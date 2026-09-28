@@ -363,4 +363,4 @@ Ideas **aprobadas como dirección**, pero **sin fecha**: no se programan hasta c
 3. Sacar "Historia" y "Meta-progresión" de la lista de §11 si la variante los necesita.
 4. Decidir si reemplaza la campaña normal o es un **modo aparte**.
 
-**Cuándo:** después de M3 como mínimo; el lugar natural es M4 (arte), porque ahí se elige la ambientación.
+**Cuándo:** sin fecha. Lucas prefiere no elegir variante por ahora (2026-09-28). Si se retoma, el lugar natural es M4 (arte), porque ahí se elige la ambientación.
