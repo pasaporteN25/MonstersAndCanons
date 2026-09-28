@@ -22,7 +22,7 @@
   **Refs:** plan §2.
   **Hecho cuando:** F5 abre una ventana gris de 1280×720 y, al agrandarla, el contenido se escala sin deformarse.
 
-- [ ] **T02 · Carpetas, git y `.gitignore`**
+- [x] **T02 · Carpetas, git y `.gitignore`**
   Crear la estructura de carpetas de §3 (vacías). Crear el `.gitignore` de Godot (ignora `.godot/`). `git init` y primer commit.
   **Refs:** plan §3.
   **Hecho cuando:** `git status` no muestra la carpeta `.godot/` y existe un commit inicial.
