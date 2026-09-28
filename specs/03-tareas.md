@@ -227,16 +227,16 @@
 
 ## M3 — Juego completo
 
-- [ ] **T40 · Autoloads `GameFlow` y `SaveManager`**
+- [x] **T40 · Autoloads `GameFlow` y `SaveManager`**
   Con `tests/test_save_manager.gd` (guardar, cargar, archivo inexistente, archivo corrupto).
   **Refs:** RF-115; plan §7.
   **Hecho cuando:** los tests pasan.
 
-- [ ] **T41 · Menú principal**
+- [x] **T41 · Menú principal**
   **Refs:** RF-110.
   **Hecho cuando:** el juego arranca en el menú; "Salir" cierra el juego.
 
-- [ ] **T42 · Selección de nivel y desbloqueo**
+- [x] **T42 · Selección de nivel y desbloqueo**
   **Refs:** RF-111, RF-112, RF-90 (Siguiente nivel / Menú).
   **Hecho cuando:** se cumple el criterio de aceptación de RF-115.
 

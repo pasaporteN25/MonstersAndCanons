@@ -110,3 +110,4 @@ func test_victory_shows_end_screen() -> void:
 	assert_true(game.end_screen.visible)
 	assert_eq(_end_screen_text("Title"), "¡Victoria!")
 	assert_eq(_end_screen_text("Detail"), "Vidas restantes: 20")
+	assert_false((game.end_screen.get_node("%NextButton") as Button).visible, "fuera de la campaña")

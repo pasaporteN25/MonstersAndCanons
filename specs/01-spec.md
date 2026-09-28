@@ -241,8 +241,8 @@ Un bot no reemplaza a una persona: estos números se revisan jugando. Cada vez q
 
 ## 8. Ganar y perder
 
-- **RF-90** **Victoria:** se completa la última oleada con al menos 1 vida. Aparece la pantalla **"¡Victoria!"** con las vidas restantes y los botones **Siguiente nivel** *(M3)*, **Reintentar** y **Menú** *(M3)*.
-- **RF-91** **Derrota:** las vidas llegan a 0. El juego se detiene y aparece **"Derrota"** con la oleada alcanzada y los botones **Reintentar** y **Menú** *(M3)*.
+- **RF-90** **Victoria:** se completa la última oleada con al menos 1 vida. Aparece la pantalla **"¡Victoria!"** con las vidas restantes y los botones **Siguiente nivel** *(M3, si hay uno)*, **Reintentar** y **Niveles** *(M3: vuelve a la selección de nivel)*.
+- **RF-91** **Derrota:** las vidas llegan a 0. El juego se detiene y aparece **"Derrota"** con la oleada alcanzada y los botones **Reintentar** y **Niveles** *(M3)*.
 - **RF-92** **Reintentar** reinicia el nivel desde cero (vidas, oro, oleadas y torres).
 
 ---
@@ -297,7 +297,8 @@ Un bot no reemplaza a una persona: estos números se revisan jugando. Cada vez q
 
 ## 10. Pantallas y progreso *(M3)*
 
-- **RF-110** **Menú principal:** Jugar, Opciones, Salir.
+- **RF-110** **Menú principal:** Jugar, Opciones, Salir. Es la primera pantalla al abrir el juego. De fondo se ve el mapa del nivel 1, oscurecido.
+- **RF-117** El progreso **solo** se guarda cuando se juega desde el menú. Abrir la partida directamente desde el editor (F6) o correr los tests no toca el guardado del jugador.
 - **RF-111** **Selección de nivel:** muestra los niveles. Los bloqueados aparecen con candado. Los completados muestran la mejor cantidad de vidas conseguida.
 - **RF-112** Al principio solo está desbloqueado el nivel 1. **Ganar** el nivel N desbloquea el N+1.
 - **RF-113** **Opciones:** volumen de música, volumen de efectos, pantalla completa sí/no.

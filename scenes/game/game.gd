@@ -35,6 +35,11 @@ var _shake_left: float = 0.0
 
 
 func _ready() -> void:
+	# Si se llegó desde el menú, se juega el nivel elegido; si no (F6, tests), el del Inspector.
+	var campaign_level: LevelData = GameFlow.current_level()
+	if campaign_level != null:
+		level_data = campaign_level
+
 	level = level_data.map_scene.instantiate()
 	level.position = MAP_OFFSET
 	add_child(level)
@@ -72,6 +77,8 @@ func _ready() -> void:
 	session.countdown_finished.connect(start_next_wave)
 	session.state_changed.connect(_on_state_changed)
 	end_screen.retry_pressed.connect(restart)
+	end_screen.next_pressed.connect(GameFlow.next_level)
+	end_screen.levels_pressed.connect(GameFlow.go_to_level_select)
 
 	hud.pause_pressed.connect(toggle_pause)
 	hud.speed_pressed.connect(toggle_speed)
@@ -219,7 +226,9 @@ func _on_state_changed(state: LevelSession.State) -> void:
 	build_controller.cancel()
 	build_controller.deselect_placed()
 	set_speed(1.0)
+	var in_campaign: bool = GameFlow.current_level() != null
 	if state == LevelSession.State.WON:
-		end_screen.show_victory(session.lives)
+		GameFlow.level_won(session.lives)  # RF-112 y RF-115: desbloquea y guarda
+		end_screen.show_victory(session.lives, GameFlow.has_next_level(), in_campaign)
 	else:
-		end_screen.show_defeat(session.wave, session.total_waves)
+		end_screen.show_defeat(session.wave, session.total_waves, in_campaign)
