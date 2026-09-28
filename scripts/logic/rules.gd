@@ -16,9 +16,14 @@ static func damage_after_armor(damage: int, armor: int) -> int:
 	return maxi(1, damage - armor)
 
 
-## RF-36: vida del enemigo según la oleada. Se redondea hacia abajo.
+## RF-36: vida del enemigo según la oleada, con el % general. Se redondea hacia abajo.
 static func scaled_health(base_health: int, wave_number: int, cfg: BalanceConfig) -> int:
-	var percent: int = 100 + cfg.health_scale_percent_per_wave * (wave_number - 1)
+	return scaled_health_percent(base_health, wave_number, cfg.health_scale_percent_per_wave)
+
+
+## RF-36 con un % concreto (cada nivel puede tener el suyo, D-019).
+static func scaled_health_percent(base_health: int, wave_number: int, percent_per_wave: int) -> int:
+	var percent: int = 100 + percent_per_wave * (wave_number - 1)
 	# El numerador es entero, así que la división no arrastra errores de redondeo.
 	return floori(base_health * percent / 100.0)
 

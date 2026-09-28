@@ -13,6 +13,8 @@
 # Después de la estrategia se pueden agregar ajustes para probar números sin tocar
 # los archivos (ver _apply_override). Ejemplo:
 #   godot ... -s tools/balance_sim.gd -- smart hp=2 cannon.damage=20
+#   godot ... -s tools/balance_sim.gd -- smart level=2          (jugar el nivel 2 de la campaña)
+#   godot ... -s tools/balance_sim.gd -- smart level=3 levelscale=25   (probar otro % de vida por oleada)
 #
 # --fixed-fps 60 hace que cada frame cuente como 1/60 s sin esperar al reloj real,
 # así una partida de ~10 minutos se simula en segundos.
@@ -24,13 +26,18 @@ const SMART_ORDER: Array[int] = [0, 0, 0, 1, 0, 2, 3, 1, 0, 3, 1, 2]
 ## Cada cuántos píxeles se mide el camino para puntuar las casillas.
 const PATH_SAMPLE_STEP: float = 16.0
 
-var game: Game
+# Node2D y no Game: este script se compila antes que los autoloads, y game.gd los usa.
+var game: Node2D
 var strategy: String = "smart"
 var rng := RandomNumberGenerator.new()
 var built: int = 0
 var last_reported_wave: int = 0
 var path_points: Array[Vector2] = []
 var air_points: Array[Vector2] = []
+## Nivel de la campaña a jugar (1, 2, 3…). 0 = el que tenga game.tscn en el Inspector.
+var level_number: int = 0
+## levelscale=N: prueba otro % de vida por oleada para el nivel elegido (D-019). -1 = no tocar.
+var level_scale_override: int = -1
 ## Recursos modificados por los ajustes. Se guardan aquí para que Godot no los descarte
 ## de su caché (si nadie los usa, los libera y la partida los volvería a leer del disco).
 var _kept: Array[Resource] = []
@@ -44,7 +51,14 @@ func _initialize() -> void:
 		_apply_override(arg)
 	rng.seed = 12345
 	game = (_keep(load("res://scenes/game/game.tscn")) as PackedScene).instantiate()
+	if level_number > 0:
+		# Este script se compila antes que los autoloads: no puede usar GameFlow por su nombre.
+		var campaign: CampaignData = _keep(load("res://data/campaign.tres"))
+		game.level_data = campaign.levels[level_number - 1]
+	if level_scale_override >= 0:
+		game.level_data.health_scale_percent_per_wave = level_scale_override
 	root.add_child(game)
+	print("Nivel: ", game.level_data.display_name)
 	print("Estrategia: %s · vida del Normal: %d" % [strategy, (load("res://data/enemies/normal.tres") as EnemyData).max_health])
 
 
@@ -58,6 +72,13 @@ func _initialize() -> void:
 func _apply_override(arg: String) -> void:
 	var parts: PackedStringArray = arg.split("=")
 	var value: float = parts[1].to_float()
+	if parts[0] == "level":
+		level_number = int(value)
+		return
+	if parts[0] == "levelscale":
+		level_scale_override = int(value)  # se aplica al elegir el nivel
+		print("Ajuste: ", arg)
+		return
 	if "." in parts[0]:
 		_apply_field_override(parts[0].get_slice(".", 0), parts[0].get_slice(".", 1), value)
 		print("Ajuste: ", arg)
@@ -163,8 +184,9 @@ func _points_in_range(points: Array[Vector2], center: Vector2, range_px: float) 
 
 
 func _sample_path() -> void:
-	path_points = _sample(game.level.get_ground_path(0))
-	air_points = _sample(game.level.get_air_path(0))
+	for i: int in game.level.entrance_count():
+		path_points.append_array(_sample(game.level.get_ground_path(i)))
+		air_points.append_array(_sample(game.level.get_air_path(i)))
 
 
 func _sample(path: Path2D) -> Array[Vector2]:

@@ -26,7 +26,8 @@ class GroupRun:
 
 var _level: Level
 var _container: Node
-var _balance: BalanceConfig
+## % de vida extra por oleada del nivel que se juega (RF-36, D-019).
+var _health_scale_percent: int = 0
 var _runs: Array[GroupRun] = []
 var _wave_number: int = 0
 ## Reloj propio de la oleada. Se usa delta (no Timers) para que la pausa
@@ -37,10 +38,10 @@ var _running: bool = false
 
 
 ## `container` es el nodo donde se agregan los enemigos (Game/Enemies).
-func setup(level: Level, container: Node, balance: BalanceConfig) -> void:
+func setup(level: Level, container: Node, health_scale_percent: int) -> void:
 	_level = level
 	_container = container
-	_balance = balance
+	_health_scale_percent = health_scale_percent
 
 
 func start_wave(wave: WaveData, wave_number: int) -> void:
@@ -70,7 +71,7 @@ func _process(delta: float) -> void:
 
 func _spawn(group: SpawnGroup) -> void:
 	var enemy: Enemy = ENEMY_SCENE.instantiate()
-	var health: int = Rules.scaled_health(group.enemy.max_health, _wave_number, _balance)
+	var health: int = Rules.scaled_health_percent(group.enemy.max_health, _wave_number, _health_scale_percent)
 	var path: Path2D = _level.get_air_path(group.entrance_index) if group.enemy.is_flying \
 		else _level.get_ground_path(group.entrance_index)
 	enemy.setup(group.enemy, path, health)

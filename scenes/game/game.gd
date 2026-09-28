@@ -51,7 +51,7 @@ func _ready() -> void:
 	for node: Node in _world_nodes():
 		node.process_mode = Node.PROCESS_MODE_PAUSABLE
 
-	spawner.setup(level, enemies, balance)
+	spawner.setup(level, enemies, level_data.health_scale_percent(balance))
 	spawner.enemy_spawned.connect(_on_enemy_spawned)
 	spawner.wave_finished.connect(session.complete_wave)
 

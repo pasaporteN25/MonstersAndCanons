@@ -240,16 +240,16 @@
   **Refs:** RF-111, RF-112, RF-90 (Siguiente nivel / Menú).
   **Hecho cuando:** se cumple el criterio de aceptación de RF-115.
 
-- [ ] **T43 · Nivel 2 — Desfiladero**
+- [x] **T43 · Nivel 2 — Desfiladero**
   Mapa, caminos, `level_02.tres` con 15 oleadas.
   **Hecho cuando:** pasa `test_level_paths.gd` y es ganable.
 
-- [ ] **T44 · Soporte de varias entradas**
+- [x] **T44 · Soporte de varias entradas**
   Revisar que `WaveSpawner` use `entrance_index` correctamente.
   **Refs:** plan §4.1 (`SpawnGroup.entrance_index`).
   **Hecho cuando:** en un mapa de prueba con 2 entradas, cada grupo sale por la entrada indicada.
 
-- [ ] **T45 · Nivel 3 — Encrucijada**
+- [x] **T45 · Nivel 3 — Encrucijada**
   Mapa con 2 entradas, `level_03.tres` con 20 oleadas.
   **Hecho cuando:** pasa `test_level_paths.gd` y es ganable.
 

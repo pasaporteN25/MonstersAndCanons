@@ -198,8 +198,8 @@ La columna **Hito** de las tablas siguientes indica en qué momento se agrega ca
 | # | Nombre provisional | Oleadas | Oro inicial | Particularidad | Hito |
 |---|---|---|---|---|---|
 | 1 | Pradera | 10 | 150 | Un camino en forma de "S". Para aprender. | M1 |
-| 2 | Desfiladero | 15 | 200 | Camino largo con muchas curvas cerradas. | M3 |
-| 3 | Encrucijada | 20 | 250 | **Dos entradas** cuyos caminos se unen antes de la salida. | M3 |
+| 2 | Desfiladero | 15 | 200 | Zigzag con 8 curvas cerradas (§7.2). | M3 |
+| 3 | Encrucijada | 20 | 250 | **Dos entradas** cuyos caminos se unen antes de la salida (§7.3). | M3 |
 | 4–5 | *(por definir)* | — | — | — | M4 (opcional) |
 
 ### Oleadas del nivel 1
@@ -236,6 +236,97 @@ Qué se cambió respecto al borrador y por qué:
 - **T38 (M2):** los enemigos nuevos tenían valores del borrador, pensados antes del +40 % por oleada, y con ellos se perdía siempre (un Blindado de la oleada 4 tenía 99 de vida y la Ametralladora le hacía 1 de daño). Se bajaron a: **Volador 18** de vida, **Blindado 30 y armadura 3** (la Ametralladora le hace 2, no 1: sigue siendo mala opción, pero no inútil), **Jefe 300** (≈ 1380 en la oleada 10). Con estos números, mezclar torres rinde más que usar solo Ametralladoras: los enemigos nuevos cumplen su función de premiar la variedad.
 
 Un bot no reemplaza a una persona: estos números se revisan jugando. Cada vez que se cambie el balance, se vuelve a correr el bot y se actualiza esta tabla.
+
+### 7.2 Nivel 2 — Desfiladero *(M3)*
+
+Un zigzag con **8 curvas cerradas**. Las franjas de pasto encerradas entre dos tramos de camino son los mejores lugares: una torre ahí alcanza los dos lados.
+
+```
+col: 01234567890123456789
+f0   ····················
+f1   ■■■■···■■■■■···■■■■■  → salida
+f2   ···■···■···■···■····
+f3   ···■···■···■···■····
+f4   ·X·■···■···■···■·X··      ■ camino · X roca
+f5   ···■···■···■···■····
+f6   ···■···■···■···■····
+f7   ···■■■■■···■■■■■··X·
+f8   ····················
+```
+
+Los Voladores cruzan en línea recta por la fila 1.
+
+| Oleada | Enemigos |
+|---|---|
+| 1 | 10 × Normal (cada 0.8 s) |
+| 2 | 12 × Rápido (cada 0.5 s) |
+| 3 | 8 × Normal (cada 0.8 s) + 5 × Blindado (cada 1.2 s, tras 3 s) |
+| 4 | 4 × Tanque (cada 1.8 s) + 8 × Volador (cada 0.7 s, tras 2 s) |
+| 5 | 15 × Rápido (cada 0.4 s) + 6 × Blindado (cada 1.0 s, tras 4 s) |
+| 6 | 20 × Normal (cada 0.5 s) |
+| 7 | 8 × Volador (cada 0.5 s) + 6 × Tanque (cada 1.5 s, tras 3 s) |
+| 8 | 10 × Blindado (cada 0.9 s) + 12 × Rápido (cada 0.4 s, tras 4 s) |
+| 9 | 1 × **Jefe** + 12 × Normal (cada 0.6 s, tras 2 s) |
+| 10 | 8 × Tanque (cada 1.2 s) + 14 × Volador (cada 0.5 s, tras 3 s) |
+| 11 | 25 × Rápido (cada 0.3 s) + 8 × Blindado (cada 1.0 s, tras 5 s) |
+| 12 | 12 × Tanque (cada 1.0 s) + 20 × Normal (cada 0.4 s, tras 4 s) |
+| 13 | 16 × Volador (cada 0.4 s) + 12 × Blindado (cada 0.8 s, tras 3 s) |
+| 14 | 2 × **Jefe** (cada 4.0 s) + 20 × Rápido (cada 0.3 s, tras 4 s) |
+| 15 | 2 × **Jefe** (cada 3.0 s) + 12 × Tanque (cada 1.0 s, tras 2 s) + 16 × Volador (cada 0.4 s, tras 6 s) + 12 × Blindado (cada 0.8 s, tras 10 s) |
+
+### 7.3 Nivel 3 — Encrucijada *(M3)*
+
+**Dos entradas** (A arriba, B abajo) que se juntan en la columna 8 y siguen juntas hasta la salida. El jugador tiene que decidir: ¿defender cada entrada por separado, o concentrar todo después del cruce?
+
+```
+col: 01234567890123456789
+f0   ····················
+f1   ■■■■■■■■■····■■■■■··  ← entrada A
+f2   ········■·X··■···■··
+f3   ········■····■···■··
+f4   ····X···■■■■■■···■··      (se juntan en la columna 8)
+f5   ········■·········■··
+f6   ········■··X···X·■··
+f7   ■■■■■■■■■········■■■  ← entrada B · → salida
+f8   ····················
+```
+
+En la tabla, **(A)** y **(B)** indican por qué entrada sale cada grupo.
+
+| Oleada | Enemigos |
+|---|---|
+| 1 | 8 × Normal (A, cada 1.0 s) |
+| 2 | 8 × Normal (B, cada 1.0 s) |
+| 3 | 8 × Normal (A, cada 0.9 s) + 8 × Normal (B, cada 0.9 s) |
+| 4 | 10 × Rápido (A, cada 0.6 s) + 10 × Rápido (B, cada 0.6 s, tras 2 s) |
+| 5 | 5 × Blindado (A, cada 1.2 s) + 8 × Volador (B, cada 0.8 s, tras 2 s) |
+| 6 | 4 × Tanque (B, cada 1.8 s) + 12 × Normal (A, cada 0.6 s, tras 2 s) |
+| 7 | 12 × Volador (A, cada 0.6 s) + 12 × Rápido (B, cada 0.4 s, tras 3 s) |
+| 8 | 8 × Blindado (B, cada 1.0 s) + 8 × Blindado (A, cada 1.0 s, tras 4 s) |
+| 9 | 6 × Tanque (A, cada 1.5 s) + 6 × Tanque (B, cada 1.5 s, tras 3 s) |
+| 10 | 1 × **Jefe** (A) + 15 × Normal (B, cada 0.5 s, tras 2 s) |
+| 11 | 20 × Rápido (A, cada 0.3 s) + 10 × Volador (B, cada 0.5 s, tras 3 s) |
+| 12 | 10 × Blindado (A, cada 0.9 s) + 10 × Tanque (B, cada 1.2 s, tras 2 s) |
+| 13 | 16 × Volador (A, cada 0.4 s) + 16 × Volador (B, cada 0.4 s, tras 6 s) |
+| 14 | 25 × Normal (A, cada 0.3 s) + 25 × Rápido (B, cada 0.3 s, tras 3 s) |
+| 15 | 1 × **Jefe** (B) + 10 × Blindado (A, cada 0.8 s, tras 3 s) + 10 × Tanque (B, cada 1.0 s, tras 6 s) |
+| 16 | 12 × Tanque (A, cada 1.0 s) + 20 × Volador (B, cada 0.4 s, tras 4 s) |
+| 17 | 15 × Blindado (A, cada 0.7 s) + 15 × Blindado (B, cada 0.7 s, tras 5 s) |
+| 18 | 2 × **Jefe** (A, cada 3.0 s) + 25 × Rápido (B, cada 0.25 s, tras 3 s) |
+| 19 | 15 × Tanque (A, cada 0.8 s) + 15 × Tanque (B, cada 0.8 s, tras 4 s) + 20 × Volador (A, cada 0.4 s, tras 8 s) |
+| 20 | 2 × **Jefe** (A, cada 2.0 s) + 2 × **Jefe** (B, cada 2.0 s, tras 4 s) + 20 × Blindado (A, cada 0.6 s, tras 8 s) + 20 × Volador (B, cada 0.35 s, tras 10 s) |
+
+### 7.4 Aumento de vida por nivel *(M3, D-019)*
+
+Con +40 % por oleada, un nivel de 15 o 20 oleadas terminaría con enemigos 7 a 9 veces más fuertes que al principio. Por eso **cada nivel puede tener su propio aumento** (`LevelData.health_scale_percent_per_wave`); si no define uno, usa el general de `BalanceConfig` (40 %).
+
+| Nivel | Aumento por oleada | Bot que mezcla torres | Solo Ametralladoras | Torres al azar |
+|---|---|---|---|---|
+| 1 · Pradera | 40 % *(el general)* | Gana con 13 vidas | Gana con 10 vidas | Pierde en la oleada 7 |
+| 2 · Desfiladero | **35 %** | Gana con 17 vidas | Pierde en la última oleada | Pierde en la oleada 7 |
+| 3 · Encrucijada | **20 %** | Gana con 9 vidas | Pierde en la última oleada | Pierde en la oleada 9 |
+
+La curva de dificultad buscada: en el nivel 1 alcanza con una sola torre bien usada; **desde el nivel 2 hay que mezclar torres** para ganar; el nivel 3 es el más exigente. (Con 40 %, el nivel 3 se perdía siempre en la oleada 6.)
 
 ---
 
@@ -338,7 +429,6 @@ Cosas que **no** hace falta decidir ahora; se deciden antes del hito indicado.
 | ¿Ambientación? (medieval, espacial, juguetes…) Afecta nombres de torres/enemigos y el arte. **Candidata fuerte: "Épocas" (§13, B-01).** | M4 |
 | ¿Estrellas por nivel (1–3 según vidas restantes) en vez de "mejor cantidad de vidas"? | M3 |
 | ¿Música: de dónde sale? (propia, gratuita con licencia CC0…) | M3 |
-| ¿El aumento de vida por oleada (40 %) debería ser distinto en cada nivel? Con 15–20 oleadas, 40 % da enemigos 7–9 veces más fuertes al final. Quizás convenga mover ese valor de `BalanceConfig` a `LevelData`. | M3 (T43) |
 
 ---
 

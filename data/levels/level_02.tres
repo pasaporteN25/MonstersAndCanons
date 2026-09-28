@@ -1,0 +1,270 @@
+[gd_resource type="Resource" script_class="LevelData" format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/levels/level_02.tscn" id="1_pd480"]
+[ext_resource type="Script" path="res://scripts/data/level_data.gd" id="2_cls38"]
+[ext_resource type="Script" path="res://scripts/data/wave_data.gd" id="3_c3pel"]
+[ext_resource type="Script" path="res://scripts/data/spawn_group.gd" id="4_mpxrr"]
+[ext_resource type="Resource" path="res://data/enemies/normal.tres" id="5_wl3ub"]
+[ext_resource type="Resource" path="res://data/enemies/fast.tres" id="6_cbk50"]
+[ext_resource type="Resource" path="res://data/enemies/armored.tres" id="7_tmxp7"]
+[ext_resource type="Resource" path="res://data/enemies/tank.tres" id="8_6lfad"]
+[ext_resource type="Resource" path="res://data/enemies/flyer.tres" id="9_sor5y"]
+[ext_resource type="Resource" path="res://data/enemies/boss.tres" id="10_c7m3g"]
+
+[sub_resource type="Resource" id="Resource_0ofsp"]
+script = ExtResource("4_mpxrr")
+enemy = ExtResource("5_wl3ub")
+count = 10
+interval = 0.8
+
+[sub_resource type="Resource" id="Resource_agkup"]
+script = ExtResource("3_c3pel")
+groups = Array[ExtResource("4_mpxrr")]([SubResource("Resource_0ofsp")])
+
+[sub_resource type="Resource" id="Resource_qgl00"]
+script = ExtResource("4_mpxrr")
+enemy = ExtResource("6_cbk50")
+count = 12
+interval = 0.5
+
+[sub_resource type="Resource" id="Resource_erj6y"]
+script = ExtResource("3_c3pel")
+groups = Array[ExtResource("4_mpxrr")]([SubResource("Resource_qgl00")])
+
+[sub_resource type="Resource" id="Resource_iuxu2"]
+script = ExtResource("4_mpxrr")
+enemy = ExtResource("5_wl3ub")
+count = 8
+interval = 0.8
+
+[sub_resource type="Resource" id="Resource_o6eby"]
+script = ExtResource("4_mpxrr")
+enemy = ExtResource("7_tmxp7")
+count = 5
+interval = 1.2
+start_delay = 3.0
+
+[sub_resource type="Resource" id="Resource_epvvu"]
+script = ExtResource("3_c3pel")
+groups = Array[ExtResource("4_mpxrr")]([SubResource("Resource_iuxu2"), SubResource("Resource_o6eby")])
+
+[sub_resource type="Resource" id="Resource_dmb5e"]
+script = ExtResource("4_mpxrr")
+enemy = ExtResource("8_6lfad")
+count = 4
+interval = 1.8
+
+[sub_resource type="Resource" id="Resource_ha4fy"]
+script = ExtResource("4_mpxrr")
+enemy = ExtResource("9_sor5y")
+count = 8
+interval = 0.7
+start_delay = 2.0
+
+[sub_resource type="Resource" id="Resource_w2mc7"]
+script = ExtResource("3_c3pel")
+groups = Array[ExtResource("4_mpxrr")]([SubResource("Resource_dmb5e"), SubResource("Resource_ha4fy")])
+
+[sub_resource type="Resource" id="Resource_bq7j1"]
+script = ExtResource("4_mpxrr")
+enemy = ExtResource("6_cbk50")
+count = 15
+interval = 0.4
+
+[sub_resource type="Resource" id="Resource_q5rrc"]
+script = ExtResource("4_mpxrr")
+enemy = ExtResource("7_tmxp7")
+count = 6
+interval = 1.0
+start_delay = 4.0
+
+[sub_resource type="Resource" id="Resource_7psxw"]
+script = ExtResource("3_c3pel")
+groups = Array[ExtResource("4_mpxrr")]([SubResource("Resource_bq7j1"), SubResource("Resource_q5rrc")])
+
+[sub_resource type="Resource" id="Resource_g64qh"]
+script = ExtResource("4_mpxrr")
+enemy = ExtResource("5_wl3ub")
+count = 20
+interval = 0.5
+
+[sub_resource type="Resource" id="Resource_8fnln"]
+script = ExtResource("3_c3pel")
+groups = Array[ExtResource("4_mpxrr")]([SubResource("Resource_g64qh")])
+
+[sub_resource type="Resource" id="Resource_ynyu8"]
+script = ExtResource("4_mpxrr")
+enemy = ExtResource("9_sor5y")
+count = 8
+interval = 0.5
+
+[sub_resource type="Resource" id="Resource_fsgyj"]
+script = ExtResource("4_mpxrr")
+enemy = ExtResource("8_6lfad")
+count = 6
+interval = 1.5
+start_delay = 3.0
+
+[sub_resource type="Resource" id="Resource_qxqa3"]
+script = ExtResource("3_c3pel")
+groups = Array[ExtResource("4_mpxrr")]([SubResource("Resource_ynyu8"), SubResource("Resource_fsgyj")])
+
+[sub_resource type="Resource" id="Resource_ae0wk"]
+script = ExtResource("4_mpxrr")
+enemy = ExtResource("7_tmxp7")
+count = 10
+interval = 0.9
+
+[sub_resource type="Resource" id="Resource_q4ncw"]
+script = ExtResource("4_mpxrr")
+enemy = ExtResource("6_cbk50")
+count = 12
+interval = 0.4
+start_delay = 4.0
+
+[sub_resource type="Resource" id="Resource_nitei"]
+script = ExtResource("3_c3pel")
+groups = Array[ExtResource("4_mpxrr")]([SubResource("Resource_ae0wk"), SubResource("Resource_q4ncw")])
+
+[sub_resource type="Resource" id="Resource_aqle6"]
+script = ExtResource("4_mpxrr")
+enemy = ExtResource("10_c7m3g")
+count = 1
+interval = 1.0
+
+[sub_resource type="Resource" id="Resource_ldco3"]
+script = ExtResource("4_mpxrr")
+enemy = ExtResource("5_wl3ub")
+count = 12
+interval = 0.6
+start_delay = 2.0
+
+[sub_resource type="Resource" id="Resource_vfw08"]
+script = ExtResource("3_c3pel")
+groups = Array[ExtResource("4_mpxrr")]([SubResource("Resource_aqle6"), SubResource("Resource_ldco3")])
+
+[sub_resource type="Resource" id="Resource_n8lm6"]
+script = ExtResource("4_mpxrr")
+enemy = ExtResource("8_6lfad")
+count = 8
+interval = 1.2
+
+[sub_resource type="Resource" id="Resource_wrn2q"]
+script = ExtResource("4_mpxrr")
+enemy = ExtResource("9_sor5y")
+count = 14
+interval = 0.5
+start_delay = 3.0
+
+[sub_resource type="Resource" id="Resource_8c1ei"]
+script = ExtResource("3_c3pel")
+groups = Array[ExtResource("4_mpxrr")]([SubResource("Resource_n8lm6"), SubResource("Resource_wrn2q")])
+
+[sub_resource type="Resource" id="Resource_7rtg7"]
+script = ExtResource("4_mpxrr")
+enemy = ExtResource("6_cbk50")
+count = 25
+interval = 0.3
+
+[sub_resource type="Resource" id="Resource_k0oak"]
+script = ExtResource("4_mpxrr")
+enemy = ExtResource("7_tmxp7")
+count = 8
+interval = 1.0
+start_delay = 5.0
+
+[sub_resource type="Resource" id="Resource_n1xr4"]
+script = ExtResource("3_c3pel")
+groups = Array[ExtResource("4_mpxrr")]([SubResource("Resource_7rtg7"), SubResource("Resource_k0oak")])
+
+[sub_resource type="Resource" id="Resource_ktkjr"]
+script = ExtResource("4_mpxrr")
+enemy = ExtResource("8_6lfad")
+count = 12
+interval = 1.0
+
+[sub_resource type="Resource" id="Resource_p4vxe"]
+script = ExtResource("4_mpxrr")
+enemy = ExtResource("5_wl3ub")
+count = 20
+interval = 0.4
+start_delay = 4.0
+
+[sub_resource type="Resource" id="Resource_pyufb"]
+script = ExtResource("3_c3pel")
+groups = Array[ExtResource("4_mpxrr")]([SubResource("Resource_ktkjr"), SubResource("Resource_p4vxe")])
+
+[sub_resource type="Resource" id="Resource_2bxci"]
+script = ExtResource("4_mpxrr")
+enemy = ExtResource("9_sor5y")
+count = 16
+interval = 0.4
+
+[sub_resource type="Resource" id="Resource_s1frf"]
+script = ExtResource("4_mpxrr")
+enemy = ExtResource("7_tmxp7")
+count = 12
+interval = 0.8
+start_delay = 3.0
+
+[sub_resource type="Resource" id="Resource_61x80"]
+script = ExtResource("3_c3pel")
+groups = Array[ExtResource("4_mpxrr")]([SubResource("Resource_2bxci"), SubResource("Resource_s1frf")])
+
+[sub_resource type="Resource" id="Resource_6kei1"]
+script = ExtResource("4_mpxrr")
+enemy = ExtResource("10_c7m3g")
+count = 2
+interval = 4.0
+
+[sub_resource type="Resource" id="Resource_eljgo"]
+script = ExtResource("4_mpxrr")
+enemy = ExtResource("6_cbk50")
+count = 20
+interval = 0.3
+start_delay = 4.0
+
+[sub_resource type="Resource" id="Resource_h070h"]
+script = ExtResource("3_c3pel")
+groups = Array[ExtResource("4_mpxrr")]([SubResource("Resource_6kei1"), SubResource("Resource_eljgo")])
+
+[sub_resource type="Resource" id="Resource_48ru0"]
+script = ExtResource("4_mpxrr")
+enemy = ExtResource("10_c7m3g")
+count = 2
+interval = 3.0
+
+[sub_resource type="Resource" id="Resource_7n564"]
+script = ExtResource("4_mpxrr")
+enemy = ExtResource("8_6lfad")
+count = 12
+interval = 1.0
+start_delay = 2.0
+
+[sub_resource type="Resource" id="Resource_eywid"]
+script = ExtResource("4_mpxrr")
+enemy = ExtResource("9_sor5y")
+count = 16
+interval = 0.4
+start_delay = 6.0
+
+[sub_resource type="Resource" id="Resource_h826h"]
+script = ExtResource("4_mpxrr")
+enemy = ExtResource("7_tmxp7")
+count = 12
+interval = 0.8
+start_delay = 10.0
+
+[sub_resource type="Resource" id="Resource_dsy5i"]
+script = ExtResource("3_c3pel")
+groups = Array[ExtResource("4_mpxrr")]([SubResource("Resource_48ru0"), SubResource("Resource_7n564"), SubResource("Resource_eywid"), SubResource("Resource_h826h")])
+
+[resource]
+script = ExtResource("2_cls38")
+id = &"level_02"
+display_name = "Desfiladero"
+map_scene = ExtResource("1_pd480")
+starting_gold = 200
+starting_lives = 20
+waves = Array[ExtResource("3_c3pel")]([SubResource("Resource_agkup"), SubResource("Resource_erj6y"), SubResource("Resource_epvvu"), SubResource("Resource_w2mc7"), SubResource("Resource_7psxw"), SubResource("Resource_8fnln"), SubResource("Resource_qxqa3"), SubResource("Resource_nitei"), SubResource("Resource_vfw08"), SubResource("Resource_8c1ei"), SubResource("Resource_n1xr4"), SubResource("Resource_pyufb"), SubResource("Resource_61x80"), SubResource("Resource_h070h"), SubResource("Resource_dsy5i")])
+health_scale_percent_per_wave = 35
