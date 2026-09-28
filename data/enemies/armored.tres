@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="1_fklr6"]
+
+[resource]
+script = ExtResource("1_fklr6")
+id = &"armored"
+display_name = "Blindado"
+max_health = 45
+speed_tiles = 1.2
+armor = 4
+reward = 12
+lives_damage = 1
+shape = 4
+color = Color(0.22745098, 0.3529412, 0.54901963, 1)
+size_tiles = 0.3

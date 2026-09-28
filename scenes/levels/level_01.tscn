@@ -10,6 +10,12 @@ _data = {
 }
 point_count = 6
 
+[sub_resource type="Curve2D" id="Curve2D_2djvx"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, -32, 96, 0, 0, 0, 0, 1312, 480)
+}
+point_count = 2
+
 [node name="Level01" type="Node2D" unique_id=2099713506]
 script = ExtResource("1_i2aat")
 
@@ -22,5 +28,8 @@ tile_set = ExtResource("2_2djvx")
 [node name="GroundPath0" type="Path2D" parent="Entrances" unique_id=695655813]
 curve = SubResource("Curve2D_uvc87")
 
-[node name="Decor" type="Node2D" parent="."]
+[node name="AirPath0" type="Path2D" parent="Entrances" unique_id=1118031903]
+curve = SubResource("Curve2D_2djvx")
+
+[node name="Decor" type="Node2D" parent="." unique_id=1645660789]
 script = ExtResource("3_decor")

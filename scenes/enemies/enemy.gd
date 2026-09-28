@@ -148,8 +148,10 @@ func _draw() -> void:
 		fill = Color.WHITE  # RF-123
 	var outline: Color = fill.darkened(0.45)
 	# Sombra (RF-126): una elipse aplastada debajo, sin bamboleo.
-	draw_set_transform(Vector2(3, r * 0.55), 0.0, Vector2(1.0, 0.45))
-	draw_circle(Vector2.ZERO, r, Color(0, 0, 0, 0.25))
+	# Los voladores la tienen más lejos y más tenue: así se nota que van por el aire.
+	var shadow_offset := Vector2(10, r * 2.2) if data.is_flying else Vector2(3, r * 0.55)
+	draw_set_transform(shadow_offset, 0.0, Vector2(1.0, 0.45))
+	draw_circle(Vector2.ZERO, r, Color(0, 0, 0, 0.15 if data.is_flying else 0.25))
 	# RF-125: bamboleo (se estira y se aplasta) al ritmo de su velocidad.
 	# Los triángulos y rombos, además, apuntan hacia donde caminan.
 	var wave: float = sin(_anim_time * TAU * current_speed_tiles() * 1.2)

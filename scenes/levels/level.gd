@@ -37,6 +37,13 @@ func get_ground_path(entrance_index: int) -> Path2D:
 	return entrances.get_node_or_null("GroundPath%d" % entrance_index) as Path2D
 
 
+## Camino aéreo de la entrada `entrance_index` (RF-05): línea recta hasta la salida.
+## Si el mapa no tiene uno, los voladores usan el terrestre.
+func get_air_path(entrance_index: int) -> Path2D:
+	var air := entrances.get_node_or_null("AirPath%d" % entrance_index) as Path2D
+	return air if air != null else get_ground_path(entrance_index)
+
+
 ## Cantidad de entradas del mapa (una por cada GroundPathN).
 func entrance_count() -> int:
 	var count: int = 0

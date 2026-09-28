@@ -185,7 +185,7 @@ La columna **Hito** de las tablas siguientes indica en qué momento se agrega ca
 | `normal` | **Normal** | 30 | 1.5 | 0 | 5 | 1 | No | — | Círculo gris | M1 |
 | `fast` | **Rápido** | 18 | 3.0 | 0 | 4 | 1 | No | — | Triángulo amarillo | M1 |
 | `tank` | **Tanque** | 135 | 0.8 | 0 | 15 | 2 | No | — | Cuadrado marrón, grande | M1 |
-| `flyer` | **Volador** | 25 | 2.0 | 0 | 8 | 1 | **Sí** | Vuela en línea recta (RF-05) | Rombo celeste | M2 |
+| `flyer` | **Volador** | 25 | 2.0 | 0 | 8 | 1 | **Sí** | Vuela en línea recta (RF-05) | Rombo violeta (no celeste: se confundiría con el Hielo y con los ralentizados) | M2 |
 | `armored` | **Blindado** | 45 | 1.2 | 4 | 12 | 1 | No | Armadura alta | Hexágono azul oscuro | M2 |
 | `boss` | **Jefe** | 800 | 0.6 | 3 | 150 | 10 | No | Solo le afecta la **mitad** de cualquier ralentización | Círculo rojo, muy grande | M2 |
 

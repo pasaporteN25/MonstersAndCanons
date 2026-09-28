@@ -195,16 +195,16 @@
   **Refs:** RF-54.
   **Hecho cuando:** con 3 enemigos distintos en rango, cambiar de modo cambia visiblemente a cuál se dispara.
 
-- [ ] **T34 · Francotirador**
+- [x] **T34 · Francotirador**
   **Refs:** spec §5.3; tecla `4`.
   **Hecho cuando:** se puede construir y alcanza enemigos a 6 casillas.
 
-- [ ] **T35 · Voladores**
+- [x] **T35 · Voladores**
   `AirPath0` en el nivel 1, `data/enemies/flyer.tres`, capa de colisión 3.
   **Refs:** RF-05, RF-53.
   **Hecho cuando:** los voladores cruzan en línea recta; el Cañón los ignora por completo (ni apunta ni daña con área); las demás torres les disparan.
 
-- [ ] **T36 · Blindado y Jefe**
+- [x] **T36 · Blindado y Jefe**
   `armored.tres`, `boss.tres` (con `slow_resistance = 0.5`).
   **Refs:** RF-80, tabla de enemigos.
   **Hecho cuando:** se cumple el criterio de aceptación de RF-80; el Jefe con Hielo nivel 1 va al 80 % de su velocidad (40 % × 0.5 = 20 % de ralentización).

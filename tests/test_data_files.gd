@@ -77,6 +77,31 @@ func test_frost_tower() -> void:
 	_assert_tower_level_1("frost", 75, 2, 1.0, 2.5, 0.0, 0.4, 2.0, true)
 
 
+func test_sniper_tower() -> void:
+	_assert_tower_level_1("sniper", 150, 40, 0.4, 6.0, 0.0, 0.0, 0.0, true)
+	var sniper: TowerData = _tower("sniper")
+	assert_eq(sniper.levels[1].cost, 150, "nivel 2: costo")
+	assert_eq(sniper.levels[1].damage, 70, "nivel 2: daño")
+	assert_eq(sniper.levels[2].cost, 225, "nivel 3: costo")
+	assert_eq(sniper.levels[2].damage, 120, "nivel 3: daño")
+	assert_almost_eq(sniper.levels[2].range_tiles, 7.0, 0.001, "nivel 3: alcance")
+
+
+# --- Enemigos de M2 (spec §6; su balance final es T38) ---
+
+func test_flyer() -> void:
+	_assert_enemy("flyer", 25, 2.0, 0, 8, 1, true, 0.25)
+
+
+func test_armored() -> void:
+	_assert_enemy("armored", 45, 1.2, 4, 12, 1, false, 0.3)
+
+
+func test_boss() -> void:
+	_assert_enemy("boss", 800, 0.6, 3, 150, 10, false, 0.45)
+	assert_almost_eq(_enemy("boss").slow_resistance, 0.5, 0.001, "solo le afecta la mitad")
+
+
 # --- Oleadas del nivel 1 (spec §7) ---
 
 ## Cada grupo como [tipo, cantidad, intervalo, retraso].

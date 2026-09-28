@@ -71,7 +71,9 @@ func _process(delta: float) -> void:
 func _spawn(group: SpawnGroup) -> void:
 	var enemy: Enemy = ENEMY_SCENE.instantiate()
 	var health: int = Rules.scaled_health(group.enemy.max_health, _wave_number, _balance)
-	enemy.setup(group.enemy, _level.get_ground_path(group.entrance_index), health)
+	var path: Path2D = _level.get_air_path(group.entrance_index) if group.enemy.is_flying \
+		else _level.get_ground_path(group.entrance_index)
+	enemy.setup(group.enemy, path, health)
 	# tree_exited se dispara tanto si muere como si llega a la salida.
 	enemy.tree_exited.connect(_on_enemy_gone)
 	_alive += 1

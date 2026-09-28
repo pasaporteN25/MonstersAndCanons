@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="TowerData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tower_level_data.gd" id="1_52100"]
+[ext_resource type="Script" path="res://scripts/data/tower_data.gd" id="2_l18ci"]
+
+[sub_resource type="Resource" id="Resource_adjjk"]
+script = ExtResource("1_52100")
+cost = 150
+damage = 40
+fire_rate = 0.4
+range_tiles = 6.0
+
+[sub_resource type="Resource" id="Resource_22mr3"]
+script = ExtResource("1_52100")
+cost = 150
+damage = 70
+fire_rate = 0.4
+range_tiles = 6.0
+
+[sub_resource type="Resource" id="Resource_mh2id"]
+script = ExtResource("1_52100")
+cost = 225
+damage = 120
+fire_rate = 0.4
+range_tiles = 7.0
+
+[resource]
+script = ExtResource("2_l18ci")
+id = &"sniper"
+display_name = "Francotirador"
+can_hit_air = true
+projectile_speed_tiles = 10.0
+color = Color(0.18039216, 0.41960785, 0.22745098, 1)
+levels = Array[ExtResource("1_52100")]([SubResource("Resource_adjjk"), SubResource("Resource_22mr3"), SubResource("Resource_mh2id")])

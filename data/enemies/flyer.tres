@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="1_g0ogr"]
+
+[resource]
+script = ExtResource("1_g0ogr")
+id = &"flyer"
+display_name = "Volador"
+max_health = 25
+speed_tiles = 2.0
+reward = 8
+lives_damage = 1
+is_flying = true
+shape = 3
+color = Color(0.6901961, 0.4862745, 0.9098039, 1)
+size_tiles = 0.25
