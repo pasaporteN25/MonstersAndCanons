@@ -70,24 +70,24 @@
 
 ### Enemigos
 
-- [ ] **T14 · Escena `game.tscn` + un enemigo que camina**
-  Crear `game.tscn` con el árbol de §5.1 (los nodos que aún no se usan pueden quedar vacíos). Crear `enemy.tscn`/`enemy.gd`: se dibuja según su forma y color, y recorre el camino. Temporalmente, `Game` crea un Normal al iniciar.
+- [x] **T14 · Escena `game.tscn` + un enemigo que camina**
+  Crear `game.tscn` con el árbol de §5.1 (los nodos que aún no se usan pueden quedar vacíos). Crear `enemy.tscn`/`enemy.gd`: se dibuja según su forma y color, y recorre el camino. (Se hizo junto con T15–T17, así que el enemigo sale directamente de la oleada 1.)
   **Refs:** RF-04; plan §5.1, §6.2.
   **Hecho cuando:** al pulsar F5, un círculo gris recorre el camino de principio a fin a 1.5 casillas/s (≈ 96 px/s) y desaparece al llegar a la salida.
 
-- [ ] **T15 · Sesión: vidas y oro + HUD mínimo**
+- [x] **T15 · Sesión: vidas y oro + HUD mínimo**
   Crear `level_session.gd` (oro, vidas, señales). Crear `hud.tscn` con la barra superior (oro, vidas). Conectar `reached_exit` → `lose_lives`.
   **Refs:** RF-10, RF-11, RF-20, RF-100; plan §5.2, §5.3.
   **Hecho cuando:** el HUD muestra "Oro 150 · Vidas 20"; cuando el enemigo de prueba llega a la salida, pasa a "Vidas 19".
 
 ### Oleadas
 
-- [ ] **T16 · `WaveSpawner` y botón "Empezar oleada"**
+- [x] **T16 · `WaveSpawner` y botón "Empezar oleada"**
   Implementar el spawner (§6.5) y el botón (y la tecla `Espacio`). Crear `data/levels/level_01.tres` con **solo las oleadas 1 y 2** de la spec. Quitar el enemigo temporal de T14.
   **Refs:** RF-30 a RF-35; plan §5.4, §6.5.
   **Hecho cuando:** no sale ningún enemigo hasta pulsar el botón; salen 8 Normales separados 1 s; al terminar la oleada se suma el bono (+25), empieza la cuenta atrás de 15 s y luego sale la oleada 2 sola. El HUD muestra "Oleada 1/2", "Oleada 2/2".
 
-- [ ] **T17 · Vida creciente por oleada**
+- [x] **T17 · Vida creciente por oleada**
   Aplicar `Rules.scaled_health` al crear cada enemigo.
   **Refs:** RF-36.
   **Hecho cuando:** (con un `print` temporal o el depurador) un Normal de la oleada 2 tiene 21 de vida.

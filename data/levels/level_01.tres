@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="LevelData" format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/levels/level_01.tscn" id="1_edcfl"]
+[ext_resource type="Script" path="res://scripts/data/level_data.gd" id="2_vjtlv"]
+[ext_resource type="Script" path="res://scripts/data/wave_data.gd" id="3_y1woe"]
+[ext_resource type="Script" path="res://scripts/data/spawn_group.gd" id="4_qg5lk"]
+[ext_resource type="Resource" path="res://data/enemies/normal.tres" id="5_bcktr"]
+
+[sub_resource type="Resource" id="Resource_6r1wk"]
+script = ExtResource("4_qg5lk")
+enemy = ExtResource("5_bcktr")
+count = 8
+interval = 1.0
+
+[sub_resource type="Resource" id="Resource_8rkjy"]
+script = ExtResource("3_y1woe")
+groups = Array[ExtResource("4_qg5lk")]([SubResource("Resource_6r1wk")])
+
+[sub_resource type="Resource" id="Resource_c0wg5"]
+script = ExtResource("4_qg5lk")
+enemy = ExtResource("5_bcktr")
+count = 12
+interval = 0.8
+
+[sub_resource type="Resource" id="Resource_a27lr"]
+script = ExtResource("3_y1woe")
+groups = Array[ExtResource("4_qg5lk")]([SubResource("Resource_c0wg5")])
+
+[resource]
+script = ExtResource("2_vjtlv")
+id = &"level_01"
+display_name = "Pradera"
+map_scene = ExtResource("1_edcfl")
+starting_gold = 150
+starting_lives = 20
+waves = Array[ExtResource("3_y1woe")]([SubResource("Resource_8rkjy"), SubResource("Resource_a27lr")])
