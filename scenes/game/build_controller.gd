@@ -42,6 +42,7 @@ func setup(level: Level, session: LevelSession, balance: BalanceConfig,
 	_balance = balance
 	_tower_types = tower_types
 	_container = container
+	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS  # D-023: torre fantasma
 
 
 # --- Elegir torre para construir (RF-40, RF-43) ---
@@ -235,8 +236,17 @@ func _draw() -> void:
 	var tile: float = Rules.TILE_SIZE
 	var cell_rect := Rect2(center - Vector2(tile, tile) / 2.0, Vector2(tile, tile))
 	draw_rect(cell_rect, VALID_TINT if can_build(tower, _hover_cell) else INVALID_TINT)
-	var half: float = Rules.tiles_to_px(Tower.BODY_SIZE_TILES) / 2.0
-	draw_rect(Rect2(center - Vector2(half, half), Vector2(half, half) * 2.0), Color(tower.color, 0.6))
+	var base: Texture2D = tower.levels[0].base_texture
+	if base != null and tower.turret_texture != null:
+		# RF-150: la torre de nivel 1 con su torreta mirando hacia arriba, semitransparente.
+		var ghost := Color(1, 1, 1, 0.6)
+		draw_texture_rect(base, cell_rect, false, ghost)
+		draw_set_transform(center, -PI / 2.0)
+		draw_texture_rect(tower.turret_texture, Rect2(-cell_rect.size / 2.0, cell_rect.size), false, ghost)
+		draw_set_transform(Vector2.ZERO)
+	else:  # RF-156: sin dibujos, el cuadrado de color.
+		var half: float = Rules.tiles_to_px(Tower.BODY_SIZE_TILES) / 2.0
+		draw_rect(Rect2(center - Vector2(half, half), Vector2(half, half) * 2.0), Color(tower.color, 0.6))
 	_draw_range(center, Rules.tiles_to_px(tower.levels[0].range_tiles))
 
 

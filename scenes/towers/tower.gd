@@ -44,10 +44,39 @@ func setup(tower_data: TowerData) -> void:
 
 
 func _ready() -> void:
+	# D-023: los dibujos se achican con suavidad (el mapa usa "Nearest" para no mostrar líneas).
+	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	# RF-130: aparece creciendo desde el centro.
 	scale = Vector2(0.2, 0.2)
 	create_tween().tween_property(self, "scale", Vector2.ONE, 0.18) \
 		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+
+
+## RF-155: ícono para la interfaz: la base de nivel 1 con la torreta mirando hacia arriba,
+## como se ve la torre recién construida. null si a la torre le falta algún dibujo (RF-156).
+static func make_icon(tower_data: TowerData) -> Texture2D:
+	var base: Texture2D = tower_data.levels[0].base_texture if not tower_data.levels.is_empty() else null
+	if base == null or tower_data.turret_texture == null:
+		return null
+	var image: Image = base.get_image()
+	var turret: Image = tower_data.turret_texture.get_image()
+	if image == null or turret == null:
+		return null
+	# Copias: get_image() puede devolver la misma imagen que guarda la textura, y cambiarla
+	# cambiaría también la base que se ve en el mapa.
+	image = image.duplicate()
+	turret = turret.duplicate()
+	# Se trabaja sin las copias achicadas (mipmaps) y se vuelven a generar al final.
+	image.decompress()
+	turret.decompress()
+	image.clear_mipmaps()
+	turret.clear_mipmaps()
+	image.convert(Image.FORMAT_RGBA8)
+	turret.convert(Image.FORMAT_RGBA8)
+	turret.rotate_90(COUNTERCLOCKWISE)
+	image.blend_rect(turret, Rect2i(Vector2i.ZERO, turret.get_size()), Vector2i.ZERO)
+	image.generate_mipmaps()
+	return ImageTexture.create_from_image(image)
 
 
 func stats() -> TowerLevelData:
@@ -181,27 +210,37 @@ func _outline_color() -> Color:
 func _draw() -> void:
 	var half: float = Rules.tiles_to_px(BODY_SIZE_TILES) / 2.0
 	var outline: Color = _outline_color()
-	# Sombra (RF-126): un poco desplazada hacia abajo a la derecha.
-	draw_rect(Rect2(Vector2(-half, -half) + Vector2(4, 5), Vector2(half, half) * 2.0), Color(0, 0, 0, 0.22))
-	# Base.
-	var rect := Rect2(-half, -half, half * 2.0, half * 2.0)
-	draw_rect(rect, data.color)
-	draw_rect(rect, outline, false, 2.0)
-	# Cañón, girado hacia `aim_angle` y retrocedido según `_recoil`.
+	# RF-150: los dibujos ocupan una casilla entera, centrados en la torre.
+	var tile_rect := Rect2(-Rules.TILE_SIZE / 2.0, -Rules.TILE_SIZE / 2.0, Rules.TILE_SIZE, Rules.TILE_SIZE)
+	var base: Texture2D = stats().base_texture
+	# Base (y su sombra, RF-126, un poco desplazada hacia abajo a la derecha).
+	if base != null:
+		draw_circle(Vector2(4, 5), Rules.TILE_SIZE * 0.44, Color(0, 0, 0, 0.22))
+		draw_texture_rect(base, tile_rect, false)
+	else:  # RF-156: sin dibujo, el cuadrado de color de antes.
+		draw_rect(Rect2(Vector2(-half, -half) + Vector2(4, 5), Vector2(half, half) * 2.0), Color(0, 0, 0, 0.22))
+		var rect := Rect2(-half, -half, half * 2.0, half * 2.0)
+		draw_rect(rect, data.color)
+		draw_rect(rect, outline, false, 2.0)
+	# Torreta (o cañón), girada hacia `aim_angle` y retrocedida según `_recoil`.
 	var length: float = _barrel_length()
 	var width: float = _barrel_width()
 	draw_set_transform(Vector2.ZERO, aim_angle)
 	var back: float = RECOIL_PX * _recoil
-	draw_rect(Rect2(-back, -width / 2.0, length, width), outline)
+	if data.turret_texture != null:
+		draw_texture_rect(data.turret_texture, Rect2(tile_rect.position - Vector2(back, 0), tile_rect.size), false)
+	else:
+		draw_rect(Rect2(-back, -width / 2.0, length, width), outline)
 	if _flash_left > 0.0:
 		var strength: float = _flash_left / FLASH_DURATION
 		draw_circle(Vector2(length - back + 3.0, 0.0), width * 0.9, Color(1.0, 0.95, 0.6, strength))
 	draw_set_transform(Vector2.ZERO)
-	# Torreta encima del cañón.
-	draw_circle(Vector2.ZERO, half * 0.42, outline)
-	draw_circle(Vector2.ZERO, half * 0.26, data.color)
-	# RF-75: un puntito por nivel, en la esquina inferior izquierda.
+	if data.turret_texture == null:
+		# Torreta redonda encima del cañón (solo sin dibujo: el dibujo ya la trae).
+		draw_circle(Vector2.ZERO, half * 0.42, outline)
+		draw_circle(Vector2.ZERO, half * 0.26, data.color)
+	# RF-75: un puntito por nivel, abajo y al centro (encima de todo, para que siempre se vean).
 	for i: int in level_number():
-		var dot := Vector2(-half + 7.0 + i * 8.0, half - 7.0)
+		var dot := Vector2((i - (level_number() - 1) / 2.0) * 8.0, half - 4.0)
 		draw_circle(dot, 3.0, Color(1.0, 0.84, 0.3))
 		draw_arc(dot, 3.0, 0.0, TAU, 12, Color(0, 0, 0, 0.6), 1.0)

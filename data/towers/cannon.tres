@@ -1,7 +1,11 @@
 [gd_resource type="Resource" script_class="TowerData" format=3]
 
 [ext_resource type="Script" path="res://scripts/data/tower_level_data.gd" id="1_t20fp"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/base_1.svg" id="2_dxqy6"]
 [ext_resource type="Script" path="res://scripts/data/tower_data.gd" id="2_yxcx4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/base_2.svg" id="3_s70g0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/base_3.svg" id="4_s4vul"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/turret_cannon.svg" id="6_fahly"]
 
 [sub_resource type="Resource" id="Resource_tojmg"]
 script = ExtResource("1_t20fp")
@@ -10,6 +14,7 @@ damage = 20
 fire_rate = 0.6
 range_tiles = 3.0
 splash_radius_tiles = 1.0
+base_texture = ExtResource("2_dxqy6")
 
 [sub_resource type="Resource" id="Resource_t20fp"]
 script = ExtResource("1_t20fp")
@@ -18,6 +23,7 @@ damage = 32
 fire_rate = 0.6
 range_tiles = 3.0
 splash_radius_tiles = 1.2
+base_texture = ExtResource("3_s70g0")
 
 [sub_resource type="Resource" id="Resource_yxcx4"]
 script = ExtResource("1_t20fp")
@@ -26,6 +32,7 @@ damage = 50
 fire_rate = 0.6
 range_tiles = 3.5
 splash_radius_tiles = 1.5
+base_texture = ExtResource("4_s4vul")
 
 [resource]
 script = ExtResource("2_yxcx4")
@@ -33,4 +40,5 @@ id = &"cannon"
 display_name = "Cañón"
 projectile_speed_tiles = 10.0
 color = Color(0.14901961, 0.14901961, 0.14901961, 1)
+turret_texture = ExtResource("6_fahly")
 levels = Array[ExtResource("1_t20fp")]([SubResource("Resource_tojmg"), SubResource("Resource_t20fp"), SubResource("Resource_yxcx4")])

@@ -10,7 +10,9 @@ signal tower_button_pressed(index: int)
 signal pause_pressed
 signal speed_pressed
 
-const TOWER_BUTTON_SIZE := Vector2(176, 60)
+const TOWER_BUTTON_SIZE := Vector2(184, 60)
+## Ancho máximo del dibujo de la torreta en su botón (RF-155).
+const TOWER_ICON_SIZE: int = 40
 ## RF-134: cuánto se ve la tarjeta de presentación de un enemigo.
 const INTRO_SECONDS: float = 6.0
 
@@ -140,8 +142,16 @@ func setup_towers(tower_types: Array[TowerData]) -> void:
 		button.focus_mode = Control.FOCUS_NONE
 		button.text = "%d · %s
 %d de oro" % [i + 1, tower.display_name, tower.levels[0].cost]
-		button.add_theme_font_size_override("font_size", 16)
-		button.icon = _color_swatch(tower.color)
+		button.add_theme_font_size_override("font_size", 15)
+		var icon: Texture2D = Tower.make_icon(tower)
+		if icon != null:
+			# RF-155: base y torreta, como la torre recién construida, achicadas con suavidad (D-023).
+			button.icon = icon
+			button.expand_icon = true
+			button.add_theme_constant_override("icon_max_width", TOWER_ICON_SIZE)
+			button.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+		else:  # RF-156: sin dibujo, un cuadradito de su color.
+			button.icon = _color_swatch(tower.color)
 		button.pressed.connect(tower_button_pressed.emit.bind(i))
 		_tower_button_row.add_child(button)
 		_tower_buttons.append(button)

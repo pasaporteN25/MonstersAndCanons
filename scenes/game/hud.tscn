@@ -90,7 +90,7 @@ theme_override_constants/separation = 12
 
 [node name="NextWave" type="VBoxContainer" parent="BottomBar"]
 unique_name_in_owner = true
-offset_left = 776.0
+offset_left = 800.0
 offset_top = 10.0
 offset_right = 1004.0
 offset_bottom = 86.0

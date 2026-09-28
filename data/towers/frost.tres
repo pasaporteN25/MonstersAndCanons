@@ -2,6 +2,10 @@
 
 [ext_resource type="Script" path="res://scripts/data/tower_level_data.gd" id="1_x1y3c"]
 [ext_resource type="Script" path="res://scripts/data/tower_data.gd" id="2_4uqr0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/base_1.svg" id="2_t0jij"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/base_2.svg" id="3_tr68n"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/base_3.svg" id="4_nc4yv"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/turret_frost.svg" id="6_21kr8"]
 
 [sub_resource type="Resource" id="Resource_110pk"]
 script = ExtResource("1_x1y3c")
@@ -11,6 +15,7 @@ fire_rate = 1.0
 range_tiles = 2.5
 slow_amount = 0.4
 slow_duration = 2.0
+base_texture = ExtResource("2_t0jij")
 
 [sub_resource type="Resource" id="Resource_x1y3c"]
 script = ExtResource("1_x1y3c")
@@ -20,6 +25,7 @@ fire_rate = 1.0
 range_tiles = 3.0
 slow_amount = 0.5
 slow_duration = 2.0
+base_texture = ExtResource("3_tr68n")
 
 [sub_resource type="Resource" id="Resource_4uqr0"]
 script = ExtResource("1_x1y3c")
@@ -29,6 +35,7 @@ fire_rate = 1.0
 range_tiles = 3.0
 slow_amount = 0.6
 slow_duration = 3.0
+base_texture = ExtResource("4_nc4yv")
 
 [resource]
 script = ExtResource("2_4uqr0")
@@ -37,4 +44,5 @@ display_name = "Hielo"
 can_hit_air = true
 projectile_speed_tiles = 10.0
 color = Color(0.49803922, 0.827451, 0.9607843, 1)
+turret_texture = ExtResource("6_21kr8")
 levels = Array[ExtResource("1_x1y3c")]([SubResource("Resource_110pk"), SubResource("Resource_x1y3c"), SubResource("Resource_4uqr0")])

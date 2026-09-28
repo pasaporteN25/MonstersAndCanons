@@ -16,3 +16,5 @@ extends Resource
 @export_range(0.0, 1.0) var slow_amount: float = 0.0
 ## Duración de la ralentización, en segundos.
 @export var slow_duration: float = 0.0
+## Solo visual (RF-150): la base que se ve en este nivel. Vacío = cuadrado de color (RF-156).
+@export var base_texture: Texture2D
