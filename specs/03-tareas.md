@@ -335,6 +335,22 @@
   **Refs:** RF-132, RF-113.
   **Hecho cuando:** los tests pasan (aparece el número, gris con armadura, no aparece con la opción apagada, nunca más de 40) y la prueba de rendimiento sigue sobre 60 FPS.
   **Resultado:** 150 FPS con números y 156 sin ellos (200 enemigos, 60 torres); frames de más de 16,6 ms: 0 a 2 de ~900 en ambos casos, es decir, ruido del sistema.
+### Avisos de enemigos *(pedido por Lucas)*
+
+- [ ] **T66 · Descripciones y marca de peligro**
+  `EnemyData.description` con las frases de la spec; dibujo de las formas compartido (`EnemyShape`) para usarlo también en la interfaz; corona sobre los enemigos peligrosos.
+  **Refs:** RF-134 (frases), RF-136.
+  **Hecho cuando:** los 6 enemigos tienen su frase (test) y la captura muestra la corona sobre el Jefe.
+
+- [ ] **T67 · Próxima oleada y cartel del Jefe**
+  **Refs:** RF-133, RF-135.
+  **Hecho cuando:** los tests comprueban la composición de la próxima oleada (tipos y cantidades) y el texto del cartel en la oleada 10 del nivel 1.
+
+- [ ] **T68 · Presentación de enemigos**
+  Tarjeta la primera vez que aparece cada tipo; "enemigos vistos" en el guardado.
+  **Refs:** RF-134, RF-117.
+  **Hecho cuando:** los tests comprueban que sale una sola vez por tipo, que se guarda y se vuelve a leer, y que fuera de la campaña no se escribe en disco.
+
 ### Otras ideas de pulido *(sin fecha)*
 
 - Decidir ambientación y arte (ver "Preguntas abiertas" de la spec).

@@ -471,6 +471,24 @@ f8   ····················
 - **RF-131** Con todos los efectos activos, el juego sigue cumpliendo la constitución P7 (60 FPS con 200 enemigos y 60 torres).
 - **RF-132** *(M4)* **Números de daño:** al recibir un golpe, sube desde el enemigo un número chico con el **daño real** (después de la armadura, RF-80). Si la armadura le quitó la mitad o más del golpe, el número se ve **gris**: así se aprende que esa torre no conviene contra ese enemigo. Se desvanece en 0,6 s. Nunca hay más de **40** números a la vez (los que sobran no se muestran). Se pueden **apagar** en las opciones (RF-113).
 
+### 9.5 Avisos de enemigos *(M4, pedido por Lucas)*
+
+Para que el jugador sepa **antes** qué viene y qué hace cada enemigo. (Motivo: en una partida real, el Jefe quitó 10 vidas sin que el juego avisara que era peligroso.)
+
+- **RF-133** **Próxima oleada:** en la barra inferior, entre los botones de torres y "Empezar oleada", se ven los enemigos de la **próxima** oleada: la forma de cada tipo y cuántos son (por ejemplo, "×10"). Se actualiza al empezar cada oleada. En la última oleada ya no hay "próxima" y el espacio queda vacío.
+- **RF-134** **Presentación de enemigos:** la **primera vez en todo el juego** que aparece un tipo de enemigo, se muestra arriba una tarjeta con su forma, su nombre y una frase sobre qué hace, durante 6 segundos. No bloquea clics. Los enemigos ya presentados se recuerdan en el guardado (solo jugando desde el menú, RF-117). Las frases están en los datos de cada enemigo (`EnemyData.description`).
+- **RF-135** **Cartel del Jefe:** si la oleada que empieza trae algún enemigo **peligroso** (que quita 5 vidas o más, RF-11), el cartel de oleada (RF-127) agrega "**¡Llega el Jefe!**" (con el nombre del enemigo) en rojo.
+- **RF-136** **Marca de peligro:** los enemigos peligrosos llevan una **corona dorada** dibujada encima.
+
+| Enemigo | Frase de presentación |
+|---|---|
+| Normal | Camina por el camino. Si llega a la salida, quita 1 vida. |
+| Rápido | Muy veloz pero frágil. Las Ametralladoras lo frenan bien. |
+| Tanque | Lento y con mucha vida. Si llega, quita 2 vidas. |
+| Volador | Vuela en línea recta hacia la salida. ¡El Cañón no le pega! |
+| Blindado | Su armadura le quita 3 a cada golpe: la Ametralladora casi no le hace nada. Usa Cañón o Francotirador. |
+| Jefe | Mucha vida y armadura; el Hielo lo frena a medias. ¡Si llega, quita 10 vidas! |
+
 ### 9.4 Android *(hito MA, D-021)*
 
 Adaptaciones **mínimas** para que el juego funcione en un celular. No es un rediseño para pantallas táctiles.
