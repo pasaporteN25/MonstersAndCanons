@@ -270,6 +270,7 @@
 - [ ] **T49 · Exportar el juego**
   Exportar un `.exe` para Windows.
   **Hecho cuando:** el `.exe` funciona en otra carpeta, sin tener Godot abierto, y guarda el progreso.
+  **Preparado:** `export_presets.cfg` (Windows, deja fuera tests, herramientas, specs y GUT). Falta instalar las plantillas: *Editor → Administrar plantillas de exportación → Descargar e instalar*.
 
 > 🎉 **Fin de M3: el juego mediano está terminado.**
 
