@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="TowerData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tower_level_data.gd" id="1_hq2q8"]
+[ext_resource type="Script" path="res://scripts/data/tower_data.gd" id="2_y8sf8"]
+
+[sub_resource type="Resource" id="Resource_qyymo"]
+script = ExtResource("1_hq2q8")
+cost = 50
+damage = 5
+fire_rate = 2.0
+range_tiles = 3.0
+
+[resource]
+script = ExtResource("2_y8sf8")
+id = &"basic"
+display_name = "Ametralladora"
+can_hit_air = true
+projectile_speed_tiles = 10.0
+color = Color(0.47843137, 0.47843137, 0.47843137, 1)
+levels = Array[ExtResource("1_hq2q8")]([SubResource("Resource_qyymo")])

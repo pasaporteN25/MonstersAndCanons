@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="TowerData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tower_level_data.gd" id="1_t20fp"]
+[ext_resource type="Script" path="res://scripts/data/tower_data.gd" id="2_yxcx4"]
+
+[sub_resource type="Resource" id="Resource_tojmg"]
+script = ExtResource("1_t20fp")
+cost = 100
+damage = 12
+fire_rate = 0.6
+range_tiles = 3.0
+splash_radius_tiles = 1.0
+
+[resource]
+script = ExtResource("2_yxcx4")
+id = &"cannon"
+display_name = "Cañón"
+projectile_speed_tiles = 10.0
+color = Color(0.14901961, 0.14901961, 0.14901961, 1)
+levels = Array[ExtResource("1_t20fp")]([SubResource("Resource_tojmg")])

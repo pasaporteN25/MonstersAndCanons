@@ -51,10 +51,10 @@
   **Hecho cuando:** `tests/test_rules.gd` pasa con, al menos, los ejemplos de la spec:
   `damage_after_armor(5, 4) == 1`, `damage_after_armor(40, 4) == 36`, `scaled_health(20, 10, cfg) == 34`, `wave_bonus(3, cfg) == 35`, `sell_refund(110, cfg) == 77` (con `cfg` = `data/balance.tres`).
 
-- [ ] **T11 · Datos de enemigos y torres del M1**
+- [x] **T11 · Datos de enemigos y torres del M1**
   Crear `data/enemies/normal.tres`, `fast.tres`, `tank.tres` y `data/towers/basic.tres`, `cannon.tres`, `frost.tres` (solo nivel 1 de cada torre por ahora) con los valores de las tablas de la spec.
   **Refs:** spec §5.3, §6.
-  **Hecho cuando:** al abrir cada `.tres` en el Inspector, los valores coinciden con las tablas de la spec.
+  **Hecho cuando:** `tests/test_data_files.gd` pasa (compara cada `.tres` con las tablas de la spec).
 
 ### El mapa
 

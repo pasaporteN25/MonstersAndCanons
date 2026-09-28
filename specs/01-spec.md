@@ -114,6 +114,7 @@ La columna **Hito** de las tablas siguientes indica en qué momento se agrega ca
   - **Último** — el más lejos de la salida.
   - **Más fuerte** — el que tiene más vida actual.
   - **Más cercano** — el más cerca de la torre.
+- **RF-55** Los proyectiles viajan a **10 casillas por segundo** (todas las torres). Es lo bastante rápido para que casi nunca lleguen tarde, y lo bastante lento para que se vean.
 
 ### 5.3 Tabla de torres (nivel 1 de cada torre)
 
@@ -181,6 +182,8 @@ La columna **Hito** de las tablas siguientes indica en qué momento se agrega ca
 | `flyer` | **Volador** | 25 | 2.0 | 0 | 8 | 1 | **Sí** | Vuela en línea recta (RF-05) | Rombo celeste | M2 |
 | `armored` | **Blindado** | 45 | 1.2 | 4 | 12 | 1 | No | Armadura alta | Hexágono azul oscuro | M2 |
 | `boss` | **Jefe** | 800 | 0.6 | 3 | 150 | 10 | No | Solo le afecta la **mitad** de cualquier ralentización | Círculo rojo, muy grande | M2 |
+
+**Tamaño visual** (radio del dibujo y de la zona que detectan las torres, en casillas): Normal 0.25 · Rápido 0.2 · Tanque 0.35 · Volador 0.25 · Blindado 0.3 · Jefe 0.45. Todos caben dentro de una casilla del camino (radio máximo 0.5).
 
 ---
 
