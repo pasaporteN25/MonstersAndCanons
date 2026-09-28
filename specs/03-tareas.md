@@ -63,7 +63,7 @@
   **Refs:** RF-01, RF-02; plan §6.1.
   **Hecho cuando:** al ejecutar la escena se ve el mapa completo, sin huecos, con el camino desde un borde hasta otro.
 
-- [ ] **T13 · Camino `Path2D` y test de coincidencia**
+- [x] **T13 · Camino `Path2D` y test de coincidencia**
   Agregar `GroundPath0` (`Path2D`) siguiendo el centro de las casillas del camino. Crear `level.gd` con `is_buildable(cell)`. Crear `tests/test_level_paths.gd`.
   **Refs:** RF-03, RF-04; plan §6.1.
   **Hecho cuando:** el test pasa. Y si se mueve a propósito un punto del `Path2D` al pasto, el test falla.
