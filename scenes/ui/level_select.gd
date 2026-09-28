@@ -15,6 +15,13 @@ func _ready() -> void:
 	Audio.add_click_sounds(self)
 
 
+## Esc (o "atrás" en Android, RF-142) vuelve al menú principal.
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("cancel"):
+		get_viewport().set_input_as_handled()
+		GameFlow.go_to_main_menu()
+
+
 func _make_card(index: int) -> Button:
 	var level: LevelData = GameFlow.level(index)
 	var card := Button.new()

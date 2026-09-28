@@ -267,12 +267,32 @@
   **Refs:** RF-116.
   **Hecho cuando:** suenan todos los eventos de RF-116 y la música no se corta al cambiar de pantalla.
 
-- [ ] **T49 · Exportar el juego**
+- [x] **T49 · Exportar el juego**
   Exportar un `.exe` para Windows.
   **Hecho cuando:** el `.exe` funciona en otra carpeta, sin tener Godot abierto, y guarda el progreso.
-  **Preparado:** `export_presets.cfg` (Windows, deja fuera tests, herramientas, specs y GUT). Falta instalar las plantillas: *Editor → Administrar plantillas de exportación → Descargar e instalar*.
+  **Resultado:** `build/JuegoA.exe` (110 MB) exportado y probado por Lucas fuera de Godot ("fue excelente").
 
 > 🎉 **Fin de M3: el juego mediano está terminado.**
+
+---
+
+## MA — Android *(prueba, D-021)*
+
+> Objetivo: instalar y jugar el juego en un celular, con las adaptaciones mínimas de la spec §9.4. No es un rediseño táctil.
+
+- [x] **TA1 · Adaptaciones mínimas**
+  Horizontal fijo, botón "atrás" = Esc sin cerrar el juego (GameFlow simula la acción `cancel`), "atrás" en la selección de nivel vuelve al menú.
+  **Refs:** RF-141, RF-142.
+  **Hecho cuando:** `test_android_back_button_opens_the_pause_menu` pasa.
+
+- [ ] **TA2 · Exportar el `.apk`**
+  Configuración `Android` en `export_presets.cfg` (paquete `com.juegoa.towerdefense`, solo arm64, sin Gradle). Requiere en el editor: *Configuración del Editor → Exportar → Android → Ruta del SDK de Java* = `C:\Program Files\Android\Android Studio\jbr`.
+  **Refs:** RF-140.
+  **Hecho cuando:** `godot --headless --path . --export-debug "Android" build/JuegoA.apk` genera el archivo sin errores.
+
+- [ ] **TA3 · Probar en un celular**
+  **Refs:** RF-140 a RF-143.
+  **Hecho cuando:** Lucas instala el `.apk`, el juego abre en horizontal, se puede construir tocando, y "atrás" abre el menú de pausa sin cerrar el juego.
 
 ---
 

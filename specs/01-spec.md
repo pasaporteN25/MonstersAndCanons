@@ -37,6 +37,7 @@ El juego completo es grande, así que se construye por **hitos**. Al terminar ca
 | **M2** | Profundidad | Mejorar y vender torres, 4.ª torre, 3 enemigos nuevos (voladores, blindados, jefe), velocidad x2, pausa, modos de apuntado. | Un juego con decisiones interesantes. |
 | **M3** | Juego completo | Menú principal, selección de nivel, 3 mapas, guardado de progreso, opciones, sonido. | El "juego mediano" terminado. |
 | **M4** | Pulido *(opcional)* | Arte, animaciones, partículas, mapas 4 y 5, balance fino. | Un juego que da gusto mostrar. |
+| **MA** | Android *(prueba)* | Exportar un `.apk` para celular con las adaptaciones mínimas al tacto (§9.4). Pedido por Lucas (D-021). | El juego se instala y se juega en un celular. |
 
 La columna **Hito** de las tablas siguientes indica en qué momento se agrega cada cosa.
 
@@ -384,6 +385,15 @@ La curva de dificultad buscada: en el nivel 1 alcanza con una sola torre bien us
 
 - **RF-131** Con todos los efectos activos, el juego sigue cumpliendo la constitución P7 (60 FPS con 200 enemigos y 60 torres).
 
+### 9.4 Android *(hito MA, D-021)*
+
+Adaptaciones **mínimas** para que el juego funcione en un celular. No es un rediseño para pantallas táctiles.
+
+- **RF-140** Se exporta un `.apk` que se instala en un celular Android (versión de prueba, firmada con la clave de depuración).
+- **RF-141** El juego se ve siempre **en horizontal** (girando el celular hacia cualquiera de los dos lados).
+- **RF-142** El **botón "atrás"** de Android hace lo mismo que `Esc`: en la partida cancela la construcción o la selección, o abre y cierra el menú de pausa; en las opciones las cierra; en la selección de nivel vuelve al menú principal. **Nunca cierra el juego de golpe** (para salir está el botón "Salir" del menú principal).
+- **RF-143** **Tocar** equivale a un clic izquierdo: tocar un botón lo pulsa; con una torre elegida, tocar una casilla construye; tocar una torre la selecciona. Como no hay "pasar el mouse por encima", la vista previa aparece donde se tocó. Para dejar de construir se toca otra vez el botón de la torre elegida.
+
 ---
 
 ## 10. Pantallas y progreso *(M3)*
@@ -410,7 +420,7 @@ Se deja por escrito para no caer en la tentación (constitución P4). Si más ad
 - Héroes o unidades controlables.
 - Habilidades activas del jugador (lluvia de meteoros, etc.).
 - Modo infinito / endless.
-- Versión para móvil o controles táctiles.
+- ~~Versión para móvil~~ → pasó al hito **MA** (§9.4, D-021), **solo** con adaptaciones mínimas. Sigue fuera: controles táctiles propios (arrastrar para construir, gestos, zoom) y una interfaz pensada para pantallas chicas.
 - Llamar oleadas antes de tiempo con bonus de oro.
 - Meta-progresión (mejoras permanentes entre partidas, tienda).
 - Historia, diálogos o cinemáticas.

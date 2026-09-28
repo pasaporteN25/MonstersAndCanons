@@ -2,7 +2,7 @@
 
 Juego *tower defense* 2D hecho en **Godot 4** con **GDScript**, construido con **SDD (Spec-Driven Development)**.
 
-> **Estado actual:** M1 ✅, M1.5 ✅, M2 ✅ y M3 casi terminado: el `.exe` se exporta y arranca; falta comprobar jugando que guarda el progreso (T49).
+> **Estado actual:** M1, M1.5, M2 y M3 ✅ (el "juego mediano" está terminado). En curso: versión Android de prueba (hito MA en [`specs/03-tareas.md`](specs/03-tareas.md)).
 >
 > **Versión de Godot:** 4.7.2 estable (renderizador *Compatibility*).
 

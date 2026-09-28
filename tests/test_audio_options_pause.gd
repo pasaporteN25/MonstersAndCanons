@@ -92,6 +92,19 @@ func test_escape_opens_the_pause_menu_and_pauses() -> void:
 	assert_false(game.pause_menu.is_open())
 
 
+## RF-142: el botón "atrás" de Android hace lo mismo que Esc (no cierra el juego).
+func test_android_back_button_opens_the_pause_menu() -> void:
+	var game: Game = GAME_SCENE.instantiate()
+	add_child_autofree(game)
+	GameFlow.notification(NOTIFICATION_WM_GO_BACK_REQUEST)
+	await wait_process_frames(2)  # el Esc simulado se entrega en el frame siguiente
+	var menu_open: bool = game.pause_menu.is_open()
+	game.close_pause_menu()
+	assert_true(menu_open)
+	assert_false(ProjectSettings.get_setting("application/config/quit_on_go_back"),
+		"Android no cierra el juego de golpe")
+
+
 func test_pause_menu_does_not_open_after_game_over() -> void:
 	var game: Game = GAME_SCENE.instantiate()
 	add_child_autofree(game)

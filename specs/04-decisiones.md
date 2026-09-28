@@ -114,3 +114,9 @@
 - **Alternativas:** descargar sonidos con licencia libre (CC0); usar un editor como *jsfxr*.
 - **Por qué:** descargar archivos de internet requiere revisar la licencia de cada uno y el permiso de Lucas. Sintetizarlos con `tools/make_sounds.gd` (ondas + envolventes) da sonidos "retro" que combinan con el estilo geométrico, sin dependencias externas, y se pueden regenerar cuando se quiera.
 - **Cómo reemplazarlos:** poner un `.wav` con el mismo nombre en `assets/audio/`. El juego no necesita cambios.
+
+### D-021 · Versión Android de prueba con adaptaciones mínimas
+- **Fecha:** 2026-09-28 · **Estado:** Aceptada · **Decidió:** Lucas (pidió el `.apk`) / Claude (alcance)
+- **Qué:** exportar el mismo proyecto a Android (Godot lo hace sin portar nada) con solo tres adaptaciones: horizontal fijo, botón "atrás" = Esc, y tocar = clic (spec §9.4).
+- **Por qué mínimo:** "Versión para móvil" estaba fuera de alcance (spec §11). Lucas pidió hacerlo solo si no era muy complejo. Todo lo necesario ya estaba instalado (Android Studio: SDK y Java 21; plantillas de Godot). Un rediseño táctil de verdad (arrastrar para construir, botones más grandes, zoom) sigue fuera de alcance.
+- **Riesgo conocido:** la interfaz fue pensada para 1280×720 con mouse; en pantallas chicas los botones pueden quedar pequeños. Se evalúa al probar (TA3).

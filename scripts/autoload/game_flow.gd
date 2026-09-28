@@ -17,6 +17,19 @@ func _ready() -> void:
 	apply_display_settings()
 
 
+## RF-142: el botón "atrás" de Android hace lo mismo que Esc.
+## En vez de repetir en cada pantalla qué hacer, se simula la acción "cancel":
+## así funciona todo lo que ya responde a Esc. (Para que Android no cierre el juego
+## de golpe, project.godot tiene application/config/quit_on_go_back = false.)
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_GO_BACK_REQUEST:
+		for pressed: bool in [true, false]:
+			var event := InputEventAction.new()
+			event.action = &"cancel"
+			event.pressed = pressed
+			Input.parse_input_event(event)
+
+
 ## RF-113: pantalla completa o ventana, según las opciones guardadas.
 ## Solo cambia algo si hace falta (así no "des-maximiza" la ventana al arrancar).
 func apply_display_settings() -> void:
