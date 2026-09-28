@@ -2,7 +2,7 @@
 
 Juego *tower defense* 2D hecho en **Godot 4** con **GDScript**, construido con **SDD (Spec-Driven Development)**.
 
-> **Estado actual:** M1 ✅, M1.5 ✅, M2 ✅ y M3 casi terminado: solo falta exportar el `.exe` (T49), que necesita instalar las plantillas de exportación de Godot.
+> **Estado actual:** M1 ✅, M1.5 ✅, M2 ✅ y M3 casi terminado: el `.exe` se exporta y arranca; falta comprobar jugando que guarda el progreso (T49).
 >
 > **Versión de Godot:** 4.7.2 estable (renderizador *Compatibility*).
 
@@ -80,3 +80,27 @@ Palabras que aparecen en todos los documentos:
 - **Godot 4** (versión estándar, **no** la versión ".NET/Mono"; esa es para C#). Descarga: https://godotengine.org/download
 - **Git** para guardar el historial de cambios.
 - Recomendado: agregar Godot al `PATH` del sistema, así Claude puede ejecutar las pruebas automáticas y detectar errores de scripts sin abrir el editor (ver T00).
+
+---
+
+## Cómo exportar el juego (`.exe` para Windows)
+
+Requiere las plantillas de exportación de Godot 4.7.2 (en el editor: *Editor → Administrar plantillas de exportación → Descargar e instalar*; se hace una sola vez).
+
+```bash
+godot --headless --path . --export-release "Windows Desktop" build/JuegoA.exe
+```
+
+- El resultado es **un solo archivo** (`build/JuegoA.exe`, ~110 MB: casi todo es el motor de Godot). Se puede copiar a cualquier carpeta o computadora con Windows y jugar sin instalar nada.
+- La configuración está en `export_presets.cfg`: deja fuera `tests/`, `tools/`, `specs/` y GUT.
+- La carpeta `build/` no se sube a git.
+- El progreso se guarda en `%APPDATA%\Godot\app_userdata\JuegoA\save.json`.
+
+## Herramientas
+
+| Comando | Para qué |
+|---|---|
+| `godot --headless --path . -s addons/gut/gut_cmdln.gd -gdir=res://tests -gexit` | Correr todos los tests. |
+| `godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- smart level=1` | Bot que juega solo para revisar el balance (ver spec §7.1). |
+| `godot --path . -s tools/perf_test.gd` | Prueba de rendimiento con 200 enemigos y 60 torres. |
+| `godot --headless --path . -s tools/make_sounds.gd` | Volver a generar los sonidos. |
