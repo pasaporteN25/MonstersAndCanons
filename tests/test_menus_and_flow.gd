@@ -104,4 +104,43 @@ func test_level_select_shows_best_result() -> void:
 	SaveManager.record_victory(&"level_01", 17)
 	var select: Control = (load("res://scenes/ui/level_select.tscn") as PackedScene).instantiate()
 	add_child_autofree(select)
-	assert_eq(select.status_text(0), "Completado\nMejor: 17 vidas", "RF-111")
+	assert_eq(select.status_text(0), "Mejor: 17 vidas", "RF-111 (las estrellas se ven abajo)")
+
+
+# --- Estrellas (RF-93, RF-111) ---
+
+func test_victory_screen_shows_stars() -> void:
+	var game: Game = GAME_SCENE.instantiate()
+	add_child_autofree(game)
+	game.session.lose_lives(3)  # quedan 17 → 2 estrellas
+	for i: int in game.session.total_waves:
+		game.session.begin_wave()
+		game.session.complete_wave()
+	var stars: StarsDisplay = game.end_screen.get_node("%Stars")
+	assert_true(stars.visible)
+	assert_eq(stars.count, 2)
+
+
+func test_defeat_screen_hides_stars() -> void:
+	var game: Game = GAME_SCENE.instantiate()
+	add_child_autofree(game)
+	game.session.lose_lives(100)
+	assert_false((game.end_screen.get_node("%Stars") as StarsDisplay).visible)
+
+
+func test_level_stars_come_from_best_lives() -> void:
+	assert_eq(GameFlow.level_stars(0), 0, "sin ganar")
+	SaveManager.record_victory(&"level_01", 12)
+	assert_eq(GameFlow.level_stars(0), 2)
+	SaveManager.record_victory(&"level_01", 19)
+	assert_eq(GameFlow.level_stars(0), 3, "cuenta el mejor resultado")
+	assert_eq(GameFlow.total_stars(), 3)
+	assert_eq(GameFlow.max_stars(), GameFlow.level_count() * 3)
+
+
+func test_level_select_shows_total_stars() -> void:
+	SaveManager.record_victory(&"level_01", 20)
+	var select: Control = (load("res://scenes/ui/level_select.tscn") as PackedScene).instantiate()
+	add_child_autofree(select)
+	assert_eq((select.get_node("%TotalStars") as Label).text,
+		"Estrellas: 3 de %d" % GameFlow.max_stars())

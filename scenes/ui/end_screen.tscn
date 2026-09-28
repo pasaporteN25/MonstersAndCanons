@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://scenes/ui/end_screen.gd" id="1_end"]
 [ext_resource type="StyleBox" path="res://assets/ui/panel_style.tres" id="9_style"]
+[ext_resource type="Script" path="res://scenes/ui/stars_display.gd" id="10_stars"]
 
 [node name="EndScreen" type="CanvasLayer"]
 layer = 10
@@ -45,6 +46,13 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 48
 text = "Título"
 horizontal_alignment = 1
+
+[node name="Stars" type="Control" parent="Dim/Center/Panel/Margin/Rows"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+script = ExtResource("10_stars")
+star_size = 44.0
 
 [node name="Detail" type="Label" parent="Dim/Center/Panel/Margin/Rows"]
 unique_name_in_owner = true

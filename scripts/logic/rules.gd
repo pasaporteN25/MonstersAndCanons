@@ -38,6 +38,18 @@ static func sell_refund(total_invested: int, cfg: BalanceConfig) -> int:
 	return floori(total_invested * cfg.sell_refund_percent / 100.0)
 
 
+## RF-93: estrellas (0 a 3) según las vidas que quedaron al ganar.
+## 0 = no se ganó (sin vidas). Cuentas con enteros para no tener errores de redondeo (D-013).
+static func stars_for(lives_left: int, starting_lives: int, cfg: BalanceConfig) -> int:
+	if lives_left <= 0:
+		return 0
+	if lives_left * 100 >= cfg.star_3_lives_percent * starting_lives:
+		return 3
+	if lives_left * 100 >= cfg.star_2_lives_percent * starting_lives:
+		return 2
+	return 1
+
+
 ## RF-60 y Jefe: ralentización que realmente sufre un enemigo según su resistencia.
 static func effective_slow(slow_amount: float, slow_resistance: float) -> float:
 	return slow_amount * (1.0 - slow_resistance)

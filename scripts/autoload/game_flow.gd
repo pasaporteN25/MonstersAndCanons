@@ -3,6 +3,7 @@
 extends Node
 
 const CAMPAIGN: CampaignData = preload("res://data/campaign.tres")
+const BALANCE: BalanceConfig = preload("res://data/balance.tres")
 const MAIN_MENU_SCENE: String = "res://scenes/ui/main_menu.tscn"
 const LEVEL_SELECT_SCENE: String = "res://scenes/ui/level_select.tscn"
 const GAME_SCENE: String = "res://scenes/game/game.tscn"
@@ -53,6 +54,26 @@ func level(index: int) -> LevelData:
 ## RF-112: el primer nivel siempre está desbloqueado; el resto, según el guardado.
 func is_level_unlocked(index: int) -> bool:
 	return index == 0 or SaveManager.is_unlocked(level(index).id)
+
+
+## RF-93: estrellas conseguidas en un nivel (0 si nunca se ganó).
+## No se guardan aparte: salen de la mejor cantidad de vidas, que sí se guarda.
+func level_stars(index: int) -> int:
+	var lvl: LevelData = level(index)
+	if not SaveManager.is_completed(lvl.id):
+		return 0
+	return Rules.stars_for(SaveManager.best_lives(lvl.id), lvl.starting_lives, BALANCE)
+
+
+func total_stars() -> int:
+	var total: int = 0
+	for i: int in level_count():
+		total += level_stars(i)
+	return total
+
+
+func max_stars() -> int:
+	return level_count() * StarsDisplay.MAX_STARS
 
 
 func current_level() -> LevelData:

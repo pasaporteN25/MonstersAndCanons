@@ -90,3 +90,20 @@ func test_boss_resists_half_of_the_slow() -> void:
 func test_tiles_to_px() -> void:
 	assert_eq(Rules.tiles_to_px(3.0), 192.0)
 	assert_eq(Rules.tiles_to_px(0.5), 32.0)
+
+
+# --- RF-93: estrellas ---
+
+func test_star_thresholds_match_spec() -> void:
+	assert_eq(cfg.star_3_lives_percent, 90, "RF-93")
+	assert_eq(cfg.star_2_lives_percent, 50, "RF-93")
+
+
+func test_stars_for() -> void:
+	assert_eq(Rules.stars_for(20, 20, cfg), 3)
+	assert_eq(Rules.stars_for(18, 20, cfg), 3, "90 % justo")
+	assert_eq(Rules.stars_for(17, 20, cfg), 2)
+	assert_eq(Rules.stars_for(10, 20, cfg), 2, "50 % justo")
+	assert_eq(Rules.stars_for(9, 20, cfg), 1)
+	assert_eq(Rules.stars_for(1, 20, cfg), 1, "ganar con 1 vida también da una estrella")
+	assert_eq(Rules.stars_for(0, 20, cfg), 0, "sin vidas no se ganó")

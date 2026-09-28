@@ -14,3 +14,7 @@ extends Resource
 @export var countdown_seconds: float = 0.0
 ## Porcentaje de vida extra que gana cada enemigo por cada oleada (RF-36).
 @export var health_scale_percent_per_wave: int = 0
+## RF-93: % de las vidas iniciales que hay que conservar para ganar 3 estrellas.
+@export_range(0, 100) var star_3_lives_percent: int = 0
+## RF-93: % de las vidas iniciales que hay que conservar para ganar 2 estrellas.
+@export_range(0, 100) var star_2_lives_percent: int = 0

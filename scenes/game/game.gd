@@ -278,7 +278,8 @@ func _on_state_changed(state: LevelSession.State) -> void:
 	var in_campaign: bool = GameFlow.current_level() != null
 	if state == LevelSession.State.WON:
 		GameFlow.level_won(session.lives)  # RF-112 y RF-115: desbloquea y guarda
-		end_screen.show_victory(session.lives, GameFlow.has_next_level(), in_campaign)
+		var stars: int = Rules.stars_for(session.lives, level_data.starting_lives, balance)  # RF-93
+		end_screen.show_victory(session.lives, stars, GameFlow.has_next_level(), in_campaign)
 		Audio.play(&"victory")
 	else:
 		end_screen.show_defeat(session.wave, session.total_waves, in_campaign)

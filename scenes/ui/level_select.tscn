@@ -46,6 +46,14 @@ theme_override_font_sizes/font_size = 48
 text = "Elegir nivel"
 horizontal_alignment = 1
 
+[node name="TotalStars" type="Label" parent="Center/Rows"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.84, 0.3, 1)
+theme_override_font_sizes/font_size = 22
+text = "Estrellas: 0 de 15"
+horizontal_alignment = 1
+
 [node name="Cards" type="HBoxContainer" parent="Center/Rows"]
 unique_name_in_owner = true
 layout_mode = 2

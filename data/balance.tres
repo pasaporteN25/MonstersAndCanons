@@ -9,3 +9,5 @@ wave_bonus_per_wave = 5
 sell_refund_percent = 70
 countdown_seconds = 15.0
 health_scale_percent_per_wave = 40
+star_3_lives_percent = 90
+star_2_lives_percent = 50
