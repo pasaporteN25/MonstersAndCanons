@@ -58,7 +58,7 @@
 
 ### El mapa
 
-- [ ] **T12 · TileSet y mapa del nivel 1**
+- [x] **T12 · TileSet y mapa del nivel 1**
   Crear un `TileSet` de 64×64 con 3 casillas de colores (verde = libre, beige = camino, gris = bloqueada) y la capa de datos `buildable`. Crear `scenes/levels/level_01.tscn` con un `TileMapLayer` de 20×9 y un camino en forma de "S".
   **Refs:** RF-01, RF-02; plan §6.1.
   **Hecho cuando:** al ejecutar la escena se ve el mapa completo, sin huecos, con el camino desde un borde hasta otro.

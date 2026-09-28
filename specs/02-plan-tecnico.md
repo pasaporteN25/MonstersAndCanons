@@ -97,7 +97,9 @@ JuegoA/
 │   ├── enemies/  normal.tres, fast.tres, tank.tres, flyer.tres, armored.tres, boss.tres
 │   └── levels/   level_01.tres, level_02.tres, level_03.tres
 │
-├── assets/                       ← (M3/M4) sonidos, imágenes, fuentes
+├── assets/
+│   ├── tiles/    tiles.png, tileset.tres   ← casillas provisionales (M1)
+│   └── ...                     ← (M3/M4) sonidos, imágenes, fuentes
 └── tests/
     ├── test_rules.gd
     ├── test_level_paths.gd
