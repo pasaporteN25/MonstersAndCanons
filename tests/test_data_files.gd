@@ -138,3 +138,16 @@ func test_level_01_waves_match_spec() -> void:
 			assert_eq(groups[g].count, expected[g][1], label + ": cantidad")
 			assert_almost_eq(groups[g].interval, expected[g][2], 0.001, label + ": intervalo")
 			assert_almost_eq(groups[g].start_delay, expected[g][3], 0.001, label + ": retraso")
+
+
+# --- Avisos de enemigos (spec §9.5) ---
+
+func test_every_enemy_has_a_description() -> void:
+	for id: String in ["normal", "fast", "tank", "flyer", "armored", "boss"]:
+		assert_gt(_enemy(id).description.length(), 10, "%s: RF-134" % id)
+
+
+func test_only_the_boss_is_dangerous() -> void:
+	for id: String in ["normal", "fast", "tank", "flyer", "armored"]:
+		assert_false(Rules.is_dangerous(_enemy(id)), id)
+	assert_true(Rules.is_dangerous(_enemy("boss")), "RF-136: quita 10 vidas")

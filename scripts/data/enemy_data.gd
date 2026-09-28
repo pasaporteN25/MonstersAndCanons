@@ -8,6 +8,8 @@ enum Shape { CIRCLE, TRIANGLE, SQUARE, DIAMOND, HEXAGON }
 
 @export var id: StringName = &""
 @export var display_name: String = ""
+## RF-134: frase que se muestra la primera vez que aparece este enemigo.
+@export_multiline var description: String = ""
 ## Vida en la oleada 1; después crece según RF-36.
 @export var max_health: int = 0
 ## Casillas por segundo.

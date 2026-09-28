@@ -6,6 +6,7 @@
 script = ExtResource("1_wrwnl")
 id = &"tank"
 display_name = "Tanque"
+description = "Lento y con mucha vida. Si llega, quita 2 vidas."
 max_health = 135
 speed_tiles = 0.8
 reward = 15

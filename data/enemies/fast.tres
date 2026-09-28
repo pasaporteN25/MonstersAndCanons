@@ -6,6 +6,7 @@
 script = ExtResource("1_hqxyi")
 id = &"fast"
 display_name = "Rápido"
+description = "Muy veloz pero frágil. Las Ametralladoras lo frenan bien."
 max_health = 18
 speed_tiles = 3.0
 reward = 4

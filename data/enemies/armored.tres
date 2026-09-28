@@ -6,6 +6,7 @@
 script = ExtResource("1_fklr6")
 id = &"armored"
 display_name = "Blindado"
+description = "Su armadura le quita 3 a cada golpe: la Ametralladora casi no le hace nada. Usa Cañón o Francotirador."
 max_health = 30
 speed_tiles = 1.2
 armor = 3

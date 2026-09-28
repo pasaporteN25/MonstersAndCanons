@@ -6,6 +6,7 @@
 script = ExtResource("1_g0ogr")
 id = &"flyer"
 display_name = "Volador"
+description = "Vuela en línea recta hacia la salida. ¡El Cañón no le pega!"
 max_health = 18
 speed_tiles = 2.0
 reward = 8

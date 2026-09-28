@@ -163,32 +163,15 @@ func _draw() -> void:
 	var squash := Vector2(1.0 + BOB_AMOUNT * wave, 1.0 - BOB_AMOUNT * wave)
 	var pointy: bool = data.shape == EnemyData.Shape.TRIANGLE or data.shape == EnemyData.Shape.DIAMOND
 	draw_set_transform(Vector2(0, -absf(wave) * 2.0), _heading + PI / 2.0 if pointy else 0.0, squash)
-	match data.shape:
-		EnemyData.Shape.CIRCLE:
-			draw_circle(Vector2.ZERO, r, fill)
-			draw_arc(Vector2.ZERO, r, 0.0, TAU, 32, outline, 2.0)
-		EnemyData.Shape.SQUARE:
-			var rect := Rect2(-r, -r, r * 2.0, r * 2.0)
-			draw_rect(rect, fill)
-			draw_rect(rect, outline, false, 2.0)
-		EnemyData.Shape.TRIANGLE:
-			_draw_regular_polygon(3, r, fill, outline)
-		EnemyData.Shape.DIAMOND:
-			_draw_regular_polygon(4, r, fill, outline)
-		EnemyData.Shape.HEXAGON:
-			_draw_regular_polygon(6, r, fill, outline)
+	EnemyShape.draw(self, data.shape, r, fill, outline)
 	draw_set_transform(Vector2.ZERO)
+	var bar_top: float = -r - HEALTH_BAR_HEIGHT - 4.0
 	if is_health_bar_visible():
 		_draw_health_bar(r)
-
-
-func _draw_regular_polygon(sides: int, r: float, fill: Color, outline: Color) -> void:
-	var points := PackedVector2Array()
-	for i: int in sides:
-		points.append(Vector2.from_angle(-PI / 2.0 + TAU * i / sides) * r)
-	draw_colored_polygon(points, fill)
-	points.append(points[0])
-	draw_polyline(points, outline, 2.0)
+	if Rules.is_dangerous(data):
+		# RF-136: corona encima (y encima de la barra de vida, si se ve).
+		var crown_base: float = bar_top - 3.0 if is_health_bar_visible() else -r - 3.0
+		EnemyShape.draw_crown(self, Vector2(0, crown_base), r * 0.9)
 
 
 ## RF-82: barra verde sobre fondo rojo oscuro, encima del enemigo.

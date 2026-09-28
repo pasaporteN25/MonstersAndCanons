@@ -5,6 +5,13 @@ extends RefCounted
 
 ## Tamaño de una casilla en píxeles (RF-01). No es un número de balance (plan §4.2).
 const TILE_SIZE: float = 64.0
+## RF-135/RF-136: un enemigo es "peligroso" si quita esta cantidad de vidas o más.
+## Es un criterio de interfaz (cuándo avisar), no un número de balance.
+const DANGEROUS_LIVES_DAMAGE: int = 5
+
+
+static func is_dangerous(enemy: EnemyData) -> bool:
+	return enemy.lives_damage >= DANGEROUS_LIVES_DAMAGE
 
 
 static func tiles_to_px(tiles: float) -> float:

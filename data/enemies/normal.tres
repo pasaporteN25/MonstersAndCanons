@@ -6,6 +6,7 @@
 script = ExtResource("1_qjnvf")
 id = &"normal"
 display_name = "Normal"
+description = "Camina por el camino. Si llega a la salida, quita 1 vida."
 max_health = 30
 speed_tiles = 1.5
 reward = 5

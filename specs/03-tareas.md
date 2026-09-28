@@ -337,7 +337,7 @@
   **Resultado:** 150 FPS con números y 156 sin ellos (200 enemigos, 60 torres); frames de más de 16,6 ms: 0 a 2 de ~900 en ambos casos, es decir, ruido del sistema.
 ### Avisos de enemigos *(pedido por Lucas)*
 
-- [ ] **T66 · Descripciones y marca de peligro**
+- [x] **T66 · Descripciones y marca de peligro**
   `EnemyData.description` con las frases de la spec; dibujo de las formas compartido (`EnemyShape`) para usarlo también en la interfaz; corona sobre los enemigos peligrosos.
   **Refs:** RF-134 (frases), RF-136.
   **Hecho cuando:** los 6 enemigos tienen su frase (test) y la captura muestra la corona sobre el Jefe.
