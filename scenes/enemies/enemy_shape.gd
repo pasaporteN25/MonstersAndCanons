@@ -11,8 +11,9 @@ const CROWN_COLOR := Color(1.0, 0.84, 0.3)
 ## (unas 20 de sus 64 unidades de radio) mide lo mismo que el círculo de antes.
 const SPRITE_SCALE: float = 2.8
 
-## RF-123: siluetas blancas ya armadas: { ruta del dibujo: ImageTexture }.
-static var _flash_textures: Dictionary = {}
+## RF-123: la silueta blanca ya armada se guarda como dato extra ("meta") del propio dibujo:
+## así vive lo mismo que él y se libera junto con él al cerrar el juego.
+const FLASH_META: StringName = &"flash_silhouette"
 
 
 ## Dibuja el sprite de un enemigo centrado en (0, 0). En los SVG el cuerpo está 2 unidades
@@ -32,8 +33,8 @@ static func sprite_top(radius: float) -> float:
 ## RF-123: silueta blanca del dibujo, para el parpadeo al recibir un golpe. Se arma la primera
 ## vez que se pide y se guarda. (Multiplicar el color por más de 1 no aclara con este renderizador.)
 static func flash_texture(texture: Texture2D) -> Texture2D:
-	if _flash_textures.has(texture.resource_path):
-		return _flash_textures[texture.resource_path]
+	if texture.has_meta(FLASH_META):
+		return texture.get_meta(FLASH_META)
 	var image: Image = texture.get_image().duplicate()  # copia: no tocar la del dibujo
 	image.decompress()
 	image.clear_mipmaps()
@@ -49,7 +50,7 @@ static func flash_texture(texture: Texture2D) -> Texture2D:
 		Image.FORMAT_RGBA8, bytes)
 	white.generate_mipmaps()
 	var flash := ImageTexture.create_from_image(white)
-	_flash_textures[texture.resource_path] = flash
+	texture.set_meta(FLASH_META, flash)
 	return flash
 
 

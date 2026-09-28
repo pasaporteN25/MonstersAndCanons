@@ -96,6 +96,25 @@ godot --headless --path . --export-release "Windows Desktop" build/JuegoA.exe
 - La carpeta `build/` no se sube a git.
 - El progreso se guarda en `%APPDATA%\Godot\app_userdata\JuegoA\save.json`.
 
+## Dibujos (arte provisional)
+
+Los dibujos del juego son archivos **SVG** en `assets/sprites/` (decisión D-023, spec §9.6). Son **provisionales**: el arte definitivo sigue en el backlog (B-02), porque depende de la ambientación.
+
+| Carpeta | Qué hay | Cómo están dibujados |
+|---|---|---|
+| `towers/` | `base_1.svg`, `base_2.svg`, `base_3.svg` (una base por nivel de torre) y `turret_<torre>.svg` | Desde arriba. La torreta mira a la **derecha** y gira sobre el **centro** de la imagen. |
+| `enemies/` | Un archivo por enemigo (`normal.svg`, `boss.svg`…) | De costado, mirando a la **derecha**. El juego los da vuelta cuando caminan hacia la izquierda. |
+| `projectiles/` | Un proyectil por torre | Mirando a la derecha. Son de 32×32; el resto, de 64×64. |
+| `map/` | Rocas, árbol, arbusto y la puerta de salida | Ocupan una casilla. |
+
+**Para cambiar un dibujo:**
+
+1. Abrir el `.svg` en **Inkscape** (gratis), Figma o Illustrator, editarlo y guardarlo con el **mismo nombre**. También sirve una imagen PNG de 128×128: en ese caso hay que elegirla en el Inspector, en el `.tres` de la torre o del enemigo (carpeta `data/`).
+2. Abrir el proyecto en Godot: el editor vuelve a importar el archivo solo.
+3. Si el archivo es **nuevo** (no reemplaza a uno que ya estaba), seleccionarlo y en el panel **Importar** poner `Svg → Scale = 2` y activar `Mipmaps → Generate`; después, *Reimportar*. Los que ya están en el proyecto tienen esa configuración.
+
+Si a una torre o a un enemigo le falta el dibujo, el juego usa la forma geométrica de antes (RF-156): nunca se rompe por un archivo que falta.
+
 ## Herramientas
 
 | Comando | Para qué |
