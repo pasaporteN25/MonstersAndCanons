@@ -91,3 +91,9 @@
 - **Alternativas:** seguir el orden original (M2 → M3 → M4 con el pulido al final).
 - **Por qué:** con M1 terminado, Lucas confirmó que el juego es divertido, que era la condición de la constitución P4 para dejar de lado "solo formas simples". Ver el juego más vivo motiva a seguir.
 - **Cómo:** se mantiene el **estilo geométrico** (sin dibujos ni sprites) porque la ambientación todavía no está decidida; así nada de este trabajo se pierde si después se cambian las formas por arte. Los efectos son solo visuales y no cambian ninguna regla.
+
+### D-017 · "Épocas" entra al backlog como candidata a ambientación
+- **Fecha:** 2026-09-28 · **Estado:** Propuesta (sin fecha) · **Propuso:** Lucas
+- **Qué:** idea B-01 de la spec §13: armas y enemigos que evolucionan a través de las épocas.
+- **Por qué no ahora:** cambia la ambientación, el arte y quizás la estructura de la campaña. Hacerlo antes de tener M2 (profundidad) y M3 (campaña y guardado) obligaría a rehacer trabajo. M1.5 mantiene el estilo geométrico justamente para que nada se pierda si se elige esta ambientación.
+- **Próximo paso:** elegir variante (A, B o C) antes de M4.

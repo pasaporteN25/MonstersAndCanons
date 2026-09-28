@@ -328,7 +328,39 @@ Cosas que **no** hace falta decidir ahora; se deciden antes del hito indicado.
 | Pregunta | Decidir antes de |
 |---|---|
 | ¿Nombre definitivo del juego? | M3 |
-| ¿Ambientación? (medieval, espacial, juguetes…) Afecta nombres de torres/enemigos y el arte. | M4 |
+| ¿Ambientación? (medieval, espacial, juguetes…) Afecta nombres de torres/enemigos y el arte. **Candidata fuerte: "Épocas" (§13, B-01).** | M4 |
 | ¿Estrellas por nivel (1–3 según vidas restantes) en vez de "mejor cantidad de vidas"? | M3 |
 | ¿Música: de dónde sale? (propia, gratuita con licencia CC0…) | M3 |
 | ¿El aumento de vida por oleada (40 %) debería ser distinto en cada nivel? Con 15–20 oleadas, 40 % da enemigos 7–9 veces más fuertes al final. Quizás convenga mover ese valor de `BalanceConfig` a `LevelData`. | M3 (T43) |
+
+---
+
+## 13. Backlog de ideas
+
+Ideas **aprobadas como dirección**, pero **sin fecha**: no se programan hasta convertirse en un hito con sus propias reglas (RF) y tareas. Se anotan aquí para no perderlas ni mezclarlas con el trabajo actual.
+
+### B-01 · Épocas: la guerra evoluciona con el tiempo
+*Propuesta de Lucas, 2026-09-28.*
+
+**Idea:** las armas mejoran a través de las épocas (por ejemplo: medieval → pólvora → industrial → moderna → futurista), y los enemigos y sus defensas también. El jugador *ve* el progreso: sus arqueros se vuelven mosqueteros, después ametralladoras, después láseres.
+
+**Por qué encaja:**
+- Da la **ambientación** que faltaba (§12) y un hilo de "historia" sin necesidad de diálogos.
+- Encaja con la arquitectura: torres y enemigos son "una escena + datos" (D-006), así que una época nueva es sobre todo **datos y dibujos nuevos**, no código nuevo.
+- La armadura (RF-80) y los voladores (RF-05) ya permiten que los enemigos "evolucionen sus defensas": más armadura en épocas posteriores, aviones en la época moderna, etc.
+
+**Variantes a decidir** (de menor a mayor complejidad):
+
+| Variante | Cómo funciona |
+|---|---|
+| **A. Una época por nivel** | Cada mapa de la campaña es una época; las torres y enemigos disponibles cambian de un nivel a otro. |
+| **B. Las mejoras son épocas** | Mejorar una torre (RF-71) la hace avanzar de época: se ve y se llama distinta. |
+| **C. Avanzar de época en la partida** | El jugador paga para que toda su defensa avance de época a mitad de partida; los enemigos también avanzan con las oleadas. Mecánica nueva. |
+
+**Antes de convertirla en hito hay que:**
+1. Elegir la variante (o combinación).
+2. Definir la lista de épocas y, para cada una, sus torres y enemigos.
+3. Sacar "Historia" y "Meta-progresión" de la lista de §11 si la variante los necesita.
+4. Decidir si reemplaza la campaña normal o es un **modo aparte**.
+
+**Cuándo:** después de M3 como mínimo; el lugar natural es M4 (arte), porque ahí se elige la ambientación.
