@@ -53,6 +53,7 @@ La columna **Hito** de las tablas siguientes indica en qué momento se agrega ca
 - **RF-03** Cada mapa tiene una o más **entradas** (donde aparecen los enemigos) y **una salida** (a donde intentan llegar).
 - **RF-04** Los enemigos **terrestres** siguen el camino desde su entrada hasta la salida, sin desviarse.
 - **RF-05** *(M2)* Los enemigos **voladores** ignoran el camino y vuelan **en línea recta** desde su entrada hasta la salida.
+- **RF-06** *(M4)* **La salida se ve.** Si un camino termina **dentro** del mapa (no en un borde), en esa casilla se dibuja una **puerta**. Una entrada también puede estar en el borde de **arriba** o de **abajo**, no solo a los costados.
 
 ---
 
@@ -201,7 +202,8 @@ La columna **Hito** de las tablas siguientes indica en qué momento se agrega ca
 | 1 | Pradera | 10 | 150 | Un camino en forma de "S". Para aprender. | M1 |
 | 2 | Desfiladero | 15 | 200 | Zigzag con 8 curvas cerradas (§7.2). | M3 |
 | 3 | Encrucijada | 20 | 250 | **Dos entradas** cuyos caminos se unen antes de la salida (§7.3). | M3 |
-| 4–5 | *(por definir)* | — | — | — | M4 (opcional) |
+| 4 | Espiral | 15 | 200 | El camino da vueltas hacia adentro; **la salida está en el centro** (§7.5). | M4 |
+| 5 | Fortaleza | 20 | 300 | **Tres entradas**, una desde arriba (§7.6). El nivel final. | M4 |
 
 ### Oleadas del nivel 1
 
@@ -328,6 +330,85 @@ Con +40 % por oleada, un nivel de 15 o 20 oleadas terminaría con enemigos 7 a 9
 | 3 · Encrucijada | **20 %** | Gana con 9 vidas | Pierde en la última oleada | Pierde en la oleada 9 |
 
 La curva de dificultad buscada: en el nivel 1 alcanza con una sola torre bien usada; **desde el nivel 2 hay que mezclar torres** para ganar; el nivel 3 es el más exigente. (Con 40 %, el nivel 3 se perdía siempre en la oleada 6.)
+
+### 7.5 Nivel 4 — Espiral *(M4)*
+
+El camino da **vueltas hacia adentro** y termina en el **centro del mapa**, donde se dibuja la puerta de salida (RF-06). Es el camino más largo del juego (unas 75 casillas): los enemigos tardan mucho en llegar, así que las oleadas son **más densas**. Una torre en el medio alcanza varios tramos a la vez.
+
+```
+col: 01234567890123456789
+f0   ····················
+f1   ■■■■■■■■■■■■■■■■■■■·  ← entrada
+f2   ··················■·
+f3   ··■■■■■■■■■■■■■■■·■·
+f4   ··■·············■·■·
+f5   ··■··◆■■■■■■■■■■■·■·      ◆ salida (puerta)
+f6   ··■···············■·
+f7   ··■■■■■■■■■■■■■■■■■·
+f8   ····················
+```
+
+Los Voladores van en línea recta desde la entrada hasta la puerta del centro.
+
+| Oleada | Enemigos |
+|---|---|
+| 1 | 12 × Normal (cada 0.7 s) |
+| 2 | 15 × Rápido (cada 0.4 s) |
+| 3 | 10 × Normal (cada 0.6 s) + 6 × Blindado (cada 1.0 s, tras 3 s) |
+| 4 | 5 × Tanque (cada 1.5 s) + 10 × Volador (cada 0.6 s, tras 2 s) |
+| 5 | 20 × Rápido (cada 0.3 s) + 8 × Blindado (cada 0.8 s, tras 4 s) |
+| 6 | 25 × Normal (cada 0.4 s) |
+| 7 | 12 × Volador (cada 0.4 s) + 8 × Tanque (cada 1.2 s, tras 3 s) |
+| 8 | 12 × Blindado (cada 0.7 s) + 15 × Rápido (cada 0.3 s, tras 4 s) |
+| 9 | 1 × **Jefe** + 20 × Normal (cada 0.4 s, tras 2 s) |
+| 10 | 10 × Tanque (cada 1.0 s) + 16 × Volador (cada 0.4 s, tras 3 s) |
+| 11 | 30 × Rápido (cada 0.25 s) + 10 × Blindado (cada 0.8 s, tras 5 s) |
+| 12 | 15 × Tanque (cada 0.8 s) + 25 × Normal (cada 0.35 s, tras 4 s) |
+| 13 | 20 × Volador (cada 0.35 s) + 15 × Blindado (cada 0.6 s, tras 3 s) |
+| 14 | 2 × **Jefe** (cada 3.0 s) + 25 × Rápido (cada 0.25 s, tras 4 s) |
+| 15 | 3 × **Jefe** (cada 3.0 s) + 15 × Tanque (cada 0.8 s, tras 3 s) + 20 × Volador (cada 0.35 s, tras 6 s) + 15 × Blindado (cada 0.6 s, tras 10 s) |
+
+### 7.6 Nivel 5 — Fortaleza *(M4)*
+
+El nivel final. **Tres entradas**: A (izquierda arriba), B (izquierda abajo) y **C, desde el borde de arriba**. A y B se juntan en la columna 6; en la columna 13 se les suma C, y los tres siguen juntos hasta la salida, abajo a la derecha. El jugador tiene que repartir su defensa o apostar todo al tramo final compartido.
+
+```
+col: 01234567890123456789
+f0   ·············■······  ← entrada C (desde arriba)
+f1   ■■■■■■■······■······  ← entrada A
+f2   ······■······■······
+f3   ······■······■······
+f4   ······■■■■■■■■······      (A y B se juntan en la col. 6; C, en la 13)
+f5   ······■······■······
+f6   ······■······■······
+f7   ■■■■■■■······■■■■■■■  ← entrada B · → salida
+f8   ····················
+```
+
+| Oleada | Enemigos |
+|---|---|
+| 1 | 8 × Normal (A, cada 1.0 s) |
+| 2 | 8 × Normal (B, cada 1.0 s) |
+| 3 | 8 × Normal (C, cada 1.0 s) |
+| 4 | 8 × Rápido (A, cada 0.6 s) + 8 × Rápido (B, cada 0.6 s, tras 1 s) + 8 × Rápido (C, cada 0.6 s, tras 2 s) |
+| 5 | 6 × Blindado (C, cada 1.0 s) + 10 × Normal (A, cada 0.6 s, tras 2 s) |
+| 6 | 10 × Volador (B, cada 0.6 s) + 4 × Tanque (A, cada 1.5 s, tras 2 s) |
+| 7 | 12 × Rápido (C, cada 0.4 s) + 12 × Rápido (A, cada 0.4 s, tras 2 s) + 12 × Rápido (B, cada 0.4 s, tras 4 s) |
+| 8 | 8 × Blindado (A, cada 0.9 s) + 8 × Blindado (B, cada 0.9 s, tras 3 s) |
+| 9 | 6 × Tanque (C, cada 1.4 s) + 12 × Volador (A, cada 0.5 s, tras 3 s) |
+| 10 | 1 × **Jefe** (B) + 15 × Normal (C, cada 0.5 s, tras 2 s) + 15 × Normal (A, cada 0.5 s, tras 4 s) |
+| 11 | 20 × Rápido (A, cada 0.3 s) + 10 × Blindado (C, cada 0.8 s, tras 3 s) |
+| 12 | 16 × Volador (B, cada 0.4 s) + 16 × Volador (C, cada 0.4 s, tras 5 s) |
+| 13 | 10 × Tanque (A, cada 1.1 s) + 10 × Tanque (B, cada 1.1 s, tras 3 s) |
+| 14 | 25 × Normal (C, cada 0.3 s) + 25 × Rápido (A, cada 0.3 s, tras 3 s) + 12 × Blindado (B, cada 0.7 s, tras 6 s) |
+| 15 | 1 × **Jefe** (A) + 1 × **Jefe** (C, tras 3 s) + 15 × Volador (B, cada 0.4 s, tras 5 s) |
+| 16 | 15 × Blindado (A, cada 0.7 s) + 15 × Blindado (C, cada 0.7 s, tras 4 s) |
+| 17 | 12 × Tanque (B, cada 0.9 s) + 20 × Volador (A, cada 0.35 s, tras 4 s) + 20 × Rápido (C, cada 0.3 s, tras 6 s) |
+| 18 | 2 × **Jefe** (B, cada 3.0 s) + 30 × Rápido (A, cada 0.25 s, tras 3 s) |
+| 19 | 15 × Tanque (A, cada 0.8 s) + 15 × Tanque (C, cada 0.8 s, tras 3 s) + 25 × Volador (B, cada 0.3 s, tras 6 s) |
+| 20 | 2 × **Jefe** (A, cada 2.5 s) + 2 × **Jefe** (B, cada 2.5 s, tras 3 s) + 2 × **Jefe** (C, cada 2.5 s, tras 6 s) + 25 × Blindado (A, cada 0.5 s, tras 9 s) + 25 × Volador (C, cada 0.3 s, tras 11 s) |
+
+*(El aumento de vida por oleada de los niveles 4 y 5 se elige con el bot en T63 y se anota en §7.4.)*
 
 ---
 

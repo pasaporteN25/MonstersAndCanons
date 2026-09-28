@@ -297,11 +297,33 @@
 
 ---
 
-## M4 — Pulido *(opcional; las tareas se detallan al llegar aquí)*
+## M4 — Pulido *(opcional)*
+
+### Niveles 4 y 5 *(pedidos por Lucas)*
+
+- [ ] **T60 · La salida se ve y entradas por arriba o abajo**
+  `LevelDecor` dibuja una puerta en las salidas que quedan dentro del mapa. El generador de mapas acepta caminos que entran o salen por cualquier borde.
+  **Refs:** RF-06.
+  **Hecho cuando:** en la captura del nivel 4 se ve la puerta en el centro; los niveles 1 a 3 no cambian.
+
+- [ ] **T61 · Nivel 4 — Espiral**
+  Mapa, `level_04.tres` con 15 oleadas, agregado a la campaña. Tarjetas de la selección de nivel más angostas para que entren 5.
+  **Refs:** spec §7.5.
+  **Hecho cuando:** pasan `test_level_paths.gd` y `test_levels.gd`, y las 5 tarjetas entran en la pantalla.
+
+- [ ] **T62 · Nivel 5 — Fortaleza**
+  Mapa con 3 entradas (una desde arriba), `level_05.tres` con 20 oleadas.
+  **Refs:** spec §7.6.
+  **Hecho cuando:** pasan los tests y cada grupo sale por su entrada.
+
+- [ ] **T63 · Balance de los niveles 4 y 5**
+  Con el bot, elegir el aumento de vida por oleada de cada uno.
+  **Refs:** spec §7.4, D-019.
+  **Hecho cuando:** el bot que mezcla torres gana pensando, y el que pone torres al azar pierde; la tabla de §7.4 queda completa.
+
+### Otras ideas de pulido *(sin fecha)*
 
 - Decidir ambientación y arte (ver "Preguntas abiertas" de la spec).
 - Reemplazar formas por sprites.
-- Animaciones de disparo y muerte, partículas.
-- Números de daño flotantes, sacudida de pantalla.
-- Niveles 4 y 5.
+- Números de daño flotantes (la sacudida de pantalla ya se hizo en M1.5).
 - Balance fino de todos los niveles.
