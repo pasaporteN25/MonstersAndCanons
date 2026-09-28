@@ -13,6 +13,8 @@ signal speed_pressed
 const TOWER_BUTTON_SIZE := Vector2(176, 60)
 
 var _total_waves: int = 0
+## Las oleadas del nivel: para mostrar la próxima (RF-133) y avisar del Jefe (RF-135).
+var _waves: Array[WaveData] = []
 var _tower_types: Array[TowerData] = []
 var _tower_buttons: Array[Button] = []
 ## -1 = todavía no se mostró ningún valor (para no animar el primero).
@@ -25,6 +27,9 @@ var _last_lives: int = -1
 @onready var _start_wave_button: Button = %StartWaveButton
 @onready var _tower_button_row: HBoxContainer = %TowerButtons
 @onready var _wave_banner: Label = %WaveBanner
+@onready var _boss_line: Label = %BossLine
+@onready var _next_wave: Control = %NextWave
+@onready var _next_wave_icons: HFlowContainer = %NextWaveIcons
 ## Panel de la torre seleccionada (RF-70). Game lo conecta con BuildController.
 @onready var tower_panel: TowerPanel = %TowerPanel
 @onready var _pause_button: Button = %PauseButton
@@ -50,6 +55,31 @@ func show_paused(paused: bool, show_label: bool = true) -> void:
 ## RF-105: el botón muestra la velocidad actual.
 func show_speed(speed: float) -> void:
 	_speed_button.text = "x%d  [F]" % roundi(speed)
+
+
+## Game le pasa las oleadas del nivel ANTES de bind() (RF-133, RF-135).
+func setup_waves(waves: Array[WaveData]) -> void:
+	_waves = waves
+
+
+## RF-133: muestra los enemigos de la oleada `wave` (o nada, si es null).
+func show_next_wave(wave: WaveData) -> void:
+	for child: Node in _next_wave_icons.get_children():
+		child.queue_free()
+	_next_wave.visible = wave != null
+	if wave == null:
+		return
+	var counts: Dictionary = wave.enemy_counts()
+	for enemy: EnemyData in counts:
+		_next_wave_icons.add_child(EnemyIcon.new().setup(enemy, counts[enemy]))
+
+
+## RF-135: el primer enemigo peligroso de la oleada, o null si no trae ninguno.
+static func dangerous_enemy_in(wave: WaveData) -> EnemyData:
+	for group: SpawnGroup in wave.groups:
+		if Rules.is_dangerous(group.enemy):
+			return group.enemy
+	return null
 
 
 ## Game le pasa la sesión para que el HUD se mantenga actualizado.
@@ -116,6 +146,8 @@ func _on_wave_changed(wave: int, total_waves: int) -> void:
 	_wave_label.text = "Oleada %d/%d" % [wave, total_waves]
 	if wave > 0:
 		_show_wave_banner(wave)
+	# RF-133: la próxima es la oleada número wave + 1, que en la lista está en el índice `wave`.
+	show_next_wave(_waves[wave] if wave < _waves.size() else null)
 
 
 func _on_wave_completed(wave: int, bonus: int) -> void:
@@ -160,6 +192,17 @@ func _show_wave_banner(wave: int) -> void:
 		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	tween.tween_interval(0.9)
 	tween.tween_property(_wave_banner, "modulate:a", 0.0, 0.4)
+	# RF-135: si la oleada trae un enemigo peligroso, una línea roja abajo, que dura más.
+	var danger: EnemyData = null
+	if wave - 1 < _waves.size():
+		danger = dangerous_enemy_in(_waves[wave - 1])
+	_boss_line.text = "¡Llega el %s!" % danger.display_name if danger != null else ""
+	_boss_line.modulate.a = 0.0
+	if danger != null:
+		var boss_tween: Tween = create_tween()
+		boss_tween.tween_property(_boss_line, "modulate:a", 1.0, 0.2)
+		boss_tween.tween_interval(2.0)
+		boss_tween.tween_property(_boss_line, "modulate:a", 0.0, 0.5)
 
 
 ## RF-129: crece un poco y vuelve.

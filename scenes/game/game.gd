@@ -64,6 +64,7 @@ func _ready() -> void:
 	build_controller.placed_selection_changed.connect(_refresh_tower_panel.unbind(1))
 
 	hud.setup_towers(tower_types)
+	hud.setup_waves(level_data.waves)  # RF-133, RF-135: antes de bind()
 	hud.tower_button_pressed.connect(build_controller.select)
 	hud.start_wave_pressed.connect(start_next_wave)
 	hud.bind(session)

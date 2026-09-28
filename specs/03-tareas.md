@@ -342,7 +342,7 @@
   **Refs:** RF-134 (frases), RF-136.
   **Hecho cuando:** los 6 enemigos tienen su frase (test) y la captura muestra la corona sobre el Jefe.
 
-- [ ] **T67 · Próxima oleada y cartel del Jefe**
+- [x] **T67 · Próxima oleada y cartel del Jefe**
   **Refs:** RF-133, RF-135.
   **Hecho cuando:** los tests comprueban la composición de la próxima oleada (tipos y cantidades) y el texto del cartel en la oleada 10 del nivel 1.
 
