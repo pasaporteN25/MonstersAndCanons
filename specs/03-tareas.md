@@ -253,17 +253,17 @@
   Mapa con 2 entradas, `level_03.tres` con 20 oleadas.
   **Hecho cuando:** pasa `test_level_paths.gd` y es ganable.
 
-- [ ] **T46 · Menú de pausa**
+- [x] **T46 · Menú de pausa**
   **Refs:** RF-114.
   **Hecho cuando:** `Esc` (sin nada seleccionado ni construcción activa) abre el menú y todas sus opciones funcionan.
 
-- [ ] **T47 · Opciones**
+- [x] **T47 · Opciones**
   Buses de audio `Master`/`Music`/`SFX`, pantalla completa.
   **Refs:** RF-113.
   **Hecho cuando:** los cambios se aplican al momento y se mantienen al reiniciar el juego.
 
-- [ ] **T48 · Sonido y música**
-  Autoload `Audio`. Sonidos con licencia libre (por ejemplo CC0) o generados con herramientas como *jsfxr*.
+- [x] **T48 · Sonido y música**
+  Autoload `Audio`. Sonidos sintetizados con código (`tools/make_sounds.gd`, D-020).
   **Refs:** RF-116.
   **Hecho cuando:** suenan todos los eventos de RF-116 y la música no se corta al cambiar de pantalla.
 

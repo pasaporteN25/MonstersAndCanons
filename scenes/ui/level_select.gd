@@ -12,6 +12,7 @@ func _ready() -> void:
 	_back_button.pressed.connect(GameFlow.go_to_main_menu)
 	for i: int in GameFlow.level_count():
 		_cards.add_child(_make_card(i))
+	Audio.add_click_sounds(self)
 
 
 func _make_card(index: int) -> Button:

@@ -13,6 +13,22 @@ const GAME_SCENE: String = "res://scenes/game/game.tscn"
 var current_index: int = -1
 
 
+func _ready() -> void:
+	apply_display_settings()
+
+
+## RF-113: pantalla completa o ventana, según las opciones guardadas.
+## Solo cambia algo si hace falta (así no "des-maximiza" la ventana al arrancar).
+func apply_display_settings() -> void:
+	var want_fullscreen: bool = bool(SaveManager.get_setting("fullscreen"))
+	var mode: DisplayServer.WindowMode = DisplayServer.window_get_mode()
+	var is_fullscreen: bool = mode == DisplayServer.WINDOW_MODE_FULLSCREEN \
+		or mode == DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN
+	if want_fullscreen != is_fullscreen:
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN if want_fullscreen \
+			else DisplayServer.WINDOW_MODE_WINDOWED)
+
+
 func level_count() -> int:
 	return CAMPAIGN.levels.size()
 

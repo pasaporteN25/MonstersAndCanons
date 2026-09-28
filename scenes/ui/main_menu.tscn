@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://scenes/ui/main_menu.gd" id="1_menu"]
 [ext_resource type="Script" path="res://scenes/ui/menu_background.gd" id="2_bg"]
+[ext_resource type="PackedScene" path="res://scenes/ui/options_menu.tscn" id="3_options"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -77,3 +78,7 @@ custom_minimum_size = Vector2(0, 56)
 layout_mode = 2
 theme_override_font_sizes/font_size = 26
 text = "Salir"
+
+[node name="OptionsMenu" parent="." instance=ExtResource("3_options")]
+unique_name_in_owner = true
+layout_mode = 1

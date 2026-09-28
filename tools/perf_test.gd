@@ -15,7 +15,8 @@ const DEATH_EFFECTS_PER_SECOND: float = 15.0
 const WARMUP_SECONDS: float = 1.0
 const MEASURE_SECONDS: float = 6.0
 
-var game: Game
+# Node2D y no Game: este script se compila antes que los autoloads, y game.gd los usa.
+var game: Node2D
 var time: float = 0.0
 var frames_measured: int = 0
 var death_timer: float = 0.0

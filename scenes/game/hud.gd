@@ -41,9 +41,10 @@ func _ready() -> void:
 
 
 ## RF-104: texto del botón y cartel "PAUSA".
-func show_paused(paused: bool) -> void:
+## `show_label` = false cuando el menú de pausa ya lo dice (no mostrar dos veces).
+func show_paused(paused: bool, show_label: bool = true) -> void:
 	_pause_button.text = "Seguir  [P]" if paused else "Pausa  [P]"
-	_pause_label.visible = paused
+	_pause_label.visible = paused and show_label
 
 
 ## RF-105: el botón muestra la velocidad actual.

@@ -32,6 +32,7 @@ var _shake_left: float = 0.0
 @onready var session: LevelSession = $Session
 @onready var hud: Hud = $HUD
 @onready var end_screen: EndScreen = $EndScreen
+@onready var pause_menu: PauseMenu = $PauseMenu
 
 
 func _ready() -> void:
@@ -85,6 +86,18 @@ func _ready() -> void:
 	pause_changed.connect(hud.show_paused)
 	speed_changed.connect(hud.show_speed)
 
+	# RF-114: menú de pausa.
+	pause_menu.resume_pressed.connect(close_pause_menu)
+	pause_menu.retry_pressed.connect(restart)
+	pause_menu.quit_pressed.connect(GameFlow.go_to_main_menu)
+
+	# RF-116: sonidos de la partida (los disparos, al construir cada torre).
+	session.wave_changed.connect(func(wave: int, _total: int) -> void:
+		if wave > 0:
+			Audio.play(&"wave_start"))
+	Audio.add_click_sounds(hud)
+	Audio.add_click_sounds(end_screen)
+
 	session.start(level_data, balance)
 
 
@@ -107,12 +120,38 @@ func _exit_tree() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("start_wave"):
+	# BuildController recibe Esc primero (cancelar construcción o selección);
+	# si nadie lo usó, llega aquí y abre o cierra el menú de pausa (RF-114).
+	if event.is_action_pressed("cancel"):
+		if pause_menu.is_open():
+			pause_menu.handle_cancel()
+		else:
+			open_pause_menu()
+	elif pause_menu.is_open():
+		return  # con el menú abierto, las otras teclas no hacen nada
+	elif event.is_action_pressed("start_wave"):
 		start_next_wave()
 	elif event.is_action_pressed("pause"):
 		toggle_pause()
 	elif event.is_action_pressed("toggle_speed"):
 		toggle_speed()
+
+
+# --- Menú de pausa (RF-114) ---
+
+func open_pause_menu() -> void:
+	if session.is_over():
+		return
+	build_controller.cancel()
+	build_controller.deselect_placed()
+	set_paused(true)
+	hud.show_paused(true, false)  # el menú ya dice "Pausa"
+	pause_menu.open()
+
+
+func close_pause_menu() -> void:
+	pause_menu.close()
+	set_paused(false)
 
 
 # --- Pausa y velocidad (RF-104, RF-105) ---
@@ -131,6 +170,8 @@ func set_paused(paused: bool) -> void:
 
 
 func toggle_pause() -> void:
+	if pause_menu.is_open():
+		return  # desde el menú de pausa se sale con "Continuar" o Esc
 	set_paused(not is_paused())
 
 
@@ -177,25 +218,33 @@ func _on_enemy_died(enemy: Enemy) -> void:
 	session.earn(enemy.data.reward)  # RF-21
 	effects.enemy_died(enemy.global_position, enemy.data.color,
 		Rules.tiles_to_px(enemy.data.size_tiles), enemy.data.reward)
+	Audio.play(&"enemy_death")
 
 
 func _on_enemy_reached_exit(enemy: Enemy) -> void:
 	session.lose_lives(enemy.data.lives_damage)  # RF-11
 	_shake_left = SHAKE_DURATION
+	Audio.play(&"life_lost")
 
 
 func _on_tower_built(tower: Tower) -> void:
 	tower.fired.connect(_on_tower_fired)
+	# Cada torre suena distinto: el sonido se llama "shot_" + el id de la torre.
+	var shot_sound := StringName("shot_%s" % tower.data.id)
+	tower.fired.connect(func(_projectile: Projectile) -> void: Audio.play(shot_sound))
 	effects.tower_built(tower.global_position, tower.data.color)
+	Audio.play(&"build")
 
 
 func _on_tower_upgraded(tower: Tower) -> void:
 	effects.tower_built(tower.global_position, tower.data.color)  # RF-75: mismo anillo
 	_refresh_tower_panel()
+	Audio.play(&"upgrade")
 
 
 func _on_tower_sold(tower: Tower, refund: int) -> void:
 	effects.tower_sold(tower.global_position, refund)
+	Audio.play(&"sell")
 
 
 func _on_targeting_pressed() -> void:
@@ -230,5 +279,7 @@ func _on_state_changed(state: LevelSession.State) -> void:
 	if state == LevelSession.State.WON:
 		GameFlow.level_won(session.lives)  # RF-112 y RF-115: desbloquea y guarda
 		end_screen.show_victory(session.lives, GameFlow.has_next_level(), in_campaign)
+		Audio.play(&"victory")
 	else:
 		end_screen.show_defeat(session.wave, session.total_waves, in_campaign)
+		Audio.play(&"defeat")

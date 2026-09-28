@@ -7,6 +7,7 @@
 [ext_resource type="Resource" path="res://data/towers/cannon.tres" id="5_cannon"]
 [ext_resource type="Resource" path="res://data/towers/frost.tres" id="6_frost"]
 [ext_resource type="Resource" path="res://data/towers/sniper.tres" id="14_sniper"]
+[ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="15_pause"]
 [ext_resource type="Script" path="res://scripts/data/tower_data.gd" id="7_tower_data"]
 [ext_resource type="Script" path="res://scenes/game/build_controller.gd" id="8_build"]
 [ext_resource type="Script" path="res://scenes/game/wave_spawner.gd" id="9_spawner"]
@@ -42,3 +43,5 @@ script = ExtResource("10_session")
 [node name="HUD" parent="." instance=ExtResource("11_hud")]
 
 [node name="EndScreen" parent="." instance=ExtResource("12_end")]
+
+[node name="PauseMenu" parent="." instance=ExtResource("15_pause")]

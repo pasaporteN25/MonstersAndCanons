@@ -348,9 +348,11 @@ En M3 se agregan tres, porque hay datos que deben **sobrevivir** al cambiar de e
 
 | Autoload | Para qué |
 |---|---|
-| `GameFlow` | Recordar qué nivel eligió el jugador y cambiar de pantalla (`change_scene_to_file`). |
-| `SaveManager` | Leer y escribir el progreso y las opciones. |
-| `Audio` | Reproducir efectos y música; la música no se corta al cambiar de escena. Buses de audio: `Master`, `Music`, `SFX`. |
+| `GameFlow` ([código](../scripts/autoload/game_flow.gd)) | Recordar qué nivel se juega (`current_index`, -1 = fuera de la campaña) y cambiar de pantalla. Registrar victorias y desbloquear el siguiente nivel. Aplicar pantalla completa al arrancar. |
+| `SaveManager` ([código](../scripts/autoload/save_manager.gd)) | Leer y escribir el progreso y las opciones (§7.1). Los tests cambian `save_path` para no tocar el guardado real. |
+| `Audio` ([código](../scripts/autoload/audio.gd)) | Efectos y música. Carga todo `assets/audio/*.wav` y los reproduce por nombre (`Audio.play(&"build")`). 12 "voces" reutilizables y un intervalo mínimo por sonido. Buses `Master`, `Music`, `SFX` (`default_bus_layout.tres`). Los sonidos se generan con `tools/make_sounds.gd` (D-020). |
+
+> ⚠️ **Los scripts de herramientas (`tools/*.gd`, que se ejecutan con `-s`) se compilan antes de que existan los autoloads.** Por eso no pueden usar `GameFlow`, `SaveManager` ni `Audio` por su nombre, ni declarar variables de tipo `Game` (porque `game.gd` sí los usa): declaran la partida como `Node2D`.
 
 ### 7.1 Formato del guardado
 
