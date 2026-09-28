@@ -9,6 +9,32 @@ const GOLD_COLOR := Color(1.0, 0.84, 0.3)
 const SPARK_COLOR := Color(1.0, 0.95, 0.6)
 const FROST_COLOR := Color(0.7, 0.92, 1.0)
 const SHOCKWAVE_COLOR := Color(1.0, 0.75, 0.4)
+## RF-132: números de daño.
+const DAMAGE_COLOR := Color(1, 1, 1)
+const DAMAGE_BLOCKED_COLOR := Color(0.62, 0.62, 0.66)  # la armadura se comió el golpe
+const MAX_DAMAGE_NUMBERS: int = 40
+
+var _damage_numbers_alive: int = 0
+
+
+## RF-132: número chico con el daño real. Gris si la armadura quitó la mitad o más.
+## Devuelve false si no se mostró (opción apagada, o ya hay demasiados en pantalla).
+func damage_number(position_: Vector2, damage: int, armor_blocked_most: bool) -> bool:
+	if not bool(SaveManager.get_setting("damage_numbers")):
+		return false
+	if _damage_numbers_alive >= MAX_DAMAGE_NUMBERS:
+		return false
+	var color: Color = DAMAGE_BLOCKED_COLOR if armor_blocked_most else DAMAGE_COLOR
+	var text := FloatingText.new().setup(str(damage), color, 15, 0.6, 26.0)
+	_damage_numbers_alive += 1
+	text.tree_exited.connect(func() -> void: _damage_numbers_alive -= 1)
+	# Un poco corrido al azar, así los golpes seguidos no se tapan entre sí.
+	_add(text, position_ + Vector2(randf_range(-10.0, 10.0), -14.0))
+	return true
+
+
+func damage_numbers_alive() -> int:
+	return _damage_numbers_alive
 
 
 ## RF-124: estallido del color del enemigo y "+N" con el oro ganado.

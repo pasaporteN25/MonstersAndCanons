@@ -9,6 +9,7 @@ signal closed
 @onready var _music_slider: HSlider = %MusicSlider
 @onready var _sfx_slider: HSlider = %SfxSlider
 @onready var _fullscreen_check: CheckBox = %FullscreenCheck
+@onready var _damage_numbers_check: CheckBox = %DamageNumbersCheck
 @onready var _back_button: Button = %BackButton
 
 
@@ -17,6 +18,8 @@ func _ready() -> void:
 	_music_slider.value_changed.connect(_on_music_changed)
 	_sfx_slider.value_changed.connect(_on_sfx_changed)
 	_fullscreen_check.toggled.connect(_on_fullscreen_toggled)
+	_damage_numbers_check.toggled.connect(
+		func(on: bool) -> void: SaveManager.set_setting("damage_numbers", on))  # RF-132
 	_back_button.pressed.connect(close)
 	Audio.add_click_sounds(self)
 
@@ -26,6 +29,7 @@ func open() -> void:
 	_music_slider.set_value_no_signal(float(SaveManager.get_setting("music_volume")))
 	_sfx_slider.set_value_no_signal(float(SaveManager.get_setting("sfx_volume")))
 	_fullscreen_check.set_pressed_no_signal(bool(SaveManager.get_setting("fullscreen")))
+	_damage_numbers_check.set_pressed_no_signal(bool(SaveManager.get_setting("damage_numbers")))
 	visible = true
 
 

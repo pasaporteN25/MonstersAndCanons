@@ -212,6 +212,8 @@ func restart() -> void:
 func _on_enemy_spawned(enemy: Enemy) -> void:
 	enemy.died.connect(_on_enemy_died)
 	enemy.reached_exit.connect(_on_enemy_reached_exit)
+	enemy.hit.connect(func(e: Enemy, damage: int, blocked: bool) -> void:
+		effects.damage_number(e.global_position, damage, blocked))  # RF-132
 
 
 func _on_enemy_died(enemy: Enemy) -> void:

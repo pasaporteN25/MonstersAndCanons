@@ -21,6 +21,15 @@ func _count_effects(type: Variant) -> int:
 	return count
 
 
+## Textos "+N" de oro (los números de daño, RF-132, no empiezan con "+").
+func _count_gold_texts() -> int:
+	var count: int = 0
+	for child: Node in game.effects.get_children():
+		if child is FloatingText and (child as FloatingText)._text.begins_with("+"):
+			count += 1
+	return count
+
+
 func _first_enemy_of_wave() -> Enemy:
 	game.start_next_wave()
 	simulate(game, 1, DT)
@@ -33,7 +42,7 @@ func test_death_shows_burst_and_gold_text() -> void:
 	var enemy: Enemy = _first_enemy_of_wave()
 	enemy.take_hit(1000)
 	assert_eq(_count_effects(BurstEffect), 1, "estallido")
-	assert_eq(_count_effects(FloatingText), 1, "+N de oro")
+	assert_eq(_count_gold_texts(), 1, "+N de oro")
 
 
 func test_escaping_shows_no_death_effects() -> void:
@@ -41,7 +50,7 @@ func test_escaping_shows_no_death_effects() -> void:
 	enemy.distance = 1e6  # lo manda directo a la salida
 	simulate(game, 1, DT)
 	assert_eq(_count_effects(BurstEffect), 0)
-	assert_eq(_count_effects(FloatingText), 0)
+	assert_eq(_count_gold_texts(), 0)
 
 
 func test_effects_remove_themselves() -> void:

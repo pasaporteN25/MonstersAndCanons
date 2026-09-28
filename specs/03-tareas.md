@@ -330,10 +330,11 @@
   **Refs:** RF-93, RF-111.
   **Hecho cuando:** los tests de umbrales pasan (20 → 3, 18 → 3, 17 → 2, 10 → 2, 9 → 1) y la captura muestra las estrellas en la victoria y en la selección de nivel.
 
-- [ ] **T65 · Números de daño flotantes**
+- [x] **T65 · Números de daño flotantes**
   Señal `hit` del enemigo con el daño real; números en la capa de efectos (grises si la armadura quitó la mitad o más); máximo 40 a la vez; opción para apagarlos.
   **Refs:** RF-132, RF-113.
   **Hecho cuando:** los tests pasan (aparece el número, gris con armadura, no aparece con la opción apagada, nunca más de 40) y la prueba de rendimiento sigue sobre 60 FPS.
+  **Resultado:** 150 FPS con números y 156 sin ellos (200 enemigos, 60 torres); frames de más de 16,6 ms: 0 a 2 de ~900 en ambos casos, es decir, ruido del sistema.
 ### Otras ideas de pulido *(sin fecha)*
 
 - Decidir ambientación y arte (ver "Preguntas abiertas" de la spec).

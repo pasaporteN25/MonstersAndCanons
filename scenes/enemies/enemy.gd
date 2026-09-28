@@ -7,6 +7,9 @@ extends Node2D
 signal died(enemy: Enemy)
 ## Llegó a la salida (RF-11). Quien escuche decide cuántas vidas restar.
 signal reached_exit(enemy: Enemy)
+## Recibió un golpe (solo para efectos visuales, RF-132). `damage` es el daño real,
+## después de la armadura; `armor_blocked_most` = la armadura quitó la mitad o más.
+signal hit(enemy: Enemy, damage: int, armor_blocked_most: bool)
 
 const GROUP: StringName = &"enemies"
 ## Color al que se tiñe un enemigo ralentizado (RF-62).
@@ -93,8 +96,10 @@ func is_health_bar_visible() -> bool:
 func take_hit(damage: int, slow_amount: float = 0.0, slow_duration: float = 0.0) -> void:
 	if _is_done:
 		return
-	health = maxi(0, health - Rules.damage_after_armor(damage, data.armor))
+	var dealt: int = Rules.damage_after_armor(damage, data.armor)
+	health = maxi(0, health - dealt)
 	_hit_flash_left = HIT_FLASH_DURATION
+	hit.emit(self, dealt, dealt * 2 <= damage)
 	if slow_amount > 0.0:
 		_apply_slow(Rules.effective_slow(slow_amount, data.slow_resistance), slow_duration)
 	queue_redraw()

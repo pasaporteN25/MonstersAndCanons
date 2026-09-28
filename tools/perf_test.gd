@@ -3,6 +3,7 @@
 #
 # Uso (desde la carpeta del proyecto):
 #   godot --path . -s tools/perf_test.gd
+#   godot --path . -s tools/perf_test.gd -- sin_numeros    (compara sin números de daño)
 #
 # Desactiva el vsync para medir cuántos FPS puede dar el juego, no los del monitor.
 extends SceneTree
@@ -21,6 +22,8 @@ var time: float = 0.0
 var frames_measured: int = 0
 var death_timer: float = 0.0
 var worst_frame_ms: float = 0.0
+## Frames que tardaron más de 16,6 ms (los que a 60 FPS se notarían como un tirón).
+var slow_frames: int = 0
 var normal: EnemyData = load("res://data/enemies/normal.tres")
 
 
@@ -33,6 +36,10 @@ func _initialize() -> void:
 
 func _process(delta: float) -> bool:
 	if game.enemies.get_child_count() == 0 and time == 0.0:
+		# "-- sin_numeros": apaga los números de daño solo en memoria (no se guarda).
+		if "sin_numeros" in OS.get_cmdline_user_args():
+			root.get_node("/root/SaveManager").call("set_setting", "damage_numbers", false)
+			print("Números de daño: apagados")
 		_populate()
 	_keep_enemy_count()
 	_fake_deaths(delta)
@@ -40,12 +47,15 @@ func _process(delta: float) -> bool:
 	if time > WARMUP_SECONDS:
 		frames_measured += 1
 		worst_frame_ms = maxf(worst_frame_ms, delta * 1000.0)
+		if delta * 1000.0 > 1000.0 / 60.0:
+			slow_frames += 1
 	if time > WARMUP_SECONDS + MEASURE_SECONDS:
 		var fps: float = frames_measured / MEASURE_SECONDS
 		print("Enemigos: %d · Torres: %d · Efectos: %d" % [
 			game.enemies.get_child_count(), game.tower_container.get_child_count(),
 			game.effects.get_child_count()])
-		print("FPS promedio: %.0f · frame más lento: %.1f ms" % [fps, worst_frame_ms])
+		print("FPS promedio: %.0f · frame más lento: %.1f ms · frames de más de 16,6 ms: %d de %d" % [
+			fps, worst_frame_ms, slow_frames, frames_measured])
 		print("RESULTADO: %s (objetivo: 60 FPS)" % ("OK" if fps >= 60.0 else "LENTO"))
 		return true
 	return false
@@ -69,6 +79,10 @@ func _spawn_enemy(distance: float) -> void:
 	var enemy: Enemy = ENEMY_SCENE.instantiate()
 	enemy.setup(normal, game.level.get_ground_path(0), 1000000)  # no mueren: siempre hay 200
 	enemy.distance = distance
+	# Como en la partida real: cada golpe muestra su número de daño (RF-132).
+	var effects: Node = game.get("effects")
+	enemy.hit.connect(func(e: Node2D, damage: int, blocked: bool) -> void:
+		effects.call("damage_number", e.global_position, damage, blocked))
 	game.enemies.add_child(enemy)
 
 
