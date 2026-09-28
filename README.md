@@ -5,6 +5,8 @@ Juego *tower defense* 2D hecho en **Godot 4** con **GDScript**, construido con *
 > **Estado actual:** M1, M1.5, M2 y M3 ✅ (el "juego mediano" está terminado). En curso: versión Android de prueba (hito MA en [`specs/03-tareas.md`](specs/03-tareas.md)).
 >
 > **Versión de Godot:** 4.7.2 estable (renderizador *Compatibility*).
+>
+> **¿Primera vez en esta computadora?** Empezar por [ONBOARDING.md](ONBOARDING.md).
 
 ---
 
@@ -77,9 +79,7 @@ Palabras que aparecen en todos los documentos:
 
 ## Requisitos para trabajar
 
-- **Godot 4** (versión estándar, **no** la versión ".NET/Mono"; esa es para C#). Descarga: https://godotengine.org/download
-- **Git** para guardar el historial de cambios.
-- Recomendado: agregar Godot al `PATH` del sistema, así Claude puede ejecutar las pruebas automáticas y detectar errores de scripts sin abrir el editor (ver T00).
+Todo lo que hay que instalar y configurar (Git, Godot, tests, exportar a Windows y a Android), paso a paso y con cómo comprobar cada paso, está en **[ONBOARDING.md](ONBOARDING.md)**.
 
 ---
 

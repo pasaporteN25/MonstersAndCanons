@@ -1,0 +1,244 @@
+# Onboarding — cómo preparar una computadora para trabajar en JuegoA
+
+> **Para quién es:** para ti en una computadora nueva, o para cualquier persona que se sume al proyecto.
+> **Qué cubre:** todo lo que hay que instalar y configurar **fuera del código** (programas, rutas, ajustes del editor) para poder abrir, probar, balancear y exportar el juego. Cada paso dice **cómo comprobar que quedó bien**.
+>
+> Para entender **qué es** el juego y **cómo está hecho**, leer después el [README](README.md) y la carpeta [`specs/`](specs/).
+
+---
+
+## Resumen (checklist)
+
+| # | Paso | Obligatorio | Se comprueba con |
+|---|---|---|---|
+| 1 | [Instalar Git y conectarlo a GitHub](#1-git-y-github) | Sí | `ssh -T git@github.com` |
+| 2 | [Instalar Godot 4.7.2 y ponerlo en el `PATH`](#2-godot) | Sí | `godot --version` |
+| 3 | [Clonar el repositorio y abrir el proyecto](#3-clonar-y-abrir-el-proyecto) | Sí | F5 abre el menú principal |
+| 4 | [Comprobar los tests (GUT)](#4-tests-gut) | Sí | 145 tests en verde |
+| 5 | [Plantillas de exportación](#5-plantillas-de-exportación) | Para exportar | aparece `export_templates/4.7.2.stable` |
+| 6 | [Exportar para Windows](#6-exportar-para-windows-exe) | Para exportar | se crea `build/JuegoA.exe` |
+| 7 | [Preparar Android](#7-android-apk) | Solo para el celular | se crea `build/JuegoA.apk` |
+
+Las versiones exactas con las que se hizo el proyecto están en [Versiones de referencia](#versiones-de-referencia).
+
+---
+
+## 1. Git y GitHub
+
+1. Instalar **Git para Windows**: <https://git-scm.com/download/win>. Trae también **Git Bash**, una terminal donde funcionan los comandos de esta guía.
+2. Configurar tu nombre y correo (aparecen en cada commit):
+   ```bash
+   git config --global user.name "Tu Nombre"
+   git config --global user.email "tu@correo.com"
+   ```
+3. El repositorio es **privado** y se accede por **SSH**. Si esta computadora no tiene una clave SSH registrada en GitHub, crear una y agregarla en *GitHub → Settings → SSH and GPG keys* (guía oficial: <https://docs.github.com/es/authentication/connecting-to-github-with-ssh>).
+
+**✅ Comprobar:**
+```bash
+ssh -T git@github.com
+```
+Tiene que responder `Hi <tu usuario>! You've successfully authenticated…`.
+
+---
+
+## 2. Godot
+
+1. Descargar **Godot 4.7.2, versión estándar** (⚠️ **no** la ".NET/Mono", que es para C#): <https://godotengine.org/download/archive/>.
+2. Crear la carpeta `C:\Tools\Godot` y poner ahí los dos ejecutables del zip:
+   - `Godot_v4.7.2-stable_win64.exe` → el **editor** (con ventanas).
+   - `Godot_v4.7.2-stable_win64_console.exe` → el mismo programa, pero **muestra mensajes en la terminal**. Es el que se usa para tests y exportaciones.
+3. Crear, en esa misma carpeta, un archivo **`godot.cmd`** con esta única línea:
+   ```bat
+   @"%~dp0Godot_v4.7.2-stable_win64_console.exe" %*
+   ```
+   Así el comando `godot` funciona desde cualquier terminal.
+
+   > ⚠️ **Trampa conocida:** **no** renombrar `…_console.exe` a `godot.exe`. Ese archivo es un "lanzador" que busca al Godot real usando su propio nombre; si se le cambia, responde *"Invalid wrapper executable name"* y no arranca. Por eso se usa el `godot.cmd`.
+
+4. Agregar `C:\Tools\Godot` al `PATH` del usuario (PowerShell):
+   ```powershell
+   [Environment]::SetEnvironmentVariable("Path", [Environment]::GetEnvironmentVariable("Path","User") + ";C:\Tools\Godot", "User")
+   ```
+5. **Cerrar y volver a abrir la terminal**: el `PATH` nuevo solo se ve en terminales nuevas.
+6. (Opcional) Crear un acceso directo en el escritorio a `C:\Tools\Godot\Godot_v4.7.2-stable_win64.exe`.
+
+**✅ Comprobar** (en una terminal nueva):
+```bash
+godot --version
+```
+Tiene que mostrar `4.7.2.stable.official…`.
+
+---
+
+## 3. Clonar y abrir el proyecto
+
+1. Clonar:
+   ```bash
+   git clone git@github.com:pasaporteN25/TDv1.git JuegoA
+   ```
+2. Abrir el **editor** de Godot → en el Gestor de proyectos, **Importar** → elegir `JuegoA/project.godot` → **Importar y editar**.
+   La primera vez tarda unos segundos: Godot "importa" las imágenes y sonidos y crea la carpeta `.godot/`. Esa carpeta es un caché local y **no** se sube a git.
+
+**✅ Comprobar:** pulsar **F5**. Tiene que abrirse el **menú principal** (título "JuegoA" con el mapa de fondo).
+
+> 💡 **F5 vs F6:** F5 abre el juego desde el menú, igual que lo ve un jugador. **F6** ejecuta solo la escena abierta en el editor; sirve para probar una partida directo (`scenes/game/game.tscn`), pero así **no se guarda el progreso** (spec RF-117).
+
+---
+
+## 4. Tests (GUT)
+
+El proyecto usa **GUT** (Godot Unit Test). Ya viene incluido en el repositorio (`addons/gut/`) y activado en `project.godot`, así que **no hay que instalar nada**.
+
+**✅ Comprobar** desde la carpeta del proyecto:
+```bash
+godot --headless --path . -s addons/gut/gut_cmdln.gd -gdir=res://tests -gexit
+```
+Al final tiene que decir `---- All tests passed! ----`. Hay 145 tests al momento de escribir esta guía.
+
+También se pueden correr desde el editor: panel **GUT** (abajo) → **Run All**. Si el panel no aparece: *Proyecto → Configuración del proyecto → Plugins* → activar **Gut**.
+
+> ℹ️ Los tests **no tocan tu progreso real**: usan un archivo aparte (`user://test_save.json`) que borran al terminar.
+
+---
+
+## 5. Plantillas de exportación
+
+Para crear el `.exe` o el `.apk`, Godot necesita sus **plantillas de exportación**: versiones del motor ya compiladas para cada sistema. Se descargan **una sola vez** por computadora (~1 GB).
+
+En el editor: **Editor → Administrar plantillas de exportación** → **Descargar e instalar**.
+
+**✅ Comprobar:** tiene que existir la carpeta
+`%APPDATA%\Godot\export_templates\4.7.2.stable\` con archivos como `windows_release_x86_64.exe` y `android_debug.apk`.
+
+---
+
+## 6. Exportar para Windows (`.exe`)
+
+La configuración ya está en el repositorio (`export_presets.cfg`, preset **"Windows Desktop"**). Deja fuera del juego los tests, las herramientas, las specs y GUT.
+
+```bash
+godot --headless --path . --export-release "Windows Desktop" build/JuegoA.exe
+```
+
+**✅ Comprobar:** se crea `build/JuegoA.exe` (~110 MB, casi todo es el motor). Copiarlo a otra carpeta y abrirlo: tiene que funcionar sin Godot.
+
+> ℹ️ La carpeta `build/` no se sube a git.
+
+---
+
+## 7. Android (`.apk`)
+
+Godot exporta **el mismo proyecto** a Android; no hace falta portar nada (decisión D-021, spec §9.4).
+
+### 7.1 Qué hace falta instalar
+
+Lo más simple es instalar **Android Studio** (<https://developer.android.com/studio>), que trae las dos cosas que Godot necesita:
+
+| Qué | Para qué | Dónde queda |
+|---|---|---|
+| **Android SDK** | Herramientas de Android (empaquetar, instalar en el celular). | `C:\Users\<usuario>\AppData\Local\Android\Sdk` |
+| **Java 17 o superior** ("JBR") | Firmar el `.apk`. | `C:\Program Files\Android\Android Studio\jbr` |
+
+> ⚠️ **Trampa conocida:** Windows puede tener un **Java 8** viejo instalado (por ejemplo, el de Oracle en `Program Files (x86)`). Godot 4 **no** funciona con Java 8. Hay que indicarle el de Android Studio.
+
+### 7.2 Configurar el editor de Godot
+
+Estas rutas se guardan en la **configuración del editor**, que es de cada computadora y **no** del proyecto. Por eso no están en git.
+
+**Editor → Configuración del Editor → Exportar → Android:**
+
+| Campo | Valor |
+|---|---|
+| **Ruta del SDK de Android** (*Android SDK Path*) | `C:\Users\<usuario>\AppData\Local\Android\Sdk` |
+| **Ruta del SDK de Java** (*Java SDK Path*) | `C:\Program Files\Android\Android Studio\jbr` |
+| **Keystore de depuración** (*Debug Keystore*) | Godot lo crea solo la primera vez. No hace falta tocarlo. |
+
+> ⚠️ **Trampa conocida:** después de escribir una ruta, **pulsar Enter** o hacer clic en otro campo antes de cerrar la ventana. Si no, el valor puede no guardarse.
+>
+> ⚠️ **No editar a mano** el archivo `%APPDATA%\Godot\editor_settings-4.7.tres` con el editor abierto: el editor lo sobrescribe al cerrarse.
+
+**✅ Comprobar** (con la terminal, estando el editor cerrado o después de configurar):
+```bash
+grep -n "java_sdk_path\|android_sdk_path" "$APPDATA/Godot/editor_settings-4.7.tres"
+```
+Las dos líneas tienen que tener una ruta, no `""`.
+
+### 7.3 Exportar
+
+La configuración está en `export_presets.cfg`, preset **"Android"**: paquete `com.juegoa.towerdefense`, solo celulares de 64 bits (arm64), sin Gradle.
+
+```bash
+godot --headless --path . --export-debug "Android" build/JuegoA.apk
+```
+
+Se usa `--export-debug` porque la versión de **prueba** se firma sola con la clave de depuración. (Publicar en la Play Store requiere una clave propia y `--export-release`; eso no está hecho.)
+
+### 7.4 Instalar en el celular
+
+**Opción A — por cable (la más rápida):**
+1. En el celular: *Ajustes → Acerca del teléfono* → tocar 7 veces **Número de compilación** (activa las "Opciones de desarrollador").
+2. *Ajustes → Opciones de desarrollador* → activar **Depuración USB**.
+3. Conectar el celular por USB y aceptar el aviso que aparece en él.
+4. Instalar:
+   ```bash
+   "$LOCALAPPDATA/Android/Sdk/platform-tools/adb.exe" install -r build/JuegoA.apk
+   ```
+
+**Opción B — copiando el archivo:** pasar `JuegoA.apk` al celular (cable, Drive, WhatsApp…), abrirlo y aceptar **"Permitir instalar apps de origen desconocido"**. Android lo pide porque no viene de la Play Store.
+
+**Cómo se juega en el celular** (spec §9.4): tocar = clic; el botón **"atrás"** = `Esc` (abre el menú de pausa y **no** cierra el juego); el juego queda siempre en horizontal.
+
+---
+
+## Dónde guarda las cosas el juego
+
+| Qué | Dónde |
+|---|---|
+| Progreso y opciones del jugador | `%APPDATA%\Godot\app_userdata\JuegoA\save.json` |
+| Configuración del editor (rutas de Android, etc.) | `%APPDATA%\Godot\editor_settings-4.7.tres` |
+| Plantillas de exportación | `%APPDATA%\Godot\export_templates\4.7.2.stable\` |
+| Caché del proyecto (se regenera sola) | `JuegoA/.godot/` |
+
+> 💡 **Empezar el progreso de cero:** borrar `save.json`. El `.exe` y el juego abierto desde el editor **comparten** ese archivo.
+
+---
+
+## Herramientas del proyecto
+
+Se ejecutan desde la carpeta del proyecto. Más detalle dentro de cada archivo.
+
+| Comando | Para qué |
+|---|---|
+| `godot --headless --path . -s addons/gut/gut_cmdln.gd -gdir=res://tests -gexit` | Correr todos los tests. |
+| `godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- smart level=1` | Bot que juega solo, para revisar el balance (spec §7.1). Estrategias: `smart`, `basic`, `naive`. |
+| `godot --path . -s tools/perf_test.gd` | Prueba de rendimiento: 200 enemigos y 60 torres. Abre una ventana. |
+| `godot --headless --path . -s tools/make_sounds.gd` | Volver a generar los sonidos (D-020). |
+
+> ⚠️ **Trampa conocida (para quien escriba herramientas nuevas):** los scripts que se ejecutan con `-s` se compilan **antes** que los autoloads. No pueden usar `GameFlow`, `SaveManager` ni `Audio` por su nombre, ni declarar variables de tipo `Game`. Hay que declarar la partida como `Node2D` (plan técnico §7).
+
+---
+
+## Problemas conocidos
+
+| Síntoma | Causa | Qué hacer |
+|---|---|---|
+| `godot` no se reconoce como comando | La terminal se abrió antes de cambiar el `PATH`. | Abrir una terminal nueva. |
+| *"Invalid wrapper executable name"* | Se renombró el `…_console.exe`. | Devolverle su nombre original y usar `godot.cmd` (paso 2). |
+| Exportar a Android: *"Se requiere una ruta válida para el SDK de Java"* | Falta la ruta de Java en el editor, o no se confirmó con Enter. | Paso 7.2. |
+| Al cerrar el juego, en la terminal: *"ObjectDB instances were leaked"* | La música sigue "reproduciéndose" en el servidor de audio durante el cierre. | Es inofensivo y el jugador no lo ve. Está anotado como pendiente. |
+| Una herramienta (`tools/…`) da *"Identifier not found: GameFlow"* | Ver la trampa de la sección anterior. | Declarar la partida como `Node2D`. |
+
+---
+
+## Versiones de referencia
+
+Con estas versiones se desarrolló y probó el proyecto (septiembre de 2026):
+
+| Programa | Versión |
+|---|---|
+| Godot | 4.7.2 estable, estándar (renderizador *Compatibility*) |
+| GUT | 9.7.1 (incluido en el repositorio) |
+| Git | 2.55 |
+| Java para Android | OpenJDK 21 (el de Android Studio) |
+| Android SDK | build-tools 34–37, plataformas 35–36 |
+| Sistema | Windows 10 Pro |
