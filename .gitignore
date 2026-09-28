@@ -1,0 +1,8 @@
+# Godot 4: carpeta de caché e importaciones (se regenera sola)
+.godot/
+/android/
+
+# Exportaciones del juego
+/build/
+*.exe
+*.pck
