@@ -11,12 +11,17 @@ signal pause_pressed
 signal speed_pressed
 
 const TOWER_BUTTON_SIZE := Vector2(176, 60)
+## RF-134: cuánto se ve la tarjeta de presentación de un enemigo.
+const INTRO_SECONDS: float = 6.0
 
 var _total_waves: int = 0
 ## Las oleadas del nivel: para mostrar la próxima (RF-133) y avisar del Jefe (RF-135).
 var _waves: Array[WaveData] = []
 var _tower_types: Array[TowerData] = []
 var _tower_buttons: Array[Button] = []
+## RF-134: si llegan dos enemigos nuevos juntos, sus tarjetas salen una detrás de otra.
+var _intro_queue: Array[EnemyData] = []
+var _intro_busy: bool = false
 ## -1 = todavía no se mostró ningún valor (para no animar el primero).
 var _last_gold: int = -1
 var _last_lives: int = -1
@@ -30,6 +35,10 @@ var _last_lives: int = -1
 @onready var _boss_line: Label = %BossLine
 @onready var _next_wave: Control = %NextWave
 @onready var _next_wave_icons: HFlowContainer = %NextWaveIcons
+@onready var _intro: Control = %EnemyIntro
+@onready var _intro_icon_slot: Control = %IntroIconSlot
+@onready var _intro_name: Label = %IntroName
+@onready var _intro_text: Label = %IntroText
 ## Panel de la torre seleccionada (RF-70). Game lo conecta con BuildController.
 @onready var tower_panel: TowerPanel = %TowerPanel
 @onready var _pause_button: Button = %PauseButton
@@ -72,6 +81,34 @@ func show_next_wave(wave: WaveData) -> void:
 	var counts: Dictionary = wave.enemy_counts()
 	for enemy: EnemyData in counts:
 		_next_wave_icons.add_child(EnemyIcon.new().setup(enemy, counts[enemy]))
+
+
+## RF-134: tarjeta "Nuevo enemigo" con su forma, nombre y qué hace.
+func show_enemy_intro(enemy: EnemyData) -> void:
+	_intro_queue.append(enemy)
+	if not _intro_busy:
+		_show_next_intro()
+
+
+func _show_next_intro() -> void:
+	if _intro_queue.is_empty():
+		_intro_busy = false
+		_intro.visible = false
+		return
+	_intro_busy = true
+	var enemy: EnemyData = _intro_queue.pop_front()
+	for child: Node in _intro_icon_slot.get_children():
+		child.queue_free()
+	_intro_icon_slot.add_child(EnemyIcon.new().setup(enemy))
+	_intro_name.text = "Nuevo enemigo: %s" % enemy.display_name
+	_intro_text.text = enemy.description
+	_intro.visible = true
+	_intro.modulate.a = 0.0
+	var tween: Tween = create_tween()
+	tween.tween_property(_intro, "modulate:a", 1.0, 0.25)
+	tween.tween_interval(INTRO_SECONDS)
+	tween.tween_property(_intro, "modulate:a", 0.0, 0.4)
+	tween.finished.connect(_show_next_intro)
 
 
 ## RF-135: el primer enemigo peligroso de la oleada, o null si no trae ninguno.

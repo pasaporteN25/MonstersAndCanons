@@ -16,6 +16,8 @@ var save_path: String = DEFAULT_PATH
 
 var _levels: Dictionary = {}    # { "level_01": {"unlocked": bool, "completed": bool, "best_lives": int} }
 var _settings: Dictionary = {}
+## RF-134: enemigos ya presentados al jugador (sus id), para no repetir la tarjeta.
+var _seen_enemies: Array[String] = []
 
 
 func _ready() -> void:
@@ -27,6 +29,7 @@ func _ready() -> void:
 func load_save() -> void:
 	_levels = {}
 	_settings = DEFAULT_SETTINGS.duplicate()
+	_seen_enemies = []
 	if not FileAccess.file_exists(save_path):
 		return
 	var file := FileAccess.open(save_path, FileAccess.READ)
@@ -41,6 +44,7 @@ func load_save() -> void:
 		return
 	_read_levels((parsed as Dictionary).get("levels", {}))
 	_read_settings((parsed as Dictionary).get("settings", {}))
+	_read_seen_enemies((parsed as Dictionary).get("seen_enemies", []))
 
 
 func save() -> bool:
@@ -48,7 +52,8 @@ func save() -> bool:
 	if file == null:
 		push_warning("No se pudo guardar en %s" % save_path)
 		return false
-	var data := {"version": SAVE_VERSION, "levels": _levels, "settings": _settings}
+	var data := {"version": SAVE_VERSION, "levels": _levels, "settings": _settings,
+		"seen_enemies": _seen_enemies}
 	file.store_string(JSON.stringify(data, "  "))
 	return true
 
@@ -83,6 +88,17 @@ func record_victory(level_id: StringName, lives: int) -> void:
 	_levels[String(level_id)] = entry
 
 
+# --- Enemigos ya presentados (RF-134) ---
+
+func has_seen_enemy(enemy_id: StringName) -> bool:
+	return _seen_enemies.has(String(enemy_id))
+
+
+func mark_enemy_seen(enemy_id: StringName) -> void:
+	if not has_seen_enemy(enemy_id):
+		_seen_enemies.append(String(enemy_id))
+
+
 # --- Opciones (RF-113) ---
 
 func get_setting(key: String) -> Variant:
@@ -112,6 +128,14 @@ func _read_levels(raw: Variant) -> void:
 			"completed": bool(entry.get("completed", false)),
 			"best_lives": int(entry.get("best_lives", 0)),
 		}
+
+
+func _read_seen_enemies(raw: Variant) -> void:
+	if not raw is Array:
+		return
+	for id: Variant in raw:
+		if id is String and not _seen_enemies.has(id):
+			_seen_enemies.append(id)
 
 
 func _read_settings(raw: Variant) -> void:

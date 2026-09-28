@@ -346,7 +346,7 @@
   **Refs:** RF-133, RF-135.
   **Hecho cuando:** los tests comprueban la composición de la próxima oleada (tipos y cantidades) y el texto del cartel en la oleada 10 del nivel 1.
 
-- [ ] **T68 · Presentación de enemigos**
+- [x] **T68 · Presentación de enemigos**
   Tarjeta la primera vez que aparece cada tipo; "enemigos vistos" en el guardado.
   **Refs:** RF-134, RF-117.
   **Hecho cuando:** los tests comprueban que sale una sola vez por tipo, que se guarda y se vuelve a leer, y que fuera de la campaña no se escribe en disco.

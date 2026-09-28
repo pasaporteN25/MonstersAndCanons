@@ -89,3 +89,60 @@ func test_boss_wave_banner() -> void:
 func test_no_boss_line_in_normal_waves() -> void:
 	game.session.begin_wave()
 	assert_eq((game.hud.get_node("%BossLine") as Label).text, "")
+
+
+# --- RF-134: presentación de enemigos ---
+
+func _spawn(enemy_id: String) -> void:
+	var group := SpawnGroup.new()
+	group.enemy = _enemy(enemy_id)
+	group.count = 1
+	var wave := WaveData.new()
+	wave.groups.append(group)
+	game.spawner.start_wave(wave, 1)
+	simulate(game.spawner, 1, DT)
+
+
+func _intro_label(unique_name: String) -> String:
+	return (game.hud.get_node("%" + unique_name) as Label).text
+
+
+func test_first_appearance_shows_the_card() -> void:
+	_spawn("flyer")
+	assert_true((game.hud.get_node("%EnemyIntro") as Control).visible)
+	assert_eq(_intro_label("IntroName"), "Nuevo enemigo: Volador")
+	assert_eq(_intro_label("IntroText"), _enemy("flyer").description)
+	assert_true(SaveManager.has_seen_enemy(&"flyer"))
+
+
+func test_card_appears_only_once_per_type() -> void:
+	_spawn("flyer")
+	var queued_after_first: int = game.hud._intro_queue.size()
+	_spawn("flyer")
+	assert_eq(game.hud._intro_queue.size(), queued_after_first, "la segunda vez no se encola nada")
+
+
+func test_two_new_enemies_are_shown_one_after_the_other() -> void:
+	_spawn("flyer")
+	_spawn("armored")
+	assert_eq(_intro_label("IntroName"), "Nuevo enemigo: Volador", "primero el que llegó primero")
+	assert_eq(game.hud._intro_queue.size(), 1, "el Blindado espera su turno")
+
+
+func test_seen_enemies_survive_closing_the_game() -> void:
+	SaveManager.mark_enemy_seen(&"boss")
+	SaveManager.save()
+	SaveManager.load_save()
+	assert_true(SaveManager.has_seen_enemy(&"boss"))
+	assert_false(SaveManager.has_seen_enemy(&"tank"))
+
+
+func test_outside_the_campaign_nothing_is_written() -> void:
+	_spawn("tank")
+	assert_false(FileAccess.file_exists(TEST_PATH), "RF-117")
+
+
+func test_in_the_campaign_it_is_saved() -> void:
+	GameFlow.current_index = 0
+	_spawn("tank")
+	assert_true(FileAccess.file_exists(TEST_PATH))

@@ -365,7 +365,8 @@ Archivo `user://save.json` (Godot lo guarda en la carpeta de datos del usuario, 
     "level_01": { "unlocked": true,  "completed": true,  "best_lives": 17 },
     "level_02": { "unlocked": true,  "completed": false, "best_lives": 0 }
   },
-  "settings": { "music_volume": 0.8, "sfx_volume": 1.0, "fullscreen": false }
+  "settings": { "music_volume": 0.7, "sfx_volume": 0.8, "fullscreen": false, "damage_numbers": true },
+  "seen_enemies": ["normal", "fast"]
 }
 ```
 
