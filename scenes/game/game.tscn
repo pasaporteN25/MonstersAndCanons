@@ -12,6 +12,7 @@
 [ext_resource type="Script" path="res://scenes/game/level_session.gd" id="10_session"]
 [ext_resource type="PackedScene" path="res://scenes/game/hud.tscn" id="11_hud"]
 [ext_resource type="PackedScene" path="res://scenes/ui/end_screen.tscn" id="12_end"]
+[ext_resource type="Script" path="res://scenes/effects/effects_layer.gd" id="13_effects"]
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_game")
@@ -24,6 +25,9 @@ tower_types = Array[ExtResource("7_tower_data")]([ExtResource("4_basic"), ExtRes
 [node name="Enemies" type="Node2D" parent="."]
 
 [node name="Projectiles" type="Node2D" parent="."]
+
+[node name="Effects" type="Node2D" parent="."]
+script = ExtResource("13_effects")
 
 [node name="BuildController" type="Node2D" parent="."]
 script = ExtResource("8_build")

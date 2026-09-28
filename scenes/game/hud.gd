@@ -12,12 +12,16 @@ const TOWER_BUTTON_SIZE := Vector2(176, 60)
 var _total_waves: int = 0
 var _tower_types: Array[TowerData] = []
 var _tower_buttons: Array[Button] = []
+## -1 = todavía no se mostró ningún valor (para no animar el primero).
+var _last_gold: int = -1
+var _last_lives: int = -1
 
 @onready var _gold_label: Label = %GoldLabel
 @onready var _lives_label: Label = %LivesLabel
 @onready var _wave_label: Label = %WaveLabel
 @onready var _start_wave_button: Button = %StartWaveButton
 @onready var _tower_button_row: HBoxContainer = %TowerButtons
+@onready var _wave_banner: Label = %WaveBanner
 
 
 func _ready() -> void:
@@ -68,6 +72,9 @@ func show_selected_tower(index: int) -> void:
 
 func _on_gold_changed(gold: int) -> void:
 	_gold_label.text = "Oro: %d" % gold
+	if _last_gold >= 0 and gold != _last_gold:
+		_pop(_gold_label)  # RF-129
+	_last_gold = gold
 	# RF-101: gris si no alcanza el oro.
 	for i: int in _tower_buttons.size():
 		_tower_buttons[i].disabled = gold < _tower_types[i].levels[0].cost
@@ -75,11 +82,16 @@ func _on_gold_changed(gold: int) -> void:
 
 func _on_lives_changed(lives: int) -> void:
 	_lives_label.text = "Vidas: %d" % lives
+	if _last_lives >= 0 and lives < _last_lives:
+		_blink(_lives_label)  # RF-128
+	_last_lives = lives
 
 
 func _on_wave_changed(wave: int, total_waves: int) -> void:
 	_total_waves = total_waves
 	_wave_label.text = "Oleada %d/%d" % [wave, total_waves]
+	if wave > 0:
+		_show_wave_banner(wave)
 
 
 func _on_wave_completed(wave: int, bonus: int) -> void:
@@ -108,3 +120,34 @@ func _on_countdown_changed(seconds_left: float) -> void:
 func _set_button(text: String, enabled: bool) -> void:
 	_start_wave_button.text = text
 	_start_wave_button.disabled = not enabled
+
+
+# --- Animaciones de la interfaz (solo visual, spec §9.3) ---
+
+## RF-127: cartel grande "Oleada N" en el centro, que aparece y se desvanece.
+func _show_wave_banner(wave: int) -> void:
+	_wave_banner.text = "Oleada %d" % wave
+	_wave_banner.pivot_offset = _wave_banner.size / 2.0
+	_wave_banner.modulate.a = 0.0
+	_wave_banner.scale = Vector2(0.8, 0.8)
+	var tween: Tween = create_tween()
+	tween.tween_property(_wave_banner, "modulate:a", 1.0, 0.2)
+	tween.parallel().tween_property(_wave_banner, "scale", Vector2.ONE, 0.25) \
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_interval(0.9)
+	tween.tween_property(_wave_banner, "modulate:a", 0.0, 0.4)
+
+
+## RF-129: crece un poco y vuelve.
+func _pop(label: Label) -> void:
+	label.pivot_offset = label.size / 2.0
+	label.scale = Vector2(1.25, 1.25)
+	create_tween().tween_property(label, "scale", Vector2.ONE, 0.15)
+
+
+## RF-128: parpadea dos veces.
+func _blink(label: Label) -> void:
+	var tween: Tween = create_tween()
+	for i: int in 2:
+		tween.tween_property(label, "modulate", Color(1, 1, 1, 0.25), 0.06)
+		tween.tween_property(label, "modulate", Color.WHITE, 0.06)

@@ -12,6 +12,10 @@ const GROUP: StringName = &"enemies"
 ## Color al que se tiñe un enemigo ralentizado (RF-62).
 const SLOW_TINT := Color(0.45, 0.72, 1.0)
 const HEALTH_BAR_HEIGHT: float = 5.0
+## Duración del parpadeo blanco al recibir un golpe (RF-123).
+const HIT_FLASH_DURATION: float = 0.08
+## Cuánto se estira y aplasta al caminar (RF-125). 0.08 = 8 %.
+const BOB_AMOUNT: float = 0.08
 
 var data: EnemyData
 var max_health: int = 0
@@ -24,6 +28,11 @@ var _slow_amount: float = 0.0
 var _slow_left: float = 0.0
 ## Evita actuar dos veces: tras queue_free() el nodo sigue vivo hasta el final del frame.
 var _is_done: bool = false
+# Solo visual (spec §9.3):
+var _hit_flash_left: float = 0.0
+var _anim_time: float = 0.0
+## Hacia dónde camina, en radianes (0 = derecha).
+var _heading: float = 0.0
 
 
 ## Se llama ANTES de agregar el enemigo al árbol.
@@ -38,6 +47,9 @@ func setup(enemy_data: EnemyData, path: Path2D, scaled_health: int) -> void:
 func _ready() -> void:
 	add_to_group(GROUP)
 	_update_position()
+	_heading = _path_direction()
+	# Cada enemigo empieza su bamboleo en un momento distinto, así no se mueven todos igual.
+	_anim_time = randf() * 10.0
 
 
 func _physics_process(delta: float) -> void:
@@ -46,6 +58,7 @@ func _physics_process(delta: float) -> void:
 	_update_slow(delta)
 	distance += Rules.tiles_to_px(current_speed_tiles()) * delta
 	_update_position()
+	_animate(delta)
 	if distance >= _path.curve.get_baked_length():
 		_is_done = true
 		reached_exit.emit(self)
@@ -81,6 +94,7 @@ func take_hit(damage: int, slow_amount: float = 0.0, slow_duration: float = 0.0)
 	if _is_done:
 		return
 	health = maxi(0, health - Rules.damage_after_armor(damage, data.armor))
+	_hit_flash_left = HIT_FLASH_DURATION
 	if slow_amount > 0.0:
 		_apply_slow(Rules.effective_slow(slow_amount, data.slow_resistance), slow_duration)
 	queue_redraw()
@@ -110,12 +124,38 @@ func _update_position() -> void:
 	global_position = _path.to_global(_path.curve.sample_baked(distance))
 
 
-# --- Dibujo provisional con formas (D-002) ---
+# --- Animación y dibujo (solo visual, spec §9.3) ---
+
+## Dirección del camino en el punto actual (mirando un poco hacia adelante).
+func _path_direction() -> float:
+	var here: Vector2 = _path.curve.sample_baked(distance)
+	var ahead: Vector2 = _path.curve.sample_baked(distance + 6.0)
+	return _heading if here.is_equal_approx(ahead) else (ahead - here).angle()
+
+
+func _animate(delta: float) -> void:
+	_anim_time += delta
+	_hit_flash_left = maxf(0.0, _hit_flash_left - delta)
+	# RF-125: gira suavemente hacia donde camina (también al doblar esquinas).
+	_heading = lerp_angle(_heading, _path_direction(), minf(1.0, 12.0 * delta))
+	queue_redraw()
+
 
 func _draw() -> void:
 	var r: float = Rules.tiles_to_px(data.size_tiles)
 	var fill: Color = data.color.lerp(SLOW_TINT, 0.6) if is_slowed() else data.color
+	if _hit_flash_left > 0.0:
+		fill = Color.WHITE  # RF-123
 	var outline: Color = fill.darkened(0.45)
+	# Sombra (RF-126): una elipse aplastada debajo, sin bamboleo.
+	draw_set_transform(Vector2(3, r * 0.55), 0.0, Vector2(1.0, 0.45))
+	draw_circle(Vector2.ZERO, r, Color(0, 0, 0, 0.25))
+	# RF-125: bamboleo (se estira y se aplasta) al ritmo de su velocidad.
+	# Los triángulos y rombos, además, apuntan hacia donde caminan.
+	var wave: float = sin(_anim_time * TAU * current_speed_tiles() * 1.2)
+	var squash := Vector2(1.0 + BOB_AMOUNT * wave, 1.0 - BOB_AMOUNT * wave)
+	var pointy: bool = data.shape == EnemyData.Shape.TRIANGLE or data.shape == EnemyData.Shape.DIAMOND
+	draw_set_transform(Vector2(0, -absf(wave) * 2.0), _heading + PI / 2.0 if pointy else 0.0, squash)
 	match data.shape:
 		EnemyData.Shape.CIRCLE:
 			draw_circle(Vector2.ZERO, r, fill)
@@ -130,6 +170,7 @@ func _draw() -> void:
 			_draw_regular_polygon(4, r, fill, outline)
 		EnemyData.Shape.HEXAGON:
 			_draw_regular_polygon(6, r, fill, outline)
+	draw_set_transform(Vector2.ZERO)
 	if is_health_bar_visible():
 		_draw_health_bar(r)
 

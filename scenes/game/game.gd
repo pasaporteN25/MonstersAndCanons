@@ -6,6 +6,9 @@ extends Node2D
 
 ## El mapa se dibuja debajo de la barra superior del HUD (plan §2).
 const MAP_OFFSET := Vector2(0, 48)
+## Sacudida de pantalla al perder vidas (RF-128).
+const SHAKE_DURATION: float = 0.25
+const SHAKE_STRENGTH_PX: float = 4.0
 
 @export var level_data: LevelData
 @export var balance: BalanceConfig
@@ -13,10 +16,12 @@ const MAP_OFFSET := Vector2(0, 48)
 @export var tower_types: Array[TowerData] = []
 
 var level: Level
+var _shake_left: float = 0.0
 
 @onready var tower_container: Node2D = $Towers
 @onready var enemies: Node2D = $Enemies
 @onready var projectiles: Node2D = $Projectiles
+@onready var effects: EffectsLayer = $Effects
 @onready var build_controller: BuildController = $BuildController
 @onready var spawner: WaveSpawner = $WaveSpawner
 @onready var session: LevelSession = $Session
@@ -50,6 +55,18 @@ func _ready() -> void:
 	session.start(level_data, balance)
 
 
+func _process(delta: float) -> void:
+	# RF-128: se mueve todo el "mundo"; el HUD está en otra capa y no se sacude.
+	if _shake_left <= 0.0:
+		return
+	_shake_left -= delta
+	if _shake_left <= 0.0:
+		position = Vector2.ZERO
+	else:
+		var strength: float = SHAKE_STRENGTH_PX * _shake_left / SHAKE_DURATION
+		position = Vector2(randf_range(-1.0, 1.0), randf_range(-1.0, 1.0)) * strength
+
+
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("start_wave"):
 		start_next_wave()
@@ -75,18 +92,23 @@ func _on_enemy_spawned(enemy: Enemy) -> void:
 
 func _on_enemy_died(enemy: Enemy) -> void:
 	session.earn(enemy.data.reward)  # RF-21
+	effects.enemy_died(enemy.global_position, enemy.data.color,
+		Rules.tiles_to_px(enemy.data.size_tiles), enemy.data.reward)
 
 
 func _on_enemy_reached_exit(enemy: Enemy) -> void:
 	session.lose_lives(enemy.data.lives_damage)  # RF-11
+	_shake_left = SHAKE_DURATION
 
 
 func _on_tower_built(tower: Tower) -> void:
 	tower.fired.connect(_on_tower_fired)
+	effects.tower_built(tower.global_position, tower.data.color)
 
 
 func _on_tower_fired(projectile: Projectile) -> void:
 	projectiles.add_child(projectile)
+	projectile.impacted.connect(effects.projectile_impacted)
 
 
 func _on_state_changed(state: LevelSession.State) -> void:

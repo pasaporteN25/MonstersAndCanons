@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://scenes/levels/level.gd" id="1_i2aat"]
 [ext_resource type="TileSet" path="res://assets/tiles/tileset.tres" id="2_2djvx"]
+[ext_resource type="Script" path="res://scenes/levels/level_decor.gd" id="3_decor"]
 
 [sub_resource type="Curve2D" id="Curve2D_uvc87"]
 _data = {
@@ -20,3 +21,6 @@ tile_set = ExtResource("2_2djvx")
 
 [node name="GroundPath0" type="Path2D" parent="Entrances" unique_id=695655813]
 curve = SubResource("Curve2D_uvc87")
+
+[node name="Decor" type="Node2D" parent="."]
+script = ExtResource("3_decor")

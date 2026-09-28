@@ -70,11 +70,14 @@ JuegoA/
 │   │   └── hud.tscn / hud.gd                 ← interfaz de la partida
 │   ├── levels/
 │   │   ├── level.gd                          ← script común a todos los mapas
+│   │   ├── level_decor.gd                    ← decoración dibujada por código (M1.5)
 │   │   └── level_01.tscn, level_02.tscn, ...
 │   ├── towers/
 │   │   ├── tower.tscn / tower.gd             ← UNA escena para TODAS las torres
 │   │   ├── projectile.tscn / projectile.gd
 │   │   └── tower_panel.tscn / tower_panel.gd ← (M2) panel mejorar/vender
+│   ├── effects/
+│   │   └── effects_layer.gd, ring_effect.gd, burst_effect.gd, floating_text.gd  ← (M1.5)
 │   ├── enemies/
 │   │   └── enemy.tscn / enemy.gd             ← UNA escena para TODOS los enemigos
 │   └── ui/                                   ← (M3) menús
@@ -101,7 +104,8 @@ JuegoA/
 │   ├── tiles/    tiles.png, tileset.tres   ← casillas provisionales (M1)
 │   └── ...                     ← (M3/M4) sonidos, imágenes, fuentes
 ├── tools/
-│   └── balance_sim.gd            ← bot que juega solo para revisar el balance (spec §7.1)
+│   ├── balance_sim.gd            ← bot que juega solo para revisar el balance (spec §7.1)
+│   └── perf_test.gd              ← prueba de rendimiento con ventana (T56, P7)
 └── tests/
     ├── test_rules.gd
     ├── test_level_paths.gd
@@ -177,10 +181,11 @@ Game (Node2D)                        game.gd       ← el "director": crea y con
 │   ├── Entrances (Node2D)
 │   │   ├── GroundPath0 (Path2D)                   ← camino terrestre de la entrada 0
 │   │   └── AirPath0 (Path2D)                      ← (M2) línea recta para voladores
-│   └── ...
+│   └── Decor (Node2D)               level_decor.gd ← pasto, bordes, rocas (M1.5)
 ├── Towers (Node2D)                                ← contenedor de torres
 ├── Enemies (Node2D)                               ← contenedor de enemigos
 ├── Projectiles (Node2D)                           ← contenedor de proyectiles
+├── Effects (Node2D)                 effects_layer.gd  ← efectos visuales (M1.5, spec §9.3)
 ├── BuildController (Node2D)         build_controller.gd
 ├── WaveSpawner (Node)               wave_spawner.gd
 ├── Session (Node)                   level_session.gd

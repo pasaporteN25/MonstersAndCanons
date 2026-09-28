@@ -4,8 +4,20 @@
 class_name Level
 extends Node2D
 
+## Casillas del TileSet (assets/tiles/tileset.tres). Qué es construible lo dice su dato
+## "buildable"; estas constantes solo sirven para decorar (LevelDecor).
+const ATLAS_GRASS := Vector2i(0, 0)
+const ATLAS_PATH := Vector2i(1, 0)
+const ATLAS_BLOCKED := Vector2i(2, 0)
+
 @onready var ground: TileMapLayer = $Ground
 @onready var entrances: Node2D = $Entrances
+
+
+func _ready() -> void:
+	var decor := get_node_or_null("Decor") as LevelDecor
+	if decor != null:
+		decor.paint(ground)
 
 
 ## RF-02: solo las casillas "libres" son construibles.

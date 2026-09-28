@@ -141,36 +141,37 @@
 
 > Objetivo: que el juego dé gusto mirar, sin cambiar ninguna regla (spec §9.3). Cada tarea se comprueba con una captura de pantalla y con los tests existentes, que deben seguir pasando sin cambios en sus valores.
 
-- [ ] **T50 · Capa de efectos, muerte y oro flotante**
+- [x] **T50 · Capa de efectos, muerte y oro flotante**
   Nodo `Effects` en la partida para efectos que sobreviven al enemigo (que ya se borró). Estallido de partículas y "+N" dorado.
   **Refs:** RF-124.
   **Hecho cuando:** al morir un enemigo se ven sus partículas y el "+N" con el oro que dio; al escapar un enemigo **no** aparece nada.
 
-- [ ] **T51 · Torres que apuntan, retroceso y destello**
+- [x] **T51 · Torres que apuntan, retroceso y destello**
   **Refs:** RF-120, RF-121.
   **Hecho cuando:** el cañón de cada torre sigue a su objetivo y retrocede con destello en cada disparo.
 
-- [ ] **T52 · Impactos por tipo de torre y parpadeo al golpear**
+- [x] **T52 · Impactos por tipo de torre y parpadeo al golpear**
   **Refs:** RF-122, RF-123.
   **Hecho cuando:** cada torre tiene su impacto distinto; la onda del Cañón llega exactamente hasta su radio de área; los enemigos parpadean en blanco al recibir daño.
 
-- [ ] **T53 · Enemigos con movimiento**
+- [x] **T53 · Enemigos con movimiento**
   **Refs:** RF-125.
   **Hecho cuando:** los enemigos se bambolean y los triángulos apuntan hacia donde caminan, también al doblar las esquinas.
 
-- [ ] **T54 · Mapa más vistoso y sombras**
+- [x] **T54 · Mapa más vistoso y sombras**
   Nueva imagen de casillas (sigue generada por código, sin dibujos externos).
   **Refs:** RF-126.
   **Hecho cuando:** el pasto no se ve como una cuadrícula repetida; el camino tiene bordes; torres y enemigos tienen sombra; `test_level_paths.gd` sigue pasando.
 
-- [ ] **T55 · Avisos de interfaz: oleada, vidas, oro y construcción**
+- [x] **T55 · Avisos de interfaz: oleada, vidas, oro y construcción**
   **Refs:** RF-127 a RF-130.
   **Hecho cuando:** aparece el cartel de oleada; perder vidas sacude la pantalla y hace parpadear las vidas; el oro hace "pop"; las torres aparecen creciendo.
 
-- [ ] **T56 · Rendimiento con efectos**
+- [x] **T56 · Rendimiento con efectos**
   Escena de prueba con 200 enemigos, 60 torres y todos los efectos.
   **Refs:** RF-131, constitución P7.
   **Hecho cuando:** se mantienen ~60 FPS. (Adelanta la parte de efectos de T39.)
+  **Resultado (2026-09-28):** `tools/perf_test.gd` → 153 FPS de promedio, frame más lento 15,3 ms. ✅
 
 ---
 

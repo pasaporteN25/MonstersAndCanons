@@ -2,6 +2,9 @@
 class_name Projectile
 extends Node2D
 
+## Llegó a destino. Solo para efectos visuales (RF-122): el daño ya se aplicó.
+signal impacted(position: Vector2, stats: TowerLevelData)
+
 var _target: Enemy
 var _target_pos: Vector2
 var _start_pos: Vector2
@@ -40,6 +43,7 @@ func _physics_process(delta: float) -> void:
 		global_position = _target_pos
 		_is_done = true
 		_impact()
+		impacted.emit(global_position, _stats)
 		queue_free()
 	else:
 		global_position = global_position.move_toward(_target_pos, step)
