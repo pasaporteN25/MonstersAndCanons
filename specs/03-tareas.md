@@ -13,11 +13,11 @@
 
 ## M0 — Preparación
 
-- [ ] **T00 · Instalar herramientas**
-  Instalar Godot 4 (versión estándar, no .NET) y Git. Agregar la carpeta de Godot al `PATH` y renombrar el ejecutable (o crear un alias) a `godot`.
+- [x] **T00 · Instalar herramientas**
+  Instalar Godot 4 (versión estándar, no .NET) y Git. Agregar la carpeta de Godot al `PATH` y crear `godot.cmd` junto a los ejecutables (no renombrar el `_console.exe`: deja de funcionar).
   **Hecho cuando:** en una terminal nueva, `godot --version` y `git --version` muestran sus versiones. La versión de Godot queda anotada en el README.
 
-- [ ] **T01 · Crear el proyecto Godot**
+- [x] **T01 · Crear el proyecto Godot**
   Crear el proyecto en esta carpeta (renderizador *Compatibility* o *Forward+*, cualquiera sirve para 2D). Aplicar la configuración de §2 (resolución, estiramiento, filtro, nombres de capas 2D).
   **Refs:** plan §2.
   **Hecho cuando:** F5 abre una ventana gris de 1280×720 y, al agrandarla, el contenido se escala sin deformarse.
@@ -27,7 +27,7 @@
   **Refs:** plan §3.
   **Hecho cuando:** `git status` no muestra la carpeta `.godot/` y existe un commit inicial.
 
-- [ ] **T03 · Instalar GUT y un test de prueba**
+- [x] **T03 · Instalar GUT y un test de prueba**
   Instalar GUT desde la AssetLib. Crear `tests/test_sanity.gd` con un test que compruebe `1 + 1 == 2`.
   **Refs:** plan §8, constitución P10.
   **Hecho cuando:** el test pasa, tanto desde el panel de GUT como desde la consola (comando de §8).
