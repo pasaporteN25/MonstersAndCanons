@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Rápido: gota amarilla inclinada hacia adelante, con cresta y líneas de velocidad. -->
+  <g stroke="#2b2233" stroke-linecap="round" opacity="0.4" stroke-width="2.2">
+    <line x1="2" y1="37" x2="11" y2="37"/>
+    <line x1="5" y1="44" x2="15" y2="44"/>
+  </g>
+  <g stroke="#2b2233" stroke-width="4" stroke-linecap="round">
+    <line x1="30" y1="47" x2="23" y2="57"/>
+    <line x1="41" y1="48" x2="47" y2="57"/>
+  </g>
+  <g stroke="#2b2233" stroke-width="2.5" stroke-linejoin="round">
+    <polygon points="21,22 25,9 31,17 37,6 41,18" fill="#e0a91c"/>
+    <path d="M4 28 C14 26 20 18 34 17 C48 16 56 26 56 34 C56 44 47 50 36 50 C24 50 16 40 4 28 Z" fill="#f2c230"/>
+  </g>
+  <ellipse cx="38" cy="41" rx="10" ry="5.5" fill="#ffe07a"/>
+  <ellipse cx="44" cy="29" rx="6" ry="6.5" fill="#ffffff" stroke="#2b2233" stroke-width="2"/>
+  <circle cx="46.5" cy="30" r="3" fill="#2b2233"/>
+  <path d="M37 20.5 L50.5 24" stroke="#2b2233" stroke-width="2.6" stroke-linecap="round"/>
+  <path d="M45 41 Q50 43.5 54 38.5" fill="none" stroke="#2b2233" stroke-width="2" stroke-linecap="round"/>
+  <ellipse cx="24" cy="26" rx="5" ry="2.4" fill="#ffffff" opacity="0.5" transform="rotate(-20 24 26)"/>
+</svg>

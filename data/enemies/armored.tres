@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="EnemyData" format=3]
 
 [ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="1_fklr6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/armored.svg" id="2_26dih"]
 
 [resource]
 script = ExtResource("1_fklr6")
@@ -14,4 +15,5 @@ reward = 12
 lives_damage = 1
 shape = 4
 color = Color(0.22745098, 0.3529412, 0.54901963, 1)
+texture = ExtResource("2_26dih")
 size_tiles = 0.3

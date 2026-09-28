@@ -7,6 +7,9 @@ extends GutTest
 
 const GAME_SCENE: PackedScene = preload("res://scenes/game/game.tscn")
 const TOWER_SCENE: PackedScene = preload("res://scenes/towers/tower.tscn")
+const ENEMY_SCENE: PackedScene = preload("res://scenes/enemies/enemy.tscn")
+const ENEMY_IDS: Array[String] = ["normal", "fast", "tank", "flyer", "armored", "boss"]
+const DT: float = 1.0 / 60.0
 ## D-023: los SVG de 64×64 se importan al doble.
 const SPRITE_SIZE := Vector2(128, 128)
 
@@ -91,3 +94,88 @@ func test_a_tower_without_drawings_still_works() -> void:
 	await wait_process_frames(2)
 	assert_null(data.turret_texture)
 	assert_eq(tower.level_number(), 1, "se creó y se dibujó sin errores")
+
+
+# --- Enemigos (RF-151, RF-152, RF-156) ---
+
+func _enemy_data(id: String) -> EnemyData:
+	return load("res://data/enemies/%s.tres" % id)
+
+
+## Un enemigo Normal caminando por un camino que pasa por `points`.
+func _walker(points: Array[Vector2], data: EnemyData = null) -> Enemy:
+	var path := Path2D.new()
+	path.curve = Curve2D.new()
+	for point: Vector2 in points:
+		path.curve.add_point(point)
+	add_child_autofree(path)
+	var enemy: Enemy = ENEMY_SCENE.instantiate()
+	enemy.setup(data if data != null else _enemy_data("normal"), path, 30)
+	add_child_autofree(enemy)
+	return enemy
+
+
+func test_every_enemy_has_its_drawing() -> void:
+	for id: String in ENEMY_IDS:
+		var texture: Texture2D = _enemy_data(id).texture
+		assert_not_null(texture, "%s: dibujo" % id)
+		if texture != null:
+			assert_eq(texture.resource_path, "res://assets/sprites/enemies/%s.svg" % id)
+			assert_eq(texture.get_size(), SPRITE_SIZE, "%s: importado al doble" % id)
+
+
+func test_walking_right_faces_right() -> void:
+	var enemy: Enemy = _walker([Vector2(100, 100), Vector2(400, 100)])
+	simulate(enemy, 10, DT)
+	assert_false(enemy.is_facing_left())
+
+
+func test_walking_left_faces_left() -> void:
+	var enemy: Enemy = _walker([Vector2(400, 100), Vector2(100, 100)])
+	simulate(enemy, 10, DT)
+	assert_true(enemy.is_facing_left(), "RF-151: se da vuelta")
+
+
+func test_going_down_keeps_facing_where_it_was() -> void:
+	# Camina 100 px hacia la izquierda y después baja: al bajar sigue mirando a la izquierda.
+	var enemy: Enemy = _walker([Vector2(300, 100), Vector2(200, 100), Vector2(200, 500)])
+	simulate(enemy, 150, DT)  # 1,5 casillas por segundo → ya está bajando
+	assert_gt(enemy.global_position.y, 150.0, "ya dobló hacia abajo")
+	assert_true(enemy.is_facing_left(), "RF-151: al subir o bajar no se da vuelta")
+
+
+func test_every_enemy_is_drawn_hit_and_slowed() -> void:
+	for id: String in ENEMY_IDS:
+		var enemy: Enemy = _walker([Vector2(400, 100), Vector2(100, 100)], _enemy_data(id))
+		enemy.take_hit(1, 0.5, 2.0)  # golpe (RF-123) y ralentización (RF-152)
+	await wait_process_frames(2)
+	assert_true(true, "se dibujaron sin errores")
+
+
+func test_an_enemy_without_drawing_still_works() -> void:
+	# RF-156: datos sin dibujo → la forma de antes.
+	var data := EnemyData.new()
+	data.id = &"test"
+	data.max_health = 10
+	data.speed_tiles = 1.0
+	data.size_tiles = 0.25
+	data.shape = EnemyData.Shape.TRIANGLE
+	var enemy: Enemy = _walker([Vector2(100, 100), Vector2(400, 100)], data)
+	enemy.take_hit(1, 0.5, 2.0)
+	await wait_process_frames(2)
+	assert_null(data.texture)
+	assert_true(enemy.is_active(), "se dibujó sin errores")
+
+
+func test_hit_flash_is_a_white_silhouette_of_the_drawing() -> void:
+	# RF-123: misma forma (misma opacidad en cada píxel), pero toda blanca.
+	var texture: Texture2D = _enemy_data("tank").texture
+	var original: Image = texture.get_image()
+	var flash: Image = EnemyShape.flash_texture(texture).get_image()
+	assert_eq(flash.get_size(), original.get_size())
+	var body: Color = original.get_pixel(40, 70)  # marrón del cuerpo
+	assert_almost_eq(body.a, 1.0, 0.01, "ahí hay cuerpo")
+	assert_eq(flash.get_pixel(40, 70), Color(1, 1, 1, 1), "en la silueta es blanco")
+	assert_eq(flash.get_pixel(2, 2).a, original.get_pixel(2, 2).a, "fuera del dibujo, transparente")
+	assert_eq(texture.get_image().get_pixel(40, 70), body, "el dibujo original no cambia")
+	assert_same(EnemyShape.flash_texture(texture), EnemyShape.flash_texture(texture), "se arma una sola vez")

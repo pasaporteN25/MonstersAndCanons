@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="EnemyData" format=3]
 
 [ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="1_hqxyi"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/fast.svg" id="2_fo1no"]
 
 [resource]
 script = ExtResource("1_hqxyi")
@@ -13,4 +14,5 @@ reward = 4
 lives_damage = 1
 shape = 1
 color = Color(0.9490196, 0.7607843, 0.1882353, 1)
+texture = ExtResource("2_fo1no")
 size_tiles = 0.2

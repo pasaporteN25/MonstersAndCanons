@@ -25,6 +25,9 @@ enum Shape { CIRCLE, TRIANGLE, SQUARE, DIAMOND, HEXAGON }
 ## Qué parte de la ralentización ignora: 0.5 = solo le afecta la mitad (Jefe).
 @export_range(0.0, 1.0) var slow_resistance: float = 0.0
 @export var shape: Shape = Shape.CIRCLE
+## Color del enemigo: se usa en los efectos (estallido al morir) y, sin dibujo, para la forma.
 @export var color: Color = Color.WHITE
+## Solo visual (RF-151): el dibujo, mirando a la derecha. Vacío = se usa `shape` (RF-156).
+@export var texture: Texture2D
 ## Radio visual, en casillas.
 @export var size_tiles: float = 0.0

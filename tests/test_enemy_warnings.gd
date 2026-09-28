@@ -68,6 +68,23 @@ func test_shows_the_following_wave_once_one_starts() -> void:
 	assert_eq(_next_wave_shown(), [["normal", 10], ["armored", 4]])
 
 
+func test_the_busiest_wave_fits_in_one_row() -> void:
+	# La oleada 10 del nivel 1 trae 4 tipos, el máximo de todos los niveles.
+	game.hud.show_next_wave(game.level_data.waves[9])
+	await wait_process_frames(2)  # deja que el contenedor acomode los íconos
+	var row: HFlowContainer = game.hud.get_node("%NextWaveIcons")
+	var icons: Array[Control] = []
+	for child: Node in row.get_children():
+		if not child.is_queued_for_deletion():
+			icons.append(child as Control)
+	assert_eq(icons.size(), 4)
+	for icon: Control in icons:
+		assert_eq(icon.position.y, icons[0].position.y, "todos en la misma fila")
+		assert_lte(icon.position.x + icon.size.x, row.size.x, "no se sale por el costado")
+	var bottom: float = row.get_global_rect().end.y
+	assert_lte(bottom, 720.0, "no se sale de la pantalla por abajo")
+
+
 func test_nothing_after_the_last_wave() -> void:
 	for i: int in game.session.total_waves:
 		game.session.begin_wave()

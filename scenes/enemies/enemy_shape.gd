@@ -1,11 +1,58 @@
-# Dibujo de las formas de los enemigos (D-002), compartido entre el enemigo en el mapa
-# y los íconos de la interfaz (próxima oleada, presentación de enemigos, RF-133 y RF-134).
+# Dibujo de los enemigos, compartido entre el enemigo en el mapa y los íconos de la interfaz
+# (próxima oleada, presentación de enemigos, RF-133 y RF-134): sus dibujos (RF-151) o,
+# si no tienen, sus formas geométricas (D-002, RF-156).
 # Dibuja centrado en (0, 0) del `canvas`; quien llama decide la posición, el giro y la escala
 # con draw_set_transform().
 class_name EnemyShape
 extends RefCounted
 
 const CROWN_COLOR := Color(1.0, 0.84, 0.3)
+## RF-151: lado del dibujo comparado con el radio del enemigo. Con 2.8, el cuerpo del dibujo
+## (unas 20 de sus 64 unidades de radio) mide lo mismo que el círculo de antes.
+const SPRITE_SCALE: float = 2.8
+
+## RF-123: siluetas blancas ya armadas: { ruta del dibujo: ImageTexture }.
+static var _flash_textures: Dictionary = {}
+
+
+## Dibuja el sprite de un enemigo centrado en (0, 0). En los SVG el cuerpo está 2 unidades
+## (de 64) por debajo del centro de la imagen: se sube un poco para que quede centrado.
+static func draw_sprite(canvas: CanvasItem, texture: Texture2D, radius: float,
+		modulate: Color = Color.WHITE) -> void:
+	var side: float = radius * SPRITE_SCALE
+	canvas.draw_texture_rect(texture, Rect2(-side / 2.0, -side / 2.0 - side / 32.0, side, side),
+		false, modulate)
+
+
+## Distancia desde el centro hasta arriba del dibujo (orejas, cuernos): ahí va la corona.
+static func sprite_top(radius: float) -> float:
+	return radius * SPRITE_SCALE * 0.42
+
+
+## RF-123: silueta blanca del dibujo, para el parpadeo al recibir un golpe. Se arma la primera
+## vez que se pide y se guarda. (Multiplicar el color por más de 1 no aclara con este renderizador.)
+static func flash_texture(texture: Texture2D) -> Texture2D:
+	if _flash_textures.has(texture.resource_path):
+		return _flash_textures[texture.resource_path]
+	var image: Image = texture.get_image().duplicate()  # copia: no tocar la del dibujo
+	image.decompress()
+	image.clear_mipmaps()
+	image.convert(Image.FORMAT_RGBA8)
+	# Cada píxel ocupa 4 bytes (rojo, verde, azul, opacidad): se ponen en blanco los tres
+	# colores y se deja la opacidad, así la silueta tiene exactamente la forma del dibujo.
+	var bytes: PackedByteArray = image.get_data()
+	for i: int in range(0, bytes.size(), 4):
+		bytes[i] = 255
+		bytes[i + 1] = 255
+		bytes[i + 2] = 255
+	var white := Image.create_from_data(image.get_width(), image.get_height(), false,
+		Image.FORMAT_RGBA8, bytes)
+	white.generate_mipmaps()
+	var flash := ImageTexture.create_from_image(white)
+	_flash_textures[texture.resource_path] = flash
+	return flash
+
+
 
 
 static func draw(canvas: CanvasItem, shape: EnemyData.Shape, radius: float, fill: Color,
