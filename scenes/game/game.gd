@@ -9,6 +9,11 @@ const MAP_OFFSET := Vector2(0, 48)
 ## Sacudida de pantalla al perder vidas (RF-128).
 const SHAKE_DURATION: float = 0.25
 const SHAKE_STRENGTH_PX: float = 4.0
+## RF-105: velocidad rápida.
+const FAST_SPEED: float = 2.0
+
+signal pause_changed(paused: bool)
+signal speed_changed(speed: float)
 
 @export var level_data: LevelData
 @export var balance: BalanceConfig
@@ -34,6 +39,12 @@ func _ready() -> void:
 	level.position = MAP_OFFSET
 	add_child(level)
 	move_child(level, 0)  # primero en la lista = se dibuja debajo de todo
+
+	# RF-104: la partida (y la interfaz, que hereda) sigue funcionando en pausa;
+	# el "mundo" se congela.
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	for node: Node in _world_nodes():
+		node.process_mode = Node.PROCESS_MODE_PAUSABLE
 
 	spawner.setup(level, enemies, balance)
 	spawner.enemy_spawned.connect(_on_enemy_spawned)
@@ -62,6 +73,11 @@ func _ready() -> void:
 	session.state_changed.connect(_on_state_changed)
 	end_screen.retry_pressed.connect(restart)
 
+	hud.pause_pressed.connect(toggle_pause)
+	hud.speed_pressed.connect(toggle_speed)
+	pause_changed.connect(hud.show_paused)
+	speed_changed.connect(hud.show_speed)
+
 	session.start(level_data, balance)
 
 
@@ -77,9 +93,58 @@ func _process(delta: float) -> void:
 		position = Vector2(randf_range(-1.0, 1.0), randf_range(-1.0, 1.0)) * strength
 
 
+## Al salir de la partida (reintentar, cerrar, o un test que la borra) nunca debe
+## quedar el juego en pausa ni acelerado (RF-105, plan §6.7).
+func _exit_tree() -> void:
+	_reset_time()
+
+
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("start_wave"):
 		start_next_wave()
+	elif event.is_action_pressed("pause"):
+		toggle_pause()
+	elif event.is_action_pressed("toggle_speed"):
+		toggle_speed()
+
+
+# --- Pausa y velocidad (RF-104, RF-105) ---
+
+func is_paused() -> bool:
+	return get_tree().paused
+
+
+func set_paused(paused: bool) -> void:
+	if session.is_over() and paused:
+		return  # con la partida terminada no hay nada que pausar
+	get_tree().paused = paused
+	if paused:
+		build_controller.cancel()  # en pausa no se construye
+	pause_changed.emit(paused)
+
+
+func toggle_pause() -> void:
+	set_paused(not is_paused())
+
+
+func set_speed(speed: float) -> void:
+	Engine.time_scale = speed
+	speed_changed.emit(speed)
+
+
+func toggle_speed() -> void:
+	set_speed(1.0 if Engine.time_scale > 1.0 else FAST_SPEED)
+
+
+func _reset_time() -> void:
+	Engine.time_scale = 1.0
+	if is_inside_tree():
+		get_tree().paused = false
+
+
+## Las partes del mundo que se congelan en pausa y al terminar la partida.
+func _world_nodes() -> Array[Node]:
+	return [level, tower_container, enemies, projectiles, effects, spawner, session]
 
 
 ## RF-32 y RF-34: la oleada empieza con el botón, con Espacio o al terminar la cuenta atrás.
@@ -92,6 +157,7 @@ func start_next_wave() -> void:
 
 ## RF-92: reinicia el nivel desde cero recargando la escena.
 func restart() -> void:
+	_reset_time()
 	get_tree().reload_current_scene()
 
 
@@ -152,6 +218,7 @@ func _on_state_changed(state: LevelSession.State) -> void:
 		node.process_mode = Node.PROCESS_MODE_DISABLED
 	build_controller.cancel()
 	build_controller.deselect_placed()
+	set_speed(1.0)
 	if state == LevelSession.State.WON:
 		end_screen.show_victory(session.lives)
 	else:

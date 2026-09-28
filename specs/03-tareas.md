@@ -209,7 +209,7 @@
   **Refs:** RF-80, tabla de enemigos.
   **Hecho cuando:** se cumple el criterio de aceptación de RF-80; el Jefe con Hielo nivel 1 va al 80 % de su velocidad (40 % × 0.5 = 20 % de ralentización).
 
-- [ ] **T37 · Pausa y velocidad x2**
+- [x] **T37 · Pausa y velocidad x2**
   **Refs:** RF-103, RF-104; plan §6.7.
   **Hecho cuando:** en pausa todo se congela pero se puede seleccionar torres; x2 lo acelera todo (incluida la cuenta atrás); al reintentar, la velocidad vuelve a x1.
 

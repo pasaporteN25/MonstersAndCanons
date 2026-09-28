@@ -6,6 +6,9 @@ extends CanvasLayer
 signal start_wave_pressed
 ## Se pulsó el botón de la torre número `index` (0 = la primera).
 signal tower_button_pressed(index: int)
+## RF-103: botones de pausa y velocidad.
+signal pause_pressed
+signal speed_pressed
 
 const TOWER_BUTTON_SIZE := Vector2(176, 60)
 
@@ -24,10 +27,28 @@ var _last_lives: int = -1
 @onready var _wave_banner: Label = %WaveBanner
 ## Panel de la torre seleccionada (RF-70). Game lo conecta con BuildController.
 @onready var tower_panel: TowerPanel = %TowerPanel
+@onready var _pause_button: Button = %PauseButton
+@onready var _speed_button: Button = %SpeedButton
+@onready var _pause_label: Label = %PauseLabel
 
 
 func _ready() -> void:
 	_start_wave_button.pressed.connect(start_wave_pressed.emit)
+	_pause_button.pressed.connect(pause_pressed.emit)
+	_speed_button.pressed.connect(speed_pressed.emit)
+	show_paused(false)
+	show_speed(1.0)
+
+
+## RF-104: texto del botón y cartel "PAUSA".
+func show_paused(paused: bool) -> void:
+	_pause_button.text = "Seguir  [P]" if paused else "Pausa  [P]"
+	_pause_label.visible = paused
+
+
+## RF-105: el botón muestra la velocidad actual.
+func show_speed(speed: float) -> void:
+	_speed_button.text = "x%d  [F]" % roundi(speed)
 
 
 ## Game le pasa la sesión para que el HUD se mantenga actualizado.

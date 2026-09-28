@@ -268,7 +268,8 @@ Un bot no reemplaza a una persona: estos números se revisan jugando. Cada vez q
 | `U` | Mejorar torre seleccionada | M2 |
 | `S` | Vender torre seleccionada | M2 |
 
-- **RF-104** *(M2)* **Pausa** detiene todo (enemigos, torres, cuenta atrás), pero se puede seguir mirando el mapa y seleccionar torres. No se puede construir en pausa.
+- **RF-104** *(M2)* **Pausa** detiene todo (enemigos, torres, cuenta atrás), pero se puede seguir mirando el mapa y seleccionar torres. No se puede construir en pausa, pero **sí mejorar y vender** (así se puede pensar con calma). Mientras está en pausa se ve el cartel **"PAUSA"** en el centro.
+- **RF-105** *(M2)* **Velocidad x2:** todo el juego va al doble (enemigos, disparos, oleadas, cuenta atrás, efectos). Al reintentar o salir, la velocidad vuelve a x1 y la pausa se quita.
 
 ### 9.3 Efectos visuales *(M1.5)*
 

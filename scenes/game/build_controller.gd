@@ -78,9 +78,10 @@ func tower_at(cell: Vector2i) -> Tower:
 	return _occupied.get(cell)
 
 
-## Casilla libre, sin torre, con oro suficiente, y la partida no terminó.
+## Casilla libre, sin torre, con oro suficiente, la partida no terminó y no está en pausa (RF-104).
 func can_build(tower: TowerData, cell: Vector2i) -> bool:
 	return not _session.is_over() \
+		and not get_tree().paused \
 		and _level.is_buildable(cell) \
 		and not is_occupied(cell) \
 		and _session.can_afford(tower.levels[0].cost)
