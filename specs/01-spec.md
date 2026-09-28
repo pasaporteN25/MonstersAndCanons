@@ -82,8 +82,8 @@ La columna **Hito** de las tablas siguientes indica en qué momento se agrega ca
 - **RF-34** Entre oleadas hay una **cuenta atrás de 15 segundos**; al llegar a 0 empieza la siguiente. El jugador puede pulsar **"Empezar oleada"** para no esperar.
 - **RF-35** No se puede llamar a la siguiente oleada mientras la actual está en curso.
 - **RF-36** **Dificultad creciente:** la vida de cada enemigo se multiplica según la oleada:
-  `vida real = vida base × (1 + 0.08 × (número de oleada − 1))`
-  Ejemplo: un Normal (20 de vida) tiene 20 en la oleada 1 y 20 × 1.72 = **34** en la oleada 10 (se redondea hacia abajo).
+  `vida real = vida base × (1 + 0.40 × (número de oleada − 1))`
+  Ejemplo: un Normal (30 de vida) tiene 30 en la oleada 1, 30 × 1.4 = **42** en la oleada 2 y 30 × 4.6 = **138** en la oleada 10 (se redondea hacia abajo). El aumento es fuerte a propósito: así las últimas oleadas presionan aunque el jugador haya juntado mucho oro (ver §7.1).
 
 > **Criterio de aceptación RF-33 / RF-22**
 > **Dado** que la oleada 3 está en curso → **Cuando** muere o escapa el último enemigo de la oleada → **Entonces** recibo 35 de oro, el contador muestra "Oleada 3/10 completada" y empieza la cuenta atrás de 15 s.
@@ -123,7 +123,7 @@ La columna **Hito** de las tablas siguientes indica en qué momento se agrega ca
 | ID | Nombre | Costo | Daño | Cadencia | DPS | Alcance | Especial | Aire | Forma provisional | Hito |
 |---|---|---|---|---|---|---|---|---|---|---|
 | `basic` | **Ametralladora** | 50 | 5 | 2.0 | 10 | 3.0 | — | Sí | Cuadrado gris | M1 |
-| `cannon` | **Cañón** | 100 | 12 | 0.6 | 7.2 | 3.0 | Daño en área, radio 1.0 | **No** | Cuadrado negro | M1 |
+| `cannon` | **Cañón** | 100 | 20 | 0.6 | 12 | 3.0 | Daño en área, radio 1.0 | **No** | Cuadrado negro | M1 |
 | `frost` | **Hielo** | 75 | 2 | 1.0 | 2 | 2.5 | Ralentiza 40 % durante 2 s | Sí | Cuadrado celeste | M1 |
 | `sniper` | **Francotirador** | 150 | 40 | 0.4 | 16 | 6.0 | — | Sí | Cuadrado verde oscuro | M2 |
 
@@ -153,7 +153,7 @@ La columna **Hito** de las tablas siguientes indica en qué momento se agrega ca
 | Torre | Nivel 2 | Nivel 3 |
 |---|---|---|
 | Ametralladora | Costo 60 · daño 8 · cadencia 2.5 | Costo 100 · daño 12 · cadencia 3.0 · alcance 3.5 |
-| Cañón | Costo 110 · daño 20 · radio 1.2 | Costo 170 · daño 32 · radio 1.5 · alcance 3.5 |
+| Cañón | Costo 110 · daño 32 · radio 1.2 | Costo 170 · daño 50 · radio 1.5 · alcance 3.5 |
 | Hielo | Costo 80 · ralentiza 50 % · alcance 3.0 | Costo 120 · ralentiza 60 % durante 3 s · daño 4 |
 | Francotirador | Costo 150 · daño 70 | Costo 225 · daño 120 · alcance 7.0 |
 
@@ -176,9 +176,9 @@ La columna **Hito** de las tablas siguientes indica en qué momento se agrega ca
 
 | ID | Nombre | Vida | Velocidad | Armadura | Oro | Vidas que quita | Vuela | Especial | Forma provisional | Hito |
 |---|---|---|---|---|---|---|---|---|---|---|
-| `normal` | **Normal** | 20 | 1.5 | 0 | 5 | 1 | No | — | Círculo gris | M1 |
-| `fast` | **Rápido** | 12 | 3.0 | 0 | 4 | 1 | No | — | Triángulo amarillo | M1 |
-| `tank` | **Tanque** | 90 | 0.8 | 0 | 15 | 2 | No | — | Cuadrado marrón, grande | M1 |
+| `normal` | **Normal** | 30 | 1.5 | 0 | 5 | 1 | No | — | Círculo gris | M1 |
+| `fast` | **Rápido** | 18 | 3.0 | 0 | 4 | 1 | No | — | Triángulo amarillo | M1 |
+| `tank` | **Tanque** | 135 | 0.8 | 0 | 15 | 2 | No | — | Cuadrado marrón, grande | M1 |
 | `flyer` | **Volador** | 25 | 2.0 | 0 | 8 | 1 | **Sí** | Vuela en línea recta (RF-05) | Rombo celeste | M2 |
 | `armored` | **Blindado** | 45 | 1.2 | 4 | 12 | 1 | No | Armadura alta | Hexágono azul oscuro | M2 |
 | `boss` | **Jefe** | 800 | 0.6 | 3 | 150 | 10 | No | Solo le afecta la **mitad** de cualquier ralentización | Círculo rojo, muy grande | M2 |
@@ -196,7 +196,7 @@ La columna **Hito** de las tablas siguientes indica en qué momento se agrega ca
 | 3 | Encrucijada | 20 | 250 | **Dos entradas** cuyos caminos se unen antes de la salida. | M3 |
 | 4–5 | *(por definir)* | — | — | — | M4 (opcional) |
 
-### Oleadas del nivel 1 (borrador)
+### Oleadas del nivel 1
 
 > Formato: `cantidad × tipo (cada X s)`. Los grupos de una misma oleada separados por "+" empiezan a la vez, salvo que se indique "tras N s".
 
@@ -212,6 +212,24 @@ La columna **Hito** de las tablas siguientes indica en qué momento se agrega ca
 | 8 | 20 × Normal (cada 0.5 s) + 10 × Rápido (cada 0.5 s, tras 5 s) |
 | 9 | 8 × Tanque (cada 1.5 s) + 15 × Rápido (cada 0.4 s, tras 6 s) |
 | 10 | 10 × Tanque (cada 1.2 s) + 20 × Normal (cada 0.4 s, tras 4 s) + 20 × Rápido (cada 0.3 s, tras 10 s) |
+
+### 7.1 Cómo se balanceó el nivel 1 (T25)
+
+El objetivo: **se gana jugando con criterio, pero no sin pensar**. Se comprobó con un bot que juega solo (`tools/balance_sim.gd`, instrucciones dentro del archivo) con tres estrategias:
+
+| Estrategia del bot | Resultado con los números actuales |
+|---|---|
+| Mezcla torres y las pone donde cubren más camino | Gana con 13 vidas |
+| Solo Ametralladoras, bien puestas | Gana con 14 vidas |
+| Solo Ametralladoras, en casillas al azar | Pierde en la oleada 8 |
+
+Qué se cambió respecto al borrador y por qué:
+- **Con los números originales se ganaba sin perder ni una vida, incluso poniendo torres al azar.** Se subió la vida base ×1,5 (Normal 20 → 30, Rápido 12 → 18, Tanque 90 → 135) y, sobre todo, el aumento por oleada (8 % → **40 %**), para que el final presione aunque el jugador haya acumulado oro.
+- **El Cañón rendía casi un tercio que la Ametralladora por cada moneda**, así que no convenía nunca. Su daño subió de 12 a **20** (y sus mejoras en proporción).
+
+Un bot no reemplaza a una persona: estos números se revisan jugando. Cada vez que se cambie el balance, se vuelve a correr el bot y se actualiza esta tabla.
+
+> **Pendiente para M2 (T38):** Volador, Blindado y Jefe todavía tienen los valores del borrador; se balancean al agregarlos.
 
 ---
 
@@ -290,3 +308,4 @@ Cosas que **no** hace falta decidir ahora; se deciden antes del hito indicado.
 | ¿Ambientación? (medieval, espacial, juguetes…) Afecta nombres de torres/enemigos y el arte. | M4 |
 | ¿Estrellas por nivel (1–3 según vidas restantes) en vez de "mejor cantidad de vidas"? | M3 |
 | ¿Música: de dónde sale? (propia, gratuita con licencia CC0…) | M3 |
+| ¿El aumento de vida por oleada (40 %) debería ser distinto en cada nivel? Con 15–20 oleadas, 40 % da enemigos 7–9 veces más fuertes al final. Quizás convenga mover ese valor de `BalanceConfig` a `LevelData`. | M3 (T43) |

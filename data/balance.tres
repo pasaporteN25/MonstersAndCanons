@@ -8,4 +8,4 @@ wave_bonus_base = 20
 wave_bonus_per_wave = 5
 sell_refund_percent = 70
 countdown_seconds = 15.0
-health_scale_percent_per_wave = 8
+health_scale_percent_per_wave = 40

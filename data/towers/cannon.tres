@@ -6,7 +6,7 @@
 [sub_resource type="Resource" id="Resource_tojmg"]
 script = ExtResource("1_t20fp")
 cost = 100
-damage = 12
+damage = 20
 fire_rate = 0.6
 range_tiles = 3.0
 splash_radius_tiles = 1.0

@@ -6,7 +6,7 @@
 script = ExtResource("1_wrwnl")
 id = &"tank"
 display_name = "Tanque"
-max_health = 90
+max_health = 135
 speed_tiles = 0.8
 reward = 15
 lives_damage = 2

@@ -16,7 +16,7 @@ func test_balance_matches_spec() -> void:
 	assert_eq(cfg.wave_bonus_per_wave, 5, "RF-22")
 	assert_eq(cfg.sell_refund_percent, 70, "RF-72")
 	assert_eq(cfg.countdown_seconds, 15.0, "RF-34")
-	assert_eq(cfg.health_scale_percent_per_wave, 8, "RF-36")
+	assert_eq(cfg.health_scale_percent_per_wave, 40, "RF-36")
 
 
 # --- RF-80: daño con armadura ---
@@ -37,17 +37,18 @@ func test_no_armor_means_full_damage() -> void:
 # --- RF-36: vida creciente por oleada ---
 
 func test_wave_one_keeps_base_health() -> void:
-	assert_eq(Rules.scaled_health(20, 1, cfg), 20)
+	assert_eq(Rules.scaled_health(30, 1, cfg), 30)
 
 
 func test_health_grows_and_rounds_down() -> void:
-	assert_eq(Rules.scaled_health(20, 2, cfg), 21, "20 × 1.08 = 21.6 → 21")
-	assert_eq(Rules.scaled_health(20, 10, cfg), 34, "ejemplo de la spec: 20 × 1.72 = 34.4 → 34")
+	assert_eq(Rules.scaled_health(30, 2, cfg), 42, "ejemplo de la spec: 30 × 1.4 = 42")
+	assert_eq(Rules.scaled_health(30, 10, cfg), 138, "ejemplo de la spec: 30 × 4.6 = 138")
+	assert_eq(Rules.scaled_health(18, 2, cfg), 25, "18 × 1.4 = 25.2 → 25")
 
 
 func test_health_has_no_rounding_errors_on_exact_results() -> void:
-	# 25 × 1.24 = 31 exacto; con decimales podría dar 30.999… → 30.
-	assert_eq(Rules.scaled_health(25, 4, cfg), 31)
+	# 135 × 2.2 = 297 exacto; con decimales podría dar 296.999… → 296.
+	assert_eq(Rules.scaled_health(135, 4, cfg), 297)
 
 
 # --- RF-22: bono de oleada ---

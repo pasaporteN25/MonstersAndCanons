@@ -1,6 +1,6 @@
-# El "director" de la partida (plan §5): carga el nivel, crea los enemigos
-# en su contenedor y CONECTA las señales entre todas las piezas.
-# No calcula daño ni lleva la cuenta del oro: eso lo hacen Rules y LevelSession.
+# El "director" de la partida (plan §5): carga el nivel y CONECTA las señales
+# entre todas las piezas. No calcula daño ni lleva la cuenta del oro:
+# eso lo hacen Rules, las torres, los proyectiles y LevelSession.
 class_name Game
 extends Node2D
 
@@ -9,13 +9,19 @@ const MAP_OFFSET := Vector2(0, 48)
 
 @export var level_data: LevelData
 @export var balance: BalanceConfig
+## Torres disponibles, en el orden de los botones y de las teclas 1, 2, 3…
+@export var tower_types: Array[TowerData] = []
 
 var level: Level
 
+@onready var tower_container: Node2D = $Towers
 @onready var enemies: Node2D = $Enemies
+@onready var projectiles: Node2D = $Projectiles
+@onready var build_controller: BuildController = $BuildController
 @onready var spawner: WaveSpawner = $WaveSpawner
 @onready var session: LevelSession = $Session
 @onready var hud: Hud = $HUD
+@onready var end_screen: EndScreen = $EndScreen
 
 
 func _ready() -> void:
@@ -27,9 +33,19 @@ func _ready() -> void:
 	spawner.setup(level, enemies, balance)
 	spawner.enemy_spawned.connect(_on_enemy_spawned)
 	spawner.wave_finished.connect(session.complete_wave)
-	session.countdown_finished.connect(start_next_wave)
+
+	build_controller.setup(level, session, tower_types, tower_container)
+	build_controller.tower_built.connect(_on_tower_built)
+	build_controller.selection_changed.connect(hud.show_selected_tower)
+
+	hud.setup_towers(tower_types)
+	hud.tower_button_pressed.connect(build_controller.select)
 	hud.start_wave_pressed.connect(start_next_wave)
 	hud.bind(session)
+
+	session.countdown_finished.connect(start_next_wave)
+	session.state_changed.connect(_on_state_changed)
+	end_screen.retry_pressed.connect(restart)
 
 	session.start(level_data, balance)
 
@@ -47,9 +63,40 @@ func start_next_wave() -> void:
 	spawner.start_wave(level_data.waves[wave_number - 1], wave_number)
 
 
+## RF-92: reinicia el nivel desde cero recargando la escena.
+func restart() -> void:
+	get_tree().reload_current_scene()
+
+
 func _on_enemy_spawned(enemy: Enemy) -> void:
+	enemy.died.connect(_on_enemy_died)
 	enemy.reached_exit.connect(_on_enemy_reached_exit)
 
 
+func _on_enemy_died(enemy: Enemy) -> void:
+	session.earn(enemy.data.reward)  # RF-21
+
+
 func _on_enemy_reached_exit(enemy: Enemy) -> void:
-	session.lose_lives(enemy.data.lives_damage)
+	session.lose_lives(enemy.data.lives_damage)  # RF-11
+
+
+func _on_tower_built(tower: Tower) -> void:
+	tower.fired.connect(_on_tower_fired)
+
+
+func _on_tower_fired(projectile: Projectile) -> void:
+	projectiles.add_child(projectile)
+
+
+func _on_state_changed(state: LevelSession.State) -> void:
+	if state != LevelSession.State.WON and state != LevelSession.State.LOST:
+		return
+	# RF-91: el juego se detiene. Se congela el "mundo", pero no la interfaz.
+	for node: Node in [enemies, tower_container, projectiles, spawner]:
+		node.process_mode = Node.PROCESS_MODE_DISABLED
+	build_controller.cancel()
+	if state == LevelSession.State.WON:
+		end_screen.show_victory(session.lives)
+	else:
+		end_screen.show_defeat(session.wave, session.total_waves)

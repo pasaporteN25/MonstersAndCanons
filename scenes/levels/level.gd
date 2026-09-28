@@ -31,3 +31,13 @@ func entrance_count() -> int:
 	while get_ground_path(count) != null:
 		count += 1
 	return count
+
+
+## Centro de una casilla, en coordenadas globales (donde se coloca una torre).
+func cell_center(cell: Vector2i) -> Vector2:
+	return ground.to_global(ground.map_to_local(cell))
+
+
+## true si la casilla es parte del mapa (aunque no sea construible).
+func is_inside(cell: Vector2i) -> bool:
+	return ground.get_used_rect().has_point(cell)

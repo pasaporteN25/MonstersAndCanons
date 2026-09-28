@@ -6,7 +6,7 @@
 script = ExtResource("1_hqxyi")
 id = &"fast"
 display_name = "Rápido"
-max_health = 12
+max_health = 18
 speed_tiles = 3.0
 reward = 4
 lives_damage = 1

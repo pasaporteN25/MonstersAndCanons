@@ -27,7 +27,7 @@ Se configura desde **Proyecto → Configuración del proyecto**:
 | `display/window/stretch/mode` | `canvas_items` | Si la ventana se agranda, todo se escala proporcionalmente. |
 | `display/window/stretch/aspect` | `keep` | Mantiene la proporción (agrega bandas negras si hace falta, no deforma). |
 | `rendering/textures/canvas_textures/default_texture_filter` | `Nearest` | Evita que los bordes se vean borrosos al escalar. |
-| **Nombres de capas 2D físicas** | 1 = `world`, 2 = `enemies_ground`, 3 = `enemies_air` | Ver §6.3. |
+| **Nombres de capas 2D físicas** | 1 = `world`, 2 = `enemies_ground`, 3 = `enemies_air` | Reservadas; por ahora no se usan (D-014). |
 | **Mapa de entrada** (*Input Map*) | `build_1`…`build_4`, `cancel`, `start_wave`, `pause`, `toggle_speed`, `upgrade`, `sell` | Nunca se leen teclas "a mano" (`KEY_1`); se usan **acciones**. Así cambiar una tecla es cambiar un ajuste, no el código. |
 
 ### Distribución de la pantalla (1280 × 720)
@@ -100,6 +100,8 @@ JuegoA/
 ├── assets/
 │   ├── tiles/    tiles.png, tileset.tres   ← casillas provisionales (M1)
 │   └── ...                     ← (M3/M4) sonidos, imágenes, fuentes
+├── tools/
+│   └── balance_sim.gd            ← bot que juega solo para revisar el balance (spec §7.1)
 └── tests/
     ├── test_rules.gd
     ├── test_level_paths.gd
@@ -182,7 +184,8 @@ Game (Node2D)                        game.gd       ← el "director": crea y con
 ├── BuildController (Node2D)         build_controller.gd
 ├── WaveSpawner (Node)               wave_spawner.gd
 ├── Session (Node)                   level_session.gd
-└── HUD (CanvasLayer)                hud.gd
+├── HUD (CanvasLayer)                hud.gd
+└── EndScreen (CanvasLayer)          end_screen.gd  ← victoria / derrota (T24)
 ```
 
 **Por qué contenedores separados:** para poder recorrer "todos los enemigos" o "todas las torres" fácilmente, y para controlar qué se dibuja encima de qué (los proyectiles por encima de los enemigos, etc.).
@@ -191,7 +194,7 @@ Game (Node2D)                        game.gd       ← el "director": crea y con
 
 | Nodo | Responsabilidad | NO hace |
 |---|---|---|
-| **Game** | Carga el nivel. Crea torres y enemigos en sus contenedores. **Conecta las señales** entre todos. | No calcula daño ni lleva la cuenta del oro. |
+| **Game** | Carga el nivel. **Conecta las señales** entre todos. Agrega los proyectiles a su contenedor. Al ganar o perder, congela el "mundo" y muestra `EndScreen`. | No calcula daño ni lleva la cuenta del oro. |
 | **Level** | Sabe qué casillas son construibles y dónde están los caminos. | No sabe nada de torres ni enemigos. |
 | **Session** | Guarda oro, vidas, oleada actual y estado (`BUILDING`, `WAVE_RUNNING`, `COUNTDOWN`, `WON`, `LOST`). Avisa con señales cuando algo cambia. | No dibuja nada. |
 | **WaveSpawner** | Recorre los grupos de la oleada y crea enemigos a su tiempo. Avisa cuando la oleada termina. | No da oro ni resta vidas. |
@@ -275,74 +278,54 @@ Se construye en **cualquier** estado excepto `WON`, `LOST` y pausa (RF-44, RF-10
 - **Los caminos son `Path2D`**: cada entrada tiene su `GroundPathN` (sigue el camino de casillas) y, desde M2, su `AirPathN` (solo dos puntos: entrada y salida).
 - ⚠️ **El camino se "dibuja" dos veces**: con casillas (lo que se ve) y con `Path2D` (lo que siguen los enemigos). Si no coinciden, los enemigos caminarían por el pasto. Por eso hay un **test** (`test_level_paths.gd`) que recorre cada `GroundPath` y comprueba que cada punto cae sobre una casilla **no** construible.
 
-### 6.2 Enemigos
+### 6.2 Enemigos ([`enemy.gd`](../scenes/enemies/enemy.gd))
 
-- **Nodo raíz:** `Area2D` (para que las torres lo detecten), con un `CollisionShape2D` circular.
-- **Se dibuja con código** en `_draw()` según `data.shape` y `data.color` (círculo, triángulo…). No hace falta ninguna imagen.
-- **Cómo avanza:** el enemigo guarda cuántos píxeles lleva recorridos (`distance`) y le pregunta a la curva del `Path2D` dónde está ese punto:
+- **Nodo raíz:** `Node2D`. No necesita colisiones: las torres lo encuentran midiendo distancias (§6.3, D-014).
+- **Se dibuja con código** en `_draw()` según `data.shape` y `data.color` (círculo, triángulo…). No hace falta ninguna imagen. Encima se dibuja la barra de vida (RF-82), y si está ralentizado se tiñe de azul (RF-62).
+- **Cómo avanza:** guarda cuántos píxeles lleva recorridos (`distance`) y le pregunta a la curva del `Path2D` dónde está ese punto. Cuando `distance` supera el largo de la curva, llegó a la salida.
 
-  ```gdscript
-  func _physics_process(delta: float) -> void:
-      distance += _current_speed_px() * delta
-      global_position = path.to_global(path.curve.sample_baked(distance))
-      if distance >= path.curve.get_baked_length():
-          reached_exit.emit(self)
-          queue_free()
-
-  func remaining_distance() -> float:     # usado para apuntar al "Primero"
-      return path.curve.get_baked_length() - distance
-  ```
-
-  **Por qué así y no con `PathFollow2D`:** `PathFollow2D` obliga a crear un nodo extra por cada enemigo y a meter al enemigo *dentro* del camino. Guardar la distancia a mano es igual de simple, funciona igual para voladores y deja a todos los enemigos juntos en el contenedor `Enemies`.
-- **Grupo:** cada enemigo se agrega al grupo `"enemies"` (sirve para el daño de área).
+  **Por qué así y no con `PathFollow2D`:** `PathFollow2D` obliga a crear un nodo extra por cada enemigo y a meter al enemigo *dentro* del camino. Guardar la distancia a mano es igual de simple, funciona igual para voladores y deja a todos los enemigos juntos en el contenedor `Enemies`. Además, `remaining_distance()` (lo que le falta para llegar) sale directo, y es justo lo que se necesita para apuntar al "Primero".
+- **Recibir golpes:** `take_hit(damage, slow_amount, slow_duration)` aplica la armadura (RF-80) y la ralentización (RF-60, RF-61).
+- **`is_active()`:** después de morir o escapar, el enemigo llama a `queue_free()`, pero Godot lo borra recién al final del frame. Mientras tanto, `is_active()` devuelve `false` para que nadie lo apunte ni lo cuente dos veces.
+- **Grupo:** cada enemigo se agrega al grupo `"enemies"`. Así las torres y el daño en área pueden recorrer todos los enemigos.
 - **Señales:** `died(enemy)`, `reached_exit(enemy)`.
 
-### 6.3 Torres: detectar y apuntar
+### 6.3 Torres: detectar y apuntar ([`tower.gd`](../scenes/towers/tower.gd))
 
 - **Una sola escena `tower.tscn`** para todas las torres. Al crearla se le asigna su `TowerData`, y con eso sabe su color, daño, alcance, etc.
-- **Detectar:** la torre tiene un hijo `RangeArea` (`Area2D` con un círculo del radio del alcance). Usa **capas de colisión** para decidir a quién "ve":
+- **Detectar (D-014):** cuando la torre puede disparar, recorre el grupo `"enemies"` y se queda con los que cumplen `can_target()`: activos, a una distancia (centro a centro) menor o igual a su alcance y, si vuelan, solo si la torre puede golpear voladores (RF-53).
 
-  | Capa | Quién está en ella |
-  |---|---|
-  | 2 — `enemies_ground` | enemigos terrestres |
-  | 3 — `enemies_air` | enemigos voladores |
-
-  El `RangeArea` de la torre **mira** (*mask*) la capa 2 y, si `can_hit_air`, también la 3. Así el Cañón literalmente **no ve** a los voladores (RF-53) sin escribir ni un `if`.
-- **Elegir objetivo:** en cada disparo se revisan `range_area.get_overlapping_areas()` y se elige según el modo (RF-51, RF-54):
-  - *Primero* → menor `remaining_distance()`;
+  > **Por qué no `Area2D`**, como decía la primera versión de este plan: las áreas de colisión de Godot se actualizan solo en frames de física reales, y los tests simulan el tiempo más rápido que eso, así que las torres no "verían" a nadie en los tests. Medir distancias es más simple, igual de correcto y fácil de testear. Costo: ~36.000 cálculos por segundo con 60 torres y 200 enemigos, poco para una computadora; se mide en T39.
+- **Elegir objetivo** según el modo (RF-51, RF-54):
+  - *Primero* → menor `remaining_distance()` *(el único en M1)*;
   - *Último* → mayor `remaining_distance()`;
   - *Más fuerte* → mayor `health`;
   - *Más cercano* → menor distancia a la torre.
-- **Cadencia:** un contador `cooldown` que baja con `delta`; cuando llega a 0 y hay objetivo, dispara y se reinicia a `1.0 / fire_rate`. (Con `delta`, la pausa y la velocidad x2 funcionan solas.)
+- **Cadencia:** un contador `_cooldown` que baja con `delta`; cuando llega a 0 y hay objetivo, dispara y se reinicia a `1.0 / fire_rate`. Si no hay objetivo, el contador se queda en 0 y dispara apenas entra un enemigo. (Con `delta`, la pausa y la velocidad x2 funcionan solas.)
 - **Disparar:** la torre crea el proyectil y **emite** `fired(projectile)`; `Game` lo agrega al contenedor `Projectiles`.
 
-### 6.4 Proyectiles
+### 6.4 Proyectiles ([`projectile.gd`](../scenes/towers/projectile.gd))
 
-- Se mueven hacia `target.global_position` a `projectile_speed`. Si el objetivo ya no existe (`not is_instance_valid(target)`), siguen hacia la última posición conocida (RF-52).
-- **Al llegar** (a menos de ~8 px):
-  - **Sin área:** `target.take_damage(damage)` (si sigue vivo) y se aplica ralentización si tiene.
-  - **Con área:** se recorren los nodos del grupo `"enemies"` y se daña a todos los que estén dentro del radio (y que la torre pueda golpear: voladores solo si `can_hit_air`).
-- Después, `queue_free()`.
+- Se mueven hacia el objetivo a `projectile_speed_tiles` (RF-55). Si el objetivo ya no está activo, siguen hacia la última posición conocida (RF-52).
+- **Al llegar** (cuando el paso de este frame alcanza para tocar el destino):
+  - **Sin área:** golpea al objetivo si sigue activo; si no, desaparece sin hacer daño.
+  - **Con área:** golpea a todos los enemigos activos del grupo `"enemies"` dentro del radio (y a los voladores solo si la torre puede golpearlos).
+- Guardan los valores de la torre **en el momento del disparo**, así una mejora (M2) no cambia proyectiles ya disparados.
 
-### 6.5 Oleadas (`WaveSpawner`)
+### 6.5 Oleadas ([`wave_spawner.gd`](../scenes/game/wave_spawner.gd))
 
-- `start_wave(index)` prepara los grupos de esa oleada. En `_process(delta)` lleva un reloj propio y, para cada grupo, crea un enemigo cuando le toca (`start_delay`, luego cada `interval`).
-- Lleva la cuenta de enemigos **vivos**. Cuando ya salieron todos y los vivos llegan a 0 → emite `wave_finished` (RF-33).
+- `start_wave(wave, wave_number)` prepara los grupos de esa oleada. En `_process(delta)` lleva un reloj propio y, para cada grupo, crea un enemigo cuando le toca (`start_delay`, luego cada `interval`).
+- Lleva la cuenta de enemigos **vivos** (escucha `tree_exited` de cada uno, que salta tanto si muere como si escapa). Cuando ya salieron todos y los vivos llegan a 0 → emite `wave_finished` (RF-33).
 - **Por qué un reloj con `delta` y no `Timer`s o `await`:** con `delta`, la pausa y la velocidad x2 funcionan sin código extra, y no quedan temporizadores "colgando" si se reinicia el nivel.
 - La vida de cada enemigo se calcula al crearlo con `Rules.scaled_health(...)` (RF-36).
 
-### 6.6 Construcción (`BuildController`)
+### 6.6 Construcción ([`build_controller.gd`](../scenes/game/build_controller.gd))
 
-- Guarda `occupied: Dictionary` → `{ Vector2i (casilla): Tower }`.
-- Cuando el HUD avisa "elegí la torre X": entra en **modo construcción** y muestra una torre fantasma semitransparente + círculo de alcance.
-- Cada frame: pasa el mouse a casilla, coloca el fantasma en el **centro** de esa casilla y lo tiñe de verde o rojo según `can_build(cell)`:
-  ```gdscript
-  func can_build(cell: Vector2i) -> bool:
-      return level.is_buildable(cell) \
-          and not occupied.has(cell) \
-          and session.can_afford(selected_tower.levels[0].cost)
-  ```
-- Clic izquierdo válido → `session.spend(costo)` → emite `tower_build_requested(data, cell)` → `Game` crea la torre.
+- Guarda `_occupied: Dictionary` → `{ Vector2i (casilla): Tower }`.
+- `select(index)` entra en **modo construcción** (desde un botón del HUD o las teclas 1–3). Elegir la misma torre otra vez, clic derecho o `Esc` lo cancelan.
+- Cada frame: pasa el mouse a casilla y dibuja la casilla verde o roja según `can_build()`, la torre fantasma y el círculo de alcance (RF-40, RF-41).
+- `can_build(tower, cell)`: la partida no terminó, la casilla es construible, no está ocupada y alcanza el oro (RF-42).
+- `try_build(tower, cell)`: si se puede, cobra, **crea la torre** en el contenedor `Towers` y emite `tower_built(tower)`; `Game` la conecta. (La primera versión del plan decía que la creaba `Game`; se movió aquí porque así la casilla se marca ocupada en el mismo lugar donde se crea la torre, y no pueden quedar desincronizadas.)
 
 ### 6.7 Pausa y velocidad *(M2)*
 

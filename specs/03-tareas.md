@@ -94,36 +94,36 @@
 
 ### Torres
 
-- [ ] **T18 · Construir torres**
+- [x] **T18 · Construir torres**
   Crear `tower.tscn` (solo se dibuja; todavía no dispara) y `build_controller.gd`: botones de torre en el HUD inferior + teclas 1–3, vista previa verde/roja con círculo de alcance, construir con clic izquierdo, cancelar con clic derecho/Esc.
   **Refs:** RF-40 a RF-44, RF-101, RF-23; plan §6.6.
   **Hecho cuando:** se cumple el criterio de RF-42 de la spec; no se puede construir dos torres en la misma casilla; el oro baja al construir; los botones se ven grises si no alcanza el oro.
 
-- [ ] **T19 · Disparar: Ametralladora**
+- [x] **T19 · Disparar: Ametralladora**
   Detección con `RangeArea` y capas (§6.3), modo "Primero", cadencia, `projectile.tscn`, daño, muerte del enemigo y recompensa.
   **Refs:** RF-50 a RF-52, RF-80, RF-81, RF-21; plan §6.3, §6.4.
   **Hecho cuando:** una Ametralladora junto al camino mata a los Normales de la oleada 1; cada muerte suma 5 de oro; siempre dispara al enemigo más adelantado; no hay errores en la consola si el objetivo muere mientras el proyectil vuela.
 
-- [ ] **T20 · Barra de vida de los enemigos**
+- [x] **T20 · Barra de vida de los enemigos**
   **Refs:** RF-82.
   **Hecho cuando:** los enemigos sin daño no muestran barra; al recibir el primer golpe aparece y baja proporcionalmente.
 
-- [ ] **T21 · Cañón (daño en área)**
+- [x] **T21 · Cañón (daño en área)**
   **Refs:** spec §5.3 (Cañón), plan §6.4.
   **Hecho cuando:** un disparo del Cañón sobre un grupo apretado daña a todos los enemigos a 1 casilla o menos del impacto, y a ninguno más lejos.
 
-- [ ] **T22 · Hielo (ralentización)**
+- [x] **T22 · Hielo (ralentización)**
   **Refs:** RF-60 a RF-62.
   **Hecho cuando:** los enemigos golpeados se ven azules y van al 60 % de su velocidad durante 2 s; dos torres de Hielo juntas **no** los frenan más que una.
 
 ### Cerrar el nivel
 
-- [ ] **T23 · Las 10 oleadas del nivel 1**
+- [x] **T23 · Las 10 oleadas del nivel 1**
   Completar `level_01.tres` con la tabla de oleadas de la spec §7.
   **Refs:** spec §7.
   **Hecho cuando:** el HUD muestra "Oleada x/10" y las 10 oleadas salen con los enemigos correctos.
 
-- [ ] **T24 · Victoria, derrota y reintentar**
+- [x] **T24 · Victoria, derrota y reintentar**
   Pantallas simples de "¡Victoria!" y "Derrota" con botón **Reintentar** (recarga la escena).
   **Refs:** RF-12, RF-90, RF-91, RF-92.
   **Hecho cuando:** sin construir nada, se pierde en la oleada 2–3 y aparece "Derrota"; al reintentar todo vuelve a 150 de oro, 20 vidas, sin torres. Ganando las 10 oleadas aparece "¡Victoria!".
@@ -131,6 +131,7 @@
 - [ ] **T25 · Primera partida de prueba y ajuste de balance**
   Jugar el nivel completo al menos 3 veces. Ajustar números **en los `.tres` y en la spec a la vez**.
   **Hecho cuando:** el nivel se puede ganar con una estrategia razonable pero no sin pensar, y la spec refleja los números finales.
+  **Estado:** ✅ revisado con el bot (`tools/balance_sim.gd`, spec §7.1). ⏳ Falta que Lucas juegue 3 partidas y confirme que se siente bien.
 
 > 🎉 **Fin de M1: ya tienes un tower defense jugable.** Buen momento para mostrárselo a alguien.
 

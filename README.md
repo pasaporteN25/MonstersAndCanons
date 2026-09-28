@@ -2,7 +2,7 @@
 
 Juego *tower defense* 2D hecho en **Godot 4** con **GDScript**, construido con **SDD (Spec-Driven Development)**.
 
-> **Estado actual:** M1 en curso. Los enemigos ya llegan en oleadas; siguiente: tarea T18 (construir torres) en [`specs/03-tareas.md`](specs/03-tareas.md).
+> **Estado actual:** M1 casi terminado: el nivel 1 se juega de principio a fin. Falta la partida de prueba humana (T25) en [`specs/03-tareas.md`](specs/03-tareas.md).
 >
 > **Versión de Godot:** 4.7.2 estable (renderizador *Compatibility*).
 

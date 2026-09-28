@@ -30,15 +30,15 @@ func _assert_enemy(id: String, health: int, speed: float, armor: int, reward: in
 
 
 func test_normal() -> void:
-	_assert_enemy("normal", 20, 1.5, 0, 5, 1, false, 0.25)
+	_assert_enemy("normal", 30, 1.5, 0, 5, 1, false, 0.25)
 
 
 func test_fast() -> void:
-	_assert_enemy("fast", 12, 3.0, 0, 4, 1, false, 0.2)
+	_assert_enemy("fast", 18, 3.0, 0, 4, 1, false, 0.2)
 
 
 func test_tank() -> void:
-	_assert_enemy("tank", 90, 0.8, 0, 15, 2, false, 0.35)
+	_assert_enemy("tank", 135, 0.8, 0, 15, 2, false, 0.35)
 
 
 # --- Torres, nivel 1 (spec §5.3) ---
@@ -70,8 +70,46 @@ func test_basic_tower() -> void:
 
 
 func test_cannon_tower() -> void:
-	_assert_tower_level_1("cannon", 100, 12, 0.6, 3.0, 1.0, 0.0, 0.0, false)
+	_assert_tower_level_1("cannon", 100, 20, 0.6, 3.0, 1.0, 0.0, 0.0, false)
 
 
 func test_frost_tower() -> void:
 	_assert_tower_level_1("frost", 75, 2, 1.0, 2.5, 0.0, 0.4, 2.0, true)
+
+
+# --- Oleadas del nivel 1 (spec §7) ---
+
+## Cada grupo como [tipo, cantidad, intervalo, retraso].
+const LEVEL_01_WAVES: Array = [
+	[["normal", 8, 1.0, 0.0]],
+	[["normal", 12, 0.8, 0.0]],
+	[["fast", 10, 0.6, 0.0]],
+	[["normal", 10, 0.8, 0.0], ["fast", 6, 0.6, 4.0]],
+	[["tank", 3, 2.0, 0.0], ["normal", 10, 0.7, 3.0]],
+	[["fast", 15, 0.4, 0.0]],
+	[["tank", 6, 1.5, 0.0]],
+	[["normal", 20, 0.5, 0.0], ["fast", 10, 0.5, 5.0]],
+	[["tank", 8, 1.5, 0.0], ["fast", 15, 0.4, 6.0]],
+	[["tank", 10, 1.2, 0.0], ["normal", 20, 0.4, 4.0], ["fast", 20, 0.3, 10.0]],
+]
+
+
+func test_level_01_basics() -> void:
+	var level: LevelData = load("res://data/levels/level_01.tres")
+	assert_eq(level.starting_gold, 150, "spec §7")
+	assert_eq(level.starting_lives, 20, "RF-10")
+	assert_eq(level.waves.size(), 10, "RF-30")
+
+
+func test_level_01_waves_match_spec() -> void:
+	var level: LevelData = load("res://data/levels/level_01.tres")
+	for w: int in LEVEL_01_WAVES.size():
+		var expected: Array = LEVEL_01_WAVES[w]
+		var groups: Array[SpawnGroup] = level.waves[w].groups
+		assert_eq(groups.size(), expected.size(), "oleada %d: cantidad de grupos" % (w + 1))
+		for g: int in mini(groups.size(), expected.size()):
+			var label: String = "oleada %d, grupo %d" % [w + 1, g + 1]
+			assert_eq(groups[g].enemy.id, StringName(expected[g][0]), label + ": tipo")
+			assert_eq(groups[g].count, expected[g][1], label + ": cantidad")
+			assert_almost_eq(groups[g].interval, expected[g][2], 0.001, label + ": intervalo")
+			assert_almost_eq(groups[g].start_delay, expected[g][3], 0.001, label + ": retraso")

@@ -29,7 +29,7 @@ func _label(unique_name: String) -> String:
 func test_hud_shows_starting_values() -> void:
 	assert_eq(_label("GoldLabel"), "Oro: 150")
 	assert_eq(_label("LivesLabel"), "Vidas: 20")
-	assert_eq(_label("WaveLabel"), "Oleada 0/2")
+	assert_eq(_label("WaveLabel"), "Oleada 0/10")
 
 
 # --- T16: nada sale hasta pulsar "Empezar oleada" (RF-32) ---
@@ -46,7 +46,7 @@ func test_enemies_come_out_one_per_second() -> void:
 	assert_eq(game.enemies.get_child_count(), 1)
 	await _run_seconds(1.0)
 	assert_eq(game.enemies.get_child_count(), 2)
-	assert_eq(_label("WaveLabel"), "Oleada 1/2")
+	assert_eq(_label("WaveLabel"), "Oleada 1/10")
 
 
 # --- T14: el enemigo recorre el camino a 1.5 casillas/s ---
@@ -73,7 +73,7 @@ func test_full_wave_without_towers() -> void:
 	assert_eq(game.session.state, LevelSession.State.COUNTDOWN, "RF-34")
 	assert_eq(_label("LivesLabel"), "Vidas: 12")
 	assert_eq(_label("GoldLabel"), "Oro: 175")
-	assert_eq(_label("WaveLabel"), "Oleada 1/2 completada (+25 de oro)")
+	assert_eq(_label("WaveLabel"), "Oleada 1/10 completada (+25 de oro)")
 
 	# RF-34: tras 15 s de cuenta atrás, la oleada 2 sale sola.
 	await _run_seconds(15.5)
@@ -90,5 +90,5 @@ func test_enemies_get_more_health_each_wave() -> void:
 	game.spawner.start_wave(game.level_data.waves[1], 2)
 	await _run_seconds(0.1)
 	assert_eq(spawned.size(), 1)
-	assert_eq(spawned[0].max_health, 21, "Normal en oleada 2: 20 × 1.08 = 21.6 → 21")
-	assert_eq(spawned[0].health, 21)
+	assert_eq(spawned[0].max_health, 42, "Normal en oleada 2: 30 × 1.4 = 42")
+	assert_eq(spawned[0].health, 42)
