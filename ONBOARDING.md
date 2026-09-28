@@ -155,7 +155,9 @@ Estas rutas se guardan en la **configuración del editor**, que es de cada compu
 
 > ⚠️ **Trampa conocida:** después de escribir una ruta, **pulsar Enter** o hacer clic en otro campo antes de cerrar la ventana. Si no, el valor puede no guardarse.
 >
-> ⚠️ **No editar a mano** el archivo `%APPDATA%\Godot\editor_settings-4.7.tres` con el editor abierto: el editor lo sobrescribe al cerrarse.
+> 🔧 **Si aun así no se guarda** (nos pasó con la ruta de Java): **cerrar el editor de Godot** y editar a mano el archivo `%APPDATA%\Godot\editor_settings-4.7.tres`, en la línea
+> `export/android/java_sdk_path = "C:/Program Files/Android/Android Studio/jbr"`.
+> ⚠️ Con el editor **abierto** no sirve: el editor guarda su configuración cada tanto y pisa el cambio con el valor que tiene en memoria.
 
 **✅ Comprobar** (con la terminal, estando el editor cerrado o después de configurar):
 ```bash
@@ -165,7 +167,7 @@ Las dos líneas tienen que tener una ruta, no `""`.
 
 ### 7.3 Exportar
 
-La configuración está en `export_presets.cfg`, preset **"Android"**: paquete `com.juegoa.towerdefense`, solo celulares de 64 bits (arm64), sin Gradle.
+La configuración está en `export_presets.cfg`, preset **"Android"**: paquete `com.juegoa.towerdefense`, solo celulares de 64 bits (arm64), sin Gradle. El proyecto ya tiene activada la compresión de texturas **ETC2/ASTC** (la que usan los celulares) y un ícono propio (`assets/icon.png`, generado con `tools/make_icon.gd`).
 
 ```bash
 godot --headless --path . --export-debug "Android" build/JuegoA.apk
@@ -213,6 +215,7 @@ Se ejecutan desde la carpeta del proyecto. Más detalle dentro de cada archivo.
 | `godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- smart level=1` | Bot que juega solo, para revisar el balance (spec §7.1). Estrategias: `smart`, `basic`, `naive`. |
 | `godot --path . -s tools/perf_test.gd` | Prueba de rendimiento: 200 enemigos y 60 torres. Abre una ventana. |
 | `godot --headless --path . -s tools/make_sounds.gd` | Volver a generar los sonidos (D-020). |
+| `godot --headless --path . -s tools/make_icon.gd` | Volver a generar el ícono del juego (`assets/icon.png`). |
 
 > ⚠️ **Trampa conocida (para quien escriba herramientas nuevas):** los scripts que se ejecutan con `-s` se compilan **antes** que los autoloads. No pueden usar `GameFlow`, `SaveManager` ni `Audio` por su nombre, ni declarar variables de tipo `Game`. Hay que declarar la partida como `Node2D` (plan técnico §7).
 
@@ -224,7 +227,8 @@ Se ejecutan desde la carpeta del proyecto. Más detalle dentro de cada archivo.
 |---|---|---|
 | `godot` no se reconoce como comando | La terminal se abrió antes de cambiar el `PATH`. | Abrir una terminal nueva. |
 | *"Invalid wrapper executable name"* | Se renombró el `…_console.exe`. | Devolverle su nombre original y usar `godot.cmd` (paso 2). |
-| Exportar a Android: *"Se requiere una ruta válida para el SDK de Java"* | Falta la ruta de Java en el editor, o no se confirmó con Enter. | Paso 7.2. |
+| Exportar a Android: *"Se requiere una ruta válida para el SDK de Java"* | Falta la ruta de Java en el editor, o no se confirmó con Enter. | Paso 7.2 (y el 🔧 si no se guarda). |
+| Exportar a Android: *"La compresión de texturas ETC2/ASTC se requiere…"* | El proyecto no genera texturas para celulares. | Ya está resuelto en `project.godot` (`import_etc2_astc=true`). Si reaparece: *Configuración del proyecto → Renderizado → Texturas → Compresión de VRAM → Importar ETC2 ASTC*. |
 | Al cerrar el juego, en la terminal: *"ObjectDB instances were leaked"* | La música sigue "reproduciéndose" en el servidor de audio durante el cierre. | Es inofensivo y el jugador no lo ve. Está anotado como pendiente. |
 | Una herramienta (`tools/…`) da *"Identifier not found: GameFlow"* | Ver la trampa de la sección anterior. | Declarar la partida como `Node2D`. |
 

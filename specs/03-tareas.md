@@ -285,10 +285,11 @@
   **Refs:** RF-141, RF-142.
   **Hecho cuando:** `test_android_back_button_opens_the_pause_menu` pasa.
 
-- [ ] **TA2 · Exportar el `.apk`**
+- [x] **TA2 · Exportar el `.apk`**
   Configuración `Android` en `export_presets.cfg` (paquete `com.juegoa.towerdefense`, solo arm64, sin Gradle). Requiere en el editor: *Configuración del Editor → Exportar → Android → Ruta del SDK de Java* = `C:\Program Files\Android\Android Studio\jbr`.
   **Refs:** RF-140.
   **Hecho cuando:** `godot --headless --path . --export-debug "Android" build/JuegoA.apk` genera el archivo sin errores.
+  **Resultado:** `build/JuegoA.apk` (28,7 MB), firmado con la clave de depuración de Godot, paquete `com.juegoa.towerdefense` 1.0, arm64. Hizo falta además activar ETC2/ASTC y agregar un ícono (`assets/icon.png`).
 
 - [ ] **TA3 · Probar en un celular**
   **Refs:** RF-140 a RF-143.
