@@ -1,0 +1,16 @@
+# Reglas generales que valen para todos los niveles.
+# Los porcentajes son ENTEROS (70 = 70 %) para que las cuentas no tengan errores
+# de redondeo: con decimales, 110 × 0.7 puede dar 76.999… y redondear a 76 (D-013).
+class_name BalanceConfig
+extends Resource
+
+## Bono fijo al terminar una oleada (RF-22).
+@export var wave_bonus_base: int = 0
+## Bono extra por número de oleada (RF-22).
+@export var wave_bonus_per_wave: int = 0
+## Porcentaje del oro invertido que se devuelve al vender (RF-72).
+@export_range(0, 100) var sell_refund_percent: int = 0
+## Segundos de cuenta atrás entre oleadas (RF-34).
+@export var countdown_seconds: float = 0.0
+## Porcentaje de vida extra que gana cada enemigo por cada oleada (RF-36).
+@export var health_scale_percent_per_wave: int = 0

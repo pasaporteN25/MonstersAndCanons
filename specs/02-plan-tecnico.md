@@ -116,101 +116,22 @@ Un **Resource** es una clase de datos que Godot sabe guardar como archivo `.tres
 
 ### 4.1 Las clases de datos
 
-```gdscript
-# scripts/data/tower_level_data.gd
-# Los valores de UN nivel de una torre (nivel 1, 2 o 3).
-class_name TowerLevelData
-extends Resource
+Cada clase es un script en `scripts/data/`. **El código real es la referencia**; aquí solo se resume qué representa cada una:
 
-@export var cost: int = 50                  # oro para construir (nivel 1) o para mejorar a este nivel
-@export var damage: int = 5
-@export var fire_rate: float = 2.0          # disparos por segundo
-@export var range_tiles: float = 3.0        # alcance, en casillas
-@export var splash_radius_tiles: float = 0.0  # 0 = daña a un solo enemigo
-@export var slow_amount: float = 0.0        # 0.4 = ralentiza un 40 %
-@export var slow_duration: float = 0.0      # segundos
-```
+| Clase | Archivo | Representa |
+|---|---|---|
+| `TowerLevelData` | [`tower_level_data.gd`](../scripts/data/tower_level_data.gd) | Los valores de **un nivel** de una torre: costo, daño, cadencia, alcance, área, ralentización. |
+| `TowerData` | [`tower_data.gd`](../scripts/data/tower_data.gd) | Un tipo de torre: nombre, si golpea voladores, color y su lista de niveles (índice 0 = nivel 1). |
+| `EnemyData` | [`enemy_data.gd`](../scripts/data/enemy_data.gd) | Un tipo de enemigo: vida, velocidad, armadura, oro, vidas que quita, si vuela, resistencia a ralentizar, forma y color. |
+| `SpawnGroup` | [`spawn_group.gd`](../scripts/data/spawn_group.gd) | "N enemigos de tipo X, cada S segundos, empezando T segundos después, por la entrada E" (RF-31). |
+| `WaveData` | [`wave_data.gd`](../scripts/data/wave_data.gd) | Una oleada = lista de `SpawnGroup`. |
+| `LevelData` | [`level_data.gd`](../scripts/data/level_data.gd) | Un nivel: escena del mapa, oro y vidas iniciales, lista de oleadas. |
+| `BalanceConfig` | [`balance_config.gd`](../scripts/data/balance_config.gd) | Reglas generales: bono de oleada, % de venta, cuenta atrás, % de vida por oleada. Sus valores están en `data/balance.tres`. |
 
-```gdscript
-# scripts/data/tower_data.gd
-class_name TowerData
-extends Resource
+**Dos reglas para todas las clases de datos:**
 
-@export var id: StringName = &"basic"
-@export var display_name: String = "Ametralladora"
-@export var can_hit_air: bool = true
-@export var projectile_speed_tiles: float = 10.0
-@export var color: Color = Color.GRAY
-@export var levels: Array[TowerLevelData] = []   # índice 0 = nivel 1
-```
-
-```gdscript
-# scripts/data/enemy_data.gd
-class_name EnemyData
-extends Resource
-
-enum Shape { CIRCLE, TRIANGLE, SQUARE, DIAMOND, HEXAGON }
-
-@export var id: StringName = &"normal"
-@export var display_name: String = "Normal"
-@export var max_health: int = 20
-@export var speed_tiles: float = 1.5        # casillas por segundo
-@export var armor: int = 0
-@export var reward: int = 5                 # oro al morir
-@export var lives_damage: int = 1           # vidas que quita al llegar a la salida
-@export var is_flying: bool = false
-@export_range(0.0, 1.0) var slow_resistance: float = 0.0   # 0.5 = solo le afecta la mitad
-@export var shape: Shape = Shape.CIRCLE
-@export var color: Color = Color.GRAY
-@export var size_tiles: float = 0.4         # radio visual, en casillas
-```
-
-```gdscript
-# scripts/data/spawn_group.gd
-# "N enemigos de tipo X, cada S segundos, empezando T segundos después" (RF-31)
-class_name SpawnGroup
-extends Resource
-
-@export var enemy: EnemyData
-@export var count: int = 10
-@export var interval: float = 1.0
-@export var start_delay: float = 0.0
-@export var entrance_index: int = 0         # por qué entrada salen (nivel 3 tiene dos)
-```
-
-```gdscript
-# scripts/data/wave_data.gd
-class_name WaveData
-extends Resource
-
-@export var groups: Array[SpawnGroup] = []
-```
-
-```gdscript
-# scripts/data/level_data.gd
-class_name LevelData
-extends Resource
-
-@export var id: StringName = &"level_01"
-@export var display_name: String = "Pradera"
-@export var map_scene: PackedScene           # level_01.tscn
-@export var starting_gold: int = 150
-@export var starting_lives: int = 20
-@export var waves: Array[WaveData] = []
-```
-
-```gdscript
-# scripts/data/balance_config.gd
-# Reglas generales que valen para todos los niveles.
-class_name BalanceConfig
-extends Resource
-
-@export var wave_bonus_base: int = 20             # RF-22
-@export var wave_bonus_per_wave: int = 5          # RF-22
-@export var sell_refund_ratio: float = 0.7        # RF-72
-@export var countdown_seconds: float = 15.0       # RF-34
-@export var health_scale_per_wave: float = 0.08   # RF-36
-```
+1. **Los valores por defecto de balance son `0`** (o vacío). Los números reales viven **solo** en los `.tres` (constitución P2). Además, Godot **no escribe** en el `.tres` un valor igual al de por defecto; si el default fuera `5`, el archivo no lo mostraría y dependería en silencio del código.
+2. **Los porcentajes usados en cuentas con enteros se guardan como enteros** (`70` = 70 %), no como decimales (`0.7`). Motivo: en la computadora `0.7` es en realidad 0,69999…, y `170 × 0.7` da 118,99999 → al redondear hacia abajo, **118 en vez de 119**. Ver D-013.
 
 ### 4.2 Unidades: casillas en los datos, píxeles en el código
 
@@ -228,26 +149,16 @@ static func tiles_to_px(tiles: float) -> float:
 
 ### 4.3 Fórmulas puras (`rules.gd`)
 
-Todas las fórmulas de la spec viven aquí, como funciones `static` que **no tocan ningún nodo**. Eso las hace fáciles de testear (P10).
+Todas las fórmulas de la spec viven en [`scripts/logic/rules.gd`](../scripts/logic/rules.gd), como funciones `static` que **no tocan ningún nodo**. Eso las hace fáciles de testear (P10); sus tests están en [`tests/test_rules.gd`](../tests/test_rules.gd).
 
-```gdscript
-class_name Rules
-
-static func damage_after_armor(damage: int, armor: int) -> int:        # RF-80
-    return maxi(1, damage - armor)
-
-static func scaled_health(base: int, wave_number: int, scale: float) -> int:  # RF-36
-    return floori(base * (1.0 + scale * (wave_number - 1)))
-
-static func wave_bonus(wave_number: int, cfg: BalanceConfig) -> int:   # RF-22
-    return cfg.wave_bonus_base + cfg.wave_bonus_per_wave * wave_number
-
-static func sell_refund(total_invested: int, cfg: BalanceConfig) -> int:  # RF-72
-    return floori(total_invested * cfg.sell_refund_ratio)
-
-static func effective_slow(slow_amount: float, resistance: float) -> float:  # RF-60, jefe
-    return slow_amount * (1.0 - resistance)
-```
+| Función | Regla |
+|---|---|
+| `tiles_to_px(tiles)` | Casillas → píxeles (§4.2). |
+| `damage_after_armor(damage, armor)` | RF-80. |
+| `scaled_health(base, wave_number, cfg)` | RF-36. |
+| `wave_bonus(wave_number, cfg)` | RF-22. |
+| `sell_refund(total_invested, cfg)` | RF-72. |
+| `effective_slow(slow_amount, resistance)` | RF-60 y resistencia del Jefe. |
 
 ---
 

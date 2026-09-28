@@ -44,12 +44,12 @@
 
 ### Fundaciones
 
-- [ ] **T10 · Clases de datos y `rules.gd`**
+- [x] **T10 · Clases de datos y `rules.gd`**
   Crear todos los scripts de `scripts/data/` (§4.1) y `scripts/logic/rules.gd` (§4.2, §4.3).
   Crear `data/balance.tres` con los valores de la spec.
   **Refs:** RF-22, RF-36, RF-72, RF-80; plan §4.
   **Hecho cuando:** `tests/test_rules.gd` pasa con, al menos, los ejemplos de la spec:
-  `damage_after_armor(5, 4) == 1`, `damage_after_armor(40, 4) == 36`, `scaled_health(20, 10, 0.08) == 34`, `wave_bonus(3) == 35`, `sell_refund(110) == 77`.
+  `damage_after_armor(5, 4) == 1`, `damage_after_armor(40, 4) == 36`, `scaled_health(20, 10, cfg) == 34`, `wave_bonus(3, cfg) == 35`, `sell_refund(110, cfg) == 77` (con `cfg` = `data/balance.tres`).
 
 - [ ] **T11 · Datos de enemigos y torres del M1**
   Crear `data/enemies/normal.tres`, `fast.tres`, `tank.tres` y `data/towers/basic.tres`, `cannon.tres`, `frost.tres` (solo nivel 1 de cada torre por ahora) con los valores de las tablas de la spec.
