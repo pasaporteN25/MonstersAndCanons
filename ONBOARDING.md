@@ -197,6 +197,7 @@ Se usa `--export-debug` porque la versión de **prueba** se firma sola con la cl
 | Qué | Dónde |
 |---|---|
 | Progreso y opciones del jugador | `%APPDATA%\Godot\app_userdata\JuegoA\save.json` |
+| Registros (logs) de cada ejecución, los últimos 30 | `%APPDATA%\Godot\app_userdata\JuegoA\logs\` |
 | Configuración del editor (rutas de Android, etc.) | `%APPDATA%\Godot\editor_settings-4.7.tres` |
 | Plantillas de exportación | `%APPDATA%\Godot\export_templates\4.7.2.stable\` |
 | Caché del proyecto (se regenera sola) | `JuegoA/.godot/` |
@@ -231,6 +232,7 @@ Se ejecutan desde la carpeta del proyecto. Más detalle dentro de cada archivo.
 | Exportar a Android: *"La compresión de texturas ETC2/ASTC se requiere…"* | El proyecto no genera texturas para celulares. | Ya está resuelto en `project.godot` (`import_etc2_astc=true`). Si reaparece: *Configuración del proyecto → Renderizado → Texturas → Compresión de VRAM → Importar ETC2 ASTC*. |
 | Al cerrar el juego, en la terminal: *"ObjectDB instances were leaked"* | La música sigue "reproduciéndose" en el servidor de audio durante el cierre. | Es inofensivo y el jugador no lo ve. Está anotado como pendiente. |
 | Una herramienta (`tools/…`) da *"Identifier not found: GameFlow"* | Ver la trampa de la sección anterior. | Declarar la partida como `Node2D`. |
+| El juego se cierra solo, se congela o hace algo raro | En la versión exportada los errores de GDScript **no se muestran**. | Anotar la hora y qué se estaba haciendo. Revisar el log de esa hora en la carpeta `logs` (ver "Dónde guarda las cosas el juego") y, si el programa se cerró de golpe, el *Visor de eventos* de Windows (*Registros de Windows → Aplicación*). |
 
 ---
 

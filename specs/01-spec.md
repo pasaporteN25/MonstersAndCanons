@@ -522,7 +522,7 @@ Cosas que **no** hace falta decidir ahora; se deciden antes del hito indicado.
 | Pregunta | Decidir antes de |
 |---|---|
 | ¿Nombre definitivo del juego? | M3 |
-| ¿Ambientación? (medieval, espacial, juguetes…) Afecta nombres de torres/enemigos y el arte. **Candidata fuerte: "Épocas" (§13, B-01).** | M4 |
+| ¿Ambientación? (medieval, espacial, juguetes…) Afecta nombres de torres/enemigos y el arte. **Candidata fuerte: "Épocas" (§13, B-01).** Se decide junto con el lore (B-03) y el arte (B-02). | M4 |
 | ¿Música: de dónde sale? (propia, gratuita con licencia CC0…) | M3 |
 
 ---
@@ -556,3 +556,26 @@ Ideas **aprobadas como dirección**, pero **sin fecha**: no se programan hasta c
 4. Decidir si reemplaza la campaña normal o es un **modo aparte**.
 
 **Cuándo:** sin fecha. Lucas prefiere no elegir variante por ahora (2026-09-28). Si se retoma, el lugar natural es M4 (arte), porque ahí se elige la ambientación.
+
+### B-02 · Diseño de assets (arte)
+*Propuesta de Lucas, 2026-09-28. No lo hace Claude: queda para un diseñador o para más adelante.*
+
+**Idea:** reemplazar las formas geométricas por arte dibujado: torres, enemigos, casillas del mapa, efectos, íconos y la interfaz.
+
+**Qué ya está preparado para que sea fácil:**
+- Cada torre y cada enemigo se dibuja en **un solo lugar** (`_draw()` de `tower.gd` y `enemy.gd`), y los datos ya dicen su forma y color (`EnemyData.shape`, `TowerData.color`). Cambiar a imágenes es cambiar ese dibujo, no la lógica.
+- Las casillas vienen de `assets/tiles/tiles.png` (64×64) y la decoración de `LevelDecor`.
+- La resolución base es 1280×720 y las casillas miden 64×64 px: el arte se hace a esa escala (o al doble, 128×128, para pantallas grandes).
+
+**Lista de piezas** (para cuando se encargue): 4 torres × 3 niveles, 6 enemigos (con su versión "golpeado" y "ralentizado"), casillas (pasto, camino con bordes, roca, puerta de salida), proyectiles e impactos, íconos de la interfaz, ícono del juego, fondo de los menús.
+
+**Depende de:** la ambientación (§12) y, si se elige, de Épocas (B-01): cada época necesitaría su propio juego de piezas.
+
+### B-03 · Lore (la historia del mundo)
+*Propuesta de Lucas, 2026-09-28. No lo hace Claude: queda para más adelante.*
+
+**Idea:** darle al juego un mundo y una historia: quiénes defienden, quiénes atacan y por qué, qué es cada nivel (Pradera, Desfiladero, Encrucijada, Espiral, Fortaleza) dentro de ese mundo, y quién es el Jefe.
+
+**Cómo se mostraría** (a decidir): un texto corto al elegir cada nivel, una frase en la pantalla de victoria, nombres temáticos para torres y enemigos.
+
+**Depende de / afecta a:** Épocas (B-01) sería una forma de lore ("la guerra a través del tiempo"); el lore también decide la ambientación y, por lo tanto, el arte (B-02). Conviene definir los tres juntos. Si se agregan textos de historia, hay que sacar "Historia, diálogos o cinemáticas" de la lista de §11 (en todo o en parte).
