@@ -104,4 +104,4 @@ func test_level_select_shows_best_result() -> void:
 	SaveManager.record_victory(&"level_01", 17)
 	var select: Control = (load("res://scenes/ui/level_select.tscn") as PackedScene).instantiate()
 	add_child_autofree(select)
-	assert_eq(select.status_text(0), "Completado · mejor: 17 vidas", "RF-111")
+	assert_eq(select.status_text(0), "Completado\nMejor: 17 vidas", "RF-111")

@@ -10,12 +10,19 @@ const PATH_EDGE := Color(0.62, 0.5, 0.3)
 const PEBBLE := Color(0.7, 0.6, 0.42)
 const ROCK := Color(0.52, 0.52, 0.55)
 
+const GATE_STONE := Color(0.42, 0.4, 0.45)
+const GATE_DOOR := Color(0.1, 0.09, 0.12)
+const GATE_GOLD := Color(1.0, 0.84, 0.3)
+
 var _ground: TileMapLayer
+var _exit_cells: Array[Vector2i] = []
 
 
 ## Level la llama al estar lista (constitución P6: el padre le da lo que necesita).
-func paint(ground: TileMapLayer) -> void:
+## `exit_cells`: salidas dentro del mapa, donde se dibuja una puerta (RF-06).
+func paint(ground: TileMapLayer, exit_cells: Array[Vector2i] = []) -> void:
 	_ground = ground
+	_exit_cells = exit_cells
 	position = ground.position
 	queue_redraw()
 
@@ -36,6 +43,8 @@ func _draw() -> void:
 			Level.ATLAS_BLOCKED:
 				_draw_grass(origin, rng)
 				_draw_rock(origin, rng)
+	for cell: Vector2i in _exit_cells:
+		_draw_gate(Vector2(cell) * tile)
 
 
 func _draw_grass(origin: Vector2, rng: RandomNumberGenerator) -> void:
@@ -95,6 +104,24 @@ func _draw_rock(origin: Vector2, rng: RandomNumberGenerator) -> void:
 	points.append(points[0])
 	draw_polyline(points, ROCK.darkened(0.4), 2.0)
 	draw_circle(center + Vector2(-6, -6), 5.0, ROCK.lightened(0.25))
+
+
+## RF-06: una puerta de piedra (arco oscuro con borde dorado) donde termina el camino.
+func _draw_gate(origin: Vector2) -> void:
+	var tile: float = Rules.TILE_SIZE
+	var center: Vector2 = origin + Vector2(tile, tile) / 2.0
+	var stone := Rect2(origin + Vector2(6, 8), Vector2(tile - 12, tile - 12))
+	draw_rect(Rect2(stone.position + Vector2(4, 5), stone.size), Color(0, 0, 0, 0.25))  # sombra
+	draw_rect(stone, GATE_STONE)
+	draw_rect(stone, GATE_STONE.darkened(0.4), false, 2.0)
+	# Hueco de la puerta: un rectángulo con un arco (círculo) arriba.
+	var door := Rect2(center + Vector2(-11, -4), Vector2(22, 26))
+	draw_rect(door, GATE_DOOR)
+	draw_circle(center + Vector2(0, -4), 11.0, GATE_DOOR)
+	draw_arc(center + Vector2(0, -4), 13.0, PI, TAU, 16, GATE_GOLD, 2.0)
+	# Dos antorchas.
+	for side: float in [-1.0, 1.0]:
+		draw_circle(center + Vector2(side * 20.0, -8), 3.5, GATE_GOLD)
 
 
 ## Fuera del mapa no se dibuja borde (el camino entra y sale por los costados).

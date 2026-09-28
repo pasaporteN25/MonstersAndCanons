@@ -16,16 +16,16 @@ func _game_with_level(index: int) -> Game:
 
 # --- Campaña (spec §7) ---
 
-func test_campaign_has_three_levels_in_order() -> void:
+func test_campaign_has_five_levels_in_order() -> void:
 	var ids: Array[StringName] = []
 	for level: LevelData in campaign.levels:
 		ids.append(level.id)
-	assert_eq(ids, [&"level_01", &"level_02", &"level_03"] as Array[StringName])
+	assert_eq(ids, [&"level_01", &"level_02", &"level_03", &"level_04", &"level_05"] as Array[StringName])
 
 
 func test_levels_match_spec_table() -> void:
 	# [oleadas, oro inicial, entradas]
-	var expected: Array = [[10, 150, 1], [15, 200, 1], [20, 250, 2]]
+	var expected: Array = [[10, 150, 1], [15, 200, 1], [20, 250, 2], [15, 200, 1], [20, 300, 3]]
 	for i: int in expected.size():
 		var game: Game = _game_with_level(i)
 		assert_eq(game.level_data.waves.size(), expected[i][0], "nivel %d: oleadas" % (i + 1))
@@ -79,6 +79,35 @@ func test_both_entrances_lead_to_the_same_exit() -> void:
 		var path: Path2D = game.level.get_ground_path(i)
 		ends.append(path.to_global(path.curve.get_point_position(path.curve.point_count - 1)))
 	assert_eq(ends[0], ends[1])
+
+
+# --- Salidas dentro del mapa y entradas por arriba (RF-06, T60) ---
+
+func test_only_the_spiral_has_its_exit_inside_the_map() -> void:
+	for i: int in campaign.levels.size():
+		var game: Game = _game_with_level(i)
+		var expected: Array[Vector2i] = []
+		if i == 3:
+			expected.append(Vector2i(5, 5))  # la puerta del centro de la Espiral
+		assert_eq(game.level.inner_exit_cells(), expected, "nivel %d" % (i + 1))
+
+
+func test_fortress_entrance_c_comes_from_the_top() -> void:
+	var game: Game = _game_with_level(4)
+	var enemy: Enemy = _spawn_from_entrance(game, 2)
+	var top_of_map: float = game.level.cell_center(Vector2i(13, 0)).y - Rules.TILE_SIZE / 2.0
+	assert_lt(enemy.global_position.y, top_of_map, "empieza por encima del mapa")
+	assert_almost_eq(enemy.global_position.x, game.level.cell_center(Vector2i(13, 0)).x, 1.0)
+
+
+func test_all_fortress_entrances_share_the_exit() -> void:
+	var game: Game = _game_with_level(4)
+	var ends: Array[Vector2] = []
+	for i: int in 3:
+		var path: Path2D = game.level.get_ground_path(i)
+		ends.append(path.to_global(path.curve.get_point_position(path.curve.point_count - 1)))
+	assert_eq(ends[0], ends[1])
+	assert_eq(ends[1], ends[2])
 
 
 # --- Vida por oleada propia de cada nivel (D-019) ---

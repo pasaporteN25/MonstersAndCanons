@@ -17,7 +17,20 @@ const ATLAS_BLOCKED := Vector2i(2, 0)
 func _ready() -> void:
 	var decor := get_node_or_null("Decor") as LevelDecor
 	if decor != null:
-		decor.paint(ground)
+		decor.paint(ground, inner_exit_cells())
+
+
+## RF-06: casillas donde termina algún camino DENTRO del mapa (ahí se dibuja una puerta).
+## Si el camino sale por un borde, la salida es el borde y no se marca nada.
+func inner_exit_cells() -> Array[Vector2i]:
+	var cells: Array[Vector2i] = []
+	for i: int in entrance_count():
+		var path: Path2D = get_ground_path(i)
+		var end: Vector2 = path.to_global(path.curve.get_point_position(path.curve.point_count - 1))
+		var cell: Vector2i = cell_at(end)
+		if is_inside(cell) and not cells.has(cell):
+			cells.append(cell)
+	return cells
 
 
 ## RF-02: solo las casillas "libres" son construibles.

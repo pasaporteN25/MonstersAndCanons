@@ -5,7 +5,9 @@
 [ext_resource type="Script" path="res://scripts/data/campaign_data.gd" id="3_avbr3"]
 [ext_resource type="Resource" path="res://data/levels/level_02.tres" id="3_p55u7"]
 [ext_resource type="Resource" path="res://data/levels/level_03.tres" id="4_r4krw"]
+[ext_resource type="Resource" path="res://data/levels/level_04.tres" id="5_r4krw"]
+[ext_resource type="Resource" path="res://data/levels/level_05.tres" id="6_hgk5x"]
 
 [resource]
 script = ExtResource("3_avbr3")
-levels = Array[ExtResource("1_iacio")]([ExtResource("2_1y28d"), ExtResource("3_p55u7"), ExtResource("4_r4krw")])
+levels = Array[ExtResource("1_iacio")]([ExtResource("2_1y28d"), ExtResource("3_p55u7"), ExtResource("4_r4krw"), ExtResource("5_r4krw"), ExtResource("6_hgk5x")])

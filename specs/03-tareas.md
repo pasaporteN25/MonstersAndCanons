@@ -301,17 +301,17 @@
 
 ### Niveles 4 y 5 *(pedidos por Lucas)*
 
-- [ ] **T60 · La salida se ve y entradas por arriba o abajo**
+- [x] **T60 · La salida se ve y entradas por arriba o abajo**
   `LevelDecor` dibuja una puerta en las salidas que quedan dentro del mapa. El generador de mapas acepta caminos que entran o salen por cualquier borde.
   **Refs:** RF-06.
   **Hecho cuando:** en la captura del nivel 4 se ve la puerta en el centro; los niveles 1 a 3 no cambian.
 
-- [ ] **T61 · Nivel 4 — Espiral**
+- [x] **T61 · Nivel 4 — Espiral**
   Mapa, `level_04.tres` con 15 oleadas, agregado a la campaña. Tarjetas de la selección de nivel más angostas para que entren 5.
   **Refs:** spec §7.5.
   **Hecho cuando:** pasan `test_level_paths.gd` y `test_levels.gd`, y las 5 tarjetas entran en la pantalla.
 
-- [ ] **T62 · Nivel 5 — Fortaleza**
+- [x] **T62 · Nivel 5 — Fortaleza**
   Mapa con 3 entradas (una desde arriba), `level_05.tres` con 20 oleadas.
   **Refs:** spec §7.6.
   **Hecho cuando:** pasan los tests y cada grupo sale por su entrada.
