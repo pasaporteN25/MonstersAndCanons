@@ -10,6 +10,20 @@ damage = 5
 fire_rate = 2.0
 range_tiles = 3.0
 
+[sub_resource type="Resource" id="Resource_hq2q8"]
+script = ExtResource("1_hq2q8")
+cost = 60
+damage = 8
+fire_rate = 2.5
+range_tiles = 3.0
+
+[sub_resource type="Resource" id="Resource_y8sf8"]
+script = ExtResource("1_hq2q8")
+cost = 100
+damage = 12
+fire_rate = 3.0
+range_tiles = 3.5
+
 [resource]
 script = ExtResource("2_y8sf8")
 id = &"basic"
@@ -17,4 +31,4 @@ display_name = "Ametralladora"
 can_hit_air = true
 projectile_speed_tiles = 10.0
 color = Color(0.47843137, 0.47843137, 0.47843137, 1)
-levels = Array[ExtResource("1_hq2q8")]([SubResource("Resource_qyymo")])
+levels = Array[ExtResource("1_hq2q8")]([SubResource("Resource_qyymo"), SubResource("Resource_hq2q8"), SubResource("Resource_y8sf8")])

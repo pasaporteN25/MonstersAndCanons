@@ -38,6 +38,12 @@ func tower_built(position_: Vector2, color: Color) -> void:
 	_add(RingEffect.new().setup(ring_color, 16.0, Rules.TILE_SIZE * 0.7, 0.3, 3.0), position_)
 
 
+## Al vender: anillo gris que se cierra y "+N" con el oro devuelto.
+func tower_sold(position_: Vector2, refund: int) -> void:
+	_add(RingEffect.new().setup(Color(1, 1, 1, 0.6), Rules.TILE_SIZE * 0.6, 4.0, 0.25, 3.0), position_)
+	_add(FloatingText.new().setup("+%d" % refund, GOLD_COLOR), position_ + Vector2(0, -16))
+
+
 func _add(effect: Node2D, position_: Vector2) -> void:
 	effect.position = position_  # la capa está en el origen: posición local = global
 	add_child(effect)

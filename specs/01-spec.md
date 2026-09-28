@@ -149,6 +149,11 @@ La columna **Hito** de las tablas siguientes indica en qué momento se agrega ca
 > **Criterio de aceptación RF-72**
 > **Dado** una Ametralladora construida (50) y mejorada a nivel 2 (60) → **Cuando** la vendo → **Entonces** recibo 77 de oro (70 % de 110) y la casilla vuelve a estar libre.
 
+- **RF-73** **Seleccionar:** clic izquierdo sobre una torre la selecciona (se ve su círculo de alcance). Clic sobre otra casilla del mapa, clic derecho o `Esc` la deseleccionan. Elegir una torre para construir deselecciona la torre construida, y viceversa: nunca hay las dos cosas a la vez.
+- **RF-74** **Dónde está el panel:** flota a la derecha, justo encima de la barra inferior, y **no** tapa los botones. Mientras está abierto, los clics sobre él no llegan al mapa.
+- **RF-75** **El nivel se ve:** cada torre muestra puntitos con su nivel (1, 2 o 3) y, al mejorarse, aparece el mismo anillo que al construirla (RF-130).
+- **RF-76** **Tecla y oro:** `U` mejora y `S` vende la torre seleccionada. El botón **Mejorar** se ve gris si no alcanza el oro, y dice "Nivel máximo" en el nivel 3.
+
 **Tabla de mejoras** (solo se indica lo que cambia respecto al nivel anterior):
 
 | Torre | Nivel 2 | Nivel 3 |

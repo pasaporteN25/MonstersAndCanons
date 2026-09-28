@@ -1,6 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scenes/game/hud.gd" id="1_hud"]
+[ext_resource type="PackedScene" path="res://scenes/ui/tower_panel.tscn" id="2_panel"]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_hud")
@@ -80,3 +81,6 @@ offset_bottom = 76.0
 focus_mode = 0
 theme_override_font_sizes/font_size = 20
 text = "Empezar oleada"
+
+[node name="TowerPanel" parent="." instance=ExtResource("2_panel")]
+unique_name_in_owner = true

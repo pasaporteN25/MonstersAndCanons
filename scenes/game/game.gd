@@ -39,14 +39,24 @@ func _ready() -> void:
 	spawner.enemy_spawned.connect(_on_enemy_spawned)
 	spawner.wave_finished.connect(session.complete_wave)
 
-	build_controller.setup(level, session, tower_types, tower_container)
+	build_controller.setup(level, session, balance, tower_types, tower_container)
 	build_controller.tower_built.connect(_on_tower_built)
+	build_controller.tower_upgraded.connect(_on_tower_upgraded)
+	build_controller.tower_sold.connect(_on_tower_sold)
 	build_controller.selection_changed.connect(hud.show_selected_tower)
+	build_controller.placed_selection_changed.connect(_refresh_tower_panel.unbind(1))
 
 	hud.setup_towers(tower_types)
 	hud.tower_button_pressed.connect(build_controller.select)
 	hud.start_wave_pressed.connect(start_next_wave)
 	hud.bind(session)
+
+	# RF-70: el panel avisa; BuildController cobra, mejora y vende.
+	var panel: TowerPanel = hud.tower_panel
+	panel.upgrade_pressed.connect(func() -> void: build_controller.try_upgrade(build_controller.selected_placed()))
+	panel.sell_pressed.connect(func() -> void: build_controller.sell(build_controller.selected_placed()))
+	panel.targeting_pressed.connect(_on_targeting_pressed)
+	session.gold_changed.connect(panel.refresh)
 
 	session.countdown_finished.connect(start_next_wave)
 	session.state_changed.connect(_on_state_changed)
@@ -106,6 +116,29 @@ func _on_tower_built(tower: Tower) -> void:
 	effects.tower_built(tower.global_position, tower.data.color)
 
 
+func _on_tower_upgraded(tower: Tower) -> void:
+	effects.tower_built(tower.global_position, tower.data.color)  # RF-75: mismo anillo
+	_refresh_tower_panel()
+
+
+func _on_tower_sold(tower: Tower, refund: int) -> void:
+	effects.tower_sold(tower.global_position, refund)
+
+
+func _on_targeting_pressed() -> void:
+	var tower: Tower = build_controller.selected_placed()
+	if tower != null:
+		tower.cycle_targeting()
+		_refresh_tower_panel()
+
+
+## Muestra en el panel la torre seleccionada (o lo oculta si no hay ninguna).
+func _refresh_tower_panel() -> void:
+	var tower: Tower = build_controller.selected_placed()
+	var value: int = build_controller.sell_value(tower) if tower != null else 0
+	hud.tower_panel.show_tower(tower, value, session.gold)
+
+
 func _on_tower_fired(projectile: Projectile) -> void:
 	projectiles.add_child(projectile)
 	projectile.impacted.connect(effects.projectile_impacted)
@@ -118,6 +151,7 @@ func _on_state_changed(state: LevelSession.State) -> void:
 	for node: Node in [enemies, tower_container, projectiles, spawner]:
 		node.process_mode = Node.PROCESS_MODE_DISABLED
 	build_controller.cancel()
+	build_controller.deselect_placed()
 	if state == LevelSession.State.WON:
 		end_screen.show_victory(session.lives)
 	else:

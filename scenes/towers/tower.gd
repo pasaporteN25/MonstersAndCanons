@@ -6,6 +6,10 @@ extends Node2D
 
 signal fired(projectile: Projectile)
 
+## RF-54: a qué enemigo apunta, entre los que están en su alcance.
+enum TargetMode { FIRST, LAST, STRONGEST, CLOSEST }
+const TARGET_MODE_NAMES: Array[String] = ["Primero", "Último", "Más fuerte", "Más cercano"]
+
 const PROJECTILE_SCENE: PackedScene = preload("res://scenes/towers/projectile.tscn")
 ## Lado del cuadrado que se dibuja, en casillas.
 const BODY_SIZE_TILES: float = 0.8
@@ -16,8 +20,11 @@ const RECOIL_PX: float = 6.0
 const FLASH_DURATION: float = 0.08
 
 var data: TowerData
-## Nivel actual: 0 = nivel 1 (las mejoras llegan en M2).
+## Nivel actual: 0 = nivel 1, 1 = nivel 2, 2 = nivel 3 (RF-71).
 var level_index: int = 0
+## Oro gastado en esta torre (construcción + mejoras). Sirve para vender (RF-72).
+var total_invested: int = 0
+var targeting: TargetMode = TargetMode.FIRST
 ## Hacia dónde apunta el cañón, en radianes (0 = derecha). Empieza mirando hacia arriba.
 var aim_angle: float = -PI / 2.0
 
@@ -33,6 +40,7 @@ var _flash_left: float = 0.0
 ## Se llama ANTES de agregar la torre al árbol.
 func setup(tower_data: TowerData) -> void:
 	data = tower_data
+	total_invested = tower_data.levels[0].cost
 
 
 func _ready() -> void:
@@ -50,6 +58,37 @@ func range_px() -> float:
 	return Rules.tiles_to_px(stats().range_tiles)
 
 
+## Nivel que se ve (1, 2 o 3).
+func level_number() -> int:
+	return level_index + 1
+
+
+func can_upgrade() -> bool:
+	return level_index < data.levels.size() - 1
+
+
+## Valores del próximo nivel, o null si ya está en el máximo.
+func next_level_stats() -> TowerLevelData:
+	return data.levels[level_index + 1] if can_upgrade() else null
+
+
+## Sube un nivel. NO cobra: el oro lo maneja quien llama (BuildController).
+func apply_upgrade() -> void:
+	assert(can_upgrade(), "apply_upgrade() en una torre de nivel máximo")
+	level_index += 1
+	total_invested += stats().cost
+	queue_redraw()
+
+
+## RF-54: pasa al siguiente modo de apuntado (y vuelve al primero después del último).
+func cycle_targeting() -> void:
+	targeting = ((targeting + 1) % TargetMode.size()) as TargetMode
+
+
+func targeting_name() -> String:
+	return TARGET_MODE_NAMES[targeting]
+
+
 func _physics_process(delta: float) -> void:
 	if _target != null and not (is_instance_valid(_target) and can_target(_target)):
 		_target = null
@@ -63,7 +102,7 @@ func _physics_process(delta: float) -> void:
 	_animate(delta)
 
 
-## RF-51: apunta al "Primero", el enemigo al que menos le falta para llegar a la salida.
+## RF-51 y RF-54: el mejor objetivo en alcance según el modo de apuntado.
 ## Se mide la distancia a cada enemigo (D-014) en vez de usar áreas de colisión.
 func find_target() -> Enemy:
 	var best: Enemy = null
@@ -71,9 +110,23 @@ func find_target() -> Enemy:
 		var enemy := node as Enemy
 		if not can_target(enemy):
 			continue
-		if best == null or enemy.remaining_distance() < best.remaining_distance():
+		if best == null or _is_better_target(enemy, best):
 			best = enemy
 	return best
+
+
+## true si `a` es mejor objetivo que `b` según el modo actual.
+func _is_better_target(a: Enemy, b: Enemy) -> bool:
+	match targeting:
+		TargetMode.LAST:
+			return a.remaining_distance() > b.remaining_distance()
+		TargetMode.STRONGEST:
+			return a.health > b.health
+		TargetMode.CLOSEST:
+			var dist_a: float = global_position.distance_squared_to(a.global_position)
+			return dist_a < global_position.distance_squared_to(b.global_position)
+		_:  # FIRST: el que menos camino le falta
+			return a.remaining_distance() < b.remaining_distance()
 
 
 ## RF-50 y RF-53: el enemigo sigue activo, está en alcance y, si vuela, la torre puede golpearlo.
@@ -147,3 +200,8 @@ func _draw() -> void:
 	# Torreta encima del cañón.
 	draw_circle(Vector2.ZERO, half * 0.42, outline)
 	draw_circle(Vector2.ZERO, half * 0.26, data.color)
+	# RF-75: un puntito por nivel, en la esquina inferior izquierda.
+	for i: int in level_number():
+		var dot := Vector2(-half + 7.0 + i * 8.0, half - 7.0)
+		draw_circle(dot, 3.0, Color(1.0, 0.84, 0.3))
+		draw_arc(dot, 3.0, 0.0, TAU, 12, Color(0, 0, 0, 0.6), 1.0)

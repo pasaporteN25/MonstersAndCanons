@@ -177,21 +177,21 @@
 
 ## M2 — Profundidad
 
-- [ ] **T30 · Seleccionar torre + panel**
+- [x] **T30 · Seleccionar torre + panel**
   Clic sobre una torre construida → se resalta y se abre `tower_panel` con sus estadísticas. Clic en otro lado o `Esc` lo cierra.
   **Refs:** RF-70.
   **Hecho cuando:** el panel muestra nombre, nivel y estadísticas correctas de la torre seleccionada.
 
-- [ ] **T31 · Mejorar torres (niveles 2 y 3)**
+- [x] **T31 · Mejorar torres (niveles 2 y 3)**
   Agregar los niveles 2 y 3 a los `.tres` de las torres. Botón **Mejorar** y tecla `U`.
   **Refs:** RF-71, tabla de mejoras.
   **Hecho cuando:** mejorar descuenta el costo correcto y cambia las estadísticas; en nivel 3 el botón desaparece o se desactiva; el círculo de alcance se actualiza.
 
-- [ ] **T32 · Vender torres**
+- [x] **T32 · Vender torres**
   **Refs:** RF-72.
   **Hecho cuando:** se cumple el criterio de aceptación de RF-72 y se puede volver a construir en esa casilla.
 
-- [ ] **T33 · Modos de apuntado**
+- [x] **T33 · Modos de apuntado**
   **Refs:** RF-54.
   **Hecho cuando:** con 3 enemigos distintos en rango, cambiar de modo cambia visiblemente a cuál se dispara.
 

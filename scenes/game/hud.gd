@@ -22,6 +22,8 @@ var _last_lives: int = -1
 @onready var _start_wave_button: Button = %StartWaveButton
 @onready var _tower_button_row: HBoxContainer = %TowerButtons
 @onready var _wave_banner: Label = %WaveBanner
+## Panel de la torre seleccionada (RF-70). Game lo conecta con BuildController.
+@onready var tower_panel: TowerPanel = %TowerPanel
 
 
 func _ready() -> void:
