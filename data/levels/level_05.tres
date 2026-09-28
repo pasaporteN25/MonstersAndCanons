@@ -437,3 +437,4 @@ map_scene = ExtResource("1_nbnpc")
 starting_gold = 300
 starting_lives = 20
 waves = Array[ExtResource("3_aig56")]([SubResource("Resource_dpa0n"), SubResource("Resource_rsw2g"), SubResource("Resource_scdwa"), SubResource("Resource_5jhm7"), SubResource("Resource_je84j"), SubResource("Resource_5jjab"), SubResource("Resource_3qad8"), SubResource("Resource_os04w"), SubResource("Resource_fxcwm"), SubResource("Resource_jv6es"), SubResource("Resource_h22ln"), SubResource("Resource_55rde"), SubResource("Resource_k76gs"), SubResource("Resource_dy0dj"), SubResource("Resource_tn1o5"), SubResource("Resource_wp4rh"), SubResource("Resource_pdcgf"), SubResource("Resource_508sg"), SubResource("Resource_gqn0f"), SubResource("Resource_3mckg")])
+health_scale_percent_per_wave = 10

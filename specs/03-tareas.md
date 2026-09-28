@@ -316,10 +316,11 @@
   **Refs:** spec §7.6.
   **Hecho cuando:** pasan los tests y cada grupo sale por su entrada.
 
-- [ ] **T63 · Balance de los niveles 4 y 5**
+- [x] **T63 · Balance de los niveles 4 y 5**
   Con el bot, elegir el aumento de vida por oleada de cada uno.
   **Refs:** spec §7.4, D-019.
   **Hecho cuando:** el bot que mezcla torres gana pensando, y el que pone torres al azar pierde; la tabla de §7.4 queda completa.
+  **Resultado:** Espiral 20 %, Fortaleza 10 % (spec §7.4). Se tomó el mejor bot como referencia; de paso se arregló un error del bot cuando el mapa se llena de torres.
 
 ### Otras ideas de pulido *(sin fecha)*
 

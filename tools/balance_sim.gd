@@ -153,8 +153,12 @@ func _free_cells() -> Array[Vector2i]:
 	return cells
 
 
+## Una casilla libre al azar, o (-1, -1) si el mapa ya está lleno de torres
+## (entonces try_build falla y el bot deja de comprar).
 func _random_cell() -> Vector2i:
 	var cells: Array[Vector2i] = _free_cells()
+	if cells.is_empty():
+		return Vector2i(-1, -1)
 	return cells[rng.randi_range(0, cells.size() - 1)]
 
 

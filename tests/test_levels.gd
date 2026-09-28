@@ -117,6 +117,8 @@ func test_levels_use_their_health_scale() -> void:
 	assert_eq(campaign.levels[0].health_scale_percent(balance), 40, "spec §7.4: nivel 1, el general")
 	assert_eq(campaign.levels[1].health_scale_percent(balance), 35, "spec §7.4: nivel 2")
 	assert_eq(campaign.levels[2].health_scale_percent(balance), 20, "spec §7.4: nivel 3")
+	assert_eq(campaign.levels[3].health_scale_percent(balance), 20, "spec §7.4: nivel 4")
+	assert_eq(campaign.levels[4].health_scale_percent(balance), 10, "spec §7.4: nivel 5")
 
 
 func test_level_can_override_health_scale() -> void:
