@@ -322,9 +322,20 @@
   **Hecho cuando:** el bot que mezcla torres gana pensando, y el que pone torres al azar pierde; la tabla de §7.4 queda completa.
   **Resultado:** Espiral 20 %, Fortaleza 10 % (spec §7.4). Se tomó el mejor bot como referencia; de paso se arregló un error del bot cuando el mapa se llena de torres.
 
+
+### Estrellas y números de daño *(pedidos por Lucas)*
+
+- [ ] **T64 · Estrellas por nivel**
+  `Rules.stars_for()`, umbrales en `balance.tres`, estrellas dibujadas por código en la pantalla de victoria y en las tarjetas, total de la campaña.
+  **Refs:** RF-93, RF-111.
+  **Hecho cuando:** los tests de umbrales pasan (20 → 3, 18 → 3, 17 → 2, 10 → 2, 9 → 1) y la captura muestra las estrellas en la victoria y en la selección de nivel.
+
+- [ ] **T65 · Números de daño flotantes**
+  Señal `hit` del enemigo con el daño real; números en la capa de efectos (grises si la armadura quitó la mitad o más); máximo 40 a la vez; opción para apagarlos.
+  **Refs:** RF-132, RF-113.
+  **Hecho cuando:** los tests pasan (aparece el número, gris con armadura, no aparece con la opción apagada, nunca más de 40) y la prueba de rendimiento sigue sobre 60 FPS.
 ### Otras ideas de pulido *(sin fecha)*
 
 - Decidir ambientación y arte (ver "Preguntas abiertas" de la spec).
 - Reemplazar formas por sprites.
-- Números de daño flotantes (la sacudida de pantalla ya se hizo en M1.5).
 - Balance fino de todos los niveles.
