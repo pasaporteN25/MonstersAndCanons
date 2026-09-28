@@ -351,8 +351,29 @@
   **Refs:** RF-134, RF-117.
   **Hecho cuando:** los tests comprueban que sale una sola vez por tipo, que se guarda y se vuelve a leer, y que fuera de la campaña no se escribe en disco.
 
+### Arte provisional *(pedido por Lucas, D-023)*
+
+- [ ] **T70 · Torres con dibujos**
+  SVG de las 3 bases y las 4 torretas; `TowerLevelData.base_texture` y `TowerData.turret_texture`; `tower.gd` dibuja base + torreta (con retroceso y destello); los botones del HUD muestran la torreta.
+  **Refs:** RF-150, RF-155, RF-156.
+  **Hecho cuando:** los tests comprueban que cada torre y cada nivel tienen su dibujo de 128×128, y la captura muestra las 4 torres en los 3 niveles.
+
+- [ ] **T71 · Enemigos con dibujos**
+  SVG de los 6 enemigos; `EnemyData.texture`; miran hacia donde caminan; golpe (parpadeo), ralentizado (tinte + escarcha); íconos de "Próxima oleada" y de la presentación.
+  **Refs:** RF-151, RF-152, RF-155, RF-156.
+  **Hecho cuando:** los tests comprueban que cada enemigo tiene su dibujo, que se da vuelta al caminar hacia la izquierda (y no al subir o bajar), y la captura muestra los 6 enemigos, uno ralentizado.
+
+- [ ] **T72 · Proyectiles y mapa**
+  `TowerData.projectile_texture`, orientado hacia donde viaja; rocas, árbol, arbusto y puerta en `LevelDecor`.
+  **Refs:** RF-153, RF-154.
+  **Hecho cuando:** los tests comprueban que el proyectil apunta hacia su objetivo y que cada casilla bloqueada elige siempre la misma decoración, y las capturas de los 5 niveles se ven bien.
+
+- [ ] **T73 · Cierre del arte provisional**
+  Prueba de rendimiento, exportar `.exe` y `.apk`, y explicar en el README cómo cambiar un dibujo.
+  **Refs:** RF-157, D-023.
+  **Hecho cuando:** la prueba de rendimiento sigue sobre 60 FPS y las dos exportaciones terminan sin errores.
+
 ### Otras ideas de pulido *(sin fecha)*
 
-- Decidir ambientación y arte (ver "Preguntas abiertas" de la spec).
-- Reemplazar formas por sprites.
+- Decidir ambientación y arte definitivo (ver "Preguntas abiertas" de la spec y B-02). *Los dibujos provisionales ya están (T70–T73).*
 - Balance fino de todos los niveles.

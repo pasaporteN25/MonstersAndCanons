@@ -450,7 +450,7 @@ f8   ····················
 
 ### 9.3 Efectos visuales *(M1.5)*
 
-**Estilo:** se mantiene el **estilo geométrico** (formas y colores planos), pero con vida: movimiento, destellos y partículas. La ambientación sigue abierta (§12); todo lo de aquí sirve igual si más adelante las formas se cambian por dibujos.
+**Estilo:** se mantiene el **estilo geométrico** (formas y colores planos), pero con vida: movimiento, destellos y partículas. La ambientación sigue abierta (§12); todo lo de aquí sirve igual si más adelante las formas se cambian por dibujos. *(En M4 las formas se cambiaron por dibujos provisionales: ver §9.6.)*
 
 **Regla general:** los efectos son **solo visuales**. No cambian ninguna regla del juego (daño, tiempos, oro) y nunca bloquean clics.
 
@@ -497,6 +497,29 @@ Adaptaciones **mínimas** para que el juego funcione en un celular. No es un red
 - **RF-141** El juego se ve siempre **en horizontal** (girando el celular hacia cualquiera de los dos lados).
 - **RF-142** El **botón "atrás"** de Android hace lo mismo que `Esc`: en la partida cancela la construcción o la selección, o abre y cierra el menú de pausa; en las opciones las cierra; en la selección de nivel vuelve al menú principal. **Nunca cierra el juego de golpe** (para salir está el botón "Salir" del menú principal).
 - **RF-143** **Tocar** equivale a un clic izquierdo: tocar un botón lo pulsa; con una torre elegida, tocar una casilla construye; tocar una torre la selecciona. Como no hay "pasar el mouse por encima", la vista previa aparece donde se tocó. Para dejar de construir se toca otra vez el botón de la torre elegida.
+
+### 9.6 Arte provisional *(M4, pedido por Lucas, D-023)*
+
+Dibujos simples para dejar de ver formas geométricas. Es un **primer intento "para rellenar"**: **no** decide la ambientación (§12; B-01, B-02 y B-03 siguen abiertos) y cada dibujo se puede cambiar sin tocar el código.
+
+**Estilo:** caricatura con colores planos y borde oscuro. Las torres se ven **desde arriba** (así la torreta puede girar); los enemigos, **de costado**, como personajes (así se les ven la cara y las patas).
+
+- **RF-150** **Torres:** cada torre se dibuja con una **base** que muestra su nivel y una **torreta** propia de cada tipo. La torreta es la parte que gira y apunta (RF-120, RF-121). Se mantienen los puntitos de nivel (RF-75).
+
+  | Nivel | Base | | Torre | Torreta |
+  |---|---|---|---|---|
+  | 1 | Plataforma de madera | | Ametralladora | Dos cañones finos |
+  | 2 | Plataforma de piedra | | Cañón | Un cañón grueso |
+  | 3 | Piedra con borde y remaches dorados | | Hielo | Cristal celeste con aletas |
+  | | | | Francotirador | Cañón largo con mira, camuflado |
+
+- **RF-151** **Enemigos:** cada tipo es un monstruito del **mismo color** que tenía su forma, porque el jugador ya los reconoce por el color. Normal = bichito gris; Rápido = gota amarilla con cresta; Tanque = bestia marrón con colmillo; Volador = murciélago violeta; Blindado = bicho azul con casco y visera; Jefe = demonio rojo con cuernos. **Miran hacia donde caminan:** se dan vuelta al ir hacia la izquierda, y al subir o bajar siguen mirando hacia donde miraban. Se mantienen la sombra, el bamboleo (RF-125), el parpadeo al recibir un golpe (RF-123), la barra de vida (RF-82) y la corona del Jefe (RF-136).
+- **RF-152** **Ralentizado** (reemplaza el dibujo de RF-62): el enemigo se tiñe de **celeste** y aparece una **mancha de escarcha** en el piso, debajo de él.
+- **RF-153** **Proyectiles:** cada torre dispara su propio proyectil, que **apunta hacia donde viaja**: bala con estela (Ametralladora), bala de cañón (Cañón), cristal de hielo (Hielo) y estela larga (Francotirador).
+- **RF-154** **Mapa:** cada casilla bloqueada muestra una roca grande, un grupo de piedras, un árbol o un arbusto. Cuál muestra depende de la casilla, así que el mapa siempre se ve igual. La salida es una **puerta de piedra con antorchas** (RF-06). El pasto y el camino no cambian.
+- **RF-155** **Interfaz:** los botones de torres muestran su **torreta**, y los íconos de enemigos (próxima oleada y presentación, RF-133 y RF-134) muestran su **dibujo**.
+- **RF-156** **Reemplazable:** cada dibujo es un archivo en `assets/sprites/`, y los datos de cada torre y cada enemigo dicen qué archivo usan. Si a un dato le falta el dibujo, se usa la **forma geométrica** de antes: así nada se rompe si falta un archivo.
+- **RF-157** Con los dibujos, el juego sigue cumpliendo P7 (60 FPS con 200 enemigos y 60 torres).
 
 ---
 
@@ -579,6 +602,8 @@ Ideas **aprobadas como dirección**, pero **sin fecha**: no se programan hasta c
 *Propuesta de Lucas, 2026-09-28. No lo hace Claude: queda para un diseñador o para más adelante.*
 
 **Idea:** reemplazar las formas geométricas por arte dibujado: torres, enemigos, casillas del mapa, efectos, íconos y la interfaz.
+
+**Estado (2026-09-28):** hay un **juego de dibujos provisionales** hecho por Claude (§9.6, D-023) para no seguir con formas geométricas. B-02 sigue abierto: es el arte **definitivo**, que depende de la ambientación. Para cambiar un dibujo, alcanza con reemplazar su archivo en `assets/sprites/` (D-023 explica cómo).
 
 **Qué ya está preparado para que sea fácil:**
 - Cada torre y cada enemigo se dibuja en **un solo lugar** (`_draw()` de `tower.gd` y `enemy.gd`), y los datos ya dicen su forma y color (`EnemyData.shape`, `TowerData.color`). Cambiar a imágenes es cambiar ese dibujo, no la lógica.

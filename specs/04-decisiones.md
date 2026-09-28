@@ -12,7 +12,7 @@
 - **Por qué:** motor gratuito, liviano, excelente para 2D, con editor visual. GDScript es sencillo de aprender y está integrado en el editor.
 - **Consecuencia:** Claude no puede ver el juego en ejecución; puede leer y escribir código y ejecutar tests por consola si Godot está en el `PATH`. **Las pruebas visuales las hace Lucas** y le cuenta a Claude lo que ve (una captura de pantalla ayuda mucho).
 
-### D-002 · Vista 2D desde arriba, con formas simples
+### D-002 · Vista 2D desde arriba, con formas simples *(formas reemplazadas por dibujos en D-023)*
 - **Fecha:** 2026-09-27 · **Estado:** Aceptada · **Decidió:** Lucas
 - **Alternativas:** pixel art desde el principio; 3D.
 - **Por qué:** permite enfocarse en que el juego sea divertido. Los gráficos se cambian en M4 sin tocar la lógica, porque cada torre/enemigo se dibuja en un solo lugar (`_draw()`).
@@ -125,3 +125,12 @@
 - **Fecha:** 2026-09-28 · **Estado:** Propuesta (sin fecha) · **Propuso:** Lucas
 - **Qué:** ideas B-02 (diseño de assets) y B-03 (lore) de la spec §13. Lucas aclaró que no las hacemos ahora.
 - **Relación:** Épocas (B-01), lore (B-03) y arte (B-02) se deciden juntos: el lore elige el mundo, el mundo elige el arte.
+
+### D-023 · Arte provisional: dibujos SVG hechos a mano
+- **Fecha:** 2026-09-28 · **Estado:** Aceptada · **Decidió:** Lucas (pidió dibujos simples "para rellenar", como primer intento) / Claude (técnica y estilo)
+- **Qué:** 22 dibujos en `assets/sprites/` (torres, enemigos, proyectiles y mapa), estilo caricatura con borde oscuro (spec §9.6). No elige ambientación: el arte definitivo sigue en el backlog (B-02).
+- **Alternativas:** pixel art generado con código (se ve más tosco y cuesta editarlo); descargar un paquete gratuito, por ejemplo los de Kenney (licencia CC0), que requiere el permiso de Lucas para descargar y revisar la licencia; esperar a un diseñador (B-02).
+- **Por qué SVG:** es un formato de **texto** (Claude lo puede escribir y en git se ve qué cambió), Godot lo importa sin agregados, y cualquiera lo puede abrir y retocar en Inkscape (gratis), Figma o Illustrator.
+- **Cómo se importan:** al **doble** de tamaño (`svg/scale=2.0`: 128×128 píxeles por casilla), para que se vean nítidos en pantalla completa, y con **mipmaps** (`mipmaps/generate=true`), que son copias achicadas que Godot usa para que el dibujo se vea suave cuando se muestra chico. Las dos opciones están en el `.import` de cada dibujo.
+- **Filtro:** el proyecto sigue usando el filtro "Nearest" por defecto, porque con otro filtro aparecen líneas finas entre las casillas del mapa. Solo los nodos que dibujan sprites usan "Linear con mipmaps".
+- **Cómo reemplazar un dibujo:** guardar el nuevo con el **mismo nombre** en la misma carpeta, o elegir otro archivo en el Inspector (en el `.tres` de la torre o del enemigo). Sirve cualquier imagen: SVG o PNG de 128×128. Los enemigos, las torretas y los proyectiles se dibujan **mirando a la derecha**; las torretas giran sobre el **centro** de la imagen.
