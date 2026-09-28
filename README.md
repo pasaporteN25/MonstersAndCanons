@@ -2,7 +2,7 @@
 
 Juego *tower defense* 2D hecho en **Godot 4** con **GDScript**, construido con **SDD (Spec-Driven Development)**.
 
-> **Estado actual:** M1 ✅ y M1.5 (pulido visual) ✅. Siguiente: M2 (profundidad), tarea T30 en [`specs/03-tareas.md`](specs/03-tareas.md).
+> **Estado actual:** M1 ✅, M1.5 ✅ y M2 ✅. Siguiente: M3 (juego completo: menús, niveles, guardado, sonido), tarea T40 en [`specs/03-tareas.md`](specs/03-tareas.md).
 >
 > **Versión de Godot:** 4.7.2 estable (renderizador *Compatibility*).
 

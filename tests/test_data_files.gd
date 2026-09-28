@@ -87,18 +87,18 @@ func test_sniper_tower() -> void:
 	assert_almost_eq(sniper.levels[2].range_tiles, 7.0, 0.001, "nivel 3: alcance")
 
 
-# --- Enemigos de M2 (spec §6; su balance final es T38) ---
+# --- Enemigos de M2 (spec §6, balanceados en T38) ---
 
 func test_flyer() -> void:
-	_assert_enemy("flyer", 25, 2.0, 0, 8, 1, true, 0.25)
+	_assert_enemy("flyer", 18, 2.0, 0, 8, 1, true, 0.25)
 
 
 func test_armored() -> void:
-	_assert_enemy("armored", 45, 1.2, 4, 12, 1, false, 0.3)
+	_assert_enemy("armored", 30, 1.2, 3, 12, 1, false, 0.3)
 
 
 func test_boss() -> void:
-	_assert_enemy("boss", 800, 0.6, 3, 150, 10, false, 0.45)
+	_assert_enemy("boss", 300, 0.6, 3, 150, 10, false, 0.45)
 	assert_almost_eq(_enemy("boss").slow_resistance, 0.5, 0.001, "solo le afecta la mitad")
 
 
@@ -109,13 +109,13 @@ const LEVEL_01_WAVES: Array = [
 	[["normal", 8, 1.0, 0.0]],
 	[["normal", 12, 0.8, 0.0]],
 	[["fast", 10, 0.6, 0.0]],
-	[["normal", 10, 0.8, 0.0], ["fast", 6, 0.6, 4.0]],
-	[["tank", 3, 2.0, 0.0], ["normal", 10, 0.7, 3.0]],
-	[["fast", 15, 0.4, 0.0]],
-	[["tank", 6, 1.5, 0.0]],
-	[["normal", 20, 0.5, 0.0], ["fast", 10, 0.5, 5.0]],
-	[["tank", 8, 1.5, 0.0], ["fast", 15, 0.4, 6.0]],
-	[["tank", 10, 1.2, 0.0], ["normal", 20, 0.4, 4.0], ["fast", 20, 0.3, 10.0]],
+	[["normal", 10, 0.8, 0.0], ["armored", 4, 1.5, 4.0]],
+	[["tank", 3, 2.0, 0.0], ["flyer", 8, 0.8, 3.0]],
+	[["fast", 15, 0.4, 0.0], ["armored", 6, 1.0, 5.0]],
+	[["tank", 6, 1.5, 0.0], ["flyer", 10, 0.6, 4.0]],
+	[["normal", 20, 0.5, 0.0], ["armored", 8, 1.0, 5.0], ["fast", 10, 0.5, 8.0]],
+	[["tank", 8, 1.5, 0.0], ["flyer", 12, 0.5, 3.0], ["fast", 15, 0.4, 8.0]],
+	[["boss", 1, 1.0, 0.0], ["tank", 10, 1.2, 3.0], ["normal", 20, 0.4, 6.0], ["flyer", 15, 0.4, 10.0]],
 ]
 
 

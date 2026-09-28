@@ -213,14 +213,15 @@
   **Refs:** RF-103, RF-104; plan §6.7.
   **Hecho cuando:** en pausa todo se congela pero se puede seleccionar torres; x2 lo acelera todo (incluida la cuenta atrás); al reintentar, la velocidad vuelve a x1.
 
-- [ ] **T38 · Rediseñar oleadas del nivel 1 con los nuevos enemigos**
+- [x] **T38 · Rediseñar oleadas del nivel 1 con los nuevos enemigos**
   Actualizar la tabla de oleadas en la spec **y** en `level_01.tres`.
   **Hecho cuando:** voladores, blindados y un Jefe (en la última oleada) aparecen en el nivel 1, y el nivel sigue siendo ganable.
 
-- [ ] **T39 · Prueba de rendimiento**
+- [x] **T39 · Prueba de rendimiento**
   Escena de prueba con 200 enemigos y 60 torres.
   **Refs:** constitución P7; plan §8.
   **Hecho cuando:** el monitor de Godot muestra ~60 FPS estables. (Si no, se crea una tarea de optimización **midiendo primero** qué es lo lento.)
+  **Resultado (2026-09-28, con todo M2):** `tools/perf_test.gd` → 140 FPS de promedio, frame más lento 15,6 ms. ✅
 
 ---
 

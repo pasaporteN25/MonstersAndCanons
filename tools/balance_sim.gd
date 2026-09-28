@@ -20,7 +20,7 @@ extends SceneTree
 
 ## Orden de compra de "smart" (índices de Game.tower_types): primero Ametralladoras
 ## baratas para sobrevivir al principio, después mezcla.
-const SMART_ORDER: Array[int] = [0, 0, 0, 1, 0, 2, 1, 0, 1, 0, 2, 1]
+const SMART_ORDER: Array[int] = [0, 0, 0, 1, 0, 2, 3, 1, 0, 3, 1, 2]
 ## Cada cuántos píxeles se mide el camino para puntuar las casillas.
 const PATH_SAMPLE_STEP: float = 16.0
 
@@ -30,6 +30,7 @@ var rng := RandomNumberGenerator.new()
 var built: int = 0
 var last_reported_wave: int = 0
 var path_points: Array[Vector2] = []
+var air_points: Array[Vector2] = []
 ## Recursos modificados por los ajustes. Se guardan aquí para que Godot no los descarte
 ## de su caché (si nadie los usa, los libera y la partida los volvería a leer del disco).
 var _kept: Array[Resource] = []
@@ -63,13 +64,13 @@ func _apply_override(arg: String) -> void:
 		return
 	match parts[0]:
 		"hp":
-			for id: String in ["normal", "fast", "tank"]:
+			for id: String in ["normal", "fast", "tank", "flyer", "armored", "boss"]:
 				var enemy: EnemyData = _keep(load("res://data/enemies/%s.tres" % id))
 				enemy.max_health = roundi(enemy.max_health * value)
 		"scale":
 			(_keep(load("res://data/balance.tres")) as BalanceConfig).health_scale_percent_per_wave = int(value)
 		"reward":
-			for id: String in ["normal", "fast", "tank"]:
+			for id: String in ["normal", "fast", "tank", "flyer", "armored", "boss"]:
 				var enemy: EnemyData = _keep(load("res://data/enemies/%s.tres" % id))
 				enemy.reward = maxi(1, roundi(enemy.reward * value))
 		"gold":
@@ -137,25 +138,39 @@ func _random_cell() -> Vector2i:
 
 
 ## La casilla libre desde la que la torre alcanza más tramo de camino.
+## Las torres que golpean voladores también cuentan el camino aéreo.
 func _best_cell(tower: TowerData) -> Vector2i:
 	var range_px: float = Rules.tiles_to_px(tower.levels[0].range_tiles)
 	var best: Vector2i = Vector2i(-1, -1)
 	var best_score: int = -1
 	for cell: Vector2i in _free_cells():
 		var center: Vector2 = game.level.cell_center(cell)
-		var score: int = 0
-		for point: Vector2 in path_points:
-			if center.distance_to(point) <= range_px:
-				score += 1
+		var score: int = _points_in_range(path_points, center, range_px)
+		if tower.can_hit_air:
+			score += _points_in_range(air_points, center, range_px)
 		if score > best_score:
 			best_score = score
 			best = cell
 	return best
 
 
+func _points_in_range(points: Array[Vector2], center: Vector2, range_px: float) -> int:
+	var count: int = 0
+	for point: Vector2 in points:
+		if center.distance_to(point) <= range_px:
+			count += 1
+	return count
+
+
 func _sample_path() -> void:
-	var path: Path2D = game.level.get_ground_path(0)
+	path_points = _sample(game.level.get_ground_path(0))
+	air_points = _sample(game.level.get_air_path(0))
+
+
+func _sample(path: Path2D) -> Array[Vector2]:
+	var points: Array[Vector2] = []
 	var distance: float = 0.0
 	while distance <= path.curve.get_baked_length():
-		path_points.append(path.to_global(path.curve.sample_baked(distance)))
+		points.append(path.to_global(path.curve.sample_baked(distance)))
 		distance += PATH_SAMPLE_STEP
+	return points

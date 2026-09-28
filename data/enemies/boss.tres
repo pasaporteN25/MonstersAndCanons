@@ -6,7 +6,7 @@
 script = ExtResource("1_73sii")
 id = &"boss"
 display_name = "Jefe"
-max_health = 800
+max_health = 300
 speed_tiles = 0.6
 armor = 3
 reward = 150

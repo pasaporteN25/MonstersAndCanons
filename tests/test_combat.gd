@@ -116,7 +116,7 @@ func test_projectile_without_target_vanishes_without_error() -> void:
 func test_armor_reduces_damage() -> void:
 	var armored: Enemy = _spawn_enemy(200.0, _enemy_data(4, false), 45)
 	armored.take_hit(5)
-	assert_eq(armored.health, 44, "criterio de aceptación RF-80: 5 − 4 = 1")
+	assert_eq(armored.health, 44, "RF-80: 5 − 4 = 1, pero siempre al menos 1")
 	armored.take_hit(40)
 	assert_eq(armored.health, 8, "40 − 4 = 36")
 

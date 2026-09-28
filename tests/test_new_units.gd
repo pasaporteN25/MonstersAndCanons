@@ -78,11 +78,15 @@ func test_cannon_ignores_flyers_in_a_real_game() -> void:
 
 # --- Blindado y Jefe (T36) ---
 
-func test_armored_takes_one_damage_from_basic() -> void:
-	var armored: Enemy = _spawn_through_wave("armored")
-	var before: int = armored.health
-	armored.take_hit(game.tower_types[0].levels[0].damage)
-	assert_eq(armored.health, before - 1, "criterio de aceptación RF-80")
+func test_armor_spec_example() -> void:
+	# Se le da mucha vida: con sus 30 normales, el golpe de 37 lo mataría y no se podría medir.
+	var first: Enemy = _spawn_through_wave("armored")
+	first.max_health = 1000
+	first.health = 1000
+	first.take_hit(game.tower_types[0].levels[0].damage)
+	assert_eq(first.health, 1000 - 2, "criterio de aceptación RF-80: Ametralladora 5 − 3")
+	first.take_hit(game.tower_types[3].levels[0].damage)
+	assert_eq(first.health, 1000 - 2 - 37, "criterio de aceptación RF-80: Francotirador 40 − 3")
 
 
 func test_boss_resists_half_of_the_frost() -> void:

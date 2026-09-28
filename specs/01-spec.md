@@ -174,7 +174,7 @@ La columna **Hito** de las tablas siguientes indica en qué momento se agrega ca
 - **RF-82** Cada enemigo muestra una **barra de vida** encima, pero **solo** después de haber recibido daño (para no llenar la pantalla de barras).
 
 > **Criterio de aceptación RF-80**
-> **Dado** un Blindado (armadura 4) → **Cuando** le pega una Ametralladora (daño 5) → **Entonces** pierde 1 de vida. **Cuando** le pega un Francotirador (40) → **Entonces** pierde 36.
+> **Dado** un Blindado (armadura 3) → **Cuando** le pega una Ametralladora (daño 5) → **Entonces** pierde 2 de vida. **Cuando** le pega un Francotirador (40) → **Entonces** pierde 37.
 
 ### Tabla de enemigos
 
@@ -185,9 +185,9 @@ La columna **Hito** de las tablas siguientes indica en qué momento se agrega ca
 | `normal` | **Normal** | 30 | 1.5 | 0 | 5 | 1 | No | — | Círculo gris | M1 |
 | `fast` | **Rápido** | 18 | 3.0 | 0 | 4 | 1 | No | — | Triángulo amarillo | M1 |
 | `tank` | **Tanque** | 135 | 0.8 | 0 | 15 | 2 | No | — | Cuadrado marrón, grande | M1 |
-| `flyer` | **Volador** | 25 | 2.0 | 0 | 8 | 1 | **Sí** | Vuela en línea recta (RF-05) | Rombo violeta (no celeste: se confundiría con el Hielo y con los ralentizados) | M2 |
-| `armored` | **Blindado** | 45 | 1.2 | 4 | 12 | 1 | No | Armadura alta | Hexágono azul oscuro | M2 |
-| `boss` | **Jefe** | 800 | 0.6 | 3 | 150 | 10 | No | Solo le afecta la **mitad** de cualquier ralentización | Círculo rojo, muy grande | M2 |
+| `flyer` | **Volador** | 18 | 2.0 | 0 | 8 | 1 | **Sí** | Vuela en línea recta (RF-05) | Rombo violeta (no celeste: se confundiría con el Hielo y con los ralentizados) | M2 |
+| `armored` | **Blindado** | 30 | 1.2 | 3 | 12 | 1 | No | Armadura alta | Hexágono azul oscuro | M2 |
+| `boss` | **Jefe** | 300 | 0.6 | 3 | 150 | 10 | No | Solo le afecta la **mitad** de cualquier ralentización | Círculo rojo, muy grande | M2 |
 
 **Tamaño visual** (radio del dibujo y de la zona que detectan las torres, en casillas): Normal 0.25 · Rápido 0.2 · Tanque 0.35 · Volador 0.25 · Blindado 0.3 · Jefe 0.45. Todos caben dentro de una casilla del camino (radio máximo 0.5).
 
@@ -211,31 +211,31 @@ La columna **Hito** de las tablas siguientes indica en qué momento se agrega ca
 | 1 | 8 × Normal (cada 1.0 s) |
 | 2 | 12 × Normal (cada 0.8 s) |
 | 3 | 10 × Rápido (cada 0.6 s) |
-| 4 | 10 × Normal (cada 0.8 s) + 6 × Rápido (cada 0.6 s, tras 4 s) |
-| 5 | 3 × Tanque (cada 2.0 s) + 10 × Normal (cada 0.7 s, tras 3 s) |
-| 6 | 15 × Rápido (cada 0.4 s) |
-| 7 | 6 × Tanque (cada 1.5 s) |
-| 8 | 20 × Normal (cada 0.5 s) + 10 × Rápido (cada 0.5 s, tras 5 s) |
-| 9 | 8 × Tanque (cada 1.5 s) + 15 × Rápido (cada 0.4 s, tras 6 s) |
-| 10 | 10 × Tanque (cada 1.2 s) + 20 × Normal (cada 0.4 s, tras 4 s) + 20 × Rápido (cada 0.3 s, tras 10 s) |
+| 4 | 10 × Normal (cada 0.8 s) + 4 × **Blindado** (cada 1.5 s, tras 4 s) ← *aparecen los Blindados* |
+| 5 | 3 × Tanque (cada 2.0 s) + 8 × **Volador** (cada 0.8 s, tras 3 s) ← *aparecen los Voladores* |
+| 6 | 15 × Rápido (cada 0.4 s) + 6 × Blindado (cada 1.0 s, tras 5 s) |
+| 7 | 6 × Tanque (cada 1.5 s) + 10 × Volador (cada 0.6 s, tras 4 s) |
+| 8 | 20 × Normal (cada 0.5 s) + 8 × Blindado (cada 1.0 s, tras 5 s) + 10 × Rápido (cada 0.5 s, tras 8 s) |
+| 9 | 8 × Tanque (cada 1.5 s) + 12 × Volador (cada 0.5 s, tras 3 s) + 15 × Rápido (cada 0.4 s, tras 8 s) |
+| 10 | 1 × **Jefe** + 10 × Tanque (cada 1.2 s, tras 3 s) + 20 × Normal (cada 0.4 s, tras 6 s) + 15 × Volador (cada 0.4 s, tras 10 s) ← *el Jefe* |
 
-### 7.1 Cómo se balanceó el nivel 1 (T25)
+### 7.1 Cómo se balanceó el nivel 1 (T25, revisado en T38)
 
 El objetivo: **se gana jugando con criterio, pero no sin pensar**. Se comprobó con un bot que juega solo (`tools/balance_sim.gd`, instrucciones dentro del archivo) con tres estrategias:
 
 | Estrategia del bot | Resultado con los números actuales |
 |---|---|
-| Mezcla torres y las pone donde cubren más camino | Gana con 13 vidas |
-| Solo Ametralladoras, bien puestas | Gana con 14 vidas |
-| Solo Ametralladoras, en casillas al azar | Pierde en la oleada 8 |
+| Mezcla torres (incluido el Francotirador) y las pone donde cubren más camino, también el aéreo | Gana con 13 vidas |
+| Solo Ametralladoras, bien puestas | Gana con 10 vidas |
+| Solo Ametralladoras, en casillas al azar | Pierde en la oleada 7 |
 
 Qué se cambió respecto al borrador y por qué:
 - **Con los números originales se ganaba sin perder ni una vida, incluso poniendo torres al azar.** Se subió la vida base ×1,5 (Normal 20 → 30, Rápido 12 → 18, Tanque 90 → 135) y, sobre todo, el aumento por oleada (8 % → **40 %**), para que el final presione aunque el jugador haya acumulado oro.
 - **El Cañón rendía casi un tercio que la Ametralladora por cada moneda**, así que no convenía nunca. Su daño subió de 12 a **20** (y sus mejoras en proporción).
 
-Un bot no reemplaza a una persona: estos números se revisan jugando. Cada vez que se cambie el balance, se vuelve a correr el bot y se actualiza esta tabla.
+- **T38 (M2):** los enemigos nuevos tenían valores del borrador, pensados antes del +40 % por oleada, y con ellos se perdía siempre (un Blindado de la oleada 4 tenía 99 de vida y la Ametralladora le hacía 1 de daño). Se bajaron a: **Volador 18** de vida, **Blindado 30 y armadura 3** (la Ametralladora le hace 2, no 1: sigue siendo mala opción, pero no inútil), **Jefe 300** (≈ 1380 en la oleada 10). Con estos números, mezclar torres rinde más que usar solo Ametralladoras: los enemigos nuevos cumplen su función de premiar la variedad.
 
-> **Pendiente para M2 (T38):** Volador, Blindado y Jefe todavía tienen los valores del borrador; se balancean al agregarlos.
+Un bot no reemplaza a una persona: estos números se revisan jugando. Cada vez que se cambie el balance, se vuelve a correr el bot y se actualiza esta tabla.
 
 ---
 
