@@ -128,12 +128,49 @@
   **Refs:** RF-12, RF-90, RF-91, RF-92.
   **Hecho cuando:** sin construir nada, se pierde en la oleada 2–3 y aparece "Derrota"; al reintentar todo vuelve a 150 de oro, 20 vidas, sin torres. Ganando las 10 oleadas aparece "¡Victoria!".
 
-- [ ] **T25 · Primera partida de prueba y ajuste de balance**
+- [x] **T25 · Primera partida de prueba y ajuste de balance**
   Jugar el nivel completo al menos 3 veces. Ajustar números **en los `.tres` y en la spec a la vez**.
   **Hecho cuando:** el nivel se puede ganar con una estrategia razonable pero no sin pensar, y la spec refleja los números finales.
-  **Estado:** ✅ revisado con el bot (`tools/balance_sim.gd`, spec §7.1). ⏳ Falta que Lucas juegue 3 partidas y confirme que se siente bien.
+  **Estado:** ✅ revisado con el bot (`tools/balance_sim.gd`, spec §7.1) y confirmado jugando por Lucas ("bien, justa").
 
 > 🎉 **Fin de M1: ya tienes un tower defense jugable.** Buen momento para mostrárselo a alguien.
+
+---
+
+## M1.5 — Pulido visual *(adelantado, D-016)*
+
+> Objetivo: que el juego dé gusto mirar, sin cambiar ninguna regla (spec §9.3). Cada tarea se comprueba con una captura de pantalla y con los tests existentes, que deben seguir pasando sin cambios en sus valores.
+
+- [ ] **T50 · Capa de efectos, muerte y oro flotante**
+  Nodo `Effects` en la partida para efectos que sobreviven al enemigo (que ya se borró). Estallido de partículas y "+N" dorado.
+  **Refs:** RF-124.
+  **Hecho cuando:** al morir un enemigo se ven sus partículas y el "+N" con el oro que dio; al escapar un enemigo **no** aparece nada.
+
+- [ ] **T51 · Torres que apuntan, retroceso y destello**
+  **Refs:** RF-120, RF-121.
+  **Hecho cuando:** el cañón de cada torre sigue a su objetivo y retrocede con destello en cada disparo.
+
+- [ ] **T52 · Impactos por tipo de torre y parpadeo al golpear**
+  **Refs:** RF-122, RF-123.
+  **Hecho cuando:** cada torre tiene su impacto distinto; la onda del Cañón llega exactamente hasta su radio de área; los enemigos parpadean en blanco al recibir daño.
+
+- [ ] **T53 · Enemigos con movimiento**
+  **Refs:** RF-125.
+  **Hecho cuando:** los enemigos se bambolean y los triángulos apuntan hacia donde caminan, también al doblar las esquinas.
+
+- [ ] **T54 · Mapa más vistoso y sombras**
+  Nueva imagen de casillas (sigue generada por código, sin dibujos externos).
+  **Refs:** RF-126.
+  **Hecho cuando:** el pasto no se ve como una cuadrícula repetida; el camino tiene bordes; torres y enemigos tienen sombra; `test_level_paths.gd` sigue pasando.
+
+- [ ] **T55 · Avisos de interfaz: oleada, vidas, oro y construcción**
+  **Refs:** RF-127 a RF-130.
+  **Hecho cuando:** aparece el cartel de oleada; perder vidas sacude la pantalla y hace parpadear las vidas; el oro hace "pop"; las torres aparecen creciendo.
+
+- [ ] **T56 · Rendimiento con efectos**
+  Escena de prueba con 200 enemigos, 60 torres y todos los efectos.
+  **Refs:** RF-131, constitución P7.
+  **Hecho cuando:** se mantienen ~60 FPS. (Adelanta la parte de efectos de T39.)
 
 ---
 

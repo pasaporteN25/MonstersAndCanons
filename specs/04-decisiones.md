@@ -81,7 +81,13 @@
 - **Consecuencia:** el enemigo pasa a ser un `Node2D` y las capas de colisión quedan reservadas sin uso.
 
 ### D-015 · Balance del nivel 1 revisado con un bot
-- **Fecha:** 2026-09-28 · **Estado:** Aceptada · **Decidió:** Claude (T25), pendiente de confirmar jugando
+- **Fecha:** 2026-09-28 · **Estado:** Aceptada · **Decidió:** Claude (T25), confirmado jugando por Lucas
 - **Qué:** vida base ×1,5, aumento por oleada 8 % → 40 %, daño del Cañón 12 → 20. Detalle y resultados en spec §7.1.
 - **Por qué:** con los números del borrador se ganaba sin perder vidas incluso poniendo torres al azar, y el Cañón nunca convenía.
 - **Herramienta:** `tools/balance_sim.gd` juega solo con tres estrategias. Se vuelve a correr cada vez que cambie el balance.
+
+### D-016 · Adelantar el pulido visual (M1.5) antes de la profundidad (M2)
+- **Fecha:** 2026-09-28 · **Estado:** Aceptada · **Decidió:** Lucas
+- **Alternativas:** seguir el orden original (M2 → M3 → M4 con el pulido al final).
+- **Por qué:** con M1 terminado, Lucas confirmó que el juego es divertido, que era la condición de la constitución P4 para dejar de lado "solo formas simples". Ver el juego más vivo motiva a seguir.
+- **Cómo:** se mantiene el **estilo geométrico** (sin dibujos ni sprites) porque la ambientación todavía no está decidida; así nada de este trabajo se pierde si después se cambian las formas por arte. Los efectos son solo visuales y no cambian ninguna regla.
