@@ -174,7 +174,7 @@ func _shoot(target: Enemy) -> void:
 	_flash_left = FLASH_DURATION
 	var projectile: Projectile = PROJECTILE_SCENE.instantiate()
 	projectile.setup(target, _barrel_tip_global(), stats(), data.can_hit_air,
-		data.projectile_speed_tiles, data.color)
+		data.projectile_speed_tiles, data.color, data.projectile_texture)
 	fired.emit(projectile)
 
 

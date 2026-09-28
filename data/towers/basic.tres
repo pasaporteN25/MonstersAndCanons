@@ -5,6 +5,7 @@
 [ext_resource type="Script" path="res://scripts/data/tower_data.gd" id="2_y8sf8"]
 [ext_resource type="Texture2D" path="res://assets/sprites/towers/base_2.svg" id="3_y7prn"]
 [ext_resource type="Texture2D" path="res://assets/sprites/towers/base_3.svg" id="4_8h2sr"]
+[ext_resource type="Texture2D" path="res://assets/sprites/projectiles/basic.svg" id="5_y7prn"]
 [ext_resource type="Texture2D" path="res://assets/sprites/towers/turret_basic.svg" id="6_n4pa8"]
 
 [sub_resource type="Resource" id="Resource_qyymo"]
@@ -39,4 +40,5 @@ can_hit_air = true
 projectile_speed_tiles = 10.0
 color = Color(0.47843137, 0.47843137, 0.47843137, 1)
 turret_texture = ExtResource("6_n4pa8")
+projectile_texture = ExtResource("5_y7prn")
 levels = Array[ExtResource("1_hq2q8")]([SubResource("Resource_qyymo"), SubResource("Resource_hq2q8"), SubResource("Resource_y8sf8")])

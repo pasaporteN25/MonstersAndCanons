@@ -5,6 +5,7 @@
 [ext_resource type="Script" path="res://scripts/data/tower_data.gd" id="2_yxcx4"]
 [ext_resource type="Texture2D" path="res://assets/sprites/towers/base_2.svg" id="3_s70g0"]
 [ext_resource type="Texture2D" path="res://assets/sprites/towers/base_3.svg" id="4_s4vul"]
+[ext_resource type="Texture2D" path="res://assets/sprites/projectiles/cannon.svg" id="5_s70g0"]
 [ext_resource type="Texture2D" path="res://assets/sprites/towers/turret_cannon.svg" id="6_fahly"]
 
 [sub_resource type="Resource" id="Resource_tojmg"]
@@ -41,4 +42,5 @@ display_name = "Cañón"
 projectile_speed_tiles = 10.0
 color = Color(0.14901961, 0.14901961, 0.14901961, 1)
 turret_texture = ExtResource("6_fahly")
+projectile_texture = ExtResource("5_s70g0")
 levels = Array[ExtResource("1_t20fp")]([SubResource("Resource_tojmg"), SubResource("Resource_t20fp"), SubResource("Resource_yxcx4")])

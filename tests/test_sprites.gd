@@ -8,6 +8,7 @@ extends GutTest
 const GAME_SCENE: PackedScene = preload("res://scenes/game/game.tscn")
 const TOWER_SCENE: PackedScene = preload("res://scenes/towers/tower.tscn")
 const ENEMY_SCENE: PackedScene = preload("res://scenes/enemies/enemy.tscn")
+const PROJECTILE_SCENE: PackedScene = preload("res://scenes/towers/projectile.tscn")
 const ENEMY_IDS: Array[String] = ["normal", "fast", "tank", "flyer", "armored", "boss"]
 const DT: float = 1.0 / 60.0
 ## D-023: los SVG de 64×64 se importan al doble.
@@ -179,3 +180,47 @@ func test_hit_flash_is_a_white_silhouette_of_the_drawing() -> void:
 	assert_eq(flash.get_pixel(2, 2).a, original.get_pixel(2, 2).a, "fuera del dibujo, transparente")
 	assert_eq(texture.get_image().get_pixel(40, 70), body, "el dibujo original no cambia")
 	assert_same(EnemyShape.flash_texture(texture), EnemyShape.flash_texture(texture), "se arma una sola vez")
+
+
+# --- Proyectiles y mapa (RF-153, RF-154) ---
+
+func test_every_tower_has_its_projectile() -> void:
+	for data: TowerData in game.tower_types:
+		var texture: Texture2D = data.projectile_texture
+		assert_not_null(texture, "%s: proyectil" % data.id)
+		if texture != null:
+			assert_eq(texture.resource_path, "res://assets/sprites/projectiles/%s.svg" % data.id)
+			assert_eq(texture.get_size(), Vector2(64, 64), "%s: 32×32 importado al doble" % data.id)
+
+
+func test_projectile_points_at_its_target() -> void:
+	var enemy: Enemy = _walker([Vector2(100, 400), Vector2(60, 400)])
+	var basic: TowerData = game.tower_types[0]
+	var start := Vector2(400, 100)
+	var projectile: Projectile = PROJECTILE_SCENE.instantiate()
+	projectile.setup(enemy, start, basic.levels[0], true, 10.0, basic.color, basic.projectile_texture)
+	add_child_autofree(projectile)
+	assert_almost_eq(projectile.rotation, (enemy.global_position - start).angle(), 0.01,
+		"RF-153: apunta hacia abajo a la izquierda, donde está el enemigo")
+	await wait_process_frames(2)  # se dibuja con su dibujo sin errores
+
+
+func test_blocked_cells_always_show_the_same_thing() -> void:
+	var different: int = 0
+	var shown: Dictionary = {}
+	for x: int in 20:
+		for y: int in 9:
+			var cell := Vector2i(x, y)
+			if LevelDecor.blocked_decor(cell) != LevelDecor.blocked_decor(cell):
+				different += 1
+			shown[LevelDecor.blocked_decor(cell).resource_path] = true
+	assert_eq(different, 0, "cada casilla elige siempre lo mismo")
+	assert_eq(shown.size(), 4, "en un mapa aparecen rocas, piedras, árboles y arbustos")
+
+
+func test_every_level_map_is_drawn() -> void:
+	for n: int in range(1, 6):
+		var level: LevelData = load("res://data/levels/level_%02d.tres" % n)
+		add_child_autofree(level.map_scene.instantiate())
+	await wait_process_frames(2)
+	assert_true(true, "los 5 mapas (con rocas, árboles y puertas) se dibujaron sin errores")

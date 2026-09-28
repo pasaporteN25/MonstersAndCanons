@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" path="res://assets/sprites/towers/base_1.svg" id="2_mh2id"]
 [ext_resource type="Texture2D" path="res://assets/sprites/towers/base_2.svg" id="3_oe6kl"]
 [ext_resource type="Texture2D" path="res://assets/sprites/towers/base_3.svg" id="4_5b1ln"]
+[ext_resource type="Texture2D" path="res://assets/sprites/projectiles/sniper.svg" id="5_oe6kl"]
 [ext_resource type="Texture2D" path="res://assets/sprites/towers/turret_sniper.svg" id="6_teci7"]
 
 [sub_resource type="Resource" id="Resource_adjjk"]
@@ -39,4 +40,5 @@ can_hit_air = true
 projectile_speed_tiles = 10.0
 color = Color(0.18039216, 0.41960785, 0.22745098, 1)
 turret_texture = ExtResource("6_teci7")
+projectile_texture = ExtResource("5_oe6kl")
 levels = Array[ExtResource("1_52100")]([SubResource("Resource_adjjk"), SubResource("Resource_22mr3"), SubResource("Resource_mh2id")])

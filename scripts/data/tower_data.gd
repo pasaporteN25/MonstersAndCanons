@@ -13,5 +13,7 @@ extends Resource
 ## Solo visual (RF-150): la parte que gira, dibujada mirando a la derecha y centrada.
 ## Vacío = cañón rectangular de antes (RF-156). La base depende del nivel (TowerLevelData).
 @export var turret_texture: Texture2D
+## Solo visual (RF-153): el proyectil, dibujado mirando a la derecha. Vacío = círculo del color.
+@export var projectile_texture: Texture2D
 ## Un elemento por nivel: índice 0 = nivel 1.
 @export var levels: Array[TowerLevelData] = []

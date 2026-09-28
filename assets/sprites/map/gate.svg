@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Puerta de salida (RF-06): arco de piedra oscuro con borde dorado y dos antorchas. -->
+  <rect x="9" y="13" width="52" height="46" rx="4" fill="#000000" opacity="0.22"/>
+  <rect x="6" y="9" width="52" height="46" rx="4" fill="#6f6c75" stroke="#2b2233" stroke-width="2.5"/>
+  <g stroke="#55525b" stroke-width="1.5" stroke-linecap="round">
+    <line x1="8" y1="21" x2="56" y2="21"/>
+    <line x1="8" y1="33" x2="18" y2="33"/>
+    <line x1="46" y1="33" x2="56" y2="33"/>
+    <line x1="8" y1="45" x2="18" y2="45"/>
+    <line x1="46" y1="45" x2="56" y2="45"/>
+    <line x1="22" y1="9.5" x2="22" y2="21"/>
+    <line x1="40" y1="9.5" x2="40" y2="21"/>
+    <line x1="13" y1="21" x2="13" y2="33"/>
+    <line x1="51" y1="21" x2="51" y2="33"/>
+    <line x1="13" y1="45" x2="13" y2="54"/>
+    <line x1="51" y1="45" x2="51" y2="54"/>
+  </g>
+  <path d="M20 55 L20 34 A12 12 0 0 1 44 34 L44 55 Z" fill="#1a1620" stroke="#2b2233" stroke-width="2"/>
+  <path d="M17.5 55 L17.5 34 A14.5 14.5 0 0 1 46.5 34 L46.5 55" fill="none" stroke="#f2c14e" stroke-width="2.4"/>
+  <g>
+    <rect x="9.5" y="27" width="4" height="10" rx="1" fill="#5b3a1e" stroke="#2b2233" stroke-width="1.4"/>
+    <path d="M11.5 16 C7.5 21 9 26 11.5 27.5 C14 26 15.5 21 11.5 16 Z" fill="#ff9d2e" stroke="#2b2233" stroke-width="1.2"/>
+    <path d="M11.5 20.5 C10 23 10.5 25.5 11.5 26 C12.5 25.5 13 23 11.5 20.5 Z" fill="#ffe07a"/>
+    <rect x="50.5" y="27" width="4" height="10" rx="1" fill="#5b3a1e" stroke="#2b2233" stroke-width="1.4"/>
+    <path d="M52.5 16 C48.5 21 50 26 52.5 27.5 C55 26 56.5 21 52.5 16 Z" fill="#ff9d2e" stroke="#2b2233" stroke-width="1.2"/>
+    <path d="M52.5 20.5 C51 23 51.5 25.5 52.5 26 C53.5 25.5 54 23 52.5 20.5 Z" fill="#ffe07a"/>
+  </g>
+</svg>
