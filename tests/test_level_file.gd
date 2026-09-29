@@ -225,3 +225,22 @@ func test_official_levels_have_no_warnings() -> void:
 	for file: String in DirAccess.get_files_at(LevelFile.LEVELS_DIR):
 		if file.ends_with(".json"):
 			assert_eq(LevelFile.load_level(LevelFile.LEVELS_DIR + file)["warnings"], PackedStringArray(), file)
+
+
+# --- Los enemigos que existen (para las listas del editor y del panel de pruebas) ---
+
+func test_enemy_ids_lists_every_enemy_file_in_order() -> void:
+	var ids: PackedStringArray = LevelFile.enemy_ids()
+	for id: String in ["normal", "fast", "tank", "flyer", "armored", "boss", "troll", "spider", "spiderling"]:
+		assert_true(ids.has(id), id)
+	var sorted: PackedStringArray = ids.duplicate()
+	sorted.sort()
+	assert_eq(ids, sorted, "en orden")
+	for id: String in ids:
+		assert_not_null(LevelFile.find_enemy(id), "%s se puede cargar" % id)
+
+
+func test_find_enemy_only_accepts_plain_names() -> void:
+	assert_null(LevelFile.find_enemy("../towers/basic"))
+	assert_null(LevelFile.find_enemy("no_existe"))
+	assert_null(LevelFile.find_enemy(""))

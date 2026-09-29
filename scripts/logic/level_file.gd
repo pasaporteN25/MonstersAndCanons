@@ -131,7 +131,7 @@ static func _read_group(data: Dictionary, where: String, grid: MapGrid, errors: 
 	_check_keys(data, GROUP_KEYS, where, errors)
 	var enemy_name: String = _text(data, "enemigo", where, errors)
 	if not enemy_name.is_empty():
-		group.enemy = _enemy(enemy_name)
+		group.enemy = find_enemy(enemy_name)
 		if group.enemy == null:
 			_add(errors, where, "no existe el enemigo '%s' (tiene que ser un archivo de data/enemies/)." % enemy_name)
 	group.count = _whole(data, "cantidad", where, 1, errors)
@@ -153,9 +153,22 @@ static func _read_group(data: Dictionary, where: String, grid: MapGrid, errors: 
 	return group
 
 
+## Los nombres de los enemigos que existen (los archivos de data/enemies/), en orden. En un
+## ejecutable exportado los recursos aparecen como "normal.tres.remap": también se aceptan.
+static func enemy_ids() -> PackedStringArray:
+	var found: Dictionary = {}
+	for file: String in DirAccess.get_files_at(ENEMIES_DIR):
+		var clean: String = file.trim_suffix(".remap")
+		if clean.ends_with(".tres") or clean.ends_with(".res"):
+			found[clean.get_basename()] = true
+	var ids := PackedStringArray(found.keys())
+	ids.sort()
+	return ids
+
+
 ## El enemigo `name` (normal, troll…). Solo letras minúsculas, números y "_": así un nombre
 ## no puede apuntar a otra carpeta (importa para los mods, B-04).
-static func _enemy(enemy_name: String) -> EnemyData:
+static func find_enemy(enemy_name: String) -> EnemyData:
 	var valid := RegEx.create_from_string("^[a-z0-9_]+$")
 	if valid.search(enemy_name) == null:
 		return null

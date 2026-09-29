@@ -63,9 +63,9 @@ func _enemy_row() -> Control:
 	_enemy_choice = OptionButton.new()
 	_enemy_choice.focus_mode = Control.FOCUS_NONE
 	_enemy_choice.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	for file: String in DirAccess.get_files_at("res://data/enemies/"):
-		if file.ends_with(".tres"):
-			_enemy_types.append(load("res://data/enemies/" + file))
+	# LevelFile.enemy_ids() entiende los nombres del ejecutable exportado (.tres.remap).
+	for id: String in LevelFile.enemy_ids():
+		_enemy_types.append(LevelFile.find_enemy(id))
 	_enemy_types.sort_custom(func(a: EnemyData, b: EnemyData) -> bool: return a.display_name < b.display_name)
 	for enemy: EnemyData in _enemy_types:
 		_enemy_choice.add_item(enemy.display_name)

@@ -22,11 +22,15 @@ var _tool_buttons: Array[Button] = []
 var _undo_button: Button
 var _redo_button: Button
 var _message_kind: StringName = &"ok"
+var _settings_panel := SettingsPanel.new()
+var _waves_panel := WavesPanel.new()
 
 @onready var _view: MapView = %MapView
 @onready var _area: Control = %MapArea
 @onready var _title: Label = %Title
 @onready var _back_button: Button = %BackButton
+@onready var _settings_button: Button = %SettingsButton
+@onready var _waves_button: Button = %WavesButton
 @onready var _tools_row: HBoxContainer = %Tools
 @onready var _messages: Label = %Messages
 
@@ -40,6 +44,10 @@ func _ready() -> void:
 	_area.gui_input.connect(_on_map_input)
 	_area.mouse_exited.connect(func() -> void: _view.hover_cell = Vector2i(-1, -1))
 	_back_button.pressed.connect(leave)
+	_style_selected(_settings_button)
+	_style_selected(_waves_button)
+	_add_panel(_settings_panel, _settings_button)
+	_add_panel(_waves_panel, _waves_button)
 	Audio.add_click_sounds(self)
 	set_tool(LevelDraft.Tool.PATH)
 	refresh()
@@ -51,6 +59,24 @@ func set_tool(new_tool: LevelDraft.Tool) -> void:
 	tool = new_tool
 	for i: int in _tool_buttons.size():
 		_tool_buttons[i].set_pressed_no_signal(i == new_tool)
+
+
+## Abre o cierra un panel (ajustes u oleadas). Hay uno solo abierto a la vez.
+func show_panel(panel: EditorPanel, on: bool) -> void:
+	for other: EditorPanel in [_settings_panel, _waves_panel]:
+		other.visible = on and other == panel
+	_settings_button.set_pressed_no_signal(_settings_panel.visible)
+	_waves_button.set_pressed_no_signal(_waves_panel.visible)
+	if on:
+		panel.refresh()
+
+
+func settings_panel() -> SettingsPanel:
+	return _settings_panel
+
+
+func waves_panel() -> WavesPanel:
+	return _waves_panel
 
 
 ## Pinta una casilla con la herramienta elegida, como un solo paso de deshacer.
@@ -117,6 +143,34 @@ func refresh() -> void:
 	_title.text = "Editor de mapas · %s%s" % [draft.level_name(), " *" if draft.dirty else ""]
 	_undo_button.disabled = not draft.can_undo()
 	_redo_button.disabled = not draft.can_redo()
+	for panel: EditorPanel in [_settings_panel, _waves_panel]:
+		if panel.visible:
+			panel.refresh()  # después de deshacer o de pintar, lo que muestran puede haber cambiado
+
+
+## Un panel cambió el borrador: se revisa el nivel, pero el panel no se vuelve a armar
+## (si no, se perdería el foco del campo que se está escribiendo).
+func _on_panel_edited() -> void:
+	_view.show_map(draft.rows(), draft.grid())
+	_update_messages()
+	_title.text = "Editor de mapas · %s%s" % [draft.level_name(), " *" if draft.dirty else ""]
+	_undo_button.disabled = not draft.can_undo()
+	_redo_button.disabled = not draft.can_redo()
+
+
+func _add_panel(panel: EditorPanel, button: Button) -> void:
+	# Pegado arriba a la derecha, debajo de la barra: el mapa de la izquierda sigue a la vista.
+	panel.anchor_left = 1.0
+	panel.anchor_right = 1.0
+	panel.offset_left = 0.0
+	panel.offset_right = -8.0
+	panel.offset_top = 56.0
+	panel.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+	panel.visible = false
+	add_child(panel)
+	panel.bind(draft)
+	panel.edited.connect(_on_panel_edited)
+	button.toggled.connect(func(on: bool) -> void: show_panel(panel, on))
 
 
 ## RF-213: el mensaje de abajo. `message_kind()`: &"error", &"warning" o &"ok".
@@ -210,6 +264,7 @@ func _on_map_input(event: InputEvent) -> void:
 		if click.button_index != MOUSE_BUTTON_LEFT and click.button_index != MOUSE_BUTTON_RIGHT:
 			return
 		if click.pressed:
+			get_viewport().gui_release_focus()  # si se estaba escribiendo un nombre, se guarda
 			# El botón derecho borra, sea cual sea la herramienta.
 			var stroke_tool: LevelDraft.Tool = tool if click.button_index == MOUSE_BUTTON_LEFT else LevelDraft.Tool.GRASS
 			begin_stroke(MapView.cell_at(click.position), stroke_tool)

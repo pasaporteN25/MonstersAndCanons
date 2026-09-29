@@ -42,6 +42,8 @@ func set_enabled(on: bool, save_path: String = "") -> void:
 	_show_banner(on)
 	if on:
 		print("Modo de pruebas activado. Guardado: %s" % save_path)  # queda en el log
+		# Sirve para comprobar, en el ejecutable exportado, que las listas de enemigos no salen vacías.
+		print("Enemigos disponibles: %d" % LevelFile.enemy_ids().size())
 
 
 func is_banner_visible() -> bool:

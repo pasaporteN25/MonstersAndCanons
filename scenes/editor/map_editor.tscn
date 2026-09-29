@@ -71,8 +71,24 @@ vertical_alignment = 1
 layout_mode = 2
 theme_override_colors/font_color = Color(0.7, 0.72, 0.78, 1)
 theme_override_font_sizes/font_size = 14
-text = "Clic izquierdo: pinta · Clic derecho: borra · Ctrl+Z: deshacer · Ctrl+Y: rehacer"
+text = "Clic izq.: pinta · Clic der.: borra · Ctrl+Z / Ctrl+Y: deshacer / rehacer"
 vertical_alignment = 1
+
+[node name="SettingsButton" type="Button" parent="TopBar/Margin/Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+text = "Ajustes"
+
+[node name="WavesButton" type="Button" parent="TopBar/Margin/Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+text = "Oleadas"
 
 [node name="BackButton" type="Button" parent="TopBar/Margin/Row"]
 unique_name_in_owner = true
