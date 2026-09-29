@@ -553,6 +553,31 @@
   **Hecho cuando:** los tests comprueban que los 7 niveles no tienen avisos, que un mapa con un tramo que se puede saltear avisa (y sigue siendo válido) y que un mapa con errores no calcula avisos; y `check_level` muestra el aviso en un nivel de prueba.
   **Resultado:** `MapGrid.unused_cells` y `MapGrid.warnings`; `LevelFile` devuelve `warnings` junto a `errors` (y la campaña los anota con `push_warning`). Prueba real: en el nivel 6, una sola casilla `#` de más en la fila 7 hace que la entrada A pase de 56 a 34 casillas y el aviso marca con `?` las 23 casillas del tramo salteado. Los 7 niveles oficiales no tienen avisos (un test lo vigila). Un mapa con errores no calcula avisos: sin recorridos no se sabe qué sobra. 8 tests nuevos.
 
+- [ ] **T101 · El borrador del nivel (`LevelDraft`)**
+  Lógica pura, sin pantallas: el nivel que se edita como datos (mismo formato que §7.8), con pintar casillas, entradas y salida (RF-212), ajustes y oleadas (RF-214, RF-215), texto ordenado como los niveles oficiales, revisión con las reglas de §7.8, guardar y leer en `user://maps/` (RF-216) y deshacer/rehacer.
+  **Refs:** RF-212, RF-214, RF-215, RF-216.
+  **Hecho cuando:** los tests comprueban cada operación, que el texto que se guarda vuelve a leerse igual con `LevelFile`, que las entradas se renumeran al quitar una (con sus oleadas), que el nivel nuevo es válido y que un nivel oficial abierto como plantilla no se puede guardar encima del oficial.
+
+- [ ] **T102 · La pantalla del editor: pintar el mapa**
+  Botón "Editor de mapas" en el menú (solo modo de pruebas); pantalla con el mapa, las herramientas y la línea de mensajes; recorridos y casillas sin usar dibujados; teclas y `Ctrl+Z`/`Ctrl+Y`.
+  **Refs:** RF-210, RF-211, RF-212, RF-213.
+  **Hecho cuando:** los tests comprueban que el botón solo existe en el modo de pruebas y que pintar cambia el mapa y los mensajes; la captura muestra un mapa válido con sus recorridos y uno con errores.
+
+- [ ] **T103 · Ajustes del nivel y oleadas**
+  Paneles con el nombre, oro, vidas y aumento de vida, y el editor de oleadas y grupos.
+  **Refs:** RF-214, RF-215.
+  **Hecho cuando:** los tests comprueban cada cambio contra el borrador y que las entradas del selector son las del mapa; la captura muestra ambos paneles.
+
+- [ ] **T104 · Guardar, abrir y probar**
+  Nuevo, Abrir (mapas propios y oficiales como plantilla), Guardar (nombre de archivo, confirmaciones) y Probar (se juega el borrador sin guardar nada y se vuelve al editor).
+  **Refs:** RF-216, RF-217, RF-218.
+  **Hecho cuando:** los tests comprueban que probar no guarda progreso ni récords, que se vuelve al editor con el borrador intacto y que no se puede probar un nivel con errores; y se guarda un mapa, se revisa con `check_level` y se juega de verdad.
+
+- [ ] **T105 · Cierre de M9: documentación y exportaciones**
+  README, ONBOARDING, CONTENIDO.md (cómo usar el editor y cómo volver oficial un mapa), plan técnico; exportar los cuatro ejecutables.
+  **Refs:** D-033.
+  **Hecho cuando:** pasan todos los tests y el `.exe` de pruebas exportado abre el editor; el `.exe` normal no.
+
 ### Otras ideas de pulido *(sin fecha)*
 
 - Decidir ambientación y arte definitivo (ver "Preguntas abiertas" de la spec y B-02). *Los dibujos provisionales ya están (T70–T73).*

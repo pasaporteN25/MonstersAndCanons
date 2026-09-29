@@ -755,6 +755,34 @@ Para probar todo sin tener que ganar cada nivel, y sin ensuciar el progreso ni l
 - **RF-183** **Todos los niveles** se pueden elegir, aunque estén bloqueados.
 - **RF-184** **Panel de pruebas** en la partida (tecla `F1` o botón "Pruebas" arriba): +1000 de oro · vidas infinitas (sí/no) · saltar oleada · matar a todos los enemigos · ganar · perder · velocidad x4 · hacer aparecer un enemigo de cualquier tipo · mostrar los FPS. Los enemigos que se matan con el panel no dan oro ni puntos.
 
+### 10.3 Editor de mapas *(M9, pedido por Lucas, D-033, B-04 escalón 2)*
+
+Una herramienta de **administración** para crear y probar niveles sin escribir el JSON a mano. Por ahora **solo existe en el modo de pruebas** (§10.2); si más adelante pasa al juego normal, o si se unifica todo en una app con modo admin, se decide aparte (B-13).
+
+- **RF-210** **Dónde está:** el menú principal tiene un botón **"Editor de mapas"** **solo en el modo de pruebas** (RF-180). El `JuegoA.exe` normal y el `.apk` no lo tienen. Usa el guardado aparte de RF-181 y **nunca toca** el progreso, los niveles oficiales (`data/levels/`) ni `campaign.json`.
+- **RF-211** **La pantalla:** arriba, una barra con **Nuevo · Abrir · Guardar · Probar · Salir**; en el centro, el mapa de 20×9 casillas con el mismo tamaño y lugar que en la partida (así se ve como va a quedar); abajo, las herramientas y una línea de mensajes. Los ajustes del nivel (RF-214) y las oleadas (RF-215) se abren en paneles encima del mapa.
+- **RF-212** **Pintar el mapa:** se elige una herramienta y se hace clic, o se arrastra, sobre el mapa.
+
+  | Herramienta | Tecla | Qué hace |
+  |---|---|---|
+  | Pasto | `1` | Casilla libre (se construye). También borra. |
+  | Camino | `2` | Casilla de camino. |
+  | Bloqueada | `3` | Casilla bloqueada (`X`). |
+  | Entrada | `4` | Pone la **próxima letra libre** (`A`, `B`…, hasta 8) en esa casilla. |
+  | Salida | `5` | Pone la salida (`S`); como hay una sola, **se mueve** si ya estaba. |
+
+  Con el **botón derecho** se borra (pasto). Pintar encima de una entrada **la quita** y las letras que venían después **bajan un lugar** (las oleadas que usaban esas entradas se acomodan solas: las de la entrada quitada pasan a la `A`). **`Ctrl+Z`** deshace y **`Ctrl+Y`** rehace, hasta 50 pasos.
+- **RF-213** **Se revisa solo, mientras se edita:** después de cada cambio se aplican las mismas reglas de §7.8. Si el mapa es válido, se dibuja el **recorrido de cada entrada** (un color por entrada) y se marcan las casillas que nadie pisa (RF-207). Si no lo es, la línea de mensajes dice qué falta o qué está mal, con los mismos textos de `check_level`. El editor **deja guardar un borrador con errores** (para seguir después), pero no probarlo.
+- **RF-214** **Ajustes del nivel:** nombre, oro inicial, vidas, y aumento de vida por oleada (`0` = usar el general, §7.4).
+- **RF-215** **Oleadas:** agregar, quitar y duplicar oleadas; cada oleada tiene grupos con **enemigo** (todos los de `data/enemies/`), **cantidad**, **cada** (segundos), **desde** (segundos) y **entrada** (solo las que tiene el mapa). Se ve el **total de enemigos** de la oleada. Un panel de oleadas nuevo empieza con un grupo de 10 Normales.
+- **RF-216** **Guardar y abrir:** los mapas se guardan en `user://maps/<archivo>.json` con el formato de §7.8 (y ordenado como los niveles oficiales, para que se lea bien y se vea qué cambió en git). El nombre de archivo solo admite minúsculas, números y `_`. **"Abrir"** lista los **mapas propios** y los **niveles oficiales**; un nivel oficial se abre como **plantilla**: al guardarlo se pide otro nombre y **nunca se pisa** el oficial. Un mapa guardado se puede revisar con `tools/check_level.gd`, y para volverlo **oficial** se copia a `data/levels/` en el repositorio y se suma a `campaign.json`.
+- **RF-217** **Probar:** el nivel del editor se juega ahí mismo, con las reglas de siempre (torres, oro, oleadas), pero **sin guardar** progreso, estrellas ni récords. Al terminar (o al salir desde la pausa) se vuelve al editor con el borrador intacto, tal como se dejó. **No se puede probar un nivel con errores.**
+- **RF-218** **Nunca pierde trabajo sin avisar:** si hay cambios sin guardar, **Nuevo**, **Abrir** y **Salir** piden confirmación.
+
+> **Criterio de aceptación**
+> **Dado** el editor abierto en modo de pruebas → **Cuando** dibujo un camino de una entrada `A` a la salida `S`, dejo la oleada de ejemplo, guardo con el nombre `prueba_1` y apreto **Probar** → **Entonces** se juega ese mapa, y al terminar vuelvo al editor con el mismo mapa.
+> **Dado** un mapa guardado por el editor → **Cuando** lo reviso con `tools/check_level.gd` → **Entonces** da el mismo resultado que el editor (sin errores, o los mismos errores).
+
 ---
 
 ## 11. Qué **NO** incluye este juego
