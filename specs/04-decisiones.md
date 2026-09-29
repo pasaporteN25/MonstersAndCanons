@@ -155,3 +155,15 @@
 ### D-027 · Modos y enemigo espejo entran al backlog
 - **Fecha:** 2026-09-29 · **Estado:** Propuesta (sin fecha) · **Propuso:** Lucas
 - **Qué:** B-05 (modos de juego; el actual sería "Torres y Bestias", y el de historia usaría imperios reales) y B-06 (enemigo espejo que aturde a las torres cercanas). Lucas pidió solo anotarlos. Además decidió que Épocas (B-01) sea un **modo aparte**.
+
+### D-028 · Modo de pruebas en un ejecutable aparte y con guardado aparte
+- **Fecha:** 2026-09-29 · **Estado:** Aceptada · **Decidió:** Lucas (ejecutable aparte) / Claude (el resto)
+- **Qué:** el modo de pruebas (spec §10.2) solo existe en `JuegoA_pruebas.exe` (preset "Windows (pruebas)", que agrega la característica `pruebas`) y al jugar desde el editor con `--pruebas`. Usa `save_pruebas.json`.
+- **Alternativas:** una clave de administrador dentro del juego; una combinación secreta de teclas.
+- **Por qué:** es un juego de un solo jugador que guarda en la computadora del jugador: una "contraseña de admin" no protege nada (el guardado es un archivo de texto que cualquiera puede editar). Lo que importa es que el jugador normal **no vea** las herramientas de prueba y que las pruebas **no ensucien** el progreso ni los récords reales. El ejecutable aparte y el guardado aparte resuelven las dos cosas.
+
+### D-029 · Récords estilo arcade: top 5 por nivel y Salón de la fama
+- **Fecha:** 2026-09-29 · **Estado:** Aceptada · **Decidió:** Lucas (qué) / Claude (cómo se calcula)
+- **Qué:** puntos = oro de cada enemigo muerto × 10 + vidas que quedan × 100 al ganar (spec RF-190). Top 5 por nivel con 3 letras; Salón de la fama con 5 letras para quien ganó todos los niveles.
+- **Cómo se suma el Salón de la fama:** la suma del **mejor puntaje en victoria de cada nivel** de la partida guardada. Alternativa descartada: sumar una "corrida" de la campaña de principio a fin, que obligaría a registrar corridas y a no poder repetir niveles en el medio.
+- **Detalle:** se guarda el último total anotado para no volver a pedir letras por el mismo total; se vuelve a entrar solo si el total sube.

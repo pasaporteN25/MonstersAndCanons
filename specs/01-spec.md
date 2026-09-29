@@ -523,7 +523,7 @@ f8   ·······▲············
 
 ### 9.1 HUD (lo que se ve durante la partida)
 
-- **RF-100** Arriba: **oro**, **vidas** y **oleada actual / total** (por ejemplo "Oleada 3/10").
+- **RF-100** Arriba: **oro**, **vidas**, **oleada actual / total** (por ejemplo "Oleada 3/10") y *(M6)* **puntos** (RF-190).
 - **RF-101** Abajo: un **botón por torre**, con su forma, nombre y costo. Desactivado (gris) si no alcanza el oro. *(M5: ver RF-170.)*
 - **RF-170** *(M5)* **Barra para 8 torres:** cada botón muestra el **dibujo** de la torre, su **costo** y, en una esquina, su **tecla**. El nombre no entra: aparece al pasar el mouse por encima y al elegirla (RF-171).
 - **RF-171** *(M5)* Al elegir una torre para construir, encima de la barra se ve su **nombre, costo y una frase** que dice para qué sirve (`TowerData.description`).
@@ -635,7 +635,7 @@ Dibujos simples para dejar de ver formas geométricas. Es un **primer intento "p
 
 ## 10. Pantallas y progreso *(M3)*
 
-- **RF-110** **Menú principal:** Jugar, Opciones, Salir. Es la primera pantalla al abrir el juego. De fondo se ve el mapa del nivel 1, oscurecido.
+- **RF-110** **Menú principal:** Jugar, Récords *(M6, RF-195)*, Opciones, Salir. Es la primera pantalla al abrir el juego. De fondo se ve el mapa del nivel 1, oscurecido.
 - **RF-117** El progreso **solo** se guarda cuando se juega desde el menú. Abrir la partida directamente desde el editor (F6) o correr los tests no toca el guardado del jugador.
 - **RF-111** **Selección de nivel:** muestra los niveles. Los bloqueados dicen "Bloqueado". Los completados muestran sus **estrellas** (RF-93) y la mejor cantidad de vidas conseguida. Arriba se ve el **total de estrellas** de la campaña ("Estrellas: 7 de 15").
 - **RF-112** Al principio solo está desbloqueado el nivel 1. **Ganar** el nivel N desbloquea el N+1.
@@ -646,6 +646,31 @@ Dibujos simples para dejar de ver formas geométricas. Es un **primer intento "p
 
 > **Criterio de aceptación RF-115**
 > **Dado** que gané el nivel 1 → **Cuando** cierro el juego y lo vuelvo a abrir → **Entonces** el nivel 2 aparece desbloqueado.
+
+### 10.1 Puntos y récords *(M6, pedido por Lucas)*
+
+Récords "a la antigua", como en los arcades: iniciales y un top 5.
+
+- **RF-190** **Puntos:** cada enemigo muerto da **su oro × 10** (las crías también). Si se gana, cada vida que queda suma **100**. Los puntos se ven arriba, junto al oro ("Puntos: 1230"). Los dos números (10 y 100) están en `balance.tres`.
+- **RF-191** **Récords de cada nivel:** cada nivel tiene su **top 5**, con **3 letras** (A–Z) y los puntos. Al terminar una partida desde la campaña, **ganada o perdida**, si los puntos entran en el top 5 se piden las 3 letras. A igual puntaje queda arriba el que llegó primero. Con 0 puntos no se entra.
+- **RF-192** **Cómo se escriben las letras (estilo arcade):** una casilla por letra. **▲/▼** (o las flechas del teclado) cambian la letra; **◄/►** pasan de casilla; también se puede escribir directo con el teclado. **Listo** (o Enter) confirma. Empieza con las últimas letras usadas (la primera vez, "AAA"). Funciona igual con el mouse y tocando la pantalla.
+- **RF-193** Después de anotarse (o si no entró), la pantalla final muestra el **top 5 del nivel**, con la entrada nueva resaltada.
+- **RF-194** **Salón de la fama** ("el ranking de los rankings"): es para quien **ganó todos los niveles**. Su puntaje es la **suma del mejor puntaje en victoria de cada nivel** de esta partida guardada. Cada vez que ese total **sube** (al ganar el último nivel que faltaba, o al mejorar el récord propio de un nivel) y entra en el top 5 del Salón, se piden **5 letras**. Tiene estética propia: dorado, con marco y trofeo.
+- **RF-195** **Pantalla "Récords"** en el menú principal: el top 5 de cada nivel (se cambia de nivel con ◄/►) y el Salón de la fama.
+- **RF-196** Los récords se guardan con el progreso (RF-115) y, como el progreso, **solo** jugando desde el menú (RF-117). En el modo de pruebas van a un guardado aparte (RF-181).
+
+> **Criterio de aceptación RF-191**
+> **Dado** que el top 5 del nivel 1 tiene 5 entradas y la última tiene 800 puntos → **Cuando** termino el nivel 1 con 900 puntos → **Entonces** se me piden 3 letras, entro cuarto (o más arriba) y la entrada de 800 desaparece.
+
+### 10.2 Modo de pruebas *(M6, pedido por Lucas, D-028)*
+
+Para probar todo sin tener que ganar cada nivel, y sin ensuciar el progreso ni los récords reales.
+
+- **RF-180** **Cómo se activa:** solo existe en el **ejecutable de pruebas** (`JuegoA_pruebas.exe`, del preset de exportación "Windows (pruebas)") y al jugar desde el editor de Godot con el argumento `--pruebas`. El `JuegoA.exe` normal y el `.apk` **no lo tienen**: un jugador normal nunca lo ve.
+- **RF-181** **Guardado aparte:** en modo pruebas se usa `save_pruebas.json`. El progreso, las estrellas, los récords y las opciones del guardado real no cambian.
+- **RF-182** Siempre se ve un cartel **"MODO PRUEBAS"** en una esquina (en los menús y en la partida), para no confundirlo con el juego normal.
+- **RF-183** **Todos los niveles** se pueden elegir, aunque estén bloqueados.
+- **RF-184** **Panel de pruebas** en la partida (tecla `F1` o botón "Pruebas" arriba): +1000 de oro · vidas infinitas (sí/no) · saltar oleada · matar a todos los enemigos · ganar · perder · velocidad x4 · hacer aparecer un enemigo de cualquier tipo · mostrar los FPS. Los enemigos que se matan con el panel no dan oro ni puntos.
 
 ---
 
@@ -824,3 +849,22 @@ Ideas **aprobadas como dirección**, pero **sin fecha**: no se programan hasta c
 **Para qué:** castigar a las torres de corto alcance pegadas al camino, sobre todo a la **Eléctrica** (§5.6), y premiar al Francotirador.
 
 **Qué necesitaría:** una regla nueva, "torre aturdida" (hoy las torres no tienen estados), y un efecto que se vea (chispas o estrellitas sobre la torre). Siguiendo RF-164, serían dos datos del enemigo: `reflect_range_tiles` y `reflect_stun_seconds`.
+
+### B-07 · Enemigos que atacan o se defienden
+*Pregunta de Lucas, 2026-09-29. Sin fecha: son ideas para elegir más adelante.*
+
+**Hoy:** los enemigos **no atacan ni se defienden activamente**. Sus defensas son pasivas: armadura (RF-80), resistencia a la ralentización (el Jefe), regeneración (Troll) y soltar crías (Araña).
+
+**Ideas**, de la más simple a la más grande (todas como datos, RF-164):
+
+| Idea | Qué hace | Contra qué | Tamaño |
+|---|---|---|---|
+| **Guardián (aura de escudo)** | Los enemigos que caminan cerca de él tienen +2 de armadura. | Obliga a matarlo primero (modo de apuntado "Más fuerte" o el Francotirador). | Chico |
+| **Curandero (aura de cura)** | Cura un poco por segundo a los que tiene alrededor. | Igual que el Guardián; el fuego le corta la cura. | Chico |
+| **Enemigo espejo** (B-06) | Si le dispara una torre cercana, el tiro rebota y la torre queda aturdida. | Castiga a la Eléctrica y a las torres pegadas al camino. | Mediano |
+| **Chamán (aturdir torres)** | Cada tanto lanza un rayo que **apaga** la torre más cercana por unos segundos. | Obliga a repartir torres; se ve una chispa sobre la torre apagada. | Mediano |
+| **Excavador** | Se entierra unos segundos: mientras tanto, las torres no lo ven. | Premia las torres de área y el daño que queda (quemadura). | Mediano |
+| **Ladrón** | Si llega a la salida, en vez de vidas se lleva oro. | Cambia la presión: menos vidas perdidas, menos oro. | Chico |
+| **Torres con vida** | Algunos enemigos **atacan a las torres** y las pueden romper; habría que repararlas. | Cambia mucho el juego: interfaz nueva (vida de la torre, reparar), balance de todo. | Grande |
+
+**Recomendación de Claude:** empezar por el **Guardián** y el **Chamán**. El Guardián es una aura (un dato y una búsqueda de enemigos cercanos, como la del rayo en cadena). El Chamán necesita una regla nueva, "torre aturdida", que también usaría el enemigo espejo (B-06). "Torres con vida" conviene dejarla para un modo aparte (B-05), porque cambia la base del juego.

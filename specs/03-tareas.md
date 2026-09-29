@@ -452,6 +452,38 @@
   **Hecho cuando:** la guía explica cada campo, los tests de contenido recorren las carpetas solos, el rendimiento sigue sobre 60 FPS y las exportaciones terminan sin errores.
   **Resultado:** `CONTENIDO.md` y `tests/test_content.gd` (revisa todos los enemigos, torres y niveles; por ejemplo, que cada torre esté en la lista del juego y tenga su sonido). Rendimiento con las 8 torres: primero dio **57 FPS**; se corrigieron dos cosas: las llamitas pasaron de polígonos a un dibujo (con la Incendiaria sola: de 42 a 110 FPS) y cada púa de la Ráfaga revisa solo a los enemigos cercanos. Resultado final: **98 FPS**, frame más lento 23 ms. Queda un caso extremo, 60 Ráfagas construidas a la vez (todas disparan en el mismo cuadro: picos de 137 ms), que no pasa jugando porque las torres se construyen de a una.
 
+## M6 — Modo de pruebas y récords *(pedido por Lucas, D-028, D-029)*
+
+- [ ] **T86 · Modo de pruebas: activación y guardado aparte**
+  Autoload `DevMode` (activo con la característica `pruebas` o, en el editor, con `--pruebas`); preset de exportación "Windows (pruebas)"; `save_pruebas.json`; cartel "MODO PRUEBAS"; todos los niveles abiertos.
+  **Refs:** RF-180, RF-181, RF-182, RF-183.
+  **Hecho cuando:** los tests comprueban que sin el modo nada cambia, que con el modo se usa el otro guardado y se abren todos los niveles, y que el `.exe` de pruebas exporta sin errores.
+
+- [ ] **T87 · Panel de pruebas**
+  Botón "Pruebas" y tecla F1 en la partida (solo en modo pruebas) con: +1000 de oro, vidas infinitas, saltar oleada, matar a todos, ganar, perder, velocidad x4, aparecer un enemigo, FPS.
+  **Refs:** RF-184.
+  **Hecho cuando:** un test prueba cada acción del panel, y sin modo de pruebas el panel no existe.
+
+- [ ] **T88 · Puntos**
+  `LevelSession.score`; puntos por enemigo muerto (oro × 10) y por vida al ganar (× 100), con los dos números en `balance.tres`; "Puntos" en la barra de arriba.
+  **Refs:** RF-190, RF-100.
+  **Hecho cuando:** los tests comprueban los puntos al matar (también crías), al ganar, y que el panel de pruebas no da puntos.
+
+- [ ] **T89 · Récords de cada nivel (3 letras)**
+  Top 5 por nivel en el guardado; entrada de letras estilo arcade; la pantalla final pide las letras si se entra y muestra el top 5.
+  **Refs:** RF-191, RF-192, RF-193, RF-196.
+  **Hecho cuando:** los tests comprueban el orden (con empates), que se descarta el sexto, que con 0 puntos no se entra, que se guarda y se vuelve a leer, y que fuera de la campaña no se escribe nada; la captura muestra la entrada de letras y el top 5.
+
+- [ ] **T90 · Salón de la fama (5 letras)**
+  Total de la campaña (suma del mejor puntaje en victoria de cada nivel), pedido de 5 letras cuando el total sube y entra, estética dorada.
+  **Refs:** RF-194.
+  **Hecho cuando:** los tests comprueban que no existe hasta ganar todos los niveles, que el total es la suma de los mejores, que solo se pide cuando el total sube, y la captura muestra el Salón.
+
+- [ ] **T91 · Pantalla "Récords" y cierre de M6**
+  Botón "Récords" en el menú principal; top 5 de cada nivel y Salón de la fama; README/ONBOARDING (cómo exportar y usar el `.exe` de pruebas); exportar los tres ejecutables.
+  **Refs:** RF-195, RF-110.
+  **Hecho cuando:** se ve la pantalla de récords, pasan todos los tests y las exportaciones terminan sin errores.
+
 ### Otras ideas de pulido *(sin fecha)*
 
 - Decidir ambientación y arte definitivo (ver "Preguntas abiertas" de la spec y B-02). *Los dibujos provisionales ya están (T70–T73).*
