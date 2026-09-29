@@ -1,30 +1,29 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- Volador: murciélago violeta con alas en punta, orejas altas, ojos rojos y colmillos. -->
-  <g stroke="#2b2233" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round">
-    <path d="M26 30 L15 15 L2 13 L6 21 L2 29 L10 28 L11 36 L17 32 L21 38 L26 36 Z" fill="#6e3fb0"/>
-    <path d="M38 30 L49 15 L62 13 L58 21 L62 29 L54 28 L53 36 L47 32 L43 38 L38 36 Z" fill="#6e3fb0"/>
-    <polygon points="26,27 23,10 31,22" fill="#7d4cc2"/>
-    <polygon points="33,22 41,10 38,27" fill="#7d4cc2"/>
-    <path d="M32 21 C38 21 40 28 40 34 C40 42 36 47 32 50 C28 47 24 42 24 34 C24 28 26 21 32 21 Z" fill="#9a66dc"/>
+  <!-- Volador: dragón alado violeta (wyvern) de costado, con las alas levantadas,
+       cola con púa y cuerno. Mira a la derecha. -->
+  <g stroke="#2b2233" stroke-width="2.3" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M30 29 L27 11 L15 6 Q18 12 12 15 Q17 18 13 23 Q19 24 22 29 Z" fill="#4f2a86"/>
+    <path d="M21 35 C13 38 7 36 4 30 C9 33 14 33 20 31 Z" fill="#7d4cc2"/>
+    <polygon points="1,26 7,28.5 3.5,33.5" fill="#4f2a86"/>
+    <path d="M16 34 C16 27 25 23 34 24 C42 25 47 29 48 34 C46 40 37 43 28 42 C21 41 16 38 16 34 Z" fill="#9a66dc"/>
+    <path d="M54 24.4 L61.5 23.6 C60.5 26.4 57.2 27.8 54 27.2 Z" fill="#4a1a3a"/>
+    <path d="M40 30 C44 25 47 21 51 18.5 L59.5 19.5 C62 20.3 62 22.6 60.2 23.6 L54 25.2 C50 27.5 47 31 44 34 Z" fill="#9a66dc"/>
+    <polygon points="50.5,19.5 46,12 53.5,18.3" fill="#e9dcc0"/>
+    <path d="M36 28 L41 11 L27 2 Q30 8 23 11 Q28 15 23 21 Q29 22 30 28 Z" fill="#7d4cc2"/>
   </g>
-  <g stroke="#4d2a85" stroke-width="1.4" stroke-linecap="round" fill="none">
-    <path d="M26 30 L15 15 L6 21"/>
-    <path d="M15 15 L10 28"/>
-    <path d="M38 30 L49 15 L58 21"/>
-    <path d="M49 15 L54 28"/>
+  <g stroke="#4f2a86" stroke-width="1.5" stroke-linecap="round" fill="none">
+    <path d="M41 11 L23 11"/>
+    <path d="M41 11 L23 21"/>
   </g>
-  <path d="M28 38 L32 44 L36 38" fill="none" stroke="#b58ae6" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-  <g fill="#ff4d3a" stroke="#2b2233" stroke-width="1.1" stroke-linejoin="round">
-    <polygon points="26.5,28 31.2,30.3 27,31.6"/>
-    <polygon points="37.5,28 32.8,30.3 37,31.6"/>
+  <path d="M21 37.5 C28 40.5 37 40 44 36" fill="none" stroke="#b58ae6" stroke-width="2.6" stroke-linecap="round"/>
+  <g stroke="#2b2233" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M28 41.5 L27 47 L30 49.5"/>
+    <path d="M37 41 L37.5 46.5 L40.5 48.5"/>
   </g>
-  <path d="M28.5 35 L35.5 35" stroke="#2b2233" stroke-width="1.6" stroke-linecap="round"/>
   <g fill="#f1ecdc" stroke="#2b2233" stroke-width="0.9" stroke-linejoin="round">
-    <polygon points="29.3,35 30.3,39 31.3,35"/>
-    <polygon points="32.7,35 33.7,39 34.7,35"/>
+    <polygon points="55,24.9 56,27 57,24.8"/>
+    <polygon points="58.3,24.6 59.1,26.4 59.9,24.5"/>
   </g>
-  <g stroke="#2b2233" stroke-width="1.8" stroke-linecap="round">
-    <line x1="30" y1="49" x2="28.5" y2="53"/>
-    <line x1="34" y1="49" x2="35.5" y2="53"/>
-  </g>
+  <polygon points="51.8,20.6 56.6,21.5 52.3,23" fill="#ff4d3a" stroke="#2b2233" stroke-width="1.1" stroke-linejoin="round"/>
+  <path d="M50.5 19.4 L57.3 21" stroke="#2b2233" stroke-width="2" stroke-linecap="round"/>
 </svg>
