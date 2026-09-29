@@ -349,6 +349,28 @@ Se construye en **cualquier** estado excepto `WON`, `LOST` y pausa (RF-44, RF-10
 - **Velocidad x2:** `Engine.time_scale = 2.0`. Como todo usa `delta`, todo va al doble.
 - ⚠️ **Siempre** volver a `Engine.time_scale = 1.0` y `paused = false` al salir de la partida (reintentar, ir al menú). Si no, el menú quedaría acelerado o congelado.
 
+### 6.8 El editor de mapas *(M9, spec §10.3)*
+
+Solo existe en el modo de pruebas (`DevMode.enabled`): el botón del menú principal está oculto si no. Está hecho en capas, de la más pura a la más visual, como el resto del juego (constitución P6):
+
+| Pieza | Archivo | Qué hace | Qué NO sabe |
+|---|---|---|---|
+| `LevelDraft` | [`level_draft.gd`](../scripts/logic/level_draft.gd) | El nivel que se edita, **en el mismo formato del archivo** (§7.8): pintar casillas, entradas y salida; ajustes; oleadas; deshacer/rehacer; texto; guardar y abrir. Lógica pura: se prueba sin pantallas. | Nada de pantallas. Tampoco las reglas de los mapas: para revisar usa `LevelFile.parse(to_text())`. |
+| `MapView` | [`map_view.gd`](../scenes/editor/map_view.gd) | Dibuja el mapa con el **mismo suelo y decoración que la partida** (`Level.make_ground` y `LevelDecor`) y, encima, los recorridos (franjas anidadas), las letras y las casillas sin usar. | Cómo se edita. |
+| `MapEditor` | [`map_editor.gd`](../scenes/editor/map_editor.gd) | La pantalla: mouse (trazos con interpolación entre casillas), teclas, botones, mensajes, y los flujos de Nuevo/Abrir/Guardar/Probar/Salir. | Las reglas: pregunta a `LevelDraft.check()`. |
+| `EditorPanel` → `SettingsPanel`, `WavesPanel` | [`scenes/editor/`](../scenes/editor/) | Los paneles de ajustes y de oleadas. Editan el borrador y avisan con `edited`. | Cómo se revisa el nivel. |
+| `EditorDialog` | [`editor_dialog.gd`](../scenes/editor/editor_dialog.gd) | Confirmar, pedir un nombre (validado mientras se escribe) o elegir de una lista. | Qué se hace después: solo emite `accepted` o `cancelled`. |
+
+**Decisiones de fondo**
+- **Un solo modelo.** El borrador es el JSON del nivel (un `Dictionary`). Lo que se edita, lo que se guarda y lo que valida `LevelFile` son lo mismo, así no hay dos representaciones que mantener alineadas. Un test abre cada nivel oficial y lo vuelve a escribir: da **exactamente el mismo texto**.
+- **Deshacer con fotos.** Cada cambio guarda una copia del `Dictionary` (hasta 50). Un trazo del mouse es **un** paso: `begin_stroke()` saca la foto y solo el primer cambio real la guarda.
+- **Los paneles no se reconstruyen al editar un número**, para no perder el foco del campo (se puede seguir con `Tab`). Solo se reconstruyen al cambiar la estructura (agregar o quitar un grupo) o después de deshacer.
+- **Las señales `left` y `test_requested`** hacen de "costura": en el juego se conectan a `GameFlow`; en los tests se desconectan, porque cambiar de escena reemplazaría la de GUT.
+- **Probar:** `GameFlow.test_level` (un `LevelData` armado con `LevelFile`) hace que `Game` juegue ese nivel con `testing = true`: no guarda progreso ni récords y los botones de salida vuelven al editor. El borrador vive en `GameFlow.editor_draft`, así sobrevive al cambio de escena.
+- **Guarda en `user://maps/`** (`maps_dir` en el editor, para que los tests usen otra carpeta). Un `.exe` exportado no puede escribir en `res://`.
+- ⚠️ **Herramientas y autoloads:** un script de `tools/` corre con `-s` **antes** de que existan los autoloads. Si tipa una variable con una clase que usa `GameFlow` o `DevMode` (por ejemplo `MapEditor`), no compila: usar `Node` y llamar sin tipos.
+- ⚠️ **`_init` en clases hijas de GDScript:** si la clase hija define su `_init`, el de la base **no se llama solo**: hay que escribir `super()` (`EditorPanel` lo necesita).
+
 ---
 
 ## 7. Globales (autoloads) — solo desde M3

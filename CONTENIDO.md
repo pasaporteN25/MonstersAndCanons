@@ -188,6 +188,28 @@ El juego avisa todos estos (y un nivel con errores no se juega, pero el resto de
 - **Una clave mal escrita** (`"canitdad"`): el juego no la ignora, avisa.
 - **Un enemigo que no existe** (`"trol"`), o una entrada que el mapa no tiene (`"C"` en un mapa con `A` y `B`).
 - **Una fila con 19 o 21 letras.**
+- **Casillas de camino que nadie pisa** (un aviso, no un error): casi siempre dos partes del camino quedaron en casillas vecinas y el enemigo se salta el tramo del medio. `check_level` las marca con `?`.
+
+### Hacerlo con el editor, sin escribir el archivo a mano
+
+En el **ejecutable de pruebas** (`JuegoA_pruebas.exe`) el menú principal tiene el botón **"Editor de mapas"**. Es lo mismo que escribir el JSON, pero se dibuja con el mouse:
+
+| Qué | Cómo |
+|---|---|
+| **Pintar** | Elegir una herramienta abajo (o las teclas `1` a `5`): Pasto, Camino, Bloqueada, Entrada, Salida. Clic o arrastrar. **Clic derecho borra.** |
+| **Entradas** | La herramienta Entrada pone la próxima letra libre (`A`, `B`…). Pintar encima de una entrada la quita y las letras siguientes bajan un lugar (las oleadas se acomodan solas). |
+| **Salida** | Hay una sola: si ya estaba, se mueve. |
+| **Ver si está bien** | Abajo, un mensaje dice si el nivel es válido (con el largo de cada recorrido) o qué está mal y dónde. Sobre el mapa se dibuja el recorrido de cada entrada y las casillas que nadie pisa. |
+| **Ajustes y oleadas** | Botones **Ajustes** (nombre, oro, vidas, vida extra por oleada) y **Oleadas** (agregar, copiar y quitar oleadas; en cada una, los grupos de enemigos). |
+| **Deshacer** | `Ctrl+Z` y `Ctrl+Y` (hasta 50 pasos). |
+| **Probar** | Juega ese nivel en el momento, sin guardar progreso ni récords. Al terminar (o con "Volver al editor" en la pausa) se vuelve al editor con todo como estaba. No se puede probar un nivel con errores. |
+| **Guardar / Abrir** | `Ctrl+S`. Guarda en `user://maps/<nombre>.json` (en Windows: `%APPDATA%\Godot\app_userdata\JuegoA\maps\`). "Abrir" lista tus mapas y los niveles oficiales (que se abren como **plantilla**: al guardar pide otro nombre y **nunca pisa el oficial**). |
+
+**Para volver oficial un mapa hecho con el editor:**
+1. Copiar el archivo de `maps/` a `data/levels/level_08.json` (o el número que siga: el nombre del archivo es el id del nivel).
+2. Revisarlo: `godot --headless --path . -s tools/check_level.gd -- data/levels/level_08.json`.
+3. Sumarlo al final de `"niveles"` en `data/campaign.json`.
+4. Balancearlo con el bot (sección de abajo) y anotarlo en la spec (una sección como §7.9 y el aumento de vida en §7.4). Los tests revisan solos que los niveles oficiales no tengan errores ni avisos.
 
 ---
 
