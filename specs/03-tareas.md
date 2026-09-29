@@ -597,10 +597,11 @@
   **Hecho cuando:** los tests comprueban que ganar un mapa de la comunidad guarda su progreso y sus récords, y **no** desbloquea niveles, no cambia las estrellas de la campaña, no cuenta para el Salón de la fama; y que la campaña sigue igual.
   **Resultado:** `GameFlow.current_community`, `played_level()` (el nivel cuyo progreso se guarda: el de la campaña o el mapa de la comunidad), `start_community()` y `community_stars()`. `level_won`, los récords y la partida usan `played_level()`, así que el mapa de la comunidad guarda mejor resultado, estrellas y top 5 con su id y **nada más**: un test comprueba que ganarlo no desbloquea niveles, no suma a las estrellas ni al total de la campaña y **no abre el Salón de la fama** aunque toda la campaña esté ganada (un mapa fácil hecho a medida no puede regalar el ranking). Dos mapas tienen progreso y récords separados. `select_page` recuerda la solapa para que "Niveles" vuelva a la comunidad. 14 tests nuevos.
 
-- [ ] **T108 · Las solapas de la selección de nivel**
+- [x] **T108 · Las solapas de la selección de nivel**
   Solapas "Campaña" y "Mapas de la comunidad (N)", tarjetas con estrellas, tarjetas con errores, mensaje cuando no hay mapas y botón "Abrir carpeta".
   **Refs:** RF-221, RF-222, RF-226.
   **Hecho cuando:** los tests comprueban las dos solapas, el orden, las tarjetas con errores (con su motivo), el mensaje vacío y que se vuelve a buscar al abrir la pantalla; las capturas muestran la solapa con mapas, con un error y vacía.
+  **Resultado:** solapas **Campaña** y **Mapas de la comunidad (N)** en la misma barra que el total de estrellas (así la pantalla no crece: con 2 filas de tarjetas entra justo, y se achicaron los espacios para que "Volver" no toque el cartel de pruebas). La solapa de la comunidad busca los archivos **cada vez que se abre la pantalla** (RF-226), muestra estrellas y "Mejor: N vidas", pone las tarjetas con errores deshabilitadas y en rojo con el motivo en el tooltip (`Con errores`), hace bajar de renglón los nombres largos, y cuando no hay mapas dice **en qué carpeta** ponerlos. "Abrir carpeta de mapas" la crea si no existe y la abre en el explorador (en el celular no se ofrece). Los tests usan una carpeta y un "abridor" falsos. 18 tests nuevos.
 
 - [ ] **T109 · Cierre de M10: documentación y exportaciones**
   README, ONBOARDING, CONTENIDO.md (cómo instalar y compartir un mapa), plan técnico; exportar los cuatro ejecutables.

@@ -35,7 +35,7 @@ grow_vertical = 2
 
 [node name="Rows" type="VBoxContainer" parent="Center"]
 layout_mode = 2
-theme_override_constants/separation = 18
+theme_override_constants/separation = 8
 
 [node name="Title" type="Label" parent="Center/Rows"]
 layout_mode = 2
@@ -46,13 +46,38 @@ theme_override_font_sizes/font_size = 48
 text = "Elegir nivel"
 horizontal_alignment = 1
 
-[node name="TotalStars" type="Label" parent="Center/Rows"]
+[node name="Tabs" type="HBoxContainer" parent="Center/Rows"]
+custom_minimum_size = Vector2(1090, 0)
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="CampaignTab" type="Button" parent="Center/Rows/Tabs"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 42)
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+theme_override_font_sizes/font_size = 20
+text = "Campaña"
+
+[node name="CommunityTab" type="Button" parent="Center/Rows/Tabs"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(320, 42)
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+theme_override_font_sizes/font_size = 20
+text = "Mapas de la comunidad"
+
+[node name="TotalStars" type="Label" parent="Center/Rows/Tabs"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_colors/font_color = Color(1, 0.84, 0.3, 1)
 theme_override_font_sizes/font_size = 22
 text = "Estrellas: 0 de 15"
-horizontal_alignment = 1
+horizontal_alignment = 2
+vertical_alignment = 1
 
 [node name="Scroll" type="ScrollContainer" parent="Center/Rows"]
 unique_name_in_owner = true
@@ -68,6 +93,20 @@ size_flags_horizontal = 3
 alignment = 1
 theme_override_constants/h_separation = 16
 theme_override_constants/v_separation = 16
+
+[node name="Footer" type="HBoxContainer" parent="Center/Rows"]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+alignment = 1
+
+[node name="FolderButton" type="Button" parent="Center/Rows/Footer"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 18
+text = "Abrir carpeta de mapas"
 
 [node name="BackButton" type="Button" parent="Center/Rows"]
 unique_name_in_owner = true
