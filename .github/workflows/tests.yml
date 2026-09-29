@@ -19,18 +19,18 @@ env:
 jobs:
   gut:
     name: Tests de GUT
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04  # fijo: ubuntu-latest pasa a Ubuntu 26 en octubre de 2026
     timeout-minutes: 15
     defaults:
       run:
         shell: bash
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       # Godot pesa ~60 MB: se guarda en la caché de GitHub para no bajarlo cada vez.
       - name: Caché de Godot
         id: cache-godot
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ~/godot
           key: godot-${{ env.GODOT_VERSION }}-linux

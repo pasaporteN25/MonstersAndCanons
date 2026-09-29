@@ -170,7 +170,7 @@
 
 ### D-030 · Tests automáticos en GitHub Actions
 - **Fecha:** 2026-09-29 · **Estado:** Aceptada · **Decidió:** Lucas (hacerlo) / Claude (cómo)
-- **Qué:** en cada *push* a `main` y en cada *pull request*, GitHub corre en Linux (`ubuntu-latest`) el mismo Godot 4.7.2 que usamos, importa el proyecto desde cero, revisa que compilen las herramientas de `tools/` y corre todos los tests de GUT ([`.github/workflows/tests.yml`](../.github/workflows/tests.yml)).
+- **Qué:** en cada *push* a `main` y en cada *pull request*, GitHub corre en Linux (`ubuntu-24.04`, fijo para que no cambie solo) el mismo Godot 4.7.2 que usamos, importa el proyecto desde cero, revisa que compilen las herramientas de `tools/` y corre todos los tests de GUT ([`.github/workflows/tests.yml`](../.github/workflows/tests.yml)).
 - **Alternativas:** una imagen de Docker ya armada con Godot (por ejemplo `barichello/godot-ci`) o una *action* de terceros; exportar también los ejecutables en cada push.
 - **Por qué:** bajar Godot del sitio oficial y guardarlo en la caché es simple, no depende de terceros y fija la versión exacta. Exportar necesita las plantillas de exportación (~1 GB) y no agrega seguridad a los tests: queda para más adelante, si hace falta publicar versiones.
 - **Detalle:** GUT **saltea sin avisar** un archivo de test con un error de sintaxis y termina en verde. Por eso el workflow falla también si el registro tiene "SCRIPT ERROR", "Parse Error" o "Failed to load script": una corrida sana no tiene ninguna de esas líneas.
