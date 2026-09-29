@@ -11,8 +11,8 @@
 [sub_resource type="Resource" id="Resource_4ji27"]
 script = ExtResource("1_6q6j5")
 cost = 110
-damage = 8
-fire_rate = 0.6
+damage = 10
+fire_rate = 0.8
 range_tiles = 2.0
 base_texture = ExtResource("2_ewixr")
 burst_count = 8
@@ -20,8 +20,8 @@ burst_count = 8
 [sub_resource type="Resource" id="Resource_42wxm"]
 script = ExtResource("1_6q6j5")
 cost = 100
-damage = 11
-fire_rate = 0.7
+damage = 13
+fire_rate = 0.9
 range_tiles = 2.0
 base_texture = ExtResource("3_cfjgc")
 burst_count = 10
@@ -29,8 +29,8 @@ burst_count = 10
 [sub_resource type="Resource" id="Resource_7rjbn"]
 script = ExtResource("1_6q6j5")
 cost = 150
-damage = 15
-fire_rate = 0.8
+damage = 17
+fire_rate = 1.0
 range_tiles = 2.5
 base_texture = ExtResource("4_dkli2")
 burst_count = 12

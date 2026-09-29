@@ -11,31 +11,31 @@
 [sub_resource type="Resource" id="Resource_fpdyk"]
 script = ExtResource("1_ux3rd")
 cost = 90
-damage = 3
+damage = 5
 fire_rate = 1.0
 range_tiles = 2.5
 base_texture = ExtResource("2_ccb5i")
-burn_damage_per_second = 6
+burn_damage_per_second = 8
 burn_duration = 3.0
 
 [sub_resource type="Resource" id="Resource_6mh51"]
 script = ExtResource("1_ux3rd")
 cost = 90
-damage = 4
+damage = 7
 fire_rate = 1.0
 range_tiles = 2.5
 base_texture = ExtResource("3_7xfws")
-burn_damage_per_second = 10
+burn_damage_per_second = 12
 burn_duration = 3.0
 
 [sub_resource type="Resource" id="Resource_rwmyv"]
 script = ExtResource("1_ux3rd")
 cost = 140
-damage = 6
+damage = 10
 fire_rate = 1.0
 range_tiles = 3.0
 base_texture = ExtResource("4_8dkqa")
-burn_damage_per_second = 16
+burn_damage_per_second = 18
 burn_duration = 4.0
 
 [resource]

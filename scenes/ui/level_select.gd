@@ -4,7 +4,7 @@
 extends Control
 
 ## 5 tarjetas de 220 px + 4 espacios de 16 px = 1164 px: entran en los 1280 de la pantalla.
-const CARD_SIZE := Vector2(220, 220)
+const CARD_SIZE := Vector2(190, 220)  # angostas: entran 6 en la pantalla (M5)
 const CARD_STAR_SIZE: float = 26.0
 
 @onready var _cards: HBoxContainer = %Cards

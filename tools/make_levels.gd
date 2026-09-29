@@ -1,9 +1,10 @@
-# Genera los mapas y datos de los niveles 4 (Espiral) y 5 (Fortaleza) (T61, T62).
-# Mapas: spec §7.5 y §7.6. Cada camino se describe por sus esquinas (casillas).
+# Genera los mapas y datos de los niveles 4 (Espiral), 5 (Fortaleza) y 6 (Nido) (T61, T62, T84).
+# Mapas: spec §7.5, §7.6 y §7.7. Cada camino se describe por sus esquinas (casillas).
 #
-# Uso: godot --headless --path . -s tools/make_levels_4_5.gd
+# Uso: godot --headless --path . -s tools/make_levels.gd            (los tres)
+#      godot --headless --path . -s tools/make_levels.gd -- 6       (solo el nivel 6)
 #
-# ⚠️ Vuelve a escribir level_04/05 (.tscn y .tres) y la campaña. El aumento de vida
+# ⚠️ Vuelve a escribir los .tscn y .tres de esos niveles y la campaña. El aumento de vida
 # por oleada de cada nivel (T63) se conserva si el .tres ya existía.
 extends SceneTree
 
@@ -15,6 +16,16 @@ const MAP_SIZE := Vector2i(20, 9)
 
 
 func _init() -> void:
+	var only: PackedStringArray = OS.get_cmdline_user_args()
+	if only.is_empty() or only.has("4") or only.has("5"):
+		_levels_4_5()
+	if only.is_empty() or only.has("6"):
+		_level_6()
+	_save_campaign()
+	quit()
+
+
+func _levels_4_5() -> void:
 	# --- Nivel 4: Espiral (salida en el centro) ---
 	_make_level("res://scenes/levels/level_04.tscn", "Level04",
 		[[Vector2i(0, 1), Vector2i(18, 1), Vector2i(18, 7), Vector2i(2, 7), Vector2i(2, 3),
@@ -70,13 +81,45 @@ func _init() -> void:
 			_g("armored", 25, 0.5, 9.0, 0), _g("flyer", 25, 0.3, 11.0, 2)]),
 	])
 
+
+# --- Nivel 6: Nido (spec §7.7): entrada A a la izquierda y B desde arriba ---
+
+func _level_6() -> void:
+	var tail: Array = [Vector2i(10, 3), Vector2i(17, 3), Vector2i(17, 5), Vector2i(2, 5), Vector2i(2, 7), Vector2i(19, 7)]
+	_make_level("res://scenes/levels/level_06.tscn", "Level06",
+		[[Vector2i(0, 1), Vector2i(5, 1), Vector2i(5, 3)] + tail,
+			[Vector2i(10, 0)] + tail],
+		[Vector2i(18, 1), Vector2i(3, 3), Vector2i(12, 6), Vector2i(7, 8)])
+	_save_level_data("level_06", "Nido", "res://scenes/levels/level_06.tscn", 250, [
+		_w([_g("normal", 10, 0.8, 0.0, 0)]),
+		_w([_g("troll", 6, 1.5, 0.0, 0)]),
+		_w([_g("fast", 12, 0.4, 0.0, 1), _g("normal", 8, 0.8, 2.0, 0)]),
+		_w([_g("spider", 4, 2.0, 0.0, 0)]),
+		_w([_g("troll", 8, 1.2, 0.0, 1), _g("flyer", 10, 0.6, 3.0, 0)]),
+		_w([_g("spider", 6, 1.5, 0.0, 1), _g("armored", 8, 1.0, 2.0, 0)]),
+		_w([_g("troll", 10, 1.0, 0.0, 0), _g("spider", 6, 1.5, 3.0, 1)]),
+		_w([_g("fast", 20, 0.3, 0.0, 0), _g("flyer", 10, 0.5, 3.0, 1)]),
+		_w([_g("armored", 12, 0.8, 0.0, 1), _g("troll", 8, 1.0, 3.0, 0)]),
+		_w([_g("boss", 1, 1.0, 0.0, 0), _g("spider", 8, 1.2, 3.0, 1)]),
+		_w([_g("troll", 12, 0.8, 0.0, 0), _g("troll", 12, 0.8, 4.0, 1)]),
+		_w([_g("spider", 10, 1.0, 0.0, 0), _g("flyer", 15, 0.4, 4.0, 1)]),
+		_w([_g("tank", 15, 1.0, 0.0, 1), _g("spider", 10, 1.0, 4.0, 0)]),
+		_w([_g("boss", 2, 3.0, 0.0, 0), _g("troll", 15, 0.6, 3.0, 1)]),
+		_w([_g("boss", 2, 3.0, 0.0, 0), _g("boss", 2, 3.0, 3.0, 1), _g("spider", 12, 0.8, 6.0, 0),
+			_g("troll", 15, 0.6, 8.0, 1)]),
+	])
+
+
+## La campaña: todos los niveles que existan (level_01, level_02…), en orden.
+func _save_campaign() -> void:
 	var campaign: CampaignData = load("res://data/campaign.tres")
 	var levels: Array[LevelData] = []
-	for i: int in 5:
-		levels.append(load("res://data/levels/level_%02d.tres" % (i + 1)))
+	var n: int = 1
+	while ResourceLoader.exists("res://data/levels/level_%02d.tres" % n):
+		levels.append(load("res://data/levels/level_%02d.tres" % n))
+		n += 1
 	campaign.levels = levels
-	print("campaign: ", ResourceSaver.save(campaign, campaign.resource_path))
-	quit()
+	print("campaign: ", ResourceSaver.save(campaign, campaign.resource_path), " · niveles: ", levels.size())
 
 
 # --- Mapas ---

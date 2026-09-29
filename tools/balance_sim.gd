@@ -6,7 +6,9 @@
 #   godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- naive
 #
 # Estrategias:
-#   smart  → mezcla torres y las pone donde cubren más camino.
+#   smart  → mezcla las 4 torres de M1–M2 y las pone donde cubren más camino.
+#   mix    → como smart, pero con las 8 torres (M5): sirve para el nivel 6 y para ver
+#            cuánto ayudan las torres nuevas en los niveles 1–5.
 #   basic  → solo Ametralladoras, bien puestas (sirve para ver si mezclar torres vale la pena).
 #   naive  → solo Ametralladoras, en casillas libres al azar.
 #
@@ -23,6 +25,8 @@ extends SceneTree
 ## Orden de compra de "smart" (índices de Game.tower_types): primero Ametralladoras
 ## baratas para sobrevivir al principio, después mezcla.
 const SMART_ORDER: Array[int] = [0, 0, 0, 1, 0, 2, 3, 1, 0, 3, 1, 2]
+## Orden de compra de "mix": las 8 torres (4 Incendiaria, 5 Múltiple, 6 Ráfaga, 7 Eléctrica).
+const MIX_ORDER: Array[int] = [0, 0, 0, 7, 1, 4, 0, 5, 3, 6, 2, 7, 0, 4, 5, 6, 3, 1]
 ## Cada cuántos píxeles se mide el camino para puntuar las casillas.
 const PATH_SAMPLE_STEP: float = 16.0
 
@@ -135,7 +139,11 @@ func _process(_delta: float) -> bool:
 
 func _buy_towers() -> void:
 	while true:
-		var index: int = SMART_ORDER[built % SMART_ORDER.size()] if strategy == "smart" else 0
+		var index: int = 0
+		if strategy == "smart":
+			index = SMART_ORDER[built % SMART_ORDER.size()]
+		elif strategy == "mix":
+			index = MIX_ORDER[built % MIX_ORDER.size()] % game.tower_types.size()
 		var tower: TowerData = game.tower_types[index]
 		if not game.session.can_afford(tower.levels[0].cost):
 			return

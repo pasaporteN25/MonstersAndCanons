@@ -11,8 +11,8 @@
 [sub_resource type="Resource" id="Resource_tahp1"]
 script = ExtResource("1_3eeww")
 cost = 130
-damage = 12
-fire_rate = 0.7
+damage = 13
+fire_rate = 0.75
 range_tiles = 2.5
 base_texture = ExtResource("2_wpk1r")
 chain_extra_targets = 2
@@ -21,8 +21,8 @@ chain_range_tiles = 1.5
 [sub_resource type="Resource" id="Resource_uln85"]
 script = ExtResource("1_3eeww")
 cost = 120
-damage = 18
-fire_rate = 0.8
+damage = 19
+fire_rate = 0.85
 range_tiles = 2.5
 base_texture = ExtResource("3_t4s08")
 chain_extra_targets = 3
@@ -31,8 +31,8 @@ chain_range_tiles = 1.5
 [sub_resource type="Resource" id="Resource_msd0y"]
 script = ExtResource("1_3eeww")
 cost = 180
-damage = 26
-fire_rate = 0.9
+damage = 27
+fire_rate = 0.95
 range_tiles = 3.0
 base_texture = ExtResource("4_bhcqx")
 chain_extra_targets = 4

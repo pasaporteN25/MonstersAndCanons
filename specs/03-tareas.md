@@ -440,10 +440,11 @@
   **Hecho cuando:** los tests comprueban que golpea a 3 enemigos (objetivo + 2 saltos) sin repetir, que no salta más lejos que su distancia y que con un solo enemigo golpea solo a ese.
   **Resultado:** el salto lo hace el proyectil al impactar (`Projectile._chain_from()`), así que cualquier torre con `chain_extra_targets` salta, aunque además queme o frene (RF-164). La torreta tiene anillos amarillos para no confundirse con la Incendiaria.
 
-- [ ] **T84 · Nivel 6 — Nido y balance**
+- [x] **T84 · Nivel 6 — Nido y balance**
   Mapa, `level_06.tres`, campaña; el bot usa las torres nuevas; aumento de vida por oleada del nivel 6; revisar que los niveles 1–5 no queden regalados con las torres nuevas.
   **Refs:** spec §7.7, §7.4.
   **Hecho cuando:** el bot que mezcla torres gana el nivel 6 y el que pone torres al azar pierde; los niveles 1–5 siguen perdiéndose con el bot al azar.
+  **Resultado:** nivel 6 con +30 % de vida por oleada: el bot con las 8 torres ("mix", nuevo) gana con 10 vidas, el de las 4 viejas con 6 y el de torres al azar pierde en la oleada 5. Las 4 torres nuevas se reforzaron porque rendían menos que la Ametralladora (spec §5.6). El generador pasó a llamarse `tools/make_levels.gd` y acepta qué niveles regenerar (`-- 6`). Las tarjetas de la selección de nivel pasaron de 220 a 190 px para que entren 6.
 
 - [ ] **T85 · Guía para crear contenido y cierre de M5**
   `CONTENIDO.md` (cómo agregar un enemigo, una torre o un nivel, con todos los campos), tests que revisan **todos** los archivos de `data/` (así, si a algo nuevo le falta un dato, un test avisa), prueba de rendimiento y exportaciones.

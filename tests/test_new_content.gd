@@ -52,9 +52,9 @@ func test_fire_tower_matches_spec() -> void:
 	assert_eq(fire.display_name, "Incendiaria")
 	assert_true(fire.can_hit_air)
 	_assert_levels("fire", [
-		{"cost": 90, "damage": 3, "fire_rate": 1.0, "range_tiles": 2.5, "burn_damage_per_second": 6, "burn_duration": 3.0},
-		{"cost": 90, "damage": 4, "burn_damage_per_second": 10, "burn_duration": 3.0},
-		{"cost": 140, "damage": 6, "range_tiles": 3.0, "burn_damage_per_second": 16, "burn_duration": 4.0},
+		{"cost": 90, "damage": 5, "fire_rate": 1.0, "range_tiles": 2.5, "burn_damage_per_second": 8, "burn_duration": 3.0},
+		{"cost": 90, "damage": 7, "burn_damage_per_second": 12, "burn_duration": 3.0},
+		{"cost": 140, "damage": 10, "range_tiles": 3.0, "burn_damage_per_second": 18, "burn_duration": 4.0},
 	])
 
 
@@ -112,7 +112,7 @@ func test_fire_projectile_sets_the_enemy_on_fire() -> void:
 	add_child_autofree(projectile)
 	_seconds(projectile, 0.5)
 	assert_true(enemy.is_burning(), "RF-160")
-	assert_eq(enemy.health, 997, "el golpe hizo 3 (la quemadura todavía no)")
+	assert_eq(enemy.health, 995, "el golpe hizo 5 (la quemadura todavía no)")
 	await wait_process_frames(2)  # se dibujan las llamitas sin errores
 
 
@@ -282,9 +282,9 @@ func _shot_targets() -> Array[Enemy]:
 func test_multi_tower_matches_spec() -> void:
 	assert_eq(_tower("multi").display_name, "Múltiple")
 	_assert_levels("multi", [
-		{"cost": 100, "damage": 6, "fire_rate": 1.2, "range_tiles": 3.0, "extra_targets": 1},
-		{"cost": 90, "damage": 8, "extra_targets": 2},
-		{"cost": 140, "damage": 11, "range_tiles": 3.5, "extra_targets": 3},
+		{"cost": 100, "damage": 7, "fire_rate": 1.3, "range_tiles": 3.0, "extra_targets": 1},
+		{"cost": 90, "damage": 9, "fire_rate": 1.3, "extra_targets": 2},
+		{"cost": 140, "damage": 12, "fire_rate": 1.3, "range_tiles": 3.5, "extra_targets": 3},
 	])
 
 
@@ -325,9 +325,9 @@ func test_burst_tower_matches_spec() -> void:
 	assert_false(burst.can_hit_air, "no le pega a los voladores")
 	assert_almost_eq(burst.projectile_speed_tiles, 6.0, 0.001)
 	_assert_levels("burst", [
-		{"cost": 110, "damage": 8, "fire_rate": 0.6, "range_tiles": 2.0, "burst_count": 8},
-		{"cost": 100, "damage": 11, "fire_rate": 0.7, "burst_count": 10},
-		{"cost": 150, "damage": 15, "fire_rate": 0.8, "range_tiles": 2.5, "burst_count": 12},
+		{"cost": 110, "damage": 10, "fire_rate": 0.8, "range_tiles": 2.0, "burst_count": 8},
+		{"cost": 100, "damage": 13, "fire_rate": 0.9, "burst_count": 10},
+		{"cost": 150, "damage": 17, "fire_rate": 1.0, "range_tiles": 2.5, "burst_count": 12},
 	])
 
 
@@ -359,9 +359,9 @@ func test_each_spike_hits_only_the_first_enemy_it_touches() -> void:
 	tower.aim_angle = -PI / 8.0  # al disparar gira PI/8: una púa sale justo a la derecha y otra a la izquierda
 	simulate(tower, 1, DT)
 	_run_shots(1.5)
-	assert_eq(e[0].health, 1000 - 8, "el de la izquierda recibe una púa")
+	assert_eq(e[0].health, 1000 - 10, "el de la izquierda recibe una púa")
 	var right_hits: int = (1000 - e[1].health) + (1000 - e[2].health)
-	assert_eq(right_hits, 8, "a la derecha, una sola púa: golpea al primero y desaparece")
+	assert_eq(right_hits, 10, "a la derecha, una sola púa: golpea al primero y desaparece")
 	for p: Projectile in shots:
 		assert_true(p._is_done, "las púas que no tocaron a nadie se perdieron")
 
@@ -375,7 +375,7 @@ func test_burst_spikes_ignore_flyers() -> void:
 	simulate(tower, 1, DT)
 	_run_shots(1.5)
 	assert_eq(flyer.health, 1000, "RF-53: al volador no le pega")
-	assert_eq(walker.health, 992, "sigue de largo y le pega al de tierra")
+	assert_eq(walker.health, 990, "sigue de largo y le pega al de tierra")
 
 
 # --- Eléctrica (RF-163) ---
@@ -406,9 +406,9 @@ func test_tesla_tower_matches_spec() -> void:
 	assert_true(tesla.can_hit_air)
 	assert_almost_eq(tesla.projectile_speed_tiles, 20.0, 0.001)
 	_assert_levels("tesla", [
-		{"cost": 130, "damage": 12, "fire_rate": 0.7, "range_tiles": 2.5, "chain_extra_targets": 2, "chain_range_tiles": 1.5},
-		{"cost": 120, "damage": 18, "fire_rate": 0.8, "chain_extra_targets": 3},
-		{"cost": 180, "damage": 26, "fire_rate": 0.9, "range_tiles": 3.0, "chain_extra_targets": 4},
+		{"cost": 130, "damage": 13, "fire_rate": 0.75, "range_tiles": 2.5, "chain_extra_targets": 2, "chain_range_tiles": 1.5},
+		{"cost": 120, "damage": 19, "fire_rate": 0.85, "chain_extra_targets": 3},
+		{"cost": 180, "damage": 27, "fire_rate": 0.95, "range_tiles": 3.0, "chain_extra_targets": 4},
 	])
 
 
@@ -416,15 +416,15 @@ func test_lightning_jumps_to_the_two_nearest() -> void:
 	var e: Array[Enemy] = _enemies_at([300.0, 340.0, 380.0, 420.0])
 	var chain: PackedVector2Array = _fire_tesla(Vector2(360, 250))
 	assert_eq(_damaged(e), [false, true, true, true], "el primero (420) y dos saltos: 380 y 340")
-	assert_eq(e[3].health, 988, "cada salto hace el mismo daño (12)")
-	assert_eq(e[1].health, 988)
+	assert_eq(e[3].health, 987, "cada salto hace el mismo daño (13)")
+	assert_eq(e[1].health, 987)
 	assert_eq(chain.size(), 3, "el zigzag une a los 3 golpeados")
 
 
 func test_lightning_never_hits_the_same_enemy_twice() -> void:
 	var e: Array[Enemy] = _enemies_at([340.0, 380.0])
 	_fire_tesla(Vector2(360, 250))
-	assert_eq([e[0].health, e[1].health], [988, 988], "cada uno una sola vez, aunque sobren saltos")
+	assert_eq([e[0].health, e[1].health], [987, 987], "cada uno una sola vez, aunque sobren saltos")
 
 
 func test_lightning_does_not_jump_too_far() -> void:

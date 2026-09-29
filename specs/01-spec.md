@@ -177,10 +177,10 @@ Cuatro torres nuevas, pensadas como **respuesta** a los enemigos nuevos (§6.1).
 
 | ID | Nombre | Costo | Daño | Cadencia | Alcance | Especial | Aire | Proyectil |
 |---|---|---|---|---|---|---|---|---|
-| `fire` | **Incendiaria** | 90 | 3 | 1.0 | 2.5 | Quema 6 por segundo durante 3 s | Sí | Bola de fuego (10) |
-| `multi` | **Múltiple** | 100 | 6 | 1.2 | 3.0 | Dispara a 2 enemigos a la vez | Sí | Dardo (10) |
-| `burst` | **Ráfaga** | 110 | 8 | 0.6 | 2.0 | 8 púas en círculo | **No** | Púa (6) |
-| `tesla` | **Eléctrica** | 130 | 12 | 0.7 | 2.5 | El rayo salta a 2 enemigos más (hasta 1,5 casillas) | Sí | Rayo (20) |
+| `fire` | **Incendiaria** | 90 | 5 | 1.0 | 2.5 | Quema 8 por segundo durante 3 s | Sí | Bola de fuego (10) |
+| `multi` | **Múltiple** | 100 | 7 | 1.3 | 3.0 | Dispara a 2 enemigos a la vez | Sí | Dardo (10) |
+| `burst` | **Ráfaga** | 110 | 10 | 0.8 | 2.0 | 8 púas en círculo | **No** | Púa (6) |
+| `tesla` | **Eléctrica** | 130 | 13 | 0.75 | 2.5 | El rayo salta a 2 enemigos más (hasta 1,5 casillas) | Sí | Rayo (20) |
 
 **Rol de cada torre:**
 - **Incendiaria:** el fuego ignora la armadura y **corta la regeneración**: es la respuesta al Troll (§6.1).
@@ -192,12 +192,12 @@ Cuatro torres nuevas, pensadas como **respuesta** a los enemigos nuevos (§6.1).
 
 | Torre | Nivel 2 | Nivel 3 |
 |---|---|---|
-| Incendiaria | Costo 90 · daño 4 · quema 10 por segundo | Costo 140 · daño 6 · quema 16 por segundo durante 4 s · alcance 3.0 |
-| Múltiple | Costo 90 · daño 8 · a 3 enemigos | Costo 140 · daño 11 · a 4 enemigos · alcance 3.5 |
-| Ráfaga | Costo 100 · daño 11 · 10 púas · cadencia 0.7 | Costo 150 · daño 15 · 12 púas · cadencia 0.8 · alcance 2.5 |
-| Eléctrica | Costo 120 · daño 18 · salta a 3 · cadencia 0.8 | Costo 180 · daño 26 · salta a 4 · cadencia 0.9 · alcance 3.0 |
+| Incendiaria | Costo 90 · daño 7 · quema 12 por segundo | Costo 140 · daño 10 · quema 18 por segundo durante 4 s · alcance 3.0 |
+| Múltiple | Costo 90 · daño 9 · a 3 enemigos | Costo 140 · daño 12 · a 4 enemigos · alcance 3.5 |
+| Ráfaga | Costo 100 · daño 13 · 10 púas · cadencia 0.9 | Costo 150 · daño 17 · 12 púas · cadencia 1.0 · alcance 2.5 |
+| Eléctrica | Costo 120 · daño 19 · salta a 3 · cadencia 0.85 | Costo 180 · daño 27 · salta a 4 · cadencia 0.95 · alcance 3.0 |
 
-*(Números iniciales: se ajustan con el bot en T84, igual que en §7.1.)*
+**Cómo se balancearon (T84):** con los primeros números (daño 3, 6, 8 y 12), el bot que usa las 8 torres jugaba **peor** que el que usa las 4 viejas (por ejemplo, en el nivel 1 ganaba con 1 vida en vez de 13): cada moneda rendía más en Ametralladoras. Se subió el daño y la cadencia de las cuatro hasta que el bot con las 8 torres quedó parejo con el de las 4 viejas (resultados en §7.4). El fuego de varias Incendiarias no se suma (RF-160), así que conviene tener una por tramo, no muchas juntas.
 
 ---
 
@@ -385,6 +385,9 @@ Con +40 % por oleada, un nivel de 15 o 20 oleadas terminaría con enemigos 7 a 9
 | 3 · Encrucijada | **20 %** | Gana con 9 vidas | Pierde en la última oleada | Pierde en la oleada 9 |
 | 4 · Espiral | **20 %** | Pierde en la última oleada | **Gana con 14 vidas** | Pierde en la oleada 10 |
 | 5 · Fortaleza | **10 %** | Pierde en la última oleada | **Gana con 10 vidas** | Pierde en la oleada 5 |
+| 6 · Nido *(M5)* | **30 %** | Gana con 6 vidas | — | Pierde en la oleada 5 |
+
+**Con las 8 torres (M5, bot "mix"):** nivel 1 gana con 19 vidas · 2 pierde en la última oleada · 3 gana con 16 · 4 gana con 9 · 5 gana con 16 · **6 gana con 10**. Queda parejo con los bots de siempre (a veces mejor, a veces peor): las torres nuevas suman opciones sin regalar los niveles. El nivel 6 es el más exigente: con 35 % ningún bot pasaba la oleada 7 (10 Trolls y 6 Arañas).
 
 La curva de dificultad buscada: en el nivel 1 alcanza con una sola torre bien usada; **desde el nivel 2 hay que mezclar torres** para ganar; el nivel 3 es el más exigente. (Con 40 %, el nivel 3 se perdía siempre en la oleada 6.)
 
@@ -502,7 +505,7 @@ f8   ·······▲············
 | 14 | 2 × **Jefe** (A, cada 3.0 s) + 15 × Troll (B, cada 0.6 s, tras 3 s) |
 | 15 | 2 × **Jefe** (A, cada 3.0 s) + 2 × **Jefe** (B, cada 3.0 s, tras 3 s) + 12 × Araña (A, cada 0.8 s, tras 6 s) + 15 × Troll (B, cada 0.6 s, tras 8 s) |
 
-*(Oleadas y aumento de vida por oleada iniciales: se ajustan con el bot en T84.)*
+**Aumento de vida por oleada: 30 %** (ver §7.4).
 
 
 ---
@@ -737,7 +740,7 @@ Ideas **aprobadas como dirección**, pero **sin fecha**: no se programan hasta c
 
 **Qué ya tenemos a favor:**
 - **Los datos ya están separados del código** (constitución P2): torres, enemigos, oleadas y niveles viven en archivos `.tres`, y los dibujos se eligen en esos datos (RF-156).
-- **Un mapa es poca información:** el tamaño (20×9 casillas), qué es cada casilla (pasto, camino o bloqueada), por dónde pasa cada camino y las oleadas. `tools/make_levels_4_5.gd` ya arma los niveles 4 y 5 a partir de eso: el "formato de mapa" existe, pero está escrito dentro del código.
+- **Un mapa es poca información:** el tamaño (20×9 casillas), qué es cada casilla (pasto, camino o bloqueada), por dónde pasa cada camino y las oleadas. `tools/make_levels.gd` ya arma los niveles 4, 5 y 6 a partir de eso: el "formato de mapa" existe, pero está escrito dentro del código.
 - **El nivel se puede armar al vuelo:** `Level` solo necesita las casillas (un `TileMapLayer`) y los caminos (`Path2D`); no importa si vienen de una escena o se crean al cargar un archivo.
 - **El bot de balance** (`balance_sim.gd`) puede jugar cualquier nivel: serviría para avisar si un mapa nuevo es imposible o demasiado fácil.
 
