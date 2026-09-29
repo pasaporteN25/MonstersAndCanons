@@ -622,3 +622,68 @@ Ideas **aprobadas como dirección**, pero **sin fecha**: no se programan hasta c
 **Cómo se mostraría** (a decidir): un texto corto al elegir cada nivel, una frase en la pantalla de victoria, nombres temáticos para torres y enemigos.
 
 **Depende de / afecta a:** Épocas (B-01) sería una forma de lore ("la guerra a través del tiempo"); el lore también decide la ambientación y, por lo tanto, el arte (B-02). Conviene definir los tres juntos. Si se agregan textos de historia, hay que sacar "Historia, diálogos o cinemáticas" de la lista de §11 (en todo o en parte).
+
+### B-04 · Crear mapas fácilmente y mods
+*Propuesta de Lucas, 2026-09-29. Analizada por Claude; sin fecha. Decisión: D-024.*
+
+**Idea:** que crear un mapa nuevo sea fácil (sin tocar código ni el editor de Godot) y, más adelante, que otras personas puedan agregar contenido al juego: mapas, oleadas, enemigos, torres y dibujos. A eso se le llama **mods** (modificaciones hechas por jugadores).
+
+**Qué ya tenemos a favor:**
+- **Los datos ya están separados del código** (constitución P2): torres, enemigos, oleadas y niveles viven en archivos `.tres`, y los dibujos se eligen en esos datos (RF-156).
+- **Un mapa es poca información:** el tamaño (20×9 casillas), qué es cada casilla (pasto, camino o bloqueada), por dónde pasa cada camino y las oleadas. `tools/make_levels_4_5.gd` ya arma los niveles 4 y 5 a partir de eso: el "formato de mapa" existe, pero está escrito dentro del código.
+- **El nivel se puede armar al vuelo:** `Level` solo necesita las casillas (un `TileMapLayer`) y los caminos (`Path2D`); no importa si vienen de una escena o se crean al cargar un archivo.
+- **El bot de balance** (`balance_sim.gd`) puede jugar cualquier nivel: serviría para avisar si un mapa nuevo es imposible o demasiado fácil.
+
+**Tres escalones.** Cada uno sirve por sí solo y prepara el siguiente:
+
+| Escalón | Qué es | Para quién | Tamaño aproximado |
+|---|---|---|---|
+| **1. Mapas en archivos de texto** | Un archivo por nivel con el mapa "dibujado" con letras y la lista de oleadas. El juego lo lee y arma el nivel solo. | Nosotros (hacer niveles nuevos sin tocar escenas) y cualquiera con un editor de texto. | 3–4 tareas |
+| **2. Editor dentro del juego** | Pantalla "Crear mapa": pintar casillas con el mouse, marcar entradas y salida, armar las oleadas eligiendo enemigos, **probar al instante** y guardar. | Jugadores. | 5–7 tareas |
+| **3. Mods de datos** | Una carpeta `mods/` donde cada mod trae mapas y, si quiere, enemigos y torres nuevos (sus números) y sus dibujos. El menú muestra los mapas instalados. | La comunidad. | 4–6 tareas |
+
+**Cómo se vería un mapa en texto** (escalón 1; formato JSON, que Godot lee sin agregados):
+
+```json
+{
+  "version": 1,
+  "nombre": "Pradera",
+  "oro": 150, "vidas": 20,
+  "mapa": [
+    "....................",
+    "A################...",
+    "................#...",
+    "...X#############...",
+    "....#...............",
+    "....###############S",
+    "...................."
+  ],
+  "oleadas": [
+    [{"enemigo": "normal", "cantidad": 8, "cada": 1.0}],
+    [{"enemigo": "normal", "cantidad": 10, "cada": 0.8},
+     {"enemigo": "armored", "cantidad": 4, "cada": 1.5, "desde": 3.0}]
+  ]
+}
+```
+
+(Ejemplo recortado: un mapa real tiene 9 filas de 20 casillas.) `.` = pasto (se construye), `#` = camino, `X` = bloqueada, `A`/`B`/`C` = entradas, `S` = salida. El recorrido de cada camino se calcula solo: es el camino más corto por las casillas `#` desde cada entrada hasta la salida. Los voladores van en línea recta, como ahora.
+
+**Decisiones a tomar cuando se retome** (con la recomendación de Claude):
+1. **Formato:** JSON *(recomendado: se escribe a mano y Godot lo lee sin agregados)* o `.tres` (lo que usamos hoy: cómodo desde el editor de Godot, incómodo a mano y peligroso para mods, porque un `.tres` puede traer código).
+2. **¿Mods solo con datos o también con código?** *Recomendado: solo datos* (JSON + imágenes). Godot puede cargar paquetes `.pck` con scripts, pero un mod con código puede hacer cualquier cosa en la computadora de quien lo instala, y además se rompe con cada cambio nuestro.
+3. **¿Dónde se guardan?** En `user://maps/` y `user://mods/`, junto a `save.json`. En Android esa carpeta no se ve desde el celular, así que el editor y los mods serían sobre todo para PC.
+4. **Progreso de los mapas propios:** separado del de la campaña (como RF-117), guardado por el nombre del mapa.
+5. **Validación:** al cargar o guardar un mapa se comprueba que cada entrada llegue a la salida, que haya casillas para construir, que los números estén en rangos razonables y que los enemigos existan. Si algo falla, se muestra un mensaje claro y el juego sigue funcionando.
+6. **Compartir:** copiando el archivo (Discord, itch.io). Steam Workshop queda fuera.
+
+**Riesgos y costos:**
+- **Balance:** un mapa de la comunidad puede ser imposible. Solo importa en los mapas oficiales; el bot puede dar una estimación ("el bot lo gana con 12 vidas").
+- **Compatibilidad:** si cambiamos el formato, los mapas viejos dejan de andar. Por eso el archivo lleva `"version"`, igual que `save.json`.
+- **Dibujos de mods:** se cargan mientras el juego corre, así que no pasan por el importador de Godot. El juego tiene que aplicarles él mismo el tamaño doble y los mipmaps (D-023).
+- **El editor es lo más grande**, y en celular sería incómodo (spec §11: sin controles táctiles propios).
+
+**Recomendación:** empezar por el **escalón 1** cuando haga falta hacer más niveles. Se paga solo: los niveles 1 a 5 se pueden pasar a ese formato (y un test compararía que se juegan igual que antes), y es la base del editor y de los mods.
+
+**Relación con otras ideas:** Épocas (B-01) podría armarse como un "paquete" con otras torres, enemigos y dibujos, usando el mismo sistema que los mods. El arte definitivo (B-02) también se beneficia: cambiar dibujos pasaría a ser cambiar archivos.
+
+**Qué cambia en la spec si se hace:** un hito nuevo con sus reglas (RF) y tareas; si se hacen mods, una sección de seguridad (qué puede traer un mod y qué no).

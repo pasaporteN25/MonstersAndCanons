@@ -134,3 +134,9 @@
 - **Cómo se importan:** al **doble** de tamaño (`svg/scale=2.0`: 128×128 píxeles por casilla), para que se vean nítidos en pantalla completa, y con **mipmaps** (`mipmaps/generate=true`), que son copias achicadas que Godot usa para que el dibujo se vea suave cuando se muestra chico. Las dos opciones están en el `.import` de cada dibujo.
 - **Filtro:** el proyecto sigue usando el filtro "Nearest" por defecto, porque con otro filtro aparecen líneas finas entre las casillas del mapa. Solo los nodos que dibujan sprites usan "Linear con mipmaps".
 - **Cómo reemplazar un dibujo:** guardar el nuevo con el **mismo nombre** en la misma carpeta, o elegir otro archivo en el Inspector (en el `.tres` de la torre o del enemigo). Sirve cualquier imagen: SVG o PNG de 128×128. Los enemigos, las torretas y los proyectiles se dibujan **mirando a la derecha**; las torretas giran sobre el **centro** de la imagen.
+
+### D-024 · Mapas fáciles de crear y mods entran al backlog
+- **Fecha:** 2026-09-29 · **Estado:** Propuesta (sin fecha) · **Propuso:** Lucas / **Analizó:** Claude
+- **Qué:** idea B-04 de la spec §13: mapas en archivos de texto (JSON), después un editor dentro del juego y, por último, mods de datos.
+- **Recomendación de Claude:** empezar por los mapas en JSON y pasar a ese formato los 5 niveles actuales; los mods, **solo con datos** (JSON e imágenes, sin código), por seguridad.
+- **Por qué no ahora:** Lucas pidió analizarlo y dejarlo anotado, no hacerlo todavía.
