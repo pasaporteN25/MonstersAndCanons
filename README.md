@@ -28,6 +28,8 @@ La carpeta `specs/` contiene todo lo que define el juego. **Se leen en orden:**
 | [`03-tareas.md`](specs/03-tareas.md) | La lista de pasos pequeños, en orden, para construirlo. | Todos los días: es la lista de "qué hago ahora". |
 | [`04-decisiones.md`](specs/04-decisiones.md) | Registro de cada decisión importante: qué se eligió, qué alternativas había y por qué. | Cuando alguien (o tú en 3 meses) pregunta "¿por qué se hizo así?". |
 
+Fuera de `specs/`: [`CONTENIDO.md`](CONTENIDO.md) explica **cómo agregar enemigos, torres y niveles** (con todos los campos de los datos), y [`ONBOARDING.md`](ONBOARDING.md), cómo preparar una computadora para trabajar.
+
 ---
 
 ## El ciclo de trabajo SDD (cómo se usa esto día a día)
@@ -111,7 +113,7 @@ Los dibujos del juego son archivos **SVG** en `assets/sprites/` (decisión D-023
 
 1. Abrir el `.svg` en **Inkscape** (gratis), Figma o Illustrator, editarlo y guardarlo con el **mismo nombre**. También sirve una imagen PNG de 128×128: en ese caso hay que elegirla en el Inspector, en el `.tres` de la torre o del enemigo (carpeta `data/`).
 2. Abrir el proyecto en Godot: el editor vuelve a importar el archivo solo.
-3. Si el archivo es **nuevo** (no reemplaza a uno que ya estaba), seleccionarlo y en el panel **Importar** poner `Svg → Scale = 2` y activar `Mipmaps → Generate`; después, *Reimportar*. Los que ya están en el proyecto tienen esa configuración.
+3. Los SVG **nuevos** se importan solos al doble y con *mipmaps* (`[importer_defaults]` en `project.godot`): no hay que tocar el panel Importar. Para agregar un enemigo o una torre nuevos, ver [`CONTENIDO.md`](CONTENIDO.md).
 
 Si a una torre o a un enemigo le falta el dibujo, el juego usa la forma geométrica de antes (RF-156): nunca se rompe por un archivo que falta.
 
@@ -122,4 +124,6 @@ Si a una torre o a un enemigo le falta el dibujo, el juego usa la forma geométr
 | `godot --headless --path . -s addons/gut/gut_cmdln.gd -gdir=res://tests -gexit` | Correr todos los tests. |
 | `godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- smart level=1` | Bot que juega solo para revisar el balance (ver spec §7.1). |
 | `godot --path . -s tools/perf_test.gd` | Prueba de rendimiento con 200 enemigos y 60 torres. |
-| `godot --headless --path . -s tools/make_sounds.gd` | Volver a generar los sonidos. |
+| `godot --headless --path . -s tools/make_sounds.gd` | Volver a generar los sonidos (`-- shot_fire` = solo ese). |
+| `godot --headless --path . -s tools/make_levels.gd -- 6` | Volver a generar el mapa y los datos de un nivel (4, 5 o 6) y la campaña. |
+| `godot --headless --path . -s tools/make_icon.gd` | Volver a generar el ícono del juego con los dibujos. |

@@ -11,6 +11,9 @@ signal chained(points: PackedVector2Array)
 const SPRITE_SIZE_PX: float = 28.0
 ## RF-162: una púa toca a un enemigo si pasa a menos de (su radio + este margen).
 const STRAIGHT_HIT_MARGIN_PX: float = 4.0
+## Rendimiento (T85): una púa solo revisa a los enemigos que al salir estaban a menos de
+## (su recorrido + este margen): lo que un enemigo rápido camina mientras la púa vuela.
+const STRAIGHT_CANDIDATE_MARGIN_PX: float = 96.0
 
 var _target: Enemy
 var _target_pos: Vector2
@@ -26,6 +29,9 @@ var _is_done: bool = false
 var _direction := Vector2.ZERO
 var _max_distance: float = 0.0
 var _traveled: float = 0.0
+## Los enemigos que esta púa puede llegar a tocar (se anotan al salir).
+var _candidates: Array[Enemy] = []
+var _has_candidates: bool = false
 
 
 ## Se llama ANTES de agregar el proyectil al árbol.
@@ -45,7 +51,13 @@ func setup(target: Enemy, start_pos: Vector2, stats: TowerLevelData, can_hit_air
 
 ## RF-162: en vez de perseguir a un objetivo, sale en línea recta hacia `direction`.
 func setup_straight(start_pos: Vector2, direction: Vector2, stats: TowerLevelData, can_hit_air: bool,
-		speed_tiles: float, max_distance: float, color: Color, texture: Texture2D = null) -> void:
+		speed_tiles: float, max_distance: float, color: Color, texture: Texture2D = null,
+		candidates: Variant = null) -> void:
+	# `candidates`: los enemigos cercanos, si quien dispara ya los buscó (la Ráfaga los busca
+	# una vez para todas sus púas). Si no, la púa los busca sola al salir.
+	if candidates != null:
+		_candidates = candidates
+		_has_candidates = true
 	_start_pos = start_pos
 	_target_pos = start_pos + direction.normalized() * max_distance
 	_direction = direction.normalized()
@@ -65,6 +77,8 @@ func _ready() -> void:
 	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS  # D-023
 	global_position = _start_pos
 	_face(_target_pos)
+	if is_straight() and not _has_candidates:
+		_candidates = enemies_near(get_tree(), _start_pos, _max_distance + STRAIGHT_CANDIDATE_MARGIN_PX, _can_hit_air)
 
 
 func _physics_process(delta: float) -> void:
@@ -105,10 +119,22 @@ func _move_straight(delta: float) -> void:
 		queue_free()
 
 
-func _first_enemy_touching() -> Enemy:
-	for node: Node in get_tree().get_nodes_in_group(Enemy.GROUP):
+## Revisar a los 200 enemigos en cada cuadro, por cada púa, bajaba el juego a 58 FPS con
+## muchas Ráfagas: por eso se anotan una sola vez los que están cerca de su recorrido.
+static func enemies_near(tree: SceneTree, center: Vector2, reach: float, can_hit_air: bool) -> Array[Enemy]:
+	var list: Array[Enemy] = []
+	for node: Node in tree.get_nodes_in_group(Enemy.GROUP):
 		var enemy := node as Enemy
-		if not enemy.is_active() or (enemy.data.is_flying and not _can_hit_air):
+		if not enemy.is_active() or (enemy.data.is_flying and not can_hit_air):
+			continue
+		if enemy.global_position.distance_squared_to(center) <= reach * reach:
+			list.append(enemy)
+	return list
+
+
+func _first_enemy_touching() -> Enemy:
+	for enemy: Enemy in _candidates:
+		if not is_instance_valid(enemy) or not enemy.is_active():
 			continue
 		var reach: float = Rules.tiles_to_px(enemy.data.size_tiles) + STRAIGHT_HIT_MARGIN_PX
 		if enemy.global_position.distance_squared_to(global_position) <= reach * reach:

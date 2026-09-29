@@ -209,12 +209,15 @@ func _fire_burst() -> void:
 	aim_angle += PI / count
 	_recoil = 1.0
 	_flash_left = FLASH_DURATION
+	# Los enemigos que las púas pueden tocar se buscan una sola vez, para todas (rendimiento, T85).
+	var nearby: Array[Enemy] = Projectile.enemies_near(get_tree(), global_position,
+		range_px() + Projectile.STRAIGHT_CANDIDATE_MARGIN_PX, data.can_hit_air)
 	for i: int in count:
 		var direction := Vector2.from_angle(aim_angle + TAU * i / count)
 		var projectile: Projectile = PROJECTILE_SCENE.instantiate()
 		projectile.setup_straight(global_position + direction * _barrel_length() * 0.6, direction, stats(),
 			data.can_hit_air, data.projectile_speed_tiles, range_px() - _barrel_length() * 0.6, data.color,
-			data.projectile_texture)
+			data.projectile_texture, nearby)
 		fired.emit(projectile)
 
 

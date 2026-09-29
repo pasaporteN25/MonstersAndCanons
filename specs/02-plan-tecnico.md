@@ -128,13 +128,15 @@ Cada clase es un script en `scripts/data/`. **El código real es la referencia**
 
 | Clase | Archivo | Representa |
 |---|---|---|
-| `TowerLevelData` | [`tower_level_data.gd`](../scripts/data/tower_level_data.gd) | Los valores de **un nivel** de una torre: costo, daño, cadencia, alcance, área, ralentización. |
-| `TowerData` | [`tower_data.gd`](../scripts/data/tower_data.gd) | Un tipo de torre: nombre, si golpea voladores, color y su lista de niveles (índice 0 = nivel 1). |
-| `EnemyData` | [`enemy_data.gd`](../scripts/data/enemy_data.gd) | Un tipo de enemigo: vida, velocidad, armadura, oro, vidas que quita, si vuela, resistencia a ralentizar, forma y color. |
+| `TowerLevelData` | [`tower_level_data.gd`](../scripts/data/tower_level_data.gd) | Los valores de **un nivel** de una torre: costo, daño, cadencia, alcance, dibujo de la base y sus **comportamientos** (área, ralentización y, desde M5, quemadura, varios objetivos, ráfaga y rayo en cadena). |
+| `TowerData` | [`tower_data.gd`](../scripts/data/tower_data.gd) | Un tipo de torre: nombre, frase, si golpea voladores, color, dibujos (torreta y proyectil) y su lista de niveles (índice 0 = nivel 1). |
+| `EnemyData` | [`enemy_data.gd`](../scripts/data/enemy_data.gd) | Un tipo de enemigo: vida, velocidad, armadura, oro, vidas que quita, si vuela, resistencia a ralentizar, dibujo (y forma y color de respaldo) y, desde M5, regeneración y crías al morir. |
 | `SpawnGroup` | [`spawn_group.gd`](../scripts/data/spawn_group.gd) | "N enemigos de tipo X, cada S segundos, empezando T segundos después, por la entrada E" (RF-31). |
 | `WaveData` | [`wave_data.gd`](../scripts/data/wave_data.gd) | Una oleada = lista de `SpawnGroup`. |
 | `LevelData` | [`level_data.gd`](../scripts/data/level_data.gd) | Un nivel: escena del mapa, oro y vidas iniciales, lista de oleadas. |
 | `BalanceConfig` | [`balance_config.gd`](../scripts/data/balance_config.gd) | Reglas generales: bono de oleada, % de venta, cuenta atrás, % de vida por oleada. Sus valores están en `data/balance.tres`. |
+
+**Comportamientos como datos (M5, D-025):** cada comportamiento especial es un campo que vale 0 cuando no se usa. El código pregunta por el comportamiento ("¿quema?"), nunca por la torre o el enemigo ("¿es la Incendiaria?"). Así se combinan libremente y el contenido nuevo no necesita código. La guía [`CONTENIDO.md`](../CONTENIDO.md) explica cada campo.
 
 **Dos reglas para todas las clases de datos:**
 
@@ -286,14 +288,15 @@ Se construye en **cualquier** estado excepto `WON`, `LOST` y pausa (RF-44, RF-10
 ### 6.2 Enemigos ([`enemy.gd`](../scenes/enemies/enemy.gd))
 
 - **Nodo raíz:** `Node2D`. No necesita colisiones: las torres lo encuentran midiendo distancias (§6.3, D-014).
-- **Se dibuja con código** en `_draw()` según `data.shape` y `data.color` (círculo, triángulo…). No hace falta ninguna imagen. Encima se dibuja la barra de vida (RF-82), y si está ralentizado se tiñe de azul (RF-62).
+- **Se dibuja** en `_draw()` con su dibujo (`data.texture`, en espejo si camina hacia la izquierda, RF-151) o, si no tiene, con su forma geométrica (RF-156). Encima: la barra de vida (RF-82), la corona si es peligroso (RF-136) y llamitas si se quema (RF-158). Ralentizado se tiñe de celeste; al recibir un golpe se le superpone una silueta blanca (`EnemyShape.flash_texture()`).
+- **Estados (M5):** quemadura (`apply_burn()`, golpecitos cada 0,5 s que ignoran la armadura) y regeneración (si `data.regen_percent_per_second` > 0 y no se está quemando). Avisa lo curado con `healed`, como mucho una vez por segundo.
 - **Cómo avanza:** guarda cuántos píxeles lleva recorridos (`distance`) y le pregunta a la curva del `Path2D` dónde está ese punto. Cuando `distance` supera el largo de la curva, llegó a la salida.
 
   **Por qué así y no con `PathFollow2D`:** `PathFollow2D` obliga a crear un nodo extra por cada enemigo y a meter al enemigo *dentro* del camino. Guardar la distancia a mano es igual de simple, funciona igual para voladores y deja a todos los enemigos juntos en el contenedor `Enemies`. Además, `remaining_distance()` (lo que le falta para llegar) sale directo, y es justo lo que se necesita para apuntar al "Primero".
 - **Recibir golpes:** `take_hit(damage, slow_amount, slow_duration)` aplica la armadura (RF-80) y la ralentización (RF-60, RF-61).
 - **`is_active()`:** después de morir o escapar, el enemigo llama a `queue_free()`, pero Godot lo borra recién al final del frame. Mientras tanto, `is_active()` devuelve `false` para que nadie lo apunte ni lo cuente dos veces.
 - **Grupo:** cada enemigo se agrega al grupo `"enemies"`. Así las torres y el daño en área pueden recorrer todos los enemigos.
-- **Señales:** `died(enemy)`, `reached_exit(enemy)`.
+- **Señales:** `died(enemy)`, `reached_exit(enemy)`, `hit(enemy, daño, armadura)` y `healed(enemy, cantidad)` (estas dos, solo para efectos).
 
 ### 6.3 Torres: detectar y apuntar ([`tower.gd`](../scenes/towers/tower.gd))
 
@@ -307,7 +310,7 @@ Se construye en **cualquier** estado excepto `WON`, `LOST` y pausa (RF-44, RF-10
   - *Más fuerte* → mayor `health`;
   - *Más cercano* → menor distancia a la torre.
 - **Cadencia:** un contador `_cooldown` que baja con `delta`; cuando llega a 0 y hay objetivo, dispara y se reinicia a `1.0 / fire_rate`. Si no hay objetivo, el contador se queda en 0 y dispara apenas entra un enemigo. (Con `delta`, la pausa y la velocidad x2 funcionan solas.)
-- **Disparar:** la torre crea el proyectil y **emite** `fired(projectile)`; `Game` lo agrega al contenedor `Projectiles`.
+- **Disparar:** la torre crea el proyectil y **emite** `fired(projectile)`; `Game` lo agrega al contenedor `Projectiles`. Con `extra_targets` dispara a sus N mejores objetivos a la vez (`find_targets()`, RF-161); con `burst_count` lanza púas en círculo si hay alguien en alcance (`_fire_burst()`, RF-162).
 
 ### 6.4 Proyectiles ([`projectile.gd`](../scenes/towers/projectile.gd))
 
@@ -316,6 +319,8 @@ Se construye en **cualquier** estado excepto `WON`, `LOST` y pausa (RF-44, RF-10
   - **Sin área:** golpea al objetivo si sigue activo; si no, desaparece sin hacer daño.
   - **Con área:** golpea a todos los enemigos activos del grupo `"enemies"` dentro del radio (y a los voladores solo si la torre puede golpearlos).
 - Guardan los valores de la torre **en el momento del disparo**, así una mejora (M2) no cambia proyectiles ya disparados.
+- **Al golpear** (`_hit()`): aplica daño y ralentización, y la quemadura si la torre la tiene (RF-160). Si la torre tiene `chain_extra_targets`, desde el golpeado salta al enemigo más cercano que todavía no golpeó (`_chain_from()`, RF-163) y avisa `chained(puntos)` para el efecto del rayo.
+- **Modo en línea recta** (`setup_straight()`, RF-162): no persigue a nadie; avanza hasta su distancia máxima y golpea al primer enemigo que toca.
 
 ### 6.5 Oleadas ([`wave_spawner.gd`](../scenes/game/wave_spawner.gd))
 
@@ -323,6 +328,7 @@ Se construye en **cualquier** estado excepto `WON`, `LOST` y pausa (RF-44, RF-10
 - Lleva la cuenta de enemigos **vivos** (escucha `tree_exited` de cada uno, que salta tanto si muere como si escapa). Cuando ya salieron todos y los vivos llegan a 0 → emite `wave_finished` (RF-33).
 - **Por qué un reloj con `delta` y no `Timer`s o `await`:** con `delta`, la pausa y la velocidad x2 funcionan sin código extra, y no quedan temporizadores "colgando" si se reinicia el nivel.
 - La vida de cada enemigo se calcula al crearlo con `Rules.scaled_health(...)` (RF-36).
+- **Crías (M5, RF-166):** si un enemigo tiene `death_spawn`, el generador escucha su `died` y crea las crías en su lugar, sobre el mismo camino. Como las suma a los vivos **antes** de que la madre deje el árbol, la oleada no termina antes de tiempo.
 
 ### 6.6 Construcción ([`build_controller.gd`](../scenes/game/build_controller.gd))
 

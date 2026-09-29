@@ -215,7 +215,8 @@ Se ejecutan desde la carpeta del proyecto. Más detalle dentro de cada archivo.
 | `godot --headless --path . -s addons/gut/gut_cmdln.gd -gdir=res://tests -gexit` | Correr todos los tests. |
 | `godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- smart level=1` | Bot que juega solo, para revisar el balance (spec §7.1). Estrategias: `smart`, `basic`, `naive`. |
 | `godot --path . -s tools/perf_test.gd` | Prueba de rendimiento: 200 enemigos y 60 torres. Abre una ventana. |
-| `godot --headless --path . -s tools/make_sounds.gd` | Volver a generar los sonidos (D-020). |
+| `godot --headless --path . -s tools/make_sounds.gd` | Volver a generar los sonidos (D-020). Con `-- shot_fire`, solo ese. |
+| `godot --headless --path . -s tools/make_levels.gd -- 6` | Volver a generar el mapa y los datos de un nivel (4, 5 o 6) y la campaña (ver `CONTENIDO.md`). |
 | `godot --headless --path . -s tools/make_icon.gd` | Volver a generar el ícono del juego (`assets/icon.png`). |
 
 > ⚠️ **Trampa conocida (para quien escriba herramientas nuevas):** los scripts que se ejecutan con `-s` se compilan **antes** que los autoloads. No pueden usar `GameFlow`, `SaveManager` ni `Audio` por su nombre, ni declarar variables de tipo `Game`. Hay que declarar la partida como `Node2D` (plan técnico §7).
@@ -232,7 +233,7 @@ Se ejecutan desde la carpeta del proyecto. Más detalle dentro de cada archivo.
 | Exportar a Android: *"La compresión de texturas ETC2/ASTC se requiere…"* | El proyecto no genera texturas para celulares. | Ya está resuelto en `project.godot` (`import_etc2_astc=true`). Si reaparece: *Configuración del proyecto → Renderizado → Texturas → Compresión de VRAM → Importar ETC2 ASTC*. |
 | Al cerrar el juego, en la terminal: *"ObjectDB instances were leaked"* | La música sigue "reproduciéndose" en el servidor de audio durante el cierre. | Es inofensivo y el jugador no lo ve. Está anotado como pendiente. |
 | Una herramienta (`tools/…`) da *"Identifier not found: GameFlow"* | Ver la trampa de la sección anterior. | Declarar la partida como `Node2D`. |
-| Un dibujo nuevo (`assets/sprites/`) se ve borroso, chico o con bordes serruchados | Se importó con la configuración por defecto (tamaño ×1, sin mipmaps). | Seleccionarlo, y en el panel *Importar*: `Svg → Scale = 2`, `Mipmaps → Generate` activado, *Reimportar* (README, "Dibujos"). |
+| Un dibujo nuevo (`assets/sprites/`) se ve borroso, chico o con bordes serruchados | Se importó sin la configuración del proyecto (tamaño ×1, sin mipmaps): pasa si se borró `[importer_defaults]` de `project.godot` o si el `.import` se copió de otro lado. | Seleccionarlo, y en el panel *Importar*: `Svg → Scale = 2`, `Mipmaps → Generate` activado, *Reimportar* (README, "Dibujos"). |
 | Un dibujo que se dibuja con código sale como un **cuadrado blanco** | La textura se cargó dentro de `_draw()` en una variable local: Godot la libera antes de mostrarla. | Guardarla en una variable del script o en una constante con `preload()`. |
 | El juego se cierra solo, se congela o hace algo raro | En la versión exportada los errores de GDScript **no se muestran**. | Anotar la hora y qué se estaba haciendo. Revisar el log de esa hora en la carpeta `logs` (ver "Dónde guarda las cosas el juego") y, si el programa se cerró de golpe, el *Visor de eventos* de Windows (*Registros de Windows → Aplicación*). |
 
