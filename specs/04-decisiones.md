@@ -191,3 +191,11 @@
 - **Consecuencia:** el Salón de la fama (D-029) pide ganar **todos** los niveles de la campaña, así que ahora exige ganar también el 7. Quien ya lo tenía anotado con 6 niveles vuelve a poder entrar cuando gane el 7 y su total suba.
 - **Linux, lo que NO se probó:** el ejecutable se exportó pero no se abrió en una computadora Linux (no había una a mano). Los tests sí corren en Linux en cada push (D-030).
 - **Alternativas para Linux:** un AppImage o un paquete Flatpak (más cómodos de instalar, pero piden herramientas y pasos extra); un `.deb`. Quedan para cuando haya jugadores que los pidan.
+
+### D-033 · Prioridades después de M8: editor de mapas y mapas de la comunidad
+- **Fecha:** 2026-09-29 · **Estado:** Aceptada (sin fecha de inicio) · **Decidió:** Lucas
+- **Qué:** de las ideas para seguir, Lucas eligió **el editor de mapas dentro del juego** y **los mapas de la comunidad** (B-04, escalones 2 y 3). Las demás quedaron en el backlog: mapas más ricos (B-08), rutas explícitas y cruces (B-09), más niveles y niveles difíciles (B-10), compartir un mapa como texto (B-11), mapas al azar y modo desafío (B-12) y una sola app con modo admin (B-13).
+- **El editor entra primero en `JuegoA_pruebas.exe`,** como herramienta de administración, junto al panel de pruebas (§10.2). Después se decide si pasa al juego normal o si se unifica todo en una app con modo admin (B-13). Sigue valiendo D-028: lo de administración usa su propio guardado y no ensucia el progreso real.
+- **Dónde guarda el editor:** `user://maps/` (el `.exe` no puede escribir en `res://`). Para hacer oficial un mapa se copia a `data/levels/` en el repositorio y se suma a `campaign.json`.
+- **Requisito previo:** la selección de nivel debe soportar cualquier cantidad de niveles (hoy es una fila fija de tarjetas que ya se angostó dos veces, al pasar a 6 y a 7 niveles).
+- **Los mapas no se ofuscan:** los archivos de nivel viajan legibles dentro del `.exe` y no hay nada que proteger (juego de un solo jugador, sin servidor ni claves), y ofuscarlos rompería los diffs de git, la revisión automática (D-030), `check_level` y los mods. Lo que sí se cuida: la clave de firma de Android no se sube nunca a git.

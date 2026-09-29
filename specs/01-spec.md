@@ -840,7 +840,13 @@ Ideas **aprobadas como dirección**, pero **sin fecha**: no se programan hasta c
 **Depende de / afecta a:** Épocas (B-01) sería una forma de lore ("la guerra a través del tiempo"); el lore también decide la ambientación y, por lo tanto, el arte (B-02). Conviene definir los tres juntos. Si se agregan textos de historia, hay que sacar "Historia, diálogos o cinemáticas" de la lista de §11 (en todo o en parte).
 
 ### B-04 · Crear mapas fácilmente y mods
-*Propuesta de Lucas, 2026-09-29. Analizada por Claude. Decisión: D-024. **El escalón 1 se hizo en M7 (§7.8, D-031)**; el editor y los mods siguen sin fecha.*
+*Propuesta de Lucas, 2026-09-29. Analizada por Claude. Decisión: D-024. **El escalón 1 se hizo en M7 (§7.8, D-031).** **Prioridad de Lucas (D-033): el editor de mapas (escalón 2) y los mapas de la comunidad (escalón 3, solo la parte de mapas); el editor entra primero en la versión de pruebas, como herramienta de administración.** Sin fecha.*
+
+> **Lo que se decidió el 2026-09-29 sobre el editor y la comunidad (D-033):**
+> - **El editor va primero en `JuegoA_pruebas.exe`**, como herramienta de administración (igual que el panel de pruebas, §10.2). Después se decide si pasa al juego normal, o si conviene **una sola app con un modo admin** (B-13).
+> - **Dónde guarda:** un `.exe` exportado no puede escribir dentro de sí mismo (`res://` es de solo lectura), así que el editor guarda en `user://maps/`. Para volver un mapa **oficial** hay que copiar el archivo a `data/levels/` en el repositorio y sumarlo a `campaign.json`.
+> - **Requisito previo, la pantalla de selección de nivel:** hoy tiene una sola fila de tarjetas de ancho fijo (se angostó al pasar a 6 y otra vez a 7 niveles, y con 8 ya no entra). Con mapas de la comunidad la cantidad de niveles no tiene tope, así que primero hay que pasarla a una grilla que se acomoda y se desplaza (también sirve en el celular).
+> - **Lo que ya está hecho y sirve de base:** leer el mapa de letras, calcular los recorridos, validar con mensajes claros (`MapGrid`, `LevelFile`) y revisar un archivo sin jugarlo (`check_level`).
 
 **Idea:** que crear un mapa nuevo sea fácil (sin tocar código ni el editor de Godot) y, más adelante, que otras personas puedan agregar contenido al juego: mapas, oleadas, enemigos, torres y dibujos. A eso se le llama **mods** (modificaciones hechas por jugadores).
 
@@ -949,3 +955,70 @@ Ideas **aprobadas como dirección**, pero **sin fecha**: no se programan hasta c
 | **Torres con vida** | Algunos enemigos **atacan a las torres** y las pueden romper; habría que repararlas. | Cambia mucho el juego: interfaz nueva (vida de la torre, reparar), balance de todo. | Grande |
 
 **Recomendación de Claude:** empezar por el **Guardián** y el **Chamán**. El Guardián es una aura (un dato y una búsqueda de enemigos cercanos, como la del rayo en cadena). El Chamán necesita una regla nueva, "torre aturdida", que también usaría el enemigo espejo (B-06). "Torres con vida" conviene dejarla para un modo aparte (B-05), porque cambia la base del juego.
+
+### B-08 · Mapas más ricos: terrenos, temas y tamaño
+*Pregunta de Lucas, 2026-09-29 (a raíz de M7). Sin fecha.*
+
+**Hoy:** un mapa dice solo tres cosas por casilla (pasto, camino, bloqueada) y **el dibujo de lo bloqueado lo elige el juego** al azar (roca, árbol, arbusto, RF-154). No se puede pedir "acá va un lago". El tamaño es fijo, 20×9 (RF-01).
+
+**Ideas**, de la más chica a la más grande. Cada una es un campo nuevo y opcional del archivo del nivel, así los niveles que ya existen no cambian:
+
+| Idea | Qué es | Tamaño |
+|---|---|---|
+| **Leyenda** | El nivel declara letras nuevas y qué son: `"leyenda": {"~": {"dibujo": "agua", "construible": false}}`. Los dibujos son archivos de `assets/sprites/map/` (y en un mod, imágenes propias). Se puede decidir el dibujo de cada casilla. | Chico |
+| **Temas** | `"tema": "desierto"` cambia la paleta del pasto y del camino y el conjunto de decoración (nieve, lava, ruinas). | Chico |
+| **Decoración a mano** | Una lista de objetos con su posición (un árbol grande en 3,4), sin necesidad de ocupar una casilla entera. | Chico |
+| **Terrenos con efecto** | Pantano (los enemigos van más lentos), colina (las torres ganan alcance), terreno rico (construir cuesta menos). Cambian la estrategia y necesitan reglas (RF) y balance. | Mediano |
+| **Tamaño variable** | Mapas más grandes que 20×9, con cámara que se desplaza o zoom. Cambia la interfaz, la construcción y los tests. | Grande |
+
+**Recomendación de Claude:** empezar por **leyenda + temas**, que son lo que más ayuda al editor (B-04) y a los mods, y dejar el tamaño variable para el final.
+
+### B-09 · Rutas explícitas y cruces de caminos
+*Pregunta de Lucas, 2026-09-29. Sin fecha.*
+
+**Hoy (§7.8):** el recorrido de cada entrada se **calcula** como el camino más corto por las casillas de camino. Eso permite **unirse** (empalmes en "T": niveles 3, 5 y 6) pero no permite:
+- **Cruzarse:** dos caminos que se atraviesan en "+" y cada uno sigue derecho. En la casilla del cruce los dos enemigos "eligen" el mismo tramo de salida, así que uno se desviaría. Ningún nivel actual lo necesita.
+- **Correr pegados sin tocarse:** dos tramos en casillas vecinas quedan **conectados**, y el enemigo puede tomar el atajo **sin que haya error** (si el atajo es el único más corto). `check_level` lo deja a la vista con el recorrido marcado, pero no lo avisa.
+
+**Ideas:**
+1. **Casilla de puente/cruce** (una letra, por ejemplo `+`): el enemigo la atraviesa **siguiendo derecho**, sin elegir. Resuelve los cruces con solo agregar una letra (el cálculo del camino tendría que recordar la dirección en que se llega).
+2. **Rutas explícitas (opcional):** un campo `"caminos"` con las esquinas de cada entrada, como se hacía antes de M7. Si está, **reemplaza el cálculo**. Sirve para cualquier forma, incluidas salidas separadas por entrada (RF-03 hoy pide una sola).
+3. **Aviso de atajo en `check_level`:** avisar cuando una casilla del recorrido tiene vecina otra casilla de camino mucho más adelante (o más atrás) en el mismo recorrido. Es lo más chico y previene el error silencioso.
+
+**Recomendación de Claude:** hacer el **aviso de atajo (3)** apenas se pueda, porque es barato, y el **puente (1)** cuando el editor o un nivel lo pidan.
+
+### B-10 · Más niveles y niveles difíciles
+*Idea de Lucas (a partir de las propuestas de Claude), 2026-09-29. Sin fecha.*
+
+- **Niveles 8, 9, 10…:** con el formato de M7 son un archivo de texto y una línea en `campaign.json`. Cada uno se balancea con el bot (spec §7.4).
+- **Niveles "difíciles":** el mismo mapa con otras oleadas y más vida por oleada, como archivo aparte (`level_03_dificil.json`), con su propio récord. Reusan el mapa: un modo de dificultad sin diseñar mapas nuevos.
+- **Requisito:** la selección de nivel escalable (ver B-04).
+
+### B-11 · Compartir un mapa como texto
+*Idea de Lucas (a partir de las propuestas de Claude), 2026-09-29. Sin fecha.*
+
+**Idea:** en el editor, un botón **"Copiar código"** deja el nivel en el portapapeles, y otro **"Pegar código"** lo carga: se comparte por Discord o WhatsApp sin mandar archivos. El código es el mismo JSON de §7.8, quizás comprimido (más corto y sin comillas que se rompen al pegar). Aplica la misma validación de RF-204 al pegar: un código de un desconocido **nunca puede traer código ejecutable**, solo datos.
+
+### B-12 · Mapas al azar y modo desafío
+*Idea de Lucas (a partir de las propuestas de Claude), 2026-09-29. Sin fecha.*
+
+**Idea:** un generador arma un mapa válido (camino, entradas, salida, bloques) y **el bot de balance lo juega** para comprobar que se puede ganar y que no es regalado, antes de ofrecérselo al jugador. Puede ser un **desafío diario** con una semilla igual para todos (la misma fecha, el mismo mapa), y un récord propio. Las oleadas también se pueden generar con una fórmula de dificultad. **Cuidar:** el bot tarda minutos por partida, así que la comprobación tendría que hacerse **antes** (mapas ya verificados) o con una versión rápida.
+
+### B-13 · Una sola app con modo administrador
+*Idea de Lucas, 2026-09-29. Sin fecha.*
+
+**Hoy (D-028):** el modo de pruebas es un ejecutable aparte, sin ninguna clave: una contraseña dentro de un juego de un solo jugador no protege nada (el guardado es un archivo de texto editable). **Si se quiere una sola app**, el modo admin se activaría por algo que **el jugador normal no toca**, por ejemplo un argumento (`JuegoA.exe --admin`, un atajo del escritorio) o un archivo de configuración al lado del `.exe`. La regla de D-028 sigue valiendo: el modo admin **usa otro guardado** para no ensuciar el progreso ni los récords reales. **Decidir después** de ver el editor funcionando (B-04).
+
+### B-14 · Tipos de daño (físico y elemental) y armadura más flexible
+*Idea de Lucas, 2026-09-29 (a raíz de la fórmula de daño de League of Legends). Sin fecha.*
+
+**Hoy (RF-80):** `daño real = máximo(1, daño − armadura)`. La resta fija es deliberada: la armadura castiga a las torres que pegan muchas veces con poco daño (Ametralladora, Múltiple, Ráfaga) y casi no afecta a las pesadas (Cañón, Francotirador), así cada torre tiene un papel. Con armadura 3, la Ametralladora pierde el 60 % del golpe y el Francotirador el 8 %. Un porcentaje fijo (`daño × 100 / (100 + armadura)`, como en League of Legends, Dota 2 o Warcraft 3) afectaría a todas por igual y se perdería esa diferencia.
+
+**Idea:** en vez de cambiar la fórmula, sumar **dos tipos de daño**, cada uno con su defensa (la idea que sí sirve de ese video):
+- **Físico** (Ametralladora, Cañón, Francotirador, Ráfaga, Múltiple): lo reduce la **armadura** (resta fija, como hoy).
+- **Elemental** (Incendiaria, Hielo, Eléctrica): lo reduce una **resistencia mágica** (`resistencia_elemental`), que podría ser un porcentaje.
+- Cada enemigo tendría sus dos defensas: el Blindado, mucha armadura y poca resistencia; un enemigo "de piedra", al revés. Sigue RF-164: son campos con valor 0 que se combinan (`damage_type` en la torre; `armor` y `elemental_resistance` en el enemigo).
+
+**Punto débil de hoy que se puede arreglar aparte:** el piso de 1 es un precipicio (si un enemigo tuviera armadura 10, las torres de golpe chico pegarían siempre 1). Una salida chica es un **piso proporcional**: `máximo(golpe × 20 %, golpe − armadura)`.
+
+**Antes de hacerlo:** cambiar la fórmula obliga a **volver a balancear los 7 niveles** con el bot. Se puede comparar las dos fórmulas con el bot en una copia aparte, sin tocar el proyecto. **Qué cambia en la spec:** RF-80, la tabla de torres (columna "tipo de daño") y la de enemigos.
