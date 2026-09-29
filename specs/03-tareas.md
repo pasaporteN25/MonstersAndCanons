@@ -291,9 +291,10 @@
   **Hecho cuando:** `godot --headless --path . --export-debug "Android" build/JuegoA.apk` genera el archivo sin errores.
   **Resultado:** `build/JuegoA.apk` (28,7 MB), firmado con la clave de depuración de Godot, paquete `com.juegoa.towerdefense` 1.0, arm64. Hizo falta además activar ETC2/ASTC y agregar un ícono (`assets/icon.png`).
 
-- [ ] **TA3 · Probar en un celular**
+- [x] **TA3 · Probar en un celular**
   **Refs:** RF-140 a RF-143.
   **Hecho cuando:** Lucas instala el `.apk`, el juego abre en horizontal, se puede construir tocando, y "atrás" abre el menú de pausa sin cerrar el juego.
+  **Resultado:** Lucas lo probó en su celular (2026-09-29): "funcionó bien como concepto". Quedan mejoras para más adelante (sin detallar todavía).
 
 ---
 
