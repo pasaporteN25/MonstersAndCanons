@@ -14,6 +14,7 @@
 | Datos de torres | `data/towers/` | Un `.tres` por torre (`TowerData`, con sus 3 niveles adentro) |
 | Niveles | `data/levels/` | Un `.json` por nivel: el mapa dibujado con letras y las oleadas (ver "Agregar un nivel") |
 | Campaña | `data/campaign.json` | La lista de niveles, en orden |
+| Artículos de la Wiki | `data/wiki/` | Un `.json` por artículo (ver "La Wiki") |
 | Dibujos | `assets/sprites/` | SVG (o PNG). Ver "Reglas de los dibujos" |
 | Sonidos | `assets/audio/` | `.wav`. Cada torre usa `shot_<id>.wav` |
 
@@ -38,6 +39,7 @@ Los niveles son JSON, un formato de texto común que se edita a mano. Un `.tres`
 2. **Datos:** en el editor, panel *Sistema de archivos* → `data/enemies/` → clic derecho sobre un enemigo parecido → **Duplicar** → llamarlo `<id>.tres`.
 3. **Completar** en el Inspector (tabla de abajo). Como mínimo: `id` (igual al nombre del archivo), `display_name`, `description`, los números y `texture` (arrastrar el SVG).
 4. **Usarlo** en una oleada de algún nivel (ver "Agregar un nivel").
+   *Aparece solo en la **Wiki** ("Enemigos"), con su dibujo, sus datos y los niveles donde sale: no hay que tocar nada más.*
 5. **Probar:** correr los tests. `tests/test_content.gd` revisa **todos** los enemigos solo y avisa si falta algo ("enemigo 'lich': frase de presentación").
 
 ### Campos de `EnemyData`
@@ -71,6 +73,7 @@ Los niveles son JSON, un formato de texto común que se edita a mano. Un `.tres`
 3. **Datos:** duplicar una torre parecida de `data/towers/` y completar (tabla de abajo). Cada torre tiene **3 niveles** (`levels`): el nivel 1 es al construirla; en los niveles 2 y 3, `cost` es lo que cuesta mejorarla.
 4. **Sumarla al juego:** abrir `scenes/game/game.tscn`, seleccionar el nodo **Game** y agregarla al final de **Tower Types**. Entran **hasta 8** (teclas 1 a 8, RF-170). Si te olvidás, un test te avisa.
 5. **Probar:** tests y el bot de balance (más abajo).
+   *Aparece sola en la **Wiki** ("Torres"), con su tabla de niveles y sus efectos.*
 
 ### Campos de `TowerData`
 
@@ -260,6 +263,41 @@ Lo más fácil: en el juego, **Jugar → solapa "Mapas de la comunidad" → "Abr
 
 ---
 
+## La Wiki: qué se agrega solo y cómo escribir un artículo
+
+La **Wiki** (menú principal) tiene tres categorías:
+
+| Categoría | De dónde sale | Qué hay que hacer |
+|---|---|---|
+| **Enemigos** | Un `.tres` de `data/enemies/` | Nada: se agrega sola, ordenada de más débil a más fuerte. Los números salen del `.tres` y "dónde aparece" sale de la campaña. |
+| **Torres** | Un `.tres` de `data/towers/` | Nada: se agrega sola, de la más barata a la más cara. |
+| **Guía** | Un `.json` de `data/wiki/` | Escribir el artículo (abajo). |
+
+Un artículo es un archivo de texto (el nombre del archivo es su id: minúsculas, números y `_`):
+
+```json
+{
+  "version": 1,
+  "titulo": "Mi artículo",
+  "subtitulo": "Una línea que lo resume (opcional)",
+  "orden": 8,
+  "bloques": [
+    { "tipo": "titulo", "texto": "Un subtítulo" },
+    { "tipo": "texto", "texto": "Un párrafo. Se parte solo en renglones." },
+    { "tipo": "datos", "filas": [["Nombre", "valor"], ["Otro", "otro valor"]] },
+    { "tipo": "tabla", "filas": [["Columna A", "Columna B"], ["1", "2"]] }
+  ]
+}
+```
+
+- `orden` (opcional) decide dónde va en la lista; a igual número, por nombre de archivo.
+- En `datos` cada fila tiene **2** textos; en `tabla`, la primera fila es el encabezado y todas tienen la misma cantidad de columnas.
+- **No copies números que ya viven en los datos** (vida, daño, costos, porcentajes): explicá la regla y mandá a la entrada del enemigo o la torre. Si se rebalancea, el artículo quedaría mintiendo.
+- Si te equivocás, el artículo simplemente no aparece; `tests/test_wiki_articles.gd` falla y dice **qué archivo y qué error**.
+- Para una categoría nueva (Niveles, Lore…) hay que sumar una función en `scripts/logic/wiki.gd`; la pantalla no cambia (plan técnico §6.10).
+
+---
+
 ## Revisar el balance con el bot
 
 El bot juega solo, a toda velocidad, e imprime cómo termina:
@@ -282,5 +320,6 @@ Una buena señal: los bots que piensan ganan con algunas vidas de sobra y el que
 - [ ] Si es un nivel: `check_level` no da errores y está en `data/campaign.json`.
 - [ ] Tiene nombre, frase y dibujo(s).
 - [ ] Si es una torre: 3 niveles, sonido `shot_<id>.wav` y está en **Tower Types**.
+- [ ] Se ve bien en la **Wiki** (enemigos y torres se agregan solos: abrirla y mirar la entrada nueva).
 - [ ] Pasan los tests (`test_content.gd` revisa todo lo anterior solo).
 - [ ] Si cambia el balance: el bot da resultados razonables, y la spec lo dice (constitución P3: la spec manda).

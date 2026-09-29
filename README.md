@@ -4,7 +4,7 @@
 
 Juego *tower defense* 2D hecho en **Godot 4** con **GDScript**, construido con **SDD (Spec-Driven Development)**.
 
-> **Estado actual:** M1 a M10 ✅ (juego completo, 7 niveles, 8 torres, modo de pruebas con editor de mapas, mapas de la comunidad, récords, niveles en archivos de texto y versión para Linux) y versión Android probada en un celular. Tests automáticos en GitHub (D-030).
+> **Estado actual:** M1 a M11 ✅ (juego completo, 7 niveles, 8 torres, modo de pruebas con editor de mapas, mapas de la comunidad, Wiki dentro del juego, récords, niveles en archivos de texto y versión para Linux) y versión Android probada en un celular. Tests automáticos en GitHub (D-030).
 >
 > **Versión de Godot:** 4.7.2 estable (renderizador *Compatibility*).
 >
@@ -126,6 +126,10 @@ godot --headless --path . --export-release "Windows (pruebas)" build/JuegoA_prue
 - Abajo al centro siempre dice "MODO PRUEBAS", para no confundirlo con el juego normal.
 - El `JuegoA.exe` normal y el `.apk` **no** lo tienen.
 - Desde el editor de Godot: *Proyecto → Configuración del proyecto → Editor → Run → Main Run Args* = `-- --pruebas`.
+
+## Wiki
+
+El botón **Wiki** del menú principal abre una enciclopedia: **Enemigos** y **Torres** (con sus números reales, la tabla de niveles y dónde aparece cada enemigo) y una **Guía** con las reglas. Un enemigo o una torre nuevos aparecen solos; los artículos de la guía son archivos de texto en `data/wiki/`. Cómo escribirlos: [`CONTENIDO.md`](CONTENIDO.md).
 
 ## Mapas de la comunidad
 

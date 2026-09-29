@@ -636,7 +636,8 @@
   **Hecho cuando:** los tests comprueban las solapas, elegir una entrada y ver su detalle, el teclado, que la categoría vacía no se muestra y que el botón del menú existe; las capturas muestran un enemigo, una torre y un artículo, y el menú con el botón nuevo.
   **Resultado:** [`wiki_screen.gd`](../scenes/ui/wiki_screen.gd) (solapas, lista con dibujo y nombre, detalle con desplazamiento; ◄/► cambian de categoría, ▲/▼ recorren la lista y al pasar se ve el detalle; Esc y Volver salen) y [`wiki_icon.gd`](../scenes/ui/wiki_icon.gd) (dibuja las capas). La pantalla solo dibuja bloques: no sabe qué es un enemigo. `show_target(categoría, entrada)` deja listo el enlace desde otros lados (B-15). `GameFlow.go_to_wiki()` y el botón "Wiki" entre Récords y Opciones. Las capturas mostraron dos cosas que se arreglaron: títulos largos que se cortaban en la lista (ahora llevan puntos suspensivos) y el texto pegado al borde del panel. 14 tests nuevos (530 en total).
 
-- [ ] **T113 · Cierre de M11: documentación y exportaciones**
+- [x] **T113 · Cierre de M11: documentación y exportaciones**
   README, ONBOARDING, CONTENIDO.md (cómo escribir un artículo y qué se agrega solo); exportar los cuatro ejecutables.
   **Refs:** D-035.
   **Hecho cuando:** pasan todos los tests y, en el `.exe` normal exportado, la wiki muestra los enemigos y las torres (los `.tres` exportados se leen).
+  **Resultado:** CONTENIDO.md (sección "La Wiki: qué se agrega solo y cómo escribir un artículo", con el formato de los bloques), README, ONBOARDING y la lista rápida al día. Se exportaron los cuatro. **Comprobación con el paquete exportado del juego normal** (cargado con el Godot de desarrollo, igual que en M10): la wiki muestra los enemigos con su dibujo y sus datos, y aparece la solapa "Guía" (los artículos `.json` se leen). **Sin probar:** el `.exe` de release abierto a mano, y el Linux en una computadora Linux.
