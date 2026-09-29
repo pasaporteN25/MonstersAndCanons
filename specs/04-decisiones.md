@@ -140,3 +140,18 @@
 - **Qué:** idea B-04 de la spec §13: mapas en archivos de texto (JSON), después un editor dentro del juego y, por último, mods de datos.
 - **Recomendación de Claude:** empezar por los mapas en JSON y pasar a ese formato los 5 niveles actuales; los mods, **solo con datos** (JSON e imágenes, sin código), por seguridad.
 - **Por qué no ahora:** Lucas pidió analizarlo y dejarlo anotado, no hacerlo todavía.
+
+### D-025 · Cada comportamiento nuevo es un dato que se puede combinar
+- **Fecha:** 2026-09-29 · **Estado:** Aceptada · **Decidió:** Lucas (pidió que crear contenido y mods sea fácil) / Claude (cómo)
+- **Qué:** quemadura, varios objetivos, ráfaga en círculo, rayo en cadena (torres) y regeneración y crías (enemigos) son **campos** de `TowerLevelData` y `EnemyData`, que valen 0 cuando no se usan (spec RF-164). El código no pregunta nunca "¿es el Troll?" o "¿es la Eléctrica?": pregunta "¿este enemigo se regenera?".
+- **Alternativa descartada:** programar cada torre y enemigo nuevo como un caso aparte. Es más rápido la primera vez, pero cada contenido nuevo (o cada mod) necesitaría código.
+- **Consecuencia:** una torre nueva puede combinar cosas que hoy no existen juntas (por ejemplo, un rayo que quema) sin programar nada. La guía `CONTENIDO.md` explica cada campo.
+
+### D-026 · Barra de torres compacta, para 8 torres
+- **Fecha:** 2026-09-29 · **Estado:** Aceptada · **Decidió:** Claude (T77)
+- **Qué:** los botones de torres muestran dibujo, costo y tecla; el nombre y la frase de la torre aparecen al pasar el mouse y al elegirla (spec RF-170, RF-171). Teclas 1–8.
+- **Por qué:** con 8 torres, los botones de 184 px con el nombre no entran en la barra de 1280 px (quedaría tapada "Próxima oleada").
+
+### D-027 · Modos y enemigo espejo entran al backlog
+- **Fecha:** 2026-09-29 · **Estado:** Propuesta (sin fecha) · **Propuso:** Lucas
+- **Qué:** B-05 (modos de juego; el actual sería "Torres y Bestias", y el de historia usaría imperios reales) y B-06 (enemigo espejo que aturde a las torres cercanas). Lucas pidió solo anotarlos. Además decidió que Épocas (B-01) sea un **modo aparte**.

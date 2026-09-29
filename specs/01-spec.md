@@ -97,7 +97,7 @@ La columna **Hito** de las tablas siguientes indica en qué momento se agrega ca
 
 ### 5.1 Construir
 
-- **RF-40** El jugador elige una torre en la barra inferior (o con las teclas **1–4**). Aparece una **vista previa** de la torre que sigue al mouse, "pegada" a la cuadrícula, mostrando su **círculo de alcance**.
+- **RF-40** El jugador elige una torre en la barra inferior (o con las teclas **1–8**; en M1–M4 eran 1–4). Aparece una **vista previa** de la torre que sigue al mouse, "pegada" a la cuadrícula, mostrando su **círculo de alcance**.
 - **RF-41** La vista previa se ve **verde** si se puede construir en esa casilla y **roja** si no.
 - **RF-42** Se puede construir en una casilla solo si: es **Libre**, **no tiene** otra torre y el jugador **tiene el oro**.
 - **RF-43** **Clic izquierdo** construye (y se descuenta el oro). La vista previa **sigue activa** para poder construir otra igual. **Clic derecho** o **Esc** cancelan.
@@ -117,7 +117,7 @@ La columna **Hito** de las tablas siguientes indica en qué momento se agrega ca
   - **Último** — el más lejos de la salida.
   - **Más fuerte** — el que tiene más vida actual.
   - **Más cercano** — el más cerca de la torre.
-- **RF-55** Los proyectiles viajan a **10 casillas por segundo** (todas las torres). Es lo bastante rápido para que casi nunca lleguen tarde, y lo bastante lento para que se vean.
+- **RF-55** Los proyectiles viajan a **10 casillas por segundo** (todas las torres). Es lo bastante rápido para que casi nunca lleguen tarde, y lo bastante lento para que se vean. *(M5: el rayo de la Eléctrica va a 20 y las púas de la Ráfaga a 6; ver §5.6.)*
 
 ### 5.3 Tabla de torres (nivel 1 de cada torre)
 
@@ -165,6 +165,40 @@ La columna **Hito** de las tablas siguientes indica en qué momento se agrega ca
 | Hielo | Costo 80 · ralentiza 50 % · alcance 3.0 | Costo 120 · ralentiza 60 % durante 3 s · daño 4 |
 | Francotirador | Costo 150 · daño 70 | Costo 225 · daño 120 · alcance 7.0 |
 
+### 5.6 Torres nuevas *(M5, pedidas por Lucas)*
+
+Cuatro torres nuevas, pensadas como **respuesta** a los enemigos nuevos (§6.1). **Principio (RF-164):** cada comportamiento es un **dato** de la torre o del enemigo, no un caso especial en el código. Por eso cualquier torre puede combinar varios (por ejemplo, un rayo que además quema), y crear contenido nuevo (o un mod, B-04) es escribir datos y hacer dibujos.
+
+- **RF-160** **Quemadura:** si el golpe trae quemadura, el enemigo **se prende fuego**: recibe `X` de daño por segundo durante `Y` segundos, de a golpecitos cada 0,5 s. El fuego **ignora la armadura**. Las quemaduras **no se suman**: queda la más fuerte y cada golpe nuevo **reinicia** el tiempo (igual que la ralentización, RF-61). Un enemigo que se quema **no se regenera** (RF-165). Se ve con llamitas encima.
+- **RF-161** **Varios objetivos:** la torre dispara **a la vez** a sus `N` mejores objetivos según su modo de apuntado (RF-54), un proyectil a cada uno. Si hay menos enemigos en alcance, dispara a los que haya.
+- **RF-162** **Ráfaga en círculo:** si hay algún enemigo en alcance, la torre lanza `N` púas repartidas en círculo (todas las direcciones por igual). Cada púa va **en línea recta** hasta el borde del alcance; golpea al **primer enemigo que toca** (si puede golpearlo, RF-53) y desaparece. Si no toca a nadie, se pierde. Es la única torre cuyos tiros **pueden fallar**.
+- **RF-163** **Rayo en cadena:** después de golpear a su objetivo, el rayo **salta** al enemigo más cercano que todavía no golpeó (a menos de `D` casillas del último), hasta `N` saltos. Cada salto hace el mismo daño (con armadura). Se ve un rayo en zigzag que une a todos los golpeados.
+- **RF-164** **Todo son datos:** quemadura, varios objetivos, ráfaga, rayo en cadena, regeneración y crías (§6.1) son campos de los datos (`TowerLevelData` y `EnemyData`), apagados por defecto (valen 0). Se pueden combinar libremente. La guía `CONTENIDO.md` explica cada campo.
+
+| ID | Nombre | Costo | Daño | Cadencia | Alcance | Especial | Aire | Proyectil |
+|---|---|---|---|---|---|---|---|---|
+| `fire` | **Incendiaria** | 90 | 3 | 1.0 | 2.5 | Quema 6 por segundo durante 3 s | Sí | Bola de fuego (10) |
+| `multi` | **Múltiple** | 100 | 6 | 1.2 | 3.0 | Dispara a 2 enemigos a la vez | Sí | Dardo (10) |
+| `burst` | **Ráfaga** | 110 | 8 | 0.6 | 2.0 | 8 púas en círculo | **No** | Púa (6) |
+| `tesla` | **Eléctrica** | 130 | 12 | 0.7 | 2.5 | El rayo salta a 2 enemigos más (hasta 1,5 casillas) | Sí | Rayo (20) |
+
+**Rol de cada torre:**
+- **Incendiaria:** el fuego ignora la armadura y **corta la regeneración**: es la respuesta al Troll (§6.1).
+- **Múltiple:** reparte los tiros: buena contra muchos enemigos débiles (crías de araña, Rápidos).
+- **Ráfaga:** barre todo lo que tiene alrededor. Rinde más en una **curva** del camino, rodeada de enemigos. No sirve contra voladores, y sus púas pueden fallar.
+- **Eléctrica:** golpea a varios enemigos juntos, también voladores. Cara y de alcance corto.
+
+**Tabla de mejoras:**
+
+| Torre | Nivel 2 | Nivel 3 |
+|---|---|---|
+| Incendiaria | Costo 90 · daño 4 · quema 10 por segundo | Costo 140 · daño 6 · quema 16 por segundo durante 4 s · alcance 3.0 |
+| Múltiple | Costo 90 · daño 8 · a 3 enemigos | Costo 140 · daño 11 · a 4 enemigos · alcance 3.5 |
+| Ráfaga | Costo 100 · daño 11 · 10 púas · cadencia 0.7 | Costo 150 · daño 15 · 12 púas · cadencia 0.8 · alcance 2.5 |
+| Eléctrica | Costo 120 · daño 18 · salta a 3 · cadencia 0.8 | Costo 180 · daño 26 · salta a 4 · cadencia 0.9 · alcance 3.0 |
+
+*(Números iniciales: se ajustan con el bot en T84, igual que en §7.1.)*
+
 ---
 
 ## 6. Enemigos
@@ -193,6 +227,26 @@ La columna **Hito** de las tablas siguientes indica en qué momento se agrega ca
 
 **Tamaño visual** (radio del dibujo y de la zona que detectan las torres, en casillas): Normal 0.25 · Rápido 0.2 · Tanque 0.35 · Volador 0.25 · Blindado 0.3 · Jefe 0.45. Todos caben dentro de una casilla del camino (radio máximo 0.5).
 
+### 6.1 Enemigos nuevos *(M5, pedidos por Lucas)*
+
+- **RF-165** **Regeneración:** el enemigo recupera `X` % de su vida máxima por segundo, sin pasarse de su máximo. **Mientras se quema no se regenera** (RF-160). Cuando se cura se ve un "+N" verde (si los números de daño están encendidos, RF-132).
+- **RF-166** **Crías:** si el enemigo tiene crías, **al morir por daño** aparecen `N` crías en su lugar, un poco escalonadas hacia atrás en el camino. Si llega a la salida, no suelta nada. Las crías tienen la vida de la oleada en curso (RF-36), dan su propio oro, cuentan para terminar la oleada (RF-33) y se presentan como cualquier enemigo nuevo (RF-134).
+- **RF-167** Los enemigos nuevos siguen el estilo del Tanque (§9.6, RF-151): bestias de costado, nada infantiles.
+
+| ID | Nombre | Vida | Velocidad | Armadura | Oro | Vidas que quita | Vuela | Especial | Tamaño |
+|---|---|---|---|---|---|---|---|---|---|
+| `troll` | **Troll** | 70 | 1.0 | 0 | 10 | 2 | No | Se regenera 4 % por segundo | 0.32 |
+| `spider` | **Araña** | 60 | 1.2 | 0 | 6 | 2 | No | Al morir suelta 4 Crías | 0.33 |
+| `spiderling` | **Cría** | 8 | 2.4 | 0 | 1 | 1 | No | — | 0.16 |
+
+| Enemigo | Frase de presentación (RF-134) |
+|---|---|
+| Troll | Se cura solo con el tiempo. El fuego de la Incendiaria le corta la curación. |
+| Araña | Al morir suelta 4 crías. La Múltiple, la Ráfaga y el Cañón las barren. |
+| Cría | Frágil y rápida, pero salen de a muchas. |
+
+**Colores:** Troll verde musgo, Araña verde azulado oscuro, Cría verde azulado claro (ninguno se confunde con los enemigos anteriores).
+
 ---
 
 ## 7. Niveles
@@ -203,7 +257,8 @@ La columna **Hito** de las tablas siguientes indica en qué momento se agrega ca
 | 2 | Desfiladero | 15 | 200 | Zigzag con 8 curvas cerradas (§7.2). | M3 |
 | 3 | Encrucijada | 20 | 250 | **Dos entradas** cuyos caminos se unen antes de la salida (§7.3). | M3 |
 | 4 | Espiral | 15 | 200 | El camino da vueltas hacia adentro; **la salida está en el centro** (§7.5). | M4 |
-| 5 | Fortaleza | 20 | 300 | **Tres entradas**, una desde arriba (§7.6). El nivel final. | M4 |
+| 5 | Fortaleza | 20 | 300 | **Tres entradas**, una desde arriba (§7.6). | M4 |
+| 6 | Nido | 15 | 250 | **Dos entradas** (una desde arriba) y los enemigos nuevos: Troll, Araña y Crías (§7.7). El nivel final. | M5 |
 
 ### Oleadas del nivel 1
 
@@ -412,6 +467,43 @@ f8   ····················
 | 19 | 15 × Tanque (A, cada 0.8 s) + 15 × Tanque (C, cada 0.8 s, tras 3 s) + 25 × Volador (B, cada 0.3 s, tras 6 s) |
 | 20 | 2 × **Jefe** (A, cada 2.5 s) + 2 × **Jefe** (B, cada 2.5 s, tras 3 s) + 2 × **Jefe** (C, cada 2.5 s, tras 6 s) + 25 × Blindado (A, cada 0.5 s, tras 9 s) + 25 × Volador (C, cada 0.3 s, tras 11 s) |
 
+### 7.7 Nivel 6 — Nido *(M5)*
+
+El nivel de los enemigos nuevos. **Dos entradas:** A (izquierda) y **B, desde arriba**, que se une al camino de A en la columna 10. Después el camino baja en zigzag hasta la salida, a la derecha. Las curvas son buenos lugares para la Ráfaga.
+
+```
+col: 01234567890123456789
+f0   ··········■·········  ← entrada B (desde arriba)
+f1   ■■■■■■····■·······▲·  ← entrada A
+f2   ·····■····■·········
+f3   ···▲·■■■■■■■■■■■■■··      (B se une a A en la col. 10)
+f4   ·················■··
+f5   ··■■■■■■■■■■■■■■■■··
+f6   ··■·········▲·······
+f7   ··■■■■■■■■■■■■■■■■■■  → salida
+f8   ·······▲············
+```
+
+| Oleada | Enemigos |
+|---|---|
+| 1 | 10 × Normal (A, cada 0.8 s) |
+| 2 | 6 × **Troll** (A, cada 1.5 s) |
+| 3 | 12 × Rápido (B, cada 0.4 s) + 8 × Normal (A, cada 0.8 s, tras 2 s) |
+| 4 | 4 × **Araña** (A, cada 2.0 s) |
+| 5 | 8 × Troll (B, cada 1.2 s) + 10 × Volador (A, cada 0.6 s, tras 3 s) |
+| 6 | 6 × Araña (B, cada 1.5 s) + 8 × Blindado (A, cada 1.0 s, tras 2 s) |
+| 7 | 10 × Troll (A, cada 1.0 s) + 6 × Araña (B, cada 1.5 s, tras 3 s) |
+| 8 | 20 × Rápido (A, cada 0.3 s) + 10 × Volador (B, cada 0.5 s, tras 3 s) |
+| 9 | 12 × Blindado (B, cada 0.8 s) + 8 × Troll (A, cada 1.0 s, tras 3 s) |
+| 10 | 1 × **Jefe** (A) + 8 × Araña (B, cada 1.2 s, tras 3 s) |
+| 11 | 12 × Troll (A, cada 0.8 s) + 12 × Troll (B, cada 0.8 s, tras 4 s) |
+| 12 | 10 × Araña (A, cada 1.0 s) + 15 × Volador (B, cada 0.4 s, tras 4 s) |
+| 13 | 15 × Tanque (B, cada 1.0 s) + 10 × Araña (A, cada 1.0 s, tras 4 s) |
+| 14 | 2 × **Jefe** (A, cada 3.0 s) + 15 × Troll (B, cada 0.6 s, tras 3 s) |
+| 15 | 2 × **Jefe** (A, cada 3.0 s) + 2 × **Jefe** (B, cada 3.0 s, tras 3 s) + 12 × Araña (A, cada 0.8 s, tras 6 s) + 15 × Troll (B, cada 0.6 s, tras 8 s) |
+
+*(Oleadas y aumento de vida por oleada iniciales: se ajustan con el bot en T84.)*
+
 
 ---
 
@@ -429,7 +521,20 @@ f8   ····················
 ### 9.1 HUD (lo que se ve durante la partida)
 
 - **RF-100** Arriba: **oro**, **vidas** y **oleada actual / total** (por ejemplo "Oleada 3/10").
-- **RF-101** Abajo: un **botón por torre**, con su forma, nombre y costo. Desactivado (gris) si no alcanza el oro.
+- **RF-101** Abajo: un **botón por torre**, con su forma, nombre y costo. Desactivado (gris) si no alcanza el oro. *(M5: ver RF-170.)*
+- **RF-170** *(M5)* **Barra para 8 torres:** cada botón muestra el **dibujo** de la torre, su **costo** y, en una esquina, su **tecla**. El nombre no entra: aparece al pasar el mouse por encima y al elegirla (RF-171).
+- **RF-171** *(M5)* Al elegir una torre para construir, encima de la barra se ve su **nombre, costo y una frase** que dice para qué sirve (`TowerData.description`).
+
+  | Torre | Frase |
+  |---|---|
+  | Ametralladora | Barata y rápida. Buena contra enemigos débiles; mala contra la armadura. |
+  | Cañón | Daño en área contra grupos. No le pega a los voladores. |
+  | Hielo | Casi no hace daño, pero frena a los enemigos para que las demás torres les peguen más. |
+  | Francotirador | Muchísimo alcance y daño por tiro. Ideal contra blindados y el Jefe. |
+  | Incendiaria | Prende fuego a los enemigos: el fuego ignora la armadura y no los deja curarse. |
+  | Múltiple | Dispara a varios enemigos a la vez. Buena contra enjambres. |
+  | Ráfaga | Lanza púas en círculo; rinde más en una curva. No le pega a los voladores. |
+  | Eléctrica | El rayo salta de un enemigo a otro. Cara y de corto alcance. |
 - **RF-102** Botón **"Empezar oleada"** que muestra la cuenta atrás entre oleadas y se desactiva durante una oleada.
 - **RF-103** *(M2)* Controles de velocidad: **Pausa**, **x1**, **x2**.
 
@@ -437,7 +542,7 @@ f8   ····················
 
 | Tecla | Acción | Hito |
 |---|---|---|
-| `1`–`4` | Elegir torre para construir | M1 (1–3), M2 (4) |
+| `1`–`8` | Elegir torre para construir | M1 (1–3), M2 (4), M5 (5–8) |
 | `Esc` | Cancelar construcción / cerrar panel / *(M3)* menú de pausa | M1 |
 | `Espacio` | Empezar oleada (si se puede) | M1 |
 | `P` | Pausar / reanudar | M2 |
@@ -520,6 +625,8 @@ Dibujos simples para dejar de ver formas geométricas. Es un **primer intento "p
 - **RF-155** **Interfaz:** los botones de torres muestran su **torreta**, y los íconos de enemigos (próxima oleada y presentación, RF-133 y RF-134) muestran su **dibujo**.
 - **RF-156** **Reemplazable:** cada dibujo es un archivo en `assets/sprites/`, y los datos de cada torre y cada enemigo dicen qué archivo usan. Si a un dato le falta el dibujo, se usa la **forma geométrica** de antes: así nada se rompe si falta un archivo.
 - **RF-157** Con los dibujos, el juego sigue cumpliendo P7 (60 FPS con 200 enemigos y 60 torres).
+- **RF-158** *(M5)* **Efectos de lo nuevo:** el enemigo que se quema lleva **llamitas** encima; el que se regenera muestra "+N" verdes (RF-165); el rayo en cadena se ve como un **zigzag** amarillo entre los enemigos golpeados; las púas de la Ráfaga salen en círculo. Las torres y enemigos nuevos tienen sus dibujos, con el mismo estilo que el resto.
+- **RF-159** *(M5)* **Ícono del juego:** hecho con los dibujos (una torre frente a una bestia), el mismo en la ventana, en el `.exe` y en el celular.
 
 ---
 
@@ -594,7 +701,7 @@ Ideas **aprobadas como dirección**, pero **sin fecha**: no se programan hasta c
 1. Elegir la variante (o combinación).
 2. Definir la lista de épocas y, para cada una, sus torres y enemigos.
 3. Sacar "Historia" y "Meta-progresión" de la lista de §11 si la variante los necesita.
-4. Decidir si reemplaza la campaña normal o es un **modo aparte**.
+4. ~~Decidir si reemplaza la campaña normal o es un **modo aparte**.~~ **Decidido por Lucas (2026-09-29): es un modo aparte** (ver B-05), con dibujos de **imperios reales**.
 
 **Cuándo:** sin fecha. Lucas prefiere no elegir variante por ahora (2026-09-28). Si se retoma, el lugar natural es M4 (arte), porque ahí se elige la ambientación.
 
@@ -687,3 +794,30 @@ Ideas **aprobadas como dirección**, pero **sin fecha**: no se programan hasta c
 **Relación con otras ideas:** Épocas (B-01) podría armarse como un "paquete" con otras torres, enemigos y dibujos, usando el mismo sistema que los mods. El arte definitivo (B-02) también se beneficia: cambiar dibujos pasaría a ser cambiar archivos.
 
 **Qué cambia en la spec si se hace:** un hito nuevo con sus reglas (RF) y tareas; si se hacen mods, una sección de seguridad (qué puede traer un mod y qué no).
+
+### B-05 · Modos de juego
+*Propuesta de Lucas, 2026-09-29. Sin fecha: Lucas pidió solo anotarlo.*
+
+**Idea:** el juego tiene **modos**, cada uno con sus propias torres, enemigos, niveles y dibujos. El juego actual sería el modo **"Torres y Bestias"**. Otro modo sería el de **historia** (Épocas, B-01), con dibujos de **imperios reales** (por ejemplo, legiones romanas, jinetes mongoles, samuráis) y armas que avanzan con las épocas.
+
+**Cómo encaja con lo que hay:**
+- Un modo es, sobre todo, un **paquete de datos y dibujos**: la lista de torres, la campaña (niveles y oleadas), los enemigos y sus dibujos. Desde M5 cada comportamiento es un dato (RF-164), así que un modo nuevo casi no necesita código.
+- Es la misma idea que los **mods** (B-04): un modo oficial sería un "mod hecho por nosotros". Conviene diseñar los dos juntos (mismo formato de paquete).
+- Pantalla para elegir modo: recién hace falta cuando exista un segundo modo.
+- Guardado: el progreso y las estrellas se guardan por modo (los ids de nivel no se pueden repetir entre modos).
+
+**Qué hay que cuidar con imperios reales:**
+- Representarlos con **respeto**: sin caricaturas ni estereotipos, sobre todo de pueblos que existen hoy.
+- Decidir cuánta **precisión histórica** se quiere (uniformes, armas, épocas) y usar referencias reales.
+- Qué pasa con el estilo: el de "Torres y Bestias" (caricatura con borde oscuro) puede servir, pero un modo de historia podría pedir otro.
+
+**Antes de convertirlo en hito:** elegir la variante de Épocas (B-01), la lista de imperios y épocas, y el formato de paquete (B-04).
+
+### B-06 · Enemigo espejo
+*Idea de Lucas, 2026-09-29. Sin fecha.*
+
+**Idea:** un enemigo con caparazón de espejo. Si le dispara una torre que está **cerca** (rango corto), el tiro **rebota**: el enemigo no recibe daño y **esa torre queda aturdida** unos segundos, sin disparar. Las torres lejanas le pegan normal.
+
+**Para qué:** castigar a las torres de corto alcance pegadas al camino, sobre todo a la **Eléctrica** (§5.6), y premiar al Francotirador.
+
+**Qué necesitaría:** una regla nueva, "torre aturdida" (hoy las torres no tienen estados), y un efecto que se vea (chispas o estrellitas sobre la torre). Siguiendo RF-164, serían dos datos del enemigo: `reflect_range_tiles` y `reflect_stun_seconds`.
