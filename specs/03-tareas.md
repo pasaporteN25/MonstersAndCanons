@@ -519,10 +519,11 @@
   **Hecho cuando:** un test compara, nivel por nivel, que los mapas nuevos tienen las mismas casillas, los mismos recorridos (misma forma y largo) y las mismas oleadas que las escenas viejas; el bot da los mismos resultados en los 6 niveles.
   **Resultado:** `tools/levels_to_json.gd` escribió los 6 `data/levels/level_0N.json` y `data/campaign.json`. `test_levels_json.gd` comparó todo (1171 comprobaciones: casillas, puertas, esquinas, largos, vuelos, oleadas, oro, vidas y aumento): todo igual. Punto por punto, los caminos coinciden salvo en el nivel 6 (entrada A) y el 5 (entrada C), donde los viejos tenían un punto de más en medio de una recta: la diferencia es de 0,0005 px. El bot (`smart` y `mix`, niveles 1 a 6) dio **11 de 12 resultados idénticos**; en el nivel 6, `smart` ganó con 5 vidas en vez de 6, por ese redondeo (la simulación es cuadro por cuadro, y una diferencia mínima cambia qué torre mata a qué enemigo). `GameFlow.campaign` sale de `LevelFile.load_campaign()`; `game.tscn` ya no trae un nivel fijo (sin campaña, juega el primero); el bot lee la campaña nueva (`gold=` se aplica al nivel elegido).
 
-- [ ] **T96 · Retirar lo viejo, `check_level` y guía**
+- [x] **T96 · Retirar lo viejo, `check_level` y guía**
   Borrar las escenas y `.tres` de niveles, `campaign.tres` y `make_levels.gd`; `tools/check_level.gd`; CONTENIDO.md ("Cómo hacer un nivel"), README y plan técnico; exportar y comprobar que los `.json` viajan dentro del ejecutable.
   **Refs:** RF-206, D-031.
   **Hecho cuando:** pasan todos los tests, `check_level` muestra el recorrido de un nivel y el error de uno roto, y el `.exe` exportado carga los 6 niveles.
+  **Resultado:** se borraron las 6 escenas, los 6 `.tres` de niveles, `campaign.tres`, `make_levels.gd`, la herramienta de conversión y el test de comparación (ya cumplieron). `LevelData` ya no tiene `map_scene`. [`check_level.gd`](../tools/check_level.gd) muestra el recorrido de cada entrada marcado con `*` y termina con código 1 si hay errores (sirve para GitHub). CONTENIDO.md tiene la sección "Agregar un nivel" nueva (letras, oleadas, errores comunes). Se exportaron los tres: los 7 `.json` están dentro del `.exe`, del `.exe` de pruebas y del `.apk`, y el `.exe` arranca sin errores de campaña. 303 tests.
 
 ### Otras ideas de pulido *(sin fecha)*
 

@@ -227,7 +227,7 @@ Se ejecutan desde la carpeta del proyecto. Más detalle dentro de cada archivo.
 | `godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- smart level=1` | Bot que juega solo, para revisar el balance (spec §7.1). Estrategias: `smart`, `basic`, `naive`. |
 | `godot --path . -s tools/perf_test.gd` | Prueba de rendimiento: 200 enemigos y 60 torres. Abre una ventana. |
 | `godot --headless --path . -s tools/make_sounds.gd` | Volver a generar los sonidos (D-020). Con `-- shot_fire`, solo ese. |
-| `godot --headless --path . -s tools/make_levels.gd -- 6` | Volver a generar el mapa y los datos de un nivel (4, 5 o 6) y la campaña (ver `CONTENIDO.md`). |
+| `godot --headless --path . -s tools/check_level.gd -- data/levels/level_06.json` | Revisar un nivel sin jugarlo (sin archivo: todos los de la campaña). Cómo hacer un nivel: `CONTENIDO.md`. |
 | `godot --headless --path . -s tools/make_icon.gd` | Volver a generar el ícono del juego (`assets/icon.png`). |
 
 > ⚠️ **Trampa conocida (para quien escriba herramientas nuevas):** los scripts que se ejecutan con `-s` se compilan **antes** que los autoloads. No pueden usar `GameFlow`, `SaveManager` ni `Audio` por su nombre, ni declarar variables de tipo `Game`. Hay que declarar la partida como `Node2D` (plan técnico §7).

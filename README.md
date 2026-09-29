@@ -4,7 +4,7 @@
 
 Juego *tower defense* 2D hecho en **Godot 4** con **GDScript**, construido con **SDD (Spec-Driven Development)**.
 
-> **Estado actual:** M1 a M6 ✅ (juego completo, 6 niveles, 8 torres, modo de pruebas y récords). Falta probar el APK en un celular (TA3, hito MA en [`specs/03-tareas.md`](specs/03-tareas.md)).
+> **Estado actual:** M1 a M7 ✅ (juego completo, 6 niveles, 8 torres, modo de pruebas, récords y niveles en archivos de texto) y versión Android probada en un celular. Tests automáticos en GitHub (D-030).
 >
 > **Versión de Godot:** 4.7.2 estable (renderizador *Compatibility*).
 >
@@ -152,5 +152,5 @@ Cada vez que se sube algo a `main` (o se abre un *pull request*), GitHub corre *
 | `godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- smart level=1` | Bot que juega solo para revisar el balance (ver spec §7.1). |
 | `godot --path . -s tools/perf_test.gd` | Prueba de rendimiento con 200 enemigos y 60 torres. |
 | `godot --headless --path . -s tools/make_sounds.gd` | Volver a generar los sonidos (`-- shot_fire` = solo ese). |
-| `godot --headless --path . -s tools/make_levels.gd -- 6` | Volver a generar el mapa y los datos de un nivel (4, 5 o 6) y la campaña. |
+| `godot --headless --path . -s tools/check_level.gd -- data/levels/level_06.json` | Revisar un nivel sin jugarlo: sus errores, o el mapa con el recorrido de cada entrada. Sin archivo, revisa todos los de la campaña. Cómo hacer un nivel: [`CONTENIDO.md`](CONTENIDO.md). |
 | `godot --headless --path . -s tools/make_icon.gd` | Volver a generar el ícono del juego con los dibujos. |

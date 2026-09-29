@@ -153,7 +153,7 @@ func test_built_map_has_the_cells_of_the_letters() -> void:
 
 
 func test_built_paths_match_the_old_level_6() -> void:
-	# Los puntos de level_06.tscn (hechos con make_levels.gd), sin los puntos que no son esquinas.
+	# Los puntos que tenía el nivel 6 cuando era una escena (antes de M7), sin los que no son esquinas.
 	var level: Level = (_parse(NEST)["level"] as LevelData).build_map()
 	add_child_autofree(level)
 	var tail: Array[Vector2] = [Vector2(1120, 224), Vector2(1120, 352), Vector2(160, 352), Vector2(160, 480), Vector2(1312, 480)]

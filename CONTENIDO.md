@@ -12,11 +12,12 @@
 |---|---|---|
 | Datos de enemigos | `data/enemies/` | Un `.tres` por enemigo (`EnemyData`) |
 | Datos de torres | `data/towers/` | Un `.tres` por torre (`TowerData`, con sus 3 niveles adentro) |
-| Niveles | `data/levels/` + `scenes/levels/` | Un `.tres` (`LevelData`: oro, vidas, oleadas) y una escena con el mapa |
+| Niveles | `data/levels/` | Un `.json` por nivel: el mapa dibujado con letras y las oleadas (ver "Agregar un nivel") |
+| Campaña | `data/campaign.json` | La lista de niveles, en orden |
 | Dibujos | `assets/sprites/` | SVG (o PNG). Ver "Reglas de los dibujos" |
 | Sonidos | `assets/audio/` | `.wav`. Cada torre usa `shot_<id>.wav` |
 
-Un `.tres` es un archivo de texto de Godot. Se edita cómodo en el editor (panel **Inspector**), aunque también se puede abrir con cualquier editor de texto.
+Los niveles son JSON, un formato de texto común que se edita a mano. Un `.tres` (enemigos y torres) es un archivo de texto de Godot. Se edita cómodo en el editor (panel **Inspector**), aunque también se puede abrir con cualquier editor de texto.
 
 ---
 
@@ -104,20 +105,89 @@ Un `.tres` es un archivo de texto de Godot. Se edita cómodo en el editor (panel
 
 ## Agregar un nivel
 
-Hoy los mapas se arman con código en `tools/make_levels.gd`, describiendo:
-- **cada camino** por sus esquinas (casillas, de la entrada a la salida);
-- las **casillas bloqueadas** (rocas, árboles);
-- el **oro inicial** y las **oleadas** (cada grupo: enemigo, cantidad, cada cuántos segundos, desde qué segundo y por qué entrada).
+Un nivel es **un archivo de texto** en `data/levels/` (spec §7.8). Se abre con el Bloc de notas, VS Code o cualquier editor. No hace falta Godot ni programar.
 
-Para agregar el nivel 7: copiar la función `_level_6()`, cambiarla y llamarla desde `_init()`. Después:
+### Paso a paso (por ejemplo, el nivel 7)
 
-```bash
-godot --headless --path . -s tools/make_levels.gd -- 7
+1. **Copiar** un nivel parecido: `data/levels/level_06.json` → `data/levels/level_07.json`. El nombre del archivo es el **id** del nivel (así se guardan su progreso y sus récords): no cambiarlo después.
+2. **Dibujar el mapa** en `"mapa"`: 9 filas de 20 letras cada una.
+3. **Escribir las oleadas** en `"oleadas"`.
+4. **Revisarlo** sin abrir el juego:
+   ```bash
+   godot --headless --path . -s tools/check_level.gd -- data/levels/level_07.json
+   ```
+   Si algo está mal, dice qué y dónde (fila y columna, oleada y grupo). Si está bien, muestra el mapa con el recorrido de cada entrada.
+5. **Sumarlo a la campaña:** agregar `"level_07"` al final de la lista `"niveles"` de `data/campaign.json`.
+6. **Balancearlo** con el bot (sección de abajo) y anotarlo en la spec (una sección como §7.7 y el aumento de vida en §7.4).
+
+### El mapa
+
+```
+"mapa": [
+  "..........B.........",
+  "A#####....#.......X.",
+  ".....#....#.........",
+  "...X.#############..",
+  ".................#..",
+  "..################..",
+  "..#.........X.......",
+  "..#################S",
+  ".......X............"
+]
 ```
 
-Eso crea `scenes/levels/level_07.tscn` y `data/levels/level_07.tres`, y **arma la campaña sola** con todos los niveles que existan. Por último, elegir el aumento de vida por oleada con el bot (abajo) y anotarlo en la spec (§7.4).
+| Letra | Qué es |
+|---|---|
+| `.` | Pasto: ahí se construyen torres. |
+| `#` | Camino. |
+| `X` | Bloqueada: el juego dibuja solo una roca, un árbol o un arbusto. |
+| `A`, `B`, `C`… | Entradas (son camino). `A` es la primera; no se puede saltear una letra. Hasta 8 (`A` a `H`). |
+| `S` | La salida (una sola). En el borde, los enemigos salen del mapa; adentro, se dibuja una puerta. |
 
-> En el futuro (spec B-04) los mapas se van a poder escribir en un archivo de texto, "dibujados" con letras, sin tocar código.
+**Cómo caminan los enemigos:** cada entrada va a la salida por el **camino más corto** sobre las casillas de camino. Por eso:
+- los caminos se pueden **unir** (como la `B` del ejemplo, que baja y se suma al camino de la `A`);
+- no puede haber **dos recorridos igual de cortos** (por ejemplo, un camino de dos casillas de ancho o un anillo): el juego no adivina y avisa dónde se separan. Se arregla cerrando uno con `X` o con pasto.
+
+Los voladores ignoran el camino: van en línea recta de su entrada a la salida.
+
+### Los demás campos
+
+| Clave | Qué es | ¿Obligatoria? |
+|---|---|---|
+| `version` | El formato del archivo. Hoy, `1`. | Sí |
+| `nombre` | El nombre que ve el jugador ("Nido"). | Sí |
+| `oro` | Oro al empezar. | Sí |
+| `vidas` | Vidas al empezar (los niveles oficiales usan 20). | Sí |
+| `aumento_vida` | % de vida extra de los enemigos en cada oleada (spec §7.4). Si no está, se usa el general de `balance.tres`. | No |
+| `oleadas` | La lista de oleadas (abajo). | Sí |
+
+### Las oleadas
+
+Cada oleada es una lista de **grupos**; los grupos de una oleada arrancan juntos, salvo que digan `desde`.
+
+```
+"oleadas": [
+  [{"enemigo": "normal", "cantidad": 10, "cada": 0.8}],
+  [{"enemigo": "fast", "cantidad": 12, "cada": 0.4, "entrada": "B"},
+   {"enemigo": "troll", "cantidad": 8, "cada": 1.2, "desde": 2.0}]
+]
+```
+
+| Clave | Qué es | ¿Obligatoria? |
+|---|---|---|
+| `enemigo` | El nombre de un archivo de `data/enemies/` (sin `.tres`): `normal`, `fast`, `tank`, `flyer`, `armored`, `boss`, `troll`, `spider`… | Sí |
+| `cantidad` | Cuántos salen. | Sí |
+| `cada` | Segundos entre uno y el siguiente. | Si `cantidad` es más de 1 |
+| `desde` | Segundos desde que empieza la oleada hasta que sale el primero. | No (vale 0) |
+| `entrada` | Por qué entrada salen: `"A"`, `"B"`… | No (vale `"A"`) |
+
+### Errores comunes
+
+El juego avisa todos estos (y un nivel con errores no se juega, pero el resto de la campaña sigue andando):
+- **Una coma de más o de menos**, o una comilla sin cerrar: "no es un JSON válido (línea 12…)". En JSON, el último elemento de una lista o de un `{ }` **no** lleva coma.
+- **Una clave mal escrita** (`"canitdad"`): el juego no la ignora, avisa.
+- **Un enemigo que no existe** (`"trol"`), o una entrada que el mapa no tiene (`"C"` en un mapa con `A` y `B`).
+- **Una fila con 19 o 21 letras.**
 
 ---
 
@@ -139,7 +209,8 @@ Una buena señal: los bots que piensan ganan con algunas vidas de sobra y el que
 
 ## Lista rápida antes de subir contenido nuevo
 
-- [ ] El `id` es igual al nombre del archivo.
+- [ ] El `id` es igual al nombre del archivo (en los niveles, el id **es** el nombre del archivo).
+- [ ] Si es un nivel: `check_level` no da errores y está en `data/campaign.json`.
 - [ ] Tiene nombre, frase y dibujo(s).
 - [ ] Si es una torre: 3 niveles, sonido `shot_<id>.wav` y está en **Tower Types**.
 - [ ] Pasan los tests (`test_content.gd` revisa todo lo anterior solo).
