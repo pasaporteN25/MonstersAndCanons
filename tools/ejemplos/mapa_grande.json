@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "nombre": "Mapa grande",
+  "oro": 220,
+  "vidas": 20,
+  "aumento_vida": 30,
+  "mapa": [
+    "...X.......X...........X..",
+    "A#####################....",
+    ".......X.............#....",
+    "........X.....X......#..X.",
+    ".....................#....",
+    "....##################....",
+    ".X..#...................X.",
+    "....#.....X......X........",
+    "....#.....................",
+    "....#####################S",
+    ".X........................",
+    "............X.........X..."
+  ],
+  "oleadas": [
+    [{"enemigo": "normal", "cantidad": 8, "cada": 1.2}],
+    [{"enemigo": "normal", "cantidad": 10, "cada": 1}, {"enemigo": "fast", "cantidad": 4, "cada": 1, "desde": 6}],
+    [{"enemigo": "normal", "cantidad": 12, "cada": 0.9}, {"enemigo": "armored", "cantidad": 3, "cada": 2, "desde": 5}],
+    [{"enemigo": "fast", "cantidad": 10, "cada": 0.7}, {"enemigo": "tank", "cantidad": 2, "cada": 3, "desde": 4}],
+    [{"enemigo": "normal", "cantidad": 14, "cada": 0.8}, {"enemigo": "flyer", "cantidad": 5, "cada": 1.5, "desde": 6}],
+    [{"enemigo": "armored", "cantidad": 6, "cada": 1.5}, {"enemigo": "troll", "cantidad": 3, "cada": 2.5, "desde": 5}],
+    [{"enemigo": "spider", "cantidad": 4, "cada": 2}, {"enemigo": "fast", "cantidad": 10, "cada": 0.6, "desde": 4}],
+    [{"enemigo": "tank", "cantidad": 4, "cada": 2.5}, {"enemigo": "flyer", "cantidad": 8, "cada": 1, "desde": 3}],
+    [{"enemigo": "troll", "cantidad": 6, "cada": 1.5}, {"enemigo": "armored", "cantidad": 8, "cada": 1, "desde": 5}],
+    [{"enemigo": "boss", "cantidad": 1, "cada": 1}, {"enemigo": "normal", "cantidad": 16, "cada": 0.6, "desde": 3}]
+  ]
+}

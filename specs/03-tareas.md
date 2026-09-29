@@ -668,10 +668,11 @@
   **Hecho cuando:** los tests comprueban un mapa de 26×12 válido, los bordes (26×12 sí; 27×12, 26×13 y 19×9 no), filas de distinto largo, entradas en el borde real, el recorrido y el suelo del tamaño correcto; los 7 niveles oficiales dan exactamente lo mismo que antes.
   **Resultado:** `MapGrid` ya no tiene ancho y alto fijos: `width` y `height` salen de las filas, con `MIN_*` (20×9) y `MAX_*` (26×12). Los mensajes dicen el tamaño que se recibió y el permitido; `is_inside`, `is_on_border` (que decide si el enemigo entra desde afuera), el suelo (`Level.make_ground`) y `check_level` usan el tamaño real. `LevelDraft` conserva el tamaño del mapa que abre (antes cortaba a 20×9; lo dejé listo acá porque dejó de compilar sin `MapGrid.WIDTH`). Los 7 niveles oficiales siguen midiendo 20×9 (un test lo vigila). Un dato que confirma la decisión D-037: `check_level` del nivel 7 da exactamente lo mismo que antes. 13 tests nuevos (554 en total).
 
-- [ ] **T117 · Zoom del mundo en la partida**
+- [x] **T117 · Zoom del mundo en la partida**
   `Rules.map_zoom`, `Rules.map_camera_center` y la `Camera2D` en `Game`.
   **Refs:** RF-251, RF-252.
   **Hecho cuando:** los tests comprueban la fórmula (20×9 → 1, 26×12 → 0,75, casos intermedios), que con 20×9 **no hay cámara**, que con 26×12 el mapa queda dentro del área entre las barras y centrado, que la casilla bajo el puntero es la correcta con zoom (esquinas y centro) y que el alcance de una torre alcanza lo mismo; una captura muestra un mapa de 26×12 jugándose.
+  **Resultado:** `Rules.map_zoom` y `Rules.map_camera_center` (fórmula de RF-251) y una `Camera2D` que `Game._fit_map()` agrega **solo si el mapa es más grande que 20×9** (con 20×9 no hay cámara: nada cambia). Se comprobó con una captura de un mapa de 26×12 jugándose: entra entero, queda centrado entre las dos barras (con unos 16 px libres a cada lado), la barra de arriba y la de torres no se achican, y las torres y los enemigos funcionan. Los tests comprueban que la posición de una torre y su alcance en el mundo dan exactamente lo mismo con y sin zoom, que la casilla bajo un punto de la pantalla es la correcta (centros y bordes), y que una oleada completa se juega en un mapa grande. **Lo que confirma la elección de D-037:** no hubo que tocar ni `BuildController`, ni torres, ni enemigos, ni proyectiles. 13 tests nuevos (567 en total).
 
 - [ ] **T118 · El editor respeta el tamaño**
   `LevelDraft` conserva el tamaño; `MapEditor` muestra el mapa entero con su zoom y convierte bien el clic.

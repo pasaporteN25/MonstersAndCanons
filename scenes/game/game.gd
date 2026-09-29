@@ -28,6 +28,8 @@ signal speed_changed(speed: float)
 @export var tower_types: Array[TowerData] = []
 
 var level: Level
+## RF-251: solo existe si el mapa es más grande que 20×9 (hay que achicar el mundo para que entre).
+var camera: Camera2D
 ## RF-217: se está probando el nivel del editor (no hay campaña: no se guarda nada).
 var testing: bool = false
 ## RF-184: el panel de pruebas. null si no es el modo de pruebas.
@@ -66,6 +68,7 @@ func _ready() -> void:
 	level.position = MAP_OFFSET
 	add_child(level)
 	move_child(level, 0)  # primero en la lista = se dibuja debajo de todo
+	_fit_map()
 
 	# RF-104: la partida (y la interfaz, que hereda) sigue funcionando en pausa;
 	# el "mundo" se congela.
@@ -133,6 +136,20 @@ func _ready() -> void:
 	session.start(level_data, balance)
 	if DevMode.enabled:
 		_add_dev_panel()
+
+
+## RF-251: un mapa más grande que 20×9 se muestra con zoom, con una cámara. Una cámara no cambia
+## las coordenadas del mundo (alcances, disparos y la casilla bajo el mouse valen lo mismo, D-037).
+func _fit_map() -> void:
+	var size: Vector2i = level.map_size()
+	var zoom: float = Rules.map_zoom(size.x, size.y)
+	if zoom >= 1.0:
+		return
+	camera = Camera2D.new()
+	camera.zoom = Vector2(zoom, zoom)
+	camera.position = Rules.map_camera_center(size.x, size.y)
+	add_child(camera)
+	camera.make_current()
 
 
 func _process(delta: float) -> void:

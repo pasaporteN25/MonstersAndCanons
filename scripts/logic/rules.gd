@@ -8,10 +8,29 @@ const TILE_SIZE: float = 64.0
 ## RF-135/RF-136: un enemigo es "peligroso" si quita esta cantidad de vidas o más.
 ## Es un criterio de interfaz (cuándo avisar), no un número de balance.
 const DANGEROUS_LIVES_DAMAGE: int = 5
+## La pantalla lógica (project.godot) y el área del mapa: entre la barra de arriba (48 px) y la de
+## torres de abajo. Un mapa de 20×9 la llena justo (RF-251).
+const SCREEN_SIZE := Vector2(1280.0, 720.0)
+const MAP_AREA := Rect2(0.0, 48.0, 1280.0, 576.0)
 
 
 static func is_dangerous(enemy: EnemyData) -> bool:
 	return enemy.lives_damage >= DANGEROUS_LIVES_DAMAGE
+
+
+## RF-251: cuánto se achica el mundo para que un mapa de `cols`×`rows` casillas entre entero en el
+## área del mapa. 1.0 = sin zoom (20×9, el tamaño de siempre).
+static func map_zoom(cols: int, rows: int) -> float:
+	return minf(1.0, minf(MAP_AREA.size.x / (cols * TILE_SIZE), MAP_AREA.size.y / (rows * TILE_SIZE)))
+
+
+## RF-251: el punto del mundo que mira la cámara para que el mapa quede centrado en el área del mapa
+## (y no en el centro de la pantalla: la barra de arriba mide 48 px y la de abajo, 96). Con 20×9 y zoom 1 da el centro de la pantalla: la cámara no cambia nada.
+static func map_camera_center(cols: int, rows: int) -> Vector2:
+	var zoom: float = map_zoom(cols, rows)
+	var map_center: Vector2 = MAP_AREA.position + Vector2(cols, rows) * TILE_SIZE / 2.0
+	var area_center: Vector2 = MAP_AREA.get_center()
+	return map_center + (SCREEN_SIZE / 2.0 - area_center) / zoom
 
 
 static func tiles_to_px(tiles: float) -> float:

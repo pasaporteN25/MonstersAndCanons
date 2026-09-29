@@ -151,6 +151,11 @@ func cell_center(cell: Vector2i) -> Vector2:
 	return ground.to_global(ground.map_to_local(cell))
 
 
+## Tamaño del mapa, en casillas.
+func map_size() -> Vector2i:
+	return ground.get_used_rect().size
+
+
 ## true si la casilla es parte del mapa (aunque no sea construible).
 func is_inside(cell: Vector2i) -> bool:
 	return ground.get_used_rect().has_point(cell)
