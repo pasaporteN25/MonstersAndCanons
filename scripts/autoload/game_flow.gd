@@ -86,10 +86,10 @@ func has_next_level() -> bool:
 
 
 ## RF-90 y RF-112: guarda la victoria y desbloquea el siguiente nivel.
-func level_won(lives: int) -> void:
+func level_won(lives: int, score: int = 0) -> void:
 	if current_index < 0:
 		return
-	SaveManager.record_victory(level(current_index).id, lives)
+	SaveManager.record_victory(level(current_index).id, lives, score)
 	if has_next_level():
 		SaveManager.unlock(level(current_index + 1).id)
 	SaveManager.save()
@@ -115,6 +115,47 @@ func record_level_score(name: String, points: int) -> int:
 
 func current_level_scores() -> Array:
 	return [] if current_index < 0 else SaveManager.scores(current_level().id)
+
+
+# --- Salón de la fama (RF-194) ---
+
+## ¿Se ganaron todos los niveles de la campaña?
+func campaign_complete() -> bool:
+	for i: int in level_count():
+		if not SaveManager.is_completed(level(i).id):
+			return false
+	return true
+
+
+## Suma del mejor puntaje en victoria de cada nivel.
+func campaign_total() -> int:
+	var total: int = 0
+	for i: int in level_count():
+		total += SaveManager.best_score(level(i).id)
+	return total
+
+
+## ¿Hay que pedir 5 letras para el Salón? Solo en la campaña, con todos los niveles ganados,
+## si el total SUBIÓ desde la última vez y entra en el top 5.
+func hall_of_fame_pending() -> bool:
+	if current_index < 0 or not campaign_complete():
+		return false
+	var total: int = campaign_total()
+	return total > SaveManager.hall_total() and HighScores.qualifies(hall_of_fame(), total)
+
+
+## Anota el total de la campaña en el Salón y guarda. Devuelve la posición (0 = primero).
+func record_hall_of_fame(name: String) -> int:
+	var total: int = campaign_total()
+	var index: int = SaveManager.add_score(SaveManager.HALL_OF_FAME_ID, name, total)
+	SaveManager.set_hall_total(total)
+	SaveManager.set_last_initials(name)
+	SaveManager.save()
+	return index
+
+
+func hall_of_fame() -> Array:
+	return SaveManager.scores(SaveManager.HALL_OF_FAME_ID)
 
 
 # --- Cambiar de pantalla ---

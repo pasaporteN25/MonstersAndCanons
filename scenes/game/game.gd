@@ -28,6 +28,8 @@ signal speed_changed(speed: float)
 var level: Level
 ## RF-184: el panel de pruebas. null si no es el modo de pruebas.
 var dev_panel: DevPanel
+## RF-194: el Salón de la fama, mientras está abierto. null si no.
+var hall_of_fame: HallOfFame
 var _shake_left: float = 0.0
 
 @onready var tower_container: Node2D = $Towers
@@ -358,7 +360,7 @@ func _on_state_changed(state: LevelSession.State) -> void:
 	set_speed(1.0)
 	var in_campaign: bool = GameFlow.current_level() != null
 	if state == LevelSession.State.WON:
-		GameFlow.level_won(session.lives)  # RF-112 y RF-115: desbloquea y guarda
+		GameFlow.level_won(session.lives, session.score)  # RF-112, RF-115 y RF-194: desbloquea y guarda
 		var stars: int = Rules.stars_for(session.lives, level_data.starting_lives, balance)  # RF-93
 		end_screen.show_victory(session.lives, stars, GameFlow.has_next_level(), in_campaign, session.score)
 		Audio.play(&"victory")
@@ -378,8 +380,26 @@ func _show_level_records() -> void:
 			SaveManager.last_initials(HighScores.LEVEL_NAME_LENGTH))
 	else:
 		end_screen.show_scores(LEVEL_RECORDS_TITLE, GameFlow.current_level_scores())
+		_show_hall_of_fame_if_earned()
 
 
 func _on_record_name_entered(name: String) -> void:
 	var index: int = GameFlow.record_level_score(name, session.score)
 	end_screen.show_scores(LEVEL_RECORDS_TITLE, GameFlow.current_level_scores(), index)
+	_show_hall_of_fame_if_earned()
+
+
+## RF-194: si con esta victoria el total de la campaña subió y entra en el Salón de la fama,
+## se abre encima de la pantalla final y pide 5 letras.
+func _show_hall_of_fame_if_earned() -> void:
+	if session.state != LevelSession.State.WON or not GameFlow.hall_of_fame_pending():
+		return
+	hall_of_fame = HallOfFame.new()
+	add_child(hall_of_fame)
+	hall_of_fame.ask_name(GameFlow.campaign_total(), SaveManager.last_initials(HighScores.HALL_NAME_LENGTH))
+	hall_of_fame.name_entered.connect(func(name: String) -> void:
+		var index: int = GameFlow.record_hall_of_fame(name)
+		hall_of_fame.show_table(GameFlow.hall_of_fame(), index))
+	hall_of_fame.closed.connect(func() -> void:
+		hall_of_fame.queue_free()
+		hall_of_fame = null)

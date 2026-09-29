@@ -478,10 +478,11 @@
   **Hecho cuando:** los tests comprueban el orden (con empates), que se descarta el sexto, que con 0 puntos no se entra, que se guarda y se vuelve a leer, y que fuera de la campaña no se escribe nada; la captura muestra la entrada de letras y el top 5.
   **Resultado:** `HighScores` (cuentas puras), `NameEntry` y `ScoreTable` (controles reutilizables para el Salón de la fama y la pantalla de récords). Mientras se piden las iniciales, los botones de la pantalla final se esconden. El guardado sigue siendo la versión 1: los récords y las últimas iniciales son claves nuevas que un guardado viejo simplemente no tiene.
 
-- [ ] **T90 · Salón de la fama (5 letras)**
+- [x] **T90 · Salón de la fama (5 letras)**
   Total de la campaña (suma del mejor puntaje en victoria de cada nivel), pedido de 5 letras cuando el total sube y entra, estética dorada.
   **Refs:** RF-194.
   **Hecho cuando:** los tests comprueban que no existe hasta ganar todos los niveles, que el total es la suma de los mejores, que solo se pide cuando el total sube, y la captura muestra el Salón.
+  **Resultado:** el guardado suma, por nivel, el mejor puntaje en victoria (`best_score`) y el último total anotado (`hall_total`). El Salón se abre encima de la pantalla final, después del récord del nivel: fondo oscuro, marco dorado con brillo, trofeo (`assets/sprites/ui/trophy.svg`) y 5 letras.
 
 - [ ] **T91 · Pantalla "Récords" y cierre de M6**
   Botón "Récords" en el menú principal; top 5 de cada nivel y Salón de la fama; README/ONBOARDING (cómo exportar y usar el `.exe` de pruebas); exportar los tres ejecutables.

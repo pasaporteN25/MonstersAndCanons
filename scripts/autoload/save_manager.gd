@@ -16,7 +16,7 @@ const DEFAULT_SETTINGS: Dictionary = {
 ## Los tests lo cambian para no tocar el guardado real del jugador.
 var save_path: String = DEFAULT_PATH
 
-var _levels: Dictionary = {}    # { "level_01": {"unlocked": bool, "completed": bool, "best_lives": int} }
+var _levels: Dictionary = {}    # { "level_01": {"unlocked", "completed", "best_lives", "best_score"} }
 var _settings: Dictionary = {}
 ## RF-134: enemigos ya presentados al jugador (sus id), para no repetir la tarjeta.
 var _seen_enemies: Array[String] = []
@@ -24,6 +24,8 @@ var _seen_enemies: Array[String] = []
 var _scores: Dictionary = {}
 ## RF-192: últimas iniciales usadas, por largo: { "3": "LUC", "5": "LUCAS" }.
 var _last_initials: Dictionary = {}
+## RF-194: el total de la campaña que ya se anotó (o se ofreció) en el Salón de la fama.
+var _hall_total: int = 0
 
 
 func _ready() -> void:
@@ -38,6 +40,7 @@ func load_save() -> void:
 	_seen_enemies = []
 	_scores = {}
 	_last_initials = {}
+	_hall_total = 0
 	if not FileAccess.file_exists(save_path):
 		return
 	var file := FileAccess.open(save_path, FileAccess.READ)
@@ -55,6 +58,8 @@ func load_save() -> void:
 	_read_seen_enemies((parsed as Dictionary).get("seen_enemies", []))
 	_read_scores((parsed as Dictionary).get("scores", {}))
 	_read_initials((parsed as Dictionary).get("initials", {}))
+	var hall_total: Variant = (parsed as Dictionary).get("hall_total", 0)
+	_hall_total = int(hall_total) if typeof(hall_total) in [TYPE_INT, TYPE_FLOAT] else 0
 
 
 func save() -> bool:
@@ -63,7 +68,7 @@ func save() -> bool:
 		push_warning("No se pudo guardar en %s" % save_path)
 		return false
 	var data := {"version": SAVE_VERSION, "levels": _levels, "settings": _settings,
-		"seen_enemies": _seen_enemies, "scores": _scores, "initials": _last_initials}
+		"seen_enemies": _seen_enemies, "scores": _scores, "initials": _last_initials, "hall_total": _hall_total}
 	file.store_string(JSON.stringify(data, "  "))
 	return true
 
@@ -90,11 +95,13 @@ func unlock(level_id: StringName) -> void:
 
 
 ## Se ganó el nivel: queda completado y se guarda la mejor cantidad de vidas.
-func record_victory(level_id: StringName, lives: int) -> void:
+## RF-194: `score` = puntos de esa victoria; se guarda el mejor (suma para el Salón de la fama).
+func record_victory(level_id: StringName, lives: int, score: int = 0) -> void:
 	var entry: Dictionary = _level(level_id)
 	entry["unlocked"] = true
 	entry["completed"] = true
 	entry["best_lives"] = maxi(lives, entry.get("best_lives", 0))
+	entry["best_score"] = maxi(score, entry.get("best_score", 0))
 	_levels[String(level_id)] = entry
 
 
@@ -122,6 +129,19 @@ func add_score(table_id: StringName, name: String, points: int) -> int:
 	var index: int = HighScores.insert(table, name, points)
 	_scores[String(table_id)] = table
 	return index
+
+
+## RF-194: mejor puntaje en una victoria de ese nivel (0 si nunca se ganó).
+func best_score(level_id: StringName) -> int:
+	return _level(level_id).get("best_score", 0)
+
+
+func hall_total() -> int:
+	return _hall_total
+
+
+func set_hall_total(total: int) -> void:
+	_hall_total = total
 
 
 ## Las últimas iniciales usadas de ese largo (la primera vez, "AAA" o "AAAAA").
@@ -161,6 +181,7 @@ func _read_levels(raw: Variant) -> void:
 			"unlocked": bool(entry.get("unlocked", false)),
 			"completed": bool(entry.get("completed", false)),
 			"best_lives": int(entry.get("best_lives", 0)),
+			"best_score": int(entry.get("best_score", 0)),
 		}
 
 

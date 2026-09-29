@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Trofeo del Salón de la fama (RF-194). -->
+  <g fill="none" stroke="#2b2233" stroke-width="6" stroke-linecap="round">
+    <path d="M19 15 C7 15 7 32 21 32"/>
+    <path d="M45 15 C57 15 57 32 43 32"/>
+  </g>
+  <g fill="none" stroke="#e0a91c" stroke-width="3" stroke-linecap="round">
+    <path d="M19 15 C7 15 7 32 21 32"/>
+    <path d="M45 15 C57 15 57 32 43 32"/>
+  </g>
+  <g stroke="#2b2233" stroke-width="2.5" stroke-linejoin="round">
+    <rect x="29" y="37" width="6" height="11" fill="#d9a53a"/>
+    <path d="M17 9 L47 9 L45 28 C43 40 21 40 19 28 Z" fill="#f2c14e"/>
+    <rect x="18" y="47" width="28" height="9" rx="2" fill="#8a5a22"/>
+  </g>
+  <rect x="24" y="49.5" width="16" height="4" rx="1" fill="#f2c14e"/>
+  <polygon points="32,15 34.2,20.2 39.8,20.6 35.5,24.2 36.9,29.6 32,26.7 27.1,29.6 28.5,24.2 24.2,20.6 29.8,20.2" fill="#fff6c2" stroke="#b8871c" stroke-width="1"/>
+  <path d="M22 12 C21 18 21 24 23 29" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" opacity="0.6"/>
+</svg>
