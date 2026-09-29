@@ -1,0 +1,28 @@
+{
+ "version": 1,
+ "titulo": "Armadura y daño",
+ "subtitulo": "Por qué algunas torres no le hacen nada a algunos enemigos",
+ "orden": 4,
+ "bloques": [
+  {
+   "tipo": "texto",
+   "texto": "La armadura de un enemigo se resta de cada golpe que recibe. Si el golpe es de 10 y la armadura es de 3, entran 7. Siempre entra al menos 1, por más armadura que tenga."
+  },
+  {
+   "tipo": "titulo",
+   "texto": "Qué significa para vos"
+  },
+  {
+   "tipo": "texto",
+   "texto": "Las torres que pegan muchas veces con poco daño (Ametralladora, Múltiple, Ráfaga) pierden mucho contra los enemigos blindados. Las torres de golpe grande (Cañón, Francotirador) casi no lo notan. Al pegar, sube un número con el daño real; si se ve gris, la armadura se comió la mitad o más del golpe: esa torre no conviene contra ese enemigo."
+  },
+  {
+   "tipo": "titulo",
+   "texto": "El fuego ignora la armadura"
+  },
+  {
+   "tipo": "texto",
+   "texto": "El daño de la quemadura no se reduce con la armadura, así que la Incendiaria sirve justo contra los blindados."
+  }
+ ]
+}

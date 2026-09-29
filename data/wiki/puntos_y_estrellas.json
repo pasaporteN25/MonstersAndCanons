@@ -1,0 +1,32 @@
+{
+ "version": 1,
+ "titulo": "Puntos, estrellas y récords",
+ "subtitulo": "Cómo se mide cómo jugaste",
+ "orden": 6,
+ "bloques": [
+  {
+   "tipo": "titulo",
+   "texto": "Puntos"
+  },
+  {
+   "tipo": "texto",
+   "texto": "Cada enemigo que matás suma puntos según el oro que da. Si ganás, cada vida que te queda suma más. Ves los puntos arriba, junto al oro."
+  },
+  {
+   "tipo": "titulo",
+   "texto": "Estrellas"
+  },
+  {
+   "tipo": "texto",
+   "texto": "Al ganar un nivel te llevás de 1 a 3 estrellas según cuántas vidas te quedaron: cuantas más, mejores. Las estrellas de todos los niveles se suman en la selección de nivel."
+  },
+  {
+   "tipo": "titulo",
+   "texto": "Récords"
+  },
+  {
+   "tipo": "texto",
+   "texto": "Cada nivel tiene su top 5, con tres letras. Quien gana todos los niveles entra al Salón de la fama, que suma el mejor puntaje de cada nivel. Los mapas de la comunidad tienen su propio top 5 y no cuentan para el Salón."
+  }
+ ]
+}

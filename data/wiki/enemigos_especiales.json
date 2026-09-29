@@ -1,0 +1,32 @@
+{
+ "version": 1,
+ "titulo": "Enemigos especiales",
+ "subtitulo": "Voladores, peligrosos y jefes",
+ "orden": 3,
+ "bloques": [
+  {
+   "tipo": "titulo",
+   "texto": "Voladores"
+  },
+  {
+   "tipo": "texto",
+   "texto": "Los voladores ignoran el camino: van en línea recta desde su entrada hasta la salida. Las torres que no pueden golpear voladores (mirá \"Golpea voladores\" en cada torre) ni los apuntan. Siempre hace falta alguna torre que llegue al aire."
+  },
+  {
+   "tipo": "titulo",
+   "texto": "Peligrosos"
+  },
+  {
+   "tipo": "texto",
+   "texto": "Los enemigos que llevan una corona dorada son peligrosos: si llegan a la salida te quitan muchas vidas de golpe. Vale la pena guardar las mejores torres para ellos."
+  },
+  {
+   "tipo": "titulo",
+   "texto": "Jefes y cosas raras"
+  },
+  {
+   "tipo": "texto",
+   "texto": "El Jefe resiste la ralentización: el Hielo le hace la mitad de efecto. El Troll se cura solo con el tiempo, pero el fuego lo deja sin curarse. La Araña suelta crías al morir, y las crías cuentan como enemigos de la oleada. Cada enemigo tiene su entrada con todos sus datos."
+  }
+ ]
+}

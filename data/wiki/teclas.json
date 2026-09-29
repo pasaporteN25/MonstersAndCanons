@@ -1,0 +1,53 @@
+{
+ "version": 1,
+ "titulo": "Teclas y controles",
+ "subtitulo": "Para jugar rápido",
+ "orden": 7,
+ "bloques": [
+  {
+   "tipo": "tabla",
+   "filas": [
+    [
+     "Tecla",
+     "Qué hace"
+    ],
+    [
+     "1 a 8",
+     "Elegir una torre para construir"
+    ],
+    [
+     "Clic izquierdo",
+     "Construir / seleccionar una torre"
+    ],
+    [
+     "Clic derecho o Esc",
+     "Cancelar / cerrar el panel"
+    ],
+    [
+     "Espacio",
+     "Empezar la oleada"
+    ],
+    [
+     "P",
+     "Pausar o seguir"
+    ],
+    [
+     "F",
+     "Alternar velocidad x1 / x2"
+    ],
+    [
+     "U",
+     "Mejorar la torre elegida"
+    ],
+    [
+     "S",
+     "Vender la torre elegida"
+    ]
+   ]
+  },
+  {
+   "tipo": "texto",
+   "texto": "En el celular se juega tocando la pantalla: los botones de abajo eligen la torre y el panel de la torre tiene Mejorar y Vender."
+  }
+ ]
+}

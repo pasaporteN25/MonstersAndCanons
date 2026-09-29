@@ -1,0 +1,40 @@
+{
+ "version": 1,
+ "titulo": "Efectos: ralentización, fuego, área y rayos",
+ "subtitulo": "Lo que hacen las torres además de dañar",
+ "orden": 5,
+ "bloques": [
+  {
+   "tipo": "titulo",
+   "texto": "Ralentización"
+  },
+  {
+   "tipo": "texto",
+   "texto": "El Hielo frena a los enemigos: un enemigo ralentizado avanza más lento y se ve teñido de azul. Si le llegan varias ralentizaciones no se suman: vale la más fuerte, y cada golpe nuevo reinicia el tiempo. Así las demás torres tienen más tiempo para pegarle."
+  },
+  {
+   "tipo": "titulo",
+   "texto": "Quemadura"
+  },
+  {
+   "tipo": "texto",
+   "texto": "La Incendiaria prende fuego: el enemigo recibe daño cada medio segundo durante unos segundos. El fuego ignora la armadura y, mientras dura, el enemigo no se cura. Las quemaduras tampoco se suman."
+  },
+  {
+   "tipo": "titulo",
+   "texto": "Daño en área"
+  },
+  {
+   "tipo": "texto",
+   "texto": "El Cañón daña a todos los enemigos cerca del punto de impacto: rinde contra grupos. No toca a los voladores."
+  },
+  {
+   "tipo": "titulo",
+   "texto": "Varios objetivos, púas y rayos"
+  },
+  {
+   "tipo": "texto",
+   "texto": "La Múltiple le dispara a varios enemigos a la vez. La Ráfaga lanza púas en círculo, y rinde más en una curva. La Eléctrica lanza un rayo que salta de un enemigo a otro. Los números de cada nivel están en la entrada de cada torre."
+  }
+ ]
+}

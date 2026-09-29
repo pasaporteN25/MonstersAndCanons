@@ -44,7 +44,7 @@ static func _enemy_entries(campaign: Array[LevelData]) -> Array[WikiEntry]:
 			enemies.append(resource)
 	# Del más débil al más fuerte (RF-233); a igual vida, por nombre, para que el orden no cambie.
 	enemies.sort_custom(func(a: EnemyData, b: EnemyData) -> bool:
-		return a.max_health < b.max_health or (a.max_health == b.max_health and a.id < b.id))
+		return a.max_health < b.max_health or (a.max_health == b.max_health and String(a.id) < String(b.id)))
 	var entries: Array[WikiEntry] = []
 	for enemy: EnemyData in enemies:
 		entries.append(enemy_entry(enemy, enemies, campaign))
@@ -119,7 +119,7 @@ static func _tower_entries(_campaign: Array[LevelData]) -> Array[WikiEntry]:
 	towers.sort_custom(func(a: TowerData, b: TowerData) -> bool:
 		var cost_a: int = a.levels[0].cost
 		var cost_b: int = b.levels[0].cost
-		return cost_a < cost_b or (cost_a == cost_b and a.id < b.id))
+		return cost_a < cost_b or (cost_a == cost_b and String(a.id) < String(b.id)))
 	var entries: Array[WikiEntry] = []
 	for tower: TowerData in towers:
 		entries.append(tower_entry(tower))
@@ -193,7 +193,7 @@ static func articles(dir: String) -> Dictionary:
 	entries.sort_custom(func(a: WikiEntry, b: WikiEntry) -> bool:
 		if orders[a.id] != orders[b.id]:
 			return orders[a.id] < orders[b.id]
-		return a.id < b.id)
+		return String(a.id) < String(b.id))
 	return {"entries": entries, "errors": errors}
 
 
@@ -269,7 +269,7 @@ static func _read_block(raw: Variant, where: String, errors: PackedStringArray) 
 					return null
 				var cells: Array = []
 				for cell: Variant in row:
-					cells.append(str(cell))
+					cells.append(_cell_text(cell))
 				if kind == WikiEntry.KIND_FACTS and cells.size() != 2:
 					errors.append("%s (datos): cada fila tiene 2 textos (nombre y valor)." % where)
 					return null
@@ -281,6 +281,13 @@ static func _read_block(raw: Variant, where: String, errors: PackedStringArray) 
 			return {"tipo": kind, "filas": rows}
 	errors.append("%s: el tipo \"%s\" no existe (los válidos: titulo, texto, datos, tabla)." % [where, kind])
 	return null
+
+
+## Un valor de una celda como texto: el 2 de un JSON llega como 2.0 y se ve "2".
+static func _cell_text(value: Variant) -> String:
+	if _is_whole(value):
+		return str(int(value))
+	return str(value)
 
 
 static func _article_failed(errors: PackedStringArray) -> Dictionary:

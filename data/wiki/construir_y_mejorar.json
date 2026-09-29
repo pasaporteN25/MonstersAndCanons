@@ -1,0 +1,36 @@
+{
+ "version": 1,
+ "titulo": "Construir, mejorar y vender",
+ "subtitulo": "Cómo se manejan las torres",
+ "orden": 2,
+ "bloques": [
+  {
+   "tipo": "texto",
+   "texto": "Elegí una torre en la barra de abajo (o con las teclas 1 a 8) y hacé clic en una casilla libre del césped. Se ve el círculo de alcance y, en verde, que se puede construir ahí; en rojo, que no. El clic derecho o Esc cancelan."
+  },
+  {
+   "tipo": "titulo",
+   "texto": "Mejorar"
+  },
+  {
+   "tipo": "texto",
+   "texto": "Cada torre tiene 3 niveles. Al hacer clic en una torre construida se abre su panel: ahí se ve su nivel, sus números y el botón Mejorar (tecla U). Mejorar cuesta oro, y en el nivel 3 ya no hay más."
+  },
+  {
+   "tipo": "titulo",
+   "texto": "Vender"
+  },
+  {
+   "tipo": "texto",
+   "texto": "Vender (tecla S) elimina la torre y te devuelve una parte de todo el oro que pusiste en ella, construcción y mejoras incluidas. Sirve para reacomodar las defensas cuando se te ocurre algo mejor."
+  },
+  {
+   "tipo": "titulo",
+   "texto": "Modo de apuntado"
+  },
+  {
+   "tipo": "texto",
+   "texto": "Cada torre elige a quién dispararle: Primero (el más cerca de la salida, es el normal), Último, Más fuerte (el de más vida) o Más cercano (el más cerca de la torre). Se cambia desde el panel de la torre. Contra un enemigo peligroso o un jefe conviene \"Más fuerte\"; para no dejar pasar a nadie, \"Primero\"."
+  }
+ ]
+}

@@ -1,0 +1,36 @@
+{
+ "version": 1,
+ "titulo": "Cómo se juega",
+ "subtitulo": "Lo básico, en un minuto",
+ "orden": 1,
+ "bloques": [
+  {
+   "tipo": "texto",
+   "texto": "Los enemigos salen por las entradas y siguen el camino hasta la salida. Tu trabajo es frenarlos con torres antes de que lleguen. Cada enemigo que llega a la salida te quita vidas; si te quedás sin vidas, perdés. Si aguantás todas las oleadas con al menos una vida, ganás el nivel."
+  },
+  {
+   "tipo": "titulo",
+   "texto": "Oro"
+  },
+  {
+   "tipo": "texto",
+   "texto": "Con el oro construís y mejorás torres. Empezás con el oro del nivel, ganás más matando enemigos y recibís un bono al terminar cada oleada. Podés construir en cualquier momento, también con la oleada en curso."
+  },
+  {
+   "tipo": "titulo",
+   "texto": "Oleadas"
+  },
+  {
+   "tipo": "texto",
+   "texto": "Nada empieza hasta que apretás \"Empezar oleada\": construí con calma antes. Entre oleadas hay una cuenta atrás; si no querés esperar, empezá la siguiente vos. Cada oleada trae enemigos con más vida que la anterior, así que hay que ir reforzando las defensas."
+  },
+  {
+   "tipo": "titulo",
+   "texto": "Consejos"
+  },
+  {
+   "tipo": "texto",
+   "texto": "Poné las torres en las curvas: ahí los enemigos pasan más tiempo dentro del alcance. Mezclá tipos de torre, porque cada enemigo tiene una debilidad (mirá la entrada de cada uno en Enemigos y la de cada torre en Torres)."
+  }
+ ]
+}
