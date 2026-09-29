@@ -71,6 +71,11 @@ func projectile_impacted(position_: Vector2, stats: TowerLevelData) -> void:
 		_add(RingEffect.new().setup(SPARK_COLOR, 2.0, 10.0, 0.12, 2.0), position_)
 
 
+## RF-163: zigzag entre los enemigos que golpeó un rayo en cadena.
+func lightning(points: PackedVector2Array) -> void:
+	_add(LightningEffect.new().setup(points), Vector2.ZERO)
+
+
 ## RF-130: anillo que se expande al construir.
 func tower_built(position_: Vector2, color: Color) -> void:
 	var ring_color: Color = color.lightened(0.5)

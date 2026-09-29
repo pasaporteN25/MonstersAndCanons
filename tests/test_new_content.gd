@@ -376,3 +376,59 @@ func test_burst_spikes_ignore_flyers() -> void:
 	_run_shots(1.5)
 	assert_eq(flyer.health, 1000, "RF-53: al volador no le pega")
 	assert_eq(walker.health, 992, "sigue de largo y le pega al de tierra")
+
+
+# --- Eléctrica (RF-163) ---
+
+## La torre dispara y el rayo llega (va a 20 casillas por segundo). Devuelve los puntos
+## del zigzag (vacío si no saltó).
+func _fire_tesla(at: Vector2) -> PackedVector2Array:
+	var tower: Tower = _tower_at("tesla", at)
+	simulate(tower, 1, DT)
+	# Una lista y no una variable suelta: las funciones anónimas copian las variables locales.
+	var chains: Array[PackedVector2Array] = []
+	for p: Projectile in shots:
+		p.chained.connect(func(points: PackedVector2Array) -> void: chains.append(points))
+	_run_shots(0.5)
+	return chains[0] if not chains.is_empty() else PackedVector2Array()
+
+
+func _damaged(enemies: Array[Enemy]) -> Array[bool]:
+	var result: Array[bool] = []
+	for e: Enemy in enemies:
+		result.append(e.health < 1000)
+	return result
+
+
+func test_tesla_tower_matches_spec() -> void:
+	var tesla: TowerData = _tower("tesla")
+	assert_eq(tesla.display_name, "Eléctrica")
+	assert_true(tesla.can_hit_air)
+	assert_almost_eq(tesla.projectile_speed_tiles, 20.0, 0.001)
+	_assert_levels("tesla", [
+		{"cost": 130, "damage": 12, "fire_rate": 0.7, "range_tiles": 2.5, "chain_extra_targets": 2, "chain_range_tiles": 1.5},
+		{"cost": 120, "damage": 18, "fire_rate": 0.8, "chain_extra_targets": 3},
+		{"cost": 180, "damage": 26, "fire_rate": 0.9, "range_tiles": 3.0, "chain_extra_targets": 4},
+	])
+
+
+func test_lightning_jumps_to_the_two_nearest() -> void:
+	var e: Array[Enemy] = _enemies_at([300.0, 340.0, 380.0, 420.0])
+	var chain: PackedVector2Array = _fire_tesla(Vector2(360, 250))
+	assert_eq(_damaged(e), [false, true, true, true], "el primero (420) y dos saltos: 380 y 340")
+	assert_eq(e[3].health, 988, "cada salto hace el mismo daño (12)")
+	assert_eq(e[1].health, 988)
+	assert_eq(chain.size(), 3, "el zigzag une a los 3 golpeados")
+
+
+func test_lightning_never_hits_the_same_enemy_twice() -> void:
+	var e: Array[Enemy] = _enemies_at([340.0, 380.0])
+	_fire_tesla(Vector2(360, 250))
+	assert_eq([e[0].health, e[1].health], [988, 988], "cada uno una sola vez, aunque sobren saltos")
+
+
+func test_lightning_does_not_jump_too_far() -> void:
+	var e: Array[Enemy] = _enemies_at([300.0, 420.0])  # a 120 px: más que 1,5 casillas (96 px)
+	var chain: PackedVector2Array = _fire_tesla(Vector2(360, 250))
+	assert_eq(_damaged(e), [false, true], "solo el objetivo")
+	assert_eq(chain.size(), 0, "sin saltos no hay zigzag")

@@ -29,3 +29,7 @@ extends Resource
 @export var extra_targets: int = 0
 ## RF-162: cuántas púas lanza en círculo, en línea recta (0 = dispara normal, a un objetivo).
 @export var burst_count: int = 0
+## RF-163: a cuántos enemigos MÁS salta el golpe, uno detrás de otro (0 = no salta).
+@export var chain_extra_targets: int = 0
+## RF-163: distancia máxima de cada salto, en casillas.
+@export var chain_range_tiles: float = 0.0

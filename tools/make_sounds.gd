@@ -38,6 +38,8 @@ func _init() -> void:
 	_save("shot_multi", _notes(Wave.SQUARE, [1500.0, 1300.0, 1100.0], 0.025, 0.2))
 	# M5: silbido corto que sube (las púas salen en todas direcciones).
 	_save("shot_burst", _mix([_tone(Wave.TRIANGLE, 500.0, 1100.0, 0.12, 0.3), _tone(Wave.NOISE, 0.0, 0.0, 0.08, 0.2)]))
+	# M5: zumbido eléctrico (onda cuadrada grave con chisporroteo).
+	_save("shot_tesla", _mix([_tone(Wave.SQUARE, 180.0, 120.0, 0.12, 0.25), _tone(Wave.NOISE, 0.0, 0.0, 0.1, 0.3)]))
 	# --- Partida ---
 	_save("enemy_death", _mix([_tone(Wave.SINE, 520.0, 180.0, 0.13, 0.45), _tone(Wave.NOISE, 0.0, 0.0, 0.06, 0.2)]))
 	_save("life_lost", _tone(Wave.SQUARE, 190.0, 110.0, 0.28, 0.35))

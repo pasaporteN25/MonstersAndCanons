@@ -4,6 +4,8 @@ extends Node2D
 
 ## Llegó a destino. Solo para efectos visuales (RF-122): el daño ya se aplicó.
 signal impacted(position: Vector2, stats: TowerLevelData)
+## El golpe saltó de enemigo en enemigo (RF-163). `points`: dónde estaba cada golpeado. Solo visual.
+signal chained(points: PackedVector2Array)
 
 ## RF-153: lado del dibujo del proyectil, en píxeles.
 const SPRITE_SIZE_PX: float = 28.0
@@ -128,7 +130,40 @@ func _impact() -> void:
 				_hit(enemy)
 	elif is_instance_valid(_target) and _target.is_active():
 		_hit(_target)
+		if _stats.chain_extra_targets > 0:
+			_chain_from(_target)
 	# Sin área y sin objetivo: desaparece sin hacer daño (RF-52).
+
+
+## RF-163: desde el primer golpeado, salta al enemigo más cercano que todavía no golpeó,
+## si está a menos de `chain_range_tiles`. Cada salto hace el mismo golpe.
+func _chain_from(first: Enemy) -> void:
+	var reach: float = Rules.tiles_to_px(_stats.chain_range_tiles)
+	var struck: Array[Enemy] = [first]
+	var points := PackedVector2Array([first.global_position])
+	for i: int in _stats.chain_extra_targets:
+		var next: Enemy = _nearest_not_struck(points[points.size() - 1], struck, reach)
+		if next == null:
+			break
+		struck.append(next)
+		points.append(next.global_position)
+		_hit(next)
+	if points.size() > 1:
+		chained.emit(points)
+
+
+func _nearest_not_struck(from: Vector2, struck: Array[Enemy], reach: float) -> Enemy:
+	var best: Enemy = null
+	var best_dist: float = reach * reach
+	for node: Node in get_tree().get_nodes_in_group(Enemy.GROUP):
+		var enemy := node as Enemy
+		if not enemy.is_active() or struck.has(enemy) or (enemy.data.is_flying and not _can_hit_air):
+			continue
+		var dist: float = from.distance_squared_to(enemy.global_position)
+		if dist <= best_dist:
+			best = enemy
+			best_dist = dist
+	return best
 
 
 func _hit(enemy: Enemy) -> void:

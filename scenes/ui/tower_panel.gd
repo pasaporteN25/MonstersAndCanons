@@ -57,6 +57,8 @@ func _describe(s: TowerLevelData) -> String:
 	]
 	if s.splash_radius_tiles > 0.0:
 		lines.append("Área: radio %.1f" % s.splash_radius_tiles)
+	if s.chain_extra_targets > 0:
+		lines.append("El rayo salta a %d enemigos más" % s.chain_extra_targets)
 	if s.burst_count > 0:
 		lines.append("Lanza %d púas en círculo" % s.burst_count)
 	if s.extra_targets > 0:

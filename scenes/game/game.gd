@@ -275,6 +275,7 @@ func _refresh_tower_panel() -> void:
 func _on_tower_fired(projectile: Projectile) -> void:
 	projectiles.add_child(projectile)
 	projectile.impacted.connect(effects.projectile_impacted)
+	projectile.chained.connect(effects.lightning)  # RF-163
 
 
 func _on_state_changed(state: LevelSession.State) -> void:
