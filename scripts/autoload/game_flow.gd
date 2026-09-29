@@ -7,6 +7,7 @@ const MAIN_MENU_SCENE: String = "res://scenes/ui/main_menu.tscn"
 const LEVEL_SELECT_SCENE: String = "res://scenes/ui/level_select.tscn"
 const GAME_SCENE: String = "res://scenes/game/game.tscn"
 const RECORDS_SCENE: String = "res://scenes/ui/records_screen.tscn"
+const EDITOR_SCENE: String = "res://scenes/editor/map_editor.tscn"
 
 ## Índice del nivel de la campaña que se está jugando.
 ## -1 = no se juega desde la campaña (por ejemplo, game.tscn abierto con F6, o un test):
@@ -14,6 +15,9 @@ const RECORDS_SCENE: String = "res://scenes/ui/records_screen.tscn"
 var current_index: int = -1
 ## RF-205: los niveles de data/campaign.json, ya leídos (los inválidos se saltean, RF-204).
 var campaign: CampaignData = LevelFile.load_campaign()
+## El borrador del editor de mapas (spec §10.3). Vive acá para no perderse cuando se prueba el
+## nivel: la partida reemplaza la pantalla del editor, y al volver se retoma este mismo borrador.
+var editor_draft: LevelDraft
 
 
 func _ready() -> void:
@@ -182,6 +186,12 @@ func go_to_main_menu() -> void:
 func go_to_level_select() -> void:
 	current_index = -1
 	get_tree().change_scene_to_file(LEVEL_SELECT_SCENE)
+
+
+## RF-210: el editor de mapas (solo en el modo de pruebas).
+func go_to_editor() -> void:
+	current_index = -1
+	get_tree().change_scene_to_file(EDITOR_SCENE)
 
 
 ## RF-195: la pantalla de récords.

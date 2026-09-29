@@ -24,14 +24,7 @@ static func build(grid: MapGrid) -> Level:
 	assert(grid.is_valid(), "Level.build necesita un mapa válido")
 	var level := Level.new()
 	level.name = "Level"
-	var ground := TileMapLayer.new()
-	ground.name = "Ground"
-	ground.tile_set = TILESET
-	for y: int in MapGrid.HEIGHT:
-		for x: int in MapGrid.WIDTH:
-			var cell := Vector2i(x, y)
-			ground.set_cell(cell, 0, ATLAS_OF[grid.cell_type(cell)])
-	level.add_child(ground)
+	level.add_child(make_ground(grid))
 	var entrances_node := Node2D.new()
 	entrances_node.name = "Entrances"
 	level.add_child(entrances_node)
@@ -51,6 +44,19 @@ static func build(grid: MapGrid) -> Level:
 	decor.name = "Decor"
 	level.add_child(decor)
 	return level
+
+
+## El suelo del mapa: una casilla del TileSet por cada casilla de letras (las entradas y la salida
+## son camino). Lo usan el juego (Level.build) y el editor de mapas (spec §10.3): se ven igual.
+static func make_ground(grid: MapGrid) -> TileMapLayer:
+	var ground := TileMapLayer.new()
+	ground.name = "Ground"
+	ground.tile_set = TILESET
+	for y: int in MapGrid.HEIGHT:
+		for x: int in MapGrid.WIDTH:
+			var cell := Vector2i(x, y)
+			ground.set_cell(cell, 0, ATLAS_OF[grid.cell_type(cell)])
+	return ground
 
 
 ## Curva que siguen los enemigos terrestres de una entrada: los centros de las esquinas del

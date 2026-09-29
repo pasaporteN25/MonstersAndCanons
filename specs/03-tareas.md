@@ -559,10 +559,11 @@
   **Hecho cuando:** los tests comprueban cada operación, que el texto que se guarda vuelve a leerse igual con `LevelFile`, que las entradas se renumeran al quitar una (con sus oleadas), que el nivel nuevo es válido y que un nivel oficial abierto como plantilla no se puede guardar encima del oficial.
   **Resultado:** [`level_draft.gd`](../scripts/logic/level_draft.gd) guarda el nivel **en el mismo formato del archivo** (un solo modelo: lo que se edita, lo que se guarda y lo que valida `LevelFile` son lo mismo). Prueba fuerte: abrir cada nivel oficial y volver a escribirlo da **exactamente el mismo texto**. Un trazo del mouse es un solo paso de deshacer (`begin_stroke`/`end_stroke`); lo que no cambia nada no se puede deshacer. Los tests encontraron un defecto: listar los mapas sin que exista `user://maps/` dejaba un error en el registro. Un mapa con errores se puede abrir y guardar (RF-213). 37 tests.
 
-- [ ] **T102 · La pantalla del editor: pintar el mapa**
+- [x] **T102 · La pantalla del editor: pintar el mapa**
   Botón "Editor de mapas" en el menú (solo modo de pruebas); pantalla con el mapa, las herramientas y la línea de mensajes; recorridos y casillas sin usar dibujados; teclas y `Ctrl+Z`/`Ctrl+Y`.
   **Refs:** RF-210, RF-211, RF-212, RF-213.
   **Hecho cuando:** los tests comprueban que el botón solo existe en el modo de pruebas y que pintar cambia el mapa y los mensajes; la captura muestra un mapa válido con sus recorridos y uno con errores.
+  **Resultado:** `MapEditor` (pantalla) y `MapView` (dibuja el mismo suelo y decoración que la partida, gracias a `Level.make_ground()`, más los recorridos, las letras y las casillas sin usar). Los recorridos se dibujan como **franjas anidadas** (la entrada A, la más ancha; las siguientes, más finas y encima) para que se vean todos donde comparten tramo. Arrastrar pinta también las casillas que el mouse se saltea (línea entre la anterior y la nueva); la entrada y la salida se ponen de a una. El borrador vive en `GameFlow.editor_draft`, así que al salir y volver se retoma. Las capturas encontraron dos defectos que se corrigieron: el botón de la herramienta anterior no se soltaba, y el elegido casi no se distinguía. 19 tests.
 
 - [ ] **T103 · Ajustes del nivel y oleadas**
   Paneles con el nombre, oro, vidas y aumento de vida, y el editor de oleadas y grupos.
