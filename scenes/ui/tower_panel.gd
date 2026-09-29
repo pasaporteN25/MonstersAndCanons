@@ -38,7 +38,7 @@ func refresh(gold: int) -> void:
 		return
 	var s: TowerLevelData = _tower.stats()
 	_title.text = "%s · Nivel %d" % [_tower.data.display_name, _tower.level_number()]
-	_stats.text = _describe(s)
+	_stats.text = TowerText.describe(s, _tower.data.can_hit_air)
 	_targeting_button.text = "Apuntar: %s" % _tower.targeting_name()
 	var next: TowerLevelData = _tower.next_level_stats()
 	if next == null:
@@ -48,24 +48,3 @@ func refresh(gold: int) -> void:
 		_upgrade_button.text = "Mejorar (%d)  [U]" % next.cost
 		_upgrade_button.disabled = gold < next.cost
 	_sell_button.text = "Vender (+%d)  [S]" % _sell_value
-
-
-func _describe(s: TowerLevelData) -> String:
-	var lines: Array[String] = [
-		"Daño: %d   ·   Cadencia: %.1f/s" % [s.damage, s.fire_rate],
-		"Alcance: %.1f casillas" % s.range_tiles,
-	]
-	if s.splash_radius_tiles > 0.0:
-		lines.append("Área: radio %.1f" % s.splash_radius_tiles)
-	if s.chain_extra_targets > 0:
-		lines.append("El rayo salta a %d enemigos más" % s.chain_extra_targets)
-	if s.burst_count > 0:
-		lines.append("Lanza %d púas en círculo" % s.burst_count)
-	if s.extra_targets > 0:
-		lines.append("Dispara a %d enemigos a la vez" % (1 + s.extra_targets))
-	if s.burn_damage_per_second > 0:
-		lines.append("Quema: %d por segundo durante %.0f s" % [s.burn_damage_per_second, s.burn_duration])
-	if s.slow_amount > 0.0:
-		lines.append("Ralentiza %d %% durante %.0f s" % [roundi(s.slow_amount * 100.0), s.slow_duration])
-	lines.append("Golpea voladores: %s" % ("sí" if _tower.data.can_hit_air else "no"))
-	return "\n".join(lines)

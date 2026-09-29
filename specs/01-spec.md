@@ -717,7 +717,7 @@ Dibujos simples para dejar de ver formas geométricas. Es un **primer intento "p
 
 ## 10. Pantallas y progreso *(M3)*
 
-- **RF-110** **Menú principal:** Jugar, Récords *(M6, RF-195)*, Opciones, Salir. Es la primera pantalla al abrir el juego. De fondo se ve el mapa del nivel 1, oscurecido.
+- **RF-110** **Menú principal:** Jugar, Récords *(M6, RF-195)*, Wiki *(M11, RF-230)*, Opciones, Salir. Es la primera pantalla al abrir el juego. De fondo se ve el mapa del nivel 1, oscurecido.
 - **RF-117** El progreso **solo** se guarda cuando se juega desde el menú. Abrir la partida directamente desde el editor (F6) o correr los tests no toca el guardado del jugador.
 - **RF-111** **Selección de nivel:** muestra los niveles. Los bloqueados dicen "Bloqueado". Los completados muestran sus **estrellas** (RF-93) y la mejor cantidad de vidas conseguida. Arriba se ve el **total de estrellas** de la campaña ("Estrellas: 7 de 15").
 - **RF-116** *(M9)* **La selección de nivel admite cualquier cantidad de niveles:** las tarjetas se acomodan en **filas de hasta 5**, centradas; se ven **2 filas** y, si hay más, el área **se desplaza** (rueda del mouse, arrastrar con el dedo o las flechas del teclado, que siguen a la tarjeta elegida). Con 5 niveles o menos hay una sola fila. Ningún nivel queda fuera de la pantalla, sin importar cuántos haya.
@@ -798,6 +798,24 @@ Cualquiera puede sumar mapas al juego **copiando un archivo**: los mapas hechos 
 > **Criterio de aceptación**
 > **Dado** un mapa guardado con el editor (`mi_mapa.json`) → **Cuando** abro la selección de nivel en cualquier versión del juego y voy a "Mapas de la comunidad" → **Entonces** veo una tarjeta "mi_mapa", la juego, y mi mejor resultado queda anotado **solo** en ese mapa.
 > **Dado** un archivo con un enemigo que no existe → **Entonces** se ve una tarjeta deshabilitada "Con errores" con el motivo, y los demás mapas se pueden jugar igual.
+
+### 10.5 Wiki *(M11, pedido por Lucas, D-035)*
+
+Una enciclopedia dentro del juego: dice cómo es cada enemigo y cada torre, y explica las reglas. Está pensada para **crecer sin tocar el código de la pantalla**: la pantalla no sabe qué es un enemigo ni una torre, solo dibuja **categorías** que contienen **entradas** hechas de **bloques** (títulos, textos y tablas).
+
+- **RF-230** **Dónde está:** botón **"Wiki"** en el menú principal, entre "Récords" y "Opciones", en todas las versiones (también en el celular). `Esc` o "Volver" regresan al menú.
+- **RF-231** **La pantalla:** arriba, una solapa por **categoría**; a la izquierda, la lista de **entradas** de la categoría elegida (dibujo y nombre); a la derecha, el **detalle** de la entrada elegida. Se elige con el mouse, con el dedo o con el teclado (**▲/▼** entre entradas, **◄/►** entre categorías). Las listas y el detalle **se desplazan** si no entran: no importa cuántas entradas ni cuánto texto haya.
+- **RF-232** **Categorías iniciales:** **Enemigos**, **Torres** y **Guía** (artículos que explican las reglas). Si una categoría no tiene entradas no se muestra.
+- **RF-233** **Enemigos:** una entrada por cada archivo de `data/enemies/`, **sin lista aparte**: agregar un enemigo al juego lo agrega solo a la wiki. Muestra su dibujo, su descripción (la de RF-134) y sus datos: vida en la primera oleada, velocidad, armadura, oro que da, vidas que quita, si vuela, resistencia a la ralentización, regeneración y qué suelta al morir. Además dice **en qué niveles de la campaña aparece** y **qué enemigo lo suelta** (las Crías, la Araña). Van ordenados del más débil al más fuerte (por vida).
+- **RF-234** **Torres:** una entrada por cada archivo de `data/towers/`, también automática. Muestra su dibujo (base y torreta), la frase de RF-171, si golpea voladores y **una tabla con los 3 niveles** (costo de construir o mejorar, daño, cadencia, alcance) más los **efectos** de cada nivel (área, quemadura, ralentización, rayo que salta, púas, varios objetivos). Van ordenadas de la más barata a la más cara.
+- **RF-235** **Guía:** artículos escritos a mano en **archivos de texto** `data/wiki/*.json` (uno por artículo: título, orden y bloques), para que se puedan escribir o corregir sin programar. Iniciales: cómo se juega, torres (construir, mejorar, vender, apuntado), enemigos (voladores, peligrosos, jefe), armadura y daño, efectos (ralentización, quemadura), puntos y estrellas. Los artículos **no repiten números que ya viven en los datos** (constitución P2): explican la regla y mandan a la entrada correspondiente.
+- **RF-236** **Nada se rompe por una entrada mala:** un artículo con errores no se muestra y no impide ver el resto (los tests, en cambio, **fallan** si algún artículo oficial tiene errores, para no publicarlo así).
+- **RF-237** **Los números salen de los datos**, no de textos escritos a mano: si se rebalancea un enemigo o una torre, la wiki cambia sola.
+- **RF-238** **Por ahora se ve todo:** la wiki muestra todos los enemigos y torres desde el principio, aunque el jugador todavía no los haya visto (B-15 propone un "bestiario" que se va llenando).
+
+> **Criterio de aceptación**
+> **Dado** un enemigo nuevo agregado a `data/enemies/` → **Cuando** abro la Wiki → **Entonces** aparece en "Enemigos" con sus datos, sin haber tocado ningún otro archivo.
+> **Dado** un artículo nuevo `data/wiki/mi_articulo.json` → **Entonces** aparece en "Guía".
 
 ---
 
@@ -1068,3 +1086,13 @@ Ideas **aprobadas como dirección**, pero **sin fecha**: no se programan hasta c
 **Punto débil de hoy que se puede arreglar aparte:** el piso de 1 es un precipicio (si un enemigo tuviera armadura 10, las torres de golpe chico pegarían siempre 1). Una salida chica es un **piso proporcional**: `máximo(golpe × 20 %, golpe − armadura)`.
 
 **Antes de hacerlo:** cambiar la fórmula obliga a **volver a balancear los 7 niveles** con el bot. Se puede comparar las dos fórmulas con el bot en una copia aparte, sin tocar el proyecto. **Qué cambia en la spec:** RF-80, la tabla de torres (columna "tipo de daño") y la de enemigos.
+
+### B-15 · Wiki: bestiario que se llena, búsqueda y más categorías
+*Idea derivada de la wiki (M11), 2026-09-29. Sin fecha.*
+
+La wiki de M11 ya es escalable a propósito (categorías → entradas → bloques). Ideas que **entran sin rehacerla**:
+- **Bestiario que se va llenando:** un enemigo aparece como "???" hasta que se lo ve en una partida. El guardado ya recuerda qué enemigos se vieron (RF-134, `seen_enemies`), así que solo falta filtrar. Se decide si a Lucas le gusta o prefiere ver todo.
+- **Enlaces entre entradas** ("la Araña suelta Crías" que lleva a la entrada de las Crías) y desde la partida ("¿Qué es esto?" al tocar un enemigo o una torre).
+- **Buscador** (un cuadro de texto que filtra las entradas).
+- **Categorías nuevas** sin tocar la pantalla: **Niveles** (mapa en miniatura, oleadas y qué enemigos vienen), **Lore** (B-03), **Épocas** (B-01), **Mapas de la comunidad** y, si algún día hay mods, **los enemigos y torres de cada mod** (salen solos de los archivos).
+- **Imágenes propias** en los artículos (un bloque `imagen`) y ejemplos de "qué torre conviene contra qué enemigo".

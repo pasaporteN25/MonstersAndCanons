@@ -455,3 +455,12 @@ godot --headless --path . -s addons/gut/gut_cmdln.gd -gdir=res://tests -gexit
 | Quedarse en x2 o en pausa al salir | Menús acelerados o congelados. | Restaurar `time_scale` y `paused` al salir (§6.7). |
 | Números de balance esparcidos por el código | Balancear se vuelve una pesadilla. | Constitución P2 + revisar en cada tarea que no haya números "mágicos". |
 | Muchos enemigos → lentitud | Menos de 60 FPS. | Medir con la prueba de rendimiento (§8) **antes** de optimizar nada. |
+
+### 6.10 La wiki *(M11, D-035)*
+
+- `Wiki` ([código](../scripts/logic/wiki.gd)) devuelve `categories() -> Array[WikiCategory]`. Cada categoría tiene `id`, `title` y `entries: Array[WikiEntry]`. Cada `WikiEntry` (`id`, `title`, `subtitle`, `icon` = capas de texturas, `blocks`) es **solo datos**. Un bloque es un diccionario: `{"tipo": "titulo", "texto": …}`, `{"tipo": "texto", "texto": …}`, `{"tipo": "datos", "filas": [[nombre, valor], …]}` o `{"tipo": "tabla", "filas": [[…], …]}` (la primera fila es el encabezado).
+- **Proveedores:** `Wiki.PROVIDERS` lista las categorías (id, título y la función que arma sus entradas). Los enemigos y las torres se **descubren** leyendo `data/enemies/` y `data/towers/` (con `.remap` en el exportado, igual que `LevelFile.enemy_ids()`); los artículos, leyendo `data/wiki/*.json`. Sumar una categoría = una función y una línea en `PROVIDERS`.
+- `Wiki.campaign` (los niveles de la campaña) se pasa por parámetro: así se prueba "aparece en los niveles…" con una campaña de mentira.
+- `TowerText` ([código](../scripts/logic/tower_text.gd)): las líneas de estadísticas de un nivel de torre. Las usan `TowerPanel` y la wiki.
+- `WikiScreen` ([escena](../scenes/ui/wiki_screen.tscn)): solapas de categoría, lista de entradas y detalle con desplazamiento; `WikiIcon` dibuja las capas de un dibujo.
+- **Artículos:** `data/wiki/*.json`, con claves en castellano como los niveles (§7.8): `version`, `titulo`, `orden`, `bloques`. `Wiki.parse_article` devuelve la entrada o la lista de errores.

@@ -613,3 +613,28 @@
 
 - Decidir ambientación y arte definitivo (ver "Preguntas abiertas" de la spec y B-02). *Los dibujos provisionales ya están (T70–T73).*
 - Balance fino de todos los niveles.
+
+---
+
+## M11 — Wiki en el juego *(pedido por Lucas, D-035)*
+
+- [x] **T110 · El modelo de la wiki: `Wiki`, entradas de enemigos y torres, y `TowerText`**
+  `WikiEntry`, `WikiCategory` y `Wiki.categories()` con Enemigos y Torres leídos de los datos; `TowerText` compartido con el panel de la torre.
+  **Refs:** RF-233, RF-234, RF-237, D-035.
+  **Hecho cuando:** los tests comprueban que hay una entrada por cada enemigo y cada torre de `data/`, el orden, los datos de cada una salidos del recurso, "aparece en los niveles…" con una campaña de prueba, lo que suelta la Araña, y que el panel de la torre dice lo mismo que antes.
+  **Resultado:** [`wiki.gd`](../scripts/logic/wiki.gd) (`Wiki.categories()`), [`wiki_entry.gd`](../scripts/logic/wiki_entry.gd) y [`wiki_category.gd`](../scripts/logic/wiki_category.gd): solo datos, con bloques `titulo`, `texto`, `datos` y `tabla`. Enemigos y torres se descubren leyendo `data/` (con `.remap` en el exportado) y se ordenan por vida y por costo. El texto de estadísticas de la torre pasó a [`tower_text.gd`](../scripts/logic/tower_text.gd) y lo usan el panel y la wiki. La carpeta de artículos que todavía no existe no da error. 16 tests nuevos (507 en total).
+
+- [ ] **T111 · Los artículos de la Guía (`data/wiki/*.json`)**
+  `Wiki.parse_article`, la carpeta de artículos y los artículos iniciales.
+  **Refs:** RF-235, RF-236.
+  **Hecho cuando:** los tests comprueban que cada artículo oficial se lee sin errores, que uno roto da su motivo sin impedir los demás, el orden y que los ids no se repiten.
+
+- [ ] **T112 · La pantalla Wiki y el botón del menú**
+  `WikiScreen` (solapas, lista, detalle con desplazamiento), `WikiIcon`, `GameFlow.go_to_wiki()` y el botón "Wiki".
+  **Refs:** RF-230, RF-231, RF-232.
+  **Hecho cuando:** los tests comprueban las solapas, elegir una entrada y ver su detalle, el teclado, que la categoría vacía no se muestra y que el botón del menú existe; las capturas muestran un enemigo, una torre y un artículo, y el menú con el botón nuevo.
+
+- [ ] **T113 · Cierre de M11: documentación y exportaciones**
+  README, ONBOARDING, CONTENIDO.md (cómo escribir un artículo y qué se agrega solo); exportar los cuatro ejecutables.
+  **Refs:** D-035.
+  **Hecho cuando:** pasan todos los tests y, en el `.exe` normal exportado, la wiki muestra los enemigos y las torres (los `.tres` exportados se leen).

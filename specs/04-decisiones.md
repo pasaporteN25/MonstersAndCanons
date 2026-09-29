@@ -209,3 +209,12 @@
 - **Un archivo roto no rompe nada:** se muestra como tarjeta deshabilitada con el motivo (así quien crea el mapa sabe qué arreglar) y el resto sigue andando.
 - **Lo que NO incluye:** descargar mapas desde el juego, compartirlos por internet o por código de texto (B-11), calificarlos, y mapas en el celular (la carpeta `user://` no se ve desde el Android). Cualquier alternativa que use internet necesitaría un servidor y otras reglas de seguridad.
 - **Riesgo conocido:** un mapa puede ser imposible o demasiado fácil. Los récords de los mapas de la comunidad son **solo del jugador que los juega** (no hay ranking compartido), así que no hay nada que "hacer trampa".
+
+### D-035 · Wiki en el juego: categorías, entradas y bloques, con los datos como fuente
+- **Fecha:** 2026-09-29 · **Estado:** Aceptada · **Decidió:** Lucas (qué: una wiki con enemigos, torres y algo más, escalable) / Claude (cómo)
+- **Qué:** una pantalla "Wiki" en el menú principal (spec §10.5). La pantalla es **genérica**: dibuja categorías → entradas → bloques (`titulo`, `texto`, `tabla`) y no sabe qué es un enemigo. Lo que sabe de enemigos, torres y artículos está en `Wiki` ([`wiki.gd`](../scripts/logic/wiki.gd)), que arma las entradas **leyendo los datos**.
+- **Por qué así (escalabilidad):** agregar un enemigo o una torre a `data/` lo agrega solo a la wiki (nada de listas a mano que se olviden); agregar un artículo es soltar un `.json` en `data/wiki/`; agregar una categoría entera (Niveles, Lore, Épocas…) es **una función más** en `Wiki` que devuelve entradas, sin tocar la pantalla. Las entradas son datos simples y por eso se prueban sin abrir ninguna ventana.
+- **Los números salen de los datos** (constitución P2): la vida, el daño o el costo que se ven en la wiki son los del `.tres`. Los artículos escritos a mano explican reglas, no repiten números.
+- **Se refactoriza el texto de la torre:** el panel de la torre ya armaba las líneas "Daño, cadencia, área, quema…" a mano; ahora vive en `TowerText` y lo usan el panel y la wiki, así no hay dos versiones que se desincronicen.
+- **Alternativas descartadas:** (1) una escena con una página dibujada a mano por enemigo: cada enemigo nuevo obligaría a editar la escena; (2) un solo archivo grande de texto con todo: se duplicarían los números de los `.tres`. (3) Ocultar lo que el jugador todavía no vio: no se hace por ahora (RF-238); queda como B-15.
+- **Lo que NO incluye:** buscador, enlaces entre entradas, bestiario que se llena, imágenes propias en los artículos (B-15).
