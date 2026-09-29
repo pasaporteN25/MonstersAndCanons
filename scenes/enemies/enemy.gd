@@ -98,6 +98,11 @@ func _physics_process(delta: float) -> void:
 		queue_free()
 
 
+## El camino que sigue (RF-166: las crías siguen el mismo).
+func path() -> Path2D:
+	return _path
+
+
 ## false si ya murió o escapó (aunque el nodo todavía no se haya borrado).
 func is_active() -> bool:
 	return not _is_done

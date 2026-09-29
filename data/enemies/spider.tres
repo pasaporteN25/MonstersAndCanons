@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Resource" path="res://data/enemies/spiderling.tres" id="1_6udio"]
+[ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="2_m6usc"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/spider.svg" id="3_3o5ed"]
+
+[resource]
+script = ExtResource("2_m6usc")
+id = &"spider"
+display_name = "Araña"
+description = "Al morir suelta 4 crías. La Múltiple, la Ráfaga y el Cañón las barren."
+max_health = 60
+speed_tiles = 1.2
+reward = 6
+lives_damage = 2
+color = Color(0.18, 0.45, 0.48, 1)
+texture = ExtResource("3_3o5ed")
+size_tiles = 0.33
+death_spawn = ExtResource("1_6udio")
+death_spawn_count = 4

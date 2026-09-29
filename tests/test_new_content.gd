@@ -156,3 +156,75 @@ func test_healing_is_reported_at_most_once_per_second() -> void:
 	_seconds(troll, 2.5)
 	assert_signal_emit_count(troll, "healed", 2, "un \"+N\" por segundo, no uno por cuadro")
 	assert_signal_emitted_with_parameters(troll, "healed", [troll, 4])
+
+
+# --- Araña y Crías (RF-166) ---
+
+## Una partida con una oleada de una sola Araña, ya en el mapa.
+func _spider_game() -> Game:
+	var game: Game = GAME_SCENE.instantiate()
+	add_child_autofree(game)
+	var group := SpawnGroup.new()
+	group.enemy = _enemy_data("spider")
+	group.count = 1
+	var wave := WaveData.new()
+	wave.groups.append(group)
+	game.session.begin_wave()
+	game.spawner.start_wave(wave, 1)
+	simulate(game.spawner, 1, DT)
+	return game
+
+
+func _alive(game: Game) -> Array[Enemy]:
+	var list: Array[Enemy] = []
+	for node: Node in game.enemies.get_children():
+		if (node as Enemy).is_active():
+			list.append(node as Enemy)
+	return list
+
+
+func test_spider_and_spiderling_match_spec() -> void:
+	var spider: EnemyData = _enemy_data("spider")
+	assert_eq([spider.max_health, spider.reward, spider.lives_damage], [60, 6, 2])
+	assert_almost_eq(spider.speed_tiles, 1.2, 0.001)
+	assert_eq(spider.death_spawn, _enemy_data("spiderling"))
+	assert_eq(spider.death_spawn_count, 4)
+	var kid: EnemyData = _enemy_data("spiderling")
+	assert_eq([kid.max_health, kid.reward, kid.lives_damage], [8, 1, 1])
+	assert_almost_eq(kid.speed_tiles, 2.4, 0.001)
+	assert_null(kid.death_spawn, "las crías no sueltan más crías")
+
+
+func test_spider_leaves_four_spiderlings_where_it_died() -> void:
+	var game: Game = _spider_game()
+	var spider: Enemy = _alive(game)[0]
+	simulate(spider, 60, DT)  # camina un segundo
+	var died_at: float = spider.distance
+	spider.take_hit(100000)
+	var kids: Array[Enemy] = _alive(game)
+	assert_eq(kids.size(), 4, "RF-166")
+	for kid: Enemy in kids:
+		assert_eq(kid.data.id, &"spiderling")
+		assert_between(kid.distance, died_at - 31.0, died_at + 0.1, "en su lugar, un poco hacia atrás")
+		assert_eq(kid.max_health, 8, "vida de la oleada 1")
+		assert_eq(kid.path(), spider.path(), "siguen el mismo camino")
+
+
+func test_wave_ends_only_when_the_spiderlings_die() -> void:
+	var game: Game = _spider_game()
+	watch_signals(game.spawner)
+	_alive(game)[0].take_hit(100000)
+	await wait_process_frames(2)  # la madre ya dejó el árbol
+	assert_signal_not_emitted(game.spawner, "wave_finished", "quedan 4 crías vivas")
+	for kid: Enemy in _alive(game):
+		kid.take_hit(100000)
+	await wait_process_frames(2)
+	assert_signal_emitted(game.spawner, "wave_finished", "RF-33: ahora sí")
+
+
+func test_spider_reaching_the_exit_leaves_nothing() -> void:
+	var game: Game = _spider_game()
+	var spider: Enemy = _alive(game)[0]
+	spider.distance = spider.path().curve.get_baked_length() - 1.0
+	simulate(spider, 5, DT)
+	assert_eq(_alive(game).size(), 0, "RF-166: solo suelta crías si muere por daño")

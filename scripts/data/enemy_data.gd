@@ -36,3 +36,7 @@ enum Shape { CIRCLE, TRIANGLE, SQUARE, DIAMOND, HEXAGON }
 
 ## RF-165: % de su vida máxima que recupera por segundo. No se regenera mientras se quema.
 @export var regen_percent_per_second: float = 0.0
+## RF-166: qué enemigo suelta al morir por daño (por ejemplo, las Crías de la Araña). Vacío = nada.
+@export var death_spawn: EnemyData
+## RF-166: cuántos suelta.
+@export var death_spawn_count: int = 0

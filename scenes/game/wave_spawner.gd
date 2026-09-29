@@ -8,6 +8,8 @@ signal enemy_spawned(enemy: Enemy)
 signal wave_finished
 
 const ENEMY_SCENE: PackedScene = preload("res://scenes/enemies/enemy.tscn")
+## RF-166: separación entre las crías que suelta un enemigo al morir, en píxeles de camino.
+const DEATH_SPAWN_SPACING_PX: float = 10.0
 
 
 ## Progreso de un grupo dentro de la oleada en curso.
@@ -70,16 +72,33 @@ func _process(delta: float) -> void:
 
 
 func _spawn(group: SpawnGroup) -> void:
-	var enemy: Enemy = ENEMY_SCENE.instantiate()
-	var health: int = Rules.scaled_health_percent(group.enemy.max_health, _wave_number, _health_scale_percent)
 	var path: Path2D = _level.get_air_path(group.entrance_index) if group.enemy.is_flying \
 		else _level.get_ground_path(group.entrance_index)
-	enemy.setup(group.enemy, path, health)
+	_spawn_enemy(group.enemy, path, 0.0)
+
+
+## Crea un enemigo con la vida de la oleada en curso (RF-36), a `distance` píxeles del
+## comienzo de su camino.
+func _spawn_enemy(data: EnemyData, path: Path2D, distance: float) -> void:
+	var enemy: Enemy = ENEMY_SCENE.instantiate()
+	var health: int = Rules.scaled_health_percent(data.max_health, _wave_number, _health_scale_percent)
+	enemy.setup(data, path, health)
+	enemy.distance = distance
+	if data.death_spawn != null and data.death_spawn_count > 0:
+		enemy.died.connect(_on_enemy_died_with_spawn)
 	# tree_exited se dispara tanto si muere como si llega a la salida.
 	enemy.tree_exited.connect(_on_enemy_gone)
 	_alive += 1
 	_container.add_child(enemy)
 	enemy_spawned.emit(enemy)
+
+
+## RF-166: al morir por daño suelta sus crías, escalonadas hacia atrás en el camino.
+## Se suman a los vivos ANTES de que la madre deje el árbol, así la oleada no termina antes.
+func _on_enemy_died_with_spawn(enemy: Enemy) -> void:
+	for i: int in enemy.data.death_spawn_count:
+		var distance: float = maxf(0.0, enemy.distance - i * DEATH_SPAWN_SPACING_PX)
+		_spawn_enemy(enemy.data.death_spawn, enemy.path(), distance)
 
 
 func _on_enemy_gone() -> void:
