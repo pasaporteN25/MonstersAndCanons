@@ -137,3 +137,49 @@ func test_a_map_without_grass_is_invalid() -> void:
 		rows.append("X".repeat(MapGrid.WIDTH))
 	rows[4] = LINE[4]
 	_assert_error(rows, "No hay pasto")
+
+
+# --- Aviso de atajo (RF-207) ---
+
+## LINE con un bloque de 2×2 pegado abajo: la ruta sigue derecho y esas 4 casillas quedan sin usar
+## (como un tramo dibujado que el enemigo se saltea por un atajo).
+func _line_with_skipped_block() -> PackedStringArray:
+	var rows: PackedStringArray = LINE.duplicate()
+	rows[5] = "....##.............."
+	rows[6] = "....##.............."
+	return rows
+
+
+func test_clean_maps_have_no_warnings() -> void:
+	for rows: PackedStringArray in [LINE, NEST]:
+		var grid: MapGrid = MapGrid.parse(rows)
+		assert_eq(grid.warnings, PackedStringArray())
+		assert_eq(grid.unused_cells, [] as Array[Vector2i])
+
+
+func test_unused_path_cells_give_a_warning_but_the_map_is_valid() -> void:
+	var grid: MapGrid = MapGrid.parse(_line_with_skipped_block())
+	assert_true(grid.is_valid(), str(grid.errors))
+	assert_eq(grid.unused_cells, _cells([Vector2i(4, 5), Vector2i(5, 5), Vector2i(4, 6), Vector2i(5, 6)]))
+	assert_eq(grid.warnings.size(), 1)
+	assert_true(grid.warnings[0].contains("4 casillas de camino que ningún recorrido usa"), grid.warnings[0])
+	assert_true(grid.warnings[0].contains("fila 6, columna 5"), "dice dónde están")
+
+
+func test_a_dead_end_stub_also_warns() -> void:
+	var grid: MapGrid = MapGrid.parse(_with(LINE, Vector2i(9, 3), "#"))
+	assert_eq(grid.unused_cells, _cells([Vector2i(9, 3)]))
+
+
+func test_many_unused_cells_are_summarized() -> void:
+	var rows: PackedStringArray = LINE.duplicate()
+	rows[6] = "..##########........"
+	var grid: MapGrid = MapGrid.parse(rows)
+	assert_eq(grid.unused_cells.size(), 10)
+	assert_true(grid.warnings[0].contains("10 casillas") and grid.warnings[0].contains("…"), "muestra pocas y resume")
+
+
+func test_a_map_with_errors_has_no_warnings() -> void:
+	var grid: MapGrid = MapGrid.parse(_with(_line_with_skipped_block(), Vector2i(19, 4), "#"))
+	assert_false(grid.is_valid())
+	assert_eq(grid.warnings, PackedStringArray(), "sin recorridos no se puede saber qué casillas sobran")

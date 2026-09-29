@@ -16,7 +16,8 @@ const CAMPAIGN_KEYS: PackedStringArray = ["version", "niveles"]
 
 
 ## Lee el archivo de un nivel. El id del nivel es el nombre del archivo (RF-200).
-## Devuelve {"level": LevelData o null, "errors": PackedStringArray}.
+## Devuelve {"level": LevelData o null, "errors": PackedStringArray, "warnings": PackedStringArray}
+## (los avisos, RF-207, no impiden jugar).
 static func load_level(path: String) -> Dictionary:
 	if not FileAccess.file_exists(path):
 		return _failed(["No existe el archivo %s." % path])
@@ -67,7 +68,10 @@ static func parse(text: String, id: StringName) -> Dictionary:
 
 	if not errors.is_empty():
 		return _failed(errors)
-	return {"level": level, "errors": errors}
+	var warnings: PackedStringArray = []
+	for problem: String in grid.warnings:
+		warnings.append("mapa: " + problem)
+	return {"level": level, "errors": errors, "warnings": warnings}
 
 
 ## La campaña (RF-205): los niveles de `campaign.json`, en orden. Un nivel inválido se saltea
@@ -79,6 +83,8 @@ static func load_campaign(path: String = CAMPAIGN_PATH) -> CampaignData:
 		if result["level"] == null:
 			push_error("El nivel %s tiene errores y no se va a jugar:\n- %s" % [level_id, "\n- ".join(result["errors"])])
 			continue
+		for warning: String in result["warnings"]:
+			push_warning("El nivel %s tiene un aviso: %s" % [level_id, warning])
 		campaign.levels.append(result["level"])
 	return campaign
 
@@ -240,7 +246,7 @@ static func _add(errors: PackedStringArray, where: String, message: String) -> v
 
 
 static func _failed(errors: PackedStringArray) -> Dictionary:
-	return {"level": null, "errors": errors}
+	return {"level": null, "errors": errors, "warnings": PackedStringArray()}
 
 
 ## Un valor como lo escribió la persona: JSON lee 2 como 2.0, y en un mensaje se ve raro.

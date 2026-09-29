@@ -529,6 +529,7 @@ Cada nivel es **un archivo de texto** en `data/levels/` (por ejemplo `level_06.j
 - **RF-204** **Validación con mensajes claros:** al leer un nivel se comprueba todo lo anterior: que el mapa sea de 20×9 y solo tenga letras conocidas; que haya salida y al menos una entrada; que cada entrada llegue a la salida sin empates; que haya pasto para construir; que el oro, las vidas, las cantidades y los tiempos tengan sentido; que los enemigos existan; que cada grupo use una entrada del mapa, y que no haya **claves mal escritas** (por ejemplo `"canitdad"`). Cada problema se explica en castellano y dice dónde está ("oleada 3, grupo 2: no existe el enemigo 'trol'"). Un nivel inválido **no se juega** y el error queda en el registro; el juego no se cierra.
 - **RF-205** **La campaña** es `data/campaign.json`: la lista de niveles en orden (`"niveles": ["level_01", …]`). Agregar un nivel es crear su archivo y sumarlo a esa lista.
 - **RF-206** **Revisar un nivel sin jugarlo:** `tools/check_level.gd` lee un archivo y muestra sus errores o, si está bien, el mapa con el recorrido de cada entrada y su largo en casillas.
+- **RF-207** *(M9)* **Aviso de atajo:** si hay casillas de camino que **ningún recorrido usa**, el nivel muestra un **aviso** (no un error: se juega igual) que dice cuántas son y dónde están (fila y columna). Casi siempre es que dos partes del camino quedaron en casillas vecinas y el enemigo **se salta el tramo del medio**, o que quedó un callejón sin salida o un camino de dos casillas de ancho. `check_level` marca esas casillas con `?` en el mapa.
 
 **Ejemplo** (el nivel 6, con solo 2 de sus 15 oleadas: la 1 y la 3):
 
@@ -984,7 +985,7 @@ Ideas **aprobadas como dirección**, pero **sin fecha**: no se programan hasta c
 **Ideas:**
 1. **Casilla de puente/cruce** (una letra, por ejemplo `+`): el enemigo la atraviesa **siguiendo derecho**, sin elegir. Resuelve los cruces con solo agregar una letra (el cálculo del camino tendría que recordar la dirección en que se llega).
 2. **Rutas explícitas (opcional):** un campo `"caminos"` con las esquinas de cada entrada, como se hacía antes de M7. Si está, **reemplaza el cálculo**. Sirve para cualquier forma, incluidas salidas separadas por entrada (RF-03 hoy pide una sola).
-3. **Aviso de atajo en `check_level`:** avisar cuando una casilla del recorrido tiene vecina otra casilla de camino mucho más adelante (o más atrás) en el mismo recorrido. Es lo más chico y previene el error silencioso.
+3. **Aviso de atajo en `check_level`:** avisar cuando el enemigo se salta un tramo dibujado. **Hecho en M9 (RF-207, T100):** el aviso detecta las casillas de camino que ningún recorrido usa, que es justo lo que deja un atajo.
 
 **Recomendación de Claude:** hacer el **aviso de atajo (3)** apenas se pueda, porque es barato, y el **puente (1)** cuando el editor o un nivel lo pidan.
 

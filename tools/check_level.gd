@@ -44,4 +44,15 @@ func _check(path: String) -> bool:
 				if cell.y == y and row[cell.x] == MapGrid.PATH:
 					row = row.left(cell.x) + "*" + row.substr(cell.x + 1)
 			print("    ", row)
+	# RF-207: avisos (no impiden jugar). Las casillas que nadie pisa se marcan con "?".
+	for warning: String in result["warnings"]:
+		print("\n  ⚠ ", warning)
+	if not grid.unused_cells.is_empty():
+		print("  Casillas que ningún recorrido usa, marcadas con ?:")
+		for y: int in MapGrid.HEIGHT:
+			var row: String = level.map_rows[y]
+			for cell: Vector2i in grid.unused_cells:
+				if cell.y == y:
+					row = row.left(cell.x) + "?" + row.substr(cell.x + 1)
+			print("    ", row)
 	return true

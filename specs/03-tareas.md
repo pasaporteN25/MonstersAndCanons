@@ -547,6 +547,12 @@
   **Hecho cuando:** los tests comprueban que con 7, 13 y 40 niveles ninguna tarjeta se sale de la pantalla, que con 7 no hace falta desplazar y que con más sí; y la captura muestra 7 y 13 niveles.
   **Resultado:** `HFlowContainer` (acomoda y centra las filas de hasta 5) dentro de un `ScrollContainer` que sigue al foco del teclado. El alto del área se ajusta a las filas que hay (hasta 2): con 5 niveles o menos hay una sola fila. La separación vertical de la pantalla bajó de 32 a 18 px para que el botón "Volver" no toque el cartel de "MODO PRUEBAS". 4 tests nuevos (7, 13 y 40 niveles; filas de a 5; cuándo hay que desplazar; una sola fila).
 
+- [x] **T100 · Aviso de atajo (`MapGrid`, `LevelFile` y `check_level`)**
+  `MapGrid` calcula las casillas de camino que ningún recorrido usa y arma un aviso; `LevelFile` lo devuelve como `warnings` (y la campaña lo anota en el registro); `check_level` lo muestra con ⚠ y marca esas casillas con `?`.
+  **Refs:** RF-207, B-09.
+  **Hecho cuando:** los tests comprueban que los 7 niveles no tienen avisos, que un mapa con un tramo que se puede saltear avisa (y sigue siendo válido) y que un mapa con errores no calcula avisos; y `check_level` muestra el aviso en un nivel de prueba.
+  **Resultado:** `MapGrid.unused_cells` y `MapGrid.warnings`; `LevelFile` devuelve `warnings` junto a `errors` (y la campaña los anota con `push_warning`). Prueba real: en el nivel 6, una sola casilla `#` de más en la fila 7 hace que la entrada A pase de 56 a 34 casillas y el aviso marca con `?` las 23 casillas del tramo salteado. Los 7 niveles oficiales no tienen avisos (un test lo vigila). Un mapa con errores no calcula avisos: sin recorridos no se sabe qué sobra. 8 tests nuevos.
+
 ### Otras ideas de pulido *(sin fecha)*
 
 - Decidir ambientación y arte definitivo (ver "Preguntas abiertas" de la spec y B-02). *Los dibujos provisionales ya están (T70–T73).*

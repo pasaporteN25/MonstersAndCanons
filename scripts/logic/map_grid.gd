@@ -22,6 +22,10 @@ const ENTRANCE_LETTERS: String = "ABCDEFGH"
 const NEIGHBORS: Array[Vector2i] = [Vector2i.RIGHT, Vector2i.DOWN, Vector2i.LEFT, Vector2i.UP]
 
 var errors: PackedStringArray = []
+## RF-207: cosas dudosas que no impiden jugar (por ejemplo, un tramo que el enemigo se salta).
+var warnings: PackedStringArray = []
+## Casillas de camino que ningún recorrido usa.
+var unused_cells: Array[Vector2i] = []
 ## Casilla de cada entrada: índice 0 = A, 1 = B…
 var entrances: Array[Vector2i] = []
 var exit_cell: Vector2i = Vector2i(-1, -1)
@@ -37,6 +41,8 @@ static func parse(rows: PackedStringArray) -> MapGrid:
 	grid._read(rows)
 	if grid.errors.is_empty():
 		grid._find_routes()
+	if grid.errors.is_empty():
+		grid._find_unused_cells()
 	return grid
 
 
@@ -156,3 +162,27 @@ func _find_routes() -> void:
 			cell = closer[0]
 			route.append(cell)
 		routes.append(route)
+
+
+## RF-207: las casillas de camino que ningún recorrido pisa. Si el enemigo se salta un tramo
+## dibujado (porque dos partes del camino quedaron en casillas vecinas), ese tramo queda acá.
+func _find_unused_cells() -> void:
+	var used: Dictionary = {}
+	for route: Array in routes:
+		for cell: Vector2i in route:
+			used[cell] = true
+	for y: int in HEIGHT:
+		for x: int in WIDTH:
+			var cell := Vector2i(x, y)
+			if cell_type(cell) == Cell.PATH and not used.has(cell):
+				unused_cells.append(cell)
+	if unused_cells.is_empty():
+		return
+	var shown: PackedStringArray = []
+	for cell: Vector2i in unused_cells.slice(0, 6):
+		shown.append(where(cell))
+	var more: String = "…" if unused_cells.size() > shown.size() else ""
+	warnings.append(("Hay %d casillas de camino que ningún recorrido usa (%s%s). Puede ser un atajo: "
+		+ "dos partes del camino quedaron en casillas vecinas y el enemigo se salta el tramo del medio. "
+		+ "También puede ser un callejón sin salida o un camino de dos casillas de ancho.")
+		% [unused_cells.size(), "; ".join(shown), more])

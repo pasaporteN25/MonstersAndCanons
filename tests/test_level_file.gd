@@ -192,3 +192,36 @@ func test_campaign_reads_levels_in_order_and_skips_broken_ones() -> void:
 	for level: LevelData in campaign.levels:
 		ids.append(level.id)
 	assert_eq(ids, [&"level_02", &"level_01"] as Array[StringName], "RF-204: el roto se saltea, el resto sigue")
+
+
+# --- Avisos (RF-207) ---
+
+func test_a_dead_end_loads_with_a_warning() -> void:
+	# Una casilla de camino colgada al costado del recorrido: no lleva a ningún lado.
+	var text: String = _nest_with(func(d: Dictionary) -> void: d["mapa"][1] = "A#####...##.......X.")
+	var result: Dictionary = _parse(text)
+	assert_not_null(result["level"], "el aviso no impide jugar")
+	assert_eq(result["errors"], PackedStringArray())
+	assert_eq(result["warnings"].size(), 1)
+	assert_true(result["warnings"][0].begins_with("mapa: Hay 1 casillas de camino que ningún recorrido usa"), result["warnings"][0])
+
+
+func test_a_stray_cell_that_makes_a_shortcut_warns() -> void:
+	# Una casilla en la fila 7 une dos tramos que estaban separados: la entrada B se salta
+	# casi todo el recorrido y las casillas dibujadas que ya nadie pisa dan el aviso.
+	var text: String = _nest_with(func(d: Dictionary) -> void: d["mapa"][6] = "..#.........X#......")
+	var result: Dictionary = _parse(text)
+	assert_not_null(result["level"], "el nivel se puede jugar, pero es otro")
+	assert_eq(result["warnings"].size(), 1)
+	assert_true(result["warnings"][0].contains("23 casillas de camino que ningún recorrido usa"), result["warnings"][0])
+
+
+func test_clean_level_has_no_warnings() -> void:
+	assert_eq(_parse(NEST)["warnings"], PackedStringArray())
+	assert_eq(_parse("{}")["warnings"], PackedStringArray(), "un nivel roto también trae la lista, vacía")
+
+
+func test_official_levels_have_no_warnings() -> void:
+	for file: String in DirAccess.get_files_at(LevelFile.LEVELS_DIR):
+		if file.ends_with(".json"):
+			assert_eq(LevelFile.load_level(LevelFile.LEVELS_DIR + file)["warnings"], PackedStringArray(), file)
