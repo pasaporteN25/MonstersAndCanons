@@ -12,6 +12,11 @@ const ICON_SMALL: float = 40.0
 ## Se llama al salir (Volver o Esc). Es una "costura": los tests la reemplazan para no cambiar de pantalla.
 var on_leave: Callable = GameFlow.go_to_main_menu
 
+## RF-238: ¿el jugador ya vio este enemigo? El modo de pruebas lo ve todo (RF-240). Es una costura:
+## los tests la reemplazan.
+var is_seen: Callable = func(enemy_id: StringName) -> bool:
+	return DevMode.enabled or SaveManager.has_seen_enemy(enemy_id)
+
 var _categories: Array[WikiCategory] = []
 var _category: WikiCategory
 var _entry: WikiEntry
@@ -28,7 +33,7 @@ var _entry_buttons: Dictionary = {}
 
 
 func _ready() -> void:
-	_categories = Wiki.categories(GameFlow.campaign.levels)
+	_categories = Wiki.categories(GameFlow.campaign.levels, is_seen)
 	_build_layout()
 	for category: WikiCategory in _categories:
 		_add_tab(category)
@@ -209,6 +214,8 @@ func _scroll() -> ScrollContainer:
 func _add_tab(category: WikiCategory) -> void:
 	var button := Button.new()
 	button.text = category.title
+	if category.has_locked():  # RF-239: cuántos lleva
+		button.text += " %d/%d" % [category.unlocked_count(), category.entries.size()]
 	button.toggle_mode = true
 	button.button_group = _tab_group
 	button.focus_mode = Control.FOCUS_NONE  # ◄/► cambian de solapa; ▲/▼ recorren la lista
@@ -241,7 +248,7 @@ func _fill_list() -> void:
 		row.add_theme_constant_override("separation", 10)
 		button.add_child(row)
 		if not entry.icon.is_empty():
-			row.add_child(WikiIcon.new().setup(entry.icon, ICON_SMALL))
+			row.add_child(WikiIcon.new().setup(entry.icon, ICON_SMALL, entry.locked))
 		var label := Label.new()
 		label.text = entry.title
 		label.size_flags_vertical = Control.SIZE_SHRINK_CENTER
@@ -263,7 +270,7 @@ func _fill_detail(entry: WikiEntry) -> void:
 	header.add_theme_constant_override("separation", 16)
 	_detail.add_child(header)
 	if not entry.icon.is_empty():
-		header.add_child(WikiIcon.new().setup(entry.icon, ICON_BIG))
+		header.add_child(WikiIcon.new().setup(entry.icon, ICON_BIG, entry.locked))
 	var names := VBoxContainer.new()
 	names.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	header.add_child(names)

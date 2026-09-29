@@ -811,7 +811,9 @@ Una enciclopedia dentro del juego: dice cómo es cada enemigo y cada torre, y ex
 - **RF-235** **Guía:** artículos escritos a mano en **archivos de texto** `data/wiki/*.json` (uno por artículo: título, orden y bloques), para que se puedan escribir o corregir sin programar. Iniciales: cómo se juega, torres (construir, mejorar, vender, apuntado), enemigos (voladores, peligrosos, jefe), armadura y daño, efectos (ralentización, quemadura), puntos y estrellas. Los artículos **no repiten números que ya viven en los datos** (constitución P2): explican la regla y mandan a la entrada correspondiente.
 - **RF-236** **Nada se rompe por una entrada mala:** un artículo con errores no se muestra y no impide ver el resto (los tests, en cambio, **fallan** si algún artículo oficial tiene errores, para no publicarlo así).
 - **RF-237** **Los números salen de los datos**, no de textos escritos a mano: si se rebalancea un enemigo o una torre, la wiki cambia sola.
-- **RF-238** **Por ahora se ve todo:** la wiki muestra todos los enemigos y torres desde el principio, aunque el jugador todavía no los haya visto (B-15 propone un "bestiario" que se va llenando).
+- **RF-238** **Bestiario que se va llenando** *(D-036, pedido por Lucas)*: un enemigo **aparece en la wiki cuando el jugador lo vio por primera vez en una partida** (el mismo momento en que el juego lo presenta, RF-134, y que el guardado ya recuerda). Mientras no se vio, su entrada existe pero está **cerrada** (RF-239). Las **torres y la Guía se ven siempre**: las torres se pueden construir desde el principio y la Guía explica las reglas.
+- **RF-239** **Entrada cerrada:** en la lista se ve como **"???"** con su dibujo en **silueta negra** (así el jugador sabe que falta uno, pero no cómo es); al abrirla solo dice que todavía no se cruzó con ese enemigo y que aparece en la partida cuando lo enfrente. **No muestra** su nombre, sus datos, su descripción ni los niveles donde sale. La solapa dice cuántos lleva ("Enemigos 5/9") mientras falte alguno. La lista mantiene el mismo orden, así que las posiciones no se mueven cuando se abre uno.
+- **RF-240** **Modo de pruebas:** en el ejecutable de pruebas (§10.2) la wiki muestra **todo abierto**, porque es una herramienta de administración y usa su propio guardado (RF-181).
 
 > **Criterio de aceptación**
 > **Dado** un enemigo nuevo agregado a `data/enemies/` → **Cuando** abro la Wiki → **Entonces** aparece en "Enemigos" con sus datos, sin haber tocado ningún otro archivo.
@@ -1091,7 +1093,7 @@ Ideas **aprobadas como dirección**, pero **sin fecha**: no se programan hasta c
 *Idea derivada de la wiki (M11), 2026-09-29. Sin fecha.*
 
 La wiki de M11 ya es escalable a propósito (categorías → entradas → bloques). Ideas que **entran sin rehacerla**:
-- **Bestiario que se va llenando:** un enemigo aparece como "???" hasta que se lo ve en una partida. El guardado ya recuerda qué enemigos se vieron (RF-134, `seen_enemies`), así que solo falta filtrar. Se decide si a Lucas le gusta o prefiere ver todo.
+- ~~**Bestiario que se va llenando**~~ **Hecho en M12** (RF-238 a RF-240, D-036).
 - **Enlaces entre entradas** ("la Araña suelta Crías" que lleva a la entrada de las Crías) y desde la partida ("¿Qué es esto?" al tocar un enemigo o una torre).
 - **Buscador** (un cuadro de texto que filtra las entradas).
 - **Categorías nuevas** sin tocar la pantalla: **Niveles** (mapa en miniatura, oleadas y qué enemigos vienen), **Lore** (B-03), **Épocas** (B-01), **Mapas de la comunidad** y, si algún día hay mods, **los enemigos y torres de cada mod** (salen solos de los archivos).

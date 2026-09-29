@@ -218,3 +218,11 @@
 - **Se refactoriza el texto de la torre:** el panel de la torre ya armaba las líneas "Daño, cadencia, área, quema…" a mano; ahora vive en `TowerText` y lo usan el panel y la wiki, así no hay dos versiones que se desincronicen.
 - **Alternativas descartadas:** (1) una escena con una página dibujada a mano por enemigo: cada enemigo nuevo obligaría a editar la escena; (2) un solo archivo grande de texto con todo: se duplicarían los números de los `.tres`. (3) Ocultar lo que el jugador todavía no vio: no se hace por ahora (RF-238); queda como B-15.
 - **Lo que NO incluye:** buscador, enlaces entre entradas, bestiario que se llena, imágenes propias en los artículos (B-15).
+
+### D-036 · Bestiario: los enemigos se abren al verlos
+- **Fecha:** 2026-09-29 · **Estado:** Aceptada · **Decidió:** Lucas
+- **Qué:** en la wiki (D-035) un enemigo está cerrado ("???", silueta) hasta que el jugador lo ve por primera vez en una partida (spec §10.5, RF-238 a RF-240). Torres y Guía se ven siempre; el modo de pruebas lo ve todo.
+- **Por qué así:** el guardado ya recordaba qué enemigos se vieron (RF-134), así que **no hay datos nuevos que guardar** y los jugadores que ya jugaron encuentran abiertos los que ya vieron. Coleccionar enemigos le da una razón más para explorar los niveles y no arruina las sorpresas (un jefe, un volador).
+- **Cómo:** `Wiki.categories()` recibe una función "¿lo vio?"; la entrada cerrada es un `WikiEntry` con `locked = true` que **no lleva** los datos reales (así ni un error de la pantalla los puede filtrar). La pantalla solo dibuja la silueta y el "???".
+- **Alternativa descartada:** ocultar del todo las entradas cerradas: el jugador no sabría que existen más ni cuántos faltan. Con "???" hay algo que completar.
+- **Consecuencia:** un enemigo visto en un mapa de la comunidad también se abre (es el mismo guardado y el mismo aviso de RF-134).

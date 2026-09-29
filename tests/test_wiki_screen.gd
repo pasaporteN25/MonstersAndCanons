@@ -12,6 +12,7 @@ func before_each() -> void:
 	left = 0
 	screen = SCREEN.instantiate()
 	screen.on_leave = func() -> void: left += 1
+	screen.is_seen = func(_id: StringName) -> bool: return true  # sin depender del guardado real
 	add_child_autofree(screen)
 	await wait_frames(1)
 

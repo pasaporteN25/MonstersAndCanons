@@ -20,6 +20,9 @@ var subtitle: String = ""
 ## Las capas del dibujo, de atrás para adelante (una torre: base y torreta). Vacío = sin dibujo.
 var icon: Array[Texture2D] = []
 var blocks: Array[Dictionary] = []
+## Entrada cerrada del bestiario (RF-239): el jugador todavía no la descubrió. No lleva ningún dato
+## real, solo el aviso; el dibujo se ve en silueta.
+var locked: bool = false
 
 
 func add_heading(text: String) -> WikiEntry:

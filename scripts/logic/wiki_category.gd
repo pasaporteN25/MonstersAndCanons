@@ -18,3 +18,16 @@ func find(entry_id: StringName) -> WikiEntry:
 		if entry.id == entry_id:
 			return entry
 	return null
+
+
+## Cuántas entradas ya están abiertas (todas, salvo las cerradas del bestiario).
+func unlocked_count() -> int:
+	var count: int = 0
+	for entry: WikiEntry in entries:
+		if not entry.locked:
+			count += 1
+	return count
+
+
+func has_locked() -> bool:
+	return unlocked_count() < entries.size()

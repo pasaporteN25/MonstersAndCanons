@@ -12,16 +12,19 @@ const ARTICLES_DIR: String = "res://data/wiki/"
 const ARTICLE_VERSION: int = 1
 const ARTICLE_KEYS: PackedStringArray = ["version", "titulo", "subtitulo", "orden", "bloques"]
 const DEFAULT_ORDER: int = 100
+const LOCKED_TITLE: String = "???"
+const LOCKED_TEXT: String = "Todavía no te cruzaste con este enemigo. Aparece acá cuando lo enfrentes en una partida."
 
 
 ## Las categorías con sus entradas. Una categoría sin entradas no se incluye (RF-232).
 ## `campaign` son los niveles de la campaña (para "dónde aparece"); se pasa de afuera para probarlo
-## con una campaña de mentira.
-static func categories(campaign: Array[LevelData] = []) -> Array[WikiCategory]:
+## con una campaña de mentira. `is_seen` es una función (id del enemigo → bool) que dice si el jugador
+## ya lo vio (bestiario, RF-238); sin función, todo está abierto.
+static func categories(campaign: Array[LevelData] = [], is_seen: Callable = Callable()) -> Array[WikiCategory]:
 	var result: Array[WikiCategory] = []
 	for provider: Dictionary in _providers():
 		var build: Callable = provider["build"]
-		var entries: Array[WikiEntry] = build.call(campaign)
+		var entries: Array[WikiEntry] = build.call(campaign, is_seen)
 		if not entries.is_empty():
 			result.append(WikiCategory.new(provider["id"], provider["title"], entries))
 	return result
@@ -37,7 +40,7 @@ static func _providers() -> Array[Dictionary]:
 
 # --- Enemigos ---
 
-static func _enemy_entries(campaign: Array[LevelData]) -> Array[WikiEntry]:
+static func _enemy_entries(campaign: Array[LevelData], is_seen: Callable) -> Array[WikiEntry]:
 	var enemies: Array[EnemyData] = []
 	for resource: Resource in _load_all(LevelFile.ENEMIES_DIR):
 		if resource is EnemyData:
@@ -47,8 +50,24 @@ static func _enemy_entries(campaign: Array[LevelData]) -> Array[WikiEntry]:
 		return a.max_health < b.max_health or (a.max_health == b.max_health and String(a.id) < String(b.id)))
 	var entries: Array[WikiEntry] = []
 	for enemy: EnemyData in enemies:
-		entries.append(enemy_entry(enemy, enemies, campaign))
+		if is_seen.is_valid() and not is_seen.call(enemy.id):
+			entries.append(locked_enemy_entry(enemy))
+		else:
+			entries.append(enemy_entry(enemy, enemies, campaign))
 	return entries
+
+
+## La entrada cerrada de un enemigo que el jugador todavía no vio (RF-239). Solo guarda su id y su
+## dibujo (que la pantalla pinta en silueta): nada del nombre, los datos ni los niveles.
+static func locked_enemy_entry(enemy: EnemyData) -> WikiEntry:
+	var entry := WikiEntry.new()
+	entry.id = enemy.id
+	entry.title = LOCKED_TITLE
+	entry.locked = true
+	if enemy.texture != null:
+		entry.icon.append(enemy.texture)
+	entry.add_text(LOCKED_TEXT)
+	return entry
 
 
 ## La entrada de un enemigo. `all_enemies` sirve para saber quién lo suelta al morir.
@@ -110,7 +129,7 @@ static func _levels_with(enemy: EnemyData, campaign: Array[LevelData]) -> Packed
 
 # --- Torres ---
 
-static func _tower_entries(_campaign: Array[LevelData]) -> Array[WikiEntry]:
+static func _tower_entries(_campaign: Array[LevelData], _is_seen: Callable) -> Array[WikiEntry]:
 	var towers: Array[TowerData] = []
 	for resource: Resource in _load_all(TOWERS_DIR):
 		if resource is TowerData and not (resource as TowerData).levels.is_empty():
@@ -165,7 +184,7 @@ static func tower_entry(tower: TowerData) -> WikiEntry:
 
 # --- Guía (artículos en data/wiki/*.json) ---
 
-static func _article_entries(_campaign: Array[LevelData]) -> Array[WikiEntry]:
+static func _article_entries(_campaign: Array[LevelData], _is_seen: Callable) -> Array[WikiEntry]:
 	return articles(ARTICLES_DIR)["entries"]
 
 
