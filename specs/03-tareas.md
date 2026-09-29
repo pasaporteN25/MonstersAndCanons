@@ -583,6 +583,28 @@
   **Hecho cuando:** pasan todos los tests y el `.exe` de pruebas exportado abre el editor; el `.exe` normal no.
   **Resultado:** plan técnico §6.8 (cómo está armado el editor, con las decisiones y las dos trampas de GDScript que aparecieron), CONTENIDO.md (cómo se usa y **cómo volver oficial un mapa**), README y ONBOARDING al día. Se exportaron los cuatro (`.exe`, `.exe` de pruebas, `.apk` y Linux, con `.tar.gz`). **En el ejecutable exportado se comprobó** que la lista de enemigos ya no sale vacía: el registro dice "Enemigos disponibles: 9", y un experimento aparte mostró que el juego exportado ve los archivos como `armored.tres.remap`, `boss.tres.remap`…, con lo que el código viejo del panel de pruebas (`ends_with(".tres")`) habría dado una lista **vacía**: el defecto era real. El `.exe` normal no muestra nada del modo de pruebas.
 
+## M10 — Mapas de la comunidad *(pedido por Lucas, D-034)*
+
+- [ ] **T106 · Leer los mapas de la comunidad (`CommunityMaps`) y los límites**
+  `CommunityMaps.scan()` lista los `.json` de `user://maps/` (nombre de archivo, tamaño, errores) con su `LevelData`; `LevelFile` pone los topes de RF-223 y el editor los respeta.
+  **Refs:** RF-220, RF-222, RF-223.
+  **Hecho cuando:** los tests comprueban el orden, que un archivo roto, con nombre no válido o demasiado grande da una entrada con su motivo y no rompe a los demás, cada límite (uno por uno, en el borde y pasado), y que los niveles oficiales cumplen los límites.
+
+- [ ] **T107 · Jugar un mapa de la comunidad: progreso, récords y salida**
+  `GameFlow` sabe jugar un mapa de la comunidad (`start_community`); la partida guarda su mejor resultado, estrellas y top 5 con el id `comunidad_<archivo>` y **nada más**; al terminar, "Niveles" vuelve a la solapa de la comunidad.
+  **Refs:** RF-224, RF-225.
+  **Hecho cuando:** los tests comprueban que ganar un mapa de la comunidad guarda su progreso y sus récords, y **no** desbloquea niveles, no cambia las estrellas de la campaña, no cuenta para el Salón de la fama; y que la campaña sigue igual.
+
+- [ ] **T108 · Las solapas de la selección de nivel**
+  Solapas "Campaña" y "Mapas de la comunidad (N)", tarjetas con estrellas, tarjetas con errores, mensaje cuando no hay mapas y botón "Abrir carpeta".
+  **Refs:** RF-221, RF-222, RF-226.
+  **Hecho cuando:** los tests comprueban las dos solapas, el orden, las tarjetas con errores (con su motivo), el mensaje vacío y que se vuelve a buscar al abrir la pantalla; las capturas muestran la solapa con mapas, con un error y vacía.
+
+- [ ] **T109 · Cierre de M10: documentación y exportaciones**
+  README, ONBOARDING, CONTENIDO.md (cómo instalar y compartir un mapa), plan técnico; exportar los cuatro ejecutables.
+  **Refs:** D-034.
+  **Hecho cuando:** pasan todos los tests y, en el `.exe` normal exportado, un mapa copiado a la carpeta aparece en el menú.
+
 ### Otras ideas de pulido *(sin fecha)*
 
 - Decidir ambientación y arte definitivo (ver "Preguntas abiertas" de la spec y B-02). *Los dibujos provisionales ya están (T70–T73).*

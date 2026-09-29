@@ -783,6 +783,22 @@ Una herramienta de **administración** para crear y probar niveles sin escribir 
 > **Dado** el editor abierto en modo de pruebas → **Cuando** dibujo un camino de una entrada `A` a la salida `S`, dejo la oleada de ejemplo, guardo con el nombre `prueba_1` y apreto **Probar** → **Entonces** se juega ese mapa, y al terminar vuelvo al editor con el mismo mapa.
 > **Dado** un mapa guardado por el editor → **Cuando** lo reviso con `tools/check_level.gd` → **Entonces** da el mismo resultado que el editor (sin errores, o los mismos errores).
 
+### 10.4 Mapas de la comunidad *(M10, pedido por Lucas, D-033, D-034, B-04 escalón 3)*
+
+Cualquiera puede sumar mapas al juego **copiando un archivo**: los mapas hechos con el editor (§10.3) o recibidos de otra persona aparecen en el menú, en cualquier versión del juego y sin tocar nada más. Son **solo datos** (JSON, §7.8): un mapa de la comunidad nunca puede traer código.
+
+- **RF-220** **Dónde van:** todo archivo `.json` de la carpeta **`user://maps/`** es un **mapa de la comunidad**. En Windows es `%APPDATA%\Godot\app_userdata\JuegoA\maps\` y en Linux, `~/.local/share/godot/app_userdata/JuegoA/maps/`. Es **la misma carpeta donde guarda el editor**: un mapa hecho con el editor aparece solo. Vale en todas las versiones que tengan esa carpeta a mano (Windows y Linux; en el celular la carpeta no se ve, así que allí la lista simplemente queda vacía).
+- **RF-221** **La pantalla:** la selección de nivel tiene dos solapas, **Campaña** y **Mapas de la comunidad (N)**. La segunda muestra una tarjeta por archivo, en orden alfabético y **todos abiertos** (no hay desbloqueo). Cada tarjeta muestra el nombre del mapa, sus oleadas, su mejor resultado y sus estrellas. Si no hay ninguno, explica **dónde** ponerlos. Un botón **"Abrir carpeta"** (en PC) abre la carpeta y la crea si todavía no existe.
+- **RF-222** **Mismas reglas que los niveles:** cada archivo se lee con las reglas de §7.8. Uno **con errores** aparece como tarjeta **deshabilitada** que dice "Con errores" y, al pasar el mouse, su primer error; no impide que se vean ni se jueguen los demás. Un archivo con un **nombre no válido** (solo minúsculas, números y `_`, RF-216) o **demasiado grande** (más de 200 KB) se muestra igual, deshabilitado y con el motivo.
+- **RF-223** **Límites, para que un archivo ajeno no cuelgue el juego:** hasta **100 oleadas**, **20 grupos** por oleada, cantidad de hasta **999**, `cada` de hasta **60 s**, `desde` de hasta **600 s**, oro de hasta **99999**, vidas de hasta **999**, `aumento_vida` de hasta **300** y nombre de hasta **30 letras**. Valen para **todos** los niveles (los oficiales los cumplen) y el editor no deja pasarse de esos números.
+- **RF-224** **Progreso aparte:** cada mapa de la comunidad tiene su propio progreso, con el id `comunidad_<archivo>`: mejor cantidad de vidas, estrellas (RF-93), mejor puntaje y **top 5 de récords** con 3 letras (RF-191 a RF-193). **No** cuentan para el desbloqueo de la campaña, ni para el total de estrellas, ni para el Salón de la fama (RF-194). Se guardan en el guardado de esa versión (RF-181: el ejecutable de pruebas tiene el suyo).
+- **RF-225** **Al terminar** un mapa de la comunidad, el botón "Niveles" vuelve a la **solapa de la comunidad**, y no hay "Siguiente nivel".
+- **RF-226** **Se buscan cada vez que se abre la pantalla:** un mapa copiado mientras el juego está abierto aparece al volver a la selección de nivel, sin reiniciar.
+
+> **Criterio de aceptación**
+> **Dado** un mapa guardado con el editor (`mi_mapa.json`) → **Cuando** abro la selección de nivel en cualquier versión del juego y voy a "Mapas de la comunidad" → **Entonces** veo una tarjeta "mi_mapa", la juego, y mi mejor resultado queda anotado **solo** en ese mapa.
+> **Dado** un archivo con un enemigo que no existe → **Entonces** se ve una tarjeta deshabilitada "Con errores" con el motivo, y los demás mapas se pueden jugar igual.
+
 ---
 
 ## 11. Qué **NO** incluye este juego
