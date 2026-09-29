@@ -1094,7 +1094,12 @@ Ideas **aprobadas como dirección**, pero **sin fecha**: no se programan hasta c
 
 La wiki de M11 ya es escalable a propósito (categorías → entradas → bloques). Ideas que **entran sin rehacerla**:
 - ~~**Bestiario que se va llenando**~~ **Hecho en M12** (RF-238 a RF-240, D-036).
-- **Enlaces entre entradas** ("la Araña suelta Crías" que lleva a la entrada de las Crías) y desde la partida ("¿Qué es esto?" al tocar un enemigo o una torre).
-- **Buscador** (un cuadro de texto que filtra las entradas).
+- **Enlaces entre entradas:** en el texto de una entrada, un nombre que se puede tocar para saltar a otra (en la Araña, "suelta 4 Crías" lleva a la entrada de las Crías; en un artículo, "Incendiaria" lleva a esa torre). La pantalla ya sabe abrir una entrada por su id (`show_target`), así que falta solo marcar los enlaces en los datos.
+- **Buscador** (un cuadro de texto que filtra las entradas). *Lucas, 2026-09-29: solo si es muy simple; no lo es del todo* (hay que cuidar el foco del teclado con Esc y las flechas, el teclado virtual del celular y que no filtre datos de enemigos cerrados), así que queda acá.
 - **Categorías nuevas** sin tocar la pantalla: **Niveles** (mapa en miniatura, oleadas y qué enemigos vienen), **Lore** (B-03), **Épocas** (B-01), **Mapas de la comunidad** y, si algún día hay mods, **los enemigos y torres de cada mod** (salen solos de los archivos).
 - **Imágenes propias** en los artículos (un bloque `imagen`) y ejemplos de "qué torre conviene contra qué enemigo".
+
+### Sugerencias de Claude *(consultar antes de implementar)*
+*Regla de Lucas, 2026-09-29: las ideas que Claude propone por su cuenta se anotan acá y no se implementan hasta que Lucas las apruebe.*
+
+- **"¿Qué es esto?" desde la partida:** al tocar un enemigo o una torre durante la partida, un botón que abre su entrada de la wiki (con `show_target`) y al volver retoma la partida en pausa. Ojo con la pausa, con el celular (el toque ya selecciona torres) y con no dejar espiar enemigos que todavía están cerrados en el bestiario.
