@@ -472,10 +472,11 @@
   **Hecho cuando:** los tests comprueban los puntos al matar (también crías), al ganar, y que el panel de pruebas no da puntos.
   **Resultado:** "Puntos" va antes que "Oleada" en la barra de arriba, porque el texto de la oleada se alarga al completarla. El bonus de vidas se suma justo antes de avisar la victoria, así la pantalla final ya tiene el total.
 
-- [ ] **T89 · Récords de cada nivel (3 letras)**
+- [x] **T89 · Récords de cada nivel (3 letras)**
   Top 5 por nivel en el guardado; entrada de letras estilo arcade; la pantalla final pide las letras si se entra y muestra el top 5.
   **Refs:** RF-191, RF-192, RF-193, RF-196.
   **Hecho cuando:** los tests comprueban el orden (con empates), que se descarta el sexto, que con 0 puntos no se entra, que se guarda y se vuelve a leer, y que fuera de la campaña no se escribe nada; la captura muestra la entrada de letras y el top 5.
+  **Resultado:** `HighScores` (cuentas puras), `NameEntry` y `ScoreTable` (controles reutilizables para el Salón de la fama y la pantalla de récords). Mientras se piden las iniciales, los botones de la pantalla final se esconden. El guardado sigue siendo la versión 1: los récords y las últimas iniciales son claves nuevas que un guardado viejo simplemente no tiene.
 
 - [ ] **T90 · Salón de la fama (5 letras)**
   Total de la campaña (suma del mejor puntaje en victoria de cada nivel), pedido de 5 letras cuando el total sube y entra, estética dorada.

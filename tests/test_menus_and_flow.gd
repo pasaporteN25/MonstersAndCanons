@@ -69,6 +69,10 @@ func test_victory_in_campaign_shows_levels_button_and_saves() -> void:
 	for i: int in game.session.total_waves:
 		game.session.begin_wave()
 		game.session.complete_wave()
+	# M6 (RF-191): con puntos, primero se piden las iniciales; los botones esperan.
+	assert_true(game.end_screen.is_asking_name())
+	assert_false((game.end_screen.get_node("%LevelsButton") as Button).visible)
+	game.end_screen.name_entry().confirm()
 	assert_true((game.end_screen.get_node("%LevelsButton") as Button).visible)
 	assert_eq((game.end_screen.get_node("%NextButton") as Button).visible, GameFlow.level_count() > 1)
 	assert_true(SaveManager.is_completed(&"level_01"))

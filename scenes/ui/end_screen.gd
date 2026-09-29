@@ -1,11 +1,18 @@
-# Pantalla de victoria o derrota (RF-90, RF-91).
+# Pantalla de victoria o derrota (RF-90, RF-91), con los puntos y los récords (RF-190 a RF-194).
+# Solo muestra y avisa: qué récord se anota y dónde lo decide Game (constitución P6).
 class_name EndScreen
 extends CanvasLayer
 
 signal retry_pressed
 signal next_pressed
 signal levels_pressed
+## RF-192: se confirmaron las iniciales pedidas con ask_name().
+signal name_entered(name: String)
 
+const SCORE_COLOR := Color(0.55, 0.85, 1)
+const RECORD_COLOR := Color(1, 0.84, 0.3)
+
+@onready var _rows: VBoxContainer = %Rows
 @onready var _title: Label = %Title
 @onready var _stars: StarsDisplay = %Stars
 @onready var _detail: Label = %Detail
@@ -13,32 +20,113 @@ signal levels_pressed
 @onready var _next_button: Button = %NextButton
 @onready var _levels_button: Button = %LevelsButton
 
+var _score_label: Label
+var _record_title: Label
+var _entry_slot: VBoxContainer
+var _table: ScoreTable
+## Qué botones corresponden a esta partida (se esconden mientras se piden las iniciales).
+var _show_next: bool = false
+var _show_levels: bool = false
+
 
 func _ready() -> void:
 	visible = false
 	_retry_button.pressed.connect(retry_pressed.emit)
 	_next_button.pressed.connect(next_pressed.emit)
 	_levels_button.pressed.connect(levels_pressed.emit)
+	# Puntos, título de récords, entrada de iniciales y tabla: debajo del detalle.
+	_score_label = _label(26, SCORE_COLOR)
+	_record_title = _label(20, RECORD_COLOR)
+	_entry_slot = VBoxContainer.new()
+	_table = ScoreTable.new().setup(20)
+	_table.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	var at: int = _detail.get_index() + 1
+	for node: Control in [_score_label, _record_title, _entry_slot, _table]:
+		_rows.add_child(node)
+		_rows.move_child(node, at)
+		at += 1
+	_record_title.visible = false
+	_table.visible = false
 
 
 ## `has_next`: hay un nivel siguiente (y se juega desde la campaña).
 ## `in_campaign`: se llegó desde el menú; si no (F6, tests), no hay a dónde volver.
-func show_victory(lives_left: int, stars: int, has_next: bool, in_campaign: bool) -> void:
+func show_victory(lives_left: int, stars: int, has_next: bool, in_campaign: bool, score: int = 0) -> void:
 	_title.text = "¡Victoria!"
 	_stars.count = stars  # RF-93
 	_stars.visible = true
 	_title.add_theme_color_override("font_color", Color(1, 0.84, 0.3))
 	_detail.text = "Vidas restantes: %d" % lives_left
-	_next_button.visible = has_next
-	_levels_button.visible = in_campaign
+	_score_label.text = "Puntos: %d" % score  # RF-190
+	_show_next = has_next
+	_show_levels = in_campaign
+	_set_buttons_visible(true)
 	visible = true
 
 
-func show_defeat(wave: int, total_waves: int, in_campaign: bool) -> void:
+func show_defeat(wave: int, total_waves: int, in_campaign: bool, score: int = 0) -> void:
 	_title.text = "Derrota"
 	_stars.visible = false
 	_title.add_theme_color_override("font_color", Color(1, 0.45, 0.45))
 	_detail.text = "Llegaste a la oleada %d de %d" % [wave, total_waves]
-	_next_button.visible = false
-	_levels_button.visible = in_campaign
+	_score_label.text = "Puntos: %d" % score  # RF-190
+	_show_next = false
+	_show_levels = in_campaign
+	_set_buttons_visible(true)
 	visible = true
+
+
+## RF-191 y RF-192: pide iniciales. Los botones esperan hasta que se confirmen.
+func ask_name(title: String, length: int, initial: String) -> void:
+	_record_title.text = title
+	_record_title.visible = true
+	_table.visible = false
+	_set_buttons_visible(false)
+	_clear_entry()
+	var entry: NameEntry = NameEntry.new().setup(length, initial)
+	entry.confirmed.connect(_on_name_confirmed)
+	_entry_slot.add_child(entry)
+
+
+func is_asking_name() -> bool:
+	return _entry_slot.get_child_count() > 0
+
+
+## La entrada de iniciales que se está mostrando (null si no se pide ninguna).
+func name_entry() -> NameEntry:
+	return _entry_slot.get_child(0) as NameEntry if is_asking_name() else null
+
+
+## RF-193: muestra una tabla de récords, con la fila `highlight` resaltada (-1 = ninguna).
+func show_scores(title: String, table: Array, highlight: int = -1) -> void:
+	_clear_entry()
+	_record_title.text = title
+	_record_title.visible = title != ""
+	_table.show_scores(table, highlight)
+	_table.visible = true
+	_set_buttons_visible(true)
+
+
+func _on_name_confirmed(name: String) -> void:
+	_clear_entry()
+	name_entered.emit(name)
+
+
+func _clear_entry() -> void:
+	for child: Node in _entry_slot.get_children():
+		_entry_slot.remove_child(child)
+		child.queue_free()
+
+
+func _set_buttons_visible(on: bool) -> void:
+	_retry_button.visible = on
+	_next_button.visible = on and _show_next
+	_levels_button.visible = on and _show_levels
+
+
+func _label(font_size: int, color: Color) -> Label:
+	var label := Label.new()
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", font_size)
+	label.add_theme_color_override("font_color", color)
+	return label

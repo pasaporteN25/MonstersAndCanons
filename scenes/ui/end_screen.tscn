@@ -37,8 +37,9 @@ theme_override_constants/margin_right = 32
 theme_override_constants/margin_bottom = 28
 
 [node name="Rows" type="VBoxContainer" parent="Dim/Center/Panel/Margin"]
+unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/separation = 18
+theme_override_constants/separation = 10
 
 [node name="Title" type="Label" parent="Dim/Center/Panel/Margin/Rows"]
 unique_name_in_owner = true

@@ -95,6 +95,28 @@ func level_won(lives: int) -> void:
 	SaveManager.save()
 
 
+# --- Récords de cada nivel (RF-191, RF-196) ---
+
+## ¿Estos puntos entran en el top 5 del nivel que se está jugando? Fuera de la campaña, no.
+func level_score_qualifies(points: int) -> bool:
+	return current_index >= 0 and HighScores.qualifies(SaveManager.scores(current_level().id), points)
+
+
+## Anota el récord del nivel que se está jugando y guarda. Devuelve la posición (0 = primero)
+## o -1 si no entró o no se juega desde la campaña.
+func record_level_score(name: String, points: int) -> int:
+	if current_index < 0:
+		return -1
+	var index: int = SaveManager.add_score(current_level().id, name, points)
+	SaveManager.set_last_initials(name)
+	SaveManager.save()
+	return index
+
+
+func current_level_scores() -> Array:
+	return [] if current_index < 0 else SaveManager.scores(current_level().id)
+
+
 # --- Cambiar de pantalla ---
 
 func start_level(index: int) -> void:

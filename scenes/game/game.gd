@@ -14,6 +14,8 @@ const FAST_SPEED: float = 2.0
 ## RF-184 (modo de pruebas): oro que da el panel y velocidad "x4".
 const DEV_GOLD: int = 1000
 const DEV_FAST_SPEED: float = 4.0
+## RF-193: título de la tabla de récords en la pantalla final.
+const LEVEL_RECORDS_TITLE: String = "Récords del nivel"
 
 signal pause_changed(paused: bool)
 signal speed_changed(speed: float)
@@ -86,6 +88,7 @@ func _ready() -> void:
 	end_screen.retry_pressed.connect(restart)
 	end_screen.next_pressed.connect(GameFlow.next_level)
 	end_screen.levels_pressed.connect(GameFlow.go_to_level_select)
+	end_screen.name_entered.connect(_on_record_name_entered)
 
 	hud.pause_pressed.connect(toggle_pause)
 	hud.speed_pressed.connect(toggle_speed)
@@ -357,8 +360,26 @@ func _on_state_changed(state: LevelSession.State) -> void:
 	if state == LevelSession.State.WON:
 		GameFlow.level_won(session.lives)  # RF-112 y RF-115: desbloquea y guarda
 		var stars: int = Rules.stars_for(session.lives, level_data.starting_lives, balance)  # RF-93
-		end_screen.show_victory(session.lives, stars, GameFlow.has_next_level(), in_campaign)
+		end_screen.show_victory(session.lives, stars, GameFlow.has_next_level(), in_campaign, session.score)
 		Audio.play(&"victory")
 	else:
-		end_screen.show_defeat(session.wave, session.total_waves, in_campaign)
+		end_screen.show_defeat(session.wave, session.total_waves, in_campaign, session.score)
 		Audio.play(&"defeat")
+	if in_campaign:
+		_show_level_records()  # RF-191: los récords solo cuentan desde la campaña (RF-196)
+
+
+# --- Récords (RF-191 a RF-193) ---
+
+## Si los puntos entran en el top 5 del nivel, pide las iniciales; si no, muestra la tabla.
+func _show_level_records() -> void:
+	if GameFlow.level_score_qualifies(session.score):
+		end_screen.ask_name("¡Nuevo récord! Escribí tus iniciales", HighScores.LEVEL_NAME_LENGTH,
+			SaveManager.last_initials(HighScores.LEVEL_NAME_LENGTH))
+	else:
+		end_screen.show_scores(LEVEL_RECORDS_TITLE, GameFlow.current_level_scores())
+
+
+func _on_record_name_entered(name: String) -> void:
+	var index: int = GameFlow.record_level_score(name, session.score)
+	end_screen.show_scores(LEVEL_RECORDS_TITLE, GameFlow.current_level_scores(), index)
