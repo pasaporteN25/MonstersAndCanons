@@ -70,8 +70,8 @@ JuegoA/
 │   │   └── hud.tscn / hud.gd                 ← interfaz de la partida
 │   ├── levels/
 │   │   ├── level.gd                          ← script común a todos los mapas
-│   │   ├── level_decor.gd                    ← decoración dibujada por código (M1.5)
-│   │   └── level_01.tscn, level_02.tscn, ...
+│   │   └── level_decor.gd                    ← decoración dibujada por código (M1.5)
+│   │       (M7: no hay escenas de mapa; Level.build() arma el mapa desde el JSON)
 │   ├── towers/
 │   │   ├── tower.tscn / tower.gd             ← UNA escena para TODAS las torres
 │   │   ├── projectile.tscn / projectile.gd
@@ -90,7 +90,9 @@ JuegoA/
 │   │   ├── spawn_group.gd, wave_data.gd, level_data.gd
 │   │   └── balance_config.gd
 │   ├── logic/
-│   │   └── rules.gd              ← fórmulas puras (daño, venta, bono…) → se testean
+│   │   ├── rules.gd              ← fórmulas puras (daño, venta, bono…) → se testean
+│   │   ├── map_grid.gd           ← (M7) lee el mapa de letras y calcula los recorridos
+│   │   └── level_file.gd         ← (M7) lee el JSON de un nivel y de la campaña
 │   └── autoload/                 ← (M3) globales
 │       ├── save_manager.gd, game_flow.gd, audio.gd
 │
@@ -98,7 +100,8 @@ JuegoA/
 │   ├── balance.tres              ← reglas generales (bono de oleada, % de venta…)
 │   ├── towers/   basic.tres, cannon.tres, frost.tres, sniper.tres
 │   ├── enemies/  normal.tres, fast.tres, tank.tres, flyer.tres, armored.tres, boss.tres
-│   └── levels/   level_01.tres, level_02.tres, level_03.tres
+│   ├── campaign.json             ← (M7) los niveles en orden
+│   └── levels/   level_01.json … level_06.json   ← (M7) mapa de letras + oleadas (spec §7.8)
 │
 ├── assets/
 │   ├── tiles/    tiles.png, tileset.tres   ← casillas provisionales (M1)
@@ -133,7 +136,7 @@ Cada clase es un script en `scripts/data/`. **El código real es la referencia**
 | `EnemyData` | [`enemy_data.gd`](../scripts/data/enemy_data.gd) | Un tipo de enemigo: vida, velocidad, armadura, oro, vidas que quita, si vuela, resistencia a ralentizar, dibujo (y forma y color de respaldo) y, desde M5, regeneración y crías al morir. |
 | `SpawnGroup` | [`spawn_group.gd`](../scripts/data/spawn_group.gd) | "N enemigos de tipo X, cada S segundos, empezando T segundos después, por la entrada E" (RF-31). |
 | `WaveData` | [`wave_data.gd`](../scripts/data/wave_data.gd) | Una oleada = lista de `SpawnGroup`. |
-| `LevelData` | [`level_data.gd`](../scripts/data/level_data.gd) | Un nivel: escena del mapa, oro y vidas iniciales, lista de oleadas. |
+| `LevelData` | [`level_data.gd`](../scripts/data/level_data.gd) | Un nivel: mapa (desde M7, las 9 filas de letras: `map_rows`), oro y vidas iniciales, lista de oleadas. Ya no es un `.tres`: lo crea `LevelFile` al leer el JSON. `build_map()` devuelve el `Level` armado. |
 | `BalanceConfig` | [`balance_config.gd`](../scripts/data/balance_config.gd) | Reglas generales: bono de oleada, % de venta, cuenta atrás, % de vida por oleada. Sus valores están en `data/balance.tres`. |
 
 **Comportamientos como datos (M5, D-025):** cada comportamiento especial es un campo que vale 0 cuando no se usa. El código pregunta por el comportamiento ("¿quema?"), nunca por la torre o el enemigo ("¿es la Incendiaria?"). Así se combinan libremente y el contenido nuevo no necesita código. La guía [`CONTENIDO.md`](../CONTENIDO.md) explica cada campo.
@@ -178,7 +181,7 @@ Todas las fórmulas de la spec viven en [`scripts/logic/rules.gd`](../scripts/lo
 
 ```
 Game (Node2D)                        game.gd       ← el "director": crea y conecta todo
-├── Level (instancia del mapa)       level.gd      ← se carga desde LevelData.map_scene
+├── Level (el mapa)                 level.gd      ← lo arma LevelData.build_map() (M7)
 │   ├── Ground (TileMapLayer)                      ← las casillas que se ven
 │   ├── Entrances (Node2D)
 │   │   ├── GroundPath0 (Path2D)                   ← camino terrestre de la entrada 0
@@ -283,6 +286,8 @@ Se construye en **cualquier** estado excepto `WON`, `LOST` y pausa (RF-44, RF-10
   (Si la casilla está vacía o fuera del mapa, `tile` es `null` → no construible.)
 - **Convertir entre píxeles y casillas:** `ground.local_to_map(pos)` y `ground.map_to_local(cell)` (esta última devuelve el **centro** de la casilla).
 - **Los caminos son `Path2D`**: cada entrada tiene su `GroundPathN` (sigue el camino de casillas) y, desde M2, su `AirPathN` (solo dos puntos: entrada y salida).
+- **Desde M7 el mapa se arma al vuelo** (spec §7.8, D-031): [`MapGrid`](../scripts/logic/map_grid.gd) lee las letras y calcula, con una búsqueda a lo ancho (BFS) desde la salida, la distancia de cada casilla de camino a la salida. El recorrido de una entrada avanza siempre a la vecina que está un paso más cerca; si hay **dos** vecinas así, hay dos recorridos igual de cortos y el mapa es inválido. El recorrido se resume en sus **esquinas**. `Level.build(grid)` crea el `Ground` (una casilla del `TileSet` por letra), un `GroundPathN` por entrada (centros de las esquinas; el primer punto, y el último si la salida está en el borde, se corren una casilla hacia afuera), su `AirPathN` (primer y último punto) y el `Decor`.
+- **`LevelFile`** ([`level_file.gd`](../scripts/logic/level_file.gd)) lee el JSON (`JSON.parse_string`), revisa cada clave y cada número, y devuelve `{level, errors}`. Nunca lanza errores: la campaña saltea un nivel inválido y lo anota con `push_error`. Los enemigos se buscan como `res://data/enemies/<nombre>.tres`.
 - ⚠️ **El camino se "dibuja" dos veces**: con casillas (lo que se ve) y con `Path2D` (lo que siguen los enemigos). Si no coinciden, los enemigos caminarían por el pasto. Por eso hay un **test** (`test_level_paths.gd`) que recorre cada `GroundPath` y comprueba que cada punto cae sobre una casilla **no** construible.
 
 ### 6.2 Enemigos ([`enemy.gd`](../scenes/enemies/enemy.gd))

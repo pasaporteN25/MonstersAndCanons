@@ -136,7 +136,7 @@
 - **Cómo reemplazar un dibujo:** guardar el nuevo con el **mismo nombre** en la misma carpeta, o elegir otro archivo en el Inspector (en el `.tres` de la torre o del enemigo). Sirve cualquier imagen: SVG o PNG de 128×128. Los enemigos, las torretas y los proyectiles se dibujan **mirando a la derecha**; las torretas giran sobre el **centro** de la imagen.
 
 ### D-024 · Mapas fáciles de crear y mods entran al backlog
-- **Fecha:** 2026-09-29 · **Estado:** Propuesta (sin fecha) · **Propuso:** Lucas / **Analizó:** Claude
+- **Fecha:** 2026-09-29 · **Estado:** Escalón 1 aceptado (D-031); editor y mods, sin fecha · **Propuso:** Lucas / **Analizó:** Claude
 - **Qué:** idea B-04 de la spec §13: mapas en archivos de texto (JSON), después un editor dentro del juego y, por último, mods de datos.
 - **Recomendación de Claude:** empezar por los mapas en JSON y pasar a ese formato los 5 niveles actuales; los mods, **solo con datos** (JSON e imágenes, sin código), por seguridad.
 - **Por qué no ahora:** Lucas pidió analizarlo y dejarlo anotado, no hacerlo todavía.
@@ -175,3 +175,11 @@
 - **Por qué:** bajar Godot del sitio oficial y guardarlo en la caché es simple, no depende de terceros y fija la versión exacta. Exportar necesita las plantillas de exportación (~1 GB) y no agrega seguridad a los tests: queda para más adelante, si hace falta publicar versiones.
 - **Detalle:** GUT **saltea sin avisar** un archivo de test con un error de sintaxis y termina en verde. Por eso el workflow falla también si el registro tiene "SCRIPT ERROR", "Parse Error" o "Failed to load script": una corrida sana no tiene ninguna de esas líneas.
 - **Costo:** el repositorio es privado; GitHub da 2000 minutos por mes gratis y cada corrida tarda unos pocos minutos.
+
+### D-031 · Los niveles pasan a archivos JSON (B-04, escalón 1)
+- **Fecha:** 2026-09-29 · **Estado:** Aceptada · **Decidió:** Lucas (hacerlo) / Claude (cómo, siguiendo las recomendaciones de B-04)
+- **Qué:** cada nivel es un `data/levels/<id>.json` con el mapa dibujado con letras y las oleadas; la campaña es `data/campaign.json` (spec §7.8). El juego arma el mapa al vuelo. Se borran las escenas `level_0N.tscn`, los `level_0N.tres` y `campaign.tres`, y `tools/make_levels.gd` (que escribía los mapas dentro del código).
+- **Formato JSON y no `.tres`:** se escribe a mano, Godot lo lee sin agregados y no puede traer código (importa para los mods). Las claves van en castellano (`oro`, `oleadas`, `cada`…), porque el archivo lo edita una persona, no un programador; el código sigue en inglés (constitución).
+- **El recorrido es el camino más corto, y un empate es un error:** así el mapa de letras alcanza para describir el nivel (no hay que listar esquinas), y nunca hay un recorrido "adivinado". Se comprobó que los 6 niveles actuales dan exactamente los mismos recorridos.
+- **Qué NO incluye:** el editor dentro del juego, cargar mapas de `user://` o de una carpeta de mods, y los dibujos elegidos por casilla (una `X` sigue eligiendo roca, árbol o arbusto sola). Son los escalones 2 y 3 de B-04.
+- **Un nivel inválido no rompe el juego:** se saltea con su error en el registro. Los niveles oficiales, además, los revisa un test (y GitHub, D-030) en cada push.

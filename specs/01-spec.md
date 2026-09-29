@@ -507,6 +507,60 @@ f8   ·······▲············
 
 **Aumento de vida por oleada: 30 %** (ver §7.4).
 
+### 7.8 Niveles en archivos de texto *(M7, B-04 escalón 1, D-031)*
+
+Cada nivel es **un archivo de texto** en `data/levels/` (por ejemplo `level_06.json`) que se puede leer y cambiar con el Bloc de notas. El juego lo lee y arma el mapa solo: ya no hay escenas de mapa hechas a mano ni generadas por código.
+
+- **RF-200** **El archivo del nivel** es JSON y tiene: `version` (hoy 1), `nombre`, `oro` (inicial), `vidas` (iniciales), `mapa` (9 filas de 20 letras), `oleadas` y, si hace falta, `aumento_vida` (el % de vida extra por oleada de ese nivel, §7.4; si no está, se usa el general). El identificador del nivel (`level_06`) es el nombre del archivo.
+- **RF-201** **Las letras del mapa:**
+
+  | Letra | Casilla |
+  |---|---|
+  | `.` | Pasto: se construye (RF-02, libre). |
+  | `#` | Camino. |
+  | `X` | Bloqueada (el dibujo, roca, árbol o arbusto, sale solo, RF-154). |
+  | `A`, `B`, `C`… | Entrada (es camino). `A` es la primera; no puede faltar una letra en el medio (no hay `C` sin `B`). |
+  | `S` | La salida (es camino). Hay **una sola**. Si está en el borde, los enemigos salen del mapa por ahí; si está adentro, se dibuja la puerta (RF-06). |
+
+- **RF-202** **El recorrido se calcula solo:** cada entrada va a la salida por el **camino más corto** sobre casillas de camino (`#` y letras). Si hay **dos recorridos igual de cortos**, el nivel es inválido: el juego no adivina, y avisa para que se cierre uno. Si la entrada está en el borde, los enemigos entran desde fuera del mapa (igual que antes). Los voladores van en línea recta de la entrada a la salida (RF-05).
+- **RF-203** **Las oleadas** son una lista; cada oleada es una lista de grupos: `{"enemigo": "troll", "cantidad": 8, "cada": 1.2, "desde": 3.0, "entrada": "B"}`. `enemigo` es el nombre de un archivo de `data/enemies/`; `desde` (segundos desde que empieza la oleada) vale 0 y `entrada` vale `"A"` si no se escriben.
+- **RF-204** **Validación con mensajes claros:** al leer un nivel se comprueba todo lo anterior: que el mapa sea de 20×9 y solo tenga letras conocidas; que haya salida y al menos una entrada; que cada entrada llegue a la salida sin empates; que haya pasto para construir; que el oro, las vidas, las cantidades y los tiempos tengan sentido; que los enemigos existan; que cada grupo use una entrada del mapa, y que no haya **claves mal escritas** (por ejemplo `"canitdad"`). Cada problema se explica en castellano y dice dónde está ("oleada 3, grupo 2: no existe el enemigo 'trol'"). Un nivel inválido **no se juega** y el error queda en el registro; el juego no se cierra.
+- **RF-205** **La campaña** es `data/campaign.json`: la lista de niveles en orden (`"niveles": ["level_01", …]`). Agregar un nivel es crear su archivo y sumarlo a esa lista.
+- **RF-206** **Revisar un nivel sin jugarlo:** `tools/check_level.gd` lee un archivo y muestra sus errores o, si está bien, el mapa con el recorrido de cada entrada y su largo en casillas.
+
+**Ejemplo** (el nivel 6, con solo 2 de sus 15 oleadas: la 1 y la 3):
+
+```json
+{
+  "version": 1,
+  "nombre": "Nido",
+  "oro": 250,
+  "vidas": 20,
+  "aumento_vida": 30,
+  "mapa": [
+    "..........B.........",
+    "A#####....#.......X.",
+    ".....#....#.........",
+    "...X.#############..",
+    ".................#..",
+    "..################..",
+    "..#.........X.......",
+    "..#################S",
+    ".......X............"
+  ],
+  "oleadas": [
+    [{"enemigo": "normal", "cantidad": 10, "cada": 0.8}],
+    [{"enemigo": "fast", "cantidad": 12, "cada": 0.4, "entrada": "B"},
+     {"enemigo": "normal", "cantidad": 8, "cada": 0.8, "desde": 2.0}]
+  ]
+}
+```
+
+> **Criterio de aceptación RF-200 a RF-205**
+> **Dado** que los 6 niveles pasaron a archivos de texto → **Entonces** cada mapa tiene exactamente las mismas casillas, entradas, recorridos y oleadas que antes, y el bot de balance da los mismos resultados.
+> **Dado** un nivel con un error (una entrada que no llega a la salida, un enemigo que no existe, una clave mal escrita) → **Entonces** el mensaje dice qué está mal y dónde, y el resto de la campaña sigue andando.
+
+
 
 ---
 
@@ -759,7 +813,7 @@ Ideas **aprobadas como dirección**, pero **sin fecha**: no se programan hasta c
 **Depende de / afecta a:** Épocas (B-01) sería una forma de lore ("la guerra a través del tiempo"); el lore también decide la ambientación y, por lo tanto, el arte (B-02). Conviene definir los tres juntos. Si se agregan textos de historia, hay que sacar "Historia, diálogos o cinemáticas" de la lista de §11 (en todo o en parte).
 
 ### B-04 · Crear mapas fácilmente y mods
-*Propuesta de Lucas, 2026-09-29. Analizada por Claude; sin fecha. Decisión: D-024.*
+*Propuesta de Lucas, 2026-09-29. Analizada por Claude. Decisión: D-024. **El escalón 1 se hizo en M7 (§7.8, D-031)**; el editor y los mods siguen sin fecha.*
 
 **Idea:** que crear un mapa nuevo sea fácil (sin tocar código ni el editor de Godot) y, más adelante, que otras personas puedan agregar contenido al juego: mapas, oleadas, enemigos, torres y dibujos. A eso se le llama **mods** (modificaciones hechas por jugadores).
 
