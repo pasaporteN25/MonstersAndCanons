@@ -22,6 +22,8 @@ var wave: int = 0
 var total_waves: int = 0
 var state: State = State.BUILDING
 var countdown_left: float = 0.0
+## RF-184 (modo de pruebas): si es true, los enemigos que llegan no quitan vidas.
+var infinite_lives: bool = false
 
 var _balance: BalanceConfig
 
@@ -72,7 +74,7 @@ func spend(cost: int) -> bool:
 # --- Vidas (RF-10 a RF-12) ---
 
 func lose_lives(amount: int) -> void:
-	if is_over():
+	if is_over() or infinite_lives:
 		return
 	lives = maxi(0, lives - amount)
 	lives_changed.emit(lives)
@@ -109,6 +111,12 @@ func complete_wave() -> void:
 		countdown_left = _balance.countdown_seconds
 		_set_state(State.COUNTDOWN)
 		countdown_changed.emit(countdown_left)
+
+
+## RF-184 (modo de pruebas): termina la partida ya, ganada o perdida.
+func finish(won: bool) -> void:
+	if not is_over():
+		_set_state(State.WON if won else State.LOST)
 
 
 func is_over() -> bool:

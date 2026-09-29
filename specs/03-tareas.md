@@ -460,10 +460,11 @@
   **Hecho cuando:** los tests comprueban que sin el modo nada cambia, que con el modo se usa el otro guardado y se abren todos los niveles, y que el `.exe` de pruebas exporta sin errores.
   **Resultado:** se comprobó corriendo el `JuegoA_pruebas.exe` exportado: el log dice "Modo de pruebas activado. Guardado: user://save_pruebas.json". Un test revisa que solo el preset de pruebas tenga la característica `pruebas`.
 
-- [ ] **T87 · Panel de pruebas**
+- [x] **T87 · Panel de pruebas**
   Botón "Pruebas" y tecla F1 en la partida (solo en modo pruebas) con: +1000 de oro, vidas infinitas, saltar oleada, matar a todos, ganar, perder, velocidad x4, aparecer un enemigo, FPS.
   **Refs:** RF-184.
   **Hecho cuando:** un test prueba cada acción del panel, y sin modo de pruebas el panel no existe.
+  **Resultado:** los enemigos que saca el panel desaparecen sin morir (`Enemy.vanish()`): no dan oro ni sueltan crías. "Saltar oleada" completa la oleada como siempre (con su bono). El cartel "MODO PRUEBAS" se movió abajo del todo, porque arriba tapaba la tarjeta "Nuevo enemigo".
 
 - [ ] **T88 · Puntos**
   `LevelSession.score`; puntos por enemigo muerto (oro × 10) y por vida al ganar (× 100), con los dos números en `balance.tres`; "Puntos" en la barra de arriba.

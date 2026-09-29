@@ -11,6 +11,9 @@ const SHAKE_DURATION: float = 0.25
 const SHAKE_STRENGTH_PX: float = 4.0
 ## RF-105: velocidad rápida.
 const FAST_SPEED: float = 2.0
+## RF-184 (modo de pruebas): oro que da el panel y velocidad "x4".
+const DEV_GOLD: int = 1000
+const DEV_FAST_SPEED: float = 4.0
 
 signal pause_changed(paused: bool)
 signal speed_changed(speed: float)
@@ -21,6 +24,8 @@ signal speed_changed(speed: float)
 @export var tower_types: Array[TowerData] = []
 
 var level: Level
+## RF-184: el panel de pruebas. null si no es el modo de pruebas.
+var dev_panel: DevPanel
 var _shake_left: float = 0.0
 
 @onready var tower_container: Node2D = $Towers
@@ -100,6 +105,8 @@ func _ready() -> void:
 	Audio.add_click_sounds(end_screen)
 
 	session.start(level_data, balance)
+	if DevMode.enabled:
+		_add_dev_panel()
 
 
 func _process(delta: float) -> void:
@@ -121,6 +128,11 @@ func _exit_tree() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	var key := event as InputEventKey
+	if dev_panel != null and key != null and key.pressed and not key.echo and key.physical_keycode == KEY_F1:
+		dev_panel.toggle()  # RF-184
+		get_viewport().set_input_as_handled()
+		return
 	# BuildController recibe Esc primero (cancelar construcción o selección);
 	# si nadie lo usó, llega aquí y abre o cierra el menú de pausa (RF-114).
 	if event.is_action_pressed("cancel"):
@@ -208,6 +220,59 @@ func start_next_wave() -> void:
 func restart() -> void:
 	_reset_time()
 	get_tree().reload_current_scene()
+
+
+# --- Modo de pruebas (RF-184): lo que hace cada botón del panel ---
+
+func _add_dev_panel() -> void:
+	dev_panel = DevPanel.new().setup(self)
+	hud.add_child(dev_panel)
+	var button := Button.new()
+	button.text = "Pruebas [F1]"
+	button.focus_mode = Control.FOCUS_NONE
+	button.position = Vector2(880, 8)
+	button.size = Vector2(126, 32)
+	button.pressed.connect(dev_panel.toggle)
+	hud.get_node("TopBar").add_child(button)
+
+
+func dev_add_gold() -> void:
+	session.earn(DEV_GOLD)
+
+
+func dev_set_infinite_lives(on: bool) -> void:
+	session.infinite_lives = on
+
+
+## Los enemigos desaparecen sin morir: no dan oro ni puntos ni sueltan crías.
+func dev_kill_all() -> void:
+	for node: Node in enemies.get_children():
+		(node as Enemy).vanish()
+
+
+## Termina la oleada en curso (o empieza la siguiente y la termina): no salen más enemigos
+## y desaparecen los que hay. La oleada se completa como siempre (con su bono de oro).
+func dev_skip_wave() -> void:
+	if session.is_over():
+		return
+	if session.state != LevelSession.State.WAVE_RUNNING:
+		start_next_wave()
+	spawner.skip_rest_of_wave()
+	dev_kill_all()
+
+
+func dev_finish(won: bool) -> void:
+	spawner.skip_rest_of_wave()
+	dev_kill_all()
+	session.finish(won)
+
+
+func dev_set_fast(on: bool) -> void:
+	set_speed(DEV_FAST_SPEED if on else 1.0)
+
+
+func dev_spawn(data: EnemyData) -> void:
+	spawner.spawn_now(data)
 
 
 func _on_enemy_spawned(enemy: Enemy) -> void:

@@ -48,18 +48,18 @@ func is_banner_visible() -> bool:
 	return _banner != null and _banner.visible
 
 
-## RF-182: cartel "MODO PRUEBAS" arriba al centro, encima de todas las pantallas.
+## RF-182: cartel "MODO PRUEBAS" abajo al centro, encima de todas las pantallas.
 func _show_banner(on: bool) -> void:
 	if _banner == null:
 		_banner = CanvasLayer.new()
 		_banner.layer = 100
 		var label := Label.new()
 		label.text = "MODO PRUEBAS · F1: panel"
-		label.position = Vector2(540, 52)
-		label.size = Vector2(200, 24)
+		label.position = Vector2(540, 699)  # franja libre de abajo, bajo los botones
+		label.size = Vector2(200, 20)
 		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		label.add_theme_font_size_override("font_size", 14)
+		label.add_theme_font_size_override("font_size", 13)
 		label.add_theme_color_override("font_color", Color(1, 0.55, 0.3))
 		label.add_theme_color_override("font_outline_color", Color(0.1, 0.1, 0.12))
 		label.add_theme_constant_override("outline_size", 5)

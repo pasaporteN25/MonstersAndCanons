@@ -59,6 +59,20 @@ func is_running() -> bool:
 	return _running
 
 
+## RF-184 (modo de pruebas): no salen más enemigos de esta oleada. Cuando mueran los que
+## quedan, la oleada termina como siempre.
+func skip_rest_of_wave() -> void:
+	for run: GroupRun in _runs:
+		run.spawned = run.group.count
+	_check_finished()
+
+
+## RF-184 (modo de pruebas): hace aparecer un enemigo ya, por la entrada 0.
+func spawn_now(data: EnemyData) -> void:
+	var path: Path2D = _level.get_air_path(0) if data.is_flying else _level.get_ground_path(0)
+	_spawn_enemy(data, path, 0.0)
+
+
 func _process(delta: float) -> void:
 	if not _running:
 		return

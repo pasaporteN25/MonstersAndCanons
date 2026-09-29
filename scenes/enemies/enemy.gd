@@ -143,6 +143,14 @@ func take_hit(damage: int, slow_amount: float = 0.0, slow_duration: float = 0.0)
 	_lose_health(dealt, dealt * 2 <= damage)
 
 
+## RF-184 (modo de pruebas): desaparece sin morir: no da oro, ni puntos, ni suelta crías.
+func vanish() -> void:
+	if _is_done:
+		return
+	_is_done = true
+	queue_free()
+
+
 ## RF-160: lo prende fuego. No se suma: queda la más fuerte y el tiempo se reinicia.
 func apply_burn(damage_per_second: int, duration: float) -> void:
 	if _is_done or damage_per_second <= 0 or duration <= 0.0:
