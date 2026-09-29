@@ -4,6 +4,8 @@ extends Resource
 
 @export var id: StringName = &""
 @export var display_name: String = ""
+## RF-171: frase que dice para qué sirve; se ve al elegir la torre para construir.
+@export_multiline var description: String = ""
 ## Si puede apuntar y dañar a enemigos voladores (RF-53).
 @export var can_hit_air: bool = false
 ## Velocidad de sus proyectiles, en casillas por segundo.

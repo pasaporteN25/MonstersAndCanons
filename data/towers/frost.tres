@@ -42,6 +42,7 @@ base_texture = ExtResource("4_nc4yv")
 script = ExtResource("2_4uqr0")
 id = &"frost"
 display_name = "Hielo"
+description = "Casi no hace daño, pero frena a los enemigos para que las demás torres les peguen más."
 can_hit_air = true
 projectile_speed_tiles = 10.0
 color = Color(0.49803922, 0.827451, 0.9607843, 1)

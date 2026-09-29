@@ -36,6 +36,7 @@ base_texture = ExtResource("4_8h2sr")
 script = ExtResource("2_y8sf8")
 id = &"basic"
 display_name = "Ametralladora"
+description = "Barata y rápida. Buena contra enemigos débiles; mala contra la armadura."
 can_hit_air = true
 projectile_speed_tiles = 10.0
 color = Color(0.47843137, 0.47843137, 0.47843137, 1)

@@ -39,6 +39,7 @@ base_texture = ExtResource("4_s4vul")
 script = ExtResource("2_yxcx4")
 id = &"cannon"
 display_name = "Cañón"
+description = "Daño en área contra grupos. No le pega a los voladores."
 projectile_speed_tiles = 10.0
 color = Color(0.14901961, 0.14901961, 0.14901961, 1)
 turret_texture = ExtResource("6_fahly")

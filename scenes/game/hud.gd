@@ -10,9 +10,10 @@ signal tower_button_pressed(index: int)
 signal pause_pressed
 signal speed_pressed
 
-const TOWER_BUTTON_SIZE := Vector2(184, 60)
-## Ancho máximo del dibujo de la torreta en su botón (RF-155).
-const TOWER_ICON_SIZE: int = 40
+## RF-170: botones compactos, para que entren 8 torres sin tapar "Próxima oleada" (D-026).
+const TOWER_BUTTON_SIZE := Vector2(86, 60)
+## Ancho máximo del dibujo de la torre en su botón (RF-155).
+const TOWER_ICON_SIZE: int = 34
 ## RF-134: cuánto se ve la tarjeta de presentación de un enemigo.
 const INTRO_SECONDS: float = 6.0
 
@@ -46,6 +47,9 @@ var _last_lives: int = -1
 @onready var _pause_button: Button = %PauseButton
 @onready var _speed_button: Button = %SpeedButton
 @onready var _pause_label: Label = %PauseLabel
+@onready var _build_info: Control = %BuildInfo
+@onready var _build_info_name: Label = %BuildInfoName
+@onready var _build_info_text: Label = %BuildInfoText
 
 
 func _ready() -> void:
@@ -140,9 +144,13 @@ func setup_towers(tower_types: Array[TowerData]) -> void:
 		button.custom_minimum_size = TOWER_BUTTON_SIZE
 		button.toggle_mode = true
 		button.focus_mode = Control.FOCUS_NONE
-		button.text = "%d · %s
-%d de oro" % [i + 1, tower.display_name, tower.levels[0].cost]
+		# RF-170: dibujo arriba, costo abajo y la tecla en una esquina. El nombre, al pasar el mouse.
+		button.text = str(tower.levels[0].cost)
+		button.tooltip_text = "%s (tecla %d): %d de oro" % [tower.display_name, i + 1, tower.levels[0].cost]
 		button.add_theme_font_size_override("font_size", 15)
+		button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		button.vertical_icon_alignment = VERTICAL_ALIGNMENT_TOP
+		button.add_child(_key_label(i + 1))
 		var icon: Texture2D = Tower.make_icon(tower)
 		if icon != null:
 			# RF-155: base y torreta, como la torre recién construida, achicadas con suavidad (D-023).
@@ -157,6 +165,17 @@ func setup_towers(tower_types: Array[TowerData]) -> void:
 		_tower_buttons.append(button)
 
 
+## RF-170: número de la tecla, chiquito, en la esquina de arriba a la izquierda del botón.
+func _key_label(key: int) -> Label:
+	var label := Label.new()
+	label.text = str(key)
+	label.position = Vector2(6, 2)
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	label.add_theme_font_size_override("font_size", 12)
+	label.modulate = Color(1, 1, 1, 0.6)
+	return label
+
+
 ## Cuadradito del color de la torre, con borde claro para que se vean también las oscuras.
 func _color_swatch(color: Color) -> Texture2D:
 	var image := Image.create(20, 20, false, Image.FORMAT_RGBA8)
@@ -169,6 +188,12 @@ func _color_swatch(color: Color) -> Texture2D:
 func show_selected_tower(index: int) -> void:
 	for i: int in _tower_buttons.size():
 		_tower_buttons[i].set_pressed_no_signal(i == index)
+	# RF-171: nombre, costo y para qué sirve la torre elegida.
+	_build_info.visible = index >= 0
+	if index >= 0:
+		var tower: TowerData = _tower_types[index]
+		_build_info_name.text = "%s · %d de oro" % [tower.display_name, tower.levels[0].cost]
+		_build_info_text.text = tower.description
 
 
 func _on_gold_changed(gold: int) -> void:
