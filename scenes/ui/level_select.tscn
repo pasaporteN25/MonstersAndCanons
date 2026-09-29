@@ -35,7 +35,7 @@ grow_vertical = 2
 
 [node name="Rows" type="VBoxContainer" parent="Center"]
 layout_mode = 2
-theme_override_constants/separation = 32
+theme_override_constants/separation = 18
 
 [node name="Title" type="Label" parent="Center/Rows"]
 layout_mode = 2
@@ -54,11 +54,20 @@ theme_override_font_sizes/font_size = 22
 text = "Estrellas: 0 de 15"
 horizontal_alignment = 1
 
-[node name="Cards" type="HBoxContainer" parent="Center/Rows"]
+[node name="Scroll" type="ScrollContainer" parent="Center/Rows"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(1090, 214)
+layout_mode = 2
+follow_focus = true
+horizontal_scroll_mode = 0
+
+[node name="Cards" type="HFlowContainer" parent="Center/Rows/Scroll"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
 alignment = 1
-theme_override_constants/separation = 12
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 16
 
 [node name="BackButton" type="Button" parent="Center/Rows"]
 unique_name_in_owner = true

@@ -5,9 +5,13 @@ extends GutTest
 
 const TEST_PATH: String = "user://test_save.json"
 const GAME_SCENE: PackedScene = preload("res://scenes/game/game.tscn")
+const SCREEN_WIDTH: float = 1280.0
+
+var _saved_levels: Array[LevelData] = []
 
 
 func before_each() -> void:
+	_saved_levels = GameFlow.campaign.levels.duplicate()
 	if FileAccess.file_exists(TEST_PATH):
 		DirAccess.remove_absolute(TEST_PATH)
 	SaveManager.save_path = TEST_PATH
@@ -16,6 +20,7 @@ func before_each() -> void:
 
 
 func after_each() -> void:
+	GameFlow.campaign.levels = _saved_levels
 	GameFlow.current_index = -1
 	if FileAccess.file_exists(TEST_PATH):
 		DirAccess.remove_absolute(TEST_PATH)
@@ -98,7 +103,7 @@ func test_main_menu_has_its_buttons() -> void:
 func test_level_select_shows_one_card_per_level() -> void:
 	var select: Control = (load("res://scenes/ui/level_select.tscn") as PackedScene).instantiate()
 	add_child_autofree(select)
-	var cards: HBoxContainer = select.get_node("%Cards")
+	var cards: HFlowContainer = select.get_node("%Cards")
 	assert_eq(cards.get_child_count(), GameFlow.level_count())
 	assert_false((cards.get_child(0) as Button).disabled, "el nivel 1 se puede elegir")
 	assert_eq(select.status_text(0), "¡Jugar!")
@@ -148,3 +153,52 @@ func test_level_select_shows_total_stars() -> void:
 	add_child_autofree(select)
 	assert_eq((select.get_node("%TotalStars") as Label).text,
 		"Estrellas: 3 de %d" % GameFlow.max_stars())
+
+
+# --- Selección de nivel con muchos niveles (RF-116) ---
+
+## Abre la selección como si la campaña tuviera `total` niveles (quita del final o repite el primero).
+func _select_with(total: int) -> Control:
+	while GameFlow.campaign.levels.size() > total:
+		GameFlow.campaign.levels.pop_back()
+	while GameFlow.campaign.levels.size() < total:
+		GameFlow.campaign.levels.append(GameFlow.campaign.levels[0])
+	var select: Control = (load("res://scenes/ui/level_select.tscn") as PackedScene).instantiate()
+	add_child_autofree(select)
+	await wait_process_frames(3)
+	return select
+
+
+func test_no_card_leaves_the_screen_however_many_levels() -> void:
+	for total: int in [7, 13, 40]:
+		var select: Control = await _select_with(total)
+		var cards: HFlowContainer = select.get_node("%Cards")
+		assert_eq(cards.get_child_count(), total)
+		for card: Control in cards.get_children():
+			var rect: Rect2 = card.get_global_rect()
+			assert_gte(rect.position.x, 0.0, "%d niveles: no se sale por la izquierda" % total)
+			assert_lte(rect.end.x, SCREEN_WIDTH, "%d niveles: no se sale por la derecha" % total)
+		select.queue_free()
+		await wait_process_frames(1)
+
+
+func test_cards_wrap_into_rows_of_five() -> void:
+	var select: Control = await _select_with(7)
+	var cards: Array[Node] = (select.get_node("%Cards") as Control).get_children()
+	assert_eq((cards[4] as Control).global_position.y, (cards[0] as Control).global_position.y, "5 en la primera fila")
+	assert_gt((cards[5] as Control).global_position.y, (cards[0] as Control).global_position.y, "el sexto baja a otra fila")
+	assert_eq((cards[6] as Control).global_position.y, (cards[5] as Control).global_position.y, "y el séptimo va con él")
+
+
+func test_it_scrolls_only_when_there_are_more_than_two_rows() -> void:
+	var scroll_of: Callable = func(select: Control) -> ScrollContainer: return select.get_node("%Scroll")
+	var seven: ScrollContainer = scroll_of.call(await _select_with(7))
+	assert_lte(seven.get_v_scroll_bar().max_value, seven.size.y + 1.0, "7 niveles = 2 filas: todo se ve, no hace falta desplazar")
+	var thirteen: ScrollContainer = scroll_of.call(await _select_with(13))
+	assert_gt(thirteen.get_v_scroll_bar().max_value, thirteen.size.y + 1.0, "13 niveles = 3 filas: hay que desplazar")
+
+
+func test_one_row_when_there_are_five_levels_or_fewer() -> void:
+	var select: Control = await _select_with(4)
+	var scroll: ScrollContainer = select.get_node("%Scroll")
+	assert_eq(scroll.custom_minimum_size.y, 214.0, "una sola fila de tarjetas")

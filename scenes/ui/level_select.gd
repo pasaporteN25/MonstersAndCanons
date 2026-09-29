@@ -3,11 +3,16 @@
 # y su mejor resultado. Arriba, el total de estrellas de la campaña.
 extends Control
 
-## 7 tarjetas de 168 px + 6 espacios de 12 px = 1248 px: entran en los 1280 de la pantalla.
-const CARD_SIZE := Vector2(168, 220)
+# Las tarjetas se acomodan en filas (RF-116): 5 de 200 px + 4 espacios de 16 px = 1064 px, que
+# entran en el área de 1090 px. Se ven 2 filas; si hay más niveles, el área se desplaza.
+const CARD_SIZE := Vector2(200, 214)
+const CARD_SPACING: float = 16.0
+const CARDS_PER_ROW: int = 5
+const VISIBLE_ROWS: int = 2
 const CARD_STAR_SIZE: float = 26.0
 
-@onready var _cards: HBoxContainer = %Cards
+@onready var _scroll: ScrollContainer = %Scroll
+@onready var _cards: HFlowContainer = %Cards
 @onready var _back_button: Button = %BackButton
 @onready var _total_stars: Label = %TotalStars
 
@@ -16,6 +21,10 @@ func _ready() -> void:
 	_back_button.pressed.connect(GameFlow.go_to_main_menu)
 	for i: int in GameFlow.level_count():
 		_cards.add_child(_make_card(i))
+	# Alto del área: las filas que hay, hasta VISIBLE_ROWS (con una sola fila no sobra espacio).
+	var rows: int = ceili(float(GameFlow.level_count()) / CARDS_PER_ROW)
+	var shown: int = mini(rows, VISIBLE_ROWS)
+	_scroll.custom_minimum_size.y = shown * CARD_SIZE.y + (shown - 1) * CARD_SPACING
 	_total_stars.text = "Estrellas: %d de %d" % [GameFlow.total_stars(), GameFlow.max_stars()]
 	Audio.add_click_sounds(self)
 
@@ -31,7 +40,7 @@ func _make_card(index: int) -> Button:
 	var level: LevelData = GameFlow.level(index)
 	var card := Button.new()
 	card.custom_minimum_size = CARD_SIZE
-	card.add_theme_font_size_override("font_size", 18)
+	card.add_theme_font_size_override("font_size", 20)
 	card.text = "Nivel %d\n%s\n%d oleadas\n%s\n\n" % [
 		index + 1, level.display_name, level.waves.size(), status_text(index)]
 	card.disabled = not GameFlow.is_level_unlocked(index)
