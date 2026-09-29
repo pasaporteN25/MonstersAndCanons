@@ -308,3 +308,71 @@ func test_multi_with_one_enemy_shoots_once() -> void:
 	var tower: Tower = _tower_at("multi", Vector2(300, 250))
 	simulate(tower, 1, DT)
 	assert_eq(_shot_targets(), [e[0]] as Array[Enemy])
+
+
+# --- Ráfaga (RF-162) ---
+
+func _run_shots(seconds: float) -> void:
+	for i: int in roundi(seconds / DT):
+		for p: Projectile in shots:
+			if is_instance_valid(p):
+				p._physics_process(DT)
+
+
+func test_burst_tower_matches_spec() -> void:
+	var burst: TowerData = _tower("burst")
+	assert_eq(burst.display_name, "Ráfaga")
+	assert_false(burst.can_hit_air, "no le pega a los voladores")
+	assert_almost_eq(burst.projectile_speed_tiles, 6.0, 0.001)
+	_assert_levels("burst", [
+		{"cost": 110, "damage": 8, "fire_rate": 0.6, "range_tiles": 2.0, "burst_count": 8},
+		{"cost": 100, "damage": 11, "fire_rate": 0.7, "burst_count": 10},
+		{"cost": 150, "damage": 15, "fire_rate": 0.8, "range_tiles": 2.5, "burst_count": 12},
+	])
+
+
+func test_burst_fires_eight_spikes_evenly_around() -> void:
+	_enemies_at([400.0])
+	var tower: Tower = _tower_at("burst", Vector2(300, 300))
+	simulate(tower, 1, DT)
+	assert_eq(shots.size(), 8)
+	var angles: Array[float] = []
+	for p: Projectile in shots:
+		assert_true(p.is_straight(), "en línea recta, no persiguen")
+		angles.append(fposmod(p._direction.angle(), TAU))
+	angles.sort()
+	for i: int in range(1, angles.size()):
+		assert_almost_eq(angles[i] - angles[i - 1], TAU / 8.0, 0.001, "repartidas en círculo")
+
+
+func test_burst_does_not_fire_without_enemies_in_range() -> void:
+	_enemies_at([3000.0])  # lejísimos
+	var tower: Tower = _tower_at("burst", Vector2(300, 300))
+	simulate(tower, 5, DT)
+	assert_eq(shots.size(), 0)
+
+
+func test_each_spike_hits_only_the_first_enemy_it_touches() -> void:
+	# Dos enemigos en fila a la derecha y uno a la izquierda de la torre.
+	var e: Array[Enemy] = _enemies_at([200.0, 360.0, 400.0])
+	var tower: Tower = _tower_at("burst", Vector2(300, 300))
+	tower.aim_angle = -PI / 8.0  # al disparar gira PI/8: una púa sale justo a la derecha y otra a la izquierda
+	simulate(tower, 1, DT)
+	_run_shots(1.5)
+	assert_eq(e[0].health, 1000 - 8, "el de la izquierda recibe una púa")
+	var right_hits: int = (1000 - e[1].health) + (1000 - e[2].health)
+	assert_eq(right_hits, 8, "a la derecha, una sola púa: golpea al primero y desaparece")
+	for p: Projectile in shots:
+		assert_true(p._is_done, "las púas que no tocaron a nadie se perdieron")
+
+
+func test_burst_spikes_ignore_flyers() -> void:
+	# A la derecha: un volador y, detrás, uno de tierra. La púa atraviesa al volador.
+	var flyer: Enemy = _enemies_at([350.0], _enemy_data("flyer"))[0]
+	var walker: Enemy = _enemies_at([410.0])[0]
+	var tower: Tower = _tower_at("burst", Vector2(300, 300))
+	tower.aim_angle = -PI / 8.0
+	simulate(tower, 1, DT)
+	_run_shots(1.5)
+	assert_eq(flyer.health, 1000, "RF-53: al volador no le pega")
+	assert_eq(walker.health, 992, "sigue de largo y le pega al de tierra")

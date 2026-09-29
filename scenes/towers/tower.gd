@@ -122,7 +122,12 @@ func _physics_process(delta: float) -> void:
 	if _target != null and not (is_instance_valid(_target) and can_target(_target)):
 		_target = null
 	_cooldown -= delta
-	if _cooldown <= 0.0:
+	if _cooldown <= 0.0 and stats().burst_count > 0:
+		# RF-162: ráfaga en círculo, si hay alguien en alcance (no apunta a nadie en particular).
+		if find_target() != null:
+			_fire_burst()
+			_cooldown = 1.0 / stats().fire_rate
+	elif _cooldown <= 0.0:
 		# RF-161: con `extra_targets`, además del mejor objetivo dispara a los siguientes.
 		var targets: Array[Enemy] = find_targets(1 + stats().extra_targets)
 		if not targets.is_empty():
@@ -195,6 +200,22 @@ func _shoot(target: Enemy) -> void:
 	projectile.setup(target, _barrel_tip_global(), stats(), data.can_hit_air,
 		data.projectile_speed_tiles, data.color, data.projectile_texture)
 	fired.emit(projectile)
+
+
+## RF-162: `burst_count` púas repartidas en círculo, en línea recta hasta el alcance.
+## La torreta gira media separación en cada ráfaga, así las púas no salen siempre igual.
+func _fire_burst() -> void:
+	var count: int = stats().burst_count
+	aim_angle += PI / count
+	_recoil = 1.0
+	_flash_left = FLASH_DURATION
+	for i: int in count:
+		var direction := Vector2.from_angle(aim_angle + TAU * i / count)
+		var projectile: Projectile = PROJECTILE_SCENE.instantiate()
+		projectile.setup_straight(global_position + direction * _barrel_length() * 0.6, direction, stats(),
+			data.can_hit_air, data.projectile_speed_tiles, range_px() - _barrel_length() * 0.6, data.color,
+			data.projectile_texture)
+		fired.emit(projectile)
 
 
 # --- Animación y dibujo (solo visual, spec §9.3) ---

@@ -1,0 +1,47 @@
+[gd_resource type="Resource" script_class="TowerData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tower_level_data.gd" id="1_6q6j5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/base_1.svg" id="2_ewixr"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/base_2.svg" id="3_cfjgc"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/base_3.svg" id="4_dkli2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/projectiles/burst.svg" id="5_or6m3"]
+[ext_resource type="Script" path="res://scripts/data/tower_data.gd" id="6_htfq5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/turret_burst.svg" id="7_fgkr5"]
+
+[sub_resource type="Resource" id="Resource_4ji27"]
+script = ExtResource("1_6q6j5")
+cost = 110
+damage = 8
+fire_rate = 0.6
+range_tiles = 2.0
+base_texture = ExtResource("2_ewixr")
+burst_count = 8
+
+[sub_resource type="Resource" id="Resource_42wxm"]
+script = ExtResource("1_6q6j5")
+cost = 100
+damage = 11
+fire_rate = 0.7
+range_tiles = 2.0
+base_texture = ExtResource("3_cfjgc")
+burst_count = 10
+
+[sub_resource type="Resource" id="Resource_7rjbn"]
+script = ExtResource("1_6q6j5")
+cost = 150
+damage = 15
+fire_rate = 0.8
+range_tiles = 2.5
+base_texture = ExtResource("4_dkli2")
+burst_count = 12
+
+[resource]
+script = ExtResource("6_htfq5")
+id = &"burst"
+display_name = "Ráfaga"
+description = "Lanza púas en círculo; rinde más en una curva. No le pega a los voladores."
+projectile_speed_tiles = 6.0
+color = Color(0.8, 0.3, 0.42, 1)
+turret_texture = ExtResource("7_fgkr5")
+projectile_texture = ExtResource("5_or6m3")
+levels = Array[ExtResource("1_6q6j5")]([SubResource("Resource_4ji27"), SubResource("Resource_42wxm"), SubResource("Resource_7rjbn")])

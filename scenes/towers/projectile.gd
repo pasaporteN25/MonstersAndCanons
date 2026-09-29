@@ -7,6 +7,8 @@ signal impacted(position: Vector2, stats: TowerLevelData)
 
 ## RF-153: lado del dibujo del proyectil, en píxeles.
 const SPRITE_SIZE_PX: float = 28.0
+## RF-162: una púa toca a un enemigo si pasa a menos de (su radio + este margen).
+const STRAIGHT_HIT_MARGIN_PX: float = 4.0
 
 var _target: Enemy
 var _target_pos: Vector2
@@ -17,6 +19,11 @@ var _speed_px: float = 0.0
 var _color: Color = Color.WHITE
 var _texture: Texture2D
 var _is_done: bool = false
+## RF-162: si no es cero, el proyectil va en LÍNEA RECTA en esa dirección (no persigue a nadie)
+## y golpea al primer enemigo que toca, o se pierde al recorrer `_max_distance`.
+var _direction := Vector2.ZERO
+var _max_distance: float = 0.0
+var _traveled: float = 0.0
 
 
 ## Se llama ANTES de agregar el proyectil al árbol.
@@ -34,6 +41,24 @@ func setup(target: Enemy, start_pos: Vector2, stats: TowerLevelData, can_hit_air
 	_texture = texture
 
 
+## RF-162: en vez de perseguir a un objetivo, sale en línea recta hacia `direction`.
+func setup_straight(start_pos: Vector2, direction: Vector2, stats: TowerLevelData, can_hit_air: bool,
+		speed_tiles: float, max_distance: float, color: Color, texture: Texture2D = null) -> void:
+	_start_pos = start_pos
+	_target_pos = start_pos + direction.normalized() * max_distance
+	_direction = direction.normalized()
+	_max_distance = max_distance
+	_stats = stats
+	_can_hit_air = can_hit_air
+	_speed_px = Rules.tiles_to_px(speed_tiles)
+	_color = color
+	_texture = texture
+
+
+func is_straight() -> bool:
+	return _direction != Vector2.ZERO
+
+
 func _ready() -> void:
 	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS  # D-023
 	global_position = _start_pos
@@ -42,6 +67,9 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	if _is_done:
+		return
+	if is_straight():
+		_move_straight(delta)
 		return
 	# RF-52: persigue al objetivo; si ya no existe, va al último lugar donde estaba.
 	if is_instance_valid(_target) and _target.is_active():
@@ -56,6 +84,34 @@ func _physics_process(delta: float) -> void:
 	else:
 		_face(_target_pos)
 		global_position = global_position.move_toward(_target_pos, step)
+
+
+## RF-162: avanza en línea recta; al tocar a un enemigo que puede golpear, impacta ahí.
+func _move_straight(delta: float) -> void:
+	var step: float = _speed_px * delta
+	global_position += _direction * step
+	_traveled += step
+	var touched: Enemy = _first_enemy_touching()
+	if touched != null:
+		_target = touched
+		_is_done = true
+		_impact()  # si además tiene área, explota ahí (RF-164: se combina)
+		impacted.emit(global_position, _stats)
+		queue_free()
+	elif _traveled >= _max_distance:
+		_is_done = true  # no tocó a nadie: se pierde
+		queue_free()
+
+
+func _first_enemy_touching() -> Enemy:
+	for node: Node in get_tree().get_nodes_in_group(Enemy.GROUP):
+		var enemy := node as Enemy
+		if not enemy.is_active() or (enemy.data.is_flying and not _can_hit_air):
+			continue
+		var reach: float = Rules.tiles_to_px(enemy.data.size_tiles) + STRAIGHT_HIT_MARGIN_PX
+		if enemy.global_position.distance_squared_to(global_position) <= reach * reach:
+			return enemy
+	return null
 
 
 func _impact() -> void:

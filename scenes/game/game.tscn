@@ -9,6 +9,7 @@
 [ext_resource type="Resource" path="res://data/towers/sniper.tres" id="14_sniper"]
 [ext_resource type="Resource" path="res://data/towers/fire.tres" id="16_fire"]
 [ext_resource type="Resource" path="res://data/towers/multi.tres" id="17_multi"]
+[ext_resource type="Resource" path="res://data/towers/burst.tres" id="18_burst"]
 [ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="15_pause"]
 [ext_resource type="Script" path="res://scripts/data/tower_data.gd" id="7_tower_data"]
 [ext_resource type="Script" path="res://scenes/game/build_controller.gd" id="8_build"]
@@ -22,7 +23,7 @@
 script = ExtResource("1_game")
 level_data = ExtResource("2_level")
 balance = ExtResource("3_balance")
-tower_types = Array[ExtResource("7_tower_data")]([ExtResource("4_basic"), ExtResource("5_cannon"), ExtResource("6_frost"), ExtResource("14_sniper"), ExtResource("16_fire"), ExtResource("17_multi")])
+tower_types = Array[ExtResource("7_tower_data")]([ExtResource("4_basic"), ExtResource("5_cannon"), ExtResource("6_frost"), ExtResource("14_sniper"), ExtResource("16_fire"), ExtResource("17_multi"), ExtResource("18_burst")])
 
 [node name="Towers" type="Node2D" parent="."]
 

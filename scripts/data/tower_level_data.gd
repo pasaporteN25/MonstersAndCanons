@@ -27,3 +27,5 @@ extends Resource
 @export var burn_duration: float = 0.0
 ## RF-161: a cuántos enemigos MÁS dispara a la vez (0 = a uno solo).
 @export var extra_targets: int = 0
+## RF-162: cuántas púas lanza en círculo, en línea recta (0 = dispara normal, a un objetivo).
+@export var burst_count: int = 0
