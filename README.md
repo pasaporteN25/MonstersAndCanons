@@ -1,8 +1,10 @@
 # JuegoA — Tower Defense
 
+[![Tests](https://github.com/pasaporteN25/TDv1/actions/workflows/tests.yml/badge.svg)](https://github.com/pasaporteN25/TDv1/actions/workflows/tests.yml)
+
 Juego *tower defense* 2D hecho en **Godot 4** con **GDScript**, construido con **SDD (Spec-Driven Development)**.
 
-> **Estado actual:** M1, M1.5, M2 y M3 ✅ (el "juego mediano" está terminado). En curso: versión Android de prueba (hito MA en [`specs/03-tareas.md`](specs/03-tareas.md)).
+> **Estado actual:** M1 a M6 ✅ (juego completo, 6 niveles, 8 torres, modo de pruebas y récords). Falta probar el APK en un celular (TA3, hito MA en [`specs/03-tareas.md`](specs/03-tareas.md)).
 >
 > **Versión de Godot:** 4.7.2 estable (renderizador *Compatibility*).
 >
@@ -130,6 +132,17 @@ Los dibujos del juego son archivos **SVG** en `assets/sprites/` (decisión D-023
 3. Los SVG **nuevos** se importan solos al doble y con *mipmaps* (`[importer_defaults]` en `project.godot`): no hay que tocar el panel Importar. Para agregar un enemigo o una torre nuevos, ver [`CONTENIDO.md`](CONTENIDO.md).
 
 Si a una torre o a un enemigo le falta el dibujo, el juego usa la forma geométrica de antes (RF-156): nunca se rompe por un archivo que falta.
+
+## Tests automáticos en GitHub
+
+Cada vez que se sube algo a `main` (o se abre un *pull request*), GitHub corre **todos los tests solo** (decisión D-030, [`.github/workflows/tests.yml`](.github/workflows/tests.yml)):
+
+1. Baja Godot 4.7.2 para Linux (la primera vez; después queda guardado).
+2. Importa el proyecto desde cero, como una computadora nueva.
+3. Revisa que compilen las herramientas de `tools/`.
+4. Corre los tests de GUT.
+
+**Cómo ver el resultado:** en GitHub, al lado de cada commit aparece ✅ (todo bien), ❌ (algo se rompió) o 🟡 (todavía corriendo). La pestaña **Actions** del repositorio muestra el detalle de cada corrida; si falla, el paso "Correr los tests" dice qué test y por qué. También se puede correr a mano: *Actions → Tests → Run workflow*. Si una corrida falla, GitHub avisa por mail.
 
 ## Herramientas
 

@@ -405,6 +405,8 @@ Ejecutar los tests por consola (requiere Godot en el `PATH`; la primera vez hay 
 godot --headless --path . -s addons/gut/gut_cmdln.gd -gdir=res://tests -gexit
 ```
 
+**En GitHub (D-030):** el workflow [`.github/workflows/tests.yml`](../.github/workflows/tests.yml) hace lo mismo en cada *push* a `main` y en cada *pull request*: baja Godot 4.7.2 para Linux (queda en caché), ejecuta `--import`, revisa con `--check-only` que compilen los scripts de `tools/` y corre GUT. Falla si algún test falla o si el registro tiene errores de script (GUT saltea sin avisar un test que no compila). El resultado se ve en la pestaña **Actions** del repositorio y como ✅/❌ al lado de cada commit.
+
 ---
 
 ## 9. Riesgos conocidos y cómo se evitan
