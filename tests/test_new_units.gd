@@ -31,7 +31,7 @@ func _spawn_through_wave(id: String) -> Enemy:
 # --- Francotirador (T34) ---
 
 func test_sniper_is_the_fourth_tower() -> void:
-	assert_eq(game.tower_types.size(), 4)
+	assert_gte(game.tower_types.size(), 4, "desde M5 hay más, pero el Francotirador sigue siendo la cuarta")
 	assert_eq(game.tower_types[3].id, &"sniper", "tecla 4")
 
 

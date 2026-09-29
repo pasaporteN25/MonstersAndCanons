@@ -7,6 +7,9 @@ class_name EnemyShape
 extends RefCounted
 
 const CROWN_COLOR := Color(1.0, 0.84, 0.3)
+## RF-158: llamitas del enemigo que se quema.
+const FLAME_OUTER := Color(1.0, 0.45, 0.1, 0.9)
+const FLAME_INNER := Color(1.0, 0.85, 0.3, 0.95)
 ## RF-151: lado del dibujo comparado con el radio del enemigo. Con 2.8, el cuerpo del dibujo
 ## (unas 20 de sus 64 unidades de radio) mide lo mismo que el círculo de antes.
 const SPRITE_SCALE: float = 2.8
@@ -96,3 +99,21 @@ static func _draw_regular_polygon(canvas: CanvasItem, sides: int, radius: float,
 	canvas.draw_colored_polygon(points, fill)
 	points.append(points[0])
 	canvas.draw_polyline(points, outline, 2.0)
+
+
+## RF-158: tres llamitas sobre el cuerpo, que titilan con el tiempo (`time`, en segundos).
+static func draw_flames(canvas: CanvasItem, radius: float, time: float) -> void:
+	var spots: Array[Vector2] = [Vector2(-0.45, -0.1), Vector2(0.05, -0.5), Vector2(0.5, -0.05)]
+	for i: int in spots.size():
+		var base: Vector2 = spots[i] * radius
+		var height: float = radius * (0.6 + 0.14 * sin(time * 17.0 + i * 2.1))
+		_flame(canvas, base, radius * 0.22, height, FLAME_OUTER)
+		_flame(canvas, base, radius * 0.11, height * 0.6, FLAME_INNER)
+
+
+static func _flame(canvas: CanvasItem, base: Vector2, half_width: float, height: float, color: Color) -> void:
+	canvas.draw_colored_polygon(PackedVector2Array([
+		base + Vector2(-half_width, 0), base + Vector2(-half_width * 0.8, -height * 0.45),
+		base + Vector2(0, -height), base + Vector2(half_width * 0.8, -height * 0.45),
+		base + Vector2(half_width, 0), base + Vector2(0, half_width * 0.6),
+	]), color)

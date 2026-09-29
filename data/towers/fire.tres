@@ -1,0 +1,51 @@
+[gd_resource type="Resource" script_class="TowerData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tower_level_data.gd" id="1_ux3rd"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/base_1.svg" id="2_ccb5i"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/base_2.svg" id="3_7xfws"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/base_3.svg" id="4_8dkqa"]
+[ext_resource type="Texture2D" path="res://assets/sprites/projectiles/fire.svg" id="5_oerir"]
+[ext_resource type="Script" path="res://scripts/data/tower_data.gd" id="6_ismkl"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/turret_fire.svg" id="7_h3prr"]
+
+[sub_resource type="Resource" id="Resource_fpdyk"]
+script = ExtResource("1_ux3rd")
+cost = 90
+damage = 3
+fire_rate = 1.0
+range_tiles = 2.5
+base_texture = ExtResource("2_ccb5i")
+burn_damage_per_second = 6
+burn_duration = 3.0
+
+[sub_resource type="Resource" id="Resource_6mh51"]
+script = ExtResource("1_ux3rd")
+cost = 90
+damage = 4
+fire_rate = 1.0
+range_tiles = 2.5
+base_texture = ExtResource("3_7xfws")
+burn_damage_per_second = 10
+burn_duration = 3.0
+
+[sub_resource type="Resource" id="Resource_rwmyv"]
+script = ExtResource("1_ux3rd")
+cost = 140
+damage = 6
+fire_rate = 1.0
+range_tiles = 3.0
+base_texture = ExtResource("4_8dkqa")
+burn_damage_per_second = 16
+burn_duration = 4.0
+
+[resource]
+script = ExtResource("6_ismkl")
+id = &"fire"
+display_name = "Incendiaria"
+description = "Prende fuego a los enemigos: el fuego ignora la armadura y no los deja curarse."
+can_hit_air = true
+projectile_speed_tiles = 10.0
+color = Color(0.89, 0.44, 0.16, 1)
+turret_texture = ExtResource("7_h3prr")
+projectile_texture = ExtResource("5_oerir")
+levels = Array[ExtResource("1_ux3rd")]([SubResource("Resource_fpdyk"), SubResource("Resource_6mh51"), SubResource("Resource_rwmyv")])

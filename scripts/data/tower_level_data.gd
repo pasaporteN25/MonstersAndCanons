@@ -18,3 +18,10 @@ extends Resource
 @export var slow_duration: float = 0.0
 ## Solo visual (RF-150): la base que se ve en este nivel. Vacío = cuadrado de color (RF-156).
 @export var base_texture: Texture2D
+
+# --- Comportamientos (M5, RF-164). Todos valen 0 = apagado, y se pueden combinar. ---
+
+## RF-160: daño de quemadura por segundo (ignora la armadura). 0 = no quema.
+@export var burn_damage_per_second: int = 0
+## RF-160: segundos que dura la quemadura.
+@export var burn_duration: float = 0.0

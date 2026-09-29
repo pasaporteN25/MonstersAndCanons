@@ -4,6 +4,7 @@
 #
 # Uso (desde la carpeta del proyecto):
 #   godot --headless --path . -s tools/make_sounds.gd
+#   godot --headless --path . -s tools/make_sounds.gd -- shot_fire shot_tesla   (solo esos)
 #
 # Escribe los .wav en assets/audio/. Para cambiar un sonido por uno mejor,
 # basta con reemplazar el .wav con el mismo nombre.
@@ -18,14 +19,21 @@ const OUT_DIR: String = "res://assets/audio/"
 
 enum Wave { SINE, SQUARE, TRIANGLE, NOISE }
 
+## Si se pasan nombres después de `--`, solo se escriben esos sonidos (los demás no se tocan).
+var _only: PackedStringArray = []
+
 
 func _init() -> void:
+	_only = OS.get_cmdline_user_args()
+	seed(20260929)  # el ruido sale siempre igual: regenerar no cambia los archivos
 	DirAccess.make_dir_recursive_absolute(OUT_DIR)
 	# --- Disparos (uno por torre) ---
 	_save("shot_basic", _tone(Wave.SQUARE, 900.0, 600.0, 0.05, 0.25))
 	_save("shot_cannon", _mix([_tone(Wave.SINE, 130.0, 55.0, 0.28, 0.7), _tone(Wave.NOISE, 0.0, 0.0, 0.18, 0.35)]))
 	_save("shot_frost", _mix([_tone(Wave.SINE, 1400.0, 1300.0, 0.16, 0.25), _tone(Wave.SINE, 2100.0, 2000.0, 0.12, 0.15)]))
 	_save("shot_sniper", _mix([_tone(Wave.NOISE, 0.0, 0.0, 0.07, 0.5), _tone(Wave.SQUARE, 320.0, 160.0, 0.1, 0.3)]))
+	# M5: soplido de fuego (ruido que se apaga) con un tono grave.
+	_save("shot_fire", _mix([_tone(Wave.NOISE, 0.0, 0.0, 0.22, 0.35), _tone(Wave.TRIANGLE, 220.0, 140.0, 0.18, 0.3)]))
 	# --- Partida ---
 	_save("enemy_death", _mix([_tone(Wave.SINE, 520.0, 180.0, 0.13, 0.45), _tone(Wave.NOISE, 0.0, 0.0, 0.06, 0.2)]))
 	_save("life_lost", _tone(Wave.SQUARE, 190.0, 110.0, 0.28, 0.35))
@@ -111,6 +119,8 @@ func _music() -> PackedFloat32Array:
 # --- Guardar como .wav de 16 bits ---
 
 func _save(file_name: String, samples: PackedFloat32Array, loop: bool = false) -> void:
+	if not _only.is_empty() and not _only.has(file_name):
+		return
 	var bytes := PackedByteArray()
 	bytes.resize(samples.size() * 2)
 	for i: int in samples.size():

@@ -28,6 +28,8 @@ const HIT_FLASH_COLOR := Color(1, 1, 1, 0.85)
 const SLOW_MODULATE := Color(0.62, 0.85, 1.0)
 ## RF-152: mancha de escarcha en el piso, debajo del enemigo ralentizado.
 const FROST_PATCH := Color(0.82, 0.95, 1.0, 0.55)
+## RF-160: la quemadura hace daño de a golpecitos, uno cada BURN_TICK segundos.
+const BURN_TICK: float = 0.5
 
 var data: EnemyData
 var max_health: int = 0
@@ -38,6 +40,10 @@ var distance: float = 0.0
 var _path: Path2D
 var _slow_amount: float = 0.0
 var _slow_left: float = 0.0
+## RF-160: quemadura en curso (daño por segundo y segundos que le quedan).
+var _burn_dps: int = 0
+var _burn_left: float = 0.0
+var _burn_tick_left: float = 0.0
 ## Evita actuar dos veces: tras queue_free() el nodo sigue vivo hasta el final del frame.
 var _is_done: bool = false
 # Solo visual (spec §9.3):
@@ -72,6 +78,9 @@ func _physics_process(delta: float) -> void:
 	if _is_done:
 		return
 	_update_slow(delta)
+	_update_burn(delta)
+	if _is_done:
+		return  # la quemadura lo mató
 	distance += Rules.tiles_to_px(current_speed_tiles()) * delta
 	_update_position()
 	_animate(delta)
@@ -115,16 +124,52 @@ func take_hit(damage: int, slow_amount: float = 0.0, slow_duration: float = 0.0)
 	if _is_done:
 		return
 	var dealt: int = Rules.damage_after_armor(damage, data.armor)
-	health = maxi(0, health - dealt)
 	_hit_flash_left = HIT_FLASH_DURATION
-	hit.emit(self, dealt, dealt * 2 <= damage)
 	if slow_amount > 0.0:
 		_apply_slow(Rules.effective_slow(slow_amount, data.slow_resistance), slow_duration)
+	_lose_health(dealt, dealt * 2 <= damage)
+
+
+## RF-160: lo prende fuego. No se suma: queda la más fuerte y el tiempo se reinicia.
+func apply_burn(damage_per_second: int, duration: float) -> void:
+	if _is_done or damage_per_second <= 0 or duration <= 0.0:
+		return
+	if not is_burning():
+		_burn_tick_left = BURN_TICK  # el primer golpecito, dentro de medio segundo
+	_burn_dps = maxi(_burn_dps, damage_per_second)
+	_burn_left = duration
+	queue_redraw()
+
+
+func is_burning() -> bool:
+	return _burn_left > 0.0
+
+
+## Resta vida, avisa (números de daño, RF-132) y, si llega a 0, muere (RF-81).
+func _lose_health(amount: int, armor_blocked_most: bool) -> void:
+	health = maxi(0, health - amount)
+	hit.emit(self, amount, armor_blocked_most)
 	queue_redraw()
 	if health == 0:
 		_is_done = true
 		died.emit(self)
 		queue_free()
+
+
+## RF-160: cada BURN_TICK segundos, un golpecito que ignora la armadura.
+func _update_burn(delta: float) -> void:
+	if not is_burning():
+		return
+	var elapsed: float = minf(delta, _burn_left)
+	_burn_left -= delta
+	_burn_tick_left -= elapsed
+	while _burn_tick_left <= 0.0001 and not _is_done:
+		_burn_tick_left += BURN_TICK
+		_lose_health(maxi(1, roundi(_burn_dps * BURN_TICK)), false)
+	if _burn_left <= 0.0001:  # margen: sumar muchos deltas deja restos diminutos
+		_burn_left = 0.0
+		_burn_dps = 0
+		queue_redraw()
 
 
 ## RF-61: las ralentizaciones no se suman; queda la más fuerte y la duración se reinicia.
@@ -208,6 +253,8 @@ func _draw() -> void:
 		var pointy: bool = data.shape == EnemyData.Shape.TRIANGLE or data.shape == EnemyData.Shape.DIAMOND
 		draw_set_transform(bob, _heading + PI / 2.0 if pointy else 0.0, squash)
 		EnemyShape.draw(self, data.shape, r, fill, fill.darkened(0.45))
+	if is_burning():
+		EnemyShape.draw_flames(self, r, _anim_time)  # RF-158 (se mueven con el bamboleo)
 	draw_set_transform(Vector2.ZERO)
 	var bar_top: float = -top - HEALTH_BAR_HEIGHT - 4.0
 	if is_health_bar_visible():

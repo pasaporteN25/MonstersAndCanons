@@ -37,6 +37,13 @@ window/handheld/orientation=4
 
 enabled=PackedStringArray("res://addons/gut/plugin.cfg")
 
+[importer_defaults]
+
+texture={
+"mipmaps/generate": true,
+"svg/scale": 2.0
+}
+
 [input]
 
 build_1={

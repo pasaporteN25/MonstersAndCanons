@@ -77,6 +77,8 @@ func _impact() -> void:
 
 func _hit(enemy: Enemy) -> void:
 	enemy.take_hit(_stats.damage, _stats.slow_amount, _stats.slow_duration)
+	if _stats.burn_damage_per_second > 0:
+		enemy.apply_burn(_stats.burn_damage_per_second, _stats.burn_duration)  # RF-160
 
 
 ## RF-153: gira el proyectil (y su dibujo) hacia donde viaja. Solo visual.

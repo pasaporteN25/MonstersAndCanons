@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Incendiaria: cuerpo naranja con tanque de combustible y boquilla ancha.
+       Apunta a la derecha; gira sobre el centro (32, 32). -->
+  <g stroke="#2b2233" stroke-linejoin="round">
+    <rect x="9" y="22" width="13" height="20" rx="4" fill="#8f3a14" stroke-width="2.2"/>
+    <path d="M34 27 L51 28.5 L57 24.5 L60 24.5 L60 39.5 L57 39.5 L51 35.5 L34 37 Z" fill="#4a4d54" stroke-width="2"/>
+    <circle cx="32" cy="32" r="13" fill="#e2702a" stroke-width="2.5"/>
+  </g>
+  <g stroke="#5e2410" stroke-width="2" stroke-linecap="round">
+    <line x1="15.5" y1="23" x2="15.5" y2="41"/>
+  </g>
+  <line x1="51" y1="29.5" x2="51" y2="34.5" stroke="#2b2f35" stroke-width="1.6"/>
+  <circle cx="32" cy="32" r="7.5" fill="#b84f1c" stroke="#2b2233" stroke-width="1.5"/>
+  <path d="M32 26 C28.8 29.8 29.3 34 32 36.2 C34.7 34 35.2 29.8 32 26 Z" fill="#ffd54a" stroke="#8f2418" stroke-width="1"/>
+  <ellipse cx="26.5" cy="25" rx="4" ry="2" fill="#ffffff" opacity="0.4"/>
+  <path d="M60.5 32 C62.3 29.8 63.6 30.8 63.6 32 C63.6 33.2 62.3 34.2 60.5 32 Z" fill="#ffb347"/>
+</svg>

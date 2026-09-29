@@ -9,6 +9,7 @@ const GOLD_COLOR := Color(1.0, 0.84, 0.3)
 const SPARK_COLOR := Color(1.0, 0.95, 0.6)
 const FROST_COLOR := Color(0.7, 0.92, 1.0)
 const SHOCKWAVE_COLOR := Color(1.0, 0.75, 0.4)
+const FIRE_COLOR := Color(1.0, 0.5, 0.15)
 ## RF-132: números de daño.
 const DAMAGE_COLOR := Color(1, 1, 1)
 const DAMAGE_BLOCKED_COLOR := Color(0.62, 0.62, 0.66)  # la armadura se comió el golpe
@@ -52,6 +53,8 @@ func projectile_impacted(position_: Vector2, stats: TowerLevelData) -> void:
 		var radius: float = Rules.tiles_to_px(stats.splash_radius_tiles)
 		_add(RingEffect.new().setup(Color(SHOCKWAVE_COLOR, 0.25), 6.0, radius, 0.3), position_)
 		_add(RingEffect.new().setup(SHOCKWAVE_COLOR, 6.0, radius, 0.3, 3.0), position_)
+	elif stats.burn_damage_per_second > 0:
+		_add(RingEffect.new().setup(Color(FIRE_COLOR, 0.8), 4.0, 18.0, 0.22, 3.0), position_)
 	elif stats.slow_amount > 0.0:
 		_add(RingEffect.new().setup(Color(FROST_COLOR, 0.6), 4.0, 22.0, 0.25), position_)
 	else:
