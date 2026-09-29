@@ -630,10 +630,11 @@
   **Hecho cuando:** los tests comprueban que cada artículo oficial se lee sin errores, que uno roto da su motivo sin impedir los demás, el orden y que los ids no se repiten.
   **Resultado:** `Wiki.parse_article` y `Wiki.articles(carpeta)` (un artículo roto se salta y deja su motivo; los tests exigen que los oficiales no tengan errores). 7 artículos en [`data/wiki/`](../data/wiki/): cómo se juega, construir/mejorar/vender, enemigos especiales, armadura y daño, efectos, puntos y estrellas, teclas. No repiten números de los datos (un test lo vigila). Dos detalles que mordieron: comparar `StringName` con `<` **no** ordena alfabéticamente (se usa `String(a) < String(b)`) y un `2` de JSON llega como `2.0` (se muestra "2"). 18 tests nuevos.
 
-- [ ] **T112 · La pantalla Wiki y el botón del menú**
+- [x] **T112 · La pantalla Wiki y el botón del menú**
   `WikiScreen` (solapas, lista, detalle con desplazamiento), `WikiIcon`, `GameFlow.go_to_wiki()` y el botón "Wiki".
   **Refs:** RF-230, RF-231, RF-232.
   **Hecho cuando:** los tests comprueban las solapas, elegir una entrada y ver su detalle, el teclado, que la categoría vacía no se muestra y que el botón del menú existe; las capturas muestran un enemigo, una torre y un artículo, y el menú con el botón nuevo.
+  **Resultado:** [`wiki_screen.gd`](../scenes/ui/wiki_screen.gd) (solapas, lista con dibujo y nombre, detalle con desplazamiento; ◄/► cambian de categoría, ▲/▼ recorren la lista y al pasar se ve el detalle; Esc y Volver salen) y [`wiki_icon.gd`](../scenes/ui/wiki_icon.gd) (dibuja las capas). La pantalla solo dibuja bloques: no sabe qué es un enemigo. `show_target(categoría, entrada)` deja listo el enlace desde otros lados (B-15). `GameFlow.go_to_wiki()` y el botón "Wiki" entre Récords y Opciones. Las capturas mostraron dos cosas que se arreglaron: títulos largos que se cortaban en la lista (ahora llevan puntos suspensivos) y el texto pegado al borde del panel. 14 tests nuevos (530 en total).
 
 - [ ] **T113 · Cierre de M11: documentación y exportaciones**
   README, ONBOARDING, CONTENIDO.md (cómo escribir un artículo y qué se agrega solo); exportar los cuatro ejecutables.

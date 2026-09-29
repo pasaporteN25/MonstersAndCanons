@@ -7,6 +7,7 @@ const MAIN_MENU_SCENE: String = "res://scenes/ui/main_menu.tscn"
 const LEVEL_SELECT_SCENE: String = "res://scenes/ui/level_select.tscn"
 const GAME_SCENE: String = "res://scenes/game/game.tscn"
 const RECORDS_SCENE: String = "res://scenes/ui/records_screen.tscn"
+const WIKI_SCENE: String = "res://scenes/ui/wiki_screen.tscn"
 const EDITOR_SCENE: String = "res://scenes/editor/map_editor.tscn"
 
 ## Índice del nivel de la campaña que se está jugando.
@@ -258,3 +259,11 @@ func go_to_records() -> void:
 	test_level = null
 	current_community = null
 	get_tree().change_scene_to_file(RECORDS_SCENE)
+
+
+## RF-230: la wiki.
+func go_to_wiki() -> void:
+	current_index = -1
+	test_level = null
+	current_community = null
+	get_tree().change_scene_to_file(WIKI_SCENE)
