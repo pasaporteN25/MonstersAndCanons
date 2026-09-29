@@ -138,7 +138,7 @@ Además, el menú principal de este ejecutable tiene el botón **"Editor de mapa
 
 ### 6.1.0 La Wiki (en todas las versiones)
 
-Menú principal → **Wiki**. Comprobá que hay tres solapas (Enemigos, Torres, Guía), que cada enemigo y cada torre tienen su dibujo y sus números, y que se puede recorrer con el mouse y con el teclado (▲/▼ entre entradas, ◄/► entre solapas, Esc para volver). Un enemigo o una torre nuevos deberían aparecer sin tocar nada más; los artículos de la Guía están en `data/wiki/*.json` ([`CONTENIDO.md`](CONTENIDO.md)).
+Menú principal → **Wiki**. Comprobá que hay tres solapas (Enemigos, Torres, Guía), que cada enemigo y cada torre tienen su dibujo y sus números, y que se puede recorrer con el mouse y con el teclado (▲/▼ entre entradas, ◄/► entre solapas, Esc para volver). Los enemigos que todavía no viste en una partida salen como "???" (con el contador "Enemigos 4/9"): en el `.exe` normal empiezan cerrados y se abren al cruzártelos; en el de pruebas se ve todo. Un enemigo o una torre nuevos deberían aparecer sin tocar nada más; los artículos de la Guía están en `data/wiki/*.json` ([`CONTENIDO.md`](CONTENIDO.md)).
 
 ### 6.1.1 Mapas de la comunidad (en todas las versiones)
 

@@ -129,7 +129,7 @@ godot --headless --path . --export-release "Windows (pruebas)" build/JuegoA_prue
 
 ## Wiki
 
-El botón **Wiki** del menú principal abre una enciclopedia: **Enemigos** y **Torres** (con sus números reales, la tabla de niveles y dónde aparece cada enemigo) y una **Guía** con las reglas. Un enemigo o una torre nuevos aparecen solos; los artículos de la guía son archivos de texto en `data/wiki/`. Cómo escribirlos: [`CONTENIDO.md`](CONTENIDO.md).
+El botón **Wiki** del menú principal abre una enciclopedia: **Enemigos** (un bestiario: cada uno aparece como "???" hasta que lo ves en una partida; en la versión de pruebas se ve todo) y **Torres** (con sus números reales, la tabla de niveles y dónde aparece cada enemigo) y una **Guía** con las reglas. Un enemigo o una torre nuevos aparecen solos; los artículos de la guía son archivos de texto en `data/wiki/`. Cómo escribirlos: [`CONTENIDO.md`](CONTENIDO.md).
 
 ## Mapas de la comunidad
 

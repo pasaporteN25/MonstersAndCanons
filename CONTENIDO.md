@@ -269,7 +269,7 @@ La **Wiki** (menú principal) tiene tres categorías:
 
 | Categoría | De dónde sale | Qué hay que hacer |
 |---|---|---|
-| **Enemigos** | Un `.tres` de `data/enemies/` | Nada: se agrega sola, ordenada de más débil a más fuerte. Los números salen del `.tres` y "dónde aparece" sale de la campaña. |
+| **Enemigos** | Un `.tres` de `data/enemies/` | Nada: se agrega sola, ordenada de más débil a más fuerte. Los números salen del `.tres` y "dónde aparece" sale de la campaña. Es un **bestiario**: cada enemigo aparece "???" (en silueta) hasta que el jugador lo ve en una partida; el enemigo nuevo queda cerrado para todos hasta que se lo cruzan. |
 | **Torres** | Un `.tres` de `data/towers/` | Nada: se agrega sola, de la más barata a la más cara. |
 | **Guía** | Un `.json` de `data/wiki/` | Escribir el artículo (abajo). |
 

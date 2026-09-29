@@ -652,7 +652,8 @@
   **Hecho cuando:** los tests comprueban que un enemigo no visto está cerrado y **su texto no contiene ningún dato real**, que uno visto está abierto, que torres y Guía nunca se cierran, que el orden no cambia, el contador, que en modo de pruebas todo está abierto, y que ver un enemigo en una partida lo abre en la wiki; las capturas muestran la lista con "???" y la entrada cerrada.
   **Resultado:** `WikiEntry.locked`, `Wiki.locked_enemy_entry()` (solo lleva el id, el dibujo y el aviso: **ni el nombre ni los datos existen** en la entrada cerrada, así la pantalla no puede filtrarlos; un test lo comprueba para los 9 enemigos), `Wiki.categories(campaña, ¿lo vio?)`, `WikiCategory.unlocked_count()`. La pantalla pinta la silueta (`WikiIcon`), pone el contador "Enemigos 4/9" mientras falte alguno y usa `SaveManager.has_seen_enemy` (o todo abierto si `DevMode.enabled`). **No hubo que guardar nada nuevo:** el juego ya anotaba cada enemigo visto (RF-134). 11 tests nuevos (541 en total).
 
-- [ ] **T115 · Cierre de M12: documentación y exportaciones**
+- [x] **T115 · Cierre de M12: documentación y exportaciones**
   README, ONBOARDING, CONTENIDO.md; exportar los cuatro ejecutables.
   **Refs:** D-036.
   **Hecho cuando:** pasan todos los tests y las exportaciones se comprueban.
+  **Resultado:** README, ONBOARDING y CONTENIDO.md al día. Se exportaron los cuatro. **Comprobación con el paquete exportado del juego normal** (cargado con el Godot de desarrollo): la wiki leyó el guardado real de Lucas y mostró "Enemigos 6/9", con los tres no vistos en silueta. **Un tropiezo:** `JuegoA_pruebas.exe` estaba abierto (Lucas probando el editor) y Windows no deja reemplazar un programa en uso; **no se cerró**: la versión nueva quedó en `build/JuegoA_pruebas_nuevo.exe`.
