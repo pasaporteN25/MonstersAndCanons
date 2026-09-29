@@ -500,10 +500,11 @@
 
 ## M7 — Niveles en archivos de texto *(pedido por Lucas, B-04 escalón 1, D-031)*
 
-- [ ] **T93 · Leer el mapa de letras (`MapGrid`)**
+- [x] **T93 · Leer el mapa de letras (`MapGrid`)**
   Clase pura que lee las 9 filas de 20 letras: tipo de cada casilla, entradas (`A`, `B`…), salida (`S`) y el recorrido más corto de cada entrada, con sus esquinas. Errores en castellano.
   **Refs:** RF-201, RF-202, RF-204.
   **Hecho cuando:** los tests comprueban las letras, el recorrido más corto con uniones (como el nivel 6), que un empate es un error, y cada error del mapa (tamaño, letra desconocida, sin salida, dos salidas, entrada sin camino, letra salteada, sin pasto).
+  **Resultado:** [`map_grid.gd`](../scripts/logic/map_grid.gd): primero mide, desde la salida, cuántos pasos hay de cada casilla de camino a la salida; después cada entrada avanza siempre a la vecina un paso más cerca (si hay dos, es un empate). Los mensajes dicen fila y columna contadas desde 1, como el Bloc de notas. Se admiten hasta 8 entradas (`A` a `H`). 12 tests.
 
 - [ ] **T94 · Leer el archivo del nivel (`LevelFile`) y armar el mapa al vuelo**
   `LevelFile` lee el JSON y devuelve un `LevelData` (con sus oleadas) o la lista de errores. `Level.build()` arma el `TileMapLayer`, los caminos (terrestre y aéreo) y la decoración a partir del `MapGrid`. `LevelData.build_map()`.
