@@ -50,7 +50,7 @@ func _ready() -> void:
 	if campaign_level != null:
 		level_data = campaign_level
 
-	level = level_data.map_scene.instantiate()
+	level = level_data.build_map()
 	level.position = MAP_OFFSET
 	add_child(level)
 	move_child(level, 0)  # primero en la lista = se dibuja debajo de todo

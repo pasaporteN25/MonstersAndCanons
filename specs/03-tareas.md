@@ -507,10 +507,11 @@
   **Hecho cuando:** los tests comprueban las letras, el recorrido más corto con uniones (como el nivel 6), que un empate es un error, y cada error del mapa (tamaño, letra desconocida, sin salida, dos salidas, entrada sin camino, letra salteada, sin pasto).
   **Resultado:** [`map_grid.gd`](../scripts/logic/map_grid.gd): primero mide, desde la salida, cuántos pasos hay de cada casilla de camino a la salida; después cada entrada avanza siempre a la vecina un paso más cerca (si hay dos, es un empate). Los mensajes dicen fila y columna contadas desde 1, como el Bloc de notas. Se admiten hasta 8 entradas (`A` a `H`). 12 tests.
 
-- [ ] **T94 · Leer el archivo del nivel (`LevelFile`) y armar el mapa al vuelo**
+- [x] **T94 · Leer el archivo del nivel (`LevelFile`) y armar el mapa al vuelo**
   `LevelFile` lee el JSON y devuelve un `LevelData` (con sus oleadas) o la lista de errores. `Level.build()` arma el `TileMapLayer`, los caminos (terrestre y aéreo) y la decoración a partir del `MapGrid`. `LevelData.build_map()`.
   **Refs:** RF-200, RF-203, RF-204.
   **Hecho cuando:** los tests leen un nivel de ejemplo, comprueban cada error de datos (clave mal escrita, enemigo que no existe, entrada que el mapa no tiene, números fuera de rango, JSON roto) y que el mapa armado tiene las casillas y los caminos esperados.
+  **Resultado:** [`level_file.gd`](../scripts/logic/level_file.gd) y `Level.build()` / `Level.route_curve()`. El mapa del nivel 6 armado desde las letras da **los mismos puntos** que `level_06.tscn` (sin los puntos intermedios que no son esquinas). La partida y el fondo del menú ya usan `LevelData.build_map()`, que sigue aceptando la escena vieja hasta T96. Un nombre de enemigo solo puede tener minúsculas, números y `_` (no puede apuntar a otra carpeta). El test de la campaña pasó a T95, porque necesita los archivos de los niveles. 13 tests.
 
 - [ ] **T95 · Pasar los 6 niveles y la campaña a JSON**
   Herramienta de conversión desde los `.tscn`/`.tres` actuales; `data/campaign.json`; `GameFlow`, la partida, el fondo del menú, el bot y los tests usan los archivos nuevos.

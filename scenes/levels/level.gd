@@ -9,9 +9,84 @@ extends Node2D
 const ATLAS_GRASS := Vector2i(0, 0)
 const ATLAS_PATH := Vector2i(1, 0)
 const ATLAS_BLOCKED := Vector2i(2, 0)
+const TILESET: TileSet = preload("res://assets/tiles/tileset.tres")
+const ATLAS_OF: Dictionary = {
+	MapGrid.Cell.GRASS: ATLAS_GRASS, MapGrid.Cell.PATH: ATLAS_PATH, MapGrid.Cell.BLOCKED: ATLAS_BLOCKED,
+}
 
 @onready var ground: TileMapLayer = $Ground
 @onready var entrances: Node2D = $Entrances
+
+
+## M7 (spec §7.8): arma el mapa a partir del mapa de letras (que tiene que ser válido):
+## el suelo, un camino terrestre y uno aéreo por entrada, y la decoración.
+static func build(grid: MapGrid) -> Level:
+	assert(grid.is_valid(), "Level.build necesita un mapa válido")
+	var level := Level.new()
+	level.name = "Level"
+	var ground := TileMapLayer.new()
+	ground.name = "Ground"
+	ground.tile_set = TILESET
+	for y: int in MapGrid.HEIGHT:
+		for x: int in MapGrid.WIDTH:
+			var cell := Vector2i(x, y)
+			ground.set_cell(cell, 0, ATLAS_OF[grid.cell_type(cell)])
+	level.add_child(ground)
+	var entrances_node := Node2D.new()
+	entrances_node.name = "Entrances"
+	level.add_child(entrances_node)
+	for i: int in grid.entrances.size():
+		var ground_path := Path2D.new()
+		ground_path.name = "GroundPath%d" % i
+		ground_path.curve = route_curve(grid, i)
+		entrances_node.add_child(ground_path)
+		# RF-05: los voladores van en línea recta del primer punto al último.
+		var air := Path2D.new()
+		air.name = "AirPath%d" % i
+		air.curve = Curve2D.new()
+		air.curve.add_point(ground_path.curve.get_point_position(0))
+		air.curve.add_point(ground_path.curve.get_point_position(ground_path.curve.point_count - 1))
+		entrances_node.add_child(air)
+	var decor := LevelDecor.new()
+	decor.name = "Decor"
+	level.add_child(decor)
+	return level
+
+
+## Curva que siguen los enemigos terrestres de una entrada: los centros de las esquinas del
+## recorrido. Si la entrada (o la salida) está en el borde, ese punto se corre una casilla
+## hacia afuera: el enemigo entra (o sale) desde fuera del mapa. Si la salida está adentro,
+## termina justo en el centro de esa casilla, donde se dibuja la puerta (RF-06).
+static func route_curve(grid: MapGrid, entrance_index: int) -> Curve2D:
+	var corners: Array[Vector2i] = grid.corners(entrance_index)
+	var first: Vector2i = corners[0]
+	var last: Vector2i = corners[corners.size() - 1]
+	var curve := Curve2D.new()
+	for i: int in corners.size():
+		var point: Vector2 = _center(corners[i])
+		if i == 0 and grid.is_on_border(first):
+			point += Vector2(_outward(grid, first, first - corners[1])) * Rules.TILE_SIZE
+		elif i == corners.size() - 1 and grid.is_on_border(last):
+			point += Vector2(_outward(grid, last, last - corners[i - 1])) * Rules.TILE_SIZE
+		curve.add_point(point)
+	return curve
+
+
+## Hacia dónde queda "afuera" de una casilla del borde. Primero se prueba seguir derecho
+## (`along`: la dirección del recorrido en ese extremo); si eso no sale del mapa (por ejemplo,
+## un camino que corre pegado al borde), se usa el lado del borde.
+static func _outward(grid: MapGrid, cell: Vector2i, along: Vector2i) -> Vector2i:
+	var dir := Vector2i(signi(along.x), signi(along.y))
+	if not grid.is_inside(cell + dir):
+		return dir
+	for side: Vector2i in MapGrid.NEIGHBORS:
+		if not grid.is_inside(cell + side):
+			return side
+	return dir
+
+
+static func _center(cell: Vector2i) -> Vector2:
+	return (Vector2(cell) + Vector2(0.5, 0.5)) * Rules.TILE_SIZE
 
 
 func _ready() -> void:
