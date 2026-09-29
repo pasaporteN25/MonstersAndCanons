@@ -244,3 +244,87 @@ func test_find_enemy_only_accepts_plain_names() -> void:
 	assert_null(LevelFile.find_enemy("../towers/basic"))
 	assert_null(LevelFile.find_enemy("no_existe"))
 	assert_null(LevelFile.find_enemy(""))
+
+
+# --- Límites (RF-223): un archivo ajeno no puede colgar el juego ---
+
+## El ejemplo con un cambio, y el error que tiene que dar (o "" si tiene que ser válido).
+func _limit(edit: Callable, expected_error: String) -> void:
+	var result: Dictionary = _parse(_nest_with(edit))
+	if expected_error == "":
+		assert_not_null(result["level"], "en el borde es válido: " + str(result["errors"]))
+	else:
+		assert_null(result["level"], "pasado del borde: " + expected_error)
+		assert_true(" | ".join(result["errors"]).contains(expected_error), "dice '%s': %s" % [expected_error, result["errors"]])
+
+
+func test_gold_limit() -> void:
+	_limit(func(d: Dictionary) -> void: d["oro"] = LevelFile.MAX_GOLD, "")
+	_limit(func(d: Dictionary) -> void: d["oro"] = LevelFile.MAX_GOLD + 1, "\"oro\" tiene que ser 99999 o menos")
+
+
+func test_lives_limit() -> void:
+	_limit(func(d: Dictionary) -> void: d["vidas"] = LevelFile.MAX_LIVES, "")
+	_limit(func(d: Dictionary) -> void: d["vidas"] = LevelFile.MAX_LIVES + 1, "\"vidas\" tiene que ser 999 o menos")
+
+
+func test_health_scale_limit() -> void:
+	_limit(func(d: Dictionary) -> void: d["aumento_vida"] = LevelFile.MAX_HEALTH_SCALE, "")
+	_limit(func(d: Dictionary) -> void: d["aumento_vida"] = LevelFile.MAX_HEALTH_SCALE + 1, "\"aumento_vida\" tiene que ser 300 o menos")
+
+
+func test_name_limit() -> void:
+	_limit(func(d: Dictionary) -> void: d["nombre"] = "a".repeat(LevelFile.MAX_NAME_LENGTH), "")
+	_limit(func(d: Dictionary) -> void: d["nombre"] = "a".repeat(LevelFile.MAX_NAME_LENGTH + 1), "El nombre tiene 31 letras")
+
+
+func test_count_limit() -> void:
+	_limit(func(d: Dictionary) -> void: d["oleadas"][0][0]["cantidad"] = LevelFile.MAX_COUNT, "")
+	_limit(func(d: Dictionary) -> void: d["oleadas"][0][0]["cantidad"] = LevelFile.MAX_COUNT + 1,
+		"oleada 1, grupo 1: \"cantidad\" tiene que ser 999 o menos")
+
+
+func test_seconds_limits() -> void:
+	_limit(func(d: Dictionary) -> void: d["oleadas"][0][0]["cada"] = LevelFile.MAX_EVERY, "")
+	_limit(func(d: Dictionary) -> void: d["oleadas"][0][0]["cada"] = LevelFile.MAX_EVERY + 1.0, "\"cada\" tiene que ser 60 segundos o menos")
+	_limit(func(d: Dictionary) -> void: d["oleadas"][0][0]["desde"] = LevelFile.MAX_FROM, "")
+	_limit(func(d: Dictionary) -> void: d["oleadas"][0][0]["desde"] = LevelFile.MAX_FROM + 1.0, "\"desde\" tiene que ser 600 segundos o menos")
+
+
+func test_groups_per_wave_limit() -> void:
+	var group: Dictionary = {"enemigo": "normal", "cantidad": 1}
+	_limit(func(d: Dictionary) -> void:
+		d["oleadas"][0] = []
+		for i: int in LevelFile.MAX_GROUPS:
+			d["oleadas"][0].append(group.duplicate()), "")
+	_limit(func(d: Dictionary) -> void:
+		d["oleadas"][0] = []
+		for i: int in LevelFile.MAX_GROUPS + 1:
+			d["oleadas"][0].append(group.duplicate()), "oleada 1: tiene 21 grupos y el máximo es 20")
+
+
+func test_waves_limit() -> void:
+	var wave: Array = [{"enemigo": "normal", "cantidad": 1}]
+	_limit(func(d: Dictionary) -> void:
+		d["oleadas"] = []
+		for i: int in LevelFile.MAX_WAVES:
+			d["oleadas"].append(wave.duplicate(true)), "")
+	_limit(func(d: Dictionary) -> void:
+		d["oleadas"] = []
+		for i: int in LevelFile.MAX_WAVES + 1:
+			d["oleadas"].append(wave.duplicate(true)), "oleadas: hay 101 y el máximo es 100")
+
+
+func test_absurd_numbers_are_refused_and_do_not_break_anything() -> void:
+	# 1e300 no cabe en un entero: se compara como decimal antes de convertir.
+	var text: String = NEST.replace("\"cantidad\": 10", "\"cantidad\": 1e300").replace("\"oro\": 250", "\"oro\": -1e300")
+	var result: Dictionary = _parse(text)
+	assert_null(result["level"])
+	assert_true(" | ".join(result["errors"]).contains("demasiado grande"), str(result["errors"]))
+	assert_true(" | ".join(result["errors"]).contains("\"oro\" tiene que ser 0 o más"), str(result["errors"]))
+
+
+func test_official_levels_are_within_the_limits() -> void:
+	for file: String in DirAccess.get_files_at(LevelFile.LEVELS_DIR):
+		if file.ends_with(".json"):
+			assert_not_null(LevelFile.load_level(LevelFile.LEVELS_DIR + file)["level"], "%s cumple los límites" % file)

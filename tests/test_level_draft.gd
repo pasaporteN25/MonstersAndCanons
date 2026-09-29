@@ -361,3 +361,38 @@ func test_clean_file_id() -> void:
 	assert_eq(LevelDraft.clean_file_id("../x"), "x")
 	assert_true(LevelDraft.is_valid_file_id("mi_mapa_2"))
 	assert_false(LevelDraft.is_valid_file_id(""))
+
+
+# --- Límites (RF-223): el editor nunca genera un archivo que el juego rechace ---
+
+func test_settings_are_capped_at_the_limits() -> void:
+	draft.set_gold(10_000_000)
+	draft.set_lives(5000)
+	draft.set_health_scale(999)
+	draft.set_level_name("x".repeat(100))
+	assert_eq([draft.gold(), draft.lives(), draft.health_scale()], [LevelFile.MAX_GOLD, LevelFile.MAX_LIVES, LevelFile.MAX_HEALTH_SCALE])
+	assert_eq(draft.level_name().length(), LevelFile.MAX_NAME_LENGTH)
+	assert_true(draft.check()["errors"].is_empty(), str(draft.check()["errors"]))
+
+
+func test_group_numbers_are_capped_at_the_limits() -> void:
+	draft.set_group(0, 0, "cantidad", 5000)
+	draft.set_group(0, 0, "cada", 999.0)
+	draft.set_group(0, 0, "desde", 99999.0)
+	var g: Dictionary = draft.group(0, 0)
+	assert_eq([g["cantidad"], g["cada"], g["desde"]], [LevelFile.MAX_COUNT, LevelFile.MAX_EVERY, LevelFile.MAX_FROM])
+	assert_true(draft.check()["errors"].is_empty(), str(draft.check()["errors"]))
+
+
+func test_waves_and_groups_stop_at_the_maximum() -> void:
+	while draft.wave_count() < LevelFile.MAX_WAVES:
+		assert_gte(draft.add_wave(), 0)
+	assert_eq(draft.add_wave(), -1, "no hay una oleada 101")
+	assert_eq(draft.duplicate_wave(0), -1)
+	assert_eq(draft.wave_count(), LevelFile.MAX_WAVES)
+	assert_true(draft.check()["errors"].is_empty(), "el máximo es válido")
+	while draft.group_count(0) < LevelFile.MAX_GROUPS:
+		assert_true(draft.add_group(0))
+	assert_false(draft.add_group(0), "no hay un grupo 21")
+	assert_eq(draft.group_count(0), LevelFile.MAX_GROUPS)
+	assert_true(draft.check()["errors"].is_empty())

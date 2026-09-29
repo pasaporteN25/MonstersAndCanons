@@ -14,6 +14,18 @@ const LEVEL_KEYS: PackedStringArray = ["version", "nombre", "oro", "vidas", "aum
 const GROUP_KEYS: PackedStringArray = ["enemigo", "cantidad", "cada", "desde", "entrada"]
 const CAMPAIGN_KEYS: PackedStringArray = ["version", "niveles"]
 
+## RF-223: topes para que un archivo ajeno no cuelgue el juego. Valen para todos los niveles y el
+## editor de mapas no deja pasarse de estos números.
+const MAX_WAVES: int = 100
+const MAX_GROUPS: int = 20
+const MAX_COUNT: int = 999
+const MAX_EVERY: float = 60.0
+const MAX_FROM: float = 600.0
+const MAX_GOLD: int = 99999
+const MAX_LIVES: int = 999
+const MAX_HEALTH_SCALE: int = 300
+const MAX_NAME_LENGTH: int = 30
+
 
 ## Lee el archivo de un nivel. El id del nivel es el nombre del archivo (RF-200).
 ## Devuelve {"level": LevelData o null, "errors": PackedStringArray, "warnings": PackedStringArray}
@@ -39,10 +51,12 @@ static func parse(text: String, id: StringName) -> Dictionary:
 	var level := LevelData.new()
 	level.id = id
 	level.display_name = _text(data, "nombre", "", errors)
-	level.starting_gold = _whole(data, "oro", "", 0, errors)
-	level.starting_lives = _whole(data, "vidas", "", 1, errors)
+	if level.display_name.length() > MAX_NAME_LENGTH:
+		errors.append("El nombre tiene %d letras y el máximo es %d." % [level.display_name.length(), MAX_NAME_LENGTH])
+	level.starting_gold = _whole(data, "oro", "", 0, MAX_GOLD, errors)
+	level.starting_lives = _whole(data, "vidas", "", 1, MAX_LIVES, errors)
 	if data.has("aumento_vida"):
-		level.health_scale_percent_per_wave = _whole(data, "aumento_vida", "", 0, errors)
+		level.health_scale_percent_per_wave = _whole(data, "aumento_vida", "", 0, MAX_HEALTH_SCALE, errors)
 
 	var grid: MapGrid = null
 	if not data.has("mapa"):
@@ -61,6 +75,8 @@ static func parse(text: String, id: StringName) -> Dictionary:
 		errors.append("Falta \"oleadas\".")
 	elif not data["oleadas"] is Array or (data["oleadas"] as Array).is_empty():
 		errors.append("oleadas: tiene que ser una lista con al menos una oleada.")
+	elif (data["oleadas"] as Array).size() > MAX_WAVES:
+		errors.append("oleadas: hay %d y el máximo es %d." % [(data["oleadas"] as Array).size(), MAX_WAVES])
 	else:
 		var waves: Array = data["oleadas"]
 		for w: int in waves.size():
@@ -117,6 +133,9 @@ static func _read_wave(value: Variant, where: String, grid: MapGrid, errors: Pac
 		_add(errors, where, "tiene que ser una lista con al menos un grupo, como [{\"enemigo\": \"normal\", \"cantidad\": 5, \"cada\": 1.0}].")
 		return wave
 	var groups: Array = value
+	if groups.size() > MAX_GROUPS:
+		_add(errors, where, "tiene %d grupos y el máximo es %d." % [groups.size(), MAX_GROUPS])
+		return wave
 	for g: int in groups.size():
 		var group_where: String = "%s, grupo %d" % [where, g + 1]
 		if not groups[g] is Dictionary:
@@ -134,13 +153,13 @@ static func _read_group(data: Dictionary, where: String, grid: MapGrid, errors: 
 		group.enemy = find_enemy(enemy_name)
 		if group.enemy == null:
 			_add(errors, where, "no existe el enemigo '%s' (tiene que ser un archivo de data/enemies/)." % enemy_name)
-	group.count = _whole(data, "cantidad", where, 1, errors)
+	group.count = _whole(data, "cantidad", where, 1, MAX_COUNT, errors)
 	if data.has("cada") or group.count > 1:
-		group.interval = _number(data, "cada", where, errors)
+		group.interval = _number(data, "cada", where, MAX_EVERY, errors)
 		if group.count > 1 and group.interval <= 0.0 and data.has("cada") and _is_number(data["cada"]):
 			_add(errors, where, "\"cada\" tiene que ser mayor que 0 (si no, salen todos juntos).")
 	if data.has("desde"):
-		group.start_delay = _number(data, "desde", where, errors)
+		group.start_delay = _number(data, "desde", where, MAX_FROM, errors)
 	if data.has("entrada"):
 		var letter: Variant = data["entrada"]
 		var index: int = MapGrid.ENTRANCE_LETTERS.find(str(letter)) if letter is String and (letter as String).length() == 1 else -1
@@ -213,8 +232,9 @@ static func _text(data: Dictionary, key: String, where: String, errors: PackedSt
 	return data[key]
 
 
-## Un número entero (JSON no distingue 5 de 5.0) mayor o igual que `minimum`.
-static func _whole(data: Dictionary, key: String, where: String, minimum: int, errors: PackedStringArray) -> int:
+## Un número entero (JSON no distingue 5 de 5.0) de `minimum` a `maximum` (RF-223).
+## Se compara como decimal ANTES de convertir a entero: un número gigante no desborda.
+static func _whole(data: Dictionary, key: String, where: String, minimum: int, maximum: int, errors: PackedStringArray) -> int:
 	if not data.has(key):
 		_add(errors, where, "falta \"%s\"." % [key])
 		return minimum
@@ -222,20 +242,26 @@ static func _whole(data: Dictionary, key: String, where: String, minimum: int, e
 	if not _is_number(value) or float(value) != floorf(float(value)):
 		_add(errors, where, "\"%s\" tiene que ser un número entero." % [key])
 		return minimum
-	if int(value) < minimum:
+	if float(value) < minimum:
 		_add(errors, where, "\"%s\" tiene que ser %d o más." % [key, minimum])
+		return minimum
+	if float(value) > maximum:
+		_add(errors, where, "\"%s\" tiene que ser %d o menos (es demasiado grande)." % [key, maximum])
 		return minimum
 	return int(value)
 
 
-## Un número (con decimales o no) de 0 para arriba: segundos.
-static func _number(data: Dictionary, key: String, where: String, errors: PackedStringArray) -> float:
+## Un número (con decimales o no) de 0 a `maximum`: segundos (RF-223).
+static func _number(data: Dictionary, key: String, where: String, maximum: float, errors: PackedStringArray) -> float:
 	if not data.has(key):
 		_add(errors, where, "falta \"%s\"." % [key])
 		return 0.0
 	var value: Variant = data[key]
 	if not _is_number(value) or float(value) < 0.0:
 		_add(errors, where, "\"%s\" tiene que ser un número de 0 para arriba (segundos)." % [key])
+		return 0.0
+	if float(value) > maximum:
+		_add(errors, where, "\"%s\" tiene que ser %s segundos o menos." % [key, _shown(maximum)])
 		return 0.0
 	return float(value)
 

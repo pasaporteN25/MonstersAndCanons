@@ -184,6 +184,7 @@ func level_name() -> String:
 
 
 func set_level_name(value: String) -> void:
+	value = value.left(LevelFile.MAX_NAME_LENGTH)  # RF-223
 	if value != level_name():
 		_record()
 		data["nombre"] = value
@@ -194,6 +195,7 @@ func gold() -> int:
 
 
 func set_gold(value: int) -> void:
+	value = mini(value, LevelFile.MAX_GOLD)  # RF-223
 	if value != gold():
 		_record()
 		data["oro"] = value
@@ -204,6 +206,7 @@ func lives() -> int:
 
 
 func set_lives(value: int) -> void:
+	value = mini(value, LevelFile.MAX_LIVES)  # RF-223
 	if value != lives():
 		_record()
 		data["vidas"] = value
@@ -215,6 +218,7 @@ func health_scale() -> int:
 
 
 func set_health_scale(value: int) -> void:
+	value = mini(value, LevelFile.MAX_HEALTH_SCALE)  # RF-223
 	if value == health_scale():
 		return
 	_record()
@@ -234,8 +238,10 @@ func group_count(wave: int) -> int:
 	return (data["oleadas"][wave] as Array).size()
 
 
-## Agrega una oleada con el grupo de ejemplo y devuelve su posición.
+## Agrega una oleada con el grupo de ejemplo y devuelve su posición (-1 si ya hay el máximo, RF-223).
 func add_wave() -> int:
+	if wave_count() >= LevelFile.MAX_WAVES:
+		return -1
 	_record()
 	(data["oleadas"] as Array).append([default_group()])
 	return wave_count() - 1
@@ -252,16 +258,20 @@ func remove_wave(wave: int) -> bool:
 
 ## Copia una oleada justo después de sí misma y devuelve la posición de la copia.
 func duplicate_wave(wave: int) -> int:
-	if wave < 0 or wave >= wave_count():
+	if wave < 0 or wave >= wave_count() or wave_count() >= LevelFile.MAX_WAVES:
 		return -1
 	_record()
 	(data["oleadas"] as Array).insert(wave + 1, (data["oleadas"][wave] as Array).duplicate(true))
 	return wave + 1
 
 
-func add_group(wave: int) -> void:
+## Agrega un grupo de ejemplo a una oleada. Devuelve false si ya tiene el máximo (RF-223).
+func add_group(wave: int) -> bool:
+	if group_count(wave) >= LevelFile.MAX_GROUPS:
+		return false
 	_record()
 	(data["oleadas"][wave] as Array).append(default_group())
+	return true
 
 
 func remove_group(wave: int, index: int) -> bool:
@@ -295,9 +305,10 @@ func set_group(wave: int, index: int, key: String, value: Variant) -> bool:
 		"enemigo", "entrada":
 			normalized = str(value)
 		"cantidad":
-			normalized = _to_int(value)
+			normalized = mini(_to_int(value), LevelFile.MAX_COUNT)  # RF-223
 		"cada", "desde":
-			normalized = snappedf(float(value), 0.01)
+			var top: float = LevelFile.MAX_EVERY if key == "cada" else LevelFile.MAX_FROM
+			normalized = minf(snappedf(float(value), 0.01), top)
 		_:
 			return false
 	if normalized == current[key]:

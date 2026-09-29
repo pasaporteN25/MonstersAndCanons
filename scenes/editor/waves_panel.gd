@@ -92,6 +92,11 @@ func _fill() -> void:
 	_prev.disabled = _wave == 0
 	_next.disabled = _wave >= draft.wave_count() - 1
 	_remove.disabled = draft.wave_count() <= 1  # RF-215: un nivel necesita al menos una oleada
+	# RF-223: los topes. Con el máximo de oleadas o de grupos, agregar no hace nada.
+	var full_waves: bool = draft.wave_count() >= LevelFile.MAX_WAVES
+	(find_child("AddWave", true, false) as Button).disabled = full_waves
+	(find_child("CopyWave", true, false) as Button).disabled = full_waves
+	(find_child("AddGroup", true, false) as Button).disabled = draft.group_count(_wave) >= LevelFile.MAX_GROUPS
 	for child: Node in _groups_box.get_children():
 		_groups_box.remove_child(child)
 		child.queue_free()
@@ -187,13 +192,19 @@ func _enemy_index(option: OptionButton, id: String) -> int:
 # --- Oleadas y grupos ---
 
 func _add_wave() -> void:
-	_wave = draft.add_wave()
+	var index: int = draft.add_wave()
+	if index < 0:
+		return  # RF-223: ya hay el máximo de oleadas
+	_wave = index
 	refresh()
 	edited.emit()
 
 
 func _copy_wave() -> void:
-	_wave = draft.duplicate_wave(_wave)
+	var index: int = draft.duplicate_wave(_wave)
+	if index < 0:
+		return
+	_wave = index
 	refresh()
 	edited.emit()
 

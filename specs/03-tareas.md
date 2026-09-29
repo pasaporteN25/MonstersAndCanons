@@ -585,10 +585,11 @@
 
 ## M10 — Mapas de la comunidad *(pedido por Lucas, D-034)*
 
-- [ ] **T106 · Leer los mapas de la comunidad (`CommunityMaps`) y los límites**
+- [x] **T106 · Leer los mapas de la comunidad (`CommunityMaps`) y los límites**
   `CommunityMaps.scan()` lista los `.json` de `user://maps/` (nombre de archivo, tamaño, errores) con su `LevelData`; `LevelFile` pone los topes de RF-223 y el editor los respeta.
   **Refs:** RF-220, RF-222, RF-223.
   **Hecho cuando:** los tests comprueban el orden, que un archivo roto, con nombre no válido o demasiado grande da una entrada con su motivo y no rompe a los demás, cada límite (uno por uno, en el borde y pasado), y que los niveles oficiales cumplen los límites.
+  **Resultado:** [`community_maps.gd`](../scripts/logic/community_maps.gd) devuelve una entrada por archivo (`file`, `id`, `level`, `errors`, `warnings`); un archivo roto, con nombre no válido o de más de 200 KB es una entrada con su motivo, y **no se lee** el de más de 200 KB. Se leen como máximo 200 archivos. El id lleva el prefijo `comunidad_` (un archivo `level_03.json` o `hall_of_fame.json` no se confunde con lo oficial en el guardado). Los topes de RF-223 están en `LevelFile` y se comparan como decimal **antes** de convertir a entero (un `1e300` no desborda); el borrador del editor los respeta, y sus botones de agregar oleada, copiar y agregar grupo se apagan en el máximo. Un dato curioso: en Windows `con` es un nombre reservado del sistema, así que un test que creaba `con.punto.json` fallaba por eso, no por el código. 26 tests nuevos.
 
 - [ ] **T107 · Jugar un mapa de la comunidad: progreso, récords y salida**
   `GameFlow` sabe jugar un mapa de la comunidad (`start_community`); la partida guarda su mejor resultado, estrellas y top 5 con el id `comunidad_<archivo>` y **nada más**; al terminar, "Niveles" vuelve a la solapa de la comunidad.
