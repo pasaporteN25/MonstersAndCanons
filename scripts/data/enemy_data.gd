@@ -31,3 +31,8 @@ enum Shape { CIRCLE, TRIANGLE, SQUARE, DIAMOND, HEXAGON }
 @export var texture: Texture2D
 ## Radio visual, en casillas.
 @export var size_tiles: float = 0.0
+
+# --- Comportamientos (M5, RF-164). Todos valen 0 = apagado, y se pueden combinar. ---
+
+## RF-165: % de su vida máxima que recupera por segundo. No se regenera mientras se quema.
+@export var regen_percent_per_second: float = 0.0

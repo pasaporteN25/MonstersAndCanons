@@ -10,6 +10,9 @@ signal reached_exit(enemy: Enemy)
 ## Recibió un golpe (solo para efectos visuales, RF-132). `damage` es el daño real,
 ## después de la armadura; `armor_blocked_most` = la armadura quitó la mitad o más.
 signal hit(enemy: Enemy, damage: int, armor_blocked_most: bool)
+## Se curó `amount` de vida (RF-165). Se avisa como mucho una vez por segundo, con lo que
+## se curó en ese tiempo, para no llenar la pantalla de números.
+signal healed(enemy: Enemy, amount: int)
 
 const GROUP: StringName = &"enemies"
 ## Color al que se tiñe un enemigo ralentizado (RF-62).
@@ -44,6 +47,10 @@ var _slow_left: float = 0.0
 var _burn_dps: int = 0
 var _burn_left: float = 0.0
 var _burn_tick_left: float = 0.0
+## RF-165: vida recuperada que todavía no llegó a 1 punto entero, y lo curado sin avisar.
+var _regen_accum: float = 0.0
+var _healed_unreported: int = 0
+var _heal_report_left: float = 0.0
 ## Evita actuar dos veces: tras queue_free() el nodo sigue vivo hasta el final del frame.
 var _is_done: bool = false
 # Solo visual (spec §9.3):
@@ -81,6 +88,7 @@ func _physics_process(delta: float) -> void:
 	_update_burn(delta)
 	if _is_done:
 		return  # la quemadura lo mató
+	_update_regen(delta)
 	distance += Rules.tiles_to_px(current_speed_tiles()) * delta
 	_update_position()
 	_animate(delta)
@@ -154,6 +162,28 @@ func _lose_health(amount: int, armor_blocked_most: bool) -> void:
 		_is_done = true
 		died.emit(self)
 		queue_free()
+
+
+## RF-165: recupera un % de su vida máxima por segundo, salvo mientras se quema.
+func _update_regen(delta: float) -> void:
+	_heal_report_left -= delta
+	if _healed_unreported > 0 and _heal_report_left <= 0.0:
+		healed.emit(self, _healed_unreported)
+		_healed_unreported = 0
+	if data.regen_percent_per_second <= 0.0 or is_burning() or health >= max_health:
+		_regen_accum = 0.0
+		return
+	_regen_accum += max_health * data.regen_percent_per_second / 100.0 * delta
+	# Margen: 60 cuadros de 4/60 suman 3,9999…, que tiene que contar como 4.
+	var whole: int = int(_regen_accum + 0.0001)
+	var amount: int = mini(whole, max_health - health)
+	if amount <= 0:
+		return
+	_regen_accum = maxf(0.0, _regen_accum - whole)
+	health += amount
+	if _healed_unreported == 0 and _heal_report_left <= 0.0:
+		_heal_report_left = 1.0
+	_healed_unreported += amount
 
 
 ## RF-160: cada BURN_TICK segundos, un golpecito que ignora la armadura.

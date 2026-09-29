@@ -13,6 +13,8 @@ const FIRE_COLOR := Color(1.0, 0.5, 0.15)
 ## RF-132: números de daño.
 const DAMAGE_COLOR := Color(1, 1, 1)
 const DAMAGE_BLOCKED_COLOR := Color(0.62, 0.62, 0.66)  # la armadura se comió el golpe
+## RF-165: lo que se cura un enemigo que se regenera.
+const HEAL_COLOR := Color(0.45, 0.95, 0.4)
 const MAX_DAMAGE_NUMBERS: int = 40
 
 var _damage_numbers_alive: int = 0
@@ -21,12 +23,20 @@ var _damage_numbers_alive: int = 0
 ## RF-132: número chico con el daño real. Gris si la armadura quitó la mitad o más.
 ## Devuelve false si no se mostró (opción apagada, o ya hay demasiados en pantalla).
 func damage_number(position_: Vector2, damage: int, armor_blocked_most: bool) -> bool:
+	return _small_number(position_, str(damage), DAMAGE_BLOCKED_COLOR if armor_blocked_most else DAMAGE_COLOR)
+
+
+## RF-165: "+N" verde cuando un enemigo se cura. Mismas reglas que los números de daño.
+func heal_number(position_: Vector2, amount: int) -> bool:
+	return _small_number(position_, "+%d" % amount, HEAL_COLOR)
+
+
+func _small_number(position_: Vector2, label: String, color: Color) -> bool:
 	if not bool(SaveManager.get_setting("damage_numbers")):
 		return false
 	if _damage_numbers_alive >= MAX_DAMAGE_NUMBERS:
 		return false
-	var color: Color = DAMAGE_BLOCKED_COLOR if armor_blocked_most else DAMAGE_COLOR
-	var text := FloatingText.new().setup(str(damage), color, 15, 0.6, 26.0)
+	var text := FloatingText.new().setup(label, color, 15, 0.6, 26.0)
 	_damage_numbers_alive += 1
 	text.tree_exited.connect(func() -> void: _damage_numbers_alive -= 1)
 	# Un poco corrido al azar, así los golpes seguidos no se tapan entre sí.

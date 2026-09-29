@@ -110,3 +110,49 @@ func test_fire_projectile_sets_the_enemy_on_fire() -> void:
 	assert_true(enemy.is_burning(), "RF-160")
 	assert_eq(enemy.health, 997, "el golpe hizo 3 (la quemadura todavía no)")
 	await wait_process_frames(2)  # se dibujan las llamitas sin errores
+
+
+# --- Troll y regeneración (RF-165) ---
+
+func test_troll_matches_spec() -> void:
+	var troll: EnemyData = _enemy_data("troll")
+	assert_eq([troll.max_health, troll.armor, troll.reward, troll.lives_damage], [70, 0, 10, 2])
+	assert_almost_eq(troll.speed_tiles, 1.0, 0.001)
+	assert_almost_eq(troll.regen_percent_per_second, 4.0, 0.001)
+	assert_almost_eq(troll.size_tiles, 0.32, 0.001)
+	assert_false(troll.is_flying)
+
+
+func test_troll_regenerates_a_percent_per_second() -> void:
+	var troll: Enemy = _walker(_enemy_data("troll"), 100)
+	troll.take_hit(50)
+	_seconds(troll, 1.0)
+	assert_eq(troll.health, 54, "4 % de 100 por segundo")
+	_seconds(troll, 1.0)
+	assert_eq(troll.health, 58)
+
+
+func test_regeneration_stops_at_max_health() -> void:
+	var troll: Enemy = _walker(_enemy_data("troll"), 100)
+	troll.take_hit(2)
+	_seconds(troll, 3.0)
+	assert_eq(troll.health, 100, "nunca más que su vida máxima")
+
+
+func test_burning_troll_does_not_regenerate() -> void:
+	var troll: Enemy = _walker(_enemy_data("troll"), 100)
+	troll.take_hit(50)
+	troll.apply_burn(2, 2.0)  # 1 por golpecito
+	_seconds(troll, 2.0)
+	assert_eq(troll.health, 46, "RF-165: quemándose solo pierde vida (4 golpecitos de 1)")
+	_seconds(troll, 1.0)
+	assert_eq(troll.health, 50, "apagado, vuelve a curarse")
+
+
+func test_healing_is_reported_at_most_once_per_second() -> void:
+	var troll: Enemy = _walker(_enemy_data("troll"), 100)
+	watch_signals(troll)
+	troll.take_hit(50)
+	_seconds(troll, 2.5)
+	assert_signal_emit_count(troll, "healed", 2, "un \"+N\" por segundo, no uno por cuadro")
+	assert_signal_emitted_with_parameters(troll, "healed", [troll, 4])
