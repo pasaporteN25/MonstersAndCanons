@@ -492,10 +492,11 @@
 
 ## MC — Tests automáticos en GitHub *(pedido por Lucas, D-030)*
 
-- [ ] **T92 · Workflow de GitHub Actions**
+- [x] **T92 · Workflow de GitHub Actions**
   `.github/workflows/tests.yml`: baja Godot 4.7.2 (con caché), importa el proyecto, revisa `tools/` y corre GUT en cada *push* a `main` y en cada *pull request*. Insignia en el README.
   **Refs:** plan §8, D-030.
   **Hecho cuando:** la corrida en GitHub termina en verde con los 276 tests, y se comprobó (en un clon limpio) que un test que falla o que no compila deja la corrida en rojo.
+  **Resultado:** la corrida en GitHub terminó en verde (Lucas lo confirmó). Se usan `actions/checkout@v7` y `actions/cache@v6` (Node 24; las v4 daban aviso de Node 20 obsoleto) y el runner fijo en `ubuntu-24.04`, porque `ubuntu-latest` pasa a Ubuntu 26 en octubre de 2026.
 
 ### Otras ideas de pulido *(sin fecha)*
 
