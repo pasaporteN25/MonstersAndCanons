@@ -221,8 +221,7 @@ func test_blocked_cells_always_show_the_same_thing() -> void:
 
 
 func test_every_level_map_is_drawn() -> void:
-	for n: int in range(1, 6):
-		var level: LevelData = load("res://data/levels/level_%02d.tres" % n)
-		add_child_autofree(level.map_scene.instantiate())
+	for level: LevelData in GameFlow.campaign.levels:
+		add_child_autofree(level.build_map())
 	await wait_process_frames(2)
-	assert_true(true, "los 5 mapas (con rocas, árboles y puertas) se dibujaron sin errores")
+	assert_true(true, "los mapas (con rocas, árboles y puertas) se dibujaron sin errores")

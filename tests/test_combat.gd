@@ -18,7 +18,7 @@ var frost: TowerData = load("res://data/towers/frost.tres")
 func before_each() -> void:
 	world = Node2D.new()
 	add_child_autofree(world)
-	level = (load("res://scenes/levels/level_01.tscn") as PackedScene).instantiate()
+	level = GameFlow.level(0).build_map()
 	world.add_child(level)
 
 

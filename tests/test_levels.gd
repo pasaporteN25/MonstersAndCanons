@@ -4,7 +4,7 @@ extends GutTest
 const GAME_SCENE: PackedScene = preload("res://scenes/game/game.tscn")
 const DT: float = 1.0 / 60.0
 
-var campaign: CampaignData = load("res://data/campaign.tres")
+var campaign: CampaignData = GameFlow.campaign
 
 
 func _game_with_level(index: int) -> Game:

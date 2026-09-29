@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "nombre": "Pradera",
+  "oro": 150,
+  "vidas": 20,
+  "mapa": [
+    "..................X.",
+    "A################...",
+    "......X.........#...",
+    "................#...",
+    "...##############...",
+    "...#........XX......",
+    "...#................",
+    "...################S",
+    ".........X.........."
+  ],
+  "oleadas": [
+    [{"enemigo": "normal", "cantidad": 8, "cada": 1.0}],
+    [{"enemigo": "normal", "cantidad": 12, "cada": 0.8}],
+    [{"enemigo": "fast", "cantidad": 10, "cada": 0.6}],
+    [{"enemigo": "normal", "cantidad": 10, "cada": 0.8},
+     {"enemigo": "armored", "cantidad": 4, "cada": 1.5, "desde": 4.0}],
+    [{"enemigo": "tank", "cantidad": 3, "cada": 2.0},
+     {"enemigo": "flyer", "cantidad": 8, "cada": 0.8, "desde": 3.0}],
+    [{"enemigo": "fast", "cantidad": 15, "cada": 0.4},
+     {"enemigo": "armored", "cantidad": 6, "cada": 1.0, "desde": 5.0}],
+    [{"enemigo": "tank", "cantidad": 6, "cada": 1.5},
+     {"enemigo": "flyer", "cantidad": 10, "cada": 0.6, "desde": 4.0}],
+    [{"enemigo": "normal", "cantidad": 20, "cada": 0.5},
+     {"enemigo": "armored", "cantidad": 8, "cada": 1.0, "desde": 5.0},
+     {"enemigo": "fast", "cantidad": 10, "cada": 0.5, "desde": 8.0}],
+    [{"enemigo": "tank", "cantidad": 8, "cada": 1.5},
+     {"enemigo": "flyer", "cantidad": 12, "cada": 0.5, "desde": 3.0},
+     {"enemigo": "fast", "cantidad": 15, "cada": 0.4, "desde": 8.0}],
+    [{"enemigo": "boss", "cantidad": 1, "cada": 1.0},
+     {"enemigo": "tank", "cantidad": 10, "cada": 1.2, "desde": 3.0},
+     {"enemigo": "normal", "cantidad": 20, "cada": 0.4, "desde": 6.0},
+     {"enemigo": "flyer", "cantidad": 15, "cada": 0.4, "desde": 10.0}]
+  ]
+}

@@ -2,7 +2,6 @@
 # Recuerda qué nivel se está jugando y cambia de pantalla.
 extends Node
 
-const CAMPAIGN: CampaignData = preload("res://data/campaign.tres")
 const BALANCE: BalanceConfig = preload("res://data/balance.tres")
 const MAIN_MENU_SCENE: String = "res://scenes/ui/main_menu.tscn"
 const LEVEL_SELECT_SCENE: String = "res://scenes/ui/level_select.tscn"
@@ -13,6 +12,8 @@ const RECORDS_SCENE: String = "res://scenes/ui/records_screen.tscn"
 ## -1 = no se juega desde la campaña (por ejemplo, game.tscn abierto con F6, o un test):
 ## en ese caso NO se guarda nada.
 var current_index: int = -1
+## RF-205: los niveles de data/campaign.json, ya leídos (los inválidos se saltean, RF-204).
+var campaign: CampaignData = LevelFile.load_campaign()
 
 
 func _ready() -> void:
@@ -45,11 +46,11 @@ func apply_display_settings() -> void:
 
 
 func level_count() -> int:
-	return CAMPAIGN.levels.size()
+	return campaign.levels.size()
 
 
 func level(index: int) -> LevelData:
-	return CAMPAIGN.levels[index]
+	return campaign.levels[index]
 
 
 ## RF-112: el primer nivel siempre está desbloqueado; el resto, según el guardado.

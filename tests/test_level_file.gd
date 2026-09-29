@@ -176,3 +176,19 @@ func test_an_inner_exit_ends_at_the_center_and_gets_a_gate() -> void:
 	assert_eq(curve.get_point_position(curve.point_count - 1), Vector2(18.5, 6.5) * 64.0)
 	assert_eq(level.inner_exit_cells(), [Vector2i(18, 6)] as Array[Vector2i], "RF-06: puerta")
 
+
+
+# --- La campaña (RF-205) ---
+
+func test_campaign_reads_levels_in_order_and_skips_broken_ones() -> void:
+	var path: String = "user://test_campaign.json"
+	var file := FileAccess.open(path, FileAccess.WRITE)
+	file.store_string("{\"version\": 1, \"niveles\": [\"level_02\", \"no_existe\", \"level_01\"]}")
+	file.close()
+	var campaign: CampaignData = LevelFile.load_campaign(path)
+	DirAccess.remove_absolute(path)
+	assert_push_error("no se va a jugar")
+	var ids: Array[StringName] = []
+	for level: LevelData in campaign.levels:
+		ids.append(level.id)
+	assert_eq(ids, [&"level_02", &"level_01"] as Array[StringName], "RF-204: el roto se saltea, el resto sigue")

@@ -94,23 +94,27 @@ func test_every_tower_is_in_the_game() -> void:
 	assert_lte(game.tower_types.size(), MAX_TOWERS, "RF-170: entran hasta 8 torres (teclas 1–8)")
 
 
-# --- Niveles (data/levels/) ---
+# --- Niveles (data/levels/, spec §7.8) ---
 
-func test_every_level_is_complete_and_in_the_campaign() -> void:
-	var campaign: CampaignData = load("res://data/campaign.tres")
-	for resource: Resource in _resources_in("res://data/levels/"):
-		var l := resource as LevelData
-		var who: String = "nivel '%s'" % _file_id(l)
-		assert_eq(String(l.id), _file_id(l), who + ": el id es el nombre del archivo")
-		assert_has(campaign.levels, l, who + ": está en la campaña (tools/make_levels.gd la arma)")
-		assert_ne(l.display_name, "", who + ": nombre")
-		assert_not_null(l.map_scene, who + ": mapa")
-		assert_gt(l.starting_gold, 0, who + ": oro inicial")
-		assert_gt(l.starting_lives, 0, who + ": vidas")
-		assert_gt(l.waves.size(), 0, who + ": oleadas")
-		for w: int in l.waves.size():
-			assert_gt(l.waves[w].groups.size(), 0, "%s, oleada %d: tiene enemigos" % [who, w + 1])
-			for group: SpawnGroup in l.waves[w].groups:
-				assert_not_null(group.enemy, "%s, oleada %d: grupo sin enemigo" % [who, w + 1])
-				assert_gt(group.count, 0, "%s, oleada %d: cantidad" % [who, w + 1])
-				assert_gte(group.interval, 0.0, "%s, oleada %d: intervalo" % [who, w + 1])
+## Cada archivo de nivel se lee sin errores (RF-204) y está en la campaña (RF-205).
+func test_every_level_file_is_valid_and_in_the_campaign() -> void:
+	var ids: PackedStringArray = LevelFile.campaign_ids()
+	var files: int = 0
+	for file: String in DirAccess.get_files_at(LevelFile.LEVELS_DIR):
+		if not file.ends_with(".json"):
+			continue
+		files += 1
+		var result: Dictionary = LevelFile.load_level(LevelFile.LEVELS_DIR + file)
+		assert_eq(result["errors"], PackedStringArray(), "nivel %s: sin errores" % file)
+		assert_has(ids, file.get_basename(), "nivel %s: está en data/campaign.json" % file)
+	assert_gt(files, 0)
+
+
+## Ningún nivel de la campaña se salteó por tener errores, y ninguno está dos veces.
+func test_the_campaign_loads_every_level_once() -> void:
+	var ids: PackedStringArray = LevelFile.campaign_ids()
+	assert_eq(GameFlow.level_count(), ids.size())
+	var seen: Dictionary = {}
+	for id: String in ids:
+		assert_false(seen.has(id), "nivel %s repetido en la campaña" % id)
+		seen[id] = true

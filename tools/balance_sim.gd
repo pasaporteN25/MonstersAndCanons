@@ -38,10 +38,11 @@ var built: int = 0
 var last_reported_wave: int = 0
 var path_points: Array[Vector2] = []
 var air_points: Array[Vector2] = []
-## Nivel de la campaña a jugar (1, 2, 3…). 0 = el que tenga game.tscn en el Inspector.
+## Nivel de la campaña a jugar (1, 2, 3…). 0 = el primero.
 var level_number: int = 0
 ## levelscale=N: prueba otro % de vida por oleada para el nivel elegido (D-019). -1 = no tocar.
 var level_scale_override: int = -1
+var starting_gold_override: int = -1
 ## Recursos modificados por los ajustes. Se guardan aquí para que Godot no los descarte
 ## de su caché (si nadie los usa, los libera y la partida los volvería a leer del disco).
 var _kept: Array[Resource] = []
@@ -55,10 +56,11 @@ func _initialize() -> void:
 		_apply_override(arg)
 	rng.seed = 12345
 	game = (_keep(load("res://scenes/game/game.tscn")) as PackedScene).instantiate()
-	if level_number > 0:
-		# Este script se compila antes que los autoloads: no puede usar GameFlow por su nombre.
-		var campaign: CampaignData = _keep(load("res://data/campaign.tres"))
-		game.level_data = campaign.levels[level_number - 1]
+	# Este script se compila antes que los autoloads: no puede usar GameFlow por su nombre.
+	var campaign: CampaignData = _keep(LevelFile.load_campaign())
+	game.level_data = campaign.levels[maxi(level_number, 1) - 1]
+	if starting_gold_override >= 0:
+		game.level_data.starting_gold = starting_gold_override
 	if level_scale_override >= 0:
 		game.level_data.health_scale_percent_per_wave = level_scale_override
 	root.add_child(game)
@@ -99,7 +101,7 @@ func _apply_override(arg: String) -> void:
 				var enemy: EnemyData = _keep(load("res://data/enemies/%s.tres" % id))
 				enemy.reward = maxi(1, roundi(enemy.reward * value))
 		"gold":
-			(_keep(load("res://data/levels/level_01.tres")) as LevelData).starting_gold = int(value)
+			starting_gold_override = int(value)  # se aplica al elegir el nivel
 	print("Ajuste: ", arg)
 
 

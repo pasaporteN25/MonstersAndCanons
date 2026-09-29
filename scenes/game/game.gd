@@ -45,10 +45,13 @@ var _shake_left: float = 0.0
 
 
 func _ready() -> void:
-	# Si se llegó desde el menú, se juega el nivel elegido; si no (F6, tests), el del Inspector.
+	# Si se llegó desde el menú, se juega el nivel elegido; si no (F6, tests), el que ya tenga
+	# (el bot lo elige antes) o el primero de la campaña.
 	var campaign_level: LevelData = GameFlow.current_level()
 	if campaign_level != null:
 		level_data = campaign_level
+	elif level_data == null:
+		level_data = GameFlow.level(0)
 
 	level = level_data.build_map()
 	level.position = MAP_OFFSET

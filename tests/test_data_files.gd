@@ -120,14 +120,14 @@ const LEVEL_01_WAVES: Array = [
 
 
 func test_level_01_basics() -> void:
-	var level: LevelData = load("res://data/levels/level_01.tres")
+	var level: LevelData = GameFlow.level(0)
 	assert_eq(level.starting_gold, 150, "spec §7")
 	assert_eq(level.starting_lives, 20, "RF-10")
 	assert_eq(level.waves.size(), 10, "RF-30")
 
 
 func test_level_01_waves_match_spec() -> void:
-	var level: LevelData = load("res://data/levels/level_01.tres")
+	var level: LevelData = GameFlow.level(0)
 	for w: int in LEVEL_01_WAVES.size():
 		var expected: Array = LEVEL_01_WAVES[w]
 		var groups: Array[SpawnGroup] = level.waves[w].groups
