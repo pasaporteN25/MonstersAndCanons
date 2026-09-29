@@ -553,10 +553,11 @@
   **Hecho cuando:** los tests comprueban que los 7 niveles no tienen avisos, que un mapa con un tramo que se puede saltear avisa (y sigue siendo válido) y que un mapa con errores no calcula avisos; y `check_level` muestra el aviso en un nivel de prueba.
   **Resultado:** `MapGrid.unused_cells` y `MapGrid.warnings`; `LevelFile` devuelve `warnings` junto a `errors` (y la campaña los anota con `push_warning`). Prueba real: en el nivel 6, una sola casilla `#` de más en la fila 7 hace que la entrada A pase de 56 a 34 casillas y el aviso marca con `?` las 23 casillas del tramo salteado. Los 7 niveles oficiales no tienen avisos (un test lo vigila). Un mapa con errores no calcula avisos: sin recorridos no se sabe qué sobra. 8 tests nuevos.
 
-- [ ] **T101 · El borrador del nivel (`LevelDraft`)**
+- [x] **T101 · El borrador del nivel (`LevelDraft`)**
   Lógica pura, sin pantallas: el nivel que se edita como datos (mismo formato que §7.8), con pintar casillas, entradas y salida (RF-212), ajustes y oleadas (RF-214, RF-215), texto ordenado como los niveles oficiales, revisión con las reglas de §7.8, guardar y leer en `user://maps/` (RF-216) y deshacer/rehacer.
   **Refs:** RF-212, RF-214, RF-215, RF-216.
   **Hecho cuando:** los tests comprueban cada operación, que el texto que se guarda vuelve a leerse igual con `LevelFile`, que las entradas se renumeran al quitar una (con sus oleadas), que el nivel nuevo es válido y que un nivel oficial abierto como plantilla no se puede guardar encima del oficial.
+  **Resultado:** [`level_draft.gd`](../scripts/logic/level_draft.gd) guarda el nivel **en el mismo formato del archivo** (un solo modelo: lo que se edita, lo que se guarda y lo que valida `LevelFile` son lo mismo). Prueba fuerte: abrir cada nivel oficial y volver a escribirlo da **exactamente el mismo texto**. Un trazo del mouse es un solo paso de deshacer (`begin_stroke`/`end_stroke`); lo que no cambia nada no se puede deshacer. Los tests encontraron un defecto: listar los mapas sin que exista `user://maps/` dejaba un error en el registro. Un mapa con errores se puede abrir y guardar (RF-213). 37 tests.
 
 - [ ] **T102 · La pantalla del editor: pintar el mapa**
   Botón "Editor de mapas" en el menú (solo modo de pruebas); pantalla con el mapa, las herramientas y la línea de mensajes; recorridos y casillas sin usar dibujados; teclas y `Ctrl+Z`/`Ctrl+Y`.
