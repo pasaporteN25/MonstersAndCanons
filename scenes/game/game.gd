@@ -54,6 +54,8 @@ func _ready() -> void:
 	var campaign_level: LevelData = GameFlow.current_level()
 	if campaign_level != null:
 		level_data = campaign_level
+	elif GameFlow.current_community != null:
+		level_data = GameFlow.current_community  # RF-224: un mapa de la comunidad
 	elif GameFlow.test_level != null:
 		level_data = GameFlow.test_level  # RF-217: el nivel del editor
 		testing = true
@@ -310,8 +312,8 @@ func _on_enemy_spawned(enemy: Enemy) -> void:
 	if not SaveManager.has_seen_enemy(enemy.data.id):
 		SaveManager.mark_enemy_seen(enemy.data.id)
 		hud.show_enemy_intro(enemy.data)
-		if GameFlow.current_level() != null:
-			SaveManager.save()  # RF-117: solo jugando desde el menú
+		if GameFlow.played_level() != null:
+			SaveManager.save()  # RF-117: solo jugando desde el menú (campaña o comunidad)
 
 
 func _on_enemy_died(enemy: Enemy) -> void:
@@ -377,9 +379,10 @@ func _on_state_changed(state: LevelSession.State) -> void:
 	build_controller.cancel()
 	build_controller.deselect_placed()
 	set_speed(1.0)
-	var in_campaign: bool = GameFlow.current_level() != null
-	# Desde la campaña se vuelve a la selección de nivel; probando (RF-217), al editor.
-	var can_leave: bool = in_campaign or testing
+	# Desde el menú (campaña o mapa de la comunidad, RF-224) se guarda progreso y récords, y se vuelve
+	# a la selección de nivel; probando (RF-217), no se guarda nada y se vuelve al editor.
+	var saves_progress: bool = GameFlow.played_level() != null
+	var can_leave: bool = saves_progress or testing
 	if state == LevelSession.State.WON:
 		GameFlow.level_won(session.lives, session.score)  # RF-112, RF-115 y RF-194: desbloquea y guarda
 		var stars: int = Rules.stars_for(session.lives, level_data.starting_lives, balance)  # RF-93
@@ -388,8 +391,8 @@ func _on_state_changed(state: LevelSession.State) -> void:
 	else:
 		end_screen.show_defeat(session.wave, session.total_waves, can_leave, session.score)
 		Audio.play(&"defeat")
-	if in_campaign:
-		_show_level_records()  # RF-191: los récords solo cuentan desde la campaña (RF-196)
+	if saves_progress:
+		_show_level_records()  # RF-191: los récords cuentan desde el menú (RF-196, RF-224)
 
 
 # --- Récords (RF-191 a RF-193) ---

@@ -22,6 +22,12 @@ var editor_draft: LevelDraft
 ## Mientras hay uno, la partida no guarda progreso, estrellas ni récords, y al terminar vuelve
 ## al editor.
 var test_level: LevelData
+## RF-224: el mapa de la comunidad que se está jugando (null = ninguno). Tiene su progreso y sus
+## récords propios, con el id `comunidad_<archivo>`, y no toca la campaña.
+var current_community: LevelData
+## RF-225: qué solapa de la selección de nivel se ve: &"campaign" o &"community". Se recuerda para
+## que, al terminar un mapa de la comunidad, "Niveles" vuelva a la solapa de la comunidad.
+var select_page: StringName = &"campaign"
 
 
 func _ready() -> void:
@@ -91,40 +97,61 @@ func current_level() -> LevelData:
 	return null if current_index < 0 else level(current_index)
 
 
+## El nivel cuyo progreso y récords se guardan: el de la campaña que se juega, o el mapa de la
+## comunidad (RF-224). null si no se juega ninguno de los dos (F6, tests, o probando desde el editor).
+func played_level() -> LevelData:
+	var campaign_level: LevelData = current_level()
+	return campaign_level if campaign_level != null else current_community
+
+
+## RF-93 para un mapa de la comunidad: sus estrellas salen de la mejor cantidad de vidas guardada.
+func community_stars(community_level: LevelData) -> int:
+	if not SaveManager.is_completed(community_level.id):
+		return 0
+	return Rules.stars_for(SaveManager.best_lives(community_level.id), community_level.starting_lives, BALANCE)
+
+
 func has_next_level() -> bool:
 	return current_index >= 0 and current_index + 1 < level_count()
 
 
 ## RF-90 y RF-112: guarda la victoria y desbloquea el siguiente nivel.
 func level_won(lives: int, score: int = 0) -> void:
-	if current_index < 0:
-		return
-	SaveManager.record_victory(level(current_index).id, lives, score)
-	if has_next_level():
-		SaveManager.unlock(level(current_index + 1).id)
-	SaveManager.save()
+	if current_index >= 0:
+		SaveManager.record_victory(level(current_index).id, lives, score)
+		if has_next_level():
+			SaveManager.unlock(level(current_index + 1).id)
+		SaveManager.save()
+	elif current_community != null:
+		# RF-224: solo su propio progreso. No desbloquea nada ni suma a la campaña.
+		SaveManager.record_victory(current_community.id, lives, score)
+		SaveManager.save()
 
 
 # --- Récords de cada nivel (RF-191, RF-196) ---
 
-## ¿Estos puntos entran en el top 5 del nivel que se está jugando? Fuera de la campaña, no.
+## ¿Estos puntos entran en el top 5 del nivel que se está jugando (de la campaña o un mapa de la
+## comunidad, RF-224)? Fuera de esos dos (F6, tests, probando desde el editor), no.
 func level_score_qualifies(points: int) -> bool:
-	return current_index >= 0 and HighScores.qualifies(SaveManager.scores(current_level().id), points)
+	var played: LevelData = played_level()
+	return played != null and HighScores.qualifies(SaveManager.scores(played.id), points)
 
 
 ## Anota el récord del nivel que se está jugando y guarda. Devuelve la posición (0 = primero)
-## o -1 si no entró o no se juega desde la campaña.
+## o -1 si no entró o no se juega desde el menú.
 func record_level_score(name: String, points: int) -> int:
-	if current_index < 0:
+	var played: LevelData = played_level()
+	if played == null:
 		return -1
-	var index: int = SaveManager.add_score(current_level().id, name, points)
+	var index: int = SaveManager.add_score(played.id, name, points)
 	SaveManager.set_last_initials(name)
 	SaveManager.save()
 	return index
 
 
 func current_level_scores() -> Array:
-	return [] if current_index < 0 else SaveManager.scores(current_level().id)
+	var played: LevelData = played_level()
+	return [] if played == null else SaveManager.scores(played.id)
 
 
 # --- Salón de la fama (RF-194) ---
@@ -175,6 +202,17 @@ func start_level(index: int) -> void:
 		return
 	current_index = index
 	test_level = null
+	current_community = null
+	select_page = &"campaign"
+	get_tree().change_scene_to_file(GAME_SCENE)
+
+
+## RF-224: juega un mapa de la comunidad, con su propio progreso.
+func start_community(community_level: LevelData) -> void:
+	current_index = -1
+	test_level = null
+	current_community = community_level
+	select_page = &"community"
 	get_tree().change_scene_to_file(GAME_SCENE)
 
 
@@ -182,6 +220,7 @@ func start_level(index: int) -> void:
 func play_test(level_to_test: LevelData) -> void:
 	current_index = -1
 	test_level = level_to_test
+	current_community = null
 	get_tree().change_scene_to_file(GAME_SCENE)
 
 
@@ -193,12 +232,14 @@ func next_level() -> void:
 func go_to_main_menu() -> void:
 	current_index = -1
 	test_level = null
+	current_community = null
 	get_tree().change_scene_to_file(MAIN_MENU_SCENE)
 
 
 func go_to_level_select() -> void:
 	current_index = -1
 	test_level = null
+	current_community = null
 	get_tree().change_scene_to_file(LEVEL_SELECT_SCENE)
 
 
@@ -207,6 +248,7 @@ func go_to_level_select() -> void:
 func go_to_editor() -> void:
 	current_index = -1
 	test_level = null
+	current_community = null
 	get_tree().change_scene_to_file(EDITOR_SCENE)
 
 
@@ -214,4 +256,5 @@ func go_to_editor() -> void:
 func go_to_records() -> void:
 	current_index = -1
 	test_level = null
+	current_community = null
 	get_tree().change_scene_to_file(RECORDS_SCENE)
