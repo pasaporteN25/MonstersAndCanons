@@ -213,6 +213,53 @@ En el **ejecutable de pruebas** (`JuegoA_pruebas.exe`) el menú principal tiene 
 
 ---
 
+## Mapas de la comunidad: instalar y compartir
+
+Cualquier persona puede sumar mapas al juego **copiando un archivo**, en cualquier versión (Windows o Linux; en el celular no). No hace falta el editor ni programar (spec §10.4).
+
+**Instalar un mapa:** copiar el archivo `.json` a la carpeta de mapas:
+
+| Sistema | Carpeta |
+|---|---|
+| Windows | `%APPDATA%\Godot\app_userdata\JuegoA\maps\` |
+| Linux | `~/.local/share/godot/app_userdata/JuegoA/maps/` |
+
+Lo más fácil: en el juego, **Jugar → solapa "Mapas de la comunidad" → "Abrir carpeta de mapas"** (la crea si no existe). Al volver a la selección de nivel, el mapa aparece solo, sin reiniciar el juego.
+
+**Compartir un mapa:** se manda el archivo (por Discord, mail, itch.io…). Los mapas hechos con el editor (versión de pruebas) se guardan en esa misma carpeta, así que ya están ahí.
+
+**Cómo se ve y cómo se juega:**
+- Cada archivo es una tarjeta con el nombre del mapa, las oleadas, las estrellas y "Mejor: N vidas". Están **todos abiertos**.
+- Tienen su **propio progreso y su propio top 5**: no desbloquean niveles, no suman a las estrellas de la campaña y **no cuentan para el Salón de la fama** (si contaran, alguien podría regalarse el ranking con un mapa fácil hecho a medida).
+- Al terminar, "Niveles" vuelve a la solapa de la comunidad.
+
+**Si una tarjeta sale en rojo ("Con errores")**, el archivo no se puede jugar. Pasá el mouse por arriba para ver el motivo, o revisalo con `tools/check_level.gd` (dice fila y columna). Los motivos más comunes:
+
+| Motivo | Cómo se arregla |
+|---|---|
+| "Nombre de archivo no válido" | El nombre solo puede tener minúsculas, números y `_` (hasta 40 letras): `mi_mapa_2.json`, no `Mi Mapa.json`. |
+| "No existe el enemigo …" | Tiene que ser uno de `data/enemies/` (`normal`, `fast`, `troll`…). |
+| "El archivo es demasiado grande" | Un mapa real pesa 2 o 3 KB; el máximo es 200 KB. |
+| Un número pasado del límite | Ver la tabla de abajo. |
+
+**Límites** (valen para todos los niveles y el editor no deja pasarse), para que un archivo ajeno no cuelgue el juego:
+
+| Qué | Máximo |
+|---|---|
+| Oleadas | 100 |
+| Grupos por oleada | 20 |
+| Cantidad de un grupo | 999 |
+| `cada` (segundos) | 60 |
+| `desde` (segundos) | 600 |
+| Oro inicial | 99999 |
+| Vidas | 999 |
+| `aumento_vida` | 300 |
+| Nombre del nivel | 30 letras |
+
+**Seguridad:** un mapa es **solo datos** (texto JSON): no puede traer código. Aun así, como con cualquier archivo que baja de internet, conviene abrirlo en un editor de texto antes de instalarlo si no se confía en quien lo mandó.
+
+---
+
 ## Revisar el balance con el bot
 
 El bot juega solo, a toda velocidad, e imprime cómo termina:

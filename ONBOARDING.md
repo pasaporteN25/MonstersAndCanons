@@ -136,6 +136,10 @@ godot --headless --path . --export-release "Windows (pruebas)" build/JuegoA_prue
 
 Además, el menú principal de este ejecutable tiene el botón **"Editor de mapas"** (spec §10.3): se dibujan niveles con el mouse, se prueban al instante y se guardan en `%APPDATA%\Godot\app_userdata\JuegoA\maps\`. El `.exe` normal y el `.apk` no lo tienen. Cómo se usa y cómo volver oficial un mapa: [`CONTENIDO.md`](CONTENIDO.md).
 
+### 6.1.1 Mapas de la comunidad (en todas las versiones)
+
+Los `.json` de `%APPDATA%\Godot\app_userdata\JuegoA\maps\` (la misma carpeta donde guarda el editor) aparecen en **Jugar → Mapas de la comunidad**, en el `.exe` normal y en el de pruebas. Para comprobarlo: guardar un mapa desde el editor de pruebas, abrir el `.exe` normal y buscarlo ahí. Cada versión tiene su propio guardado, así que el progreso en esos mapas no se comparte entre el `.exe` normal y el de pruebas. Detalles en [`CONTENIDO.md`](CONTENIDO.md).
+
 ### 6.2 La versión para GNU/Linux
 
 ```bash

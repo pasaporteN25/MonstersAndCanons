@@ -371,6 +371,16 @@ Solo existe en el modo de pruebas (`DevMode.enabled`): el botón del menú princ
 - ⚠️ **Herramientas y autoloads:** un script de `tools/` corre con `-s` **antes** de que existan los autoloads. Si tipa una variable con una clase que usa `GameFlow` o `DevMode` (por ejemplo `MapEditor`), no compila: usar `Node` y llamar sin tipos.
 - ⚠️ **`_init` en clases hijas de GDScript:** si la clase hija define su `_init`, el de la base **no se llama solo**: hay que escribir `super()` (`EditorPanel` lo necesita).
 
+### 6.9 Los mapas de la comunidad *(M10, spec §10.4, D-034)*
+
+- [`CommunityMaps`](../scripts/logic/community_maps.gd) (lógica pura) lista los `.json` de `user://maps/` y devuelve, por archivo, `{file, id, level, errors, warnings}`. Lee cada uno con `LevelFile.parse(texto, id)`, con el id `comunidad_<archivo>`. Un archivo roto, con nombre no válido o de más de 200 KB es una entrada con su motivo (y el grande **ni se lee**); se leen hasta 200 archivos.
+- **Es la misma carpeta que usa el editor** (`LevelDraft.MAPS_DIR`): un test comprueba que las dos constantes coinciden.
+- **Progreso aparte, sin tocar `SaveManager`:** el guardado ya es genérico por id (`record_victory`, `add_score`), así que solo hizo falta el prefijo `comunidad_` para que un archivo llamado `level_03.json` o `hall_of_fame.json` no se confunda con lo oficial.
+- `GameFlow`: `current_community` (el mapa que se juega), `played_level()` (el nivel cuyo progreso se guarda: el de la campaña o el de la comunidad), `start_community()`, `community_stars()` y `select_page` (la solapa en la que se estaba, para volver a ella). `level_won`, los récords y la partida (`Game`) usan `played_level()`. Lo que **no** usa `played_level()` es a propósito: el desbloqueo, el total de estrellas y el Salón de la fama miran solo la campaña.
+- `LevelSelect` tiene dos solapas y **vuelve a buscar** los mapas cada vez que se abre. `community_dir` y `folder_opener` son "costuras" para los tests (otra carpeta, y un abridor falso que no abre ventanas).
+- **Los límites** (`LevelFile.MAX_*`) se comparan como decimal **antes** de convertir a entero (un `1e300` no desborda) y el editor los respeta (`LevelDraft` recorta y devuelve `-1`/`false` al llegar al máximo).
+- ⚠️ **Windows y los nombres reservados:** `con`, `nul`, `com1`… no se pueden crear como archivo en Windows. Un mapa con ese nombre no llega a existir; y un test con `con.punto.json` falló por eso.
+
 ---
 
 ## 7. Globales (autoloads) — solo desde M3
