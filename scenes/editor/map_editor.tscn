@@ -67,16 +67,40 @@ theme_override_font_sizes/font_size = 22
 text = "Editor de mapas"
 vertical_alignment = 1
 
-[node name="Hint" type="Label" parent="TopBar/Margin/Row"]
+[node name="NewButton" type="Button" parent="TopBar/Margin/Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(88, 0)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.7, 0.72, 0.78, 1)
-theme_override_font_sizes/font_size = 14
-text = "Clic izq.: pinta · Clic der.: borra · Ctrl+Z / Ctrl+Y: deshacer / rehacer"
-vertical_alignment = 1
+focus_mode = 0
+text = "Nuevo"
+
+[node name="OpenButton" type="Button" parent="TopBar/Margin/Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(88, 0)
+layout_mode = 2
+focus_mode = 0
+text = "Abrir"
+
+[node name="SaveButton" type="Button" parent="TopBar/Margin/Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(88, 0)
+layout_mode = 2
+focus_mode = 0
+text = "Guardar"
+
+[node name="TryButton" type="Button" parent="TopBar/Margin/Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(88, 0)
+layout_mode = 2
+focus_mode = 0
+text = "Probar"
+
+[node name="Separator" type="VSeparator" parent="TopBar/Margin/Row"]
+layout_mode = 2
 
 [node name="SettingsButton" type="Button" parent="TopBar/Margin/Row"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(110, 0)
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 focus_mode = 0
 toggle_mode = true
@@ -84,7 +108,7 @@ text = "Ajustes"
 
 [node name="WavesButton" type="Button" parent="TopBar/Margin/Row"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(110, 0)
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 focus_mode = 0
 toggle_mode = true

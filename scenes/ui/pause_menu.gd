@@ -21,6 +21,11 @@ func _ready() -> void:
 	Audio.add_click_sounds(self)
 
 
+## Cómo se llama el botón de salir ("Salir al menú", o "Volver al editor" al probar, RF-217).
+func set_quit_text(text: String) -> void:
+	(%QuitButton as Button).text = text
+
+
 func open() -> void:
 	visible = true
 	_panel.visible = true

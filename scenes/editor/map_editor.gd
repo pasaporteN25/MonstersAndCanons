@@ -12,8 +12,15 @@ const SELECTED_COLOR := Color(1.0, 0.84, 0.3)
 const TOOL_NAMES: Array[String] = ["Pasto", "Camino", "Bloqueada", "Entrada", "Salida"]
 const TOOL_KEYS: Array[Key] = [KEY_1, KEY_2, KEY_3, KEY_4, KEY_5]
 
+## Se sale del editor (GameFlow lleva al menú). Es una señal para poder probarlo sin cambiar de pantalla.
+signal left
+## RF-217: piden jugar el nivel del editor (GameFlow abre la partida). Igual: una señal, para los tests.
+signal test_requested(level: LevelData)
+
 var draft: LevelDraft
 var tool: LevelDraft.Tool = LevelDraft.Tool.PATH
+## RF-216: dónde se guardan y se buscan los mapas propios. Los tests usan otra carpeta.
+var maps_dir: String = LevelDraft.MAPS_DIR
 
 var _stroking: bool = false
 var _stroke_tool: LevelDraft.Tool = LevelDraft.Tool.PATH
@@ -24,11 +31,20 @@ var _redo_button: Button
 var _message_kind: StringName = &"ok"
 var _settings_panel := SettingsPanel.new()
 var _waves_panel := WavesPanel.new()
+var _dialog := EditorDialog.new()
+## Lo que se hace cuando la persona acepta el diálogo que está abierto (null = nada).
+var _pending: Callable
+## Aviso que se suma al mensaje de abajo hasta el próximo cambio ("Guardado en …").
+var _notice: String = ""
 
 @onready var _view: MapView = %MapView
 @onready var _area: Control = %MapArea
 @onready var _title: Label = %Title
 @onready var _back_button: Button = %BackButton
+@onready var _new_button: Button = %NewButton
+@onready var _open_button: Button = %OpenButton
+@onready var _save_button: Button = %SaveButton
+@onready var _try_button: Button = %TryButton
 @onready var _settings_button: Button = %SettingsButton
 @onready var _waves_button: Button = %WavesButton
 @onready var _tools_row: HBoxContainer = %Tools
@@ -44,10 +60,19 @@ func _ready() -> void:
 	_area.gui_input.connect(_on_map_input)
 	_area.mouse_exited.connect(func() -> void: _view.hover_cell = Vector2i(-1, -1))
 	_back_button.pressed.connect(leave)
+	_new_button.pressed.connect(new_level)
+	_open_button.pressed.connect(open_level)
+	_save_button.pressed.connect(save_level)
+	_try_button.pressed.connect(try_level)
+	left.connect(GameFlow.go_to_main_menu)
+	test_requested.connect(GameFlow.play_test)
 	_style_selected(_settings_button)
 	_style_selected(_waves_button)
 	_add_panel(_settings_panel, _settings_button)
 	_add_panel(_waves_panel, _waves_button)
+	add_child(_dialog)  # último: se dibuja encima de todo
+	_dialog.accepted.connect(_on_dialog_accepted)
+	_dialog.cancelled.connect(func() -> void: _pending = Callable())
 	Audio.add_click_sounds(self)
 	set_tool(LevelDraft.Tool.PATH)
 	refresh()
@@ -129,15 +154,161 @@ func redo() -> void:
 		refresh()
 
 
-## RF-210: vuelve al menú. El borrador queda guardado en GameFlow: al volver se retoma.
+# --- Nuevo, abrir, guardar, probar y salir (RF-216, RF-217, RF-218) ---
+
+func dialog() -> EditorDialog:
+	return _dialog
+
+
+## RF-215: un nivel en blanco. Con cambios sin guardar, pregunta antes (RF-218).
+func new_level() -> void:
+	_when_safe("Nuevo nivel", func() -> void: _use_draft(LevelDraft.new_level(), "Nivel nuevo"))
+
+
+## RF-216: abre un mapa propio o un nivel oficial (como plantilla).
+func open_level() -> void:
+	_when_safe("Abrir otro nivel", _ask_which_to_open)
+
+
+## RF-216: guarda en \`maps_dir\`. Si todavía no tiene nombre de archivo, lo pide.
+func save_level() -> void:
+	if draft.file_id == "":
+		_ask_file_name()
+	else:
+		_write()
+
+
+## RF-217: juega el nivel del editor. Un nivel con errores no se puede probar.
+func try_level() -> void:
+	var result: Dictionary = draft.check()
+	if result["level"] == null:
+		_show_error("✗ No se puede probar todavía: " + str(result["errors"][0]))
+		return
+	test_requested.emit(result["level"])
+
+
+## RF-210, RF-218: vuelve al menú. El borrador queda en GameFlow: si se vuelve al editor, se retoma.
 func leave() -> void:
-	GameFlow.go_to_main_menu()
+	if not draft.dirty:
+		left.emit()
+		return
+	_pending = func(_value: Variant) -> void: left.emit()
+	_dialog.ask_confirm("Salir del editor",
+		"Hay cambios sin guardar. Si cerrás el juego se pierden.\n(Mientras el juego siga abierto, el borrador se conserva y se retoma al volver.)",
+		"Salir igual")
+
+
+## Hace \`action\` ya, o después de confirmar si hay cambios sin guardar (RF-218).
+func _when_safe(title: String, action: Callable) -> void:
+	if not draft.dirty:
+		action.call()
+		return
+	_pending = func(_value: Variant) -> void: action.call()
+	_dialog.ask_confirm(title, "Hay cambios sin guardar. Si seguís, se pierden.", "Descartar y seguir")
+
+
+func _on_dialog_accepted(value: Variant) -> void:
+	# Se suelta ANTES de ejecutar: la acción puede abrir otro diálogo y dejar su propio pendiente.
+	var action: Callable = _pending
+	_pending = Callable()
+	if action.is_valid():
+		action.call(value)
+
+
+## Cambia el borrador que se edita (nuevo o abierto) y vuelve a armar la pantalla.
+func _use_draft(new_draft: LevelDraft, notice: String) -> void:
+	draft = new_draft
+	GameFlow.editor_draft = new_draft
+	_settings_panel.bind(draft)
+	_waves_panel.bind(draft)
+	_waves_panel.show_wave(0)
+	refresh()
+	_notice = notice
+	_update_messages()
+
+
+func _ask_file_name() -> void:
+	var suggestion: String = draft.suggested_id
+	if suggestion == "":
+		suggestion = LevelDraft.clean_file_id(draft.level_name())
+	_pending = func(value: Variant) -> void:
+		draft.file_id = str(value)
+		_write()
+	_dialog.ask_text("Guardar el mapa", "Nombre del archivo (minúsculas, números y _):",
+		suggestion, "Guardar", _check_file_name)
+
+
+## Revisa el nombre mientras se escribe (RF-216).
+func _check_file_name(text: String) -> Dictionary:
+	if text == "":
+		return {"ok": false, "note": "Escribí un nombre.", "kind": &"error"}
+	if not LevelDraft.is_valid_file_id(text):
+		return {"ok": false, "note": "Solo minúsculas, números y _ (hasta %d letras)." % LevelDraft.FILE_ID_MAX, "kind": &"error"}
+	if LevelDraft.is_official_id(text):
+		return {"ok": false, "note": "'%s' es el nombre de un nivel oficial: elegí otro para no pisarlo." % text, "kind": &"error"}
+	if LevelDraft.saved_ids(maps_dir).has(text):
+		return {"ok": true, "note": "Ya hay un mapa con ese nombre: se va a reemplazar.", "kind": &"warning"}
+	return {"ok": true, "note": "Se guarda en " + _file_path(text), "kind": &"info"}
+
+
+func _write() -> void:
+	var problem: String = draft.save(maps_dir)
+	if problem != "":
+		draft.file_id = ""  # no quedó guardado: la próxima vez vuelve a pedir el nombre
+		_show_error("✗ No se guardó: " + problem)
+		return
+	refresh()
+	_notice = "Guardado en " + _file_path(draft.file_id)
+	_update_messages()
+
+
+func _ask_which_to_open() -> void:
+	var items: Array[Dictionary] = [{"text": "— Mis mapas —", "selectable": false}]
+	var saved: PackedStringArray = LevelDraft.saved_ids(maps_dir)
+	if saved.is_empty():
+		items.append({"text": "(todavía no guardaste ninguno)", "selectable": false})
+	for id: String in saved:
+		items.append({"text": id, "value": {"kind": "saved", "id": id}})
+	items.append({"text": "— Niveles oficiales (se abren como plantilla) —", "selectable": false})
+	for id: String in LevelFile.campaign_ids():
+		var official: LevelData = LevelFile.load_level(LevelFile.LEVELS_DIR + id + ".json")["level"]
+		items.append({"text": "%s · %s" % [id, official.display_name if official != null else "?"],
+			"value": {"kind": "official", "id": id}})
+	_pending = _open_choice
+	_dialog.ask_choice("Abrir un nivel", "", items, "Abrir")
+
+
+func _open_choice(value: Variant) -> void:
+	var choice: Dictionary = value
+	var opened: LevelDraft
+	if choice["kind"] == "saved":
+		opened = LevelDraft.open_saved(choice["id"], maps_dir)
+	else:
+		opened = LevelDraft.open_official(choice["id"])
+	if opened == null:
+		_show_error("✗ No se pudo abrir " + str(choice["id"]))
+		return
+	var notice: String = "Abierto: %s" % choice["id"]
+	if choice["kind"] == "official":
+		notice = "Abierto como plantilla: %s (al guardarlo pide otro nombre)" % choice["id"]
+	_use_draft(opened, notice)
+
+
+func _file_path(id: String) -> String:
+	return ProjectSettings.globalize_path(maps_dir + id + ".json")
+
+
+func _show_error(text: String) -> void:
+	_message_kind = &"error"
+	_messages.text = text
+	_messages.add_theme_color_override("font_color", ERROR_COLOR)
 
 
 # --- Lo que se ve ---
 
 ## Vuelve a dibujar el mapa y los mensajes después de un cambio.
 func refresh() -> void:
+	_notice = ""
 	_view.show_map(draft.rows(), draft.grid())
 	_update_messages()
 	_title.text = "Editor de mapas · %s%s" % [draft.level_name(), " *" if draft.dirty else ""]
@@ -151,6 +322,7 @@ func refresh() -> void:
 ## Un panel cambió el borrador: se revisa el nivel, pero el panel no se vuelve a armar
 ## (si no, se perdería el foco del campo que se está escribiendo).
 func _on_panel_edited() -> void:
+	_notice = ""
 	_view.show_map(draft.rows(), draft.grid())
 	_update_messages()
 	_title.text = "Editor de mapas · %s%s" % [draft.level_name(), " *" if draft.dirty else ""]
@@ -198,6 +370,8 @@ func _update_messages() -> void:
 		_message_kind = &"ok"
 		_messages.text = "✓ Nivel válido · " + _routes_summary()
 		_messages.add_theme_color_override("font_color", OK_COLOR)
+	if _notice != "":
+		_messages.text += "\n" + _notice
 
 
 ## "Entrada A: 30 casillas · Entrada B: 29 casillas"
@@ -222,9 +396,13 @@ func _build_tools() -> void:
 		button.pressed.connect(set_tool.bind(i))
 		_tools_row.add_child(button)
 		_tool_buttons.append(button)
-	var spacer := Control.new()
-	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_tools_row.add_child(spacer)
+	var hint := Label.new()
+	hint.text = "Clic der.: borra · Ctrl+Z / Ctrl+Y · Ctrl+S: guardar"
+	hint.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	hint.add_theme_font_size_override("font_size", 13)
+	hint.add_theme_color_override("font_color", EditorPanel.HEADER_COLOR)
+	_tools_row.add_child(hint)
 	_undo_button = _action_button("Deshacer", undo)
 	_redo_button = _action_button("Rehacer", redo)
 
@@ -273,6 +451,8 @@ func _on_map_input(event: InputEvent) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if _dialog.is_open():
+		return  # con un diálogo abierto, el teclado es del diálogo
 	if event.is_action_pressed("cancel"):
 		get_viewport().set_input_as_handled()
 		leave()
@@ -286,6 +466,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif key.ctrl_pressed and key.keycode == KEY_Y:
 		get_viewport().set_input_as_handled()
 		redo()
+	elif key.ctrl_pressed and key.keycode == KEY_S:
+		get_viewport().set_input_as_handled()
+		save_level()
 	elif not key.ctrl_pressed and TOOL_KEYS.has(key.keycode):
 		get_viewport().set_input_as_handled()
 		set_tool(TOOL_KEYS.find(key.keycode) as LevelDraft.Tool)

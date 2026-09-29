@@ -18,6 +18,10 @@ var campaign: CampaignData = LevelFile.load_campaign()
 ## El borrador del editor de mapas (spec §10.3). Vive acá para no perderse cuando se prueba el
 ## nivel: la partida reemplaza la pantalla del editor, y al volver se retoma este mismo borrador.
 var editor_draft: LevelDraft
+## RF-217: el nivel que se está probando desde el editor. null = se juega un nivel de la campaña.
+## Mientras hay uno, la partida no guarda progreso, estrellas ni récords, y al terminar vuelve
+## al editor.
+var test_level: LevelData
 
 
 func _ready() -> void:
@@ -170,6 +174,14 @@ func start_level(index: int) -> void:
 	if not is_level_unlocked(index):
 		return
 	current_index = index
+	test_level = null
+	get_tree().change_scene_to_file(GAME_SCENE)
+
+
+## RF-217: juega el nivel del editor. No es de la campaña: no guarda nada.
+func play_test(level_to_test: LevelData) -> void:
+	current_index = -1
+	test_level = level_to_test
 	get_tree().change_scene_to_file(GAME_SCENE)
 
 
@@ -180,21 +192,26 @@ func next_level() -> void:
 
 func go_to_main_menu() -> void:
 	current_index = -1
+	test_level = null
 	get_tree().change_scene_to_file(MAIN_MENU_SCENE)
 
 
 func go_to_level_select() -> void:
 	current_index = -1
+	test_level = null
 	get_tree().change_scene_to_file(LEVEL_SELECT_SCENE)
 
 
-## RF-210: el editor de mapas (solo en el modo de pruebas).
+## RF-210: el editor de mapas (solo en el modo de pruebas). También es a donde se vuelve al
+## terminar de probar un nivel (RF-217): el borrador sigue en `editor_draft`.
 func go_to_editor() -> void:
 	current_index = -1
+	test_level = null
 	get_tree().change_scene_to_file(EDITOR_SCENE)
 
 
 ## RF-195: la pantalla de récords.
 func go_to_records() -> void:
 	current_index = -1
+	test_level = null
 	get_tree().change_scene_to_file(RECORDS_SCENE)

@@ -49,6 +49,11 @@ func _ready() -> void:
 	_table.visible = false
 
 
+## Cómo se llama el botón que sale de la partida ("Niveles", o "Volver al editor" al probar, RF-217).
+func set_levels_text(text: String) -> void:
+	_levels_button.text = text
+
+
 ## `has_next`: hay un nivel siguiente (y se juega desde la campaña).
 ## `in_campaign`: se llegó desde el menú; si no (F6, tests), no hay a dónde volver.
 func show_victory(lives_left: int, stars: int, has_next: bool, in_campaign: bool, score: int = 0) -> void:

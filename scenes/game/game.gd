@@ -16,6 +16,8 @@ const DEV_GOLD: int = 1000
 const DEV_FAST_SPEED: float = 4.0
 ## RF-193: título de la tabla de récords en la pantalla final.
 const LEVEL_RECORDS_TITLE: String = "Récords del nivel"
+## RF-217: cómo se llama el botón que vuelve al editor cuando se está probando un nivel.
+const BACK_TO_EDITOR: String = "Volver al editor"
 
 signal pause_changed(paused: bool)
 signal speed_changed(speed: float)
@@ -26,6 +28,8 @@ signal speed_changed(speed: float)
 @export var tower_types: Array[TowerData] = []
 
 var level: Level
+## RF-217: se está probando el nivel del editor (no hay campaña: no se guarda nada).
+var testing: bool = false
 ## RF-184: el panel de pruebas. null si no es el modo de pruebas.
 var dev_panel: DevPanel
 ## RF-194: el Salón de la fama, mientras está abierto. null si no.
@@ -50,6 +54,9 @@ func _ready() -> void:
 	var campaign_level: LevelData = GameFlow.current_level()
 	if campaign_level != null:
 		level_data = campaign_level
+	elif GameFlow.test_level != null:
+		level_data = GameFlow.test_level  # RF-217: el nivel del editor
+		testing = true
 	elif level_data == null:
 		level_data = GameFlow.level(0)
 
@@ -92,7 +99,12 @@ func _ready() -> void:
 	session.state_changed.connect(_on_state_changed)
 	end_screen.retry_pressed.connect(restart)
 	end_screen.next_pressed.connect(GameFlow.next_level)
-	end_screen.levels_pressed.connect(GameFlow.go_to_level_select)
+	if testing:
+		# RF-217: al terminar o salir, se vuelve al editor con el borrador intacto.
+		end_screen.levels_pressed.connect(GameFlow.go_to_editor)
+		end_screen.set_levels_text(BACK_TO_EDITOR)
+	else:
+		end_screen.levels_pressed.connect(GameFlow.go_to_level_select)
 	end_screen.name_entered.connect(_on_record_name_entered)
 
 	hud.pause_pressed.connect(toggle_pause)
@@ -103,7 +115,11 @@ func _ready() -> void:
 	# RF-114: menú de pausa.
 	pause_menu.resume_pressed.connect(close_pause_menu)
 	pause_menu.retry_pressed.connect(restart)
-	pause_menu.quit_pressed.connect(GameFlow.go_to_main_menu)
+	if testing:
+		pause_menu.quit_pressed.connect(GameFlow.go_to_editor)
+		pause_menu.set_quit_text(BACK_TO_EDITOR)
+	else:
+		pause_menu.quit_pressed.connect(GameFlow.go_to_main_menu)
 
 	# RF-116: sonidos de la partida (los disparos, al construir cada torre).
 	session.wave_changed.connect(func(wave: int, _total: int) -> void:
@@ -362,13 +378,15 @@ func _on_state_changed(state: LevelSession.State) -> void:
 	build_controller.deselect_placed()
 	set_speed(1.0)
 	var in_campaign: bool = GameFlow.current_level() != null
+	# Desde la campaña se vuelve a la selección de nivel; probando (RF-217), al editor.
+	var can_leave: bool = in_campaign or testing
 	if state == LevelSession.State.WON:
 		GameFlow.level_won(session.lives, session.score)  # RF-112, RF-115 y RF-194: desbloquea y guarda
 		var stars: int = Rules.stars_for(session.lives, level_data.starting_lives, balance)  # RF-93
-		end_screen.show_victory(session.lives, stars, GameFlow.has_next_level(), in_campaign, session.score)
+		end_screen.show_victory(session.lives, stars, GameFlow.has_next_level(), can_leave, session.score)
 		Audio.play(&"victory")
 	else:
-		end_screen.show_defeat(session.wave, session.total_waves, in_campaign, session.score)
+		end_screen.show_defeat(session.wave, session.total_waves, can_leave, session.score)
 		Audio.play(&"defeat")
 	if in_campaign:
 		_show_level_records()  # RF-191: los récords solo cuentan desde la campaña (RF-196)
