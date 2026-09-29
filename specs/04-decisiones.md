@@ -183,3 +183,11 @@
 - **El recorrido es el camino más corto, y un empate es un error:** así el mapa de letras alcanza para describir el nivel (no hay que listar esquinas), y nunca hay un recorrido "adivinado". Se comprobó que los 6 niveles actuales dan exactamente los mismos recorridos.
 - **Qué NO incluye:** el editor dentro del juego, cargar mapas de `user://` o de una carpeta de mods, y los dibujos elegidos por casilla (una `X` sigue eligiendo roca, árbol o arbusto sola). Son los escalones 2 y 3 de B-04.
 - **Un nivel inválido no rompe el juego:** se saltea con su error en el registro. Los niveles oficiales, además, los revisa un test (y GitHub, D-030) en cada push.
+
+### D-032 · Nivel 7 hecho en JSON y versión para GNU/Linux
+- **Fecha:** 2026-09-29 · **Estado:** Aceptada · **Decidió:** Lucas (pidió el nivel 7 y la versión de Linux) / Claude (el diseño y los números)
+- **Qué:** el nivel 7 "Cruce" (spec §7.9) es el primero que nace como archivo de texto, para probar el formato de M7 con contenido nuevo. Y se agrega un preset de exportación "Linux" (un solo archivo `JuegoA.x86_64` de 64 bits, con los datos adentro) más un `.tar.gz` que conserva el permiso de ejecución.
+- **Aumento de vida 24 %:** se probó con 15, 20, 24, 30 y 45 %. Con 15 y 20 % el bot que mezcla las 8 torres ganaba sin perder vidas; con 30 %, perdía en la oleada 18. Con 24 % el bot que mezcla gana con 7 vidas y el de las 4 torres viejas pierde en la 18: el nivel final exige usar las torres nuevas.
+- **Consecuencia:** el Salón de la fama (D-029) pide ganar **todos** los niveles de la campaña, así que ahora exige ganar también el 7. Quien ya lo tenía anotado con 6 niveles vuelve a poder entrar cuando gane el 7 y su total suba.
+- **Linux, lo que NO se probó:** el ejecutable se exportó pero no se abrió en una computadora Linux (no había una a mano). Los tests sí corren en Linux en cada push (D-030).
+- **Alternativas para Linux:** un AppImage o un paquete Flatpak (más cómodos de instalar, pero piden herramientas y pasos extra); un `.deb`. Quedan para cuando haya jugadores que los pidan.

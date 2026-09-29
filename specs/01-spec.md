@@ -258,7 +258,8 @@ Cuatro torres nuevas, pensadas como **respuesta** a los enemigos nuevos (§6.1).
 | 3 | Encrucijada | 20 | 250 | **Dos entradas** cuyos caminos se unen antes de la salida (§7.3). | M3 |
 | 4 | Espiral | 15 | 200 | El camino da vueltas hacia adentro; **la salida está en el centro** (§7.5). | M4 |
 | 5 | Fortaleza | 20 | 300 | **Tres entradas**, una desde arriba (§7.6). | M4 |
-| 6 | Nido | 15 | 250 | **Dos entradas** (una desde arriba) y los enemigos nuevos: Troll, Araña y Crías (§7.7). El nivel final. | M5 |
+| 6 | Nido | 15 | 250 | **Dos entradas** (una desde arriba) y los enemigos nuevos: Troll, Araña y Crías (§7.7). | M5 |
+| 7 | Cruce | 20 | 300 | **Dos entradas** en lados opuestos y **la salida en el centro** (§7.9). El nivel final. Primero hecho en archivo de texto (§7.8). | M8 |
 
 ### Oleadas del nivel 1
 
@@ -386,8 +387,9 @@ Con +40 % por oleada, un nivel de 15 o 20 oleadas terminaría con enemigos 7 a 9
 | 4 · Espiral | **20 %** | Pierde en la última oleada | **Gana con 14 vidas** | Pierde en la oleada 10 |
 | 5 · Fortaleza | **10 %** | Pierde en la última oleada | **Gana con 10 vidas** | Pierde en la oleada 5 |
 | 6 · Nido *(M5)* | **30 %** | Gana con 6 vidas | — | Pierde en la oleada 5 |
+| 7 · Cruce *(M8)* | **24 %** | Pierde en la oleada 18 | — | Pierde en la oleada 4 |
 
-**Con las 8 torres (M5, bot "mix"):** nivel 1 gana con 19 vidas · 2 pierde en la última oleada · 3 gana con 16 · 4 gana con 9 · 5 gana con 16 · **6 gana con 10**. Queda parejo con los bots de siempre (a veces mejor, a veces peor): las torres nuevas suman opciones sin regalar los niveles. El nivel 6 es el más exigente: con 35 % ningún bot pasaba la oleada 7 (10 Trolls y 6 Arañas).
+**Con las 8 torres (M5, bot "mix"):** nivel 1 gana con 19 vidas · 2 pierde en la última oleada · 3 gana con 16 · 4 gana con 9 · 5 gana con 16 · **6 gana con 10** · **7 gana con 7**. Queda parejo con los bots de siempre (a veces mejor, a veces peor): las torres nuevas suman opciones sin regalar los niveles. El nivel 6 es el más exigente: con 35 % ningún bot pasaba la oleada 7 (10 Trolls y 6 Arañas).
 
 La curva de dificultad buscada: en el nivel 1 alcanza con una sola torre bien usada; **desde el nivel 2 hay que mezclar torres** para ganar; el nivel 3 es el más exigente. (Con 40 %, el nivel 3 se perdía siempre en la oleada 6.)
 
@@ -561,6 +563,31 @@ Cada nivel es **un archivo de texto** en `data/levels/` (por ejemplo `level_06.j
 > **Dado** un nivel con un error (una entrada que no llega a la salida, un enemigo que no existe, una clave mal escrita) → **Entonces** el mensaje dice qué está mal y dónde, y el resto de la campaña sigue andando.
 
 
+
+---
+
+### 7.9 Nivel 7 — Cruce *(M8)*
+
+El primer nivel hecho **directamente como archivo de texto** ([`level_07.json`](../data/levels/level_07.json), §7.8): sirvió para probar el formato nuevo con contenido real. **Dos entradas** en lados opuestos, A (izquierda, arriba) y B (derecha, abajo), y **la salida en el centro del mapa**, con su puerta (RF-06). Los dos recorridos dan una vuelta larga y terminan pegados a la salida, uno por cada lado. Los recorridos son más cortos que los de los niveles 4 a 6 (30 y 29 casillas), pero los dos terminan en el mismo lugar: una defensa en el centro cubre los dos frentes.
+
+```
+col: 01234567890123456789
+f0   ····················
+f1   A■■■■■■■■■■■■■■■■■··  ← entrada A
+f2   ····▲···▲·····▲··■··
+f3   ·▲····▲······■■■■■··
+f4   ········■■S■·■······  ← la salida (S), en el centro
+f5   ··■■■■■■■··■■■···▲··
+f6   ··■·······▲····▲····
+f7   ··■■■■■■■■■■■■■■■■■B  ← entrada B
+f8   ·····▲······▲·······
+```
+
+(`■` es camino y `▲`, casilla bloqueada, como en los otros mapas; `A`, `B` y `S` son las entradas y la salida.)
+
+Oro inicial **300**, 20 vidas, **20 oleadas**, con todos los enemigos (Normal, Rápido, Tanque, Volador, Blindado, Jefe, Troll y Araña): las oleadas 1 a 8 los presentan de a pares, y de la 9 en adelante se mezclan; la 20 trae 6 Jefes, Arañas y Trolls. La lista completa está en el archivo del nivel.
+
+**Aumento de vida por oleada: 24 %** (ver §7.4). Con 15 % y con 20 % el bot que mezcla ganaba casi sin perder vidas (20 y 19); con 30 % perdía en la oleada 18 y con 45 %, en la 6: el salto entre 24 % y 30 % es muy brusco, así que conviene no subirlo sin revisar.
 
 ---
 

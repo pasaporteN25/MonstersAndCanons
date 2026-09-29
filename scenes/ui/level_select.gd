@@ -3,8 +3,8 @@
 # y su mejor resultado. Arriba, el total de estrellas de la campaña.
 extends Control
 
-## 6 tarjetas de 190 px + 5 espacios de 16 px = 1220 px: entran en los 1280 de la pantalla.
-const CARD_SIZE := Vector2(190, 220)
+## 7 tarjetas de 168 px + 6 espacios de 12 px = 1248 px: entran en los 1280 de la pantalla.
+const CARD_SIZE := Vector2(168, 220)
 const CARD_STAR_SIZE: float = 26.0
 
 @onready var _cards: HBoxContainer = %Cards
@@ -31,7 +31,7 @@ func _make_card(index: int) -> Button:
 	var level: LevelData = GameFlow.level(index)
 	var card := Button.new()
 	card.custom_minimum_size = CARD_SIZE
-	card.add_theme_font_size_override("font_size", 20)
+	card.add_theme_font_size_override("font_size", 18)
 	card.text = "Nivel %d\n%s\n%d oleadas\n%s\n\n" % [
 		index + 1, level.display_name, level.waves.size(), status_text(index)]
 	card.disabled = not GameFlow.is_level_unlocked(index)

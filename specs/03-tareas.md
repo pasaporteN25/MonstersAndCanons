@@ -525,6 +525,20 @@
   **Hecho cuando:** pasan todos los tests, `check_level` muestra el recorrido de un nivel y el error de uno roto, y el `.exe` exportado carga los 6 niveles.
   **Resultado:** se borraron las 6 escenas, los 6 `.tres` de niveles, `campaign.tres`, `make_levels.gd`, la herramienta de conversión y el test de comparación (ya cumplieron). `LevelData` ya no tiene `map_scene`. [`check_level.gd`](../tools/check_level.gd) muestra el recorrido de cada entrada marcado con `*` y termina con código 1 si hay errores (sirve para GitHub). CONTENIDO.md tiene la sección "Agregar un nivel" nueva (letras, oleadas, errores comunes). Se exportaron los tres: los 7 `.json` están dentro del `.exe`, del `.exe` de pruebas y del `.apk`, y el `.exe` arranca sin errores de campaña. 303 tests.
 
+## M8 — Nivel 7 y versión para Linux *(pedido por Lucas, D-032)*
+
+- [x] **T97 · Nivel 7 — Cruce**
+  `data/levels/level_07.json` (mapa con la salida en el centro, dos entradas, 20 oleadas), agregado a `campaign.json`; tarjetas de la selección de nivel de 190 a 168 px para que entren 7; aumento de vida elegido con el bot.
+  **Refs:** spec §7.9, RF-200 a RF-205.
+  **Hecho cuando:** `check_level` no da errores, pasan los tests (la campaña ahora es de 7 niveles) y el bot da resultados razonables.
+  **Resultado:** aumento de vida **24 %**: el bot que mezcla las 8 torres gana con 7 vidas, el de las 4 viejas pierde en la oleada 18 y el de torres al azar, en la 4 (con 15 % y 20 % era regalado; con 30 % nadie pasaba la 18). Con la salida en el centro y los dos recorridos cortos (30 y 29 casillas), una defensa central cubre todo, por eso hace falta más vida por oleada que en el nivel 6. Crear el nivel llevó un archivo de texto y una línea en la campaña, sin tocar código (salvo el ancho de las tarjetas).
+
+- [x] **T98 · Exportar para GNU/Linux**
+  Preset "Linux" en `export_presets.cfg` (un solo archivo, con los datos adentro) y `.tar.gz` que conserva el permiso de ejecución; README y ONBOARDING.
+  **Refs:** D-032.
+  **Hecho cuando:** la exportación termina sin errores y el archivo es un ejecutable de Linux de 64 bits con los niveles adentro.
+  **Resultado:** `build/JuegoA.x86_64` (74 MB, ELF x86-64, con los 7 niveles adentro) y `build/JuegoA_linux.tar.gz` (29 MB). **Falta probarlo en una computadora Linux real:** en esta PC (Windows, sin WSL) no se pudo abrir.
+
 ### Otras ideas de pulido *(sin fecha)*
 
 - Decidir ambientación y arte definitivo (ver "Preguntas abiertas" de la spec y B-02). *Los dibujos provisionales ya están (T70–T73).*

@@ -134,6 +134,19 @@ godot --headless --path . --export-release "Windows (pruebas)" build/JuegoA_prue
 
 **✅ Comprobar:** al abrirlo, abajo al centro dice "MODO PRUEBAS · F1: panel", todos los niveles se pueden elegir, y en la partida `F1` abre el panel de pruebas. En el log de esa ejecución aparece "Modo de pruebas activado". Usa su propio guardado (`save_pruebas.json`), así que no toca el progreso ni los récords del `.exe` normal.
 
+### 6.2 La versión para GNU/Linux
+
+```bash
+godot --headless --path . --export-release "Linux" build/JuegoA.x86_64
+tar --mode=755 -czf build/JuegoA_linux.tar.gz -C build JuegoA.x86_64
+```
+
+**✅ Comprobar:** se crea `build/JuegoA.x86_64` (~75 MB). Para verificar que es de Linux: `file build/JuegoA.x86_64` dice "ELF 64-bit LSB executable, x86-64". Necesita las plantillas de Linux, que vienen con las de Windows (paso 6, arriba).
+
+**En una computadora Linux:** `tar -xzf JuegoA_linux.tar.gz` y `./JuegoA.x86_64`. Si se copió el archivo suelto desde Windows, hay que darle permiso: `chmod +x JuegoA.x86_64`.
+
+> ⚠️ Desde Windows no se puede abrir, así que probarlo en una computadora Linux real sigue pendiente. Si falla al abrir, lo primero que hay que mirar es la terminal: el ejecutable imprime ahí sus errores.
+
 ---
 
 ## 7. Android (`.apk`)

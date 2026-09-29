@@ -4,7 +4,7 @@
 
 Juego *tower defense* 2D hecho en **Godot 4** con **GDScript**, construido con **SDD (Spec-Driven Development)**.
 
-> **Estado actual:** M1 a M7 ✅ (juego completo, 6 niveles, 8 torres, modo de pruebas, récords y niveles en archivos de texto) y versión Android probada en un celular. Tests automáticos en GitHub (D-030).
+> **Estado actual:** M1 a M8 ✅ (juego completo, 7 niveles, 8 torres, modo de pruebas, récords, niveles en archivos de texto y versión para Linux) y versión Android probada en un celular. Tests automáticos en GitHub (D-030).
 >
 > **Versión de Godot:** 4.7.2 estable (renderizador *Compatibility*).
 >
@@ -99,6 +99,18 @@ godot --headless --path . --export-release "Windows Desktop" build/JuegoA.exe
 - La configuración está en `export_presets.cfg`: deja fuera `tests/`, `tools/`, `specs/` y GUT.
 - La carpeta `build/` no se sube a git.
 - El progreso se guarda en `%APPDATA%\Godot\app_userdata\JuegoA\save.json`.
+
+### Versión para GNU/Linux
+
+```bash
+godot --headless --path . --export-release "Linux" build/JuegoA.x86_64
+tar --mode=755 -czf build/JuegoA_linux.tar.gz -C build JuegoA.x86_64
+```
+
+- Es **un solo archivo** (`JuegoA.x86_64`, ~75 MB, para procesadores de 64 bits Intel/AMD) con los datos adentro, igual que el `.exe`. Usa las mismas plantillas de exportación de Godot 4.7.2 (las de Linux vienen con las de Windows).
+- Un archivo copiado desde Windows **pierde el permiso de ejecución**. Por eso también se arma el `.tar.gz`, que lo conserva: en Linux, `tar -xzf JuegoA_linux.tar.gz` y `./JuegoA.x86_64`. Si se copió el archivo suelto: `chmod +x JuegoA.x86_64`.
+- Necesita una computadora con escritorio (X11 o Wayland) y OpenGL. El progreso se guarda en `~/.local/share/godot/app_userdata/JuegoA/save.json`.
+- **Todavía no se probó en una computadora Linux real**: los tests sí corren en Linux en cada push (GitHub, D-030), pero el ejecutable no se abrió.
 
 ### El ejecutable de pruebas (`JuegoA_pruebas.exe`)
 
