@@ -11,8 +11,11 @@ extends RefCounted
 
 enum Cell { GRASS, PATH, BLOCKED }
 
-const WIDTH: int = 20
-const HEIGHT: int = 9
+## RF-250: el tamaño de un mapa va de 20×9 (el de siempre) a 26×12.
+const MIN_WIDTH: int = 20
+const MIN_HEIGHT: int = 9
+const MAX_WIDTH: int = 26
+const MAX_HEIGHT: int = 12
 const GRASS: String = "."
 const PATH: String = "#"
 const BLOCKED: String = "X"
@@ -21,6 +24,9 @@ const EXIT: String = "S"
 const ENTRANCE_LETTERS: String = "ABCDEFGH"
 const NEIGHBORS: Array[Vector2i] = [Vector2i.RIGHT, Vector2i.DOWN, Vector2i.LEFT, Vector2i.UP]
 
+## Tamaño del mapa, en casillas (sale de las filas).
+var width: int = MIN_WIDTH
+var height: int = MIN_HEIGHT
 var errors: PackedStringArray = []
 ## RF-207: cosas dudosas que no impiden jugar (por ejemplo, un tramo que el enemigo se salta).
 var warnings: PackedStringArray = []
@@ -55,11 +61,11 @@ func cell_type(cell: Vector2i) -> Cell:
 
 
 func is_inside(cell: Vector2i) -> bool:
-	return cell.x >= 0 and cell.y >= 0 and cell.x < WIDTH and cell.y < HEIGHT
+	return cell.x >= 0 and cell.y >= 0 and cell.x < width and cell.y < height
 
 
 func is_on_border(cell: Vector2i) -> bool:
-	return cell.x == 0 or cell.y == 0 or cell.x == WIDTH - 1 or cell.y == HEIGHT - 1
+	return cell.x == 0 or cell.y == 0 or cell.x == width - 1 or cell.y == height - 1
 
 
 ## Las esquinas del recorrido de una entrada: la entrada, cada casilla donde dobla y la salida.
@@ -79,18 +85,23 @@ static func where(cell: Vector2i) -> String:
 
 
 func _read(rows: PackedStringArray) -> void:
-	if rows.size() != HEIGHT:
-		errors.append("El mapa tiene %d filas y tiene que tener %d." % [rows.size(), HEIGHT])
+	if rows.size() < MIN_HEIGHT or rows.size() > MAX_HEIGHT:
+		errors.append("El mapa tiene %d filas y tiene que tener entre %d y %d." % [rows.size(), MIN_HEIGHT, MAX_HEIGHT])
+		return
+	height = rows.size()
+	width = rows[0].length()
+	if width < MIN_WIDTH or width > MAX_WIDTH:
+		errors.append("La fila 1 tiene %d letras y tiene que tener entre %d y %d." % [width, MIN_WIDTH, MAX_WIDTH])
 		return
 	var found: Dictionary = {}  # letra de entrada → casilla
 	var exits: Array[Vector2i] = []
 	var grass: int = 0
-	for y: int in HEIGHT:
+	for y: int in height:
 		var row: String = rows[y]
-		if row.length() != WIDTH:
-			errors.append("La fila %d tiene %d letras y tiene que tener %d." % [y + 1, row.length(), WIDTH])
+		if row.length() != width:
+			errors.append("La fila %d tiene %d letras y la fila 1 tiene %d: todas las filas tienen que tener el mismo largo." % [y + 1, row.length(), width])
 			continue
-		for x: int in WIDTH:
+		for x: int in width:
 			var cell := Vector2i(x, y)
 			var letter: String = row[x]
 			if letter == GRASS:
@@ -171,8 +182,8 @@ func _find_unused_cells() -> void:
 	for route: Array in routes:
 		for cell: Vector2i in route:
 			used[cell] = true
-	for y: int in HEIGHT:
-		for x: int in WIDTH:
+	for y: int in height:
+		for x: int in width:
 			var cell := Vector2i(x, y)
 			if cell_type(cell) == Cell.PATH and not used.has(cell):
 				unused_cells.append(cell)

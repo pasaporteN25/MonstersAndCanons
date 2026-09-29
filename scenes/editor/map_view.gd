@@ -93,7 +93,7 @@ func _draw_overlay() -> void:
 				_draw_badge(cell, letter, EXIT_COLOR)
 			elif MapGrid.ENTRANCE_LETTERS.contains(letter):
 				_draw_badge(cell, letter, _route_color(MapGrid.ENTRANCE_LETTERS.find(letter)))
-	if hover_cell.x >= 0 and hover_cell.y >= 0 and hover_cell.x < MapGrid.WIDTH and hover_cell.y < MapGrid.HEIGHT:
+	if hover_cell.x >= 0 and hover_cell.y >= 0 and hover_cell.x < _grid.width and hover_cell.y < _grid.height:
 		_overlay.draw_rect(Rect2(Vector2(hover_cell) * tile, Vector2(tile, tile)), HOVER_COLOR, false, 2.0)
 
 

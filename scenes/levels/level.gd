@@ -52,8 +52,8 @@ static func make_ground(grid: MapGrid) -> TileMapLayer:
 	var ground := TileMapLayer.new()
 	ground.name = "Ground"
 	ground.tile_set = TILESET
-	for y: int in MapGrid.HEIGHT:
-		for x: int in MapGrid.WIDTH:
+	for y: int in grid.height:
+		for x: int in grid.width:
 			var cell := Vector2i(x, y)
 			ground.set_cell(cell, 0, ATLAS_OF[grid.cell_type(cell)])
 	return ground

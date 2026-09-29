@@ -226,3 +226,11 @@
 - **Cómo:** `Wiki.categories()` recibe una función "¿lo vio?"; la entrada cerrada es un `WikiEntry` con `locked = true` que **no lleva** los datos reales (así ni un error de la pantalla los puede filtrar). La pantalla solo dibuja la silueta y el "???".
 - **Alternativa descartada:** ocultar del todo las entradas cerradas: el jugador no sabría que existen más ni cuántos faltan. Con "???" hay algo que completar.
 - **Consecuencia:** un enemigo visto en un mapa de la comunidad también se abre (es el mismo guardado y el mismo aviso de RF-134).
+
+### D-037 · Mapas más grandes con zoom (cámara), no con desplazamiento
+- **Fecha:** 2026-09-29 · **Estado:** Aceptada · **Decidió:** Lucas (qué: un mapa un poco más grande, solo para los niveles 9 y 10) / Claude (cómo)
+- **Qué:** un mapa puede medir de 20×9 a 26×12 casillas y el juego lo achica para que entre entero (spec §7.10, RF-250 a RF-255).
+- **Cómo:** una `Camera2D` con `zoom` y centrada en el mapa, solo cuando el mapa no es de 20×9. **Es lo que menos toca:** una cámara **no cambia las coordenadas del mundo**: `global_position`, los alcances en píxeles y la casilla bajo el mouse (`get_global_mouse_position`) siguen valiendo lo mismo. Si en cambio se hubiera achicado el nodo `Game`, cada distancia entre torres y enemigos (más de 50 usos de `global_position`) habría quedado multiplicada por el zoom y todo el combate habría cambiado sin avisar. La barra de arriba y la de torres son `CanvasLayer`, que la cámara no toca.
+- **Por qué solo hasta 26×12:** con zoom 0,75 las casillas miden 48 px en la pantalla lógica de 1280×720; más chico se vuelve difícil de tocar con el dedo. Lucas pidió "no mucho".
+- **Alternativa descartada:** cámara que se desplaza (mapas enormes): peor en el celular (el dedo ya selecciona torres), obliga a pensar qué se ve y qué no, y cambia mucho más.
+- **Lo que NO incluye:** cambiar el tamaño desde el editor (RF-254), tamaños menores a 20×9, zoom manual del jugador.

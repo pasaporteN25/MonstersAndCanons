@@ -45,7 +45,7 @@ La columna **Hito** de las tablas siguientes indica en qué momento se agrega ca
 
 ## 3. El mapa
 
-- **RF-01** El mapa es una **cuadrícula** de **20 columnas × 9 filas**; cada casilla mide 64×64 píxeles (el mapa ocupa 1280×576 y deja espacio arriba y abajo para la interfaz).
+- **RF-01** El mapa es una **cuadrícula** de **20 columnas × 9 filas** *(M13: los mapas pueden ser más grandes, hasta 26×12, RF-250)*; cada casilla mide 64×64 píxeles (el mapa ocupa 1280×576 y deja espacio arriba y abajo para la interfaz).
 - **RF-02** Cada casilla es de uno de estos tipos:
   - **Camino:** por aquí caminan los enemigos terrestres. No se puede construir.
   - **Libre:** se puede construir una torre.
@@ -513,7 +513,7 @@ f8   ·······▲············
 
 Cada nivel es **un archivo de texto** en `data/levels/` (por ejemplo `level_06.json`) que se puede leer y cambiar con el Bloc de notas. El juego lo lee y arma el mapa solo: ya no hay escenas de mapa hechas a mano ni generadas por código.
 
-- **RF-200** **El archivo del nivel** es JSON y tiene: `version` (hoy 1), `nombre`, `oro` (inicial), `vidas` (iniciales), `mapa` (9 filas de 20 letras), `oleadas` y, si hace falta, `aumento_vida` (el % de vida extra por oleada de ese nivel, §7.4; si no está, se usa el general). El identificador del nivel (`level_06`) es el nombre del archivo.
+- **RF-200** **El archivo del nivel** es JSON y tiene: `version` (hoy 1), `nombre`, `oro` (inicial), `vidas` (iniciales), `mapa` (9 filas de 20 letras; hasta 12 filas de 26, RF-250), `oleadas` y, si hace falta, `aumento_vida` (el % de vida extra por oleada de ese nivel, §7.4; si no está, se usa el general). El identificador del nivel (`level_06`) es el nombre del archivo.
 - **RF-201** **Las letras del mapa:**
 
   | Letra | Casilla |
@@ -526,7 +526,7 @@ Cada nivel es **un archivo de texto** en `data/levels/` (por ejemplo `level_06.j
 
 - **RF-202** **El recorrido se calcula solo:** cada entrada va a la salida por el **camino más corto** sobre casillas de camino (`#` y letras). Si hay **dos recorridos igual de cortos**, el nivel es inválido: el juego no adivina, y avisa para que se cierre uno. Si la entrada está en el borde, los enemigos entran desde fuera del mapa (igual que antes). Los voladores van en línea recta de la entrada a la salida (RF-05).
 - **RF-203** **Las oleadas** son una lista; cada oleada es una lista de grupos: `{"enemigo": "troll", "cantidad": 8, "cada": 1.2, "desde": 3.0, "entrada": "B"}`. `enemigo` es el nombre de un archivo de `data/enemies/`; `desde` (segundos desde que empieza la oleada) vale 0 y `entrada` vale `"A"` si no se escriben.
-- **RF-204** **Validación con mensajes claros:** al leer un nivel se comprueba todo lo anterior: que el mapa sea de 20×9 y solo tenga letras conocidas; que haya salida y al menos una entrada; que cada entrada llegue a la salida sin empates; que haya pasto para construir; que el oro, las vidas, las cantidades y los tiempos tengan sentido; que los enemigos existan; que cada grupo use una entrada del mapa, y que no haya **claves mal escritas** (por ejemplo `"canitdad"`). Cada problema se explica en castellano y dice dónde está ("oleada 3, grupo 2: no existe el enemigo 'trol'"). Un nivel inválido **no se juega** y el error queda en el registro; el juego no se cierra.
+- **RF-204** **Validación con mensajes claros:** al leer un nivel se comprueba todo lo anterior: que el mapa mida entre 20×9 y 26×12 (RF-250) y solo tenga letras conocidas; que haya salida y al menos una entrada; que cada entrada llegue a la salida sin empates; que haya pasto para construir; que el oro, las vidas, las cantidades y los tiempos tengan sentido; que los enemigos existan; que cada grupo use una entrada del mapa, y que no haya **claves mal escritas** (por ejemplo `"canitdad"`). Cada problema se explica en castellano y dice dónde está ("oleada 3, grupo 2: no existe el enemigo 'trol'"). Un nivel inválido **no se juega** y el error queda en el registro; el juego no se cierra.
 - **RF-205** **La campaña** es `data/campaign.json`: la lista de niveles en orden (`"niveles": ["level_01", …]`). Agregar un nivel es crear su archivo y sumarlo a esa lista.
 - **RF-206** **Revisar un nivel sin jugarlo:** `tools/check_level.gd` lee un archivo y muestra sus errores o, si está bien, el mapa con el recorrido de cada entrada y su largo en casillas.
 - **RF-207** *(M9)* **Aviso de atajo:** si hay casillas de camino que **ningún recorrido usa**, el nivel muestra un **aviso** (no un error: se juega igual) que dice cuántas son y dónde están (fila y columna). Casi siempre es que dos partes del camino quedaron en casillas vecinas y el enemigo **se salta el tramo del medio**, o que quedó un callejón sin salida o un camino de dos casillas de ancho. `check_level` marca esas casillas con `?` en el mapa.
@@ -589,6 +589,20 @@ f8   ·····▲······▲·······
 Oro inicial **300**, 20 vidas, **20 oleadas**, con todos los enemigos (Normal, Rápido, Tanque, Volador, Blindado, Jefe, Troll y Araña): las oleadas 1 a 8 los presentan de a pares, y de la 9 en adelante se mezclan; la 20 trae 6 Jefes, Arañas y Trolls. La lista completa está en el archivo del nivel.
 
 **Aumento de vida por oleada: 24 %** (ver §7.4). Con 15 % y con 20 % el bot que mezcla ganaba casi sin perder vidas (20 y 19); con 30 % perdía en la oleada 18 y con 45 %, en la 6: el salto entre 24 % y 30 % es muy brusco, así que conviene no subirlo sin revisar.
+
+### 7.10 Mapas de tamaño variable *(M13, pedido por Lucas, D-037, B-08)*
+
+Para poder hacer niveles más altos (9 y 10) con más lugar para construir y caminos más largos, un mapa puede ser **un poco más grande** que 20×9. No hay cámara que se desplaza: el juego **achica todo** (zoom) para que el mapa entre entero en pantalla, y la interfaz no cambia.
+
+- **RF-250** **Tamaños posibles:** de **20×9** (el de siempre y el de todos los niveles actuales) hasta **26×12** casillas. Cada fila del `mapa` tiene que tener **el mismo largo** (entre 20 y 26 letras) y la cantidad de filas va de 9 a 12. La casilla sigue midiendo 64×64 en los números del juego: **alcance, velocidad y daño no cambian con el tamaño**.
+- **RF-251** **Zoom automático:** el mapa se muestra con un zoom de `mínimo(1; 1280 ÷ (ancho × 64); 576 ÷ (alto × 64))`, **centrado** en el área que hay entre la barra de arriba y la de abajo. Con 20×9 el zoom es 1 (todo igual que hoy); con 26×12, 0,75. La barra de arriba, la de torres y los paneles **no se achican**: solo el mundo (mapa, torres, enemigos, disparos y efectos).
+- **RF-252** **Todo funciona igual con zoom:** la casilla que se marca con el mouse o el dedo es la que está debajo del puntero; los alcances, los disparos y el daño dan lo mismo que sin zoom.
+- **RF-253** **Validación:** un mapa con filas de distinto largo, de menos de 20×9 o de más de 26×12 es inválido y el mensaje dice qué tamaño tiene y cuáles se aceptan. Las entradas tienen que estar en el borde del mapa **real** (no de 20×9). Los topes de RF-223 suman estos.
+- **RF-254** **El editor (§10.3) respeta el tamaño:** abrir, guardar y probar un mapa de otro tamaño no lo recorta ni lo corrige a 20×9, y el mapa se ve entero en el editor (con su propio zoom). El nivel nuevo sigue siendo de 20×9; **cambiar el tamaño desde el editor** todavía no se puede (queda para cuando se pida).
+- **RF-255** **Por ahora solo se usa en los niveles 9 y 10** (Lucas, 2026-09-29): antes de tenerlos, el tamaño grande se prueba con un mapa de ejemplo y con los tests. Los niveles 1 a 7 no cambian.
+
+> **Criterio de aceptación**
+> **Dado** un mapa de 26×12 → **Cuando** lo juego → **Entonces** se ve entero, centrado entre las dos barras; hago clic en una casilla y la torre se construye **en esa casilla**; una torre con alcance 3 alcanza a los mismos enemigos que en un mapa de 20×9.
 
 ---
 
@@ -1035,7 +1049,7 @@ Ideas **aprobadas como dirección**, pero **sin fecha**: no se programan hasta c
 | **Temas** | `"tema": "desierto"` cambia la paleta del pasto y del camino y el conjunto de decoración (nieve, lava, ruinas). | Chico |
 | **Decoración a mano** | Una lista de objetos con su posición (un árbol grande en 3,4), sin necesidad de ocupar una casilla entera. | Chico |
 | **Terrenos con efecto** | Pantano (los enemigos van más lentos), colina (las torres ganan alcance), terreno rico (construir cuesta menos). Cambian la estrategia y necesitan reglas (RF) y balance. | Mediano |
-| **Tamaño variable** | Mapas más grandes que 20×9, con cámara que se desplaza o zoom. Cambia la interfaz, la construcción y los tests. | Grande |
+| **Tamaño variable** | Mapas más grandes que 20×9, con cámara que se desplaza o zoom. Cambia la interfaz, la construcción y los tests. **Hecho con zoom en M13 (RF-250 a RF-255, D-037): hasta 26×12.** | Grande |
 
 **Recomendación de Claude:** empezar por **leyenda + temas**, que son lo que más ayuda al editor (B-04) y a los mods, y dejar el tamaño variable para el final.
 
@@ -1094,8 +1108,8 @@ Ideas **aprobadas como dirección**, pero **sin fecha**: no se programan hasta c
 
 La wiki de M11 ya es escalable a propósito (categorías → entradas → bloques). Ideas que **entran sin rehacerla**:
 - ~~**Bestiario que se va llenando**~~ **Hecho en M12** (RF-238 a RF-240, D-036).
-- **Enlaces entre entradas:** en el texto de una entrada, un nombre que se puede tocar para saltar a otra (en la Araña, "suelta 4 Crías" lleva a la entrada de las Crías; en un artículo, "Incendiaria" lleva a esa torre). La pantalla ya sabe abrir una entrada por su id (`show_target`), así que falta solo marcar los enlaces en los datos.
-- **Buscador** (un cuadro de texto que filtra las entradas). *Lucas, 2026-09-29: solo si es muy simple; no lo es del todo* (hay que cuidar el foco del teclado con Esc y las flechas, el teclado virtual del celular y que no filtre datos de enemigos cerrados), así que queda acá.
+- **Enlaces entre entradas** *(Lucas, 2026-09-29: se hacen **junto con el buscador**, cuando se tome cualquiera de los dos)*: en el texto de una entrada, un nombre que se puede tocar para saltar a otra (en la Araña, "suelta 4 Crías" lleva a la entrada de las Crías; en un artículo, "Incendiaria" lleva a esa torre). La pantalla ya sabe abrir una entrada por su id (`show_target`), así que falta solo marcar los enlaces en los datos.
+- **Buscador** (un cuadro de texto que filtra las entradas) *(se hace junto con los enlaces; Lucas: solo si es muy simple, y no lo es del todo)* (hay que cuidar el foco del teclado con Esc y las flechas, el teclado virtual del celular y que no filtre datos de enemigos cerrados), así que queda acá.
 - **Categorías nuevas** sin tocar la pantalla: **Niveles** (mapa en miniatura, oleadas y qué enemigos vienen), **Lore** (B-03), **Épocas** (B-01), **Mapas de la comunidad** y, si algún día hay mods, **los enemigos y torres de cada mod** (salen solos de los archivos).
 - **Imágenes propias** en los artículos (un bloque `imagen`) y ejemplos de "qué torre conviene contra qué enemigo".
 

@@ -293,8 +293,8 @@ func test_from_text_rejects_what_is_not_a_level() -> void:
 func test_from_text_completes_what_is_missing() -> void:
 	var partial: LevelDraft = LevelDraft.from_text("{\"nombre\": \"Roto\", \"mapa\": [\"A#S\"], \"dinero\": 5}")
 	assert_not_null(partial)
-	assert_eq(partial.rows().size(), MapGrid.HEIGHT, "nueve filas")
-	assert_eq(partial.rows()[0].length(), MapGrid.WIDTH, "de veinte letras")
+	assert_eq(partial.rows().size(), MapGrid.MIN_HEIGHT, "nueve filas")
+	assert_eq(partial.rows()[0].length(), MapGrid.MIN_WIDTH, "de veinte letras")
 	assert_eq(partial.rows()[0], "A#S" + ".".repeat(17))
 	assert_false(partial.data.has("dinero"), "las claves desconocidas se descartan")
 	assert_eq(partial.wave_count(), 0)

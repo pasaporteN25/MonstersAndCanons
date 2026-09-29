@@ -37,10 +37,10 @@ var _stroke_snapshot: Dictionary = {}
 ## El nivel nuevo (RF-215): una recta de la entrada A a la salida y una oleada de ejemplo. Es válido.
 static func new_level() -> LevelDraft:
 	var rows: Array = []
-	for y: int in MapGrid.HEIGHT:
-		rows.append(MapGrid.GRASS.repeat(MapGrid.WIDTH))
-	var middle: int = MapGrid.HEIGHT / 2
-	rows[middle] = MapGrid.ENTRANCE_LETTERS[0] + MapGrid.PATH.repeat(MapGrid.WIDTH - 2) + MapGrid.EXIT
+	for y: int in MapGrid.MIN_HEIGHT:
+		rows.append(MapGrid.GRASS.repeat(MapGrid.MIN_WIDTH))
+	var middle: int = MapGrid.MIN_HEIGHT / 2
+	rows[middle] = MapGrid.ENTRANCE_LETTERS[0] + MapGrid.PATH.repeat(MapGrid.MIN_WIDTH - 2) + MapGrid.EXIT
 	var draft := LevelDraft.new()
 	draft.data = {
 		"version": LevelFile.VERSION, "nombre": NEW_NAME, "oro": 200, "vidas": 20,
@@ -115,8 +115,17 @@ func rows() -> PackedStringArray:
 	return PackedStringArray(data["mapa"])
 
 
+## RF-254: el tamaño lo dan las filas del mapa (el nivel nuevo es de 20×9, uno abierto conserva el suyo).
+func map_width() -> int:
+	return (data["mapa"][0] as String).length()
+
+
+func map_height() -> int:
+	return (data["mapa"] as Array).size()
+
+
 func in_bounds(cell: Vector2i) -> bool:
-	return cell.x >= 0 and cell.y >= 0 and cell.x < MapGrid.WIDTH and cell.y < MapGrid.HEIGHT
+	return cell.x >= 0 and cell.y >= 0 and cell.x < map_width() and cell.y < map_height()
 
 
 ## La letra de una casilla ("" fuera del mapa).
@@ -486,7 +495,7 @@ func _first_free_entrance_letter() -> String:
 
 ## La salida es una sola: la vieja pasa a pasto.
 func _clear_exit() -> void:
-	for y: int in MapGrid.HEIGHT:
+	for y: int in map_height():
 		var x: int = (data["mapa"][y] as String).find(MapGrid.EXIT)
 		if x >= 0:
 			_set_letter(Vector2i(x, y), MapGrid.GRASS)
@@ -496,7 +505,7 @@ func _clear_exit() -> void:
 ## las oleadas se acomodan (las de la entrada quitada pasan a la A).
 func _remove_entrance(letter: String) -> void:
 	var index: int = MapGrid.ENTRANCE_LETTERS.find(letter)
-	for y: int in MapGrid.HEIGHT:
+	for y: int in map_height():
 		var fixed: String = ""
 		for c: String in (data["mapa"][y] as String):
 			var i: int = MapGrid.ENTRANCE_LETTERS.find(c)
@@ -546,13 +555,17 @@ static func _to_float(value: Variant) -> float:
 	return float(value) if value is int or value is float else 0.0
 
 
-## Nueve filas de veinte letras: lo que falta se completa con pasto y lo que sobra se corta.
+## Filas de igual largo: lo que falta se completa con pasto y lo que sobra se corta. El tamaño es
+## el del mapa (RF-254), corregido al más cercano permitido si era imposible (menos de 20×9 o más de 26×12).
 static func _clean_rows(value: Variant) -> Array:
 	var source: Array = value if value is Array else []
+	var height: int = clampi(source.size(), MapGrid.MIN_HEIGHT, MapGrid.MAX_HEIGHT)
+	var first_length: int = str(source[0]).length() if not source.is_empty() else 0
+	var width: int = clampi(first_length, MapGrid.MIN_WIDTH, MapGrid.MAX_WIDTH)
 	var rows_out: Array = []
-	for y: int in MapGrid.HEIGHT:
+	for y: int in height:
 		var row: String = str(source[y]) if y < source.size() else ""
-		rows_out.append(row.left(MapGrid.WIDTH).rpad(MapGrid.WIDTH, MapGrid.GRASS))
+		rows_out.append(row.left(width).rpad(width, MapGrid.GRASS))
 	return rows_out
 
 

@@ -143,8 +143,8 @@ func test_dragging_diagonally_leaves_no_gaps() -> void:
 	editor.stroke_to(Vector2i(6, 4))
 	editor.end_stroke()
 	var painted: int = 0
-	for y: int in MapGrid.HEIGHT:
-		for x: int in MapGrid.WIDTH:
+	for y: int in MapGrid.MIN_HEIGHT:
+		for x: int in MapGrid.MIN_WIDTH:
 			if editor.draft.letter_at(Vector2i(x, y)) == "X":
 				painted += 1
 	assert_eq(painted, 6, "una línea de 6 casillas (la mayor distancia entre los extremos)")

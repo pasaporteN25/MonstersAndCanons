@@ -464,3 +464,11 @@ godot --headless --path . -s addons/gut/gut_cmdln.gd -gdir=res://tests -gexit
 - `TowerText` ([código](../scripts/logic/tower_text.gd)): las líneas de estadísticas de un nivel de torre. Las usan `TowerPanel` y la wiki.
 - `WikiScreen` ([escena](../scenes/ui/wiki_screen.tscn)): solapas de categoría, lista de entradas y detalle con desplazamiento; `WikiIcon` dibuja las capas de un dibujo.
 - **Artículos:** `data/wiki/*.json`, con claves en castellano como los niveles (§7.8): `version`, `titulo`, `orden`, `bloques`. `Wiki.parse_article` devuelve la entrada o la lista de errores.
+
+### 6.11 Mapas de tamaño variable *(M13, D-037)*
+
+- `MapGrid` ya no usa `WIDTH`/`HEIGHT` fijos: `width` y `height` salen de las filas del mapa. `MapGrid.MIN_*` (20×9) y `MapGrid.MAX_*` (26×12) son los topes de RF-250. `is_inside` e `is_on_border` usan el tamaño real.
+- `Rules.map_zoom(ancho, alto)` calcula el zoom de RF-251 y `Rules.map_camera_center(...)` el punto que la cámara mira, de modo que el mapa quede centrado entre las barras (con 20×9 da el mismo encuadre de siempre).
+- `Game` agrega una `Camera2D` **solo si el zoom es menor que 1**. Como la cámara no cambia las coordenadas del mundo, `BuildController`, las torres, los enemigos y los proyectiles no se tocan.
+- `LevelDraft` conserva el tamaño del mapa (antes cortaba o rellenaba a 20×9) y `MapEditor` le pone un zoom al `MapView` para verlo entero.
+- ⚠️ Los `CanvasLayer` (HUD, pausa, pantalla final) no se achican con la cámara. Todo lo que se dibuje **directo en el mundo** sí.

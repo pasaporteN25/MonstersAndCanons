@@ -133,8 +133,8 @@ func test_entrance_problems() -> void:
 
 func test_a_map_without_grass_is_invalid() -> void:
 	var rows: PackedStringArray = []
-	for y: int in MapGrid.HEIGHT:
-		rows.append("X".repeat(MapGrid.WIDTH))
+	for y: int in MapGrid.MIN_HEIGHT:
+		rows.append("X".repeat(MapGrid.MIN_WIDTH))
 	rows[4] = LINE[4]
 	_assert_error(rows, "No hay pasto")
 

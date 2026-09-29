@@ -38,7 +38,7 @@ func _check(path: String) -> bool:
 	for i: int in grid.entrances.size():
 		var letter: String = MapGrid.ENTRANCE_LETTERS[i]
 		print("\n  Entrada %s: %d casillas hasta la salida (recorrido marcado con *)" % [letter, grid.routes[i].size()])
-		for y: int in MapGrid.HEIGHT:
+		for y: int in grid.height:
 			var row: String = level.map_rows[y]
 			for cell: Vector2i in grid.routes[i]:
 				if cell.y == y and row[cell.x] == MapGrid.PATH:
@@ -49,7 +49,7 @@ func _check(path: String) -> bool:
 		print("\n  ⚠ ", warning)
 	if not grid.unused_cells.is_empty():
 		print("  Casillas que ningún recorrido usa, marcadas con ?:")
-		for y: int in MapGrid.HEIGHT:
+		for y: int in grid.height:
 			var row: String = level.map_rows[y]
 			for cell: Vector2i in grid.unused_cells:
 				if cell.y == y:

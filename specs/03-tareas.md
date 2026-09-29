@@ -657,3 +657,33 @@
   **Refs:** D-036.
   **Hecho cuando:** pasan todos los tests y las exportaciones se comprueban.
   **Resultado:** README, ONBOARDING y CONTENIDO.md al día. Se exportaron los cuatro. **Comprobación con el paquete exportado del juego normal** (cargado con el Godot de desarrollo): la wiki leyó el guardado real de Lucas y mostró "Enemigos 6/9", con los tres no vistos en silueta. **Un tropiezo:** `JuegoA_pruebas.exe` estaba abierto (Lucas probando el editor) y Windows no deja reemplazar un programa en uso; **no se cerró**: la versión nueva quedó en `build/JuegoA_pruebas_nuevo.exe`.
+
+---
+
+## M13 — Mapas de tamaño variable *(pedido por Lucas, D-037)*
+
+- [x] **T116 · `MapGrid` y `LevelFile` con tamaño variable**
+  `MapGrid` lee el tamaño de las filas (20×9 a 26×12); `Level.make_ground`, `check_level` y los topes de RF-223 lo respetan.
+  **Refs:** RF-250, RF-253.
+  **Hecho cuando:** los tests comprueban un mapa de 26×12 válido, los bordes (26×12 sí; 27×12, 26×13 y 19×9 no), filas de distinto largo, entradas en el borde real, el recorrido y el suelo del tamaño correcto; los 7 niveles oficiales dan exactamente lo mismo que antes.
+  **Resultado:** `MapGrid` ya no tiene ancho y alto fijos: `width` y `height` salen de las filas, con `MIN_*` (20×9) y `MAX_*` (26×12). Los mensajes dicen el tamaño que se recibió y el permitido; `is_inside`, `is_on_border` (que decide si el enemigo entra desde afuera), el suelo (`Level.make_ground`) y `check_level` usan el tamaño real. `LevelDraft` conserva el tamaño del mapa que abre (antes cortaba a 20×9; lo dejé listo acá porque dejó de compilar sin `MapGrid.WIDTH`). Los 7 niveles oficiales siguen midiendo 20×9 (un test lo vigila). Un dato que confirma la decisión D-037: `check_level` del nivel 7 da exactamente lo mismo que antes. 13 tests nuevos (554 en total).
+
+- [ ] **T117 · Zoom del mundo en la partida**
+  `Rules.map_zoom`, `Rules.map_camera_center` y la `Camera2D` en `Game`.
+  **Refs:** RF-251, RF-252.
+  **Hecho cuando:** los tests comprueban la fórmula (20×9 → 1, 26×12 → 0,75, casos intermedios), que con 20×9 **no hay cámara**, que con 26×12 el mapa queda dentro del área entre las barras y centrado, que la casilla bajo el puntero es la correcta con zoom (esquinas y centro) y que el alcance de una torre alcanza lo mismo; una captura muestra un mapa de 26×12 jugándose.
+
+- [ ] **T118 · El editor respeta el tamaño**
+  `LevelDraft` conserva el tamaño; `MapEditor` muestra el mapa entero con su zoom y convierte bien el clic.
+  **Refs:** RF-254.
+  **Hecho cuando:** los tests comprueban que abrir, editar y guardar un mapa de 26×12 no lo recorta, que el clic pinta la casilla correcta con zoom y que un mapa de 20×9 se ve como siempre; una captura muestra el editor con un mapa grande.
+
+- [ ] **T119 · Mapa de ejemplo y una partida completa**
+  Un mapa de ejemplo de 26×12 (fuera del juego) y una partida completa con el bot en un mapa grande.
+  **Refs:** RF-255.
+  **Hecho cuando:** el bot juega una partida completa en el mapa de ejemplo sin errores, y el mapa se puede copiar a la carpeta de mapas de la comunidad y jugarlo.
+
+- [ ] **T120 · Cierre de M13: documentación y exportaciones**
+  README, ONBOARDING, CONTENIDO.md; exportar los cuatro ejecutables.
+  **Refs:** D-037.
+  **Hecho cuando:** pasan todos los tests y el mapa de ejemplo se juega en el paquete exportado.
