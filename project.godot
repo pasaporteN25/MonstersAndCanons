@@ -19,6 +19,7 @@ config/icon="res://assets/icon.png"
 [autoload]
 
 SaveManager="*res://scripts/autoload/save_manager.gd"
+DevMode="*res://scripts/autoload/dev_mode.gd"
 GameFlow="*res://scripts/autoload/game_flow.gd"
 Audio="*res://scripts/autoload/audio.gd"
 

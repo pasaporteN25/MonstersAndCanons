@@ -454,10 +454,11 @@
 
 ## M6 — Modo de pruebas y récords *(pedido por Lucas, D-028, D-029)*
 
-- [ ] **T86 · Modo de pruebas: activación y guardado aparte**
+- [x] **T86 · Modo de pruebas: activación y guardado aparte**
   Autoload `DevMode` (activo con la característica `pruebas` o, en el editor, con `--pruebas`); preset de exportación "Windows (pruebas)"; `save_pruebas.json`; cartel "MODO PRUEBAS"; todos los niveles abiertos.
   **Refs:** RF-180, RF-181, RF-182, RF-183.
   **Hecho cuando:** los tests comprueban que sin el modo nada cambia, que con el modo se usa el otro guardado y se abren todos los niveles, y que el `.exe` de pruebas exporta sin errores.
+  **Resultado:** se comprobó corriendo el `JuegoA_pruebas.exe` exportado: el log dice "Modo de pruebas activado. Guardado: user://save_pruebas.json". Un test revisa que solo el preset de pruebas tenga la característica `pruebas`.
 
 - [ ] **T87 · Panel de pruebas**
   Botón "Pruebas" y tecla F1 en la partida (solo en modo pruebas) con: +1000 de oro, vidas infinitas, saltar oleada, matar a todos, ganar, perder, velocidad x4, aparecer un enemigo, FPS.
