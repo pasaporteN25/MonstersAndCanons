@@ -484,10 +484,11 @@
   **Hecho cuando:** los tests comprueban que no existe hasta ganar todos los niveles, que el total es la suma de los mejores, que solo se pide cuando el total sube, y la captura muestra el Salón.
   **Resultado:** el guardado suma, por nivel, el mejor puntaje en victoria (`best_score`) y el último total anotado (`hall_total`). El Salón se abre encima de la pantalla final, después del récord del nivel: fondo oscuro, marco dorado con brillo, trofeo (`assets/sprites/ui/trophy.svg`) y 5 letras.
 
-- [ ] **T91 · Pantalla "Récords" y cierre de M6**
+- [x] **T91 · Pantalla "Récords" y cierre de M6**
   Botón "Récords" en el menú principal; top 5 de cada nivel y Salón de la fama; README/ONBOARDING (cómo exportar y usar el `.exe` de pruebas); exportar los tres ejecutables.
   **Refs:** RF-195, RF-110.
   **Hecho cuando:** se ve la pantalla de récords, pasan todos los tests y las exportaciones terminan sin errores.
+  **Resultado:** se exportaron los tres (`JuegoA.exe`, `JuegoA_pruebas.exe` y `JuegoA.apk`) y se comprobó corriéndolos: el normal no activa el modo de pruebas y el de pruebas sí. README ("El ejecutable de pruebas"), ONBOARDING (6.1) y el plan técnico (autoload `DevMode` y formato del guardado) quedaron al día.
 
 ### Otras ideas de pulido *(sin fecha)*
 

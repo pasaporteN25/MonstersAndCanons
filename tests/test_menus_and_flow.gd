@@ -91,7 +91,7 @@ func test_victory_outside_campaign_hides_menu_buttons() -> void:
 func test_main_menu_has_its_buttons() -> void:
 	var menu: Control = (load("res://scenes/ui/main_menu.tscn") as PackedScene).instantiate()
 	add_child_autofree(menu)
-	for button_name: String in ["PlayButton", "OptionsButton", "QuitButton"]:
+	for button_name: String in ["PlayButton", "RecordsButton", "OptionsButton", "QuitButton"]:
 		assert_not_null(menu.get_node_or_null("%" + button_name), button_name)
 
 

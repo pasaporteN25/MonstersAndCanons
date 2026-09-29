@@ -356,6 +356,7 @@ En M3 se agregan tres, porque hay datos que deben **sobrevivir** al cambiar de e
 |---|---|
 | `GameFlow` ([código](../scripts/autoload/game_flow.gd)) | Recordar qué nivel se juega (`current_index`, -1 = fuera de la campaña) y cambiar de pantalla. Registrar victorias y desbloquear el siguiente nivel. Aplicar pantalla completa al arrancar. |
 | `SaveManager` ([código](../scripts/autoload/save_manager.gd)) | Leer y escribir el progreso y las opciones (§7.1). Los tests cambian `save_path` para no tocar el guardado real. |
+| `DevMode` ([código](../scripts/autoload/dev_mode.gd)) *(M6)* | Modo de pruebas (spec §10.2, D-028): se activa con la característica de exportación `pruebas` (`JuegoA_pruebas.exe`) o, en el editor, con `--pruebas`. Cambia a `save_pruebas.json`, abre todos los niveles, muestra el cartel y hace que `Game` agregue el panel de pruebas. Va después de `SaveManager` y antes de `GameFlow` y `Audio`, así las opciones ya salen del guardado de pruebas. |
 | `Audio` ([código](../scripts/autoload/audio.gd)) | Efectos y música. Carga todo `assets/audio/*.wav` y los reproduce por nombre (`Audio.play(&"build")`). 12 "voces" reutilizables y un intervalo mínimo por sonido. Buses `Master`, `Music`, `SFX` (`default_bus_layout.tres`). Los sonidos se generan con `tools/make_sounds.gd` (D-020). |
 
 > ⚠️ **Los scripts de herramientas (`tools/*.gd`, que se ejecutan con `-s`) se compilan antes de que existan los autoloads.** Por eso no pueden usar `GameFlow`, `SaveManager` ni `Audio` por su nombre, ni declarar variables de tipo `Game` (porque `game.gd` sí los usa): declaran la partida como `Node2D`.
@@ -368,17 +369,25 @@ Archivo `user://save.json` (Godot lo guarda en la carpeta de datos del usuario, 
 {
   "version": 1,
   "levels": {
-    "level_01": { "unlocked": true,  "completed": true,  "best_lives": 17 },
-    "level_02": { "unlocked": true,  "completed": false, "best_lives": 0 }
+    "level_01": { "unlocked": true,  "completed": true,  "best_lives": 17, "best_score": 2020 },
+    "level_02": { "unlocked": true,  "completed": false, "best_lives": 0,  "best_score": 0 }
   },
   "settings": { "music_volume": 0.7, "sfx_volume": 0.8, "fullscreen": false, "damage_numbers": true },
-  "seen_enemies": ["normal", "fast"]
+  "seen_enemies": ["normal", "fast"],
+  "scores": {
+    "level_01": [ { "name": "ANA", "points": 2400 }, { "name": "LUC", "points": 2020 } ],
+    "hall_of_fame": [ { "name": "LUCAS", "points": 19100 } ]
+  },
+  "initials": { "3": "LUC", "5": "LUCAS" },
+  "hall_total": 19100
 }
 ```
 
 - El campo `version` permite, en el futuro, reconocer guardados viejos y convertirlos.
 - Si el archivo **no existe** o está **corrupto**, se empieza con el progreso por defecto (solo nivel 1 desbloqueado) y **no** se cierra el juego.
-- Se guarda al ganar un nivel y al cerrar la pantalla de opciones.
+- Se guarda al ganar un nivel, al cerrar la pantalla de opciones y al anotar un récord.
+- *(M6)* `scores`: el top 5 de cada nivel y del Salón de la fama (`hall_of_fame`); `initials`: las últimas iniciales usadas (3 y 5 letras); `hall_total`: el último total de campaña ya anotado; `best_score`: el mejor puntaje en victoria de cada nivel (se suman para el Salón). Son claves nuevas: un guardado de antes de M6 no las tiene y se lee igual (sigue siendo la versión 1).
+- *(M6)* En el modo de pruebas el archivo es `user://save_pruebas.json` (mismo formato).
 
 ---
 

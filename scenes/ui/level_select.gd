@@ -3,8 +3,8 @@
 # y su mejor resultado. Arriba, el total de estrellas de la campaña.
 extends Control
 
-## 5 tarjetas de 220 px + 4 espacios de 16 px = 1164 px: entran en los 1280 de la pantalla.
-const CARD_SIZE := Vector2(190, 220)  # angostas: entran 6 en la pantalla (M5)
+## 6 tarjetas de 190 px + 5 espacios de 16 px = 1220 px: entran en los 1280 de la pantalla.
+const CARD_SIZE := Vector2(190, 220)
 const CARD_STAR_SIZE: float = 26.0
 
 @onready var _cards: HBoxContainer = %Cards

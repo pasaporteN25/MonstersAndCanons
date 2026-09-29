@@ -98,6 +98,20 @@ godot --headless --path . --export-release "Windows Desktop" build/JuegoA.exe
 - La carpeta `build/` no se sube a git.
 - El progreso se guarda en `%APPDATA%\Godot\app_userdata\JuegoA\save.json`.
 
+### El ejecutable de pruebas (`JuegoA_pruebas.exe`)
+
+Para probar todo sin ganar cada nivel (spec §10.2, D-028):
+
+```bash
+godot --headless --path . --export-release "Windows (pruebas)" build/JuegoA_pruebas.exe
+```
+
+- Trae el **modo de pruebas**: todos los niveles abiertos y, en la partida, el **panel de pruebas** (`F1` o el botón "Pruebas"): +1000 de oro, vidas infinitas, saltar oleada, matar a todos, ganar, perder, velocidad x4, hacer aparecer cualquier enemigo y ver los FPS.
+- Usa **otro guardado** (`save_pruebas.json`, en la misma carpeta): lo que hagas ahí no toca tu progreso, tus estrellas ni tus récords reales.
+- Abajo al centro siempre dice "MODO PRUEBAS", para no confundirlo con el juego normal.
+- El `JuegoA.exe` normal y el `.apk` **no** lo tienen.
+- Desde el editor de Godot: *Proyecto → Configuración del proyecto → Editor → Run → Main Run Args* = `-- --pruebas`.
+
 ## Dibujos (arte provisional)
 
 Los dibujos del juego son archivos **SVG** en `assets/sprites/` (decisión D-023, spec §9.6). Son **provisionales**: el arte definitivo sigue en el backlog (B-02), porque depende de la ambientación.

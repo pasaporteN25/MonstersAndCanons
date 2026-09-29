@@ -124,6 +124,16 @@ godot --headless --path . --export-release "Windows Desktop" build/JuegoA.exe
 
 > ℹ️ La carpeta `build/` no se sube a git.
 
+### 6.1 El ejecutable de pruebas
+
+Para probar todos los niveles y el contenido sin ganar cada nivel (spec §10.2):
+
+```bash
+godot --headless --path . --export-release "Windows (pruebas)" build/JuegoA_pruebas.exe
+```
+
+**✅ Comprobar:** al abrirlo, abajo al centro dice "MODO PRUEBAS · F1: panel", todos los niveles se pueden elegir, y en la partida `F1` abre el panel de pruebas. En el log de esa ejecución aparece "Modo de pruebas activado". Usa su propio guardado (`save_pruebas.json`), así que no toca el progreso ni los récords del `.exe` normal.
+
 ---
 
 ## 7. Android (`.apk`)
@@ -196,7 +206,8 @@ Se usa `--export-debug` porque la versión de **prueba** se firma sola con la cl
 
 | Qué | Dónde |
 |---|---|
-| Progreso y opciones del jugador | `%APPDATA%\Godot\app_userdata\JuegoA\save.json` |
+| Progreso, récords y opciones del jugador | `%APPDATA%\Godot\app_userdata\JuegoA\save.json` |
+| Lo mismo, pero del ejecutable de pruebas | `%APPDATA%\Godot\app_userdata\JuegoA\save_pruebas.json` |
 | Registros (logs) de cada ejecución, los últimos 30 | `%APPDATA%\Godot\app_userdata\JuegoA\logs\` |
 | Configuración del editor (rutas de Android, etc.) | `%APPDATA%\Godot\editor_settings-4.7.tres` |
 | Plantillas de exportación | `%APPDATA%\Godot\export_templates\4.7.2.stable\` |

@@ -7,6 +7,7 @@ const BALANCE: BalanceConfig = preload("res://data/balance.tres")
 const MAIN_MENU_SCENE: String = "res://scenes/ui/main_menu.tscn"
 const LEVEL_SELECT_SCENE: String = "res://scenes/ui/level_select.tscn"
 const GAME_SCENE: String = "res://scenes/game/game.tscn"
+const RECORDS_SCENE: String = "res://scenes/ui/records_screen.tscn"
 
 ## Índice del nivel de la campaña que se está jugando.
 ## -1 = no se juega desde la campaña (por ejemplo, game.tscn abierto con F6, o un test):
@@ -180,3 +181,9 @@ func go_to_main_menu() -> void:
 func go_to_level_select() -> void:
 	current_index = -1
 	get_tree().change_scene_to_file(LEVEL_SELECT_SCENE)
+
+
+## RF-195: la pantalla de récords.
+func go_to_records() -> void:
+	current_index = -1
+	get_tree().change_scene_to_file(RECORDS_SCENE)
