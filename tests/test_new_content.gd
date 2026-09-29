@@ -4,7 +4,11 @@ extends GutTest
 const GAME_SCENE: PackedScene = preload("res://scenes/game/game.tscn")
 const ENEMY_SCENE: PackedScene = preload("res://scenes/enemies/enemy.tscn")
 const PROJECTILE_SCENE: PackedScene = preload("res://scenes/towers/projectile.tscn")
+const TOWER_SCENE: PackedScene = preload("res://scenes/towers/tower.tscn")
 const DT: float = 1.0 / 60.0
+
+## Proyectiles que disparó la torre de prueba (_tower_at).
+var shots: Array[Projectile] = []
 
 
 func _tower(id: String) -> TowerData:
@@ -228,3 +232,79 @@ func test_spider_reaching_the_exit_leaves_nothing() -> void:
 	spider.distance = spider.path().curve.get_baked_length() - 1.0
 	simulate(spider, 5, DT)
 	assert_eq(_alive(game).size(), 0, "RF-166: solo suelta crías si muere por daño")
+
+
+# --- Torres de prueba: una torre y enemigos parados en un mismo camino ---
+
+## Enemigos sobre UN camino recto (y = 300), a esas distancias del comienzo (x = distancia).
+## Se congelan (process_mode) para que no se muevan mientras la torre dispara.
+func _enemies_at(distances: Array, data: EnemyData = null) -> Array[Enemy]:
+	var path := Path2D.new()
+	path.curve = Curve2D.new()
+	path.curve.add_point(Vector2(0, 300))
+	path.curve.add_point(Vector2(4000, 300))
+	add_child_autofree(path)
+	var list: Array[Enemy] = []
+	for d: float in distances:
+		var enemy: Enemy = ENEMY_SCENE.instantiate()
+		enemy.setup(data if data != null else _enemy_data("tank"), path, 1000)
+		enemy.distance = d
+		enemy.process_mode = Node.PROCESS_MODE_DISABLED
+		add_child_autofree(enemy)
+		list.append(enemy)
+	return list
+
+
+## Una torre en `at`, en el nivel `level` (1 a 3). Sus proyectiles se guardan en `shots`.
+func _tower_at(id: String, at: Vector2, level: int = 1) -> Tower:
+	shots.clear()
+	var tower: Tower = TOWER_SCENE.instantiate()
+	tower.setup(_tower(id))
+	for i: int in level - 1:
+		tower.apply_upgrade()
+	tower.position = at
+	tower.fired.connect(func(p: Projectile) -> void:
+		shots.append(p)
+		add_child_autofree(p))
+	add_child_autofree(tower)
+	return tower
+
+
+func _shot_targets() -> Array[Enemy]:
+	var targets: Array[Enemy] = []
+	for p: Projectile in shots:
+		targets.append(p._target)
+	return targets
+
+
+# --- Múltiple (RF-161) ---
+
+func test_multi_tower_matches_spec() -> void:
+	assert_eq(_tower("multi").display_name, "Múltiple")
+	_assert_levels("multi", [
+		{"cost": 100, "damage": 6, "fire_rate": 1.2, "range_tiles": 3.0, "extra_targets": 1},
+		{"cost": 90, "damage": 8, "extra_targets": 2},
+		{"cost": 140, "damage": 11, "range_tiles": 3.5, "extra_targets": 3},
+	])
+
+
+func test_multi_shoots_its_two_best_targets_at_once() -> void:
+	var e: Array[Enemy] = _enemies_at([200.0, 250.0, 300.0, 350.0, 400.0])
+	var tower: Tower = _tower_at("multi", Vector2(300, 250))
+	simulate(tower, 1, DT)
+	assert_eq(shots.size(), 2, "nivel 1: a 2 enemigos")
+	assert_eq(_shot_targets(), [e[4], e[3]] as Array[Enemy], "los dos más cerca de la salida (\"Primero\")")
+
+
+func test_multi_level_3_shoots_four() -> void:
+	_enemies_at([200.0, 250.0, 300.0, 350.0, 400.0])
+	var tower: Tower = _tower_at("multi", Vector2(300, 250), 3)
+	simulate(tower, 1, DT)
+	assert_eq(shots.size(), 4)
+
+
+func test_multi_with_one_enemy_shoots_once() -> void:
+	var e: Array[Enemy] = _enemies_at([300.0])
+	var tower: Tower = _tower_at("multi", Vector2(300, 250))
+	simulate(tower, 1, DT)
+	assert_eq(_shot_targets(), [e[0]] as Array[Enemy])

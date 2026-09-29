@@ -25,3 +25,5 @@ extends Resource
 @export var burn_damage_per_second: int = 0
 ## RF-160: segundos que dura la quemadura.
 @export var burn_duration: float = 0.0
+## RF-161: a cuántos enemigos MÁS dispara a la vez (0 = a uno solo).
+@export var extra_targets: int = 0

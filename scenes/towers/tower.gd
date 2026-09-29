@@ -123,12 +123,31 @@ func _physics_process(delta: float) -> void:
 		_target = null
 	_cooldown -= delta
 	if _cooldown <= 0.0:
-		var target: Enemy = find_target()
-		if target != null:
-			_target = target
-			_shoot(target)
+		# RF-161: con `extra_targets`, además del mejor objetivo dispara a los siguientes.
+		var targets: Array[Enemy] = find_targets(1 + stats().extra_targets)
+		if not targets.is_empty():
+			_target = targets[0]
+			for target: Enemy in targets:
+				_shoot(target)
+			aim_angle = (_target.global_position - global_position).angle()  # mira al principal
 			_cooldown = 1.0 / stats().fire_rate
 	_animate(delta)
+
+
+## RF-161: los `count` mejores objetivos en alcance, del mejor al peor según el modo de apuntado.
+func find_targets(count: int) -> Array[Enemy]:
+	var candidates: Array[Enemy] = []
+	if count <= 1:  # lo común: alcanza con buscar el mejor, sin ordenar a todos
+		var best: Enemy = find_target()
+		if best != null:
+			candidates.append(best)
+		return candidates
+	for node: Node in get_tree().get_nodes_in_group(Enemy.GROUP):
+		var enemy := node as Enemy
+		if can_target(enemy):
+			candidates.append(enemy)
+	candidates.sort_custom(_is_better_target)
+	return candidates.slice(0, count)
 
 
 ## RF-51 y RF-54: el mejor objetivo en alcance según el modo de apuntado.

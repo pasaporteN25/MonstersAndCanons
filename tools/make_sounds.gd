@@ -34,6 +34,8 @@ func _init() -> void:
 	_save("shot_sniper", _mix([_tone(Wave.NOISE, 0.0, 0.0, 0.07, 0.5), _tone(Wave.SQUARE, 320.0, 160.0, 0.1, 0.3)]))
 	# M5: soplido de fuego (ruido que se apaga) con un tono grave.
 	_save("shot_fire", _mix([_tone(Wave.NOISE, 0.0, 0.0, 0.22, 0.35), _tone(Wave.TRIANGLE, 220.0, 140.0, 0.18, 0.3)]))
+	# M5: tres chasquidos seguidos (dispara a varios a la vez).
+	_save("shot_multi", _notes(Wave.SQUARE, [1500.0, 1300.0, 1100.0], 0.025, 0.2))
 	# --- Partida ---
 	_save("enemy_death", _mix([_tone(Wave.SINE, 520.0, 180.0, 0.13, 0.45), _tone(Wave.NOISE, 0.0, 0.0, 0.06, 0.2)]))
 	_save("life_lost", _tone(Wave.SQUARE, 190.0, 110.0, 0.28, 0.35))
