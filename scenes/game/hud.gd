@@ -28,10 +28,12 @@ var _intro_busy: bool = false
 ## -1 = todavía no se mostró ningún valor (para no animar el primero).
 var _last_gold: int = -1
 var _last_lives: int = -1
+var _last_score: int = -1
 
 @onready var _gold_label: Label = %GoldLabel
 @onready var _lives_label: Label = %LivesLabel
 @onready var _wave_label: Label = %WaveLabel
+@onready var _score_label: Label = %ScoreLabel
 @onready var _start_wave_button: Button = %StartWaveButton
 @onready var _tower_button_row: HBoxContainer = %TowerButtons
 @onready var _wave_banner: Label = %WaveBanner
@@ -129,6 +131,7 @@ static func dangerous_enemy_in(wave: WaveData) -> EnemyData:
 func bind(session: LevelSession) -> void:
 	session.gold_changed.connect(_on_gold_changed)
 	session.lives_changed.connect(_on_lives_changed)
+	session.score_changed.connect(_on_score_changed)
 	session.wave_changed.connect(_on_wave_changed)
 	session.wave_completed.connect(_on_wave_completed)
 	session.state_changed.connect(_on_state_changed)
@@ -204,6 +207,14 @@ func _on_gold_changed(gold: int) -> void:
 	# RF-101: gris si no alcanza el oro.
 	for i: int in _tower_buttons.size():
 		_tower_buttons[i].disabled = gold < _tower_types[i].levels[0].cost
+
+
+## RF-190: los puntos, con el mismo "pop" que el oro.
+func _on_score_changed(score: int) -> void:
+	_score_label.text = "Puntos: %d" % score
+	if _last_score >= 0 and score != _last_score:
+		_pop(_score_label)
+	_last_score = score
 
 
 func _on_lives_changed(lives: int) -> void:

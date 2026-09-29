@@ -8,6 +8,8 @@ enum State { BUILDING, WAVE_RUNNING, COUNTDOWN, WON, LOST }
 
 signal gold_changed(gold: int)
 signal lives_changed(lives: int)
+## RF-190: cambiaron los puntos.
+signal score_changed(score: int)
 signal wave_changed(wave: int, total_waves: int)
 signal wave_completed(wave: int, bonus: int)
 signal state_changed(state: State)
@@ -17,6 +19,8 @@ signal countdown_finished
 
 var gold: int = 0
 var lives: int = 0
+## RF-190: puntos de esta partida.
+var score: int = 0
 ## Número de la oleada actual. 0 = todavía no empezó ninguna.
 var wave: int = 0
 var total_waves: int = 0
@@ -32,12 +36,14 @@ func start(level: LevelData, balance: BalanceConfig) -> void:
 	_balance = balance
 	gold = level.starting_gold
 	lives = level.starting_lives
+	score = 0
 	wave = 0
 	total_waves = level.waves.size()
 	countdown_left = 0.0
 	state = State.BUILDING
 	gold_changed.emit(gold)
 	lives_changed.emit(lives)
+	score_changed.emit(score)
 	wave_changed.emit(wave, total_waves)
 	state_changed.emit(state)
 
@@ -69,6 +75,15 @@ func spend(cost: int) -> bool:
 	gold -= cost
 	gold_changed.emit(gold)
 	return true
+
+
+# --- Puntos (RF-190) ---
+
+func add_score(amount: int) -> void:
+	if amount <= 0:
+		return
+	score += amount
+	score_changed.emit(score)
 
 
 # --- Vidas (RF-10 a RF-12) ---
@@ -124,5 +139,7 @@ func is_over() -> bool:
 
 
 func _set_state(new_state: State) -> void:
+	if new_state == State.WON:
+		add_score(Rules.victory_points(lives, _balance))  # RF-190: antes de avisar la victoria
 	state = new_state
 	state_changed.emit(state)

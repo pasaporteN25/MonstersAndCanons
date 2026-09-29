@@ -292,6 +292,7 @@ func _on_enemy_spawned(enemy: Enemy) -> void:
 
 func _on_enemy_died(enemy: Enemy) -> void:
 	session.earn(enemy.data.reward)  # RF-21
+	session.add_score(Rules.kill_points(enemy.data.reward, balance))  # RF-190
 	effects.enemy_died(enemy.global_position, enemy.data.color,
 		Rules.tiles_to_px(enemy.data.size_tiles), enemy.data.reward)
 	Audio.play(&"enemy_death")

@@ -18,3 +18,7 @@ extends Resource
 @export_range(0, 100) var star_3_lives_percent: int = 0
 ## RF-93: % de las vidas iniciales que hay que conservar para ganar 2 estrellas.
 @export_range(0, 100) var star_2_lives_percent: int = 0
+## RF-190: puntos por cada moneda de oro que vale un enemigo al morir.
+@export var points_per_gold: int = 0
+## RF-190: puntos por cada vida que queda al ganar.
+@export var points_per_life: int = 0

@@ -40,6 +40,16 @@ static func wave_bonus(wave_number: int, cfg: BalanceConfig) -> int:
 	return cfg.wave_bonus_base + cfg.wave_bonus_per_wave * wave_number
 
 
+## RF-190: puntos por matar a un enemigo que vale `reward` de oro.
+static func kill_points(reward: int, cfg: BalanceConfig) -> int:
+	return reward * cfg.points_per_gold
+
+
+## RF-190: puntos por ganar con `lives` vidas.
+static func victory_points(lives: int, cfg: BalanceConfig) -> int:
+	return lives * cfg.points_per_life
+
+
 ## RF-72: oro que se devuelve al vender una torre. Se redondea hacia abajo.
 static func sell_refund(total_invested: int, cfg: BalanceConfig) -> int:
 	return floori(total_invested * cfg.sell_refund_percent / 100.0)
