@@ -761,3 +761,27 @@
   **Hecho cuando:** la guía describe la técnica y la paleta reales de los enemigos redibujados y las reglas coinciden con la constitución.
 
   **Resultado:** la guía sale de los SVG reales (contorno `#202330` de ancho 2, degradé de 3 paradas, hueso `#fff0ce → #ab8c69`, ojos `#ffe19a`, apoyo en y≈57) y de la paleta del generador de los enemigos (`build/enemy-redesign/redesign.py`, no versionado). Incluye los **tonos libres** para enemigos nuevos y una regla de los temas del mapa (ningún enemigo puede perderse sobre ningún suelo; se aprueba con una hoja de contacto). Las reglas recogen los errores que ya nos pasaron. **No es código:** los tests no cambian (582).
+
+---
+
+## M17 — Enemigos con aura: Guardián y Curandero *(pedido por Lucas, D-041, D-042)*
+
+- [ ] **T130 · La mecánica del aura**
+  Los tres datos de `EnemyData`, `Enemy.receive_aura` / `_pulse_aura`, armadura efectiva y cura extra.
+  **Refs:** RF-270 a RF-273.
+  **Hecho cuando:** los tests comprueban el daño con y sin aura (RF-80 con +2), que la quemadura la ignora, que no afecta al portador ni a los que están fuera del radio (borde incluido), que no se suman dos auras, que **caduca** en menos de 0,5 s al morir el portador y que la cura se suma a la regeneración y se corta al quemarse.
+
+- [ ] **T131 · Cómo se ve un aura**
+  Anillo del portador e íconos del afectado en `Enemy._draw`.
+  **Refs:** RF-274.
+  **Hecho cuando:** una captura muestra un Guardián con su anillo y enemigos con el escudo, y un Curandero con el suyo y enemigos con la cruz, sobre dos temas distintos.
+
+- [ ] **T132 · Los enemigos Guardián y Curandero**
+  `data/enemies/guardian.tres` y `healer.tres`, sus dibujos y las líneas de aura en la Wiki.
+  **Refs:** RF-275 a RF-277.
+  **Hecho cuando:** pasan los tests de contenido y de la wiki para los dos, aparecen en el panel de pruebas, y la hoja de contacto los muestra junto a los otros nueve a 34 px sin confundirse con ninguno.
+
+- [ ] **T133 · Una partida con auras y cierre de M17**
+  Un mapa de ejemplo con los dos enemigos, una partida completa del bot, documentación, CHANGELOG y exportaciones.
+  **Refs:** D-042.
+  **Hecho cuando:** el bot juega el mapa de ejemplo sin errores y se ve cómo cambia el resultado con y sin el Guardián; pasan todos los tests.

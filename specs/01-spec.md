@@ -247,6 +247,36 @@ Cuatro torres nuevas, pensadas como **respuesta** a los enemigos nuevos (§6.1).
 
 **Colores:** Troll verde musgo, Araña verde azulado oscuro, Cría verde azulado claro (ninguno se confunde con los enemigos anteriores).
 
+### 6.2 Enemigos con aura *(M17, pedido por Lucas, D-041, D-042, B-07)*
+
+Dos enemigos que **no atacan**: hacen más fuertes a los que caminan cerca de ellos. Obligan a cambiar de táctica (matarlos primero, o pegarles de lejos) y son la primera vez que un enemigo **cambia a otro**. Como todo lo de RF-164, son **datos** del enemigo (valen 0 = apagado) y se pueden combinar.
+
+- **RF-270** **Los datos del aura** (en `EnemyData`): `aura_radius_tiles` (hasta dónde llega, en casillas; 0 = sin aura), `aura_armor_bonus` (armadura extra que da) y `aura_heal_percent_per_second` (% de su vida máxima por segundo que hace recuperar). Un mismo enemigo puede dar las dos cosas.
+- **RF-271** **Aura de armadura:** cada enemigo **que no sea el portador** y esté a menos de `aura_radius_tiles` de él (distancia entre centros, ground o aire) tiene **+`aura_armor_bonus` de armadura**. Vale para todo daño **de una torre** (RF-80: `daño − armadura`, mínimo 1). **No** afecta a la quemadura, que ignora la armadura (RF-160). Si le llegan varias auras de armadura, **vale la más fuerte** (no se suman, como la ralentización, RF-61).
+- **RF-272** **Aura de cura:** el enemigo dentro del aura recupera `aura_heal_percent_per_second` % de su vida máxima por segundo, **además** de su propia regeneración (RF-165), sin pasarse de su máximo y **no mientras se quema** (RF-165). Varias auras de cura: **vale la más fuerte**.
+- **RF-273** **Cuándo se aplica:** el portador "emite" cada **0,25 s** y cada emisión dura **0,35 s**. Por eso, si el portador **muere**, sale del alcance o llega a la salida, **el efecto desaparece en menos de medio segundo**. El portador **no se da el aura a sí mismo**. La pausa y la velocidad x2 lo afectan igual que al resto del mundo.
+- **RF-274** **Cómo se ve:** alrededor del portador, un **anillo suave en el suelo** que llega justo hasta donde llega el aura (marfil dorado para armadura, verde amarillento para cura). Sobre cada enemigo afectado, un **ícono chico** (un escudo o una cruz) al lado de su barra de vida. Se leen aunque haya muchos enemigos y no tapan el dibujo.
+- **RF-275** **Los dos enemigos:**
+
+  | ID | Nombre | Vida | Velocidad | Armadura | Oro | Vidas que quita | Vuela | Aura | Tamaño |
+  |---|---|---|---|---|---|---|---|---|---|
+  | `guardian` | **Guardián** | 200 | 0.7 | 1 | 25 | 3 | No | Radio 2 casillas: **+2 de armadura** | 0.38 |
+  | `healer` | **Curandero** | 60 | 1.1 | 0 | 10 | 1 | No | Radio 2,5 casillas: **cura 3 %** de la vida por segundo | 0.28 |
+
+  Son **números de partida**: se ajustan con el bot cuando debuten en un nivel (D-041: el Guardián en el nivel 8, el Curandero en el 9).
+
+  | Enemigo | Frase de presentación (RF-134) |
+  |---|---|
+  | Guardián | Da armadura a los enemigos que lo rodean. Conviene eliminarlo primero, o pegarle de lejos. |
+  | Curandero | Cura a los enemigos que lo rodean. Conviene eliminarlo primero; el fuego frena la cura. |
+
+- **RF-276** **Dibujos:** el **Guardián** es un gólem de piedra **marfil** con un escudo grande; el **Curandero** es una criatura chica y ágil con un bulbo que brilla, **verde amarillento**. Siguen la guía de arte (`specs/05-guia-de-arte.md`) y usan dos de los **tonos libres** (marfil y amarillo verdoso), así que no se confunden con ningún enemigo anterior.
+- **RF-277** **En el resto del juego:** aparecen **solos** en la Wiki (con su aura escrita en los datos, RF-233), en el bestiario (RF-238) y en el panel de pruebas (RF-184). Mientras no debuten en un nivel, la Wiki dice que no aparecen en la campaña.
+
+> **Criterio de aceptación**
+> **Dado** un Guardián (aura +2) y un Normal a 1,5 casillas de él, con una torre que pega de a 5 → **Cuando** la torre le pega al Normal → **Entonces** el daño real es 3 (5 − 0 − 2) y se ve el escudo sobre el Normal; **si** el Guardián muere, **en menos de medio segundo** el Normal vuelve a recibir 5.
+> **Dado** un Curandero (aura 3 %) y un Tanque herido dentro de su radio → **Entonces** el Tanque recupera vida cada segundo y se ve la cruz verde; **si** se quema, deja de curarse.
+
 ---
 
 ## 7. Niveles

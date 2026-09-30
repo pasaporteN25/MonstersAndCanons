@@ -400,7 +400,7 @@ En M3 se agregan tres, porque hay datos que deben **sobrevivir** al cambiar de e
 
 ### 7.1 Formato del guardado
 
-Archivo `user://save.json` (Godot lo guarda en la carpeta de datos del usuario, en Windows: `%APPDATA%\Godot\app_userdata\<nombre del proyecto>\`).
+Archivo `user://save.json` (Godot lo guarda en la carpeta de datos del usuario, en Windows: `%APPDATA%\Godot\app_userdata\<nombre del proyecto>`).
 
 ```json
 {
@@ -480,3 +480,10 @@ godot --headless --path . -s addons/gut/gut_cmdln.gd -gdir=res://tests -gexit
 - `MapThemes` (lógica pura): los siete temas con su paleta y su lista de decoración de `X`. `MapDrawings`: el catálogo de dibujos de la leyenda (nombre → textura o función de dibujo, y si es "suelo" u "objeto").
 - `LevelDecor.paint(ground, exit_cells, theme, legend_cells)`: pinta cada casilla con la paleta del tema; sin tema (pradera) usa las mismas constantes de hoy, así que los niveles actuales quedan **idénticos** (un test compara el dibujo).
 - `MapView` (editor) pasa el mismo tema y leyenda a `LevelDecor` para que el editor se vea como la partida, y `LevelDraft` conserva `tema` y `leyenda` al abrir y guardar. Los botones del editor para elegirlos van en M16.
+
+### 6.13 Auras de los enemigos *(M17, D-042)*
+
+- `EnemyData` gana `aura_radius_tiles`, `aura_armor_bonus` y `aura_heal_percent_per_second`.
+- `Enemy` tiene dos caras: **portador** (`_pulse_aura`, cada `AURA_TICK` = 0,25 s, busca en el grupo `Enemy.GROUP` a los demás dentro del radio) y **receptor** (`receive_aura(armadura, cura)`: guarda el mayor valor y lo hace caducar en `AURA_DURATION` = 0,35 s). `armor()` devuelve la armadura propia más la del aura y `take_hit` la usa; `_update_regen` suma la cura del aura a la propia.
+- La parte visual (anillo del portador, ícono del afectado) vive en `Enemy._draw`. Los datos de aura los muestra `Wiki.enemy_entry`.
+- Los enemigos nuevos (`data/enemies/guardian.tres`, `healer.tres`) se agregan solos a la Wiki, al bestiario y al panel de pruebas (todo sale de listar `data/enemies/`).
