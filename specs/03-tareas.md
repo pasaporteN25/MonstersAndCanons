@@ -789,3 +789,27 @@
   **Refs:** D-042.
   **Hecho cuando:** el bot juega el mapa de ejemplo sin errores y se ve cómo cambia el resultado con y sin el Guardián; pasan todos los tests.
   **Resultado:** `tools/ejemplos/mapa_auras.json` (el nivel 4 con tema bosque y diez oleadas con los dos enemigos; **sin balancear**, de ejemplo). **El bot lo gana con 20 vidas** con las estrategias `mix`, `basic` y `smart`, y con la misma partida cambiando los dos enemigos por un Tanque y un Troll el resultado es el mismo: el mapa es demasiado fácil para que el bot lo note, así que **el balance fino queda para el nivel 8 y el 9**, donde debutan (D-041). Lo que sí se mide es el **efecto del +2 de armadura** sobre cada torre nivel 1: Ametralladora 5 → 3 (−40 %), Hielo 2 → 1 (−50 %), Múltiple 7 → 5 (−29 %), Ráfaga 10 → 8 (−20 %), Eléctrica 13 → 11 (−15 %), Cañón 20 → 18 (−10 %) y Francotirador 40 → 38 (−5 %): castiga a las torres de golpe chico, como se diseñó. CONTENIDO.md, guía de arte, CHANGELOG y ONBOARDING al día; se exportaron los cuatro.
+
+---
+
+## M18 — Torres aturdidas: Chamán y Espejo *(pedido por Lucas, D-041, D-043)*
+
+- [ ] **T134 · La torre aturdida**
+  `Tower.stun`, el grupo `Tower.GROUP`, dejar de disparar, el aspecto apagado y "Aturdida (N s)" en el panel.
+  **Refs:** RF-280.
+  **Hecho cuando:** los tests comprueban que una torre aturdida no dispara y vuelve a disparar sola al pasar el tiempo, que no se suma (queda el mayor), que se puede mejorar y vender, que la pausa la congela, y que el panel lo dice; una captura muestra una torre apagada.
+
+- [ ] **T135 · El Chamán**
+  Datos, hechizo, rayo magenta, dibujo, Wiki.
+  **Refs:** RF-281, RF-282, RF-285, RF-286, RF-287.
+  **Hecho cuando:** los tests comprueban el intervalo (el primer hechizo tras un intervalo), que elige la torre más cercana y no la ya aturdida, el alcance (dentro, en el borde y fuera), que espera si no hay torres y que un Francotirador (alcance mayor) lo mata antes; una captura muestra el rayo y la torre apagada.
+
+- [ ] **T136 · El Espejo**
+  El proyectil recuerda su torre; rebote, aturdimiento, destello y "¡Rebote!"; dibujo, Wiki.
+  **Refs:** RF-283, RF-284, RF-285, RF-286, RF-287.
+  **Hecho cuando:** los tests comprueban el criterio de aceptación (una torre cercana rebota y una lejana no), área, cadena y ráfaga, que la ralentización tampoco pasa, que la quemadura sí, y que una torre ya aturdida no vuelve a rebotar; una captura muestra el rebote.
+
+- [ ] **T137 · Cierre de M18**
+  Un mapa de ejemplo con los dos enemigos, una partida del bot, documentación, CHANGELOG y exportaciones.
+  **Refs:** D-043.
+  **Hecho cuando:** pasan todos los tests y las exportaciones se comprueban.

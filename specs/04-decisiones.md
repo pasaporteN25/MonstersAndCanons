@@ -275,3 +275,12 @@
 - **Cómo no se pisan dos auras:** el que recibe guarda **el mayor** valor y cuándo caduca. Un aura más débil no refresca a una más fuerte, así que si el portador fuerte muere, su valor caduca y recién ahí entra el débil.
 - **Alternativas descartadas:** (a) un administrador que recalcula todo cada frame: acopla todo y es más lento; (b) que cada afectado busque a los portadores: obliga a cada enemigo a mirar a todos.
 - **Consecuencia:** entre la muerte del portador y el fin del efecto pasan hasta 0,35 s. Es intencional y se ve como un "apagarse" natural.
+
+### D-043 · "Torre aturdida" es un estado de la torre; el disparo lleva la torre que lo hizo
+- **Fecha:** 2026-09-30 · **Estado:** Aceptada · **Decidió:** Claude (cómo), sobre lo que Lucas aprobó (D-041)
+- **Qué:** `Tower` tiene un contador de aturdimiento (`stun`, `is_stunned`, `stun_left`) y un grupo (`Tower.GROUP`) para que un enemigo las encuentre. Un `Projectile` recuerda **qué torre lo disparó** (`source`).
+- **Por qué:** el Chamán necesita **encontrar torres** y el Espejo necesita saber **quién le pegó** para aturdirla. Antes nada de eso existía: un proyectil no sabía de dónde venía y las torres no tenían estados.
+- **Cómo se evita romper nada:** el aturdimiento solo **impide disparar** (el resto de la torre sigue igual: apuntar, mejorar, vender). Un proyectil sin torre de origen (los de los tests y los sueltos) se comporta como siempre.
+- **Los rebotes:** ocurren al **impactar** y miden la distancia entre la torre y el Espejo en ese momento, no al disparar. Así una torre que dispara de lejos y el enemigo se acerca **sí rebota** si al llegar está cerca. Es coherente con el "castigo a las torres pegadas al camino".
+- **Alternativas descartadas:** (a) rebotar al **disparar** según la distancia de ese instante: un tiro que sale de lejos y llega de cerca no rebotaría; (b) que la quemadura también rebote: haría inútil a la Incendiaria contra el Espejo, cuando el diseño dice que es una de sus respuestas.
+- **Consecuencia conocida:** el Espejo es muy fuerte contra las torres pegadas al camino con poco alcance (Ráfaga, Eléctrica); es su papel. Con 2,5 casillas de rebote y 2 s de aturdimiento, las de largo alcance (Francotirador, y las de nivel 3 a 3,5 casillas) lo golpean sin problema.

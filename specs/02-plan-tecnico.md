@@ -487,3 +487,11 @@ godot --headless --path . -s addons/gut/gut_cmdln.gd -gdir=res://tests -gexit
 - `Enemy` tiene dos caras: **portador** (`_pulse_aura`, cada `AURA_TICK` = 0,25 s, busca en el grupo `Enemy.GROUP` a los demás dentro del radio) y **receptor** (`receive_aura(armadura, cura)`: guarda el mayor valor y lo hace caducar en `AURA_DURATION` = 0,35 s). `armor()` devuelve la armadura propia más la del aura y `take_hit` la usa; `_update_regen` suma la cura del aura a la propia.
 - La parte visual (anillo del portador, ícono del afectado) vive en `Enemy._draw`. Los datos de aura los muestra `Wiki.enemy_entry`.
 - Los enemigos nuevos (`data/enemies/guardian.tres`, `healer.tres`) se agregan solos a la Wiki, al bestiario y al panel de pruebas (todo sale de listar `data/enemies/`).
+
+### 6.14 Torres aturdidas, Chamán y Espejo *(M18, D-043)*
+
+- `Tower`: `GROUP = &"towers"`, `stun(seconds)` (queda el mayor tiempo), `is_stunned()`, `stun_left()`. En `_physics_process`, si está aturdida **no dispara** (el cooldown sigue corriendo). `_draw` la oscurece y dibuja chispas que giran. `TowerPanel` muestra "Aturdida (N s)" y se refresca mientras dura.
+- `EnemyData` gana `stun_interval`, `stun_seconds`, `stun_range_tiles` (Chamán) y `reflect_range_tiles`, `reflect_stun_seconds` (Espejo).
+- `Enemy`: el Chamán cuenta `_stun_cast_left`; al llegar a 0 busca la torre más cercana (`Tower.GROUP`) sin aturdir dentro del alcance y le hace `stun()`; si no hay, espera. Avisa con `cast_stun(from, tower)` (solo visual). `will_reflect(tower)` / `reflect(tower)` implementan el rebote y avisan con `reflected(enemy, tower)`.
+- `Projectile`: `source: Tower`. En `_hit`, si el enemigo rebota el tiro de `source`, no llama a `take_hit` (sí aplica la quemadura).
+- `Game` conecta `cast_stun` y `reflected` a `EffectsLayer` (rayo magenta, destello y "¡Rebote!"). `LightningEffect` acepta un color.

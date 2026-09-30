@@ -277,6 +277,36 @@ Dos enemigos que **no atacan**: hacen más fuertes a los que caminan cerca de el
 > **Dado** un Guardián (aura +2) y un Normal a 1,5 casillas de él, con una torre que pega de a 5 → **Cuando** la torre le pega al Normal → **Entonces** el daño real es 3 (5 − 0 − 2) y se ve el escudo sobre el Normal; **si** el Guardián muere, **en menos de medio segundo** el Normal vuelve a recibir 5.
 > **Dado** un Curandero (aura 3 %) y un Tanque herido dentro de su radio → **Entonces** el Tanque recupera vida cada segundo y se ve la cruz verde; **si** se quema, deja de curarse.
 
+### 6.3 Torres aturdidas: el Chamán y el Espejo *(M18, pedido por Lucas, D-041, D-043, B-06, B-07)*
+
+Hasta ahora los enemigos no le hacían nada a las torres. Estos dos sí: las **apagan** unos segundos. Es la primera regla que cambia **lo que hacen las torres**, y hace que **dónde** se las pone importe más.
+
+- **RF-280** **Torre aturdida:** una torre aturdida **no dispara** hasta que se le pasa el tiempo. Sigue en su lugar y se puede **mejorar, vender y cambiar de apuntado** igual. Si le llega otro aturdimiento, **no se suma**: queda el que más dura. El tiempo corre con el del mundo (la pausa y el x2 lo afectan como al resto). Se ve **apagada** (más oscura, con chispas que giran encima) y su panel dice **"Aturdida (N s)"**.
+- **RF-281** **Los datos del Chamán** (en `EnemyData`, valen 0 = apagado, RF-164): `stun_interval` (cada cuántos segundos lanza su hechizo), `stun_seconds` (cuánto aturde) y `stun_range_tiles` (a qué distancia llega).
+- **RF-282** **El Chamán:** cada `stun_interval` segundos (el primero, un intervalo después de aparecer) **aturde la torre más cercana** que esté a menos de `stun_range_tiles` de él y no esté ya aturdida. Si no hay ninguna, **espera** hasta que aparezca una (no acumula hechizos). Se ve un **rayo magenta** en zigzag del Chamán a la torre. Alcance del hechizo **menor** que el del Francotirador: se lo puede matar antes de que llegue a lanzarlo.
+- **RF-283** **Los datos del Espejo:** `reflect_range_tiles` (a qué distancia rebota) y `reflect_stun_seconds` (cuánto aturde a la torre que disparó).
+- **RF-284** **El Espejo:** cuando un golpe de una torre lo alcanza y esa torre está a **menos de `reflect_range_tiles`** de él (medido al impactar), el golpe **rebota**: el Espejo **no recibe daño ni ralentización** de ese golpe y la torre queda aturdida `reflect_stun_seconds`. Vale para todos los golpes (área, cadena, ráfaga); una torre aturdida por un rebote **no vuelve a rebotar** mientras esté apagada. Las torres **más lejos** le pegan normal. **La quemadura no rebota**: se aplica igual (RF-160). Se ve un **destello** y el texto **"¡Rebote!"**.
+- **RF-285** **Los dos enemigos:**
+
+  | ID | Nombre | Vida | Velocidad | Armadura | Oro | Vidas que quita | Vuela | Habilidad | Tamaño |
+  |---|---|---|---|---|---|---|---|---|---|
+  | `shaman` | **Chamán** | 90 | 0.9 | 0 | 20 | 2 | No | Cada 8 s aturde 3 s a la torre más cercana (hasta 4 casillas) | 0.32 |
+  | `mirror` | **Espejo** | 180 | 0.7 | 0 | 25 | 2 | No | Rebota los golpes de torres a menos de 2,5 casillas y las aturde 2 s | 0.36 |
+
+  Son **números de partida**: se ajustan con el bot cuando debuten (D-041: los dos en el nivel 10).
+
+  | Enemigo | Frase de presentación (RF-134) |
+  |---|---|
+  | Chamán | Cada tanto apaga la torre más cercana. Un Francotirador lo alcanza antes de que lance su hechizo. |
+  | Espejo | Devuelve los tiros de las torres cercanas y las aturde. El fuego y las torres de largo alcance lo golpean sin problema. |
+
+- **RF-286** **Dibujos:** el **Chamán** es un encapuchado **magenta** con un bastón que chispea; el **Espejo**, una tortuga de cristal **cian frío** con placas que reflejan. Siguen la guía de arte y usan los dos **tonos libres** que quedaban (rosa magenta y cian frío).
+- **RF-287** **En el resto del juego:** aparecen solos en la Wiki (con su habilidad escrita, RF-233), en el bestiario y en el panel de pruebas. Mientras no debuten en un nivel, la Wiki dice que no aparecen en la campaña.
+
+> **Criterio de aceptación**
+> **Dado** un Chamán con una Ametralladora a 3 casillas → **Cuando** pasan 8 segundos → **Entonces** la torre deja de disparar 3 segundos, se ve el rayo magenta y su panel dice "Aturdida"; después vuelve a disparar sola.
+> **Dado** un Espejo y dos torres con el mismo daño, una a 2 casillas y otra a 4 → **Cuando** las dos le disparan → **Entonces** el golpe de la cercana **rebota** (0 de daño, la torre queda aturdida 2 s) y el de la lejana le pega normal.
+
 ---
 
 ## 7. Niveles
