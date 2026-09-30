@@ -154,7 +154,7 @@ Abrí una partida en `JuegoA_pruebas.exe`, `F1` (panel de pruebas) y hacé apare
 
 ### 6.1.09 El Mortero (2×2)
 
-En el nivel 1, elegí el **Mortero** (novena torre, tecla **9**, 300 de oro) y pasá el mouse por el mapa: el cuadrado de **2×2** queda centrado en el mouse y se ve **verde** donde entra y **rojo** si una de las cuatro casillas es camino, roca u otra torre. Construilo: ocupa las cuatro casillas, un clic en cualquiera lo selecciona, dispara una bomba cada 4 segundos con daño de área, y al **venderlo** devuelve el 70 % y libera las cuatro casillas. La barra de abajo debe mostrar las 9 torres sin tapar "Próxima oleada".
+El Mortero es una torre **reservada** (solo el nivel 10 la tendrá): para probarla, abrí el mapa `tools/ejemplos/mapa_torres_apagadas.json` (copialo a la carpeta de mapas de la comunidad). Elegí el **Mortero** (novena torre, tecla **9**, 300 de oro) y pasá el mouse por el mapa: el cuadrado de **2×2** queda centrado en el mouse y se ve **verde** donde entra y **rojo** si una de las cuatro casillas es camino, roca u otra torre. Construilo: ocupa las cuatro casillas, un clic en cualquiera lo selecciona, dispara una bomba cada 4 segundos con daño de área, y al **venderlo** devuelve el 70 % y libera las cuatro casillas. La barra de abajo debe mostrar las 9 torres sin tapar "Próxima oleada".
 
 ### 6.1.08 Chamán y Espejo (versión de pruebas)
 

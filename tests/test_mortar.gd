@@ -1,4 +1,4 @@
-# Tests del Mortero, la primera torre de 2×2 (T140, spec RF-296 a RF-299).
+# Tests del Mortero, la primera torre de 2×2 (T140 y T142, spec RF-296 a RF-300).
 extends GutTest
 
 const GAME_SCENE: PackedScene = preload("res://scenes/game/game.tscn")
@@ -7,9 +7,18 @@ var game: Game
 var mortar: TowerData
 
 
+## Una partida del nivel 1 que habilita el Mortero (RF-300), como lo hará el nivel 10.
+func _game_with_mortar() -> Game:
+	var g: Game = GAME_SCENE.instantiate()
+	var level: LevelData = GameFlow.level(0).duplicate()
+	level.extra_towers = PackedStringArray(["mortar"])
+	g.level_data = level
+	add_child_autofree(g)
+	return g
+
+
 func before_each() -> void:
-	game = GAME_SCENE.instantiate()
-	add_child_autofree(game)
+	game = _game_with_mortar()
 	mortar = load("res://data/towers/mortar.tres")
 	game.session.earn(2000)
 
@@ -131,3 +140,58 @@ func test_the_wiki_writes_the_size() -> void:
 	assert_string_contains(text, "2×2 casillas")
 	var basic_text: String = JSON.stringify(Wiki.tower_entry(game.tower_types[0]).blocks)
 	assert_false(basic_text.contains("Tamaño"), "las de una casilla no lo dicen")
+
+
+# --- Torre reservada: solo en los niveles que la habilitan (RF-300) ---
+
+func test_a_normal_level_does_not_offer_the_mortar() -> void:
+	var plain: Game = GAME_SCENE.instantiate()
+	add_child_autofree(plain)
+	assert_eq(plain.available_towers.size(), 8, "las ocho de siempre")
+	assert_false(plain.available_towers.has(mortar))
+	assert_eq(plain.hud._tower_buttons.size(), 8, "la barra no la muestra")
+	assert_true(mortar.reserved)
+	assert_eq(plain.tower_types.size(), 9, "existe en el juego, pero no se ofrece")
+
+
+func test_a_level_that_lists_it_offers_it() -> void:
+	assert_eq(game.available_towers.size(), 9)
+	assert_eq(game.available_towers[8], mortar)
+	assert_eq(game.hud._tower_buttons.size(), 9)
+
+
+func _level_text(extra: Variant) -> String:
+	var data: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/levels/level_01.json"))
+	if extra != null:
+		data["torres_extra"] = extra
+	return JSON.stringify(data)
+
+
+func test_the_level_file_reads_torres_extra() -> void:
+	var result: Dictionary = LevelFile.parse(_level_text(["mortar"]), &"prueba")
+	assert_eq(result["errors"].size(), 0, "sin errores")
+	assert_eq((result["level"] as LevelData).extra_towers, PackedStringArray(["mortar"]))
+	assert_eq((LevelFile.parse(_level_text(null), &"prueba")["level"] as LevelData).extra_towers.size(), 0, "sin la clave: ninguna")
+
+
+func test_torres_extra_with_a_wrong_name_or_shape_is_an_error() -> void:
+	var unknown: Dictionary = LevelFile.parse(_level_text(["bazooka"]), &"prueba")
+	assert_eq(unknown["errors"].size(), 1)
+	assert_string_contains(unknown["errors"][0], "bazooka")
+	assert_string_contains(unknown["errors"][0], "mortar", "lista las que hay")
+	var not_a_list: Dictionary = LevelFile.parse(_level_text("mortar"), &"prueba")
+	assert_eq(not_a_list["errors"].size(), 1)
+	assert_string_contains(not_a_list["errors"][0], "torres_extra")
+
+
+func test_a_repeated_name_counts_once() -> void:
+	var result: Dictionary = LevelFile.parse(_level_text(["mortar", "mortar"]), &"prueba")
+	assert_eq((result["level"] as LevelData).extra_towers.size(), 1)
+
+
+func test_the_editor_keeps_torres_extra() -> void:
+	var draft: LevelDraft = LevelDraft.from_text(_level_text(["mortar"]), "prueba")
+	var saved: String = draft.to_text()
+	assert_string_contains(saved, "\"torres_extra\": [\"mortar\"]")
+	assert_eq(LevelDraft.from_text(saved, "x").to_text(), saved, "guardar dos veces da el mismo texto")
+	assert_false(LevelDraft.from_text(_level_text(null), "x").to_text().contains("torres_extra"), "sin la clave, no la escribe")

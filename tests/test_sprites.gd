@@ -44,7 +44,7 @@ func test_each_level_has_its_own_base() -> void:
 
 func test_tower_buttons_show_the_tower() -> void:
 	var buttons: Array[Button] = game.hud._tower_buttons
-	for i: int in game.tower_types.size():
+	for i: int in game.available_towers.size():
 		var icon: Texture2D = buttons[i].icon
 		assert_true(icon is ImageTexture, "RF-155: ícono armado con base + torreta")
 		assert_eq(icon.get_size(), SPRITE_SIZE)

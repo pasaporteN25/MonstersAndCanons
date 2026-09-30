@@ -9,6 +9,9 @@ var game: Game
 ## Una partida con `count` torres (repite las que haya si hacen falta más).
 func _game_with_towers(count: int) -> Game:
 	var g: Game = GAME_SCENE.instantiate()
+	var level: LevelData = GameFlow.level(0).duplicate()
+	level.extra_towers = PackedStringArray(["mortar"])  # RF-300
+	g.level_data = level
 	var base: Array[TowerData] = g.tower_types.duplicate()
 	var towers: Array[TowerData] = []
 	for i: int in count:

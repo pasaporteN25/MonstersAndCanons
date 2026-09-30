@@ -19,5 +19,8 @@ extends Resource
 @export var projectile_texture: Texture2D
 ## RF-290: lado de la torre en casillas. 1 = una casilla (todas las de hoy), 2 = cuadrado de 2×2 (el Mortero).
 @export_range(1, 3) var footprint: int = 1
+## RF-300: una torre **reservada** no está en la barra de todos los niveles: solo en los que la habilitan
+## con `"torres_extra"` en su archivo (por ahora, el Mortero).
+@export var reserved: bool = false
 ## Un elemento por nivel: índice 0 = nivel 1.
 @export var levels: Array[TowerLevelData] = []

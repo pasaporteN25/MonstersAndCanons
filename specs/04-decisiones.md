@@ -293,3 +293,10 @@
 - **Por qué reusar las bases:** `base_1`, `base_2` y `base_3` son dibujos vectoriales que escalan sin perder nitidez; hacer tres bases nuevas solo para el Mortero sería trabajo de arte que la fusión ya no necesitaría. Solo se dibuja la torreta y la bomba.
 - **Alternativas descartadas:** (a) una escena aparte para las torres grandes: duplica mejorar, vender, aturdir y apuntar; (b) guardar solo la casilla de arriba a la izquierda y calcular el resto al vender: cada consulta "¿está ocupada?" tendría que recorrer todas las torres.
 - **Riesgos conocidos:** en los mapas de 20×9 hay pocos lugares con 2×2 libres cerca del camino; el Mortero es de **largo alcance** (5 casillas) justamente para no necesitar estar pegado. Al ser la novena torre, la barra queda más apretada en pantallas chicas (se revisa en T140).
+
+### D-045 · El Mortero es una torre reservada: solo los niveles que la piden la tienen
+- **Fecha:** 2026-09-30 · **Estado:** Aceptada · **Decidió:** Lucas ("la torre de 4 no me terminó de convencer, dejarla solo para el nivel 10")
+- **Qué:** `TowerData.reserved` y el campo `"torres_extra"` del archivo de nivel (`LevelData.extra_towers`). `Game.available_towers` (lo que ven la barra y las teclas) sale de `tower_types` filtrando las reservadas no habilitadas. El Mortero sigue en `tower_types`, en la Wiki y en los tests.
+- **Por qué así y no un "nivel desde el que se desbloquea":** la campaña todavía no tiene desbloqueos de torres; un campo en el nivel es lo más chico que sirve hoy y deja a los mapas de la comunidad habilitar torres reservadas si quieren. Más adelante puede crecer a un sistema de desbloqueos sin cambiar los archivos.
+- **Alternativa descartada:** sacar el Mortero del juego hasta el nivel 10: perdería su ficha, sus tests y la prueba de que el 2×2 funciona.
+- **Consecuencia:** hasta que exista el nivel 10, el Mortero solo se juega con un mapa que lo habilite. La restricción es de **interfaz**: `BuildController.try_build` no rechaza una torre reservada (los tests y el bot construyen directo).

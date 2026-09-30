@@ -4,7 +4,7 @@ Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle t�
 
 ## Torres grandes: el Mortero *(M19)*
 - Primera torre de **2×2 casillas**: el **Mortero** (tecla **9**), una bomba lenta de gran daño en área y largo alcance, pensada contra blindados y jefes. Se construye en un cuadrado de cuatro casillas libres; la vista previa se centra en el mouse y se pinta verde o roja.
-- La barra de torres ahora tiene **9** botones.
+- Por ahora el Mortero es una torre **reservada**: solo aparece en los niveles que la habilitan (el 10, cuando exista); los demás siguen con las 8 de siempre.
 
 ## Torres apagadas: Chamán y Espejo *(M18)*
 - El **Chamán** apaga la torre más cercana unos segundos con un rayo magenta; el **Espejo** devuelve los tiros de las torres cercanas y las aturde.

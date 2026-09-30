@@ -87,6 +87,7 @@ Los niveles son JSON, un formato de texto común que se edita a mano. Un `.tres`
 | `id`, `display_name` | Como en los enemigos. |
 | `description` | Frase que se ve al elegirla para construir (RF-171). |
 | `can_hit_air` | Si le pega a los voladores. |
+| `reserved` | `true` = la torre **no** está en la barra salvo que el nivel la habilite con `"torres_extra"` (RF-300). Hoy: el Mortero. | `true` |
 | `footprint` | **Lado** de la torre en casillas (RF-290). `1` = una casilla (la común), `2` = cuadrado de 2×2 como el Mortero. Necesita todas sus casillas libres; usa los mismos dibujos de base agrandados. | `2` |
 | `projectile_speed_tiles` | Velocidad de sus proyectiles (casi todas: 10). |
 | `color` | Color de sus efectos (anillo al construir). |
@@ -236,6 +237,7 @@ Dos campos **opcionales** del nivel (sin ellos, el nivel se ve como siempre). Ha
 ```
 
 - **`tema`** cambia los colores y la decoración de todo el mapa: `pradera` (el de siempre), `desierto`, `nieve`, `volcan`, `bosque`, `pantano` o `ruinas`. Es solo visual.
+- **`torres_extra`** (opcional) habilita torres **reservadas** en este nivel, por ejemplo `"torres_extra": ["mortar"]` (RF-300). Un nombre que no existe es un error.
 - **`leyenda`** declara letras nuevas (hasta 10) para usar en el `"mapa"`. Cada una dice un **`dibujo`** y, si se puede construir encima, `"construible": true` (si no se escribe, no se puede). La letra es **una sola** y no puede ser `. # X S` ni una entrada (`A` a `H`).
 - **Nunca son camino:** una letra de la leyenda es pasto (si es construible) o casilla bloqueada. Los recorridos de los enemigos no cambian.
 - **Los dibujos** son una lista cerrada:

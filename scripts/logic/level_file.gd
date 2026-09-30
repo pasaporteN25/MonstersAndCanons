@@ -8,9 +8,10 @@ extends RefCounted
 const VERSION: int = 1
 const LEVELS_DIR: String = "res://data/levels/"
 const ENEMIES_DIR: String = "res://data/enemies/"
+const TOWERS_DIR: String = "res://data/towers/"
 const CAMPAIGN_PATH: String = "res://data/campaign.json"
 
-const LEVEL_KEYS: PackedStringArray = ["version", "nombre", "oro", "vidas", "aumento_vida", "tema", "leyenda", "mapa", "oleadas"]
+const LEVEL_KEYS: PackedStringArray = ["version", "nombre", "oro", "vidas", "aumento_vida", "tema", "leyenda", "torres_extra", "mapa", "oleadas"]
 const LEGEND_KEYS: PackedStringArray = ["dibujo", "construible"]
 const GROUP_KEYS: PackedStringArray = ["enemigo", "cantidad", "cada", "desde", "entrada"]
 const CAMPAIGN_KEYS: PackedStringArray = ["version", "niveles"]
@@ -63,6 +64,7 @@ static func parse(text: String, id: StringName) -> Dictionary:
 
 	level.theme = _read_theme(data, errors)
 	level.legend = _read_legend(data, errors)
+	level.extra_towers = _read_extra_towers(data, errors)
 
 	var grid: MapGrid = null
 	if not data.has("mapa"):
@@ -201,6 +203,37 @@ static func find_enemy(enemy_name: String) -> EnemyData:
 	if not ResourceLoader.exists(path):
 		return null
 	return load(path) as EnemyData
+
+
+# --- Torres extra (RF-300) ---
+
+## Los ids de las torres que existen (los archivos de `data/towers/`).
+static func tower_ids() -> PackedStringArray:
+	var found: Dictionary = {}
+	for file: String in DirAccess.get_files_at(TOWERS_DIR):
+		var clean: String = file.trim_suffix(".remap")
+		if clean.ends_with(".tres") or clean.ends_with(".res"):
+			found[clean.get_basename()] = true
+	var ids := PackedStringArray(found.keys())
+	ids.sort()
+	return ids
+
+
+## `"torres_extra"`: lista de ids de torres reservadas que el nivel habilita. Un id que no existe es un error.
+static func _read_extra_towers(data: Dictionary, errors: PackedStringArray) -> PackedStringArray:
+	var result: PackedStringArray = []
+	if not data.has("torres_extra"):
+		return result
+	if not _is_list_of_text(data["torres_extra"]):
+		errors.append("torres_extra: tiene que ser una lista de nombres de torre entre comillas, como [\"mortar\"].")
+		return result
+	var known: PackedStringArray = tower_ids()
+	for id: String in data["torres_extra"]:
+		if not known.has(id):
+			errors.append("torres_extra: la torre \"%s\" no existe. Las que hay: %s." % [id, ", ".join(known)])
+		elif not result.has(id):
+			result.append(id)
+	return result
 
 
 # --- Tema y leyenda (RF-260, RF-262, RF-265) ---

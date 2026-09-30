@@ -72,6 +72,8 @@ func _initialize() -> void:
 			quit(1)
 			return
 		game.level_data = _keep(result["level"])
+	if strategy == "heavy":
+		game.level_data.extra_towers = PackedStringArray(["mortar"])  # RF-300: los niveles comunes no lo traen
 	if starting_gold_override >= 0:
 		game.level_data.starting_gold = starting_gold_override
 	if level_scale_override >= 0:

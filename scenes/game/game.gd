@@ -26,6 +26,8 @@ signal speed_changed(speed: float)
 @export var balance: BalanceConfig
 ## Torres disponibles, en el orden de los botones y de las teclas 1, 2, 3…
 @export var tower_types: Array[TowerData] = []
+## RF-300: las torres de la barra en ESTE nivel (las comunes y las reservadas que el nivel habilita).
+var available_towers: Array[TowerData] = []
 
 var level: Level
 ## RF-251: solo existe si el mapa es más grande que 20×9 (hay que achicar el mundo para que entre).
@@ -80,14 +82,15 @@ func _ready() -> void:
 	spawner.enemy_spawned.connect(_on_enemy_spawned)
 	spawner.wave_finished.connect(session.complete_wave)
 
-	build_controller.setup(level, session, balance, tower_types, tower_container)
+	available_towers = level_data.available_towers(tower_types)
+	build_controller.setup(level, session, balance, available_towers, tower_container)
 	build_controller.tower_built.connect(_on_tower_built)
 	build_controller.tower_upgraded.connect(_on_tower_upgraded)
 	build_controller.tower_sold.connect(_on_tower_sold)
 	build_controller.selection_changed.connect(hud.show_selected_tower)
 	build_controller.placed_selection_changed.connect(_refresh_tower_panel.unbind(1))
 
-	hud.setup_towers(tower_types)
+	hud.setup_towers(available_towers)
 	hud.setup_waves(level_data.waves)  # RF-133, RF-135: antes de bind()
 	hud.tower_button_pressed.connect(build_controller.select)
 	hud.start_wave_pressed.connect(start_next_wave)

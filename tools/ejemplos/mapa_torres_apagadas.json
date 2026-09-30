@@ -5,6 +5,7 @@
   "vidas": 20,
   "aumento_vida": 20,
   "tema": "ruinas",
+  "torres_extra": ["mortar"],
   "mapa": [
     "....................",
     "A##################.",
