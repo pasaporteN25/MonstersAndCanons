@@ -607,7 +607,7 @@
   README, ONBOARDING, CONTENIDO.md (cómo instalar y compartir un mapa), plan técnico; exportar los cuatro ejecutables.
   **Refs:** D-034.
   **Hecho cuando:** pasan todos los tests y, en el `.exe` normal exportado, un mapa copiado a la carpeta aparece en el menú.
-  **Resultado:** CONTENIDO.md ("Mapas de la comunidad: instalar y compartir", con las carpetas de Windows y Linux, los motivos de error y la tabla de límites), plan técnico §6.9, README y ONBOARDING al día. Se exportaron los cuatro. **Comprobación con el paquete exportado del juego normal:** se copió un mapa a `%APPDATA%\Godot\app_userdata\JuegoA\maps\` y la solapa dijo "Mapas de la comunidad (1)" (con el juego en modo normal: sin cartel de pruebas y con los niveles 2 a 7 bloqueados). **Límite honesto de la prueba:** el `.exe` de release no admite `--scene` (lo trae desactivado), así que se cargó el paquete de datos exportado con el Godot de desarrollo (`--main-pack`): son los mismos archivos convertidos que ve el juego real, pero no el binario de release. La carpeta y el archivo de prueba se borraron después, y el `save.json` quedó como estaba.
+  **Resultado:** CONTENIDO.md ("Mapas de la comunidad: instalar y compartir", con las carpetas de Windows y Linux, los motivos de error y la tabla de límites), plan técnico §6.9, README y ONBOARDING al día. Se exportaron los cuatro. **Comprobación con el paquete exportado del juego normal:** se copió un mapa a `%APPDATA%\Godot\app_userdata\JuegoA\maps` y la solapa dijo "Mapas de la comunidad (1)" (con el juego en modo normal: sin cartel de pruebas y con los niveles 2 a 7 bloqueados). **Límite honesto de la prueba:** el `.exe` de release no admite `--scene` (lo trae desactivado), así que se cargó el paquete de datos exportado con el Godot de desarrollo (`--main-pack`): son los mismos archivos convertidos que ve el juego real, pero no el binario de release. La carpeta y el archivo de prueba se borraron después, y el `save.json` quedó como estaba.
 
 ### Otras ideas de pulido *(sin fecha)*
 
@@ -747,3 +747,12 @@
   **Hecho cuando:** los nueve SVG se importan en Godot, se revisan juntos a escala de juego e interfaz y pasan los tests de sprites y contenido.
 
   **Resultado:** nueve SVG rediseñados y renderizados con Godot 4.7.2; comparativa visual antes/después revisada, incluyendo lectura a 34 px. Los 67 tests existentes de sprites, contenido nuevo, catálogo y datos pasan (879 aserciones). Se conservan rutas, dimensiones, transparencia y parámetros de importación; no cambia el balance.
+
+## Herramientas de trabajo *(pedido por Lucas, D-040)*
+
+- [x] **T129 · Guía de arte y reglas por carpeta**
+  `specs/05-guia-de-arte.md` y cinco reglas en `.claude/rules/`.
+  **Refs:** D-040.
+  **Hecho cuando:** la guía describe la técnica y la paleta reales de los enemigos redibujados y las reglas coinciden con la constitución.
+
+  **Resultado:** la guía sale de los SVG reales (contorno `#202330` de ancho 2, degradé de 3 paradas, hueso `#fff0ce → #ab8c69`, ojos `#ffe19a`, apoyo en y≈57) y de la paleta del generador de los enemigos (`build/enemy-redesign/redesign.py`, no versionado). Incluye los **tonos libres** para enemigos nuevos y una regla de los temas del mapa (ningún enemigo puede perderse sobre ningún suelo; se aprueba con una hoja de contacto). Las reglas recogen los errores que ya nos pasaron. **No es código:** los tests no cambian (582).

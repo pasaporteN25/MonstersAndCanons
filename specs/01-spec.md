@@ -845,7 +845,7 @@ Una herramienta para crear y probar niveles sin escribir el JSON a mano. Nació 
 
 Cualquiera puede sumar mapas al juego **copiando un archivo**: los mapas hechos con el editor (§10.3) o recibidos de otra persona aparecen en el menú, en cualquier versión del juego y sin tocar nada más. Son **solo datos** (JSON, §7.8): un mapa de la comunidad nunca puede traer código.
 
-- **RF-220** **Dónde van:** todo archivo `.json` de la carpeta **`user://maps/`** es un **mapa de la comunidad**. En Windows es `%APPDATA%\Godot\app_userdata\JuegoA\maps\` y en Linux, `~/.local/share/godot/app_userdata/JuegoA/maps/`. Es **la misma carpeta donde guarda el editor**: un mapa hecho con el editor aparece solo. Vale en todas las versiones que tengan esa carpeta a mano (Windows y Linux; en el celular la carpeta no se ve, así que allí la lista simplemente queda vacía).
+- **RF-220** **Dónde van:** todo archivo `.json` de la carpeta **`user://maps/`** es un **mapa de la comunidad**. En Windows es `%APPDATA%\Godot\app_userdata\JuegoA\maps` y en Linux, `~/.local/share/godot/app_userdata/JuegoA/maps/`. Es **la misma carpeta donde guarda el editor**: un mapa hecho con el editor aparece solo. Vale en todas las versiones que tengan esa carpeta a mano (Windows y Linux; en el celular la carpeta no se ve, así que allí la lista simplemente queda vacía).
 - **RF-221** **La pantalla:** la selección de nivel tiene dos solapas, **Campaña** y **Mapas de la comunidad (N)**. La segunda muestra una tarjeta por archivo, en orden alfabético y **todos abiertos** (no hay desbloqueo). Cada tarjeta muestra el nombre del mapa, sus oleadas, su mejor resultado y sus estrellas. Si no hay ninguno, explica **dónde** ponerlos. Un botón **"Abrir carpeta"** (en PC) abre la carpeta y la crea si todavía no existe.
 - **RF-222** **Mismas reglas que los niveles:** cada archivo se lee con las reglas de §7.8. Uno **con errores** aparece como tarjeta **deshabilitada** que dice "Con errores" y, al pasar el mouse, su primer error; no impide que se vean ni se jueguen los demás. Un archivo con un **nombre no válido** (solo minúsculas, números y `_`, RF-216) o **demasiado grande** (más de 200 KB) se muestra igual, deshabilitado y con el motivo.
 - **RF-223** **Límites, para que un archivo ajeno no cuelgue el juego:** hasta **100 oleadas**, **20 grupos** por oleada, cantidad de hasta **999**, `cada` de hasta **60 s**, `desde` de hasta **600 s**, oro de hasta **99999**, vidas de hasta **999**, `aumento_vida` de hasta **300** y nombre de hasta **30 letras**. Valen para **todos** los niveles (los oficiales los cumplen) y el editor no deja pasarse de esos números.
@@ -1080,6 +1080,31 @@ Ideas **aprobadas como dirección**, pero **sin fecha**: no se programan hasta c
 
 **Recomendación de Claude:** empezar por el **Guardián** y el **Chamán**. El Guardián es una aura (un dato y una búsqueda de enemigos cercanos, como la del rayo en cadena). El Chamán necesita una regla nueva, "torre aturdida", que también usaría el enemigo espejo (B-06). "Torres con vida" conviene dejarla para un modo aparte (B-05), porque cambia la base del juego.
 
+### B-07 · Diseño ampliado de los enemigos con habilidades *(Lucas, 2026-09-29: "me gustaron, desarrollalos"; sigue sin fecha)*
+
+Los cuatro enemigos que gustaron, con lo necesario para convertirlos en spec cuando se tomen. Todos siguen RF-164: son **datos** del enemigo, apagados por defecto (valen 0), y se pueden combinar. Los colores son los libres de la guía de arte (`specs/05-guia-de-arte.md`).
+
+| | **Guardián** | **Curandero** | **Chamán** | **Espejo** |
+|---|---|---|---|---|
+| **Aspecto** | Gólem de piedra marfil con un escudo grande; lento y macizo | Criatura chica y ágil con un bulbo o cristal que brilla, verde amarillento (no el verde del Troll) | Encapuchado magenta con un bastón que chispea | Tortuga de cristal cian, con placas que reflejan la luz |
+| **Qué hace** | Aura de **armadura**: los enemigos cerca de él ganan +armadura | Aura de **cura**: los enemigos cerca de él recuperan vida | Cada tanto **apaga** la torre más cercana unos segundos | Si le dispara una torre **cercana**, el tiro rebota y esa torre queda aturdida |
+| **Datos nuevos** | `aura_radius_tiles`, `aura_armor_bonus` | `aura_radius_tiles`, `aura_heal_percent_per_second` | `stun_interval`, `stun_seconds`, `stun_range_tiles` | `reflect_range_tiles`, `reflect_stun_seconds` |
+| **Números de partida** (a balancear con el bot) | vida ≈ 2× el Tanque, velocidad baja, radio 2 casillas, +2 de armadura | vida ≈ el Troll, velocidad media, radio 2,5 casillas, 3 % de vida por segundo | vida media, velocidad media, cada 8 s, 3 s de apagón, alcance 4 casillas | vida alta, velocidad baja, rebota a menos de 3 casillas, 2 s de aturdimiento |
+| **Cómo se le gana** | Matarlo primero (modo "Más fuerte", Francotirador) o pegarle desde lejos; el **fuego** no es frenado por el +armadura | Matarlo primero; el fuego le corta la cura (igual que al Troll, RF-165); el daño en área lo alcanza | Matarlo de lejos (Francotirador tiene más alcance que su hechizo) o tener torres de sobra | Torres de **largo alcance**, la quemadura (no rebota) y la ralentización |
+| **Castiga a** | Las torres de golpe chico (Ametralladora, Múltiple, Ráfaga): con +2 de armadura casi no hacen daño | Los grupos que se plantan lejos de las torres de área | Las defensas que dependen de **una** torre fuerte | A la Eléctrica y a las torres pegadas al camino |
+
+**Reglas comunes de las auras** (Guardián y Curandero): afectan **solo a los demás** enemigos dentro del radio, no a sí mismos; **no se suman** (vale la más fuerte, como la ralentización, RF-61); se ven como un **anillo suave** en el suelo alrededor del portador y un detalle sobre el afectado (un destello de escudo, una cruz verde); el portador **muere como cualquier otro** (no es inmune). Cuestan poco de calcular: una búsqueda de enemigos cercanos cada 0,25 s, igual que el rayo en cadena (RF-163).
+
+**Regla común de "torre aturdida"** (Chamán y Espejo): una torre aturdida **no dispara** hasta que pasa el tiempo; se ve con **chispas** encima y el panel de la torre dice "Aturdida (2 s)". Se puede mejorar y vender igual. Es una regla nueva de las torres (hoy no tienen estados), que hay que agregar una sola vez para los dos enemigos.
+
+**En qué orden y por qué:**
+1. **Guardián + Curandero** (una etapa): comparten la mecánica de aura y no piden reglas nuevas en las torres. Empezar por el Guardián, que es el que obliga a cambiar de táctica.
+2. **Chamán + Espejo** (una etapa): comparten "torre aturdida"; el Espejo además necesita que un proyectil sepa **qué torre lo disparó**.
+3. **Cómo se presentan en los niveles** (spec §7.4): cada uno **entra solo** en un nivel (nivel 8: Guardián con muchos comunes; nivel 9: Curandero junto al Guardián; nivel 10: Chamán y Espejo), con la frase de presentación de RF-134, y en la Wiki aparecen solos (los datos nuevos se muestran como los demás).
+4. **Cada uno se balancea con el bot** sobre el nivel donde debuta, y el bot tiene que aprender la respuesta (por ejemplo, poner el Francotirador). Si el bot no la encuentra, el enemigo es injusto.
+
+Los otros dos de la lista (**Excavador** y **Ladrón**) quedan para una etapa posterior.
+
 ### B-08 · Mapas más ricos: terrenos, temas y tamaño
 *Pregunta de Lucas, 2026-09-29 (a raíz de M7). Sin fecha.*
 
@@ -1161,5 +1186,36 @@ La wiki de M11 ya es escalable a propósito (categorías → entradas → bloque
 *Regla de Lucas, 2026-09-29: las ideas que Claude propone por su cuenta se anotan acá y no se implementan hasta que Lucas las apruebe.*
 
 - **"¿Qué es esto?" desde la partida:** al tocar un enemigo o una torre durante la partida, un botón que abre su entrada de la wiki (con `show_target`) y al volver retoma la partida en pausa. Ojo con la pausa, con el celular (el toque ya selecciona torres) y con no dejar espiar enemigos que todavía están cerrados en el bestiario.
-- **Guía de arte del juego:** a partir del rediseño de los nueve enemigos (T127) se ve un estilo propio: contorno oscuro grueso, formas angulosas con facetas, un brillo por dibujo, mirando a la derecha, un color por especie. Escribirlo en un documento corto (`specs/05-guia-de-arte.md`: paleta por enemigo y por tema, grosor del contorno, cómo se hace una faceta, qué se evita) ayudaría a que los ~25 dibujos de M15 y los enemigos nuevos salgan iguales. Idea inspirada en el rol de "director de arte" del repositorio Claude Code Game Studios.
-- **Reglas por carpeta para Claude** (`.claude/rules/`): por ejemplo "en `scripts/` y `scenes/` se sangra con tabuladores", "los números de balance van en `data/`, no en el código" y "un dibujo nuevo sigue `specs/05-guia-de-arte.md`". Hoy esas reglas están en la constitución y en mi cabeza; ponerlas por carpeta evitaría errores repetidos (por ejemplo, editar con espacios un archivo de tabuladores).
+- ~~**Guía de arte del juego:** a partir del rediseño de los nueve enemigos (T127) se ve un estilo propio: contorno oscuro grueso, formas angulosas con facetas, un brillo por dibujo, mirando a la derecha, un color por especie. Escribirlo en un documento corto (`specs/05-guia-de-arte.md`: paleta por enemigo y por tema, grosor del contorno, cómo se hace una faceta, qué se evita) ayudaría a que los ~25 dibujos de M15 y los enemigos nuevos salgan iguales. Idea inspirada en el rol de "director de arte" del repositorio Claude Code Game Studios.~~ **Hecho (T129, D-040): [`specs/05-guia-de-arte.md`](05-guia-de-arte.md).**
+- ~~**Reglas por carpeta para Claude** (`.claude/rules/`): por ejemplo "en `scripts/` y `scenes/` se sangra con tabuladores", "los números de balance van en `data/`, no en el código" y "un dibujo nuevo sigue `specs/05-guia-de-arte.md`". Hoy esas reglas están en la constitución y en mi cabeza; ponerlas por carpeta evitaría errores repetidos (por ejemplo, editar con espacios un archivo de tabuladores).~~ **Hecho (T129, D-040): [`.claude/rules/`](../.claude/rules/).**
+- **Parte útil del repositorio Claude Code Game Studios** (Lucas: "no hace falta `validate-commit`"; del resto, ver D-040):
+  - **Informe de prueba** (su `playtest-report`): una plantilla corta para anotar lo que se siente al probar el juego (¿se entendió?, ¿dónde te trabaste?, ¿qué te aburrió?) y guardarla en `specs/pruebas/`. Hoy las impresiones de Lucas quedan en la charla.
+  - **Auditoría de recursos** (su `asset-audit`): un test que revise que **todos** los dibujos y sonidos existen, miden lo que dice la guía y que ningún dato apunta a un archivo que falta.
+  - **Notas de versión** (su `changelog`/`patch-notes`): un `CHANGELOG.md` para quien juegue, con lo nuevo de cada versión, cuando se empiece a compartir el juego.
+  - **Deuda técnica** (su `tech-debt`): un registro de las cosas flojas que fuimos anotando (el editor solo con mouse, Linux sin probar, el celular sin probar el zoom…).
+
+### B-16 · Torres especiales y torres que se fusionan *(idea de Lucas, 2026-09-29: "combinar torres para hacer unas de 4 casillas contra los bichos más fuertes"; sin fecha)*
+
+**Idea de Lucas:** juntar torres para hacer una más grande, de 4 casillas (2×2), que sirva contra los enemigos más fuertes.
+
+**Por qué encaja bien con lo que ya hay:** la armadura resta un número fijo **a cada golpe** (RF-80). (Números de ejemplo.) Cuatro Ametralladoras que pegan de a 5 contra armadura 3 hacen 4 × 2 = 8 por ronda; **una** torre que pega de a 20 hace 17. Concentrar el daño en un solo golpe es justo lo que vence a la armadura, y así ya funcionan el Cañón y el Francotirador. Una fusión sería la forma de que **toda** torre tenga un "modo pesado". Además, en los mapas grandes (§7.10) hay lugar de sobra.
+
+**Cuatro formas de hacerlo**, de la más grande a la más chica:
+
+| | Qué es | Trabajo | Comentario |
+|---|---|---|---|
+| **A · Fusión** | 4 torres **iguales, de nivel 3, en cuadrado** se fusionan (botón "Fusionar") en una torre 2×2 con más daño por golpe, más alcance y un efecto extra, de datos propios | Grande | Es lo que pidió Lucas. Exige torres de **más de una casilla** en el juego (ocupación, vista previa, vender, mejorar) y un arte de fusión |
+| **B · Torre grande construible** | Una torre nueva que **se construye directamente en 2×2** (por ejemplo un **Mortero**: daño enorme en área, lento, de gran alcance) | Mediano | Es el paso previo de A: prueba el "2×2" con **una** sola torre y **una** pieza de arte |
+| **C · Sinergia por vecinos** | Dos torres **pegadas** se potencian (Hielo junto al Cañón: el Cañón pega más a lo ralentizado; Incendiaria + Eléctrica: el rayo quema) | Mediano | Sin torres nuevas ni arte, pero hay que **mostrar** los vínculos y balancear pares |
+| **D · Recetas** | Dos torres **distintas** adyacentes se fusionan en una híbrida | Grande | Con 8 torres son 28 pares: demasiado, salvo pocas recetas elegidas a mano |
+
+**Recomendación de Claude:** ir por **B y después A**. Con B se resuelve lo difícil (que una torre ocupe 4 casillas) con un solo dibujo y un solo balance. Con A, las fusiones pueden salir **de los datos** (cada torre declara su versión fusionada con multiplicadores) y **reusar el mismo dibujo agrandado** con un marco dorado, sin ocho dibujos nuevos.
+
+**Reglas a decidir cuando se tome:**
+- ¿La fusión **se puede deshacer**? (Propuesta: no; se puede **vender** y devuelve una parte, RF-72.)
+- ¿Cuánto **cuesta**? Ya se pagaron las 4 torres; una fusión debe **valer la pena**, pero no ser obligatoria (propuesta: costo extra parecido al de una torre de nivel 3).
+- La torre fusionada **apunta desde el centro** del cuadrado y el alcance se mide desde ahí.
+- En el **bot de balance**, una estrategia nueva que fusione.
+- En **mapas chicos** (20×9) el espacio sí importa: 4 casillas de pasto juntas cerca del camino.
+
+**Torres de apoyo (idea de Claude, relacionada):** como los enemigos tendrán auras (arriba), las torres pueden tenerlas también: un **Estandarte** que sube la cadencia o el alcance de las torres cercanas. Usa **la misma mecánica de aura**, así que conviene diseñarlas juntas.
