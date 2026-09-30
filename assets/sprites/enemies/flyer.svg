@@ -1,29 +1,32 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- Volador: dragón alado violeta (wyvern) de costado, con las alas levantadas,
-       cola con púa y cuerno. Mira a la derecha. -->
-  <g stroke="#2b2233" stroke-width="2.3" stroke-linejoin="round" stroke-linecap="round">
-    <path d="M30 29 L27 11 L15 6 Q18 12 12 15 Q17 18 13 23 Q19 24 22 29 Z" fill="#4f2a86"/>
-    <path d="M21 35 C13 38 7 36 4 30 C9 33 14 33 20 31 Z" fill="#7d4cc2"/>
-    <polygon points="1,26 7,28.5 3.5,33.5" fill="#4f2a86"/>
-    <path d="M16 34 C16 27 25 23 34 24 C42 25 47 29 48 34 C46 40 37 43 28 42 C21 41 16 38 16 34 Z" fill="#9a66dc"/>
-    <path d="M54 24.4 L61.5 23.6 C60.5 26.4 57.2 27.8 54 27.2 Z" fill="#4a1a3a"/>
-    <path d="M40 30 C44 25 47 21 51 18.5 L59.5 19.5 C62 20.3 62 22.6 60.2 23.6 L54 25.2 C50 27.5 47 31 44 34 Z" fill="#9a66dc"/>
-    <polygon points="50.5,19.5 46,12 53.5,18.3" fill="#e9dcc0"/>
-    <path d="M36 28 L41 11 L27 2 Q30 8 23 11 Q28 15 23 21 Q29 22 30 28 Z" fill="#7d4cc2"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <!-- Wyvern violeta: alas en forma de hoz y membranas contrastadas. Vista lateral hacia la derecha; fondo transparente. -->
+  <defs>
+    <linearGradient id="hide" x1="0" y1="0" x2="0.25" y2="1"><stop stop-color="#c59bf4"/>
+    <stop offset="0.48" stop-color="#9260cb"/>
+    <stop offset="1" stop-color="#473366"/>
+    </linearGradient>
+    <linearGradient id="bone" x2="0.3" y2="1"><stop stop-color="#fff0ce"/>
+    <stop offset="1" stop-color="#ab8c69"/>
+    </linearGradient>
+    <linearGradient id="plate" x2="0.25" y2="1"><stop stop-color="#c59bf4"/>
+    <stop offset="0.35" stop-color="#9260cb"/>
+    <stop offset="1" stop-color="#473366"/>
+    </linearGradient>
+  </defs>
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <path d="M29 29 22 9 10 7 15 16 10 21 20 25 21 32Z" fill="#583b80" stroke="#202330" stroke-width="2"/>
+    <path d="M24 36 Q12 45 5 31 L3 27 9 30 9 34 Q16 38 22 31Z" fill="url(#hide)" stroke="#202330" stroke-width="2"/>
+    <path d="M19 34 Q22 27 33 27 L43 29 47 35 Q41 43 29 43 L21 39Z" fill="url(#hide)" stroke="#202330" stroke-width="2"/>
+    <path d="M28 42 27 48 32 50 M38 40 39 46 44 47" fill="none" stroke="#202330" stroke-width="3"/>
+    <path d="M39 31 44 24 51 20 59 23 61 27 55 31 50 31 44 37Z" fill="url(#hide)" stroke="#202330" stroke-width="2"/>
+    <path d="M49 21 45 14 53 20Z" fill="url(#bone)" stroke="#202330" stroke-width="1.3"/>
+    <path d="M51 29 60 27 58 32 52 33Z" fill="#3e253f" stroke="#202330" stroke-width="1"/>
+    <path d="M54 29 55 32 57 28Z" fill="url(#bone)" stroke="#202330" stroke-width="0.6"/>
+    <path d="M30 34 30 23 38 8 32 5 Q24 8 19 13 L25 16 18 24 Q25 23 27 28 L25 34Z" fill="url(#hide)" stroke="#202330" stroke-width="2"/>
+    <path d="M36 10 26 16 29 21 23 24 29 28 30 31 32 21Z" fill="#cf8dcc" stroke="none" stroke-width="2"/>
+    <path d="M30 33 32 21 38 8 M32 21 26 16 M32 21 23 24" fill="none" stroke="#4c326f" stroke-width="1.4"/>
+    <path d="M22 12 31 7 M22 37 Q27 40 34 39" fill="none" stroke="#d7b4f0" stroke-width="1.5"/>
+    <path d="M51 24 l7 1 -6 3 Z" fill="#ffbc77" stroke="#202330" stroke-width="1"/>
+    <path d="M50 23 l9 2" fill="none" stroke="#202330" stroke-width="2"/>
   </g>
-  <g stroke="#4f2a86" stroke-width="1.5" stroke-linecap="round" fill="none">
-    <path d="M41 11 L23 11"/>
-    <path d="M41 11 L23 21"/>
-  </g>
-  <path d="M21 37.5 C28 40.5 37 40 44 36" fill="none" stroke="#b58ae6" stroke-width="2.6" stroke-linecap="round"/>
-  <g stroke="#2b2233" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none">
-    <path d="M28 41.5 L27 47 L30 49.5"/>
-    <path d="M37 41 L37.5 46.5 L40.5 48.5"/>
-  </g>
-  <g fill="#f1ecdc" stroke="#2b2233" stroke-width="0.9" stroke-linejoin="round">
-    <polygon points="55,24.9 56,27 57,24.8"/>
-    <polygon points="58.3,24.6 59.1,26.4 59.9,24.5"/>
-  </g>
-  <polygon points="51.8,20.6 56.6,21.5 52.3,23" fill="#ff4d3a" stroke="#2b2233" stroke-width="1.1" stroke-linejoin="round"/>
-  <path d="M50.5 19.4 L57.3 21" stroke="#2b2233" stroke-width="2" stroke-linecap="round"/>
 </svg>

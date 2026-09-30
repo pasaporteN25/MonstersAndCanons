@@ -1,37 +1,36 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- Blindado: escarabajo rinoceronte con caparazón de metal azul, remaches y un cuerno grande.
-       Mira a la derecha. -->
-  <g stroke="#1b2a45" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none">
-    <path d="M20 42 L18 49 L21 54"/>
-    <path d="M35 43 L36 50 L39 54"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <!-- Escarabajo rinoceronte: placas de acero azul y cuerno biselado. Vista lateral hacia la derecha; fondo transparente. -->
+  <defs>
+    <linearGradient id="hide" x1="0" y1="0" x2="0.25" y2="1"><stop stop-color="#abcbe6"/>
+    <stop offset="0.48" stop-color="#547ea9"/>
+    <stop offset="1" stop-color="#283e65"/>
+    </linearGradient>
+    <linearGradient id="bone" x2="0.3" y2="1"><stop stop-color="#fff0ce"/>
+    <stop offset="1" stop-color="#ab8c69"/>
+    </linearGradient>
+    <linearGradient id="plate" x2="0.25" y2="1"><stop stop-color="#abcbe6"/>
+    <stop offset="0.35" stop-color="#547ea9"/>
+    <stop offset="1" stop-color="#283e65"/>
+    </linearGradient>
+  </defs>
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <path d="M19 39 13 47 16 53 M32 39 32 50 36 54 M43 37 50 45 51 52" fill="none" stroke="#202e49" stroke-width="4"/>
+    <path d="M8 34 Q8 17 28 15 Q45 13 51 31 L51 39 42 44 18 44 8 40Z" fill="#283e65" stroke="#202330" stroke-width="2"/>
+    <path d="M9 34 Q9 20 25 16 L29 19 26 34 19 39 9 38Z" fill="url(#plate)" stroke="#202330" stroke-width="2"/>
+    <path d="M28 16 Q41 15 46 24 L46 35 29 37 26 33 29 20Z" fill="url(#plate)" stroke="#202330" stroke-width="2"/>
+    <path d="M46 26 Q54 23 57 29 L59 37 54 42 46 41 43 34Z" fill="url(#hide)" stroke="#202330" stroke-width="2"/>
+    <path d="M51 28 Q49 17 59 7 L57 22 59 28 56 33Z" fill="url(#bone)" stroke="#202330" stroke-width="2"/>
+    <path d="M53 26 55 18 59 7 Q49 17 51 28Z" fill="#7d9db9" stroke="none" stroke-width="2"/>
+    <path d="M9 35 22 37 29 34 45 33 45 39 30 42 18 42 9 39Z" fill="#3d5c87" stroke="#202330" stroke-width="1.4"/>
+    <path d="M14 28 Q17 21 23 20 M33 20 Q40 20 43 26" fill="none" stroke="#d6e8f2" stroke-width="2"/>
+    <path d="M17 41 10 49 12 57 M30 43 27 51 30 57 M43 41 47 49 45 57" fill="none" stroke="#202330" stroke-width="4.5"/>
+    <path d="M17 41 10 49 12 56 M30 43 27 51 30 56 M43 41 47 49 45 56" fill="none" stroke="#7899bd" stroke-width="2"/>
+    <ellipse cx="14" cy="37" rx="1.15" ry="1.15" fill="#d2e4ef" stroke="#202330" stroke-width="0.6"/>
+    <ellipse cx="23" cy="39" rx="1.15" ry="1.15" fill="#d2e4ef" stroke="#202330" stroke-width="0.6"/>
+    <ellipse cx="32" cy="37" rx="1.15" ry="1.15" fill="#d2e4ef" stroke="#202330" stroke-width="0.6"/>
+    <ellipse cx="40" cy="36" rx="1.15" ry="1.15" fill="#d2e4ef" stroke="#202330" stroke-width="0.6"/>
+    <path d="M49 33 l7 1 -6 3 Z" fill="#72f0f5" stroke="#202330" stroke-width="1"/>
+    <path d="M48 32 l9 2" fill="none" stroke="#202330" stroke-width="2"/>
+    <path d="M55 40 60 39 57 44 53 43Z" fill="#849fb7" stroke="#202330" stroke-width="1.2"/>
   </g>
-  <g stroke="#2b2233" stroke-width="2.5" stroke-linejoin="round">
-    <path d="M7 38 C11 45 45 46 53 38 Z" fill="#2f4a73"/>
-    <path d="M47 26 C54 22 61 26 61 32 C61 37 57 41 50 41 Z" fill="#2f4a73"/>
-    <path d="M54 27 C53 19 57 11 63 7 C62 15 61 22 58.5 29 Z" fill="#8fb0de"/>
-    <path d="M58 37 L63.5 38.5 L58 41.5 Z" fill="#1c2233"/>
-    <path d="M6 38 C5 24 16 14 31 14 C44 14 52 22 53 34 L53 38 Z" fill="#4a6fa5"/>
-  </g>
-  <g stroke="#2f4a73" stroke-width="2" stroke-linecap="round" fill="none">
-    <path d="M22 15.5 C19 22 19 29 20 37"/>
-    <path d="M37 15 C39 22 39 29 38 37"/>
-    <path d="M7 32 C20 34.5 40 34.5 52.5 31.5"/>
-  </g>
-  <path d="M11 27 C13 21 19 17 26 16" fill="none" stroke="#8fb0de" stroke-width="3" stroke-linecap="round"/>
-  <g fill="#c9d6ea">
-    <circle cx="13" cy="29" r="1.2"/><circle cx="28" cy="25" r="1.2"/>
-    <circle cx="45" cy="26" r="1.2"/><circle cx="14" cy="36" r="1.2"/>
-    <circle cx="29" cy="36.5" r="1.2"/><circle cx="45" cy="35.5" r="1.2"/>
-  </g>
-  <g stroke="#2b2233" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round" fill="none">
-    <path d="M14 42 L10 49 L13 55"/>
-    <path d="M29 43 L28 50 L31 55"/>
-    <path d="M43 42 L47 48 L46 55"/>
-  </g>
-  <g stroke="#3f639b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none">
-    <path d="M14 42 L10 49 L13 55"/>
-    <path d="M29 43 L28 50 L31 55"/>
-    <path d="M43 42 L47 48 L46 55"/>
-  </g>
-  <polygon points="53,30.5 58,32 53.5,33.6" fill="#ffd54a" stroke="#2b2233" stroke-width="1" stroke-linejoin="round"/>
 </svg>

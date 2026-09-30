@@ -1,28 +1,34 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- Rápido: lagarto corredor amarillo, inclinado hacia adelante, con cola larga y hocico
-       con dientes. Mira a la derecha. -->
-  <g stroke="#2b2233" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round">
-    <path d="M29 39 L24 49 L17 55 L24 57 L30 50 L34 41 Z" fill="#a8791a"/>
-    <path d="M23 29 C15 30 7 27 1 21 C6 30 13 36 25 37 Z" fill="#e0ad2a"/>
-    <path d="M25 24 L27 17 L31 22 L34 15 L37 22 L41 17 L43 25 L46 20 L47 27 Z" fill="#b8871c"/>
-    <path d="M20 31 C22 24 30 21 38 23 C44 25 48 28 50 31 C46 38 38 41 30 40 C24 39 20 36 20 31 Z" fill="#e8b52a"/>
-    <path d="M55 23 L62.5 22.6 C61.5 26.5 57.5 28 53 27.5 Z" fill="#8f2418"/>
-    <path d="M43 29 C44 23 48 18 54 16.5 L62 18 C63.5 19 63.5 21.8 62 22.4 L55.5 23.4 L51.5 30 Z" fill="#e8b52a"/>
-    <path d="M37 37 L41 47 L47 54 L41 57 L36 50 L32 40 Z" fill="#d49e20"/>
-    <path d="M45 31 L49 36 L52 36 L47 30 Z" fill="#d49e20"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <!-- Lagarto corredor: perfil de flecha y cresta de ámbar. Vista lateral hacia la derecha; fondo transparente. -->
+  <defs>
+    <linearGradient id="hide" x1="0" y1="0" x2="0.25" y2="1"><stop stop-color="#ffe188"/>
+    <stop offset="0.48" stop-color="#eeb333"/>
+    <stop offset="1" stop-color="#a55a24"/>
+    </linearGradient>
+    <linearGradient id="bone" x2="0.3" y2="1"><stop stop-color="#fff0ce"/>
+    <stop offset="1" stop-color="#ab8c69"/>
+    </linearGradient>
+    <linearGradient id="plate" x2="0.25" y2="1"><stop stop-color="#ffe188"/>
+    <stop offset="0.35" stop-color="#eeb333"/>
+    <stop offset="1" stop-color="#a55a24"/>
+    </linearGradient>
+  </defs>
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <path d="M28 37 31 44 23 50 15 51 13 54 25 54 38 43 35 36Z" fill="#9a5728" stroke="#202330" stroke-width="2"/>
+    <path d="M26 30 Q12 34 3 24 Q7 38 26 39Z" fill="url(#hide)" stroke="#202330" stroke-width="2"/>
+    <path d="M23 27 25 20 31 23 35 17 38 23 44 19 44 27Z" fill="#ac5027" stroke="#202330" stroke-width="2"/>
+    <path d="M21 32 Q23 24 34 25 L44 29 50 26 51 32 Q42 43 31 41 L23 38Z" fill="url(#hide)" stroke="#202330" stroke-width="2"/>
+    <path d="M29 36 Q40 38 47 31 L49 33 Q40 43 31 41Z" fill="#ffe9a6" stroke="none" stroke-width="2"/>
+    <path d="M40 30 45 22 53 17 60 18 61 22 55 26 51 31Z" fill="url(#hide)" stroke="#202330" stroke-width="2"/>
+    <path d="M51 25 61 23 58 28 51 29Z" fill="#582c2b" stroke="#202330" stroke-width="1"/>
+    <path d="M54 25 55 28 57 24Z" fill="#fff0ce" stroke="#202330" stroke-width="0.7"/>
+    <path d="M32 35 Q40 35 40 42 L36 49 45 53 46 56 39 56 29 50 33 43 28 40Z" fill="url(#hide)" stroke="#202330" stroke-width="2"/>
+    <path d="M45 31 48 36 54 34 56 36 48 40 42 34Z" fill="#d18a29" stroke="#202330" stroke-width="1.5"/>
+    <path d="M25 27 29 27 28 33 25 34 M32 26 35 26 34 32 31 33 M39 27 42 29 39 34 37 34" fill="#b8742b" stroke="none" stroke-width="2"/>
+    <path d="M26 26 31 24 M46 23 51 20" fill="none" stroke="#ffecad" stroke-width="1.6"/>
+    <path d="M51 20 l7 1 -6 3 Z" fill="#ff6541" stroke="#202330" stroke-width="1"/>
+    <path d="M50 19 l9 2" fill="none" stroke="#202330" stroke-width="2"/>
+    <ellipse cx="59" cy="20" rx="1" ry="0.8" fill="#202330" stroke="none" stroke-width="1"/>
+    <path d="M41 54h4" fill="none" stroke="#fff0ce" stroke-width="1.2"/>
   </g>
-  <g stroke="#b8871c" stroke-width="2.4" stroke-linecap="round">
-    <line x1="28" y1="25" x2="29" y2="31"/>
-    <line x1="34" y1="24" x2="34.5" y2="30"/>
-    <line x1="40" y1="25.5" x2="40" y2="31"/>
-    <line x1="12" y1="29.5" x2="14" y2="33"/>
-  </g>
-  <path d="M26 36 C32 39 40 38 46 34" fill="none" stroke="#f5d56b" stroke-width="2.6" stroke-linecap="round"/>
-  <g fill="#f1ecdc" stroke="#2b2233" stroke-width="0.9" stroke-linejoin="round">
-    <polygon points="56,23.3 57,25.6 58,23.2"/>
-    <polygon points="59.2,23 60,25 60.8,22.9"/>
-  </g>
-  <polygon points="51.5,18.8 56.5,19.8 52,21.4" fill="#e8402a" stroke="#2b2233" stroke-width="1.2" stroke-linejoin="round"/>
-  <path d="M50 17.4 L57 19.3" stroke="#2b2233" stroke-width="2.2" stroke-linecap="round"/>
-  <circle cx="61" cy="19.6" r="0.9" fill="#2b2233"/>
 </svg>
