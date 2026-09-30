@@ -195,7 +195,7 @@ El juego avisa todos estos (y un nivel con errores no se juega, pero el resto de
 
 ### Hacerlo con el editor, sin escribir el archivo a mano
 
-En el **ejecutable de pruebas** (`JuegoA_pruebas.exe`) el menú principal tiene el botón **"Editor de mapas"**. Es lo mismo que escribir el JSON, pero se dibuja con el mouse:
+En el menú principal, en el **`JuegoA.exe` normal y en el de pruebas** (no en el celular), está el botón **"Editor de mapas"**. Es lo mismo que escribir el JSON, pero se dibuja con el mouse:
 
 | Qué | Cómo |
 |---|---|
@@ -229,7 +229,7 @@ Cualquier persona puede sumar mapas al juego **copiando un archivo**, en cualqui
 
 Lo más fácil: en el juego, **Jugar → solapa "Mapas de la comunidad" → "Abrir carpeta de mapas"** (la crea si no existe). Al volver a la selección de nivel, el mapa aparece solo, sin reiniciar el juego.
 
-**Compartir un mapa:** se manda el archivo (por Discord, mail, itch.io…). Los mapas hechos con el editor (versión de pruebas) se guardan en esa misma carpeta, así que ya están ahí.
+**Compartir un mapa:** se manda el archivo (por Discord, mail, itch.io…). Los mapas hechos con el editor se guardan en esa misma carpeta, así que ya están ahí.
 
 **Cómo se ve y cómo se juega:**
 - Cada archivo es una tarjeta con el nombre del mapa, las oleadas, las estrellas y "Mejor: N vidas". Están **todos abiertos**.

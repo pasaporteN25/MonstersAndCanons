@@ -122,7 +122,7 @@ godot --headless --path . --export-release "Windows (pruebas)" build/JuegoA_prue
 
 - Trae el **modo de pruebas**: todos los niveles abiertos y, en la partida, el **panel de pruebas** (`F1` o el botón "Pruebas"): +1000 de oro, vidas infinitas, saltar oleada, matar a todos, ganar, perder, velocidad x4, hacer aparecer cualquier enemigo y ver los FPS.
 - Usa **otro guardado** (`save_pruebas.json`, en la misma carpeta): lo que hagas ahí no toca tu progreso, tus estrellas ni tus récords reales.
-- **Editor de mapas:** el menú principal trae el botón "Editor de mapas" (solo en este ejecutable). Se dibuja el mapa con el mouse, se arman las oleadas, se prueba el nivel al instante y se guarda en `%APPDATA%\Godot\app_userdata\JuegoA\maps\`. Ver [`CONTENIDO.md`](CONTENIDO.md).
+- **Editor de mapas:** el menú principal trae el botón "Editor de mapas" (en el juego normal y en el de pruebas, no en el celular). Se dibuja el mapa con el mouse, se arman las oleadas, se prueba el nivel al instante y se guarda en `%APPDATA%\Godot\app_userdata\JuegoA\maps\`. Ver [`CONTENIDO.md`](CONTENIDO.md).
 - Abajo al centro siempre dice "MODO PRUEBAS", para no confundirlo con el juego normal.
 - El `JuegoA.exe` normal y el `.apk` **no** lo tienen.
 - Desde el editor de Godot: *Proyecto → Configuración del proyecto → Editor → Run → Main Run Args* = `-- --pruebas`.

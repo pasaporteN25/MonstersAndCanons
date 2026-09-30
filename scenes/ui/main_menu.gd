@@ -1,5 +1,6 @@
-# Menú principal (RF-110): Jugar, Récords, Wiki, Opciones, Salir. En el modo de pruebas, además, el
-# Editor de mapas (RF-210).
+# Menú principal (RF-110): Jugar, Récords, Wiki, Editor de mapas (RF-210: no en el celular), Opciones
+# y Salir.
+class_name MainMenu
 extends Control
 
 @onready var _play_button: Button = %PlayButton
@@ -15,13 +16,19 @@ func _ready() -> void:
 	_play_button.pressed.connect(GameFlow.go_to_level_select)
 	_records_button.pressed.connect(GameFlow.go_to_records)  # RF-195
 	_wiki_button.pressed.connect(GameFlow.go_to_wiki)  # RF-230
-	_editor_button.visible = DevMode.enabled  # RF-210: el juego normal y el APK no lo tienen
+	_editor_button.visible = editor_available(OS.has_feature("mobile"))  # RF-210
 	_editor_button.pressed.connect(GameFlow.go_to_editor)
 	_options_button.pressed.connect(_options.open)
 	_quit_button.pressed.connect(get_tree().quit)
 	_options.closed.connect(_play_button.grab_focus)
 	Audio.add_click_sounds(self)
 	_play_button.grab_focus()  # se puede jugar con Enter sin tocar el mouse
+
+
+## RF-210 (D-038): el editor es para todos, menos en el celular (se maneja con mouse y teclado); el
+## modo de pruebas lo ve siempre.
+static func editor_available(is_mobile: bool) -> bool:
+	return not is_mobile or DevMode.enabled
 
 
 func _unhandled_input(event: InputEvent) -> void:

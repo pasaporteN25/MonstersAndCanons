@@ -691,3 +691,13 @@
   **Refs:** D-037.
   **Hecho cuando:** pasan todos los tests y el mapa de ejemplo se juega en el paquete exportado.
   **Resultado:** CONTENIDO.md (tamaño del mapa y el ejemplo), README y ONBOARDING (una prueba manual nueva, 6.1.05) al día. Se exportaron los cuatro (el de pruebas se pudo reemplazar esta vez: ya no estaba abierto). **Comprobación con el paquete exportado del juego normal:** el nivel 1 se ve idéntico a siempre, sin zoom ni errores. **Límite honesto:** el mapa grande **no se pudo jugar en el paquete exportado** sin copiar un archivo a la carpeta de mapas de Lucas (que tiene un mapa suyo, `test01.json`, y no quise tocarla); se comprobó con los tests, con la captura de la partida y del editor y con el bot, todos en el proyecto y no en el exportado. Además, **nadie probó todavía el zoom con el mouse o el dedo**.
+
+---
+
+## M14 — El editor de mapas para todos *(pedido por Lucas, D-038)*
+
+- [x] **T121 · El botón "Editor de mapas" en el juego normal**
+  El botón se ve siempre, salvo en el celular (donde solo se ve en el modo de pruebas).
+  **Refs:** RF-210, D-038.
+  **Hecho cuando:** los tests comprueban que el botón está en el menú normal y en el de pruebas, que no está en el celular (salvo modo de pruebas), y que el editor abierto desde el juego normal no cambia el progreso ni los niveles desbloqueados, y guarda en la carpeta de mapas; las exportaciones se comprueban.
+  **Resultado:** El botón "Editor de mapas" está siempre en el menú, salvo en el celular (`MainMenu.editor_available`); el modo de pruebas lo ve siempre. Un test comprueba que abrirlo en el juego normal no cambia el progreso ni desbloquea niveles y que guarda en la carpeta de mapas. Se exportaron los cuatro y se comprobó con el paquete exportado del juego normal: el menú muestra Jugar, Récords, Wiki, **Editor de mapas**, Opciones y Salir, y entra en pantalla. 2 tests nuevos y 1 cambiado (582 en total).

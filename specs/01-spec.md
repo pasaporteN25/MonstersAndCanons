@@ -771,9 +771,9 @@ Para probar todo sin tener que ganar cada nivel, y sin ensuciar el progreso ni l
 
 ### 10.3 Editor de mapas *(M9, pedido por Lucas, D-033, B-04 escalón 2)*
 
-Una herramienta de **administración** para crear y probar niveles sin escribir el JSON a mano. Por ahora **solo existe en el modo de pruebas** (§10.2); si más adelante pasa al juego normal, o si se unifica todo en una app con modo admin, se decide aparte (B-13).
+Una herramienta para crear y probar niveles sin escribir el JSON a mano. Nació como herramienta de administración solo del modo de pruebas (§10.2); desde M14 **está en el juego normal** (D-038): cualquiera puede hacer un mapa y jugarlo o compartirlo (§10.4). Lo que sigue siendo solo del modo de pruebas es el panel de pruebas y jugar cualquier nivel de la campaña (§10.2).
 
-- **RF-210** **Dónde está:** el menú principal tiene un botón **"Editor de mapas"** **solo en el modo de pruebas** (RF-180). El `JuegoA.exe` normal y el `.apk` no lo tienen. Usa el guardado aparte de RF-181 y **nunca toca** el progreso, los niveles oficiales (`data/levels/`) ni `campaign.json`.
+- **RF-210** **Dónde está:** el menú principal tiene un botón **"Editor de mapas"** en el `JuegoA.exe` normal, en el de pruebas y en Linux *(M14, D-038)*. **En el celular no se ofrece** (se maneja con mouse y teclado), salvo en el modo de pruebas. **Nunca toca** el progreso, los niveles oficiales (`data/levels/`) ni `campaign.json`: guarda solo en `user://maps/` (RF-216), y en el modo de pruebas usa además su guardado aparte (RF-181).
 - **RF-211** **La pantalla:** arriba, una barra con **Nuevo · Abrir · Guardar · Probar · Salir**; en el centro, el mapa de 20×9 casillas con el mismo tamaño y lugar que en la partida (así se ve como va a quedar); abajo, las herramientas y una línea de mensajes. Los ajustes del nivel (RF-214) y las oleadas (RF-215) se abren en paneles encima del mapa.
 - **RF-212** **Pintar el mapa:** se elige una herramienta y se hace clic, o se arrastra, sobre el mapa.
 

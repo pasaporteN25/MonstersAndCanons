@@ -134,7 +134,7 @@ godot --headless --path . --export-release "Windows (pruebas)" build/JuegoA_prue
 
 **✅ Comprobar:** al abrirlo, abajo al centro dice "MODO PRUEBAS · F1: panel", todos los niveles se pueden elegir, y en la partida `F1` abre el panel de pruebas. En el log de esa ejecución aparece "Modo de pruebas activado". Usa su propio guardado (`save_pruebas.json`), así que no toca el progreso ni los récords del `.exe` normal.
 
-Además, el menú principal de este ejecutable tiene el botón **"Editor de mapas"** (spec §10.3): se dibujan niveles con el mouse, se prueban al instante y se guardan en `%APPDATA%\Godot\app_userdata\JuegoA\maps\`. El `.exe` normal y el `.apk` no lo tienen. Cómo se usa y cómo volver oficial un mapa: [`CONTENIDO.md`](CONTENIDO.md).
+El botón **"Editor de mapas"** (spec §10.3) está en **todas las versiones de escritorio** (desde M14, D-038; el celular no lo ofrece): se dibujan niveles con el mouse, se prueban al instante y se guardan en `%APPDATA%\Godot\app_userdata\JuegoA\maps\`. Comprobá que también está en el `.exe` normal y que abrirlo no cambia el progreso. Cómo se usa y cómo volver oficial un mapa: [`CONTENIDO.md`](CONTENIDO.md).
 
 ### 6.1.0 La Wiki (en todas las versiones)
 
@@ -146,7 +146,7 @@ Copiá `tools/ejemplos/mapa_grande.json` a la carpeta de mapas de la comunidad (
 
 ### 6.1.1 Mapas de la comunidad (en todas las versiones)
 
-Los `.json` de `%APPDATA%\Godot\app_userdata\JuegoA\maps\` (la misma carpeta donde guarda el editor) aparecen en **Jugar → Mapas de la comunidad**, en el `.exe` normal y en el de pruebas. Para comprobarlo: guardar un mapa desde el editor de pruebas, abrir el `.exe` normal y buscarlo ahí. Cada versión tiene su propio guardado, así que el progreso en esos mapas no se comparte entre el `.exe` normal y el de pruebas. Detalles en [`CONTENIDO.md`](CONTENIDO.md).
+Los `.json` de `%APPDATA%\Godot\app_userdata\JuegoA\maps\` (la misma carpeta donde guarda el editor) aparecen en **Jugar → Mapas de la comunidad**, en el `.exe` normal y en el de pruebas. Para comprobarlo: guardar un mapa desde el editor (en cualquiera de los dos `.exe`) y buscarlo en la solapa. Cada versión tiene su propio guardado, así que el progreso en esos mapas no se comparte entre el `.exe` normal y el de pruebas. Detalles en [`CONTENIDO.md`](CONTENIDO.md).
 
 ### 6.2 La versión para GNU/Linux
 

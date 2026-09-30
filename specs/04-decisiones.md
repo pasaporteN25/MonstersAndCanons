@@ -234,3 +234,11 @@
 - **Por qué solo hasta 26×12:** con zoom 0,75 las casillas miden 48 px en la pantalla lógica de 1280×720; más chico se vuelve difícil de tocar con el dedo. Lucas pidió "no mucho".
 - **Alternativa descartada:** cámara que se desplaza (mapas enormes): peor en el celular (el dedo ya selecciona torres), obliga a pensar qué se ve y qué no, y cambia mucho más.
 - **Lo que NO incluye:** cambiar el tamaño desde el editor (RF-254), tamaños menores a 20×9, zoom manual del jugador.
+
+### D-038 · El editor de mapas es para todos (opción 2 de B-13)
+- **Fecha:** 2026-09-29 · **Estado:** Aceptada · **Decidió:** Lucas
+- **Qué:** el botón "Editor de mapas" pasa al juego normal (spec §10.3, RF-210). Sigue siendo del modo de pruebas el panel de pruebas y **jugar cualquier nivel de la campaña** (RF-183, RF-184): Lucas quiere que la comunidad haga mapas, pero que los niveles de la campaña se ganen.
+- **Cómo:** una línea en el menú. Se **mantienen los dos ejecutables** (opción 2 de la propuesta): no hace falta un archivo `pruebas.txt` ni una app unificada todavía (B-13 sigue abierta).
+- **Consecuencia que Lucas conoce:** el editor guarda en la misma carpeta que lee la solapa de los mapas de la comunidad (D-034), así que **un mapa hecho por un jugador aparece solo en su propia lista**, sin publicar nada. No hay riesgo para nadie más: los mapas de la comunidad son solo datos (RF-223) y con progreso propio.
+- **En el celular no se ofrece:** el editor es de mouse y teclado (Ctrl+Z, teclas 1 a 5) y la carpeta de mapas no se ve desde el Android (RF-220).
+- **El editor puede abrir los niveles oficiales** (para mirarlos o partir de uno): no se pueden pisar, hay que guardarlos con otro nombre (RF-216).

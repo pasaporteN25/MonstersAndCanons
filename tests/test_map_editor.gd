@@ -58,15 +58,37 @@ func _key(target: MapEditor, keycode: Key, ctrl: bool = false, shift: bool = fal
 
 # --- Acceso (RF-210) ---
 
-func test_the_menu_button_only_exists_in_dev_mode() -> void:
+func test_the_menu_button_exists_in_the_normal_game_and_in_dev_mode() -> void:
 	DevMode.set_enabled(false, NORMAL_PATH)
 	var normal: Control = MENU_SCENE.instantiate()
 	add_child_autofree(normal)
-	assert_false((normal.get_node("%EditorButton") as Button).visible, "el juego normal no lo tiene")
+	assert_true((normal.get_node("%EditorButton") as Button).visible, "RF-210 (D-038): el juego normal también lo tiene")
 	DevMode.set_enabled(true, DEV_PATH)
 	var dev: Control = MENU_SCENE.instantiate()
 	add_child_autofree(dev)
-	assert_true((dev.get_node("%EditorButton") as Button).visible, "RF-210: en el modo de pruebas sí")
+	assert_true((dev.get_node("%EditorButton") as Button).visible, "y el modo de pruebas también")
+
+
+func test_the_editor_is_not_offered_on_mobile_unless_in_dev_mode() -> void:
+	DevMode.set_enabled(false, NORMAL_PATH)
+	assert_true(MainMenu.editor_available(false))
+	assert_false(MainMenu.editor_available(true), "el celular no tiene mouse ni teclado")
+	DevMode.set_enabled(true, DEV_PATH)
+	assert_true(MainMenu.editor_available(true), "en el modo de pruebas siempre")
+
+
+func test_editing_in_the_normal_game_does_not_touch_the_progress() -> void:
+	DevMode.set_enabled(false, NORMAL_PATH)
+	SaveManager.load_save()
+	var unlocked_before: bool = GameFlow.is_level_unlocked(1)
+	var stars_before: int = GameFlow.total_stars()
+	var editor: MapEditor = _open()
+	assert_not_null(editor.draft)
+	assert_false(DevMode.enabled)
+	assert_eq(editor.maps_dir, LevelDraft.MAPS_DIR, "guarda en la carpeta de mapas de siempre")
+	assert_eq(GameFlow.is_level_unlocked(1), unlocked_before, "abrir el editor no desbloquea nada")
+	assert_false(GameFlow.is_level_unlocked(1), "y el nivel 2 sigue bloqueado en el juego normal")
+	assert_eq(GameFlow.total_stars(), stars_before)
 
 
 # --- La pantalla ---
