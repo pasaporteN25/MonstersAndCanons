@@ -148,6 +148,10 @@ Copiá `tools/ejemplos/mapa_grande.json` a la carpeta de mapas de la comunidad (
 
 Copiá los siete `tools/ejemplos/tema_*.json` a la carpeta de mapas de la comunidad y jugá cada uno. Se tiene que ver: el **paisaje** propio de cada tema, el **camino bien distinto del suelo**, los enemigos claros sobre cualquier suelo, un **lago / oasis / laguna helada / río de lava / barro** que **no se puede construir**, las **flores** (que sí) y la decoración del tema. Los enemigos siguen el **mismo camino** que en el nivel 4 (son ese nivel con parches). Abrilos también en el editor: se ven igual y se guardan sin perder el tema.
 
+### 6.1.07 Guardián y Curandero (versión de pruebas)
+
+Abrí una partida en `JuegoA_pruebas.exe`, `F1` (panel de pruebas) y hacé aparecer un **Guardián**, un **Curandero** y varios enemigos comunes. Tiene que verse: el **anillo** de cada uno en el suelo (marfil dorado el Guardián, verde el Curandero); un **escudo** sobre los enemigos que están dentro del anillo del Guardián y una **cruz verde** sobre los del Curandero; el **número de daño gris** cuando la armadura se come el golpe; y que al **matar al portador** el escudo o la cruz desaparecen en menos de un segundo. Con una Incendiaria, el enemigo que se quema no recupera vida aunque esté dentro del anillo verde.
+
 ### 6.1.1 Mapas de la comunidad (en todas las versiones)
 
 Los `.json` de `%APPDATA%\Godot\app_userdata\JuegoA\maps` (la misma carpeta donde guarda el editor) aparecen en **Jugar → Mapas de la comunidad**, en el `.exe` normal y en el de pruebas. Para comprobarlo: guardar un mapa desde el editor (en cualquiera de los dos `.exe`) y buscarlo en la solapa. Cada versión tiene su propio guardado, así que el progreso en esos mapas no se comparte entre el `.exe` normal y el de pruebas. Detalles en [`CONTENIDO.md`](CONTENIDO.md).

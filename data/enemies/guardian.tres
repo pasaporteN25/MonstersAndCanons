@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="1_guard"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/guardian.svg" id="2_guard"]
+
+[resource]
+script = ExtResource("1_guard")
+id = &"guardian"
+display_name = "Guardián"
+description = "Da armadura a los enemigos que lo rodean. Conviene eliminarlo primero, o pegarle de lejos."
+max_health = 200
+speed_tiles = 0.7
+armor = 1
+reward = 25
+lives_damage = 3
+color = Color(0.78, 0.72, 0.55, 1)
+texture = ExtResource("2_guard")
+size_tiles = 0.38
+aura_radius_tiles = 2.0
+aura_armor_bonus = 2

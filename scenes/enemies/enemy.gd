@@ -37,6 +37,10 @@ const BURN_TICK: float = 0.5
 ## Así, si el portador muere o se va, el efecto caduca solo en menos de medio segundo (D-042).
 const AURA_TICK: float = 0.25
 const AURA_DURATION: float = 0.35
+## RF-274: colores del aura (marfil dorado = armadura, verde amarillento = cura) y del contorno de los íconos.
+const AURA_ARMOR_COLOR := Color(0.94, 0.85, 0.63)
+const AURA_HEAL_COLOR := Color(0.72, 0.89, 0.29)
+const AURA_INK := Color(0.125, 0.137, 0.188)
 
 var data: EnemyData
 var max_health: int = 0
@@ -349,6 +353,8 @@ func _update_facing() -> void:
 
 func _draw() -> void:
 	var r: float = Rules.tiles_to_px(data.size_tiles)
+	if has_aura():
+		_draw_aura_ring()  # RF-274: debajo de todo, en el suelo
 	# Sombra (RF-126): una elipse aplastada debajo, sin bamboleo.
 	# Los voladores la tienen más lejos y más tenue: así se nota que van por el aire.
 	var shadow_offset := Vector2(10, r * 2.2) if data.is_flying else Vector2(3, r * 0.55)
@@ -386,10 +392,46 @@ func _draw() -> void:
 	var bar_top: float = -top - HEALTH_BAR_HEIGHT - 4.0
 	if is_health_bar_visible():
 		_draw_health_bar(r, bar_top)
+	_draw_aura_icons(top)  # RF-274: lo que recibe de un aura, al lado de la barra de vida
 	if Rules.is_dangerous(data):
 		# RF-136: corona encima (y encima de la barra de vida, si se ve).
 		var crown_base: float = bar_top - 3.0 if is_health_bar_visible() else -top - 3.0
 		EnemyShape.draw_crown(self, Vector2(0, crown_base), r * 0.9)
+
+
+## RF-274: un anillo suave en el suelo que llega justo hasta donde llega el aura (un círculo real:
+## el mapa se ve desde arriba y el radio se mide en el plano). Late despacito para que se note.
+func _draw_aura_ring() -> void:
+	var radius: float = Rules.tiles_to_px(data.aura_radius_tiles)
+	var pulse: float = 0.5 + 0.15 * sin(_anim_time * 3.0)
+	var rings: Array[Color] = []
+	if data.aura_armor_bonus > 0:
+		rings.append(AURA_ARMOR_COLOR)
+	if data.aura_heal_percent_per_second > 0.0:
+		rings.append(AURA_HEAL_COLOR)
+	for i: int in rings.size():
+		var ring_radius: float = radius - i * 3.0  # si da las dos cosas, dos anillos casi juntos
+		draw_circle(Vector2.ZERO, ring_radius, Color(rings[i], 0.07))
+		draw_arc(Vector2.ZERO, ring_radius, 0.0, TAU, 72, Color(rings[i], pulse), 2.0, true)
+
+
+## RF-274: un escudo (recibe armadura de un aura) y/o una cruz verde (recibe cura), chicos, a un costado.
+func _draw_aura_icons(top: float) -> void:
+	if _aura_armor <= 0 and _aura_heal <= 0.0:
+		return
+	var r: float = Rules.tiles_to_px(data.size_tiles)
+	var x: float = maxf(r, 12.0) + 6.0
+	var y: float = -top - 6.0
+	if _aura_armor > 0:
+		var shield := PackedVector2Array([Vector2(x - 5, y - 5), Vector2(x + 5, y - 5), Vector2(x + 5, y + 1), Vector2(x, y + 6), Vector2(x - 5, y + 1)])
+		draw_colored_polygon(shield, AURA_ARMOR_COLOR)
+		draw_polyline(shield + PackedVector2Array([shield[0]]), AURA_INK, 1.4)
+		x += 13.0
+	if _aura_heal > 0.0:
+		draw_line(Vector2(x - 5, y), Vector2(x + 5, y), AURA_INK, 4.6)
+		draw_line(Vector2(x, y - 5), Vector2(x, y + 5), AURA_INK, 4.6)
+		draw_line(Vector2(x - 4, y), Vector2(x + 4, y), AURA_HEAL_COLOR, 2.4)
+		draw_line(Vector2(x, y - 4), Vector2(x, y + 4), AURA_HEAL_COLOR, 2.4)
 
 
 ## RF-82: barra verde sobre fondo rojo oscuro, encima del enemigo. `top` = borde de arriba.

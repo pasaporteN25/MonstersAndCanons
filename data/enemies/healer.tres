@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="1_heal"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/healer.svg" id="2_heal"]
+
+[resource]
+script = ExtResource("1_heal")
+id = &"healer"
+display_name = "Curandero"
+description = "Cura a los enemigos que lo rodean. Conviene eliminarlo primero; el fuego frena la cura."
+max_health = 60
+speed_tiles = 1.1
+reward = 10
+lives_damage = 1
+color = Color(0.71, 0.81, 0.24, 1)
+texture = ExtResource("2_heal")
+size_tiles = 0.28
+aura_radius_tiles = 2.5
+aura_heal_percent_per_second = 3.0

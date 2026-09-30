@@ -40,8 +40,10 @@ Cada terna es **luz / medio / sombra** del degradé de relleno. Los nuevos enemi
 | Troll | Troll de musgo (verde) | `#afc77d` | `#72954e` | `#344f3e` |
 | Araña | Matriarca (verde azulado) | `#76bdb5` | `#377e85` | `#234550` |
 | Cría | Cría de araña (verde agua claro) | `#bbe5c9` | `#70b8ad` | `#3c787e` |
+| Guardián | Gólem de piedra (marfil) con escudo dorado | `#f2e8cf` | `#c8b78c` | `#7b6a4a` |
+| Curandero | Criatura con un bulbo luminoso (verde amarillento) | `#e8f08a` | `#b6cf3c` | `#5f7a23` |
 
-**Tonos que todavía están libres** para enemigos nuevos: rosa magenta, marfil o hueso, cian frío y amarillo verdoso. Las crías y sus madres son de la misma familia de color, y los enemigos "de la misma banda" (por ejemplo, los que dan aura) pueden compartir un detalle (un brillo, una piedra) sin compartir el color.
+**Tonos que todavía están libres** para enemigos nuevos: rosa magenta y cian frío (el marfil y el amarillo verdoso los usan el Guardián y el Curandero). Las crías y sus madres son de la misma familia de color, y los enemigos "de la misma banda" (por ejemplo, los que dan aura) pueden compartir un detalle (un brillo, una piedra) sin compartir el color.
 
 ## 4. Los temas del mapa (M15)
 
@@ -63,4 +65,4 @@ Cada terna es **luz / medio / sombra** del degradé de relleno. Los nuevos enemi
 
 - Los **nueve enemigos** se redibujaron en T127 con un generador (`redesign.py`, en `build/enemy-redesign/`, que **no se versiona**: la carpeta `build/` está ignorada por git). **La fuente de verdad es el SVG** de `assets/sprites/enemies/`; los originales de antes y las comparaciones "antes/después" quedaron en esa carpeta.
 - **Torres, proyectiles, íconos y decoración del mapa** son los de M4/M5 (T70–T73, T84): contorno `#2b2233` y bases de madera, piedra y piedra con oro. Se pueden rediseñar más adelante con esta misma guía; hoy conviven sin problema.
-- **Enemigos nuevos previstos** (B-07): Guardián, Curandero, Chamán y Espejo. Sus ideas de aspecto están en el backlog y se ajustan a los tonos libres de la tabla.
+- **Enemigos nuevos previstos** (B-07): el Guardián y el Curandero ya están (M17); faltan el Chamán y el Espejo. Sus ideas de aspecto están en el backlog y se ajustan a los tonos libres de la tabla.

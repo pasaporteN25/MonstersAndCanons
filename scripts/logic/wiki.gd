@@ -95,6 +95,12 @@ static func enemy_entry(enemy: EnemyData, all_enemies: Array[EnemyData], campaig
 		facts.append(["Se cura", "%.0f %% de su vida por segundo" % enemy.regen_percent_per_second])
 	if enemy.death_spawn != null and enemy.death_spawn_count > 0:
 		facts.append(["Al morir suelta", "%d × %s" % [enemy.death_spawn_count, enemy.death_spawn.display_name]])
+	if enemy.aura_radius_tiles > 0.0:  # RF-270, RF-277
+		var reach: String = "a menos de %s casillas" % _number(enemy.aura_radius_tiles)
+		if enemy.aura_armor_bonus > 0:
+			facts.append(["Aura de armadura", "+%d de armadura a los enemigos %s" % [enemy.aura_armor_bonus, reach]])
+		if enemy.aura_heal_percent_per_second > 0.0:
+			facts.append(["Aura de cura", "cura %s %% de la vida por segundo a los enemigos %s" % [_number(enemy.aura_heal_percent_per_second), reach]])
 	entry.add_facts(facts)
 
 	entry.add_heading("Dónde aparece")
@@ -110,6 +116,11 @@ static func enemy_entry(enemy: EnemyData, all_enemies: Array[EnemyData], campaig
 	if not released_by.is_empty():
 		entry.add_text("Lo suelta al morir: %s." % ", ".join(released_by))
 	return entry
+
+
+## Un número sin ceros de más: 2.0 → "2", 2.5 → "2.5".
+static func _number(value: float) -> String:
+	return str(int(value)) if is_equal_approx(value, roundf(value)) else "%.1f" % value
 
 
 ## "Nivel 3 · Encrucijada", uno por cada nivel donde algún grupo lo trae.

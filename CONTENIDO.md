@@ -63,6 +63,9 @@ Los niveles son JSON, un formato de texto común que se edita a mano. Un `.tres`
 | **Comportamientos** | *(valen 0 = apagado)* | |
 | `regen_percent_per_second` | % de su vida máxima que recupera por segundo; no mientras se quema (RF-165). | `4.0` |
 | `death_spawn` / `death_spawn_count` | Qué enemigo suelta al morir por daño, y cuántos (RF-166). | `spiderling`, `4` |
+| `aura_radius_tiles` | Hasta dónde llega su **aura**, en casillas (RF-270). 0 = sin aura. | `2.0` |
+| `aura_armor_bonus` | Armadura extra que da a los demás enemigos dentro del radio (RF-271). No se suma con otras auras. | `2` |
+| `aura_heal_percent_per_second` | % de vida máxima por segundo que hace recuperar a los demás dentro del radio (RF-272); no mientras se queman. | `3.0` |
 
 ---
 

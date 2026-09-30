@@ -2,6 +2,10 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Enemigos con aura: Guardián y Curandero *(M17)*
+- El **Guardián** da armadura a los enemigos que lo rodean; el **Curandero** los cura. Los dos muestran un **anillo** en el suelo y ponen un escudo o una cruz sobre los que ayudan.
+- Todavía no aparecen en los niveles (debutan en el 8 y el 9); se pueden ver en la Wiki y en la versión de pruebas.
+
 ## Paisajes de mapa *(M15)*
 - Un nivel puede tener su **tema**: pradera, desierto, nieve, volcán, bosque, pantano o ruinas.
 - Los mapas pueden pedir **lagos, hielo, lava, barro, flores y decoración** con una leyenda.
