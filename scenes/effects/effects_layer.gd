@@ -17,6 +17,8 @@ const DAMAGE_BLOCKED_COLOR := Color(0.62, 0.62, 0.66)  # la armadura se comió e
 const HEAL_COLOR := Color(0.45, 0.95, 0.4)
 ## RF-282: el rayo del Chamán y la marca en la torre que apaga.
 const STUN_COLOR := Color(0.95, 0.35, 0.8)
+## RF-284: el rebote del Espejo.
+const REFLECT_COLOR := Color(0.6, 0.92, 1.0)
 const MAX_DAMAGE_NUMBERS: int = 40
 
 var _damage_numbers_alive: int = 0
@@ -82,6 +84,14 @@ func lightning(points: PackedVector2Array) -> void:
 func stun_bolt(from: Vector2, to: Vector2) -> void:
 	_add(LightningEffect.new().setup(PackedVector2Array([from, to]), STUN_COLOR), Vector2.ZERO)
 	_add(RingEffect.new().setup(Color(STUN_COLOR, 0.8), 8.0, Rules.TILE_SIZE * 0.6, 0.35, 3.0), to)
+
+
+## RF-284: destello cian en el Espejo y, la primera vez, el texto "¡Rebote!" y un anillo en la torre.
+func reflect(mirror_position: Vector2, tower_position: Vector2, first: bool) -> void:
+	_add(RingEffect.new().setup(Color(REFLECT_COLOR, 0.9), 6.0, 24.0, 0.2, 3.0), mirror_position)
+	if first:
+		_add(FloatingText.new().setup("¡Rebote!", REFLECT_COLOR, 18, 0.9, 30.0), mirror_position + Vector2(0, -22))
+		_add(RingEffect.new().setup(Color(REFLECT_COLOR, 0.8), 8.0, Rules.TILE_SIZE * 0.6, 0.35, 3.0), tower_position)
 
 
 ## RF-130: anillo que se expande al construir.

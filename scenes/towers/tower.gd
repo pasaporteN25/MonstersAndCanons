@@ -234,6 +234,7 @@ func _shoot(target: Enemy) -> void:
 	var projectile: Projectile = PROJECTILE_SCENE.instantiate()
 	projectile.setup(target, _barrel_tip_global(), stats(), data.can_hit_air,
 		data.projectile_speed_tiles, data.color, data.projectile_texture)
+	projectile.source = self  # RF-284
 	fired.emit(projectile)
 
 
@@ -253,6 +254,7 @@ func _fire_burst() -> void:
 		projectile.setup_straight(global_position + direction * _barrel_length() * 0.6, direction, stats(),
 			data.can_hit_air, data.projectile_speed_tiles, range_px() - _barrel_length() * 0.6, data.color,
 			data.projectile_texture, nearby)
+		projectile.source = self  # RF-284
 		fired.emit(projectile)
 
 

@@ -15,6 +15,8 @@ const STRAIGHT_HIT_MARGIN_PX: float = 4.0
 ## (su recorrido + este margen): lo que un enemigo rápido camina mientras la púa vuela.
 const STRAIGHT_CANDIDATE_MARGIN_PX: float = 96.0
 
+## RF-284: la torre que disparó (el Espejo la necesita para devolverle el tiro). null = ninguna.
+var source: Tower
 var _target: Enemy
 var _target_pos: Vector2
 var _start_pos: Vector2
@@ -193,9 +195,12 @@ func _nearest_not_struck(from: Vector2, struck: Array[Enemy], reach: float) -> E
 
 
 func _hit(enemy: Enemy) -> void:
-	enemy.take_hit(_stats.damage, _stats.slow_amount, _stats.slow_duration)
+	if is_instance_valid(source) and enemy.will_reflect(source):  # la torre pudo venderse mientras volaba
+		enemy.reflect(source)  # RF-284: ni daño ni ralentización; la torre queda aturdida
+	else:
+		enemy.take_hit(_stats.damage, _stats.slow_amount, _stats.slow_duration)
 	if _stats.burn_damage_per_second > 0:
-		enemy.apply_burn(_stats.burn_damage_per_second, _stats.burn_duration)  # RF-160
+		enemy.apply_burn(_stats.burn_damage_per_second, _stats.burn_duration)  # RF-160 (la quemadura no rebota, RF-284)
 
 
 ## RF-153: gira el proyectil (y su dibujo) hacia donde viaja. Solo visual.

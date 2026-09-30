@@ -285,7 +285,7 @@ Hasta ahora los enemigos no le hacían nada a las torres. Estos dos sí: las **a
 - **RF-281** **Los datos del Chamán** (en `EnemyData`, valen 0 = apagado, RF-164): `stun_interval` (cada cuántos segundos lanza su hechizo), `stun_seconds` (cuánto aturde) y `stun_range_tiles` (a qué distancia llega).
 - **RF-282** **El Chamán:** cada `stun_interval` segundos (el primero, un intervalo después de aparecer) **aturde la torre más cercana** que esté a menos de `stun_range_tiles` de él y no esté ya aturdida. Si no hay ninguna, **espera** hasta que aparezca una (no acumula hechizos). Se ve un **rayo magenta** en zigzag del Chamán a la torre. Alcance del hechizo **menor** que el del Francotirador: se lo puede matar antes de que llegue a lanzarlo.
 - **RF-283** **Los datos del Espejo:** `reflect_range_tiles` (a qué distancia rebota) y `reflect_stun_seconds` (cuánto aturde a la torre que disparó).
-- **RF-284** **El Espejo:** cuando un golpe de una torre lo alcanza y esa torre está a **menos de `reflect_range_tiles`** de él (medido al impactar), el golpe **rebota**: el Espejo **no recibe daño ni ralentización** de ese golpe y la torre queda aturdida `reflect_stun_seconds`. Vale para todos los golpes (área, cadena, ráfaga); una torre aturdida por un rebote **no vuelve a rebotar** mientras esté apagada. Las torres **más lejos** le pegan normal. **La quemadura no rebota**: se aplica igual (RF-160). Se ve un **destello** y el texto **"¡Rebote!"**.
+- **RF-284** **El Espejo:** cuando un golpe de una torre lo alcanza y esa torre está a **menos de `reflect_range_tiles`** de él (medido al impactar), el golpe **rebota**: el Espejo **no recibe daño ni ralentización** de ese golpe y la torre queda aturdida `reflect_stun_seconds`. Vale para todos los golpes (área, cadena, ráfaga); si una descarga trae varios proyectiles, **todos rebotan** (ninguno se cuela mientras la torre ya está apagada), pero el aturdimiento **no se alarga** (queda el que más dura, RF-280). Las torres **más lejos** le pegan normal. **La quemadura no rebota**: se aplica igual (RF-160). Se ve un **destello** y el texto **"¡Rebote!"**.
 - **RF-285** **Los dos enemigos:**
 
   | ID | Nombre | Vida | Velocidad | Armadura | Oro | Vidas que quita | Vuela | Habilidad | Tamaño |
@@ -1140,7 +1140,7 @@ Ideas **aprobadas como dirección**, pero **sin fecha**: no se programan hasta c
 
 **Recomendación de Claude:** empezar por el **Guardián** y el **Chamán**. El Guardián es una aura (un dato y una búsqueda de enemigos cercanos, como la del rayo en cadena). El Chamán necesita una regla nueva, "torre aturdida", que también usaría el enemigo espejo (B-06). "Torres con vida" conviene dejarla para un modo aparte (B-05), porque cambia la base del juego.
 
-### B-07 · Diseño ampliado de los enemigos con habilidades *(Lucas, 2026-09-29: "me gustaron, desarrollalos"; **Guardián y Curandero hechos en M17**, RF-270 a RF-277; Chamán y Espejo, sin fecha)*
+### B-07 · Diseño ampliado de los enemigos con habilidades *(Lucas, 2026-09-29: "me gustaron, desarrollalos"; **Guardián y Curandero hechos en M17** (RF-270 a RF-277) y **Chamán y Espejo en M18** (RF-280 a RF-287); Excavador y Ladrón, sin fecha)*
 
 Los cuatro enemigos que gustaron, con lo necesario para convertirlos en spec cuando se tomen. Todos siguen RF-164: son **datos** del enemigo, apagados por defecto (valen 0), y se pueden combinar. Los colores son los libres de la guía de arte (`specs/05-guia-de-arte.md`).
 

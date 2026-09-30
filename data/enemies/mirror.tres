@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="1_mirr"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/mirror.svg" id="2_mirr"]
+
+[resource]
+script = ExtResource("1_mirr")
+id = &"mirror"
+display_name = "Espejo"
+description = "Devuelve los tiros de las torres cercanas y las aturde. El fuego y las torres de largo alcance lo golpean sin problema."
+max_health = 180
+speed_tiles = 0.7
+reward = 25
+lives_damage = 2
+color = Color(0.5, 0.82, 0.9, 1)
+texture = ExtResource("2_mirr")
+size_tiles = 0.36
+reflect_range_tiles = 2.5
+reflect_stun_seconds = 2.0

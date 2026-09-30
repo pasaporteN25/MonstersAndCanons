@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "nombre": "Ejemplo torres apagadas",
+  "oro": 250,
+  "vidas": 20,
+  "aumento_vida": 20,
+  "tema": "ruinas",
+  "mapa": [
+    "....................",
+    "A##################.",
+    "..................#.",
+    "..###############.#.",
+    "..#.......X.....#.#X",
+    "X.#..S###########.#.",
+    "..#...............#.",
+    "..#################.",
+    "...................."
+  ],
+  "oleadas": [
+    [{"enemigo":"normal","cantidad":10,"cada":1}],
+    [{"enemigo":"normal","cantidad":12,"cada":0.9},{"enemigo":"shaman","cantidad":1,"cada":1,"desde":3}],
+    [{"enemigo":"fast","cantidad":12,"cada":0.6},{"enemigo":"mirror","cantidad":1,"cada":1,"desde":3}],
+    [{"enemigo":"normal","cantidad":12,"cada":0.8},{"enemigo":"shaman","cantidad":2,"cada":4,"desde":2},{"enemigo":"tank","cantidad":2,"cada":3,"desde":5}],
+    [{"enemigo":"tank","cantidad":4,"cada":2.5},{"enemigo":"mirror","cantidad":2,"cada":3,"desde":2}],
+    [{"enemigo":"normal","cantidad":14,"cada":0.7},{"enemigo":"shaman","cantidad":2,"cada":3,"desde":3},{"enemigo":"mirror","cantidad":1,"cada":1,"desde":6}],
+    [{"enemigo":"armored","cantidad":5,"cada":1.8},{"enemigo":"mirror","cantidad":2,"cada":3,"desde":2},{"enemigo":"shaman","cantidad":2,"cada":3,"desde":4}],
+    [{"enemigo":"tank","cantidad":5,"cada":2},{"enemigo":"shaman","cantidad":3,"cada":3,"desde":2},{"enemigo":"mirror","cantidad":3,"cada":3,"desde":3},{"enemigo":"troll","cantidad":3,"cada":2,"desde":6}],
+    [{"enemigo":"spider","cantidad":4,"cada":2},{"enemigo":"mirror","cantidad":3,"cada":2.5,"desde":2},{"enemigo":"shaman","cantidad":3,"cada":2.5,"desde":3},{"enemigo":"fast","cantidad":10,"cada":0.6,"desde":5}],
+    [{"enemigo":"boss","cantidad":1,"cada":1},{"enemigo":"shaman","cantidad":3,"cada":3,"desde":3},{"enemigo":"mirror","cantidad":3,"cada":3,"desde":4},{"enemigo":"normal","cantidad":16,"cada":0.6,"desde":5}]
+  ]
+}

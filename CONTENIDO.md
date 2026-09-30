@@ -65,6 +65,8 @@ Los niveles son JSON, un formato de texto común que se edita a mano. Un `.tres`
 | `death_spawn` / `death_spawn_count` | Qué enemigo suelta al morir por daño, y cuántos (RF-166). | `spiderling`, `4` |
 | `aura_radius_tiles` | Hasta dónde llega su **aura**, en casillas (RF-270). 0 = sin aura. | `2.0` |
 | `aura_armor_bonus` | Armadura extra que da a los demás enemigos dentro del radio (RF-271). No se suma con otras auras. | `2` |
+| `stun_interval` / `stun_seconds` / `stun_range_tiles` | El **hechizo** que apaga torres (RF-281): cada cuántos segundos, cuánto aturde y a qué distancia. 0 = no lanza. | `8.0`, `3.0`, `4.0` |
+| `reflect_range_tiles` / `reflect_stun_seconds` | El **rebote** (RF-283): a qué distancia rebota el tiro de una torre y cuánto la aturde. La quemadura no rebota. | `2.5`, `2.0` |
 | `aura_heal_percent_per_second` | % de vida máxima por segundo que hace recuperar a los demás dentro del radio (RF-272); no mientras se queman. | `3.0` |
 
 ---

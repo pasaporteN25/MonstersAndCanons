@@ -97,6 +97,8 @@ static func enemy_entry(enemy: EnemyData, all_enemies: Array[EnemyData], campaig
 		facts.append(["Al morir suelta", "%d × %s" % [enemy.death_spawn_count, enemy.death_spawn.display_name]])
 	if enemy.stun_interval > 0.0:  # RF-281, RF-287
 		facts.append(["Hechizo", "apaga la torre más cercana (a menos de %s casillas) durante %s s, cada %s s" % [_number(enemy.stun_range_tiles), _number(enemy.stun_seconds), _number(enemy.stun_interval)]])
+	if enemy.reflect_range_tiles > 0.0:  # RF-283, RF-287
+		facts.append(["Rebota los tiros", "de las torres a menos de %s casillas, y las aturde %s s" % [_number(enemy.reflect_range_tiles), _number(enemy.reflect_stun_seconds)]])
 	if enemy.aura_radius_tiles > 0.0:  # RF-270, RF-277
 		var reach: String = "a menos de %s casillas" % _number(enemy.aura_radius_tiles)
 		if enemy.aura_armor_bonus > 0:

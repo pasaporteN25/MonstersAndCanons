@@ -58,3 +58,10 @@ enum Shape { CIRCLE, TRIANGLE, SQUARE, DIAMOND, HEXAGON }
 @export var stun_seconds: float = 0.0
 ## A qué distancia llega el hechizo, en casillas. Menor que el alcance del Francotirador.
 @export var stun_range_tiles: float = 0.0
+
+# --- Rebote del Espejo (M18, RF-283): devuelve los tiros de las torres cercanas. Todos valen 0 = apagado. ---
+
+## A qué distancia de él rebota el tiro de una torre, en casillas. 0 = no rebota nada.
+@export var reflect_range_tiles: float = 0.0
+## Cuántos segundos deja aturdida a la torre cuyo tiro rebotó.
+@export var reflect_stun_seconds: float = 0.0

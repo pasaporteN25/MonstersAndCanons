@@ -2,6 +2,10 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Torres apagadas: Chamán y Espejo *(M18)*
+- El **Chamán** apaga la torre más cercana unos segundos con un rayo magenta; el **Espejo** devuelve los tiros de las torres cercanas y las aturde.
+- Las **torres aturdidas** se ven apagadas y su panel dice cuánto falta. Todavía no aparecen en los niveles (debutan en el 10).
+
 ## Enemigos con aura: Guardián y Curandero *(M17)*
 - El **Guardián** da armadura a los enemigos que lo rodean; el **Curandero** los cura. Los dos muestran un **anillo** en el suelo y ponen un escudo o una cruz sobre los que ayudan.
 - Todavía no aparecen en los niveles (debutan en el 8 y el 9); se pueden ver en la Wiki y en la versión de pruebas.

@@ -42,8 +42,10 @@ Cada terna es **luz / medio / sombra** del degradé de relleno. Los nuevos enemi
 | Cría | Cría de araña (verde agua claro) | `#bbe5c9` | `#70b8ad` | `#3c787e` |
 | Guardián | Gólem de piedra (marfil) con escudo dorado | `#f2e8cf` | `#c8b78c` | `#7b6a4a` |
 | Curandero | Criatura con un bulbo luminoso (verde amarillento) | `#e8f08a` | `#b6cf3c` | `#5f7a23` |
+| Chamán | Encapuchado con un bastón que chispea (rosa magenta) | `#f0a3d8` | `#c8449e` | `#6b1f5a` |
+| Espejo | Tortuga de cristal facetado (cian frío) | `#d7f6ff` | `#7fd0e6` | `#2f7f9d` |
 
-**Tonos que todavía están libres** para enemigos nuevos: rosa magenta y cian frío (el marfil y el amarillo verdoso los usan el Guardián y el Curandero). Las crías y sus madres son de la misma familia de color, y los enemigos "de la misma banda" (por ejemplo, los que dan aura) pueden compartir un detalle (un brillo, una piedra) sin compartir el color.
+**Tonos que todavía están libres** para enemigos nuevos: **ninguno de los grandes**; para un enemigo más habría que **oscurecer o aclarar** uno existente con cuidado, o usar un detalle distintivo (un brillo, una piedra). Ya se usaron el marfil y el amarillo verdoso (Guardián y Curandero) y el rosa magenta y el cian frío (Chamán y Espejo). Las crías y sus madres son de la misma familia de color, y los enemigos "de la misma banda" (por ejemplo, los que dan aura) pueden compartir un detalle (un brillo, una piedra) sin compartir el color.
 
 ## 4. Los temas del mapa (M15)
 
@@ -65,4 +67,4 @@ Cada terna es **luz / medio / sombra** del degradé de relleno. Los nuevos enemi
 
 - Los **nueve enemigos** se redibujaron en T127 con un generador (`redesign.py`, en `build/enemy-redesign/`, que **no se versiona**: la carpeta `build/` está ignorada por git). **La fuente de verdad es el SVG** de `assets/sprites/enemies/`; los originales de antes y las comparaciones "antes/después" quedaron en esa carpeta.
 - **Torres, proyectiles, íconos y decoración del mapa** son los de M4/M5 (T70–T73, T84): contorno `#2b2233` y bases de madera, piedra y piedra con oro. Se pueden rediseñar más adelante con esta misma guía; hoy conviven sin problema.
-- **Enemigos nuevos previstos** (B-07): el Guardián y el Curandero ya están (M17); faltan el Chamán y el Espejo. Sus ideas de aspecto están en el backlog y se ajustan a los tonos libres de la tabla.
+- **Enemigos con habilidad** (B-07): el Guardián y el Curandero (M17) y el Chamán y el Espejo (M18) ya están; quedan el Excavador y el Ladrón. Sus ideas de aspecto están en el backlog y se ajustan a los tonos libres de la tabla.

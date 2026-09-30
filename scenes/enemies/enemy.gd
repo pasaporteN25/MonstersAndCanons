@@ -15,6 +15,9 @@ signal hit(enemy: Enemy, damage: int, armor_blocked_most: bool)
 signal healed(enemy: Enemy, amount: int)
 ## El Chamán lanzó su hechizo a una torre (RF-282). Solo para los efectos: la torre ya quedó aturdida.
 signal cast_stun(shaman: Enemy, tower: Tower)
+## Un tiro de `tower` rebotó en este enemigo (RF-284). `first` = la torre no estaba aturdida antes (para no llenar la
+## pantalla de "¡Rebote!" cuando una descarga de varios proyectiles rebota toda junta). Solo para los efectos.
+signal reflected(enemy: Enemy, tower: Tower, first: bool)
 
 const GROUP: StringName = &"enemies"
 ## Color al que se tiñe un enemigo ralentizado (RF-62).
@@ -258,6 +261,27 @@ func _update_regen(delta: float) -> void:
 	if _healed_unreported == 0 and _heal_report_left <= 0.0:
 		_heal_report_left = 1.0
 	_healed_unreported += amount
+
+
+## RF-283: true si este enemigo devuelve los tiros de las torres cercanas (el Espejo).
+func can_reflect() -> bool:
+	return data.reflect_range_tiles > 0.0 and data.reflect_stun_seconds > 0.0
+
+
+## RF-284: ¿el tiro de `tower` rebota ahora? Solo si la torre existe y está a menos de `reflect_range_tiles`.
+## Se mide al IMPACTAR (D-043). Un tiro sin torre de origen no rebota.
+func will_reflect(tower: Tower) -> bool:
+	if not can_reflect() or tower == null or not is_instance_valid(tower):
+		return false
+	return global_position.distance_to(tower.global_position) <= Rules.tiles_to_px(data.reflect_range_tiles)
+
+
+## RF-284: el tiro rebota: sin daño para este enemigo y la torre queda aturdida (el tiempo no se suma).
+func reflect(tower: Tower) -> void:
+	var first: bool = not tower.is_stunned()
+	tower.stun(data.reflect_stun_seconds)
+	_hit_flash_left = HIT_FLASH_DURATION * 2.0
+	reflected.emit(self, tower, first)
 
 
 ## RF-281: true si este enemigo lanza el hechizo que apaga torres (el Chamán).
