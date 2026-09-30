@@ -320,6 +320,8 @@ func dev_spawn(data: EnemyData) -> void:
 
 func _on_enemy_spawned(enemy: Enemy) -> void:
 	enemy.died.connect(_on_enemy_died)
+	enemy.cast_stun.connect(func(shaman: Enemy, tower: Tower) -> void:
+		effects.stun_bolt(shaman.global_position, tower.global_position))  # RF-282
 	enemy.reached_exit.connect(_on_enemy_reached_exit)
 	enemy.hit.connect(func(e: Enemy, damage: int, blocked: bool) -> void:
 		effects.damage_number(e.global_position, damage, blocked))  # RF-132

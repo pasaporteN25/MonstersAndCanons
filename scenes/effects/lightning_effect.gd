@@ -10,12 +10,14 @@ const KINKS_PER_SEGMENT: int = 4
 const JITTER_PX: float = 7.0
 
 var _points := PackedVector2Array()
+var _color: Color = COLOR
 var _time: float = 0.0
 
 
 ## `points`: posiciones GLOBALES de los golpeados, en orden. La capa de efectos está en el
 ## origen, así que sirven tal cual como posiciones locales.
-func setup(points: PackedVector2Array) -> LightningEffect:
+func setup(points: PackedVector2Array, color: Color = COLOR) -> LightningEffect:
+	_color = color
 	for i: int in range(1, points.size()):
 		var from: Vector2 = points[i - 1]
 		var to: Vector2 = points[i]
@@ -41,5 +43,5 @@ func _draw() -> void:
 	if _points.size() < 2:
 		return
 	var alpha: float = 1.0 - _time / DURATION
-	draw_polyline(_points, Color(COLOR, 0.6 * alpha), 9.0)  # resplandor
+	draw_polyline(_points, Color(_color, 0.6 * alpha), 9.0)  # resplandor
 	draw_polyline(_points, Color(1, 1, 1, alpha), 3.0)       # centro blanco

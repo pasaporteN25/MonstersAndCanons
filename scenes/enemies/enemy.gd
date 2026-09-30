@@ -13,6 +13,8 @@ signal hit(enemy: Enemy, damage: int, armor_blocked_most: bool)
 ## Se curó `amount` de vida (RF-165). Se avisa como mucho una vez por segundo, con lo que
 ## se curó en ese tiempo, para no llenar la pantalla de números.
 signal healed(enemy: Enemy, amount: int)
+## El Chamán lanzó su hechizo a una torre (RF-282). Solo para los efectos: la torre ya quedó aturdida.
+signal cast_stun(shaman: Enemy, tower: Tower)
 
 const GROUP: StringName = &"enemies"
 ## Color al que se tiñe un enemigo ralentizado (RF-62).
@@ -66,6 +68,8 @@ var _aura_heal: float = 0.0
 var _aura_heal_left: float = 0.0
 ## Cuánto falta para la próxima emisión, si este enemigo tiene aura.
 var _aura_pulse_left: float = 0.0
+## RF-282: cuánto falta para el próximo hechizo (si tiene). Llega a 0 y espera hasta que haya una torre.
+var _stun_cast_left: float = 0.0
 ## Evita actuar dos veces: tras queue_free() el nodo sigue vivo hasta el final del frame.
 var _is_done: bool = false
 # Solo visual (spec §9.3):
@@ -90,6 +94,7 @@ func _ready() -> void:
 	add_to_group(GROUP)
 	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS  # D-023
 	_update_position()
+	_stun_cast_left = data.stun_interval  # RF-282: el primer hechizo, un intervalo después de aparecer
 	_heading = _path_direction()
 	_update_facing()
 	# Cada enemigo empieza su bamboleo en un momento distinto, así no se mueven todos igual.
@@ -105,6 +110,7 @@ func _physics_process(delta: float) -> void:
 		return  # la quemadura lo mató
 	_update_regen(delta)
 	_update_aura(delta)
+	_update_stun_spell(delta)
 	distance += Rules.tiles_to_px(current_speed_tiles()) * delta
 	_update_position()
 	_animate(delta)
@@ -252,6 +258,43 @@ func _update_regen(delta: float) -> void:
 	if _healed_unreported == 0 and _heal_report_left <= 0.0:
 		_heal_report_left = 1.0
 	_healed_unreported += amount
+
+
+## RF-281: true si este enemigo lanza el hechizo que apaga torres (el Chamán).
+func has_stun_spell() -> bool:
+	return data.stun_interval > 0.0 and data.stun_seconds > 0.0 and data.stun_range_tiles > 0.0
+
+
+## RF-282: cada `stun_interval` segundos apaga la torre más cercana que esté a tiro y no esté ya aturdida.
+## Si no hay ninguna, espera (no acumula hechizos) y lo lanza apenas aparezca una.
+func _update_stun_spell(delta: float) -> void:
+	if not has_stun_spell():
+		return
+	_stun_cast_left -= delta
+	if _stun_cast_left > 0.0:
+		return
+	var tower: Tower = _nearest_castable_tower()
+	if tower == null:
+		_stun_cast_left = 0.0
+		return
+	tower.stun(data.stun_seconds)
+	_stun_cast_left = data.stun_interval
+	cast_stun.emit(self, tower)
+
+
+func _nearest_castable_tower() -> Tower:
+	var reach: float = Rules.tiles_to_px(data.stun_range_tiles)
+	var best: Tower = null
+	var best_distance: float = reach
+	for node: Node in get_tree().get_nodes_in_group(Tower.GROUP):
+		var tower := node as Tower
+		if tower == null or tower.is_stunned():
+			continue
+		var distance_to_tower: float = global_position.distance_to(tower.global_position)
+		if distance_to_tower <= best_distance:
+			best = tower
+			best_distance = distance_to_tower
+	return best
 
 
 ## RF-273: lo que recibe caduca (si nadie lo refresca) y, si tiene aura, emite cada AURA_TICK.

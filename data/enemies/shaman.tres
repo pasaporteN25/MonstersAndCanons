@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="1_sham"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/shaman.svg" id="2_sham"]
+
+[resource]
+script = ExtResource("1_sham")
+id = &"shaman"
+display_name = "Chamán"
+description = "Cada tanto apaga la torre más cercana. Un Francotirador lo alcanza antes de que lance su hechizo."
+max_health = 90
+speed_tiles = 0.9
+reward = 20
+lives_damage = 2
+color = Color(0.78, 0.27, 0.62, 1)
+texture = ExtResource("2_sham")
+size_tiles = 0.32
+stun_interval = 8.0
+stun_seconds = 3.0
+stun_range_tiles = 4.0

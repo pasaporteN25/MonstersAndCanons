@@ -49,3 +49,12 @@ enum Shape { CIRCLE, TRIANGLE, SQUARE, DIAMOND, HEXAGON }
 @export var aura_armor_bonus: int = 0
 ## RF-272: % de su vida máxima por segundo que hace recuperar a los demás dentro del radio.
 @export var aura_heal_percent_per_second: float = 0.0
+
+# --- Hechizo del Chamán (M18, RF-281): apaga torres. Todos valen 0 = apagado. ---
+
+## Cada cuántos segundos lanza su hechizo. 0 = no lanza.
+@export var stun_interval: float = 0.0
+## Cuántos segundos deja aturdida (sin disparar) a la torre que alcanza.
+@export var stun_seconds: float = 0.0
+## A qué distancia llega el hechizo, en casillas. Menor que el alcance del Francotirador.
+@export var stun_range_tiles: float = 0.0

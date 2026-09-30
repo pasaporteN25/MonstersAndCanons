@@ -103,7 +103,7 @@ func test_every_official_enemy_appears_in_some_level_or_is_dropped() -> void:
 	# Un enemigo que no aparece en ningún lado no debería existir: la wiki lo delataría.
 	# Salvo los que todavía no debutaron: el Guardián y el Curandero entran en los niveles 8 y 9 (D-041).
 	# Cuando debuten, esta lista se vacía.
-	var not_yet: Array = [&"guardian", &"healer"]
+	var not_yet: Array = [&"guardian", &"healer", &"shaman", &"mirror"]
 	for entry: WikiEntry in _category(&"enemigos").entries:
 		if not_yet.has(entry.id):
 			continue
