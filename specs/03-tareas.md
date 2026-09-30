@@ -766,10 +766,11 @@
 
 ## M17 — Enemigos con aura: Guardián y Curandero *(pedido por Lucas, D-041, D-042)*
 
-- [ ] **T130 · La mecánica del aura**
+- [x] **T130 · La mecánica del aura**
   Los tres datos de `EnemyData`, `Enemy.receive_aura` / `_pulse_aura`, armadura efectiva y cura extra.
   **Refs:** RF-270 a RF-273.
   **Hecho cuando:** los tests comprueban el daño con y sin aura (RF-80 con +2), que la quemadura la ignora, que no afecta al portador ni a los que están fuera del radio (borde incluido), que no se suman dos auras, que **caduca** en menos de 0,5 s al morir el portador y que la cura se suma a la regeneración y se corta al quemarse.
+  **Resultado:** Los tres datos de aura en `EnemyData`; en `Enemy`, `receive_aura` (guarda el mayor valor y caduca), `_pulse_aura` (cada 0,25 s, a los demás dentro del radio), `armor()` (armadura propia + aura, la que usa `take_hit`) y la cura del aura sumada a la regeneración propia. 20 tests nuevos (645 en total): daño con +2 (criterio de aceptación: 5 → 3), mínimo de 1, suma con la armadura propia, dentro y fuera del radio (casi en el borde y un poco más allá; se probó con un margen porque comparar píxeles justo en el borde depende de decimales), también a los de atrás y a los voladores, la quemadura la ignora, dos auras iguales **no** se suman, gana la más fuerte, **caduca en menos de medio segundo** al morir el portador o al irse el enemigo, una débil no mantiene viva a una fuerte muerta, la cura tiene tope, se suma a la regeneración y se corta al quemarse, y el portador no se cura a sí mismo. Un detalle que costó un intento: `Enemy.setup` toma la vida como vida **máxima**, así que para probar a un enemigo herido hay que bajarle la vida después.
 
 - [ ] **T131 · Cómo se ve un aura**
   Anillo del portador e íconos del afectado en `Enemy._draw`.

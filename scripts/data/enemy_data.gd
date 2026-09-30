@@ -40,3 +40,12 @@ enum Shape { CIRCLE, TRIANGLE, SQUARE, DIAMOND, HEXAGON }
 @export var death_spawn: EnemyData
 ## RF-166: cuántos suelta.
 @export var death_spawn_count: int = 0
+
+# --- Aura (M17, RF-270): hace más fuertes a los enemigos que caminan cerca. Todos valen 0 = apagado. ---
+
+## Hasta dónde llega el aura de este enemigo, en casillas. 0 = no tiene aura.
+@export var aura_radius_tiles: float = 0.0
+## RF-271: armadura extra que da a los demás enemigos dentro del radio.
+@export var aura_armor_bonus: int = 0
+## RF-272: % de su vida máxima por segundo que hace recuperar a los demás dentro del radio.
+@export var aura_heal_percent_per_second: float = 0.0

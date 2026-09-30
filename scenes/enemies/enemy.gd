@@ -33,6 +33,10 @@ const SLOW_MODULATE := Color(0.62, 0.85, 1.0)
 const FROST_PATCH := Color(0.82, 0.95, 1.0, 0.55)
 ## RF-160: la quemadura hace daño de a golpecitos, uno cada BURN_TICK segundos.
 const BURN_TICK: float = 0.5
+## RF-273: un portador de aura emite cada AURA_TICK segundos, y cada emisión dura AURA_DURATION.
+## Así, si el portador muere o se va, el efecto caduca solo en menos de medio segundo (D-042).
+const AURA_TICK: float = 0.25
+const AURA_DURATION: float = 0.35
 
 var data: EnemyData
 var max_health: int = 0
@@ -51,6 +55,13 @@ var _burn_tick_left: float = 0.0
 var _regen_accum: float = 0.0
 var _healed_unreported: int = 0
 var _heal_report_left: float = 0.0
+## RF-271, RF-272: lo que recibe de las auras de otros enemigos, y cuánto le queda.
+var _aura_armor: int = 0
+var _aura_armor_left: float = 0.0
+var _aura_heal: float = 0.0
+var _aura_heal_left: float = 0.0
+## Cuánto falta para la próxima emisión, si este enemigo tiene aura.
+var _aura_pulse_left: float = 0.0
 ## Evita actuar dos veces: tras queue_free() el nodo sigue vivo hasta el final del frame.
 var _is_done: bool = false
 # Solo visual (spec §9.3):
@@ -89,6 +100,7 @@ func _physics_process(delta: float) -> void:
 	if _is_done:
 		return  # la quemadura lo mató
 	_update_regen(delta)
+	_update_aura(delta)
 	distance += Rules.tiles_to_px(current_speed_tiles()) * delta
 	_update_position()
 	_animate(delta)
@@ -136,11 +148,48 @@ func is_health_bar_visible() -> bool:
 func take_hit(damage: int, slow_amount: float = 0.0, slow_duration: float = 0.0) -> void:
 	if _is_done:
 		return
-	var dealt: int = Rules.damage_after_armor(damage, data.armor)
+	var dealt: int = Rules.damage_after_armor(damage, armor())
 	_hit_flash_left = HIT_FLASH_DURATION
 	if slow_amount > 0.0:
 		_apply_slow(Rules.effective_slow(slow_amount, data.slow_resistance), slow_duration)
 	_lose_health(dealt, dealt * 2 <= damage)
+
+
+## RF-80, RF-271: la armadura que cuenta al recibir un golpe: la propia más la que le da un aura.
+func armor() -> int:
+	return data.armor + _aura_armor
+
+
+## RF-271: armadura extra que recibe ahora de un aura (0 = ninguna).
+func aura_armor() -> int:
+	return _aura_armor
+
+
+## RF-272: % de vida por segundo que recibe ahora de un aura (0 = ninguna).
+func aura_heal() -> float:
+	return _aura_heal
+
+
+## RF-270: true si este enemigo da algún aura a los que lo rodean.
+func has_aura() -> bool:
+	return data.aura_radius_tiles > 0.0 and (data.aura_armor_bonus > 0 or data.aura_heal_percent_per_second > 0.0)
+
+
+## RF-271, RF-272: un aura de otro enemigo lo alcanza. Queda el valor MÁS FUERTE (no se suman); un aura
+## más débil no refresca a una más fuerte, así que cuando el portador fuerte muere, su valor caduca.
+func receive_aura(armor_bonus: int, heal_percent: float) -> void:
+	if _is_done:
+		return
+	if armor_bonus > 0 and (_aura_armor_left <= 0.0 or armor_bonus >= _aura_armor):
+		if armor_bonus != _aura_armor:
+			queue_redraw()
+		_aura_armor = armor_bonus
+		_aura_armor_left = AURA_DURATION
+	if heal_percent > 0.0 and (_aura_heal_left <= 0.0 or heal_percent >= _aura_heal):
+		if not is_equal_approx(heal_percent, _aura_heal):
+			queue_redraw()
+		_aura_heal = heal_percent
+		_aura_heal_left = AURA_DURATION
 
 
 ## RF-184 (modo de pruebas): desaparece sin morir: no da oro, ni puntos, ni suelta crías.
@@ -183,10 +232,12 @@ func _update_regen(delta: float) -> void:
 	if _healed_unreported > 0 and _heal_report_left <= 0.0:
 		healed.emit(self, _healed_unreported)
 		_healed_unreported = 0
-	if data.regen_percent_per_second <= 0.0 or is_burning() or health >= max_health:
+	# RF-272: la cura de un aura se suma a la propia regeneración.
+	var heal_percent: float = data.regen_percent_per_second + _aura_heal
+	if heal_percent <= 0.0 or is_burning() or health >= max_health:
 		_regen_accum = 0.0
 		return
-	_regen_accum += max_health * data.regen_percent_per_second / 100.0 * delta
+	_regen_accum += max_health * heal_percent / 100.0 * delta
 	# Margen: 60 cuadros de 4/60 suman 3,9999…, que tiene que contar como 4.
 	var whole: int = int(_regen_accum + 0.0001)
 	var amount: int = mini(whole, max_health - health)
@@ -197,6 +248,39 @@ func _update_regen(delta: float) -> void:
 	if _healed_unreported == 0 and _heal_report_left <= 0.0:
 		_heal_report_left = 1.0
 	_healed_unreported += amount
+
+
+## RF-273: lo que recibe caduca (si nadie lo refresca) y, si tiene aura, emite cada AURA_TICK.
+func _update_aura(delta: float) -> void:
+	if _aura_armor_left > 0.0:
+		_aura_armor_left -= delta
+		if _aura_armor_left <= 0.0001:
+			_aura_armor_left = 0.0
+			_aura_armor = 0
+			queue_redraw()
+	if _aura_heal_left > 0.0:
+		_aura_heal_left -= delta
+		if _aura_heal_left <= 0.0001:
+			_aura_heal_left = 0.0
+			_aura_heal = 0.0
+			queue_redraw()
+	if not has_aura():
+		return
+	_aura_pulse_left -= delta
+	if _aura_pulse_left <= 0.0:
+		_aura_pulse_left += AURA_TICK
+		_pulse_aura()
+
+
+## RF-271, RF-272: les da el aura a los DEMÁS enemigos que están dentro del radio (no a sí mismo).
+func _pulse_aura() -> void:
+	var reach: float = Rules.tiles_to_px(data.aura_radius_tiles)
+	for node: Node in get_tree().get_nodes_in_group(GROUP):
+		var other := node as Enemy
+		if other == null or other == self or not other.is_active():
+			continue
+		if global_position.distance_to(other.global_position) <= reach:
+			other.receive_aura(data.aura_armor_bonus, data.aura_heal_percent_per_second)
 
 
 ## RF-160: cada BURN_TICK segundos, un golpecito que ignora la armadura.
