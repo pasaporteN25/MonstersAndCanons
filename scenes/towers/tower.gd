@@ -18,6 +18,11 @@ const AIM_SPEED: float = 14.0
 ## Cuánto retrocede el cañón al disparar, en píxeles (RF-121).
 const RECOIL_PX: float = 6.0
 const FLASH_DURATION: float = 0.08
+## Las torres están en este grupo: así un enemigo (el Chamán, RF-282) las encuentra.
+const GROUP: StringName = &"towers"
+## RF-280: aspecto de una torre aturdida (apagada, con chispas que giran encima).
+const STUN_DIM := Color(0.06, 0.06, 0.1, 0.45)
+const STUN_SPARK_COUNT: int = 3
 
 var data: TowerData
 ## Nivel actual: 0 = nivel 1, 1 = nivel 2, 2 = nivel 3 (RF-71).
@@ -35,6 +40,9 @@ var _target: Enemy
 ## 1 = recién disparó, 0 = cañón en reposo.
 var _recoil: float = 0.0
 var _flash_left: float = 0.0
+## RF-280: segundos que le quedan aturdida (no dispara mientras sea mayor que 0).
+var _stun_left: float = 0.0
+var _stun_anim: float = 0.0
 
 
 ## Se llama ANTES de agregar la torre al árbol.
@@ -44,6 +52,7 @@ func setup(tower_data: TowerData) -> void:
 
 
 func _ready() -> void:
+	add_to_group(GROUP)
 	# D-023: los dibujos se achican con suavidad (el mapa usa "Nearest" para no mostrar líneas).
 	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	# RF-130: aparece creciendo desde el centro.
@@ -109,6 +118,23 @@ func apply_upgrade() -> void:
 	queue_redraw()
 
 
+## RF-280: la aturde `seconds` segundos: no dispara hasta que pasen. No se suma: queda el que más dura.
+func stun(seconds: float) -> void:
+	if seconds <= 0.0:
+		return
+	_stun_left = maxf(_stun_left, seconds)
+	queue_redraw()
+
+
+func is_stunned() -> bool:
+	return _stun_left > 0.0
+
+
+## Segundos que le quedan aturdida (0 = no lo está).
+func stun_left() -> float:
+	return _stun_left
+
+
 ## RF-54: pasa al siguiente modo de apuntado (y vuelve al primero después del último).
 func cycle_targeting() -> void:
 	targeting = ((targeting + 1) % TargetMode.size()) as TargetMode
@@ -122,6 +148,15 @@ func _physics_process(delta: float) -> void:
 	if _target != null and not (is_instance_valid(_target) and can_target(_target)):
 		_target = null
 	_cooldown -= delta
+	if _stun_left > 0.0:
+		_stun_left = maxf(0.0, _stun_left - delta)
+		_stun_anim += delta
+		if _stun_left <= 0.0001:
+			_stun_left = 0.0
+			queue_redraw()
+	if is_stunned():
+		_animate(delta)  # RF-280: apagada, no dispara
+		return
 	if _cooldown <= 0.0 and stats().burst_count > 0:
 		# RF-162: ráfaga en círculo, si hay alguien en alcance (no apunta a nadie en particular).
 		if find_target() != null:
@@ -287,3 +322,17 @@ func _draw() -> void:
 		var dot := Vector2((i - (level_number() - 1) / 2.0) * 8.0, half - 4.0)
 		draw_circle(dot, 3.0, Color(1.0, 0.84, 0.3))
 		draw_arc(dot, 3.0, 0.0, TAU, 12, Color(0, 0, 0, 0.6), 1.0)
+	if is_stunned():
+		_draw_stun(tile_rect)
+
+
+## RF-280: la torre aturdida se ve apagada y con chispas que giran encima.
+func _draw_stun(tile_rect: Rect2) -> void:
+	draw_rect(tile_rect, STUN_DIM)
+	for i: int in STUN_SPARK_COUNT:
+		var angle: float = _stun_anim * 4.0 + TAU * i / STUN_SPARK_COUNT
+		var p := Vector2(cos(angle) * 20.0, -20.0 + sin(angle) * 7.0)
+		draw_line(p + Vector2(-4, 0), p + Vector2(4, 0), Color(0.1, 0.08, 0.15), 4.4)
+		draw_line(p + Vector2(0, -4), p + Vector2(0, 4), Color(0.1, 0.08, 0.15), 4.4)
+		draw_line(p + Vector2(-3.4, 0), p + Vector2(3.4, 0), Color(1.0, 0.95, 0.5), 2.2)
+		draw_line(p + Vector2(0, -3.4), p + Vector2(0, 3.4), Color(1.0, 0.95, 0.5), 2.2)

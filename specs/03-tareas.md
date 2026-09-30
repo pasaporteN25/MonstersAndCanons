@@ -794,10 +794,11 @@
 
 ## M18 — Torres aturdidas: Chamán y Espejo *(pedido por Lucas, D-041, D-043)*
 
-- [ ] **T134 · La torre aturdida**
+- [x] **T134 · La torre aturdida**
   `Tower.stun`, el grupo `Tower.GROUP`, dejar de disparar, el aspecto apagado y "Aturdida (N s)" en el panel.
   **Refs:** RF-280.
   **Hecho cuando:** los tests comprueban que una torre aturdida no dispara y vuelve a disparar sola al pasar el tiempo, que no se suma (queda el mayor), que se puede mejorar y vender, que la pausa la congela, y que el panel lo dice; una captura muestra una torre apagada.
+  **Resultado:** `Tower` gana el grupo `Tower.GROUP`, `stun(segundos)` (queda el mayor, no se suma), `is_stunned()` y `stun_left()`. Aturdida **no dispara** (el enfriamiento sigue corriendo, así dispara casi enseguida al recuperarse) pero se puede mejorar, vender y cambiar de apuntado. Se ve **apagada** (más oscura) con tres chispas que giran encima, y el panel dice "Aturdida (N s)" con la cuenta atrás. La pausa la congela porque las torres son del mundo "pausable" (un test lo comprueba con `can_process()`; primero probé esperando con el juego pausado y **colgó la corrida de tests**, porque GUT también se detiene: por eso se prueba la propiedad y no el tiempo). 12 tests nuevos (669 en total).
 
 - [ ] **T135 · El Chamán**
   Datos, hechizo, rayo magenta, dibujo, Wiki.

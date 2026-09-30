@@ -9,6 +9,9 @@ signal targeting_pressed
 
 var _tower: Tower
 var _sell_value: int = 0
+var _gold: int = 0
+## RF-280: los segundos de aturdimiento que se muestran (para refrescar solo cuando cambian).
+var _shown_stun: int = 0
 
 @onready var _title: Label = %Title
 @onready var _stats: Label = %Stats
@@ -33,11 +36,21 @@ func show_tower(tower: Tower, sell_value: int, gold: int) -> void:
 		refresh(gold)
 
 
+## RF-280: mientras la torre está aturdida, la cuenta atrás del título se va actualizando.
+func _process(_delta: float) -> void:
+	if _tower != null and visible and ceili(_tower.stun_left()) != _shown_stun:
+		refresh(_gold)
+
+
 func refresh(gold: int) -> void:
 	if _tower == null:
 		return
+	_gold = gold
 	var s: TowerLevelData = _tower.stats()
+	_shown_stun = ceili(_tower.stun_left())
 	_title.text = "%s · Nivel %d" % [_tower.data.display_name, _tower.level_number()]
+	if _shown_stun > 0:
+		_title.text += " · Aturdida (%d s)" % _shown_stun  # RF-280
 	_stats.text = TowerText.describe(s, _tower.data.can_hit_air)
 	_targeting_button.text = "Apuntar: %s" % _tower.targeting_name()
 	var next: TowerLevelData = _tower.next_level_stats()
