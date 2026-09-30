@@ -604,6 +604,45 @@ Para poder hacer niveles más altos (9 y 10) con más lugar para construir y cam
 > **Criterio de aceptación**
 > **Dado** un mapa de 26×12 → **Cuando** lo juego → **Entonces** se ve entero, centrado entre las dos barras; hago clic en una casilla y la torre se construye **en esa casilla**; una torre con alcance 3 alcanza a los mismos enemigos que en un mapa de 20×9.
 
+### 7.11 Leyenda y temas *(M15, pedido por Lucas, D-039, B-08 · PROPUESTA: pendiente de aprobación)*
+
+Hoy todos los mapas se ven igual (pradera) y lo bloqueado lo dibuja el juego al azar (RF-154). Con esto, un nivel puede tener **su propio paisaje** (un desierto, un mundo de nieve, un volcán) y **pedir qué va en cada casilla** ("acá hay un lago"). Son dos campos opcionales del archivo del nivel (§7.8): un nivel que no los tiene se ve **exactamente igual que hoy**.
+
+- **RF-260** **Tema:** el campo opcional `"tema"` elige el paisaje de **todo** el mapa: `"pradera"` (el de siempre, es el que se usa si no está), `"desierto"`, `"nieve"` o `"volcan"`. Cambia los **colores** del pasto y del camino, sus bordes, las piedritas y matas, y **qué se dibuja en las casillas bloqueadas** (`X`). Es **solo visual**: no cambia por dónde van los enemigos, qué se puede construir ni ningún número del juego.
+- **RF-261** **Los temas** (los dibujos son nuevos y siguen las reglas de arte de RF-151: aspecto cuidado, nada infantil):
+
+  | Tema | Suelo | Camino | Lo que sale en las casillas `X` |
+  |---|---|---|---|
+  | `pradera` | pasto verde (el actual) | tierra | rocas, árboles, arbustos (el actual) |
+  | `desierto` | arena | tierra rojiza | cactus, rocas rojizas, huesos |
+  | `nieve` | nieve | barro oscuro | pinos nevados, rocas con nieve |
+  | `volcan` | roca oscura | ceniza | rocas negras, columnas de piedra, grietas con brasas |
+
+- **RF-262** **Leyenda:** el campo opcional `"leyenda"` declara letras nuevas para el mapa. Cada una dice **qué se dibuja** y **si se puede construir**:
+  `"leyenda": {"~": {"dibujo": "agua"}, ",": {"dibujo": "flores", "construible": true}}`
+  La **letra** es un solo carácter, **no** puede ser `.` `#` `X` `S` ni una entrada (`A` a `H`) ni un espacio, una comilla o una barra. Hasta **10** letras por nivel. `construible` vale `false` si no se escribe.
+- **RF-263** **Los dibujos** (una lista cerrada: el archivo elige un nombre, no trae imágenes propias):
+
+  | Dibujo | Qué es | Tipo |
+  |---|---|---|
+  | `roca`, `arbol`, `arbusto` | los de siempre | objeto sobre el suelo |
+  | `flores` | un parche de flores del color del tema | objeto (decoración) |
+  | `agua` | un lago o un río, con reflejos | **suelo** (cubre toda la casilla y se une con los vecinos) |
+  | `hielo` | hielo agrietado | suelo |
+  | `lava` | lava con brillo | suelo |
+  | `cactus`, `pino`, `columna` | según el paisaje | objeto sobre el suelo |
+
+  Un dibujo cualquiera se puede usar en cualquier tema (un lago en el desierto es un oasis). Uno que no existe es un **error** que lista los que sí.
+- **RF-264** **Lo que significa para el juego:** una letra de la leyenda es, para el juego, **pasto** (si es `construible`) o **casilla bloqueada** (si no). **Nunca es camino**: no cambia entradas, salida ni recorridos, y los enemigos no la pisan (los voladores la cruzan igual que el resto del mapa, RF-05). Por eso los recorridos y todo el cálculo de §7.8 quedan iguales.
+- **RF-265** **Validación (con mensajes claros, RF-204):** una letra usada en el mapa que no está declarada dice "letra desconocida" y recuerda que existe la leyenda; una declarada pero que no se usa da un **aviso** (RF-207); un tema o dibujo desconocido, una letra prohibida o repetida y más de 10 letras son **errores**. Los topes de RF-223 suman: 10 letras.
+- **RF-266** **Editor (§10.3):** el panel de **Ajustes** tiene un selector de **tema**; la barra de herramientas suma un botón por cada letra de la leyenda (para pintarla) y un botón para **agregar una letra** eligiendo el dibujo y si es construible. Abrir y guardar un nivel **conserva** su tema y su leyenda.
+- **RF-267** **Compatibilidad:** los 7 niveles oficiales no cambian (se ven igual). Un mapa de la comunidad con tema o leyenda funciona en cualquier versión del juego que tenga esta función; en una versión anterior el campo se rechaza por desconocido (RF-204), como cualquier otra clave. **Sigue siendo solo datos:** ningún archivo puede traer imágenes ni código (RF-223).
+- **Lo que NO incluye** (queda en B-08): terrenos con efecto (pantano, colina), un camino dibujado distinto (puente), decoración puesta a mano por posición, imágenes propias de un mod, un tema para parte del mapa.
+
+> **Criterio de aceptación**
+> **Dado** un nivel con `"tema": "nieve"` y una leyenda `"~": {"dibujo": "hielo"}` con una laguna de `~` al lado del camino → **Cuando** lo juego → **Entonces** el mapa se ve nevado, la laguna se ve como hielo, no puedo construir sobre ella y los enemigos siguen el mismo camino de siempre.
+> **Dado** un nivel sin `tema` ni `leyenda` → **Entonces** se ve **exactamente** igual que antes de M15.
+
 ---
 
 ## 8. Ganar y perder
@@ -1045,8 +1084,8 @@ Ideas **aprobadas como dirección**, pero **sin fecha**: no se programan hasta c
 
 | Idea | Qué es | Tamaño |
 |---|---|---|
-| **Leyenda** | El nivel declara letras nuevas y qué son: `"leyenda": {"~": {"dibujo": "agua", "construible": false}}`. Los dibujos son archivos de `assets/sprites/map/` (y en un mod, imágenes propias). Se puede decidir el dibujo de cada casilla. | Chico |
-| **Temas** | `"tema": "desierto"` cambia la paleta del pasto y del camino y el conjunto de decoración (nieve, lava, ruinas). | Chico |
+| **Leyenda** *(propuesta en M15, §7.11)* | El nivel declara letras nuevas y qué son: `"leyenda": {"~": {"dibujo": "agua", "construible": false}}`. Los dibujos son archivos de `assets/sprites/map/` (y en un mod, imágenes propias). Se puede decidir el dibujo de cada casilla. | Chico |
+| **Temas** *(propuesta en M15, §7.11)* | `"tema": "desierto"` cambia la paleta del pasto y del camino y el conjunto de decoración (nieve, lava, ruinas). | Chico |
 | **Decoración a mano** | Una lista de objetos con su posición (un árbol grande en 3,4), sin necesidad de ocupar una casilla entera. | Chico |
 | **Terrenos con efecto** | Pantano (los enemigos van más lentos), colina (las torres ganan alcance), terreno rico (construir cuesta menos). Cambian la estrategia y necesitan reglas (RF) y balance. | Mediano |
 | **Tamaño variable** | Mapas más grandes que 20×9, con cámara que se desplaza o zoom. Cambia la interfaz, la construcción y los tests. **Hecho con zoom en M13 (RF-250 a RF-255, D-037): hasta 26×12.** | Grande |

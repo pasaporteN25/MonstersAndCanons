@@ -242,3 +242,13 @@
 - **Consecuencia que Lucas conoce:** el editor guarda en la misma carpeta que lee la solapa de los mapas de la comunidad (D-034), así que **un mapa hecho por un jugador aparece solo en su propia lista**, sin publicar nada. No hay riesgo para nadie más: los mapas de la comunidad son solo datos (RF-223) y con progreso propio.
 - **En el celular no se ofrece:** el editor es de mouse y teclado (Ctrl+Z, teclas 1 a 5) y la carpeta de mapas no se ve desde el Android (RF-220).
 - **El editor puede abrir los niveles oficiales** (para mirarlos o partir de uno): no se pueden pisar, hay que guardarlos con otro nombre (RF-216).
+
+### D-039 · Leyenda y temas: dos campos opcionales, un catálogo cerrado de dibujos
+- **Fecha:** 2026-09-29 · **Estado:** **Propuesta, pendiente de aprobación de Lucas** · **Decidió:** Lucas (qué: leyenda y temas, del backlog B-08) / Claude (cómo, a confirmar)
+- **Qué:** un nivel puede tener `"tema"` (paisaje de todo el mapa) y `"leyenda"` (letras nuevas con un dibujo del catálogo y si se puede construir). Spec §7.11.
+- **Por qué campos opcionales:** los 7 niveles y los mapas de la comunidad que ya existen no cambian ni se tocan, y un archivo viejo se sigue leyendo igual (misma idea que `aumento_vida`, D-019).
+- **Por qué un catálogo cerrado de dibujos (y no imágenes propias en el archivo):** un mapa de la comunidad tiene que ser **solo datos** (D-034): una imagen dentro de un JSON es más peso, más superficie de error y, con archivos ajenos, más riesgo. Los mods con imágenes propias siguen siendo el escalón siguiente de B-04, y un catálogo no lo impide.
+- **Por qué una letra de leyenda nunca es camino:** así **no se toca el cálculo de los recorridos** (§7.8, RF-202), que es lo más delicado del formato y está muy probado. Para el juego una letra de leyenda es pasto o bloqueada; el resto es dibujo. Un "puente" (camino que se ve distinto) queda para después.
+- **Cómo (plan §6.12):** `MapGrid` entiende las letras de la leyenda como pasto o bloqueada y recuerda cuál es cuál; `LevelDecor` recibe el tema y el dibujo de cada casilla. Los temas son **paletas y listas de decoración en código**, no un TileSet por tema: tres colores planos y decoración dibujada encima ya es como está hecho hoy (RF-126).
+- **Alternativas descartadas:** (1) un TileSet distinto por tema: hay que rehacer el suelo y los tests de casillas para pintar tres colores; (2) que la leyenda pueda declarar **caminos**: obliga a rehacer el cálculo de recorridos; (3) un tema por casilla: sin uso claro y multiplica los casos.
+- **Riesgos conocidos:** el **arte** es el grueso del trabajo (unos 12 dibujos nuevos) y hay que cuidar el estilo (RF-151). Un mapa con muchas letras de agua se puede ver repetitivo hasta que haya una decoración más rica (B-08).

@@ -472,3 +472,11 @@ godot --headless --path . -s addons/gut/gut_cmdln.gd -gdir=res://tests -gexit
 - `Game` agrega una `Camera2D` **solo si el zoom es menor que 1**. Como la cámara no cambia las coordenadas del mundo, `BuildController`, las torres, los enemigos y los proyectiles no se tocan.
 - `LevelDraft` conserva el tamaño del mapa (antes cortaba o rellenaba a 20×9) y `MapEditor` le pone un zoom al `MapView` para verlo entero.
 - ⚠️ Los `CanvasLayer` (HUD, pausa, pantalla final) no se achican con la cámara. Todo lo que se dibuje **directo en el mundo** sí.
+
+### 6.12 Leyenda y temas *(M15, D-039 — propuesta)*
+
+- `LevelData` gana `theme: StringName` (vacío = pradera) y `legend: Dictionary` (letra → `{"dibujo", "construible"}`). `LevelFile` los lee y valida; `LEVEL_KEYS` suma `tema` y `leyenda`.
+- `MapGrid.parse(rows, legend)`: una letra de la leyenda es `Cell.GRASS` (construible) o `Cell.BLOCKED`, y se recuerda en `legend_cells` (casilla → letra). **Nada de `_find_routes` cambia.**
+- `MapThemes` (lógica pura): los cuatro temas con su paleta y su lista de decoración de `X`. `MapDrawings`: el catálogo de dibujos de la leyenda (nombre → textura o función de dibujo, y si es "suelo" u "objeto").
+- `LevelDecor.paint(ground, exit_cells, theme, legend_cells)`: pinta cada casilla con la paleta del tema; sin tema (pradera) usa las mismas constantes de hoy, así que los niveles actuales quedan **idénticos** (un test compara el dibujo).
+- `MapView` (editor) pasa el mismo tema y leyenda a `LevelDecor` para que el editor se vea como la partida.

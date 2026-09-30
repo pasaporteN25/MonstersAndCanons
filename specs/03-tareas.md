@@ -701,3 +701,32 @@
   **Refs:** RF-210, D-038.
   **Hecho cuando:** los tests comprueban que el botón está en el menú normal y en el de pruebas, que no está en el celular (salvo modo de pruebas), y que el editor abierto desde el juego normal no cambia el progreso ni los niveles desbloqueados, y guarda en la carpeta de mapas; las exportaciones se comprueban.
   **Resultado:** El botón "Editor de mapas" está siempre en el menú, salvo en el celular (`MainMenu.editor_available`); el modo de pruebas lo ve siempre. Un test comprueba que abrirlo en el juego normal no cambia el progreso ni desbloquea niveles y que guarda en la carpeta de mapas. Se exportaron los cuatro y se comprobó con el paquete exportado del juego normal: el menú muestra Jugar, Récords, Wiki, **Editor de mapas**, Opciones y Salir, y entra en pantalla. 2 tests nuevos y 1 cambiado (582 en total).
+
+---
+
+## M15 — Leyenda y temas *(pedido por Lucas, D-039 — PROPUESTA: se empieza cuando Lucas apruebe la spec)*
+
+- [ ] **T122 · `tema` y `leyenda` en el archivo del nivel (sin dibujo todavía)**
+  `LevelFile`, `LevelData` y `MapGrid` leen y validan los dos campos; una letra de leyenda es pasto o bloqueada.
+  **Refs:** RF-262, RF-264, RF-265, RF-267.
+  **Hecho cuando:** los tests comprueban cada error (letra prohibida, repetida, sin declarar, declarada y sin usar, tema o dibujo desconocido, más de 10 letras), que una letra construible se puede construir y una no, que los recorridos son **idénticos** con y sin leyenda, y que los 7 niveles oficiales dan lo mismo que antes.
+
+- [ ] **T123 · Los temas**
+  `MapThemes`, `LevelDecor` con paleta y decoración de `X` por tema; el arte de cada tema.
+  **Refs:** RF-260, RF-261, RF-267.
+  **Hecho cuando:** los tests comprueban que `pradera` da el mismo dibujo de siempre y que cada tema tiene sus colores y su decoración; las capturas muestran el mismo mapa en los cuatro temas, para que Lucas las apruebe.
+
+- [ ] **T124 · Los dibujos de la leyenda**
+  `MapDrawings` (catálogo), el arte de los dibujos y su pintado en `LevelDecor` (suelo que se une con los vecinos, objetos sobre el suelo).
+  **Refs:** RF-263.
+  **Hecho cuando:** los tests comprueban que cada dibujo del catálogo existe y se pinta, y que un dibujo desconocido es un error; las capturas muestran un mapa con lago, hielo, lava y objetos.
+
+- [ ] **T125 · El editor: tema y leyenda**
+  Selector de tema en Ajustes, un botón por letra de leyenda y "agregar letra"; abrir y guardar conserva ambos.
+  **Refs:** RF-266.
+  **Hecho cuando:** los tests comprueban pintar con una letra de leyenda, agregarla y quitarla, cambiar el tema, y que guardar y volver a abrir conserva todo; una captura muestra el editor con un mapa temático.
+
+- [ ] **T126 · Cierre de M15: mapa de ejemplo, documentación y exportaciones**
+  Un mapa de ejemplo por tema, CONTENIDO.md, README, ONBOARDING; exportar los cuatro.
+  **Refs:** D-039.
+  **Hecho cuando:** pasan todos los tests y se ven los cuatro temas en el paquete exportado.
