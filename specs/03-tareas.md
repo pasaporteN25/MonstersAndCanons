@@ -704,29 +704,46 @@
 
 ---
 
-## M15 — Leyenda y temas *(pedido por Lucas, D-039 — PROPUESTA: se empieza cuando Lucas apruebe la spec)*
+## M15 — Leyenda y temas *(pedido por Lucas, D-039)*
 
 - [ ] **T122 · `tema` y `leyenda` en el archivo del nivel (sin dibujo todavía)**
-  `LevelFile`, `LevelData` y `MapGrid` leen y validan los dos campos; una letra de leyenda es pasto o bloqueada.
-  **Refs:** RF-262, RF-264, RF-265, RF-267.
-  **Hecho cuando:** los tests comprueban cada error (letra prohibida, repetida, sin declarar, declarada y sin usar, tema o dibujo desconocido, más de 10 letras), que una letra construible se puede construir y una no, que los recorridos son **idénticos** con y sin leyenda, y que los 7 niveles oficiales dan lo mismo que antes.
+  `LevelFile`, `LevelData` y `MapGrid` leen y validan los dos campos; una letra de leyenda es pasto o bloqueada; `LevelDraft` los conserva al abrir y guardar.
+  **Refs:** RF-262, RF-264, RF-265, RF-266, RF-267.
+  **Hecho cuando:** los tests comprueban cada error (letra prohibida, repetida, sin declarar, declarada y sin usar, tema o dibujo desconocido, más de 10 letras), que una letra construible se puede construir y una no, que los recorridos son **idénticos** con y sin leyenda, que abrir y guardar en el editor no pierde tema ni leyenda, y que los 7 niveles oficiales dan lo mismo que antes.
 
-- [ ] **T123 · Los temas**
-  `MapThemes`, `LevelDecor` con paleta y decoración de `X` por tema; el arte de cada tema.
+- [ ] **T123 · Los temas: base, desierto, nieve y volcán**
+  `MapThemes` (los siete, con su paleta), `LevelDecor` con paleta y decoración de `X` por tema; el arte de desierto, nieve y volcán.
   **Refs:** RF-260, RF-261, RF-267.
-  **Hecho cuando:** los tests comprueban que `pradera` da el mismo dibujo de siempre y que cada tema tiene sus colores y su decoración; las capturas muestran el mismo mapa en los cuatro temas, para que Lucas las apruebe.
+  **Hecho cuando:** los tests comprueban que `pradera` da el mismo dibujo de siempre y que cada tema tiene sus colores y su decoración; las capturas muestran el mismo mapa en cada tema, para que Lucas las apruebe.
 
-- [ ] **T124 · Los dibujos de la leyenda**
+- [ ] **T124 · Los temas: bosque, pantano y ruinas**
+  El arte y la decoración de los tres temas que pidió Lucas.
+  **Refs:** RF-260, RF-261.
+  **Hecho cuando:** los tests del tema pasan para los siete; las capturas muestran los siete temas juntos, para que Lucas las apruebe.
+
+- [ ] **T125 · Los dibujos de la leyenda**
   `MapDrawings` (catálogo), el arte de los dibujos y su pintado en `LevelDecor` (suelo que se une con los vecinos, objetos sobre el suelo).
   **Refs:** RF-263.
-  **Hecho cuando:** los tests comprueban que cada dibujo del catálogo existe y se pinta, y que un dibujo desconocido es un error; las capturas muestran un mapa con lago, hielo, lava y objetos.
+  **Hecho cuando:** los tests comprueban que cada dibujo del catálogo existe y se pinta, y que un dibujo desconocido es un error; las capturas muestran un mapa con lago, hielo, lava, barro y objetos.
 
-- [ ] **T125 · El editor: tema y leyenda**
-  Selector de tema en Ajustes, un botón por letra de leyenda y "agregar letra"; abrir y guardar conserva ambos.
-  **Refs:** RF-266.
-  **Hecho cuando:** los tests comprueban pintar con una letra de leyenda, agregarla y quitarla, cambiar el tema, y que guardar y volver a abrir conserva todo; una captura muestra el editor con un mapa temático.
-
-- [ ] **T126 · Cierre de M15: mapa de ejemplo, documentación y exportaciones**
-  Un mapa de ejemplo por tema, CONTENIDO.md, README, ONBOARDING; exportar los cuatro.
+- [ ] **T126 · Cierre de M15: mapas de ejemplo, documentación y exportaciones**
+  Un mapa de ejemplo por tema (fuera del juego), CONTENIDO.md, README, ONBOARDING; exportar los cuatro.
   **Refs:** D-039.
-  **Hecho cuando:** pasan todos los tests y se ven los cuatro temas en el paquete exportado.
+  **Hecho cuando:** pasan todos los tests y se ven los siete temas en el paquete exportado.
+
+## M16 — El editor con temas y leyenda *(pedido por Lucas: "en otra etapa"; sin fecha)*
+
+- [ ] **T128 · Tema y leyenda en el editor de mapas**
+  Selector de tema en Ajustes, un botón por letra de la leyenda y "agregar letra".
+  **Refs:** RF-266.
+  **Hecho cuando:** los tests comprueban pintar con una letra de leyenda, agregarla y quitarla y cambiar el tema; una captura muestra el editor con un mapa temático.
+
+---
+
+## Mejora visual de enemigos (pedido por Lucas)
+
+- [x] **T127 · Rediseño de los nueve sprites de enemigos**
+  Siluetas diferenciadas, volumen y materiales, conservando especie, color, vista lateral y SVG de 64 × 64 (RF-151, RF-155, RF-167).
+  **Hecho cuando:** los nueve SVG se importan en Godot, se revisan juntos a escala de juego e interfaz y pasan los tests de sprites y contenido.
+
+  **Resultado:** nueve SVG rediseñados y renderizados con Godot 4.7.2; comparativa visual antes/después revisada, incluyendo lectura a 34 px. Los 67 tests existentes de sprites, contenido nuevo, catálogo y datos pasan (879 aserciones). Se conservan rutas, dimensiones, transparencia y parámetros de importación; no cambia el balance.

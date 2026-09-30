@@ -604,12 +604,12 @@ Para poder hacer niveles más altos (9 y 10) con más lugar para construir y cam
 > **Criterio de aceptación**
 > **Dado** un mapa de 26×12 → **Cuando** lo juego → **Entonces** se ve entero, centrado entre las dos barras; hago clic en una casilla y la torre se construye **en esa casilla**; una torre con alcance 3 alcanza a los mismos enemigos que en un mapa de 20×9.
 
-### 7.11 Leyenda y temas *(M15, pedido por Lucas, D-039, B-08 · PROPUESTA: pendiente de aprobación)*
+### 7.11 Leyenda y temas *(M15, pedido por Lucas, D-039, B-08)*
 
 Hoy todos los mapas se ven igual (pradera) y lo bloqueado lo dibuja el juego al azar (RF-154). Con esto, un nivel puede tener **su propio paisaje** (un desierto, un mundo de nieve, un volcán) y **pedir qué va en cada casilla** ("acá hay un lago"). Son dos campos opcionales del archivo del nivel (§7.8): un nivel que no los tiene se ve **exactamente igual que hoy**.
 
-- **RF-260** **Tema:** el campo opcional `"tema"` elige el paisaje de **todo** el mapa: `"pradera"` (el de siempre, es el que se usa si no está), `"desierto"`, `"nieve"` o `"volcan"`. Cambia los **colores** del pasto y del camino, sus bordes, las piedritas y matas, y **qué se dibuja en las casillas bloqueadas** (`X`). Es **solo visual**: no cambia por dónde van los enemigos, qué se puede construir ni ningún número del juego.
-- **RF-261** **Los temas** (los dibujos son nuevos y siguen las reglas de arte de RF-151: aspecto cuidado, nada infantil):
+- **RF-260** **Tema:** el campo opcional `"tema"` elige el paisaje de **todo** el mapa: `"pradera"` (el de siempre, es el que se usa si no está), `"desierto"`, `"nieve"`, `"volcan"`, `"bosque"`, `"pantano"` o `"ruinas"`. Cambia los **colores** del pasto y del camino, sus bordes, las piedritas y matas, y **qué se dibuja en las casillas bloqueadas** (`X`). Es **solo visual**: no cambia por dónde van los enemigos, qué se puede construir ni ningún número del juego.
+- **RF-261** **Los siete temas** (los dibujos son nuevos y siguen las reglas de arte de RF-151: aspecto cuidado, nada infantil):
 
   | Tema | Suelo | Camino | Lo que sale en las casillas `X` |
   |---|---|---|---|
@@ -617,6 +617,9 @@ Hoy todos los mapas se ven igual (pradera) y lo bloqueado lo dibuja el juego al 
   | `desierto` | arena | tierra rojiza | cactus, rocas rojizas, huesos |
   | `nieve` | nieve | barro oscuro | pinos nevados, rocas con nieve |
   | `volcan` | roca oscura | ceniza | rocas negras, columnas de piedra, grietas con brasas |
+| `bosque` | pasto oscuro con musgo y hojas caídas | tierra oscura con hojas | árboles densos, troncos caídos, helechos |
+| `pantano` | barro verdoso con charcos | tierra húmeda con tablones | juncos, troncos secos, hongos grandes |
+| `ruinas` | adoquines de piedra clara con pasto ralo | losas de piedra gastadas | columnas rotas, bloques caídos, estatuas |
 
 - **RF-262** **Leyenda:** el campo opcional `"leyenda"` declara letras nuevas para el mapa. Cada una dice **qué se dibuja** y **si se puede construir**:
   `"leyenda": {"~": {"dibujo": "agua"}, ",": {"dibujo": "flores", "construible": true}}`
@@ -630,12 +633,14 @@ Hoy todos los mapas se ven igual (pradera) y lo bloqueado lo dibuja el juego al 
   | `agua` | un lago o un río, con reflejos | **suelo** (cubre toda la casilla y se une con los vecinos) |
   | `hielo` | hielo agrietado | suelo |
   | `lava` | lava con brillo | suelo |
+  | `barro` | un charco de barro | suelo |
   | `cactus`, `pino`, `columna` | según el paisaje | objeto sobre el suelo |
+  | `tronco`, `helecho`, `junco`, `hongo`, `estatua` | según el paisaje | objeto sobre el suelo |
 
   Un dibujo cualquiera se puede usar en cualquier tema (un lago en el desierto es un oasis). Uno que no existe es un **error** que lista los que sí.
 - **RF-264** **Lo que significa para el juego:** una letra de la leyenda es, para el juego, **pasto** (si es `construible`) o **casilla bloqueada** (si no). **Nunca es camino**: no cambia entradas, salida ni recorridos, y los enemigos no la pisan (los voladores la cruzan igual que el resto del mapa, RF-05). Por eso los recorridos y todo el cálculo de §7.8 quedan iguales.
 - **RF-265** **Validación (con mensajes claros, RF-204):** una letra usada en el mapa que no está declarada dice "letra desconocida" y recuerda que existe la leyenda; una declarada pero que no se usa da un **aviso** (RF-207); un tema o dibujo desconocido, una letra prohibida o repetida y más de 10 letras son **errores**. Los topes de RF-223 suman: 10 letras.
-- **RF-266** **Editor (§10.3):** el panel de **Ajustes** tiene un selector de **tema**; la barra de herramientas suma un botón por cada letra de la leyenda (para pintarla) y un botón para **agregar una letra** eligiendo el dibujo y si es construible. Abrir y guardar un nivel **conserva** su tema y su leyenda.
+- **RF-266** **Editor (§10.3), etapa siguiente (M16, Lucas: "en otra etapa"):** el panel de **Ajustes** tendrá un selector de **tema**; la barra de herramientas sumará un botón por cada letra de la leyenda (para pintarla) y un botón para **agregar una letra** eligiendo el dibujo y si es construible. **En M15 el editor solo tiene que conservar** el tema y la leyenda de un nivel al abrirlo y guardarlo (para no perderlos); se escriben a mano en el archivo.
 - **RF-267** **Compatibilidad:** los 7 niveles oficiales no cambian (se ven igual). Un mapa de la comunidad con tema o leyenda funciona en cualquier versión del juego que tenga esta función; en una versión anterior el campo se rechaza por desconocido (RF-204), como cualquier otra clave. **Sigue siendo solo datos:** ningún archivo puede traer imágenes ni código (RF-223).
 - **Lo que NO incluye** (queda en B-08): terrenos con efecto (pantano, colina), un camino dibujado distinto (puente), decoración puesta a mano por posición, imágenes propias de un mod, un tema para parte del mapa.
 
@@ -1156,3 +1161,5 @@ La wiki de M11 ya es escalable a propósito (categorías → entradas → bloque
 *Regla de Lucas, 2026-09-29: las ideas que Claude propone por su cuenta se anotan acá y no se implementan hasta que Lucas las apruebe.*
 
 - **"¿Qué es esto?" desde la partida:** al tocar un enemigo o una torre durante la partida, un botón que abre su entrada de la wiki (con `show_target`) y al volver retoma la partida en pausa. Ojo con la pausa, con el celular (el toque ya selecciona torres) y con no dejar espiar enemigos que todavía están cerrados en el bestiario.
+- **Guía de arte del juego:** a partir del rediseño de los nueve enemigos (T127) se ve un estilo propio: contorno oscuro grueso, formas angulosas con facetas, un brillo por dibujo, mirando a la derecha, un color por especie. Escribirlo en un documento corto (`specs/05-guia-de-arte.md`: paleta por enemigo y por tema, grosor del contorno, cómo se hace una faceta, qué se evita) ayudaría a que los ~25 dibujos de M15 y los enemigos nuevos salgan iguales. Idea inspirada en el rol de "director de arte" del repositorio Claude Code Game Studios.
+- **Reglas por carpeta para Claude** (`.claude/rules/`): por ejemplo "en `scripts/` y `scenes/` se sangra con tabuladores", "los números de balance van en `data/`, no en el código" y "un dibujo nuevo sigue `specs/05-guia-de-arte.md`". Hoy esas reglas están en la constitución y en mi cabeza; ponerlas por carpeta evitaría errores repetidos (por ejemplo, editar con espacios un archivo de tabuladores).
