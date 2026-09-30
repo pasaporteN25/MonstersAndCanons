@@ -1296,7 +1296,7 @@ La wiki de M11 ya es escalable a propósito (categorías → entradas → bloque
 | **C · Sinergia por vecinos** | Dos torres **pegadas** se potencian (Hielo junto al Cañón: el Cañón pega más a lo ralentizado; Incendiaria + Eléctrica: el rayo quema) | Mediano | Sin torres nuevas ni arte, pero hay que **mostrar** los vínculos y balancear pares |
 | **D · Recetas** | Dos torres **distintas** adyacentes se fusionan en una híbrida | Grande | Con 8 torres son 28 pares: demasiado, salvo pocas recetas elegidas a mano |
 
-**Orden acordado (Lucas, 2026-09-30, D-041): B, después C, y la A (fusión) para más adelante. La B (el Mortero 2×2) se especifica en §5.7 (M19, RF-290 a RF-299).** *Recomendación original de Claude: ir por **B y después A**.* Con B se resuelve lo difícil (que una torre ocupe 4 casillas) con un solo dibujo y un solo balance. Con A, las fusiones pueden salir **de los datos** (cada torre declara su versión fusionada con multiplicadores) y **reusar el mismo dibujo agrandado** con un marco dorado, sin ocho dibujos nuevos.
+**Orden acordado (Lucas, 2026-09-30, D-041): B, después C, y la A (fusión) para más adelante. La B (el Mortero 2×2) se especifica en §5.7 y está hecha en M19 (RF-290 a RF-299).** *Recomendación original de Claude: ir por **B y después A**.* Con B se resuelve lo difícil (que una torre ocupe 4 casillas) con un solo dibujo y un solo balance. Con A, las fusiones pueden salir **de los datos** (cada torre declara su versión fusionada con multiplicadores) y **reusar el mismo dibujo agrandado** con un marco dorado, sin ocho dibujos nuevos.
 
 **Reglas a decidir cuando se tome:**
 - ¿La fusión **se puede deshacer**? (Propuesta: no; se puede **vender** y devuelve una parte, RF-72.)

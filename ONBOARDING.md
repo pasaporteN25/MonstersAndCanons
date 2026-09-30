@@ -152,6 +152,10 @@ Copiá los siete `tools/ejemplos/tema_*.json` a la carpeta de mapas de la comuni
 
 Abrí una partida en `JuegoA_pruebas.exe`, `F1` (panel de pruebas) y hacé aparecer un **Guardián**, un **Curandero** y varios enemigos comunes. Tiene que verse: el **anillo** de cada uno en el suelo (marfil dorado el Guardián, verde el Curandero); un **escudo** sobre los enemigos que están dentro del anillo del Guardián y una **cruz verde** sobre los del Curandero; el **número de daño gris** cuando la armadura se come el golpe; y que al **matar al portador** el escudo o la cruz desaparecen en menos de un segundo. Con una Incendiaria, el enemigo que se quema no recupera vida aunque esté dentro del anillo verde.
 
+### 6.1.09 El Mortero (2×2)
+
+En el nivel 1, elegí el **Mortero** (novena torre, tecla **9**, 300 de oro) y pasá el mouse por el mapa: el cuadrado de **2×2** queda centrado en el mouse y se ve **verde** donde entra y **rojo** si una de las cuatro casillas es camino, roca u otra torre. Construilo: ocupa las cuatro casillas, un clic en cualquiera lo selecciona, dispara una bomba cada 4 segundos con daño de área, y al **venderlo** devuelve el 70 % y libera las cuatro casillas. La barra de abajo debe mostrar las 9 torres sin tapar "Próxima oleada".
+
 ### 6.1.08 Chamán y Espejo (versión de pruebas)
 
 En `JuegoA_pruebas.exe`, `F1`, hacé aparecer un **Chamán** cerca de varias torres y esperá unos 8 segundos: tiene que salir un **rayo magenta** hacia la torre más cercana, que se ve **apagada** (oscura, con chispas) y **no dispara** unos 3 segundos; si la seleccionás, el panel dice **"Aturdida (N s)"** con la cuenta atrás. Después, un **Espejo** al lado de una torre pegada al camino: el primer disparo tiene que mostrar **"¡Rebote!"**, el Espejo no pierde vida y la torre queda apagada 2 segundos; una torre lejos (por ejemplo un Francotirador) le pega normal. Con una Incendiaria pegada, el Espejo se quema igual.

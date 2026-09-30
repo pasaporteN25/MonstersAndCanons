@@ -87,6 +87,7 @@ Los niveles son JSON, un formato de texto común que se edita a mano. Un `.tres`
 | `id`, `display_name` | Como en los enemigos. |
 | `description` | Frase que se ve al elegirla para construir (RF-171). |
 | `can_hit_air` | Si le pega a los voladores. |
+| `footprint` | **Lado** de la torre en casillas (RF-290). `1` = una casilla (la común), `2` = cuadrado de 2×2 como el Mortero. Necesita todas sus casillas libres; usa los mismos dibujos de base agrandados. | `2` |
 | `projectile_speed_tiles` | Velocidad de sus proyectiles (casi todas: 10). |
 | `color` | Color de sus efectos (anillo al construir). |
 | `turret_texture`, `projectile_texture` | Los dibujos. |
@@ -341,7 +342,7 @@ El bot juega solo, a toda velocidad, e imprime cómo termina:
 godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- mix level=6
 ```
 
-- Estrategias: `smart` (las 4 torres de siempre), `mix` (las 8 torres), `basic` (solo Ametralladoras) y `naive` (torres al azar).
+- Estrategias: `smart` (las 4 torres de siempre), `mix` (las 8 torres), `heavy` (como `mix` más Morteros, M19), `basic` (solo Ametralladoras) y `naive` (torres al azar).
 - `levelscale=30` prueba otro aumento de vida por oleada sin tocar los archivos.
 - `<torre>.<campo>=valor` prueba otro número del nivel 1 de una torre (por ejemplo `fire.damage=6`).
 

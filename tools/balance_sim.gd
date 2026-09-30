@@ -9,6 +9,7 @@
 #   smart  → mezcla las 4 torres de M1–M2 y las pone donde cubren más camino.
 #   mix    → como smart, pero con las 8 torres (M5): sirve para el nivel 6 y para ver
 #            cuánto ayudan las torres nuevas en los niveles 1–5.
+#   heavy  → como mix, pero también compra Morteros (M19, torre de 2×2) donde haya un cuadrado libre.
 #   basic  → solo Ametralladoras, bien puestas (sirve para ver si mezclar torres vale la pena).
 #   naive  → solo Ametralladoras, en casillas libres al azar.
 #
@@ -28,6 +29,8 @@ extends SceneTree
 const SMART_ORDER: Array[int] = [0, 0, 0, 1, 0, 2, 3, 1, 0, 3, 1, 2]
 ## Orden de compra de "mix": las 8 torres (4 Incendiaria, 5 Múltiple, 6 Ráfaga, 7 Eléctrica).
 const MIX_ORDER: Array[int] = [0, 0, 0, 7, 1, 4, 0, 5, 3, 6, 2, 7, 0, 4, 5, 6, 3, 1]
+## Orden de compra de "heavy" (M19): como "mix" más el Mortero (8) cada tanto.
+const HEAVY_ORDER: Array[int] = [0, 0, 0, 7, 1, 4, 0, 8, 5, 3, 6, 8, 2, 7, 0, 4, 8, 5, 6, 3, 1]
 ## Cada cuántos píxeles se mide el camino para puntuar las casillas.
 const PATH_SAMPLE_STEP: float = 16.0
 
@@ -157,6 +160,8 @@ func _buy_towers() -> void:
 		var index: int = 0
 		if strategy == "smart":
 			index = SMART_ORDER[built % SMART_ORDER.size()]
+		elif strategy == "heavy":
+			index = HEAVY_ORDER[built % HEAVY_ORDER.size()] % game.tower_types.size()
 		elif strategy == "mix":
 			index = MIX_ORDER[built % MIX_ORDER.size()] % game.tower_types.size()
 		var tower: TowerData = game.tower_types[index]
@@ -192,7 +197,9 @@ func _best_cell(tower: TowerData) -> Vector2i:
 	var best: Vector2i = Vector2i(-1, -1)
 	var best_score: int = -1
 	for cell: Vector2i in _free_cells():
-		var center: Vector2 = game.level.cell_center(cell)
+		if tower.footprint > 1 and not game.build_controller.cells_free(tower, cell):
+			continue  # una torre grande necesita todo su cuadrado libre (RF-291)
+		var center: Vector2 = game.level.cell_center(cell) + Vector2.ONE * (tower.footprint - 1) * Rules.TILE_SIZE / 2.0
 		var score: int = _points_in_range(path_points, center, range_px)
 		if tower.can_hit_air:
 			score += _points_in_range(air_points, center, range_px)
