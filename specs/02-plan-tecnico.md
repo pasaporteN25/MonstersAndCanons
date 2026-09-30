@@ -495,3 +495,12 @@ godot --headless --path . -s addons/gut/gut_cmdln.gd -gdir=res://tests -gexit
 - `Enemy`: el Chamán cuenta `_stun_cast_left`; al llegar a 0 busca la torre más cercana (`Tower.GROUP`) sin aturdir dentro del alcance y le hace `stun()`; si no hay, espera. Avisa con `cast_stun(from, tower)` (solo visual). `will_reflect(tower)` / `reflect(tower)` implementan el rebote y avisan con `reflected(enemy, tower)`.
 - `Projectile`: `source: Tower`. En `_hit`, si el enemigo rebota el tiro de `source`, no llama a `take_hit` (sí aplica la quemadura).
 - `Game` conecta `cast_stun` y `reflected` a `EffectsLayer` (rayo magenta, destello y "¡Rebote!"). `LightningEffect` acepta un color.
+
+### 6.15 Torres de 2×2: el Mortero *(M19, D-044)*
+
+- `TowerData.footprint: int = 1` (lado en casillas). `Tower` guarda `origin_cell` (la casilla de arriba a la izquierda) y `footprint`; `cells()` devuelve todas las casillas que ocupa. Su `position` es el **centro** del cuadrado.
+- `BuildController`: `footprint_cells(origin, footprint)` (estática, sin escena, para probarla) y `_occupied` guarda la torre en **cada** casilla. `can_build` exige que todas sean construibles, estén dentro del mapa y libres. `sell` libera **todas** (hoy usa `cell_at(tower.global_position)`, que con el centro en una esquina no sirve). `tower_at(cell)` ya funciona para cualquiera de las cuatro.
+- **Vista previa:** la casilla de origen es `cell_at(mouse - (footprint - 1) * TILE_SIZE / 2)`: con `footprint` 1 da la de siempre y con 2 centra el cuadrado en el mouse. Se pintan todas las casillas, el dibujo **escalado** por `footprint` y el alcance desde el centro.
+- `Tower._draw` escala con `footprint` la base, la sombra, la torreta, los puntitos, el aturdimiento y la longitud del cañón; el anillo de construcción usa el tamaño. `HUD`/`input`: acción `build_9` en `project.godot` y el límite de la barra sube a 9.
+- Datos: `data/towers/mortar.tres` (reusa `base_1..3`), `assets/sprites/towers/turret_mortar.svg` y `assets/sprites/projectiles/mortar.svg`; se agrega al final de `Tower Types` en `game.tscn`. La Wiki escribe "Tamaño: 2×2 casillas" leyendo `footprint`.
+- **Bot de balance:** las estrategias de hoy usan solo los índices 0–7, así que **no cambian**; se suma una (`mortar`) que compra Morteros donde haya 2×2 libres.

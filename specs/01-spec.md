@@ -97,7 +97,7 @@ La columna **Hito** de las tablas siguientes indica en qué momento se agrega ca
 
 ### 5.1 Construir
 
-- **RF-40** El jugador elige una torre en la barra inferior (o con las teclas **1–8**; en M1–M4 eran 1–4). Aparece una **vista previa** de la torre que sigue al mouse, "pegada" a la cuadrícula, mostrando su **círculo de alcance**.
+- **RF-40** El jugador elige una torre en la barra inferior (o con las teclas **1–9**; en M1–M4 eran 1–4 y hasta M18, 1–8). Aparece una **vista previa** de la torre que sigue al mouse, "pegada" a la cuadrícula, mostrando su **círculo de alcance**.
 - **RF-41** La vista previa se ve **verde** si se puede construir en esa casilla y **roja** si no.
 - **RF-42** Se puede construir en una casilla solo si: es **Libre**, **no tiene** otra torre y el jugador **tiene el oro**.
 - **RF-43** **Clic izquierdo** construye (y se descuenta el oro). La vista previa **sigue activa** para poder construir otra igual. **Clic derecho** o **Esc** cancelan.
@@ -198,6 +198,33 @@ Cuatro torres nuevas, pensadas como **respuesta** a los enemigos nuevos (§6.1).
 | Eléctrica | Costo 120 · daño 19 · salta a 3 · cadencia 0.85 | Costo 180 · daño 27 · salta a 4 · cadencia 0.95 · alcance 3.0 |
 
 **Cómo se balancearon (T84):** con los primeros números (daño 3, 6, 8 y 12), el bot que usa las 8 torres jugaba **peor** que el que usa las 4 viejas (por ejemplo, en el nivel 1 ganaba con 1 vida en vez de 13): cada moneda rendía más en Ametralladoras. Se subió el daño y la cadencia de las cuatro hasta que el bot con las 8 torres quedó parejo con el de las 4 viejas (resultados en §7.4). El fuego de varias Incendiarias no se suma (RF-160), así que conviene tener una por tramo, no muchas juntas.
+
+### 5.7 Torres de 2×2: el Mortero *(M19, pedido por Lucas, D-041, D-044, B-16 forma B)*
+
+Hasta ahora toda torre ocupa **una** casilla. Esta etapa enseña al juego a manejar torres **más grandes** y estrena la primera: el **Mortero**, que se construye **directo** en un cuadrado de 2×2. Es la base para la fusión de cuatro torres (B-16 forma A, más adelante) y la respuesta a los enemigos más duros (Guardián, Tanque, jefe).
+
+- **RF-290** **Tamaño como dato:** `TowerData` gana `footprint` (el **lado** de la torre en casillas: `1` = una casilla, `2` = cuadrado de 2×2). Vale `1` por defecto, así que las ocho torres de hoy **no cambian**. Sin casos especiales en el código (RF-164): cualquier torre futura puede declarar su tamaño.
+- **RF-291** **Dónde se puede construir:** una torre de `footprint` 2 necesita que **sus cuatro casillas** sean Libres (RF-42), estén dentro del mapa y **no tengan** otra torre; además, el oro. Si **una sola** casilla falla, no se construye (y no se cobra).
+- **RF-292** **Vista previa:** la vista previa de una torre grande **se centra en el mouse** y se "pega" a la cuadrícula (el centro queda en la esquina común de las cuatro casillas más cercanas al mouse). Las **cuatro** casillas se pintan **verdes** si se puede construir y **rojas** si no (RF-41); el dibujo y el círculo de alcance salen desde el centro del cuadrado. Una torre de una casilla se ve **igual que siempre**.
+- **RF-293** **Ocupación y selección:** la torre ocupa sus cuatro casillas: un clic en **cualquiera** de ellas la selecciona (RF-73), y ninguna puede usarse para otra torre. La torre **apunta y mide su alcance desde el centro** del cuadrado.
+- **RF-294** **Vender y mejorar:** funcionan **igual** que en las demás (RF-70 a RF-76, devuelve el 70 %, RF-72). Al vender, **las cuatro casillas** vuelven a estar libres.
+- **RF-295** **Dibujo:** la torre grande se dibuja **el doble de grande** (2×2 casillas): la base del nivel (`base_1`/`base_2`/`base_3`, que son dibujos vectoriales y escalan sin perder nitidez), la sombra, la torreta, los puntitos de nivel, el aturdimiento (RF-280) y el anillo de construcción (RF-130) se **escalan** con el tamaño. El Chamán y el Espejo (RF-282, RF-284) la tratan como a cualquier torre: miden hasta su **centro**.
+- **RF-296** **El Mortero** (`mortar`, tecla **9**): daño enorme en **área**, muy lento, de largo alcance y caro. Su función: **concentrar el daño en un solo golpe** para que la armadura importe poco (RF-80) y reventar a los grupos de enemigos duros. No le pega a los voladores.
+
+  | Nivel | Costo | Daño | Cadencia | Alcance | Radio del área |
+  |---|---|---|---|---|---|
+  | 1 | 300 | 90 | 0,25 (un disparo cada 4 s) | 5,0 | 1,5 |
+  | 2 | 250 | 140 | 0,25 | 5,0 | 1,8 |
+  | 3 | 350 | 220 | 0,25 | 5,5 | 2,2 |
+
+  Son **números de partida**: se afinan con el bot (T141). Comparado con el Cañón (100 de oro, 20 de daño cada 1,7 s, radio 1,0), el Mortero cuesta tres veces más **y ocupa cuatro casillas**: tiene que valer la pena por pegar fuerte y de lejos, no por ser más de lo mismo. Proyectil: una **bomba** lenta (velocidad 6 casillas por segundo, RF-55) que recorre un tramo largo sin fallar (RF-52).
+- **RF-297** **La barra y las teclas:** con el Mortero hay **9 torres**: la barra inferior y las teclas pasan de 8 a **9** (tecla `9`, acción `build_9`). Los botones **entran** sin tapar "Próxima oleada" (RF-170 se actualiza). El límite de la barra sube a 9.
+- **RF-298** **Disponible desde el principio:** el Mortero se puede construir **en todos los niveles** (todavía no hay torres bloqueadas por nivel). Mientras no haya cuatro casillas libres juntas, la vista previa está roja y el juego lo dice al pasar el mouse (RF-171: *"Necesita 2×2 casillas libres"*). La Wiki lo anota en su ficha (**"Tamaño: 2×2 casillas"**, RF-231) y `CONTENIDO.md` explica `footprint`.
+- **RF-299** **Dibujos:** una **torreta de mortero** nueva (tubo corto y ancho apuntando hacia adelante, sobre una placa) y una **bomba** como proyectil, según la guía de arte (RF-151). La base es la de siempre, agrandada; no hay dibujos de base nuevos.
+
+> **Criterio de aceptación RF-291**
+> **Dado** un Mortero y un mapa donde hay tres casillas libres juntas (la cuarta es camino) → **Cuando** intento construirlo ahí → **Entonces** no se construye, las cuatro casillas se ven rojas y sigo teniendo mi oro.
+> **Dado** cuatro casillas libres juntas y 300 de oro → **Cuando** hago clic con la vista previa → **Entonces** se construye, ocupa las cuatro casillas, **un clic en cualquiera** la selecciona, y al venderla recibo el 70 % y las cuatro vuelven a estar libres.
 
 ---
 
@@ -725,7 +752,7 @@ Hoy todos los mapas se ven igual (pradera) y lo bloqueado lo dibuja el juego al 
 
 - **RF-100** Arriba: **oro**, **vidas**, **oleada actual / total** (por ejemplo "Oleada 3/10") y *(M6)* **puntos** (RF-190).
 - **RF-101** Abajo: un **botón por torre**, con su forma, nombre y costo. Desactivado (gris) si no alcanza el oro. *(M5: ver RF-170.)*
-- **RF-170** *(M5)* **Barra para 8 torres:** cada botón muestra el **dibujo** de la torre, su **costo** y, en una esquina, su **tecla**. El nombre no entra: aparece al pasar el mouse por encima y al elegirla (RF-171).
+- **RF-170** *(M5; en M19 pasa a **9 torres**, RF-297)* **Barra para 8 torres:** cada botón muestra el **dibujo** de la torre, su **costo** y, en una esquina, su **tecla**. El nombre no entra: aparece al pasar el mouse por encima y al elegirla (RF-171).
 - **RF-171** *(M5)* Al elegir una torre para construir, encima de la barra se ve su **nombre, costo y una frase** que dice para qué sirve (`TowerData.description`).
 
   | Torre | Frase |
@@ -1269,7 +1296,7 @@ La wiki de M11 ya es escalable a propósito (categorías → entradas → bloque
 | **C · Sinergia por vecinos** | Dos torres **pegadas** se potencian (Hielo junto al Cañón: el Cañón pega más a lo ralentizado; Incendiaria + Eléctrica: el rayo quema) | Mediano | Sin torres nuevas ni arte, pero hay que **mostrar** los vínculos y balancear pares |
 | **D · Recetas** | Dos torres **distintas** adyacentes se fusionan en una híbrida | Grande | Con 8 torres son 28 pares: demasiado, salvo pocas recetas elegidas a mano |
 
-**Orden acordado (Lucas, 2026-09-30, D-041): B, después C, y la A (fusión) para más adelante.** *Recomendación original de Claude: ir por **B y después A**.* Con B se resuelve lo difícil (que una torre ocupe 4 casillas) con un solo dibujo y un solo balance. Con A, las fusiones pueden salir **de los datos** (cada torre declara su versión fusionada con multiplicadores) y **reusar el mismo dibujo agrandado** con un marco dorado, sin ocho dibujos nuevos.
+**Orden acordado (Lucas, 2026-09-30, D-041): B, después C, y la A (fusión) para más adelante. La B (el Mortero 2×2) se especifica en §5.7 (M19, RF-290 a RF-299).** *Recomendación original de Claude: ir por **B y después A**.* Con B se resuelve lo difícil (que una torre ocupe 4 casillas) con un solo dibujo y un solo balance. Con A, las fusiones pueden salir **de los datos** (cada torre declara su versión fusionada con multiplicadores) y **reusar el mismo dibujo agrandado** con un marco dorado, sin ocho dibujos nuevos.
 
 **Reglas a decidir cuando se tome:**
 - ¿La fusión **se puede deshacer**? (Propuesta: no; se puede **vender** y devuelve una parte, RF-72.)

@@ -817,3 +817,25 @@
   **Refs:** D-043.
   **Hecho cuando:** pasan todos los tests y las exportaciones se comprueban.
   **Resultado:** `tools/ejemplos/mapa_torres_apagadas.json` (el nivel 4 con tema de ruinas y diez oleadas con los dos enemigos; **sin balancear**). **Esta vez el bot sí los nota.** Con la misma partida cambiando el Chamán por un Troll y el Espejo por un Tanque: la estrategia `mix` termina con **10 vidas en vez de 20**, `smart` con 18 en vez de 20 y `basic` (solo Ametralladoras, todas cerca del camino) con **2 vidas en vez de 20**. Es lo que se diseñó: castigan a las defensas pegadas al camino y de poco alcance, y las mezcladas aguantan mejor. El balance fino queda para el nivel 10, donde debutan (D-041). CONTENIDO.md (los cinco datos nuevos), guía de arte (los dos últimos tonos), CHANGELOG, ONBOARDING y B-06/B-07 al día; se exportaron los cuatro.
+
+## M19 — Torres de 2×2: el Mortero *(pedido por Lucas, D-041, D-044)*
+
+- [ ] **T138 · Torres de más de una casilla: datos y ocupación**
+  `TowerData.footprint`, `Tower.origin_cell`/`cells()`, registro de ocupación por casilla, `can_build`, seleccionar y vender.
+  **Refs:** RF-290, RF-291, RF-293, RF-294, D-044.
+  **Hecho cuando:** los tests comprueban con una torre de prueba de `footprint` 2 el criterio de aceptación de RF-291 (tres casillas libres y una de camino: no se construye y no se cobra; cuatro libres: se construye), que un clic en cualquiera de las cuatro la selecciona, que ninguna se puede reusar, que vender devuelve el 70 % y libera las cuatro, el borde del mapa, y que las ocho torres de hoy no cambian.
+
+- [ ] **T139 · Vista previa y dibujo de la torre grande**
+  Vista previa centrada en el mouse con cuatro casillas verdes o rojas; `Tower._draw` escalado; anillo y aturdimiento escalados.
+  **Refs:** RF-292, RF-295.
+  **Hecho cuando:** los tests comprueban la casilla de origen para `footprint` 1 y 2 (mismo resultado de siempre para 1) y que el Chamán y el Espejo miden hasta el centro; una captura muestra la vista previa roja y verde y la torre construida.
+
+- [ ] **T140 · El Mortero y la barra de 9 torres**
+  `mortar.tres`, torreta y bomba, tecla 9, barra y Wiki.
+  **Refs:** RF-296, RF-297, RF-298, RF-299.
+  **Hecho cuando:** los tests comprueban los datos (RF-296), la tecla 9, que la barra no tapa "Próxima oleada" y que la Wiki anota el tamaño; capturas de la barra, del Mortero construido en un mapa real y de su disparo con área.
+
+- [ ] **T141 · Cierre de M19**
+  Una estrategia del bot que compra Morteros, balance de partida, documentación, CHANGELOG y exportaciones.
+  **Refs:** RF-296, D-044.
+  **Hecho cuando:** pasan todos los tests, el bot muestra si el Mortero vale la pena contra enemigos duros (por ejemplo, el mapa de auras), los números de RF-296 se ajustan si hace falta y se comprueban las exportaciones.
