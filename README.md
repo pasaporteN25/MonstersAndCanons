@@ -4,7 +4,7 @@
 
 Juego *tower defense* 2D hecho en **Godot 4** con **GDScript**, construido con **SDD (Spec-Driven Development)**.
 
-> **Estado actual:** M1 a M13 ✅ (juego completo, 7 niveles, 8 torres, modo de pruebas con editor de mapas, mapas de la comunidad, Wiki con bestiario, mapas de tamaño variable con zoom, récords, niveles en archivos de texto y versión para Linux) y versión Android probada en un celular. Tests automáticos en GitHub (D-030).
+> **Estado actual:** M1 a M15 ✅ (juego completo, 7 niveles, 8 torres, modo de pruebas con editor de mapas, mapas de la comunidad, Wiki con bestiario, mapas de tamaño variable con zoom, siete temas de paisaje y leyenda, récords, niveles en archivos de texto y versión para Linux) y versión Android probada en un celular. Tests automáticos en GitHub (D-030).
 >
 > **Versión de Godot:** 4.7.2 estable (renderizador *Compatibility*).
 >
@@ -127,6 +127,10 @@ godot --headless --path . --export-release "Windows (pruebas)" build/JuegoA_prue
 - Abajo al centro siempre dice "MODO PRUEBAS", para no confundirlo con el juego normal.
 - El `JuegoA.exe` normal y el `.apk` **no** lo tienen.
 - Desde el editor de Godot: *Proyecto → Configuración del proyecto → Editor → Run → Main Run Args* = `-- --pruebas`.
+
+## Paisajes de mapa
+
+Un nivel puede elegir su **tema** (pradera, desierto, nieve, volcán, bosque, pantano o ruinas) y declarar una **leyenda** con letras nuevas (lago, hielo, lava, flores, cactus…). Hay un mapa de ejemplo por tema en `tools/ejemplos/`. Cómo se escriben: [`CONTENIDO.md`](CONTENIDO.md).
 
 ## Wiki
 

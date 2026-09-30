@@ -261,3 +261,9 @@
 - **Qué se toma:** la idea del **director de arte** (→ guía de arte) y de las **reglas por carpeta** (→ `.claude/rules/`). Quedan anotadas como sugerencias (backlog): informe de prueba, auditoría de recursos, notas de versión y registro de deuda técnica.
 - **Qué NO se toma:** los 49 agentes, los sprints y retrospectivas, las plantillas de documentos de diseño y los **hooks** (Lucas: `validate-commit` no hace falta). El flujo actual (spec, decisiones, tareas, tests, commit) ya cubre lo que ese marco resuelve, con menos contexto y sin ejecutar scripts ajenos.
 - **Por qué reglas por carpeta y no todo en un solo archivo:** son **cortas, específicas y se cargan solo donde se trabaja**; la constitución sigue siendo la fuente y las reglas la recuerdan junto con los errores que ya nos pasaron (tabuladores, `StringName`, `JSON.parse_string`, funciones que cambian de pantalla en los tests).
+
+### D-041 · El orden de las próximas etapas
+- **Fecha:** 2026-09-30 · **Estado:** Aceptada · **Decidió:** Lucas
+- **Qué:** después de leyenda y temas (M15) el orden es: **1)** enemigos con aura, **Guardián y Curandero**; **2)** **Chamán y Espejo**, con la regla nueva de "torre aturdida"; **3)** **torre 2×2 que se construye directo** (B-16, forma B); **4)** **sinergias entre torres vecinas** (B-16, forma C); **5)** los **niveles 8, 9 y 10**, que estrenan todo lo anterior. La **fusión** de 4 torres (B-16, forma A) queda **para más adelante**, sin fecha. El **editor con tema y leyenda** (M16) queda también para otra etapa.
+- **Por qué los niveles al final:** cada nivel nuevo debe estrenar enemigos, torres y paisajes que ya existan; hacerlos antes obligaría a rehacerlos (D-036 y D-039 dejaron listas las piezas visuales y de datos).
+- **Detalle de los enemigos** (aspecto, datos, números de partida y contrajuego): B-07 ampliado. **Detalle de las torres:** B-16.

@@ -12,15 +12,18 @@ const GATE: Texture2D = preload("res://assets/sprites/map/gate.svg")
 var _ground: TileMapLayer
 var _exit_cells: Array[Vector2i] = []
 var _theme: StringName = MapThemes.DEFAULT
+var _legend_cells: Dictionary = {}  # casilla → nombre del dibujo (RF-262)
 var _palette: Dictionary = MapThemes.palette(MapThemes.DEFAULT)
 
 
 ## Level la llama al estar lista (constitución P6: el padre le da lo que necesita).
 ## `exit_cells`: salidas dentro del mapa, donde se dibuja una puerta (RF-06). `theme`: el paisaje (RF-260).
-func paint(ground: TileMapLayer, exit_cells: Array[Vector2i] = [], theme: StringName = MapThemes.DEFAULT) -> void:
+## `legend_cells`: los dibujos que pidió la leyenda del nivel, casilla por casilla (RF-262).
+func paint(ground: TileMapLayer, exit_cells: Array[Vector2i] = [], theme: StringName = MapThemes.DEFAULT, legend_cells: Dictionary = {}) -> void:
 	_ground = ground
 	_exit_cells = exit_cells
 	_theme = theme
+	_legend_cells = legend_cells
 	_palette = MapThemes.palette(theme)
 	position = ground.position
 	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS  # D-023
@@ -40,6 +43,9 @@ func _draw() -> void:
 		var rng := RandomNumberGenerator.new()
 		rng.seed = hash(cell)
 		var origin: Vector2 = Vector2(cell) * tile
+		if _legend_cells.has(cell):
+			_draw_legend(cell, origin, rng, _legend_cells[cell])
+			continue
 		match _ground.get_cell_atlas_coords(cell):
 			Level.ATLAS_GRASS:
 				_draw_ground(origin, rng)
@@ -50,6 +56,83 @@ func _draw() -> void:
 				draw_texture_rect(blocked_decor(cell, _theme), Rect2(origin, Vector2(tile, tile)), false)
 	for cell: Vector2i in _exit_cells:
 		draw_texture_rect(GATE, Rect2(Vector2(cell) * tile, Vector2(tile, tile)), false)  # RF-06
+
+
+## RF-263: una casilla de la leyenda. Un "objeto" va sobre el suelo del tema; un "suelo" (agua, hielo,
+## lava, barro) cubre toda la casilla.
+func _draw_legend(cell: Vector2i, origin: Vector2, rng: RandomNumberGenerator, drawing: String) -> void:
+	var tile: float = Rules.TILE_SIZE
+	if MapDrawings.kind(drawing) == MapDrawings.KIND_OBJECT:
+		_draw_ground(origin, rng)
+		draw_texture_rect(MapDrawings.texture(drawing), Rect2(origin, Vector2(tile, tile)), false)
+		return
+	var colors: Dictionary = MapDrawings.ground_colors(drawing)
+	draw_rect(Rect2(origin, Vector2(tile, tile)), colors["base"])
+	match drawing:
+		"agua":
+			_draw_waves(origin, rng, colors)
+		"hielo":
+			_draw_ice(origin, rng, colors)
+		"lava":
+			_draw_lava(origin, rng, colors)
+		"barro":
+			_draw_puddles(origin, rng, colors)
+	# Donde la mancha termina, un borde (contra el suelo, no contra otra casilla igual).
+	var sides: Array[Vector2i] = [Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT]
+	for side: Vector2i in sides:
+		var neighbor: Vector2i = cell + side
+		if not _is_inside(neighbor) or _legend_cells.get(neighbor, "") == drawing:
+			continue
+		var a: Vector2 = origin + Vector2(maxf(side.x, 0.0), maxf(side.y, 0.0)) * tile
+		var along: Vector2 = Vector2(absf(side.y), absf(side.x)) * tile
+		draw_line(a, a + along, colors["edge"], 4.0)
+		var inward: Vector2 = Vector2(-side) * 4.0
+		draw_line(a + inward, a + along + inward, Color(colors["light"], 0.55), 2.0)
+
+
+## Agua: rayitas claras horizontales (reflejos).
+func _draw_waves(origin: Vector2, rng: RandomNumberGenerator, colors: Dictionary) -> void:
+	var tile: float = Rules.TILE_SIZE
+	for i: int in rng.randi_range(2, 3):
+		var p: Vector2 = origin + Vector2(rng.randf_range(8, tile - 26), rng.randf_range(10, tile - 8))
+		var points := PackedVector2Array([p, p + Vector2(6, -2), p + Vector2(12, 0), p + Vector2(18, -2)])
+		draw_polyline(points, Color(colors["light"], 0.8), 2.0)
+	if rng.randf() < 0.35:
+		draw_circle(origin + Vector2(rng.randf_range(10, tile - 10), rng.randf_range(10, tile - 10)), rng.randf_range(3.0, 6.0), Color(colors["dark"], 0.5))
+
+
+## Hielo: una grieta y un destello.
+func _draw_ice(origin: Vector2, rng: RandomNumberGenerator, colors: Dictionary) -> void:
+	var tile: float = Rules.TILE_SIZE
+	var p: Vector2 = origin + Vector2(rng.randf_range(8, tile * 0.4), rng.randf_range(10, tile - 10))
+	var points := PackedVector2Array([p])
+	for i: int in 3:
+		p += Vector2(rng.randf_range(7, 14), rng.randf_range(-9, 9))
+		points.append(p)
+	draw_polyline(points, Color(colors["dark"], 0.9), 1.6)
+	var s: Vector2 = origin + Vector2(rng.randf_range(10, tile - 10), rng.randf_range(10, tile - 10))
+	draw_line(s, s + Vector2(7, -5), colors["light"], 2.0)
+
+
+## Lava: manchas oscuras (la costra) y venas brillantes.
+func _draw_lava(origin: Vector2, rng: RandomNumberGenerator, colors: Dictionary) -> void:
+	var tile: float = Rules.TILE_SIZE
+	for i: int in rng.randi_range(1, 2):
+		draw_circle(origin + Vector2(rng.randf_range(10, tile - 10), rng.randf_range(10, tile - 10)), rng.randf_range(5.0, 9.0), Color(colors["dark"], 0.75))
+	var p: Vector2 = origin + Vector2(rng.randf_range(6, tile * 0.4), rng.randf_range(12, tile - 12))
+	var points := PackedVector2Array([p])
+	for i: int in 3:
+		p += Vector2(rng.randf_range(6, 12), rng.randf_range(-8, 8))
+		points.append(p)
+	draw_polyline(points, colors["light"], 2.4)
+
+
+## Barro: manchas más oscuras y más claras.
+func _draw_puddles(origin: Vector2, rng: RandomNumberGenerator, colors: Dictionary) -> void:
+	var tile: float = Rules.TILE_SIZE
+	for i: int in rng.randi_range(2, 3):
+		var c: Color = colors["dark"] if rng.randf() < 0.55 else colors["light"]
+		draw_circle(origin + Vector2(rng.randf_range(10, tile - 10), rng.randf_range(10, tile - 10)), rng.randf_range(3.0, 7.0), Color(c, 0.7))
 
 
 ## El suelo de una casilla: el color de fondo del tema (la pradera se ve por el TileSet) y su decoración.

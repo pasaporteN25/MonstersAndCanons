@@ -59,7 +59,7 @@ func show_map(rows: PackedStringArray, grid: MapGrid, theme: StringName = MapThe
 	var gates: Array[Vector2i] = []
 	if grid.exit_cell != Vector2i(-1, -1) and not grid.is_on_border(grid.exit_cell):
 		gates.append(grid.exit_cell)
-	_decor.paint(_ground, gates, theme)
+	_decor.paint(_ground, gates, theme, grid.legend_cells)
 	_overlay.queue_redraw()
 
 

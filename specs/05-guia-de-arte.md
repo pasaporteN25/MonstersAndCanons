@@ -49,6 +49,7 @@ Cada terna es **luz / medio / sombra** del degradé de relleno. Los nuevos enemi
 - **Lo construible y lo bloqueado se distinguen de un vistazo:** un objeto de decoración (roca, cactus, pino, columna) nunca se parece a una torre ni a un enemigo.
 - **Ningún enemigo se pierde sobre ningún suelo.** Cuidado especial: el Troll (verde) en el bosque y el pantano, la Araña y la Cría (verdes azulados) en la nieve y el pantano, el Lobo (gris) en las ruinas y el volcán. Cada tema se aprueba con una hoja que pone **todos los enemigos sobre su suelo y su camino**, a 34 px. Si alguno se pierde, se corrige el **suelo del tema** (menos saturado, más claro u oscuro), no el enemigo.
 - **Los objetos de un tema usan la misma técnica** (contorno, degradé de 3 paradas, una línea de luz); los suelos (agua, hielo, lava, barro) son **planos con reflejos**, sin contorno grueso.
+- **Los siete temas** están en la práctica en `scripts/logic/map_themes.gd` (paleta y decoración) y sus mapas de ejemplo en `tools/ejemplos/`. La revisión de M15 mostró que con el **contorno oscuro** de los enemigos ninguno se pierde sobre ningún suelo; lo que sí falló fue el **camino** (en el bosque y el pantano casi se confundía con el suelo) y por eso hay un test que mide su diferencia de claridad.
 - **El pasto, el camino y el borde de cada tema** salen de una paleta en código (plan §6.12, `MapThemes`); los dibujos de decoración son SVG en `assets/sprites/map/`.
 
 ## 5. Cómo se comprueba un dibujo nuevo

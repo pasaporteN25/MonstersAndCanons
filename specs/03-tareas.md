@@ -724,15 +724,17 @@
   **Hecho cuando:** los tests del tema pasan para los siete; las capturas muestran los siete temas juntos, para que Lucas las apruebe.
   **Resultado:** Bosque (árboles, troncos, helechos, hojas caídas), pantano (juncos, troncos, hongos, barro con charcos) y ruinas (columnas rotas, bloques caídos, estatuas, adoquines). **Se hicieron 16 dibujos nuevos** en `assets/sprites/map/` con el estilo de los existentes (contorno `#2b2233`, sombra suave en el suelo, una faceta de luz). La hoja con los enemigos sobre el suelo y el camino de cada tema, a tamaño de juego, muestra que **todos se distinguen** gracias a su contorno oscuro (guía de arte §4). Un detalle de Godot que costó un rato: en una prueba con ventana, un `load()` en tiempo de ejecución de un SVG recién importado se dibuja **blanco**; con `preload` (como usa el juego) se ve bien. 15 tests nuevos (615 en total).
 
-- [ ] **T125 · Los dibujos de la leyenda**
+- [x] **T125 · Los dibujos de la leyenda**
   `MapDrawings` (catálogo), el arte de los dibujos y su pintado en `LevelDecor` (suelo que se une con los vecinos, objetos sobre el suelo).
   **Refs:** RF-263.
   **Hecho cuando:** los tests comprueban que cada dibujo del catálogo existe y se pinta, y que un dibujo desconocido es un error; las capturas muestran un mapa con lago, hielo, lava, barro y objetos.
+  **Resultado:** `MapDrawings` ([código](../scripts/logic/map_drawings.gd)): el catálogo de 16 dibujos, 12 **objetos** (roca, árbol, arbusto, flores, cactus, pino, columna, tronco, helecho, junco, hongo, estatua) y 4 **suelos** (agua, hielo, lava, barro). `LevelDecor` pinta un objeto sobre el suelo del tema y un suelo cubriendo la casilla, con su detalle (reflejos del agua, grietas del hielo, venas de la lava, manchas de barro) y **un borde donde la mancha termina** (no entre dos casillas iguales). El editor dibuja lo mismo (`MapView`). Las capturas de los siete mapas de ejemplo muestran un lago, un oasis, una laguna helada, un río de lava, flores, cactus, pinos y columnas sobre el paisaje de cada tema. 10 tests nuevos (625 en total).
 
-- [ ] **T126 · Cierre de M15: mapas de ejemplo, documentación y exportaciones**
+- [x] **T126 · Cierre de M15: mapas de ejemplo, documentación y exportaciones**
   Un mapa de ejemplo por tema (fuera del juego), CONTENIDO.md, README, ONBOARDING; exportar los cuatro.
   **Refs:** D-039.
   **Hecho cuando:** pasan todos los tests y se ven los siete temas en el paquete exportado.
+  **Resultado:** Un mapa de ejemplo por tema en `tools/ejemplos/tema_<tema>.json` (el nivel 4 con parches de leyenda; fuera del juego exportado, y un test comprueba que son válidos, sin avisos y con **los mismos recorridos** que el original). CONTENIDO.md (sección de temas y leyenda), README, ONBOARDING (una prueba manual nueva), guía de arte y **CHANGELOG.md**. Se exportaron los cuatro.
 
 ## M16 — El editor con temas y leyenda *(pedido por Lucas: "en otra etapa"; sin fecha)*
 

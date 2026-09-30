@@ -108,7 +108,7 @@ Para crear el `.exe` o el `.apk`, Godot necesita sus **plantillas de exportació
 En el editor: **Editor → Administrar plantillas de exportación** → **Descargar e instalar**.
 
 **✅ Comprobar:** tiene que existir la carpeta
-`%APPDATA%\Godot\export_templates\4.7.2.stable\` con archivos como `windows_release_x86_64.exe` y `android_debug.apk`.
+`%APPDATA%\Godot\export_templates\4.7.2.stable` con archivos como `windows_release_x86_64.exe` y `android_debug.apk`.
 
 ---
 
@@ -134,7 +134,7 @@ godot --headless --path . --export-release "Windows (pruebas)" build/JuegoA_prue
 
 **✅ Comprobar:** al abrirlo, abajo al centro dice "MODO PRUEBAS · F1: panel", todos los niveles se pueden elegir, y en la partida `F1` abre el panel de pruebas. En el log de esa ejecución aparece "Modo de pruebas activado". Usa su propio guardado (`save_pruebas.json`), así que no toca el progreso ni los récords del `.exe` normal.
 
-El botón **"Editor de mapas"** (spec §10.3) está en **todas las versiones de escritorio** (desde M14, D-038; el celular no lo ofrece): se dibujan niveles con el mouse, se prueban al instante y se guardan en `%APPDATA%\Godot\app_userdata\JuegoA\maps\`. Comprobá que también está en el `.exe` normal y que abrirlo no cambia el progreso. Cómo se usa y cómo volver oficial un mapa: [`CONTENIDO.md`](CONTENIDO.md).
+El botón **"Editor de mapas"** (spec §10.3) está en **todas las versiones de escritorio** (desde M14, D-038; el celular no lo ofrece): se dibujan niveles con el mouse, se prueban al instante y se guardan en `%APPDATA%\Godot\app_userdata\JuegoA\maps`. Comprobá que también está en el `.exe` normal y que abrirlo no cambia el progreso. Cómo se usa y cómo volver oficial un mapa: [`CONTENIDO.md`](CONTENIDO.md).
 
 ### 6.1.0 La Wiki (en todas las versiones)
 
@@ -144,9 +144,13 @@ Menú principal → **Wiki**. Comprobá que hay tres solapas (Enemigos, Torres, 
 
 Copiá `tools/ejemplos/mapa_grande.json` a la carpeta de mapas de la comunidad (ver más abajo) y jugalo desde **Jugar → Mapas de la comunidad**. Tiene que verse **entero**, centrado entre las dos barras, con las torres y los enemigos algo más chicos que en los otros niveles y la interfaz igual. Construí una torre haciendo clic en una casilla: tiene que aparecer **justo en esa casilla**. Con el ratón y, en el celular, con el dedo. Abrilo también en el editor de mapas (versión de pruebas): se ve entero y se puede pintar sin errores de puntería.
 
+### 6.1.06 Temas y leyenda
+
+Copiá los siete `tools/ejemplos/tema_*.json` a la carpeta de mapas de la comunidad y jugá cada uno. Se tiene que ver: el **paisaje** propio de cada tema, el **camino bien distinto del suelo**, los enemigos claros sobre cualquier suelo, un **lago / oasis / laguna helada / río de lava / barro** que **no se puede construir**, las **flores** (que sí) y la decoración del tema. Los enemigos siguen el **mismo camino** que en el nivel 4 (son ese nivel con parches). Abrilos también en el editor: se ven igual y se guardan sin perder el tema.
+
 ### 6.1.1 Mapas de la comunidad (en todas las versiones)
 
-Los `.json` de `%APPDATA%\Godot\app_userdata\JuegoA\maps\` (la misma carpeta donde guarda el editor) aparecen en **Jugar → Mapas de la comunidad**, en el `.exe` normal y en el de pruebas. Para comprobarlo: guardar un mapa desde el editor (en cualquiera de los dos `.exe`) y buscarlo en la solapa. Cada versión tiene su propio guardado, así que el progreso en esos mapas no se comparte entre el `.exe` normal y el de pruebas. Detalles en [`CONTENIDO.md`](CONTENIDO.md).
+Los `.json` de `%APPDATA%\Godot\app_userdata\JuegoA\maps` (la misma carpeta donde guarda el editor) aparecen en **Jugar → Mapas de la comunidad**, en el `.exe` normal y en el de pruebas. Para comprobarlo: guardar un mapa desde el editor (en cualquiera de los dos `.exe`) y buscarlo en la solapa. Cada versión tiene su propio guardado, así que el progreso en esos mapas no se comparte entre el `.exe` normal y el de pruebas. Detalles en [`CONTENIDO.md`](CONTENIDO.md).
 
 ### 6.2 La versión para GNU/Linux
 
@@ -235,9 +239,9 @@ Se usa `--export-debug` porque la versión de **prueba** se firma sola con la cl
 |---|---|
 | Progreso, récords y opciones del jugador | `%APPDATA%\Godot\app_userdata\JuegoA\save.json` |
 | Lo mismo, pero del ejecutable de pruebas | `%APPDATA%\Godot\app_userdata\JuegoA\save_pruebas.json` |
-| Registros (logs) de cada ejecución, los últimos 30 | `%APPDATA%\Godot\app_userdata\JuegoA\logs\` |
+| Registros (logs) de cada ejecución, los últimos 30 | `%APPDATA%\Godot\app_userdata\JuegoA\logs` |
 | Configuración del editor (rutas de Android, etc.) | `%APPDATA%\Godot\editor_settings-4.7.tres` |
-| Plantillas de exportación | `%APPDATA%\Godot\export_templates\4.7.2.stable\` |
+| Plantillas de exportación | `%APPDATA%\Godot\export_templates\4.7.2.stable` |
 | Caché del proyecto (se regenera sola) | `JuegoA/.godot/` |
 
 > 💡 **Empezar el progreso de cero:** borrar `save.json`. El `.exe` y el juego abierto desde el editor **comparten** ese archivo.

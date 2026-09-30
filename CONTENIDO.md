@@ -206,13 +206,43 @@ En el menú principal, en el **`JuegoA.exe` normal y en el de pruebas** (no en e
 | **Ajustes y oleadas** | Botones **Ajustes** (nombre, oro, vidas, vida extra por oleada) y **Oleadas** (agregar, copiar y quitar oleadas; en cada una, los grupos de enemigos). |
 | **Deshacer** | `Ctrl+Z` y `Ctrl+Y` (hasta 50 pasos). |
 | **Probar** | Juega ese nivel en el momento, sin guardar progreso ni récords. Al terminar (o con "Volver al editor" en la pausa) se vuelve al editor con todo como estaba. No se puede probar un nivel con errores. |
-| **Guardar / Abrir** | `Ctrl+S`. Guarda en `user://maps/<nombre>.json` (en Windows: `%APPDATA%\Godot\app_userdata\JuegoA\maps\`). "Abrir" lista tus mapas y los niveles oficiales (que se abren como **plantilla**: al guardar pide otro nombre y **nunca pisa el oficial**). |
+| **Guardar / Abrir** | `Ctrl+S`. Guarda en `user://maps/<nombre>.json` (en Windows: `%APPDATA%\Godot\app_userdata\JuegoA\maps`). "Abrir" lista tus mapas y los niveles oficiales (que se abren como **plantilla**: al guardar pide otro nombre y **nunca pisa el oficial**). |
 
 **Para volver oficial un mapa hecho con el editor:**
 1. Copiar el archivo de `maps/` a `data/levels/level_08.json` (o el número que siga: el nombre del archivo es el id del nivel).
 2. Revisarlo: `godot --headless --path . -s tools/check_level.gd -- data/levels/level_08.json`.
 3. Sumarlo al final de `"niveles"` en `data/campaign.json`.
 4. Balancearlo con el bot (sección de abajo) y anotarlo en la spec (una sección como §7.9 y el aumento de vida en §7.4). Los tests revisan solos que los niveles oficiales no tengan errores ni avisos.
+
+---
+
+## Paisaje del mapa: tema y leyenda
+
+Dos campos **opcionales** del nivel (sin ellos, el nivel se ve como siempre). Hay un ejemplo por tema en `tools/ejemplos/tema_*.json`.
+
+```json
+"tema": "nieve",
+"leyenda": {
+  "~": {"dibujo": "hielo"},
+  "p": {"dibujo": "pino"},
+  ",": {"dibujo": "flores", "construible": true}
+},
+```
+
+- **`tema`** cambia los colores y la decoración de todo el mapa: `pradera` (el de siempre), `desierto`, `nieve`, `volcan`, `bosque`, `pantano` o `ruinas`. Es solo visual.
+- **`leyenda`** declara letras nuevas (hasta 10) para usar en el `"mapa"`. Cada una dice un **`dibujo`** y, si se puede construir encima, `"construible": true` (si no se escribe, no se puede). La letra es **una sola** y no puede ser `. # X S` ni una entrada (`A` a `H`).
+- **Nunca son camino:** una letra de la leyenda es pasto (si es construible) o casilla bloqueada. Los recorridos de los enemigos no cambian.
+- **Los dibujos** son una lista cerrada:
+
+| Dibujo | Tipo | |
+|---|---|---|
+| `roca`, `arbol`, `arbusto`, `flores` | objeto | los de la pradera; las flores son decoración |
+| `cactus`, `pino`, `columna`, `tronco`, `helecho`, `junco`, `hongo`, `estatua` | objeto | uno o dos por paisaje |
+| `agua`, `hielo`, `lava`, `barro` | suelo | cubren toda la casilla y se unen entre sí; tienen un borde donde terminan |
+
+- **Errores comunes:** una letra usada en el mapa que no está en la leyenda ("Letra desconocida"), un nombre de dibujo o de tema mal escrito (el mensaje lista los que existen) y una letra de la leyenda que no se usa (solo un aviso).
+- **Un dibujo nuevo** (para el catálogo) es un SVG de 64×64 en `assets/sprites/map/` que sigue `specs/05-guia-de-arte.md`, y un nombre nuevo en `scripts/logic/map_drawings.gd`. Un tema nuevo es una paleta y una lista de decoración en `scripts/logic/map_themes.gd`.
+- El editor de mapas **conserva** el tema y la leyenda al abrir y guardar, pero **todavía no los edita**: se escriben a mano en el archivo.
 
 ---
 
@@ -224,7 +254,7 @@ Cualquier persona puede sumar mapas al juego **copiando un archivo**, en cualqui
 
 | Sistema | Carpeta |
 |---|---|
-| Windows | `%APPDATA%\Godot\app_userdata\JuegoA\maps\` |
+| Windows | `%APPDATA%\Godot\app_userdata\JuegoA\maps` |
 | Linux | `~/.local/share/godot/app_userdata/JuegoA/maps/` |
 
 Lo más fácil: en el juego, **Jugar → solapa "Mapas de la comunidad" → "Abrir carpeta de mapas"** (la crea si no existe). Al volver a la selección de nivel, el mapa aparece solo, sin reiniciar el juego.

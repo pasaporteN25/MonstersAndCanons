@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "nombre": "Ejemplo desierto",
+  "oro": 200,
+  "vidas": 20,
+  "aumento_vida": 20,
+  "tema": "desierto",
+  "leyenda": {
+    "~": {"dibujo":"agua"},
+    "c": {"dibujo":"cactus"}
+  },
+  "mapa": [
+    "....................",
+    "A##################.",
+    "..................#.",
+    "..###############.#.",
+    "..#..c....X..c..#.#X",
+    "X.#..S###########.#.",
+    "..#...~~~~........#.",
+    "..#################.",
+    "...................."
+  ],
+  "oleadas": [
+    [{"enemigo":"normal","cantidad":12,"cada":0.7}],
+    [{"enemigo":"fast","cantidad":15,"cada":0.4}],
+    [{"enemigo":"normal","cantidad":10,"cada":0.6},{"enemigo":"armored","cantidad":6,"cada":1,"desde":3}],
+    [{"enemigo":"tank","cantidad":5,"cada":1.5},{"enemigo":"flyer","cantidad":10,"cada":0.6,"desde":2}],
+    [{"enemigo":"fast","cantidad":20,"cada":0.3},{"enemigo":"armored","cantidad":8,"cada":0.8,"desde":4}],
+    [{"enemigo":"normal","cantidad":25,"cada":0.4}],
+    [{"enemigo":"flyer","cantidad":12,"cada":0.4},{"enemigo":"tank","cantidad":8,"cada":1.2,"desde":3}],
+    [{"enemigo":"armored","cantidad":12,"cada":0.7},{"enemigo":"fast","cantidad":15,"cada":0.3,"desde":4}],
+    [{"enemigo":"boss","cantidad":1,"cada":1},{"enemigo":"normal","cantidad":20,"cada":0.4,"desde":2}],
+    [{"enemigo":"tank","cantidad":10,"cada":1},{"enemigo":"flyer","cantidad":16,"cada":0.4,"desde":3}],
+    [{"enemigo":"fast","cantidad":30,"cada":0.25},{"enemigo":"armored","cantidad":10,"cada":0.8,"desde":5}],
+    [{"enemigo":"tank","cantidad":15,"cada":0.8},{"enemigo":"normal","cantidad":25,"cada":0.35,"desde":4}],
+    [{"enemigo":"flyer","cantidad":20,"cada":0.35},{"enemigo":"armored","cantidad":15,"cada":0.6,"desde":3}],
+    [{"enemigo":"boss","cantidad":2,"cada":3},{"enemigo":"fast","cantidad":25,"cada":0.25,"desde":4}],
+    [{"enemigo":"boss","cantidad":3,"cada":3},{"enemigo":"tank","cantidad":15,"cada":0.8,"desde":3},{"enemigo":"flyer","cantidad":20,"cada":0.35,"desde":6},{"enemigo":"armored","cantidad":15,"cada":0.6,"desde":10}]
+  ]
+}
