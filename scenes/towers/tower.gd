@@ -277,12 +277,17 @@ func _animate(delta: float) -> void:
 	queue_redraw()
 
 
+## RF-295: lado de la torre en casillas (1 = la de siempre); lo que se dibuja se escala con él.
+func _scale_factor() -> float:
+	return float(data.footprint)
+
+
 func _barrel_length() -> float:
-	return Rules.TILE_SIZE * 0.48
+	return Rules.TILE_SIZE * 0.48 * _scale_factor()
 
 
 func _barrel_width() -> float:
-	return Rules.TILE_SIZE * (0.22 if stats().splash_radius_tiles > 0.0 else 0.13)
+	return Rules.TILE_SIZE * (0.22 if stats().splash_radius_tiles > 0.0 else 0.13) * _scale_factor()
 
 
 func _barrel_tip_global() -> Vector2:
@@ -295,17 +300,19 @@ func _outline_color() -> Color:
 
 
 func _draw() -> void:
-	var half: float = Rules.tiles_to_px(BODY_SIZE_TILES) / 2.0
+	var factor: float = _scale_factor()
+	var half: float = Rules.tiles_to_px(BODY_SIZE_TILES) / 2.0 * factor
 	var outline: Color = _outline_color()
-	# RF-150: los dibujos ocupan una casilla entera, centrados en la torre.
-	var tile_rect := Rect2(-Rules.TILE_SIZE / 2.0, -Rules.TILE_SIZE / 2.0, Rules.TILE_SIZE, Rules.TILE_SIZE)
+	# RF-150: los dibujos ocupan una casilla entera (o el cuadrado entero, RF-295), centrados en la torre.
+	var side: float = Rules.TILE_SIZE * factor
+	var tile_rect := Rect2(-side / 2.0, -side / 2.0, side, side)
 	var base: Texture2D = stats().base_texture
 	# Base (y su sombra, RF-126, un poco desplazada hacia abajo a la derecha).
 	if base != null:
-		draw_circle(Vector2(4, 5), Rules.TILE_SIZE * 0.44, Color(0, 0, 0, 0.22))
+		draw_circle(Vector2(4, 5) * factor, Rules.TILE_SIZE * 0.44 * factor, Color(0, 0, 0, 0.22))
 		draw_texture_rect(base, tile_rect, false)
 	else:  # RF-156: sin dibujo, el cuadrado de color de antes.
-		draw_rect(Rect2(Vector2(-half, -half) + Vector2(4, 5), Vector2(half, half) * 2.0), Color(0, 0, 0, 0.22))
+		draw_rect(Rect2(Vector2(-half, -half) + Vector2(4, 5) * factor, Vector2(half, half) * 2.0), Color(0, 0, 0, 0.22))
 		var rect := Rect2(-half, -half, half * 2.0, half * 2.0)
 		draw_rect(rect, data.color)
 		draw_rect(rect, outline, false, 2.0)
@@ -313,7 +320,7 @@ func _draw() -> void:
 	var length: float = _barrel_length()
 	var width: float = _barrel_width()
 	draw_set_transform(Vector2.ZERO, aim_angle)
-	var back: float = RECOIL_PX * _recoil
+	var back: float = RECOIL_PX * _recoil * factor
 	if data.turret_texture != null:
 		draw_texture_rect(data.turret_texture, Rect2(tile_rect.position - Vector2(back, 0), tile_rect.size), false)
 	else:
@@ -328,9 +335,9 @@ func _draw() -> void:
 		draw_circle(Vector2.ZERO, half * 0.26, data.color)
 	# RF-75: un puntito por nivel, abajo y al centro (encima de todo, para que siempre se vean).
 	for i: int in level_number():
-		var dot := Vector2((i - (level_number() - 1) / 2.0) * 8.0, half - 4.0)
-		draw_circle(dot, 3.0, Color(1.0, 0.84, 0.3))
-		draw_arc(dot, 3.0, 0.0, TAU, 12, Color(0, 0, 0, 0.6), 1.0)
+		var dot := Vector2((i - (level_number() - 1) / 2.0) * 8.0 * factor, half - 4.0 * factor)
+		draw_circle(dot, 3.0 * factor, Color(1.0, 0.84, 0.3))
+		draw_arc(dot, 3.0 * factor, 0.0, TAU, 12, Color(0, 0, 0, 0.6), 1.0)
 	if is_stunned():
 		_draw_stun(tile_rect)
 
@@ -340,7 +347,7 @@ func _draw_stun(tile_rect: Rect2) -> void:
 	draw_rect(tile_rect, STUN_DIM)
 	for i: int in STUN_SPARK_COUNT:
 		var angle: float = _stun_anim * 4.0 + TAU * i / STUN_SPARK_COUNT
-		var p := Vector2(cos(angle) * 20.0, -20.0 + sin(angle) * 7.0)
+		var p := Vector2(cos(angle) * 20.0, -20.0 + sin(angle) * 7.0) * _scale_factor()
 		draw_line(p + Vector2(-4, 0), p + Vector2(4, 0), Color(0.1, 0.08, 0.15), 4.4)
 		draw_line(p + Vector2(0, -4), p + Vector2(0, 4), Color(0.1, 0.08, 0.15), 4.4)
 		draw_line(p + Vector2(-3.4, 0), p + Vector2(3.4, 0), Color(1.0, 0.95, 0.5), 2.2)

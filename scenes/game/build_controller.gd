@@ -193,7 +193,7 @@ func sell(tower: Tower) -> int:
 func _process(_delta: float) -> void:
 	if _selected < 0:
 		return
-	_hover_cell = _level.cell_at(get_global_mouse_position())
+	_hover_cell = origin_for(get_global_mouse_position(), _tower_types[_selected].footprint)
 	queue_redraw()  # se redibuja siempre: el color también cambia si cambia el oro
 
 
@@ -256,13 +256,20 @@ func _draw() -> void:
 	if _selected_placed != null:
 		_draw_range(_selected_placed.global_position, _selected_placed.range_px())
 	var tower: TowerData = selected_tower()
-	if tower == null or not _level.is_inside(_hover_cell):
+	if tower == null:
 		return
-	# RF-40 y RF-41: casilla verde/roja, torre fantasma y círculo de alcance.
-	var center: Vector2 = _level.cell_center(_hover_cell)
+	var cells: Array[Vector2i] = footprint_cells(_hover_cell, tower.footprint)
+	if not cells.any(_level.is_inside):
+		return
+	# RF-40, RF-41 y RF-292: casillas verdes/rojas (todas las de la torre), torre fantasma y círculo de alcance.
 	var tile: float = Rules.TILE_SIZE
-	var cell_rect := Rect2(center - Vector2(tile, tile) / 2.0, Vector2(tile, tile))
-	draw_rect(cell_rect, VALID_TINT if can_build(tower, _hover_cell) else INVALID_TINT)
+	var center: Vector2 = _level.cell_center(_hover_cell) + Vector2.ONE * (tower.footprint - 1) * tile / 2.0
+	var tint: Color = VALID_TINT if can_build(tower, _hover_cell) else INVALID_TINT
+	for cell: Vector2i in cells:
+		var cell_center: Vector2 = _level.cell_center(cell)
+		draw_rect(Rect2(cell_center - Vector2(tile, tile) / 2.0, Vector2(tile, tile)), tint)
+	var side: float = tile * tower.footprint
+	var cell_rect := Rect2(center - Vector2(side, side) / 2.0, Vector2(side, side))
 	var base: Texture2D = tower.levels[0].base_texture
 	if base != null and tower.turret_texture != null:
 		# RF-150: la torre de nivel 1 con su torreta mirando hacia arriba, semitransparente.
@@ -272,7 +279,7 @@ func _draw() -> void:
 		draw_texture_rect(tower.turret_texture, Rect2(-cell_rect.size / 2.0, cell_rect.size), false, ghost)
 		draw_set_transform(Vector2.ZERO)
 	else:  # RF-156: sin dibujos, el cuadrado de color.
-		var half: float = Rules.tiles_to_px(Tower.BODY_SIZE_TILES) / 2.0
+		var half: float = Rules.tiles_to_px(Tower.BODY_SIZE_TILES) / 2.0 * tower.footprint
 		draw_rect(Rect2(center - Vector2(half, half), Vector2(half, half) * 2.0), Color(tower.color, 0.6))
 	_draw_range(center, Rules.tiles_to_px(tower.levels[0].range_tiles))
 

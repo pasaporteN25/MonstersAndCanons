@@ -163,3 +163,45 @@ func test_small_towers_keep_working_as_before() -> void:
 	assert_eq(tower.global_position, game.level.cell_center(Vector2i(0, 0)))
 	game.build_controller.sell(tower)
 	assert_false(game.build_controller.is_occupied(Vector2i(0, 0)))
+
+
+# --- Vista previa y dibujo (RF-292, RF-295) ---
+
+func test_the_preview_origin_is_the_usual_cell_for_small_towers() -> void:
+	var center: Vector2 = game.level.cell_center(Vector2i(6, 4))
+	assert_eq(game.build_controller.origin_for(center, 1), Vector2i(6, 4))
+	assert_eq(game.build_controller.origin_for(center + Vector2(20, -20), 1), Vector2i(6, 4), "dentro de la misma casilla")
+
+
+func test_the_preview_of_a_big_tower_is_centered_on_the_mouse() -> void:
+	# El mouse cerca de la esquina común de las casillas (6,4), (7,4), (6,5) y (7,5).
+	var corner: Vector2 = game.level.cell_center(Vector2i(6, 4)) + Vector2(Rules.TILE_SIZE, Rules.TILE_SIZE) / 2.0
+	assert_eq(game.build_controller.origin_for(corner + Vector2(10, 10), 2), Vector2i(6, 4))
+	assert_eq(game.build_controller.origin_for(corner - Vector2(10, 10), 2), Vector2i(6, 4))
+	assert_eq(game.build_controller.origin_for(corner + Vector2(40, 0), 2), Vector2i(7, 4), "se corrió media casilla")
+
+
+func test_a_big_tower_is_drawn_twice_as_big() -> void:
+	var origin: Vector2i = _free_block()
+	game.build_controller.try_build(big, origin)
+	var tower: Tower = game.build_controller.tower_at(origin)
+	assert_eq(tower._scale_factor(), 2.0)
+	assert_eq(tower._barrel_length(), Rules.TILE_SIZE * 0.48 * 2.0, "el cañón también")
+	game.build_controller.try_build(basic, Vector2i(0, 0))
+	assert_eq(game.build_controller.tower_at(Vector2i(0, 0))._scale_factor(), 1.0)
+
+
+func test_range_and_enemies_are_measured_from_the_center() -> void:
+	var origin: Vector2i = _free_block()
+	game.build_controller.try_build(big, origin)
+	var tower: Tower = game.build_controller.tower_at(origin)
+	var mirror_data: EnemyData = (load("res://data/enemies/mirror.tres") as EnemyData).duplicate()
+	mirror_data.speed_tiles = 0.0
+	var mirror: Enemy = preload("res://scenes/enemies/enemy.tscn").instantiate()
+	mirror.setup(mirror_data, game.level.get_ground_path(0), 1000)
+	game.add_child(mirror)
+	mirror.global_position = tower.global_position + Vector2(0, Rules.tiles_to_px(2.4))
+	assert_true(mirror.will_reflect(tower), "a 2,4 casillas de su centro: rebota")
+	mirror.global_position = tower.global_position + Vector2(0, Rules.tiles_to_px(2.6))
+	assert_false(mirror.will_reflect(tower), "a 2,6 casillas de su centro: no")
+	mirror.queue_free()

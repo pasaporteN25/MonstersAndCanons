@@ -356,18 +356,18 @@ func _on_tower_built(tower: Tower) -> void:
 	# Cada torre suena distinto: el sonido se llama "shot_" + el id de la torre.
 	var shot_sound := StringName("shot_%s" % tower.data.id)
 	tower.fired.connect(func(_projectile: Projectile) -> void: Audio.play(shot_sound))
-	effects.tower_built(tower.global_position, tower.data.color)
+	effects.tower_built(tower.global_position, tower.data.color, tower.data.footprint)
 	Audio.play(&"build")
 
 
 func _on_tower_upgraded(tower: Tower) -> void:
-	effects.tower_built(tower.global_position, tower.data.color)  # RF-75: mismo anillo
+	effects.tower_built(tower.global_position, tower.data.color, tower.data.footprint)  # RF-75: mismo anillo
 	_refresh_tower_panel()
 	Audio.play(&"upgrade")
 
 
 func _on_tower_sold(tower: Tower, refund: int) -> void:
-	effects.tower_sold(tower.global_position, refund)
+	effects.tower_sold(tower.global_position, refund, tower.data.footprint)
 	Audio.play(&"sell")
 
 
