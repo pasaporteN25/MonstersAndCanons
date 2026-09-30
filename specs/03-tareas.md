@@ -674,10 +674,11 @@
   **Hecho cuando:** los tests comprueban la fórmula (20×9 → 1, 26×12 → 0,75, casos intermedios), que con 20×9 **no hay cámara**, que con 26×12 el mapa queda dentro del área entre las barras y centrado, que la casilla bajo el puntero es la correcta con zoom (esquinas y centro) y que el alcance de una torre alcanza lo mismo; una captura muestra un mapa de 26×12 jugándose.
   **Resultado:** `Rules.map_zoom` y `Rules.map_camera_center` (fórmula de RF-251) y una `Camera2D` que `Game._fit_map()` agrega **solo si el mapa es más grande que 20×9** (con 20×9 no hay cámara: nada cambia). Se comprobó con una captura de un mapa de 26×12 jugándose: entra entero, queda centrado entre las dos barras (con unos 16 px libres a cada lado), la barra de arriba y la de torres no se achican, y las torres y los enemigos funcionan. Los tests comprueban que la posición de una torre y su alcance en el mundo dan exactamente lo mismo con y sin zoom, que la casilla bajo un punto de la pantalla es la correcta (centros y bordes), y que una oleada completa se juega en un mapa grande. **Lo que confirma la elección de D-037:** no hubo que tocar ni `BuildController`, ni torres, ni enemigos, ni proyectiles. 13 tests nuevos (567 en total).
 
-- [ ] **T118 · El editor respeta el tamaño**
+- [x] **T118 · El editor respeta el tamaño**
   `LevelDraft` conserva el tamaño; `MapEditor` muestra el mapa entero con su zoom y convierte bien el clic.
   **Refs:** RF-254.
   **Hecho cuando:** los tests comprueban que abrir, editar y guardar un mapa de 26×12 no lo recorta, que el clic pinta la casilla correcta con zoom y que un mapa de 20×9 se ve como siempre; una captura muestra el editor con un mapa grande.
+  **Resultado:** `MapView` se ajusta solo al tamaño del mapa (`_fit`: mismo zoom que en la partida y centrado en el área del mapa; con 20×9 queda exactamente como antes) y `cell_at_area()` convierte el punto del mouse en casilla con el zoom incluido. `LevelDraft` conserva el tamaño (`map_width()`, `map_height()`), corrige uno imposible al más cercano permitido y guardar y reabrir un mapa de 26×12 no lo recorta. La captura del editor con el mapa de ejemplo se ve entera, con el recorrido de 68 casillas y la casilla resaltada bajo el mouse. **Sigue sin poder cambiarse el tamaño desde el editor** (RF-254): un mapa grande se hace escribiendo el archivo o partiendo de uno existente. 11 tests nuevos (578 en total).
 
 - [ ] **T119 · Mapa de ejemplo y una partida completa**
   Un mapa de ejemplo de 26×12 (fuera del juego) y una partida completa con el bot en un mapa grande.

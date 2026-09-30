@@ -49,6 +49,7 @@ func _ready() -> void:
 func show_map(rows: PackedStringArray, grid: MapGrid) -> void:
 	_rows = rows
 	_grid = grid
+	_fit(grid.width, grid.height)
 	if _ground != null:
 		_ground.queue_free()
 	_ground = Level.make_ground(grid)
@@ -62,9 +63,24 @@ func show_map(rows: PackedStringArray, grid: MapGrid) -> void:
 	_overlay.queue_redraw()
 
 
-## La casilla que hay debajo de un punto de la pantalla (`local` es relativo a este nodo).
+## RF-254: un mapa más grande que 20×9 se ve entero, con el mismo zoom que en la partida (RF-251), y
+## centrado en el área del mapa. Con 20×9 no cambia nada.
+func _fit(cols: int, rows: int) -> void:
+	var zoom: float = Rules.map_zoom(cols, rows)
+	scale = Vector2(zoom, zoom)
+	position = Rules.MAP_AREA.position + (Rules.MAP_AREA.size - Vector2(cols, rows) * Rules.TILE_SIZE * zoom) / 2.0
+
+
+## La casilla que hay debajo de un punto del propio mapa (`local` es relativo a este nodo, sin zoom).
 static func cell_at(local: Vector2) -> Vector2i:
 	return Vector2i((local / Rules.TILE_SIZE).floor())
+
+
+## La casilla que hay debajo de un punto de la pantalla, contado desde la esquina de arriba a la
+## izquierda del área del mapa (lo que trae un evento del mouse de MapArea), con el zoom incluido.
+func cell_at_area(area_point: Vector2) -> Vector2i:
+	var local: Vector2 = (area_point + Rules.MAP_AREA.position - position) / scale.x
+	return cell_at(local)
 
 
 func _draw_overlay() -> void:

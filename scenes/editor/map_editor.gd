@@ -434,7 +434,7 @@ func _action_button(text: String, action: Callable) -> Button:
 
 func _on_map_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
-		var cell: Vector2i = MapView.cell_at((event as InputEventMouseMotion).position)
+		var cell: Vector2i = _view.cell_at_area((event as InputEventMouseMotion).position)
 		_view.hover_cell = cell
 		stroke_to(cell)
 	elif event is InputEventMouseButton:
@@ -445,7 +445,7 @@ func _on_map_input(event: InputEvent) -> void:
 			get_viewport().gui_release_focus()  # si se estaba escribiendo un nombre, se guarda
 			# El botón derecho borra, sea cual sea la herramienta.
 			var stroke_tool: LevelDraft.Tool = tool if click.button_index == MOUSE_BUTTON_LEFT else LevelDraft.Tool.GRASS
-			begin_stroke(MapView.cell_at(click.position), stroke_tool)
+			begin_stroke(_view.cell_at_area(click.position), stroke_tool)
 		else:
 			end_stroke()
 
