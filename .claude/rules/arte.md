@@ -14,4 +14,6 @@ Todo dibujo sigue **`specs/05-guia-de-arte.md`**: leerla antes de dibujar. En re
 - **Bestias con carácter, nunca infantiles.** Se tienen que distinguir por la silueta a **34 px**.
 - Un enemigo nuevo usa un color que **no** esté en la tabla de la guía.
 - Un dibujo nuevo se aprueba con una **hoja de contacto** (a 220 px y a 34 px) y una captura del juego; Lucas las ve antes de darlo por terminado.
+- En el código, los dibujos van con **`preload`** (no `load`): así es como los usa el juego. En una prueba con ventana, un `load()` de un SVG recién importado se ve blanco.
+- La decoración del mapa (rocas, árboles, cactus…) lleva **una sombra suave en el suelo** dibujada, como las existentes; los enemigos y las torres no (esa sombra la pone el juego).
 - El comentario del SVG va **en castellano**, en una línea, al principio.

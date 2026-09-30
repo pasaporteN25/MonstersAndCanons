@@ -309,7 +309,7 @@ func _show_error(text: String) -> void:
 ## Vuelve a dibujar el mapa y los mensajes después de un cambio.
 func refresh() -> void:
 	_notice = ""
-	_view.show_map(draft.rows(), draft.grid())
+	_view.show_map(draft.rows(), draft.grid(), draft.theme())
 	_update_messages()
 	_title.text = "Editor de mapas · %s%s" % [draft.level_name(), " *" if draft.dirty else ""]
 	_undo_button.disabled = not draft.can_undo()
@@ -323,7 +323,7 @@ func refresh() -> void:
 ## (si no, se perdería el foco del campo que se está escribiendo).
 func _on_panel_edited() -> void:
 	_notice = ""
-	_view.show_map(draft.rows(), draft.grid())
+	_view.show_map(draft.rows(), draft.grid(), draft.theme())
 	_update_messages()
 	_title.text = "Editor de mapas · %s%s" % [draft.level_name(), " *" if draft.dirty else ""]
 	_undo_button.disabled = not draft.can_undo()

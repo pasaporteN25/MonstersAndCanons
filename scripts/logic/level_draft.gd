@@ -348,6 +348,12 @@ func enemy_total(wave: int) -> int:
 
 # --- Revisar (RF-213) ---
 
+## El paisaje del mapa (RF-260): el `tema` del archivo, o la pradera si no lo dice o no existe.
+func theme() -> StringName:
+	var id: String = str(data.get("tema", MapThemes.DEFAULT))
+	return StringName(id) if MapThemes.is_valid(id) else MapThemes.DEFAULT
+
+
 ## El mapa leído con las reglas de §7.8 (recorridos, avisos, errores).
 func grid() -> MapGrid:
 	return MapGrid.parse(rows(), LevelFile.parse_legend(data))

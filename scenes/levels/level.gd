@@ -104,7 +104,7 @@ static func _center(cell: Vector2i) -> Vector2:
 func _ready() -> void:
 	var decor := get_node_or_null("Decor") as LevelDecor
 	if decor != null:
-		decor.paint(ground, inner_exit_cells())
+		decor.paint(ground, inner_exit_cells(), theme)
 
 
 ## RF-06: casillas donde termina algún camino DENTRO del mapa (ahí se dibuja una puerta).

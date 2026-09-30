@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Abeto joven nevado (casilla bloqueada de la nieve): más bajo y ancho que el pino, de dos pisos, con un
+       montoncito de nieve al pie. -->
+  <ellipse cx="33" cy="55" rx="19" ry="5.5" fill="#000000" opacity="0.22"/>
+  <rect x="28.5" y="46" width="8" height="9" rx="2" fill="#6b4526" stroke="#2b2233" stroke-width="2.4"/>
+  <g fill="#2b2233" stroke="#2b2233" stroke-width="5" stroke-linejoin="round">
+    <polygon points="8,50 32,28 56,50"/>
+    <polygon points="14,36 32,12 50,36"/>
+  </g>
+  <g fill="#3a7a55">
+    <polygon points="8,50 32,28 56,50"/>
+    <polygon points="14,36 32,12 50,36"/>
+  </g>
+  <g fill="#2b6446">
+    <polygon points="32,28 56,50 32,50"/>
+    <polygon points="32,12 50,36 32,36"/>
+  </g>
+  <g fill="#f6fbff" stroke="#bcd2ea" stroke-width="1" stroke-linejoin="round">
+    <polygon points="32,12 41,24 38,22.5 35,26.5 32,22.5 29,26 26,22.5 23,24"/>
+    <polygon points="32,28 44.5,42 41,40.5 37,45 32,40.5 27,44.5 23,40.5 19.5,42"/>
+  </g>
+  <ellipse cx="17" cy="51.5" rx="6" ry="2.6" fill="#f6fbff" stroke="#bcd2ea" stroke-width="1"/>
+  <ellipse cx="49" cy="51" rx="5" ry="2.3" fill="#f6fbff" stroke="#bcd2ea" stroke-width="1"/>
+</svg>

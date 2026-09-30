@@ -45,8 +45,8 @@ func _ready() -> void:
 	add_child(_overlay)  # va último: se dibuja encima de todo
 
 
-## Dibuja el mapa de letras `rows` (con `grid`, que es ese mismo mapa ya leído).
-func show_map(rows: PackedStringArray, grid: MapGrid) -> void:
+## Dibuja el mapa de letras `rows` (con `grid`, que es ese mismo mapa ya leído) con el paisaje `theme`.
+func show_map(rows: PackedStringArray, grid: MapGrid, theme: StringName = MapThemes.DEFAULT) -> void:
 	_rows = rows
 	_grid = grid
 	_fit(grid.width, grid.height)
@@ -59,7 +59,7 @@ func show_map(rows: PackedStringArray, grid: MapGrid) -> void:
 	var gates: Array[Vector2i] = []
 	if grid.exit_cell != Vector2i(-1, -1) and not grid.is_on_border(grid.exit_cell):
 		gates.append(grid.exit_cell)
-	_decor.paint(_ground, gates)
+	_decor.paint(_ground, gates, theme)
 	_overlay.queue_redraw()
 
 
