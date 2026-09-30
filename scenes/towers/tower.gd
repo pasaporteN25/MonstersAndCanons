@@ -30,6 +30,8 @@ var level_index: int = 0
 ## Oro gastado en esta torre (construcción + mejoras). Sirve para vender (RF-72).
 var total_invested: int = 0
 var targeting: TargetMode = TargetMode.FIRST
+## RF-293: casilla de arriba a la izquierda de la torre (la única, si ocupa una sola casilla).
+var origin_cell: Vector2i = Vector2i.ZERO
 ## Hacia dónde apunta el cañón, en radianes (0 = derecha). Empieza mirando hacia arriba.
 var aim_angle: float = -PI / 2.0
 
@@ -86,6 +88,11 @@ static func make_icon(tower_data: TowerData) -> Texture2D:
 	image.blend_rect(turret, Rect2i(Vector2i.ZERO, turret.get_size()), Vector2i.ZERO)
 	image.generate_mipmaps()
 	return ImageTexture.create_from_image(image)
+
+
+## RF-293: todas las casillas que ocupa, empezando por la de arriba a la izquierda.
+func cells() -> Array[Vector2i]:
+	return BuildController.footprint_cells(origin_cell, data.footprint)
 
 
 func stats() -> TowerLevelData:

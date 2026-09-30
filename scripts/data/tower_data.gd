@@ -17,5 +17,7 @@ extends Resource
 @export var turret_texture: Texture2D
 ## Solo visual (RF-153): el proyectil, dibujado mirando a la derecha. Vacío = círculo del color.
 @export var projectile_texture: Texture2D
+## RF-290: lado de la torre en casillas. 1 = una casilla (todas las de hoy), 2 = cuadrado de 2×2 (el Mortero).
+@export_range(1, 3) var footprint: int = 1
 ## Un elemento por nivel: índice 0 = nivel 1.
 @export var levels: Array[TowerLevelData] = []

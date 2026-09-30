@@ -820,10 +820,11 @@
 
 ## M19 — Torres de 2×2: el Mortero *(pedido por Lucas, D-041, D-044)*
 
-- [ ] **T138 · Torres de más de una casilla: datos y ocupación**
+- [x] **T138 · Torres de más de una casilla: datos y ocupación**
   `TowerData.footprint`, `Tower.origin_cell`/`cells()`, registro de ocupación por casilla, `can_build`, seleccionar y vender.
   **Refs:** RF-290, RF-291, RF-293, RF-294, D-044.
   **Hecho cuando:** los tests comprueban con una torre de prueba de `footprint` 2 el criterio de aceptación de RF-291 (tres casillas libres y una de camino: no se construye y no se cobra; cuatro libres: se construye), que un clic en cualquiera de las cuatro la selecciona, que ninguna se puede reusar, que vender devuelve el 70 % y libera las cuatro, el borde del mapa, y que las ocho torres de hoy no cambian.
+  **Resultado:** `TowerData.footprint` (lado en casillas, 1 por defecto; las ocho torres de hoy no cambian). `Tower.origin_cell` y `cells()`; `BuildController.footprint_cells` (estática), `origin_for` (la casilla de origen para el mouse: con lado 1 es la de siempre y con lado 2 centra el cuadrado) y `cells_free`; `can_build` exige las cuatro casillas construibles y libres; `try_build` pone la torre en el **centro** del cuadrado y anota las cuatro casillas; `sell` las libera todas (antes calculaba la casilla desde la posición de la torre, que con el centro en una esquina habría fallado). Seleccionar, mejorar y vender funcionan igual. 13 tests nuevos (715 en total) con una torre de prueba de 2×2: construye en cuatro libres y ocupa las cuatro, en el centro, tres libres y una de camino **no** construye ni cobra, no se superpone con otra (ni con una chica en una sola casilla), bordes del mapa, falta 1 de oro, un clic en cualquiera de las cuatro la selecciona, vender devuelve el 70 % y libera las cuatro, mejorar. Todavía **sin vista previa ni dibujo** de la torre grande (T139): por ahora no hay nada en el juego que use `footprint` 2.
 
 - [ ] **T139 · Vista previa y dibujo de la torre grande**
   Vista previa centrada en el mouse con cuatro casillas verdes o rojas; `Tower._draw` escalado; anillo y aturdimiento escalados.

@@ -79,12 +79,35 @@ func tower_at(cell: Vector2i) -> Tower:
 	return _occupied.get(cell)
 
 
-## Casilla libre, sin torre, con oro suficiente, la partida no terminó y no está en pausa (RF-104).
+## RF-290: las casillas de una torre de lado `footprint` cuya casilla de arriba a la izquierda es `origin`.
+static func footprint_cells(origin: Vector2i, footprint: int) -> Array[Vector2i]:
+	var cells: Array[Vector2i] = []
+	for y: int in footprint:
+		for x: int in footprint:
+			cells.append(origin + Vector2i(x, y))
+	return cells
+
+
+## RF-292: la casilla de arriba a la izquierda de una torre de lado `footprint` para el mouse en `global_pos`.
+## Con lado 1 es la casilla de siempre; con lado 2 el cuadrado queda centrado en el mouse.
+func origin_for(global_pos: Vector2, footprint: int) -> Vector2i:
+	return _level.cell_at(global_pos - Vector2.ONE * (footprint - 1) * Rules.TILE_SIZE / 2.0)
+
+
+## RF-291: todas las casillas son construibles y están libres.
+func cells_free(tower: TowerData, origin: Vector2i) -> bool:
+	for cell: Vector2i in footprint_cells(origin, tower.footprint):
+		if not _level.is_buildable(cell) or is_occupied(cell):
+			return false
+	return true
+
+
+## `cell` es la casilla de arriba a la izquierda. Casillas libres, con oro suficiente, la partida no
+## terminó y no está en pausa (RF-104).
 func can_build(tower: TowerData, cell: Vector2i) -> bool:
 	return not _session.is_over() \
 		and not get_tree().paused \
-		and _level.is_buildable(cell) \
-		and not is_occupied(cell) \
+		and cells_free(tower, cell) \
 		and _session.can_afford(tower.levels[0].cost)
 
 
@@ -95,9 +118,12 @@ func try_build(tower_data: TowerData, cell: Vector2i) -> bool:
 	_session.spend(tower_data.levels[0].cost)
 	var tower: Tower = TOWER_SCENE.instantiate()
 	tower.setup(tower_data)
-	tower.position = _level.cell_center(cell)  # el contenedor está en el origen
+	tower.origin_cell = cell
+	# RF-293: en el centro del cuadrado (el contenedor está en el origen).
+	tower.position = _level.cell_center(cell) + Vector2.ONE * (tower_data.footprint - 1) * Rules.TILE_SIZE / 2.0
 	_container.add_child(tower)
-	_occupied[cell] = tower
+	for occupied: Vector2i in tower.cells():
+		_occupied[occupied] = tower
 	tower_built.emit(tower)
 	queue_redraw()
 	return true
@@ -153,7 +179,8 @@ func sell(tower: Tower) -> int:
 		return 0
 	var refund: int = sell_value(tower)
 	_session.earn(refund)
-	_occupied.erase(_level.cell_at(tower.global_position))
+	for occupied: Vector2i in tower.cells():  # RF-294: se liberan todas sus casillas
+		_occupied.erase(occupied)
 	if tower == _selected_placed:
 		deselect_placed()
 	tower_sold.emit(tower, refund)
@@ -188,7 +215,7 @@ func _handle_build_mode_input(event: InputEvent) -> void:
 		_accept()
 	elif _is_click(event, MOUSE_BUTTON_LEFT):
 		# RF-43: la vista previa sigue activa para construir otra igual.
-		try_build(selected_tower(), _level.cell_at(get_global_mouse_position()))
+		try_build(selected_tower(), origin_for(get_global_mouse_position(), selected_tower().footprint))
 		_accept()
 
 
