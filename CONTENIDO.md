@@ -113,7 +113,7 @@ Un nivel es **un archivo de texto** en `data/levels/` (spec §7.8). Se abre con 
 ### Paso a paso (por ejemplo, el nivel 7)
 
 1. **Copiar** un nivel parecido: `data/levels/level_06.json` → `data/levels/level_07.json`. El nombre del archivo es el **id** del nivel (así se guardan su progreso y sus récords): no cambiarlo después.
-2. **Dibujar el mapa** en `"mapa"`: 9 filas de 20 letras cada una.
+2. **Dibujar el mapa** en `"mapa"`: normalmente 9 filas de 20 letras cada una. Puede ser más grande, **hasta 12 filas de 26 letras** (todas las filas del mismo largo): el juego lo achica solo para que entre entero (zoom, sin cambiar el alcance ni el daño de nada). Hay un mapa de ejemplo en `tools/ejemplos/mapa_grande.json`: copialo a la carpeta de mapas de la comunidad para verlo, o abrilo con `check_level`. El editor lo abre, lo muestra entero y lo guarda sin recortarlo, pero **todavía no permite cambiar el tamaño**.
 3. **Escribir las oleadas** en `"oleadas"`.
 4. **Revisarlo** sin abrir el juego:
    ```bash

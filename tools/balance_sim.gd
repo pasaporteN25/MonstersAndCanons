@@ -17,6 +17,7 @@
 #   godot ... -s tools/balance_sim.gd -- smart hp=2 cannon.damage=20
 #   godot ... -s tools/balance_sim.gd -- smart level=2          (jugar el nivel 2 de la campaña)
 #   godot ... -s tools/balance_sim.gd -- smart level=3 levelscale=25   (probar otro % de vida por oleada)
+#   godot ... -s tools/balance_sim.gd -- mix file=tools/ejemplos/mapa_grande.json   (jugar un archivo de nivel cualquiera)
 #
 # --fixed-fps 60 hace que cada frame cuente como 1/60 s sin esperar al reloj real,
 # así una partida de ~10 minutos se simula en segundos.
@@ -40,6 +41,8 @@ var path_points: Array[Vector2] = []
 var air_points: Array[Vector2] = []
 ## Nivel de la campaña a jugar (1, 2, 3…). 0 = el primero.
 var level_number: int = 0
+## file=ruta: juega un archivo de nivel en vez de uno de la campaña (por ejemplo, un mapa de ejemplo o de la comunidad).
+var level_file: String = ""
 ## levelscale=N: prueba otro % de vida por oleada para el nivel elegido (D-019). -1 = no tocar.
 var level_scale_override: int = -1
 var starting_gold_override: int = -1
@@ -59,6 +62,13 @@ func _initialize() -> void:
 	# Este script se compila antes que los autoloads: no puede usar GameFlow por su nombre.
 	var campaign: CampaignData = _keep(LevelFile.load_campaign())
 	game.level_data = campaign.levels[maxi(level_number, 1) - 1]
+	if level_file != "":
+		var result: Dictionary = LevelFile.load_level(level_file)
+		if result["level"] == null:
+			print("No se pudo leer %s: %s" % [level_file, result["errors"]])
+			quit(1)
+			return
+		game.level_data = _keep(result["level"])
 	if starting_gold_override >= 0:
 		game.level_data.starting_gold = starting_gold_override
 	if level_scale_override >= 0:
@@ -77,6 +87,9 @@ func _initialize() -> void:
 ##   <enemigo>.<campo>=valor  cambia un enemigo (ej: tank.max_health=120)
 func _apply_override(arg: String) -> void:
 	var parts: PackedStringArray = arg.split("=")
+	if parts[0] == "file":
+		level_file = parts[1] if parts[1].begins_with("res://") else "res://" + parts[1]
+		return
 	var value: float = parts[1].to_float()
 	if parts[0] == "level":
 		level_number = int(value)

@@ -140,6 +140,10 @@ Además, el menú principal de este ejecutable tiene el botón **"Editor de mapa
 
 Menú principal → **Wiki**. Comprobá que hay tres solapas (Enemigos, Torres, Guía), que cada enemigo y cada torre tienen su dibujo y sus números, y que se puede recorrer con el mouse y con el teclado (▲/▼ entre entradas, ◄/► entre solapas, Esc para volver). Los enemigos que todavía no viste en una partida salen como "???" (con el contador "Enemigos 4/9"): en el `.exe` normal empiezan cerrados y se abren al cruzártelos; en el de pruebas se ve todo. Un enemigo o una torre nuevos deberían aparecer sin tocar nada más; los artículos de la Guía están en `data/wiki/*.json` ([`CONTENIDO.md`](CONTENIDO.md)).
 
+### 6.1.05 Mapas más grandes (zoom)
+
+Copiá `tools/ejemplos/mapa_grande.json` a la carpeta de mapas de la comunidad (ver más abajo) y jugalo desde **Jugar → Mapas de la comunidad**. Tiene que verse **entero**, centrado entre las dos barras, con las torres y los enemigos algo más chicos que en los otros niveles y la interfaz igual. Construí una torre haciendo clic en una casilla: tiene que aparecer **justo en esa casilla**. Con el ratón y, en el celular, con el dedo. Abrilo también en el editor de mapas (versión de pruebas): se ve entero y se puede pintar sin errores de puntería.
+
 ### 6.1.1 Mapas de la comunidad (en todas las versiones)
 
 Los `.json` de `%APPDATA%\Godot\app_userdata\JuegoA\maps\` (la misma carpeta donde guarda el editor) aparecen en **Jugar → Mapas de la comunidad**, en el `.exe` normal y en el de pruebas. Para comprobarlo: guardar un mapa desde el editor de pruebas, abrir el `.exe` normal y buscarlo ahí. Cada versión tiene su propio guardado, así que el progreso en esos mapas no se comparte entre el `.exe` normal y el de pruebas. Detalles en [`CONTENIDO.md`](CONTENIDO.md).

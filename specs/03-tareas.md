@@ -680,12 +680,14 @@
   **Hecho cuando:** los tests comprueban que abrir, editar y guardar un mapa de 26×12 no lo recorta, que el clic pinta la casilla correcta con zoom y que un mapa de 20×9 se ve como siempre; una captura muestra el editor con un mapa grande.
   **Resultado:** `MapView` se ajusta solo al tamaño del mapa (`_fit`: mismo zoom que en la partida y centrado en el área del mapa; con 20×9 queda exactamente como antes) y `cell_at_area()` convierte el punto del mouse en casilla con el zoom incluido. `LevelDraft` conserva el tamaño (`map_width()`, `map_height()`), corrige uno imposible al más cercano permitido y guardar y reabrir un mapa de 26×12 no lo recorta. La captura del editor con el mapa de ejemplo se ve entera, con el recorrido de 68 casillas y la casilla resaltada bajo el mouse. **Sigue sin poder cambiarse el tamaño desde el editor** (RF-254): un mapa grande se hace escribiendo el archivo o partiendo de uno existente. 11 tests nuevos (578 en total).
 
-- [ ] **T119 · Mapa de ejemplo y una partida completa**
+- [x] **T119 · Mapa de ejemplo y una partida completa**
   Un mapa de ejemplo de 26×12 (fuera del juego) y una partida completa con el bot en un mapa grande.
   **Refs:** RF-255.
   **Hecho cuando:** el bot juega una partida completa en el mapa de ejemplo sin errores, y el mapa se puede copiar a la carpeta de mapas de la comunidad y jugarlo.
+  **Resultado:** `tools/ejemplos/mapa_grande.json` (26×12, camino de 68 casillas, 10 oleadas con casi todos los enemigos; **sin balancear**, es solo de ejemplo y queda fuera del juego exportado). `check_level` lo da por bueno sin avisos y el bot (`balance_sim`, que ahora acepta `file=ruta` para jugar cualquier archivo de nivel) lo juega entero: 10 oleadas, **victoria con 20 vidas** (demasiado fácil, pero no es un nivel del juego). Un test comprueba que el archivo es válido y que aparece en la carpeta de los mapas de la comunidad sin errores. 2 tests nuevos (580 en total).
 
-- [ ] **T120 · Cierre de M13: documentación y exportaciones**
+- [x] **T120 · Cierre de M13: documentación y exportaciones**
   README, ONBOARDING, CONTENIDO.md; exportar los cuatro ejecutables.
   **Refs:** D-037.
   **Hecho cuando:** pasan todos los tests y el mapa de ejemplo se juega en el paquete exportado.
+  **Resultado:** CONTENIDO.md (tamaño del mapa y el ejemplo), README y ONBOARDING (una prueba manual nueva, 6.1.05) al día. Se exportaron los cuatro (el de pruebas se pudo reemplazar esta vez: ya no estaba abierto). **Comprobación con el paquete exportado del juego normal:** el nivel 1 se ve idéntico a siempre, sin zoom ni errores. **Límite honesto:** el mapa grande **no se pudo jugar en el paquete exportado** sin copiar un archivo a la carpeta de mapas de Lucas (que tiene un mapa suyo, `test01.json`, y no quise tocarla); se comprobó con los tests, con la captura de la partida y del editor y con el bot, todos en el proyecto y no en el exportado. Además, **nadie probó todavía el zoom con el mouse o el dedo**.

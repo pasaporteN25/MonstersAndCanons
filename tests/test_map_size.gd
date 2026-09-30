@@ -133,3 +133,32 @@ func test_the_official_levels_keep_their_size() -> void:
 		var grid: MapGrid = MapGrid.parse(level.map_rows)
 		assert_true(grid.is_valid(), str(level.id))
 		assert_eq(Vector2i(grid.width, grid.height), Vector2i(20, 9), "%s no cambia de tamaño" % level.id)
+
+
+# --- El mapa de ejemplo y los mapas de la comunidad (T119) ---
+
+const EXAMPLE_PATH: String = "res://tools/ejemplos/mapa_grande.json"
+const COMMUNITY_TEST_DIR: String = "user://test_big_community/"
+
+
+func test_the_example_big_map_is_a_valid_26_by_12_level() -> void:
+	var result: Dictionary = LevelFile.load_level(EXAMPLE_PATH)
+	assert_eq(result["errors"], PackedStringArray())
+	assert_eq(result["warnings"], PackedStringArray(), "sin casillas de camino que nadie pisa")
+	var level: LevelData = result["level"]
+	var grid: MapGrid = MapGrid.parse(level.map_rows)
+	assert_eq(Vector2i(grid.width, grid.height), Vector2i(26, 12))
+	assert_eq(level.waves.size(), 10)
+
+
+func test_a_big_map_shows_up_in_the_community_folder_without_errors() -> void:
+	DirAccess.make_dir_recursive_absolute(COMMUNITY_TEST_DIR)
+	var handle := FileAccess.open(COMMUNITY_TEST_DIR + "mapa_grande.json", FileAccess.WRITE)
+	handle.store_string(FileAccess.get_file_as_string(EXAMPLE_PATH))
+	handle.close()
+	var entries: Array[Dictionary] = CommunityMaps.scan(COMMUNITY_TEST_DIR)
+	DirAccess.remove_absolute(COMMUNITY_TEST_DIR + "mapa_grande.json")
+	DirAccess.remove_absolute(COMMUNITY_TEST_DIR)
+	assert_eq(entries.size(), 1)
+	assert_eq(entries[0]["errors"], PackedStringArray())
+	assert_not_null(entries[0]["level"])
