@@ -69,6 +69,11 @@ static func from_text(text: String, id: String = "") -> LevelDraft:
 	}
 	if _to_int(source.get("aumento_vida", 0)) > 0:
 		draft.data["aumento_vida"] = _to_int(source["aumento_vida"])
+	# M15: el tema y la leyenda se conservan tal cual (el editor todavía no los edita; check() los revisa).
+	if source.get("tema") is String:
+		draft.data["tema"] = source["tema"]
+	if source.get("leyenda") is Dictionary:
+		draft.data["leyenda"] = (source["leyenda"] as Dictionary).duplicate(true)
 	# El orden de las claves del texto lo fija to_text(), no este diccionario.
 	return draft
 
@@ -345,7 +350,7 @@ func enemy_total(wave: int) -> int:
 
 ## El mapa leído con las reglas de §7.8 (recorridos, avisos, errores).
 func grid() -> MapGrid:
-	return MapGrid.parse(rows())
+	return MapGrid.parse(rows(), LevelFile.parse_legend(data))
 
 
 ## El nivel revisado con TODAS las reglas de §7.8, igual que al leer un archivo.
@@ -365,6 +370,14 @@ func to_text() -> String:
 	lines.append("  \"vidas\": %d," % lives())
 	if health_scale() > 0:
 		lines.append("  \"aumento_vida\": %d," % health_scale())
+	if data.has("tema"):
+		lines.append("  \"tema\": %s," % JSON.stringify(data["tema"]))
+	if data.has("leyenda"):
+		var legend: Dictionary = data["leyenda"]
+		var entries: PackedStringArray = []
+		for letter: Variant in legend.keys():
+			entries.append("    %s: %s" % [JSON.stringify(str(letter)), JSON.stringify(legend[letter])])
+		lines.append("  \"leyenda\": {\n" + ",\n".join(entries) + "\n  },")
 	lines.append("  \"mapa\": [")
 	var map_rows: PackedStringArray = rows()
 	for y: int in map_rows.size():

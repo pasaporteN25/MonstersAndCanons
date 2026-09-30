@@ -706,10 +706,11 @@
 
 ## M15 — Leyenda y temas *(pedido por Lucas, D-039)*
 
-- [ ] **T122 · `tema` y `leyenda` en el archivo del nivel (sin dibujo todavía)**
+- [x] **T122 · `tema` y `leyenda` en el archivo del nivel (sin dibujo todavía)**
   `LevelFile`, `LevelData` y `MapGrid` leen y validan los dos campos; una letra de leyenda es pasto o bloqueada; `LevelDraft` los conserva al abrir y guardar.
   **Refs:** RF-262, RF-264, RF-265, RF-266, RF-267.
   **Hecho cuando:** los tests comprueban cada error (letra prohibida, repetida, sin declarar, declarada y sin usar, tema o dibujo desconocido, más de 10 letras), que una letra construible se puede construir y una no, que los recorridos son **idénticos** con y sin leyenda, que abrir y guardar en el editor no pierde tema ni leyenda, y que los 7 niveles oficiales dan lo mismo que antes.
+  **Resultado:** `MapThemes` (los siete temas) y `MapDrawings` (el catálogo de 16 dibujos y si cada uno es suelo u objeto) dan las listas válidas. `LevelFile` lee y valida `tema` y `leyenda` con un mensaje claro por error (letra prohibida, de más de un carácter, dibujo desconocido con el catálogo, clave mal escrita, más de 10 letras); `MapGrid.parse(filas, leyenda)` trata cada letra como pasto (construible) o bloqueada y **nunca como camino**: un test comprueba que recorridos, entradas, salida y casillas sin usar son **idénticos** con y sin leyenda. Una letra usada sin declarar dice que existe la leyenda; una declarada y sin usar es un aviso. `LevelData` y `Level` guardan el tema y los dibujos por casilla. `LevelDraft` los conserva al abrir y guardar (y guardar dos veces da el mismo texto). Los 7 niveles oficiales siguen sin tema ni leyenda. Todavía no se **ve** nada distinto: los dibujos son T123 a T125. 21 tests nuevos (603 en total).
 
 - [ ] **T123 · Los temas: base, desierto, nieve y volcán**
   `MapThemes` (los siete, con su paleta), `LevelDecor` con paleta y decoración de `X` por tema; el arte de desierto, nieve y volcán.

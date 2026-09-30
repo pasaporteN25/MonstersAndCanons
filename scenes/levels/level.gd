@@ -14,16 +14,22 @@ const ATLAS_OF: Dictionary = {
 	MapGrid.Cell.GRASS: ATLAS_GRASS, MapGrid.Cell.PATH: ATLAS_PATH, MapGrid.Cell.BLOCKED: ATLAS_BLOCKED,
 }
 
+## M15: el paisaje (RF-260) y los dibujos que pidió la leyenda (RF-262, casilla → dibujo).
+var theme: StringName = MapThemes.DEFAULT
+var legend_cells: Dictionary = {}
+
 @onready var ground: TileMapLayer = $Ground
 @onready var entrances: Node2D = $Entrances
 
 
 ## M7 (spec §7.8): arma el mapa a partir del mapa de letras (que tiene que ser válido):
 ## el suelo, un camino terrestre y uno aéreo por entrada, y la decoración.
-static func build(grid: MapGrid) -> Level:
+static func build(grid: MapGrid, map_theme: StringName = MapThemes.DEFAULT) -> Level:
 	assert(grid.is_valid(), "Level.build necesita un mapa válido")
 	var level := Level.new()
 	level.name = "Level"
+	level.theme = map_theme
+	level.legend_cells = grid.legend_cells
 	level.add_child(make_ground(grid))
 	var entrances_node := Node2D.new()
 	entrances_node.name = "Entrances"

@@ -3,6 +3,7 @@
 #
 #   .  pasto (se construye)   #  camino   X  bloqueada
 #   A, B, C…  entradas (son camino)       S  salida (es camino)
+#   Las letras de la LEYENDA del nivel (RF-262): pasto si es construible, bloqueada si no. Nunca camino.
 #
 # Los errores se juntan en `errors`, en castellano y con la fila y la columna contadas desde 1
 # (como las muestra el Bloc de notas).
@@ -32,6 +33,8 @@ var errors: PackedStringArray = []
 var warnings: PackedStringArray = []
 ## Casillas de camino que ningún recorrido usa.
 var unused_cells: Array[Vector2i] = []
+## RF-262: el dibujo que pidió la leyenda para cada casilla (casilla → nombre del dibujo).
+var legend_cells: Dictionary = {}
 ## Casilla de cada entrada: índice 0 = A, 1 = B…
 var entrances: Array[Vector2i] = []
 var exit_cell: Vector2i = Vector2i(-1, -1)
@@ -39,11 +42,14 @@ var exit_cell: Vector2i = Vector2i(-1, -1)
 var routes: Array[Array] = []
 
 var _cells: Dictionary = {}  # Vector2i → Cell
+var _legend: Dictionary = {}  # letra → {"dibujo": String, "construible": bool}
 
 
-## Lee las filas del mapa. Si algo está mal, `errors` dice qué y dónde.
-static func parse(rows: PackedStringArray) -> MapGrid:
+## Lee las filas del mapa. Si algo está mal, `errors` dice qué y dónde. `legend` son las letras
+## extra que declaró el nivel (ya validadas por LevelFile).
+static func parse(rows: PackedStringArray, legend: Dictionary = {}) -> MapGrid:
 	var grid := MapGrid.new()
+	grid._legend = legend
 	grid._read(rows)
 	if grid.errors.is_empty():
 		grid._find_routes()
@@ -96,6 +102,7 @@ func _read(rows: PackedStringArray) -> void:
 	var found: Dictionary = {}  # letra de entrada → casilla
 	var exits: Array[Vector2i] = []
 	var grass: int = 0
+	var used_legend: Dictionary = {}
 	for y: int in height:
 		var row: String = rows[y]
 		if row.length() != width:
@@ -119,8 +126,16 @@ func _read(rows: PackedStringArray) -> void:
 				if found.has(letter):
 					errors.append("La entrada %s está dos veces (%s y %s)." % [letter, where(found[letter]), where(cell)])
 				found[letter] = cell
+			elif _legend.has(letter):
+				var entry: Dictionary = _legend[letter]
+				var buildable: bool = entry.get("construible", false)
+				_cells[cell] = Cell.GRASS if buildable else Cell.BLOCKED
+				if buildable:
+					grass += 1
+				legend_cells[cell] = entry["dibujo"]
+				used_legend[letter] = true
 			else:
-				errors.append("Letra desconocida '%s' en %s. Se usan: . # X S y las entradas A, B, C…" % [letter, where(cell)])
+				errors.append("Letra desconocida '%s' en %s. Se usan: . # X S, las entradas A, B, C… y las letras que declares en la \"leyenda\" del nivel." % [letter, where(cell)])
 	if not errors.is_empty():
 		return
 	if exits.is_empty():
@@ -140,6 +155,10 @@ func _read(rows: PackedStringArray) -> void:
 			entrances.append(found[letter])
 	if grass == 0:
 		errors.append("No hay pasto (.): no se podría construir ninguna torre.")
+	if errors.is_empty():
+		for letter: String in _legend.keys():
+			if not used_legend.has(letter):
+				warnings.append("La letra '%s' está en la leyenda pero no se usa en el mapa." % letter)
 
 
 ## RF-202: el camino más corto de cada entrada a la salida. Primero se mide, desde la salida,

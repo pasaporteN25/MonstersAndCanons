@@ -10,7 +10,8 @@ const LEVELS_DIR: String = "res://data/levels/"
 const ENEMIES_DIR: String = "res://data/enemies/"
 const CAMPAIGN_PATH: String = "res://data/campaign.json"
 
-const LEVEL_KEYS: PackedStringArray = ["version", "nombre", "oro", "vidas", "aumento_vida", "mapa", "oleadas"]
+const LEVEL_KEYS: PackedStringArray = ["version", "nombre", "oro", "vidas", "aumento_vida", "tema", "leyenda", "mapa", "oleadas"]
+const LEGEND_KEYS: PackedStringArray = ["dibujo", "construible"]
 const GROUP_KEYS: PackedStringArray = ["enemigo", "cantidad", "cada", "desde", "entrada"]
 const CAMPAIGN_KEYS: PackedStringArray = ["version", "niveles"]
 
@@ -25,6 +26,8 @@ const MAX_GOLD: int = 99999
 const MAX_LIVES: int = 999
 const MAX_HEALTH_SCALE: int = 300
 const MAX_NAME_LENGTH: int = 30
+## RF-262, RF-265: letras que puede declarar la leyenda de un nivel.
+const MAX_LEGEND: int = 10
 
 
 ## Lee el archivo de un nivel. El id del nivel es el nombre del archivo (RF-200).
@@ -58,6 +61,9 @@ static func parse(text: String, id: StringName) -> Dictionary:
 	if data.has("aumento_vida"):
 		level.health_scale_percent_per_wave = _whole(data, "aumento_vida", "", 0, MAX_HEALTH_SCALE, errors)
 
+	level.theme = _read_theme(data, errors)
+	level.legend = _read_legend(data, errors)
+
 	var grid: MapGrid = null
 	if not data.has("mapa"):
 		errors.append("Falta \"mapa\".")
@@ -65,7 +71,7 @@ static func parse(text: String, id: StringName) -> Dictionary:
 		errors.append("mapa: tiene que ser una lista de filas entre comillas, como [\"....\", \"A###\"].")
 	else:
 		level.map_rows = PackedStringArray(data["mapa"])
-		grid = MapGrid.parse(level.map_rows)
+		grid = MapGrid.parse(level.map_rows, level.legend)
 		for problem: String in grid.errors:
 			errors.append("mapa: " + problem)
 		if not grid.is_valid():
@@ -195,6 +201,71 @@ static func find_enemy(enemy_name: String) -> EnemyData:
 	if not ResourceLoader.exists(path):
 		return null
 	return load(path) as EnemyData
+
+
+# --- Tema y leyenda (RF-260, RF-262, RF-265) ---
+
+## El tema del nivel. Sin el campo, `pradera` (el de siempre).
+static func _read_theme(data: Dictionary, errors: PackedStringArray) -> StringName:
+	if not data.has("tema"):
+		return MapThemes.DEFAULT
+	var value: Variant = data["tema"]
+	if not value is String or not MapThemes.is_valid(value):
+		errors.append("tema: %s no existe. Los que hay: %s." % [JSON.stringify(value), ", ".join(MapThemes.IDS)])
+		return MapThemes.DEFAULT
+	return StringName(value)
+
+
+## La leyenda de un nivel ya leído, sin los errores (para el editor, que la conserva; los errores los da parse).
+static func parse_legend(data: Dictionary) -> Dictionary:
+	return _read_legend(data, PackedStringArray())
+
+
+## La leyenda: letra → {"dibujo": String, "construible": bool}. Devuelve la leyenda ya normalizada
+## (con `construible` siempre escrito); lo que está mal se agrega a `errors` y se saltea.
+static func _read_legend(data: Dictionary, errors: PackedStringArray) -> Dictionary:
+	var legend: Dictionary = {}
+	if not data.has("leyenda"):
+		return legend
+	if not data["leyenda"] is Dictionary:
+		errors.append("leyenda: tiene que ser un objeto con una letra por entrada, como {\"~\": {\"dibujo\": \"agua\"}}.")
+		return legend
+	var source: Dictionary = data["leyenda"]
+	if source.size() > MAX_LEGEND:
+		errors.append("leyenda: hay %d letras y el máximo es %d." % [source.size(), MAX_LEGEND])
+	for key: Variant in source.keys():
+		var letter: String = str(key)
+		var where: String = "leyenda \"%s\"" % letter
+		var problem: String = _legend_letter_problem(letter)
+		if problem != "":
+			errors.append("%s: %s" % [where, problem])
+			continue
+		if not source[key] is Dictionary:
+			errors.append("%s: tiene que ser un objeto, como {\"dibujo\": \"agua\"}." % where)
+			continue
+		var entry: Dictionary = source[key]
+		_check_keys(entry, LEGEND_KEYS, where, errors)
+		var drawing: Variant = entry.get("dibujo")
+		if not drawing is String or not MapDrawings.is_valid(drawing):
+			errors.append("%s: el dibujo %s no existe. Los que hay: %s." % [where, JSON.stringify(drawing), ", ".join(MapDrawings.ids())])
+			continue
+		var buildable: Variant = entry.get("construible", false)
+		if not buildable is bool:
+			errors.append("%s: \"construible\" tiene que ser true o false." % where)
+			continue
+		legend[letter] = {"dibujo": drawing, "construible": buildable}
+	return legend
+
+
+## Por qué una letra no sirve para la leyenda ("" si sirve): una sola, y que no sea una que ya significa algo.
+static func _legend_letter_problem(letter: String) -> String:
+	if letter.length() != 1:
+		return "tiene que ser una sola letra o símbolo."
+	if ". # X S".contains(letter) or MapGrid.ENTRANCE_LETTERS.contains(letter):
+		return "esa letra ya significa algo (. # X S y las entradas A a H)."
+	if letter == " " or letter == "\"" or letter == "\\":
+		return "no puede ser un espacio, una comilla ni una barra."
+	return ""
 
 
 # --- Valores sueltos ---
