@@ -68,11 +68,21 @@ func test_tower_without_drawings_gets_no_icon() -> void:
 
 func test_towers_of_every_level_are_drawn() -> void:
 	game.session.earn(5000)
-	# Casillas libres del nivel 1, una por torre (hasta 8).
+	# Casillas libres del nivel 1, una por torre (las ocho de una casilla).
 	var cells: Array[Vector2i] = [Vector2i(1, 2), Vector2i(4, 2), Vector2i(8, 2), Vector2i(11, 2),
 		Vector2i(5, 6), Vector2i(8, 6), Vector2i(15, 6), Vector2i(18, 6)]
-	for i: int in game.tower_types.size():
+	for i: int in cells.size():
 		assert_true(game.build_controller.try_build(game.tower_types[i], cells[i]))
+	# Las torres de 2×2 (M19) se ponen donde haya un cuadrado libre.
+	for i: int in range(cells.size(), game.tower_types.size()):
+		var big: TowerData = game.tower_types[i]
+		var origin := Vector2i(-1, -1)
+		for y: int in range(0, 8):
+			for x: int in range(0, 19):
+				if origin.x < 0 and game.build_controller.cells_free(big, Vector2i(x, y)):
+					origin = Vector2i(x, y)
+		assert_true(game.build_controller.try_build(big, origin), "%s cabe en el nivel 1" % big.id)
+		cells.append(origin)
 	await wait_process_frames(2)  # nivel 1
 	for cell: Vector2i in cells:
 		game.build_controller.try_upgrade(game.build_controller.tower_at(cell))

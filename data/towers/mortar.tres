@@ -1,0 +1,48 @@
+[gd_resource type="Resource" script_class="TowerData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tower_level_data.gd" id="1_lvl"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/base_1.svg" id="2_b1"]
+[ext_resource type="Script" path="res://scripts/data/tower_data.gd" id="3_tower"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/base_2.svg" id="4_b2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/base_3.svg" id="5_b3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/projectiles/mortar.svg" id="6_proj"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/turret_mortar.svg" id="7_turret"]
+
+[sub_resource type="Resource" id="Resource_l1"]
+script = ExtResource("1_lvl")
+cost = 300
+damage = 90
+fire_rate = 0.25
+range_tiles = 5.0
+splash_radius_tiles = 1.5
+base_texture = ExtResource("2_b1")
+
+[sub_resource type="Resource" id="Resource_l2"]
+script = ExtResource("1_lvl")
+cost = 250
+damage = 140
+fire_rate = 0.25
+range_tiles = 5.0
+splash_radius_tiles = 1.8
+base_texture = ExtResource("4_b2")
+
+[sub_resource type="Resource" id="Resource_l3"]
+script = ExtResource("1_lvl")
+cost = 350
+damage = 220
+fire_rate = 0.25
+range_tiles = 5.5
+splash_radius_tiles = 2.2
+base_texture = ExtResource("5_b3")
+
+[resource]
+script = ExtResource("3_tower")
+id = &"mortar"
+display_name = "Mortero"
+description = "Bomba lenta de gran daño en área y largo alcance. Ideal contra blindados y jefes."
+projectile_speed_tiles = 6.0
+color = Color(0.48, 0.35, 0.21, 1)
+turret_texture = ExtResource("7_turret")
+projectile_texture = ExtResource("6_proj")
+footprint = 2
+levels = Array[ExtResource("1_lvl")]([SubResource("Resource_l1"), SubResource("Resource_l2"), SubResource("Resource_l3")])

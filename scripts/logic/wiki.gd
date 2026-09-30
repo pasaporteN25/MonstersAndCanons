@@ -172,7 +172,10 @@ static func tower_entry(tower: TowerData) -> WikiEntry:
 		entry.icon.append(tower.turret_texture)
 	if tower.description != "":
 		entry.add_text(tower.description)
-	entry.add_facts([["Golpea voladores", "sí" if tower.can_hit_air else "no"]])
+	var facts: Array = [["Golpea voladores", "sí" if tower.can_hit_air else "no"]]
+	if tower.footprint > 1:  # RF-298
+		facts.append(["Tamaño", "%d×%d casillas" % [tower.footprint, tower.footprint]])
+	entry.add_facts(facts)
 	entry.add_heading("Niveles")
 	var rows: Array = [["Nivel", "Oro", "Daño", "Cadencia", "Daño/s", "Alcance"]]
 	for i: int in tower.levels.size():

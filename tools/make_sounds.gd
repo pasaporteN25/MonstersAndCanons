@@ -40,6 +40,8 @@ func _init() -> void:
 	_save("shot_burst", _mix([_tone(Wave.TRIANGLE, 500.0, 1100.0, 0.12, 0.3), _tone(Wave.NOISE, 0.0, 0.0, 0.08, 0.2)]))
 	# M5: zumbido eléctrico (onda cuadrada grave con chisporroteo).
 	_save("shot_tesla", _mix([_tone(Wave.SQUARE, 180.0, 120.0, 0.12, 0.25), _tone(Wave.NOISE, 0.0, 0.0, 0.1, 0.3)]))
+	# M19: el Mortero: un golpe grave y largo, con algo de ruido (la bomba sale del tubo).
+	_save("shot_mortar", _mix([_tone(Wave.SINE, 95.0, 38.0, 0.4, 0.8), _tone(Wave.NOISE, 0.0, 0.0, 0.22, 0.4)]))
 	# --- Partida ---
 	_save("enemy_death", _mix([_tone(Wave.SINE, 520.0, 180.0, 0.13, 0.45), _tone(Wave.NOISE, 0.0, 0.0, 0.06, 0.2)]))
 	_save("life_lost", _tone(Wave.SQUARE, 190.0, 110.0, 0.28, 0.35))

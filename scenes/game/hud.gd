@@ -10,8 +10,8 @@ signal tower_button_pressed(index: int)
 signal pause_pressed
 signal speed_pressed
 
-## RF-170: botones compactos, para que entren 8 torres sin tapar "Próxima oleada" (D-026).
-const TOWER_BUTTON_SIZE := Vector2(86, 60)
+## RF-170: botones compactos, para que entren 9 torres (M19) sin tapar "Próxima oleada" (D-026).
+const TOWER_BUTTON_SIZE := Vector2(76, 60)
 ## Ancho máximo del dibujo de la torre en su botón (RF-155).
 const TOWER_ICON_SIZE: int = 34
 ## RF-134: cuánto se ve la tarjeta de presentación de un enemigo.
@@ -197,6 +197,8 @@ func show_selected_tower(index: int) -> void:
 		var tower: TowerData = _tower_types[index]
 		_build_info_name.text = "%s · %d de oro" % [tower.display_name, tower.levels[0].cost]
 		_build_info_text.text = tower.description
+		if tower.footprint > 1:  # RF-298
+			_build_info_text.text += " Necesita %d×%d casillas libres." % [tower.footprint, tower.footprint]
 
 
 func _on_gold_changed(gold: int) -> void:

@@ -5,8 +5,8 @@
 extends GutTest
 
 const GAME_SCENE: PackedScene = preload("res://scenes/game/game.tscn")
-## RF-170: la barra y las teclas 1–8 no admiten más.
-const MAX_TOWERS: int = 8
+## RF-170 y RF-297: la barra y las teclas 1–9 no admiten más.
+const MAX_TOWERS: int = 9
 
 
 func _resources_in(dir: String) -> Array[Resource]:
@@ -91,7 +91,7 @@ func test_every_tower_is_in_the_game() -> void:
 	for resource: Resource in _resources_in("res://data/towers/"):
 		assert_has(ids, (resource as TowerData).id,
 			"torre '%s': falta agregarla a Game → Tower Types (game.tscn)" % _file_id(resource))
-	assert_lte(game.tower_types.size(), MAX_TOWERS, "RF-170: entran hasta 8 torres (teclas 1–8)")
+	assert_lte(game.tower_types.size(), MAX_TOWERS, "RF-297: entran hasta 9 torres (teclas 1–9)")
 
 
 # --- Niveles (data/levels/, spec §7.8) ---

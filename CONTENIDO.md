@@ -76,7 +76,7 @@ Los niveles son JSON, un formato de texto común que se edita a mano. Un `.tres`
 1. **Dibujos:** `assets/sprites/towers/turret_<id>.svg` (la torreta) y `assets/sprites/projectiles/<id>.svg`. Las **bases** (madera, piedra, piedra con oro) son las mismas para todas.
 2. **Sonido** *(opcional)*: `assets/audio/shot_<id>.wav`. Se puede generar uno agregando una línea en `tools/make_sounds.gd` y corriendo `godot --headless --path . -s tools/make_sounds.gd -- shot_<id>` (así no se tocan los otros sonidos).
 3. **Datos:** duplicar una torre parecida de `data/towers/` y completar (tabla de abajo). Cada torre tiene **3 niveles** (`levels`): el nivel 1 es al construirla; en los niveles 2 y 3, `cost` es lo que cuesta mejorarla.
-4. **Sumarla al juego:** abrir `scenes/game/game.tscn`, seleccionar el nodo **Game** y agregarla al final de **Tower Types**. Entran **hasta 8** (teclas 1 a 8, RF-170). Si te olvidás, un test te avisa.
+4. **Sumarla al juego:** abrir `scenes/game/game.tscn`, seleccionar el nodo **Game** y agregarla al final de **Tower Types**. Entran **hasta 9** (teclas 1 a 9, RF-170 y RF-297). Si te olvidás, un test te avisa.
 5. **Probar:** tests y el bot de balance (más abajo).
    *Aparece sola en la **Wiki** ("Torres"), con su tabla de niveles y sus efectos.*
 
