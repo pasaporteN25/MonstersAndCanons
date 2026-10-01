@@ -93,13 +93,6 @@ func test_win_and_lose() -> void:
 	assert_eq(other.session.state, LevelSession.State.LOST)
 
 
-func test_speed_x4() -> void:
-	game.dev_set_fast(true)
-	assert_eq(Engine.time_scale, DevMode.config.speeds[-1])
-	game.dev_set_fast(false)
-	assert_eq(Engine.time_scale, 1.0)
-
-
 func test_spawn_any_enemy() -> void:
 	game.dev_spawn(load("res://data/enemies/troll.tres"))
 	assert_eq(_active_enemies(), 1)

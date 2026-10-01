@@ -11,6 +11,8 @@ const FEATURE: String = "pruebas"
 const EDITOR_ARG: String = "--pruebas"
 ## RF-181: guardado del modo de pruebas.
 const SAVE_PATH: String = "user://save_pruebas.json"
+## RF-182: el texto del cartel (sin la velocidad).
+const BANNER_TEXT: String = "MODO PRUEBAS · F1: panel"
 
 ## RF-324: los números del modo de pruebas (oro del botón, velocidades).
 var config: DevConfig = preload("res://data/dev_config.tres")
@@ -25,6 +27,8 @@ var start_gold: int = -1
 var applied_wave: int = 1
 
 var _banner: CanvasLayer
+var _banner_label: Label
+var _speed: float = 1.0
 
 
 func _ready() -> void:
@@ -63,6 +67,21 @@ func reset_start() -> void:
 	applied_wave = 1
 
 
+## RF-322: el cartel dice la velocidad cuando no es x1. `Game` avisa cada vez que cambia.
+func show_speed(speed: float) -> void:
+	_speed = speed
+	if _banner_label != null:
+		_banner_label.text = banner_text()
+
+
+## RF-182 y RF-322: el texto del cartel.
+func banner_text() -> String:
+	var text: String = BANNER_TEXT
+	if not is_equal_approx(_speed, 1.0):
+		text += " · %s" % Rules.speed_text(_speed)
+	return text
+
+
 func is_banner_visible() -> bool:
 	return _banner != null and _banner.visible
 
@@ -73,9 +92,10 @@ func _show_banner(on: bool) -> void:
 		_banner = CanvasLayer.new()
 		_banner.layer = 100
 		var label := Label.new()
-		label.text = "MODO PRUEBAS · F1: panel"
-		label.position = Vector2(540, 699)  # franja libre de abajo, bajo los botones
-		label.size = Vector2(200, 20)
+		label.text = banner_text()
+		_banner_label = label
+		label.position = Vector2(460, 699)  # franja libre de abajo, bajo los botones (el ancho deja lugar a la velocidad)
+		label.size = Vector2(360, 20)
 		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		label.add_theme_font_size_override("font_size", 13)

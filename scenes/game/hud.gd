@@ -73,7 +73,7 @@ func show_paused(paused: bool, show_label: bool = true) -> void:
 
 ## RF-105: el botón muestra la velocidad actual.
 func show_speed(speed: float) -> void:
-	_speed_button.text = "x%d  [F]" % roundi(speed)
+	_speed_button.text = "%s  [F]" % Rules.speed_text(speed)  # RF-322: x0,5 no se redondea a x0
 
 
 ## Game le pasa las oleadas del nivel ANTES de bind() (RF-133, RF-135).

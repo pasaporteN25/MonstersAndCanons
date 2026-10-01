@@ -11,6 +11,7 @@ var _fps_label: Label
 var _show_fps: bool = false
 var _enemy_choice: OptionButton
 var _enemy_types: Array[EnemyData] = []
+var _speed_buttons: Array[Button] = []
 
 
 func setup(game: Game) -> DevPanel:
@@ -37,7 +38,8 @@ func setup(game: Game) -> DevPanel:
 	box.add_child(_button("Matar a todos", game.dev_kill_all))
 	box.add_child(_button("Ganar", game.dev_finish.bind(true)))
 	box.add_child(_button("Perder", game.dev_finish.bind(false)))
-	box.add_child(_toggle("Velocidad x4", game.dev_set_fast))
+	box.add_child(_speed_row())
+	game.speed_changed.connect(_on_speed_changed)
 	box.add_child(_enemy_row())
 	box.add_child(_toggle("Mostrar FPS", func(on: bool) -> void:
 		_show_fps = on
@@ -46,6 +48,41 @@ func setup(game: Game) -> DevPanel:
 	_fps_label.visible = false
 	box.add_child(_fps_label)
 	return self
+
+
+## RF-322: una fila de botones con las velocidades de `data/dev_config.tres`; el activo queda marcado.
+func _speed_row() -> Control:
+	var column := VBoxContainer.new()
+	var title := Label.new()
+	title.text = "Velocidad"
+	column.add_child(title)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 2)
+	for speed: float in DevMode.config.speeds:
+		var button := Button.new()
+		button.text = Rules.speed_text(speed)
+		button.toggle_mode = true
+		button.focus_mode = Control.FOCUS_NONE
+		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		button.add_theme_font_size_override("font_size", 13)
+		button.pressed.connect(func() -> void:
+			_game.dev_set_speed(speed)
+			_on_speed_changed(Engine.time_scale))  # un clic en el activo no lo apaga
+		row.add_child(button)
+		_speed_buttons.append(button)
+	column.add_child(row)
+	_on_speed_changed(Engine.time_scale)
+	return column
+
+
+## Marca el botón de la velocidad actual (también cuando cambia con la tecla F o termina la partida).
+func _on_speed_changed(speed: float) -> void:
+	for i: int in _speed_buttons.size():
+		_speed_buttons[i].set_pressed_no_signal(is_equal_approx(DevMode.config.speeds[i], speed))
+
+
+func speed_buttons() -> Array[Button]:
+	return _speed_buttons
 
 
 func toggle() -> void:

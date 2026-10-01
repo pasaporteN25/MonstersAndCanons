@@ -95,3 +95,8 @@ static func stars_for(lives_left: int, starting_lives: int, cfg: BalanceConfig) 
 ## RF-60 y Jefe: ralentización que realmente sufre un enemigo según su resistencia.
 static func effective_slow(slow_amount: float, slow_resistance: float) -> float:
 	return slow_amount * (1.0 - slow_resistance)
+
+
+## RF-322: cómo se escribe una velocidad: "x2", "x0,5", "x0,25" (con coma, como el resto de los textos).
+static func speed_text(speed: float) -> String:
+	return "x" + String.num(speed).trim_suffix(".0").replace(".", ",")

@@ -240,15 +240,18 @@ func toggle_pause() -> void:
 
 func set_speed(speed: float) -> void:
 	Engine.time_scale = speed
+	DevMode.show_speed(speed)  # RF-322: el cartel del modo de pruebas dice la velocidad
 	speed_changed.emit(speed)
 
 
 func toggle_speed() -> void:
-	set_speed(1.0 if Engine.time_scale > 1.0 else FAST_SPEED)
+	# RF-105 y RF-322: desde x1 pasa a x2; desde cualquier otra velocidad (las del modo de pruebas) vuelve a x1.
+	set_speed(FAST_SPEED if is_equal_approx(Engine.time_scale, 1.0) else 1.0)
 
 
 func _reset_time() -> void:
 	Engine.time_scale = 1.0
+	DevMode.show_speed(1.0)
 	if is_inside_tree():
 		get_tree().paused = false
 
@@ -331,8 +334,9 @@ func dev_finish(won: bool) -> void:
 	session.finish(won)
 
 
-func dev_set_fast(on: bool) -> void:
-	set_speed(DevMode.config.speeds[-1] if on else 1.0)  # se reemplaza por los cinco botones en T151
+## RF-322: una de las cinco velocidades del panel (o de los atajos).
+func dev_set_speed(speed: float) -> void:
+	set_speed(speed)
 
 
 func dev_spawn(data: EnemyData) -> void:
