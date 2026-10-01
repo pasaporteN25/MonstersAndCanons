@@ -14,6 +14,17 @@ const SAVE_PATH: String = "user://save_pruebas.json"
 ## RF-182: el texto del cartel (sin la velocidad).
 const BANNER_TEXT: String = "MODO PRUEBAS · F1: panel"
 
+## RF-323: los atajos de teclado del modo de pruebas (acción del `InputMap`, tecla, texto del panel).
+## F1 abre el panel. Ninguna tecla es `1`–`9`, `Esc`, `Espacio`, `P`, `F`, `U` ni `S`, que usa el juego.
+## F5 se saltea: Godot la usa para actualizar los cuadros de diálogo de archivos (`ui_filedialog_refresh`).
+const ACTIONS: Array[Dictionary] = [
+	{"action": &"dev_kill_all", "key": KEY_F2, "text": "Matar a todos"},
+	{"action": &"dev_skip_wave", "key": KEY_F3, "text": "Saltar oleada"},
+	{"action": &"dev_infinite_lives", "key": KEY_F4, "text": "Vidas infinitas"},
+	{"action": &"dev_slower", "key": KEY_F6, "text": "Velocidad más lenta"},
+	{"action": &"dev_faster", "key": KEY_F7, "text": "Velocidad más rápida"},
+]
+
 ## RF-324: los números del modo de pruebas (oro del botón, velocidades).
 var config: DevConfig = preload("res://data/dev_config.tres")
 var enabled: bool = false
@@ -53,6 +64,10 @@ func set_enabled(on: bool, save_path: String = "") -> void:
 		save_path = SAVE_PATH if on else SaveManager.DEFAULT_PATH
 	SaveManager.save_path = save_path
 	SaveManager.load_save()
+	if on:
+		register_actions()
+	else:
+		unregister_actions()
 	_show_banner(on)
 	if on:
 		print("Modo de pruebas activado. Guardado: %s" % save_path)  # queda en el log
@@ -80,6 +95,32 @@ func banner_text() -> String:
 	if not is_equal_approx(_speed, 1.0):
 		text += " · %s" % Rules.speed_text(_speed)
 	return text
+
+
+## RF-323: crea las acciones de los atajos en el `InputMap`. El juego normal no las tiene.
+func register_actions() -> void:
+	for shortcut: Dictionary in ACTIONS:
+		var action: StringName = shortcut["action"]
+		if not InputMap.has_action(action):
+			InputMap.add_action(action)
+			var event := InputEventKey.new()
+			event.physical_keycode = shortcut["key"]
+			InputMap.action_add_event(action, event)
+
+
+func unregister_actions() -> void:
+	for shortcut: Dictionary in ACTIONS:
+		var action: StringName = shortcut["action"]
+		if InputMap.has_action(action):
+			InputMap.erase_action(action)
+
+
+## El nombre de la tecla de un atajo, por ejemplo "F2", para escribirlo en el panel.
+static func key_label(action: StringName) -> String:
+	for shortcut: Dictionary in ACTIONS:
+		if shortcut["action"] == action:
+			return OS.get_keycode_string(shortcut["key"])
+	return ""
 
 
 func is_banner_visible() -> bool:

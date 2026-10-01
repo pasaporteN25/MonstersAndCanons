@@ -12,6 +12,7 @@ var _show_fps: bool = false
 var _enemy_choice: OptionButton
 var _enemy_types: Array[EnemyData] = []
 var _speed_buttons: Array[Button] = []
+var _lives_toggle: CheckButton
 
 
 func setup(game: Game) -> DevPanel:
@@ -33,9 +34,11 @@ func setup(game: Game) -> DevPanel:
 	title.add_theme_font_size_override("font_size", 20)
 	box.add_child(title)
 	box.add_child(_button("+1000 de oro", game.dev_add_gold))
-	box.add_child(_toggle("Vidas infinitas", game.dev_set_infinite_lives))
-	box.add_child(_button("Saltar oleada", game.dev_skip_wave))
-	box.add_child(_button("Matar a todos", game.dev_kill_all))
+	_lives_toggle = _toggle("Vidas infinitas  [%s]" % DevMode.key_label(&"dev_infinite_lives"), game.dev_set_infinite_lives)
+	box.add_child(_lives_toggle)
+	game.dev_infinite_lives_changed.connect(_lives_toggle.set_pressed_no_signal)
+	box.add_child(_button("Saltar oleada  [%s]" % DevMode.key_label(&"dev_skip_wave"), game.dev_skip_wave))
+	box.add_child(_button("Matar a todos  [%s]" % DevMode.key_label(&"dev_kill_all"), game.dev_kill_all))
 	box.add_child(_button("Ganar", game.dev_finish.bind(true)))
 	box.add_child(_button("Perder", game.dev_finish.bind(false)))
 	box.add_child(_speed_row())
@@ -54,7 +57,7 @@ func setup(game: Game) -> DevPanel:
 func _speed_row() -> Control:
 	var column := VBoxContainer.new()
 	var title := Label.new()
-	title.text = "Velocidad"
+	title.text = "Velocidad  [%s / %s]" % [DevMode.key_label(&"dev_slower"), DevMode.key_label(&"dev_faster")]
 	column.add_child(title)
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 2)

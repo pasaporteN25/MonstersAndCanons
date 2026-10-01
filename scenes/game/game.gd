@@ -20,6 +20,8 @@ const BACK_TO_EDITOR: String = "Volver al editor"
 
 signal pause_changed(paused: bool)
 signal speed_changed(speed: float)
+## RF-323: las vidas infinitas cambiaron (con el botón o con el atajo); el panel marca su interruptor.
+signal dev_infinite_lives_changed(on: bool)
 
 @export var level_data: LevelData
 @export var balance: BalanceConfig
@@ -192,6 +194,8 @@ func _unhandled_input(event: InputEvent) -> void:
 			open_pause_menu()
 	elif pause_menu.is_open():
 		return  # con el menú abierto, las otras teclas no hacen nada
+	elif dev_panel != null and _handle_dev_shortcut(event):
+		get_viewport().set_input_as_handled()
 	elif event.is_action_pressed("start_wave"):
 		start_next_wave()
 	elif event.is_action_pressed("pause"):
@@ -309,6 +313,7 @@ func dev_add_gold() -> void:
 
 func dev_set_infinite_lives(on: bool) -> void:
 	session.infinite_lives = on
+	dev_infinite_lives_changed.emit(on)
 
 
 ## Los enemigos desaparecen sin morir: no dan oro ni puntos ni sueltan crías.
@@ -332,6 +337,24 @@ func dev_finish(won: bool) -> void:
 	spawner.skip_rest_of_wave()
 	dev_kill_all()
 	session.finish(won)
+
+
+## RF-323: los atajos del modo de pruebas hacen lo mismo que los botones del panel. Devuelve true si
+## la tecla era uno de ellos.
+func _handle_dev_shortcut(event: InputEvent) -> bool:
+	if event.is_action_pressed(&"dev_kill_all"):
+		dev_kill_all()
+	elif event.is_action_pressed(&"dev_skip_wave"):
+		dev_skip_wave()
+	elif event.is_action_pressed(&"dev_infinite_lives"):
+		dev_set_infinite_lives(not session.infinite_lives)
+	elif event.is_action_pressed(&"dev_slower"):
+		dev_set_speed(DevStart.step_speed(DevMode.config.speeds, Engine.time_scale, -1))
+	elif event.is_action_pressed(&"dev_faster"):
+		dev_set_speed(DevStart.step_speed(DevMode.config.speeds, Engine.time_scale, 1))
+	else:
+		return false
+	return true
 
 
 ## RF-322: una de las cinco velocidades del panel (o de los atajos).

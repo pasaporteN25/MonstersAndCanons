@@ -39,3 +39,15 @@ static func start_gold(level: LevelData, balance: BalanceConfig, wave: int, manu
 	if manual >= 0:
 		return manual
 	return level.starting_gold + skipped_gold(level, balance, wave)
+
+
+## RF-323: la velocidad vecina de `current` en la lista `speeds` (ordenada de menor a mayor).
+## `direction` -1 = más lenta, 1 = más rápida. En los extremos se queda donde está.
+static func step_speed(speeds: PackedFloat32Array, current: float, direction: int) -> float:
+	if speeds.is_empty():
+		return current
+	var nearest: int = 0
+	for i: int in speeds.size():
+		if absf(speeds[i] - current) < absf(speeds[nearest] - current):
+			nearest = i
+	return speeds[clampi(nearest + signi(direction), 0, speeds.size() - 1)]
