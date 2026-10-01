@@ -15,6 +15,7 @@
 | Niveles | `data/levels/` | Un `.json` por nivel: el mapa dibujado con letras y las oleadas (ver "Agregar un nivel") |
 | Campaña | `data/campaign.json` | La lista de niveles, en orden |
 | Artículos de la Wiki | `data/wiki/` | Un `.json` por artículo (ver "La Wiki") |
+| Modo de pruebas | `data/dev_config.tres` | El oro del botón "+1000 de oro" y las cinco velocidades del panel (`DevConfig`) |
 | Dibujos | `assets/sprites/` | SVG (o PNG). Ver "Reglas de los dibujos" |
 | Sonidos | `assets/audio/` | `.wav`. Cada torre usa `shot_<id>.wav` |
 

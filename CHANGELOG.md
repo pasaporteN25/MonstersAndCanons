@@ -2,6 +2,12 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Modo de pruebas: oleadas finales, velocidades y atajos *(M22)*
+- **Empezar en la oleada N:** en la selección de nivel del ejecutable de pruebas, una franja **"Pruebas"** deja elegir la **oleada inicial** y el **oro inicial** (automático, que es lo que se habría juntado, o a mano). Esa partida empieza sin torres y **no guarda** progreso ni récords.
+- **Cinco velocidades:** x0,25 · x0,5 · x1 · x2 · x4, que se ven en el cartel "MODO PRUEBAS" y vuelven a x1 al salir. Sirve para mirar con calma el aviso de combo.
+- **Atajos:** `F2` matar a todos, `F3` saltar oleada, `F4` vidas infinitas, `F6` y `F7` velocidad más lenta y más rápida (no chocan con las teclas del juego).
+- **Informe:** al terminar o salir de una partida de pruebas, escribe `user://pruebas_stats.json` con la oleada, vidas, oro y torres de cada oleada (los mismos datos que el bot de balance).
+
 ## Sinergias: combinar ataques *(M20)*
 - Un enemigo **ralentizado** por el Hielo recibe **+25 %** de daño del **Cañón**, el **Francotirador** y el **Mortero**; uno **quemado** por la Incendiaria recibe **+30 %** de la **Eléctrica**.
 - **El combo se nota:** el número de daño del golpe sale **más grande y con "!"**, **celeste** si fue por el hielo y **naranja** si fue por el fuego, con un anillo del mismo color y un **"tin"** propio. El primer combo de cada tipo en la partida dice **"¡Combo de hielo!"** o **"¡Combo de fuego!"**. Ya no se amontona con los otros números ni se confunde con el oro, y no desaparece aunque apagues los números de daño.

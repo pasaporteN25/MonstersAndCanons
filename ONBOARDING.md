@@ -172,6 +172,18 @@ El Mortero es una torre **reservada** (solo el nivel 10 la tendrá): para probar
 
 En `JuegoA_pruebas.exe`, `F1`, hacé aparecer un **Chamán** cerca de varias torres y esperá unos 8 segundos: tiene que salir un **rayo magenta** hacia la torre más cercana, que se ve **apagada** (oscura, con chispas) y **no dispara** unos 3 segundos; si la seleccionás, el panel dice **"Aturdida (N s)"** con la cuenta atrás. Después, un **Espejo** al lado de una torre pegada al camino: el primer disparo tiene que mostrar **"¡Rebote!"**, el Espejo no pierde vida y la torre queda apagada 2 segundos; una torre lejos (por ejemplo un Francotirador) le pega normal. Con una Incendiaria pegada, el Espejo se quema igual.
 
+
+### 6.1.11 Probar oleadas finales y mirar un combo (modo de pruebas)
+
+En `JuegoA_pruebas.exe`, **Jugar**: arriba de las tarjetas hay una franja **"Pruebas"**. Poné **Oleada inicial** en 10 (por ejemplo) y dejá el oro en **Automático**, y elegí el **Nivel 1**.
+
+**✅ Comprobar:**
+- La partida arranca sin torres, con bastante más oro que el normal (lo que se habría juntado en las oleadas 1 a 9), el HUD dice **"Próxima: oleada 10/10"** y al apretar *Empezar oleada* salen los enemigos de la última. Con **Oro inicial** a mano (sacá la tilde de "Automático") arranca con el número que escribas, también con 0. Un número mayor al total usa la última oleada.
+- Ganar o perder esa partida **no** cambia estrellas, récords ni niveles desbloqueados (mirá la pantalla de selección al volver). **Reintentar** vuelve a la oleada 10 con el mismo oro.
+- `F1` abre el panel: la fila **Velocidad** tiene **x0,25 · x0,5 · x1 · x2 · x4**. Elegí x0,25 con un Hielo y un Cañón en el camino: el aviso de combo (número celeste con "!") se lee con calma. El cartel de abajo dice "MODO PRUEBAS · F1: panel · x0,25", el botón de arriba dice "x0,25 [F]", y al salir de la partida vuelve a x1.
+- **Atajos** (con el panel abierto o cerrado): `F2` mata a todos, `F3` salta la oleada, `F4` prende y apaga las vidas infinitas, `F6` y `F7` bajan y suben la velocidad un paso. Las teclas `1`–`9` siguen construyendo torres.
+- Al terminar (o al salir) se escribe `%APPDATA%\Godot\app_userdata\JuegoA\pruebas_stats.json` con la oleada, las vidas, el oro y las torres de cada oleada terminada y el resultado (`won`, `lost` o `left`).
+
 ### 6.1.1 Mapas de la comunidad (en todas las versiones)
 
 Los `.json` de `%APPDATA%\Godot\app_userdata\JuegoA\maps` (la misma carpeta donde guarda el editor) aparecen en **Jugar → Mapas de la comunidad**, en el `.exe` normal y en el de pruebas. Para comprobarlo: guardar un mapa desde el editor (en cualquiera de los dos `.exe`) y buscarlo en la solapa. Cada versión tiene su propio guardado, así que el progreso en esos mapas no se comparte entre el `.exe` normal y el de pruebas. Detalles en [`CONTENIDO.md`](CONTENIDO.md).

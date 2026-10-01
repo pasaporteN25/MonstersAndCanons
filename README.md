@@ -4,7 +4,7 @@
 
 Juego *tower defense* 2D hecho en **Godot 4** con **GDScript**, construido con **SDD (Spec-Driven Development)**.
 
-> **Estado actual:** M1 a M20 ✅ (juego completo, 7 niveles, 9 torres (una de 2×2) con combos por estado (el Hielo y la Incendiaria potencian a otras), modo de pruebas con editor de mapas, mapas de la comunidad, Wiki con bestiario, mapas de tamaño variable con zoom, siete temas de paisaje y leyenda, récords, niveles en archivos de texto y versión para Linux) y versión Android probada en un celular. Tests automáticos en GitHub (D-030).
+> **Estado actual:** M1 a M22 ✅ (juego completo, 7 niveles, 9 torres (una de 2×2) con combos por estado (el Hielo y la Incendiaria potencian a otras), modo de pruebas con editor de mapas, mapas de la comunidad, Wiki con bestiario, mapas de tamaño variable con zoom, siete temas de paisaje y leyenda, récords, niveles en archivos de texto y versión para Linux) y versión Android probada en un celular. Tests automáticos en GitHub (D-030).
 >
 > **Versión de Godot:** 4.7.2 estable (renderizador *Compatibility*).
 >
@@ -121,7 +121,7 @@ Para probar todo sin ganar cada nivel (spec §10.2, D-028):
 godot --headless --path . --export-release "Windows (pruebas)" build/JuegoA_pruebas.exe
 ```
 
-- Trae el **modo de pruebas**: todos los niveles abiertos y, en la partida, el **panel de pruebas** (`F1` o el botón "Pruebas"): +1000 de oro, vidas infinitas, saltar oleada, matar a todos, ganar, perder, velocidad x4, hacer aparecer cualquier enemigo y ver los FPS.
+- Trae el **modo de pruebas**: todos los niveles abiertos; al elegir nivel se puede **empezar en cualquier oleada** (con el oro que se habría juntado, o el que se escriba) y, en la partida, el **panel de pruebas** (`F1` o el botón "Pruebas"): +1000 de oro, vidas infinitas, saltar oleada, matar a todos, ganar, perder, **cinco velocidades (x0,25 a x4)**, hacer aparecer cualquier enemigo y ver los FPS. Atajos: `F2` matar, `F3` saltar oleada, `F4` vidas infinitas, `F6` / `F7` velocidad. Al terminar guarda un informe en `user://pruebas_stats.json`.
 - Usa **otro guardado** (`save_pruebas.json`, en la misma carpeta): lo que hagas ahí no toca tu progreso, tus estrellas ni tus récords reales.
 - **Editor de mapas:** el menú principal trae el botón "Editor de mapas" (en el juego normal y en el de pruebas, no en el celular). Se dibuja el mapa con el mouse, se arman las oleadas, se prueba el nivel al instante y se guarda en `%APPDATA%\Godot\app_userdata\JuegoA\maps`. Ver [`CONTENIDO.md`](CONTENIDO.md).
 - Abajo al centro siempre dice "MODO PRUEBAS", para no confundirlo con el juego normal.
