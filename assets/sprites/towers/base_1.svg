@@ -1,11 +1,19 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
-  <!-- Boceto B, base de madera con bisel suave; vista superior, centro de giro (32, 32). -->
-  <defs><linearGradient id="wood" x1="0" y1="0" x2="0.88" y2="1">
-  <stop stop-color="#ebba76"/><stop offset=".49" stop-color="#ad7147"/><stop offset="1" stop-color="#714536"/>
-  </linearGradient>
-  <linearGradient id="bevel" x1="0" y1="0" x2=".3" y2="1">
-  <stop stop-color="#f3cf91"/><stop offset=".56" stop-color="#ad7448"/><stop offset="1" stop-color="#563a32"/>
-  </linearGradient>
-  <clipPath id="top"><polygon points="23,11 41,11 53,23 53,41 41,53 23,53 11,41 11,23"/></clipPath></defs>
-  <g stroke-linejoin="round" stroke-linecap="round"><polygon points="22,10 42,10 59,27 59,45 42,61 22,61 5,45 5,27" fill="#3d2c2c" stroke="#20242f" stroke-width="2.2"/><polygon points="22,7 42,7 58,23 58,43 42,58 22,58 6,43 6,23" fill="url(#bevel)" stroke="#20242f" stroke-width="2.2"/><polygon points="23,8 41,8 56,23 56,39 41,54 23,54 8,39 8,23" fill="#78503a" stroke="#553a33" stroke-width="1.5"/><polygon points="23,11 41,11 53,23 53,41 41,53 23,53 11,41 11,23" fill="url(#wood)" stroke="#5c3d30" stroke-width="1.2"/><g clip-path="url(#top)" stroke="#6f432f" stroke-width="2.4"><path d="M5 21 H60 M5 30 H60 M5 40 H60 M5 49 H60"/></g><path d="M16 19 H49 M13 28 H52 M13 38 H52 M16 47 H49" fill="none" stroke="#f3c188" stroke-width="1.4"/><polygon points="17,17 20,14 23,17 20,20" fill="#efc476" stroke="#8b653a" stroke-width="1"/><polygon points="41,47 44,44 47,47 44,50" fill="#efc476" stroke="#8b653a" stroke-width="1"/></g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Base de nivel 1: plataforma de madera (octógono), vista desde arriba. -->
+  <polygon points="57.9,42.7 42.7,57.9 21.3,57.9 6.1,42.7 6.1,21.3 21.3,6.1 42.7,6.1 57.9,21.3"
+    fill="#7d5330" stroke="#2b2233" stroke-width="2.5" stroke-linejoin="round"/>
+  <polygon points="53.3,40.8 40.8,53.3 23.2,53.3 10.8,40.8 10.8,23.2 23.2,10.8 40.8,10.8 53.3,23.2"
+    fill="#a8743f"/>
+  <g stroke="#7d5330" stroke-width="1.6" stroke-linecap="round">
+    <line x1="15" y1="20" x2="49" y2="20"/>
+    <line x1="12" y1="26" x2="52" y2="26"/>
+    <line x1="12" y1="32" x2="52" y2="32"/>
+    <line x1="12" y1="38" x2="52" y2="38"/>
+    <line x1="15" y1="44" x2="49" y2="44"/>
+  </g>
+  <g fill="#4a3520">
+    <circle cx="14" cy="23" r="1.3"/><circle cx="50" cy="23" r="1.3"/>
+    <circle cx="14" cy="41" r="1.3"/><circle cx="50" cy="41" r="1.3"/>
+  </g>
+  <polygon points="23.2,10.8 40.8,10.8 53.3,23.2 51,23 40,13 24,13" fill="#c99462" opacity="0.7"/>
 </svg>
