@@ -101,8 +101,22 @@ func current_level() -> LevelData:
 ## El nivel cuyo progreso y récords se guardan: el de la campaña que se juega, o el mapa de la
 ## comunidad (RF-224). null si no se juega ninguno de los dos (F6, tests, o probando desde el editor).
 func played_level() -> LevelData:
+	if dev_partial_run():
+		return null  # RF-321: no es una partida entera, no guarda nada
 	var campaign_level: LevelData = current_level()
 	return campaign_level if campaign_level != null else current_community
+
+
+## RF-321: ¿esta partida empezó en la oleada 2 o más (modo de pruebas)? Entonces no guarda
+## victoria, estrellas, récords ni desbloqueos.
+func dev_partial_run() -> bool:
+	return DevMode.enabled and DevMode.applied_wave > 1
+
+
+## RF-321: la oleada y el oro elegidos en la selección de nivel se olvidan al seguir de nivel o al
+## volver a una pantalla (en la selección se vuelven a elegir).
+func forget_dev_start() -> void:
+	DevMode.reset_start()
 
 
 ## RF-93 para un mapa de la comunidad: sus estrellas salen de la mejor cantidad de vidas guardada.
@@ -118,6 +132,8 @@ func has_next_level() -> bool:
 
 ## RF-90 y RF-112: guarda la victoria y desbloquea el siguiente nivel.
 func level_won(lives: int, score: int = 0) -> void:
+	if dev_partial_run():
+		return  # RF-321
 	if current_index >= 0:
 		SaveManager.record_victory(level(current_index).id, lives, score)
 		if has_next_level():
@@ -176,7 +192,7 @@ func campaign_total() -> int:
 ## ¿Hay que pedir 5 letras para el Salón? Solo en la campaña, con todos los niveles ganados,
 ## si el total SUBIÓ desde la última vez y entra en el top 5.
 func hall_of_fame_pending() -> bool:
-	if current_index < 0 or not campaign_complete():
+	if current_index < 0 or dev_partial_run() or not campaign_complete():
 		return false
 	var total: int = campaign_total()
 	return total > SaveManager.hall_total() and HighScores.qualifies(hall_of_fame(), total)
@@ -227,10 +243,12 @@ func play_test(level_to_test: LevelData) -> void:
 
 func next_level() -> void:
 	if has_next_level():
+		forget_dev_start()  # RF-321
 		start_level(current_index + 1)
 
 
 func go_to_main_menu() -> void:
+	forget_dev_start()  # RF-321
 	current_index = -1
 	test_level = null
 	current_community = null
@@ -238,6 +256,7 @@ func go_to_main_menu() -> void:
 
 
 func go_to_level_select() -> void:
+	forget_dev_start()  # RF-321
 	current_index = -1
 	test_level = null
 	current_community = null

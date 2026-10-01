@@ -140,6 +140,7 @@ func _ready() -> void:
 	Audio.add_click_sounds(end_screen)
 
 	session.start(level_data, balance)
+	_apply_dev_start()
 	if DevMode.enabled:
 		_add_dev_panel()
 
@@ -272,6 +273,20 @@ func restart() -> void:
 
 
 # --- Modo de pruebas (RF-184): lo que hace cada botón del panel ---
+
+## RF-319 y RF-320: en el modo de pruebas, la partida de la campaña o de la comunidad arranca en la
+## oleada y con el oro que se eligieron en la selección de nivel. El nivel del editor, F6 y los
+## tests quedan como siempre.
+func _apply_dev_start() -> void:
+	DevMode.applied_wave = 1
+	var from_menu: bool = GameFlow.current_level() != null or GameFlow.current_community != null
+	if not DevMode.enabled or testing or not from_menu:
+		return
+	var wave: int = DevStart.clamp_wave(DevMode.start_wave, level_data.waves.size())
+	session.jump_to_wave(wave)
+	session.set_gold(DevStart.start_gold(level_data, balance, wave, DevMode.start_gold))
+	DevMode.applied_wave = wave
+
 
 func _add_dev_panel() -> void:
 	dev_panel = DevPanel.new().setup(self)
@@ -437,7 +452,7 @@ func _on_state_changed(state: LevelSession.State) -> void:
 	# Desde el menú (campaña o mapa de la comunidad, RF-224) se guarda progreso y récords, y se vuelve
 	# a la selección de nivel; probando (RF-217), no se guarda nada y se vuelve al editor.
 	var saves_progress: bool = GameFlow.played_level() != null
-	var can_leave: bool = saves_progress or testing
+	var can_leave: bool = saves_progress or testing or GameFlow.dev_partial_run()
 	if state == LevelSession.State.WON:
 		GameFlow.level_won(session.lives, session.score)  # RF-112, RF-115 y RF-194: desbloquea y guarda
 		var stars: int = Rules.stars_for(session.lives, level_data.starting_lives, balance)  # RF-93

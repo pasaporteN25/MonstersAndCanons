@@ -15,6 +15,14 @@ const SAVE_PATH: String = "user://save_pruebas.json"
 ## RF-324: los números del modo de pruebas (oro del botón, velocidades).
 var config: DevConfig = preload("res://data/dev_config.tres")
 var enabled: bool = false
+## RF-319: lo que se eligió en la selección de nivel. La oleada desde la que se empieza (1 = como
+## siempre) y el oro inicial (-1 = automático, RF-320). `Game` los lee al arrancar y NO los borra,
+## así reintentar repite la misma partida (RF-321).
+var start_wave: int = 1
+var start_gold: int = -1
+## La oleada con la que arrancó de verdad la partida en curso (ya ajustada al total del nivel).
+## Mayor que 1 = no es una partida entera y no guarda progreso (RF-321). La fija `Game`.
+var applied_wave: int = 1
 
 var _banner: CanvasLayer
 
@@ -46,6 +54,13 @@ func set_enabled(on: bool, save_path: String = "") -> void:
 		print("Modo de pruebas activado. Guardado: %s" % save_path)  # queda en el log
 		# Sirve para comprobar, en el ejecutable exportado, que las listas de enemigos no salen vacías.
 		print("Enemigos disponibles: %d" % LevelFile.enemy_ids().size())
+
+
+## RF-321: vuelve a "empezar en la oleada 1 con el oro del nivel".
+func reset_start() -> void:
+	start_wave = 1
+	start_gold = -1
+	applied_wave = 1
 
 
 func is_banner_visible() -> bool:

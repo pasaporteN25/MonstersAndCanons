@@ -64,6 +64,12 @@ func earn(amount: int) -> void:
 	gold_changed.emit(gold)
 
 
+## RF-320 (modo de pruebas): fija el oro de arranque (puede ser 0).
+func set_gold(amount: int) -> void:
+	gold = maxi(amount, 0)
+	gold_changed.emit(gold)
+
+
 func can_afford(cost: int) -> bool:
 	return gold >= cost
 
