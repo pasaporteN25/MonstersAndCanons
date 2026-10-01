@@ -33,3 +33,10 @@ extends Resource
 @export var chain_extra_targets: int = 0
 ## RF-163: distancia máxima de cada salto, en casillas.
 @export var chain_range_tiles: float = 0.0
+
+# --- Sinergias por estado (M20, RF-310): cuánto más daño hace contra un enemigo en cierto estado. 0 = nada. ---
+
+## RF-310: % de daño extra contra un enemigo ralentizado.
+@export var bonus_vs_slowed_percent: int = 0
+## RF-310: % de daño extra contra un enemigo que se está quemando.
+@export var bonus_vs_burning_percent: int = 0

@@ -15,6 +15,8 @@ signal hit(enemy: Enemy, damage: int, armor_blocked_most: bool)
 signal healed(enemy: Enemy, amount: int)
 ## El Chamán lanzó su hechizo a una torre (RF-282). Solo para los efectos: la torre ya quedó aturdida.
 signal cast_stun(shaman: Enemy, tower: Tower)
+## RF-313: lo golpeó una torre con bonus por su estado (ralentizado o quemado). Solo para los efectos.
+signal combo_hit(enemy: Enemy)
 ## Un tiro de `tower` rebotó en este enemigo (RF-284). `first` = la torre no estaba aturdida antes (para no llenar la
 ## pantalla de "¡Rebote!" cuando una descarga de varios proyectiles rebota toda junta). Solo para los efectos.
 signal reflected(enemy: Enemy, tower: Tower, first: bool)
@@ -158,9 +160,11 @@ func is_health_bar_visible() -> bool:
 
 
 ## Recibe un golpe (RF-80) y, si lo trae, una ralentización (RF-60, RF-61).
-func take_hit(damage: int, slow_amount: float = 0.0, slow_duration: float = 0.0) -> void:
+func take_hit(damage: int, slow_amount: float = 0.0, slow_duration: float = 0.0, combo: bool = false) -> void:
 	if _is_done:
 		return
+	if combo:
+		combo_hit.emit(self)
 	var dealt: int = Rules.damage_after_armor(damage, armor())
 	_hit_flash_left = HIT_FLASH_DURATION
 	if slow_amount > 0.0:

@@ -19,6 +19,8 @@ const HEAL_COLOR := Color(0.45, 0.95, 0.4)
 const STUN_COLOR := Color(0.95, 0.35, 0.8)
 ## RF-284: el rebote del Espejo.
 const REFLECT_COLOR := Color(0.6, 0.92, 1.0)
+## RF-313: el "¡Combo!" de un golpe con bonus por el estado del enemigo.
+const COMBO_COLOR := Color(1.0, 0.82, 0.3)
 const MAX_DAMAGE_NUMBERS: int = 40
 
 var _damage_numbers_alive: int = 0
@@ -28,6 +30,14 @@ var _damage_numbers_alive: int = 0
 ## Devuelve false si no se mostró (opción apagada, o ya hay demasiados en pantalla).
 func damage_number(position_: Vector2, damage: int, armor_blocked_most: bool) -> bool:
 	return _small_number(position_, str(damage), DAMAGE_BLOCKED_COLOR if armor_blocked_most else DAMAGE_COLOR)
+
+
+## RF-313: "¡Combo!" dorado sobre el enemigo. Mismas reglas que los números de daño (opción y tope).
+func combo(position_: Vector2) -> bool:
+	if not _small_number(position_ + Vector2(0, -12), "¡Combo!", COMBO_COLOR):
+		return false
+	_add(RingEffect.new().setup(Color(COMBO_COLOR, 0.8), 6.0, 20.0, 0.2, 2.0), position_)
+	return true
 
 
 ## RF-165: "+N" verde cuando un enemigo se cura. Mismas reglas que los números de daño.

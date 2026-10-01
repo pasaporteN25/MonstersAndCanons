@@ -198,7 +198,13 @@ func _hit(enemy: Enemy) -> void:
 	if is_instance_valid(source) and enemy.will_reflect(source):  # la torre pudo venderse mientras volaba
 		enemy.reflect(source)  # RF-284: ni daño ni ralentización; la torre queda aturdida
 	else:
-		enemy.take_hit(_stats.damage, _stats.slow_amount, _stats.slow_duration)
+		# RF-311: el estado se mira ANTES de aplicar lo que trae este golpe, y el bonus va antes de la armadura.
+		var bonus: int = 0
+		if enemy.is_slowed():
+			bonus += _stats.bonus_vs_slowed_percent
+		if enemy.is_burning():
+			bonus += _stats.bonus_vs_burning_percent
+		enemy.take_hit(Rules.damage_with_bonus(_stats.damage, bonus), _stats.slow_amount, _stats.slow_duration, bonus > 0)
 	if _stats.burn_damage_per_second > 0:
 		enemy.apply_burn(_stats.burn_damage_per_second, _stats.burn_duration)  # RF-160 (la quemadura no rebota, RF-284)
 

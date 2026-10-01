@@ -10,6 +10,7 @@
 
 [sub_resource type="Resource" id="Resource_adjjk"]
 script = ExtResource("1_52100")
+bonus_vs_slowed_percent = 25
 cost = 150
 damage = 40
 fire_rate = 0.4
@@ -18,6 +19,7 @@ base_texture = ExtResource("2_mh2id")
 
 [sub_resource type="Resource" id="Resource_22mr3"]
 script = ExtResource("1_52100")
+bonus_vs_slowed_percent = 25
 cost = 150
 damage = 70
 fire_rate = 0.4
@@ -26,6 +28,7 @@ base_texture = ExtResource("3_oe6kl")
 
 [sub_resource type="Resource" id="Resource_mh2id"]
 script = ExtResource("1_52100")
+bonus_vs_slowed_percent = 25
 cost = 225
 damage = 120
 fire_rate = 0.4

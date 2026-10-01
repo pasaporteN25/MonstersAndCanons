@@ -852,15 +852,17 @@
 
 ## M20 — Sinergias, etapa A: reacciones por estado *(pedido por Lucas, D-041, D-046)*
 
-- [ ] **T143 · Los datos y el daño con bonus**
+- [x] **T143 · Los datos y el daño con bonus**
   `bonus_vs_slowed_percent` / `bonus_vs_burning_percent`, `Rules.damage_with_bonus`, `Projectile._hit`, los valores de Cañón, Francotirador, Mortero y Eléctrica.
   **Refs:** RF-310, RF-311, RF-312, D-046.
   **Hecho cuando:** los tests comprueban el criterio de aceptación (Cañón 25 contra ralentizado y 20 contra no; Eléctrica 17 contra quemado), que se suman los dos estados, el redondeo, que la armadura resta **después**, que un golpe de Hielo no se ayuda a sí mismo, y área, cadena y ráfaga; que un golpe rebotado no tiene bonus; y los datos de las cuatro torres.
+  **Resultado:** `TowerLevelData.bonus_vs_slowed_percent` y `bonus_vs_burning_percent` (enteros, 0 = apagado); `Rules.damage_with_bonus` (redondeo al más cercano, antes de la armadura); `Projectile._hit` suma los bonus según el estado del enemigo **antes** de aplicar lo que trae el golpe y le pasa el daño ya calculado a `Enemy.take_hit`, que ahora recibe un `combo` y emite `combo_hit` (solo visual). Datos: Cañón, Francotirador y Mortero +25 % contra ralentizados en los tres niveles; Eléctrica +30 % contra quemados. 12 tests nuevos (747 en total): la cuenta, el criterio de aceptación (Cañón 25 contra 20; Eléctrica 17 contra 13), que cada torre solo aprovecha su estado, los dos estados suman (20 → 31), el bonus va antes de la armadura (25 − 3 contra 20 − 3), un golpe no se potencia con su propia ralentización, la señal solo sale con bonus, área y cadena miran a cada enemigo por separado, un golpe rebotado por el Espejo no tiene bonus, y los datos de **todas** las torres (solo esas cuatro tienen bonus). Todavía **sin aviso visual** (T144).
 
-- [ ] **T144 · Aviso visual, panel y Wiki**
+- [x] **T144 · Aviso visual, panel y Wiki**
   "¡Combo!" dorado, línea en el panel de la torre y en la Wiki.
   **Refs:** RF-313.
   **Hecho cuando:** los tests comprueban la señal, el texto del panel y de la Wiki y que la opción de números lo apaga; una captura muestra el combo.
+  **Resultado:** `EffectsLayer.combo` dibuja **"¡Combo!"** dorado y un anillo chico sobre el enemigo (con las reglas de los números de daño: se apaga con la opción y tiene tope); `Game` lo conecta a la señal `combo_hit`. `TowerText.effects` escribe "+25 % de daño a ralentizados" / "+30 % de daño a quemados", así lo muestran **solos** el panel de la torre y la Wiki. 4 tests nuevos (751 en total): el texto dorado, que un golpe normal no lo muestra, que la opción de números lo apaga, y el panel y la Wiki (y que las demás torres no lo dicen). Captura de una partida real (Cañón + enemigos ralentizados): se ve el "¡Combo!" y el anillo sobre el enemigo golpeado; **queda algo amontonado con el número de daño** cuando varios golpes caen juntos (en la captura además yo ralentizaba a todos con golpes de 1 de daño para forzarlo).
 
 - [ ] **T145 · Cierre de M20**
   El bot compara partidas con y sin los bonus, documentación, CHANGELOG y exportaciones.

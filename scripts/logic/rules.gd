@@ -37,6 +37,12 @@ static func tiles_to_px(tiles: float) -> float:
 	return tiles * TILE_SIZE
 
 
+## RF-311: el daño de un golpe con un bonus de `percent` %, redondeado al entero más cercano.
+## Se calcula ANTES de restar la armadura.
+static func damage_with_bonus(damage: int, percent: int) -> int:
+	return roundi(damage * (100 + percent) / 100.0)
+
+
 ## RF-80: la armadura resta, pero siempre se hace al menos 1 de daño.
 static func damage_after_armor(damage: int, armor: int) -> int:
 	return maxi(1, damage - armor)

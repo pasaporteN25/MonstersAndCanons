@@ -17,6 +17,10 @@ static func effects(level: TowerLevelData) -> Array[String]:
 		lines.append("Dispara a %d enemigos a la vez" % (1 + level.extra_targets))
 	if level.burn_damage_per_second > 0:
 		lines.append("Quema: %d por segundo durante %.0f s" % [level.burn_damage_per_second, level.burn_duration])
+	if level.bonus_vs_slowed_percent > 0:  # RF-313
+		lines.append("+%d %% de daño a ralentizados" % level.bonus_vs_slowed_percent)
+	if level.bonus_vs_burning_percent > 0:
+		lines.append("+%d %% de daño a quemados" % level.bonus_vs_burning_percent)
 	if level.slow_amount > 0.0:
 		lines.append("Ralentiza %d %% durante %.0f s" % [roundi(level.slow_amount * 100.0), level.slow_duration])
 	return lines
