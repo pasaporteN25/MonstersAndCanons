@@ -11,10 +11,13 @@ var level: Level
 var cannon: TowerData = load("res://data/towers/cannon.tres")
 var tesla: TowerData = load("res://data/towers/tesla.tres")
 var combos: Array = []
+## RF-315: qué estado aprovechó cada combo, en orden.
+var kinds: Array = []
 
 
 func before_each() -> void:
 	combos = []
+	kinds = []
 	world = Node2D.new()
 	add_child_autofree(world)
 	level = GameFlow.level(0).build_map()
@@ -27,7 +30,10 @@ func _enemy(id: String = "normal", distance: float = 250.0) -> Enemy:
 	var enemy: Enemy = ENEMY_SCENE.instantiate()
 	enemy.setup(data, level.get_ground_path(0), HEALTH)
 	enemy.distance = distance
-	enemy.combo_hit.connect(func(e: Enemy) -> void: combos.append(e))
+	enemy.hit.connect(func(e: Enemy, _damage: int, _blocked: bool, combo: Enemy.Combo) -> void:
+		if combo != Enemy.Combo.NONE:
+			combos.append(e)
+			kinds.append(combo))
 	world.add_child(enemy)
 	return enemy
 
@@ -146,6 +152,38 @@ func test_the_combo_signal_only_fires_with_a_bonus() -> void:
 	assert_eq(combos[0], enemy)
 	_hit(_stats(20), enemy)
 	assert_eq(combos.size(), 1, "una torre sin bonus tampoco")
+
+
+func test_the_combo_says_which_state_it_used() -> void:
+	# RF-315: el aviso lleva el color del estado que aprovechó el golpe.
+	var slowed: Enemy = _enemy()
+	_slow(slowed)
+	_hit(cannon.levels[0], slowed)
+	var burning: Enemy = _enemy()
+	_burn(burning)
+	_hit(tesla.levels[0], burning)
+	assert_eq(kinds, [Enemy.Combo.SLOWED, Enemy.Combo.BURNING])
+
+
+func test_with_both_states_the_bigger_bonus_wins() -> void:
+	var enemy: Enemy = _enemy()
+	_slow(enemy)
+	_burn(enemy)
+	_hit(_stats(10, 25, 30), enemy)
+	_hit(_stats(10, 40, 30), enemy)
+	_hit(_stats(10, 30, 30), enemy)
+	assert_eq(kinds, [Enemy.Combo.BURNING, Enemy.Combo.SLOWED, Enemy.Combo.SLOWED], "si empatan, el ralentizado")
+	_hit(cannon.levels[0], enemy)
+	assert_eq(kinds[3], Enemy.Combo.SLOWED, "el Cañón no aprovecha la quemadura: cuenta solo el ralentizado")
+
+
+func test_a_burn_tick_is_never_a_combo() -> void:
+	var enemy: Enemy = _enemy()
+	_slow(enemy)
+	_burn(enemy)
+	enemy._update_burn(0.6)  # un golpecito de fuego
+	assert_lt(enemy.health, HEALTH, "el fuego le pegó")
+	assert_eq(combos.size(), 0)
 
 
 # --- Todos los tipos de golpe (RF-311) ---

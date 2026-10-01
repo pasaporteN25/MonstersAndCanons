@@ -52,6 +52,8 @@ func _init() -> void:
 	_save("victory", _notes(Wave.SQUARE, [523.3, 659.3, 784.0, 1046.5], 0.16, 0.3))
 	_save("defeat", _notes(Wave.SQUARE, [392.0, 349.2, 311.1, 261.6], 0.2, 0.3))
 	_save("click", _tone(Wave.SQUARE, 1200.0, 1000.0, 0.025, 0.2))
+	# RF-316: el combo: un "tin" corto y brillante (dos notas agudas que suben, con un brillo encima).
+	_save("combo", _mix([_notes(Wave.SINE, [1568.0, 2093.0], 0.045, 0.4), _tone(Wave.TRIANGLE, 3136.0, 4186.0, 0.09, 0.08)]))
 	# --- Música (bucle) ---
 	_save("music_loop", _music(), true)
 	quit()

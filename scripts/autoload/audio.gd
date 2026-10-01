@@ -44,13 +44,14 @@ func _exit_tree() -> void:
 
 
 ## Reproduce un efecto por su nombre (el nombre del .wav sin extensión).
+## `min_repeat` = cuánto tiene que pasar desde la última vez que sonó (RF-316: el combo pide más).
 ## Devuelve false si no se reprodujo (no existe, o sonó hace muy poco).
-func play(sound: StringName) -> bool:
+func play(sound: StringName, min_repeat: float = MIN_REPEAT_SECONDS) -> bool:
 	var stream: AudioStream = _streams.get(sound)
 	if stream == null:
 		return false
 	var now: float = Time.get_ticks_msec() / 1000.0
-	if now - float(_last_played.get(sound, -1.0)) < MIN_REPEAT_SECONDS:
+	if now - float(_last_played.get(sound, -1.0)) < min_repeat:
 		return false
 	_last_played[sound] = now
 	var voice: AudioStreamPlayer = _voices[_next_voice]

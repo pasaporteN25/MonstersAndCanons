@@ -8,18 +8,20 @@ signal died(enemy: Enemy)
 ## Llegó a la salida (RF-11). Quien escuche decide cuántas vidas restar.
 signal reached_exit(enemy: Enemy)
 ## Recibió un golpe (solo para efectos visuales, RF-132). `damage` es el daño real,
-## después de la armadura; `armor_blocked_most` = la armadura quitó la mitad o más.
-signal hit(enemy: Enemy, damage: int, armor_blocked_most: bool)
+## después de la armadura; `armor_blocked_most` = la armadura quitó la mitad o más;
+## `combo` = el golpe aprovechó un estado del enemigo (RF-315: el número es el aviso del combo).
+signal hit(enemy: Enemy, damage: int, armor_blocked_most: bool, combo: Combo)
 ## Se curó `amount` de vida (RF-165). Se avisa como mucho una vez por segundo, con lo que
 ## se curó en ese tiempo, para no llenar la pantalla de números.
 signal healed(enemy: Enemy, amount: int)
 ## El Chamán lanzó su hechizo a una torre (RF-282). Solo para los efectos: la torre ya quedó aturdida.
 signal cast_stun(shaman: Enemy, tower: Tower)
-## RF-313: lo golpeó una torre con bonus por su estado (ralentizado o quemado). Solo para los efectos.
-signal combo_hit(enemy: Enemy)
 ## Un tiro de `tower` rebotó en este enemigo (RF-284). `first` = la torre no estaba aturdida antes (para no llenar la
 ## pantalla de "¡Rebote!" cuando una descarga de varios proyectiles rebota toda junta). Solo para los efectos.
 signal reflected(enemy: Enemy, tower: Tower, first: bool)
+
+## RF-315: qué estado del enemigo aprovechó un golpe con bonus (NONE = ninguno, un golpe común).
+enum Combo { NONE, SLOWED, BURNING }
 
 const GROUP: StringName = &"enemies"
 ## Color al que se tiñe un enemigo ralentizado (RF-62).
@@ -160,16 +162,15 @@ func is_health_bar_visible() -> bool:
 
 
 ## Recibe un golpe (RF-80) y, si lo trae, una ralentización (RF-60, RF-61).
-func take_hit(damage: int, slow_amount: float = 0.0, slow_duration: float = 0.0, combo: bool = false) -> void:
+## `combo` = el golpe vino potenciado por un estado del enemigo (RF-315); solo cambia cómo se ve.
+func take_hit(damage: int, slow_amount: float = 0.0, slow_duration: float = 0.0, combo: Combo = Combo.NONE) -> void:
 	if _is_done:
 		return
-	if combo:
-		combo_hit.emit(self)
 	var dealt: int = Rules.damage_after_armor(damage, armor())
 	_hit_flash_left = HIT_FLASH_DURATION
 	if slow_amount > 0.0:
 		_apply_slow(Rules.effective_slow(slow_amount, data.slow_resistance), slow_duration)
-	_lose_health(dealt, dealt * 2 <= damage)
+	_lose_health(dealt, dealt * 2 <= damage, combo)
 
 
 ## RF-80, RF-271: la armadura que cuenta al recibir un golpe: la propia más la que le da un aura.
@@ -233,9 +234,9 @@ func is_burning() -> bool:
 
 
 ## Resta vida, avisa (números de daño, RF-132) y, si llega a 0, muere (RF-81).
-func _lose_health(amount: int, armor_blocked_most: bool) -> void:
+func _lose_health(amount: int, armor_blocked_most: bool, combo: Combo = Combo.NONE) -> void:
 	health = maxi(0, health - amount)
-	hit.emit(self, amount, armor_blocked_most)
+	hit.emit(self, amount, armor_blocked_most, combo)
 	queue_redraw()
 	if health == 0:
 		_is_done = true

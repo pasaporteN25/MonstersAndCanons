@@ -81,7 +81,7 @@ func _spawn_enemy(distance: float) -> void:
 	enemy.distance = distance
 	# Como en la partida real: cada golpe muestra su número de daño (RF-132).
 	var effects: Node = game.get("effects")
-	enemy.hit.connect(func(e: Node2D, damage: int, blocked: bool) -> void:
+	enemy.hit.connect(func(e: Node2D, damage: int, blocked: bool, _combo: int) -> void:
 		effects.call("damage_number", e.global_position, damage, blocked))
 	game.enemies.add_child(enemy)
 

@@ -26,7 +26,7 @@ func after_each() -> void:
 
 func test_every_game_event_has_a_sound() -> void:
 	var needed: Array[StringName] = [&"enemy_death", &"life_lost", &"build", &"upgrade", &"sell",
-		&"wave_start", &"victory", &"defeat", &"click", &"music_loop"]
+		&"wave_start", &"victory", &"defeat", &"click", &"music_loop", &"combo"]
 	var game: Node = GAME_SCENE.instantiate()
 	for tower: TowerData in game.get("tower_types"):
 		needed.append(StringName("shot_%s" % tower.id))
@@ -48,6 +48,15 @@ func test_play_returns_false_for_unknown_sounds() -> void:
 func test_same_sound_is_not_repeated_too_fast() -> void:
 	assert_true(Audio.play(&"shot_basic"))
 	assert_false(Audio.play(&"shot_basic"), "con 40 torres sería ensordecedor")
+
+
+func test_a_sound_can_ask_for_a_longer_gap() -> void:
+	# RF-316: el combo pide 0,15 s. Simulamos que sonó hace 0,1 s: con el intervalo de
+	# siempre (0,05 s) ya podría sonar, con el suyo todavía no.
+	Audio._last_played[&"combo"] = Time.get_ticks_msec() / 1000.0 - 0.1
+	assert_false(Audio.play(&"combo", 0.15), "todavía no pasaron 0,15 s")
+	Audio._last_played[&"combo"] = Time.get_ticks_msec() / 1000.0 - 0.1
+	assert_true(Audio.play(&"combo"), "con el intervalo de siempre, sí")
 
 
 func test_music_and_sfx_have_their_own_buses() -> void:

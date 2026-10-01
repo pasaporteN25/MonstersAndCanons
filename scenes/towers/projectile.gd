@@ -199,12 +199,14 @@ func _hit(enemy: Enemy) -> void:
 		enemy.reflect(source)  # RF-284: ni daño ni ralentización; la torre queda aturdida
 	else:
 		# RF-311: el estado se mira ANTES de aplicar lo que trae este golpe, y el bonus va antes de la armadura.
-		var bonus: int = 0
-		if enemy.is_slowed():
-			bonus += _stats.bonus_vs_slowed_percent
-		if enemy.is_burning():
-			bonus += _stats.bonus_vs_burning_percent
-		enemy.take_hit(Rules.damage_with_bonus(_stats.damage, bonus), _stats.slow_amount, _stats.slow_duration, bonus > 0)
+		var slowed_bonus: int = _stats.bonus_vs_slowed_percent if enemy.is_slowed() else 0
+		var burning_bonus: int = _stats.bonus_vs_burning_percent if enemy.is_burning() else 0
+		# RF-315: el aviso lleva el color del estado que dio más bonus (si empatan, el ralentizado).
+		var combo: Enemy.Combo = Enemy.Combo.NONE
+		if slowed_bonus + burning_bonus > 0:
+			combo = Enemy.Combo.SLOWED if slowed_bonus >= burning_bonus else Enemy.Combo.BURNING
+		var damage: int = Rules.damage_with_bonus(_stats.damage, slowed_bonus + burning_bonus)
+		enemy.take_hit(damage, _stats.slow_amount, _stats.slow_duration, combo)
 	if _stats.burn_damage_per_second > 0:
 		enemy.apply_burn(_stats.burn_damage_per_second, _stats.burn_duration)  # RF-160 (la quemadura no rebota, RF-284)
 

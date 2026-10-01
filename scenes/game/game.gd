@@ -9,6 +9,8 @@ const MAP_OFFSET := Vector2(0, 48)
 ## Sacudida de pantalla al perder vidas (RF-128).
 const SHAKE_DURATION: float = 0.25
 const SHAKE_STRENGTH_PX: float = 4.0
+## RF-316: el sonido del combo suena como mucho una vez cada tantos segundos.
+const COMBO_SOUND_GAP: float = 0.15
 ## RF-105: velocidad rápida.
 const FAST_SPEED: float = 2.0
 ## RF-184 (modo de pruebas): oro que da el panel y velocidad "x4".
@@ -328,10 +330,7 @@ func _on_enemy_spawned(enemy: Enemy) -> void:
 	enemy.reflected.connect(func(mirror: Enemy, tower: Tower, first: bool) -> void:
 		effects.reflect(mirror.global_position, tower.global_position, first))  # RF-284
 	enemy.reached_exit.connect(_on_enemy_reached_exit)
-	enemy.hit.connect(func(e: Enemy, damage: int, blocked: bool) -> void:
-		effects.damage_number(e.global_position, damage, blocked))  # RF-132
-	enemy.combo_hit.connect(func(e: Enemy) -> void:
-		effects.combo(e.global_position))  # RF-313
+	enemy.hit.connect(_on_enemy_hit)
 	enemy.healed.connect(func(e: Enemy, amount: int) -> void:
 		effects.heal_number(e.global_position, amount))  # RF-165
 	# RF-134: la primera vez en todo el juego que aparece este tipo, se presenta.
@@ -340,6 +339,15 @@ func _on_enemy_spawned(enemy: Enemy) -> void:
 		hud.show_enemy_intro(enemy.data)
 		if GameFlow.played_level() != null:
 			SaveManager.save()  # RF-117: solo jugando desde el menú (campaña o comunidad)
+
+
+## RF-132: el número de daño de cada golpe. Si el golpe hizo combo, su número es el aviso (RF-315) y suena (RF-316).
+func _on_enemy_hit(enemy: Enemy, damage: int, blocked: bool, combo: Enemy.Combo) -> void:
+	if combo == Enemy.Combo.NONE:
+		effects.damage_number(enemy.global_position, damage, blocked)
+		return
+	effects.combo(enemy.global_position, damage, combo)
+	Audio.play(&"combo", COMBO_SOUND_GAP)
 
 
 func _on_enemy_died(enemy: Enemy) -> void:

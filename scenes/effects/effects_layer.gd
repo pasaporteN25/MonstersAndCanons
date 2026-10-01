@@ -19,11 +19,35 @@ const HEAL_COLOR := Color(0.45, 0.95, 0.4)
 const STUN_COLOR := Color(0.95, 0.35, 0.8)
 ## RF-284: el rebote del Espejo.
 const REFLECT_COLOR := Color(0.6, 0.92, 1.0)
-## RF-313: el "¡Combo!" de un golpe con bonus por el estado del enemigo.
-const COMBO_COLOR := Color(1.0, 0.82, 0.3)
+## RF-315: el número de un golpe con combo, del color del estado que aprovechó.
+## Nunca dorado: el dorado es el color del oro (RF-124).
+const COMBO_SLOWED_COLOR := Color(0.45, 0.8, 1.0)
+const COMBO_BURNING_COLOR := Color(1.0, 0.55, 0.15)
+const COMBO_FONT_SIZE: int = 20
+## RF-315: la primera vez en la partida que salta cada combo, un texto que lo nombra.
+const COMBO_FIRST_TEXTS: Dictionary = {
+	Enemy.Combo.SLOWED: "¡Combo de hielo!",
+	Enemy.Combo.BURNING: "¡Combo de fuego!",
+}
+## RF-315: un combo a menos de esta distancia y este tiempo de otro solo muestra su anillo (golpes de área).
+const COMBO_GROUP_PX: float = 40.0
+const COMBO_GROUP_SECONDS: float = 0.15
 const MAX_DAMAGE_NUMBERS: int = 40
+## RF-315: los números de combo tienen su propio tope y no compiten con los blancos.
+const MAX_COMBO_NUMBERS: int = 12
 
 var _damage_numbers_alive: int = 0
+var _combo_numbers_alive: int = 0
+## RF-315: los combos que ya se nombraron en esta partida (la capa vive lo que dura la partida).
+var _combo_seen: Dictionary = {}
+## RF-315: los últimos números de combo, como [posición, momento], para no amontonarlos.
+var _recent_combos: Array[Array] = []
+## Reloj propio de la capa (se congela con la pausa, como el resto del mundo).
+var _clock: float = 0.0
+
+
+func _process(delta: float) -> void:
+	_clock += delta
 
 
 ## RF-132: número chico con el daño real. Gris si la armadura quitó la mitad o más.
@@ -32,12 +56,48 @@ func damage_number(position_: Vector2, damage: int, armor_blocked_most: bool) ->
 	return _small_number(position_, str(damage), DAMAGE_BLOCKED_COLOR if armor_blocked_most else DAMAGE_COLOR)
 
 
-## RF-313: "¡Combo!" dorado sobre el enemigo. Mismas reglas que los números de daño (opción y tope).
-func combo(position_: Vector2) -> bool:
-	if not _small_number(position_ + Vector2(0, -12), "¡Combo!", COMBO_COLOR):
+## RF-315: un golpe con combo. Su número de daño ES el aviso: "25!", más grande y del color del estado.
+## El anillo y el texto de la primera vez salen siempre; el número sigue la opción de números de daño,
+## tiene su propio tope y no se repite pegado a otro (un golpe de área sobre un grupo).
+## Devuelve true si mostró el número.
+func combo(position_: Vector2, damage: int, kind: Enemy.Combo) -> bool:
+	var color: Color = combo_color(kind)
+	_add(RingEffect.new().setup(Color(color, 0.95), 8.0, 28.0, 0.3, 3.0), position_)
+	if not _combo_seen.has(kind):
+		_combo_seen[kind] = true
+		_add(FloatingText.new().setup(COMBO_FIRST_TEXTS[kind], color, 18, 0.9, 30.0), position_ + Vector2(0, -36))
+	if _is_near_recent_combo(position_):
 		return false
-	_add(RingEffect.new().setup(Color(COMBO_COLOR, 0.8), 6.0, 20.0, 0.2, 2.0), position_)
+	_recent_combos.append([position_, _clock])
+	if not bool(SaveManager.get_setting("damage_numbers")) or _combo_numbers_alive >= MAX_COMBO_NUMBERS:
+		return false
+	var text := FloatingText.new().setup("%d!" % damage, color, COMBO_FONT_SIZE, 0.7, 30.0)
+	_combo_numbers_alive += 1
+	text.tree_exited.connect(func() -> void: _combo_numbers_alive -= 1)
+	_add(text, position_ + Vector2(randf_range(-6.0, 6.0), -16.0))
 	return true
+
+
+## RF-315: celeste si el golpe aprovechó un ralentizado, naranja si un quemado.
+static func combo_color(kind: Enemy.Combo) -> Color:
+	return COMBO_BURNING_COLOR if kind == Enemy.Combo.BURNING else COMBO_SLOWED_COLOR
+
+
+func combo_numbers_alive() -> int:
+	return _combo_numbers_alive
+
+
+## true si hace muy poco salió otro número de combo muy cerca. De paso olvida los viejos.
+func _is_near_recent_combo(position_: Vector2) -> bool:
+	var still_recent: Array[Array] = []
+	var near: bool = false
+	for entry: Array in _recent_combos:
+		if _clock - float(entry[1]) >= COMBO_GROUP_SECONDS:
+			continue
+		still_recent.append(entry)
+		near = near or position_.distance_to(entry[0]) < COMBO_GROUP_PX
+	_recent_combos = still_recent
+	return near
 
 
 ## RF-165: "+N" verde cuando un enemigo se cura. Mismas reglas que los números de daño.
