@@ -505,3 +505,11 @@ godot --headless --path . -s addons/gut/gut_cmdln.gd -gdir=res://tests -gexit
 - Datos: `data/towers/mortar.tres` (reusa `base_1..3`), `assets/sprites/towers/turret_mortar.svg` y `assets/sprites/projectiles/mortar.svg`; se agrega al final de `Tower Types` en `game.tscn`. La Wiki escribe "Tamaño: 2×2 casillas" leyendo `footprint`.
 - **Bot de balance:** las estrategias de hoy usan solo los índices 0–7, así que **no cambian**; se suma una (`mortar`) que compra Morteros donde haya 2×2 libres.
 - **Torres reservadas (D-045, RF-300):** `TowerData.reserved`; `LevelData.extra_towers` se lee de `"torres_extra"` (`LevelFile._read_extra_towers`, con `LevelFile.tower_ids()`) y `LevelData.available_towers(todas)` filtra. `Game.available_towers` alimenta a `BuildController` y al HUD; `tower_types` sigue siendo la lista completa. `LevelDraft` conserva y escribe el campo.
+
+### 6.16 Sinergias: reacciones por estado *(M20, D-046)*
+
+- `TowerLevelData` gana `bonus_vs_slowed_percent` y `bonus_vs_burning_percent`.
+- `Rules.damage_with_bonus(damage, percent)` (estática, sin escena): `roundi(damage × (100 + percent) / 100)`.
+- `Projectile._hit` (el único lugar por donde pasan los golpes directos, de área, de cadena y de ráfaga): suma los bonus según `enemy.is_slowed()` / `enemy.is_burning()` **antes** de aplicar los efectos del golpe, y llama `enemy.take_hit(daño_con_bonus, ..., combo)`.
+- `Enemy.take_hit` gana un parámetro `combo` y emite `combo_hit(enemy)` (solo visual); `Game` lo conecta a `EffectsLayer.combo` ("¡Combo!" dorado con el mismo tope que los números).
+- `TowerText.effects` escribe los bonus (panel y Wiki).

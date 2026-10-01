@@ -849,3 +849,20 @@
   **Refs:** RF-300, D-045.
   **Hecho cuando:** los tests comprueban que un nivel común tiene 8 torres y uno que habilita el Mortero tiene 9, la lectura del campo (válido, id que no existe, forma incorrecta, repetido), que el editor lo conserva y que el mapa de ejemplo lo usa.
   **Resultado:** `TowerData.reserved` (el Mortero lo es); `LevelData.extra_towers` y `available_towers()`; `LevelFile` lee `"torres_extra"` (con mensajes claros y la lista de torres que existen); `Game.available_towers` alimenta la barra y las teclas; `LevelDraft` conserva y escribe el campo. `tools/ejemplos/mapa_torres_apagadas.json` lo habilita (sirve para probarlo) y el bot `heavy` lo activa solo. 6 tests nuevos (735 en total) y se ajustaron los de la barra y de dibujos. **Hasta que exista el nivel 10, el Mortero no se puede jugar en la campaña.** La restricción es solo de interfaz (un test o el bot pueden construirlo directo).
+
+## M20 — Sinergias, etapa A: reacciones por estado *(pedido por Lucas, D-041, D-046)*
+
+- [ ] **T143 · Los datos y el daño con bonus**
+  `bonus_vs_slowed_percent` / `bonus_vs_burning_percent`, `Rules.damage_with_bonus`, `Projectile._hit`, los valores de Cañón, Francotirador, Mortero y Eléctrica.
+  **Refs:** RF-310, RF-311, RF-312, D-046.
+  **Hecho cuando:** los tests comprueban el criterio de aceptación (Cañón 25 contra ralentizado y 20 contra no; Eléctrica 17 contra quemado), que se suman los dos estados, el redondeo, que la armadura resta **después**, que un golpe de Hielo no se ayuda a sí mismo, y área, cadena y ráfaga; que un golpe rebotado no tiene bonus; y los datos de las cuatro torres.
+
+- [ ] **T144 · Aviso visual, panel y Wiki**
+  "¡Combo!" dorado, línea en el panel de la torre y en la Wiki.
+  **Refs:** RF-313.
+  **Hecho cuando:** los tests comprueban la señal, el texto del panel y de la Wiki y que la opción de números lo apaga; una captura muestra el combo.
+
+- [ ] **T145 · Cierre de M20**
+  El bot compara partidas con y sin los bonus, documentación, CHANGELOG y exportaciones.
+  **Refs:** D-046, RF-314.
+  **Hecho cuando:** pasan todos los tests, el bot muestra cuánto cambian los niveles 1 a 7 y se revisan las exportaciones.

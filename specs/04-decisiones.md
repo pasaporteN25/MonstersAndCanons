@@ -300,3 +300,12 @@
 - **Por qué así y no un "nivel desde el que se desbloquea":** la campaña todavía no tiene desbloqueos de torres; un campo en el nivel es lo más chico que sirve hoy y deja a los mapas de la comunidad habilitar torres reservadas si quieren. Más adelante puede crecer a un sistema de desbloqueos sin cambiar los archivos.
 - **Alternativa descartada:** sacar el Mortero del juego hasta el nivel 10: perdería su ficha, sus tests y la prueba de que el 2×2 funciona.
 - **Consecuencia:** hasta que exista el nivel 10, el Mortero solo se juega con un mapa que lo habilite. La restricción es de **interfaz**: `BuildController.try_build` no rechaza una torre reservada (los tests y el bot construyen directo).
+
+### D-046 · Sinergias en dos etapas: primero reacciones por estado, después vecinas
+- **Fecha:** 2026-09-30 · **Estado:** Aceptada · **Decidió:** Lucas (elegir A y B1 en dos etapas, 8 casillas de vecindad, combos de +25 a 30 %); Claude propuso las opciones y los números
+- **Qué:** etapa A (M20): `bonus_vs_slowed_percent` y `bonus_vs_burning_percent` en `TowerLevelData`; el proyectil mira los estados del enemigo **al impactar** y le pasa el daño ya multiplicado. Etapa B1 (M21): pares de torres vecinas, por especificar.
+- **Por qué empezar por A:** prueba la idea de "combinar ataques" **barata** (sin interfaz de vecindad ni líneas) usando estados que el juego ya muestra; si los combos no divierten, se descubre antes de construir la parte cara.
+- **Por qué el bono va antes de la armadura:** el golpe "vale más" y después la armadura resta lo de siempre (RF-80). Así un bono sobre un daño grande rinde casi entero, y sobre uno chico se lo come la armadura, como debe ser.
+- **Por qué los dos porcentajes se suman y no se multiplican:** son fáciles de explicar ("+25 % y +30 % = +55 %") y no se disparan si se agregan más estados.
+- **Alternativas descartadas:** (a) bonus para todas las torres: borra la identidad de cada una; (b) un estado nuevo ("mojado", "empapado") para combinar: más reglas que enseñar cuando ya hay dos estados visibles; (c) que el bono dependa de **cuánto** está ralentizado: los números dejarían de poder anunciarse en el panel.
+- **Riesgo conocido:** con Hielo y Cañón juntos en el camino, las partidas se vuelven más fáciles en los niveles 1 a 7 (que no se pensaron con esto). Se mide con el bot (T145) y, si hace falta, se baja el bono o se rebalancean oleadas.

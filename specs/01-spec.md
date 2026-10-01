@@ -230,9 +230,37 @@ Hasta ahora toda torre ocupa **una** casilla. Esta etapa enseña al juego a mane
 > **Dado** un Mortero y un mapa donde hay tres casillas libres juntas (la cuarta es camino) → **Cuando** intento construirlo ahí → **Entonces** no se construye, las cuatro casillas se ven rojas y sigo teniendo mi oro.
 > **Dado** cuatro casillas libres juntas y 300 de oro → **Cuando** hago clic con la vista previa → **Entonces** se construye, ocupa las cuatro casillas, **un clic en cualquiera** la selecciona, y al venderla recibo el 70 % y las cuatro vuelven a estar libres.
 
----
+### 5.8 Sinergias: combinar los ataques *(M20 y M21, pedido por Lucas, D-041, D-046, B-16 forma C)*
 
-## 6. Enemigos
+Hoy cada torre hace lo suyo sola. Las sinergias hacen que **combinar** torres rinda más que repetir la misma. **Lucas decidió (2026-09-30)** hacerlo en **dos etapas**: primero **reacciones por estado del enemigo** (A, M20) y después **pares de torres vecinas** (B1, M21), con combos **notables (+25 a 30 %)** y **8 casillas** de vecindad. Mismo principio de siempre (RF-164): todo son **datos**, apagados en 0.
+
+#### Etapa A · Reacciones por estado *(M20)*
+
+Un enemigo **ralentizado** o **quemado** (los estados que ya existen y ya se ven: tinte azul y llamitas, RF-62 y RF-160) recibe **más daño** de ciertas torres. No importa **dónde** estén las torres: premia tener Hielo e Incendiaria en el camino junto al resto.
+
+- **RF-310** **Los datos** (en `TowerLevelData`, enteros, valen 0 = apagado, D-013): `bonus_vs_slowed_percent` (+% de daño a un enemigo ralentizado) y `bonus_vs_burning_percent` (+% a uno que se quema).
+- **RF-311** **Cuándo cuenta:** el estado se mira **al impactar y antes de aplicar lo que trae ese mismo golpe** (un golpe de Hielo no se "ayuda" a sí mismo). Si el enemigo tiene **los dos** estados, **se suman** los dos porcentajes. El daño del golpe pasa a `daño × (100 + bonus) / 100`, **redondeado al entero más cercano**, y **recién después** resta la armadura (RF-80). Vale para todos los golpes: directos, de área, de cadena y de ráfaga. Un golpe que **rebota** en el Espejo no hace daño, así que no hay bonus (RF-284).
+- **RF-312** **Quién aprovecha qué** (números de partida; el mismo en los tres niveles de la torre):
+
+  | Torre | Contra | Bonus | Idea |
+  |---|---|---|---|
+  | Cañón | ralentizado | +25 % | el hielo lo deja quieto para la bomba |
+  | Francotirador | ralentizado | +25 % | blanco fácil |
+  | Mortero | ralentizado | +25 % | ídem (solo en los niveles que lo tienen, RF-300) |
+  | Eléctrica | quemado | +30 % | el fuego lo vuelve conductor |
+
+  Con eso, el Hielo y la Incendiaria pasan de "casi no hacen daño" a **amplificadores** del resto.
+- **RF-313** **Cómo se ve:** un golpe con bonus muestra **"¡Combo!"** dorado sobre el número de daño (mismas reglas que los números, RF-132: se apaga con la opción y hay un tope en pantalla). El panel de la torre dice **"+25 % de daño a ralentizados"** y la Wiki lo escribe en los efectos de la torre (RF-234).
+- **RF-314** **Por qué no se rompe el balance:** los bonus **no** son para las torres que ya sobresalen contra armadura (Ametralladora, Hielo) ni para las que pegan de a poquito (Múltiple, Ráfaga). Las torres con bonus son las de **golpe grande y lento**, que son las que más necesitan que el enemigo se quede quieto o se prenda fuego.
+
+> **Criterio de aceptación**
+> **Dado** un Cañón de nivel 1 (20 de daño) y un enemigo sin armadura → **Cuando** le pega a uno **ralentizado** → **Entonces** hace **25**; a uno que **no** lo está, **20**.
+> **Dado** una Eléctrica de nivel 1 (13 de daño) y un enemigo quemado → **Entonces** hace **17** (13 × 1,3 = 16,9). **Dado** un golpe de Hielo → **Entonces** no tiene bonus por el estado que él mismo pone.
+
+#### Etapa B1 · Pares de torres vecinas *(M21, se especifica al tomarla)*
+
+Lo ya decidido: son **vecinas** las torres que se tocan en las **8 casillas** de alrededor (una torre de 2×2 toca por todo su borde); los pares son **pocos y elegidos a mano** (propuesta: **Incendiaria + Eléctrica** → el rayo además quema; **Hielo + Múltiple** → los dardos ralentizan un poco; **Hielo + Cañón** → el área también ralentiza); se **ven** con una línea fina entre las vecinas, el panel dice la sinergia activa y la vista previa resalta con quién combina. Se escribe como §5.9 con sus RF cuando se tome.
+
 
 - **RF-80** Cuando un enemigo recibe daño, el daño real es:
   `daño real = máximo(1, daño del golpe − armadura del enemigo)`
