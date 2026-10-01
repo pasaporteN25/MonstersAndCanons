@@ -3,7 +3,9 @@
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
 ## Sinergias: combinar ataques *(M20)*
-- Un enemigo **ralentizado** por el Hielo recibe **+25 %** de daño del **Cañón**, el **Francotirador** y el **Mortero**; uno **quemado** por la Incendiaria recibe **+30 %** de la **Eléctrica**. Se ve un **"¡Combo!"** dorado y el panel y la Wiki lo explican.
+- Un enemigo **ralentizado** por el Hielo recibe **+25 %** de daño del **Cañón**, el **Francotirador** y el **Mortero**; uno **quemado** por la Incendiaria recibe **+30 %** de la **Eléctrica**.
+- **El combo se nota:** el número de daño del golpe sale **más grande y con "!"**, **celeste** si fue por el hielo y **naranja** si fue por el fuego, con un anillo del mismo color y un **"tin"** propio. El primer combo de cada tipo en la partida dice **"¡Combo de hielo!"** o **"¡Combo de fuego!"**. Ya no se amontona con los otros números ni se confunde con el oro, y no desaparece aunque apagues los números de daño.
+- **El combo se descubre:** el **Hielo** y la **Incendiaria** dicen en su panel y en la Wiki con qué torres combinan; la barra de construcción lo nombra; y un enemigo que está listo para un combo muestra una **dianita** al lado de su barra de vida.
 - Es la primera mitad; después vendrán los pares de torres vecinas.
 
 ## Torres grandes: el Mortero *(M19)*

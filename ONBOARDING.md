@@ -154,7 +154,15 @@ Abrí una partida en `JuegoA_pruebas.exe`, `F1` (panel de pruebas) y hacé apare
 
 ### 6.1.10 Combos por estado
 
-En el nivel 1 poné un **Hielo** y un **Cañón** juntos junto al camino. Cuando un enemigo ya ralentizado (se ve **azul**) recibe un golpe del Cañón tiene que salir un **"¡Combo!"** dorado y el número de daño es **25** en vez de 20. Seleccioná el Cañón: el panel dice "+25 % de daño a ralentizados". Con una **Incendiaria** y una **Eléctrica**, el enemigo en llamas recibe +30 % de la Eléctrica. Si apagás los números de daño en Opciones, el "¡Combo!" tampoco se ve.
+En el nivel 1 poné un **Hielo** y, un poco más adelante en el camino, un **Cañón**. Qué tiene que pasar (RF-315 a RF-318):
+
+- **Antes del golpe:** un enemigo ralentizado (tinte **celeste** y escarcha en el piso) muestra una **dianita celeste** al lado de su barra de vida, porque hay un Cañón en el mapa. Si vendés el Cañón, la dianita desaparece.
+- **El golpe:** cuando el Cañón le pega, el número de daño sale **"25!"**, **celeste y más grande** (en vez del "20" blanco), con un **anillo celeste** y un **"tin"**. El primer combo de la partida dice además **"¡Combo de hielo!"**; los siguientes, no.
+- **Con fuego:** con una **Incendiaria** y una **Eléctrica**, el enemigo en llamas muestra una dianita **naranja**, el número sale **naranja** ("17!") y la primera vez dice "¡Combo de fuego!".
+- **Los textos:** seleccioná el Hielo: el panel dice "Combo: Cañón y Francotirador +25 % a los que frena" (en el nivel 1 no hay Mortero). Elegí el Cañón en la barra: la frase de abajo termina con "Combo: +25 % a ralentizados.". En la Wiki, la ficha del Hielo tiene un apartado "Combos" y el artículo "Efectos de las torres" los explica.
+- **Números apagados** (Opciones): no hay número, pero el anillo, el "tin" y el texto de la primera vez siguen.
+
+Qué mirar con ojo crítico: si el "tin" se vuelve molesto en una oleada cargada, y si el combo **pesa** lo suficiente. Si falta peso, lo decidido es una regla nueva (el combo frena en seco al enemigo un instante, D-047), no subir los porcentajes.
 
 ### 6.1.09 El Mortero (2×2)
 

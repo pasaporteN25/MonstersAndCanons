@@ -4,7 +4,7 @@
 
 Juego *tower defense* 2D hecho en **Godot 4** con **GDScript**, construido con **SDD (Spec-Driven Development)**.
 
-> **Estado actual:** M1 a M20 ✅ (juego completo, 7 niveles, 9 torres (una de 2×2), modo de pruebas con editor de mapas, mapas de la comunidad, Wiki con bestiario, mapas de tamaño variable con zoom, siete temas de paisaje y leyenda, récords, niveles en archivos de texto y versión para Linux) y versión Android probada en un celular. Tests automáticos en GitHub (D-030).
+> **Estado actual:** M1 a M20 ✅ (juego completo, 7 niveles, 9 torres (una de 2×2) con combos por estado (el Hielo y la Incendiaria potencian a otras), modo de pruebas con editor de mapas, mapas de la comunidad, Wiki con bestiario, mapas de tamaño variable con zoom, siete temas de paisaje y leyenda, récords, niveles en archivos de texto y versión para Linux) y versión Android probada en un celular. Tests automáticos en GitHub (D-030).
 >
 > **Versión de Godot:** 4.7.2 estable (renderizador *Compatibility*).
 >
