@@ -145,10 +145,7 @@ static func _levels_with(enemy: EnemyData, campaign: Array[LevelData]) -> Packed
 # --- Torres ---
 
 static func _tower_entries(_campaign: Array[LevelData], _is_seen: Callable) -> Array[WikiEntry]:
-	var towers: Array[TowerData] = []
-	for resource: Resource in _load_all(TOWERS_DIR):
-		if resource is TowerData and not (resource as TowerData).levels.is_empty():
-			towers.append(resource)
+	var towers: Array[TowerData] = _all_towers()
 	# De la más barata a la más cara (RF-234).
 	towers.sort_custom(func(a: TowerData, b: TowerData) -> bool:
 		var cost_a: int = a.levels[0].cost
@@ -156,11 +153,21 @@ static func _tower_entries(_campaign: Array[LevelData], _is_seen: Callable) -> A
 		return cost_a < cost_b or (cost_a == cost_b and String(a.id) < String(b.id)))
 	var entries: Array[WikiEntry] = []
 	for tower: TowerData in towers:
-		entries.append(tower_entry(tower))
+		entries.append(tower_entry(tower, towers))
 	return entries
 
 
-static func tower_entry(tower: TowerData) -> WikiEntry:
+## Todas las torres de `data/towers/` (las que tienen niveles).
+static func _all_towers() -> Array[TowerData]:
+	var towers: Array[TowerData] = []
+	for resource: Resource in _load_all(TOWERS_DIR):
+		if resource is TowerData and not (resource as TowerData).levels.is_empty():
+			towers.append(resource)
+	return towers
+
+
+## `towers` = con qué torres puede combinar (RF-317); si no se pasa, todas las de `data/towers/`.
+static func tower_entry(tower: TowerData, towers: Array[TowerData] = []) -> WikiEntry:
 	var entry := WikiEntry.new()
 	entry.id = tower.id
 	entry.title = tower.display_name
@@ -197,6 +204,12 @@ static func tower_entry(tower: TowerData) -> WikiEntry:
 				entry.add_heading("Efectos")
 				has_effects = true
 			entry.add_text("Nivel %d: %s" % [i + 1, " · ".join(effects)])
+	# RF-317: la torre que pone un estado dice con quién combina (en la Wiki, con todas las torres).
+	var partners: Array[String] = TowerText.combo_partners(tower, towers if not towers.is_empty() else _all_towers())
+	if not partners.is_empty():
+		entry.add_heading("Combos")
+		for line: String in partners:
+			entry.add_text(line)
 	return entry
 
 

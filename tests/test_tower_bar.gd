@@ -68,7 +68,9 @@ func test_choosing_a_tower_shows_its_name_and_phrase() -> void:
 	game.build_controller.select(1)
 	assert_true(info.visible, "RF-171")
 	assert_eq((game.hud.get_node("%BuildInfoName") as Label).text, "Cañón · 100 de oro")
-	assert_eq((game.hud.get_node("%BuildInfoText") as Label).text, game.tower_types[1].description)
+	var text: String = (game.hud.get_node("%BuildInfoText") as Label).text
+	assert_string_starts_with(text, game.tower_types[1].description)
+	assert_string_ends_with(text, "Combo: +25 % a ralentizados.", "RF-317: el Cañón dice su combo")
 	game.build_controller.cancel()
 	assert_false(info.visible, "al cancelar se esconde")
 

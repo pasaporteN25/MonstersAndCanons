@@ -199,6 +199,9 @@ func show_selected_tower(index: int) -> void:
 		_build_info_text.text = tower.description
 		if tower.footprint > 1:  # RF-298
 			_build_info_text.text += " Necesita %d×%d casillas libres." % [tower.footprint, tower.footprint]
+		var combo: String = TowerText.combo_hint(tower, _tower_types)  # RF-317
+		if combo != "":
+			_build_info_text.text += " " + combo
 
 
 func _on_gold_changed(gold: int) -> void:

@@ -41,6 +41,9 @@ var dev_panel: DevPanel
 ## RF-194: el Salón de la fama, mientras está abierto. null si no.
 var hall_of_fame: HallOfFame
 var _shake_left: float = 0.0
+## RF-318: alguna torre del mapa aprovecha a los ralentizados / a los quemados.
+var _exploit_slowed: bool = false
+var _exploit_burning: bool = false
 
 @onready var tower_container: Node2D = $Towers
 @onready var enemies: Node2D = $Enemies
@@ -100,6 +103,7 @@ func _ready() -> void:
 
 	# RF-70: el panel avisa; BuildController cobra, mejora y vende.
 	var panel: TowerPanel = hud.tower_panel
+	panel.partner_towers = available_towers  # RF-317: el panel nombra solo las torres de este nivel
 	panel.upgrade_pressed.connect(func() -> void: build_controller.try_upgrade(build_controller.selected_placed()))
 	panel.sell_pressed.connect(func() -> void: build_controller.sell(build_controller.selected_placed()))
 	panel.targeting_pressed.connect(_on_targeting_pressed)
@@ -331,6 +335,7 @@ func _on_enemy_spawned(enemy: Enemy) -> void:
 		effects.reflect(mirror.global_position, tower.global_position, first))  # RF-284
 	enemy.reached_exit.connect(_on_enemy_reached_exit)
 	enemy.hit.connect(_on_enemy_hit)
+	enemy.set_exploitable(_exploit_slowed, _exploit_burning)  # RF-318
 	enemy.healed.connect(func(e: Enemy, amount: int) -> void:
 		effects.heal_number(e.global_position, amount))  # RF-165
 	# RF-134: la primera vez en todo el juego que aparece este tipo, se presenta.
@@ -370,18 +375,37 @@ func _on_tower_built(tower: Tower) -> void:
 	var shot_sound := StringName("shot_%s" % tower.data.id)
 	tower.fired.connect(func(_projectile: Projectile) -> void: Audio.play(shot_sound))
 	effects.tower_built(tower.global_position, tower.data.color, tower.data.footprint)
+	_refresh_exploitable()
 	Audio.play(&"build")
 
 
 func _on_tower_upgraded(tower: Tower) -> void:
 	effects.tower_built(tower.global_position, tower.data.color, tower.data.footprint)  # RF-75: mismo anillo
 	_refresh_tower_panel()
+	_refresh_exploitable()
 	Audio.play(&"upgrade")
 
 
 func _on_tower_sold(tower: Tower, refund: int) -> void:
 	effects.tower_sold(tower.global_position, refund, tower.data.footprint)
+	_refresh_exploitable(tower)  # todavía está en el árbol: se borra al final del cuadro
 	Audio.play(&"sell")
+
+
+## RF-318: qué estados aprovecha alguna torre del mapa (sin contar `leaving`, la que se está vendiendo).
+## Se lo avisa a todos los enemigos para su marca de "vulnerable".
+func _refresh_exploitable(leaving: Tower = null) -> void:
+	_exploit_slowed = false
+	_exploit_burning = false
+	for node: Node in tower_container.get_children():
+		var tower := node as Tower
+		if tower == null or tower == leaving or tower.is_queued_for_deletion():
+			continue
+		_exploit_slowed = _exploit_slowed or tower.stats().bonus_vs_slowed_percent > 0
+		_exploit_burning = _exploit_burning or tower.stats().bonus_vs_burning_percent > 0
+	for node: Node in enemies.get_children():
+		if node is Enemy:
+			(node as Enemy).set_exploitable(_exploit_slowed, _exploit_burning)
 
 
 func _on_targeting_pressed() -> void:

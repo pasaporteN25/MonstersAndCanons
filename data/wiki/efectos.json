@@ -35,6 +35,18 @@
   {
    "tipo": "texto",
    "texto": "La Múltiple le dispara a varios enemigos a la vez. La Ráfaga lanza púas en círculo, y rinde más en una curva. La Eléctrica lanza un rayo que salta de un enemigo a otro. Los números de cada nivel están en la entrada de cada torre."
+  },
+  {
+   "tipo": "titulo",
+   "texto": "Combos"
+  },
+  {
+   "tipo": "texto",
+   "texto": "Algunas torres le pegan más fuerte a un enemigo que ya está frenado por el Hielo o en llamas por la Incendiaria: el Cañón, el Francotirador y el Mortero aprovechan el hielo, y la Eléctrica, el fuego. No importa dónde estén las torres: importa que el enemigo llegue frenado o quemado."
+  },
+  {
+   "tipo": "texto",
+   "texto": "Un golpe con combo muestra su número más grande y con un «!»: celeste si fue por el hielo y naranja si fue por el fuego, y suena un «tin». Mientras un enemigo está listo para un combo, se ve una dianita de ese color al lado de su barra de vida. Cuánto suma cada combo está en la entrada de cada torre."
   }
  ]
 }

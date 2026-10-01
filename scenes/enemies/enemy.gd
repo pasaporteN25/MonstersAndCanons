@@ -77,6 +77,9 @@ var _aura_heal_left: float = 0.0
 var _aura_pulse_left: float = 0.0
 ## RF-282: cuánto falta para el próximo hechizo (si tiene). Llega a 0 y espera hasta que haya una torre.
 var _stun_cast_left: float = 0.0
+## RF-318: qué estados aprovecha alguna torre del mapa (lo avisa Game con set_exploitable).
+var _exploit_slowed: bool = false
+var _exploit_burning: bool = false
 ## Evita actuar dos veces: tras queue_free() el nodo sigue vivo hasta el final del frame.
 var _is_done: bool = false
 # Solo visual (spec §9.3):
@@ -488,8 +491,13 @@ func _draw_aura_ring() -> void:
 
 
 ## RF-274: un escudo (recibe armadura de un aura) y/o una cruz verde (recibe cura), chicos, a un costado.
+## RF-318: en la misma fila, la dianita de "vulnerable" (celeste o naranja).
 func _draw_aura_icons(top: float) -> void:
-	if _aura_armor <= 0 and _aura_heal <= 0.0:
+	var marks: Array[Combo] = []
+	for kind: Combo in [Combo.SLOWED, Combo.BURNING]:
+		if shows_vulnerable_mark(kind):
+			marks.append(kind)
+	if _aura_armor <= 0 and _aura_heal <= 0.0 and marks.is_empty():
 		return
 	var r: float = Rules.tiles_to_px(data.size_tiles)
 	var x: float = maxf(r, 12.0) + 6.0
@@ -504,6 +512,38 @@ func _draw_aura_icons(top: float) -> void:
 		draw_line(Vector2(x, y - 5), Vector2(x, y + 5), AURA_INK, 4.6)
 		draw_line(Vector2(x - 4, y), Vector2(x + 4, y), AURA_HEAL_COLOR, 2.4)
 		draw_line(Vector2(x, y - 4), Vector2(x, y + 4), AURA_HEAL_COLOR, 2.4)
+		x += 13.0
+	for kind: Combo in marks:
+		# +2: la dianita es un poco más ancha que el escudo y si no, pisa la punta de la barra de vida.
+		_draw_vulnerable_mark(Vector2(x + 2.0, y), EffectsLayer.combo_color(kind))
+		x += 17.0
+
+
+## RF-318: una dianita: círculo oscuro, aro del color del estado y cuatro marcas que lo cruzan.
+func _draw_vulnerable_mark(center: Vector2, color: Color) -> void:
+	draw_circle(center, 6.5, AURA_INK)
+	draw_arc(center, 4.5, 0.0, TAU, 20, color, 2.0, true)
+	for angle: float in [0.0, PI / 2.0, PI, PI * 1.5]:
+		var direction := Vector2.from_angle(angle)
+		draw_line(center + direction * 2.0, center + direction * 7.5, color, 1.8)
+
+
+## RF-318: Game avisa qué estados aprovecha alguna torre del mapa (llamada hacia abajo, P6).
+func set_exploitable(slowed: bool, burning: bool) -> void:
+	if slowed != _exploit_slowed or burning != _exploit_burning:
+		queue_redraw()
+	_exploit_slowed = slowed
+	_exploit_burning = burning
+
+
+## RF-318: true si muestra la marca de "vulnerable" de ese estado: lo tiene Y alguna torre del mapa lo aprovecha.
+func shows_vulnerable_mark(kind: Combo) -> bool:
+	match kind:
+		Combo.SLOWED:
+			return _exploit_slowed and is_slowed()
+		Combo.BURNING:
+			return _exploit_burning and is_burning()
+	return false
 
 
 ## RF-82: barra verde sobre fondo rojo oscuro, encima del enemigo. `top` = borde de arriba.

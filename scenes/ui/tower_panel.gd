@@ -12,6 +12,8 @@ var _sell_value: int = 0
 var _gold: int = 0
 ## RF-280: los segundos de aturdimiento que se muestran (para refrescar solo cuando cambian).
 var _shown_stun: int = 0
+## RF-317: las torres de este nivel, para decir con cuáles combina la seleccionada. Lo pone Game.
+var partner_towers: Array[TowerData] = []
 
 @onready var _title: Label = %Title
 @onready var _stats: Label = %Stats
@@ -52,6 +54,9 @@ func refresh(gold: int) -> void:
 	if _shown_stun > 0:
 		_title.text += " · Aturdida (%d s)" % _shown_stun  # RF-280
 	_stats.text = TowerText.describe(s, _tower.data.can_hit_air)
+	for line: String in TowerText.combo_partners(_tower.data, partner_towers):  # RF-317
+		# Espacio que no corta: si la línea no entra, que no quede "+25" arriba y "%" abajo.
+		_stats.text += "\n" + line.replace(" %", " %")
 	_targeting_button.text = "Apuntar: %s" % _tower.targeting_name()
 	var next: TowerLevelData = _tower.next_level_stats()
 	if next == null:
