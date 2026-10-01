@@ -930,10 +930,11 @@
   **Comparado con el bot** (una copia del bot con el modo de pruebas prendido, `mix`, nivel 1, victoria con 19 vidas): las diez filas del informe (`gold`, `lives`, `towers` de cada oleada) y el resultado final coinciden **exactamente** con las diez líneas "oleada N terminada" que imprime el bot (por ejemplo la oleada 1: vidas 20, oro 65, torres 3; la 10: vidas 19, oro 236, torres 23). El informe da además 414 s de tiempo de juego, que el bot no mide.
   **No probé:** abrir el informe con otra herramienta (solo `JSON.new().parse` del propio juego) ni qué pasa si el disco está lleno (devuelve `false` y deja un aviso en el log, probado con una ruta imposible).
 
-- [ ] **T154 · `CLAUDE.md` en la raíz** *(aparte, chico)*
+- [x] **T154 · `CLAUDE.md` en la raíz** *(aparte, chico)*
   Hoy no existe: lo que Claude necesita saber al abrir el proyecto, en un solo lugar.
   **Refs:** D-040 (reglas por carpeta), D-048.
   **Hecho cuando:** `CLAUDE.md` dice cómo correr Godot y GUT (con `--import` antes de los tests nuevos), el flujo SDD (spec, decisión, plan, tareas, código, commit; los números de RF y D no se reusan), la regla de "Sugerencias de Claude (consultar antes de implementar)" y que las reglas por carpeta están en `.claude/rules/` (con la lista); es corto (no repite la constitución) y todo lo que afirma se comprobó (los comandos se corrieron).
+  **Resultado:** `CLAUDE.md` en la raíz (47 líneas): cómo se corre Godot y GUT (los comandos, el de importar, el del bot y el de la exportación de pruebas, con la diferencia entre PowerShell y Git Bash), el flujo SDD con la regla de no reusar números y el commit por tarea con `git push`, la regla de **"Sugerencias de Claude"**, la tabla de las cinco reglas de `.claude/rules/` y dónde está cada documento. No repite la constitución ni el contenido de las reglas. **Comprobado:** corrí los comandos de importar, de un test y de todos los tests (853 en verde), el bot (`balance_sim.gd`, varios niveles) y que `godot` se resuelve a `C:ToolsGodotgodot.cmd` en PowerShell y no en Git Bash; la exportación se prueba en T155. **Sumé una advertencia que no estaba en ningún lado y encontré en esta sesión:** `godot --import` reescribe sin avisar algunos SVG de `assets/sprites/` y hay que mirar `git status` antes de cada commit. **No probé:** que Claude Code cargue el archivo en una sesión nueva.
 
 - [ ] **T155 · Cierre de M22**
   Todos los tests, sin `SCRIPT ERROR`, documentación y exportaciones.
