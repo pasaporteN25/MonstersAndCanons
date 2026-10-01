@@ -152,6 +152,10 @@ Copiá los siete `tools/ejemplos/tema_*.json` a la carpeta de mapas de la comuni
 
 Abrí una partida en `JuegoA_pruebas.exe`, `F1` (panel de pruebas) y hacé aparecer un **Guardián**, un **Curandero** y varios enemigos comunes. Tiene que verse: el **anillo** de cada uno en el suelo (marfil dorado el Guardián, verde el Curandero); un **escudo** sobre los enemigos que están dentro del anillo del Guardián y una **cruz verde** sobre los del Curandero; el **número de daño gris** cuando la armadura se come el golpe; y que al **matar al portador** el escudo o la cruz desaparecen en menos de un segundo. Con una Incendiaria, el enemigo que se quema no recupera vida aunque esté dentro del anillo verde.
 
+### 6.1.10 Combos por estado
+
+En el nivel 1 poné un **Hielo** y un **Cañón** juntos junto al camino. Cuando un enemigo ya ralentizado (se ve **azul**) recibe un golpe del Cañón tiene que salir un **"¡Combo!"** dorado y el número de daño es **25** en vez de 20. Seleccioná el Cañón: el panel dice "+25 % de daño a ralentizados". Con una **Incendiaria** y una **Eléctrica**, el enemigo en llamas recibe +30 % de la Eléctrica. Si apagás los números de daño en Opciones, el "¡Combo!" tampoco se ve.
+
 ### 6.1.09 El Mortero (2×2)
 
 El Mortero es una torre **reservada** (solo el nivel 10 la tendrá): para probarla, abrí el mapa `tools/ejemplos/mapa_torres_apagadas.json` (copialo a la carpeta de mapas de la comunidad). Elegí el **Mortero** (novena torre, tecla **9**, 300 de oro) y pasá el mouse por el mapa: el cuadrado de **2×2** queda centrado en el mouse y se ve **verde** donde entra y **rojo** si una de las cuatro casillas es camino, roca u otra torre. Construilo: ocupa las cuatro casillas, un clic en cualquiera lo selecciona, dispara una bomba cada 4 segundos con daño de área, y al **venderlo** devuelve el 70 % y libera las cuatro casillas. La barra de abajo debe mostrar las 9 torres sin tapar "Próxima oleada".

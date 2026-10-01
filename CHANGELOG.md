@@ -2,6 +2,10 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Sinergias: combinar ataques *(M20)*
+- Un enemigo **ralentizado** por el Hielo recibe **+25 %** de daño del **Cañón**, el **Francotirador** y el **Mortero**; uno **quemado** por la Incendiaria recibe **+30 %** de la **Eléctrica**. Se ve un **"¡Combo!"** dorado y el panel y la Wiki lo explican.
+- Es la primera mitad; después vendrán los pares de torres vecinas.
+
 ## Torres grandes: el Mortero *(M19)*
 - Primera torre de **2×2 casillas**: el **Mortero** (tecla **9**), una bomba lenta de gran daño en área y largo alcance, pensada contra blindados y jefes. Se construye en un cuadrado de cuatro casillas libres; la vista previa se centra en el mouse y se pinta verde o roja.
 - Por ahora el Mortero es una torre **reservada**: solo aparece en los niveles que la habilitan (el 10, cuando exista); los demás siguen con las 8 de siempre.

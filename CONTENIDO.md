@@ -87,6 +87,7 @@ Los niveles son JSON, un formato de texto común que se edita a mano. Un `.tres`
 | `id`, `display_name` | Como en los enemigos. |
 | `description` | Frase que se ve al elegirla para construir (RF-171). |
 | `can_hit_air` | Si le pega a los voladores. |
+| `bonus_vs_slowed_percent` / `bonus_vs_burning_percent` | **Sinergia por estado** (RF-310): % de daño extra contra un enemigo ralentizado o que se quema. Se mira al impactar, se suman si tiene los dos y se calcula antes de la armadura. 0 = nada. Va en cada **nivel** de la torre. | `25`, `0` |
 | `reserved` | `true` = la torre **no** está en la barra salvo que el nivel la habilite con `"torres_extra"` (RF-300). Hoy: el Mortero. | `true` |
 | `footprint` | **Lado** de la torre en casillas (RF-290). `1` = una casilla (la común), `2` = cuadrado de 2×2 como el Mortero. Necesita todas sus casillas libres; usa los mismos dibujos de base agrandados. | `2` |
 | `projectile_speed_tiles` | Velocidad de sus proyectiles (casi todas: 10). |

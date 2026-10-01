@@ -234,7 +234,7 @@ Hasta ahora toda torre ocupa **una** casilla. Esta etapa enseña al juego a mane
 
 Hoy cada torre hace lo suyo sola. Las sinergias hacen que **combinar** torres rinda más que repetir la misma. **Lucas decidió (2026-09-30)** hacerlo en **dos etapas**: primero **reacciones por estado del enemigo** (A, M20) y después **pares de torres vecinas** (B1, M21), con combos **notables (+25 a 30 %)** y **8 casillas** de vecindad. Mismo principio de siempre (RF-164): todo son **datos**, apagados en 0.
 
-#### Etapa A · Reacciones por estado *(M20)*
+#### Etapa A · Reacciones por estado *(M20, hecha)*
 
 Un enemigo **ralentizado** o **quemado** (los estados que ya existen y ya se ven: tinte azul y llamitas, RF-62 y RF-160) recibe **más daño** de ciertas torres. No importa **dónde** estén las torres: premia tener Hielo e Incendiaria en el camino junto al resto.
 
