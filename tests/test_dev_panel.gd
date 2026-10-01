@@ -49,7 +49,7 @@ func test_dev_mode_game_has_the_panel_closed() -> void:
 func test_add_gold() -> void:
 	var before: int = game.session.gold
 	game.dev_add_gold()
-	assert_eq(game.session.gold, before + Game.DEV_GOLD)
+	assert_eq(game.session.gold, before + DevMode.config.gold_step)
 
 
 func test_infinite_lives() -> void:
@@ -95,7 +95,7 @@ func test_win_and_lose() -> void:
 
 func test_speed_x4() -> void:
 	game.dev_set_fast(true)
-	assert_eq(Engine.time_scale, Game.DEV_FAST_SPEED)
+	assert_eq(Engine.time_scale, DevMode.config.speeds[-1])
 	game.dev_set_fast(false)
 	assert_eq(Engine.time_scale, 1.0)
 

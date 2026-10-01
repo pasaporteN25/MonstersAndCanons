@@ -12,6 +12,8 @@ const EDITOR_ARG: String = "--pruebas"
 ## RF-181: guardado del modo de pruebas.
 const SAVE_PATH: String = "user://save_pruebas.json"
 
+## RF-324: los números del modo de pruebas (oro del botón, velocidades).
+var config: DevConfig = preload("res://data/dev_config.tres")
 var enabled: bool = false
 
 var _banner: CanvasLayer

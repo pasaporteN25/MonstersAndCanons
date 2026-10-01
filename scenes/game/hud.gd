@@ -18,6 +18,8 @@ const TOWER_ICON_SIZE: int = 34
 const INTRO_SECONDS: float = 6.0
 
 var _total_waves: int = 0
+## RF-319: la última oleada que avisó la sesión; si el salto es de más de una, no fue "empezó la oleada".
+var _last_wave: int = 0
 ## Las oleadas del nivel: para mostrar la próxima (RF-133) y avisar del Jefe (RF-135).
 var _waves: Array[WaveData] = []
 var _tower_types: Array[TowerData] = []
@@ -231,9 +233,14 @@ func _on_lives_changed(lives: int) -> void:
 
 func _on_wave_changed(wave: int, total_waves: int) -> void:
 	_total_waves = total_waves
-	_wave_label.text = "Oleada %d/%d" % [wave, total_waves]
-	if wave > 0:
-		_show_wave_banner(wave)
+	if wave > 0 and wave != _last_wave + 1:
+		# RF-319 (modo de pruebas): se saltó a una oleada; la que dice es la que viene, sin cartel de inicio.
+		_wave_label.text = "Próxima: oleada %d/%d" % [wave + 1, total_waves]
+	else:
+		_wave_label.text = "Oleada %d/%d" % [wave, total_waves]
+		if wave > 0:
+			_show_wave_banner(wave)
+	_last_wave = wave
 	# RF-133: la próxima es la oleada número wave + 1, que en la lista está en el índice `wave`.
 	show_next_wave(_waves[wave] if wave < _waves.size() else null)
 

@@ -895,10 +895,11 @@
 
 **Estado: aprobada por Lucas (2026-10-01). Se hace en la rama `m22-modo-pruebas`, con un PR.**
 
-- [ ] **T149 · Los datos y la lógica de la oleada inicial**
+- [x] **T149 · Los datos y la lógica de la oleada inicial**
   `DevConfig` y `data/dev_config.tres`, `DevStart` (`clamp_wave`, `skipped_gold`, `start_gold`), `LevelSession.jump_to_wave`.
   **Refs:** RF-319, RF-320, RF-324, D-048.
   **Hecho cuando:** los tests comprueban el criterio de aceptación de RF-319 y RF-320 con los datos reales del nivel 1 (oleada 1 = oro del nivel; oleada 6 = oro del nivel + recompensas de las oleadas 1 a 5 + sus bonos), que las crías de la Araña suman, que un valor mayor que el total se ajusta, el oro a mano de 0, y que `jump_to_wave` deja la oleada, el estado y la señal bien y el HUD con la próxima oleada correcta. Nada de números nuevos en el código.
+  **Resultado:** `DevConfig` (`scripts/data/dev_config.gd`) y `data/dev_config.tres` con el oro del botón (1000) y las cinco velocidades; `DevMode.config` lo carga y `Game.DEV_GOLD` / `DEV_FAST_SPEED` desaparecieron. `DevStart` (`scripts/logic/dev_start.gd`, sin escenas): `clamp_wave`, `enemy_reward` (suma las crías recursivamente, con un tope de 8 generaciones por si un dato se cierra en círculo), `skipped_gold` y `start_gold` (automático con un valor negativo; a mano desde 0). `LevelSession.jump_to_wave(n)` deja `wave = n-1`, avisa con `wave_changed`, no da oro y solo vale antes de la primera oleada. **Salió de probarlo:** el HUD, al recibir un salto, mostraba el cartel "Oleada 5" y la etiqueta "Oleada 5/10", como si la 5 empezara; ahora, si la oleada no es la siguiente a la anterior, no hay cartel y dice **"Próxima: oleada 6/10"**. 15 tests nuevos (793 en total, sin `SCRIPT ERROR`): los límites de `clamp_wave`, oro con la oleada 1 / 2 / 3, valor mayor al total, oro a mano de 0, crías (y crías de crías), el lazo de crías no cuelga, el nivel 1 real calculado por otro camino, que la Araña suma crías, los números de `dev_config.tres`, `jump_to_wave` (con sus bordes) y el HUD mostrando la oleada 6 como próxima. Se ajustaron dos asserts de `test_dev_panel.gd` que nombraban las constantes borradas. **Todavía no:** nada de esto se ve en el juego; la elección en pantalla es T150.
 
 - [ ] **T150 · Elegir la oleada y el oro al elegir nivel**
   Franja "Pruebas" en la selección de nivel, `Game` la aplica, esa partida no guarda progreso, y el oro automático se contrasta con el bot.

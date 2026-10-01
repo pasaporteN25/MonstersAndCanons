@@ -13,9 +13,6 @@ const SHAKE_STRENGTH_PX: float = 4.0
 const COMBO_SOUND_GAP: float = 0.15
 ## RF-105: velocidad rápida.
 const FAST_SPEED: float = 2.0
-## RF-184 (modo de pruebas): oro que da el panel y velocidad "x4".
-const DEV_GOLD: int = 1000
-const DEV_FAST_SPEED: float = 4.0
 ## RF-193: título de la tabla de récords en la pantalla final.
 const LEVEL_RECORDS_TITLE: String = "Récords del nivel"
 ## RF-217: cómo se llama el botón que vuelve al editor cuando se está probando un nivel.
@@ -289,7 +286,7 @@ func _add_dev_panel() -> void:
 
 
 func dev_add_gold() -> void:
-	session.earn(DEV_GOLD)
+	session.earn(DevMode.config.gold_step)  # RF-324: el número vive en data/dev_config.tres
 
 
 func dev_set_infinite_lives(on: bool) -> void:
@@ -320,7 +317,7 @@ func dev_finish(won: bool) -> void:
 
 
 func dev_set_fast(on: bool) -> void:
-	set_speed(DEV_FAST_SPEED if on else 1.0)
+	set_speed(DevMode.config.speeds[-1] if on else 1.0)  # se reemplaza por los cinco botones en T151
 
 
 func dev_spawn(data: EnemyData) -> void:

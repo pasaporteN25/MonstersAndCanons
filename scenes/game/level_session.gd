@@ -143,3 +143,13 @@ func _set_state(new_state: State) -> void:
 		add_score(Rules.victory_points(lives, _balance))  # RF-190: antes de avisar la victoria
 	state = new_state
 	state_changed.emit(state)
+
+
+## RF-319 (modo de pruebas): la partida arranca lista para empezar la oleada `target`, como si las
+## anteriores ya se hubieran jugado. Solo antes de empezar la primera. Con un `target` fuera de rango
+## se usa la última oleada del nivel. No da oro ni bonos: el oro lo decide `DevStart.start_gold`.
+func jump_to_wave(target: int) -> void:
+	if state != State.BUILDING or wave != 0 or total_waves == 0:
+		return
+	wave = DevStart.clamp_wave(target, total_waves) - 1
+	wave_changed.emit(wave, total_waves)
