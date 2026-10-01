@@ -869,3 +869,20 @@
   **Refs:** D-046, RF-314.
   **Hecho cuando:** pasan todos los tests, el bot muestra cuánto cambian los niveles 1 a 7 y se revisan las exportaciones.
   **Resultado:** El bot jugó los siete niveles **sin** y **con** los bonus (vidas al terminar, sin → con). **`mix`** (las 8 torres): nivel 1 9 → 19, nivel 2 derrota → derrota, nivel 3 16 → 16, nivel 4 6 → 8, nivel 5 13 → 13, nivel 6 10 → 10, nivel 7 7 → **17**. **`smart`** (las 4 viejas, solo Cañón y Francotirador aprovechan): nivel 1 13 → 14, nivel 2 17 → 17, nivel 3 9 → 9, niveles 4 y 5 derrota → derrota, nivel 6 5 → **11**, nivel 7 derrota en la oleada 18 → derrota en la 11. **Lectura honesta:** ayuda sobre todo a `mix`, que sí compra Hielo, Incendiaria y Eléctrica; **ningún nivel se volvió trivial** ni se rompió, así que no se tocaron los números ni las oleadas. Dos cosas raras que **no investigué**: `smart` en el nivel 7 empeora (el bot compra en un orden fijo y el bonus cambia a qué enemigos mata primero), y el 9 → 19 de `mix` en el nivel 1 es un salto grande para un bot que tiene un solo Hielo; el bot es tosco y con un solo corrida por caso, no es una medición fina. README, CONTENIDO (los dos campos nuevos), CHANGELOG y ONBOARDING (cómo probarlo) al día; se exportaron los cuatro. **Sin probar:** jugarlo a mano, Linux y celular.
+
+### M20, segunda parte — Que el combo se lea y se descubra *(pedido por Lucas, D-047)*
+
+- [ ] **T146 · El combo se ve y suena**
+  El número de daño es el aviso (grande, "!", celeste o naranja), anillo del color del estado, "¡Combo de hielo/fuego!" la primera vez, sin amontonar, tope propio, visible con los números apagados, y el sonido `combo`.
+  **Refs:** RF-315, RF-316, D-047.
+  **Hecho cuando:** los tests comprueban el criterio de aceptación de RF-315 y RF-316: un golpe con combo muestra **un** número "N!" del color del estado y **no** el número blanco; el anillo; el texto de la primera vez sale una sola vez por estado; el naranja con una Eléctrica contra un quemado; con los dos estados manda el de más bonus; dos combos pegados en 0,15 s dan un número y dos anillos (y pasado ese tiempo, dos números); con los números apagados no hay número pero sí anillo y texto; el tope de 12; que el sonido existe y que `Audio.play` respeta el intervalo pedido. Se ajustan los tests de T143 y T144. Una captura de una partida real muestra el combo nuevo.
+
+- [ ] **T147 · El combo se descubre**
+  `TowerText.combo_partners` y `combo_hint`, panel, Wiki, barra de construcción, artículo "Efectos de las torres" y la marca de "vulnerable".
+  **Refs:** RF-317, RF-318, D-047.
+  **Hecho cuando:** los tests comprueban el criterio de aceptación de RF-317 y RF-318: las líneas del Hielo (con y sin Mortero según el nivel) y de la Incendiaria, que una torre sin estado no dice nada, que se arman desde los datos (una torre de prueba con bonus aparece sola), el panel, la Wiki, la barra, el artículo; la marca aparece solo si el enemigo está en el estado **y** hay una torre que lo aprovecha, aparece al construir y se va al vender. Capturas del panel del Hielo, de la barra y de la marca en una partida real.
+
+- [ ] **T148 · Cierre de la segunda parte de M20**
+  Todos los tests, el bot (que el balance no cambió), README, CONTENIDO, CHANGELOG, ONBOARDING (cómo probarlo) y exportaciones.
+  **Refs:** D-047.
+  **Hecho cuando:** pasan todos los tests, el bot da los mismos resultados que antes en los niveles 1 a 7 (no se tocó el balance), la documentación dice cómo se ve y suena el combo ahora y se revisan las exportaciones.
