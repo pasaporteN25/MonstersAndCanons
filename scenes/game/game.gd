@@ -40,6 +40,9 @@ var dev_panel: DevPanel
 ## RF-194: el Salón de la fama, mientras está abierto. null si no.
 var hall_of_fame: HallOfFame
 var _shake_left: float = 0.0
+## RF-325: el informe de esta partida de pruebas. null en el juego normal.
+var dev_stats: DevStats
+var _stats_written: bool = false
 ## RF-318: alguna torre del mapa aprovecha a los ralentizados / a los quemados.
 var _exploit_slowed: bool = false
 var _exploit_burning: bool = false
@@ -143,6 +146,7 @@ func _ready() -> void:
 
 	session.start(level_data, balance)
 	_apply_dev_start()
+	_start_dev_stats()
 	if DevMode.enabled:
 		_add_dev_panel()
 
@@ -162,6 +166,8 @@ func _fit_map() -> void:
 
 
 func _process(delta: float) -> void:
+	if dev_stats != null and not get_tree().paused and not session.is_over():
+		dev_stats.seconds += delta  # RF-325: tiempo de juego, sin pausa
 	# RF-128: se mueve todo el "mundo"; el HUD está en otra capa y no se sacude.
 	if _shake_left <= 0.0:
 		return
@@ -176,6 +182,7 @@ func _process(delta: float) -> void:
 ## Al salir de la partida (reintentar, cerrar, o un test que la borra) nunca debe
 ## quedar el juego en pausa ni acelerado (RF-105, plan §6.7).
 func _exit_tree() -> void:
+	_write_dev_stats(DevStats.RESULT_LEFT)  # si la partida ya terminó, no pisa su informe
 	_reset_time()
 
 
@@ -293,6 +300,34 @@ func _apply_dev_start() -> void:
 	session.jump_to_wave(wave)
 	session.set_gold(DevStart.start_gold(level_data, balance, wave, DevMode.start_gold))
 	DevMode.applied_wave = wave
+
+
+## RF-325: empieza a juntar el informe de la partida (solo en el modo de pruebas).
+func _start_dev_stats() -> void:
+	if not DevMode.enabled:
+		return
+	dev_stats = DevStats.new()
+	dev_stats.begin(String(level_data.id), DevMode.applied_wave)
+	session.wave_completed.connect(func(wave: int, _bonus: int) -> void:
+		dev_stats.record_wave(wave, session.lives, session.gold, _tower_count()))
+
+
+## Torres en el mapa (sin contar las que se están vendiendo).
+func _tower_count() -> int:
+	var count: int = 0
+	for node: Node in tower_container.get_children():
+		if not node.is_queued_for_deletion():
+			count += 1
+	return count
+
+
+## RF-325: escribe el informe una sola vez por partida (al terminar, o al salir si no terminó).
+func _write_dev_stats(result: String) -> void:
+	if dev_stats == null or _stats_written or not DevMode.enabled:  # sin modo de pruebas (ya apagado) no hay informe
+		return
+	_stats_written = true
+	DevMode.write_stats(dev_stats.to_dict(result, session.wave, session.total_waves, session.lives,
+			session.gold, _tower_count()))
 
 
 func _add_dev_panel() -> void:
@@ -470,6 +505,7 @@ func _on_tower_fired(projectile: Projectile) -> void:
 func _on_state_changed(state: LevelSession.State) -> void:
 	if state != LevelSession.State.WON and state != LevelSession.State.LOST:
 		return
+	_write_dev_stats(DevStats.RESULT_WON if state == LevelSession.State.WON else DevStats.RESULT_LOST)
 	# RF-91: el juego se detiene. Se congela el "mundo", pero no la interfaz.
 	for node: Node in [enemies, tower_container, projectiles, spawner]:
 		node.process_mode = Node.PROCESS_MODE_DISABLED

@@ -22,6 +22,7 @@ func before_each() -> void:
 func after_each() -> void:
 	Engine.time_scale = 1.0
 	DevMode.show_speed(1.0)
+	DevMode.clear_stats_file()
 	DevMode.set_enabled(false, SaveManager.DEFAULT_PATH)
 	if FileAccess.file_exists(DEV_PATH):
 		DirAccess.remove_absolute(DEV_PATH)

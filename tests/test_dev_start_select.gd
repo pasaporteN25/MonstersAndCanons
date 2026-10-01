@@ -24,6 +24,7 @@ func after_each() -> void:
 	GameFlow.current_index = -1
 	GameFlow.current_community = null
 	DevMode.reset_start()
+	DevMode.clear_stats_file()
 	DevMode.set_enabled(false, SaveManager.DEFAULT_PATH)
 	_remove(DEV_PATH)
 	_remove(TEST_SAVE)

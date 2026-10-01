@@ -10,6 +10,8 @@ const KINKS_PER_SEGMENT: int = 4
 const JITTER_PX: float = 7.0
 
 var _points := PackedVector2Array()
+var _branches: Array[PackedVector2Array] = []
+var _endpoints := PackedVector2Array()
 var _color: Color = COLOR
 var _time: float = 0.0
 
@@ -18,6 +20,7 @@ var _time: float = 0.0
 ## origen, así que sirven tal cual como posiciones locales.
 func setup(points: PackedVector2Array, color: Color = COLOR) -> LightningEffect:
 	_color = color
+	_endpoints = points
 	for i: int in range(1, points.size()):
 		var from: Vector2 = points[i - 1]
 		var to: Vector2 = points[i]
@@ -25,7 +28,13 @@ func setup(points: PackedVector2Array, color: Color = COLOR) -> LightningEffect:
 		_points.append(from)
 		for k: int in range(1, KINKS_PER_SEGMENT):
 			var t: float = float(k) / KINKS_PER_SEGMENT
-			_points.append(from.lerp(to, t) + side * randf_range(-JITTER_PX, JITTER_PX))
+			var kink: Vector2 = from.lerp(to, t) + side * randf_range(-JITTER_PX, JITTER_PX)
+			_points.append(kink)
+			if k % 2 == 1:
+				var branch_direction: float = -1.0 if k == 1 else 1.0
+				_branches.append(PackedVector2Array([kink,
+					kink + side * branch_direction * 6.0 + (to - from).normalized() * 4.0,
+					kink + side * branch_direction * 12.0 + (to - from).normalized() * 7.0]))
 	if points.size() > 0:
 		_points.append(points[points.size() - 1])
 	return self
@@ -43,5 +52,12 @@ func _draw() -> void:
 	if _points.size() < 2:
 		return
 	var alpha: float = 1.0 - _time / DURATION
-	draw_polyline(_points, Color(_color, 0.6 * alpha), 9.0)  # resplandor
-	draw_polyline(_points, Color(1, 1, 1, alpha), 3.0)       # centro blanco
+	draw_polyline(_points, Color(_color, 0.16 * alpha), 15.0)
+	draw_polyline(_points, Color(_color, 0.8 * alpha), 5.0)
+	draw_polyline(_points, Color(1, 1, 1, alpha), 1.7)
+	for branch: PackedVector2Array in _branches:
+		draw_polyline(branch, Color(_color, 0.45 * alpha), 3.0)
+		draw_polyline(branch, Color(1, 1, 1, 0.8 * alpha), 1.0)
+	for point: Vector2 in _endpoints:
+		draw_circle(point, 6.0, Color(_color, 0.25 * alpha))
+		draw_circle(point, 2.3, Color(1, 1, 1, 0.9 * alpha))

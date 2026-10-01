@@ -13,6 +13,8 @@ const EDITOR_ARG: String = "--pruebas"
 const SAVE_PATH: String = "user://save_pruebas.json"
 ## RF-182: el texto del cartel (sin la velocidad).
 const BANNER_TEXT: String = "MODO PRUEBAS · F1: panel"
+## RF-325: dónde se escribe el informe de la partida de pruebas.
+const STATS_PATH: String = "user://pruebas_stats.json"
 
 ## RF-323: los atajos de teclado del modo de pruebas (acción del `InputMap`, tecla, texto del panel).
 ## F1 abre el panel. Ninguna tecla es `1`–`9`, `Esc`, `Espacio`, `P`, `F`, `U` ni `S`, que usa el juego.
@@ -37,6 +39,9 @@ var start_gold: int = -1
 ## Mayor que 1 = no es una partida entera y no guarda progreso (RF-321). La fija `Game`.
 var applied_wave: int = 1
 
+## RF-325: archivo del informe. Con un guardado de prueba (`set_enabled(true, ruta)`) es otro archivo al lado,
+## así los tests no pisan el informe del jugador.
+var stats_path: String = STATS_PATH
 var _banner: CanvasLayer
 var _banner_label: Label
 var _speed: float = 1.0
@@ -63,6 +68,7 @@ func set_enabled(on: bool, save_path: String = "") -> void:
 	if save_path == "":
 		save_path = SAVE_PATH if on else SaveManager.DEFAULT_PATH
 	SaveManager.save_path = save_path
+	stats_path = save_path.get_basename() + "_stats.json" if on and save_path != SAVE_PATH else STATS_PATH
 	SaveManager.load_save()
 	if on:
 		register_actions()
@@ -121,6 +127,20 @@ static func key_label(action: StringName) -> String:
 		if shortcut["action"] == action:
 			return OS.get_keycode_string(shortcut["key"])
 	return ""
+
+
+## RF-325: escribe el informe de la partida. Devuelve false si no se pudo (queda un aviso en el log).
+func write_stats(report: Dictionary) -> bool:
+	var ok: bool = DevStats.write(report, stats_path)
+	if not ok:
+		print("No se pudo escribir el informe de pruebas en %s" % stats_path)
+	return ok
+
+
+## Borra el archivo del informe (lo usan los tests para no dejar nada).
+func clear_stats_file() -> void:
+	if FileAccess.file_exists(stats_path):
+		DirAccess.remove_absolute(stats_path)
 
 
 func is_banner_visible() -> bool:

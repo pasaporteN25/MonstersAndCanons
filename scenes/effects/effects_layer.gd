@@ -139,6 +139,7 @@ func projectile_impacted(position_: Vector2, stats: TowerLevelData) -> void:
 		_add(RingEffect.new().setup(SHOCKWAVE_COLOR, 6.0, radius, 0.3, 3.0), position_)
 	elif stats.burn_damage_per_second > 0:
 		_add(RingEffect.new().setup(Color(FIRE_COLOR, 0.8), 4.0, 18.0, 0.22, 3.0), position_)
+		_add(FireImpactEffect.new(), position_)
 	elif stats.slow_amount > 0.0:
 		_add(RingEffect.new().setup(Color(FROST_COLOR, 0.6), 4.0, 22.0, 0.25), position_)
 	else:
