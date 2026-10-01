@@ -889,3 +889,43 @@
   **Refs:** D-047.
   **Hecho cuando:** pasan todos los tests, el bot da los mismos resultados que antes en los niveles 1 a 7 (no se tocó el balance), la documentación dice cómo se ve y suena el combo ahora y se revisan las exportaciones.
   **Resultado:** Pasan los **778** tests. El bot original (`tools/balance_sim.gd`, corridas de a una para no sumar el ruido del temblor de pantalla, D-047) da **exactamente lo mismo que en T145** en los 14 casos: `mix` nivel 1 → 19 vidas, 2 → derrota, 3 → 16, 4 → 8, 5 → 13, 6 → 10, 7 → 17; `smart` nivel 1 → 14, 2 → 17, 3 → 9, 4 y 5 → derrota, 6 → 11, 7 → derrota en la oleada 11. El balance no cambió. ONBOARDING (6.1.10, cómo probar el combo a mano y qué mirar con ojo crítico), CHANGELOG, CONTENIDO (qué muestra el juego solo con poner el dato) y README al día. Se exportaron los cuatro (Windows, Windows de pruebas, Linux con su `.tar.gz` y Android de prueba), sin errores; el `.exe` arranca sin errores de script y trae `combo.wav`. **Sin probar:** jugarlo a mano (tiempo real, escuchar el "tin"), Linux y celular. **Lo que sigue (D-047):** que Lucas lo pruebe; si el combo todavía no pesa, especificar el "quiebre" (el combo frena en seco al enemigo un instante) y medirlo con el bot.
+
+
+## M22 — Modo de pruebas: oleadas finales, velocidades y atajos *(pedido por Lucas, D-048)*
+
+**Estado: aprobada por Lucas (2026-10-01). Se hace en la rama `m22-modo-pruebas`, con un PR.**
+
+- [ ] **T149 · Los datos y la lógica de la oleada inicial**
+  `DevConfig` y `data/dev_config.tres`, `DevStart` (`clamp_wave`, `skipped_gold`, `start_gold`), `LevelSession.jump_to_wave`.
+  **Refs:** RF-319, RF-320, RF-324, D-048.
+  **Hecho cuando:** los tests comprueban el criterio de aceptación de RF-319 y RF-320 con los datos reales del nivel 1 (oleada 1 = oro del nivel; oleada 6 = oro del nivel + recompensas de las oleadas 1 a 5 + sus bonos), que las crías de la Araña suman, que un valor mayor que el total se ajusta, el oro a mano de 0, y que `jump_to_wave` deja la oleada, el estado y la señal bien y el HUD con la próxima oleada correcta. Nada de números nuevos en el código.
+
+- [ ] **T150 · Elegir la oleada y el oro al elegir nivel**
+  Franja "Pruebas" en la selección de nivel, `Game` la aplica, esa partida no guarda progreso, y el oro automático se contrasta con el bot.
+  **Refs:** RF-319, RF-321, D-048.
+  **Hecho cuando:** los tests comprueban el criterio de aceptación de RF-319 y RF-321: la franja solo está en el modo de pruebas, la partida arranca con la oleada y el oro elegidos (campaña y comunidad), reintentar los repite, "Siguiente nivel" y volver los reinician, y no se guarda victoria, récord ni "enemigo visto" en una partida desde la oleada 2. Captura del selector. El resultado dice, con números, cuánto difiere el oro automático de lo que el bot juntó en los niveles 1 a 7.
+
+- [ ] **T151 · Cinco velocidades**
+  Fila de botones x0,25 a x4 en el panel, la velocidad en el cartel y en el HUD, vuelta a x1, y la regla de `F`.
+  **Refs:** RF-322, RF-324, D-048.
+  **Hecho cuando:** los tests comprueban el criterio de aceptación de RF-322: cada botón fija `Engine.time_scale`, el cartel y el HUD dicen "x0,5" (no "x0"), al salir o terminar vuelve a 1 y el cartel se limpia, `F` en el juego normal sigue alternando 1 y 2, y desde x0,5 vuelve a 1. Se ajustan los tests de `dev_set_fast`. Captura del cartel con una velocidad.
+
+- [ ] **T152 · Atajos de teclado**
+  Acciones `dev_*` en el `InputMap`, `F2` a `F6`, las teclas escritas en el panel.
+  **Refs:** RF-323, D-048.
+  **Hecho cuando:** `test_dev_shortcuts.gd` comprueba que ninguna tecla de pruebas se repite con otra acción (con el modo prendido y apagado), que ninguna es `1`-`9`, que el juego normal no tiene las acciones, y que cada atajo hace lo mismo que su botón (matar, saltar, vidas, velocidad más lenta y más rápida, con sus bordes: en x0,25 no baja más y en x4 no sube más) y no actúa con el menú de pausa abierto.
+
+- [ ] **T153 · Estadísticas de la partida de pruebas**
+  `DevStats` (lógica sin escena que arma el diccionario) y su escritura en `user://pruebas_stats.json`.
+  **Refs:** RF-325, D-048.
+  **Hecho cuando:** los tests (con una ruta `user://test_*.json`) comprueban el criterio de aceptación de RF-325: los nombres, una fila por oleada, `"won"`, `"lost"` y `"left"`, que el archivo se reemplaza, que se lee con `JSON.new().parse`, y que el juego normal no escribe nada. Se compara con lo que imprime el bot en una situación concreta.
+
+- [ ] **T154 · `CLAUDE.md` en la raíz** *(aparte, chico)*
+  Hoy no existe: lo que Claude necesita saber al abrir el proyecto, en un solo lugar.
+  **Refs:** D-040 (reglas por carpeta), D-048.
+  **Hecho cuando:** `CLAUDE.md` dice cómo correr Godot y GUT (con `--import` antes de los tests nuevos), el flujo SDD (spec, decisión, plan, tareas, código, commit; los números de RF y D no se reusan), la regla de "Sugerencias de Claude (consultar antes de implementar)" y que las reglas por carpeta están en `.claude/rules/` (con la lista); es corto (no repite la constitución) y todo lo que afirma se comprobó (los comandos se corrieron).
+
+- [ ] **T155 · Cierre de M22**
+  Todos los tests, sin `SCRIPT ERROR`, documentación y exportaciones.
+  **Refs:** D-048.
+  **Hecho cuando:** pasa GUT completo en verde y sin `SCRIPT ERROR`, se exporta **"Windows (pruebas)"** y se abre unos segundos sin errores, README, CONTENIDO, CHANGELOG y ONBOARDING (cómo probar la oleada final y mirar un combo a x0,25) quedan al día, y el resultado dice qué **no** se probó.
