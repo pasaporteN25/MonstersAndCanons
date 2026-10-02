@@ -10,6 +10,15 @@ extends Control
 @onready var _options_button: Button = %OptionsButton
 @onready var _quit_button: Button = %QuitButton
 @onready var _options: OptionsMenu = %OptionsMenu
+@onready var _logo: TextureRect = %Logo
+
+## RF-331: medidas de interfaz del menú (no son de balance): alto de cada botón, separación entre filas,
+## aire arriba y abajo, y los límites del alto del logo.
+const BUTTON_HEIGHT: float = 52.0
+const ROW_GAP: float = 12.0
+const SCREEN_MARGIN: float = 24.0
+const LOGO_MIN_HEIGHT: float = 70.0
+const LOGO_MAX_HEIGHT: float = 240.0
 
 
 func _ready() -> void:
@@ -22,7 +31,23 @@ func _ready() -> void:
 	_quit_button.pressed.connect(get_tree().quit)
 	_options.closed.connect(_play_button.grab_focus)
 	Audio.add_click_sounds(self)
+	_logo.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS  # D-023: el logo se achica
+	resized.connect(_fit_logo)
+	_fit_logo()
 	_play_button.grab_focus()  # se puede jugar con Enter sin tocar el mouse
+
+
+## RF-331: el alto del logo para que, con `button_count` botones, todo entre en una ventana de
+## `window_height`: lo que sobra después de los botones, entre un mínimo y un máximo.
+static func logo_height(window_height: float, button_count: int) -> float:
+	var buttons: float = button_count * (BUTTON_HEIGHT + ROW_GAP)
+	var spare: float = window_height - SCREEN_MARGIN * 2.0 - buttons - 8.0 - ROW_GAP
+	return clampf(spare, LOGO_MIN_HEIGHT, LOGO_MAX_HEIGHT)
+
+
+func _fit_logo() -> void:
+	var buttons: int = 5 + (1 if _editor_button.visible else 0)
+	_logo.custom_minimum_size.y = logo_height(size.y, buttons)
 
 
 ## RF-210 (D-038): el editor es para todos, menos en el celular (se maneja con mouse y teclado); el
