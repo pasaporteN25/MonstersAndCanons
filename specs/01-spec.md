@@ -1389,3 +1389,14 @@ La wiki de M11 ya es escalable a propósito (categorías → entradas → bloque
 - En **mapas chicos** (20×9) el espacio sí importa: 4 casillas de pasto juntas cerca del camino.
 
 **Torres de apoyo (idea de Claude, relacionada):** como los enemigos tendrán auras (arriba), las torres pueden tenerlas también: un **Estandarte** que sube la cadencia o el alcance de las torres cercanas. Usa **la misma mecánica de aura**, así que conviene diseñarlas juntas.
+
+## 14. Arte de torres con volumen (M23, pedido por Lucas, 2026-10-02)
+
+- **RF-326** Las nueve torres usan la dirección artística elegida: cañón y mortero de hierro, bronce y madera (A); básica, francotirador, fuego, múltiple y ráfaga industriales (B); hielo y Tesla arcanas (C). Comparten perspectiva elevada, luz desde arriba a la izquierda y proporciones legibles a 64 px y 34 px.
+  **Aceptación:** dado el grupo completo, cuando se ve en el mapa, HUD y Wiki, entonces cada mecanismo se reconoce y conserva el material y volumen de las muestras aprobadas.
+- **RF-327** Al apuntar, la torreta conserva la vertical y la iluminación del mundo. Usa ocho vistas direccionales; la base permanece fija. Retroceso, pausa, mejoras y destello siguen funcionando. Sin atlas, conserva la compatibilidad con dibujos de una sola vista y formas geométricas.
+  **Aceptación:** dada una torre con atlas, cuando apunta en las ocho direcciones y cruza el límite entre 0 y 360 grados, entonces usa el cuadro correcto sin girar su luz; sin atlas, el dibujo anterior funciona.
+- **RF-328** Las bases muestran tres niveles de construcción con piedra, metal y detalles dorados. Los proyectiles y efectos de impacto acompañan las tres familias y mantienen la lectura de fuego, frío, electricidad y explosión.
+  **Aceptación:** dada una partida con las nueve torres, cuando construyen, mejoran y disparan, entonces los dibujos importan, quedan centrados y los efectos se liberan al terminar; daño, precios, alcance y tiempos de balance no cambian.
+
+Los PNG con transparencia se permiten para conservar la calidad de las muestras 3D; los SVG siguen siendo válidos para arte existente y mods. Enemigos, terreno y decoración requieren una revisión posterior específica; esta entrega cubre torres, bases, disparos y sus efectos.

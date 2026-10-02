@@ -338,3 +338,9 @@
 - **Alternativas descartadas:** (a) un deslizador de velocidad: más difícil de repetir y de leer el valor exacto que cinco botones; (b) guardar "puntos de control" de partidas reales para saltar a ellos: serviría para probar con una defensa real, pero es mucho más trabajo y queda como idea; (c) cambiar el juego normal: no, es una herramienta de administración (B-13).
 - **Riesgos conocidos:** a x0,25 la cuenta atrás y las animaciones también van lentas (es lo pedido); el oro automático es un **techo** (nadie deja pasar a ningún enemigo), así que probar con él es probar con una defensa algo más rica que la real.
 - **Estadísticas (RF-325):** Lucas dijo que sí. Van **al final**, porque son más útiles cuando ya se llega rápido a la oleada que se quiere medir. Se escriben en `user://pruebas_stats.json` con los datos del informe del bot y sus nombres pasados al inglés (`wave`, `lives`, `gold`, `towers`, `result`), para compararlos a ojo o con un script. Una partida **reemplaza** el archivo: es el informe de una prueba, no un historial.
+
+### D-049 · Tres familias visuales, sprites con ocho vistas
+
+**Fecha:** 2026-10-02. **Estado:** aceptada por el pedido de Lucas. **Refs:** RF-326 a RF-328.
+
+Lucas eligió A para el cañón, B para las torretas y C para hielo. Se extiende A al mortero, B a básica/francotirador/fuego/múltiple/ráfaga y C a Tesla. Las imágenes renderizadas se conservan en PNG con alfa; no se vuelven a aproximar con polígonos SVG. Ocho vistas mantienen volumen y luz al apuntar en el juego 2D. La base se separa del mecanismo que gira. El atlas se corta y normaliza mediante una herramienta reproducible de Godot y se conserva una vista de 128×128 para consumidores antiguos. Se descarta rotar una imagen de perspectiva fija, porque haría girar también la vertical y la iluminación. Se conserva la ruta de una sola textura para datos sin atlas. No se cambia el balance.

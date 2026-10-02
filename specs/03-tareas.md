@@ -941,3 +941,21 @@
   **Refs:** D-048.
   **Hecho cuando:** pasa GUT completo en verde y sin `SCRIPT ERROR`, se exporta **"Windows (pruebas)"** y se abre unos segundos sin errores, README, CONTENIDO, CHANGELOG y ONBOARDING (cómo probar la oleada final y mirar un combo a x0,25) quedan al día, y el resultado dice qué **no** se probó.
   **Resultado:** GUT completo: **853 tests en verde, sin `SCRIPT ERROR`** (partimos de 778 antes de M22). Exportado **"Windows (pruebas)"** (`build/JuegoA_pruebas.exe`, 117 MB, sin errores) y abierto con `--quit-after`: arranca, dice "Modo de pruebas activado", lista los 13 enemigos y no imprime ningún error de script (sí los avisos de recursos sin liberar al cerrar, que también salen en la corrida de GUT antes de M22). README (estado M22 y el modo de pruebas), CHANGELOG, CONTENIDO (`data/dev_config.tres`) y ONBOARDING (6.1.11: cómo probar la oleada final y mirar un combo a x0,25) al día. **Capturas de partidas y pantallas reales:** la selección de nivel con la franja "Pruebas" (T150) y una partida a x0,5 con el panel, el botón de arriba y el cartel (T151). **El oro automático coincide con lo que juntó el bot** (diferencia de 0 a 68 de oro en los siete niveles, T150) y **el informe coincide exactamente con las líneas del bot** (T153). **No probé:** hacer clic de verdad en una tarjeta del `.exe` exportado y jugar desde la oleada 10 (el exportado solo se abrió unos segundos; el flujo se probó con tests y capturas en el editor), apretar las teclas `F2` a `F7` en la ventana real, jugar a x0,25 con un combo a la vista (lo que motivó todo esto: queda para Lucas), ni las versiones de Linux y Android (no se tocaron los exportables ni los presets).
+
+## M23 · Torres renderizadas (tres sprints, RF-326 a RF-328, D-049)
+
+### Sprint 1 · Dirección y producción
+- [x] **T156 · Producir las nueve torretas y tres bases.**
+  **Refs:** RF-326, RF-328, D-049.
+  **Hecho cuando:** fuentes conservadas, ocho vistas de cada mecanismo y tres bases transparentes, recorte reproducible y hoja de contacto a 64/34 px. Se actualiza la guía de arte para PNG y las tres familias.
+  **Resultado:** nueve atlas RGBA de 512×256 (72 vistas de 128 px), nueve vistas independientes, tres bases y fuentes originales conservadas. Recorte por componentes de alfa, porque las hojas generadas cruzaban las celdas: no se cortan tubos ni cristales. Herramienta Godot reproducible; guía §7 actualizada. Hoja conjunta y ocho direcciones revisadas a tamaño de mapa/HUD. Los tests confirman que todos los cuadros tienen cuerpo y margen transparente. Las vistas son ilustraciones generadas, no geometría 3D: hay pequeñas variaciones de detalle entre ellas que quedan sujetas a la revisión visual de Lucas.
+
+### Sprint 2 · Integración y efectos
+- [ ] **T157 · Integrar los atlas, disparos y efectos.**
+  **Refs:** RF-327, RF-328, D-049.
+  **Hecho cuando:** los nueve datos apuntan al nuevo arte; HUD/Wiki, ocho direcciones, retroceso y mejoras funcionan; disparos y efectos acompañan el estilo; tests relevantes pasan sin errores de script.
+
+### Sprint 3 · Revisión del conjunto
+- [ ] **T158 · Revisar el juego y documentar la siguiente etapa.**
+  **Refs:** RF-326 a RF-328, D-049.
+  **Hecho cuando:** suite completa en verde, capturas reales del grupo y combate, documentación de formatos y lista de siguientes assets a rediseñar con prioridad. El resultado declara lo comprobado y los límites pendientes de revisión de Lucas.
