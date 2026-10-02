@@ -2,6 +2,12 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Monsters & Canons: logo, menú y primeros monstruos *(M24, 2026-10-02)*
+
+- El menú principal muestra el logo **Monsters & Canons** y sus botones tienen un acabado de hierro oscuro con borde de bronce, relieve discreto y resplandor ámbar al pasar el mouse o con el teclado.
+- **Normal** (diablillo rojo), **Rápido** (bestia turquesa) y **Tanque** (ogro de piedra) tienen arte nuevo en la partida, la Wiki, "Próxima oleada" y el aviso de enemigo nuevo. Vida, velocidad, recompensa, tamaño y habilidades son los mismos.
+- Por ahora son imágenes fijas: miran siempre hacia el mismo lado y se mueven solo con el bamboleo de caminar (para que la luz no cambie de lado). Las evoluciones de las torres todavía no se integraron: falta arte de ocho vistas.
+
 ## Torres con volumen y tres familias visuales *(M23, 2026-10-02)*
 
 - Cañón y mortero de hierro, bronce y madera; cinco torretas industriales; hielo y electricidad con cristal y metal claro.

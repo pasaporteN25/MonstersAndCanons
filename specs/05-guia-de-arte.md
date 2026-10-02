@@ -82,3 +82,7 @@ Para las torres nuevas, esta sección reemplaza las reglas de SVG y vista latera
 - **Revisión:** capturas de mapa, combate, HUD y Wiki; hoja del conjunto; revisión de las ocho direcciones. Es una primera producción con imágenes generadas: cualquier deriva entre cuadros se anota y se corrige, no se da por modelado 3D real.
 
 **Siguiente etapa de arte:** primero suelo/camino y decoración (material y perspectiva comunes), después enemigos (volumen preservando especies y tamaños), finalmente paneles/wiki/selección de niveles. El HUD ya aceptado permanece como referencia de legibilidad. No se cambia todo el juego sin revisar cada grupo.
+
+## 8. Monstruos renderizados (M24, D-050)
+
+Normal (diablillo rojo), Rápido (bestia turquesa) y Tanque (ogro de piedra y piel verde) son PNG RGBA de **256×256**, **una sola vista** con la luz arriba a la izquierda, sin sombra dibujada (la pone el juego). Cuerpo al 63,4 % del alto como máximo y pies al 74,55 % del alto; los genera `tools/prepare_monster_sprites.gd` desde `art/redesign-m24/sources/`. **No se reflejan en espejo** (`flip_when_walking_left = false`) y todavía no tienen cuadros de caminar: lo que falta pedir está en `art/FORMATO_PROXIMA_ENTREGA_M24.md`. Los otros diez enemigos siguen con las reglas de §1–2.

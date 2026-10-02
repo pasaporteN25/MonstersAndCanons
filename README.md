@@ -4,7 +4,7 @@
 
 Juego *tower defense* 2D hecho en **Godot 4** con **GDScript**, construido con **SDD (Spec-Driven Development)**.
 
-> **Estado actual:** M1 a M23 ✅ (juego completo, 7 niveles, 9 torres (una de 2×2) con arte renderizado de ocho vistas, tres familias visuales y combos por estado, modo de pruebas con editor de mapas, mapas de la comunidad, Wiki con bestiario, mapas de tamaño variable con zoom, siete temas de paisaje y leyenda, récords, niveles en archivos de texto y versión para Linux). Android fue probado en un celular antes de M23; el nuevo arte se verificó en Windows. Tests automáticos en GitHub (D-030).
+> **Estado actual:** M1 a M24 (primera tanda) ✅ (nuevo logo Monsters & Canons, botones del menú de hierro y bronce, Normal, Rápido y Tanque con arte renderizado de una sola vista; juego completo, 7 niveles, 9 torres (una de 2×2) con arte renderizado de ocho vistas, tres familias visuales y combos por estado, modo de pruebas con editor de mapas, mapas de la comunidad, Wiki con bestiario, mapas de tamaño variable con zoom, siete temas de paisaje y leyenda, récords, niveles en archivos de texto y versión para Linux). Android fue probado en un celular antes de M23; el nuevo arte se verificó en Windows. Tests automáticos en GitHub (D-030).
 >
 > **Versión de Godot:** 4.7.2 estable (renderizador *Compatibility*).
 >

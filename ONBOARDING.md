@@ -343,3 +343,10 @@ godot --headless --path . --editor --import
 Los PNG de mecanismos/bases miden 128×128, los atlas 512×256, los proyectiles 64×64. Activar mipmaps, pero no ampliar los PNG como si fueran SVG. El campo turret_atlas permite las vistas; dejarlo vacío conserva la textura giratoria anterior. Las fuentes de art/ no van en exportables. El ejecutable Windows de esta entrega es build/JuegoA_m23.exe. No se volvieron a probar Android ni Linux con M23.
 
 Para comprobarlo, abrir una partida, construir las ocho torres comunes, mejorar dos veces y ver cómo apuntan. El mortero se prueba en un nivel que lo habilite o mediante la escena art/redesign-m23/capture_game.tscn. Revisar frío, fuego, explosión y rayo; comparar con en_juego.png, direcciones_m23.png y conjunto_m23.png. La fila preparada de efectos_en_juego.png fue invocada para comparar efectos, no representa cuatro disparos espontáneos. Nunca usar el guardado habitual al ejecutar las herramientas de captura: aislar APPDATA como en las pruebas de producción.
+
+## Monstruos y menú M24
+
+- Menú: logo `assets/ui/logo.png` (se regenera con `godot --headless --path . -s tools/prepare_logo.gd`) y tema de botones `assets/ui/menu_theme.tres`, solo para el menú. Probar con el mouse y con las flechas + Enter.
+- Monstruos: `godot --headless --path . -s tools/prepare_monster_sprites.gd` regenera los PNG de `assets/sprites/enemies/rendered/` desde `art/redesign-m24/sources/` (esas fuentes no se tocan). Después, `godot --headless --import`.
+- Capturas reales (con ventana y el guardado aislado): `$env:APPDATA="$env:TEMP\m24appdata"; godot --path . res://tools/capture_m24.tscn -- monstruos` (también `menu` y `wiki`); salen en `art/m24-integracion/`.
+- Para probarlo jugando: el ejecutable de pruebas, nivel 1, oleada 1. Mirar el diablillo, la bestia y el ogro caminando hacia la izquierda: no se dan vuelta (a propósito, D-050).

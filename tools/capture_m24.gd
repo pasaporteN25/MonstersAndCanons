@@ -45,9 +45,13 @@ func capture_menu() -> void:
 
 func capture_wiki() -> void:
 	var wiki: Control = (load("res://scenes/ui/wiki_screen.tscn") as PackedScene).instantiate()
+	wiki.is_seen = func(_enemy_id: StringName) -> bool: return true
 	add_child(wiki)
-	await get_tree().create_timer(0.6).timeout
-	await shot("wiki.png")
+	await get_tree().create_timer(0.4).timeout
+	for id: StringName in [&"tank", &"fast", &"normal"]:
+		wiki.show_target(&"enemigos", id)
+		await get_tree().create_timer(0.3).timeout
+		await shot("wiki_%s.png" % id)
 	wiki.queue_free()
 
 
