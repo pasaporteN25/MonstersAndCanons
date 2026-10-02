@@ -387,3 +387,6 @@ Blindado, Troll, Araña, Cría, Guardián, Curandero, Chamán, Espejo y Jefe: nu
 
 ### Monitor M32
 Solo métricas locales: FPS de Engine y ms/cuadro estimados como1000/FPS; actualización cada500ms con reloj real, independiente de velocidad de juego. No equivale a medir tiempo de CPU/GPU ni envía datos.
+
+### Tema de interfaz M33
+`assets/ui/menu_theme.tres` reúne botones, deslizadores, casillas, desplegables y entradas. Iconos SVG propios en `assets/ui/`; paneles en `game_panel_style.tres`. Se aplica por pantalla, sin tema global.

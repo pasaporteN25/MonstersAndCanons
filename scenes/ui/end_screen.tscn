@@ -1,14 +1,17 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scenes/ui/end_screen.gd" id="1_end"]
-[ext_resource type="StyleBox" path="res://assets/ui/panel_style.tres" id="9_style"]
+[ext_resource type="StyleBox" path="res://assets/ui/game_panel_style.tres" id="9_style"]
 [ext_resource type="Script" path="res://scenes/ui/stars_display.gd" id="10_stars"]
+
+[ext_resource type="Theme" path="res://assets/ui/menu_theme.tres" id="m33_theme"]
 
 [node name="EndScreen" type="CanvasLayer"]
 layer = 10
 script = ExtResource("1_end")
 
 [node name="Dim" type="ColorRect" parent="."]
+theme = ExtResource("m33_theme")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

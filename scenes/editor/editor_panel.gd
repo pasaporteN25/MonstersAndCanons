@@ -7,7 +7,7 @@ extends PanelContainer
 ## Se cambió algo desde el panel: el editor tiene que revisar el nivel y actualizar los mensajes.
 signal edited
 
-const PANEL_STYLE: StyleBox = preload("res://assets/ui/panel_style.tres")
+const PANEL_STYLE: StyleBox = preload("res://assets/ui/game_panel_style.tres")
 const TITLE_COLOR := Color(1.0, 0.84, 0.3)
 const HEADER_COLOR := Color(0.7, 0.72, 0.78)
 

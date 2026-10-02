@@ -11,7 +11,7 @@ signal name_entered(name: String)
 signal closed
 
 const GOLD := Color(1.0, 0.84, 0.3)
-const DARK := Color(0.1, 0.09, 0.13)
+const DARK := Color(0.105, 0.11, 0.125)
 const TROPHY: Texture2D = preload("res://assets/sprites/ui/trophy.svg")
 const TITLE: String = "SALÓN DE LA FAMA"
 
@@ -24,6 +24,7 @@ var _continue: Button
 func _init() -> void:
 	layer = 20  # encima de la pantalla final
 	var dim := ColorRect.new()
+	dim.theme = preload("res://assets/ui/menu_theme.tres")
 	dim.color = Color(0, 0, 0, 0.8)
 	dim.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(dim)

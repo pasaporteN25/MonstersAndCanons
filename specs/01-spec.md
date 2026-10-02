@@ -1395,16 +1395,16 @@ La wiki de M11 ya es escalable a propósito (categorías → entradas → bloque
 
 ### Actualización de prioridades · Lucas, 2026-10-02
 
-**Registro inicial; Lucas autorizó B-17/B-18 en M32.** Las otras entradas siguen sin autorización de implementación. B-17 a B-23 tienen **prioridad media**, sin fecha. Primero mejorar la experiencia y la presentación actuales; ampliar la campaña hasta el nivel10 (B-10) queda con **prioridad baja**. Las investigaciones entregan opciones y muestras para decidir antes de producción. Las capturas compartidas muestran el HUD/panel de pruebas y los indicadores amarillos de niveles de torre; sirven de referencia visual.
+**Registro inicial; Lucas autorizó B-17/B-18 en M32 y B-19 en M33.** Las otras entradas siguen sin autorización de implementación. B-17 a B-23 tienen **prioridad media**, sin fecha. Primero mejorar la experiencia y la presentación actuales; ampliar la campaña hasta el nivel10 (B-10) queda con **prioridad baja**. Las investigaciones entregan opciones y muestras para decidir antes de producción. Las capturas compartidas muestran el HUD/panel de pruebas y los indicadores amarillos de niveles de torre; sirven de referencia visual.
 
-### B-17 · HUD compacto, pausa y controles de administración
+### B-17 · ~~HUD compacto, pausa y controles de administración~~
 **Prioridad media · Implementado en M32 (T175, RF-345).** Quitar palabras redundantes junto a los iconos de oro, vidas, puntos y oleada: conservar icono y valor (incluido actual/total de oleada). Al pasar el puntero sobre cada icono, mostrar una ayuda pequeña con su significado; contemplar foco por teclado y una alternativa táctil. Rediseñar el fondo de la barra superior, el menú de pausa y los controles de pruebas/admin con la estética actual de Monsters & Canons, mejorando agrupación, jerarquía y orden. Conservar acciones y atajos. **Entrega futura:** muestras del HUD, pausa y panel reorganizado, legibles en los tamaños de ventana soportados, antes de integrar.
 
-### B-18 · FPS y métricas visibles durante la partida
+### B-18 · ~~FPS y métricas visibles durante la partida~~
 **Prioridad media · Implementado en M32 (T175, RF-346).** FPS y ms/cuadro estimados; otras métricas no se añadieron. Cuando se active Mostrar FPS, dibujarlos sobre la partida, sin fondo y fuera del panel de pruebas, para que sigan visibles con el panel cerrado. Evaluar si conviene añadir tiempo por cuadro en ms, enemigos/proyectiles activos u otra métrica útil; elegir pocas, con bajo costo y buen contraste sin tapar controles. Es un monitor local de rendimiento (telemetría local); no implica envío ni recopilación remota. **Entrega futura:** propuesta de métricas, ubicación, frecuencia de actualización y muestra; comparar costo con el monitor apagado/encendido.
 
-### B-19 · Renovar Opciones y los submenús
-**Prioridad media · Pendiente.** Llevar el estilo del menú principal a Opciones y demás submenús. Relevar primero qué pantallas aún tienen el estilo anterior, ordenar controles y mantener navegación, foco, contraste y legibilidad. **Entrega futura:** inventario de pantallas y muestras coherentes antes de la implementación.
+### B-19 · ~~Renovar Opciones y los submenús~~
+**Completado en M33 (T176, RF-347), prioridad media.** Opciones separa sonido/visualización con deslizadores y casillas del tema. Selección de campaña/comunidad, Wiki, récords, final, iniciales/Salón de la Fama y editor/diálogos comparten hierro-bronce. Paneles y foco coherentes; funciones/guardados conservados. Capturas en `art/redesign-m33/`,891/891 GUT; revisión visual Full HD, sin ejecución móvil/Linux.
 
 ### B-20 · Integrar mejor las marcas del nivel de torre
 **Prioridad media · Pendiente.** Revisar los puntos amarillos flotantes de RF-75, que hoy indican niveles1/2/3. Comparar puntos más sutiles incorporados a la base (remaches, luces o detalles) con mayor contraste/intensidad del brillo ya implementado en M30. No es obligatorio eliminarlos: el nivel debe seguir siendo reconocible a escala de partida, también cuando el brillo se apaga por aturdimiento. Evitar confundirlos con selección u otros efectos. **Entrega futura:** comparación de los tres niveles, al menos sobre el Cañón, y revisión del criterio para las demás torres; sombras fuera de alcance salvo pedido posterior.
@@ -1481,3 +1481,6 @@ Lucas eligió entre las propuestas de la tanda 1 (`art/redesign-m24/`): **Normal
 ### M32 · HUD y monitor local (B-17/B-18 aprobados por Lucas)
 - **RF-345** HUD con iconos y valores sin etiquetas redundantes; significado en ayuda pequeña al pasar el puntero o enfocar. Barra, pausa y pruebas usan hierro/bronce del menú y controles agrupados. Dado el HUD, cuando cambia un valor o se completa una oleada, entonces conserva cifras/estado y muestra el bonus en la ayuda de oleada.
 - **RF-346** Mostrar FPS activa un texto sobre la partida sin fondo, independiente del panel, con FPS y ms por cuadro estimados a partir de FPS. Dado el monitor activo, cuando se cierra Pruebas, entonces sigue visible; apagado no actualiza, encendido refresca como máximo dos veces por segundo. Solo métricas locales.
+
+### M33 · Submenús renovados
+- **RF-347** Opciones, selección de niveles, Wiki, récords, final, iniciales/Salón de la Fama y editor/diálogos adoptan el tema hierro-bronce sin alterar funciones. Dado un submenú, cuando se abre desde menú o partida, entonces conserva navegación y controles legibles, foco visible y paneles coherentes. Opciones separa sonido y visualización y usa deslizadores/casillas del tema.

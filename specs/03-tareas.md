@@ -1071,3 +1071,10 @@
   **Hecho cuando:** HUD compacto con ayudas, barra/pausa/admin renovados, FPS/ms sobre partida independiente del panel, captura y GUT correctos, docs y push.
 
   **Resultado T175:** iconos y cifras con tooltip y ayuda por foco; oleada compacta, bonus en ayuda de estado. Barra/pausa/admin hierro-bronce, controles agrupados. Monitor local sin fondo, independiente del panel, dos refrescos por segundo, FPS y ms estimados (1000/FPS), sin búsquedas de actores ni envío remoto. Capturas Full HD revisadas;891/891 GUT,8065 asserts,68 scripts, sin SCRIPT ERROR/Parse Error. Windows/Linux exportados, arranque Windows headless salida0; Linux y móvil sin ejecutar. Persisten avisos previos de certificados/limpieza al cerrar. Otros submenús siguen pendientes B-19.
+
+### M33 · Submenús
+- [x] **T176 · Renovar Opciones y demás submenús.**
+  **Refs:** B-19, RF-347, D-059.
+  **Hecho cuando:** inventario renovado, controles/foco/funciones conservados, capturas y GUT correctos, backlog tachado, documentos y PR#1 actualizados.
+
+  **Resultado T176:** tema local ampliado con casillas, deslizadores, desplegables/entradas y paneles hierro-bronce. Opciones agrupadas; selección campaña/comunidad, Wiki, récords, final, iniciales/Salón y editor/diálogos renovados sin cambiar lógica/guardados. Siete capturas Full HD revisadas,891/891 GUT,8065 asserts,68 scripts; sin SCRIPT ERROR/Parse Error. Windows/Linux exportados; Windows arranca headless con salida0, Linux/móvil sin ejecutar. B-19 tachado y B-17/B-18 también señalados como completos; resto intacto. Aviso de certificados del entorno persiste.

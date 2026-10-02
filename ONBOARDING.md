@@ -371,3 +371,6 @@ Ejecutar `build/JuegoA_m31.exe` o extraer `build/JuegoA_m31_linux.zip`. Revisar 
 
 ### Probar M32
 Abrir `build/JuegoA_m32.exe`, pasar el puntero sobre los iconos de la barra, revisar cifras y ayuda de oleada completada. Abrir Pruebas [F1], activar Mostrar FPS y cerrar el panel: el monitor sigue visible. Esc abre la pausa renovada; P pausa directamente. Capturas en `art/redesign-m32/`. Linux exportado sin ejecutar; móvil sin probar.
+
+### Probar M33
+Abrir `build/JuegoA_m33.exe`; revisar Opciones desde menú y pausa (sonido/visualización), niveles/comunidad, Wiki, récords, final e iniciales. Probar editor/Ajustes/Oleadas/diálogos en modo pruebas. Capturas en `art/redesign-m33/`; ejecutar `capture.tscn` reproduce las siete pantallas. Windows exportado y arranque verificado; Linux exportado sin ejecutar, móvil sin probar.

@@ -201,3 +201,6 @@ Los trece enemigos ya tienen movimiento propio: doce ciclos de caminar con cuatr
 
 ### Interfaz M32
 HUD compacto con ayudas; barra, pausa y administración con estilo hierro/bronce. En Pruebas, Mostrar FPS activa un texto independiente sin fondo con FPS y ms/cuadro estimados.
+
+### Submenús M33
+Opciones, niveles/comunidad, Wiki, récords, final, iniciales/Salón y editor/diálogos comparten el tema local hierro-bronce. B-19 completado; controles y datos conservados.

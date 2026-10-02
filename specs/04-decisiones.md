@@ -374,3 +374,6 @@ Generar una hoja independiente por criatura tomando su PNG aprobado como referen
 
 ## D-058 · Renovación rápida de HUD y monitor
 2026-10-02, aprobada por Lucas. Reutilizar tema hierro/bronce; barra con borde, pausa y panel agrupados. Hud posee el monitor y DevPanel emite la activación: cerrar el panel no lo oculta. FPS/ms estimados bastan; se descartan métricas adicionales costosas y telemetría remota.
+
+## D-059 · Un tema reutilizable para submenús
+2026-10-02, aprobada por Lucas (B-19). Extender el tema existente con deslizadores, casillas y listas desplegables; aplicarlo localmente a submenús y paneles, sin tema global ni cambios de guardados. Conservar el marco dorado del Salón de la Fama y todos los flujos.

@@ -1,5 +1,33 @@
 [gd_resource type="Theme" format=3]
 
+[ext_resource type="Texture2D" path="res://assets/ui/check_off.svg" id="check_off"]
+[ext_resource type="Texture2D" path="res://assets/ui/check_on.svg" id="check_on"]
+[ext_resource type="Texture2D" path="res://assets/ui/slider_grip.svg" id="grip"]
+[ext_resource type="StyleBox" path="res://assets/ui/game_panel_style.tres" id="panel"]
+
+[sub_resource type="StyleBoxFlat" id="track"]
+bg_color = Color(0.055, 0.06, 0.075, 1)
+border_width_left = 1
+border_width_right = 1
+border_width_top = 1
+border_width_bottom = 1
+border_color = Color(0.4, 0.3, 0.18, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_left = 4
+corner_radius_bottom_right = 4
+content_margin_top = 4.0
+content_margin_bottom = 4.0
+
+[sub_resource type="StyleBoxFlat" id="track_fill"]
+bg_color = Color(0.86, 0.59, 0.22, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_left = 4
+corner_radius_bottom_right = 4
+content_margin_top = 4.0
+content_margin_bottom = 4.0
+
 [sub_resource type="StyleBoxFlat" id="iron"]
 bg_color = Color(0.105, 0.11, 0.125, 0.96)
 border_width_left = 2
@@ -90,3 +118,29 @@ Button/styles/hover = SubResource("iron_hover")
 Button/styles/hover_pressed = SubResource("iron_pressed")
 Button/styles/normal = SubResource("iron")
 Button/styles/pressed = SubResource("iron_pressed")
+
+Label/colors/font_color = Color(0.94, 0.91, 0.85, 1)
+HSlider/styles/slider = SubResource("track")
+HSlider/styles/grabber_area = SubResource("track_fill")
+HSlider/styles/grabber_area_highlight = SubResource("track_fill")
+HSlider/icons/grabber = ExtResource("grip")
+HSlider/icons/grabber_highlight = ExtResource("grip")
+HSlider/icons/grabber_disabled = ExtResource("grip")
+HSlider/constants/grabber_offset = 0
+CheckBox/icons/checked = ExtResource("check_on")
+CheckBox/icons/unchecked = ExtResource("check_off")
+CheckBox/styles/focus = SubResource("iron_focus")
+CheckBox/colors/font_color = Color(0.94, 0.91, 0.85, 1)
+CheckBox/colors/font_hover_color = Color(1, 0.8, 0.35, 1)
+OptionButton/styles/normal = SubResource("iron")
+OptionButton/styles/hover = SubResource("iron_hover")
+OptionButton/styles/pressed = SubResource("iron_pressed")
+OptionButton/styles/focus = SubResource("iron_focus")
+OptionButton/styles/disabled = SubResource("iron_disabled")
+OptionButton/colors/font_color = Color(0.94, 0.91, 0.85, 1)
+PopupMenu/styles/panel = ExtResource("panel")
+PopupMenu/styles/hover = SubResource("iron_hover")
+PopupMenu/colors/font_color = Color(0.94, 0.91, 0.85, 1)
+LineEdit/styles/normal = SubResource("iron")
+LineEdit/styles/focus = SubResource("iron_focus")
+LineEdit/colors/font_color = Color(0.94, 0.91, 0.85, 1)

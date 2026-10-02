@@ -2,6 +2,12 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Submenús coherentes *(M33, 2026-10-02)*
+
+- Opciones separa sonido y visualización, con deslizadores y casillas de hierro/bronce.
+- Selección de niveles y mapas de la comunidad, Wiki, récords, pantalla final, iniciales/Salón de la Fama y editor/diálogos adoptan el estilo del menú. Se conservan controles, guardados y navegación.
+- Backlog B-19 completado; B-17/B-18 también señalados como terminados.
+
 ## HUD compacto y monitor local *(M32, 2026-10-02)*
 
 - Barra superior con iconos y cifras; ayudas al pasar el puntero y al enfocar con teclado. Oleada completada con marca y detalle del bonus en su ayuda.

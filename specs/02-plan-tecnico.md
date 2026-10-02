@@ -577,3 +577,6 @@ Producir nueve fuentes transparentes y conservar prompts. Empaquetar144cuadros d
 
 ### M32 · RF-345/RF-346, D-058
 Compactar textos y tooltips; reutilizar tema de botones y estilo de panel propio, agregar secciones admin. Monitor Label en HUD, señal desde DevPanel y actualización por intervalo real. Verificar valores/oleadas y monitor independiente del panel, captura y GUT.
+
+### M33 · RF-347, D-059
+Inventario de submenús: Opciones, niveles, Wiki, récords, final, Salón/iniciales, editor y diálogos. Tema compartido y panel hierro-bronce; SVG propios para casillas/deslizador. Agrupar Opciones, revisar capturas y navegación/guardado existentes con GUT, actualizar B-19 y push.
