@@ -39,6 +39,6 @@ No añadir squash/bamboleo fuerte encima del paso dibujado: comprobar primero si
 
 Se verifican 48 cuadros no vacíos, cuatro cuadros distintos en cada fila, margen transparente y que no se arrastren fragmentos de otras figuras. Hay pequeñas variaciones de detalles y amplitud entre poses generadas; revisar en una ruta real antes de considerarlo cerrado. Esta entrega incluye caminar/correr; no contiene una animación específica de ataque, daño o muerte, que estos tres enemigos no necesitan para sustituir sus efectos existentes.
 
-Las cinco propuestas de Blindado, Troll, Volador, Araña y Cría son conceptos para selección de Lucas. No integrarlas ni animarlas como diseños aprobados todavía. Bestia violeta y ogro volcánico de M24 quedan reservados para futuras especies; el diablillo verde sigue descartado.
+Las cinco propuestas de Blindado, Troll, Volador, Araña y Cría **fueron aprobadas por Lucas el 2026-10-02**. Sus copias de 256×256, preparadas con el mismo formato de M24, están en `art/redesign-m26/monsters/`. Ya se pueden usar como diseños aprobados; son vistas estáticas, todavía sin ciclos propios. Bestia violeta y ogro volcánico de M24 quedan reservados para futuras especies; el diablillo verde sigue descartado.
 
 El formato coincide con art/FORMATO_PROXIMA_ENTREGA_M24.md: cuadro de 256 px, cuerpo máximo 63,3 % de alto, pies al 74,6 %. Hay vistas este/sur/oeste/norte; los retratos estáticos de producción quedan como respaldo.

@@ -35,6 +35,6 @@ Validación: **872/872 tests**, 6726 asserts, sin SCRIPT ERROR ni Parse Error; e
 
 Esta tanda entrega el desplazamiento inicial de los tres elegidos y muestras de cinco monstruos físicos. No modificó escenas, datos ni código de producción, ni la integración de Claude. No se exportó otro ejecutable: falta conectar las animaciones al Enemy real.
 
-Daño, fuego, frío y desaparición siguen siendo efectos del juego; no se entregan ciclos independientes de ataque, golpe o muerte. El reposo puede sostener un cuadro de la dirección actual. Los cinco conceptos nuevos requieren selección antes de animarlos.
+Daño, fuego, frío y desaparición siguen siendo efectos del juego; no se entregan ciclos independientes de ataque, golpe o muerte. El reposo puede sostener un cuadro de la dirección actual. **Los cinco conceptos fueron aprobados por Lucas el 2026-10-02.** Sus copias enmarcadas se entregan en `art/redesign-m26/monsters/`; siguen pendientes animación e integración.
 
 Quedan para próximas tandas Guardián, Curandero, Chamán, Espejo y Jefe, y los atlas de evoluciones de las torres. Bestia violeta y Tanque volcánico quedan reservados; Diablillo A descartado.

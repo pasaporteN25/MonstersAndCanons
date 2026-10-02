@@ -1,0 +1,29 @@
+{
+	"grounds": {
+		"ground_bosque": "textures/ground_bosque.png",
+		"ground_desierto": "textures/ground_desierto.png",
+		"ground_nieve": "textures/ground_nieve.png",
+		"ground_pantano": "textures/ground_pantano.png",
+		"ground_pradera": "textures/ground_pradera.png",
+		"ground_ruinas": "textures/ground_ruinas.png",
+		"ground_volcan": "textures/ground_volcan.png",
+		"path": "textures/path.png"
+	},
+	"prop_anchor": [
+		64,
+		116
+	],
+	"prop_frame": [
+		128,
+		128
+	],
+	"props": {
+		"bush": "props/bush.png",
+		"gate": "props/gate.png",
+		"rock_a": "props/rock_a.png",
+		"rock_b": "props/rock_b.png",
+		"tree": "props/tree.png"
+	},
+	"texture_size": 256,
+	"tile_size": 64
+}
