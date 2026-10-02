@@ -3,6 +3,8 @@
 [ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="1_pck5a"]
 [ext_resource type="Texture2D" path="res://assets/sprites/enemies/rendered/spiderling.png" id="2_nlmec"]
 
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/rendered/spiderling_walk.png" id="m31_walk"]
+
 [resource]
 script = ExtResource("1_pck5a")
 id = &"spiderling"
@@ -17,3 +19,6 @@ texture = ExtResource("2_nlmec")
 visual_scale = 1.2
 flip_when_walking_left = false
 size_tiles = 0.16
+walk_atlas = ExtResource("m31_walk")
+walk_stride_tiles = 0.4
+walk_art_scale = 1.24260355029586

@@ -365,3 +365,6 @@ Importar el proyecto y correr GUT como arriba. En Windows/Linux la ventana crece
 
 ### Probar M30
 Mejorar las nueve torres y comparar reflejos en niveles2/3; apuntar, retroceder, pausar y aturdir. La base y su sombra permanecen fijas. Reproducir captura con `godot --path . --resolution 1920x1080 art/redesign-m30/capture.tscn`.
+
+### Probar M31
+Ejecutar `build/JuegoA_m31.exe` o extraer `build/JuegoA_m31_linux.zip`. Revisar los nueve monstruos nuevos: giro, pies, tamaño, ralentización y pausa; comprobar crías, auras, regeneración, hechizo y rebote. Muestra reproducible: `art/redesign-m31/capture.tscn`; `previews/motion.gif` presenta las cuatro direcciones con actores y datos de producción. Linux fue exportado, sin ejecución en este equipo Windows.

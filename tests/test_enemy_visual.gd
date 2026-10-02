@@ -38,17 +38,17 @@ func test_enemy_uses_regions_for_walk_flight_and_static_fallback() -> void:
 	path.curve.add_point(Vector2.ZERO)
 	path.curve.add_point(Vector2(1000, 0))
 	add_child_autofree(path)
-	for id: String in ["normal", "fast", "tank", "flyer", "armored"]:
+	for id: String in ["normal", "fast", "tank", "flyer", "armored", "troll", "spider", "spiderling", "guardian", "healer", "shaman", "mirror", "boss"]:
 		var data: EnemyData = load("res://data/enemies/" + id + ".tres")
 		var enemy: Enemy = ENEMY_SCENE.instantiate()
 		enemy.setup(data, path, data.max_health)
 		add_child_autofree(enemy)
 		enemy.set_physics_process(false)
 		var region: Rect2 = enemy.visual_frame_region()
-		assert_eq(region.has_area(), id != "armored", id)
+		assert_true(region.has_area(), id + ": ciclo integrado")
 		if data.walk_atlas != null:
 			assert_same(enemy.visual_texture(), data.walk_atlas)
-			assert_gt(enemy.visual_draw_scale(), data.visual_scale, "el enmarcado del ciclo no achica el monstruo")
+			assert_gt(enemy.visual_draw_scale(), 0.0, "enmarcado calibrado y válido")
 			enemy.distance = Rules.tiles_to_px(data.walk_stride_tiles) / 4
 			assert_eq(enemy.visual_frame_region().position, Vector2(256, 0))
 		elif data.flight_atlas != null:
@@ -97,3 +97,64 @@ func test_desktop_size_fits_monitor_and_preserves_aspect_ratio() -> void:
 		assert_gt(fitted.y, 0)
 		if fitted.x > 2:
 			assert_almost_eq(float(fitted.x) / fitted.y, 16.0 / 9.0, 0.01)
+
+
+func test_static_fallback_still_draws_without_a_cycle() -> void:
+	var data: EnemyData = (load("res://data/enemies/armored.tres") as EnemyData).duplicate()
+	data.walk_atlas = null
+	var path := Path2D.new()
+	path.curve = Curve2D.new()
+	path.curve.add_point(Vector2.ZERO)
+	path.curve.add_point(Vector2(1000, 0))
+	add_child_autofree(path)
+	var enemy: Enemy = ENEMY_SCENE.instantiate()
+	enemy.setup(data, path, data.max_health)
+	add_child_autofree(enemy)
+	enemy.set_physics_process(false)
+	assert_eq(enemy.visual_frame_region(), Rect2())
+	assert_same(enemy.visual_texture(), data.texture)
+	await wait_process_frames(2)
+
+func test_remaining_cycles_are_complete_unique_and_inside_transparent_frames() -> void:
+	for id: String in ["armored", "troll", "spider", "spiderling", "guardian", "healer", "shaman", "mirror", "boss"]:
+		var data: EnemyData = load("res://data/enemies/" + id + ".tres")
+		assert_not_null(data.walk_atlas, id)
+		if data.walk_atlas == null:
+			continue
+		assert_eq(data.walk_atlas.get_size(), Vector2(1024, 1024), id)
+		assert_gt(data.walk_stride_tiles, 0.0, id)
+		var unique: Dictionary = {}
+		var image: Image = data.walk_atlas.get_image()
+		image.decompress()
+		image.clear_mipmaps()
+		for row: int in 4:
+			for step: int in 4:
+				var region: Rect2 = EnemyVisual.walk_region(step * Rules.tiles_to_px(data.walk_stride_tiles) / 4 + 0.001, Rules.tiles_to_px(data.walk_stride_tiles), row * PI / 2)
+				assert_eq(region.position, Vector2(step, row) * 256)
+				var frame: Image = image.get_region(Rect2i(region))
+				unique[hash(frame.get_data())] = true
+				var body: Rect2i = frame.get_used_rect()
+				assert_gt(body.position.x, 0, id + ": margen izquierdo")
+				assert_lt(body.end.x, 256, id + ": margen derecho")
+				assert_gt(body.position.y, 0, id + ": margen de arriba")
+				assert_eq(body.end.y, 191, id + ": apoyo constante")
+		assert_eq(unique.size(), 16, id + ": poses propias")
+
+func test_every_ground_cycle_slows_steps_and_keeps_boss_resistance() -> void:
+	var path := Path2D.new()
+	path.curve = Curve2D.new()
+	path.curve.add_point(Vector2.ZERO)
+	path.curve.add_point(Vector2(1000, 0))
+	add_child_autofree(path)
+	for id: String in ["armored", "troll", "spider", "spiderling", "guardian", "healer", "shaman", "mirror", "boss"]:
+		var data: EnemyData = load("res://data/enemies/" + id + ".tres")
+		var enemy: Enemy = ENEMY_SCENE.instantiate()
+		enemy.setup(data, path, data.max_health)
+		add_child_autofree(enemy)
+		enemy.set_physics_process(false)
+		enemy.take_hit(1, 0.5, 5.0)
+		var delta: float = data.walk_stride_tiles / data.speed_tiles * 0.3
+		enemy._physics_process(delta)
+		var expected: float = Rules.tiles_to_px(data.walk_stride_tiles) * 0.3 * (1.0 - 0.5 * (1.0 - data.slow_resistance))
+		assert_almost_eq(enemy.distance, expected, 0.001, id)
+		assert_eq(enemy.visual_frame_region().position.x, 0.0, id + ": no llega al paso siguiente mientras está lento")

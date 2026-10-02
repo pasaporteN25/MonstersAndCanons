@@ -381,3 +381,6 @@ Las bases compartidas de niveles1/2/3 y los24 cuadros del cañón adoptan C. `To
 
 ### Reflejos por nivel
 `assets/shaders/tower_upgrade_glow.gdshader` añade luz sobre píxeles claros del mecanismo, conservando el alfa. `TowerVisual.upgrade_glow_strength` define intensidad visual:0/0.5/1 para niveles1/2/3; `upgrade_glow_color` define la familia. Tower reutiliza AtlasTexture y material propios, con tiempo físico; no cambia datos de balance ni sombras.
+
+### Ciclos restantes M31
+Blindado, Troll, Araña, Cría, Guardián, Curandero, Chamán, Espejo y Jefe: nueve atlas1024×1024, cuatro filas Este/Sur/Oeste/Norte y cuatro fases por fila. Cuadros256×256 y apoyo191, calibración uniforme por especie. Se conservan los PNG estáticos para la Wiki. Caminata integrada; no se agregan ciclos de ataque ni muerte.

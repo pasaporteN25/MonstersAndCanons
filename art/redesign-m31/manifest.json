@@ -1,0 +1,110 @@
+{
+	"anchor": [
+		128,
+		191
+	],
+	"columns": 4,
+	"creatures": {
+		"armored": {
+			"atlas": "atlases/armored_walk.png",
+			"source_size": [
+				1254,
+				1254
+			],
+			"unique_poses": 16,
+			"walk_art_scale": 1.06521739130435,
+			"walk_stride_tiles": 0.65
+		},
+		"boss": {
+			"atlas": "atlases/boss_walk.png",
+			"source_size": [
+				1254,
+				1254
+			],
+			"unique_poses": 16,
+			"walk_art_scale": 1.25850340136054,
+			"walk_stride_tiles": 0.85
+		},
+		"guardian": {
+			"atlas": "atlases/guardian_walk.png",
+			"source_size": [
+				1254,
+				1254
+			],
+			"unique_poses": 16,
+			"walk_art_scale": 1.11695906432749,
+			"walk_stride_tiles": 0.85
+		},
+		"healer": {
+			"atlas": "atlases/healer_walk.png",
+			"source_size": [
+				1254,
+				1254
+			],
+			"unique_poses": 16,
+			"walk_art_scale": 0.993865030674847,
+			"walk_stride_tiles": 0.65
+		},
+		"mirror": {
+			"atlas": "atlases/mirror_walk.png",
+			"source_size": [
+				1254,
+				1254
+			],
+			"unique_poses": 16,
+			"walk_art_scale": 1.1123595505618,
+			"walk_stride_tiles": 0.55
+		},
+		"shaman": {
+			"atlas": "atlases/shaman_walk.png",
+			"source_size": [
+				1254,
+				1254
+			],
+			"unique_poses": 16,
+			"walk_art_scale": 1.10429447852761,
+			"walk_stride_tiles": 0.7
+		},
+		"spider": {
+			"atlas": "atlases/spider_walk.png",
+			"source_size": [
+				1254,
+				1254
+			],
+			"unique_poses": 16,
+			"walk_art_scale": 1.14835164835165,
+			"walk_stride_tiles": 0.55
+		},
+		"spiderling": {
+			"atlas": "atlases/spiderling_walk.png",
+			"source_size": [
+				1254,
+				1254
+			],
+			"unique_poses": 16,
+			"walk_art_scale": 1.24260355029586,
+			"walk_stride_tiles": 0.4
+		},
+		"troll": {
+			"atlas": "atlases/troll_walk.png",
+			"source_size": [
+				1254,
+				1254
+			],
+			"unique_poses": 16,
+			"walk_art_scale": 1.13286713286713,
+			"walk_stride_tiles": 0.85
+		}
+	},
+	"directions": [
+		"east",
+		"south",
+		"west",
+		"north"
+	],
+	"frame_size": [
+		256,
+		256
+	],
+	"rows": 4
+}

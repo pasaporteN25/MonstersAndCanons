@@ -3,6 +3,10 @@
 [ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="1_fklr6"]
 [ext_resource type="Texture2D" path="res://assets/sprites/enemies/rendered/armored.png" id="2_26dih"]
 
+
+
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/rendered/armored_walk.png" id="m31_walk"]
+
 [resource]
 script = ExtResource("1_fklr6")
 id = &"armored"
@@ -19,3 +23,6 @@ texture = ExtResource("2_26dih")
 visual_scale = 1.2
 flip_when_walking_left = false
 size_tiles = 0.3
+walk_atlas = ExtResource("m31_walk")
+walk_stride_tiles = 0.65
+walk_art_scale = 1.06521739130435

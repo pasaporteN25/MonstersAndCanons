@@ -3,6 +3,8 @@
 [ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="1_sham"]
 [ext_resource type="Texture2D" path="res://assets/sprites/enemies/rendered/shaman.png" id="2_sham"]
 
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/rendered/shaman_walk.png" id="m31_walk"]
+
 [resource]
 script = ExtResource("1_sham")
 id = &"shaman"
@@ -20,3 +22,6 @@ size_tiles = 0.32
 stun_interval = 8.0
 stun_seconds = 3.0
 stun_range_tiles = 4.0
+walk_atlas = ExtResource("m31_walk")
+walk_stride_tiles = 0.7
+walk_art_scale = 1.10429447852761

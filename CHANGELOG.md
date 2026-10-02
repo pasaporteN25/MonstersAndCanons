@@ -2,6 +2,11 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Ciclos completos de monstruos *(M31, 2026-10-02)*
+
+- Blindado, Troll, Araña, Cría, Guardián, Curandero, Chamán, Espejo y Jefe ahora caminan con cuatro poses en cuatro direcciones: 144 poses nuevas. Con los ciclos anteriores, los trece enemigos tienen movimiento propio.
+- Los pasos acompañan la distancia y la ralentización, se congelan al pausar y conservan tamaño y apoyo. Habilidades, balance y sombras permanecen intactos.
+
 ## Reflejos de mejoras *(M30, 2026-10-02)*
 
 - Las nueve torres ahora suman reflejos programáticos sobre metal/cristal: nivel1 conserva su acabado, nivel2 destaca las piezas claras y nivel3 intensifica el brillo. Bronce para armas metálicas, azul para Hielo/Múltiple, violeta para Eléctrica y naranja para Incendiaria.

@@ -571,3 +571,6 @@ El atlas de caminar tiene enmarcado diferente a la pose fija; walk_art_scale con
 
 ### M30 · RF-342/RF-343, D-056
 Tower crea una capa Sprite2D con AtlasTexture reutilizable y ShaderMaterial propio. Comparte cuadro/posición/escala del mecanismo, ajusta intensidad/color por nivel, oculta al aturdir o sin atlas y congela tiempo con física. Shader usa alfa y luminosidad originales para reflejos localizados. Validar selección por nivel, pose/retroceso, pausa/aturdimiento y capturas reales; actualizar changelog y estado de ciclos pendientes.
+
+### M31 · RF-344, D-057
+Producir nueve fuentes transparentes y conservar prompts. Empaquetar144cuadros de256 en nueve atlas1024, validar alfa/orden/poses únicas/apoyo y calibrar tamaño. Conectar nueve EnemyData con distancias de ciclo propias sin modificar balance. Generalizar tests de selección/ralentización/pausa y fallback, comprobar regeneración/aura/crías/hechizo/rebote existentes con GUT. Capturas reales y GIF de ciclos y direcciones; exportar Windows/Linux, actualizar documentos/changelog y subir al PR#1.

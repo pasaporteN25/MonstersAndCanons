@@ -195,3 +195,6 @@ Los trece monstruos renderizados tienen un aumento visual del20% en partida. Dia
 
 ### Reflejos M30
 Las mejoras de las nueve torres tienen reflejos programáticos por nivel y familia; siguen pose/retroceso, se congelan en pausa y se apagan al aturdir. Sombras intactas. Captura: `art/redesign-m30/torres_full_hd.png`.
+
+### Animaciones M31
+Los trece enemigos ya tienen movimiento propio: doce ciclos de caminar con cuatro poses por dirección y el aleteo del Volador. Los nueve ciclos restantes están conectados a los recursos de partida, sin cambiar habilidades ni balance. Fuentes, empaquetador, manifest y muestra animada: `art/redesign-m31/`.

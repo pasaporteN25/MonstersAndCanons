@@ -368,3 +368,6 @@ Lucas aprobó +20 %, ciclos de patas y montaje C de M28. La escala vive en Enemy
 
 ## D-056 · Reflejos aditivos sobre las mejoras existentes
 Los atlas por nivel ya cambian, pero el brillo pintado es sutil a escala de partida. Añadir un Sprite2D con shader de reflejos localizados sobre los píxeles claros del mecanismo; intensidad por nivel y color por familia. La textura y el cuadro son los de producción, sin recolorear el cuerpo entero ni sumar sombras. El tiempo viene del proceso físico, respetando pausa. Se descarta redibujar todos los atlas para este detalle. Los nueve enemigos sin ciclo quedan registrados, sin inventar animaciones de patas.
+
+## D-057 · Completar nueve ciclos conservando el contrato M29
+Generar una hoja independiente por criatura tomando su PNG aprobado como referencia estricta, cuatro direcciones por cuatro fases reales (16cuadros). Empaquetar por conectividad de alfa en Godot, escala constante por especie, pies fila191; calibrar el enmarcado frente a la pose estática para que no se achique al animarse. Integrar con walk_atlas/stride/art_scale existentes, sin otra máquina de estados ni efectos de combate nuevos. Se descartan imágenes reflejadas, deformación global y sustituir habilidades por efectos dibujados.

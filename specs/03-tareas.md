@@ -1051,3 +1051,10 @@
   **Hecho cuando:** las nueve torres distinguen niveles2/3 con reflejos localizados sin cambiar sombras o balance, se verifica pausa/aturdimiento/pose, hay captura y GUT en verde y se sube al PR#1.
 
   **Resultado T172:** reflejo aditivo localizado por luminosidad original y alfa, intensidad por nivel y color por familia, en las nueve torres. AtlasTexture/material reutilizados, pose/retroceso/huella coherentes; pausa física congela pulso y aturdimiento apaga la capa. Atlas y sombras intactos. Captura real1920×1080 revisada, shader sin errores. **886/886 tests GUT,7230 asserts,68 scripts**, sin SCRIPT ERROR/Parse Error/SHADER ERROR. Windows de pruebas exportado y arrancado headless, salida0; Linux exportado y empaquetado, sin ejecutar. Changelog y documentación al día; nueve enemigos pendientes de ciclos propios registrados (no se produjeron animaciones en esta tarea). Descripción del PR a cargo de Lucas.
+
+### M31 · Animaciones pendientes
+- [x] **T173 · Producir e integrar los nueve ciclos restantes.**
+  **Refs:** RF-344, D-057.
+  **Hecho cuando:** nueve hojas y atlas de16poses propios, conectados en partida con apoyo/tamaño/velocidad coherentes, habilidades conservadas, capturas/GIF y suite GUT en verde, documentación y changelog al día, exportación y push al PR#1.
+
+  **Resultado T173:** nueve fuentes y atlas integrados,144poses únicas, apoyo fila191 y escala constante por especie; doce caminantes más el vuelo existente. Balance y habilidades comparados con HEAD sin diferencias. Captura real1920×1080 y GIF revisados;889/889 tests GUT,8048 asserts,68 scripts, sin SCRIPT ERROR/Parse Error. Windows y Linux exportados; arranque Windows headless comprobado, Linux sin ejecutar. Persisten avisos de certificados y de limpieza (2 ObjectDB/1 recurso) al cerrar la suite/captura. No se añadieron ataques/muerte ni se cambiaron sombras. Documentos/changelog actualizados; descripción del PR a cargo de Lucas.

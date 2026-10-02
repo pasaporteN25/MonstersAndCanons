@@ -1444,3 +1444,7 @@ Lucas eligió entre las propuestas de la tanda 1 (`art/redesign-m24/`): **Normal
 - **RF-342** Las nueve torres distinguen sus mejoras con reflejos aditivos localizados: nivel1 sin capa extra, nivel2 moderado y nivel3 más intenso. Conservan atlas, luz, dirección, retroceso y encastre. Una torre aturdida apaga el reflejo.
   **Aceptación:** dadas las torres de tres niveles, cuando apuntan o retroceden, entonces el reflejo sigue solo el mecanismo, respeta el alfa y permite distinguir la mejora en partida. Pausa congela su pulso; sombras y reglas permanecen intactas.
 - **RF-343** Se registra el estado de animaciones: Normal/Rápido/Tanque tienen ciclos de caminar y Volador aleteo; Blindado/Troll/Araña/Cría/Guardián/Curandero/Chamán/Espejo/Jefe requieren ciclos propios. No se simulan esos ciclos deformando una pose estática.
+
+### M31 · Ciclos completos de monstruos
+- **RF-344** Blindado, Troll, Araña, Cría, Guardián, Curandero, Chamán, Espejo y Jefe reciben ciclos propios de cuatro poses en cuatro direcciones, conservando sus diseños aprobados y la luz fija.
+  **Aceptación:** dadas las nueve criaturas en partida, cuando caminan o doblan, entonces se selecciona su pose direccional por distancia; pies anclados, cuerpo legible con el20% aprobado, sin reflejar luz o deformar el sprite globalmente. Ralentización y pausa detienen/reducen los pasos; regeneración, crías, auras, hechizo, rebote y resistencia del Jefe conservan sus cifras.
