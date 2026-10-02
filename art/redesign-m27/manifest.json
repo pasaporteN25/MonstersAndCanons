@@ -1,0 +1,64 @@
+{
+  "status": "Propuestas revisadas técnicamente, pendientes de aprobación e integración",
+  "tool": "image_gen integrado",
+  "towers": {
+    "ids": [
+      "cannon",
+      "basic",
+      "multi",
+      "sniper",
+      "burst",
+      "fire",
+      "mortar",
+      "frost",
+      "tesla"
+    ],
+    "levels": [
+      2,
+      3
+    ],
+    "atlas_size": [
+      512,
+      256
+    ],
+    "frame_size": [
+      128,
+      128
+    ],
+    "directions": [
+      "E",
+      "SE",
+      "S",
+      "SO",
+      "O",
+      "NO",
+      "N",
+      "NE"
+    ],
+    "icon_direction": "N",
+    "icon_size": [
+      128,
+      128
+    ]
+  },
+  "monsters": {
+    "ids": [
+      "guardian",
+      "healer",
+      "shaman",
+      "mirror",
+      "boss"
+    ],
+    "size": [
+      256,
+      256
+    ],
+    "body_height_max": 0.634,
+    "foot_line": 0.7455,
+    "actions": [
+      "static"
+    ],
+    "light": "arriba a la izquierda",
+    "flip": false
+  }
+}

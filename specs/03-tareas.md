@@ -1014,3 +1014,10 @@
   **Hecho cuando:** partida, menú y editor usan los materiales nuevos; los siete temas se dibujan y GUT pasa sin errores de scripts.
 
   **Resultado:** ocho materiales y cinco objetos copiados a assets y conectados a MapThemes/LevelDecor. Se retiraron los detalles procedurales de suelo sustituidos; leyendas especiales y TileSet lógico intactos. 873/873 tests, 6735 asserts, incluidos dibujo de los siete temas y fallback de recursos, sin SCRIPT ERROR/Parse Error. Importación correcta. Persisten los avisos previos de certificados y dos objetos/un recurso al cerrar. No se integraron los monstruos/animaciones pendientes ni se exportó un nuevo ejecutable.
+
+### M27 · Evoluciones y monstruos especiales
+- [x] **T168 · Producir evoluciones de las nueve torres y cinco monstruos especiales.**
+  **Refs:** RF-335, RF-336, D-052.
+  **Hecho cuando:** hojas e iconos de niveles 2/3 y cinco conceptos están guardados, revisados y acompañados por muestras, prompts y límites honestos de integración.
+
+  **Resultado:** 18 atlas RGBA512×256, 144 cuadros distintos de128×128 con margen transparente y 18 iconos N, conservando nivel1. Cinco especiales estáticos RGBA256 con enmarcado M24. Fuentes y prompts de image_gen guardados; cuatro hojas rehechas por margen/transparencia antes de empaquetar. Validación de dimensiones, contenido, cuadros únicos y pies; visor de ocho vistas y cuatro capturas reales de Godot, dos usando escenas Tower/Enemy y copias temporales de datos. Preparadores y visores salen0; 873/873 tests, 6735 asserts, sin SCRIPT ERROR/Parse Error. Persisten errores locales de certificados y avisos intermitentes de recursos al cerrar herramientas. **Límites:** propuestas pendientes de aprobación e integración; no se cambiaron datos/escenas de producción ni balance, no se exportó.exe; no se probaron disparos/retroceso con nuevos atlas ni se produjeron animaciones de los cinco especiales. La diferencia2→3 es discreta en varias familias y puede ajustarse después de la revisión visual.

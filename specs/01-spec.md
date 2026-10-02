@@ -1418,3 +1418,9 @@ Lucas eligió entre las propuestas de la tanda 1 (`art/redesign-m24/`): **Normal
 
 - **RF-334** Los siete temas usan los suelos preparados de M26, el camino común y las rocas, árbol, arbusto y puerta nuevos.
   **Aceptación:** dado un mapa en partida, menú o editor, cuando se dibuja, entonces aparecen los nuevos materiales; rutas, casillas construibles, leyendas y selección determinista de objetos conservan su comportamiento.
+
+### M27 · Evoluciones y monstruos especiales
+- **RF-335** Las evoluciones conservan los mecanismos de nivel 1 y diferencian niveles 2 y 3 con refuerzos, materiales y brillos localizados.
+  **Aceptación:** dados los nueve tipos de torre, cuando se revisa la entrega, entonces cada nivel tiene ocho vistas en el orden de M23, icono hacia arriba y margen transparente; el nivel 1 y el balance permanecen intactos.
+- **RF-336** Guardián, Curandero, Chamán, Espejo y Jefe reciben conceptos renderizados dentro de la temática de monstruos y con siluetas propias de su función.
+  **Aceptación:** dados los cinco diseños, cuando se presentan a escala de juego, entonces sus cuerpos son legibles, tienen transparencia real y la misma luz que los monstruos aprobados; no se cambia ninguna habilidad.

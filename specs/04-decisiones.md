@@ -353,3 +353,6 @@ Lucas aprobó diablillo rojo, bestia turquesa, ogro verde y el logo corregido. L
 
 ## D-051 · Texturas M26 sobre el mapa lógico
 LevelDecor dibuja los PNG preparados sobre el TileMap existente. MapThemes centraliza los recursos y conserva el fallback a pradera. Se descarta reemplazar el TileSet: sus datos de construcción y navegación no necesitan cambios. Las superficies especiales de leyenda conservan su dibujo actual.
+
+## D-052 · Evoluciones discretas y entrega artística separada
+Generar niveles 2 y 3 usando los atlas aprobados como referencia: identidad, ocho vistas y luz fija. Preparar copias normalizadas y muestras antes de integrar; los cinco especiales son conceptos estáticos para revisión, con su función visible en la silueta. No se sustituyen datos de producción con fuentes sin validar.

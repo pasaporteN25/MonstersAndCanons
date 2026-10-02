@@ -554,3 +554,6 @@ godot --headless --path . -s addons/gut/gut_cmdln.gd -gdir=res://tests -gexit
 
 ### Integración M26 · RF-334, D-051
 Copiar ocho materiales y cinco objetos a assets; conectar MapThemes y LevelDecor, retirar el detalle procedural de suelo reemplazado y conservar las superficies de leyenda. Verificar los siete temas, recursos y suite GUT.
+
+### M27 · RF-335, RF-336, D-052
+Producir nueve hojas de evoluciones, separar niveles y normalizar ocho cuadros de 128; extraer iconos hacia arriba. Validar alfa, contenido, orden y escala con muestras. Después producir cinco especiales y enmarcarlos como M24. Conservar fuentes, prompts, manifest y guía de integración.
