@@ -2,6 +2,12 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Reflejos de mejoras *(M30, 2026-10-02)*
+
+- Las nueve torres ahora suman reflejos programáticos sobre metal/cristal: nivel1 conserva su acabado, nivel2 destaca las piezas claras y nivel3 intensifica el brillo. Bronce para armas metálicas, azul para Hielo/Múltiple, violeta para Eléctrica y naranja para Incendiaria.
+- El reflejo acompaña las ocho vistas, el retroceso y el encastre; pausa congela el pulso y el aturdimiento lo apaga. Las sombras quedan intactas.
+- Pendientes de ciclos propios: Blindado, Troll, Araña, Cría, Guardián, Curandero, Chamán, Espejo y Jefe. Solo Normal/Rápido/Tanque caminan y Volador aletea; los otros nueve usan pose fija.
+
 ## Monstruos más legibles, montaje C y escritorio Full HD *(M29, 2026-10-02)*
 
 - Los trece enemigos usan sus diseños renderizados: se suman Volador, Blindado, Troll, Araña y Cría que seguían con SVG. En partida el cuerpo crece un20% sin cambiar vida, alcance, selección, colisión ni habilidades.

@@ -41,6 +41,11 @@ var _cooldown: float = 0.0
 var _target: Enemy
 ## 1 = recién disparó, 0 = cañón en reposo.
 var _recoil: float = 0.0
+const UPGRADE_GLOW: Shader = preload("res://assets/shaders/tower_upgrade_glow.gdshader")
+var _upgrade_glow: Sprite2D
+var _upgrade_frame: AtlasTexture
+var _upgrade_material: ShaderMaterial
+var _upgrade_time: float = 0.0
 var _flash_left: float = 0.0
 ## RF-280: segundos que le quedan aturdida (no dispara mientras sea mayor que 0).
 var _stun_left: float = 0.0
@@ -54,6 +59,16 @@ func setup(tower_data: TowerData) -> void:
 
 
 func _ready() -> void:
+	_upgrade_glow = Sprite2D.new()
+	_upgrade_glow.name = "UpgradeGlow"
+	_upgrade_frame = AtlasTexture.new()
+	_upgrade_frame.filter_clip = true
+	_upgrade_glow.texture = _upgrade_frame
+	_upgrade_material = ShaderMaterial.new()
+	_upgrade_material.shader = UPGRADE_GLOW
+	_upgrade_glow.material = _upgrade_material
+	add_child(_upgrade_glow)
+	_sync_upgrade_glow()
 	add_to_group(GROUP)
 	# D-023: los dibujos se achican con suavidad (el mapa usa "Nearest" para no mostrar líneas).
 	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
@@ -117,6 +132,7 @@ func apply_upgrade() -> void:
 	assert(can_upgrade(), "apply_upgrade() en una torre de nivel máximo")
 	level_index += 1
 	total_invested += stats().cost
+	_sync_upgrade_glow()
 	queue_redraw()
 
 
@@ -125,6 +141,7 @@ func stun(seconds: float) -> void:
 	if seconds <= 0.0:
 		return
 	_stun_left = maxf(_stun_left, seconds)
+	_sync_upgrade_glow()
 	queue_redraw()
 
 
@@ -264,11 +281,13 @@ func _fire_burst() -> void:
 
 ## RF-120 y RF-121: el cañón sigue al objetivo; el retroceso y el destello se apagan solos.
 func _animate(delta: float) -> void:
+	_upgrade_time += delta
 	if _target != null:
 		var desired: float = (_target.global_position - global_position).angle()
 		aim_angle = lerp_angle(aim_angle, desired, minf(1.0, AIM_SPEED * delta))
 	_recoil = move_toward(_recoil, 0.0, delta * 8.0)
 	_flash_left = maxf(0.0, _flash_left - delta)
+	_sync_upgrade_glow()
 	queue_redraw()
 
 
@@ -360,3 +379,21 @@ func _draw_stun(tile_rect: Rect2) -> void:
 		draw_line(p + Vector2(0, -4), p + Vector2(0, 4), Color(0.1, 0.08, 0.15), 4.4)
 		draw_line(p + Vector2(-3.4, 0), p + Vector2(3.4, 0), Color(1.0, 0.95, 0.5), 2.2)
 		draw_line(p + Vector2(0, -3.4), p + Vector2(0, 3.4), Color(1.0, 0.95, 0.5), 2.2)
+
+
+## RF-342: comparte pose y retroceso del mecanismo. Nunca toca base, sombra ni datos de combate.
+func _sync_upgrade_glow() -> void:
+	if _upgrade_glow == null:
+		return
+	var atlas: Texture2D = current_turret_atlas()
+	_upgrade_glow.visible = atlas != null and level_number() > 1 and not is_stunned()
+	if not _upgrade_glow.visible:
+		return
+	_upgrade_frame.atlas = atlas
+	_upgrade_frame.region = TowerVisual.frame_rect(atlas, aim_angle)
+	var factor: float = _scale_factor()
+	_upgrade_glow.scale = Vector2.ONE * Rules.TILE_SIZE * factor / _upgrade_frame.region.size.x
+	_upgrade_glow.position = TowerVisual.MOUNT_OFFSET * factor - Vector2.from_angle(aim_angle) * RECOIL_PX * _recoil * factor
+	_upgrade_material.set_shader_parameter("accent", TowerVisual.upgrade_glow_color(data.id))
+	_upgrade_material.set_shader_parameter("strength", TowerVisual.upgrade_glow_strength(level_number()))
+	_upgrade_material.set_shader_parameter("phase", _upgrade_time)

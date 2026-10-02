@@ -1439,3 +1439,8 @@ Lucas eligió entre las propuestas de la tanda 1 (`art/redesign-m24/`): **Normal
   **Aceptación:** al apuntar y retroceder, la base queda fija y los tres niveles conservan su identidad, huella y reglas. El icono de construcción utiliza el mismo encastre que la partida.
 - **RF-341** Windows y Linux usan una ventana inicial Full HD (1920×1080), con lienzo lógico 1280×720 y ajuste a pantallas menores. Celular conserva el tamaño y orientación existentes.
   **Aceptación:** dado un escritorio Full HD, el mapa y la interfaz se escalan juntos sin casillas nuevas ni recortes; una pantalla menor recibe una ventana que cabe en el área disponible.
+
+### M30 · Lectura programática de mejoras
+- **RF-342** Las nueve torres distinguen sus mejoras con reflejos aditivos localizados: nivel1 sin capa extra, nivel2 moderado y nivel3 más intenso. Conservan atlas, luz, dirección, retroceso y encastre. Una torre aturdida apaga el reflejo.
+  **Aceptación:** dadas las torres de tres niveles, cuando apuntan o retroceden, entonces el reflejo sigue solo el mecanismo, respeta el alfa y permite distinguir la mejora en partida. Pausa congela su pulso; sombras y reglas permanecen intactas.
+- **RF-343** Se registra el estado de animaciones: Normal/Rápido/Tanque tienen ciclos de caminar y Volador aleteo; Blindado/Troll/Araña/Cría/Guardián/Curandero/Chamán/Espejo/Jefe requieren ciclos propios. No se simulan esos ciclos deformando una pose estática.

@@ -192,3 +192,6 @@ Las nueve torres usan mecanismos nuevos en niveles 2 y 3. Guardián, Curandero, 
 
 ### Presentación M29
 Los trece monstruos renderizados tienen un aumento visual del20% en partida. Diablillo, Bestia y Tanque usan pasos por distancia en cuatro direcciones; Volador, cuatro poses de aleteo. Los otros nueve conservan una pose sin deformaciones globales. Las nueve torres usan el encastre C con bases fijas y el cañón tiene24 vistas nuevas. Windows/Linux abren una ventana objetivo1920×1080, limitada al área útil del monitor, conservando el lienzo lógico1280×720; pantalla completa utiliza el monitor. Móvil conserva su presentación. Capturas y reproducción en `art/redesign-m29/README.md`.
+
+### Reflejos M30
+Las mejoras de las nueve torres tienen reflejos programáticos por nivel y familia; siguen pose/retroceso, se congelan en pausa y se apagan al aturdir. Sombras intactas. Captura: `art/redesign-m30/torres_full_hd.png`.

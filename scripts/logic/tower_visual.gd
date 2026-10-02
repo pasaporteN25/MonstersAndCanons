@@ -47,3 +47,16 @@ static func frame_texture(texture: Texture2D, angle: float) -> AtlasTexture:
 	frame.region = frame_rect(texture, angle)
 	frame.filter_clip = true
 	return frame
+
+
+## Solo visual: cero en nivel1, metal reforzado en2 y reflejos más fuertes en3.
+static func upgrade_glow_strength(level: int) -> float:
+	return 0.0 if level <= 1 else (0.5 if level == 2 else 1.0)
+
+static func upgrade_glow_color(id: StringName) -> Color:
+	match id:
+		&"frost": return Color(0.25, 0.8, 1.0)
+		&"tesla": return Color(0.75, 0.4, 1.0)
+		&"fire": return Color(1.0, 0.36, 0.08)
+		&"multi": return Color(0.3, 0.65, 1.0)
+		_: return Color(1.0, 0.7, 0.28)
