@@ -29,6 +29,9 @@ enum Shape { CIRCLE, TRIANGLE, SQUARE, DIAMOND, HEXAGON }
 @export var color: Color = Color.WHITE
 ## Solo visual (RF-151): el dibujo, mirando a la derecha. Vacío = se usa `shape` (RF-156).
 @export var texture: Texture2D
+## Solo visual (RF-330): si el dibujo se refleja en espejo al caminar hacia la izquierda (RF-151). Un
+## dibujo con luz propia (los PNG de una sola vista) no se refleja: el espejo le cambiaría la luz de lado.
+@export var flip_when_walking_left: bool = true
 ## Radio visual, en casillas.
 @export var size_tiles: float = 0.0
 

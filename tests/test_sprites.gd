@@ -13,6 +13,17 @@ const ENEMY_IDS: Array[String] = ["normal", "fast", "tank", "flyer", "armored", 
 const DT: float = 1.0 / 60.0
 ## D-023: los SVG de 64×64 se importan al doble.
 const SPRITE_SIZE := Vector2(128, 128)
+## M24 (D-050): los tres monstruos con PNG de una sola vista, de 256×256, y los datos que no cambian.
+const RENDERED_IDS: Array[String] = ["normal", "fast", "tank"]
+const RENDERED_SIZE := Vector2(256, 256)
+## Los pies caen al 74,55 % del alto del lienzo (tools/prepare_monster_sprites.gd, FOOT_LINE).
+const FOOT_ROW: int = 191
+## Número de balance de cada uno ANTES de M24: id → [vida, velocidad, armadura, recompensa, vidas, tamaño].
+const UNCHANGED_STATS: Dictionary = {
+	"normal": [30, 1.5, 0, 5, 1, 0.25],
+	"fast": [18, 3.0, 0, 4, 1, 0.2],
+	"tank": [135, 0.8, 0, 15, 2, 0.35],
+}
 
 var game: Game
 
@@ -133,8 +144,12 @@ func test_every_enemy_has_its_drawing() -> void:
 		var texture: Texture2D = _enemy_data(id).texture
 		assert_not_null(texture, "%s: dibujo" % id)
 		if texture != null:
-			assert_eq(texture.resource_path, "res://assets/sprites/enemies/%s.svg" % id)
-			assert_eq(texture.get_size(), SPRITE_SIZE, "%s: importado al doble" % id)
+			if RENDERED_IDS.has(id):
+				assert_eq(texture.resource_path, "res://assets/sprites/enemies/rendered/%s.png" % id)
+				assert_eq(texture.get_size(), RENDERED_SIZE, "%s: PNG de producción" % id)
+			else:
+				assert_eq(texture.resource_path, "res://assets/sprites/enemies/%s.svg" % id)
+				assert_eq(texture.get_size(), SPRITE_SIZE, "%s: importado al doble" % id)
 
 
 func test_walking_right_faces_right() -> void:
@@ -186,11 +201,11 @@ func test_hit_flash_is_a_white_silhouette_of_the_drawing() -> void:
 	var original: Image = texture.get_image()
 	var flash: Image = EnemyShape.flash_texture(texture).get_image()
 	assert_eq(flash.get_size(), original.get_size())
-	var body: Color = original.get_pixel(40, 70)  # marrón del cuerpo
-	assert_almost_eq(body.a, 1.0, 0.01, "ahí hay cuerpo")
-	assert_eq(flash.get_pixel(40, 70), Color(1, 1, 1, 1), "en la silueta es blanco")
+	var body: Color = original.get_pixel(128, 130)  # piedra y piel del cuerpo, al centro
+	assert_gt(body.a, 0.9, "ahí hay cuerpo")
+	assert_eq(flash.get_pixel(128, 130), Color(1, 1, 1, body.a), "en la silueta es blanco, con la misma opacidad")
 	assert_eq(flash.get_pixel(2, 2).a, original.get_pixel(2, 2).a, "fuera del dibujo, transparente")
-	assert_eq(texture.get_image().get_pixel(40, 70), body, "el dibujo original no cambia")
+	assert_eq(texture.get_image().get_pixel(128, 130), body, "el dibujo original no cambia")
 	assert_same(EnemyShape.flash_texture(texture), EnemyShape.flash_texture(texture), "se arma una sola vez")
 
 
@@ -235,3 +250,74 @@ func test_every_level_map_is_drawn() -> void:
 		add_child_autofree(level.build_map())
 	await wait_process_frames(2)
 	assert_true(true, "los mapas (con rocas, árboles y puertas) se dibujaron sin errores")
+
+
+# --- Monstruos M24: PNG de producción de una sola vista (RF-329, RF-330, D-050) ---
+
+## El rectángulo del cuerpo de una textura: los píxeles con más de 10 % de opacidad, como los cuenta
+## tools/prepare_monster_sprites.gd.
+func _body_rect(texture: Texture2D) -> Rect2i:
+	var image: Image = texture.get_image()
+	var low := Vector2i(image.get_width(), image.get_height())
+	var high := Vector2i(-1, -1)
+	for y: int in image.get_height():
+		for x: int in image.get_width():
+			if image.get_pixel(x, y).a > 0.1:
+				low = Vector2i(mini(low.x, x), mini(low.y, y))
+				high = Vector2i(maxi(high.x, x), maxi(high.y, y))
+	return Rect2i(low, high - low + Vector2i.ONE) if high.x >= 0 else Rect2i()
+
+
+func test_rendered_monsters_keep_their_alpha_and_have_margins() -> void:
+	for id: String in RENDERED_IDS:
+		var image: Image = _enemy_data(id).texture.get_image()
+		assert_true(image.detect_alpha() != Image.ALPHA_NONE, "%s: conserva el alfa" % id)
+		assert_lt(image.get_pixel(0, 0).a, 0.01, "%s: la esquina es transparente" % id)
+		var rect: Rect2i = _body_rect(_enemy_data(id).texture)
+		assert_gt(rect.size.x, 100, "%s: tiene cuerpo" % id)
+		assert_gte(rect.position.x, 1, "%s: margen izquierdo" % id)
+		assert_lte(rect.end.x, 255, "%s: margen derecho" % id)
+		assert_gte(rect.position.y, 1, "%s: margen de arriba" % id)
+
+
+func test_rendered_monsters_stand_on_the_same_ground_line() -> void:
+	for id: String in RENDERED_IDS:
+		var rect: Rect2i = _body_rect(_enemy_data(id).texture)
+		assert_eq(rect.end.y, FOOT_ROW, "%s: los pies apoyan a la misma altura" % id)
+		# El cuerpo no sube más de lo que EnemyShape.sprite_top deja para la barra de vida.
+		# (en unidades del radio; el dibujo se sube side / 32 respecto del centro)
+		var top_above_center: float = (128.0 - rect.position.y) / 256.0 * EnemyShape.SPRITE_SCALE + EnemyShape.SPRITE_SCALE / 32.0
+		assert_lte(top_above_center, EnemyShape.sprite_top(1.0) + 0.05, "%s: la cabeza no pasa de sprite_top" % id)
+
+
+func test_rendered_monsters_do_not_flip_and_the_others_do() -> void:
+	for id: String in ENEMY_IDS:
+		var data: EnemyData = _enemy_data(id)
+		assert_eq(data.flip_when_walking_left, not RENDERED_IDS.has(id), "%s: espejo" % id)
+		var enemy: Enemy = _walker([Vector2(400, 100), Vector2(100, 100)], data)
+		simulate(enemy, 10, DT)
+		assert_true(enemy.is_facing_left(), "%s: camina hacia la izquierda" % id)
+		assert_eq(enemy.is_drawn_mirrored(), data.flip_when_walking_left, "%s: dibujo reflejado" % id)
+
+
+func test_rendered_monsters_keep_their_balance_numbers() -> void:
+	for id: String in UNCHANGED_STATS:
+		var data: EnemyData = _enemy_data(id)
+		var expected: Array = UNCHANGED_STATS[id]
+		assert_eq(data.max_health, expected[0], "%s: vida" % id)
+		assert_eq(data.speed_tiles, expected[1], "%s: velocidad" % id)
+		assert_eq(data.armor, expected[2], "%s: armadura" % id)
+		assert_eq(data.reward, expected[3], "%s: recompensa" % id)
+		assert_eq(data.lives_damage, expected[4], "%s: vidas" % id)
+		assert_eq(data.size_tiles, expected[5], "%s: tamaño (colisión y selección)" % id)
+		assert_false(data.is_flying, "%s: no vuela" % id)
+
+
+func test_rendered_monsters_draw_every_state_without_errors() -> void:
+	# Parpadeo, ralentización, quemadura y barra de vida (RF-123, RF-152, RF-158, RF-82) con el PNG nuevo.
+	for id: String in RENDERED_IDS:
+		var enemy: Enemy = _walker([Vector2(400, 100), Vector2(100, 100)], _enemy_data(id))
+		enemy.take_hit(1, 0.5, 2.0)
+		enemy.apply_burn(2, 2.0)
+	await wait_process_frames(3)
+	assert_true(true, "se dibujaron sin errores")

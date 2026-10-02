@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="EnemyData" format=3]
 
 [ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="1_wrwnl"]
-[ext_resource type="Texture2D" path="res://assets/sprites/enemies/tank.svg" id="2_mf8iq"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/rendered/tank.png" id="2_mf8iq"]
 
 [resource]
 script = ExtResource("1_wrwnl")
@@ -16,3 +16,4 @@ shape = 2
 color = Color(0.5529412, 0.3529412, 0.16862746, 1)
 texture = ExtResource("2_mf8iq")
 size_tiles = 0.35
+flip_when_walking_left = false

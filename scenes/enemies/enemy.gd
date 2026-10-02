@@ -159,6 +159,11 @@ func is_facing_left() -> bool:
 	return _facing_left
 
 
+## RF-330: true si el dibujo se refleja en espejo (mira a la izquierda y su dibujo lo permite).
+func is_drawn_mirrored() -> bool:
+	return _facing_left and data.flip_when_walking_left
+
+
 ## RF-82: la barra de vida solo aparece después del primer golpe.
 func is_health_bar_visible() -> bool:
 	return health < max_health
@@ -446,8 +451,9 @@ func _draw() -> void:
 	# Hasta dónde llega el dibujo hacia arriba: encima van la barra de vida y la corona.
 	var top: float = r
 	if data.texture != null:
-		# RF-151: el dibujo mira hacia donde camina (se da vuelta en espejo).
-		var flip := Vector2(-1.0 if _facing_left else 1.0, 1.0)
+		# RF-151: el dibujo mira hacia donde camina (se da vuelta en espejo), salvo que tenga luz
+		# propia que el espejo movería de lado (RF-330).
+		var flip := Vector2(-1.0 if is_drawn_mirrored() else 1.0, 1.0)
 		draw_set_transform(bob, 0.0, squash * flip)
 		EnemyShape.draw_sprite(self, data.texture, r, SLOW_MODULATE if is_slowed() else Color.WHITE)
 		if _hit_flash_left > 0.0:

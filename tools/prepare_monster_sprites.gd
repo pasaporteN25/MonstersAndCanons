@@ -12,7 +12,7 @@ const CANVAS: int = 256
 const FOOT_LINE: float = 0.7455
 ## Hasta dónde puede subir la cabeza (el alto máximo del cuerpo coincide con EnemyShape.sprite_top, donde
 ## van la barra de vida y la corona) y cuánto puede ocupar de ancho.
-const MAX_BODY_HEIGHT: float = 0.6965
+const MAX_BODY_HEIGHT: float = 0.634
 const MAX_BODY_WIDTH: float = 0.98
 ## Un píxel cuenta como cuerpo con más de esta opacidad (ignora motas casi invisibles del generador).
 const BODY_ALPHA: float = 0.1
