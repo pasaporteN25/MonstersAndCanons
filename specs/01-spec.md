@@ -284,6 +284,8 @@ Una investigación con capturas y con el bot (D-047) mostró que el combo quedab
 
 #### Etapa B1 · Pares de torres vecinas *(M21, se especifica al tomarla)*
 
+**Actualización de backlog (Lucas, 2026-10-02):** analizar activación solo desde mejoras de torre2 o3; prioridad media, sin implementación autorizada. Detalle y preguntas pendientes en B-23. La etapa A existente no cambia.
+
 Lo ya decidido: son **vecinas** las torres que se tocan en las **8 casillas** de alrededor (una torre de 2×2 toca por todo su borde); los pares son **pocos y elegidos a mano** (propuesta: **Incendiaria + Eléctrica** → el rayo además quema; **Hielo + Múltiple** → los dardos ralentizan un poco; **Hielo + Cañón** → el área también ralentiza); se **ven** con una línea fina entre las vecinas, el panel dice la sinergia activa y la vista previa resalta con quién combina. Se escribe como §5.9 con sus RF cuando se tome.
 
 
@@ -1306,6 +1308,7 @@ Los otros dos de la lista (**Excavador** y **Ladrón**) quedan para una etapa po
 **Recomendación de Claude:** hacer el **aviso de atajo (3)** apenas se pueda, porque es barato, y el **puente (1)** cuando el editor o un nivel lo pidan.
 
 ### B-10 · Más niveles y niveles difíciles
+**Actualización de Lucas, 2026-10-02: prioridad baja.** Completar la campaña hasta el nivel10 sigue pendiente; primero mejorar lo existente. Actualmente `campaign.json` incluye niveles1–7.
 *Idea de Lucas (a partir de las propuestas de Claude), 2026-09-29. Sin fecha.*
 
 - **Niveles 8, 9, 10…:** con el formato de M7 son un archivo de texto y una línea en `campaign.json`. Cada uno se balancea con el bot (spec §7.4).
@@ -1389,6 +1392,32 @@ La wiki de M11 ya es escalable a propósito (categorías → entradas → bloque
 - En **mapas chicos** (20×9) el espacio sí importa: 4 casillas de pasto juntas cerca del camino.
 
 **Torres de apoyo (idea de Claude, relacionada):** como los enemigos tendrán auras (arriba), las torres pueden tenerlas también: un **Estandarte** que sube la cadencia o el alcance de las torres cercanas. Usa **la misma mecánica de aura**, así que conviene diseñarlas juntas.
+
+### Actualización de prioridades · Lucas, 2026-10-02
+
+**Solo registro, sin autorización de implementación.** B-17 a B-23 tienen **prioridad media**, sin fecha. Primero mejorar la experiencia y la presentación actuales; ampliar la campaña hasta el nivel10 (B-10) queda con **prioridad baja**. Las investigaciones entregan opciones y muestras para decidir antes de producción. Las capturas compartidas muestran el HUD/panel de pruebas y los indicadores amarillos de niveles de torre; sirven de referencia visual.
+
+### B-17 · HUD compacto, pausa y controles de administración
+**Prioridad media · Pendiente.** Quitar palabras redundantes junto a los iconos de oro, vidas, puntos y oleada: conservar icono y valor (incluido actual/total de oleada). Al pasar el puntero sobre cada icono, mostrar una ayuda pequeña con su significado; contemplar foco por teclado y una alternativa táctil. Rediseñar el fondo de la barra superior, el menú de pausa y los controles de pruebas/admin con la estética actual de Monsters & Canons, mejorando agrupación, jerarquía y orden. Conservar acciones y atajos. **Entrega futura:** muestras del HUD, pausa y panel reorganizado, legibles en los tamaños de ventana soportados, antes de integrar.
+
+### B-18 · FPS y métricas visibles durante la partida
+**Prioridad media · Pendiente.** Cuando se active Mostrar FPS, dibujarlos sobre la partida, sin fondo y fuera del panel de pruebas, para que sigan visibles con el panel cerrado. Evaluar si conviene añadir tiempo por cuadro en ms, enemigos/proyectiles activos u otra métrica útil; elegir pocas, con bajo costo y buen contraste sin tapar controles. Es un monitor local de rendimiento (telemetría local); no implica envío ni recopilación remota. **Entrega futura:** propuesta de métricas, ubicación, frecuencia de actualización y muestra; comparar costo con el monitor apagado/encendido.
+
+### B-19 · Renovar Opciones y los submenús
+**Prioridad media · Pendiente.** Llevar el estilo del menú principal a Opciones y demás submenús. Relevar primero qué pantallas aún tienen el estilo anterior, ordenar controles y mantener navegación, foco, contraste y legibilidad. **Entrega futura:** inventario de pantallas y muestras coherentes antes de la implementación.
+
+### B-20 · Integrar mejor las marcas del nivel de torre
+**Prioridad media · Pendiente.** Revisar los puntos amarillos flotantes de RF-75, que hoy indican niveles1/2/3. Comparar puntos más sutiles incorporados a la base (remaches, luces o detalles) con mayor contraste/intensidad del brillo ya implementado en M30. No es obligatorio eliminarlos: el nivel debe seguir siendo reconocible a escala de partida, también cuando el brillo se apaga por aturdimiento. Evitar confundirlos con selección u otros efectos. **Entrega futura:** comparación de los tres niveles, al menos sobre el Cañón, y revisión del criterio para las demás torres; sombras fuera de alcance salvo pedido posterior.
+
+### B-21 · Investigar una vista general con más sensación de 3D
+**Prioridad media · Investigación y pruebas pendientes.** Mejorar la profundidad de toda la escena, además de los sprites. Comparar alternativas: relieve y bordes del terreno con iluminación coherente; perspectiva oblicua/isométrica simulada en2D; escena2.5D con suelo3D y sprites. Evaluar orden de dibujo/oclusiones, alineación de bases y caminos, selección/construcción, cámara, interfaz, rendimiento, escritorio y móvil, y compatibilidad de mapas/guardados. No se adopta ninguna opción todavía.
+**Entrega futura:** muestras comparables del mismo mapa y una evaluación de alcance/costos/riesgos. Tratar el cambio de vista como potencial **breaking change**: preparar un PR de revisión identificado como tal, avisar a Lucas con el enlace y esperar su aprobación explícita **antes de mergear**. Una muestra no autoriza migrar toda la producción ni fusionar el PR.
+
+### B-22 · Analizar contenido nuevo y desbloqueos en niveles superiores
+**Prioridad media · Análisis pendiente; creación e integración no autorizadas.** Proponer2–3 candidatos de torretas y2–3 de monstruos (confirmar la selección final), con papel táctico distinto, estética, contramedida, costo de implementación y nivel de aparición/desbloqueo. Mantener la temática de monstruos. Considerar Excavador/Ladrón del B-07 y las variantes B de Bestia/Tanque que Lucas reservó para futuro, evitando duplicar funciones existentes. Comparar habilitación por nivel con desbloqueo persistente; contemplar Wiki, presentación, progreso y balance. El Mortero ya tiene disponibilidad reservada para el nivel10 (RF-300); no tratarlo como contenido nuevo. **Entrega futura:** tabla comparativa y recomendación, sin depender de completar ahora los niveles8–10.
+
+### B-23 · Combinar ataques de torres vecinas desde mejoras2/3
+**Prioridad media · Análisis pendiente.** Extiende la propuesta B1 de §5.8 y B-16.C, todavía sin implementar. Investigar combinaciones de ataques entre torres cercanas, habilitadas recién desde nivel de **mejora de torre2 o3** (distinto del número de nivel de campaña). Decidir si ambas torres deben alcanzar el mínimo, qué pares califican y si el efecto combinado reemplaza o suma al ataque normal. Comparar requisito2 frente a3, legibilidad de vínculos/vista previa y respuesta al mejorar, vender o aturdir una vecina; medir balance y rendimiento. Conservar separadas las reacciones por estado existentes de M20, que ya funcionan sin vecindad. **Entrega futura:** pocas recetas propuestas, reglas de activación y prueba de balance; sin cambiar las reglas actuales hasta aprobación.
 
 ## 14. Arte de torres con volumen (M23, pedido por Lucas, 2026-10-02)
 

@@ -1058,3 +1058,9 @@
   **Hecho cuando:** nueve hojas y atlas de16poses propios, conectados en partida con apoyo/tamaño/velocidad coherentes, habilidades conservadas, capturas/GIF y suite GUT en verde, documentación y changelog al día, exportación y push al PR#1.
 
   **Resultado T173:** nueve fuentes y atlas integrados,144poses únicas, apoyo fila191 y escala constante por especie; doce caminantes más el vuelo existente. Balance y habilidades comparados con HEAD sin diferencias. Captura real1920×1080 y GIF revisados;889/889 tests GUT,8048 asserts,68 scripts, sin SCRIPT ERROR/Parse Error. Windows y Linux exportados; arranque Windows headless comprobado, Linux sin ejecutar. Persisten avisos de certificados y de limpieza (2 ObjectDB/1 recurso) al cerrar la suite/captura. No se añadieron ataques/muerte ni se cambiaron sombras. Documentos/changelog actualizados; descripción del PR a cargo de Lucas.
+
+### Registro de backlog · 2026-10-02
+- [x] **T174 · Registrar prioridades de interfaz, presentación y futuras mecánicas.**
+  **Refs:** backlog §13, B-10 y B-17 a B-23; propuesta B1 existente.
+  **Hecho cuando:** propuestas de Lucas anotadas con prioridad media, niveles8–10 relegados, investigaciones y revisión previa al merge explícitas; sin implementar cambios de juego.
+  **Resultado T174:** siete entradas agregadas al backlog existente, prioridad baja para completar campaña y vínculo con B1 sin duplicar la mecánica. Solo documentación revisada; no se modificaron escenas, assets, datos ni código y no se ejecutó GUT porque no hay cambios de ejecución.
