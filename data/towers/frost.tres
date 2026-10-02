@@ -2,11 +2,13 @@
 
 [ext_resource type="Script" path="res://scripts/data/tower_level_data.gd" id="1_x1y3c"]
 [ext_resource type="Script" path="res://scripts/data/tower_data.gd" id="2_4uqr0"]
-[ext_resource type="Texture2D" path="res://assets/sprites/towers/base_1.svg" id="2_t0jij"]
-[ext_resource type="Texture2D" path="res://assets/sprites/towers/base_2.svg" id="3_tr68n"]
-[ext_resource type="Texture2D" path="res://assets/sprites/towers/base_3.svg" id="4_nc4yv"]
-[ext_resource type="Texture2D" path="res://assets/sprites/projectiles/frost.svg" id="5_tr68n"]
-[ext_resource type="Texture2D" path="res://assets/sprites/towers/turret_frost.svg" id="6_21kr8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/base_1.png" id="2_t0jij"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/base_2.png" id="3_tr68n"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/base_3.png" id="4_nc4yv"]
+[ext_resource type="Texture2D" path="res://assets/sprites/projectiles/rendered/frost.png" id="5_tr68n"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/turret_frost.png" id="6_21kr8"]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/frost_atlas.png" id="rendered_atlas"]
 
 [sub_resource type="Resource" id="Resource_110pk"]
 script = ExtResource("1_x1y3c")
@@ -47,5 +49,6 @@ can_hit_air = true
 projectile_speed_tiles = 10.0
 color = Color(0.49803922, 0.827451, 0.9607843, 1)
 turret_texture = ExtResource("6_21kr8")
+turret_atlas = ExtResource("rendered_atlas")
 projectile_texture = ExtResource("5_tr68n")
 levels = Array[ExtResource("1_x1y3c")]([SubResource("Resource_110pk"), SubResource("Resource_x1y3c"), SubResource("Resource_4uqr0")])

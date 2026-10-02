@@ -951,9 +951,10 @@
   **Resultado:** nueve atlas RGBA de 512×256 (72 vistas de 128 px), nueve vistas independientes, tres bases y fuentes originales conservadas. Recorte por componentes de alfa, porque las hojas generadas cruzaban las celdas: no se cortan tubos ni cristales. Herramienta Godot reproducible; guía §7 actualizada. Hoja conjunta y ocho direcciones revisadas a tamaño de mapa/HUD. Los tests confirman que todos los cuadros tienen cuerpo y margen transparente. Las vistas son ilustraciones generadas, no geometría 3D: hay pequeñas variaciones de detalle entre ellas que quedan sujetas a la revisión visual de Lucas.
 
 ### Sprint 2 · Integración y efectos
-- [ ] **T157 · Integrar los atlas, disparos y efectos.**
+- [x] **T157 · Integrar los atlas, disparos y efectos.**
   **Refs:** RF-327, RF-328, D-049.
   **Hecho cuando:** los nueve datos apuntan al nuevo arte; HUD/Wiki, ocho direcciones, retroceso y mejoras funcionan; disparos y efectos acompañan el estilo; tests relevantes pasan sin errores de script.
+  **Resultado:** TowerVisual selecciona cuadros por ángulo con envoltura correcta; Tower dibuja la vista sin rotar la luz y mantiene retroceso/destello. HUD usa la vista norte y Wiki la textura renderizada. Los nueve datos usan PNG para mecanismo, base y proyectil; los SVG y formas simples siguen como compatibilidad para datos antiguos. Nueve proyectiles y cuatro texturas de impacto; frío/explosión suman sprites temporales, fuego usa llama renderizada también sobre enemigos, Tesla suma chispas violetas al rayo existente. Se incluyen los cuatro emblemas del HUD ya aceptado. 18 tests de sprites y seis tests nuevos de vistas, recursos y efectos pasan; las mejoras se comprobaron en escena real. Ningún número de balance cambió.
 
 ### Sprint 3 · Revisión del conjunto
 - [ ] **T158 · Revisar el juego y documentar la siguiente etapa.**

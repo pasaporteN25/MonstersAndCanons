@@ -8,7 +8,7 @@ extends RefCounted
 
 const CROWN_COLOR := Color(1.0, 0.84, 0.3)
 ## RF-158: llamita del enemigo que se quema.
-const FLAME: Texture2D = preload("res://assets/sprites/effects/flame.svg")
+const FLAME: Texture2D = preload("res://assets/sprites/effects/rendered/flame.png")
 ## RF-151: lado del dibujo comparado con el radio del enemigo. Con 2.8, el cuerpo del dibujo
 ## (unas 20 de sus 64 unidades de radio) mide lo mismo que el círculo de antes.
 const SPRITE_SCALE: float = 2.8

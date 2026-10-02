@@ -3,7 +3,8 @@
 class_name LightningEffect
 extends Node2D
 
-const COLOR := Color(1.0, 0.92, 0.35)
+const COLOR := Color(0.72, 0.5, 1.0)
+const SPARK: Texture2D = preload("res://assets/sprites/effects/rendered/spark.png")
 const DURATION: float = 0.22
 ## Cada tramo se parte en esta cantidad de pedacitos, corridos un poco hacia los costados.
 const KINKS_PER_SEGMENT: int = 4
@@ -61,3 +62,6 @@ func _draw() -> void:
 	for point: Vector2 in _endpoints:
 		draw_circle(point, 6.0, Color(_color, 0.25 * alpha))
 		draw_circle(point, 2.3, Color(1, 1, 1, 0.9 * alpha))
+		# El rayo magenta del Chamán conserva su color y su lectura propios.
+		if _color == COLOR:
+			draw_texture_rect(SPARK, Rect2(point - Vector2(10, 10), Vector2(20, 20)), false, Color(1, 1, 1, alpha))

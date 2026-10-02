@@ -37,8 +37,8 @@ func test_each_level_has_its_own_base() -> void:
 			var base: Texture2D = data.levels[i].base_texture
 			assert_not_null(base, "%s, nivel %d: base" % [data.id, i + 1])
 			if base != null:
-				assert_eq(base.resource_path, "res://assets/sprites/towers/base_%d.svg" % (i + 1),
-					"%s, nivel %d: madera, piedra, piedra con oro" % [data.id, i + 1])
+				assert_eq(base.resource_path, "res://assets/sprites/towers/rendered/base_%d.png" % (i + 1),
+					"%s, nivel %d: base renderizada del nivel" % [data.id, i + 1])
 				assert_eq(base.get_size(), SPRITE_SIZE)
 
 
@@ -58,8 +58,8 @@ func test_tower_icon_is_the_base_with_the_turret_on_top() -> void:
 	assert_eq(base.get_pixel(64, 64), wood, "armar el ícono no cambia la base del mapa")
 	# En el centro está la torreta (oscura) y no la madera de la base.
 	assert_ne(icon.get_pixel(64, 64), base.get_pixel(64, 64), "la torreta tapa el centro")
-	# Abajo, fuera de la torreta, se sigue viendo la madera.
-	assert_eq(icon.get_pixel(64, 108), base.get_pixel(64, 108), "abajo, la madera de la base")
+	# En el borde, fuera del mecanismo, se sigue viendo la base.
+	assert_eq(icon.get_pixel(8, 64), base.get_pixel(8, 64), "el borde de la base sigue visible")
 
 
 func test_tower_without_drawings_gets_no_icon() -> void:
@@ -201,7 +201,7 @@ func test_every_tower_has_its_projectile() -> void:
 		var texture: Texture2D = data.projectile_texture
 		assert_not_null(texture, "%s: proyectil" % data.id)
 		if texture != null:
-			assert_eq(texture.resource_path, "res://assets/sprites/projectiles/%s.svg" % data.id)
+			assert_eq(texture.resource_path, "res://assets/sprites/projectiles/rendered/%s.png" % data.id)
 			assert_eq(texture.get_size(), Vector2(64, 64), "%s: 32×32 importado al doble" % data.id)
 
 

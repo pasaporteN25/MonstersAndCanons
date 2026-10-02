@@ -2,7 +2,7 @@
 class_name FireImpactEffect
 extends Node2D
 
-const FLAME: Texture2D = preload("res://assets/sprites/effects/flame.svg")
+const FLAME: Texture2D = preload("res://assets/sprites/effects/rendered/flame.png")
 const DURATION: float = 0.25
 
 var _time: float = 0.0

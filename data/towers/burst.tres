@@ -1,12 +1,14 @@
 [gd_resource type="Resource" script_class="TowerData" format=3]
 
 [ext_resource type="Script" path="res://scripts/data/tower_level_data.gd" id="1_6q6j5"]
-[ext_resource type="Texture2D" path="res://assets/sprites/towers/base_1.svg" id="2_ewixr"]
-[ext_resource type="Texture2D" path="res://assets/sprites/towers/base_2.svg" id="3_cfjgc"]
-[ext_resource type="Texture2D" path="res://assets/sprites/towers/base_3.svg" id="4_dkli2"]
-[ext_resource type="Texture2D" path="res://assets/sprites/projectiles/burst.svg" id="5_or6m3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/base_1.png" id="2_ewixr"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/base_2.png" id="3_cfjgc"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/base_3.png" id="4_dkli2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/projectiles/rendered/burst.png" id="5_or6m3"]
 [ext_resource type="Script" path="res://scripts/data/tower_data.gd" id="6_htfq5"]
-[ext_resource type="Texture2D" path="res://assets/sprites/towers/turret_burst.svg" id="7_fgkr5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/turret_burst.png" id="7_fgkr5"]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/burst_atlas.png" id="rendered_atlas"]
 
 [sub_resource type="Resource" id="Resource_4ji27"]
 script = ExtResource("1_6q6j5")
@@ -43,5 +45,6 @@ description = "Lanza púas en círculo; rinde más en una curva. No le pega a lo
 projectile_speed_tiles = 6.0
 color = Color(0.8, 0.3, 0.42, 1)
 turret_texture = ExtResource("7_fgkr5")
+turret_atlas = ExtResource("rendered_atlas")
 projectile_texture = ExtResource("5_or6m3")
 levels = Array[ExtResource("1_6q6j5")]([SubResource("Resource_4ji27"), SubResource("Resource_42wxm"), SubResource("Resource_7rjbn")])

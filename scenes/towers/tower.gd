@@ -67,10 +67,11 @@ func _ready() -> void:
 ## como se ve la torre recién construida. null si a la torre le falta algún dibujo (RF-156).
 static func make_icon(tower_data: TowerData) -> Texture2D:
 	var base: Texture2D = tower_data.levels[0].base_texture if not tower_data.levels.is_empty() else null
-	if base == null or tower_data.turret_texture == null:
+	if base == null or (tower_data.turret_texture == null and tower_data.turret_atlas == null):
 		return null
 	var image: Image = base.get_image()
-	var turret: Image = tower_data.turret_texture.get_image()
+	var turret: Image = TowerVisual.frame_texture(tower_data.turret_atlas, -PI / 2.0).get_image() \
+		if tower_data.turret_atlas != null else tower_data.turret_texture.get_image()
 	if image == null or turret == null:
 		return null
 	# Copias: get_image() puede devolver la misma imagen que guarda la textura, y cambiarla
@@ -84,7 +85,8 @@ static func make_icon(tower_data: TowerData) -> Texture2D:
 	turret.clear_mipmaps()
 	image.convert(Image.FORMAT_RGBA8)
 	turret.convert(Image.FORMAT_RGBA8)
-	turret.rotate_90(COUNTERCLOCKWISE)
+	if tower_data.turret_atlas == null:
+		turret.rotate_90(COUNTERCLOCKWISE)
 	image.blend_rect(turret, Rect2i(Vector2i.ZERO, turret.get_size()), Vector2i.ZERO)
 	image.generate_mipmaps()
 	return ImageTexture.create_from_image(image)
@@ -319,17 +321,23 @@ func _draw() -> void:
 	# Torreta (o cañón), girada hacia `aim_angle` y retrocedida según `_recoil`.
 	var length: float = _barrel_length()
 	var width: float = _barrel_width()
-	draw_set_transform(Vector2.ZERO, aim_angle)
 	var back: float = RECOIL_PX * _recoil * factor
-	if data.turret_texture != null:
+	if data.turret_atlas != null:
+		# Las vistas conservan la vertical y la luz. Solo el retroceso sigue la puntería.
+		var offset: Vector2 = Vector2.from_angle(aim_angle) * back
+		draw_texture_rect_region(data.turret_atlas, Rect2(tile_rect.position - offset, tile_rect.size),
+			TowerVisual.frame_rect(data.turret_atlas, aim_angle))
+	elif data.turret_texture != null:
+		draw_set_transform(Vector2.ZERO, aim_angle)
 		draw_texture_rect(data.turret_texture, Rect2(tile_rect.position - Vector2(back, 0), tile_rect.size), false)
 	else:
+		draw_set_transform(Vector2.ZERO, aim_angle)
 		draw_rect(Rect2(-back, -width / 2.0, length, width), outline)
+	draw_set_transform(Vector2.ZERO)
 	if _flash_left > 0.0:
 		var strength: float = _flash_left / FLASH_DURATION
-		draw_circle(Vector2(length - back + 3.0, 0.0), width * 0.9, Color(1.0, 0.95, 0.6, strength))
-	draw_set_transform(Vector2.ZERO)
-	if data.turret_texture == null:
+		draw_circle(Vector2.from_angle(aim_angle) * (length - back + 3.0), width * 0.9, Color(1.0, 0.95, 0.6, strength))
+	if data.turret_texture == null and data.turret_atlas == null:
 		# Torreta redonda encima del cañón (solo sin dibujo: el dibujo ya la trae).
 		draw_circle(Vector2.ZERO, half * 0.42, outline)
 		draw_circle(Vector2.ZERO, half * 0.26, data.color)
