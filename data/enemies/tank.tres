@@ -3,6 +3,8 @@
 [ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="1_wrwnl"]
 [ext_resource type="Texture2D" path="res://assets/sprites/enemies/rendered/tank.png" id="2_mf8iq"]
 
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/rendered/tank_walk.png" id="3_walk"]
+
 [resource]
 script = ExtResource("1_wrwnl")
 id = &"tank"
@@ -15,5 +17,11 @@ lives_damage = 2
 shape = 2
 color = Color(0.5529412, 0.3529412, 0.16862746, 1)
 texture = ExtResource("2_mf8iq")
-size_tiles = 0.35
+visual_scale = 1.2
 flip_when_walking_left = false
+size_tiles = 0.35
+
+walk_atlas = ExtResource("3_walk")
+walk_stride_tiles = 1.0
+
+walk_art_scale = 1.19

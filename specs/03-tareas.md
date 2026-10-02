@@ -1035,3 +1035,12 @@
   **Resultado:** comparaciones de13 enemigos con tamaños actual/+20%/+35%, GIF de24 cuadros de caminar y vuelo, capturas reales1280×720/1920×1080, montaje A en tres familias/tres vistas y conceptos B/C. Prototipo de vuelo con cabeza estabilizada, fuentes y prompts conservados. Changelog al día. Producción intacta; propuestas pendientes de aprobación. La descripción del PR queda a cargo de Lucas por pedido explícito; no se modificó. No se probaron Linux/celular ni nuevas colisiones o transiciones; no se exportó.exe.
 
   **Verificación T170:**875/875 tests,6975 asserts; sin SCRIPT ERROR/Parse Error. Capturas y empaquetado salen0.
+
+### M29 · Cambios aprobados en partida
+- [x] **T171 · Integrar escala, ciclos, migraciones, encastre C y escritorio Full HD.**
+  **Refs:** RF-339 a RF-341, D-055.
+  **Hecho cuando:** los trece diseños están conectados; +20 % no altera radios; ciclos existentes y vuelo se dibujan por cuadro; las nueve torres encastran con C; iconos coherentes; escritorio se adapta a1920×1080; capturas, pruebas y changelog disponibles, commit y push al PR #1. La descripción del PR queda a cargo de Lucas.
+
+  **Resultado T171:** los13 diseños renderizados están conectados; aumento visual20% independiente del radio y con pies anclados. Tres atlas de cuatro direcciones/poses por distancia y cuatro poses de vuelo; nueve restantes siguen estáticos, sin deformación global. Cotas por pose para barras y silueta blanca nativa conservando alfa. Tres bases C compartidas,24 vistas nuevas del Cañón e iconos compuestos HUD/Wiki; otras ocho torres conservan sus mecanismos con asiento/contacto nuevos. Ventana de escritorio objetivo1920×1080, limitada al monitor, lienzo1280×720 conservado y móvil/headless respetados. Fuentes, prompts y capturas reales con GIF de24cuadros. **883/883 tests GUT,7178 asserts,67 scripts**, sin SCRIPT ERROR/Parse Error ni fallos. Captura sale0; Windows de pruebas exporta y arranca headless con13 enemigos, salida0; Linux exporta y se empaqueta pero no se ejecutó. Persisten avisos previos del almacén de certificados del entorno. No se produjeron ciclos para los nueve estáticos ni se ejecutó móvil. Changelog/README/CONTENIDO/ONBOARDING al día. La descripción del PR queda a cargo de Lucas.
+
+  **Ventana real Windows:**1920×1080 sobre monitor con área útil2560×1400; lienzo lógico confirmado1280×720. Capturas Full HD y arranque exportado correctos.

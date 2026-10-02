@@ -32,6 +32,7 @@ var select_page: StringName = &"campaign"
 
 
 func _ready() -> void:
+	DesktopWindow.apply()
 	apply_display_settings()
 
 

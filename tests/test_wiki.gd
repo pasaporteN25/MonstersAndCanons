@@ -160,7 +160,7 @@ func test_a_tower_lists_its_effects_and_whether_it_hits_air() -> void:
 
 func test_a_tower_entry_has_its_drawing_layers() -> void:
 	var entry: WikiEntry = _category(&"torres").find(&"basic")
-	assert_eq(entry.icon.size(), 2, "base y torreta")
+	assert_eq(entry.icon.size(), 1, "base y torreta ya encastradas en el mismo icono")
 	for texture: Texture2D in entry.icon:
 		assert_not_null(texture)
 

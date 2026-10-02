@@ -14,8 +14,8 @@ reward = 25
 lives_damage = 2
 color = Color(0.5, 0.82, 0.9, 1)
 texture = ExtResource("2_mirr")
+visual_scale = 1.2
+flip_when_walking_left = false
 size_tiles = 0.36
 reflect_range_tiles = 2.5
 reflect_stun_seconds = 2.0
-
-flip_when_walking_left = false

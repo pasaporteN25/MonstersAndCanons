@@ -9,12 +9,12 @@ const GAME_SCENE: PackedScene = preload("res://scenes/game/game.tscn")
 const TOWER_SCENE: PackedScene = preload("res://scenes/towers/tower.tscn")
 const ENEMY_SCENE: PackedScene = preload("res://scenes/enemies/enemy.tscn")
 const PROJECTILE_SCENE: PackedScene = preload("res://scenes/towers/projectile.tscn")
-const ENEMY_IDS: Array[String] = ["normal", "fast", "tank", "flyer", "armored", "boss"]
+const ENEMY_IDS: Array[String] = ["normal", "fast", "tank", "flyer", "armored", "troll", "spider", "spiderling", "guardian", "healer", "shaman", "mirror", "boss"]
 const DT: float = 1.0 / 60.0
 ## D-023: los SVG de 64×64 se importan al doble.
 const SPRITE_SIZE := Vector2(128, 128)
-## M24 (D-050): los tres monstruos con PNG de una sola vista, de 256×256, y los datos que no cambian.
-const RENDERED_IDS: Array[String] = ["normal", "fast", "tank", "guardian", "healer", "shaman", "mirror", "boss"]
+## M29: los trece monstruos con PNG estático de256×256; la partida también admite atlas.
+const RENDERED_IDS: Array[String] = ["normal", "fast", "tank", "flyer", "armored", "troll", "spider", "spiderling", "guardian", "healer", "shaman", "mirror", "boss"]
 const RENDERED_SIZE := Vector2(256, 256)
 ## Los pies caen al 74,55 % del alto del lienzo (tools/prepare_monster_sprites.gd, FOOT_LINE).
 const FOOT_ROW: int = 191
@@ -70,7 +70,8 @@ func test_tower_icon_is_the_base_with_the_turret_on_top() -> void:
 	# En el centro está la torreta (oscura) y no la madera de la base.
 	assert_ne(icon.get_pixel(64, 64), base.get_pixel(64, 64), "la torreta tapa el centro")
 	# En el borde, fuera del mecanismo, se sigue viendo la base.
-	assert_eq(icon.get_pixel(8, 64), base.get_pixel(8, 64), "el borde de la base sigue visible")
+	assert_gt(icon.get_pixel(64, 104).a, 0.5, "la base sigue visible debajo del mecanismo")
+	assert_lt(icon.get_pixel(0, 0).a, 0.01, "el icono conserva margen transparente")
 
 
 func test_tower_without_drawings_gets_no_icon() -> void:

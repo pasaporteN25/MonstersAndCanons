@@ -14,9 +14,9 @@ reward = 20
 lives_damage = 2
 color = Color(0.78, 0.27, 0.62, 1)
 texture = ExtResource("2_sham")
+visual_scale = 1.2
+flip_when_walking_left = false
 size_tiles = 0.32
 stun_interval = 8.0
 stun_seconds = 3.0
 stun_range_tiles = 4.0
-
-flip_when_walking_left = false

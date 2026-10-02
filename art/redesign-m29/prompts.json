@@ -1,0 +1,22 @@
+{
+  "tool": "image_gen.imagegen",
+  "transparent_background": true,
+  "prompts": [
+    {
+      "key": "bases",
+      "prompt": "Production game sprite sheet for Monsters & Canons. Reference 1 RIGHT cannon assembly is approved mounting option C; reference 2 is existing base. Generate ONLY three FIXED circular stone-and-iron bases, no guns, no barrels, no crystals. Exactly three isolated objects horizontally in a single row, generous transparent margins, identical elevated orthographic three-quarter game camera, same top-left warm lighting, painterly premium rendered 3D illusion. Preserve reference2 squat round segmented stone outer footing and reinforced iron straps. Improve it with reference1 RIGHT low built-in reinforced circular turntable seat with raised dark iron shoulder and bronze bolts: the mechanism nests INTO the seat instead of floating above. Low recessed central dark contact well on top, sturdy bronze joining plates along the front rim, visible structural thickness but NOT a tall pedestal. Left level1 modest bronze fasteners, middle level2 reinforced polished brass inset ring, right level3 refined brighter golden bronze and tiny localized blue emissive rivets. All same dimensions and camera, no baked ground shadow, no surrounding background, no text. Genuine transparent alpha. Whole silhouettes fit, front lip grounded. Sheet only three bases, no detached parts.",
+      "refs": [
+        "art/redesign-m28/sources/cannon_mount_concepts.png",
+        "assets/sprites/towers/rendered/base_1.png"
+      ]
+    },
+    {
+      "key": "cannon_mount",
+      "prompt": "Production sprite sheet for Monsters & Canons: redesign the cannon mechanism as approved RIGHT option C in reference1. Reference2 is existing cannon eight-direction layout. Generate ONLY the rotating cannon mechanism with its integrated heavy brass-and-dark-iron curved trunnion brackets fastening directly onto its squat wooden support block and circular low mechanical turntable shoe. NO stone outer base, no ground, no shadow, genuine transparent alpha. Do not float barrel above support. Premium painterly 3D rendered game sprite illusion, identical elevated orthographic three-quarter camera and FIXED top-left studio light across ALL poses. EXACT GRID FOUR columns SIX rows =24 equally spaced isolated cannon mechanisms, generous separation, no overlaps/text/borders. First eight sprites (rows1-2) level1 match approved RIGHT reference cannon: chunky dark iron barrel brass muzzle wood cradle sculpted sweeping bronze side-brackets solid flush lower shoe. Next eight (rows3-4) level2 same weapon with reinforced brass bands and extra support bolts. Last eight(rows5-6) level3 same silhouette with refined golden bands and small localized cool blue rivets. Each group uses EXACT direction order: row1 east(right), southeast(down-right), south(down), southwest(down-left); row2 west(left), northwest(up-left), north(up), northeast(up-right). Repeat same order for each tier. Direction means BARREL MUZZLE aims that way in screen plane, viewpoint and light never rotate, no mirroring. Consistent scale and central pivot in all24cells. Art highly legible at128px, medium details, all parts contact physically. Entire mechanisms fit fully within each cell. Do not include stone base from reference1; these mechanisms sit on a separately drawn fixed base.\nCRITICAL OUTPUT LAYOUT CHANGE: TALL PORTRAIT sprite sheet aspect ratio TWO wide by THREE tall, 1024x1536 or equivalent, EXACT 4 columns by 6 rows of SQUARE cells. Each weapon takes at most 70% of its square cell width/height, with 15% clear TRANSPARENT margin ON EVERY SIDE. Large EMPTY gap between rows, no adjoining or touching sprites. All 24 weapons entirely visible with substantial empty space around them, including final bottom row. Do not use a wide landscape canvas or compressed rows. Reference is style only; output portrait.",
+      "refs": [
+        "art/redesign-m28/sources/cannon_mount_concepts.png",
+        "assets/sprites/towers/rendered/cannon_atlas.png"
+      ]
+    }
+  ]
+}

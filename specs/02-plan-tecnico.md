@@ -563,3 +563,8 @@ Copiar atlas y monstruos a assets, asignar atlas en niveles2/3 y resolverlo en T
 
 ### M28 · RF-338, D-054
 Visor aislado de enemigos y tamaños; GIF de caminata y vuelo; comparación de bases con montaje ajustado y dos conceptos integrados. Capturas1920×1080 desde copia temporal del proyecto. Registrar propuestas en changelog y sección de descripción PR, dejando explícito lo pendiente de aprobación.
+
+### M29 · RF-339 a RF-341, D-055
+Copiar cinco físicos, tres atlas de caminar y el vuelo a assets. Añadir escala y atlas opcionales en EnemyData, selección pura en EnemyVisual y anclaje de pies en EnemyShape. Enemy dibuja cuadros con parpadeo, estados y barras existentes. Producir bases y cañón C, empaquetar en Godot, compartir offset de encastre/contacto entre Tower y make_icon. Ajustar ventana de escritorio desde GameFlow mediante cálculo puro DesktopWindow y omitir headless/móvil. Validar cuatro direcciones, pasos/ralentización/pausa, escala sin cambio lógico, encastre, capturas reales y suite GUT. Exportar Windows de pruebas.
+
+El atlas de caminar tiene enmarcado diferente a la pose fija; walk_art_scale conserva el tamaño del cuerpo aprobado antes de aplicar el20%. Cotas por pose cacheadas sitúan la barra sobre la cabeza/alas. La silueta blanca usa ajuste nativo de RGB conservando alfa para evitar recorrer atlas grandes en GDScript al primer golpe.

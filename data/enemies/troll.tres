@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="EnemyData" format=3]
 
 [ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="1_0oga6"]
-[ext_resource type="Texture2D" path="res://assets/sprites/enemies/troll.svg" id="2_lqpfw"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/rendered/troll.png" id="2_lqpfw"]
 
 [resource]
 script = ExtResource("1_0oga6")
@@ -14,5 +14,7 @@ reward = 10
 lives_damage = 2
 color = Color(0.37, 0.6, 0.24, 1)
 texture = ExtResource("2_lqpfw")
+visual_scale = 1.2
+flip_when_walking_left = false
 size_tiles = 0.32
 regen_percent_per_second = 4.0

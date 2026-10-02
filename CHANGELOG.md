@@ -2,6 +2,14 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Monstruos más legibles, montaje C y escritorio Full HD *(M29, 2026-10-02)*
+
+- Los trece enemigos usan sus diseños renderizados: se suman Volador, Blindado, Troll, Araña y Cría que seguían con SVG. En partida el cuerpo crece un20% sin cambiar vida, alcance, selección, colisión ni habilidades.
+- Diablillo, Bestia y Tanque caminan con cuatro poses en cuatro direcciones, sincronizadas con la distancia recorrida. El volador aletea con cuatro poses. Al ralentizar se frenan los pasos y al pausar se detiene la animación. Los otros nueve tienen pose fija, sin aplastamiento global; sus ciclos propios quedan para otra tanda.
+- Las nueve torres encastran sobre bases reforzadas siguiendo el montaje C. El Cañón recibe24 vistas nuevas (ocho por nivel), conservando bronce, hierro y madera. La base queda quieta al apuntar; mecanismo, retroceso y boca de disparo comparten el nuevo asiento. HUD y Wiki usan iconos coherentes con el encastre.
+- Windows/Linux apuntan a1920×1080 con ajuste al área útil en pantallas menores. En pantalla completa se usa la resolución del monitor. El mapa conserva su lienzo lógico1280×720 y se escala junto con la interfaz; celular conserva su presentación.
+- Fuentes, prompts y capturas reales en `art/redesign-m29/`. Linux y celular no se ejecutaron en esta tanda; la revisión visual y el ejecutable corresponden a Windows. Descripción del PR a cargo de Lucas.
+
 ## Monsters & Canons: logo, menú y primeros monstruos *(M24, 2026-10-02)*
 
 - El menú principal muestra el logo **Monsters & Canons** y sus botones tienen un acabado de hierro oscuro con borde de bronce, relieve discreto y resplandor ámbar al pasar el mouse o con el teclado.

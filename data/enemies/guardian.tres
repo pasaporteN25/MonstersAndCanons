@@ -15,8 +15,8 @@ reward = 25
 lives_damage = 3
 color = Color(0.78, 0.72, 0.55, 1)
 texture = ExtResource("2_guard")
+visual_scale = 1.2
+flip_when_walking_left = false
 size_tiles = 0.38
 aura_radius_tiles = 2.0
 aura_armor_bonus = 2
-
-flip_when_walking_left = false

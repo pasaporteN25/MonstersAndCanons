@@ -362,3 +362,6 @@ TowerLevelData contiene un atlas visual opcional; Tower lo elige según stats() 
 
 ## D-054 · Prototipos aislados para revisar M28
 Usar los cinco físicos aprobados y los ciclos M25 existentes, comparar aumentos solo visuales y reducir deformación global. Comparar ventana1920×1080 con y sin cambio de lienzo lógico, porque más resolución por sí sola no agranda las unidades. Evaluar montaje y contacto entre mecanismo y base antes de producir nuevos atlas.
+
+## D-055 · Escala visual, poses reales y encastre C
+Lucas aprobó +20 %, ciclos de patas y montaje C de M28. La escala vive en EnemyData y se dibuja con anclaje a los pies, sin modificar size_tiles. EnemyVisual selecciona cuadros por distancia (caminar) o tiempo físico (aleteo), evitando deformaciones de todo el sprite. Se integran los ciclos existentes, sin inventar poses para los nueve estáticos. El montaje C utiliza un asiento fijo nuevo con contacto y mecanismos de ocho vistas; el cañón se rediseña siguiendo el concepto C. El lienzo lógico sigue en1280×720: cambiarlo a1920×1080 dejaría huecos o alteraría coordenadas y balance. Solo la ventana de escritorio crece y se limita al área útil del monitor. Se descartan reflejos que cambian la luz y rotaciones de sprites planos.

@@ -1431,3 +1431,11 @@ Lucas eligió entre las propuestas de la tanda 1 (`art/redesign-m24/`): **Normal
 ### M28 · Muestras de legibilidad y presentación
 - **RF-338** Antes de cambiar producción se comparan pendientes de migración, tamaños visuales, movimiento y encastre de torretas; Windows/Linux cuentan con una muestra a1920×1080.
   **Aceptación:** dadas las muestras, Lucas puede comparar el estado actual y las alternativas con PNG/GIF y criterios explícitos; no se modifican escenas, datos o resolución de producción hasta su aprobación.
+
+### M29 · Integración aprobada de las muestras M28
+- **RF-339** Los trece enemigos usan los diseños renderizados aprobados y un aumento visual del 20 %, independiente de su radio lógico. Los tres ciclos M25 caminan en cuatro direcciones por distancia recorrida; el volador usa cuatro poses de aleteo. Los otros nueve conservan su pose sin aplastamiento global.
+  **Aceptación:** dado un enemigo ralentizado, el paso acompaña su desplazamiento; al pausar no avanzan las poses. Vida, velocidad, selección, colisión y habilidades conservan sus cifras. Los pies de los terrestres conservan la línea de apoyo y la barra de vida queda sobre el cuerpo.
+- **RF-340** Las nueve torres adoptan el encastre C: asiento reforzado, contacto con la base fija y mecanismo móvil; el cañón cuenta con ocho vistas por nivel del montaje nuevo.
+  **Aceptación:** al apuntar y retroceder, la base queda fija y los tres niveles conservan su identidad, huella y reglas. El icono de construcción utiliza el mismo encastre que la partida.
+- **RF-341** Windows y Linux usan una ventana inicial Full HD (1920×1080), con lienzo lógico 1280×720 y ajuste a pantallas menores. Celular conserva el tamaño y orientación existentes.
+  **Aceptación:** dado un escritorio Full HD, el mapa y la interfaz se escalan juntos sin casillas nuevas ni recortes; una pantalla menor recibe una ventana que cabe en el área disponible.

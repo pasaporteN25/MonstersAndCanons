@@ -161,7 +161,7 @@ func is_facing_left() -> bool:
 
 ## RF-330: true si el dibujo se refleja en espejo (mira a la izquierda y su dibujo lo permite).
 func is_drawn_mirrored() -> bool:
-	return _facing_left and data.flip_when_walking_left
+	return _facing_left and data.flip_when_walking_left and data.walk_atlas == null and data.flight_atlas == null
 
 
 ## RF-82: la barra de vida solo aparece después del primer golpe.
@@ -431,6 +431,31 @@ func _update_facing() -> void:
 		_facing_left = false
 
 
+## Cuadro actual: camina por distancia, vuela por tiempo físico. No crea recursos por frame.
+func visual_frame_region() -> Rect2:
+	if data.walk_atlas != null:
+		return EnemyVisual.walk_region(distance, Rules.tiles_to_px(data.walk_stride_tiles), _heading)
+	if data.flight_atlas != null:
+		return EnemyVisual.flight_region(_anim_time, data.flight_frame_seconds)
+	return Rect2()
+
+func visual_texture() -> Texture2D:
+	if data.walk_atlas != null:
+		return data.walk_atlas
+	if data.flight_atlas != null:
+		return data.flight_atlas
+	return data.texture
+
+func visual_draw_scale() -> float:
+	return data.visual_scale * (data.walk_art_scale if data.walk_atlas != null else 1.0)
+
+func _draw_visual(texture: Texture2D, radius: float, color_: Color) -> void:
+	var region: Rect2 = visual_frame_region()
+	if region.has_area():
+		draw_texture_rect_region(texture, EnemyShape.sprite_rect(radius, visual_draw_scale()), region, color_)
+	else:
+		EnemyShape.draw_sprite(self, texture, radius, color_, data.visual_scale)
+
 func _draw() -> void:
 	var r: float = Rules.tiles_to_px(data.size_tiles)
 	if has_aura():
@@ -454,11 +479,20 @@ func _draw() -> void:
 		# RF-151: el dibujo mira hacia donde camina (se da vuelta en espejo), salvo que tenga luz
 		# propia que el espejo movería de lado (RF-330).
 		var flip := Vector2(-1.0 if is_drawn_mirrored() else 1.0, 1.0)
-		draw_set_transform(bob, 0.0, squash * flip)
-		EnemyShape.draw_sprite(self, data.texture, r, SLOW_MODULATE if is_slowed() else Color.WHITE)
+		# Poses reales: el cuerpo no se aplasta. El vuelo tiene un leve desplazamiento vertical.
+		var flight_bob := Vector2(0, sin(_anim_time * 3.0) * 0.6) if data.is_flying else Vector2.ZERO
+		draw_set_transform(flight_bob, 0.0, flip)
+		var texture: Texture2D = visual_texture()
+		_draw_visual(texture, r, SLOW_MODULATE if is_slowed() else Color.WHITE)
 		if _hit_flash_left > 0.0:
-			EnemyShape.draw_sprite(self, EnemyShape.flash_texture(data.texture), r, HIT_FLASH_COLOR)
-		top = EnemyShape.sprite_top(r)
+			_draw_visual(EnemyShape.flash_texture(texture), r, HIT_FLASH_COLOR)
+		var region: Rect2 = visual_frame_region()
+		if region.has_area():
+			var rect: Rect2 = EnemyShape.sprite_rect(r, visual_draw_scale())
+			var bounds: Rect2i = EnemyVisual.body_bounds(texture, region)
+			top = -rect.position.y - rect.size.y * bounds.position.y / region.size.y
+		else:
+			top = EnemyShape.sprite_top(r, data.visual_scale)
 	else:
 		# RF-156: sin dibujo, la forma de antes. Triángulos y rombos apuntan hacia donde caminan.
 		var fill: Color = data.color.lerp(SLOW_TINT, 0.6) if is_slowed() else data.color

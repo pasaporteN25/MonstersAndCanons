@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="EnemyData" format=3]
 
 [ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="1_pck5a"]
-[ext_resource type="Texture2D" path="res://assets/sprites/enemies/spiderling.svg" id="2_nlmec"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/rendered/spiderling.png" id="2_nlmec"]
 
 [resource]
 script = ExtResource("1_pck5a")
@@ -14,4 +14,6 @@ reward = 1
 lives_damage = 1
 color = Color(0.35, 0.66, 0.66, 1)
 texture = ExtResource("2_nlmec")
+visual_scale = 1.2
+flip_when_walking_left = false
 size_tiles = 0.16

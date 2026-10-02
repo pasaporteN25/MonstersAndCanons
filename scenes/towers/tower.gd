@@ -69,27 +69,15 @@ static func make_icon(tower_data: TowerData) -> Texture2D:
 	var base: Texture2D = tower_data.levels[0].base_texture if not tower_data.levels.is_empty() else null
 	if base == null or (tower_data.turret_texture == null and tower_data.turret_atlas == null):
 		return null
-	var image: Image = base.get_image()
-	var turret: Image = TowerVisual.frame_texture(tower_data.turret_atlas, -PI / 2.0).get_image() \
-		if tower_data.turret_atlas != null else tower_data.turret_texture.get_image()
-	if image == null or turret == null:
-		return null
-	# Copias: get_image() puede devolver la misma imagen que guarda la textura, y cambiarla
-	# cambiaría también la base que se ve en el mapa.
-	image = image.duplicate()
-	turret = turret.duplicate()
-	# Se trabaja sin las copias achicadas (mipmaps) y se vuelven a generar al final.
-	image.decompress()
-	turret.decompress()
-	image.clear_mipmaps()
-	turret.clear_mipmaps()
-	image.convert(Image.FORMAT_RGBA8)
-	turret.convert(Image.FORMAT_RGBA8)
+	var turret: Texture2D = TowerVisual.frame_texture(tower_data.turret_atlas, -PI / 2.0) \
+		if tower_data.turret_atlas != null else tower_data.turret_texture
 	if tower_data.turret_atlas == null:
-		turret.rotate_90(COUNTERCLOCKWISE)
-	image.blend_rect(turret, Rect2i(Vector2i.ZERO, turret.get_size()), Vector2i.ZERO)
-	image.generate_mipmaps()
-	return ImageTexture.create_from_image(image)
+		var image: Image = turret.get_image().duplicate()
+		image.decompress()
+		image.clear_mipmaps()
+		image.rotate_90(COUNTERCLOCKWISE)
+		turret = ImageTexture.create_from_image(image)
+	return TowerVisual.mounted_icon(base, turret)
 
 
 ## RF-293: todas las casillas que ocupa, empezando por la de arriba a la izquierda.
@@ -298,7 +286,8 @@ func _barrel_width() -> float:
 
 
 func _barrel_tip_global() -> Vector2:
-	return global_position + Vector2.from_angle(aim_angle) * _barrel_length()
+	var mount: Vector2 = TowerVisual.MOUNT_OFFSET * _scale_factor() if current_turret_atlas() != null else Vector2.ZERO
+	return global_position + mount + Vector2.from_angle(aim_angle) * _barrel_length()
 
 
 func _outline_color() -> Color:
@@ -318,6 +307,10 @@ func _draw() -> void:
 	if base != null:
 		draw_circle(Vector2(4, 5) * factor, Rules.TILE_SIZE * 0.44 * factor, Color(0, 0, 0, 0.22))
 		draw_texture_rect(base, tile_rect, false)
+		# Contacto fijo sobre el asiento: también durante el retroceso, sin girar la base.
+		draw_set_transform(Vector2(0, 2) * factor, 0.0, Vector2(1.0, 0.35))
+		draw_circle(Vector2.ZERO, side * 0.25, Color(0, 0, 0, 0.24))
+		draw_set_transform(Vector2.ZERO)
 	else:  # RF-156: sin dibujo, el cuadrado de color de antes.
 		draw_rect(Rect2(Vector2(-half, -half) + Vector2(4, 5) * factor, Vector2(half, half) * 2.0), Color(0, 0, 0, 0.22))
 		var rect := Rect2(-half, -half, half * 2.0, half * 2.0)
@@ -331,7 +324,7 @@ func _draw() -> void:
 	if atlas != null:
 		# Las vistas conservan la vertical y la luz. Solo el retroceso sigue la puntería.
 		var offset: Vector2 = Vector2.from_angle(aim_angle) * back
-		draw_texture_rect_region(atlas, Rect2(tile_rect.position - offset, tile_rect.size),
+		draw_texture_rect_region(atlas, TowerVisual.mounted_rect(tile_rect, factor, offset),
 			TowerVisual.frame_rect(atlas, aim_angle))
 	elif data.turret_texture != null:
 		draw_set_transform(Vector2.ZERO, aim_angle)
@@ -342,7 +335,8 @@ func _draw() -> void:
 	draw_set_transform(Vector2.ZERO)
 	if _flash_left > 0.0:
 		var strength: float = _flash_left / FLASH_DURATION
-		draw_circle(Vector2.from_angle(aim_angle) * (length - back + 3.0), width * 0.9, Color(1.0, 0.95, 0.6, strength))
+		var mount: Vector2 = TowerVisual.MOUNT_OFFSET * factor if atlas != null else Vector2.ZERO
+		draw_circle(mount + Vector2.from_angle(aim_angle) * (length - back + 3.0), width * 0.9, Color(1.0, 0.95, 0.6, strength))
 	if data.turret_texture == null and atlas == null:
 		# Torreta redonda encima del cañón (solo sin dibujo: el dibujo ya la trae).
 		draw_circle(Vector2.ZERO, half * 0.42, outline)

@@ -1,5 +1,16 @@
 extends GutTest
 
+func test_mount_keeps_base_fixed_and_recoil_follows_aim() -> void:
+	var base := Rect2(-32, -32, 64, 64)
+	var mounted: Rect2 = TowerVisual.mounted_rect(base, 1.0)
+	assert_eq(mounted.position, base.position + TowerVisual.MOUNT_OFFSET)
+	assert_eq(mounted.size, base.size)
+	for angle: float in [0.0, PI / 2, PI, -PI / 2]:
+		var recoil: Vector2 = Vector2.from_angle(angle) * 3.0
+		assert_eq(TowerVisual.mounted_rect(base, 1.0, recoil).position, mounted.position - recoil)
+	assert_eq(base, Rect2(-32, -32, 64, 64), "la base permanece fija")
+	assert_eq(TowerVisual.mounted_rect(base, 2.0).position, base.position + TowerVisual.MOUNT_OFFSET * 2.0, "huella2×2")
+
 func test_eight_directions_and_angle_wrap() -> void:
 	for i: int in 8:
 		assert_eq(TowerVisual.direction_index(i * TAU / 8.0), i)

@@ -16,6 +16,6 @@ lives_damage = 10
 slow_resistance = 0.5
 color = Color(0.7529412, 0.22352941, 0.16862746, 1)
 texture = ExtResource("2_hladh")
-size_tiles = 0.45
-
+visual_scale = 1.2
 flip_when_walking_left = false
+size_tiles = 0.45

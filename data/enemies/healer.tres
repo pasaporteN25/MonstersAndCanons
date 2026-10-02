@@ -14,8 +14,8 @@ reward = 10
 lives_damage = 1
 color = Color(0.71, 0.81, 0.24, 1)
 texture = ExtResource("2_heal")
+visual_scale = 1.2
+flip_when_walking_left = false
 size_tiles = 0.28
 aura_radius_tiles = 2.5
 aura_heal_percent_per_second = 3.0
-
-flip_when_walking_left = false

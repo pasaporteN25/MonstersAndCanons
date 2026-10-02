@@ -3,6 +3,8 @@
 [ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="1_qjnvf"]
 [ext_resource type="Texture2D" path="res://assets/sprites/enemies/rendered/normal.png" id="2_op7wj"]
 
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/rendered/normal_walk.png" id="3_walk"]
+
 [resource]
 script = ExtResource("1_qjnvf")
 id = &"normal"
@@ -14,5 +16,11 @@ reward = 5
 lives_damage = 1
 color = Color(0.61960787, 0.61960787, 0.61960787, 1)
 texture = ExtResource("2_op7wj")
-size_tiles = 0.25
+visual_scale = 1.2
 flip_when_walking_left = false
+size_tiles = 0.25
+
+walk_atlas = ExtResource("3_walk")
+walk_stride_tiles = 0.75
+
+walk_art_scale = 1.066

@@ -359,3 +359,6 @@ Propuestas de niveles2/3 de las nueve torres (ocho vistas por nivel) y cinco mon
 
 ### M27 aplicado a la partida
 Las nueve torres usan mecanismos nuevos en niveles 2 y 3. Guardián, Curandero, Chamán, Espejo y Jefe usan sus PNG renderizados estáticos. Se conservan balance, habilidades y nivel 1 de las torres. Capturas en `art/m27-integracion/`.
+
+### Probar M29
+Importar el proyecto y correr GUT como arriba. En Windows/Linux la ventana crece hacia1920×1080 y cabe en el área útil; en Opciones, Pantalla completa utiliza toda la resolución del monitor. El lienzo lógico sigue1280×720. En partida, revisar Volador/Blindado/Troll/Araña/Cría migrados; caminar y doblar con Normal/Rápido/Tanque; pausar y ralentizar; comprobar barras, quemadura y parpadeo. Mejorar las nueve torres y comprobar base fija, apuntado y retroceso con el encastre C. `art/redesign-m29/capture.tscn` reproduce capturas de producción y24 cuadros de movimiento con `godot --path . --resolution 1920x1080 art/redesign-m29/capture.tscn`. Windows de pruebas: `godot --headless --path . --export-release "Windows (pruebas)" build/JuegoA_m29.exe`. Linux/móvil requieren revisión en sus dispositivos.

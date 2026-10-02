@@ -2,7 +2,7 @@
 
 [ext_resource type="Resource" path="res://data/enemies/spiderling.tres" id="1_6udio"]
 [ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="2_m6usc"]
-[ext_resource type="Texture2D" path="res://assets/sprites/enemies/spider.svg" id="3_3o5ed"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/rendered/spider.png" id="3_3o5ed"]
 
 [resource]
 script = ExtResource("2_m6usc")
@@ -15,6 +15,8 @@ reward = 6
 lives_damage = 2
 color = Color(0.18, 0.45, 0.48, 1)
 texture = ExtResource("3_3o5ed")
+visual_scale = 1.2
+flip_when_walking_left = false
 size_tiles = 0.33
 death_spawn = ExtResource("1_6udio")
 death_spawn_count = 4
