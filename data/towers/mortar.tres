@@ -10,6 +10,9 @@
 
 [ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/mortar_atlas.png" id="rendered_atlas"]
 
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/mortar_level_2.png" id="evolution_2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/mortar_level_3.png" id="evolution_3"]
+
 [sub_resource type="Resource" id="Resource_l1"]
 script = ExtResource("1_lvl")
 bonus_vs_slowed_percent = 25
@@ -29,6 +32,7 @@ fire_rate = 0.25
 range_tiles = 5.0
 splash_radius_tiles = 1.8
 base_texture = ExtResource("4_b2")
+turret_atlas = ExtResource("evolution_2")
 
 [sub_resource type="Resource" id="Resource_l3"]
 script = ExtResource("1_lvl")
@@ -39,6 +43,7 @@ fire_rate = 0.25
 range_tiles = 5.5
 splash_radius_tiles = 2.2
 base_texture = ExtResource("5_b3")
+turret_atlas = ExtResource("evolution_3")
 
 [resource]
 script = ExtResource("3_tower")

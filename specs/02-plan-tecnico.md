@@ -557,3 +557,6 @@ Copiar ocho materiales y cinco objetos a assets; conectar MapThemes y LevelDecor
 
 ### M27 · RF-335, RF-336, D-052
 Producir nueve hojas de evoluciones, separar niveles y normalizar ocho cuadros de 128; extraer iconos hacia arriba. Validar alfa, contenido, orden y escala con muestras. Después producir cinco especiales y enmarcarlos como M24. Conservar fuentes, prompts, manifest y guía de integración.
+
+### Integración M27 · RF-337, D-053
+Copiar atlas y monstruos a assets, asignar atlas en niveles2/3 y resolverlo en Tower. Cambiar textura/flip de los cinco especiales. Verificar mejoras, fallback, ocho vistas y combate con capturas y GUT.

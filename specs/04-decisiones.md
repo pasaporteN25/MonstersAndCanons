@@ -356,3 +356,6 @@ LevelDecor dibuja los PNG preparados sobre el TileMap existente. MapThemes centr
 
 ## D-052 · Evoluciones discretas y entrega artística separada
 Generar niveles 2 y 3 usando los atlas aprobados como referencia: identidad, ocho vistas y luz fija. Preparar copias normalizadas y muestras antes de integrar; los cinco especiales son conceptos estáticos para revisión, con su función visible en la silueta. No se sustituyen datos de producción con fuentes sin validar.
+
+## D-053 · Atlas opcional por nivel
+TowerLevelData contiene un atlas visual opcional; Tower lo elige según stats() con fallback al atlas del tipo. Los especiales siguen el contrato estático M24. Se conservan todas las cifras de balance.

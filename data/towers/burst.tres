@@ -10,6 +10,9 @@
 
 [ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/burst_atlas.png" id="rendered_atlas"]
 
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/burst_level_2.png" id="evolution_2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/burst_level_3.png" id="evolution_3"]
+
 [sub_resource type="Resource" id="Resource_4ji27"]
 script = ExtResource("1_6q6j5")
 cost = 110
@@ -26,6 +29,7 @@ damage = 13
 fire_rate = 0.9
 range_tiles = 2.0
 base_texture = ExtResource("3_cfjgc")
+turret_atlas = ExtResource("evolution_2")
 burst_count = 10
 
 [sub_resource type="Resource" id="Resource_7rjbn"]
@@ -35,6 +39,7 @@ damage = 17
 fire_rate = 1.0
 range_tiles = 2.5
 base_texture = ExtResource("4_dkli2")
+turret_atlas = ExtResource("evolution_3")
 burst_count = 12
 
 [resource]

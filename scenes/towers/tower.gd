@@ -101,6 +101,11 @@ func stats() -> TowerLevelData:
 	return data.levels[level_index]
 
 
+## RF-337: las mejoras conservan el fallback para torres sin atlas por nivel.
+func current_turret_atlas() -> Texture2D:
+	return stats().turret_atlas if stats().turret_atlas != null else data.turret_atlas
+
+
 func range_px() -> float:
 	return Rules.tiles_to_px(stats().range_tiles)
 
@@ -322,11 +327,12 @@ func _draw() -> void:
 	var length: float = _barrel_length()
 	var width: float = _barrel_width()
 	var back: float = RECOIL_PX * _recoil * factor
-	if data.turret_atlas != null:
+	var atlas: Texture2D = current_turret_atlas()
+	if atlas != null:
 		# Las vistas conservan la vertical y la luz. Solo el retroceso sigue la puntería.
 		var offset: Vector2 = Vector2.from_angle(aim_angle) * back
-		draw_texture_rect_region(data.turret_atlas, Rect2(tile_rect.position - offset, tile_rect.size),
-			TowerVisual.frame_rect(data.turret_atlas, aim_angle))
+		draw_texture_rect_region(atlas, Rect2(tile_rect.position - offset, tile_rect.size),
+			TowerVisual.frame_rect(atlas, aim_angle))
 	elif data.turret_texture != null:
 		draw_set_transform(Vector2.ZERO, aim_angle)
 		draw_texture_rect(data.turret_texture, Rect2(tile_rect.position - Vector2(back, 0), tile_rect.size), false)
@@ -337,7 +343,7 @@ func _draw() -> void:
 	if _flash_left > 0.0:
 		var strength: float = _flash_left / FLASH_DURATION
 		draw_circle(Vector2.from_angle(aim_angle) * (length - back + 3.0), width * 0.9, Color(1.0, 0.95, 0.6, strength))
-	if data.turret_texture == null and data.turret_atlas == null:
+	if data.turret_texture == null and atlas == null:
 		# Torreta redonda encima del cañón (solo sin dibujo: el dibujo ya la trae).
 		draw_circle(Vector2.ZERO, half * 0.42, outline)
 		draw_circle(Vector2.ZERO, half * 0.26, data.color)

@@ -14,7 +14,7 @@ const DT: float = 1.0 / 60.0
 ## D-023: los SVG de 64×64 se importan al doble.
 const SPRITE_SIZE := Vector2(128, 128)
 ## M24 (D-050): los tres monstruos con PNG de una sola vista, de 256×256, y los datos que no cambian.
-const RENDERED_IDS: Array[String] = ["normal", "fast", "tank"]
+const RENDERED_IDS: Array[String] = ["normal", "fast", "tank", "guardian", "healer", "shaman", "mirror", "boss"]
 const RENDERED_SIZE := Vector2(256, 256)
 ## Los pies caen al 74,55 % del alto del lienzo (tools/prepare_monster_sprites.gd, FOOT_LINE).
 const FOOT_ROW: int = 191

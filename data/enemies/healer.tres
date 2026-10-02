@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="EnemyData" format=3]
 
 [ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="1_heal"]
-[ext_resource type="Texture2D" path="res://assets/sprites/enemies/healer.svg" id="2_heal"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/rendered/healer.png" id="2_heal"]
 
 [resource]
 script = ExtResource("1_heal")
@@ -17,3 +17,5 @@ texture = ExtResource("2_heal")
 size_tiles = 0.28
 aura_radius_tiles = 2.5
 aura_heal_percent_per_second = 3.0
+
+flip_when_walking_left = false

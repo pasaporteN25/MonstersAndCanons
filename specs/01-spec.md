@@ -1424,3 +1424,6 @@ Lucas eligió entre las propuestas de la tanda 1 (`art/redesign-m24/`): **Normal
   **Aceptación:** dados los nueve tipos de torre, cuando se revisa la entrega, entonces cada nivel tiene ocho vistas en el orden de M23, icono hacia arriba y margen transparente; el nivel 1 y el balance permanecen intactos.
 - **RF-336** Guardián, Curandero, Chamán, Espejo y Jefe reciben conceptos renderizados dentro de la temática de monstruos y con siluetas propias de su función.
   **Aceptación:** dados los cinco diseños, cuando se presentan a escala de juego, entonces sus cuerpos son legibles, tienen transparencia real y la misma luz que los monstruos aprobados; no se cambia ninguna habilidad.
+
+- **RF-337** La partida usa los atlas M27 al mejorar las nueve torres a niveles 2/3 y los cinco especiales aprobados.
+  **Aceptación:** dada una mejora, el mecanismo cambia al atlas del nivel conservando ocho direcciones y retroceso; sin atlas de nivel se usa el original. Los cinco especiales conservan habilidades, tamaño y efectos y no se reflejan en espejo.

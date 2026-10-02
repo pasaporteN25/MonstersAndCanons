@@ -17,3 +17,5 @@ Las capturas usan copias temporales de datos: no son una integración ni una par
 Desde el proyecto, ejecutar Godot con `-s art/redesign-m27/pack_upgrades.gd`, luego `-s art/redesign-m27/prepare_specials.gd`. Para capturas, abrir `preview.tscn -- --capture`, `preview_specials.tscn` y `capture_game.tscn`.
 
 Los subdirectorios tienen `.gdignore` para no importar fuentes y muestras como recursos de producción. Los visores cargan los PNG mediante ImageTexture.
+
+Actualización T169: Lucas aprobó la aplicación. Los18 atlas y cinco especiales ya están integrados; las animaciones de los especiales siguen pendientes.

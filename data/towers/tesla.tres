@@ -10,6 +10,9 @@
 
 [ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/tesla_atlas.png" id="rendered_atlas"]
 
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/tesla_level_2.png" id="evolution_2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/tesla_level_3.png" id="evolution_3"]
+
 [sub_resource type="Resource" id="Resource_tahp1"]
 script = ExtResource("1_3eeww")
 bonus_vs_burning_percent = 30
@@ -29,6 +32,7 @@ damage = 19
 fire_rate = 0.85
 range_tiles = 2.5
 base_texture = ExtResource("3_t4s08")
+turret_atlas = ExtResource("evolution_2")
 chain_extra_targets = 3
 chain_range_tiles = 1.5
 
@@ -40,6 +44,7 @@ damage = 27
 fire_rate = 0.95
 range_tiles = 3.0
 base_texture = ExtResource("4_bhcqx")
+turret_atlas = ExtResource("evolution_3")
 chain_extra_targets = 4
 chain_range_tiles = 1.5
 

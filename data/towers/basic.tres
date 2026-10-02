@@ -10,6 +10,9 @@
 
 [ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/basic_atlas.png" id="rendered_atlas"]
 
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/basic_level_2.png" id="evolution_2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/basic_level_3.png" id="evolution_3"]
+
 [sub_resource type="Resource" id="Resource_qyymo"]
 script = ExtResource("1_hq2q8")
 cost = 50
@@ -25,6 +28,7 @@ damage = 8
 fire_rate = 2.5
 range_tiles = 3.0
 base_texture = ExtResource("3_y7prn")
+turret_atlas = ExtResource("evolution_2")
 
 [sub_resource type="Resource" id="Resource_y8sf8"]
 script = ExtResource("1_hq2q8")
@@ -33,6 +37,7 @@ damage = 12
 fire_rate = 3.0
 range_tiles = 3.5
 base_texture = ExtResource("4_8h2sr")
+turret_atlas = ExtResource("evolution_3")
 
 [resource]
 script = ExtResource("2_y8sf8")

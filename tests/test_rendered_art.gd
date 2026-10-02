@@ -42,3 +42,34 @@ func test_rendered_impacts_appear_and_free_themselves() -> void:
 	simulate(layer, 40, 1.0 / 60.0)
 	await wait_process_frames(2)
 	assert_eq(layer.get_child_count(), 0, "ni sprites ni anillos quedan acumulados")
+
+
+func test_evolution_atlas_selection_and_legacy_fallback() -> void:
+	var data: TowerData = load("res://data/towers/cannon.tres").duplicate(true)
+	var tower := Tower.new()
+	autofree(tower)
+	tower.setup(data)
+	assert_eq(tower.current_turret_atlas(), data.turret_atlas)
+	for level: int in [1, 2]:
+		tower.level_index = level
+		assert_eq(tower.current_turret_atlas(), data.levels[level].turret_atlas)
+	data.levels[2].turret_atlas = null
+	assert_eq(tower.current_turret_atlas(), data.turret_atlas)
+	data.turret_atlas = null
+	assert_null(tower.current_turret_atlas(), "el dibujo anterior sigue siendo un fallback válido")
+
+
+func test_all_evolutions_have_eight_views_and_special_monsters_use_approved_art() -> void:
+	for id: String in NAMES:
+		var data: TowerData = load("res://data/towers/" + id + ".tres")
+		for level: int in [1, 2]:
+			var atlas: Texture2D = data.levels[level].turret_atlas
+			assert_not_null(atlas, id)
+			assert_eq(atlas.get_size(), Vector2(512, 256))
+			for direction: int in 8:
+				assert_false(TowerVisual.frame_texture(atlas, direction * TAU / 8.0).get_image().is_invisible())
+	for id: String in ["guardian", "healer", "shaman", "mirror", "boss"]:
+		var data: EnemyData = load("res://data/enemies/" + id + ".tres")
+		assert_eq(data.texture.resource_path, "res://assets/sprites/enemies/rendered/" + id + ".png")
+		assert_eq(data.texture.get_size(), Vector2(256, 256))
+		assert_false(data.flip_when_walking_left)
