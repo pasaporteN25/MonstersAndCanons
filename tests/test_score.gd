@@ -39,13 +39,13 @@ func test_points_come_from_balance() -> void:
 
 func test_game_starts_with_zero_points() -> void:
 	assert_eq(game.session.score, 0)
-	assert_eq((game.hud.get_node("%ScoreLabel") as Label).text, "Puntos: 0")
+	assert_eq((game.hud.get_node("%ScoreLabel") as Label).text, "0")
 
 
 func test_killing_gives_ten_points_per_gold() -> void:
 	_spawn("normal").take_hit(100000)  # vale 5 de oro
 	assert_eq(game.session.score, 50)
-	assert_eq((game.hud.get_node("%ScoreLabel") as Label).text, "Puntos: 50", "se ve arriba")
+	assert_eq((game.hud.get_node("%ScoreLabel") as Label).text, "50", "se ve arriba")
 
 
 func test_spiderlings_also_give_points() -> void:

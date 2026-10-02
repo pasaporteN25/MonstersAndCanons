@@ -198,3 +198,6 @@ Las mejoras de las nueve torres tienen reflejos programáticos por nivel y famil
 
 ### Animaciones M31
 Los trece enemigos ya tienen movimiento propio: doce ciclos de caminar con cuatro poses por dirección y el aleteo del Volador. Los nueve ciclos restantes están conectados a los recursos de partida, sin cambiar habilidades ni balance. Fuentes, empaquetador, manifest y muestra animada: `art/redesign-m31/`.
+
+### Interfaz M32
+HUD compacto con ayudas; barra, pausa y administración con estilo hierro/bronce. En Pruebas, Mostrar FPS activa un texto independiente sin fondo con FPS y ms/cuadro estimados.

@@ -574,3 +574,6 @@ Tower crea una capa Sprite2D con AtlasTexture reutilizable y ShaderMaterial prop
 
 ### M31 · RF-344, D-057
 Producir nueve fuentes transparentes y conservar prompts. Empaquetar144cuadros de256 en nueve atlas1024, validar alfa/orden/poses únicas/apoyo y calibrar tamaño. Conectar nueve EnemyData con distancias de ciclo propias sin modificar balance. Generalizar tests de selección/ralentización/pausa y fallback, comprobar regeneración/aura/crías/hechizo/rebote existentes con GUT. Capturas reales y GIF de ciclos y direcciones; exportar Windows/Linux, actualizar documentos/changelog y subir al PR#1.
+
+### M32 · RF-345/RF-346, D-058
+Compactar textos y tooltips; reutilizar tema de botones y estilo de panel propio, agregar secciones admin. Monitor Label en HUD, señal desde DevPanel y actualización por intervalo real. Verificar valores/oleadas y monitor independiente del panel, captura y GUT.

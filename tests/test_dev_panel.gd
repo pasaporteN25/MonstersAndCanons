@@ -98,3 +98,16 @@ func test_spawn_any_enemy() -> void:
 	game.dev_spawn(load("res://data/enemies/troll.tres"))
 	assert_eq(_active_enemies(), 1)
 	assert_eq((game.enemies.get_child(0) as Enemy).data.id, &"troll")
+
+func test_metrics_stay_visible_when_panel_closes_and_can_be_disabled() -> void:
+	game.dev_panel.show()
+	game.dev_panel.metrics_toggled.emit(true)
+	game.hud._process(0.0)
+	var overlay: Label = game.hud.get_node("PerformanceOverlay")
+	game.dev_panel.hide()
+	assert_true(overlay.is_visible_in_tree())
+	assert_true(overlay.text.contains("FPS"))
+	assert_true(overlay.text.contains("ms/cuadro"))
+	assert_eq(overlay.mouse_filter, Control.MOUSE_FILTER_IGNORE)
+	game.dev_panel.metrics_toggled.emit(false)
+	assert_false(overlay.visible)

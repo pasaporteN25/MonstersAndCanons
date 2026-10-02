@@ -27,9 +27,9 @@ func _label(unique_name: String) -> String:
 # --- T15: HUD al empezar ---
 
 func test_hud_shows_starting_values() -> void:
-	assert_eq(_label("GoldLabel"), "Oro: 150")
-	assert_eq(_label("LivesLabel"), "Vidas: 20")
-	assert_eq(_label("WaveLabel"), "Oleada 0/10")
+	assert_eq(_label("GoldLabel"), "150")
+	assert_eq(_label("LivesLabel"), "20")
+	assert_eq(_label("WaveLabel"), "0/10")
 
 
 # --- T16: nada sale hasta pulsar "Empezar oleada" (RF-32) ---
@@ -46,7 +46,7 @@ func test_enemies_come_out_one_per_second() -> void:
 	assert_eq(game.enemies.get_child_count(), 1)
 	await _run_seconds(1.0)
 	assert_eq(game.enemies.get_child_count(), 2)
-	assert_eq(_label("WaveLabel"), "Oleada 1/10")
+	assert_eq(_label("WaveLabel"), "1/10")
 
 
 # --- T14: el enemigo recorre el camino a 1.5 casillas/s ---
@@ -71,9 +71,9 @@ func test_full_wave_without_towers() -> void:
 	assert_eq(game.session.lives, 12, "RF-11: 20 − 8")
 	assert_eq(game.session.gold, 175, "RF-22: 150 + bono de 25")
 	assert_eq(game.session.state, LevelSession.State.COUNTDOWN, "RF-34")
-	assert_eq(_label("LivesLabel"), "Vidas: 12")
-	assert_eq(_label("GoldLabel"), "Oro: 175")
-	assert_eq(_label("WaveLabel"), "Oleada 1/10 completada (+25 de oro)")
+	assert_eq(_label("LivesLabel"), "12")
+	assert_eq(_label("GoldLabel"), "175")
+	assert_eq(_label("WaveLabel"), "1/10 ✓")
 
 	# RF-34: tras 15 s de cuenta atrás, la oleada 2 sale sola.
 	await _run_seconds(15.5)
@@ -92,3 +92,10 @@ func test_enemies_get_more_health_each_wave() -> void:
 	assert_eq(spawned.size(), 1)
 	assert_eq(spawned[0].max_health, 42, "Normal en oleada 2: 30 × 1.4 = 42")
 	assert_eq(spawned[0].health, 42)
+
+func test_stat_icons_explain_their_meaning_without_redundant_labels() -> void:
+	for stat: String in ["Gold", "Lives", "Score", "Wave"]:
+		var icon: Control = game.hud.get_node("TopBar/Stats/" + stat + "Stat/" + stat + "Icon")
+		assert_false(icon.tooltip_text.is_empty())
+		assert_eq(icon.mouse_filter, Control.MOUSE_FILTER_STOP)
+		assert_eq(icon.focus_mode, Control.FOCUS_ALL)

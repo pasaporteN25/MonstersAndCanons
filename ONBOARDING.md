@@ -368,3 +368,6 @@ Mejorar las nueve torres y comparar reflejos en niveles2/3; apuntar, retroceder,
 
 ### Probar M31
 Ejecutar `build/JuegoA_m31.exe` o extraer `build/JuegoA_m31_linux.zip`. Revisar los nueve monstruos nuevos: giro, pies, tamaño, ralentización y pausa; comprobar crías, auras, regeneración, hechizo y rebote. Muestra reproducible: `art/redesign-m31/capture.tscn`; `previews/motion.gif` presenta las cuatro direcciones con actores y datos de producción. Linux fue exportado, sin ejecución en este equipo Windows.
+
+### Probar M32
+Abrir `build/JuegoA_m32.exe`, pasar el puntero sobre los iconos de la barra, revisar cifras y ayuda de oleada completada. Abrir Pruebas [F1], activar Mostrar FPS y cerrar el panel: el monitor sigue visible. Esc abre la pausa renovada; P pausa directamente. Capturas en `art/redesign-m32/`. Linux exportado sin ejecutar; móvil sin probar.

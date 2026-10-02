@@ -333,6 +333,7 @@ func _write_dev_stats(result: String) -> void:
 func _add_dev_panel() -> void:
 	dev_panel = DevPanel.new().setup(self)
 	hud.add_child(dev_panel)
+	dev_panel.metrics_toggled.connect(hud.show_metrics)
 	var button := Button.new()
 	button.text = "Pruebas [F1]"
 	button.focus_mode = Control.FOCUS_NONE

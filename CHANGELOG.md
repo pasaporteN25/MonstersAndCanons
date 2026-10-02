@@ -2,6 +2,12 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## HUD compacto y monitor local *(M32, 2026-10-02)*
+
+- Barra superior con iconos y cifras; ayudas al pasar el puntero y al enfocar con teclado. Oleada completada con marca y detalle del bonus en su ayuda.
+- Barra, menú de pausa y controles de pruebas adoptan hierro/bronce; el panel agrupa recursos, partida y simulación.
+- Mostrar FPS deja un monitor sin fondo sobre la partida, visible al cerrar Pruebas. Incluye ms/cuadro estimados y refresca dos veces por segundo; solo información local.
+
 ## Ciclos completos de monstruos *(M31, 2026-10-02)*
 
 - Blindado, Troll, Araña, Cría, Guardián, Curandero, Chamán, Espejo y Jefe ahora caminan con cuatro poses en cuatro direcciones: 144 poses nuevas. Con los ciclos anteriores, los trece enemigos tienen movimiento propio.

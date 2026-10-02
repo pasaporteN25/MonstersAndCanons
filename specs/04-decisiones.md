@@ -371,3 +371,6 @@ Los atlas por nivel ya cambian, pero el brillo pintado es sutil a escala de part
 
 ## D-057 · Completar nueve ciclos conservando el contrato M29
 Generar una hoja independiente por criatura tomando su PNG aprobado como referencia estricta, cuatro direcciones por cuatro fases reales (16cuadros). Empaquetar por conectividad de alfa en Godot, escala constante por especie, pies fila191; calibrar el enmarcado frente a la pose estática para que no se achique al animarse. Integrar con walk_atlas/stride/art_scale existentes, sin otra máquina de estados ni efectos de combate nuevos. Se descartan imágenes reflejadas, deformación global y sustituir habilidades por efectos dibujados.
+
+## D-058 · Renovación rápida de HUD y monitor
+2026-10-02, aprobada por Lucas. Reutilizar tema hierro/bronce; barra con borde, pausa y panel agrupados. Hud posee el monitor y DevPanel emite la activación: cerrar el panel no lo oculta. FPS/ms estimados bastan; se descartan métricas adicionales costosas y telemetría remota.

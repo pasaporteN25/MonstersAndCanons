@@ -1064,3 +1064,10 @@
   **Refs:** backlog §13, B-10 y B-17 a B-23; propuesta B1 existente.
   **Hecho cuando:** propuestas de Lucas anotadas con prioridad media, niveles8–10 relegados, investigaciones y revisión previa al merge explícitas; sin implementar cambios de juego.
   **Resultado T174:** siete entradas agregadas al backlog existente, prioridad baja para completar campaña y vínculo con B1 sin duplicar la mecánica. Solo documentación revisada; no se modificaron escenas, assets, datos ni código y no se ejecutó GUT porque no hay cambios de ejecución.
+
+### M32 · Interfaz compacta
+- [x] **T175 · Implementar B-17/B-18.**
+  **Refs:** RF-345/RF-346, D-058.
+  **Hecho cuando:** HUD compacto con ayudas, barra/pausa/admin renovados, FPS/ms sobre partida independiente del panel, captura y GUT correctos, docs y push.
+
+  **Resultado T175:** iconos y cifras con tooltip y ayuda por foco; oleada compacta, bonus en ayuda de estado. Barra/pausa/admin hierro-bronce, controles agrupados. Monitor local sin fondo, independiente del panel, dos refrescos por segundo, FPS y ms estimados (1000/FPS), sin búsquedas de actores ni envío remoto. Capturas Full HD revisadas;891/891 GUT,8065 asserts,68 scripts, sin SCRIPT ERROR/Parse Error. Windows/Linux exportados, arranque Windows headless salida0; Linux y móvil sin ejecutar. Persisten avisos previos de certificados/limpieza al cerrar. Otros submenús siguen pendientes B-19.

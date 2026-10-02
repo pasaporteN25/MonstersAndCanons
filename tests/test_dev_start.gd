@@ -172,7 +172,7 @@ func test_hud_shows_the_target_wave_as_next() -> void:
 	await wait_process_frames(2)
 	var counts: Dictionary = game.level_data.waves[5].enemy_counts()
 	assert_eq(game.hud._next_wave_icons.get_child_count(), counts.size(), "RF-319: muestra la oleada 6 como próxima")
-	assert_true(game.hud._wave_label.text.contains("Próxima: oleada 6"), game.hud._wave_label.text)
+	assert_true(game.hud._wave_label.text.contains("→ 6"), game.hud._wave_label.text)
 	DevMode.clear_stats_file()
 	DevMode.set_enabled(false, SaveManager.DEFAULT_PATH)
 	if FileAccess.file_exists(DEV_PATH):
