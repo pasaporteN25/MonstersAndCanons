@@ -227,5 +227,5 @@ func test_in_a_real_game_the_shaman_switches_off_a_tower_and_the_bolt_is_drawn()
 			stunned_once = true
 			break
 	assert_true(stunned_once, "el Chamán pasó cerca y apagó la torre")
-	await wait_frames(3)
+	await wait_physics_frames(3)
 	assert_gt(game.effects.get_child_count(), 0, "se dibujó el rayo")

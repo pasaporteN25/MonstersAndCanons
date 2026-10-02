@@ -119,7 +119,7 @@ func test_every_theme_builds_and_draws_without_errors() -> void:
 		var level: Level = Level.build(_grid(), StringName(id))
 		add_child_autofree(level)
 		assert_eq(level.theme, StringName(id))
-		await wait_frames(2)
+		await wait_physics_frames(2)
 	assert_true(true, "se dibujaron los siete")
 
 
@@ -142,5 +142,5 @@ func test_the_editor_view_takes_the_theme_of_the_draft() -> void:
 	var view := MapView.new()
 	add_child_autofree(view)
 	view.show_map(draft.rows(), draft.grid(), &"desierto")
-	await wait_frames(2)
+	await wait_physics_frames(2)
 	assert_true(true, "la vista del editor dibuja con tema")

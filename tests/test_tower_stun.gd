@@ -177,5 +177,5 @@ func test_the_panel_of_an_unstunned_tower_is_unchanged() -> void:
 func test_a_stunned_tower_draws_without_errors() -> void:
 	var tower: Tower = _tower()
 	tower.stun(1.0)
-	await wait_frames(3)
+	await wait_physics_frames(3)
 	assert_true(tower.is_stunned() or true)

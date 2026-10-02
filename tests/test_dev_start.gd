@@ -89,6 +89,10 @@ func test_a_loop_of_young_does_not_hang() -> void:
 	enemy.death_spawn = enemy
 	enemy.death_spawn_count = 1
 	assert_eq(DevStart.enemy_reward(enemy), DevStart.MAX_SPAWN_DEPTH + 1, "corta en el tope")
+	var released: WeakRef = weakref(enemy)
+	enemy.death_spawn = null
+	enemy = null
+	assert_null(released.get_ref(), "el dato circular de prueba se libera")
 
 
 func test_real_level_1_gold_matches_its_data() -> void:

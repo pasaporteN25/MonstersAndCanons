@@ -106,7 +106,7 @@ func _screen(is_seen: Callable) -> Control:
 
 func test_the_screen_shows_question_marks_and_the_counter() -> void:
 	var screen: Control = _screen(_seen_only(["normal", "fast"]))
-	await wait_frames(1)
+	await wait_physics_frames(1)
 	assert_eq(screen.tab_text(&"enemigos"), "Enemigos 2/%d" % LevelFile.enemy_ids().size())
 	assert_eq(screen.tab_text(&"torres"), "Torres", "sin contador: nunca tiene cerradas")
 	screen.show_entry(&"boss")
@@ -121,13 +121,13 @@ func test_the_screen_shows_question_marks_and_the_counter() -> void:
 
 func test_the_counter_disappears_when_all_are_seen() -> void:
 	var screen: Control = _screen(_seen_only(LevelFile.enemy_ids()))
-	await wait_frames(1)
+	await wait_physics_frames(1)
 	assert_eq(screen.tab_text(&"enemigos"), "Enemigos")
 
 
 func test_every_locked_entry_can_be_opened() -> void:
 	var screen: Control = _screen(_seen_only([]))
-	await wait_frames(1)
+	await wait_physics_frames(1)
 	for id: StringName in screen.entry_ids():
 		screen.show_entry(id)
 		assert_eq(screen.current_entry(), id)

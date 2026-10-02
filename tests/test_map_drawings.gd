@@ -66,7 +66,7 @@ func test_every_drawing_paints_in_a_level_without_errors() -> void:
 		var level: Level = _level_with(id)
 		add_child_autofree(level)
 		assert_eq(level.legend_cells.size(), 8, id)
-		await wait_frames(2)
+		await wait_physics_frames(2)
 	assert_true(true, "se pintaron los 16")
 
 
@@ -86,7 +86,7 @@ func test_every_drawing_paints_in_every_theme() -> void:
 			index += 1
 		var level: Level = Level.build(MapGrid.parse(rows, legend), StringName(theme))
 		add_child_autofree(level)
-		await wait_frames(2)
+		await wait_physics_frames(2)
 	assert_true(true, "todos los dibujos en los siete temas")
 
 
@@ -111,7 +111,7 @@ func test_the_editor_view_draws_the_legend_too() -> void:
 	var view := MapView.new()
 	add_child_autofree(view)
 	view.show_map(rows, grid, &"volcan")
-	await wait_frames(2)
+	await wait_physics_frames(2)
 	assert_eq(grid.legend_cells.size(), 4)
 
 

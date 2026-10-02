@@ -14,7 +14,7 @@ func before_each() -> void:
 	screen.on_leave = func() -> void: left += 1
 	screen.is_seen = func(_id: StringName) -> bool: return true  # sin depender del guardado real
 	add_child_autofree(screen)
-	await wait_frames(1)
+	await wait_physics_frames(1)
 
 
 func _action(name: StringName) -> InputEventAction:
@@ -94,7 +94,7 @@ func test_the_detail_is_rebuilt_and_not_piled_up() -> void:
 	for i: int in 5:
 		screen.show_entry(&"basic")
 	assert_eq(screen.detail_text().length(), first)
-	await wait_frames(1)
+	await wait_physics_frames(1)
 	assert_eq(screen.detail_text().length(), first)
 
 

@@ -278,5 +278,5 @@ func test_in_a_real_game_a_tower_next_to_the_path_gets_switched_off_by_the_mirro
 			(projectile as Projectile)._physics_process(DT)
 	assert_gt(seen.size(), 0, "la torre pegada al camino rebotó al menos una vez")
 	assert_lt(mirror.health, mirror.max_health + 1)
-	await wait_frames(3)
+	await wait_physics_frames(3)
 	assert_true(true, "se dibujó el rebote")
