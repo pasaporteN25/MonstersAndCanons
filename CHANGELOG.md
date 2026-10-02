@@ -96,3 +96,7 @@ Propuestas de niveles2/3 de las nueve torres (ocho vistas por nivel) y cinco mon
 
 ### M27 aplicado a la partida
 Las nueve torres usan mecanismos nuevos en niveles 2 y 3. Guardián, Curandero, Chamán, Espejo y Jefe usan sus PNG renderizados estáticos. Se conservan balance, habilidades y nivel 1 de las torres. Capturas en `art/m27-integracion/`.
+
+## Muestras de legibilidad y presentación *(M28, pendientes de aprobación)*
+
+Comparaciones del arte pendiente de Volador, Blindado, Troll, Araña y Cría; cuerpos+20%/+35%; ciclos de caminar y aleteo exploratorio; presentación1920×1080 para escritorio; ajustes de contacto entre torreta/base y dos conceptos integrados de Cañón. Fuentes, GIF y capturas en `art/redesign-m28/`. Estas propuestas **todavía no cambian la partida**, su resolución, balance ni colisiones. La descripción del PR queda a cargo de Lucas.

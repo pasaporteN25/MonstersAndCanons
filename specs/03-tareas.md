@@ -1027,3 +1027,11 @@
   **Hecho cuando:** mejoras usan los18 atlas nuevos, los cinco especiales usan sus PNG, y pruebas/capturas verifican la integración sin cambiar balance.
 
   **Resultado:**18 atlas y cinco monstruos copiados a assets e importados. Atlas opcional en TowerLevelData, selección por nivel en Tower con fallback al atlas original y asignaciones en nueve tipos; cinco especiales sin reflejo. Capturas usando los datos reales en art/m27-integracion. Suite875/875,6975 asserts; tests nuevos de selección/fallback y recursos, y contrato de sprites extendido a los especiales. Sin SCRIPT ERROR/Parse Error. No se modificaron estadísticas, habilidades, colisiones ni proyectiles; persistieron avisos previos de certificados y dos objetos/un recurso al cerrar. No se exportó nuevo.exe ni se añadieron animaciones a los especiales.
+
+- [x] **T170 · Muestras de escala, movimiento, resolución y montaje.**
+  **Refs:** RF-338, D-054.
+  **Hecho cuando:** se entregan comparaciones de los cuatro problemas sin cambiar producción, changelog al día y descripción del PR a cargo de Lucas, según su indicación posterior.
+
+  **Resultado:** comparaciones de13 enemigos con tamaños actual/+20%/+35%, GIF de24 cuadros de caminar y vuelo, capturas reales1280×720/1920×1080, montaje A en tres familias/tres vistas y conceptos B/C. Prototipo de vuelo con cabeza estabilizada, fuentes y prompts conservados. Changelog al día. Producción intacta; propuestas pendientes de aprobación. La descripción del PR queda a cargo de Lucas por pedido explícito; no se modificó. No se probaron Linux/celular ni nuevas colisiones o transiciones; no se exportó.exe.
+
+  **Verificación T170:**875/875 tests,6975 asserts; sin SCRIPT ERROR/Parse Error. Capturas y empaquetado salen0.

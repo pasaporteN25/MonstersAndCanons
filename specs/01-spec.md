@@ -1427,3 +1427,7 @@ Lucas eligió entre las propuestas de la tanda 1 (`art/redesign-m24/`): **Normal
 
 - **RF-337** La partida usa los atlas M27 al mejorar las nueve torres a niveles 2/3 y los cinco especiales aprobados.
   **Aceptación:** dada una mejora, el mecanismo cambia al atlas del nivel conservando ocho direcciones y retroceso; sin atlas de nivel se usa el original. Los cinco especiales conservan habilidades, tamaño y efectos y no se reflejan en espejo.
+
+### M28 · Muestras de legibilidad y presentación
+- **RF-338** Antes de cambiar producción se comparan pendientes de migración, tamaños visuales, movimiento y encastre de torretas; Windows/Linux cuentan con una muestra a1920×1080.
+  **Aceptación:** dadas las muestras, Lucas puede comparar el estado actual y las alternativas con PNG/GIF y criterios explícitos; no se modifican escenas, datos o resolución de producción hasta su aprobación.

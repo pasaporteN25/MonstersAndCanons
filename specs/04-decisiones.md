@@ -359,3 +359,6 @@ Generar niveles 2 y 3 usando los atlas aprobados como referencia: identidad, och
 
 ## D-053 · Atlas opcional por nivel
 TowerLevelData contiene un atlas visual opcional; Tower lo elige según stats() con fallback al atlas del tipo. Los especiales siguen el contrato estático M24. Se conservan todas las cifras de balance.
+
+## D-054 · Prototipos aislados para revisar M28
+Usar los cinco físicos aprobados y los ciclos M25 existentes, comparar aumentos solo visuales y reducir deformación global. Comparar ventana1920×1080 con y sin cambio de lienzo lógico, porque más resolución por sí sola no agranda las unidades. Evaluar montaje y contacto entre mecanismo y base antes de producir nuevos atlas.

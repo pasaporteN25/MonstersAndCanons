@@ -560,3 +560,6 @@ Producir nueve hojas de evoluciones, separar niveles y normalizar ocho cuadros d
 
 ### Integración M27 · RF-337, D-053
 Copiar atlas y monstruos a assets, asignar atlas en niveles2/3 y resolverlo en Tower. Cambiar textura/flip de los cinco especiales. Verificar mejoras, fallback, ocho vistas y combate con capturas y GUT.
+
+### M28 · RF-338, D-054
+Visor aislado de enemigos y tamaños; GIF de caminata y vuelo; comparación de bases con montaje ajustado y dos conceptos integrados. Capturas1920×1080 desde copia temporal del proyecto. Registrar propuestas en changelog y sección de descripción PR, dejando explícito lo pendiente de aprobación.
