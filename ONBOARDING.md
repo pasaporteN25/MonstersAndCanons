@@ -350,3 +350,6 @@ Para comprobarlo, abrir una partida, construir las ocho torres comunes, mejorar 
 - Monstruos: `godot --headless --path . -s tools/prepare_monster_sprites.gd` regenera los PNG de `assets/sprites/enemies/rendered/` desde `art/redesign-m24/sources/` (esas fuentes no se tocan). Después, `godot --headless --import`.
 - Capturas reales (con ventana y el guardado aislado): `$env:APPDATA="$env:TEMP\m24appdata"; godot --path . res://tools/capture_m24.tscn -- monstruos` (también `menu` y `wiki`); salen en `art/m24-integracion/`.
 - Para probarlo jugando: el ejecutable de pruebas, nivel 1, oleada 1. Mirar el diablillo, la bestia y el ogro caminando hacia la izquierda: no se dan vuelta (a propósito, D-050).
+
+## Fondos M26
+Los siete temas, el camino y las rocas, árbol, arbusto y puerta usan los nuevos PNG renderizados. Se aplican en partida, menú y editor; rutas y casillas construibles conservan sus reglas. Recursos en `assets/tiles/rendered/` y `assets/sprites/map/rendered/`.

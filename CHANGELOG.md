@@ -87,3 +87,6 @@ Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle t�
 
 ## Los primeros niveles *(M1 a M3)*
 - El juego base: **3 niveles**, 4 torres, menú, opciones, pausa, sonido y guardado del progreso.
+
+## Fondos M26
+Los siete temas, el camino y las rocas, árbol, arbusto y puerta usan los nuevos PNG renderizados. Se aplican en partida, menú y editor; rutas y casillas construibles conservan sus reglas. Recursos en `assets/tiles/rendered/` y `assets/sprites/map/rendered/`.

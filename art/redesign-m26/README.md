@@ -41,3 +41,5 @@ Empaquetadores y escenas de muestra ejecutados con salida 0; revisados los siete
 Las muestras no son una integración de producción: usan instancias locales, sin cambios de lógica, rutas, colisiones o balance. Las unidades del mapa son retratos estáticos de contraste. No se exportó un nuevo ejecutable. Los siete suelos están preparados, pero el visor de mapa muestra la pradera; leyendas de agua/hielo/lava/barro y objetos específicos de los demás paisajes conservan su arte anterior hasta otra tanda. No se probaron todos los niveles ni zooms, Android o rendimiento con grandes oleadas.
 
 Los cinco monstruos físicos quedan **aprobados**; sus nuevas copias están listas para la integración estática de Claude. Sus animaciones todavía no se produjeron. Los atlas de locomoción de los tres primeros elegidos siguen en `art/redesign-m25/atlases/`.
+
+Actualización T167: los fondos y cinco objetos ya están integrados en producción (RF-334). Los monstruos preparados y las animaciones siguen pendientes de integración.

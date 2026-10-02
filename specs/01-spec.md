@@ -1415,3 +1415,6 @@ Lucas eligió entre las propuestas de la tanda 1 (`art/redesign-m24/`): **Normal
   **Aceptación:** dado el menú, cuando el mouse pasa sobre un botón o el teclado lo enfoca, entonces el botón se ve distinto de los demás (borde y texto ámbar); el texto de todos los botones tiene un contraste mínimo de 4,5:1 contra su fondo.
 - **RF-333** Las **evoluciones** de torres de `upgrades_comparison.png` (Cañón e Hielo en tres niveles) son referencias de **una sola dirección**: **no se integran** todavía, porque las torres apuntan con ocho vistas (RF-327) y esas hojas no las tienen. El nivel 1 conserva el atlas aprobado en M23. Queda documentado el formato que necesita la siguiente entrega artística (plan §6.20, `art/FORMATO_PROXIMA_ENTREGA_M24.md`).
   **Aceptación:** dado el juego tras esta tanda, entonces las nueve torres siguen usando sus atlas de M23, sin cambios.
+
+- **RF-334** Los siete temas usan los suelos preparados de M26, el camino común y las rocas, árbol, arbusto y puerta nuevos.
+  **Aceptación:** dado un mapa en partida, menú o editor, cuando se dibuja, entonces aparecen los nuevos materiales; rutas, casillas construibles, leyendas y selección determinista de objetos conservan su comportamiento.

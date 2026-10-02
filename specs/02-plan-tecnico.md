@@ -551,3 +551,6 @@ godot --headless --path . -s addons/gut/gut_cmdln.gd -gdir=res://tests -gexit
 - **Datos:** `EnemyData.flip_when_walking_left` (bool, `true` por defecto). `normal.tres`, `fast.tres` y `tank.tres` apuntan a los PNG y lo apagan; nada más cambia. `Enemy._draw` solo refleja el dibujo si el dato lo permite; el parpadeo, el tinte, la escarcha, las llamas, la barra y la corona se dibujan igual que antes.
 - **Menú:** `assets/ui/logo.png` (copia de `logo_corrected.png` a 1024 px de ancho, mismo alfa) en un `TextureRect` que reemplaza a `Title` y `Subtitle`. `MainMenu.logo_height(alto_de_ventana, alto_de_botones)` (estática, sin escena) calcula el alto del logo para que todo entre. `assets/ui/menu_theme.tres` es un `Theme` con `StyleBoxFlat` para `Button` (normal, hover, pressed, focus, disabled) aplicado solo a las filas del menú.
 - **Evoluciones:** no se integran. Formato pedido para la siguiente entrega, en `art/FORMATO_PROXIMA_ENTREGA_M24.md`.
+
+### Integración M26 · RF-334, D-051
+Copiar ocho materiales y cinco objetos a assets; conectar MapThemes y LevelDecor, retirar el detalle procedural de suelo reemplazado y conservar las superficies de leyenda. Verificar los siete temas, recursos y suite GUT.

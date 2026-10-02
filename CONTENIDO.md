@@ -365,3 +365,6 @@ Una buena señal: los bots que piensan ganan con algunas vidas de sobra y el que
 - [ ] Se ve bien en la **Wiki** (enemigos y torres se agregan solos: abrirla y mirar la entrada nueva).
 - [ ] Pasan los tests (`test_content.gd` revisa todo lo anterior solo).
 - [ ] Si cambia el balance: el bot da resultados razonables, y la spec lo dice (constitución P3: la spec manda).
+
+## Fondos M26
+Los siete temas, el camino y las rocas, árbol, arbusto y puerta usan los nuevos PNG renderizados. Se aplican en partida, menú y editor; rutas y casillas construibles conservan sus reglas. Recursos en `assets/tiles/rendered/` y `assets/sprites/map/rendered/`.
