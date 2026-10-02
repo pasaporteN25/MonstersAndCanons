@@ -1,5 +1,3 @@
-# Monsters & Canons — Tower Defense
-
 <img width="1774" height="887" alt="image" src="https://github.com/user-attachments/assets/06cc1aed-e7d0-40fa-96c0-1aeb75d8dfb4" />
 
 
