@@ -2,6 +2,14 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Torres con volumen y tres familias visuales *(M23, 2026-10-02)*
+
+- Cañón y mortero de hierro, bronce y madera; cinco torretas industriales; hielo y electricidad con cristal y metal claro.
+- Nueve torres con ocho vistas para apuntar, tres bases según el nivel y nueve proyectiles nuevos. La luz se mantiene fija al cambiar de dirección.
+- Llama renderizada, fragmentos de hielo, explosión y chispas violetas. Los efectos desaparecen al terminar y mantienen los anillos que indican el área.
+- HUD y Wiki usan el nuevo arte. Los cuatro emblemas del HUD ya aceptados quedan incluidos en el repositorio.
+- Conserva reglas y balance. 859 tests en verde y ejecutable Windows de pruebas verificado al arrancar. Enemigos, suelo y decoración quedan para su siguiente revisión artística.
+
 ## Modo de pruebas: oleadas finales, velocidades y atajos *(M22)*
 - **Empezar en la oleada N:** en la selección de nivel del ejecutable de pruebas, una franja **"Pruebas"** deja elegir la **oleada inicial** y el **oro inicial** (automático, que es lo que se habría juntado, o a mano). Esa partida empieza sin torres y **no guarda** progreso ni récords.
 - **Cinco velocidades:** x0,25 · x0,5 · x1 · x2 · x4, que se ven en el cartel "MODO PRUEBAS" y vuelven a x1 al salir. Sirve para mirar con calma el aviso de combo.

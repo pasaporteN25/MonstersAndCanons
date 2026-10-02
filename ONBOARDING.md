@@ -329,3 +329,17 @@ Con estas versiones se desarrolló y probó el proyecto (septiembre de 2026):
 | Java para Android | OpenJDK 21 (el de Android Studio) |
 | Android SDK | build-tools 34–37, plataformas 35–36 |
 | Sistema | Windows 10 Pro |
+
+## Arte renderizado de torres (M23)
+
+Las torres conservan el juego 2D y usan PNG con ocho vistas. La fuente y las capturas están en art/redesign-m23; la guía está en specs/05-guia-de-arte.md §7. Para reproducir los derivados:
+
+```powershell
+godot --headless --path . -s tools/prepare_tower_sprites.gd
+python tools/apply_rendered_art.py
+godot --headless --path . --editor --import
+```
+
+Los PNG de mecanismos/bases miden 128×128, los atlas 512×256, los proyectiles 64×64. Activar mipmaps, pero no ampliar los PNG como si fueran SVG. El campo turret_atlas permite las vistas; dejarlo vacío conserva la textura giratoria anterior. Las fuentes de art/ no van en exportables. El ejecutable Windows de esta entrega es build/JuegoA_m23.exe. No se volvieron a probar Android ni Linux con M23.
+
+Para comprobarlo, abrir una partida, construir las ocho torres comunes, mejorar dos veces y ver cómo apuntan. El mortero se prueba en un nivel que lo habilite o mediante la escena art/redesign-m23/capture_game.tscn. Revisar frío, fuego, explosión y rayo; comparar con en_juego.png, direcciones_m23.png y conjunto_m23.png. La fila preparada de efectos_en_juego.png fue invocada para comparar efectos, no representa cuatro disparos espontáneos. Nunca usar el guardado habitual al ejecutar las herramientas de captura: aislar APPDATA como en las pruebas de producción.

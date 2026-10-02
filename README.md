@@ -4,7 +4,7 @@
 
 Juego *tower defense* 2D hecho en **Godot 4** con **GDScript**, construido con **SDD (Spec-Driven Development)**.
 
-> **Estado actual:** M1 a M22 ✅ (juego completo, 7 niveles, 9 torres (una de 2×2) con combos por estado (el Hielo y la Incendiaria potencian a otras), modo de pruebas con editor de mapas, mapas de la comunidad, Wiki con bestiario, mapas de tamaño variable con zoom, siete temas de paisaje y leyenda, récords, niveles en archivos de texto y versión para Linux) y versión Android probada en un celular. Tests automáticos en GitHub (D-030).
+> **Estado actual:** M1 a M23 ✅ (juego completo, 7 niveles, 9 torres (una de 2×2) con arte renderizado de ocho vistas, tres familias visuales y combos por estado, modo de pruebas con editor de mapas, mapas de la comunidad, Wiki con bestiario, mapas de tamaño variable con zoom, siete temas de paisaje y leyenda, récords, niveles en archivos de texto y versión para Linux). Android fue probado en un celular antes de M23; el nuevo arte se verificó en Windows. Tests automáticos en GitHub (D-030).
 >
 > **Versión de Godot:** 4.7.2 estable (renderizador *Compatibility*).
 >
@@ -29,7 +29,7 @@ La carpeta `specs/` contiene todo lo que define el juego. **Se leen en orden:**
 | [`02-plan-tecnico.md`](specs/02-plan-tecnico.md) | **Cómo** se construye en Godot: carpetas, escenas, scripts, datos. | Cuando vas a programar. |
 | [`03-tareas.md`](specs/03-tareas.md) | La lista de pasos pequeños, en orden, para construirlo. | Todos los días: es la lista de "qué hago ahora". |
 | [`04-decisiones.md`](specs/04-decisiones.md) | Registro de cada decisión importante: qué se eligió, qué alternativas había y por qué. | Cuando alguien (o tú en 3 meses) pregunta "¿por qué se hizo así?". |
-| [`05-guia-de-arte.md`](specs/05-guia-de-arte.md) | Cómo se dibuja todo: técnica del SVG, paleta de cada enemigo y reglas para los temas del mapa. | Antes de dibujar cualquier cosa nueva. |
+| [`05-guia-de-arte.md`](specs/05-guia-de-arte.md) | SVG existentes, paletas, temas y tres familias de torres PNG con ocho vistas (§7). | Antes de producir arte nuevo. |
 
 Fuera de `specs/`: [`CONTENIDO.md`](CONTENIDO.md) explica **cómo agregar enemigos, torres y niveles** (con todos los campos de los datos), y [`ONBOARDING.md`](ONBOARDING.md), cómo preparar una computadora para trabajar.
 

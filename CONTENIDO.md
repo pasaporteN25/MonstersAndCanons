@@ -25,7 +25,7 @@ Los niveles son JSON, un formato de texto común que se edita a mano. Un `.tres`
 
 ## Reglas de los dibujos
 
-- **Tamaño:** 64×64 unidades (los proyectiles, 32×32). Godot los importa **solos** al doble de tamaño y con *mipmaps* (lo dice `[importer_defaults]` en `project.godot`): no hay que tocar el panel Importar.
+- **Tamaño:** los SVG usan 64×64 unidades (proyectiles, 32×32) y se importan al doble. Los PNG ya se entregan a 128×128 (proyectiles, 64×64): no llevan otra ampliación. Mipmaps activados. En M23 las torres usan atlas de 512×256, con ocho cuadros de 128×128 (guía de arte §7).
 - **Enemigos:** de costado, **mirando a la derecha** (el juego los da vuelta). El cuerpo, centrado un poco más abajo del centro (en y = 34).
 - **Torretas:** vistas desde arriba, **apuntando a la derecha**, girando sobre el **centro** de la imagen. La punta del cañón, cerca del borde derecho.
 - **Proyectiles:** apuntando a la derecha.
@@ -94,6 +94,7 @@ Los niveles son JSON, un formato de texto común que se edita a mano. Un `.tres`
 | `projectile_speed_tiles` | Velocidad de sus proyectiles (casi todas: 10). |
 | `color` | Color de sus efectos (anillo al construir). |
 | `turret_texture`, `projectile_texture` | Los dibujos. |
+| `turret_atlas` | Opcional: PNG de cuatro columnas × dos filas, ocho vistas en orden E, SE, S, SO, O, NO, N, NE. Mantiene luz y perspectiva al apuntar. Sin atlas, gira `turret_texture` como antes. |
 | `levels` | Los 3 niveles (`TowerLevelData`, tabla de abajo). |
 
 ### Campos de cada nivel (`TowerLevelData`)
@@ -102,7 +103,7 @@ Los niveles son JSON, un formato de texto común que se edita a mano. Un `.tres`
 |---|---|
 | `cost` | Oro para construir (nivel 1) o para mejorar (niveles 2 y 3). |
 | `damage`, `fire_rate`, `range_tiles` | Daño por golpe, disparos por segundo, alcance en casillas. |
-| `base_texture` | La base de ese nivel (`base_1.svg`, `base_2.svg`, `base_3.svg`). |
+| `base_texture` | Base fija de ese nivel: producción M23 en `assets/sprites/towers/rendered/base_1.png` a `base_3.png`. Los SVG anteriores siguen siendo válidos para datos sin atlas. |
 | **Comportamientos** | *(valen 0 = apagado; se pueden combinar)* |
 | `splash_radius_tiles` | Daño en área alrededor del impacto (Cañón). |
 | `slow_amount`, `slow_duration` | Ralentiza (Hielo). 0,4 = 40 % más lento. |

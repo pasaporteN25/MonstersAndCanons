@@ -6,3 +6,8 @@
 /build/
 *.exe
 *.pck
+
+# Datos de usuario aislados y diagnósticos de producción visual
+art/m23-user-data*/
+art/preview-user-data/
+art/redesign-m23/*.log
