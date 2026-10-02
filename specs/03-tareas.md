@@ -1084,3 +1084,9 @@
   **Refs:** B-24 a B-28, RF-280/RF-284 existentes.
   **Hecho cuando:** pedidos registrados sin duplicados, prioridad media y alcance claros, sin implementación; documentación subida al PR#1.
   **Resultado T177:** cinco entradas pendientes: muerte, rebote/aturdimiento, curación, música/sonidos y panel de información/mejoras. Se diferencia aturdimiento de ralentización y panel de torre de submenús ya completados. Solo documentación; sin cambios de assets/código/datos ni ejecución de tests.
+
+### Archivo de materiales anteriores
+- [x] **T178 · Revisar y versionar los archivos pendientes.**
+  **Refs:** revisión de Lucas de archivos sin commit, archivo de arte.
+  **Hecho cuando:** se identifica todo lo pendiente, se conservan bocetos/herramientas/UID útiles, se excluyen temporales/proyecto vacío y se sube al PR#1.
+  **Resultado T178:** materiales históricos de branding, torres3D y full-pass archivados, incluidas alternativas descartadas; UID de herramientas previas conservados. Logs y `.import` de art ignorados, proyecto secundario vacío excluido sin eliminarlo. No hay cambios de producción ni integración de bocetos. Verificación de inventario y `git diff --check`; GUT no se repite al no cambiar ejecución.
