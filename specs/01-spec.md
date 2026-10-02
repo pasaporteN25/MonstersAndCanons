@@ -1419,6 +1419,24 @@ La wiki de M11 ya es escalable a propósito (categorías → entradas → bloque
 ### B-23 · Combinar ataques de torres vecinas desde mejoras2/3
 **Prioridad media · Análisis pendiente.** Extiende la propuesta B1 de §5.8 y B-16.C, todavía sin implementar. Investigar combinaciones de ataques entre torres cercanas, habilitadas recién desde nivel de **mejora de torre2 o3** (distinto del número de nivel de campaña). Decidir si ambas torres deben alcanzar el mínimo, qué pares califican y si el efecto combinado reemplaza o suma al ataque normal. Comparar requisito2 frente a3, legibilidad de vínculos/vista previa y respuesta al mejorar, vender o aturdir una vecina; medir balance y rendimiento. Conservar separadas las reacciones por estado existentes de M20, que ya funcionan sin vecindad. **Entrega futura:** pocas recetas propuestas, reglas de activación y prueba de balance; sin cambiar las reglas actuales hasta aprobación.
 
+### Ampliación del backlog · Lucas, 2026-10-02
+B-24 a B-28: **prioridad media, pendientes, solo registro sin implementación autorizada**. Complementan la renovación visual actual; B-19 sigue completo para los submenús y B-28 cubre el panel de torre en partida que no formó parte de esa tarea.
+
+### B-24 · Renovar los assets de muerte de enemigos
+Volver a generar los efectos/poses de muerte, que quedaron desactualizados frente a los monstruos renderizados y sus ciclos M31. Relevar lo existente y definir si conviene un efecto común con variantes o ciclos propios por criatura; conservar identidad, escala, apoyo y claridad cuando mueren varios juntos. **Entrega futura:** muestras de muertes en combate y cobertura del bestiario. No alterar momento de muerte, recompensa, salida de crías ni desaparición lógica; respetar pausa/velocidad y límites de efectos simultáneos.
+
+### B-25 · Rediseñar rebote y aturdimiento del Espejo
+Renovar el efecto que Lucas describe como «letargo»: corresponde al **aturdimiento de la torre** después de que el Espejo rebota un ataque (RF-280/RF-284), no a la ralentización del enemigo. Revisar destello de rebote, aviso y efecto sobre la torre apagada para que se entienda origen, estado y recuperación, con la estética actual. Evaluar coherencia con el aturdimiento del Chamán, que comparte el estado. **Entrega futura:** comparación visual en partida, sin modificar alcance, duración ni reglas del rebote.
+
+### B-26 · Rediseñar la curación del Curandero
+Mejorar aura e indicación de curación sobre los enemigos afectados: un efecto orgánico y coherente con el monstruo, visible sin tapar cuerpos, barras o caminos. Distinguir alcance del aura y curación efectiva; evaluar coherencia con la regeneración del Troll. **Entrega futura:** muestra con varios enemigos, pausa y fuego que impide la cura. Conservar porcentajes, radio y reglas actuales, con costo de dibujo acotado.
+
+### B-27 · Mejorar música y efectos de sonido
+Relevar música y efectos actuales; mejorar o rediseñar su calidad y coherencia con Monsters & Canons. Evaluar música de menú/partida y señales de disparos, impactos, muerte, mejora, rebote, curación, combos, victoria/derrota e interfaz; priorizar según el relevamiento. Evitar fatiga y saturación con muchos ataques, equilibrar volúmenes y conservar controles de Opciones. **Entrega futura:** muestras de audio y propuesta de mezcla/variantes antes de reemplazar archivos; registrar procedencia/licencia de los recursos elegidos. No generar ni integrar audio en esta tarea de registro.
+
+### B-28 · Renovar el panel de información y mejoras de torre
+Rediseñar el panel en partida de la captura de Lucas (Ráfaga · Nivel2): título/nivel, daño, cadencia, alcance, descripción, capacidad contra voladores, selector de apuntado, Mejorar y Vender. Aplicar hierro/bronce y mejor jerarquía/agrupación, fondo legible y compacto, sin tapar más partida. Mantener precios, devolución, atajos U/S, estados sin oro/nivel máximo/aturdida y datos de sinergias. **Entrega futura:** muestras con torres de niveles1–3 y textos cortos/largos; verificar foco, controles y tamaños soportados. Relacionado con B-20 (marcas visuales del nivel), pero independiente de cambiar los assets de torre.
+
 ## 14. Arte de torres con volumen (M23, pedido por Lucas, 2026-10-02)
 
 - **RF-326** Las nueve torres usan la dirección artística elegida: cañón y mortero de hierro, bronce y madera (A); básica, francotirador, fuego, múltiple y ráfaga industriales (B); hielo y Tesla arcanas (C). Comparten perspectiva elevada, luz desde arriba a la izquierda y proporciones legibles a 64 px y 34 px.

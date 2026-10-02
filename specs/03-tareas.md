@@ -1078,3 +1078,9 @@
   **Hecho cuando:** inventario renovado, controles/foco/funciones conservados, capturas y GUT correctos, backlog tachado, documentos y PR#1 actualizados.
 
   **Resultado T176:** tema local ampliado con casillas, deslizadores, desplegables/entradas y paneles hierro-bronce. Opciones agrupadas; selección campaña/comunidad, Wiki, récords, final, iniciales/Salón y editor/diálogos renovados sin cambiar lógica/guardados. Siete capturas Full HD revisadas,891/891 GUT,8065 asserts,68 scripts; sin SCRIPT ERROR/Parse Error. Windows/Linux exportados; Windows arranca headless con salida0, Linux/móvil sin ejecutar. B-19 tachado y B-17/B-18 también señalados como completos; resto intacto. Aviso de certificados del entorno persiste.
+
+### Registro de backlog · Efectos, audio y panel de torre
+- [x] **T177 · Anotar mejoras pendientes de efectos, audio y panel de torre.**
+  **Refs:** B-24 a B-28, RF-280/RF-284 existentes.
+  **Hecho cuando:** pedidos registrados sin duplicados, prioridad media y alcance claros, sin implementación; documentación subida al PR#1.
+  **Resultado T177:** cinco entradas pendientes: muerte, rebote/aturdimiento, curación, música/sonidos y panel de información/mejoras. Se diferencia aturdimiento de ralentización y panel de torre de submenús ya completados. Solo documentación; sin cambios de assets/código/datos ni ejecución de tests.
