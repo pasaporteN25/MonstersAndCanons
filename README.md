@@ -216,3 +216,6 @@ Una pieza tecnológica por nivel1–5, cinco distintas desbloquean el apoyo mec�
 
 ### M38
 Avances tecnológicos integrados en la barra superior con icono/valor; estado de la partida en la ayuda del icono. Rama de este desarrollo: feature/avances-estandarte.
+
+### M39 · Ladrón
+Encuentros opcionales en6/7: roba3 de oro cada2s, piso10, hasta morir o escapar. Pausa/velocidad respetadas. Pruebas permite invocarlo sin progresión; Wiki explica la habilidad. Arte y balance iniciales revisables.

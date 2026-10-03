@@ -392,3 +392,7 @@ Generar una hoja independiente por criatura tomando su PNG aprobado como referen
 
 ## D-065 · Avances integrados al HUD
 2026-10-03, Lucas pide mover avances a la barra superior respetando icono/valor y seguir las etapas pendientes en feature/avances-estandarte. Se retira el cartel sobre el mapa; estado en ayuda del icono. No cambia la colección ni los primeros cinco niveles. Ramas nuevas siempre feature/, por pedido explícito de Lucas.
+
+## D-066 · Efecto económico por señal y grupos opcionales
+Lucas autorizó continuar las etapas, 2026-10-03. Enemy mide tiempo y emite solicitud; Game aplica LevelSession.steal, sin acceso del enemigo a economía global. Probabilidad por grupo y límite por EnemyData permiten nuevos encuentros sin codificar ids. No cambia el guardado ni se reemplazan enemigos existentes. Robo de un monto fijo al escapar descartado según el pedido. Balance6/7 de prueba; intensidad8/9 y diseño10–15 quedan para su creación.
+

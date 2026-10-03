@@ -149,3 +149,6 @@ Colección de cinco piezas tecnológicas, una por cada nivel1–5, y apoyo de ca
 
 ### M38 · Avances en el HUD
 La colección ahora aparece en la barra superior como icono y cantidad/objetivo; pendiente/confirmado se explica en la ayuda.
+
+### M39 · Ladrón
+Encuentros opcionales en6/7: roba3 de oro cada2s, piso10, hasta morir o escapar. Pausa/velocidad respetadas. Pruebas permite invocarlo sin progresión; Wiki explica la habilidad. Arte y balance iniciales revisables.

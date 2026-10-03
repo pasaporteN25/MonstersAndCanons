@@ -386,3 +386,6 @@ Usar guardado aislado. Verificar que fuente repetida no suma, enemigo portador q
 
 ### M38
 Comprobar contador0/5 en la barra superior, pickup1/5 y ayuda pendiente/confirmada; sin cartel fijo sobre el mapa. Normal/admin/comunidad tienen contador y ayudas de foco.
+
+### M39 · Ladrón
+Encuentros opcionales en6/7: roba3 de oro cada2s, piso10, hasta morir o escapar. Pausa/velocidad respetadas. Pruebas permite invocarlo sin progresión; Wiki explica la habilidad. Arte y balance iniciales revisables.

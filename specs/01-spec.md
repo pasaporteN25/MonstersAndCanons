@@ -1530,3 +1530,9 @@ Excavador/Ballesta/Alquimista siguen candidatos sin selección. B-21/B-23 no se 
 
 ### M38 · Avances en la barra superior
 - **RF-362** Dada cualquier partida, cuando cambia la colección, entonces la barra superior muestra icono plateado + cantidad/objetivo, con el mismo tamaño/formato de las otras estadísticas. El icono ofrece ayuda por puntero/foco con estado pendiente/confirmado; se retira el aviso fijo sobre el mapa. Recogida, confirmación y guardado conservan RF-358/359. Admin/comunidad muestran la colección pero no generan avances.
+
+### M39 · Ladrón periódico (B-07/B-22)
+- **RF-363** Dado un enemigo con drenaje configurado, mientras permanece vivo en el camino solicita oro cada intervalo de tiempo de juego. El Ladrón roba3 cada2s, sin bajar de10; con menos oro no crea ni quita monedas. Un ingreso posterior vuelve a ser robable en el próximo intervalo. Morir, desaparecer, escapar o terminar la partida corta el drenaje; pausa congela y velocidad acelera el reloj. No hay robo adicional al escapar. Valores y habilidad combinables viven en EnemyData.
+- **RF-364** Los grupos aceptan probabilidad opcional0–1 (por defecto1), sorteada una vez al iniciar la oleada. Dado un grupo omitido, no mantiene la oleada abierta. Ladrón: máximo uno por oleada sorteada, incluso con grupos duplicados; nivel6 oleada9 al25%, nivel7 oleadas7/12/17 al35%. Niveles1–5 intactos. El editor conserva y permite editar la probabilidad; Wiki, intro y pruebas administrativas descubren el nuevo dato. Son semillas de balance, no ajuste definitivo.
+- **RF-365** Cuando se roba oro efectivo, la barra actualiza y aparece un aviso ámbar en el Ladrón; no anuncia robos cuando se alcanzó el piso. Arte inicial revisable: pequeño monstruo encapuchado con bolsa; no se considera arte final aprobado.
+

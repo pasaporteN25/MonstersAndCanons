@@ -396,3 +396,7 @@ Los efectos de muerte reutilizan automáticamente textura, cuadro y escala del e
 
 ### M37 · Avances y apoyo
 data/progression.json define colecciones/fuentes/cantidad requerida; solo fuentes oficiales permiten drops. TowerData puede exigir una colección y ser support_only; TowerLevelData declara support_rate_percent. El mecánico se habilita con torres_extra en6/7 más colección5/5; admin lo habilita sin modificar el progreso. Ladrón/desgaste/reparación y niveles8–15 son etapas posteriores.
+
+### M39 · Encuentros opcionales y drenaje
+Un grupo de oleada puede declarar `"probabilidad":0.35`; ausencia equivale a1. El sorteo ocurre una vez por oleada/grupo. `EnemyData.optional_wave_limit` limita el total sorteado de ese tipo. `gold_drain_amount`, `gold_drain_interval` y `gold_drain_floor` habilitan drenaje combinable; cero lo apaga. Ladrón:3/2s/piso10, una aparición opcional por oleada. Sus cifras se modifican en data/enemies/thief.tres; ensayos solo6/7,1–5 intactos.
+
