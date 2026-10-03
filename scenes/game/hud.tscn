@@ -8,6 +8,8 @@
 [ext_resource type="Texture2D" path="res://assets/sprites/ui/stat_points.svg" id="6_points"]
 [ext_resource type="Texture2D" path="res://assets/sprites/ui/stat_wave.svg" id="7_wave"]
 
+[ext_resource type="Texture2D" path="res://assets/ui/technology_token.svg" id="8_technology"]
+
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_hud")
 
@@ -137,6 +139,27 @@ layout_mode = 2
 size_flags_vertical = 1
 theme_override_font_sizes/font_size = 22
 text = "0/0"
+vertical_alignment = 1
+
+[node name="TechnologyStat" type="HBoxContainer" parent="TopBar/Stats"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="TechnologyIcon" type="TextureRect" parent="TopBar/Stats/TechnologyStat"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("8_technology")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="TechnologyLabel" type="Label" parent="TopBar/Stats/TechnologyStat"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.88, 0.94, 1)
+theme_override_font_sizes/font_size = 22
+text = "0/5"
 vertical_alignment = 1
 
 [node name="BottomBar" type="ColorRect" parent="."]

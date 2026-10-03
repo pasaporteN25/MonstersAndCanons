@@ -146,3 +146,6 @@ B-02 cerrado; B-15 retirado/dividido. Lore y documentación de Épocas en B-03; 
 
 ### M37 · Avances y Estandarte mecánico
 Colección de cinco piezas tecnológicas, una por cada nivel1–5, y apoyo de cadencia disponible desde6 con colección completa y permiso del nivel. Habilitación manual en pruebas. Próximas etapas: robo periódico, embestida/desgaste y reparación; campaña base objetivo15 niveles, todavía no construida.
+
+### M38 · Avances en el HUD
+La colección ahora aparece en la barra superior como icono y cantidad/objetivo; pendiente/confirmado se explica en la ayuda.

@@ -32,8 +32,6 @@ var available_towers: Array[TowerData] = []
 const MECHANICAL_STANDARD: TowerData = preload("res://data/towers/mechanical_standard.tres")
 var collectible: CollectibleRun
 var _carrier: Enemy
-var _collection_notice: HBoxContainer
-var _collection_text: Label
 
 var level: Level
 ## RF-251: solo existe si el mapa es más grande que 20×9 (hay que achicar el mundo para que entre).
@@ -95,6 +93,7 @@ func _ready() -> void:
 	spawner.wave_finished.connect(session.complete_wave)
 
 	_setup_collection()
+	_update_collection_notice()
 	for support: TowerData in support_catalog():
 		if (level_data.extra_towers.has(String(support.id)) or (DevMode.enabled and DevMode.support_unlocked)) and not tower_types.has(support):
 			tower_types.append(support)
@@ -613,33 +612,15 @@ func _setup_collection() -> void:
 		rng.randomize()
 		collectible = CollectibleRun.new()
 		collectible.setup(&"technology", level_data.id, count, rng)
-	_collection_notice = HBoxContainer.new()
-	_collection_notice.position = Vector2(18, 590)
-	_collection_notice.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var icon := TextureRect.new()
-	icon.texture = preload("res://assets/ui/technology_token.svg")
-	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	icon.custom_minimum_size = Vector2(30, 30)
-	_collection_notice.add_child(icon)
-	_collection_text = Label.new()
-	_collection_text.add_theme_font_size_override("font_size", 14)
-	_collection_text.add_theme_color_override("font_outline_color", Color.BLACK)
-	_collection_text.add_theme_constant_override("outline_size", 4)
-	_collection_notice.add_child(_collection_text)
-	hud.add_child(_collection_notice)
 	_update_collection_notice()
 
 func _update_collection_notice() -> void:
-	if _collection_text == null:
-		return
 	var count: int = SaveManager.collected_sources(&"technology").size()
-	var state: String = " · conseguido aquí" if SaveManager.collected_sources(&"technology").has(String(level_data.id)) else " · pendiente aquí"
+	var state: String = "conseguido aquí" if SaveManager.collected_sources(&"technology").has(String(level_data.id)) else "pendiente aquí"
 	if collectible != null and collectible.picked_wave > 0:
 		count += 1
-		state = " · oleada confirmada" if collectible.confirmed else " · completar oleada"
-	_collection_text.text = "Avances %d/%d%s" % [count, CollectibleRun.required(&"technology"), state]
-	_collection_notice.tooltip_text = "Una pieza por nivel1–5. Se guarda al terminar; abandonar descarta lo recogido."
+		state = "oleada confirmada; pendiente del resultado" if collectible.confirmed else "completar oleada"
+	hud.show_collection(count, CollectibleRun.required(&"technology"), state)
 
 func _collection_wave_completed(wave: int, _bonus: int) -> void:
 	if collectible != null:

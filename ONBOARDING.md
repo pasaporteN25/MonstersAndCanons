@@ -383,3 +383,6 @@ Revisar las nueve torres niveles1–3 y Mortero2×2, también aturdidas: contar 
 
 ### M37 · Comprobar avances y apoyo
 Usar guardado aislado. Verificar que fuente repetida no suma, enemigo portador que escapa no entrega, derrota antes/después del cierre de oleada difiere y abandonar no guarda. En6/7, colección incompleta bloquea mecánico;5/5 permite construirlo. F1→Habilitar estandartes ofrece apoyo sin colección también fuera de esos niveles solo en admin. Dos auras no apilan; aturdir/vender/mejorar modifica el apoyo. Reparación todavía pendiente.
+
+### M38
+Comprobar contador0/5 en la barra superior, pickup1/5 y ayuda pendiente/confirmada; sin cartel fijo sobre el mapa. Normal/admin/comunidad tienen contador y ayudas de foco.

@@ -97,7 +97,7 @@ func _ready() -> void:
 	edge.size = Vector2(1280, 2)
 	edge.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	bar.add_child(edge)
-	for pair: Array in [["Gold", "Oro"], ["Lives", "Vidas"], ["Score", "Puntos"], ["Wave", "Oleada"]]:
+	for pair: Array in [["Gold", "Oro"], ["Lives", "Vidas"], ["Score", "Puntos"], ["Wave", "Oleada"], ["Technology", "Avances tecnológicos"]]:
 		var icon: Control = bar.get_node("Stats/" + pair[0] + "Stat/" + pair[0] + "Icon")
 		icon.tooltip_text = pair[1]
 		icon.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -372,3 +372,9 @@ func _blink(label: Label) -> void:
 	for i: int in 2:
 		tween.tween_property(label, "modulate", Color(1, 1, 1, 0.25), 0.06)
 		tween.tween_property(label, "modulate", Color.WHITE, 0.06)
+
+func show_collection(count: int, required: int, state: String) -> void:
+	(%TechnologyLabel as Label).text = "%d/%d" % [count, required]
+	var icon: Control = get_node("TopBar/Stats/TechnologyStat/TechnologyIcon")
+	icon.tooltip_text = "Avances tecnológicos: %s. Una pieza por nivel1–5; se guarda al terminar, abandonar descarta." % state
+

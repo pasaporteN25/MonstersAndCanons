@@ -592,3 +592,6 @@ B-02 cerrado; B-15 retirado. Lore/Wiki de Épocas en B-03; documentación de mod
 
 ### M37 · Colección y torres de apoyo (D-064)
 CollectibleRun mantiene portador/pickup/confirmación por oleada fuera del guardado; colección de SaveManager es diccionario id→fuentes únicas, con lectura defensiva y campos opcionales versión1. Game conecta nacimiento/muerte/fin de oleada/resultado y excluye admin/editor/comunidad. Solo el resultado guarda fuentes confirmadas. La disponibilidad de TowerData usa requisito de colección y permiso del nivel; admin puede agregar catálogo reservado sin cambiar archivo ni desbloqueo persistente. SupportRules calcula el aura mayor a partir de torres activas y radios, sin apilar ni referencias permanentes a torres vendidas; cadencia efectiva se calcula antes de cada disparo. No altera recursos de niveles1–5;6/7 solo agregan permiso del mecánico. Pruebas deterministas de fuente/drop/límites/guardado/aura, integración normal/admin y balance local6/7 con y sin apoyo; captura inicial para revisión de arte.
+
+### M38 · HUD de colección
+TechnologyStat en TopBar/Stats usa el icono existente, tipografía22 y ayuda por foco/puntero. Game actualiza Hud.show_collection después de pickup/confirmación/resultado y al arrancar cualquier modo, sin agregar otro control sobre el mapa.

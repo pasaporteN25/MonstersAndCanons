@@ -213,3 +213,6 @@ Torres con placa/remaches de nivel integrados en la base. Rebote con trayectoria
 
 ### M37 · Primera etapa: avances y Estandarte
 Una pieza tecnológica por nivel1–5, cinco distintas desbloquean el apoyo mecánico en niveles que lo permiten desde6. Rejugar recupera fuentes pendientes; completar la oleada confirma el drop y victoria/derrota lo guarda, abandonar no. Admin puede habilitar estandartes sin colección. Ladrón, Embestidor, reparación y niveles8–15 permanecen en etapas posteriores.
+
+### M38
+Avances tecnológicos integrados en la barra superior con icono/valor; estado de la partida en la ayuda del icono. Rama de este desarrollo: feature/avances-estandarte.

@@ -1119,3 +1119,5 @@
 - [ ] **T184 · Ladrón periódico.** Refs: dirección de M37/D-064. Definir RF detallados, aparición aleatoria limitada, piso10, clocks y avisos; probar6/7 antes de8/9.
 - [ ] **T185 · Embestidor y desgaste.** Refs: dirección M37/D-064. Definir RF de carga/recta/extremo/proximidad/estados; sin impactos a torres fuera del camino ni destrucción; probar6/7.
 - [ ] **T186 · Reparación del mecánico.** Refs: dirección M37/D-064. Definir tasas/costos/estados y balance tras T185; no confundir con aturdimiento. Otras torres de apoyo quedan posibles, no seleccionadas.
+
+- [x] **T187 · Integrar avances en la barra superior.** Refs RF-362/D-065. Hecho cuando icono/valor, ayudas y estados quedan integrados sin cambiar persistencia ni superponer controles. Resultado: control uniforme, cartel del mapa retirado; pruebas de colección/HUD y captura, descripción PR1 preparada. Ramas feature/ registradas.
