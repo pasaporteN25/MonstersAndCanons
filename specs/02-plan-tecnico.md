@@ -586,3 +586,6 @@ TowerPanel conserva show_tower/refresh y sus tres señales. Tres valores de esta
 
 ### M36 · RF-350 a RF-357
 Tower dibuja placa/remaches antes del mecanismo, y aturdimiento con trazos localizados. Enemy dibuja límite de aura y brotes en receptores capaces de curarse; EffectsLayer muestra pulso de cura efectiva y limita residuos de muerte. DeathEffect captura textura/región/escala de Enemy, sin referencias al enemigo borrado; shader con progreso de CPU conserva pausa. Audio mantiene buses, añade perfiles de mezcla, música por pantalla, variación determinista y separación entre disparos/avisos. Generador original produce WAV y manifiesto de picos/RMS. Investigación y muestras viven en art/redesign-m36; no se incluyen en exportación.
+
+### Depuración del backlog (D-063)
+B-02 cerrado; B-15 retirado. Lore/Wiki de Épocas en B-03; documentación de mods y comunidad separada en B-29/B-30, dependiente de B-04 y sin añadir sistemas por anticipado. B-21/22/23 son estudios preliminares abiertos: elegir y validar antes de diseñar producción. Esta reorganización documental no cambia código, datos, guardados ni exportaciones.

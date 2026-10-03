@@ -1104,3 +1104,9 @@
   **Hecho cuando:** ocho entregables completos: remaches de nivel, rebote/aturdimiento, aura/cura, muerte de las trece especies, audio/menu/combate, tres prototipos de profundidad, candidatos/desbloqueos y recetas/ensayo de vecindad. Revisar capturas/audio/análisis, GUT y60FPS con200 enemigos/60 torres, exportar Windows/Linux, registrar límites y push. Preservar M34 pendiente fuera del commit.
 
   **Resultado T181:** ocho entregables completos. B-20/24/25/26/27 integrados (placa/remaches, muerte con pose actual, rebote/aturdimiento, cura y audio). B-21/22/23 con muestras, candidatos y laboratorio de36 casos; elegir/activar esas mecánicas sigue pendiente, conforme al alcance de investigación.898/898 GUT,8150 asserts,70 scripts; sin SCRIPT ERROR/Parse Error. Diez capturas revisadas. Rendimiento200 enemigos/60 torres con nuevos residuos:100FPS promedio,28,8ms peor cuadro,7/601 cuadros por encima de16,6ms. Windows normal/pruebas y Linux exportados; ambos Windows arrancan con salida0. Sin ejecución física Linux/Android ni evaluación auditiva humana; aviso previo de certificados y limpieza de recursos al cerrar herramientas declarados. Evidencia/reproducción en art/redesign-m36/README.md. M34 previo conservado fuera del commit.
+
+### T182 · Depurar el backlog con Lucas
+- [x] **T182 · Cerrar B-02 y reorganizar B-03/B-15.**
+  **Refs:** D-063, backlog §13. No añade requisitos de juego.
+  **Hecho cuando:** B-02 cerrado; B-15 retirado sin buscador/enlaces/Niveles/imágenes; lore/Épocas trasladados a B-03 y Wiki de mods/comunidad separada sin duplicar B-04; estudios B-21–B-23 explícitamente abiertos/preliminares; pendientes restantes identificados.
+  **Resultado:** documentación y referencias actualizadas; conservados los números históricos. Revisión de cambios y referencias, sin ejecución de tests por no modificar juego ni datos. Cambios M34 anteriores conservados fuera del commit.

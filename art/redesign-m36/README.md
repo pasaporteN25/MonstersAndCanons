@@ -30,3 +30,5 @@ Usar APPDATA aislado dentro de build/t180-user, para conservar el guardado del j
 - `godot --path . -s tools/perf_test.gd`
 
 Los prototipos, JSON de resultados e informes de art quedan fuera del juego exportado. No se activaron nueva proyección, nuevos enemigos/torres ni recetas vecinales; esas entradas pedían una investigación previa. Se entregan completas y quedan listas para seleccionar una opción de producción.
+
+Actualización de Lucas (T182, 2026-10-03): B-21/B-22/B-23 siguen abiertos. Estos informes son preliminares; faltan decisiones y validación más profunda de las opciones seleccionadas antes de producción.

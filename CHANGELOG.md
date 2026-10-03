@@ -140,3 +140,6 @@ Comparaciones del arte pendiente de Volador, Blindado, Troll, Araña y Cría; cu
 - Muertes conservan brevemente la pose del monstruo y se desintegran sin demorar recompensa ni crías.
 - Música propia de menú/combate, efectos suaves y avisos protegidos de los disparos; limitador de mezcla.
 - Estudios de profundidad, contenido/desbloqueos y combos vecinales entregados; esas mecánicas no se activaron en el juego.
+
+### Backlog depurado · T182 (2026-10-03)
+B-02 cerrado; B-15 retirado/dividido. Lore y documentación de Épocas en B-03; Wiki de mods y comunidad en B-29/B-30. B-21/22/23 siguen abiertos con estudios preliminares. Sin cambios en el juego.

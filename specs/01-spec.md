@@ -894,7 +894,7 @@ Adaptaciones **mínimas** para que el juego funcione en un celular. No es un red
 
 ### 9.6 Arte provisional *(M4, pedido por Lucas, D-023)*
 
-Dibujos simples para dejar de ver formas geométricas. Es un **primer intento "para rellenar"**: **no** decide la ambientación (§12; B-01, B-02 y B-03 siguen abiertos) y cada dibujo se puede cambiar sin tocar el código.
+Dibujos simples para dejar de ver formas geométricas. Es un **primer intento "para rellenar"**: **no** decide la ambientación (§12; B-01 y B-03 siguen abiertos; B-02 cerrado el2026-10-03) y cada dibujo se puede cambiar sin tocar el código.
 
 **Estilo:** caricatura con colores planos y borde oscuro. Las torres se ven **desde arriba** (así la torreta puede girar); los enemigos, **de costado**, como personajes (así se les ven la cara y las patas).
 
@@ -1074,7 +1074,7 @@ Cosas que **no** hace falta decidir ahora; se deciden antes del hito indicado.
 | Pregunta | Decidir antes de |
 |---|---|
 | ¿Nombre definitivo del juego? | M3 |
-| ¿Ambientación? (medieval, espacial, juguetes…) Afecta nombres de torres/enemigos y el arte. **Candidata fuerte: "Épocas" (§13, B-01).** Se decide junto con el lore (B-03) y el arte (B-02). | M4 |
+| ¿Ambientación? (medieval, espacial, juguetes…) Afecta nombres de torres/enemigos y el arte. **Candidata fuerte: "Épocas" (§13, B-01).** Se decide junto con el lore (B-03); B-02 está cerrado y el arte futuro se encarga como trabajo específico. | M4 |
 | ¿Música: de dónde sale? (propia, gratuita con licencia CC0…) | M3 |
 
 ---
@@ -1109,30 +1109,13 @@ Ideas **aprobadas como dirección**, pero **sin fecha**: no se programan hasta c
 
 **Cuándo:** sin fecha. Lucas prefiere no elegir variante por ahora (2026-09-28). Si se retoma, el lugar natural es M4 (arte), porque ahí se elige la ambientación.
 
-### B-02 · Diseño de assets (arte)
-*Propuesta de Lucas, 2026-09-28. No lo hace Claude: queda para un diseñador o para más adelante.*
+### B-02 · ~~Diseño de assets (arte)~~
+**Cerrado por Lucas, 2026-10-03 (D-063).** El juego ya tiene arte de torres, enemigos, mapas, interfaz y efectos, renovado en M23–M36. Se elimina el objetivo indefinido de «arte definitivo». Los detalles visuales concretos que surjan se registrarán y resolverán por separado, siguiendo la guía de arte; no mantienen abierta esta entrada ni requieren rehacer todo.
 
-**Idea:** reemplazar las formas geométricas por arte dibujado: torres, enemigos, casillas del mapa, efectos, íconos y la interfaz.
+### B-03 · Lore y documentación de Épocas
+**Actualizado por Lucas, 2026-10-03 (D-063). Sin fecha.** Definir quién defiende, quién ataca y por qué, qué representan los niveles y quién es el Jefe. Elegir cómo presentarlo: textos breves por nivel, victoria, nombres y una categoría Lore en la Wiki.
 
-**Estado (2026-09-28):** hay un **juego de dibujos provisionales** hecho por Claude (§9.6, D-023) para no seguir con formas geométricas. B-02 sigue abierto: es el arte **definitivo**, que depende de la ambientación. Para cambiar un dibujo, alcanza con reemplazar su archivo en `assets/sprites/` (D-023 explica cómo).
-
-**Qué ya está preparado para que sea fácil:**
-- Cada torre y cada enemigo se dibuja en **un solo lugar** (`_draw()` de `tower.gd` y `enemy.gd`), y los datos ya dicen su forma y color (`EnemyData.shape`, `TowerData.color`). Cambiar a imágenes es cambiar ese dibujo, no la lógica.
-- Las casillas vienen de `assets/tiles/tiles.png` (64×64) y la decoración de `LevelDecor`.
-- La resolución base es 1280×720 y las casillas miden 64×64 px: el arte se hace a esa escala (o al doble, 128×128, para pantallas grandes).
-
-**Lista de piezas** (para cuando se encargue): 4 torres × 3 niveles, 6 enemigos (con su versión "golpeado" y "ralentizado"), casillas (pasto, camino con bordes, roca, puerta de salida), proyectiles e impactos, íconos de la interfaz, ícono del juego, fondo de los menús.
-
-**Depende de:** la ambientación (§12) y, si se elige, de Épocas (B-01): cada época necesitaría su propio juego de piezas.
-
-### B-03 · Lore (la historia del mundo)
-*Propuesta de Lucas, 2026-09-28. No lo hace Claude: queda para más adelante.*
-
-**Idea:** darle al juego un mundo y una historia: quiénes defienden, quiénes atacan y por qué, qué es cada nivel (Pradera, Desfiladero, Encrucijada, Espiral, Fortaleza) dentro de ese mundo, y quién es el Jefe.
-
-**Cómo se mostraría** (a decidir): un texto corto al elegir cada nivel, una frase en la pantalla de victoria, nombres temáticos para torres y enemigos.
-
-**Depende de / afecta a:** Épocas (B-01) sería una forma de lore ("la guerra a través del tiempo"); el lore también decide la ambientación y, por lo tanto, el arte (B-02). Conviene definir los tres juntos. Si se agregan textos de historia, hay que sacar "Historia, diálogos o cinemáticas" de la lista de §11 (en todo o en parte).
+**Traslado desde B-15:** incluir aquí la futura categoría Épocas en la Wiki, cuando exista ese contenido. B-01 conserva las decisiones de mecánica, progresión e imperios del modo Épocas, y B-05 los modos de juego; esta entrada cubre su historia y documentación, sin duplicar implementación. No presupone diálogos ni cinemáticas. Si se adopta historia, actualizar el alcance de §11. El arte actual (B-02 cerrado) no queda bloqueado por esta decisión.
 
 ### B-04 · Crear mapas fácilmente y mods
 *Propuesta de Lucas, 2026-09-29. Analizada por Claude. Decisión: D-024. **El escalón 1 se hizo en M7 (§7.8, D-031). El escalón 2, el editor, se hizo en M9 (§10.3) solo en la versión de pruebas.** **Prioridad de Lucas (D-033): el editor de mapas (escalón 2) y los mapas de la comunidad (escalón 3, solo la parte de mapas).** **La parte de mapas del escalón 3 se hizo en M10 (§10.4, D-034).** Lo que falta: enemigos, torres y dibujos propios (paquetes de mods completos) y decidir si el editor pasa al juego normal (B-13). Sin fecha.*
@@ -1201,7 +1184,7 @@ Ideas **aprobadas como dirección**, pero **sin fecha**: no se programan hasta c
 
 **Recomendación:** empezar por el **escalón 1** cuando haga falta hacer más niveles. Se paga solo: los niveles 1 a 5 se pueden pasar a ese formato (y un test compararía que se juegan igual que antes), y es la base del editor y de los mods.
 
-**Relación con otras ideas:** Épocas (B-01) podría armarse como un "paquete" con otras torres, enemigos y dibujos, usando el mismo sistema que los mods. El arte definitivo (B-02) también se beneficia: cambiar dibujos pasaría a ser cambiar archivos.
+**Relación con otras ideas:** Épocas (B-01) podría armarse como un "paquete" con otras torres, enemigos y dibujos, usando el mismo sistema que los mods. Los assets propios de un mod también se benefician: sus dibujos forman parte del paquete; B-02 está cerrado.
 
 **Qué cambia en la spec si se hace:** un hito nuevo con sus reglas (RF) y tareas; si se hacen mods, una sección de seguridad (qué puede traer un mod y qué no).
 
@@ -1344,15 +1327,8 @@ Los otros dos de la lista (**Excavador** y **Ladrón**) quedan para una etapa po
 
 **Antes de hacerlo:** cambiar la fórmula obliga a **volver a balancear los 7 niveles** con el bot. Se puede comparar las dos fórmulas con el bot en una copia aparte, sin tocar el proyecto. **Qué cambia en la spec:** RF-80, la tabla de torres (columna "tipo de daño") y la de enemigos.
 
-### B-15 · Wiki: bestiario que se llena, búsqueda y más categorías
-*Idea derivada de la wiki (M11), 2026-09-29. Sin fecha.*
-
-La wiki de M11 ya es escalable a propósito (categorías → entradas → bloques). Ideas que **entran sin rehacerla**:
-- ~~**Bestiario que se va llenando**~~ **Hecho en M12** (RF-238 a RF-240, D-036).
-- **Enlaces entre entradas** *(Lucas, 2026-09-29: se hacen **junto con el buscador**, cuando se tome cualquiera de los dos)*: en el texto de una entrada, un nombre que se puede tocar para saltar a otra (en la Araña, "suelta 4 Crías" lleva a la entrada de las Crías; en un artículo, "Incendiaria" lleva a esa torre). La pantalla ya sabe abrir una entrada por su id (`show_target`), así que falta solo marcar los enlaces en los datos.
-- **Buscador** (un cuadro de texto que filtra las entradas) *(se hace junto con los enlaces; Lucas: solo si es muy simple, y no lo es del todo)* (hay que cuidar el foco del teclado con Esc y las flechas, el teclado virtual del celular y que no filtre datos de enemigos cerrados), así que queda acá.
-- **Categorías nuevas** sin tocar la pantalla: **Niveles** (mapa en miniatura, oleadas y qué enemigos vienen), **Lore** (B-03), **Épocas** (B-01), **Mapas de la comunidad** y, si algún día hay mods, **los enemigos y torres de cada mod** (salen solos de los archivos).
-- **Imágenes propias** en los artículos (un bloque `imagen`) y ejemplos de "qué torre conviene contra qué enemigo".
+### B-15 · ~~Ampliación general de la Wiki~~
+**Retirado y dividido por Lucas, 2026-10-03 (D-063).** Lore y Épocas pasan a B-03; la documentación de mods y comunidad se separa en B-29 y B-30. Se retira del pendiente el bestiario ya implementado en M12. Se descartan buscador, enlaces entre entradas, categoría Niveles e imágenes adicionales en artículos: no se necesitan. El bestiario, los dibujos y la navegación existentes se conservan.
 
 ### Sugerencias de Claude *(consultar antes de implementar)*
 *Regla de Lucas, 2026-09-29: las ideas que Claude propone por su cuenta se anotan acá y no se implementan hasta que Lucas las apruebe.*
@@ -1411,16 +1387,16 @@ La wiki de M11 ya es escalable a propósito (categorías → entradas → bloque
 **Pedido original:** revisar los puntos amarillos flotantes de RF-75, que hoy indican niveles1/2/3. Comparar puntos más sutiles incorporados a la base (remaches, luces o detalles) con mayor contraste/intensidad del brillo ya implementado en M30. No es obligatorio eliminarlos: el nivel debe seguir siendo reconocible a escala de partida, también cuando el brillo se apaga por aturdimiento. Evitar confundirlos con selección u otros efectos. **Entrega futura:** comparación de los tres niveles, al menos sobre el Cañón, y revisión del criterio para las demás torres; sombras fuera de alcance salvo pedido posterior.
 
 ### B-21 · Investigar una vista general con más sensación de 3D
-**Análisis completado en M36 (T181).** Entrega en [`B21-profundidad.md`](../art/redesign-m36/B21-profundidad.md). Pendiente de elegir una opción para producción; no se integró esa mecánica. El texto siguiente registra el alcance original.
+**Abierto: análisis preliminar entregado en M36 (T181).** Entrega en [`B21-profundidad.md`](../art/redesign-m36/B21-profundidad.md). Faltan decisiones de Lucas y profundizar/validar la opción elegida antes de producción; no se integró esa mecánica. El estudio rápido no constituye un diseño definitivo. El texto siguiente registra el alcance original.
 **Pedido original de investigación:** Mejorar la profundidad de toda la escena, además de los sprites. Comparar alternativas: relieve y bordes del terreno con iluminación coherente; perspectiva oblicua/isométrica simulada en2D; escena2.5D con suelo3D y sprites. Evaluar orden de dibujo/oclusiones, alineación de bases y caminos, selección/construcción, cámara, interfaz, rendimiento, escritorio y móvil, y compatibilidad de mapas/guardados. No se adopta ninguna opción todavía.
 **Entrega futura:** muestras comparables del mismo mapa y una evaluación de alcance/costos/riesgos. Tratar el cambio de vista como potencial **breaking change**: preparar un PR de revisión identificado como tal, avisar a Lucas con el enlace y esperar su aprobación explícita **antes de mergear**. Una muestra no autoriza migrar toda la producción ni fusionar el PR.
 
 ### B-22 · Analizar contenido nuevo y desbloqueos en niveles superiores
-**Análisis completado en M36 (T181).** Entrega en [`B22-contenido.md`](../art/redesign-m36/B22-contenido.md). Pendiente de elegir una opción para producción; no se integró esa mecánica. El texto siguiente registra el alcance original.
+**Abierto: análisis preliminar entregado en M36 (T181).** Entrega en [`B22-contenido.md`](../art/redesign-m36/B22-contenido.md). Faltan decisiones de Lucas y profundizar/validar la opción elegida antes de producción; no se integró esa mecánica. El estudio rápido no constituye un diseño definitivo. El texto siguiente registra el alcance original.
 **Pedido original de análisis; producción pendiente de selección:** Proponer2–3 candidatos de torretas y2–3 de monstruos (confirmar la selección final), con papel táctico distinto, estética, contramedida, costo de implementación y nivel de aparición/desbloqueo. Mantener la temática de monstruos. Considerar Excavador/Ladrón del B-07 y las variantes B de Bestia/Tanque que Lucas reservó para futuro, evitando duplicar funciones existentes. Comparar habilitación por nivel con desbloqueo persistente; contemplar Wiki, presentación, progreso y balance. El Mortero ya tiene disponibilidad reservada para el nivel10 (RF-300); no tratarlo como contenido nuevo. **Entrega futura:** tabla comparativa y recomendación, sin depender de completar ahora los niveles8–10.
 
 ### B-23 · Combinar ataques de torres vecinas desde mejoras2/3
-**Análisis completado en M36 (T181).** Entrega en [`B23-vecindad.md`](../art/redesign-m36/B23-vecindad.md). Pendiente de elegir una opción para producción; no se integró esa mecánica. El texto siguiente registra el alcance original.
+**Abierto: análisis preliminar entregado en M36 (T181).** Entrega en [`B23-vecindad.md`](../art/redesign-m36/B23-vecindad.md). Faltan decisiones de Lucas y profundizar/validar la opción elegida antes de producción; no se integró esa mecánica. El estudio rápido no constituye un diseño definitivo. El texto siguiente registra el alcance original.
 **Pedido original de análisis:** Extiende la propuesta B1 de §5.8 y B-16.C, todavía sin implementar. Investigar combinaciones de ataques entre torres cercanas, habilitadas recién desde nivel de **mejora de torre2 o3** (distinto del número de nivel de campaña). Decidir si ambas torres deben alcanzar el mínimo, qué pares califican y si el efecto combinado reemplaza o suma al ataque normal. Comparar requisito2 frente a3, legibilidad de vínculos/vista previa y respuesta al mejorar, vender o aturdir una vecina; medir balance y rendimiento. Conservar separadas las reacciones por estado existentes de M20, que ya funcionan sin vecindad. **Entrega futura:** pocas recetas propuestas, reglas de activación y prueba de balance; sin cambiar las reglas actuales hasta aprobación.
 
 ### Ampliación del backlog · Lucas, 2026-10-02
@@ -1444,6 +1420,17 @@ Relevar música y efectos actuales; mejorar o rediseñar su calidad y coherencia
 
 ### B-28 · ~~Renovar el panel de información y mejoras de torre~~
 Rediseñar el panel en partida de la captura de Lucas (Ráfaga · Nivel2): título/nivel, daño, cadencia, alcance, descripción, capacidad contra voladores, selector de apuntado, Mejorar y Vender. Aplicar hierro/bronce y mejor jerarquía/agrupación, fondo legible y compacto, sin tapar más partida. Mantener precios, devolución, atajos U/S, estados sin oro/nivel máximo/aturdida y datos de sinergias. **Entrega futura:** muestras con torres de niveles1–3 y textos cortos/largos; verificar foco, controles y tamaños soportados. Relacionado con B-20 (marcas visuales del nivel), pero independiente de cambiar los assets de torre.
+
+### B-29 · Wiki de mods
+**Separado de B-15 por Lucas, 2026-10-03 (D-063). Sin fecha.** Cuando existan paquetes de mods completos (B-04), mostrar en la Wiki sus torres y enemigos, identificando el paquete de origen. Definir carga y actualización de entradas, compatibilidad y descubrimiento del bestiario. Esta entrada documenta contenido instalado; no duplica el sistema de instalación, validación ni formato de mods de B-04.
+
+### B-30 · Wiki de mapas de la comunidad
+**Separado de B-15 por Lucas, 2026-10-03 (D-063). Sin fecha.** Evaluar una categoría dedicada a mapas comunitarios instalados, con información útil que no repita la selección de mapas. La carga y validación de mapas ya existen desde M10 (§10.4, B-04); esta entrada no implica crear un servicio online, publicación ni otro editor. Definir primero qué información agrega y cómo se mantiene al importar o quitar mapas.
+
+### Estado depurado del backlog · Lucas, 2026-10-03
+B-02 cerrado; B-15 retirado/dividido. B-17 a B-20 y B-24 a B-28 implementados. B-21/B-22/B-23 siguen abiertos: informes preliminares entregados, sin decisión ni validación definitiva de producción.
+
+Otros pendientes: Épocas y modos (B-01/B-05), lore y Wiki de Épocas (B-03), mods completos (resto de B-04), Excavador/Ladrón y eventual combate contra torres (resto de B-07, candidatos relacionados con B-22), decoración manual/terrenos con efectos y temas/leyenda en el editor (resto de B-08, T128), cruces/rutas explícitas (resto de B-09), campaña/dificultades (B-10, prioridad baja), compartir mapas como texto (B-11), mapas al azar/desafíos (B-12), app única con admin (B-13), daño elemental/armadura (B-14), fusiones (resto de B-16; vecindad se sigue en B-23), Wiki de mods (B-29) y de comunidad (B-30). B-06 ya está implementado en M18; leyenda/temas del formato y tamaño variable de B-08 están implementados en M15/M13; aviso de atajos B-09 está hecho en M9. No contarlos nuevamente como pendientes. Las sugerencias no autorizadas permanecen separadas y no son tareas comprometidas.
 
 ## 14. Arte de torres con volumen (M23, pedido por Lucas, 2026-10-02)
 

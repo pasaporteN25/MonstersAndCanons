@@ -140,9 +140,9 @@ El botón **Wiki** del menú principal abre una enciclopedia: **Enemigos** (un b
 
 En **Jugar → "Mapas de la comunidad"** aparecen todos los archivos `.json` que haya en la carpeta de mapas (en Windows, `%APPDATA%\Godot\app_userdata\JuegoA\maps`; el botón "Abrir carpeta de mapas" la abre). Sirve para jugar mapas que te pasó otra persona o los que hacés con el editor de la versión de pruebas. Cada mapa tiene su propio progreso y su top 5, y no toca la campaña. Cómo instalar, compartir y qué límites tienen: [`CONTENIDO.md`](CONTENIDO.md).
 
-## Dibujos (arte provisional)
+## Dibujos y arte del juego
 
-Los dibujos del juego son archivos **SVG** en `assets/sprites/` (decisión D-023, spec §9.6). Son **provisionales**: el arte definitivo sigue en el backlog (B-02), porque depende de la ambientación.
+Los dibujos del juego son archivos **SVG** en `assets/sprites/` (decisión D-023, spec §9.6). B-02 fue cerrado por Lucas el2026-10-03: las mejoras visuales específicas se registran por separado. Los SVG originales conviven con los atlas PNG y materiales incorporados en M23–M36; el arte actual no espera una renovación general.
 
 | Carpeta | Qué hay | Cómo están dibujados |
 |---|---|---|
