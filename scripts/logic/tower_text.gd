@@ -7,6 +7,8 @@ extends RefCounted
 ## Los efectos especiales del nivel (área, rayo, púas, quemadura…). Vacío si es una torre común.
 static func effects(level: TowerLevelData) -> Array[String]:
 	var lines: Array[String] = []
+	if level.support_rate_percent > 0:
+		lines.append("Apoyo: +%d %% de cadencia; solo el mayor" % level.support_rate_percent)
 	if level.splash_radius_tiles > 0.0:
 		lines.append("Área: radio %.1f" % level.splash_radius_tiles)
 	if level.chain_extra_targets > 0:

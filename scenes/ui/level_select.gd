@@ -183,6 +183,10 @@ func _make_card(index: int) -> Button:
 	var card := _new_card()
 	card.text = "Nivel %d\n%s\n%d oleadas\n%s\n\n" % [
 		index + 1, level.display_name, level.waves.size(), status_text(index)]
+	if level.extra_towers.has("mechanical_standard"):
+		card.tooltip_text = "Estandarte mecánico: requiere cinco avances de niveles1–5 (%d/5)." % SaveManager.collected_sources(&"technology").size()
+	elif CollectibleRun.eligible(&"technology", level.id):
+		card.tooltip_text = "Avance de este nivel: %s. Una pieza distinta por nivel1–5." % ("conseguido" if SaveManager.collected_sources(&"technology").has(String(level.id)) else "pendiente")
 	card.disabled = not GameFlow.is_level_unlocked(index)
 	card.pressed.connect(GameFlow.start_level.bind(index))
 	_add_stars(card, GameFlow.level_stars(index), GameFlow.is_level_unlocked(index))

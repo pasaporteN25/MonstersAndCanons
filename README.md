@@ -210,3 +210,6 @@ Información agrupada con hierro/bronce: daño, cadencia y alcance arriba; descr
 
 ### M36 · Efectos, niveles y audio
 Torres con placa/remaches de nivel integrados en la base. Rebote con trayectoria visible; aturdimiento y recuperación localizados. Cura efectiva con pulso orgánico y aura de alcance separada; muertes con pose real desintegrada y fragmentos facetados. Música de menú/combate y mezcla con avisos separados y limitador. Ver muestras e investigaciones B-21/22/23 en `art/redesign-m36/README.md`.
+
+### M37 · Primera etapa: avances y Estandarte
+Una pieza tecnológica por nivel1–5, cinco distintas desbloquean el apoyo mecánico en niveles que lo permiten desde6. Rejugar recupera fuentes pendientes; completar la oleada confirma el drop y victoria/derrota lo guarda, abandonar no. Admin puede habilitar estandartes sin colección. Ladrón, Embestidor, reparación y niveles8–15 permanecen en etapas posteriores.

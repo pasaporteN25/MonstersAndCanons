@@ -32,9 +32,11 @@ func health_scale_percent(balance: BalanceConfig) -> int:
 
 
 ## RF-300: las torres que se ven en la barra de este nivel: todas las comunes y las reservadas que el nivel habilita.
-func available_towers(all_towers: Array[TowerData]) -> Array[TowerData]:
+func available_towers(all_towers: Array[TowerData], is_collected: Callable = Callable()) -> Array[TowerData]:
 	var result: Array[TowerData] = []
 	for tower: TowerData in all_towers:
-		if not tower.reserved or extra_towers.has(String(tower.id)):
+		var allowed: bool = not tower.reserved or extra_towers.has(String(tower.id))
+		var collected: bool = tower.required_collection == &"" or (is_collected.is_valid() and is_collected.call(tower.required_collection))
+		if allowed and collected:
 			result.append(tower)
 	return result

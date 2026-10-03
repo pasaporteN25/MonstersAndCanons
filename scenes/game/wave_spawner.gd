@@ -88,14 +88,15 @@ func _process(delta: float) -> void:
 func _spawn(group: SpawnGroup) -> void:
 	var path: Path2D = _level.get_air_path(group.entrance_index) if group.enemy.is_flying \
 		else _level.get_ground_path(group.entrance_index)
-	_spawn_enemy(group.enemy, path, 0.0)
+	_spawn_enemy(group.enemy, path, 0.0, true)
 
 
 ## Crea un enemigo con la vida de la oleada en curso (RF-36), a `distance` píxeles del
 ## comienzo de su camino.
-func _spawn_enemy(data: EnemyData, path: Path2D, distance: float) -> void:
+func _spawn_enemy(data: EnemyData, path: Path2D, distance: float, original: bool = false) -> void:
 	var enemy: Enemy = ENEMY_SCENE.instantiate()
 	var health: int = Rules.scaled_health_percent(data.max_health, _wave_number, _health_scale_percent)
+	enemy.set_meta("original_spawn", original)
 	enemy.setup(data, path, health)
 	enemy.distance = distance
 	if data.death_spawn != null and data.death_spawn_count > 0:
