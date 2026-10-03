@@ -374,3 +374,6 @@ Abrir `build/JuegoA_m32.exe`, pasar el puntero sobre los iconos de la barra, rev
 
 ### Probar M33
 Abrir `build/JuegoA_m33.exe`; revisar Opciones desde menú y pausa (sonido/visualización), niveles/comunidad, Wiki, récords, final e iniciales. Probar editor/Ajustes/Oleadas/diálogos en modo pruebas. Capturas en `art/redesign-m33/`; ejecutar `capture.tscn` reproduce las siete pantallas. Windows exportado y arranque verificado; Linux exportado sin ejecutar, móvil sin probar.
+
+### Prueba manual M35 · Panel de torre
+Seleccionar torres de niveles1–3, revisar daño/cadencia/alcance, descripción y voladores. Cambiar prioridad, mejorar con U, vender con S; comprobar falta de oro y nivel máximo. Aturdir una torre: aparece cuenta atrás independiente del título. En Hielo, recorrer el detalle hasta ver sinergias y capacidad aérea. Con texto largo, desplazar el detalle y recorrer botones con Tab: ninguna acción sale del panel ni tapa la barra de construcción. Revisar también ventana1280×720 y tamaños escalados.

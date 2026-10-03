@@ -153,17 +153,18 @@ func test_the_panel_says_when_the_tower_is_stunned_and_counts_down() -> void:
 	add_child_autofree(panel)
 	var tower: Tower = _tower()
 	panel.show_tower(tower, 10, 100)
-	var title: Label = panel.get_node("%Title")
-	assert_false(title.text.contains("Aturdida"))
+	var status: Label = panel.get_node("%Status")
+	assert_false(status.visible)
 	tower.stun(2.4)
 	panel._process(0.0)
-	assert_string_contains(title.text, "Aturdida (3 s)", "se redondea hacia arriba")
+	assert_string_contains(status.text, "Aturdida (3 s)", "se redondea hacia arriba")
+	assert_true(status.visible)
 	_step(tower, 1.0)
 	panel._process(0.0)
-	assert_string_contains(title.text, "Aturdida (2 s)")
+	assert_string_contains(status.text, "Aturdida (2 s)")
 	_step(tower, 2.0)
 	panel._process(0.0)
-	assert_false(title.text.contains("Aturdida"), "al pasar, el título vuelve a ser el de siempre")
+	assert_false(status.visible, "al pasar, se oculta el estado")
 
 
 func test_the_panel_of_an_unstunned_tower_is_unchanged() -> void:

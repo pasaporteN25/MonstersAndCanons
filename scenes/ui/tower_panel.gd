@@ -17,6 +17,13 @@ var partner_towers: Array[TowerData] = []
 
 @onready var _title: Label = %Title
 @onready var _stats: Label = %Stats
+@onready var _description: Label = %Description
+@onready var _damage: Label = %Damage
+@onready var _rate: Label = %Rate
+@onready var _range: Label = %Range
+@onready var _air: Label = %Air
+@onready var _details: ScrollContainer = %Details
+@onready var _status: Label = %Status
 @onready var _targeting_button: Button = %TargetingButton
 @onready var _upgrade_button: Button = %UpgradeButton
 @onready var _sell_button: Button = %SellButton
@@ -31,6 +38,8 @@ func _ready() -> void:
 
 ## Muestra la torre (o se oculta si es null). `gold` decide si Mejorar está activo.
 func show_tower(tower: Tower, sell_value: int, gold: int) -> void:
+	if tower != _tower:
+		_details.scroll_vertical = 0
 	_tower = tower
 	_sell_value = sell_value
 	visible = tower != null
@@ -51,12 +60,21 @@ func refresh(gold: int) -> void:
 	var s: TowerLevelData = _tower.stats()
 	_shown_stun = ceili(_tower.stun_left())
 	_title.text = "%s · Nivel %d" % [_tower.data.display_name, _tower.level_number()]
-	if _shown_stun > 0:
-		_title.text += " · Aturdida (%d s)" % _shown_stun  # RF-280
-	_stats.text = TowerText.describe(s, _tower.data.can_hit_air)
+	_title.tooltip_text = _title.text
+	_status.visible = _shown_stun > 0
+	_status.text = "Aturdida (%d s)" % _shown_stun
+	_damage.text = str(s.damage)
+	_rate.text = "%.1f/s" % s.fire_rate
+	_range.text = "%.1f" % s.range_tiles
+	_description.text = _tower.data.description
+	_description.visible = not _description.text.is_empty()
+	_air.text = "Voladores: %s" % ("sí" if _tower.data.can_hit_air else "no")
+	_stats.text = "\n".join(TowerText.effects(s))
 	for line: String in TowerText.combo_partners(_tower.data, partner_towers):  # RF-317
 		# Espacio que no corta: si la línea no entra, que no quede "+25" arriba y "%" abajo.
 		_stats.text += "\n" + line.replace(" %", " %")
+	_stats.text = _stats.text.strip_edges()
+	_stats.visible = not _stats.text.is_empty()
 	_targeting_button.text = "Apuntar: %s" % _tower.targeting_name()
 	var next: TowerLevelData = _tower.next_level_stats()
 	if next == null:
@@ -65,4 +83,5 @@ func refresh(gold: int) -> void:
 	else:
 		_upgrade_button.text = "Mejorar (%d)  [U]" % next.cost
 		_upgrade_button.disabled = gold < next.cost
+	_upgrade_button.tooltip_text = "Nivel máximo alcanzado" if next == null else ("Faltan %d de oro" % (next.cost - gold) if gold < next.cost else "Mejorar torre · U")
 	_sell_button.text = "Vender (+%d)  [S]" % _sell_value

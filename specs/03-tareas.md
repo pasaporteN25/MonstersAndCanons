@@ -1090,3 +1090,10 @@
   **Refs:** revisión de Lucas de archivos sin commit, archivo de arte.
   **Hecho cuando:** se identifica todo lo pendiente, se conservan bocetos/herramientas/UID útiles, se excluyen temporales/proyecto vacío y se sube al PR#1.
   **Resultado T178:** materiales históricos de branding, torres3D y full-pass archivados, incluidas alternativas descartadas; UID de herramientas previas conservados. Logs y `.import` de art ignorados, proyecto secundario vacío excluido sin eliminarlo. No hay cambios de producción ni integración de bocetos. Verificación de inventario y `git diff --check`; GUT no se repite al no cambiar ejecución.
+
+### M35 · Panel de información y mejoras
+- [x] **T180 · Renovar el panel de torre (B-28).**
+  **Refs:** RF-349, D-061.
+  **Hecho cuando:** métricas/detalle/acciones agrupados con hierro-bronce, textos largos desplazables, foco y estados de nivel1–3/sin oro/aturdida/sinergias verificados, capturas revisadas, GUT y exportaciones correctos. Conservar cambios Android previos fuera del commit.
+
+  **Resultado T180:** panel hierro/bronce de270×356 píxeles lógicos, tres métricas, descripción/efectos/sinergias desplazables, acciones fijas, estado de aturdimiento separado y foco visible.892/892 GUT,8074 asserts,69 scripts; sin SCRIPT ERROR/Parse Error. Doce capturas reales revisadas en1920×1080 y1280×720. Windows normal/pruebas y Linux exportados; arranque Windows comprobado. Sin ejecución física Linux/Android. Aviso previo de certificados persiste. Cambios M34 anteriores conservados fuera del commit.

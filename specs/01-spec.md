@@ -1420,7 +1420,7 @@ La wiki de M11 ya es escalable a propósito (categorías → entradas → bloque
 **Prioridad media · Análisis pendiente.** Extiende la propuesta B1 de §5.8 y B-16.C, todavía sin implementar. Investigar combinaciones de ataques entre torres cercanas, habilitadas recién desde nivel de **mejora de torre2 o3** (distinto del número de nivel de campaña). Decidir si ambas torres deben alcanzar el mínimo, qué pares califican y si el efecto combinado reemplaza o suma al ataque normal. Comparar requisito2 frente a3, legibilidad de vínculos/vista previa y respuesta al mejorar, vender o aturdir una vecina; medir balance y rendimiento. Conservar separadas las reacciones por estado existentes de M20, que ya funcionan sin vecindad. **Entrega futura:** pocas recetas propuestas, reglas de activación y prueba de balance; sin cambiar las reglas actuales hasta aprobación.
 
 ### Ampliación del backlog · Lucas, 2026-10-02
-B-24 a B-28: **prioridad media, pendientes, solo registro sin implementación autorizada**. Complementan la renovación visual actual; B-19 sigue completo para los submenús y B-28 cubre el panel de torre en partida que no formó parte de esa tarea.
+B-24 a B-27: **prioridad media, pendientes, solo registro sin implementación autorizada**. B-28 completado en M35 (T180, RF-349), autorizado por Lucas el2026-10-03. Complementan la renovación visual actual; B-19 sigue completo para los submenús y B-28 cubre el panel de torre en partida que no formó parte de esa tarea.
 
 ### B-24 · Renovar los assets de muerte de enemigos
 Volver a generar los efectos/poses de muerte, que quedaron desactualizados frente a los monstruos renderizados y sus ciclos M31. Relevar lo existente y definir si conviene un efecto común con variantes o ciclos propios por criatura; conservar identidad, escala, apoyo y claridad cuando mueren varios juntos. **Entrega futura:** muestras de muertes en combate y cobertura del bestiario. No alterar momento de muerte, recompensa, salida de crías ni desaparición lógica; respetar pausa/velocidad y límites de efectos simultáneos.
@@ -1434,7 +1434,7 @@ Mejorar aura e indicación de curación sobre los enemigos afectados: un efecto 
 ### B-27 · Mejorar música y efectos de sonido
 Relevar música y efectos actuales; mejorar o rediseñar su calidad y coherencia con Monsters & Canons. Evaluar música de menú/partida y señales de disparos, impactos, muerte, mejora, rebote, curación, combos, victoria/derrota e interfaz; priorizar según el relevamiento. Evitar fatiga y saturación con muchos ataques, equilibrar volúmenes y conservar controles de Opciones. **Entrega futura:** muestras de audio y propuesta de mezcla/variantes antes de reemplazar archivos; registrar procedencia/licencia de los recursos elegidos. No generar ni integrar audio en esta tarea de registro.
 
-### B-28 · Renovar el panel de información y mejoras de torre
+### B-28 · ~~Renovar el panel de información y mejoras de torre~~
 Rediseñar el panel en partida de la captura de Lucas (Ráfaga · Nivel2): título/nivel, daño, cadencia, alcance, descripción, capacidad contra voladores, selector de apuntado, Mejorar y Vender. Aplicar hierro/bronce y mejor jerarquía/agrupación, fondo legible y compacto, sin tapar más partida. Mantener precios, devolución, atajos U/S, estados sin oro/nivel máximo/aturdida y datos de sinergias. **Entrega futura:** muestras con torres de niveles1–3 y textos cortos/largos; verificar foco, controles y tamaños soportados. Relacionado con B-20 (marcas visuales del nivel), pero independiente de cambiar los assets de torre.
 
 ## 14. Arte de torres con volumen (M23, pedido por Lucas, 2026-10-02)
@@ -1502,3 +1502,7 @@ Lucas eligió entre las propuestas de la tanda 1 (`art/redesign-m24/`): **Normal
 
 ### M33 · Submenús renovados
 - **RF-347** Opciones, selección de niveles, Wiki, récords, final, iniciales/Salón de la Fama y editor/diálogos adoptan el tema hierro-bronce sin alterar funciones. Dado un submenú, cuando se abre desde menú o partida, entonces conserva navegación y controles legibles, foco visible y paneles coherentes. Opciones separa sonido y visualización y usa deslizadores/casillas del tema.
+
+### M35 · Panel de torre renovado (B-28, Lucas, 2026-10-03)
+- **RF-349** El panel seleccionado usa hierro/bronce, título y nivel, tres cifras agrupadas (daño, cadencia, alcance), descripción, efectos/sinergias y capacidad contra voladores. El contenido largo se desplaza dentro del panel; apuntado, Mejorar y Vender permanecen visibles. Conserva ancho de270 píxeles lógicos, límite inferior sobre la barra de construcción y atajos U/S.
+  **Aceptación:** Dada una torre de nivel1–3 con texto corto o largo, cuando se selecciona, mejora, cambia el oro o se aturde, entonces los datos/precios/devolución siguen correctos, el estado es legible, el panel no invade la barra inferior y sus botones tienen foco visible. Sin oro y en nivel máximo se desactiva Mejorar; vender y apuntar conservan sus señales y reglas.

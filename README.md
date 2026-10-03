@@ -204,3 +204,6 @@ HUD compacto con ayudas; barra, pausa y administración con estilo hierro/bronce
 
 ### Submenús M33
 Opciones, niveles/comunidad, Wiki, récords, final, iniciales/Salón y editor/diálogos comparten el tema local hierro-bronce. B-19 completado; controles y datos conservados.
+
+### Panel de torre M35
+Información agrupada con hierro/bronce: daño, cadencia y alcance arriba; descripción, efectos y sinergias desplazables; apuntado, Mejorar y Vender siempre accesibles. Estado de aturdimiento separado y foco visible. Capturas en `art/redesign-m35/`.

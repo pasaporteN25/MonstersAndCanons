@@ -131,3 +131,6 @@ Las nueve torres usan mecanismos nuevos en niveles 2 y 3. Guardián, Curandero, 
 ## Muestras de legibilidad y presentación *(M28, pendientes de aprobación)*
 
 Comparaciones del arte pendiente de Volador, Blindado, Troll, Araña y Cría; cuerpos+20%/+35%; ciclos de caminar y aleteo exploratorio; presentación1920×1080 para escritorio; ajustes de contacto entre torreta/base y dos conceptos integrados de Cañón. Fuentes, GIF y capturas en `art/redesign-m28/`. Estas propuestas **todavía no cambian la partida**, su resolución, balance ni colisiones. La descripción del PR queda a cargo de Lucas.
+
+### M35 · Panel de torre
+- Panel de información y mejoras con estilo hierro/bronce, métricas agrupadas y detalle desplazable. Los botones quedan visibles incluso con textos largos; aturdimiento y foco de teclado se distinguen.
