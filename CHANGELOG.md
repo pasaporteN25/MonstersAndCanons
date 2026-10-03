@@ -134,3 +134,9 @@ Comparaciones del arte pendiente de Volador, Blindado, Troll, Araña y Cría; cu
 
 ### M35 · Panel de torre
 - Panel de información y mejoras con estilo hierro/bronce, métricas agrupadas y detalle desplazable. Los botones quedan visibles incluso con textos largos; aturdimiento y foco de teclado se distinguen.
+
+### M36 · Mejoras B-20 a B-27
+- Marcas de nivel integradas en la base; rebote, aturdimiento, recuperación y curación más legibles.
+- Muertes conservan brevemente la pose del monstruo y se desintegran sin demorar recompensa ni crías.
+- Música propia de menú/combate, efectos suaves y avisos protegidos de los disparos; limitador de mezcla.
+- Estudios de profundidad, contenido/desbloqueos y combos vecinales entregados; esas mecánicas no se activaron en el juego.

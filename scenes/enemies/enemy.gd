@@ -526,8 +526,13 @@ func _draw_aura_ring() -> void:
 		rings.append(AURA_HEAL_COLOR)
 	for i: int in rings.size():
 		var ring_radius: float = radius - i * 3.0  # si da las dos cosas, dos anillos casi juntos
-		draw_circle(Vector2.ZERO, ring_radius, Color(rings[i], 0.07))
-		draw_arc(Vector2.ZERO, ring_radius, 0.0, TAU, 72, Color(rings[i], pulse), 2.0, true)
+		draw_arc(Vector2.ZERO, ring_radius, 0.0, TAU, 72, Color(rings[i], pulse * 0.6), 1.2, true)
+		if rings[i] == AURA_HEAL_COLOR:
+			for petal: int in 12:
+				var angle: float = TAU * petal / 12.0
+				var p: Vector2 = Vector2.from_angle(angle) * ring_radius
+				draw_line(p - Vector2.from_angle(angle) * 3, p + Vector2.from_angle(angle) * 3,
+					Color(0.82, 0.97, 0.52, 0.35 + pulse * 0.3), 2.0, true)
 
 
 ## RF-274: un escudo (recibe armadura de un aura) y/o una cruz verde (recibe cura), chicos, a un costado.
@@ -547,7 +552,7 @@ func _draw_aura_icons(top: float) -> void:
 		draw_colored_polygon(shield, AURA_ARMOR_COLOR)
 		draw_polyline(shield + PackedVector2Array([shield[0]]), AURA_INK, 1.4)
 		x += 13.0
-	if _aura_heal > 0.0:
+	if _aura_heal > 0.0 and health < max_health and not is_burning():
 		draw_line(Vector2(x - 5, y), Vector2(x + 5, y), AURA_INK, 4.6)
 		draw_line(Vector2(x, y - 5), Vector2(x, y + 5), AURA_INK, 4.6)
 		draw_line(Vector2(x - 4, y), Vector2(x + 4, y), AURA_HEAL_COLOR, 2.4)

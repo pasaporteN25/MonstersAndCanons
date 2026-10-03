@@ -377,3 +377,6 @@ Abrir `build/JuegoA_m33.exe`; revisar Opciones desde menú y pausa (sonido/visua
 
 ### Prueba manual M35 · Panel de torre
 Seleccionar torres de niveles1–3, revisar daño/cadencia/alcance, descripción y voladores. Cambiar prioridad, mejorar con U, vender con S; comprobar falta de oro y nivel máximo. Aturdir una torre: aparece cuenta atrás independiente del título. En Hielo, recorrer el detalle hasta ver sinergias y capacidad aérea. Con texto largo, desplazar el detalle y recorrer botones con Tab: ninguna acción sale del panel ni tapa la barra de construcción. Revisar también ventana1280×720 y tamaños escalados.
+
+### M36 · Comprobar niveles, efectos y sonido
+Revisar las nueve torres niveles1–3 y Mortero2×2, también aturdidas: contar remaches sin depender del brillo. Probar Espejo/Chamán, origen del efecto y recuperación. Curandero con heridos/vida completa/fuego y Troll regenerando: distinguir radio del aura de cura efectiva. Matar las trece especies, pausar y usar x2 durante efectos; verificar crías/oro/salida. Escuchar menú y combate, luego impactos/rebote/hechizo/cura con muchas torres; Opciones al0/50/100%. Muestras y laboratorio en art/redesign-m36; requieren APPDATA aislado. No implica prueba física Android/Linux ni aprobación auditiva humana.

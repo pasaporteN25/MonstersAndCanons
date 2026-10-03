@@ -405,14 +405,17 @@ func dev_spawn(data: EnemyData) -> void:
 func _on_enemy_spawned(enemy: Enemy) -> void:
 	enemy.died.connect(_on_enemy_died)
 	enemy.cast_stun.connect(func(shaman: Enemy, tower: Tower) -> void:
-		effects.stun_bolt(shaman.global_position, tower.global_position))  # RF-282
+		effects.stun_bolt(shaman.global_position, tower.global_position)
+		Audio.play(&"stun", 0.2))  # RF-282
 	enemy.reflected.connect(func(mirror: Enemy, tower: Tower, first: bool) -> void:
-		effects.reflect(mirror.global_position, tower.global_position, first))  # RF-284
+		effects.reflect(mirror.global_position, tower.global_position, first)
+		Audio.play(&"reflect", 0.15))  # RF-284
 	enemy.reached_exit.connect(_on_enemy_reached_exit)
 	enemy.hit.connect(_on_enemy_hit)
 	enemy.set_exploitable(_exploit_slowed, _exploit_burning)  # RF-318
 	enemy.healed.connect(func(e: Enemy, amount: int) -> void:
-		effects.heal_number(e.global_position, amount))  # RF-165
+		effects.heal_number(e.global_position, amount)
+		Audio.play(&"heal", 0.8))  # RF-165
 	# RF-134: la primera vez en todo el juego que aparece este tipo, se presenta.
 	if not SaveManager.has_seen_enemy(enemy.data.id):
 		SaveManager.mark_enemy_seen(enemy.data.id)
@@ -434,7 +437,7 @@ func _on_enemy_died(enemy: Enemy) -> void:
 	session.earn(enemy.data.reward)  # RF-21
 	session.add_score(Rules.kill_points(enemy.data.reward, balance))  # RF-190
 	effects.enemy_died(enemy.global_position, enemy.data.color,
-		Rules.tiles_to_px(enemy.data.size_tiles), enemy.data.reward)
+		Rules.tiles_to_px(enemy.data.size_tiles), enemy.data.reward, enemy)
 	Audio.play(&"enemy_death")
 
 
@@ -500,6 +503,8 @@ func _refresh_tower_panel() -> void:
 func _on_tower_fired(projectile: Projectile) -> void:
 	projectiles.add_child(projectile)
 	projectile.impacted.connect(effects.projectile_impacted)
+	projectile.impacted.connect(func(_position: Vector2, _stats: TowerLevelData) -> void:
+		Audio.play(&"impact", 0.12))
 	projectile.chained.connect(effects.lightning)  # RF-163
 
 

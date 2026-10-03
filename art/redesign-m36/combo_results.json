@@ -1,0 +1,750 @@
+{
+	"100000_pair_checks_usec": 29027,
+	"activation_costs": [
+		{
+			"minimum_level": 2,
+			"pair": [
+				"frost",
+				"cannon"
+			],
+			"total_investment": 365
+		},
+		{
+			"minimum_level": 3,
+			"pair": [
+				"frost",
+				"cannon"
+			],
+			"total_investment": 655
+		},
+		{
+			"minimum_level": 2,
+			"pair": [
+				"frost",
+				"multi"
+			],
+			"total_investment": 345
+		},
+		{
+			"minimum_level": 3,
+			"pair": [
+				"frost",
+				"multi"
+			],
+			"total_investment": 605
+		},
+		{
+			"minimum_level": 2,
+			"pair": [
+				"fire",
+				"tesla"
+			],
+			"total_investment": 430
+		},
+		{
+			"minimum_level": 3,
+			"pair": [
+				"fire",
+				"tesla"
+			],
+			"total_investment": 750
+		}
+	],
+	"cases": [
+		{
+			"armor": 0,
+			"base": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 384,
+				"dps": 19.2,
+				"equivalent_stop_seconds": 0.0
+			},
+			"damage_change_percent": 0.0,
+			"level": 2,
+			"recipe": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 384,
+				"dps": 19.2,
+				"equivalent_stop_seconds": 1.8
+			},
+			"slow_resistance": 0.0,
+			"tower": "cannon"
+		},
+		{
+			"armor": 0,
+			"base": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 384,
+				"dps": 19.2,
+				"equivalent_stop_seconds": 0.0
+			},
+			"damage_change_percent": 0.0,
+			"level": 2,
+			"recipe": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 384,
+				"dps": 19.2,
+				"equivalent_stop_seconds": 0.900000000000002
+			},
+			"slow_resistance": 0.5,
+			"tower": "cannon"
+		},
+		{
+			"armor": 4,
+			"base": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 336,
+				"dps": 16.8,
+				"equivalent_stop_seconds": 0.0
+			},
+			"damage_change_percent": 0.0,
+			"level": 2,
+			"recipe": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 336,
+				"dps": 16.8,
+				"equivalent_stop_seconds": 1.8
+			},
+			"slow_resistance": 0.0,
+			"tower": "cannon"
+		},
+		{
+			"armor": 4,
+			"base": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 336,
+				"dps": 16.8,
+				"equivalent_stop_seconds": 0.0
+			},
+			"damage_change_percent": 0.0,
+			"level": 2,
+			"recipe": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 336,
+				"dps": 16.8,
+				"equivalent_stop_seconds": 0.900000000000002
+			},
+			"slow_resistance": 0.5,
+			"tower": "cannon"
+		},
+		{
+			"armor": 12,
+			"base": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 240,
+				"dps": 12.0,
+				"equivalent_stop_seconds": 0.0
+			},
+			"damage_change_percent": 0.0,
+			"level": 2,
+			"recipe": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 240,
+				"dps": 12.0,
+				"equivalent_stop_seconds": 1.8
+			},
+			"slow_resistance": 0.0,
+			"tower": "cannon"
+		},
+		{
+			"armor": 12,
+			"base": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 240,
+				"dps": 12.0,
+				"equivalent_stop_seconds": 0.0
+			},
+			"damage_change_percent": 0.0,
+			"level": 2,
+			"recipe": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 240,
+				"dps": 12.0,
+				"equivalent_stop_seconds": 0.900000000000002
+			},
+			"slow_resistance": 0.5,
+			"tower": "cannon"
+		},
+		{
+			"armor": 0,
+			"base": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 600,
+				"dps": 30.0,
+				"equivalent_stop_seconds": 0.0
+			},
+			"damage_change_percent": 0.0,
+			"level": 3,
+			"recipe": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 600,
+				"dps": 30.0,
+				"equivalent_stop_seconds": 1.8
+			},
+			"slow_resistance": 0.0,
+			"tower": "cannon"
+		},
+		{
+			"armor": 0,
+			"base": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 600,
+				"dps": 30.0,
+				"equivalent_stop_seconds": 0.0
+			},
+			"damage_change_percent": 0.0,
+			"level": 3,
+			"recipe": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 600,
+				"dps": 30.0,
+				"equivalent_stop_seconds": 0.900000000000002
+			},
+			"slow_resistance": 0.5,
+			"tower": "cannon"
+		},
+		{
+			"armor": 4,
+			"base": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 552,
+				"dps": 27.6,
+				"equivalent_stop_seconds": 0.0
+			},
+			"damage_change_percent": 0.0,
+			"level": 3,
+			"recipe": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 552,
+				"dps": 27.6,
+				"equivalent_stop_seconds": 1.8
+			},
+			"slow_resistance": 0.0,
+			"tower": "cannon"
+		},
+		{
+			"armor": 4,
+			"base": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 552,
+				"dps": 27.6,
+				"equivalent_stop_seconds": 0.0
+			},
+			"damage_change_percent": 0.0,
+			"level": 3,
+			"recipe": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 552,
+				"dps": 27.6,
+				"equivalent_stop_seconds": 0.900000000000002
+			},
+			"slow_resistance": 0.5,
+			"tower": "cannon"
+		},
+		{
+			"armor": 12,
+			"base": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 456,
+				"dps": 22.8,
+				"equivalent_stop_seconds": 0.0
+			},
+			"damage_change_percent": 0.0,
+			"level": 3,
+			"recipe": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 456,
+				"dps": 22.8,
+				"equivalent_stop_seconds": 1.8
+			},
+			"slow_resistance": 0.0,
+			"tower": "cannon"
+		},
+		{
+			"armor": 12,
+			"base": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 456,
+				"dps": 22.8,
+				"equivalent_stop_seconds": 0.0
+			},
+			"damage_change_percent": 0.0,
+			"level": 3,
+			"recipe": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 456,
+				"dps": 22.8,
+				"equivalent_stop_seconds": 0.900000000000002
+			},
+			"slow_resistance": 0.5,
+			"tower": "cannon"
+		},
+		{
+			"armor": 0,
+			"base": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 234,
+				"dps": 11.7,
+				"equivalent_stop_seconds": 0.0
+			},
+			"damage_change_percent": 0.0,
+			"level": 2,
+			"recipe": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 234,
+				"dps": 11.7,
+				"equivalent_stop_seconds": 2.99999999999998
+			},
+			"slow_resistance": 0.0,
+			"tower": "multi"
+		},
+		{
+			"armor": 0,
+			"base": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 234,
+				"dps": 11.7,
+				"equivalent_stop_seconds": 0.0
+			},
+			"damage_change_percent": 0.0,
+			"level": 2,
+			"recipe": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 234,
+				"dps": 11.7,
+				"equivalent_stop_seconds": 1.49999999999999
+			},
+			"slow_resistance": 0.5,
+			"tower": "multi"
+		},
+		{
+			"armor": 4,
+			"base": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 130,
+				"dps": 6.5,
+				"equivalent_stop_seconds": 0.0
+			},
+			"damage_change_percent": 0.0,
+			"level": 2,
+			"recipe": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 130,
+				"dps": 6.5,
+				"equivalent_stop_seconds": 2.99999999999998
+			},
+			"slow_resistance": 0.0,
+			"tower": "multi"
+		},
+		{
+			"armor": 4,
+			"base": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 130,
+				"dps": 6.5,
+				"equivalent_stop_seconds": 0.0
+			},
+			"damage_change_percent": 0.0,
+			"level": 2,
+			"recipe": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 130,
+				"dps": 6.5,
+				"equivalent_stop_seconds": 1.49999999999999
+			},
+			"slow_resistance": 0.5,
+			"tower": "multi"
+		},
+		{
+			"armor": 12,
+			"base": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 26,
+				"dps": 1.3,
+				"equivalent_stop_seconds": 0.0
+			},
+			"damage_change_percent": 0.0,
+			"level": 2,
+			"recipe": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 26,
+				"dps": 1.3,
+				"equivalent_stop_seconds": 2.99999999999998
+			},
+			"slow_resistance": 0.0,
+			"tower": "multi"
+		},
+		{
+			"armor": 12,
+			"base": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 26,
+				"dps": 1.3,
+				"equivalent_stop_seconds": 0.0
+			},
+			"damage_change_percent": 0.0,
+			"level": 2,
+			"recipe": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 26,
+				"dps": 1.3,
+				"equivalent_stop_seconds": 1.49999999999999
+			},
+			"slow_resistance": 0.5,
+			"tower": "multi"
+		},
+		{
+			"armor": 0,
+			"base": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 312,
+				"dps": 15.6,
+				"equivalent_stop_seconds": 0.0
+			},
+			"damage_change_percent": 0.0,
+			"level": 3,
+			"recipe": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 312,
+				"dps": 15.6,
+				"equivalent_stop_seconds": 2.99999999999998
+			},
+			"slow_resistance": 0.0,
+			"tower": "multi"
+		},
+		{
+			"armor": 0,
+			"base": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 312,
+				"dps": 15.6,
+				"equivalent_stop_seconds": 0.0
+			},
+			"damage_change_percent": 0.0,
+			"level": 3,
+			"recipe": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 312,
+				"dps": 15.6,
+				"equivalent_stop_seconds": 1.49999999999999
+			},
+			"slow_resistance": 0.5,
+			"tower": "multi"
+		},
+		{
+			"armor": 4,
+			"base": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 208,
+				"dps": 10.4,
+				"equivalent_stop_seconds": 0.0
+			},
+			"damage_change_percent": 0.0,
+			"level": 3,
+			"recipe": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 208,
+				"dps": 10.4,
+				"equivalent_stop_seconds": 2.99999999999998
+			},
+			"slow_resistance": 0.0,
+			"tower": "multi"
+		},
+		{
+			"armor": 4,
+			"base": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 208,
+				"dps": 10.4,
+				"equivalent_stop_seconds": 0.0
+			},
+			"damage_change_percent": 0.0,
+			"level": 3,
+			"recipe": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 208,
+				"dps": 10.4,
+				"equivalent_stop_seconds": 1.49999999999999
+			},
+			"slow_resistance": 0.5,
+			"tower": "multi"
+		},
+		{
+			"armor": 12,
+			"base": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 26,
+				"dps": 1.3,
+				"equivalent_stop_seconds": 0.0
+			},
+			"damage_change_percent": 0.0,
+			"level": 3,
+			"recipe": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 26,
+				"dps": 1.3,
+				"equivalent_stop_seconds": 2.99999999999998
+			},
+			"slow_resistance": 0.0,
+			"tower": "multi"
+		},
+		{
+			"armor": 12,
+			"base": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 26,
+				"dps": 1.3,
+				"equivalent_stop_seconds": 0.0
+			},
+			"damage_change_percent": 0.0,
+			"level": 3,
+			"recipe": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 26,
+				"dps": 1.3,
+				"equivalent_stop_seconds": 1.49999999999999
+			},
+			"slow_resistance": 0.5,
+			"tower": "multi"
+		},
+		{
+			"armor": 0,
+			"base": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 323,
+				"dps": 16.15,
+				"equivalent_stop_seconds": 0.0
+			},
+			"damage_change_percent": 10.5263157894737,
+			"level": 2,
+			"recipe": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 357,
+				"dps": 17.85,
+				"equivalent_stop_seconds": 0.0
+			},
+			"slow_resistance": 0.0,
+			"tower": "tesla"
+		},
+		{
+			"armor": 0,
+			"base": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 323,
+				"dps": 16.15,
+				"equivalent_stop_seconds": 0.0
+			},
+			"damage_change_percent": 10.5263157894737,
+			"level": 2,
+			"recipe": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 357,
+				"dps": 17.85,
+				"equivalent_stop_seconds": 0.0
+			},
+			"slow_resistance": 0.5,
+			"tower": "tesla"
+		},
+		{
+			"armor": 4,
+			"base": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 255,
+				"dps": 12.75,
+				"equivalent_stop_seconds": 0.0
+			},
+			"damage_change_percent": 13.3333333333333,
+			"level": 2,
+			"recipe": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 289,
+				"dps": 14.45,
+				"equivalent_stop_seconds": 0.0
+			},
+			"slow_resistance": 0.0,
+			"tower": "tesla"
+		},
+		{
+			"armor": 4,
+			"base": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 255,
+				"dps": 12.75,
+				"equivalent_stop_seconds": 0.0
+			},
+			"damage_change_percent": 13.3333333333333,
+			"level": 2,
+			"recipe": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 289,
+				"dps": 14.45,
+				"equivalent_stop_seconds": 0.0
+			},
+			"slow_resistance": 0.5,
+			"tower": "tesla"
+		},
+		{
+			"armor": 12,
+			"base": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 119,
+				"dps": 5.95,
+				"equivalent_stop_seconds": 0.0
+			},
+			"damage_change_percent": 28.5714285714286,
+			"level": 2,
+			"recipe": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 153,
+				"dps": 7.65,
+				"equivalent_stop_seconds": 0.0
+			},
+			"slow_resistance": 0.0,
+			"tower": "tesla"
+		},
+		{
+			"armor": 12,
+			"base": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 119,
+				"dps": 5.95,
+				"equivalent_stop_seconds": 0.0
+			},
+			"damage_change_percent": 28.5714285714286,
+			"level": 2,
+			"recipe": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 153,
+				"dps": 7.65,
+				"equivalent_stop_seconds": 0.0
+			},
+			"slow_resistance": 0.5,
+			"tower": "tesla"
+		},
+		{
+			"armor": 0,
+			"base": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 513,
+				"dps": 25.65,
+				"equivalent_stop_seconds": 0.0
+			},
+			"damage_change_percent": 7.40740740740742,
+			"level": 3,
+			"recipe": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 551,
+				"dps": 27.55,
+				"equivalent_stop_seconds": 0.0
+			},
+			"slow_resistance": 0.0,
+			"tower": "tesla"
+		},
+		{
+			"armor": 0,
+			"base": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 513,
+				"dps": 25.65,
+				"equivalent_stop_seconds": 0.0
+			},
+			"damage_change_percent": 7.40740740740742,
+			"level": 3,
+			"recipe": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 551,
+				"dps": 27.55,
+				"equivalent_stop_seconds": 0.0
+			},
+			"slow_resistance": 0.5,
+			"tower": "tesla"
+		},
+		{
+			"armor": 4,
+			"base": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 437,
+				"dps": 21.85,
+				"equivalent_stop_seconds": 0.0
+			},
+			"damage_change_percent": 8.69565217391304,
+			"level": 3,
+			"recipe": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 475,
+				"dps": 23.75,
+				"equivalent_stop_seconds": 0.0
+			},
+			"slow_resistance": 0.0,
+			"tower": "tesla"
+		},
+		{
+			"armor": 4,
+			"base": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 437,
+				"dps": 21.85,
+				"equivalent_stop_seconds": 0.0
+			},
+			"damage_change_percent": 8.69565217391304,
+			"level": 3,
+			"recipe": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 475,
+				"dps": 23.75,
+				"equivalent_stop_seconds": 0.0
+			},
+			"slow_resistance": 0.5,
+			"tower": "tesla"
+		},
+		{
+			"armor": 12,
+			"base": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 285,
+				"dps": 14.25,
+				"equivalent_stop_seconds": 0.0
+			},
+			"damage_change_percent": 13.3333333333333,
+			"level": 3,
+			"recipe": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 323,
+				"dps": 16.15,
+				"equivalent_stop_seconds": 0.0
+			},
+			"slow_resistance": 0.0,
+			"tower": "tesla"
+		},
+		{
+			"armor": 12,
+			"base": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 285,
+				"dps": 14.25,
+				"equivalent_stop_seconds": 0.0
+			},
+			"damage_change_percent": 13.3333333333333,
+			"level": 3,
+			"recipe": {
+				"assumption": "Lado receptor solamente; sin daño ni estados del compañero",
+				"damage": 323,
+				"dps": 16.15,
+				"equivalent_stop_seconds": 0.0
+			},
+			"slow_resistance": 0.5,
+			"tower": "tesla"
+		}
+	],
+	"scope": "Un objetivo inmóvil, sin distancia de proyectiles ni oleadas; prueba de mecánica, no balance final de campaña",
+	"seconds_per_case": 20.0,
+	"topology": {
+		"aturdida": false,
+		"borde2x2": true,
+		"diagonal": true,
+		"nivel1": false,
+		"separadas": false,
+		"vendida": false
+	},
+	"topology_passed": true
+}

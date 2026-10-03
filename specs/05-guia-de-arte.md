@@ -86,3 +86,6 @@ Para las torres nuevas, esta sección reemplaza las reglas de SVG y vista latera
 ## 8. Monstruos renderizados (M24, D-050)
 
 Normal (diablillo rojo), Rápido (bestia turquesa) y Tanque (ogro de piedra y piel verde) son PNG RGBA de **256×256**, **una sola vista** con la luz arriba a la izquierda, sin sombra dibujada (la pone el juego). Cuerpo al 63,4 % del alto como máximo y pies al 74,55 % del alto; los genera `tools/prepare_monster_sprites.gd` desde `art/redesign-m24/sources/`. **No se reflejan en espejo** (`flip_when_walking_left = false`) y todavía no tienen cuadros de caminar: lo que falta pedir está en `art/FORMATO_PROXIMA_ENTREGA_M24.md`. Los otros diez enemigos siguen con las reglas de §1–2.
+
+## M36 · Lectura de estados y efectos
+Placa de nivel: hierro/bronce, remaches ámbar siempre legibles; no depende del brillo animado. Aturdimiento: aro roto violeta y descargas sobre el mecanismo, sin tapar base/sombra. Cura: límite verde amarillento suave y brotes en cura efectiva; no usar oro ni blanco de daño. Muerte: conservar la pose y escala de la criatura, disolver con shader y ocho fragmentos facetados; sin deformaciones corporales, sombras nuevas ni nuevos ciclos falsos. Efectos finitos respetan pausa/velocidad y topes (12 residuos de muerte,16 pulsos de cura).

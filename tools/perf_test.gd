@@ -101,4 +101,4 @@ func _fake_deaths(delta: float) -> void:
 	while death_timer >= 1.0:
 		death_timer -= 1.0
 		var enemy := game.enemies.get_child(randi() % game.enemies.get_child_count()) as Node2D
-		game.effects.enemy_died(enemy.global_position, normal.color, 16.0, 5)
+		game.effects.enemy_died(enemy.global_position, normal.color, 16.0, 5, enemy)

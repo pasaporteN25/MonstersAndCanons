@@ -17,6 +17,11 @@ var _last_played: Dictionary = {}  # { &"shot_basic": segundos desde el inicio }
 var _voices: Array[AudioStreamPlayer] = []
 var _next_voice: int = 0
 var _music: AudioStreamPlayer
+var _music_track: StringName = &""
+var _music_tween: Tween
+var _next_alert_voice: int = 9
+var _screen_check_left: float = 0.0
+var _variation: int = 0
 
 
 func _ready() -> void:
@@ -51,11 +56,19 @@ func play(sound: StringName, min_repeat: float = MIN_REPEAT_SECONDS) -> bool:
 	if stream == null:
 		return false
 	var now: float = Time.get_ticks_msec() / 1000.0
-	if now - float(_last_played.get(sound, -1.0)) < min_repeat:
+	var shot: bool = String(sound).begins_with("shot_") or sound == &"impact"
+	var gap: float = maxf(min_repeat, 0.08 if shot else 0.0)
+	if now - float(_last_played.get(sound, -1.0)) < gap:
 		return false
 	_last_played[sound] = now
-	var voice: AudioStreamPlayer = _voices[_next_voice]
-	_next_voice = (_next_voice + 1) % _voices.size()
+	var voice: AudioStreamPlayer = _voices[_next_voice if shot else _next_alert_voice]
+	if shot:
+		_next_voice = (_next_voice + 1) % 9
+	else:
+		_next_alert_voice = 9 + (_next_alert_voice - 9 + 1) % 3
+	_variation += 1
+	voice.pitch_scale = [0.97, 1.0, 1.03][_variation % 3] if shot else 1.0
+	voice.volume_db = -9.0 if shot else (-5.0 if sound == &"heal" else -2.0)
 	voice.stream = stream
 	voice.play()
 	return true
@@ -65,11 +78,34 @@ func has_sound(sound: StringName) -> bool:
 	return _streams.has(sound)
 
 
-func play_music() -> void:
-	var loop: AudioStream = _streams.get(&"music_loop")
-	if loop != null and not _music.playing:
+func play_music(track: StringName = &"music_menu") -> void:
+	var loop: AudioStream = _streams.get(track)
+	if loop == null or (_music_track == track and _music.playing):
+		return
+	_music_track = track
+	if _music_tween != null and _music_tween.is_valid():
+		_music_tween.kill()
+	if not _music.playing:
 		_music.stream = loop
+		_music.volume_db = -5.0
 		_music.play()
+		return
+	_music_tween = create_tween()
+	_music_tween.tween_property(_music, "volume_db", -35.0, 0.2)
+	_music_tween.tween_callback(func() -> void:
+		_music.stream = loop
+		_music.play())
+	_music_tween.tween_property(_music, "volume_db", -5.0, 0.3)
+
+
+func _process(delta: float) -> void:
+	_screen_check_left -= delta
+	if _screen_check_left > 0.0:
+		return
+	_screen_check_left = 0.25
+	var screen: Node = get_tree().current_scene
+	if screen != null:
+		play_music(&"music_combat" if screen.scene_file_path == "res://scenes/game/game.tscn" else &"music_menu")
 
 
 ## RF-113: aplica los volúmenes guardados (0 = silencio, 1 = máximo).

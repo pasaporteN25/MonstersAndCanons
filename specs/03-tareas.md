@@ -1097,3 +1097,10 @@
   **Hecho cuando:** métricas/detalle/acciones agrupados con hierro-bronce, textos largos desplazables, foco y estados de nivel1–3/sin oro/aturdida/sinergias verificados, capturas revisadas, GUT y exportaciones correctos. Conservar cambios Android previos fuera del commit.
 
   **Resultado T180:** panel hierro/bronce de270×356 píxeles lógicos, tres métricas, descripción/efectos/sinergias desplazables, acciones fijas, estado de aturdimiento separado y foco visible.892/892 GUT,8074 asserts,69 scripts; sin SCRIPT ERROR/Parse Error. Doce capturas reales revisadas en1920×1080 y1280×720. Windows normal/pruebas y Linux exportados; arranque Windows comprobado. Sin ejecución física Linux/Android. Aviso previo de certificados persiste. Cambios M34 anteriores conservados fuera del commit.
+
+### M36 · Cerrar todo el rango de mejoras
+- [x] **T181 · Completar B-20 a B-27.**
+  **Refs:** RF-350 a RF-357, D-062.
+  **Hecho cuando:** ocho entregables completos: remaches de nivel, rebote/aturdimiento, aura/cura, muerte de las trece especies, audio/menu/combate, tres prototipos de profundidad, candidatos/desbloqueos y recetas/ensayo de vecindad. Revisar capturas/audio/análisis, GUT y60FPS con200 enemigos/60 torres, exportar Windows/Linux, registrar límites y push. Preservar M34 pendiente fuera del commit.
+
+  **Resultado T181:** ocho entregables completos. B-20/24/25/26/27 integrados (placa/remaches, muerte con pose actual, rebote/aturdimiento, cura y audio). B-21/22/23 con muestras, candidatos y laboratorio de36 casos; elegir/activar esas mecánicas sigue pendiente, conforme al alcance de investigación.898/898 GUT,8150 asserts,70 scripts; sin SCRIPT ERROR/Parse Error. Diez capturas revisadas. Rendimiento200 enemigos/60 torres con nuevos residuos:100FPS promedio,28,8ms peor cuadro,7/601 cuadros por encima de16,6ms. Windows normal/pruebas y Linux exportados; ambos Windows arrancan con salida0. Sin ejecución física Linux/Android ni evaluación auditiva humana; aviso previo de certificados y limpieza de recursos al cerrar herramientas declarados. Evidencia/reproducción en art/redesign-m36/README.md. M34 previo conservado fuera del commit.
