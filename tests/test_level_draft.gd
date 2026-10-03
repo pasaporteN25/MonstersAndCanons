@@ -230,7 +230,7 @@ func test_groups() -> void:
 	draft.set_group(0, 1, "cantidad", 4)
 	draft.set_group(0, 1, "cada", 1.5)
 	draft.set_group(0, 1, "desde", 2.0)
-	assert_eq(draft.group(0, 1), {"enemigo": "troll", "cantidad": 4, "cada": 1.5, "desde": 2.0, "entrada": "A"})
+	assert_eq(draft.group(0, 1), {"enemigo": "troll", "cantidad": 4, "cada": 1.5, "desde": 2.0, "entrada": "A", "probabilidad": 1.0})
 	assert_eq(draft.enemy_total(0), 14)
 	assert_true(draft.remove_group(0, 1))
 	assert_eq(draft.enemy_total(0), 10)

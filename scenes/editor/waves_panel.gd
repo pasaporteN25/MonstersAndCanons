@@ -115,7 +115,7 @@ func _columns() -> Control:
 	var row_box := HBoxContainer.new()
 	row_box.add_theme_constant_override("separation", 8)
 	for column: Array in [["Enemigo", ENEMY_WIDTH], ["Cantidad", COUNT_WIDTH], ["Cada", SECONDS_WIDTH],
-			["Desde", SECONDS_WIDTH], ["Entrada", ENTRANCE_WIDTH], ["", REMOVE_WIDTH]]:
+			["Desde", SECONDS_WIDTH], ["Entrada", ENTRANCE_WIDTH], ["Azar %", COUNT_WIDTH], ["", REMOVE_WIDTH]]:
 		var label := _header(column[0])
 		label.custom_minimum_size = Vector2(column[1], 0)
 		row_box.add_child(label)
@@ -169,6 +169,11 @@ func _add_row(g: int) -> void:
 			draft.set_group(_wave, g, "entrada", MapGrid.ENTRANCE_LETTERS[index])
 			edited.emit())
 
+	var chance: SpinBox = _spin(0, 100, 1, " %", func(value: float) -> void:
+		draft.set_group(_wave, g, "probabilidad", value / 100.0))
+	chance.custom_minimum_size = Vector2(COUNT_WIDTH, 0)
+	chance.set_value_no_signal(float(data["probabilidad"]) * 100.0)
+	chance.tooltip_text = "Probabilidad de que salga este grupo al iniciar la oleada.100%: siempre."
 	var remove: Button = _button("×", "", func() -> void:
 		draft.remove_group(_wave, g)
 		refresh()
@@ -176,10 +181,10 @@ func _add_row(g: int) -> void:
 	remove.custom_minimum_size = Vector2(REMOVE_WIDTH, 0)
 	remove.tooltip_text = "Quitar este grupo"
 
-	for node: Control in [enemy, count, every, from, entrance, remove]:
+	for node: Control in [enemy, count, every, from, entrance, chance, remove]:
 		row_box.add_child(node)
 	_groups_box.add_child(row_box)
-	_rows.append({"enemy": enemy, "count": count, "every": every, "from": from, "entrance": entrance, "remove": remove})
+	_rows.append({"enemy": enemy, "count": count, "every": every, "from": from, "entrance": entrance, "chance": chance, "remove": remove})
 
 
 func _enemy_index(option: OptionButton, id: String) -> int:

@@ -4,6 +4,7 @@ class_name Enemy
 extends Node2D
 
 ## Murió por daño (RF-81). Quien escuche decide cuánto oro dar.
+signal gold_drain(enemy: Enemy, amount: int, floor_gold: int)
 signal died(enemy: Enemy)
 ## Llegó a la salida (RF-11). Quien escuche decide cuántas vidas restar.
 signal reached_exit(enemy: Enemy)
@@ -57,6 +58,7 @@ var health: int = 0
 ## Píxeles recorridos desde el inicio del camino.
 var distance: float = 0.0
 
+var _drain_clock: float = 0.0
 var _path: Path2D
 var _slow_amount: float = 0.0
 var _slow_left: float = 0.0
@@ -121,6 +123,9 @@ func _physics_process(delta: float) -> void:
 	_update_regen(delta)
 	_update_aura(delta)
 	_update_stun_spell(delta)
+	# Solo cuenta el tiempo que todavía está dentro del camino, incluso con deltas grandes.
+	var on_path_time: float = minf(delta, maxf(0.0, remaining_distance()) / maxf(0.001, Rules.tiles_to_px(current_speed_tiles())))
+	_update_gold_drain(on_path_time)
 	distance += Rules.tiles_to_px(current_speed_tiles()) * delta
 	_update_position()
 	_animate(delta)
@@ -598,3 +603,14 @@ func _draw_health_bar(r: float, top: float) -> void:
 	draw_rect(Rect2(top_left, Vector2(width, HEALTH_BAR_HEIGHT)), Color(0.35, 0.05, 0.05))
 	var ratio: float = float(health) / float(max_health)
 	draw_rect(Rect2(top_left, Vector2(width * ratio, HEALTH_BAR_HEIGHT)), Color(0.3, 0.9, 0.3))
+
+## RF-363: reloj por enemigo; la economía se resuelve arriba mediante la señal.
+func _update_gold_drain(delta: float) -> void:
+	if _is_done or data.gold_drain_amount <= 0 or data.gold_drain_interval <= 0.0:
+		return
+	_drain_clock += delta
+	var ticks: int = floori((_drain_clock + 0.000001) / data.gold_drain_interval)
+	if ticks > 0:
+		_drain_clock = maxf(0.0, _drain_clock - ticks * data.gold_drain_interval)
+		gold_drain.emit(self, ticks * data.gold_drain_amount, data.gold_drain_floor)
+

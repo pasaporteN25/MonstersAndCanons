@@ -169,7 +169,7 @@ func test_editing_a_group_changes_the_draft() -> void:
 	(row["count"] as SpinBox).value = 4.0
 	(row["every"] as SpinBox).value = 1.5
 	(row["from"] as SpinBox).value = 2.0
-	assert_eq(editor.draft.group(0, 0), {"enemigo": "troll", "cantidad": 4, "cada": 1.5, "desde": 2.0, "entrada": "A"})
+	assert_eq(editor.draft.group(0, 0), {"enemigo": "troll", "cantidad": 4, "cada": 1.5, "desde": 2.0, "entrada": "A", "probabilidad": 1.0})
 	assert_eq(waves.total_text(), "Enemigos en esta oleada: 4")
 
 

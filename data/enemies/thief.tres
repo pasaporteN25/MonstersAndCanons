@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+[ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="script"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/thief.svg" id="art"]
+[resource]
+script = ExtResource("script")
+id = &"thief"
+display_name = "Ladrón"
+description = "Roba3 de oro cada2 segundos mientras sigue en pantalla, sin bajar de10. Si ganás monedas, vuelve a robar. Matalo pronto; escapar no añade otro robo."
+max_health = 24
+speed_tiles = 1.6
+reward = 6
+lives_damage = 1
+size_tiles = 0.3
+color = Color(0.58, 0.48, 0.72, 1)
+texture = ExtResource("art")
+gold_drain_amount = 3
+gold_drain_interval = 2.0
+gold_drain_floor = 10
+optional_wave_limit = 1

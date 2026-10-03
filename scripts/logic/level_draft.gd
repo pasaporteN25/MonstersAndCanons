@@ -308,6 +308,7 @@ func group(wave: int, index: int) -> Dictionary:
 		"cada": float(source.get("cada", 0.0)),
 		"desde": float(source.get("desde", 0.0)),
 		"entrada": str(source.get("entrada", MapGrid.ENTRANCE_LETTERS[0])),
+		"probabilidad": float(source.get("probabilidad", 1.0)),
 	}
 
 
@@ -323,6 +324,8 @@ func set_group(wave: int, index: int, key: String, value: Variant) -> bool:
 			normalized = str(value)
 		"cantidad":
 			normalized = mini(_to_int(value), LevelFile.MAX_COUNT)  # RF-223
+		"probabilidad":
+			normalized = clampf(snappedf(float(value), 0.01), 0.0, 1.0)
 		"cada", "desde":
 			var top: float = LevelFile.MAX_EVERY if key == "cada" else LevelFile.MAX_FROM
 			normalized = minf(snappedf(float(value), 0.01), top)
@@ -333,7 +336,8 @@ func set_group(wave: int, index: int, key: String, value: Variant) -> bool:
 	_record()
 	var target: Dictionary = data["oleadas"][wave][index]
 	var is_default: bool = (key == "desde" and normalized == 0.0) \
-		or (key == "entrada" and normalized == MapGrid.ENTRANCE_LETTERS[0])
+		or (key == "entrada" and normalized == MapGrid.ENTRANCE_LETTERS[0]) \
+		or (key == "probabilidad" and normalized == 1.0)
 	if is_default:
 		target.erase(key)
 	else:
@@ -563,6 +567,8 @@ func _group_text(wave: int, index: int) -> String:
 		parts.append("\"desde\": %s" % _seconds(g["desde"]))
 	if g["entrada"] != MapGrid.ENTRANCE_LETTERS[0]:
 		parts.append("\"entrada\": %s" % JSON.stringify(g["entrada"]))
+	if g["probabilidad"] != 1.0:
+		parts.append("\"probabilidad\": %s" % _seconds(g["probabilidad"]))
 	return "{" + ", ".join(parts) + "}"
 
 
@@ -610,6 +616,8 @@ static func _clean_waves(value: Variant) -> Array:
 			var letter: String = str(group_source.get("entrada", MapGrid.ENTRANCE_LETTERS[0]))
 			if letter != MapGrid.ENTRANCE_LETTERS[0]:
 				cleaned["entrada"] = letter
+			if group_source.has("probabilidad"):
+				cleaned["probabilidad"] = _to_float(group_source["probabilidad"])
 			groups.append(cleaned)
 		waves.append(groups)
 	return waves

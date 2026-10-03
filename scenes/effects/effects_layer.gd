@@ -201,3 +201,8 @@ func tower_sold(position_: Vector2, refund: int, footprint: int = 1) -> void:
 func _add(effect: Node2D, position_: Vector2) -> void:
 	effect.position = position_  # la capa está en el origen: posición local = global
 	add_child(effect)
+
+## RF-365: aviso de robo efectivo, independiente de la opción de daño.
+func gold_stolen(position_: Vector2, amount: int) -> void:
+	_add(FloatingText.new().setup("−%d oro" % amount, GOLD_COLOR, 18, 0.7, 30.0), position_ + Vector2(0, -20))
+

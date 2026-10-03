@@ -11,3 +11,7 @@ extends Resource
 @export var start_delay: float = 0.0
 ## Por qué entrada salen (el nivel 3 tiene dos).
 @export var entrance_index: int = 0
+
+## RF-364: un sorteo por grupo al empezar la oleada.1 conserva los niveles anteriores.
+@export_range(0.0, 1.0) var probability: float = 1.0
+

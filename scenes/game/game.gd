@@ -419,6 +419,10 @@ func _on_enemy_spawned(enemy: Enemy) -> void:
 	if collectible != null and bool(enemy.get_meta("original_spawn", false)) and collectible.next_enemy_is_carrier():
 		_carrier = enemy
 	enemy.died.connect(_on_enemy_died)
+	enemy.gold_drain.connect(func(thief: Enemy, amount: int, floor_gold: int) -> void:
+		var taken: int = session.steal(amount, floor_gold)
+		if taken > 0:
+			effects.gold_stolen(thief.global_position, taken))
 	enemy.cast_stun.connect(func(shaman: Enemy, tower: Tower) -> void:
 		effects.stun_bolt(shaman.global_position, tower.global_position)
 		Audio.play(&"stun", 0.2))  # RF-282

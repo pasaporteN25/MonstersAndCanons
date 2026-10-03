@@ -26,6 +26,7 @@ class GroupRun:
 		return spawned >= group.count
 
 
+var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 var _level: Level
 var _container: Node
 ## % de vida extra por oleada del nivel que se juega (RF-36, D-019).
@@ -41,6 +42,7 @@ var _running: bool = false
 
 ## `container` es el nodo donde se agregan los enemigos (Game/Enemies).
 func setup(level: Level, container: Node, health_scale_percent: int) -> void:
+	rng.randomize()
 	_level = level
 	_container = container
 	_health_scale_percent = health_scale_percent
@@ -48,8 +50,17 @@ func setup(level: Level, container: Node, health_scale_percent: int) -> void:
 
 func start_wave(wave: WaveData, wave_number: int) -> void:
 	_runs.clear()
+	var optional_counts: Dictionary = {}
 	for group: SpawnGroup in wave.groups:
-		_runs.append(GroupRun.new(group))
+		if group.probability <= 0.0 or (group.probability < 1.0 and rng.randf() >= group.probability):
+			continue
+		var run := GroupRun.new(group)
+		if group.probability < 1.0 and group.enemy.optional_wave_limit > 0:
+			var used: int = int(optional_counts.get(group.enemy.id, 0))
+			var allowed: int = mini(group.count, maxi(0, group.enemy.optional_wave_limit - used))
+			run.spawned = group.count - allowed
+			optional_counts[group.enemy.id] = used + allowed
+		_runs.append(run)
 	_wave_number = wave_number
 	_clock = 0.0
 	_running = true

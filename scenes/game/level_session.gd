@@ -159,3 +159,14 @@ func jump_to_wave(target: int) -> void:
 		return
 	wave = DevStart.clamp_wave(target, total_waves) - 1
 	wave_changed.emit(wave, total_waves)
+
+## RF-363: descuento limitado sin crear oro por debajo del piso.
+func steal(amount: int, floor_gold: int) -> int:
+	if is_over() or amount <= 0:
+		return 0
+	var taken: int = mini(amount, maxi(0, gold - maxi(0, floor_gold)))
+	if taken > 0:
+		gold -= taken
+		gold_changed.emit(gold)
+	return taken
+
