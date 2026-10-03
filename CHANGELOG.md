@@ -143,3 +143,6 @@ Comparaciones del arte pendiente de Volador, Blindado, Troll, Araña y Cría; cu
 
 ### Backlog depurado · T182 (2026-10-03)
 B-02 cerrado; B-15 retirado/dividido. Lore y documentación de Épocas en B-03; Wiki de mods y comunidad en B-29/B-30. B-21/22/23 siguen abiertos con estudios preliminares. Sin cambios en el juego.
+
+### M37 · Avances y Estandarte mecánico
+Colección de cinco piezas tecnológicas, una por cada nivel1–5, y apoyo de cadencia disponible desde6 con colección completa y permiso del nivel. Habilitación manual en pruebas. Próximas etapas: robo periódico, embestida/desgaste y reparación; campaña base objetivo15 niveles, todavía no construida.

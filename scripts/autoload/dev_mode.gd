@@ -30,6 +30,8 @@ const ACTIONS: Array[Dictionary] = [
 ## RF-324: los números del modo de pruebas (oro del botón, velocidades).
 var config: DevConfig = preload("res://data/dev_config.tres")
 var enabled: bool = false
+## Habilitación temporal de apoyo, nunca escribe colección.
+var support_unlocked: bool = false
 ## RF-319: lo que se eligió en la selección de nivel. La oleada desde la que se empieza (1 = como
 ## siempre) y el oro inicial (-1 = automático, RF-320). `Game` los lee al arrancar y NO los borra,
 ## así reintentar repite la misma partida (RF-321).
@@ -65,6 +67,7 @@ static func detect() -> bool:
 ## `save_path` para no crear archivos en la carpeta del jugador.
 func set_enabled(on: bool, save_path: String = "") -> void:
 	enabled = on
+	support_unlocked = false
 	if save_path == "":
 		save_path = SAVE_PATH if on else SaveManager.DEFAULT_PATH
 	SaveManager.save_path = save_path

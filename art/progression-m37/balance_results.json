@@ -1,0 +1,42 @@
+{
+  "level_6_support_0": {
+    "strategy": "mix",
+    "seed": 12345,
+    "support": false,
+    "result": "VICTORIA",
+    "wave": 15,
+    "total": 15,
+    "lives": 10,
+    "limitations": "Bot solo construye torres nivel1; una estrategia y una semilla. Compra un estandarte después de cuatro cañones, pagando su costo. No balance definitivo."
+  },
+  "level_6_support_1": {
+    "strategy": "mix",
+    "seed": 12345,
+    "support": true,
+    "result": "DERROTA",
+    "wave": 12,
+    "total": 15,
+    "lives": 0,
+    "limitations": "Bot solo construye torres nivel1; una estrategia y una semilla. Compra un estandarte después de cuatro cañones, pagando su costo. No balance definitivo."
+  },
+  "level_7_support_0": {
+    "strategy": "mix",
+    "seed": 12345,
+    "support": false,
+    "result": "VICTORIA",
+    "wave": 20,
+    "total": 20,
+    "lives": 16,
+    "limitations": "Bot solo construye torres nivel1; una estrategia y una semilla. Compra un estandarte después de cuatro cañones, pagando su costo. No balance definitivo."
+  },
+  "level_7_support_1": {
+    "strategy": "mix",
+    "seed": 12345,
+    "support": true,
+    "result": "VICTORIA",
+    "wave": 20,
+    "total": 20,
+    "lives": 13,
+    "limitations": "Bot solo construye torres nivel1; una estrategia y una semilla. Compra un estandarte después de cuatro cañones, pagando su costo. No balance definitivo."
+  }
+}

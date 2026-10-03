@@ -192,6 +192,10 @@ func bind(session: LevelSession) -> void:
 
 ## RF-101: un botón por torre, con su color, nombre, tecla y costo.
 func setup_towers(tower_types: Array[TowerData]) -> void:
+	for old: Node in _tower_button_row.get_children():
+		_tower_button_row.remove_child(old)
+		old.queue_free()
+	_tower_buttons.clear()
 	_tower_types = tower_types
 	for i: int in tower_types.size():
 		var tower: TowerData = tower_types[i]
@@ -205,7 +209,10 @@ func setup_towers(tower_types: Array[TowerData]) -> void:
 		button.add_theme_font_size_override("font_size", 15)
 		button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		button.vertical_icon_alignment = VERTICAL_ALIGNMENT_TOP
-		button.add_child(_key_label(i + 1))
+		if i < 9:
+			button.add_child(_key_label(i + 1))
+		else:
+			button.tooltip_text = "%s: %d de oro" % [tower.display_name, tower.levels[0].cost]
 		var icon: Texture2D = Tower.make_icon(tower)
 		if icon != null:
 			# RF-155: base y torreta, como la torre recién construida, achicadas con suavidad (D-023).
