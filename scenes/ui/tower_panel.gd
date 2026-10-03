@@ -12,7 +12,6 @@ var _sell_value: int = 0
 var _gold: int = 0
 ## RF-280: los segundos de aturdimiento que se muestran (para refrescar solo cuando cambian).
 var _shown_stun: int = 0
-var _shown_support: int = 0
 ## RF-317: las torres de este nivel, para decir con cuáles combina la seleccionada. Lo pone Game.
 var partner_towers: Array[TowerData] = []
 
@@ -50,7 +49,7 @@ func show_tower(tower: Tower, sell_value: int, gold: int) -> void:
 
 ## RF-280: mientras la torre está aturdida, la cuenta atrás del título se va actualizando.
 func _process(_delta: float) -> void:
-	if _tower != null and visible and (ceili(_tower.stun_left()) != _shown_stun or _tower.support_bonus() != _shown_support):
+	if _tower != null and visible and ceili(_tower.stun_left()) != _shown_stun:
 		refresh(_gold)
 
 
@@ -65,21 +64,17 @@ func refresh(gold: int) -> void:
 	_status.visible = _shown_stun > 0
 	_status.text = "Aturdida (%d s)" % _shown_stun
 	_damage.text = str(s.damage)
-	_shown_support = _tower.support_bonus()
-	_rate.text = "Apoyo" if _tower.data.support_only else "%.2f/s" % _tower.effective_fire_rate()
+	_rate.text = "%.1f/s" % s.fire_rate
 	_range.text = "%.1f" % s.range_tiles
 	_description.text = _tower.data.description
 	_description.visible = not _description.text.is_empty()
 	_air.text = "Voladores: %s" % ("sí" if _tower.data.can_hit_air else "no")
 	_stats.text = "\n".join(TowerText.effects(s))
-	if _shown_support > 0:
-		_stats.text += "\nApoyo recibido: +%d %% cadencia" % _shown_support
 	for line: String in TowerText.combo_partners(_tower.data, partner_towers):  # RF-317
 		# Espacio que no corta: si la línea no entra, que no quede "+25" arriba y "%" abajo.
 		_stats.text += "\n" + line.replace(" %", " %")
 	_stats.text = _stats.text.strip_edges()
 	_stats.visible = not _stats.text.is_empty()
-	_targeting_button.disabled = _tower.data.support_only
 	_targeting_button.text = "Apuntar: %s" % _tower.targeting_name()
 	var next: TowerLevelData = _tower.next_level_stats()
 	if next == null:

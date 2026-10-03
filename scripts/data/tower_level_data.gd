@@ -8,8 +8,6 @@ extends Resource
 @export var damage: int = 0
 ## Disparos por segundo.
 @export var fire_rate: float = 0.0
-## RF-361: bonus de cadencia a otras torres dentro del alcance.
-@export var support_rate_percent: int = 0
 ## Alcance, en casillas.
 @export var range_tiles: float = 0.0
 ## Radio del daño en área, en casillas. 0 = daña a un solo enemigo.

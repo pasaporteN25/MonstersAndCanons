@@ -393,6 +393,3 @@ Solo métricas locales: FPS de Engine y ms/cuadro estimados como1000/FPS; actual
 
 ### M36 · Efectos y audio
 Los efectos de muerte reutilizan automáticamente textura, cuadro y escala del enemigo actual; no necesitan un asset de muerte por especie. Residuo y fragmentos son visuales y no alteran recompensa/crías. El audio se regenera con tools/make_sounds.gd; music_menu/music_combat usan bucle en importación. Material y límites de efectos se documentan en plan/spec; los candidatos de B-22 y recetas B-23 son propuestas y todavía no forman parte del formato de contenido.
-
-### M37 · Avances y apoyo
-data/progression.json define colecciones/fuentes/cantidad requerida; solo fuentes oficiales permiten drops. TowerData puede exigir una colección y ser support_only; TowerLevelData declara support_rate_percent. El mecánico se habilita con torres_extra en6/7 más colección5/5; admin lo habilita sin modificar el progreso. Ladrón/desgaste/reparación y niveles8–15 son etapas posteriores.

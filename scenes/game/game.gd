@@ -29,11 +29,6 @@ signal dev_infinite_lives_changed(on: bool)
 @export var tower_types: Array[TowerData] = []
 ## RF-300: las torres de la barra en ESTE nivel (las comunes y las reservadas que el nivel habilita).
 var available_towers: Array[TowerData] = []
-const MECHANICAL_STANDARD: TowerData = preload("res://data/towers/mechanical_standard.tres")
-var collectible: CollectibleRun
-var _carrier: Enemy
-var _collection_notice: HBoxContainer
-var _collection_text: Label
 
 var level: Level
 ## RF-251: solo existe si el mapa es más grande que 20×9 (hay que achicar el mundo para que entre).
@@ -94,15 +89,7 @@ func _ready() -> void:
 	spawner.enemy_spawned.connect(_on_enemy_spawned)
 	spawner.wave_finished.connect(session.complete_wave)
 
-	_setup_collection()
-	for support: TowerData in support_catalog():
-		if (level_data.extra_towers.has(String(support.id)) or (DevMode.enabled and DevMode.support_unlocked)) and not tower_types.has(support):
-			tower_types.append(support)
-	available_towers = level_data.available_towers(tower_types, SaveManager.collection_complete)
-	if DevMode.enabled and DevMode.support_unlocked:
-		for support: TowerData in support_catalog():
-			if not available_towers.has(support):
-				available_towers.append(support)
+	available_towers = level_data.available_towers(tower_types)
 	build_controller.setup(level, session, balance, available_towers, tower_container)
 	build_controller.tower_built.connect(_on_tower_built)
 	build_controller.tower_upgraded.connect(_on_tower_upgraded)
@@ -124,7 +111,6 @@ func _ready() -> void:
 	panel.targeting_pressed.connect(_on_targeting_pressed)
 	session.gold_changed.connect(panel.refresh)
 
-	session.wave_completed.connect(_collection_wave_completed)
 	session.countdown_finished.connect(start_next_wave)
 	session.state_changed.connect(_on_state_changed)
 	end_screen.retry_pressed.connect(restart)
@@ -417,8 +403,6 @@ func dev_spawn(data: EnemyData) -> void:
 
 
 func _on_enemy_spawned(enemy: Enemy) -> void:
-	if collectible != null and bool(enemy.get_meta("original_spawn", false)) and collectible.next_enemy_is_carrier():
-		_carrier = enemy
 	enemy.died.connect(_on_enemy_died)
 	enemy.cast_stun.connect(func(shaman: Enemy, tower: Tower) -> void:
 		effects.stun_bolt(shaman.global_position, tower.global_position)
@@ -450,19 +434,6 @@ func _on_enemy_hit(enemy: Enemy, damage: int, blocked: bool, combo: Enemy.Combo)
 
 
 func _on_enemy_died(enemy: Enemy) -> void:
-	if collectible != null and enemy == _carrier and not session.is_over():
-		collectible.pick(session.wave)
-		_carrier = null
-		var token := Sprite2D.new()
-		token.texture = preload("res://assets/ui/technology_token.svg")
-		token.scale = Vector2.ONE * 0.45
-		token.position = enemy.global_position
-		effects.add_child(token)
-		var tween: Tween = token.create_tween()
-		tween.tween_property(token, "position:y", token.position.y - 35.0, 0.6)
-		tween.parallel().tween_property(token, "modulate:a", 0.0, 0.6)
-		tween.tween_callback(token.queue_free)
-		_update_collection_notice()
 	session.earn(enemy.data.reward)  # RF-21
 	session.add_score(Rules.kill_points(enemy.data.reward, balance))  # RF-190
 	effects.enemy_died(enemy.global_position, enemy.data.color,
@@ -471,8 +442,6 @@ func _on_enemy_died(enemy: Enemy) -> void:
 
 
 func _on_enemy_reached_exit(enemy: Enemy) -> void:
-	if enemy == _carrier:
-		_carrier = null
 	session.lose_lives(enemy.data.lives_damage)  # RF-11
 	_shake_left = SHAKE_DURATION
 	Audio.play(&"life_lost")
@@ -542,7 +511,6 @@ func _on_tower_fired(projectile: Projectile) -> void:
 func _on_state_changed(state: LevelSession.State) -> void:
 	if state != LevelSession.State.WON and state != LevelSession.State.LOST:
 		return
-	_commit_collection()
 	_write_dev_stats(DevStats.RESULT_WON if state == LevelSession.State.WON else DevStats.RESULT_LOST)
 	# RF-91: el juego se detiene. Se congela el "mundo", pero no la interfaz.
 	for node: Node in [enemies, tower_container, projectiles, spawner]:
@@ -598,86 +566,3 @@ func _show_hall_of_fame_if_earned() -> void:
 	hall_of_fame.closed.connect(func() -> void:
 		hall_of_fame.queue_free()
 		hall_of_fame = null)
-
-func _setup_collection() -> void:
-	if DevMode.enabled or testing or GameFlow.current_index < 0 or GameFlow.current_community != null:
-		return
-	if not CollectibleRun.eligible(&"technology", level_data.id):
-		return
-	if not SaveManager.collected_sources(&"technology").has(String(level_data.id)):
-		var count: int = 0
-		for wave: WaveData in level_data.waves:
-			for group: SpawnGroup in wave.groups:
-				count += group.count
-		var rng := RandomNumberGenerator.new()
-		rng.randomize()
-		collectible = CollectibleRun.new()
-		collectible.setup(&"technology", level_data.id, count, rng)
-	_collection_notice = HBoxContainer.new()
-	_collection_notice.position = Vector2(18, 590)
-	_collection_notice.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var icon := TextureRect.new()
-	icon.texture = preload("res://assets/ui/technology_token.svg")
-	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	icon.custom_minimum_size = Vector2(30, 30)
-	_collection_notice.add_child(icon)
-	_collection_text = Label.new()
-	_collection_text.add_theme_font_size_override("font_size", 14)
-	_collection_text.add_theme_color_override("font_outline_color", Color.BLACK)
-	_collection_text.add_theme_constant_override("outline_size", 4)
-	_collection_notice.add_child(_collection_text)
-	hud.add_child(_collection_notice)
-	_update_collection_notice()
-
-func _update_collection_notice() -> void:
-	if _collection_text == null:
-		return
-	var count: int = SaveManager.collected_sources(&"technology").size()
-	var state: String = " · conseguido aquí" if SaveManager.collected_sources(&"technology").has(String(level_data.id)) else " · pendiente aquí"
-	if collectible != null and collectible.picked_wave > 0:
-		count += 1
-		state = " · oleada confirmada" if collectible.confirmed else " · completar oleada"
-	_collection_text.text = "Avances %d/%d%s" % [count, CollectibleRun.required(&"technology"), state]
-	_collection_notice.tooltip_text = "Una pieza por nivel1–5. Se guarda al terminar; abandonar descarta lo recogido."
-
-func _collection_wave_completed(wave: int, _bonus: int) -> void:
-	if collectible != null:
-		collectible.complete_wave(wave)
-		_update_collection_notice()
-
-func _commit_collection() -> void:
-	if collectible == null or DevMode.enabled or testing:
-		return
-	for source: String in collectible.result_sources(true):
-		SaveManager.collect_source(collectible.collection, StringName(source))
-	if collectible.confirmed:
-		SaveManager.save()
-		collectible = null
-		_update_collection_notice()
-
-func dev_enable_support(on: bool) -> void:
-	if not DevMode.enabled:
-		return
-	DevMode.support_unlocked = on
-	if on:
-		for support: TowerData in support_catalog():
-			if not tower_types.has(support):
-				tower_types.append(support)
-	available_towers = level_data.available_towers(tower_types, SaveManager.collection_complete)
-	if on:
-		for support: TowerData in support_catalog():
-			if not available_towers.has(support):
-				available_towers.append(support)
-	build_controller.cancel()
-	build_controller.setup(level, session, balance, available_towers, tower_container)
-	hud.setup_towers(available_towers)
-	hud._on_gold_changed(session.gold)
-	hud.tower_panel.partner_towers = available_towers
-
-static func support_catalog() -> Array[TowerData]:
-	var result: Array[TowerData] = []
-	for tower: TowerData in Wiki._all_towers():
-		if tower.support_only:
-			result.append(tower)
-	return result

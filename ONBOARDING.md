@@ -380,6 +380,3 @@ Seleccionar torres de niveles1–3, revisar daño/cadencia/alcance, descripción
 
 ### M36 · Comprobar niveles, efectos y sonido
 Revisar las nueve torres niveles1–3 y Mortero2×2, también aturdidas: contar remaches sin depender del brillo. Probar Espejo/Chamán, origen del efecto y recuperación. Curandero con heridos/vida completa/fuego y Troll regenerando: distinguir radio del aura de cura efectiva. Matar las trece especies, pausar y usar x2 durante efectos; verificar crías/oro/salida. Escuchar menú y combate, luego impactos/rebote/hechizo/cura con muchas torres; Opciones al0/50/100%. Muestras y laboratorio en art/redesign-m36; requieren APPDATA aislado. No implica prueba física Android/Linux ni aprobación auditiva humana.
-
-### M37 · Comprobar avances y apoyo
-Usar guardado aislado. Verificar que fuente repetida no suma, enemigo portador que escapa no entrega, derrota antes/después del cierre de oleada difiere y abandonar no guarda. En6/7, colección incompleta bloquea mecánico;5/5 permite construirlo. F1→Habilitar estandartes ofrece apoyo sin colección también fuera de esos niveles solo en admin. Dos auras no apilan; aturdir/vender/mejorar modifica el apoyo. Reparación todavía pendiente.

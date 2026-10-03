@@ -24,8 +24,5 @@ extends Resource
 ## RF-300: una torre **reservada** no está en la barra de todos los niveles: solo en los que la habilitan
 ## con `"torres_extra"` en su archivo (por ahora, el Mortero).
 @export var reserved: bool = false
-## RF-360/361: apoyo fijo y condición de colección, apagados para torres anteriores.
-@export var support_only: bool = false
-@export var required_collection: StringName = &""
 ## Un elemento por nivel: índice 0 = nivel 1.
 @export var levels: Array[TowerLevelData] = []

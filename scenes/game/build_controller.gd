@@ -106,7 +106,6 @@ func cells_free(tower: TowerData, origin: Vector2i) -> bool:
 ## terminó y no está en pausa (RF-104).
 func can_build(tower: TowerData, cell: Vector2i) -> bool:
 	return not _session.is_over() \
-		and (tower.required_collection == &"" or _tower_types.has(tower)) \
 		and not get_tree().paused \
 		and cells_free(tower, cell) \
 		and _session.can_afford(tower.levels[0].cost)

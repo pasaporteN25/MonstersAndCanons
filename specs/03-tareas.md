@@ -1110,12 +1110,3 @@
   **Refs:** D-063, backlog §13. No añade requisitos de juego.
   **Hecho cuando:** B-02 cerrado; B-15 retirado sin buscador/enlaces/Niveles/imágenes; lore/Épocas trasladados a B-03 y Wiki de mods/comunidad separada sin duplicar B-04; estudios B-21–B-23 explícitamente abiertos/preliminares; pendientes restantes identificados.
   **Resultado:** documentación y referencias actualizadas; conservados los números históricos. Revisión de cambios y referencias, sin ejecución de tests por no modificar juego ni datos. Cambios M34 anteriores conservados fuera del commit.
-
-### M37 · Primera etapa de B-07/B-22
-- [x] **T183 · Avances genéricos y Estandarte mecánico.**
-  **Refs:** RF-358–361, D-064.
-  **Hecho cuando:** colección5 fuentes, checkpoint de oleada y guardado solo al resultado, disponibilidad6/7 más requisito, apoyo sin apilar, admin explícito, UI/Wiki/iconos; pruebas, exportación y muestras revisables. Documentar balance y límites honestos.
-  **Resultado T183:** primera etapa funcional:5 fuentes únicas, portador aleatorio original, confirmación al cerrar oleada, guardado solo victoria/derrota, colección+permiso6/7 y habilitación admin genérica, apoyo10/15/20% sin apilar ni disparar, UI/Wiki y diseño vectorial inicial revisable.918/918 GUT,8251 asserts,71 scripts, sin SCRIPT ERROR/Parse Error.106FPS con200 enemigos/60 torres incluyendo apoyo, peor cuadro33,3ms y6/638 cuadros sobre16,6ms (RX6900XT). Cuatro capturas revisadas. Bot mix semilla12345: nivel6 sin apoyo gana10 vidas, con compra temprana pierde12/15; nivel7 gana16/13 vidas sin/con apoyo. No es balance definitivo: este bot solo compra nivel1, una sola estrategia/semilla y apoyo no obligatorio. Windows normal/pruebas y Linux exportados; arranque de ambos Windows verificado. No ejecución en Linux/Android ni aprobación visual final de Lucas. Cambios M34 previos conservados fuera del commit. Evidencia art/progression-m37/.
-- [ ] **T184 · Ladrón periódico.** Refs: dirección de M37/D-064. Definir RF detallados, aparición aleatoria limitada, piso10, clocks y avisos; probar6/7 antes de8/9.
-- [ ] **T185 · Embestidor y desgaste.** Refs: dirección M37/D-064. Definir RF de carga/recta/extremo/proximidad/estados; sin impactos a torres fuera del camino ni destrucción; probar6/7.
-- [ ] **T186 · Reparación del mecánico.** Refs: dirección M37/D-064. Definir tasas/costos/estados y balance tras T185; no confundir con aturdimiento. Otras torres de apoyo quedan posibles, no seleccionadas.

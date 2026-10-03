@@ -63,11 +63,6 @@ func _process(delta: float) -> bool:
 
 func _populate() -> void:
 	game.session.earn(100000)
-	if "apoyo" in OS.get_cmdline_user_args():
-		var support: TowerData = load("res://data/towers/mechanical_standard.tres")
-		game.tower_types.append(support)
-		game.available_towers.append(support)
-		print("Apoyo mecánico incluido en las 60 torres")
 	var built: int = 0
 	for cell: Vector2i in game.level.ground.get_used_cells():
 		if built >= TOWER_COUNT:

@@ -26,8 +26,6 @@ var _scores: Dictionary = {}
 var _last_initials: Dictionary = {}
 ## RF-194: el total de la campaña que ya se anotó (o se ofreció) en el Salón de la fama.
 var _hall_total: int = 0
-## RF-359: fuentes únicas por colección; opcional para guardados anteriores.
-var _collections: Dictionary = {}
 
 
 func _ready() -> void:
@@ -43,7 +41,6 @@ func load_save() -> void:
 	_scores = {}
 	_last_initials = {}
 	_hall_total = 0
-	_collections = {}
 	if not FileAccess.file_exists(save_path):
 		return
 	var file := FileAccess.open(save_path, FileAccess.READ)
@@ -56,7 +53,6 @@ func load_save() -> void:
 	if not parsed is Dictionary or int((parsed as Dictionary).get("version", 0)) != SAVE_VERSION:
 		push_warning("Guardado ilegible o de otra versión: se empieza de cero (%s)" % save_path)
 		return
-	_read_collections((parsed as Dictionary).get("collections", {}))
 	_read_levels((parsed as Dictionary).get("levels", {}))
 	_read_settings((parsed as Dictionary).get("settings", {}))
 	_read_seen_enemies((parsed as Dictionary).get("seen_enemies", []))
@@ -72,36 +68,10 @@ func save() -> bool:
 		push_warning("No se pudo guardar en %s" % save_path)
 		return false
 	var data := {"version": SAVE_VERSION, "levels": _levels, "settings": _settings,
-		"seen_enemies": _seen_enemies, "scores": _scores, "initials": _last_initials, "hall_total": _hall_total, "collections": _collections}
+		"seen_enemies": _seen_enemies, "scores": _scores, "initials": _last_initials, "hall_total": _hall_total}
 	file.store_string(JSON.stringify(data, "  "))
 	return true
 
-
-# --- Colecciones (RF-359/360) ---
-func collected_sources(collection: StringName) -> PackedStringArray:
-	return PackedStringArray(_collections.get(String(collection), []))
-
-func collection_complete(collection: StringName) -> bool:
-	var needed: int = CollectibleRun.required(collection)
-	return needed > 0 and collected_sources(collection).size() >= needed
-
-func collect_source(collection: StringName, source: StringName) -> void:
-	if not CollectibleRun.eligible(collection, source):
-		return
-	var sources: Array = _collections.get(String(collection), [])
-	if not sources.has(String(source)):
-		sources.append(String(source))
-	_collections[String(collection)] = sources
-
-func _read_collections(raw: Variant) -> void:
-	if not raw is Dictionary:
-		return
-	for collection: Variant in raw:
-		if not collection is String or not raw[collection] is Array:
-			continue
-		for source: Variant in raw[collection]:
-			if source is String:
-				collect_source(StringName(collection), StringName(source))
 
 # --- Progreso de niveles (RF-111, RF-112) ---
 

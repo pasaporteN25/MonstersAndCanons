@@ -64,24 +64,16 @@ func test_every_tower_is_complete() -> void:
 		assert_ne(t.display_name, "", who + ": nombre")
 		assert_ne(t.description, "", who + ": frase (RF-171)")
 		assert_not_null(t.turret_texture, who + ": dibujo de la torreta (RF-150)")
-		if not t.support_only:
-			assert_not_null(t.projectile_texture, who + ": dibujo del proyectil (RF-153)")
-		if not t.support_only:
-			assert_gt(t.projectile_speed_tiles, 0.0, who + ": velocidad del proyectil")
-		if not t.support_only:
-			assert_true(Audio.has_sound(StringName("shot_%s" % t.id)), who + ": sonido shot_%s.wav (RF-116)" % t.id)
+		assert_not_null(t.projectile_texture, who + ": dibujo del proyectil (RF-153)")
+		assert_gt(t.projectile_speed_tiles, 0.0, who + ": velocidad del proyectil")
+		assert_true(Audio.has_sound(StringName("shot_%s" % t.id)), who + ": sonido shot_%s.wav (RF-116)" % t.id)
 		assert_eq(t.levels.size(), 3, who + ": 3 niveles (RF-71)")
 		for i: int in t.levels.size():
 			var l: TowerLevelData = t.levels[i]
 			var lvl: String = "%s, nivel %d" % [who, i + 1]
 			assert_gt(l.cost, 0, lvl + ": costo")
-			if t.support_only:
-				assert_eq(l.damage, 0, lvl + ": apoyo sin daño")
-				assert_eq(l.fire_rate, 0.0, lvl + ": apoyo sin disparos")
-				assert_gt(l.support_rate_percent, 0, lvl + ": bonus de apoyo")
-			else:
-				assert_gt(l.damage, 0, lvl + ": daño")
-				assert_gt(l.fire_rate, 0.0, lvl + ": cadencia")
+			assert_gt(l.damage, 0, lvl + ": daño")
+			assert_gt(l.fire_rate, 0.0, lvl + ": cadencia")
 			assert_gt(l.range_tiles, 0.0, lvl + ": alcance")
 			assert_not_null(l.base_texture, lvl + ": dibujo de la base")
 			if l.burn_damage_per_second > 0:
@@ -96,8 +88,6 @@ func test_every_tower_is_in_the_game() -> void:
 	var ids: Array[StringName] = []
 	for tower: TowerData in game.tower_types:
 		ids.append(tower.id)
-	for support: TowerData in Game.support_catalog():
-		ids.append(support.id)
 	for resource: Resource in _resources_in("res://data/towers/"):
 		assert_has(ids, (resource as TowerData).id,
 			"torre '%s': falta agregarla a Game → Tower Types (game.tscn)" % _file_id(resource))

@@ -1,6 +1,6 @@
 # B-22 · Contenido y desbloqueos
 
-Análisis preliminar de M36, conservado como comparación histórica. Propuesta: elegir dos torres y dos monstruos para la siguiente producción; los terceros son alternativas para comparar.
+Análisis completo, sin nuevos recursos de campaña ni desbloqueos activados. Propuesta: elegir dos torres y dos monstruos para la siguiente producción; los terceros son alternativas para comparar.
 
 | Candidato | Papel y contramedida | Identidad visual propuesta | Aparición propuesta | Esfuerzo adicional |
 |---|---|---|---|---|
@@ -23,8 +23,3 @@ Tanque B queda reservado: no elegir otro enemigo solo por más vida/armadura, po
 **Recomendación:** disponibilidad por nivel para la primera tanda. Mostrar torre disponible al elegir el nivel y habilitar Wiki de torre con texto de aparición; enemigos siguen el bestiario descubierto, sin que las tarjetas revelen los todavía cerrados. Si se elige desbloqueo persistente, guardar IDs oficiales, no índices; separar por modo, desbloquear viejos guardados a partir del progreso, declarar si viejos récords siguen comparables y dejar comunidad/pruebas con su catálogo propio.
 
 **Selección recomendada:** Ballesta + Alquimista; Excavador + Ladrón. Son funciones distintas y cubren línea, defensa, objetivo y economía. Primero prototipo de cada habilidad con datos; después arte/atlas, Wiki y balance. Los números anteriores son semillas de diseño, no valores finales. Cada pieza exige tests de bordes (proyectil atraviesa una sola vez, armadura piso0/sin apilar, quemadura durante entierro y robo con oro0) y prueba con bot en los niveles elegidos. No hace falta completar ahora los niveles8–10 para probarlos en mapas aislados.
-
-## Dirección aprobada por Lucas · 2026-10-03 · M37
-Primera etapa funcional T183: Estandarte mecánico seleccionado como apoyo de cadencia, estatua de casco/engranaje; cinco avances de fuentes distintas en niveles1–5, desde6 exige colección y permiso por nivel. Icono de colección genérico plateado/nave. Admin puede habilitar estandartes sin colección ni escribir progreso. Colección confirmada al completar la oleada y guardada al resultado: derrota posterior sí, derrota durante esa oleada o abandono no. Datos actuales costos120/100/160, radios2/2,5/3, bonus10/15/20%; balance y arte son iniciales, no definitivos.
-Ladrón cambia el diseño anterior: robo periódico mientras vivo/en pantalla, piso10, sin robo adicional al escapar. Embestidor carga en recta y solo daña/desgasta torres cerca del camino en su extremo final. Desgaste reparable sin destrucción; reparación del mecánico es una etapa posterior. Torres con vida/destrucción/reparación paga/economía/UI/rebalanceo quedan como alternativa futura.
-Campaña base objetivo15:1–5 protegidos de amenazas nuevas, pruebas6–7 (énfasis7), mayor presencia8–9, avanzado10–14 por diseñar y definitivo15. Actualmente solo1–7. Disponibilidad por nivel aprobada; colección es una condición adicional explícita para estandartes. Ballesta/Alquimista/Excavador siguen candidatos. Ver entrega y límites en ../progression-m37/README.md. B-22 sigue abierto.

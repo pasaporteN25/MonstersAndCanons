@@ -171,7 +171,7 @@ static func tower_entry(tower: TowerData, towers: Array[TowerData] = []) -> Wiki
 	var entry := WikiEntry.new()
 	entry.id = tower.id
 	entry.title = tower.display_name
-	entry.subtitle = "Apoyo · no dispara" if tower.support_only else ("Golpea voladores" if tower.can_hit_air else "Solo terrestres")
+	entry.subtitle = "Golpea voladores" if tower.can_hit_air else "Solo terrestres"
 	var first: TowerLevelData = tower.levels[0]
 	var icon: Texture2D = TowerVisual.mounted_icon(first.base_texture,
 		TowerVisual.frame_texture(tower.turret_atlas, -PI / 2.0) if tower.turret_atlas != null else tower.turret_texture)
@@ -179,9 +179,7 @@ static func tower_entry(tower: TowerData, towers: Array[TowerData] = []) -> Wiki
 		entry.icon.append(icon)
 	if tower.description != "":
 		entry.add_text(tower.description)
-	var facts: Array = [["Función", "Apoyo de cadencia; no dispara"]] if tower.support_only else [["Golpea voladores", "sí" if tower.can_hit_air else "no"]]
-	if tower.required_collection != &"":
-		facts.append(["Requisito", "%d avances distintos y permiso del nivel" % CollectibleRun.required(tower.required_collection)])
+	var facts: Array = [["Golpea voladores", "sí" if tower.can_hit_air else "no"]]
 	if tower.footprint > 1:  # RF-298
 		facts.append(["Tamaño", "%d×%d casillas" % [tower.footprint, tower.footprint]])
 	entry.add_facts(facts)

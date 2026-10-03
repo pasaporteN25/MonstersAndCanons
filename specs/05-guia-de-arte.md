@@ -89,6 +89,3 @@ Normal (diablillo rojo), Rápido (bestia turquesa) y Tanque (ogro de piedra y pi
 
 ## M36 · Lectura de estados y efectos
 Placa de nivel: hierro/bronce, remaches ámbar siempre legibles; no depende del brillo animado. Aturdimiento: aro roto violeta y descargas sobre el mecanismo, sin tapar base/sombra. Cura: límite verde amarillento suave y brotes en cura efectiva; no usar oro ni blanco de daño. Muerte: conservar la pose y escala de la criatura, disolver con shader y ocho fragmentos facetados; sin deformaciones corporales, sombras nuevas ni nuevos ciclos falsos. Efectos finitos respetan pausa/velocidad y topes (12 residuos de muerte,16 pulsos de cura).
-
-### M37 · Apoyo y avance coleccionable
-Avance genérico: disco plateado con silueta de nave, sin engranaje exclusivo del mecánico, reutilizable para futuros desbloqueos. Mecánico: estatua fija de hierro/plata y bronce, casco de guerra y engranaje, distingue apoyo de un cañón. Diseño vectorial inicial nativo, luz arriba/izquierda, sin sombras incrustadas; revisión por Lucas antes de declarar arte definitivo. No modifica atlas aprobados. Aura de apoyo fina y cian/gris, sin confundirla con curación verde o aturdimiento violeta.
