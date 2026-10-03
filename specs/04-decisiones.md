@@ -396,3 +396,7 @@ Generar una hoja independiente por criatura tomando su PNG aprobado como referen
 ## D-066 · Efecto económico por señal y grupos opcionales
 Lucas autorizó continuar las etapas, 2026-10-03. Enemy mide tiempo y emite solicitud; Game aplica LevelSession.steal, sin acceso del enemigo a economía global. Probabilidad por grupo y límite por EnemyData permiten nuevos encuentros sin codificar ids. No cambia el guardado ni se reemplazan enemigos existentes. Robo de un monto fijo al escapar descartado según el pedido. Balance6/7 de prueba; intensidad8/9 y diseño10–15 quedan para su creación.
 
+
+## D-067 · Carga por geometría y desgaste sin destrucción
+Lucas aprobó el extremo de la recta y la cercanía al camino. ChargeRules fusiona puntos colineales del recorrido; Enemy acumula preparación solo en esa recta y evalúa sus extremos al cruzarlos. WearRules conserva lógica pura; límite en BalanceConfig y cifras del impacto en EnemyData. Torres mantienen inversión/huella y se pueden reparar en T186. Alternativa futura registrada: vida/destrucción, reparación pagada, precios de reconstrucción, interfaz económica y rebalanceo; no activada en esta etapa.
+

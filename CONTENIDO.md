@@ -400,3 +400,7 @@ data/progression.json define colecciones/fuentes/cantidad requerida; solo fuente
 ### M39 · Encuentros opcionales y drenaje
 Un grupo de oleada puede declarar `"probabilidad":0.35`; ausencia equivale a1. El sorteo ocurre una vez por oleada/grupo. `EnemyData.optional_wave_limit` limita el total sorteado de ese tipo. `gold_drain_amount`, `gold_drain_interval` y `gold_drain_floor` habilitan drenaje combinable; cero lo apaga. Ladrón:3/2s/piso10, una aparición opcional por oleada. Sus cifras se modifican en data/enemies/thief.tres; ensayos solo6/7,1–5 intactos.
 
+
+### M40 · Carga y desgaste
+EnemyData: `charge_distance_tiles`, `charge_multiplier`, `charge_slow_tolerance`, `charge_impact_radius_tiles`, `charge_wear_percent` (cero apaga). Embestidor: preparación3 casillas, velocidad×1.8, slow hasta20%, impacto20% a una torre a≤1.25 casillas del extremo; `data/balance.tres` limita desgaste a50%. No se destruyen torres. La Bestia B de M24 se reutiliza como diseño inicial. Nivel6: oleada10; nivel7:9/14/18.1–5 sin nuevos enemigos.
+

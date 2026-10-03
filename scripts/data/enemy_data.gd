@@ -86,3 +86,11 @@ enum Shape { CIRCLE, TRIANGLE, SQUARE, DIAMOND, HEXAGON }
 @export var gold_drain_floor: int = 0
 @export var optional_wave_limit: int = 0
 
+
+# --- Carga al extremo de rectas (RF-366). Cero = apagado. ---
+@export var charge_distance_tiles: float = 0.0
+@export var charge_multiplier: float = 0.0
+@export var charge_slow_tolerance: float = 0.0
+@export var charge_impact_radius_tiles: float = 0.0
+@export var charge_wear_percent: float = 0.0
+

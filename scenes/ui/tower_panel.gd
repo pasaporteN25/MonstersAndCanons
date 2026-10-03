@@ -13,6 +13,7 @@ var _gold: int = 0
 ## RF-280: los segundos de aturdimiento que se muestran (para refrescar solo cuando cambian).
 var _shown_stun: int = 0
 var _shown_support: int = 0
+var _shown_wear: float = 0.0
 ## RF-317: las torres de este nivel, para decir con cuáles combina la seleccionada. Lo pone Game.
 var partner_towers: Array[TowerData] = []
 
@@ -50,7 +51,7 @@ func show_tower(tower: Tower, sell_value: int, gold: int) -> void:
 
 ## RF-280: mientras la torre está aturdida, la cuenta atrás del título se va actualizando.
 func _process(_delta: float) -> void:
-	if _tower != null and visible and (ceili(_tower.stun_left()) != _shown_stun or _tower.support_bonus() != _shown_support):
+	if _tower != null and visible and (ceili(_tower.stun_left()) != _shown_stun or _tower.support_bonus() != _shown_support or not is_equal_approx(_tower.wear_percent, _shown_wear)):
 		refresh(_gold)
 
 
@@ -62,8 +63,14 @@ func refresh(gold: int) -> void:
 	_shown_stun = ceili(_tower.stun_left())
 	_title.text = "%s · Nivel %d" % [_tower.data.display_name, _tower.level_number()]
 	_title.tooltip_text = _title.text
-	_status.visible = _shown_stun > 0
-	_status.text = "Aturdida (%d s)" % _shown_stun
+	_shown_wear = _tower.wear_percent
+	var states: PackedStringArray = []
+	if _shown_stun > 0:
+		states.append("Aturdida (%d s)" % _shown_stun)
+	if _shown_wear > 0.0:
+		states.append("Desgaste %.0f %%" % _shown_wear)
+	_status.visible = not states.is_empty()
+	_status.text = " · ".join(states)
 	_damage.text = str(s.damage)
 	_shown_support = _tower.support_bonus()
 	_rate.text = "Apoyo" if _tower.data.support_only else "%.2f/s" % _tower.effective_fire_rate()

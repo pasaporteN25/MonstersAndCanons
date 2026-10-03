@@ -22,3 +22,7 @@ extends Resource
 @export var points_per_gold: int = 0
 ## RF-190: puntos por cada vida que queda al ganar.
 @export var points_per_life: int = 0
+
+## RF-367: límite de desgaste por torre, en puntos porcentuales.
+@export var wear_max_percent: float = 0.0
+

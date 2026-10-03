@@ -419,6 +419,11 @@ func _on_enemy_spawned(enemy: Enemy) -> void:
 	if collectible != null and bool(enemy.get_meta("original_spawn", false)) and collectible.next_enemy_is_carrier():
 		_carrier = enemy
 	enemy.died.connect(_on_enemy_died)
+	enemy.charged_impact.connect(func(_rammer: Enemy, tower: Tower) -> void:
+		var text := FloatingText.new().setup("¡Desgaste!", Color(1,0.67,0.27), 18, 0.7, 30.0)
+		text.position = tower.global_position + Vector2(0,-20)
+		effects.add_child(text)
+		Audio.play(&"impact", 0.2))
 	enemy.gold_drain.connect(func(thief: Enemy, amount: int, floor_gold: int) -> void:
 		var taken: int = session.steal(amount, floor_gold)
 		if taken > 0:

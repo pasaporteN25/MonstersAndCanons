@@ -5,6 +5,8 @@ class_name Tower
 extends Node2D
 
 signal fired(projectile: Projectile)
+const WEAR_BALANCE: BalanceConfig = preload("res://data/balance.tres")
+var wear_percent: float = 0.0
 
 ## RF-54: a qué enemigo apunta, entre los que están en su alcance.
 enum TargetMode { FIRST, LAST, STRONGEST, CLOSEST }
@@ -175,11 +177,11 @@ func support_bonus() -> int:
 		if tower == null or not tower.data.support_only or tower.is_queued_for_deletion():
 			continue
 		supports.append({"active": not tower.is_stunned(), "position": tower.global_position,
-			"radius": tower.range_px(), "percent": tower.stats().support_rate_percent})
+			"radius": tower.range_px(), "percent": roundi(tower.stats().support_rate_percent * WearRules.ratio(tower.wear_percent))})
 	return SupportRules.strongest_at(global_position, supports)
 
 func effective_fire_rate() -> float:
-	return SupportRules.fire_rate(stats().fire_rate, support_bonus())
+	return SupportRules.fire_rate(stats().fire_rate, support_bonus()) * WearRules.ratio(wear_percent)
 
 func _physics_process(delta: float) -> void:
 	_recovery_left = maxf(0.0, _recovery_left - delta)
@@ -392,6 +394,10 @@ func _draw() -> void:
 	elif _recovery_left > 0.0:
 		draw_arc(Vector2(0, -10) * factor, 18 * factor, PI, TAU, 24,
 			Color(0.7, 0.96, 1, _recovery_left / 0.28), 1.7, true)
+	draw_set_transform(Vector2.ZERO)
+	if wear_percent > 0.0:
+		draw_polyline(PackedVector2Array([Vector2(-18,14),Vector2(-6,9),Vector2(-10,20),Vector2(8,14)]), Color(0.95,0.6,0.22), 2.8, true)
+		draw_arc(Vector2.ZERO, 25.0, PI * 0.15, PI * (0.15 + wear_percent / 50.0), 20, Color(0.9,0.5,0.15,0.8), 2.5, true)
 
 
 func _draw_level_plate(factor: float) -> void:
@@ -444,3 +450,9 @@ func _sync_upgrade_glow() -> void:
 	_upgrade_material.set_shader_parameter("accent", TowerVisual.upgrade_glow_color(data.id))
 	_upgrade_material.set_shader_parameter("strength", TowerVisual.upgrade_glow_strength(level_number()))
 	_upgrade_material.set_shader_parameter("phase", _upgrade_time)
+
+## RF-367: desgaste distinto de stun; mejorar no lo borra.
+func apply_wear(amount: float) -> void:
+	wear_percent = WearRules.impact(wear_percent, amount, WEAR_BALANCE.wear_max_percent)
+	queue_redraw()
+

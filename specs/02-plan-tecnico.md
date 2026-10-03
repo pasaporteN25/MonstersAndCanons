@@ -599,3 +599,7 @@ TechnologyStat en TopBar/Stats usa el icono existente, tipografía22 y ayuda por
 ### M39 / T184
 EnemyData: gold_drain_amount/interval/floor y optional_wave_limit apagados por defecto. Enemy.clock de física solicita oro; LevelSession calcula el descuento acotado. SpawnGroup.probability y WaveSpawner.rng inyectable sortean al inicio y limitan enemigos opcionales por tipo. LevelFile valida0–1, LevelDraft conserva/serializa/deshace; pruebas de piso, ingresos, muerte/salida, sorteo/cap, persistencia editorial y campaña.
 
+
+### M40 / T185
+ChargeRules extrae rectas del Curve2D de camino y calcula extremos/proximidad. EnemyData configura distancia, aceleración, tolerancia a slow, alcance e impacto; Enemy usa delta/distancia y señal de impacto. WearRules aplica/clampa desgaste, Tower lo guarda por instancia y calcula cadencia/prestaciones; BalanceConfig.wear_max_percent limita. Panel y marca de base separan daño de stun. Pruebas de geometría, extremos, cercanía, slow, persistencia al mejorar, tope y coexistencia con apoyo/stun.
+

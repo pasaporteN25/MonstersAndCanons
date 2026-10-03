@@ -13,3 +13,5 @@ star_3_lives_percent = 90
 star_2_lives_percent = 50
 points_per_gold = 10
 points_per_life = 100
+
+wear_max_percent = 50.0

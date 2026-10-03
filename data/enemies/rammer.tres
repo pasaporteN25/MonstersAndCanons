@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+[ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="script"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/rammer.png" id="art"]
+[resource]
+script = ExtResource("script")
+id = &"rammer"
+display_name = "Embestidor"
+description = "Carga después de3 casillas rectas. Al llegar al giro o salida desgasta una torre cercana a ese extremo. Hielo fuerte corta su carga. No destruye torres; el Mecánico repara el desgaste."
+max_health = 60
+speed_tiles = 1.1
+armor = 2
+reward = 10
+lives_damage = 2
+size_tiles = 0.32
+visual_scale = 1.2
+flip_when_walking_left = false
+color = Color(0.61, 0.38, 0.78, 1)
+texture = ExtResource("art")
+charge_distance_tiles = 3.0
+charge_multiplier = 1.8
+charge_slow_tolerance = 0.2
+charge_impact_radius_tiles = 1.25
+charge_wear_percent = 20.0
