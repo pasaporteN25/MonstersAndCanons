@@ -603,3 +603,9 @@ EnemyData: gold_drain_amount/interval/floor y optional_wave_limit apagados por d
 ### M40 / T185
 ChargeRules extrae rectas del Curve2D de camino y calcula extremos/proximidad. EnemyData configura distancia, aceleración, tolerancia a slow, alcance e impacto; Enemy usa delta/distancia y señal de impacto. WearRules aplica/clampa desgaste, Tower lo guarda por instancia y calcula cadencia/prestaciones; BalanceConfig.wear_max_percent limita. Panel y marca de base separan daño de stun. Pruebas de geometría, extremos, cercanía, slow, persistencia al mejorar, tope y coexistencia con apoyo/stun.
 
+
+### M41 / T186
+TowerLevelData.support_repair_per_second; WearRules.repair pura; búsqueda de mayor fuente sin asignar diccionarios por receptor. Tower registra repair_rate_received para lectura visual/UI, consulta solo SUPPORT_GROUP cuando desgastada, descarta self/stun/sale y reduce tasa por condición del reparador. Reparación antes del retorno de stun permite curar una torre apagada sin despertarla. Clocks de física respetan pausa/velocidad. Laboratorio reproducible con semillas, conteo de Ladrones/Embestidores/robo/impactos/reparación y capturas de panel/estado; pruebas y exportaciones independientes del progreso real.
+
+
+La validación de rendimiento detectó costo de triangulación de marcas por frame. M41 usa dos texturas SVG compartidas (grieta ámbar/herramienta cian), intensidad proporcional a desgaste y sin geometría adicional por cuadro; alcanza 103 FPS en la carga P7 extendida.

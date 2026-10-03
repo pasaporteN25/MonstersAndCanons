@@ -5,7 +5,7 @@
 script = ExtResource("script")
 id = &"rammer"
 display_name = "Embestidor"
-description = "Carga después de3 casillas rectas. Al llegar al giro o salida desgasta una torre cercana a ese extremo. Hielo fuerte corta su carga. No destruye torres; el Mecánico repara el desgaste."
+description = "Carga después de 3 casillas rectas. Al llegar al giro o salida desgasta una torre cercana a ese extremo. Hielo fuerte corta su carga. No destruye torres; el Mecánico repara el desgaste."
 max_health = 60
 speed_tiles = 1.1
 armor = 2

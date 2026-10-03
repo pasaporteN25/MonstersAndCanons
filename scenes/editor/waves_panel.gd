@@ -108,6 +108,10 @@ func _fill() -> void:
 
 func _update_total() -> void:
 	_total_label.text = "Enemigos en esta oleada: %d" % draft.enemy_total(_wave)
+	for i: int in draft.group_count(_wave):
+		if float(draft.group(_wave,i)["probabilidad"]) < 1.0:
+			_total_label.text += " (máximo; incluye opcionales)"
+			break
 
 
 ## Los títulos de las columnas, del mismo ancho que los controles de abajo.

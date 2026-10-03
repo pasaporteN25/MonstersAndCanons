@@ -7,6 +7,7 @@ extends Node
 enum State { BUILDING, WAVE_RUNNING, COUNTDOWN, WON, LOST }
 
 signal gold_changed(gold: int)
+signal gold_stolen(amount: int)
 signal lives_changed(lives: int)
 ## RF-190: cambiaron los puntos.
 signal score_changed(score: int)
@@ -168,5 +169,6 @@ func steal(amount: int, floor_gold: int) -> int:
 	if taken > 0:
 		gold -= taken
 		gold_changed.emit(gold)
+		gold_stolen.emit(taken)
 	return taken
 

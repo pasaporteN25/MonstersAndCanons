@@ -236,3 +236,19 @@ func test_first_five_levels_do_not_offer_new_support_even_when_unlocked() -> voi
 	for i: int in 5:
 		assert_false(GameFlow.level(i).available_towers([STANDARD], SaveManager.collection_complete).has(STANDARD))
 	assert_true(GameFlow.level(6).available_towers([STANDARD], SaveManager.collection_complete).has(STANDARD))
+
+func test_collection_counter_is_top_bar_and_tracks_pending_confirmed_and_saved() -> void:
+	SaveManager.collect_source(&"technology",&"level_02")
+	var game: Game = _game(0,true)
+	var value: Label = game.hud.get_node("TopBar/Stats/TechnologyStat/TechnologyLabel")
+	assert_eq(value.text,"1/5")
+	game.collectible.pick(1)
+	game._update_collection_notice()
+	assert_eq(value.text,"2/5")
+	var icon: Control = game.hud.get_node("TopBar/Stats/TechnologyStat/TechnologyIcon")
+	assert_string_contains(icon.tooltip_text,"completar oleada")
+	game.session.begin_wave()
+	game.session.complete_wave()
+	assert_string_contains(icon.tooltip_text,"confirmada")
+	game.session.lose_lives(1000)
+	assert_eq(value.text,"2/5")

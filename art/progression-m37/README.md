@@ -25,5 +25,7 @@ APPDATA aislado en build/t180-user. Desde la raíz:
 - godot --path . -s tools/perf_test.gd -- apoyo
 - godot --headless --fixed-fps 60 -s art/progression-m37/balance_support.gd -- mix level=6 support=0 (nivel6/7, support0/1)
 
-## Siguientes etapas registradas
+## Etapas posteriores (completadas en M39–M41)
 T184 Ladrón periódico, T185 Embestidor/desgaste al final de rectas cerca del camino, T186 reparación del mecánico. Campaña objetivo1–15 con pruebas6/7, intensidad8/9 y combinaciones10–14/final15; solo1–7 existen. B-22 permanece abierto. Vida/destrucción/reconstrucción, reparación paga y economía/UI nueva son alternativas futuras, no parte de esta primera etapa.
+
+Actualización: T184–T186 completos; ver ../mechanics-m41/README.md para pruebas, balance y capturas actuales. Los resultados de este archivo documentan la primera entrega M37, anterior al desgaste/reparación.

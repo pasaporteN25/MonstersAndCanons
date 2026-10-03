@@ -77,7 +77,7 @@ func test_optional_groups_can_be_absent_and_caps_reset_per_wave() -> void:
 	var spawner := WaveSpawner.new()
 	add_child_autofree(spawner)
 	var wave := WaveData.new()
-	for probability: float in [0.0,0.5,0.5]:
+	for probability: float in [0.0,0.999999,0.999999]:
 		var group := SpawnGroup.new()
 		group.enemy = THIEF
 		group.count = 10
@@ -88,7 +88,12 @@ func test_optional_groups_can_be_absent_and_caps_reset_per_wave() -> void:
 	var total: int = 0
 	for run: WaveSpawner.GroupRun in spawner._runs:
 		total += run.group.count - run.spawned
-	assert_lte(total,1)
+	assert_eq(total,1)
+	spawner.start_wave(wave,2)
+	total = 0
+	for run: WaveSpawner.GroupRun in spawner._runs:
+		total += run.group.count - run.spawned
+	assert_eq(total,1,"el cupo vuelve a estar disponible en la siguiente oleada")
 	wave.groups.resize(1)
 	watch_signals(spawner)
 	spawner.start_wave(wave,2)
@@ -118,3 +123,18 @@ func test_campaign_introduces_threats_only_after_five_levels() -> void:
 					assert_eq(group.count,1)
 					assert_lt(group.probability,1.0)
 		assert_eq(count,0 if i < 5 else (1 if i == 5 else 3))
+
+func test_actual_pause_freezes_and_time_scale_accelerates_clock() -> void:
+	var enemy: Enemy = _enemy()
+	enemy.set_physics_process(true)
+	get_tree().paused = true
+	var distance_before: float = enemy.distance
+	await get_tree().create_timer(0.1,true,false,true).timeout
+	assert_eq(enemy._drain_clock,0.0)
+	assert_eq(enemy.distance,distance_before)
+	get_tree().paused = false
+	Engine.time_scale = 2.0
+	await get_tree().create_timer(0.2,true,false,true).timeout
+	Engine.time_scale = 1.0
+	enemy.set_physics_process(false)
+	assert_gt(enemy._drain_clock,0.3)

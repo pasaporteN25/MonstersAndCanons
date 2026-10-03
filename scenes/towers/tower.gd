@@ -5,8 +5,12 @@ class_name Tower
 extends Node2D
 
 signal fired(projectile: Projectile)
+signal wear_changed(current: float, change: float)
 const WEAR_BALANCE: BalanceConfig = preload("res://data/balance.tres")
+const WEAR_ICON: Texture2D = preload("res://assets/ui/tower_wear.svg")
+const REPAIR_ICON: Texture2D = preload("res://assets/ui/tower_repair.svg")
 var wear_percent: float = 0.0
+var repair_rate_received: float = 0.0
 
 ## RF-54: a qué enemigo apunta, entre los que están en su alcance.
 enum TargetMode { FIRST, LAST, STRONGEST, CLOSEST }
@@ -184,6 +188,7 @@ func effective_fire_rate() -> float:
 	return SupportRules.fire_rate(stats().fire_rate, support_bonus()) * WearRules.ratio(wear_percent)
 
 func _physics_process(delta: float) -> void:
+	_update_repair(delta)
 	_recovery_left = maxf(0.0, _recovery_left - delta)
 	if _target != null and not (is_instance_valid(_target) and can_target(_target)):
 		_target = null
@@ -395,9 +400,11 @@ func _draw() -> void:
 		draw_arc(Vector2(0, -10) * factor, 18 * factor, PI, TAU, 24,
 			Color(0.7, 0.96, 1, _recovery_left / 0.28), 1.7, true)
 	draw_set_transform(Vector2.ZERO)
+	if repair_rate_received > 0.0 and wear_percent > 0.0:
+		draw_texture_rect(REPAIR_ICON, Rect2(Vector2(10,7) * factor,Vector2(18,18) * factor),false)
 	if wear_percent > 0.0:
-		draw_polyline(PackedVector2Array([Vector2(-18,14),Vector2(-6,9),Vector2(-10,20),Vector2(8,14)]), Color(0.95,0.6,0.22), 2.8, true)
-		draw_arc(Vector2.ZERO, 25.0, PI * 0.15, PI * (0.15 + wear_percent / 50.0), 20, Color(0.9,0.5,0.15,0.8), 2.5, true)
+		var opacity: float = lerpf(0.35,1.0,wear_percent / maxf(0.001,WEAR_BALANCE.wear_max_percent))
+		draw_texture_rect(WEAR_ICON,Rect2(Vector2(-27,3) * factor,Vector2(22,22) * factor),false,Color(1,1,1,opacity))
 
 
 func _draw_level_plate(factor: float) -> void:
@@ -453,6 +460,39 @@ func _sync_upgrade_glow() -> void:
 
 ## RF-367: desgaste distinto de stun; mejorar no lo borra.
 func apply_wear(amount: float) -> void:
+	var previous: float = wear_percent
 	wear_percent = WearRules.impact(wear_percent, amount, WEAR_BALANCE.wear_max_percent)
+	if not is_equal_approx(previous,wear_percent):
+		wear_changed.emit(wear_percent,wear_percent - previous)
 	queue_redraw()
 
+
+func repair_rate() -> float:
+	if not is_inside_tree():
+		return 0.0
+	var strongest: float = 0.0
+	var receiver: Vector2 = global_position
+	for node: Node in get_tree().get_nodes_in_group(SUPPORT_GROUP):
+		var tower: Tower = node as Tower
+		if tower == null or tower == self or tower.is_queued_for_deletion() or tower.is_stunned():
+			continue
+		var radius: float = tower.range_px()
+		if receiver.distance_squared_to(tower.global_position) <= radius * radius:
+			strongest = maxf(strongest,tower.stats().support_repair_per_second * WearRules.ratio(tower.wear_percent))
+	return strongest
+
+func _update_repair(delta: float) -> void:
+	if wear_percent <= 0.0:
+		if repair_rate_received > 0.0:
+			repair_rate_received = 0.0
+			queue_redraw()
+		return
+	repair_rate_received = repair_rate()
+	var restored: float = WearRules.repair(wear_percent,repair_rate_received,delta)
+	if not is_equal_approx(restored,wear_percent):
+		var change: float = restored - wear_percent
+		wear_percent = restored
+		wear_changed.emit(wear_percent,change)
+		if wear_percent <= 0.0:
+			repair_rate_received = 0.0
+		queue_redraw()

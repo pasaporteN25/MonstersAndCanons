@@ -10,24 +10,27 @@ script = ExtResource("stats")
 cost = 120
 range_tiles = 2.0
 support_rate_percent = 10
+support_repair_per_second = 2.0
 base_texture = ExtResource("base1")
 [sub_resource type="Resource" id="level2"]
 script = ExtResource("stats")
 cost = 100
 range_tiles = 2.5
 support_rate_percent = 15
+support_repair_per_second = 3.0
 base_texture = ExtResource("base2")
 [sub_resource type="Resource" id="level3"]
 script = ExtResource("stats")
 cost = 160
 range_tiles = 3.0
 support_rate_percent = 20
+support_repair_per_second = 4.0
 base_texture = ExtResource("base3")
 [resource]
 script = ExtResource("tower")
 id = &"mechanical_standard"
 display_name = "Estandarte mecánico"
-description = "Estatua de ingeniería: aumenta la cadencia de los cañones cercanos. No dispara ni acumula su apoyo con otros estandartes. Requiere cinco avances y permiso del nivel. Reparación en una etapa posterior."
+description = "Estatua de ingeniería: aumenta la cadencia de los cañones cercanos. No dispara ni acumula su apoyo con otros estandartes. Requiere cinco avances y permiso del nivel. Repara desgaste dentro del radio (no aturdimiento), sin autorrepararse ni acumular tasas."
 color = Color(0.68, 0.78, 0.83, 1)
 reserved = true
 support_only = true

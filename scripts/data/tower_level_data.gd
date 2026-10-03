@@ -44,3 +44,6 @@ extends Resource
 @export var bonus_vs_slowed_percent: int = 0
 ## RF-310: % de daño extra contra un enemigo que se está quemando.
 @export var bonus_vs_burning_percent: int = 0
+
+## RF-369: puntos porcentuales de desgaste que repara por segundo;0 apagado.
+@export var support_repair_per_second: float = 0.0

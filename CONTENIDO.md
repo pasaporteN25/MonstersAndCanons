@@ -404,3 +404,7 @@ Un grupo de oleada puede declarar `"probabilidad":0.35`; ausencia equivale a1. E
 ### M40 · Carga y desgaste
 EnemyData: `charge_distance_tiles`, `charge_multiplier`, `charge_slow_tolerance`, `charge_impact_radius_tiles`, `charge_wear_percent` (cero apaga). Embestidor: preparación3 casillas, velocidad×1.8, slow hasta20%, impacto20% a una torre a≤1.25 casillas del extremo; `data/balance.tres` limita desgaste a50%. No se destruyen torres. La Bestia B de M24 se reutiliza como diseño inicial. Nivel6: oleada10; nivel7:9/14/18.1–5 sin nuevos enemigos.
 
+
+### M41 · Reparación
+`TowerLevelData.support_repair_per_second` expresa puntos porcentuales de desgaste por segundo,0 desactiva. Mecánico2/3/4, costos y rangos intactos. Mayor tasa activa por radio, sin apilar ni autorreparar; otras fuentes sí pueden reparar estandartes. Desgaste de la fuente reduce tasa y bonus proporcionalmente. Pausa/velocidad afectan reloj; stun del reparador lo apaga, stun del receptor no impide recuperar desgaste ni se acorta.
+

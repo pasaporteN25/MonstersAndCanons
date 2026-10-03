@@ -5,7 +5,7 @@
 script = ExtResource("script")
 id = &"thief"
 display_name = "Ladrón"
-description = "Roba3 de oro cada2 segundos mientras sigue en pantalla, sin bajar de10. Si ganás monedas, vuelve a robar. Matalo pronto; escapar no añade otro robo."
+description = "Roba 3 de oro cada 2 segundos mientras sigue en pantalla, sin bajar de 10. Si ganás monedas, vuelve a robar. Matalo pronto; escapar no añade otro robo."
 max_health = 24
 speed_tiles = 1.6
 reward = 6

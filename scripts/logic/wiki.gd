@@ -93,6 +93,11 @@ static func enemy_entry(enemy: EnemyData, all_enemies: Array[EnemyData], campaig
 		facts.append(["Resistencia a la ralentización", "%d %%" % roundi(enemy.slow_resistance * 100.0)])
 	if enemy.regen_percent_per_second > 0.0:
 		facts.append(["Se cura", "%.0f %% de su vida por segundo" % enemy.regen_percent_per_second])
+	if enemy.gold_drain_amount > 0 and enemy.gold_drain_interval > 0.0:
+		facts.append(["Robo", "%d de oro cada %s s; piso %d, hasta morir o escapar" % [enemy.gold_drain_amount,_number(enemy.gold_drain_interval),enemy.gold_drain_floor]])
+	if enemy.charge_distance_tiles > 0.0:
+		facts.append(["Carga", "tras %s casillas rectas, velocidad ×%s; slow mayor al %s %% la interrumpe" % [_number(enemy.charge_distance_tiles),_number(enemy.charge_multiplier),_number(enemy.charge_slow_tolerance * 100.0)]])
+		facts.append(["Impacto", "%s %% de desgaste a una torre a ≤%s casillas del extremo de la recta; sin destrucción" % [_number(enemy.charge_wear_percent),_number(enemy.charge_impact_radius_tiles)]])
 	if enemy.death_spawn != null and enemy.death_spawn_count > 0:
 		facts.append(["Al morir suelta", "%d × %s" % [enemy.death_spawn_count, enemy.death_spawn.display_name]])
 	if enemy.stun_interval > 0.0:  # RF-281, RF-287

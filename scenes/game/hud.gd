@@ -140,7 +140,13 @@ func show_next_wave(wave: WaveData) -> void:
 		return
 	var counts: Dictionary = wave.enemy_counts()
 	for enemy: EnemyData in counts:
-		_next_wave_icons.add_child(EnemyIcon.new().setup(enemy, counts[enemy]))
+		var icon: EnemyIcon = EnemyIcon.new().setup(enemy, counts[enemy])
+		for group: SpawnGroup in wave.groups:
+			if group.enemy == enemy and group.probability < 1.0:
+				icon.uncertain = true
+				icon.mouse_filter = Control.MOUSE_FILTER_PASS
+				icon.tooltip_text += " · encuentro opcional (grupo %.0f %%)" % (group.probability * 100.0)
+		_next_wave_icons.add_child(icon)
 
 
 ## RF-134: tarjeta "Nuevo enemigo" con su forma, nombre y qué hace.
@@ -376,5 +382,4 @@ func _blink(label: Label) -> void:
 func show_collection(count: int, required: int, state: String) -> void:
 	(%TechnologyLabel as Label).text = "%d/%d" % [count, required]
 	var icon: Control = get_node("TopBar/Stats/TechnologyStat/TechnologyIcon")
-	icon.tooltip_text = "Avances tecnológicos: %s. Una pieza por nivel1–5; se guarda al terminar, abandonar descarta." % state
-
+	icon.tooltip_text = "Avances tecnológicos: %s. Una pieza por cada nivel del 1 al 5; se guarda al terminar, abandonar descarta." % state

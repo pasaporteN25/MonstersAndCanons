@@ -9,6 +9,8 @@ static func effects(level: TowerLevelData) -> Array[String]:
 	var lines: Array[String] = []
 	if level.support_rate_percent > 0:
 		lines.append("Apoyo: +%d %% de cadencia; solo el mayor" % level.support_rate_percent)
+	if level.support_repair_per_second > 0.0:
+		lines.append("Repara %.0f puntos de desgaste/s; solo la mayor tasa" % level.support_repair_per_second)
 	if level.splash_radius_tiles > 0.0:
 		lines.append("Área: radio %.1f" % level.splash_radius_tiles)
 	if level.chain_extra_targets > 0:

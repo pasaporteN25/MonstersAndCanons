@@ -92,3 +92,6 @@ Placa de nivel: hierro/bronce, remaches ámbar siempre legibles; no depende del 
 
 ### M37 · Apoyo y avance coleccionable
 Avance genérico: disco plateado con silueta de nave, sin engranaje exclusivo del mecánico, reutilizable para futuros desbloqueos. Mecánico: estatua fija de hierro/plata y bronce, casco de guerra y engranaje, distingue apoyo de un cañón. Diseño vectorial inicial nativo, luz arriba/izquierda, sin sombras incrustadas; revisión por Lucas antes de declarar arte definitivo. No modifica atlas aprobados. Aura de apoyo fina y cian/gris, sin confundirla con curación verde o aturdimiento violeta.
+
+### M39–M41 · Diseños iniciales de mecánicas
+Ladrón: vector nativo encapuchado con bolsa; Embestidor: Bestia B reservada de M24, pose única. Desgaste usa grieta ámbar y reparación herramienta cian sobre base, con texturas compartidas para preservar rendimiento. No confundir con aura verde de cura enemiga ni chispas magenta de stun. Muestras reales en art/mechanics-m41; diseños iniciales revisables por Lucas, sin aprobación artística definitiva.
