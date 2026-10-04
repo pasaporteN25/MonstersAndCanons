@@ -1,0 +1,50 @@
+{
+	"anchor": [
+		128,
+		191
+	],
+	"columns": 4,
+	"creatures": {
+		"fast": {
+			"atlas": "atlases/fast_walk.png",
+			"frame_seconds": 0.08,
+			"idle_column": 0,
+			"loop": true,
+			"source_size": [
+				1254,
+				1254
+			]
+		},
+		"normal": {
+			"atlas": "atlases/normal_walk.png",
+			"frame_seconds": 0.1,
+			"idle_column": 0,
+			"loop": true,
+			"source_size": [
+				1254,
+				1254
+			]
+		},
+		"tank": {
+			"atlas": "atlases/tank_walk.png",
+			"frame_seconds": 0.18,
+			"idle_column": 0,
+			"loop": true,
+			"source_size": [
+				1254,
+				1254
+			]
+		}
+	},
+	"directions": [
+		"east",
+		"south",
+		"west",
+		"north"
+	],
+	"frame_size": [
+		256,
+		256
+	],
+	"rows": 4
+}

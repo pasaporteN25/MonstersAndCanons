@@ -15,6 +15,8 @@ const CARDS_PER_ROW: int = 5
 const VISIBLE_ROWS: int = 2
 const CARD_STAR_SIZE: float = 26.0
 const ERROR_COLOR := Color(1.0, 0.55, 0.55)
+## RF-319: tope del oro que se puede escribir a mano en la franja de pruebas.
+const DEV_MAX_GOLD: int = 999999
 
 ## RF-226: dónde se buscan los mapas de la comunidad. Los tests usan otra carpeta (hay que
 ## cambiarlo ANTES de agregar la pantalla al árbol, que es cuando busca).
@@ -24,6 +26,11 @@ var folder_opener: Callable = OS.shell_open
 
 var _page: StringName = PAGE_CAMPAIGN
 var _entries: Array[Dictionary] = []
+## RF-319: la franja "Pruebas" (solo en el modo de pruebas). null en el juego normal.
+var dev_strip: HBoxContainer
+var _dev_wave: SpinBox
+var _dev_auto: CheckBox
+var _dev_gold: SpinBox
 
 @onready var _scroll: ScrollContainer = %Scroll
 @onready var _cards: HFlowContainer = %Cards
@@ -42,6 +49,8 @@ func _ready() -> void:
 	_entries = CommunityMaps.scan(community_dir)  # RF-226: se vuelve a buscar cada vez que se abre
 	_community_tab.text = "Mapas de la comunidad (%d)" % _entries.size()
 	show_page(GameFlow.select_page)  # RF-225: la solapa en la que se estaba
+	if DevMode.enabled:
+		_add_dev_strip()
 	Audio.add_click_sounds(self)
 
 
@@ -83,6 +92,79 @@ func show_page(page: StringName) -> void:
 
 func current_page() -> StringName:
 	return _page
+
+
+## RF-319: oleada inicial y oro inicial, para probar las oleadas finales sin jugar las anteriores.
+## Los valores quedan en `DevMode` en cuanto se cambian; al elegir un nivel, `Game` los usa.
+func _add_dev_strip() -> void:
+	DevMode.reset_start()  # cada vez que se abre la selección se vuelve a elegir
+	dev_strip = HBoxContainer.new()
+	dev_strip.name = "DevStrip"
+	dev_strip.custom_minimum_size = Vector2(1090, 36)
+	dev_strip.add_theme_constant_override("separation", 10)
+	var title: Label = _dev_label("Pruebas")
+	title.add_theme_color_override("font_color", Color(1, 0.55, 0.3))
+	dev_strip.add_child(title)
+	dev_strip.add_child(_dev_label("Oleada inicial"))
+	_dev_wave = _dev_spin(1, _max_waves(), 1)
+	_dev_wave.value_changed.connect(_on_dev_wave_changed)
+	dev_strip.add_child(_dev_wave)
+	dev_strip.add_child(_dev_label("Oro inicial"))
+	_dev_auto = CheckBox.new()
+	_dev_auto.text = "Automático"
+	_dev_auto.button_pressed = true
+	_dev_auto.focus_mode = Control.FOCUS_NONE
+	_dev_auto.toggled.connect(_on_dev_gold_changed.unbind(1))
+	dev_strip.add_child(_dev_auto)
+	_dev_gold = _dev_spin(0, DEV_MAX_GOLD, 0)
+	_dev_gold.editable = false
+	_dev_gold.value_changed.connect(_on_dev_gold_changed.unbind(1))
+	dev_strip.add_child(_dev_gold)
+	var hint: Label = _dev_label("Si pasa del total del nivel, se usa la última oleada.")
+	hint.add_theme_font_size_override("font_size", 15)
+	hint.modulate = Color(1, 1, 1, 0.7)
+	dev_strip.add_child(hint)
+	_scroll.get_parent().add_child(dev_strip)
+	_scroll.get_parent().move_child(dev_strip, _scroll.get_index())
+	Audio.add_click_sounds(dev_strip)
+
+
+func _dev_label(text: String) -> Label:
+	var label := Label.new()
+	label.text = text
+	label.add_theme_font_size_override("font_size", 20)
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	return label
+
+
+func _dev_spin(min_value: int, max_value: int, start: int) -> SpinBox:
+	var spin := SpinBox.new()
+	spin.min_value = min_value
+	spin.max_value = max_value
+	spin.value = start
+	spin.custom_minimum_size = Vector2(110, 0)
+	return spin
+
+
+## El mayor número de oleadas entre los niveles de la campaña y los mapas de la comunidad.
+func _max_waves() -> int:
+	var most: int = 1
+	for i: int in GameFlow.level_count():
+		most = maxi(most, GameFlow.level(i).waves.size())
+	for entry: Dictionary in _entries:
+		var level: LevelData = entry["level"]
+		if level != null:
+			most = maxi(most, level.waves.size())
+	return most
+
+
+func _on_dev_wave_changed(value: float) -> void:
+	DevMode.start_wave = int(value)
+
+
+func _on_dev_gold_changed() -> void:
+	_dev_gold.editable = not _dev_auto.button_pressed
+	DevMode.start_gold = -1 if _dev_auto.button_pressed else int(_dev_gold.value)
 
 
 ## En el celular la carpeta de mapas no se ve (D-034): no se ofrece agregar mapas.

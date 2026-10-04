@@ -1,0 +1,152 @@
+{
+  "cannon_2": {
+    "frames": 8,
+    "unique": 8,
+    "transparent_margin": true
+  },
+  "cannon_3": {
+    "frames": 8,
+    "unique": 8,
+    "transparent_margin": true
+  },
+  "basic_2": {
+    "frames": 8,
+    "unique": 8,
+    "transparent_margin": true
+  },
+  "basic_3": {
+    "frames": 8,
+    "unique": 8,
+    "transparent_margin": true
+  },
+  "multi_2": {
+    "frames": 8,
+    "unique": 8,
+    "transparent_margin": true
+  },
+  "multi_3": {
+    "frames": 8,
+    "unique": 8,
+    "transparent_margin": true
+  },
+  "sniper_2": {
+    "frames": 8,
+    "unique": 8,
+    "transparent_margin": true
+  },
+  "sniper_3": {
+    "frames": 8,
+    "unique": 8,
+    "transparent_margin": true
+  },
+  "burst_2": {
+    "frames": 8,
+    "unique": 8,
+    "transparent_margin": true
+  },
+  "burst_3": {
+    "frames": 8,
+    "unique": 8,
+    "transparent_margin": true
+  },
+  "fire_2": {
+    "frames": 8,
+    "unique": 8,
+    "transparent_margin": true
+  },
+  "fire_3": {
+    "frames": 8,
+    "unique": 8,
+    "transparent_margin": true
+  },
+  "mortar_2": {
+    "frames": 8,
+    "unique": 8,
+    "transparent_margin": true
+  },
+  "mortar_3": {
+    "frames": 8,
+    "unique": 8,
+    "transparent_margin": true
+  },
+  "frost_2": {
+    "frames": 8,
+    "unique": 8,
+    "transparent_margin": true
+  },
+  "frost_3": {
+    "frames": 8,
+    "unique": 8,
+    "transparent_margin": true
+  },
+  "tesla_2": {
+    "frames": 8,
+    "unique": 8,
+    "transparent_margin": true
+  },
+  "tesla_3": {
+    "frames": 8,
+    "unique": 8,
+    "transparent_margin": true
+  },
+  "guardian": {
+    "size": [
+      256,
+      256
+    ],
+    "body_bounds": [
+      32,
+      29,
+      223,
+      191
+    ]
+  },
+  "healer": {
+    "size": [
+      256,
+      256
+    ],
+    "body_bounds": [
+      48,
+      29,
+      208,
+      191
+    ]
+  },
+  "shaman": {
+    "size": [
+      256,
+      256
+    ],
+    "body_bounds": [
+      38,
+      29,
+      218,
+      191
+    ]
+  },
+  "mirror": {
+    "size": [
+      256,
+      256
+    ],
+    "body_bounds": [
+      29,
+      29,
+      227,
+      191
+    ]
+  },
+  "boss": {
+    "size": [
+      256,
+      256
+    ],
+    "body_bounds": [
+      35,
+      29,
+      220,
+      191
+    ]
+  }
+}

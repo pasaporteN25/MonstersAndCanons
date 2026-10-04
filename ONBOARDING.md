@@ -172,6 +172,18 @@ El Mortero es una torre **reservada** (solo el nivel 10 la tendrá): para probar
 
 En `JuegoA_pruebas.exe`, `F1`, hacé aparecer un **Chamán** cerca de varias torres y esperá unos 8 segundos: tiene que salir un **rayo magenta** hacia la torre más cercana, que se ve **apagada** (oscura, con chispas) y **no dispara** unos 3 segundos; si la seleccionás, el panel dice **"Aturdida (N s)"** con la cuenta atrás. Después, un **Espejo** al lado de una torre pegada al camino: el primer disparo tiene que mostrar **"¡Rebote!"**, el Espejo no pierde vida y la torre queda apagada 2 segundos; una torre lejos (por ejemplo un Francotirador) le pega normal. Con una Incendiaria pegada, el Espejo se quema igual.
 
+
+### 6.1.11 Probar oleadas finales y mirar un combo (modo de pruebas)
+
+En `JuegoA_pruebas.exe`, **Jugar**: arriba de las tarjetas hay una franja **"Pruebas"**. Poné **Oleada inicial** en 10 (por ejemplo) y dejá el oro en **Automático**, y elegí el **Nivel 1**.
+
+**✅ Comprobar:**
+- La partida arranca sin torres, con bastante más oro que el normal (lo que se habría juntado en las oleadas 1 a 9), el HUD dice **"Próxima: oleada 10/10"** y al apretar *Empezar oleada* salen los enemigos de la última. Con **Oro inicial** a mano (sacá la tilde de "Automático") arranca con el número que escribas, también con 0. Un número mayor al total usa la última oleada.
+- Ganar o perder esa partida **no** cambia estrellas, récords ni niveles desbloqueados (mirá la pantalla de selección al volver). **Reintentar** vuelve a la oleada 10 con el mismo oro.
+- `F1` abre el panel: la fila **Velocidad** tiene **x0,25 · x0,5 · x1 · x2 · x4**. Elegí x0,25 con un Hielo y un Cañón en el camino: el aviso de combo (número celeste con "!") se lee con calma. El cartel de abajo dice "MODO PRUEBAS · F1: panel · x0,25", el botón de arriba dice "x0,25 [F]", y al salir de la partida vuelve a x1.
+- **Atajos** (con el panel abierto o cerrado): `F2` mata a todos, `F3` salta la oleada, `F4` prende y apaga las vidas infinitas, `F6` y `F7` bajan y suben la velocidad un paso. Las teclas `1`–`9` siguen construyendo torres.
+- Al terminar (o al salir) se escribe `%APPDATA%\Godot\app_userdata\JuegoA\pruebas_stats.json` con la oleada, las vidas, el oro y las torres de cada oleada terminada y el resultado (`won`, `lost` o `left`).
+
 ### 6.1.1 Mapas de la comunidad (en todas las versiones)
 
 Los `.json` de `%APPDATA%\Godot\app_userdata\JuegoA\maps` (la misma carpeta donde guarda el editor) aparecen en **Jugar → Mapas de la comunidad**, en el `.exe` normal y en el de pruebas. Para comprobarlo: guardar un mapa desde el editor (en cualquiera de los dos `.exe`) y buscarlo en la solapa. Cada versión tiene su propio guardado, así que el progreso en esos mapas no se comparte entre el `.exe` normal y el de pruebas. Detalles en [`CONTENIDO.md`](CONTENIDO.md).
@@ -317,3 +329,54 @@ Con estas versiones se desarrolló y probó el proyecto (septiembre de 2026):
 | Java para Android | OpenJDK 21 (el de Android Studio) |
 | Android SDK | build-tools 34–37, plataformas 35–36 |
 | Sistema | Windows 10 Pro |
+
+## Arte renderizado de torres (M23)
+
+Las torres conservan el juego 2D y usan PNG con ocho vistas. La fuente y las capturas están en art/redesign-m23; la guía está en specs/05-guia-de-arte.md §7. Para reproducir los derivados:
+
+```powershell
+godot --headless --path . -s tools/prepare_tower_sprites.gd
+python tools/apply_rendered_art.py
+godot --headless --path . --editor --import
+```
+
+Los PNG de mecanismos/bases miden 128×128, los atlas 512×256, los proyectiles 64×64. Activar mipmaps, pero no ampliar los PNG como si fueran SVG. El campo turret_atlas permite las vistas; dejarlo vacío conserva la textura giratoria anterior. Las fuentes de art/ no van en exportables. El ejecutable Windows de esta entrega es build/JuegoA_m23.exe. No se volvieron a probar Android ni Linux con M23.
+
+Para comprobarlo, abrir una partida, construir las ocho torres comunes, mejorar dos veces y ver cómo apuntan. El mortero se prueba en un nivel que lo habilite o mediante la escena art/redesign-m23/capture_game.tscn. Revisar frío, fuego, explosión y rayo; comparar con en_juego.png, direcciones_m23.png y conjunto_m23.png. La fila preparada de efectos_en_juego.png fue invocada para comparar efectos, no representa cuatro disparos espontáneos. Nunca usar el guardado habitual al ejecutar las herramientas de captura: aislar APPDATA como en las pruebas de producción.
+
+## Monstruos y menú M24
+
+- Menú: logo `assets/ui/logo.png` (se regenera con `godot --headless --path . -s tools/prepare_logo.gd`) y tema de botones `assets/ui/menu_theme.tres`, solo para el menú. Probar con el mouse y con las flechas + Enter.
+- Monstruos: `godot --headless --path . -s tools/prepare_monster_sprites.gd` regenera los PNG de `assets/sprites/enemies/rendered/` desde `art/redesign-m24/sources/` (esas fuentes no se tocan). Después, `godot --headless --import`.
+- Capturas reales (con ventana y el guardado aislado): `$env:APPDATA="$env:TEMP\m24appdata"; godot --path . res://tools/capture_m24.tscn -- monstruos` (también `menu` y `wiki`); salen en `art/m24-integracion/`.
+- Para probarlo jugando: el ejecutable de pruebas, nivel 1, oleada 1. Mirar el diablillo, la bestia y el ogro caminando hacia la izquierda: no se dan vuelta (a propósito, D-050).
+
+## Fondos M26
+Los siete temas, el camino y las rocas, árbol, arbusto y puerta usan los nuevos PNG renderizados. Se aplican en partida, menú y editor; rutas y casillas construibles conservan sus reglas. Recursos en `assets/tiles/rendered/` y `assets/sprites/map/rendered/`.
+
+### Arte M27 en revisión
+Propuestas de niveles2/3 de las nueve torres (ocho vistas por nivel) y cinco monstruos especiales en `art/redesign-m27/`. Incluye atlas, iconos, muestras en Godot, fuentes y guía de integración; todavía no cambia los recursos que usa la partida.
+
+### M27 aplicado a la partida
+Las nueve torres usan mecanismos nuevos en niveles 2 y 3. Guardián, Curandero, Chamán, Espejo y Jefe usan sus PNG renderizados estáticos. Se conservan balance, habilidades y nivel 1 de las torres. Capturas en `art/m27-integracion/`.
+
+### Probar M29
+Importar el proyecto y correr GUT como arriba. En Windows/Linux la ventana crece hacia1920×1080 y cabe en el área útil; en Opciones, Pantalla completa utiliza toda la resolución del monitor. El lienzo lógico sigue1280×720. En partida, revisar Volador/Blindado/Troll/Araña/Cría migrados; caminar y doblar con Normal/Rápido/Tanque; pausar y ralentizar; comprobar barras, quemadura y parpadeo. Mejorar las nueve torres y comprobar base fija, apuntado y retroceso con el encastre C. `art/redesign-m29/capture.tscn` reproduce capturas de producción y24 cuadros de movimiento con `godot --path . --resolution 1920x1080 art/redesign-m29/capture.tscn`. Windows de pruebas: `godot --headless --path . --export-release "Windows (pruebas)" build/JuegoA_m29.exe`. Linux/móvil requieren revisión en sus dispositivos.
+
+### Probar M30
+Mejorar las nueve torres y comparar reflejos en niveles2/3; apuntar, retroceder, pausar y aturdir. La base y su sombra permanecen fijas. Reproducir captura con `godot --path . --resolution 1920x1080 art/redesign-m30/capture.tscn`.
+
+### Probar M31
+Ejecutar `build/JuegoA_m31.exe` o extraer `build/JuegoA_m31_linux.zip`. Revisar los nueve monstruos nuevos: giro, pies, tamaño, ralentización y pausa; comprobar crías, auras, regeneración, hechizo y rebote. Muestra reproducible: `art/redesign-m31/capture.tscn`; `previews/motion.gif` presenta las cuatro direcciones con actores y datos de producción. Linux fue exportado, sin ejecución en este equipo Windows.
+
+### Probar M32
+Abrir `build/JuegoA_m32.exe`, pasar el puntero sobre los iconos de la barra, revisar cifras y ayuda de oleada completada. Abrir Pruebas [F1], activar Mostrar FPS y cerrar el panel: el monitor sigue visible. Esc abre la pausa renovada; P pausa directamente. Capturas en `art/redesign-m32/`. Linux exportado sin ejecutar; móvil sin probar.
+
+### Probar M33
+Abrir `build/JuegoA_m33.exe`; revisar Opciones desde menú y pausa (sonido/visualización), niveles/comunidad, Wiki, récords, final e iniciales. Probar editor/Ajustes/Oleadas/diálogos en modo pruebas. Capturas en `art/redesign-m33/`; ejecutar `capture.tscn` reproduce las siete pantallas. Windows exportado y arranque verificado; Linux exportado sin ejecutar, móvil sin probar.
+
+### Prueba manual M35 · Panel de torre
+Seleccionar torres de niveles1–3, revisar daño/cadencia/alcance, descripción y voladores. Cambiar prioridad, mejorar con U, vender con S; comprobar falta de oro y nivel máximo. Aturdir una torre: aparece cuenta atrás independiente del título. En Hielo, recorrer el detalle hasta ver sinergias y capacidad aérea. Con texto largo, desplazar el detalle y recorrer botones con Tab: ninguna acción sale del panel ni tapa la barra de construcción. Revisar también ventana1280×720 y tamaños escalados.
+
+### M36 · Comprobar niveles, efectos y sonido
+Revisar las nueve torres niveles1–3 y Mortero2×2, también aturdidas: contar remaches sin depender del brillo. Probar Espejo/Chamán, origen del efecto y recuperación. Curandero con heridos/vida completa/fuego y Troll regenerando: distinguir radio del aura de cura efectiva. Matar las trece especies, pausar y usar x2 durante efectos; verificar crías/oro/salida. Escuchar menú y combate, luego impactos/rebote/hechizo/cura con muchas torres; Opciones al0/50/100%. Muestras y laboratorio en art/redesign-m36; requieren APPDATA aislado. No implica prueba física Android/Linux ni aprobación auditiva humana.

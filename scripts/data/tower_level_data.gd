@@ -18,6 +18,8 @@ extends Resource
 @export var slow_duration: float = 0.0
 ## Solo visual (RF-150): la base que se ve en este nivel. Vacío = cuadrado de color (RF-156).
 @export var base_texture: Texture2D
+## RF-337: mecanismo de este nivel. Vacío = atlas original del tipo de torre.
+@export var turret_atlas: Texture2D
 
 # --- Comportamientos (M5, RF-164). Todos valen 0 = apagado, y se pueden combinar. ---
 

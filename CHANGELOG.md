@@ -2,6 +2,57 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Submenús coherentes *(M33, 2026-10-02)*
+
+- Opciones separa sonido y visualización, con deslizadores y casillas de hierro/bronce.
+- Selección de niveles y mapas de la comunidad, Wiki, récords, pantalla final, iniciales/Salón de la Fama y editor/diálogos adoptan el estilo del menú. Se conservan controles, guardados y navegación.
+- Backlog B-19 completado; B-17/B-18 también señalados como terminados.
+
+## HUD compacto y monitor local *(M32, 2026-10-02)*
+
+- Barra superior con iconos y cifras; ayudas al pasar el puntero y al enfocar con teclado. Oleada completada con marca y detalle del bonus en su ayuda.
+- Barra, menú de pausa y controles de pruebas adoptan hierro/bronce; el panel agrupa recursos, partida y simulación.
+- Mostrar FPS deja un monitor sin fondo sobre la partida, visible al cerrar Pruebas. Incluye ms/cuadro estimados y refresca dos veces por segundo; solo información local.
+
+## Ciclos completos de monstruos *(M31, 2026-10-02)*
+
+- Blindado, Troll, Araña, Cría, Guardián, Curandero, Chamán, Espejo y Jefe ahora caminan con cuatro poses en cuatro direcciones: 144 poses nuevas. Con los ciclos anteriores, los trece enemigos tienen movimiento propio.
+- Los pasos acompañan la distancia y la ralentización, se congelan al pausar y conservan tamaño y apoyo. Habilidades, balance y sombras permanecen intactos.
+
+## Reflejos de mejoras *(M30, 2026-10-02)*
+
+- Las nueve torres ahora suman reflejos programáticos sobre metal/cristal: nivel1 conserva su acabado, nivel2 destaca las piezas claras y nivel3 intensifica el brillo. Bronce para armas metálicas, azul para Hielo/Múltiple, violeta para Eléctrica y naranja para Incendiaria.
+- El reflejo acompaña las ocho vistas, el retroceso y el encastre; pausa congela el pulso y el aturdimiento lo apaga. Las sombras quedan intactas.
+- Pendientes de ciclos propios: Blindado, Troll, Araña, Cría, Guardián, Curandero, Chamán, Espejo y Jefe. Solo Normal/Rápido/Tanque caminan y Volador aletea; los otros nueve usan pose fija.
+
+## Monstruos más legibles, montaje C y escritorio Full HD *(M29, 2026-10-02)*
+
+- Los trece enemigos usan sus diseños renderizados: se suman Volador, Blindado, Troll, Araña y Cría que seguían con SVG. En partida el cuerpo crece un20% sin cambiar vida, alcance, selección, colisión ni habilidades.
+- Diablillo, Bestia y Tanque caminan con cuatro poses en cuatro direcciones, sincronizadas con la distancia recorrida. El volador aletea con cuatro poses. Al ralentizar se frenan los pasos y al pausar se detiene la animación. Los otros nueve tienen pose fija, sin aplastamiento global; sus ciclos propios quedan para otra tanda.
+- Las nueve torres encastran sobre bases reforzadas siguiendo el montaje C. El Cañón recibe24 vistas nuevas (ocho por nivel), conservando bronce, hierro y madera. La base queda quieta al apuntar; mecanismo, retroceso y boca de disparo comparten el nuevo asiento. HUD y Wiki usan iconos coherentes con el encastre.
+- Windows/Linux apuntan a1920×1080 con ajuste al área útil en pantallas menores. En pantalla completa se usa la resolución del monitor. El mapa conserva su lienzo lógico1280×720 y se escala junto con la interfaz; celular conserva su presentación.
+- Fuentes, prompts y capturas reales en `art/redesign-m29/`. Linux y celular no se ejecutaron en esta tanda; la revisión visual y el ejecutable corresponden a Windows. Descripción del PR a cargo de Lucas.
+
+## Monsters & Canons: logo, menú y primeros monstruos *(M24, 2026-10-02)*
+
+- El menú principal muestra el logo **Monsters & Canons** y sus botones tienen un acabado de hierro oscuro con borde de bronce, relieve discreto y resplandor ámbar al pasar el mouse o con el teclado.
+- **Normal** (diablillo rojo), **Rápido** (bestia turquesa) y **Tanque** (ogro de piedra) tienen arte nuevo en la partida, la Wiki, "Próxima oleada" y el aviso de enemigo nuevo. Vida, velocidad, recompensa, tamaño y habilidades son los mismos.
+- Por ahora son imágenes fijas: miran siempre hacia el mismo lado y se mueven solo con el bamboleo de caminar (para que la luz no cambie de lado). Las evoluciones de las torres todavía no se integraron: falta arte de ocho vistas.
+
+## Torres con volumen y tres familias visuales *(M23, 2026-10-02)*
+
+- Cañón y mortero de hierro, bronce y madera; cinco torretas industriales; hielo y electricidad con cristal y metal claro.
+- Nueve torres con ocho vistas para apuntar, tres bases según el nivel y nueve proyectiles nuevos. La luz se mantiene fija al cambiar de dirección.
+- Llama renderizada, fragmentos de hielo, explosión y chispas violetas. Los efectos desaparecen al terminar y mantienen los anillos que indican el área.
+- HUD y Wiki usan el nuevo arte. Los cuatro emblemas del HUD ya aceptados quedan incluidos en el repositorio.
+- Conserva reglas y balance. 859 tests en verde y ejecutable Windows de pruebas verificado al arrancar. Enemigos, suelo y decoración quedan para su siguiente revisión artística.
+
+## Modo de pruebas: oleadas finales, velocidades y atajos *(M22)*
+- **Empezar en la oleada N:** en la selección de nivel del ejecutable de pruebas, una franja **"Pruebas"** deja elegir la **oleada inicial** y el **oro inicial** (automático, que es lo que se habría juntado, o a mano). Esa partida empieza sin torres y **no guarda** progreso ni récords.
+- **Cinco velocidades:** x0,25 · x0,5 · x1 · x2 · x4, que se ven en el cartel "MODO PRUEBAS" y vuelven a x1 al salir. Sirve para mirar con calma el aviso de combo.
+- **Atajos:** `F2` matar a todos, `F3` saltar oleada, `F4` vidas infinitas, `F6` y `F7` velocidad más lenta y más rápida (no chocan con las teclas del juego).
+- **Informe:** al terminar o salir de una partida de pruebas, escribe `user://pruebas_stats.json` con la oleada, vidas, oro y torres de cada oleada (los mismos datos que el bot de balance).
+
 ## Sinergias: combinar ataques *(M20)*
 - Un enemigo **ralentizado** por el Hielo recibe **+25 %** de daño del **Cañón**, el **Francotirador** y el **Mortero**; uno **quemado** por la Incendiaria recibe **+30 %** de la **Eléctrica**.
 - **El combo se nota:** el número de daño del golpe sale **más grande y con "!"**, **celeste** si fue por el hielo y **naranja** si fue por el fuego, con un anillo del mismo color y un **"tin"** propio. El primer combo de cada tipo en la partida dice **"¡Combo de hielo!"** o **"¡Combo de fuego!"**. Ya no se amontona con los otros números ni se confunde con el oro, y no desaparece aunque apagues los números de daño.
@@ -67,3 +118,28 @@ Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle t�
 
 ## Los primeros niveles *(M1 a M3)*
 - El juego base: **3 niveles**, 4 torres, menú, opciones, pausa, sonido y guardado del progreso.
+
+## Fondos M26
+Los siete temas, el camino y las rocas, árbol, arbusto y puerta usan los nuevos PNG renderizados. Se aplican en partida, menú y editor; rutas y casillas construibles conservan sus reglas. Recursos en `assets/tiles/rendered/` y `assets/sprites/map/rendered/`.
+
+### Arte M27 en revisión
+Propuestas de niveles2/3 de las nueve torres (ocho vistas por nivel) y cinco monstruos especiales en `art/redesign-m27/`. Incluye atlas, iconos, muestras en Godot, fuentes y guía de integración; todavía no cambia los recursos que usa la partida.
+
+### M27 aplicado a la partida
+Las nueve torres usan mecanismos nuevos en niveles 2 y 3. Guardián, Curandero, Chamán, Espejo y Jefe usan sus PNG renderizados estáticos. Se conservan balance, habilidades y nivel 1 de las torres. Capturas en `art/m27-integracion/`.
+
+## Muestras de legibilidad y presentación *(M28, pendientes de aprobación)*
+
+Comparaciones del arte pendiente de Volador, Blindado, Troll, Araña y Cría; cuerpos+20%/+35%; ciclos de caminar y aleteo exploratorio; presentación1920×1080 para escritorio; ajustes de contacto entre torreta/base y dos conceptos integrados de Cañón. Fuentes, GIF y capturas en `art/redesign-m28/`. Estas propuestas **todavía no cambian la partida**, su resolución, balance ni colisiones. La descripción del PR queda a cargo de Lucas.
+
+### M35 · Panel de torre
+- Panel de información y mejoras con estilo hierro/bronce, métricas agrupadas y detalle desplazable. Los botones quedan visibles incluso con textos largos; aturdimiento y foco de teclado se distinguen.
+
+### M36 · Mejoras B-20 a B-27
+- Marcas de nivel integradas en la base; rebote, aturdimiento, recuperación y curación más legibles.
+- Muertes conservan brevemente la pose del monstruo y se desintegran sin demorar recompensa ni crías.
+- Música propia de menú/combate, efectos suaves y avisos protegidos de los disparos; limitador de mezcla.
+- Estudios de profundidad, contenido/desbloqueos y combos vecinales entregados; esas mecánicas no se activaron en el juego.
+
+### Backlog depurado · T182 (2026-10-03)
+B-02 cerrado; B-15 retirado/dividido. Lore y documentación de Épocas en B-03; Wiki de mods y comunidad en B-29/B-30. B-21/22/23 siguen abiertos con estudios preliminares. Sin cambios en el juego.

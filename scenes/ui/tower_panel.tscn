@@ -1,13 +1,17 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scenes/ui/tower_panel.gd" id="1_panel"]
+[ext_resource type="Theme" path="res://assets/ui/menu_theme.tres" id="theme"]
+[ext_resource type="StyleBox" path="res://assets/ui/game_panel_style.tres" id="panel"]
 
 [node name="TowerPanel" type="PanelContainer"]
 offset_left = 1000.0
-offset_top = 388.0
+offset_top = 260.0
 offset_right = 1270.0
 offset_bottom = 616.0
 grow_vertical = 0
+theme = ExtResource("theme")
+theme_override_styles/panel = ExtResource("panel")
 script = ExtResource("1_panel")
 
 [node name="Margin" type="MarginContainer" parent="."]
@@ -24,31 +28,116 @@ theme_override_constants/separation = 6
 [node name="Title" type="Label" parent="Margin/Rows"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.84, 0.3, 1)
+theme_override_colors/font_color = Color(1, 0.84, 0.45, 1)
 theme_override_font_sizes/font_size = 18
 text = "Torre · Nivel 1"
+autowrap_mode = 3
+max_lines_visible = 2
+text_overrun_behavior = 3
 
-[node name="Stats" type="Label" parent="Margin/Rows"]
+[node name="Status" type="Label" parent="Margin/Rows"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.68, 0.35, 1)
+theme_override_font_sizes/font_size = 14
+
+[node name="Metrics" type="GridContainer" parent="Margin/Rows"]
+layout_mode = 2
+columns = 3
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 0
+
+[node name="DamageCaption" type="Label" parent="Margin/Rows/Metrics"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+text = "DAÑO"
+
+[node name="RateCaption" type="Label" parent="Margin/Rows/Metrics"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+text = "CADENCIA"
+
+[node name="RangeCaption" type="Label" parent="Margin/Rows/Metrics"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+text = "ALCANCE"
+tooltip_text = "Distancia en casillas"
+
+[node name="Damage" type="Label" parent="Margin/Rows/Metrics"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 19
+text = "0"
+
+[node name="Rate" type="Label" parent="Margin/Rows/Metrics"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 19
+text = "0.0/s"
+
+[node name="Range" type="Label" parent="Margin/Rows/Metrics"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 19
+text = "0.0"
+
+[node name="Divider" type="HSeparator" parent="Margin/Rows"]
+layout_mode = 2
+
+[node name="Details" type="ScrollContainer" parent="Margin/Rows"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+follow_focus = true
+
+[node name="Content" type="VBoxContainer" parent="Margin/Rows/Details"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 7
+
+[node name="Description" type="Label" parent="Margin/Rows/Details/Content"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
-text = "Daño"
 autowrap_mode = 3
+
+[node name="Stats" type="Label" parent="Margin/Rows/Details/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.84, 0.55, 1)
+theme_override_font_sizes/font_size = 14
+autowrap_mode = 3
+
+[node name="Air" type="Label" parent="Margin/Rows/Details/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Voladores: no"
 
 [node name="TargetingButton" type="Button" parent="Margin/Rows"]
 unique_name_in_owner = true
 layout_mode = 2
-focus_mode = 0
+custom_minimum_size = Vector2(0, 32)
+theme_override_font_sizes/font_size = 14
 text = "Apuntar: Primero"
+tooltip_text = "Cambiar prioridad de objetivo"
 
 [node name="UpgradeButton" type="Button" parent="Margin/Rows"]
 unique_name_in_owner = true
 layout_mode = 2
-focus_mode = 0
+custom_minimum_size = Vector2(0, 34)
+theme_override_font_sizes/font_size = 14
 text = "Mejorar"
 
 [node name="SellButton" type="Button" parent="Margin/Rows"]
 unique_name_in_owner = true
 layout_mode = 2
-focus_mode = 0
+custom_minimum_size = Vector2(0, 32)
+theme_override_font_sizes/font_size = 14
 text = "Vender"
+tooltip_text = "Vender y recuperar parte de lo invertido · S"

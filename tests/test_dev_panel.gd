@@ -20,6 +20,7 @@ func before_each() -> void:
 
 
 func after_each() -> void:
+	DevMode.clear_stats_file()
 	DevMode.set_enabled(false, SaveManager.DEFAULT_PATH)
 	if FileAccess.file_exists(DEV_PATH):
 		DirAccess.remove_absolute(DEV_PATH)
@@ -49,7 +50,7 @@ func test_dev_mode_game_has_the_panel_closed() -> void:
 func test_add_gold() -> void:
 	var before: int = game.session.gold
 	game.dev_add_gold()
-	assert_eq(game.session.gold, before + Game.DEV_GOLD)
+	assert_eq(game.session.gold, before + DevMode.config.gold_step)
 
 
 func test_infinite_lives() -> void:
@@ -93,14 +94,20 @@ func test_win_and_lose() -> void:
 	assert_eq(other.session.state, LevelSession.State.LOST)
 
 
-func test_speed_x4() -> void:
-	game.dev_set_fast(true)
-	assert_eq(Engine.time_scale, Game.DEV_FAST_SPEED)
-	game.dev_set_fast(false)
-	assert_eq(Engine.time_scale, 1.0)
-
-
 func test_spawn_any_enemy() -> void:
 	game.dev_spawn(load("res://data/enemies/troll.tres"))
 	assert_eq(_active_enemies(), 1)
 	assert_eq((game.enemies.get_child(0) as Enemy).data.id, &"troll")
+
+func test_metrics_stay_visible_when_panel_closes_and_can_be_disabled() -> void:
+	game.dev_panel.show()
+	game.dev_panel.metrics_toggled.emit(true)
+	game.hud._process(0.0)
+	var overlay: Label = game.hud.get_node("PerformanceOverlay")
+	game.dev_panel.hide()
+	assert_true(overlay.is_visible_in_tree())
+	assert_true(overlay.text.contains("FPS"))
+	assert_true(overlay.text.contains("ms/cuadro"))
+	assert_eq(overlay.mouse_filter, Control.MOUSE_FILTER_IGNORE)
+	game.dev_panel.metrics_toggled.emit(false)
+	assert_false(overlay.visible)

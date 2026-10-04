@@ -99,7 +99,7 @@ func test_the_meadow_decoration_is_the_old_one() -> void:
 	for cell: Vector2i in [Vector2i(1, 1), Vector2i(5, 2), Vector2i(12, 7)]:
 		assert_eq(LevelDecor.blocked_decor(cell), MapThemes.blocked_decor(&"pradera", cell))
 	var list: Array = MapThemes.BLOCKED[&"pradera"]
-	assert_eq(list[0], load("res://assets/sprites/map/rock_a.svg"))
+	assert_eq(list[0], load("res://assets/sprites/map/rendered/rock_a.png"))
 	assert_eq(list.size(), 6, "las mismas seis, con las rocas repetidas")
 
 
@@ -119,7 +119,7 @@ func test_every_theme_builds_and_draws_without_errors() -> void:
 		var level: Level = Level.build(_grid(), StringName(id))
 		add_child_autofree(level)
 		assert_eq(level.theme, StringName(id))
-		await wait_frames(2)
+		await wait_physics_frames(2)
 	assert_true(true, "se dibujaron los siete")
 
 
@@ -142,5 +142,12 @@ func test_the_editor_view_takes_the_theme_of_the_draft() -> void:
 	var view := MapView.new()
 	add_child_autofree(view)
 	view.show_map(draft.rows(), draft.grid(), &"desierto")
-	await wait_frames(2)
+	await wait_physics_frames(2)
 	assert_true(true, "la vista del editor dibuja con tema")
+
+
+func test_rendered_ground_materials_and_fallback() -> void:
+	for id: String in MapThemes.IDS:
+		assert_eq(MapThemes.ground_texture(StringName(id)).get_size(), Vector2(256, 256), id)
+	assert_eq(MapThemes.ground_texture(&"playa"), MapThemes.ground_texture(MapThemes.DEFAULT))
+	assert_eq(MapThemes.PATH_TEXTURE.get_size(), Vector2(256, 256))

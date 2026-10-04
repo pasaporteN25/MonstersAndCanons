@@ -5,6 +5,9 @@
 class_name EffectsLayer
 extends Node2D
 
+const FROST_IMPACT: Texture2D = preload("res://assets/sprites/effects/rendered/frost.png")
+const EXPLOSION_IMPACT: Texture2D = preload("res://assets/sprites/effects/rendered/explosion.png")
+
 const GOLD_COLOR := Color(1.0, 0.84, 0.3)
 const SPARK_COLOR := Color(1.0, 0.95, 0.6)
 const FROST_COLOR := Color(0.7, 0.92, 1.0)
@@ -35,6 +38,10 @@ const COMBO_GROUP_SECONDS: float = 0.15
 const MAX_DAMAGE_NUMBERS: int = 40
 ## RF-315: los números de combo tienen su propio tope y no compiten con los blancos.
 const MAX_COMBO_NUMBERS: int = 12
+const MAX_DEATH_RESIDUES: int = 12
+const MAX_HEAL_PULSES: int = 16
+var _death_residues_alive: int = 0
+var _heal_pulses_alive: int = 0
 
 var _damage_numbers_alive: int = 0
 var _combo_numbers_alive: int = 0
@@ -102,6 +109,11 @@ func _is_near_recent_combo(position_: Vector2) -> bool:
 
 ## RF-165: "+N" verde cuando un enemigo se cura. Mismas reglas que los números de daño.
 func heal_number(position_: Vector2, amount: int) -> bool:
+	if _heal_pulses_alive < MAX_HEAL_PULSES:
+		var pulse := RestorationEffect.new()
+		_heal_pulses_alive += 1
+		pulse.tree_exited.connect(func() -> void: _heal_pulses_alive -= 1)
+		_add(pulse, position_)
 	return _small_number(position_, "+%d" % amount, HEAL_COLOR)
 
 
@@ -123,10 +135,15 @@ func damage_numbers_alive() -> int:
 
 
 ## RF-124: estallido del color del enemigo y "+N" con el oro ganado.
-func enemy_died(position_: Vector2, color: Color, radius: float, reward: int) -> void:
+func enemy_died(position_: Vector2, color: Color, radius: float, reward: int, enemy: Enemy = null) -> void:
 	# Destello blanco breve: se ve sobre cualquier fondo, aunque el enemigo sea del color del suelo.
-	_add(RingEffect.new().setup(Color(1, 1, 1, 0.7), radius, radius * 2.2, 0.18), position_)
+	_add(RingEffect.new().setup(Color(1, 0.93, 0.8, 0.45), radius * 0.6, radius * 1.4, 0.16, 1.4), position_)
 	_add(BurstEffect.new().setup(color, radius), position_)
+	if enemy != null and enemy.visual_texture() != null and _death_residues_alive < MAX_DEATH_RESIDUES:
+		var residue := DeathEffect.new().setup(enemy)
+		_death_residues_alive += 1
+		residue.tree_exited.connect(func() -> void: _death_residues_alive -= 1)
+		_add(residue, position_)
 	_add(FloatingText.new().setup("+%d" % reward, GOLD_COLOR), position_ + Vector2(0, -radius))
 
 
@@ -137,10 +154,13 @@ func projectile_impacted(position_: Vector2, stats: TowerLevelData) -> void:
 		var radius: float = Rules.tiles_to_px(stats.splash_radius_tiles)
 		_add(RingEffect.new().setup(Color(SHOCKWAVE_COLOR, 0.25), 6.0, radius, 0.3), position_)
 		_add(RingEffect.new().setup(SHOCKWAVE_COLOR, 6.0, radius, 0.3, 3.0), position_)
+		_add(ImpactSpriteEffect.new().setup(EXPLOSION_IMPACT, clampf(radius * 0.75, 28.0, 64.0), 0.3), position_)
 	elif stats.burn_damage_per_second > 0:
 		_add(RingEffect.new().setup(Color(FIRE_COLOR, 0.8), 4.0, 18.0, 0.22, 3.0), position_)
+		_add(FireImpactEffect.new(), position_)
 	elif stats.slow_amount > 0.0:
 		_add(RingEffect.new().setup(Color(FROST_COLOR, 0.6), 4.0, 22.0, 0.25), position_)
+		_add(ImpactSpriteEffect.new().setup(FROST_IMPACT, 32.0, 0.28), position_)
 	else:
 		_add(RingEffect.new().setup(SPARK_COLOR, 2.0, 10.0, 0.12, 2.0), position_)
 
@@ -158,6 +178,7 @@ func stun_bolt(from: Vector2, to: Vector2) -> void:
 
 ## RF-284: destello cian en el Espejo y, la primera vez, el texto "¡Rebote!" y un anillo en la torre.
 func reflect(mirror_position: Vector2, tower_position: Vector2, first: bool) -> void:
+	_add(ReflectionEffect.new().setup(tower_position - mirror_position), mirror_position)
 	_add(RingEffect.new().setup(Color(REFLECT_COLOR, 0.9), 6.0, 24.0, 0.2, 3.0), mirror_position)
 	if first:
 		_add(FloatingText.new().setup("¡Rebote!", REFLECT_COLOR, 18, 0.9, 30.0), mirror_position + Vector2(0, -22))

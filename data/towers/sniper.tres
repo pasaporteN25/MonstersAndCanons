@@ -2,11 +2,16 @@
 
 [ext_resource type="Script" path="res://scripts/data/tower_level_data.gd" id="1_52100"]
 [ext_resource type="Script" path="res://scripts/data/tower_data.gd" id="2_l18ci"]
-[ext_resource type="Texture2D" path="res://assets/sprites/towers/base_1.svg" id="2_mh2id"]
-[ext_resource type="Texture2D" path="res://assets/sprites/towers/base_2.svg" id="3_oe6kl"]
-[ext_resource type="Texture2D" path="res://assets/sprites/towers/base_3.svg" id="4_5b1ln"]
-[ext_resource type="Texture2D" path="res://assets/sprites/projectiles/sniper.svg" id="5_oe6kl"]
-[ext_resource type="Texture2D" path="res://assets/sprites/towers/turret_sniper.svg" id="6_teci7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/base_1.png" id="2_mh2id"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/base_2.png" id="3_oe6kl"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/base_3.png" id="4_5b1ln"]
+[ext_resource type="Texture2D" path="res://assets/sprites/projectiles/rendered/sniper.png" id="5_oe6kl"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/turret_sniper.png" id="6_teci7"]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/sniper_atlas.png" id="rendered_atlas"]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/sniper_level_2.png" id="evolution_2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/sniper_level_3.png" id="evolution_3"]
 
 [sub_resource type="Resource" id="Resource_adjjk"]
 script = ExtResource("1_52100")
@@ -25,6 +30,7 @@ damage = 70
 fire_rate = 0.4
 range_tiles = 6.0
 base_texture = ExtResource("3_oe6kl")
+turret_atlas = ExtResource("evolution_2")
 
 [sub_resource type="Resource" id="Resource_mh2id"]
 script = ExtResource("1_52100")
@@ -34,6 +40,7 @@ damage = 120
 fire_rate = 0.4
 range_tiles = 7.0
 base_texture = ExtResource("4_5b1ln")
+turret_atlas = ExtResource("evolution_3")
 
 [resource]
 script = ExtResource("2_l18ci")
@@ -44,5 +51,6 @@ can_hit_air = true
 projectile_speed_tiles = 10.0
 color = Color(0.18039216, 0.41960785, 0.22745098, 1)
 turret_texture = ExtResource("6_teci7")
+turret_atlas = ExtResource("rendered_atlas")
 projectile_texture = ExtResource("5_oe6kl")
 levels = Array[ExtResource("1_52100")]([SubResource("Resource_adjjk"), SubResource("Resource_22mr3"), SubResource("Resource_mh2id")])

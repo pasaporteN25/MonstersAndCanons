@@ -196,7 +196,7 @@ func _build_layout() -> void:
 
 func _panel() -> PanelContainer:
 	var panel := PanelContainer.new()
-	var style: StyleBoxFlat = (load("res://assets/ui/panel_style.tres") as StyleBoxFlat).duplicate()
+	var style: StyleBoxFlat = (load("res://assets/ui/game_panel_style.tres") as StyleBoxFlat).duplicate()
 	style.set_content_margin_all(14)
 	panel.add_theme_stylebox_override("panel", style)
 	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL

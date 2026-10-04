@@ -89,7 +89,7 @@ func test_a_big_map_gets_a_camera_with_the_right_zoom_and_center() -> void:
 
 func test_the_camera_maps_the_world_where_the_formula_says() -> void:
 	var game: Game = _game(_big_level(26, 12))
-	await wait_frames(3)
+	await wait_physics_frames(3)
 	assert_eq(get_viewport().get_visible_rect().size, Rules.SCREEN_SIZE, "la pantalla de prueba mide 1280×720")
 	var transform: Transform2D = game.get_canvas_transform()
 	for cell: Vector2i in [Vector2i(0, 0), Vector2i(25, 11), Vector2i(13, 6)]:
@@ -101,7 +101,7 @@ func test_the_camera_maps_the_world_where_the_formula_says() -> void:
 func test_the_cell_under_a_screen_point_is_the_right_one() -> void:
 	# RF-252: es lo que hace get_global_mouse_position() con una cámara.
 	var game: Game = _game(_big_level(26, 12))
-	await wait_frames(3)
+	await wait_physics_frames(3)
 	var inverse: Transform2D = game.get_canvas_transform().affine_inverse()
 	for cell: Vector2i in [Vector2i(0, 0), Vector2i(25, 11), Vector2i(7, 3), Vector2i(20, 10)]:
 		var screen: Vector2 = game.get_canvas_transform() * game.level.cell_center(cell)

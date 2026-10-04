@@ -18,6 +18,8 @@ const TOWER_ICON_SIZE: int = 34
 const INTRO_SECONDS: float = 6.0
 
 var _total_waves: int = 0
+## RF-319: la última oleada que avisó la sesión; si el salto es de más de una, no fue "empezó la oleada".
+var _last_wave: int = 0
 ## Las oleadas del nivel: para mostrar la próxima (RF-133) y avisar del Jefe (RF-135).
 var _waves: Array[WaveData] = []
 var _tower_types: Array[TowerData] = []
@@ -54,7 +56,57 @@ var _last_score: int = -1
 @onready var _build_info_text: Label = %BuildInfoText
 
 
+var _metrics: Label
+var _metrics_updated: int = 0
+
+func _process(_delta: float) -> void:
+	if _metrics == null or not _metrics.visible:
+		return
+	var now: int = Time.get_ticks_msec()
+	if now - _metrics_updated < 500:
+		return
+	_metrics_updated = now
+	var fps: float = Engine.get_frames_per_second()
+	_metrics.text = "%d FPS · %.1f ms/cuadro" % [fps, 1000.0 / maxf(fps, 1.0)]
+
+func show_metrics(enabled: bool) -> void:
+	_metrics.visible = enabled
+	_metrics_updated = 0
+
 func _ready() -> void:
+	_metrics = Label.new()
+	_metrics.name = "PerformanceOverlay"
+	_metrics.position = Vector2(990, 56)
+	_metrics.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_metrics.add_theme_font_size_override("font_size", 14)
+	_metrics.add_theme_color_override("font_outline_color", Color.BLACK)
+	_metrics.add_theme_constant_override("outline_size", 4)
+	_metrics.visible = false
+	add_child(_metrics)
+	var hint := Label.new()
+	hint.position = Vector2(20, 52)
+	hint.visible = false
+	hint.add_theme_color_override("font_outline_color", Color.BLACK)
+	hint.add_theme_constant_override("outline_size", 4)
+	add_child(hint)
+	var bar: Control = get_node("TopBar")
+	bar.theme = preload("res://assets/ui/menu_theme.tres")
+	var edge := ColorRect.new()
+	edge.color = Color(0.52, 0.36, 0.17)
+	edge.position = Vector2(0, 46)
+	edge.size = Vector2(1280, 2)
+	edge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	bar.add_child(edge)
+	for pair: Array in [["Gold", "Oro"], ["Lives", "Vidas"], ["Score", "Puntos"], ["Wave", "Oleada"]]:
+		var icon: Control = bar.get_node("Stats/" + pair[0] + "Stat/" + pair[0] + "Icon")
+		icon.tooltip_text = pair[1]
+		icon.mouse_filter = Control.MOUSE_FILTER_STOP
+		icon.focus_mode = Control.FOCUS_ALL
+		icon.focus_entered.connect(func() -> void:
+			hint.text = icon.tooltip_text
+			hint.show())
+		icon.focus_exited.connect(hint.hide)
+
 	_start_wave_button.pressed.connect(start_wave_pressed.emit)
 	_pause_button.pressed.connect(pause_pressed.emit)
 	_speed_button.pressed.connect(speed_pressed.emit)
@@ -71,7 +123,7 @@ func show_paused(paused: bool, show_label: bool = true) -> void:
 
 ## RF-105: el botón muestra la velocidad actual.
 func show_speed(speed: float) -> void:
-	_speed_button.text = "x%d  [F]" % roundi(speed)
+	_speed_button.text = "%s  [F]" % Rules.speed_text(speed)  # RF-322: x0,5 no se redondea a x0
 
 
 ## Game le pasa las oleadas del nivel ANTES de bind() (RF-133, RF-135).
@@ -205,7 +257,7 @@ func show_selected_tower(index: int) -> void:
 
 
 func _on_gold_changed(gold: int) -> void:
-	_gold_label.text = "Oro: %d" % gold
+	_gold_label.text = "%d" % gold
 	if _last_gold >= 0 and gold != _last_gold:
 		_pop(_gold_label)  # RF-129
 	_last_gold = gold
@@ -216,30 +268,37 @@ func _on_gold_changed(gold: int) -> void:
 
 ## RF-190: los puntos, con el mismo "pop" que el oro.
 func _on_score_changed(score: int) -> void:
-	_score_label.text = "Puntos: %d" % score
+	_score_label.text = "%d" % score
 	if _last_score >= 0 and score != _last_score:
 		_pop(_score_label)
 	_last_score = score
 
 
 func _on_lives_changed(lives: int) -> void:
-	_lives_label.text = "Vidas: %d" % lives
+	_lives_label.text = "%d" % lives
 	if _last_lives >= 0 and lives < _last_lives:
 		_blink(_lives_label)  # RF-128
 	_last_lives = lives
 
 
 func _on_wave_changed(wave: int, total_waves: int) -> void:
+	_wave_label.tooltip_text = "Oleada"
 	_total_waves = total_waves
-	_wave_label.text = "Oleada %d/%d" % [wave, total_waves]
-	if wave > 0:
-		_show_wave_banner(wave)
+	if wave > 0 and wave != _last_wave + 1:
+		# RF-319 (modo de pruebas): se saltó a una oleada; la que dice es la que viene, sin cartel de inicio.
+		_wave_label.text = "→ %d/%d" % [wave + 1, total_waves]
+	else:
+		_wave_label.text = "%d/%d" % [wave, total_waves]
+		if wave > 0:
+			_show_wave_banner(wave)
+	_last_wave = wave
 	# RF-133: la próxima es la oleada número wave + 1, que en la lista está en el índice `wave`.
 	show_next_wave(_waves[wave] if wave < _waves.size() else null)
 
 
 func _on_wave_completed(wave: int, bonus: int) -> void:
-	_wave_label.text = "Oleada %d/%d completada (+%d de oro)" % [wave, _total_waves, bonus]
+	_wave_label.text = "%d/%d ✓" % [wave, _total_waves]
+	_wave_label.tooltip_text = "Oleada completada (+%d de oro)" % bonus
 
 
 func _on_state_changed(state: LevelSession.State) -> void:

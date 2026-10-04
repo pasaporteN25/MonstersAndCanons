@@ -153,7 +153,7 @@ La columna **Hito** de las tablas siguientes indica en qué momento se agrega ca
 
 - **RF-73** **Seleccionar:** clic izquierdo sobre una torre la selecciona (se ve su círculo de alcance). Clic sobre otra casilla del mapa, clic derecho o `Esc` la deseleccionan. Elegir una torre para construir deselecciona la torre construida, y viceversa: nunca hay las dos cosas a la vez.
 - **RF-74** **Dónde está el panel:** flota a la derecha, justo encima de la barra inferior, y **no** tapa los botones. Mientras está abierto, los clics sobre él no llegan al mapa.
-- **RF-75** **El nivel se ve:** cada torre muestra puntitos con su nivel (1, 2 o 3) y, al mejorarse, aparece el mismo anillo que al construirla (RF-130).
+- **RF-75** **El nivel se ve:** cada torre muestra remaches encastrados en una placa de la base con su nivel (1, 2 o 3; RF-350) y, al mejorarse, aparece el mismo anillo que al construirla (RF-130).
 - **RF-76** **Tecla y oro:** `U` mejora y `S` vende la torre seleccionada. El botón **Mejorar** se ve gris si no alcanza el oro, y dice "Nivel máximo" en el nivel 3.
 
 **Tabla de mejoras** (solo se indica lo que cambia respecto al nivel anterior):
@@ -208,7 +208,7 @@ Hasta ahora toda torre ocupa **una** casilla. Esta etapa enseña al juego a mane
 - **RF-292** **Vista previa:** la vista previa de una torre grande **se centra en el mouse** y se "pega" a la cuadrícula (el centro queda en la esquina común de las cuatro casillas más cercanas al mouse). Las **cuatro** casillas se pintan **verdes** si se puede construir y **rojas** si no (RF-41); el dibujo y el círculo de alcance salen desde el centro del cuadrado. Una torre de una casilla se ve **igual que siempre**.
 - **RF-293** **Ocupación y selección:** la torre ocupa sus cuatro casillas: un clic en **cualquiera** de ellas la selecciona (RF-73), y ninguna puede usarse para otra torre. La torre **apunta y mide su alcance desde el centro** del cuadrado.
 - **RF-294** **Vender y mejorar:** funcionan **igual** que en las demás (RF-70 a RF-76, devuelve el 70 %, RF-72). Al vender, **las cuatro casillas** vuelven a estar libres.
-- **RF-295** **Dibujo:** la torre grande se dibuja **el doble de grande** (2×2 casillas): la base del nivel (`base_1`/`base_2`/`base_3`, que son dibujos vectoriales y escalan sin perder nitidez), la sombra, la torreta, los puntitos de nivel, el aturdimiento (RF-280) y el anillo de construcción (RF-130) se **escalan** con el tamaño. El Chamán y el Espejo (RF-282, RF-284) la tratan como a cualquier torre: miden hasta su **centro**.
+- **RF-295** **Dibujo:** la torre grande se dibuja **el doble de grande** (2×2 casillas): la base del nivel (`base_1`/`base_2`/`base_3`, que son dibujos vectoriales y escalan sin perder nitidez), la sombra, la torreta, la placa/remaches de nivel, el aturdimiento (RF-280) y el anillo de construcción (RF-130) se **escalan** con el tamaño. El Chamán y el Espejo (RF-282, RF-284) la tratan como a cualquier torre: miden hasta su **centro**.
 - **RF-296** **El Mortero** (`mortar`, tecla **9**): daño enorme en **área**, muy lento, de largo alcance y caro. Su función: **concentrar el daño en un solo golpe** para que la armadura importe poco (RF-80) y reventar a los grupos de enemigos duros. No le pega a los voladores.
 
   | Nivel | Costo | Daño | Cadencia | Alcance | Radio del área |
@@ -283,6 +283,8 @@ Una investigación con capturas y con el bot (D-047) mostró que el combo quedab
 > **Dado** un enemigo ralentizado y ninguna torre con bonus contra ralentizados en el mapa → **Entonces** no tiene marca. **Cuando** construyo un Cañón → **Entonces** tiene la dianita celeste. **Cuando** lo vendo → **Entonces** la marca desaparece.
 
 #### Etapa B1 · Pares de torres vecinas *(M21, se especifica al tomarla)*
+
+**Actualización de backlog (Lucas, 2026-10-03):** análisis de activación desde mejoras2/3 entregado en B-23/M36; recetas y resultados en `art/redesign-m36/B23-vecindad.md`. Selección e integración de recetas pendientes. La etapa A existente no cambia.
 
 Lo ya decidido: son **vecinas** las torres que se tocan en las **8 casillas** de alrededor (una torre de 2×2 toca por todo su borde); los pares son **pocos y elegidos a mano** (propuesta: **Incendiaria + Eléctrica** → el rayo además quema; **Hielo + Múltiple** → los dardos ralentizan un poco; **Hielo + Cañón** → el área también ralentiza); se **ven** con una línea fina entre las vecinas, el panel dice la sinergia activa y la vista previa resalta con quién combina. Se escribe como §5.9 con sus RF cuando se tome.
 
@@ -365,7 +367,7 @@ Dos enemigos que **no atacan**: hacen más fuertes a los que caminan cerca de el
 
 Hasta ahora los enemigos no le hacían nada a las torres. Estos dos sí: las **apagan** unos segundos. Es la primera regla que cambia **lo que hacen las torres**, y hace que **dónde** se las pone importe más.
 
-- **RF-280** **Torre aturdida:** una torre aturdida **no dispara** hasta que se le pasa el tiempo. Sigue en su lugar y se puede **mejorar, vender y cambiar de apuntado** igual. Si le llega otro aturdimiento, **no se suma**: queda el que más dura. El tiempo corre con el del mundo (la pausa y el x2 lo afectan como al resto). Se ve **apagada** (más oscura, con chispas que giran encima) y su panel dice **"Aturdida (N s)"**.
+- **RF-280** **Torre aturdida:** una torre aturdida **no dispara** hasta que se le pasa el tiempo. Sigue en su lugar y se puede **mejorar, vender y cambiar de apuntado** igual. Si le llega otro aturdimiento, **no se suma**: queda el que más dura. El tiempo corre con el del mundo (la pausa y el x2 lo afectan como al resto). Se ve **apagada** (sin brillo de mejora, con aro roto y descargas localizadas sobre el mecanismo (RF-351)) y su panel dice **"Aturdida (N s)"**.
 - **RF-281** **Los datos del Chamán** (en `EnemyData`, valen 0 = apagado, RF-164): `stun_interval` (cada cuántos segundos lanza su hechizo), `stun_seconds` (cuánto aturde) y `stun_range_tiles` (a qué distancia llega).
 - **RF-282** **El Chamán:** cada `stun_interval` segundos (el primero, un intervalo después de aparecer) **aturde la torre más cercana** que esté a menos de `stun_range_tiles` de él y no esté ya aturdida. Si no hay ninguna, **espera** hasta que aparezca una (no acumula hechizos). Se ve un **rayo magenta** en zigzag del Chamán a la torre. Alcance del hechizo **menor** que el del Francotirador: se lo puede matar antes de que llegue a lanzarlo.
 - **RF-283** **Los datos del Espejo:** `reflect_range_tiles` (a qué distancia rebota) y `reflect_stun_seconds` (cuánto aturde a la torre que disparó).
@@ -892,11 +894,11 @@ Adaptaciones **mínimas** para que el juego funcione en un celular. No es un red
 
 ### 9.6 Arte provisional *(M4, pedido por Lucas, D-023)*
 
-Dibujos simples para dejar de ver formas geométricas. Es un **primer intento "para rellenar"**: **no** decide la ambientación (§12; B-01, B-02 y B-03 siguen abiertos) y cada dibujo se puede cambiar sin tocar el código.
+Dibujos simples para dejar de ver formas geométricas. Es un **primer intento "para rellenar"**: **no** decide la ambientación (§12; B-01 y B-03 siguen abiertos; B-02 cerrado el2026-10-03) y cada dibujo se puede cambiar sin tocar el código.
 
 **Estilo:** caricatura con colores planos y borde oscuro. Las torres se ven **desde arriba** (así la torreta puede girar); los enemigos, **de costado**, como personajes (así se les ven la cara y las patas).
 
-- **RF-150** **Torres:** cada torre se dibuja con una **base** que muestra su nivel y una **torreta** propia de cada tipo. La torreta es la parte que gira y apunta (RF-120, RF-121). Se mantienen los puntitos de nivel (RF-75).
+- **RF-150** **Torres:** cada torre se dibuja con una **base** que muestra su nivel y una **torreta** propia de cada tipo. La torreta es la parte que gira y apunta (RF-120, RF-121). Se mantienen la placa/remaches de nivel (RF-75).
 
   | Nivel | Base | | Torre | Torreta |
   |---|---|---|---|---|
@@ -927,7 +929,7 @@ Dibujos simples para dejar de ver formas geométricas. Es un **primer intento "p
 - **RF-113** **Opciones:** volumen de música, volumen de efectos, pantalla completa sí/no, **números de daño sí/no** *(M4, RF-132)*.
 - **RF-114** **Menú de pausa** (con `Esc` durante la partida): Continuar, Reintentar, Opciones, Salir al menú.
 - **RF-115** El progreso (niveles desbloqueados, mejores resultados) y las opciones **se guardan automáticamente** y siguen ahí al cerrar y volver a abrir el juego.
-- **RF-116** **Sonido básico:** disparo de cada torre, muerte de enemigo, enemigo llega a la salida, victoria, derrota, clic de botón. Una música de fondo.
+- **RF-116** **Sonido básico:** disparo de cada torre, muerte de enemigo, enemigo llega a la salida, victoria, derrota, clic de botón. Música de menú y combate, con transiciones y mezcla (RF-354).
 
 > **Criterio de aceptación RF-115**
 > **Dado** que gané el nivel 1 → **Cuando** cierro el juego y lo vuelvo a abrir → **Entonces** el nivel 2 aparece desbloqueado.
@@ -956,6 +958,31 @@ Para probar todo sin tener que ganar cada nivel, y sin ensuciar el progreso ni l
 - **RF-182** Siempre se ve un cartel **"MODO PRUEBAS"** en una esquina (en los menús y en la partida), para no confundirlo con el juego normal.
 - **RF-183** **Todos los niveles** se pueden elegir, aunque estén bloqueados.
 - **RF-184** **Panel de pruebas** en la partida (tecla `F1` o botón "Pruebas" arriba): +1000 de oro · vidas infinitas (sí/no) · saltar oleada · matar a todos los enemigos · ganar · perder · velocidad x4 · hacer aparecer un enemigo de cualquier tipo · mostrar los FPS. Los enemigos que se matan con el panel no dan oro ni puntos.
+
+#### Probar oleadas finales y combos sin jugar el nivel entero *(M22, pedido por Lucas, D-048)*
+
+**Estado: hecha (2026-10-01, T149 a T155), aprobada por Lucas.** Hoy, para ver la oleada 18 hay que jugar las 17 anteriores, y para mirar el aviso de combo (RF-315 a RF-318) solo hay una velocidad rápida (x4), que lo vuelve ilegible. Esta parte hace que el modo de pruebas sirva para eso. **Solo existe en el modo de pruebas** (RF-180): el juego normal no cambia.
+
+- **RF-319** **Empezar en la oleada N:** en la selección de nivel (campaña y mapas de la comunidad), el modo de pruebas muestra una franja **"Pruebas"** con **Oleada inicial** (un número, desde 1) y **Oro inicial** (**Automático** o un valor a mano). Al elegir un nivel, la partida arranca **lista para empezar la oleada N** (la oleada y la vida de los enemigos son las que corresponden a la N, RF-36, y el HUD muestra la N como "próxima"). Si N es mayor que las oleadas del nivel, se usa la última. Con N = 1 todo es **igual que hoy**. La partida empieza **sin torres**: el oro sirve para construirlas.
+- **RF-320** **Oro automático:** es lo que habría juntado quien juega las oleadas saltadas sin perder ningún enemigo: **el oro inicial del nivel** + **lo que dan todos los enemigos de cada oleada saltada** (incluidas las crías que suelta al morir, RF-166) + **el bono de cada oleada saltada** (RF-22). Se calcula **leyendo los datos** (el nivel, las oleadas, los enemigos y `balance.tres`): **no hay números nuevos en el código** (P2). Las **vidas** son las del nivel. Con un valor a mano, se usa ese (puede ser 0).
+- **RF-321** **No ensucia el progreso:** una partida que empezó en la oleada 2 o más **no guarda** victoria, estrellas, récords ni desbloqueos (como cuando se prueba un nivel desde el editor, RF-217), porque no es una partida entera. Con la oleada 1 se guarda como hasta ahora (en el guardado aparte, RF-181). **Reintentar** vuelve a empezar en la **misma** oleada y con el **mismo** oro; "Siguiente nivel" y volver a la selección vuelven a la oleada 1.
+- **RF-322** **Velocidades:** el panel de pruebas ofrece **x0,25 · x0,5 · x1 · x2 · x4** (cinco botones, el activo resaltado) en vez del interruptor "Velocidad x4". La velocidad se ve en el **cartel "MODO PRUEBAS"** (por ejemplo "MODO PRUEBAS · F1: panel · x0,5"; con x1 el cartel queda como hoy) y en el botón de velocidad del HUD (que hoy redondea y mostraría "x0"). **Al reintentar, terminar la partida o salir, la velocidad vuelve a x1** y el cartel también (RF-105). La tecla `F` sigue alternando x1 y x2; desde cualquier otra velocidad vuelve a x1.
+- **RF-323** **Atajos de teclado** (solo en la partida y solo en el modo de pruebas, con el panel abierto o cerrado, y no con el menú de pausa abierto): **`F2`** matar a todos · **`F3`** saltar oleada · **`F4`** vidas infinitas (sí/no) · **`F6`** velocidad más lenta · **`F7`** velocidad más rápida (se saltea `F5`: Godot la usa en los cuadros de archivos). Se escriben en el panel junto a cada botón ("Matar a todos [F2]"). **No chocan** con ninguna acción del juego: las teclas `1`–`9` (torres), `Esc`, `Espacio`, `P`, `F`, `U`, `S` ni con `F1` (panel) ni con ninguna acción `ui_*` de Godot. Son acciones del `InputMap` creadas por el modo de pruebas al arrancar, así el juego normal ni las tiene. Las teclas **no se reasignan** (el juego no tiene pantalla de controles).
+- **RF-324** **Los números viven en datos (P2):** las velocidades y el oro del botón "+1000 de oro" pasan de constantes del código a `data/dev_config.tres`.
+
+> **Criterio de aceptación RF-319 a RF-321**
+> **Dado** el nivel 1 (oro inicial 100 y 10 oleadas) en el modo de pruebas, **cuando** elijo oleada inicial 6 con oro automático, **entonces** la partida arranca con el oro del nivel + las recompensas de los enemigos de las oleadas 1 a 5 + los bonos de esas cinco oleadas (el número exacto sale de los datos y lo comprueba un test), el HUD dice que la próxima es la 6, y al empezarla salen los enemigos de la 6 con la vida de la 6.
+> **Dado** una oleada inicial mayor que el total (por ejemplo 99), **entonces** se usa la última. **Dado** oleada 1, **entonces** el oro es el del nivel, como hoy. **Dado** un oro a mano de 0, **entonces** arranca con 0.
+> **Dado** una partida empezada en la oleada 6, **cuando** gano, **entonces** no se guarda nada en el progreso ni en los récords; **y cuando** reintento, **entonces** vuelve a la oleada 6 con el mismo oro.
+
+> **Criterio de aceptación RF-322 a RF-324**
+> **Dado** una partida en el modo de pruebas, **cuando** elijo x0,5, **entonces** `Engine.time_scale` vale 0,5, el cartel y el botón del HUD dicen "x0,5"; **y cuando** salgo de la partida, **entonces** la velocidad es 1 y el cartel ya no dice nada de velocidad.
+> **Dado** el `InputMap` con las acciones del juego y las del modo de pruebas, **entonces** ninguna tecla de una acción de pruebas es igual a la de otra acción (un test lo recorre), ninguna es `1`–`9`, y cada acción de pruebas hace lo mismo que su botón del panel.
+
+- **RF-325** **Estadísticas de la partida de pruebas** *(Lucas dijo que sí, 2026-10-01)*: al terminar la partida (ganada o perdida) o al salir de ella, el modo de pruebas escribe `user://pruebas_stats.json` con **los mismos datos que el informe del bot** (`tools/balance_sim.gd`: oleada, vidas, oro, torres, resultado), con los nombres en inglés como el resto del código: `level`, `start_wave`, `wave`, `total_waves`, `lives`, `gold`, `towers`, `result` (`"won"`, `"lost"` o `"left"` si se salió antes) y `waves`, una lista con una fila por oleada terminada (`wave`, `lives`, `gold`, `towers`), más `seconds` (tiempo de juego, sin contar la pausa) y `started_at`. Cada partida **reemplaza** el archivo (no se acumulan). Solo en el modo de pruebas, y nunca toca el guardado de pruebas ni el real.
+
+> **Criterio de aceptación RF-325**
+> **Dado** una partida de pruebas que terminé en la oleada 3 con 17 vidas y 40 de oro, **cuando** termina, **entonces** `pruebas_stats.json` dice `result` `"won"` o `"lost"`, `wave` 3, `lives` 17, `gold` 40 y una fila por cada oleada terminada. **Dado** que salgo antes del final, **entonces** `result` es `"left"`. **Dado** el juego normal, **entonces** no se escribe nada.
 
 ### 10.3 Editor de mapas *(M9, pedido por Lucas, D-033, B-04 escalón 2)*
 
@@ -1047,7 +1074,7 @@ Cosas que **no** hace falta decidir ahora; se deciden antes del hito indicado.
 | Pregunta | Decidir antes de |
 |---|---|
 | ¿Nombre definitivo del juego? | M3 |
-| ¿Ambientación? (medieval, espacial, juguetes…) Afecta nombres de torres/enemigos y el arte. **Candidata fuerte: "Épocas" (§13, B-01).** Se decide junto con el lore (B-03) y el arte (B-02). | M4 |
+| ¿Ambientación? (medieval, espacial, juguetes…) Afecta nombres de torres/enemigos y el arte. **Candidata fuerte: "Épocas" (§13, B-01).** Se decide junto con el lore (B-03); B-02 está cerrado y el arte futuro se encarga como trabajo específico. | M4 |
 | ¿Música: de dónde sale? (propia, gratuita con licencia CC0…) | M3 |
 
 ---
@@ -1082,30 +1109,13 @@ Ideas **aprobadas como dirección**, pero **sin fecha**: no se programan hasta c
 
 **Cuándo:** sin fecha. Lucas prefiere no elegir variante por ahora (2026-09-28). Si se retoma, el lugar natural es M4 (arte), porque ahí se elige la ambientación.
 
-### B-02 · Diseño de assets (arte)
-*Propuesta de Lucas, 2026-09-28. No lo hace Claude: queda para un diseñador o para más adelante.*
+### B-02 · ~~Diseño de assets (arte)~~
+**Cerrado por Lucas, 2026-10-03 (D-063).** El juego ya tiene arte de torres, enemigos, mapas, interfaz y efectos, renovado en M23–M36. Se elimina el objetivo indefinido de «arte definitivo». Los detalles visuales concretos que surjan se registrarán y resolverán por separado, siguiendo la guía de arte; no mantienen abierta esta entrada ni requieren rehacer todo.
 
-**Idea:** reemplazar las formas geométricas por arte dibujado: torres, enemigos, casillas del mapa, efectos, íconos y la interfaz.
+### B-03 · Lore y documentación de Épocas
+**Actualizado por Lucas, 2026-10-03 (D-063). Sin fecha.** Definir quién defiende, quién ataca y por qué, qué representan los niveles y quién es el Jefe. Elegir cómo presentarlo: textos breves por nivel, victoria, nombres y una categoría Lore en la Wiki.
 
-**Estado (2026-09-28):** hay un **juego de dibujos provisionales** hecho por Claude (§9.6, D-023) para no seguir con formas geométricas. B-02 sigue abierto: es el arte **definitivo**, que depende de la ambientación. Para cambiar un dibujo, alcanza con reemplazar su archivo en `assets/sprites/` (D-023 explica cómo).
-
-**Qué ya está preparado para que sea fácil:**
-- Cada torre y cada enemigo se dibuja en **un solo lugar** (`_draw()` de `tower.gd` y `enemy.gd`), y los datos ya dicen su forma y color (`EnemyData.shape`, `TowerData.color`). Cambiar a imágenes es cambiar ese dibujo, no la lógica.
-- Las casillas vienen de `assets/tiles/tiles.png` (64×64) y la decoración de `LevelDecor`.
-- La resolución base es 1280×720 y las casillas miden 64×64 px: el arte se hace a esa escala (o al doble, 128×128, para pantallas grandes).
-
-**Lista de piezas** (para cuando se encargue): 4 torres × 3 niveles, 6 enemigos (con su versión "golpeado" y "ralentizado"), casillas (pasto, camino con bordes, roca, puerta de salida), proyectiles e impactos, íconos de la interfaz, ícono del juego, fondo de los menús.
-
-**Depende de:** la ambientación (§12) y, si se elige, de Épocas (B-01): cada época necesitaría su propio juego de piezas.
-
-### B-03 · Lore (la historia del mundo)
-*Propuesta de Lucas, 2026-09-28. No lo hace Claude: queda para más adelante.*
-
-**Idea:** darle al juego un mundo y una historia: quiénes defienden, quiénes atacan y por qué, qué es cada nivel (Pradera, Desfiladero, Encrucijada, Espiral, Fortaleza) dentro de ese mundo, y quién es el Jefe.
-
-**Cómo se mostraría** (a decidir): un texto corto al elegir cada nivel, una frase en la pantalla de victoria, nombres temáticos para torres y enemigos.
-
-**Depende de / afecta a:** Épocas (B-01) sería una forma de lore ("la guerra a través del tiempo"); el lore también decide la ambientación y, por lo tanto, el arte (B-02). Conviene definir los tres juntos. Si se agregan textos de historia, hay que sacar "Historia, diálogos o cinemáticas" de la lista de §11 (en todo o en parte).
+**Traslado desde B-15:** incluir aquí la futura categoría Épocas en la Wiki, cuando exista ese contenido. B-01 conserva las decisiones de mecánica, progresión e imperios del modo Épocas, y B-05 los modos de juego; esta entrada cubre su historia y documentación, sin duplicar implementación. No presupone diálogos ni cinemáticas. Si se adopta historia, actualizar el alcance de §11. El arte actual (B-02 cerrado) no queda bloqueado por esta decisión.
 
 ### B-04 · Crear mapas fácilmente y mods
 *Propuesta de Lucas, 2026-09-29. Analizada por Claude. Decisión: D-024. **El escalón 1 se hizo en M7 (§7.8, D-031). El escalón 2, el editor, se hizo en M9 (§10.3) solo en la versión de pruebas.** **Prioridad de Lucas (D-033): el editor de mapas (escalón 2) y los mapas de la comunidad (escalón 3, solo la parte de mapas).** **La parte de mapas del escalón 3 se hizo en M10 (§10.4, D-034).** Lo que falta: enemigos, torres y dibujos propios (paquetes de mods completos) y decidir si el editor pasa al juego normal (B-13). Sin fecha.*
@@ -1174,7 +1184,7 @@ Ideas **aprobadas como dirección**, pero **sin fecha**: no se programan hasta c
 
 **Recomendación:** empezar por el **escalón 1** cuando haga falta hacer más niveles. Se paga solo: los niveles 1 a 5 se pueden pasar a ese formato (y un test compararía que se juegan igual que antes), y es la base del editor y de los mods.
 
-**Relación con otras ideas:** Épocas (B-01) podría armarse como un "paquete" con otras torres, enemigos y dibujos, usando el mismo sistema que los mods. El arte definitivo (B-02) también se beneficia: cambiar dibujos pasaría a ser cambiar archivos.
+**Relación con otras ideas:** Épocas (B-01) podría armarse como un "paquete" con otras torres, enemigos y dibujos, usando el mismo sistema que los mods. Los assets propios de un mod también se benefician: sus dibujos forman parte del paquete; B-02 está cerrado.
 
 **Qué cambia en la spec si se hace:** un hito nuevo con sus reglas (RF) y tareas; si se hacen mods, una sección de seguridad (qué puede traer un mod y qué no).
 
@@ -1281,6 +1291,7 @@ Los otros dos de la lista (**Excavador** y **Ladrón**) quedan para una etapa po
 **Recomendación de Claude:** hacer el **aviso de atajo (3)** apenas se pueda, porque es barato, y el **puente (1)** cuando el editor o un nivel lo pidan.
 
 ### B-10 · Más niveles y niveles difíciles
+**Actualización de Lucas, 2026-10-02: prioridad baja.** Completar la campaña hasta el nivel10 sigue pendiente; primero mejorar lo existente. Actualmente `campaign.json` incluye niveles1–7.
 *Idea de Lucas (a partir de las propuestas de Claude), 2026-09-29. Sin fecha.*
 
 - **Niveles 8, 9, 10…:** con el formato de M7 son un archivo de texto y una línea en `campaign.json`. Cada uno se balancea con el bot (spec §7.4).
@@ -1316,15 +1327,8 @@ Los otros dos de la lista (**Excavador** y **Ladrón**) quedan para una etapa po
 
 **Antes de hacerlo:** cambiar la fórmula obliga a **volver a balancear los 7 niveles** con el bot. Se puede comparar las dos fórmulas con el bot en una copia aparte, sin tocar el proyecto. **Qué cambia en la spec:** RF-80, la tabla de torres (columna "tipo de daño") y la de enemigos.
 
-### B-15 · Wiki: bestiario que se llena, búsqueda y más categorías
-*Idea derivada de la wiki (M11), 2026-09-29. Sin fecha.*
-
-La wiki de M11 ya es escalable a propósito (categorías → entradas → bloques). Ideas que **entran sin rehacerla**:
-- ~~**Bestiario que se va llenando**~~ **Hecho en M12** (RF-238 a RF-240, D-036).
-- **Enlaces entre entradas** *(Lucas, 2026-09-29: se hacen **junto con el buscador**, cuando se tome cualquiera de los dos)*: en el texto de una entrada, un nombre que se puede tocar para saltar a otra (en la Araña, "suelta 4 Crías" lleva a la entrada de las Crías; en un artículo, "Incendiaria" lleva a esa torre). La pantalla ya sabe abrir una entrada por su id (`show_target`), así que falta solo marcar los enlaces en los datos.
-- **Buscador** (un cuadro de texto que filtra las entradas) *(se hace junto con los enlaces; Lucas: solo si es muy simple, y no lo es del todo)* (hay que cuidar el foco del teclado con Esc y las flechas, el teclado virtual del celular y que no filtre datos de enemigos cerrados), así que queda acá.
-- **Categorías nuevas** sin tocar la pantalla: **Niveles** (mapa en miniatura, oleadas y qué enemigos vienen), **Lore** (B-03), **Épocas** (B-01), **Mapas de la comunidad** y, si algún día hay mods, **los enemigos y torres de cada mod** (salen solos de los archivos).
-- **Imágenes propias** en los artículos (un bloque `imagen`) y ejemplos de "qué torre conviene contra qué enemigo".
+### B-15 · ~~Ampliación general de la Wiki~~
+**Retirado y dividido por Lucas, 2026-10-03 (D-063).** Lore y Épocas pasan a B-03; la documentación de mods y comunidad se separa en B-29 y B-30. Se retira del pendiente el bestiario ya implementado en M12. Se descartan buscador, enlaces entre entradas, categoría Niveles e imágenes adicionales en artículos: no se necesitan. El bestiario, los dibujos y la navegación existentes se conservan.
 
 ### Sugerencias de Claude *(consultar antes de implementar)*
 *Regla de Lucas, 2026-09-29: las ideas que Claude propone por su cuenta se anotan acá y no se implementan hasta que Lucas las apruebe.*
@@ -1364,3 +1368,146 @@ La wiki de M11 ya es escalable a propósito (categorías → entradas → bloque
 - En **mapas chicos** (20×9) el espacio sí importa: 4 casillas de pasto juntas cerca del camino.
 
 **Torres de apoyo (idea de Claude, relacionada):** como los enemigos tendrán auras (arriba), las torres pueden tenerlas también: un **Estandarte** que sube la cadencia o el alcance de las torres cercanas. Usa **la misma mecánica de aura**, así que conviene diseñarlas juntas.
+
+### Actualización de prioridades · Lucas, 2026-10-02
+
+**Registro inicial; Lucas autorizó B-17/B-18 en M32 y B-19 en M33.** B-20 y B-24 a B-27 completados en M36; análisis B-21/B-22/B-23 entregados con opciones de producción por decidir. B-17 a B-23 tenían **prioridad media**, sin fecha. Primero mejorar la experiencia y la presentación actuales; ampliar la campaña hasta el nivel10 (B-10) queda con **prioridad baja**. Las investigaciones entregan opciones y muestras para decidir antes de producción. Las capturas compartidas muestran el HUD/panel de pruebas y los indicadores amarillos de niveles de torre; sirven de referencia visual.
+
+### B-17 · ~~HUD compacto, pausa y controles de administración~~
+**Prioridad media · Implementado en M32 (T175, RF-345).** Quitar palabras redundantes junto a los iconos de oro, vidas, puntos y oleada: conservar icono y valor (incluido actual/total de oleada). Al pasar el puntero sobre cada icono, mostrar una ayuda pequeña con su significado; contemplar foco por teclado y una alternativa táctil. Rediseñar el fondo de la barra superior, el menú de pausa y los controles de pruebas/admin con la estética actual de Monsters & Canons, mejorando agrupación, jerarquía y orden. Conservar acciones y atajos. **Entrega futura:** muestras del HUD, pausa y panel reorganizado, legibles en los tamaños de ventana soportados, antes de integrar.
+
+### B-18 · ~~FPS y métricas visibles durante la partida~~
+**Prioridad media · Implementado en M32 (T175, RF-346).** FPS y ms/cuadro estimados; otras métricas no se añadieron. Cuando se active Mostrar FPS, dibujarlos sobre la partida, sin fondo y fuera del panel de pruebas, para que sigan visibles con el panel cerrado. Evaluar si conviene añadir tiempo por cuadro en ms, enemigos/proyectiles activos u otra métrica útil; elegir pocas, con bajo costo y buen contraste sin tapar controles. Es un monitor local de rendimiento (telemetría local); no implica envío ni recopilación remota. **Entrega futura:** propuesta de métricas, ubicación, frecuencia de actualización y muestra; comparar costo con el monitor apagado/encendido.
+
+### B-19 · ~~Renovar Opciones y los submenús~~
+**Completado en M33 (T176, RF-347), prioridad media.** Opciones separa sonido/visualización con deslizadores y casillas del tema. Selección de campaña/comunidad, Wiki, récords, final, iniciales/Salón de la Fama y editor/diálogos comparten hierro-bronce. Paneles y foco coherentes; funciones/guardados conservados. Capturas en `art/redesign-m33/`,891/891 GUT; revisión visual Full HD, sin ejecución móvil/Linux.
+
+### B-20 · ~~Integrar mejor las marcas del nivel de torre~~
+**Completado en M36 (T181, Lucas, 2026-10-03).** Capturas y detalles en `art/redesign-m36/`; reglas de combate conservadas. El texto siguiente registra el pedido original.
+**Pedido original:** revisar los puntos amarillos flotantes de RF-75, que hoy indican niveles1/2/3. Comparar puntos más sutiles incorporados a la base (remaches, luces o detalles) con mayor contraste/intensidad del brillo ya implementado en M30. No es obligatorio eliminarlos: el nivel debe seguir siendo reconocible a escala de partida, también cuando el brillo se apaga por aturdimiento. Evitar confundirlos con selección u otros efectos. **Entrega futura:** comparación de los tres niveles, al menos sobre el Cañón, y revisión del criterio para las demás torres; sombras fuera de alcance salvo pedido posterior.
+
+### B-21 · Investigar una vista general con más sensación de 3D
+**Abierto: análisis preliminar entregado en M36 (T181).** Entrega en [`B21-profundidad.md`](../art/redesign-m36/B21-profundidad.md). Faltan decisiones de Lucas y profundizar/validar la opción elegida antes de producción; no se integró esa mecánica. El estudio rápido no constituye un diseño definitivo. El texto siguiente registra el alcance original.
+**Pedido original de investigación:** Mejorar la profundidad de toda la escena, además de los sprites. Comparar alternativas: relieve y bordes del terreno con iluminación coherente; perspectiva oblicua/isométrica simulada en2D; escena2.5D con suelo3D y sprites. Evaluar orden de dibujo/oclusiones, alineación de bases y caminos, selección/construcción, cámara, interfaz, rendimiento, escritorio y móvil, y compatibilidad de mapas/guardados. No se adopta ninguna opción todavía.
+**Entrega futura:** muestras comparables del mismo mapa y una evaluación de alcance/costos/riesgos. Tratar el cambio de vista como potencial **breaking change**: preparar un PR de revisión identificado como tal, avisar a Lucas con el enlace y esperar su aprobación explícita **antes de mergear**. Una muestra no autoriza migrar toda la producción ni fusionar el PR.
+
+### B-22 · Analizar contenido nuevo y desbloqueos en niveles superiores
+**Abierto: análisis preliminar entregado en M36 (T181).** Entrega en [`B22-contenido.md`](../art/redesign-m36/B22-contenido.md). Faltan decisiones de Lucas y profundizar/validar la opción elegida antes de producción; no se integró esa mecánica. El estudio rápido no constituye un diseño definitivo. El texto siguiente registra el alcance original.
+**Pedido original de análisis; producción pendiente de selección:** Proponer2–3 candidatos de torretas y2–3 de monstruos (confirmar la selección final), con papel táctico distinto, estética, contramedida, costo de implementación y nivel de aparición/desbloqueo. Mantener la temática de monstruos. Considerar Excavador/Ladrón del B-07 y las variantes B de Bestia/Tanque que Lucas reservó para futuro, evitando duplicar funciones existentes. Comparar habilitación por nivel con desbloqueo persistente; contemplar Wiki, presentación, progreso y balance. El Mortero ya tiene disponibilidad reservada para el nivel10 (RF-300); no tratarlo como contenido nuevo. **Entrega futura:** tabla comparativa y recomendación, sin depender de completar ahora los niveles8–10.
+
+### B-23 · Combinar ataques de torres vecinas desde mejoras2/3
+**Abierto: análisis preliminar entregado en M36 (T181).** Entrega en [`B23-vecindad.md`](../art/redesign-m36/B23-vecindad.md). Faltan decisiones de Lucas y profundizar/validar la opción elegida antes de producción; no se integró esa mecánica. El estudio rápido no constituye un diseño definitivo. El texto siguiente registra el alcance original.
+**Pedido original de análisis:** Extiende la propuesta B1 de §5.8 y B-16.C, todavía sin implementar. Investigar combinaciones de ataques entre torres cercanas, habilitadas recién desde nivel de **mejora de torre2 o3** (distinto del número de nivel de campaña). Decidir si ambas torres deben alcanzar el mínimo, qué pares califican y si el efecto combinado reemplaza o suma al ataque normal. Comparar requisito2 frente a3, legibilidad de vínculos/vista previa y respuesta al mejorar, vender o aturdir una vecina; medir balance y rendimiento. Conservar separadas las reacciones por estado existentes de M20, que ya funcionan sin vecindad. **Entrega futura:** pocas recetas propuestas, reglas de activación y prueba de balance; sin cambiar las reglas actuales hasta aprobación.
+
+### Ampliación del backlog · Lucas, 2026-10-02
+B-24 a B-27: **completados en M36 (T181), autorizados por Lucas el2026-10-03**. B-28 completado en M35 (T180, RF-349), autorizado por Lucas el2026-10-03. Complementan la renovación visual actual; B-19 sigue completo para los submenús y B-28 cubre el panel de torre en partida que no formó parte de esa tarea.
+
+### B-24 · ~~Renovar los assets de muerte de enemigos~~
+**Completado en M36 (T181, Lucas, 2026-10-03).** Capturas y detalles en `art/redesign-m36/`; reglas de combate conservadas. El texto siguiente registra el pedido original.
+Volver a generar los efectos/poses de muerte, que quedaron desactualizados frente a los monstruos renderizados y sus ciclos M31. Relevar lo existente y definir si conviene un efecto común con variantes o ciclos propios por criatura; conservar identidad, escala, apoyo y claridad cuando mueren varios juntos. **Entrega futura:** muestras de muertes en combate y cobertura del bestiario. No alterar momento de muerte, recompensa, salida de crías ni desaparición lógica; respetar pausa/velocidad y límites de efectos simultáneos.
+
+### B-25 · ~~Rediseñar rebote y aturdimiento del Espejo~~
+**Completado en M36 (T181, Lucas, 2026-10-03).** Capturas y detalles en `art/redesign-m36/`; reglas de combate conservadas. El texto siguiente registra el pedido original.
+Renovar el efecto que Lucas describe como «letargo»: corresponde al **aturdimiento de la torre** después de que el Espejo rebota un ataque (RF-280/RF-284), no a la ralentización del enemigo. Revisar destello de rebote, aviso y efecto sobre la torre apagada para que se entienda origen, estado y recuperación, con la estética actual. Evaluar coherencia con el aturdimiento del Chamán, que comparte el estado. **Entrega futura:** comparación visual en partida, sin modificar alcance, duración ni reglas del rebote.
+
+### B-26 · ~~Rediseñar la curación del Curandero~~
+**Completado en M36 (T181, Lucas, 2026-10-03).** Capturas y detalles en `art/redesign-m36/`; reglas de combate conservadas. El texto siguiente registra el pedido original.
+Mejorar aura e indicación de curación sobre los enemigos afectados: un efecto orgánico y coherente con el monstruo, visible sin tapar cuerpos, barras o caminos. Distinguir alcance del aura y curación efectiva; evaluar coherencia con la regeneración del Troll. **Entrega futura:** muestra con varios enemigos, pausa y fuego que impide la cura. Conservar porcentajes, radio y reglas actuales, con costo de dibujo acotado.
+
+### B-27 · ~~Mejorar música y efectos de sonido~~
+**Completado en M36 (T181, Lucas, 2026-10-03).** Capturas y detalles en `art/redesign-m36/`; reglas de combate conservadas. El texto siguiente registra el pedido original.
+Relevar música y efectos actuales; mejorar o rediseñar su calidad y coherencia con Monsters & Canons. Evaluar música de menú/partida y señales de disparos, impactos, muerte, mejora, rebote, curación, combos, victoria/derrota e interfaz; priorizar según el relevamiento. Evitar fatiga y saturación con muchos ataques, equilibrar volúmenes y conservar controles de Opciones. **Entrega futura:** muestras de audio y propuesta de mezcla/variantes antes de reemplazar archivos; registrar procedencia/licencia de los recursos elegidos. No generar ni integrar audio en esta tarea de registro.
+
+### B-28 · ~~Renovar el panel de información y mejoras de torre~~
+Rediseñar el panel en partida de la captura de Lucas (Ráfaga · Nivel2): título/nivel, daño, cadencia, alcance, descripción, capacidad contra voladores, selector de apuntado, Mejorar y Vender. Aplicar hierro/bronce y mejor jerarquía/agrupación, fondo legible y compacto, sin tapar más partida. Mantener precios, devolución, atajos U/S, estados sin oro/nivel máximo/aturdida y datos de sinergias. **Entrega futura:** muestras con torres de niveles1–3 y textos cortos/largos; verificar foco, controles y tamaños soportados. Relacionado con B-20 (marcas visuales del nivel), pero independiente de cambiar los assets de torre.
+
+### B-29 · Wiki de mods
+**Separado de B-15 por Lucas, 2026-10-03 (D-063). Sin fecha.** Cuando existan paquetes de mods completos (B-04), mostrar en la Wiki sus torres y enemigos, identificando el paquete de origen. Definir carga y actualización de entradas, compatibilidad y descubrimiento del bestiario. Esta entrada documenta contenido instalado; no duplica el sistema de instalación, validación ni formato de mods de B-04.
+
+### B-30 · Wiki de mapas de la comunidad
+**Separado de B-15 por Lucas, 2026-10-03 (D-063). Sin fecha.** Evaluar una categoría dedicada a mapas comunitarios instalados, con información útil que no repita la selección de mapas. La carga y validación de mapas ya existen desde M10 (§10.4, B-04); esta entrada no implica crear un servicio online, publicación ni otro editor. Definir primero qué información agrega y cómo se mantiene al importar o quitar mapas.
+
+### Estado depurado del backlog · Lucas, 2026-10-03
+B-02 cerrado; B-15 retirado/dividido. B-17 a B-20 y B-24 a B-28 implementados. B-21/B-22/B-23 siguen abiertos: informes preliminares entregados, sin decisión ni validación definitiva de producción.
+
+Otros pendientes: Épocas y modos (B-01/B-05), lore y Wiki de Épocas (B-03), mods completos (resto de B-04), Excavador/Ladrón y eventual combate contra torres (resto de B-07, candidatos relacionados con B-22), decoración manual/terrenos con efectos y temas/leyenda en el editor (resto de B-08, T128), cruces/rutas explícitas (resto de B-09), campaña/dificultades (B-10, prioridad baja), compartir mapas como texto (B-11), mapas al azar/desafíos (B-12), app única con admin (B-13), daño elemental/armadura (B-14), fusiones (resto de B-16; vecindad se sigue en B-23), Wiki de mods (B-29) y de comunidad (B-30). B-06 ya está implementado en M18; leyenda/temas del formato y tamaño variable de B-08 están implementados en M15/M13; aviso de atajos B-09 está hecho en M9. No contarlos nuevamente como pendientes. Las sugerencias no autorizadas permanecen separadas y no son tareas comprometidas.
+
+## 14. Arte de torres con volumen (M23, pedido por Lucas, 2026-10-02)
+
+- **RF-326** Las nueve torres usan la dirección artística elegida: cañón y mortero de hierro, bronce y madera (A); básica, francotirador, fuego, múltiple y ráfaga industriales (B); hielo y Tesla arcanas (C). Comparten perspectiva elevada, luz desde arriba a la izquierda y proporciones legibles a 64 px y 34 px.
+  **Aceptación:** dado el grupo completo, cuando se ve en el mapa, HUD y Wiki, entonces cada mecanismo se reconoce y conserva el material y volumen de las muestras aprobadas.
+- **RF-327** Al apuntar, la torreta conserva la vertical y la iluminación del mundo. Usa ocho vistas direccionales; la base permanece fija. Retroceso, pausa, mejoras y destello siguen funcionando. Sin atlas, conserva la compatibilidad con dibujos de una sola vista y formas geométricas.
+  **Aceptación:** dada una torre con atlas, cuando apunta en las ocho direcciones y cruza el límite entre 0 y 360 grados, entonces usa el cuadro correcto sin girar su luz; sin atlas, el dibujo anterior funciona.
+- **RF-328** Las bases muestran tres niveles de construcción con piedra, metal y detalles dorados. Los proyectiles y efectos de impacto acompañan las tres familias y mantienen la lectura de fuego, frío, electricidad y explosión.
+  **Aceptación:** dada una partida con las nueve torres, cuando construyen, mejoran y disparan, entonces los dibujos importan, quedan centrados y los efectos se liberan al terminar; daño, precios, alcance y tiempos de balance no cambian.
+
+Los PNG con transparencia se permiten para conservar la calidad de las muestras 3D; los SVG siguen siendo válidos para arte existente y mods. Enemigos, terreno y decoración requieren una revisión posterior específica; esta entrega cubre torres, bases, disparos y sus efectos.
+
+## 15. Monstruos y menú con el nuevo arte (M24, pedido por Lucas, 2026-10-02)
+
+Lucas eligió entre las propuestas de la tanda 1 (`art/redesign-m24/`): **Normal = diablillo rojo** (`normal_B`), **Rápido = bestia turquesa** (`fast_A`), **Tanque = ogro de piedra y piel verde** (`tank_A`) y el logo **Monsters & Canons** (`logo_corrected`). `normal_A` se descarta; `fast_B` y `tank_B` quedan como conceptos para enemigos futuros y **no** se integran. No cambia ningún número de balance, habilidad, ruta ni colisión.
+
+- **RF-329** Normal, Rápido y Tanque usan las copias de producción de los monstruos aprobados, con su transparencia, a la misma escala visual que sus dibujos anteriores y con los pies apoyados siempre a la misma altura del lienzo (sobre la sombra del suelo). Se ven igual en la partida, la Wiki, "Próxima oleada" y la presentación de enemigos. Sus IDs, vida, velocidad, armadura, recompensa y tamaño (`size_tiles`, que fija colisiones y selección) no cambian.
+  **Aceptación:** dado un Normal, un Rápido y un Tanque, cuando caminan, reciben un golpe, se ralentizan o se queman, entonces se ve el monstruo nuevo con el parpadeo blanco en su silueta, el tinte celeste y la mancha de escarcha, las llamitas, la barra de vida y (el Tanque) la corona en su lugar de siempre; y los datos de los tres, salvo el dibujo, son los mismos que antes.
+- **RF-330** Los PNG de esta tanda son **conceptos estáticos de una sola vista** (la luz viene de arriba a la izquierda): no son atlas y no tienen cuadros de animación. Por eso estos enemigos **no se dan vuelta en espejo** al caminar hacia la izquierda (un espejo pasaría la luz a la derecha): mantienen siempre la misma vista y conservan el bamboleo de caminar (estirarse y aplastarse). Un dato nuevo `flip_when_walking_left` (por defecto sí) lo decide por enemigo: los tres de esta tanda lo apagan; los demás enemigos siguen como antes.
+  **Aceptación:** dado un enemigo de esta tanda, cuando camina hacia la izquierda, entonces su dibujo no se refleja; dado un enemigo con `flip_when_walking_left` encendido, se refleja como hasta ahora.
+- **RF-331** El menú principal muestra el logo **Monsters & Canons** en lugar de "JuegoA" y "Tower Defense". El logo conserva su proporción, se achica si la ventana es baja para que todos los botones sigan a la vista, y no tapa los controles.
+  **Aceptación:** dada la ventana del juego (1280×720 lógicos, que `canvas_items` escala a cualquier tamaño), cuando se abre el menú, entonces se ve el logo entero y los seis botones (cinco si no hay editor) sin recortes ni superposiciones.
+- **RF-332** Los botones del menú principal tienen un acabado de **hierro oscuro con borde de bronce y relieve discreto**, y un **acento ámbar** al pasar el mouse o recibir el foco del teclado. Los textos siguen legibles (contraste suficiente), se navega con las flechas y Enter, y los botones se adaptan al ancho disponible.
+  **Aceptación:** dado el menú, cuando el mouse pasa sobre un botón o el teclado lo enfoca, entonces el botón se ve distinto de los demás (borde y texto ámbar); el texto de todos los botones tiene un contraste mínimo de 4,5:1 contra su fondo.
+- **RF-333** Las **evoluciones** de torres de `upgrades_comparison.png` (Cañón e Hielo en tres niveles) son referencias de **una sola dirección**: **no se integran** todavía, porque las torres apuntan con ocho vistas (RF-327) y esas hojas no las tienen. El nivel 1 conserva el atlas aprobado en M23. Queda documentado el formato que necesita la siguiente entrega artística (plan §6.20, `art/FORMATO_PROXIMA_ENTREGA_M24.md`).
+  **Aceptación:** dado el juego tras esta tanda, entonces las nueve torres siguen usando sus atlas de M23, sin cambios.
+
+- **RF-334** Los siete temas usan los suelos preparados de M26, el camino común y las rocas, árbol, arbusto y puerta nuevos.
+  **Aceptación:** dado un mapa en partida, menú o editor, cuando se dibuja, entonces aparecen los nuevos materiales; rutas, casillas construibles, leyendas y selección determinista de objetos conservan su comportamiento.
+
+### M27 · Evoluciones y monstruos especiales
+- **RF-335** Las evoluciones conservan los mecanismos de nivel 1 y diferencian niveles 2 y 3 con refuerzos, materiales y brillos localizados.
+  **Aceptación:** dados los nueve tipos de torre, cuando se revisa la entrega, entonces cada nivel tiene ocho vistas en el orden de M23, icono hacia arriba y margen transparente; el nivel 1 y el balance permanecen intactos.
+- **RF-336** Guardián, Curandero, Chamán, Espejo y Jefe reciben conceptos renderizados dentro de la temática de monstruos y con siluetas propias de su función.
+  **Aceptación:** dados los cinco diseños, cuando se presentan a escala de juego, entonces sus cuerpos son legibles, tienen transparencia real y la misma luz que los monstruos aprobados; no se cambia ninguna habilidad.
+
+- **RF-337** La partida usa los atlas M27 al mejorar las nueve torres a niveles 2/3 y los cinco especiales aprobados.
+  **Aceptación:** dada una mejora, el mecanismo cambia al atlas del nivel conservando ocho direcciones y retroceso; sin atlas de nivel se usa el original. Los cinco especiales conservan habilidades, tamaño y efectos y no se reflejan en espejo.
+
+### M28 · Muestras de legibilidad y presentación
+- **RF-338** Antes de cambiar producción se comparan pendientes de migración, tamaños visuales, movimiento y encastre de torretas; Windows/Linux cuentan con una muestra a1920×1080.
+  **Aceptación:** dadas las muestras, Lucas puede comparar el estado actual y las alternativas con PNG/GIF y criterios explícitos; no se modifican escenas, datos o resolución de producción hasta su aprobación.
+
+### M29 · Integración aprobada de las muestras M28
+- **RF-339** Los trece enemigos usan los diseños renderizados aprobados y un aumento visual del 20 %, independiente de su radio lógico. Los tres ciclos M25 caminan en cuatro direcciones por distancia recorrida; el volador usa cuatro poses de aleteo. Los otros nueve conservan su pose sin aplastamiento global.
+  **Aceptación:** dado un enemigo ralentizado, el paso acompaña su desplazamiento; al pausar no avanzan las poses. Vida, velocidad, selección, colisión y habilidades conservan sus cifras. Los pies de los terrestres conservan la línea de apoyo y la barra de vida queda sobre el cuerpo.
+- **RF-340** Las nueve torres adoptan el encastre C: asiento reforzado, contacto con la base fija y mecanismo móvil; el cañón cuenta con ocho vistas por nivel del montaje nuevo.
+  **Aceptación:** al apuntar y retroceder, la base queda fija y los tres niveles conservan su identidad, huella y reglas. El icono de construcción utiliza el mismo encastre que la partida.
+- **RF-341** Windows y Linux usan una ventana inicial Full HD (1920×1080), con lienzo lógico 1280×720 y ajuste a pantallas menores. Celular conserva el tamaño y orientación existentes.
+  **Aceptación:** dado un escritorio Full HD, el mapa y la interfaz se escalan juntos sin casillas nuevas ni recortes; una pantalla menor recibe una ventana que cabe en el área disponible.
+
+### M30 · Lectura programática de mejoras
+- **RF-342** Las nueve torres distinguen sus mejoras con reflejos aditivos localizados: nivel1 sin capa extra, nivel2 moderado y nivel3 más intenso. Conservan atlas, luz, dirección, retroceso y encastre. Una torre aturdida apaga el reflejo.
+  **Aceptación:** dadas las torres de tres niveles, cuando apuntan o retroceden, entonces el reflejo sigue solo el mecanismo, respeta el alfa y permite distinguir la mejora en partida. Pausa congela su pulso; sombras y reglas permanecen intactas.
+- **RF-343** Se registra el estado de animaciones: Normal/Rápido/Tanque tienen ciclos de caminar y Volador aleteo; Blindado/Troll/Araña/Cría/Guardián/Curandero/Chamán/Espejo/Jefe requieren ciclos propios. No se simulan esos ciclos deformando una pose estática.
+
+### M31 · Ciclos completos de monstruos
+- **RF-344** Blindado, Troll, Araña, Cría, Guardián, Curandero, Chamán, Espejo y Jefe reciben ciclos propios de cuatro poses en cuatro direcciones, conservando sus diseños aprobados y la luz fija.
+  **Aceptación:** dadas las nueve criaturas en partida, cuando caminan o doblan, entonces se selecciona su pose direccional por distancia; pies anclados, cuerpo legible con el20% aprobado, sin reflejar luz o deformar el sprite globalmente. Ralentización y pausa detienen/reducen los pasos; regeneración, crías, auras, hechizo, rebote y resistencia del Jefe conservan sus cifras.
+
+### M32 · HUD y monitor local (B-17/B-18 aprobados por Lucas)
+- **RF-345** HUD con iconos y valores sin etiquetas redundantes; significado en ayuda pequeña al pasar el puntero o enfocar. Barra, pausa y pruebas usan hierro/bronce del menú y controles agrupados. Dado el HUD, cuando cambia un valor o se completa una oleada, entonces conserva cifras/estado y muestra el bonus en la ayuda de oleada.
+- **RF-346** Mostrar FPS activa un texto sobre la partida sin fondo, independiente del panel, con FPS y ms por cuadro estimados a partir de FPS. Dado el monitor activo, cuando se cierra Pruebas, entonces sigue visible; apagado no actualiza, encendido refresca como máximo dos veces por segundo. Solo métricas locales.
+
+### M33 · Submenús renovados
+- **RF-347** Opciones, selección de niveles, Wiki, récords, final, iniciales/Salón de la Fama y editor/diálogos adoptan el tema hierro-bronce sin alterar funciones. Dado un submenú, cuando se abre desde menú o partida, entonces conserva navegación y controles legibles, foco visible y paneles coherentes. Opciones separa sonido y visualización y usa deslizadores/casillas del tema.
+
+### M35 · Panel de torre renovado (B-28, Lucas, 2026-10-03)
+- **RF-349** El panel seleccionado usa hierro/bronce, título y nivel, tres cifras agrupadas (daño, cadencia, alcance), descripción, efectos/sinergias y capacidad contra voladores. El contenido largo se desplaza dentro del panel; apuntado, Mejorar y Vender permanecen visibles. Conserva ancho de270 píxeles lógicos, límite inferior sobre la barra de construcción y atajos U/S.
+  **Aceptación:** Dada una torre de nivel1–3 con texto corto o largo, cuando se selecciona, mejora, cambia el oro o se aturde, entonces los datos/precios/devolución siguen correctos, el estado es legible, el panel no invade la barra inferior y sus botones tienen foco visible. Sin oro y en nivel máximo se desactiva Mejorar; vender y apuntar conservan sus señales y reglas.
+
+### M36 · Cierre de B-20 a B-27 (Lucas, 2026-10-03)
+- **RF-350** Niveles de torre indicados por remaches ámbar encastrados en una placa de la base, legibles sin brillo animado, también aturdida. Dada cualquier torre nivel1–3, cuando apunta/mejora/se aturde, entonces se cuenta su nivel sin confundirlo con selección, conservando sombras y atlas.
+- **RF-351** Rebote del Espejo muestra una trayectoria cristalina desde el enemigo hasta la torre y un destello facetado; torre aturdida tiene aro roto/descargas localizadas, sin oscurecer el cuadrado vacío del sprite. Dado Espejo/Chamán, cuando aturden y termina el estado, entonces origen, estado y recuperación se reconocen y sus duraciones/alcances no cambian.
+- **RF-352** Aura de Curandero usa límite verde suave y brotes/luz sobre receptores solo mientras pueden curarse. Dado un receptor herido, cuando recibe cura efectiva se muestra un pulso; a vida completa o quemado no se indica cura activa. Regeneración del Troll comparte el pulso, no el aura. Radio, porcentajes y bloqueo por fuego intactos.
+- **RF-353** Muertes usan la pose renderizada actual como residuo breve desintegrado y fragmentos facetados propios del color del enemigo. Dado cualquier especie, cuando muere entonces desaparece lógicamente y recompensa/crías ocurren como antes; residuo solo visual, sin colisión, respeta pausa/velocidad, se libera y tiene tope. Escapar o desaparecer por administración no produce muerte.
+- **RF-354** Música de menú y combate diferenciadas, síntesis original reproducible y efectos suavizados sin recorte digital. Disparo/impacto/rebote/hechizo/cura tienen señales propias; límites de voces/repetición y mezcla atenúan disparos para conservar avisos. Dado un cambio de pantalla, entonces se elige la música correspondiente sin reiniciar la misma pista; opciones de buses permanecen y se documenta procedencia.
+- **RF-355** Investigación B-21 entrega tres muestras del mismo mapa (relieve2D, oblicua2D y suelo3D/sprites) con costos/riesgos y recomendación. Ningún prototipo modifica producción, mapas ni guardados; migración exige PR separado y aprobación de merge.
+- **RF-356** Análisis B-22 entrega2–3 torres y2–3 monstruos candidatos con función, contramedida, arte, costo y aparición/desbloqueo, comparando desbloqueo persistente y por nivel. No integra nuevos datos de producción.
+- **RF-357** Análisis B-23 entrega pocas recetas de vecindad, reglas de mejora2/3, venta/aturdimiento y ensayo reproducible de balance/costo. Conserva las reacciones M20 actuales; no activa recetas nuevas en producción.

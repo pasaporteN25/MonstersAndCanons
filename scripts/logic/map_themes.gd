@@ -5,14 +5,25 @@
 class_name MapThemes
 extends RefCounted
 
-## El de siempre: si un nivel no dice tema, es este y se ve exactamente igual que antes de M15.
+## El de siempre: si un nivel no dice tema, es este. RF-334 actualiza su material visual.
 const DEFAULT: StringName = &"pradera"
 const IDS: PackedStringArray = ["pradera", "desierto", "nieve", "volcan", "bosque", "pantano", "ruinas"]
 
-const ROCK_A: Texture2D = preload("res://assets/sprites/map/rock_a.svg")
-const ROCK_B: Texture2D = preload("res://assets/sprites/map/rock_b.svg")
-const TREE: Texture2D = preload("res://assets/sprites/map/tree.svg")
-const BUSH: Texture2D = preload("res://assets/sprites/map/bush.svg")
+const PATH_TEXTURE: Texture2D = preload("res://assets/tiles/rendered/path.png")
+const GROUNDS: Dictionary = {
+	&"pradera": preload("res://assets/tiles/rendered/ground_pradera.png"),
+	&"desierto": preload("res://assets/tiles/rendered/ground_desierto.png"),
+	&"nieve": preload("res://assets/tiles/rendered/ground_nieve.png"),
+	&"volcan": preload("res://assets/tiles/rendered/ground_volcan.png"),
+	&"bosque": preload("res://assets/tiles/rendered/ground_bosque.png"),
+	&"pantano": preload("res://assets/tiles/rendered/ground_pantano.png"),
+	&"ruinas": preload("res://assets/tiles/rendered/ground_ruinas.png"),
+}
+
+const ROCK_A: Texture2D = preload("res://assets/sprites/map/rendered/rock_a.png")
+const ROCK_B: Texture2D = preload("res://assets/sprites/map/rendered/rock_b.png")
+const TREE: Texture2D = preload("res://assets/sprites/map/rendered/tree.png")
+const BUSH: Texture2D = preload("res://assets/sprites/map/rendered/bush.png")
 const CACTUS: Texture2D = preload("res://assets/sprites/map/cactus.svg")
 const RED_ROCK: Texture2D = preload("res://assets/sprites/map/roca_roja.svg")
 const BONES: Texture2D = preload("res://assets/sprites/map/huesos.svg")
@@ -99,3 +110,8 @@ static func palette(id: StringName) -> Dictionary:
 static func blocked_decor(id: StringName, cell: Vector2i) -> Texture2D:
 	var list: Array = BLOCKED.get(id, BLOCKED[DEFAULT])
 	return list[posmod(hash(cell), list.size())]
+
+
+## Material del suelo; un tema desconocido usa la pradera.
+static func ground_texture(id: StringName) -> Texture2D:
+	return GROUNDS.get(id, GROUNDS[DEFAULT])

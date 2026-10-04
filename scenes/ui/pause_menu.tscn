@@ -1,14 +1,17 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scenes/ui/pause_menu.gd" id="1_pause"]
-[ext_resource type="StyleBox" path="res://assets/ui/panel_style.tres" id="9_style"]
+[ext_resource type="StyleBox" path="res://assets/ui/game_panel_style.tres" id="9_style"]
 [ext_resource type="PackedScene" path="res://scenes/ui/options_menu.tscn" id="2_options"]
+
+[ext_resource type="Theme" path="res://assets/ui/menu_theme.tres" id="m32_theme"]
 
 [node name="PauseMenu" type="CanvasLayer"]
 layer = 20
 script = ExtResource("1_pause")
 
 [node name="MenuPanel" type="Control" parent="."]
+theme = ExtResource("m32_theme")
 unique_name_in_owner = true
 layout_mode = 3
 anchors_preset = 15

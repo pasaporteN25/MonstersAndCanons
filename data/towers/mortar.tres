@@ -1,12 +1,17 @@
 [gd_resource type="Resource" script_class="TowerData" format=3]
 
 [ext_resource type="Script" path="res://scripts/data/tower_level_data.gd" id="1_lvl"]
-[ext_resource type="Texture2D" path="res://assets/sprites/towers/base_1.svg" id="2_b1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/base_1.png" id="2_b1"]
 [ext_resource type="Script" path="res://scripts/data/tower_data.gd" id="3_tower"]
-[ext_resource type="Texture2D" path="res://assets/sprites/towers/base_2.svg" id="4_b2"]
-[ext_resource type="Texture2D" path="res://assets/sprites/towers/base_3.svg" id="5_b3"]
-[ext_resource type="Texture2D" path="res://assets/sprites/projectiles/mortar.svg" id="6_proj"]
-[ext_resource type="Texture2D" path="res://assets/sprites/towers/turret_mortar.svg" id="7_turret"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/base_2.png" id="4_b2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/base_3.png" id="5_b3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/projectiles/rendered/mortar.png" id="6_proj"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/turret_mortar.png" id="7_turret"]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/mortar_atlas.png" id="rendered_atlas"]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/mortar_level_2.png" id="evolution_2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/mortar_level_3.png" id="evolution_3"]
 
 [sub_resource type="Resource" id="Resource_l1"]
 script = ExtResource("1_lvl")
@@ -27,6 +32,7 @@ fire_rate = 0.25
 range_tiles = 5.0
 splash_radius_tiles = 1.8
 base_texture = ExtResource("4_b2")
+turret_atlas = ExtResource("evolution_2")
 
 [sub_resource type="Resource" id="Resource_l3"]
 script = ExtResource("1_lvl")
@@ -37,6 +43,7 @@ fire_rate = 0.25
 range_tiles = 5.5
 splash_radius_tiles = 2.2
 base_texture = ExtResource("5_b3")
+turret_atlas = ExtResource("evolution_3")
 
 [resource]
 script = ExtResource("3_tower")
@@ -46,6 +53,7 @@ description = "Bomba lenta de gran daño en área y largo alcance. Ideal contra 
 projectile_speed_tiles = 6.0
 color = Color(0.48, 0.35, 0.21, 1)
 turret_texture = ExtResource("7_turret")
+turret_atlas = ExtResource("rendered_atlas")
 projectile_texture = ExtResource("6_proj")
 footprint = 2
 reserved = true

@@ -3,10 +3,13 @@
 [ext_resource type="Script" path="res://scenes/editor/map_editor.gd" id="1_editor"]
 [ext_resource type="Script" path="res://scenes/editor/map_view.gd" id="2_view"]
 
+[ext_resource type="Theme" path="res://assets/ui/menu_theme.tres" id="m33_theme"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bar"]
 bg_color = Color(0.09, 0.1, 0.13, 1)
 
 [node name="MapEditor" type="Control"]
+theme = ExtResource("m33_theme")
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

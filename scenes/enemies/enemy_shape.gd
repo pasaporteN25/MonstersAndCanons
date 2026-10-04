@@ -8,7 +8,7 @@ extends RefCounted
 
 const CROWN_COLOR := Color(1.0, 0.84, 0.3)
 ## RF-158: llamita del enemigo que se quema.
-const FLAME: Texture2D = preload("res://assets/sprites/effects/flame.svg")
+const FLAME: Texture2D = preload("res://assets/sprites/effects/rendered/flame.png")
 ## RF-151: lado del dibujo comparado con el radio del enemigo. Con 2.8, el cuerpo del dibujo
 ## (unas 20 de sus 64 unidades de radio) mide lo mismo que el círculo de antes.
 const SPRITE_SCALE: float = 2.8
@@ -21,15 +21,19 @@ const FLASH_META: StringName = &"flash_silhouette"
 ## Dibuja el sprite de un enemigo centrado en (0, 0). En los SVG el cuerpo está 2 unidades
 ## (de 64) por debajo del centro de la imagen: se sube un poco para que quede centrado.
 static func draw_sprite(canvas: CanvasItem, texture: Texture2D, radius: float,
-		modulate: Color = Color.WHITE) -> void:
-	var side: float = radius * SPRITE_SCALE
-	canvas.draw_texture_rect(texture, Rect2(-side / 2.0, -side / 2.0 - side / 32.0, side, side),
-		false, modulate)
+		modulate: Color = Color.WHITE, visual_scale: float = 1.0) -> void:
+	canvas.draw_texture_rect(texture, sprite_rect(radius, visual_scale), false, modulate)
+
+## La fila191 de los pies conserva su posición aunque cambie el tamaño visual.
+static func sprite_rect(radius: float, visual_scale: float = 1.0) -> Rect2:
+	var side: float = radius * SPRITE_SCALE * visual_scale
+	var foot: float = radius * SPRITE_SCALE * (191.0 / 256.0 - 0.5 - 1.0 / 32.0)
+	return Rect2(-side / 2.0, foot - side * 191.0 / 256.0, side, side)
 
 
 ## Distancia desde el centro hasta arriba del dibujo (orejas, cuernos): ahí va la corona.
-static func sprite_top(radius: float) -> float:
-	return radius * SPRITE_SCALE * 0.42
+static func sprite_top(radius: float, visual_scale: float = 1.0) -> float:
+	return radius * SPRITE_SCALE * 0.42 * visual_scale + radius * SPRITE_SCALE * (191.0 / 256.0 - 0.5 - 1.0 / 32.0) * (visual_scale - 1.0)
 
 
 ## RF-123: silueta blanca del dibujo, para el parpadeo al recibir un golpe. Se arma la primera
@@ -41,15 +45,11 @@ static func flash_texture(texture: Texture2D) -> Texture2D:
 	image.decompress()
 	image.clear_mipmaps()
 	image.convert(Image.FORMAT_RGBA8)
-	# Cada píxel ocupa 4 bytes (rojo, verde, azul, opacidad): se ponen en blanco los tres
-	# colores y se deja la opacidad, así la silueta tiene exactamente la forma del dibujo.
-	var bytes: PackedByteArray = image.get_data()
-	for i: int in range(0, bytes.size(), 4):
-		bytes[i] = 255
-		bytes[i + 1] = 255
-		bytes[i + 2] = 255
-	var white := Image.create_from_data(image.get_width(), image.get_height(), false,
-		Image.FORMAT_RGBA8, bytes)
+	# Operaciones nativas: contraste cero lleva RGB a gris uniforme y brillo triple a blanco.
+	# Ambas conservan el alfa, sin recorrer el atlas entero en GDScript al primer golpe.
+	var white: Image = image.duplicate()
+	white.adjust_bcs(1.0, 0.0, 1.0)
+	white.adjust_bcs(3.0, 1.0, 1.0)
 	white.generate_mipmaps()
 	var flash := ImageTexture.create_from_image(white)
 	texture.set_meta(FLASH_META, flash)

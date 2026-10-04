@@ -1,12 +1,17 @@
 [gd_resource type="Resource" script_class="TowerData" format=3]
 
 [ext_resource type="Script" path="res://scripts/data/tower_level_data.gd" id="1_t20fp"]
-[ext_resource type="Texture2D" path="res://assets/sprites/towers/base_1.svg" id="2_dxqy6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/base_1.png" id="2_dxqy6"]
 [ext_resource type="Script" path="res://scripts/data/tower_data.gd" id="2_yxcx4"]
-[ext_resource type="Texture2D" path="res://assets/sprites/towers/base_2.svg" id="3_s70g0"]
-[ext_resource type="Texture2D" path="res://assets/sprites/towers/base_3.svg" id="4_s4vul"]
-[ext_resource type="Texture2D" path="res://assets/sprites/projectiles/cannon.svg" id="5_s70g0"]
-[ext_resource type="Texture2D" path="res://assets/sprites/towers/turret_cannon.svg" id="6_fahly"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/base_2.png" id="3_s70g0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/base_3.png" id="4_s4vul"]
+[ext_resource type="Texture2D" path="res://assets/sprites/projectiles/rendered/cannon.png" id="5_s70g0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/turret_cannon.png" id="6_fahly"]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/cannon_atlas.png" id="rendered_atlas"]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/cannon_level_2.png" id="evolution_2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/cannon_level_3.png" id="evolution_3"]
 
 [sub_resource type="Resource" id="Resource_tojmg"]
 script = ExtResource("1_t20fp")
@@ -27,6 +32,7 @@ fire_rate = 0.6
 range_tiles = 3.0
 splash_radius_tiles = 1.2
 base_texture = ExtResource("3_s70g0")
+turret_atlas = ExtResource("evolution_2")
 
 [sub_resource type="Resource" id="Resource_yxcx4"]
 script = ExtResource("1_t20fp")
@@ -37,6 +43,7 @@ fire_rate = 0.6
 range_tiles = 3.5
 splash_radius_tiles = 1.5
 base_texture = ExtResource("4_s4vul")
+turret_atlas = ExtResource("evolution_3")
 
 [resource]
 script = ExtResource("2_yxcx4")
@@ -46,5 +53,6 @@ description = "Daño en área contra grupos. No le pega a los voladores."
 projectile_speed_tiles = 10.0
 color = Color(0.14901961, 0.14901961, 0.14901961, 1)
 turret_texture = ExtResource("6_fahly")
+turret_atlas = ExtResource("rendered_atlas")
 projectile_texture = ExtResource("5_s70g0")
 levels = Array[ExtResource("1_t20fp")]([SubResource("Resource_tojmg"), SubResource("Resource_t20fp"), SubResource("Resource_yxcx4")])

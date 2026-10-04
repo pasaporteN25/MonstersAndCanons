@@ -15,6 +15,7 @@
 | Niveles | `data/levels/` | Un `.json` por nivel: el mapa dibujado con letras y las oleadas (ver "Agregar un nivel") |
 | Campaña | `data/campaign.json` | La lista de niveles, en orden |
 | Artículos de la Wiki | `data/wiki/` | Un `.json` por artículo (ver "La Wiki") |
+| Modo de pruebas | `data/dev_config.tres` | El oro del botón "+1000 de oro" y las cinco velocidades del panel (`DevConfig`) |
 | Dibujos | `assets/sprites/` | SVG (o PNG). Ver "Reglas de los dibujos" |
 | Sonidos | `assets/audio/` | `.wav`. Cada torre usa `shot_<id>.wav` |
 
@@ -24,7 +25,7 @@ Los niveles son JSON, un formato de texto común que se edita a mano. Un `.tres`
 
 ## Reglas de los dibujos
 
-- **Tamaño:** 64×64 unidades (los proyectiles, 32×32). Godot los importa **solos** al doble de tamaño y con *mipmaps* (lo dice `[importer_defaults]` en `project.godot`): no hay que tocar el panel Importar.
+- **Tamaño:** los SVG usan 64×64 unidades (proyectiles, 32×32) y se importan al doble. Los PNG ya se entregan a 128×128 (proyectiles, 64×64): no llevan otra ampliación. Mipmaps activados. En M23 las torres usan atlas de 512×256, con ocho cuadros de 128×128 (guía de arte §7).
 - **Enemigos:** de costado, **mirando a la derecha** (el juego los da vuelta). El cuerpo, centrado un poco más abajo del centro (en y = 34).
 - **Torretas:** vistas desde arriba, **apuntando a la derecha**, girando sobre el **centro** de la imagen. La punta del cañón, cerca del borde derecho.
 - **Proyectiles:** apuntando a la derecha.
@@ -57,7 +58,8 @@ Los niveles son JSON, un formato de texto común que se edita a mano. Un `.tres`
 | `is_flying` | Vuela en línea recta; el Cañón y la Ráfaga no le pegan (RF-53). | `false` |
 | `slow_resistance` | Parte de la ralentización que ignora (0,5 = la mitad). | `0.0` |
 | `color` | Color del estallido al morir. | verde |
-| `texture` | El dibujo. | `troll.svg` |
+| `texture` | El dibujo. Los tres monstruos de M24 (Normal, Rápido, Tanque) usan PNG de 256×256 de una sola vista en `assets/sprites/enemies/rendered/`. | `troll.svg` |
+| `flip_when_walking_left` | Si el dibujo se refleja en espejo al caminar hacia la izquierda (por defecto sí). Apagarlo para un PNG con luz propia (la luz no cambia de lado); entonces el enemigo mira siempre hacia el mismo lado. | `false` |
 | `size_tiles` | Radio, en casillas (máximo 0,5). | `0.32` |
 | `shape` | Forma geométrica si no hay dibujo. | `CIRCLE` |
 | **Comportamientos** | *(valen 0 = apagado)* | |
@@ -93,6 +95,7 @@ Los niveles son JSON, un formato de texto común que se edita a mano. Un `.tres`
 | `projectile_speed_tiles` | Velocidad de sus proyectiles (casi todas: 10). |
 | `color` | Color de sus efectos (anillo al construir). |
 | `turret_texture`, `projectile_texture` | Los dibujos. |
+| `turret_atlas` | Opcional: PNG de cuatro columnas × dos filas, ocho vistas en orden E, SE, S, SO, O, NO, N, NE. Mantiene luz y perspectiva al apuntar. Sin atlas, gira `turret_texture` como antes. |
 | `levels` | Los 3 niveles (`TowerLevelData`, tabla de abajo). |
 
 ### Campos de cada nivel (`TowerLevelData`)
@@ -101,7 +104,7 @@ Los niveles son JSON, un formato de texto común que se edita a mano. Un `.tres`
 |---|---|
 | `cost` | Oro para construir (nivel 1) o para mejorar (niveles 2 y 3). |
 | `damage`, `fire_rate`, `range_tiles` | Daño por golpe, disparos por segundo, alcance en casillas. |
-| `base_texture` | La base de ese nivel (`base_1.svg`, `base_2.svg`, `base_3.svg`). |
+| `base_texture` | Base fija de ese nivel: producción M23 en `assets/sprites/towers/rendered/base_1.png` a `base_3.png`. Los SVG anteriores siguen siendo válidos para datos sin atlas. |
 | **Comportamientos** | *(valen 0 = apagado; se pueden combinar)* |
 | `splash_radius_tiles` | Daño en área alrededor del impacto (Cañón). |
 | `slow_amount`, `slow_duration` | Ralentiza (Hielo). 0,4 = 40 % más lento. |
@@ -362,3 +365,31 @@ Una buena señal: los bots que piensan ganan con algunas vidas de sobra y el que
 - [ ] Se ve bien en la **Wiki** (enemigos y torres se agregan solos: abrirla y mirar la entrada nueva).
 - [ ] Pasan los tests (`test_content.gd` revisa todo lo anterior solo).
 - [ ] Si cambia el balance: el bot da resultados razonables, y la spec lo dice (constitución P3: la spec manda).
+
+## Fondos M26
+Los siete temas, el camino y las rocas, árbol, arbusto y puerta usan los nuevos PNG renderizados. Se aplican en partida, menú y editor; rutas y casillas construibles conservan sus reglas. Recursos en `assets/tiles/rendered/` y `assets/sprites/map/rendered/`.
+
+### Arte M27 en revisión
+Propuestas de niveles2/3 de las nueve torres (ocho vistas por nivel) y cinco monstruos especiales en `art/redesign-m27/`. Incluye atlas, iconos, muestras en Godot, fuentes y guía de integración; todavía no cambia los recursos que usa la partida.
+
+### M27 aplicado a la partida
+Las nueve torres usan mecanismos nuevos en niveles 2 y 3. Guardián, Curandero, Chamán, Espejo y Jefe usan sus PNG renderizados estáticos. Se conservan balance, habilidades y nivel 1 de las torres. Capturas en `art/m27-integracion/`.
+
+### Recursos visuales M29
+Los13 `data/enemies/*.tres` apuntan a `assets/sprites/enemies/rendered/`. `visual_scale=1.2` cambia solo el cuerpo, sin alterar `size_tiles` (selección/colisión). `walk_atlas` opcional:1024×1024, cuatro pasos por fila, filas derecha/abajo/izquierda/arriba; `walk_stride_tiles` es la distancia de un ciclo. `walk_art_scale` compensa el encuadre distinto del atlas frente a la pose fija (1.066 normal,1.335 rápido,1.19 tanque), siempre con pies en la fila191. `flight_atlas`:512×512, cuatro cuadros256 en2×2; `flight_frame_seconds=0.16`. Sin atlas se usa la pose fija. No reflejar dibujos con luz propia.
+Las bases compartidas de niveles1/2/3 y los24 cuadros del cañón adoptan C. `TowerVisual.MOUNT_OFFSET` define el encastre, compartido por partida, disparo e iconos compuestos. Los atlas conservan512×256 y cuadros128. Las otras ocho torres conservan sus mecanismos aprobados y usan el nuevo asiento/contacto.
+
+### Reflejos por nivel
+`assets/shaders/tower_upgrade_glow.gdshader` añade luz sobre píxeles claros del mecanismo, conservando el alfa. `TowerVisual.upgrade_glow_strength` define intensidad visual:0/0.5/1 para niveles1/2/3; `upgrade_glow_color` define la familia. Tower reutiliza AtlasTexture y material propios, con tiempo físico; no cambia datos de balance ni sombras.
+
+### Ciclos restantes M31
+Blindado, Troll, Araña, Cría, Guardián, Curandero, Chamán, Espejo y Jefe: nueve atlas1024×1024, cuatro filas Este/Sur/Oeste/Norte y cuatro fases por fila. Cuadros256×256 y apoyo191, calibración uniforme por especie. Se conservan los PNG estáticos para la Wiki. Caminata integrada; no se agregan ciclos de ataque ni muerte.
+
+### Monitor M32
+Solo métricas locales: FPS de Engine y ms/cuadro estimados como1000/FPS; actualización cada500ms con reloj real, independiente de velocidad de juego. No equivale a medir tiempo de CPU/GPU ni envía datos.
+
+### Tema de interfaz M33
+`assets/ui/menu_theme.tres` reúne botones, deslizadores, casillas, desplegables y entradas. Iconos SVG propios en `assets/ui/`; paneles en `game_panel_style.tres`. Se aplica por pantalla, sin tema global.
+
+### M36 · Efectos y audio
+Los efectos de muerte reutilizan automáticamente textura, cuadro y escala del enemigo actual; no necesitan un asset de muerte por especie. Residuo y fragmentos son visuales y no alteran recompensa/crías. El audio se regenera con tools/make_sounds.gd; music_menu/music_combat usan bucle en importación. Material y límites de efectos se documentan en plan/spec; los candidatos de B-22 y recetas B-23 son propuestas y todavía no forman parte del formato de contenido.

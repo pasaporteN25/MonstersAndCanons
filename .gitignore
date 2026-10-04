@@ -6,3 +6,15 @@
 /build/
 *.exe
 *.pck
+
+# Datos de usuario aislados y diagnósticos de producción visual
+art/m23-user-data*/
+art/preview-user-data/
+art/redesign-m23/*.log
+
+# Archivo de arte: importaciones y logs locales regenerables
+/art/**/*.import
+/art/**/*.log
+
+# Segundo proyecto Godot vacío, sin relación con el juego principal
+/monters-&-canons/

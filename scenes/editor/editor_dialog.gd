@@ -24,6 +24,7 @@ var _validator: Callable
 
 
 func _init() -> void:
+	theme = preload("res://assets/ui/menu_theme.tres")
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	visible = false
 	var dim := ColorRect.new()

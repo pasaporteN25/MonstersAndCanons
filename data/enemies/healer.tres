@@ -1,7 +1,9 @@
 [gd_resource type="Resource" script_class="EnemyData" format=3]
 
 [ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="1_heal"]
-[ext_resource type="Texture2D" path="res://assets/sprites/enemies/healer.svg" id="2_heal"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/rendered/healer.png" id="2_heal"]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/rendered/healer_walk.png" id="m31_walk"]
 
 [resource]
 script = ExtResource("1_heal")
@@ -14,6 +16,11 @@ reward = 10
 lives_damage = 1
 color = Color(0.71, 0.81, 0.24, 1)
 texture = ExtResource("2_heal")
+visual_scale = 1.2
+flip_when_walking_left = false
 size_tiles = 0.28
 aura_radius_tiles = 2.5
 aura_heal_percent_per_second = 3.0
+walk_atlas = ExtResource("m31_walk")
+walk_stride_tiles = 0.65
+walk_art_scale = 0.993865030674847

@@ -222,5 +222,5 @@ func test_the_marks_are_drawn_without_errors() -> void:
 	enemy.take_hit(1, 0.4, 5.0)
 	enemy.apply_burn(8, 5.0)
 	enemy.receive_aura(2, 1.0)  # con los íconos de aura en la misma fila
-	await wait_frames(2)
+	await wait_physics_frames(2)
 	assert_true(enemy.shows_vulnerable_mark(Enemy.Combo.SLOWED) and enemy.shows_vulnerable_mark(Enemy.Combo.BURNING))

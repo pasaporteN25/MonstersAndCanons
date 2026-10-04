@@ -21,7 +21,6 @@ const FLASH_DURATION: float = 0.08
 ## Las torres están en este grupo: así un enemigo (el Chamán, RF-282) las encuentra.
 const GROUP: StringName = &"towers"
 ## RF-280: aspecto de una torre aturdida (apagada, con chispas que giran encima).
-const STUN_DIM := Color(0.06, 0.06, 0.1, 0.45)
 const STUN_SPARK_COUNT: int = 3
 
 var data: TowerData
@@ -41,10 +40,16 @@ var _cooldown: float = 0.0
 var _target: Enemy
 ## 1 = recién disparó, 0 = cañón en reposo.
 var _recoil: float = 0.0
+const UPGRADE_GLOW: Shader = preload("res://assets/shaders/tower_upgrade_glow.gdshader")
+var _upgrade_glow: Sprite2D
+var _upgrade_frame: AtlasTexture
+var _upgrade_material: ShaderMaterial
+var _upgrade_time: float = 0.0
 var _flash_left: float = 0.0
 ## RF-280: segundos que le quedan aturdida (no dispara mientras sea mayor que 0).
 var _stun_left: float = 0.0
 var _stun_anim: float = 0.0
+var _recovery_left: float = 0.0
 
 
 ## Se llama ANTES de agregar la torre al árbol.
@@ -54,6 +59,16 @@ func setup(tower_data: TowerData) -> void:
 
 
 func _ready() -> void:
+	_upgrade_glow = Sprite2D.new()
+	_upgrade_glow.name = "UpgradeGlow"
+	_upgrade_frame = AtlasTexture.new()
+	_upgrade_frame.filter_clip = true
+	_upgrade_glow.texture = _upgrade_frame
+	_upgrade_material = ShaderMaterial.new()
+	_upgrade_material.shader = UPGRADE_GLOW
+	_upgrade_glow.material = _upgrade_material
+	add_child(_upgrade_glow)
+	_sync_upgrade_glow()
 	add_to_group(GROUP)
 	# D-023: los dibujos se achican con suavidad (el mapa usa "Nearest" para no mostrar líneas).
 	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
@@ -67,27 +82,17 @@ func _ready() -> void:
 ## como se ve la torre recién construida. null si a la torre le falta algún dibujo (RF-156).
 static func make_icon(tower_data: TowerData) -> Texture2D:
 	var base: Texture2D = tower_data.levels[0].base_texture if not tower_data.levels.is_empty() else null
-	if base == null or tower_data.turret_texture == null:
+	if base == null or (tower_data.turret_texture == null and tower_data.turret_atlas == null):
 		return null
-	var image: Image = base.get_image()
-	var turret: Image = tower_data.turret_texture.get_image()
-	if image == null or turret == null:
-		return null
-	# Copias: get_image() puede devolver la misma imagen que guarda la textura, y cambiarla
-	# cambiaría también la base que se ve en el mapa.
-	image = image.duplicate()
-	turret = turret.duplicate()
-	# Se trabaja sin las copias achicadas (mipmaps) y se vuelven a generar al final.
-	image.decompress()
-	turret.decompress()
-	image.clear_mipmaps()
-	turret.clear_mipmaps()
-	image.convert(Image.FORMAT_RGBA8)
-	turret.convert(Image.FORMAT_RGBA8)
-	turret.rotate_90(COUNTERCLOCKWISE)
-	image.blend_rect(turret, Rect2i(Vector2i.ZERO, turret.get_size()), Vector2i.ZERO)
-	image.generate_mipmaps()
-	return ImageTexture.create_from_image(image)
+	var turret: Texture2D = TowerVisual.frame_texture(tower_data.turret_atlas, -PI / 2.0) \
+		if tower_data.turret_atlas != null else tower_data.turret_texture
+	if tower_data.turret_atlas == null:
+		var image: Image = turret.get_image().duplicate()
+		image.decompress()
+		image.clear_mipmaps()
+		image.rotate_90(COUNTERCLOCKWISE)
+		turret = ImageTexture.create_from_image(image)
+	return TowerVisual.mounted_icon(base, turret)
 
 
 ## RF-293: todas las casillas que ocupa, empezando por la de arriba a la izquierda.
@@ -97,6 +102,11 @@ func cells() -> Array[Vector2i]:
 
 func stats() -> TowerLevelData:
 	return data.levels[level_index]
+
+
+## RF-337: las mejoras conservan el fallback para torres sin atlas por nivel.
+func current_turret_atlas() -> Texture2D:
+	return stats().turret_atlas if stats().turret_atlas != null else data.turret_atlas
 
 
 func range_px() -> float:
@@ -122,6 +132,7 @@ func apply_upgrade() -> void:
 	assert(can_upgrade(), "apply_upgrade() en una torre de nivel máximo")
 	level_index += 1
 	total_invested += stats().cost
+	_sync_upgrade_glow()
 	queue_redraw()
 
 
@@ -130,6 +141,7 @@ func stun(seconds: float) -> void:
 	if seconds <= 0.0:
 		return
 	_stun_left = maxf(_stun_left, seconds)
+	_sync_upgrade_glow()
 	queue_redraw()
 
 
@@ -152,6 +164,7 @@ func targeting_name() -> String:
 
 
 func _physics_process(delta: float) -> void:
+	_recovery_left = maxf(0.0, _recovery_left - delta)
 	if _target != null and not (is_instance_valid(_target) and can_target(_target)):
 		_target = null
 	_cooldown -= delta
@@ -160,6 +173,7 @@ func _physics_process(delta: float) -> void:
 		_stun_anim += delta
 		if _stun_left <= 0.0001:
 			_stun_left = 0.0
+			_recovery_left = 0.28
 			queue_redraw()
 	if is_stunned():
 		_animate(delta)  # RF-280: apagada, no dispara
@@ -269,11 +283,13 @@ func _fire_burst() -> void:
 
 ## RF-120 y RF-121: el cañón sigue al objetivo; el retroceso y el destello se apagan solos.
 func _animate(delta: float) -> void:
+	_upgrade_time += delta
 	if _target != null:
 		var desired: float = (_target.global_position - global_position).angle()
 		aim_angle = lerp_angle(aim_angle, desired, minf(1.0, AIM_SPEED * delta))
 	_recoil = move_toward(_recoil, 0.0, delta * 8.0)
 	_flash_left = maxf(0.0, _flash_left - delta)
+	_sync_upgrade_glow()
 	queue_redraw()
 
 
@@ -291,7 +307,8 @@ func _barrel_width() -> float:
 
 
 func _barrel_tip_global() -> Vector2:
-	return global_position + Vector2.from_angle(aim_angle) * _barrel_length()
+	var mount: Vector2 = TowerVisual.MOUNT_OFFSET * _scale_factor() if current_turret_atlas() != null else Vector2.ZERO
+	return global_position + mount + Vector2.from_angle(aim_angle) * _barrel_length()
 
 
 func _outline_color() -> Color:
@@ -311,44 +328,96 @@ func _draw() -> void:
 	if base != null:
 		draw_circle(Vector2(4, 5) * factor, Rules.TILE_SIZE * 0.44 * factor, Color(0, 0, 0, 0.22))
 		draw_texture_rect(base, tile_rect, false)
+		# Contacto fijo sobre el asiento: también durante el retroceso, sin girar la base.
+		draw_set_transform(Vector2(0, 2) * factor, 0.0, Vector2(1.0, 0.35))
+		draw_circle(Vector2.ZERO, side * 0.25, Color(0, 0, 0, 0.24))
+		draw_set_transform(Vector2.ZERO)
 	else:  # RF-156: sin dibujo, el cuadrado de color de antes.
 		draw_rect(Rect2(Vector2(-half, -half) + Vector2(4, 5) * factor, Vector2(half, half) * 2.0), Color(0, 0, 0, 0.22))
 		var rect := Rect2(-half, -half, half * 2.0, half * 2.0)
 		draw_rect(rect, data.color)
 		draw_rect(rect, outline, false, 2.0)
+	# RF-350: placa de nivel integrada en el borde delantero de la base, bajo el mecanismo.
+	_draw_level_plate(factor)
 	# Torreta (o cañón), girada hacia `aim_angle` y retrocedida según `_recoil`.
 	var length: float = _barrel_length()
 	var width: float = _barrel_width()
-	draw_set_transform(Vector2.ZERO, aim_angle)
 	var back: float = RECOIL_PX * _recoil * factor
-	if data.turret_texture != null:
+	var atlas: Texture2D = current_turret_atlas()
+	if atlas != null:
+		# Las vistas conservan la vertical y la luz. Solo el retroceso sigue la puntería.
+		var offset: Vector2 = Vector2.from_angle(aim_angle) * back
+		draw_texture_rect_region(atlas, TowerVisual.mounted_rect(tile_rect, factor, offset),
+			TowerVisual.frame_rect(atlas, aim_angle))
+	elif data.turret_texture != null:
+		draw_set_transform(Vector2.ZERO, aim_angle)
 		draw_texture_rect(data.turret_texture, Rect2(tile_rect.position - Vector2(back, 0), tile_rect.size), false)
 	else:
+		draw_set_transform(Vector2.ZERO, aim_angle)
 		draw_rect(Rect2(-back, -width / 2.0, length, width), outline)
+	draw_set_transform(Vector2.ZERO)
 	if _flash_left > 0.0:
 		var strength: float = _flash_left / FLASH_DURATION
-		draw_circle(Vector2(length - back + 3.0, 0.0), width * 0.9, Color(1.0, 0.95, 0.6, strength))
-	draw_set_transform(Vector2.ZERO)
-	if data.turret_texture == null:
+		var mount: Vector2 = TowerVisual.MOUNT_OFFSET * factor if atlas != null else Vector2.ZERO
+		draw_circle(mount + Vector2.from_angle(aim_angle) * (length - back + 3.0), width * 0.9, Color(1.0, 0.95, 0.6, strength))
+	if data.turret_texture == null and atlas == null:
 		# Torreta redonda encima del cañón (solo sin dibujo: el dibujo ya la trae).
 		draw_circle(Vector2.ZERO, half * 0.42, outline)
 		draw_circle(Vector2.ZERO, half * 0.26, data.color)
-	# RF-75: un puntito por nivel, abajo y al centro (encima de todo, para que siempre se vean).
-	for i: int in level_number():
-		var dot := Vector2((i - (level_number() - 1) / 2.0) * 8.0 * factor, half - 4.0 * factor)
-		draw_circle(dot, 3.0 * factor, Color(1.0, 0.84, 0.3))
-		draw_arc(dot, 3.0 * factor, 0.0, TAU, 12, Color(0, 0, 0, 0.6), 1.0)
 	if is_stunned():
 		_draw_stun(tile_rect)
+	elif _recovery_left > 0.0:
+		draw_arc(Vector2(0, -10) * factor, 18 * factor, PI, TAU, 24,
+			Color(0.7, 0.96, 1, _recovery_left / 0.28), 1.7, true)
 
 
-## RF-280: la torre aturdida se ve apagada y con chispas que giran encima.
+func _draw_level_plate(factor: float) -> void:
+	var plate := Rect2(Vector2(-13, 16) * factor, Vector2(26, 7) * factor)
+	draw_style_box(level_plate_style(), plate)
+	for i: int in 3:
+		var dot := Vector2(-8 + i * 8, 19.5) * factor
+		draw_circle(dot, 2.2 * factor, Color(0.13, 0.1, 0.08))
+		if i < level_number():
+			draw_circle(dot, 1.6 * factor, Color(0.94, 0.67, 0.29))
+			draw_circle(dot + Vector2(-0.5, -0.5) * factor, 0.65 * factor, Color(1, 0.91, 0.6))
+
+
+static func level_plate_style() -> StyleBoxFlat:
+	const STYLE: StyleBoxFlat = preload("res://assets/ui/tower_level_plate.tres")
+	return STYLE
+
+
+## RF-351: aro roto y descargas sobre el mecanismo, con el brillo de mejora apagado.
 func _draw_stun(tile_rect: Rect2) -> void:
-	draw_rect(tile_rect, STUN_DIM)
+	var factor: float = _scale_factor()
+	var center := Vector2(0, -16) * factor
+	# Aro interrumpido sobre el mecanismo: no oscurece el rectángulo transparente ni los remaches.
+	for i: int in 3:
+		var start: float = _stun_anim * 1.6 + TAU * i / 3.0
+		draw_set_transform(center, 0.0, Vector2(1, 0.45))
+		draw_arc(Vector2.ZERO, tile_rect.size.x * 0.28, start, start + 1.1, 14, Color(0.83, 0.49, 0.98, 0.85), 2.0, true)
+	draw_set_transform(Vector2.ZERO)
 	for i: int in STUN_SPARK_COUNT:
 		var angle: float = _stun_anim * 4.0 + TAU * i / STUN_SPARK_COUNT
 		var p := Vector2(cos(angle) * 20.0, -20.0 + sin(angle) * 7.0) * _scale_factor()
-		draw_line(p + Vector2(-4, 0), p + Vector2(4, 0), Color(0.1, 0.08, 0.15), 4.4)
-		draw_line(p + Vector2(0, -4), p + Vector2(0, 4), Color(0.1, 0.08, 0.15), 4.4)
-		draw_line(p + Vector2(-3.4, 0), p + Vector2(3.4, 0), Color(1.0, 0.95, 0.5), 2.2)
-		draw_line(p + Vector2(0, -3.4), p + Vector2(0, 3.4), Color(1.0, 0.95, 0.5), 2.2)
+		var bolt := PackedVector2Array([p + Vector2(-2, -4), p + Vector2(1, -1), p + Vector2(-1, 1), p + Vector2(2, 4)])
+		draw_polyline(bolt, Color(0.1, 0.08, 0.15), 4.0, true)
+		draw_polyline(bolt, Color(0.86, 0.73, 1.0), 1.7, true)
+
+
+## RF-342: comparte pose y retroceso del mecanismo. Nunca toca base, sombra ni datos de combate.
+func _sync_upgrade_glow() -> void:
+	if _upgrade_glow == null:
+		return
+	var atlas: Texture2D = current_turret_atlas()
+	_upgrade_glow.visible = atlas != null and level_number() > 1 and not is_stunned()
+	if not _upgrade_glow.visible:
+		return
+	_upgrade_frame.atlas = atlas
+	_upgrade_frame.region = TowerVisual.frame_rect(atlas, aim_angle)
+	var factor: float = _scale_factor()
+	_upgrade_glow.scale = Vector2.ONE * Rules.TILE_SIZE * factor / _upgrade_frame.region.size.x
+	_upgrade_glow.position = TowerVisual.MOUNT_OFFSET * factor - Vector2.from_angle(aim_angle) * RECOIL_PX * _recoil * factor
+	_upgrade_material.set_shader_parameter("accent", TowerVisual.upgrade_glow_color(data.id))
+	_upgrade_material.set_shader_parameter("strength", TowerVisual.upgrade_glow_strength(level_number()))
+	_upgrade_material.set_shader_parameter("phase", _upgrade_time)

@@ -191,7 +191,7 @@ func test_time_stopped_means_aura_stopped() -> void:
 	var target: Enemy = _spawn(_data(), 1.0)
 	_step(0.3)
 	var armor: int = target.aura_armor()
-	await wait_frames(3)  # pasan cuadros, pero nadie llamó a _physics_process a mano
+	await wait_physics_frames(3)  # pasan cuadros, pero nadie llamó a _physics_process a mano
 	assert_eq(target.aura_armor(), armor)
 
 

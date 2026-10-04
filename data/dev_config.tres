@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="DevConfig" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/dev_config.gd" id="1_devcfg"]
+
+[resource]
+script = ExtResource("1_devcfg")
+gold_step = 1000
+speeds = PackedFloat32Array(0.25, 0.5, 1, 2, 4)

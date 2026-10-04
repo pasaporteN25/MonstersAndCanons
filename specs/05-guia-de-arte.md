@@ -68,3 +68,24 @@ Cada terna es **luz / medio / sombra** del degradé de relleno. Los nuevos enemi
 - Los **nueve enemigos** se redibujaron en T127 con un generador (`redesign.py`, en `build/enemy-redesign/`, que **no se versiona**: la carpeta `build/` está ignorada por git). **La fuente de verdad es el SVG** de `assets/sprites/enemies/`; los originales de antes y las comparaciones "antes/después" quedaron en esa carpeta.
 - **Torres, proyectiles, íconos y decoración del mapa** son los de M4/M5 (T70–T73, T84): contorno `#2b2233` y bases de madera, piedra y piedra con oro. Se pueden rediseñar más adelante con esta misma guía; hoy conviven sin problema.
 - **Enemigos con habilidad** (B-07): el Guardián y el Curandero (M17) y el Chamán y el Espejo (M18) ya están; quedan el Excavador y el Ladrón. Sus ideas de aspecto están en el backlog y se ajustan a los tonos libres de la tabla.
+
+## 7. Torres renderizadas (M23, D-049)
+
+Para las torres nuevas, esta sección reemplaza las reglas de SVG y vista lateral de §1–2. Los enemigos y la decoración existentes siguen con sus reglas anteriores.
+
+- **Familia A:** cañón y mortero, hierro oscuro, bronce y madera; cilindros torneados y soportes robustos.
+- **Familia B:** básica, francotirador, fuego, múltiple y ráfaga, acero y blindaje industrial. Básica oliva, rifle verde oscuro, fuego cobre/naranja, múltiple azul acero, ráfaga rojo oscuro. El mecanismo diferencia más que el color.
+- **Familia C:** hielo y Tesla, metal claro, bronce y cristal. Hielo celeste facetado; Tesla bobinas con energía violeta y esfera eléctrica.
+- **Lo común:** perspectiva ortográfica elevada, luz arriba a la izquierda, grandes biseles y reflejos; detalles pequeños subordinados a la silueta a 64/34 px. No se trazan de nuevo como SVG las imágenes aprobadas.
+- **Formato:** PNG RGBA, atlas 512×256 de 4×2 cuadros de 128×128. Orden E, SE, S, SO, O, NO, N, NE. La vista independiente y las bases miden 128×128. Mipmaps y filtrado lineal. Separar el mecanismo que gira de la base fija; la sombra del suelo la dibuja Godot.
+- **Fuentes y reproducción:** art/redesign-m23/sources conserva las hojas originales; tools/prepare_tower_sprites.gd produce los recursos consumidos por el juego. No sobrescribir estos PNG mediante los generadores SVG históricos de art/prototypes.
+- **Revisión:** capturas de mapa, combate, HUD y Wiki; hoja del conjunto; revisión de las ocho direcciones. Es una primera producción con imágenes generadas: cualquier deriva entre cuadros se anota y se corrige, no se da por modelado 3D real.
+
+**Siguiente etapa de arte:** primero suelo/camino y decoración (material y perspectiva comunes), después enemigos (volumen preservando especies y tamaños), finalmente paneles/wiki/selección de niveles. El HUD ya aceptado permanece como referencia de legibilidad. No se cambia todo el juego sin revisar cada grupo.
+
+## 8. Monstruos renderizados (M24, D-050)
+
+Normal (diablillo rojo), Rápido (bestia turquesa) y Tanque (ogro de piedra y piel verde) son PNG RGBA de **256×256**, **una sola vista** con la luz arriba a la izquierda, sin sombra dibujada (la pone el juego). Cuerpo al 63,4 % del alto como máximo y pies al 74,55 % del alto; los genera `tools/prepare_monster_sprites.gd` desde `art/redesign-m24/sources/`. **No se reflejan en espejo** (`flip_when_walking_left = false`) y todavía no tienen cuadros de caminar: lo que falta pedir está en `art/FORMATO_PROXIMA_ENTREGA_M24.md`. Los otros diez enemigos siguen con las reglas de §1–2.
+
+## M36 · Lectura de estados y efectos
+Placa de nivel: hierro/bronce, remaches ámbar siempre legibles; no depende del brillo animado. Aturdimiento: aro roto violeta y descargas sobre el mecanismo, sin tapar base/sombra. Cura: límite verde amarillento suave y brotes en cura efectiva; no usar oro ni blanco de daño. Muerte: conservar la pose y escala de la criatura, disolver con shader y ocho fragmentos facetados; sin deformaciones corporales, sombras nuevas ni nuevos ciclos falsos. Efectos finitos respetan pausa/velocidad y topes (12 residuos de muerte,16 pulsos de cura).

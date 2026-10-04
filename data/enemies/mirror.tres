@@ -1,7 +1,9 @@
 [gd_resource type="Resource" script_class="EnemyData" format=3]
 
 [ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="1_mirr"]
-[ext_resource type="Texture2D" path="res://assets/sprites/enemies/mirror.svg" id="2_mirr"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/rendered/mirror.png" id="2_mirr"]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/rendered/mirror_walk.png" id="m31_walk"]
 
 [resource]
 script = ExtResource("1_mirr")
@@ -14,6 +16,11 @@ reward = 25
 lives_damage = 2
 color = Color(0.5, 0.82, 0.9, 1)
 texture = ExtResource("2_mirr")
+visual_scale = 1.2
+flip_when_walking_left = false
 size_tiles = 0.36
 reflect_range_tiles = 2.5
 reflect_stun_seconds = 2.0
+walk_atlas = ExtResource("m31_walk")
+walk_stride_tiles = 0.55
+walk_art_scale = 1.1123595505618

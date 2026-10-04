@@ -8,7 +8,7 @@
 # Desactiva el vsync para medir cuántos FPS puede dar el juego, no los del monitor.
 extends SceneTree
 
-const ENEMY_SCENE: PackedScene = preload("res://scenes/enemies/enemy.tscn")
+const ENEMY_SCENE_PATH: String = "res://scenes/enemies/enemy.tscn"
 const ENEMY_COUNT: int = 200
 const TOWER_COUNT: int = 60
 ## Muertes "de mentira" por segundo, para que siempre haya estallidos en pantalla.
@@ -76,7 +76,7 @@ func _populate() -> void:
 
 
 func _spawn_enemy(distance: float) -> void:
-	var enemy: Enemy = ENEMY_SCENE.instantiate()
+	var enemy: Node2D = (load(ENEMY_SCENE_PATH) as PackedScene).instantiate()
 	enemy.setup(normal, game.level.get_ground_path(0), 1000000)  # no mueren: siempre hay 200
 	enemy.distance = distance
 	# Como en la partida real: cada golpe muestra su número de daño (RF-132).
@@ -90,7 +90,7 @@ func _spawn_enemy(distance: float) -> void:
 func _keep_enemy_count() -> void:
 	var active: int = 0
 	for node: Node in game.enemies.get_children():
-		if (node as Enemy).is_active():
+		if node.is_active():
 			active += 1
 	for i: int in ENEMY_COUNT - active:
 		_spawn_enemy(0.0)
@@ -100,5 +100,5 @@ func _fake_deaths(delta: float) -> void:
 	death_timer += delta * DEATH_EFFECTS_PER_SECOND
 	while death_timer >= 1.0:
 		death_timer -= 1.0
-		var enemy := game.enemies.get_child(randi() % game.enemies.get_child_count()) as Enemy
-		game.effects.enemy_died(enemy.global_position, normal.color, 16.0, 5)
+		var enemy := game.enemies.get_child(randi() % game.enemies.get_child_count()) as Node2D
+		game.effects.enemy_died(enemy.global_position, normal.color, 16.0, 5, enemy)

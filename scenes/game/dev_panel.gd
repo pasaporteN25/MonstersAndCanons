@@ -4,16 +4,19 @@
 class_name DevPanel
 extends PanelContainer
 
-const PANEL_STYLE: StyleBox = preload("res://assets/ui/panel_style.tres")
+signal metrics_toggled(enabled: bool)
+
+const PANEL_STYLE: StyleBox = preload("res://assets/ui/game_panel_style.tres")
 
 var _game: Game
-var _fps_label: Label
-var _show_fps: bool = false
 var _enemy_choice: OptionButton
 var _enemy_types: Array[EnemyData] = []
+var _speed_buttons: Array[Button] = []
+var _lives_toggle: CheckButton
 
 
 func setup(game: Game) -> DevPanel:
+	theme = preload("res://assets/ui/menu_theme.tres")
 	_game = game
 	visible = false
 	position = Vector2(20, 60)
@@ -31,30 +34,61 @@ func setup(game: Game) -> DevPanel:
 	title.add_theme_color_override("font_color", Color(1, 0.55, 0.3))
 	title.add_theme_font_size_override("font_size", 20)
 	box.add_child(title)
+	box.add_child(_section("Recursos"))
 	box.add_child(_button("+1000 de oro", game.dev_add_gold))
-	box.add_child(_toggle("Vidas infinitas", game.dev_set_infinite_lives))
-	box.add_child(_button("Saltar oleada", game.dev_skip_wave))
-	box.add_child(_button("Matar a todos", game.dev_kill_all))
+	_lives_toggle = _toggle("Vidas infinitas  [%s]" % DevMode.key_label(&"dev_infinite_lives"), game.dev_set_infinite_lives)
+	box.add_child(_lives_toggle)
+	game.dev_infinite_lives_changed.connect(_lives_toggle.set_pressed_no_signal)
+	box.add_child(_section("Partida"))
+	box.add_child(_button("Saltar oleada  [%s]" % DevMode.key_label(&"dev_skip_wave"), game.dev_skip_wave))
+	box.add_child(_button("Matar a todos  [%s]" % DevMode.key_label(&"dev_kill_all"), game.dev_kill_all))
 	box.add_child(_button("Ganar", game.dev_finish.bind(true)))
 	box.add_child(_button("Perder", game.dev_finish.bind(false)))
-	box.add_child(_toggle("Velocidad x4", game.dev_set_fast))
+	box.add_child(_section("Simulación"))
+	box.add_child(_speed_row())
+	game.speed_changed.connect(_on_speed_changed)
 	box.add_child(_enemy_row())
-	box.add_child(_toggle("Mostrar FPS", func(on: bool) -> void:
-		_show_fps = on
-		_fps_label.visible = on))
-	_fps_label = Label.new()
-	_fps_label.visible = false
-	box.add_child(_fps_label)
+	box.add_child(_toggle("Mostrar FPS", metrics_toggled.emit))
 	return self
+
+
+## RF-322: una fila de botones con las velocidades de `data/dev_config.tres`; el activo queda marcado.
+func _speed_row() -> Control:
+	var column := VBoxContainer.new()
+	var title := Label.new()
+	title.text = "Velocidad  [%s / %s]" % [DevMode.key_label(&"dev_slower"), DevMode.key_label(&"dev_faster")]
+	column.add_child(title)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 2)
+	for speed: float in DevMode.config.speeds:
+		var button := Button.new()
+		button.text = Rules.speed_text(speed)
+		button.toggle_mode = true
+		button.focus_mode = Control.FOCUS_NONE
+		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		button.add_theme_font_size_override("font_size", 13)
+		button.pressed.connect(func() -> void:
+			_game.dev_set_speed(speed)
+			_on_speed_changed(Engine.time_scale))  # un clic en el activo no lo apaga
+		row.add_child(button)
+		_speed_buttons.append(button)
+	column.add_child(row)
+	_on_speed_changed(Engine.time_scale)
+	return column
+
+
+## Marca el botón de la velocidad actual (también cuando cambia con la tecla F o termina la partida).
+func _on_speed_changed(speed: float) -> void:
+	for i: int in _speed_buttons.size():
+		_speed_buttons[i].set_pressed_no_signal(is_equal_approx(DevMode.config.speeds[i], speed))
+
+
+func speed_buttons() -> Array[Button]:
+	return _speed_buttons
 
 
 func toggle() -> void:
 	visible = not visible
-
-
-func _process(_delta: float) -> void:
-	if _show_fps:
-		_fps_label.text = "FPS: %d" % Engine.get_frames_per_second()
 
 
 ## Elegir un enemigo de cualquier tipo (todos los de data/enemies) y hacerlo aparecer.
@@ -89,3 +123,10 @@ func _toggle(text: String, action: Callable) -> CheckButton:
 	check.focus_mode = Control.FOCUS_NONE
 	check.toggled.connect(action)
 	return check
+
+func _section(text: String) -> Label:
+	var label := Label.new()
+	label.text = text
+	label.add_theme_font_size_override("font_size", 12)
+	label.add_theme_color_override("font_color", Color(0.9, 0.72, 0.4))
+	return label

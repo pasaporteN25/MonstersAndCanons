@@ -29,6 +29,20 @@ enum Shape { CIRCLE, TRIANGLE, SQUARE, DIAMOND, HEXAGON }
 @export var color: Color = Color.WHITE
 ## Solo visual (RF-151): el dibujo, mirando a la derecha. Vacío = se usa `shape` (RF-156).
 @export var texture: Texture2D
+## RF-339: solo el dibujo crece; radio lógico y selección no cambian.
+@export_range(0.1, 3.0) var visual_scale: float = 1.0
+## Cuatro poses por fila, filas derecha/abajo/izquierda/arriba, cuadros de256.
+@export var walk_atlas: Texture2D
+## Distancia de un ciclo completo, en casillas; la ralentización mueve las patas más lento.
+@export var walk_stride_tiles: float = 0.0
+## Compensa la diferencia de enmarcado entre el atlas y la pose estática aprobada.
+@export_range(0.1, 3.0) var walk_art_scale: float = 1.0
+## Cuatro poses de vuelo en2×2. Usa tiempo físico y se detiene con la pausa.
+@export var flight_atlas: Texture2D
+@export var flight_frame_seconds: float = 0.16
+## Solo visual (RF-330): si el dibujo se refleja en espejo al caminar hacia la izquierda (RF-151). Un
+## dibujo con luz propia (los PNG de una sola vista) no se refleja: el espejo le cambiaría la luz de lado.
+@export var flip_when_walking_left: bool = true
 ## Radio visual, en casillas.
 @export var size_tiles: float = 0.0
 

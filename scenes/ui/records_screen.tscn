@@ -2,9 +2,12 @@
 
 [ext_resource type="Script" path="res://scenes/ui/records_screen.gd" id="1_records"]
 [ext_resource type="Script" path="res://scenes/ui/menu_background.gd" id="2_bg"]
-[ext_resource type="StyleBox" path="res://assets/ui/panel_style.tres" id="3_style"]
+[ext_resource type="StyleBox" path="res://assets/ui/game_panel_style.tres" id="3_style"]
+
+[ext_resource type="Theme" path="res://assets/ui/menu_theme.tres" id="m33_theme"]
 
 [node name="RecordsScreen" type="Control"]
+theme = ExtResource("m33_theme")
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

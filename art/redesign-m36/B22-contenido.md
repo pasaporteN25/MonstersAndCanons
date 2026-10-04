@@ -1,0 +1,25 @@
+# B-22 · Contenido y desbloqueos
+
+Análisis completo, sin nuevos recursos de campaña ni desbloqueos activados. Propuesta: elegir dos torres y dos monstruos para la siguiente producción; los terceros son alternativas para comparar.
+
+| Candidato | Papel y contramedida | Identidad visual propuesta | Aparición propuesta | Esfuerzo adicional |
+|---|---|---|---|---|
+| Ballesta penetrante | Un proyectil atraviesa hasta3 terrestres alineados; pierde daño tras cada impacto. Distinta de Múltiple (varios blancos) y Ráfaga (púas radiales). Mala contra curvas, grupos dispersos y voladores; fuerte en rectas | Arco doble de acero y madera, perno largo; conserva familia industrial y atlas8 vistas | Torre en nivel8, antes de las oleadas de blindados | 3–5 días lógica/UI/tests + 2–4 arte |
+| Alquimista | Aplica corrosión temporal: -2 de armadura, piso0, solo la corrosión más fuerte. Potencia golpes pequeños sin reemplazar la quemadura que ignora armadura. Poco útil contra enemigos sin armadura; obliga a invertir en daño adicional | Depósito de vidrio ámbar, cobre oscuro y boquilla; impacto verde oliva distinto de la cura amarilla | Torre en nivel9, frente a Guardián y grupos blindados | 4–7 días + 2–4 arte; requiere revisar reglas de armadura/aura |
+| Estandarte mecánico (alternativa) | +10% de cadencia a torres cercanas, radio2; no se acumula, no afecta a sí mismo, se apaga al aturdir. Consume una casilla que podría disparar; no resuelve un mal posicionamiento | Baliza de hierro/bronce con banderín oscuro, sin parecer monstruo ni torre de hielo | Nivel9/10, si se prefiere apoyo sobre corrosión | 5–8 días + 2–3 arte; balance de todas las combinaciones |
+| Excavador | Ciclo visible → enterrado → visible; mientras se entierra no es objetivo directo, pero recibe área y quemadura previa. No invulnerabilidad total. Contramedida: área, fuego y distribuir torres antes de emerger | Bestia baja con garras anchas y tierra en el lomo; marcador de tierra mantiene legible su posición | Monstruo en nivel8, después de presentar área/fuego | 3–5 días + 3–5 arte/entierro; revisar selección y objetivos de proyectiles |
+| Ladrón | Escapar roba una cantidad fija de oro, limitada al disponible; no quita vidas ni genera saldo negativo. No crear derrota alternativa por economía. Contramedida: prioridades/velocidad de ataque | Criatura delgada con bolsa de bronce y máscara, silueta distinta del Rápido | Nivel8/9, pocos en grupos mezclados para no bloquear compras | 1–2 días + 2–4 arte; HUD/guía deben explicar oro frente a vidas |
+| Embestidor (Bestia B reservada, alternativa) | Acelera tras recorrer un tramo recto, pierde impulso al doblar. Distinto del Rápido de velocidad constante; presión predecible en rectas. Contramedida: Hielo, daño antes de la aceleración y cobertura del tramo final | Aprovecha concepto fast_B reservado; hombros delanteros y patas de carrera, con estela muy discreta | Nivel9, mapa con rectas y curvas que enseñe el comportamiento | 3–5 días + 3–5 ciclo/poses; no castigar mapas sin curvas sin rebalancearlos |
+
+Tanque B queda reservado: no elegir otro enemigo solo por más vida/armadura, porque se solaparía con Tanque, Blindado y Guardián. Mortero ya existe y está reservado para el nivel10; no cuenta como torre nueva.
+
+## Disponibilidad por nivel frente a desbloqueo persistente
+
+| Sistema | Beneficio | Costo/riesgo |
+|---|---|---|
+| Lista de torres por nivel | Diseñador controla qué herramientas tiene cada desafío; campaña antigua conserva balance; mapas propios declaran catálogo | Mostrar claramente qué torre se habilita en la tarjeta y documentar la lista; reutiliza la idea de torres_extra |
+| Desbloqueo persistente por victoria | Recompensa clara y progresión entre partidas | Nueva versión del guardado, migración, diferencias normal/pruebas/comunidad; permitir nuevas torres en niveles viejos cambia balance y récords |
+
+**Recomendación:** disponibilidad por nivel para la primera tanda. Mostrar torre disponible al elegir el nivel y habilitar Wiki de torre con texto de aparición; enemigos siguen el bestiario descubierto, sin que las tarjetas revelen los todavía cerrados. Si se elige desbloqueo persistente, guardar IDs oficiales, no índices; separar por modo, desbloquear viejos guardados a partir del progreso, declarar si viejos récords siguen comparables y dejar comunidad/pruebas con su catálogo propio.
+
+**Selección recomendada:** Ballesta + Alquimista; Excavador + Ladrón. Son funciones distintas y cubren línea, defensa, objetivo y economía. Primero prototipo de cada habilidad con datos; después arte/atlas, Wiki y balance. Los números anteriores son semillas de diseño, no valores finales. Cada pieza exige tests de bordes (proyectil atraviesa una sola vez, armadura piso0/sin apilar, quemadura durante entierro y robo con oro0) y prueba con bot en los niveles elegidos. No hace falta completar ahora los niveles8–10 para probarlos en mapas aislados.

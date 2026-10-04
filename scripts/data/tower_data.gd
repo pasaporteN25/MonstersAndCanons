@@ -15,6 +15,8 @@ extends Resource
 ## Solo visual (RF-150): la parte que gira, dibujada mirando a la derecha y centrada.
 ## Vacío = cañón rectangular de antes (RF-156). La base depende del nivel (TowerLevelData).
 @export var turret_texture: Texture2D
+## RF-327: ocho vistas, cuatro columnas por dos filas. Vacío = textura giratoria anterior.
+@export var turret_atlas: Texture2D
 ## Solo visual (RF-153): el proyectil, dibujado mirando a la derecha. Vacío = círculo del color.
 @export var projectile_texture: Texture2D
 ## RF-290: lado de la torre en casillas. 1 = una casilla (todas las de hoy), 2 = cuadrado de 2×2 (el Mortero).

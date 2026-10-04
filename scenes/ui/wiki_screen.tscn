@@ -3,7 +3,10 @@
 [ext_resource type="Script" path="res://scenes/ui/wiki_screen.gd" id="1_wiki"]
 [ext_resource type="Script" path="res://scenes/ui/menu_background.gd" id="2_bg"]
 
+[ext_resource type="Theme" path="res://assets/ui/menu_theme.tres" id="m33_theme"]
+
 [node name="WikiScreen" type="Control"]
+theme = ExtResource("m33_theme")
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

@@ -14,13 +14,14 @@
 # o en el editor: panel Importar → Loop Mode: Forward). Lo vigila un test.
 extends SceneTree
 
-const RATE: int = 22050
+const RATE: int = 44100
 const OUT_DIR: String = "res://assets/audio/"
 
 enum Wave { SINE, SQUARE, TRIANGLE, NOISE }
 
 ## Si se pasan nombres después de `--`, solo se escriben esos sonidos (los demás no se tocan).
 var _only: PackedStringArray = []
+var _report: Dictionary = {}
 
 
 func _init() -> void:
@@ -54,8 +55,17 @@ func _init() -> void:
 	_save("click", _tone(Wave.SQUARE, 1200.0, 1000.0, 0.025, 0.2))
 	# RF-316: el combo: un "tin" corto y brillante (dos notas agudas que suben, con un brillo encima).
 	_save("combo", _mix([_notes(Wave.SINE, [1568.0, 2093.0], 0.045, 0.4), _tone(Wave.TRIANGLE, 3136.0, 4186.0, 0.09, 0.08)]))
+	_save("reflect", _mix([_tone(Wave.SINE, 1700, 2400, 0.18, 0.3), _tone(Wave.SINE, 2700, 3300, 0.13, 0.12)]))
+	_save("stun", _mix([_tone(Wave.TRIANGLE, 360, 110, 0.26, 0.3), _tone(Wave.NOISE, 0, 0, 0.12, 0.12)]))
+	_save("heal", _notes(Wave.SINE, [659.25, 880, 987.77], 0.1, 0.22))
+	_save("impact", _mix([_tone(Wave.NOISE, 0, 0, 0.06, 0.25), _tone(Wave.SINE, 240, 80, 0.09, 0.3)]))
 	# --- Música (bucle) ---
-	_save("music_loop", _music(), true)
+	var menu: PackedFloat32Array = _music(false)
+	_save("music_loop", menu, true)  # compatibilidad con recursos anteriores
+	_save("music_menu", menu, true)
+	_save("music_combat", _music(true), true)
+	var report_file: FileAccess = FileAccess.open("res://art/redesign-m36/audio_manifest.json", FileAccess.WRITE)
+	report_file.store_string(JSON.stringify(_report, "\t"))
 	quit()
 
 
@@ -67,12 +77,17 @@ func _tone(wave: Wave, from_hz: float, to_hz: float, seconds: float, volume: flo
 	var samples := PackedFloat32Array()
 	samples.resize(count)
 	var phase: float = 0.0
+	var noise_filtered: float = 0.0
 	for i: int in count:
 		var t: float = float(i) / count
 		phase += lerpf(from_hz, to_hz, t) / RATE
 		var attack: float = minf(1.0, t * 40.0)
 		var decay: float = pow(1.0 - t, 2.0)
-		samples[i] = _oscillator(wave, phase) * volume * attack * decay
+		var sample: float = _oscillator(wave, phase)
+		if wave == Wave.NOISE:
+			noise_filtered = lerpf(noise_filtered, sample, 0.18)
+			sample = noise_filtered * 2.0
+		samples[i] = sample * volume * attack * decay
 	return samples
 
 
@@ -88,7 +103,8 @@ func _oscillator(wave: Wave, phase: float) -> float:
 	var p: float = fposmod(phase, 1.0)
 	match wave:
 		Wave.SQUARE:
-			return 1.0 if p < 0.5 else -1.0
+			# Timbre de metal suave sin los bordes discontinuos del cuadrado original.
+			return (sin(p * TAU) + sin(p * TAU * 3) * 0.22 + sin(p * TAU * 5) * 0.06) / 1.28
 		Wave.TRIANGLE:
 			return 4.0 * absf(p - 0.5) - 1.0
 		Wave.NOISE:
@@ -111,18 +127,29 @@ func _mix(layers: Array) -> PackedFloat32Array:
 
 
 ## Un bucle tranquilo de 16 compases: bajo + arpegio sobre 4 acordes (La m, Fa, Do, Sol).
-func _music() -> PackedFloat32Array:
-	var beat: float = 60.0 / 96.0  # 96 pulsos por minuto
+func _music(combat: bool) -> PackedFloat32Array:
+	var beat: float = 60.0 / (112.0 if combat else 84.0)
 	var chords: Array = [[220.0, 261.6, 329.6], [174.6, 220.0, 261.6], [261.6, 329.6, 392.0], [196.0, 246.9, 293.7]]
 	var result := PackedFloat32Array()
 	for bar: int in 16:
 		var chord: Array = chords[bar % chords.size()]
-		var bass := _tone(Wave.TRIANGLE, chord[0] / 2.0, chord[0] / 2.0, beat * 4.0, 0.22)
+		var bass := _tone(Wave.SINE, chord[0] / 2.0, chord[0] / 2.0, beat * 4.0, 0.17)
+		var pad := PackedFloat32Array()
+		pad.resize(int(beat * 4.0 * RATE))
+		for i: int in pad.size():
+			var t: float = i / float(pad.size())
+			var clock: float = i / float(RATE)
+			for hz: float in chord:
+				pad[i] += (sin(clock * hz * TAU) + sin(clock * hz * 2.003 * TAU) * 0.15) * sin(t * PI) * 0.032
 		var arpeggio := PackedFloat32Array()
 		for step: int in 8:
 			var hz: float = chord[step % 3] * (2.0 if step >= 4 else 1.0)
-			arpeggio.append_array(_tone(Wave.SQUARE, hz, hz, beat / 2.0, 0.06))
-		result.append_array(_mix([bass, arpeggio]))
+			var pluck: PackedFloat32Array = _tone(Wave.TRIANGLE, hz, hz, beat / 2.0, 0.075)
+			if combat:
+				pluck = _mix([pluck, _tone(Wave.SINE, 95, 42, beat / 2.0, 0.2 if step % 2 == 0 else 0.04),
+					_tone(Wave.NOISE, 0, 0, 0.045, 0.07 if step % 2 == 1 else 0.025)])
+			arpeggio.append_array(pluck)
+		result.append_array(_mix([bass, pad, arpeggio]))
 	return result
 
 
@@ -131,17 +158,32 @@ func _music() -> PackedFloat32Array:
 func _save(file_name: String, samples: PackedFloat32Array, loop: bool = false) -> void:
 	if not _only.is_empty() and not _only.has(file_name):
 		return
+	var peak: float = 0.0
+	for sample: float in samples:
+		peak = maxf(peak, absf(sample))
+	var gain: float = minf(1.0, (0.45 if loop else 0.75) / maxf(peak, 0.001))
 	var bytes := PackedByteArray()
-	bytes.resize(samples.size() * 2)
+	bytes.resize(samples.size() * (4 if loop else 2))
+	var energy: float = 0.0
 	for i: int in samples.size():
-		bytes.encode_s16(i * 2, int(clampf(samples[i], -1.0, 1.0) * 32767.0))
+		var sample: float = samples[i] * gain
+		energy += sample * sample
+		if loop:
+			bytes.encode_s16(i * 4, int(sample * 32767.0))
+			# Ensanchamiento estéreo discreto y circular, conservando el empalme del bucle.
+			var right: float = (sample * 0.88 + samples[posmod(i - 529, samples.size())] * gain * 0.12)
+			bytes.encode_s16(i * 4 + 2, int(right * 32767.0))
+		else:
+			bytes.encode_s16(i * 2, int(sample * 32767.0))
 	var stream := AudioStreamWAV.new()
 	stream.format = AudioStreamWAV.FORMAT_16_BITS
 	stream.mix_rate = RATE
-	stream.stereo = false
+	stream.stereo = loop
 	stream.data = bytes
 	if loop:
 		stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
 		stream.loop_end = samples.size()
 	var path: String = OUT_DIR + file_name + ".wav"
+	_report[file_name] = {"seconds": samples.size() / float(RATE), "rate": RATE, "peak": peak * gain,
+		"rms": sqrt(energy / samples.size()), "stereo": loop, "source": "Síntesis original tools/make_sounds.gd; sin muestras externas"}
 	print(file_name, ": ", stream.save_to_wav(path), " (%.2f s)" % (float(samples.size()) / RATE))

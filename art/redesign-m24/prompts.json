@@ -1,0 +1,46 @@
+{
+  "mode": "Herramienta integrada image_gen",
+  "monsters": [
+    {
+      "name": "normal_A",
+      "prompt": "Use case: stylized-concept. Asset type: ONE isolated full-body monster concept sprite for Monsters & Canons, a 2D tower defense with premium stylized 3D-rendered sprites. Reference image 1 is STYLE ONLY: match its elevated camera, sculpted forms, soft upper-left lighting, dark clean edges and believable materials. Single creature facing southeast, camera elevated 35 degrees, entire body and feet visible, centered with ample transparent padding. No pedestal, no scene, no weapons unrelated to role, no text, no labels, no watermark. Strong readable silhouette at 40 pixels tall, broad color masses, restrained surface detail, expressive threatening face, stylized fantasy monster not human. Real alpha transparency. Small squat moss-green horned imp. Large wedge ears, two ivory horns, toothy mischievous face, thick hands, simple dark leather loincloth. Compact upright stance, appealing but hostile."
+    },
+    {
+      "name": "normal_B",
+      "prompt": "Use case: stylized-concept. Asset type: ONE isolated full-body monster concept sprite for Monsters & Canons, a 2D tower defense with premium stylized 3D-rendered sprites. Reference image 1 is STYLE ONLY: match its elevated camera, sculpted forms, soft upper-left lighting, dark clean edges and believable materials. Single creature facing southeast, camera elevated 35 degrees, entire body and feet visible, centered with ample transparent padding. No pedestal, no scene, no weapons unrelated to role, no text, no labels, no watermark. Strong readable silhouette at 40 pixels tall, broad color masses, restrained surface detail, expressive threatening face, stylized fantasy monster not human. Real alpha transparency. Small rust-red horned imp, compact hunched body, broad jaw, short curved charcoal horns, bright amber eyes, clawed hands and feet, rough dark leather belt. More feral and distinctive than a generic goblin."
+    },
+    {
+      "name": "fast_A",
+      "prompt": "Use case: stylized-concept. Asset type: ONE isolated full-body monster concept sprite for Monsters & Canons, a 2D tower defense with premium stylized 3D-rendered sprites. Reference image 1 is STYLE ONLY: match its elevated camera, sculpted forms, soft upper-left lighting, dark clean edges and believable materials. Single creature facing southeast, camera elevated 35 degrees, entire body and feet visible, centered with ample transparent padding. No pedestal, no scene, no weapons unrelated to role, no text, no labels, no watermark. Strong readable silhouette at 40 pixels tall, broad color masses, restrained surface detail, expressive threatening face, stylized fantasy monster not human. Real alpha transparency. Lean turquoise reptilian monster running low on four limbs, swept-back ivory head spikes, long curved tail, powerful hind legs, bright amber eyes. Athletic aerodynamic silhouette, conveys speed immediately."
+    },
+    {
+      "name": "fast_B",
+      "prompt": "Use case: stylized-concept. Asset type: ONE isolated full-body monster concept sprite for Monsters & Canons, a 2D tower defense with premium stylized 3D-rendered sprites. Reference image 1 is STYLE ONLY: match its elevated camera, sculpted forms, soft upper-left lighting, dark clean edges and believable materials. Single creature facing southeast, camera elevated 35 degrees, entire body and feet visible, centered with ample transparent padding. No pedestal, no scene, no weapons unrelated to role, no text, no labels, no watermark. Strong readable silhouette at 40 pixels tall, broad color masses, restrained surface detail, expressive threatening face, stylized fantasy monster not human. Real alpha transparency. Lean purple reptilian monster sprinting on two strong digitigrade legs, small clawed arms, swept back lavender crest and hooked tail, glowing yellow eyes. Raptor-like fantasy beast, no feathers, clear fast agile silhouette."
+    },
+    {
+      "name": "tank_A",
+      "prompt": "Use case: stylized-concept. Asset type: ONE isolated full-body monster concept sprite for Monsters & Canons, a 2D tower defense with premium stylized 3D-rendered sprites. Reference image 1 is STYLE ONLY: match its elevated camera, sculpted forms, soft upper-left lighting, dark clean edges and believable materials. Single creature facing southeast, camera elevated 35 degrees, entire body and feet visible, centered with ample transparent padding. No pedestal, no scene, no weapons unrelated to role, no text, no labels, no watermark. Strong readable silhouette at 40 pixels tall, broad color masses, restrained surface detail, expressive threatening face, stylized fantasy monster not human. Real alpha transparency. Very broad heavy stone ogre, gray slate rock plates over moss-green flesh, massive forearms, short sturdy legs, two blunt ivory tusks. Low center of gravity and organic stone armor, no weapon."
+    },
+    {
+      "name": "tank_B",
+      "prompt": "Use case: stylized-concept. Asset type: ONE isolated full-body monster concept sprite for Monsters & Canons, a 2D tower defense with premium stylized 3D-rendered sprites. Reference image 1 is STYLE ONLY: match its elevated camera, sculpted forms, soft upper-left lighting, dark clean edges and believable materials. Single creature facing southeast, camera elevated 35 degrees, entire body and feet visible, centered with ample transparent padding. No pedestal, no scene, no weapons unrelated to role, no text, no labels, no watermark. Strong readable silhouette at 40 pixels tall, broad color masses, restrained surface detail, expressive threatening face, stylized fantasy monster not human. Real alpha transparency. Heavy obsidian ogre, broad dark basalt shoulder slabs, warm orange cracks limited to shoulders and chest, massive fists, squat legs, small horned head. Recognizably living rocky monster, readable eyes, threatening and weighty."
+    }
+  ],
+  "extras": [
+    {
+      "name": "cannon_levels",
+      "prompt": "precise-object-edit. Reference image is the existing cannon turret to preserve. Produce a wide transparent sprite comparison sheet with exactly THREE evenly spaced isolated versions of THIS SAME cannon, left to right levels 1,2,3. Keep its silhouette, single barrel aiming right, elevated camera, upper-left lighting, brown wooden carriage, dark iron barrel and bronze hardware. Level1 identical to reference. Level2 only add reinforced bronze barrel bands and restrained warm amber accents. Level3 more polished bronze reinforcement, engraved metal panels and a small amber energy vent. No extra barrels, no huge glow, no base/pedestal, no text, no labels. Same scale and camera for all three, full objects with padding, genuine alpha.",
+      "reference": "assets/sprites/towers/rendered/turret_cannon.png"
+    },
+    {
+      "name": "frost_levels",
+      "prompt": "precise-object-edit. Reference image is the existing frost turret to preserve. Produce a wide transparent sprite comparison sheet with exactly THREE evenly spaced isolated versions of THIS SAME frost turret, left to right levels1,2,3. Preserve curved pale-metal and bronze frame, suspended cyan ice crystal, pointing right, elevated camera, upper-left lighting. Level1 identical to reference. Level2 only add restrained cyan glowing seams and small polished silver reinforcements. Level3 brighter crystal core, a few small ice fins and rune inlays, controlled blue highlights. Keep crystal and metal clearly separated, same silhouette, no oversized glow, no base, no text. Same scale/camera, full objects with padding, genuine alpha.",
+      "reference": "assets/sprites/towers/rendered/turret_frost.png"
+    },
+    {
+      "name": "logo_corrected",
+      "prompt": "Use case: text-localization. Edit target is the existing logo. Preserve its design, sculpted 3D beveled ivory Monsters, gold second line, horns, cannon, layout and transparent alpha. Correct ONLY spelling of second line from CANNONS to CANONS (remove the extra N). EXACT text: Monsters & Canons. CANONS is six letters: C A N O N S. The word should read CANONS, never CANNONS. Rebalance spacing naturally. No new ornaments, no background. Transparent PNG.",
+      "reference": "art/prototypes/branding/monsters_canons_logo_3d.png"
+    }
+  ]
+}

@@ -4,7 +4,9 @@
 class_name BurstEffect
 extends Node2D
 
-const PARTICLE_COUNT: int = 12
+const PARTICLE_COUNT: int = 8
+var _facet := PackedVector2Array([Vector2(-1, 0), Vector2(0, -0.6), Vector2(1, 0.2), Vector2(0, 1)])
+var _light_facet := PackedVector2Array([Vector2(-1, 0), Vector2(0, -0.6), Vector2(0.1, 0.1)])
 const DURATION: float = 0.55
 const DRAG: float = 4.0  # cuánto frenan las partículas por segundo
 
@@ -20,8 +22,8 @@ func setup(color: Color, radius: float) -> BurstEffect:
 	for i: int in PARTICLE_COUNT:
 		var angle: float = TAU * i / PARTICLE_COUNT + randf_range(-0.3, 0.3)
 		_offsets.append(Vector2.from_angle(angle) * radius * 0.5)
-		_velocities.append(Vector2.from_angle(angle) * randf_range(90.0, 200.0))
-		_sizes.append(randf_range(4.0, 8.0))
+		_velocities.append(Vector2.from_angle(angle) * randf_range(35.0, 80.0))
+		_sizes.append(randf_range(2.0, 4.0))
 	return self
 
 
@@ -39,9 +41,10 @@ func _process(delta: float) -> void:
 func _draw() -> void:
 	var t: float = _time / DURATION
 	var color := Color(_color.lightened(0.2), 1.0 - t)
-	var outline := Color(_color.darkened(0.5), 1.0 - t)
 	for i: int in _offsets.size():
 		var size: float = _sizes[i] * (1.0 - t * 0.6)
-		var rect := Rect2(_offsets[i] - Vector2(size, size) / 2.0, Vector2(size, size))
-		draw_rect(rect, color)
-		draw_rect(rect, outline, false, 1.0)  # borde oscuro: se ve también sobre fondos claros
+		var p: Vector2 = _offsets[i]
+		draw_set_transform(p, 0.0, Vector2.ONE * size)
+		draw_colored_polygon(_facet, color)
+		draw_colored_polygon(_light_facet, Color(_color.lightened(0.65), (1.0 - t) * 0.8))
+	draw_set_transform(Vector2.ZERO)

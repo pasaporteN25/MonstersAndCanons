@@ -151,6 +151,6 @@ func test_auras_are_drawn_without_errors() -> void:
 	game.dev_spawn(_enemy("healer"))
 	game.dev_spawn(_enemy("normal"))
 	simulate(game, 30, 1.0 / 60.0)
-	await wait_frames(3)
+	await wait_physics_frames(3)
 	assert_eq(game.enemies.get_child_count(), 3)
 	assert_true(true, "el anillo y los íconos se dibujaron")

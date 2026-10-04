@@ -1,7 +1,10 @@
 [gd_resource type="Resource" script_class="EnemyData" format=3]
 
 [ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="1_73sii"]
-[ext_resource type="Texture2D" path="res://assets/sprites/enemies/boss.svg" id="2_hladh"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/rendered/boss.png" id="2_hladh"]
+
+
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/rendered/boss_walk.png" id="m31_walk"]
 
 [resource]
 script = ExtResource("1_73sii")
@@ -16,4 +19,9 @@ lives_damage = 10
 slow_resistance = 0.5
 color = Color(0.7529412, 0.22352941, 0.16862746, 1)
 texture = ExtResource("2_hladh")
+visual_scale = 1.2
+flip_when_walking_left = false
 size_tiles = 0.45
+walk_atlas = ExtResource("m31_walk")
+walk_stride_tiles = 0.85
+walk_art_scale = 1.25850340136054

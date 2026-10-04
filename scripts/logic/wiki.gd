@@ -173,10 +173,10 @@ static func tower_entry(tower: TowerData, towers: Array[TowerData] = []) -> Wiki
 	entry.title = tower.display_name
 	entry.subtitle = "Golpea voladores" if tower.can_hit_air else "Solo terrestres"
 	var first: TowerLevelData = tower.levels[0]
-	if first.base_texture != null:
-		entry.icon.append(first.base_texture)
-	if tower.turret_texture != null:
-		entry.icon.append(tower.turret_texture)
+	var icon: Texture2D = TowerVisual.mounted_icon(first.base_texture,
+		TowerVisual.frame_texture(tower.turret_atlas, -PI / 2.0) if tower.turret_atlas != null else tower.turret_texture)
+	if icon != null:
+		entry.icon.append(icon)
 	if tower.description != "":
 		entry.add_text(tower.description)
 	var facts: Array = [["Golpea voladores", "sí" if tower.can_hit_air else "no"]]

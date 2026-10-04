@@ -394,7 +394,7 @@ En M3 se agregan tres, porque hay datos que deben **sobrevivir** al cambiar de e
 | `GameFlow` ([código](../scripts/autoload/game_flow.gd)) | Recordar qué nivel se juega (`current_index`, -1 = fuera de la campaña) y cambiar de pantalla. Registrar victorias y desbloquear el siguiente nivel. Aplicar pantalla completa al arrancar. |
 | `SaveManager` ([código](../scripts/autoload/save_manager.gd)) | Leer y escribir el progreso y las opciones (§7.1). Los tests cambian `save_path` para no tocar el guardado real. |
 | `DevMode` ([código](../scripts/autoload/dev_mode.gd)) *(M6)* | Modo de pruebas (spec §10.2, D-028): se activa con la característica de exportación `pruebas` (`JuegoA_pruebas.exe`) o, en el editor, con `--pruebas`. Cambia a `save_pruebas.json`, abre todos los niveles, muestra el cartel y hace que `Game` agregue el panel de pruebas. Va después de `SaveManager` y antes de `GameFlow` y `Audio`, así las opciones ya salen del guardado de pruebas. |
-| `Audio` ([código](../scripts/autoload/audio.gd)) | Efectos y música. Carga todo `assets/audio/*.wav` y los reproduce por nombre (`Audio.play(&"build")`). 12 "voces" reutilizables y un intervalo mínimo por sonido. Buses `Master`, `Music`, `SFX` (`default_bus_layout.tres`). Los sonidos se generan con `tools/make_sounds.gd` (D-020). |
+| `Audio` ([código](../scripts/autoload/audio.gd)) | Efectos y música. Carga todo `assets/audio/*.wav` y los reproduce por nombre (`Audio.play(&"build")`). 12 "voces" reutilizables (9 disparos/impactos, 3 avisos), un intervalo mínimo por sonido y limitador Master a-1dB (M36). Buses `Master`, `Music`, `SFX` (`default_bus_layout.tres`). Los sonidos se generan con `tools/make_sounds.gd` (D-020). |
 
 > ⚠️ **Los scripts de herramientas (`tools/*.gd`, que se ejecutan con `-s`) se compilan antes de que existan los autoloads.** Por eso no pueden usar `GameFlow`, `SaveManager` ni `Audio` por su nombre, ni declarar variables de tipo `Game` (porque `game.gd` sí los usa): declaran la partida como `Node2D`.
 
@@ -490,7 +490,7 @@ godot --headless --path . -s addons/gut/gut_cmdln.gd -gdir=res://tests -gexit
 
 ### 6.14 Torres aturdidas, Chamán y Espejo *(M18, D-043)*
 
-- `Tower`: `GROUP = &"towers"`, `stun(seconds)` (queda el mayor tiempo), `is_stunned()`, `stun_left()`. En `_physics_process`, si está aturdida **no dispara** (el cooldown sigue corriendo). `_draw` la oscurece y dibuja chispas que giran. `TowerPanel` muestra "Aturdida (N s)" y se refresca mientras dura.
+- `Tower`: `GROUP = &"towers"`, `stun(seconds)` (queda el mayor tiempo), `is_stunned()`, `stun_left()`. En `_physics_process`, si está aturdida **no dispara** (el cooldown sigue corriendo). `_draw` dibuja aro roto y descargas localizadas; el brillo de mejora se apaga (M36). `TowerPanel` muestra "Aturdida (N s)" y se refresca mientras dura.
 - `EnemyData` gana `stun_interval`, `stun_seconds`, `stun_range_tiles` (Chamán) y `reflect_range_tiles`, `reflect_stun_seconds` (Espejo).
 - `Enemy`: el Chamán cuenta `_stun_cast_left`; al llegar a 0 busca la torre más cercana (`Tower.GROUP`) sin aturdir dentro del alcance y le hace `stun()`; si no hay, espera. Avisa con `cast_stun(from, tower)` (solo visual). `will_reflect(tower)` / `reflect(tower)` implementan el rebote y avisan con `reflected(enemy, tower)`.
 - `Projectile`: `source: Tower`. En `_hit`, si el enemigo rebota el tiro de `source`, no llama a `take_hit` (sí aplica la quemadura).
@@ -501,7 +501,7 @@ godot --headless --path . -s addons/gut/gut_cmdln.gd -gdir=res://tests -gexit
 - `TowerData.footprint: int = 1` (lado en casillas). `Tower` guarda `origin_cell` (la casilla de arriba a la izquierda) y `footprint`; `cells()` devuelve todas las casillas que ocupa. Su `position` es el **centro** del cuadrado.
 - `BuildController`: `footprint_cells(origin, footprint)` (estática, sin escena, para probarla) y `_occupied` guarda la torre en **cada** casilla. `can_build` exige que todas sean construibles, estén dentro del mapa y libres. `sell` libera **todas** (hoy usa `cell_at(tower.global_position)`, que con el centro en una esquina no sirve). `tower_at(cell)` ya funciona para cualquiera de las cuatro.
 - **Vista previa:** la casilla de origen es `cell_at(mouse - (footprint - 1) * TILE_SIZE / 2)`: con `footprint` 1 da la de siempre y con 2 centra el cuadrado en el mouse. Se pintan todas las casillas, el dibujo **escalado** por `footprint` y el alcance desde el centro.
-- `Tower._draw` escala con `footprint` la base, la sombra, la torreta, los puntitos, el aturdimiento y la longitud del cañón; el anillo de construcción usa el tamaño. `HUD`/`input`: acción `build_9` en `project.godot` y el límite de la barra sube a 9.
+- `Tower._draw` escala con `footprint` la base, la sombra, la torreta, la placa/remaches, el aturdimiento y la longitud del cañón; el anillo de construcción usa el tamaño. `HUD`/`input`: acción `build_9` en `project.godot` y el límite de la barra sube a 9.
 - Datos: `data/towers/mortar.tres` (reusa `base_1..3`), `assets/sprites/towers/turret_mortar.svg` y `assets/sprites/projectiles/mortar.svg`; se agrega al final de `Tower Types` en `game.tscn`. La Wiki escribe "Tamaño: 2×2 casillas" leyendo `footprint`.
 - **Bot de balance:** las estrategias de hoy usan solo los índices 0–7, así que **no cambian**; se suma una (`mortar`) que compra Morteros donde haya 2×2 libres.
 - **Torres reservadas (D-045, RF-300):** `TowerData.reserved`; `LevelData.extra_towers` se lee de `"torres_extra"` (`LevelFile._read_extra_towers`, con `LevelFile.tower_ids()`) y `LevelData.available_towers(todas)` filtra. `Game.available_towers` alimenta a `BuildController` y al HUD; `tower_types` sigue siendo la lista completa. `LevelDraft` conserva y escribe el campo.
@@ -523,3 +523,69 @@ godot --headless --path . -s addons/gut/gut_cmdln.gd -gdir=res://tests -gexit
 - Sonido: `tools/make_sounds.gd` sintetiza `combo` (dos senos agudos que suben, ~90 ms) y escribe `assets/audio/combo.wav`.
 - **Desde la torre que pone el estado:** `TowerText.combo_partners(torre, torres)` (estática, sin escena) arma las líneas "Combo: Cañón, Francotirador y Mortero +25 % a los que frena" leyendo `slow_amount` / `burn_damage_per_second` del nivel 1 de la torre y los `bonus_vs_*_percent` del nivel 1 de las demás (agrupa por porcentaje). `TowerText.combo_hint(torre, torres)` da la frase corta de la barra. `TowerPanel` recibe de `Game` la lista de torres del nivel (`partner_towers`, llamada hacia abajo); `Wiki.tower_entry` usa todas las torres de `data/towers/`; `Hud.show_selected_tower` usa las de la barra.
 - **Marca de "vulnerable":** `Enemy.set_exploitable(ralentizados, quemados)` guarda qué estados aprovecha alguna torre del mapa; `_draw_aura_icons` (ahora "íconos de arriba") dibuja la dianita celeste o naranja si además el enemigo **está** en ese estado. `Game._refresh_exploitable()` recorre las torres (sin contar las que se están borrando) al construir, mejorar y vender, y se lo pasa a todos los enemigos; uno nuevo lo recibe al aparecer.
+
+
+### 6.18 Probar oleadas finales y combos *(M22, D-048)*
+
+- **Datos (RF-324):** `scripts/data/dev_config.gd` (`DevConfig`, un `Resource`) con `gold_step` (1000) y `speeds` (`PackedFloat32Array`: 0,25 · 0,5 · 1 · 2 · 4), y `data/dev_config.tres`. `DevMode` lo carga; `Game.DEV_GOLD` y `Game.DEV_FAST_SPEED` desaparecen.
+- **Lógica sin escena (P10):** `scripts/logic/dev_start.gd` (`DevStart`), estática: `clamp_wave(n, total)`; `skipped_gold(level, balance, wave)` (recompensas de los enemigos de las oleadas `1..wave-1`, sumando recursivamente `death_spawn × death_spawn_count`, más `Rules.wave_bonus` de cada una); `start_gold(level, balance, wave, manual)` (`manual < 0` = automático = `level.starting_gold + skipped_gold`). Se prueba sin abrir ventanas.
+- **Qué se eligió:** `DevMode.start_wave` (1 por defecto) y `DevMode.start_gold` (-1 = automático). La franja de `level_select.gd` los escribe (solo si `DevMode.enabled`); `GameFlow.next_level` y `go_to_main_menu` los reinician. `Game._ready` los usa solo si el nivel viene de la campaña o de la comunidad (no del editor, ni de F6, ni de un test que no los pida), **sin borrarlos**, así `restart()` (recarga la escena) repite la misma partida.
+- **Saltar a la oleada N:** `LevelSession.jump_to_wave(n)` pone `wave = n - 1` y emite `wave_changed` (el HUD ya muestra `waves[wave]` como próxima); no toca el estado (`BUILDING`). El oro se fija con `DevStart.start_gold` justo después de `session.start`.
+- **Sin progreso (RF-321):** `GameFlow.dev_partial_run()` (verdadero si `DevMode.enabled`, `start_wave > 1` y se juega desde la campaña o la comunidad); `played_level()`, `level_won`, `record_level_score` y la presentación de enemigos de `Game._on_enemy_spawned` (que guarda en `SaveManager`) lo consultan para no guardar. Un test por cada punto donde hoy se guarda.
+- **Velocidades (RF-322):** `Game.dev_set_speed(speed)` reemplaza a `dev_set_fast` y llama a `set_speed`; `Game.set_speed` avisa a `DevMode.show_speed(speed)` (hacia abajo, a un autoload) que reescribe el cartel (se ensancha y se vuelve a centrar) y emite `speed_changed`. `Hud.show_speed` deja de redondear (formato "x0,5" con coma). `Game._exit_tree` y `_on_state_changed` ya vuelven a 1: suman `DevMode.show_speed(1.0)`. `toggle_speed` pasa a "si va a x1 → x2, si no → x1" (idéntico en el juego normal, que solo tiene 1 y 2). En el panel, una fila de cinco botones con el activo marcado.
+- **Atajos (RF-323):** `DevMode.register_actions()` (se llama al activarse) crea en el `InputMap` (F5 queda libre: la usa Godot) `dev_kill_all` (F2), `dev_skip_wave` (F3), `dev_infinite_lives` (F4), `dev_slower` (F6), `dev_faster` (F7) con `physical_keycode`, y `DevMode.ACTIONS` es la lista nombre → tecla → texto. `Game._unhandled_input` los atiende (junto al `F1` de hoy, y no con el menú de pausa abierto). El panel escribe la tecla en cada botón leyendo `ACTIONS`. `tests/test_dev_shortcuts.gd` recorre `InputMap.get_actions()`: sin teclas repetidas entre acciones (con y sin el modo), ninguna en `KEY_1`-`KEY_9`, cada acción existe en el panel y llama a lo mismo que su botón. Sin dependencia de `godot-remappable-controls`: el juego no tiene pantalla de controles.
+- **Estadísticas (RF-325):** `scripts/logic/dev_stats.gd` (`DevStats`, sin escena) guarda las filas por oleada y arma el diccionario (`to_dict(result)`). `Game` le avisa en `wave_completed`, al terminar la partida (`_on_state_changed`) y al salir (`_exit_tree`, con `"left"` si no había terminado); `DevMode` escribe el archivo en `stats_path` (los tests lo cambian a `user://test_*.json`). El tiempo suma el `delta` del juego, así no cuenta la pausa.
+- **Lo que no se hace:** no se restaura una defensa armada, no se guardan "puntos de control", no se toca el juego normal.
+
+### 6.19 Arte renderizado direccional (M23, D-049)
+
+- Fuentes PNG transparentes de ocho vistas (4 columnas × 2 filas) en art/redesign-m23/sources; atlas normalizado de 4×2 cuadros de 128 px y vista derecha en assets/sprites/towers/rendered.
+- Orden: derecha, abajo-derecha, abajo, abajo-izquierda, izquierda, arriba-izquierda, arriba, arriba-derecha. TowerData incorpora turret_atlas opcional. La selección y rectángulo de cuadro viven en TowerVisual, independientes de escenas. El dibujo con atlas no rota el lienzo: solo el vector de retroceso sigue aim_angle. Destello y salida del proyectil siguen el ángulo continuo.
+- Tower.make_icon compone la base con el cuadro hacia arriba del atlas; la Wiki recibe la vista derecha. Se conservan los dibujos SVG para datos antiguos.
+- Bases renderizadas compartidas por nivel, PNG de 128×128. Proyectiles con siluetas pequeñas y efectos temporales de frío/explosión junto a fuego/rayo existentes.
+- Pruebas de límites angulares, datos, atlas, íconos, mejoras, efectos y suite completa. Capturas reales y hoja de contacto del conjunto, con límites de calidad documentados.
+
+### 6.20 Monstruos y menú M24 (D-050)
+
+- **Producción:** `tools/prepare_monster_sprites.gd` lee `art/redesign-m24/sources/{normal_B,fast_A,tank_A}.png`, recorta el cuerpo (opacidad > 0,1), lo escala para que quepa en un 98 % de ancho y un 63,4 % de alto (el alto que `EnemyShape.sprite_top` espera para la corona y la barra de vida) y lo apoya en un lienzo de 256×256 con los pies al 74,55 % del alto: con `SPRITE_SCALE` 2,8 eso cae sobre la sombra del suelo. Salida: `assets/sprites/enemies/rendered/{normal,fast,tank}.png` (RGBA, mipmaps). Los SVG anteriores se conservan como están.
+- **Datos:** `EnemyData.flip_when_walking_left` (bool, `true` por defecto). `normal.tres`, `fast.tres` y `tank.tres` apuntan a los PNG y lo apagan; nada más cambia. `Enemy._draw` solo refleja el dibujo si el dato lo permite; el parpadeo, el tinte, la escarcha, las llamas, la barra y la corona se dibujan igual que antes.
+- **Menú:** `assets/ui/logo.png` (copia de `logo_corrected.png` a 1024 px de ancho, mismo alfa) en un `TextureRect` que reemplaza a `Title` y `Subtitle`. `MainMenu.logo_height(alto_de_ventana, alto_de_botones)` (estática, sin escena) calcula el alto del logo para que todo entre. `assets/ui/menu_theme.tres` es un `Theme` con `StyleBoxFlat` para `Button` (normal, hover, pressed, focus, disabled) aplicado solo a las filas del menú.
+- **Evoluciones:** no se integran. Formato pedido para la siguiente entrega, en `art/FORMATO_PROXIMA_ENTREGA_M24.md`.
+
+### Integración M26 · RF-334, D-051
+Copiar ocho materiales y cinco objetos a assets; conectar MapThemes y LevelDecor, retirar el detalle procedural de suelo reemplazado y conservar las superficies de leyenda. Verificar los siete temas, recursos y suite GUT.
+
+### M27 · RF-335, RF-336, D-052
+Producir nueve hojas de evoluciones, separar niveles y normalizar ocho cuadros de 128; extraer iconos hacia arriba. Validar alfa, contenido, orden y escala con muestras. Después producir cinco especiales y enmarcarlos como M24. Conservar fuentes, prompts, manifest y guía de integración.
+
+### Integración M27 · RF-337, D-053
+Copiar atlas y monstruos a assets, asignar atlas en niveles2/3 y resolverlo en Tower. Cambiar textura/flip de los cinco especiales. Verificar mejoras, fallback, ocho vistas y combate con capturas y GUT.
+
+### M28 · RF-338, D-054
+Visor aislado de enemigos y tamaños; GIF de caminata y vuelo; comparación de bases con montaje ajustado y dos conceptos integrados. Capturas1920×1080 desde copia temporal del proyecto. Registrar propuestas en changelog y sección de descripción PR, dejando explícito lo pendiente de aprobación.
+
+### M29 · RF-339 a RF-341, D-055
+Copiar cinco físicos, tres atlas de caminar y el vuelo a assets. Añadir escala y atlas opcionales en EnemyData, selección pura en EnemyVisual y anclaje de pies en EnemyShape. Enemy dibuja cuadros con parpadeo, estados y barras existentes. Producir bases y cañón C, empaquetar en Godot, compartir offset de encastre/contacto entre Tower y make_icon. Ajustar ventana de escritorio desde GameFlow mediante cálculo puro DesktopWindow y omitir headless/móvil. Validar cuatro direcciones, pasos/ralentización/pausa, escala sin cambio lógico, encastre, capturas reales y suite GUT. Exportar Windows de pruebas.
+
+El atlas de caminar tiene enmarcado diferente a la pose fija; walk_art_scale conserva el tamaño del cuerpo aprobado antes de aplicar el20%. Cotas por pose cacheadas sitúan la barra sobre la cabeza/alas. La silueta blanca usa ajuste nativo de RGB conservando alfa para evitar recorrer atlas grandes en GDScript al primer golpe.
+
+### M30 · RF-342/RF-343, D-056
+Tower crea una capa Sprite2D con AtlasTexture reutilizable y ShaderMaterial propio. Comparte cuadro/posición/escala del mecanismo, ajusta intensidad/color por nivel, oculta al aturdir o sin atlas y congela tiempo con física. Shader usa alfa y luminosidad originales para reflejos localizados. Validar selección por nivel, pose/retroceso, pausa/aturdimiento y capturas reales; actualizar changelog y estado de ciclos pendientes.
+
+### M31 · RF-344, D-057
+Producir nueve fuentes transparentes y conservar prompts. Empaquetar144cuadros de256 en nueve atlas1024, validar alfa/orden/poses únicas/apoyo y calibrar tamaño. Conectar nueve EnemyData con distancias de ciclo propias sin modificar balance. Generalizar tests de selección/ralentización/pausa y fallback, comprobar regeneración/aura/crías/hechizo/rebote existentes con GUT. Capturas reales y GIF de ciclos y direcciones; exportar Windows/Linux, actualizar documentos/changelog y subir al PR#1.
+
+### M32 · RF-345/RF-346, D-058
+Compactar textos y tooltips; reutilizar tema de botones y estilo de panel propio, agregar secciones admin. Monitor Label en HUD, señal desde DevPanel y actualización por intervalo real. Verificar valores/oleadas y monitor independiente del panel, captura y GUT.
+
+### M33 · RF-347, D-059
+Inventario de submenús: Opciones, niveles, Wiki, récords, final, Salón/iniciales, editor y diálogos. Tema compartido y panel hierro-bronce; SVG propios para casillas/deslizador. Agrupar Opciones, revisar capturas y navegación/guardado existentes con GUT, actualizar B-19 y push.
+
+### M35 · Panel de torre (RF-349, D-061)
+TowerPanel conserva show_tower/refresh y sus tres señales. Tres valores de estadísticas fuera de ScrollContainer; descripción, TowerText.effects, combo_partners y capacidad aérea dentro. Botones fuera del desplazamiento, tema local menu_theme y game_panel_style. Se reinicia el desplazamiento al seleccionar otra torre, no al cambiar oro o cuenta atrás. Datos de combate, TowerText compartido con Wiki y guardados intactos.
+
+### M36 · RF-350 a RF-357
+Tower dibuja placa/remaches antes del mecanismo, y aturdimiento con trazos localizados. Enemy dibuja límite de aura y brotes en receptores capaces de curarse; EffectsLayer muestra pulso de cura efectiva y limita residuos de muerte. DeathEffect captura textura/región/escala de Enemy, sin referencias al enemigo borrado; shader con progreso de CPU conserva pausa. Audio mantiene buses, añade perfiles de mezcla, música por pantalla, variación determinista y separación entre disparos/avisos. Generador original produce WAV y manifiesto de picos/RMS. Investigación y muestras viven en art/redesign-m36; no se incluyen en exportación.
+
+### Depuración del backlog (D-063)
+B-02 cerrado; B-15 retirado. Lore/Wiki de Épocas en B-03; documentación de mods y comunidad separada en B-29/B-30, dependiente de B-04 y sin añadir sistemas por anticipado. B-21/22/23 son estudios preliminares abiertos: elegir y validar antes de diseñar producción. Esta reorganización documental no cambia código, datos, guardados ni exportaciones.

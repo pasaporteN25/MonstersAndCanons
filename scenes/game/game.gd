@@ -13,9 +13,6 @@ const SHAKE_STRENGTH_PX: float = 4.0
 const COMBO_SOUND_GAP: float = 0.15
 ## RF-105: velocidad rápida.
 const FAST_SPEED: float = 2.0
-## RF-184 (modo de pruebas): oro que da el panel y velocidad "x4".
-const DEV_GOLD: int = 1000
-const DEV_FAST_SPEED: float = 4.0
 ## RF-193: título de la tabla de récords en la pantalla final.
 const LEVEL_RECORDS_TITLE: String = "Récords del nivel"
 ## RF-217: cómo se llama el botón que vuelve al editor cuando se está probando un nivel.
@@ -23,6 +20,8 @@ const BACK_TO_EDITOR: String = "Volver al editor"
 
 signal pause_changed(paused: bool)
 signal speed_changed(speed: float)
+## RF-323: las vidas infinitas cambiaron (con el botón o con el atajo); el panel marca su interruptor.
+signal dev_infinite_lives_changed(on: bool)
 
 @export var level_data: LevelData
 @export var balance: BalanceConfig
@@ -41,6 +40,9 @@ var dev_panel: DevPanel
 ## RF-194: el Salón de la fama, mientras está abierto. null si no.
 var hall_of_fame: HallOfFame
 var _shake_left: float = 0.0
+## RF-325: el informe de esta partida de pruebas. null en el juego normal.
+var dev_stats: DevStats
+var _stats_written: bool = false
 ## RF-318: alguna torre del mapa aprovecha a los ralentizados / a los quemados.
 var _exploit_slowed: bool = false
 var _exploit_burning: bool = false
@@ -143,6 +145,8 @@ func _ready() -> void:
 	Audio.add_click_sounds(end_screen)
 
 	session.start(level_data, balance)
+	_apply_dev_start()
+	_start_dev_stats()
 	if DevMode.enabled:
 		_add_dev_panel()
 
@@ -162,6 +166,8 @@ func _fit_map() -> void:
 
 
 func _process(delta: float) -> void:
+	if dev_stats != null and not get_tree().paused and not session.is_over():
+		dev_stats.seconds += delta  # RF-325: tiempo de juego, sin pausa
 	# RF-128: se mueve todo el "mundo"; el HUD está en otra capa y no se sacude.
 	if _shake_left <= 0.0:
 		return
@@ -176,6 +182,7 @@ func _process(delta: float) -> void:
 ## Al salir de la partida (reintentar, cerrar, o un test que la borra) nunca debe
 ## quedar el juego en pausa ni acelerado (RF-105, plan §6.7).
 func _exit_tree() -> void:
+	_write_dev_stats(DevStats.RESULT_LEFT)  # si la partida ya terminó, no pisa su informe
 	_reset_time()
 
 
@@ -194,6 +201,8 @@ func _unhandled_input(event: InputEvent) -> void:
 			open_pause_menu()
 	elif pause_menu.is_open():
 		return  # con el menú abierto, las otras teclas no hacen nada
+	elif dev_panel != null and _handle_dev_shortcut(event):
+		get_viewport().set_input_as_handled()
 	elif event.is_action_pressed("start_wave"):
 		start_next_wave()
 	elif event.is_action_pressed("pause"):
@@ -242,15 +251,18 @@ func toggle_pause() -> void:
 
 func set_speed(speed: float) -> void:
 	Engine.time_scale = speed
+	DevMode.show_speed(speed)  # RF-322: el cartel del modo de pruebas dice la velocidad
 	speed_changed.emit(speed)
 
 
 func toggle_speed() -> void:
-	set_speed(1.0 if Engine.time_scale > 1.0 else FAST_SPEED)
+	# RF-105 y RF-322: desde x1 pasa a x2; desde cualquier otra velocidad (las del modo de pruebas) vuelve a x1.
+	set_speed(FAST_SPEED if is_equal_approx(Engine.time_scale, 1.0) else 1.0)
 
 
 func _reset_time() -> void:
 	Engine.time_scale = 1.0
+	DevMode.show_speed(1.0)
 	if is_inside_tree():
 		get_tree().paused = false
 
@@ -276,9 +288,52 @@ func restart() -> void:
 
 # --- Modo de pruebas (RF-184): lo que hace cada botón del panel ---
 
+## RF-319 y RF-320: en el modo de pruebas, la partida de la campaña o de la comunidad arranca en la
+## oleada y con el oro que se eligieron en la selección de nivel. El nivel del editor, F6 y los
+## tests quedan como siempre.
+func _apply_dev_start() -> void:
+	DevMode.applied_wave = 1
+	var from_menu: bool = GameFlow.current_level() != null or GameFlow.current_community != null
+	if not DevMode.enabled or testing or not from_menu:
+		return
+	var wave: int = DevStart.clamp_wave(DevMode.start_wave, level_data.waves.size())
+	session.jump_to_wave(wave)
+	session.set_gold(DevStart.start_gold(level_data, balance, wave, DevMode.start_gold))
+	DevMode.applied_wave = wave
+
+
+## RF-325: empieza a juntar el informe de la partida (solo en el modo de pruebas).
+func _start_dev_stats() -> void:
+	if not DevMode.enabled:
+		return
+	dev_stats = DevStats.new()
+	dev_stats.begin(String(level_data.id), DevMode.applied_wave)
+	session.wave_completed.connect(func(wave: int, _bonus: int) -> void:
+		dev_stats.record_wave(wave, session.lives, session.gold, _tower_count()))
+
+
+## Torres en el mapa (sin contar las que se están vendiendo).
+func _tower_count() -> int:
+	var count: int = 0
+	for node: Node in tower_container.get_children():
+		if not node.is_queued_for_deletion():
+			count += 1
+	return count
+
+
+## RF-325: escribe el informe una sola vez por partida (al terminar, o al salir si no terminó).
+func _write_dev_stats(result: String) -> void:
+	if dev_stats == null or _stats_written or not DevMode.enabled:  # sin modo de pruebas (ya apagado) no hay informe
+		return
+	_stats_written = true
+	DevMode.write_stats(dev_stats.to_dict(result, session.wave, session.total_waves, session.lives,
+			session.gold, _tower_count()))
+
+
 func _add_dev_panel() -> void:
 	dev_panel = DevPanel.new().setup(self)
 	hud.add_child(dev_panel)
+	dev_panel.metrics_toggled.connect(hud.show_metrics)
 	var button := Button.new()
 	button.text = "Pruebas [F1]"
 	button.focus_mode = Control.FOCUS_NONE
@@ -289,11 +344,12 @@ func _add_dev_panel() -> void:
 
 
 func dev_add_gold() -> void:
-	session.earn(DEV_GOLD)
+	session.earn(DevMode.config.gold_step)  # RF-324: el número vive en data/dev_config.tres
 
 
 func dev_set_infinite_lives(on: bool) -> void:
 	session.infinite_lives = on
+	dev_infinite_lives_changed.emit(on)
 
 
 ## Los enemigos desaparecen sin morir: no dan oro ni puntos ni sueltan crías.
@@ -319,8 +375,27 @@ func dev_finish(won: bool) -> void:
 	session.finish(won)
 
 
-func dev_set_fast(on: bool) -> void:
-	set_speed(DEV_FAST_SPEED if on else 1.0)
+## RF-323: los atajos del modo de pruebas hacen lo mismo que los botones del panel. Devuelve true si
+## la tecla era uno de ellos.
+func _handle_dev_shortcut(event: InputEvent) -> bool:
+	if event.is_action_pressed(&"dev_kill_all"):
+		dev_kill_all()
+	elif event.is_action_pressed(&"dev_skip_wave"):
+		dev_skip_wave()
+	elif event.is_action_pressed(&"dev_infinite_lives"):
+		dev_set_infinite_lives(not session.infinite_lives)
+	elif event.is_action_pressed(&"dev_slower"):
+		dev_set_speed(DevStart.step_speed(DevMode.config.speeds, Engine.time_scale, -1))
+	elif event.is_action_pressed(&"dev_faster"):
+		dev_set_speed(DevStart.step_speed(DevMode.config.speeds, Engine.time_scale, 1))
+	else:
+		return false
+	return true
+
+
+## RF-322: una de las cinco velocidades del panel (o de los atajos).
+func dev_set_speed(speed: float) -> void:
+	set_speed(speed)
 
 
 func dev_spawn(data: EnemyData) -> void:
@@ -330,14 +405,17 @@ func dev_spawn(data: EnemyData) -> void:
 func _on_enemy_spawned(enemy: Enemy) -> void:
 	enemy.died.connect(_on_enemy_died)
 	enemy.cast_stun.connect(func(shaman: Enemy, tower: Tower) -> void:
-		effects.stun_bolt(shaman.global_position, tower.global_position))  # RF-282
+		effects.stun_bolt(shaman.global_position, tower.global_position)
+		Audio.play(&"stun", 0.2))  # RF-282
 	enemy.reflected.connect(func(mirror: Enemy, tower: Tower, first: bool) -> void:
-		effects.reflect(mirror.global_position, tower.global_position, first))  # RF-284
+		effects.reflect(mirror.global_position, tower.global_position, first)
+		Audio.play(&"reflect", 0.15))  # RF-284
 	enemy.reached_exit.connect(_on_enemy_reached_exit)
 	enemy.hit.connect(_on_enemy_hit)
 	enemy.set_exploitable(_exploit_slowed, _exploit_burning)  # RF-318
 	enemy.healed.connect(func(e: Enemy, amount: int) -> void:
-		effects.heal_number(e.global_position, amount))  # RF-165
+		effects.heal_number(e.global_position, amount)
+		Audio.play(&"heal", 0.8))  # RF-165
 	# RF-134: la primera vez en todo el juego que aparece este tipo, se presenta.
 	if not SaveManager.has_seen_enemy(enemy.data.id):
 		SaveManager.mark_enemy_seen(enemy.data.id)
@@ -359,7 +437,7 @@ func _on_enemy_died(enemy: Enemy) -> void:
 	session.earn(enemy.data.reward)  # RF-21
 	session.add_score(Rules.kill_points(enemy.data.reward, balance))  # RF-190
 	effects.enemy_died(enemy.global_position, enemy.data.color,
-		Rules.tiles_to_px(enemy.data.size_tiles), enemy.data.reward)
+		Rules.tiles_to_px(enemy.data.size_tiles), enemy.data.reward, enemy)
 	Audio.play(&"enemy_death")
 
 
@@ -425,12 +503,15 @@ func _refresh_tower_panel() -> void:
 func _on_tower_fired(projectile: Projectile) -> void:
 	projectiles.add_child(projectile)
 	projectile.impacted.connect(effects.projectile_impacted)
+	projectile.impacted.connect(func(_position: Vector2, _stats: TowerLevelData) -> void:
+		Audio.play(&"impact", 0.12))
 	projectile.chained.connect(effects.lightning)  # RF-163
 
 
 func _on_state_changed(state: LevelSession.State) -> void:
 	if state != LevelSession.State.WON and state != LevelSession.State.LOST:
 		return
+	_write_dev_stats(DevStats.RESULT_WON if state == LevelSession.State.WON else DevStats.RESULT_LOST)
 	# RF-91: el juego se detiene. Se congela el "mundo", pero no la interfaz.
 	for node: Node in [enemies, tower_container, projectiles, spawner]:
 		node.process_mode = Node.PROCESS_MODE_DISABLED
@@ -440,7 +521,7 @@ func _on_state_changed(state: LevelSession.State) -> void:
 	# Desde el menú (campaña o mapa de la comunidad, RF-224) se guarda progreso y récords, y se vuelve
 	# a la selección de nivel; probando (RF-217), no se guarda nada y se vuelve al editor.
 	var saves_progress: bool = GameFlow.played_level() != null
-	var can_leave: bool = saves_progress or testing
+	var can_leave: bool = saves_progress or testing or GameFlow.dev_partial_run()
 	if state == LevelSession.State.WON:
 		GameFlow.level_won(session.lives, session.score)  # RF-112, RF-115 y RF-194: desbloquea y guarda
 		var stars: int = Rules.stars_for(session.lives, level_data.starting_lives, balance)  # RF-93

@@ -17,6 +17,7 @@ var _labels: Array[Label] = []
 
 ## `initial`: las letras con las que empieza (por ejemplo, las últimas usadas).
 func setup(length: int, initial: String) -> NameEntry:
+	theme = preload("res://assets/ui/menu_theme.tres")
 	alignment = BoxContainer.ALIGNMENT_CENTER
 	add_theme_constant_override("separation", 8)
 	var clean: String = HighScores.clean_name(initial, length)
