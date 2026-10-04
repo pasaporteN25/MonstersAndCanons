@@ -489,7 +489,9 @@ func _update_repair(delta: float) -> void:
 		return
 	repair_rate_received = repair_rate()
 	var restored: float = WearRules.repair(wear_percent,repair_rate_received,delta)
-	if not is_equal_approx(restored,wear_percent):
+	if is_zero_approx(restored):
+		restored = 0.0
+	if not is_equal_approx(restored,wear_percent) or (restored == 0.0 and wear_percent > 0.0):
 		var change: float = restored - wear_percent
 		wear_percent = restored
 		wear_changed.emit(wear_percent,change)

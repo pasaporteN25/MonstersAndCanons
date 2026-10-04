@@ -406,3 +406,7 @@ Embestidor acorazado con frente de impacto; Curandero erguido con semilla medici
 
 ### T190 · Entrega visual aprobada
 B31 cerrado por aprobación de Lucas (2026-10-04). Exportados `build/JuegoA.exe`, `build/JuegoA_pruebas.exe`, `build/JuegoA.apk` y `build/JuegoA_pruebas.apk`. Windows release: ambos arrancan con código0, solo pruebas activa DevMode. APK debug arm64, Android7+, paquetes normal/pruebas separados, misma firma anterior verificada v2/v3 y recursos M43 presentes. SHA256 y registros en `build/t190/manifest.json`; no se ejecutaron en celular físico. Siguiente: balance/estrategias6/7, luego diseñar8/9.
+
+### T191 · Verificar balance y reparación
+
+Ver art/balance-m44/README.md para perfiles, semillas, ejecución y límites. Runner usa APPDATA por proceso y física60Hz; no ejecutar fases de escritura simultáneas. La suite incluye pasos0,1s y cierre exacto de desgaste/tasa. Los paquetes build/JuegoA{,_pruebas}.{exe,apk} incluyen esta corrección; firmas y paquetes Android conservados. No hay QA física Android ni balance humano definitivo.

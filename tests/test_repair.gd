@@ -142,3 +142,17 @@ func test_real_paths_six_and_seven_charge_impact_and_mechanic_recovery() -> void
 			break
 		assert_true(tested,"existe un extremo construible en nivel%d" % (index+1))
 	DevMode.enabled = old_dev
+
+func test_small_steps_finish_at_exact_zero_and_clear_repair_state() -> void:
+	var cannon: Tower = _tower(Vector2.ZERO)
+	var source: Tower = _tower(Vector2(64,0),STANDARD)
+	for level: int in [0,2]:
+		source.level_index = level
+		cannon.wear_percent = 20.0
+		for step: int in 101:
+			cannon._update_repair(0.1)
+		assert_eq(cannon.wear_percent,0.0,"no conserva residuo de coma flotante")
+		assert_eq(cannon.repair_rate_received,0.0,"no queda herramienta de reparación encendida")
+	cannon.wear_percent = 0.000001
+	cannon._update_repair(0.1)
+	assert_eq(cannon.wear_percent,0.0,"último fragmento termina aunque sean valores aproximadamente iguales")

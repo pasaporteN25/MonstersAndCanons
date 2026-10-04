@@ -417,3 +417,7 @@ PNG versionados *_m43 y ciclos 1024×1024 de Embestidor/Curandero/Ladrón; está
 
 ### T190 · Arte aprobado y paquetes
 Lucas aprobó los cuatro diseños M43, B31 cerrado. Dos EXE y dos APK normal/pruebas disponibles en build; los paquetes incluyen las nuevas estáticas y ciclos. No modifica comportamiento ni balance. Validación APK estática, sin prueba física móvil.
+
+### T191 · Laboratorio6/7
+
+Perfiles de compra/ubicación/mejoras y variantes de frecuencia viven en art/balance-m44, modifican recursos solo en memoria y no son presets de campaña. Exposure.json registra celdas realmente amenazadas al final de rectas y reparación20→0 en10/6,7/5s. El cierre de reparación elimina residuos de coma flotante; no cambia tasas ni costos. Consultar README del laboratorio antes de usar sus resultados para diseñar8/9.

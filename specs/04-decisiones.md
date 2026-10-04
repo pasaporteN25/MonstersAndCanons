@@ -415,3 +415,12 @@ Lucas, 2026-10-04, aprobó corregir recorte y sumar rueda conservando clic. Se m
 
 ## D-071 · Aprobación visual B31 y entrega multiplataforma
 2026-10-04, Lucas: “Excelente los apruebo. Podes generarme los dos exe y las apk?”. Aprueba los cuatro diseños M43, cierra B31 y autoriza generar Windows normal/pruebas y Android normal/pruebas con presets existentes. APK debug para instalación directa, con paquetes separados; comprobar integridad/firma y distinguir verificación estática de prueba física.
+
+## D-072 · Laboratorio de balance6/7 con mejoras y ubicación
+2026-10-04, Lucas autorizó avanzar con comparación de compra de Mecánico, colocación, mejoras y frecuencia de especiales. Comparar semillas iguales y estrategias explícitas antes de rebalancear. Variantes de frecuencia se aplican solo en memoria: evitar alterar niveles1–5 y preservar incertidumbre humana. La falta de impactos en bot no prueba falta de utilidad reparadora; medir también exposición/colocación cerca de extremos de rectas.
+
+**D072, hallazgo del laboratorio:** pasos0.1s dejan residuos≈1e-14 en desgaste y el guard is_equal_approx impedía asignar0. Corregir terminal sin introducir umbral de balance: aplicar is_zero_approx y permitir transición positiva→0 aunque la variación sea aproximada. Verificar señal/tasa e indicador.
+
+**D072, reproducibilidad:** fijar el RNG global antes de instanciar Game además del spawner (D047). Descartar exploraciones sin esa condición. Usar física60Hz y APPDATA independiente; comparar controles de misma semilla y repetir un caso. Las ablaciones modifican también recompensas/tiempos y no demuestran causalidad aislada. DPS nominal es proxy de ubicación, no potencia total.
+
+**D072, conclusión:** conservar costos/aura/tasas y frecuencia6/7.38 corridas reproducibles más repetición idéntica. Nivel6 con mejoras termina20 vidas en tres semillas; Mecánico temprano pierde con semilla42. En7, apoyo tardío por cantidad con mejoras termina18–19 frente a7–10 sin apoyo en esos perfiles. Presión reforzada permite impactos y reparación natural, pero cambia recompensas/compras y no tiene efecto monotónico en vidas: no adoptar esa frecuencia automáticamente. Diseñar8/9 con posiciones expuestas y margen económico. B22 permanece abierto; balance humano pendiente. Evidencia completa art/balance-m44.

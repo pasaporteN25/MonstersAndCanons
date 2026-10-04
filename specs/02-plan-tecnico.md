@@ -618,3 +618,8 @@ Fuentes RGBA en art/redesign-m43/sources; empaquetado por figuras/celdas con esc
 
 ### T190 · Entrega aprobada M43
 Exportar Windows Desktop/Windows (pruebas) release y Android/Android (pruebas) debug. Usar configuración local de SDK/Java y APPDATA aislado. Verificar arranque de ambos Windows, paquetes/feature y firma APK con herramientas SDK, SHA256/tamaño. Preservar cambios locales M34 fuera del commit.
+
+### T191 · Comparación6/7
+Extender balance_sim sin tocar su estrategia original. Perfiles sin apoyo/con apoyo temprano/tardío, mejoras y ubicaciones por cobertura/valor de aliados. Registrar compras, oleadas, vida, robo, impactos y reparación. Ablación de especiales y frecuencia reforzada solo en laboratorio; semillas controladas y escenarios de impacto sobre caminos reales. Informe JSON y conclusiones con límites antes de cambiar datos oficiales.
+
+T191 también corrige cierre de reparación con is_zero_approx y transición positiva→0 fuera del guard aproximado. Test de regresión con pasos pequeños y residuo; reexportar las cuatro variantes y verificar boot Windows/firma e identidad APK. Evidencia en art/balance-m44 y logs/paquetes locales build/t191.

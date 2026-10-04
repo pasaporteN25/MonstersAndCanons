@@ -1567,3 +1567,6 @@ Excavador/Ballesta/Alquimista siguen candidatos sin selección. B-21/B-23 no se 
 - **RF-375** Dado Ladrón y Mecánico, cuando se ven junto al bestiario/cañones, entonces usan PNG renderizados con materiales y luz compatibles: bolsa/robo en Ladrón y casco/engranaje en estatua fija de Mecánico. No cambian lógica, economía ni bases.
 - **RF-376** Dados los nuevos assets, cuando se importan, entonces tienen alfa real, márgenes y anclajes estables, poses completas y capturas a escala de juego/Wiki. Se conservan fuentes y prompts reproducibles. Lucas aprobó visualmente los cuatro diseños el 2026-10-04; B31 cerrado.
 
+
+### M44 · Cierre de reparación
+- **RF-377** Dada una torre reparada en pasos pequeños, cuando el desgaste restante llega al cero aproximado de coma flotante, entonces se fija desgaste0, se limpia tasa/indicador de reparación y termina el efecto. No queda un residuo positivo invisible; la última variación conserva señal y no cambia tasas/costos.

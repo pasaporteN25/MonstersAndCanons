@@ -236,3 +236,9 @@ Embestidor acorazado con frente de impacto; Curandero erguido con semilla medici
 
 ### T190 · Entrega visual aprobada
 B31 cerrado por aprobación de Lucas (2026-10-04). Exportados `build/JuegoA.exe`, `build/JuegoA_pruebas.exe`, `build/JuegoA.apk` y `build/JuegoA_pruebas.apk`. Windows release: ambos arrancan con código0, solo pruebas activa DevMode. APK debug arm64, Android7+, paquetes normal/pruebas separados, misma firma anterior verificada v2/v3 y recursos M43 presentes. SHA256 y registros en `build/t190/manifest.json`; no se ejecutaron en celular físico. Siguiente: balance/estrategias6/7, luego diseñar8/9.
+
+### M44 · Balance6/7 y cierre de reparación
+
+T191 agrega un laboratorio con compra temprana/tardía del Mecánico, ubicación, mejoras, semillas global/spawner y presión de especiales. Evidencia y límites: [art/balance-m44/README.md](art/balance-m44/README.md). Corrige residuos de desgaste que dejaban la reparación encendida;949/949 pruebas. Los dos EXE y dos APK locales se regeneraron con la corrección. Niveles1–5 intactos; balance definitivo humano pendiente.
+
+Resultado M44:38 corridas más repetición idéntica. En7, el perfil de apoyo tardío agrupado con mejoras conserva18–19 vidas frente a7–10 sin apoyo, en tres semillas. Se mantienen costos y frecuencia oficiales6/7; mayor frecuencia cambia también economía/compras y no prueba dificultad de forma aislada. El diseño8/9 y la prueba humana continúan aparte; B22 permanece abierto.

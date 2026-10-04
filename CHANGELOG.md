@@ -169,3 +169,9 @@ Embestidor acorazado con frente de impacto; Curandero erguido con semilla medici
 
 ### T190 · Entrega visual aprobada
 B31 cerrado por aprobación de Lucas (2026-10-04). Exportados `build/JuegoA.exe`, `build/JuegoA_pruebas.exe`, `build/JuegoA.apk` y `build/JuegoA_pruebas.apk`. Windows release: ambos arrancan con código0, solo pruebas activa DevMode. APK debug arm64, Android7+, paquetes normal/pruebas separados, misma firma anterior verificada v2/v3 y recursos M43 presentes. SHA256 y registros en `build/t190/manifest.json`; no se ejecutaron en celular físico. Siguiente: balance/estrategias6/7, luego diseñar8/9.
+
+### T191 · Reparación y estudio6/7
+
+- La reparación termina correctamente aunque quede un residuo mínimo de desgaste; el indicador se apaga.
+- Laboratorio de compra/ubicación/mejoras del Mecánico y frecuencia de Ladrón/Embestidor sobre6/7; resultados y límites en art/balance-m44.
+- EXE y APK normales/de pruebas regenerados con la corrección. No cambia balance1–5.
