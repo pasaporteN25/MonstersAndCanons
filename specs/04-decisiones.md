@@ -412,3 +412,6 @@ Lucas, 2026-10-04, aprobó corregir recorte y sumar rueda conservando clic. Se m
 ## D-070 · Producción B-31 por familias de silueta
 2026-10-04, autorizado por Lucas (“Dale avanza”). Embestidor toma anatomía del antiguo Curandero, cambia bulbo por armadura/frente de impacto; no se intercambian archivos sin adaptar identidad. Curandero nuevo erguido, con semilla medicinal en herramienta. Ciclos nativos 4×4 por distancia, sin deformaciones para fingir animación; Ladrón encapuchado con bolsa y Mecánico fijo renderizado sobre bases existentes. Generación integrada con imagegen, fuentes intactas y empaquetado en Godot; no cambia balance. B-31 sigue pendiente de revisión visual de Lucas antes de arte definitivo.
 
+
+## D-071 · Aprobación visual B31 y entrega multiplataforma
+2026-10-04, Lucas: “Excelente los apruebo. Podes generarme los dos exe y las apk?”. Aprueba los cuatro diseños M43, cierra B31 y autoriza generar Windows normal/pruebas y Android normal/pruebas con presets existentes. APK debug para instalación directa, con paquetes separados; comprobar integridad/firma y distinguir verificación estática de prueba física.

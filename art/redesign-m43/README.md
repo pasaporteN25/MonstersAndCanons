@@ -1,4 +1,4 @@
-# M43 · B31 integrado para revisión visual
+# M43 · B31 aprobado por Lucas
 
 Embestidor: anatomía robusta del Curandero anterior, sin bulbo, con armadura de hierro/bronce, cuernos y frente reforzada. Curandero: silueta erguida vegetal con semilla medicinal y hierbas. Ladrón: capucha, gesto furtivo y bolsa de monedas. Mecánico: casco, engranaje y herramientas renderizados sobre las mismas bases de los cañones. Arte producido con generador integrado image_gen; [prompts normalizados](prompts.md), [fuentes originales](sources/), [manifest](manifest.json) y [empaquetador Godot](pack.gd) conservados.
 
@@ -27,4 +27,4 @@ godot --path . -s art/mechanics-m41/performance.gd
 La captura usa user://test_m43_capture.json. Generadores por conectividad alfa separan16 figuras, normalizan encuadre sin pintar/modificar diseño y rechazan conteo/poses repetidas; originales intactos.
 
 ## Límites y siguiente paso
-B31 tiene producción integrada, pendiente revisión artística final de Lucas. No se declara modelado3D real: son hojas generadas con posible deriva sutil entre fases, revisadas en las cuatro vistas. No hay ciclo específico de ataque: carga usa marcha acelerada y trazos existentes, con cabeza ya baja. No se ejecutaron Linux/Android ni sesión humana completa; avisos conocidos de certificados y limpieza de Godot persisten en herramientas/bot. Después de revisión visual, afinar estrategias de6/7 antes de definir8/9;1–5 intactos.
+B31 cerrado: Lucas aprobó visualmente los cuatro diseños el 2026-10-04. No se declara modelado3D real: son hojas generadas con posible deriva sutil entre fases, revisadas en las cuatro vistas. No hay ciclo específico de ataque: carga usa marcha acelerada y trazos existentes, con cabeza ya baja. T190 generó ambos EXE y APK; se verificaron arranque Windows, integridad/firma/paquetes APK. No se ejecutaron Linux/Android físico ni sesión humana completa; avisos conocidos de certificados y limpieza de Godot persisten en herramientas/bot. Después de revisión visual, afinar estrategias de6/7 antes de definir8/9;1–5 intactos.

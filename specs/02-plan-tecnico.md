@@ -615,3 +615,6 @@ DevPanel mantiene el catálogo dinámico y OptionButton. PopupMenu.max_size limi
 
 ### M43 / T189 · B-31
 Fuentes RGBA en art/redesign-m43/sources; empaquetado por figuras/celdas con escala uniforme y apoyo a191 en atlas 1024×1024, estáticas256×256 para Wiki; Mecánico128×128 sin sombra/base incrustada. Recursos EnemyData/TowerData referencian los nuevos PNG conservando todos los parámetros jugables. Capturas comparativas a34/112px, cuatro direcciones y movimiento con Enemy real, además de mapa y Wiki. Verificar GUT e importación/exportación Windows de pruebas. La aprobación artística final se pide solo con imágenes integradas revisables.
+
+### T190 · Entrega aprobada M43
+Exportar Windows Desktop/Windows (pruebas) release y Android/Android (pruebas) debug. Usar configuración local de SDK/Java y APPDATA aislado. Verificar arranque de ambos Windows, paquetes/feature y firma APK con herramientas SDK, SHA256/tamaño. Preservar cambios locales M34 fuera del commit.

@@ -414,3 +414,6 @@ El selector de Pruebas sigue leyendo todos los EnemyData. La lista larga se desp
 
 ### M43 · B31
 PNG versionados *_m43 y ciclos 1024×1024 de Embestidor/Curandero/Ladrón; estáticas256×256 en Wiki. Mecánico128×128 con casco/engranaje y bases compartidas. Sources, prompts, pack.gd, manifest, captura y preview animada en art/redesign-m43. Los originales anteriores quedan conservados para comparación; no cambian ids ni estadísticas.
+
+### T190 · Arte aprobado y paquetes
+Lucas aprobó los cuatro diseños M43, B31 cerrado. Dos EXE y dos APK normal/pruebas disponibles en build; los paquetes incluyen las nuevas estáticas y ciclos. No modifica comportamiento ni balance. Validación APK estática, sin prueba física móvil.
