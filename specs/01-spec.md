@@ -1433,7 +1433,7 @@ Rediseñar el panel en partida de la captura de Lucas (Ráfaga · Nivel2): títu
 B-02 cerrado; B-15 retirado/dividido. B-17 a B-20 y B-24 a B-28 implementados. B-21/B-22/B-23 siguen abiertos: informes preliminares entregados, sin decisión ni validación definitiva de producción.
 
 ### B-31 · Rediseño visual de Mecánico, Embestidor, Ladrón y Curandero
-**Pedido de Lucas, 2026-10-04. Pendiente de producción artística.**
+**Pedido de Lucas, 2026-10-04. Producción integrada en T189 (M43); pendiente revisión visual final de Lucas.**
 - Mecánico: reemplazar la estatua vectorial inicial por un diseño con volumen, materiales y calidad acordes a los cañones; actualmente parece de otro juego. Mantener identidad de ingeniería, apoyo y reparación.
 - Embestidor: rediseñar silueta y crear sprites/poses que transmitan fuerza e impulso frontal; abandonar la apariencia actual de dinosaurio rápido. Evaluar el Curandero actual como referencia/base del Embestidor, comparando ambos a escala real antes de reasignar sprites.
 - Curandero: si se reutiliza su aspecto para Embestidor, crear un nuevo monstruo que comunique curación con anatomía, objeto o gesto propio, además del aura; conservar rol/habilidad. La reasignación es una propuesta a evaluar, no un intercambio ya aplicado.
@@ -1559,4 +1559,11 @@ Excavador/Ballesta/Alquimista siguen candidatos sin selección. B-21/B-23 no se 
 ### M42 · Selector de enemigos en Pruebas
 - **RF-371** Dada la lista de enemigos de Pruebas, cuando se abre por clic, entonces el desplegable tiene altura limitada y desplazamiento interno, fondo opaco y resaltado sin sombra recortada; permanece dentro de la ventana. Todos los enemigos siguen accesibles, incluyendo al aumentar el catálogo.
 - **RF-372** Dado el puntero sobre el selector cerrado, cuando gira la rueda arriba/abajo, entonces elige anterior/siguiente sin abrir ni invocar; se detiene en primer/último elemento. Clic conserva lista completa y selección normal; Aparecer usa el elegido. La rueda fuera del selector no modifica la selección.
+
+
+### M43 · Producción visual B-31
+- **RF-373** Dado Embestidor, cuando camina o carga, entonces usa sprites con cuatro direcciones y cuatro fases, cabeza reforzada baja y cuerpo robusto inspirado en el Curandero anterior, sin bulbo de cura. El ciclo sigue distancia recorrida y la carga existente acelera su paso.
+- **RF-374** Dado Curandero, cuando se ve en mapa y Wiki, entonces se distingue por silueta erguida y herramienta/semilla medicinal; mantiene cura, aura y balance. Tiene cuatro direcciones por cuatro fases, sin reflejar la luz.
+- **RF-375** Dado Ladrón y Mecánico, cuando se ven junto al bestiario/cañones, entonces usan PNG renderizados con materiales y luz compatibles: bolsa/robo en Ladrón y casco/engranaje en estatua fija de Mecánico. No cambian lógica, economía ni bases.
+- **RF-376** Dados los nuevos assets, cuando se importan, entonces tienen alfa real, márgenes y anclajes estables, poses completas y capturas a escala de juego/Wiki. Se conservan fuentes y prompts reproducibles. La aprobación visual final queda para Lucas.
 

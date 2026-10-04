@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="EnemyData" format=3]
 [ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="script"]
-[ext_resource type="Texture2D" path="res://assets/sprites/enemies/thief.svg" id="art"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/rendered/thief_m43.png" id="art"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/rendered/thief_m43_walk.png" id="walk"]
 [resource]
 script = ExtResource("script")
 id = &"thief"
@@ -17,3 +18,9 @@ gold_drain_amount = 3
 gold_drain_interval = 2.0
 gold_drain_floor = 10
 optional_wave_limit = 1
+
+walk_atlas = ExtResource("walk")
+walk_stride_tiles = 0.65
+walk_art_scale = 1.0
+visual_scale = 1.2
+flip_when_walking_left = false

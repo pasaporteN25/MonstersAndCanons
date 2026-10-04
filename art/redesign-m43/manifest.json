@@ -1,0 +1,29 @@
+{
+	"anchor": [
+		128,
+		191
+	],
+	"creatures": {
+		"healer": {
+			"scale": 0.54180602006689,
+			"source_size": "(1254, 1254)",
+			"unique_poses": 16
+		},
+		"rammer": {
+			"scale": 0.580645161290323,
+			"source_size": "(1254, 1254)",
+			"unique_poses": 16
+		},
+		"thief": {
+			"scale": 0.551020408163265,
+			"source_size": "(1254, 1254)",
+			"unique_poses": 16
+		}
+	},
+	"directions": [
+		"east",
+		"south",
+		"west",
+		"north"
+	]
+}

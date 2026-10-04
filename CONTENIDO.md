@@ -411,3 +411,6 @@ EnemyData: `charge_distance_tiles`, `charge_multiplier`, `charge_slow_tolerance`
 
 ### M42 · Catálogo y arte pendiente
 El selector de Pruebas sigue leyendo todos los EnemyData. La lista larga se desplaza dentro del popup y la rueda sobre el selector cerrado cambia el elegido. No hay nuevos ids ni cambios de balance. Los rediseños concretos quedan en B-31; todavía no se reasignan recursos Curandero/Embestidor.
+
+### M43 · B31
+PNG versionados *_m43 y ciclos 1024×1024 de Embestidor/Curandero/Ladrón; estáticas256×256 en Wiki. Mecánico128×128 con casco/engranaje y bases compartidas. Sources, prompts, pack.gd, manifest, captura y preview animada en art/redesign-m43. Los originales anteriores quedan conservados para comparación; no cambian ids ni estadísticas.

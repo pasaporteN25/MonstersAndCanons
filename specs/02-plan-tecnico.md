@@ -612,3 +612,6 @@ La validación de rendimiento detectó costo de triangulación de marcas por fra
 
 ### M42 / T188
 DevPanel mantiene el catálogo dinámico y OptionButton. PopupMenu.max_size limita altura y activa scroll nativo; StyleBoxFlat duplicados locales eliminan transparencia/sombra recortada sin alterar el tema compartido. gui_input discrimina rueda presionada, acota selección y conserva clic. Tests de extremos, eventos ajenos, invocación del seleccionado y captura real del popup. Rediseños en B-31, producción futura con muestras comparativas.
+
+### M43 / T189 · B-31
+Fuentes RGBA en art/redesign-m43/sources; empaquetado por figuras/celdas con escala uniforme y apoyo a191 en atlas 1024×1024, estáticas256×256 para Wiki; Mecánico128×128 sin sombra/base incrustada. Recursos EnemyData/TowerData referencian los nuevos PNG conservando todos los parámetros jugables. Capturas comparativas a34/112px, cuatro direcciones y movimiento con Enemy real, además de mapa y Wiki. Verificar GUT e importación/exportación Windows de pruebas. La aprobación artística final se pide solo con imágenes integradas revisables.

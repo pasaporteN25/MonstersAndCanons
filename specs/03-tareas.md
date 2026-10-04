@@ -1126,3 +1126,8 @@
 
 
   **Resultado T188:** B-31 registra los cuatro rediseños y la propuesta Curandero→Embestidor, sin reasignar recursos. Popup opaco con máximo efectivo de 320 píxeles lógicos y scroll, hover sin sombra recortada; rueda sobre selector cerrado cambia con límites. Pasan 948/948 tests (8477 asserts), sin SCRIPT ERROR ni Parse Error. Capturas reales y reproducción en `art/ui-m42/`; Windows (pruebas) reexportado, arranque headless código 0. Persisten avisos conocidos de certificados/limpieza de Godot. No se hizo sesión manual con rueda física ni se produjo arte nuevo.
+
+- [x] **T189 · Producir e integrar rediseños B-31.** Refs B-31/RF-373–376/D-070. Hecho cuando Embestidor/Curandero tienen nuevas siluetas y ciclos, Ladrón/Mecánico usan render compatibles, fuentes/prompts y capturas quedan conservados, balance intacto y pruebas pasan. Integración técnica completa separada de aprobación visual final por Lucas.
+
+
+  **Resultado T189:** cuatro diseños integrados,48 poses de marcha, PNG estáticos/Wiki y Mecánico renderizado. Fuentes, prompts normalizados, pack/manifest, preview animada y capturas mapa/Wiki en art/redesign-m43. 948/948 tests,8693 asserts; parámetros jugables idénticos. Windows (pruebas) exportado y arranque0. Carga200 enemigos/60 torres:114FPS en este equipo. Bot6/7 semilla42 con compra temprana Mecánico conserva resultados M41 (6 derrota12/15,7 victoria15vidas,18 monedas robadas). No se cambió balance ni niveles1–5. Pendiente aprobación artística de Lucas, estrategias con mejoras/juego humano y prueba Linux/Android; límites completos en README de evidencia.

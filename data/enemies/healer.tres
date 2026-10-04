@@ -1,9 +1,9 @@
 [gd_resource type="Resource" script_class="EnemyData" format=3]
 
 [ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="1_heal"]
-[ext_resource type="Texture2D" path="res://assets/sprites/enemies/rendered/healer.png" id="2_heal"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/rendered/healer_m43.png" id="2_heal"]
 
-[ext_resource type="Texture2D" path="res://assets/sprites/enemies/rendered/healer_walk.png" id="m31_walk"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/rendered/healer_m43_walk.png" id="m31_walk"]
 
 [resource]
 script = ExtResource("1_heal")
@@ -23,4 +23,4 @@ aura_radius_tiles = 2.5
 aura_heal_percent_per_second = 3.0
 walk_atlas = ExtResource("m31_walk")
 walk_stride_tiles = 0.65
-walk_art_scale = 0.993865030674847
+walk_art_scale = 1.0

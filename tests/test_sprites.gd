@@ -9,12 +9,12 @@ const GAME_SCENE: PackedScene = preload("res://scenes/game/game.tscn")
 const TOWER_SCENE: PackedScene = preload("res://scenes/towers/tower.tscn")
 const ENEMY_SCENE: PackedScene = preload("res://scenes/enemies/enemy.tscn")
 const PROJECTILE_SCENE: PackedScene = preload("res://scenes/towers/projectile.tscn")
-const ENEMY_IDS: Array[String] = ["normal", "fast", "tank", "flyer", "armored", "troll", "spider", "spiderling", "guardian", "healer", "shaman", "mirror", "boss"]
+const ENEMY_IDS: Array[String] = ["normal", "fast", "tank", "flyer", "armored", "troll", "spider", "spiderling", "guardian", "healer", "shaman", "mirror", "boss", "rammer", "thief"]
 const DT: float = 1.0 / 60.0
 ## D-023: los SVG de 64×64 se importan al doble.
 const SPRITE_SIZE := Vector2(128, 128)
 ## M29: los trece monstruos con PNG estático de256×256; la partida también admite atlas.
-const RENDERED_IDS: Array[String] = ["normal", "fast", "tank", "flyer", "armored", "troll", "spider", "spiderling", "guardian", "healer", "shaman", "mirror", "boss"]
+const RENDERED_IDS: Array[String] = ["normal", "fast", "tank", "flyer", "armored", "troll", "spider", "spiderling", "guardian", "healer", "shaman", "mirror", "boss", "rammer", "thief"]
 const RENDERED_SIZE := Vector2(256, 256)
 ## Los pies caen al 74,55 % del alto del lienzo (tools/prepare_monster_sprites.gd, FOOT_LINE).
 const FOOT_ROW: int = 191
@@ -146,7 +146,7 @@ func test_every_enemy_has_its_drawing() -> void:
 		assert_not_null(texture, "%s: dibujo" % id)
 		if texture != null:
 			if RENDERED_IDS.has(id):
-				assert_eq(texture.resource_path, "res://assets/sprites/enemies/rendered/%s.png" % id)
+				assert_eq(texture.resource_path, "res://assets/sprites/enemies/rendered/%s%s.png" % [id, "_m43" if id in ["healer","rammer","thief"] else ""])
 				assert_eq(texture.get_size(), RENDERED_SIZE, "%s: PNG de producción" % id)
 			else:
 				assert_eq(texture.resource_path, "res://assets/sprites/enemies/%s.svg" % id)

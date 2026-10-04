@@ -26,7 +26,7 @@ func test_scaled_sprite_keeps_feet_and_collision_radius() -> void:
 	assert_almost_eq(original.position.y + original.size.y * 191.0 / 256.0,
 		enlarged.position.y + enlarged.size.y * 191.0 / 256.0, 0.001, "los pies no flotan")
 	assert_gt(EnemyShape.sprite_top(16, 1.2), EnemyShape.sprite_top(16), "barra sobre la cabeza ampliada")
-	for id: String in ["normal", "fast", "tank", "flyer", "armored", "troll", "spider", "spiderling", "guardian", "healer", "shaman", "mirror", "boss"]:
+	for id: String in ["normal", "fast", "tank", "flyer", "armored", "troll", "spider", "spiderling", "guardian", "healer", "shaman", "mirror", "boss", "rammer", "thief"]:
 		var data: EnemyData = load("res://data/enemies/" + id + ".tres")
 		assert_eq(data.visual_scale, 1.2, id)
 		assert_true(data.texture.resource_path.contains("/rendered/"), id)
@@ -38,7 +38,7 @@ func test_enemy_uses_regions_for_walk_flight_and_static_fallback() -> void:
 	path.curve.add_point(Vector2.ZERO)
 	path.curve.add_point(Vector2(1000, 0))
 	add_child_autofree(path)
-	for id: String in ["normal", "fast", "tank", "flyer", "armored", "troll", "spider", "spiderling", "guardian", "healer", "shaman", "mirror", "boss"]:
+	for id: String in ["normal", "fast", "tank", "flyer", "armored", "troll", "spider", "spiderling", "guardian", "healer", "shaman", "mirror", "boss", "rammer", "thief"]:
 		var data: EnemyData = load("res://data/enemies/" + id + ".tres")
 		var enemy: Enemy = ENEMY_SCENE.instantiate()
 		enemy.setup(data, path, data.max_health)
@@ -116,7 +116,7 @@ func test_static_fallback_still_draws_without_a_cycle() -> void:
 	await wait_process_frames(2)
 
 func test_remaining_cycles_are_complete_unique_and_inside_transparent_frames() -> void:
-	for id: String in ["armored", "troll", "spider", "spiderling", "guardian", "healer", "shaman", "mirror", "boss"]:
+	for id: String in ["armored", "troll", "spider", "spiderling", "guardian", "healer", "shaman", "mirror", "boss", "rammer", "thief"]:
 		var data: EnemyData = load("res://data/enemies/" + id + ".tres")
 		assert_not_null(data.walk_atlas, id)
 		if data.walk_atlas == null:
@@ -146,7 +146,7 @@ func test_every_ground_cycle_slows_steps_and_keeps_boss_resistance() -> void:
 	path.curve.add_point(Vector2.ZERO)
 	path.curve.add_point(Vector2(1000, 0))
 	add_child_autofree(path)
-	for id: String in ["armored", "troll", "spider", "spiderling", "guardian", "healer", "shaman", "mirror", "boss"]:
+	for id: String in ["armored", "troll", "spider", "spiderling", "guardian", "healer", "shaman", "mirror", "boss", "rammer", "thief"]:
 		var data: EnemyData = load("res://data/enemies/" + id + ".tres")
 		var enemy: Enemy = ENEMY_SCENE.instantiate()
 		enemy.setup(data, path, data.max_health)

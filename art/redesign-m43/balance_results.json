@@ -1,0 +1,28 @@
+[
+  {
+    "impacts": 0,
+    "level": 6,
+    "lives": 0,
+    "rammers": 1,
+    "repaired_points": 0.0,
+    "seed": 42,
+    "stolen_gold": 18,
+    "support": true,
+    "thieves": 1,
+    "wave": 12,
+    "won": false
+  },
+  {
+    "impacts": 0,
+    "level": 7,
+    "lives": 15,
+    "rammers": 3,
+    "repaired_points": 0.0,
+    "seed": 42,
+    "stolen_gold": 18,
+    "support": true,
+    "thieves": 2,
+    "wave": 20,
+    "won": true
+  }
+]

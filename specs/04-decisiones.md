@@ -408,3 +408,7 @@ Lucas autorizó desgaste reparable y el rol del Mecánico. Tower consulta fuente
 ## D-069 · Lista acotada y selección rápida en Pruebas
 Lucas, 2026-10-04, aprobó corregir recorte y sumar rueda conservando clic. Se mantiene OptionButton y PopupMenu nativo con máximo320 píxeles lógicos y scroll, fondo opaco y hover sin sombra exterior; no se reemplaza por otro sistema de listas. gui_input recibe la rueda solo sobre el selector, limita índice y consume el evento. B-31 registra los cuatro rediseños pedidos; usar Curandero como base de Embestidor se evaluará con muestras, no cambia arte en esta tarea.
 
+
+## D-070 · Producción B-31 por familias de silueta
+2026-10-04, autorizado por Lucas (“Dale avanza”). Embestidor toma anatomía del antiguo Curandero, cambia bulbo por armadura/frente de impacto; no se intercambian archivos sin adaptar identidad. Curandero nuevo erguido, con semilla medicinal en herramienta. Ciclos nativos 4×4 por distancia, sin deformaciones para fingir animación; Ladrón encapuchado con bolsa y Mecánico fijo renderizado sobre bases existentes. Generación integrada con imagegen, fuentes intactas y empaquetado en Godot; no cambia balance. B-31 sigue pendiente de revisión visual de Lucas antes de arte definitivo.
+

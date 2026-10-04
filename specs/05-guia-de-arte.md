@@ -95,3 +95,6 @@ Avance genérico: disco plateado con silueta de nave, sin engranaje exclusivo de
 
 ### M39–M41 · Diseños iniciales de mecánicas
 Ladrón: vector nativo encapuchado con bolsa; Embestidor: Bestia B reservada de M24, pose única. Desgaste usa grieta ámbar y reparación herramienta cian sobre base, con texturas compartidas para preservar rendimiento. No confundir con aura verde de cura enemiga ni chispas magenta de stun. Muestras reales en art/mechanics-m41; diseños iniciales revisables por Lucas, sin aprobación artística definitiva.
+
+### M43 · Rediseños B-31 (D-070)
+Embestidor: anatomía pesada del antiguo Curandero, casco óseo/cuerno frontal, placas hierro/bronce y piel oliva oscura; sin bulbo ni resplandor de cura. Curandero: criatura erguida vegetal, semilla medicinal verde amarillenta en herramienta, bolsa de hierbas; silueta distinta del Chamán por cabeza descubierta y textura orgánica. Ladrón: encapuchado gris violeta desaturado, manos/bolsa reconocibles. Mecánico: estatua fija de hierro/plata/bronce, casco y engranaje, mismas bases y luz que los cañones. PNG con alfa, cuatro direcciones por cuatro fases en enemigos; anclaje/escala uniformes. Materiales predominan sobre color; no reflejar atlas ni alterar parámetros jugables. Producción inicial para revisión de Lucas, no aprobación definitiva.
