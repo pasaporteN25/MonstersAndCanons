@@ -71,8 +71,10 @@ func level(index: int) -> LevelData:
 
 ## RF-112: el primer nivel siempre está desbloqueado; el resto, según el guardado.
 ## RF-183: en el modo de pruebas, todos.
+## RF-381: una victoria previa habilita también niveles agregados después de esa partida.
 func is_level_unlocked(index: int) -> bool:
-	return index == 0 or DevMode.enabled or SaveManager.is_unlocked(level(index).id)
+	return index == 0 or DevMode.enabled or SaveManager.is_unlocked(level(index).id) \
+		or SaveManager.is_completed(level(index - 1).id)
 
 
 ## RF-93: estrellas conseguidas en un nivel (0 si nunca se ganó).

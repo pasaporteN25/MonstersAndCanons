@@ -112,9 +112,9 @@ func test_they_start_closed_in_the_bestiary() -> void:
 			assert_false(category.find(&"guardian").plain_text().contains("Aura"), "la entrada cerrada no cuenta nada")
 
 
-func test_they_are_not_in_any_official_level_yet() -> void:
-	# D-041: el Guardián debuta en el nivel 8 y el Curandero en el 9. Cuando existan, este test se cambia.
-	for level: LevelData in GameFlow.campaign.levels:
+func test_auras_do_not_appear_before_their_campaign_debut() -> void:
+	# D-041: el debut8/9 no debe introducir auras en los siete niveles anteriores.
+	for level: LevelData in GameFlow.campaign.levels.slice(0,7):
 		for wave: WaveData in level.waves:
 			for group: SpawnGroup in wave.groups:
 				assert_false(group.enemy.id == &"guardian" or group.enemy.id == &"healer", "%s" % level.id)

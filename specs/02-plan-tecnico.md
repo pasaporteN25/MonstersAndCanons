@@ -623,3 +623,8 @@ Exportar Windows Desktop/Windows (pruebas) release y Android/Android (pruebas) d
 Extender balance_sim sin tocar su estrategia original. Perfiles sin apoyo/con apoyo temprano/tardío, mejoras y ubicaciones por cobertura/valor de aliados. Registrar compras, oleadas, vida, robo, impactos y reparación. Ablación de especiales y frecuencia reforzada solo en laboratorio; semillas controladas y escenarios de impacto sobre caminos reales. Informe JSON y conclusiones con límites antes de cambiar datos oficiales.
 
 T191 también corrige cierre de reparación con is_zero_approx y transición positiva→0 fuera del guard aproximado. Test de regresión con pasos pequeños y residuo; reexportar las cuatro variantes y verificar boot Windows/firma e identidad APK. Evidencia en art/balance-m44 y logs/paquetes locales build/t191.
+
+### M45 / T192 · Niveles8/9
+Agregar JSON20×9, una entrada8 y dos9, recorridos con rectas/exposición legal. Oleadas escalan grupos y vida local, introducen Guardián/Curandero antes de combinaciones tardías. Append en campaign.json; desbloqueo/menu/Wiki por datos existentes. Tests de contratos, aparición ordenada, pasos de campaña y geometría de carga/reparación sin cambiar pantalla. Laboratorio hereda políticas M44, fija RNG global/spawner y aisla APPDATA; conserva resultados y capturas de mapas reales. No exportaciones.
+
+T192 extiende is_level_unlocked con victoria del anterior para guardados previos sin marca de desbloqueo del nuevo nivel. Laboratorio M45 conserva controles M44 y agrega puntaje de cobertura aérea a mejoras, sin cambiar bot original ni lógica del juego. JSON se serializa con LevelDraft.to_text para conservar roundtrip del editor.

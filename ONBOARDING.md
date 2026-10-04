@@ -410,3 +410,7 @@ B31 cerrado por aprobación de Lucas (2026-10-04). Exportados `build/JuegoA.exe`
 ### T191 · Verificar balance y reparación
 
 Ver art/balance-m44/README.md para perfiles, semillas, ejecución y límites. Runner usa APPDATA por proceso y física60Hz; no ejecutar fases de escritura simultáneas. La suite incluye pasos0,1s y cierre exacto de desgaste/tasa. Los paquetes build/JuegoA{,_pruebas}.{exe,apk} incluyen esta corrección; firmas y paquetes Android conservados. No hay QA física Android ni balance humano definitivo.
+
+### T192 · Probar campaña8/9 desde el proyecto
+
+Abrir el editor o ejecutar Godot desde el proyecto: los EXE/APK anteriores no incluyen esta etapa y no se regeneraron. Ganar7 habilita8 incluso en un guardado antiguo; ganar8 habilita9. Admin permite elegir ambos niveles y habilitar Mecánico sin avances. En modo normal construirlo exige5/5 y permiso del nivel. Verificar presentación Guardián8/Curandero9, encuentros opcionales de Ladrón y carga al extremo de rectas con torres cercanas; probar apoyo en grupo y reparación después de impacto. Capturas/bots y criterios en art/campaign-m45/README.md; no confundir capturas controladas con sesión humana de balance.

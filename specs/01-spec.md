@@ -405,7 +405,9 @@ Hasta ahora los enemigos no le hacían nada a las torres. Estos dos sí: las **a
 | 4 | Espiral | 15 | 200 | El camino da vueltas hacia adentro; **la salida está en el centro** (§7.5). | M4 |
 | 5 | Fortaleza | 20 | 300 | **Tres entradas**, una desde arriba (§7.6). | M4 |
 | 6 | Nido | 15 | 250 | **Dos entradas** (una desde arriba) y los enemigos nuevos: Troll, Araña y Crías (§7.7). | M5 |
-| 7 | Cruce | 20 | 300 | **Dos entradas** en lados opuestos y **la salida en el centro** (§7.9). El nivel final. Primero hecho en archivo de texto (§7.8). | M8 |
+| 7 | Cruce | 20 | 300 | **Dos entradas** en lados opuestos y **la salida en el centro** (§7.9). Cierra el tramo introductorio6/7. Primero hecho en archivo de texto (§7.8). | M8 |
+| 8 | Bastión | 18 | 300 | Una entrada, debut Guardián, robo y embestidas separados antes de combinarse; Mecánico disponible con colección. | M45 |
+| 9 | Taller asediado | 20 | 320 | Dos entradas, debut Curandero junto al Guardián, presión combinada y posiciones expuestas reparables. | M45 |
 
 ### Oleadas del nivel 1
 
@@ -1292,7 +1294,8 @@ Los cuatro enemigos que gustaron, con lo necesario para convertirlos en spec cua
 **Recomendación de Claude:** hacer el **aviso de atajo (3)** apenas se pueda, porque es barato, y el **puente (1)** cuando el editor o un nivel lo pidan.
 
 ### B-10 · Más niveles y niveles difíciles
-**Actualización de Lucas, 2026-10-03:** campaña base objetivo15 niveles: básico1–5, introducción/pruebas6–7, mayor presencia de nuevas mecánicas8–9, avanzado10–14 y definitivo15. Actualmente `campaign.json` incluye niveles1–7. Los demás requieren diseño y balance; no están implementados. Las amenazas nuevas no afectan1–5; esas primeras pantallas solo reciben avances de colección.
+**Producción parcial M45/T192:** niveles8/9 integrados con debuts de auras y encuentros de robo/desgaste; balance automatizado inicial. Niveles10–14 y cierre15 siguen pendientes, además de validación humana8/9.
+**Actualización de Lucas, 2026-10-03:** campaña base objetivo15 niveles: básico1–5, introducción/pruebas6–7, mayor presencia de nuevas mecánicas8–9, avanzado10–14 y definitivo15. Actualmente `campaign.json` incluye niveles1–9 (M45). Niveles10–15 requieren diseño y balance; no están implementados. Las amenazas nuevas no afectan1–5; esas primeras pantallas solo reciben avances de colección.
 *Idea de Lucas (a partir de las propuestas de Claude), 2026-09-29. Sin fecha.*
 
 - **Niveles 8, 9, 10…:** con el formato de M7 son un archivo de texto y una línea en `campaign.json`. Cada uno se balancea con el bot (spec §7.4).
@@ -1393,6 +1396,8 @@ Los cuatro enemigos que gustaron, con lo necesario para convertirlos en spec cua
 **Entrega futura:** muestras comparables del mismo mapa y una evaluación de alcance/costos/riesgos. Tratar el cambio de vista como potencial **breaking change**: preparar un PR de revisión identificado como tal, avisar a Lucas con el enlace y esperar su aprobación explícita **antes de mergear**. Una muestra no autoriza migrar toda la producción ni fusionar el PR.
 
 ### B-22 · Analizar contenido nuevo y desbloqueos en niveles superiores
+**Producción M45/T192:** campaña8/9 con Guardián/Curandero y mayor presión de sistemas existentes; estadísticas globales y1–7 intactos, balance humano pendiente. B22 continúa abierto para tramo avanzado y otros candidatos.
+
 **Primera producción parcial M37/T183:** colección y apoyo mecánico implementados como etapa funcional; diseño visual y balance iniciales. Disponibilidad por nivel aprobada, con colección adicional para estandartes. Ladrón, Embestidor/desgaste y reparación implementados en T184–T186 con pruebas6/7; Ballesta/Alquimista/Excavador aún candidatos. B-22 no está cerrado.
 **Abierto: análisis preliminar entregado en M36 (T181).** Entrega en [`B22-contenido.md`](../art/redesign-m36/B22-contenido.md). Faltan decisiones de Lucas y profundizar/validar la opción elegida antes de producción; no se integró esa mecánica. El estudio rápido no constituye un diseño definitivo. El texto siguiente registra el alcance original.
 **Pedido original de análisis; producción pendiente de selección:** Proponer2–3 candidatos de torretas y2–3 de monstruos (confirmar la selección final), con papel táctico distinto, estética, contramedida, costo de implementación y nivel de aparición/desbloqueo. Mantener la temática de monstruos. Considerar Excavador/Ladrón del B-07 y las variantes B de Bestia/Tanque que Lucas reservó para futuro, evitando duplicar funciones existentes. Comparar habilitación por nivel con desbloqueo persistente; contemplar Wiki, presentación, progreso y balance. El Mortero ya tiene disponibilidad reservada para el nivel10 (RF-300); no tratarlo como contenido nuevo. **Entrega futura:** tabla comparativa y recomendación, sin depender de completar ahora los niveles8–10.
@@ -1570,3 +1575,10 @@ Excavador/Ballesta/Alquimista siguen candidatos sin selección. B-21/B-23 no se 
 
 ### M44 · Cierre de reparación
 - **RF-377** Dada una torre reparada en pasos pequeños, cuando el desgaste restante llega al cero aproximado de coma flotante, entonces se fija desgaste0, se limpia tasa/indicador de reparación y termina el efecto. No queda un residuo positivo invisible; la última variación conserva señal y no cambia tasas/costos.
+
+### M45 · Campaña8/9
+- **RF-378** Dada la campaña completada hasta7, cuando se continúa, entonces se puede jugar8 y9 en orden.8 presenta Guardián y9 Curandero junto al Guardián según D041, sin alterar niveles1–7 ni estadísticas globales.
+- **RF-379** Dados los mapas8/9, cuando aparece un Embestidor, entonces existen extremos de rectas de al menos tres casillas con posiciones construibles a distancia de impacto y una posición distinta para apoyo dentro de radio. Los encuentros iniciales de Ladrón/Embestidor son separados; aparecen después de una preparación ofensiva y se combinan más tarde. Cada grupo opcional del Ladrón tiene cantidad1/probabilidad y el Mecánico requiere colección5 más permiso del nivel; no se agregan avances fuera de1–5.
+- **RF-380** Dados8/9, cuando se valida su primera versión, entonces carga/recorridos/campaña/progresión y composición se prueban, se comparan bots reproducibles con/sin mejoras/apoyo en varias semillas y se conserva evidencia de exposición y sesiones. Balance humano pendiente se informa explícitamente. No generar EXE/APK en esta etapa por instrucción de Lucas.
+
+- **RF-381** Dado un guardado de campaña anterior que completó el antiguo último nivel, cuando se amplía la campaña, entonces la selección permite jugar el siguiente por victoria previa aunque no exista su entrada unlocked en el guardado. No saltea el nivel siguiente sin victoria, no modifica récords ni reescribe el archivo al consultar.

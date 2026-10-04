@@ -395,10 +395,10 @@ Solo métricas locales: FPS de Engine y ms/cuadro estimados como1000/FPS; actual
 Los efectos de muerte reutilizan automáticamente textura, cuadro y escala del enemigo actual; no necesitan un asset de muerte por especie. Residuo y fragmentos son visuales y no alteran recompensa/crías. El audio se regenera con tools/make_sounds.gd; music_menu/music_combat usan bucle en importación. Material y límites de efectos se documentan en plan/spec; los candidatos de B-22 y recetas B-23 son propuestas y todavía no forman parte del formato de contenido.
 
 ### M37 · Avances y apoyo
-data/progression.json define colecciones/fuentes/cantidad requerida; solo fuentes oficiales permiten drops. TowerData puede exigir una colección y ser support_only; TowerLevelData declara support_rate_percent. El mecánico se habilita con torres_extra en6/7 más colección5/5; admin lo habilita sin modificar el progreso. Ladrón/desgaste/reparación y niveles8–15 son etapas posteriores.
+data/progression.json define colecciones/fuentes/cantidad requerida; solo fuentes oficiales permiten drops. TowerData puede exigir una colección y ser support_only; TowerLevelData declara support_rate_percent. El mecánico se habilita con torres_extra en6–9 más colección5/5; admin lo habilita sin modificar el progreso. Ladrón/desgaste/reparación están implementados; niveles8/9 integrados en M45. Niveles10–15 continúan pendientes.
 
 ### M39 · Encuentros opcionales y drenaje
-Un grupo de oleada puede declarar `"probabilidad":0.35`; ausencia equivale a1. El sorteo ocurre una vez por oleada/grupo. `EnemyData.optional_wave_limit` limita el total sorteado de ese tipo. `gold_drain_amount`, `gold_drain_interval` y `gold_drain_floor` habilitan drenaje combinable; cero lo apaga. Ladrón:3/2s/piso10, una aparición opcional por oleada. Sus cifras se modifican en data/enemies/thief.tres; ensayos solo6/7,1–5 intactos.
+Un grupo de oleada puede declarar `"probabilidad":0.35`; ausencia equivale a1. El sorteo ocurre una vez por oleada/grupo. `EnemyData.optional_wave_limit` limita el total sorteado de ese tipo. `gold_drain_amount`, `gold_drain_interval` y `gold_drain_floor` habilitan drenaje combinable; cero lo apaga. Ladrón:3/2s/piso10, una aparición opcional por oleada. Sus cifras se modifican en data/enemies/thief.tres; introducción6/7 y mayor presión8/9,1–5 intactos.
 
 
 ### M40 · Carga y desgaste
@@ -421,3 +421,7 @@ Lucas aprobó los cuatro diseños M43, B31 cerrado. Dos EXE y dos APK normal/pru
 ### T191 · Laboratorio6/7
 
 Perfiles de compra/ubicación/mejoras y variantes de frecuencia viven en art/balance-m44, modifican recursos solo en memoria y no son presets de campaña. Exposure.json registra celdas realmente amenazadas al final de rectas y reparación20→0 en10/6,7/5s. El cierre de reparación elimina residuos de coma flotante; no cambia tasas ni costos. Consultar README del laboratorio antes de usar sus resultados para diseñar8/9.
+
+### M45 · Niveles8/9
+
+Campaña ampliada con level_08 (Bastión) y level_09 (Taller asediado). JSON en formato canónico del editor; torres_extra permite Mecánico, sin nuevas fuentes de colección. Guardián debuta en8/oleada4 y Curandero en9/oleada5; robos opcionales comienzan6 y embestidas8, con combinaciones posteriores. Carga/auras/desgaste/reparación reutilizan recursos existentes y no cambian sus estadísticas. Datos y recorridos1–7 intactos. Detalle, bots/capturas y límites en art/campaign-m45/README.md.

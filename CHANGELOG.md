@@ -175,3 +175,9 @@ B31 cerrado por aprobación de Lucas (2026-10-04). Exportados `build/JuegoA.exe`
 - La reparación termina correctamente aunque quede un residuo mínimo de desgaste; el indicador se apaga.
 - Laboratorio de compra/ubicación/mejoras del Mecánico y frecuencia de Ladrón/Embestidor sobre6/7; resultados y límites en art/balance-m44.
 - EXE y APK normales/de pruebas regenerados con la corrección. No cambia balance1–5.
+
+### T192 · Bastión y Taller asediado
+
+- Campaña con9 niveles: Guardián en8, Curandero en9, más encuentros de robo/desgaste y apoyo Mecánico disponible.
+- Un guardado que completó el antiguo último nivel permite acceder al siguiente agregado sin repetirlo.
+- Niveles1–7 y estadísticas globales conservados. EXE/APK sin regenerar; primera versión de balance con validación humana pendiente.

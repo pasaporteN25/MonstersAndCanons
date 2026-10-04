@@ -4,7 +4,7 @@
 
 Juego *tower defense* 2D hecho en **Godot 4** con **GDScript**, construido con **SDD (Spec-Driven Development)**.
 
-> **Estado actual:** M1 a M24 (primera tanda) ✅ (nuevo logo Monsters & Canons, botones del menú de hierro y bronce, Normal, Rápido y Tanque con arte renderizado de una sola vista; juego completo, 7 niveles, 9 torres (una de 2×2) con arte renderizado de ocho vistas, tres familias visuales y combos por estado, modo de pruebas con editor de mapas, mapas de la comunidad, Wiki con bestiario, mapas de tamaño variable con zoom, siete temas de paisaje y leyenda, récords, niveles en archivos de texto y versión para Linux). Android fue probado en un celular antes de M23; el nuevo arte se verificó en Windows. Tests automáticos en GitHub (D-030).
+> **Estado actual:** M1 a M45 ✅ (nuevo logo Monsters & Canons, botones del menú de hierro y bronce, Normal, Rápido y Tanque con arte renderizado de una sola vista; campaña jugable, 9 niveles, 9 torres (una de 2×2) con arte renderizado de ocho vistas más el apoyo Mecánico, tres familias visuales y combos por estado, modo de pruebas con editor de mapas, mapas de la comunidad, Wiki con bestiario, mapas de tamaño variable con zoom, siete temas de paisaje y leyenda, récords, niveles en archivos de texto y versión para Linux). Android fue probado en un celular antes de M23; el nuevo arte se verificó en Windows. Tests automáticos en GitHub (D-030).
 >
 > **Versión de Godot:** 4.7.2 estable (renderizador *Compatibility*).
 >
@@ -242,3 +242,9 @@ B31 cerrado por aprobación de Lucas (2026-10-04). Exportados `build/JuegoA.exe`
 T191 agrega un laboratorio con compra temprana/tardía del Mecánico, ubicación, mejoras, semillas global/spawner y presión de especiales. Evidencia y límites: [art/balance-m44/README.md](art/balance-m44/README.md). Corrige residuos de desgaste que dejaban la reparación encendida;949/949 pruebas. Los dos EXE y dos APK locales se regeneraron con la corrección. Niveles1–5 intactos; balance definitivo humano pendiente.
 
 Resultado M44:38 corridas más repetición idéntica. En7, el perfil de apoyo tardío agrupado con mejoras conserva18–19 vidas frente a7–10 sin apoyo, en tres semillas. Se mantienen costos y frecuencia oficiales6/7; mayor frecuencia cambia también economía/compras y no prueba dificultad de forma aislada. El diseño8/9 y la prueba humana continúan aparte; B22 permanece abierto.
+
+### M45 · Campaña8/9
+
+Bastión (18 oleadas, una entrada) presenta Guardián y eleva robo/desgaste. Taller asediado (20 oleadas, dos entradas) introduce Curandero y combina auras con esos encuentros. Mecánico permitido con colección5/5. Los guardados que ya ganaron7 permiten abrir8 sin rejugar; las consultas no escriben progreso. Pruebas y evidencia en art/campaign-m45; balance humano pendiente. No se regeneraron APK/EXE por instrucción de Lucas.
+
+Validación M45:954/954 pruebas y62/62 finales de contenido.24 corridas más repetición idéntica, encuentros oficiales que causan/reparan40 puntos y capturas revisadas.8 conserva margen;9 gana con defensa variada en tres semillas y exige priorizar auras/cobertura. Las políticas del bot pueden perder, y no sustituyen juego humano. Paquetes anteriores y niveles1–7 verificados por hash sin cambios.

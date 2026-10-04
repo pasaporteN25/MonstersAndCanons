@@ -1,0 +1,964 @@
+[
+  {
+    "health_scale": 22,
+    "results": [
+      {
+        "built": 68,
+        "global_seed": 42,
+        "gold": 260,
+        "impacts": 0,
+        "level": 8,
+        "lives": 20,
+        "pressure": "normal",
+        "profile": "baseline",
+        "purchases": [],
+        "repaired": 0.0,
+        "seed": 42,
+        "specials": {
+          "rammer": 10,
+          "thief": 3
+        },
+        "stolen": 29,
+        "upgrades": 0,
+        "wave": 18,
+        "won": true
+      },
+      {
+        "built": 49,
+        "global_seed": 42,
+        "gold": 339,
+        "impacts": 0,
+        "level": 8,
+        "lives": 20,
+        "pressure": "normal",
+        "profile": "upgrades",
+        "purchases": [
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "basic",
+            "wave": 3
+          },
+          {
+            "kind": "upgrade",
+            "level": 3,
+            "tower": "basic",
+            "wave": 4
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "basic",
+            "wave": 5
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "basic",
+            "wave": 6
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "basic",
+            "wave": 7
+          },
+          {
+            "kind": "upgrade",
+            "level": 3,
+            "tower": "basic",
+            "wave": 8
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "basic",
+            "wave": 9
+          },
+          {
+            "kind": "upgrade",
+            "level": 3,
+            "tower": "basic",
+            "wave": 10
+          },
+          {
+            "kind": "upgrade",
+            "level": 3,
+            "tower": "basic",
+            "wave": 11
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "sniper",
+            "wave": 12
+          },
+          {
+            "kind": "upgrade",
+            "level": 3,
+            "tower": "basic",
+            "wave": 13
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "sniper",
+            "wave": 14
+          },
+          {
+            "kind": "upgrade",
+            "level": 3,
+            "tower": "sniper",
+            "wave": 15
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "sniper",
+            "wave": 16
+          },
+          {
+            "kind": "upgrade",
+            "level": 3,
+            "tower": "sniper",
+            "wave": 17
+          }
+        ],
+        "repaired": 0.0,
+        "seed": 42,
+        "specials": {
+          "rammer": 10,
+          "thief": 3
+        },
+        "stolen": 25,
+        "upgrades": 15,
+        "wave": 18,
+        "won": true
+      },
+      {
+        "built": 50,
+        "global_seed": 42,
+        "gold": 339,
+        "impacts": 0,
+        "level": 8,
+        "lives": 20,
+        "pressure": "normal",
+        "profile": "upgrade_support",
+        "purchases": [
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "basic",
+            "wave": 3
+          },
+          {
+            "kind": "upgrade",
+            "level": 3,
+            "tower": "basic",
+            "wave": 4
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "basic",
+            "wave": 5
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "basic",
+            "wave": 6
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "basic",
+            "wave": 7
+          },
+          {
+            "allies": 5,
+            "cell": "(14, 4)",
+            "kind": "support",
+            "nominal_dps": 37.85,
+            "wave": 8
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "sniper",
+            "wave": 9
+          },
+          {
+            "kind": "support_upgrade",
+            "level": 2,
+            "wave": 10
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "basic",
+            "wave": 11
+          },
+          {
+            "kind": "support_upgrade",
+            "level": 3,
+            "wave": 12
+          },
+          {
+            "kind": "upgrade",
+            "level": 3,
+            "tower": "basic",
+            "wave": 13
+          },
+          {
+            "kind": "upgrade",
+            "level": 3,
+            "tower": "basic",
+            "wave": 14
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "sniper",
+            "wave": 15
+          },
+          {
+            "kind": "upgrade",
+            "level": 3,
+            "tower": "basic",
+            "wave": 16
+          },
+          {
+            "kind": "upgrade",
+            "level": 3,
+            "tower": "sniper",
+            "wave": 17
+          }
+        ],
+        "repaired": 0.0,
+        "seed": 42,
+        "specials": {
+          "rammer": 10,
+          "thief": 3
+        },
+        "stolen": 30,
+        "upgrades": 14,
+        "wave": 18,
+        "won": true
+      },
+      {
+        "built": 87,
+        "global_seed": 42,
+        "gold": 337,
+        "impacts": 3,
+        "level": 9,
+        "lives": 20,
+        "pressure": "normal",
+        "profile": "baseline",
+        "purchases": [],
+        "repaired": 0.0,
+        "seed": 42,
+        "specials": {
+          "rammer": 16,
+          "thief": 3
+        },
+        "stolen": 15,
+        "upgrades": 0,
+        "wave": 20,
+        "won": true
+      },
+      {
+        "built": 67,
+        "global_seed": 42,
+        "gold": 309,
+        "impacts": 1,
+        "level": 9,
+        "lives": 20,
+        "pressure": "normal",
+        "profile": "upgrades",
+        "purchases": [
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "sniper",
+            "wave": 3
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "basic",
+            "wave": 4
+          },
+          {
+            "kind": "upgrade",
+            "level": 3,
+            "tower": "basic",
+            "wave": 6
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "basic",
+            "wave": 7
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "basic",
+            "wave": 8
+          },
+          {
+            "kind": "upgrade",
+            "level": 3,
+            "tower": "basic",
+            "wave": 9
+          },
+          {
+            "kind": "upgrade",
+            "level": 3,
+            "tower": "sniper",
+            "wave": 10
+          },
+          {
+            "kind": "upgrade",
+            "level": 3,
+            "tower": "basic",
+            "wave": 11
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "basic",
+            "wave": 12
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "sniper",
+            "wave": 13
+          },
+          {
+            "kind": "upgrade",
+            "level": 3,
+            "tower": "basic",
+            "wave": 14
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "sniper",
+            "wave": 15
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "sniper",
+            "wave": 16
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "sniper",
+            "wave": 17
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "basic",
+            "wave": 18
+          },
+          {
+            "kind": "upgrade",
+            "level": 3,
+            "tower": "sniper",
+            "wave": 19
+          }
+        ],
+        "repaired": 0.0,
+        "seed": 42,
+        "specials": {
+          "rammer": 16,
+          "thief": 3
+        },
+        "stolen": 18,
+        "upgrades": 16,
+        "wave": 20,
+        "won": true
+      },
+      {
+        "built": 67,
+        "global_seed": 42,
+        "gold": 289,
+        "impacts": 2,
+        "level": 9,
+        "lives": 20,
+        "pressure": "normal",
+        "profile": "upgrade_support",
+        "purchases": [
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "sniper",
+            "wave": 3
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "basic",
+            "wave": 4
+          },
+          {
+            "kind": "upgrade",
+            "level": 3,
+            "tower": "basic",
+            "wave": 6
+          },
+          {
+            "allies": 3,
+            "cell": "(18, 4)",
+            "kind": "support",
+            "nominal_dps": 28.85,
+            "wave": 7
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "basic",
+            "wave": 8
+          },
+          {
+            "kind": "upgrade",
+            "level": 3,
+            "tower": "basic",
+            "wave": 9
+          },
+          {
+            "kind": "support_upgrade",
+            "level": 2,
+            "wave": 10
+          },
+          {
+            "kind": "support_upgrade",
+            "level": 3,
+            "wave": 11
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "basic",
+            "wave": 12
+          },
+          {
+            "kind": "upgrade",
+            "level": 3,
+            "tower": "basic",
+            "wave": 13
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "basic",
+            "wave": 14
+          },
+          {
+            "kind": "upgrade",
+            "level": 3,
+            "tower": "sniper",
+            "wave": 15
+          },
+          {
+            "kind": "upgrade",
+            "level": 3,
+            "tower": "basic",
+            "wave": 16
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "sniper",
+            "wave": 17
+          },
+          {
+            "kind": "upgrade",
+            "level": 3,
+            "tower": "sniper",
+            "wave": 18
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "sniper",
+            "wave": 19
+          }
+        ],
+        "repaired": 0.0,
+        "seed": 42,
+        "specials": {
+          "rammer": 16,
+          "thief": 3
+        },
+        "stolen": 18,
+        "upgrades": 15,
+        "wave": 20,
+        "won": true
+      }
+    ]
+  },
+  {
+    "health_scale": 40,
+    "results": [
+      {
+        "built": 62,
+        "global_seed": 42,
+        "gold": 27,
+        "impacts": 1,
+        "level": 8,
+        "lives": 0,
+        "pressure": "normal",
+        "profile": "baseline",
+        "purchases": [],
+        "repaired": 0.0,
+        "seed": 42,
+        "specials": {
+          "rammer": 10,
+          "thief": 3
+        },
+        "stolen": 37,
+        "upgrades": 0,
+        "wave": 18,
+        "won": false
+      },
+      {
+        "built": 48,
+        "global_seed": 42,
+        "gold": 305,
+        "impacts": 0,
+        "level": 8,
+        "lives": 6,
+        "pressure": "normal",
+        "profile": "upgrades",
+        "purchases": [
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "basic",
+            "wave": 3
+          },
+          {
+            "kind": "upgrade",
+            "level": 3,
+            "tower": "basic",
+            "wave": 4
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "basic",
+            "wave": 5
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "sniper",
+            "wave": 6
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "basic",
+            "wave": 7
+          },
+          {
+            "kind": "upgrade",
+            "level": 3,
+            "tower": "basic",
+            "wave": 8
+          },
+          {
+            "kind": "upgrade",
+            "level": 3,
+            "tower": "basic",
+            "wave": 9
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "sniper",
+            "wave": 10
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "basic",
+            "wave": 11
+          },
+          {
+            "kind": "upgrade",
+            "level": 3,
+            "tower": "sniper",
+            "wave": 12
+          },
+          {
+            "kind": "upgrade",
+            "level": 3,
+            "tower": "basic",
+            "wave": 13
+          },
+          {
+            "kind": "upgrade",
+            "level": 3,
+            "tower": "sniper",
+            "wave": 14
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "basic",
+            "wave": 15
+          },
+          {
+            "kind": "upgrade",
+            "level": 3,
+            "tower": "basic",
+            "wave": 16
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "sniper",
+            "wave": 17
+          }
+        ],
+        "repaired": 0.0,
+        "seed": 42,
+        "specials": {
+          "rammer": 10,
+          "thief": 3
+        },
+        "stolen": 39,
+        "upgrades": 15,
+        "wave": 18,
+        "won": true
+      },
+      {
+        "built": 43,
+        "global_seed": 42,
+        "gold": 87,
+        "impacts": 0,
+        "level": 8,
+        "lives": 0,
+        "pressure": "normal",
+        "profile": "upgrade_support",
+        "purchases": [
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "basic",
+            "wave": 3
+          },
+          {
+            "kind": "upgrade",
+            "level": 3,
+            "tower": "basic",
+            "wave": 4
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "basic",
+            "wave": 5
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "sniper",
+            "wave": 6
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "basic",
+            "wave": 7
+          },
+          {
+            "allies": 5,
+            "cell": "(14, 4)",
+            "kind": "support",
+            "nominal_dps": 37.85,
+            "wave": 8
+          },
+          {
+            "kind": "upgrade",
+            "level": 3,
+            "tower": "basic",
+            "wave": 9
+          },
+          {
+            "kind": "support_upgrade",
+            "level": 2,
+            "wave": 10
+          },
+          {
+            "kind": "support_upgrade",
+            "level": 3,
+            "wave": 11
+          },
+          {
+            "kind": "upgrade",
+            "level": 3,
+            "tower": "sniper",
+            "wave": 12
+          },
+          {
+            "kind": "upgrade",
+            "level": 3,
+            "tower": "basic",
+            "wave": 13
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "sniper",
+            "wave": 14
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "basic",
+            "wave": 15
+          },
+          {
+            "kind": "upgrade",
+            "level": 3,
+            "tower": "basic",
+            "wave": 16
+          },
+          {
+            "kind": "upgrade",
+            "level": 3,
+            "tower": "sniper",
+            "wave": 17
+          }
+        ],
+        "repaired": 0.0,
+        "seed": 42,
+        "specials": {
+          "rammer": 10,
+          "thief": 3
+        },
+        "stolen": 42,
+        "upgrades": 14,
+        "wave": 18,
+        "won": false
+      },
+      {
+        "built": 86,
+        "global_seed": 42,
+        "gold": 368,
+        "impacts": 4,
+        "level": 9,
+        "lives": 11,
+        "pressure": "normal",
+        "profile": "baseline",
+        "purchases": [],
+        "repaired": 0.0,
+        "seed": 42,
+        "specials": {
+          "rammer": 16,
+          "thief": 3
+        },
+        "stolen": 18,
+        "upgrades": 0,
+        "wave": 20,
+        "won": true
+      },
+      {
+        "built": 45,
+        "global_seed": 42,
+        "gold": 83,
+        "impacts": 0,
+        "level": 9,
+        "lives": 0,
+        "pressure": "normal",
+        "profile": "upgrades",
+        "purchases": [
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "sniper",
+            "wave": 3
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "basic",
+            "wave": 4
+          },
+          {
+            "kind": "upgrade",
+            "level": 3,
+            "tower": "basic",
+            "wave": 6
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "basic",
+            "wave": 7
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "basic",
+            "wave": 8
+          },
+          {
+            "kind": "upgrade",
+            "level": 3,
+            "tower": "basic",
+            "wave": 9
+          },
+          {
+            "kind": "upgrade",
+            "level": 3,
+            "tower": "sniper",
+            "wave": 10
+          },
+          {
+            "kind": "upgrade",
+            "level": 3,
+            "tower": "basic",
+            "wave": 11
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "sniper",
+            "wave": 12
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "sniper",
+            "wave": 13
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "basic",
+            "wave": 14
+          },
+          {
+            "kind": "upgrade",
+            "level": 3,
+            "tower": "basic",
+            "wave": 15
+          }
+        ],
+        "repaired": 0.0,
+        "seed": 42,
+        "specials": {
+          "rammer": 10,
+          "thief": 2
+        },
+        "stolen": 24,
+        "upgrades": 12,
+        "wave": 16,
+        "won": false
+      },
+      {
+        "built": 45,
+        "global_seed": 42,
+        "gold": 56,
+        "impacts": 0,
+        "level": 9,
+        "lives": 0,
+        "pressure": "normal",
+        "profile": "upgrade_support",
+        "purchases": [
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "sniper",
+            "wave": 3
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "basic",
+            "wave": 4
+          },
+          {
+            "kind": "upgrade",
+            "level": 3,
+            "tower": "basic",
+            "wave": 6
+          },
+          {
+            "allies": 3,
+            "cell": "(18, 4)",
+            "kind": "support",
+            "nominal_dps": 28.85,
+            "wave": 7
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "basic",
+            "wave": 8
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "basic",
+            "wave": 9
+          },
+          {
+            "kind": "support_upgrade",
+            "level": 2,
+            "wave": 10
+          },
+          {
+            "kind": "upgrade",
+            "level": 3,
+            "tower": "basic",
+            "wave": 11
+          },
+          {
+            "kind": "upgrade",
+            "level": 3,
+            "tower": "basic",
+            "wave": 12
+          },
+          {
+            "kind": "support_upgrade",
+            "level": 3,
+            "wave": 13
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "sniper",
+            "wave": 14
+          },
+          {
+            "kind": "upgrade",
+            "level": 2,
+            "tower": "sniper",
+            "wave": 15
+          }
+        ],
+        "repaired": 0.0,
+        "seed": 42,
+        "specials": {
+          "rammer": 10,
+          "thief": 2
+        },
+        "stolen": 24,
+        "upgrades": 11,
+        "wave": 16,
+        "won": false
+      }
+    ]
+  }
+]
