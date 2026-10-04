@@ -404,3 +404,7 @@ Lucas aprobó el extremo de la recta y la cercanía al camino. ChargeRules fusio
 ## D-068 · Reparación automática y no acumulable
 Lucas autorizó desgaste reparable y el rol del Mecánico. Tower consulta fuentes activas dentro de radio; repara con la mayor tasa en tiempo físico, sin trabajo global ni referencias persistentes. Tasas2/3/4 en TowerLevelData; no crea nueva economía, botones ni monedas. El daño del propio Mecánico reduce prestaciones para que el Embestidor tenga efecto real en toda torre; otro Mecánico puede restaurarlo. La alternativa de economía/reparación manual/destrucción queda anotada en D-067 y fuera de esta etapa. Costos actuales se mantienen como base para laboratorio6/7.
 
+
+## D-069 · Lista acotada y selección rápida en Pruebas
+Lucas, 2026-10-04, aprobó corregir recorte y sumar rueda conservando clic. Se mantiene OptionButton y PopupMenu nativo con máximo320 píxeles lógicos y scroll, fondo opaco y hover sin sombra exterior; no se reemplaza por otro sistema de listas. gui_input recibe la rueda solo sobre el selector, limita índice y consume el evento. B-31 registra los cuatro rediseños pedidos; usar Curandero como base de Embestidor se evaluará con muestras, no cambia arte en esta tarea.
+

@@ -111,3 +111,70 @@ func test_metrics_stay_visible_when_panel_closes_and_can_be_disabled() -> void:
 	assert_eq(overlay.mouse_filter, Control.MOUSE_FILTER_IGNORE)
 	game.dev_panel.metrics_toggled.emit(false)
 	assert_false(overlay.visible)
+
+func _wheel(button: MouseButton, pressed: bool = true) -> InputEventMouseButton:
+	var event := InputEventMouseButton.new()
+	event.button_index = button
+	event.pressed = pressed
+	return event
+
+func test_enemy_wheel_selects_without_opening_or_spawning_and_clamps_ends() -> void:
+	var panel: DevPanel = game.dev_panel
+	var choice: OptionButton = panel._enemy_choice
+	choice.select(0)
+	panel._on_enemy_choice_input(_wheel(MOUSE_BUTTON_WHEEL_UP))
+	assert_eq(choice.selected,0)
+	panel._on_enemy_choice_input(_wheel(MOUSE_BUTTON_WHEEL_DOWN))
+	assert_eq(choice.selected,1)
+	assert_false(choice.get_popup().visible)
+	assert_eq(_active_enemies(),0)
+	choice.select(choice.item_count - 1)
+	panel._on_enemy_choice_input(_wheel(MOUSE_BUTTON_WHEEL_DOWN))
+	assert_eq(choice.selected,choice.item_count - 1)
+	panel._on_enemy_choice_input(_wheel(MOUSE_BUTTON_WHEEL_UP))
+	assert_eq(choice.selected,choice.item_count - 2)
+
+func test_click_release_and_horizontal_wheel_are_not_selection_steps() -> void:
+	var panel: DevPanel = game.dev_panel
+	panel._enemy_choice.select(3)
+	for event: InputEvent in [_wheel(MOUSE_BUTTON_LEFT),_wheel(MOUSE_BUTTON_WHEEL_DOWN,false),_wheel(MOUSE_BUTTON_WHEEL_LEFT),InputEventMouseMotion.new()]:
+		panel._on_enemy_choice_input(event)
+	assert_eq(panel._enemy_choice.selected,3)
+
+func test_spawn_button_uses_enemy_chosen_with_wheel() -> void:
+	var panel: DevPanel = game.dev_panel
+	panel._enemy_choice.select(0)
+	panel._on_enemy_choice_input(_wheel(MOUSE_BUTTON_WHEEL_DOWN))
+	var spawn: Button = null
+	for button: Node in panel.find_children("*","Button",true,false):
+		if (button as Button).text == "Aparecer":
+			spawn = button as Button
+	assert_not_null(spawn)
+	spawn.pressed.emit()
+	assert_eq(_active_enemies(),1)
+	assert_eq((game.enemies.get_child(0) as Enemy).data,panel._enemy_types[1])
+
+func test_enemy_popup_is_bounded_opaque_and_hover_has_no_clipped_shadow() -> void:
+	var popup: PopupMenu = game.dev_panel._enemy_choice.get_popup()
+	assert_eq(popup.max_size.y,320)
+	assert_eq((popup.get_theme_stylebox("panel") as StyleBoxFlat).bg_color.a,1.0)
+	assert_eq((popup.get_theme_stylebox("hover") as StyleBoxFlat).shadow_size,0)
+
+func test_enemy_popup_real_height_and_last_item_remain_accessible() -> void:
+	game.dev_panel.show()
+	await wait_process_frames(2)
+	var choice: OptionButton = game.dev_panel._enemy_choice
+	choice.show_popup()
+	await wait_process_frames(2)
+	var popup: PopupMenu = choice.get_popup()
+	assert_true(popup.visible)
+	assert_lte(popup.size.y,320,"limita altura real, no solo la propiedad")
+	var last: int = choice.item_count - 1
+	popup.set_focused_item(last)
+	popup.scroll_to_item(last)
+	assert_eq(popup.get_focused_item(),last)
+	popup.index_pressed.emit(last)
+	assert_eq(choice.selected,last,"el clic conserva selección del último enemigo")
+	popup.hide()
+	choice.gui_input.emit(_wheel(MOUSE_BUTTON_WHEEL_UP))
+	assert_eq(choice.selected,last - 1,"la señal del control conecta la rueda")

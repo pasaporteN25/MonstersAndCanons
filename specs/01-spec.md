@@ -1432,6 +1432,14 @@ Rediseñar el panel en partida de la captura de Lucas (Ráfaga · Nivel2): títu
 ### Estado depurado del backlog · Lucas, 2026-10-03
 B-02 cerrado; B-15 retirado/dividido. B-17 a B-20 y B-24 a B-28 implementados. B-21/B-22/B-23 siguen abiertos: informes preliminares entregados, sin decisión ni validación definitiva de producción.
 
+### B-31 · Rediseño visual de Mecánico, Embestidor, Ladrón y Curandero
+**Pedido de Lucas, 2026-10-04. Pendiente de producción artística.**
+- Mecánico: reemplazar la estatua vectorial inicial por un diseño con volumen, materiales y calidad acordes a los cañones; actualmente parece de otro juego. Mantener identidad de ingeniería, apoyo y reparación.
+- Embestidor: rediseñar silueta y crear sprites/poses que transmitan fuerza e impulso frontal; abandonar la apariencia actual de dinosaurio rápido. Evaluar el Curandero actual como referencia/base del Embestidor, comparando ambos a escala real antes de reasignar sprites.
+- Curandero: si se reutiliza su aspecto para Embestidor, crear un nuevo monstruo que comunique curación con anatomía, objeto o gesto propio, además del aura; conservar rol/habilidad. La reasignación es una propuesta a evaluar, no un intercambio ya aplicado.
+- Ladrón: crear un asset de la calidad del resto del bestiario, con bolsa/robo reconocibles y sprites coherentes con caminar/estados; reemplazar el vector inicial.
+**Aceptación:** revisar siluetas juntas en mapa y Wiki, materiales/luz/escala/estados, poses direccionales y movimiento; distinguir carga, robo y cura sin depender del texto. Mantener mecánicas y datos de balance. B-02 permanece cerrado: este es un pendiente concreto nuevo, ligado a B-07/B-22.
+
 Otros pendientes: Épocas y modos (B-01/B-05), lore y Wiki de Épocas (B-03), mods completos (resto de B-04), Excavador y eventual vida/destrucción/economía de torres (resto de B-07, candidatos relacionados con B-22; Ladrón y Embestidor/desgaste/reparación implementados en M39–M41), decoración manual/terrenos con efectos y temas/leyenda en el editor (resto de B-08, T128), cruces/rutas explícitas (resto de B-09), campaña/dificultades (B-10, prioridad baja), compartir mapas como texto (B-11), mapas al azar/desafíos (B-12), app única con admin (B-13), daño elemental/armadura (B-14), fusiones (resto de B-16; vecindad se sigue en B-23), Wiki de mods (B-29) y de comunidad (B-30). B-06 ya está implementado en M18; leyenda/temas del formato y tamaño variable de B-08 están implementados en M15/M13; aviso de atajos B-09 está hecho en M9. No contarlos nuevamente como pendientes. Las sugerencias no autorizadas permanecen separadas y no son tareas comprometidas.
 
 ## 14. Arte de torres con volumen (M23, pedido por Lucas, 2026-10-02)
@@ -1546,4 +1554,9 @@ Excavador/Ballesta/Alquimista siguen candidatos sin selección. B-21/B-23 no se 
 ### M41 · Reparación del Mecánico y validación conjunta
 - **RF-369** Dada una torre desgastada dentro del alcance de un Mecánico activo, recupera2/3/4 puntos porcentuales por segundo según nivel del Mecánico, gratis y sin superar estado sano. Solo aplica la tasa más fuerte, no suma Mecánicos. Aturdir/vender el reparador corta su efecto; pausa congela y velocidad acelera reparación. El reparador no se repara a sí mismo, pero otro puede repararlo. Su desgaste reduce tanto bonus de cadencia como tasa reparadora. Reparar no acorta stun; mejorar conserva desgaste. Torres sin desgaste no reciben cura ni avisos falsos.
 - **RF-370** Panel/Wiki/ayuda de construcción explican apoyo y reparación desde datos, cadencia efectiva incluye desgaste y apoyo. Una marca ámbar de desgaste disminuye hasta desaparecer; mientras recibe reparación aparece un pequeño indicador cian junto a la base, distinto de la curación verde de enemigos. Los tres niveles del Mecánico mantienen costos120/100/160 y rangos2/2.5/3; pruebas administrativas habilitan sin colección. Verificar integración6/7, estabilidad de1–5, pruebas completas y exportación Windows/Linux. Balance y arte se declaran iniciales, no definitivos.
+
+
+### M42 · Selector de enemigos en Pruebas
+- **RF-371** Dada la lista de enemigos de Pruebas, cuando se abre por clic, entonces el desplegable tiene altura limitada y desplazamiento interno, fondo opaco y resaltado sin sombra recortada; permanece dentro de la ventana. Todos los enemigos siguen accesibles, incluyendo al aumentar el catálogo.
+- **RF-372** Dado el puntero sobre el selector cerrado, cuando gira la rueda arriba/abajo, entonces elige anterior/siguiente sin abrir ni invocar; se detiene en primer/último elemento. Clic conserva lista completa y selección normal; Aparecer usa el elegido. La rueda fuera del selector no modifica la selección.
 

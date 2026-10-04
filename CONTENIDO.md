@@ -408,3 +408,6 @@ EnemyData: `charge_distance_tiles`, `charge_multiplier`, `charge_slow_tolerance`
 ### M41 · Reparación
 `TowerLevelData.support_repair_per_second` expresa puntos porcentuales de desgaste por segundo,0 desactiva. Mecánico2/3/4, costos y rangos intactos. Mayor tasa activa por radio, sin apilar ni autorreparar; otras fuentes sí pueden reparar estandartes. Desgaste de la fuente reduce tasa y bonus proporcionalmente. Pausa/velocidad afectan reloj; stun del reparador lo apaga, stun del receptor no impide recuperar desgaste ni se acorta.
 
+
+### M42 · Catálogo y arte pendiente
+El selector de Pruebas sigue leyendo todos los EnemyData. La lista larga se desplaza dentro del popup y la rueda sobre el selector cerrado cambia el elegido. No hay nuevos ids ni cambios de balance. Los rediseños concretos quedan en B-31; todavía no se reasignan recursos Curandero/Embestidor.

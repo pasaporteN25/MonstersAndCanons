@@ -98,8 +98,20 @@ func toggle() -> void:
 func _enemy_row() -> Control:
 	var row := HBoxContainer.new()
 	_enemy_choice = OptionButton.new()
+	_enemy_choice.name = "EnemyChoice"
 	_enemy_choice.focus_mode = Control.FOCUS_NONE
 	_enemy_choice.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_enemy_choice.tooltip_text = "Rueda: cambiar enemigo. Clic: abrir la lista completa."
+	_enemy_choice.gui_input.connect(_on_enemy_choice_input)
+	var popup: PopupMenu = _enemy_choice.get_popup()
+	popup.max_size = Vector2i(600,320)
+	var popup_style: StyleBoxFlat = PANEL_STYLE.duplicate()
+	popup_style.bg_color.a = 1.0
+	popup_style.shadow_size = 0
+	popup.add_theme_stylebox_override("panel",popup_style)
+	var hover: StyleBoxFlat = theme.get_stylebox("hover","PopupMenu").duplicate()
+	hover.shadow_size = 0
+	popup.add_theme_stylebox_override("hover",hover)
 	# LevelFile.enemy_ids() entiende los nombres del ejecutable exportado (.tres.remap).
 	for id: String in LevelFile.enemy_ids():
 		_enemy_types.append(LevelFile.find_enemy(id))
@@ -110,6 +122,25 @@ func _enemy_row() -> Control:
 	row.add_child(_button("Aparecer", func() -> void:
 		_game.dev_spawn(_enemy_types[_enemy_choice.selected])))
 	return row
+
+
+## La rueda sobre el selector cambia sin abrirlo ni invocar enemigos; extremos acotados.
+func _on_enemy_choice_input(event: InputEvent) -> void:
+	var wheel: InputEventMouseButton = event as InputEventMouseButton
+	if wheel == null or not wheel.pressed or _enemy_choice.item_count == 0:
+		return
+	var step: int = 0
+	if wheel.button_index == MOUSE_BUTTON_WHEEL_UP:
+		step = -1
+	elif wheel.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+		step = 1
+	else:
+		return
+	var selected: int = clampi(_enemy_choice.selected + step,0,_enemy_choice.item_count - 1)
+	if selected != _enemy_choice.selected:
+		_enemy_choice.select(selected)
+		_enemy_choice.item_selected.emit(selected)
+	_enemy_choice.accept_event()
 
 
 func _button(text: String, action: Callable) -> Button:

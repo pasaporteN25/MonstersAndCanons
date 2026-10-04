@@ -609,3 +609,6 @@ TowerLevelData.support_repair_per_second; WearRules.repair pura; búsqueda de ma
 
 
 La validación de rendimiento detectó costo de triangulación de marcas por frame. M41 usa dos texturas SVG compartidas (grieta ámbar/herramienta cian), intensidad proporcional a desgaste y sin geometría adicional por cuadro; alcanza 103 FPS en la carga P7 extendida.
+
+### M42 / T188
+DevPanel mantiene el catálogo dinámico y OptionButton. PopupMenu.max_size limita altura y activa scroll nativo; StyleBoxFlat duplicados locales eliminan transparencia/sombra recortada sin alterar el tema compartido. gui_input discrimina rueda presionada, acota selección y conserva clic. Tests de extremos, eventos ajenos, invocación del seleccionado y captura real del popup. Rediseños en B-31, producción futura con muestras comparativas.
