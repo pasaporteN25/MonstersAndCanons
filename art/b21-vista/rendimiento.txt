@@ -1,0 +1,41 @@
+# B-21 v2 · Mediciones crudas (2026-10-06). Una línea por corrida de vista_lab.tscn -- rendimiento.
+# Equipo: AMD Radeon RX 6900 XT, Windows 10, ventana 1920×1080, GL Compatibility, vsync apagado.
+# Carga: nivel 1, 60 torres disparando, 200 Lobos que no mueren, números de daño y 15 muertes falsas por segundo (como tools/perf_test.gd).
+# Calentamiento 1 s, medición 6 s. Antes de las rondas se hizo una corrida de calentamiento descartada.
+
+## Rondas 1 a 3: A, B directo, B horneado, B horneado sin orden, C horneado, D (D con el código previo a portar proyectiles)
+RESULTADO_B21 {"cuadros":564,"cuadros_lentos":36,"enemigos":200,"fps":94.0,"gpu":"AMD Radeon RX 6900 XT","horneado":false,"ms_p95":17.05,"ms_peor":22.79,"ms_promedio":10.66,"orden_por_profundidad":true,"render":"gl_compatibility","torres":60,"variante":"A"}
+RESULTADO_B21 {"cuadros":447,"cuadros_lentos":66,"enemigos":200,"fps":74.0,"gpu":"AMD Radeon RX 6900 XT","horneado":false,"ms_p95":18.06,"ms_peor":23.75,"ms_promedio":13.43,"orden_por_profundidad":true,"render":"gl_compatibility","torres":60,"variante":"B"}
+RESULTADO_B21 {"cuadros":570,"cuadros_lentos":38,"enemigos":200,"fps":95.0,"gpu":"AMD Radeon RX 6900 XT","horneado":true,"ms_p95":17.01,"ms_peor":22.5,"ms_promedio":10.55,"orden_por_profundidad":true,"render":"gl_compatibility","torres":60,"variante":"B"}
+RESULTADO_B21 {"cuadros":576,"cuadros_lentos":30,"enemigos":200,"fps":96.0,"gpu":"AMD Radeon RX 6900 XT","horneado":true,"ms_p95":16.78,"ms_peor":23.15,"ms_promedio":10.45,"orden_por_profundidad":false,"render":"gl_compatibility","torres":60,"variante":"B"}
+RESULTADO_B21 {"cuadros":573,"cuadros_lentos":31,"enemigos":200,"fps":95.0,"gpu":"AMD Radeon RX 6900 XT","horneado":true,"ms_p95":16.71,"ms_peor":20.48,"ms_promedio":10.49,"orden_por_profundidad":true,"render":"gl_compatibility","torres":60,"variante":"C"}
+RESULTADO_B21 {"cuadros":1226,"cuadros_lentos":1,"enemigos":200,"fps":204.0,"gpu":"AMD Radeon RX 6900 XT","horneado":false,"ms_p95":7.88,"ms_peor":16.77,"ms_promedio":4.9,"orden_por_profundidad":true,"render":"gl_compatibility","torres":60,"variante":"D"}
+RESULTADO_B21 {"cuadros":545,"cuadros_lentos":36,"enemigos":200,"fps":91.0,"gpu":"AMD Radeon RX 6900 XT","horneado":false,"ms_p95":17.27,"ms_peor":29.29,"ms_promedio":11.01,"orden_por_profundidad":true,"render":"gl_compatibility","torres":60,"variante":"A"}
+RESULTADO_B21 {"cuadros":415,"cuadros_lentos":76,"enemigos":200,"fps":69.0,"gpu":"AMD Radeon RX 6900 XT","horneado":false,"ms_p95":19.43,"ms_peor":49.96,"ms_promedio":14.48,"orden_por_profundidad":true,"render":"gl_compatibility","torres":60,"variante":"B"}
+RESULTADO_B21 {"cuadros":527,"cuadros_lentos":44,"enemigos":200,"fps":88.0,"gpu":"AMD Radeon RX 6900 XT","horneado":true,"ms_p95":18.02,"ms_peor":48.27,"ms_promedio":11.42,"orden_por_profundidad":true,"render":"gl_compatibility","torres":60,"variante":"B"}
+RESULTADO_B21 {"cuadros":525,"cuadros_lentos":36,"enemigos":200,"fps":87.0,"gpu":"AMD Radeon RX 6900 XT","horneado":true,"ms_p95":17.5,"ms_peor":36.39,"ms_promedio":11.45,"orden_por_profundidad":false,"render":"gl_compatibility","torres":60,"variante":"B"}
+RESULTADO_B21 {"cuadros":581,"cuadros_lentos":30,"enemigos":200,"fps":96.0,"gpu":"AMD Radeon RX 6900 XT","horneado":true,"ms_p95":16.85,"ms_peor":48.38,"ms_promedio":10.37,"orden_por_profundidad":true,"render":"gl_compatibility","torres":60,"variante":"C"}
+RESULTADO_B21 {"cuadros":1310,"cuadros_lentos":1,"enemigos":200,"fps":218.0,"gpu":"AMD Radeon RX 6900 XT","horneado":false,"ms_p95":7.03,"ms_peor":20.65,"ms_promedio":4.59,"orden_por_profundidad":true,"render":"gl_compatibility","torres":60,"variante":"D"}
+RESULTADO_B21 {"cuadros":572,"cuadros_lentos":31,"enemigos":200,"fps":95.0,"gpu":"AMD Radeon RX 6900 XT","horneado":false,"ms_p95":16.84,"ms_peor":21.57,"ms_promedio":10.5,"orden_por_profundidad":true,"render":"gl_compatibility","torres":60,"variante":"A"}
+RESULTADO_B21 {"cuadros":453,"cuadros_lentos":57,"enemigos":200,"fps":75.0,"gpu":"AMD Radeon RX 6900 XT","horneado":false,"ms_p95":18.05,"ms_peor":22.5,"ms_promedio":13.25,"orden_por_profundidad":true,"render":"gl_compatibility","torres":60,"variante":"B"}
+RESULTADO_B21 {"cuadros":551,"cuadros_lentos":38,"enemigos":200,"fps":92.0,"gpu":"AMD Radeon RX 6900 XT","horneado":true,"ms_p95":16.98,"ms_peor":21.45,"ms_promedio":10.9,"orden_por_profundidad":true,"render":"gl_compatibility","torres":60,"variante":"B"}
+RESULTADO_B21 {"cuadros":555,"cuadros_lentos":34,"enemigos":200,"fps":92.0,"gpu":"AMD Radeon RX 6900 XT","horneado":true,"ms_p95":17.24,"ms_peor":29.08,"ms_promedio":10.84,"orden_por_profundidad":false,"render":"gl_compatibility","torres":60,"variante":"B"}
+RESULTADO_B21 {"cuadros":565,"cuadros_lentos":28,"enemigos":200,"fps":94.0,"gpu":"AMD Radeon RX 6900 XT","horneado":true,"ms_p95":16.6,"ms_peor":23.33,"ms_promedio":10.65,"orden_por_profundidad":true,"render":"gl_compatibility","torres":60,"variante":"C"}
+RESULTADO_B21 {"cuadros":1275,"cuadros_lentos":0,"enemigos":200,"fps":212.0,"gpu":"AMD Radeon RX 6900 XT","horneado":false,"ms_p95":7.2,"ms_peor":14.38,"ms_promedio":4.71,"orden_por_profundidad":true,"render":"gl_compatibility","torres":60,"variante":"D"}
+
+## D final (proyectiles en 3D) intercalado con A
+RESULTADO_B21 {"cuadros":1232,"cuadros_lentos":0,"enemigos":200,"fps":205.0,"gpu":"AMD Radeon RX 6900 XT","horneado":false,"ms_p95":7.67,"ms_peor":13.78,"ms_promedio":4.87,"orden_por_profundidad":true,"render":"gl_compatibility","torres":60,"variante":"D"}
+RESULTADO_B21 {"cuadros":549,"cuadros_lentos":33,"enemigos":200,"fps":91.0,"gpu":"AMD Radeon RX 6900 XT","horneado":false,"ms_p95":17.16,"ms_peor":29.33,"ms_promedio":10.94,"orden_por_profundidad":true,"render":"gl_compatibility","torres":60,"variante":"A"}
+RESULTADO_B21 {"cuadros":1213,"cuadros_lentos":1,"enemigos":200,"fps":202.0,"gpu":"AMD Radeon RX 6900 XT","horneado":false,"ms_p95":7.91,"ms_peor":18.13,"ms_promedio":4.95,"orden_por_profundidad":true,"render":"gl_compatibility","torres":60,"variante":"D"}
+RESULTADO_B21 {"cuadros":532,"cuadros_lentos":38,"enemigos":200,"fps":89.0,"gpu":"AMD Radeon RX 6900 XT","horneado":false,"ms_p95":17.33,"ms_peor":39.52,"ms_promedio":11.29,"orden_por_profundidad":true,"render":"gl_compatibility","torres":60,"variante":"A"}
+RESULTADO_B21 {"cuadros":1214,"cuadros_lentos":0,"enemigos":200,"fps":202.0,"gpu":"AMD Radeon RX 6900 XT","horneado":false,"ms_p95":7.75,"ms_peor":16.31,"ms_promedio":4.95,"orden_por_profundidad":true,"render":"gl_compatibility","torres":60,"variante":"D"}
+RESULTADO_B21 {"cuadros":564,"cuadros_lentos":33,"enemigos":200,"fps":94.0,"gpu":"AMD Radeon RX 6900 XT","horneado":false,"ms_p95":16.95,"ms_peor":33.34,"ms_promedio":10.64,"orden_por_profundidad":true,"render":"gl_compatibility","torres":60,"variante":"A"}
+
+## Control: A sin dibujar torres ni monstruos 2D (siguen jugando, ocultos)
+RESULTADO_B21 {"cuadros":3160,"cuadros_lentos":0,"enemigos":200,"fps":526.0,"gpu":"AMD Radeon RX 6900 XT","horneado":false,"ms_p95":4.17,"ms_peor":9.93,"ms_promedio":1.9,"orden_por_profundidad":true,"render":"gl_compatibility","torres":60,"variante":"A"}
+RESULTADO_B21 {"cuadros":3119,"cuadros_lentos":0,"enemigos":200,"fps":520.0,"gpu":"AMD Radeon RX 6900 XT","horneado":false,"ms_p95":4.27,"ms_peor":9.67,"ms_promedio":1.92,"orden_por_profundidad":true,"render":"gl_compatibility","torres":60,"variante":"A"}
+RESULTADO_B21 {"cuadros":3121,"cuadros_lentos":0,"enemigos":200,"fps":520.0,"gpu":"AMD Radeon RX 6900 XT","horneado":false,"ms_p95":4.19,"ms_peor":9.92,"ms_promedio":1.92,"orden_por_profundidad":true,"render":"gl_compatibility","torres":60,"variante":"A"}
+
+## Calibración: tools/perf_test.gd oficial en las mismas condiciones
+FPS promedio: 91 · frame más lento: 21.2 ms · frames de más de 16,6 ms: 8 de 547
+FPS promedio: 93 · frame más lento: 29.8 ms · frames de más de 16,6 ms: 12 de 557

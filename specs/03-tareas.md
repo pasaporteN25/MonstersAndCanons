@@ -1143,3 +1143,29 @@
 - [x] **T192 · Integrar y balancear primera versión de niveles8/9.** Refs RF378–381/D073/B10/B22. Hecho cuando campaña se amplía con debuts de auras, preparación y encuentros/combinaciones de robo/desgaste, disponibilidad del apoyo y rutas válidas; pruebas, varias semillas/estrategias y evidencia documentada. Niveles1–7 y stats globales intactos; no EXE/APK ni afirmar balance humano definitivo.
 
 **Resultado T192:** Bastión18 oleadas/una entrada y Taller asediado20/dos entradas integrados en campaña; Guardián8/Curandero9, robos opcionales desde6 y embestidas8 antes de combinaciones, Mecánico con permiso+5avances. Escala local32%/40% tras dos exploraciones;24 corridas finales en tres semillas y repetición idéntica.8 gana en perfiles comparados,9 gana con defensa variada11 vidas/compra tardía8; heurística de mejoras puede perder y apoyo por daño no cubre siempre extremos. Dos encuentros oficiales con defensa mínima causan/reparan40 puntos por mapa sin forzar efectos; dos exposiciones y capturas revisadas. Compatibilidad de acceso al nuevo nivel por victoria anterior sin escribir guardado.954/954 GUT,8939 asserts,75 scripts;62/62 verificaciones finales tras ajuste local8,1241 asserts; carga/caminos/texto canónico e importación válidos, sin SCRIPT ERROR/Parse Error. Niveles1–7/stats globales y hashes de los cuatro paquetes intactos. No exportaciones por instrucción de Lucas, ni balance humano definitivo/QA física móvil. B10/B22 parciales:10–15 y otros candidatos pendientes. Evidencia art/campaign-m45; cambios M34 conservados fuera del commit.
+
+### M46 · Estudio de vista B-21 v2
+- [x] **T193 · Nuevo análisis y pruebas de una vista con más sensación de 3D (B-21).**
+  **Refs:** RF-382, D-074, B-21.
+  **Hecho cuando:** las cuatro presentaciones (actual, relieve en la misma cuadrícula, oblicua al 80 % y maqueta 3D) se arman sobre la partida real con la misma escena; hay capturas completas y de detalle, modo jugable con autoprueba por vista, medidas de casillas, superficie y clics, rendimiento con la carga de P7 en tres rondas y un informe con costos, riesgos, límites y una recomendación que incluye no cambiar nada; producción, mapas y guardados quedan intactos y GUT pasa en verde.
+
+  **Resultado T193:**
+  - **Laboratorio:** `art/b21-vista/` (`vista_lab`, `relief_layer`, `diorama_3d` y `d_input`), montado sobre `game.tscn` sin tocar los scripts de producción. Escena de referencia: nivel 1 con 7 torres, 14 monstruos y la vista previa de la Incendiaria. Entrega las cuatro vistas completas, la hoja de detalle y una foto en pleno combate por vista.
+  - **Casillas, superficie y clics:** A y B 64 × 64 px y 100 %; C 64 × 51 px y 80 %; D 53 × 38 px al fondo y 64 × 56 px adelante, 66 %. En las cuatro vistas, 615/615 clics de ida y vuelta caen en la casilla correcta (en D, con el rayo nuevo).
+  - **Rendimiento** (RX 6900 XT, 1920 × 1080, tres rondas):
+
+    | Vista | FPS | ms por cuadro |
+    |---|---|---|
+    | A | 92 | 10,8 |
+    | B con relieve dibujado en cada cuadro | 73 | 13,7 |
+    | B horneado | 92 | 11,0 |
+    | B horneado sin orden por profundidad | 92 | 10,9 |
+    | C horneado | 95 | 10,5 |
+    | D | 203 | 4,9 |
+
+    El número de D no es comparable: omite casi todos los detalles por enemigo. El control (A sin dibujar torres ni monstruos) da 520 FPS y 1,9 ms, o sea que unos 9 ms de cada cuadro son el dibujo 2D de torres y monstruos. Quedó anotado como sugerencia, sin tocar nada.
+  - **Autoprueba jugando:** en las cuatro vistas se construyen 3/3 torres (en D por clic simulado), Escape sale del modo construcción y la oleada 1 corre sin `SCRIPT ERROR`.
+  - **Recomendación (D-074):** no cambiar la proyección. Si se quiere más profundidad, B por etapas; C como alternativa con PR *breaking change*; D descartada para este juego; A también es válida.
+  - **Tests:** 954/954 GUT, 8939 asserts, 75 scripts, sin `SCRIPT ERROR` ni `Parse Error`.
+  - **Lo que no se probó:** ningún celular (ni rendimiento, ni toque, ni memoria). Solo la Pradera en 20 × 9. El arte de relieve y maqueta es de prototipo. En C la torre fantasma sale aplastada y los efectos no están corregidos. En D faltan efectos, coronas, auras y placas, los monstruos entran flotando por el borde y la decoración tiene sombra doble. Al cerrar el laboratorio, Godot avisa de 2 objetos sin liberar.
+  - **Pendiente:** la decisión de Lucas. Los cambios M34 se conservaron fuera del commit.

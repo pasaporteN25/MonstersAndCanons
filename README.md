@@ -248,3 +248,8 @@ Resultado M44:38 corridas más repetición idéntica. En7, el perfil de apoyo ta
 Bastión (18 oleadas, una entrada) presenta Guardián y eleva robo/desgaste. Taller asediado (20 oleadas, dos entradas) introduce Curandero y combina auras con esos encuentros. Mecánico permitido con colección5/5. Los guardados que ya ganaron7 permiten abrir8 sin rejugar; las consultas no escriben progreso. Pruebas y evidencia en art/campaign-m45; balance humano pendiente. No se regeneraron APK/EXE por instrucción de Lucas.
 
 Validación M45:954/954 pruebas y62/62 finales de contenido.24 corridas más repetición idéntica, encuentros oficiales que causan/reparan40 puntos y capturas revisadas.8 conserva margen;9 gana con defensa variada en tres semillas y exige priorizar auras/cobertura. Las políticas del bot pueden perder, y no sustituyen juego humano. Paquetes anteriores y niveles1–7 verificados por hash sin cambios.
+
+### T193 · Estudio de vista B-21 v2
+
+- Cuatro vistas de la misma partida: la actual, relieve en la misma cuadrícula, oblicua al 80 % y maqueta 3D. Cada una tiene fotos, medidas de casillas y clics, y rendimiento, y además se puede jugar entera con `godot --path . res://art/b21-vista/vista_lab.tscn -- jugar variante=C` (letras A a D).
+- Recomendación: no cambiar la proyección. Si se quiere más profundidad, relieve horneado por etapas. Informe completo en `art/b21-vista/B21-vista-v2.md`. No cambia el juego; la decisión es de Lucas.
