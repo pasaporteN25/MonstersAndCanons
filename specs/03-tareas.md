@@ -1181,3 +1181,15 @@
   - **Relevamiento de la V1:** todo el backlog abierto, más plataformas y sugerencias, con tamaño y relación con el 3D.
   - **Pruebas:** solo se cambió el laboratorio de `art/` y documentos. GUT pasa 954/954 (8939 asserts, 75 scripts, sin `SCRIPT ERROR` ni `Parse Error`), y la prueba de cámara corrió sin `SCRIPT ERROR`. No se midió rendimiento con cámara libre ni se probó en celular.
   - Los cambios M34 se conservaron fuera del commit.
+
+- [x] **T195 · Trasladar Épocas al backlog de M&C 3D y registrar el estado de la V1.**
+  **Refs:** D-076, B-01, B-05, B-13, B-32. No añade requisitos de juego.
+  **Hecho cuando:** B-01 queda marcado como trasladado y su contenido completo está en el backlog de M&C 3D (§15 del documento 06); B-05 y B-13 registran las propuestas de Lucas; el relevamiento de la V1 refleja que la APK ya se probó y que el lore está en curso.
+
+  **Resultado T195:**
+  - Épocas ya forma parte del backlog de M&C 3D como entrada 3D-01, con sus variantes, cuidados y pasos previos.
+  - El documento 06 tiene la tabla de pendientes, el orden y las preguntas actualizados.
+  - El README registra la prueba de la APK hecha por Lucas.
+  - B-03 no se tocó: lo trabaja otro agente.
+  - Solo cambiaron documentos, así que no se corrió GUT.
+  - Los cambios M34 se conservaron fuera del commit.

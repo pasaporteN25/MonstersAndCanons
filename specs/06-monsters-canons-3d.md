@@ -303,7 +303,7 @@ Tamaños: **chico** (1–2 días), **mediano** (3–7 días), **grande** (más d
 | Ítem | Qué falta | Tamaño | ¿Sirve para 3D? |
 |---|---|---|---|
 | **B-21** Vista 3D | Resuelto: pasa a M&C 3D. Opcional en la V1: etapa 1 del relieve (que lo de adelante tape a lo de atrás). | Chico | Poco |
-| **B-03** Lore | Biblia, textos por nivel y categoría Lore en la Wiki. | Mediano | **Mucho**: es la base de la saga. |
+| **B-03** Lore | Biblia, textos por nivel y categoría Lore en la Wiki. **En curso:** Lucas lo trabaja con otro agente (2026-10-07). | Mediano | **Mucho**: es la base de la saga. |
 | **B-10** Niveles 10–14 y 15 | Diseño, oleadas y balance; validación jugando de 8–15; niveles "difíciles" (mismo mapa, otras oleadas). | Grande | Sí: contenido y oficio de diseño de oleadas. |
 | **B-22** Contenido nuevo | Elegir entre Excavador, Ballesta y Alquimista, y producirlos (datos, arte, Wiki, balance). | Mediano c/u | Excavador: **mucho**. |
 | **B-23** Recetas de vecindad | Tres recetas (Hielo + Cañón, Hielo + Múltiple, Incendiaria + Eléctrica) con reglas de nivel 2/3. | Mediano | Sí: sistemas que se heredan. |
@@ -316,20 +316,15 @@ Tamaños: **chico** (1–2 días), **mediano** (3–7 días), **grande** (más d
 | **B-29 / B-30** Wiki de mods y de mapas de la comunidad | Categorías nuevas en la Wiki. | Chico c/u | Poco |
 | **B-11** Compartir un mapa como texto | Copiar y pegar un código en el editor. | Chico | Sí: mapas con alturas también. |
 | **B-12** Mapas al azar y desafío diario | Generador más verificación con el bot. | Mediano o grande | Sí. |
-| **B-13** Una sola app con modo admin | Activar el modo de pruebas con un argumento o un archivo. | Chico | Sí: se repite en 3D. |
-| **B-01 / B-05** Épocas y modos | Un modo nuevo con imperios reales y armas que avanzan. | **Muy grande** | Ver la pregunta de 10.2. |
-| **Plataformas** | Probar la APK en un celular real con el arte nuevo (no se hizo desde antes de M23), Linux en una máquina real y rendimiento en celular. | Chico c/u | **Mucho**: es la línea de base del celular. |
+| **B-13** Una sola app con modo admin | Como el juego se va a regalar, activar el modo de pruebas desde Opciones y unificar ejecutables y APK (propuesta, pendiente de OK de Lucas). | Chico | Sí: se repite en 3D. |
+| **B-05** Modos | Prueba chica en la V1, unificada con el gestor de mapas (propuesta, pendiente de OK de Lucas). | Mediano | Sí: el formato de paquete sirve para los mods y para el 3D. |
+| ~~**B-01** Épocas~~ | **Trasladado** a M&C 3D / M&C 2 (Lucas, 2026-10-07, D-076). Ver sección 15. | — | Es contenido de la saga. |
+| **Plataformas** | La APK ya la probó Lucas en su celular (informado el 2026-10-07). Falta Linux en una máquina real y medir el rendimiento en celular. | Chico c/u | **Mucho**: es la línea de base del celular. |
 | **Sugerencias de Claude** (§13, sin aprobar) | "¿Qué es esto?" desde la partida, informe de prueba, auditoría de recursos, registro de deuda técnica, dibujo liviano de torres y monstruos. | Chico c/u | Varias, sí. |
 
-### 10.2 Una decisión grande antes de ordenar
+### 10.2 Épocas y modos (resuelto)
 
-**Épocas (B-01) y modos (B-05)** son, por sí solos, casi un juego nuevo: imperios reales, torres y monstruos por época, arte nuevo. Hay tres opciones:
-
-1. Hacerlos completos en la V1.
-2. Hacer en la V1 una **rebanada** (un modo con una o dos épocas) como prueba.
-3. Guardarlos para M&C 3D o M&C 2, donde el 3D y el lore los harían brillar más.
-
-*Recomendación de Claude:* la opción 2 o la 3. Se decide junto con el lore.
+**Lucas, 2026-10-07 (D-076):** Épocas, con sus imperios reales, torres y monstruos por época y arte nuevo, pasa al backlog de M&C 3D / M&C 2 (sección 15). Los **modos** (B-05) tienen una prueba chica en la V1, unificada con el gestor de mapas.
 
 ### 10.3 Orden propuesto para cerrar la V1
 
@@ -337,14 +332,13 @@ La regla que ordena todo: **lo que cambia el balance va antes que los niveles 10
 
 1. **Cimientos (chicos):**
    - Cerrar B-21 (y, si querés, la etapa 1 del relieve).
-   - Probar la APK en tu celular, para saber dónde estamos parados.
-   - Decidir el alcance de Épocas y modos (10.2).
-   - Escribir la biblia de lore (B-03).
+   - Modo de pruebas desde Opciones, una sola app (B-13).
+   - Biblia de lore (B-03), en curso con otro agente.
 2. **Reglas que cambian el balance:** B-14 tipos de daño, B-23 recetas, B-22 (Excavador y una o dos torres), B-08 terrenos con efecto y B-09 puentes.
 3. **Campaña:** niveles 10–14 y el 15, usando todo lo anterior, con textos de lore por nivel, y validación jugando de los niveles 8 a 15.
-4. **Mapas y comunidad:** B-11, B-13, B-30, B-12, B-04 y B-29.
-5. **Grandes opcionales:** B-16 fusión y lo que se decida de Épocas.
-6. **Cierre:** pulido, rendimiento en celular, exportaciones y, si querés, publicación (itch.io o Play Store).
+4. **Modos, mapas y comunidad:** prueba chica de modos (B-05) unificada con el gestor de mapas, B-11, B-30, B-12, B-04 y B-29.
+5. **Grandes opcionales:** B-16 fusión y, si se quiere, torres con vida (resto de B-07).
+6. **Cierre:** pulido, rendimiento en celular, exportaciones y publicación gratuita.
 
 Recordatorio de Lucas: **no tiene que ser perfecto**. Cada ítem se hace en su versión más simple que funcione (P4).
 
@@ -386,8 +380,8 @@ Cada hito responde **una pregunta**. Si la respuesta es "no", se corrige el rumb
 
 | Pregunta | Decidir antes de |
 |---|---|
-| ¿Épocas y modos van en la V1 (completos o una rebanada) o se guardan para M&C 3D / M&C 2? (10.2) | Ordenar el cierre de la V1 |
-| ¿Se quiere publicar la V1 (itch.io, Play Store) o queda como proyecto propio? | El final de la V1 |
+| ~~¿Épocas y modos van en la V1 o se guardan para M&C 3D / M&C 2?~~ **Resuelto (D-076):** Épocas pasa al otro juego; los modos tienen una prueba chica en la V1. | — |
+| La V1 se va a regalar (Lucas, 2026-10-07). ¿Dónde se publica: itch.io, Play Store, otro? | El final de la V1 |
 | ¿Un proyecto con dos productos (7.1) o dos desarrollos realmente separados? | H0 |
 | ¿Qué teléfono de referencia usamos para el celular? | H0 |
 | ¿Construcción en cualquier casilla o en lugares marcados? (4.2) | Al final de H1 (se prueba) |
@@ -419,3 +413,41 @@ La prueba de cámara (seis fotos y la hoja):
 ```bash
 godot --path . res://art/b21-vista/vista_lab.tscn -- camara
 ```
+
+---
+
+## 15. Backlog de Monsters & Canons 3D
+
+Ideas que pasan de la V1 a este juego (o a *M&C 2*). Igual que en la V1, no se programan hasta convertirse en un hito con su spec.
+
+### 3D-01 · Épocas: la guerra evoluciona con el tiempo *(viene de B-01 y B-05 de la V1; trasladado por Lucas el 2026-10-07, D-076)*
+
+**Idea (Lucas, 2026-09-28):** las armas mejoran a través de las épocas (medieval → pólvora → industrial → moderna → futurista), y los enemigos y sus defensas también. El jugador *ve* el progreso: los arqueros se vuelven mosqueteros, después ametralladoras, después láseres.
+
+**Lo que ya se decidió en la V1:**
+- Es un **modo aparte**, no reemplaza la campaña (Lucas, 2026-09-29).
+- Usa dibujos de **imperios reales**: legiones romanas, jinetes mongoles, samuráis... (B-05).
+
+**Variantes, sin elegir todavía:**
+
+| Variante | Cómo funciona |
+|---|---|
+| **A · Una época por nivel** | Cada mapa es una época; cambian las torres y los monstruos disponibles. |
+| **B · Las mejoras son épocas** | Mejorar una torre la hace avanzar de época: se ve y se llama distinta. |
+| **C · Avanzar de época en la partida** | El jugador paga para que toda su defensa avance de época; los enemigos también avanzan con las oleadas. Es una mecánica nueva. |
+
+**Cuidados que vienen de la V1:**
+- Representar a los imperios con **respeto**: sin caricaturas ni estereotipos, sobre todo de pueblos que existen hoy.
+- Decidir cuánta **precisión histórica** se quiere y usar referencias reales.
+- Puede pedir un estilo de arte distinto al de "Torres y Bestias".
+
+**Por qué encaja en el 3D:**
+- Con modelos, una torre que "avanza de época" puede cambiar de pieza en pieza sin pintar 8 vistas por época.
+- Los mapas en 3D cuentan la época con el escenario: murallas, trincheras, ciudades.
+- Es la candidata natural a **segundo modo** después del modo base, usando el formato de modos que la V1 va a probar (B-05).
+
+**Antes de convertirlo en hito:**
+1. Elegir la variante.
+2. Definir la lista de épocas y de imperios, con sus torres y monstruos.
+3. Integrarlo con el lore (B-03 de la V1).
+4. Decidir si va en M&C 3D o se guarda para M&C 2.

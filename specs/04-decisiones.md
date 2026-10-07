@@ -463,3 +463,16 @@ Nada de esto se integra sin la elección de Lucas. Evidencia en `art/b21-vista/`
 - Cerrar la V1 en un orden en el que lo que cambia el balance va antes de los niveles 10–15.
 
 La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Documento: `specs/06-monsters-canons-3d.md`.
+
+## D-076 · Épocas pasa al otro juego y la V1 se regala
+2026-10-07, **decisión de Lucas.**
+- **Épocas (B-01)**, con sus imperios reales, torres y monstruos por época, **no se hace en la V1**: pasa al backlog de *Monsters & Canons 3D* o de *M&C 2* (`specs/06-monsters-canons-3d.md` §15, entrada 3D-01). Viaja con todo lo ya decidido: es un modo aparte, con imperios reales representados con respeto.
+- **Los modos (B-05)** se prueban en chico en la V1, unificados con el gestor de mapas.
+- **La V1 se va a regalar.** Por eso Lucas propone llevar el modo de pruebas a Opciones y unificar ejecutables y APK (B-13).
+- **Estado de la V1:** Lucas informó que ya probó la APK en su celular. El lore (B-03) lo está trabajando con otro agente.
+
+**D076, alternativas descartadas:**
+- Hacer Épocas completo en la V1: es casi un juego nuevo.
+- Hacer en la V1 una rebanada de Épocas: Lucas prefiere probar los modos con algo más chico.
+
+**Pendiente:** el diseño de la prueba de modos y del modo de pruebas en Opciones son propuestas de Claude; no se implementan hasta el OK de Lucas.

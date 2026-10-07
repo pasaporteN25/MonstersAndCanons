@@ -1076,7 +1076,7 @@ Cosas que **no** hace falta decidir ahora; se deciden antes del hito indicado.
 | Pregunta | Decidir antes de |
 |---|---|
 | ¿Nombre definitivo del juego? | M3 |
-| ¿Ambientación? (medieval, espacial, juguetes…) Afecta nombres de torres/enemigos y el arte. **Candidata fuerte: "Épocas" (§13, B-01).** Se decide junto con el lore (B-03); B-02 está cerrado y el arte futuro se encarga como trabajo específico. | M4 |
+| ¿Ambientación? (medieval, espacial, juguetes…) Afecta nombres de torres/enemigos y el arte. **"Épocas" (B-01) pasó a Monsters & Canons 3D / M&C 2 (D-076).** Se decide junto con el lore (B-03); B-02 está cerrado y el arte futuro se encarga como trabajo específico. | M4 |
 | ¿Música: de dónde sale? (propia, gratuita con licencia CC0…) | M3 |
 
 ---
@@ -1086,6 +1086,7 @@ Cosas que **no** hace falta decidir ahora; se deciden antes del hito indicado.
 Ideas **aprobadas como dirección**, pero **sin fecha**: no se programan hasta convertirse en un hito con sus propias reglas (RF) y tareas. Se anotan aquí para no perderlas ni mezclarlas con el trabajo actual.
 
 ### B-01 · Épocas: la guerra evoluciona con el tiempo
+**Trasladado por Lucas, 2026-10-07 (D-076):** Épocas no se hace en la V1; pasa al backlog de *Monsters & Canons 3D* o de *M&C 2* ([`06-monsters-canons-3d.md`](06-monsters-canons-3d.md) §15). La documentación de Épocas que menciona B-03 viaja con ella. El texto siguiente queda como registro.
 *Propuesta de Lucas, 2026-09-28.*
 
 **Idea:** las armas mejoran a través de las épocas (por ejemplo: medieval → pólvora → industrial → moderna → futurista), y los enemigos y sus defensas también. El jugador *ve* el progreso: sus arqueros se vuelven mosqueteros, después ametralladoras, después láseres.
@@ -1191,6 +1192,7 @@ Ideas **aprobadas como dirección**, pero **sin fecha**: no se programan hasta c
 **Qué cambia en la spec si se hace:** un hito nuevo con sus reglas (RF) y tareas; si se hacen mods, una sección de seguridad (qué puede traer un mod y qué no).
 
 ### B-05 · Modos de juego
+**Actualización de Lucas, 2026-10-07 (D-076):** el modo de historia con imperios reales (Épocas) pasa al otro juego. En la V1, Lucas propone una **prueba chica de modos, unificada con el gestor de mapas**; el diseño está en discusión y no se implementa hasta su OK.
 *Propuesta de Lucas, 2026-09-29. Sin fecha: Lucas pidió solo anotarlo.*
 
 **Idea:** el juego tiene **modos**, cada uno con sus propias torres, enemigos, niveles y dibujos. El juego actual sería el modo **"Torres y Bestias"**. Otro modo sería el de **historia** (Épocas, B-01), con dibujos de **imperios reales** (por ejemplo, legiones romanas, jinetes mongoles, samuráis) y armas que avanzan con las épocas.
@@ -1451,7 +1453,7 @@ B-02 cerrado; B-15 retirado/dividido. B-17 a B-20 y B-24 a B-28 implementados. B
 ### B-32 · Monsters & Canons 3D (segunda entrega)
 **Idea de Lucas, 2026-10-07 (D-075). Proyecto aparte; arranca después de cerrar lo pendiente de la V1.** Llevar el juego al 3D conservando lo de la V1 (monstruos, torres, habilidades, sistemas, Wiki, modo de pruebas y forma de trabajar), con PC como desarrollo principal y celular como segundo desarrollo cuidado, y cámara no fija. Sirve de campo de pruebas para aprender 3D antes de una eventual *Monsters & Canons 2*, que no se planifica. El lore de la V1 (B-03) es la base de la saga. Concepto, evidencia, relevamiento de lo pendiente en la V1 y plan por hitos en [`06-monsters-canons-3d.md`](06-monsters-canons-3d.md). No agrega requisitos a la V1: lo que el documento propone hacer antes en la V1 (por ejemplo, la colina de B-08 o los puentes de B-09) se decide ítem por ítem.
 
-Otros pendientes: Épocas y modos (B-01/B-05), lore y Wiki de Épocas (B-03), mods completos (resto de B-04), Excavador y eventual vida/destrucción/economía de torres (resto de B-07, candidatos relacionados con B-22; Ladrón y Embestidor/desgaste/reparación implementados en M39–M41), decoración manual/terrenos con efectos y temas/leyenda en el editor (resto de B-08, T128), cruces/rutas explícitas (resto de B-09), campaña/dificultades (B-10, prioridad baja), compartir mapas como texto (B-11), mapas al azar/desafíos (B-12), app única con admin (B-13), daño elemental/armadura (B-14), fusiones (resto de B-16; vecindad se sigue en B-23), Wiki de mods (B-29) y de comunidad (B-30). B-06 ya está implementado en M18; leyenda/temas del formato y tamaño variable de B-08 están implementados en M15/M13; aviso de atajos B-09 está hecho en M9. No contarlos nuevamente como pendientes. Las sugerencias no autorizadas permanecen separadas y no son tareas comprometidas.
+Otros pendientes: prueba chica de modos (B-05; Épocas pasó a M&C 3D/M&C 2, D-076), lore (B-03), mods completos (resto de B-04), Excavador y eventual vida/destrucción/economía de torres (resto de B-07, candidatos relacionados con B-22; Ladrón y Embestidor/desgaste/reparación implementados en M39–M41), decoración manual/terrenos con efectos y temas/leyenda en el editor (resto de B-08, T128), cruces/rutas explícitas (resto de B-09), campaña/dificultades (B-10, prioridad baja), compartir mapas como texto (B-11), mapas al azar/desafíos (B-12), app única con admin (B-13), daño elemental/armadura (B-14), fusiones (resto de B-16; vecindad se sigue en B-23), Wiki de mods (B-29) y de comunidad (B-30). B-06 ya está implementado en M18; leyenda/temas del formato y tamaño variable de B-08 están implementados en M15/M13; aviso de atajos B-09 está hecho en M9. No contarlos nuevamente como pendientes. Las sugerencias no autorizadas permanecen separadas y no son tareas comprometidas.
 
 ## 14. Arte de torres con volumen (M23, pedido por Lucas, 2026-10-02)
 
