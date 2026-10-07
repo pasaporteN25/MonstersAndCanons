@@ -2,6 +2,8 @@
 
 **2026-10-06 · Tarea T193 · RF-382 · D-074.** Es una investigación: **no cambia nada del juego**, ni mapas, ni guardados. Elegir una opción te toca a vos (Lucas).
 
+> **Decisión posterior (Lucas, 2026-10-07, D-075):** el 3D no se integra en la V1; pasa a una segunda entrega, *Monsters & Canons 3D*. El concepto, una prueba de cámara libre y el plan están en [`specs/06-monsters-canons-3d.md`](../../specs/06-monsters-canons-3d.md).
+
 ## Resumen
 
 - **Recomendación:** **no cambiar la proyección del juego**. Si querés más profundidad, la mejor relación entre lo que se gana y lo que cuesta es la **opción B (relieve en la misma cuadrícula)**, hecha por etapas que se pueden cortar en cualquier momento.
@@ -173,7 +175,7 @@ godot --path . res://art/b21-vista/vista_lab.tscn -- medidas
 godot --path . res://art/b21-vista/vista_lab.tscn -- rendimiento variante=B horneado
 ```
 
-Otras opciones: `solo=B` (una sola foto), `sin_orden` (sin orden por profundidad), `ocultar_actores` (el control de rendimiento) y `autoprueba` (junto con `jugar`).
+Otras opciones: `solo=B` (una sola foto), `sin_orden` (sin orden por profundidad), `ocultar_actores` (el control de rendimiento) y `autoprueba` (junto con `jugar`). El modo `camara` (agregado en T194) orbita la maqueta 3D y saca seis vistas.
 
 ## Hallazgo aparte (no implementado)
 
@@ -191,3 +193,4 @@ Medir D dejó ver que **dibujar torres y monstruos en 2D se lleva unos 9 de los 
 | `vista_a.jpg` … `vista_d.jpg` | Cada vista completa, a 1920 × 1080. |
 | `jugar_a.jpg` … `jugar_d.jpg` | Fotos en pleno combate de la autoprueba. |
 | `medidas.json`, `rendimiento.txt` | Medidas de interacción y mediciones crudas. |
+| `camara_pruebas.jpg`, `camara_1.jpg` … `camara_6.jpg` | Prueba de cámara libre (T194). |

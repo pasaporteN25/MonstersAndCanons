@@ -7,6 +7,7 @@
 #   godot --path . res://art/b21-vista/vista_lab.tscn -- jugar variante=C       (el nivel 1 jugable)
 #   godot --path . res://art/b21-vista/vista_lab.tscn -- capturas [solo=B] [horneado]
 #   godot --path . res://art/b21-vista/vista_lab.tscn -- medidas                 (casillas y clics)
+#   godot --path . res://art/b21-vista/vista_lab.tscn -- camara                  (cámara libre, para M&C 3D)
 #   godot --path . res://art/b21-vista/vista_lab.tscn -- rendimiento variante=B [horneado] [sin_orden]
 # Variantes: A actual · B relieve en la misma cuadrícula · C oblicua comprimida · D maqueta 3D.
 # Conviene apuntar APPDATA a una carpeta temporal para no mezclar registros con los del juego.
@@ -67,7 +68,9 @@ func run() -> void:
 	if "jugar" in args:
 		await _play(_variant_arg(args))
 		return  # se juega hasta cerrar la ventana
-	if "medidas" in args:
+	if "camara" in args:
+		await _camera_tests()
+	elif "medidas" in args:
 		await _measurements()
 	elif "rendimiento" in args:
 		await _measure(_variant_arg(args))
@@ -182,6 +185,44 @@ func _process(_delta: float) -> void:
 		_diorama.update_preview(Vector2i.ZERO, null, 0.0, false, true)
 
 
+# --- Prueba de cámara libre (para Monsters & Canons 3D) ---
+
+## [título, giro horizontal °, inclinación °, distancia, cerca]. Misma escena que las capturas, sin HUD.
+const CAMERA_SHOTS: Array = [
+	["1 · Referencia: giro 0°, 55°", 0.0, 55.0, 23.5, false],
+	["2 · Giro 30°", 30.0, 55.0, 23.5, false],
+	["3 · Giro 90° (desde el este)", 90.0, 55.0, 23.5, false],
+	["4 · Giro 180° (desde el norte)", 180.0, 55.0, 23.5, false],
+	["5 · Cámara baja: 32°", 0.0, 32.0, 23.5, false],
+	["6 · De cerca: giro 20°, 45°", 20.0, 45.0, 8.5, true],
+]
+
+
+## Orbita la maqueta 3D con los dibujos actuales: muestra hasta dónde aguantan una cámara que gira.
+func _camera_tests() -> void:
+	var game: Game = await _new_game()
+	_populate_scene(game)
+	await get_tree().create_timer(0.35).timeout
+	await _apply_variant(game, "D")
+	game.hud.hide()
+	_diorama.show_preview(PREVIEW_CELL, game.available_towers[_preview_index(game)])
+	var shots: Dictionary = {}
+	var titles: Dictionary = {}
+	for i: int in CAMERA_SHOTS.size():
+		var shot: Array = CAMERA_SHOTS[i]
+		var target := Vector3(8.0, 0.0, 5.5) if shot[4] else Vector3(10.0, 0.0, 4.5)
+		_diorama.orbit(shot[1], shot[2], shot[3], target)
+		for frame: int in 3:
+			await get_tree().process_frame
+		await RenderingServer.frame_post_draw
+		var image: Image = get_viewport().get_texture().get_image()
+		image.save_jpg(OUT + "camara_%d.jpg" % (i + 1), 0.9)
+		shots[str(i)] = image
+		titles[str(i)] = shot[0]
+	await _teardown(game)
+	await _sheet(shots, "camara_pruebas.jpg", false, titles, 3)
+
+
 # --- Capturas ---
 
 func _captures() -> void:
@@ -286,17 +327,19 @@ func _detail_rect(game: Game, variant: String) -> Rect2i:
 
 
 ## Hoja 2×2 con títulos: las cuatro vistas completas o los cuatro recortes.
-func _sheet(images: Dictionary, file: String, fit: bool) -> void:
+func _sheet(images: Dictionary, file: String, fit: bool, titles: Dictionary = TITLES, columns: int = 2) -> void:
 	var holder := Control.new()
 	holder.size = Rules.SCREEN_SIZE
 	var background := ColorRect.new()
 	background.color = Color(0.12, 0.12, 0.13)
 	background.size = Rules.SCREEN_SIZE
 	holder.add_child(background)
-	var cell_size: Vector2 = Rules.SCREEN_SIZE / 2.0
-	for i: int in VARIANTS.size():
-		var variant: String = VARIANTS[i]
-		var origin := Vector2(i % 2, i / 2) * cell_size
+	var keys: Array = images.keys()
+	var rows: int = ceili(keys.size() / float(columns))
+	var cell_size: Vector2 = Rules.SCREEN_SIZE / Vector2(columns, rows)
+	for i: int in keys.size():
+		var variant: String = keys[i]
+		var origin := Vector2(i % columns, i / columns) * cell_size
 		var picture := TextureRect.new()
 		picture.texture = ImageTexture.create_from_image(images[variant])
 		picture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
@@ -306,8 +349,8 @@ func _sheet(images: Dictionary, file: String, fit: bool) -> void:
 		picture.size = cell_size - Vector2(4, 4)
 		holder.add_child(picture)
 		var label := Label.new()
-		label.text = " %s " % TITLES[variant]
-		label.add_theme_font_size_override("font_size", 17)
+		label.text = " %s " % titles[variant]
+		label.add_theme_font_size_override("font_size", 17 if columns <= 2 else 14)
 		var box := StyleBoxFlat.new()
 		box.bg_color = Color(0, 0, 0, 0.72)
 		box.set_content_margin_all(4)

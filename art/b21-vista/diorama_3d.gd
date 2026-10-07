@@ -30,6 +30,8 @@ var _ring_line: MeshInstance3D
 var _ghost: Sprite3D
 var _up: Vector3
 var _normal: Vector3
+## Prueba de cámara (M&C 3D): giro horizontal de la cámara, en radianes. 0 = mirando desde el sur, como en 2D.
+var camera_yaw: float = 0.0
 
 
 func build(game_: Game, overlay_parent: Node) -> void:
@@ -172,6 +174,22 @@ func _add_camera() -> void:
 		camera.position.distance_to(center), top_y, bottom_y, shift_px, get_viewport().get_visible_rect()])
 
 
+## Prueba de cámara libre: orbita alrededor de `target`. Los dibujos pasan a mirar siempre a la cámara y
+## eligen su cuadro (8 vistas en torres, 4 en monstruos) según el giro. El sol queda fijo en el mundo.
+func orbit(yaw_deg: float, pitch_deg: float, distance: float, target: Vector3) -> void:
+	camera_yaw = deg_to_rad(yaw_deg)
+	var phi: float = deg_to_rad(pitch_deg)
+	camera.v_offset = 0.0
+	camera.position = target + Vector3(0, sin(phi), cos(phi)).rotated(Vector3.UP, camera_yaw) * distance
+	camera.look_at(target, Vector3.UP)
+	for child: Node in get_children():
+		if child is Sprite3D:
+			(child as Sprite3D).billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	if _ghost != null:
+		_ghost.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	sync()
+
+
 # --- Copia de la partida 2D ---
 
 func sync() -> void:
@@ -197,7 +215,7 @@ func sync() -> void:
 		(pair[0] as Sprite3D).texture = tower.stats().base_texture  # cambia al mejorar
 		if tower.current_turret_atlas() != null:
 			(pair[1] as Sprite3D).texture = tower.current_turret_atlas()
-			(pair[1] as Sprite3D).region_rect = TowerVisual.frame_rect(tower.current_turret_atlas(), tower.aim_angle)
+			(pair[1] as Sprite3D).region_rect = TowerVisual.frame_rect(tower.current_turret_atlas(), tower.aim_angle + camera_yaw)
 	for key: Variant in _towers.keys():  # vendidas
 		if not is_instance_valid(key) or (key as Tower).is_queued_for_deletion():
 			for sprite: Sprite3D in _towers[key]:
@@ -246,6 +264,8 @@ func _update_enemy(enemy: Enemy, sprite: Sprite3D) -> void:
 	var side: float = r * EnemyShape.SPRITE_SCALE * enemy.visual_draw_scale()
 	var foot: float = r * EnemyShape.SPRITE_SCALE * (191.0 / 256.0 - 0.5 - 1.0 / 32.0)
 	var region: Rect2 = enemy.visual_frame_region()
+	if enemy.data.walk_atlas != null:  # la fila (dirección) depende de hacia dónde mira la cámara
+		region = EnemyVisual.walk_region(enemy.distance, Rules.tiles_to_px(enemy.data.walk_stride_tiles), enemy._heading + camera_yaw)
 	if region.has_area():
 		sprite.region_rect = region
 	var source: Vector2 = region.size if region.has_area() else sprite.texture.get_size()

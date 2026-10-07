@@ -1169,3 +1169,15 @@
   - **Tests:** 954/954 GUT, 8939 asserts, 75 scripts, sin `SCRIPT ERROR` ni `Parse Error`.
   - **Lo que no se probó:** ningún celular (ni rendimiento, ni toque, ni memoria). Solo la Pradera en 20 × 9. El arte de relieve y maqueta es de prototipo. En C la torre fantasma sale aplastada y los efectos no están corregidos. En D faltan efectos, coronas, auras y placas, los monstruos entran flotando por el borde y la decoración tiene sombra doble. Al cerrar el laboratorio, Godot avisa de 2 objetos sin liberar.
   - **Pendiente:** la decisión de Lucas. Los cambios M34 se conservaron fuera del commit.
+
+### M47 · Monsters & Canons 3D: concepto
+- [x] **T194 · Documento de concepto de Monsters & Canons 3D y prueba de cámara libre.**
+  **Refs:** D-075, B-21, B-32, backlog §13. No añade requisitos de juego.
+  **Hecho cuando:** existe un documento que junta la investigación 3D, lo que se conserva de la V1, el diseño del espacio, la cámara, el arte, PC y celular, el lore, el relevamiento completo de lo pendiente en la V1 con un orden propuesto y un plan por hitos con riesgos y preguntas; la sección de cámara se apoya en una prueba real de cámara giratoria; B-21 queda resuelto y B-32 registrado.
+
+  **Resultado T194:**
+  - **Documento:** `specs/06-monsters-canons-3d.md`.
+  - **Prueba de cámara:** seis vistas de la maqueta con los dibujos actuales (`art/b21-vista/camara_*.jpg`). Aguantan giros de ±30°, la cámara baja y el acercamiento; desde 90° y sobre todo desde 180° se rompen (luz pintada contra sol, frentes pintados, puntos de apoyo corridos y paredes que tapan). Conclusión: cámara de estratega con el arte actual; el giro libre pide modelos.
+  - **Relevamiento de la V1:** todo el backlog abierto, más plataformas y sugerencias, con tamaño y relación con el 3D.
+  - **Pruebas:** solo se cambió el laboratorio de `art/` y documentos. GUT pasa 954/954 (8939 asserts, 75 scripts, sin `SCRIPT ERROR` ni `Parse Error`), y la prueba de cámara corrió sin `SCRIPT ERROR`. No se midió rendimiento con cámara libre ni se probó en celular.
+  - Los cambios M34 se conservaron fuera del commit.

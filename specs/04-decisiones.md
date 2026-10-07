@@ -445,3 +445,21 @@ Lucas, 2026-10-04, aprobó corregir recorte y sumar rueda conservando clic. Se m
 - **A (no cambiar):** es una alternativa válida que libera tiempo para B-22.
 
 Nada de esto se integra sin la elección de Lucas. Evidencia en `art/b21-vista/`.
+
+## D-075 · El 3D va a una segunda entrega: Monsters & Canons 3D
+2026-10-07, **decisión de Lucas.** Después de ver el análisis v2 de B-21, la maqueta 3D le pareció la mejor, pero exige adaptar o rehacer los dibujos y repensar el espacio: en 3D no tiene sentido un mapa en forma de laberinto plano. Por eso el 3D no se integra en la V1 y pasa a una segunda entrega, *Monsters & Canons 3D*, que conserva lo de la V1 y sirve de campo de pruebas antes de una eventual *Monsters & Canons 2*. Esa segunda entrega tendrá dos desarrollos, PC (preferido) y celular (Lucas es desarrollador mobile), y cámara no fija. **Antes de empezarla se termina todo lo pendiente de la V1**, que tampoco tiene que ser perfecta: también es campo de pruebas.
+
+**D075, alternativas descartadas:**
+- **Convertir la V1 al 3D:** son 4 a 8 semanas de una presentación nueva sobre mapas pensados para 2D, y se pierde legibilidad en el celular.
+- **Adoptar el relieve (B) o la oblicua (C) en la V1 como sustituto del 3D:** no conforma la sensación buscada.
+- **Planificar ya M&C 2:** es demasiado lejano.
+
+**D075, propuestas de Claude, para que Lucas las confirme ítem por ítem:**
+- Un solo proyecto con dos productos (PC y celular) en lugar de dos proyectos.
+- Cámara de estratega con giro de ±30° mientras se usen los dibujos actuales; el giro de 360° pide modelos (prueba de cámara de T194).
+- Arte por etapas: terreno y decoración, después torres (rígidas, fáciles en 3D) y por último monstruos.
+- Escribir el lore en la V1 (B-03).
+- Probar en 2D la colina de B-08 y los puentes de B-09.
+- Cerrar la V1 en un orden en el que lo que cambia el balance va antes de los niveles 10–15.
+
+La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Documento: `specs/06-monsters-canons-3d.md`.

@@ -30,6 +30,7 @@ La carpeta `specs/` contiene todo lo que define el juego. **Se leen en orden:**
 | [`03-tareas.md`](specs/03-tareas.md) | La lista de pasos pequeños, en orden, para construirlo. | Todos los días: es la lista de "qué hago ahora". |
 | [`04-decisiones.md`](specs/04-decisiones.md) | Registro de cada decisión importante: qué se eligió, qué alternativas había y por qué. | Cuando alguien (o tú en 3 meses) pregunta "¿por qué se hizo así?". |
 | [`05-guia-de-arte.md`](specs/05-guia-de-arte.md) | SVG existentes, paletas, temas y tres familias de torres PNG con ocho vistas (§7). | Antes de producir arte nuevo. |
+| [`06-monsters-canons-3d.md`](specs/06-monsters-canons-3d.md) | Concepto y plan de la segunda entrega en 3D, más el relevamiento de lo que le falta a la V1. | Antes de cerrar la V1 y al arrancar el proyecto 3D. |
 
 Fuera de `specs/`: [`CONTENIDO.md`](CONTENIDO.md) explica **cómo agregar enemigos, torres y niveles** (con todos los campos de los datos), y [`ONBOARDING.md`](ONBOARDING.md), cómo preparar una computadora para trabajar.
 
@@ -253,3 +254,8 @@ Validación M45:954/954 pruebas y62/62 finales de contenido.24 corridas más rep
 
 - Cuatro vistas de la misma partida: la actual, relieve en la misma cuadrícula, oblicua al 80 % y maqueta 3D. Cada una tiene fotos, medidas de casillas y clics, y rendimiento, y además se puede jugar entera con `godot --path . res://art/b21-vista/vista_lab.tscn -- jugar variante=C` (letras A a D).
 - Recomendación: no cambiar la proyección. Si se quiere más profundidad, relieve horneado por etapas. Informe completo en `art/b21-vista/B21-vista-v2.md`. No cambia el juego; la decisión es de Lucas.
+
+### T194 · Monsters & Canons 3D
+
+- El 3D no se integra en esta versión: pasa a una segunda entrega, *Monsters & Canons 3D*, que arranca después de cerrar lo pendiente de la V1. Concepto, evidencia, plan y relevamiento de la V1 en `specs/06-monsters-canons-3d.md`.
+- Prueba de cámara libre sobre la maqueta: `godot --path . res://art/b21-vista/vista_lab.tscn -- camara`. No cambia el juego.
