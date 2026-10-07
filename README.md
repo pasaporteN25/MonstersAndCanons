@@ -114,20 +114,34 @@ tar --mode=755 -czf build/JuegoA_linux.tar.gz -C build JuegoA.x86_64
 - Necesita una computadora con escritorio (X11 o Wayland) y OpenGL. El progreso se guarda en `~/.local/share/godot/app_userdata/JuegoA/save.json`.
 - **Todavía no se probó en una computadora Linux real**: los tests sí corren en Linux en cada push (GitHub, D-030), pero el ejecutable no se abrió.
 
-### El ejecutable de pruebas (`JuegoA_pruebas.exe`)
+### El modo de pruebas (desde Opciones)
 
-Para probar todo sin ganar cada nivel (spec §10.2, D-028):
+Para probar todo sin ganar cada nivel (spec §10.2, D-028, D-077). Desde M48 **no hay un ejecutable aparte**: es el mismo `JuegoA.exe`, `JuegoA.x86_64` o `JuegoA.apk`.
 
-```bash
-godot --headless --path . --export-release "Windows (pruebas)" build/JuegoA_pruebas.exe
-```
-
-- Trae el **modo de pruebas**: todos los niveles abiertos; al elegir nivel se puede **empezar en cualquier oleada** (con el oro que se habría juntado, o el que se escriba) y, en la partida, el **panel de pruebas** (`F1` o el botón "Pruebas"): +1000 de oro, vidas infinitas, saltar oleada, matar a todos, ganar, perder, **cinco velocidades (x0,25 a x4)**, hacer aparecer cualquier enemigo y ver los FPS. Atajos: `F2` matar, `F3` saltar oleada, `F4` vidas infinitas, `F6` / `F7` velocidad. Al terminar guarda un informe en `user://pruebas_stats.json`.
+- **Cómo se activa:** menú principal → **Opciones** → **Administración** → **Activar modo de pruebas** → **Sí, activar**. Para salir: Opciones → **Volver al juego normal**. Desde el menú de pausa no aparece, para no cambiar de guardado en medio de una partida.
+- **Siempre arranca normal:** si se cierra el juego en modo de pruebas, la próxima vez abre con el progreso real.
+- **Qué trae:**
+  - Todos los niveles abiertos.
+  - Al elegir nivel se puede **empezar en cualquier oleada**, con el oro que se habría juntado o el que se escriba.
+  - En la partida, el **panel de pruebas** (`F1` o el botón "Pruebas"): +1000 de oro, vidas infinitas, saltar oleada, matar a todos, ganar, perder, **cinco velocidades (x0,25 a x4)**, hacer aparecer cualquier enemigo y ver los FPS.
+  - Atajos: `F2` matar, `F3` saltar oleada, `F4` vidas infinitas, `F6` / `F7` velocidad.
+  - Al terminar guarda un informe en `user://pruebas_stats.json`.
 - Usa **otro guardado** (`save_pruebas.json`, en la misma carpeta): lo que hagas ahí no toca tu progreso, tus estrellas ni tus récords reales.
-- **Editor de mapas:** el menú principal trae el botón "Editor de mapas" (en el juego normal y en el de pruebas, no en el celular). Se dibuja el mapa con el mouse, se arman las oleadas, se prueba el nivel al instante y se guarda en `%APPDATA%\Godot\app_userdata\JuegoA\maps`. Ver [`CONTENIDO.md`](CONTENIDO.md).
 - Abajo al centro siempre dice "MODO PRUEBAS", para no confundirlo con el juego normal.
-- El `JuegoA.exe` normal y el `.apk` **no** lo tienen.
-- Desde el editor de Godot: *Proyecto → Configuración del proyecto → Editor → Run → Main Run Args* = `-- --pruebas`.
+- **Editor de mapas:** el menú principal trae el botón "Editor de mapas" para todos en PC. En el celular solo aparece con el modo de pruebas activo, porque se maneja con mouse y teclado. Se dibuja el mapa con el mouse, se arman las oleadas, se prueba el nivel al instante y se guarda en `%APPDATA%\Godot\app_userdata\JuegoA\maps`. Ver [`CONTENIDO.md`](CONTENIDO.md).
+- **Para arrancar directo en modo de pruebas** (desarrollo):
+  - Desde el editor de Godot: *Proyecto → Configuración del proyecto → Editor → Run → Main Run Args* = `-- --pruebas`.
+  - Desde un acceso directo: `JuegoA.exe -- --pruebas`.
+
+## Licencia
+
+*Monsters & Canons* es **software libre** y se regala: código, datos, dibujos y sonidos propios se distribuyen bajo la **GNU General Public License, versión 3 o posterior** (GPL-3.0-or-later). El texto completo está en [`LICENSE`](LICENSE) (D-077, RF-387).
+
+- **Qué permite:** usarlo, copiarlo, compartirlo y modificarlo. Quien reparta una versión modificada tiene que hacerlo con la misma licencia y ofrecer su código fuente.
+- **Ojo al publicar:** quien reparte ejecutables bajo la GPL tiene que ofrecer también el código fuente. Hoy el repositorio de GitHub es privado, así que antes de subir el juego a itch.io o a Play Store hay que hacerlo público o adjuntar el código.
+- **Terceros:**
+  - El motor **Godot** es MIT; su aviso de copyright tiene que acompañar a los ejecutables, y por eso está en la Wiki del juego (Guía → Licencias).
+  - **GUT** (`addons/gut/`, MIT) solo se usa para los tests y no va dentro de los ejecutables.
 
 ## Paisajes de mapa
 

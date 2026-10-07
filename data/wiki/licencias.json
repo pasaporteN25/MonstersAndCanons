@@ -1,0 +1,40 @@
+{
+ "version": 1,
+ "titulo": "Licencias",
+ "subtitulo": "Qué podés hacer con el juego",
+ "orden": 8,
+ "bloques": [
+  {
+   "tipo": "titulo",
+   "texto": "Monsters & Canons"
+  },
+  {
+   "tipo": "texto",
+   "texto": "Copyright (C) 2026 Lucas.\n\nEste juego es software libre y se regala: podés usarlo, copiarlo, compartirlo y modificarlo bajo los términos de la Licencia Pública General de GNU (GPL) publicada por la Free Software Foundation, versión 3 o, a tu elección, cualquier versión posterior. Eso vale para su código, sus datos, sus dibujos y sus sonidos."
+  },
+  {
+   "tipo": "texto",
+   "texto": "Se distribuye con la esperanza de que sea útil, pero SIN NINGUNA GARANTÍA, ni siquiera la garantía implícita de COMERCIABILIDAD o de APTITUD PARA UN PROPÓSITO PARTICULAR. El texto completo de la licencia está en el archivo LICENSE que acompaña al código fuente y en https://www.gnu.org/licenses/gpl-3.0.html."
+  },
+  {
+   "tipo": "titulo",
+   "texto": "Motor Godot"
+  },
+  {
+   "tipo": "texto",
+   "texto": "Hecho con Godot Engine (https://godotengine.org), bajo la licencia MIT:\n\nCopyright (c) 2014-present Godot Engine contributors (see AUTHORS.md).\nCopyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE."
+  },
+  {
+   "tipo": "texto",
+   "texto": "Godot incluye componentes de terceros, cada uno con su propia licencia (por ejemplo FreeType, HarfBuzz, ENet, Mbed TLS, libpng y zlib). La lista completa y sus textos están en el archivo COPYRIGHT.txt del motor: https://github.com/godotengine/godot.\n\nPortions of this software are copyright © 1996-2025 The FreeType Project (https://freetype.org). All rights reserved."
+  },
+  {
+   "tipo": "titulo",
+   "texto": "Herramientas de desarrollo"
+  },
+  {
+   "tipo": "texto",
+   "texto": "Los tests automáticos usan GUT (Godot Unit Test, licencia MIT). Es solo una herramienta de desarrollo y no va dentro de los ejecutables."
+  }
+ ]
+}

@@ -181,3 +181,9 @@ B31 cerrado por aprobación de Lucas (2026-10-04). Exportados `build/JuegoA.exe`
 - Campaña con9 niveles: Guardián en8, Curandero en9, más encuentros de robo/desgaste y apoyo Mecánico disponible.
 - Un guardado que completó el antiguo último nivel permite acceder al siguiente agregado sin repetirlo.
 - Niveles1–7 y estadísticas globales conservados. EXE/APK sin regenerar; primera versión de balance con validación humana pendiente.
+
+### T196 · Modo de pruebas en Opciones y licencia libre
+
+- El modo de pruebas ahora está en **Opciones → Activar modo de pruebas**, con confirmación, y se apaga con **Volver al juego normal**. Usa su propio guardado: no toca tu progreso ni tus récords. El juego siempre arranca en modo normal.
+- Un solo ejecutable o APK por plataforma: ya no hay una versión "de pruebas" aparte.
+- El juego es software libre, bajo la GPL versión 3 o posterior. Detalles en la Wiki: Guía → Licencias.

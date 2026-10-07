@@ -151,7 +151,7 @@ Si después de verlas te quedás con **C**, B es su base: se hace B y después C
 - **El relieve, el fondo y la maqueta son arte de prototipo**, generado por código; no es arte final ni pasó por la guía de arte.
 - **C:** la torre fantasma sale aplastada y los efectos no están corregidos. **D:** faltan efectos, coronas, auras, escarcha, llamas, placas de nivel, brillo de mejora, aturdimiento y disolución. Los monstruos entran flotando por el borde, no se pueden seleccionar monstruos y la decoración tiene sombra doble.
 - **Todo se midió en una sola PC muy potente.** Los números absolutos no se trasladan a otras máquinas; sirven para comparar entre vistas.
-- Al cerrar el laboratorio, Godot avisa de 2 objetos sin liberar. Es del prototipo, no del juego.
+- Al cerrar el laboratorio, Godot avisa de 2 objetos sin liberar. Corrección (T196): ese aviso aparece en cualquier corrida del proyecto, también en un script mínimo y en el ejecutable exportado; no es del prototipo.
 
 ## Cómo reproducirlo
 

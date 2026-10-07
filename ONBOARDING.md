@@ -124,17 +124,19 @@ godot --headless --path . --export-release "Windows Desktop" build/JuegoA.exe
 
 > ℹ️ La carpeta `build/` no se sube a git.
 
-### 6.1 El ejecutable de pruebas
+### 6.1 El modo de pruebas (desde Opciones)
 
-Para probar todos los niveles y el contenido sin ganar cada nivel (spec §10.2):
+Para probar todos los niveles y el contenido sin ganar cada nivel (spec §10.2). Desde M48 (D-077) **no hay un ejecutable aparte**: se activa en el mismo `JuegoA.exe` (o la APK), desde **Opciones → Administración → Activar modo de pruebas → Sí, activar**.
 
-```bash
-godot --headless --path . --export-release "Windows (pruebas)" build/JuegoA_pruebas.exe
-```
+**✅ Comprobar:**
+- Al confirmar, el menú se vuelve a armar y abajo al centro dice "MODO PRUEBAS · F1: panel". Todos los niveles se pueden elegir y en la partida `F1` abre el panel de pruebas. En el log aparece "Modo de pruebas activado".
+- Usa su propio guardado (`save_pruebas.json`), así que no toca el progreso ni los récords reales.
+- Opciones ahora dice **"Volver al juego normal"**, y desde el menú de pausa la sección no aparece.
+- Si cerrás el juego en modo de pruebas, la próxima vez arranca normal.
 
-**✅ Comprobar:** al abrirlo, abajo al centro dice "MODO PRUEBAS · F1: panel", todos los niveles se pueden elegir, y en la partida `F1` abre el panel de pruebas. En el log de esa ejecución aparece "Modo de pruebas activado". Usa su propio guardado (`save_pruebas.json`), así que no toca el progreso ni los récords del `.exe` normal.
+Para arrancar directo en modo de pruebas, por ejemplo con un acceso directo para desarrollo: `JuegoA.exe -- --pruebas`.
 
-El botón **"Editor de mapas"** (spec §10.3) está en **todas las versiones de escritorio** (desde M14, D-038; el celular no lo ofrece): se dibujan niveles con el mouse, se prueban al instante y se guardan en `%APPDATA%\Godot\app_userdata\JuegoA\maps`. Comprobá que también está en el `.exe` normal y que abrirlo no cambia el progreso. Cómo se usa y cómo volver oficial un mapa: [`CONTENIDO.md`](CONTENIDO.md).
+El botón **"Editor de mapas"** (spec §10.3) está **para todos en PC** (desde M14, D-038; en el celular solo con el modo de pruebas activo): se dibujan niveles con el mouse, se prueban al instante y se guardan en `%APPDATA%\Godot\app_userdata\JuegoA\maps`. Comprobá que abrirlo no cambia el progreso. Cómo se usa y cómo volver oficial un mapa: [`CONTENIDO.md`](CONTENIDO.md).
 
 ### 6.1.0 La Wiki (en todas las versiones)
 
@@ -142,15 +144,15 @@ Menú principal → **Wiki**. Comprobá que hay tres solapas (Enemigos, Torres, 
 
 ### 6.1.05 Mapas más grandes (zoom)
 
-Copiá `tools/ejemplos/mapa_grande.json` a la carpeta de mapas de la comunidad (ver más abajo) y jugalo desde **Jugar → Mapas de la comunidad**. Tiene que verse **entero**, centrado entre las dos barras, con las torres y los enemigos algo más chicos que en los otros niveles y la interfaz igual. Construí una torre haciendo clic en una casilla: tiene que aparecer **justo en esa casilla**. Con el ratón y, en el celular, con el dedo. Abrilo también en el editor de mapas (versión de pruebas): se ve entero y se puede pintar sin errores de puntería.
+Copiá `tools/ejemplos/mapa_grande.json` a la carpeta de mapas de la comunidad (ver más abajo) y jugalo desde **Jugar → Mapas de la comunidad**. Tiene que verse **entero**, centrado entre las dos barras, con las torres y los enemigos algo más chicos que en los otros niveles y la interfaz igual. Construí una torre haciendo clic en una casilla: tiene que aparecer **justo en esa casilla**. Con el ratón y, en el celular, con el dedo. Abrilo también en el editor de mapas: se ve entero y se puede pintar sin errores de puntería.
 
 ### 6.1.06 Temas y leyenda
 
 Copiá los siete `tools/ejemplos/tema_*.json` a la carpeta de mapas de la comunidad y jugá cada uno. Se tiene que ver: el **paisaje** propio de cada tema, el **camino bien distinto del suelo**, los enemigos claros sobre cualquier suelo, un **lago / oasis / laguna helada / río de lava / barro** que **no se puede construir**, las **flores** (que sí) y la decoración del tema. Los enemigos siguen el **mismo camino** que en el nivel 4 (son ese nivel con parches). Abrilos también en el editor: se ven igual y se guardan sin perder el tema.
 
-### 6.1.07 Guardián y Curandero (versión de pruebas)
+### 6.1.07 Guardián y Curandero (modo de pruebas)
 
-Abrí una partida en `JuegoA_pruebas.exe`, `F1` (panel de pruebas) y hacé aparecer un **Guardián**, un **Curandero** y varios enemigos comunes. Tiene que verse: el **anillo** de cada uno en el suelo (marfil dorado el Guardián, verde el Curandero); un **escudo** sobre los enemigos que están dentro del anillo del Guardián y una **cruz verde** sobre los del Curandero; el **número de daño gris** cuando la armadura se come el golpe; y que al **matar al portador** el escudo o la cruz desaparecen en menos de un segundo. Con una Incendiaria, el enemigo que se quema no recupera vida aunque esté dentro del anillo verde.
+Con el modo de pruebas activo (Opciones), abrí una partida, `F1` (panel de pruebas) y hacé aparecer un **Guardián**, un **Curandero** y varios enemigos comunes. Tiene que verse: el **anillo** de cada uno en el suelo (marfil dorado el Guardián, verde el Curandero); un **escudo** sobre los enemigos que están dentro del anillo del Guardián y una **cruz verde** sobre los del Curandero; el **número de daño gris** cuando la armadura se come el golpe; y que al **matar al portador** el escudo o la cruz desaparecen en menos de un segundo. Con una Incendiaria, el enemigo que se quema no recupera vida aunque esté dentro del anillo verde.
 
 ### 6.1.10 Combos por estado
 
@@ -168,14 +170,14 @@ Qué mirar con ojo crítico: si el "tin" se vuelve molesto en una oleada cargada
 
 El Mortero es una torre **reservada** (solo el nivel 10 la tendrá): para probarla, abrí el mapa `tools/ejemplos/mapa_torres_apagadas.json` (copialo a la carpeta de mapas de la comunidad). Elegí el **Mortero** (novena torre, tecla **9**, 300 de oro) y pasá el mouse por el mapa: el cuadrado de **2×2** queda centrado en el mouse y se ve **verde** donde entra y **rojo** si una de las cuatro casillas es camino, roca u otra torre. Construilo: ocupa las cuatro casillas, un clic en cualquiera lo selecciona, dispara una bomba cada 4 segundos con daño de área, y al **venderlo** devuelve el 70 % y libera las cuatro casillas. La barra de abajo debe mostrar las 9 torres sin tapar "Próxima oleada".
 
-### 6.1.08 Chamán y Espejo (versión de pruebas)
+### 6.1.08 Chamán y Espejo (modo de pruebas)
 
-En `JuegoA_pruebas.exe`, `F1`, hacé aparecer un **Chamán** cerca de varias torres y esperá unos 8 segundos: tiene que salir un **rayo magenta** hacia la torre más cercana, que se ve **apagada** (oscura, con chispas) y **no dispara** unos 3 segundos; si la seleccionás, el panel dice **"Aturdida (N s)"** con la cuenta atrás. Después, un **Espejo** al lado de una torre pegada al camino: el primer disparo tiene que mostrar **"¡Rebote!"**, el Espejo no pierde vida y la torre queda apagada 2 segundos; una torre lejos (por ejemplo un Francotirador) le pega normal. Con una Incendiaria pegada, el Espejo se quema igual.
+Con el modo de pruebas activo (Opciones), `F1`, hacé aparecer un **Chamán** cerca de varias torres y esperá unos 8 segundos: tiene que salir un **rayo magenta** hacia la torre más cercana, que se ve **apagada** (oscura, con chispas) y **no dispara** unos 3 segundos; si la seleccionás, el panel dice **"Aturdida (N s)"** con la cuenta atrás. Después, un **Espejo** al lado de una torre pegada al camino: el primer disparo tiene que mostrar **"¡Rebote!"**, el Espejo no pierde vida y la torre queda apagada 2 segundos; una torre lejos (por ejemplo un Francotirador) le pega normal. Con una Incendiaria pegada, el Espejo se quema igual.
 
 
 ### 6.1.11 Probar oleadas finales y mirar un combo (modo de pruebas)
 
-En `JuegoA_pruebas.exe`, **Jugar**: arriba de las tarjetas hay una franja **"Pruebas"**. Poné **Oleada inicial** en 10 (por ejemplo) y dejá el oro en **Automático**, y elegí el **Nivel 1**.
+Con el modo de pruebas activo (Opciones), **Jugar**: arriba de las tarjetas hay una franja **"Pruebas"**. Poné **Oleada inicial** en 10 (por ejemplo) y dejá el oro en **Automático**, y elegí el **Nivel 1**.
 
 **✅ Comprobar:**
 - La partida arranca sin torres, con bastante más oro que el normal (lo que se habría juntado en las oleadas 1 a 9), el HUD dice **"Próxima: oleada 10/10"** y al apretar *Empezar oleada* salen los enemigos de la última. Con **Oro inicial** a mano (sacá la tilde de "Automático") arranca con el número que escribas, también con 0. Un número mayor al total usa la última oleada.
@@ -274,7 +276,7 @@ Se usa `--export-debug` porque la versión de **prueba** se firma sola con la cl
 | Qué | Dónde |
 |---|---|
 | Progreso, récords y opciones del jugador | `%APPDATA%\Godot\app_userdata\JuegoA\save.json` |
-| Lo mismo, pero del ejecutable de pruebas | `%APPDATA%\Godot\app_userdata\JuegoA\save_pruebas.json` |
+| Lo mismo, pero del modo de pruebas | `%APPDATA%\Godot\app_userdata\JuegoA\save_pruebas.json` |
 | Registros (logs) de cada ejecución, los últimos 30 | `%APPDATA%\Godot\app_userdata\JuegoA\logs` |
 | Configuración del editor (rutas de Android, etc.) | `%APPDATA%\Godot\editor_settings-4.7.tres` |
 | Plantillas de exportación | `%APPDATA%\Godot\export_templates\4.7.2.stable` |
@@ -349,7 +351,7 @@ Para comprobarlo, abrir una partida, construir las ocho torres comunes, mejorar 
 - Menú: logo `assets/ui/logo.png` (se regenera con `godot --headless --path . -s tools/prepare_logo.gd`) y tema de botones `assets/ui/menu_theme.tres`, solo para el menú. Probar con el mouse y con las flechas + Enter.
 - Monstruos: `godot --headless --path . -s tools/prepare_monster_sprites.gd` regenera los PNG de `assets/sprites/enemies/rendered/` desde `art/redesign-m24/sources/` (esas fuentes no se tocan). Después, `godot --headless --import`.
 - Capturas reales (con ventana y el guardado aislado): `$env:APPDATA="$env:TEMP\m24appdata"; godot --path . res://tools/capture_m24.tscn -- monstruos` (también `menu` y `wiki`); salen en `art/m24-integracion/`.
-- Para probarlo jugando: el ejecutable de pruebas, nivel 1, oleada 1. Mirar el diablillo, la bestia y el ogro caminando hacia la izquierda: no se dan vuelta (a propósito, D-050).
+- Para probarlo jugando: el modo de pruebas, nivel 1, oleada 1. Mirar el diablillo, la bestia y el ogro caminando hacia la izquierda: no se dan vuelta (a propósito, D-050).
 
 ## Fondos M26
 Los siete temas, el camino y las rocas, árbol, arbusto y puerta usan los nuevos PNG renderizados. Se aplican en partida, menú y editor; rutas y casillas construibles conservan sus reglas. Recursos en `assets/tiles/rendered/` y `assets/sprites/map/rendered/`.

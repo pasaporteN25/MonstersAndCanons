@@ -103,6 +103,57 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Mostrar números de daño"
 
+[node name="AdminSection" type="Label" parent="Center/Panel/Margin/Rows"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.78, 0.38, 1)
+theme_override_font_sizes/font_size = 15
+text = "Administración"
+
+[node name="AdminButton" type="Button" parent="Center/Panel/Margin/Rows"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Activar modo de pruebas"
+
+[node name="AdminConfirm" type="VBoxContainer" parent="Center/Panel/Margin/Rows"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="AdminConfirmText" type="Label" parent="Center/Panel/Margin/Rows/AdminConfirm"]
+custom_minimum_size = Vector2(396, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "¿Activar el modo de pruebas?
+
+Abre todos los niveles y las herramientas (panel F1, editor). Usa un guardado aparte: lo que hagas ahí no cuenta para tu progreso ni tus récords.
+
+Para volver: Opciones → Volver al juego normal."
+autowrap_mode = 3
+
+[node name="AdminConfirmButtons" type="HBoxContainer" parent="Center/Panel/Margin/Rows/AdminConfirm"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="AdminConfirmButton" type="Button" parent="Center/Panel/Margin/Rows/AdminConfirm/AdminConfirmButtons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 18
+text = "Sí, activar"
+
+[node name="AdminCancelButton" type="Button" parent="Center/Panel/Margin/Rows/AdminConfirm/AdminConfirmButtons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 18
+text = "Cancelar"
+
 [node name="BackButton" type="Button" parent="Center/Panel/Margin/Rows"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 52)

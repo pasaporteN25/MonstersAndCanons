@@ -393,7 +393,7 @@ En M3 se agregan tres, porque hay datos que deben **sobrevivir** al cambiar de e
 |---|---|
 | `GameFlow` ([código](../scripts/autoload/game_flow.gd)) | Recordar qué nivel se juega (`current_index`, -1 = fuera de la campaña) y cambiar de pantalla. Registrar victorias y desbloquear el siguiente nivel. Aplicar pantalla completa al arrancar. |
 | `SaveManager` ([código](../scripts/autoload/save_manager.gd)) | Leer y escribir el progreso y las opciones (§7.1). Los tests cambian `save_path` para no tocar el guardado real. |
-| `DevMode` ([código](../scripts/autoload/dev_mode.gd)) *(M6)* | Modo de pruebas (spec §10.2, D-028): se activa con la característica de exportación `pruebas` (`JuegoA_pruebas.exe`) o, en el editor, con `--pruebas`. Cambia a `save_pruebas.json`, abre todos los niveles, muestra el cartel y hace que `Game` agregue el panel de pruebas. Va después de `SaveManager` y antes de `GameFlow` y `Audio`, así las opciones ya salen del guardado de pruebas. |
+| `DevMode` ([código](../scripts/autoload/dev_mode.gd)) *(M6)* | Modo de pruebas (spec §10.2, D-028, D-077): se activa desde Opciones (`OptionsMenu`, M48) o al iniciar con `--pruebas`; hasta M48 también con la característica de exportación `pruebas`. Cambia a `save_pruebas.json`, abre todos los niveles, muestra el cartel y hace que `Game` agregue el panel de pruebas. Va después de `SaveManager` y antes de `GameFlow` y `Audio`, así las opciones ya salen del guardado de pruebas. |
 | `Audio` ([código](../scripts/autoload/audio.gd)) | Efectos y música. Carga todo `assets/audio/*.wav` y los reproduce por nombre (`Audio.play(&"build")`). 12 "voces" reutilizables (9 disparos/impactos, 3 avisos), un intervalo mínimo por sonido y limitador Master a-1dB (M36). Buses `Master`, `Music`, `SFX` (`default_bus_layout.tres`). Los sonidos se generan con `tools/make_sounds.gd` (D-020). |
 
 > ⚠️ **Los scripts de herramientas (`tools/*.gd`, que se ejecutan con `-s`) se compilan antes de que existan los autoloads.** Por eso no pueden usar `GameFlow`, `SaveManager` ni `Audio` por su nombre, ni declarar variables de tipo `Game` (porque `game.gd` sí los usa): declaran la partida como `Node2D`.
@@ -638,3 +638,22 @@ Laboratorio aislado en `art/b21-vista/` (fuera de los paquetes exportados, igual
 
 ### T194 · Prueba de cámara libre para Monsters & Canons 3D
 `diorama_3d.gd` suma `orbit(giro, inclinación, distancia, objetivo)`: la cámara se ubica rotando `(0, sen φ, cos φ) · d` alrededor del eje vertical. Los Sprite3D pasan a *billboard* completo. Torres y monstruos eligen su cuadro sumando el giro de la cámara al ángulo de puntería o de marcha (`frame_rect(atlas, aim + giro)`, `walk_region(..., heading + giro)`). El sol queda fijo en el mundo. `vista_lab.tscn -- camara` saca seis vistas de la escena de referencia (sin HUD) y una hoja de 3 × 2 (`_sheet` admite títulos y columnas). Es investigación: no toca producción.
+
+### M48 / T196 · Modo de pruebas en Opciones, una sola app y licencia
+- **`DevMode.detect()`** solo mira el argumento `--pruebas` en cualquier ejecutable (sin la característica de exportación ni la restricción al editor). Se elimina la constante `FEATURE`.
+- **`OptionsMenu`** suma la sección "Administración" (rótulo, botón y una fila de confirmación con "Sí, activar" y "Cancelar", dentro del mismo panel, sin ventanas emergentes):
+  - `admin_available` (falso por defecto) la muestra; `MainMenu` lo prende, y el menú de pausa no.
+  - `set_dev_mode(on)` llama a `DevMode.set_enabled(on, dev_save_path)`, aplica volúmenes y pantalla del guardado que queda activo y emite `dev_mode_changed(on)`.
+  - `dev_save_path` vacío usa el guardado de pruebas real; los tests pasan uno propio.
+- **`MainMenu`** escucha `dev_mode_changed` y recarga el menú principal (`GameFlow.go_to_main_menu()`), así se actualizan el botón del editor en el celular y el resto de la pantalla. Los tests no recargan escenas: prueban la señal.
+- **`export_presets.cfg`** queda con Windows Desktop, Android y Linux (índices 0, 1 y 2). Las APK y EXE de pruebas viejos quedan en `build/` como archivos sueltos.
+- **Licencia:** `LICENSE` con el texto oficial de gnu.org sin cambios; artículo `data/wiki/licencias.json` (orden 8) con los avisos del juego y de Godot.
+- **Tests:** presets sin la característica `pruebas`; Opciones (visibilidad, confirmar, cancelar, volver, guardado real intacto); `LICENSE` y el artículo de la Wiki.
+
+### M49 / T197 · Prueba de modos (pendiente)
+Diseño en spec RF-388 a RF-392 y D-078.
+- **Lógica:** un `ModePacks` (lógica pura, como `CommunityMaps`) escanea `res://data/modos/` y `user://modos/`, valida `modo.json` y arma la lista de `LevelData` con las reglas aplicadas.
+- **Pantallas:** `GameFlow` recuerda el modo elegido para progreso, récords y desbloqueo.
+- **Lo que se reusa:** la selección de nivel suma el selector de modo, reusando las tarjetas actuales; el editor suma el destino de guardado.
+- **Asedio:** son datos.
+- **Tests:** formato y errores, ids de progreso, desbloqueo por modo, separación de la campaña y del Salón, y el editor guardando en un modo de una carpeta de prueba.

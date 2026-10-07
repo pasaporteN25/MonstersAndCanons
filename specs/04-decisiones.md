@@ -476,3 +476,37 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - Hacer en la V1 una rebanada de Épocas: Lucas prefiere probar los modos con algo más chico.
 
 **Pendiente:** el diseño de la prueba de modos y del modo de pruebas en Opciones son propuestas de Claude; no se implementan hasta el OK de Lucas.
+
+## D-077 · Modo de pruebas en Opciones, una sola app y licencia GPL
+- **Fecha:** 2026-10-07 · **Estado:** Aceptada · **Decidió:** Lucas (qué) / Claude (cómo)
+- **Qué:**
+  - El modo de pruebas se activa desde Opciones en el menú principal, con confirmación, y se desactiva desde el mismo lugar (RF-383, RF-384).
+  - El juego siempre arranca normal; `--pruebas` al iniciar se conserva para desarrollo (RF-385).
+  - Un solo ejecutable o APK por plataforma (RF-386).
+  - Licencia GPL-3.0-or-later (RF-387).
+  - Reemplaza la parte "ejecutable aparte" de D-028. Se mantiene el guardado aparte, que es lo que protege el progreso y los récords reales.
+- **Por qué:**
+  - El juego se regala y es de un solo jugador: esconder las herramientas no protege nada (D-028 ya lo decía) y duplicaba exportaciones, presets y paquetes de Android.
+  - Arrancar siempre normal evita que alguien abra el juego, vea el guardado de pruebas y crea que perdió su progreso.
+  - La sección no aparece en la pausa para no cambiar de guardado en medio de una partida.
+- **Licencia:**
+  - Lucas pidió "tipo GNU 3.0". Se usa "versión 3 o posterior", que es el aviso que recomienda la FSF; si se prefiere "solo versión 3", es un cambio de una línea.
+  - Cubre todo lo propio del proyecto. Lucas tiene los derechos de su obra, así que podría relicenciarla más adelante.
+  - Componentes de terceros: el motor **Godot** es MIT y su aviso tiene que acompañar a los ejecutables (va en la Wiki); **GUT** es MIT y solo se usa en desarrollo (se excluye de las exportaciones).
+  - **Consecuencia:** quien reparte ejecutables bajo GPL tiene que ofrecer también el código fuente. El repositorio de GitHub hoy es privado, así que antes de publicar hay que hacerlo público o adjuntar el código.
+- **Alternativas descartadas:**
+  - Recordar el modo de pruebas entre sesiones: confunde, porque parece que se perdió el progreso.
+  - Combinación secreta de teclas: ya descartada en D-028.
+  - Licencias permisivas (MIT, Apache): Lucas eligió GPL.
+  - Separar arte y sonido con Creative Commons: suma complejidad sin pedido.
+
+## D-078 · Modos como paquetes de datos unificados con el gestor de mapas
+- **Fecha:** 2026-10-07 · **Estado:** Aceptada (especificada, sin implementar) · **Decidió:** Lucas (prueba chica de modos, unificada con el gestor de mapas) / Claude (diseño)
+- **Qué:** un modo es una carpeta con `modo.json` y mapas JSON; los oficiales en `data/modos/` y los propios en `user://modos/`. La selección de nivel muestra Campaña, modos oficiales, Comunidad y modos propios. El progreso va por modo, y el editor puede guardar mapas dentro de un modo propio. El modo oficial de prueba es "Asedio" (RF-388 a RF-392).
+- **Por qué:**
+  - Un modo y un mapa de la comunidad son el mismo concepto en distinto tamaño, así que comparten carga, validación, progreso y editor.
+  - Asedio no necesita arte ni reglas nuevas y cubre los niveles difíciles de B-10.
+  - El formato sirve después para los mods completos (B-04) y para Épocas en el otro juego (3D-01).
+- **Alternativas descartadas:**
+  - Modos como una lista más en `campaign.json`: no une con la comunidad ni con el editor.
+  - Modos con torres y monstruos propios desde ya: eso es B-04 y agranda la prueba.

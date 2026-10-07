@@ -1193,3 +1193,44 @@
   - B-03 no se tocó: lo trabaja otro agente.
   - Solo cambiaron documentos, así que no se corrió GUT.
   - Los cambios M34 se conservaron fuera del commit.
+
+### M48 · Modo de pruebas en Opciones, una sola app y licencia
+- [x] **T196 · Modo de pruebas desde Opciones, una sola exportación por plataforma y licencia GPL.**
+  **Refs:** RF-180, RF-383 a RF-387, D-077, B-13.
+  **Hecho cuando:**
+  - Opciones del menú principal activa el modo de pruebas (con confirmación) y lo desactiva sin tocar el guardado real; desde la pausa no aparece.
+  - El juego siempre arranca normal y `--pruebas` sigue sirviendo.
+  - Quedan los presets Windows, Android y Linux, sin la característica `pruebas`.
+  - Están `LICENSE` con la GPL-3.0 y el artículo Licencias en la Wiki.
+  - Los documentos están al día, los tests en verde y las exportaciones verificadas.
+
+  **Resultado T196:**
+  - **Opciones:** tiene la sección "Administración". La confirmación ocupa el panel entero, así no se pasa de 720 px de alto (la primera versión se cortaba; se corrigió).
+  - **Menú principal:** se vuelve a armar al cambiar de modo.
+  - **`DevMode.detect()`:** solo mira `--pruebas`.
+  - **Exportaciones:** se eliminaron los presets "Windows (pruebas)" y "Android (pruebas)".
+  - **Licencia:** `LICENSE` es el texto oficial de gnu.org (SHA-256 3972dc97…). El artículo Licencias de la Wiki lleva la licencia del juego, el aviso de Godot copiado del propio motor, el crédito de FreeType y la aclaración sobre GUT.
+  - **Tests:** 965/965 GUT (8994 asserts, 77 scripts, sin `SCRIPT ERROR` ni `Parse Error`), con 11 tests nuevos (9 de Opciones y 2 de licencia) y el de presets reescrito.
+  - **Prueba en el menú real:** confirmar activa el modo y muestra el cartel; Opciones ofrece "Volver al juego normal" y al tocarlo vuelve al guardado real.
+  - **Exportaciones verificadas:**
+    - `build/JuegoA.exe` arranca con salida 0, normal por defecto y en modo de pruebas con `-- --pruebas`.
+    - `build/JuegoA.x86_64` se exportó.
+    - `build/JuegoA.apk` es la APK debug única, con paquete `com.juegoa.towerdefense`, firma de depuración verificada con apksigner, Android 7+, versión 1.1-pr1 (code 2, de la configuración local de M34) e incluye el artículo de licencias.
+  - **Lo que no se probó:**
+    - La APK no se instaló en un celular (la prueba física queda para Lucas).
+    - Linux no se abrió en una máquina real.
+    - No se hizo una sesión manual con mouse y teclado: los clics de la prueba son simulados.
+  - **Pendientes:**
+    - En `build/` quedan los EXE y APK de pruebas viejos, ya obsoletos.
+    - El repositorio es privado: antes de publicar hay que ofrecer el código fuente (D-077).
+  - Los cambios M34 se conservaron fuera del commit.
+
+### M49 · Prueba de modos
+- [ ] **T197 · Prueba de modos unificada con el gestor de mapas (B-05).**
+  **Refs:** RF-388 a RF-392, D-078.
+  **Hecho cuando:**
+  - Los paquetes de modo (oficiales y propios) se leen y validan solo como datos.
+  - La selección de nivel ofrece Campaña, Asedio, Comunidad y modos propios, con progreso y récords por modo, sin tocar campaña, Salón ni colección.
+  - El editor guarda en un modo propio.
+  - Asedio se ofrece con valores iniciales y una corrida del bot sobre sus primeros mapas.
+  - Hay tests de formato, errores, ids, desbloqueo y editor en carpetas de prueba.

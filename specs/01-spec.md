@@ -955,7 +955,7 @@ Récords "a la antigua", como en los arcades: iniciales y un top 5.
 
 Para probar todo sin tener que ganar cada nivel, y sin ensuciar el progreso ni los récords reales.
 
-- **RF-180** **Cómo se activa:** solo existe en el **ejecutable de pruebas** (`JuegoA_pruebas.exe`, del preset de exportación "Windows (pruebas)") y al jugar desde el editor de Godot con el argumento `--pruebas`. El `JuegoA.exe` normal y el `.apk` **no lo tienen**: un jugador normal nunca lo ve.
+- **RF-180** **Cómo se activa** *(cambiado en M48, D-077)*: desde **Opciones** en el menú principal (RF-383, RF-384), en el mismo ejecutable o APK de siempre, o al iniciar con el argumento `--pruebas` (RF-385). Hasta M48 solo existía en un ejecutable aparte, `JuegoA_pruebas.exe` (D-028).
 - **RF-181** **Guardado aparte:** en modo pruebas se usa `save_pruebas.json`. El progreso, las estrellas, los récords y las opciones del guardado real no cambian.
 - **RF-182** Siempre se ve un cartel **"MODO PRUEBAS"** en una esquina (en los menús y en la partida), para no confundirlo con el juego normal.
 - **RF-183** **Todos los niveles** se pueden elegir, aunque estén bloqueados.
@@ -990,7 +990,7 @@ Para probar todo sin tener que ganar cada nivel, y sin ensuciar el progreso ni l
 
 Una herramienta para crear y probar niveles sin escribir el JSON a mano. Nació como herramienta de administración solo del modo de pruebas (§10.2); desde M14 **está en el juego normal** (D-038): cualquiera puede hacer un mapa y jugarlo o compartirlo (§10.4). Lo que sigue siendo solo del modo de pruebas es el panel de pruebas y jugar cualquier nivel de la campaña (§10.2).
 
-- **RF-210** **Dónde está:** el menú principal tiene un botón **"Editor de mapas"** en el `JuegoA.exe` normal, en el de pruebas y en Linux *(M14, D-038)*. **En el celular no se ofrece** (se maneja con mouse y teclado), salvo en el modo de pruebas. **Nunca toca** el progreso, los niveles oficiales (`data/levels/`) ni `campaign.json`: guarda solo en `user://maps/` (RF-216), y en el modo de pruebas usa además su guardado aparte (RF-181).
+- **RF-210** **Dónde está:** el menú principal tiene un botón **"Editor de mapas"** en el `JuegoA.exe` normal y en Linux *(M14, D-038; Lucas confirmó el 2026-10-07 que sigue siendo para todos)*. **En el celular no se ofrece** (se maneja con mouse y teclado), salvo en el modo de pruebas. **Nunca toca** el progreso, los niveles oficiales (`data/levels/`) ni `campaign.json`: guarda solo en `user://maps/` (RF-216), y en el modo de pruebas usa además su guardado aparte (RF-181).
 - **RF-211** **La pantalla:** arriba, una barra con **Nuevo · Abrir · Guardar · Probar · Salir**; en el centro, el mapa de 20×9 casillas con el mismo tamaño y lugar que en la partida (así se ve como va a quedar); abajo, las herramientas y una línea de mensajes. Los ajustes del nivel (RF-214) y las oleadas (RF-215) se abren en paneles encima del mapa.
 - **RF-212** **Pintar el mapa:** se elige una herramienta y se hace clic, o se arrastra, sobre el mapa.
 
@@ -1022,7 +1022,7 @@ Cualquiera puede sumar mapas al juego **copiando un archivo**: los mapas hechos 
 - **RF-221** **La pantalla:** la selección de nivel tiene dos solapas, **Campaña** y **Mapas de la comunidad (N)**. La segunda muestra una tarjeta por archivo, en orden alfabético y **todos abiertos** (no hay desbloqueo). Cada tarjeta muestra el nombre del mapa, sus oleadas, su mejor resultado y sus estrellas. Si no hay ninguno, explica **dónde** ponerlos. Un botón **"Abrir carpeta"** (en PC) abre la carpeta y la crea si todavía no existe.
 - **RF-222** **Mismas reglas que los niveles:** cada archivo se lee con las reglas de §7.8. Uno **con errores** aparece como tarjeta **deshabilitada** que dice "Con errores" y, al pasar el mouse, su primer error; no impide que se vean ni se jueguen los demás. Un archivo con un **nombre no válido** (solo minúsculas, números y `_`, RF-216) o **demasiado grande** (más de 200 KB) se muestra igual, deshabilitado y con el motivo.
 - **RF-223** **Límites, para que un archivo ajeno no cuelgue el juego:** hasta **100 oleadas**, **20 grupos** por oleada, cantidad de hasta **999**, `cada` de hasta **60 s**, `desde` de hasta **600 s**, oro de hasta **99999**, vidas de hasta **999**, `aumento_vida` de hasta **300** y nombre de hasta **30 letras**. Valen para **todos** los niveles (los oficiales los cumplen) y el editor no deja pasarse de esos números.
-- **RF-224** **Progreso aparte:** cada mapa de la comunidad tiene su propio progreso, con el id `comunidad_<archivo>`: mejor cantidad de vidas, estrellas (RF-93), mejor puntaje y **top 5 de récords** con 3 letras (RF-191 a RF-193). **No** cuentan para el desbloqueo de la campaña, ni para el total de estrellas, ni para el Salón de la fama (RF-194). Se guardan en el guardado de esa versión (RF-181: el ejecutable de pruebas tiene el suyo).
+- **RF-224** **Progreso aparte:** cada mapa de la comunidad tiene su propio progreso, con el id `comunidad_<archivo>`: mejor cantidad de vidas, estrellas (RF-93), mejor puntaje y **top 5 de récords** con 3 letras (RF-191 a RF-193). **No** cuentan para el desbloqueo de la campaña, ni para el total de estrellas, ni para el Salón de la fama (RF-194). Se guardan en el guardado de esa versión (RF-181: el modo de pruebas tiene el suyo).
 - **RF-225** **Al terminar** un mapa de la comunidad, el botón "Niveles" vuelve a la **solapa de la comunidad**, y no hay "Siguiente nivel".
 - **RF-226** **Se buscan cada vez que se abre la pantalla:** un mapa copiado mientras el juego está abierto aparece al volver a la selección de nivel, sin reiniciar.
 
@@ -1044,7 +1044,7 @@ Una enciclopedia dentro del juego: dice cómo es cada enemigo y cada torre, y ex
 - **RF-237** **Los números salen de los datos**, no de textos escritos a mano: si se rebalancea un enemigo o una torre, la wiki cambia sola.
 - **RF-238** **Bestiario que se va llenando** *(D-036, pedido por Lucas)*: un enemigo **aparece en la wiki cuando el jugador lo vio por primera vez en una partida** (el mismo momento en que el juego lo presenta, RF-134, y que el guardado ya recuerda). Mientras no se vio, su entrada existe pero está **cerrada** (RF-239). Las **torres y la Guía se ven siempre**: las torres se pueden construir desde el principio y la Guía explica las reglas.
 - **RF-239** **Entrada cerrada:** en la lista se ve como **"???"** con su dibujo en **silueta negra** (así el jugador sabe que falta uno, pero no cómo es); al abrirla solo dice que todavía no se cruzó con ese enemigo y que aparece en la partida cuando lo enfrente. **No muestra** su nombre, sus datos, su descripción ni los niveles donde sale. La solapa dice cuántos lleva ("Enemigos 5/9") mientras falte alguno. La lista mantiene el mismo orden, así que las posiciones no se mueven cuando se abre uno.
-- **RF-240** **Modo de pruebas:** en el ejecutable de pruebas (§10.2) la wiki muestra **todo abierto**, porque es una herramienta de administración y usa su propio guardado (RF-181).
+- **RF-240** **Modo de pruebas:** con el modo de pruebas activo (§10.2) la wiki muestra **todo abierto**, porque es una herramienta de administración y usa su propio guardado (RF-181).
 
 > **Criterio de aceptación**
 > **Dado** un enemigo nuevo agregado a `data/enemies/` → **Cuando** abro la Wiki → **Entonces** aparece en "Enemigos" con sus datos, sin haber tocado ningún otro archivo.
@@ -1192,7 +1192,7 @@ Ideas **aprobadas como dirección**, pero **sin fecha**: no se programan hasta c
 **Qué cambia en la spec si se hace:** un hito nuevo con sus reglas (RF) y tareas; si se hacen mods, una sección de seguridad (qué puede traer un mod y qué no).
 
 ### B-05 · Modos de juego
-**Actualización de Lucas, 2026-10-07 (D-076):** el modo de historia con imperios reales (Épocas) pasa al otro juego. En la V1, Lucas propone una **prueba chica de modos, unificada con el gestor de mapas**; el diseño está en discusión y no se implementa hasta su OK.
+**Actualización de Lucas, 2026-10-07 (D-076):** el modo de historia con imperios reales (Épocas) pasa al otro juego. En la V1, Lucas propone una **prueba chica de modos, unificada con el gestor de mapas**. **Especificada en M49 (RF-388 a RF-392, D-078) con el OK de Lucas; se implementa en T197, después de M48.**
 *Propuesta de Lucas, 2026-09-29. Sin fecha: Lucas pidió solo anotarlo.*
 
 **Idea:** el juego tiene **modos**, cada uno con sus propias torres, enemigos, niveles y dibujos. El juego actual sería el modo **"Torres y Bestias"**. Otro modo sería el de **historia** (Épocas, B-01), con dibujos de **imperios reales** (por ejemplo, legiones romanas, jinetes mongoles, samuráis) y armas que avanzan con las épocas.
@@ -1315,6 +1315,7 @@ Los cuatro enemigos que gustaron, con lo necesario para convertirlos en spec cua
 **Idea:** un generador arma un mapa válido (camino, entradas, salida, bloques) y **el bot de balance lo juega** para comprobar que se puede ganar y que no es regalado, antes de ofrecérselo al jugador. Puede ser un **desafío diario** con una semilla igual para todos (la misma fecha, el mismo mapa), y un récord propio. Las oleadas también se pueden generar con una fórmula de dificultad. **Cuidar:** el bot tarda minutos por partida, así que la comprobación tendría que hacerse **antes** (mapas ya verificados) o con una versión rápida.
 
 ### B-13 · Una sola app con modo administrador
+**Hecho en M48 (T196, RF-383 a RF-387, D-077), pedido por Lucas el 2026-10-07:** como el juego se regala, el modo de pruebas se activa desde Opciones y hay un solo ejecutable o APK por plataforma.
 *Idea de Lucas, 2026-09-29. Sin fecha.*
 
 **Hoy (D-028):** el modo de pruebas es un ejecutable aparte, sin ninguna clave: una contraseña dentro de un juego de un solo jugador no protege nada (el guardado es un archivo de texto editable). **Si se quiere una sola app**, el modo admin se activaría por algo que **el jugador normal no toca**, por ejemplo un argumento (`JuegoA.exe --admin`, un atajo del escritorio) o un archivo de configuración al lado del `.exe`. La regla de D-028 sigue valiendo: el modo admin **usa otro guardado** para no ensuciar el progreso ni los récords reales. **Decidir después** de ver el editor funcionando (B-04).
@@ -1594,3 +1595,53 @@ Excavador/Ballesta/Alquimista siguen candidatos sin selección. B-21/B-23 no se 
 ### M46 · Estudio de vista B-21 v2 (Lucas, 2026-10-06)
 Lucas pidió revisar de nuevo B-21 con análisis y pruebas, considerando también no aplicarlo. Es una investigación: no cambia el juego.
 - **RF-382** Dada la investigación B-21 v2, cuando Lucas la revisa, entonces encuentra cuatro presentaciones de **la misma partida real** (actual; relieve en la misma cuadrícula; oblicua con el suelo al 80 %; maqueta 3D con los dibujos actuales), cada una con captura completa, recorte de detalle de la misma zona y un modo jugable del nivel 1; medidas de tamaño de casilla, superficie del mapa y clics de ida y vuelta en todas las casillas construibles; rendimiento con la carga de P7 en tres rondas; costos, riesgos, límites honestos y una recomendación que incluye no cambiar la vista. Ningún prototipo modifica producción, mapas ni guardados; adoptar una opción requiere decisión de Lucas, y cambiar la proyección, un PR separado marcado como *breaking change*.
+
+### M48 · Modo de pruebas en Opciones, una sola app y licencia (Lucas, 2026-10-07)
+Como el juego se va a regalar, no tiene sentido un ejecutable aparte para el modo de pruebas (B-13). Lucas también pidió una licencia libre del tipo GNU 3.0. Reemplaza el "ejecutable aparte" de D-028; el guardado aparte (RF-181) sigue igual.
+
+- **RF-383** **Activar desde Opciones.**
+  - **Dado** el menú principal, **cuando** se abre Opciones, **entonces** se ve una sección "Administración" con el botón "Activar modo de pruebas".
+  - **Cuando** se lo toca, aparece una confirmación en el mismo panel. Explica que el modo usa un guardado aparte, que abre todos los niveles y herramientas, y que lo que se haga ahí no cuenta para el progreso ni los récords reales. Aceptar activa el modo (guardado aparte, cartel, atajos: RF-181 a RF-184) y rearma el menú principal. Cancelar no cambia nada.
+  - Desde el menú de pausa la sección **no aparece**: nunca se cambia de guardado en medio de una partida.
+- **RF-384** **Volver al juego normal.**
+  - **Dado** el modo de pruebas activo, **cuando** se abre Opciones desde el menú principal, **entonces** el botón dice "Volver al juego normal". Tocarlo vuelve al guardado real sin confirmación y rearma el menú.
+  - Mientras el modo de pruebas está activo, el guardado real no se modifica.
+- **RF-385** **Siempre arranca normal.**
+  - **Dado** cualquier ejecutable o APK, **cuando** se abre el juego, **entonces** arranca en modo normal, aunque se haya cerrado en modo de pruebas. Así nadie cree que perdió su progreso.
+  - Excepción para desarrollo: con el argumento `--pruebas` al iniciar, desde el editor de Godot o desde un acceso directo con `-- --pruebas`, arranca ya activado.
+- **RF-386** **Una sola exportación por plataforma.**
+  - Quedan `JuegoA.exe` (Windows), `JuegoA.x86_64` (Linux) y `JuegoA.apk` (Android).
+  - Desaparecen los presets "Windows (pruebas)" y "Android (pruebas)" y la característica de exportación `pruebas`.
+  - **Dado** un celular con la APK de pruebas anterior instalada, esa app queda aparte hasta desinstalarla a mano.
+- **RF-387** **Licencia libre.**
+  - El juego (código, datos, dibujos y sonidos propios) se distribuye gratis bajo la **GNU General Public License, versión 3 o posterior** (GPL-3.0-or-later). El texto oficial completo va en `LICENSE`, en la raíz, y el README tiene una sección "Licencia".
+  - **Dada** la Wiki, **cuando** se abre la guía, **entonces** hay un artículo "Licencias" que nombra la licencia del juego y la del motor Godot (MIT, con su aviso de copyright, que tiene que acompañar a los ejecutables). También aclara que GUT, la herramienta de tests (MIT), no va dentro de los ejecutables.
+
+### M49 · Prueba de modos unificada con el gestor de mapas (Lucas, 2026-10-07)
+**Estado: especificada, sin implementar (T197, después de M48).** Es la prueba chica de modos de B-05 (D-078). Un modo es un paquete de datos, igual que un mapa de la comunidad pero con varios mapas y reglas. Épocas pasó al otro juego (D-076).
+
+- **RF-388** **Paquete de modo.**
+  - Es una carpeta con un `modo.json` y sus mapas JSON (formato §7.8). El `modo.json` lleva versión, nombre, descripción y la lista ordenada de mapas, y como opcionales las torres disponibles y las reglas `oro_inicial_%`, `vidas` y `vida_monstruos_%`.
+  - Los modos oficiales viven en `res://data/modos/<id>/` y los propios en `user://modos/<id>/`.
+  - **Solo datos:** un modo nunca trae código (como RF-204).
+  - **Dado** un paquete roto, **cuando** se listan los modos, **entonces** aparece con su motivo y los demás se ven igual (como RF-222).
+- **RF-389** **Selección de nivel con modos.**
+  - Arriba hay un selector de modo:
+    - **Campaña:** la de siempre, sin mover archivos.
+    - **Los modos oficiales.**
+    - **Comunidad:** los mapas sueltos de `user://maps/`, como hoy.
+    - **Los modos propios.**
+  - **Cuando** se elige un modo, **entonces** se ven sus mapas en orden, con sus estrellas.
+- **RF-390** **Progreso por modo.**
+  - Cada mapa de un modo guarda vidas, estrellas, puntaje y top 5 con el id `modo_<modo>_<mapa>`.
+  - No cuenta para la campaña, el total de estrellas de la campaña, el Salón de la fama ni la colección de avances.
+  - En un modo oficial el primer mapa está abierto y cada uno se habilita al ganar el anterior del mismo modo. En los modos propios, todos están abiertos. El modo de pruebas abre todo (RF-183).
+- **RF-391** **Modo oficial de prueba "Asedio".**
+  - Son los mapas 1 a 9 de la campaña con sus mismas oleadas, con monstruos de más vida y menos oro inicial. Valores iniciales en datos: vida 150 % y oro 80 %, ajustables.
+  - Cubre también los "niveles difíciles" de B-10.
+  - **Dado** el bot de balance, **cuando** juega los primeros mapas de Asedio, **entonces** se informa si se pueden ganar. No es balance definitivo.
+- **RF-392** **El editor guarda en modos.**
+  - Al guardar, se elige el destino: "Mapas sueltos (Comunidad)" como hoy, o un modo propio, existente o nuevo con su nombre.
+  - Crear un modo desde el editor arma la carpeta y su `modo.json`; cada mapa nuevo se agrega al final de la lista.
+  - Abrir un mapa en el editor lista también los de los modos propios.
+  - Nunca toca `data/` ni `campaign.json` (RF-210).
