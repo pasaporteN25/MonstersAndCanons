@@ -1,6 +1,6 @@
 # M51 · Ficha de arte de la Disruptora (para Codex, T216)
 
-**Estado:** ficha escrita en T215. **Todavía no hay arte** y **no se produce nada sin el OK de Lucas sobre el concepto** (compuerta 🎨 de T216). Reglas del juego: RF-438 a RF-452 de `specs/01-spec.md` (M51) y D-086 / D-087. Protocolo de Codex: `specs/tareas/README.md` §6.
+**Estado:** ficha escrita en T215. Hay una **entrega provisional** en esta carpeta y en `assets/sprites/towers/rendered/`, por instrucción directa para que Lucas la revise después; **la aprobación del concepto sigue pendiente** y no se considera cerrada la compuerta 🎨 de T216. Reglas del juego: RF-438 a RF-452 de `specs/01-spec.md` (M51) y D-086 / D-087. Protocolo de Codex: `specs/tareas/README.md` §6.
 
 ## Qué es (en una frase)
 Una **bobina Tesla** (pedido de Lucas, 07 §9) que **no dispara**: emite **pulsos en anillo** que **apagan el aura** del Guardián y del Curandero. Tiene que parecer una torre de **utilidad** y **verse distinta de la Eléctrica** a 64 y a 34 px.
