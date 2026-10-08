@@ -4,17 +4,25 @@
   "oro": 300,
   "vidas": 20,
   "aumento_vida": 24,
+  "tema": "bosque",
+  "leyenda": {
+    "t": {"removible":{"clase":"arbol","probabilidad":50.0,"recursos":1.0}},
+    "r": {"removible":{"clase":"roca","probabilidad":50.0,"recursos":1.0}},
+    "m": {"dibujo":"roca_marcada"},
+    "f": {"dibujo":"helecho"}
+  },
   "torres_extra": ["mechanical_standard"],
+  "demoledora": true,
   "mapa": [
     "....................",
     "A#################..",
-    "....X...X.....X..#..",
-    ".X....X......#####..",
+    "....X...t.....r..#..",
+    ".m....t......#####..",
     "........##S#.#......",
     "..#######..###...X..",
-    "..#.......X....X....",
+    "..#.......r....t....",
     "..#################B",
-    ".....X......X......."
+    ".....f......r......."
   ],
   "oleadas": [
     [{"enemigo": "normal", "cantidad": 12, "cada": 0.7},

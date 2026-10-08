@@ -672,6 +672,8 @@ f8   ·······▲············
 
 **Aumento de vida por oleada: 30 %** (ver §7.4).
 
+**T223 (bloque 2, «El lindero»):** tema `bosque` con **3 removibles** (2 árboles y 1 roca, `probabilidad` 0: este nivel **no da recursos**, Q-18) en el corredor entre las dos rectas del camino, más un poste con cintas y un helecho en casillas `X`. Enseña la **demolición directa**: despejarlos suma casillas de la zona más fuerte del mapa. Ningún removible toca el camino ni las casillas de impacto del Embestidor (RF-379) y se gana sin demoler (el bot `mix` gana 5 de 5 con 9 vidas; antes de T223, con 10).
+
 ### 7.8 Niveles en archivos de texto *(M7, B-04 escalón 1, D-031)*
 
 Cada nivel es **un archivo de texto** en `data/levels/` (por ejemplo `level_06.json`) que se puede leer y cambiar con el Bloc de notas. El juego lo lee y arma el mapa solo: ya no hay escenas de mapa hechas a mano ni generadas por código.
@@ -752,6 +754,8 @@ f8   ·····▲······▲·······
 Oro inicial **300**, 20 vidas, **20 oleadas**, con todos los enemigos (Normal, Rápido, Tanque, Volador, Blindado, Jefe, Troll y Araña): las oleadas 1 a 8 los presentan de a pares, y de la 9 en adelante se mezclan; la 20 trae 6 Jefes, Arañas y Trolls. La lista completa está en el archivo del nivel.
 
 **Aumento de vida por oleada: 24 %** (ver §7.4). Con 15 % y con 20 % el bot que mezcla ganaba casi sin perder vidas (20 y 19); con 30 % perdía en la oleada 18 y con 45 %, en la 6: el salto entre 24 % y 30 % es muy brusco, así que conviene no subirlo sin revisar.
+
+**T223 (bloque 2, «El aserradero»):** tema `bosque`, **demoledora habilitada** y **6 removibles** (3 árboles y 3 rocas, todos sobre casillas `X`) que **entregan 1 recurso con 50 % de probabilidad** (el primer drop, Q-18). El Francotirador se compra por 150 de oro o 120 + 1 recurso, y el mapa se gana sin comprarlo con recursos. Una roca marcada (símbolo A) y un helecho reemplazan casillas `X`. El recorrido no cambia (30 y 29 casillas); el bot `mix` gana 5 de 5 con 16 vidas, igual que antes.
 
 ### 7.10 Mapas de tamaño variable *(M13, pedido por Lucas, D-037, B-08)*
 

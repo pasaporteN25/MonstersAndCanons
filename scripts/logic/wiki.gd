@@ -226,8 +226,12 @@ static func tower_entry(tower: TowerData, towers: Array[TowerData] = []) -> Wiki
 
 static func _collection_entries(_campaign: Array[LevelData], _is_seen: Callable) -> Array[WikiEntry]:
 	var entries: Array[WikiEntry] = []
+	# Se busca el autoload por nombre (y no como identificador) para que este script compile
+	# también en las herramientas `-s` (check_level, balance_sim), donde los autoloads no existen todavía.
+	var save_manager: Node = (Engine.get_main_loop() as SceneTree).root.get_node_or_null("SaveManager")
 	for id: StringName in CollectionDefinitions.ids():
-		entries.append(collection_entry(id, SaveManager.collected_sources(id).size(), _all_towers()))
+		var collected: int = save_manager.collected_sources(id).size() if save_manager != null else 0
+		entries.append(collection_entry(id, collected, _all_towers()))
 	return entries
 
 

@@ -2,6 +2,12 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Niveles 6 y 7 en el bosque *(T223, 2026-10-08)*
+
+- **Nido («El lindero»)** y **Cruce («El aserradero»)** pasan al **bosque**, con árboles y rocas que se pueden **demoler** pagando oro y esperando (un clic sobre el objeto). Despejarlos libera casillas buenas entre las rectas del camino. En el Nido son 3 y **no dan recursos**; se gana sin demoler.
+- En el Cruce hay 6 removibles, la **demoledora** se puede comprar desde el botón *Infraestructura* y cada removible **puede entregar 1 recurso** (50 % de probabilidad). Con un recurso, el Francotirador cuesta 120 de oro en vez de 150; nunca es obligatorio. Se suman señales nuevas (un poste con cintas y una roca con una marca tallada).
+- El camino y las oleadas no cambian.
+
 ## Demoledora global *(T208, 2026-10-08)*
 
 - En los niveles que la habilitan, el botón **Infraestructura** permite comprar una demoledora por 180 de oro, una sola vez. Cada demolición posterior cuesta el 10 % del precio original (mínimo 5) y tarda el 80 % del tiempo; el panel de cada objeto muestra el ahorro antes de comprarla. Las demoliciones ya iniciadas conservan su costo y duración, y al reiniciar se pierde la compra.

@@ -48,9 +48,13 @@ func test_a_level_without_theme_or_legend_is_the_usual_one() -> void:
 	assert_true(level.legend.is_empty())
 
 
-func test_the_official_levels_6_to_9_have_no_legend_and_levels_1_to_5_only_decoration() -> void:
+func test_the_official_levels_8_and_9_have_no_legend_and_levels_1_to_5_only_decoration() -> void:
 	# T222 (Q-36): los niveles 1 a 5 tienen señales y oasis, siempre no construibles (reemplazan casillas X).
+	# T223: los niveles 6 y 7 son de bosque y tienen removibles (los revisa test_levels_6_7.gd).
 	for level: LevelData in GameFlow.campaign.levels:
+		if str(level.id) in ["level_06", "level_07"]:
+			assert_eq(level.theme, &"bosque", str(level.id))
+			continue
 		assert_eq(level.theme, &"pradera", str(level.id))
 		var grid: MapGrid = MapGrid.parse(level.map_rows, level.legend)
 		if level.legend.is_empty():
