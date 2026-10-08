@@ -1,0 +1,11 @@
+{
+  "tarea": "T221",
+  "estado": "provisional",
+  "fecha": "2026-10-08",
+  "formato": "SVG transparente; 64x64",
+  "fuentes": "sources/",
+  "finales": ["stat_resources.svg", "coleccion_disruptor.svg", "demoledora.svg"],
+  "destinos": ["assets/sprites/ui/"],
+  "integracion": "Pendiente de T209 y T211; el HUD, la barra de colección y el panel de infraestructura todavía no consumen estos iconos.",
+  "aprobacion_lucas": "Pendiente"
+}
