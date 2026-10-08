@@ -48,11 +48,15 @@ func test_a_level_without_theme_or_legend_is_the_usual_one() -> void:
 	assert_true(level.legend.is_empty())
 
 
-func test_the_official_levels_have_no_theme_or_legend_and_the_same_routes() -> void:
+func test_the_official_levels_6_to_9_have_no_legend_and_levels_1_to_5_only_decoration() -> void:
+	# T222 (Q-36): los niveles 1 a 5 tienen señales y oasis, siempre no construibles (reemplazan casillas X).
 	for level: LevelData in GameFlow.campaign.levels:
 		assert_eq(level.theme, &"pradera", str(level.id))
-		assert_true(level.legend.is_empty(), str(level.id))
-		assert_true(MapGrid.parse(level.map_rows).legend_cells.is_empty())
+		var grid: MapGrid = MapGrid.parse(level.map_rows, level.legend)
+		if level.legend.is_empty():
+			assert_true(grid.legend_cells.is_empty(), str(level.id))
+		for letter: String in level.legend.keys():
+			assert_false(level.legend[letter].get("construible", false), "%s: '%s'" % [level.id, letter])
 
 
 # --- Tema (RF-260) ---

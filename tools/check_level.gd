@@ -32,7 +32,7 @@ func _check(path: String) -> bool:
 			print("  ✗ ", problem)
 		return false
 	var level: LevelData = result["level"]
-	var grid: MapGrid = MapGrid.parse(level.map_rows)
+	var grid: MapGrid = MapGrid.parse(level.map_rows, level.legend)
 	print("  %s · oro %d · vidas %d · %d oleadas" % [level.display_name, level.starting_gold,
 		level.starting_lives, level.waves.size()])
 	for i: int in grid.entrances.size():

@@ -129,7 +129,7 @@ func test_the_example_map_of_every_theme_is_valid_and_has_no_warnings() -> void:
 
 func test_the_example_maps_have_the_same_routes_as_the_map_they_came_from() -> void:
 	# Son el nivel 4 con parches de leyenda: el recorrido no puede haber cambiado (RF-264).
-	var original: MapGrid = MapGrid.parse(GameFlow.level(3).map_rows)
+	var original: MapGrid = MapGrid.parse(GameFlow.level(3).map_rows, GameFlow.level(3).legend)
 	for theme: String in EXAMPLES:
 		var level: LevelData = LevelFile.load_level("res://tools/ejemplos/tema_%s.json" % theme)["level"]
 		var grid: MapGrid = MapGrid.parse(level.map_rows, level.legend)

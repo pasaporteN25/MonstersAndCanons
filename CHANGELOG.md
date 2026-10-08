@@ -2,6 +2,10 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Señales y oasis en los niveles 1 a 5 *(T222, 2026-10-08)*
+
+- Los cinco primeros mapas suman unas rocas talladas, charcos de agua y flores donde antes había casillas bloqueadas. Es solo decoración: el camino, dónde se puede construir, las oleadas, el oro y las vidas son los mismos de siempre.
+
 ## Android normal y pruebas *(M34, 2026-10-02)*
 
 - Dos APK con los últimos diseños e interfaces del PR#1, con paquetes separados para instalarlas juntas. La variante de pruebas conserva su panel de administración; la normal no lo habilita.

@@ -130,7 +130,7 @@ func test_a_level_file_with_a_map_too_big_says_why() -> void:
 
 func test_the_official_levels_keep_their_size() -> void:
 	for level: LevelData in GameFlow.campaign.levels:
-		var grid: MapGrid = MapGrid.parse(level.map_rows)
+		var grid: MapGrid = MapGrid.parse(level.map_rows, level.legend)
 		assert_true(grid.is_valid(), str(level.id))
 		assert_eq(Vector2i(grid.width, grid.height), Vector2i(20, 9), "%s no cambia de tamaño" % level.id)
 
