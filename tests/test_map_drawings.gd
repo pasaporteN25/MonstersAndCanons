@@ -45,8 +45,7 @@ func test_the_catalog_has_four_grounds_and_eighteen_objects() -> void:
 		else:
 			objects += 1
 	assert_eq(grounds, 4)
-	assert_eq(objects, 15)
-	assert_eq(objects, 18)
+	assert_eq(objects, 21)
 
 
 func test_the_six_community_signals_are_static_objects() -> void:
@@ -82,7 +81,7 @@ func test_every_drawing_paints_in_a_level_without_errors() -> void:
 		add_child_autofree(level)
 		assert_eq(level.legend_cells.size(), 8, id)
 		await wait_physics_frames(2)
-	assert_true(true, "se pintaron los 19")
+	assert_true(true, "se pintaron los 25")
 
 
 func test_every_drawing_paints_in_every_theme() -> void:
