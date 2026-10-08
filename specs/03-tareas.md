@@ -1313,7 +1313,26 @@
 - [ ] **T201** · 🚦 G2 · Biblia del universo (`specs/10-universo.md`).
 - [ ] **T202** · Auditoría de nombres y glosario canónico.
 - [ ] **T203** · Torres por mapa y aviso en la selección.
-- [ ] **T204** · Bot de balance con varias semillas.
+- [x] **T204** · Bot de balance con varias semillas.
+  - **Resultado (2026-10-08):** `tools/balance_sim.gd` ahora acepta `seed=N`, `seeds=N`, `levels=A-B`, varias estrategias separadas por coma (`mix,smart`) y `report=ruta.json`. Juega una cola de partidas en un solo proceso y, al final, imprime la tabla (mapa, estrategia, semilla, resultado, vidas, oleada y oro sobrante) y, si se pide, la guarda en JSON. La lectura de rangos vive en `scripts/logic/balance_args.gd` (nuevo, funciones puras) con `tests/test_balance_args.gd` (5 tests). Documentado en el encabezado del script y en `ONBOARDING.md`.
+  - **Azar fijado (sin tocar el juego):** (1) el temblor de pantalla (RF-128) y el resto de los `randf` sueltos del juego usan el generador global: el bot llama a `seed(N)` antes de cada partida; (2) el sorteo de grupos (RF-364) usa `WaveSpawner.rng`, que se mezcla con `randomize()` en su `setup()`: el bot le fija la semilla ya armada la partida (solo inyecta el generador, sin cambiar código del juego); (3) las casillas al azar de `naive` usan el `rng` propio del bot. El portador del avance (`game.gd`, `_setup_collection`) no corre en el bot (exige `GameFlow.current_index >= 0`) y el robo del Ladrón no usa números al azar en el código (`grep randf|randi` no lo encontró), así que no hubo nada que fijar ahí.
+  - **Qué se probó:** `mix level=7 seed=3` corrido dos veces seguidas dio lo mismo (VICTORIA, 16 vidas, 358 de oro). La corrida `mix levels=1-9 seeds=3` terminó (27 partidas) con 0 `SCRIPT ERROR`. Tests completos: 1022/1022 (1017 + 5 nuevos), 0 `SCRIPT ERROR`/`Parse Error`. Hallazgo: antes de arreglar el azar del `WaveSpawner`, el mismo caso daba 355 y 358 de oro; el arreglo lo hace repetible.
+  - **Línea de base `mix` (mapas 1–9 × semillas 1–3), para T223 y T224** (vidas / oleada / oro sobrante):
+
+    | Mapa | Semilla 1 | Semilla 2 | Semilla 3 |
+    |---|---|---|---|
+    | 1 | ✔ 20 · 10/10 · 241 | ✔ 20 · 10/10 · 241 | ✔ 20 · 10/10 · 241 |
+    | 2 | ✘ 0 · 15/15 · 33 | ✘ 0 · 15/15 · 33 | ✘ 0 · 15/15 · 33 |
+    | 3 | ✔ 16 · 20/20 · 310 | ✔ 16 · 20/20 · 310 | ✔ 16 · 20/20 · 310 |
+    | 4 | ✔ 10 · 15/15 · 316 | ✔ 10 · 15/15 · 316 | ✔ 10 · 15/15 · 316 |
+    | 5 | ✔ 13 · 20/20 · 283 | ✔ 13 · 20/20 · 283 | ✔ 13 · 20/20 · 283 |
+    | 6 | ✔ 10 · 15/15 · 275 | ✔ 10 · 15/15 · 275 | ✔ 10 · 15/15 · 275 |
+    | 7 | ✔ 16 · 20/20 · 346 | ✔ 16 · 20/20 · 358 | ✔ 16 · 20/20 · 358 |
+    | 8 | ✔ 20 · 18/18 · 337 | ✔ 20 · 18/18 · 273 | ✔ 20 · 18/18 · 273 |
+    | 9 | ✔ 11 · 20/20 · 351 | ✔ 11 · 20/20 · 364 | ✔ 11 · 20/20 · 273 |
+
+    24 victorias de 27. **Aviso para Lucas:** con `mix` el mapa 2 se **pierde** en la última oleada (15/15) con las 3 semillas; no se investigó si es esperado o un problema de balance (no era parte de T204). Las semillas solo cambian el oro en los mapas 7–9; en 1–6 no hay sorteos que dependan de ellas.
+  - **Qué no:** no se probaron las otras estrategias (`smart`, `heavy`, `basic`, `naive`) en la corrida larga, ni `report=` con una ruta que no sea `user://`, ni `levels=` con `file=` o `modo=` (con esos, `level=N` sigue siendo un solo mapa). Al salir, Godot imprime advertencias de objetos sin liberar (`ObjectDB instances were leaked`): ya salían antes de este cambio con el script original. No se actualizó `CHANGELOG.md` porque no cambia nada de lo que ve quien juega.
 - [ ] **T205** · 🚦 G3 · Spec de removibles, demolición, demoledora, recursos, extracción y colecciones (M50).
 - [ ] **T206** · Removibles: formato y validación.
 - [ ] **T207** · Demolición directa.

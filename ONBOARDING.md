@@ -293,7 +293,7 @@ Se ejecutan desde la carpeta del proyecto. Más detalle dentro de cada archivo.
 | Comando | Para qué |
 |---|---|
 | `godot --headless --path . -s addons/gut/gut_cmdln.gd -gdir=res://tests -gexit` | Correr todos los tests. |
-| `godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- smart level=1` | Bot que juega solo, para revisar el balance (spec §7.1). Estrategias: `smart`, `basic`, `naive`. |
+| `godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- smart level=1` | Bot que juega solo, para revisar el balance (spec §7.1). Estrategias: `smart`, `mix`, `heavy`, `basic`, `naive`; con `seeds=N` y `levels=A-B` juega muchas partidas y da una tabla. |
 | `godot --path . -s tools/perf_test.gd` | Prueba de rendimiento: 200 enemigos y 60 torres. Abre una ventana. |
 | `godot --headless --path . -s tools/make_sounds.gd` | Volver a generar los sonidos (D-020). Con `-- shot_fire`, solo ese. |
 | `godot --headless --path . -s tools/check_level.gd -- data/levels/level_06.json` | Revisar un nivel sin jugarlo (sin archivo: todos los de la campaña). Cómo hacer un nivel: `CONTENIDO.md`. |
@@ -435,5 +435,6 @@ Abrí el juego (o el proyecto con F5) y entrá a **Jugar**.
 - En el **Editor de mapas**, **"En un modo…"** → **+ Nuevo modo…** → un nombre → un nombre de archivo. Al volver a **Jugar**, aparece una solapa con ese modo después de "Mapas de la comunidad", con el mapa abierto y el botón "Abrir carpeta del modo".
 - "Guardar" después de eso sigue guardando en el modo, y "Abrir" lista el mapa bajo "— Modo … —".
 - Para balancear: `godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- mix modo=asedio level=1`.
+- **Varias semillas y varios mapas (T204):** `... -s tools/balance_sim.gd -- mix levels=6-9 seeds=5 report=user://balance.json`. `seed=N` fija una semilla, `seeds=N` juega las semillas 1 a N, `levels=A-B` juega los mapas A a B y se pueden pedir varias estrategias (`mix,smart`). La misma semilla da siempre el mismo resultado. Al final imprime una tabla (mapa, estrategia, semilla, resultado, vidas, oleada y oro sobrante) y, con `report=`, la guarda en JSON (`user://` es `~/.local/share/godot/app_userdata/<proyecto>/`).
 
 Con más de dos modos propios, las solapas ya no entran en la fila (limitación conocida de esta primera prueba).

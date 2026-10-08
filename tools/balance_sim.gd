@@ -21,6 +21,19 @@
 #   godot ... -s tools/balance_sim.gd -- mix file=tools/ejemplos/mapa_grande.json   (jugar un archivo de nivel cualquiera)
 #   godot ... -s tools/balance_sim.gd -- mix modo=asedio level=2   (jugar el mapa 2 del modo Asedio, con sus reglas)
 #
+# Varias semillas y varios mapas en una sola corrida (T204):
+#   seed=N          una semilla (por defecto 12345). Fija TODO el azar de la partida: el temblor de
+#                   pantalla (RF-128), la probabilidad de los grupos (RF-364) y las casillas del bot "naive".
+#   seeds=N         las semillas 1 a N, una partida por semilla.
+#   levels=A-B      juega los mapas A a B seguidos (levels=6-9). Con level=N, uno solo.
+#   mix,smart       (la estrategia) se pueden pedir varias separadas por coma.
+#   report=ruta     además de la tabla final, la guarda en JSON (por ejemplo report=user://balance.json).
+#   Ejemplos:
+#     godot ... -s tools/balance_sim.gd -- mix level=6 seeds=5
+#     godot ... -s tools/balance_sim.gd -- mix levels=6-9 seeds=5 report=user://balance.json
+#   La misma semilla da siempre el mismo resultado. Al final imprime una tabla: mapa, estrategia,
+#   semilla, resultado, vidas, oleada y oro sobrante.
+#
 # --fixed-fps 60 hace que cada frame cuente como 1/60 s sin esperar al reloj real,
 # así una partida de ~10 minutos se simula en segundos.
 extends SceneTree
@@ -38,6 +51,8 @@ const PATH_SAMPLE_STEP: float = 16.0
 # Node2D y no Game: este script se compila antes que los autoloads, y game.gd los usa.
 var game: Node2D
 var strategy: String = "smart"
+## Estrategias a jugar (T204): normalmente una; "mix,smart" juega las dos.
+var strategies: Array[String] = []
 var rng := RandomNumberGenerator.new()
 var built: int = 0
 var last_reported_wave: int = 0
@@ -52,6 +67,15 @@ var mode_id: String = ""
 ## levelscale=N: prueba otro % de vida por oleada para el nivel elegido (D-019). -1 = no tocar.
 var level_scale_override: int = -1
 var starting_gold_override: int = -1
+## T204: mapas y semillas a jugar, y la cola de partidas pendientes.
+var level_numbers: Array[int] = []
+var seed_list: Array[int] = [BalanceArgs.DEFAULT_SEED]
+var report_path: String = ""
+var _queue: Array[Dictionary] = []
+var _rows: Array[Dictionary] = []
+var _current: Dictionary = {}
+var _spawner_seeded: bool = false
+var _campaign: CampaignData
 ## Recursos modificados por los ajustes. Se guardan aquí para que Godot no los descarte
 ## de su caché (si nadie los usa, los libera y la partida los volvería a leer del disco).
 var _kept: Array[Resource] = []
@@ -59,29 +83,60 @@ var _kept: Array[Resource] = []
 
 func _initialize() -> void:
 	var args: PackedStringArray = OS.get_cmdline_user_args()
+	var strategy_text: String = "smart"
 	if not args.is_empty():
-		strategy = args[0]
+		strategy_text = args[0]
+	strategies = BalanceArgs.parse_strategies(strategy_text)
+	if strategies.is_empty():
+		strategies = ["smart"]
 	for arg: String in args.slice(1):
 		_apply_override(arg)
-	rng.seed = 12345
-	game = (_keep(load("res://scenes/game/game.tscn")) as PackedScene).instantiate()
 	# Este script se compila antes que los autoloads: no puede usar GameFlow por su nombre.
-	var campaign: CampaignData = _keep(LevelFile.load_campaign())
-	game.level_data = campaign.levels[maxi(level_number, 1) - 1]
+	_campaign = _keep(LevelFile.load_campaign())
+	if level_numbers.is_empty():
+		level_numbers = [maxi(level_number, 1)]
+	for level_n: int in level_numbers:
+		for strategy_name: String in strategies:
+			for seed_n: int in seed_list:
+				_queue.append({"level": level_n, "strategy": strategy_name, "seed": seed_n})
+	_start_next_run()
+
+
+## Arma la partida de la cola y la agrega al árbol. Devuelve false si no quedan más.
+func _start_next_run() -> bool:
+	if _queue.is_empty():
+		return false
+	_current = _queue.pop_front()
+	strategy = _current["strategy"]
+	level_number = _current["level"]
+	built = 0
+	last_reported_wave = 0
+	path_points.clear()
+	air_points.clear()
+	rng.seed = _current["seed"]
+	# T204: la semilla manda sobre TODO el azar de la partida, sin cambiar cómo se sortea nada:
+	# el temblor de pantalla usa el generador global; el sorteo de grupos, el del WaveSpawner (más abajo).
+	seed(_current["seed"])
+	game = (_keep(load("res://scenes/game/game.tscn")) as PackedScene).instantiate()
+	if level_number > _campaign.levels.size():
+		print("No existe el mapa %d (la campaña tiene %d)." % [level_number, _campaign.levels.size()])
+		quit(1)
+		return false
+	game.level_data = _campaign.levels[level_number - 1]
 	if level_file != "":
 		var result: Dictionary = LevelFile.load_level(level_file)
 		if result["level"] == null:
 			print("No se pudo leer %s: %s" % [level_file, result["errors"]])
 			quit(1)
-			return
+			return false
 		game.level_data = _keep(result["level"])
 	if mode_id != "":
 		var mode: Dictionary = ModePacks.read(ModePacks.OFFICIAL_DIR, mode_id, true)
-		var mode_level: LevelData = ModePacks.map_level(mode, maxi(level_number, 1) - 1)
+		var mode_level: LevelData = ModePacks.map_level(mode, level_number - 1)
 		if mode_level == null:
-			print("No se pudo leer el mapa %d del modo %s: %s" % [maxi(level_number, 1), mode_id, mode["errors"]])
+			print("No se pudo leer el mapa %d del modo %s: %s" % [level_number, mode_id, mode["errors"]])
 			quit(1)
-			return
+			return false
 		game.level_data = _keep(mode_level)
 		print("Modo: %s · oro inicial %d · vida de los monstruos %d %%" % [mode["name"], mode_level.starting_gold, mode_level.enemy_health_percent])
 	if strategy == "heavy":
@@ -91,8 +146,11 @@ func _initialize() -> void:
 	if level_scale_override >= 0:
 		game.level_data.health_scale_percent_per_wave = level_scale_override
 	root.add_child(game)
-	print("Nivel: ", game.level_data.display_name)
-	print("Estrategia: %s · vida del Normal: %d" % [strategy, (load("res://data/enemies/normal.tres") as EnemyData).max_health])
+	_seed_spawner()
+	print("Nivel: %s · estrategia: %s · semilla: %d · vida del Normal: %d" % [
+		game.level_data.display_name, strategy, _current["seed"],
+		(load("res://data/enemies/normal.tres") as EnemyData).max_health])
+	return true
 
 
 ## Prueba de números SIN tocar los archivos: cambia los recursos ya cargados en memoria.
@@ -110,7 +168,22 @@ func _apply_override(arg: String) -> void:
 	if parts[0] == "modo":
 		mode_id = parts[1]  # RF-391: el mapa level=N de ese modo oficial, con sus reglas
 		return
+	if parts[0] == "report":
+		report_path = parts[1]
+		return
+	if parts[0] == "levels":
+		level_numbers = BalanceArgs.parse_levels(parts[1])
+		if level_numbers.is_empty():
+			print("levels=%s no es válido (se espera A-B, por ejemplo levels=6-9)." % parts[1])
+			quit(1)
+		return
 	var value: float = parts[1].to_float()
+	if parts[0] == "seed":
+		seed_list = [int(value)]
+		return
+	if parts[0] == "seeds":
+		seed_list = BalanceArgs.seeds_up_to(int(value))
+		return
 	if parts[0] == "level":
 		level_number = int(value)
 		return
@@ -153,11 +226,27 @@ func _keep(resource: Resource) -> Resource:
 	return resource
 
 
+## El WaveSpawner sortea con randomize() en su setup(), que corre en el _ready de la partida: recién
+## ahí se le puede fijar la semilla. Solo inyecta el generador; el juego sortea igual que siempre.
+## En la primera partida el árbol todavía no está andando (_ready llega después), así que se reintenta.
+func _seed_spawner() -> void:
+	if game.is_node_ready():
+		game.spawner.rng.seed = _current["seed"]
+		_spawner_seeded = true
+	else:
+		_spawner_seeded = false
+
+
 func _process(_delta: float) -> bool:
+	if game == null:
+		return true
+	if not _spawner_seeded:
+		_seed_spawner()
 	if path_points.is_empty():
 		_sample_path()
 	var session: LevelSession = game.session
-	if session.wave > last_reported_wave and session.state != LevelSession.State.WAVE_RUNNING:
+	var single_run: bool = _rows.is_empty() and _queue.is_empty()
+	if single_run and session.wave > last_reported_wave and session.state != LevelSession.State.WAVE_RUNNING:
 		last_reported_wave = session.wave
 		print("  oleada %2d terminada · vidas %2d · oro %4d · torres %2d" % [
 			session.wave, session.lives, session.gold, built])
@@ -165,11 +254,43 @@ func _process(_delta: float) -> bool:
 		var won: bool = session.state == LevelSession.State.WON
 		print("RESULTADO: %s · oleada %d/%d · vidas %d" % [
 			"VICTORIA" if won else "DERROTA", session.wave, session.total_waves, session.lives])
+		_rows.append({
+			"level": _current["level"], "strategy": strategy, "seed": _current["seed"],
+			"won": won, "lives": session.lives, "wave": session.wave,
+			"total_waves": session.total_waves, "gold": session.gold})
+		root.remove_child(game)
+		game.queue_free()
+		game = null
+		if _start_next_run():
+			return false
+		_print_summary()
 		return true
 	_buy_towers()
 	if session.can_start_wave():
 		game.start_next_wave()  # sin esperar la cuenta atrás
 	return false
+
+
+## Tabla final de todas las partidas (T204) y, con report=ruta, el mismo contenido en JSON.
+func _print_summary() -> void:
+	print("")
+	print("mapa | estrategia | semilla | resultado | vidas | oleada | oro sobrante")
+	for row: Dictionary in _rows:
+		print("%4d | %-10s | %7d | %-9s | %5d | %2d/%-3d | %5d" % [
+			row["level"], row["strategy"], row["seed"], "VICTORIA" if row["won"] else "DERROTA",
+			row["lives"], row["wave"], row["total_waves"], row["gold"]])
+	var wins: int = 0
+	for row: Dictionary in _rows:
+		if row["won"]:
+			wins += 1
+	print("Victorias: %d de %d" % [wins, _rows.size()])
+	if report_path != "":
+		var file := FileAccess.open(report_path, FileAccess.WRITE)
+		if file == null:
+			print("No se pudo escribir %s" % report_path)
+			return
+		file.store_string(JSON.stringify(_rows, "\t"))
+		print("Informe guardado en ", ProjectSettings.globalize_path(report_path))
 
 
 func _buy_towers() -> void:
