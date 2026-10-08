@@ -1311,7 +1311,8 @@
   - **Qué se probó:** nada de código; es solo documentación.
   - **Qué no:** los valores (probabilidad del drop, precio de la máquina, tiempo que baja, Mortero y Francotirador) son iniciales y no se probaron con el bot. El diseño del jefe supremo no existe todavía.
 - [ ] **T201** · 🚦 G2 · Biblia del universo (`specs/10-universo.md`).
-- [ ] **T202** · Auditoría de nombres y glosario canónico.
+- [x] **T202** · Auditoría de nombres y glosario canónico.
+  **Resultado:** informe en `specs/tareas/informes/T202-glosario.md` con la tabla de las 10 torres, los 15 enemigos, los 7 temas y los conceptos (juego, avance/pieza/fuente, colección, Estandarte, desgaste, aturdimiento, modo de pruebas), 9 preguntas para Lucas (G2) y la lista de archivos que habría que cambiar. Hallazgos principales: el Normal, el Rápido y el Tanque tienen en la guía §3 una especie y un color que ya no son los del dibujo (M24); el Curandero cambió en M43; la tabla de §3 tiene 13 filas para 15 enemigos (faltan Embestidor y Ladrón); la torre de apoyo tiene cuatro nombres (Estandarte mecánico, Estandarte, Mecánico, estatua); "Monsters & Canons" puede ser un error de "Cannons". **Qué se probó:** nada de código (es solo documentación; no se corrieron los tests). **Qué no:** no se abrió el juego ni se miró cada PNG; lo del "dibujo ya no coincide" sale de lo que dicen los documentos de arte y de las aprobaciones de Lucas, no de ver el arte actual. No se cambió ningún archivo del juego ni de la spec.
 - [ ] **T203** · Torres por mapa y aviso en la selección.
 - [ ] **T204** · Bot de balance con varias semillas.
 - [ ] **T205** · 🚦 G3 · Spec de removibles, demolición, demoledora, recursos, extracción y colecciones (M50).
