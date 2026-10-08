@@ -43,3 +43,26 @@ static func seconds_left_line(seconds: float) -> String:
 
 static func _seconds(seconds: float) -> String:
 	return str(int(seconds)) if is_equal_approx(seconds, roundf(seconds)) else "%.1f" % seconds
+
+
+## RF-422: el botón de un punto sin habilitar.
+static func enable_line(cost: int) -> String:
+	return "Habilitar extracción (%d de oro)" % cost
+
+
+static func production_line(production: int) -> String:
+	return "Produce %d %s por oleada" % [production, "recurso" if production == 1 else "recursos"]
+
+
+## RF-424: "Reserva 6/8".
+static func reserve_line(left: int, total: int) -> String:
+	return "Reserva %d/%d" % [left, total]
+
+
+static func state_line(state: ObstacleField.State) -> String:
+	match state:
+		ObstacleField.State.ACTIVE:
+			return "Activa"
+		ObstacleField.State.DEPLETED:
+			return "Agotada"
+	return "Sin habilitar"

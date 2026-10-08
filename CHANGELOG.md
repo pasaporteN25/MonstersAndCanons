@@ -5,6 +5,12 @@ Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle t�
 ## Demoledora global *(T208, 2026-10-08)*
 
 - En los niveles que la habilitan, el botón **Infraestructura** permite comprar una demoledora por 180 de oro, una sola vez. Cada demolición posterior cuesta el 10 % del precio original (mínimo 5) y tarda el 80 % del tiempo; el panel de cada objeto muestra el ahorro antes de comprarla. Las demoliciones ya iniciadas conservan su costo y duración, y al reiniciar se pierde la compra.
+## Minas y bosques que se pueden explotar *(T210, 2026-10-08)*
+
+- Un clic en una **mina** o un **bosque explotable** abre su panel: *"Habilitar extracción (100 de oro)"*, *"Produce 2 recursos por oleada"* y *"Reserva 8/8"*. Habilitar cobra el oro al instante; no se cancela ni se devuelve. Se pueden habilitar todos los puntos que alcance el oro.
+- Un punto activo entrega sus recursos **cada vez que se completa una oleada** (también la que estaba en curso al habilitarlo) y aparece un "+2 recursos" sobre él. **No produce por esperar** ni cuando el modo de pruebas salta de oleada. Una mina con la reserva de 8 entrega 2, 2, 2 y 2, y queda **agotada**.
+- En el mapa se ve el estado (velo gris y marco ámbar sin habilitar, marco verde activa, velo oscuro agotada) y la reserva como **segmentos que se vacían**. El dibujo es provisional: el arte final llega más adelante.
+
 ## Recursos y torres que cuestan recursos *(T209, 2026-10-08)*
 
 - En un mapa que tenga **recursos** (removibles que pueden entregarlos o minas), la barra de arriba muestra un **contador de recursos** con un ícono provisional. Los recursos son solo de esa partida: empiezan en 0, no se guardan y los que sobran se pierden. Al terminar una demolición, el recurso (si salió) entra una sola vez.

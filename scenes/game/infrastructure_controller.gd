@@ -13,6 +13,8 @@ const REWARD_COLOR := Color(0.55, 0.95, 0.5)
 signal selection_changed(cell: Vector2i)
 ## Terminó una demolición: la casilla ya es pasto. `reward` es la de `ObstacleField.reward_of`.
 signal demolished(cell: Vector2i, reward: Dictionary)
+## RF-423: al completarse una oleada, lo que entregó cada punto (celda → recursos).
+signal produced_resources(produced: Dictionary)
 ## Cambió el estado de algún obstáculo (para refrescar el panel).
 signal changed
 
@@ -36,7 +38,9 @@ func setup(level: Level, session: LevelSession, specs: Array[ObstacleSpec], rng:
 	field.job_cancelled.connect(func(_cell: Vector2i, _refund: int) -> void: changed.emit())
 	field.job_started.connect(func(_cell: Vector2i) -> void: changed.emit())
 	field.job_progress.connect(func(_cell: Vector2i, _fraction: float) -> void: changed.emit())
+	field.site_changed.connect(func(_cell: Vector2i) -> void: changed.emit())
 	session.gold_changed.connect(func(_gold: int) -> void: changed.emit())
+	session.wave_completed.connect(_on_wave_completed)
 
 
 ## RF-411 a RF-413: cobra la máquina una sola vez; el campo solo registra la compra.
@@ -59,8 +63,11 @@ func _process(delta: float) -> void:
 
 # --- Elegir (RF-404) ---
 
-## El removible de `cell` si se puede elegir: uno ya despejado es pasto y no se elige.
+## El removible o punto de extracción de `cell` si se puede elegir: un removible ya despejado es pasto
+## y no se elige; un punto de extracción se elige siempre, también agotado (RF-422).
 func obstacle_at(cell: Vector2i) -> ObstacleSpec:
+	if field.is_extraction(cell):
+		return field.spec_at(cell)
 	if not field.is_removable(cell) or field.state_of(cell) == ObstacleField.State.CLEARED:
 		return null
 	return field.spec_at(cell)
@@ -97,6 +104,31 @@ func order(cell: Vector2i) -> bool:
 	if not _session.spend(field.cost_of(cell)):
 		return false
 	return field.order(cell) != null
+
+
+## RF-422: cobra el oro y deja activo el punto de extracción. Es inmediato, no se cancela ni se devuelve.
+## Devuelve false, sin cambiar nada, si no se puede habilitar o no alcanza el oro.
+func enable(cell: Vector2i) -> bool:
+	if _session.is_over() or field.can_enable(cell) != &"":
+		return false
+	if not _session.spend(field.cost_of(cell)):
+		return false
+	return field.enable_site(cell)
+
+
+## RF-423: una oleada realmente completada (no un salto, RF-319) hace producir a cada punto activo.
+func _on_wave_completed(_wave: int, _bonus: int) -> void:
+	var produced: Dictionary = field.complete_wave()
+	for cell: Vector2i in produced:
+		var amount: int = produced[cell]
+		_session.add_resources(amount)
+		if _effects != null:
+			var text := FloatingText.new().setup("+%d %s" % [amount, "recurso" if amount == 1 else "recursos"], REWARD_COLOR, 18, 0.9, 34.0)
+			text.position = _level.cell_center(cell) + Vector2(0, -20)
+			_effects.add_child(text)
+	if not produced.is_empty():
+		produced_resources.emit(produced)
+	changed.emit()
 
 
 ## RF-407: devuelve todo el oro pagado. Devuelve false si no hay trabajo.

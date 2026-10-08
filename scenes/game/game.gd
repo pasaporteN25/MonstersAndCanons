@@ -199,6 +199,7 @@ func _setup_infrastructure() -> void:
 	hud.setup_infrastructure(level_data.machine_enabled, infrastructure.field.machine_price(), session.gold,
 		infrastructure.field.has_machine)
 	hud.infrastructure_panel.buy_pressed.connect(infrastructure.buy_machine)
+	panel.enable_pressed.connect(infrastructure.enable)
 	infrastructure.selection_changed.connect(_refresh_obstacle_panel.unbind(1))
 	infrastructure.changed.connect(_refresh_obstacle_panel)
 	infrastructure.changed.connect(_refresh_infrastructure_panel)
@@ -216,7 +217,8 @@ func _refresh_obstacle_panel() -> void:
 	hud.obstacle_panel.show_obstacle(spec, field.state_of(cell), field.has_job() and job.cell != cell,
 			session.gold, 0.0 if job == null else job.seconds_left(), field.finding_recovered(cell),
 			job.paid if job != null and job.cell == cell else field.cost_of(cell),
-			field.seconds_of(cell), field.cost_with_machine(cell) if infrastructure.machine_enabled and not field.has_machine else -1)
+			field.seconds_of(cell), field.cost_with_machine(cell) if infrastructure.machine_enabled and not field.has_machine else -1,
+			field.reserve_left(cell))
 
 
 func _refresh_infrastructure_panel() -> void:

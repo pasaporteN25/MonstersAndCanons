@@ -257,6 +257,7 @@ Dos campos **opcionales** del nivel (sin ellos, el nivel se ve como siempre). Ha
 | `agua`, `hielo`, `lava`, `barro` | suelo | cubren toda la casilla y se unen entre sí; tienen un borde donde terminan |
 
 - **Objetos que se pueden retirar y minas** *(M50, RF-398 a RF-403; formato, validación, dibujo y `check_level` en T206; **demolición directa en T207** (clic, panel, cobro, trabajo con reloj de partida, cancelar); recursos, extracción y piezas, en T209 a T211; demoledora global en T208)*. Una letra de la leyenda puede llevar **`removible`** (un objeto que se retira pagando oro y esperando) **o** **`extraccion`** (una mina o un bosque que produce recursos), nunca los dos. Ejemplo:
+- **Objetos que se pueden retirar y minas** *(M50, RF-398 a RF-403; formato, validación, dibujo y `check_level` en T206; **demolición directa en T207** (clic, panel, cobro, trabajo con reloj de partida, cancelar); recursos en T209; **extracción finita en T210** (habilitar con oro, producir al completar oleadas hasta agotar la reserva); demoledora y piezas, en T208 y T211)*. Una letra de la leyenda puede llevar **`removible`** (un objeto que se retira pagando oro y esperando) **o** **`extraccion`** (una mina o un bosque que produce recursos), nunca los dos. Ejemplo:
 
 ```json
 "leyenda": {
