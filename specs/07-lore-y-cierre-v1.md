@@ -353,6 +353,8 @@ Lucas propone slides con ilustraciones de aspecto dibujado a mano que cuenten la
 - Balance: entradas, reservas y gastos; metodología de referencia, no valores impuestos al juego: https://machinations.io/docs/framework-basics
 - Validación e iteración: https://www.gdcvault.com/play/1028982/Building-Sustainable-Game-Economies-The
 
+- **Plan de ejecución (T199, 2026-10-07):** [08-plan-cierre-v1.md](08-plan-cierre-v1.md), con el cuestionario [09-decisiones-pendientes-v1.md](09-decisiones-pendientes-v1.md) y las fichas de [`tareas/`](tareas/).
+
 ## 15. Estado de esta incorporación
 
 Se registra la conversación y su plan; no se implementan mecánicas, mapas, arte ni intro. Se conservan los cambios locales ajenos que ya existían. Los precios ilustrativos, candidatos y preguntas no se convierten en decisiones aprobadas por aparecer en este documento.

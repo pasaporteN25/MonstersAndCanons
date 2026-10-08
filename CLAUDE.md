@@ -4,7 +4,7 @@ Tower defense 2D en **Godot 4.7** con **GDScript**, hecho con **spec primero**. 
 
 ## Cómo se corre
 
-Godot está en `C:\Tools\Godot\`. En PowerShell alcanza con `godot`; desde Git Bash hay que llamar a `/c/Tools/Godot/godot.cmd` (ahí `godot` no se encuentra). Usar `godot.cmd` (el que muestra los mensajes en la terminal); **no** renombrar `Godot_v…_console.exe` a `godot.exe` (ver `ONBOARDING.md`). Todo desde la carpeta del proyecto:
+**En la máquina Linux de Lucas** (2026-10-07), Godot 4.7.2 está en `/usr/local/bin/godot` y los comandos de abajo funcionan tal cual con `godot`. **En Windows**, Godot está en `C:\Tools\Godot\`. En PowerShell alcanza con `godot`; desde Git Bash hay que llamar a `/c/Tools/Godot/godot.cmd` (ahí `godot` no se encuentra). Usar `godot.cmd` (el que muestra los mensajes en la terminal); **no** renombrar `Godot_v…_console.exe` a `godot.exe` (ver `ONBOARDING.md`). Todo desde la carpeta del proyecto:
 
 ```bash
 godot --headless --import                                              # antes de los tests si hay clases (class_name) o archivos nuevos
@@ -45,7 +45,7 @@ Viven en `.claude/rules/` y se cargan solas según el archivo que se edita. No s
 
 ## Dónde está cada cosa
 
-La **constitución** (`specs/00-constitucion.md`, principios P1 a P10) manda sobre todo lo demás. `README.md` explica el proyecto, `ONBOARDING.md` cómo instalarlo y probar cada hito, `CONTENIDO.md` qué datos se pueden agregar sin programar, `CHANGELOG.md` lo nuevo para quien juega. `specs/06-monsters-canons-3d.md` es el concepto de la segunda entrega en 3D y el relevamiento de lo pendiente en la V1: consultarlo antes de planificar qué sigue.
+La **constitución** (`specs/00-constitucion.md`, principios P1 a P10) manda sobre todo lo demás. `README.md` explica el proyecto, `ONBOARDING.md` cómo instalarlo y probar cada hito, `CONTENIDO.md` qué datos se pueden agregar sin programar, `CHANGELOG.md` lo nuevo para quien juega. `specs/06-monsters-canons-3d.md` es el concepto de la segunda entrega en 3D (por ahora no se avanza con ella). **El plan vigente para cerrar la V1** es `specs/08-plan-cierre-v1.md`, que sale del lore de `specs/07-lore-y-cierre-v1.md`. Las decisiones que faltan están en `specs/09-decisiones-pendientes-v1.md`, y las fichas para delegar cada tarea, en `specs/tareas/` (empezar por su `README.md`).
 
 ## Ramas Git
 Lucas, 2026-10-03: usar siempre el prefijo `feature/` para ramas nuevas; nunca `codex/`. La instrucción del usuario prevalece sobre el prefijo sugerido por la app.
