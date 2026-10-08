@@ -1,9 +1,217 @@
 {
+	"build": {
+		"peak": 0.415825515985489,
+		"rate": 44100,
+		"rms": 0.111476677857881,
+		"seconds": 0.1,
+		"source": "Síntesis original tools/make_sounds.gd; sin muestras externas",
+		"stereo": false
+	},
+	"click": {
+		"peak": 0.122894510626793,
+		"rate": 44100,
+		"rms": 0.0486290253577378,
+		"seconds": 0.0249886621315193,
+		"source": "Síntesis original tools/make_sounds.gd; sin muestras externas",
+		"stereo": false
+	},
+	"combo": {
+		"peak": 0.43288266658783,
+		"rate": 44100,
+		"rms": 0.122914987440863,
+		"seconds": 0.09,
+		"source": "Síntesis original tools/make_sounds.gd; sin muestras externas",
+		"stereo": false
+	},
+	"defeat": {
+		"peak": 0.186991780996323,
+		"rate": 44100,
+		"rms": 0.0729044744533883,
+		"seconds": 0.8,
+		"source": "Síntesis original tools/make_sounds.gd; sin muestras externas",
+		"stereo": false
+	},
+	"enemy_death": {
+		"peak": 0.561949372291565,
+		"rate": 44100,
+		"rms": 0.137558812622682,
+		"seconds": 0.13,
+		"source": "Síntesis original tools/make_sounds.gd; sin muestras externas",
+		"stereo": false
+	},
+	"heal": {
+		"peak": 0.208869263529778,
+		"rate": 44100,
+		"rms": 0.0667230579940091,
+		"seconds": 0.3,
+		"source": "Síntesis original tools/make_sounds.gd; sin muestras externas",
+		"stereo": false
+	},
+	"impact": {
+		"peak": 0.416522145271301,
+		"rate": 44100,
+		"rms": 0.0902190009353172,
+		"seconds": 0.09,
+		"source": "Síntesis original tools/make_sounds.gd; sin muestras externas",
+		"stereo": false
+	},
+	"life_lost": {
+		"peak": 0.214759647846222,
+		"rate": 44100,
+		"rms": 0.0850648413035461,
+		"seconds": 0.28,
+		"source": "Síntesis original tools/make_sounds.gd; sin muestras externas",
+		"stereo": false
+	},
+	"music_combat": {
+		"peak": 0.350809097290039,
+		"rate": 44100,
+		"rms": 0.0758594989721257,
+		"seconds": 34.2857142857143,
+		"source": "Síntesis original tools/make_sounds.gd; sin muestras externas",
+		"stereo": true
+	},
+	"music_loop": {
+		"peak": 0.213636264204979,
+		"rate": 44100,
+		"rms": 0.0614349717197118,
+		"seconds": 45.7142857142857,
+		"source": "Síntesis original tools/make_sounds.gd; sin muestras externas",
+		"stereo": true
+	},
+	"music_menu": {
+		"peak": 0.213636264204979,
+		"rate": 44100,
+		"rms": 0.0614349717197118,
+		"seconds": 45.7142857142857,
+		"source": "Síntesis original tools/make_sounds.gd; sin muestras externas",
+		"stereo": true
+	},
+	"reflect": {
+		"peak": 0.389575898647308,
+		"rate": 44100,
+		"rms": 0.0960888725054105,
+		"seconds": 0.18,
+		"source": "Síntesis original tools/make_sounds.gd; sin muestras externas",
+		"stereo": false
+	},
+	"sell": {
+		"peak": 0.15561431646347,
+		"rate": 44100,
+		"rms": 0.060757596351619,
+		"seconds": 0.14,
+		"source": "Síntesis original tools/make_sounds.gd; sin muestras externas",
+		"stereo": false
+	},
+	"shot_basic": {
+		"peak": 0.155039548873901,
+		"rate": 44100,
+		"rms": 0.0607597979176918,
+		"seconds": 0.05,
+		"source": "Síntesis original tools/make_sounds.gd; sin muestras externas",
+		"stereo": false
+	},
+	"shot_burst": {
+		"peak": 0.364679217338562,
+		"rate": 44100,
+		"rms": 0.0779783082905598,
+		"seconds": 0.12,
+		"source": "Síntesis original tools/make_sounds.gd; sin muestras externas",
+		"stereo": false
+	},
+	"shot_cannon": {
+		"peak": 0.75,
+		"rate": 44100,
+		"rms": 0.16449546391847,
+		"seconds": 0.28,
+		"source": "Síntesis original tools/make_sounds.gd; sin muestras externas",
+		"stereo": false
+	},
 	"shot_disruptor": {
 		"peak": 0.71380078792572,
 		"rate": 44100,
 		"rms": 0.184701939834376,
 		"seconds": 0.3,
+		"source": "Síntesis original tools/make_sounds.gd; sin muestras externas",
+		"stereo": false
+	},
+	"shot_fire": {
+		"peak": 0.493012487888336,
+		"rate": 44100,
+		"rms": 0.0863584724422669,
+		"seconds": 0.22,
+		"source": "Síntesis original tools/make_sounds.gd; sin muestras externas",
+		"stereo": false
+	},
+	"shot_frost": {
+		"peak": 0.358478873968124,
+		"rate": 44100,
+		"rms": 0.0854592246341498,
+		"seconds": 0.16,
+		"source": "Síntesis original tools/make_sounds.gd; sin muestras externas",
+		"stereo": false
+	},
+	"shot_mortar": {
+		"peak": 0.75,
+		"rate": 44100,
+		"rms": 0.188419521953979,
+		"seconds": 0.4,
+		"source": "Síntesis original tools/make_sounds.gd; sin muestras externas",
+		"stereo": false
+	},
+	"shot_multi": {
+		"peak": 0.124428600072861,
+		"rate": 44100,
+		"rms": 0.0486083337728815,
+		"seconds": 0.0749659863945578,
+		"source": "Síntesis original tools/make_sounds.gd; sin muestras externas",
+		"stereo": false
+	},
+	"shot_sniper": {
+		"peak": 0.544196426868439,
+		"rate": 44100,
+		"rms": 0.0961576576428136,
+		"seconds": 0.1,
+		"source": "Síntesis original tools/make_sounds.gd; sin muestras externas",
+		"stereo": false
+	},
+	"shot_tesla": {
+		"peak": 0.345591366291046,
+		"rate": 44100,
+		"rms": 0.0669718345635088,
+		"seconds": 0.12,
+		"source": "Síntesis original tools/make_sounds.gd; sin muestras externas",
+		"stereo": false
+	},
+	"stun": {
+		"peak": 0.340840995311737,
+		"rate": 44100,
+		"rms": 0.0773328504569235,
+		"seconds": 0.26,
+		"source": "Síntesis original tools/make_sounds.gd; sin muestras externas",
+		"stereo": false
+	},
+	"upgrade": {
+		"peak": 0.373873502016068,
+		"rate": 44100,
+		"rms": 0.099060223646806,
+		"seconds": 0.21,
+		"source": "Síntesis original tools/make_sounds.gd; sin muestras externas",
+		"stereo": false
+	},
+	"victory": {
+		"peak": 0.18705515563488,
+		"rate": 44100,
+		"rms": 0.072904625118234,
+		"seconds": 0.64,
+		"source": "Síntesis original tools/make_sounds.gd; sin muestras externas",
+		"stereo": false
+	},
+	"wave_start": {
+		"peak": 0.185974761843681,
+		"rate": 44100,
+		"rms": 0.0729080554557373,
+		"seconds": 0.36,
 		"source": "Síntesis original tools/make_sounds.gd; sin muestras externas",
 		"stereo": false
 	}
