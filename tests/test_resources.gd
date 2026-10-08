@@ -84,7 +84,9 @@ func test_no_tower_mixes_resource_cost_with_a_second_payment() -> void:
 
 func test_other_towers_do_not_cost_resources() -> void:
 	for tower: TowerData in Wiki._all_towers():
-		if tower.id != &"mortar":
+		if tower.id == &"disruptor":
+			assert_eq(tower.resource_cost, 2, "RF-446: la Disruptora cuesta 2 recursos")
+		elif tower.id != &"mortar":
 			assert_eq(tower.resource_cost, 0, "%s no cambia" % tower.id)
 
 

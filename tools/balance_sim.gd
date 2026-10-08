@@ -34,6 +34,12 @@
 #   La misma semilla da siempre el mismo resultado. Al final imprime una tabla: mapa, estrategia,
 #   semilla, resultado, vidas, oleada y oro sobrante.
 #
+# Disruptora (T217, RF-452): la estrategia "mix" la compra por id cuando el mapa la ofrece y hay emisores de aura
+# en las oleadas (3 torres comunes antes de la primera, 8 antes de la segunda, nunca más de 2).
+#   disruptor=0     no la compra (para comparar con y sin ella). Por omisión, disruptor=1.
+#   El bot no recoge piezas ni extrae recursos: simula la colección completa y le da 4 recursos al empezar.
+#   "sin_recursos" (T214) nunca la compra.
+#
 # --fixed-fps 60 hace que cada frame cuente como 1/60 s sin esperar al reloj real,
 # así una partida de ~10 minutos se simula en segundos.
 extends SceneTree
@@ -45,6 +51,12 @@ const SMART_ORDER: Array[int] = [0, 0, 0, 1, 0, 2, 3, 1, 0, 3, 1, 2]
 const MIX_ORDER: Array[int] = [0, 0, 0, 7, 1, 4, 0, 5, 3, 6, 2, 7, 0, 4, 5, 6, 3, 1]
 ## Orden de compra de "heavy" (M19): como "mix" más el Mortero (8) cada tanto.
 const HEAVY_ORDER: Array[int] = [0, 0, 0, 7, 1, 4, 0, 8, 5, 3, 6, 8, 2, 7, 0, 4, 8, 5, 6, 3, 1]
+## RF-452: id de la Disruptora y cuántas compra como máximo el bot (valores de la herramienta, no del juego).
+const DISRUPTOR_ID: StringName = &"disruptor"
+const DISRUPTOR_MAX: int = 2
+const DISRUPTOR_AFTER_COMMON: int = 3
+const DISRUPTOR_SECOND_AT: int = 8
+const DISRUPTOR_BOT_RESOURCES: int = 4
 ## Cada cuántos píxeles se mide el camino para puntuar las casillas.
 const PATH_SAMPLE_STEP: float = 16.0
 
@@ -71,6 +83,10 @@ var starting_gold_override: int = -1
 var level_numbers: Array[int] = []
 var seed_list: Array[int] = [BalanceArgs.DEFAULT_SEED]
 var report_path: String = ""
+## RF-452: disruptor=0 apaga la compra de la Disruptora (para comparar).
+var disruptor_enabled: bool = true
+var disruptors_built: int = 0
+var _disruptor_prepared: bool = false
 var _queue: Array[Dictionary] = []
 var _rows: Array[Dictionary] = []
 var _current: Dictionary = {}
@@ -110,6 +126,8 @@ func _start_next_run() -> bool:
 	strategy = _current["strategy"]
 	level_number = _current["level"]
 	built = 0
+	disruptors_built = 0
+	_disruptor_prepared = false
 	last_reported_wave = 0
 	path_points.clear()
 	air_points.clear()
@@ -170,6 +188,9 @@ func _apply_override(arg: String) -> void:
 		return
 	if parts[0] == "report":
 		report_path = parts[1]
+		return
+	if parts[0] == "disruptor":
+		disruptor_enabled = parts[1] != "0"
 		return
 	if parts[0] == "levels":
 		level_numbers = BalanceArgs.parse_levels(parts[1])
@@ -244,6 +265,8 @@ func _process(_delta: float) -> bool:
 		_seed_spawner()
 	if path_points.is_empty():
 		_sample_path()
+	if not _disruptor_prepared and game.is_node_ready():
+		_prepare_disruptor()
 	var session: LevelSession = game.session
 	var single_run: bool = _rows.is_empty() and _queue.is_empty()
 	if single_run and session.wave > last_reported_wave and session.state != LevelSession.State.WAVE_RUNNING:
@@ -293,8 +316,59 @@ func _print_summary() -> void:
 		print("Informe guardado en ", ProjectSettings.globalize_path(report_path))
 
 
+## RF-452: el bot no puede juntar piezas ni extraer recursos, así que si el mapa ofrece la Disruptora la
+## habilita (simula la colección completa) y le da unos recursos. Solo la estrategia "mix".
+func _prepare_disruptor() -> void:
+	_disruptor_prepared = true
+	var tower: TowerData = _disruptor()
+	if tower == null or strategy != "mix" or not disruptor_enabled:
+		return
+	var level: LevelData = game.level_data
+	if not (level.towers.has(String(DISRUPTOR_ID)) or level.extra_towers.has(String(DISRUPTOR_ID))):
+		return
+	if not game.available_towers.has(tower):
+		game.available_towers.append(tower)  # es el mismo arreglo que usa el BuildController
+	game.session.add_resources(DISRUPTOR_BOT_RESOURCES)
+
+
+func _disruptor() -> TowerData:
+	for tower: TowerData in game.tower_types:
+		if tower.id == DISRUPTOR_ID:
+			return tower
+	return null
+
+
+## RF-452: ¿alguna oleada trae un enemigo con aura? (se lee de los datos del enemigo)
+func _level_has_aura_emitters() -> bool:
+	for wave: WaveData in game.level_data.waves:
+		for group: SpawnGroup in wave.groups:
+			if group.enemy != null and TowerText.has_aura(group.enemy):
+				return true
+	return false
+
+
+## RF-452: la compra de la Disruptora, por id: disponible, hay emisores, 3 torres comunes (8 para la segunda),
+## alcanzan oro y recursos, y como mucho 2. "sin_recursos" y disruptor=0 nunca.
+func _wants_disruptor() -> bool:
+	if strategy != "mix" or not disruptor_enabled or disruptors_built >= DISRUPTOR_MAX:
+		return false
+	var tower: TowerData = _disruptor()
+	if tower == null or not game.available_towers.has(tower) or not _level_has_aura_emitters():
+		return false
+	var common: int = built - disruptors_built
+	if common < DISRUPTOR_AFTER_COMMON or (disruptors_built >= 1 and built < DISRUPTOR_SECOND_AT):
+		return false
+	return game.session.can_afford_both(tower.build_gold(), tower.build_resources())
+
+
 func _buy_towers() -> void:
 	while true:
+		if _wants_disruptor():
+			var disruptor: TowerData = _disruptor()
+			if game.build_controller.try_build(disruptor, _best_cell(disruptor)):
+				built += 1
+				disruptors_built += 1
+				continue
 		var index: int = 0
 		if strategy == "smart":
 			index = SMART_ORDER[built % SMART_ORDER.size()]

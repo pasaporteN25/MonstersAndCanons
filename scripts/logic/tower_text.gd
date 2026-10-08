@@ -7,6 +7,8 @@ extends RefCounted
 ## Los efectos especiales del nivel (área, rayo, púas, quemadura…). Vacío si es una torre común.
 static func effects(level: TowerLevelData) -> Array[String]:
 	var lines: Array[String] = []
+	if level.suppress_seconds > 0.0:  # RF-450
+		lines.append(pulse_line(level))
 	if level.support_rate_percent > 0:
 		lines.append("Apoyo: +%d %% de cadencia; solo el mayor" % level.support_rate_percent)
 	if level.support_repair_per_second > 0.0:
@@ -28,6 +30,74 @@ static func effects(level: TowerLevelData) -> Array[String]:
 	if level.slow_amount > 0.0:
 		lines.append("Ralentiza %d %% durante %.0f s" % [roundi(level.slow_amount * 100.0), level.slow_duration])
 	return lines
+
+
+## RF-450: el pulso de la Disruptora, armado con los números del nivel (RF-164):
+## "Pulso cada 4 s · radio 2,5 · apaga las auras 2,5 s · 5 de daño". Con `emitters` (los nombres de los
+## enemigos con aura, en plural) suma "Apaga el aura de Guardianes y Curanderos." Vacío si no es de pulso.
+static func pulse_line(level: TowerLevelData, emitters: Array[String] = []) -> String:
+	if level.suppress_seconds <= 0.0:
+		return ""
+	var period: float = 1.0 / level.fire_rate if level.fire_rate > 0.0 else 0.0
+	var line: String = "Pulso cada %s s · radio %s · apaga las auras %s s · %d de daño" % [
+		decimal(period), decimal(level.range_tiles), decimal(level.suppress_seconds), level.damage]
+	if not emitters.is_empty():
+		line += ". Apaga el aura de %s." % join_names(emitters)
+	return line
+
+
+## "2,5" y "4": coma decimal y sin ceros de más.
+static func decimal(value: float) -> String:
+	var text: String = str(roundi(value)) if is_equal_approx(value, roundf(value)) else "%.1f" % value
+	return text.replace(".", ",")
+
+
+## RF-450: ¿es un enemigo con aura? Lo mismo que `Enemy.has_aura()`, pero sobre los datos.
+static func has_aura(enemy: EnemyData) -> bool:
+	return enemy.aura_radius_tiles > 0.0 and (enemy.aura_armor_bonus > 0 or enemy.aura_heal_percent_per_second > 0.0)
+
+
+## RF-450: los nombres en plural de los enemigos con aura de `enemies` ("Guardianes", "Curanderos").
+static func emitter_names(enemies: Array[EnemyData]) -> Array[String]:
+	var sorted: Array[EnemyData] = []
+	for enemy: EnemyData in enemies:
+		if has_aura(enemy):
+			sorted.append(enemy)
+	sorted.sort_custom(func(a: EnemyData, b: EnemyData) -> bool: return String(a.id) < String(b.id))
+	var names: Array[String] = []
+	for enemy: EnemyData in sorted:
+		names.append(plural(enemy.display_name))
+	return names
+
+
+## Plural simple en castellano: "Guardián" → "Guardianes", "Curandero" → "Curanderos".
+static func plural(word: String) -> String:
+	if word.is_empty():
+		return word
+	var last: String = word.substr(word.length() - 1)
+	if last in ["á", "é", "í", "ó", "ú"] or last in ["a", "e", "o"]:
+		return word + "s"
+	if word.ends_with("án") or word.ends_with("én") or word.ends_with("ín") or word.ends_with("ón"):
+		var plain: String = word.substr(0, word.length() - 2) + word.substr(word.length() - 2, 1).replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o") + "n"
+		return plain + "es"
+	if last in ["n", "r", "l", "z", "d", "j"]:
+		return word + "es"
+	return word + "s"
+
+
+## RF-450: las torres de `towers` que apagan el aura de `enemy` (alguna con `suppress_seconds` > 0).
+## Vacío si el enemigo no tiene aura. Se lee de los datos, de los dos lados, como el combo (RF-317).
+static func suppressors_of(enemy: EnemyData, towers: Array[TowerData]) -> Array[String]:
+	var names: Array[String] = []
+	if not has_aura(enemy):
+		return names
+	for tower: TowerData in towers:
+		for level: TowerLevelData in tower.levels:
+			if level.suppress_seconds > 0.0:
+				names.append(tower.display_name)
+				break
+	names.sort()
+	return names
 
 
 ## RF-317: lo que dice del combo la torre que PONE el estado (el Hielo frena, la Incendiaria quema):

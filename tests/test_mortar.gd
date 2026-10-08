@@ -62,7 +62,7 @@ func test_the_mortar_has_its_own_drawings_and_sound() -> void:
 
 
 func test_the_mortar_is_the_ninth_tower_and_the_others_stay_the_same() -> void:
-	assert_eq(game.tower_types.size(), 9, "RF-297")
+	assert_gte(game.tower_types.size(), 9, "RF-297 (la Disruptora, décima, va después: RF-448)")
 	assert_eq(game.tower_types[8], mortar, "tecla 9")
 	assert_eq(game.tower_types[0].id, &"basic", "las ocho de antes siguen en su lugar")
 	assert_eq(game.tower_types[7].id, &"tesla")
@@ -152,7 +152,7 @@ func test_a_normal_level_does_not_offer_the_mortar() -> void:
 	assert_false(plain.available_towers.has(mortar))
 	assert_eq(plain.hud._tower_buttons.size(), 8, "la barra no la muestra")
 	assert_true(mortar.reserved)
-	assert_eq(plain.tower_types.size(), 9, "existe en el juego, pero no se ofrece")
+	assert_true(plain.tower_types.has(mortar), "existe en el juego, pero no se ofrece")
 
 
 func test_a_level_that_lists_it_offers_it() -> void:

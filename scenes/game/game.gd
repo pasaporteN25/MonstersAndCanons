@@ -557,6 +557,10 @@ func _on_tower_built(tower: Tower) -> void:
 	# Cada torre suena distinto: el sonido se llama "shot_" + el id de la torre.
 	var shot_sound := StringName("shot_%s" % tower.data.id)
 	tower.fired.connect(func(_projectile: Projectile) -> void: Audio.play(shot_sound))
+	# RF-449: el pulso de la Disruptora (señal hacia arriba, P6): anillo y su sonido.
+	tower.pulsed.connect(func(radius_px: float) -> void:
+		effects.pulse_ring(tower.global_position, radius_px)
+		Audio.play(&"shot_disruptor"))
 	effects.tower_built(tower.global_position, tower.data.color, tower.data.footprint)
 	_refresh_exploitable()
 	Audio.play(&"build")

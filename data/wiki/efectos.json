@@ -47,6 +47,14 @@
   {
    "tipo": "texto",
    "texto": "Un golpe con combo muestra su número más grande y con un «!»: celeste si fue por el hielo y naranja si fue por el fuego, y suena un «tin». Mientras un enemigo está listo para un combo, se ve una dianita de ese color al lado de su barra de vida. Cuánto suma cada combo está en la entrada de cada torre."
+  },
+  {
+   "tipo": "titulo",
+   "texto": "Supresión de auras"
+  },
+  {
+   "tipo": "texto",
+   "texto": "La Disruptora no dispara: cada tanto emite un pulso a su alrededor. Los enemigos con aura, como el Guardián y el Curandero, que el pulso alcanza dejan de emitirla unos segundos, y todos los alcanzados reciben un golpe muy débil. Solo apaga auras: no toca al Chamán, al Ladrón ni al Embestidor, y el Espejo queda fuera del pulso. Un enemigo suprimido muestra su anillo del suelo roto y un ícono de tres arcos que se apagan de a uno. Los que ya habían recibido el aura la pierden enseguida, y si llega otro pulso no se suma: vale el tiempo que más dura. Cuánto dura cada supresión está en la entrada de la torre."
   }
  ]
 }

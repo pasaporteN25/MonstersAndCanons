@@ -2,6 +2,12 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Disruptora *(T217, 2026-10-08; en revisión de balance)*
+
+- Torre nueva, la **Disruptora** (130 de oro + 2 recursos): no dispara; cada 4 s emite un **pulso** en un círculo de 2,5 casillas. Si el pulso alcanza a un **Guardián o un Curandero**, ese enemigo **deja de emitir su aura 2,5 s** (3 y 3,5 s en los niveles 2 y 3), y todos los alcanzados reciben un golpe muy débil (5). No toca al Espejo ni apaga otras habilidades (Chamán, Ladrón, Embestidor). Si no hay ningún emisor de aura a su alcance, no pulsa.
+- Solo la tienen quienes completaron la colección **Disruptora** y en los niveles que la ofrecen: **ningún nivel de 1 a 10 la ofrece**.
+- Se ve como un anillo blanco azulado que se expande; el enemigo suprimido muestra el anillo del suelo roto y un ícono de tres arcos que se apagan. La Wiki suma la ficha de la torre, la línea **Contramedida** en el Guardián y el Curandero y un párrafo en "Efectos de las torres".
+
 ## Demoledora global *(T208, 2026-10-08)*
 
 - En los niveles que la habilitan, el botón **Infraestructura** permite comprar una demoledora por 180 de oro, una sola vez. Cada demolición posterior cuesta el 10 % del precio original (mínimo 5) y tarda el 80 % del tiempo; el panel de cada objeto muestra el ahorro antes de comprarla. Las demoliciones ya iniciadas conservan su costo y duración, y al reiniciar se pierde la compra.
