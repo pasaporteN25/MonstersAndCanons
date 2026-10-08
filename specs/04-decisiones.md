@@ -637,3 +637,41 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
   - **Un guardado nuevo con versión 2:** migraciones y riesgo sin necesidad.
   - **Que la comunidad pueda dar piezas:** se podrían fabricar.
   - **Un id global distinto del nivel:** hoy una pieza por colección y nivel alcanza (RF-426); si hiciera falta más de una, se cambia con una `D` nueva.
+
+## D-086 · Disruptora: una torre de pulso que apaga el aura de los emisores, no una segunda Eléctrica
+- **Fecha:** 2026-10-08 · **Estado:** Aceptada en la spec (RF-438 a RF-452), a la espera de que Lucas revise los puntos de "Para revisar" de M51 · **Decidió:** Lucas (Q-33 y 07 §9) / Claude (detalle)
+- **Qué:** la Disruptora (bobina Tesla, pedido de Lucas) emite cada 4 s un **pulso** en un radio de 2,5 casillas (3 y 3,5 al mejorar). Los enemigos **con aura** (Guardián, Curandero y cualquiera con `has_aura()`) que el pulso alcanza **no emiten su aura** durante 2,5 s (3 y 3,5 al mejorar). Todos los alcanzados reciben 5 de daño. Cuesta 130 de oro + 2 recursos y pide la colección `disruptor`. **Solo apaga auras:** ninguna otra habilidad enemiga.
+- **Por qué:**
+  - **Suprimir al que emite** (y no cortar el efecto en el que lo recibe): el aura ya tiene una vida corta (0,35 s, D-042), así que dejar de emitir la apaga **en menos de medio segundo** sin tocar el código de los receptores, y sigue la frase de Lucas en Q-33 ("pierden su aura 2,5 s"). Es un estado más del enemigo, como la ralentización o la quemadura, y se muestra igual (RF-449).
+  - **Es otra cosa que la Eléctrica** (la torre con la que más se parece por el aspecto de bobina): la **Eléctrica** pega fuerte a varios con un rayo y es la respuesta al **grupo**; la **Disruptora** casi no daña (≈13 % del daño por segundo de la Eléctrica de nivel 1) y es la respuesta a **la ayuda** que dan el Guardián y el Curandero. Sin ella, la contramedida era "matarlos primero" (D-041); con ella hay una segunda, que además **combina** con el resto (el Mecánico la acelera, el Hielo y el Cañón rematan). No hay forma de que la Disruptora reemplace a la Eléctrica ni al revés.
+  - **Frente al Aislador** (relegado en 07 §9): el 07 solo lo llama "defensivo preventivo" y dice que Lucas lo encontró parecido al Disruptor; **no tiene reglas escritas**. Se lo dejó de lado para no tener dos torres que hacen casi lo mismo, y la Disruptora es la que quedó con reglas concretas (Q-33): actúa **sobre los enemigos con aura, durante la oleada** y se paga con una colección. No se comparan más detalles porque no hay de dónde sacarlos.
+  - **Un ritmo con huecos a propósito** (cobertura 62,5 % a 87,5 %): una torre que apaga un aura **para siempre** haría inútiles al Guardián y al Curandero, y los niveles que los usan perderían sentido. Cubrirlo todo pide invertir (nivel 3 + Mecánico o dos Disruptoras, RF-445).
+  - **Daño bajo a todos** (Q-33): el pulso no es un efecto sin cuerpo; el daño es tan chico que no compite con las demás torres, pero termina a los enemigos débiles que ya venían heridos.
+  - **Los números son de Lucas** (Q-33). Lo que Q-33 no fija (el costo en oro de mejorar) quedó como **valor inicial** y se ajusta con el bot.
+- **Alternativas descartadas:**
+  - **Suprimir todas las habilidades enemigas:** 07 §9 dice que no se da por aprobado; Q-33 descartó al Chamán, al Espejo y a otras habilidades. Una torre que apaga todo es una respuesta única a todos los enemigos especiales.
+  - **Cortar el aura ya recibida en el receptor:** toca RF-271 y RF-272 (M17) para ganar menos de 0,35 s (RF-443).
+  - **Una zona que apaga auras mientras el emisor está adentro:** pide una entidad persistente, estados que entran y salen y más dibujos; Q-33 describe un estado de segundos, no una zona.
+  - **Más daño y menos supresión** (una Eléctrica con un extra): 07 §9 pide una torre que "interrumpe" con "poco daño directo", y con más daño se parecería a la Eléctrica.
+  - **Una torre pasiva o un aura propia:** la distinguiría menos del Mecánico (apoyo) y no tendría el ritmo de pulsos.
+  - **Que dispare un proyectil al emisor:** reabre reglas de proyectiles, bloqueos y el Espejo; el pulso en área es más simple y se lee mejor.
+
+## D-087 · Disruptora: reglas de borde (espera a un emisor, el Espejo queda fuera, lo recibido no se corta)
+- **Fecha:** 2026-10-08 · **Estado:** Aceptada en la spec (RF-440, RF-443, RF-444, RF-445 y RF-448), a la espera de que Lucas revise los puntos 1, 3, 4 y 5 de "Para revisar" de M51 · **Decidió:** Claude (detalle) sobre lo que dijo Lucas en Q-33
+- **Qué:**
+  - **Cuándo pulsa:** cuando está lista **y** hay al menos un emisor de aura a su alcance. Sin emisor no pulsa ni gasta su espera.
+  - **Quién queda fuera:** el **Espejo** (por su dato `reflect_range_tiles`, no por el nombre) no recibe nada del pulso, y por eso no hay rebote. El Chamán, el Ladrón y el Embestidor reciben el golpe de daño bajo pero **conservan su habilidad**.
+  - **Lo ya recibido** del aura no se corta: caduca solo (0,35 s).
+  - **Las otras torres:** el Chamán la aturde como a cualquiera; el desgaste del Embestidor y el Mecánico cambian su cadencia como en todas las torres; la barra sigue el orden canónico y la Disruptora es la décima.
+- **Por qué:**
+  - **Esperar un emisor:** los pulsos de 4 s son escasos; gastarlos con cualquier enemigo los pierde justo cuando aparece el Guardián. También la separa de la Eléctrica (D-086).
+  - **El Espejo:** RF-284 dice que **todo** golpe de torre que lo alcanza rebota, incluidos los de área. Si el pulso lo tocara, la Disruptora quedaría aturdida, lo que contradice Q-33 ("no afecta al Espejo"). Dejarlo fuera **sin tocar RF-284** es lo más chico: ningún RF existente cambia y los proyectiles siguen rebotando como siempre.
+  - **El Chamán, el Ladrón y el Embestidor reciben el golpe:** Q-33 habla de **habilidades**, no de inmunidad. Recibir 5 de daño no cambia lo que hacen. Si Lucas prefiere que no los toque en nada, es un cambio chico (punto 1 de "Para revisar").
+  - **Lo ya recibido no se corta:** el aura caduca en 0,35 s (RF-273); cortarla antes exigiría tocar a los receptores (D-086).
+  - **La décima torre:** la barra y las teclas llegan a 9 (RF-297). No se agrega una tecla nueva en esta etapa; los niveles del bloque 3 eligen qué ofrecen (RF-393).
+- **Alternativas descartadas:**
+  - **Pulsar siempre que haya cualquier enemigo:** más "viva" a la vista, pero deja huecos (punto 3 de "Para revisar").
+  - **Que el pulso rebote en el Espejo o lo aturda:** contradice Q-33.
+  - **Que el pulso no toque al Chamán, al Ladrón ni al Embestidor:** posible (punto 1 de "Para revisar"); queda como alternativa de un cambio chico.
+  - **Excluir al Espejo por su `id`:** rompe el principio de que todo son datos (RF-164); con `reflect_range_tiles` un enemigo nuevo con rebote queda fuera solo.
+  - **Una tecla `0` para la décima torre:** cambia el HUD y el mapa de teclas (RF-297); no hace falta si cada nivel ofrece 9.

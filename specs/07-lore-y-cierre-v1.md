@@ -225,6 +225,8 @@ Primero revisar las reglas actuales de checkpoints, resultado y guardado; no sus
 
 Pendientes: duración, recarga, selección de objetivo, alcance, mejoras, efectos sobre otros enemigos y reglas de acumulación. No dar por aprobada la supresión de todas las habilidades enemigas.
 
+**Cerrado en T215 (2026-10-08):** las reglas están en `01-spec.md` M51 (RF-438 a RF-452), D-086 y D-087, con los números de Lucas (Q-33): pulso cada 4 s, radio 2,5, supresión 2,5 s, daño 5, 130 de oro + 2 recursos. Solo apaga auras (la supresión de otras habilidades sigue sin aprobarse). Quedan para revisar los puntos del final de M51.
+
 ### Lanzamisiles: candidato propuesto por Lucas
 
 Ataque que alcance enemigos dentro de un radio de 3 casillas de camino, con tiempo de carga o lanzamientos limitados por partida. Reemplaza al Aislador como candidato principal; no tiene todavía diseño cerrado.
