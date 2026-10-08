@@ -200,6 +200,7 @@ func test_the_legend_limit_is_ten_letters() -> void:
 func test_the_whole_catalog_is_accepted() -> void:
 	var ids: PackedStringArray = MapDrawings.ids()
 	assert_eq(ids.size(), 19)
+	assert_eq(ids.size(), 22)
 	for id: String in ids:
 		var result: Dictionary = LevelFile.parse(_text({"leyenda": {"~": {"dibujo": id}}}, _rows_with(Vector2i(3, 1), "~")), &"prueba")
 		assert_eq(result["errors"], PackedStringArray(), id)

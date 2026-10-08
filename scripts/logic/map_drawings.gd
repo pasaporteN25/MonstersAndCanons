@@ -13,16 +13,26 @@ const KINDS: Dictionary = {
 	"cactus": KIND_OBJECT, "pino": KIND_OBJECT, "columna": KIND_OBJECT, "tronco": KIND_OBJECT,
 	"helecho": KIND_OBJECT, "junco": KIND_OBJECT, "hongo": KIND_OBJECT, "estatua": KIND_OBJECT,
 	"escombro": KIND_OBJECT, "mina": KIND_OBJECT, "bosque_explotable": KIND_OBJECT,
+	"roca_marcada": KIND_OBJECT, "sendero": KIND_OBJECT, "herramienta": KIND_OBJECT,
+	"poste_cintas": KIND_OBJECT, "simbolo_ruina": KIND_OBJECT, "campamento_vacio": KIND_OBJECT,
 	"agua": KIND_GROUND, "hielo": KIND_GROUND, "lava": KIND_GROUND, "barro": KIND_GROUND,
 }
 
 const FLOWERS: Texture2D = preload("res://assets/sprites/map/flores.svg")
+const SIGNAL_ROCK: Texture2D = preload("res://assets/sprites/map/roca_marcada.svg")
+const SIGNAL_PATH: Texture2D = preload("res://assets/sprites/map/sendero.svg")
+const SIGNAL_TOOL: Texture2D = preload("res://assets/sprites/map/herramienta.svg")
+const SIGNAL_RIBBONS: Texture2D = preload("res://assets/sprites/map/poste_cintas.svg")
+const SIGNAL_RUIN: Texture2D = preload("res://assets/sprites/map/simbolo_ruina.svg")
+const SIGNAL_CAMP: Texture2D = preload("res://assets/sprites/map/campamento_vacio.svg")
 
 ## El dibujo de cada objeto. Van con `preload` (se cargan con el script).
 const TEXTURES: Dictionary = {
 	"roca": MapThemes.ROCK_A, "arbol": MapThemes.TREE, "arbusto": MapThemes.BUSH, "flores": FLOWERS,
 	"cactus": MapThemes.CACTUS, "pino": MapThemes.PINE, "columna": MapThemes.COLUMN, "tronco": MapThemes.LOG,
 	"helecho": MapThemes.FERN, "junco": MapThemes.REEDS, "hongo": MapThemes.MUSHROOM, "estatua": MapThemes.STATUE,
+	"roca_marcada": SIGNAL_ROCK, "sendero": SIGNAL_PATH, "herramienta": SIGNAL_TOOL,
+	"poste_cintas": SIGNAL_RIBBONS, "simbolo_ruina": SIGNAL_RUIN, "campamento_vacio": SIGNAL_CAMP,
 }
 
 ## Los colores de cada suelo: el fondo, un tono claro (reflejos), uno oscuro (fondo, sombras) y el borde.
