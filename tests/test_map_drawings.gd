@@ -33,7 +33,7 @@ func test_every_object_has_a_drawing_and_every_ground_has_colors() -> void:
 				fail_test("%s no es ni suelo ni objeto" % id)
 
 
-func test_the_catalog_has_four_grounds_and_twelve_objects() -> void:
+func test_the_catalog_has_four_grounds_and_eighteen_objects() -> void:
 	var grounds: int = 0
 	var objects: int = 0
 	for id: String in MapDrawings.ids():
@@ -42,7 +42,18 @@ func test_the_catalog_has_four_grounds_and_twelve_objects() -> void:
 		else:
 			objects += 1
 	assert_eq(grounds, 4)
-	assert_eq(objects, 12)
+	assert_eq(objects, 18)
+
+
+func test_the_six_community_signals_are_static_objects() -> void:
+	for id: String in ["roca_marcada", "sendero", "herramienta", "poste_cintas", "simbolo_ruina", "campamento_vacio"]:
+		assert_true(MapDrawings.is_valid(id), "%s está en el catálogo cerrado" % id)
+		assert_eq(MapDrawings.kind(id), MapDrawings.KIND_OBJECT, "%s es decoración de casilla" % id)
+		var texture: Texture2D = MapDrawings.texture(id)
+		assert_not_null(texture, "%s usa una textura precargada" % id)
+		if texture != null:
+			assert_eq(texture.get_size(), Vector2(128, 128), "%s: SVG importado a 2x" % id)
+			assert_true(texture.get_image().detect_alpha() != Image.ALPHA_NONE, "%s conserva alfa" % id)
 
 
 func test_an_unknown_drawing_is_nothing() -> void:
