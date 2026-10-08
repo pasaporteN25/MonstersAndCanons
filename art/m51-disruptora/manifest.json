@@ -1,0 +1,75 @@
+{
+	"atlas": {
+		"alto": 256,
+		"ancho": 512,
+		"archivo": "disruptor_atlas.png",
+		"celda": 128,
+		"direcciones": [
+			"E",
+			"SE",
+			"S",
+			"SO",
+			"O",
+			"NO",
+			"N",
+			"NE"
+		],
+		"variacion_direcciones": "ocho copias de la misma vista SE; torre casi simétrica"
+	},
+	"celdas_fuente": [
+		{
+			"alto": 112,
+			"ancho": 50,
+			"variante": 1
+		},
+		{
+			"alto": 112,
+			"ancho": 55,
+			"variante": 2
+		},
+		{
+			"alto": 112,
+			"ancho": 49,
+			"variante": 3
+		}
+	],
+	"estado": "provisional; pendiente de aprobación de Lucas",
+	"fuente": "sources/concept_sheet.png",
+	"fuente_original": {
+		"alfa": "RGBA",
+		"alto": 1254,
+		"ancho": 1254
+	},
+	"hojas": [
+		"concept_provisional.png",
+		"contact_112px.png",
+		"contact_34px.png"
+	],
+	"limitaciones": [
+		"No hay captura de partida ni de Wiki: T217 todavía no integró la torre."
+	],
+	"marca": [
+		"disruptor_suppression_icon.png",
+		"disruptor_suppression_arc_1.png",
+		"disruptor_suppression_arc_2.png",
+		"disruptor_suppression_arc_3.png"
+	],
+	"orden_contacto": [
+		"Básica",
+		"Francotirador",
+		"Incendiaria",
+		"Múltiple",
+		"Ráfaga",
+		"Hielo",
+		"Eléctrica",
+		"Cañón",
+		"Mortero",
+		"Disruptora"
+	],
+	"pulso": "disruptor_pulse_ring.png",
+	"variantes": [
+		"turret_disruptor.png",
+		"disruptor_level_2.png",
+		"disruptor_level_3.png"
+	]
+}
