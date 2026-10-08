@@ -2,6 +2,11 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Android normal y pruebas *(M34, 2026-10-02)*
+
+- Dos APK con los últimos diseños e interfaces del PR#1, con paquetes separados para instalarlas juntas. La variante de pruebas conserva su panel de administración; la normal no lo habilita.
+- Android7 o superior, arm64; firmadas para instalación local. Instalación y partida en dispositivo todavía no verificadas.
+
 ## Submenús coherentes *(M33, 2026-10-02)*
 
 - Opciones separa sonido y visualización, con deslizadores y casillas de hierro/bronce.

@@ -377,6 +377,14 @@ Abrir `build/JuegoA_m32.exe`, pasar el puntero sobre los iconos de la barra, rev
 ### Probar M33
 Abrir `build/JuegoA_m33.exe`; revisar Opciones desde menú y pausa (sonido/visualización), niveles/comunidad, Wiki, récords, final e iniciales. Probar editor/Ajustes/Oleadas/diálogos en modo pruebas. Capturas en `art/redesign-m33/`; ejecutar `capture.tscn` reproduce las siete pantallas. Windows exportado y arranque verificado; Linux exportado sin ejecutar, móvil sin probar.
 
+### APK del PR#1 · M34
+> **Reemplazado en T196 (D-077):** hoy hay una sola APK (`build/JuegoA.apk`, paquete `com.juegoa.towerdefense`) y el modo de pruebas se activa desde Opciones. Lo que sigue es el registro de M34.
+
+- Normal: `build/JuegoA_PR1_normal.apk`, paquete `com.juegoa.towerdefense`.
+- Pruebas: `build/JuegoA_PR1_pruebas.apk`, paquete `com.juegoa.towerdefense.pruebas`, feature `pruebas`.
+Ambas pueden instalarse juntas, Android7 o superior en arm64. Están firmadas con clave de depuración para instalación directa, no para Play Store; «normal» describe las reglas del juego, aunque la exportación técnica es debug. Exportar con `--export-debug "Android"` y `--export-debug "Android (pruebas)"`. Si una versión instalada usa otra firma, Android rechazará actualizarla; no desinstalar sin resguardar el progreso. No se probaron en dispositivo físico. SHA256 y verificación: `build/m34/`.
+iOS usa IPA, no APK. La exportación exige un Mac con Xcode y los datos de firma de Apple; este Windows no genera una app iOS instalable. Fuente: https://docs.godotengine.org/en/stable/tutorials/export/exporting_for_ios.html
+
 ### Prueba manual M35 · Panel de torre
 Seleccionar torres de niveles1–3, revisar daño/cadencia/alcance, descripción y voladores. Cambiar prioridad, mejorar con U, vender con S; comprobar falta de oro y nivel máximo. Aturdir una torre: aparece cuenta atrás independiente del título. En Hielo, recorrer el detalle hasta ver sinergias y capacidad aérea. Con texto largo, desplazar el detalle y recorrer botones con Tab: ninguna acción sale del panel ni tapa la barra de construcción. Revisar también ventana1280×720 y tamaños escalados.
 

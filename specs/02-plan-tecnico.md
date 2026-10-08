@@ -581,6 +581,9 @@ Compactar textos y tooltips; reutilizar tema de botones y estilo de panel propio
 ### M33 · RF-347, D-059
 Inventario de submenús: Opciones, niveles, Wiki, récords, final, Salón/iniciales, editor y diálogos. Tema compartido y panel hierro-bronce; SVG propios para casillas/deslizador. Agrupar Opciones, revisar capturas y navegación/guardado existentes con GUT, actualizar B-19 y push.
 
+### M34 · RF-348, D-060
+Agregar preset Android pruebas, paquetes distintos y versión1.1-pr1/code2. Exportar APK de instalación local, validar firmas/manifest/recursos y SHA256; documentar limitación iOS y ausencia de ejecución física si no hay dispositivo disponible.
+
 ### M35 · Panel de torre (RF-349, D-061)
 TowerPanel conserva show_tower/refresh y sus tres señales. Tres valores de estadísticas fuera de ScrollContainer; descripción, TowerText.effects, combo_partners y capacidad aérea dentro. Botones fuera del desplazamiento, tema local menu_theme y game_panel_style. Se reinicia el desplazamiento al seleccionar otra torre, no al cambiar oro o cuenta atrás. Datos de combate, TowerText compartido con Wiki y guardados intactos.
 

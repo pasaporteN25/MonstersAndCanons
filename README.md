@@ -230,6 +230,9 @@ HUD compacto con ayudas; barra, pausa y administración con estilo hierro/bronce
 ### Submenús M33
 Opciones, niveles/comunidad, Wiki, récords, final, iniciales/Salón y editor/diálogos comparten el tema local hierro-bronce. B-19 completado; controles y datos conservados.
 
+### Android M34
+Presets normal y pruebas con paquetes separados; APK arm64 de instalación local en `build/JuegoA_PR1_normal.apk` y `build/JuegoA_PR1_pruebas.apk`. Firma de depuración, contenido del PR#1. Android7+, sin prueba en dispositivo. **Reemplazado en T196:** hoy hay una sola APK (`build/JuegoA.apk`) y el modo de pruebas se activa en Opciones (D-077).
+
 ### Panel de torre M35
 Información agrupada con hierro/bronce: daño, cadencia y alcance arriba; descripción, efectos y sinergias desplazables; apuntado, Mejorar y Vender siempre accesibles. Estado de aturdimiento separado y foco visible. Capturas en `art/redesign-m35/`.
 

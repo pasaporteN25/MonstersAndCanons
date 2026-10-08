@@ -391,6 +391,9 @@ Solo métricas locales: FPS de Engine y ms/cuadro estimados como1000/FPS; actual
 ### Tema de interfaz M33
 `assets/ui/menu_theme.tres` reúne botones, deslizadores, casillas, desplegables y entradas. Iconos SVG propios en `assets/ui/`; paneles en `game_panel_style.tres`. Se aplica por pantalla, sin tema global.
 
+### Variantes Android M34
+Preset Android sin feature especial; Android (pruebas) incluye `pruebas`. Identificadores separados y versión1.1-pr1/code2; las exportaciones incluyen recursos actuales y excluyen tests/tools/specs/art/GUT.
+
 ### M36 · Efectos y audio
 Los efectos de muerte reutilizan automáticamente textura, cuadro y escala del enemigo actual; no necesitan un asset de muerte por especie. Residuo y fragmentos son visuales y no alteran recompensa/crías. El audio se regenera con tools/make_sounds.gd; music_menu/music_combat usan bucle en importación. Material y límites de efectos se documentan en plan/spec; los candidatos de B-22 y recetas B-23 son propuestas y todavía no forman parte del formato de contenido.
 

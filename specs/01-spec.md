@@ -1528,6 +1528,9 @@ Lucas eligió entre las propuestas de la tanda 1 (`art/redesign-m24/`): **Normal
 ### M33 · Submenús renovados
 - **RF-347** Opciones, selección de niveles, Wiki, récords, final, iniciales/Salón de la Fama y editor/diálogos adoptan el tema hierro-bronce sin alterar funciones. Dado un submenú, cuando se abre desde menú o partida, entonces conserva navegación y controles legibles, foco visible y paneles coherentes. Opciones separa sonido y visualización y usa deslizadores/casillas del tema.
 
+### M34 · Android normal y pruebas
+- **RF-348** Dos APK Android arm64 con recursos actuales del PR#1: normal sin feature pruebas y variante de pruebas con identificador distinto para coexistir. Dado un Android compatible, cuando se instalan ambas variantes, entonces sus paquetes/progreso quedan separados; verificar firma y contenido, declarar si no se ejecutaron en dispositivo.
+
 ### M35 · Panel de torre renovado (B-28, Lucas, 2026-10-03)
 - **RF-349** El panel seleccionado usa hierro/bronce, título y nivel, tres cifras agrupadas (daño, cadencia, alcance), descripción, efectos/sinergias y capacidad contra voladores. El contenido largo se desplaza dentro del panel; apuntado, Mejorar y Vender permanecen visibles. Conserva ancho de270 píxeles lógicos, límite inferior sobre la barra de construcción y atajos U/S.
   **Aceptación:** Dada una torre de nivel1–3 con texto corto o largo, cuando se selecciona, mejora, cambia el oro o se aturde, entonces los datos/precios/devolución siguen correctos, el estado es legible, el panel no invade la barra inferior y sus botones tienen foco visible. Sin oro y en nivel máximo se desactiva Mejorar; vender y apuntar conservan sus señales y reglas.

@@ -378,6 +378,9 @@ Generar una hoja independiente por criatura tomando su PNG aprobado como referen
 ## D-059 · Un tema reutilizable para submenús
 2026-10-02, aprobada por Lucas (B-19). Extender el tema existente con deslizadores, casillas y listas desplegables; aplicarlo localmente a submenús y paneles, sin tema global ni cambios de guardados. Conservar el marco dorado del Salón de la Fama y todos los flujos.
 
+## D-060 · APK independientes para instalación local
+2026-10-02, pedido por Lucas. Reusar exportación Android sin Gradle, arm64 y feature pruebas solo en variante de administración. Firmar con clave de depuración local para instalación directa, sin publicación en Play Store. iOS requiere macOS/Xcode y firma Apple, no se genera APK ni se promete IPA desde Windows.
+
 ## D-061 · Panel compacto con contenido desplazable
 2026-10-03, autorizado por Lucas al iniciar el orden de mejoras (B-28). Reutilizar el tema local hierro/bronce y separar métricas, descripción/efectos y acciones. Mantener270 píxeles de ancho y fijar la altura; desplazar solo el detalle para que textos de mods y sinergias no empujen los botones fuera de pantalla. Conservar señales y lógica de Game/BuildController. Se descarta ampliar el ancho o recortar los efectos. El foco de teclado usa el tema existente; no se toma automáticamente al seleccionar con el mouse.
 

@@ -1091,6 +1091,13 @@
   **Hecho cuando:** se identifica todo lo pendiente, se conservan bocetos/herramientas/UID útiles, se excluyen temporales/proyecto vacío y se sube al PR#1.
   **Resultado T178:** materiales históricos de branding, torres3D y full-pass archivados, incluidas alternativas descartadas; UID de herramientas previas conservados. Logs y `.import` de art ignorados, proyecto secundario vacío excluido sin eliminarlo. No hay cambios de producción ni integración de bocetos. Verificación de inventario y `git diff --check`; GUT no se repite al no cambiar ejecución.
 
+### M34 · APK
+- [x] **T179 · Exportar Android normal y de pruebas con el PR#1.**
+  **Refs:** RF-348, D-060.
+  **Hecho cuando:** ambas APK firmadas, variantes y contenido verificados, docs al día y push; límites de Android/iOS declarados.
+
+  **Resultado T179:** dos APK arm64 firmadas para instalación local (clave de depuración), Android7/API24 o superior, versión1.1-pr1/code2. Paquetes com.juegoa.towerdefense y com.juegoa.towerdefense.pruebas; feature pruebas confirmada solo en la segunda al decodificar project.binary. Firmas v2/v3 verificadas, integridad ZIP y presencia de los doce atlas de caminata/submenús actuales comprobadas; exclusión art/tests/tools/GUT confirmada. Cada APK49429778bytes; hashes en build/m34/apk_manifest.json. Exportación con todos los cambios hasta T178 del PR#1 y presets nuevos. No había dispositivos conectados, no se instaló/jugó en Android ni se reejecutó GUT (solo presets/documentos). iOS bloqueado por entorno Windows: requiere macOS/Xcode y firma Apple; no se generó IPA.
+
 ### M35 · Panel de información y mejoras
 - [x] **T180 · Renovar el panel de torre (B-28).**
   **Refs:** RF-349, D-061.
