@@ -5,6 +5,12 @@ Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle t�
 ## Demoledora global *(T208, 2026-10-08)*
 
 - En los niveles que la habilitan, el botón **Infraestructura** permite comprar una demoledora por 180 de oro, una sola vez. Cada demolición posterior cuesta el 10 % del precio original (mínimo 5) y tarda el 80 % del tiempo; el panel de cada objeto muestra el ahorro antes de comprarla. Las demoliciones ya iniciadas conservan su costo y duración, y al reiniciar se pierde la compra.
+## Recursos y torres que cuestan recursos *(T209, 2026-10-08)*
+
+- En un mapa que tenga **recursos** (removibles que pueden entregarlos o minas), la barra de arriba muestra un **contador de recursos** con un ícono provisional. Los recursos son solo de esa partida: empiezan en 0, no se guardan y los que sobran se pierden. Al terminar una demolición, el recurso (si salió) entra una sola vez.
+- El **Mortero** ahora cuesta **300 de oro + 3 recursos**: la barra muestra "300 + 3" y lo deshabilita diciendo qué falta. Al venderlo se devuelve el 70 % del oro y de los recursos, redondeado hacia abajo (210 y 2). Mejorarlo sigue costando solo oro. Los niveles 1 a 8 no lo ofrecen, así que no cambian.
+- El **Francotirador** se puede comprar de dos formas en la misma partida: **150 de oro** (como siempre) o **120 de oro + 1 recurso**. Al elegirlo aparecen dos botones chicos de pago (arranca "solo oro"); el segundo se apaga si faltan recursos o el mapa no tiene. Con 1 recurso, la venta no devuelve ninguno.
+- El panel de la torre y la Wiki muestran los costos en recursos. El validador (`check_level`) avisa si un mapa ofrece una torre que cuesta recursos y no tiene cómo conseguirlos.
 
 ## Demolición directa de obstáculos *(T207, 2026-10-08)*
 

@@ -21,6 +21,7 @@ func before_each() -> void:
 	game = _game_with_mortar()
 	mortar = load("res://data/towers/mortar.tres")
 	game.session.earn(2000)
+	game.session.add_resources(10)  # RF-420: el Mortero cuesta oro y recursos
 
 
 func _free_block() -> Vector2i:
@@ -80,7 +81,7 @@ func test_key_9_chooses_the_mortar() -> void:
 
 func test_the_bar_shows_the_mortar_with_its_cost_and_key() -> void:
 	var button: Button = game.hud._tower_buttons[8]
-	assert_eq(button.text, "300")
+	assert_eq(button.text, "300 + 3", "RF-418: oro y recursos")
 	assert_string_contains(button.tooltip_text, "Mortero")
 	assert_string_contains(button.tooltip_text, "tecla 9")
 

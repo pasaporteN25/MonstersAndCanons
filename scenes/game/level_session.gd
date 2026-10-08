@@ -8,6 +8,8 @@ enum State { BUILDING, WAVE_RUNNING, COUNTDOWN, WON, LOST }
 
 signal gold_changed(gold: int)
 signal gold_stolen(amount: int)
+## RF-415: cambiaron los recursos de la partida.
+signal resources_changed(resources: int)
 signal lives_changed(lives: int)
 ## RF-190: cambiaron los puntos.
 signal score_changed(score: int)
@@ -20,6 +22,8 @@ signal countdown_finished
 
 var gold: int = 0
 var lives: int = 0
+## RF-415: recursos de esta partida (un solo tipo). Empiezan en 0, no se guardan y no dan puntos.
+var resources: int = 0
 ## RF-190: puntos de esta partida.
 var score: int = 0
 ## Número de la oleada actual. 0 = todavía no empezó ninguna.
@@ -36,6 +40,7 @@ var _balance: BalanceConfig
 func start(level: LevelData, balance: BalanceConfig) -> void:
 	_balance = balance
 	gold = level.starting_gold
+	resources = 0
 	lives = level.starting_lives
 	score = 0
 	wave = 0
@@ -43,6 +48,7 @@ func start(level: LevelData, balance: BalanceConfig) -> void:
 	countdown_left = 0.0
 	state = State.BUILDING
 	gold_changed.emit(gold)
+	resources_changed.emit(resources)
 	lives_changed.emit(lives)
 	score_changed.emit(score)
 	wave_changed.emit(wave, total_waves)
@@ -81,6 +87,31 @@ func spend(cost: int) -> bool:
 		return false
 	gold -= cost
 	gold_changed.emit(gold)
+	return true
+
+
+# --- Recursos (RF-415 y RF-418) ---
+
+func add_resources(amount: int) -> void:
+	if amount <= 0:
+		return
+	resources += amount
+	resources_changed.emit(resources)
+
+
+func can_afford_both(gold_cost: int, resource_cost: int) -> bool:
+	return gold >= gold_cost and resources >= resource_cost
+
+
+## RF-418: cobra oro y recursos a la vez, o no cobra nada. Devuelve false (sin cambiar nada) si falta alguno.
+func spend_both(gold_cost: int, resource_cost: int) -> bool:
+	if not can_afford_both(gold_cost, resource_cost):
+		return false
+	gold -= gold_cost
+	resources -= resource_cost
+	gold_changed.emit(gold)
+	if resource_cost > 0:
+		resources_changed.emit(resources)
 	return true
 
 

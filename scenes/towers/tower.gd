@@ -35,6 +35,8 @@ var data: TowerData
 var level_index: int = 0
 ## Oro gastado en esta torre (construcción + mejoras). Sirve para vender (RF-72).
 var total_invested: int = 0
+## RF-418: recursos gastados al construirla (las mejoras no cuestan recursos). Sirve para vender.
+var resources_invested: int = 0
 var targeting: TargetMode = TargetMode.FIRST
 ## RF-293: casilla de arriba a la izquierda de la torre (la única, si ocupa una sola casilla).
 var origin_cell: Vector2i = Vector2i.ZERO
@@ -60,9 +62,11 @@ var _recovery_left: float = 0.0
 
 
 ## Se llama ANTES de agregar la torre al árbol.
-func setup(tower_data: TowerData) -> void:
+## `alt` = se pagó con la segunda forma de pago (RF-419).
+func setup(tower_data: TowerData, alt: bool = false) -> void:
 	data = tower_data
-	total_invested = tower_data.levels[0].cost
+	total_invested = tower_data.build_gold(alt)
+	resources_invested = tower_data.build_resources(alt)
 
 
 func _ready() -> void:
