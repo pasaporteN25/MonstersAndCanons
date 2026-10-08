@@ -1115,10 +1115,14 @@ Ideas **aprobadas como dirección**, pero **sin fecha**: no se programan hasta c
 ### B-02 · ~~Diseño de assets (arte)~~
 **Cerrado por Lucas, 2026-10-03 (D-063).** El juego ya tiene arte de torres, enemigos, mapas, interfaz y efectos, renovado en M23–M36. Se elimina el objetivo indefinido de «arte definitivo». Los detalles visuales concretos que surjan se registrarán y resolverán por separado, siguiendo la guía de arte; no mantienen abierta esta entrada ni requieren rehacer todo.
 
-### B-03 · Lore y documentación de Épocas
-**Actualizado por Lucas, 2026-10-03 (D-063). Sin fecha.** Definir quién defiende, quién ataca y por qué, qué representan los niveles y quién es el Jefe. Elegir cómo presentarlo: textos breves por nivel, victoria, nombres y una categoría Lore en la Wiki.
+### B-03 · Lore y cierre de la V1
+**Actualizado por Lucas, 2026-10-07. Dirección acordada; implementación pendiente.** La expedición coloniza un planeta desde un oasis, asegura posiciones y enfrenta bestias, criaturas independientes y comunidades organizadas. Campaña de **15 niveles**, en bloques **1–5 / 6–10 / 11–15**; final con asentamiento permanente, central de energía y abastecimiento, sin conquistar todo el planeta. El desenlace deja una sensación ambigua y la elección de bando queda fuera de V1.
 
-**Traslado desde B-15:** incluir aquí la futura categoría Épocas en la Wiki, cuando exista ese contenido. B-01 conserva las decisiones de mecánica, progresión e imperios del modo Épocas, y B-05 los modos de juego; esta entrada cubre su historia y documentación, sin duplicar implementación. No presupone diálogos ni cinemáticas. Si se adopta historia, actualizar el alcance de §11. El arte actual (B-02 cerrado) no queda bloqueado por esta decisión.
+**Registro completo de decisiones y plan:** [07-lore-y-cierre-v1.md](07-lore-y-cierre-v1.md). Incluye señales narrativas, biomas/mapas, demolición directa y demoledora global, recursos locales, extracción finita por oleadas, hallazgos científicos permanentes con colecciones por tecnología, Disruptora y Lanzamisiles candidato, rotación, assets, economía, criterios de entrega y preguntas pendientes. Los mapas con torres de recursos deben poder ganarse sin recolectar ni gastar recursos. **La intro ilustrada se agrega al final, después del juego funcional.** Registro de diseño; no afirma funciones implementadas ni cierra B-03.
+
+**Relación con el backlog:** B-10 conserva niveles y campaña; B-22 conserva contenido/desbloqueos; las mecánicas nuevas requieren requisitos y tareas antes de implementarse. Textos breves, victoria, nombres y Lore en la Wiki siguen como opciones de presentación; revisar §11 antes de incorporar historia al juego. No se reabre B-02 como renovación general del arte.
+
+**Épocas y registro histórico:** D-063 trasladó desde B-15 su futura documentación. D-076 traslada Épocas y esa documentación a otra entrega (B-01 y 06-monsters-canons-3d.md); no forma parte de este cierre de V1.
 
 ### B-04 · Crear mapas fácilmente y mods
 *Propuesta de Lucas, 2026-09-29. Analizada por Claude. Decisión: D-024. **El escalón 1 se hizo en M7 (§7.8, D-031). El escalón 2, el editor, se hizo en M9 (§10.3) solo en la versión de pruebas.** **Prioridad de Lucas (D-033): el editor de mapas (escalón 2) y los mapas de la comunidad (escalón 3, solo la parte de mapas).** **La parte de mapas del escalón 3 se hizo en M10 (§10.4, D-034).** Lo que falta: enemigos, torres y dibujos propios (paquetes de mods completos) y decidir si el editor pasa al juego normal (B-13). Sin fecha.*
@@ -1296,6 +1300,7 @@ Los cuatro enemigos que gustaron, con lo necesario para convertirlos en spec cua
 **Recomendación de Claude:** hacer el **aviso de atajo (3)** apenas se pueda, porque es barato, y el **puente (1)** cuando el editor o un nivel lo pidan.
 
 ### B-10 · Más niveles y niveles difíciles
+**Dirección de cierre acordada, 2026-10-07:** campaña de 15 niveles y tres bloques; fichas, biomas y rotación por definir junto con el lore. Plan completo en [07-lore-y-cierre-v1.md](07-lore-y-cierre-v1.md) §§3/11/12. No marca como hechos los niveles pendientes.
 **Producción parcial M45/T192:** niveles8/9 integrados con debuts de auras y encuentros de robo/desgaste; balance automatizado inicial. Niveles10–14 y cierre15 siguen pendientes, además de validación humana8/9.
 **Actualización de Lucas, 2026-10-03:** campaña base objetivo15 niveles: básico1–5, introducción/pruebas6–7, mayor presencia de nuevas mecánicas8–9, avanzado10–14 y definitivo15. Actualmente `campaign.json` incluye niveles1–9 (M45). Niveles10–15 requieren diseño y balance; no están implementados. Las amenazas nuevas no afectan1–5; esas primeras pantallas solo reciben avances de colección.
 *Idea de Lucas (a partir de las propuestas de Claude), 2026-09-29. Sin fecha.*
@@ -1402,6 +1407,7 @@ Los cuatro enemigos que gustaron, con lo necesario para convertirlos en spec cua
 **Entrega futura:** muestras comparables del mismo mapa y una evaluación de alcance/costos/riesgos. Tratar el cambio de vista como potencial **breaking change**: preparar un PR de revisión identificado como tal, avisar a Lucas con el enlace y esperar su aprobación explícita **antes de mergear**. Una muestra no autoriza migrar toda la producción ni fusionar el PR.
 
 ### B-22 · Analizar contenido nuevo y desbloqueos en niveles superiores
+**Dirección acordada, 2026-10-07:** recursos locales opcionales, hallazgos científicos por tecnología, Disruptora aprobada como dirección y Lanzamisiles candidato. Asedio de largo alcance descartado por redundancia con Francotirador. Reglas, economía y preguntas en [07-lore-y-cierre-v1.md](07-lore-y-cierre-v1.md) §§4–9; no cierra B-22.
 **Producción M45/T192:** campaña8/9 con Guardián/Curandero y mayor presión de sistemas existentes; estadísticas globales y1–7 intactos, balance humano pendiente. B22 continúa abierto para tramo avanzado y otros candidatos.
 
 **Primera producción parcial M37/T183:** colección y apoyo mecánico implementados como etapa funcional; diseño visual y balance iniciales. Disponibilidad por nivel aprobada, con colección adicional para estandartes. Ladrón, Embestidor/desgaste y reparación implementados en T184–T186 con pruebas6/7; Ballesta/Alquimista/Excavador aún candidatos. B-22 no está cerrado.

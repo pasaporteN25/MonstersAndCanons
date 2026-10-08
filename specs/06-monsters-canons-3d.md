@@ -17,7 +17,7 @@
 - **Plataformas (Lucas):** PC como desarrollo principal y celular como segundo desarrollo cuidado. La propuesta es **un solo proyecto con dos productos**, no dos proyectos separados (sección 7).
 - **Cámara (Lucas):** no fija. La prueba de esta semana muestra que con los dibujos actuales aguanta **giros chicos (±30°), inclinarla y acercarla**; el giro libre de 360° pide modelos 3D (sección 5).
 - **Arte:** por etapas. Primero terreno y decoración en 3D real; después las **torres como modelos**, que son lo más fácil porque son rígidas; los **monstruos al final**, que son lo más caro por la animación. Mientras tanto, los dibujos actuales funcionan como planos (sección 6).
-- **Lore (Lucas):** si se trabaja bien, habilita una V2. Hoy no hay lore escrito (B-03 está abierto); conviene escribirlo **en la V1**, porque va a ser la base de toda la saga (sección 9).
+- **Lore (Lucas):** si se trabaja bien, habilita una V2. El lore y el plan de cierre de V1 ya están registrados en [07-lore-y-cierre-v1.md](07-lore-y-cierre-v1.md) (B-03 sigue abierto: diseño detallado e implementación pendientes); conviene escribirlo **en la V1**, porque va a ser la base de toda la saga (sección 9).
 
 ---
 

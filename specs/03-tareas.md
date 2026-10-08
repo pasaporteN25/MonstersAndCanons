@@ -1234,3 +1234,9 @@
   - El editor guarda en un modo propio.
   - Asedio se ofrece con valores iniciales y una corrida del bot sobre sus primeros mapas.
   - Hay tests de formato, errores, ids, desbloqueo y editor en carpetas de prueba.
+
+### Registro de lore y cierre de V1
+- [x] **T198 · Registrar las decisiones de B-03 y el plan de primera entrega.**
+  **Refs:** B-03, B-10, B-22, D-075/D-076, specs/07-lore-y-cierre-v1.md.
+  **Hecho cuando:** toda la conversación queda registrada, separando acuerdos, descartes y preguntas; backlog y documento de segunda entrega enlazan el plan, sin implementar mecánicas.
+  **Resultado:** documento completo con lore, campaña de 15 niveles, tres bloques, demolición global, recursos opcionales, extracción finita por oleadas, colecciones científicas por tecnología, torres, mapas/assets, orden de desarrollo y criterio de entrega. Referencias en B-03/B-10/B-22 y documento 06. Lectura del archivo guardado, 17 comprobaciones de contenido y revisión de formato del diff. Sin cambios de ejecución; no se corrió GUT para esta tarea documental. Los cambios previos de Android y T197 se conservan fuera del commit.
