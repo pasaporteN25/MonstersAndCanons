@@ -12,7 +12,9 @@
 2. `TowerData` gana un costo opcional en recursos (`resource_cost`, 0 por defecto). Construir exige y cobra oro **y** recursos. Vender devuelve los dos con el porcentaje de venta, redondeado hacia abajo.
 3. HUD: un contador de recursos con un ícono provisional, **solo si el nivel usa recursos** (alguna recompensa, extracción o torre con costo en recursos). La barra de construcción muestra "300 + 3 ⛭" y deshabilita con el motivo.
 4. El panel de torre, la ayuda de construcción y la Wiki muestran el costo en recursos desde los datos (RF-164: el texto se arma leyendo los datos).
-5. **Mortero** (Q-21): ponerle el costo en recursos que decidió Lucas en `data/towers/mortar.tres`. Como el Mortero solo aparece donde un nivel lo habilita (RF-300) y hoy ninguno lo hace, **no cambia el balance** de los niveles 1 a 9. Verificarlo.
+5. **Mortero** (Q-21 ✎): ponerle el costo en recursos que decidió Lucas en `data/towers/mortar.tres` (300 de oro + 3 recursos, iniciales). Debuta en el **nivel 9** (T224), así que **no cambia el balance** de los niveles 1 a 8. Verificarlo.
+6. **Francotirador con dos precios** (Q-21 ✎): se puede comprar **de las dos formas en la misma partida**, 150 de oro o 120 de oro + 1 recurso; en los mapas sin recursos (o con 0 recursos) la segunda opción queda deshabilitada. Con 1 recurso, la venta devuelve 0 (Q-23). Nunca es indispensable.
+7. **Drop al azar con semilla** (Q-18 ✎): el removible tiene una probabilidad de dar 1 recurso, sale de la semilla de la partida y el bot lo repite. Es la única excepción a "sin sorteos".
 
 ## Pasos
 1. Lógica y tests primero: el contador, `can_afford(gold, resources)` y `spend_both`, que es atómico (o cobra los dos o ninguno), además del reembolso.

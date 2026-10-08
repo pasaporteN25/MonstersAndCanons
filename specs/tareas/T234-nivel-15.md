@@ -1,16 +1,16 @@
 # T234 · Nivel 15 · La Central y epílogo
 
 - **Ejecutor:** Sonnet 5.5 · esfuerzo **alto** (es el cierre del juego)
-- **Depende de:** T232 (nivel 14) y T228 (pantallas). T233 es opcional: sin su arte, se usa el provisional · **Compuerta:** la G5 llega en T238 · **Tamaño:** mediano
+- **Depende de:** T232 (nivel 14), T228 (pantallas) y T243 (diseño del jefe supremo). T233 y T244 son opcionales: sin su arte, se usa el provisional · **Compuerta:** la G5 llega en T238 · **Tamaño:** mediano
 
 ## Leer
-- La ficha del 15 en la spec §7 (T227), el epílogo aprobado, Q-32 y el 07 §1 y §12.
+- La ficha del 15 en la spec §7 (T227), el epílogo aprobado, Q-32 ✎, la spec de T243 y el 07 §1 y §12.
 - Los Resultados de T229 a T232 (método y curva de dificultad).
 - `data/enemies/boss.tres` (Soberano) y cómo funcionan los grupos con `desde` y `entrada` (RF-203).
 
 ## Objetivo
 - El **último nivel**: mapa grande (hasta 26 × 12), la central de energía y la cadena de abastecimiento como elementos del mapa, y todas las torres disponibles.
-- **Final:** el Soberano con una **escolta coordinada** (Guardián + Curandero + Chamán que entran juntos y en formación por varias entradas), en las últimas oleadas.
+- **Final:** el **jefe supremo nuevo** (T243) con una **escolta coordinada** (Guardián + Curandero + Chamán que entran juntos y en formación por varias entradas), en las últimas oleadas.
 - Victoria: la pantalla de **epílogo** (T228) con la imagen de T233 y los créditos.
 
 ## Pasos

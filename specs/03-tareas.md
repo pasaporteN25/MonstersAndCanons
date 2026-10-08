@@ -1298,7 +1298,18 @@
   - **Qué no:** no se implementó ninguna mecánica, mapa ni arte. Las fichas de mapa y los valores numéricos son propuestas, no decisiones.
 
 #### Pendientes (ver el tablero del plan 08 y su ficha en `specs/tareas/`)
-- [ ] **T200** · 🚦 G1 · Lucas responde el cuestionario 09 y aprueba las fichas de mapa.
+- [x] **T200** · 🚦 G1 · Lucas responde el cuestionario 09 y aprueba las fichas de mapa.
+  **Resultado (2026-10-08):**
+  - **Respondió las 40 preguntas** (Q-01 a Q-40; la numeración salta del 31 al 33 porque el 09 así lo tenía). Las respuestas con fecha están en la columna "Tu respuesta" del 09.
+  - **Aceptó la recomendación en 36 de 40** y cambió 4 (✎: Q-10, Q-18, Q-21 y Q-32); Q-34 la aprobó con un reparto nuevo. De Q-21 salió además una regla nueva:
+    - **Q-10:** la máquina baja el precio **y también un poco el tiempo** de demolición (cuánto, lo fija T205 con el bot).
+    - **Q-18:** los recursos caen **al azar con semilla desde el nivel 7**, no desde el 10. Única excepción a "sin sorteos".
+    - **Q-21:** el Mortero debuta en el **nivel 9** (enmienda de RF-300), y el Francotirador se compra por **150 de oro o por 120 + 1 recurso**, las dos formas a la vez, nunca indispensable.
+    - **Q-32:** el nivel 15 tiene un **jefe supremo nuevo** con escolta.
+    - **Q-34 ✔:** fichas aprobadas como dirección, con el reparto del bloque 2 (7: demoledora + primer drop + Francotirador con recurso; 8: Guardián, pieza 1/3, símbolo A; 9: Curandero, pieza 2/3 y Mortero; 10: mina explotable y pieza 3/3).
+  - **Fichas ajustadas:** plan 08 (§2.2, §5 y tablero), T205, T209, T223, T224, T225, T227 y T234. **Tareas nuevas:** T243 (spec del jefe supremo) y T244 (su arte).
+  - **Qué se probó:** nada de código; es solo documentación.
+  - **Qué no:** los valores (probabilidad del drop, precio de la máquina, tiempo que baja, Mortero y Francotirador) son iniciales y no se probaron con el bot. El diseño del jefe supremo no existe todavía.
 - [ ] **T201** · 🚦 G2 · Biblia del universo (`specs/10-universo.md`).
 - [ ] **T202** · Auditoría de nombres y glosario canónico.
 - [ ] **T203** · Torres por mapa y aviso en la selección.
@@ -1321,14 +1332,16 @@
 - [ ] **T220** · 🎨 Mina y bosque explotable (Codex).
 - [ ] **T221** · 🎨 Íconos: recurso, piezas y demoledora (Codex).
 - [ ] **T222** · Niveles 1 a 5: señales (apto Qwen).
-- [ ] **T223** · Niveles 6 y 7: bosque y removibles.
-- [ ] **T224** · Niveles 8 y 9: ruinas y piezas.
+- [ ] **T223** · Niveles 6 y 7: bosque, removibles y primer drop de recursos.
+- [ ] **T224** · Niveles 8 y 9: ruinas, piezas y debut del Mortero.
 - [ ] **T225** · Nivel 10: la mina vieja.
 - [ ] **T226** · 🚦 G4 · Lucas juega del 6 al 10.
 - [ ] **T227** · Spec del lore en el juego, del bloque 3 y del final (M52).
 - [ ] **T228** · Textos por nivel y Lore en la Wiki.
 - [ ] **T229 · T230 · T231 · T232** · Niveles 11, 12, 13 y 14.
 - [ ] **T233** · 🎨 Central, abastecimiento e imagen del final (Codex).
+- [ ] **T243** · 📜 🚦 Spec del jefe supremo del nivel 15.
+- [ ] **T244** · 🎨 Arte del jefe supremo (Codex).
 - [ ] **T234** · Nivel 15 y epílogo.
 - [ ] **T235** · Asedio con 15 mapas y pulido de modos.
 - [ ] **T236** · Regresión, guardados, rendimiento y auditoría.
