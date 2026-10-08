@@ -1278,3 +1278,63 @@
   **Refs:** B-03, B-10, B-22, D-075/D-076, specs/07-lore-y-cierre-v1.md.
   **Hecho cuando:** toda la conversación queda registrada, separando acuerdos, descartes y preguntas; backlog y documento de segunda entrega enlazan el plan, sin implementar mecánicas.
   **Resultado:** documento completo con lore, campaña de 15 niveles, tres bloques, demolición global, recursos opcionales, extracción finita por oleadas, colecciones científicas por tecnología, torres, mapas/assets, orden de desarrollo y criterio de entrega. Referencias en B-03/B-10/B-22 y documento 06. Lectura del archivo guardado, 17 comprobaciones de contenido y revisión de formato del diff. Sin cambios de ejecución; no se corrió GUT para esta tarea documental. Los cambios previos de Android y T197 se conservan fuera del commit.
+
+### Plan de cierre de la V1 (plan 08)
+- [x] **T199 · Plan de cierre de la V1 dividido en tareas, cuestionario de decisiones y fichas de delegación.**
+  **Refs:** B-03, B-10, B-22, `specs/07-lore-y-cierre-v1.md`, `specs/08-plan-cierre-v1.md`, `specs/09-decisiones-pendientes-v1.md`, `specs/tareas/`.
+  **Hecho cuando:** el 07 y el estado real del repositorio están analizados; hay un plan por fases con compuertas de Lucas; las decisiones abiertas tienen una recomendación en un cuestionario; y cada tarea tiene una ficha que se le puede pasar a otro agente (Sonnet, Codex o Qwen).
+  **Resultado:**
+  - **Plan 08:**
+    - estado real del repositorio;
+    - piezas existentes que conviene extender (leyenda, `allowed_towers`, `CollectibleRun` y RF-359);
+    - cinco tensiones detectadas (§11 contra la intro y los textos, recursos sin uso en 6–9, B-14/B-23/B-08/B-09 antes o después, marca `JuegoA` y fuente GPL, nombres inconsistentes);
+    - definición de "base para la franquicia";
+    - propuesta de fichas de los 15 mapas;
+    - tablero T200–T242 con ejecutor, modelo, dependencias y compuertas.
+  - **Cuestionario 09:** 40 preguntas, todas con recomendación.
+  - **Fichas:** `specs/tareas/README.md` (protocolo común, entorno Linux, Codex y Qwen) y 40 fichas.
+  - **CLAUDE.md:** nota para Linux y enlaces a los documentos 08 y 09.
+  - **Qué se probó:** línea de base de tests en esta máquina (Linux, Godot 4.7.2): 1017/1017, sin `SCRIPT ERROR`.
+  - **Qué no:** no se implementó ninguna mecánica, mapa ni arte. Las fichas de mapa y los valores numéricos son propuestas, no decisiones.
+
+#### Pendientes (ver el tablero del plan 08 y su ficha en `specs/tareas/`)
+- [ ] **T200** · 🚦 G1 · Lucas responde el cuestionario 09 y aprueba las fichas de mapa.
+- [ ] **T201** · 🚦 G2 · Biblia del universo (`specs/10-universo.md`).
+- [ ] **T202** · Auditoría de nombres y glosario canónico.
+- [ ] **T203** · Torres por mapa y aviso en la selección.
+- [ ] **T204** · Bot de balance con varias semillas.
+- [ ] **T205** · 🚦 G3 · Spec de removibles, demolición, demoledora, recursos, extracción y colecciones (M50).
+- [ ] **T206** · Removibles: formato y validación.
+- [ ] **T207** · Demolición directa.
+- [ ] **T208** · Demoledora global.
+- [ ] **T209** · Recursos locales y torres con costo en recursos.
+- [ ] **T210** · Extracción finita.
+- [ ] **T211** · Colecciones por tecnología.
+- [ ] **T212** · Editor: sistemas nuevos.
+- [ ] **T213** · Modo de pruebas: sistemas nuevos.
+- [ ] **T214** · Bot: estrategias con recursos y regla de oro.
+- [ ] **T215** · Spec de la Disruptora (M51).
+- [ ] **T216** · 🎨 Arte de la Disruptora (Codex).
+- [ ] **T217** · Disruptora: código.
+- [ ] **T218** · 🎨 Señales de los habitantes (Codex).
+- [ ] **T219** · 🎨 Removibles y ruinas (Codex).
+- [ ] **T220** · 🎨 Mina y bosque explotable (Codex).
+- [ ] **T221** · 🎨 Íconos: recurso, piezas y demoledora (Codex).
+- [ ] **T222** · Niveles 1 a 5: señales (apto Qwen).
+- [ ] **T223** · Niveles 6 y 7: bosque y removibles.
+- [ ] **T224** · Niveles 8 y 9: ruinas y piezas.
+- [ ] **T225** · Nivel 10: la mina vieja.
+- [ ] **T226** · 🚦 G4 · Lucas juega del 6 al 10.
+- [ ] **T227** · Spec del lore en el juego, del bloque 3 y del final (M52).
+- [ ] **T228** · Textos por nivel y Lore en la Wiki.
+- [ ] **T229 · T230 · T231 · T232** · Niveles 11, 12, 13 y 14.
+- [ ] **T233** · 🎨 Central, abastecimiento e imagen del final (Codex).
+- [ ] **T234** · Nivel 15 y epílogo.
+- [ ] **T235** · Asedio con 15 mapas y pulido de modos.
+- [ ] **T236** · Regresión, guardados, rendimiento y auditoría.
+- [ ] **T237** · Marca y exportaciones.
+- [ ] **T238** · 🚦 G5 · Lucas juega del 1 al 15.
+- [ ] **T239** · Publicación.
+- [ ] **T240** · 🚦 G6 · Guion de la intro.
+- [ ] **T241** · 🎨 Láminas de la intro (Codex).
+- [ ] **T242** · Intro: integración.
