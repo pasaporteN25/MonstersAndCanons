@@ -35,6 +35,8 @@ var warnings: PackedStringArray = []
 var unused_cells: Array[Vector2i] = []
 ## RF-262: el dibujo que pidió la leyenda para cada casilla (casilla → nombre del dibujo).
 var legend_cells: Dictionary = {}
+## RF-401: casillas con removibles, para dibujar su marca provisional.
+var removable_cells: Array[Vector2i] = []
 ## Casilla de cada entrada: índice 0 = A, 1 = B…
 var entrances: Array[Vector2i] = []
 var exit_cell: Vector2i = Vector2i(-1, -1)
@@ -64,6 +66,16 @@ func is_valid() -> bool:
 
 func cell_type(cell: Vector2i) -> Cell:
 	return _cells.get(cell, Cell.BLOCKED)
+
+
+## RF-400: despeja un removible sin recalcular recorridos; nunca ocupaba una casilla de camino.
+func clear_cell(cell: Vector2i) -> bool:
+	if not is_inside(cell) or cell_type(cell) != Cell.BLOCKED or not removable_cells.has(cell):
+		return false
+	_cells[cell] = Cell.GRASS
+	legend_cells.erase(cell)
+	removable_cells.erase(cell)
+	return true
 
 
 func is_inside(cell: Vector2i) -> bool:
@@ -133,6 +145,8 @@ func _read(rows: PackedStringArray) -> void:
 				if buildable:
 					grass += 1
 				legend_cells[cell] = entry["dibujo"]
+				if entry.has("removible"):
+					removable_cells.append(cell)
 				used_legend[letter] = true
 			else:
 				errors.append("Letra desconocida '%s' en %s. Se usan: . # X S, las entradas A, B, C… y las letras que declares en la \"leyenda\" del nivel." % [letter, where(cell)])

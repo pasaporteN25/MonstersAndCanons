@@ -32,9 +32,23 @@ func _check(path: String) -> bool:
 			print("  ✗ ", problem)
 		return false
 	var level: LevelData = result["level"]
-	var grid: MapGrid = MapGrid.parse(level.map_rows)
+	var grid: MapGrid = MapGrid.parse(level.map_rows, level.legend)
 	print("  %s · oro %d · vidas %d · %d oleadas" % [level.display_name, level.starting_gold,
 		level.starting_lives, level.waves.size()])
+	if not level.obstacles.is_empty():
+		var counts: Dictionary = {}
+		var removable_count: int = 0
+		for obstacle: ObstacleSpec in level.obstacles:
+			if obstacle.kind == ObstacleSpec.Kind.REMOVABLE:
+				removable_count += 1
+			else:
+				counts[obstacle.class_id] = int(counts.get(obstacle.class_id, 0)) + 1
+		var summary: PackedStringArray = []
+		if removable_count > 0:
+			summary.append("%d removible%s" % [removable_count, "" if removable_count == 1 else "s"])
+		for class_id: StringName in counts:
+			summary.append("%d %s" % [counts[class_id], class_id])
+		print("  Objetos: ", ", ".join(summary))
 	for i: int in grid.entrances.size():
 		var letter: String = MapGrid.ENTRANCE_LETTERS[i]
 		print("\n  Entrada %s: %d casillas hasta la salida (recorrido marcado con *)" % [letter, grid.routes[i].size()])

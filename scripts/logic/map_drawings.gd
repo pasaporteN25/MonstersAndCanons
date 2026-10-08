@@ -12,6 +12,7 @@ const KINDS: Dictionary = {
 	"roca": KIND_OBJECT, "arbol": KIND_OBJECT, "arbusto": KIND_OBJECT, "flores": KIND_OBJECT,
 	"cactus": KIND_OBJECT, "pino": KIND_OBJECT, "columna": KIND_OBJECT, "tronco": KIND_OBJECT,
 	"helecho": KIND_OBJECT, "junco": KIND_OBJECT, "hongo": KIND_OBJECT, "estatua": KIND_OBJECT,
+	"escombro": KIND_OBJECT, "mina": KIND_OBJECT, "bosque_explotable": KIND_OBJECT,
 	"agua": KIND_GROUND, "hielo": KIND_GROUND, "lava": KIND_GROUND, "barro": KIND_GROUND,
 }
 

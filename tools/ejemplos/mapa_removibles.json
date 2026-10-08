@@ -1,0 +1,25 @@
+{
+	"version": 1,
+	"nombre": "Mapa con removibles",
+	"oro": 200,
+	"vidas": 20,
+	"demoledora": true,
+	"leyenda": {
+		"t": {"removible": {"clase": "arbol"}},
+		"r": {"removible": {"clase": "roca", "costo": 50, "probabilidad": 0}},
+		"u": {"removible": {"clase": "escombro"}},
+		"m": {"extraccion": {"clase": "mina", "reserva": 6}}
+	},
+	"mapa": [
+		"....................",
+		"....t...............",
+		"....................",
+		"...........r........",
+		"A##################S",
+		"....................",
+		"...............u....",
+		"...m................",
+		"...................."
+	],
+	"oleadas": [[{"enemigo": "normal", "cantidad": 2, "cada": 1.0}]]
+}

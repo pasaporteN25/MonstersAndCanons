@@ -20,10 +20,24 @@ extends Resource
 @export var theme: StringName = MapThemes.DEFAULT
 ## M15 (RF-262): letras extra del mapa. Cada una: {"dibujo": nombre del catálogo, "construible": bool}.
 @export var legend: Dictionary = {}
+## M50 (RF-398): datos de cada removible y punto de extracción, resueltos desde la leyenda.
+var obstacles: Array[ObstacleSpec] = []
+## M50 (RF-411): el nivel habilita la compra de la demoledora.
+@export var machine_enabled: bool = false
 ## M49 (RF-388): % de la vida de los monstruos que aplica un modo (`"vida_monstruos_%"`). 100 = como siempre.
 @export var enemy_health_percent: int = 100
 ## M49 (RF-388): torres que permite un modo (`"torres"`). Vacío = las de siempre.
 @export var allowed_towers: PackedStringArray = []
+
+
+## RF-416: hay recursos si un removible puede entregarlos o existe un punto de extracción.
+func uses_resources() -> bool:
+	for obstacle: ObstacleSpec in obstacles:
+		if obstacle.kind == ObstacleSpec.Kind.EXTRACTION:
+			return true
+		if obstacle.reward_amount > 0 and obstacle.chance_percent > 0:
+			return true
+	return false
 
 
 ## El mapa listo para agregar a la escena (un `Level`), armado con las filas de letras.

@@ -251,31 +251,32 @@ Dos campos **opcionales** del nivel (sin ellos, el nivel se ve como siempre). Ha
 |---|---|---|
 | `roca`, `arbol`, `arbusto`, `flores` | objeto | los de la pradera; las flores son decoración |
 | `cactus`, `pino`, `columna`, `tronco`, `helecho`, `junco`, `hongo`, `estatua` | objeto | uno o dos por paisaje |
+| `escombro`, `mina`, `bosque_explotable` | objeto | removibles y puntos de extracción de M50 |
 | `agua`, `hielo`, `lava`, `barro` | suelo | cubren toda la casilla y se unen entre sí; tienen un borde donde terminan |
 
-- **Objetos que se pueden retirar y minas** *(M50, RF-398 a RF-403; **todavía no los lee el juego**: se programan en T206 y siguientes, y falta el OK de Lucas a la spec)*. Una letra de la leyenda puede llevar **`removible`** (un objeto que se retira pagando oro y esperando) **o** **`extraccion`** (una mina o un bosque que produce recursos), nunca los dos. Ejemplo:
+- **Objetos que se pueden retirar y minas** *(M50, RF-398 a RF-403; formato, validación, dibujo y `check_level` implementados en T206; demoler y cobrar se implementa en T207 y siguientes)*. Una letra de la leyenda puede llevar **`removible`** (un objeto que se retira pagando oro y esperando) **o** **`extraccion`** (una mina o un bosque que produce recursos), nunca los dos. Ejemplo:
 
 ```json
 "leyenda": {
   "t": {"removible": {"clase": "arbol"}},
   "r": {"removible": {"clase": "roca", "costo": 50, "probabilidad": 0}},
-  "u": {"removible": {"clase": "escombro", "hallazgo": "disruptor"}},
+  "u": {"removible": {"clase": "escombro", "hallazgo": "technology"}},
   "m": {"extraccion": {"clase": "mina", "reserva": 6}}
 }
 ```
 
   - **`clase`** es obligatoria: `arbol`, `roca` o `escombro` (removibles), `mina` o `bosque_explotable` (extracción). Los números de cada clase están en `data/obstaculos.json`, que se puede editar sin programar.
   - **Se pueden cambiar por letra**, solo para ese mapa: `costo` (oro), `tiempo` (segundos), `recursos` (cuántos entrega) y `probabilidad` (de 0 a 100, la chance de que los entregue) en un removible; `costo`, `produccion` y `reserva` en una extracción. Lo que no se escribe sale de la clase. Con `"probabilidad": 0` el objeto solo abre la casilla.
-  - **`hallazgo`** (solo en un `escombro`) pone una pieza de una colección de `data/progression.json`, por ejemplo `"disruptor"`. Solo se recoge jugando la **campaña**, y un nivel solo puede tener una pieza por colección.
+  - **`hallazgo`** (solo en un `escombro`) identifica una colección de `data/progression.json`, por ejemplo `"technology"`. Solo se recoge jugando la **campaña**, y un nivel solo puede tener una pieza por colección.
   - **`dibujo`** se puede omitir: es el de la clase. Si se escribe, tiene que ser el mismo.
   - Un removible **intacto** es una casilla bloqueada y **ya despejado** es pasto construible. **Nunca es camino**: los recorridos no cambian. Cuentan para el tope de 10 letras.
-  - **`"demoledora": true`** (opcional, en el nivel, no en la leyenda) habilita en el HUD el botón "Infraestructura" para comprar la demoledora, que abarata las demás demoliciones.
+  - **`"demoledora": true`** (opcional, en el nivel, no en la leyenda) declara que el nivel habilita la demoledora. El formato ya se lee y se conserva en el editor; la compra y el botón se incorporan en T208.
   - **Errores comunes:** `removible` y `extraccion` en la misma letra; `construible: true` en un removible; una `clase` que no existe (el mensaje lista las que hay); `hallazgo` fuera de un `escombro`; dos `hallazgo` de la misma colección en un mismo nivel. **Avisos:** `demoledora` en un mapa sin removibles, y una torre que cuesta recursos en un mapa sin forma de conseguirlos.
   - Los dibujos `escombro`, `mina` y `bosque_explotable` se suman a la lista cerrada de arriba.
   - **Mapa con recursos:** tiene recursos si algún removible puede entregarlos (`probabilidad` y `recursos` mayores que 0) o si tiene una mina o un bosque. Solo entonces el HUD muestra el contador. **Todo mapa de la campaña con recursos tiene que poderse ganar sin usarlos** (el bot lo comprueba con la estrategia `sin_recursos`).
 - **Errores comunes:** una letra usada en el mapa que no está en la leyenda ("Letra desconocida"), un nombre de dibujo o de tema mal escrito (el mensaje lista los que existen) y una letra de la leyenda que no se usa (solo un aviso).
 - **Un dibujo nuevo** (para el catálogo) es un SVG de 64×64 en `assets/sprites/map/` que sigue `specs/05-guia-de-arte.md`, y un nombre nuevo en `scripts/logic/map_drawings.gd`. Un tema nuevo es una paleta y una lista de decoración en `scripts/logic/map_themes.gd`.
-- El editor de mapas **conserva** el tema y la leyenda al abrir y guardar, pero **todavía no los edita**: se escriben a mano en el archivo.
+- El editor de mapas **conserva** el tema, la leyenda y `demoledora` al abrir y guardar, pero **todavía no los edita**: se escriben a mano en el archivo.
 
 ---
 
