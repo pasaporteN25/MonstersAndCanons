@@ -32,6 +32,8 @@ var _selected_placed: Tower
 ## Casillas ocupadas: { Vector2i: Tower }.
 var _occupied: Dictionary = {}
 var _hover_cell: Vector2i = Vector2i.ZERO
+## RF-404: los removibles del mapa. Lo pone Game; null = este controlador no los conoce (sirve para los tests).
+var obstacles: InfrastructureController
 
 
 ## `container` es el nodo donde se agregan las torres (Game/Towers).
@@ -56,6 +58,8 @@ func select(index: int) -> void:
 	if index < 0 or index >= _tower_types.size():
 		return
 	deselect_placed()  # RF-73: nunca las dos cosas a la vez
+	if obstacles != null:
+		obstacles.deselect()
 	_selected = -1 if index == _selected else index
 	selection_changed.emit(_selected)
 	queue_redraw()
@@ -138,6 +142,8 @@ func selected_placed() -> Tower:
 
 func select_placed(tower: Tower) -> void:
 	cancel()  # RF-73: nunca las dos cosas a la vez
+	if obstacles != null and tower != null:
+		obstacles.deselect()
 	if tower == _selected_placed:
 		return
 	_selected_placed = tower
@@ -210,11 +216,31 @@ func _unhandled_input(event: InputEvent) -> void:
 		_handle_selection_input(event)
 
 
+## RF-404: el removible bajo el mouse, si lo hay (null si no hay o no se puede elegir).
+func _obstacle_under_mouse() -> Vector2i:
+	if obstacles == null:
+		return InfrastructureController.NONE
+	var cell: Vector2i = _level.cell_at(get_global_mouse_position())
+	return cell if obstacles.obstacle_at(cell) != null else InfrastructureController.NONE
+
+
+## RF-73 y RF-404: elegir un removible deselecciona la torre y el modo construcción.
+func _select_obstacle(cell: Vector2i) -> void:
+	cancel()
+	deselect_placed()
+	obstacles.select(cell)
+
+
 func _handle_build_mode_input(event: InputEvent) -> void:
 	if event.is_action_pressed("cancel") or _is_click(event, MOUSE_BUTTON_RIGHT):
 		cancel()
 		_accept()
 	elif _is_click(event, MOUSE_BUTTON_LEFT):
+		var obstacle: Vector2i = _obstacle_under_mouse()
+		if obstacle != InfrastructureController.NONE:
+			_select_obstacle(obstacle)  # RF-404: en el modo construcción, un removible se elige, no se construye
+			_accept()
+			return
 		# RF-43: la vista previa sigue activa para construir otra igual.
 		try_build(selected_tower(), origin_for(get_global_mouse_position(), selected_tower().footprint))
 		_accept()
@@ -226,10 +252,18 @@ func _handle_selection_input(event: InputEvent) -> void:
 		if not _level.is_inside(cell):
 			return  # clic fuera del mapa (por ejemplo, en el HUD): no tocar la selección
 		var tower: Tower = tower_at(cell)
-		if tower != null:
+		if obstacles != null and tower == null and obstacles.obstacle_at(cell) != null:
+			_select_obstacle(cell)
+		elif tower != null:
 			select_placed(tower)
 		else:
 			deselect_placed()
+			if obstacles != null:
+				obstacles.deselect()  # un clic fuera deselecciona
+		_accept()
+	elif obstacles != null and obstacles.has_selection() \
+			and (event.is_action_pressed("cancel") or _is_click(event, MOUSE_BUTTON_RIGHT)):
+		obstacles.deselect()
 		_accept()
 	elif _selected_placed == null:
 		return

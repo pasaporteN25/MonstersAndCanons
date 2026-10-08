@@ -55,6 +55,9 @@ var _exploit_burning: bool = false
 @onready var projectiles: Node2D = $Projectiles
 @onready var effects: EffectsLayer = $Effects
 @onready var build_controller: BuildController = $BuildController
+## RF-404 a RF-409: la demolición directa. Se crea en `_ready`.
+var infrastructure: InfrastructureController
+var obstacle_layer: ObstacleLayer
 @onready var spawner: WaveSpawner = $WaveSpawner
 @onready var session: LevelSession = $Session
 @onready var hud: Hud = $HUD
@@ -83,6 +86,8 @@ func _ready() -> void:
 	add_child(level)
 	move_child(level, 0)  # primero en la lista = se dibuja debajo de todo
 	_fit_map()
+
+	_setup_infrastructure()
 
 	# RF-104: la partida (y la interfaz, que hereda) sigue funcionando en pausa;
 	# el "mundo" se congela.
@@ -166,6 +171,43 @@ func _ready() -> void:
 		_add_dev_panel()
 
 
+## RF-404 a RF-409: el controlador de la demolición, su vista y el panel del HUD. El sorteo del drop
+## usa un generador propio con semilla (RF-417): nueva en cada partida, o `GameFlow.forced_seed`.
+func _setup_infrastructure() -> void:
+	var rng := RandomNumberGenerator.new()
+	if GameFlow.forced_seed >= 0:
+		rng.seed = GameFlow.forced_seed
+	else:
+		rng.randomize()
+	infrastructure = InfrastructureController.new()
+	infrastructure.name = "Infrastructure"
+	add_child(infrastructure)
+	infrastructure.setup(level, session, level_data.obstacles, rng, effects, {}, level_data.id)
+	obstacle_layer = ObstacleLayer.new()
+	obstacle_layer.name = "ObstacleLayer"
+	add_child(obstacle_layer)
+	obstacle_layer.setup(infrastructure, level)
+	build_controller.obstacles = infrastructure
+	var panel: ObstaclePanel = hud.obstacle_panel
+	panel.demolish_pressed.connect(infrastructure.order)
+	panel.cancel_pressed.connect(infrastructure.cancel_job)
+	infrastructure.selection_changed.connect(_refresh_obstacle_panel.unbind(1))
+	infrastructure.changed.connect(_refresh_obstacle_panel)
+
+
+## Muestra en el panel el removible elegido (o lo oculta si no hay ninguno).
+func _refresh_obstacle_panel() -> void:
+	var cell: Vector2i = infrastructure.selected_cell()
+	var spec: ObstacleSpec = infrastructure.obstacle_at(cell)
+	if spec == null:
+		hud.obstacle_panel.show_obstacle(null, ObstacleField.State.INTACT, false, session.gold, 0.0, false)
+		return
+	var field: ObstacleField = infrastructure.field
+	var job: DemolitionJob = field.job()
+	hud.obstacle_panel.show_obstacle(spec, field.state_of(cell), field.has_job() and job.cell != cell,
+			session.gold, 0.0 if job == null else job.seconds_left(), field.finding_recovered(cell))
+
+
 ## RF-251: un mapa más grande que 20×9 se muestra con zoom, con una cámara. Una cámara no cambia
 ## las coordenadas del mundo (alcances, disparos y la casilla bajo el mouse valen lo mismo, D-037).
 func _fit_map() -> void:
@@ -233,6 +275,7 @@ func open_pause_menu() -> void:
 		return
 	build_controller.cancel()
 	build_controller.deselect_placed()
+	infrastructure.deselect()
 	set_paused(true)
 	hud.show_paused(true, false)  # el menú ya dice "Pausa"
 	pause_menu.open()
@@ -284,7 +327,7 @@ func _reset_time() -> void:
 
 ## Las partes del mundo que se congelan en pausa y al terminar la partida.
 func _world_nodes() -> Array[Node]:
-	return [level, tower_container, enemies, projectiles, effects, spawner, session]
+	return [level, tower_container, enemies, projectiles, effects, spawner, session, infrastructure, obstacle_layer]
 
 
 ## RF-32 y RF-34: la oleada empieza con el botón, con Espacio o al terminar la cuenta atrás.
@@ -556,7 +599,8 @@ func _on_state_changed(state: LevelSession.State) -> void:
 	_commit_collection()
 	_write_dev_stats(DevStats.RESULT_WON if state == LevelSession.State.WON else DevStats.RESULT_LOST)
 	# RF-91: el juego se detiene. Se congela el "mundo", pero no la interfaz.
-	for node: Node in [enemies, tower_container, projectiles, spawner]:
+	infrastructure.discard_job()  # RF-409: el trabajo se pierde
+	for node: Node in [enemies, tower_container, projectiles, spawner, infrastructure]:
 		node.process_mode = Node.PROCESS_MODE_DISABLED
 	build_controller.cancel()
 	build_controller.deselect_placed()

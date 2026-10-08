@@ -48,6 +48,8 @@ var _last_score: int = -1
 @onready var _intro_text: Label = %IntroText
 ## Panel de la torre seleccionada (RF-70). Game lo conecta con BuildController.
 @onready var tower_panel: TowerPanel = %TowerPanel
+## Panel del removible elegido (RF-404). Game lo conecta con InfrastructureController.
+var obstacle_panel: ObstaclePanel
 @onready var _pause_button: Button = %PauseButton
 @onready var _speed_button: Button = %SpeedButton
 @onready var _pause_label: Label = %PauseLabel
@@ -74,6 +76,9 @@ func show_metrics(enabled: bool) -> void:
 	_metrics_updated = 0
 
 func _ready() -> void:
+	obstacle_panel = ObstaclePanel.new()
+	obstacle_panel.name = "ObstaclePanel"
+	add_child(obstacle_panel)
 	_metrics = Label.new()
 	_metrics.name = "PerformanceOverlay"
 	_metrics.position = Vector2(990, 56)

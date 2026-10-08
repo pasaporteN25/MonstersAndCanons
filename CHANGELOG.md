@@ -2,6 +2,11 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Demolición directa de obstáculos *(T207, 2026-10-08)*
+
+- En un mapa que tenga **removibles** (árboles, rocas o escombros marcados con una estaca ámbar), un clic abre un panel con el costo, el tiempo y la recompensa. **Demoler** cobra el oro y empieza un trabajo que avanza con el reloj de la partida (se frena en pausa y va más rápido a ×2). Se puede **cancelar** y se devuelve todo el oro. Al terminar la casilla queda libre para construir.
+- Una sola demolición a la vez. Los 9 niveles actuales no tienen removibles: no cambian. Los recursos y las piezas todavía no se entregan (llegan en tareas siguientes).
+
 ## Torres por mapa y aviso en la selección *(T203, 2026-10-08)*
 
 - Un nivel puede decir qué torres ofrece (`"torres"` en su archivo): la barra muestra solo esas. Sin el campo, todo sigue igual; los 9 niveles actuales no cambian.

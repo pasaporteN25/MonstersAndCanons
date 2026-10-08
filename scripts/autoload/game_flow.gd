@@ -23,6 +23,8 @@ var editor_draft: LevelDraft
 ## Mientras hay uno, la partida no guarda progreso, estrellas ni récords, y al terminar vuelve
 ## al editor.
 var test_level: LevelData
+## RF-417: semilla fija del sorteo de los removibles (el bot y los tests). -1 = una nueva en cada partida.
+var forced_seed: int = -1
 ## RF-224: el mapa de la comunidad que se está jugando (null = ninguno). Tiene su progreso y sus
 ## récords propios, con el id `comunidad_<archivo>`, y no toca la campaña.
 var current_community: LevelData
