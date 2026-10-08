@@ -10,8 +10,13 @@ const WARNING_COLOR := Color(1.0, 0.85, 0.4)
 const ERROR_COLOR := Color(1.0, 0.5, 0.5)
 const SELECTED_COLOR := Color(1.0, 0.84, 0.3)
 ## RF-212: nombre y tecla de cada herramienta, en el orden de LevelDraft.Tool.
-const TOOL_NAMES: Array[String] = ["Pasto", "Camino", "Bloqueada", "Entrada", "Salida"]
-const TOOL_KEYS: Array[Key] = [KEY_1, KEY_2, KEY_3, KEY_4, KEY_5]
+## RF-434: los últimos cinco son los pinceles de objetos (árbol y roca removibles, escombro, mina y bosque explotable).
+const TOOL_NAMES: Array[String] = ["Pasto", "Camino", "Bloqueada", "Entrada", "Salida", "Árbol", "Roca", "Escombro", "Mina", "Bosque"]
+const TOOL_KEYS: Array[Key] = [KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9, KEY_0]
+const TOOL_TIPS: Array[String] = ["", "", "", "", "",
+	"Árbol removible: se despeja pagando oro (Demoler)", "Roca removible: se despeja pagando oro (Demoler)",
+	"Escombro: ruinas removibles; en la campaña pueden esconder una pieza",
+	"Mina: punto de extracción de recursos", "Bosque explotable: punto de extracción de recursos"]
 
 ## Se sale del editor (GameFlow lleva al menú). Es una señal para poder probarlo sin cambiar de pantalla.
 signal left
@@ -30,12 +35,15 @@ var official_modes_dir: String = ModePacks.OFFICIAL_DIR
 var _stroking: bool = false
 var _stroke_tool: LevelDraft.Tool = LevelDraft.Tool.PATH
 var _last_cell := Vector2i(-1, -1)
+## Por qué no pintó el pincel durante el trazo en curso ("" = nada que avisar).
+var _stroke_problem: String = ""
 var _tool_buttons: Array[Button] = []
 var _undo_button: Button
 var _redo_button: Button
 var _message_kind: StringName = &"ok"
 var _settings_panel := SettingsPanel.new()
 var _waves_panel := WavesPanel.new()
+var _objects_panel := ObjectsPanel.new()
 var _dialog := EditorDialog.new()
 ## Lo que se hace cuando la persona acepta el diálogo que está abierto (null = nada).
 var _pending: Callable
@@ -53,6 +61,7 @@ var _notice: String = ""
 @onready var _try_button: Button = %TryButton
 @onready var _settings_button: Button = %SettingsButton
 @onready var _waves_button: Button = %WavesButton
+@onready var _objects_button: Button = %ObjectsButton
 @onready var _tools_row: HBoxContainer = %Tools
 @onready var _messages: Label = %Messages
 
@@ -75,8 +84,10 @@ func _ready() -> void:
 	test_requested.connect(GameFlow.play_test)
 	_style_selected(_settings_button)
 	_style_selected(_waves_button)
+	_style_selected(_objects_button)
 	_add_panel(_settings_panel, _settings_button)
 	_add_panel(_waves_panel, _waves_button)
+	_add_panel(_objects_panel, _objects_button)
 	add_child(_dialog)  # último: se dibuja encima de todo
 	_dialog.accepted.connect(_on_dialog_accepted)
 	_dialog.cancelled.connect(func() -> void: _pending = Callable())
@@ -93,12 +104,13 @@ func set_tool(new_tool: LevelDraft.Tool) -> void:
 		_tool_buttons[i].set_pressed_no_signal(i == new_tool)
 
 
-## Abre o cierra un panel (ajustes u oleadas). Hay uno solo abierto a la vez.
+## Abre o cierra un panel (ajustes, oleadas u objetos). Hay uno solo abierto a la vez.
 func show_panel(panel: EditorPanel, on: bool) -> void:
-	for other: EditorPanel in [_settings_panel, _waves_panel]:
+	for other: EditorPanel in [_settings_panel, _waves_panel, _objects_panel]:
 		other.visible = on and other == panel
 	_settings_button.set_pressed_no_signal(_settings_panel.visible)
 	_waves_button.set_pressed_no_signal(_waves_panel.visible)
+	_objects_button.set_pressed_no_signal(_objects_panel.visible)
 	if on:
 		panel.refresh()
 
@@ -109,6 +121,10 @@ func settings_panel() -> SettingsPanel:
 
 func waves_panel() -> WavesPanel:
 	return _waves_panel
+
+
+func objects_panel() -> ObjectsPanel:
+	return _objects_panel
 
 
 ## Pinta una casilla con la herramienta elegida, como un solo paso de deshacer.
@@ -123,8 +139,11 @@ func begin_stroke(cell: Vector2i, stroke_tool: LevelDraft.Tool) -> void:
 	_stroke_tool = stroke_tool
 	draft.begin_stroke()
 	_last_cell = cell
+	_stroke_problem = ""
 	if draft.apply_tool(stroke_tool, cell):
 		refresh()
+	elif draft.last_problem != "":
+		_stroke_problem = draft.last_problem
 
 
 ## Sigue el trazo hasta `cell`, pintando también las casillas del medio (si el mouse va rápido
@@ -138,6 +157,8 @@ func stroke_to(cell: Vector2i) -> void:
 	var changed: bool = false
 	for step: Vector2i in _cells_between(_last_cell, cell):
 		changed = draft.apply_tool(_stroke_tool, step) or changed
+		if draft.last_problem != "":
+			_stroke_problem = draft.last_problem
 	_last_cell = cell
 	if changed:
 		refresh()
@@ -149,6 +170,11 @@ func end_stroke() -> void:
 	_stroking = false
 	draft.end_stroke()
 	refresh()
+	if _stroke_problem != "":
+		# RF-434: si el pincel no pudo pintar (la leyenda llegó al tope), se dice debajo del estado del nivel.
+		_notice = "⚠ " + _stroke_problem
+		_stroke_problem = ""
+		_update_messages()
 
 
 func undo() -> void:
@@ -263,6 +289,7 @@ func _use_draft(new_draft: LevelDraft, notice: String) -> void:
 	GameFlow.editor_draft = new_draft
 	_settings_panel.bind(draft)
 	_waves_panel.bind(draft)
+	_objects_panel.bind(draft)
 	_waves_panel.show_wave(0)
 	refresh()
 	_notice = notice
@@ -387,7 +414,7 @@ func refresh() -> void:
 	_title.text = "Editor de mapas · %s%s" % [draft.level_name(), " *" if draft.dirty else ""]
 	_undo_button.disabled = not draft.can_undo()
 	_redo_button.disabled = not draft.can_redo()
-	for panel: EditorPanel in [_settings_panel, _waves_panel]:
+	for panel: EditorPanel in [_settings_panel, _waves_panel, _objects_panel]:
 		if panel.visible:
 			panel.refresh()  # después de deshacer o de pintar, lo que muestran puede haber cambiado
 
@@ -460,17 +487,18 @@ func _build_tools() -> void:
 	var group := ButtonGroup.new()
 	for i: int in TOOL_NAMES.size():
 		var button := Button.new()
-		button.text = "%s (%d)" % [TOOL_NAMES[i], i + 1]
+		button.text = "%s (%d)" % [TOOL_NAMES[i], (i + 1) % 10]
 		button.toggle_mode = true
 		button.button_group = group
 		button.focus_mode = Control.FOCUS_NONE  # las teclas 1 a 5 no se las come el botón
-		button.custom_minimum_size = Vector2(112, 0)
+		button.tooltip_text = TOOL_TIPS[i]
 		_style_selected(button)
 		button.pressed.connect(set_tool.bind(i))
 		_tools_row.add_child(button)
 		_tool_buttons.append(button)
 	var hint := Label.new()
-	hint.text = "Clic der.: borra · Ctrl+Z / Ctrl+Y · Ctrl+S: guardar"
+	hint.text = "Clic der.: borra · Ctrl+Z/Y · Ctrl+S"
+	hint.clip_text = true
 	hint.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	hint.add_theme_font_size_override("font_size", 13)

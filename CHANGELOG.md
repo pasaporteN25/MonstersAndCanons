@@ -2,6 +2,13 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Editor: removibles, minas, demoledora y torres del mapa *(T212, 2026-10-08)*
+
+- El **editor de mapas** suma cinco pinceles: **Árbol**, **Roca**, **Escombro**, **Mina** y **Bosque** (teclas `6` a `0`). Se pintan como el pasto o el camino y el editor arma solo la leyenda del archivo. Si la leyenda ya tiene sus 10 letras, avisa abajo en lugar de pintar.
+- Un botón nuevo, **Objetos**, deja cambiar el costo, el tiempo, los recursos y la probabilidad de un removible (o la producción y la reserva de una mina) para todas las casillas de ese tipo, viendo siempre el valor de la clase.
+- **Ajustes** suma *Demoledora disponible* y *Torres del mapa* (casillas para elegir cuáles ofrece el nivel; "Usar las de siempre" las deja como antes). **Probar** funciona con todo esto.
+- La **pieza de colección** de una ruina solo se puede elegir al editar un nivel de la campaña; en los mapas de la comunidad y de los modos el campo está deshabilitado y explica por qué (si el archivo ya tenía una, se conserva).
+
 ## Niveles 6 y 7 en el bosque *(T223, 2026-10-08)*
 
 - **Nido («El lindero»)** y **Cruce («El aserradero»)** pasan al **bosque**, con árboles y rocas que se pueden **demoler** pagando oro y esperando (un clic sobre el objeto). Despejarlos libera casillas buenas entre las rectas del camino. En el Nido son 3 y **no dan recursos**; se gana sin demoler.

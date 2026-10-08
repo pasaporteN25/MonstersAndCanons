@@ -6,7 +6,7 @@
 class_name LevelDraft
 extends RefCounted
 
-enum Tool { GRASS, PATH, BLOCKED, ENTRANCE, EXIT }
+enum Tool { GRASS, PATH, BLOCKED, ENTRANCE, EXIT, TREE, ROCK, RUBBLE, MINE, FOREST }
 
 ## RF-216: dónde se guardan los mapas propios.
 const MAPS_DIR: String = "user://maps/"
@@ -15,6 +15,23 @@ const UNDO_LIMIT: int = 50
 const NEW_NAME: String = "Nivel nuevo"
 const TEMPLATE_SUFFIX: String = "_copia"
 const FILE_ID_MAX: int = 40
+## RF-434: qué crea cada pincel de objetos: la parte de la leyenda ("removible" o "extraccion"), la clase de
+## `data/obstaculos.json` y la letra que se prefiere (las del ejemplo de RF-399; si está ocupada, otra libre).
+const OBSTACLE_TOOLS: Dictionary = {
+	Tool.TREE: {"categoria": "removible", "clase": "arbol", "letra": "t"},
+	Tool.ROCK: {"categoria": "removible", "clase": "roca", "letra": "r"},
+	Tool.RUBBLE: {"categoria": "removible", "clase": "escombro", "letra": "u"},
+	Tool.MINE: {"categoria": "extraccion", "clase": "mina", "letra": "m"},
+	Tool.FOREST: {"categoria": "extraccion", "clase": "bosque_explotable", "letra": "b"},
+}
+## Letras que se prueban, en orden, cuando la preferida del pincel ya está en uso.
+const SPARE_LETTERS: String = "abcdefghijklmnopqrstuvwxyz0123456789"
+## RF-434: lo que se puede sobrescribir por letra (RF-399).
+const REMOVABLE_FIELDS: PackedStringArray = ["costo", "tiempo", "recursos", "probabilidad"]
+const EXTRACTION_FIELDS: PackedStringArray = ["costo", "produccion", "reserva"]
+## Topes del panel de propiedades (la validación de LevelFile solo exige que no sean negativos ni cero donde corresponde).
+const OBSTACLE_VALUE_MAX: int = 9999
+const OBSTACLE_TIME_MAX: float = 600.0
 
 ## El nivel, como el archivo de §7.8: version, nombre, oro, vidas, [aumento_vida], mapa, oleadas.
 var data: Dictionary = {}
@@ -26,6 +43,11 @@ var suggested_id: String = ""
 var mode_id: String = ""
 ## Hay cambios sin guardar (RF-218).
 var dirty: bool = false
+## RF-435: el borrador salió de un nivel de la campaña (se abrió como plantilla). Mientras no se guarde
+## como mapa de la comunidad o de un modo, sus ruinas pueden llevar un hallazgo.
+var from_campaign: bool = false
+## Por qué la última herramienta usada no pintó (por ejemplo, la leyenda ya tiene 10 letras). "" = nada que avisar.
+var last_problem: String = ""
 
 var _undo: Array[Dictionary] = []
 var _redo: Array[Dictionary] = []
@@ -71,18 +93,19 @@ static func from_text(text: String, id: String = "") -> LevelDraft:
 	}
 	if _to_int(source.get("aumento_vida", 0)) > 0:
 		draft.data["aumento_vida"] = _to_int(source["aumento_vida"])
-	# M15: el tema y la leyenda se conservan tal cual (el editor todavía no los edita; check() los revisa).
+	# M15: el tema y la leyenda se conservan tal cual (check() los revisa). Los objetos de la leyenda se editan
+	# con los pinceles y el panel de objetos (RF-434).
 	if source.get("tema") is String:
 		draft.data["tema"] = source["tema"]
 	if source.get("leyenda") is Dictionary:
 		draft.data["leyenda"] = (source["leyenda"] as Dictionary).duplicate(true)
-	# RF-300: las torres extra se conservan tal cual (el editor todavía no las edita).
+	# RF-300: las torres extra se conservan tal cual.
 	if source.get("torres_extra") is Array:
 		draft.data["torres_extra"] = (source["torres_extra"] as Array).duplicate()
-	# RF-394: la lista de torres del nivel también se conserva tal cual.
+	# RF-394: la lista de torres del nivel se edita en Ajustes (RF-434); al abrir se conserva tal cual.
 	if source.get("torres") is Array:
 		draft.data["torres"] = (source["torres"] as Array).duplicate()
-	# RF-411: el editor todavía no lo edita, pero debe conservarlo al guardar.
+	# RF-411: se conserva tal cual al guardar (aunque no sea true/false: check() lo marca).
 	if source.has("demoledora"):
 		draft.data["demoledora"] = source["demoledora"]
 	# El orden de las claves del texto lo fija to_text(), no este diccionario.
@@ -106,6 +129,7 @@ static func open_official(id: String) -> LevelDraft:
 	var draft: LevelDraft = from_text(FileAccess.get_file_as_string(path), "")
 	if draft != null:
 		draft.suggested_id = id + TEMPLATE_SUFFIX
+		draft.from_campaign = true  # RF-435
 	return draft
 
 
@@ -159,10 +183,14 @@ func entrance_count() -> int:
 
 
 ## Usa una herramienta en una casilla. Devuelve true si el mapa cambió.
+## Si no pudo pintar por un motivo que conviene decir (RF-434: la leyenda llegó al tope), queda en `last_problem`.
 ## Un trazo del mouse se agrupa con begin_stroke() y end_stroke().
 func apply_tool(tool: Tool, cell: Vector2i) -> bool:
+	last_problem = ""
 	if not in_bounds(cell):
 		return false
+	if OBSTACLE_TOOLS.has(tool):
+		return _apply_obstacle_tool(tool, cell)
 	var current: String = letter_at(cell)
 	var wanted: String
 	match tool:
@@ -187,6 +215,7 @@ func apply_tool(tool: Tool, cell: Vector2i) -> bool:
 	if wanted == MapGrid.EXIT:
 		_clear_exit()
 	_set_letter(cell, wanted)
+	_forget_unused_obstacle_letter(current)
 	return true
 
 
@@ -359,6 +388,203 @@ func enemy_total(wave: int) -> int:
 	for i: int in group_count(wave):
 		total += int(group(wave, i)["cantidad"])
 	return total
+
+
+# --- Objetos del mapa: removibles y extracción (RF-434, RF-435) ---
+
+## Las letras de la leyenda que son un removible o un punto de extracción, en el orden del archivo.
+func obstacle_letters() -> PackedStringArray:
+	var letters: PackedStringArray = []
+	for letter: Variant in _legend().keys():
+		if obstacle_category(str(letter)) != "":
+			letters.append(str(letter))
+	return letters
+
+
+## "removible", "extraccion" o "" si la letra no es un objeto.
+func obstacle_category(letter: String) -> String:
+	var entry: Variant = _legend().get(letter)
+	if not entry is Dictionary:
+		return ""
+	for category: String in ["removible", "extraccion"]:
+		if (entry as Dictionary).get(category) is Dictionary:
+			return category
+	return ""
+
+
+## La clase de la letra ("arbol", "roca", "mina"…) o "".
+func obstacle_class(letter: String) -> String:
+	var category: String = obstacle_category(letter)
+	return str(_legend()[letter][category].get("clase", "")) if category != "" else ""
+
+
+## Los datos que se pueden sobrescribir en esa letra (RF-399).
+func obstacle_fields(letter: String) -> PackedStringArray:
+	match obstacle_category(letter):
+		"removible":
+			return REMOVABLE_FIELDS
+		"extraccion":
+			return EXTRACTION_FIELDS
+		_:
+			return PackedStringArray()
+
+
+## El valor de la clase para `key` (el que rige si el mapa no lo sobrescribe). 0 si no hay.
+func obstacle_default(letter: String, key: String) -> float:
+	var class_id: String = obstacle_class(letter)
+	var defaults: Dictionary = ObstacleCatalog.removable(class_id) if obstacle_category(letter) == "removible" \
+		else ObstacleCatalog.extraction(class_id)
+	return _to_float(defaults.get(key, 0))
+
+
+## El valor que rige para esa letra: el que escribió el mapa o, si no, el de la clase.
+func obstacle_value(letter: String, key: String) -> float:
+	var category: String = obstacle_category(letter)
+	if category == "" or not obstacle_fields(letter).has(key):
+		return 0.0
+	var body: Dictionary = _legend()[letter][category]
+	return _to_float(body[key]) if body.has(key) else obstacle_default(letter, key)
+
+
+## ¿La letra sobrescribe este dato (RF-434)?
+func obstacle_overrides(letter: String, key: String) -> bool:
+	var category: String = obstacle_category(letter)
+	return category != "" and (_legend()[letter][category] as Dictionary).has(key)
+
+
+## Sobrescribe un dato de TODAS las casillas con esa letra (RF-434). Un valor igual al de la clase no se escribe:
+## se borra la sobrescritura. Los valores se acomodan al rango que acepta LevelFile. Devuelve true si algo cambió.
+func set_obstacle_value(letter: String, key: String, value: float) -> bool:
+	if not obstacle_fields(letter).has(key):
+		return false
+	var wanted: float
+	match key:
+		"tiempo":
+			wanted = clampf(snappedf(value, 0.1), 0.1, OBSTACLE_TIME_MAX)
+		"probabilidad":
+			wanted = clampf(roundf(value), 0.0, 100.0)
+		"costo":
+			wanted = clampf(roundf(value), 1.0, OBSTACLE_VALUE_MAX)
+		_:
+			wanted = clampf(roundf(value), 0.0, OBSTACLE_VALUE_MAX)
+	var body: Dictionary = _legend()[letter][obstacle_category(letter)]
+	var is_default: bool = is_equal_approx(wanted, obstacle_default(letter, key))
+	if is_default and not body.has(key):
+		return false
+	if not is_default and body.has(key) and is_equal_approx(_to_float(body[key]), wanted):
+		return false
+	_record()
+	if is_default:
+		body.erase(key)
+	else:
+		body[key] = wanted  # decimal, como lo devuelve el lector de JSON: guardar y reabrir no cambia el texto
+	return true
+
+
+## RF-435: ¿se puede escribir el hallazgo? Solo en una ruina (escombro) y solo mientras el borrador es un
+## nivel de la campaña (abierto como plantilla y todavía sin guardar como mapa de la comunidad o de un modo).
+func is_campaign() -> bool:
+	return from_campaign and file_id == "" and mode_id == ""
+
+
+func can_edit_finding(letter: String) -> bool:
+	return is_campaign() and obstacle_category(letter) == "removible" and obstacle_class(letter) == "escombro"
+
+
+## La colección del hallazgo de esa letra ("" = sin hallazgo).
+func finding(letter: String) -> String:
+	if obstacle_category(letter) != "removible":
+		return ""
+	return str(_legend()[letter]["removible"].get("hallazgo", ""))
+
+
+## Pone (o con "" quita) el hallazgo de una ruina. No hace nada si el borrador no es de la campaña (RF-435).
+func set_finding(letter: String, collection: String) -> bool:
+	if not can_edit_finding(letter) or collection == finding(letter):
+		return false
+	_record()
+	var body: Dictionary = _legend()[letter]["removible"]
+	if collection == "":
+		body.erase("hallazgo")
+	else:
+		body["hallazgo"] = collection
+	return true
+
+
+# --- Demoledora y torres del mapa (RF-434) ---
+
+## `"demoledora": true` (RF-411). Sin el campo, o con otra cosa, es false.
+func machine_enabled() -> bool:
+	return data.get("demoledora", false) == true
+
+
+## Activa la demoledora; apagarla borra el campo (vale lo mismo que no escribirlo).
+func set_machine_enabled(on: bool) -> bool:
+	if on == machine_enabled():
+		return false
+	_record()
+	if on:
+		data["demoledora"] = true
+	else:
+		data.erase("demoledora")
+	return true
+
+
+## ¿El nivel dice qué torres ofrece (`"torres"`)? Si no, ofrece las de siempre (RF-393).
+func has_tower_list() -> bool:
+	return data.get("torres") is Array
+
+
+## Los ids de las torres que ofrece el nivel, en el orden de `all_towers` (el canónico). Sin lista, las que
+## ofrece un nivel sin el campo: las comunes más las de `"torres_extra"` (RF-300).
+func offered_tower_ids(all_towers: Array[TowerData]) -> PackedStringArray:
+	var ids: PackedStringArray = []
+	var listed: Array = data["torres"] if has_tower_list() else []
+	var extra: Array = data["torres_extra"] if data.get("torres_extra") is Array else []
+	for tower: TowerData in all_towers:
+		var id: String = String(tower.id)
+		var offered: bool = listed.has(id) if has_tower_list() else (not tower.reserved or extra.has(id))
+		if offered:
+			ids.append(id)
+	return ids
+
+
+## Marca o desmarca una torre. La primera vez escribe la lista completa de lo que ya se ofrecía, así que el
+## resto no cambia. No deja la lista vacía (RF-394): quitar la última no hace nada. Los ids que el juego no
+## conoce y ya estaban escritos se conservan al final (los marca check()). Devuelve true si algo cambió.
+func set_tower_offered(tower_id: String, on: bool, all_towers: Array[TowerData]) -> bool:
+	var current: PackedStringArray = offered_tower_ids(all_towers)
+	if current.has(tower_id) == on and has_tower_list():
+		return false
+	var wanted: PackedStringArray = current.duplicate()
+	if on and not wanted.has(tower_id):
+		wanted.append(tower_id)
+	elif wanted.has(tower_id):
+		wanted.remove_at(wanted.find(tower_id))
+	var unknown: Array = []
+	if has_tower_list():
+		for id: Variant in data["torres"]:
+			if not _tower_ids_of(all_towers).has(str(id)):
+				unknown.append(id)
+	if wanted.is_empty() and unknown.is_empty():
+		return false
+	var ordered: Array = []
+	for tower: TowerData in all_towers:
+		if wanted.has(String(tower.id)):
+			ordered.append(String(tower.id))
+	ordered.append_array(unknown)
+	_record()
+	data["torres"] = ordered
+	return true
+
+
+## Vuelve a "las de siempre": borra el campo `"torres"`.
+func use_default_towers() -> bool:
+	if not has_tower_list():
+		return false
+	_record()
+	data.erase("torres")
+	return true
 
 
 # --- Revisar (RF-213) ---
@@ -566,6 +792,99 @@ func _remove_entrance(letter: String) -> void:
 				group_data.erase("entrada")
 			else:
 				group_data["entrada"] = MapGrid.ENTRANCE_LETTERS[now]
+
+
+## RF-434: pinta un objeto (removible o extracción). Crea o reusa la letra de la leyenda con esa clase y sin
+## sobrescrituras; si hace falta una nueva y la leyenda ya tiene el máximo (RF-262), avisa en `last_problem`.
+func _apply_obstacle_tool(tool: Tool, cell: Vector2i) -> bool:
+	var spec: Dictionary = OBSTACLE_TOOLS[tool]
+	var current: String = letter_at(cell)
+	var letter: String = _plain_obstacle_letter(spec["categoria"], spec["clase"])
+	var is_new: bool = letter == ""
+	if not is_new and current == letter:
+		return false
+	if is_new:
+		# Pintar encima de la última casilla de otro objeto libera su letra, así que ese lugar cuenta.
+		var freed: int = 1 if _is_last_obstacle_cell(current) else 0
+		if _legend().size() - freed >= LevelFile.MAX_LEGEND:
+			last_problem = "La leyenda ya tiene %d letras, que es el máximo. Borrá todos los objetos de una clase para poder usar otra." % LevelFile.MAX_LEGEND
+			return false
+		letter = _spare_letter(spec["letra"])
+		if letter == "":
+			last_problem = "No quedan letras libres para la leyenda."
+			return false
+	_record()
+	if is_new:
+		if not data.get("leyenda") is Dictionary:
+			data["leyenda"] = {}
+		data["leyenda"][letter] = {spec["categoria"]: {"clase": spec["clase"]}}
+	if _is_entrance(current):
+		_remove_entrance(current)
+	_set_letter(cell, letter)
+	_forget_unused_obstacle_letter(current)
+	return true
+
+
+## La letra que ya tiene exactamente ese objeto, sin sobrescrituras (RF-434: "si ya hay una con los mismos valores, la reusa").
+func _plain_obstacle_letter(category: String, class_id: String) -> String:
+	for letter: Variant in _legend().keys():
+		var entry: Variant = _legend()[letter]
+		if not entry is Dictionary or obstacle_category(str(letter)) != category:
+			continue
+		var body: Dictionary = entry[category]
+		var plain: bool = body.size() == 1 and body.get("clase") == class_id
+		for key: Variant in (entry as Dictionary).keys():
+			if key == "dibujo":
+				plain = plain and entry[key] == class_id
+			elif key == "construible":
+				plain = plain and entry[key] == false
+			elif key != category:
+				plain = false
+		if plain:
+			return str(letter)
+	return ""
+
+
+## Una letra libre para la leyenda: la preferida o, si está ocupada, la primera de SPARE_LETTERS que ni
+## esté en la leyenda ni aparezca en el mapa. "" si no queda ninguna.
+func _spare_letter(preferred: String) -> String:
+	for letter: String in preferred + SPARE_LETTERS:
+		if not _legend().has(letter) and not _has_letter(letter):
+			return letter
+	return ""
+
+
+func _legend() -> Dictionary:
+	return data["leyenda"] if data.get("leyenda") is Dictionary else {}
+
+
+func _count_letter(letter: String) -> int:
+	var total: int = 0
+	for row: String in data["mapa"]:
+		total += row.count(letter)
+	return total
+
+
+## ¿Esa letra es un objeto y esta es su única casilla?
+func _is_last_obstacle_cell(letter: String) -> bool:
+	return letter != "" and obstacle_category(letter) != "" and _count_letter(letter) <= 1
+
+
+## Si `letter` era un objeto y ya no queda ninguna casilla con ella, sale de la leyenda (si no, quedaría una letra
+## declarada y sin usar, RF-265, ocupando uno de los 10 lugares). Solo toca la letra que acaba de dejar de usarse.
+func _forget_unused_obstacle_letter(letter: String) -> void:
+	if letter == "" or obstacle_category(letter) == "" or _has_letter(letter):
+		return
+	(data["leyenda"] as Dictionary).erase(letter)
+	if (data["leyenda"] as Dictionary).is_empty():
+		data.erase("leyenda")
+
+
+func _tower_ids_of(all_towers: Array[TowerData]) -> PackedStringArray:
+	var ids: PackedStringArray = []
+	for tower: TowerData in all_towers:
+		ids.append(String(tower.id))
+	return ids
 
 
 func _group_text(wave: int, index: int) -> String:
