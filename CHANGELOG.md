@@ -33,6 +33,9 @@ Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle t�
 
 - Un nivel puede decir qué torres ofrece (`"torres"` en su archivo): la barra muestra solo esas. Sin el campo, todo sigue igual; los 9 niveles actuales no cambian.
 - Las tarjetas de la campaña muestran las torres de cada nivel y marcan con un punto naranja (y "Nueva" al pasar el mouse) la que debuta ahí. La Wiki sigue mostrando todas.
+## Señales y oasis en los niveles 1 a 5 *(T222, 2026-10-08)*
+
+- Los cinco primeros mapas suman unas rocas talladas, charcos de agua y flores donde antes había casillas bloqueadas. Es solo decoración: el camino, dónde se puede construir, las oleadas, el oro y las vidas son los mismos de siempre.
 
 ## Android normal y pruebas *(M34, 2026-10-02)*
 
