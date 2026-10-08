@@ -55,7 +55,7 @@ func _label(parent: Control, size: int, color: Color = Color.WHITE) -> Label:
 ## Muestra el removible `spec` (o se oculta si es null). `state` es el de `ObstacleField`; `busy`, si hay
 ## otro trabajo en curso; `seconds_left`, lo que falta si este es el que se está demoliendo.
 func show_obstacle(spec: ObstacleSpec, state: ObstacleField.State, busy: bool, gold: int,
-		seconds_left: float, recovered: bool) -> void:
+		seconds_left: float, recovered: bool, collects: bool = true) -> void:
 	visible = spec != null
 	if spec == null:
 		_cell = InfrastructureController.NONE
@@ -64,7 +64,7 @@ func show_obstacle(spec: ObstacleSpec, state: ObstacleField.State, busy: bool, g
 	_title.text = ObstacleText.display_name(spec)
 	_cost.text = ObstacleText.cost_line(spec.cost)
 	_time.text = ObstacleText.time_line(spec.seconds)
-	_reward.text = ObstacleText.reward_line(spec, recovered)
+	_reward.text = ObstacleText.reward_line(spec, recovered, collects)
 	_note.visible = false
 	_cancel_mode = state == ObstacleField.State.WORKING
 	if state == ObstacleField.State.WORKING:

@@ -6,8 +6,6 @@ const NAMES: Dictionary = {
 	&"arbol": "Árbol", &"roca": "Roca", &"escombro": "Escombros",
 	&"mina": "Mina", &"bosque_explotable": "Bosque explotable",
 }
-## Provisorio: T211 lleva los nombres de las colecciones a `data/progression.json` (RF-425).
-const COLLECTION_NAMES: Dictionary = {&"disruptor": "la Disruptora"}
 
 
 static func display_name(spec: ObstacleSpec) -> String:
@@ -28,10 +26,13 @@ static func missing_gold(cost: int, gold: int) -> String:
 
 
 ## RF-404: la recompensa sin mostrar el sorteo.
-static func reward_line(spec: ObstacleSpec, recovered: bool) -> String:
+## RF-428 y RF-429: `collects` = false cuando la partida no recoge piezas (modos, comunidad, editor, pruebas).
+static func reward_line(spec: ObstacleSpec, recovered: bool, collects: bool = true) -> String:
 	if spec.finding_collection != &"":
-		var name: String = COLLECTION_NAMES.get(spec.finding_collection, String(spec.finding_collection))
-		return "Pieza de %s: %s" % [name, "ya recuperada" if recovered else "pendiente"]
+		if not collects:
+			return "Aquí no se recogen piezas"
+		var name: String = CollectionDefinitions.name_of(spec.finding_collection)
+		return "Pieza de la %s: %s" % [name, "ya recuperada" if recovered else "pendiente"]
 	if spec.chance_percent > 0 and spec.reward_amount > 0:
 		return "Puede dar %d %s (%d %%)" % [spec.reward_amount, "recurso" if spec.reward_amount == 1 else "recursos", spec.chance_percent]
 	return "No da recursos"

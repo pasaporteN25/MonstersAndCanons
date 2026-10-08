@@ -27,7 +27,7 @@ func _action(name: StringName) -> InputEventAction:
 # --- Solapas y lista ---
 
 func test_it_has_one_tab_per_category_and_starts_on_enemies() -> void:
-	assert_eq(screen.category_ids(), [&"enemigos", &"torres", &"guia"] as Array[StringName])
+	assert_eq(screen.category_ids(), [&"enemigos", &"torres", &"colecciones", &"guia"] as Array[StringName])
 	assert_eq(screen.current_category(), &"enemigos")
 	assert_eq(screen.tab_text(&"torres"), "Torres")
 	assert_eq(screen.entry_ids().size(), LevelFile.enemy_ids().size())
@@ -125,6 +125,7 @@ func test_left_and_right_switch_category_and_wrap_around() -> void:
 	assert_eq(screen.current_category(), &"torres")
 	screen._unhandled_input(_action(&"ui_right"))
 	screen._unhandled_input(_action(&"ui_right"))
+	screen._unhandled_input(_action(&"ui_right"))  # T211: hay una solapa más (Colecciones)
 	assert_eq(screen.current_category(), &"enemigos", "da la vuelta")
 	screen._unhandled_input(_action(&"ui_left"))
 	assert_eq(screen.current_category(), &"guia")

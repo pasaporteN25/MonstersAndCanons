@@ -384,7 +384,13 @@ func _blink(label: Label) -> void:
 		tween.tween_property(label, "modulate", Color(1, 1, 1, 0.25), 0.06)
 		tween.tween_property(label, "modulate", Color.WHITE, 0.06)
 
-func show_collection(count: int, required: int, state: String) -> void:
+func show_collection(count: int, required: int, state: String, collection: StringName = &"technology") -> void:
 	(%TechnologyLabel as Label).text = "%d/%d" % [count, required]
-	var icon: Control = get_node("TopBar/Stats/TechnologyStat/TechnologyIcon")
-	icon.tooltip_text = "Avances tecnológicos: %s. Una pieza por cada nivel del 1 al 5; se guarda al terminar, abandonar descarta." % state
+	var icon: TextureRect = get_node("TopBar/Stats/TechnologyStat/TechnologyIcon")
+	var icon_path: String = CollectionDefinitions.icon_of(collection)
+	if ResourceLoader.exists(icon_path):
+		icon.texture = load(icon_path) as Texture2D
+	if collection == &"technology":
+		icon.tooltip_text = "Avances tecnológicos: %s. Una pieza por cada nivel del 1 al 5; se guarda al terminar, abandonar descarta." % state
+	else:
+		icon.tooltip_text = "Piezas de la %s: %s. Una pieza por ruina; se guarda al terminar, abandonar descarta." % [CollectionDefinitions.name_of(collection), state]

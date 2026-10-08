@@ -2,6 +2,13 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Colecciones por tecnología y piezas en ruinas *(T211, 2026-10-08)*
+
+- Ahora hay **dos colecciones**: los avances tecnológicos de siempre (niveles 1 a 5, sin cambios) y una nueva, la de la **Disruptora**, con 3 piezas que se encuentran en **ruinas** (escombros con hallazgo) de los niveles 8, 9 y 10. Los niveles actuales todavía no tienen ruinas con hallazgo: la colección empieza vacía y se llena cuando lleguen esos mapas.
+- Al terminar de demoler una ruina, la pieza queda **pendiente**; se **confirma** al completar la oleada en curso (o la siguiente, si demoliste antes de empezar). Una derrota antes de confirmar, abandonar o reintentar la pierde; una pieza confirmada se guarda aunque después pierdas. El panel de la ruina dice **"pendiente"** o **"ya recuperada"** antes de demoler.
+- Las piezas **solo se consiguen en la campaña**: en los modos, la comunidad, el editor y el modo de pruebas la ruina se puede demoler, pero el panel avisa "Aquí no se recogen piezas" y no se guarda nada.
+- La barra superior muestra la colección del nivel que jugás, y la Wiki tiene una solapa nueva, **Colecciones**, con el progreso de cada una y qué torre desbloquea. Los guardados viejos cargan igual.
+
 ## Demolición directa de obstáculos *(T207, 2026-10-08)*
 
 - En un mapa que tenga **removibles** (árboles, rocas o escombros marcados con una estaca ámbar), un clic abre un panel con el costo, el tiempo y la recompensa. **Demoler** cobra el oro y empieza un trabajo que avanza con el reloj de la partida (se frena en pausa y va más rápido a ×2). Se puede **cancelar** y se devuelve todo el oro. Al terminar la casilla queda libre para construir.
