@@ -1,0 +1,33 @@
+{
+	"version": 1,
+	"nombre": "Extracción y removibles",
+	"oro": 500,
+	"vidas": 20,
+	"demoledora": true,
+	"torres": ["basic", "cannon", "frost", "sniper", "mortar"],
+	"leyenda": {
+		"r": {"removible": {"clase": "roca"}},
+		"t": {"removible": {"clase": "arbol", "probabilidad": 100}},
+		"m": {"extraccion": {"clase": "mina", "reserva": 8}},
+		"b": {"extraccion": {"clase": "bosque_explotable", "reserva": 8}}
+	},
+	"mapa": [
+		"....................",
+		"..m...............b.",
+		"....................",
+		"..rrtrrrtrrrrtrrr...",
+		"A##################S",
+		"..rrrtrrrrtrrrrtr...",
+		"....................",
+		"....................",
+		"...................."
+	],
+	"oleadas": [
+		[{"enemigo": "normal", "cantidad": 5, "cada": 1.2}],
+		[{"enemigo": "normal", "cantidad": 6, "cada": 1.0}, {"enemigo": "fast", "cantidad": 2, "cada": 1.0}],
+		[{"enemigo": "normal", "cantidad": 8, "cada": 0.9}],
+		[{"enemigo": "tank", "cantidad": 2, "cada": 2.0}, {"enemigo": "normal", "cantidad": 5, "cada": 0.9}],
+		[{"enemigo": "fast", "cantidad": 7, "cada": 0.8}],
+		[{"enemigo": "tank", "cantidad": 3, "cada": 1.8}, {"enemigo": "normal", "cantidad": 6, "cada": 0.8}]
+	]
+}

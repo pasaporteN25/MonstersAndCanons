@@ -34,3 +34,48 @@ static func parse_strategies(text: String) -> Array[String]:
 		if part != "":
 			result.append(part)
 	return result
+
+
+# --- T214: estrategias con infraestructura y regla de oro (RF-432) ---
+
+## Las cinco estrategias de M50. Las demás (smart, mix, heavy, basic, naive) siguen como estaban.
+const INFRA_STRATEGIES: Array[String] = ["sin_recursos", "demoler", "demoledora", "extraer_temprano", "extraer_tarde"]
+## RF-432: N semillas y M victorias mínimas. Viven en la herramienta y no en el juego.
+const RULE_SEEDS: int = 5
+const RULE_MIN_WINS: int = 4
+
+
+static func is_infra_strategy(name: String) -> bool:
+	return INFRA_STRATEGIES.has(name)
+
+
+## RF-432: ¿un mapa cumple la regla de oro? `wins` victorias en `total` partidas con `sin_recursos`.
+## Hace falta haber jugado las N semillas: con menos partidas no se puede afirmar nada.
+static func rule_holds(wins: int, total: int) -> bool:
+	return total >= RULE_SEEDS and wins >= RULE_MIN_WINS
+
+
+## Cuenta las victorias de `sin_recursos` por mapa. `rows` son las filas del informe del bot.
+## Devuelve mapa → {"wins": int, "total": int}.
+static func rule_summary(rows: Array[Dictionary]) -> Dictionary:
+	var result: Dictionary = {}
+	for row: Dictionary in rows:
+		if row["strategy"] != "sin_recursos":
+			continue
+		var entry: Dictionary = result.get(row["level"], {"wins": 0, "total": 0})
+		entry["total"] += 1
+		if row["won"]:
+			entry["wins"] += 1
+		result[row["level"]] = entry
+	return result
+
+
+## Código de salida de `check_rule=1`: 0 si todos los mapas cumplen la regla, 1 si alguno no (o si no se jugó ninguno).
+static func rule_exit_code(rows: Array[Dictionary]) -> int:
+	var summary: Dictionary = rule_summary(rows)
+	if summary.is_empty():
+		return 1
+	for level: int in summary:
+		if not rule_holds(summary[level]["wins"], summary[level]["total"]):
+			return 1
+	return 0

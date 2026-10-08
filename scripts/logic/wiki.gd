@@ -226,11 +226,12 @@ static func tower_entry(tower: TowerData, towers: Array[TowerData] = []) -> Wiki
 
 static func _collection_entries(_campaign: Array[LevelData], _is_seen: Callable) -> Array[WikiEntry]:
 	var entries: Array[WikiEntry] = []
-	# Se busca el autoload por nombre (y no como identificador) para que este script compile
-	# también en las herramientas `-s` (check_level, balance_sim), donde los autoloads no existen todavía.
-	var save_manager: Node = (Engine.get_main_loop() as SceneTree).root.get_node_or_null("SaveManager")
+	# SaveManager es un autoload: se lo busca por el árbol para que `tools/` (que se compila antes que los
+	# autoloads) pueda cargar este script. Sin autoload (herramientas), el progreso es 0.
+	var tree: SceneTree = Engine.get_main_loop() as SceneTree
+	var save: Node = null if tree == null else tree.root.get_node_or_null("SaveManager")
 	for id: StringName in CollectionDefinitions.ids():
-		var collected: int = save_manager.collected_sources(id).size() if save_manager != null else 0
+		var collected: int = 0 if save == null else save.collected_sources(id).size()
 		entries.append(collection_entry(id, collected, _all_towers()))
 	return entries
 
