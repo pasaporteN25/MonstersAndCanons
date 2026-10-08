@@ -16,16 +16,16 @@ func _game_with_level(index: int) -> Game:
 
 # --- Campaña (spec §7) ---
 
-func test_campaign_has_nine_levels_in_order() -> void:
+func test_campaign_has_ten_levels_in_order() -> void:
 	var ids: Array[StringName] = []
 	for level: LevelData in campaign.levels:
 		ids.append(level.id)
-	assert_eq(ids, [&"level_01", &"level_02", &"level_03", &"level_04", &"level_05", &"level_06", &"level_07", &"level_08", &"level_09"] as Array[StringName])
+	assert_eq(ids, [&"level_01", &"level_02", &"level_03", &"level_04", &"level_05", &"level_06", &"level_07", &"level_08", &"level_09", &"level_10"] as Array[StringName])
 
 
 func test_levels_match_spec_table() -> void:
 	# [oleadas, oro inicial, entradas]
-	var expected: Array = [[10, 150, 1], [15, 200, 1], [20, 250, 2], [15, 200, 1], [20, 300, 3], [15, 250, 2], [20, 300, 2], [18, 300, 1], [20, 320, 2]]
+	var expected: Array = [[10, 150, 1], [15, 200, 1], [20, 250, 2], [15, 200, 1], [20, 300, 3], [15, 250, 2], [20, 300, 2], [18, 300, 1], [20, 320, 2], [20, 360, 2]]
 	for i: int in expected.size():
 		var game: Game = _game_with_level(i)
 		assert_eq(game.level_data.waves.size(), expected[i][0], "nivel %d: oleadas" % (i + 1))
@@ -34,10 +34,12 @@ func test_levels_match_spec_table() -> void:
 		assert_eq(game.session.lives, 20, "nivel %d: vidas" % (i + 1))
 
 
-func test_every_level_is_20_by_9() -> void:
+func test_every_level_is_20_by_9_but_the_tenth() -> void:
 	for i: int in campaign.levels.size():
 		var game: Game = _game_with_level(i)
-		assert_eq(game.level.ground.get_used_rect(), Rect2i(0, 0, 20, 9), "nivel %d: RF-01" % (i + 1))
+		# T225: el nivel 10 (la mina vieja) usa un mapa grande (RF-250).
+		var size: Rect2i = Rect2i(0, 0, 24, 11) if i == 9 else Rect2i(0, 0, 20, 9)
+		assert_eq(game.level.ground.get_used_rect(), size, "nivel %d: RF-01 / RF-250" % (i + 1))
 
 
 func test_entrance_indexes_exist_in_their_map() -> void:
