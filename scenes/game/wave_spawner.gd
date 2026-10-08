@@ -31,6 +31,8 @@ var _level: Level
 var _container: Node
 ## % de vida extra por oleada del nivel que se juega (RF-36, D-019).
 var _health_scale_percent: int = 0
+## RF-388: % de la vida que aplica un modo a todos los monstruos (100 = como siempre).
+var _health_percent: int = 100
 var _runs: Array[GroupRun] = []
 var _wave_number: int = 0
 ## Reloj propio de la oleada. Se usa delta (no Timers) para que la pausa
@@ -41,10 +43,11 @@ var _running: bool = false
 
 
 ## `container` es el nodo donde se agregan los enemigos (Game/Enemies).
-func setup(level: Level, container: Node, health_scale_percent: int) -> void:
+func setup(level: Level, container: Node, health_scale_percent: int, health_percent: int = 100) -> void:
 	rng.randomize()
 	_level = level
 	_container = container
+	_health_percent = health_percent
 	_health_scale_percent = health_scale_percent
 
 
@@ -107,6 +110,7 @@ func _spawn(group: SpawnGroup) -> void:
 func _spawn_enemy(data: EnemyData, path: Path2D, distance: float, original: bool = false) -> void:
 	var enemy: Enemy = ENEMY_SCENE.instantiate()
 	var health: int = Rules.scaled_health_percent(data.max_health, _wave_number, _health_scale_percent)
+	health = maxi(1, Rules.percent_of(health, _health_percent))  # RF-388: la vida del modo
 	enemy.set_meta("original_spawn", original)
 	enemy.setup(data, path, health)
 	enemy.distance = distance

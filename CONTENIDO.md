@@ -425,3 +425,51 @@ Perfiles de compra/ubicación/mejoras y variantes de frecuencia viven en art/bal
 ### M45 · Niveles8/9
 
 Campaña ampliada con level_08 (Bastión) y level_09 (Taller asediado). JSON en formato canónico del editor; torres_extra permite Mecánico, sin nuevas fuentes de colección. Guardián debuta en8/oleada4 y Curandero en9/oleada5; robos opcionales comienzan6 y embestidas8, con combinaciones posteriores. Carga/auras/desgaste/reparación reutilizan recursos existentes y no cambian sus estadísticas. Datos y recorridos1–7 intactos. Detalle, bots/capturas y límites en art/campaign-m45/README.md.
+
+### M49 · Modos de juego (RF-388 a RF-392)
+
+Un **modo** es un grupo de mapas con reglas propias. Aparece como una solapa en **Jugar**: los oficiales después de "Campaña" y los propios después de "Mapas de la comunidad". No hace falta programar: es una carpeta con un archivo `modo.json`.
+
+**Dónde va cada uno:**
+- **Oficiales:** `data/modos/<id>/modo.json`, en el repositorio. Hoy existe **Asedio** (`data/modos/asedio/`).
+- **Propios:** `user://modos/<id>/modo.json`; en Windows, `%APPDATA%\Godot\app_userdata\JuegoA\modos\`. El editor de mapas los crea solo con **"En un modo…"**.
+- El `<id>` es el nombre de la carpeta: minúsculas, números y `_`. Un modo propio no puede llamarse igual que uno oficial.
+
+**Ejemplo** (`modo.json`):
+
+```json
+{
+	"version": 1,
+	"nombre": "Mis desafíos",
+	"descripcion": "Tres mapas con pocas vidas.",
+	"mapas": ["mi_mapa", "level_03", "level_05"],
+	"torres": ["basic", "cannon", "frost"],
+	"reglas": {"oro_inicial_%": 100, "vidas": 5, "vida_monstruos_%": 120}
+}
+```
+
+**Las claves:**
+
+| Clave | Obligatoria | Qué hace |
+|---|---|---|
+| `version` | Sí | Siempre `1`. |
+| `nombre` | Sí | Lo que dice la solapa (hasta 30 letras). |
+| `descripcion` | No | Se ve al pasar el mouse por la solapa (hasta 200 letras). |
+| `mapas` | Sí | Los mapas en orden, sin `.json`. Cada uno se busca primero en la carpeta del modo y, si no está, entre los niveles oficiales (`data/levels/`). Así se pueden reusar mapas de la campaña sin copiarlos. Hasta 50; ninguno puede llamarse `modo`. |
+| `torres` | No | Las torres que se pueden construir (ids de `data/towers/`). Sin esta clave, las de siempre. |
+| `reglas` | No | `oro_inicial_%` (10 a 1000, sobre el oro del mapa), `vidas` (1 a 999, reemplaza las del mapa) y `vida_monstruos_%` (10 a 1000, sobre la vida de cada monstruo). Sin reglas, el mapa se juega tal cual. |
+
+**Progreso y desbloqueo:**
+- Cada mapa de un modo guarda vidas, estrellas, puntaje y su top 5 aparte, con el id `modo_<modo>_<mapa>`.
+- No cuenta para la campaña, el total de estrellas de la campaña, el Salón de la fama ni los avances.
+- En un modo oficial, cada mapa se abre al ganar el anterior; en los propios, todos están abiertos. El modo de pruebas abre todo.
+
+**Si algo está mal**, el juego no se corta: un `modo.json` roto muestra una sola tarjeta "Con errores" con el motivo, y un mapa que falta o tiene errores queda como tarjeta deshabilitada, mientras los demás se juegan igual.
+
+**Balancear un modo oficial con el bot:**
+
+```bash
+godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- mix modo=asedio level=2
+```
+
+**Asedio:** usa los mapas 1 a 9 de la campaña con `vida_monstruos_%` 115 y el mismo oro. El valor salió del bot: con 150 % y 80 % de oro, el bot perdía en la oleada 4.

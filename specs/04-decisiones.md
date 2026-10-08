@@ -501,8 +501,8 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
   - Separar arte y sonido con Creative Commons: suma complejidad sin pedido.
 
 ## D-078 · Modos como paquetes de datos unificados con el gestor de mapas
-- **Fecha:** 2026-10-07 · **Estado:** Aceptada (especificada, sin implementar) · **Decidió:** Lucas (prueba chica de modos, unificada con el gestor de mapas) / Claude (diseño)
-- **Qué:** un modo es una carpeta con `modo.json` y mapas JSON; los oficiales en `data/modos/` y los propios en `user://modos/`. La selección de nivel muestra Campaña, modos oficiales, Comunidad y modos propios. El progreso va por modo, y el editor puede guardar mapas dentro de un modo propio. El modo oficial de prueba es "Asedio" (RF-388 a RF-392).
+- **Fecha:** 2026-10-07 · **Estado:** Aceptada, hecha en T197 · **Decidió:** Lucas (prueba chica de modos, unificada con el gestor de mapas) / Claude (diseño)
+- **Qué:** un modo es una carpeta con `modo.json` y mapas JSON; los oficiales en `data/modos/` y los propios en `user://modos/`. La selección de nivel muestra Campaña, modos oficiales, Comunidad y modos propios. El progreso va por modo, y el editor puede guardar mapas dentro de un modo propio. El modo oficial de prueba es "Asedio" (RF-388 a RF-392), con vida 115 % según el bot (T197).
 - **Por qué:**
   - Un modo y un mapa de la comunidad son el mismo concepto en distinto tamaño, así que comparten carga, validación, progreso y editor.
   - Asedio no necesita arte ni reglas nuevas y cubre los niveles difíciles de B-10.
@@ -510,3 +510,12 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Alternativas descartadas:**
   - Modos como una lista más en `campaign.json`: no une con la comunidad ni con el editor.
   - Modos con torres y monstruos propios desde ya: eso es B-04 y agranda la prueba.
+
+**D078, ajustes de T197:**
+- **Mapas reusados:** un mapa de un modo se busca primero en su carpeta y después entre los niveles oficiales, así Asedio no copia los nueve niveles.
+- **Editor:** "Guardar" no cambió (así siguen valiendo sus tests y la costumbre); el destino se elige con la acción nueva "En un modo…".
+- **Balance de Asedio, con el bot `mix`:**
+  - Con vida 150 % y oro 80 % perdía en la oleada 4 de los mapas 1 a 3; con 125 % y el mismo oro también perdía temprano. Con reglas neutras da exactamente lo mismo que la campaña, oleada por oleada, así que el camino del modo está bien.
+  - Valor elegido: **vida 115 %, el mismo oro**. Gana los mapas 1, 3 y 5 con 3, 6 y 4 vidas; en la campaña gana 8 de 9.
+  - Es un modo claramente más difícil. Este bot es simple, así que hace falta una prueba jugando; 110 % es la alternativa si resulta demasiado.
+- **Limitación conocida:** con más de dos modos propios, las solapas no entran en la fila de 1280 px.

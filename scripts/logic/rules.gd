@@ -37,6 +37,12 @@ static func tiles_to_px(tiles: float) -> float:
 	return tiles * TILE_SIZE
 
 
+## RF-388: un valor llevado al `percent` % (vida de los monstruos u oro inicial de un modo), redondeado al
+## entero más cercano. 100 = sin cambio.
+static func percent_of(value: int, percent: int) -> int:
+	return roundi(value * percent / 100.0)
+
+
 ## RF-311: el daño de un golpe con un bonus de `percent` %, redondeado al entero más cercano.
 ## Se calcula ANTES de restar la armadura.
 static func damage_with_bonus(damage: int, percent: int) -> int:

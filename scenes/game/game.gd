@@ -70,6 +70,8 @@ func _ready() -> void:
 		level_data = campaign_level
 	elif GameFlow.current_community != null:
 		level_data = GameFlow.current_community  # RF-224: un mapa de la comunidad
+	elif GameFlow.current_mode_level() != null:
+		level_data = GameFlow.current_mode_level()  # RF-389: un mapa de un modo, con sus reglas
 	elif GameFlow.test_level != null:
 		level_data = GameFlow.test_level  # RF-217: el nivel del editor
 		testing = true
@@ -88,7 +90,7 @@ func _ready() -> void:
 	for node: Node in _world_nodes():
 		node.process_mode = Node.PROCESS_MODE_PAUSABLE
 
-	spawner.setup(level, enemies, level_data.health_scale_percent(balance))
+	spawner.setup(level, enemies, level_data.health_scale_percent(balance), level_data.enemy_health_percent)
 	spawner.enemy_spawned.connect(_on_enemy_spawned)
 	spawner.wave_finished.connect(session.complete_wave)
 
@@ -306,7 +308,8 @@ func restart() -> void:
 ## tests quedan como siempre.
 func _apply_dev_start() -> void:
 	DevMode.applied_wave = 1
-	var from_menu: bool = GameFlow.current_level() != null or GameFlow.current_community != null
+	var from_menu: bool = GameFlow.current_level() != null or GameFlow.current_community != null \
+		or GameFlow.current_mode_level() != null
 	if not DevMode.enabled or testing or not from_menu:
 		return
 	var wave: int = DevStart.clamp_wave(DevMode.start_wave, level_data.waves.size())

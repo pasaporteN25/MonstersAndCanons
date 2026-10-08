@@ -187,3 +187,8 @@ B31 cerrado por aprobación de Lucas (2026-10-04). Exportados `build/JuegoA.exe`
 - El modo de pruebas ahora está en **Opciones → Activar modo de pruebas**, con confirmación, y se apaga con **Volver al juego normal**. Usa su propio guardado: no toca tu progreso ni tus récords. El juego siempre arranca en modo normal.
 - Un solo ejecutable o APK por plataforma: ya no hay una versión "de pruebas" aparte.
 - El juego es software libre, bajo la GPL versión 3 o posterior. Detalles en la Wiki: Guía → Licencias.
+
+### T197 · Modos de juego
+
+- Nueva solapa **Asedio** en Jugar: los nueve mapas de la campaña con monstruos más duros. Cada mapa se abre al ganar el anterior y tiene sus propias estrellas y récords, sin tocar la campaña.
+- Podés armar tus propios modos: en el editor de mapas, **"En un modo…"** crea un modo (o elige uno) y guarda el mapa adentro. Cada modo aparece como una solapa más en Jugar.

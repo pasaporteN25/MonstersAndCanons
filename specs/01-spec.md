@@ -1196,7 +1196,7 @@ Ideas **aprobadas como dirección**, pero **sin fecha**: no se programan hasta c
 **Qué cambia en la spec si se hace:** un hito nuevo con sus reglas (RF) y tareas; si se hacen mods, una sección de seguridad (qué puede traer un mod y qué no).
 
 ### B-05 · Modos de juego
-**Actualización de Lucas, 2026-10-07 (D-076):** el modo de historia con imperios reales (Épocas) pasa al otro juego. En la V1, Lucas propone una **prueba chica de modos, unificada con el gestor de mapas**. **Especificada en M49 (RF-388 a RF-392, D-078) con el OK de Lucas; se implementa en T197, después de M48.**
+**Actualización de Lucas, 2026-10-07 (D-076):** el modo de historia con imperios reales (Épocas) pasa al otro juego. En la V1, Lucas propone una **prueba chica de modos, unificada con el gestor de mapas**. **Especificada en M49 (RF-388 a RF-392, D-078) con el OK de Lucas y hecha en T197: modo oficial Asedio, modos propios y "En un modo…" en el editor.**
 *Propuesta de Lucas, 2026-09-29. Sin fecha: Lucas pidió solo anotarlo.*
 
 **Idea:** el juego tiene **modos**, cada uno con sus propias torres, enemigos, niveles y dibujos. El juego actual sería el modo **"Torres y Bestias"**. Otro modo sería el de **historia** (Épocas, B-01), con dibujos de **imperios reales** (por ejemplo, legiones romanas, jinetes mongoles, samuráis) y armas que avanzan con las épocas.
@@ -1301,7 +1301,7 @@ Los cuatro enemigos que gustaron, con lo necesario para convertirlos en spec cua
 
 ### B-10 · Más niveles y niveles difíciles
 **Dirección de cierre acordada, 2026-10-07:** campaña de 15 niveles y tres bloques; fichas, biomas y rotación por definir junto con el lore. Plan completo en [07-lore-y-cierre-v1.md](07-lore-y-cierre-v1.md) §§3/11/12. No marca como hechos los niveles pendientes.
-**Producción parcial M45/T192:** niveles8/9 integrados con debuts de auras y encuentros de robo/desgaste; balance automatizado inicial. Niveles10–14 y cierre15 siguen pendientes, además de validación humana8/9.
+**Producción parcial M45/T192:** niveles8/9 integrados con debuts de auras y encuentros de robo/desgaste; balance automatizado inicial. Los niveles "difíciles" (mismo mapa, otras exigencias) quedan cubiertos por el modo Asedio (M49, T197). Niveles10–14 y cierre15 siguen pendientes, además de validación humana8/9.
 **Actualización de Lucas, 2026-10-03:** campaña base objetivo15 niveles: básico1–5, introducción/pruebas6–7, mayor presencia de nuevas mecánicas8–9, avanzado10–14 y definitivo15. Actualmente `campaign.json` incluye niveles1–9 (M45). Niveles10–15 requieren diseño y balance; no están implementados. Las amenazas nuevas no afectan1–5; esas primeras pantallas solo reciben avances de colección.
 *Idea de Lucas (a partir de las propuestas de Claude), 2026-09-29. Sin fecha.*
 
@@ -1624,11 +1624,12 @@ Como el juego se va a regalar, no tiene sentido un ejecutable aparte para el mod
   - **Dada** la Wiki, **cuando** se abre la guía, **entonces** hay un artículo "Licencias" que nombra la licencia del juego y la del motor Godot (MIT, con su aviso de copyright, que tiene que acompañar a los ejecutables). También aclara que GUT, la herramienta de tests (MIT), no va dentro de los ejecutables.
 
 ### M49 · Prueba de modos unificada con el gestor de mapas (Lucas, 2026-10-07)
-**Estado: especificada, sin implementar (T197, después de M48).** Es la prueba chica de modos de B-05 (D-078). Un modo es un paquete de datos, igual que un mapa de la comunidad pero con varios mapas y reglas. Épocas pasó al otro juego (D-076).
+**Estado: hecha en T197 (2026-10-07).** Es la prueba chica de modos de B-05 (D-078). Un modo es un paquete de datos, igual que un mapa de la comunidad pero con varios mapas y reglas. Épocas pasó al otro juego (D-076).
 
 - **RF-388** **Paquete de modo.**
   - Es una carpeta con un `modo.json` y sus mapas JSON (formato §7.8). El `modo.json` lleva versión, nombre, descripción y la lista ordenada de mapas, y como opcionales las torres disponibles y las reglas `oro_inicial_%`, `vidas` y `vida_monstruos_%`.
-  - Los modos oficiales viven en `res://data/modos/<id>/` y los propios en `user://modos/<id>/`.
+  - Cada mapa de la lista se busca primero en la carpeta del modo y, si no está, entre los niveles oficiales (`data/levels/`). Así un modo puede reusar mapas de la campaña sin copiarlos *(aclarado en T197)*.
+  - Los modos oficiales viven en `res://data/modos/<id>/` y los propios en `user://modos/<id>/`. Un modo propio con el mismo nombre de carpeta que uno oficial se muestra con error, para que sus récords no se mezclen.
   - **Solo datos:** un modo nunca trae código (como RF-204).
   - **Dado** un paquete roto, **cuando** se listan los modos, **entonces** aparece con su motivo y los demás se ven igual (como RF-222).
 - **RF-389** **Selección de nivel con modos.**
@@ -1643,11 +1644,12 @@ Como el juego se va a regalar, no tiene sentido un ejecutable aparte para el mod
   - No cuenta para la campaña, el total de estrellas de la campaña, el Salón de la fama ni la colección de avances.
   - En un modo oficial el primer mapa está abierto y cada uno se habilita al ganar el anterior del mismo modo. En los modos propios, todos están abiertos. El modo de pruebas abre todo (RF-183).
 - **RF-391** **Modo oficial de prueba "Asedio".**
-  - Son los mapas 1 a 9 de la campaña con sus mismas oleadas, con monstruos de más vida y menos oro inicial. Valores iniciales en datos: vida 150 % y oro 80 %, ajustables.
+  - Son los mapas 1 a 9 de la campaña con sus mismas oleadas y monstruos con más vida. Valor en datos: **vida 115 %**, con el mismo oro, ajustable. *(Ajustado en T197 con el bot: la propuesta inicial de vida 150 % y oro 80 % hacía perder al bot en la oleada 4 de los mapas 1 a 3, y hasta 125 % con el mismo oro perdía temprano. Con 115 % gana el mapa 1 con 3 vidas y el 3 con 6, contra 20 y 18 en la campaña.)*
   - Cubre también los "niveles difíciles" de B-10.
   - **Dado** el bot de balance, **cuando** juega los primeros mapas de Asedio, **entonces** se informa si se pueden ganar. No es balance definitivo.
 - **RF-392** **El editor guarda en modos.**
-  - Al guardar, se elige el destino: "Mapas sueltos (Comunidad)" como hoy, o un modo propio, existente o nuevo con su nombre.
-  - Crear un modo desde el editor arma la carpeta y su `modo.json`; cada mapa nuevo se agrega al final de la lista.
+  - "Guardar" sigue como hoy: mapa suelto (Comunidad) o el modo donde ya está el mapa.
+  - Nueva acción **"Guardar en un modo…"**: se elige un modo propio existente o uno nuevo (con su nombre) y el nombre del archivo *(aclarado en T197)*.
+  - Crear un modo desde el editor arma la carpeta y su `modo.json`; cada mapa nuevo se agrega al final de la lista. Después, "Guardar" sigue guardando en ese modo.
   - Abrir un mapa en el editor lista también los de los modos propios.
   - Nunca toca `data/` ni `campaign.json` (RF-210).

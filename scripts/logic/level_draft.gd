@@ -22,6 +22,8 @@ var data: Dictionary = {}
 var file_id: String = ""
 ## Nombre sugerido al guardar un nivel abierto como plantilla (RF-216).
 var suggested_id: String = ""
+## RF-392: el modo propio donde se guarda (su id). "" = mapa suelto de la comunidad (user://maps/).
+var mode_id: String = ""
 ## Hay cambios sin guardar (RF-218).
 var dirty: bool = false
 

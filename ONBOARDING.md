@@ -416,3 +416,16 @@ Ver art/balance-m44/README.md para perfiles, semillas, ejecución y límites. Ru
 ### T192 · Probar campaña8/9 desde el proyecto
 
 Abrir el editor o ejecutar Godot desde el proyecto: los EXE/APK anteriores no incluyen esta etapa y no se regeneraron. Ganar7 habilita8 incluso en un guardado antiguo; ganar8 habilita9. Admin permite elegir ambos niveles y habilitar Mecánico sin avances. En modo normal construirlo exige5/5 y permiso del nivel. Verificar presentación Guardián8/Curandero9, encuentros opcionales de Ladrón y carga al extremo de rectas con torres cercanas; probar apoyo en grupo y reparación después de impacto. Capturas/bots y criterios en art/campaign-m45/README.md; no confundir capturas controladas con sesión humana de balance.
+
+### T197 · Comprobar los modos de juego
+
+Abrí el juego (o el proyecto con F5) y entrá a **Jugar**.
+
+**✅ Comprobar:**
+- Después de "Campaña" aparece la solapa **Asedio**. Tiene nueve mapas: el primero abierto y los demás "Bloqueado".
+- Jugar el Mapa 1 de Asedio arranca la Pradera con los monstruos más duros. Al ganar, se abre el Mapa 2 de Asedio, pero la campaña no cambia.
+- En el **Editor de mapas**, **"En un modo…"** → **+ Nuevo modo…** → un nombre → un nombre de archivo. Al volver a **Jugar**, aparece una solapa con ese modo después de "Mapas de la comunidad", con el mapa abierto y el botón "Abrir carpeta del modo".
+- "Guardar" después de eso sigue guardando en el modo, y "Abrir" lista el mapa bajo "— Modo … —".
+- Para balancear: `godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- mix modo=asedio level=1`.
+
+Con más de dos modos propios, las solapas ya no entran en la fila (limitación conocida de esta primera prueba).

@@ -153,7 +153,17 @@ El botón **Wiki** del menú principal abre una enciclopedia: **Enemigos** (un b
 
 ## Mapas de la comunidad
 
-En **Jugar → "Mapas de la comunidad"** aparecen todos los archivos `.json` que haya en la carpeta de mapas (en Windows, `%APPDATA%\Godot\app_userdata\JuegoA\maps`; el botón "Abrir carpeta de mapas" la abre). Sirve para jugar mapas que te pasó otra persona o los que hacés con el editor de la versión de pruebas. Cada mapa tiene su propio progreso y su top 5, y no toca la campaña. Cómo instalar, compartir y qué límites tienen: [`CONTENIDO.md`](CONTENIDO.md).
+En **Jugar → "Mapas de la comunidad"** aparecen todos los archivos `.json` que haya en la carpeta de mapas (en Windows, `%APPDATA%\Godot\app_userdata\JuegoA\maps`; el botón "Abrir carpeta de mapas" la abre). Sirve para jugar mapas que te pasó otra persona o los que hacés con el editor de mapas. Cada mapa tiene su propio progreso y su top 5, y no toca la campaña. Cómo instalar, compartir y qué límites tienen: [`CONTENIDO.md`](CONTENIDO.md).
+
+## Modos de juego
+
+En **Jugar** hay una solapa por modo (M49):
+- **Modos oficiales**, después de "Campaña". Hoy está **Asedio**: los nueve mapas de la campaña con monstruos más duros (vida 115 %). Cada mapa se abre al ganar el anterior.
+- **Modos propios**, después de "Mapas de la comunidad". Todos sus mapas están abiertos.
+
+Cada modo tiene su progreso, sus estrellas y su top 5. No toca la campaña, el Salón de la fama ni los avances.
+
+Un modo propio se arma desde el editor con **"En un modo…"** (crea el modo o elige uno existente), o a mano con un `modo.json` en `%APPDATA%\Godot\app_userdata\JuegoA\modos\<nombre>`. El formato está en [`CONTENIDO.md`](CONTENIDO.md).
 
 ## Dibujos y arte del juego
 
@@ -273,3 +283,9 @@ Validación M45:954/954 pruebas y62/62 finales de contenido.24 corridas más rep
 
 - El 3D no se integra en esta versión: pasa a una segunda entrega, *Monsters & Canons 3D*, que arranca después de cerrar lo pendiente de la V1. Concepto, evidencia, plan y relevamiento de la V1 en `specs/06-monsters-canons-3d.md`.
 - Prueba de cámara libre sobre la maqueta: `godot --path . res://art/b21-vista/vista_lab.tscn -- camara`. No cambia el juego.
+
+### T197 · Modos de juego
+
+- Solapa **Asedio** en Jugar: los mapas de la campaña con monstruos más duros y progreso propio.
+- Modos propios: desde el editor con "En un modo…", o con un `modo.json` (ver `CONTENIDO.md`).
+- El bot de balance acepta `modo=asedio`.

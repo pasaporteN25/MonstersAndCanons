@@ -304,7 +304,7 @@ Tamaños: **chico** (1–2 días), **mediano** (3–7 días), **grande** (más d
 |---|---|---|---|
 | **B-21** Vista 3D | Resuelto: pasa a M&C 3D. Opcional en la V1: etapa 1 del relieve (que lo de adelante tape a lo de atrás). | Chico | Poco |
 | **B-03** Lore | Biblia, textos por nivel y categoría Lore en la Wiki. **En curso:** Lucas lo trabaja con otro agente (2026-10-07). | Mediano | **Mucho**: es la base de la saga. |
-| **B-10** Niveles 10–14 y 15 | Diseño, oleadas y balance; validación jugando de 8–15; niveles "difíciles" (mismo mapa, otras oleadas). | Grande | Sí: contenido y oficio de diseño de oleadas. |
+| **B-10** Niveles 10–14 y 15 | Diseño, oleadas y balance; validación jugando de 8–15. Los niveles "difíciles" ya los cubre el modo Asedio (T197). | Grande | Sí: contenido y oficio de diseño de oleadas. |
 | **B-22** Contenido nuevo | Elegir entre Excavador, Ballesta y Alquimista, y producirlos (datos, arte, Wiki, balance). | Mediano c/u | Excavador: **mucho**. |
 | **B-23** Recetas de vecindad | Tres recetas (Hielo + Cañón, Hielo + Múltiple, Incendiaria + Eléctrica) con reglas de nivel 2/3. | Mediano | Sí: sistemas que se heredan. |
 | **B-14** Tipos de daño | Físico y elemental, resistencia, piso proporcional; rebalancear todo. | Mediano | Sí: se hereda. |
@@ -316,8 +316,8 @@ Tamaños: **chico** (1–2 días), **mediano** (3–7 días), **grande** (más d
 | **B-29 / B-30** Wiki de mods y de mapas de la comunidad | Categorías nuevas en la Wiki. | Chico c/u | Poco |
 | **B-11** Compartir un mapa como texto | Copiar y pegar un código en el editor. | Chico | Sí: mapas con alturas también. |
 | **B-12** Mapas al azar y desafío diario | Generador más verificación con el bot. | Mediano o grande | Sí. |
-| **B-13** Una sola app con modo admin | Como el juego se va a regalar, activar el modo de pruebas desde Opciones y unificar ejecutables y APK (propuesta, pendiente de OK de Lucas). | Chico | Sí: se repite en 3D. |
-| **B-05** Modos | Prueba chica en la V1, unificada con el gestor de mapas (propuesta, pendiente de OK de Lucas). | Mediano | Sí: el formato de paquete sirve para los mods y para el 3D. |
+| ~~**B-13** Una sola app con modo admin~~ | **Hecho en T196:** el modo de pruebas está en Opciones y hay un solo ejecutable o APK por plataforma. | — | Sí: se repite en 3D. |
+| ~~**B-05** Modos~~ | **Prueba chica hecha en T197:** modo oficial Asedio, modos propios desde el editor y solapas en Jugar. | — | Sí: el formato de paquete sirve para los mods y para el 3D. |
 | ~~**B-01** Épocas~~ | **Trasladado** a M&C 3D / M&C 2 (Lucas, 2026-10-07, D-076). Ver sección 15. | — | Es contenido de la saga. |
 | **Plataformas** | La APK ya la probó Lucas en su celular (informado el 2026-10-07). Falta Linux en una máquina real y medir el rendimiento en celular. | Chico c/u | **Mucho**: es la línea de base del celular. |
 | **Sugerencias de Claude** (§13, sin aprobar) | "¿Qué es esto?" desde la partida, informe de prueba, auditoría de recursos, registro de deuda técnica, dibujo liviano de torres y monstruos. | Chico c/u | Varias, sí. |
@@ -332,11 +332,11 @@ La regla que ordena todo: **lo que cambia el balance va antes que los niveles 10
 
 1. **Cimientos (chicos):**
    - Cerrar B-21 (y, si querés, la etapa 1 del relieve).
-   - Modo de pruebas desde Opciones, una sola app (B-13).
+   - ~~Modo de pruebas desde Opciones, una sola app (B-13).~~ Hecho en T196.
    - Biblia de lore (B-03), en curso con otro agente.
 2. **Reglas que cambian el balance:** B-14 tipos de daño, B-23 recetas, B-22 (Excavador y una o dos torres), B-08 terrenos con efecto y B-09 puentes.
 3. **Campaña:** niveles 10–14 y el 15, usando todo lo anterior, con textos de lore por nivel, y validación jugando de los niveles 8 a 15.
-4. **Modos, mapas y comunidad:** prueba chica de modos (B-05) unificada con el gestor de mapas, B-11, B-30, B-12, B-04 y B-29.
+4. **Modos, mapas y comunidad:** ~~prueba chica de modos (B-05)~~ (hecha en T197), B-11, B-30, B-12, B-04 y B-29.
 5. **Grandes opcionales:** B-16 fusión y, si se quiere, torres con vida (resto de B-07).
 6. **Cierre:** pulido, rendimiento en celular, exportaciones y publicación gratuita.
 

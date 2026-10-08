@@ -19,6 +19,7 @@ func before_each() -> void:
 	editor = EDITOR_SCENE.instantiate()
 	add_child_autofree(editor)
 	editor.maps_dir = TEST_DIR
+	editor.modes_dir = "user://test_editor_files_modes/"  # nunca los modos del jugador (RF-392)
 	editor.left.disconnect(GameFlow.go_to_main_menu)
 	editor.test_requested.disconnect(GameFlow.play_test)
 	dialog = editor.dialog()

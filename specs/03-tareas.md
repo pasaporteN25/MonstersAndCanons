@@ -1226,7 +1226,7 @@
   - Los cambios M34 se conservaron fuera del commit.
 
 ### M49 · Prueba de modos
-- [ ] **T197 · Prueba de modos unificada con el gestor de mapas (B-05).**
+- [x] **T197 · Prueba de modos unificada con el gestor de mapas (B-05).**
   **Refs:** RF-388 a RF-392, D-078.
   **Hecho cuando:**
   - Los paquetes de modo (oficiales y propios) se leen y validan solo como datos.
@@ -1234,6 +1234,37 @@
   - El editor guarda en un modo propio.
   - Asedio se ofrece con valores iniciales y una corrida del bot sobre sus primeros mapas.
   - Hay tests de formato, errores, ids, desbloqueo y editor en carpetas de prueba.
+
+  **Resultado T197:**
+  - **Paquetes:** `ModePacks` lee y valida `modo.json` (solo datos). Los mapas se buscan en la carpeta del modo o entre los oficiales, se aplican las reglas (oro %, vidas, vida % y torres) y el id es `modo_<modo>_<mapa>`. Un modo propio con el nombre de uno oficial queda con error.
+  - **Partida:** la vida del modo llega al generador de oleadas (`Rules.percent_of`, mínimo 1). El progreso y el top 5 van por modo y no tocan la campaña, el Salón ni los avances. "Siguiente nivel" sigue dentro del modo.
+  - **Selección de nivel:** solapas dinámicas, tarjetas con bloqueo en los modos oficiales, error o mensaje si el modo está vacío, y carpeta del modo propio.
+  - **Editor:** "En un modo…" crea o elige el modo y después pide el nombre; el destino cambia recién al aceptar. "Guardar" no cambió y "Abrir" lista los mapas de los modos.
+  - **Bot:** acepta `modo=asedio`.
+  - **Asedio, ajustado con el bot `mix`:**
+    - La propuesta de vida 150 % y oro 80 % perdía en la oleada 4 de los mapas 1 a 3, y con 125 % y el mismo oro también perdía temprano.
+    - Con reglas neutras da lo mismo que la campaña, oleada por oleada.
+    - Final: vida 115 %, el mismo oro.
+
+    | Mapa | Campaña | Asedio 115 % |
+    |---|---|---|
+    | 1 | gana con 20 vidas | gana con 3 |
+    | 2 | pierde en la oleada 15 | pierde en la 12 |
+    | 3 | gana con 16 | gana con 6 |
+    | 4 | gana con 10 | pierde en la última oleada (15) |
+    | 5 | gana con 13 | gana con 4 |
+    | 6 | gana con 10 | pierde en la oleada 7 |
+    | 7 | gana con 16 | pierde en la 19 de 20 |
+    | 8 | gana con 20 | pierde en la última oleada (18) |
+    | 9 | gana con 11 | pierde en la 16 de 20 |
+
+    El bot es simple: falta probarlo jugando, y 110 % es la alternativa si resulta demasiado.
+  - **Tests:** 1017/1017 GUT (9256 asserts, 81 scripts, sin `SCRIPT ERROR` ni `Parse Error`), con 51 nuevos. Se revisó en capturas la selección con Asedio, dos modos propios y la página de un modo propio.
+  - **Lo que no se probó:**
+    - Una partida manual en Asedio, ni en celular.
+    - Con más de dos modos propios, las solapas no entran en la fila.
+    - Los récords de los modos no aparecen en la pantalla de Récords (sí al terminar cada partida).
+  - No se regeneraron EXE/APK. Los cambios M34 se conservaron fuera del commit.
 
 ### Registro de lore y cierre de V1
 - [x] **T198 · Registrar las decisiones de B-03 y el plan de primera entrega.**

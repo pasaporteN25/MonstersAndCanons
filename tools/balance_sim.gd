@@ -19,6 +19,7 @@
 #   godot ... -s tools/balance_sim.gd -- smart level=2          (jugar el nivel 2 de la campaña)
 #   godot ... -s tools/balance_sim.gd -- smart level=3 levelscale=25   (probar otro % de vida por oleada)
 #   godot ... -s tools/balance_sim.gd -- mix file=tools/ejemplos/mapa_grande.json   (jugar un archivo de nivel cualquiera)
+#   godot ... -s tools/balance_sim.gd -- mix modo=asedio level=2   (jugar el mapa 2 del modo Asedio, con sus reglas)
 #
 # --fixed-fps 60 hace que cada frame cuente como 1/60 s sin esperar al reloj real,
 # así una partida de ~10 minutos se simula en segundos.
@@ -46,6 +47,8 @@ var air_points: Array[Vector2] = []
 var level_number: int = 0
 ## file=ruta: juega un archivo de nivel en vez de uno de la campaña (por ejemplo, un mapa de ejemplo o de la comunidad).
 var level_file: String = ""
+## modo=asedio: juega el mapa level=N de un modo oficial, con las reglas del modo (RF-391).
+var mode_id: String = ""
 ## levelscale=N: prueba otro % de vida por oleada para el nivel elegido (D-019). -1 = no tocar.
 var level_scale_override: int = -1
 var starting_gold_override: int = -1
@@ -72,6 +75,15 @@ func _initialize() -> void:
 			quit(1)
 			return
 		game.level_data = _keep(result["level"])
+	if mode_id != "":
+		var mode: Dictionary = ModePacks.read(ModePacks.OFFICIAL_DIR, mode_id, true)
+		var mode_level: LevelData = ModePacks.map_level(mode, maxi(level_number, 1) - 1)
+		if mode_level == null:
+			print("No se pudo leer el mapa %d del modo %s: %s" % [maxi(level_number, 1), mode_id, mode["errors"]])
+			quit(1)
+			return
+		game.level_data = _keep(mode_level)
+		print("Modo: %s · oro inicial %d · vida de los monstruos %d %%" % [mode["name"], mode_level.starting_gold, mode_level.enemy_health_percent])
 	if strategy == "heavy":
 		game.level_data.extra_towers = PackedStringArray(["mortar"])  # RF-300: los niveles comunes no lo traen
 	if starting_gold_override >= 0:
@@ -94,6 +106,9 @@ func _apply_override(arg: String) -> void:
 	var parts: PackedStringArray = arg.split("=")
 	if parts[0] == "file":
 		level_file = parts[1] if parts[1].begins_with("res://") else "res://" + parts[1]
+		return
+	if parts[0] == "modo":
+		mode_id = parts[1]  # RF-391: el mapa level=N de ese modo oficial, con sus reglas
 		return
 	var value: float = parts[1].to_float()
 	if parts[0] == "level":

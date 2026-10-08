@@ -1,6 +1,7 @@
-# Editor de mapas (spec §10.3, RF-210 a RF-213): una pantalla para dibujar el mapa de un nivel,
-# solo en el modo de pruebas. Cambia el borrador (LevelDraft), lo muestra (MapView) y explica
-# los errores; no sabe nada de las reglas de los mapas: esas las revisa LevelFile (spec §7.8).
+# Editor de mapas (spec §10.3, RF-210 a RF-213, RF-392): una pantalla para dibujar el mapa de un nivel.
+# Cambia el borrador (LevelDraft), lo muestra (MapView) y explica los errores; no sabe nada de las
+# reglas de los mapas: esas las revisa LevelFile (spec §7.8). Guarda mapas sueltos (Comunidad) o dentro
+# de un modo propio (ModePacks).
 class_name MapEditor
 extends Control
 
@@ -21,6 +22,10 @@ var draft: LevelDraft
 var tool: LevelDraft.Tool = LevelDraft.Tool.PATH
 ## RF-216: dónde se guardan y se buscan los mapas propios. Los tests usan otra carpeta.
 var maps_dir: String = LevelDraft.MAPS_DIR
+## RF-392: dónde están los modos propios (y dónde se crean). Los tests usan otra carpeta.
+var modes_dir: String = ModePacks.USER_DIR
+## Los modos oficiales: un modo nuevo no puede llamarse como uno de ellos.
+var official_modes_dir: String = ModePacks.OFFICIAL_DIR
 
 var _stroking: bool = false
 var _stroke_tool: LevelDraft.Tool = LevelDraft.Tool.PATH
@@ -44,6 +49,7 @@ var _notice: String = ""
 @onready var _new_button: Button = %NewButton
 @onready var _open_button: Button = %OpenButton
 @onready var _save_button: Button = %SaveButton
+@onready var _save_mode_button: Button = %SaveModeButton
 @onready var _try_button: Button = %TryButton
 @onready var _settings_button: Button = %SettingsButton
 @onready var _waves_button: Button = %WavesButton
@@ -63,6 +69,7 @@ func _ready() -> void:
 	_new_button.pressed.connect(new_level)
 	_open_button.pressed.connect(open_level)
 	_save_button.pressed.connect(save_level)
+	_save_mode_button.pressed.connect(save_to_mode)
 	_try_button.pressed.connect(try_level)
 	left.connect(GameFlow.go_to_main_menu)
 	test_requested.connect(GameFlow.play_test)
@@ -170,12 +177,47 @@ func open_level() -> void:
 	_when_safe("Abrir otro nivel", _ask_which_to_open)
 
 
-## RF-216: guarda en \`maps_dir\`. Si todavía no tiene nombre de archivo, lo pide.
+## RF-216: guarda en \`maps_dir\` (o en su modo, RF-392). Si todavía no tiene nombre de archivo, lo pide.
 func save_level() -> void:
 	if draft.file_id == "":
 		_ask_file_name()
 	else:
 		_write()
+
+
+## RF-392: guarda el mapa dentro de un modo propio. Se elige uno existente o se crea uno nuevo, y
+## después el nombre del archivo. Desde ahí, "Guardar" sigue guardando en ese modo.
+func save_to_mode() -> void:
+	var items: Array[Dictionary] = [{"text": "— Mis modos —", "selectable": false}]
+	for mode_id: String in ModePacks.user_ids(modes_dir):
+		items.append({"text": "%s (%s)" % [ModePacks.display_name(modes_dir, mode_id), mode_id], "value": mode_id})
+	items.append({"text": "+ Nuevo modo…", "value": ""})
+	_pending = _on_mode_chosen
+	_dialog.ask_choice("Guardar en un modo", "Elegí el modo donde se guarda este mapa.", items, "Elegir")
+
+
+func _on_mode_chosen(value: Variant) -> void:
+	var mode_id: String = str(value)
+	if mode_id != "":
+		_ask_file_name_in(mode_id)
+		return
+	_pending = func(name: Variant) -> void:
+		var result: Dictionary = ModePacks.create(modes_dir, str(name), official_modes_dir)
+		if result["error"] != "":
+			_show_error("✗ No se creó el modo: " + str(result["error"]))
+			return
+		_ask_file_name_in(result["id"])
+	_dialog.ask_text("Nuevo modo", "Nombre del modo (se ve como una solapa en la selección de nivel):",
+		"", "Crear", _check_mode_name)
+
+
+## Revisa el nombre del modo nuevo mientras se escribe (RF-392).
+func _check_mode_name(text: String) -> Dictionary:
+	var problem: String = ModePacks.name_problem(modes_dir, text, official_modes_dir)
+	if problem != "":
+		return {"ok": false, "note": problem, "kind": &"error"}
+	var folder: String = ModePacks.dir_of(modes_dir, LevelDraft.clean_file_id(text))
+	return {"ok": true, "note": "Se crea la carpeta " + ProjectSettings.globalize_path(folder), "kind": &"info"}
 
 
 ## RF-217: juega el nivel del editor. Un nivel con errores no se puede probar.
@@ -228,38 +270,56 @@ func _use_draft(new_draft: LevelDraft, notice: String) -> void:
 
 
 func _ask_file_name() -> void:
-	var suggestion: String = draft.suggested_id
+	_ask_file_name_in(draft.mode_id)
+
+
+## Pide el nombre del archivo para guardar en `mode_id` ("" = mapa suelto). El borrador cambia de destino
+## recién al aceptar: si se cancela, sigue donde estaba.
+func _ask_file_name_in(mode_id: String) -> void:
+	var suggestion: String = draft.file_id if draft.file_id != "" else draft.suggested_id
 	if suggestion == "":
 		suggestion = LevelDraft.clean_file_id(draft.level_name())
 	_pending = func(value: Variant) -> void:
+		draft.mode_id = mode_id
 		draft.file_id = str(value)
 		_write()
-	_dialog.ask_text("Guardar el mapa", "Nombre del archivo (minúsculas, números y _):",
-		suggestion, "Guardar", _check_file_name)
+	var title: String = "Guardar el mapa" if mode_id == "" else "Guardar el mapa en el modo '%s'" % mode_id
+	_dialog.ask_text(title, "Nombre del archivo (minúsculas, números y _):",
+		suggestion, "Guardar", _check_file_name.bind(mode_id))
 
 
-## Revisa el nombre mientras se escribe (RF-216).
-func _check_file_name(text: String) -> Dictionary:
+## Revisa el nombre mientras se escribe (RF-216, RF-392).
+func _check_file_name(text: String, mode_id: String = "") -> Dictionary:
 	if text == "":
 		return {"ok": false, "note": "Escribí un nombre.", "kind": &"error"}
 	if not LevelDraft.is_valid_file_id(text):
 		return {"ok": false, "note": "Solo minúsculas, números y _ (hasta %d letras)." % LevelDraft.FILE_ID_MAX, "kind": &"error"}
 	if LevelDraft.is_official_id(text):
 		return {"ok": false, "note": "'%s' es el nombre de un nivel oficial: elegí otro para no pisarlo." % text, "kind": &"error"}
-	if LevelDraft.saved_ids(maps_dir).has(text):
+	if mode_id != "" and text == ModePacks.RESERVED_MAP_ID:
+		return {"ok": false, "note": "'%s' está reservado para el archivo del modo: elegí otro." % text, "kind": &"error"}
+	if LevelDraft.saved_ids(_dir_for(mode_id)).has(text):
 		return {"ok": true, "note": "Ya hay un mapa con ese nombre: se va a reemplazar.", "kind": &"warning"}
-	return {"ok": true, "note": "Se guarda en " + _file_path(text), "kind": &"info"}
+	return {"ok": true, "note": "Se guarda en " + _file_path(text, mode_id), "kind": &"info"}
 
 
 func _write() -> void:
-	var problem: String = draft.save(maps_dir)
+	var dir: String = _dir_for(draft.mode_id)
+	var problem: String = draft.save(dir)
+	if problem == "" and draft.mode_id != "":
+		problem = ModePacks.add_map(dir, draft.file_id)  # RF-392: el mapa entra en la lista del modo
 	if problem != "":
 		draft.file_id = ""  # no quedó guardado: la próxima vez vuelve a pedir el nombre
 		_show_error("✗ No se guardó: " + problem)
 		return
 	refresh()
-	_notice = "Guardado en " + _file_path(draft.file_id)
+	_notice = "Guardado en " + _file_path(draft.file_id, draft.mode_id)
 	_update_messages()
+
+
+## La carpeta donde se guarda: la de mapas sueltos o la de un modo propio (RF-392).
+func _dir_for(mode_id: String) -> String:
+	return maps_dir if mode_id == "" else ModePacks.dir_of(modes_dir, mode_id)
 
 
 func _ask_which_to_open() -> void:
@@ -269,6 +329,15 @@ func _ask_which_to_open() -> void:
 		items.append({"text": "(todavía no guardaste ninguno)", "selectable": false})
 	for id: String in saved:
 		items.append({"text": id, "value": {"kind": "saved", "id": id}})
+	# RF-392: los mapas guardados dentro de cada modo propio.
+	for mode_id: String in ModePacks.user_ids(modes_dir):
+		var mode_maps: PackedStringArray = LevelDraft.saved_ids(ModePacks.dir_of(modes_dir, mode_id))
+		mode_maps.erase(ModePacks.RESERVED_MAP_ID)  # el modo.json no es un mapa
+		if mode_maps.is_empty():
+			continue
+		items.append({"text": "— Modo %s —" % ModePacks.display_name(modes_dir, mode_id), "selectable": false})
+		for id: String in mode_maps:
+			items.append({"text": id, "value": {"kind": "mode", "mode": mode_id, "id": id}})
 	items.append({"text": "— Niveles oficiales (se abren como plantilla) —", "selectable": false})
 	for id: String in LevelFile.campaign_ids():
 		var official: LevelData = LevelFile.load_level(LevelFile.LEVELS_DIR + id + ".json")["level"]
@@ -283,6 +352,10 @@ func _open_choice(value: Variant) -> void:
 	var opened: LevelDraft
 	if choice["kind"] == "saved":
 		opened = LevelDraft.open_saved(choice["id"], maps_dir)
+	elif choice["kind"] == "mode":
+		opened = LevelDraft.open_saved(choice["id"], ModePacks.dir_of(modes_dir, choice["mode"]))
+		if opened != null:
+			opened.mode_id = choice["mode"]  # RF-392: "Guardar" sigue guardando en su modo
 	else:
 		opened = LevelDraft.open_official(choice["id"])
 	if opened == null:
@@ -294,8 +367,8 @@ func _open_choice(value: Variant) -> void:
 	_use_draft(opened, notice)
 
 
-func _file_path(id: String) -> String:
-	return ProjectSettings.globalize_path(maps_dir + id + ".json")
+func _file_path(id: String, mode_id: String = "") -> String:
+	return ProjectSettings.globalize_path(_dir_for(mode_id) + id + ".json")
 
 
 func _show_error(text: String) -> void:

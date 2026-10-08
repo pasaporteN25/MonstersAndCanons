@@ -650,10 +650,26 @@ Laboratorio aislado en `art/b21-vista/` (fuera de los paquetes exportados, igual
 - **Licencia:** `LICENSE` con el texto oficial de gnu.org sin cambios; artículo `data/wiki/licencias.json` (orden 8) con los avisos del juego y de Godot.
 - **Tests:** presets sin la característica `pruebas`; Opciones (visibilidad, confirmar, cancelar, volver, guardado real intacto); `LICENSE` y el artículo de la Wiki.
 
-### M49 / T197 · Prueba de modos (pendiente)
+### M49 / T197 · Prueba de modos
 Diseño en spec RF-388 a RF-392 y D-078.
-- **Lógica:** un `ModePacks` (lógica pura, como `CommunityMaps`) escanea `res://data/modos/` y `user://modos/`, valida `modo.json` y arma la lista de `LevelData` con las reglas aplicadas.
-- **Pantallas:** `GameFlow` recuerda el modo elegido para progreso, récords y desbloqueo.
-- **Lo que se reusa:** la selección de nivel suma el selector de modo, reusando las tarjetas actuales; el editor suma el destino de guardado.
-- **Asedio:** son datos.
-- **Tests:** formato y errores, ids de progreso, desbloqueo por modo, separación de la campaña y del Salón, y el editor guardando en un modo de una carpeta de prueba.
+- **`ModePacks`** (`scripts/logic/mode_packs.gd`, lógica pura como `CommunityMaps`):
+  - `all(oficiales, propios)` escanea las subcarpetas de `res://data/modos/` y `user://modos/`. `read()` valida `modo.json` (claves, versión, nombre, mapas, torres, reglas, topes) y lee cada mapa (carpeta del modo → `data/levels/`) con `LevelFile.parse`, el id `modo_<modo>_<mapa>` y las reglas aplicadas.
+  - `is_open` / `previous_playable` / `next_playable` resuelven el desbloqueo, y `create` / `name_problem` / `add_map` sirven al editor. Al reescribir, los números enteros vuelven a guardarse como enteros.
+- **`LevelData`** suma `enemy_health_percent` y `allowed_towers`. `available_towers` filtra por `allowed_towers`.
+- **`Rules.percent_of`** redondea al entero más cercano. `WaveSpawner.setup` recibe el % de vida (100 por defecto) y lo aplica después de la escala por oleada, con un mínimo de 1.
+- **`GameFlow`:**
+  - `current_mode` / `current_mode_index`, `current_mode_level()`, `is_mode_level_unlocked()` (el modo de pruebas abre todo) y `start_mode_level()`.
+  - `played_level()`, `has_next_level()`, `next_level()` y `level_won()` contemplan el modo; ganar desbloquea el siguiente del mismo modo.
+  - Toda función que cambia de pantalla limpia el modo (`_clear_mode`). `select_page` usa `&"mode:<id>"`.
+- **`Game`:** toma el mapa del modo después de la campaña y la comunidad, y pasa el % de vida al generador. La colección no corre porque `current_index` es -1.
+- **Selección de nivel:**
+  - Arma solapas dinámicas: las oficiales después de "Campaña" y las propias después de "Comunidad".
+  - `_show_mode` pone tarjetas de mapa, de error o un mensaje si el modo está vacío, y las estrellas del modo.
+  - El botón de carpeta abre la del modo propio. Las carpetas se cambian desde los tests (`modes_official_dir`, `modes_user_dir`).
+- **Editor:**
+  - El botón `SaveModeButton` ("En un modo…") llama a `save_to_mode`: elegir modo o crear uno, y después pedir el nombre del archivo. El borrador recuerda `mode_id` recién al aceptar.
+  - `_dir_for()` decide la carpeta y `_write()` suma el mapa a la lista del modo.
+  - "Abrir" lista los mapas de cada modo propio, sin `modo.json`. Las carpetas `modes_dir` y `official_modes_dir` se cambian desde los tests.
+- **Bot:** `balance_sim.gd -- mix modo=asedio level=N`.
+- **Datos:** `data/modos/asedio/modo.json`.
+- **Tests:** `test_mode_packs`, `test_mode_flow`, `test_mode_select` y `test_editor_modes`, siempre en carpetas `user://test_*`. `test_editor_files` fija una carpeta de modos de prueba para no leer la del jugador.

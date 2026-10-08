@@ -91,6 +91,14 @@ layout_mode = 2
 focus_mode = 0
 text = "Guardar"
 
+[node name="SaveModeButton" type="Button" parent="TopBar/Margin/Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(88, 0)
+layout_mode = 2
+focus_mode = 0
+tooltip_text = "Guardar el mapa dentro de un modo propio (o crear uno nuevo)"
+text = "En un modo…"
+
 [node name="TryButton" type="Button" parent="TopBar/Margin/Row"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(88, 0)
