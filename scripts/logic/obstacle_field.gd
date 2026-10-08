@@ -12,12 +12,16 @@ signal job_progress(cell: Vector2i, fraction: float)
 signal job_finished(cell: Vector2i, reward: Dictionary)
 ## RF-407: se canceló (con el oro pagado) o RF-409: se descartó (con 0).
 signal job_cancelled(cell: Vector2i, refund: int)
+## RF-422 y RF-423: un punto de extracción se habilitó, produjo o se agotó.
+signal site_changed(cell: Vector2i)
 
 var _specs: Dictionary = {}  # Vector2i → ObstacleSpec
 var _states: Dictionary = {}  # Vector2i → State
 ## RF-417: el resultado del sorteo de cada removible, fijado al empezar.
 var _drops: Dictionary = {}  # Vector2i → bool
 var _recovered: Dictionary = {}
+## RF-423: lo que le queda a cada punto de extracción.
+var _reserves: Dictionary = {}  # Vector2i → int
 var _source: StringName = &""
 var _job: DemolitionJob
 
@@ -30,6 +34,7 @@ func setup(specs: Array[ObstacleSpec], rng: RandomNumberGenerator, recovered: Di
 	_specs.clear()
 	_states.clear()
 	_drops.clear()
+	_reserves.clear()
 	_job = null
 	_recovered = recovered
 	_source = source
@@ -43,6 +48,7 @@ func setup(specs: Array[ObstacleSpec], rng: RandomNumberGenerator, recovered: Di
 			_drops[spec.cell] = rng.randi_range(1, 100) <= spec.chance_percent
 		else:
 			_states[spec.cell] = State.DISABLED
+			_reserves[spec.cell] = spec.reserve
 
 
 func spec_at(cell: Vector2i) -> ObstacleSpec:
@@ -157,3 +163,66 @@ func reward_of(cell: Vector2i) -> Dictionary:
 func finding_recovered(cell: Vector2i) -> bool:
 	var spec: ObstacleSpec = _specs.get(cell)
 	return spec != null and spec.finding_collection != &"" and _recovered.get(spec.finding_collection, false)
+
+
+# --- Extracción finita (RF-422 a RF-424) ---
+
+func is_extraction(cell: Vector2i) -> bool:
+	var spec: ObstacleSpec = _specs.get(cell)
+	return spec != null and spec.kind == ObstacleSpec.Kind.EXTRACTION
+
+
+## `&""` si se puede habilitar, o el motivo: `&"not_extraction"`, `&"active"` o `&"depleted"`.
+func can_enable(cell: Vector2i) -> StringName:
+	if not is_extraction(cell):
+		return &"not_extraction"
+	match state_of(cell):
+		State.ACTIVE:
+			return &"active"
+		State.DEPLETED:
+			return &"depleted"
+	return &""
+
+
+## RF-422: deja activo el punto. El cobro lo hace el llamador. Devuelve false si no se puede.
+func enable_site(cell: Vector2i) -> bool:
+	if can_enable(cell) != &"":
+		return false
+	# Una reserva de 0 desde el principio no tiene qué entregar: nace agotada.
+	_states[cell] = State.ACTIVE if reserve_left(cell) > 0 else State.DEPLETED
+	site_changed.emit(cell)
+	return true
+
+
+## RF-423: cada punto activo entrega `min(producción, reserva)` y baja su reserva. Devuelve lo producido
+## por punto (celda → cantidad, solo los que entregaron algo). El que llega a 0 queda agotado.
+## Se llama una vez por oleada realmente completada, nunca por esperar ni al saltar de oleada.
+func complete_wave() -> Dictionary:
+	var produced: Dictionary = {}
+	var cells: Array = _reserves.keys()
+	cells.sort_custom(func(a: Vector2i, b: Vector2i) -> bool: return a.y < b.y or (a.y == b.y and a.x < b.x))
+	for cell: Vector2i in cells:
+		if _states[cell] != State.ACTIVE:
+			continue
+		var amount: int = mini(_specs[cell].production, _reserves[cell])
+		_reserves[cell] -= amount
+		if _reserves[cell] <= 0:
+			_states[cell] = State.DEPLETED
+		if amount > 0:
+			produced[cell] = amount
+		site_changed.emit(cell)
+	return produced
+
+
+## Las celdas de los puntos de extracción, en orden de fila y columna.
+func extraction_cells() -> Array[Vector2i]:
+	var cells: Array[Vector2i] = []
+	for cell: Vector2i in _reserves:
+		cells.append(cell)
+	cells.sort_custom(func(a: Vector2i, b: Vector2i) -> bool: return a.y < b.y or (a.y == b.y and a.x < b.x))
+	return cells
+
+
+## Lo que le queda al punto (0 si no es de extracción).
+func reserve_left(cell: Vector2i) -> int:
+	return _reserves.get(cell, 0)

@@ -5,6 +5,7 @@ extends PanelContainer
 
 signal demolish_pressed(cell: Vector2i)
 signal cancel_pressed
+signal enable_pressed(cell: Vector2i)
 
 var _cell: Vector2i = InfrastructureController.NONE
 var _title: Label
@@ -14,6 +15,7 @@ var _reward: Label
 var _note: Label
 var _button: Button
 var _cancel_mode: bool = false
+var _enable_mode: bool = false
 
 
 func _ready() -> void:
@@ -55,17 +57,22 @@ func _label(parent: Control, size: int, color: Color = Color.WHITE) -> Label:
 ## Muestra el removible `spec` (o se oculta si es null). `state` es el de `ObstacleField`; `busy`, si hay
 ## otro trabajo en curso; `seconds_left`, lo que falta si este es el que se está demoliendo.
 func show_obstacle(spec: ObstacleSpec, state: ObstacleField.State, busy: bool, gold: int,
-		seconds_left: float, recovered: bool) -> void:
+		seconds_left: float, recovered: bool, reserve_left: int = 0) -> void:
 	visible = spec != null
 	if spec == null:
 		_cell = InfrastructureController.NONE
 		return
 	_cell = spec.cell
+	_enable_mode = false
+	if spec.kind == ObstacleSpec.Kind.EXTRACTION:
+		_show_extraction(spec, state, gold, reserve_left)
+		return
 	_title.text = ObstacleText.display_name(spec)
 	_cost.text = ObstacleText.cost_line(spec.cost)
 	_time.text = ObstacleText.time_line(spec.seconds)
 	_reward.text = ObstacleText.reward_line(spec, recovered)
 	_note.visible = false
+	_button.visible = true
 	_cancel_mode = state == ObstacleField.State.WORKING
 	if state == ObstacleField.State.WORKING:
 		_cost.text = "Pagado: %d de oro" % spec.cost
@@ -89,8 +96,32 @@ func show_obstacle(spec: ObstacleSpec, state: ObstacleField.State, busy: bool, g
 		_button.tooltip_text = "Demoler"
 
 
+## RF-422 y RF-424: un punto de extracción. `state` es DISABLED, ACTIVE o DEPLETED.
+func _show_extraction(spec: ObstacleSpec, state: ObstacleField.State, gold: int, reserve_left: int) -> void:
+	_title.text = "%s · %s" % [ObstacleText.display_name(spec), ObstacleText.state_line(state)]
+	_cost.text = ObstacleText.production_line(spec.production)
+	_time.text = ObstacleText.reserve_line(reserve_left, spec.reserve)
+	_reward.text = "Entrega al completar cada oleada" if state != ObstacleField.State.DEPLETED else "Ya no entrega más"
+	_note.visible = false
+	_cancel_mode = false
+	if state == ObstacleField.State.ACTIVE or state == ObstacleField.State.DEPLETED:
+		_button.visible = false
+		return
+	_button.visible = true
+	_enable_mode = true
+	if gold < spec.cost:
+		_button.text = ObstacleText.missing_gold(spec.cost, gold)
+		_button.disabled = true
+	else:
+		_button.text = ObstacleText.enable_line(spec.cost)
+		_button.disabled = false
+	_button.tooltip_text = _button.text
+
+
 func _on_button_pressed() -> void:
-	if _cancel_mode:
+	if _enable_mode:
+		enable_pressed.emit(_cell)
+	elif _cancel_mode:
 		cancel_pressed.emit()
 	else:
 		demolish_pressed.emit(_cell)

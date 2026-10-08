@@ -2,6 +2,12 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Minas y bosques que se pueden explotar *(T210, 2026-10-08)*
+
+- Un clic en una **mina** o un **bosque explotable** abre su panel: *"Habilitar extracción (100 de oro)"*, *"Produce 2 recursos por oleada"* y *"Reserva 8/8"*. Habilitar cobra el oro al instante; no se cancela ni se devuelve. Se pueden habilitar todos los puntos que alcance el oro.
+- Un punto activo entrega sus recursos **cada vez que se completa una oleada** (también la que estaba en curso al habilitarlo) y aparece un "+2 recursos" sobre él. **No produce por esperar** ni cuando el modo de pruebas salta de oleada. Una mina con la reserva de 8 entrega 2, 2, 2 y 2, y queda **agotada**.
+- En el mapa se ve el estado (velo gris y marco ámbar sin habilitar, marco verde activa, velo oscuro agotada) y la reserva como **segmentos que se vacían**. El dibujo es provisional: el arte final llega más adelante.
+
 ## Recursos y torres que cuestan recursos *(T209, 2026-10-08)*
 
 - En un mapa que tenga **recursos** (removibles que pueden entregarlos o minas), la barra de arriba muestra un **contador de recursos** con un ícono provisional. Los recursos son solo de esa partida: empiezan en 0, no se guardan y los que sobran se pierden. Al terminar una demolición, el recurso (si salió) entra una sola vez.

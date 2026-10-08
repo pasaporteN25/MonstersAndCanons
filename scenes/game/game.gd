@@ -195,6 +195,7 @@ func _setup_infrastructure() -> void:
 	var panel: ObstaclePanel = hud.obstacle_panel
 	panel.demolish_pressed.connect(infrastructure.order)
 	panel.cancel_pressed.connect(infrastructure.cancel_job)
+	panel.enable_pressed.connect(infrastructure.enable)
 	infrastructure.selection_changed.connect(_refresh_obstacle_panel.unbind(1))
 	infrastructure.changed.connect(_refresh_obstacle_panel)
 
@@ -209,7 +210,8 @@ func _refresh_obstacle_panel() -> void:
 	var field: ObstacleField = infrastructure.field
 	var job: DemolitionJob = field.job()
 	hud.obstacle_panel.show_obstacle(spec, field.state_of(cell), field.has_job() and job.cell != cell,
-			session.gold, 0.0 if job == null else job.seconds_left(), field.finding_recovered(cell))
+			session.gold, 0.0 if job == null else job.seconds_left(), field.finding_recovered(cell),
+			field.reserve_left(cell))
 
 
 ## RF-251: un mapa más grande que 20×9 se muestra con zoom, con una cámara. Una cámara no cambia
