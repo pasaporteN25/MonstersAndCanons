@@ -1,8 +1,8 @@
 # 10 — Biblia del universo de Monsters & Canons
 
-> **Estado: BORRADOR para la compuerta G2.** Todavía no es canon. Escrito el 2026-10-08 por Claude (Sonnet 5.5), tarea **T201**.
+> **Estado: CANON** (aprobado por Lucas en G2 el 2026-10-08). Escrito el 2026-10-08 por Claude (Sonnet 5.5), tarea **T201**.
 >
-> **OK de Lucas (G2):** _pendiente_ — fecha: ____-__-__. Cuando Lucas elija los nombres y apruebe el texto, este renglón se completa y el estado pasa a **canon**.
+> **OK de Lucas (G2):** dado el 2026-10-08. Eligió los nombres (planeta **Cántaro**, colonia **Compañía Meridiana**, comunidades **Moradores**) y aceptó todas las recomendaciones P-1 a P-7. Las marcas **[PROPUESTA]** y **[OPCIÓN]** de abajo pasan a canon según esas respuestas; lo marcado **[SEMILLA]** sigue sin estar prometido.
 
 **Qué es este documento.** El **canon** del universo: lo que comparten la V1, *Monsters & Canons 3D* y *Monsters & Canons 2*. Es una referencia para escribir textos, dibujar señales y diseñar mapas. **No es una spec**: no tiene `RF` ni `D`, no cambia reglas del juego y no hay que programar nada a partir de él.
 
@@ -21,7 +21,9 @@
 
 ---
 
-## 0. Qué decide Lucas en G2
+## 0. Qué decidió Lucas en G2 (2026-10-08)
+
+**Resultado:** N-1 = **B · Cántaro**, N-2 = **C · Compañía Meridiana**, N-3 = **A · Moradores**. P-1 a P-7: se acepta la recomendación de cada una (alianza de tres pueblos; el Soberano es un tipo; los cinco avances salen del cargamento de la expedición; ruinas ambiguas con la lectura "anteriores" como la oficial de la colonia; categorías Bestia/Criatura; señal `hito` opcional; Canons/cánones solo como subtítulo). En el resto del documento, "el planeta", "la colonia" y "las comunidades" se leen como **Cántaro**, **la Compañía Meridiana** y **los Moradores**.
 
 **Nombres (Q-03 del cuestionario 09: "3 opciones de cada uno"):**
 
