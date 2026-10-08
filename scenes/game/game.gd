@@ -260,6 +260,7 @@ func _process(delta: float) -> void:
 ## quedar el juego en pausa ni acelerado (RF-105, plan §6.7).
 func _exit_tree() -> void:
 	_write_dev_stats(DevStats.RESULT_LEFT)  # si la partida ya terminó, no pisa su informe
+	DevMode.collections_unlocked = false  # RF-436: la habilitación dura solo esta partida.
 	_reset_time()
 
 
@@ -424,6 +425,21 @@ func _add_dev_panel() -> void:
 
 func dev_add_gold() -> void:
 	session.earn(DevMode.config.gold_step)  # RF-324: el número vive en data/dev_config.tres
+
+
+## RF-436: suma recursos solo a la sesión actual.
+func dev_add_resources() -> void:
+	if DevMode.enabled and not session.is_over():
+		hud.setup_resources(true)
+		session.add_resources(10)
+
+
+## RF-436: avanza el trabajo por el mismo camino que una demolición normal.
+func dev_finish_demolition() -> void:
+	if not DevMode.enabled or session.is_over() or not infrastructure.field.has_job():
+		return
+	var job: DemolitionJob = infrastructure.field.job()
+	infrastructure.field.tick(job.seconds_left())
 
 
 func dev_set_infinite_lives(on: bool) -> void:
@@ -762,15 +778,32 @@ func dev_enable_support(on: bool) -> void:
 	if not DevMode.enabled:
 		return
 	DevMode.support_unlocked = on
-	if on:
-		for support: TowerData in support_catalog():
-			if not tower_types.has(support):
-				tower_types.append(support)
-	available_towers = level_data.available_towers(tower_types, SaveManager.collection_complete)
-	if on:
+	_refresh_dev_towers()
+
+
+## RF-436: las torres de colección quedan disponibles en esta partida, aunque el nivel no las ofrezca.
+func dev_enable_collections(on: bool) -> void:
+	if not DevMode.enabled:
+		return
+	DevMode.collections_unlocked = on
+	_refresh_dev_towers()
+
+
+func _refresh_dev_towers() -> void:
+	var catalog: Array[TowerData] = tower_types.duplicate()
+	for support: TowerData in support_catalog():
+		if not catalog.has(support):
+			catalog.append(support)
+	available_towers = level_data.available_towers(catalog, func(collection: StringName) -> bool:
+		return DevMode.collections_unlocked or SaveManager.collection_complete(collection))
+	if DevMode.enabled and DevMode.support_unlocked:
 		for support: TowerData in support_catalog():
 			if not available_towers.has(support):
 				available_towers.append(support)
+	if DevMode.enabled and DevMode.collections_unlocked:
+		for tower: TowerData in catalog:
+			if tower.required_collection != &"" and not available_towers.has(tower):
+				available_towers.append(tower)
 	build_controller.cancel()
 	build_controller.setup(level, session, balance, available_towers, tower_container)
 	hud.setup_towers(available_towers)

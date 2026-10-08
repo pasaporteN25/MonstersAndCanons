@@ -3,6 +3,7 @@ extends GutTest
 
 const GAME_SCENE: PackedScene = preload("res://scenes/game/game.tscn")
 const DEV_PATH: String = "user://test_save_pruebas.json"
+const REAL_PATH: String = "user://test_save_real.json"
 const DT: float = 1.0 / 60.0
 
 var game: Game
@@ -20,10 +21,13 @@ func before_each() -> void:
 
 
 func after_each() -> void:
+	GameFlow.test_level = null
+	GameFlow.forced_seed = -1
 	DevMode.clear_stats_file()
 	DevMode.set_enabled(false, SaveManager.DEFAULT_PATH)
-	if FileAccess.file_exists(DEV_PATH):
-		DirAccess.remove_absolute(DEV_PATH)
+	for path: String in [DEV_PATH, REAL_PATH]:
+		if FileAccess.file_exists(path):
+			DirAccess.remove_absolute(path)
 
 
 func _active_enemies() -> int:
@@ -43,6 +47,15 @@ func test_without_dev_mode_there_is_no_panel() -> void:
 func test_dev_mode_game_has_the_panel_closed() -> void:
 	assert_not_null(game.dev_panel)
 	assert_false(game.dev_panel.visible, "empieza cerrado")
+	var button_texts: Array[String] = []
+	for node: Node in game.dev_panel.find_children("*", "Button", true, false):
+		button_texts.append((node as Button).text)
+	assert_true(button_texts.has("+10 recursos"), "RF-436: el panel ofrece recursos")
+	assert_true(button_texts.has("Terminar demolición"), "RF-436: el panel termina la demolición")
+	var toggles: Array[String] = []
+	for node: Node in game.dev_panel.find_children("*", "CheckButton", true, false):
+		toggles.append((node as CheckButton).text)
+	assert_true(toggles.has("Habilitar todas las colecciones"), "RF-436: el panel habilita las colecciones")
 	game.dev_panel.toggle()
 	assert_true(game.dev_panel.visible, "F1 o el botón lo abren")
 
@@ -51,6 +64,63 @@ func test_add_gold() -> void:
 	var before: int = game.session.gold
 	game.dev_add_gold()
 	assert_eq(game.session.gold, before + DevMode.config.gold_step)
+
+
+func test_add_ten_resources_shows_the_counter_without_map_sources() -> void:
+	assert_false(game.level_data.uses_resources())
+	assert_false(game.hud.get_node("TopBar/Stats/ResourceStat").visible)
+	game.dev_add_resources()
+	assert_eq(game.session.resources, 10)
+	assert_true(game.hud.get_node("TopBar/Stats/ResourceStat").visible, "RF-436: el contador aparece aunque el mapa no tenga fuentes")
+	assert_eq(game.hud.get_node("TopBar/Stats/ResourceStat/ResourceLabel").text, "10")
+
+
+func test_finish_demolition_finishes_the_current_job_and_grants_its_reward() -> void:
+	game.free()
+	var data := {"version": 1, "nombre": "Prueba", "oro": 100, "vidas": 10,
+		"mapa": ["....................", "....................", "....................", "...........r........",
+			"A##################S", "....................", "....................", "....................", "...................."],
+		"leyenda": {"r": {"removible": {"clase": "roca", "probabilidad": 100, "costo": 10, "tiempo": 1.0}}},
+		"oleadas": [[{"enemigo": "normal", "cantidad": 2, "cada": 1.0}]]}
+	var parsed: Dictionary = LevelFile.parse(JSON.stringify(data), &"prueba")
+	assert_eq(parsed["errors"], PackedStringArray())
+	GameFlow.test_level = parsed["level"]
+	game = _new_game()
+	assert_true(game.infrastructure.order(Vector2i(11, 3)))
+	game.dev_finish_demolition()
+	assert_false(game.infrastructure.field.has_job())
+	assert_eq(game.infrastructure.field.state_of(Vector2i(11, 3)), ObstacleField.State.CLEARED)
+	assert_eq(game.session.resources, 1, "la recompensa normal entra al terminar al instante")
+
+
+func test_all_collections_toggle_unlocks_collection_towers_without_collecting_pieces() -> void:
+	var tower: TowerData = load("res://data/towers/cannon.tres").duplicate()
+	tower.id = &"dev_collection_test"
+	tower.required_collection = &"disruptor"
+	tower.reserved = true
+	game.tower_types.append(tower)
+	game._refresh_dev_towers()
+	assert_false(game.available_towers.has(tower))
+	var collected_before: PackedStringArray = SaveManager.collected_sources(&"disruptor")
+	game.dev_enable_collections(true)
+	assert_true(game.available_towers.has(tower), "RF-436: la torre aparece aunque el nivel no la ofrezca")
+	assert_eq(SaveManager.collected_sources(&"disruptor"), collected_before, "no guarda piezas ni progreso")
+	game.dev_enable_collections(false)
+	assert_false(game.available_towers.has(tower))
+	await wait_process_frames(2)
+
+
+func test_dev_actions_do_not_write_the_normal_save() -> void:
+	SaveManager.save_path = REAL_PATH
+	SaveManager.load_save()
+	SaveManager.record_victory(&"level_01", 20)
+	assert_true(SaveManager.save())
+	var normal_save_before: String = FileAccess.get_file_as_string(REAL_PATH)
+	DevMode.set_enabled(true, DEV_PATH)
+	game.dev_add_resources()
+	game.dev_enable_collections(true)
+	assert_eq(FileAccess.get_file_as_string(REAL_PATH), normal_save_before, "RF-181 y RF-436: las acciones no escriben el guardado normal")
+	await wait_process_frames(2)
 
 
 func test_infinite_lives() -> void:

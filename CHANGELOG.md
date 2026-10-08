@@ -2,6 +2,11 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Herramientas para probar recursos, demoliciones y colecciones *(T213, 2026-10-08)*
+
+- El panel de pruebas suma **+10 recursos** (el contador aparece aunque el mapa no tenga fuentes), **Terminar demolición** para cobrar la recompensa normal del trabajo en curso y **Habilitar todas las colecciones** para probar las torres que las requieren sin completar ni guardar piezas.
+- La habilitación de colecciones dura solo la partida actual; nada de estas acciones modifica el guardado normal.
+
 ## Editor: removibles, minas, demoledora y torres del mapa *(T212, 2026-10-08)*
 
 - El **editor de mapas** suma cinco pinceles: **Árbol**, **Roca**, **Escombro**, **Mina** y **Bosque** (teclas `6` a `0`). Se pintan como el pasto o el camino y el editor arma solo la leyenda del archivo. Si la leyenda ya tiene sus 10 letras, avisa abajo en lugar de pintar.
