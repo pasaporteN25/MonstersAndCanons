@@ -8,6 +8,12 @@ Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle t�
 - Un botón nuevo, **Objetos**, deja cambiar el costo, el tiempo, los recursos y la probabilidad de un removible (o la producción y la reserva de una mina) para todas las casillas de ese tipo, viendo siempre el valor de la clase.
 - **Ajustes** suma *Demoledora disponible* y *Torres del mapa* (casillas para elegir cuáles ofrece el nivel; "Usar las de siempre" las deja como antes). **Probar** funciona con todo esto.
 - La **pieza de colección** de una ruina solo se puede elegir al editar un nivel de la campaña; en los mapas de la comunidad y de los modos el campo está deshabilitado y explica por qué (si el archivo ya tenía una, se conserva).
+## Niveles 8 y 9 en las ruinas *(T224, 2026-10-08)*
+
+- **Bastión («El bastión sobre ruinas»)** y **Taller asediado («El taller»)** pasan a las **ruinas**, con escombros que se pueden **demoler** (90 de oro, 10 segundos). Algunos entregan 1 recurso (50 %) y se ve el símbolo A grabado en la piedra.
+- En cada nivel hay un **escombro especial** con una **pieza de la Disruptora** (la 1.ª en el Bastión y la 2.ª en el Taller). Se confirma al completar la oleada y queda guardada en la campaña; la 3.ª aparece más adelante.
+- El **Mortero debuta en el Taller** y cuesta 300 de oro y 3 recursos; el Bastión no lo tiene. Con los escombros del Bastión el mapa es un poco más exigente si no se demuele.
+- El camino y las oleadas no cambian.
 
 ## Niveles 6 y 7 en el bosque *(T223, 2026-10-08)*
 
