@@ -35,7 +35,7 @@
 #   semilla, resultado, vidas, oleada y oro sobrante.
 #
 # Disruptora (T217, RF-452): la estrategia "mix" la compra por id cuando el mapa la ofrece y hay emisores de aura
-# en las oleadas (3 torres comunes antes de la primera, 8 antes de la segunda, nunca más de 2).
+# en la oleada en curso o la siguiente (3 torres comunes antes de la primera, 8 antes de la segunda, nunca más de 2).
 #   disruptor=0     no la compra (para comparar con y sin ella). Por omisión, disruptor=1.
 #   El bot no recoge piezas ni extrae recursos: simula la colección completa y le da 4 recursos al empezar.
 #   "sin_recursos" (T214) nunca la compra.
@@ -338,10 +338,13 @@ func _disruptor() -> TowerData:
 	return null
 
 
-## RF-452: ¿alguna oleada trae un enemigo con aura? (se lee de los datos del enemigo)
+## RF-452: ¿la oleada en curso o la que sigue trae un enemigo con aura? (se lee de los datos del enemigo).
+## El bot no la compra antes: hasta entonces la Disruptora gasta oro en una torre que casi no daña.
 func _level_has_aura_emitters() -> bool:
-	for wave: WaveData in game.level_data.waves:
-		for group: SpawnGroup in wave.groups:
+	var waves: Array[WaveData] = game.level_data.waves
+	var first: int = maxi(game.session.wave - 1, 0)
+	for index: int in range(first, mini(game.session.wave + 1, waves.size())):
+		for group: SpawnGroup in waves[index].groups:
 			if group.enemy != null and TowerText.has_aura(group.enemy):
 				return true
 	return false
