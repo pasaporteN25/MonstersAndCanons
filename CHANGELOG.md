@@ -2,6 +2,13 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Niveles 8 y 9 en las ruinas *(T224, 2026-10-08)*
+
+- **Bastión («El bastión sobre ruinas»)** y **Taller asediado («El taller»)** pasan a las **ruinas**, con escombros que se pueden **demoler** (90 de oro, 10 segundos). Algunos entregan 1 recurso (50 %) y se ve el símbolo A grabado en la piedra.
+- En cada nivel hay un **escombro especial** con una **pieza de la Disruptora** (la 1.ª en el Bastión y la 2.ª en el Taller). Se confirma al completar la oleada y queda guardada en la campaña; la 3.ª aparece más adelante.
+- El **Mortero debuta en el Taller** y cuesta 300 de oro y 3 recursos; el Bastión no lo tiene. Con los escombros del Bastión el mapa es un poco más exigente si no se demuele.
+- El camino y las oleadas no cambian.
+
 ## Niveles 6 y 7 en el bosque *(T223, 2026-10-08)*
 
 - **Nido («El lindero»)** y **Cruce («El aserradero»)** pasan al **bosque**, con árboles y rocas que se pueden **demoler** pagando oro y esperando (un clic sobre el objeto). Despejarlos libera casillas buenas entre las rectas del camino. En el Nido son 3 y **no dan recursos**; se gana sin demoler.

@@ -4,17 +4,23 @@
   "oro": 320,
   "vidas": 20,
   "aumento_vida": 40,
-  "torres_extra": ["mechanical_standard"],
+  "tema": "ruinas",
+  "leyenda": {
+    "u": {"removible":{"clase":"escombro","hallazgo":"disruptor"}},
+    "e": {"removible":{"clase":"escombro","probabilidad":50.0,"recursos":1.0}},
+    "s": {"dibujo":"simbolo_ruina"}
+  },
+  "torres_extra": ["mechanical_standard","mortar"],
   "mapa": [
-    "......X...B.........",
+    "......s...B.........",
     "A#####....#.........",
-    "...X.#....#...X.....",
+    "...e.#....#...e.....",
     ".....#############..",
-    "X................#..",
+    "s................#..",
     "..################..",
-    "..#........X........",
+    "..#........u........",
     "..#################S",
-    ".......X............"
+    ".......e............"
   ],
   "oleadas": [
     [{"enemigo": "normal", "cantidad": 14, "cada": 0.7},

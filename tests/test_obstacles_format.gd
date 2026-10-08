@@ -165,8 +165,8 @@ func test_example_and_official_levels_remain_valid() -> void:
 	assert_eq((example["level"] as LevelData).obstacles.size(), 4)
 	# T223: solo los niveles 6 (3 removibles) y 7 (6 removibles y demoledora) los tienen; test_levels_6_7.gd los revisa.
 	for level: LevelData in GameFlow.campaign.levels:
-		if str(level.id) in ["level_06", "level_07"]:
-			continue
+		if str(level.id) in ["level_06", "level_07", "level_08", "level_09"]:
+			continue  # T224: el 8 y el 9 (ruinas) también; los revisa test_levels_8_9.gd
 		assert_true(level.obstacles.is_empty(), str(level.id))
 		assert_eq(level.machine_enabled, false, str(level.id))
 
