@@ -40,7 +40,7 @@ func _rows(level: int, wins: int, total: int, strategy: String = "sin_recursos")
 
 
 func test_infra_strategy_names() -> void:
-	for name: String in ["sin_recursos", "demoler", "demoledora", "extraer_temprano", "extraer_tarde"]:
+	for name: String in ["sin_recursos", "demoler", "demoledora", "pieza", "extraer_temprano", "extraer_tarde"]:
 		assert_true(BalanceArgs.is_infra_strategy(name), name)
 	assert_false(BalanceArgs.is_infra_strategy("mix"))
 	assert_false(BalanceArgs.is_infra_strategy(""))

@@ -17,6 +17,8 @@
 #   sin_recursos     → como mix: no demuele, no extrae, no compra la demoledora y no usa recursos. Es la de la regla de oro.
 #   demoler          → demuele de a uno, con oro, los removibles que abren casillas mejores que las libres que quedan.
 #   demoledora       → compra la máquina cuando quedan 4 o más removibles que valgan la pena, y después demuele.
+#   pieza            → como sin_recursos, pero después de las 2 primeras torres junta oro y demuele la ruina con la pieza de
+#                      colección (T245), y nada más. Sirve para ver si la pieza se alcanza sin perder.
 #   extraer_temprano → habilita los puntos de extracción desde la oleada 1 y construye torres con recursos apenas puede.
 #   extraer_tarde    → defiende primero y habilita los puntos a mitad del nivel.
 #   Para juntar oro, el bot deja de comprar torres (después de las 2 primeras) hasta pagar lo que quiere.
@@ -542,6 +544,8 @@ func _run_infrastructure() -> int:
 	match strategy:
 		"demoler", "demoledora":
 			return _run_demolition(controller, session)
+		"pieza":
+			return _run_piece(controller, session)
 		"extraer_temprano":
 			return _run_extraction(controller, session, 1)
 		"extraer_tarde":
@@ -568,6 +572,24 @@ func _run_demolition(controller: Node, session: LevelSession) -> int:
 		_worth_dirty = true
 		return 0
 	return cost
+
+
+## Estrategia "pieza": demuele solo la ruina que guarda la pieza de colección. Devuelve el oro que hay que guardar.
+func _run_piece(controller: Node, session: LevelSession) -> int:
+	var field: ObstacleField = controller.field
+	if field.has_job():
+		return 0
+	for spec: ObstacleSpec in game.level_data.obstacles:
+		if spec.kind != ObstacleSpec.Kind.REMOVABLE or spec.finding_collection == &"":
+			continue
+		if game.infrastructure.obstacle_at(spec.cell) == null:
+			continue  # ya demolida
+		var cost: int = field.cost_of(spec.cell)
+		if session.gold >= cost and controller.order(spec.cell):
+			_infra_gold += cost
+			return 0
+		return cost
+	return 0
 
 
 ## Habilita los puntos de extracción (de a uno, el de más reserva primero) desde la oleada `from_wave`.
