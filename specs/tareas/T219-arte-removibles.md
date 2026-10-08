@@ -19,7 +19,7 @@
 | `despejado` | uno por tema (`pradera`, `bosque`, `ruinas` y `desierto`) | El suelo con tocón o restos chatos, **construible**: que no parezca bloqueado. |
 | Marca de "pieza pendiente" | 32 × 32 | Un brillo plateado sobre el escombro que todavía guarda una pieza. |
 
-Si T205 fijó otros estados, se sigue la lista de T205.
+**La lista de estados y los nombres de archivo definitivos son los de la tabla "Estados visuales" de la sección M50 del plan técnico (RF-401)**: ahí figuran también `marca_pieza.svg` y el sufijo `_trabajo`. Si hay que cambiar un nombre, se anota en el Resultado para que el código lo siga.
 
 ## Pasos
 1. Concepto (una hoja con todos los estados sobre `bosque` y `ruinas`, a 220 y a 34 px) y **OK de Lucas**.

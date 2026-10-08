@@ -4,7 +4,7 @@
 - **Depende de:** T204 y T210 (y T211 si una estrategia demuele ruinas) · **Compuerta:** ninguna · **Tamaño:** mediano
 
 ## Leer
-- El RF de la "regla de oro" de M50 (ganar sin recursos, con N semillas y M victorias), escrito en T205.
+- **RF-432 y RF-433** (la "regla de oro" de M50: `sin_recursos` con N = 5 semillas gana en al menos M = 4), D-083 y la sección M50 del plan (la semilla del drop, `GameFlow.forced_seed`).
 - 07 §7, "Método de balance propuesto".
 - `tools/balance_sim.gd` (ya con `seeds=` y `levels=` de T204).
 

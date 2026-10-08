@@ -4,7 +4,7 @@
 - **Depende de:** T203, T206, T210 y T211 · **Compuerta:** ninguna · **Tamaño:** mediano
 
 ## Leer
-- RF-266 (el editor y la leyenda), §10.3 (el editor), RF-392 (guardar en modos) y los RF de M50 sobre el editor, si T205 los escribió. Si no los escribió, **frenar**: falta un RF del editor.
+- RF-266 (el editor y la leyenda), §10.3 (el editor), RF-392 (guardar en modos) y **RF-434 y RF-435** (el editor de M50, ya escritos en T205). Si algo del editor no está en esos RF, **frenar**.
 - `scenes/editor/map_editor.gd`, `editor_panel.gd`, `settings_panel.gd`, `map_view.gd` y `scripts/logic/level_draft.gd`. Los tests: `grep -l "editor\|LevelDraft" tests/*.gd`.
 
 ## Objetivo

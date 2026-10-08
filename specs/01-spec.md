@@ -220,7 +220,7 @@ Hasta ahora toda torre ocupa **una** casilla. Esta etapa enseña al juego a mane
   Son **números de partida**: se afinan con el bot (T141). Comparado con el Cañón (100 de oro, 20 de daño cada 1,7 s, radio 1,0), el Mortero cuesta tres veces más **y ocupa cuatro casillas**: tiene que valer la pena por pegar fuerte y de lejos, no por ser más de lo mismo. Proyectil: una **bomba** lenta (velocidad 6 casillas por segundo, RF-55) que recorre un tramo largo sin fallar (RF-52).
 - **RF-297** **La barra y las teclas:** con el Mortero hay **9 torres**: la barra inferior y las teclas pasan de 8 a **9** (tecla `9`, acción `build_9`). Los botones **entran** sin tapar "Próxima oleada" (RF-170 se actualiza). El límite de la barra sube a 9.
 - **RF-298** **Aviso y Wiki:** al elegir el Mortero el HUD agrega *"Necesita 2×2 casillas libres"* (RF-171) y la Wiki lo anota en su ficha (**"Tamaño: 2×2 casillas"**, RF-231). `CONTENIDO.md` explica `footprint`. *(Lucas, 2026-09-30: el Mortero **no** está en todos los niveles, ver RF-300.)*
-- **RF-300** **Torres reservadas** *(pedido por Lucas, 2026-09-30: "la torre de 4 dejarla por ahora solo para el nivel 10")*: `TowerData` gana `reserved` (`false` por defecto). Una torre reservada **no aparece en la barra** de un nivel salvo que su archivo la habilite con el campo opcional `"torres_extra": ["mortar"]`. Un id que no existe es un **error** que lista los que hay (RF-204); uno repetido cuenta una vez; el editor **conserva** el campo. La barra y las teclas de ese nivel son las comunes más las habilitadas. El Mortero es reservada y **solo el nivel 10 la habilitará**; hasta que exista, se puede probar con `tools/ejemplos/mapa_torres_apagadas.json`. Sigue apareciendo en la Wiki.
+- **RF-300** **Torres reservadas** *(pedido por Lucas, 2026-09-30: "la torre de 4 dejarla por ahora solo para el nivel 10")*: `TowerData` gana `reserved` (`false` por defecto). Una torre reservada **no aparece en la barra** de un nivel salvo que su archivo la habilite con el campo opcional `"torres_extra": ["mortar"]`. Un id que no existe es un **error** que lista los que hay (RF-204); uno repetido cuenta una vez; el editor **conserva** el campo. La barra y las teclas de ese nivel son las comunes más las habilitadas. El Mortero es reservada y **solo el nivel 10 la habilitará** *(enmendado en M50, RF-420: Lucas, 2026-10-08, Q-21, lo adelanta al **nivel 9** y pasa a costar oro y recursos)*; hasta que exista, se puede probar con `tools/ejemplos/mapa_torres_apagadas.json`. Sigue apareciendo en la Wiki.
 - **RF-299** **Dibujos:** una **torreta de mortero** nueva (tubo corto y ancho apuntando hacia adelante, sobre una placa) y una **bomba** como proyectil, según la guía de arte (RF-151). La base es la de siempre, agrandada; no hay dibujos de base nuevos.
 
 > **Criterio de aceptación RF-300**
@@ -786,7 +786,7 @@ Hoy todos los mapas se ven igual (pradera) y lo bloqueado lo dibuja el juego al 
 
 - **RF-262** **Leyenda:** el campo opcional `"leyenda"` declara letras nuevas para el mapa. Cada una dice **qué se dibuja** y **si se puede construir**:
   `"leyenda": {"~": {"dibujo": "agua"}, ",": {"dibujo": "flores", "construible": true}}`
-  La **letra** es un solo carácter, **no** puede ser `.` `#` `X` `S` ni una entrada (`A` a `H`) ni un espacio, una comilla o una barra. Hasta **10** letras por nivel. `construible` vale `false` si no se escribe.
+  La **letra** es un solo carácter, **no** puede ser `.` `#` `X` `S` ni una entrada (`A` a `H`) ni un espacio, una comilla o una barra. Hasta **10** letras por nivel. `construible` vale `false` si no se escribe. *(M50, RF-399: `dibujo` pasa a ser opcional si la letra lleva `removible` o `extraccion`.)*
 - **RF-263** **Los dibujos** (una lista cerrada: el archivo elige un nombre, no trae imágenes propias):
 
   | Dibujo | Qué es | Tipo |
@@ -799,6 +799,7 @@ Hoy todos los mapas se ven igual (pradera) y lo bloqueado lo dibuja el juego al 
   | `barro` | un charco de barro | suelo |
   | `cactus`, `pino`, `columna` | según el paisaje | objeto sobre el suelo |
   | `tronco`, `helecho`, `junco`, `hongo`, `estatua` | según el paisaje | objeto sobre el suelo |
+  | `escombro`, `mina`, `bosque_explotable` *(M50, RF-401)* | restos de una ruina, boca de mina y grupo de árboles marcados | objeto sobre el suelo |
 
   Un dibujo cualquiera se puede usar en cualquier tema (un lago en el desierto es un oasis). Uno que no existe es un **error** que lista los que sí.
 - **RF-264** **Lo que significa para el juego:** una letra de la leyenda es, para el juego, **pasto** (si es `construible`) o **casilla bloqueada** (si no). **Nunca es camino**: no cambia entradas, salida ni recorridos, y los enemigos no la pisan (los voladores la cruzan igual que el resto del mapa, RF-05). Por eso los recorridos y todo el cálculo de §7.8 quedan iguales.
@@ -1575,7 +1576,7 @@ Lucas, 2026-10-03. Disponibilidad por nivel, con colección persistente como con
 Excavador/Ballesta/Alquimista siguen candidatos sin selección. B-21/B-23 no se cierran con esta etapa; B-22 sigue abierto para siguientes piezas y balance avanzado.
 
 ### M38 · Avances en la barra superior
-- **RF-362** Dada cualquier partida, cuando cambia la colección, entonces la barra superior muestra icono plateado + cantidad/objetivo, con el mismo tamaño/formato de las otras estadísticas. El icono ofrece ayuda por puntero/foco con estado pendiente/confirmado; se retira el aviso fijo sobre el mapa. Recogida, confirmación y guardado conservan RF-358/359. Admin/comunidad muestran la colección pero no generan avances.
+- **RF-362** Dada cualquier partida, cuando cambia la colección, entonces la barra superior muestra icono plateado + cantidad/objetivo, con el mismo tamaño/formato de las otras estadísticas. El icono ofrece ayuda por puntero/foco con estado pendiente/confirmado; se retira el aviso fijo sobre el mapa. Recogida, confirmación y guardado conservan RF-358/359. Admin/comunidad muestran la colección pero no generan avances. *(M50, RF-431: la barra muestra la colección de la que el nivel es fuente; los demás niveles siguen mostrando `technology`.)*
 
 ### M39 · Ladrón periódico (B-07/B-22)
 - **RF-363** Dado un enemigo con drenaje configurado, mientras permanece vivo en el camino solicita oro cada intervalo de tiempo de juego. El Ladrón roba3 cada2s, sin bajar de10; con menos oro no crea ni quita monedas. Un ingreso posterior vuelve a ser robable en el próximo intervalo. Morir, desaparecer, escapar o terminar la partida corta el drenaje; pausa congela y velocidad acelera el reloj. No hay robo adicional al escapar. Valores y habilidad combinables viven en EnemyData.
@@ -1671,3 +1672,209 @@ Como el juego se va a regalar, no tiene sentido un ejecutable aparte para el mod
   - Crear un modo desde el editor arma la carpeta y su `modo.json`; cada mapa nuevo se agrega al final de la lista. Después, "Guardar" sigue guardando en ese modo.
   - Abrir un mapa en el editor lista también los de los modos propios.
   - Nunca toca `data/` ni `campaign.json` (RF-210).
+
+### M50 · Infraestructura: demolición, recursos y hallazgos (Lucas, 2026-10-08; T205)
+**Estado: especificada en T205, a la espera del OK de Lucas (compuerta G3). Todavía no hay código.** Salen del documento 07 (§5 a §8, §12) y de las respuestas de Lucas al cuestionario 09 del 2026-10-08 (Q-08 a Q-27 y Q-31, con los cambios ✎ de Q-10, Q-18 y Q-21). Las razones y las alternativas descartadas están en D-080 a D-085, y el cómo técnico, en la sección M50 de `02-plan-tecnico.md`. Las tareas de código son T206 a T214.
+
+**Idea general, en pocas palabras:** algunos objetos del mapa (árboles, rocas, escombros de ruinas) se pueden **retirar pagando oro y esperando un rato**. Al retirarlos, la casilla queda libre para construir y, a veces, **entregan algo**: un recurso o una pieza de una colección. Una **demoledora** (una compra única) abarata las demás demoliciones. Las **minas** y los **bosques explotables** producen recursos con el tiempo pero se agotan. Los **recursos** sirven para construir torres avanzadas junto con el oro. **Ninguna de estas cosas es obligatoria**: todo mapa con recursos se gana sin tocarlos (RF-432).
+
+Valores: los números de este bloque son **iniciales** (los pidió así Lucas en el 09) y viven en `data/obstaculos.json` y en los `.tres` de las torres (constitución P2). Lo que se decide acá es la **regla**; el bot (T204 y T214) y las partidas de Lucas ajustan los números.
+
+#### Removibles y puntos de extracción: el formato *(Q-08, Q-09, Q-17, Q-19 y Q-38; D-080)*
+
+- **RF-398** **Valores por clase, en un archivo de datos:** `data/obstaculos.json` guarda los números de cada **clase** de objeto. Una clase de **removible** (`arbol`, `roca`, `escombro`) tiene `costo` (oro), `tiempo` (segundos de juego), `recursos` (cuántos entrega), `probabilidad` (de 0 a 100: la chance de que los entregue, RF-417) y, solo el escombro, `recursos_si_recuperado` (RF-428). Una clase de **extracción** (`mina`, `bosque_explotable`) tiene `costo` (oro, para habilitarla), `produccion` (recursos por oleada completada) y `reserva` (recursos en total). El archivo trae también los números de la demoledora (RF-411 a RF-413). **Valores iniciales:**
+
+  | Clase | Costo | Tiempo | Recursos | Probabilidad | Otros |
+  |---|---|---|---|---|---|
+  | `arbol` | 40 | 4 s | 1 | 50 % | |
+  | `roca` | 60 | 6 s | 1 | 50 % | |
+  | `escombro` | 90 | 10 s | 0 | 0 % | `recursos_si_recuperado`: 1 |
+  | `mina` | 100 | — | — | — | produce 2 por oleada · reserva 8 |
+  | `bosque_explotable` | 100 | — | — | — | produce 2 por oleada · reserva 8 |
+
+  El archivo tiene `version` (hoy 1), y una clave mal escrita o un valor fuera de rango es un **error** que se ve en las pruebas (como `progression.json`). Un archivo ilegible deja el registro y el juego sigue **sin removibles** (no se cierra).
+- **RF-399** **Formato en la leyenda (compatible con RF-262):** cada letra de la `leyenda` puede llevar `"removible"` **o** `"extraccion"` (nunca los dos):
+  ```json
+  "leyenda": {
+    "t": {"removible": {"clase": "arbol"}},
+    "r": {"removible": {"clase": "roca", "costo": 50, "probabilidad": 0}},
+    "u": {"removible": {"clase": "escombro", "hallazgo": "disruptor"}},
+    "m": {"extraccion": {"clase": "mina", "reserva": 6}}
+  }
+  ```
+  - `clase` es obligatoria y tiene que existir en `data/obstaculos.json`.
+  - **Se pueden sobrescribir por letra**, para ese mapa: `costo`, `tiempo`, `recursos` y `probabilidad` en un removible; `costo`, `produccion` y `reserva` en una extracción. Lo que no se escribe sale de la clase.
+  - `hallazgo` (solo en un removible de clase `escombro`) es el id de una colección de `progression.json` (RF-425). Pone una **pieza** en ese objeto (RF-426).
+  - `dibujo` pasa a ser **opcional** cuando la letra tiene `removible` o `extraccion`: si no se escribe, es el de la clase (`arbol`, `roca`, `escombro`, `mina` o `bosque_explotable`); si se escribe, tiene que ser ese mismo. *(Es el único cambio a RF-262: hasta ahora `dibujo` era obligatorio.)*
+  - Cada casilla con esa letra es **un objeto aparte**, con su propio estado (se despeja una sin despejar las otras). Cuentan para el tope de 10 letras de RF-262 y RF-265.
+  - Los números salen de la clase y las sobrescrituras del mapa mandan sobre ella. Dos casillas con la misma letra comparten los números; si hacen falta números distintos, se usan dos letras.
+- **RF-400** **Qué son para el juego (RF-264 sigue valiendo):**
+  - Un removible **intacto** es una casilla **bloqueada**: no se construye, los enemigos no la pisan y los voladores la cruzan como siempre. Uno **despejado** pasa a ser **pasto construible**.
+  - Un punto de extracción es siempre una casilla bloqueada; **no se puede demoler** ni despejar, aunque se agote.
+  - **Nunca es camino.** Despejar no cambia entradas, salida ni recorridos, y el cálculo de RF-202 y RF-207 no se vuelve a hacer. Por eso no hay atajos ni rutas nuevas (Q-17): solo se abren casillas laterales para construir.
+- **RF-401** **Dibujos y marcas:** la lista cerrada de RF-263 suma tres dibujos de tipo *objeto*: `escombro` (restos de una ruina), `mina` (una boca de mina con tablas) y `bosque_explotable` (un grupo de árboles marcados). Un removible se tiene que **distinguir a simple vista** de lo permanente: lleva una **marca** (propuesta: una cinta o estaca ámbar), y la roca o el árbol removible es **otro dibujo** que el permanente. Los estados que hay que dibujar (intacto, en trabajo, despejado, pieza pendiente, mina sin habilitar, activa, agotada y reserva) están en la sección M50 del plan técnico. Hasta que llegue el arte de Codex (T219 a T221), el juego los dibuja por código con figuras simples (Q-40).
+- **RF-402** **Validación (con mensajes claros, RF-204):**
+  - **Errores:** una letra con `removible` y `extraccion` a la vez; con `construible: true` (un removible intacto no se construye); `clase` que falta o no existe (el mensaje lista las que hay); una clave mal escrita; un número negativo, un `costo` o `tiempo` en cero, o una `probabilidad` mayor que 100; `hallazgo` en una clase que no es `escombro`, o con una colección que no existe; un `dibujo` que no es el de la clase; **dos letras con `hallazgo` de la misma colección en un mismo nivel** (la pieza se identifica por colección y nivel, RF-426); y `"demoledora"` que no sea verdadero o falso (RF-411).
+  - **Avisos** (no impiden jugar, como RF-207): `"demoledora": true` en un mapa **sin ningún removible**; una torre que **cuesta recursos** (RF-418 a RF-420) ofrecida en un mapa que **no tiene cómo conseguirlos** (RF-421); y una letra declarada y no usada (RF-265).
+  - `tools/check_level.gd` marca en el mapa impreso los removibles y los puntos de extracción, y suma un resumen (por ejemplo, "3 removibles, 1 mina").
+- **RF-403** **Compatibilidad:** sin los campos nuevos, un nivel se lee y se juega **exactamente igual** que hoy: los 9 niveles oficiales no cambian y los mapas de la comunidad ya guardados tampoco. La `version` del archivo del nivel sigue en 1. Un mapa con removibles en una versión anterior del juego se rechaza por clave desconocida (como RF-267). El editor **conserva** los campos al abrir y guardar aunque no los edite.
+
+> **Criterio de aceptación RF-398 a RF-403**
+> **Dado** un mapa con `"t": {"removible": {"clase": "arbol"}}` → **Entonces** se lee, la casilla de la `t` está bloqueada, se dibuja con su marca y `check_level` la cuenta. **Dado** que ese removible se despeja → **Entonces** la casilla es pasto construible y los recorridos (`routes`) son los mismos de antes. **Dado** una letra con `removible` y `construible: true`, o con una clase que no existe → **Entonces** el nivel es inválido y el mensaje dice cuál es el problema y dónde. **Dado** cualquiera de los 9 niveles actuales → **Entonces** se lee igual que antes de M50.
+
+#### Demolición directa *(Q-09 a Q-12 y Q-14 a Q-17; D-081)*
+
+- **RF-404** **Elegir y ver el panel (Q-16):**
+  - **Cuando** se toca o se hace clic en un removible, **entonces** se **selecciona** y se abre un **panel** (con el estilo del panel de torre, RF-349) con: el nombre del objeto, el **costo** en oro, el **tiempo**, la **recompensa** y el botón **Demoler**. En el celular alcanza con tocar (no hay gestos, §11).
+  - La **recompensa** se escribe sin mostrar el sorteo: *"Puede dar 1 recurso (50 %)"* si la clase tiene probabilidad, *"No da recursos"* si no, y en un escombro con hallazgo *"Pieza de la Disruptora: pendiente"* o *"Pieza de la Disruptora: ya recuperada"* (RF-428). Los textos se arman leyendo los datos (RF-164).
+  - Hay **una sola selección a la vez** (RF-73): elegir un removible deselecciona la torre o el modo de construcción, y al revés. Un clic fuera o `Esc` deselecciona. En el modo construcción, un clic sobre un removible **no construye**: lo selecciona.
+  - Un removible **ya despejado** no se puede elegir (es pasto). Un punto de extracción se elige igual y abre su panel (RF-422).
+- **RF-405** **Precio y cobro (Q-09 y Q-11):** el precio es el `costo` de la clase (o la sobrescritura del mapa), y se **cobra al ordenar**. **Dado** que no alcanza el oro, **entonces** el botón queda deshabilitado y dice cuánto falta (*"Te faltan 15 de oro"*). Con la demoledora comprada, el costo es el de RF-413 y el panel muestra los dos números.
+- **RF-406** **El trabajo (Q-10 y Q-15):**
+  - Al ordenar empieza un **trabajo** que dura `tiempo` segundos de **juego**: avanza con el reloj de la partida, así que **respeta la pausa y la velocidad** (como el Ladrón, RF-363). Sobre el objeto se ve una **barra de progreso** y el panel muestra el tiempo que falta.
+  - Hay **un solo trabajo a la vez** y **no hay cola** (Q-15). Mientras uno está activo, el panel de cualquier otro removible dice *"Hay una demolición en curso"* y el botón queda deshabilitado.
+  - El precio y la duración de un trabajo **quedan fijos al ordenarlo**: comprar la demoledora después no los cambia (RF-413).
+  - Se puede demoler en preparación, en la cuenta atrás y durante las oleadas.
+- **RF-407** **Cancelar (Q-12):** **cuando** se toca *Cancelar* en el panel del objeto en trabajo, **entonces** se **devuelve todo el oro pagado**, el objeto vuelve a estar **intacto** (el progreso se pierde) y no pasa nada más. Como la recompensa llega recién al terminar, cancelar nunca da ganancia. No hay cancelación parcial.
+- **RF-408** **Terminar:** **cuando** el trabajo llega a su duración, **entonces**: la casilla pasa a **despejada** (pasto construible, RF-400), se **entrega la recompensa** (recursos con RF-417 y pieza con RF-427), aparece un aviso flotante ("+1 recurso", "¡Pieza encontrada!"), suena un sonido que ya existe y el panel se cierra. **La recompensa se entrega una sola vez por partida**: un removible despejado no vuelve.
+- **RF-409** **Qué pasa al terminar una oleada o la partida (Q-14):**
+  - **Al terminar una oleada, el trabajo sigue** (se demuele también en preparación y durante las oleadas).
+  - **Al terminar la partida** (victoria, derrota o abandono) el trabajo se **pierde**: no entrega nada y no devuelve el oro.
+  - **Reintentar** o reiniciar el nivel **restaura todo** (todos los removibles intactos, recursos en 0, demoledora sin comprar, extracciones sin habilitar).
+  - La demolición **no cambia el puntaje ni las estrellas** (Q-24); el oro que se gasta en ella no es un récord.
+- **RF-410** **Dónde funciona (Q-31):** los removibles y la extracción son **datos del mapa**, así que funcionan en la **campaña, los modos, la comunidad, el editor ("Probar") y el modo de pruebas**. Lo único que **solo** existe en la campaña son las **piezas de colección** (RF-429).
+
+> **Criterio de aceptación RF-404 a RF-410**
+> **Dado** un removible de 40 de oro y 4 s con 100 de oro → **Cuando** se toca y se pulsa Demoler → **Entonces** el oro queda en 60, hay una barra de progreso, y a los 4 s de juego la casilla es pasto y se puede construir una torre. **Dado** la partida en pausa → **Entonces** la barra no avanza; **dado** velocidad ×2 → **Entonces** tarda 2 s reales. **Dado** un trabajo en curso → **Cuando** se toca otro removible → **Entonces** dice "Hay una demolición en curso". **Dado** un trabajo a la mitad → **Cuando** se cancela → **Entonces** el oro vuelve a 100 y el objeto sigue intacto. **Dado** un trabajo a la mitad → **Cuando** termina la oleada → **Entonces** sigue; **cuando** se pierde la partida → **Entonces** no entrega nada. **Dado** el mismo mapa tras reintentar → **Entonces** el removible vuelve a estar intacto.
+
+#### Demoledora *(Q-08 y Q-13; D-082)*
+
+- **RF-411** **Habilitada por el nivel y comprada en un panel global (Q-08):** el campo opcional `"demoledora": true` del nivel (falso si no está) la habilita. Un nivel que la habilita muestra en el HUD un botón **"Infraestructura"** que abre un panel con la demoledora: su precio, un botón **Comprar** y, ya comprada, *"Demoledora activa"*. La máquina **no ocupa casillas** ni se mueve por el mapa. Sin el campo, el botón **no aparece** y el nivel se comporta como hoy. El editor conserva el campo y lo edita (RF-434).
+- **RF-412** **Se compra una vez y no se vende (Q-13):** el precio inicial es **180 de oro** (3 veces el de una roca, 07 §5) y está en `data/obstaculos.json`. Se cobra al comprar; **comprarla otra vez** no es posible; **no se puede vender ni devolver** (así no hay ganancia comprándola y vendiéndola). Dura toda la partida y se pierde al reintentar (RF-409).
+- **RF-413** **Qué hace (Q-10 ✎ y Q-13):** desde la compra, **cada demolición siguiente, en todo el mapa**, cuesta menos y tarda un poco menos:
+  - **Costo con máquina** = el **10 %** del costo del objeto (redondeado al entero más cercano), con un **mínimo de 5** y **nunca más** que el costo sin máquina. Con los valores iniciales: árbol 5, roca 6 y escombro 9. Son `costo_uso_porcentaje` y `costo_uso_minimo` en los datos.
+  - **Tiempo con máquina** = el `tiempo` del objeto por `tiempo_porcentaje` por ciento. **Valor inicial provisional: 80 %** (árbol 3,2 s, roca 4,8 s, escombro 8 s). *Lucas pidió en Q-10 que esa baja fuera "un poco" y que T205 la fijara con el bot, pero el bot no puede medirla porque la demolición todavía no existe: queda como valor provisional y se revisa en T214 y T223 (punto 1 de "Para revisar en G3").*
+  - El trabajo **ya en curso** al comprar conserva el precio y el tiempo con los que se ordenó (RF-406). No hay reembolso de diferencias.
+  - Los números que ve el jugador son los de la máquina cuando la tiene, y el panel del objeto muestra *"Con la demoledora: 6 de oro"* antes de comprarla, para que se pueda decidir.
+- **RF-414** **Se paga sola a partir de cierto número:** si una demolición cuesta C, la máquina cuesta M y el uso d, conviene desde que `N × C > M + N × d`. Con los valores iniciales: **4 rocas** (240 contra 204), **6 árboles** (240 contra 210) o **3 escombros** (270 contra 207). Cada nivel que ofrece la demoledora tiene que tener **removibles suficientes para que comprarla convenga** (T223 lo comprueba con el bot), pero nunca es obligatoria.
+
+> **Criterio de aceptación RF-411 a RF-414**
+> **Dado** un nivel sin `"demoledora"` → **Entonces** no hay botón "Infraestructura". **Dado** uno con `"demoledora": true` y 200 de oro → **Cuando** se compra → **Entonces** quedan 20 de oro, el panel dice "Demoledora activa" y no se puede comprar otra vez. **Dado** la máquina comprada → **Cuando** se demuele una roca → **Entonces** cuesta 6 de oro y tarda 4,8 s. **Dado** una demolición ordenada antes de comprarla → **Entonces** termina con el tiempo original. **Dado** 4 rocas demolidas con máquina → **Entonces** el oro gastado total es menor que sin ella.
+
+#### Recursos locales *(Q-18 ✎, Q-21 ✎ y Q-22 a Q-24; D-083)*
+
+- **RF-415** **Qué es un recurso (Q-24):** un **único** tipo de material genérico (no hay madera ni piedra por separado, 07 §6). Es **local a la partida**: empieza en 0, **no se guarda**, no pasa de un nivel al siguiente, no da puntaje ni estrellas y los que sobran al ganar se pierden. Reintentar vuelve a 0. `LevelSession` lleva el contador y avisa con la señal `resources_changed`.
+- **RF-416** **Un mapa "con recursos" y el contador:**
+  - Un mapa **tiene recursos** si tiene **alguna fuente**: un removible con `probabilidad` y `recursos` mayores que 0, o un punto de extracción. Las torres que cuestan recursos **no** cuentan, para que el contador no aparezca en los niveles 1 a 6, que ofrecen al Francotirador (con su forma de pago en recursos) pero no tienen ninguna fuente.
+  - **Solo en un mapa con recursos** el HUD muestra el **contador** (ícono y cantidad) en la barra superior, con el mismo tamaño y formato que las otras estadísticas. En un mapa sin recursos no se ve ni cambia nada.
+- **RF-417** **El drop es al azar, con semilla (Q-18 ✎):** esta es la **única excepción a "sin sorteos"** de la V1.
+  - Al **empezar la partida** se sortea, **una vez por cada removible** y en orden fijo de fila y columna, si **entregará** su recurso: sale con probabilidad `probabilidad` por ciento usando un generador con **semilla**. El resultado queda fijado y **se revela recién al terminar la demolición**. Así cancelar y volver a ordenar **no vuelve a sortear**, y el resultado no depende del orden en que se demuele.
+  - La **semilla** es nueva en cada partida. El bot de balance y los tests la fijan (`seed=`) para repetir exactamente la misma partida (Q-07). Reintentar usa una semilla nueva.
+  - Los niveles 1 a 5 no tienen removibles, y el nivel 6 los escribe con `probabilidad: 0` (solo abren casillas, Q-18). Desde el nivel 7 las clases dan recursos.
+  - Un mapa que no escribe `probabilidad` toma la de su clase (50 % inicial).
+- **RF-418** **Torres que cuestan recursos (Q-22):** `TowerData` gana `resource_cost` (cuántos recursos cuesta construirla; **0 por defecto**, así que las torres actuales no cambian). Una torre con `resource_cost` mayor que 0 se paga **con oro y con recursos a la vez**:
+  - **Construir** cobra los dos o **ninguno** (si falta uno, no cobra nada). El botón de la barra, la ayuda de construcción y el panel dicen *"300 + 3 recursos"* y, si faltan, qué falta.
+  - **Mejorar no cuesta recursos**, solo oro (Q-22).
+  - **Vender devuelve los dos** con el mismo `sell_refund_percent` que el oro (70 %), **redondeando hacia abajo** (Q-23): con 3 recursos devuelve 2 y con 1 recurso devuelve 0. La torre recuerda cuántos recursos costó.
+  - El texto sale de los datos (RF-164): si mañana otra torre gana `resource_cost`, aparece sola en la barra, el panel y la Wiki.
+- **RF-419** **Francotirador con dos formas de pago (Q-21 ✎):** `TowerData` gana `alt_gold_cost` y `alt_resource_cost` (ambos 0 por defecto = una sola forma de pago). El **Francotirador** se puede comprar **de las dos formas en la misma partida**: **150 de oro** (la de siempre) o **120 de oro + 1 recurso**.
+  - Al elegir la torre, la ayuda de construcción (RF-171) muestra **dos botones chicos** de pago: *"150 de oro"* y *"120 de oro + 1 recurso"*; arranca elegido el de **solo oro**. La segunda opción queda **deshabilitada** (con el motivo) si no hay recursos suficientes o si el mapa no tiene recursos (RF-416). En la barra se ve el precio de oro y, en chico, la otra forma.
+  - Una torre **no puede** tener `resource_cost` y `alt_*` a la vez (un test de los datos lo comprueba) y `alt_gold_cost` tiene que ser menor que su costo de oro. Las mejoras cuestan lo mismo en las dos formas.
+  - Vender devuelve el oro invertido y, si se pagó con recurso, `floor(1 × 70 / 100) = 0` recursos (RF-418).
+  - **Nunca es indispensable**: la forma de oro cuesta lo mismo que antes, así que el Francotirador y los niveles 1 a 6 **no cambian**.
+- **RF-420** **El Mortero cuesta recursos y debuta en el nivel 9 (Q-21 ✎):** `data/towers/mortar.tres` pasa a `resource_cost = 3` (con su `cost` de 300 de oro: **300 + 3 recursos**, valores iniciales). **Enmienda de RF-300:** el Mortero ya **no está reservado para el nivel 10**, sino que **debuta en el nivel 9** (`"torres_extra": ["mortar"]`) y sigue habilitado en el 10. Los niveles 1 a 8 **no lo ofrecen**, así que su balance no cambia. Desde el 11 lo decide la rotación de torres (RF-393).
+- **RF-421** **Un mapa que ofrece algo imposible de conseguir:** si un mapa ofrece una torre con `resource_cost` (el Mortero, y más adelante la Disruptora) pero no tiene recursos (RF-416), `check_level` y el editor muestran un **aviso** ("el Mortero cuesta recursos y este mapa no tiene cómo conseguirlos"). No es un error: la torre queda en la barra deshabilitada con ese motivo.
+
+> **Criterio de aceptación RF-415 a RF-421**
+> **Dado** un mapa sin fuentes de recursos → **Entonces** no se ve el contador. **Dado** un mapa con una roca de `probabilidad: 100` → **Cuando** se demuele → **Entonces** el contador pasa a 1 y entra una sola vez. **Dado** la misma semilla → **Entonces** el mismo removible entrega (o no) lo mismo en todas las partidas, y cancelar y volver a ordenar no lo cambia. **Dado** el Mortero con 300 de oro y 2 recursos → **Entonces** no se puede construir y la barra dice qué falta; con 3 recursos → **Entonces** se construye y quedan 0 de oro y 0 recursos. **Dado** ese Mortero → **Cuando** se mejora → **Entonces** no cuesta recursos; **cuando** se vende → **Entonces** devuelve el oro del 70 % y 2 recursos. **Dado** el Francotirador con 120 de oro y 1 recurso → **Cuando** se elige el segundo pago → **Entonces** se construye y deja 0 y 0; al venderlo devuelve 0 recursos.
+
+#### Extracción finita *(Q-19 y Q-20; D-084)*
+
+- **RF-422** **Habilitar (Q-19):** una mina o un bosque explotable se **elige** como un removible (RF-404). Su panel muestra *"Habilitar extracción · 100 de oro"*, *"Produce 2 recursos por oleada completada"* y *"Reserva: 8"*. **Cuando** se pulsa el botón, **entonces** se cobra el oro y el punto queda **activo**. Es inmediato (no tiene tiempo de trabajo), no se cancela ni se devuelve, y **no lo abarata la demoledora** (no es una demolición). La mina y el bosque funcionan igual y solo cambia el dibujo. **No hay límite** de puntos activos a la vez (Q-20): lo limita el oro.
+- **RF-423** **Producir:** **cada vez que se completa una oleada** (la señal `wave_completed` de la partida, RF-33), **cada punto activo** entrega `min(produccion, reserva que le queda)` recursos y baja su reserva en eso. Cuando la reserva llega a 0, el punto queda **agotado** y no entrega más. Cuenta toda oleada que se completa **con el punto ya activo**, incluida la que estaba en curso al habilitarlo. **No se produce por esperar** (ni en preparación ni en la cuenta atrás), ni al **saltar** de oleada (RF-319): solo una oleada realmente completada produce. Cada entrega muestra un aviso flotante sobre el punto ("+2 recursos"). Con los valores iniciales una mina entrega 2, 2, 2 y 2 y queda agotada.
+- **RF-424** **Se ve en qué estado está:** un punto **sin habilitar**, uno **activo** y uno **agotado** se dibujan distinto, y la **reserva se lee de un vistazo** sobre el punto (propuesta: 8 segmentos chicos que se vacían, legibles a 34 px) y en el panel (*"Reserva 6/8"*, *"Agotada"*). Una mina activa no se puede confundir con una torre (guía de arte §4).
+
+> **Criterio de aceptación RF-422 a RF-424**
+> **Dado** una mina sin habilitar con 100 de oro → **Cuando** se pulsa Habilitar → **Entonces** quedan 0 de oro y la mina está activa con reserva 8. **Cuando** se completan 4 oleadas → **Entonces** el contador sumó 2, 2, 2 y 2 y la mina está agotada. **Dado** una mina sin habilitar → **Cuando** se completa una oleada → **Entonces** no entrega nada. **Dado** una partida que salta a la oleada 5 → **Entonces** una mina activa no entrega nada por el salto. **Dado** una mina con reserva 1 y producción 2 → **Entonces** entrega 1 y queda agotada.
+
+#### Colecciones por tecnología y hallazgos *(Q-25 a Q-27 y Q-31; D-085)*
+
+- **RF-425** **Varias colecciones en `progression.json`:** el archivo es un diccionario de colecciones. Cada una tiene `required` (cuántas piezas), `sources` (la lista de fuentes únicas, ids de nivel) y, opcionalmente, `origen`, `nombre` e `icono`:
+  ```json
+  {
+    "technology": {"required": 5, "sources": ["level_01", "level_02", "level_03", "level_04", "level_05"]},
+    "disruptor": {"required": 3, "origen": "hallazgo", "nombre": "Disruptora", "sources": ["level_08", "level_09", "level_10"]}
+  }
+  ```
+  - `origen` dice **de dónde salen las piezas**: `"portador"` (el enemigo que lleva el avance, RF-358; es el **valor por omisión**, así que `technology` queda **idéntica**) o `"hallazgo"` (un removible con `hallazgo`, RF-426).
+  - La torre que cada colección desbloquea sigue siendo `required_collection` de **su** `TowerData` (RF-360): para `disruptor`, la Disruptora (M51).
+  - Un `required` que no coincide con la cantidad de `sources` es un error que se ve en las pruebas.
+- **RF-426** **Pieza e identidad única (Q-25):** una pieza se identifica por **colección y nivel**: su id es `<colección>:<nivel>` (por ejemplo `disruptor:level_09`). Es **única**: repetir la ruina no la duplica. Un removible con `"hallazgo": "disruptor"` es la fuente de la pieza **solo si** el id del nivel está en `sources` de esa colección; si no, el objeto funciona como una ruina común. Por eso la colección de la Disruptora tiene **3 piezas fijas**: una en una ruina de cada nivel **8, 9 y 10** (con las 3, la Disruptora se puede construir desde el 11, donde el mapa la habilita). *(Un nivel solo puede tener una pieza por colección, RF-402; la identidad en el guardado es el id del nivel dentro de la colección.)*
+- **RF-427** **Recoger y confirmar (Q-26):** igual que los avances actuales (RF-359):
+  - La pieza se **recoge al terminar la demolición** de la ruina.
+  - Queda **pendiente** y se **confirma al completar la oleada en curso**; si la ruina se demolió en preparación o en la cuenta atrás, **al completar la siguiente oleada**.
+  - Una **derrota antes de confirmar**, **abandonar** o **reintentar** antes del resultado la **pierde**, y se puede rejugar el nivel para recuperarla. Una pieza **confirmada** se conserva aunque después se pierda la partida, y se **guarda al mostrarse el resultado**, como hoy.
+  - Se puede tener **varias piezas pendientes a la vez** (colecciones o niveles distintos) y cada una se confirma por separado.
+  - Si la demolición **se cancela** o el trabajo se pierde por el fin de la partida (RF-407, RF-409), no se recoge nada.
+- **RF-428** **Una ruina cuya pieza ya está recuperada (Q-27):** el panel lo dice **antes de demoler** (*"Pieza de la Disruptora: ya recuperada"*). Demolerla entrega `recursos_si_recuperado` recursos (**1**) **si el mapa tiene recursos** (RF-416) y **nada si no**. **No hay sorteos** para esto. Una ruina con la pieza **pendiente** entrega la pieza y **ningún recurso**. En los contextos donde no se recogen piezas (RF-429) la ruina se comporta como "ya recuperada" y el panel dice *"Aquí no se recogen piezas"*.
+- **RF-429** **Solo en la campaña (Q-31):** las piezas de colección solo se consiguen jugando la **campaña** desde el menú. En los **modos, la comunidad, el editor ("Probar") y el modo de pruebas** el hallazgo se ve y se puede demoler, pero **no recoge ni guarda nada** (como RF-358: crías, admin, comunidad y editor no generan avances).
+- **RF-430** **Guardado aditivo y compatible:** las piezas se guardan en `collections` **con el mismo formato de hoy**: `{"technology": ["level_01", …], "disruptor": ["level_08"]}`, una lista de ids de nivel por colección. **No se cambia la versión del guardado.** Un guardado de la versión 1 con solo `technology` carga igual, y uno con colecciones desconocidas las ignora sin romperse. No se conceden piezas retroactivas por victorias viejas (como RF-359).
+- **RF-431** **Barra y Wiki (amplía RF-362):**
+  - **Dada** una partida, **cuando** el nivel es la fuente de una colección, **entonces** la barra superior muestra **esa colección** (ícono + cantidad/objetivo, con el mismo estado pendiente/confirmado de RF-362). Los niveles que no son fuente de ninguna siguen mostrando `technology`, como hoy.
+  - Cada colección tiene su **ícono** (el `icono` de los datos): el avance plateado para `technology` y, por colección, una **silueta distinta** en el mismo estilo de disco de metal (Q-39).
+  - La **Wiki** muestra cada colección con su progreso y **qué torre desbloquea**.
+
+> **Criterio de aceptación RF-425 a RF-431**
+> **Dado** el `progression.json` con `technology` y `disruptor` → **Entonces** las dos conviven y `technology` se comporta exactamente como en M37 y M38. **Dado** un escombro con `"hallazgo": "disruptor"` en el nivel 8 con la pieza pendiente → **Cuando** se demuele → **Entonces** la pieza queda pendiente; **cuando** se completa la oleada → **Entonces** queda confirmada; **cuando** se gana o se pierde → **Entonces** `disruptor:level_08` se guarda. **Dado** que se pierde antes de confirmar → **Entonces** no se guarda. **Dado** que se repite el nivel con la pieza ya recuperada → **Entonces** el panel dice "ya recuperada", entrega 1 recurso si el mapa tiene recursos, y la colección no cambia. **Dado** el mismo mapa jugado desde un modo → **Entonces** no se guarda ninguna pieza. **Dado** un guardado viejo de la versión 1 → **Entonces** carga sin errores.
+
+#### Regla de oro: ganar sin recursos *(07 §7 y §12, Q-07; D-083)*
+
+- **RF-432** **Todo mapa con recursos se gana sin recursos:** **dado** cualquier nivel de la **campaña** que **tenga recursos** (RF-416), **cuando** el bot de balance juega la estrategia **`sin_recursos`** con **5 semillas**, **entonces gana en al menos 4**. Los números son **N = 5** y **M = 4** (valores iniciales, en la herramienta y no en el juego).
+  - La estrategia `sin_recursos` es una partida de verdad con las reglas de siempre: **no demuele** nada, **no compra la demoledora**, **no habilita extracción**, **no usa la forma de pago con recursos** del Francotirador, **no construye torres con `resource_cost`**, no empieza con recursos regalados y no usa las herramientas de administración. Si el mapa se gana así, ningún removible es obligatorio y ningún recurso es indispensable.
+  - La comprueba `tools/balance_sim.gd` (`check_rule=1`, T214), que termina con código de salida 1 si no se cumple. La corre **cada tarea de nivel** que agrega o cambia un mapa con recursos (T223 a T225 y T229 a T234) y la regresión final (T236).
+  - El bot **no reemplaza** a las partidas de Lucas (G4 y G5), pero un mapa que no cumple la regla **no se entrega**.
+- **RF-433** **Lo que no puede ser obligatorio (07 §12):**
+  - Ningún removible, mina o bosque es necesario para ganar, ni para llegar a un camino o a una casilla indispensable; los recorridos no dependen de la demolición (RF-400).
+  - Ninguna pieza ni recurso es necesario para **pasar de nivel**: las piezas solo desbloquean una torre alternativa (la Disruptora) y los recursos, torres y formas de pago alternativas.
+  - No hay recursos ni oro **por esperar**: la extracción produce solo al completar oleadas (RF-423), tiene una reserva finita y una ruina entrega su pieza una sola vez, así que nada se duplica repitiendo o esperando. Los recursos no se acumulan entre niveles (RF-415).
+
+#### Editor, modo de pruebas y Wiki
+
+- **RF-434** **Editor (amplía RF-266; la edición del campo `"torres"` de RF-394 también entra acá):**
+  - La barra de herramientas suma cinco pinceles: **árbol removible**, **roca removible**, **escombro**, **mina** y **bosque explotable**. Cada uno **crea o reusa** una letra de la leyenda con esa clase (si ya hay una con los mismos valores, la reusa) y pinta la casilla. Si se llega al tope de 10 letras (RF-262), avisa en la línea de mensajes en lugar de pintar.
+  - Un panel de **propiedades de la letra** deja sobrescribir `costo`, `tiempo`, `recursos` y `probabilidad` (o `produccion` y `reserva`, en una extracción) de **todas** las casillas con esa letra, y muestra los de la clase como valor por omisión.
+  - El panel de **Ajustes** suma **"Torres del mapa"** (casillas para marcar cuáles ofrece el nivel, RF-393) y **"Demoledora disponible"** (RF-411).
+  - Los avisos de RF-402 y RF-421 aparecen en la línea de mensajes mientras se edita (RF-213). **"Probar"** (RF-217) funciona con todo lo nuevo.
+  - **Ida y vuelta:** abrir y guardar un mapa con removibles, extracción, hallazgos, torres o demoledora **no pierde ni cambia nada**.
+- **RF-435** **El hallazgo en el editor (Q-31):** el campo `hallazgo` de un escombro se puede **editar solo mientras el borrador es un nivel de la campaña**. En un mapa de la **comunidad** o de un **modo** el campo aparece **deshabilitado** con la explicación *"Las piezas de colección solo se consiguen en la campaña"*. Un hallazgo que ya está escrito en el archivo **se conserva siempre** al guardar, y el editor nunca escribe en `data/` (RF-210).
+- **RF-436** **Modo de pruebas (amplía RF-184; Q-31):** el panel de pruebas suma tres acciones. Nada de lo que hacen se escribe en el guardado real ni cuenta para el progreso (RF-181, RF-183):
+  - **"+10 recursos":** suma 10 recursos a la partida. El contador se ve aunque el mapa no tenga fuentes.
+  - **"Terminar demolición":** completa **al instante** el trabajo en curso, con su recompensa normal (excepto las piezas, que en pruebas no se recogen: RF-429).
+  - **"Habilitar todas las colecciones":** como el interruptor de los estandartes (RF-360), aplica al **nivel actual** y deja construir las torres que piden una colección sin tenerla, **sin** escribir la colección ni el progreso normal.
+  - La demolición, la demoledora y la extracción funcionan en pruebas como en cualquier partida (RF-410).
+- **RF-437** **Wiki:** un artículo nuevo de la guía, **"Demolición, recursos y hallazgos"**, explica en lenguaje claro: qué se puede retirar y qué no, para qué sirve la demoledora, qué es un recurso (local a cada mapa), cómo funciona una mina o un bosque explotable y qué es una pieza de colección. **No repite números** (los costos están en el panel de cada objeto y en la ficha de la torre). La ficha de cada **torre** muestra su costo en recursos y sus formas de pago leyendo los datos (RF-418, RF-419), y cada **colección** aparece con su progreso y la torre que desbloquea (RF-431).
+
+#### Lo que M50 no incluye
+
+Queda **fuera** de la V1 (07 §5; Q-15, Q-17, Q-27):
+- **Atajos**, rutas dinámicas o demolición sobre el camino. Solo se despejan casillas laterales.
+- Una **cola de órdenes** o varias demoliciones a la vez.
+- Una **máquina que se mueve** o se coloca en una casilla, daño ambiental y física de derrumbes.
+- **Mantenimiento**, munición de recurso, inventario que persista y más de un tipo de recurso.
+- **Recursos entre niveles**: los que sobran se pierden.
+- **Sorteos**, salvo el del drop de recursos (RF-417). Las piezas de colección son fijas y garantizadas.
+- Las **piezas fuera de la campaña** (RF-429), las **mejoras** que cuestan recursos (RF-418) y la **venta de la demoledora** (RF-412).
+- Que la **demoledora abarate la extracción** (RF-422).
+- El **Lanzamisiles** y su colección (Q-28): actualización posterior.
+
+#### Para revisar en G3
+
+Lo que el cuestionario no dejó cerrado o lo que T205 tuvo que **elegir**. Son los puntos donde conviene que Lucas mire con más atención antes de que se programe:
+1. **Cuánto baja el tiempo la demoledora (Q-10 ✎).** Lucas pidió que T205 lo fijara con el bot, pero no se puede medir una demolición que todavía no existe. Quedó **`tiempo_porcentaje` = 80 %** (el trabajo tarda un 20 % menos), provisional, para ajustar con T214 y T223.
+2. **La semilla del drop (Q-18 ✎).** Se interpretó "la semilla del mapa" como **una semilla nueva en cada partida**, que el bot y los tests fijan para repetir. La otra lectura posible, una semilla escrita **en el archivo del mapa** (y entonces el mismo resultado en cada partida de ese mapa), sacaría la sorpresa. La **probabilidad** inicial es **50 %** para árbol y roca, y es un dato de cada clase y de cada letra.
+3. **Cómo se elige la forma de pago del Francotirador (Q-21 ✎).** Dos botones chicos en la ayuda de construcción, con "solo oro" elegido de entrada (RF-419). No hay una tecla ni un gesto para cambiar.
+4. **La pieza pendiente no da recursos (Q-27).** Una ruina con la pieza pendiente entrega la pieza y nada más; solo la ruina ya recuperada da 1 recurso (RF-428).
+5. **Cuenta la oleada en curso al habilitar una extracción (Q-19).** Si se habilita durante una oleada, esa oleada ya produce al completarse (RF-423). La alternativa, que empiece con la siguiente, es más estricta.
+6. **El tope de 10 letras de la leyenda (RF-262).** Se mantuvo. Un nivel con muchos tipos de removibles, decoración y señales puede quedarse corto; si pasa, se sube en la tarea del nivel con una `D` nueva.
+7. **Un mapa que ofrece una torre con recursos y no tiene recursos da un aviso, no un error (RF-421).**
+8. **La barra de la colección muestra la del nivel (RF-431);** los niveles que no son fuente de ninguna siguen mostrando `technology`, como hoy.

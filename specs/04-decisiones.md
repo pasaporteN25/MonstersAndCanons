@@ -535,3 +535,105 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
   - Una lista de torres **a quitar** (`"sin_torres"`): hay que saber cuáles son las comunes para entender qué queda, y si mañana se suma una torre común, entra sola en todos los mapas sin que nadie lo decida.
   - Una pantalla de mazo antes del nivel: el 07 §4 la descarta.
   - Guardar en el guardado qué torres "ya vio" el jugador: complica el guardado y deja de ser un dato del contenido.
+
+## D-080 · Removibles y puntos de extracción: se declaran en la leyenda del mapa
+- **Fecha:** 2026-10-08 · **Estado:** Aceptada en la spec (RF-398 a RF-403), a la espera del OK de Lucas (G3) · **Decidió:** Lucas (Q-09, Q-17, Q-19, Q-31 y Q-38 del cuestionario 09) / Claude (formato)
+- **Qué:** un removible o un punto de extracción es una **letra de la leyenda** del mapa (RF-262) que lleva `"removible"` o `"extraccion"` con su `clase`. Los números de cada clase (costo, tiempo, recursos, probabilidad, producción, reserva) están en `data/obstaculos.json` y la letra puede sobrescribirlos. Intacto es una casilla bloqueada, despejado es pasto construible, y **nunca es camino**.
+- **Por qué:**
+  - La leyenda ya es el lugar donde un mapa dice "esta letra se dibuja así y se construye o no" (RF-262 a RF-265). Extenderla sirve al editor, a la comunidad y a los modos sin formato nuevo (Q-31), y mantiene el principio de que un mapa es solo datos (RF-204).
+  - **Por clase, en datos** (Q-09): lo pidió Lucas, y es P2 (los números no van en el código). Que la letra pueda sobrescribir un valor deja ajustar un mapa sin tocar la clase.
+  - Que **nunca sea camino** (RF-264, Q-17) deja intactos los recorridos, el cálculo de RF-202 y el bot: despejar solo abre casillas laterales. No hay atajos.
+  - `dibujo` opcional evita que el mapa se contradiga (una `clase: roca` con `dibujo: arbol`).
+- **Alternativas descartadas:**
+  - **Un campo aparte** (`"obstaculos": [{"fila": 2, "columna": 5, …}]`): hay que mantenerlo sincronizado con el mapa de letras y el editor tendría que pintar en dos lugares.
+  - **Un solo archivo de datos sin sobrescritura**: obliga a clases nuevas para cada ajuste de un mapa.
+  - **Subir el tope de 10 letras ya**: no hace falta todavía; se decide en la tarea del nivel que se pase (punto 6 de "Para revisar en G3").
+  - **Que despejar vuelva la casilla camino**: abre atajos y rutas dinámicas, que la V1 no incluye (07 §5).
+
+## D-081 · Demolición directa: se cobra al ordenar, tarda en tiempo de juego, una a la vez
+- **Fecha:** 2026-10-08 · **Estado:** Aceptada en la spec (RF-404 a RF-410), a la espera del OK de Lucas (G3) · **Decidió:** Lucas (Q-09 a Q-12 y Q-14 a Q-17, 2026-10-08) / Claude (detalle)
+- **Qué:** tocar un removible abre un panel con costo, tiempo y recompensa; **Demoler** cobra el oro y empieza un trabajo que dura segundos de juego (pausa y velocidad respetadas). Hay uno solo a la vez y sin cola. Se puede cancelar con reembolso total. Al terminar se despeja la casilla y se entrega la recompensa **una sola vez**. Al terminar la oleada sigue; al terminar la partida se pierde.
+- **Por qué:**
+  - **Se cobra al ordenar** (Q-11): así nadie se queda sin oro a mitad de un trabajo, y cancelar devuelve todo; como la recompensa llega recién al final, no hay ganancia posible cancelando.
+  - **El trabajo tarda tiempo de juego** (07 §5): la demolición es una **decisión de inversión** (oro ahora, casilla útil después), no un clic instantáneo. Tiene que respetar pausa y velocidad para no ser trampa ni frustrante, igual que el reloj del Ladrón (RF-363).
+  - **Una sola a la vez y sin cola** (Q-15): lo acordado en el 07 y lo más simple; el panel dice por qué no se puede.
+  - **Tocar el objeto** (Q-16) reusa la selección de torres, sin gestos nuevos (§11). Los removibles se marcan para no confundirlos con lo permanente.
+  - **Solo se pierde al terminar la partida** (Q-14), porque se demuele en preparación y en las oleadas.
+  - No es una "habilidad activa del jugador" (§11 la excluye): es una compra con espera, como construir.
+- **Alternativas descartadas:**
+  - **Cobrar al terminar:** se puede quedar sin oro a mitad de trabajo y hay que definir qué pasa.
+  - **Cancelar con reembolso parcial o nulo:** castiga el error y complica; con el total no hay ganancia.
+  - **Cola de órdenes o varias demoliciones a la vez:** más reglas y más interfaz sin pedido.
+  - **Demolición instantánea:** no sería una decisión de inversión.
+  - **Entregar la recompensa al ordenar:** sería ganancia al cancelar.
+
+## D-082 · Demoledora: una compra global, sin venta, baja precio y un poco el tiempo
+- **Fecha:** 2026-10-08 · **Estado:** Aceptada en la spec (RF-411 a RF-414), a la espera del OK de Lucas (G3); el valor del tiempo es provisional · **Decidió:** Lucas (Q-08, Q-10 ✎ y Q-13) / Claude (fórmulas)
+- **Qué:** si el nivel dice `"demoledora": true`, el HUD tiene un botón "Infraestructura" donde se compra la máquina una vez (**180 de oro**). Desde ahí, cada demolición cuesta el 10 % (mínimo 5) y tarda el 80 % del tiempo. No se vende.
+- **Por qué:**
+  - **Botón global, no estructura** (Q-08): el descuento ya está acordado como global (07 §5), así que no tiene sentido que ocupe una casilla; evita construir un objeto más con vida, estado y arte propios.
+  - **Sin venta** (Q-13): comprarla y venderla sería una forma de ganar plata.
+  - **Precio 3 × una roca** (Q-13, 07 §5): convierte la decisión en un cálculo de amortización. Con los valores iniciales se paga sola desde 4 rocas, 6 árboles o 3 escombros (RF-414).
+  - **También baja el tiempo** (Q-10 ✎): Lucas lo cambió respecto de la recomendación ("solo baja el precio"). Lo que no se pudo cerrar es **cuánto**: Lucas pidió fijarlo "con el bot", y como la demolición no existe, el bot no puede medirla. Se dejó **80 %** como valor provisional en datos y se revisa en T214 y T223. *Anotado como pendiente en "Para revisar en G3".*
+  - **Un trabajo ya ordenado conserva su precio y su tiempo**: es más simple y justo; la diferencia no se reembolsa.
+- **Alternativas descartadas:**
+  - **Máquina como estructura en una casilla:** ocupa lugar, hay que dibujarla y animarla (07 pide que se vea el trabajo solo sobre el objeto) y no cambia el descuento.
+  - **Descuento por radio local:** el 07 lo descarta.
+  - **Máquina vendible con reembolso parcial:** abre ganancias y casos borde sin pedido.
+  - **Que baje solo el precio (la recomendación original):** Lucas pidió que baje también el tiempo.
+
+## D-083 · Recursos locales: un solo tipo, sin guardar, con drop al azar con semilla y torres que cuestan recursos
+- **Fecha:** 2026-10-08 · **Estado:** Aceptada en la spec (RF-415 a RF-421 y RF-432 a RF-433), a la espera del OK de Lucas (G3); los números son iniciales · **Decidió:** Lucas (Q-18 ✎, Q-21 ✎, Q-22, Q-23, Q-24 y Q-07) / Claude (detalle)
+- **Qué:**
+  - Un recurso genérico, **local** a la partida (en `LevelSession`), que no se guarda ni da puntaje. El contador solo se ve en mapas **con fuentes**.
+  - Los removibles entregan 1 recurso **con una probabilidad por clase** (50 % inicial), sorteada **al empezar la partida** con una semilla que el bot y los tests fijan. Es la única excepción a "sin sorteos".
+  - `TowerData.resource_cost` (el **Mortero**, 300 + 3, debuta en el nivel 9) y `alt_gold_cost` / `alt_resource_cost` (el **Francotirador**: 150 de oro o 120 + 1 recurso). Mejorar no cuesta recursos y vender devuelve el 70 % redondeado hacia abajo.
+  - **Regla de oro:** todo mapa de la campaña con recursos se gana con la estrategia `sin_recursos` (4 de 5 semillas).
+- **Por qué:**
+  - **Local y sin guardar** (07 §7, Q-24): evita acumular recursos varios niveles y una economía persistente.
+  - **Desde el nivel 7 y al azar** (Q-18 ✎): Lucas quiso que la mecánica empiece antes del 10. Para que los recursos "tengan uso donde aparecen" (plan 08 §2.2), el Francotirador gana una forma de pago chica con recurso, y el Mortero ya cuesta recursos desde el 9.
+  - **Sorteo fijado al empezar, no al terminar:** el resultado no depende del orden de demolición ni de cancelar y reordenar (nadie puede "tirar de nuevo"), y el bot compara estrategias sobre **la misma** partida. El jugador no ve el resultado hasta terminar, así que sigue habiendo sorpresa.
+  - **Contador solo con fuentes:** con "torres que cuestan recursos" como criterio, aparecería en los niveles 1 a 6 por el Francotirador, donde no hay forma de conseguir recursos.
+  - **Dos formas de pago a la vez** (Q-21 ✎): la de oro cuesta lo mismo que hoy, así que el Francotirador y los niveles 1 a 6 no cambian, y nunca es indispensable.
+  - **Mejorar no cuesta recursos** (Q-22): menos reglas. **Vender devuelve con el mismo %** (Q-23): comprar y vender no da ganancia.
+  - **Regla de oro** (07 §7, Q-07): es lo que garantiza que los recursos son "una estrategia más" y no un requisito encubierto; se mide con el bot y después con las partidas de Lucas.
+- **Alternativas descartadas:**
+  - **Sortear al terminar cada demolición:** depende del orden y de las cancelaciones, y el bot no compara bien las estrategias.
+  - **Una semilla escrita en el archivo del mapa:** el resultado sería siempre el mismo y desaparecería el azar que pidió Lucas (punto 2 de "Para revisar en G3").
+  - **Recursos con costo en las mejoras** (Q-22) y **que sobrantes den puntaje** (Q-24): más reglas, y el puntaje cambiaría.
+  - **Varias monedas** (madera, piedra): el 07 pide un recurso genérico.
+  - **Que el recurso empiece en el 10** (la recomendación original): Lucas lo adelantó al 7.
+  - **Que el mapa decida si "usa recursos" con una bandera propia:** se deduce de las fuentes, sin otro campo que mantener.
+
+## D-084 · Extracción finita: se habilita con oro y produce al completar oleadas hasta agotar la reserva
+- **Fecha:** 2026-10-08 · **Estado:** Aceptada en la spec (RF-422 a RF-424), a la espera del OK de Lucas (G3) · **Decidió:** Lucas (Q-19 y Q-20) / Claude (detalle)
+- **Qué:** una mina o un bosque explotable se habilita pagando **100 de oro** tocándolo como un removible, produce **2 recursos por oleada completada** hasta agotar una **reserva de 8**, y no produce por esperar. No hay límite de puntos activos. Mina y bosque funcionan igual; cambia el dibujo.
+- **Por qué:**
+  - **Pagar oro para habilitar** (07 §6): la extracción es una **inversión** que hay que recuperar con las oleadas.
+  - **Solo por oleada completada** (07 §6): evita generar recursos esperando y repitiendo; la **reserva finita** evita que la economía crezca sin tope.
+  - **Sin límite de puntos** (Q-20): lo limita el oro; es lo más simple.
+  - **Que cuente la oleada en curso:** habilitar en medio de una oleada ya aprovecha su final; no se pidió algo más estricto y cuesta menos explicarlo ("produce cada oleada que se completa mientras está activa").
+  - **No la abarata la demoledora:** no es una demolición.
+  - Con los valores iniciales, 100 de oro compran 8 recursos; si **no se recupera** frente al valor de lo que se compra con ellos, es un dato para el balance (T214), no un error de la regla.
+- **Alternativas descartadas:**
+  - **Producción por tiempo:** premia esperar y deja de ser una decisión.
+  - **Límite de puntos activos o de extracción simultánea:** más reglas, y el oro ya lo limita.
+  - **Reserva infinita o que se recupera:** rompe "finito" (07 §6).
+  - **Que la producción empiece con la oleada siguiente:** más estricta pero más difícil de explicar (punto 5 de "Para revisar en G3").
+
+## D-085 · Colecciones por tecnología: varias en `progression.json`, con pieza en una ruina
+- **Fecha:** 2026-10-08 · **Estado:** Aceptada en la spec (RF-425 a RF-431), a la espera del OK de Lucas (G3) · **Decidió:** Lucas (Q-25 a Q-27 y Q-31) / Claude (formato)
+- **Qué:** `progression.json` admite **varias colecciones**; cada una dice cuántas piezas necesita y qué niveles son su fuente. La nueva, `disruptor`, tiene 3 piezas fijas, una en una ruina de los niveles **8, 9 y 10**. Una pieza se **recoge** al terminar la demolición de la ruina y se **confirma** como los avances actuales (RF-359). Una ruina ya recuperada da 1 recurso si el mapa tiene recursos. **Solo en la campaña.**
+- **Por qué:**
+  - **Mismas reglas que los avances de hoy** (Q-26): una sola idea de "recogido, pendiente y confirmado" para el jugador, y el código de M37 se reutiliza.
+  - **Guardado igual que hoy:** la pieza es el id del nivel dentro de la lista de su colección. No cambia la versión del guardado, un guardado viejo carga igual, y una versión anterior del juego que lea uno nuevo ignora la colección que no conoce (aunque al volver a guardar la descartaría).
+  - **`technology` queda idéntica**: el `origen` por omisión es `"portador"`, y los tests de M37 y M38 siguen valiendo sin tocarlos.
+  - **Pieza fija y garantizada, sin sorteos** (Q-27, 07 §8): nadie tiene que repetir un mapa por suerte; la identidad única evita duplicados por repetir la ruina.
+  - **Solo campaña** (Q-31, RF-358): los mapas de la comunidad o un editor no pueden "fabricar" piezas.
+  - **La ruina ya recuperada da 1 recurso** (Q-27) para que repetir un mapa tenga algún sentido sin dar piezas repetidas.
+- **Alternativas descartadas:**
+  - **Una pieza por enemigo portador** (como los 5 avances): no sirve para una ruina que se demuele.
+  - **Piezas sorteadas** o un 2.º hallazgo por ruina: lo descarta Q-27.
+  - **Un guardado nuevo con versión 2:** migraciones y riesgo sin necesidad.
+  - **Que la comunidad pueda dar piezas:** se podrían fabricar.
+  - **Un id global distinto del nivel:** hoy una pieza por colección y nivel alcanza (RF-426); si hiciera falta más de una, se cambia con una `D` nueva.

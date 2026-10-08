@@ -4,7 +4,7 @@
 - **Depende de:** T206 · **Compuerta:** ninguna · **Tamaño:** mediano
 
 ## Leer
-- Los RF de M50 de **demolición directa** y la sección M50 del plan técnico.
+- **RF-404 a RF-410** (demolición directa), **RF-417** (el drop con semilla), D-081 y D-083, y la sección M50 del plan técnico (API de `ObstacleField`, flujo y archivos de T207).
 - `scenes/game/build_controller.gd`: cómo se selecciona una casilla o torre (`_handle_selection_input`, `select_placed`) y cómo se cobra (`try_build`).
 - `scenes/game/level_session.gd`: `spend`, `earn`, la señal `gold_changed` y `complete_wave`.
 - `scenes/game/hud.gd` y `scenes/ui/tower_panel.gd`: el panel de torre es la referencia de estilo del panel nuevo.
@@ -15,8 +15,8 @@
 Tocar o hacer clic en un removible abre un **panel** con el costo, el tiempo y la recompensa, y el botón **Demoler**. Al confirmar se cobra, empieza un **trabajo con reloj de juego** y, al terminar, la casilla queda **despejada y construible** y se entrega la recompensa. Hay una sola demolición a la vez y se puede cancelar con reembolso, según los RF.
 
 ## Pasos
-1. **Lógica pura primero** (testeable sin escenas): `DemolitionJob` y el estado de los obstáculos de la partida (`ObstacleField`, según el plan). Funciones como `can_order(cell)`, `order(cell)`, `tick(delta)`, `cancel()` y `finish()`, con señales `job_started`, `job_progress` y `job_finished(cell, reward)`.
-2. Conectarla a `LevelSession`: cobro al ordenar y reembolso al cancelar. La recompensa de recursos va a T209: por ahora dejar el **gancho** (`reward` con `recursos: 0`). La de hallazgos va a T211.
+1. **Lógica pura primero** (testeable sin escenas): `DemolitionJob` y `ObstacleField`, con la API y las señales del plan M50 (`can_order`, `cost_of`, `seconds_of`, `order`, `tick`, `cancel`, `discard_job`, `reward_of`; `job_started`, `job_progress`, `job_finished(cell, reward)`, `job_cancelled`). `setup` **sortea el drop de cada removible al empezar** con la semilla (RF-417), en orden de fila y columna.
+2. Conectarla a `LevelSession` con `InfrastructureController`: cobro al ordenar y reembolso al cancelar. `reward_of` ya devuelve los `resources` sorteados, pero **sumarlos a la sesión** es de T209 (por ahora el controlador solo los muestra en el aviso flotante). El hallazgo (`finding`) lo conecta T211.
 3. La selección en `build_controller.gd`:
    - un clic sobre un removible lo selecciona, con la misma lógica que una torre;
    - Escape o un clic fuera lo deselecciona;

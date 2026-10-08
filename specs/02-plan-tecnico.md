@@ -678,3 +678,120 @@ Diseño en spec RF-388 a RF-392 y D-078.
 - **Bot:** `balance_sim.gd -- mix modo=asedio level=N`.
 - **Datos:** `data/modos/asedio/modo.json`.
 - **Tests:** `test_mode_packs`, `test_mode_flow`, `test_mode_select` y `test_editor_modes`, siempre en carpetas `user://test_*`. `test_editor_files` fija una carpeta de modos de prueba para no leer la del jugador.
+
+### M50 / T205 · Infraestructura: demolición, recursos y hallazgos (RF-398 a RF-437, D-080 a D-085)
+
+**Estado: diseño, a la espera del OK de Lucas (G3).** Se programa en T206 a T214 (código) con arte provisional hecho por código (Q-40); el arte final es de Codex (T219 a T221). Este plan está escrito para que un Sonnet en esfuerzo medio pueda implementar cada tarea **sin tomar decisiones de diseño**: si algo no está acá ni en la spec, se frena y se pregunta (`specs/tareas/README.md` §5).
+
+#### Datos
+
+- **`data/obstaculos.json`** (nuevo, RF-398). Lo lee `ObstacleCatalog` (lógica pura, `scripts/logic/obstacle_catalog.gd`), que valida claves y tipos, y devuelve los números de cada clase. Estructura:
+  ```json
+  {
+    "version": 1,
+    "demoledora": {"precio": 180, "costo_uso_porcentaje": 10, "costo_uso_minimo": 5, "tiempo_porcentaje": 80},
+    "removibles": {
+      "arbol":    {"costo": 40, "tiempo": 4.0,  "recursos": 1, "probabilidad": 50},
+      "roca":     {"costo": 60, "tiempo": 6.0,  "recursos": 1, "probabilidad": 50},
+      "escombro": {"costo": 90, "tiempo": 10.0, "recursos": 0, "probabilidad": 0, "recursos_si_recuperado": 1}
+    },
+    "extraccion": {
+      "mina":              {"costo": 100, "produccion": 2, "reserva": 8},
+      "bosque_explotable": {"costo": 100, "produccion": 2, "reserva": 8}
+    }
+  }
+  ```
+  Todos son valores iniciales. Un test de datos comprueba que cada clase del archivo tiene su dibujo en `MapDrawings` (mismo nombre) y que no sobra ninguna clave.
+- **`data/progression.json`** (RF-425): se suma `disruptor` (`origen: "hallazgo"`, `nombre`, 3 fuentes). `technology` no cambia (puede ganar `nombre`).
+- **`TowerData`** (`scripts/data/tower_data.gd`): `resource_cost: int = 0`, `alt_gold_cost: int = 0`, `alt_resource_cost: int = 0`. En `mortar.tres`: `resource_cost = 3`. En `sniper.tres`: `alt_gold_cost = 120`, `alt_resource_cost = 1`. Un test de datos comprueba RF-419 (no los dos a la vez, `alt_gold_cost` menor que el costo de oro).
+- **`LevelData`**: `obstacles: Array[ObstacleSpec]` (ya resueltos), `machine_enabled: bool`, y `uses_resources() -> bool` (RF-416: algún removible con `probabilidad` y `recursos` mayores que 0, o algún punto de extracción).
+- **`ObstacleSpec`** (`RefCounted`, `scripts/data/obstacle_spec.gd`): `cell: Vector2i`, `letter`, `kind` (`REMOVABLE` o `EXTRACTION`), `class_id`, `cost`, `seconds`, `reward_amount`, `chance_percent`, `finding_collection` (`&""` si no hay), `repeat_reward`, `production`, `reserve`. Lo arma `LevelFile` cruzando la leyenda con las casillas del mapa, **con los números de la clase y las sobrescrituras ya aplicadas**; así el resto del código nunca vuelve a mirar el catálogo.
+
+#### Clases nuevas
+
+| Clase | Tipo | Dónde | Qué hace |
+|---|---|---|---|
+| `ObstacleCatalog` | lógica pura, estático | `scripts/logic/` | Lee y valida `data/obstaculos.json`; `removable(class)`, `extraction(class)`, `machine()`, `class_ids()`. |
+| `ObstacleSpec` | datos | `scripts/data/` | Ver arriba. |
+| `ObstacleField` | `RefCounted`, lógica pura | `scripts/logic/` | **El estado de la partida de cada obstáculo** y las reglas de demolición y extracción. Sin nodos: se prueba con GUT. |
+| `DemolitionJob` | `RefCounted` | `scripts/logic/` | **Un trabajo activo**: celda, segundos totales, transcurridos, oro pagado. `tick(delta)`, `progress()`, `is_done()`. |
+| `CollectionDefinitions` | lógica pura, estático | `scripts/logic/` | Generaliza `CollectibleRun.definitions()`: `all()`, `required(id)`, `eligible(id, source)`, `origin(id)`, `name_of(id)`, `icon_of(id)`, `collection_of_level(level_id)`. `CollectibleRun.definitions/eligible/required` quedan como **envoltorios** que lo llaman (los tests de M37 y M38 no cambian). |
+| `FindingRun` | `RefCounted`, lógica pura | `scripts/logic/` | Las **piezas** de una partida: `pick(collection, source, wave_to_confirm)`, `complete_wave(wave)`, `pending()`, `confirmed()`. **No toca `CollectibleRun`** (el portador de `technology` queda idéntico). |
+| `InfrastructureController` | `Node` | `scenes/game/` | El pegamento con la partida: dueño del `ObstacleField`, cobra y reembolsa en `LevelSession`, escucha `wave_completed`, y emite las señales que usan la vista y el panel. Hermano de `BuildController`. |
+| `ObstaclePanel` | `Control` | `scenes/ui/` | El panel de un removible o de un punto de extracción (RF-404, RF-422). Estilo hierro y bronce, copia de `tower_panel.gd`. |
+| `InfrastructurePanel` | `Control` | `scenes/ui/` | El botón y el panel "Infraestructura" con la demoledora (RF-411). |
+| `ObstacleLayer` | `Node2D` | `scenes/levels/` | Dibuja el **estado** de cada obstáculo sobre el suelo: marca, barra de progreso, despejado, mina activa o agotada y reserva. Escucha al `InfrastructureController`. |
+
+**`ObstacleField` (API que fijan los tests de T207):**
+- `setup(specs: Array[ObstacleSpec], rng: RandomNumberGenerator, recovered: Dictionary)`. Sortea **ahora** el drop de cada removible (RF-417), en **orden de fila y columna**, con `rng.randi_range(1, 100) <= chance_percent`. `recovered` dice qué hallazgos ya están recuperados o no se recogen en este contexto (RF-428, RF-429).
+- Estado de cada celda: `Removable { INTACT, WORKING, CLEARED }` o `Site { DISABLED, ACTIVE, DEPLETED }`, con `state_of(cell)`.
+- `can_order(cell) -> StringName`: `&""` si se puede, o el motivo (`&"busy"`, `&"cleared"`, `&"not_removable"`).
+- `cost_of(cell) -> int` y `seconds_of(cell) -> float`: **con la máquina** si la hay (RF-413).
+- `order(cell) -> DemolitionJob`: **el cobro lo hace el llamador** (`InfrastructureController`), que ya comprobó el oro. Guarda el costo pagado en el trabajo.
+- `tick(delta)`: avanza el trabajo; al terminar, despeja y emite `job_finished(cell, reward)`.
+- `cancel() -> int`: devuelve el oro pagado y deja el objeto `INTACT`.
+- `buy_machine()` / `has_machine`, `machine_price()`.
+- `reward_of(cell) -> Dictionary` (solo al terminar): `{"resources": int, "finding": {"collection": StringName, "source": StringName}}`.
+- `enable_site(cell)`, `complete_wave() -> Dictionary` (celda → recursos producidos) y `reserve_left(cell)`.
+- Señales: `job_started(cell)`, `job_progress(cell, fraction)`, `job_finished(cell, reward)`, `job_cancelled(cell, refund)`, `site_changed(cell)`.
+- `discard_job()`: al terminar la partida (RF-409).
+
+**`LevelSession` (RF-415, `scenes/game/level_session.gd`):** agrega `resources: int`, la señal `resources_changed(resources: int)`, `add_resources(n)`, `can_afford_both(gold, resources)` y `spend_both(gold, resources) -> bool` (**atómico**: o cobra los dos o ninguno). `spend(cost)` y `can_afford(cost)` **no cambian**. El reinicio vuelve `resources` a 0.
+
+**`Tower`:** guarda `resources_invested: int` (RF-418). `BuildController.sell_value` devuelve el oro como hoy y se suma `sell_resource_value(tower) = Rules.sell_refund(tower.resources_invested, cfg)` (el mismo `floori`, así que redondea hacia abajo). `try_build(tower_data, cell, pay_alt := false)` cobra con `spend_both`.
+
+#### La semilla (RF-417)
+
+`Game` crea un `RandomNumberGenerator` por partida: `randomize()` por omisión, o `seed = N` si se lo piden (`GameFlow.forced_seed`, usado por el bot y los tests). **Ese generador solo se usa para el drop** y se consume una vez por removible, en orden de fila y columna, al empezar. No se mezcla con el generador del portador (`CollectibleRun`) ni con el del `WaveSpawner`, así que `technology` y las oleadas **no cambian** con M50.
+
+#### Reglas del flujo (qué llama a qué)
+
+1. **Elegir.** `BuildController._handle_selection_input` pregunta al `InfrastructureController` `obstacle_at(cell)` antes de mirar torres; si hay uno, lo selecciona y emite `obstacle_selected(spec, state)` (el HUD abre el `ObstaclePanel`). Deselecciona lo demás (RF-73) y `Esc` o un clic fuera lo cierran. En modo construcción, el clic sobre un removible **selecciona**, no construye.
+2. **Demoler.** `ObstaclePanel` emite `demolish_pressed(cell)`. El controlador comprueba `can_order` y `session.can_afford(cost_of(cell))`, **cobra con `session.spend`**, llama a `field.order(cell)` y empieza a llamar a `field.tick(delta)` desde su `_process`. El controlador se crea con `process_mode = PAUSABLE`, igual que los nodos del mundo (se suma a `Game._world_nodes()`, junto a `enemies` y `tower_container`, y también al congelado de `_on_state_changed`), y `Engine.time_scale` ya escala el `delta`: así la **pausa y la velocidad se respetan sin código extra**.
+3. **Terminar.** `job_finished` → el controlador llama a `MapGrid.clear_cell(cell)`, suma recursos a la sesión (`add_resources`), y si hay hallazgo y se recoge (RF-429) llama a `FindingRun.pick(colección, nivel, wave_to_confirm)` con `wave_to_confirm = wave` si el estado es `WAVE_RUNNING` y `wave + 1` en cualquier otro. Emite un aviso flotante (`floating_text.gd`) y un sonido ya existente.
+4. **Cancelar.** `session.earn(refund)` (el reembolso no es ganancia: no entra en estadísticas de oro ganado, si las hay) y `field.cancel()`.
+5. **Oleada completa.** El controlador escucha `session.wave_completed`: `field.complete_wave()` devuelve lo que produjo cada punto y lo suma a `session.add_resources`; `FindingRun.complete_wave(wave)` confirma. **No** escucha `jump_to_wave` (que no emite `wave_completed`).
+6. **Fin de partida.** En `Game._on_state_changed` (WON/LOST), `field.discard_job()` y, junto a `_commit_collection`, se llama a `_commit_findings()`: guarda las piezas confirmadas con `SaveManager.collect_source` (y `SaveManager.save()` como hoy) si **no** `DevMode.enabled`, **no** `testing`, hay campaña (`GameFlow.current_index >= 0`), ni comunidad ni modo.
+
+#### Archivos que toca cada tarea
+
+| Tarea | Crea | Modifica |
+|---|---|---|
+| **T206** · formato | `data/obstaculos.json`, `scripts/logic/obstacle_catalog.gd`, `scripts/data/obstacle_spec.gd`, `tools/ejemplos/mapa_removibles.json`, tests | `scripts/logic/level_file.gd` (`LEGEND_KEYS`, `_read_legend`, claves `demoledora`), `scripts/data/level_data.gd`, `scripts/logic/map_grid.gd` (`clear_cell`), `scripts/logic/map_drawings.gd` (3 dibujos), `scenes/levels/level_decor.gd`, `tools/check_level.gd`, `scripts/logic/level_draft.gd` (conserva campos), `CONTENIDO.md` |
+| **T207** · demolición | `scripts/logic/obstacle_field.gd`, `scripts/logic/demolition_job.gd`, `scenes/game/infrastructure_controller.gd`, `scenes/ui/obstacle_panel.gd`, `scenes/levels/obstacle_layer.gd`, tests | `scenes/game/game.gd` (crea el controlador, la semilla, el fin de partida), `scenes/game/build_controller.gd` (selección), `scenes/game/hud.gd` (abre el panel) |
+| **T208** · demoledora | `scenes/ui/infrastructure_panel.gd` | `obstacle_field.gd` (`buy_machine`, `cost_of`, `seconds_of`), `hud.gd`, `obstacle_panel.gd` (muestra "Con la demoledora…") |
+| **T209** · recursos | tests | `level_session.gd` (`resources`, `spend_both`), `tower_data.gd`, `tower.gd`, `build_controller.gd`, `hud.gd` (contador, barra, ayuda de construcción con los dos botones de pago), `tower_panel.gd`, `tower_text.gd`, `wiki.gd`, `data/towers/mortar.tres`, `data/towers/sniper.tres`, `check_level.gd` (aviso RF-421), `CONTENIDO.md` |
+| **T210** · extracción | tests | `obstacle_field.gd` (`enable_site`, `complete_wave`), `infrastructure_controller.gd`, `obstacle_panel.gd`, `obstacle_layer.gd` (estados y reserva) |
+| **T211** · colecciones | `scripts/logic/collection_definitions.gd`, `scripts/logic/finding_run.gd`, tests | `collectible_run.gd` (envoltorios), `save_manager.gd` (solo lo que haga falta; el formato **no cambia**), `data/progression.json`, `game.gd` (`_commit_findings`), `hud.gd` (la barra elige la colección del nivel), `scripts/logic/wiki.gd` |
+| **T212** · editor | tests | `scripts/logic/level_draft.gd`, `scenes/editor/map_editor.gd`, `editor_panel.gd`, `settings_panel.gd`, `map_view.gd` |
+| **T213** · pruebas | tests | `scenes/game/dev_panel.gd`, `scripts/autoload/dev_mode.gd`, `scenes/game/game.gd` (los atajos) |
+| **T214** · bot | tests | `tools/balance_sim.gd` (estrategias, `seeds=`, `check_rule=1`) |
+
+`T215` y `T217` (Disruptora) **reusan** `resource_cost` (2 recursos, 130 de oro) y la colección `disruptor`. `T223` a `T225` usan `obstaculos.json` y la regla de oro. `T219` a `T221` usan la lista de estados que sigue.
+
+#### Estados visuales que dibuja Codex (T219 a T221)
+
+La vista decide qué dibujar así: la **clase** del obstáculo (`arbol`, `roca`, `escombro`, `mina`, `bosque_explotable`) y su **estado**. Todo es SVG de **64 × 64** con sombra suave en el suelo (Q-38, guía §4). Mientras no llegue el arte, `ObstacleLayer` dibuja los mismos estados con figuras simples. Los nombres son una propuesta para que Codex y el código se pongan de acuerdo; se guardan en `assets/sprites/map/` salvo los íconos.
+
+| Estado | Archivo propuesto | Cuándo se ve | Notas |
+|---|---|---|---|
+| Árbol removible, **intacto** | `arbol_removible.svg` | Letra con `removible` de clase `arbol`, sin trabajo | Distinto del árbol permanente. Lleva la **marca ámbar** (cinta o estaca). |
+| Árbol removible, **en trabajo** | `arbol_removible_trabajo.svg` | Mientras dura el trabajo | Andamio, hacha clavada o cortes. |
+| Roca removible, intacta / en trabajo | `roca_removible.svg`, `roca_removible_trabajo.svg` | Ídem con `roca` | Misma marca ámbar. Cuñas y grietas en trabajo. |
+| Escombro, intacto / en trabajo | `escombro.svg`, `escombro_trabajo.svg` | Ídem con `escombro` | Piedra de ruina con el símbolo (T218). Marca ámbar. |
+| **Pieza pendiente** | `marca_pieza.svg` (32 × 32) | Sobre un escombro con hallazgo **pendiente** | Brillo plateado. No se ve si ya está recuperada o si no se recogen piezas. |
+| **Despejado** | `despejado_<tema>.svg` para `pradera`, `bosque`, `ruinas` y `desierto` | Casilla ya despejada | Suelo con tocón o restos chatos, **construible** (que no parezca bloqueado). Un tema sin archivo usa `despejado_pradera.svg`. |
+| Mina, **sin habilitar** / **activa** / **agotada** | `mina.svg`, `mina_activa.svg`, `mina_agotada.svg` | Estados `DISABLED`, `ACTIVE`, `DEPLETED` | Boca con tablas; vagoneta y brillo de mineral; tapiada. **No se confunde con una torre.** |
+| Bosque explotable, **sin habilitar** / **activo** / **agotado** | `bosque_explotable.svg`, `bosque_explotable_activo.svg`, `bosque_explotable_agotado.svg` | Ídem | Árboles marcados; troncos apilados; tocones. Distinto del árbol removible. |
+| **Reserva legible** | `reserva_llena.svg`, `reserva_vacia.svg` (8 × 8) | Sobre un punto de extracción habilitado | 8 segmentos; legibles a 34 px. |
+| Máquina trabajando *(opcional)* | `demoledora_trabajo.svg` (2 a 4 cuadros) | Sobre el removible durante un trabajo **con** la máquina | Solo si Lucas lo pide en la ficha de arte. |
+| Íconos | `assets/sprites/ui/stat_resources.svg`, `coleccion_disruptor.svg`, `demoledora.svg` | Contador de recursos y costos; barra de la colección y panel; botón "Infraestructura" | Mismo formato que `stat_gold.svg` y el avance plateado (Q-39). |
+
+La **barra de progreso** del trabajo y el aviso flotante los dibuja el código (no son arte).
+
+#### Riesgos y límites conocidos
+
+- **El tope de 10 letras** de la leyenda (RF-262) puede quedar corto en un nivel con muchos tipos de objeto: se resuelve en la tarea del nivel (punto 6 de "Para revisar en G3").
+- **`tiempo_porcentaje` (80 %) y las probabilidades** (50 %) no están medidos: salen del 09 y de la intuición, no del bot. T214 y T223 los revisan.
+- **`FindingRun` y `CollectibleRun`** conviven. Si en T211 resulta más claro unificarlos, se hace sin cambiar el comportamiento ni los tests de M37 y M38, y se anota.
+- El **bot** (`balance_sim.gd`) no es determinista en el oro (se vio en T203); para la regla de oro se usa el resultado de victoria, no el oro final.
