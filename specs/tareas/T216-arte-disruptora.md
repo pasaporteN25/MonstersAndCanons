@@ -7,7 +7,7 @@
 - `specs/tareas/README.md` §6 (protocolo de Codex).
 - `specs/05-guia-de-arte.md` §7 (torres renderizadas: formato y familias), §M36 (lectura de estados) y §M43.
 - `art/redesign-m43/README.md` y `prompts.md`: el último pipeline aprobado, para copiarlo.
-- La ficha de arte de T215 (`art/m51-disruptora/FICHA.md` o la sección del plan técnico).
+- **La ficha de arte de T215: `art/m51-disruptora/FICHA.md`** (la tabla de cómo se distingue de la Eléctrica, los colores y los estados) y los RF-449 y RF-451 de la spec. Si algo de la ficha de esta tarea difiere de ese archivo, **manda `FICHA.md`**.
 - Las referencias visuales: `assets/sprites/towers/rendered/tesla_atlas.png` (**no parecerse**), `turret_tesla.png` y `base_1.png` a `base_3.png`.
 
 ## Entregables

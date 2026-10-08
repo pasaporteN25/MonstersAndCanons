@@ -1878,3 +1878,138 @@ Lo que el cuestionario no dejó cerrado o lo que T205 tuvo que **elegir**. Son l
 6. **El tope de 10 letras de la leyenda (RF-262).** Se mantuvo. Un nivel con muchos tipos de removibles, decoración y señales puede quedarse corto; si pasa, se sube en la tarea del nivel con una `D` nueva.
 7. **Un mapa que ofrece una torre con recursos y no tiene recursos da un aviso, no un error (RF-421).**
 8. **La barra de la colección muestra la del nivel (RF-431);** los niveles que no son fuente de ninguna siguen mostrando `technology`, como hoy.
+
+---
+
+### M51 · Disruptora (Lucas, 2026-10-08; T215)
+**Estado: especificada en T215. Todavía no hay código** (lo hace T217; el arte, T216). Sale de 07 §9 (dirección aprobada), de la respuesta de Lucas a **Q-33** del cuestionario 09 y de las colecciones y recursos de M50 (Q-25, RF-418, RF-425). Las razones y las alternativas descartadas están en D-086 y D-087, y el cómo técnico, en la sección M51 de `02-plan-tecnico.md`. La ficha de arte para Codex está en `art/m51-disruptora/FICHA.md`.
+
+**Idea general, en pocas palabras:** la **Disruptora** es una torre con aspecto de **bobina Tesla** que **no dispara proyectiles**: cada tanto emite un **pulso** en un círculo a su alrededor. Los enemigos con **aura** (el Guardián y el Curandero) que el pulso alcanza **dejan de emitir su aura unos segundos**, y todos los alcanzados reciben un golpe **muy débil**. No sirve para matar: sirve para **apagar el apoyo** de los enemigos que protegen o curan a los demás, mientras las otras torres hacen el daño. Se construye con **oro y recursos** y solo la tienen quienes completaron la colección **Disruptora** (3 piezas, M50). Ninguna otra habilidad enemiga se apaga con ella (07 §9: no se da por aprobada la supresión de todas las habilidades).
+
+Valores: los números de este bloque son **los de Lucas (Q-33)** salvo los que dicen *provisional*; viven en `data/towers/disruptor.tres` (constitución P2) y el bot de balance (T217 y los niveles 11 a 15) los ajusta.
+
+#### El pulso *(Q-33; D-086)*
+
+- **RF-438** **Qué es:** una torre nueva, `disruptor`, nombre **Disruptora**. Es una torre de **pulso**: no dispara proyectiles, no elige un objetivo y no tiene "modo de apuntado" que cambie algo (como la Ráfaga, RF-162). No es un apoyo (no es `support_only`): ocupa **1 casilla**, se **mejora**, se **vende** y se **aturde** como cualquier torre. Es la torre n.º **10** en el orden canónico de la barra (después del Mortero; el Mecánico se agrega después, RF-448).
+- **RF-439** **Los datos del pulso** (en `TowerLevelData`, valen 0 = apagado, RF-164): `suppress_seconds` (cuántos segundos deja sin aura al enemigo con aura que el pulso alcanza). Una torre cuyo nivel tiene `suppress_seconds` mayor que 0 es una **torre de pulso**. Los otros campos que ya existen se leen así:
+  - `fire_rate` = **pulsos por segundo** (0,25 = un pulso cada 4 s).
+  - `range_tiles` = el **radio del pulso**, en casillas, medido entre centros (como el aura, RF-271).
+  - `damage` = el golpe a cada alcanzado.
+  - Una torre de pulso **no puede** tener a la vez `burst_count`, `extra_targets` ni `chain_extra_targets`, ni `splash_radius_tiles` ni ralentización ni quemadura: un test de los datos lo comprueba (el pulso es una sola cosa).
+- **RF-440** **Cuándo pulsa:** la torre pulsa cuando **está lista** (pasó el tiempo de su cadencia, `effective_fire_rate`: con el apoyo del Mecánico y el desgaste, RF-361 y RF-367) **y** hay **al menos un emisor de aura** a su alcance. Un **emisor de aura** es cualquier enemigo para el que `Enemy.has_aura()` da `true` (hoy el Guardián y el Curandero; mañana cualquiera con datos de aura, RF-270). Al construirla queda **lista de inmediato**. Si no hay ningún emisor a su alcance **no pulsa y no gasta** su espera: apenas aparece uno, pulsa. Cuenta como emisor aunque ya esté suprimido: el pulso le **renueva** la supresión (RF-442). Después de pulsar, vuelve a esperar `1 / fire_rate` (con apoyo y desgaste).
+- **RF-441** **A quién le pega el pulso:** a **todos los enemigos activos** dentro del radio (a menos de `range_tiles` entre centros, **en el suelo o en el aire**: `can_hit_air = true`), **menos el Espejo** (RF-444). Cada uno recibe `damage` **como cualquier golpe de torre**: `daño − armadura`, mínimo 1 (RF-80), con la armadura que le da un aura si la tiene (RF-271). El pulso **no ralentiza, no quema y no activa combos** (RF-310, RF-315): es un golpe sin estados. **Si el golpe mata**, el enemigo paga su oro y suelta sus crías como siempre.
+- **RF-442** **Supresión del aura:** cada enemigo alcanzado **con aura** queda **suprimido** `suppress_seconds` segundos. Mientras está suprimido **no emite su aura**: ni la de armadura ni la de cura (RF-273). Reglas:
+  - **No se suma:** si le llega otro pulso (de la misma Disruptora o de otra) mientras está suprimido, **queda el tiempo que más dura** (como el aturdimiento, RF-280, y la quemadura, RF-160). Dos Disruptoras no suprimen más rápido, solo cubren más lugar.
+  - **Es del enemigo, no del lugar:** si el enemigo sale del radio, **sigue suprimido** hasta que se le acaba el tiempo.
+  - El tiempo corre con el del juego: la **pausa** lo congela y la **velocidad ×2** lo acelera (como RF-273 y RF-280).
+  - Al vencer, el enemigo **vuelve a emitir** su aura con el ritmo de siempre (RF-273): en menos de 0,25 s.
+  - Un enemigo **sin aura** alcanzado por el pulso solo recibe el golpe; no queda suprimido de nada.
+- **RF-443** **Lo que los demás ya recibieron:** la supresión **no corta** el aura que ya llegó a otros enemigos. La conservan **hasta que caduca sola** (`AURA_DURATION`, 0,35 s, RF-273), porque nadie la refresca. En la práctica **alcanza**: el efecto desaparece **en menos de 0,35 s** después del pulso (el mismo caso que el Guardián que muere), así que los que estaban protegidos o curándose dejan de estarlo casi enseguida. **No se agrega** ninguna forma de cortar el aura en el receptor: el receptor sigue como en M17 (RF-271 y RF-272 no cambian).
+
+> **Criterio de aceptación RF-438 a RF-443**
+> **Dado** una Disruptora lista, un Guardián dentro de su radio y un Normal junto al Guardián que tiene +2 de armadura por su aura → **Cuando** pulsa → **Entonces** el Guardián recibe 4 de daño (5 − 1 de armadura), el Normal recibe 3 (5 − 0 − 2, porque el aura todavía no caducó), el Guardián queda suprimido y, **en menos de 0,35 s**, el Normal pierde el +2 y vuelve a recibir los golpes de las torres sin él. **Dado** el Guardián suprimido 2,5 s → **Cuando** pasan 2,5 s de juego → **Entonces** vuelve a emitir y el Normal recupera el +2. **Dado** el juego en pausa → **Entonces** la supresión no avanza.
+> **Dado** una Disruptora lista y solo Normales en su radio → **Entonces** no pulsa; **cuando** entra un Curandero → **Entonces** pulsa en ese instante, le apaga la cura 2,5 s y le saca 5 de vida (menos la armadura de cada uno) a todos los que están dentro.
+> **Dado** un Curandero ya suprimido que recibe otro pulso con 1 s restante → **Entonces** le quedan 2,5 s, no 3,5. **Dado** un Curandero suprimido que sale del radio → **Entonces** sigue sin aura hasta que se le acaba el tiempo.
+> **Dado** un enemigo volador sin aura dentro del radio → **Entonces** recibe el golpe y no queda suprimido de nada.
+
+- **RF-444** **Lo que no hace** *(Q-33: "no afecta al Chamán, al Espejo ni a otras habilidades"; 07 §9)*:
+  - **Solo apaga auras.** No corta el hechizo del **Chamán** (RF-282), el robo del **Ladrón** (RF-363), la **embestida** del Embestidor (RF-366), la **regeneración** del Troll (RF-165), las **crías** de la Araña ni ninguna otra habilidad. El Chamán, el Ladrón y el Embestidor que el pulso alcanza **reciben el golpe de daño bajo** como cualquier otro enemigo (RF-441), pero su habilidad **sigue igual**: no se interrumpe, no se demora y no se acelera.
+  - **El Espejo queda fuera del pulso.** Un enemigo con `reflect_range_tiles` mayor que 0 (el Espejo, RF-283) **no recibe el golpe** ni nada más del pulso, y **no hay rebote** ni aturdimiento de la Disruptora. Es la forma más simple de cumplir Q-33 sin contradecir a RF-284, que rebota **todo golpe de torre** que lo alcanza (también los de área): el pulso **no es un golpe con proyectil** y el Espejo directamente no cuenta como alcanzado. El criterio es el **dato** (`reflect_range_tiles`), no el nombre; RF-284 **no cambia** y sigue valiendo para los proyectiles de todas las demás torres.
+  - **No se aplica a las torres.** El pulso no toca torres propias ni cambia sus estados (no cura ni quita el aturdimiento).
+
+> **Criterio de aceptación RF-444**
+> **Dado** un Chamán dentro del radio de una Disruptora lista y un Guardián también → **Cuando** pulsa → **Entonces** el Chamán recibe 5 de daño, **no** queda suprimido y su siguiente hechizo sale a su hora. **Dado** un Espejo y un Guardián dentro del radio → **Entonces** el Espejo no recibe nada y la Disruptora **no** queda aturdida; el Guardián, sí, se suprime. **Dado** un Espejo solo en el radio → **Entonces** la Disruptora **no pulsa** (no hay emisor).
+
+- **RF-445** **Interacciones con las otras torres y los otros enemigos:**
+  - **El Chamán la puede aturdir** como a cualquier torre (RF-282; Q-33). Aturdida **no pulsa** (RF-280), se la ve apagada y el panel dice "Aturdida (N s)". La espera de su cadencia **sigue corriendo** mientras está aturdida, igual que en las otras torres: apenas se recupera, pulsa si hay un emisor. El aturdimiento **no** quita la supresión que ya había puesto: un Guardián suprimido sigue sin aura hasta que se le acaba el tiempo.
+  - **El Embestidor la desgasta** como a cualquier torre (RF-366, RF-367): cada impacto suma 20 puntos de desgaste, y `cadencia efectiva = cadencia × (1 − desgaste/100)`. Para la Disruptora eso significa **pulsos más espaciados** (con 50 % de desgaste, uno cada 8 s en vez de cada 4), y por lo tanto **más huecos sin supresión**. Su radio, su daño y su `suppress_seconds` **no cambian** con el desgaste. Mejorar no borra el desgaste.
+  - **El Mecánico la apoya** como a cualquier torre (RF-361): sube su cadencia 10, 15 o 20 % según su nivel, y la **repara** (RF-369). Con el Mecánico de nivel 3 (+20 %) la Disruptora de nivel 3 pulsa cada 3,33 s y suprime 3,5 s: **los pulsos se solapan y el emisor no emite nunca** mientras haya un emisor en su radio. Es la combinación a propósito más fuerte (y es opcional: el Mecánico necesita su colección y su propio lugar).
+  - **La Disruptora no ayuda a otras torres ni se combina con el Hielo y la Incendiaria** (no pone ni aprovecha ralentización o quemadura, RF-310).
+  - **Varias Disruptoras:** funcionan cada una por su lado; la supresión **no se suma** (RF-442), así que una segunda sirve para cubrir otro tramo o para que **siempre haya una lista** cuando el emisor aparece.
+
+> **Criterio de aceptación RF-445**
+> **Dado** una Disruptora aturdida por un Chamán con un Guardián en su radio → **Entonces** no pulsa; **cuando** se le pasa el aturdimiento → **Entonces** pulsa de inmediato si ya pasó su espera. **Dado** una Disruptora con 40 puntos de desgaste → **Entonces** su cadencia efectiva es 0,15 pulsos por segundo (un pulso cada 6,67 s). **Dado** una Disruptora de nivel 3 con un Mecánico de nivel 3 a su alcance → **Entonces** pulsa cada 3,33 s y el Guardián en su radio **no emite nunca** entre pulso y pulso.
+
+- **RF-446** **Los números** (Q-33; **provisional** lo marcado, hasta que el bot lo ajuste):
+
+  | ID | Nombre | Costo | Daño | Cadencia | Radio | Suprime el aura | Aire | Proyectil |
+  |---|---|---|---|---|---|---|---|---|
+  | `disruptor` | **Disruptora** | **130 de oro + 2 recursos** | 5 | **0,25** (un pulso cada 4 s) | 2,5 | 2,5 s | Sí | Ninguno (pulso) |
+
+  **Tabla de mejoras:**
+
+  | Nivel | Costo de mejorar | Daño | Cadencia | Radio | Suprime el aura | Cobertura sola (supresión ÷ 4 s) |
+  |---|---|---|---|---|---|---|
+  | 1 | 130 + 2 recursos | 5 | 0,25 | 2,5 | 2,5 s | 62,5 % |
+  | 2 | **100** *(provisional)* | 5 | 0,25 | 3,0 | 3,0 s | 75 % |
+  | 3 | **150** *(provisional)* | 5 | 0,25 | 3,5 | 3,5 s | 87,5 % |
+
+  - Q-33 fija el **costo de construir**, el **daño**, la **cadencia**, y el **radio** y la **supresión** de los tres niveles. **No fija el costo en oro de mejorar** (niveles 2 y 3): T215 puso 100 y 150 como **valores iniciales** (la escala de la Ráfaga, 100 y 150, y de la Incendiaria, 90 y 140), y se ajustan con el bot (punto 2 de "Para revisar").
+  - **Mejorar no cuesta recursos** (RF-418). **Vender** devuelve el 70 % del oro invertido y `floor(2 × 70 / 100) = 1` recurso (RF-418).
+  - **Comparada con la Eléctrica** (130 de oro, 13 de daño cada 1,33 s y un rayo que salta a 2 enemigos más, RF-160 a RF-164): la Disruptora hace **alrededor del 13 % del daño por segundo** (1,25 contra unos 9,75 del nivel 1) y no tiene proyectil ni rayo; a cambio **apaga un aura**, cosa que la Eléctrica no puede. Es una torre de **utilidad**, no de daño: la Eléctrica sigue siendo la que mata, y la Disruptora hace que las demás maten mejor al Guardián y al Curandero. Eso es lo que la distingue (D-086).
+  - **Ventanas:** un pulso cada 4 s con 62,5 % de cobertura deja **huecos de 1,5 s** (nivel 1) en que el aura vuelve. Se pensó así para que **no sea una solución perfecta**: cubrir todo el tiempo pide subirla a nivel 3 con el Mecánico, o dos Disruptoras (RF-445).
+
+- **RF-447** **Disponibilidad: dos condiciones a la vez** (RF-300, RF-393, RF-395, RF-418, RF-425):
+  - **Colección:** `required_collection = &"disruptor"` (las 3 piezas de los niveles 8, 9 y 10, RF-425 y RF-426). Sin las 3, la torre **no aparece** en la barra.
+  - **Nivel:** `reserved = true` y el nivel la nombra en su campo `"torres"` (RF-393) o en `"torres_extra"` (RF-300). **Ninguna de las dos alcanza sola**: estar en `"torres"` **no** saltea la colección (RF-395) y tener la colección no la pone en un nivel que no la ofrece. **Ningún nivel de 1 a 10 la ofrece**; el mapa del nivel 11 la habilita (plan 08).
+  - **Costo:** `resource_cost = 2` (RF-418): se pagan **130 de oro y 2 recursos a la vez**, o ninguno. Un mapa que ofrece la Disruptora **sin tener recursos** da el aviso de RF-421 (*"la Disruptora cuesta recursos y este mapa no tiene cómo conseguirlos"*): la torre queda en la barra, deshabilitada, con ese motivo.
+  - **Se ve siempre en la Wiki**, con su ficha, aunque la colección esté incompleta (RF-300), con el progreso de la colección y la torre que desbloquea (RF-431, RF-437).
+  - **En el modo de pruebas** (RF-436): con "Habilitar todas las colecciones" la Disruptora aparece en la barra del nivel actual **aunque el nivel no la ofrezca** (como los estandartes con el interruptor de RF-360), así se la prueba sin jugar la campaña, y "+10 recursos" paga su costo. No se escribe nada en el guardado.
+- **RF-448** **La barra y las teclas:** la Disruptora va **después del Mortero** en el orden canónico de las torres (en `Game.tower_types`: la décima), y **no corre las teclas de las demás**: las teclas siguen siendo la posición en la barra del nivel (RF-393). La barra del HUD tiene 9 teclas (`build_1` a `build_9`, RF-297); un nivel que ofrezca **más de 9** torres (con el Mecánico que se agrega al final, RF-361) deja **sin tecla** a las del lugar 10 en adelante, que se eligen con el mouse y no llevan etiqueta de tecla, como hoy. Los niveles de rotación (11 a 15, Q-29) eligen qué torres ofrecen (RF-393), así que cada uno puede mantenerse en 9 (punto 5 de "Para revisar"). La barra muestra *"130 + 2 recursos"* (RF-418) y el texto de ayuda de construcción, abajo.
+
+> **Criterio de aceptación RF-446 a RF-448**
+> **Dado** una partida con la colección `disruptor` completa en un nivel que **no** la ofrece → **Entonces** la barra no la muestra. **Dado** un nivel con `"torres": ["cannon", "frost", "disruptor"]` y la colección **sin** completar → **Entonces** no aparece. **Dado** los dos requisitos y 130 de oro con 1 recurso → **Entonces** el botón está deshabilitado y dice qué falta; con 2 recursos → **Entonces** se construye y quedan 0 de oro y 0 recursos. **Dado** esa Disruptora → **Cuando** se mejora a nivel 2 → **Entonces** cuesta 100 de oro y ningún recurso, y su radio pasa a 3,0 y su supresión a 3,0 s. **Dado** que se la vende en nivel 1 → **Entonces** devuelve 91 de oro (70 % de 130) y 1 recurso. **Dado** un mapa que la ofrece sin recursos → **Entonces** `check_level` avisa y la barra la muestra deshabilitada.
+
+#### Cómo se lee *(M36; D-086)*
+
+- **RF-449** **El pulso y la marca de supresión se distinguen de todo lo demás** (RF-274, RF-280, RF-352, RF-370, RF-318, guía de arte M36 y M37):
+  - **El pulso en el mapa:** al pulsar, un **anillo blanco azulado** que se **expande desde la torre** hasta el radio del pulso en unos 0,3 s y se desvanece (la clase que ya existe, `RingEffect`), con un segundo anillo más fino detrás. **Un solo color**: blanco azulado (`#DCEBFF`) con borde azul (`#7FA8FF`), **distinto** de la descarga amarilla de la Eléctrica, del violeta del aturdimiento, del verde amarillento de la cura, del marfil del aura de armadura, del cian fino del apoyo del Mecánico y del celeste del Hielo (el celeste es más saturado y verdoso). La torre muestra un destello breve en su disco emisor.
+  - **El enemigo suprimido** muestra, mientras dura: (1) su **anillo de aura en el suelo** (RF-274) pasa a ser un **anillo roto** (en arcos separados), **blanco azulado, sin latir y más tenue**, en lugar del anillo marfil o verde que tenía: es el "aura apagada"; (2) un **ícono chico** al lado de su barra de vida, en la misma fila que el escudo, la cruz y la dianita (RF-274, RF-318): **tres arcos de un anillo roto**, blanco azulado con contorno oscuro (`AURA_INK`), de unos 12 px, que **se vacía** a medida que se acaba la supresión (los arcos desaparecen de a uno). **No se tiñe el dibujo del enemigo**: el celeste de la ralentización (RF-152) tiñe el cuerpo y esta marca no, para no confundirse con el Hielo.
+  - **El que dejó de recibir el aura** no muestra nada nuevo: pierde el escudo o la cruz (RF-274) como cuando el portador muere.
+  - **La torre** se dibuja con su disco emisor encendido (blanco azulado) cuando está **lista y con un emisor en el radio**, y apagado cuando está **esperando** o **aturdida** (aro roto violeta, RF-280). Eso dice sin texto "está por pulsar".
+  - Todo respeta la **pausa** y la velocidad ×2 y llevan un tope de efectos simultáneos (8 anillos de pulso a la vez; el exceso no se dibuja), como el de 16 pulsos de cura de la guía de arte (M36).
+  - Legible a **34 px** y a 64 px. La forma (anillo roto, no una diana ni un escudo) y el lugar (suelo y fila de íconos) son lo que lo separa de los demás estados; el color solo ayuda (RF-318 hace lo mismo con la dianita).
+- **RF-450** **El texto sale de los datos** (RF-164, RF-233, RF-317):
+  - **Panel de la torre y ayuda de construcción** (RF-171): una línea corta armada con los números del nivel, por ejemplo *"Pulso cada 4 s · radio 2,5 · apaga las auras 2,5 s · 5 de daño"* y, en la barra, *"Apaga el aura de Guardianes y Curanderos."* Los nombres de los enemigos se **buscan en los datos**: son los enemigos con `has_aura()`; si mañana otro enemigo gana un aura, aparece solo.
+  - **Wiki, ficha de la torre:** el mismo texto, el costo con recursos (RF-418), el progreso de la colección (RF-431) y la frase *"No alcanza al Espejo y no apaga otras habilidades."* (RF-444).
+  - **Wiki, fichas del Guardián y del Curandero** (y de cualquier enemigo con aura): una línea *"Contramedida: Disruptora (le apaga el aura unos segundos)."*, armada leyendo las torres con `suppress_seconds` mayor que 0, **desde los dos lados** como el combo de RF-317. Mientras la torre no debute en un nivel, la Wiki dice que no aparece en la campaña (RF-277, RF-287).
+  - **Artículo "Efectos de las torres"** de la Wiki: un párrafo nuevo que explica la supresión **sin repetir números**.
+  - **Panel de pruebas** (RF-184): el Guardián y el Curandero ya están; con "Habilitar todas las colecciones" la Disruptora se puede construir y probar con ellos.
+  - **Frases de presentación** (RF-134) de los dos enemigos con aura: no cambian (siguen valiendo RF-275).
+
+> **Criterio de aceptación RF-449 y RF-450**
+> **Dado** un Guardián suprimido → **Entonces** su anillo del suelo es blanco azulado, roto y quieto, y su ícono muestra tres arcos que se van apagando; **cuando** vuelve a emitir → **Entonces** el anillo marfil vuelve a latir y el ícono desaparece. **Dado** un Guardián ralentizado y suprimido → **Entonces** el cuerpo se ve celeste (Hielo) y la marca blanco azulada sigue visible aparte. **Dado** la Wiki → **Entonces** la ficha de la Disruptora muestra su radio y su supresión de los datos, y las del Guardián y el Curandero nombran a la Disruptora; si se cambia un número del `.tres`, el texto cambia sin tocar código.
+
+- **RF-451** **Dibujo** *(pedido de Lucas, 07 §9; D-086)*: la Disruptora tiene **aspecto de bobina Tesla** y una silueta **distinta de la Eléctrica** (que es una bobina de bronce con una esfera violeta y un brazo con garra, **familia C** de la guía de arte §7). Lo que la distingue: una **columna simétrica** de **anillos horizontales apilados** de cobre y bronce que **se ensanchan hacia arriba**, un **disco emisor plano** arriba (sin esfera) y energía **blanca azulada** (nunca violeta ni amarilla). Es **torre renderizada** (atlas de 8 direcciones, vista independiente y variantes de nivel 2 y 3, guía §7) con una **textura de anillo** para el pulso y un **ícono** de la marca de supresión. La ficha completa para Codex (T216) está en `art/m51-disruptora/FICHA.md`. **Mientras no llegue el arte de T216**, T217 la dibuja con figuras simples (`_draw`: pila de anillos y disco) con los colores de la guía, sin esperar (Q-40).
+- **RF-452** **El bot de balance** (`tools/balance_sim.gd`, estrategia `mix`; T217 y los niveles 11 a 15):
+  - **Compra** la Disruptora cuando se cumplen **las cuatro**: está disponible en el nivel (RF-447), el mapa tiene **algún grupo con un emisor de aura** en sus oleadas (leído de los datos del enemigo, `has_aura()`), alcanzan el **oro y los recursos**, y ya construyó al menos **3 torres** de las comunes.
+  - **Cuántas:** **una** al cumplirse eso y **una segunda** cuando ya tiene 8 torres; **nunca más de dos** (valores iniciales de la herramienta, no del juego). La coloca con el mismo criterio que las demás (la casilla desde la que alcanza **más tramo de camino**).
+  - **Elige por `id` de torre, no por posición** en la lista, porque la rotación (Q-29) cambia las posiciones (T214 lo deja hecho si lo necesita).
+  - La estrategia **`sin_recursos`** (RF-432) **nunca** la compra: el nivel se tiene que ganar sin ella.
+  - **Cómo se comprueba que sirve:** en un mapa con Guardianes y Curanderos, con **3 semillas** y las mismas, el bot `mix` **con** la Disruptora **pierde menos vidas** (o las mismas, y gana) que **sin** ella (se anota la tabla en T217). Si no mejora, **se frena y se avisa**: el balance de la torre se revisa antes de seguir (el costo, la supresión o la cadencia), no se fuerza el resultado. Para los niveles 11 a 15 se corre además la regla de oro (RF-432).
+
+> **Criterio de aceptación RF-451 y RF-452**
+> **Dado** un mapa de ejemplo con Guardianes y Curanderos, la Disruptora ofrecida y recursos suficientes → **Entonces** el bot `mix` la compra después de 3 torres y no más de 2. **Dado** `sin_recursos` → **Entonces** no la compra. **Dado** un mapa sin emisores de aura → **Entonces** el bot no la compra.
+
+#### Lo que M51 no incluye
+
+Queda **fuera** (07 §9; D-086, D-087):
+- **Suprimir otras habilidades** (el hechizo del Chamán, el rebote del Espejo, el robo, la embestida, la regeneración, las crías): 07 §9 no lo aprobó y Q-33 lo descartó.
+- **Cortar el aura ya recibida** (RF-443) o **tocar a los receptores** del aura.
+- Una **zona persistente** que apague auras mientras el enemigo está adentro (la supresión es un estado del enemigo, RF-442).
+- **Pulsos apuntados** por el jugador, una **habilidad activa** o una carga limitada (07 §9: eso es del Lanzamisiles, Q-28).
+- El **Aislador** (defensivo, preventivo): relegado en 07 §9 por parecerse a esta torre.
+- Una **mejora que cueste recursos** (RF-418).
+- **Enemigos nuevos** ni cambios a los números de los existentes.
+- **Más de una colección** para esta torre ni piezas fuera de la campaña (RF-429).
+
+#### Para revisar *(lo que Q-33 no dejó cerrado o lo que T215 tuvo que elegir)*
+
+Los puntos donde conviene que Lucas mire con más atención antes de programar (T217):
+1. **El Espejo, el Chamán, el Ladrón y el Embestidor (RF-444).** Q-33 dice "no afecta al Chamán, al Espejo ni a otras habilidades". T215 lo leyó así: el **Espejo queda fuera del pulso** (ni daño ni rebote, para no chocar con RF-284), y los otros tres **reciben el golpe de daño bajo pero conservan su habilidad intacta**. La otra lectura posible es que el pulso **no los toque en nada** (tampoco daño); es un cambio chico, pero conviene confirmarlo.
+2. **El costo de mejorar (RF-446).** Q-33 no lo fija. T215 puso **100** y **150** (provisional).
+3. **Solo pulsa si hay un emisor (RF-440).** Q-33 dice "cada 4 s emite un pulso". T215 la hizo **esperar a un emisor de aura**: así el pulso no se gasta en balde (si pulsara con cualquier enemigo, podría quedar en espera justo cuando llega el Guardián) y no se parece a una Eléctrica débil que le pega a todo. La alternativa, pulsar cada 4 s mientras haya cualquier enemigo, hace que la torre **se vea activa** todo el tiempo, pero deja huecos sin supresión cuando aparece el emisor.
+4. **Lo ya recibido no se corta (RF-443).** Alcanza porque el aura caduca en 0,35 s. La alternativa, cortarla en el receptor, toca el código de M17.
+5. **La barra y la décima torre (RF-448).** Con la rotación del bloque 3, un nivel con muchas torres deja a la Disruptora, o al Mecánico, **sin tecla**. Conviene que cada mapa del bloque 3 ofrezca como mucho 9, o se agrega una tecla `0` (cambio chico, no incluido).
+6. **Con el Mecánico en nivel 3 la cobertura es del 100 % (RF-445).** Es un premio por combinar a propósito, pero puede ser demasiado fuerte: el bot (T217) lo mide.
+7. **La marca blanco azulada y el celeste del Hielo (RF-449).** Se separan por la forma y el lugar, no por el color: hay que verlo en pantalla (T216 y T217) antes de darlo por bueno.

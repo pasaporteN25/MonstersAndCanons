@@ -795,3 +795,75 @@ La **barra de progreso** del trabajo y el aviso flotante los dibuja el código (
 - **`tiempo_porcentaje` (80 %) y las probabilidades** (50 %) no están medidos: salen del 09 y de la intuición, no del bot. T214 y T223 los revisan.
 - **`FindingRun` y `CollectibleRun`** conviven. Si en T211 resulta más claro unificarlos, se hace sin cambiar el comportamiento ni los tests de M37 y M38, y se anota.
 - El **bot** (`balance_sim.gd`) no es determinista en el oro (se vio en T203); para la regla de oro se usa el resultado de victoria, no el oro final.
+
+### M51 / T215 · Disruptora (RF-438 a RF-452, D-086 y D-087)
+
+**Estado: diseño; todavía no hay código.** Se programa en **T217** (con arte provisional hecho por código, Q-40); el arte final es de Codex (**T216**, ficha en `art/m51-disruptora/FICHA.md`). Depende de **T209** (`resource_cost`) y de **T211** (la colección `disruptor`): sin ellos, T217 **no puede terminar** la parte de disponibilidad. Está escrito para que un Sonnet en esfuerzo medio lo implemente **sin tomar decisiones de diseño**.
+
+#### Datos
+
+- **`scripts/data/tower_level_data.gd`** suma `@export var suppress_seconds: float = 0.0` (RF-439; comentario: "segundos que un enemigo con aura alcanzado por el pulso deja de emitir su aura; 0 = no es una torre de pulso"). **Es la única clase de datos que cambia.** `TowerData` no cambia (usa `reserved`, `required_collection` y, de T209, `resource_cost`).
+- **`data/towers/disruptor.tres`** (nuevo, copiar la estructura de `tesla.tres`): `id = &"disruptor"`, `display_name = "Disruptora"`, `description` (una frase: *"Apaga un rato el aura del Guardián y del Curandero. Casi no hace daño."*), `can_hit_air = true`, `reserved = true`, `required_collection = &"disruptor"`, `resource_cost = 2`, `color` blanco azulado (`Color(0.86, 0.92, 1.0)`). Sin `projectile_texture` ni `projectile_speed_tiles` (no dispara). Tres niveles:
+
+  | Nivel | `cost` | `damage` | `fire_rate` | `range_tiles` | `suppress_seconds` |
+  |---|---|---|---|---|---|
+  | 1 | 130 | 5 | 0.25 | 2.5 | 2.5 |
+  | 2 | 100 | 5 | 0.25 | 3.0 | 3.0 |
+  | 3 | 150 | 5 | 0.25 | 3.5 | 3.5 |
+
+  Los costos de los niveles 2 y 3 son **provisionales** (RF-446). Sin `turret_atlas` ni `base_texture` hasta T216: la torre cae a la forma de color (RF-156) y T217 le suma el dibujo provisional por código. Con T216, se agregan `turret_atlas`, `turret_texture` y las variantes de nivel 2 y 3, y **solo** esas rutas.
+- **`scenes/game/game.tscn`:** `tower_types` suma `disruptor` **al final** (después del Mortero): es la décima. **No se tocan las teclas** (RF-448): la posición en la barra del nivel manda.
+- **`CONTENIDO.md`:** una fila nueva en la tabla de campos de torre para `suppress_seconds`, marcada *"todavía no la lee el juego"* hasta T217, y una nota de que la Disruptora necesita su colección y los recursos.
+- **El texto de los enemigos con aura** (`has_aura`) **no se escribe a mano**: se lee de los datos (RF-450).
+
+#### Lógica
+
+- **`scenes/enemies/enemy.gd`** (enemigo):
+  - `var _suppress_left: float = 0.0` y tres funciones: `suppress(seconds: float)` (si `_is_done` o `not has_aura()`, no hace nada; si no, `_suppress_left = maxf(_suppress_left, seconds)` y `queue_redraw()` si pasó de 0 a mayor), `is_suppressed() -> bool` y `suppress_left() -> float`.
+  - **`_update_aura(delta)`:** baja `_suppress_left` con el tiempo del juego (se agrega **antes** de `if not has_aura()`) y, al llegar a 0, `queue_redraw()`. El **timer de emisión** `_aura_pulse_left` **sigue corriendo** durante la supresión, pero `_pulse_aura()` **no se llama** mientras `is_suppressed()`: al vencer, vuelve a emitir en menos de `AURA_TICK` (RF-442). **Una línea**: `if _aura_pulse_left <= 0.0 and not is_suppressed()`; si está suprimido, no recarga el timer hasta que venza (así vuelve a emitir en el acto).
+  - **`receive_aura` y las funciones de armadura y cura no cambian** (RF-443).
+  - `func is_pulse_immune() -> bool: return data.reflect_range_tiles > 0.0` (RF-444). `Enemy.GROUP` y `is_active()` ya existen.
+  - **Dibujo:** en `_draw_aura_ring()`, si `is_suppressed()`: en vez de los anillos marfil o verde, `draw_arc` de **4 arcos separados** (≈ 60° de arco y 30° de hueco) de color `SUPPRESS_COLOR` (blanco azulado, alfa 0,45, **sin latido**, grosor 1,2). En `_draw_aura_icons`: el **ícono de supresión** (3 arcos de un anillo roto sobre un círculo `AURA_INK` de 6,5 px, blanco azulado; se apagan de a uno con `suppress_left() / suppress_total`; hace falta guardar `_suppress_total` para eso) **va en la misma fila**, delante del escudo y la cruz, y **la condición de salida temprana** (`if _aura_armor <= 0 and _aura_heal <= 0.0 and marks.is_empty(): return`) **también tiene que considerar** `is_suppressed()`. El cuerpo **no se tiñe** (`SLOW_MODULATE` queda solo para la ralentización, RF-449).
+  - Constantes nuevas: `SUPPRESS_COLOR := Color(0.86, 0.92, 1.0)` y `SUPPRESS_EDGE := Color(0.50, 0.66, 1.0)`.
+- **`scenes/towers/tower.gd`** (torre):
+  - `signal pulsed(radius_px: float)` (señal **hacia arriba**, P6; `Game` la conecta, como `fired`).
+  - `func is_pulse_tower() -> bool: return stats().suppress_seconds > 0.0`.
+  - En `_physics_process`, **antes** del `elif _cooldown <= 0.0` de los disparos: `elif _cooldown <= 0.0 and is_pulse_tower(): _fire_pulse()` (después del aturdimiento y de `support_only`, así que una torre aturdida **no pulsa**, RF-445).
+  - `func _fire_pulse() -> void`: busca los enemigos activos a menos de `range_px()` (`get_tree().get_nodes_in_group(Enemy.GROUP)`, `is_active()`, `not is_pulse_immune()`); **si ninguno** `has_aura()`, **sale sin tocar** `_cooldown` (RF-440); si hay, a **cada uno** `take_hit(stats().damage)` (sin ralentización y sin combos) y a los `has_aura()`, además, `suppress(stats().suppress_seconds)`; `_cooldown = 1.0 / effective_fire_rate()`; `_flash_left = FLASH_DURATION`; `pulsed.emit(range_px())`. **Se junta la lista primero y se aplica después** (un golpe que mata libera el nodo y no debe romper el recorrido).
+  - `can_target`/`find_target` **no se usan** para el pulso. `cycle_targeting` queda sin efecto visible para esta torre: el panel **esconde** el botón de apuntado cuando `is_pulse_tower()` (igual que la Ráfaga si ya lo hace; si no, se deja y se anota).
+  - **Dibujo provisional:** si no hay `turret_atlas`, `_draw` pinta una **pila de 3 anillos** que se ensanchan hacia arriba y un **disco** blanco azulado arriba; el disco se enciende cuando `_cooldown <= 0` y hay un emisor en el radio (se calcula cada 0,25 s, no en cada cuadro) y se apaga si está aturdida (RF-449).
+- **`scenes/effects/effects_layer.gd`:** `func pulse_ring(position_: Vector2, radius: float)`: **dos** `RingEffect` (el principal con `SUPPRESS_COLOR`, de `radius * 0.2` a `radius`, 0,3 s, grosor 3; y uno más fino y más tenue, de 0,35 s, grosor 1,4), con un tope de **8 anillos** vivos. Lo llama `Game` desde la señal `pulsed`; respeta pausa y velocidad como el resto.
+- **`scenes/game/game.gd`:** conecta `tower.pulsed` (como `tower.fired`, línea ~493) a `effects.pulse_ring` y a un **sonido** (reusar el del rayo o uno nuevo chico: el audio es de T217, no bloquea). **No** cambia la creación de torres ni la disponibilidad (T209 y T211 ya lo resolvieron).
+- **Texto:** `scripts/logic/tower_text.gd` suma `pulse_line(level: TowerLevelData, emitters: Array[String]) -> String` (arma *"Pulso cada 4 s · radio 2,5 · apaga las auras 2,5 s · 5 de daño"* con `Rules`/números formateados como las otras) y `suppressors_of(enemy: EnemyData, towers: Array[TowerData]) -> Array[String]` (los nombres de las torres con `suppress_seconds > 0` en algún nivel, **solo si el enemigo tiene aura**). `scripts/logic/wiki.gd`: la ficha de la torre usa `pulse_line` y la frase de RF-450; la del enemigo con aura suma *"Contramedida: …"* con `suppressors_of` (**un apartado como el de "Combos"** de RF-317). `data/wiki/efectos.json`: un bloque nuevo sobre la supresión, **sin números**. El panel (`tower_panel`), `effects()` y la barra de construcción llaman a lo mismo.
+- **`tools/balance_sim.gd`** (RF-452): una función `_wants_disruptor() -> bool` (disponible + algún grupo de las oleadas con `EnemyData.has_aura`-equivalente: `aura_radius_tiles > 0` y bono o cura > 0 + 3 torres comunes + máximo 2); en `_buy_towers()` de `mix` la compra **por id** (`game.available_towers`), no por posición, **antes** de seguir con `MIX_ORDER`. `sin_recursos` (T214) nunca la compra.
+- **`tools/check_level.gd`:** el aviso de RF-421 ya cubre "torre con `resource_cost` en un mapa sin recursos" (T209); T217 comprueba que **nombre a la Disruptora** en el mensaje (se arma con `display_name`, no a mano).
+- **`tools/ejemplos/mapa_disruptora.json`** (nuevo): un mapa de ejemplo con `"torres": ["cannon", "frost", "disruptor"]`, una roca con `probabilidad: 100` (para tener los 2 recursos) y grupos con Guardianes y Curanderos. Sirve para el criterio de aceptación del bot y para probarla en el modo de pruebas.
+
+#### Qué toca cada tarea
+
+| Tarea | Archivos nuevos | Archivos que cambia |
+|---|---|---|
+| **T216** · arte | `art/m51-disruptora/` (fuentes, `prompts.md`, `manifest.json`, `pack.gd`, hojas y capturas), `assets/sprites/towers/rendered/disruptor_atlas.png`, `turret_disruptor.png`, `disruptor_level_2.png`, `disruptor_level_3.png`, una textura de anillo de pulso y el ícono de supresión (32 × 32) | Solo, si T217 ya creó la torre: las rutas de textura de `data/towers/disruptor.tres`. **Ningún código.** |
+| **T217** · código | `data/towers/disruptor.tres`, `tools/ejemplos/mapa_disruptora.json`, `tests/test_disruptor_pulse.gd`, `tests/test_disruptor_text.gd` | `scripts/data/tower_level_data.gd`, `scenes/enemies/enemy.gd`, `scenes/towers/tower.gd`, `scenes/effects/effects_layer.gd`, `scenes/game/game.gd` y `game.tscn`, `scenes/ui/tower_panel*` (apuntado), `scripts/logic/tower_text.gd`, `scripts/logic/wiki.gd`, `data/wiki/efectos.json`, `tools/balance_sim.gd`, `tools/check_level.gd` (solo si hace falta), `CONTENIDO.md`, `CHANGELOG.md` |
+
+#### Pruebas que T217 tiene que escribir (todas con GUT, sin cambiar de escena)
+
+1. **Enemigo:** suprimido no emite (el Normal junto al Guardián no recibe el +2 pasados 0,35 s); al vencer vuelve a emitir; refrescar toma el **máximo**; `suppress` en un enemigo **sin aura** no hace nada; en pausa no corre; el timer de emisión no se desfasa.
+2. **Torre:** pulsa solo con un emisor a su alcance y no gasta su espera si no hay; **todos** los alcanzados reciben `damage − armadura` (mínimo 1); el **Espejo** no recibe nada y la torre **no** queda aturdida; el Chamán, el Ladrón y el Embestidor reciben el golpe y siguen con su habilidad; un volador sin aura recibe el golpe; **aturdida no pulsa** y al recuperarse pulsa; el **desgaste** espacia los pulsos (40 → cada 6,67 s); el **Mecánico** de nivel 3 la acelera (3,33 s) y con la Disruptora de nivel 3 no hay hueco; un golpe que mata no rompe el recorrido; mejorar a 2 y 3 cambia radio y supresión.
+3. **Datos:** `disruptor.tres` cumple RF-446 (3 niveles, números), `reserved`, `required_collection`, `resource_cost = 2`, sin `burst_count`/`extra_targets`/`chain_extra_targets`/`splash_radius_tiles`/ralentización/quemadura (RF-439); **no aparece** en los niveles 1 a 10 y sí en un mapa que la nombra con la colección completa; sin colección no aparece aunque la nombre (RF-395).
+4. **Costo:** 130 de oro + 2 recursos juntos o ninguno; mejorar sin recursos; vender devuelve 91 y 1 (RF-418).
+5. **Texto y Wiki:** `pulse_line` sale de los datos y cambia si se cambia el `.tres`; el Guardián y el Curandero **nombran** a la Disruptora y la Wiki no la nombra en un enemigo **sin** aura; el artículo de efectos no repite números.
+6. **Vista:** el anillo y el ícono se dibujan sin errores (con un Guardián suprimido); el tope de 8 anillos.
+7. **Bot:** compra la Disruptora en el mapa de ejemplo con 3 torres y como mucho 2; `sin_recursos` nunca; un mapa sin emisores, nunca.
+
+#### Cómo se comprueba que sirve (RF-452)
+
+Con `tools/ejemplos/mapa_disruptora.json` y **3 semillas** (`seed=`), el bot `mix` **con** y **sin** la Disruptora (`disruptor=0`, una opción nueva de la herramienta, valor por omisión 1). Se anotan en el Resultado de T217 las **vidas perdidas** y la **oleada donde se pierde** de cada corrida. El bot no es determinista en el oro (T203): se mira la **victoria y las vidas**, no el oro final. **Si con la Disruptora no se pierde menos, se frena y se avisa.**
+
+#### Riesgos y límites conocidos
+
+- **Los números de mejora (100 y 150) y la cobertura** no están medidos: son valores iniciales (RF-446).
+- **El color blanco azulado y el celeste del Hielo** se parecen: la separación depende de la forma y del lugar (RF-449); hay que mirarlo en una captura real de T216/T217.
+- **La décima torre y las teclas** (RF-448): un nivel con más de 9 torres deja a la Disruptora o al Mecánico sin tecla.
+- **El Espejo se excluye por `reflect_range_tiles`** (D-087): un enemigo nuevo con rebote queda fuera del pulso sin avisar; es lo buscado, pero hay que recordarlo al crear enemigos.
+- **El desgaste** hace que la Disruptora deje de ser útil rápido (un solo impacto la lleva a 20 %): es lo que pide RF-367 para cualquier torre.
