@@ -107,3 +107,72 @@ static func describe(level: TowerLevelData, can_hit_air: bool) -> String:
 	lines.append_array(effects(level))
 	lines.append("Golpea voladores: %s" % ("sí" if can_hit_air else "no"))
 	return "\n".join(lines)
+
+
+# --- Costo en recursos (RF-418 y RF-419): el texto sale de los datos (RF-164) ---
+
+## "recurso" o "recursos" según la cantidad.
+static func resources_word(amount: int) -> String:
+	return "recurso" if amount == 1 else "recursos"
+
+
+## "300 de oro + 3 recursos" o, sin recursos, "150 de oro". `alt` = la segunda forma de pago.
+static func cost_text(tower: TowerData, alt: bool = false) -> String:
+	var text: String = "%d de oro" % tower.build_gold(alt)
+	var resources: int = tower.build_resources(alt)
+	if resources > 0:
+		text += " + %d %s" % [resources, resources_word(resources)]
+	return text
+
+
+## El precio en el botón de la barra: "300 + 3" (el ícono del recurso lo pone el HUD) o "150".
+static func bar_text(tower: TowerData, alt: bool = false) -> String:
+	var text: String = str(tower.build_gold(alt))
+	if tower.build_resources(alt) > 0:
+		text += " + %d" % tower.build_resources(alt)
+	return text
+
+
+## true si alguna forma de pago de la torre pide recursos.
+static func uses_resources(tower: TowerData) -> bool:
+	return tower.resource_cost > 0 or tower.has_alt_payment()
+
+
+## Por qué no se puede pagar con esa forma ("Faltan 2 recursos", "Este mapa no tiene recursos"), o "" si se puede.
+static func missing_text(tower: TowerData, alt: bool, gold: int, resources: int, map_has_resources: bool) -> String:
+	var gold_cost: int = tower.build_gold(alt)
+	var resource_cost: int = tower.build_resources(alt)
+	var parts: Array[String] = []
+	if gold < gold_cost:
+		parts.append("%d de oro" % (gold_cost - gold))
+	if resource_cost > resources:
+		if not map_has_resources:
+			parts.append("recursos (este mapa no tiene cómo conseguirlos)")
+		else:
+			parts.append("%d %s" % [resource_cost - resources, resources_word(resource_cost - resources)])
+	return "" if parts.is_empty() else "Faltan " + " y ".join(parts)
+
+
+## RF-418: "70 de oro" o "210 y 2 recursos" para el botón Vender del panel.
+static func refund_text(gold: int, resources: int) -> String:
+	if resources <= 0:
+		return str(gold)
+	return "%d y %d %s" % [gold, resources, resources_word(resources)]
+
+
+## RF-418: la línea del panel con lo que costó la torre en recursos. Vacía si no costó ninguno
+## y la torre tampoco tiene una forma de pago con recursos.
+static func invested_line(tower: TowerData, resources_invested: int) -> String:
+	if not uses_resources(tower):
+		return ""
+	return "Recursos invertidos: %d" % resources_invested
+
+
+## RF-437: los datos de costo para la ficha de la Wiki: [[rótulo, valor], ...]. Vacío si la torre solo usa oro.
+static func cost_facts(tower: TowerData) -> Array:
+	var facts: Array = []
+	if tower.resource_cost > 0:
+		facts.append(["Costo de construcción", cost_text(tower)])
+	if tower.has_alt_payment():
+		facts.append(["Formas de pago", "%s, o %s" % [cost_text(tower), cost_text(tower, true)]])
+	return facts

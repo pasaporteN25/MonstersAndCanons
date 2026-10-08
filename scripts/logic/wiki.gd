@@ -189,6 +189,7 @@ static func tower_entry(tower: TowerData, towers: Array[TowerData] = []) -> Wiki
 		facts.append(["Requisito", "%d avances distintos y permiso del nivel" % CollectibleRun.required(tower.required_collection)])
 	if tower.footprint > 1:  # RF-298
 		facts.append(["Tamaño", "%d×%d casillas" % [tower.footprint, tower.footprint]])
+	facts.append_array(TowerText.cost_facts(tower))  # RF-437
 	entry.add_facts(facts)
 	entry.add_heading("Niveles")
 	var rows: Array = [["Nivel", "Oro", "Daño", "Cadencia", "Daño/s", "Alcance"]]

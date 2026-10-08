@@ -80,6 +80,7 @@ func test_tower_without_drawings_gets_no_icon() -> void:
 
 func test_towers_of_every_level_are_drawn() -> void:
 	game.session.earn(5000)
+	game.session.add_resources(10)  # RF-420: el Mortero cuesta recursos
 	# Casillas libres del nivel 1, una por torre (las ocho de una casilla).
 	var cells: Array[Vector2i] = [Vector2i(1, 2), Vector2i(4, 2), Vector2i(8, 2), Vector2i(11, 2),
 		Vector2i(5, 6), Vector2i(8, 6), Vector2i(15, 6), Vector2i(18, 6)]

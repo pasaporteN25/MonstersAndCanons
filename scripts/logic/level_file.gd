@@ -105,6 +105,10 @@ static func parse(text: String, id: StringName) -> Dictionary:
 		warnings.append("mapa: " + problem)
 	if level.machine_enabled and level.obstacles.filter(func(obstacle: ObstacleSpec) -> bool: return obstacle.kind == ObstacleSpec.Kind.REMOVABLE).is_empty():
 		warnings.append("demoledora: el nivel la habilita pero no tiene removibles.")
+	if not level.uses_resources():  # RF-421: ofrece una torre que cuesta recursos y no hay cómo conseguirlos
+		for tower: TowerData in level.available_towers(Wiki._all_towers()):
+			if tower.resource_cost > 0:
+				warnings.append("torres: el %s cuesta recursos y este mapa no tiene cómo conseguirlos." % tower.display_name)
 	return {"level": level, "errors": errors, "warnings": warnings}
 
 

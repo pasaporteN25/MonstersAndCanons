@@ -9,8 +9,10 @@ extends Node2D
 signal tower_built(tower: Tower)
 ## Una torre subió de nivel (RF-71).
 signal tower_upgraded(tower: Tower)
-## Se vendió una torre; `refund` es el oro devuelto (RF-72).
-signal tower_sold(tower: Tower, refund: int)
+## Se vendió una torre; `refund` es el oro devuelto (RF-72) y `resource_refund` los recursos (RF-418).
+signal tower_sold(tower: Tower, refund: int, resource_refund: int)
+## RF-419: cambió la forma de pago elegida (false = solo oro).
+signal payment_changed(alt: bool)
 ## Cambió la torre elegida para construir. -1 = ninguna.
 signal selection_changed(index: int)
 ## Cambió la torre construida seleccionada. null = ninguna (RF-73).
@@ -32,6 +34,8 @@ var _selected_placed: Tower
 ## Casillas ocupadas: { Vector2i: Tower }.
 var _occupied: Dictionary = {}
 var _hover_cell: Vector2i = Vector2i.ZERO
+## RF-419: la torre elegida se paga con la segunda forma (oro + recursos). Arranca en false.
+var _pay_alt: bool = false
 ## RF-404: los removibles del mapa. Lo pone Game; null = este controlador no los conoce (sirve para los tests).
 var obstacles: InfrastructureController
 
@@ -61,6 +65,7 @@ func select(index: int) -> void:
 	if obstacles != null:
 		obstacles.deselect()
 	_selected = -1 if index == _selected else index
+	set_pay_alt(false)  # RF-419: "solo oro" elegido de entrada
 	selection_changed.emit(_selected)
 	queue_redraw()
 
@@ -69,8 +74,24 @@ func cancel() -> void:
 	if _selected == -1:
 		return
 	_selected = -1
+	set_pay_alt(false)
 	selection_changed.emit(_selected)
 	queue_redraw()
+
+
+## RF-419: elige la forma de pago de la torre elegida. Si no tiene dos formas, queda en solo oro.
+func set_pay_alt(alt: bool) -> void:
+	var tower: TowerData = selected_tower()
+	alt = alt and tower != null and tower.has_alt_payment()
+	if alt == _pay_alt:
+		return
+	_pay_alt = alt
+	payment_changed.emit(_pay_alt)
+	queue_redraw()
+
+
+func pay_alt() -> bool:
+	return _pay_alt
 
 
 # --- Construir (RF-42) ---
@@ -108,21 +129,22 @@ func cells_free(tower: TowerData, origin: Vector2i) -> bool:
 
 ## `cell` es la casilla de arriba a la izquierda. Casillas libres, con oro suficiente, la partida no
 ## terminó y no está en pausa (RF-104).
-func can_build(tower: TowerData, cell: Vector2i) -> bool:
+func can_build(tower: TowerData, cell: Vector2i, alt: bool = false) -> bool:
 	return not _session.is_over() \
 		and (tower.required_collection == &"" or _tower_types.has(tower)) \
 		and not get_tree().paused \
 		and cells_free(tower, cell) \
-		and _session.can_afford(tower.levels[0].cost)
+		and _session.can_afford_both(tower.build_gold(alt), tower.build_resources(alt))
 
 
-## Cobra y crea la torre. Devuelve false (y no cambia nada) si no se puede construir ahí.
-func try_build(tower_data: TowerData, cell: Vector2i) -> bool:
-	if not can_build(tower_data, cell):
+## Cobra (oro y recursos, los dos o ninguno: RF-418) y crea la torre. `alt` = segunda forma de pago (RF-419).
+## Devuelve false (y no cambia nada) si no se puede construir ahí.
+func try_build(tower_data: TowerData, cell: Vector2i, alt: bool = false) -> bool:
+	if not can_build(tower_data, cell, alt):
 		return false
-	_session.spend(tower_data.levels[0].cost)
+	_session.spend_both(tower_data.build_gold(alt), tower_data.build_resources(alt))
 	var tower: Tower = TOWER_SCENE.instantiate()
-	tower.setup(tower_data)
+	tower.setup(tower_data, alt and tower_data.has_alt_payment())
 	tower.origin_cell = cell
 	# RF-293: en el centro del cuadrado (el contenedor está en el origen).
 	tower.position = _level.cell_center(cell) + Vector2.ONE * (tower_data.footprint - 1) * Rules.TILE_SIZE / 2.0
@@ -180,17 +202,24 @@ func sell_value(tower: Tower) -> int:
 	return Rules.sell_refund(tower.total_invested, _balance)
 
 
-## Vende la torre: devuelve el oro, libera la casilla y la borra. Devuelve el oro devuelto.
+## RF-418 y RF-423: los recursos que devolvería vender esta torre; el mismo %, redondeado hacia abajo.
+func sell_resource_value(tower: Tower) -> int:
+	return Rules.sell_refund(tower.resources_invested, _balance)
+
+
+## Vende la torre: devuelve el oro y los recursos, libera la casilla y la borra. Devuelve el oro devuelto.
 func sell(tower: Tower) -> int:
 	if tower == null or _session.is_over():
 		return 0
 	var refund: int = sell_value(tower)
+	var resource_refund: int = sell_resource_value(tower)
 	_session.earn(refund)
+	_session.add_resources(resource_refund)
 	for occupied: Vector2i in tower.cells():  # RF-294: se liberan todas sus casillas
 		_occupied.erase(occupied)
 	if tower == _selected_placed:
 		deselect_placed()
-	tower_sold.emit(tower, refund)
+	tower_sold.emit(tower, refund, resource_refund)
 	tower.queue_free()
 	return refund
 
@@ -242,7 +271,7 @@ func _handle_build_mode_input(event: InputEvent) -> void:
 			_accept()
 			return
 		# RF-43: la vista previa sigue activa para construir otra igual.
-		try_build(selected_tower(), origin_for(get_global_mouse_position(), selected_tower().footprint))
+		try_build(selected_tower(), origin_for(get_global_mouse_position(), selected_tower().footprint), _pay_alt)
 		_accept()
 
 
@@ -299,7 +328,7 @@ func _draw() -> void:
 	# RF-40, RF-41 y RF-292: casillas verdes/rojas (todas las de la torre), torre fantasma y círculo de alcance.
 	var tile: float = Rules.TILE_SIZE
 	var center: Vector2 = _level.cell_center(_hover_cell) + Vector2.ONE * (tower.footprint - 1) * tile / 2.0
-	var tint: Color = VALID_TINT if can_build(tower, _hover_cell) else INVALID_TINT
+	var tint: Color = VALID_TINT if can_build(tower, _hover_cell, _pay_alt) else INVALID_TINT
 	for cell: Vector2i in cells:
 		var cell_center: Vector2 = _level.cell_center(cell)
 		draw_rect(Rect2(cell_center - Vector2(tile, tile) / 2.0, Vector2(tile, tile)), tint)

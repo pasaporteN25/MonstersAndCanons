@@ -116,9 +116,12 @@ func _ready() -> void:
 	build_controller.selection_changed.connect(hud.show_selected_tower)
 	build_controller.placed_selection_changed.connect(_refresh_tower_panel.unbind(1))
 
+	hud.setup_resources(level_data.uses_resources())  # RF-416: antes de setup_towers
 	hud.setup_towers(available_towers)
 	hud.setup_waves(level_data.waves)  # RF-133, RF-135: antes de bind()
 	hud.tower_button_pressed.connect(build_controller.select)
+	hud.payment_pressed.connect(build_controller.set_pay_alt)  # RF-419
+	build_controller.payment_changed.connect(hud.show_payment)
 	hud.start_wave_pressed.connect(start_next_wave)
 	hud.bind(session)
 
@@ -129,6 +132,7 @@ func _ready() -> void:
 	panel.sell_pressed.connect(func() -> void: build_controller.sell(build_controller.selected_placed()))
 	panel.targeting_pressed.connect(_on_targeting_pressed)
 	session.gold_changed.connect(panel.refresh)
+	session.resources_changed.connect(_refresh_tower_panel.unbind(1))  # RF-418: la venta muestra recursos
 
 	session.wave_completed.connect(_collection_wave_completed)
 	session.countdown_finished.connect(start_next_wave)
@@ -549,7 +553,7 @@ func _on_tower_upgraded(tower: Tower) -> void:
 	Audio.play(&"upgrade")
 
 
-func _on_tower_sold(tower: Tower, refund: int) -> void:
+func _on_tower_sold(tower: Tower, refund: int, _resource_refund: int) -> void:
 	effects.tower_sold(tower.global_position, refund, tower.data.footprint)
 	_refresh_exploitable(tower)  # todavía está en el árbol: se borra al final del cuadro
 	Audio.play(&"sell")
@@ -582,7 +586,8 @@ func _on_targeting_pressed() -> void:
 func _refresh_tower_panel() -> void:
 	var tower: Tower = build_controller.selected_placed()
 	var value: int = build_controller.sell_value(tower) if tower != null else 0
-	hud.tower_panel.show_tower(tower, value, session.gold)
+	var resource_value: int = build_controller.sell_resource_value(tower) if tower != null else 0
+	hud.tower_panel.show_tower(tower, value, session.gold, resource_value)
 
 
 func _on_tower_fired(projectile: Projectile) -> void:

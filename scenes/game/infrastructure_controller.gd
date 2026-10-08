@@ -100,8 +100,10 @@ func discard_job() -> void:
 
 func _on_job_finished(cell: Vector2i, reward: Dictionary) -> void:
 	_level.clear_removable(cell)  # RF-408: pasto construible
-	# Los recursos los suma a la sesión T209 y la pieza la conecta T211: acá solo se muestra el aviso.
+	# RF-408 y RF-415: los recursos entran a la sesión una sola vez (la casilla ya no se puede volver a demoler).
+	# La pieza de colección la conecta T211.
 	var resources: int = reward.get("resources", 0)
+	_session.add_resources(resources)
 	if resources > 0 and _effects != null:
 		var text := FloatingText.new().setup("+%d %s" % [resources, "recurso" if resources == 1 else "recursos"], REWARD_COLOR, 18, 0.9, 34.0)
 		text.position = _level.cell_center(cell) + Vector2(0, -20)

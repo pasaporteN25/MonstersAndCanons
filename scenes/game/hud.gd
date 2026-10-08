@@ -9,6 +9,8 @@ signal tower_button_pressed(index: int)
 ## RF-103: botones de pausa y velocidad.
 signal pause_pressed
 signal speed_pressed
+## RF-419: se pulsó un botón de pago de la ayuda de construcción (true = oro + recursos).
+signal payment_pressed(alt: bool)
 
 ## RF-170: botones compactos, para que entren 9 torres (M19) sin tapar "Próxima oleada" (D-026).
 const TOWER_BUTTON_SIZE := Vector2(76, 60)
@@ -31,6 +33,17 @@ var _intro_busy: bool = false
 var _last_gold: int = -1
 var _last_lives: int = -1
 var _last_score: int = -1
+## RF-416: el mapa tiene alguna fuente de recursos (el contador se ve solo entonces).
+var _uses_resources: bool = false
+var _resources: int = 0
+var _last_resources: int = -1
+var _gold: int = 0
+## Índice de la torre elegida para construir (-1 = ninguna) y su forma de pago (RF-419).
+var _selected_index: int = -1
+var _resource_stat: HBoxContainer
+var _resource_label: Label
+var _pay_gold_button: Button
+var _pay_alt_button: Button
 
 @onready var _gold_label: Label = %GoldLabel
 @onready var _lives_label: Label = %LivesLabel
@@ -96,6 +109,8 @@ func _ready() -> void:
 	add_child(hint)
 	var bar: Control = get_node("TopBar")
 	bar.theme = preload("res://assets/ui/menu_theme.tres")
+	_build_resource_stat(bar.get_node("Stats"))
+	_build_payment_buttons()
 	var edge := ColorRect.new()
 	edge.color = Color(0.52, 0.36, 0.17)
 	edge.position = Vector2(0, 46)
@@ -112,11 +127,89 @@ func _ready() -> void:
 			hint.show())
 		icon.focus_exited.connect(hint.hide)
 
+	var resource_icon: Control = _resource_stat.get_node("ResourceIcon")
+	resource_icon.focus_entered.connect(func() -> void:
+		hint.text = resource_icon.tooltip_text
+		hint.show())
+	resource_icon.focus_exited.connect(hint.hide)
+
 	_start_wave_button.pressed.connect(start_wave_pressed.emit)
 	_pause_button.pressed.connect(pause_pressed.emit)
 	_speed_button.pressed.connect(speed_pressed.emit)
 	show_paused(false)
 	show_speed(1.0)
+
+
+## RF-416: el contador de recursos de la barra superior, con el mismo formato que las otras estadísticas.
+## Oculto hasta que `setup_resources(true)`. El ícono es provisional (una gema dibujada) hasta T221.
+func _build_resource_stat(stats: Control) -> void:
+	_resource_stat = HBoxContainer.new()
+	_resource_stat.name = "ResourceStat"
+	_resource_stat.add_theme_constant_override("separation", 6)
+	_resource_stat.visible = false
+	var icon := TextureRect.new()
+	icon.name = "ResourceIcon"
+	icon.custom_minimum_size = Vector2(30, 30)
+	icon.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture = _resource_texture(30)
+	icon.tooltip_text = "Recursos (solo de esta partida)"
+	icon.mouse_filter = Control.MOUSE_FILTER_STOP
+	icon.focus_mode = Control.FOCUS_ALL
+	_resource_stat.add_child(icon)
+	_resource_label = Label.new()
+	_resource_label.name = "ResourceLabel"
+	_resource_label.text = "0"
+	_resource_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_resource_label.add_theme_color_override("font_color", Color(0.62, 0.9, 0.55))
+	_resource_label.add_theme_font_size_override("font_size", 22)
+	_resource_stat.add_child(_resource_label)
+	stats.add_child(_resource_stat)
+
+
+## Ícono provisional del recurso: un rombo verde con borde claro (guía de arte: colores de la interfaz).
+static func _resource_texture(size: int) -> Texture2D:
+	var image := Image.create(size, size, false, Image.FORMAT_RGBA8)
+	var center: float = (size - 1) / 2.0
+	for y: int in size:
+		for x: int in size:
+			var distance: float = (absf(x - center) + absf(y - center)) / center
+			if distance <= 0.78:
+				image.set_pixel(x, y, Color(0.4, 0.78, 0.38))
+			elif distance <= 0.95:
+				image.set_pixel(x, y, Color(0.85, 1.0, 0.8))
+	return ImageTexture.create_from_image(image)
+
+
+## RF-419: los dos botones chicos de pago de la ayuda de construcción. Solo se ven con una torre de dos precios.
+func _build_payment_buttons() -> void:
+	_pay_gold_button = _payment_button(false)
+	_pay_alt_button = _payment_button(true)
+	_build_info.add_child(_pay_gold_button)
+	_build_info.add_child(_pay_alt_button)
+	_build_info.move_child(_pay_gold_button, 1)
+	_build_info.move_child(_pay_alt_button, 2)
+
+
+func _payment_button(alt: bool) -> Button:
+	var button := Button.new()
+	button.name = "PayAltButton" if alt else "PayGoldButton"
+	button.toggle_mode = true
+	button.focus_mode = Control.FOCUS_NONE
+	button.visible = false
+	button.add_theme_font_size_override("font_size", 14)
+	button.custom_minimum_size = Vector2(0, 28)
+	button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	button.pressed.connect(payment_pressed.emit.bind(alt))
+	return button
+
+
+## RF-416: muestra u oculta el contador. Game lo llama con `LevelData.uses_resources()` antes de `setup_towers`.
+func setup_resources(enabled: bool) -> void:
+	_uses_resources = enabled
+	_resource_stat.visible = enabled
+	_refresh_tower_buttons()
 
 
 ## RF-104: texto del botón y cartel "PAUSA".
@@ -193,6 +286,7 @@ static func dangerous_enemy_in(wave: WaveData) -> EnemyData:
 ## Game le pasa la sesión para que el HUD se mantenga actualizado.
 func bind(session: LevelSession) -> void:
 	session.gold_changed.connect(_on_gold_changed)
+	session.resources_changed.connect(_on_resources_changed)
 	session.lives_changed.connect(_on_lives_changed)
 	session.score_changed.connect(_on_score_changed)
 	session.wave_changed.connect(_on_wave_changed)
@@ -215,15 +309,15 @@ func setup_towers(tower_types: Array[TowerData]) -> void:
 		button.toggle_mode = true
 		button.focus_mode = Control.FOCUS_NONE
 		# RF-170: dibujo arriba, costo abajo y la tecla en una esquina. El nombre, al pasar el mouse.
-		button.text = str(tower.levels[0].cost)
-		button.tooltip_text = "%s (tecla %d): %d de oro" % [tower.display_name, i + 1, tower.levels[0].cost]
+		button.text = TowerText.bar_text(tower)  # RF-418: "300 + 3"
+		button.tooltip_text = "%s (tecla %d): %s" % [tower.display_name, i + 1, TowerText.cost_text(tower)]
 		button.add_theme_font_size_override("font_size", 15)
 		button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		button.vertical_icon_alignment = VERTICAL_ALIGNMENT_TOP
 		if i < 9:
 			button.add_child(_key_label(i + 1))
 		else:
-			button.tooltip_text = "%s: %d de oro" % [tower.display_name, tower.levels[0].cost]
+			button.tooltip_text = "%s: %s" % [tower.display_name, TowerText.cost_text(tower)]
 		var icon: Texture2D = Tower.make_icon(tower)
 		if icon != null:
 			# RF-155: base y torreta, como la torre recién construida, achicadas con suavidad (D-023).
@@ -233,9 +327,37 @@ func setup_towers(tower_types: Array[TowerData]) -> void:
 			button.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 		else:  # RF-156: sin dibujo, un cuadradito de su color.
 			button.icon = _color_swatch(tower.color)
+		if TowerText.uses_resources(tower):
+			button.add_child(_resource_badge(tower))
+		if tower.has_alt_payment():
+			button.tooltip_text += " · o " + TowerText.cost_text(tower, true)
 		button.pressed.connect(tower_button_pressed.emit.bind(i))
 		_tower_button_row.add_child(button)
 		_tower_buttons.append(button)
+	_refresh_tower_buttons()
+
+
+## RF-418 y RF-419: el ícono del recurso, chiquito, en la esquina de arriba a la derecha del botón. Con dos
+## formas de pago lleva además la otra ("o 120 + 1"), en chico.
+func _resource_badge(tower: TowerData) -> Control:
+	var row := HBoxContainer.new()
+	row.name = "ResourceBadge"
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_theme_constant_override("separation", 1)
+	row.position = Vector2(TOWER_BUTTON_SIZE.x - (46 if tower.has_alt_payment() else 18), 2)
+	if tower.has_alt_payment():
+		var other := Label.new()
+		other.text = "o " + TowerText.bar_text(tower, true)
+		other.add_theme_font_size_override("font_size", 10)
+		other.modulate = Color(1, 1, 1, 0.75)
+		other.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		row.add_child(other)
+	var icon := TextureRect.new()
+	icon.texture = _resource_texture(14)
+	icon.custom_minimum_size = Vector2(14, 14)
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(icon)
+	return row
 
 
 ## RF-170: número de la tecla, chiquito, en la esquina de arriba a la izquierda del botón.
@@ -262,10 +384,22 @@ func show_selected_tower(index: int) -> void:
 	for i: int in _tower_buttons.size():
 		_tower_buttons[i].set_pressed_no_signal(i == index)
 	# RF-171: nombre, costo y para qué sirve la torre elegida.
+	_selected_index = index
 	_build_info.visible = index >= 0
+	_pay_gold_button.visible = false
+	_pay_alt_button.visible = false
 	if index >= 0:
 		var tower: TowerData = _tower_types[index]
-		_build_info_name.text = "%s · %d de oro" % [tower.display_name, tower.levels[0].cost]
+		if tower.has_alt_payment():  # RF-419: dos botones chicos; el nombre queda sin precio
+			_build_info_name.text = tower.display_name
+			_pay_gold_button.text = TowerText.cost_text(tower)
+			_pay_alt_button.text = TowerText.cost_text(tower, true)
+			_pay_gold_button.visible = true
+			_pay_alt_button.visible = true
+			show_payment(false)
+			_refresh_payment_buttons()
+		else:
+			_build_info_name.text = "%s · %s" % [tower.display_name, TowerText.cost_text(tower)]
 		_build_info_text.text = tower.description
 		if tower.footprint > 1:  # RF-298
 			_build_info_text.text += " Necesita %d×%d casillas libres." % [tower.footprint, tower.footprint]
@@ -279,9 +413,51 @@ func _on_gold_changed(gold: int) -> void:
 	if _last_gold >= 0 and gold != _last_gold:
 		_pop(_gold_label)  # RF-129
 	_last_gold = gold
-	# RF-101: gris si no alcanza el oro.
+	_gold = gold
+	_refresh_tower_buttons()
+
+
+## RF-416: el contador de recursos, con el mismo "pop" que el oro.
+func _on_resources_changed(resources: int) -> void:
+	_resource_label.text = "%d" % resources
+	if _last_resources >= 0 and resources != _last_resources:
+		_pop(_resource_label)
+	_last_resources = resources
+	_resources = resources
+	_refresh_tower_buttons()
+
+
+## RF-101 y RF-418: gris si no alcanza el oro o los recursos; el motivo, en el tooltip. Una torre con dos
+## formas de pago se puede elegir si alcanza cualquiera de las dos (RF-419).
+func _refresh_tower_buttons() -> void:
 	for i: int in _tower_buttons.size():
-		_tower_buttons[i].disabled = gold < _tower_types[i].levels[0].cost
+		var tower: TowerData = _tower_types[i]
+		var reason: String = TowerText.missing_text(tower, false, _gold, _resources, _uses_resources)
+		if reason != "" and tower.has_alt_payment():
+			reason = reason if TowerText.missing_text(tower, true, _gold, _resources, _uses_resources) != "" else ""
+		_tower_buttons[i].disabled = reason != ""
+		var base: String = _tower_buttons[i].tooltip_text.split("\n")[0]
+		_tower_buttons[i].tooltip_text = base + ("\n" + reason if reason != "" else "")
+	_refresh_payment_buttons()
+
+
+## RF-419: la segunda opción se apaga, con el motivo, si faltan recursos o el mapa no los tiene.
+func _refresh_payment_buttons() -> void:
+	if _selected_index < 0 or _selected_index >= _tower_types.size() or not _tower_types[_selected_index].has_alt_payment():
+		return
+	var tower: TowerData = _tower_types[_selected_index]
+	var reason: String = TowerText.missing_text(tower, true, _gold, _resources, _uses_resources)
+	_pay_alt_button.disabled = reason != ""
+	_pay_alt_button.tooltip_text = reason
+	var reason_gold: String = TowerText.missing_text(tower, false, _gold, _resources, _uses_resources)
+	_pay_gold_button.disabled = reason_gold != ""
+	_pay_gold_button.tooltip_text = reason_gold
+
+
+## RF-419: marca el botón de pago elegido.
+func show_payment(alt: bool) -> void:
+	_pay_gold_button.set_pressed_no_signal(not alt)
+	_pay_alt_button.set_pressed_no_signal(alt)
 
 
 ## RF-190: los puntos, con el mismo "pop" que el oro.
