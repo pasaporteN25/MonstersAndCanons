@@ -1,0 +1,10 @@
+{
+  "tarea": "T220",
+  "estado": "provisional",
+  "fecha": "2026-10-08",
+  "formatos": {"mapa": "64x64 SVG", "segmento_reserva": "8x8 SVG"},
+  "fuentes": "sources/",
+  "finales": ["mina.svg", "mina_activa.svg", "mina_agotada.svg", "bosque_explotable.svg", "bosque_explotable_activo.svg", "bosque_explotable_agotado.svg", "reserva_llena.svg", "reserva_vacia.svg"],
+  "integracion": "Pendiente de T210; todavía no existe el sistema de extracción que consume estos recursos.",
+  "aprobacion_lucas": "Pendiente"
+}
