@@ -2,6 +2,10 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Demoledora global *(T208, 2026-10-08)*
+
+- En los niveles que la habilitan, el botón **Infraestructura** permite comprar una demoledora por 180 de oro, una sola vez. Cada demolición posterior cuesta el 10 % del precio original (mínimo 5) y tarda el 80 % del tiempo; el panel de cada objeto muestra el ahorro antes de comprarla. Las demoliciones ya iniciadas conservan su costo y duración, y al reiniciar se pierde la compra.
+
 ## Demolición directa de obstáculos *(T207, 2026-10-08)*
 
 - En un mapa que tenga **removibles** (árboles, rocas o escombros marcados con una estaca ámbar), un clic abre un panel con el costo, el tiempo y la recompensa. **Demoler** cobra el oro y empieza un trabajo que avanza con el reloj de la partida (se frena en pausa y va más rápido a ×2). Se puede **cancelar** y se devuelve todo el oro. Al terminar la casilla queda libre para construir.

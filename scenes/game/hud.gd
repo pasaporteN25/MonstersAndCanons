@@ -50,6 +50,7 @@ var _last_score: int = -1
 @onready var tower_panel: TowerPanel = %TowerPanel
 ## Panel del removible elegido (RF-404). Game lo conecta con InfrastructureController.
 var obstacle_panel: ObstaclePanel
+var infrastructure_panel: InfrastructurePanel
 @onready var _pause_button: Button = %PauseButton
 @onready var _speed_button: Button = %SpeedButton
 @onready var _pause_label: Label = %PauseLabel
@@ -79,6 +80,9 @@ func _ready() -> void:
 	obstacle_panel = ObstaclePanel.new()
 	obstacle_panel.name = "ObstaclePanel"
 	add_child(obstacle_panel)
+	infrastructure_panel = InfrastructurePanel.new()
+	infrastructure_panel.name = "InfrastructurePanel"
+	add_child(infrastructure_panel)
 	_metrics = Label.new()
 	_metrics.name = "PerformanceOverlay"
 	_metrics.position = Vector2(990, 56)
@@ -199,6 +203,12 @@ func bind(session: LevelSession) -> void:
 	session.wave_completed.connect(_on_wave_completed)
 	session.state_changed.connect(_on_state_changed)
 	session.countdown_changed.connect(_on_countdown_changed)
+	_on_gold_changed(session.gold)
+
+
+## RF-411 y RF-412: botón global, visible solo si el nivel habilita la compra.
+func setup_infrastructure(enabled: bool, price: int, gold: int, owned: bool) -> void:
+	infrastructure_panel.setup(enabled, price, gold, owned)
 
 
 ## RF-101: un botón por torre, con su color, nombre, tecla y costo.
@@ -276,6 +286,8 @@ func show_selected_tower(index: int) -> void:
 
 func _on_gold_changed(gold: int) -> void:
 	_gold_label.text = "%d" % gold
+	if infrastructure_panel != null:
+		infrastructure_panel.update_gold(gold)
 	if _last_gold >= 0 and gold != _last_gold:
 		_pop(_gold_label)  # RF-129
 	_last_gold = gold

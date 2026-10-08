@@ -21,20 +21,35 @@ var _level: Level
 var _session: LevelSession
 var _effects: Node
 var _selected: Vector2i = NONE
+var machine_enabled: bool = false
 
 
 ## `rng` es el generador con semilla de la partida (RF-417); `recovered` y `source`, de ObstacleField.
 func setup(level: Level, session: LevelSession, specs: Array[ObstacleSpec], rng: RandomNumberGenerator,
-		effects: Node, recovered: Dictionary = {}, source: StringName = &"") -> void:
+		effects: Node, recovered: Dictionary = {}, source: StringName = &"", enable_machine: bool = false) -> void:
 	_level = level
 	_session = session
 	_effects = effects
+	machine_enabled = enable_machine
 	field.setup(specs, rng, recovered, source)
 	field.job_finished.connect(_on_job_finished)
 	field.job_cancelled.connect(func(_cell: Vector2i, _refund: int) -> void: changed.emit())
 	field.job_started.connect(func(_cell: Vector2i) -> void: changed.emit())
 	field.job_progress.connect(func(_cell: Vector2i, _fraction: float) -> void: changed.emit())
 	session.gold_changed.connect(func(_gold: int) -> void: changed.emit())
+
+
+## RF-411 a RF-413: cobra la máquina una sola vez; el campo solo registra la compra.
+func buy_machine() -> bool:
+	if not machine_enabled or _session.is_over() or field.has_machine:
+		return false
+	if not _session.spend(field.machine_price()):
+		return false
+	if not field.buy_machine():
+		_session.earn(field.machine_price())
+		return false
+	changed.emit()
+	return true
 
 
 func _process(delta: float) -> void:

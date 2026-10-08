@@ -20,6 +20,8 @@ var _drops: Dictionary = {}  # Vector2i → bool
 var _recovered: Dictionary = {}
 var _source: StringName = &""
 var _job: DemolitionJob
+var has_machine: bool = false
+var _machine: Dictionary = {}
 
 
 ## RF-417: sortea ahora el drop de cada removible, en orden de fila y columna. `recovered` dice qué
@@ -31,6 +33,8 @@ func setup(specs: Array[ObstacleSpec], rng: RandomNumberGenerator, recovered: Di
 	_states.clear()
 	_drops.clear()
 	_job = null
+	has_machine = false
+	_machine = ObstacleCatalog.machine()
 	_recovered = recovered
 	_source = source
 	var ordered: Array[ObstacleSpec] = specs.duplicate()
@@ -80,12 +84,51 @@ func can_order(cell: Vector2i) -> StringName:
 
 func cost_of(cell: Vector2i) -> int:
 	var spec: ObstacleSpec = _specs.get(cell)
-	return 0 if spec == null else spec.cost
+	return 0 if spec == null else _cost(spec, has_machine)
 
 
 func seconds_of(cell: Vector2i) -> float:
 	var spec: ObstacleSpec = _specs.get(cell)
-	return 0.0 if spec == null else spec.seconds
+	return 0.0 if spec == null else _seconds(spec, has_machine)
+
+
+## Precio que tendría la celda con la máquina, para mostrarlo antes de comprarla.
+func cost_with_machine(cell: Vector2i) -> int:
+	var spec: ObstacleSpec = _specs.get(cell)
+	return 0 if spec == null else _cost(spec, true)
+
+
+## Duración que tendría la celda con la máquina, para mostrarla antes de comprarla.
+func seconds_with_machine(cell: Vector2i) -> float:
+	var spec: ObstacleSpec = _specs.get(cell)
+	return 0.0 if spec == null else _seconds(spec, true)
+
+
+func machine_price() -> int:
+	return int(_machine.get("precio", 0))
+
+
+## La compra se cobra afuera. Devuelve false si ya se compró.
+func buy_machine() -> bool:
+	if has_machine or machine_price() <= 0:
+		return false
+	has_machine = true
+	return true
+
+
+func _cost(spec: ObstacleSpec, with_machine: bool) -> int:
+	if not with_machine:
+		return spec.cost
+	var percentage: float = float(_machine.get("costo_uso_porcentaje", 100)) / 100.0
+	var minimum: int = int(_machine.get("costo_uso_minimo", 0))
+	return mini(spec.cost, maxi(minimum, roundi(spec.cost * percentage)))
+
+
+func _seconds(spec: ObstacleSpec, with_machine: bool) -> float:
+	if not with_machine:
+		return spec.seconds
+	var percentage: float = float(_machine.get("tiempo_porcentaje", 100)) / 100.0
+	return spec.seconds * percentage
 
 
 ## Empieza el trabajo y guarda el precio y la duración (RF-406). El cobro lo hace el llamador.

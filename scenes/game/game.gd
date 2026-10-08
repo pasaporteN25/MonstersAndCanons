@@ -182,7 +182,8 @@ func _setup_infrastructure() -> void:
 	infrastructure = InfrastructureController.new()
 	infrastructure.name = "Infrastructure"
 	add_child(infrastructure)
-	infrastructure.setup(level, session, level_data.obstacles, rng, effects, {}, level_data.id)
+	infrastructure.setup(level, session, level_data.obstacles, rng, effects, {}, level_data.id,
+		level_data.machine_enabled)
 	obstacle_layer = ObstacleLayer.new()
 	obstacle_layer.name = "ObstacleLayer"
 	add_child(obstacle_layer)
@@ -191,8 +192,12 @@ func _setup_infrastructure() -> void:
 	var panel: ObstaclePanel = hud.obstacle_panel
 	panel.demolish_pressed.connect(infrastructure.order)
 	panel.cancel_pressed.connect(infrastructure.cancel_job)
+	hud.setup_infrastructure(level_data.machine_enabled, infrastructure.field.machine_price(), session.gold,
+		infrastructure.field.has_machine)
+	hud.infrastructure_panel.buy_pressed.connect(infrastructure.buy_machine)
 	infrastructure.selection_changed.connect(_refresh_obstacle_panel.unbind(1))
 	infrastructure.changed.connect(_refresh_obstacle_panel)
+	infrastructure.changed.connect(_refresh_infrastructure_panel)
 
 
 ## Muestra en el panel el removible elegido (o lo oculta si no hay ninguno).
@@ -205,7 +210,13 @@ func _refresh_obstacle_panel() -> void:
 	var field: ObstacleField = infrastructure.field
 	var job: DemolitionJob = field.job()
 	hud.obstacle_panel.show_obstacle(spec, field.state_of(cell), field.has_job() and job.cell != cell,
-			session.gold, 0.0 if job == null else job.seconds_left(), field.finding_recovered(cell))
+			session.gold, 0.0 if job == null else job.seconds_left(), field.finding_recovered(cell),
+			job.paid if job != null and job.cell == cell else field.cost_of(cell),
+			field.seconds_of(cell), field.cost_with_machine(cell) if infrastructure.machine_enabled and not field.has_machine else -1)
+
+
+func _refresh_infrastructure_panel() -> void:
+	hud.infrastructure_panel.update_state(session.gold, infrastructure.field.has_machine)
 
 
 ## RF-251: un mapa más grande que 20×9 se muestra con zoom, con una cámara. Una cámara no cambia

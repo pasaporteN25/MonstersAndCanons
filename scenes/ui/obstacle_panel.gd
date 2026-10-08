@@ -55,36 +55,41 @@ func _label(parent: Control, size: int, color: Color = Color.WHITE) -> Label:
 ## Muestra el removible `spec` (o se oculta si es null). `state` es el de `ObstacleField`; `busy`, si hay
 ## otro trabajo en curso; `seconds_left`, lo que falta si este es el que se está demoliendo.
 func show_obstacle(spec: ObstacleSpec, state: ObstacleField.State, busy: bool, gold: int,
-		seconds_left: float, recovered: bool) -> void:
+		seconds_left: float, recovered: bool, current_cost: int = -1, current_seconds: float = -1.0,
+		machine_cost: int = -1) -> void:
 	visible = spec != null
 	if spec == null:
 		_cell = InfrastructureController.NONE
 		return
 	_cell = spec.cell
 	_title.text = ObstacleText.display_name(spec)
-	_cost.text = ObstacleText.cost_line(spec.cost)
-	_time.text = ObstacleText.time_line(spec.seconds)
+	var cost: int = spec.cost if current_cost < 0 else current_cost
+	var seconds: float = spec.seconds if current_seconds < 0.0 else current_seconds
+	_cost.text = ObstacleText.cost_line(cost)
+	if machine_cost >= 0:
+		_cost.text += "\nCon la demoledora: %d de oro" % machine_cost
+	_time.text = ObstacleText.time_line(seconds)
 	_reward.text = ObstacleText.reward_line(spec, recovered)
 	_note.visible = false
 	_cancel_mode = state == ObstacleField.State.WORKING
 	if state == ObstacleField.State.WORKING:
-		_cost.text = "Pagado: %d de oro" % spec.cost
+		_cost.text = "Pagado: %d de oro" % cost
 		_time.text = ObstacleText.seconds_left_line(seconds_left)
-		_button.text = "Cancelar (devuelve %d)" % spec.cost
+		_button.text = "Cancelar (devuelve %d)" % cost
 		_button.disabled = false
 		_button.tooltip_text = "Cancelar la demolición y recuperar todo el oro"
 	elif busy:
 		_note.visible = true
 		_note.text = "Hay una demolición en curso"
-		_button.text = "Demoler (%d)" % spec.cost
+		_button.text = "Demoler (%d)" % cost
 		_button.disabled = true
 		_button.tooltip_text = _note.text
-	elif gold < spec.cost:
-		_button.text = ObstacleText.missing_gold(spec.cost, gold)
+	elif gold < cost:
+		_button.text = ObstacleText.missing_gold(cost, gold)
 		_button.disabled = true
 		_button.tooltip_text = _button.text
 	else:
-		_button.text = "Demoler (%d)" % spec.cost
+		_button.text = "Demoler (%d)" % cost
 		_button.disabled = false
 		_button.tooltip_text = "Demoler"
 

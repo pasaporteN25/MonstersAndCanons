@@ -42,11 +42,12 @@ func _field(chance: int = 100, seed_value: int = 1) -> ObstacleField:
 	return result
 
 
-func _start_game(gold: int = 100) -> void:
+func _start_game(gold: int = 100, machine_enabled: bool = false) -> void:
 	var rows: Array = ROWS.duplicate()
 	rows[1] = "....t..............."
 	rows[3] = "...........r........"
 	var data := {"version": 1, "nombre": "Demolición", "oro": gold, "vidas": 10,
+		"demoledora": machine_enabled,
 		"leyenda": {"t": {"removible": {"clase": "arbol"}}, "r": {"removible": {"clase": "roca"}}},
 		"mapa": rows, "oleadas": [[{"enemigo": "normal", "cantidad": 2, "cada": 1.0}], [{"enemigo": "normal", "cantidad": 2, "cada": 1.0}]]}
 	var result: Dictionary = LevelFile.parse(JSON.stringify(data), &"prueba")
@@ -77,6 +78,39 @@ func test_order_starts_a_job_with_fixed_price_and_time() -> void:
 	assert_eq(job.paid, 40)
 	assert_eq(job.seconds_total, 4.0)
 	assert_eq(field.state_of(TREE), ObstacleField.State.WORKING)
+
+
+func test_machine_applies_data_percentages_and_minimum() -> void:
+	field = _field()
+	assert_eq(field.machine_price(), 180, "RF-412: el precio sale de data/obstaculos.json")
+	assert_eq(field.cost_of(TREE), 40)
+	assert_true(field.buy_machine())
+	assert_true(field.has_machine)
+	assert_eq(field.cost_of(TREE), 5, "RF-413: 10 % de 40 redondeado, mínimo 5")
+	assert_eq(field.cost_of(ROCK), 6, "RF-413: 10 % de 60")
+	assert_almost_eq(field.seconds_of(TREE), 3.2, 0.001)
+	assert_almost_eq(field.seconds_of(ROCK), 4.8, 0.001)
+	assert_false(field.buy_machine(), "RF-412: no se compra dos veces")
+
+
+func test_machine_discount_never_exceeds_original_cost() -> void:
+	var cheap := ObstacleSpec.new()
+	cheap.cell = TREE
+	cheap.cost = 3
+	cheap.seconds = 2.0
+	field = ObstacleField.new()
+	field.setup([cheap] as Array[ObstacleSpec], RandomNumberGenerator.new())
+	field.buy_machine()
+	assert_eq(field.cost_of(TREE), 3, "RF-413: el mínimo no puede subir el costo original")
+
+
+func test_machine_amortization_examples_from_rf_414() -> void:
+	field = _field()
+	var cases: Array[Array] = [[60, 6, 4], [40, 5, 6], [90, 9, 3]]
+	for entry: Array in cases:
+		var original_total: int = int(entry[0]) * int(entry[2])
+		var machine_total: int = field.machine_price() + int(entry[1]) * int(entry[2])
+		assert_true(machine_total < original_total, "RF-414: la máquina se amortiza en el número de demoliciones indicado")
 
 
 func test_only_one_job_at_a_time() -> void:
@@ -205,6 +239,55 @@ func test_order_charges_and_finishing_allows_building() -> void:
 	assert_eq(game.infrastructure.field.state_of(TREE), ObstacleField.State.CLEARED)
 	assert_true(game.level.is_buildable(TREE), "RF-408: queda pasto construible")
 	assert_true(game.build_controller.try_build(basic, TREE))
+
+
+func test_machine_purchase_is_level_gated_and_updates_prices_globally() -> void:
+	_start_game(300, true)
+	assert_true(game.hud.infrastructure_panel.visible, "RF-411: aparece solo en el nivel habilitado")
+	game.infrastructure.select(TREE)
+	var text_before: Array[String] = []
+	for label: Node in game.hud.obstacle_panel.find_children("*", "Label", true, false):
+		text_before.append((label as Label).text)
+	assert_true(text_before.any(func(text: String) -> bool: return text.contains("Con la demoledora: 5 de oro")),
+		"RF-413: se informa el precio reducido antes de comprar")
+	assert_true(game.infrastructure.buy_machine())
+	assert_eq(game.session.gold, 120, "RF-412: cobra 180 de oro")
+	assert_true(game.infrastructure.field.has_machine)
+	assert_true(game.hud.infrastructure_panel.find_children("*", "Label", true, false)[0].text.contains("Demoledora activa"))
+	assert_false(game.infrastructure.buy_machine(), "no vuelve a cobrar una segunda compra")
+	assert_eq(game.session.gold, 120)
+	assert_true(game.infrastructure.order(ROCK))
+	assert_eq(game.session.gold, 114, "RF-413: el descuento rige en todo el mapa")
+	assert_almost_eq(game.infrastructure.field.job().seconds_total, 4.8, 0.001)
+
+
+func test_machine_cannot_be_bought_without_gold_or_when_level_disables_it() -> void:
+	_start_game(100, true)
+	assert_false(game.infrastructure.buy_machine(), "RF-412: no alcanza para los 180 de oro")
+	assert_eq(game.session.gold, 100)
+	assert_false(game.infrastructure.field.has_machine)
+	game.free()
+	_start_game(300, false)
+	assert_false(game.hud.infrastructure_panel.visible, "RF-411: sin habilitación no aparece el panel")
+	assert_false(game.infrastructure.buy_machine())
+	assert_eq(game.session.gold, 300)
+
+
+func test_machine_purchase_does_not_change_existing_job_and_retry_removes_it() -> void:
+	_start_game(300, true)
+	assert_true(game.infrastructure.order(TREE))
+	var active_job: DemolitionJob = game.infrastructure.field.job()
+	assert_eq(active_job.paid, 40)
+	assert_eq(active_job.seconds_total, 4.0)
+	assert_true(game.infrastructure.buy_machine())
+	assert_eq(game.session.gold, 80)
+	assert_eq(active_job.paid, 40, "RF-413: no se devuelve la diferencia")
+	assert_eq(active_job.seconds_total, 4.0, "RF-406: la duración ordenada queda fija")
+	game.free()
+	game = GAME_SCENE.instantiate()
+	add_child_autofree(game)
+	assert_false(game.infrastructure.field.has_machine, "RF-412: el reinicio pierde la compra")
+	assert_eq(game.session.gold, 300)
 
 
 func test_cannot_order_without_gold() -> void:
