@@ -93,6 +93,11 @@ static func enemy_entry(enemy: EnemyData, all_enemies: Array[EnemyData], campaig
 		facts.append(["Resistencia a la ralentización", "%d %%" % roundi(enemy.slow_resistance * 100.0)])
 	if enemy.regen_percent_per_second > 0.0:
 		facts.append(["Se cura", "%.0f %% de su vida por segundo" % enemy.regen_percent_per_second])
+	if enemy.gold_drain_amount > 0 and enemy.gold_drain_interval > 0.0:
+		facts.append(["Robo", "%d de oro cada %s s; piso %d, hasta morir o escapar" % [enemy.gold_drain_amount,_number(enemy.gold_drain_interval),enemy.gold_drain_floor]])
+	if enemy.charge_distance_tiles > 0.0:
+		facts.append(["Carga", "tras %s casillas rectas, velocidad ×%s; slow mayor al %s %% la interrumpe" % [_number(enemy.charge_distance_tiles),_number(enemy.charge_multiplier),_number(enemy.charge_slow_tolerance * 100.0)]])
+		facts.append(["Impacto", "%s %% de desgaste a una torre a ≤%s casillas del extremo de la recta; sin destrucción" % [_number(enemy.charge_wear_percent),_number(enemy.charge_impact_radius_tiles)]])
 	if enemy.death_spawn != null and enemy.death_spawn_count > 0:
 		facts.append(["Al morir suelta", "%d × %s" % [enemy.death_spawn_count, enemy.death_spawn.display_name]])
 	if enemy.stun_interval > 0.0:  # RF-281, RF-287
@@ -171,7 +176,7 @@ static func tower_entry(tower: TowerData, towers: Array[TowerData] = []) -> Wiki
 	var entry := WikiEntry.new()
 	entry.id = tower.id
 	entry.title = tower.display_name
-	entry.subtitle = "Golpea voladores" if tower.can_hit_air else "Solo terrestres"
+	entry.subtitle = "Apoyo · no dispara" if tower.support_only else ("Golpea voladores" if tower.can_hit_air else "Solo terrestres")
 	var first: TowerLevelData = tower.levels[0]
 	var icon: Texture2D = TowerVisual.mounted_icon(first.base_texture,
 		TowerVisual.frame_texture(tower.turret_atlas, -PI / 2.0) if tower.turret_atlas != null else tower.turret_texture)
@@ -179,7 +184,9 @@ static func tower_entry(tower: TowerData, towers: Array[TowerData] = []) -> Wiki
 		entry.icon.append(icon)
 	if tower.description != "":
 		entry.add_text(tower.description)
-	var facts: Array = [["Golpea voladores", "sí" if tower.can_hit_air else "no"]]
+	var facts: Array = [["Función", "Apoyo de cadencia; no dispara"]] if tower.support_only else [["Golpea voladores", "sí" if tower.can_hit_air else "no"]]
+	if tower.required_collection != &"":
+		facts.append(["Requisito", "%d avances distintos y permiso del nivel" % CollectibleRun.required(tower.required_collection)])
 	if tower.footprint > 1:  # RF-298
 		facts.append(["Tamaño", "%d×%d casillas" % [tower.footprint, tower.footprint]])
 	entry.add_facts(facts)

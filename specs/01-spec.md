@@ -405,7 +405,9 @@ Hasta ahora los enemigos no le hacían nada a las torres. Estos dos sí: las **a
 | 4 | Espiral | 15 | 200 | El camino da vueltas hacia adentro; **la salida está en el centro** (§7.5). | M4 |
 | 5 | Fortaleza | 20 | 300 | **Tres entradas**, una desde arriba (§7.6). | M4 |
 | 6 | Nido | 15 | 250 | **Dos entradas** (una desde arriba) y los enemigos nuevos: Troll, Araña y Crías (§7.7). | M5 |
-| 7 | Cruce | 20 | 300 | **Dos entradas** en lados opuestos y **la salida en el centro** (§7.9). El nivel final. Primero hecho en archivo de texto (§7.8). | M8 |
+| 7 | Cruce | 20 | 300 | **Dos entradas** en lados opuestos y **la salida en el centro** (§7.9). Cierra el tramo introductorio6/7. Primero hecho en archivo de texto (§7.8). | M8 |
+| 8 | Bastión | 18 | 300 | Una entrada, debut Guardián, robo y embestidas separados antes de combinarse; Mecánico disponible con colección. | M45 |
+| 9 | Taller asediado | 20 | 320 | Dos entradas, debut Curandero junto al Guardián, presión combinada y posiciones expuestas reparables. | M45 |
 
 ### Oleadas del nivel 1
 
@@ -953,7 +955,7 @@ Récords "a la antigua", como en los arcades: iniciales y un top 5.
 
 Para probar todo sin tener que ganar cada nivel, y sin ensuciar el progreso ni los récords reales.
 
-- **RF-180** **Cómo se activa:** solo existe en el **ejecutable de pruebas** (`JuegoA_pruebas.exe`, del preset de exportación "Windows (pruebas)") y al jugar desde el editor de Godot con el argumento `--pruebas`. El `JuegoA.exe` normal y el `.apk` **no lo tienen**: un jugador normal nunca lo ve.
+- **RF-180** **Cómo se activa** *(cambiado en M48, D-077)*: desde **Opciones** en el menú principal (RF-383, RF-384), en el mismo ejecutable o APK de siempre, o al iniciar con el argumento `--pruebas` (RF-385). Hasta M48 solo existía en un ejecutable aparte, `JuegoA_pruebas.exe` (D-028).
 - **RF-181** **Guardado aparte:** en modo pruebas se usa `save_pruebas.json`. El progreso, las estrellas, los récords y las opciones del guardado real no cambian.
 - **RF-182** Siempre se ve un cartel **"MODO PRUEBAS"** en una esquina (en los menús y en la partida), para no confundirlo con el juego normal.
 - **RF-183** **Todos los niveles** se pueden elegir, aunque estén bloqueados.
@@ -988,7 +990,7 @@ Para probar todo sin tener que ganar cada nivel, y sin ensuciar el progreso ni l
 
 Una herramienta para crear y probar niveles sin escribir el JSON a mano. Nació como herramienta de administración solo del modo de pruebas (§10.2); desde M14 **está en el juego normal** (D-038): cualquiera puede hacer un mapa y jugarlo o compartirlo (§10.4). Lo que sigue siendo solo del modo de pruebas es el panel de pruebas y jugar cualquier nivel de la campaña (§10.2).
 
-- **RF-210** **Dónde está:** el menú principal tiene un botón **"Editor de mapas"** en el `JuegoA.exe` normal, en el de pruebas y en Linux *(M14, D-038)*. **En el celular no se ofrece** (se maneja con mouse y teclado), salvo en el modo de pruebas. **Nunca toca** el progreso, los niveles oficiales (`data/levels/`) ni `campaign.json`: guarda solo en `user://maps/` (RF-216), y en el modo de pruebas usa además su guardado aparte (RF-181).
+- **RF-210** **Dónde está:** el menú principal tiene un botón **"Editor de mapas"** en el `JuegoA.exe` normal y en Linux *(M14, D-038; Lucas confirmó el 2026-10-07 que sigue siendo para todos)*. **En el celular no se ofrece** (se maneja con mouse y teclado), salvo en el modo de pruebas. **Nunca toca** el progreso, los niveles oficiales (`data/levels/`) ni `campaign.json`: guarda solo en `user://maps/` (RF-216), y en el modo de pruebas usa además su guardado aparte (RF-181).
 - **RF-211** **La pantalla:** arriba, una barra con **Nuevo · Abrir · Guardar · Probar · Salir**; en el centro, el mapa de 20×9 casillas con el mismo tamaño y lugar que en la partida (así se ve como va a quedar); abajo, las herramientas y una línea de mensajes. Los ajustes del nivel (RF-214) y las oleadas (RF-215) se abren en paneles encima del mapa.
 - **RF-212** **Pintar el mapa:** se elige una herramienta y se hace clic, o se arrastra, sobre el mapa.
 
@@ -1020,7 +1022,7 @@ Cualquiera puede sumar mapas al juego **copiando un archivo**: los mapas hechos 
 - **RF-221** **La pantalla:** la selección de nivel tiene dos solapas, **Campaña** y **Mapas de la comunidad (N)**. La segunda muestra una tarjeta por archivo, en orden alfabético y **todos abiertos** (no hay desbloqueo). Cada tarjeta muestra el nombre del mapa, sus oleadas, su mejor resultado y sus estrellas. Si no hay ninguno, explica **dónde** ponerlos. Un botón **"Abrir carpeta"** (en PC) abre la carpeta y la crea si todavía no existe.
 - **RF-222** **Mismas reglas que los niveles:** cada archivo se lee con las reglas de §7.8. Uno **con errores** aparece como tarjeta **deshabilitada** que dice "Con errores" y, al pasar el mouse, su primer error; no impide que se vean ni se jueguen los demás. Un archivo con un **nombre no válido** (solo minúsculas, números y `_`, RF-216) o **demasiado grande** (más de 200 KB) se muestra igual, deshabilitado y con el motivo.
 - **RF-223** **Límites, para que un archivo ajeno no cuelgue el juego:** hasta **100 oleadas**, **20 grupos** por oleada, cantidad de hasta **999**, `cada` de hasta **60 s**, `desde` de hasta **600 s**, oro de hasta **99999**, vidas de hasta **999**, `aumento_vida` de hasta **300** y nombre de hasta **30 letras**. Valen para **todos** los niveles (los oficiales los cumplen) y el editor no deja pasarse de esos números.
-- **RF-224** **Progreso aparte:** cada mapa de la comunidad tiene su propio progreso, con el id `comunidad_<archivo>`: mejor cantidad de vidas, estrellas (RF-93), mejor puntaje y **top 5 de récords** con 3 letras (RF-191 a RF-193). **No** cuentan para el desbloqueo de la campaña, ni para el total de estrellas, ni para el Salón de la fama (RF-194). Se guardan en el guardado de esa versión (RF-181: el ejecutable de pruebas tiene el suyo).
+- **RF-224** **Progreso aparte:** cada mapa de la comunidad tiene su propio progreso, con el id `comunidad_<archivo>`: mejor cantidad de vidas, estrellas (RF-93), mejor puntaje y **top 5 de récords** con 3 letras (RF-191 a RF-193). **No** cuentan para el desbloqueo de la campaña, ni para el total de estrellas, ni para el Salón de la fama (RF-194). Se guardan en el guardado de esa versión (RF-181: el modo de pruebas tiene el suyo).
 - **RF-225** **Al terminar** un mapa de la comunidad, el botón "Niveles" vuelve a la **solapa de la comunidad**, y no hay "Siguiente nivel".
 - **RF-226** **Se buscan cada vez que se abre la pantalla:** un mapa copiado mientras el juego está abierto aparece al volver a la selección de nivel, sin reiniciar.
 
@@ -1042,7 +1044,7 @@ Una enciclopedia dentro del juego: dice cómo es cada enemigo y cada torre, y ex
 - **RF-237** **Los números salen de los datos**, no de textos escritos a mano: si se rebalancea un enemigo o una torre, la wiki cambia sola.
 - **RF-238** **Bestiario que se va llenando** *(D-036, pedido por Lucas)*: un enemigo **aparece en la wiki cuando el jugador lo vio por primera vez en una partida** (el mismo momento en que el juego lo presenta, RF-134, y que el guardado ya recuerda). Mientras no se vio, su entrada existe pero está **cerrada** (RF-239). Las **torres y la Guía se ven siempre**: las torres se pueden construir desde el principio y la Guía explica las reglas.
 - **RF-239** **Entrada cerrada:** en la lista se ve como **"???"** con su dibujo en **silueta negra** (así el jugador sabe que falta uno, pero no cómo es); al abrirla solo dice que todavía no se cruzó con ese enemigo y que aparece en la partida cuando lo enfrente. **No muestra** su nombre, sus datos, su descripción ni los niveles donde sale. La solapa dice cuántos lleva ("Enemigos 5/9") mientras falte alguno. La lista mantiene el mismo orden, así que las posiciones no se mueven cuando se abre uno.
-- **RF-240** **Modo de pruebas:** en el ejecutable de pruebas (§10.2) la wiki muestra **todo abierto**, porque es una herramienta de administración y usa su propio guardado (RF-181).
+- **RF-240** **Modo de pruebas:** con el modo de pruebas activo (§10.2) la wiki muestra **todo abierto**, porque es una herramienta de administración y usa su propio guardado (RF-181).
 
 > **Criterio de aceptación**
 > **Dado** un enemigo nuevo agregado a `data/enemies/` → **Cuando** abro la Wiki → **Entonces** aparece en "Enemigos" con sus datos, sin haber tocado ningún otro archivo.
@@ -1074,7 +1076,7 @@ Cosas que **no** hace falta decidir ahora; se deciden antes del hito indicado.
 | Pregunta | Decidir antes de |
 |---|---|
 | ¿Nombre definitivo del juego? | M3 |
-| ¿Ambientación? (medieval, espacial, juguetes…) Afecta nombres de torres/enemigos y el arte. **Candidata fuerte: "Épocas" (§13, B-01).** Se decide junto con el lore (B-03); B-02 está cerrado y el arte futuro se encarga como trabajo específico. | M4 |
+| ¿Ambientación? (medieval, espacial, juguetes…) Afecta nombres de torres/enemigos y el arte. **"Épocas" (B-01) pasó a Monsters & Canons 3D / M&C 2 (D-076).** Se decide junto con el lore (B-03); B-02 está cerrado y el arte futuro se encarga como trabajo específico. | M4 |
 | ¿Música: de dónde sale? (propia, gratuita con licencia CC0…) | M3 |
 
 ---
@@ -1084,6 +1086,7 @@ Cosas que **no** hace falta decidir ahora; se deciden antes del hito indicado.
 Ideas **aprobadas como dirección**, pero **sin fecha**: no se programan hasta convertirse en un hito con sus propias reglas (RF) y tareas. Se anotan aquí para no perderlas ni mezclarlas con el trabajo actual.
 
 ### B-01 · Épocas: la guerra evoluciona con el tiempo
+**Trasladado por Lucas, 2026-10-07 (D-076):** Épocas no se hace en la V1; pasa al backlog de *Monsters & Canons 3D* o de *M&C 2* ([`06-monsters-canons-3d.md`](06-monsters-canons-3d.md) §15). La documentación de Épocas que menciona B-03 viaja con ella. El texto siguiente queda como registro.
 *Propuesta de Lucas, 2026-09-28.*
 
 **Idea:** las armas mejoran a través de las épocas (por ejemplo: medieval → pólvora → industrial → moderna → futurista), y los enemigos y sus defensas también. El jugador *ve* el progreso: sus arqueros se vuelven mosqueteros, después ametralladoras, después láseres.
@@ -1112,10 +1115,14 @@ Ideas **aprobadas como dirección**, pero **sin fecha**: no se programan hasta c
 ### B-02 · ~~Diseño de assets (arte)~~
 **Cerrado por Lucas, 2026-10-03 (D-063).** El juego ya tiene arte de torres, enemigos, mapas, interfaz y efectos, renovado en M23–M36. Se elimina el objetivo indefinido de «arte definitivo». Los detalles visuales concretos que surjan se registrarán y resolverán por separado, siguiendo la guía de arte; no mantienen abierta esta entrada ni requieren rehacer todo.
 
-### B-03 · Lore y documentación de Épocas
-**Actualizado por Lucas, 2026-10-03 (D-063). Sin fecha.** Definir quién defiende, quién ataca y por qué, qué representan los niveles y quién es el Jefe. Elegir cómo presentarlo: textos breves por nivel, victoria, nombres y una categoría Lore en la Wiki.
+### B-03 · Lore y cierre de la V1
+**Actualizado por Lucas, 2026-10-07. Dirección acordada; implementación pendiente.** La expedición coloniza un planeta desde un oasis, asegura posiciones y enfrenta bestias, criaturas independientes y comunidades organizadas. Campaña de **15 niveles**, en bloques **1–5 / 6–10 / 11–15**; final con asentamiento permanente, central de energía y abastecimiento, sin conquistar todo el planeta. El desenlace deja una sensación ambigua y la elección de bando queda fuera de V1.
 
-**Traslado desde B-15:** incluir aquí la futura categoría Épocas en la Wiki, cuando exista ese contenido. B-01 conserva las decisiones de mecánica, progresión e imperios del modo Épocas, y B-05 los modos de juego; esta entrada cubre su historia y documentación, sin duplicar implementación. No presupone diálogos ni cinemáticas. Si se adopta historia, actualizar el alcance de §11. El arte actual (B-02 cerrado) no queda bloqueado por esta decisión.
+**Registro completo de decisiones y plan:** [07-lore-y-cierre-v1.md](07-lore-y-cierre-v1.md). Incluye señales narrativas, biomas/mapas, demolición directa y demoledora global, recursos locales, extracción finita por oleadas, hallazgos científicos permanentes con colecciones por tecnología, Disruptora y Lanzamisiles candidato, rotación, assets, economía, criterios de entrega y preguntas pendientes. Los mapas con torres de recursos deben poder ganarse sin recolectar ni gastar recursos. **La intro ilustrada se agrega al final, después del juego funcional.** Registro de diseño; no afirma funciones implementadas ni cierra B-03.
+
+**Relación con el backlog:** B-10 conserva niveles y campaña; B-22 conserva contenido/desbloqueos; las mecánicas nuevas requieren requisitos y tareas antes de implementarse. Textos breves, victoria, nombres y Lore en la Wiki siguen como opciones de presentación; revisar §11 antes de incorporar historia al juego. No se reabre B-02 como renovación general del arte.
+
+**Épocas y registro histórico:** D-063 trasladó desde B-15 su futura documentación. D-076 traslada Épocas y esa documentación a otra entrega (B-01 y 06-monsters-canons-3d.md); no forma parte de este cierre de V1.
 
 ### B-04 · Crear mapas fácilmente y mods
 *Propuesta de Lucas, 2026-09-29. Analizada por Claude. Decisión: D-024. **El escalón 1 se hizo en M7 (§7.8, D-031). El escalón 2, el editor, se hizo en M9 (§10.3) solo en la versión de pruebas.** **Prioridad de Lucas (D-033): el editor de mapas (escalón 2) y los mapas de la comunidad (escalón 3, solo la parte de mapas).** **La parte de mapas del escalón 3 se hizo en M10 (§10.4, D-034).** Lo que falta: enemigos, torres y dibujos propios (paquetes de mods completos) y decidir si el editor pasa al juego normal (B-13). Sin fecha.*
@@ -1189,6 +1196,7 @@ Ideas **aprobadas como dirección**, pero **sin fecha**: no se programan hasta c
 **Qué cambia en la spec si se hace:** un hito nuevo con sus reglas (RF) y tareas; si se hacen mods, una sección de seguridad (qué puede traer un mod y qué no).
 
 ### B-05 · Modos de juego
+**Actualización de Lucas, 2026-10-07 (D-076):** el modo de historia con imperios reales (Épocas) pasa al otro juego. En la V1, Lucas propone una **prueba chica de modos, unificada con el gestor de mapas**. **Especificada en M49 (RF-388 a RF-392, D-078) con el OK de Lucas y hecha en T197: modo oficial Asedio, modos propios y "En un modo…" en el editor.**
 *Propuesta de Lucas, 2026-09-29. Sin fecha: Lucas pidió solo anotarlo.*
 
 **Idea:** el juego tiene **modos**, cada uno con sus propias torres, enemigos, niveles y dibujos. El juego actual sería el modo **"Torres y Bestias"**. Otro modo sería el de **historia** (Épocas, B-01), con dibujos de **imperios reales** (por ejemplo, legiones romanas, jinetes mongoles, samuráis) y armas que avanzan con las épocas.
@@ -1216,6 +1224,7 @@ Ideas **aprobadas como dirección**, pero **sin fecha**: no se programan hasta c
 **Qué necesitaría:** una regla nueva, "torre aturdida" (hoy las torres no tienen estados), y un efecto que se vea (chispas o estrellitas sobre la torre). Siguiendo RF-164, serían dos datos del enemigo: `reflect_range_tiles` y `reflect_stun_seconds`.
 
 ### B-07 · Enemigos que atacan o se defienden
+**Actualización Lucas, 2026-10-03 (M37/D-064):** Estandarte, Ladrón periódico, Embestidor al extremo de rectas y desgaste/reparación se desarrollan por etapas al final de esta spec. Las propuestas históricas siguientes no sustituyen esas reglas nuevas. Guardián/Curandero/Chamán/Espejo ya implementados; Excavador continúa candidato.
 *Pregunta de Lucas, 2026-09-29. Sin fecha: son ideas para elegir más adelante.*
 
 **Hoy:** los enemigos **no atacan ni se defienden activamente**. Sus defensas son pasivas: armadura (RF-80), resistencia a la ralentización (el Jefe), regeneración (Troll) y soltar crías (Araña).
@@ -1234,7 +1243,7 @@ Ideas **aprobadas como dirección**, pero **sin fecha**: no se programan hasta c
 
 **Recomendación de Claude:** empezar por el **Guardián** y el **Chamán**. El Guardián es una aura (un dato y una búsqueda de enemigos cercanos, como la del rayo en cadena). El Chamán necesita una regla nueva, "torre aturdida", que también usaría el enemigo espejo (B-06). "Torres con vida" conviene dejarla para un modo aparte (B-05), porque cambia la base del juego.
 
-### B-07 · Diseño ampliado de los enemigos con habilidades *(Lucas, 2026-09-29: "me gustaron, desarrollalos"; **Guardián y Curandero hechos en M17** (RF-270 a RF-277) y **Chamán y Espejo en M18** (RF-280 a RF-287); Excavador y Ladrón, sin fecha)*
+### B-07 · Diseño ampliado de los enemigos con habilidades *(Lucas, 2026-09-29: "me gustaron, desarrollalos"; **Guardián y Curandero hechos en M17** (RF-270 a RF-277) y **Chamán y Espejo en M18** (RF-280 a RF-287); Ladrón hecho en M39, Excavador sin fecha)*
 
 Los cuatro enemigos que gustaron, con lo necesario para convertirlos en spec cuando se tomen. Todos siguen RF-164: son **datos** del enemigo, apagados por defecto (valen 0), y se pueden combinar. Los colores son los libres de la guía de arte (`specs/05-guia-de-arte.md`).
 
@@ -1257,7 +1266,7 @@ Los cuatro enemigos que gustaron, con lo necesario para convertirlos en spec cua
 3. **Cómo se presentan en los niveles** (spec §7.4): cada uno **entra solo** en un nivel (nivel 8: Guardián con muchos comunes; nivel 9: Curandero junto al Guardián; nivel 10: Chamán y Espejo), con la frase de presentación de RF-134, y en la Wiki aparecen solos (los datos nuevos se muestran como los demás).
 4. **Cada uno se balancea con el bot** sobre el nivel donde debuta, y el bot tiene que aprender la respuesta (por ejemplo, poner el Francotirador). Si el bot no la encuentra, el enemigo es injusto.
 
-Los otros dos de la lista (**Excavador** y **Ladrón**) quedan para una etapa posterior.
+**Actualización M39–M41:** Ladrón periódico y Embestidor/desgaste/reparación ya implementados para pruebas 6/7. Excavador continúa candidato sin selección. El diseño histórico de robo al escapar queda reemplazado por RF-363–365.
 
 ### B-08 · Mapas más ricos: terrenos, temas y tamaño
 *Pregunta de Lucas, 2026-09-29 (a raíz de M7). Sin fecha.*
@@ -1291,7 +1300,9 @@ Los otros dos de la lista (**Excavador** y **Ladrón**) quedan para una etapa po
 **Recomendación de Claude:** hacer el **aviso de atajo (3)** apenas se pueda, porque es barato, y el **puente (1)** cuando el editor o un nivel lo pidan.
 
 ### B-10 · Más niveles y niveles difíciles
-**Actualización de Lucas, 2026-10-02: prioridad baja.** Completar la campaña hasta el nivel10 sigue pendiente; primero mejorar lo existente. Actualmente `campaign.json` incluye niveles1–7.
+**Dirección de cierre acordada, 2026-10-07:** campaña de 15 niveles y tres bloques; fichas, biomas y rotación por definir junto con el lore. Plan completo en [07-lore-y-cierre-v1.md](07-lore-y-cierre-v1.md) §§3/11/12. No marca como hechos los niveles pendientes.
+**Producción parcial M45/T192:** niveles8/9 integrados con debuts de auras y encuentros de robo/desgaste; balance automatizado inicial. Los niveles "difíciles" (mismo mapa, otras exigencias) quedan cubiertos por el modo Asedio (M49, T197). Niveles10–14 y cierre15 siguen pendientes, además de validación humana8/9.
+**Actualización de Lucas, 2026-10-03:** campaña base objetivo15 niveles: básico1–5, introducción/pruebas6–7, mayor presencia de nuevas mecánicas8–9, avanzado10–14 y definitivo15. Actualmente `campaign.json` incluye niveles1–9 (M45). Niveles10–15 requieren diseño y balance; no están implementados. Las amenazas nuevas no afectan1–5; esas primeras pantallas solo reciben avances de colección.
 *Idea de Lucas (a partir de las propuestas de Claude), 2026-09-29. Sin fecha.*
 
 - **Niveles 8, 9, 10…:** con el formato de M7 son un archivo de texto y una línea en `campaign.json`. Cada uno se balancea con el bot (spec §7.4).
@@ -1309,6 +1320,7 @@ Los otros dos de la lista (**Excavador** y **Ladrón**) quedan para una etapa po
 **Idea:** un generador arma un mapa válido (camino, entradas, salida, bloques) y **el bot de balance lo juega** para comprobar que se puede ganar y que no es regalado, antes de ofrecérselo al jugador. Puede ser un **desafío diario** con una semilla igual para todos (la misma fecha, el mismo mapa), y un récord propio. Las oleadas también se pueden generar con una fórmula de dificultad. **Cuidar:** el bot tarda minutos por partida, así que la comprobación tendría que hacerse **antes** (mapas ya verificados) o con una versión rápida.
 
 ### B-13 · Una sola app con modo administrador
+**Hecho en M48 (T196, RF-383 a RF-387, D-077), pedido por Lucas el 2026-10-07:** como el juego se regala, el modo de pruebas se activa desde Opciones y hay un solo ejecutable o APK por plataforma.
 *Idea de Lucas, 2026-09-29. Sin fecha.*
 
 **Hoy (D-028):** el modo de pruebas es un ejecutable aparte, sin ninguna clave: una contraseña dentro de un juego de un solo jugador no protege nada (el guardado es un archivo de texto editable). **Si se quiere una sola app**, el modo admin se activaría por algo que **el jugador normal no toca**, por ejemplo un argumento (`JuegoA.exe --admin`, un atajo del escritorio) o un archivo de configuración al lado del `.exe`. La regla de D-028 sigue valiendo: el modo admin **usa otro guardado** para no ensuciar el progreso ni los récords reales. **Decidir después** de ver el editor funcionando (B-04).
@@ -1334,6 +1346,7 @@ Los otros dos de la lista (**Excavador** y **Ladrón**) quedan para una etapa po
 *Regla de Lucas, 2026-09-29: las ideas que Claude propone por su cuenta se anotan acá y no se implementan hasta que Lucas las apruebe.*
 
 - **Bot de balance repetible** *(2026-10-01, D-047)*: el temblor de pantalla (RF-128) usa `randf` sin semilla fija y, con varias copias del bot corriendo a la vez, cambia por redondeo qué enemigo está dentro del alcance; en el nivel 7 el mismo caso daba derrota en la oleada 11 o en la 18. Arreglo de una línea en `tools/balance_sim.gd` (`seed(12345)` en `_initialize`, o anular el temblor en el bot). Sumar también la opción `seed=N` de la investigación del combo (elegir entre casillas casi tan buenas como la mejor) para medir con varias corridas por caso. No cambia el juego.
+- **Dibujo más liviano de torres y monstruos** *(2026-10-06, hallazgo del estudio B-21 v2, T193)*: con la carga de P7 (200 monstruos, 60 torres) unos 9 de los ~11 ms de cada cuadro se van en dibujar torres y monstruos en 2D (cada uno se redibuja entero con `_draw` en cada cuadro); con ellos ocultos el juego corre a ~520 FPS en lugar de ~92 (medido en `art/b21-vista/rendimiento.txt`). En PC sobra margen, pero en celular puede ser lo primero que conviene aligerar: por ejemplo, el cuerpo con `Sprite2D` y solo barras/íconos con dibujo propio, o redibujar solo lo que cambia. Medir primero en un Android real (P4: no optimizar sin medir).
 - **"¿Qué es esto?" desde la partida:** al tocar un enemigo o una torre durante la partida, un botón que abre su entrada de la wiki (con `show_target`) y al volver retoma la partida en pausa. Ojo con la pausa, con el celular (el toque ya selecciona torres) y con no dejar espiar enemigos que todavía están cerrados en el bestiario.
 - ~~**Guía de arte del juego:** a partir del rediseño de los nueve enemigos (T127) se ve un estilo propio: contorno oscuro grueso, formas angulosas con facetas, un brillo por dibujo, mirando a la derecha, un color por especie. Escribirlo en un documento corto (`specs/05-guia-de-arte.md`: paleta por enemigo y por tema, grosor del contorno, cómo se hace una faceta, qué se evita) ayudaría a que los ~25 dibujos de M15 y los enemigos nuevos salgan iguales. Idea inspirada en el rol de "director de arte" del repositorio Claude Code Game Studios.~~ **Hecho (T129, D-040): [`specs/05-guia-de-arte.md`](05-guia-de-arte.md).**
 - ~~**Reglas por carpeta para Claude** (`.claude/rules/`): por ejemplo "en `scripts/` y `scenes/` se sangra con tabuladores", "los números de balance van en `data/`, no en el código" y "un dibujo nuevo sigue `specs/05-guia-de-arte.md`". Hoy esas reglas están en la constitución y en mi cabeza; ponerlas por carpeta evitaría errores repetidos (por ejemplo, editar con espacios un archivo de tabuladores).~~ **Hecho (T129, D-040): [`.claude/rules/`](../.claude/rules/).**
@@ -1387,11 +1400,17 @@ Los otros dos de la lista (**Excavador** y **Ladrón**) quedan para una etapa po
 **Pedido original:** revisar los puntos amarillos flotantes de RF-75, que hoy indican niveles1/2/3. Comparar puntos más sutiles incorporados a la base (remaches, luces o detalles) con mayor contraste/intensidad del brillo ya implementado en M30. No es obligatorio eliminarlos: el nivel debe seguir siendo reconocible a escala de partida, también cuando el brillo se apaga por aturdimiento. Evitar confundirlos con selección u otros efectos. **Entrega futura:** comparación de los tres niveles, al menos sobre el Cañón, y revisión del criterio para las demás torres; sombras fuera de alcance salvo pedido posterior.
 
 ### B-21 · Investigar una vista general con más sensación de 3D
-**Abierto: análisis preliminar entregado en M36 (T181).** Entrega en [`B21-profundidad.md`](../art/redesign-m36/B21-profundidad.md). Faltan decisiones de Lucas y profundizar/validar la opción elegida antes de producción; no se integró esa mecánica. El estudio rápido no constituye un diseño definitivo. El texto siguiente registra el alcance original.
+**Resuelto por Lucas, 2026-10-07 (D-075):** la maqueta 3D es la que más le gustó, pero exige adaptar los dibujos y repensar el espacio, así que el 3D **no se integra en la V1**: pasa a la segunda entrega, *Monsters & Canons 3D* (B-32, [`06-monsters-canons-3d.md`](06-monsters-canons-3d.md)). En la V1 solo queda, como opcional, la etapa 1 del relieve (orden por profundidad con capa superior para barras).
+**Análisis v2 entregado en M46 (T193, RF-382, D-074; Lucas lo pidió el 2026-10-06).** Entrega en [`B21-vista-v2.md`](../art/b21-vista/B21-vista-v2.md): cuatro vistas de la misma partida real (actual, relieve en la misma cuadrícula, oblicua al 80 % y maqueta 3D), jugables, con medidas de casillas/clics y rendimiento. Recomendación: no cambiar la proyección; si se quiere más profundidad, relieve en la misma cuadrícula (B) horneado y por etapas; oblicua (C) como alternativa con PR *breaking change*; 3D real (D) descartada para este juego; dejarlo como está (A) también es válido. No se integró nada.
+**Antes: análisis preliminar entregado en M36 (T181).** Entrega en [`B21-profundidad.md`](../art/redesign-m36/B21-profundidad.md). Faltan decisiones de Lucas y profundizar/validar la opción elegida antes de producción; no se integró esa mecánica. El estudio rápido no constituye un diseño definitivo. El texto siguiente registra el alcance original.
 **Pedido original de investigación:** Mejorar la profundidad de toda la escena, además de los sprites. Comparar alternativas: relieve y bordes del terreno con iluminación coherente; perspectiva oblicua/isométrica simulada en2D; escena2.5D con suelo3D y sprites. Evaluar orden de dibujo/oclusiones, alineación de bases y caminos, selección/construcción, cámara, interfaz, rendimiento, escritorio y móvil, y compatibilidad de mapas/guardados. No se adopta ninguna opción todavía.
 **Entrega futura:** muestras comparables del mismo mapa y una evaluación de alcance/costos/riesgos. Tratar el cambio de vista como potencial **breaking change**: preparar un PR de revisión identificado como tal, avisar a Lucas con el enlace y esperar su aprobación explícita **antes de mergear**. Una muestra no autoriza migrar toda la producción ni fusionar el PR.
 
 ### B-22 · Analizar contenido nuevo y desbloqueos en niveles superiores
+**Dirección acordada, 2026-10-07:** recursos locales opcionales, hallazgos científicos por tecnología, Disruptora aprobada como dirección y Lanzamisiles candidato. Asedio de largo alcance descartado por redundancia con Francotirador. Reglas, economía y preguntas en [07-lore-y-cierre-v1.md](07-lore-y-cierre-v1.md) §§4–9; no cierra B-22.
+**Producción M45/T192:** campaña8/9 con Guardián/Curandero y mayor presión de sistemas existentes; estadísticas globales y1–7 intactos, balance humano pendiente. B22 continúa abierto para tramo avanzado y otros candidatos.
+
+**Primera producción parcial M37/T183:** colección y apoyo mecánico implementados como etapa funcional; diseño visual y balance iniciales. Disponibilidad por nivel aprobada, con colección adicional para estandartes. Ladrón, Embestidor/desgaste y reparación implementados en T184–T186 con pruebas6/7; Ballesta/Alquimista/Excavador aún candidatos. B-22 no está cerrado.
 **Abierto: análisis preliminar entregado en M36 (T181).** Entrega en [`B22-contenido.md`](../art/redesign-m36/B22-contenido.md). Faltan decisiones de Lucas y profundizar/validar la opción elegida antes de producción; no se integró esa mecánica. El estudio rápido no constituye un diseño definitivo. El texto siguiente registra el alcance original.
 **Pedido original de análisis; producción pendiente de selección:** Proponer2–3 candidatos de torretas y2–3 de monstruos (confirmar la selección final), con papel táctico distinto, estética, contramedida, costo de implementación y nivel de aparición/desbloqueo. Mantener la temática de monstruos. Considerar Excavador/Ladrón del B-07 y las variantes B de Bestia/Tanque que Lucas reservó para futuro, evitando duplicar funciones existentes. Comparar habilitación por nivel con desbloqueo persistente; contemplar Wiki, presentación, progreso y balance. El Mortero ya tiene disponibilidad reservada para el nivel10 (RF-300); no tratarlo como contenido nuevo. **Entrega futura:** tabla comparativa y recomendación, sin depender de completar ahora los niveles8–10.
 
@@ -1428,9 +1447,20 @@ Rediseñar el panel en partida de la captura de Lucas (Ráfaga · Nivel2): títu
 **Separado de B-15 por Lucas, 2026-10-03 (D-063). Sin fecha.** Evaluar una categoría dedicada a mapas comunitarios instalados, con información útil que no repita la selección de mapas. La carga y validación de mapas ya existen desde M10 (§10.4, B-04); esta entrada no implica crear un servicio online, publicación ni otro editor. Definir primero qué información agrega y cómo se mantiene al importar o quitar mapas.
 
 ### Estado depurado del backlog · Lucas, 2026-10-03
-B-02 cerrado; B-15 retirado/dividido. B-17 a B-20 y B-24 a B-28 implementados. B-21/B-22/B-23 siguen abiertos: informes preliminares entregados, sin decisión ni validación definitiva de producción.
+B-02 cerrado; B-15 retirado/dividido. B-17 a B-20 y B-24 a B-28 implementados. B-21/B-22/B-23 siguen abiertos: informes preliminares entregados, sin decisión ni validación definitiva de producción. B-21 quedó resuelto (D-075): el 3D pasa a *Monsters & Canons 3D* (B-32).
 
-Otros pendientes: Épocas y modos (B-01/B-05), lore y Wiki de Épocas (B-03), mods completos (resto de B-04), Excavador/Ladrón y eventual combate contra torres (resto de B-07, candidatos relacionados con B-22), decoración manual/terrenos con efectos y temas/leyenda en el editor (resto de B-08, T128), cruces/rutas explícitas (resto de B-09), campaña/dificultades (B-10, prioridad baja), compartir mapas como texto (B-11), mapas al azar/desafíos (B-12), app única con admin (B-13), daño elemental/armadura (B-14), fusiones (resto de B-16; vecindad se sigue en B-23), Wiki de mods (B-29) y de comunidad (B-30). B-06 ya está implementado en M18; leyenda/temas del formato y tamaño variable de B-08 están implementados en M15/M13; aviso de atajos B-09 está hecho en M9. No contarlos nuevamente como pendientes. Las sugerencias no autorizadas permanecen separadas y no son tareas comprometidas.
+### B-31 · Rediseño visual de Mecánico, Embestidor, Ladrón y Curandero
+**Pedido de Lucas, 2026-10-04. Producción integrada en T189 (M43), aprobada visualmente por Lucas el 2026-10-04. B-31 cerrado.**
+- Mecánico: reemplazar la estatua vectorial inicial por un diseño con volumen, materiales y calidad acordes a los cañones; actualmente parece de otro juego. Mantener identidad de ingeniería, apoyo y reparación.
+- Embestidor: rediseñar silueta y crear sprites/poses que transmitan fuerza e impulso frontal; abandonar la apariencia actual de dinosaurio rápido. Evaluar el Curandero actual como referencia/base del Embestidor, comparando ambos a escala real antes de reasignar sprites.
+- Curandero: si se reutiliza su aspecto para Embestidor, crear un nuevo monstruo que comunique curación con anatomía, objeto o gesto propio, además del aura; conservar rol/habilidad. La reasignación es una propuesta a evaluar, no un intercambio ya aplicado.
+- Ladrón: crear un asset de la calidad del resto del bestiario, con bolsa/robo reconocibles y sprites coherentes con caminar/estados; reemplazar el vector inicial.
+**Aceptación:** revisar siluetas juntas en mapa y Wiki, materiales/luz/escala/estados, poses direccionales y movimiento; distinguir carga, robo y cura sin depender del texto. Mantener mecánicas y datos de balance. B-02 permanece cerrado: este es un pendiente concreto nuevo, ligado a B-07/B-22.
+
+### B-32 · Monsters & Canons 3D (segunda entrega)
+**Idea de Lucas, 2026-10-07 (D-075). Proyecto aparte; arranca después de cerrar lo pendiente de la V1.** Llevar el juego al 3D conservando lo de la V1 (monstruos, torres, habilidades, sistemas, Wiki, modo de pruebas y forma de trabajar), con PC como desarrollo principal y celular como segundo desarrollo cuidado, y cámara no fija. Sirve de campo de pruebas para aprender 3D antes de una eventual *Monsters & Canons 2*, que no se planifica. El lore de la V1 (B-03) es la base de la saga. Concepto, evidencia, relevamiento de lo pendiente en la V1 y plan por hitos en [`06-monsters-canons-3d.md`](06-monsters-canons-3d.md). No agrega requisitos a la V1: lo que el documento propone hacer antes en la V1 (por ejemplo, la colina de B-08 o los puentes de B-09) se decide ítem por ítem.
+
+Otros pendientes: prueba chica de modos (B-05; Épocas pasó a M&C 3D/M&C 2, D-076), lore (B-03), mods completos (resto de B-04), Excavador y eventual vida/destrucción/economía de torres (resto de B-07, candidatos relacionados con B-22; Ladrón y Embestidor/desgaste/reparación implementados en M39–M41), decoración manual/terrenos con efectos y temas/leyenda en el editor (resto de B-08, T128), cruces/rutas explícitas (resto de B-09), campaña/dificultades (B-10, prioridad baja), compartir mapas como texto (B-11), mapas al azar/desafíos (B-12), app única con admin (B-13), daño elemental/armadura (B-14), fusiones (resto de B-16; vecindad se sigue en B-23), Wiki de mods (B-29) y de comunidad (B-30). B-06 ya está implementado en M18; leyenda/temas del formato y tamaño variable de B-08 están implementados en M15/M13; aviso de atajos B-09 está hecho en M9. No contarlos nuevamente como pendientes. Las sugerencias no autorizadas permanecen separadas y no son tareas comprometidas.
 
 ## 14. Arte de torres con volumen (M23, pedido por Lucas, 2026-10-02)
 
@@ -1498,6 +1528,9 @@ Lucas eligió entre las propuestas de la tanda 1 (`art/redesign-m24/`): **Normal
 ### M33 · Submenús renovados
 - **RF-347** Opciones, selección de niveles, Wiki, récords, final, iniciales/Salón de la Fama y editor/diálogos adoptan el tema hierro-bronce sin alterar funciones. Dado un submenú, cuando se abre desde menú o partida, entonces conserva navegación y controles legibles, foco visible y paneles coherentes. Opciones separa sonido y visualización y usa deslizadores/casillas del tema.
 
+### M34 · Android normal y pruebas
+- **RF-348** Dos APK Android arm64 con recursos actuales del PR#1: normal sin feature pruebas y variante de pruebas con identificador distinto para coexistir. Dado un Android compatible, cuando se instalan ambas variantes, entonces sus paquetes/progreso quedan separados; verificar firma y contenido, declarar si no se ejecutaron en dispositivo.
+
 ### M35 · Panel de torre renovado (B-28, Lucas, 2026-10-03)
 - **RF-349** El panel seleccionado usa hierro/bronce, título y nivel, tres cifras agrupadas (daño, cadencia, alcance), descripción, efectos/sinergias y capacidad contra voladores. El contenido largo se desplaza dentro del panel; apuntado, Mejorar y Vender permanecen visibles. Conserva ancho de270 píxeles lógicos, límite inferior sobre la barra de construcción y atajos U/S.
   **Aceptación:** Dada una torre de nivel1–3 con texto corto o largo, cuando se selecciona, mejora, cambia el oro o se aturde, entonces los datos/precios/devolución siguen correctos, el estado es legible, el panel no invade la barra inferior y sus botones tienen foco visible. Sin oro y en nivel máximo se desactiva Mejorar; vender y apuntar conservan sus señales y reglas.
@@ -1511,3 +1544,115 @@ Lucas eligió entre las propuestas de la tanda 1 (`art/redesign-m24/`): **Normal
 - **RF-355** Investigación B-21 entrega tres muestras del mismo mapa (relieve2D, oblicua2D y suelo3D/sprites) con costos/riesgos y recomendación. Ningún prototipo modifica producción, mapas ni guardados; migración exige PR separado y aprobación de merge.
 - **RF-356** Análisis B-22 entrega2–3 torres y2–3 monstruos candidatos con función, contramedida, arte, costo y aparición/desbloqueo, comparando desbloqueo persistente y por nivel. No integra nuevos datos de producción.
 - **RF-357** Análisis B-23 entrega pocas recetas de vecindad, reglas de mejora2/3, venta/aturdimiento y ensayo reproducible de balance/costo. Conserva las reacciones M20 actuales; no activa recetas nuevas en producción.
+
+### M37 · Avances y Estandarte, primera etapa de B-07/B-22
+Lucas, 2026-10-03. Disponibilidad por nivel, con colección persistente como condición adicional para estandartes. Primera entrega: avances y apoyo de cadencia; ampliada con Ladrón, Embestidor/desgaste y reparación en M39–M41.
+- **RF-358** Colección genérica por id, con fuentes únicas: un avance plateado por cada nivel oficial1–5, total5. Dado un nivel con avance pendiente, al comenzar se elige al azar un enemigo original de sus oleadas como portador; cuando muere entrega el avance automáticamente. Si escapa, se puede rejugar el nivel. Crías/admin/comunidad/editor no generan avances; niveles sin fuente no generan drops. No altera oro, daño, oleadas ni balance1–5.
+- **RF-359** El avance recogido queda pendiente hasta completar su oleada. Dada una derrota posterior o victoria, se conserva; derrota durante esa oleada no lo conserva. Abandonar/reintentar/cerrar antes del resultado descarta los avances de esa partida, incluso si la oleada terminó. El guardado es aditivo y compatible con versión1; no se conceden avances retrospectivos por victorias viejas.
+- **RF-360** Estandarte mecánico reservado disponible desde nivel6 cuando el nivel lo permita y existan5 avances distintos. Dada una colección incompleta no puede construirse; con5 y sin disponibilidad tampoco. Niveles1–5 no lo permiten. Admin tiene habilitación explícita de estandartes sin reunir avances, aplicable al nivel actual y sin escribir colección/progreso normal.
+- **RF-361** Torre de apoyo sin disparos: radio2/2,5/3 y cadencia extra10/15/20%, costos120/100/160 como valores iniciales en datos. Dadas varias auras solo vale la mayor; no potencia a sí misma ni a otras torres de apoyo; venta, mejora y aturdimiento actualizan el efecto. Pausa/velocidad respetadas. UI/Wiki distinguen apoyo de daño, alcance del aura y condición de colección. Icono de avance genérico plateado y estatua de engranaje/casco, diseño inicial revisable por Lucas.
+
+### Etapas siguientes de B-07/B-22 · dirección aprobada, producción pendiente
+**Campaña base objetivo:15 niveles**, no15 niveles ya implementados. Básico1–5, introducción y pruebas6–7 (énfasis7), mayor presencia8–9, combinación avanzada10–14 por diseñar, cierre definitivo15. Los nuevos ataques/desgaste/robo no se introducen en1–5. El drop de avance allí es una recompensa sin dificultad adicional. Los niveles oficiales actuales siguen siendo1–7.
+1. **Ladrón:** aparición aleatoria acotada en oleadas autorizadas avanzadas, robo periódico de oro mientras está vivo/en pantalla; monto/intervalo por datos (semilla3 cada2s), piso10. Si vuelve a entrar oro, el robo continúa; muerte/salida lo corta, pausa congela el reloj. No roba al escapar además del efecto periódico. Definir balance y máximo de ladrones por oleada antes de activarlo.
+2. **Embestidor:** carga al recorrer una recta; solo embiste torres cercanas al camino en el extremo final de esa recta. No afecta torres alejadas ni cualquiera a mitad del tramo. Hielo/daño antes de la carga son respuestas. Desgaste reparable reduce funcionamiento, no destruye torres. Definir geometría, límites, cadencia de impactos y señalización con prototipo6/7 antes de8/9.
+3. **Reparación:** segunda etapa del Estandarte mecánico, sobre un sistema genérico de estados/desgaste para futuras torres de apoyo; aún no implementada. Registrar como alternativa futura vida/destrucción/reconstrucción de torres, reparación paga, nueva economía/interfaz y rebalanceo completo. No activar esa alternativa en esta etapa.
+Excavador/Ballesta/Alquimista siguen candidatos sin selección. B-21/B-23 no se cierran con esta etapa; B-22 sigue abierto para siguientes piezas y balance avanzado.
+
+### M38 · Avances en la barra superior
+- **RF-362** Dada cualquier partida, cuando cambia la colección, entonces la barra superior muestra icono plateado + cantidad/objetivo, con el mismo tamaño/formato de las otras estadísticas. El icono ofrece ayuda por puntero/foco con estado pendiente/confirmado; se retira el aviso fijo sobre el mapa. Recogida, confirmación y guardado conservan RF-358/359. Admin/comunidad muestran la colección pero no generan avances.
+
+### M39 · Ladrón periódico (B-07/B-22)
+- **RF-363** Dado un enemigo con drenaje configurado, mientras permanece vivo en el camino solicita oro cada intervalo de tiempo de juego. El Ladrón roba3 cada2s, sin bajar de10; con menos oro no crea ni quita monedas. Un ingreso posterior vuelve a ser robable en el próximo intervalo. Morir, desaparecer, escapar o terminar la partida corta el drenaje; pausa congela y velocidad acelera el reloj. No hay robo adicional al escapar. Valores y habilidad combinables viven en EnemyData.
+- **RF-364** Los grupos aceptan probabilidad opcional0–1 (por defecto1), sorteada una vez al iniciar la oleada. Dado un grupo omitido, no mantiene la oleada abierta. Ladrón: máximo uno por oleada sorteada, incluso con grupos duplicados; nivel6 oleada9 al25%, nivel7 oleadas7/12/17 al35%. Niveles1–5 intactos. El editor conserva y permite editar la probabilidad; Wiki, intro y pruebas administrativas descubren el nuevo dato. Son semillas de balance, no ajuste definitivo.
+- **RF-365** Cuando se roba oro efectivo, la barra actualiza y aparece un aviso ámbar en el Ladrón; no anuncia robos cuando se alcanzó el piso. Arte inicial revisable: pequeño monstruo encapuchado con bolsa; no se considera arte final aprobado.
+
+
+### M40 · Embestidor y desgaste reparable
+- **RF-366** Dado un Embestidor que recorre3 casillas seguidas sin ralentización fuerte en una recta, entonces acelera×1.8 hasta el giro/salida. Al cruzar el extremo de esa recta puede golpear una sola torre cuyo centro esté a1.25 casillas o menos del extremo. Rectas cortas, torres lejanas o situadas en el medio de la recta no reciben impacto. Cada extremo se evalúa una vez; no hay ataques periódicos alrededor del enemigo. Ralentización mayor al20% interrumpe la preparación e impide la carga mientras dure. El reloj/distancia respetan pausa y velocidad.
+- **RF-367** Un impacto añade20 puntos porcentuales de desgaste, con tope global50; cadencia efectiva = cadencia con apoyo×(1−desgaste/100). No destruye ni elimina torres; stun sigue siendo otro estado. Mejorar no borra desgaste, vender conserva devolución normal. Los apoyos desgastados también reducen sus prestaciones proporcionalmente. Sin impactos previos no cambia nada. El panel distingue desgaste/aturdimiento, muestra cadencia efectiva y una marca ámbar sobre la base indica daño reparable.
+- **RF-368** Embestidor se ensaya en nivel6 oleada10 y nivel7 oleadas9/14/18, uno por grupo, sin modificar1–5. Disponibilidad por nivel: ningún desbloqueo persistente de enemigos. Diseño inicial basado en Bestia B reservada por Lucas, sin nuevos atlas aprobados; carga/impacto tienen avisos programáticos. Balance avanzado8/9 y10–15 pendiente de esos niveles.
+
+
+### M41 · Reparación del Mecánico y validación conjunta
+- **RF-369** Dada una torre desgastada dentro del alcance de un Mecánico activo, recupera2/3/4 puntos porcentuales por segundo según nivel del Mecánico, gratis y sin superar estado sano. Solo aplica la tasa más fuerte, no suma Mecánicos. Aturdir/vender el reparador corta su efecto; pausa congela y velocidad acelera reparación. El reparador no se repara a sí mismo, pero otro puede repararlo. Su desgaste reduce tanto bonus de cadencia como tasa reparadora. Reparar no acorta stun; mejorar conserva desgaste. Torres sin desgaste no reciben cura ni avisos falsos.
+- **RF-370** Panel/Wiki/ayuda de construcción explican apoyo y reparación desde datos, cadencia efectiva incluye desgaste y apoyo. Una marca ámbar de desgaste disminuye hasta desaparecer; mientras recibe reparación aparece un pequeño indicador cian junto a la base, distinto de la curación verde de enemigos. Los tres niveles del Mecánico mantienen costos120/100/160 y rangos2/2.5/3; pruebas administrativas habilitan sin colección. Verificar integración6/7, estabilidad de1–5, pruebas completas y exportación Windows/Linux. Balance y arte se declaran iniciales, no definitivos.
+
+
+### M42 · Selector de enemigos en Pruebas
+- **RF-371** Dada la lista de enemigos de Pruebas, cuando se abre por clic, entonces el desplegable tiene altura limitada y desplazamiento interno, fondo opaco y resaltado sin sombra recortada; permanece dentro de la ventana. Todos los enemigos siguen accesibles, incluyendo al aumentar el catálogo.
+- **RF-372** Dado el puntero sobre el selector cerrado, cuando gira la rueda arriba/abajo, entonces elige anterior/siguiente sin abrir ni invocar; se detiene en primer/último elemento. Clic conserva lista completa y selección normal; Aparecer usa el elegido. La rueda fuera del selector no modifica la selección.
+
+
+### M43 · Producción visual B-31
+- **RF-373** Dado Embestidor, cuando camina o carga, entonces usa sprites con cuatro direcciones y cuatro fases, cabeza reforzada baja y cuerpo robusto inspirado en el Curandero anterior, sin bulbo de cura. El ciclo sigue distancia recorrida y la carga existente acelera su paso.
+- **RF-374** Dado Curandero, cuando se ve en mapa y Wiki, entonces se distingue por silueta erguida y herramienta/semilla medicinal; mantiene cura, aura y balance. Tiene cuatro direcciones por cuatro fases, sin reflejar la luz.
+- **RF-375** Dado Ladrón y Mecánico, cuando se ven junto al bestiario/cañones, entonces usan PNG renderizados con materiales y luz compatibles: bolsa/robo en Ladrón y casco/engranaje en estatua fija de Mecánico. No cambian lógica, economía ni bases.
+- **RF-376** Dados los nuevos assets, cuando se importan, entonces tienen alfa real, márgenes y anclajes estables, poses completas y capturas a escala de juego/Wiki. Se conservan fuentes y prompts reproducibles. Lucas aprobó visualmente los cuatro diseños el 2026-10-04; B31 cerrado.
+
+
+### M44 · Cierre de reparación
+- **RF-377** Dada una torre reparada en pasos pequeños, cuando el desgaste restante llega al cero aproximado de coma flotante, entonces se fija desgaste0, se limpia tasa/indicador de reparación y termina el efecto. No queda un residuo positivo invisible; la última variación conserva señal y no cambia tasas/costos.
+
+### M45 · Campaña8/9
+- **RF-378** Dada la campaña completada hasta7, cuando se continúa, entonces se puede jugar8 y9 en orden.8 presenta Guardián y9 Curandero junto al Guardián según D041, sin alterar niveles1–7 ni estadísticas globales.
+- **RF-379** Dados los mapas8/9, cuando aparece un Embestidor, entonces existen extremos de rectas de al menos tres casillas con posiciones construibles a distancia de impacto y una posición distinta para apoyo dentro de radio. Los encuentros iniciales de Ladrón/Embestidor son separados; aparecen después de una preparación ofensiva y se combinan más tarde. Cada grupo opcional del Ladrón tiene cantidad1/probabilidad y el Mecánico requiere colección5 más permiso del nivel; no se agregan avances fuera de1–5.
+- **RF-380** Dados8/9, cuando se valida su primera versión, entonces carga/recorridos/campaña/progresión y composición se prueban, se comparan bots reproducibles con/sin mejoras/apoyo en varias semillas y se conserva evidencia de exposición y sesiones. Balance humano pendiente se informa explícitamente. No generar EXE/APK en esta etapa por instrucción de Lucas.
+
+- **RF-381** Dado un guardado de campaña anterior que completó el antiguo último nivel, cuando se amplía la campaña, entonces la selección permite jugar el siguiente por victoria previa aunque no exista su entrada unlocked en el guardado. No saltea el nivel siguiente sin victoria, no modifica récords ni reescribe el archivo al consultar.
+
+### M46 · Estudio de vista B-21 v2 (Lucas, 2026-10-06)
+Lucas pidió revisar de nuevo B-21 con análisis y pruebas, considerando también no aplicarlo. Es una investigación: no cambia el juego.
+- **RF-382** Dada la investigación B-21 v2, cuando Lucas la revisa, entonces encuentra cuatro presentaciones de **la misma partida real** (actual; relieve en la misma cuadrícula; oblicua con el suelo al 80 %; maqueta 3D con los dibujos actuales), cada una con captura completa, recorte de detalle de la misma zona y un modo jugable del nivel 1; medidas de tamaño de casilla, superficie del mapa y clics de ida y vuelta en todas las casillas construibles; rendimiento con la carga de P7 en tres rondas; costos, riesgos, límites honestos y una recomendación que incluye no cambiar la vista. Ningún prototipo modifica producción, mapas ni guardados; adoptar una opción requiere decisión de Lucas, y cambiar la proyección, un PR separado marcado como *breaking change*.
+
+### M48 · Modo de pruebas en Opciones, una sola app y licencia (Lucas, 2026-10-07)
+Como el juego se va a regalar, no tiene sentido un ejecutable aparte para el modo de pruebas (B-13). Lucas también pidió una licencia libre del tipo GNU 3.0. Reemplaza el "ejecutable aparte" de D-028; el guardado aparte (RF-181) sigue igual.
+
+- **RF-383** **Activar desde Opciones.**
+  - **Dado** el menú principal, **cuando** se abre Opciones, **entonces** se ve una sección "Administración" con el botón "Activar modo de pruebas".
+  - **Cuando** se lo toca, aparece una confirmación en el mismo panel. Explica que el modo usa un guardado aparte, que abre todos los niveles y herramientas, y que lo que se haga ahí no cuenta para el progreso ni los récords reales. Aceptar activa el modo (guardado aparte, cartel, atajos: RF-181 a RF-184) y rearma el menú principal. Cancelar no cambia nada.
+  - Desde el menú de pausa la sección **no aparece**: nunca se cambia de guardado en medio de una partida.
+- **RF-384** **Volver al juego normal.**
+  - **Dado** el modo de pruebas activo, **cuando** se abre Opciones desde el menú principal, **entonces** el botón dice "Volver al juego normal". Tocarlo vuelve al guardado real sin confirmación y rearma el menú.
+  - Mientras el modo de pruebas está activo, el guardado real no se modifica.
+- **RF-385** **Siempre arranca normal.**
+  - **Dado** cualquier ejecutable o APK, **cuando** se abre el juego, **entonces** arranca en modo normal, aunque se haya cerrado en modo de pruebas. Así nadie cree que perdió su progreso.
+  - Excepción para desarrollo: con el argumento `--pruebas` al iniciar, desde el editor de Godot o desde un acceso directo con `-- --pruebas`, arranca ya activado.
+- **RF-386** **Una sola exportación por plataforma.**
+  - Quedan `JuegoA.exe` (Windows), `JuegoA.x86_64` (Linux) y `JuegoA.apk` (Android).
+  - Desaparecen los presets "Windows (pruebas)" y "Android (pruebas)" y la característica de exportación `pruebas`.
+  - **Dado** un celular con la APK de pruebas anterior instalada, esa app queda aparte hasta desinstalarla a mano.
+- **RF-387** **Licencia libre.**
+  - El juego (código, datos, dibujos y sonidos propios) se distribuye gratis bajo la **GNU General Public License, versión 3 o posterior** (GPL-3.0-or-later). El texto oficial completo va en `LICENSE`, en la raíz, y el README tiene una sección "Licencia".
+  - **Dada** la Wiki, **cuando** se abre la guía, **entonces** hay un artículo "Licencias" que nombra la licencia del juego y la del motor Godot (MIT, con su aviso de copyright, que tiene que acompañar a los ejecutables). También aclara que GUT, la herramienta de tests (MIT), no va dentro de los ejecutables.
+
+### M49 · Prueba de modos unificada con el gestor de mapas (Lucas, 2026-10-07)
+**Estado: hecha en T197 (2026-10-07).** Es la prueba chica de modos de B-05 (D-078). Un modo es un paquete de datos, igual que un mapa de la comunidad pero con varios mapas y reglas. Épocas pasó al otro juego (D-076).
+
+- **RF-388** **Paquete de modo.**
+  - Es una carpeta con un `modo.json` y sus mapas JSON (formato §7.8). El `modo.json` lleva versión, nombre, descripción y la lista ordenada de mapas, y como opcionales las torres disponibles y las reglas `oro_inicial_%`, `vidas` y `vida_monstruos_%`.
+  - Cada mapa de la lista se busca primero en la carpeta del modo y, si no está, entre los niveles oficiales (`data/levels/`). Así un modo puede reusar mapas de la campaña sin copiarlos *(aclarado en T197)*.
+  - Los modos oficiales viven en `res://data/modos/<id>/` y los propios en `user://modos/<id>/`. Un modo propio con el mismo nombre de carpeta que uno oficial se muestra con error, para que sus récords no se mezclen.
+  - **Solo datos:** un modo nunca trae código (como RF-204).
+  - **Dado** un paquete roto, **cuando** se listan los modos, **entonces** aparece con su motivo y los demás se ven igual (como RF-222).
+- **RF-389** **Selección de nivel con modos.**
+  - Arriba hay un selector de modo:
+    - **Campaña:** la de siempre, sin mover archivos.
+    - **Los modos oficiales.**
+    - **Comunidad:** los mapas sueltos de `user://maps/`, como hoy.
+    - **Los modos propios.**
+  - **Cuando** se elige un modo, **entonces** se ven sus mapas en orden, con sus estrellas.
+- **RF-390** **Progreso por modo.**
+  - Cada mapa de un modo guarda vidas, estrellas, puntaje y top 5 con el id `modo_<modo>_<mapa>`.
+  - No cuenta para la campaña, el total de estrellas de la campaña, el Salón de la fama ni la colección de avances.
+  - En un modo oficial el primer mapa está abierto y cada uno se habilita al ganar el anterior del mismo modo. En los modos propios, todos están abiertos. El modo de pruebas abre todo (RF-183).
+- **RF-391** **Modo oficial de prueba "Asedio".**
+  - Son los mapas 1 a 9 de la campaña con sus mismas oleadas y monstruos con más vida. Valor en datos: **vida 115 %**, con el mismo oro, ajustable. *(Ajustado en T197 con el bot: la propuesta inicial de vida 150 % y oro 80 % hacía perder al bot en la oleada 4 de los mapas 1 a 3, y hasta 125 % con el mismo oro perdía temprano. Con 115 % gana el mapa 1 con 3 vidas y el 3 con 6, contra 20 y 18 en la campaña.)*
+  - Cubre también los "niveles difíciles" de B-10.
+  - **Dado** el bot de balance, **cuando** juega los primeros mapas de Asedio, **entonces** se informa si se pueden ganar. No es balance definitivo.
+- **RF-392** **El editor guarda en modos.**
+  - "Guardar" sigue como hoy: mapa suelto (Comunidad) o el modo donde ya está el mapa.
+  - Nueva acción **"Guardar en un modo…"**: se elige un modo propio existente o uno nuevo (con su nombre) y el nombre del archivo *(aclarado en T197)*.
+  - Crear un modo desde el editor arma la carpeta y su `modo.json`; cada mapa nuevo se agrega al final de la lista. Después, "Guardar" sigue guardando en ese modo.
+  - Abrir un mapa en el editor lista también los de los modos propios.
+  - Nunca toca `data/` ni `campaign.json` (RF-210).

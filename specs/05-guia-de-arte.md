@@ -89,3 +89,14 @@ Normal (diablillo rojo), Rápido (bestia turquesa) y Tanque (ogro de piedra y pi
 
 ## M36 · Lectura de estados y efectos
 Placa de nivel: hierro/bronce, remaches ámbar siempre legibles; no depende del brillo animado. Aturdimiento: aro roto violeta y descargas sobre el mecanismo, sin tapar base/sombra. Cura: límite verde amarillento suave y brotes en cura efectiva; no usar oro ni blanco de daño. Muerte: conservar la pose y escala de la criatura, disolver con shader y ocho fragmentos facetados; sin deformaciones corporales, sombras nuevas ni nuevos ciclos falsos. Efectos finitos respetan pausa/velocidad y topes (12 residuos de muerte,16 pulsos de cura).
+
+### M37 · Apoyo y avance coleccionable
+Avance genérico: disco plateado con silueta de nave, sin engranaje exclusivo del mecánico, reutilizable para futuros desbloqueos. Mecánico: estatua fija de hierro/plata y bronce, casco de guerra y engranaje, distingue apoyo de un cañón. Diseño vectorial inicial nativo, luz arriba/izquierda, sin sombras incrustadas; revisión por Lucas antes de declarar arte definitivo. No modifica atlas aprobados. Aura de apoyo fina y cian/gris, sin confundirla con curación verde o aturdimiento violeta.
+
+### M39–M41 · Diseños iniciales de mecánicas
+Ladrón: vector nativo encapuchado con bolsa; Embestidor: Bestia B reservada de M24, pose única. Desgaste usa grieta ámbar y reparación herramienta cian sobre base, con texturas compartidas para preservar rendimiento. No confundir con aura verde de cura enemiga ni chispas magenta de stun. Muestras reales en art/mechanics-m41; diseños iniciales revisables por Lucas, sin aprobación artística definitiva.
+
+### M43 · Rediseños B-31 (D-070)
+Embestidor: anatomía pesada del antiguo Curandero, casco óseo/cuerno frontal, placas hierro/bronce y piel oliva oscura; sin bulbo ni resplandor de cura. Curandero: criatura erguida vegetal, semilla medicinal verde amarillenta en herramienta, bolsa de hierbas; silueta distinta del Chamán por cabeza descubierta y textura orgánica. Ladrón: encapuchado gris violeta desaturado, manos/bolsa reconocibles. Mecánico: estatua fija de hierro/plata/bronce, casco y engranaje, mismas bases y luz que los cañones. PNG con alfa, cuatro direcciones por cuatro fases en enemigos; anclaje/escala uniformes. Materiales predominan sobre color; no reflejar atlas ni alterar parámetros jugables. Producción inicial para revisión de Lucas, no aprobación definitiva.
+
+**Aprobación M43:** Lucas aprobó los cuatro rediseños el 2026-10-04 (“Excelente los apruebo”). Son la referencia vigente para estos personajes; B31 cerrado. Fuentes y prompts conservados.

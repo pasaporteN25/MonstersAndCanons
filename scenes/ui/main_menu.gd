@@ -30,6 +30,10 @@ func _ready() -> void:
 	_options_button.pressed.connect(_options.open)
 	_quit_button.pressed.connect(get_tree().quit)
 	_options.closed.connect(_play_button.grab_focus)
+	# RF-383, RF-384: el modo de pruebas se prende y se apaga desde Opciones, solo acá (no en la pausa).
+	# Al cambiar, el menú se vuelve a armar (botón del editor en el celular, cartel, guardado).
+	_options.admin_available = true
+	_options.dev_mode_changed.connect(func(_on: bool) -> void: GameFlow.go_to_main_menu())
 	Audio.add_click_sounds(self)
 	_logo.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS  # D-023: el logo se achica
 	resized.connect(_fit_logo)

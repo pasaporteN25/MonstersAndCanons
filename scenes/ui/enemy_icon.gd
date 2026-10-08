@@ -13,6 +13,7 @@ const SIZE_ALONE := Vector2(30, 36)
 var enemy: EnemyData
 ## Cuántos vienen. 0 = no mostrar el número.
 var count: int = 0
+var uncertain: bool = false
 
 
 func setup(enemy_data: EnemyData, enemy_count: int = 0) -> EnemyIcon:
@@ -40,5 +41,5 @@ func _draw() -> void:
 		EnemyShape.draw_crown(self, Vector2(0, -top + 1.0), RADIUS * 1.1)  # RF-136
 	draw_set_transform(Vector2.ZERO)
 	if count > 0:
-		draw_string(ThemeDB.fallback_font, Vector2(0, size.y - 2.0), "×%d" % count,
+		draw_string(ThemeDB.fallback_font, Vector2(0, size.y - 2.0), ("≤%d?" if uncertain else "×%d") % count,
 			HORIZONTAL_ALIGNMENT_CENTER, size.x, FONT_SIZE, Color(1, 1, 1, 0.9))

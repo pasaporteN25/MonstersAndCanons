@@ -5,6 +5,12 @@ class_name Tower
 extends Node2D
 
 signal fired(projectile: Projectile)
+signal wear_changed(current: float, change: float)
+const WEAR_BALANCE: BalanceConfig = preload("res://data/balance.tres")
+const WEAR_ICON: Texture2D = preload("res://assets/ui/tower_wear.svg")
+const REPAIR_ICON: Texture2D = preload("res://assets/ui/tower_repair.svg")
+var wear_percent: float = 0.0
+var repair_rate_received: float = 0.0
 
 ## RF-54: a qué enemigo apunta, entre los que están en su alcance.
 enum TargetMode { FIRST, LAST, STRONGEST, CLOSEST }
@@ -20,6 +26,7 @@ const RECOIL_PX: float = 6.0
 const FLASH_DURATION: float = 0.08
 ## Las torres están en este grupo: así un enemigo (el Chamán, RF-282) las encuentra.
 const GROUP: StringName = &"towers"
+const SUPPORT_GROUP: StringName = &"tower_supports"
 ## RF-280: aspecto de una torre aturdida (apagada, con chispas que giran encima).
 const STUN_SPARK_COUNT: int = 3
 
@@ -70,6 +77,8 @@ func _ready() -> void:
 	add_child(_upgrade_glow)
 	_sync_upgrade_glow()
 	add_to_group(GROUP)
+	if data.support_only:
+		add_to_group(SUPPORT_GROUP)
 	# D-023: los dibujos se achican con suavidad (el mapa usa "Nearest" para no mostrar líneas).
 	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	# RF-130: aparece creciendo desde el centro.
@@ -86,7 +95,7 @@ static func make_icon(tower_data: TowerData) -> Texture2D:
 		return null
 	var turret: Texture2D = TowerVisual.frame_texture(tower_data.turret_atlas, -PI / 2.0) \
 		if tower_data.turret_atlas != null else tower_data.turret_texture
-	if tower_data.turret_atlas == null:
+	if tower_data.turret_atlas == null and not tower_data.support_only:
 		var image: Image = turret.get_image().duplicate()
 		image.decompress()
 		image.clear_mipmaps()
@@ -163,7 +172,23 @@ func targeting_name() -> String:
 	return TARGET_MODE_NAMES[targeting]
 
 
+func support_bonus() -> int:
+	if data.support_only or not is_inside_tree():
+		return 0
+	var supports: Array[Dictionary] = []
+	for node: Node in get_tree().get_nodes_in_group(SUPPORT_GROUP):
+		var tower: Tower = node as Tower
+		if tower == null or not tower.data.support_only or tower.is_queued_for_deletion():
+			continue
+		supports.append({"active": not tower.is_stunned(), "position": tower.global_position,
+			"radius": tower.range_px(), "percent": roundi(tower.stats().support_rate_percent * WearRules.ratio(tower.wear_percent))})
+	return SupportRules.strongest_at(global_position, supports)
+
+func effective_fire_rate() -> float:
+	return SupportRules.fire_rate(stats().fire_rate, support_bonus()) * WearRules.ratio(wear_percent)
+
 func _physics_process(delta: float) -> void:
+	_update_repair(delta)
 	_recovery_left = maxf(0.0, _recovery_left - delta)
 	if _target != null and not (is_instance_valid(_target) and can_target(_target)):
 		_target = null
@@ -178,11 +203,14 @@ func _physics_process(delta: float) -> void:
 	if is_stunned():
 		_animate(delta)  # RF-280: apagada, no dispara
 		return
+	if data.support_only:
+		_animate(delta)
+		return
 	if _cooldown <= 0.0 and stats().burst_count > 0:
 		# RF-162: ráfaga en círculo, si hay alguien en alcance (no apunta a nadie en particular).
 		if find_target() != null:
 			_fire_burst()
-			_cooldown = 1.0 / stats().fire_rate
+			_cooldown = 1.0 / effective_fire_rate()
 	elif _cooldown <= 0.0:
 		# RF-161: con `extra_targets`, además del mejor objetivo dispara a los siguientes.
 		var targets: Array[Enemy] = find_targets(1 + stats().extra_targets)
@@ -191,7 +219,7 @@ func _physics_process(delta: float) -> void:
 			for target: Enemy in targets:
 				_shoot(target)
 			aim_angle = (_target.global_position - global_position).angle()  # mira al principal
-			_cooldown = 1.0 / stats().fire_rate
+			_cooldown = 1.0 / effective_fire_rate()
 	_animate(delta)
 
 
@@ -318,6 +346,8 @@ func _outline_color() -> Color:
 
 func _draw() -> void:
 	var factor: float = _scale_factor()
+	if data.support_only and not is_stunned():
+		draw_arc(Vector2.ZERO, range_px(), 0, TAU, 48, Color(0.68, 0.83, 0.9, 0.22), 1.0, true)
 	var half: float = Rules.tiles_to_px(BODY_SIZE_TILES) / 2.0 * factor
 	var outline: Color = _outline_color()
 	# RF-150: los dibujos ocupan una casilla entera (o el cuadrado entero, RF-295), centrados en la torre.
@@ -350,7 +380,7 @@ func _draw() -> void:
 		draw_texture_rect_region(atlas, TowerVisual.mounted_rect(tile_rect, factor, offset),
 			TowerVisual.frame_rect(atlas, aim_angle))
 	elif data.turret_texture != null:
-		draw_set_transform(Vector2.ZERO, aim_angle)
+		draw_set_transform(Vector2.ZERO, 0.0 if data.support_only else aim_angle)
 		draw_texture_rect(data.turret_texture, Rect2(tile_rect.position - Vector2(back, 0), tile_rect.size), false)
 	else:
 		draw_set_transform(Vector2.ZERO, aim_angle)
@@ -369,6 +399,12 @@ func _draw() -> void:
 	elif _recovery_left > 0.0:
 		draw_arc(Vector2(0, -10) * factor, 18 * factor, PI, TAU, 24,
 			Color(0.7, 0.96, 1, _recovery_left / 0.28), 1.7, true)
+	draw_set_transform(Vector2.ZERO)
+	if repair_rate_received > 0.0 and wear_percent > 0.0:
+		draw_texture_rect(REPAIR_ICON, Rect2(Vector2(10,7) * factor,Vector2(18,18) * factor),false)
+	if wear_percent > 0.0:
+		var opacity: float = lerpf(0.35,1.0,wear_percent / maxf(0.001,WEAR_BALANCE.wear_max_percent))
+		draw_texture_rect(WEAR_ICON,Rect2(Vector2(-27,3) * factor,Vector2(22,22) * factor),false,Color(1,1,1,opacity))
 
 
 func _draw_level_plate(factor: float) -> void:
@@ -421,3 +457,44 @@ func _sync_upgrade_glow() -> void:
 	_upgrade_material.set_shader_parameter("accent", TowerVisual.upgrade_glow_color(data.id))
 	_upgrade_material.set_shader_parameter("strength", TowerVisual.upgrade_glow_strength(level_number()))
 	_upgrade_material.set_shader_parameter("phase", _upgrade_time)
+
+## RF-367: desgaste distinto de stun; mejorar no lo borra.
+func apply_wear(amount: float) -> void:
+	var previous: float = wear_percent
+	wear_percent = WearRules.impact(wear_percent, amount, WEAR_BALANCE.wear_max_percent)
+	if not is_equal_approx(previous,wear_percent):
+		wear_changed.emit(wear_percent,wear_percent - previous)
+	queue_redraw()
+
+
+func repair_rate() -> float:
+	if not is_inside_tree():
+		return 0.0
+	var strongest: float = 0.0
+	var receiver: Vector2 = global_position
+	for node: Node in get_tree().get_nodes_in_group(SUPPORT_GROUP):
+		var tower: Tower = node as Tower
+		if tower == null or tower == self or tower.is_queued_for_deletion() or tower.is_stunned():
+			continue
+		var radius: float = tower.range_px()
+		if receiver.distance_squared_to(tower.global_position) <= radius * radius:
+			strongest = maxf(strongest,tower.stats().support_repair_per_second * WearRules.ratio(tower.wear_percent))
+	return strongest
+
+func _update_repair(delta: float) -> void:
+	if wear_percent <= 0.0:
+		if repair_rate_received > 0.0:
+			repair_rate_received = 0.0
+			queue_redraw()
+		return
+	repair_rate_received = repair_rate()
+	var restored: float = WearRules.repair(wear_percent,repair_rate_received,delta)
+	if is_zero_approx(restored):
+		restored = 0.0
+	if not is_equal_approx(restored,wear_percent) or (restored == 0.0 and wear_percent > 0.0):
+		var change: float = restored - wear_percent
+		wear_percent = restored
+		wear_changed.emit(wear_percent,change)
+		if wear_percent <= 0.0:
+			repair_rate_received = 0.0
+		queue_redraw()

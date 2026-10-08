@@ -26,10 +26,13 @@ class GroupRun:
 		return spawned >= group.count
 
 
+var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 var _level: Level
 var _container: Node
 ## % de vida extra por oleada del nivel que se juega (RF-36, D-019).
 var _health_scale_percent: int = 0
+## RF-388: % de la vida que aplica un modo a todos los monstruos (100 = como siempre).
+var _health_percent: int = 100
 var _runs: Array[GroupRun] = []
 var _wave_number: int = 0
 ## Reloj propio de la oleada. Se usa delta (no Timers) para que la pausa
@@ -40,16 +43,27 @@ var _running: bool = false
 
 
 ## `container` es el nodo donde se agregan los enemigos (Game/Enemies).
-func setup(level: Level, container: Node, health_scale_percent: int) -> void:
+func setup(level: Level, container: Node, health_scale_percent: int, health_percent: int = 100) -> void:
+	rng.randomize()
 	_level = level
 	_container = container
+	_health_percent = health_percent
 	_health_scale_percent = health_scale_percent
 
 
 func start_wave(wave: WaveData, wave_number: int) -> void:
 	_runs.clear()
+	var optional_counts: Dictionary = {}
 	for group: SpawnGroup in wave.groups:
-		_runs.append(GroupRun.new(group))
+		if group.probability <= 0.0 or (group.probability < 1.0 and rng.randf() >= group.probability):
+			continue
+		var run := GroupRun.new(group)
+		if group.probability < 1.0 and group.enemy.optional_wave_limit > 0:
+			var used: int = int(optional_counts.get(group.enemy.id, 0))
+			var allowed: int = mini(group.count, maxi(0, group.enemy.optional_wave_limit - used))
+			run.spawned = group.count - allowed
+			optional_counts[group.enemy.id] = used + allowed
+		_runs.append(run)
 	_wave_number = wave_number
 	_clock = 0.0
 	_running = true
@@ -88,14 +102,16 @@ func _process(delta: float) -> void:
 func _spawn(group: SpawnGroup) -> void:
 	var path: Path2D = _level.get_air_path(group.entrance_index) if group.enemy.is_flying \
 		else _level.get_ground_path(group.entrance_index)
-	_spawn_enemy(group.enemy, path, 0.0)
+	_spawn_enemy(group.enemy, path, 0.0, true)
 
 
 ## Crea un enemigo con la vida de la oleada en curso (RF-36), a `distance` píxeles del
 ## comienzo de su camino.
-func _spawn_enemy(data: EnemyData, path: Path2D, distance: float) -> void:
+func _spawn_enemy(data: EnemyData, path: Path2D, distance: float, original: bool = false) -> void:
 	var enemy: Enemy = ENEMY_SCENE.instantiate()
 	var health: int = Rules.scaled_health_percent(data.max_health, _wave_number, _health_scale_percent)
+	health = maxi(1, Rules.percent_of(health, _health_percent))  # RF-388: la vida del modo
+	enemy.set_meta("original_spawn", original)
 	enemy.setup(data, path, health)
 	enemy.distance = distance
 	if data.death_spawn != null and data.death_spawn_count > 0:

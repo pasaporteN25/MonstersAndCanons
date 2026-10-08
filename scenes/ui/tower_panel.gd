@@ -12,6 +12,9 @@ var _sell_value: int = 0
 var _gold: int = 0
 ## RF-280: los segundos de aturdimiento que se muestran (para refrescar solo cuando cambian).
 var _shown_stun: int = 0
+var _shown_support: int = 0
+var _shown_wear: float = 0.0
+var _shown_repair: float = 0.0
 ## RF-317: las torres de este nivel, para decir con cuáles combina la seleccionada. Lo pone Game.
 var partner_towers: Array[TowerData] = []
 
@@ -49,7 +52,7 @@ func show_tower(tower: Tower, sell_value: int, gold: int) -> void:
 
 ## RF-280: mientras la torre está aturdida, la cuenta atrás del título se va actualizando.
 func _process(_delta: float) -> void:
-	if _tower != null and visible and ceili(_tower.stun_left()) != _shown_stun:
+	if _tower != null and visible and (ceili(_tower.stun_left()) != _shown_stun or _tower.support_bonus() != _shown_support or not is_equal_approx(_tower.wear_percent, _shown_wear) or not is_equal_approx(_tower.repair_rate_received,_shown_repair)):
 		refresh(_gold)
 
 
@@ -61,20 +64,35 @@ func refresh(gold: int) -> void:
 	_shown_stun = ceili(_tower.stun_left())
 	_title.text = "%s · Nivel %d" % [_tower.data.display_name, _tower.level_number()]
 	_title.tooltip_text = _title.text
-	_status.visible = _shown_stun > 0
-	_status.text = "Aturdida (%d s)" % _shown_stun
+	_shown_wear = _tower.wear_percent
+	_shown_repair = _tower.repair_rate_received
+	var states: PackedStringArray = []
+	if _shown_stun > 0:
+		states.append("Aturdida (%d s)" % _shown_stun)
+	if _shown_wear > 0.0:
+		states.append("Desgaste %.0f %%" % _shown_wear)
+	_status.visible = not states.is_empty()
+	_status.text = " · ".join(states)
 	_damage.text = str(s.damage)
-	_rate.text = "%.1f/s" % s.fire_rate
+	_shown_support = _tower.support_bonus()
+	_rate.text = "Apoyo" if _tower.data.support_only else "%.2f/s" % _tower.effective_fire_rate()
 	_range.text = "%.1f" % s.range_tiles
 	_description.text = _tower.data.description
 	_description.visible = not _description.text.is_empty()
 	_air.text = "Voladores: %s" % ("sí" if _tower.data.can_hit_air else "no")
 	_stats.text = "\n".join(TowerText.effects(s))
+	if _shown_repair > 0:
+		_stats.text += "\nReparación recibida: %.1f puntos/s" % _shown_repair
+	if _tower.data.support_only and _shown_wear > 0:
+		_stats.text += "\nPrestaciones actuales: %.0f %%" % (WearRules.ratio(_shown_wear) * 100.0)
+	if _shown_support > 0:
+		_stats.text += "\nApoyo recibido: +%d %% cadencia" % _shown_support
 	for line: String in TowerText.combo_partners(_tower.data, partner_towers):  # RF-317
 		# Espacio que no corta: si la línea no entra, que no quede "+25" arriba y "%" abajo.
 		_stats.text += "\n" + line.replace(" %", " %")
 	_stats.text = _stats.text.strip_edges()
 	_stats.visible = not _stats.text.is_empty()
+	_targeting_button.disabled = _tower.data.support_only
 	_targeting_button.text = "Apuntar: %s" % _tower.targeting_name()
 	var next: TowerLevelData = _tower.next_level_stats()
 	if next == null:

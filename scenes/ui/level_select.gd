@@ -1,7 +1,8 @@
-# Selección de nivel (RF-111, RF-112, RF-116, RF-221): dos solapas, la Campaña y los Mapas de la
-# comunidad. En la campaña, los bloqueados no se pueden elegir y los completados muestran sus
-# estrellas (RF-93) y su mejor resultado. Los mapas de la comunidad (los .json de user://maps/)
-# están todos abiertos, y los que tienen errores se ven deshabilitados con el motivo (RF-222).
+# Selección de nivel (RF-111, RF-112, RF-116, RF-221, RF-389): solapas para la Campaña, los modos
+# oficiales, los Mapas de la comunidad y los modos propios. En la campaña y en los modos oficiales,
+# los bloqueados no se pueden elegir y los completados muestran sus estrellas (RF-93) y su mejor
+# resultado. Los mapas de la comunidad (los .json de user://maps/) y los de los modos propios están
+# todos abiertos, y los que tienen errores se ven deshabilitados con el motivo (RF-222, RF-388).
 extends Control
 
 const PAGE_CAMPAIGN: StringName = &"campaign"
@@ -21,11 +22,18 @@ const DEV_MAX_GOLD: int = 999999
 ## RF-226: dónde se buscan los mapas de la comunidad. Los tests usan otra carpeta (hay que
 ## cambiarlo ANTES de agregar la pantalla al árbol, que es cuando busca).
 var community_dir: String = CommunityMaps.DIR
+## RF-388: dónde se buscan los modos oficiales y los propios (los tests usan otras carpetas; igual que
+## `community_dir`, se cambian ANTES de agregar la pantalla al árbol).
+var modes_official_dir: String = ModePacks.OFFICIAL_DIR
+var modes_user_dir: String = ModePacks.USER_DIR
 ## Cómo se abre la carpeta en el explorador. Los tests lo reemplazan (si no, abrirían una ventana).
 var folder_opener: Callable = OS.shell_open
 
 var _page: StringName = PAGE_CAMPAIGN
 var _entries: Array[Dictionary] = []
+## RF-389: los modos (ModePacks.all) y la solapa de cada uno, por página (&"mode:<id>").
+var _modes: Array[Dictionary] = []
+var _mode_tabs: Dictionary = {}
 ## RF-319: la franja "Pruebas" (solo en el modo de pruebas). null en el juego normal.
 var dev_strip: HBoxContainer
 var _dev_wave: SpinBox
@@ -48,6 +56,8 @@ func _ready() -> void:
 	_community_tab.pressed.connect(show_page.bind(PAGE_COMMUNITY))
 	_entries = CommunityMaps.scan(community_dir)  # RF-226: se vuelve a buscar cada vez que se abre
 	_community_tab.text = "Mapas de la comunidad (%d)" % _entries.size()
+	_modes = ModePacks.all(modes_official_dir, modes_user_dir)  # RF-389: también cada vez
+	_add_mode_tabs()
 	show_page(GameFlow.select_page)  # RF-225: la solapa en la que se estaba
 	if DevMode.enabled:
 		_add_dev_strip()
@@ -63,10 +73,15 @@ func _unhandled_input(event: InputEvent) -> void:
 
 ## Cambia de solapa y vuelve a armar las tarjetas (RF-221).
 func show_page(page: StringName) -> void:
+	var mode: Dictionary = _mode_for(page)
+	if page != PAGE_CAMPAIGN and page != PAGE_COMMUNITY and mode.is_empty():
+		page = PAGE_CAMPAIGN  # un modo que ya no está (se borró la carpeta): se vuelve a la campaña
 	_page = page
 	GameFlow.select_page = page
 	_campaign_tab.set_pressed_no_signal(page == PAGE_CAMPAIGN)
 	_community_tab.set_pressed_no_signal(page == PAGE_COMMUNITY)
+	for tab_page: StringName in _mode_tabs:
+		(_mode_tabs[tab_page] as Button).set_pressed_no_signal(tab_page == page)
 	for card: Node in _cards.get_children():
 		_cards.remove_child(card)
 		card.queue_free()
@@ -76,14 +91,18 @@ func show_page(page: StringName) -> void:
 			_cards.add_child(_make_card(i))
 		count = GameFlow.level_count()
 		_total_stars.text = "Estrellas: %d de %d" % [GameFlow.total_stars(), GameFlow.max_stars()]
-	else:
+	elif page == PAGE_COMMUNITY:
 		for entry: Dictionary in _entries:
 			_cards.add_child(_make_community_card(entry))
 		count = _entries.size()
 		if _entries.is_empty():
 			_cards.add_child(_empty_message())
 		_total_stars.text = "%d %s" % [_entries.size(), "mapa" if _entries.size() == 1 else "mapas"]
-	_folder_button.visible = page == PAGE_COMMUNITY and can_add_maps()
+	else:
+		count = _show_mode(mode)
+	_folder_button.visible = (page == PAGE_COMMUNITY or (not mode.is_empty() and not mode["official"])) \
+		and can_add_maps()
+	_folder_button.text = "Abrir carpeta del modo" if not mode.is_empty() else "Abrir carpeta de mapas"
 	# Alto del área: las filas que hay, hasta VISIBLE_ROWS (con una sola fila no sobra espacio).
 	var rows: int = maxi(ceili(float(count) / CARDS_PER_ROW), 1)
 	var shown: int = mini(rows, VISIBLE_ROWS)
@@ -92,6 +111,102 @@ func show_page(page: StringName) -> void:
 
 func current_page() -> StringName:
 	return _page
+
+
+# --- Modos (RF-389) ---
+
+## Una solapa por modo: los oficiales después de "Campaña" y los propios después de "Comunidad".
+func _add_mode_tabs() -> void:
+	var after_campaign: int = _campaign_tab.get_index()
+	var after_community: int = _community_tab.get_index()
+	for mode: Dictionary in _modes:
+		var tab := Button.new()
+		tab.toggle_mode = true
+		tab.text = mode["name"] if (mode["errors"] as PackedStringArray).is_empty() else "%s (con errores)" % mode["id"]
+		tab.tooltip_text = mode["description"]
+		tab.custom_minimum_size = Vector2(130, 42)
+		tab.add_theme_font_size_override("font_size", _campaign_tab.get_theme_font_size("font_size"))
+		var page: StringName = ModePacks.page_of(mode)
+		tab.pressed.connect(show_page.bind(page))
+		_campaign_tab.get_parent().add_child(tab)
+		if mode["official"]:
+			after_campaign += 1
+			after_community += 1
+			_campaign_tab.get_parent().move_child(tab, after_campaign)
+		else:
+			after_community += 1
+			_campaign_tab.get_parent().move_child(tab, after_community)
+		_mode_tabs[page] = tab
+
+
+func mode_tab(page: StringName) -> Button:
+	return _mode_tabs.get(page)
+
+
+func _mode_for(page: StringName) -> Dictionary:
+	for mode: Dictionary in _modes:
+		if ModePacks.page_of(mode) == page:
+			return mode
+	return {}
+
+
+## Arma las tarjetas de un modo y devuelve cuántas son.
+func _show_mode(mode: Dictionary) -> int:
+	var errors: PackedStringArray = mode["errors"]
+	var maps: Array = mode["maps"]
+	if not errors.is_empty():
+		_cards.add_child(_error_card(String(mode["id"]), errors))
+		_total_stars.text = "Modo con errores"
+		return 1
+	if maps.is_empty():
+		_cards.add_child(_message_label("Este modo todavía no tiene mapas.\n\nEn el editor de mapas, \"Guardar en un modo\" los agrega."))
+		_total_stars.text = "0 mapas"
+		return 1
+	var stars: int = 0
+	var playable: int = 0
+	for i: int in maps.size():
+		_cards.add_child(_make_mode_card(mode, i))
+		var level: LevelData = ModePacks.map_level(mode, i)
+		if level != null:
+			playable += 1
+			stars += GameFlow.map_stars(level)
+	_total_stars.text = "Estrellas: %d de %d" % [stars, playable * StarsDisplay.MAX_STARS]
+	return maps.size()
+
+
+## Una tarjeta de un mapa de un modo (RF-389). Con errores: deshabilitada y con el motivo (RF-388).
+func _make_mode_card(mode: Dictionary, index: int) -> Button:
+	var entry: Dictionary = mode["maps"][index]
+	var level: LevelData = entry["level"]
+	if level == null:
+		return _error_card(entry["file"], entry["errors"])
+	var unlocked: bool = GameFlow.is_mode_level_unlocked(mode, index)
+	var card := _new_card()
+	card.text = "Mapa %d\n%s\n%d oleadas\n%s\n\n" % [index + 1, level.display_name, level.waves.size(),
+		mode_status_text(mode, index)]
+	card.disabled = not unlocked
+	card.pressed.connect(GameFlow.start_mode_level.bind(mode, index))
+	_add_stars(card, GameFlow.map_stars(level), unlocked)
+	return card
+
+
+## Texto de estado de la tarjeta de un mapa de un modo (público para poder testearlo).
+func mode_status_text(mode: Dictionary, index: int) -> String:
+	if not GameFlow.is_mode_level_unlocked(mode, index):
+		return "Bloqueado"
+	var id: StringName = ModePacks.map_level(mode, index).id
+	if SaveManager.is_completed(id):
+		return "Mejor: %d vidas" % SaveManager.best_lives(id)
+	return "¡Jugar!"
+
+
+func _error_card(title: String, errors: PackedStringArray) -> Button:
+	var card := _new_card()
+	card.text = "%s\nCon errores\n\n\n" % title
+	card.disabled = true
+	card.tooltip_text = errors[0] if not errors.is_empty() else ""
+	card.add_theme_color_override("font_disabled_color", ERROR_COLOR)
+	return card
 
 
 ## RF-319: oleada inicial y oro inicial, para probar las oleadas finales sin jugar las anteriores.
@@ -155,6 +270,11 @@ func _max_waves() -> int:
 		var level: LevelData = entry["level"]
 		if level != null:
 			most = maxi(most, level.waves.size())
+	for mode: Dictionary in _modes:
+		for i: int in (mode["maps"] as Array).size():
+			var level: LevelData = ModePacks.map_level(mode, i)
+			if level != null:
+				most = maxi(most, level.waves.size())
 	return most
 
 
@@ -172,10 +292,13 @@ func can_add_maps() -> bool:
 	return not OS.has_feature("android")
 
 
-## RF-221: abre la carpeta de mapas (y la crea si todavía no existe).
+## RF-221: abre la carpeta de mapas (y la crea si todavía no existe). En la solapa de un modo propio,
+## la carpeta de ese modo (RF-389).
 func open_folder() -> void:
-	DirAccess.make_dir_recursive_absolute(community_dir)
-	folder_opener.call(ProjectSettings.globalize_path(community_dir))
+	var mode: Dictionary = _mode_for(_page)
+	var folder: String = community_dir if mode.is_empty() else String(mode["dir"])
+	DirAccess.make_dir_recursive_absolute(folder)
+	folder_opener.call(ProjectSettings.globalize_path(folder))
 
 
 func _make_card(index: int) -> Button:
@@ -183,6 +306,10 @@ func _make_card(index: int) -> Button:
 	var card := _new_card()
 	card.text = "Nivel %d\n%s\n%d oleadas\n%s\n\n" % [
 		index + 1, level.display_name, level.waves.size(), status_text(index)]
+	if level.extra_towers.has("mechanical_standard"):
+		card.tooltip_text = "Estandarte mecánico: requiere cinco avances de niveles1–5 (%d/5)." % SaveManager.collected_sources(&"technology").size()
+	elif CollectibleRun.eligible(&"technology", level.id):
+		card.tooltip_text = "Avance de este nivel: %s. Una pieza distinta por nivel1–5." % ("conseguido" if SaveManager.collected_sources(&"technology").has(String(level.id)) else "pendiente")
 	card.disabled = not GameFlow.is_level_unlocked(index)
 	card.pressed.connect(GameFlow.start_level.bind(index))
 	_add_stars(card, GameFlow.level_stars(index), GameFlow.is_level_unlocked(index))
@@ -191,15 +318,10 @@ func _make_card(index: int) -> Button:
 
 ## Una tarjeta de un mapa de la comunidad (RF-221). Con errores: deshabilitada y con el motivo (RF-222).
 func _make_community_card(entry: Dictionary) -> Button:
-	var card := _new_card()
 	var level: LevelData = entry["level"]
 	if level == null:
-		var errors: PackedStringArray = entry["errors"]
-		card.text = "%s\nCon errores\n\n\n" % entry["file"]
-		card.disabled = true
-		card.tooltip_text = errors[0] if not errors.is_empty() else ""
-		card.add_theme_color_override("font_disabled_color", ERROR_COLOR)
-		return card
+		return _error_card(entry["file"], entry["errors"])
+	var card := _new_card()
 	card.text = "%s\n%d oleadas\n%s\n\n" % [level.display_name, level.waves.size(), community_status_text(entry)]
 	card.pressed.connect(GameFlow.start_community.bind(level))
 	_add_stars(card, GameFlow.community_stars(level), true)
@@ -228,17 +350,20 @@ func _add_stars(card: Button, count: int, shown: bool) -> void:
 
 ## Lo que se ve cuando la solapa de la comunidad está vacía: dónde poner los mapas (RF-221).
 func _empty_message() -> Label:
+	if can_add_maps():
+		return _message_label("Todavía no hay mapas de la comunidad.\n\nCopiá archivos .json a esta carpeta y aparecen acá:\n%s\n\nLos mapas que hacés con el editor de mapas también aparecen solos." \
+			% CommunityMaps.folder_path(community_dir))
+	return _message_label("Todavía no hay mapas de la comunidad.\n\nEn el celular no se pueden agregar mapas: usá la versión de computadora.")
+
+
+func _message_label(text: String) -> Label:
 	var label := Label.new()
 	label.custom_minimum_size = Vector2(900, 180)
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.add_theme_font_size_override("font_size", 20)
-	if can_add_maps():
-		label.text = "Todavía no hay mapas de la comunidad.\n\nCopiá archivos .json a esta carpeta y aparecen acá:\n%s\n\nLos mapas que hacés con el editor de mapas (versión de pruebas) también aparecen solos." \
-			% CommunityMaps.folder_path(community_dir)
-	else:
-		label.text = "Todavía no hay mapas de la comunidad.\n\nEn el celular no se pueden agregar mapas: usá la versión de computadora."
+	label.text = text
 	return label
 
 

@@ -97,7 +97,7 @@ func _ready() -> void:
 	edge.size = Vector2(1280, 2)
 	edge.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	bar.add_child(edge)
-	for pair: Array in [["Gold", "Oro"], ["Lives", "Vidas"], ["Score", "Puntos"], ["Wave", "Oleada"]]:
+	for pair: Array in [["Gold", "Oro"], ["Lives", "Vidas"], ["Score", "Puntos"], ["Wave", "Oleada"], ["Technology", "Avances tecnológicos"]]:
 		var icon: Control = bar.get_node("Stats/" + pair[0] + "Stat/" + pair[0] + "Icon")
 		icon.tooltip_text = pair[1]
 		icon.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -140,7 +140,13 @@ func show_next_wave(wave: WaveData) -> void:
 		return
 	var counts: Dictionary = wave.enemy_counts()
 	for enemy: EnemyData in counts:
-		_next_wave_icons.add_child(EnemyIcon.new().setup(enemy, counts[enemy]))
+		var icon: EnemyIcon = EnemyIcon.new().setup(enemy, counts[enemy])
+		for group: SpawnGroup in wave.groups:
+			if group.enemy == enemy and group.probability < 1.0:
+				icon.uncertain = true
+				icon.mouse_filter = Control.MOUSE_FILTER_PASS
+				icon.tooltip_text += " · encuentro opcional (grupo %.0f %%)" % (group.probability * 100.0)
+		_next_wave_icons.add_child(icon)
 
 
 ## RF-134: tarjeta "Nuevo enemigo" con su forma, nombre y qué hace.
@@ -192,6 +198,10 @@ func bind(session: LevelSession) -> void:
 
 ## RF-101: un botón por torre, con su color, nombre, tecla y costo.
 func setup_towers(tower_types: Array[TowerData]) -> void:
+	for old: Node in _tower_button_row.get_children():
+		_tower_button_row.remove_child(old)
+		old.queue_free()
+	_tower_buttons.clear()
 	_tower_types = tower_types
 	for i: int in tower_types.size():
 		var tower: TowerData = tower_types[i]
@@ -205,7 +215,10 @@ func setup_towers(tower_types: Array[TowerData]) -> void:
 		button.add_theme_font_size_override("font_size", 15)
 		button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		button.vertical_icon_alignment = VERTICAL_ALIGNMENT_TOP
-		button.add_child(_key_label(i + 1))
+		if i < 9:
+			button.add_child(_key_label(i + 1))
+		else:
+			button.tooltip_text = "%s: %d de oro" % [tower.display_name, tower.levels[0].cost]
 		var icon: Texture2D = Tower.make_icon(tower)
 		if icon != null:
 			# RF-155: base y torreta, como la torre recién construida, achicadas con suavidad (D-023).
@@ -365,3 +378,8 @@ func _blink(label: Label) -> void:
 	for i: int in 2:
 		tween.tween_property(label, "modulate", Color(1, 1, 1, 0.25), 0.06)
 		tween.tween_property(label, "modulate", Color.WHITE, 0.06)
+
+func show_collection(count: int, required: int, state: String) -> void:
+	(%TechnologyLabel as Label).text = "%d/%d" % [count, required]
+	var icon: Control = get_node("TopBar/Stats/TechnologyStat/TechnologyIcon")
+	icon.tooltip_text = "Avances tecnológicos: %s. Una pieza por cada nivel del 1 al 5; se guarda al terminar, abandonar descarta." % state

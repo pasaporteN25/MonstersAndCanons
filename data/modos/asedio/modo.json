@@ -1,0 +1,10 @@
+{
+	"version": 1,
+	"nombre": "Asedio",
+	"descripcion": "Los mapas de la campaña con monstruos más duros. Ganar un mapa abre el siguiente.",
+	"mapas": ["level_01", "level_02", "level_03", "level_04", "level_05", "level_06", "level_07", "level_08", "level_09"],
+	"reglas": {
+		"oro_inicial_%": 100,
+		"vida_monstruos_%": 115
+	}
+}

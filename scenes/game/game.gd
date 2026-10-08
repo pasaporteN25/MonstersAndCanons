@@ -29,6 +29,9 @@ signal dev_infinite_lives_changed(on: bool)
 @export var tower_types: Array[TowerData] = []
 ## RF-300: las torres de la barra en ESTE nivel (las comunes y las reservadas que el nivel habilita).
 var available_towers: Array[TowerData] = []
+const MECHANICAL_STANDARD: TowerData = preload("res://data/towers/mechanical_standard.tres")
+var collectible: CollectibleRun
+var _carrier: Enemy
 
 var level: Level
 ## RF-251: solo existe si el mapa es más grande que 20×9 (hay que achicar el mundo para que entre).
@@ -67,6 +70,8 @@ func _ready() -> void:
 		level_data = campaign_level
 	elif GameFlow.current_community != null:
 		level_data = GameFlow.current_community  # RF-224: un mapa de la comunidad
+	elif GameFlow.current_mode_level() != null:
+		level_data = GameFlow.current_mode_level()  # RF-389: un mapa de un modo, con sus reglas
 	elif GameFlow.test_level != null:
 		level_data = GameFlow.test_level  # RF-217: el nivel del editor
 		testing = true
@@ -85,11 +90,20 @@ func _ready() -> void:
 	for node: Node in _world_nodes():
 		node.process_mode = Node.PROCESS_MODE_PAUSABLE
 
-	spawner.setup(level, enemies, level_data.health_scale_percent(balance))
+	spawner.setup(level, enemies, level_data.health_scale_percent(balance), level_data.enemy_health_percent)
 	spawner.enemy_spawned.connect(_on_enemy_spawned)
 	spawner.wave_finished.connect(session.complete_wave)
 
-	available_towers = level_data.available_towers(tower_types)
+	_setup_collection()
+	_update_collection_notice()
+	for support: TowerData in support_catalog():
+		if (level_data.extra_towers.has(String(support.id)) or (DevMode.enabled and DevMode.support_unlocked)) and not tower_types.has(support):
+			tower_types.append(support)
+	available_towers = level_data.available_towers(tower_types, SaveManager.collection_complete)
+	if DevMode.enabled and DevMode.support_unlocked:
+		for support: TowerData in support_catalog():
+			if not available_towers.has(support):
+				available_towers.append(support)
 	build_controller.setup(level, session, balance, available_towers, tower_container)
 	build_controller.tower_built.connect(_on_tower_built)
 	build_controller.tower_upgraded.connect(_on_tower_upgraded)
@@ -111,6 +125,7 @@ func _ready() -> void:
 	panel.targeting_pressed.connect(_on_targeting_pressed)
 	session.gold_changed.connect(panel.refresh)
 
+	session.wave_completed.connect(_collection_wave_completed)
 	session.countdown_finished.connect(start_next_wave)
 	session.state_changed.connect(_on_state_changed)
 	end_screen.retry_pressed.connect(restart)
@@ -293,7 +308,8 @@ func restart() -> void:
 ## tests quedan como siempre.
 func _apply_dev_start() -> void:
 	DevMode.applied_wave = 1
-	var from_menu: bool = GameFlow.current_level() != null or GameFlow.current_community != null
+	var from_menu: bool = GameFlow.current_level() != null or GameFlow.current_community != null \
+		or GameFlow.current_mode_level() != null
 	if not DevMode.enabled or testing or not from_menu:
 		return
 	var wave: int = DevStart.clamp_wave(DevMode.start_wave, level_data.waves.size())
@@ -403,7 +419,18 @@ func dev_spawn(data: EnemyData) -> void:
 
 
 func _on_enemy_spawned(enemy: Enemy) -> void:
+	if collectible != null and bool(enemy.get_meta("original_spawn", false)) and collectible.next_enemy_is_carrier():
+		_carrier = enemy
 	enemy.died.connect(_on_enemy_died)
+	enemy.charged_impact.connect(func(_rammer: Enemy, tower: Tower) -> void:
+		var text := FloatingText.new().setup("¡Desgaste!", Color(1,0.67,0.27), 18, 0.7, 30.0)
+		text.position = tower.global_position + Vector2(0,-20)
+		effects.add_child(text)
+		Audio.play(&"impact", 0.2))
+	enemy.gold_drain.connect(func(thief: Enemy, amount: int, floor_gold: int) -> void:
+		var taken: int = session.steal(amount, floor_gold)
+		if taken > 0:
+			effects.gold_stolen(thief.global_position, taken))
 	enemy.cast_stun.connect(func(shaman: Enemy, tower: Tower) -> void:
 		effects.stun_bolt(shaman.global_position, tower.global_position)
 		Audio.play(&"stun", 0.2))  # RF-282
@@ -434,6 +461,19 @@ func _on_enemy_hit(enemy: Enemy, damage: int, blocked: bool, combo: Enemy.Combo)
 
 
 func _on_enemy_died(enemy: Enemy) -> void:
+	if collectible != null and enemy == _carrier and not session.is_over():
+		collectible.pick(session.wave)
+		_carrier = null
+		var token := Sprite2D.new()
+		token.texture = preload("res://assets/ui/technology_token.svg")
+		token.scale = Vector2.ONE * 0.45
+		token.position = enemy.global_position
+		effects.add_child(token)
+		var tween: Tween = token.create_tween()
+		tween.tween_property(token, "position:y", token.position.y - 35.0, 0.6)
+		tween.parallel().tween_property(token, "modulate:a", 0.0, 0.6)
+		tween.tween_callback(token.queue_free)
+		_update_collection_notice()
 	session.earn(enemy.data.reward)  # RF-21
 	session.add_score(Rules.kill_points(enemy.data.reward, balance))  # RF-190
 	effects.enemy_died(enemy.global_position, enemy.data.color,
@@ -442,6 +482,8 @@ func _on_enemy_died(enemy: Enemy) -> void:
 
 
 func _on_enemy_reached_exit(enemy: Enemy) -> void:
+	if enemy == _carrier:
+		_carrier = null
 	session.lose_lives(enemy.data.lives_damage)  # RF-11
 	_shake_left = SHAKE_DURATION
 	Audio.play(&"life_lost")
@@ -511,6 +553,7 @@ func _on_tower_fired(projectile: Projectile) -> void:
 func _on_state_changed(state: LevelSession.State) -> void:
 	if state != LevelSession.State.WON and state != LevelSession.State.LOST:
 		return
+	_commit_collection()
 	_write_dev_stats(DevStats.RESULT_WON if state == LevelSession.State.WON else DevStats.RESULT_LOST)
 	# RF-91: el juego se detiene. Se congela el "mundo", pero no la interfaz.
 	for node: Node in [enemies, tower_container, projectiles, spawner]:
@@ -566,3 +609,68 @@ func _show_hall_of_fame_if_earned() -> void:
 	hall_of_fame.closed.connect(func() -> void:
 		hall_of_fame.queue_free()
 		hall_of_fame = null)
+
+func _setup_collection() -> void:
+	if DevMode.enabled or testing or GameFlow.current_index < 0 or GameFlow.current_community != null:
+		return
+	if not CollectibleRun.eligible(&"technology", level_data.id):
+		return
+	if not SaveManager.collected_sources(&"technology").has(String(level_data.id)):
+		var count: int = 0
+		for wave: WaveData in level_data.waves:
+			for group: SpawnGroup in wave.groups:
+				count += group.count
+		var rng := RandomNumberGenerator.new()
+		rng.randomize()
+		collectible = CollectibleRun.new()
+		collectible.setup(&"technology", level_data.id, count, rng)
+	_update_collection_notice()
+
+func _update_collection_notice() -> void:
+	var count: int = SaveManager.collected_sources(&"technology").size()
+	var state: String = "conseguido aquí" if SaveManager.collected_sources(&"technology").has(String(level_data.id)) else "pendiente aquí"
+	if collectible != null and collectible.picked_wave > 0:
+		count += 1
+		state = "oleada confirmada; pendiente del resultado" if collectible.confirmed else "completar oleada"
+	hud.show_collection(count, CollectibleRun.required(&"technology"), state)
+
+func _collection_wave_completed(wave: int, _bonus: int) -> void:
+	if collectible != null:
+		collectible.complete_wave(wave)
+		_update_collection_notice()
+
+func _commit_collection() -> void:
+	if collectible == null or DevMode.enabled or testing:
+		return
+	for source: String in collectible.result_sources(true):
+		SaveManager.collect_source(collectible.collection, StringName(source))
+	if collectible.confirmed:
+		SaveManager.save()
+		collectible = null
+		_update_collection_notice()
+
+func dev_enable_support(on: bool) -> void:
+	if not DevMode.enabled:
+		return
+	DevMode.support_unlocked = on
+	if on:
+		for support: TowerData in support_catalog():
+			if not tower_types.has(support):
+				tower_types.append(support)
+	available_towers = level_data.available_towers(tower_types, SaveManager.collection_complete)
+	if on:
+		for support: TowerData in support_catalog():
+			if not available_towers.has(support):
+				available_towers.append(support)
+	build_controller.cancel()
+	build_controller.setup(level, session, balance, available_towers, tower_container)
+	hud.setup_towers(available_towers)
+	hud._on_gold_changed(session.gold)
+	hud.tower_panel.partner_towers = available_towers
+
+static func support_catalog() -> Array[TowerData]:
+	var result: Array[TowerData] = []
+	for tower: TowerData in Wiki._all_towers():
+		if tower.support_only:
+			result.append(tower)
+	return result

@@ -5,7 +5,7 @@
 
 Juego *tower defense* 2D hecho en **Godot 4** con **GDScript**, construido con **SDD (Spec-Driven Development)**.
 
-> **Estado actual:** M1 a M24 (primera tanda) ✅ (nuevo logo Monsters & Canons, botones del menú de hierro y bronce, Normal, Rápido y Tanque con arte renderizado de una sola vista; juego completo, 7 niveles, 9 torres (una de 2×2) con arte renderizado de ocho vistas, tres familias visuales y combos por estado, modo de pruebas con editor de mapas, mapas de la comunidad, Wiki con bestiario, mapas de tamaño variable con zoom, siete temas de paisaje y leyenda, récords, niveles en archivos de texto y versión para Linux). Android fue probado en un celular antes de M23; el nuevo arte se verificó en Windows. Tests automáticos en GitHub (D-030).
+> **Estado actual:** M1 a M45 ✅ (nuevo logo Monsters & Canons, botones del menú de hierro y bronce, Normal, Rápido y Tanque con arte renderizado de una sola vista; campaña jugable, 9 niveles, 9 torres (una de 2×2) con arte renderizado de ocho vistas más el apoyo Mecánico, tres familias visuales y combos por estado, modo de pruebas con editor de mapas, mapas de la comunidad, Wiki con bestiario, mapas de tamaño variable con zoom, siete temas de paisaje y leyenda, récords, niveles en archivos de texto y versión para Linux). Lucas probó la APK en su celular (informado el 2026-10-07). Tests automáticos en GitHub (D-030).
 >
 > **Versión de Godot:** 4.7.2 estable (renderizador *Compatibility*).
 >
@@ -31,6 +31,7 @@ La carpeta `specs/` contiene todo lo que define el juego. **Se leen en orden:**
 | [`03-tareas.md`](specs/03-tareas.md) | La lista de pasos pequeños, en orden, para construirlo. | Todos los días: es la lista de "qué hago ahora". |
 | [`04-decisiones.md`](specs/04-decisiones.md) | Registro de cada decisión importante: qué se eligió, qué alternativas había y por qué. | Cuando alguien (o tú en 3 meses) pregunta "¿por qué se hizo así?". |
 | [`05-guia-de-arte.md`](specs/05-guia-de-arte.md) | SVG existentes, paletas, temas y tres familias de torres PNG con ocho vistas (§7). | Antes de producir arte nuevo. |
+| [`06-monsters-canons-3d.md`](specs/06-monsters-canons-3d.md) | Concepto y plan de la segunda entrega en 3D, más el relevamiento de lo que le falta a la V1. | Antes de cerrar la V1 y al arrancar el proyecto 3D. |
 
 Fuera de `specs/`: [`CONTENIDO.md`](CONTENIDO.md) explica **cómo agregar enemigos, torres y niveles** (con todos los campos de los datos), y [`ONBOARDING.md`](ONBOARDING.md), cómo preparar una computadora para trabajar.
 
@@ -114,20 +115,34 @@ tar --mode=755 -czf build/JuegoA_linux.tar.gz -C build JuegoA.x86_64
 - Necesita una computadora con escritorio (X11 o Wayland) y OpenGL. El progreso se guarda en `~/.local/share/godot/app_userdata/JuegoA/save.json`.
 - **Todavía no se probó en una computadora Linux real**: los tests sí corren en Linux en cada push (GitHub, D-030), pero el ejecutable no se abrió.
 
-### El ejecutable de pruebas (`JuegoA_pruebas.exe`)
+### El modo de pruebas (desde Opciones)
 
-Para probar todo sin ganar cada nivel (spec §10.2, D-028):
+Para probar todo sin ganar cada nivel (spec §10.2, D-028, D-077). Desde M48 **no hay un ejecutable aparte**: es el mismo `JuegoA.exe`, `JuegoA.x86_64` o `JuegoA.apk`.
 
-```bash
-godot --headless --path . --export-release "Windows (pruebas)" build/JuegoA_pruebas.exe
-```
-
-- Trae el **modo de pruebas**: todos los niveles abiertos; al elegir nivel se puede **empezar en cualquier oleada** (con el oro que se habría juntado, o el que se escriba) y, en la partida, el **panel de pruebas** (`F1` o el botón "Pruebas"): +1000 de oro, vidas infinitas, saltar oleada, matar a todos, ganar, perder, **cinco velocidades (x0,25 a x4)**, hacer aparecer cualquier enemigo y ver los FPS. Atajos: `F2` matar, `F3` saltar oleada, `F4` vidas infinitas, `F6` / `F7` velocidad. Al terminar guarda un informe en `user://pruebas_stats.json`.
+- **Cómo se activa:** menú principal → **Opciones** → **Administración** → **Activar modo de pruebas** → **Sí, activar**. Para salir: Opciones → **Volver al juego normal**. Desde el menú de pausa no aparece, para no cambiar de guardado en medio de una partida.
+- **Siempre arranca normal:** si se cierra el juego en modo de pruebas, la próxima vez abre con el progreso real.
+- **Qué trae:**
+  - Todos los niveles abiertos.
+  - Al elegir nivel se puede **empezar en cualquier oleada**, con el oro que se habría juntado o el que se escriba.
+  - En la partida, el **panel de pruebas** (`F1` o el botón "Pruebas"): +1000 de oro, vidas infinitas, saltar oleada, matar a todos, ganar, perder, **cinco velocidades (x0,25 a x4)**, hacer aparecer cualquier enemigo y ver los FPS.
+  - Atajos: `F2` matar, `F3` saltar oleada, `F4` vidas infinitas, `F6` / `F7` velocidad.
+  - Al terminar guarda un informe en `user://pruebas_stats.json`.
 - Usa **otro guardado** (`save_pruebas.json`, en la misma carpeta): lo que hagas ahí no toca tu progreso, tus estrellas ni tus récords reales.
-- **Editor de mapas:** el menú principal trae el botón "Editor de mapas" (en el juego normal y en el de pruebas, no en el celular). Se dibuja el mapa con el mouse, se arman las oleadas, se prueba el nivel al instante y se guarda en `%APPDATA%\Godot\app_userdata\JuegoA\maps`. Ver [`CONTENIDO.md`](CONTENIDO.md).
 - Abajo al centro siempre dice "MODO PRUEBAS", para no confundirlo con el juego normal.
-- El `JuegoA.exe` normal y el `.apk` **no** lo tienen.
-- Desde el editor de Godot: *Proyecto → Configuración del proyecto → Editor → Run → Main Run Args* = `-- --pruebas`.
+- **Editor de mapas:** el menú principal trae el botón "Editor de mapas" para todos en PC. En el celular solo aparece con el modo de pruebas activo, porque se maneja con mouse y teclado. Se dibuja el mapa con el mouse, se arman las oleadas, se prueba el nivel al instante y se guarda en `%APPDATA%\Godot\app_userdata\JuegoA\maps`. Ver [`CONTENIDO.md`](CONTENIDO.md).
+- **Para arrancar directo en modo de pruebas** (desarrollo):
+  - Desde el editor de Godot: *Proyecto → Configuración del proyecto → Editor → Run → Main Run Args* = `-- --pruebas`.
+  - Desde un acceso directo: `JuegoA.exe -- --pruebas`.
+
+## Licencia
+
+*Monsters & Canons* es **software libre** y se regala: código, datos, dibujos y sonidos propios se distribuyen bajo la **GNU General Public License, versión 3 o posterior** (GPL-3.0-or-later). El texto completo está en [`LICENSE`](LICENSE) (D-077, RF-387).
+
+- **Qué permite:** usarlo, copiarlo, compartirlo y modificarlo. Quien reparta una versión modificada tiene que hacerlo con la misma licencia y ofrecer su código fuente.
+- **Ojo al publicar:** quien reparte ejecutables bajo la GPL tiene que ofrecer también el código fuente. Hoy el repositorio de GitHub es privado, así que antes de subir el juego a itch.io o a Play Store hay que hacerlo público o adjuntar el código.
+- **Terceros:**
+  - El motor **Godot** es MIT; su aviso de copyright tiene que acompañar a los ejecutables, y por eso está en la Wiki del juego (Guía → Licencias).
+  - **GUT** (`addons/gut/`, MIT) solo se usa para los tests y no va dentro de los ejecutables.
 
 ## Paisajes de mapa
 
@@ -139,7 +154,17 @@ El botón **Wiki** del menú principal abre una enciclopedia: **Enemigos** (un b
 
 ## Mapas de la comunidad
 
-En **Jugar → "Mapas de la comunidad"** aparecen todos los archivos `.json` que haya en la carpeta de mapas (en Windows, `%APPDATA%\Godot\app_userdata\JuegoA\maps`; el botón "Abrir carpeta de mapas" la abre). Sirve para jugar mapas que te pasó otra persona o los que hacés con el editor de la versión de pruebas. Cada mapa tiene su propio progreso y su top 5, y no toca la campaña. Cómo instalar, compartir y qué límites tienen: [`CONTENIDO.md`](CONTENIDO.md).
+En **Jugar → "Mapas de la comunidad"** aparecen todos los archivos `.json` que haya en la carpeta de mapas (en Windows, `%APPDATA%\Godot\app_userdata\JuegoA\maps`; el botón "Abrir carpeta de mapas" la abre). Sirve para jugar mapas que te pasó otra persona o los que hacés con el editor de mapas. Cada mapa tiene su propio progreso y su top 5, y no toca la campaña. Cómo instalar, compartir y qué límites tienen: [`CONTENIDO.md`](CONTENIDO.md).
+
+## Modos de juego
+
+En **Jugar** hay una solapa por modo (M49):
+- **Modos oficiales**, después de "Campaña". Hoy está **Asedio**: los nueve mapas de la campaña con monstruos más duros (vida 115 %). Cada mapa se abre al ganar el anterior.
+- **Modos propios**, después de "Mapas de la comunidad". Todos sus mapas están abiertos.
+
+Cada modo tiene su progreso, sus estrellas y su top 5. No toca la campaña, el Salón de la fama ni los avances.
+
+Un modo propio se arma desde el editor con **"En un modo…"** (crea el modo o elige uno existente), o a mano con un `modo.json` en `%APPDATA%\Godot\app_userdata\JuegoA\modos\<nombre>`. El formato está en [`CONTENIDO.md`](CONTENIDO.md).
 
 ## Dibujos y arte del juego
 
@@ -206,8 +231,65 @@ HUD compacto con ayudas; barra, pausa y administración con estilo hierro/bronce
 ### Submenús M33
 Opciones, niveles/comunidad, Wiki, récords, final, iniciales/Salón y editor/diálogos comparten el tema local hierro-bronce. B-19 completado; controles y datos conservados.
 
+### Android M34
+Presets normal y pruebas con paquetes separados; APK arm64 de instalación local en `build/JuegoA_PR1_normal.apk` y `build/JuegoA_PR1_pruebas.apk`. Firma de depuración, contenido del PR#1. Android7+, sin prueba en dispositivo. **Reemplazado en T196:** hoy hay una sola APK (`build/JuegoA.apk`) y el modo de pruebas se activa en Opciones (D-077).
+
 ### Panel de torre M35
 Información agrupada con hierro/bronce: daño, cadencia y alcance arriba; descripción, efectos y sinergias desplazables; apuntado, Mejorar y Vender siempre accesibles. Estado de aturdimiento separado y foco visible. Capturas en `art/redesign-m35/`.
 
 ### M36 · Efectos, niveles y audio
 Torres con placa/remaches de nivel integrados en la base. Rebote con trayectoria visible; aturdimiento y recuperación localizados. Cura efectiva con pulso orgánico y aura de alcance separada; muertes con pose real desintegrada y fragmentos facetados. Música de menú/combate y mezcla con avisos separados y limitador. Ver muestras e investigaciones B-21/22/23 en `art/redesign-m36/README.md`.
+
+### M37 · Primera etapa: avances y Estandarte
+Una pieza tecnológica por nivel1–5, cinco distintas desbloquean el apoyo mecánico en niveles que lo permiten desde6. Rejugar recupera fuentes pendientes; completar la oleada confirma el drop y victoria/derrota lo guarda, abandonar no. Admin puede habilitar estandartes sin colección. Ladrón, Embestidor, reparación y niveles8–15 permanecen en etapas posteriores.
+
+### M38
+Avances tecnológicos integrados en la barra superior con icono/valor; estado de la partida en la ayuda del icono. Rama de este desarrollo: feature/avances-estandarte.
+
+### M39 · Ladrón
+Encuentros opcionales en6/7: roba3 de oro cada2s, piso10, hasta morir o escapar. Pausa/velocidad respetadas. Pruebas permite invocarlo sin progresión; Wiki explica la habilidad. Arte y balance iniciales revisables.
+
+### M40 · Embestidor y desgaste
+Ensayos6/7. Carga al final de rectas; solo alcanza una torre próxima a ese extremo. Desgaste20% por impacto, tope50%, reduce cadencia y apoyo sin destruir. Hielo fuerte interrumpe carga; mejora conserva desgaste. Panel y marcas distinguen daño y aturdimiento. Reparación continúa en M41.
+
+### M41 · Mecánico reparador
+El Mecánico recupera2/3/4 puntos de desgaste por segundo dentro de su radio; solo el más fuerte y sin autorreparación. No cura aturdimiento. Daño reduce sus prestaciones; otra estatua puede repararlo. Colección5 avances+permiso del nivel y habilitación de Pruebas se conservan. Ensayos6/7;1–5 conservan datos de oleadas y balance.
+
+Verificación M41: 943 pruebas GUT verdes; 103 FPS con 200 enemigos/60 torres y desgaste activo. Exportaciones Windows normal/pruebas y Linux; arranque Windows código 0. Capturas y 12 simulaciones en art/mechanics-m41. Balance inicial: compra temprana del Mecánico perjudica al bot en nivel 6; en nivel 7 ambas variantes ganan. Ajuste fino y arte final pendientes.
+
+### M42 · Selección de enemigos en Pruebas
+Rueda sobre el selector: anterior/siguiente, sin abrir ni invocar. Clic mantiene la lista completa, ahora con altura limitada y scroll, fondo opaco y sin sombra recortada. B-31 registra rediseños pendientes de Mecánico, Embestidor, Ladrón y Curandero; se evaluará reutilizar la silueta del Curandero como base del Embestidor.
+
+### M43 · Rediseños B31 integrados
+Embestidor acorazado con frente de impacto; Curandero erguido con semilla medicinal; Ladrón encapuchado con bolsa; Mecánico renderizado en hierro/bronce sobre bases existentes. Los tres enemigos tienen ciclos 4×4, por distancia. No cambia balance. Vista animada y capturas: `art/redesign-m43/preview.html`; prompts/fuentes allí. Pruebas: habilitar estandartes, invocar los enemigos y observar giros/carga/pausa; revisar Wiki. Aprobado visualmente por Lucas el 2026-10-04.
+
+### T190 · Entrega visual aprobada
+B31 cerrado por aprobación de Lucas (2026-10-04). Exportados `build/JuegoA.exe`, `build/JuegoA_pruebas.exe`, `build/JuegoA.apk` y `build/JuegoA_pruebas.apk`. Windows release: ambos arrancan con código0, solo pruebas activa DevMode. APK debug arm64, Android7+, paquetes normal/pruebas separados, misma firma anterior verificada v2/v3 y recursos M43 presentes. SHA256 y registros en `build/t190/manifest.json`; no se ejecutaron en celular físico. Siguiente: balance/estrategias6/7, luego diseñar8/9.
+
+### M44 · Balance6/7 y cierre de reparación
+
+T191 agrega un laboratorio con compra temprana/tardía del Mecánico, ubicación, mejoras, semillas global/spawner y presión de especiales. Evidencia y límites: [art/balance-m44/README.md](art/balance-m44/README.md). Corrige residuos de desgaste que dejaban la reparación encendida;949/949 pruebas. Los dos EXE y dos APK locales se regeneraron con la corrección. Niveles1–5 intactos; balance definitivo humano pendiente.
+
+Resultado M44:38 corridas más repetición idéntica. En7, el perfil de apoyo tardío agrupado con mejoras conserva18–19 vidas frente a7–10 sin apoyo, en tres semillas. Se mantienen costos y frecuencia oficiales6/7; mayor frecuencia cambia también economía/compras y no prueba dificultad de forma aislada. El diseño8/9 y la prueba humana continúan aparte; B22 permanece abierto.
+
+### M45 · Campaña8/9
+
+Bastión (18 oleadas, una entrada) presenta Guardián y eleva robo/desgaste. Taller asediado (20 oleadas, dos entradas) introduce Curandero y combina auras con esos encuentros. Mecánico permitido con colección5/5. Los guardados que ya ganaron7 permiten abrir8 sin rejugar; las consultas no escriben progreso. Pruebas y evidencia en art/campaign-m45; balance humano pendiente. No se regeneraron APK/EXE por instrucción de Lucas.
+
+Validación M45:954/954 pruebas y62/62 finales de contenido.24 corridas más repetición idéntica, encuentros oficiales que causan/reparan40 puntos y capturas revisadas.8 conserva margen;9 gana con defensa variada en tres semillas y exige priorizar auras/cobertura. Las políticas del bot pueden perder, y no sustituyen juego humano. Paquetes anteriores y niveles1–7 verificados por hash sin cambios.
+
+### T193 · Estudio de vista B-21 v2
+
+- Cuatro vistas de la misma partida: la actual, relieve en la misma cuadrícula, oblicua al 80 % y maqueta 3D. Cada una tiene fotos, medidas de casillas y clics, y rendimiento, y además se puede jugar entera con `godot --path . res://art/b21-vista/vista_lab.tscn -- jugar variante=C` (letras A a D).
+- Recomendación: no cambiar la proyección. Si se quiere más profundidad, relieve horneado por etapas. Informe completo en `art/b21-vista/B21-vista-v2.md`. No cambia el juego; la decisión es de Lucas.
+
+### T194 · Monsters & Canons 3D
+
+- El 3D no se integra en esta versión: pasa a una segunda entrega, *Monsters & Canons 3D*, que arranca después de cerrar lo pendiente de la V1. Concepto, evidencia, plan y relevamiento de la V1 en `specs/06-monsters-canons-3d.md`.
+- Prueba de cámara libre sobre la maqueta: `godot --path . res://art/b21-vista/vista_lab.tscn -- camara`. No cambia el juego.
+
+### T197 · Modos de juego
+
+- Solapa **Asedio** en Jugar: los mapas de la campaña con monstruos más duros y progreso propio.
+- Modos propios: desde el editor con "En un modo…", o con un `modo.json` (ver `CONTENIDO.md`).
+- El bot de balance acepta `modo=asedio`.

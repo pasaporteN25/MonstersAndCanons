@@ -25,7 +25,7 @@ func after_each() -> void:
 
 
 func test_tests_and_normal_builds_run_without_dev_mode() -> void:
-	assert_false(DevMode.detect(), "RF-180: sin la característica ni el argumento, no hay modo de pruebas")
+	assert_false(DevMode.detect(), "RF-385: sin el argumento --pruebas, el juego arranca normal")
 	assert_false(DevMode.enabled)
 	assert_false(DevMode.is_banner_visible())
 
@@ -62,15 +62,16 @@ func test_dev_mode_uses_its_own_save() -> void:
 	assert_false(SaveManager.is_completed(&"level_03"), "lo que se hizo en pruebas no pasó al real")
 
 
-func test_only_the_test_preset_has_the_dev_feature() -> void:
+func test_one_export_per_platform_and_none_is_a_test_build() -> void:
+	# RF-386 (D-077): el modo de pruebas se activa desde Opciones; no hay ejecutables ni APK aparte.
 	var presets := ConfigFile.new()
 	assert_eq(presets.load("res://export_presets.cfg"), OK)
-	var features: Dictionary = {}
+	var names: PackedStringArray = []
 	var i: int = 0
 	while presets.has_section("preset.%d" % i):
 		var section: String = "preset.%d" % i
-		features[presets.get_value(section, "name")] = presets.get_value(section, "custom_features", "")
+		var preset_name: String = presets.get_value(section, "name")
+		names.append(preset_name)
+		assert_eq(presets.get_value(section, "custom_features", ""), "", "%s no trae ninguna característica especial" % preset_name)
 		i += 1
-	assert_eq(features.get("Windows (pruebas)"), DevMode.FEATURE, "el .exe de pruebas lo trae")
-	assert_eq(features.get("Windows Desktop"), "", "el .exe normal no")
-	assert_eq(features.get("Android"), "", "el .apk tampoco")
+	assert_eq(names, PackedStringArray(["Windows Desktop", "Android", "Linux"]))

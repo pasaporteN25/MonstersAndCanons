@@ -26,9 +26,13 @@ var test_level: LevelData
 ## RF-224: el mapa de la comunidad que se está jugando (null = ninguno). Tiene su progreso y sus
 ## récords propios, con el id `comunidad_<archivo>`, y no toca la campaña.
 var current_community: LevelData
-## RF-225: qué solapa de la selección de nivel se ve: &"campaign" o &"community". Se recuerda para
-## que, al terminar un mapa de la comunidad, "Niveles" vuelva a la solapa de la comunidad.
+## RF-225: qué solapa de la selección de nivel se ve: &"campaign", &"community" o la de un modo
+## (&"mode:<id>", RF-389). Se recuerda para que "Niveles" vuelva a la misma solapa al terminar.
 var select_page: StringName = &"campaign"
+## RF-389: el modo que se está jugando (una entrada de ModePacks.all()) y el índice del mapa en su lista.
+## Vacío / -1 = no se juega un modo.
+var current_mode: Dictionary = {}
+var current_mode_index: int = -1
 
 
 func _ready() -> void:
@@ -71,8 +75,10 @@ func level(index: int) -> LevelData:
 
 ## RF-112: el primer nivel siempre está desbloqueado; el resto, según el guardado.
 ## RF-183: en el modo de pruebas, todos.
+## RF-381: una victoria previa habilita también niveles agregados después de esa partida.
 func is_level_unlocked(index: int) -> bool:
-	return index == 0 or DevMode.enabled or SaveManager.is_unlocked(level(index).id)
+	return index == 0 or DevMode.enabled or SaveManager.is_unlocked(level(index).id) \
+		or SaveManager.is_completed(level(index - 1).id)
 
 
 ## RF-93: estrellas conseguidas en un nivel (0 si nunca se ganó).
@@ -105,7 +111,9 @@ func played_level() -> LevelData:
 	if dev_partial_run():
 		return null  # RF-321: no es una partida entera, no guarda nada
 	var campaign_level: LevelData = current_level()
-	return campaign_level if campaign_level != null else current_community
+	if campaign_level != null:
+		return campaign_level
+	return current_community if current_community != null else current_mode_level()  # RF-224, RF-390
 
 
 ## RF-321: ¿esta partida empezó en la oleada 2 o más (modo de pruebas)? Entonces no guarda
@@ -127,7 +135,31 @@ func community_stars(community_level: LevelData) -> int:
 	return Rules.stars_for(SaveManager.best_lives(community_level.id), community_level.starting_lives, BALANCE)
 
 
+## RF-93 para cualquier nivel que no es de la campaña (un mapa de un modo, RF-390): igual que la comunidad.
+func map_stars(lvl: LevelData) -> int:
+	return community_stars(lvl)
+
+
+# --- Modos (RF-389, RF-390) ---
+
+## El mapa del modo que se está jugando, con las reglas del modo (null si no se juega un modo).
+func current_mode_level() -> LevelData:
+	if current_mode.is_empty():
+		return null
+	return ModePacks.map_level(current_mode, current_mode_index)
+
+
+## RF-390: ¿se puede jugar el mapa `index` del modo? RF-183: en el modo de pruebas, todos.
+func is_mode_level_unlocked(mode: Dictionary, index: int) -> bool:
+	if ModePacks.map_level(mode, index) == null:
+		return false
+	return DevMode.enabled or ModePacks.is_open(mode, index, SaveManager.is_completed, SaveManager.is_unlocked)
+
+
 func has_next_level() -> bool:
+	if not current_mode.is_empty():
+		var next: int = ModePacks.next_playable(current_mode, current_mode_index)
+		return next >= 0 and is_mode_level_unlocked(current_mode, next)
 	return current_index >= 0 and current_index + 1 < level_count()
 
 
@@ -143,6 +175,13 @@ func level_won(lives: int, score: int = 0) -> void:
 	elif current_community != null:
 		# RF-224: solo su propio progreso. No desbloquea nada ni suma a la campaña.
 		SaveManager.record_victory(current_community.id, lives, score)
+		SaveManager.save()
+	elif current_mode_level() != null:
+		# RF-390: progreso del mapa del modo; desbloquea el siguiente del MISMO modo, nunca la campaña.
+		SaveManager.record_victory(current_mode_level().id, lives, score)
+		var next: int = ModePacks.next_playable(current_mode, current_mode_index)
+		if next >= 0:
+			SaveManager.unlock(ModePacks.map_level(current_mode, next).id)
 		SaveManager.save()
 
 
@@ -221,6 +260,7 @@ func start_level(index: int) -> void:
 	current_index = index
 	test_level = null
 	current_community = null
+	_clear_mode()
 	select_page = &"campaign"
 	get_tree().change_scene_to_file(GAME_SCENE)
 
@@ -230,6 +270,7 @@ func start_community(community_level: LevelData) -> void:
 	current_index = -1
 	test_level = null
 	current_community = community_level
+	_clear_mode()
 	select_page = &"community"
 	get_tree().change_scene_to_file(GAME_SCENE)
 
@@ -239,13 +280,36 @@ func play_test(level_to_test: LevelData) -> void:
 	current_index = -1
 	test_level = level_to_test
 	current_community = null
+	_clear_mode()
+	get_tree().change_scene_to_file(GAME_SCENE)
+
+
+## RF-389: juega el mapa `index` de un modo, con sus reglas y su progreso propio (RF-390).
+func start_mode_level(mode: Dictionary, index: int) -> void:
+	if not is_mode_level_unlocked(mode, index):
+		return
+	current_index = -1
+	test_level = null
+	current_community = null
+	current_mode = mode
+	current_mode_index = index
+	select_page = ModePacks.page_of(mode)
 	get_tree().change_scene_to_file(GAME_SCENE)
 
 
 func next_level() -> void:
-	if has_next_level():
-		forget_dev_start()  # RF-321
+	if not has_next_level():
+		return
+	forget_dev_start()  # RF-321
+	if not current_mode.is_empty():
+		start_mode_level(current_mode, ModePacks.next_playable(current_mode, current_mode_index))
+	else:
 		start_level(current_index + 1)
+
+
+func _clear_mode() -> void:
+	current_mode = {}
+	current_mode_index = -1
 
 
 func go_to_main_menu() -> void:
@@ -253,6 +317,7 @@ func go_to_main_menu() -> void:
 	current_index = -1
 	test_level = null
 	current_community = null
+	_clear_mode()
 	get_tree().change_scene_to_file(MAIN_MENU_SCENE)
 
 
@@ -261,6 +326,7 @@ func go_to_level_select() -> void:
 	current_index = -1
 	test_level = null
 	current_community = null
+	_clear_mode()
 	get_tree().change_scene_to_file(LEVEL_SELECT_SCENE)
 
 
@@ -270,6 +336,7 @@ func go_to_editor() -> void:
 	current_index = -1
 	test_level = null
 	current_community = null
+	_clear_mode()
 	get_tree().change_scene_to_file(EDITOR_SCENE)
 
 
@@ -278,6 +345,7 @@ func go_to_records() -> void:
 	current_index = -1
 	test_level = null
 	current_community = null
+	_clear_mode()
 	get_tree().change_scene_to_file(RECORDS_SCENE)
 
 
@@ -286,4 +354,5 @@ func go_to_wiki() -> void:
 	current_index = -1
 	test_level = null
 	current_community = null
+	_clear_mode()
 	get_tree().change_scene_to_file(WIKI_SCENE)

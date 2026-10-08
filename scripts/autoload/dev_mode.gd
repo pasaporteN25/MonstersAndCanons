@@ -1,13 +1,11 @@
-# Modo de pruebas (spec §10.2, D-028). Es un autoload: se usa como `DevMode`.
-# Solo se activa en el ejecutable de pruebas (característica de exportación "pruebas") o
-# al jugar desde el editor con el argumento --pruebas. Usa un guardado aparte, así las
-# pruebas no tocan el progreso ni los récords reales.
+# Modo de pruebas (spec §10.2, D-028, D-077). Es un autoload: se usa como `DevMode`.
+# Se activa desde Opciones en el menú principal (RF-383) o al iniciar con el argumento --pruebas
+# (RF-385). Usa un guardado aparte, así las pruebas no tocan el progreso ni los récords reales.
 extends Node
 
-## Característica que agrega el preset de exportación "Windows (pruebas)".
-const FEATURE: String = "pruebas"
-## Argumento para activarlo desde el editor (Proyecto → Configuración → Editor → Run →
-## Main Run Args: `-- --pruebas`). En un ejecutable normal se ignora.
+## RF-385: argumento para arrancar ya en modo de pruebas. En el editor de Godot: Proyecto →
+## Configuración → Editor → Run → Main Run Args: `-- --pruebas`. En un ejecutable: un acceso directo
+## a `JuegoA.exe -- --pruebas`.
 const EDITOR_ARG: String = "--pruebas"
 ## RF-181: guardado del modo de pruebas.
 const SAVE_PATH: String = "user://save_pruebas.json"
@@ -30,6 +28,8 @@ const ACTIONS: Array[Dictionary] = [
 ## RF-324: los números del modo de pruebas (oro del botón, velocidades).
 var config: DevConfig = preload("res://data/dev_config.tres")
 var enabled: bool = false
+## Habilitación temporal de apoyo, nunca escribe colección.
+var support_unlocked: bool = false
 ## RF-319: lo que se eligió en la selección de nivel. La oleada desde la que se empieza (1 = como
 ## siempre) y el oro inicial (-1 = automático, RF-320). `Game` los lee al arrancar y NO los borra,
 ## así reintentar repite la misma partida (RF-321).
@@ -54,17 +54,17 @@ func _ready() -> void:
 		set_enabled(true)
 
 
-## RF-180: ¿este ejecutable trae el modo de pruebas?
+## RF-385: ¿se pidió arrancar en modo de pruebas? Sin el argumento, el juego siempre arranca normal,
+## aunque la vez anterior se haya cerrado en modo de pruebas.
 static func detect() -> bool:
-	if OS.has_feature(FEATURE):
-		return true
-	return OS.has_feature("editor") and OS.get_cmdline_user_args().has(EDITOR_ARG)
+	return OS.get_cmdline_user_args().has(EDITOR_ARG)
 
 
 ## Prende o apaga el modo y cambia de guardado (RF-181). Los tests pasan su propio
 ## `save_path` para no crear archivos en la carpeta del jugador.
 func set_enabled(on: bool, save_path: String = "") -> void:
 	enabled = on
+	support_unlocked = false
 	if save_path == "":
 		save_path = SAVE_PATH if on else SaveManager.DEFAULT_PATH
 	SaveManager.save_path = save_path

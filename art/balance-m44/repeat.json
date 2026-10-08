@@ -1,0 +1,134 @@
+{
+  "identical": true,
+  "result": {
+    "built": 60,
+    "global_seed": 42,
+    "gold": 309,
+    "impacts": 0,
+    "level": 7,
+    "lives": 12,
+    "pressure": "normal",
+    "profile": "upgrade_late_value",
+    "purchases": [
+      {
+        "kind": "upgrade",
+        "level": 2,
+        "tower": "basic",
+        "wave": 2
+      },
+      {
+        "kind": "upgrade",
+        "level": 3,
+        "tower": "basic",
+        "wave": 4
+      },
+      {
+        "kind": "upgrade",
+        "level": 2,
+        "tower": "basic",
+        "wave": 5
+      },
+      {
+        "kind": "upgrade",
+        "level": 3,
+        "tower": "basic",
+        "wave": 6
+      },
+      {
+        "kind": "upgrade",
+        "level": 2,
+        "tower": "basic",
+        "wave": 7
+      },
+      {
+        "kind": "upgrade",
+        "level": 2,
+        "tower": "sniper",
+        "wave": 8
+      },
+      {
+        "kind": "upgrade",
+        "level": 3,
+        "tower": "sniper",
+        "wave": 9
+      },
+      {
+        "allies": 3,
+        "cell": "(12, 2)",
+        "kind": "support",
+        "nominal_dps": 120.0,
+        "wave": 10
+      },
+      {
+        "kind": "upgrade",
+        "level": 3,
+        "tower": "basic",
+        "wave": 10
+      },
+      {
+        "kind": "upgrade",
+        "level": 2,
+        "tower": "basic",
+        "wave": 11
+      },
+      {
+        "kind": "upgrade",
+        "level": 2,
+        "tower": "sniper",
+        "wave": 12
+      },
+      {
+        "kind": "upgrade",
+        "level": 3,
+        "tower": "basic",
+        "wave": 13
+      },
+      {
+        "kind": "upgrade",
+        "level": 3,
+        "tower": "sniper",
+        "wave": 14
+      },
+      {
+        "kind": "upgrade",
+        "level": 2,
+        "tower": "basic",
+        "wave": 15
+      },
+      {
+        "kind": "upgrade",
+        "level": 2,
+        "tower": "sniper",
+        "wave": 16
+      },
+      {
+        "kind": "upgrade",
+        "level": 3,
+        "tower": "sniper",
+        "wave": 17
+      },
+      {
+        "kind": "upgrade",
+        "level": 2,
+        "tower": "sniper",
+        "wave": 18
+      },
+      {
+        "kind": "upgrade",
+        "level": 3,
+        "tower": "basic",
+        "wave": 19
+      }
+    ],
+    "repaired": 0.0,
+    "seed": 42,
+    "specials": {
+      "rammer": 3,
+      "thief": 2
+    },
+    "stolen": 12,
+    "upgrades": 17,
+    "wave": 20,
+    "won": true
+  }
+}

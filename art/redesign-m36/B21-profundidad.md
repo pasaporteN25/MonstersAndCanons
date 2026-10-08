@@ -1,5 +1,7 @@
 # B-21 · Investigación de profundidad de escena
 
+> **Reemplazada (2026-10-06):** este estudio fue preliminar. El análisis v2, con la partida real, cuatro vistas jugables y mediciones, está en [`art/b21-vista/B21-vista-v2.md`](../b21-vista/B21-vista-v2.md) (T193).
+
 Entrega de análisis y tres prototipos reproducibles. La producción sigue con su cámara2D y sus mapas actuales.
 
 | Alternativa | Muestra real | Qué prueba | Migración estimada |

@@ -391,5 +391,88 @@ Solo métricas locales: FPS de Engine y ms/cuadro estimados como1000/FPS; actual
 ### Tema de interfaz M33
 `assets/ui/menu_theme.tres` reúne botones, deslizadores, casillas, desplegables y entradas. Iconos SVG propios en `assets/ui/`; paneles en `game_panel_style.tres`. Se aplica por pantalla, sin tema global.
 
+### Variantes Android M34
+Preset Android sin feature especial; Android (pruebas) incluye `pruebas`. Identificadores separados y versión1.1-pr1/code2; las exportaciones incluyen recursos actuales y excluyen tests/tools/specs/art/GUT.
+
 ### M36 · Efectos y audio
 Los efectos de muerte reutilizan automáticamente textura, cuadro y escala del enemigo actual; no necesitan un asset de muerte por especie. Residuo y fragmentos son visuales y no alteran recompensa/crías. El audio se regenera con tools/make_sounds.gd; music_menu/music_combat usan bucle en importación. Material y límites de efectos se documentan en plan/spec; los candidatos de B-22 y recetas B-23 son propuestas y todavía no forman parte del formato de contenido.
+
+### M37 · Avances y apoyo
+data/progression.json define colecciones/fuentes/cantidad requerida; solo fuentes oficiales permiten drops. TowerData puede exigir una colección y ser support_only; TowerLevelData declara support_rate_percent. El mecánico se habilita con torres_extra en6–9 más colección5/5; admin lo habilita sin modificar el progreso. Ladrón/desgaste/reparación están implementados; niveles8/9 integrados en M45. Niveles10–15 continúan pendientes.
+
+### M39 · Encuentros opcionales y drenaje
+Un grupo de oleada puede declarar `"probabilidad":0.35`; ausencia equivale a1. El sorteo ocurre una vez por oleada/grupo. `EnemyData.optional_wave_limit` limita el total sorteado de ese tipo. `gold_drain_amount`, `gold_drain_interval` y `gold_drain_floor` habilitan drenaje combinable; cero lo apaga. Ladrón:3/2s/piso10, una aparición opcional por oleada. Sus cifras se modifican en data/enemies/thief.tres; introducción6/7 y mayor presión8/9,1–5 intactos.
+
+
+### M40 · Carga y desgaste
+EnemyData: `charge_distance_tiles`, `charge_multiplier`, `charge_slow_tolerance`, `charge_impact_radius_tiles`, `charge_wear_percent` (cero apaga). Embestidor: preparación3 casillas, velocidad×1.8, slow hasta20%, impacto20% a una torre a≤1.25 casillas del extremo; `data/balance.tres` limita desgaste a50%. No se destruyen torres. La Bestia B de M24 se reutiliza como diseño inicial. Nivel6: oleada10; nivel7:9/14/18.1–5 sin nuevos enemigos.
+
+
+### M41 · Reparación
+`TowerLevelData.support_repair_per_second` expresa puntos porcentuales de desgaste por segundo,0 desactiva. Mecánico2/3/4, costos y rangos intactos. Mayor tasa activa por radio, sin apilar ni autorreparar; otras fuentes sí pueden reparar estandartes. Desgaste de la fuente reduce tasa y bonus proporcionalmente. Pausa/velocidad afectan reloj; stun del reparador lo apaga, stun del receptor no impide recuperar desgaste ni se acorta.
+
+
+### M42 · Catálogo y arte pendiente
+El selector de Pruebas sigue leyendo todos los EnemyData. La lista larga se desplaza dentro del popup y la rueda sobre el selector cerrado cambia el elegido. No hay nuevos ids ni cambios de balance. Los rediseños concretos quedan en B-31; todavía no se reasignan recursos Curandero/Embestidor.
+
+### M43 · B31
+PNG versionados *_m43 y ciclos 1024×1024 de Embestidor/Curandero/Ladrón; estáticas256×256 en Wiki. Mecánico128×128 con casco/engranaje y bases compartidas. Sources, prompts, pack.gd, manifest, captura y preview animada en art/redesign-m43. Los originales anteriores quedan conservados para comparación; no cambian ids ni estadísticas.
+
+### T190 · Arte aprobado y paquetes
+Lucas aprobó los cuatro diseños M43, B31 cerrado. Dos EXE y dos APK normal/pruebas disponibles en build; los paquetes incluyen las nuevas estáticas y ciclos. No modifica comportamiento ni balance. Validación APK estática, sin prueba física móvil.
+
+### T191 · Laboratorio6/7
+
+Perfiles de compra/ubicación/mejoras y variantes de frecuencia viven en art/balance-m44, modifican recursos solo en memoria y no son presets de campaña. Exposure.json registra celdas realmente amenazadas al final de rectas y reparación20→0 en10/6,7/5s. El cierre de reparación elimina residuos de coma flotante; no cambia tasas ni costos. Consultar README del laboratorio antes de usar sus resultados para diseñar8/9.
+
+### M45 · Niveles8/9
+
+Campaña ampliada con level_08 (Bastión) y level_09 (Taller asediado). JSON en formato canónico del editor; torres_extra permite Mecánico, sin nuevas fuentes de colección. Guardián debuta en8/oleada4 y Curandero en9/oleada5; robos opcionales comienzan6 y embestidas8, con combinaciones posteriores. Carga/auras/desgaste/reparación reutilizan recursos existentes y no cambian sus estadísticas. Datos y recorridos1–7 intactos. Detalle, bots/capturas y límites en art/campaign-m45/README.md.
+
+### M49 · Modos de juego (RF-388 a RF-392)
+
+Un **modo** es un grupo de mapas con reglas propias. Aparece como una solapa en **Jugar**: los oficiales después de "Campaña" y los propios después de "Mapas de la comunidad". No hace falta programar: es una carpeta con un archivo `modo.json`.
+
+**Dónde va cada uno:**
+- **Oficiales:** `data/modos/<id>/modo.json`, en el repositorio. Hoy existe **Asedio** (`data/modos/asedio/`).
+- **Propios:** `user://modos/<id>/modo.json`; en Windows, `%APPDATA%\Godot\app_userdata\JuegoA\modos\`. El editor de mapas los crea solo con **"En un modo…"**.
+- El `<id>` es el nombre de la carpeta: minúsculas, números y `_`. Un modo propio no puede llamarse igual que uno oficial.
+
+**Ejemplo** (`modo.json`):
+
+```json
+{
+	"version": 1,
+	"nombre": "Mis desafíos",
+	"descripcion": "Tres mapas con pocas vidas.",
+	"mapas": ["mi_mapa", "level_03", "level_05"],
+	"torres": ["basic", "cannon", "frost"],
+	"reglas": {"oro_inicial_%": 100, "vidas": 5, "vida_monstruos_%": 120}
+}
+```
+
+**Las claves:**
+
+| Clave | Obligatoria | Qué hace |
+|---|---|---|
+| `version` | Sí | Siempre `1`. |
+| `nombre` | Sí | Lo que dice la solapa (hasta 30 letras). |
+| `descripcion` | No | Se ve al pasar el mouse por la solapa (hasta 200 letras). |
+| `mapas` | Sí | Los mapas en orden, sin `.json`. Cada uno se busca primero en la carpeta del modo y, si no está, entre los niveles oficiales (`data/levels/`). Así se pueden reusar mapas de la campaña sin copiarlos. Hasta 50; ninguno puede llamarse `modo`. |
+| `torres` | No | Las torres que se pueden construir (ids de `data/towers/`). Sin esta clave, las de siempre. |
+| `reglas` | No | `oro_inicial_%` (10 a 1000, sobre el oro del mapa), `vidas` (1 a 999, reemplaza las del mapa) y `vida_monstruos_%` (10 a 1000, sobre la vida de cada monstruo). Sin reglas, el mapa se juega tal cual. |
+
+**Progreso y desbloqueo:**
+- Cada mapa de un modo guarda vidas, estrellas, puntaje y su top 5 aparte, con el id `modo_<modo>_<mapa>`.
+- No cuenta para la campaña, el total de estrellas de la campaña, el Salón de la fama ni los avances.
+- En un modo oficial, cada mapa se abre al ganar el anterior; en los propios, todos están abiertos. El modo de pruebas abre todo.
+
+**Si algo está mal**, el juego no se corta: un `modo.json` roto muestra una sola tarjeta "Con errores" con el motivo, y un mapa que falta o tiene errores queda como tarjeta deshabilitada, mientras los demás se juegan igual.
+
+**Balancear un modo oficial con el bot:**
+
+```bash
+godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- mix modo=asedio level=2
+```
+
+**Asedio:** usa los mapas 1 a 9 de la campaña con `vida_monstruos_%` 115 y el mismo oro. El valor salió del bot: con 150 % y 80 % de oro, el bot perdía en la oleada 4.

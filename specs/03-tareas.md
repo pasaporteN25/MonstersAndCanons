@@ -1091,6 +1091,13 @@
   **Hecho cuando:** se identifica todo lo pendiente, se conservan bocetos/herramientas/UID útiles, se excluyen temporales/proyecto vacío y se sube al PR#1.
   **Resultado T178:** materiales históricos de branding, torres3D y full-pass archivados, incluidas alternativas descartadas; UID de herramientas previas conservados. Logs y `.import` de art ignorados, proyecto secundario vacío excluido sin eliminarlo. No hay cambios de producción ni integración de bocetos. Verificación de inventario y `git diff --check`; GUT no se repite al no cambiar ejecución.
 
+### M34 · APK
+- [x] **T179 · Exportar Android normal y de pruebas con el PR#1.**
+  **Refs:** RF-348, D-060.
+  **Hecho cuando:** ambas APK firmadas, variantes y contenido verificados, docs al día y push; límites de Android/iOS declarados.
+
+  **Resultado T179:** dos APK arm64 firmadas para instalación local (clave de depuración), Android7/API24 o superior, versión1.1-pr1/code2. Paquetes com.juegoa.towerdefense y com.juegoa.towerdefense.pruebas; feature pruebas confirmada solo en la segunda al decodificar project.binary. Firmas v2/v3 verificadas, integridad ZIP y presencia de los doce atlas de caminata/submenús actuales comprobadas; exclusión art/tests/tools/GUT confirmada. Cada APK49429778bytes; hashes en build/m34/apk_manifest.json. Exportación con todos los cambios hasta T178 del PR#1 y presets nuevos. No había dispositivos conectados, no se instaló/jugó en Android ni se reejecutó GUT (solo presets/documentos). iOS bloqueado por entorno Windows: requiere macOS/Xcode y firma Apple; no se generó IPA.
+
 ### M35 · Panel de información y mejoras
 - [x] **T180 · Renovar el panel de torre (B-28).**
   **Refs:** RF-349, D-061.
@@ -1110,3 +1117,164 @@
   **Refs:** D-063, backlog §13. No añade requisitos de juego.
   **Hecho cuando:** B-02 cerrado; B-15 retirado sin buscador/enlaces/Niveles/imágenes; lore/Épocas trasladados a B-03 y Wiki de mods/comunidad separada sin duplicar B-04; estudios B-21–B-23 explícitamente abiertos/preliminares; pendientes restantes identificados.
   **Resultado:** documentación y referencias actualizadas; conservados los números históricos. Revisión de cambios y referencias, sin ejecución de tests por no modificar juego ni datos. Cambios M34 anteriores conservados fuera del commit.
+
+### M37 · Primera etapa de B-07/B-22
+- [x] **T183 · Avances genéricos y Estandarte mecánico.**
+  **Refs:** RF-358–361, D-064.
+  **Hecho cuando:** colección5 fuentes, checkpoint de oleada y guardado solo al resultado, disponibilidad6/7 más requisito, apoyo sin apilar, admin explícito, UI/Wiki/iconos; pruebas, exportación y muestras revisables. Documentar balance y límites honestos.
+  **Resultado T183:** primera etapa funcional:5 fuentes únicas, portador aleatorio original, confirmación al cerrar oleada, guardado solo victoria/derrota, colección+permiso6/7 y habilitación admin genérica, apoyo10/15/20% sin apilar ni disparar, UI/Wiki y diseño vectorial inicial revisable.918/918 GUT,8251 asserts,71 scripts, sin SCRIPT ERROR/Parse Error.106FPS con200 enemigos/60 torres incluyendo apoyo, peor cuadro33,3ms y6/638 cuadros sobre16,6ms (RX6900XT). Cuatro capturas revisadas. Bot mix semilla12345: nivel6 sin apoyo gana10 vidas, con compra temprana pierde12/15; nivel7 gana16/13 vidas sin/con apoyo. No es balance definitivo: este bot solo compra nivel1, una sola estrategia/semilla y apoyo no obligatorio. Windows normal/pruebas y Linux exportados; arranque de ambos Windows verificado. No ejecución en Linux/Android ni aprobación visual final de Lucas. Cambios M34 previos conservados fuera del commit. Evidencia art/progression-m37/.
+- [x] **T184 · Ladrón periódico.** Refs RF-363–365/D-066. Resultado: drenaje3/2s/piso10 por señal, encuentros limitados en6/7, editor preserva probabilidad, Wiki/admin automáticos y aviso de robo efectivo. Pruebas de límites/ingresos/escape/muerte/sorteo/editor/campaña y regresión. Diseño y balance iniciales; integración de desgaste/reparación continúa en T185–186.
+- [x] **T185 · Embestidor y desgaste.** Refs RF-366–368/D-067. Resultado: rectas fusionadas, preparación/aceleración y slow, impacto único al extremo en torre próxima, desgaste limitado50% que conserva mejoras y stun independiente. Panel, marca y aviso; datos presentes solo6/7.73 pruebas de geometría/cercanía/topes/contenido/progresión/editor verdes. Reutiliza Bestia B como arte inicial; balance conjunto y reparación se verifican en T186.
+- [x] **T186 · Reparación del mecánico.** Refs RF-369–370/D-068. Resultado: reparación automática 2/3/4 puntos/s, mayor fuente activa, sin autorreparación; desgaste del apoyo reduce prestaciones, stun separado. Wiki/panel/ayudas y marcas compartidas; 943/943 GUT, 8459 asserts, 74 scripts; 35 pruebas finales de UI/contenido. Impacto y reparación verificados sobre caminos 6/7; 12 simulaciones (3 semillas, con/sin apoyo), 103 FPS con 200 enemigos/60 torres desgastadas. Windows normal/pruebas y Linux exportados; arranque Windows código 0. Nivel6 pierde con compra temprana del apoyo y gana sin ella; nivel7 gana en ambos casos. Bot mata Embestidores antes del impacto; escenarios controlados verifican ese efecto. Balance/arte iniciales, sin QA física Linux/Android. Evidencia art/mechanics-m41; cambios Android M34 ajenos conservados.
+
+- [x] **T187 · Integrar avances en la barra superior.** Refs RF-362/D-065. Hecho cuando icono/valor, ayudas y estados quedan integrados sin cambiar persistencia ni superponer controles. Resultado: control uniforme, cartel del mapa retirado; pruebas de colección/HUD y captura, descripción PR1 preparada. Ramas feature/ registradas.
+
+- [x] **T188 · Registrar rediseños y corregir selector de enemigos.** Refs B-31/RF-371–372/D-069. Hecho cuando los cuatro rediseños y la propuesta Curandero→Embestidor quedan registrados; desplegable no recorta, permite scroll y clic, rueda sobre selector cambia con límites y Aparecer respeta selección. Verificar pruebas y captura; no sustituir assets en esta tarea.
+
+
+  **Resultado T188:** B-31 registra los cuatro rediseños y la propuesta Curandero→Embestidor, sin reasignar recursos. Popup opaco con máximo efectivo de 320 píxeles lógicos y scroll, hover sin sombra recortada; rueda sobre selector cerrado cambia con límites. Pasan 948/948 tests (8477 asserts), sin SCRIPT ERROR ni Parse Error. Capturas reales y reproducción en `art/ui-m42/`; Windows (pruebas) reexportado, arranque headless código 0. Persisten avisos conocidos de certificados/limpieza de Godot. No se hizo sesión manual con rueda física ni se produjo arte nuevo.
+
+- [x] **T189 · Producir e integrar rediseños B-31.** Refs B-31/RF-373–376/D-070. Hecho cuando Embestidor/Curandero tienen nuevas siluetas y ciclos, Ladrón/Mecánico usan render compatibles, fuentes/prompts y capturas quedan conservados, balance intacto y pruebas pasan. Integración técnica completa separada de aprobación visual final por Lucas.
+
+
+  **Resultado T189:** cuatro diseños integrados,48 poses de marcha, PNG estáticos/Wiki y Mecánico renderizado. Fuentes, prompts normalizados, pack/manifest, preview animada y capturas mapa/Wiki en art/redesign-m43. 948/948 tests,8693 asserts; parámetros jugables idénticos. Windows (pruebas) exportado y arranque0. Carga200 enemigos/60 torres:114FPS en este equipo. Bot6/7 semilla42 con compra temprana Mecánico conserva resultados M41 (6 derrota12/15,7 victoria15vidas,18 monedas robadas). No se cambió balance ni niveles1–5. Pendiente aprobación artística de Lucas, estrategias con mejoras/juego humano y prueba Linux/Android; límites completos en README de evidencia.
+
+- [x] **T190 · Exportar entrega visual aprobada.** Refs B31/D071/RF376. Hecho cuando aprobación queda registrada y los dos EXE y dos APK se generan y verifican; informar límites de ejecución y siguiente etapa. No cambiar balance ni configuración local ajena.
+
+  **Resultado T190:** aprobación B31 registrada. Windows Desktop/Windows (pruebas) release y Android/Android (pruebas) debug regenerados; ambos EXE arrancan0 y solo pruebas activa DevMode. APK arm64 Android7+, firmas v2/v3 válidas e idénticas aM34, paquetes separados; feature pruebas solo en la variante de pruebas, ZIP íntegro y los cuatro recursos M43 presentes. SHA256/tamaños y logs en build/t190. Se reutilizaron plantillas y clave anteriores en entorno aislado. No hay prueba física Android, instalación en dispositivo ni cambio de lógica; GUT948/948 deT189 sigue vigente. Se conservaron cambios locales Android sin incluirlos en commit.
+
+- [x] **T191 · Comparar y afinar balance6/7.** Refs B07/B22/D072/RF377. Hecho cuando se comparan momento/ubicación del Mecánico, mejoras y presión de especiales con corridas reproducibles; se informan criterios para8/9 y se conserva balance1–5. Cambios oficiales solo si los datos los justifican; documentar límites del bot y prueba humana pendiente.
+
+**Resultado T191:**38 corridas con semillas global/spawner controladas y una repetición completa idéntica; siete perfiles, mejoras, ubicación y presión de especiales. Se conservan números oficiales6/7: evidencia favorece apoyo tardío agrupado en7, no compra temprana con torres básicas en6. Variantes reforzadas producen impactos/reparación natural en7, pero recompensas y compras confunden interpretación de vidas. Dos escenarios con caminos reales:20 desgaste, reparación10/6,7/5s. Corregido residuo terminal y estado de reparación;949/949 GUT,8698 asserts,74 scripts, sin SCRIPT ERROR/Parse Error. Dos EXE release y dos APK debug regenerados: arranque Windows0, paquetes/feature/firma APK válidos e iguales aT190. Evidencia art/balance-m44 y logs/manifest local build/t191. Niveles1–5 intactos; no balance humano definitivo ni QA física Android. B22 abierto; criterios para8/9 documentados. Cambios locales M34 conservados fuera del commit.
+
+- [x] **T192 · Integrar y balancear primera versión de niveles8/9.** Refs RF378–381/D073/B10/B22. Hecho cuando campaña se amplía con debuts de auras, preparación y encuentros/combinaciones de robo/desgaste, disponibilidad del apoyo y rutas válidas; pruebas, varias semillas/estrategias y evidencia documentada. Niveles1–7 y stats globales intactos; no EXE/APK ni afirmar balance humano definitivo.
+
+**Resultado T192:** Bastión18 oleadas/una entrada y Taller asediado20/dos entradas integrados en campaña; Guardián8/Curandero9, robos opcionales desde6 y embestidas8 antes de combinaciones, Mecánico con permiso+5avances. Escala local32%/40% tras dos exploraciones;24 corridas finales en tres semillas y repetición idéntica.8 gana en perfiles comparados,9 gana con defensa variada11 vidas/compra tardía8; heurística de mejoras puede perder y apoyo por daño no cubre siempre extremos. Dos encuentros oficiales con defensa mínima causan/reparan40 puntos por mapa sin forzar efectos; dos exposiciones y capturas revisadas. Compatibilidad de acceso al nuevo nivel por victoria anterior sin escribir guardado.954/954 GUT,8939 asserts,75 scripts;62/62 verificaciones finales tras ajuste local8,1241 asserts; carga/caminos/texto canónico e importación válidos, sin SCRIPT ERROR/Parse Error. Niveles1–7/stats globales y hashes de los cuatro paquetes intactos. No exportaciones por instrucción de Lucas, ni balance humano definitivo/QA física móvil. B10/B22 parciales:10–15 y otros candidatos pendientes. Evidencia art/campaign-m45; cambios M34 conservados fuera del commit.
+
+### M46 · Estudio de vista B-21 v2
+- [x] **T193 · Nuevo análisis y pruebas de una vista con más sensación de 3D (B-21).**
+  **Refs:** RF-382, D-074, B-21.
+  **Hecho cuando:** las cuatro presentaciones (actual, relieve en la misma cuadrícula, oblicua al 80 % y maqueta 3D) se arman sobre la partida real con la misma escena; hay capturas completas y de detalle, modo jugable con autoprueba por vista, medidas de casillas, superficie y clics, rendimiento con la carga de P7 en tres rondas y un informe con costos, riesgos, límites y una recomendación que incluye no cambiar nada; producción, mapas y guardados quedan intactos y GUT pasa en verde.
+
+  **Resultado T193:**
+  - **Laboratorio:** `art/b21-vista/` (`vista_lab`, `relief_layer`, `diorama_3d` y `d_input`), montado sobre `game.tscn` sin tocar los scripts de producción. Escena de referencia: nivel 1 con 7 torres, 14 monstruos y la vista previa de la Incendiaria. Entrega las cuatro vistas completas, la hoja de detalle y una foto en pleno combate por vista.
+  - **Casillas, superficie y clics:** A y B 64 × 64 px y 100 %; C 64 × 51 px y 80 %; D 53 × 38 px al fondo y 64 × 56 px adelante, 66 %. En las cuatro vistas, 615/615 clics de ida y vuelta caen en la casilla correcta (en D, con el rayo nuevo).
+  - **Rendimiento** (RX 6900 XT, 1920 × 1080, tres rondas):
+
+    | Vista | FPS | ms por cuadro |
+    |---|---|---|
+    | A | 92 | 10,8 |
+    | B con relieve dibujado en cada cuadro | 73 | 13,7 |
+    | B horneado | 92 | 11,0 |
+    | B horneado sin orden por profundidad | 92 | 10,9 |
+    | C horneado | 95 | 10,5 |
+    | D | 203 | 4,9 |
+
+    El número de D no es comparable: omite casi todos los detalles por enemigo. El control (A sin dibujar torres ni monstruos) da 520 FPS y 1,9 ms, o sea que unos 9 ms de cada cuadro son el dibujo 2D de torres y monstruos. Quedó anotado como sugerencia, sin tocar nada.
+  - **Autoprueba jugando:** en las cuatro vistas se construyen 3/3 torres (en D por clic simulado), Escape sale del modo construcción y la oleada 1 corre sin `SCRIPT ERROR`.
+  - **Recomendación (D-074):** no cambiar la proyección. Si se quiere más profundidad, B por etapas; C como alternativa con PR *breaking change*; D descartada para este juego; A también es válida.
+  - **Tests:** 954/954 GUT, 8939 asserts, 75 scripts, sin `SCRIPT ERROR` ni `Parse Error`.
+  - **Lo que no se probó:** ningún celular (ni rendimiento, ni toque, ni memoria). Solo la Pradera en 20 × 9. El arte de relieve y maqueta es de prototipo. En C la torre fantasma sale aplastada y los efectos no están corregidos. En D faltan efectos, coronas, auras y placas, los monstruos entran flotando por el borde y la decoración tiene sombra doble. Al cerrar el laboratorio, Godot avisa de 2 objetos sin liberar.
+  - **Pendiente:** la decisión de Lucas. Los cambios M34 se conservaron fuera del commit.
+
+### M47 · Monsters & Canons 3D: concepto
+- [x] **T194 · Documento de concepto de Monsters & Canons 3D y prueba de cámara libre.**
+  **Refs:** D-075, B-21, B-32, backlog §13. No añade requisitos de juego.
+  **Hecho cuando:** existe un documento que junta la investigación 3D, lo que se conserva de la V1, el diseño del espacio, la cámara, el arte, PC y celular, el lore, el relevamiento completo de lo pendiente en la V1 con un orden propuesto y un plan por hitos con riesgos y preguntas; la sección de cámara se apoya en una prueba real de cámara giratoria; B-21 queda resuelto y B-32 registrado.
+
+  **Resultado T194:**
+  - **Documento:** `specs/06-monsters-canons-3d.md`.
+  - **Prueba de cámara:** seis vistas de la maqueta con los dibujos actuales (`art/b21-vista/camara_*.jpg`). Aguantan giros de ±30°, la cámara baja y el acercamiento; desde 90° y sobre todo desde 180° se rompen (luz pintada contra sol, frentes pintados, puntos de apoyo corridos y paredes que tapan). Conclusión: cámara de estratega con el arte actual; el giro libre pide modelos.
+  - **Relevamiento de la V1:** todo el backlog abierto, más plataformas y sugerencias, con tamaño y relación con el 3D.
+  - **Pruebas:** solo se cambió el laboratorio de `art/` y documentos. GUT pasa 954/954 (8939 asserts, 75 scripts, sin `SCRIPT ERROR` ni `Parse Error`), y la prueba de cámara corrió sin `SCRIPT ERROR`. No se midió rendimiento con cámara libre ni se probó en celular.
+  - Los cambios M34 se conservaron fuera del commit.
+
+- [x] **T195 · Trasladar Épocas al backlog de M&C 3D y registrar el estado de la V1.**
+  **Refs:** D-076, B-01, B-05, B-13, B-32. No añade requisitos de juego.
+  **Hecho cuando:** B-01 queda marcado como trasladado y su contenido completo está en el backlog de M&C 3D (§15 del documento 06); B-05 y B-13 registran las propuestas de Lucas; el relevamiento de la V1 refleja que la APK ya se probó y que el lore está en curso.
+
+  **Resultado T195:**
+  - Épocas ya forma parte del backlog de M&C 3D como entrada 3D-01, con sus variantes, cuidados y pasos previos.
+  - El documento 06 tiene la tabla de pendientes, el orden y las preguntas actualizados.
+  - El README registra la prueba de la APK hecha por Lucas.
+  - B-03 no se tocó: lo trabaja otro agente.
+  - Solo cambiaron documentos, así que no se corrió GUT.
+  - Los cambios M34 se conservaron fuera del commit.
+
+### M48 · Modo de pruebas en Opciones, una sola app y licencia
+- [x] **T196 · Modo de pruebas desde Opciones, una sola exportación por plataforma y licencia GPL.**
+  **Refs:** RF-180, RF-383 a RF-387, D-077, B-13.
+  **Hecho cuando:**
+  - Opciones del menú principal activa el modo de pruebas (con confirmación) y lo desactiva sin tocar el guardado real; desde la pausa no aparece.
+  - El juego siempre arranca normal y `--pruebas` sigue sirviendo.
+  - Quedan los presets Windows, Android y Linux, sin la característica `pruebas`.
+  - Están `LICENSE` con la GPL-3.0 y el artículo Licencias en la Wiki.
+  - Los documentos están al día, los tests en verde y las exportaciones verificadas.
+
+  **Resultado T196:**
+  - **Opciones:** tiene la sección "Administración". La confirmación ocupa el panel entero, así no se pasa de 720 px de alto (la primera versión se cortaba; se corrigió).
+  - **Menú principal:** se vuelve a armar al cambiar de modo.
+  - **`DevMode.detect()`:** solo mira `--pruebas`.
+  - **Exportaciones:** se eliminaron los presets "Windows (pruebas)" y "Android (pruebas)".
+  - **Licencia:** `LICENSE` es el texto oficial de gnu.org (SHA-256 3972dc97…). El artículo Licencias de la Wiki lleva la licencia del juego, el aviso de Godot copiado del propio motor, el crédito de FreeType y la aclaración sobre GUT.
+  - **Tests:** 965/965 GUT (8994 asserts, 77 scripts, sin `SCRIPT ERROR` ni `Parse Error`), con 11 tests nuevos (9 de Opciones y 2 de licencia) y el de presets reescrito.
+  - **Prueba en el menú real:** confirmar activa el modo y muestra el cartel; Opciones ofrece "Volver al juego normal" y al tocarlo vuelve al guardado real.
+  - **Exportaciones verificadas:**
+    - `build/JuegoA.exe` arranca con salida 0, normal por defecto y en modo de pruebas con `-- --pruebas`.
+    - `build/JuegoA.x86_64` se exportó.
+    - `build/JuegoA.apk` es la APK debug única, con paquete `com.juegoa.towerdefense`, firma de depuración verificada con apksigner, Android 7+, versión 1.1-pr1 (code 2, de la configuración local de M34) e incluye el artículo de licencias.
+  - **Lo que no se probó:**
+    - La APK no se instaló en un celular (la prueba física queda para Lucas).
+    - Linux no se abrió en una máquina real.
+    - No se hizo una sesión manual con mouse y teclado: los clics de la prueba son simulados.
+  - **Pendientes:**
+    - En `build/` quedan los EXE y APK de pruebas viejos, ya obsoletos.
+    - El repositorio es privado: antes de publicar hay que ofrecer el código fuente (D-077).
+  - Los cambios M34 se conservaron fuera del commit.
+
+### M49 · Prueba de modos
+- [x] **T197 · Prueba de modos unificada con el gestor de mapas (B-05).**
+  **Refs:** RF-388 a RF-392, D-078.
+  **Hecho cuando:**
+  - Los paquetes de modo (oficiales y propios) se leen y validan solo como datos.
+  - La selección de nivel ofrece Campaña, Asedio, Comunidad y modos propios, con progreso y récords por modo, sin tocar campaña, Salón ni colección.
+  - El editor guarda en un modo propio.
+  - Asedio se ofrece con valores iniciales y una corrida del bot sobre sus primeros mapas.
+  - Hay tests de formato, errores, ids, desbloqueo y editor en carpetas de prueba.
+
+  **Resultado T197:**
+  - **Paquetes:** `ModePacks` lee y valida `modo.json` (solo datos). Los mapas se buscan en la carpeta del modo o entre los oficiales, se aplican las reglas (oro %, vidas, vida % y torres) y el id es `modo_<modo>_<mapa>`. Un modo propio con el nombre de uno oficial queda con error.
+  - **Partida:** la vida del modo llega al generador de oleadas (`Rules.percent_of`, mínimo 1). El progreso y el top 5 van por modo y no tocan la campaña, el Salón ni los avances. "Siguiente nivel" sigue dentro del modo.
+  - **Selección de nivel:** solapas dinámicas, tarjetas con bloqueo en los modos oficiales, error o mensaje si el modo está vacío, y carpeta del modo propio.
+  - **Editor:** "En un modo…" crea o elige el modo y después pide el nombre; el destino cambia recién al aceptar. "Guardar" no cambió y "Abrir" lista los mapas de los modos.
+  - **Bot:** acepta `modo=asedio`.
+  - **Asedio, ajustado con el bot `mix`:**
+    - La propuesta de vida 150 % y oro 80 % perdía en la oleada 4 de los mapas 1 a 3, y con 125 % y el mismo oro también perdía temprano.
+    - Con reglas neutras da lo mismo que la campaña, oleada por oleada.
+    - Final: vida 115 %, el mismo oro.
+
+    | Mapa | Campaña | Asedio 115 % |
+    |---|---|---|
+    | 1 | gana con 20 vidas | gana con 3 |
+    | 2 | pierde en la oleada 15 | pierde en la 12 |
+    | 3 | gana con 16 | gana con 6 |
+    | 4 | gana con 10 | pierde en la última oleada (15) |
+    | 5 | gana con 13 | gana con 4 |
+    | 6 | gana con 10 | pierde en la oleada 7 |
+    | 7 | gana con 16 | pierde en la 19 de 20 |
+    | 8 | gana con 20 | pierde en la última oleada (18) |
+    | 9 | gana con 11 | pierde en la 16 de 20 |
+
+    El bot es simple: falta probarlo jugando, y 110 % es la alternativa si resulta demasiado.
+  - **Tests:** 1017/1017 GUT (9256 asserts, 81 scripts, sin `SCRIPT ERROR` ni `Parse Error`), con 51 nuevos. Se revisó en capturas la selección con Asedio, dos modos propios y la página de un modo propio.
+  - **Lo que no se probó:**
+    - Una partida manual en Asedio, ni en celular.
+    - Con más de dos modos propios, las solapas no entran en la fila.
+    - Los récords de los modos no aparecen en la pantalla de Récords (sí al terminar cada partida).
+  - No se regeneraron EXE/APK. Los cambios M34 se conservaron fuera del commit.
+
+### Registro de lore y cierre de V1
+- [x] **T198 · Registrar las decisiones de B-03 y el plan de primera entrega.**
+  **Refs:** B-03, B-10, B-22, D-075/D-076, specs/07-lore-y-cierre-v1.md.
+  **Hecho cuando:** toda la conversación queda registrada, separando acuerdos, descartes y preguntas; backlog y documento de segunda entrega enlazan el plan, sin implementar mecánicas.
+  **Resultado:** documento completo con lore, campaña de 15 niveles, tres bloques, demolición global, recursos opcionales, extracción finita por oleadas, colecciones científicas por tecnología, torres, mapas/assets, orden de desarrollo y criterio de entrega. Referencias en B-03/B-10/B-22 y documento 06. Lectura del archivo guardado, 17 comprobaciones de contenido y revisión de formato del diff. Sin cambios de ejecución; no se corrió GUT para esta tarea documental. Los cambios previos de Android y T197 se conservan fuera del commit.

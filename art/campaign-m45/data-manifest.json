@@ -1,0 +1,16 @@
+{
+  "godot": "4.7.2.stable",
+  "seed_protocol": "global+spawner; física60Hz; APPDATA aislado",
+  "files": {
+    "data/campaign.json": "09c763a917faf6a95328a5ea883deb20f7ebabd093d35f805fdf7eaf00395749",
+    "data/levels/level_01.json": "f293a76cd5d9dea3d76d165a5e206a7d761256c5641fe63ef624a663a763c493",
+    "data/levels/level_02.json": "7c725aa72099e978a6a995005ed4223b13ec3b5f24f2f3eb028f4b89d98f5bf4",
+    "data/levels/level_03.json": "0abf987787765181fdbead57a49397caa28dd4e24d2aca07b91092604818f8b3",
+    "data/levels/level_04.json": "533904804fafa2648a3cdaddf50da61403c0f66fec52ea5f1c82dde488ef991b",
+    "data/levels/level_05.json": "97ca15f331e0f81fe58f9f92b7d75f7c4714e69192e30b82d14583d7ea6e481d",
+    "data/levels/level_06.json": "7d77b0d23398e84fa36cb7d7707aad044de3c3985db991d24ad4ac411d6086b4",
+    "data/levels/level_07.json": "0d2823f711eb3605ef7637166bc5683df6a814b5602e1e6d9ee5a0d94878761b",
+    "data/levels/level_08.json": "0169a0f8f04d82b5207dad5a5ba585662b7aec8a649e20a68b3754747a842ddb",
+    "data/levels/level_09.json": "4bcd257d0f09b8afee44e24c136de0136510e05f9f61b50a98af317c7583282c"
+  }
+}

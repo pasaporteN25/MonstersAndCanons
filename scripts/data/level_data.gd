@@ -18,6 +18,10 @@ extends Resource
 @export var theme: StringName = MapThemes.DEFAULT
 ## M15 (RF-262): letras extra del mapa. Cada una: {"dibujo": nombre del catálogo, "construible": bool}.
 @export var legend: Dictionary = {}
+## M49 (RF-388): % de la vida de los monstruos que aplica un modo (`"vida_monstruos_%"`). 100 = como siempre.
+@export var enemy_health_percent: int = 100
+## M49 (RF-388): torres que permite un modo (`"torres"`). Vacío = las de siempre.
+@export var allowed_towers: PackedStringArray = []
 
 
 ## El mapa listo para agregar a la escena (un `Level`), armado con las filas de letras.
@@ -32,9 +36,13 @@ func health_scale_percent(balance: BalanceConfig) -> int:
 
 
 ## RF-300: las torres que se ven en la barra de este nivel: todas las comunes y las reservadas que el nivel habilita.
-func available_towers(all_towers: Array[TowerData]) -> Array[TowerData]:
+func available_towers(all_towers: Array[TowerData], is_collected: Callable = Callable()) -> Array[TowerData]:
 	var result: Array[TowerData] = []
 	for tower: TowerData in all_towers:
-		if not tower.reserved or extra_towers.has(String(tower.id)):
+		var allowed: bool = not tower.reserved or extra_towers.has(String(tower.id))
+		if not allowed_towers.is_empty() and not allowed_towers.has(String(tower.id)):
+			allowed = false  # RF-388: el modo limita las torres
+		var collected: bool = tower.required_collection == &"" or (is_collected.is_valid() and is_collected.call(tower.required_collection))
+		if allowed and collected:
 			result.append(tower)
 	return result

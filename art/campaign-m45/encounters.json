@@ -1,0 +1,26 @@
+[
+	{
+		"gun_cell": "(8, 0)",
+		"level": 8,
+		"lives_at_cutoff": 20,
+		"remaining_wear": 0.0,
+		"repaired": 40.0,
+		"seconds": 30,
+		"seed": 42,
+		"support_cell": "(6, 0)",
+		"wave": 8,
+		"wear_received": 40.0
+	},
+	{
+		"gun_cell": "(10, 4)",
+		"level": 9,
+		"lives_at_cutoff": 4,
+		"remaining_wear": 0.0,
+		"repaired": 40.0,
+		"seconds": 30,
+		"seed": 42,
+		"support_cell": "(12, 4)",
+		"wave": 8,
+		"wear_received": 40.0
+	}
+]

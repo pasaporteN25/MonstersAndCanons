@@ -11,11 +11,11 @@ godot --headless --import                                              # antes d
 godot --headless -s addons/gut/gut_cmdln.gd -gdir=res://tests -gexit   # todos los tests de GUT
 godot --headless -s addons/gut/gut_cmdln.gd -gtest=res://tests/test_x.gd -gexit   # uno solo
 godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- mix level=3  # el bot de balance (uso en el encabezado del archivo)
-godot --headless --path . --export-release "Windows (pruebas)" build/JuegoA_pruebas.exe   # ejecutable con el modo de pruebas
+godot --headless --path . --export-release "Windows Desktop" build/JuegoA.exe   # el único ejecutable de Windows (el modo de pruebas se activa en Opciones, D-077)
 ```
 
 - Un test que pasa pero imprime `SCRIPT ERROR` **es un fallo**: mirar la salida completa, no solo el resumen.
-- Jugar con el modo de pruebas desde el editor: argumento `-- --pruebas` (spec §10.2).
+- Modo de pruebas: en el juego, Opciones → Activar modo de pruebas (RF-383); para arrancar ya activado, argumento `-- --pruebas` (desde el editor de Godot o un acceso directo, RF-385). Ya no hay ejecutable ni APK de pruebas aparte (D-077).
 - **`--import` reescribe a veces los SVG de `assets/sprites/`** (cambia saltos de línea). Antes de cada commit, mirar `git status` y devolver con `git checkout -- assets` lo que no se tocó a propósito.
 
 ## Cómo se trabaja (SDD)
@@ -45,4 +45,7 @@ Viven en `.claude/rules/` y se cargan solas según el archivo que se edita. No s
 
 ## Dónde está cada cosa
 
-La **constitución** (`specs/00-constitucion.md`, principios P1 a P10) manda sobre todo lo demás. `README.md` explica el proyecto, `ONBOARDING.md` cómo instalarlo y probar cada hito, `CONTENIDO.md` qué datos se pueden agregar sin programar, `CHANGELOG.md` lo nuevo para quien juega.
+La **constitución** (`specs/00-constitucion.md`, principios P1 a P10) manda sobre todo lo demás. `README.md` explica el proyecto, `ONBOARDING.md` cómo instalarlo y probar cada hito, `CONTENIDO.md` qué datos se pueden agregar sin programar, `CHANGELOG.md` lo nuevo para quien juega. `specs/06-monsters-canons-3d.md` es el concepto de la segunda entrega en 3D y el relevamiento de lo pendiente en la V1: consultarlo antes de planificar qué sigue.
+
+## Ramas Git
+Lucas, 2026-10-03: usar siempre el prefijo `feature/` para ramas nuevas; nunca `codex/`. La instrucción del usuario prevalece sobre el prefijo sugerido por la app.

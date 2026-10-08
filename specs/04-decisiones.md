@@ -378,6 +378,9 @@ Generar una hoja independiente por criatura tomando su PNG aprobado como referen
 ## D-059 · Un tema reutilizable para submenús
 2026-10-02, aprobada por Lucas (B-19). Extender el tema existente con deslizadores, casillas y listas desplegables; aplicarlo localmente a submenús y paneles, sin tema global ni cambios de guardados. Conservar el marco dorado del Salón de la Fama y todos los flujos.
 
+## D-060 · APK independientes para instalación local
+2026-10-02, pedido por Lucas. Reusar exportación Android sin Gradle, arm64 y feature pruebas solo en variante de administración. Firmar con clave de depuración local para instalación directa, sin publicación en Play Store. iOS requiere macOS/Xcode y firma Apple, no se genera APK ni se promete IPA desde Windows.
+
 ## D-061 · Panel compacto con contenido desplazable
 2026-10-03, autorizado por Lucas al iniciar el orden de mejoras (B-28). Reutilizar el tema local hierro/bronce y separar métricas, descripción/efectos y acciones. Mantener270 píxeles de ancho y fijar la altura; desplazar solo el detalle para que textos de mods y sinergias no empujen los botones fuera de pantalla. Conservar señales y lógica de Game/BuildController. Se descarta ampliar el ancho o recortar los efectos. El foco de teclado usa el tema existente; no se toma automáticamente al seleccionar con el mouse.
 
@@ -386,3 +389,136 @@ Generar una hoja independiente por criatura tomando su PNG aprobado como referen
 
 ## D-063 · Depurar el backlog y separar documentación futura
 2026-10-03, decisión de Lucas. Cerrar B-02 y resolver arte futuro mediante detalles específicos. Retirar el bestiario ya hecho de B-15 y descartar búsqueda/enlaces, categoría Niveles e imágenes adicionales. Trasladar lore y documentación de Épocas a B-03; separar Wiki de mods (B-29) y comunidad (B-30), sin duplicar sistemas de B-04 ni renumerar ids anteriores. B-01 conserva la mecánica de Épocas. B-21/22/23 continúan abiertos: los informes M36 son rápidos/preliminares, no decisiones ni diseños definitivos. Se descarta mantener un bloque genérico de mejoras de Wiki o arte permanentemente abierto.
+
+## D-064 · Progresión por fuentes y apoyo antes de desgaste
+2026-10-03, Lucas aprueba desarrollo por etapas. Una fuente de avance distinta por nivel1–5, colección genérica persistente más permiso por nivel; Estandarte desde6, admin habilita sin colección. La oleada debe completarse antes de una derrota para conservar el drop; abandonar no conserva. Elegir un portador aleatorio entre enemigos originales garantiza oportunidad si se matan todos, evitando azar sin límite y duplicados por farmear un solo nivel. Se descarta introducir amenazas nuevas en1–5 o agregar ahora niveles8–15 sin diseño/balance. Ladrón periódico con piso10 y Embestidor al final de rectas pasan a siguientes etapas; mecánico reparador después. Vida/destrucción/reconstrucción quedan como alternativa futura, no se mezclan con aturdimiento ni se implementan ahora. Estatua e icono plateado iniciales son vectoriales nativos; no reemplazan arte aprobado existente.
+
+## D-065 · Avances integrados al HUD
+2026-10-03, Lucas pide mover avances a la barra superior respetando icono/valor y seguir las etapas pendientes en feature/avances-estandarte. Se retira el cartel sobre el mapa; estado en ayuda del icono. No cambia la colección ni los primeros cinco niveles. Ramas nuevas siempre feature/, por pedido explícito de Lucas.
+
+## D-066 · Efecto económico por señal y grupos opcionales
+Lucas autorizó continuar las etapas, 2026-10-03. Enemy mide tiempo y emite solicitud; Game aplica LevelSession.steal, sin acceso del enemigo a economía global. Probabilidad por grupo y límite por EnemyData permiten nuevos encuentros sin codificar ids. No cambia el guardado ni se reemplazan enemigos existentes. Robo de un monto fijo al escapar descartado según el pedido. Balance6/7 de prueba; intensidad8/9 y diseño10–15 quedan para su creación.
+
+
+## D-067 · Carga por geometría y desgaste sin destrucción
+Lucas aprobó el extremo de la recta y la cercanía al camino. ChargeRules fusiona puntos colineales del recorrido; Enemy acumula preparación solo en esa recta y evalúa sus extremos al cruzarlos. WearRules conserva lógica pura; límite en BalanceConfig y cifras del impacto en EnemyData. Torres mantienen inversión/huella y se pueden reparar en T186. Alternativa futura registrada: vida/destrucción, reparación pagada, precios de reconstrucción, interfaz económica y rebalanceo; no activada en esta etapa.
+
+
+## D-068 · Reparación automática y no acumulable
+Lucas autorizó desgaste reparable y el rol del Mecánico. Tower consulta fuentes activas dentro de radio; repara con la mayor tasa en tiempo físico, sin trabajo global ni referencias persistentes. Tasas2/3/4 en TowerLevelData; no crea nueva economía, botones ni monedas. El daño del propio Mecánico reduce prestaciones para que el Embestidor tenga efecto real en toda torre; otro Mecánico puede restaurarlo. La alternativa de economía/reparación manual/destrucción queda anotada en D-067 y fuera de esta etapa. Costos actuales se mantienen como base para laboratorio6/7.
+
+
+## D-069 · Lista acotada y selección rápida en Pruebas
+Lucas, 2026-10-04, aprobó corregir recorte y sumar rueda conservando clic. Se mantiene OptionButton y PopupMenu nativo con máximo320 píxeles lógicos y scroll, fondo opaco y hover sin sombra exterior; no se reemplaza por otro sistema de listas. gui_input recibe la rueda solo sobre el selector, limita índice y consume el evento. B-31 registra los cuatro rediseños pedidos; usar Curandero como base de Embestidor se evaluará con muestras, no cambia arte en esta tarea.
+
+
+## D-070 · Producción B-31 por familias de silueta
+2026-10-04, autorizado por Lucas (“Dale avanza”). Embestidor toma anatomía del antiguo Curandero, cambia bulbo por armadura/frente de impacto; no se intercambian archivos sin adaptar identidad. Curandero nuevo erguido, con semilla medicinal en herramienta. Ciclos nativos 4×4 por distancia, sin deformaciones para fingir animación; Ladrón encapuchado con bolsa y Mecánico fijo renderizado sobre bases existentes. Generación integrada con imagegen, fuentes intactas y empaquetado en Godot; no cambia balance. B-31 sigue pendiente de revisión visual de Lucas antes de arte definitivo.
+
+
+## D-071 · Aprobación visual B31 y entrega multiplataforma
+2026-10-04, Lucas: “Excelente los apruebo. Podes generarme los dos exe y las apk?”. Aprueba los cuatro diseños M43, cierra B31 y autoriza generar Windows normal/pruebas y Android normal/pruebas con presets existentes. APK debug para instalación directa, con paquetes separados; comprobar integridad/firma y distinguir verificación estática de prueba física.
+
+## D-072 · Laboratorio de balance6/7 con mejoras y ubicación
+2026-10-04, Lucas autorizó avanzar con comparación de compra de Mecánico, colocación, mejoras y frecuencia de especiales. Comparar semillas iguales y estrategias explícitas antes de rebalancear. Variantes de frecuencia se aplican solo en memoria: evitar alterar niveles1–5 y preservar incertidumbre humana. La falta de impactos en bot no prueba falta de utilidad reparadora; medir también exposición/colocación cerca de extremos de rectas.
+
+**D072, hallazgo del laboratorio:** pasos0.1s dejan residuos≈1e-14 en desgaste y el guard is_equal_approx impedía asignar0. Corregir terminal sin introducir umbral de balance: aplicar is_zero_approx y permitir transición positiva→0 aunque la variación sea aproximada. Verificar señal/tasa e indicador.
+
+**D072, reproducibilidad:** fijar el RNG global antes de instanciar Game además del spawner (D047). Descartar exploraciones sin esa condición. Usar física60Hz y APPDATA independiente; comparar controles de misma semilla y repetir un caso. Las ablaciones modifican también recompensas/tiempos y no demuestran causalidad aislada. DPS nominal es proxy de ubicación, no potencia total.
+
+**D072, conclusión:** conservar costos/aura/tasas y frecuencia6/7.38 corridas reproducibles más repetición idéntica. Nivel6 con mejoras termina20 vidas en tres semillas; Mecánico temprano pierde con semilla42. En7, apoyo tardío por cantidad con mejoras termina18–19 frente a7–10 sin apoyo en esos perfiles. Presión reforzada permite impactos y reparación natural, pero cambia recompensas/compras y no tiene efecto monotónico en vidas: no adoptar esa frecuencia automáticamente. Diseñar8/9 con posiciones expuestas y margen económico. B22 permanece abierto; balance humano pendiente. Evidencia completa art/balance-m44.
+
+## D-073 · Producción de campaña8/9
+2026-10-04. Lucas autoriza continuar8/9 y excluye regenerar APK/EXE. Respetar debut Guardián8/Curandero9 ya aprobado en D041; encuentros después de preparación, separados antes de combinarse.8 concentra enseñanza en una entrada;9 combina dos entradas y auras. Reutilizar sistemas/assets actuales y mantener datos1–7/globales. El Mecánico sigue opcional, con permiso8/9 y cinco avances persistentes. Ajustar solo mapas/oleadas/economía local si las comparaciones lo justifican; no extrapolar frecuencia reforzada M44 como receta.
+
+**D073, compatibilidad:** el antiguo último nivel no guardaba desbloqueo del siguiente inexistente. GameFlow consulta victoria del nivel anterior además de la marca explícita. Inferencia solo de acceso, sin migración ni escritura del guardado y sin adelantar más de una posición.
+
+**D073, calibración:** exploración22% terminó con20 vidas en8/9.40% vuelve8 demasiado exigente para el perfil de apoyo: primera versión final8=32%,9=40%. El bot se amplía solo en el laboratorio para considerar cobertura aérea al mejorar; conserva controles anteriores. Un encuentro con la oleada8 oficial, torre expuesta y apoyo legal demuestra40 puntos recibidos/reparados sin forzar el efecto; la ubicación por daño del bot puede no cubrir extremos. No imponer compra del apoyo como condición de victoria ni extrapolar ese encuentro mínimo a balance humano.
+
+**D073, resultado:**24 corridas finales más repetición idéntica;8 ganador en todos los perfiles,9 con control variado gana11 vidas y compra tardía por daño8 en tres semillas. La heurística de mejoras puede perder; no es optimización ni prueba humana. Oleada8 oficial con defensa mínima expuesta causa/repara40 puntos en ambos mapas, sin forzar efectos. Configuración32%/40% aceptada como primera versión automatizada, pendiente validación jugando. No crear10–15 ni regenerar paquetes en esta tarea.
+
+## D-074 · Estudio de vista B-21 v2: método y recomendación
+2026-10-06. **Estado: recomendación de Claude, decisión pendiente de Lucas.** Lucas pidió revisar B-21 con un análisis y pruebas nuevos, y considerar también no aplicarlo. El estudio de M36 no alcanzaba para decidir: sus muestras no tenían monstruos, HUD ni vista previa, la "oblicua" era un paralelogramo y la "3D" un plano girado en diagonal, y los costos no se habían medido.
+
+**D074, método:** las cuatro vistas se arman sobre la partida real (`game.tscn`), con la misma escena, y solo cambia la presentación. A es la actual. B es el relieve dibujado en la misma cuadrícula, con orden por profundidad. C suma una cámara Camera2D con zoom (1; 0,8) y endereza lo que está de pie. D es una maqueta 3D con la lógica 2D oculta copiada en cada cuadro. Se mide tamaño de casilla, superficie, 615 clics de ida y vuelta y rendimiento con la carga de P7 en tres rondas, con un control que oculta los actores 2D. Cada vista además se puede jugar. El relieve se mide también "horneado" en una textura, porque así sería en producción.
+
+**D074, recomendación:** no cambiar la proyección. Si se quiere más profundidad, B por etapas: (1) orden por profundidad y decoración como objetos, con capa superior para barras, coronas e íconos; (2) relieve horneado en la Pradera; (3) los otros temas y los suelos de la leyenda. Así cuesta lo mismo que A (92 contra 92 FPS) y no rompe mapas, clics ni guardados.
+- **C (oblicua):** queda condicionada a que Lucas la prefiera. Cuesta B más 5 a 8 días, achica la casilla a 64 × 51 px y deja el tablero en el 80 % del área. Va en un PR *breaking change*.
+- **D (3D real):** descartada para este juego. Son 4 a 8 semanas de una capa de presentación nueva, la casilla del fondo baja a 53 × 38 px, el tablero ocupa el 66 % y el celular es incierto. Su número de rendimiento no es comparable: omite casi todos los detalles por enemigo.
+- **A (no cambiar):** es una alternativa válida que libera tiempo para B-22.
+
+Nada de esto se integra sin la elección de Lucas. Evidencia en `art/b21-vista/`.
+
+## D-075 · El 3D va a una segunda entrega: Monsters & Canons 3D
+2026-10-07, **decisión de Lucas.** Después de ver el análisis v2 de B-21, la maqueta 3D le pareció la mejor, pero exige adaptar o rehacer los dibujos y repensar el espacio: en 3D no tiene sentido un mapa en forma de laberinto plano. Por eso el 3D no se integra en la V1 y pasa a una segunda entrega, *Monsters & Canons 3D*, que conserva lo de la V1 y sirve de campo de pruebas antes de una eventual *Monsters & Canons 2*. Esa segunda entrega tendrá dos desarrollos, PC (preferido) y celular (Lucas es desarrollador mobile), y cámara no fija. **Antes de empezarla se termina todo lo pendiente de la V1**, que tampoco tiene que ser perfecta: también es campo de pruebas.
+
+**D075, alternativas descartadas:**
+- **Convertir la V1 al 3D:** son 4 a 8 semanas de una presentación nueva sobre mapas pensados para 2D, y se pierde legibilidad en el celular.
+- **Adoptar el relieve (B) o la oblicua (C) en la V1 como sustituto del 3D:** no conforma la sensación buscada.
+- **Planificar ya M&C 2:** es demasiado lejano.
+
+**D075, propuestas de Claude, para que Lucas las confirme ítem por ítem:**
+- Un solo proyecto con dos productos (PC y celular) en lugar de dos proyectos.
+- Cámara de estratega con giro de ±30° mientras se usen los dibujos actuales; el giro de 360° pide modelos (prueba de cámara de T194).
+- Arte por etapas: terreno y decoración, después torres (rígidas, fáciles en 3D) y por último monstruos.
+- Escribir el lore en la V1 (B-03).
+- Probar en 2D la colina de B-08 y los puentes de B-09.
+- Cerrar la V1 en un orden en el que lo que cambia el balance va antes de los niveles 10–15.
+
+La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Documento: `specs/06-monsters-canons-3d.md`.
+
+## D-076 · Épocas pasa al otro juego y la V1 se regala
+2026-10-07, **decisión de Lucas.**
+- **Épocas (B-01)**, con sus imperios reales, torres y monstruos por época, **no se hace en la V1**: pasa al backlog de *Monsters & Canons 3D* o de *M&C 2* (`specs/06-monsters-canons-3d.md` §15, entrada 3D-01). Viaja con todo lo ya decidido: es un modo aparte, con imperios reales representados con respeto.
+- **Los modos (B-05)** se prueban en chico en la V1, unificados con el gestor de mapas.
+- **La V1 se va a regalar.** Por eso Lucas propone llevar el modo de pruebas a Opciones y unificar ejecutables y APK (B-13).
+- **Estado de la V1:** Lucas informó que ya probó la APK en su celular. El lore (B-03) lo está trabajando con otro agente.
+
+**D076, alternativas descartadas:**
+- Hacer Épocas completo en la V1: es casi un juego nuevo.
+- Hacer en la V1 una rebanada de Épocas: Lucas prefiere probar los modos con algo más chico.
+
+**Pendiente:** el diseño de la prueba de modos y del modo de pruebas en Opciones son propuestas de Claude; no se implementan hasta el OK de Lucas.
+
+## D-077 · Modo de pruebas en Opciones, una sola app y licencia GPL
+- **Fecha:** 2026-10-07 · **Estado:** Aceptada · **Decidió:** Lucas (qué) / Claude (cómo)
+- **Qué:**
+  - El modo de pruebas se activa desde Opciones en el menú principal, con confirmación, y se desactiva desde el mismo lugar (RF-383, RF-384).
+  - El juego siempre arranca normal; `--pruebas` al iniciar se conserva para desarrollo (RF-385).
+  - Un solo ejecutable o APK por plataforma (RF-386).
+  - Licencia GPL-3.0-or-later (RF-387).
+  - Reemplaza la parte "ejecutable aparte" de D-028. Se mantiene el guardado aparte, que es lo que protege el progreso y los récords reales.
+- **Por qué:**
+  - El juego se regala y es de un solo jugador: esconder las herramientas no protege nada (D-028 ya lo decía) y duplicaba exportaciones, presets y paquetes de Android.
+  - Arrancar siempre normal evita que alguien abra el juego, vea el guardado de pruebas y crea que perdió su progreso.
+  - La sección no aparece en la pausa para no cambiar de guardado en medio de una partida.
+- **Licencia:**
+  - Lucas pidió "tipo GNU 3.0". Se usa "versión 3 o posterior", que es el aviso que recomienda la FSF; si se prefiere "solo versión 3", es un cambio de una línea.
+  - Cubre todo lo propio del proyecto. Lucas tiene los derechos de su obra, así que podría relicenciarla más adelante.
+  - Componentes de terceros: el motor **Godot** es MIT y su aviso tiene que acompañar a los ejecutables (va en la Wiki); **GUT** es MIT y solo se usa en desarrollo (se excluye de las exportaciones).
+  - **Consecuencia:** quien reparte ejecutables bajo GPL tiene que ofrecer también el código fuente. El repositorio de GitHub hoy es privado, así que antes de publicar hay que hacerlo público o adjuntar el código.
+- **Alternativas descartadas:**
+  - Recordar el modo de pruebas entre sesiones: confunde, porque parece que se perdió el progreso.
+  - Combinación secreta de teclas: ya descartada en D-028.
+  - Licencias permisivas (MIT, Apache): Lucas eligió GPL.
+  - Separar arte y sonido con Creative Commons: suma complejidad sin pedido.
+
+## D-078 · Modos como paquetes de datos unificados con el gestor de mapas
+- **Fecha:** 2026-10-07 · **Estado:** Aceptada, hecha en T197 · **Decidió:** Lucas (prueba chica de modos, unificada con el gestor de mapas) / Claude (diseño)
+- **Qué:** un modo es una carpeta con `modo.json` y mapas JSON; los oficiales en `data/modos/` y los propios en `user://modos/`. La selección de nivel muestra Campaña, modos oficiales, Comunidad y modos propios. El progreso va por modo, y el editor puede guardar mapas dentro de un modo propio. El modo oficial de prueba es "Asedio" (RF-388 a RF-392), con vida 115 % según el bot (T197).
+- **Por qué:**
+  - Un modo y un mapa de la comunidad son el mismo concepto en distinto tamaño, así que comparten carga, validación, progreso y editor.
+  - Asedio no necesita arte ni reglas nuevas y cubre los niveles difíciles de B-10.
+  - El formato sirve después para los mods completos (B-04) y para Épocas en el otro juego (3D-01).
+- **Alternativas descartadas:**
+  - Modos como una lista más en `campaign.json`: no une con la comunidad ni con el editor.
+  - Modos con torres y monstruos propios desde ya: eso es B-04 y agranda la prueba.
+
+**D078, ajustes de T197:**
+- **Mapas reusados:** un mapa de un modo se busca primero en su carpeta y después entre los niveles oficiales, así Asedio no copia los nueve niveles.
+- **Editor:** "Guardar" no cambió (así siguen valiendo sus tests y la costumbre); el destino se elige con la acción nueva "En un modo…".
+- **Balance de Asedio, con el bot `mix`:**
+  - Con vida 150 % y oro 80 % perdía en la oleada 4 de los mapas 1 a 3; con 125 % y el mismo oro también perdía temprano. Con reglas neutras da exactamente lo mismo que la campaña, oleada por oleada, así que el camino del modo está bien.
+  - Valor elegido: **vida 115 %, el mismo oro**. Gana los mapas 1, 3 y 5 con 3, 6 y 4 vidas; en la campaña gana 8 de 9.
+  - Es un modo claramente más difícil. Este bot es simple, así que hace falta una prueba jugando; 110 % es la alternativa si resulta demasiado.
+- **Limitación conocida:** con más de dos modos propios, las solapas no entran en la fila de 1280 px.

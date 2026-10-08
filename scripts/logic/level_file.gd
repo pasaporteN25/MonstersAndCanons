@@ -13,7 +13,7 @@ const CAMPAIGN_PATH: String = "res://data/campaign.json"
 
 const LEVEL_KEYS: PackedStringArray = ["version", "nombre", "oro", "vidas", "aumento_vida", "tema", "leyenda", "torres_extra", "mapa", "oleadas"]
 const LEGEND_KEYS: PackedStringArray = ["dibujo", "construible"]
-const GROUP_KEYS: PackedStringArray = ["enemigo", "cantidad", "cada", "desde", "entrada"]
+const GROUP_KEYS: PackedStringArray = ["enemigo", "cantidad", "cada", "desde", "entrada", "probabilidad"]
 const CAMPAIGN_KEYS: PackedStringArray = ["version", "niveles"]
 
 ## RF-223: topes para que un archivo ajeno no cuelgue el juego. Valen para todos los niveles y el
@@ -162,6 +162,8 @@ static func _read_group(data: Dictionary, where: String, grid: MapGrid, errors: 
 		if group.enemy == null:
 			_add(errors, where, "no existe el enemigo '%s' (tiene que ser un archivo de data/enemies/)." % enemy_name)
 	group.count = _whole(data, "cantidad", where, 1, MAX_COUNT, errors)
+	if data.has("probabilidad"):
+		group.probability = _number(data, "probabilidad", where, 1.0, errors)
 	if data.has("cada") or group.count > 1:
 		group.interval = _number(data, "cada", where, MAX_EVERY, errors)
 		if group.count > 1 and group.interval <= 0.0 and data.has("cada") and _is_number(data["cada"]):

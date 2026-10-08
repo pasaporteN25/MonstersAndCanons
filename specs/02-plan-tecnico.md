@@ -393,7 +393,7 @@ En M3 se agregan tres, porque hay datos que deben **sobrevivir** al cambiar de e
 |---|---|
 | `GameFlow` ([código](../scripts/autoload/game_flow.gd)) | Recordar qué nivel se juega (`current_index`, -1 = fuera de la campaña) y cambiar de pantalla. Registrar victorias y desbloquear el siguiente nivel. Aplicar pantalla completa al arrancar. |
 | `SaveManager` ([código](../scripts/autoload/save_manager.gd)) | Leer y escribir el progreso y las opciones (§7.1). Los tests cambian `save_path` para no tocar el guardado real. |
-| `DevMode` ([código](../scripts/autoload/dev_mode.gd)) *(M6)* | Modo de pruebas (spec §10.2, D-028): se activa con la característica de exportación `pruebas` (`JuegoA_pruebas.exe`) o, en el editor, con `--pruebas`. Cambia a `save_pruebas.json`, abre todos los niveles, muestra el cartel y hace que `Game` agregue el panel de pruebas. Va después de `SaveManager` y antes de `GameFlow` y `Audio`, así las opciones ya salen del guardado de pruebas. |
+| `DevMode` ([código](../scripts/autoload/dev_mode.gd)) *(M6)* | Modo de pruebas (spec §10.2, D-028, D-077): se activa desde Opciones (`OptionsMenu`, M48) o al iniciar con `--pruebas`; hasta M48 también con la característica de exportación `pruebas`. Cambia a `save_pruebas.json`, abre todos los niveles, muestra el cartel y hace que `Game` agregue el panel de pruebas. Va después de `SaveManager` y antes de `GameFlow` y `Audio`, así las opciones ya salen del guardado de pruebas. |
 | `Audio` ([código](../scripts/autoload/audio.gd)) | Efectos y música. Carga todo `assets/audio/*.wav` y los reproduce por nombre (`Audio.play(&"build")`). 12 "voces" reutilizables (9 disparos/impactos, 3 avisos), un intervalo mínimo por sonido y limitador Master a-1dB (M36). Buses `Master`, `Music`, `SFX` (`default_bus_layout.tres`). Los sonidos se generan con `tools/make_sounds.gd` (D-020). |
 
 > ⚠️ **Los scripts de herramientas (`tools/*.gd`, que se ejecutan con `-s`) se compilan antes de que existan los autoloads.** Por eso no pueden usar `GameFlow`, `SaveManager` ni `Audio` por su nombre, ni declarar variables de tipo `Game` (porque `game.gd` sí los usa): declaran la partida como `Node2D`.
@@ -581,6 +581,9 @@ Compactar textos y tooltips; reutilizar tema de botones y estilo de panel propio
 ### M33 · RF-347, D-059
 Inventario de submenús: Opciones, niveles, Wiki, récords, final, Salón/iniciales, editor y diálogos. Tema compartido y panel hierro-bronce; SVG propios para casillas/deslizador. Agrupar Opciones, revisar capturas y navegación/guardado existentes con GUT, actualizar B-19 y push.
 
+### M34 · RF-348, D-060
+Agregar preset Android pruebas, paquetes distintos y versión1.1-pr1/code2. Exportar APK de instalación local, validar firmas/manifest/recursos y SHA256; documentar limitación iOS y ausencia de ejecución física si no hay dispositivo disponible.
+
 ### M35 · Panel de torre (RF-349, D-061)
 TowerPanel conserva show_tower/refresh y sus tres señales. Tres valores de estadísticas fuera de ScrollContainer; descripción, TowerText.effects, combo_partners y capacidad aérea dentro. Botones fuera del desplazamiento, tema local menu_theme y game_panel_style. Se reinicia el desplazamiento al seleccionar otra torre, no al cambiar oro o cuenta atrás. Datos de combate, TowerText compartido con Wiki y guardados intactos.
 
@@ -589,3 +592,87 @@ Tower dibuja placa/remaches antes del mecanismo, y aturdimiento con trazos local
 
 ### Depuración del backlog (D-063)
 B-02 cerrado; B-15 retirado. Lore/Wiki de Épocas en B-03; documentación de mods y comunidad separada en B-29/B-30, dependiente de B-04 y sin añadir sistemas por anticipado. B-21/22/23 son estudios preliminares abiertos: elegir y validar antes de diseñar producción. Esta reorganización documental no cambia código, datos, guardados ni exportaciones.
+
+### M37 · Colección y torres de apoyo (D-064)
+CollectibleRun mantiene portador/pickup/confirmación por oleada fuera del guardado; colección de SaveManager es diccionario id→fuentes únicas, con lectura defensiva y campos opcionales versión1. Game conecta nacimiento/muerte/fin de oleada/resultado y excluye admin/editor/comunidad. Solo el resultado guarda fuentes confirmadas. La disponibilidad de TowerData usa requisito de colección y permiso del nivel; admin puede agregar catálogo reservado sin cambiar archivo ni desbloqueo persistente. SupportRules calcula el aura mayor a partir de torres activas y radios, sin apilar ni referencias permanentes a torres vendidas; cadencia efectiva se calcula antes de cada disparo. No altera recursos de niveles1–5;6/7 solo agregan permiso del mecánico. Pruebas deterministas de fuente/drop/límites/guardado/aura, integración normal/admin y balance local6/7 con y sin apoyo; captura inicial para revisión de arte.
+
+### M38 · HUD de colección
+TechnologyStat en TopBar/Stats usa el icono existente, tipografía22 y ayuda por foco/puntero. Game actualiza Hud.show_collection después de pickup/confirmación/resultado y al arrancar cualquier modo, sin agregar otro control sobre el mapa.
+
+### M39 / T184
+EnemyData: gold_drain_amount/interval/floor y optional_wave_limit apagados por defecto. Enemy.clock de física solicita oro; LevelSession calcula el descuento acotado. SpawnGroup.probability y WaveSpawner.rng inyectable sortean al inicio y limitan enemigos opcionales por tipo. LevelFile valida0–1, LevelDraft conserva/serializa/deshace; pruebas de piso, ingresos, muerte/salida, sorteo/cap, persistencia editorial y campaña.
+
+
+### M40 / T185
+ChargeRules extrae rectas del Curve2D de camino y calcula extremos/proximidad. EnemyData configura distancia, aceleración, tolerancia a slow, alcance e impacto; Enemy usa delta/distancia y señal de impacto. WearRules aplica/clampa desgaste, Tower lo guarda por instancia y calcula cadencia/prestaciones; BalanceConfig.wear_max_percent limita. Panel y marca de base separan daño de stun. Pruebas de geometría, extremos, cercanía, slow, persistencia al mejorar, tope y coexistencia con apoyo/stun.
+
+
+### M41 / T186
+TowerLevelData.support_repair_per_second; WearRules.repair pura; búsqueda de mayor fuente sin asignar diccionarios por receptor. Tower registra repair_rate_received para lectura visual/UI, consulta solo SUPPORT_GROUP cuando desgastada, descarta self/stun/sale y reduce tasa por condición del reparador. Reparación antes del retorno de stun permite curar una torre apagada sin despertarla. Clocks de física respetan pausa/velocidad. Laboratorio reproducible con semillas, conteo de Ladrones/Embestidores/robo/impactos/reparación y capturas de panel/estado; pruebas y exportaciones independientes del progreso real.
+
+
+La validación de rendimiento detectó costo de triangulación de marcas por frame. M41 usa dos texturas SVG compartidas (grieta ámbar/herramienta cian), intensidad proporcional a desgaste y sin geometría adicional por cuadro; alcanza 103 FPS en la carga P7 extendida.
+
+### M42 / T188
+DevPanel mantiene el catálogo dinámico y OptionButton. PopupMenu.max_size limita altura y activa scroll nativo; StyleBoxFlat duplicados locales eliminan transparencia/sombra recortada sin alterar el tema compartido. gui_input discrimina rueda presionada, acota selección y conserva clic. Tests de extremos, eventos ajenos, invocación del seleccionado y captura real del popup. Rediseños en B-31, producción futura con muestras comparativas.
+
+### M43 / T189 · B-31
+Fuentes RGBA en art/redesign-m43/sources; empaquetado por figuras/celdas con escala uniforme y apoyo a191 en atlas 1024×1024, estáticas256×256 para Wiki; Mecánico128×128 sin sombra/base incrustada. Recursos EnemyData/TowerData referencian los nuevos PNG conservando todos los parámetros jugables. Capturas comparativas a34/112px, cuatro direcciones y movimiento con Enemy real, además de mapa y Wiki. Verificar GUT e importación/exportación Windows de pruebas. La aprobación artística final se pide solo con imágenes integradas revisables.
+
+### T190 · Entrega aprobada M43
+Exportar Windows Desktop/Windows (pruebas) release y Android/Android (pruebas) debug. Usar configuración local de SDK/Java y APPDATA aislado. Verificar arranque de ambos Windows, paquetes/feature y firma APK con herramientas SDK, SHA256/tamaño. Preservar cambios locales M34 fuera del commit.
+
+### T191 · Comparación6/7
+Extender balance_sim sin tocar su estrategia original. Perfiles sin apoyo/con apoyo temprano/tardío, mejoras y ubicaciones por cobertura/valor de aliados. Registrar compras, oleadas, vida, robo, impactos y reparación. Ablación de especiales y frecuencia reforzada solo en laboratorio; semillas controladas y escenarios de impacto sobre caminos reales. Informe JSON y conclusiones con límites antes de cambiar datos oficiales.
+
+T191 también corrige cierre de reparación con is_zero_approx y transición positiva→0 fuera del guard aproximado. Test de regresión con pasos pequeños y residuo; reexportar las cuatro variantes y verificar boot Windows/firma e identidad APK. Evidencia en art/balance-m44 y logs/paquetes locales build/t191.
+
+### M45 / T192 · Niveles8/9
+Agregar JSON20×9, una entrada8 y dos9, recorridos con rectas/exposición legal. Oleadas escalan grupos y vida local, introducen Guardián/Curandero antes de combinaciones tardías. Append en campaign.json; desbloqueo/menu/Wiki por datos existentes. Tests de contratos, aparición ordenada, pasos de campaña y geometría de carga/reparación sin cambiar pantalla. Laboratorio hereda políticas M44, fija RNG global/spawner y aisla APPDATA; conserva resultados y capturas de mapas reales. No exportaciones.
+
+T192 extiende is_level_unlocked con victoria del anterior para guardados previos sin marca de desbloqueo del nuevo nivel. Laboratorio M45 conserva controles M44 y agrega puntaje de cobertura aérea a mejoras, sin cambiar bot original ni lógica del juego. JSON se serializa con LevelDraft.to_text para conservar roundtrip del editor.
+
+### M46 / T193 · Estudio de vista B-21 v2
+Laboratorio aislado en `art/b21-vista/` (fuera de los paquetes exportados, igual que `art/`). Instancia `game.tscn` sin tocar sus scripts y cambia solo la presentación.
+- **B:** `relief_layer.gd` reemplaza el dibujo de `LevelDecor` (mismos materiales). Dibuja taludes al norte del camino, sombra proyectada al sureste y labios iluminados, y le suma una textura de luz multiplicada. Torres, monstruos y decoración (Sprite2D por casilla bloqueada) quedan bajo un nodo con `y_sort_enabled`. Para medir, el suelo se hornea una vez en un SubViewport al doble de resolución.
+- **C:** agrega una Camera2D con `zoom = (1; 0,8)`, canto delantero y fondo. Lo que está de pie se escala (1; 1,25), y las torres después de su animación de aparición. Los clics siguen pasando por `get_global_mouse_position()`.
+- **D:** `diorama_3d.gd` arma un ArrayMesh por casilla (pasto 0,28, camino 0, canto −0,55), una DirectionalLight3D con sombras y sesgo chico (la escena mide ~20 unidades) y una Camera3D en perspectiva (30°, 55°) encuadrada entre las barras del HUD. Torres, monstruos, decoración y proyectiles son Sprite3D inclinados hacia la cámara, apoyados en su pie. Las barras de vida van en 2D con `unproject_position`. Los clics usan un rayo al plano del pasto (`d_input.gd` recibe la entrada antes que Game). La partida 2D sigue corriendo oculta.
+- **Modos:** `capturas`, `medidas`, `rendimiento` (carga de `tools/perf_test.gd`, con opciones `horneado`, `sin_orden` y `ocultar_actores`) y `jugar` (con `autoprueba`). Guarda en `user://test_b21_vista.json`; conviene correrlo con `APPDATA` aislado.
+
+### T194 · Prueba de cámara libre para Monsters & Canons 3D
+`diorama_3d.gd` suma `orbit(giro, inclinación, distancia, objetivo)`: la cámara se ubica rotando `(0, sen φ, cos φ) · d` alrededor del eje vertical. Los Sprite3D pasan a *billboard* completo. Torres y monstruos eligen su cuadro sumando el giro de la cámara al ángulo de puntería o de marcha (`frame_rect(atlas, aim + giro)`, `walk_region(..., heading + giro)`). El sol queda fijo en el mundo. `vista_lab.tscn -- camara` saca seis vistas de la escena de referencia (sin HUD) y una hoja de 3 × 2 (`_sheet` admite títulos y columnas). Es investigación: no toca producción.
+
+### M48 / T196 · Modo de pruebas en Opciones, una sola app y licencia
+- **`DevMode.detect()`** solo mira el argumento `--pruebas` en cualquier ejecutable (sin la característica de exportación ni la restricción al editor). Se elimina la constante `FEATURE`.
+- **`OptionsMenu`** suma la sección "Administración" (rótulo, botón y una fila de confirmación con "Sí, activar" y "Cancelar", dentro del mismo panel, sin ventanas emergentes):
+  - `admin_available` (falso por defecto) la muestra; `MainMenu` lo prende, y el menú de pausa no.
+  - `set_dev_mode(on)` llama a `DevMode.set_enabled(on, dev_save_path)`, aplica volúmenes y pantalla del guardado que queda activo y emite `dev_mode_changed(on)`.
+  - `dev_save_path` vacío usa el guardado de pruebas real; los tests pasan uno propio.
+- **`MainMenu`** escucha `dev_mode_changed` y recarga el menú principal (`GameFlow.go_to_main_menu()`), así se actualizan el botón del editor en el celular y el resto de la pantalla. Los tests no recargan escenas: prueban la señal.
+- **`export_presets.cfg`** queda con Windows Desktop, Android y Linux (índices 0, 1 y 2). Las APK y EXE de pruebas viejos quedan en `build/` como archivos sueltos.
+- **Licencia:** `LICENSE` con el texto oficial de gnu.org sin cambios; artículo `data/wiki/licencias.json` (orden 8) con los avisos del juego y de Godot.
+- **Tests:** presets sin la característica `pruebas`; Opciones (visibilidad, confirmar, cancelar, volver, guardado real intacto); `LICENSE` y el artículo de la Wiki.
+
+### M49 / T197 · Prueba de modos
+Diseño en spec RF-388 a RF-392 y D-078.
+- **`ModePacks`** (`scripts/logic/mode_packs.gd`, lógica pura como `CommunityMaps`):
+  - `all(oficiales, propios)` escanea las subcarpetas de `res://data/modos/` y `user://modos/`. `read()` valida `modo.json` (claves, versión, nombre, mapas, torres, reglas, topes) y lee cada mapa (carpeta del modo → `data/levels/`) con `LevelFile.parse`, el id `modo_<modo>_<mapa>` y las reglas aplicadas.
+  - `is_open` / `previous_playable` / `next_playable` resuelven el desbloqueo, y `create` / `name_problem` / `add_map` sirven al editor. Al reescribir, los números enteros vuelven a guardarse como enteros.
+- **`LevelData`** suma `enemy_health_percent` y `allowed_towers`. `available_towers` filtra por `allowed_towers`.
+- **`Rules.percent_of`** redondea al entero más cercano. `WaveSpawner.setup` recibe el % de vida (100 por defecto) y lo aplica después de la escala por oleada, con un mínimo de 1.
+- **`GameFlow`:**
+  - `current_mode` / `current_mode_index`, `current_mode_level()`, `is_mode_level_unlocked()` (el modo de pruebas abre todo) y `start_mode_level()`.
+  - `played_level()`, `has_next_level()`, `next_level()` y `level_won()` contemplan el modo; ganar desbloquea el siguiente del mismo modo.
+  - Toda función que cambia de pantalla limpia el modo (`_clear_mode`). `select_page` usa `&"mode:<id>"`.
+- **`Game`:** toma el mapa del modo después de la campaña y la comunidad, y pasa el % de vida al generador. La colección no corre porque `current_index` es -1.
+- **Selección de nivel:**
+  - Arma solapas dinámicas: las oficiales después de "Campaña" y las propias después de "Comunidad".
+  - `_show_mode` pone tarjetas de mapa, de error o un mensaje si el modo está vacío, y las estrellas del modo.
+  - El botón de carpeta abre la del modo propio. Las carpetas se cambian desde los tests (`modes_official_dir`, `modes_user_dir`).
+- **Editor:**
+  - El botón `SaveModeButton` ("En un modo…") llama a `save_to_mode`: elegir modo o crear uno, y después pedir el nombre del archivo. El borrador recuerda `mode_id` recién al aceptar.
+  - `_dir_for()` decide la carpeta y `_write()` suma el mapa a la lista del modo.
+  - "Abrir" lista los mapas de cada modo propio, sin `modo.json`. Las carpetas `modes_dir` y `official_modes_dir` se cambian desde los tests.
+- **Bot:** `balance_sim.gd -- mix modo=asedio level=N`.
+- **Datos:** `data/modos/asedio/modo.json`.
+- **Tests:** `test_mode_packs`, `test_mode_flow`, `test_mode_select` y `test_editor_modes`, siempre en carpetas `user://test_*`. `test_editor_files` fija una carpeta de modos de prueba para no leer la del jugador.

@@ -1,0 +1,44 @@
+[
+	{
+		"entrance": 0,
+		"gun_cell": "(8, 0)",
+		"impact_wear": 20,
+		"level": 8,
+		"long_straights": 4,
+		"repair_seconds_levels_1_2_3": [
+			10.0,
+			6.7,
+			5.0
+		],
+		"support_cell": "(6, 0)",
+		"threatened_cells": [
+			"(8, 0)",
+			"(9, 1)",
+			"(18, 2)",
+			"(19, 3)",
+			"(2, 4)",
+			"(1, 5)"
+		]
+	},
+	{
+		"entrance": 0,
+		"gun_cell": "(5, 0)",
+		"impact_wear": 20,
+		"level": 9,
+		"long_straights": 4,
+		"repair_seconds_levels_1_2_3": [
+			10.0,
+			6.7,
+			5.0
+		],
+		"support_cell": "(3, 0)",
+		"threatened_cells": [
+			"(5, 0)",
+			"(6, 1)",
+			"(17, 2)",
+			"(18, 3)",
+			"(2, 4)",
+			"(1, 5)"
+		]
+	}
+]

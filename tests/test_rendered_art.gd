@@ -70,6 +70,6 @@ func test_all_evolutions_have_eight_views_and_special_monsters_use_approved_art(
 				assert_false(TowerVisual.frame_texture(atlas, direction * TAU / 8.0).get_image().is_invisible())
 	for id: String in ["guardian", "healer", "shaman", "mirror", "boss"]:
 		var data: EnemyData = load("res://data/enemies/" + id + ".tres")
-		assert_eq(data.texture.resource_path, "res://assets/sprites/enemies/rendered/" + id + ".png")
+		assert_eq(data.texture.resource_path, "res://assets/sprites/enemies/rendered/" + id + ("_m43" if id == "healer" else "") + ".png")
 		assert_eq(data.texture.get_size(), Vector2(256, 256))
 		assert_false(data.flip_when_walking_left)

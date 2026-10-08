@@ -1,0 +1,24 @@
+{
+  "identical": true,
+  "result": {
+    "built": 86,
+    "global_seed": 42,
+    "gold": 368,
+    "impacts": 4,
+    "level": 9,
+    "lives": 11,
+    "pressure": "normal",
+    "profile": "baseline",
+    "purchases": [],
+    "repaired": 0.0,
+    "seed": 42,
+    "specials": {
+      "rammer": 16,
+      "thief": 3
+    },
+    "stolen": 18,
+    "upgrades": 0,
+    "wave": 20,
+    "won": true
+  }
+}

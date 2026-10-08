@@ -2,6 +2,11 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Android normal y pruebas *(M34, 2026-10-02)*
+
+- Dos APK con los últimos diseños e interfaces del PR#1, con paquetes separados para instalarlas juntas. La variante de pruebas conserva su panel de administración; la normal no lo habilita.
+- Android7 o superior, arm64; firmadas para instalación local. Instalación y partida en dispositivo todavía no verificadas.
+
 ## Submenús coherentes *(M33, 2026-10-02)*
 
 - Opciones separa sonido y visualización, con deslizadores y casillas de hierro/bronce.
@@ -143,3 +148,52 @@ Comparaciones del arte pendiente de Volador, Blindado, Troll, Araña y Cría; cu
 
 ### Backlog depurado · T182 (2026-10-03)
 B-02 cerrado; B-15 retirado/dividido. Lore y documentación de Épocas en B-03; Wiki de mods y comunidad en B-29/B-30. B-21/22/23 siguen abiertos con estudios preliminares. Sin cambios en el juego.
+
+### M37 · Avances y Estandarte mecánico
+Colección de cinco piezas tecnológicas, una por cada nivel1–5, y apoyo de cadencia disponible desde6 con colección completa y permiso del nivel. Habilitación manual en pruebas. Próximas etapas: robo periódico, embestida/desgaste y reparación; campaña base objetivo15 niveles, todavía no construida.
+
+### M38 · Avances en el HUD
+La colección ahora aparece en la barra superior como icono y cantidad/objetivo; pendiente/confirmado se explica en la ayuda.
+
+### M39 · Ladrón
+Encuentros opcionales en6/7: roba3 de oro cada2s, piso10, hasta morir o escapar. Pausa/velocidad respetadas. Pruebas permite invocarlo sin progresión; Wiki explica la habilidad. Arte y balance iniciales revisables.
+
+### M40 · Embestidor y desgaste
+Ensayos6/7. Carga al final de rectas; solo alcanza una torre próxima a ese extremo. Desgaste20% por impacto, tope50%, reduce cadencia y apoyo sin destruir. Hielo fuerte interrumpe carga; mejora conserva desgaste. Panel y marcas distinguen daño y aturdimiento. Reparación continúa en M41.
+
+### M41 · Mecánico reparador
+El Mecánico recupera2/3/4 puntos de desgaste por segundo dentro de su radio; solo el más fuerte y sin autorreparación. No cura aturdimiento. Daño reduce sus prestaciones; otra estatua puede repararlo. Colección5 avances+permiso del nivel y habilitación de Pruebas se conservan. Ensayos6/7;1–5 conservan datos de oleadas y balance.
+
+Verificación M41: 943 pruebas GUT verdes; 103 FPS con 200 enemigos/60 torres y desgaste activo. Exportaciones Windows normal/pruebas y Linux; arranque Windows código 0. Capturas y 12 simulaciones en art/mechanics-m41. Balance inicial: compra temprana del Mecánico perjudica al bot en nivel 6; en nivel 7 ambas variantes ganan. Ajuste fino y arte final pendientes.
+
+### M42 · Selección de enemigos en Pruebas
+Rueda sobre el selector: anterior/siguiente, sin abrir ni invocar. Clic mantiene la lista completa, ahora con altura limitada y scroll, fondo opaco y sin sombra recortada. B-31 registra rediseños pendientes de Mecánico, Embestidor, Ladrón y Curandero; se evaluará reutilizar la silueta del Curandero como base del Embestidor.
+
+### M43 · Rediseños B31 integrados
+Embestidor acorazado con frente de impacto; Curandero erguido con semilla medicinal; Ladrón encapuchado con bolsa; Mecánico renderizado en hierro/bronce sobre bases existentes. Los tres enemigos tienen ciclos 4×4, por distancia. No cambia balance. Vista animada y capturas: `art/redesign-m43/preview.html`; prompts/fuentes allí. Pruebas: habilitar estandartes, invocar los enemigos y observar giros/carga/pausa; revisar Wiki. Aprobado visualmente por Lucas el 2026-10-04.
+
+### T190 · Entrega visual aprobada
+B31 cerrado por aprobación de Lucas (2026-10-04). Exportados `build/JuegoA.exe`, `build/JuegoA_pruebas.exe`, `build/JuegoA.apk` y `build/JuegoA_pruebas.apk`. Windows release: ambos arrancan con código0, solo pruebas activa DevMode. APK debug arm64, Android7+, paquetes normal/pruebas separados, misma firma anterior verificada v2/v3 y recursos M43 presentes. SHA256 y registros en `build/t190/manifest.json`; no se ejecutaron en celular físico. Siguiente: balance/estrategias6/7, luego diseñar8/9.
+
+### T191 · Reparación y estudio6/7
+
+- La reparación termina correctamente aunque quede un residuo mínimo de desgaste; el indicador se apaga.
+- Laboratorio de compra/ubicación/mejoras del Mecánico y frecuencia de Ladrón/Embestidor sobre6/7; resultados y límites en art/balance-m44.
+- EXE y APK normales/de pruebas regenerados con la corrección. No cambia balance1–5.
+
+### T192 · Bastión y Taller asediado
+
+- Campaña con9 niveles: Guardián en8, Curandero en9, más encuentros de robo/desgaste y apoyo Mecánico disponible.
+- Un guardado que completó el antiguo último nivel permite acceder al siguiente agregado sin repetirlo.
+- Niveles1–7 y estadísticas globales conservados. EXE/APK sin regenerar; primera versión de balance con validación humana pendiente.
+
+### T196 · Modo de pruebas en Opciones y licencia libre
+
+- El modo de pruebas ahora está en **Opciones → Activar modo de pruebas**, con confirmación, y se apaga con **Volver al juego normal**. Usa su propio guardado: no toca tu progreso ni tus récords. El juego siempre arranca en modo normal.
+- Un solo ejecutable o APK por plataforma: ya no hay una versión "de pruebas" aparte.
+- El juego es software libre, bajo la GPL versión 3 o posterior. Detalles en la Wiki: Guía → Licencias.
+
+### T197 · Modos de juego
+
+- Nueva solapa **Asedio** en Jugar: los nueve mapas de la campaña con monstruos más duros. Cada mapa se abre al ganar el anterior y tiene sus propias estrellas y récords, sin tocar la campaña.
+- Podés armar tus propios modos: en el editor de mapas, **"En un modo…"** crea un modo (o elige uno) y guarda el mapa adentro. Cada modo aparece como una solapa más en Jugar.

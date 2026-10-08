@@ -4,6 +4,8 @@ class_name Enemy
 extends Node2D
 
 ## Murió por daño (RF-81). Quien escuche decide cuánto oro dar.
+signal gold_drain(enemy: Enemy, amount: int, floor_gold: int)
+signal charged_impact(enemy: Enemy, tower: Tower)
 signal died(enemy: Enemy)
 ## Llegó a la salida (RF-11). Quien escuche decide cuántas vidas restar.
 signal reached_exit(enemy: Enemy)
@@ -57,6 +59,9 @@ var health: int = 0
 ## Píxeles recorridos desde el inicio del camino.
 var distance: float = 0.0
 
+var _drain_clock: float = 0.0
+var _charge_segments: Array[Dictionary] = []
+var _charge_progress: float = 0.0
 var _path: Path2D
 var _slow_amount: float = 0.0
 var _slow_left: float = 0.0
@@ -96,6 +101,8 @@ var _facing_left: bool = false
 func setup(enemy_data: EnemyData, path: Path2D, scaled_health: int) -> void:
 	data = enemy_data
 	_path = path
+	if data.charge_distance_tiles > 0.0:
+		_charge_segments = ChargeRules.segments(path.curve)
 	max_health = scaled_health
 	health = scaled_health
 
@@ -121,7 +128,13 @@ func _physics_process(delta: float) -> void:
 	_update_regen(delta)
 	_update_aura(delta)
 	_update_stun_spell(delta)
+	# Solo cuenta el tiempo que todavía está dentro del camino, incluso con deltas grandes.
+	if data.gold_drain_amount > 0:
+		var on_path_time: float = minf(delta, maxf(0.0, remaining_distance()) / maxf(0.001, Rules.tiles_to_px(current_speed_tiles())))
+		_update_gold_drain(on_path_time)
+	var previous: float = distance
 	distance += Rules.tiles_to_px(current_speed_tiles()) * delta
+	_update_charge(previous, distance)
 	_update_position()
 	_animate(delta)
 	if distance >= _path.curve.get_baked_length():
@@ -146,7 +159,7 @@ func is_slowed() -> bool:
 
 ## RF-60: velocidad × (1 − ralentización).
 func current_speed_tiles() -> float:
-	return data.speed_tiles * (1.0 - _slow_amount)
+	return data.speed_tiles * (1.0 - _slow_amount) * (data.charge_multiplier if is_charging() else 1.0)
 
 
 ## Píxeles que le faltan para llegar a la salida. Sirve para apuntar al "Primero" (RF-51).
@@ -458,6 +471,11 @@ func _draw_visual(texture: Texture2D, radius: float, color_: Color) -> void:
 
 func _draw() -> void:
 	var r: float = Rules.tiles_to_px(data.size_tiles)
+	if is_charging():
+		var behind: Vector2 = Vector2.from_angle(_heading + PI)
+		for offset: float in [-6.0,0.0,6.0]:
+			var side: Vector2 = behind.orthogonal() * offset
+			draw_line(side + behind * (r + 3), side + behind * (r + 17), Color(1,0.7,0.3,0.7), 2.0, true)
 	if has_aura():
 		_draw_aura_ring()  # RF-274: debajo de todo, en el suelo
 	# Sombra (RF-126): una elipse aplastada debajo, sin bamboleo.
@@ -598,3 +616,51 @@ func _draw_health_bar(r: float, top: float) -> void:
 	draw_rect(Rect2(top_left, Vector2(width, HEALTH_BAR_HEIGHT)), Color(0.35, 0.05, 0.05))
 	var ratio: float = float(health) / float(max_health)
 	draw_rect(Rect2(top_left, Vector2(width * ratio, HEALTH_BAR_HEIGHT)), Color(0.3, 0.9, 0.3))
+
+## RF-363: reloj por enemigo; la economía se resuelve arriba mediante la señal.
+func _update_gold_drain(delta: float) -> void:
+	if _is_done or data.gold_drain_amount <= 0 or data.gold_drain_interval <= 0.0:
+		return
+	_drain_clock += delta
+	var ticks: int = floori((_drain_clock + 0.000001) / data.gold_drain_interval)
+	if ticks > 0:
+		_drain_clock = maxf(0.0, _drain_clock - ticks * data.gold_drain_interval)
+		gold_drain.emit(self, ticks * data.gold_drain_amount, data.gold_drain_floor)
+
+
+func is_charging() -> bool:
+	return data.charge_distance_tiles > 0.0 and data.charge_multiplier > 1.0 and _slow_amount <= data.charge_slow_tolerance and _charge_progress >= Rules.tiles_to_px(data.charge_distance_tiles)
+
+func _update_charge(previous: float, current: float) -> void:
+	if _charge_segments.is_empty():
+		return
+	for segment: Dictionary in _charge_segments:
+		var start: float = float(segment["start"])
+		var end: float = float(segment["end"])
+		var traveled: float = minf(current,end) - maxf(previous,start)
+		if traveled <= 0.0:
+			continue
+		if previous < start or _slow_amount > data.charge_slow_tolerance:
+			_charge_progress = 0.0
+		if _slow_amount <= data.charge_slow_tolerance:
+			_charge_progress += traveled
+		if previous < end and current >= end:
+			if is_charging():
+				_impact_at(_path.to_global(segment["position"]))
+			_charge_progress = 0.0
+
+func _impact_at(endpoint: Vector2) -> void:
+	var best: Tower = null
+	var best_distance: float = Rules.tiles_to_px(data.charge_impact_radius_tiles)
+	for node: Node in get_tree().get_nodes_in_group(Tower.GROUP):
+		var tower: Tower = node as Tower
+		if tower == null or tower.is_queued_for_deletion():
+			continue
+		var proximity: float = endpoint.distance_to(tower.global_position)
+		if proximity <= best_distance:
+			best = tower
+			best_distance = proximity
+	if best != null and data.charge_wear_percent > 0.0:
+		best.apply_wear(data.charge_wear_percent)
+		charged_impact.emit(self,best)
+
