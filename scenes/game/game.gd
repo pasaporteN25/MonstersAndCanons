@@ -31,6 +31,8 @@ signal dev_infinite_lives_changed(on: bool)
 var available_towers: Array[TowerData] = []
 const MECHANICAL_STANDARD: TowerData = preload("res://data/towers/mechanical_standard.tres")
 var collectible: CollectibleRun
+## RF-427: las piezas de las ruinas de esta partida (T211).
+var findings: FindingRun = FindingRun.new()
 var _carrier: Enemy
 
 var level: Level
@@ -186,8 +188,9 @@ func _setup_infrastructure() -> void:
 	infrastructure = InfrastructureController.new()
 	infrastructure.name = "Infrastructure"
 	add_child(infrastructure)
-	infrastructure.setup(level, session, level_data.obstacles, rng, effects, {}, level_data.id,
-		level_data.machine_enabled)
+	infrastructure.setup(level, session, level_data.obstacles, rng, effects, _recovered_collections(), level_data.id,
+		level_data.machine_enabled, _collects_pieces())
+	infrastructure.demolished.connect(_on_obstacle_demolished)
 	obstacle_layer = ObstacleLayer.new()
 	obstacle_layer.name = "ObstacleLayer"
 	add_child(obstacle_layer)
@@ -218,7 +221,7 @@ func _refresh_obstacle_panel() -> void:
 			session.gold, 0.0 if job == null else job.seconds_left(), field.finding_recovered(cell),
 			job.paid if job != null and job.cell == cell else field.cost_of(cell),
 			field.seconds_of(cell), field.cost_with_machine(cell) if infrastructure.machine_enabled and not field.has_machine else -1,
-			field.reserve_left(cell))
+			field.reserve_left(cell), _collects_pieces())
 
 
 func _refresh_infrastructure_panel() -> void:
@@ -688,20 +691,64 @@ func _setup_collection() -> void:
 		collectible.setup(&"technology", level_data.id, count, rng)
 	_update_collection_notice()
 
+## RF-362 y RF-431: la barra muestra la colección de la que este nivel es fuente (o `technology`).
 func _update_collection_notice() -> void:
-	var count: int = SaveManager.collected_sources(&"technology").size()
-	var state: String = "conseguido aquí" if SaveManager.collected_sources(&"technology").has(String(level_data.id)) else "pendiente aquí"
-	if collectible != null and collectible.picked_wave > 0:
+	var id: StringName = CollectionDefinitions.collection_of_level(level_data.id)
+	var count: int = SaveManager.collected_sources(id).size()
+	var state: String = "conseguido aquí" if SaveManager.collected_sources(id).has(String(level_data.id)) else "pendiente aquí"
+	if id == &"technology":
+		if collectible != null and collectible.picked_wave > 0:
+			count += 1
+			state = "oleada confirmada; pendiente del resultado" if collectible.confirmed else "completar oleada"
+	elif findings.has_piece(id, level_data.id):
 		count += 1
-		state = "oleada confirmada; pendiente del resultado" if collectible.confirmed else "completar oleada"
-	hud.show_collection(count, CollectibleRun.required(&"technology"), state)
+		state = "oleada confirmada; pendiente del resultado" if findings.is_confirmed(id, level_data.id) else "completar oleada"
+	hud.show_collection(count, CollectionDefinitions.required(id), state, id)
 
 func _collection_wave_completed(wave: int, _bonus: int) -> void:
+	findings.complete_wave(wave)  # RF-427
 	if collectible != null:
 		collectible.complete_wave(wave)
+	_update_collection_notice()
+
+## RF-429: las piezas de colección solo se recogen en la campaña jugada desde el menú.
+func _collects_pieces() -> bool:
+	return not (DevMode.enabled or testing or GameFlow.current_index < 0 or GameFlow.current_community != null \
+			or GameFlow.current_mode_level() != null)
+
+## RF-428 y RF-429: qué colecciones de hallazgo ya no entregan pieza en esta partida: las que ya
+## están recuperadas en el guardado y todas, si acá no se recogen piezas.
+func _recovered_collections() -> Dictionary:
+	var result: Dictionary = {}
+	var collects: bool = _collects_pieces()
+	for id: StringName in CollectionDefinitions.ids():
+		if CollectionDefinitions.origin(id) == CollectionDefinitions.ORIGIN_FINDING:
+			result[id] = not collects or SaveManager.collected_sources(id).has(String(level_data.id))
+	return result
+
+## RF-427: la pieza se recoge al terminar la demolición y se confirma con la oleada en curso, o con
+## la siguiente si se demolió en preparación o en la cuenta atrás.
+func _on_obstacle_demolished(_cell: Vector2i, reward: Dictionary) -> void:
+	var finding: Dictionary = reward.get("finding", {})
+	if finding.is_empty() or not _collects_pieces() or session.is_over():
+		return
+	var wave_to_confirm: int = session.wave if session.state == LevelSession.State.WAVE_RUNNING else session.wave + 1
+	if findings.pick(finding["collection"], finding["source"], wave_to_confirm):
 		_update_collection_notice()
 
+## RF-427: al mostrarse el resultado se guardan las piezas confirmadas, aunque la partida se pierda.
+func _commit_findings() -> void:
+	if not _collects_pieces():
+		return
+	var saved: bool = false
+	for piece: Dictionary in findings.confirmed():
+		SaveManager.collect_source(piece["collection"], piece["source"])
+		saved = true
+	if saved:
+		SaveManager.save()
+
 func _commit_collection() -> void:
+	_commit_findings()
 	if collectible == null or DevMode.enabled or testing:
 		return
 	for source: String in collectible.result_sources(true):

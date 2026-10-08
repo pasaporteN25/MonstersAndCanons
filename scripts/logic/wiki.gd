@@ -34,6 +34,7 @@ static func _providers() -> Array[Dictionary]:
 	return [
 		{"id": &"enemigos", "title": "Enemigos", "build": _enemy_entries},
 		{"id": &"torres", "title": "Torres", "build": _tower_entries},
+		{"id": &"colecciones", "title": "Colecciones", "build": _collection_entries},
 		{"id": &"guia", "title": "Guía", "build": _article_entries},
 	]
 
@@ -186,7 +187,7 @@ static func tower_entry(tower: TowerData, towers: Array[TowerData] = []) -> Wiki
 		entry.add_text(tower.description)
 	var facts: Array = [["Función", "Apoyo de cadencia; no dispara"]] if tower.support_only else [["Golpea voladores", "sí" if tower.can_hit_air else "no"]]
 	if tower.required_collection != &"":
-		facts.append(["Requisito", "%d avances distintos y permiso del nivel" % CollectibleRun.required(tower.required_collection)])
+		facts.append(["Requisito", "%d %s distintos y permiso del nivel" % [CollectionDefinitions.required(tower.required_collection), "avances" if CollectionDefinitions.origin(tower.required_collection) == CollectionDefinitions.ORIGIN_CARRIER else "piezas"]])
 	if tower.footprint > 1:  # RF-298
 		facts.append(["Tamaño", "%d×%d casillas" % [tower.footprint, tower.footprint]])
 	facts.append_array(TowerText.cost_facts(tower))  # RF-437
@@ -218,6 +219,37 @@ static func tower_entry(tower: TowerData, towers: Array[TowerData] = []) -> Wiki
 		entry.add_heading("Combos")
 		for line: String in partners:
 			entry.add_text(line)
+	return entry
+
+
+# --- Colecciones (RF-431) ---
+
+static func _collection_entries(_campaign: Array[LevelData], _is_seen: Callable) -> Array[WikiEntry]:
+	var entries: Array[WikiEntry] = []
+	for id: StringName in CollectionDefinitions.ids():
+		entries.append(collection_entry(id, SaveManager.collected_sources(id).size(), _all_towers()))
+	return entries
+
+
+## RF-431: una colección con su progreso y qué torre desbloquea. `collected` se pasa de afuera para probarla.
+static func collection_entry(id: StringName, collected: int, towers: Array[TowerData]) -> WikiEntry:
+	var entry := WikiEntry.new()
+	entry.id = id
+	entry.title = CollectionDefinitions.name_of(id)
+	var icon_path: String = CollectionDefinitions.icon_of(id)
+	if ResourceLoader.exists(icon_path):
+		entry.icon.append(load(icon_path) as Texture2D)
+	var from_finding: bool = CollectionDefinitions.origin(id) == CollectionDefinitions.ORIGIN_FINDING
+	entry.subtitle = "Piezas en ruinas" if from_finding else "Avances de enemigos portadores"
+	var unlocks := PackedStringArray()
+	for tower: TowerData in towers:
+		if tower.required_collection == id:
+			unlocks.append(tower.display_name)
+	entry.add_text("Se completa con %d piezas distintas, una por nivel de origen. Se guardan al terminar la partida." % CollectionDefinitions.required(id))
+	entry.add_facts([
+		["Progreso", "%d/%d" % [collected, CollectionDefinitions.required(id)]],
+		["Desbloquea", ", ".join(unlocks) if not unlocks.is_empty() else "todavía ninguna torre"],
+	])
 	return entry
 
 

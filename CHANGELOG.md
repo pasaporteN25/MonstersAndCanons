@@ -17,6 +17,12 @@ Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle t�
 - El **Mortero** ahora cuesta **300 de oro + 3 recursos**: la barra muestra "300 + 3" y lo deshabilita diciendo qué falta. Al venderlo se devuelve el 70 % del oro y de los recursos, redondeado hacia abajo (210 y 2). Mejorarlo sigue costando solo oro. Los niveles 1 a 8 no lo ofrecen, así que no cambian.
 - El **Francotirador** se puede comprar de dos formas en la misma partida: **150 de oro** (como siempre) o **120 de oro + 1 recurso**. Al elegirlo aparecen dos botones chicos de pago (arranca "solo oro"); el segundo se apaga si faltan recursos o el mapa no tiene. Con 1 recurso, la venta no devuelve ninguno.
 - El panel de la torre y la Wiki muestran los costos en recursos. El validador (`check_level`) avisa si un mapa ofrece una torre que cuesta recursos y no tiene cómo conseguirlos.
+## Colecciones por tecnología y piezas en ruinas *(T211, 2026-10-08)*
+
+- Ahora hay **dos colecciones**: los avances tecnológicos de siempre (niveles 1 a 5, sin cambios) y una nueva, la de la **Disruptora**, con 3 piezas que se encuentran en **ruinas** (escombros con hallazgo) de los niveles 8, 9 y 10. Los niveles actuales todavía no tienen ruinas con hallazgo: la colección empieza vacía y se llena cuando lleguen esos mapas.
+- Al terminar de demoler una ruina, la pieza queda **pendiente**; se **confirma** al completar la oleada en curso (o la siguiente, si demoliste antes de empezar). Una derrota antes de confirmar, abandonar o reintentar la pierde; una pieza confirmada se guarda aunque después pierdas. El panel de la ruina dice **"pendiente"** o **"ya recuperada"** antes de demoler.
+- Las piezas **solo se consiguen en la campaña**: en los modos, la comunidad, el editor y el modo de pruebas la ruina se puede demoler, pero el panel avisa "Aquí no se recogen piezas" y no se guarda nada.
+- La barra superior muestra la colección del nivel que jugás, y la Wiki tiene una solapa nueva, **Colecciones**, con el progreso de cada una y qué torre desbloquea. Los guardados viejos cargan igual.
 
 ## Demolición directa de obstáculos *(T207, 2026-10-08)*
 

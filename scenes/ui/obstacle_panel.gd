@@ -58,7 +58,8 @@ func _label(parent: Control, size: int, color: Color = Color.WHITE) -> Label:
 ## otro trabajo en curso; `seconds_left`, lo que falta si este es el que se está demoliendo.
 func show_obstacle(spec: ObstacleSpec, state: ObstacleField.State, busy: bool, gold: int,
 		seconds_left: float, recovered: bool, current_cost: int = -1, current_seconds: float = -1.0,
-		machine_cost: int = -1, reserve_left: int = 0) -> void:
+		machine_cost: int = -1, reserve_left: int = 0,
+		collects: bool = true) -> void:
 	visible = spec != null
 	if spec == null:
 		_cell = InfrastructureController.NONE
@@ -75,7 +76,7 @@ func show_obstacle(spec: ObstacleSpec, state: ObstacleField.State, busy: bool, g
 	if machine_cost >= 0:
 		_cost.text += "\nCon la demoledora: %d de oro" % machine_cost
 	_time.text = ObstacleText.time_line(seconds)
-	_reward.text = ObstacleText.reward_line(spec, recovered)
+	_reward.text = ObstacleText.reward_line(spec, recovered, collects)
 	_note.visible = false
 	_button.visible = true
 	_cancel_mode = state == ObstacleField.State.WORKING
