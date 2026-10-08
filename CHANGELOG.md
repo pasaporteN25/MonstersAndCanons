@@ -2,6 +2,11 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Torres por mapa y aviso en la selección *(T203, 2026-10-08)*
+
+- Un nivel puede decir qué torres ofrece (`"torres"` en su archivo): la barra muestra solo esas. Sin el campo, todo sigue igual; los 9 niveles actuales no cambian.
+- Las tarjetas de la campaña muestran las torres de cada nivel y marcan con un punto naranja (y "Nueva" al pasar el mouse) la que debuta ahí. La Wiki sigue mostrando todas.
+
 ## Android normal y pruebas *(M34, 2026-10-02)*
 
 - Dos APK con los últimos diseños e interfaces del PR#1, con paquetes separados para instalarlas juntas. La variante de pruebas conserva su panel de administración; la normal no lo habilita.

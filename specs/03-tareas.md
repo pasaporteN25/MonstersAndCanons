@@ -1312,7 +1312,14 @@
   - **Qué no:** los valores (probabilidad del drop, precio de la máquina, tiempo que baja, Mortero y Francotirador) son iniciales y no se probaron con el bot. El diseño del jefe supremo no existe todavía.
 - [ ] **T201** · 🚦 G2 · Biblia del universo (`specs/10-universo.md`).
 - [ ] **T202** · Auditoría de nombres y glosario canónico.
-- [ ] **T203** · Torres por mapa y aviso en la selección.
+- [x] **T203** · Torres por mapa y aviso en la selección.
+  **Refs:** RF-393 a RF-397, D-079 (Q-29 y Q-30).
+  **Resultado (2026-10-08):**
+  - **Spec y decisión:** RF-393 a RF-397 en `01-spec.md` (subsección "Torres por mapa (rotación)", después de RF-300), D-079 en `04-decisiones.md` (descarta la lista "a quitar" y la pantalla de mazo) y el cómo en `02-plan-tecnico.md`. `CONTENIDO.md` explica el campo con ejemplo y `CHANGELOG.md` lo anota.
+  - **Código:** campo `"torres"` en `LEVEL_KEYS`, `LevelFile._read_towers` (error con la lista de ids, repetidos cuentan una vez, lista vacía es error), `LevelData.towers` y `available_towers` (orden canónico, la lista manda sobre `torres_extra`, la colección sigue mandando). El modo sigue escribiendo `allowed_towers` y el filtro aplica los dos (intersección); `ModePacks._towers_conflict` hace error del mapa la intersección vacía. `LevelDraft` conserva y escribe el campo. Clase nueva `TowerOffer` (lógica pura) y tarjetas de `level_select.gd` con los íconos de `Tower.make_icon` y un punto naranja en la torre que debuta (el "Nueva" completo sale en el tooltip). `Game` agrega una torre de apoyo nombrada en `"torres"`. Ejemplo: `tools/ejemplos/mapa_torres_por_mapa.json`.
+  - **Qué se probó:** `tests/test_map_towers.gd` (16 tests): sin campo igual que hoy, con campo y orden canónico, reservada, id malo, forma mala, lista vacía, repetido, el editor conserva el campo, el ejemplo, la colección, intersección con un modo (incluida la vacía), "Nueva" con niveles armados y con la campaña real, y la tarjeta real (íconos y marca). Suite completa: **1033/1033** (1017 + 16), 0 `SCRIPT ERROR`/`Parse Error`. `check_level` acepta el ejemplo con `"torres"`. Bot `mix`: `level=6` da exactamente la misma salida antes y después; `level=9` da la misma victoria (oleada 20/20, 11 vidas, mismas torres por oleada), pero el **oro de las últimas oleadas varía entre corridas** (155 / 164 / 170 en tres corridas, una de ellas con el código original limpio), así que ese bot no es determinista en el oro y no es un efecto de este cambio.
+  - **Qué no:** no se miró la tarjeta en pantalla (solo por tests; el tamaño de los íconos y del punto es a ojo, 22 px, y entran 8 en el ancho de 200 px, pero con 9 o más se cortarían). En el nivel 1 todas las torres figuran como "Nueva" por la regla literal de la ficha. Ningún nivel oficial usa todavía `"torres"` (eso es de la rotación, bloque 3). No se probó un modo propio con `"torres"` en la pantalla real, solo la lógica. No hubo push (la instrucción de la coordinación).
+
 - [ ] **T204** · Bot de balance con varias semillas.
 - [ ] **T205** · 🚦 G3 · Spec de removibles, demolición, demoledora, recursos, extracción y colecciones (M50).
 - [ ] **T206** · Removibles: formato y validación.

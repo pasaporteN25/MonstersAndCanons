@@ -226,6 +226,21 @@ Hasta ahora toda torre ocupa **una** casilla. Esta etapa enseña al juego a mane
 > **Criterio de aceptación RF-300**
 > **Dado** un nivel sin `"torres_extra"` → **Entonces** la barra tiene las **8** torres de siempre y la tecla 9 no hace nada. **Dado** uno con `"torres_extra": ["mortar"]` → **Entonces** hay **9** y la tecla 9 elige el Mortero.
 
+#### Torres por mapa (rotación) *(T203, pedido por Lucas en Q-29 y Q-30 del cuestionario 09, 2026-10-08; D-079)*
+
+- **RF-393** **Campo `"torres"` del nivel:** un nivel puede decir qué torres ofrece con el campo opcional `"torres": ["frost", "cannon"]`. **Sin el campo**, el nivel se comporta exactamente como hoy: las 8 comunes más las de `"torres_extra"` (RF-300). **Con el campo**, la barra y las teclas muestran **solo esas**, en el **orden canónico** de las torres del juego (el de la barra de siempre), no en el orden del archivo. `"torres"` puede nombrar torres reservadas: equivale a habilitarlas, como `"torres_extra"`. La **Wiki** sigue mostrando todas las torres.
+- **RF-394** **Validación:** `"torres"` tiene que ser una lista de nombres entre comillas y no puede estar vacía. Un id que no existe es un **error** que lista los que hay (como RF-204); uno repetido cuenta una vez; el **editor conserva** el campo al abrir y guardar (editarlo es T212).
+- **RF-395** **La colección sigue mandando:** estar en `"torres"` **no** saltea la condición de colección de la torre (`required_collection`, RF-360): sin las piezas, la torre no aparece.
+- **RF-396** **Modo y nivel juntos:** cuando un modo limita las torres (`"torres"` en `modo.json`, RF-388) y el mapa también, vale la **intersección**. Si queda **vacía**, el mapa de ese modo es un **error del modo**, con un mensaje que lo explica, y se ve deshabilitado como cualquier mapa con errores.
+- **RF-397** **Aviso en la selección de nivel (Q-30):** la tarjeta de cada nivel de la campaña muestra **íconos chicos** de las torres que ofrece (los mismos de la barra de construcción) y marca con **"Nueva"** la torre cuyo **primer** nivel de la campaña con ella es ese. Se calcula desde los datos de los niveles y **no se guarda** en el guardado. No hay pantalla de mazo (07 §4).
+
+> **Criterio de aceptación RF-393 a RF-397**
+> **Dado** un nivel sin `"torres"` → **Entonces** ofrece lo mismo que antes de este cambio. **Dado** `"torres": ["tesla", "frost"]` → **Entonces** la barra tiene Hielo y Tesla, **en ese orden canónico**, y nada más. **Dado** `"torres": ["mortar"]` sin `"torres_extra"` → **Entonces** el Mortero aparece.
+> **Dado** `"torres": ["hielo"]` → **Entonces** el nivel da un error que lista los ids válidos. **Dado** `["frost", "frost"]` → **Entonces** el Hielo cuenta una vez.
+> **Dado** una torre de colección que no se completó y que figura en `"torres"` → **Entonces** no aparece.
+> **Dado** un modo con `"torres": ["basic"]` y un mapa con `"torres": ["frost"]` → **Entonces** el mapa de ese modo es un error del modo; **dado** un mapa con `["basic", "frost"]` → **Entonces** ofrece solo la Básica.
+> **Dado** la selección de nivel → **Entonces** cada tarjeta muestra las torres de su nivel y **"Nueva"** en la que debuta ahí.
+
 > **Criterio de aceptación RF-291**
 > **Dado** un Mortero y un mapa donde hay tres casillas libres juntas (la cuarta es camino) → **Cuando** intento construirlo ahí → **Entonces** no se construye, las cuatro casillas se ven rojas y sigo teniendo mi oro.
 > **Dado** cuatro casillas libres juntas y 300 de oro → **Cuando** hago clic con la vista previa → **Entonces** se construye, ocupa las cuatro casillas, **un clic en cualquiera** la selecciona, y al venderla recibo el 70 % y las cuatro vuelven a estar libres.

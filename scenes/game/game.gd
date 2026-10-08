@@ -97,7 +97,7 @@ func _ready() -> void:
 	_setup_collection()
 	_update_collection_notice()
 	for support: TowerData in support_catalog():
-		if (level_data.extra_towers.has(String(support.id)) or (DevMode.enabled and DevMode.support_unlocked)) and not tower_types.has(support):
+		if (level_data.extra_towers.has(String(support.id)) or level_data.towers.has(String(support.id)) or (DevMode.enabled and DevMode.support_unlocked)) and not tower_types.has(support):
 			tower_types.append(support)
 	available_towers = level_data.available_towers(tower_types, SaveManager.collection_complete)
 	if DevMode.enabled and DevMode.support_unlocked:

@@ -506,6 +506,8 @@ godot --headless --path . -s addons/gut/gut_cmdln.gd -gdir=res://tests -gexit
 - **Bot de balance:** las estrategias de hoy usan solo los índices 0–7, así que **no cambian**; se suma una (`mortar`) que compra Morteros donde haya 2×2 libres.
 - **Torres reservadas (D-045, RF-300):** `TowerData.reserved`; `LevelData.extra_towers` se lee de `"torres_extra"` (`LevelFile._read_extra_towers`, con `LevelFile.tower_ids()`) y `LevelData.available_towers(todas)` filtra. `Game.available_towers` alimenta a `BuildController` y al HUD; `tower_types` sigue siendo la lista completa. `LevelDraft` conserva y escribe el campo.
 
+- **Torres por mapa (D-079, RF-393 a RF-397, T203):** `LevelData.towers` se lee de `"torres"` (`LevelFile._read_towers`, mismos mensajes que `torres_extra`). `LevelData.available_towers` recorre las torres en el orden de `Game.tower_types` (el canónico), así que la lista del archivo no cambia el orden; con `towers` no vacío manda sobre `extra_towers` y la colección se sigue mirando. El modo escribe su propio `allowed_towers` (RF-388): el filtro aplica los dos (intersección) y `ModePacks._towers_conflict` convierte una intersección vacía en error del mapa. `TowerOffer` (lógica pura) calcula qué ofrece cada nivel y dónde debuta cada torre; `level_select.gd` dibuja los íconos con `Tower.make_icon`. `LevelDraft` conserva el campo.
+
 ### 6.16 Sinergias: reacciones por estado *(M20, D-046)*
 
 - `TowerLevelData` gana `bonus_vs_slowed_percent` y `bonus_vs_burning_percent`.

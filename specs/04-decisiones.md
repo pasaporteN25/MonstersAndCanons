@@ -522,3 +522,16 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
   - Valor elegido: **vida 115 %, el mismo oro**. Gana los mapas 1, 3 y 5 con 3, 6 y 4 vidas; en la campaña gana 8 de 9.
   - Es un modo claramente más difícil. Este bot es simple, así que hace falta una prueba jugando; 110 % es la alternativa si resulta demasiado.
 - **Limitación conocida:** con más de dos modos propios, las solapas no entran en la fila de 1280 px.
+
+## D-079 · Torres por mapa: lista de las que se ofrecen
+- **Fecha:** 2026-10-08 · **Estado:** Aceptada, hecha en T203 · **Decidió:** Lucas (Q-29 y Q-30 del cuestionario 09) / Claude (formato)
+- **Qué:** el nivel gana el campo opcional `"torres"` con la lista de las torres que ofrece; la tarjeta de la selección muestra sus íconos y marca "Nueva" donde una torre debuta. Con un modo, vale la intersección. Detalle en RF-393 a RF-397.
+- **Por qué:**
+  - El 07 §4 dice que la rotación de torres va **por datos del mapa** y que **no hay pantalla de mazo**: el jugador no arma nada, el mapa decide.
+  - Una lista de las que **se ofrecen** se lee de un vistazo (qué hay en este mapa) y se escribe igual que `"torres"` de los modos (RF-388), así que el formato y la validación se copian.
+  - Sin el campo todo queda como hoy: los 9 niveles actuales no cambian.
+  - "Nueva" se calcula desde los datos y no se guarda, así no hay nada que migrar ni que se desincronice.
+- **Alternativas descartadas:**
+  - Una lista de torres **a quitar** (`"sin_torres"`): hay que saber cuáles son las comunes para entender qué queda, y si mañana se suma una torre común, entra sola en todos los mapas sin que nadie lo decida.
+  - Una pantalla de mazo antes del nivel: el 07 §4 la descarta.
+  - Guardar en el guardado qué torres "ya vio" el jugador: complica el guardado y deja de ser un dato del contenido.

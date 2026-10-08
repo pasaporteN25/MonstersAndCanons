@@ -79,6 +79,9 @@ static func from_text(text: String, id: String = "") -> LevelDraft:
 	# RF-300: las torres extra se conservan tal cual (el editor todavía no las edita).
 	if source.get("torres_extra") is Array:
 		draft.data["torres_extra"] = (source["torres_extra"] as Array).duplicate()
+	# RF-394: la lista de torres del nivel también se conserva tal cual.
+	if source.get("torres") is Array:
+		draft.data["torres"] = (source["torres"] as Array).duplicate()
 	# El orden de las claves del texto lo fija to_text(), no este diccionario.
 	return draft
 
@@ -395,6 +398,8 @@ func to_text() -> String:
 		lines.append("  \"leyenda\": {\n" + ",\n".join(entries) + "\n  },")
 	if data.has("torres_extra"):
 		lines.append("  \"torres_extra\": %s," % JSON.stringify(data["torres_extra"]))
+	if data.has("torres"):
+		lines.append("  \"torres\": %s," % JSON.stringify(data["torres"]))
 	lines.append("  \"mapa\": [")
 	var map_rows: PackedStringArray = rows()
 	for y: int in map_rows.size():

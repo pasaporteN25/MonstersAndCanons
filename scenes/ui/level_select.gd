@@ -15,6 +15,8 @@ const CARD_SPACING: float = 16.0
 const CARDS_PER_ROW: int = 5
 const VISIBLE_ROWS: int = 2
 const CARD_STAR_SIZE: float = 26.0
+const TOWER_ICON_SIZE: float = 22.0
+const NEW_COLOR := Color(1.0, 0.6, 0.15)
 const ERROR_COLOR := Color(1.0, 0.55, 0.55)
 ## RF-319: tope del oro que se puede escribir a mano en la franja de pruebas.
 const DEV_MAX_GOLD: int = 999999
@@ -29,6 +31,7 @@ var modes_user_dir: String = ModePacks.USER_DIR
 ## Cómo se abre la carpeta en el explorador. Los tests lo reemplazan (si no, abrirían una ventana).
 var folder_opener: Callable = OS.shell_open
 
+var _all_towers: Array[TowerData] = []
 var _page: StringName = PAGE_CAMPAIGN
 var _entries: Array[Dictionary] = []
 ## RF-389: los modos (ModePacks.all) y la solapa de cada uno, por página (&"mode:<id>").
@@ -311,9 +314,47 @@ func _make_card(index: int) -> Button:
 	elif CollectibleRun.eligible(&"technology", level.id):
 		card.tooltip_text = "Avance de este nivel: %s. Una pieza distinta por nivel1–5." % ("conseguido" if SaveManager.collected_sources(&"technology").has(String(level.id)) else "pendiente")
 	card.disabled = not GameFlow.is_level_unlocked(index)
+	_add_tower_icons(card, index)
 	card.pressed.connect(GameFlow.start_level.bind(index))
 	_add_stars(card, GameFlow.level_stars(index), GameFlow.is_level_unlocked(index))
 	return card
+
+
+## RF-397: íconos chicos de las torres que ofrece el nivel (los de la barra) y, en las que debutan ahí,
+## una marca naranja y "Nueva" al pasar el mouse. Se calcula en el momento, desde los datos.
+func _add_tower_icons(card: Button, index: int) -> void:
+	if _all_towers.is_empty():
+		_all_towers = TowerOffer.canonical_towers()
+	var levels: Array[LevelData] = []
+	for i: int in GameFlow.level_count():
+		levels.append(GameFlow.level(i))
+	var fresh: PackedStringArray = TowerOffer.new_tower_ids(levels, index, _all_towers)
+	var row := HBoxContainer.new()
+	row.name = "TowerIcons"
+	row.add_theme_constant_override("separation", 0)
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.position = Vector2(4, CARD_SIZE.y - CARD_STAR_SIZE - 18.0 - TOWER_ICON_SIZE - 4.0)
+	for tower: TowerData in TowerOffer.offered(levels[index], _all_towers):
+		var icon := TextureRect.new()
+		icon.name = String(tower.id)
+		icon.texture = Tower.make_icon(tower)
+		icon.custom_minimum_size = Vector2(TOWER_ICON_SIZE, TOWER_ICON_SIZE)
+		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		icon.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+		icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		var is_new: bool = fresh.has(String(tower.id))
+		card.tooltip_text += "%s%s%s" % ["\n" if card.tooltip_text != "" else "", tower.display_name, " · Nueva" if is_new else ""]
+		if is_new:
+			var mark := ColorRect.new()
+			mark.name = "NewMark"
+			mark.color = NEW_COLOR
+			mark.size = Vector2(7, 7)
+			mark.position = Vector2(TOWER_ICON_SIZE - 8.0, 1.0)
+			mark.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			icon.add_child(mark)
+		row.add_child(icon)
+	card.add_child(row)
 
 
 ## Una tarjeta de un mapa de la comunidad (RF-221). Con errores: deshabilitada y con el motivo (RF-222).
