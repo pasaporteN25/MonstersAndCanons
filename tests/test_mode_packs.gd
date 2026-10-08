@@ -65,7 +65,8 @@ func test_siege_reads_with_its_rules() -> void:
 	assert_eq(mode["errors"], PackedStringArray(), "Asedio no tiene errores")
 	assert_eq(mode["name"], "Asedio")
 	var maps: Array = mode["maps"]
-	assert_eq(maps.size(), GameFlow.level_count(), "los mapas 1 a 9 de la campaña")
+	# T225: la campaña ya tiene 10 niveles, pero Asedio sigue con los mapas 1 a 9 (consulta para Lucas).
+	assert_eq(maps.size(), 9, "los mapas 1 a 9 de la campaña")
 	for i: int in maps.size():
 		var level: LevelData = ModePacks.map_level(mode, i)
 		var campaign: LevelData = GameFlow.level(i)

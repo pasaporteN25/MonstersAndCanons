@@ -458,6 +458,10 @@ Perfiles de compra/ubicación/mejoras y variantes de frecuencia viven en art/bal
 
 Campaña ampliada con level_08 (Bastión) y level_09 (Taller asediado). JSON en formato canónico del editor; torres_extra permite Mecánico, sin nuevas fuentes de colección. Guardián debuta en8/oleada4 y Curandero en9/oleada5; robos opcionales comienzan6 y embestidas8, con combinaciones posteriores. Carga/auras/desgaste/reparación reutilizan recursos existentes y no cambian sus estadísticas. Datos y recorridos1–7 intactos. Detalle, bots/capturas y límites en art/campaign-m45/README.md.
 
+### T225 · Nivel 10 (La mina vieja)
+
+`data/levels/level_10.json`, último de `data/campaign.json`. Es el **único nivel oficial de mapa grande** (24 × 11, RF-250) y de tema `desierto`, con las ruinas de los niveles 8 y 9 contadas por la leyenda (`p` columna, `s` símbolo A, `u` y `e` escombros). Su leyenda usa 6 de las 10 letras: `u` escombro con `hallazgo: disruptor` (la pieza 3/3), `e` escombro común (1 recurso al 50 %), `r` roca removible (1 recurso al 50 %), `m` mina (clase `mina`, sin sobrescribir: 100 de oro, 2 por oleada, reserva 8), `s` y `p` decoración. Para cambiar la dificultad sin tocar el mapa se mueve `aumento_vida` (30) y, con cuidado, las cantidades de las oleadas: con 33 `sin_recursos` ya pierde 2 de 5, así que **después de cualquier cambio** hay que correr `godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- x check_rule=1 levels=10` (regla de oro, RF-432). Es un mapa de **espacio limitado** (43 casillas libres, ver §7.12 de la spec): agregar casillas libres lo vuelve más fácil para todos los bots. La exposición del Embestidor y la captura están en `art/campaign-t225/`.
+
 ### M49 · Modos de juego (RF-388 a RF-392)
 
 Un **modo** es un grupo de mapas con reglas propias. Aparece como una solapa en **Jugar**: los oficiales después de "Campaña" y los propios después de "Mapas de la comunidad". No hace falta programar: es una carpeta con un archivo `modo.json`.

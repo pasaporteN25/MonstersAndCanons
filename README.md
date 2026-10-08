@@ -5,7 +5,7 @@
 
 Juego *tower defense* 2D hecho en **Godot 4** con **GDScript**, construido con **SDD (Spec-Driven Development)**.
 
-> **Estado actual:** M1 a M45 ✅ (nuevo logo Monsters & Canons, botones del menú de hierro y bronce, Normal, Rápido y Tanque con arte renderizado de una sola vista; campaña jugable, 9 niveles, 9 torres (una de 2×2) con arte renderizado de ocho vistas más el apoyo Mecánico, tres familias visuales y combos por estado, modo de pruebas con editor de mapas, mapas de la comunidad, Wiki con bestiario, mapas de tamaño variable con zoom, siete temas de paisaje y leyenda, récords, niveles en archivos de texto y versión para Linux). Lucas probó la APK en su celular (informado el 2026-10-07). Tests automáticos en GitHub (D-030).
+> **Estado actual:** M1 a M45 ✅ (nuevo logo Monsters & Canons, botones del menú de hierro y bronce, Normal, Rápido y Tanque con arte renderizado de una sola vista; campaña jugable, 10 niveles, 9 torres (una de 2×2) con arte renderizado de ocho vistas más el apoyo Mecánico, tres familias visuales y combos por estado, modo de pruebas con editor de mapas, mapas de la comunidad, Wiki con bestiario, mapas de tamaño variable con zoom, siete temas de paisaje y leyenda, récords, niveles en archivos de texto y versión para Linux). Lucas probó la APK en su celular (informado el 2026-10-07). Tests automáticos en GitHub (D-030).
 >
 > **Versión de Godot:** 4.7.2 estable (renderizador *Compatibility*).
 >
@@ -293,3 +293,7 @@ Validación M45:954/954 pruebas y62/62 finales de contenido.24 corridas más rep
 - Solapa **Asedio** en Jugar: los mapas de la campaña con monstruos más duros y progreso propio.
 - Modos propios: desde el editor con "En un modo…", o con un `modo.json` (ver `CONTENIDO.md`).
 - El bot de balance acepta `modo=asedio`.
+
+### T225 · Nivel 10: La mina vieja
+
+Cierra el bloque 2 con un mapa grande (24 × 11) del desierto, dos entradas y 20 oleadas con los enemigos de los niveles 6 a 9 (sin debuts). Tiene una **mina** de reserva finita (100 de oro, 2 recursos por oleada, 8 en total), seis removibles que pueden dar 1 recurso, la **pieza 3/3 de la Disruptora** y el Mortero. Es un mapa de **espacio limitado** (43 casillas libres): el bot sin recursos lo gana con 7 a 13 vidas y las estrategias de extracción y de demolición lo ganan con 17 y 18. La ficha completa está en `specs/01-spec.md` §7.12 (RF-453) y la evidencia, en `art/campaign-t225/README.md`.

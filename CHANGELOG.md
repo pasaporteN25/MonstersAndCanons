@@ -2,6 +2,15 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Nivel 10: La mina vieja *(T225, 2026-10-08)*
+
+- **La campaña tiene 10 niveles.** El nuevo se abre al ganar el 9: **La mina vieja**, un mapa **grande** (24 × 11) del **desierto**, con dos entradas y un camino en serpentina. Las ruinas de los niveles 8 y 9 quedan atrás: se ven columnas rotas, escombros y el símbolo A en tres rocas.
+- **Una mina para habilitar** (100 de oro): da **2 recursos por oleada completada** y se agota a los 8. Hay también **seis removibles** (rocas y escombros) que pueden entregar 1 recurso (50 %, al azar).
+- **La pieza 3/3 de la Disruptora** está en un escombro del centro del mapa. Con las piezas del 8 y del 9, la colección queda **completa** y la Disruptora estará lista para el nivel 11.
+- El **Mortero** sigue disponible (300 de oro + 3 recursos), con cuatro bloques de 2×2 libres. El Francotirador mantiene sus dos precios (150 de oro, o 120 + 1 recurso).
+- **Hay pocas casillas buenas** (43): el espacio es lo que falta, no el oro. Los enemigos son los de los niveles 6 a 9, sin ninguno nuevo; el Guardián y el Curandero van juntos en varias oleadas. **Se gana sin tocar la mina, los removibles ni los recursos.**
+- El modo **Asedio** sigue con los mapas 1 a 9.
+
 ## Editor: removibles, minas, demoledora y torres del mapa *(T212, 2026-10-08)*
 
 - El **editor de mapas** suma cinco pinceles: **Árbol**, **Roca**, **Escombro**, **Mina** y **Bosque** (teclas `6` a `0`). Se pintan como el pasto o el camino y el editor arma solo la leyenda del archivo. Si la leyenda ya tiene sus 10 letras, avisa abajo en lugar de pintar.

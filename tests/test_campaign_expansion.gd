@@ -35,23 +35,30 @@ func test_old_last_level_victory_opens_only_the_next_without_writing() -> void:
 	assert_eq(SaveManager.best_score(&"level_07"),1234)
 	assert_eq(FileAccess.get_file_as_string(PATH),previous,"consulta no migra ni escribe")
 
-func test_winning_eight_unlocks_nine_and_nine_is_current_last() -> void:
+func test_winning_eight_unlocks_nine_and_ten_is_current_last() -> void:
 	GameFlow.current_index = 7
 	assert_true(GameFlow.has_next_level())
 	GameFlow.level_won(15,1234)
 	SaveManager.load_save()
 	assert_true(GameFlow.is_level_unlocked(8))
 	assert_true(SaveManager.is_unlocked(&"level_09"))
+	# T225: el 9 ya tiene siguiente (la mina vieja) y el 10 es el último.
 	GameFlow.current_index = 8
+	assert_true(GameFlow.has_next_level())
+	GameFlow.level_won(15,1234)
+	SaveManager.load_save()
+	assert_true(GameFlow.is_level_unlocked(9))
+	assert_true(SaveManager.is_unlocked(&"level_10"))
+	GameFlow.current_index = 9
 	assert_false(GameFlow.has_next_level())
 
-func test_campaign_tail_and_collection_gate_for_both_new_levels() -> void:
-	assert_eq(LevelFile.campaign_ids().slice(7),PackedStringArray(["level_08","level_09"]))
-	for index: int in [7,8]:
+func test_campaign_tail_and_collection_gate_for_the_new_levels() -> void:
+	assert_eq(LevelFile.campaign_ids().slice(7),PackedStringArray(["level_08","level_09","level_10"]))
+	for index: int in [7,8,9]:
 		assert_false(GameFlow.level(index).available_towers([STANDARD],SaveManager.collection_complete).has(STANDARD))
 	for source: String in (CollectibleRun.definitions()["technology"]["sources"] as Array):
 		SaveManager.collect_source(&"technology",StringName(source))
-	for index: int in [7,8]:
+	for index: int in [7,8,9]:
 		assert_true(GameFlow.level(index).available_towers([STANDARD],SaveManager.collection_complete).has(STANDARD))
 		var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 		var run: CollectibleRun = CollectibleRun.new()
