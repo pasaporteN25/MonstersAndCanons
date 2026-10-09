@@ -176,6 +176,7 @@ Los voladores ignoran el camino: van en línea recta de su entrada a la salida.
 | `oro` | Oro al empezar. | Sí |
 | `vidas` | Vidas al empezar (los niveles oficiales usan 20). | Sí |
 | `aumento_vida` | % de vida extra de los enemigos en cada oleada (spec §7.4). Si no está, se usa el general de `balance.tres`. | No |
+| `textos` | *(M52, RF-464; **todavía no lo lee el juego**, lo hace T228)* Los textos breves del nivel: `"lugar"` (1 línea, 32 caracteres; sale en la tarjeta), `"entrada"` (hasta 3 líneas y 240 caracteres; un cartel al empezar), `"victoria"` (hasta 2 líneas y 160 caracteres; sale en la pantalla de victoria) y `"epilogo"` (3 a 5 líneas, solo para el último nivel de la campaña). Las líneas se separan con `\n` y ninguna pasa de 90 caracteres. Ejemplo: `"textos": {"lugar": "El paso del agua", "victoria": "Paso asegurado."}`. Un mapa de la comunidad o de un modo propio los muestra **solo si el archivo los trae**. Los textos oficiales están en `specs/11-textos-lore.md`. | No |
 | `oleadas` | La lista de oleadas (abajo). | Sí |
 
 ### Las oleadas
@@ -367,6 +368,7 @@ Un artículo es un archivo de texto (el nombre del archivo es su id: minúsculas
 - **No copies números que ya viven en los datos** (vida, daño, costos, porcentajes): explicá la regla y mandá a la entrada del enemigo o la torre. Si se rebalancea, el artículo quedaría mintiendo.
 - Si te equivocás, el artículo simplemente no aparece; `tests/test_wiki_articles.gd` falla y dice **qué archivo y qué error**.
 - Para una categoría nueva (Niveles, Lore…) hay que sumar una función en `scripts/logic/wiki.gd`; la pantalla no cambia (plan técnico §6.10).
+- **Lore** *(M52, RF-469; **todavía no existe**, lo hace T228)*: será una cuarta categoría después de la Guía, con artículos en `data/wiki/lore/` (subcarpeta: la Guía no los ve) que llevan además la clave obligatoria `"desbloqueo"` (el id del nivel de la campaña que, al ganarse, los abre, por ejemplo `"level_08"`). Antes de ganarlo se ven como «???» con *«Se abre al ganar el nivel N.»*.
 
 ---
 
