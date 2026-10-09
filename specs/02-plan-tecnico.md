@@ -108,7 +108,8 @@ JuegoA/
 │   └── ...                     ← (M3/M4) sonidos, imágenes, fuentes
 ├── tools/
 │   ├── balance_sim.gd            ← bot que juega solo para revisar el balance (spec §7.1)
-│   └── perf_test.gd              ← prueba de rendimiento con ventana (T56, P7)
+│   ├── perf_test.gd              ← prueba de rendimiento con ventana (T56, P7)
+│   └── perf_levels.gd / .tscn    ← rendimiento de un nivel real con sus oleadas finales (T236, P7)
 └── tests/
     ├── test_rules.gd
     ├── test_level_paths.gd

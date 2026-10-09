@@ -2,6 +2,11 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Torres más livianas con muchas en pantalla *(T236, 2026-10-09)*
+
+- **El juego va más fluido en las oleadas finales.** Con 60 o más torres en el mapa del final, las torres quietas ya no se vuelven a dibujar en cada instante: solo se redibujan cuando giran de verdad, disparan o están aturdidas. En la prueba del nivel 15 (oleada 30, 64 torres) los cuadros por segundo pasaron de unos 30–45 a unos 95–100 en los primeros 30 segundos de la oleada. No cambia cómo se ven ni cómo apuntan ni ninguna regla ni número.
+- Los guardados de versiones anteriores (solo con niveles, de antes de la Disruptora, con las colecciones completas y los del modo de pruebas) se siguen leyendo sin perder nada, y ganar el 9 sigue abriendo el 10.
+
 ## Nivel 15: La Central, el Coloso, el epílogo y los créditos *(T234, 2026-10-09)*
 
 - **La campaña tiene 15 niveles y termina.** El nuevo se abre al ganar el 14: **La Central**, «energía y abastecimiento», un mapa **grande** (26 × 12) en el **valle** donde aterrizó la nave, con **tres entradas**. Al lado de la salida está la **central de energía** (un edificio de cuatro piezas) y, por el borde del mapa, la **cadena de abastecimiento** (un depósito, un poste de línea y una vagoneta) que la une con la mina. Hay una mina, dos bosques y cinco escombros, y también tres campamentos vacíos y dos rocas marcadas, como en el primer nivel. Es **el nivel más difícil de la campaña**: **30 oleadas**, 520 de oro y 20 vidas.
