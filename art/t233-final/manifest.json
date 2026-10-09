@@ -1,0 +1,156 @@
+{
+  "task": "T233",
+  "status": "PROVISIONAL: pendiente del OK artístico de Lucas",
+  "authorization": "Despacho del 2026-10-09: producir provisional para destrabar código; P5/P6 de M52 aprobados",
+  "central_order": [
+    [
+      "central_1",
+      "central_2"
+    ],
+    [
+      "central_3",
+      "central_4"
+    ]
+  ],
+  "central_size": [
+    128,
+    128
+  ],
+  "assets": [
+    {
+      "id": "central_1",
+      "path": "assets/sprites/map/central_1.svg",
+      "source": "art/t233-final/sources/central_1.svg",
+      "format": "SVG",
+      "size": [
+        64,
+        64
+      ],
+      "state": "provisional",
+      "sha256": "e80653932753ab6258bc598fb372778655ec61bb4d57a073c60811e306330a87"
+    },
+    {
+      "id": "central_2",
+      "path": "assets/sprites/map/central_2.svg",
+      "source": "art/t233-final/sources/central_2.svg",
+      "format": "SVG",
+      "size": [
+        64,
+        64
+      ],
+      "state": "provisional",
+      "sha256": "87e66d49d2a8962ecf5e468fb0600e8886e98cd2b7461c594dad5a7914057cbb"
+    },
+    {
+      "id": "central_3",
+      "path": "assets/sprites/map/central_3.svg",
+      "source": "art/t233-final/sources/central_3.svg",
+      "format": "SVG",
+      "size": [
+        64,
+        64
+      ],
+      "state": "provisional",
+      "sha256": "05ec730586d92491809c209ad42c3e7620cbd25fa7e81d60d6cdb468b6808a5e"
+    },
+    {
+      "id": "central_4",
+      "path": "assets/sprites/map/central_4.svg",
+      "source": "art/t233-final/sources/central_4.svg",
+      "format": "SVG",
+      "size": [
+        64,
+        64
+      ],
+      "state": "provisional",
+      "sha256": "c501b185a2b9872a8721421084330cad28ca954c3bdc356ec316e948ff70eecf"
+    },
+    {
+      "id": "supply_depot",
+      "path": "assets/sprites/map/supply_depot.svg",
+      "source": "art/t233-final/sources/supply_depot.svg",
+      "format": "SVG",
+      "size": [
+        64,
+        64
+      ],
+      "state": "provisional",
+      "sha256": "da1d240c2da4296c817c50920bf7e269e89e2aa99c93fc6cc57dea11a5c6648a"
+    },
+    {
+      "id": "supply_line_pole",
+      "path": "assets/sprites/map/supply_line_pole.svg",
+      "source": "art/t233-final/sources/supply_line_pole.svg",
+      "format": "SVG",
+      "size": [
+        64,
+        64
+      ],
+      "state": "provisional",
+      "sha256": "017da98a7540ef8f5a536a7a5684ebf58a39846064eee4f7bc61b42c81e2154e"
+    },
+    {
+      "id": "supply_cart",
+      "path": "assets/sprites/map/supply_cart.svg",
+      "source": "art/t233-final/sources/supply_cart.svg",
+      "format": "SVG",
+      "size": [
+        64,
+        64
+      ],
+      "state": "provisional",
+      "sha256": "644e4e9b94b43cdd4a09ca56c6441c172f09888cf6595e44a7c9be09feb652bd"
+    },
+    {
+      "id": "supply_conveyor",
+      "path": "assets/sprites/map/supply_conveyor.svg",
+      "source": "art/t233-final/sources/supply_conveyor.svg",
+      "format": "SVG",
+      "size": [
+        64,
+        64
+      ],
+      "state": "provisional",
+      "sha256": "092c40e013cc1bb23df3e28b0c8329e6223076c8f5b3bbcdabbd22cdec39c554"
+    },
+    {
+      "id": "hito",
+      "path": "assets/sprites/map/hito.svg",
+      "source": "art/t233-final/sources/hito.svg",
+      "format": "SVG",
+      "size": [
+        64,
+        64
+      ],
+      "state": "provisional",
+      "sha256": "c538fa707bb05c70f0788ee6fe80fe96d850514f2674dcdc67cb9b8c3cb95a1c"
+    },
+    {
+      "id": "epilogue",
+      "path": "assets/sprites/story/epilogue.png",
+      "source": "art/t233-final/sources/epilogue_generated.png",
+      "format": "PNG",
+      "size": [
+        1920,
+        1080
+      ],
+      "state": "provisional",
+      "sha256": "06d95ba1d460ba51007395fc5ada251db1c018181c71a32eabfee77c8e511c8a"
+    }
+  ],
+  "contact_order": [
+    "central_assembled",
+    "supply_depot",
+    "supply_line_pole",
+    "supply_cart",
+    "supply_conveyor",
+    "hito"
+  ],
+  "contact_grounds": [
+    "pradera",
+    "desierto",
+    "nieve"
+  ],
+  "integration_task": "T234; hito para T229/T230/T231; epílogo para T228/T234",
+  "runtime_changes": false
+}

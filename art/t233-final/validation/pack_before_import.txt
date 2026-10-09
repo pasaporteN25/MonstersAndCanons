@@ -1,0 +1,519 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+SCRIPT ERROR: Parse Error: Identifier "CollectibleRun" not declared in the current scope.
+          at: GDScript::reload (res://scripts/autoload/save_manager.gd:85)
+SCRIPT ERROR: Parse Error: Identifier "CollectibleRun" not declared in the current scope.
+          at: GDScript::reload (res://scripts/autoload/save_manager.gd:89)
+SCRIPT ERROR: Parse Error: Identifier "HighScores" not declared in the current scope.
+          at: GDScript::reload (res://scripts/autoload/save_manager.gd:159)
+SCRIPT ERROR: Parse Error: Identifier "HighScores" not declared in the current scope.
+          at: GDScript::reload (res://scripts/autoload/save_manager.gd:179)
+SCRIPT ERROR: Parse Error: Identifier "HighScores" not declared in the current scope.
+          at: GDScript::reload (res://scripts/autoload/save_manager.gd:234)
+SCRIPT ERROR: Parse Error: Identifier "HighScores" not declared in the current scope.
+          at: GDScript::reload (res://scripts/autoload/save_manager.gd:234)
+SCRIPT ERROR: Parse Error: Identifier "HighScores" not declared in the current scope.
+          at: GDScript::reload (res://scripts/autoload/save_manager.gd:238)
+SCRIPT ERROR: Parse Error: Identifier "HighScores" not declared in the current scope.
+          at: GDScript::reload (res://scripts/autoload/save_manager.gd:238)
+ERROR: Failed to load script "res://scripts/autoload/save_manager.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+ERROR: Failed to instantiate an autoload, script 'res://scripts/autoload/save_manager.gd' does not inherit from 'Node'.
+   at: start (main/main.cpp:4539)
+SCRIPT ERROR: Parse Error: Could not find type "DevConfig" in the current scope.
+          at: GDScript::reload (res://scripts/autoload/dev_mode.gd:29)
+SCRIPT ERROR: Parse Error: Identifier "LevelFile" not declared in the current scope.
+          at: GDScript::reload (res://scripts/autoload/dev_mode.gd:84)
+SCRIPT ERROR: Parse Error: Identifier "Rules" not declared in the current scope.
+          at: GDScript::reload (res://scripts/autoload/dev_mode.gd:105)
+SCRIPT ERROR: Parse Error: Identifier "DevStats" not declared in the current scope.
+          at: GDScript::reload (res://scripts/autoload/dev_mode.gd:137)
+ERROR: Failed to load script "res://scripts/autoload/dev_mode.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+ERROR: Failed to instantiate an autoload, script 'res://scripts/autoload/dev_mode.gd' does not inherit from 'Node'.
+   at: start (main/main.cpp:4539)
+SCRIPT ERROR: Parse Error: Could not find type "BalanceConfig" in the current scope.
+          at: GDScript::reload (res://scripts/autoload/game_flow.gd:5)
+SCRIPT ERROR: Parse Error: Could not find type "CampaignData" in the current scope.
+          at: GDScript::reload (res://scripts/autoload/game_flow.gd:18)
+SCRIPT ERROR: Parse Error: Identifier "LevelFile" not declared in the current scope.
+          at: GDScript::reload (res://scripts/autoload/game_flow.gd:18)
+SCRIPT ERROR: Parse Error: Could not find type "LevelDraft" in the current scope.
+          at: GDScript::reload (res://scripts/autoload/game_flow.gd:21)
+SCRIPT ERROR: Parse Error: Could not find type "LevelData" in the current scope.
+          at: GDScript::reload (res://scripts/autoload/game_flow.gd:25)
+SCRIPT ERROR: Parse Error: Could not find type "LevelData" in the current scope.
+          at: GDScript::reload (res://scripts/autoload/game_flow.gd:30)
+SCRIPT ERROR: Parse Error: Could not find type "LevelData" in the current scope.
+          at: GDScript::reload (res://scripts/autoload/game_flow.gd:74)
+SCRIPT ERROR: Parse Error: Could not find type "LevelData" in the current scope.
+          at: GDScript::reload (res://scripts/autoload/game_flow.gd:106)
+SCRIPT ERROR: Parse Error: Could not find type "LevelData" in the current scope.
+          at: GDScript::reload (res://scripts/autoload/game_flow.gd:112)
+SCRIPT ERROR: Parse Error: Could not find type "LevelData" in the current scope.
+          at: GDScript::reload (res://scripts/autoload/game_flow.gd:134)
+SCRIPT ERROR: Parse Error: Could not find type "LevelData" in the current scope.
+          at: GDScript::reload (res://scripts/autoload/game_flow.gd:141)
+SCRIPT ERROR: Parse Error: Could not find type "LevelData" in the current scope.
+          at: GDScript::reload (res://scripts/autoload/game_flow.gd:148)
+SCRIPT ERROR: Parse Error: Could not find type "LevelData" in the current scope.
+          at: GDScript::reload (res://scripts/autoload/game_flow.gd:271)
+SCRIPT ERROR: Parse Error: Could not find type "LevelData" in the current scope.
+          at: GDScript::reload (res://scripts/autoload/game_flow.gd:281)
+SCRIPT ERROR: Parse Error: Identifier "DesktopWindow" not declared in the current scope.
+          at: GDScript::reload (res://scripts/autoload/game_flow.gd:41)
+SCRIPT ERROR: Parse Error: Could not find type "LevelData" in the current scope.
+          at: GDScript::reload (res://scripts/autoload/game_flow.gd:89)
+SCRIPT ERROR: Parse Error: Identifier "Rules" not declared in the current scope.
+          at: GDScript::reload (res://scripts/autoload/game_flow.gd:92)
+SCRIPT ERROR: Parse Error: Identifier "StarsDisplay" not declared in the current scope.
+          at: GDScript::reload (res://scripts/autoload/game_flow.gd:103)
+SCRIPT ERROR: Parse Error: Could not find type "LevelData" in the current scope.
+          at: GDScript::reload (res://scripts/autoload/game_flow.gd:115)
+SCRIPT ERROR: Parse Error: Identifier "Rules" not declared in the current scope.
+          at: GDScript::reload (res://scripts/autoload/game_flow.gd:137)
+SCRIPT ERROR: Parse Error: Identifier "ModePacks" not declared in the current scope.
+          at: GDScript::reload (res://scripts/autoload/game_flow.gd:151)
+SCRIPT ERROR: Parse Error: Identifier "ModePacks" not declared in the current scope.
+          at: GDScript::reload (res://scripts/autoload/game_flow.gd:156)
+SCRIPT ERROR: Parse Error: Identifier "ModePacks" not declared in the current scope.
+          at: GDScript::reload (res://scripts/autoload/game_flow.gd:158)
+SCRIPT ERROR: Parse Error: Identifier "ModePacks" not declared in the current scope.
+          at: GDScript::reload (res://scripts/autoload/game_flow.gd:163)
+SCRIPT ERROR: Parse Error: Identifier "ModePacks" not declared in the current scope.
+          at: GDScript::reload (res://scripts/autoload/game_flow.gd:184)
+SCRIPT ERROR: Parse Error: Identifier "ModePacks" not declared in the current scope.
+          at: GDScript::reload (res://scripts/autoload/game_flow.gd:186)
+SCRIPT ERROR: Parse Error: Could not find type "LevelData" in the current scope.
+          at: GDScript::reload (res://scripts/autoload/game_flow.gd:195)
+SCRIPT ERROR: Parse Error: Identifier "HighScores" not declared in the current scope.
+          at: GDScript::reload (res://scripts/autoload/game_flow.gd:196)
+SCRIPT ERROR: Parse Error: Could not find type "LevelData" in the current scope.
+          at: GDScript::reload (res://scripts/autoload/game_flow.gd:202)
+SCRIPT ERROR: Parse Error: Could not find type "LevelData" in the current scope.
+          at: GDScript::reload (res://scripts/autoload/game_flow.gd:212)
+SCRIPT ERROR: Parse Error: Identifier "HighScores" not declared in the current scope.
+          at: GDScript::reload (res://scripts/autoload/game_flow.gd:240)
+SCRIPT ERROR: Parse Error: Identifier "ModePacks" not declared in the current scope.
+          at: GDScript::reload (res://scripts/autoload/game_flow.gd:298)
+SCRIPT ERROR: Parse Error: Identifier "ModePacks" not declared in the current scope.
+          at: GDScript::reload (res://scripts/autoload/game_flow.gd:307)
+ERROR: Failed to load script "res://scripts/autoload/game_flow.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+ERROR: Failed to instantiate an autoload, script 'res://scripts/autoload/game_flow.gd' does not inherit from 'Node'.
+   at: start (main/main.cpp:4539)
+Diferencias raster fuente/cuatro cuartos: 23
+SCRIPT ERROR: Assertion failed.
+          at: _initialize (res://art/t233-final/pack.gd:31)
+          GDScript backtrace (most recent call first):
+              [0] _initialize (res://art/t233-final/pack.gd:31)
+ERROR: Cannot open file 'res://.godot/imported/build.wav-f0f37dcc9742a49a9d642f149ad65bb7.sample'.
+   at: load (core/io/resource_format_binary.cpp:1156)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://.godot/imported/build.wav-f0f37dcc9742a49a9d642f149ad65bb7.sample.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://assets/audio/build.wav.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Cannot open file 'res://.godot/imported/click.wav-726094e36c7052fadb6392aaf7409595.sample'.
+   at: load (core/io/resource_format_binary.cpp:1156)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://.godot/imported/click.wav-726094e36c7052fadb6392aaf7409595.sample.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://assets/audio/click.wav.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Cannot open file 'res://.godot/imported/combo.wav-9f6768319d8b29b0cbb9fb2c180ec9aa.sample'.
+   at: load (core/io/resource_format_binary.cpp:1156)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://.godot/imported/combo.wav-9f6768319d8b29b0cbb9fb2c180ec9aa.sample.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://assets/audio/combo.wav.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Cannot open file 'res://.godot/imported/defeat.wav-2c373cdad262b5fb9203b05423989caa.sample'.
+   at: load (core/io/resource_format_binary.cpp:1156)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://.godot/imported/defeat.wav-2c373cdad262b5fb9203b05423989caa.sample.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://assets/audio/defeat.wav.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Cannot open file 'res://.godot/imported/enemy_death.wav-3941436349ff69495c237569f3b08064.sample'.
+   at: load (core/io/resource_format_binary.cpp:1156)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://.godot/imported/enemy_death.wav-3941436349ff69495c237569f3b08064.sample.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://assets/audio/enemy_death.wav.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Cannot open file 'res://.godot/imported/heal.wav-931ca7a754542f5b94f13b00622da730.sample'.
+   at: load (core/io/resource_format_binary.cpp:1156)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://.godot/imported/heal.wav-931ca7a754542f5b94f13b00622da730.sample.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://assets/audio/heal.wav.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Cannot open file 'res://.godot/imported/impact.wav-69c408f3f3e73daf7c3030beaa0507af.sample'.
+   at: load (core/io/resource_format_binary.cpp:1156)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://.godot/imported/impact.wav-69c408f3f3e73daf7c3030beaa0507af.sample.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://assets/audio/impact.wav.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Cannot open file 'res://.godot/imported/life_lost.wav-d9741c0c8ceaa92cf66160aae6cede49.sample'.
+   at: load (core/io/resource_format_binary.cpp:1156)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://.godot/imported/life_lost.wav-d9741c0c8ceaa92cf66160aae6cede49.sample.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://assets/audio/life_lost.wav.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Cannot open file 'res://.godot/imported/music_combat.wav-92c6e6eed47e69d31b01b7fdc4ee0a7e.sample'.
+   at: load (core/io/resource_format_binary.cpp:1156)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://.godot/imported/music_combat.wav-92c6e6eed47e69d31b01b7fdc4ee0a7e.sample.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://assets/audio/music_combat.wav.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Cannot open file 'res://.godot/imported/music_loop.wav-274ec49d6b5e79fcaec3ecc4e72285ce.sample'.
+   at: load (core/io/resource_format_binary.cpp:1156)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://.godot/imported/music_loop.wav-274ec49d6b5e79fcaec3ecc4e72285ce.sample.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://assets/audio/music_loop.wav.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Cannot open file 'res://.godot/imported/music_menu.wav-edac82989e4ef867b59a3751a8df50d7.sample'.
+   at: load (core/io/resource_format_binary.cpp:1156)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://.godot/imported/music_menu.wav-edac82989e4ef867b59a3751a8df50d7.sample.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://assets/audio/music_menu.wav.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Cannot open file 'res://.godot/imported/reflect.wav-2bde12a16f1919905196f0d1a6ed3314.sample'.
+   at: load (core/io/resource_format_binary.cpp:1156)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://.godot/imported/reflect.wav-2bde12a16f1919905196f0d1a6ed3314.sample.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://assets/audio/reflect.wav.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Cannot open file 'res://.godot/imported/sell.wav-380b45342505ed9a2216dcb66f2b686f.sample'.
+   at: load (core/io/resource_format_binary.cpp:1156)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://.godot/imported/sell.wav-380b45342505ed9a2216dcb66f2b686f.sample.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://assets/audio/sell.wav.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Cannot open file 'res://.godot/imported/shot_basic.wav-7b15c3b12d120b0a8d235f4d26aaa0be.sample'.
+   at: load (core/io/resource_format_binary.cpp:1156)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://.godot/imported/shot_basic.wav-7b15c3b12d120b0a8d235f4d26aaa0be.sample.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://assets/audio/shot_basic.wav.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Cannot open file 'res://.godot/imported/shot_burst.wav-ea7ac4ffe3d26a1037fd5319182e1b54.sample'.
+   at: load (core/io/resource_format_binary.cpp:1156)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://.godot/imported/shot_burst.wav-ea7ac4ffe3d26a1037fd5319182e1b54.sample.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://assets/audio/shot_burst.wav.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Cannot open file 'res://.godot/imported/shot_cannon.wav-c820f5817671216aef061999c519425e.sample'.
+   at: load (core/io/resource_format_binary.cpp:1156)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://.godot/imported/shot_cannon.wav-c820f5817671216aef061999c519425e.sample.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://assets/audio/shot_cannon.wav.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Cannot open file 'res://.godot/imported/shot_disruptor.wav-963afc744c575f0ff2bea977921f93d7.sample'.
+   at: load (core/io/resource_format_binary.cpp:1156)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://.godot/imported/shot_disruptor.wav-963afc744c575f0ff2bea977921f93d7.sample.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://assets/audio/shot_disruptor.wav.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Cannot open file 'res://.godot/imported/shot_fire.wav-5f03b619623c3ab0b659e0d80971deae.sample'.
+   at: load (core/io/resource_format_binary.cpp:1156)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://.godot/imported/shot_fire.wav-5f03b619623c3ab0b659e0d80971deae.sample.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://assets/audio/shot_fire.wav.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Cannot open file 'res://.godot/imported/shot_frost.wav-beeaa02dc8257d0e0c1ff9168e06a2ba.sample'.
+   at: load (core/io/resource_format_binary.cpp:1156)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://.godot/imported/shot_frost.wav-beeaa02dc8257d0e0c1ff9168e06a2ba.sample.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://assets/audio/shot_frost.wav.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Cannot open file 'res://.godot/imported/shot_mortar.wav-cab9231ef196f269474603458e00ea76.sample'.
+   at: load (core/io/resource_format_binary.cpp:1156)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://.godot/imported/shot_mortar.wav-cab9231ef196f269474603458e00ea76.sample.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://assets/audio/shot_mortar.wav.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Cannot open file 'res://.godot/imported/shot_multi.wav-d7501b046bea7c910d1e129cce4b5269.sample'.
+   at: load (core/io/resource_format_binary.cpp:1156)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://.godot/imported/shot_multi.wav-d7501b046bea7c910d1e129cce4b5269.sample.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://assets/audio/shot_multi.wav.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Cannot open file 'res://.godot/imported/shot_sniper.wav-6ec4b9210f3d630feee3e9429e288a91.sample'.
+   at: load (core/io/resource_format_binary.cpp:1156)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://.godot/imported/shot_sniper.wav-6ec4b9210f3d630feee3e9429e288a91.sample.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://assets/audio/shot_sniper.wav.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Cannot open file 'res://.godot/imported/shot_tesla.wav-2477fdd39b979ec6864c4bacf7910a1b.sample'.
+   at: load (core/io/resource_format_binary.cpp:1156)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://.godot/imported/shot_tesla.wav-2477fdd39b979ec6864c4bacf7910a1b.sample.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://assets/audio/shot_tesla.wav.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Cannot open file 'res://.godot/imported/stun.wav-583f00938eb704738de6886cfc09fcf3.sample'.
+   at: load (core/io/resource_format_binary.cpp:1156)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://.godot/imported/stun.wav-583f00938eb704738de6886cfc09fcf3.sample.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://assets/audio/stun.wav.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Cannot open file 'res://.godot/imported/upgrade.wav-6853b7f856a19267cd7715d3e916de87.sample'.
+   at: load (core/io/resource_format_binary.cpp:1156)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://.godot/imported/upgrade.wav-6853b7f856a19267cd7715d3e916de87.sample.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://assets/audio/upgrade.wav.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Cannot open file 'res://.godot/imported/victory.wav-d893d32ad919f27e15cf04d35e288b78.sample'.
+   at: load (core/io/resource_format_binary.cpp:1156)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://.godot/imported/victory.wav-d893d32ad919f27e15cf04d35e288b78.sample.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://assets/audio/victory.wav.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Cannot open file 'res://.godot/imported/wave_start.wav-fbfd417b6507063bf247d9e9868fb055.sample'.
+   at: load (core/io/resource_format_binary.cpp:1156)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://.godot/imported/wave_start.wav-fbfd417b6507063bf247d9e9868fb055.sample.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+ERROR: Failed loading resource: res://assets/audio/wave_start.wav.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _load_streams (res://scripts/autoload/audio.gd:140)
+       [1] _ready (res://scripts/autoload/audio.gd:29)
+SCRIPT ERROR: Invalid call. Nonexistent function 'get_setting' in base 'Nil'.
+          at: apply_volumes (res://scripts/autoload/audio.gd:113)
+          GDScript backtrace (most recent call first):
+              [0] apply_volumes (res://scripts/autoload/audio.gd:113)
+              [1] _ready (res://scripts/autoload/audio.gd:38)

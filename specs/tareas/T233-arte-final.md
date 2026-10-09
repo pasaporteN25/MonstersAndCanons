@@ -1,5 +1,7 @@
 # T233 · 🎨 Central de energía, abastecimiento e imagen del final
 
+> **Entrega provisional (2026-10-09):** el despacho autorizó producir para destrabar el código, conservando la aprobación artística de Lucas como pendiente. Recursos, fuentes, capturas y rutas de integración en [art/t233-final/README.md](../../art/t233-final/README.md); Resultado en `specs/03-tareas.md`. P5/P6 de M52 están aprobados, pero estos dibujos todavía no. No se cierra la compuerta 🎨 con esta entrega.
+
 - **Ejecutor:** **Codex**
 - **Depende de:** T227 (la ficha del 15 y el epílogo **con el OK de Lucas**) · **Compuerta:** 🎨 concepto aprobado · **Tamaño:** mediano
 
