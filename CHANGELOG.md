@@ -2,6 +2,13 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Versión 1.0: el juego pasa a llamarse «Monsters & Canons» *(T237, 2026-10-09)*
+
+- **Nuevo nombre en la ventana y en los archivos.** El juego se abre como **Monsters & Canons**, y los archivos son `MonstersCanons.exe` (Windows), `MonstersCanons.x86_64` (Linux) y `MonstersCanons.apk` (Android). La versión es la **1.0.0**.
+- **Tu progreso se conserva en PC.** Los guardados, récords, mapas y modos propios siguen en la misma carpeta de siempre, así que no se pierde nada.
+- **En el celular se instala como otra app.** El paquete cambió a `com.monsterscanons.v1`: la APK vieja queda aparte y se puede desinstalar a mano; el progreso del celular viejo **no pasa** a la app nueva. *(La APK nueva todavía no está generada: falta preparar el SDK de Android en la máquina de trabajo.)*
+- No cambia ninguna regla ni número del juego.
+
 ## Torres más livianas con muchas en pantalla *(T236, 2026-10-09)*
 
 - **El juego va más fluido en las oleadas finales.** Con 60 o más torres en el mapa del final, las torres quietas ya no se vuelven a dibujar en cada instante: solo se redibujan cuando giran de verdad, disparan o están aturdidas. En la prueba del nivel 15 (oleada 30, 64 torres) los cuadros por segundo pasaron de unos 30–45 a unos 95–100 en los primeros 30 segundos de la oleada. No cambia cómo se ven ni cómo apuntan ni ninguna regla ni número.

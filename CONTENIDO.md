@@ -210,7 +210,7 @@ El juego avisa todos estos (y un nivel con errores no se juega, pero el resto de
 
 ### Hacerlo con el editor, sin escribir el archivo a mano
 
-En el menú principal, en el **`JuegoA.exe` normal y en el de pruebas** (no en el celular), está el botón **"Editor de mapas"**. Es lo mismo que escribir el JSON, pero se dibuja con el mouse:
+En el menú principal, en el **`MonstersCanons.exe` normal y en el de pruebas** (no en el celular), está el botón **"Editor de mapas"**. Es lo mismo que escribir el JSON, pero se dibuja con el mouse:
 
 | Qué | Cómo |
 |---|---|

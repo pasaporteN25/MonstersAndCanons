@@ -95,10 +95,10 @@ Todo lo que hay que instalar y configurar (Git, Godot, tests, exportar a Windows
 Requiere las plantillas de exportación de Godot 4.7.2 (en el editor: *Editor → Administrar plantillas de exportación → Descargar e instalar*; se hace una sola vez).
 
 ```bash
-godot --headless --path . --export-release "Windows Desktop" build/JuegoA.exe
+godot --headless --path . --export-release "Windows Desktop" build/MonstersCanons.exe
 ```
 
-- El resultado es **un solo archivo** (`build/JuegoA.exe`, ~110 MB: casi todo es el motor de Godot). Se puede copiar a cualquier carpeta o computadora con Windows y jugar sin instalar nada.
+- El resultado es **un solo archivo** (`build/MonstersCanons.exe`, ~110 MB: casi todo es el motor de Godot). Se puede copiar a cualquier carpeta o computadora con Windows y jugar sin instalar nada.
 - La configuración está en `export_presets.cfg`: deja fuera `tests/`, `tools/`, `specs/` y GUT.
 - La carpeta `build/` no se sube a git.
 - El progreso se guarda en `%APPDATA%\Godot\app_userdata\JuegoA\save.json`.
@@ -106,18 +106,18 @@ godot --headless --path . --export-release "Windows Desktop" build/JuegoA.exe
 ### Versión para GNU/Linux
 
 ```bash
-godot --headless --path . --export-release "Linux" build/JuegoA.x86_64
-tar --mode=755 -czf build/JuegoA_linux.tar.gz -C build JuegoA.x86_64
+godot --headless --path . --export-release "Linux" build/MonstersCanons.x86_64
+tar --mode=755 -czf build/MonstersCanons_linux.tar.gz -C build MonstersCanons.x86_64
 ```
 
-- Es **un solo archivo** (`JuegoA.x86_64`, ~75 MB, para procesadores de 64 bits Intel/AMD) con los datos adentro, igual que el `.exe`. Usa las mismas plantillas de exportación de Godot 4.7.2 (las de Linux vienen con las de Windows).
-- Un archivo copiado desde Windows **pierde el permiso de ejecución**. Por eso también se arma el `.tar.gz`, que lo conserva: en Linux, `tar -xzf JuegoA_linux.tar.gz` y `./JuegoA.x86_64`. Si se copió el archivo suelto: `chmod +x JuegoA.x86_64`.
+- Es **un solo archivo** (`MonstersCanons.x86_64`, ~75 MB, para procesadores de 64 bits Intel/AMD) con los datos adentro, igual que el `.exe`. Usa las mismas plantillas de exportación de Godot 4.7.2 (las de Linux vienen con las de Windows).
+- Un archivo copiado desde Windows **pierde el permiso de ejecución**. Por eso también se arma el `.tar.gz`, que lo conserva: en Linux, `tar -xzf MonstersCanons_linux.tar.gz` y `./MonstersCanons.x86_64`. Si se copió el archivo suelto: `chmod +x MonstersCanons.x86_64`.
 - Necesita una computadora con escritorio (X11 o Wayland) y OpenGL. El progreso se guarda en `~/.local/share/godot/app_userdata/JuegoA/save.json`.
 - **Todavía no se probó en una computadora Linux real**: los tests sí corren en Linux en cada push (GitHub, D-030), pero el ejecutable no se abrió.
 
 ### El modo de pruebas (desde Opciones)
 
-Para probar todo sin ganar cada nivel (spec §10.2, D-028, D-077). Desde M48 **no hay un ejecutable aparte**: es el mismo `JuegoA.exe`, `JuegoA.x86_64` o `JuegoA.apk`.
+Para probar todo sin ganar cada nivel (spec §10.2, D-028, D-077). Desde M48 **no hay un ejecutable aparte**: es el mismo `MonstersCanons.exe`, `MonstersCanons.x86_64` o `MonstersCanons.apk`.
 
 - **Cómo se activa:** menú principal → **Opciones** → **Administración** → **Activar modo de pruebas** → **Sí, activar**. Para salir: Opciones → **Volver al juego normal**. Desde el menú de pausa no aparece, para no cambiar de guardado en medio de una partida.
 - **Siempre arranca normal:** si se cierra el juego en modo de pruebas, la próxima vez abre con el progreso real.
@@ -132,7 +132,7 @@ Para probar todo sin ganar cada nivel (spec §10.2, D-028, D-077). Desde M48 **n
 - **Editor de mapas:** el menú principal trae el botón "Editor de mapas" para todos en PC. En el celular solo aparece con el modo de pruebas activo, porque se maneja con mouse y teclado. Se dibuja el mapa con el mouse, se arman las oleadas, se prueba el nivel al instante y se guarda en `%APPDATA%\Godot\app_userdata\JuegoA\maps`. Ver [`CONTENIDO.md`](CONTENIDO.md).
 - **Para arrancar directo en modo de pruebas** (desarrollo):
   - Desde el editor de Godot: *Proyecto → Configuración del proyecto → Editor → Run → Main Run Args* = `-- --pruebas`.
-  - Desde un acceso directo: `JuegoA.exe -- --pruebas`.
+  - Desde un acceso directo: `MonstersCanons.exe -- --pruebas`.
 
 ## Licencia
 

@@ -53,7 +53,7 @@ El nodo del mapa se coloca en `position = (0, 48)`.
 ## 3. Estructura de carpetas
 
 ```
-JuegoA/
+JuegoA/   # (la carpeta del repositorio no se renombra; el juego es «Monsters & Canons», T237)
 ├── README.md
 ├── specs/                        ← estos documentos
 ├── project.godot

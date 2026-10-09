@@ -5,7 +5,7 @@ extends Node
 
 ## RF-385: argumento para arrancar ya en modo de pruebas. En el editor de Godot: Proyecto →
 ## Configuración → Editor → Run → Main Run Args: `-- --pruebas`. En un ejecutable: un acceso directo
-## a `JuegoA.exe -- --pruebas`.
+## a `MonstersCanons.exe -- --pruebas`.
 const EDITOR_ARG: String = "--pruebas"
 ## RF-181: guardado del modo de pruebas.
 const SAVE_PATH: String = "user://save_pruebas.json"

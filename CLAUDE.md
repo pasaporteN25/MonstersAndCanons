@@ -1,4 +1,4 @@
-# JuegoA (TDv1)
+# Monsters & Canons (TDv1)
 
 Tower defense 2D en **Godot 4.7** con **GDScript**, hecho con **spec primero**. Lucas escribe en español (rioplatense): **todo lo que se le dice y se escribe en los documentos va en español**, con explicaciones claras y detalladas. Nombres de código, archivos y escenas, en inglés.
 
@@ -11,7 +11,7 @@ godot --headless --import                                              # antes d
 godot --headless -s addons/gut/gut_cmdln.gd -gdir=res://tests -gexit   # todos los tests de GUT
 godot --headless -s addons/gut/gut_cmdln.gd -gtest=res://tests/test_x.gd -gexit   # uno solo
 godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- mix level=3  # el bot de balance (uso en el encabezado del archivo)
-godot --headless --path . --export-release "Windows Desktop" build/JuegoA.exe   # el único ejecutable de Windows (el modo de pruebas se activa en Opciones, D-077)
+godot --headless --path . --export-release "Windows Desktop" build/MonstersCanons.exe   # el único ejecutable de Windows (el modo de pruebas se activa en Opciones, D-077)
 ```
 
 - Un test que pasa pero imprime `SCRIPT ERROR` **es un fallo**: mirar la salida completa, no solo el resumen.

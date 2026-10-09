@@ -1,4 +1,4 @@
-# Onboarding — cómo preparar una computadora para trabajar en JuegoA
+# Onboarding — cómo preparar una computadora para trabajar en Monsters & Canons (TDv1)
 
 > **Para quién es:** para ti en una computadora nueva, o para cualquier persona que se sume al proyecto.
 > **Qué cubre:** todo lo que hay que instalar y configurar **fuera del código** (programas, rutas, ajustes del editor) para poder abrir, probar, balancear y exportar el juego. Cada paso dice **cómo comprobar que quedó bien**.
@@ -16,8 +16,8 @@
 | 3 | [Clonar el repositorio y abrir el proyecto](#3-clonar-y-abrir-el-proyecto) | Sí | F5 abre el menú principal |
 | 4 | [Comprobar los tests (GUT)](#4-tests-gut) | Sí | 145 tests en verde |
 | 5 | [Plantillas de exportación](#5-plantillas-de-exportación) | Para exportar | aparece `export_templates/4.7.2.stable` |
-| 6 | [Exportar para Windows](#6-exportar-para-windows-exe) | Para exportar | se crea `build/JuegoA.exe` |
-| 7 | [Preparar Android](#7-android-apk) | Solo para el celular | se crea `build/JuegoA.apk` |
+| 6 | [Exportar para Windows](#6-exportar-para-windows-exe) | Para exportar | se crea `build/MonstersCanons.exe` |
+| 7 | [Preparar Android](#7-android-apk) | Solo para el celular | se crea `build/MonstersCanons.apk` |
 
 Las versiones exactas con las que se hizo el proyecto están en [Versiones de referencia](#versiones-de-referencia).
 
@@ -79,7 +79,7 @@ Tiene que mostrar `4.7.2.stable.official…`.
 2. Abrir el **editor** de Godot → en el Gestor de proyectos, **Importar** → elegir `JuegoA/project.godot` → **Importar y editar**.
    La primera vez tarda unos segundos: Godot "importa" las imágenes y sonidos y crea la carpeta `.godot/`. Esa carpeta es un caché local y **no** se sube a git.
 
-**✅ Comprobar:** pulsar **F5**. Tiene que abrirse el **menú principal** (título "JuegoA" con el mapa de fondo).
+**✅ Comprobar:** pulsar **F5**. Tiene que abrirse el **menú principal** (logo «Monsters & Canons» con el mapa de fondo).
 
 > 💡 **F5 vs F6:** F5 abre el juego desde el menú, igual que lo ve un jugador. **F6** ejecuta solo la escena abierta en el editor; sirve para probar una partida directo (`scenes/game/game.tscn`), pero así **no se guarda el progreso** (spec RF-117).
 
@@ -117,16 +117,16 @@ En el editor: **Editor → Administrar plantillas de exportación** → **Descar
 La configuración ya está en el repositorio (`export_presets.cfg`, preset **"Windows Desktop"**). Deja fuera del juego los tests, las herramientas, las specs y GUT.
 
 ```bash
-godot --headless --path . --export-release "Windows Desktop" build/JuegoA.exe
+godot --headless --path . --export-release "Windows Desktop" build/MonstersCanons.exe
 ```
 
-**✅ Comprobar:** se crea `build/JuegoA.exe` (~110 MB, casi todo es el motor). Copiarlo a otra carpeta y abrirlo: tiene que funcionar sin Godot.
+**✅ Comprobar:** se crea `build/MonstersCanons.exe` (~110 MB, casi todo es el motor). Copiarlo a otra carpeta y abrirlo: tiene que funcionar sin Godot.
 
 > ℹ️ La carpeta `build/` no se sube a git.
 
 ### 6.1 El modo de pruebas (desde Opciones)
 
-Para probar todos los niveles y el contenido sin ganar cada nivel (spec §10.2). Desde M48 (D-077) **no hay un ejecutable aparte**: se activa en el mismo `JuegoA.exe` (o la APK), desde **Opciones → Administración → Activar modo de pruebas → Sí, activar**.
+Para probar todos los niveles y el contenido sin ganar cada nivel (spec §10.2). Desde M48 (D-077) **no hay un ejecutable aparte**: se activa en el mismo `MonstersCanons.exe` (o la APK), desde **Opciones → Administración → Activar modo de pruebas → Sí, activar**.
 
 **✅ Comprobar:**
 - Al confirmar, el menú se vuelve a armar y abajo al centro dice "MODO PRUEBAS · F1: panel". Todos los niveles se pueden elegir y en la partida `F1` abre el panel de pruebas. En el log aparece "Modo de pruebas activado".
@@ -134,7 +134,7 @@ Para probar todos los niveles y el contenido sin ganar cada nivel (spec §10.2).
 - Opciones ahora dice **"Volver al juego normal"**, y desde el menú de pausa la sección no aparece.
 - Si cerrás el juego en modo de pruebas, la próxima vez arranca normal.
 
-Para arrancar directo en modo de pruebas, por ejemplo con un acceso directo para desarrollo: `JuegoA.exe -- --pruebas`.
+Para arrancar directo en modo de pruebas, por ejemplo con un acceso directo para desarrollo: `MonstersCanons.exe -- --pruebas`.
 
 El botón **"Editor de mapas"** (spec §10.3) está **para todos en PC** (desde M14, D-038; en el celular solo con el modo de pruebas activo): se dibujan niveles con el mouse, se prueban al instante y se guardan en `%APPDATA%\Godot\app_userdata\JuegoA\maps`. Comprobá que abrirlo no cambia el progreso. Cómo se usa y cómo volver oficial un mapa: [`CONTENIDO.md`](CONTENIDO.md).
 
@@ -197,13 +197,13 @@ Los `.json` de `%APPDATA%\Godot\app_userdata\JuegoA\maps` (la misma carpeta dond
 ### 6.2 La versión para GNU/Linux
 
 ```bash
-godot --headless --path . --export-release "Linux" build/JuegoA.x86_64
-tar --mode=755 -czf build/JuegoA_linux.tar.gz -C build JuegoA.x86_64
+godot --headless --path . --export-release "Linux" build/MonstersCanons.x86_64
+tar --mode=755 -czf build/MonstersCanons_linux.tar.gz -C build MonstersCanons.x86_64
 ```
 
-**✅ Comprobar:** se crea `build/JuegoA.x86_64` (~75 MB). Para verificar que es de Linux: `file build/JuegoA.x86_64` dice "ELF 64-bit LSB executable, x86-64". Necesita las plantillas de Linux, que vienen con las de Windows (paso 6, arriba).
+**✅ Comprobar:** se crea `build/MonstersCanons.x86_64` (~75 MB). Para verificar que es de Linux: `file build/MonstersCanons.x86_64` dice "ELF 64-bit LSB executable, x86-64". Necesita las plantillas de Linux, que vienen con las de Windows (paso 6, arriba).
 
-**En una computadora Linux:** `tar -xzf JuegoA_linux.tar.gz` y `./JuegoA.x86_64`. Si se copió el archivo suelto desde Windows, hay que darle permiso: `chmod +x JuegoA.x86_64`.
+**En una computadora Linux:** `tar -xzf MonstersCanons_linux.tar.gz` y `./MonstersCanons.x86_64`. Si se copió el archivo suelto desde Windows, hay que darle permiso: `chmod +x MonstersCanons.x86_64`.
 
 > ⚠️ Desde Windows no se puede abrir, así que probarlo en una computadora Linux real sigue pendiente. Si falla al abrir, lo primero que hay que mirar es la terminal: el ejecutable imprime ahí sus errores.
 
@@ -253,10 +253,10 @@ Las dos líneas tienen que tener una ruta, no `""`.
 La configuración está en `export_presets.cfg`, preset **"Android"**: paquete `com.juegoa.towerdefense`, solo celulares de 64 bits (arm64), sin Gradle. El proyecto ya tiene activada la compresión de texturas **ETC2/ASTC** (la que usan los celulares) y un ícono propio (`assets/icon.png`, generado con `tools/make_icon.gd`).
 
 ```bash
-godot --headless --path . --export-debug "Android" build/JuegoA.apk
+godot --headless --path . --export-debug "Android" build/MonstersCanons.apk
 ```
 
-Se usa `--export-debug` porque la versión de **prueba** se firma sola con la clave de depuración. (Publicar en la Play Store requiere una clave propia y `--export-release`; eso no está hecho.)
+Se usa `--export-debug` porque la versión de **prueba** se firma sola con la clave de depuración. (Publicar en la Play Store requiere una clave propia y `--export-release`; eso no está hecho.) Mientras no esté el SDK de Android (T237), la APK `MonstersCanons.apk` no se genera en la máquina Linux.
 
 ### 7.4 Instalar en el celular
 
@@ -266,10 +266,10 @@ Se usa `--export-debug` porque la versión de **prueba** se firma sola con la cl
 3. Conectar el celular por USB y aceptar el aviso que aparece en él.
 4. Instalar:
    ```bash
-   "$LOCALAPPDATA/Android/Sdk/platform-tools/adb.exe" install -r build/JuegoA.apk
+   "$LOCALAPPDATA/Android/Sdk/platform-tools/adb.exe" install -r build/MonstersCanons.apk
    ```
 
-**Opción B — copiando el archivo:** pasar `JuegoA.apk` al celular (cable, Drive, WhatsApp…), abrirlo y aceptar **"Permitir instalar apps de origen desconocido"**. Android lo pide porque no viene de la Play Store.
+**Opción B — copiando el archivo:** pasar `MonstersCanons.apk` al celular (cable, Drive, WhatsApp…), abrirlo y aceptar **"Permitir instalar apps de origen desconocido"**. Android lo pide porque no viene de la Play Store.
 
 **Cómo se juega en el celular** (spec §9.4): tocar = clic; el botón **"atrás"** = `Esc` (abre el menú de pausa y **no** cierra el juego); el juego queda siempre en horizontal.
 

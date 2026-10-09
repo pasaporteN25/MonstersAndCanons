@@ -22,3 +22,6 @@ D-077, RF-383 a RF-387, `export_presets.cfg`, `project.godot` (nombre de la apli
 
 ## Hecho cuando
 Las tres builds están en `build/`, la de Linux probada y la APK verificada, y los documentos actualizados. Resultado, `CHANGELOG.md` ("Versión 1.0"), commit y PR.
+
+## Resultado
+Ver la entrada de T237 en `specs/03-tareas.md`: Windows y Linux exportados; la APK quedó pendiente por falta de JDK, SDK de Android y keystore de depuración en esta máquina.
