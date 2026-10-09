@@ -7,5 +7,12 @@
  <linearGradient id="cloth" x1="0" y1="0" x2=".25" y2="1"><stop stop-color="#b77563"/><stop offset=".52" stop-color="#8c5148"/><stop offset="1" stop-color="#4b3838"/></linearGradient>
  <linearGradient id="ruin" x1="0" y1="0" x2=".25" y2="1"><stop stop-color="#d2c6ad"/><stop offset=".52" stop-color="#9e9381"/><stop offset="1" stop-color="#61594e"/></linearGradient>
 </defs>
-<ellipse cx="32" cy="56" rx="25" ry="3.5" fill="#202330" opacity=".20"/><path d="m9 48 7-18 13-8 13 8 9 18-8 2-8-12-7 12-8-9-5 10Z" fill="url(#cloth)" stroke="#2b2233" stroke-width="2" stroke-linejoin="round" opacity=".9"/><path d="m15 34 12-9 11 8-8 9-8-2Z" fill="#81776e" stroke="#2b2233" stroke-width="1.5" stroke-linejoin="round"/><path d="M23 48 15 54m21-10 11 10" stroke="#79583d" stroke-width="2" stroke-linecap="round"/><path d="M27 50 32 45l5 5-5 3Z" fill="#55483c" stroke="#2b2233" stroke-width="1.5"/><path d="m28 48 4-2 3 2" fill="none" stroke="#95836d" stroke-width="1.2" stroke-linecap="round"/><path d="m12 52 3-7m34 7-3-7" stroke="#2b2233" stroke-width="2" stroke-linecap="round"/>
+<ellipse cx="32" cy="56" rx="25" ry="3.5" fill="#2b2233" opacity=".18"/>
+<path d="M11 46 19 28 30 34 45 39 53 48 41 50 29 42 18 50Z" fill="url(#cloth)" stroke="#2b2233" stroke-width="2" stroke-linejoin="round"/>
+<path d="M19 29 23 37 38 41" fill="none" stroke="#e2a28a" stroke-width="1.5" stroke-linecap="round"/>
+<path d="M18 50 22 35 29 42 26 49Z" fill="#493c38" stroke="#2b2233" stroke-width="1.5"/>
+<path d="M11 50 17 31M47 48 49 34" stroke="#2b2233" stroke-width="3" stroke-linecap="round"/>
+<ellipse cx="37" cy="53" rx="8" ry="4" fill="#4b4542" stroke="#2b2233" stroke-width="1.5"/>
+<path d="M29 52 33 49 39 49 44 52 41 55 34 56Z" fill="none" stroke="#aaa08b" stroke-width="3" stroke-linejoin="round"/>
+<path d="M34 52 39 54M34 54 40 51" stroke="#2b2233" stroke-width="2" stroke-linecap="round"/>
 </svg>

@@ -6,5 +6,5 @@
  <linearGradient id="stone" x1="0" y1="0" x2=".25" y2="1"><stop stop-color="#d4ccb8"/><stop offset=".52" stop-color="#9e9584"/><stop offset="1" stop-color="#625d53"/></linearGradient>
  <linearGradient id="amber" x1="0" y1="0" x2=".25" y2="1"><stop stop-color="#ffe3a0"/><stop offset=".52" stop-color="#d59a39"/><stop offset="1" stop-color="#805228"/></linearGradient>
 </defs>
-<ellipse cx="32" cy="53" rx="26" ry="5" fill="#202330" opacity=".20"/><path d="M7 47Q19 42 32 47T57 46L55 53Q32 58 9 53Z" fill="#777365" stroke="#2b2233" stroke-width="1.5"/><path d="M10 47Q21 44 31 48T54 46" fill="none" stroke="#aaa38f" stroke-width="2"/><path d="m14 50 5-3 4 3-2 2h-6Zm26 1 4-4 5 3-2 2Z" fill="#a69d89" stroke="#514b43" stroke-width="1"/>
+<ellipse cx="32" cy="53" rx="26" ry="5" fill="#2b2233" opacity=".12"/><path d="M7 47Q19 42 32 47T57 46L55 53Q32 58 9 53Z" fill="#777365" stroke="none" opacity=".65"/><path d="M10 47Q21 44 31 48T54 46" fill="none" stroke="#aaa38f" stroke-width="2"/><path d="m14 50 5-3 4 3-2 2h-6Zm26 1 4-4 5 3-2 2Z" fill="#a69d89" stroke="#514b43" stroke-width="1"/>
 </svg>

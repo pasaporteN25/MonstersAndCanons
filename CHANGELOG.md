@@ -10,6 +10,10 @@ Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle t�
 - **Los botones de torre se achican** (de 76 a 57 px) cuando hay más de 9, para que entren todas sin tapar «Próxima oleada»; el costo y el ícono del recurso se siguen leyendo.
 - **Arreglo escondido:** con 10 torres, cada tecla o clic hacía que el juego anotara un error de «acción inexistente» (`build_10`) en el registro. Ya no.
 - **Una flecha «← Menú» arriba a la izquierda, en todos los niveles.** **Siempre pregunta** antes de salir y te dice qué perdés: las **piezas de colección recogidas en la partida (aunque ya estén confirmadas)** y la **demolición en curso**; lo que ya ganaste (niveles, estrellas, récords y piezas guardadas) se conserva. Mientras decidís, la partida queda en pausa, y «Seguir jugando» la deja como estaba (corriendo a la misma velocidad, o en pausa si ya lo estaba). Al probar un mapa desde el editor, la flecha dice **«← Editor»** y vuelve sin preguntar. El menú de pausa (`Esc`) no cambió.
+## Retoques de arte provisional *(T249, 2026-10-09)*
+
+- Las señales de piedra muestran el símbolo A con más contraste y el poste tiene cintas gastadas más claras. La **Disruptora** gana anillos más anchos y un disco emisor más legible en el mapa y la barra.
+- Se retocaron también los SVG de removibles, minas, bosque e íconos; su integración visual completa sigue pendiente. Comparación antes/después y límites en `art/t249-mejoras/`. Todo sigue siendo **provisional**, sujeto a la aprobación de Lucas.
 
 ## Arreglo del botón «Infraestructura» *(T246, 2026-10-08)*
 

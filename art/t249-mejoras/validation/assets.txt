@@ -1,0 +1,2 @@
+Validación estructural: 29 assets modificados; 25 SVG y 4 PNG; formatos, alfa y cuadros consistentes.
+Restaurados por importación accidental: []
