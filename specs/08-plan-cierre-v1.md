@@ -69,7 +69,7 @@ Se arma sobre la V1. **No anticipa el 3D:**
    - Qué es **canon** y qué es **semilla** para entregas futuras (elegir bando, rebeldes).
    - La reusan M&C 3D y M&C 2 tal cual.
 2. **Glosario canónico** (T202): un nombre por especie, torre, lugar y facción, aplicado en datos, Wiki y documentos.
-3. **Lore dentro del juego** (T227 y T228): textos breves por nivel, una categoría Lore en la Wiki y el epílogo.
+3. **Lore dentro del juego** (T227 y T228): textos breves por nivel, una categoría Lore en la Wiki y el epílogo. La spec es M52 (`01-spec.md`) y los textos viven en [`11-textos-lore.md`](11-textos-lore.md).
 4. **Marca** (T237): "Monsters & Canons" en ventana, ejecutables y paquete, si Lucas lo aprueba.
 5. **Datos reutilizables:** los sistemas nuevos se definen por datos (leyenda, `modo.json` y `progression.json`), como ya pide P10, para llevarlos a otra entrega sin reescribirlos.
 

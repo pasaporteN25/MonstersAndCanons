@@ -702,3 +702,61 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
   - **Una tecla propia para la flecha:** se descarta a propósito: salir del juego no debe estar a un `Espacio` de distancia.
   - **Que la flecha abra el menú de pausa:** duplica `Esc` y no sirve para el caso de salir de una vez; el menú de pausa sigue donde estaba.
   - **Guardar la última pestaña usada:** un guardado más sin ganancia; arrancar siempre en «Cañones» es lo previsible.
+
+## D-089 · Se enmienda §11: entran los textos breves, el Lore de la Wiki, el epílogo y la intro; siguen fuera los diálogos, las cinemáticas animadas y las voces
+- **Fecha:** 2026-10-08 · **Estado:** Aprobada por Lucas (la enmienda, Q-01) · **Decidió:** Lucas (la enmienda y sus límites, respuesta **Q-01 ✔** del cuestionario `09-decisiones-pendientes-v1.md`, el 2026-10-08) / Claude (el texto de la enmienda y de su nota en §11)
+- **Cita de la respuesta de Lucas (Q-01):** *«Sí, de forma acotada. Se permiten textos breves por nivel (entrada de hasta 3 líneas y victoria de hasta 2), una categoría Lore en la Wiki, un epílogo en la victoria del 15 y una intro de láminas que se pueda omitir y volver a ver. Siguen excluidos: diálogos entre personajes, cinemáticas animadas y voces.»* (respondida con ✔: Lucas aceptó la recomendación tal cual).
+- **Qué:**
+  - En §11 («Qué NO incluye este juego»), la línea «Historia, diálogos o cinemáticas» pasa a **«Diálogos entre personajes, cinemáticas animadas y voces»**, con una nota que manda a **M52** (`01-spec.md`) y a `specs/11-textos-lore.md`.
+  - Lo que entra queda acotado por M52: un campo opcional `"textos"` por nivel (lugar, entrada de hasta 3 líneas, victoria de hasta 2, y un epílogo de 3 a 5 líneas solo en el último nivel), una categoría **Lore** en la Wiki y créditos. La **intro de láminas** también queda permitida, pero su spec es de T240 y todavía no existe.
+- **Por qué:**
+  - El 07 pide que la victoria muestre el logro y su costo, y que las explicaciones esenciales estén **dentro del juego**. Sin textos no hay dónde decirlo, y la constitución (P4) pide enmendar §11 **antes** de agregar algo que figura como excluido.
+  - Se mantiene excluido lo que cambiaría el tipo de juego: personajes que hablan, escenas animadas y voces piden guion, animación y actores, y no hacen falta para un cierre ambiguo y sobrio (biblia §8).
+- **Alternativas descartadas:**
+  - **No enmendar §11 y contar todo con las señales del terreno:** el 07 §12 pide explicaciones esenciales dentro del juego; las señales por sí solas no cuentan el logro y el costo de la victoria.
+  - **Sacar «Historia» de §11 por completo:** abría la puerta a diálogos y cinemáticas, que Lucas dejó fuera.
+  - **Enmendar §11 sin límites de largo:** los límites (3 líneas, 2 líneas, 3 a 5 de epílogo) son los que hacen que los textos sean «breves» y no una novela; sin límite, un texto de la comunidad podría tapar la pantalla.
+
+## D-090 · Los textos viven en el archivo de cada nivel y la Wiki Lore se abre por niveles ganados, sin campos nuevos en el guardado
+- **Fecha:** 2026-10-08 · **Estado:** Propuesta en la spec (RF-464 a RF-473, M52), **a la espera del OK de Lucas** · **Decidió:** Lucas (la forma general: texto de entrada/victoria por nivel, Lore en la Wiki que se desbloquea y epílogo en el 15; Q-01 y 07 §1, §2 y §12) / Claude (el detalle: formato, límites, cartel, desbloqueo y recomendaciones de las preguntas P1 a P8 de M52)
+- **Qué:**
+  - El campo opcional **`"textos"`** vive **en el JSON del nivel**, con `lugar`, `entrada`, `victoria` y `epilogo` (límites de RF-464). Es un dato como la leyenda: lo conserva el editor, lo valida `check_level` y un mapa de la comunidad lo puede traer.
+  - La entrada es un **cartel al empezar** que **pausa** la partida mientras se lee, se omite con un toque y no vuelve al reintentar. La victoria sale en la pantalla de victoria; el lugar, en la tarjeta de selección (solo si el nivel está desbloqueado).
+  - La Wiki suma **«Lore»**: artículos en `data/wiki/lore/*.json` con una clave `"desbloqueo"` (el id del nivel que los abre). Se abren con `SaveManager.is_completed`: **no hay campos nuevos en el guardado**.
+  - El **epílogo** es un botón en la pantalla de victoria del último nivel, que abre una pantalla con la imagen, el texto y «Créditos» (`data/creditos.json`). «Campaña terminada» se **deduce** (los 15 niveles completados).
+  - Los textos mismos viven en **un solo documento**, `specs/11-textos-lore.md`, y las tareas los copian tal cual.
+- **Por qué:**
+  - **En el archivo del nivel, no en un archivo aparte:** un nivel nuevo (o un mapa de la comunidad) trae su historia con él, sin tocar código ni otra lista (constitución P2 y P10). Es lo que dice el pedido: «salvo que el mapa los traiga».
+  - **Pausar mientras se lee:** un cartel que no pausa obliga a leer con la cuenta atrás corriendo; un jugador de celular perdería segundos. No es el menú de pausa: no cambia ninguna regla.
+  - **Reintentar sin cartel:** el cartel es para entrar al nivel; repetirlo cinco veces cansa y empuja a saltearlo siempre.
+  - **Desbloquear por nivel ganado y no por un campo nuevo:** el guardado ya sabe qué niveles se ganaron. Así los guardados viejos abren los artículos retroactivamente, no hay migración y no hay nada que se pueda desincronizar.
+  - **Un solo documento de textos:** los textos se corrigen y se aprueban en un lugar; evita que la spec, la ficha de cada nivel y los JSON digan cosas distintas.
+- **Alternativas descartadas:**
+  - **Un archivo de textos aparte (`data/lore.json`) con todos los niveles:** el mapa de la comunidad no podría traer sus textos, y renombrar o sumar un nivel obligaría a tocar dos archivos.
+  - **Que el cartel no pause:** más simple, pero castiga la lectura (ver arriba).
+  - **Guardar «visto» por texto o por artículo:** un campo más en el guardado y una migración, sin ganancia: reaparecería lo que ya se vio solo si se borra el guardado, que es lo esperable.
+  - **Un estado «campaña terminada» en el guardado:** se deduce sin guardar nada y no puede quedar mal.
+  - **Un modo «ver historia» aparte, con todos los textos en fila:** es una pantalla nueva que nadie pidió. La Wiki Lore cumple ese papel para el que la quiera releer.
+  - **Mostrar los textos también en Asedio:** Asedio reusa los mapas con monstruos más fuertes; «asegurar este lugar» no es lo que pasa ahí (decide Lucas, P2).
+
+## D-091 · Bloque 3 (niveles 11 a 15): fichas por datos, rotación sin Ametralladora, central de cuatro dibujos y las dudas de G4 marcadas
+- **Fecha:** 2026-10-08 · **Estado:** Propuesta en la spec (RF-474 a RF-480, §7.13 a §7.17), **a la espera del OK de Lucas** · **Decidió:** Lucas (la rotación, Q-29; Chamán en el 11 y Espejo en el 12, Q-35; jefe supremo nuevo en el 15, Q-32 ✎; Disruptora desde el 11 con su balance a reevaluar ahí, T217; recursos desde el 7 y Mortero en el 9, Q-18 ✎ y Q-21 ✎) / Claude (el detalle de las fichas y los valores iniciales)
+- **Qué:**
+  - Los niveles **11 a 15** tienen el campo `"torres"` con las del juego **menos la Ametralladora** (Q-29); la Disruptora, el Mortero y el Mecánico entran en la lista y la colección de las dos que la tienen sigue mandando (RF-395).
+  - Cada nivel tiene su **ficha de 9 puntos** (07 §3) como subsección de §7 y su RF de campaña. Las fichas dicen **qué** debe tener cada mapa y los **números iniciales**; las coordenadas y las oleadas las arma cada tarea con el bot.
+  - **Debuts:** Chamán en el 11 y Espejo en el 12, **solos** en su primera oleada (07 §4); el 13 es **cómo vienen** (la escolta coordinada, solo con oleadas, RF-203); el 14 junta todo; el 15 deja un **hueco** para el jefe supremo de T243.
+  - **La central de energía** se arma con **cuatro dibujos de 64 × 64** al lado de la salida, sin sistema nuevo de objetos grandes.
+  - **Lo que depende de la partida de Lucas del 6 al 10 (T226, G4) está marcado «A REVISAR TRAS G4»:** (a) si la demolición convence, (b) si el Mortero del 9 se alcanza y (c) si la Disruptora rinde. Se confirman antes de arrancar cada nivel.
+- **Por qué:**
+  - **Fichas por datos y no un mapa dibujado:** las coordenadas de los niveles 6 a 10 se rehicieron varias veces con el bot (T223 a T225 y T245). Fijar casillas acá, sin que Lucas haya jugado el 6 al 10, sería fijar lo que probablemente cambie.
+  - **Sin Ametralladora desde el 11:** es la rotación que pidió Lucas (07 §4: «algunas torres baratas o repetidas pueden retirarse»); el riesgo es la apertura, y por eso la comprueba el bot con la regla de RF-475.
+  - **El hueco del jefe supremo:** Lucas pidió que su diseño sea de T243 y que **nadie lo invente** fuera de esa spec.
+  - **La central como cuatro dibujos:** un objeto grande de verdad (que ocupe 2 × 2 casillas con un solo dibujo) es un sistema nuevo de decoración; con cuatro cuartos se resuelve con lo que la leyenda ya hace.
+  - **Marcar G4 en vez de esperar:** Lucas pidió dejar la spec lista para su OK sin frenar por la partida; marcar cada punto dudoso permite aprobar lo firme hoy y corregir lo marcado después.
+- **Alternativas descartadas:**
+  - **Esperar a G4 para escribir las fichas:** frena el lore y los textos, que sí están firmes.
+  - **Fichas con las coordenadas y las oleadas completas:** se rehacen al medir; solo suman ruido a la revisión de Lucas.
+  - **Retirar más torres en el bloque 3 (por ejemplo la Ráfaga):** Q-29 retiró solo la Ametralladora; más cambios empeoran la apertura y el 07 no los pide.
+  - **La central como la salida del mapa:** exige un objeto de salida nuevo y tocar el recorrido; es un sistema nuevo.
+  - **Que el 15 repita el Soberano con escolta:** la respuesta Q-32 de Lucas cambió esto (jefe supremo nuevo).
+  - **Agregar el Lanzamisiles al 13:** Q-28 lo dejó para una actualización posterior.

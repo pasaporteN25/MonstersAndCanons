@@ -868,6 +868,81 @@ Con `tools/ejemplos/mapa_disruptora.json` y **3 semillas** (`seed=`), el bot `mi
 - **El Espejo se excluye por `reflect_range_tiles`** (D-087): un enemigo nuevo con rebote queda fuera del pulso sin avisar; es lo buscado, pero hay que recordarlo al crear enemigos.
 - **El desgaste** hace que la Disruptora deje de ser útil rápido (un solo impacto la lleva a 20 %): es lo que pide RF-367 para cualquier torre.
 
+### M52 / T227 · Lore en el juego y bloque 3 (RF-464 a RF-480, D-089 a D-091)
+
+**Estado: diseño; todavía no hay código.** Se programa en **T228** (textos, cartel, tarjeta, Wiki Lore) y **T234** (epílogo y créditos, junto con el nivel 15), después del OK de Lucas a la spec (M52, §7.13 a §7.17) y a los textos (`specs/11-textos-lore.md`). Los niveles 11 a 14 son **solo datos** (T229 a T232). Es todo interfaz y datos: **ninguna regla de combate ni número de balance cambia**.
+
+#### Qué hay hoy (leído en T227)
+
+- `scripts/logic/level_file.gd`: `LEVEL_KEYS` (línea 14) lista las claves permitidas del nivel; una clave que no está es un error (RF-204). `MAX_NAME_LENGTH = 30`. `LevelFile.parse` arma un `LevelData`.
+- `scenes/ui/level_select.gd`: `_make_card(index)` arma el texto de la tarjeta (`"Nivel %d\n%s\n%d oleadas\n%s\n\n"`) y `card.disabled = not GameFlow.is_level_unlocked(index)`; la tarjeta mide `CARD_SIZE = (200, 214)`.
+- `scripts/autoload/game_flow.gd`: `start_level(index)` cambia a la escena de la partida; «Siguiente nivel» es `GameFlow.next_level`; `has_next_level()` dice si hay otro. `Reintentar` es `restart()` en `scenes/game/game.gd` (línea ~365), que hace `reload_current_scene()`: **no pasa por `start_level`**.
+- `scenes/ui/end_screen.gd`: `show_victory(lives_left, stars, has_next, in_campaign, score)` arma «¡Victoria!», estrellas, `Detail` (vidas), puntos y récords; `_next_button` es «Siguiente nivel».
+- `scripts/logic/wiki.gd`: `categories()` recorre `_providers()` (cuatro hoy: enemigos, torres, colecciones y guía; el encabezado dice que sumar una categoría es una función y una línea). `articles(dir)` lee todos los `.json` de **una carpeta** (no baja a las subcarpetas) y `parse_article()` valida con `ARTICLE_KEYS`. `WikiEntry.locked` ya existe (bestiario) y `WikiCategory` ya cuenta `has_locked()` y `unlocked_count()`; `wiki_screen.gd` ya escribe «n/m» en la solapa.
+- `scripts/autoload/save_manager.gd`: `is_completed(level_id)`; **ya basta** para el desbloqueo, no hace falta ningún campo.
+- `data/campaign.json` (`"niveles"`) manda en el orden de la campaña; hoy son 10.
+
+#### Archivos
+
+**Lógica pura** (`scripts/logic/`, sin escena, con tests; P10):
+
+- **`level_texts.gd`** (`class_name LevelTexts`, nuevo): constantes de largo (`LUGAR_MAX = 32`, `ENTRADA_MAX_LINES = 3`, `ENTRADA_MAX_CHARS = 240`, `VICTORIA_MAX_LINES = 2`, `VICTORIA_MAX_CHARS = 160`, `EPILOGO_MIN_LINES = 3`, `EPILOGO_MAX_LINES = 5`, `EPILOGO_MAX_CHARS = 400`, `LINE_MAX = 90`; son de interfaz y no de balance, así que viven en el código, como las de `BarLayout`) y `static func parse(raw: Variant, errors: PackedStringArray) -> Dictionary` que devuelve `{lugar, entrada, victoria, epilogo}` con **cadenas vacías** donde falta. Reusa el estilo de mensajes de `LevelFile` (`_check_keys`, que lista las claves válidas).
+- **`lore_unlock.gd`** (`class_name LoreUnlock`, nuevo): `static func is_open(unlock_level: StringName, is_completed: Callable) -> bool`; `static func locked_text(unlock_level: StringName, campaign_ids: Array) -> String` arma *«Se abre al ganar el nivel N.»* con el **número** del nivel en la campaña (nada de su nombre).
+- **`scripts/data/level_data.gd`**: nuevo campo `texts: Dictionary` (o cuatro `String`: `place_text`, `intro_text`, `win_text`, `epilogue_text`) y `func has_texts() -> bool`.
+- **`scripts/logic/level_file.gd`**: `"textos"` entra en `LEVEL_KEYS`; `parse` lo pasa por `LevelTexts.parse` y lo guarda en el `LevelData`. El **guardado del editor** (`level_file` ↔ `LevelData` para el editor) lo conserva tal cual, como la leyenda (RF-266); buscar dónde se serializa el nivel antes de tocar.
+- **`scripts/logic/wiki.gd`**: `ARTICLE_KEYS` no cambia para la Guía. Un parámetro nuevo de `parse_article`/`articles` (`lore: bool`) que, si es verdadero, **exige** y valida `"desbloqueo"` (y la Guía lo rechaza como clave desconocida). Un proveedor nuevo `{"id": &"lore", "title": "Lore", "build": _lore_entries}` **después** de la Guía; `_lore_entries` lee `res://data/wiki/lore/` y marca `locked` cada entrada cuyo nivel no está completo (`LoreUnlock`). Para el aviso de «cerrado», la entrada lleva el texto de `LoreUnlock.locked_text()` y **ningún bloque real**.
+- **`scripts/logic/credits.gd`** (`class_name Credits`, nuevo, opcional): lee `data/creditos.json` (`version` y `lineas`) con los mismos controles de forma que los otros JSON de datos.
+
+**Interfaz** (`scenes/ui/` y `scenes/game/`):
+
+- **`scenes/ui/level_select.gd`**: `_make_card` suma, si el nivel está desbloqueado y tiene `place_text`, una línea debajo del nombre. El tamaño de la tarjeta (`CARD_SIZE`) **no cambia**; si no entra, se corta con «…» y el `tooltip_text` lleva el texto completo.
+- **`scenes/ui/level_intro.gd`** + `level_intro.tscn` (`class_name LevelIntro`, `CanvasLayer`, nuevo): el cartel de RF-466, modelado sobre `PauseMenu` (mismo panel y atenuado). `open(title, place, lines)`, `signal closed`. Cierra con clic o toque, `Espacio`, `Enter`, `Esc` o el botón «Empezar». No sabe de la partida: solo muestra y avisa.
+- **`scenes/game/game.gd`**: en `_ready`, si `GameFlow.intro_pending` y el nivel tiene `intro_text` y no es modo de pruebas ni «Probar», abre `LevelIntro`, **pausa** (`set_paused(true)`, guardando el estado anterior como hace el diálogo de salida de M53) y al `closed` restaura. `GameFlow.intro_pending` es un `bool` de ejecución (no se guarda): lo pone en `true` **`start_level`** (y por lo tanto «Siguiente nivel») y lo consume `Game._ready`; `restart()` no pasa por `start_level`, así que el reintento **no** lo muestra. `start_community`, `start_mode_level` y `play_test` dejan `intro_pending` en `false` salvo que el archivo del mapa traiga `"entrada"` (RF-468; **modo oficial → nunca**).
+- **`scenes/ui/end_screen.gd`**: `show_victory` recibe además `win_text: String` y `has_epilogue: bool`; muestra el texto bajo las estrellas (en `Detail` o un `Label` nuevo antes de los puntos) y, si `has_epilogue`, **reemplaza** el texto de `_next_button` por «Epílogo» (señal nueva `epilogue_pressed`). `Game` decide `has_epilogue`: partida de campaña, último nivel de `campaign.json`, `epilogue_text != ""`.
+- **`scenes/ui/epilogue_screen.gd`** + `.tscn` (nuevo, T234): imagen de fondo (la de T233, o el cielo provisional dibujado con `_draw`), franja de texto y botones «Créditos» y «Niveles». **`scenes/ui/credits_screen.gd`** + `.tscn` (nuevo): texto centrado con `ScrollContainer`, botón «Volver».
+- **`scenes/ui/wiki_screen.gd`**: sin cambios previstos (ya dibuja entradas cerradas y el «n/m»); T228 comprueba que una entrada cerrada **sin dibujo** no rompe `WikiIcon`.
+- **Editor** (`scenes/editor/`): conserva `"textos"` (un campo más en lo que se carga y se guarda). **No** hay pantalla de edición.
+
+**Datos:**
+
+- `data/levels/level_01.json` a `level_10.json`: se les suma `"textos"` en T228. `level_11.json` a `level_15.json`: nacen con `"textos"` en T229 a T232 y T234.
+- `data/wiki/lore/*.json` (10 artículos, T228) y `data/creditos.json` (T234).
+- `data/campaign.json`: suma `level_11` a `level_15` **de a uno**, en cada tarea de nivel (así la campaña nunca apunta a un archivo que no existe).
+
+#### Orden de trabajo
+
+1. **T228 · lógica y datos primero:** `LevelTexts`, `LevelData`, `LevelFile`; sus tests. Correr todo.
+2. **T228 · selección y victoria:** `level_select` (tarjeta) y `end_screen` (`win_text`); tests con la escena y con un nivel de mentira.
+3. **T228 · cartel:** `LevelIntro` y el `intro_pending` de `GameFlow`; test de que `restart()` no lo abre, que pausa y restaura, y que no aparece en modo de pruebas, «Probar» ni Asedio.
+4. **T228 · Wiki Lore:** `Wiki` (proveedor, parámetro `lore`), `LoreUnlock`, los 10 artículos y sus tests con un guardado de prueba (`user://test_*.json`).
+5. **T228 · cargar los textos aprobados** en los niveles 1 a 10 y en `data/wiki/lore/`, **copiados de `11-textos-lore.md`**. Capturas de PC y de tamaño celular.
+6. **T229 a T232:** niveles 11 a 14 (solo datos), cada uno con sus textos y su RF de campaña.
+7. **T234:** nivel 15, `EpilogueScreen`, `CreditsScreen`, `data/creditos.json`, el botón «Epílogo».
+
+#### Pruebas que T228 y T234 tienen que escribir
+
+1. **`LevelTexts`:** sin campo → todo vacío y sin errores; cada clave válida sola; una clave desconocida lista las válidas; valor que no es texto; texto vacío; 4 líneas de entrada; 3 de victoria; una línea de 91 caracteres; 241 caracteres de entrada; control `\u0001`; el epílogo de 2 y de 6 líneas.
+2. **Niveles oficiales:** los 15 (según vayan existiendo) cumplen los límites y **sus textos son los de `11-textos-lore.md`** (un test lee el documento y compara; si eso resulta frágil, compara contra una copia en `tests/fixtures/`).
+3. **Tarjeta:** el lugar aparece en una tarjeta desbloqueada y no en una bloqueada; el tamaño no cambia; sin `"textos"` es idéntica a la de hoy.
+4. **Cartel:** aparece al entrar con `start_level`; no al `restart()`; pausa y restaura (cuenta atrás intacta y velocidad conservada); no aparece en el modo de pruebas, probando, ni desde Asedio; sí en un mapa de la comunidad que trae `"entrada"`.
+5. **Victoria:** el texto sale bajo las estrellas; en el último nivel de la campaña el botón dice «Epílogo» y no hay «Siguiente nivel»; desde un mapa de la comunidad no.
+6. **Wiki Lore:** guardado nuevo → 0/10 y todas cerradas; con el nivel 1 ganado → «El oasis» abierto; el texto de la cerrada dice el número y no el nombre; un artículo sin `"desbloqueo"` falla el test oficial; la Guía conserva sus artículos; modo de pruebas → todo abierto.
+7. **Epílogo y créditos (T234):** el flujo victoria → epílogo → créditos → volver; **el guardado no cambia** antes y después de verlo.
+8. **Los tests existentes** que cuentan categorías de la Wiki, botones de la victoria o claves de nivel se actualizan; el total no baja de la línea de base.
+
+#### Riesgos y cosas que no se saben
+
+- **La tarjeta:** no se midió si 32 caracteres entran en 200 px a la letra de la tarjeta. Si no entran, se baja el límite o la tarjeta usa dos líneas.
+- **El cartel en el celular:** no se probó el tamaño táctil de «Empezar» ni que el cartel no tape el botón de pausa. T228 hace la captura.
+- **`Esc` con el cartel abierto:** hoy `Esc` abre el menú de pausa; el cartel debe recibir `Esc` **antes** (igual que `BuildController` recibe `Esc` primero). Hay que confirmarlo con una prueba en la escena real.
+- **El guardado de `LevelData` en el editor:** no se miró en esta tarea cómo serializa los campos que no edita. Si el editor reconstruye el nivel campo por campo, `"textos"` se perdería; T228 lo prueba con un nivel real.
+- **La central de cuatro dibujos (T233/T234):** el formato de los cuartos (SVG o PNG de 64 × 64, con alfa y anclajes estables) y cómo se ve junto a la salida no se probó. Si T233 propone otro formato, decide Lucas en el concepto.
+- **Los niveles 11 a 14 dependen de G4** (§7.13): si la partida de Lucas del 6 al 10 cambia algo de demolición, del Mortero o de la Disruptora, las fichas se ajustan antes de T229.
+
+#### Lo que M52 no toca
+
+`ObstaclePanel` y la infraestructura, las reglas de combate, los números de `data/enemies`, `data/towers` y `data/obstaculos.json`, el guardado (`save.json` y `progression.json`), el menú de pausa, el menú principal y `ModePacks`. El pedido es de textos, de una categoría de la Wiki, de un epílogo y de la guía de los últimos niveles.
+
 ### M53 / T247 · Barra con pestañas y flecha al menú (RF-454 a RF-463, D-088)
 
 **Estado: diseño; todavía no hay código.** Se programa en **T248**, después del OK de Lucas a la spec (M53) y a sus preguntas P1 a P8. Depende de que el código de **T207, T208 y T210** (`InfrastructureController`, `ObstaclePanel`, `InfrastructurePanel`) esté en la rama base, como ya está en `feature/integracion-v1`. Es interfaz pura: **ninguna regla ni dato de balance cambia**.

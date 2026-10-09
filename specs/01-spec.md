@@ -831,13 +831,120 @@ Es el último nivel del bloque 2 («Fuera del oasis») y el **prototipo completo
 6. **Dónde se construye.** Un mapa de **24 × 11** (RF-250), un camino en serpentina de tres rectas largas y un **cañadón de 43 casillas libres** (todo lo demás es `X`): la fila central de cada una de las dos bandas entre rectas (que cubre a la vez dos rectas del camino), **cuatro bloques libres de 2×2 para el Mortero** —(5,2), (13,3), (9,6) y (17,7), esquina de arriba a la izquierda, (columna, fila)— y **una casilla junto a cada una de las cuatro esquinas** donde termina una recta larga, para que el Embestidor tenga a quién embestir (con otra casilla libre cerca para el apoyo, como en RF-379). Es un mapa **de espacio limitado a propósito**: el bot llena las 43 casillas en la oleada 13 y el oro sobra (más de 4000 al final), así que lo que se compra con recursos o se abre demoliendo es **capacidad**, no solo ahorro.
 7. **Recursos y hallazgos.** Una **mina** en (10,2) (`clase: mina`, valores de Q-19, sin sobrescribir). **Seis removibles** que entregan **1 recurso con 50 %** y semilla (RF-417): tres rocas (9,3), (17,3) y (16,7) y tres escombros comunes (11,3), (7,7) y (20,7), todos sobre casillas del cañadón. Un **escombro con la pieza 3/3 de la Disruptora** (`hallazgo: disruptor`) en (13,7): con las piezas del 8 y del 9, **completa la colección** (`progression.json` ya lo traía como fuente, T211) y la Disruptora queda lista para construirse desde el nivel 11. Ningún removible toca el camino ni una casilla de impacto del Embestidor (RF-400).
 8. **Estrategia sin recursos.** Se gana **sin demoler, sin extraer y sin usar recursos** (RF-432): el bot `sin_recursos` gana **5 de 5** con **7 a 13 vidas**. La mina, los removibles y la pieza ayudan, pero nada es obligatorio (RF-433).
-9. **Textos y transición.** El juego todavía no muestra textos de entrada, de victoria ni de transición por nivel: eso es de la spec del lore (M52, T227). Para el 10 queda el hilo del canon (10 §«Bloque 2»): la colonia **retoma una mina ajena** y, con la pieza 3/3, tiene todo para la Disruptora; el 11 («Puesto seco», desierto) sigue por el camino seco.
+9. **Textos y transición.** El juego todavía no muestra textos de entrada, de victoria ni de transición por nivel: eso es de la spec del lore (M52, RF-464 a RF-473); los textos del 10 están en `specs/11-textos-lore.md`. Para el 10 queda el hilo del canon (10 §«Bloque 2»): la colonia **retoma una mina ajena** y, con la pieza 3/3, tiene todo para la Disruptora; el 11 («Puesto seco», desierto) sigue por el camino seco.
 
 - **RF-453** **Nivel 10 en la campaña:** **dada** la campaña, **cuando** se gana el nivel 9, **entonces** se abre `level_10` («La mina vieja», 24×11, tema `desierto`, 20 oleadas, 360 de oro, 20 vidas), que es **el último** de la campaña (después del 10 no hay «siguiente nivel»). **Dado** ese nivel, **entonces** tiene una mina (RF-422), siete removibles (seis con 1 recurso al 50 % y uno con la pieza 3/3 de la Disruptora, RF-426), ofrece el Mortero y el Mecánico y no estrena enemigos. **Dada** la pieza recogida y confirmada en el 10 con las del 8 y el 9 ya guardadas, **cuando** se guarda la partida, **entonces** la colección `disruptor` queda **completa** (3 de 3). **Dado** el bot de balance con 5 semillas, **entonces** `sin_recursos` gana al menos 4 (RF-432) y las estrategias de extracción ganan con más vidas que `sin_recursos` (medido en T225).
 - **Lo que no incluye:** textos de la historia del nivel (T227), la demoledora, la rotación de torres (desde el 11) y el nivel 10 en el modo **Asedio**, que sigue con los mapas 1 a 9 *(consulta para Lucas: sumar el 10 pide medir su balance con monstruos al 115 %)*.
 
 > **Criterio de aceptación RF-453**
 > **Dado** un guardado que ganó el nivel 9 → **Entonces** el nivel 10 está abierto. **Dado** el nivel 10 → **Entonces** carga sin errores ni avisos, mide 24 × 11, sus recorridos tienen 68 y 55 casillas, tiene una mina con reserva 8, siete removibles y una sola pieza, ofrece el Mortero y todos sus enemigos ya aparecieron en los niveles 6 a 9. **Dada** una partida con 2 recursos → **Entonces** el Mortero no se puede construir; con la mina activa y dos oleadas completadas (4 recursos) → **Entonces** se construye y quedan 1 recurso. **Dado** el nivel 10 desde un modo o la comunidad → **Entonces** la pieza no se recoge (RF-429).
+
+### 7.13 Nivel 11 — Puesto seco *(M52, T229; abre el bloque 3)*
+
+**Cómo se leen las fichas del 11 al 15 (§7.13 a §7.17).** Son la **ficha de diseño** que 07 §3 pide para cada mapa, con sus nueve puntos. Dicen **qué** tiene que tener cada nivel y con qué números **iniciales**; **no traen las coordenadas** del mapa ni las oleadas casilla por casilla: eso lo arma cada tarea (T229 a T232 y T234) con el bot, igual que T225 hizo con el 10. Los textos son los de `specs/11-textos-lore.md`.
+
+**Lo que depende de G4.** La partida de Lucas del 6 al 10 (T226) no se cerró. Cada punto que depende de ella lleva la marca **«A REVISAR TRAS G4»** y la letra de la pregunta a la que responde:
+
+| Letra | Qué se espera saber | Qué se midió hasta ahora | Qué cambia en las fichas si la respuesta es «no» |
+|---|---|---|---|
+| **(a) Demolición** | Si demoler convence como decisión. | T245: con el bot, demoler **nunca da ventaja** (pierde 5 de 5 en el 6, 3 de 5 en el 9); propuesta pendiente: bajar costos o que el valor sea el drop. | La cantidad, el costo y la recompensa de los removibles de los niveles 11 a 14, y si alguno ofrece la demoledora. |
+| **(b) Mortero del 9** | Si el Mortero se alcanza con los recursos del 9. | T224 y T245: **ninguna estrategia lo compró** en el 9; lo máximo que se juntó fueron 2 de los 3 recursos. En el 10, los recursos de la mina fueron a Francotiradores (T225). | Cuántos bloques de 2×2 libres lleva cada mapa y cuánto pesa la extracción para poder pagarlo. |
+| **(c) Disruptora** | Si la Disruptora rinde. | T217: con el bot **empeora** (derrota en la oleada 7 donde sin ella gana con 20 vidas); Lucas decidió **reevaluar el balance en el 11** con Guardianes y Curanderos reales. | Cuántos emisores de aura trae cada nivel y cómo se mide la torre; si cambia su costo, supresión o cadencia (decide Lucas). |
+
+Lo que **no** depende de G4 y queda firme: el lugar, el bioma, las señales, los debuts (Chamán en el 11, Espejo en el 12), la rotación sin Ametralladora (RF-474), la regla de oro (RF-475) y los textos.
+
+1. **Nombre y lugar.** *Puesto seco*, **«El punto de agua»**: un punto de agua en el camino seco, justo pasada la mina del 10. Es el nivel 11 y se abre al ganar el 10. **Objetivo del mapa:** asegurar los dos pozos del camino.
+2. **Bioma y señales.** Tema **`desierto`** (como la parte final del 10). Señales: dos casillas de **`agua`** (los dos pozos, no construibles, dentro del perímetro), **dos o tres `hito`** en el camino seco (P-6; si el dibujo no llega, `roca_marcada`) y huesos y cactus de relleno. Las señales no cambian nada jugable. La revelación del bloque: el límite ahora está del lado de ellos.
+3. **Torres.** `"torres"` de RF-474 (sin Ametralladora; con Mortero, Disruptora y Mecánico según sus colecciones). **Nueva: la Disruptora** (RF-397). El Francotirador conserva sus dos precios (RF-419) y el Mortero cuesta 300 de oro + 3 recursos (RF-420). **Sin demoledora** (`"demoledora": false`, como el 8, el 9 y el 10).
+4. **Enemigos y oleadas.** Los de los niveles 6 a 10 **más el Chamán**, que debuta **solo** en una oleada de la **4 a la 6** (RF-475, punto 1); el Guardián y el Curandero entran juntos recién desde la **8**, para que la Disruptora tenga a quién apagarle el aura; el Chamán se junta con ellos desde la **12**. El **Soberano** aparece a mitad del nivel, como en el 10. **Valores iniciales:** **22 oleadas**, **420 de oro**, **20 vidas**, aumento de vida de **28 %** por oleada. Una sola entrada (**A**) con un camino largo (75 casillas o más), para que el Francotirador alcance al Chamán antes de que lance su hechizo (RF-282).
+5. **Qué enseña.** Dos cosas, en este orden: (1) **el sabotaje** (el Chamán aturde la torre más cercana, RF-282) y su contramedida natural, el alcance; (2) la **Disruptora contra las auras** del Guardián y el Curandero, que es la herramienta nueva del bloque. Ya no hay Ametralladora: la apertura es con el Hielo y una torre de 90 a 110.
+6. **Dónde se construye.** Un mapa de **24 × 11** (como el 10) con unas **50 casillas libres** y **al menos tres bloques de 2×2 libres** para el Mortero. **Removibles:** de 4 a 6 (rocas y escombros comunes, 1 recurso con 50 %, RF-417), ninguno sobre el camino ni sobre una casilla de impacto del Embestidor (RF-400). **A REVISAR TRAS G4 (a):** la cantidad, el costo y la recompensa de los removibles (si Lucas decide bajar costos o subir el drop, se reparte distinto) **y (b):** si hacen falta más bloques de 2×2 o menos casillas buenas para que el Mortero tenga sentido.
+7. **Recursos y hallazgos.** Una **mina** (`clase: mina`, valores de Q-19: 100 de oro, 2 por oleada, reserva 8) y los removibles de arriba. **Sin ruinas con pieza:** la colección de la Disruptora se completó en el 10; la ruina de este mapa, si hay, da lo de RF-428. **A REVISAR TRAS G4 (b):** en el 10 los recursos de la mina se convirtieron en Francotiradores, no en Mortero; si Lucas quiere que la mina sea el camino al Mortero, hay que decidir cómo (más espacio de 2×2, o que el Mortero rinda más: números de la torre, no de este mapa).
+8. **Estrategia sin recursos.** Se gana **sin demoler, sin extraer y sin la Disruptora** (RF-432 y RF-433): `sin_recursos` gana **4 de 5** como mínimo, y las oleadas 1 a 3 no pierden vidas (RF-475). La Disruptora, quien la tiene, rinde contra el Guardián y el Curandero; el Francotirador y el alcance, contra el Chamán. **A REVISAR TRAS G4 (c):** que la Disruptora rinda es justamente lo que mide T229 (RF-475, punto 8); si con el bot sigue empeorando, **no es motivo para frenar el nivel**: se informa a Lucas con la tabla y él decide.
+9. **Textos y transición.** Lugar, entrada y victoria: `11-textos-lore.md`, nivel 11 (la victoria es la frase de ejemplo de la biblia: «Informe del puesto seco: paso asegurado. Dos pozos quedaron dentro del perímetro.»). Artículo de Lore que se abre al ganarlo: **«Los pozos»**. Transición: al ganar se abre el 12, «El cañadón», el paso hacia el norte.
+
+- **RF-476** **Nivel 11 en la campaña:** **dada** la campaña, **cuando** se gana el nivel 10, **entonces** se abre `level_11` («Puesto seco», tema `desierto`, 24 × 11, una entrada, 22 oleadas, 420 de oro, 20 vidas), y **después del 11 hay «siguiente nivel»**. **Dado** ese nivel, **entonces** ofrece las torres de RF-474, **no** ofrece `basic`, tiene una mina y de 4 a 6 removibles sin hallazgos, trae el Chamán por primera vez en una oleada de la 4 a la 6 **sin** Guardián, Curandero ni Espejo, y ningún otro enemigo debuta. **Dado** el bot con 5 semillas, **entonces** `sin_recursos` gana al menos 4 y la tabla con y sin Disruptora queda en el Resultado (T229).
+
+> **Criterio de aceptación RF-476**
+> **Dado** un guardado que ganó el nivel 10 → **Entonces** el 11 está abierto, su tarjeta dice «El punto de agua» y marca la Disruptora como «Nueva». **Dado** el nivel 11 → **Entonces** carga sin errores ni avisos, mide 24 × 11, tiene dos casillas de agua, una mina con reserva 8, entre 4 y 6 removibles y ningún hallazgo; su `"torres"` no incluye `basic`; y todos sus enemigos salvo el Chamán ya aparecieron en los niveles 6 a 10. **Dado** la primera oleada con Chamán → **Entonces** no hay en ella emisor de aura ni Espejo. **Dado** `check_rule=1 levels=11` → **Entonces** «SE CUMPLE». **Dado** el nivel 11 ganado → **Entonces** la Wiki Lore abre «Los pozos».
+
+### 7.14 Nivel 12 — El cañadón *(M52, T230)*
+
+*Las mismas marcas «A REVISAR TRAS G4» de §7.13 (letras a, b y c) valen acá.*
+
+1. **Nombre y lugar.** *El cañadón*, **«El paso hacia el norte»**: el único paso hacia el norte, que cruza un cañadón de paredes altas. Se abre al ganar el 11. **Objetivo del mapa:** abrir el paso al norte.
+2. **Bioma y señales.** Tema **`desierto`**: arena y tierra rojiza, las paredes del cañadón hechas de rocas y columnas (casillas `X`). Señales: **`hito`** (dos o tres) en la boca del cañadón y huellas (`huesos`) a lo largo de las paredes. El Espejo aparece **junto a las comunidades** sin que quede claro si lo guían (10 §4.2): el mapa no lo explica.
+3. **Torres.** `"torres"` de RF-474. Sin demoledora. La Disruptora ya no es nueva.
+4. **Enemigos y oleadas.** Los del 11 **más el Espejo**, que debuta **solo** en una oleada de la **4 a la 6**; el Chamán, el Guardián y el Curandero ya son conocidos y se mezclan desde la oleada **8**; recién desde la **12** se combinan con el Espejo: **auras y aturdimiento juntos** (plan 08 §5). **Valores iniciales:** **24 oleadas**, **440 de oro**, **20 vidas**, aumento de vida de **26 %**. Una entrada (**A**), camino largo de zigzag entre paredes. Soberano a mitad del nivel.
+5. **Qué enseña.** Que **el Espejo devuelve los tiros de las torres cercanas** (hasta 2,5 casillas, RF-284) y las aturde, así que lo que rinde es **pegarle de lejos** (Francotirador, Mortero, Incendiaria) y no poner torres pegadas al camino. Y a **combinar la Disruptora con apoyo**: la Disruptora no afecta al Espejo (RF-444), pero sí apaga las auras que lo acompañan.
+6. **Dónde se construye.** Un mapa de **26 × 11**, de **espacio limitado a propósito** como el 10 (unas **40 a 45 casillas libres**, casi todas junto a las paredes) y **al menos tres bloques de 2×2** libres. Removibles: de 4 a 6 (rocas, escombros) y un **bosque explotable** en vez de la mina, para variar la fuente. **A REVISAR TRAS G4 (a) y (b):** la cantidad y el costo de los removibles, y los bloques de 2×2.
+7. **Recursos y hallazgos.** Un **bosque explotable** (Q-19: 100 de oro, 2 por oleada, reserva 8) y los removibles. Sin hallazgos. **A REVISAR TRAS G4 (b)**, igual que en el 11.
+8. **Estrategia sin recursos.** Igual que el 11: `sin_recursos` gana al menos 4 de 5, sin demoler ni extraer ni usar la Disruptora. La contramedida del Espejo está en las comunes (Francotirador, Incendiaria). **A REVISAR TRAS G4 (c).**
+9. **Textos y transición.** `11-textos-lore.md`, nivel 12. Artículo de Lore: ninguno nuevo (el siguiente es el del 14). Transición: al ganar se abre el 13, «Paso alto», ya en la nieve.
+
+- **RF-477** **Nivel 12 en la campaña:** **dada** la campaña, **cuando** se gana el nivel 11, **entonces** se abre `level_12` («El cañadón», tema `desierto`, 26 × 11, una entrada, 24 oleadas, 440 de oro, 20 vidas). **Dado** ese nivel, **entonces** no ofrece `basic`, tiene un bosque explotable y de 4 a 6 removibles, trae el Espejo por primera vez en una oleada de la 4 a la 6 **sin** Chamán, Guardián ni Curandero, y ningún otro enemigo debuta. **Dado** el bot con 5 semillas, **entonces** `sin_recursos` gana al menos 4 y su tabla no es más fácil que la del 11 (RF-475).
+
+> **Criterio de aceptación RF-477**
+> **Dado** un guardado que ganó el 11 → **Entonces** el 12 está abierto. **Dado** el nivel 12 → **Entonces** carga sin errores ni avisos, mide 26 × 11, tiene un bosque explotable con reserva 8 y entre 4 y 6 removibles, y ningún enemigo salvo el Espejo es nuevo. **Dado** la primera oleada con Espejo → **Entonces** no hay en ella Chamán ni emisor de aura. **Dado** `check_rule=1 levels=12` → **Entonces** «SE CUMPLE».
+
+### 7.15 Nivel 13 — Paso alto *(M52, T231)*
+
+*Las marcas «A REVISAR TRAS G4» de §7.13 (a, b y c) valen acá.*
+
+1. **Nombre y lugar.** *Paso alto*, **«El camino al resto de la región»**: el paso que comunica la colonia con el resto de la región. Se abre al ganar el 12. **Objetivo del mapa:** abrir el camino y dejar los hitos del lado de adentro.
+2. **Bioma y señales.** Tema **`nieve`**, con una laguna de **`hielo`** (no construible) en la leyenda. Señales: **tres o cuatro `hito`** a lo largo de los dos caminos (10 §6: «marca un límite, y el límite ahora está del lado de ellos»). Si el dibujo no llega, `roca_marcada`.
+3. **Torres.** `"torres"` de RF-474. **Sin Lanzamisiles** (Q-28: no entra en la V1). Sin demoledora.
+4. **Enemigos y oleadas.** Lo de los niveles 11 y 12; **ningún debut**. Lo nuevo es **cómo vienen**: grupos **coordinados**, la **escolta** (**Guardián + Curandero + Chamán**) que entra **junta**, con el mismo `desde` (RF-203), y por **las dos entradas a la vez**. La primera escolta, completa, entra por **una sola entrada** (oleada **8** a **10**); desde la **14** vienen por las dos. **Valores iniciales:** **24 oleadas**, **460 de oro**, **20 vidas**, aumento de vida de **25 %**. Dos entradas (**A** y **B**) que se unen a mitad del camino. Soberano a mitad del nivel.
+5. **Qué enseña.** Que ahora **se organizan**: ya no viene un Guardián suelto, sino un grupo que protege, cura y apaga torres a la vez. La respuesta es **repartir** las defensas entre las dos entradas y apagar las auras con la Disruptora justo donde el grupo se junta. No hay sistema nuevo: son oleadas.
+6. **Dónde se construye.** Un mapa de **26 × 12**, dos entradas, **unas 60 casillas libres** repartidas entre los dos tramos y **tres bloques de 2×2** como mínimo. Removibles: de 4 a 6. **A REVISAR TRAS G4 (a) y (b).**
+7. **Recursos y hallazgos.** Una **mina** y un **bosque explotable**, uno por entrada (2 por oleada cada uno, reserva 8: 16 recursos en total si se habilitan los dos). Sin hallazgos. **A REVISAR TRAS G4 (b).**
+8. **Estrategia sin recursos.** Igual que los anteriores (≥ 4 de 5). **A REVISAR TRAS G4 (c):** con dos escoltas a la vez, el aura es el problema que la Disruptora resuelve mejor; si no rinde, la dificultad de este nivel depende de lo que decida Lucas sobre la torre.
+9. **Textos y transición.** `11-textos-lore.md`, nivel 13 (dependen de que exista el `hito`, P-6). Sin artículo de Lore nuevo. Transición: al ganar se abre el 14, «Los poblados vacíos».
+
+- **RF-478** **Nivel 13 en la campaña:** **dada** la campaña, **cuando** se gana el nivel 12, **entonces** se abre `level_13` («Paso alto», tema `nieve`, 26 × 12, dos entradas, 24 oleadas, 460 de oro, 20 vidas). **Dado** ese nivel, **entonces** no ofrece `basic`, no estrena ningún enemigo, trae la escolta (Guardián, Curandero y Chamán con el mismo `desde`) en al menos 6 oleadas y, desde la 14, por las dos entradas a la vez. **Dado** el bot con 5 semillas, **entonces** `sin_recursos` gana al menos 4 y su tabla no es más fácil que la del 12.
+
+> **Criterio de aceptación RF-478**
+> **Dado** un guardado que ganó el 12 → **Entonces** el 13 está abierto. **Dado** el nivel 13 → **Entonces** carga sin errores ni avisos, mide 26 × 12, tiene dos entradas, una laguna de hielo no construible, y ningún enemigo es nuevo respecto del 12. **Dado** sus oleadas → **Entonces** hay al menos 6 con los tres miembros de la escolta con el mismo `desde`, y al menos 2 que los traen por las dos entradas. **Dado** `check_rule=1 levels=13` → **Entonces** «SE CUMPLE».
+
+### 7.16 Nivel 14 — Los poblados vacíos *(M52, T232)*
+
+*Las marcas «A REVISAR TRAS G4» de §7.13 (a, b y c) valen acá.*
+
+1. **Nombre y lugar.** *Los poblados vacíos*, **«Asentamientos de los Moradores»**: los poblados que las comunidades dejaron. Se abre al ganar el 13. **Objetivo del mapa:** ocupar los poblados.
+2. **Bioma y señales.** Tema **`ruinas`**. Es donde las señales **culminan** (10 §6): **`campamento_vacio`** (cuatro a seis, restos de fuego, cuerdas y pieles) y **`simbolo_ruina`** por todas partes (seis o más), más columnas. El jugador tiene que sentir que **se fueron hace poco**. Ningún texto lo explica más que los de `11-textos-lore.md`.
+3. **Torres.** `"torres"` de RF-474. Sin demoledora.
+4. **Enemigos y oleadas.** **Todas las amenazas**, sin debuts: Normal, Rápido, Tanque, Blindado, Volador, Troll, Araña, Ladrón, Embestidor, Guardián, Curandero, Chamán, Espejo y Soberano. Es el **nivel más difícil antes del 15**: la escolta de la 13 más el Espejo, en oleadas mezcladas con Voladores, y el Ladrón y el Embestidor. **Valores iniciales:** **26 oleadas**, **480 de oro**, **20 vidas**, aumento de vida de **24 %**. Dos entradas (**A** y **B**); los Voladores cruzan en línea recta (RF-05). Soberano a mitad del nivel.
+5. **Qué enseña.** Nada nuevo: **junta todo**. Es el examen antes del final. Lo que cuenta es lo que **se ve**: los poblados vacíos, mientras la defensa sigue siendo necesaria.
+6. **Dónde se construye.** Un mapa de **26 × 12**, unas **55 casillas libres** y tres bloques de 2×2 como mínimo. Removibles: de 4 a 6 (escombros, rocas), pensados como **las casas** del poblado. **A REVISAR TRAS G4 (a) y (b).**
+7. **Recursos y hallazgos.** Un **bosque explotable** y una **mina** (reserva 8 cada uno). Sin hallazgos. **A REVISAR TRAS G4 (b).**
+8. **Estrategia sin recursos.** Igual que los anteriores (≥ 4 de 5), y es donde mejor se ve si el Mortero y la Disruptora son «una estrategia más» o quedan como adorno. **A REVISAR TRAS G4 (b) y (c).**
+9. **Textos y transición.** `11-textos-lore.md`, nivel 14 (la victoria es la frase de ejemplo de la biblia). Artículo de Lore: **«Los poblados vacíos»**. Transición: al ganar se abre el 15, «La Central».
+
+- **RF-479** **Nivel 14 en la campaña:** **dada** la campaña, **cuando** se gana el nivel 13, **entonces** se abre `level_14` («Los poblados vacíos», tema `ruinas`, 26 × 12, 26 oleadas, 480 de oro, 20 vidas). **Dado** ese nivel, **entonces** no ofrece `basic`, no estrena enemigos, trae a la vez Guardián, Curandero, Chamán y Espejo en al menos 6 oleadas, tiene al menos cuatro `campamento_vacio` y seis `simbolo_ruina`, y **su tabla del bot no es más fácil que la del 13**. **Dado** el bot con 5 semillas, **entonces** `sin_recursos` gana al menos 4.
+
+> **Criterio de aceptación RF-479**
+> **Dado** un guardado que ganó el 13 → **Entonces** el 14 está abierto. **Dado** el nivel 14 → **Entonces** carga sin errores ni avisos, mide 26 × 12, y todos sus enemigos aparecieron antes. **Dado** su leyenda → **Entonces** tiene al menos cuatro `campamento_vacio` y seis `simbolo_ruina`. **Dado** `check_rule=1 levels=14` → **Entonces** «SE CUMPLE». **Dado** el 14 ganado → **Entonces** la Wiki Lore abre «Los poblados vacíos».
+
+### 7.17 Nivel 15 — La Central *(M52, T234; cierra la campaña)*
+
+*Las marcas «A REVISAR TRAS G4» de §7.13 (a, b y c) valen acá.*
+
+> **El hueco del jefe supremo (Q-32 ✎, T243).** Lucas decidió que el último nivel **no** tiene al Soberano sino un **jefe supremo nuevo, con la escolta coordinada** (Guardián + Curandero + Chamán). **Esta spec no lo diseña.** Su función, vida, velocidad, habilidad, contramedidas, recompensa, aspecto y texto propio los fija **T243** (📜 con compuerta de Lucas) y su arte, **T244**. Hasta que T243 esté aprobada, **T234 no puede cerrar las oleadas finales**. Lo único que esta ficha fija son las **restricciones de coherencia** (10 §4.4): (1) tiene que ser la amenaza más grande del juego y sentirse como un cierre, no como «un jefe más»; (2) respeta el tono (nada de villano caricaturesco); (3) lo natural es que pertenezca al lado de las comunidades por la escolta, pero eso lo decide T243. **El Soberano (`boss.tres`) no aparece en el 15.**
+
+1. **Nombre y lugar.** *La Central*, **«Energía y abastecimiento»**: defender la **central de energía** y la **cadena de abastecimiento** que la une con la mina. Es el valle donde aterrizó la nave. Se abre al ganar el 14. **Objetivo del mapa:** que la colonia quede asentada en una región, no en todo el planeta (07 §1).
+2. **Bioma y señales.** Tema **`pradera`** (el valle, como el oasis: el círculo se cierra). Señales: **`campamento_vacio`** (dos o tres, en el borde) y **`roca_marcada`** de nuevo, como en el 1. **La central de energía** es un objeto grande permanente **al lado de la salida** (no la salida misma: `S` sigue siendo la salida, no se agrega un sistema nuevo); se arma con **cuatro dibujos de 64 × 64** (un cuarto cada uno, `central_1` a `central_4`) sobre cuatro casillas `X` contiguas (P5 de M52). La **cadena de abastecimiento** son de 2 a 4 piezas de decoración permanentes (depósito, poste de línea, vagoneta, cinta) en casillas `X` a lo largo del borde. El dibujo lo entrega T233; hasta entonces, los cuatro cuartos son figuras simples hechas en código (arte provisional, Q-40).
+3. **Torres.** `"torres"` de RF-474 («todas las disponibles» de la tabla del plan 08 §5 se lee como las del bloque 3). Sin Lanzamisiles (Q-28). Sin demoledora.
+4. **Enemigos y oleadas.** Las de los niveles 11 a 14 (sin debuts de los enemigos de hoy) **y el jefe supremo nuevo con su escolta** en las últimas oleadas, en formación y por **varias entradas** a la vez (RF-203); **el diseño del jefe y la composición de esas oleadas son de T243**. **Valores iniciales:** **30 oleadas**, **520 de oro**, **20 vidas**, aumento de vida de **22 %**. Tres entradas (**A**, **B**, **C**). **Tiene que ser el nivel más difícil de la campaña**, sin estar por encima de lo que gana `mix` con apoyo y mejoras (comparar con el 14).
+5. **Qué enseña.** Nada nuevo: es el **cierre**. Junta lo aprendido en los 14 niveles.
+6. **Dónde se construye.** Un mapa de **26 × 12** (el máximo, RF-250), unas **65 casillas libres** y al menos cuatro bloques de 2×2. Removibles: de 4 a 6. **A REVISAR TRAS G4 (a) y (b).**
+7. **Recursos y hallazgos.** Una **mina** y **dos bosques explotables** (reserva 8 cada uno). Sin hallazgos. **A REVISAR TRAS G4 (b).**
+8. **Estrategia sin recursos.** Igual que los anteriores: `sin_recursos` gana al menos 4 de 5 (regla de oro), **también contra el jefe supremo** (la contramedida de T243 tiene que estar entre las torres comunes o en una estrategia sin recursos). **A REVISAR TRAS G4 (b) y (c).**
+9. **Textos, epílogo y transición.** Lugar, entrada y victoria: `11-textos-lore.md`, nivel 15; **epílogo** y **créditos**: `11-textos-lore.md` §2 y §3 (RF-471 y RF-472). Artículo de Lore: **«La Central»**. **Transición:** ganar el 15 **no** abre otro nivel (es el último); la pantalla de victoria muestra «Epílogo» en lugar de «Siguiente nivel».
+
+- **RF-480** **Nivel 15 en la campaña:** **dada** la campaña, **cuando** se gana el nivel 14, **entonces** se abre `level_15` («La Central», tema `pradera`, 26 × 12, tres entradas, 30 oleadas, 520 de oro, 20 vidas), que es **el último** de la campaña. **Dado** ese nivel, **entonces** no ofrece `basic`, **no trae al Soberano**, trae al jefe supremo de T243 con la escolta (Guardián, Curandero y Chamán) en las últimas oleadas, y tiene la central y al menos dos piezas de la cadena de abastecimiento como decoración permanente. **Dado** el bot con 5 semillas, **entonces** `sin_recursos` gana al menos 4 y su tabla es **la más difícil de la campaña**. **Dado** el 15 ganado desde la campaña, **entonces** aparece «Epílogo» (RF-471) y la campaña queda terminada sin ningún campo nuevo en el guardado.
+
+> **Criterio de aceptación RF-480**
+> **Dado** un guardado que ganó el 14 → **Entonces** el 15 está abierto. **Dado** el nivel 15 → **Entonces** carga sin errores ni avisos, mide 26 × 12, no tiene Soberano en sus oleadas, tiene las cuatro casillas de la central junto a la salida y al menos dos piezas de la cadena. **Dado** el nivel 15 ganado → **Entonces** la pantalla de victoria muestra «Epílogo» y no «Siguiente nivel», y la Wiki Lore abre «La Central». **Dado** `check_rule=1 levels=15` → **Entonces** «SE CUMPLE». **Dado** que T243 no está aprobada → **Entonces** T234 no se cierra.
 
 ---
 
@@ -1081,7 +1188,7 @@ Una enciclopedia dentro del juego: dice cómo es cada enemigo y cada torre, y ex
 
 - **RF-230** **Dónde está:** botón **"Wiki"** en el menú principal, entre "Récords" y "Opciones", en todas las versiones (también en el celular). `Esc` o "Volver" regresan al menú.
 - **RF-231** **La pantalla:** arriba, una solapa por **categoría**; a la izquierda, la lista de **entradas** de la categoría elegida (dibujo y nombre); a la derecha, el **detalle** de la entrada elegida. Se elige con el mouse, con el dedo o con el teclado (**▲/▼** entre entradas, **◄/►** entre categorías). Las listas y el detalle **se desplazan** si no entran: no importa cuántas entradas ni cuánto texto haya.
-- **RF-232** **Categorías iniciales:** **Enemigos**, **Torres** y **Guía** (artículos que explican las reglas). Si una categoría no tiene entradas no se muestra.
+- **RF-232** **Categorías iniciales:** **Enemigos**, **Torres** y **Guía** (artículos que explican las reglas). Si una categoría no tiene entradas no se muestra. *(M52, RF-469: se suma la categoría **Lore**, después de la Guía.)*
 - **RF-233** **Enemigos:** una entrada por cada archivo de `data/enemies/`, **sin lista aparte**: agregar un enemigo al juego lo agrega solo a la wiki. Muestra su dibujo, su descripción (la de RF-134) y sus datos: vida en la primera oleada, velocidad, armadura, oro que da, vidas que quita, si vuela, resistencia a la ralentización, regeneración y qué suelta al morir. Además dice **en qué niveles de la campaña aparece** y **qué enemigo lo suelta** (las Crías, la Araña). Van ordenados del más débil al más fuerte (por vida).
 - **RF-234** **Torres:** una entrada por cada archivo de `data/towers/`, también automática. Muestra su dibujo (base y torreta), la frase de RF-171, si golpea voladores y **una tabla con los 3 niveles** (costo de construir o mejorar, daño, cadencia, alcance) más los **efectos** de cada nivel (área, quemadura, ralentización, rayo que salta, púas, varios objetivos). Van ordenadas de la más barata a la más cara.
 - **RF-235** **Guía:** artículos escritos a mano en **archivos de texto** `data/wiki/*.json` (uno por artículo: título, orden y bloques), para que se puedan escribir o corregir sin programar. Iniciales: cómo se juega, torres (construir, mejorar, vender, apuntado), enemigos (voladores, peligrosos, jefe), armadura y daño, efectos (ralentización, quemadura), puntos y estrellas. Los artículos **no repiten números que ya viven en los datos** (constitución P2): explican la regla y mandan a la entrada correspondiente.
@@ -1108,7 +1215,7 @@ Se deja por escrito para no caer en la tentación (constitución P4). Si más ad
 - ~~Versión para móvil~~ → pasó al hito **MA** (§9.4, D-021), **solo** con adaptaciones mínimas. Sigue fuera: controles táctiles propios (arrastrar para construir, gestos, zoom) y una interfaz pensada para pantallas chicas.
 - Llamar oleadas antes de tiempo con bonus de oro.
 - Meta-progresión (mejoras permanentes entre partidas, tienda).
-- Historia, diálogos o cinemáticas.
+- ~~Historia, diálogos o cinemáticas.~~ → **Diálogos entre personajes, cinemáticas animadas y voces.** *(Enmienda del 2026-10-08, D-089, respuesta Q-01 de Lucas; ver M52 y `specs/11-textos-lore.md`.)* Sí entran, con los límites de M52: textos breves por nivel (lugar, entrada de hasta 3 líneas y victoria de hasta 2), una categoría Lore en la Wiki, un epílogo en la victoria del último nivel y una intro de láminas que se pueda omitir y volver a ver (la spec de la intro es de T240; todavía no existe). Siguen excluidos los diálogos entre personajes, las cinemáticas animadas y las voces.
 - Logros.
 - Construir laberintos (los enemigos nunca cambian de camino).
 
@@ -1398,6 +1505,9 @@ Los cuatro enemigos que gustaron, con lo necesario para convertirlos en spec cua
 - **El menú de pausa también confirma al abandonar** *(2026-10-08, T247)*: «Salir al menú» y «Reintentar» del menú de pausa (RF-114) descartan las piezas de colección recogidas en la partida (RF-359, RF-427) **sin avisar**. La flecha del RF-459 va a avisar con un diálogo (RF-460); la sugerencia es que esos dos botones usen **el mismo diálogo**. Es un cambio chico en `game.gd` y `pause_menu.gd`. **No está en M53:** no se implementa sin el OK de Lucas (pregunta P7 de M53).
 - **Que se note qué se puede tocar en las ruinas** *(2026-10-08, T246)*: Lucas reportó que en los niveles 8 y 9 "tocar las ruinas no muestra nada", pero con clics reales el panel de los escombros sí aparece (T246). Una explicación posible es que se toque el **símbolo A grabado** (`simbolo_ruina`, un decorado sin función) o las columnas, que parecen "las ruinas" y no responden. Opciones, de menor a mayor: (a) resaltar la casilla de un removible cuando el mouse pasa por encima (marco o cursor de mano); (b) que el decorado muestre una línea de texto de ambientación al tocarlo; (c) una nota en la tarjeta de presentación de los niveles 8 y 9 ("los escombros con un rombo naranja se pueden demoler"). No se implementó nada: falta que Lucas confirme qué tocaba y cuál opción prefiere.
 - **Que demoler valga la pena en los niveles 6 a 9** *(2026-10-08, T245)*: medido con el bot, demoler **nunca da ventaja**: pierde 5 de 5 en el 6, 3 de 5 en el 9 y gana con menos vidas en el 7 (13 contra 16), porque cada removible suma muy poca cobertura sobre la mejor casilla libre y el mapa tiene ~115 casillas libres. Mover los removibles a las mejores casillas empeoró el 6 (rompe la regla de oro). Opciones a decidir con Lucas en el G4: bajar el costo de árboles, rocas y escombros en las leyendas, o que el valor de demoler sea el drop (más recursos o más chance) y no la casilla. Además, el Mortero del 9 (300 de oro + 3 recursos) no lo compró ninguna estrategia: los recursos del 9 salen solo de 3 comunes al 50 % y la pieza, y lo máximo que se juntó fueron 2.
+- **Avisar al ganar que se abrió un artículo de Lore** *(2026-10-08, T227)*: la Wiki Lore (RF-469 y RF-470) se abre sola al ganar ciertos niveles, pero nada le avisa al jugador que hay algo nuevo, así que puede no enterarse nunca. La idea: una línea en la pantalla de victoria (*«Nuevo en la Wiki: Las ruinas»*) con un botón que abre ese artículo. Cambio chico en `end_screen.gd` y en la Wiki (`show_target`); **no incluido** en M52.
+- **Una casilla en Opciones para no ver los carteles de entrada** *(2026-10-08, T227)*: el cartel de RF-466 no vuelve al reintentar, pero sí cada vez que se entra a un nivel desde la selección. Para quien rejuega la campaña puede cansar. La idea: una casilla *«Mostrar los textos de los niveles»* (activada por defecto) en Opciones, guardada como las demás preferencias (`SaveManager.get_setting`). **No incluida** en M52.
+- **Acceso al epílogo y a los créditos desde el menú principal, una vez terminada la campaña** *(2026-10-08, T227)*: hoy (RF-471) el epílogo solo se vuelve a ver ganando el 15 de nuevo. La idea: un botón *«Epílogo»* en el menú principal que aparece cuando los 15 niveles figuran completados (se deduce del guardado, sin campo nuevo). Toca `main_menu.gd`. **No incluido** en M52.
 - **Parte útil del repositorio Claude Code Game Studios** (Lucas: "no hace falta `validate-commit`"; del resto, ver D-040):
   - **Informe de prueba** (su `playtest-report`): una plantilla corta para anotar lo que se siente al probar el juego (¿se entendió?, ¿dónde te trabaste?, ¿qué te aburrió?) y guardarla en `specs/pruebas/`. Hoy las impresiones de Lucas quedan en la charla.
   - **Auditoría de recursos** (su `asset-audit`): un test que revise que **todos** los dibujos y sonidos existen, miden lo que dice la guía y que ningún dato apunta a un archivo que falta.
@@ -2045,6 +2155,148 @@ Los puntos donde conviene que Lucas mire con más atención antes de programar (
 5. **La barra y la décima torre (RF-448).** Con la rotación del bloque 3, un nivel con muchas torres deja a la Disruptora, o al Mecánico, **sin tecla**. Conviene que cada mapa del bloque 3 ofrezca como mucho 9, o se agrega una tecla `0` (cambio chico, no incluido).
 6. **Con el Mecánico en nivel 3 la cobertura es del 100 % (RF-445).** Es un premio por combinar a propósito, pero puede ser demasiado fuerte: el bot (T217) lo mide.
 7. **La marca blanco azulada y el celeste del Hielo (RF-449).** Se separan por la forma y el lugar, no por el color: hay que verlo en pantalla (T216 y T217) antes de darlo por bueno.
+
+---
+
+### M52 · Lore en el juego (Lucas, 2026-10-08; T227)
+**Estado: especificada en T227 (borrador), a la espera del OK de Lucas a los textos (`specs/11-textos-lore.md`) y a las fichas de los niveles 11 a 15 (§7.13 a §7.17). Todavía no hay código.** Salen de `07-lore-y-cierre-v1.md` (§1, §2, §3 y §12), de la biblia `10-universo.md` (canon desde G2: el planeta **Cántaro**, la colonia **Compañía Meridiana**, las comunidades **Moradores**) y de las respuestas de Lucas al cuestionario 09 del 2026-10-08: **Q-01** (enmienda de §11), **Q-29** (rotación: se retira la Básica), **Q-30** (aviso de torres en la tarjeta), **Q-32 ✎** (nivel 15: jefe supremo nuevo con escolta), **Q-34**, **Q-35** (Chamán en el 11 y Espejo en el 12) y **Q-36**. Las razones y las alternativas descartadas están en D-089 a D-091, y el cómo técnico, en la sección M52 de `02-plan-tecnico.md`. Las tareas de código son T228 a T235.
+
+> **Lo que todavía no se sabe (G4).** La partida de Lucas del 6 al 10 (**T226**) no se cerró cuando se escribió esto. Hay tres cosas de esa partida de las que dependen las fichas del 11 al 14, y cada punto que depende de ellas lleva la marca **«A REVISAR TRAS G4»**: (a) **si la demolición convence** (T245 midió que con el bot nunca da ventaja); (b) **si el Mortero del 9 se alcanza** (ninguna estrategia del bot lo compró); (c) **si la Disruptora rinde** (con el bot empeoró; Lucas decidió reevaluarla en el 11). Cuando Lucas cierre G4, se recorren las marcas y se confirma o se corrige cada una **antes** de que arranque T229.
+
+**Idea general, en pocas palabras:** el juego puede **contar** un poco, sin diálogos ni cinemáticas, con tres piezas chicas y una guía para los últimos niveles. (1) Cada nivel puede traer **tres textos breves** (el *lugar*, una *entrada* de hasta 3 líneas y una *victoria* de hasta 2). (2) La Wiki suma una categoría **Lore** con artículos que se **abren al ganar** ciertos niveles. (3) El nivel 15 termina con un **epílogo** (imagen, 3 a 5 líneas y «Créditos»). Aparte, §7.13 a §7.17 dejan escritas las **fichas del 11 al 15** y la regla de la rotación de torres del bloque 3.
+
+**Por qué** *(07 §1, §2 y §12; Q-01)*: el 07 pide que la victoria muestre «el logro de la colonia y su costo», con una sensación ambigua que interpreta el jugador, y que las explicaciones esenciales existan **dentro del juego** (también cuando se agregue la intro). Hoy §11 excluía «Historia, diálogos o cinemáticas»: Lucas lo acotó (D-089) y esta sección es la que dice qué sí entra y con qué límites.
+
+**Cómo se lee:** cada punto trae su **RF**, su criterio de aceptación y, cuando hay algo que decide Lucas, una línea **«Recomendación (decide Lucas)»**. La lista corta de preguntas está al final.
+
+**Valores:** los límites de largo y los textos son los de `11-textos-lore.md`; los números de los niveles 11 a 15 son **iniciales** (los ajusta el bot y las partidas de Lucas, como en RF-453).
+
+#### 1. Textos por nivel
+
+- **RF-464** **El campo `"textos"` del nivel:** un nivel puede traer el campo opcional `"textos"`, un objeto con hasta cuatro claves, todas opcionales y todas de **texto plano** (sin imágenes ni formato, RF-223):
+
+  | Clave | Qué es | Límite |
+  |---|---|---|
+  | `"lugar"` | Dónde está la posición que se asegura. | 1 línea, **32 caracteres** |
+  | `"entrada"` | El cartel al empezar el nivel. | **3 líneas**, 240 caracteres en total |
+  | `"victoria"` | Lo que dice la pantalla de victoria. | **2 líneas**, 160 caracteres en total |
+  | `"epilogo"` | El epílogo (RF-471). Solo se muestra en el último nivel de la campaña. | **3 a 5 líneas**, 400 caracteres en total |
+
+  Las líneas se separan con `\n`. Ninguna línea pasa de **90 caracteres**. Ejemplo: `"textos": {"lugar": "El paso del agua", "entrada": "Primera línea.\nSegunda línea.", "victoria": "Paso asegurado."}`.
+  - **Validación (con mensajes claros, RF-204):** una clave que no es de la tabla es un **error** que lista las válidas; un valor que no es texto, o que está vacío (solo espacios), también (*«"entrada" está vacío: sacá la clave si no querés texto»*); pasarse de líneas, de caracteres o de largo de línea es un **error** que dice cuánto tiene y cuánto es el máximo. Un texto con caracteres de control (salvo `\n`) es un error.
+  - **Sin el campo, el nivel se lee y se juega exactamente igual que hoy** (como RF-403). La `version` del archivo sigue en 1. Una versión anterior del juego rechaza el campo por clave desconocida (RF-204).
+  - **Editor:** conserva `"textos"` al abrir y guardar un mapa (como RF-266 con la leyenda). Escribirlos es a mano en el archivo; no hay pantalla nueva.
+  - **Los textos oficiales** de los niveles 1 a 15 son los de `specs/11-textos-lore.md`, **copiados tal cual**. Un test comprueba que los niveles oficiales cumplen estos límites.
+
+> **Criterio de aceptación RF-464**
+> **Dado** un nivel sin `"textos"` → **Entonces** carga y se ve igual que antes. **Dado** `"textos": {"lugar": "El paso del agua"}` → **Entonces** carga sin errores ni avisos. **Dado** una entrada de 4 líneas → **Entonces** el nivel da un error que dice «tiene 4 líneas y el máximo es 3». **Dado** `"textos": {"entrada": "   "}` → **Entonces** da un error de texto vacío. **Dado** `"textos": {"intro": "x"}` → **Entonces** da un error que lista `lugar`, `entrada`, `victoria` y `epilogo`. **Dado** un nivel con `textos` abierto y guardado desde el editor → **Entonces** el campo queda igual.
+
+- **RF-465** **El lugar en la tarjeta de selección:** la tarjeta de un nivel desbloqueado muestra su `"lugar"` en **una línea debajo del nombre**, con letra chica y de color suave. Una tarjeta **bloqueada** no lo muestra (para no adelantar el nivel); sin `"lugar"`, la tarjeta es **idéntica** a la de hoy y el tamaño de la tarjeta (200 × 214, RF-116) no cambia. Si el texto no entra en el ancho, se corta con «…» y el cuadro de ayuda (*tooltip*) lo muestra completo.
+- **RF-466** **La entrada, un cartel al empezar:** al entrar a un nivel con `"entrada"` desde la selección de niveles o con «Siguiente nivel», se ve un **cartel** centrado sobre el mapa, con el nombre del nivel como título, el `"lugar"` como subtítulo (si hay) y las líneas de la entrada, y un botón **«Empezar»**.
+  - **Mientras está abierto, la partida espera:** la cuenta atrás y el reloj están detenidos y no se puede construir, así que **leer no cuesta tiempo**. No es el menú de pausa (no dice «PAUSA» ni se abre con `P`).
+  - **Se omite con un toque:** un clic o toque en cualquier parte, el botón «Empezar», `Espacio`, `Enter` o `Esc` lo cierran. Al cerrarlo, la partida sigue **exactamente** como estaba (la misma cuenta atrás, a la misma velocidad); no suma ninguna espera.
+  - **No se muestra** al «Reintentar» (ni al volver del menú de pausa), en el modo de pruebas (RF-181), probando desde el editor (RF-217) ni cuando el nivel no trae `"entrada"` (arranca como hoy).
+  - **Dónde entra:** en 1280 × 720 y en la pantalla de un celular. Las líneas se parten solas si no entran; el cartel nunca tapa el botón del menú de pausa del celular.
+- **RF-467** **La victoria, en la pantalla de victoria:** la pantalla de victoria (RF-90) muestra el `"victoria"` del nivel **debajo del título «¡Victoria!» y las estrellas**, antes de los puntos y los récords, con letra más chica y en cursiva si el tema la tiene. No hay texto en la derrota. Sin `"victoria"`, la pantalla es idéntica a la de hoy. En el último nivel de la campaña, ver RF-471.
+- **RF-468** **Dónde se muestran y dónde no** *(Lucas: «que no se muestren en los modos ni en la comunidad, salvo que el mapa los traiga»)*:
+  - **Campaña:** siempre, en los niveles que traen el campo.
+  - **Mapas de la comunidad y modos propios:** solo si **el archivo del mapa trae `"textos"`**. Los que no lo traen (casi todos) se comportan como hoy.
+  - **Modos oficiales (hoy, Asedio):** **no** los muestran, aunque el mapa sea un nivel de la campaña: Asedio reusa los mapas con monstruos más fuertes y «asegurar este lugar» no es lo que pasa ahí.
+  - **Editor («Probar») y modo de pruebas:** no muestran el cartel (RF-466) ni el texto de victoria.
+
+> **Criterio de aceptación RF-465 a RF-468**
+> **Dado** el nivel 8 desbloqueado → **Entonces** su tarjeta muestra «El bastión sobre ruinas» bajo el nombre y mide lo mismo; **dado** el nivel 12 sin desbloquear → **Entonces** su tarjeta no muestra el lugar. **Dado** el nivel 8 → **Cuando** se entra desde la selección → **Entonces** aparece el cartel con las 3 líneas, la cuenta atrás no avanza, y **cuando** se toca la pantalla → **Entonces** el cartel se cierra y la cuenta sigue desde donde estaba. **Dado** el nivel 8 → **Cuando** se pierde y se toca «Reintentar» → **Entonces** no hay cartel. **Dado** el nivel 8 ganado → **Entonces** la pantalla de victoria muestra las 2 líneas de victoria bajo las estrellas. **Dado** un mapa de la comunidad sin `"textos"` → **Entonces** no hay cartel ni texto. **Dado** el mismo mapa con `"textos"` → **Entonces** los muestra. **Dado** el nivel 8 jugado desde Asedio → **Entonces** no hay cartel ni texto de victoria.
+
+**Recomendación (decide Lucas):** que el cartel **pause** la partida mientras se lee y **no** vuelva a aparecer al reintentar (leerlo cinco veces cansa), y que los **modos oficiales no muestren** textos aunque el mapa los tenga. Preguntas P1 y P2.
+
+#### 2. La categoría Lore de la Wiki
+
+- **RF-469** **Una categoría nueva: «Lore».** La Wiki (RF-230 a RF-240) suma una categoría **«Lore»**, después de «Guía», con artículos escritos en archivos de texto `data/wiki/lore/*.json`. El formato es el de los artículos de la Guía (RF-235: `version`, `titulo`, `subtitulo`, `orden` y `bloques` de los tipos `titulo`, `texto`, `datos` y `tabla`) **más una clave nueva obligatoria**, `"desbloqueo"`: el id del nivel de la campaña que, al ganarse, abre el artículo (por ejemplo `"level_08"`).
+  - **La Guía no los ve:** vive en la subcarpeta `lore/`; la Guía sigue con los artículos de `data/wiki/` y nada más.
+  - **Validación (RF-236):** un artículo de Lore sin `"desbloqueo"`, con uno que no es un id, o que no figura en `campaign.json`, **no se muestra**, no impide ver el resto y **hace fallar el test** de los artículos oficiales. La clave `"desbloqueo"` en un artículo de la Guía es un error de clave desconocida.
+  - **Orden:** por `orden`; a igual orden, por título.
+  - **Los artículos iniciales** son los 10 de `specs/11-textos-lore.md` §4 (el oasis, Cántaro, la Compañía Meridiana, el Soberano, las criaturas que van solas, las ruinas, los Moradores, los pozos, los poblados vacíos y la Central), cada uno con su nivel de desbloqueo.
+  - Como todo artículo (RF-235), **no repite números que viven en los datos** (constitución P2).
+- **RF-470** **Desbloqueo y artículo cerrado** *(igual que el bestiario, RF-238 y RF-239)*:
+  - Un artículo está **abierto** si el nivel de su `"desbloqueo"` figura como completado en el guardado (`SaveManager.is_completed`). **No hay campos nuevos en el guardado:** quien ya ganó el nivel 9 tiene abiertos del 1 al 9 sin hacer nada.
+  - **Cerrado**, en la lista se ve como **«???»** (sin dibujo, el mismo criterio que RF-239); al abrirlo dice *«Se abre al ganar el nivel 8.»* (el número, **no** el nombre del nivel ni nada del contenido). La solapa dice cuántos lleva («Lore 3/10») mientras falte alguno. El orden de la lista no cambia al abrirse uno.
+  - **Modo de pruebas:** todo abierto (como RF-240).
+
+> **Criterio de aceptación RF-469 y RF-470**
+> **Dado** un guardado nuevo → **Entonces** la categoría «Lore» muestra «Lore 0/10» y todos sus artículos cerrados. **Dado** que se ganó el nivel 1 → **Entonces** «El oasis» está abierto y los demás, cerrados. **Dado** un artículo cerrado con `"desbloqueo": "level_08"` → **Entonces** al abrirlo dice «Se abre al ganar el nivel 8.» y no muestra su título ni su texto. **Dado** un guardado que ganó del 1 al 9 → **Entonces** hay 7 artículos abiertos (los de los niveles 1, 2, 3, 4, 6, 8 y 9). **Dado** un artículo de Lore sin `"desbloqueo"` → **Entonces** no se muestra y el test de artículos falla. **Dado** la Guía → **Entonces** sigue con los mismos artículos de siempre. **Dado** el modo de pruebas → **Entonces** todo está abierto.
+
+**Recomendación (decide Lucas):** artículos **cerrados pero visibles** con el número del nivel que los abre (como el bestiario y las colecciones), y no ocultos hasta que se ganan: el jugador ve que hay algo para descubrir. Pregunta P3.
+
+#### 3. Epílogo y créditos
+
+- **RF-471** **El epílogo del último nivel:** **dado** que se gana el **último nivel de la campaña** (hoy el 15, el último de `campaign.json`) jugando la campaña, **entonces** la pantalla de victoria trae un botón **«Epílogo»** en lugar de «Siguiente nivel» (que no existe) y conserva «Reintentar» y «Niveles». Los puntos, las iniciales y los récords funcionan **antes**, como hoy.
+  - **El epílogo** es una pantalla con la **imagen del final** a pantalla completa (16:9, recortada a lo que entre; la entrega T233), el texto `"epilogo"` del nivel (3 a 5 líneas) sobre una franja en la parte de abajo, y dos botones: **«Créditos»** y **«Niveles»**. `Esc` o un toque vuelven a la pantalla de victoria.
+  - **Mientras la imagen de T233 no esté**, un fondo provisional dibujado en código (un cielo cálido que pasa a un horizonte más frío, sin figuras) ocupa su lugar (arte provisional, Q-40).
+  - **Se puede volver a ver** ganando el 15 otra vez. En la V1 no hay otro acceso (ver «Lo que M52 no incluye»).
+  - **Sin estado nuevo en el guardado:** la campaña está «terminada» cuando los 15 niveles figuran completados; no se guarda un campo aparte.
+  - **Solo en la campaña:** los modos, la comunidad, el editor y el modo de pruebas no muestran el botón. Sin `"epilogo"` en el último nivel, el botón no aparece.
+- **RF-472** **Los créditos:** una pantalla de texto centrado, con desplazamiento si no entra, a la que se llega desde el epílogo, con un botón **«Volver»**. Su contenido es **un archivo de datos**, `data/creditos.json` (`{"version": 1, "lineas": ["…"]}`), con el texto propuesto en `11-textos-lore.md` §3. Sin música nueva ni animación. **Solo lleva lo que se puede comprobar** en el repositorio (el copyright y la licencia salen de `data/wiki/licencias.json`); lo demás lo agrega Lucas.
+
+> **Criterio de aceptación RF-471 y RF-472**
+> **Dado** el nivel 15 ganado desde la campaña → **Entonces** la pantalla de victoria muestra «Epílogo», no muestra «Siguiente nivel» y los récords funcionan igual. **Cuando** se toca «Epílogo» → **Entonces** se ve la imagen con las 4 líneas del epílogo y los botones «Créditos» y «Niveles». **Cuando** se toca «Créditos» → **Entonces** se ve el texto de los créditos y «Volver» regresa al epílogo. **Dado** el nivel 15 ganado desde un mapa de la comunidad, un modo o el editor → **Entonces** no hay botón «Epílogo». **Dado** un guardado antes y después de ver el epílogo → **Entonces** son idénticos.
+
+**Recomendación (decide Lucas):** el botón en la pantalla de victoria, sin acceso desde el menú principal y sin guardar nada, para no tocar el guardado ni el menú. Preguntas P4 y P7.
+
+#### 4. Compatibilidad
+
+- **RF-473** **Nada de lo existente cambia, salvo lo dicho:**
+  - **Guardados:** no hay campos nuevos (los textos no se «marcan como vistos»; la Wiki y el epílogo se deducen de los niveles completados). El formato de `save.json` y de `progression.json` queda igual.
+  - **Niveles, modos y comunidad:** ningún número de `data/` cambia. Los 10 niveles oficiales ganan su `"textos"` en T228; los mapas de la comunidad, los modos y el editor cargan igual (RF-468).
+  - **Constitución P10:** la validación y los límites de los textos, y la regla de qué artículo está abierto, van en funciones puras fuera de la escena (`LevelTexts`, `LoreUnlock`) y se prueban sin abrir ventanas.
+  - **Tests:** el total no baja de la línea de base (el último número de `03-tareas.md`). Los tests de la Wiki, de la selección de nivel y de la pantalla de victoria que cuentan categorías, tarjetas o botones se **actualizan**, no se borran.
+  - **Límite honesto:** las medidas del cartel y de la tarjeta **no se vieron en pantalla ni en un celular** cuando se escribió esto; T228 hace capturas de 1280 × 720 y de tamaño celular y deja escrito lo que no pudo probar.
+
+> **Criterio de aceptación RF-473**
+> **Dado** un guardado de la versión anterior → **Entonces** carga sin cambios, y **dado** que ganó los niveles 1 a 9 → **Entonces** la Wiki Lore tiene abiertos los artículos de esos niveles. **Dado** los mapas de la comunidad ya guardados → **Entonces** cargan y se juegan igual. **Dado** los tests de antes de T228 → **Entonces** pasan, salvo los que cuentan categorías o botones y se reescriben.
+
+#### 5. El bloque 3 (niveles 11 a 15)
+
+- **RF-474** **Rotación de torres del bloque 3 (Q-29):** los niveles **11 a 15** llevan el campo `"torres"` (RF-393) con las torres de la campaña **menos la Ametralladora** (`basic`): `["frost", "cannon", "sniper", "fire", "multi", "burst", "tesla", "mortar", "disruptor", "mechanical_standard"]`. La barra las muestra en el orden canónico (RF-393).
+  - **La colección sigue mandando (RF-395):** la Disruptora y el Mecánico aparecen **solo si** su colección está completa (3/3 y 5/5). Quien no la tiene juega con 8 torres, y **el nivel se tiene que poder ganar igual** (RF-433).
+  - **«Nueva» (Q-30, RF-397):** la tarjeta del 11 marca la **Disruptora** como nueva (es el primer nivel de la campaña que la ofrece).
+  - **La apertura sin Ametralladora tiene que ser viable:** el oro inicial de cada nivel alcanza para una apertura con el **Hielo (75)** y una de las torres de 90 a 110 (Incendiaria, Cañón, Múltiple o Ráfaga). **Lo comprueba el bot** (RF-475, punto 4).
+  - **La barra:** con 10 torres, la décima se elige con la tecla `0` y la pestaña «Cañones» las muestra a todas (RF-455 y RF-456, M53). Si M53 todavía no está en la rama, el 11 se juega igual: la décima se elige con el mouse o el dedo (RF-448).
+- **RF-475** **Reglas comunes de los niveles 11 a 15:**
+  1. **Primero se enseña la amenaza, después se combina (07 §4):** la primera oleada que trae un enemigo que **debuta** en el nivel (el Chamán en el 11 y el Espejo en el 12) lo trae **solo**, sin otro emisor de aura ni otro aturdidor en esa misma oleada, y con tiempo de preparación antes. Recién varias oleadas después se combina con lo demás.
+  2. **Regla de oro (RF-432):** todo nivel con recursos se gana con la estrategia `sin_recursos` del bot en **al menos 4 de 5 semillas**. La Disruptora y el Mortero son una estrategia más, nunca un requisito (RF-433).
+  3. **Escalera de dificultad:** la tabla del bot de un nivel no es más fácil que la del anterior (las vidas finales de `sin_recursos` iguales o menores); si lo es, el Resultado de la tarea lo explica. **El 15 es el más difícil de la campaña.**
+  4. **La apertura sin Ametralladora:** las oleadas **1 a 3** se pasan sin perder vidas en **al menos 4 de 5 semillas** con `sin_recursos`.
+  5. **Jefe:** el **Soberano** (`boss.tres`) sigue como jefe de los niveles 11 a 14, como en el 10; el 15 no lo trae (Q-32 ✎, ver §7.17).
+  6. **Solo datos:** los cinco niveles se arman con lo que ya existe (leyenda, `"torres"`, `"demoledora"`, removibles, extracción, grupos con `desde` y `entrada`, RF-203). Si un nivel pide un sistema nuevo, **se frena** y la idea va a §13 (no se implementa sin consultar).
+  7. **Textos:** de `11-textos-lore.md`, tal cual, en el campo `"textos"` (RF-464).
+  8. **Disruptora (decisión de Lucas, T217):** su balance se **reevalúa en el 11**. El Resultado de T229 trae la tabla del bot **con y sin** Disruptora, y **Lucas decide** si se toca algo (costo, supresión o cadencia, Q-33); la tarea no cambia esos números por su cuenta.
+  9. **Las marcas «A REVISAR TRAS G4»** de las fichas se confirman o se corrigen **antes** de empezar el nivel que las tiene.
+  10. **Asedio:** los niveles 11 a 15 no se suman a Asedio en sus tareas; lo hace T235.
+
+> **Criterio de aceptación RF-474 y RF-475**
+> **Dado** cualquier nivel del 11 al 15 → **Entonces** su `"torres"` no incluye `basic` e incluye el Mortero, la Disruptora y el Mecánico. **Dado** un guardado sin la colección de la Disruptora → **Entonces** el 11 ofrece 8 torres (o 9 con el Mecánico) y se gana igual. **Dado** el bot con 5 semillas en un nivel del bloque 3 → **Entonces** `sin_recursos` gana al menos 4, y pasa las oleadas 1 a 3 sin perder vidas en al menos 4. **Dado** el 11 → **Entonces** el Chamán aparece por primera vez en una oleada sin Guardián, Curandero ni Espejo.
+
+#### Lo que M52 no incluye
+
+- **Diálogos entre personajes, cinemáticas animadas y voces** (§11 sigue excluyéndolos).
+- **La intro de láminas.** Q-01 la permite, pero su spec es de T240 (guion), T241 y T242; no existe todavía.
+- **Los textos del modo Asedio, de la comunidad o del editor** más allá de lo que diga el archivo del mapa (RF-468), y una pantalla para **editar** textos en el editor.
+- **Un acceso al epílogo o a los créditos desde el menú principal**, y un campo «campaña terminada» en el guardado.
+- **El diseño del jefe supremo del 15** (función, vida, habilidad, contramedidas, aspecto y texto propio): es **T243**.
+- **Las lenguas y los nombres de los Moradores** (la biblia §9 los deja sin decir), el Lanzamisiles (Q-28), el volcán y el pantano.
+
+#### Preguntas para Lucas
+
+Corta, en orden de importancia. Cada una trae mi recomendación; **sin el OK de la P8, T228 y T229 a T235 no arrancan** (la compuerta es tuya).
+
+1. **P1 · El cartel de entrada.** Recomiendo que **pause** la partida mientras se lee, que se cierre con un toque, y que **no** aparezca al reintentar ni en el modo de pruebas (RF-466). ¿Sirve?
+2. **P2 · Los modos oficiales (Asedio).** Recomiendo que **no** muestren los textos aunque el mapa los tenga (RF-468). La otra opción es que los muestren porque el archivo del mapa los trae.
+3. **P3 · La Wiki Lore.** Recomiendo artículos **cerrados pero visibles** («???» + «Se abre al ganar el nivel N»), como el bestiario (RF-470). La otra opción es que no se vean hasta ganarse.
+4. **P4 · El epílogo.** Recomiendo el botón **«Epílogo»** en la pantalla de victoria del 15 y que solo se vuelva a ver ganando el 15 de nuevo (RF-471), sin acceso desde el menú ni campo nuevo en el guardado. ¿O querés un acceso desde el menú principal (Sugerencias de Claude, §13)?
+5. **P5 · La central como cuatro dibujos.** Para no agregar un sistema de objetos grandes, la central de energía (128 × 128) se arma con **cuatro dibujos de 64 × 64** (un cuarto cada uno) y queda **al lado de la salida**, no como la salida misma (§7.17). ¿De acuerdo?
+6. **P6 · El hito.** La biblia (P-6) aprobó una señal nueva, **`hito`**, para los niveles 11 a 13. Recomiendo pedírsela a Codex dentro de T233 (una pieza de 64 × 64, con tu OK al concepto). Si no la querés, esos niveles usan `roca_marcada` y la entrada y la victoria del 13 se reescriben.
+7. **P7 · Los créditos.** Los que propongo llevan solo lo comprobable (título, «Un juego de Lucas», el motor y la licencia). ¿Quién más va, y con qué palabras?
+8. **P8 · El OK.** ¿Aprobás los **textos** de `11-textos-lore.md` (lugares, entradas, victorias, epílogo, créditos y los 10 artículos) y las **fichas del 11 al 15** (§7.13 a §7.17), con la corrección que quieras? Algunos puntos de las fichas llevan **A REVISAR TRAS G4** y se confirman cuando cierres la partida del 6 al 10 (T226).
 
 ---
 
