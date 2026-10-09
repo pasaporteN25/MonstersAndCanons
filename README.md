@@ -203,6 +203,7 @@ Cada vez que se sube algo a `main` (o se abre un *pull request*), GitHub corre *
 | `godot --headless --path . -s addons/gut/gut_cmdln.gd -gdir=res://tests -gexit` | Correr todos los tests. |
 | `godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- smart level=1` | Bot que juega solo para revisar el balance (ver spec §7.1). |
 | `godot --path . -s tools/perf_test.gd` | Prueba de rendimiento con 200 enemigos y 60 torres. |
+| `godot --path . res://tools/perf_levels.tscn -- level=15 from=27` | Rendimiento en un nivel real (T236): defensa completa y las oleadas finales a velocidad 1, con FPS por oleada. Abre una ventana. |
 | `godot --headless --path . -s tools/make_sounds.gd` | Volver a generar los sonidos (`-- shot_fire` = solo ese). |
 | `godot --headless --path . -s tools/check_level.gd -- data/levels/level_06.json` | Revisar un nivel sin jugarlo: sus errores, o el mapa con el recorrido de cada entrada. Sin archivo, revisa todos los de la campaña. Cómo hacer un nivel: [`CONTENIDO.md`](CONTENIDO.md). |
 | `godot --headless --path . -s tools/make_icon.gd` | Volver a generar el ícono del juego con los dibujos. |

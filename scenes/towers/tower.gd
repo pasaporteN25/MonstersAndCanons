@@ -286,10 +286,8 @@ func find_targets(count: int) -> Array[Enemy]:
 		if best != null:
 			candidates.append(best)
 		return candidates
-	for node: Node in get_tree().get_nodes_in_group(Enemy.GROUP):
-		var enemy := node as Enemy
-		if can_target(enemy):
-			candidates.append(enemy)
+	for enemy: Enemy in _enemies_in_reach():
+		candidates.append(enemy)
 	candidates.sort_custom(_is_better_target)
 	return candidates.slice(0, count)
 
@@ -298,13 +296,27 @@ func find_targets(count: int) -> Array[Enemy]:
 ## Se mide la distancia a cada enemigo (D-014) en vez de usar áreas de colisión.
 func find_target() -> Enemy:
 	var best: Enemy = null
-	for node: Node in get_tree().get_nodes_in_group(Enemy.GROUP):
-		var enemy := node as Enemy
-		if not can_target(enemy):
-			continue
+	for enemy: Enemy in _enemies_in_reach():
 		if best == null or _is_better_target(enemy, best):
 			best = enemy
 	return best
+
+
+## Los mismos enemigos que aceptaría `can_target`, pero sin recalcular el alcance y la posición de la torre por
+## cada uno (T236: con 60 torres y 40 enemigos esa búsqueda, repetida en cada tick, era lo que más costaba).
+func _enemies_in_reach() -> Array[Enemy]:
+	var found: Array[Enemy] = []
+	var origin: Vector2 = global_position
+	var reach: float = range_px()
+	var reach_squared: float = reach * reach
+	var hits_air: bool = data.can_hit_air
+	for node: Node in get_tree().get_nodes_in_group(Enemy.GROUP):
+		var enemy := node as Enemy
+		if not enemy.is_active() or (enemy.data.is_flying and not hits_air):
+			continue
+		if origin.distance_squared_to(enemy.global_position) <= reach_squared:
+			found.append(enemy)
+	return found
 
 
 ## true si `a` es mejor objetivo que `b` según el modo actual.
@@ -367,13 +379,31 @@ func _fire_burst() -> void:
 ## RF-120 y RF-121: el cañón sigue al objetivo; el retroceso y el destello se apagan solos.
 func _animate(delta: float) -> void:
 	_upgrade_time += delta
+	var aim_before: float = aim_angle
+	var recoil_before: float = _recoil
+	var flash_before: float = _flash_left
 	if _target != null:
 		var desired: float = (_target.global_position - global_position).angle()
 		aim_angle = lerp_angle(aim_angle, desired, minf(1.0, AIM_SPEED * delta))
 	_recoil = move_toward(_recoil, 0.0, delta * 8.0)
 	_flash_left = maxf(0.0, _flash_left - delta)
 	_sync_upgrade_glow()
-	queue_redraw()
+	# T236: una torre quieta no se vuelve a dibujar en cada tick (con 60 torres era lo que más costaba). Se redibuja
+	# si cambió algo de lo que `_draw` usa y se mueve solo: la puntería, el retroceso, el destello, o si está aturdida o
+	# recuperándose. El resto (nivel, desgaste, reparación) ya pide su propio `queue_redraw`.
+	if _aim_changed_visibly(aim_before) or _recoil != recoil_before or _flash_left != flash_before \
+			or is_stunned() or _recovery_left > 0.0:
+		queue_redraw()
+
+
+## ¿Cambió la puntería de forma que se vea? Con la torreta de vistas (atlas) solo importa el cambio de dirección
+## entre las del dibujo; sin ella la torreta gira de verdad y cualquier cambio se ve.
+func _aim_changed_visibly(before: float) -> bool:
+	if aim_angle == before:
+		return false
+	if current_turret_atlas() == null:
+		return true
+	return TowerVisual.direction_index(aim_angle) != TowerVisual.direction_index(before)
 
 
 ## RF-295: lado de la torre en casillas (1 = la de siempre); lo que se dibuja se escala con él.
