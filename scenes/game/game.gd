@@ -65,6 +65,13 @@ var obstacle_layer: ObstacleLayer
 @onready var hud: Hud = $HUD
 @onready var end_screen: EndScreen = $EndScreen
 @onready var pause_menu: PauseMenu = $PauseMenu
+## RF-460: el diálogo de la flecha «← Menú».
+@onready var exit_dialog: ExitDialog = $ExitDialog
+## RF-460: si la partida ya estaba en pausa (con `P`) cuando se abrió el diálogo.
+var _exit_was_paused: bool = false
+## Costuras para los tests (`.claude/rules/tests.md`): a dónde sale la flecha. Por omisión, las pantallas de verdad.
+var leave_to_menu: Callable = func() -> void: GameFlow.go_to_main_menu()
+var leave_to_editor: Callable = func() -> void: GameFlow.go_to_editor()
 
 
 func _ready() -> void:
@@ -163,6 +170,13 @@ func _ready() -> void:
 	else:
 		pause_menu.quit_pressed.connect(GameFlow.go_to_main_menu)
 
+	# RF-459 a RF-461: la flecha «← Menú» pregunta antes de salir; probando un mapa del editor vuelve directo.
+	hud.menu_pressed.connect(_request_exit)
+	exit_dialog.confirmed.connect(_on_exit_confirmed)
+	exit_dialog.cancelled.connect(_on_exit_cancelled)
+	if testing:
+		hud.set_exit_text("← Editor", "Volver al editor")
+
 	# RF-116: sonidos de la partida (los disparos, al construir cada torre).
 	session.wave_changed.connect(func(wave: int, _total: int) -> void:
 		if wave > 0:
@@ -191,6 +205,7 @@ func _setup_infrastructure() -> void:
 	infrastructure.setup(level, session, level_data.obstacles, rng, effects, _recovered_collections(), level_data.id,
 		level_data.machine_enabled, _collects_pieces())
 	infrastructure.demolished.connect(_on_obstacle_demolished)
+	hud.setup_bar(level_data.uses_infrastructure())  # RF-454: las pestañas, solo si el nivel usa infraestructura
 	obstacle_layer = ObstacleLayer.new()
 	obstacle_layer.name = "ObstacleLayer"
 	add_child(obstacle_layer)
@@ -199,13 +214,19 @@ func _setup_infrastructure() -> void:
 	var panel: ObstaclePanel = hud.obstacle_panel
 	panel.demolish_pressed.connect(infrastructure.order)
 	panel.cancel_pressed.connect(infrastructure.cancel_job)
-	hud.setup_infrastructure(level_data.machine_enabled, infrastructure.field.machine_price(), session.gold,
-		infrastructure.field.has_machine)
-	hud.infrastructure_panel.buy_pressed.connect(infrastructure.buy_machine)
 	panel.enable_pressed.connect(infrastructure.enable)
 	infrastructure.selection_changed.connect(_refresh_obstacle_panel.unbind(1))
 	infrastructure.changed.connect(_refresh_obstacle_panel)
-	infrastructure.changed.connect(_refresh_infrastructure_panel)
+	if hud.infrastructure_tab != null:  # RF-457: las tarjetas llaman a lo mismo que el panel del objeto
+		var tab: InfrastructureTab = hud.infrastructure_tab
+		tab.buy_pressed.connect(infrastructure.buy_machine)
+		tab.cancel_pressed.connect(infrastructure.cancel_job)
+		tab.enable_pressed.connect(infrastructure.enable)
+		tab.site_selected.connect(_on_site_selected)
+		hud.tab_changed.connect(_on_tab_changed)
+		infrastructure.changed.connect(_refresh_infrastructure_tab)
+		session.resources_changed.connect(_refresh_infrastructure_tab.unbind(1))
+		_refresh_infrastructure_tab()
 
 
 ## Muestra en el panel el removible elegido (o lo oculta si no hay ninguno).
@@ -224,8 +245,37 @@ func _refresh_obstacle_panel() -> void:
 			field.reserve_left(cell), _collects_pieces())
 
 
-func _refresh_infrastructure_panel() -> void:
-	hud.infrastructure_panel.update_state(session.gold, infrastructure.field.has_machine)
+## RF-457 y RF-458: alimenta las cuatro tarjetas de «Infraestructura» y el aviso del título, leyendo lo que ya
+## expone el controlador. La pestaña no guarda nada propio.
+func _refresh_infrastructure_tab() -> void:
+	var tab: InfrastructureTab = hud.infrastructure_tab
+	if tab == null:
+		return
+	var field: ObstacleField = infrastructure.field
+	var job: DemolitionJob = field.job()
+	if job != null:
+		tab.show_job(ObstacleText.display_name(field.spec_at(job.cell)), job.progress(), job.seconds_left())
+	else:
+		tab.clear_job()
+	hud.show_job_badge(0.0 if job == null else job.seconds_left(), job != null)
+	tab.show_machine(infrastructure.machine_enabled, field.has_machine, field.machine_price(), session.gold,
+			InfrastructureText.machine_effect())
+	tab.show_sites(InfrastructureText.sites(field), session.gold)
+	tab.show_resources(hud.shows_resources(), session.resources, InfrastructureText.expected_resources(field))
+
+
+## RF-458: tocar el nombre de un punto lo elige en el mapa, igual que tocarlo allá (una sola selección, RF-73).
+func _on_site_selected(cell: Vector2i) -> void:
+	build_controller.cancel()
+	build_controller.deselect_placed()
+	infrastructure.select(cell)
+
+
+## RF-456: pasar a «Infraestructura» con una torre elegida para construir cancela la construcción (la vista previa
+## no puede quedar sobre el mapa con sus botones ocultos). Una torre ya colocada o un objeto elegido siguen igual.
+func _on_tab_changed(id: StringName) -> void:
+	if id != Hud.TAB_CANNONS:
+		build_controller.cancel()
 
 
 ## RF-251: un mapa más grande que 20×9 se muestra con zoom, con una cámara. Una cámara no cambia
@@ -264,6 +314,20 @@ func _exit_tree() -> void:
 	_reset_time()
 
 
+## RF-456: `Tab` cambia de pestaña. Va en `_input` y no en `_unhandled_input` para que el foco de la interfaz
+## (los íconos de arriba lo aceptan) no se lo quede para moverse entre controles.
+func _input(event: InputEvent) -> void:
+	if not event.is_action_pressed("switch_tab") or not hud.has_tabs():
+		return
+	if exit_dialog.is_open() or pause_menu.is_open() or session.is_over():
+		return  # con un diálogo abierto o la partida terminada, no hace nada
+	var focus: Control = get_viewport().gui_get_focus_owner()
+	if focus is LineEdit or focus is TextEdit:
+		return  # escribiendo en un campo (el panel de pruebas): Tab es de ese campo
+	hud.switch_tab()
+	get_viewport().set_input_as_handled()
+
+
 func _unhandled_input(event: InputEvent) -> void:
 	var key := event as InputEventKey
 	if dev_panel != null and key != null and key.pressed and not key.echo and key.physical_keycode == KEY_F1:
@@ -273,12 +337,14 @@ func _unhandled_input(event: InputEvent) -> void:
 	# BuildController recibe Esc primero (cancelar construcción o selección);
 	# si nadie lo usó, llega aquí y abre o cierra el menú de pausa (RF-114).
 	if event.is_action_pressed("cancel"):
-		if pause_menu.is_open():
+		if exit_dialog.is_open():
+			exit_dialog.handle_cancel()  # RF-461: Esc cierra el diálogo; el menú de pausa no se abre debajo
+		elif pause_menu.is_open():
 			pause_menu.handle_cancel()
 		else:
 			open_pause_menu()
-	elif pause_menu.is_open():
-		return  # con el menú abierto, las otras teclas no hacen nada
+	elif pause_menu.is_open() or exit_dialog.is_open():
+		return  # con el menú o el diálogo abiertos, las otras teclas no hacen nada
 	elif dev_panel != null and _handle_dev_shortcut(event):
 		get_viewport().set_input_as_handled()
 	elif event.is_action_pressed("start_wave"):
@@ -305,6 +371,53 @@ func open_pause_menu() -> void:
 func close_pause_menu() -> void:
 	pause_menu.close()
 	set_paused(false)
+
+
+# --- La flecha «← Menú» (RF-459 a RF-461) ---
+
+## Las piezas de colección que se perderían: una entrada por pieza, con el id de su colección. Cuentan las
+## pendientes y las ya confirmadas, porque las dos se guardan recién al mostrar el resultado (RF-359, RF-427).
+func lost_pieces() -> Array[String]:
+	var collections: Array[String] = []
+	for piece: Dictionary in findings.pending() + findings.confirmed():
+		collections.append(String(piece["collection"]))
+	if collectible != null and collectible.picked_wave > 0:
+		collections.append(String(collectible.collection))
+	return collections
+
+
+## El texto del diálogo para el estado actual de la partida.
+func exit_message() -> String:
+	return ExitText.message(lost_pieces(), infrastructure.field.has_job())
+
+
+## RF-460: pregunta qué se pierde y pausa la partida. Probando desde el editor no se pierde nada: vuelve directo.
+func _request_exit() -> void:
+	if session.is_over() or exit_dialog.is_open() or pause_menu.is_open():
+		return
+	if testing:
+		leave_to_editor.call()
+		return
+	build_controller.cancel()
+	build_controller.deselect_placed()
+	infrastructure.deselect()
+	_exit_was_paused = is_paused()
+	build_controller.input_blocked = true
+	set_paused(true)
+	hud.show_paused(true, false)  # el diálogo ya cubre la pantalla
+	exit_dialog.open(exit_message())
+
+
+## «Seguir jugando» o Esc: la partida vuelve al estado anterior (corriendo a la misma velocidad, o en pausa si ya lo estaba).
+func _on_exit_cancelled() -> void:
+	build_controller.input_blocked = false
+	set_paused(_exit_was_paused)
+
+
+## «Salir al menú»: no se guarda nada (ni piezas ni progreso ni récords), así que no se llama a `_commit_collection()`.
+func _on_exit_confirmed() -> void:
+	build_controller.input_blocked = false
+	leave_to_menu.call()
 
 
 # --- Pausa y velocidad (RF-104, RF-105) ---
@@ -637,6 +750,7 @@ func _on_tower_fired(projectile: Projectile) -> void:
 func _on_state_changed(state: LevelSession.State) -> void:
 	if state != LevelSession.State.WON and state != LevelSession.State.LOST:
 		return
+	hud.hide_exit()  # RF-459: la pantalla de resultado ya trae sus botones
 	_commit_collection()
 	_write_dev_stats(DevStats.RESULT_WON if state == LevelSession.State.WON else DevStats.RESULT_LOST)
 	# RF-91: el juego se detiene. Se congela el "mundo", pero no la interfaz.

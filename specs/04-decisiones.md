@@ -677,7 +677,7 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
   - **Una tecla `0` para la décima torre:** cambia el HUD y el mapa de teclas (RF-297); no hace falta si cada nivel ofrece 9.
 
 ## D-088 · La barra de abajo con pestañas por tipo (Cañones e Infraestructura) y una flecha al menú principal
-- **Fecha:** 2026-10-08 · **Estado:** Propuesta en la spec (RF-454 a RF-463, M53), **a la espera del OK de Lucas** · **Decidió:** Lucas (el pedido y las dos pestañas) / Claude (el detalle: medidas, teclas, textos y recomendaciones de las preguntas P1 a P8)
+- **Fecha:** 2026-10-08 · **Estado:** **Aprobada por Lucas el 2026-10-08** (preguntas P1 a P8 de M53, todas con la recomendación de cada una: pestañas por datos del mapa, teclas `1`–`9` más `0` y `Tab`, cuatro tarjetas en «Infraestructura», la flecha «← Menú» en todos los niveles con confirmación, el menú de pausa sin tocar); programada en T248 · **Decidió:** Lucas (el pedido y las dos pestañas) / Claude (el detalle: medidas, teclas, textos y recomendaciones de las preguntas P1 a P8)
 - **Qué:**
   - Los niveles que **usan infraestructura** (demoledora, removibles o extracción; hoy del 6 al 10) tienen una barra con **dos pestañas**: **«Cañones»** (las torres de hoy) e **«Infraestructura»** (trabajo en curso, demoledora, extracción y recursos). Los niveles 1 a 5 no cambian.
   - Las teclas: `1`–`9` para las torres 1 a 9, **`0` para la décima** y **`Tab`** para cambiar de pestaña. Los botones de torre se achican (de 76 a 56 px como mínimo) para que entren hasta 11.
@@ -702,3 +702,9 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
   - **Una tecla propia para la flecha:** se descarta a propósito: salir del juego no debe estar a un `Espacio` de distancia.
   - **Que la flecha abra el menú de pausa:** duplica `Esc` y no sirve para el caso de salir de una vez; el menú de pausa sigue donde estaba.
   - **Guardar la última pestaña usada:** un guardado más sin ganancia; arrancar siempre en «Cañones» es lo previsible.
+
+- **Ajustes al programarla (T248, 2026-10-08)** *(no cambian lo decidido; salieron de medir en una ventana real)*:
+  - «Infraestructura» a 13 pt no entra en 96 px (mide 96): las pestañas usan 12 pt con 3 px de margen. Los botones de torre miden 71, 63 y 57 px con 9, 10 y 11 torres, como la cuenta; el costo y la insignia de la segunda forma de pago se achican en los botones angostos (RF-455).
+  - Sin pestañas y con 10 o más torres (mapa de la comunidad o de un modo) los botones miden 73 y 66 px: la spec dejaba «siempre 76» en una frase y «se achican» en otra, y a 76 la décima tapaba «Próxima oleada» (RF-454).
+  - `Tab` se atiende en `_input` y no en `_unhandled_input`: los íconos de arriba aceptan el foco del teclado y, con uno enfocado, el motor se quedaba `Tab` para mover el foco. Probado con un ícono enfocado en la ventana real.
+  - El nivel 6 no tiene demoledora (solo el 7): la tarjeta de la demoledora no se dibuja en el 6.

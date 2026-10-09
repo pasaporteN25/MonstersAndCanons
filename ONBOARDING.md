@@ -446,3 +446,15 @@ Abrí el juego (o el proyecto con F5) y entrá a **Jugar**.
 - **`check_rule=1` (RF-432):** juega `sin_recursos` con 5 semillas en cada mapa con recursos y **termina con código 1** si algún mapa gana menos de 4. Sin `level`, `levels`, `file` ni `modo` mira toda la campaña y se salta los mapas sin recursos; con alguno de ellos comprueba ese mapa siempre. Ejemplo: `... -s tools/balance_sim.gd -- x check_rule=1 file=tools/ejemplos/mapa_extraccion.json` (código 0); con `hp=20` el mismo mapa da código 1. Lo corre cada tarea de nivel con recursos y la regresión final (T236).
 
 Con más de dos modos propios, las solapas ya no entran en la fila (limitación conocida de esta primera prueba).
+
+### T248 · Probar la barra con pestañas y la flecha al menú (M53)
+
+Con el proyecto abierto (o `godot --path .`). **✅ Comprobar:**
+
+- **Nivel 1 (o cualquiera del 1 al 5):** la barra de abajo es la de siempre (sin pestañas) y arriba a la izquierda hay una flecha **«← Menú»**, con los contadores a su derecha. `Tab` y `0` no hacen nada.
+- **Nivel 7 («El aserradero», con demoledora):** a la izquierda de la barra hay dos pestañas, «Cañones» (activa) e «Infraestructura». Tocá **Infraestructura** (o apretá `Tab`): se ven tres tarjetas, *Trabajo en curso*, *Demoledora · 180 de oro* con su botón **Comprar**, y *Recursos*. Comprá la demoledora: dice «Demoledora activa» y «Cada demolición cuesta el 10 % y tarda el 80 %». Volvé a «Cañones», tocá un árbol del mapa (la pestaña **no** cambia, se abre su panel a la derecha) y **Demoler**: el título de la otra pestaña pasa a «Infraestructura · 3 s» y baja; en la pestaña se ve la barra de avance y **Cancelar** (devuelve todo el oro). Elegí una torre y apretá `Tab`: la construcción se cancela. Desde «Infraestructura», apretá `3`: vuelve a «Cañones» con la tercera elegida. En el **nivel 6** no hay tarjeta de demoledora (su archivo no la trae).
+- **Nivel 10 («La mina vieja»):** «Infraestructura» muestra la **Mina** con su botón *Habilitar · 100 de oro* (y, ya habilitada, «Activa · reserva 8/8 · +2 por oleada»). Con el modo de pruebas y **Habilitar todas las colecciones** hay 11 torres: los botones se achican a 57 px, se lee el costo y la insignia verde del recurso, ninguno toca «Próxima oleada», y `0` elige la décima. El mapa se ve igual (con zoom) con o sin pestañas.
+- **La flecha:** tocala. Aparece «¿Volver al menú principal?» con la partida en pausa y el foco en «Seguir jugando» (`Esc` hace lo mismo). Si recogiste una pieza de colección o hay una demolición en curso, el texto lo avisa. «Seguir jugando» deja todo como estaba (en pausa si ya lo estaba); «Salir al menú» vuelve al menú principal y **no guarda** la pieza. Al probar un mapa desde el editor, la flecha dice «← Editor» y vuelve sin preguntar. Con la partida terminada la flecha no se ve.
+- **Con toques:** todo lo anterior se hace sin teclado. **No se probó en un celular real.**
+
+Capturas y mediciones en `art/m53-barra/` (`README.md`).

@@ -1,6 +1,7 @@
 # T246: lo que los tests de unidad no vieron. Se juega con la escena Game REAL y con eventos de mouse
 # reales (movimiento + clic) sobre la casilla, en los niveles oficiales 6, 7, 8 y 9: el panel del
-# removible tiene que aparecer, y el botón «Infraestructura» del nivel 7 tiene que verse y poder pulsarse.
+# removible tiene que aparecer. Con M53 (T248) «Infraestructura» es una pestaña de la barra de abajo: tiene que verse,
+# no tapar nada y poder pulsarse con un clic real.
 extends GutTest
 
 const GAME_SCENE: PackedScene = preload("res://scenes/game/game.tscn")
@@ -121,72 +122,66 @@ func test_official_levels_read_the_machine_flag_from_the_file() -> void:
 	assert_eq(in_campaign.map(func(level: LevelData) -> String: return str(level.id)), ["level_07"], "la campaña carga solo el 7 con demoledora")
 
 
-func test_level_7_shows_the_infrastructure_button_and_it_can_be_pressed() -> void:
+func test_level_7_has_the_infrastructure_tab_and_no_loose_button() -> void:
+	# M53 (RF-458): el botón suelto de arriba a la derecha desaparece; la demoledora se compra en la pestaña de abajo.
 	await _start(7)
-	var panel: InfrastructurePanel = game.hud.infrastructure_panel
+	var hud: Hud = game.hud
 	assert_true(game.infrastructure.machine_enabled)
-	assert_true(panel.visible, "el panel de infraestructura se ve en el nivel 7")
-	var button: Button = panel._button
-	var rect: Rect2 = button.get_global_rect()
-	assert_true(SCREEN.encloses(rect), "el botón entra en la pantalla: %s" % rect)
-	for other: Button in [game.hud._pause_button, game.hud._speed_button]:
-		assert_false(rect.intersects(other.get_global_rect()), "no tapa el botón %s" % other.name)
-	var stats: Control = game.hud.get_node("TopBar/Stats")
-	var stats_end: float = stats.global_position.x + stats.get_combined_minimum_size().x
-	assert_lt(stats_end, rect.position.x, "no tapa los contadores de arriba (oro, vidas, recursos…)")
-	# Un clic real en el centro del botón lo abre; otro lo cierra.
+	assert_not_null(hud.bar_tabs, "el nivel 7 usa infraestructura: hay pestañas")
+	assert_null(hud.find_child("InfrastructurePanel", true, false), "ya no existe el panel suelto")
+	var tab: Button = hud.bar_tabs.button_of(&"infrastructure")
+	var rect: Rect2 = tab.get_global_rect()
+	assert_true(SCREEN.encloses(rect), "la pestaña entra en la pantalla: %s" % rect)
+	for other: Control in [hud._pause_button, hud._speed_button, hud._exit_button, hud._start_wave_button]:
+		assert_false(rect.intersects(other.get_global_rect()), "no tapa %s" % other.name)
+	# Un clic real en la pestaña la abre; la tarjeta de la demoledora se ve.
 	await _click_at(rect.get_center())
-	assert_true(panel._panel.visible, "el clic abre el panel")
-	assert_lt(panel._panel.size.y, 200.0, "el panel abre con su alto, no altísimo hasta acomodar el texto")
-	var panel_rect: Rect2 = panel._panel.get_global_rect()
-	assert_true(SCREEN.encloses(panel_rect), "el panel entra en la pantalla: %s" % panel_rect)
-	assert_false(panel_rect.intersects(game.hud.obstacle_panel.get_global_rect()) and game.hud.obstacle_panel.visible, "no pisa el panel del removible")
-	await _click_at(rect.get_center())
-	assert_false(panel._panel.visible, "el segundo clic lo cierra")
+	assert_eq(hud.current_tab(), Hud.TAB_INFRASTRUCTURE)
+	assert_true(hud.infrastructure_tab.visible)
+	assert_false(hud._tower_button_row.visible, "los botones de torre se ocultan")
+	assert_true(hud.infrastructure_tab._machine_card.visible)
+	var card_rect: Rect2 = hud.infrastructure_tab._machine_card.get_global_rect()
+	assert_true(SCREEN.encloses(card_rect), "la tarjeta entra en la pantalla: %s" % card_rect)
+	assert_false(card_rect.intersects(hud._start_wave_button.get_global_rect()), "no tapa «Empezar oleada»")
+	assert_false(card_rect.intersects(hud._next_wave.get_global_rect()), "no tapa «Próxima oleada»")
 
 
 func test_level_7_buy_button_buys_the_machine() -> void:
 	await _start(7)
-	var panel: InfrastructurePanel = game.hud.infrastructure_panel
+	var hud: Hud = game.hud
+	var tab: InfrastructureTab = hud.infrastructure_tab
 	var price: int = game.infrastructure.field.machine_price()
 	assert_gt(game.session.gold, price - 1, "alcanza el oro")
-	await _click_at(panel._button.get_global_rect().get_center())
+	await _click_at(hud.bar_tabs.button_of(&"infrastructure").get_global_rect().get_center())
 	await _settle()
-	assert_true(panel._panel.visible)
-	assert_false(panel._buy_button.disabled)
+	assert_false(tab._buy_button.disabled)
 	var gold: int = game.session.gold
-	await _click_at(panel._buy_button.get_global_rect().get_center())
+	await _click_at(tab._buy_button.get_global_rect().get_center())
 	assert_true(game.infrastructure.field.has_machine, "el clic en «Comprar» compra la demoledora")
 	assert_eq(game.session.gold, gold - price)
-	assert_eq(panel._buy_button.text, "Comprada")
+	assert_eq(tab._machine_title.text, "Demoledora activa")
+	assert_false(tab._buy_button.visible, "ya comprada, no hay botón")
 
 
-func test_the_button_does_not_move_with_the_zoom_of_big_maps() -> void:
+func test_the_bar_does_not_move_with_the_zoom_of_big_maps() -> void:
 	# El nivel 10 (24×11) se ve con zoom y cámara; el HUD está en otra capa y no los sufre.
-	var big: LevelData = _load(10)
-	big.machine_enabled = true  # el 10 oficial no la tiene: se fuerza para comprobar el botón
-	GameFlow.campaign = CampaignData.new()
-	GameFlow.campaign.levels = [big] as Array[LevelData]
-	GameFlow.current_index = 0
-	game = GAME_SCENE.instantiate()
-	add_child_autofree(game)
-	await get_tree().process_frame
+	await _start(10)
 	assert_not_null(game.camera, "el mapa grande usa cámara con zoom")
-	var panel: InfrastructurePanel = game.hud.infrastructure_panel
-	assert_true(panel.visible)
-	var rect: Rect2 = panel._button.get_global_rect()
-	assert_eq(rect.position, InfrastructurePanel.BUTTON_POSITION, "el botón no se mueve con la cámara")
-	assert_true(SCREEN.encloses(rect))
-	await _click_at(rect.get_center())
+	var hud: Hud = game.hud
+	var tab: Button = hud.bar_tabs.button_of(&"infrastructure")
+	assert_eq(tab.get_global_rect().position, Vector2(12, 674), "la pestaña no se mueve con la cámara")
+	assert_eq(hud._exit_button.get_global_rect().position, Vector2(8, 8), "la flecha tampoco")
+	await _click_at(tab.get_global_rect().get_center())
 	await _settle()
-	assert_true(panel._panel.visible, "con zoom, el clic en el botón también lo abre")
-	assert_true(SCREEN.encloses(panel._panel.get_global_rect()))
+	assert_true(hud.infrastructure_tab.visible, "con zoom, el clic en la pestaña también la abre")
+	assert_true(SCREEN.encloses(hud.infrastructure_tab.get_global_rect()))
 
 
-func test_levels_without_the_machine_hide_the_button() -> void:
+func test_levels_without_the_machine_have_tabs_but_no_machine_card() -> void:
 	for n: int in [6, 8, 9]:
 		await _start(n)
-		assert_false(game.hud.infrastructure_panel.visible, "nivel %d: sin demoledora, sin botón" % n)
+		assert_not_null(game.hud.bar_tabs, "nivel %d: usa infraestructura (tiene removibles)" % n)
+		assert_false(game.hud.infrastructure_tab._machine_card.visible, "nivel %d: sin demoledora, sin su tarjeta" % n)
 		game.queue_free()
 		await get_tree().process_frame
 

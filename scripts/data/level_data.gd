@@ -30,6 +30,12 @@ var obstacles: Array[ObstacleSpec] = []
 @export var allowed_towers: PackedStringArray = []
 
 
+## RF-454: el nivel usa infraestructura (la barra lleva pestañas) si habilita la demoledora o tiene algún
+## removible o punto de extracción. Se decide por los datos del mapa, no por el número del nivel.
+func uses_infrastructure() -> bool:
+	return machine_enabled or not obstacles.is_empty()
+
+
 ## RF-416: hay recursos si un removible puede entregarlos o existe un punto de extracción.
 func uses_resources() -> bool:
 	for obstacle: ObstacleSpec in obstacles:

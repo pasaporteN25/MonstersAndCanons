@@ -2,6 +2,15 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## La barra con pestañas y la flecha al menú *(T248, 2026-10-08)*
+
+- **Del nivel 6 en adelante, la barra de abajo tiene dos pestañas:** **«Cañones»** (las torres de siempre) e **«Infraestructura»** (todo lo de demoler, la demoledora, la extracción y los recursos). Aparecen en **todo mapa que tenga removibles, minas o demoledora** (hoy, los niveles 6 a 10, y también un mapa de la comunidad con un solo árbol removible). **Los niveles 1 a 5 se ven y se juegan exactamente igual.**
+- **El botón «Infraestructura» de arriba a la derecha desaparece:** la demoledora se compra ahora en la pestaña, que además muestra el **trabajo en curso** (con barra y «Cancelar»), la **extracción** (una ficha por mina o bosque, con «Habilitar») y los **recursos**. Tocar una roca o un árbol del mapa funciona igual que antes y **no cambia de pestaña**: mientras demolés, el título de la pestaña dice «Infraestructura · 4 s».
+- **Teclas:** `1` a `9` eligen las torres 1 a 9, **`0` elige la décima** y **`Tab` cambia de pestaña** (solo en los niveles con pestañas). Con una torre elegida, `Tab` cancela la construcción; apretar la tecla de una torre desde «Infraestructura» vuelve a «Cañones» y la elige. Todo se puede hacer también con el mouse o con el dedo.
+- **Los botones de torre se achican** (de 76 a 57 px) cuando hay más de 9, para que entren todas sin tapar «Próxima oleada»; el costo y el ícono del recurso se siguen leyendo.
+- **Arreglo escondido:** con 10 torres, cada tecla o clic hacía que el juego anotara un error de «acción inexistente» (`build_10`) en el registro. Ya no.
+- **Una flecha «← Menú» arriba a la izquierda, en todos los niveles.** **Siempre pregunta** antes de salir y te dice qué perdés: las **piezas de colección recogidas en la partida (aunque ya estén confirmadas)** y la **demolición en curso**; lo que ya ganaste (niveles, estrellas, récords y piezas guardadas) se conserva. Mientras decidís, la partida queda en pausa, y «Seguir jugando» la deja como estaba (corriendo a la misma velocidad, o en pausa si ya lo estaba). Al probar un mapa desde el editor, la flecha dice **«← Editor»** y vuelve sin preguntar. El menú de pausa (`Esc`) no cambió.
+
 ## Arreglo del botón «Infraestructura» *(T246, 2026-10-08)*
 
 - En el **Cruce** (nivel 7) el botón **Infraestructura** estaba **encima de «Pausa» y «Velocidad»** y se veía como texto suelto. Ahora va en la barra de arriba, a la izquierda de «Pausa», con el mismo marco que los demás botones.

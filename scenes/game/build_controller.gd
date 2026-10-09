@@ -38,6 +38,8 @@ var _hover_cell: Vector2i = Vector2i.ZERO
 var _pay_alt: bool = false
 ## RF-404: los removibles del mapa. Lo pone Game; null = este controlador no los conoce (sirve para los tests).
 var obstacles: InfrastructureController
+## RF-456: con el diálogo de la flecha abierto (RF-460) ninguna tecla ni clic llega a la construcción.
+var input_blocked: bool = false
 
 
 ## `container` es el nodo donde se agregan las torres (Game/Towers).
@@ -234,8 +236,11 @@ func _process(_delta: float) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if input_blocked:
+		return
 	for i: int in _tower_types.size():
-		if event.is_action_pressed("build_%d" % (i + 1)):
+		var action: StringName = BarLayout.action_for(i)  # RF-456: la torre 11 en adelante no tiene tecla
+		if action != &"" and event.is_action_pressed(action):
 			select(i)
 			_accept()
 			return

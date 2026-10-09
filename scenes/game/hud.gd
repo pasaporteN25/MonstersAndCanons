@@ -11,9 +11,19 @@ signal pause_pressed
 signal speed_pressed
 ## RF-419: se pulsó un botón de pago de la ayuda de construcción (true = oro + recursos).
 signal payment_pressed(alt: bool)
+## RF-459: se pulsó la flecha «← Menú». Game pregunta antes de salir (RF-460).
+signal menu_pressed
+## RF-455: el jugador cambió de pestaña de la barra (clic, toque o `Tab`). Game decide qué más pasa.
+signal tab_changed(id: StringName)
 
 ## RF-170: botones compactos, para que entren 9 torres (M19) sin tapar "Próxima oleada" (D-026).
-const TOWER_BUTTON_SIZE := Vector2(76, 60)
+## El ancho lo reparte `BarLayout.button_width` (RF-455): 76 mientras entren, hasta 56 con pestañas.
+const TOWER_BUTTON_HEIGHT: int = 60
+## La letra del costo en el botón de torre (RF-170).
+const COST_FONT_SIZE: int = 15
+## RF-455: los ids de las dos pestañas de la barra.
+const TAB_CANNONS: StringName = &"cannons"
+const TAB_INFRASTRUCTURE: StringName = &"infrastructure"
 ## Ancho máximo del dibujo de la torre en su botón (RF-155).
 const TOWER_ICON_SIZE: int = 34
 ## RF-134: cuánto se ve la tarjeta de presentación de un enemigo.
@@ -63,7 +73,12 @@ var _pay_alt_button: Button
 @onready var tower_panel: TowerPanel = %TowerPanel
 ## Panel del removible elegido (RF-404). Game lo conecta con InfrastructureController.
 var obstacle_panel: ObstaclePanel
-var infrastructure_panel: InfrastructurePanel
+## RF-454: solo existen en los niveles que usan infraestructura (`setup_bar`); null en los demás.
+var bar_tabs: BarTabs
+var infrastructure_tab: InfrastructureTab
+## Cuántas torres tiene la barra y si lleva pestañas: de ahí salen el ancho de los botones y sus teclas.
+var _tabs_enabled: bool = false
+@onready var _exit_button: Button = %ExitButton
 @onready var _pause_button: Button = %PauseButton
 @onready var _speed_button: Button = %SpeedButton
 @onready var _pause_label: Label = %PauseLabel
@@ -93,9 +108,6 @@ func _ready() -> void:
 	obstacle_panel = ObstaclePanel.new()
 	obstacle_panel.name = "ObstaclePanel"
 	add_child(obstacle_panel)
-	infrastructure_panel = InfrastructurePanel.new()
-	infrastructure_panel.name = "InfrastructurePanel"
-	add_child(infrastructure_panel)
 	_metrics = Label.new()
 	_metrics.name = "PerformanceOverlay"
 	_metrics.position = Vector2(990, 56)
@@ -113,6 +125,7 @@ func _ready() -> void:
 	add_child(hint)
 	var bar: Control = get_node("TopBar")
 	bar.theme = preload("res://assets/ui/menu_theme.tres")
+	BarTabs.tighten(_exit_button)  # RF-459: 80 px de ancho; con el margen del tema el botón crecía a 94
 	_build_resource_stat(bar.get_node("Stats"))
 	_build_payment_buttons()
 	var edge := ColorRect.new()
@@ -140,6 +153,7 @@ func _ready() -> void:
 	_start_wave_button.pressed.connect(start_wave_pressed.emit)
 	_pause_button.pressed.connect(pause_pressed.emit)
 	_speed_button.pressed.connect(speed_pressed.emit)
+	_exit_button.pressed.connect(menu_pressed.emit)
 	show_paused(false)
 	show_speed(1.0)
 
@@ -207,6 +221,11 @@ func _payment_button(alt: bool) -> Button:
 	button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	button.pressed.connect(payment_pressed.emit.bind(alt))
 	return button
+
+
+## RF-416: ¿el contador de recursos está a la vista? (La tarjeta «Recursos» de la barra sigue a este contador.)
+func shows_resources() -> bool:
+	return _uses_resources
 
 
 ## RF-416: muestra u oculta el contador. Game lo llama con `LevelData.uses_resources()` antes de `setup_towers`.
@@ -300,9 +319,77 @@ func bind(session: LevelSession) -> void:
 	_on_gold_changed(session.gold)
 
 
-## RF-411 y RF-412: botón global, visible solo si el nivel habilita la compra.
-func setup_infrastructure(enabled: bool, price: int, gold: int, owned: bool) -> void:
-	infrastructure_panel.setup(enabled, price, gold, owned)
+## RF-454 y RF-455: la columna de pestañas y la pestaña «Infraestructura», solo si el nivel usa infraestructura.
+## Sin pestañas no se crea nada y la barra queda como siempre. Game lo llama antes de `setup_towers`.
+func setup_bar(tabs: bool) -> void:
+	_tabs_enabled = tabs
+	if not tabs:
+		return
+	var bottom: Control = get_node("BottomBar")
+	bar_tabs = BarTabs.new()
+	bar_tabs.name = "BarTabs"
+	bar_tabs.position = Vector2(12, 2)
+	bottom.add_child(bar_tabs)
+	var list: Array[Dictionary] = [
+		{"id": TAB_CANNONS, "text": "Cañones"},
+		{"id": TAB_INFRASTRUCTURE, "text": InfrastructureText.TAB_TITLE},
+	]
+	bar_tabs.setup(list)
+	bar_tabs.tab_selected.connect(_on_tab_selected)
+	infrastructure_tab = InfrastructureTab.new()
+	infrastructure_tab.name = "InfrastructureTab"
+	bottom.add_child(infrastructure_tab)
+	show_tab(TAB_CANNONS)
+
+
+func has_tabs() -> bool:
+	return bar_tabs != null
+
+
+## La pestaña activa (`TAB_CANNONS` si la barra no tiene pestañas).
+func current_tab() -> StringName:
+	return bar_tabs.current() if bar_tabs != null else TAB_CANNONS
+
+
+## Muestra una pestaña sin avisar (RF-456: elegir una torre con su tecla vuelve a «Cañones»).
+func show_tab(id: StringName) -> void:
+	if bar_tabs == null or not bar_tabs.has_tab(id):
+		return
+	bar_tabs.select(id)
+	_tower_button_row.visible = id == TAB_CANNONS
+	infrastructure_tab.visible = id == TAB_INFRASTRUCTURE
+
+
+## RF-456 (`Tab`): pasa a la pestaña que sigue y avisa. Sin pestañas no hace nada.
+func switch_tab() -> void:
+	if bar_tabs == null:
+		return
+	_on_tab_selected(bar_tabs.next_id())
+
+
+func _on_tab_selected(id: StringName) -> void:
+	show_tab(id)
+	tab_changed.emit(id)
+
+
+## RF-458: el título de «Infraestructura» muestra lo que falta de la demolición en curso.
+func show_job_badge(seconds_left: float, job_active: bool) -> void:
+	if bar_tabs == null:
+		return
+	var badge: String = "" if not job_active else InfrastructureText.seconds_text(seconds_left)
+	bar_tabs.set_badge(TAB_INFRASTRUCTURE, badge)
+
+
+## RF-459: «← Menú», o «← Editor» al probar un mapa del editor (RF-217).
+func set_exit_text(text: String, tooltip: String = "") -> void:
+	_exit_button.text = text
+	if tooltip != "":
+		_exit_button.tooltip_text = tooltip
+
+
+## RF-459: con la partida terminada la flecha se oculta (la pantalla de resultado trae sus botones).
+func hide_exit() -> void:
+	_exit_button.visible = false
 
 
 ## RF-101: un botón por torre, con su color, nombre, tecla y costo.
@@ -312,22 +399,29 @@ func setup_towers(tower_types: Array[TowerData]) -> void:
 		old.queue_free()
 	_tower_buttons.clear()
 	_tower_types = tower_types
+	# RF-455: el reparto sale de BarLayout. Sin pestañas y hasta 9 torres: lo de siempre (x = 20, 76 de ancho, 10 de separación).
+	var width: int = BarLayout.button_width(tower_types.size(), _tabs_enabled)
+	_tower_button_row.offset_left = BarLayout.left(_tabs_enabled)
+	if _tabs_enabled:
+		_tower_button_row.offset_right = BarLayout.RIGHT_EDGE
+	_tower_button_row.add_theme_constant_override("separation", BarLayout.gap(tower_types.size(), _tabs_enabled))
 	for i: int in tower_types.size():
 		var tower: TowerData = tower_types[i]
 		var button := Button.new()
-		button.custom_minimum_size = TOWER_BUTTON_SIZE
+		button.custom_minimum_size = Vector2(width, TOWER_BUTTON_HEIGHT)
 		button.toggle_mode = true
 		button.focus_mode = Control.FOCUS_NONE
 		# RF-170: dibujo arriba, costo abajo y la tecla en una esquina. El nombre, al pasar el mouse.
 		button.text = TowerText.bar_text(tower)  # RF-418: "300 + 3"
-		button.tooltip_text = "%s (tecla %d): %s" % [tower.display_name, i + 1, TowerText.cost_text(tower)]
-		button.add_theme_font_size_override("font_size", 15)
+		var key: String = BarLayout.key_label(i)
+		if key != "":
+			button.tooltip_text = "%s (tecla %s): %s" % [tower.display_name, key, TowerText.cost_text(tower)]
+			button.add_child(_key_label(key))
+		else:  # RF-456: de la torre 11 en adelante no hay tecla
+			button.tooltip_text = "%s: %s" % [tower.display_name, TowerText.cost_text(tower)]
+		button.add_theme_font_size_override("font_size", _cost_font_size(button, width))
 		button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		button.vertical_icon_alignment = VERTICAL_ALIGNMENT_TOP
-		if i < 9:
-			button.add_child(_key_label(i + 1))
-		else:
-			button.tooltip_text = "%s: %s" % [tower.display_name, TowerText.cost_text(tower)]
 		var icon: Texture2D = Tower.make_icon(tower)
 		if icon != null:
 			# RF-155: base y torreta, como la torre recién construida, achicadas con suavidad (D-023).
@@ -338,7 +432,7 @@ func setup_towers(tower_types: Array[TowerData]) -> void:
 		else:  # RF-156: sin dibujo, un cuadradito de su color.
 			button.icon = _color_swatch(tower.color)
 		if TowerText.uses_resources(tower):
-			button.add_child(_resource_badge(tower))
+			button.add_child(_resource_badge(tower, width))
 		if tower.has_alt_payment():
 			button.tooltip_text += " · o " + TowerText.cost_text(tower, true)
 		button.pressed.connect(tower_button_pressed.emit.bind(i))
@@ -347,33 +441,56 @@ func setup_towers(tower_types: Array[TowerData]) -> void:
 	_refresh_tower_buttons()
 
 
+## RF-455: la letra del costo, la de siempre (15) mientras entre; en un botón angosto, la más grande que quepa
+## (un «300 + 3» a 15 pt hacía crecer el botón de 57 a 59 px). No se saca información: solo se achica.
+func _cost_font_size(button: Button, width: int) -> int:
+	var font: Font = button.get_theme_font("font")
+	var margins: float = button.get_theme_stylebox("normal").get_minimum_size().x
+	for size: int in [COST_FONT_SIZE, 14, 13, 12]:
+		if font.get_string_size(button.text, HORIZONTAL_ALIGNMENT_LEFT, -1, size).x + margins <= width:
+			return size
+	return 12
+
+
 ## RF-418 y RF-419: el ícono del recurso, chiquito, en la esquina de arriba a la derecha del botón. Con dos
-## formas de pago lleva además la otra ("o 120 + 1"), en chico.
-func _resource_badge(tower: TowerData) -> Control:
+## formas de pago lleva además la otra ("o 120 + 1"), en chico. En un botón angosto (RF-455) va pegado al borde
+## derecho, crece hacia la izquierda y se achica la letra y el ícono para no pisar la tecla de la esquina.
+func _resource_badge(tower: TowerData, button_width: int) -> Control:
+	var narrow: bool = button_width < BarLayout.MAX_BUTTON_WIDTH
 	var row := HBoxContainer.new()
 	row.name = "ResourceBadge"
 	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	row.add_theme_constant_override("separation", 1)
-	row.position = Vector2(TOWER_BUTTON_SIZE.x - (46 if tower.has_alt_payment() else 18), 2)
+	if narrow:
+		row.anchor_left = 1.0
+		row.anchor_right = 1.0
+		row.offset_left = 0.0
+		row.offset_right = -4.0
+		row.offset_top = 2.0
+		row.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+	else:  # 76 px: el lugar de siempre, para que la barra de los niveles 1 a 5 no cambie ni un píxel
+		row.position = Vector2(button_width - (46 if tower.has_alt_payment() else 18), 2)
 	if tower.has_alt_payment():
 		var other := Label.new()
-		other.text = "o " + TowerText.bar_text(tower, true)
-		other.add_theme_font_size_override("font_size", 10)
+		# Angosto: «120+1» sin el «o» ni los espacios (la otra forma de pago completa está en la ayuda al pasar el mouse).
+		other.text = TowerText.bar_text(tower, true).replace(" ", "") if narrow else "o " + TowerText.bar_text(tower, true)
+		other.add_theme_font_size_override("font_size", 9 if narrow else 10)
 		other.modulate = Color(1, 1, 1, 0.75)
 		other.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		row.add_child(other)
 	var icon := TextureRect.new()
-	icon.texture = _resource_texture(14)
-	icon.custom_minimum_size = Vector2(14, 14)
+	var icon_size: int = 10 if narrow and tower.has_alt_payment() else 14
+	icon.texture = _resource_texture(icon_size)
+	icon.custom_minimum_size = Vector2(icon_size, icon_size)
 	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	row.add_child(icon)
 	return row
 
 
 ## RF-170: número de la tecla, chiquito, en la esquina de arriba a la izquierda del botón.
-func _key_label(key: int) -> Label:
+func _key_label(key: String) -> Label:
 	var label := Label.new()
-	label.text = str(key)
+	label.text = key
 	label.position = Vector2(6, 2)
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	label.add_theme_font_size_override("font_size", 12)
@@ -395,6 +512,8 @@ func show_selected_tower(index: int) -> void:
 		_tower_buttons[i].set_pressed_no_signal(i == index)
 	# RF-171: nombre, costo y para qué sirve la torre elegida.
 	_selected_index = index
+	if index >= 0:
+		show_tab(TAB_CANNONS)  # RF-456: elegir una torre (también con su tecla) vuelve a «Cañones»
 	_build_info.visible = index >= 0
 	_pay_gold_button.visible = false
 	_pay_alt_button.visible = false
@@ -422,8 +541,6 @@ func show_selected_tower(index: int) -> void:
 
 func _on_gold_changed(gold: int) -> void:
 	_gold_label.text = "%d" % gold
-	if infrastructure_panel != null:
-		infrastructure_panel.update_gold(gold)
 	if _last_gold >= 0 and gold != _last_gold:
 		_pop(_gold_label)  # RF-129
 	_last_gold = gold

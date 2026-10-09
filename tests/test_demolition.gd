@@ -243,7 +243,7 @@ func test_order_charges_and_finishing_allows_building() -> void:
 
 func test_machine_purchase_is_level_gated_and_updates_prices_globally() -> void:
 	_start_game(300, true)
-	assert_true(game.hud.infrastructure_panel.visible, "RF-411: aparece solo en el nivel habilitado")
+	assert_true(game.hud.infrastructure_tab._machine_card.visible, "RF-411 y RF-457: la tarjeta de la demoledora aparece solo en el nivel habilitado")
 	game.infrastructure.select(TREE)
 	var text_before: Array[String] = []
 	for label: Node in game.hud.obstacle_panel.find_children("*", "Label", true, false):
@@ -253,7 +253,7 @@ func test_machine_purchase_is_level_gated_and_updates_prices_globally() -> void:
 	assert_true(game.infrastructure.buy_machine())
 	assert_eq(game.session.gold, 120, "RF-412: cobra 180 de oro")
 	assert_true(game.infrastructure.field.has_machine)
-	assert_true(game.hud.infrastructure_panel.find_children("*", "Label", true, false)[0].text.contains("Demoledora activa"))
+	assert_true(game.hud.infrastructure_tab._machine_title.text.contains("Demoledora activa"))
 	assert_false(game.infrastructure.buy_machine(), "no vuelve a cobrar una segunda compra")
 	assert_eq(game.session.gold, 120)
 	assert_true(game.infrastructure.order(ROCK))
@@ -268,7 +268,7 @@ func test_machine_cannot_be_bought_without_gold_or_when_level_disables_it() -> v
 	assert_false(game.infrastructure.field.has_machine)
 	game.free()
 	_start_game(300, false)
-	assert_false(game.hud.infrastructure_panel.visible, "RF-411: sin habilitación no aparece el panel")
+	assert_false(game.hud.infrastructure_tab._machine_card.visible, "RF-411: sin habilitación no aparece la tarjeta de la demoledora")
 	assert_false(game.infrastructure.buy_machine())
 	assert_eq(game.session.gold, 300)
 
