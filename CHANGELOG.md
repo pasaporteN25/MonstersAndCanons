@@ -2,6 +2,13 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Textos de los niveles y Lore en la Wiki *(T228, 2026-10-09)*
+
+- **Cada nivel de la campaña (1 a 10) cuenta dónde estás.** La **tarjeta** del nivel (si ya está desbloqueado) muestra su lugar bajo el nombre, por ejemplo «El paso del agua». Al entrar a un nivel aparece un **cartel** con el nombre, el lugar y tres líneas de entrada: **la partida espera mientras lo leés** y se cierra con un toque, `Espacio`, `Enter` o `Esc`. **«Reintentar» no lo vuelve a mostrar.** Al ganar, la pantalla de victoria suma dos líneas bajo las estrellas.
+- **No se ven** en el modo de pruebas, al probar un mapa desde el editor ni en el modo Asedio. Un mapa de la comunidad los muestra solo si su archivo trae el campo `"textos"` (ver `CONTENIDO.md`).
+- **Wiki → Lore:** una solapa nueva con artículos sobre el oasis, Cántaro, la Compañía Meridiana, el Soberano y más. Cada uno **se abre al ganar un nivel** (quien ya había ganado hasta el 9 los tiene abiertos); antes se ve «???» y «Se abre al ganar el nivel N.». Hoy son **7 artículos**; los de los niveles 11, 14 y 15 aparecen cuando esos niveles lleguen a la campaña.
+- No cambió ningún número del juego ni el guardado.
+
 ## La barra con pestañas y la flecha al menú *(T248, 2026-10-08)*
 
 - **Del nivel 6 en adelante, la barra de abajo tiene dos pestañas:** **«Cañones»** (las torres de siempre) e **«Infraestructura»** (todo lo de demoler, la demoledora, la extracción y los recursos). Aparecen en **todo mapa que tenga removibles, minas o demoledora** (hoy, los niveles 6 a 10, y también un mapa de la comunidad con un solo árbol removible). **Los niveles 1 a 5 se ven y se juegan exactamente igual.**

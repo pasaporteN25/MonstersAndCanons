@@ -9,6 +9,11 @@
     "m": {"dibujo":"estatua"},
     ",": {"dibujo":"flores"}
   },
+  "textos": {
+    "lugar": "La empalizada",
+    "entrada": "El campamento ya es un pueblo y todavía no tiene cerco.\nHoy se cierra el primer perímetro.\nLo que quede afuera, queda afuera.",
+    "victoria": "Empalizada cerrada. Es el primer perímetro de la colonia.\nPor primera vez, dormimos adentro."
+  },
   "mapa": [
     ".............C......",
     "A######...m..#......",

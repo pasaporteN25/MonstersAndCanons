@@ -1,0 +1,21 @@
+{
+ "version": 1,
+ "titulo": "Los pozos",
+ "subtitulo": "Informe del puesto seco",
+ "orden": 8,
+ "desbloqueo": "level_11",
+ "bloques": [
+  {
+   "tipo": "texto",
+   "texto": "En el camino seco hay pocos pozos, y todos tienen huellas alrededor. Dos quedaron dentro del perímetro del puesto."
+  },
+  {
+   "tipo": "texto",
+   "texto": "El mismo día en que se aseguró el paso empezaron los fallos: torres que se apagan sin motivo. Las observaciones coinciden en un encapuchado con un bastón que chispea, que se acerca a las torres y no a los colonos."
+  },
+  {
+   "tipo": "texto",
+   "texto": "No ataca a las personas. Ataca lo que construimos."
+  }
+ ]
+}

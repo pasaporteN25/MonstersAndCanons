@@ -9,6 +9,11 @@
     "s": {"dibujo":"columna"},
     "~": {"dibujo":"agua"}
   },
+  "textos": {
+    "lugar": "El paso del agua",
+    "entrada": "El agua dulce más cercana está al otro lado del desfiladero.\nSin ese paso, el campamento no aguanta.\nHay que sostenerlo antes de tender las cañerías.",
+    "victoria": "Paso asegurado. El agua llega al campamento por primera vez.\nFaltan tres tramos de cañería."
+  },
   "mapa": [
     "....................",
     "A###...#####...####S",

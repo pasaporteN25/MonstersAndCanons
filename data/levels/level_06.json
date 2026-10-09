@@ -12,6 +12,11 @@
     "f": {"dibujo":"helecho"}
   },
   "torres_extra": ["mechanical_standard"],
+  "textos": {
+    "lugar": "El lindero",
+    "entrada": "El bosque empieza donde termina el cerco.\nHay madera para varios años, y también criaturas que no habíamos visto.\nDel campamento empezaron a faltar cosas.",
+    "victoria": "Lindero asegurado. Se taló el primer tramo.\nLa madera alcanza para dos casas."
+  },
   "mapa": [
     "..........B.........",
     "A#####....#.......p.",

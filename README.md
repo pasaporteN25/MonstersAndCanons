@@ -150,7 +150,7 @@ Un nivel puede elegir su **tema** (pradera, desierto, nieve, volcán, bosque, pa
 
 ## Wiki
 
-El botón **Wiki** del menú principal abre una enciclopedia: **Enemigos** (un bestiario: cada uno aparece como "???" hasta que lo ves en una partida; en la versión de pruebas se ve todo) y **Torres** (con sus números reales, la tabla de niveles y dónde aparece cada enemigo) y una **Guía** con las reglas. Un enemigo o una torre nuevos aparecen solos; los artículos de la guía son archivos de texto en `data/wiki/`. Cómo escribirlos: [`CONTENIDO.md`](CONTENIDO.md).
+El botón **Wiki** del menú principal abre una enciclopedia: **Enemigos** (un bestiario: cada uno aparece como "???" hasta que lo ves en una partida; en la versión de pruebas se ve todo) y **Torres** (con sus números reales, la tabla de niveles y dónde aparece cada enemigo) una **Guía** con las reglas y **Lore** (la historia de Cántaro y la colonia: cada artículo se abre al ganar un nivel de la campaña). Un enemigo o una torre nuevos aparecen solos; los artículos de la guía son archivos de texto en `data/wiki/`. Cómo escribirlos: [`CONTENIDO.md`](CONTENIDO.md).
 
 ## Mapas de la comunidad
 

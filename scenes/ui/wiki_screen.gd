@@ -17,6 +17,10 @@ var on_leave: Callable = GameFlow.go_to_main_menu
 var is_seen: Callable = func(enemy_id: StringName) -> bool:
 	return DevMode.enabled or SaveManager.has_seen_enemy(enemy_id)
 
+## RF-470: ¿el jugador ganó este nivel? Abre los artículos de Lore. El modo de pruebas lo ve todo. Costura de los tests.
+var is_completed: Callable = func(level_id: StringName) -> bool:
+	return DevMode.enabled or SaveManager.is_completed(level_id)
+
 var _categories: Array[WikiCategory] = []
 var _category: WikiCategory
 var _entry: WikiEntry
@@ -33,7 +37,7 @@ var _entry_buttons: Dictionary = {}
 
 
 func _ready() -> void:
-	_categories = Wiki.categories(GameFlow.campaign.levels, is_seen)
+	_categories = Wiki.categories(GameFlow.campaign.levels, is_seen, is_completed)
 	_build_layout()
 	for category: WikiCategory in _categories:
 		_add_tab(category)

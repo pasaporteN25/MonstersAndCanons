@@ -67,6 +67,8 @@ var obstacle_layer: ObstacleLayer
 @onready var pause_menu: PauseMenu = $PauseMenu
 ## RF-460: el diálogo de la flecha «← Menú».
 @onready var exit_dialog: ExitDialog = $ExitDialog
+## M52 (RF-466): el cartel de entrada del nivel.
+@onready var level_intro: LevelIntro = $LevelIntro
 ## RF-460: si la partida ya estaba en pausa (con `P`) cuando se abrió el diálogo.
 var _exit_was_paused: bool = false
 ## Costuras para los tests (`.claude/rules/tests.md`): a dónde sale la flecha. Por omisión, las pantallas de verdad.
@@ -189,6 +191,7 @@ func _ready() -> void:
 	_start_dev_stats()
 	if DevMode.enabled:
 		_add_dev_panel()
+	_open_intro_if_pending()
 
 
 ## RF-404 a RF-409: el controlador de la demolición, su vista y el panel del HUD. El sorteo del drop
@@ -319,7 +322,7 @@ func _exit_tree() -> void:
 func _input(event: InputEvent) -> void:
 	if not event.is_action_pressed("switch_tab") or not hud.has_tabs():
 		return
-	if exit_dialog.is_open() or pause_menu.is_open() or session.is_over():
+	if exit_dialog.is_open() or pause_menu.is_open() or level_intro.is_open() or session.is_over():
 		return  # con un diálogo abierto o la partida terminada, no hace nada
 	var focus: Control = get_viewport().gui_get_focus_owner()
 	if focus is LineEdit or focus is TextEdit:
@@ -343,7 +346,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			pause_menu.handle_cancel()
 		else:
 			open_pause_menu()
-	elif pause_menu.is_open() or exit_dialog.is_open():
+	elif pause_menu.is_open() or exit_dialog.is_open() or level_intro.is_open():
 		return  # con el menú o el diálogo abiertos, las otras teclas no hacen nada
 	elif dev_panel != null and _handle_dev_shortcut(event):
 		get_viewport().set_input_as_handled()
@@ -370,6 +373,38 @@ func open_pause_menu() -> void:
 
 func close_pause_menu() -> void:
 	pause_menu.close()
+	set_paused(false)
+
+
+# --- El cartel de entrada (M52, RF-466 a RF-468) ---
+
+## RF-468: ¿esta partida muestra los textos del nivel (cartel y victoria)? La campaña, siempre; un mapa de la
+## comunidad o de un modo propio, solo si su archivo los trae (si no, los textos están vacíos y no hay nada que
+## mostrar). No los muestran el modo de pruebas, probar desde el editor ni los modos oficiales (Asedio).
+func shows_texts() -> bool:
+	if DevMode.enabled or testing:
+		return false
+	return GameFlow.current_mode.is_empty() or not bool(GameFlow.current_mode.get("official", false))
+
+
+## RF-466: si se llegó eligiendo el nivel (`GameFlow.intro_pending`) y trae `"entrada"`, abre el cartel y la partida
+## espera. El aviso se consume siempre: «Reintentar» recarga la escena y no lo vuelve a encender.
+func _open_intro_if_pending() -> void:
+	var pending: bool = GameFlow.intro_pending
+	GameFlow.intro_pending = false
+	level_intro.closed.connect(_on_intro_closed)
+	if not pending or not shows_texts() or level_data.intro_text == "":
+		return
+	build_controller.cancel()
+	build_controller.input_blocked = true  # leer no cuesta tiempo ni deja construir
+	set_paused(true)
+	hud.show_paused(true, false)  # el cartel no es el menú de pausa: no dice «PAUSA»
+	level_intro.open(level_data.display_name, level_data.place_text, level_data.intro_text)
+
+
+## Al cerrarlo la partida sigue exactamente como estaba: la misma cuenta atrás, a la misma velocidad.
+func _on_intro_closed() -> void:
+	build_controller.input_blocked = false
 	set_paused(false)
 
 
@@ -767,7 +802,8 @@ func _on_state_changed(state: LevelSession.State) -> void:
 	if state == LevelSession.State.WON:
 		GameFlow.level_won(session.lives, session.score)  # RF-112, RF-115 y RF-194: desbloquea y guarda
 		var stars: int = Rules.stars_for(session.lives, level_data.starting_lives, balance)  # RF-93
-		end_screen.show_victory(session.lives, stars, GameFlow.has_next_level(), can_leave, session.score)
+		end_screen.show_victory(session.lives, stars, GameFlow.has_next_level(), can_leave, session.score,
+			level_data.win_text if shows_texts() else "")  # RF-467
 		Audio.play(&"victory")
 	else:
 		end_screen.show_defeat(session.wave, session.total_waves, can_leave, session.score)

@@ -35,6 +35,10 @@ var select_page: StringName = &"campaign"
 ## Vacío / -1 = no se juega un modo.
 var current_mode: Dictionary = {}
 var current_mode_index: int = -1
+## M52 (RF-466): la próxima partida que se abre viene de elegir un nivel (o «Siguiente nivel»), así que puede
+## mostrar el cartel de entrada. `Game._ready` lo consume y lo apaga; no se guarda. «Reintentar» recarga la
+## escena sin pasar por acá, por eso el cartel no vuelve (y probar desde el editor nunca lo enciende).
+var intro_pending: bool = false
 
 
 func _ready() -> void:
@@ -264,6 +268,7 @@ func start_level(index: int) -> void:
 	current_community = null
 	_clear_mode()
 	select_page = &"campaign"
+	intro_pending = true
 	get_tree().change_scene_to_file(GAME_SCENE)
 
 
@@ -274,6 +279,7 @@ func start_community(community_level: LevelData) -> void:
 	current_community = community_level
 	_clear_mode()
 	select_page = &"community"
+	intro_pending = true  # RF-468: solo se muestra si el archivo del mapa trae "textos"
 	get_tree().change_scene_to_file(GAME_SCENE)
 
 
@@ -283,6 +289,7 @@ func play_test(level_to_test: LevelData) -> void:
 	test_level = level_to_test
 	current_community = null
 	_clear_mode()
+	intro_pending = false  # RF-468: probando desde el editor no hay cartel
 	get_tree().change_scene_to_file(GAME_SCENE)
 
 
@@ -296,6 +303,7 @@ func start_mode_level(mode: Dictionary, index: int) -> void:
 	current_mode = mode
 	current_mode_index = index
 	select_page = ModePacks.page_of(mode)
+	intro_pending = true  # RF-468: los modos oficiales nunca lo muestran; los propios, si el mapa trae "textos"
 	get_tree().change_scene_to_file(GAME_SCENE)
 
 

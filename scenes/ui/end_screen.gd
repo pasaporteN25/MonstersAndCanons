@@ -11,6 +11,9 @@ signal name_entered(name: String)
 
 const SCORE_COLOR := Color(0.55, 0.85, 1)
 const RECORD_COLOR := Color(1, 0.84, 0.3)
+## RF-467: el texto de victoria del nivel, más chico y de color suave. Mismo ancho que el panel (420 menos los márgenes).
+const WIN_TEXT_COLOR := Color(0.78, 0.82, 0.9)
+const WIN_TEXT_WIDTH: float = 356.0
 
 @onready var _rows: VBoxContainer = %Rows
 @onready var _title: Label = %Title
@@ -21,6 +24,7 @@ const RECORD_COLOR := Color(1, 0.84, 0.3)
 @onready var _levels_button: Button = %LevelsButton
 
 var _score_label: Label
+var _win_label: Label
 var _record_title: Label
 var _entry_slot: VBoxContainer
 var _table: ScoreTable
@@ -35,13 +39,17 @@ func _ready() -> void:
 	_next_button.pressed.connect(next_pressed.emit)
 	_levels_button.pressed.connect(levels_pressed.emit)
 	# Puntos, título de récords, entrada de iniciales y tabla: debajo del detalle.
+	_win_label = _label(17, WIN_TEXT_COLOR)
+	_win_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_win_label.custom_minimum_size = Vector2(WIN_TEXT_WIDTH, 0)
+	_win_label.visible = false
 	_score_label = _label(26, SCORE_COLOR)
 	_record_title = _label(20, RECORD_COLOR)
 	_entry_slot = VBoxContainer.new()
 	_table = ScoreTable.new().setup(20)
 	_table.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	var at: int = _detail.get_index() + 1
-	for node: Control in [_score_label, _record_title, _entry_slot, _table]:
+	for node: Control in [_win_label, _score_label, _record_title, _entry_slot, _table]:
 		_rows.add_child(node)
 		_rows.move_child(node, at)
 		at += 1
@@ -56,12 +64,15 @@ func set_levels_text(text: String) -> void:
 
 ## `has_next`: hay un nivel siguiente (y se juega desde la campaña).
 ## `in_campaign`: se llegó desde el menú; si no (F6, tests), no hay a dónde volver.
-func show_victory(lives_left: int, stars: int, has_next: bool, in_campaign: bool, score: int = 0) -> void:
+## `win_text` (RF-467): el texto de victoria del nivel, bajo las estrellas y antes de los puntos. Vacío = no se ve nada.
+func show_victory(lives_left: int, stars: int, has_next: bool, in_campaign: bool, score: int = 0, win_text: String = "") -> void:
 	_title.text = "¡Victoria!"
 	_stars.count = stars  # RF-93
 	_stars.visible = true
 	_title.add_theme_color_override("font_color", Color(1, 0.84, 0.3))
 	_detail.text = "Vidas restantes: %d" % lives_left
+	_win_label.text = win_text
+	_win_label.visible = win_text != ""
 	_score_label.text = "Puntos: %d" % score  # RF-190
 	_show_next = has_next
 	_show_levels = in_campaign
@@ -74,6 +85,7 @@ func show_defeat(wave: int, total_waves: int, in_campaign: bool, score: int = 0)
 	_stars.visible = false
 	_title.add_theme_color_override("font_color", Color(1, 0.45, 0.45))
 	_detail.text = "Llegaste a la oleada %d de %d" % [wave, total_waves]
+	_win_label.visible = false  # RF-467: no hay texto en la derrota
 	_score_label.text = "Puntos: %d" % score  # RF-190
 	_show_next = false
 	_show_levels = in_campaign
@@ -91,6 +103,11 @@ func ask_name(title: String, length: int, initial: String) -> void:
 	var entry: NameEntry = NameEntry.new().setup(length, initial)
 	entry.confirmed.connect(_on_name_confirmed)
 	_entry_slot.add_child(entry)
+
+
+## El texto de victoria que se ve ("" si no hay).
+func win_text() -> String:
+	return _win_label.text if _win_label.visible else ""
 
 
 func is_asking_name() -> bool:

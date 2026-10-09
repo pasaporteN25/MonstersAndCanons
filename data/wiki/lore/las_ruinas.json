@@ -1,0 +1,21 @@
+{
+ "version": 1,
+ "titulo": "Las ruinas",
+ "subtitulo": "Lo que había antes",
+ "orden": 6,
+ "desbloqueo": "level_08",
+ "bloques": [
+  {
+   "tipo": "texto",
+   "texto": "Sobre la loma del bastión hay muros de piedra y metal, a medio enterrar. Los colonos los llaman «las ruinas» y los tratan como un yacimiento: se despeja, se anota y se recupera lo que sirve."
+  },
+  {
+   "tipo": "texto",
+   "texto": "Todas llevan la misma marca que las rocas del oasis. Nadie sabe qué quiere decir: puede ser «esto es nuestro», «hasta acá» o un recuerdo."
+  },
+  {
+   "tipo": "texto",
+   "texto": "El informe de la Compañía dice que las dejó una gente que ya no está. No dice cómo lo sabe."
+  }
+ ]
+}

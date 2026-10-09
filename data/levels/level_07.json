@@ -13,6 +13,11 @@
   },
   "torres_extra": ["mechanical_standard"],
   "demoledora": true,
+  "textos": {
+    "lugar": "El aserradero",
+    "entrada": "El mejor sitio para cortar madera es un cruce de caminos.\nSe arma un aserradero, y para eso hay que despejar el terreno.\nTodo lo que estorbe se retira.",
+    "victoria": "Aserradero en marcha. La colonia ya tiene madera propia.\nLa primera carga sale mañana hacia el campamento."
+  },
   "mapa": [
     "....................",
     "A#################..",
