@@ -298,6 +298,22 @@ Validación M45:954/954 pruebas y62/62 finales de contenido.24 corridas más rep
 
 Cierra el bloque 2 con un mapa grande (24 × 11) del desierto, dos entradas y 20 oleadas con los enemigos de los niveles 6 a 9 (sin debuts). Tiene una **mina** de reserva finita (100 de oro, 2 recursos por oleada, 8 en total), seis removibles que pueden dar 1 recurso, la **pieza 3/3 de la Disruptora** y el Mortero. Es un mapa de **espacio limitado** (43 casillas libres): el bot sin recursos lo gana con 7 a 13 vidas y las estrategias de extracción y de demolición lo ganan con 17 y 18. La ficha completa está en `specs/01-spec.md` §7.12 (RF-453) y la evidencia, en `art/campaign-t225/README.md`.
 
+### T232 · Nivel 14: Los poblados vacíos
+
+Un mapa de ruinas de 26 × 12 con **dos entradas** que se unen (el 13 espejado), las **señales que culminan** (campamentos vacíos, el símbolo A por todas partes y columnas) y 26 oleadas con **todas las amenazas juntas**, sin enemigos nuevos: es el examen antes del final. El bot sin recursos lo gana con 3 vidas (el 13: 6). Ficha: `specs/01-spec.md` §7.16 (RF-479); evidencia: `art/campaign-t229/README.md`.
+
+### T231 · Nivel 13: Paso alto
+
+Un paso de nieve de 26 × 12 con **dos entradas** que se unen, una laguna de hielo, una mina y un bosque (uno por entrada) y 24 oleadas **sin enemigos nuevos**: lo nuevo es **la escolta** (Guardián + Curandero + Chamán que salen juntos, primero por una entrada y desde la oleada 14 por las dos). El bot sin recursos lo gana con 6 vidas. Ficha: `specs/01-spec.md` §7.15 (RF-478); evidencia: `art/campaign-t229/README.md`.
+
+### T230 · Nivel 12: El cañadón
+
+Un cañadón de 26 × 11 del desierto con **una entrada** y un zigzag entre paredes, un **bosque explotable** en lugar de la mina y 24 oleadas. **Debuta el Espejo** (devuelve los tiros de las torres cercanas y las aturde), solo, en la oleada 5; desde la 12 viaja con las auras y el Chamán. El bot sin recursos lo gana con 3 a 5 vidas (el 11: 6). Ficha: `specs/01-spec.md` §7.14 (RF-477); evidencia: `art/campaign-t229/README.md`.
+
+### T229 · Nivel 11: Puesto seco
+
+Abre el bloque 3 con un mapa grande (24 × 11) del desierto, **una entrada**, 22 oleadas, dos pozos, una mina y cinco removibles. **Ya no hay Ametralladora** (rotación de torres, RF-474), se ofrece la **Disruptora** (con su colección) y **debuta el Chamán**, solo, en la oleada 5. El bot sin recursos lo gana con 6 vidas (el nivel 10: 7 a 13); con la Disruptora el bot **pierde** (la tabla está para que Lucas decida). La ficha completa está en `specs/01-spec.md` §7.13 (RF-476) y la evidencia, en `art/campaign-t229/README.md`.
+
 ### T248 · Barra con pestañas y flecha al menú (M53)
 
 En los niveles que usan infraestructura (los que tienen removibles, minas o demoledora; hoy del 6 al 10) la barra de abajo trae dos pestañas, **«Cañones»** e **«Infraestructura»**, y el panel suelto de arriba a la derecha desaparece. Los niveles 1 a 5 no cambian. Teclas nuevas: **`0`** elige la décima torre y **`Tab`** cambia de pestaña (las torres 1 a 9 siguen en `1` a `9`; la torre 11 no tiene tecla). En todos los niveles hay una flecha **«← Menú»** arriba a la izquierda que pide confirmación y avisa qué se pierde (piezas de colección recogidas y demolición en curso); al probar un mapa del editor dice «← Editor» y vuelve sin preguntar. Capturas reales en `art/m53-barra/`. Spec: M53 (RF-454 a RF-463), D-088.

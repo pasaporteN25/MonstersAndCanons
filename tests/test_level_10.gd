@@ -89,8 +89,8 @@ func _corners(grid: MapGrid) -> Array[Vector2i]:
 	return corners
 
 
-func test_level_10_is_the_last_of_the_campaign_in_a_big_desert_map() -> void:
-	assert_eq(LevelFile.campaign_ids().slice(8), PackedStringArray(["level_09", "level_10"]))
+func test_level_10_is_in_the_campaign_in_a_big_desert_map() -> void:
+	assert_eq(LevelFile.campaign_ids().slice(8, 10), PackedStringArray(["level_09", "level_10"]))
 	var level: LevelData = _load(10)
 	assert_eq(level.display_name, "La mina vieja")
 	assert_eq(level.theme, &"desierto")

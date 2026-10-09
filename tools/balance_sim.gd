@@ -68,6 +68,9 @@ extends SceneTree
 const SMART_ORDER: Array[int] = [0, 0, 0, 1, 0, 2, 3, 1, 0, 3, 1, 2]
 ## Orden de compra de "mix": las 8 torres (4 Incendiaria, 5 Múltiple, 6 Ráfaga, 7 Eléctrica).
 const MIX_ORDER: Array[int] = [0, 0, 0, 7, 1, 4, 0, 5, 3, 6, 2, 7, 0, 4, 5, 6, 3, 1]
+## T229: orden de compra de "mix" y de las estrategias de M50 en los mapas que NO ofrecen la Ametralladora (niveles 11
+## a 15, RF-474): abre con Cañón y Hielo (RF-474: Hielo + una torre de 90 a 110) y sigue con lo barato antes que lo caro.
+const NO_BASIC_ORDER: Array[int] = [1, 2, 1, 3, 1, 5, 3, 7, 1, 6, 3, 4, 1, 2, 7, 3, 6, 5]
 ## Orden de compra de "heavy" (M19): como "mix" más el Mortero (8) cada tanto.
 const HEAVY_ORDER: Array[int] = [0, 0, 0, 7, 1, 4, 0, 8, 5, 3, 6, 8, 2, 7, 0, 4, 8, 5, 6, 3, 1]
 ## RF-452: id de la Disruptora y cuántas compra como máximo el bot (valores de la herramienta, no del juego).
@@ -458,6 +461,7 @@ func _buy_towers() -> void:
 				disruptors_built += 1
 				continue
 		var index: int = 0
+		var advance: int = 0
 		if strategy == "smart":
 			index = SMART_ORDER[built % SMART_ORDER.size()]
 		elif strategy == "heavy":
@@ -465,12 +469,21 @@ func _buy_towers() -> void:
 		elif strategy == "mix":
 			index = MIX_ORDER[built % MIX_ORDER.size()] % game.tower_types.size()
 		var tower: TowerData = game.tower_types[index]
+		if strategy == "mix":
+			# T229: "mix" compra solo lo que el mapa ofrece (los niveles 11 a 15 no traen la Ametralladora, RF-474).
+			# En los mapas que ofrecen todo el orden da exactamente la misma secuencia de siempre.
+			var pick: Dictionary = _order_pick()
+			if pick.is_empty():
+				return
+			tower = pick["tower"]
+			advance = pick["advance"]
 		if not game.session.can_afford(tower.levels[0].cost):
 			return
 		var cell: Vector2i = _random_cell() if strategy == "naive" else _best_cell(tower)
 		if not game.build_controller.try_build(tower, cell):
 			return
 		built += 1
+		_order_pos += advance
 
 
 func _free_cells() -> Array[Vector2i]:
@@ -584,11 +597,20 @@ func _buy_towers_infra() -> void:
 			_order_pos += advance
 
 
+## El orden de compra de "mix": el de siempre, o el de NO_BASIC_ORDER si el mapa no ofrece la Ametralladora.
+func _buy_order() -> Array[int]:
+	for tower: TowerData in game.available_towers:
+		if tower.id == &"basic":
+			return MIX_ORDER
+	return NO_BASIC_ORDER
+
+
 ## La próxima torre del orden de "mix" que el mapa ofrece y no cuesta recursos. Vacío si no hay ninguna.
 ## `advance` cuenta las entradas del orden que se saltó, para seguir desde ahí.
 func _order_pick() -> Dictionary:
-	for offset: int in MIX_ORDER.size():
-		var tower: TowerData = game.tower_types[MIX_ORDER[(_order_pos + offset) % MIX_ORDER.size()] % game.tower_types.size()]
+	var order: Array[int] = _buy_order()
+	for offset: int in order.size():
+		var tower: TowerData = game.tower_types[order[(_order_pos + offset) % order.size()] % game.tower_types.size()]
 		if game.available_towers.has(tower) and tower.resource_cost == 0:
 			return {"tower": tower, "advance": offset + 1}
 	return {}

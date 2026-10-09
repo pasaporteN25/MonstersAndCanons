@@ -13,6 +13,30 @@ Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle t�
 - **No se ven** en el modo de pruebas, al probar un mapa desde el editor ni en el modo Asedio. Un mapa de la comunidad los muestra solo si su archivo trae el campo `"textos"` (ver `CONTENIDO.md`).
 - **Wiki → Lore:** una solapa nueva con artículos sobre el oasis, Cántaro, la Compañía Meridiana, el Soberano y más. Cada uno **se abre al ganar un nivel** (quien ya había ganado hasta el 9 los tiene abiertos); antes se ve «???» y «Se abre al ganar el nivel N.». Hoy son **7 artículos**; los de los niveles 11, 14 y 15 aparecen cuando esos niveles lleguen a la campaña.
 - No cambió ningún número del juego ni el guardado.
+## Nivel 14: Los poblados vacíos *(T232, 2026-10-09)*
+
+- **La campaña tiene 14 niveles.** El nuevo se abre al ganar el 13: **Los poblados vacíos**, «asentamientos de los Moradores», un mapa **grande** (26 × 12) de **ruinas** con **dos entradas** a la derecha cuyos caminos se unen y siguen juntos hasta la salida, a la izquierda. Los poblados están **vacíos pero con huellas recientes**: campamentos con restos de fuego, cuerdas y pieles, el símbolo A por todas partes y columnas rotas. Hay una mina y un bosque (uno por entrada) y cinco removibles, las casas del poblado.
+- **No hay enemigos nuevos: es el examen antes del final.** Vienen **todos juntos**: la escolta (Guardián, Curandero y Chamán) con el **Espejo** y **Voladores**, el Ladrón, el Embestidor y el Soberano, en **26 oleadas**. Es **el nivel más difícil hasta ahora** (aumento de vida de 30 % por oleada).
+- Sin Ametralladora. **Se gana sin tocar la mina, el bosque ni los removibles.** Con la Disruptora, conviene ponerla donde se juntan los caminos.
+
+## Nivel 13: Paso alto *(T231, 2026-10-09)*
+
+- **La campaña tiene 13 niveles.** El nuevo se abre al ganar el 12: **Paso alto**, «el camino al resto de la región», un mapa **grande** (26 × 12) de **nieve** con **dos entradas** (arriba y abajo a la izquierda) cuyos caminos **se unen** y siguen juntos hasta la salida, una **laguna de hielo** en el medio (no se construye) y cuatro rocas marcadas a lo largo de los caminos. Hay una **mina** del lado de la entrada de arriba y un **bosque** del lado de la de abajo (2 recursos por oleada cada uno), y cinco removibles.
+- **No hay enemigos nuevos: lo nuevo es cómo vienen.** Aparece **la escolta**: un **Guardián, un Curandero y un Chamán juntos**, que protegen, curan y apagan torres a la vez. La primera llega en la oleada 9 por una sola entrada; desde la 14 vienen **por las dos entradas al mismo tiempo**. Conviene **repartir las defensas** entre las dos entradas y apagar las auras (con la Disruptora, si la tenés) donde los caminos se juntan.
+- Sin Ametralladora ni Lanzamisiles. **Se gana sin tocar la mina, el bosque ni los removibles.** El nivel es **tan difícil como el 11** (con aumento de vida de 40 % por oleada, 24 oleadas).
+
+## Nivel 12: El cañadón *(T230, 2026-10-09)*
+
+- **La campaña tiene 12 niveles.** El nuevo se abre al ganar el 11: **El cañadón**, «el paso hacia el norte»: un mapa **grande** (26 × 11) del **desierto** con **una entrada** y un camino que **zigzaguea entre paredes de roca** (cinco tramos verticales). Hay pocas casillas buenas (45), tres rocas marcadas en la boca del cañadón, cinco rocas y escombros que pueden dar 1 recurso y, en lugar de la mina, un **bosque explotable** (100 de oro, 2 recursos por oleada, 8 en total).
+- **Debuta el Espejo**, solo, en la oleada 5: **devuelve los tiros de las torres cercanas** (a menos de 2,5 casillas) y las aturde un par de segundos. Lo que rinde es **pegarle de lejos** (Francotirador, Mortero, Incendiaria) y no poner las torres pegadas al camino. Desde la oleada 8 se mezclan el Chamán, el Guardián y el Curandero, y desde la 12 el Espejo viaja con ellos.
+- Sigue sin Ametralladora; con las colecciones completas están la Disruptora y el Mecánico. **Se gana sin tocar el bosque ni los removibles.** El nivel es **más difícil que el 11** (aumento de vida de 27 % por oleada, 24 oleadas).
+
+## Nivel 11: Puesto seco *(T229, 2026-10-09)*
+
+- **La campaña tiene 11 niveles.** El nuevo se abre al ganar el 10: **Puesto seco**, «el punto de agua», un mapa **grande** (24 × 11) del **desierto** con **una sola entrada** y un camino largo en serpentina. Tiene **dos pozos de agua** y tres rocas marcadas al costado del camino, una **mina** (100 de oro, 2 recursos por oleada) y cinco rocas y escombros que pueden dar 1 recurso.
+- **Desde acá ya no hay Ametralladora.** El nivel ofrece las otras torres (Cañón, Hielo, Francotirador, Incendiaria, Múltiple, Ráfaga, Eléctrica y Mortero) y, si completaste sus colecciones, la **Disruptora** (que en este nivel aparece marcada como «Nueva») y el Mecánico. La apertura es con el **Hielo** y una torre de entre 90 y 110 de oro.
+- **Debuta el Chamán**, y lo hace solo, en la oleada 5: **apaga la torre más cercana** unos segundos. Un Francotirador lo alcanza antes de que lance el hechizo. El Guardián y el Curandero llegan juntos desde la oleada 8; el Chamán se les suma desde la 12 (ahí sirve la Disruptora contra las auras). El Soberano aparece a mitad del nivel.
+- **Se gana sin tocar la mina, los removibles ni los recursos.** El nivel es más difícil que el 10 (con aumento de vida de 27 % por oleada).
 
 ## La barra con pestañas y la flecha al menú *(T248, 2026-10-08)*
 

@@ -424,6 +424,10 @@ Hasta ahora los enemigos no le hacían nada a las torres. Estos dos sí: las **a
 | 8 | Bastión | 18 | 300 | Una entrada, debut Guardián, robo y embestidas separados antes de combinarse; Mecánico disponible con colección. | M45 |
 | 9 | Taller asediado | 20 | 320 | Dos entradas, debut Curandero junto al Guardián, presión combinada y posiciones expuestas reparables. | M45 |
 | 10 | La mina vieja | 20 | 360 | Mapa grande (24×11) del desierto con **mina** de reserva finita, removibles que dan recursos, la **pieza 3/3** de la Disruptora y el Mortero. Cierra el bloque 2 (§7.12). | M50 |
+| 11 | Puesto seco | 22 | 420 | Mapa de 24×11 del desierto con **una entrada**, dos pozos, una mina y cinco removibles; abre la rotación de torres **sin Ametralladora**, ofrece la Disruptora y debuta el **Chamán**, solo (§7.13). | M52 |
+| 12 | El cañadón | 24 | 440 | Cañadón de 26×11 del desierto con **una entrada**, un zigzag entre paredes, un **bosque explotable** en vez de la mina y el debut del **Espejo**, solo (§7.14). | M52 |
+| 13 | Paso alto | 24 | 460 | Paso de nieve de 26×12 con **dos entradas** que se unen, una laguna de hielo, una mina y un bosque (uno por entrada) y las **escoltas coordinadas** (Guardián + Curandero + Chamán), sin debuts (§7.15). | M52 |
+| 14 | Los poblados vacíos | 26 | 480 | Mapa de ruinas de 26×12 con **dos entradas**, las señales que culminan (campamentos vacíos y el símbolo A por todas partes) y **todas las amenazas juntas**, sin debuts: el examen antes del final (§7.16). | M52 |
 
 ### Oleadas del nivel 1
 
@@ -863,6 +867,14 @@ Lo que **no** depende de G4 y queda firme: el lugar, el bioma, las señales, los
 8. **Estrategia sin recursos.** Se gana **sin demoler, sin extraer y sin la Disruptora** (RF-432 y RF-433): `sin_recursos` gana **4 de 5** como mínimo, y las oleadas 1 a 3 no pierden vidas (RF-475). La Disruptora, quien la tiene, rinde contra el Guardián y el Curandero; el Francotirador y el alcance, contra el Chamán. **A REVISAR TRAS G4 (c):** que la Disruptora rinda es justamente lo que mide T229 (RF-475, punto 8); si con el bot sigue empeorando, **no es motivo para frenar el nivel**: se informa a Lucas con la tabla y él decide.
 9. **Textos y transición.** Lugar, entrada y victoria: `11-textos-lore.md`, nivel 11 (la victoria es la frase de ejemplo de la biblia: «Informe del puesto seco: paso asegurado. Dos pozos quedaron dentro del perímetro.»). Artículo de Lore que se abre al ganarlo: **«Los pozos»**. Transición: al ganar se abre el 12, «El cañadón», el paso hacia el norte.
 
+**Valores finales (T229, 2026-10-09).** Lo que quedó escrito en `data/levels/level_11.json` (los números de arriba eran iniciales; el detalle y las tablas del bot están en `art/campaign-t229/README.md`):
+
+- **Mapa de 24 × 11** con A arriba a la izquierda y S abajo a la derecha (los voladores cruzan en diagonal), un camino de **76 casillas** en una serpentina de tres rectas largas por las filas 0, 5 y 10, **52 casillas libres** y **cuatro bloques de 2×2** libres para el Mortero en (3,1), (13,2), (6,7) y (13,7) *(columna, fila; esquina de arriba a la izquierda)*. Las cuatro esquinas del Embestidor tienen una casilla libre pegada y otra cerca para el apoyo (RF-379).
+- **Señales:** dos casillas de `agua` (los pozos, en (6,3) y (16,7)) y tres `roca_marcada` en (1,2), (21,2) y (2,8): el dibujo del `hito` todavía no existe (P6, T233), y la ficha ya decía que sin él se usa la roca marcada. Huesos y cactus salen solos del tema.
+- **Infraestructura:** una **mina** en (11,2) (`clase: mina`, Q-19) y **cinco removibles** (rocas en (6,1), (12,6) y (19,9); escombros en (16,2) y (7,9)), cada uno con 1 recurso al 50 %. Ninguno toca el camino ni una casilla de impacto del Embestidor. Sin hallazgos, sin demoledora. **A REVISAR TRAS G4 (a) y (b)** sigue en pie: son estos números.
+- **Oleadas:** 22. **El Chamán debuta en la 5, solo** (1 Chamán y 5 Trolls); **el Guardián y el Curandero entran juntos en la 8**; el Chamán se junta con ellos desde la 12; el Soberano está en las 11, 17, 21 y 22. **Oro 420, 20 vidas y aumento de vida de 27 %** (no 28 %: con 28 `sin_recursos` gana con 1 vida de margen; con 27, con 6).
+- **Desvío de la ficha:** ninguno más. Los textos del nivel (`"textos"`) **no están cargados**: el campo lo agrega T228 (en paralelo) y los copia de `11-textos-lore.md`.
+
 - **RF-476** **Nivel 11 en la campaña:** **dada** la campaña, **cuando** se gana el nivel 10, **entonces** se abre `level_11` («Puesto seco», tema `desierto`, 24 × 11, una entrada, 22 oleadas, 420 de oro, 20 vidas), y **después del 11 hay «siguiente nivel»**. **Dado** ese nivel, **entonces** ofrece las torres de RF-474, **no** ofrece `basic`, tiene una mina y de 4 a 6 removibles sin hallazgos, trae el Chamán por primera vez en una oleada de la 4 a la 6 **sin** Guardián, Curandero ni Espejo, y ningún otro enemigo debuta. **Dado** el bot con 5 semillas, **entonces** `sin_recursos` gana al menos 4 y la tabla con y sin Disruptora queda en el Resultado (T229).
 
 > **Criterio de aceptación RF-476**
@@ -881,6 +893,14 @@ Lo que **no** depende de G4 y queda firme: el lugar, el bioma, las señales, los
 7. **Recursos y hallazgos.** Un **bosque explotable** (Q-19: 100 de oro, 2 por oleada, reserva 8) y los removibles. Sin hallazgos. **A REVISAR TRAS G4 (b)**, igual que en el 11.
 8. **Estrategia sin recursos.** Igual que el 11: `sin_recursos` gana al menos 4 de 5, sin demoler ni extraer ni usar la Disruptora. La contramedida del Espejo está en las comunes (Francotirador, Incendiaria). **A REVISAR TRAS G4 (c).**
 9. **Textos y transición.** `11-textos-lore.md`, nivel 12. Artículo de Lore: ninguno nuevo (el siguiente es el del 14). Transición: al ganar se abre el 13, «Paso alto», ya en la nieve.
+
+**Valores finales (T230, 2026-10-09).** Lo que quedó en `data/levels/level_12.json` (detalle y tablas del bot en `art/campaign-t229/README.md`):
+
+- **Mapa de 26 × 11:** A arriba a la izquierda y S abajo a la derecha, cinco patas verticales unidas por el borde de arriba y el de abajo (un **zigzag entre paredes**), un camino de **76 casillas**, **45 casillas libres** y **cuatro bloques de 2×2** libres para el Mortero en (14,3), (4,4), (19,5) y (9,6). Las nueve esquinas del Embestidor tienen una casilla libre pegada y otra cerca para el apoyo (RF-379).
+- **Señales:** tres `roca_marcada` (el `hito`, que todavía no existe) en la boca del cañadón: (4,0), (0,3) y (1,6). Huesos y cactus salen solos del tema.
+- **Infraestructura:** un **bosque explotable** en (6,5) (`clase: bosque_explotable`, Q-19: 100 de oro, 2 por oleada, reserva 8) y **cinco removibles** (rocas en (15,6), (5,7) y (9,9); escombros en (10,3) y (20,8)) con 1 recurso al 50 %. **A REVISAR TRAS G4 (a) y (b)** sigue en pie.
+- **Oleadas:** 24. **El Espejo debuta en la 5, solo** (1 Espejo y 5 Trolls, sin Chamán, Guardián ni Curandero); desde la 8 se mezclan el Chamán, el Guardián y el Curandero; **desde la 12 el Espejo viaja con ellos**; el Soberano, en las 11, 17, 21 y 24. **Oro 440, 20 vidas y aumento de vida de 27 %** (la ficha traía 26: con 26 % y las oleadas de ese momento el bot lo ganaba con 12 a 15 vidas, más fácil que el 11).
+- **Textos:** igual que el 11, el campo `"textos"` lo agrega T228.
 
 - **RF-477** **Nivel 12 en la campaña:** **dada** la campaña, **cuando** se gana el nivel 11, **entonces** se abre `level_12` («El cañadón», tema `desierto`, 26 × 11, una entrada, 24 oleadas, 440 de oro, 20 vidas). **Dado** ese nivel, **entonces** no ofrece `basic`, tiene un bosque explotable y de 4 a 6 removibles, trae el Espejo por primera vez en una oleada de la 4 a la 6 **sin** Chamán, Guardián ni Curandero, y ningún otro enemigo debuta. **Dado** el bot con 5 semillas, **entonces** `sin_recursos` gana al menos 4 y su tabla no es más fácil que la del 11 (RF-475).
 
@@ -901,6 +921,14 @@ Lo que **no** depende de G4 y queda firme: el lugar, el bioma, las señales, los
 8. **Estrategia sin recursos.** Igual que los anteriores (≥ 4 de 5). **A REVISAR TRAS G4 (c):** con dos escoltas a la vez, el aura es el problema que la Disruptora resuelve mejor; si no rinde, la dificultad de este nivel depende de lo que decida Lucas sobre la torre.
 9. **Textos y transición.** `11-textos-lore.md`, nivel 13 (dependen de que exista el `hito`, P-6). Sin artículo de Lore nuevo. Transición: al ganar se abre el 14, «Los poblados vacíos».
 
+**Valores finales (T231, 2026-10-09).** Lo que quedó en `data/levels/level_13.json` (detalle y tablas del bot en `art/campaign-t229/README.md`):
+
+- **Mapa de 26 × 12**, tema `nieve`, **dos entradas**: A arriba a la izquierda y B abajo a la izquierda, cada una con dos rectas largas (23 y 21 casillas) que se **unen en (2,6)** y siguen por un tronco común de 23 casillas hasta la salida S, a la derecha, al medio. Recorridos de **72 (A) y 71 (B)** casillas. **59 casillas libres** y **cuatro bloques de 2×2** en (4,1), (12,1), (5,4) y (18,7). Las seis esquinas del Embestidor tienen casilla libre pegada y otra cerca para el apoyo.
+- **Señales:** una **laguna de hielo** de 3 × 2 en (15..17, 4..5) (`hielo`, no se construye) y **cuatro** `roca_marcada` (el `hito`, que todavía no existe) en (7,1), (11,4), (20,5) y (8,7), repartidas por los dos caminos.
+- **Infraestructura:** una **mina** en (10,1), del lado de A, y un **bosque explotable** en (11,10), del lado de B (16 recursos si se habilitan los dos); **cinco removibles** (rocas en (6,2), (14,5), (20,8); escombros en (3,5), (16,7)) con 1 recurso al 50 %. **A REVISAR TRAS G4 (a) y (b)** sigue en pie.
+- **Oleadas:** 24, **sin debuts**. **Escolta completa** (Guardián + Curandero + Chamán con el mismo `desde` y la misma entrada) en las oleadas **9** (solo por A), 12 (solo por B), **14** (por las dos), 16, **19** (por las dos), 20, **22** (por las dos) y 24; el Soberano en las 11, 17, 21 y 24; el Espejo, conocido del 12, se mezcla desde la 16. **Oro 460, 20 vidas y aumento de vida de 40 %** (la ficha traía 25: con 25 el bot ganaba con 20 vidas, y recién con 38 a 40 el nivel queda a la altura del 12; el bot es el que manda, RF-475 punto 3).
+- **Textos:** igual que el 11 y el 12, el campo `"textos"` lo agrega T228.
+
 - **RF-478** **Nivel 13 en la campaña:** **dada** la campaña, **cuando** se gana el nivel 12, **entonces** se abre `level_13` («Paso alto», tema `nieve`, 26 × 12, dos entradas, 24 oleadas, 460 de oro, 20 vidas). **Dado** ese nivel, **entonces** no ofrece `basic`, no estrena ningún enemigo, trae la escolta (Guardián, Curandero y Chamán con el mismo `desde`) en al menos 6 oleadas y, desde la 14, por las dos entradas a la vez. **Dado** el bot con 5 semillas, **entonces** `sin_recursos` gana al menos 4 y su tabla no es más fácil que la del 12.
 
 > **Criterio de aceptación RF-478**
@@ -919,6 +947,14 @@ Lo que **no** depende de G4 y queda firme: el lugar, el bioma, las señales, los
 7. **Recursos y hallazgos.** Un **bosque explotable** y una **mina** (reserva 8 cada uno). Sin hallazgos. **A REVISAR TRAS G4 (b).**
 8. **Estrategia sin recursos.** Igual que los anteriores (≥ 4 de 5), y es donde mejor se ve si el Mortero y la Disruptora son «una estrategia más» o quedan como adorno. **A REVISAR TRAS G4 (b) y (c).**
 9. **Textos y transición.** `11-textos-lore.md`, nivel 14 (la victoria es la frase de ejemplo de la biblia). Artículo de Lore: **«Los poblados vacíos»**. Transición: al ganar se abre el 15, «La Central».
+
+**Valores finales (T232, 2026-10-09).** Lo que quedó en `data/levels/level_14.json` (detalle y tablas del bot en `art/campaign-t229/README.md`):
+
+- **Mapa de 26 × 12**, tema `ruinas`, **dos entradas**: A arriba a la derecha y B abajo a la derecha, que se **unen en (23,6)** y siguen por un tronco común hasta la salida S, a la izquierda, al medio (el 13 al revés: los Voladores cruzan de derecha a izquierda). Recorridos de **72 (A) y 71 (B)** casillas. **51 casillas libres** y **tres bloques de 2×2** en (19,1), (7,4) y (15,7).
+- **Señales (culminan):** **cinco** `campamento_vacio` en (16,1), (5,4), (22,4), (10,7) y (21,8); **ocho** `simbolo_ruina` en (8,1), (24,1), (18,2), (3,5), (14,5), (7,7), (13,8) y (25,9); y **cinco columnas** rotas.
+- **Infraestructura:** una **mina** en (14,2) (lado A) y un **bosque explotable** en (14,10) (lado B); **cinco removibles** («las casas»: rocas en (9,2), (20,5), (6,8); escombros en (11,5), (17,7)) con 1 recurso al 50 %. **A REVISAR TRAS G4 (a) y (b)** sigue en pie.
+- **Oleadas:** 26. **Los 14 enemigos** (Normal, Rápido, Tanque, Blindado, Volador, Troll, Araña, Ladrón, Embestidor, Guardián, Curandero, Chamán, Espejo y Soberano), **sin debuts**. **Guardián, Curandero, Chamán y Espejo a la vez** en 9 oleadas (12, 14, 16, 19, 20, 22, 24, 25 y 26), todas con Voladores; el Soberano en las 11, 17, 21, 24, 25 y 26. **Oro 480, 20 vidas y aumento de vida de 30 %** (la ficha traía 24: con 24 el bot ganaba con 16 vidas).
+- **Textos:** el campo `"textos"` y el artículo de Lore «Los poblados vacíos» los agrega T228.
 
 - **RF-479** **Nivel 14 en la campaña:** **dada** la campaña, **cuando** se gana el nivel 13, **entonces** se abre `level_14` («Los poblados vacíos», tema `ruinas`, 26 × 12, 26 oleadas, 480 de oro, 20 vidas). **Dado** ese nivel, **entonces** no ofrece `basic`, no estrena enemigos, trae a la vez Guardián, Curandero, Chamán y Espejo en al menos 6 oleadas, tiene al menos cuatro `campamento_vacio` y seis `simbolo_ruina`, y **su tabla del bot no es más fácil que la del 13**. **Dado** el bot con 5 semillas, **entonces** `sin_recursos` gana al menos 4.
 

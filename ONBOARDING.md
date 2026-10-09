@@ -435,6 +435,30 @@ Con el proyecto abierto (o `godot --path .`): ganar el nivel 9 abre el 10 (o, co
 
 Para medir: `godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- sin_recursos,demoler,extraer_temprano,extraer_tarde level=10 seeds=5` y `... -- x check_rule=1 levels=10`. Captura y exposición: `godot --path . --resolution 1920x1080 art/campaign-t225/capture.tscn` (necesita pantalla) y `godot --headless --path . art/campaign-t225/exposure.tscn`. Detalle en `art/campaign-t225/README.md`.
 
+### T232 · Probar el nivel 14 (Los poblados vacíos)
+
+Ganar el nivel 13 abre el 14 (o, con el modo de pruebas, elegirlo en **Niveles**). **✅ Comprobar:** mapa **de ruinas** (adoquines grises, columnas rotas, estatuas) de 26 × 12 con **dos entradas a la derecha** que se juntan en el medio-derecha y siguen juntas hasta la salida de la izquierda; **cinco campamentos vacíos** (tiendas oscuras con restos de fuego), **muchas rocas con una A** y cinco removibles; en «Infraestructura» una mina (arriba) y un bosque (abajo). **Sin enemigos nuevos:** la escolta (Guardián + Curandero + Chamán) llega con el Espejo y Voladores desde la oleada 12, por una o por las dos entradas. **La sensación a mirar:** que los poblados se vean abandonados hace poco, mientras la defensa sigue siendo necesaria.
+
+Para medir: `... -s tools/balance_sim.gd -- sin_recursos,demoler,extraer_temprano,extraer_tarde level=14 seeds=5` y `... -- x check_rule=1 levels=14`. Partida real (necesita pantalla y mueve el puntero): `godot --path . --resolution 1280x720 art/campaign-t229/play.tscn -- level=14 until=10 speed=5 out=art/campaign-t229`.
+
+### T231 · Probar el nivel 13 (Paso alto)
+
+Ganar el nivel 12 abre el 13 (o, con el modo de pruebas, elegirlo en **Niveles**). **✅ Comprobar:** mapa **de nieve** de 26 × 12 con **dos entradas** (arriba y abajo a la izquierda) que se juntan a la izquierda del medio y siguen juntas hasta la salida, a la derecha; una **laguna de hielo** celeste en el medio donde no se puede construir; **la barra tiene 8 torres** (sin Ametralladora ni Lanzamisiles). En la **pestaña «Infraestructura»** hay **dos fuentes**: la mina (arriba) y el bosque (abajo), cada una *Habilitar · 100 de oro*. En la **oleada 9** llegan juntos un Guardián, un Curandero y un Chamán por **una** entrada (la tarjeta «Nuevo enemigo» sale por cada uno si es tu primera vez); desde la **14**, por las dos entradas a la vez. Con la Disruptora, se la pone donde se juntan los caminos.
+
+Para medir: `... -s tools/balance_sim.gd -- sin_recursos,demoler,extraer_temprano,extraer_tarde level=13 seeds=5` y `... -- x check_rule=1 levels=13`. Partida real (necesita pantalla y mueve el puntero): `godot --path . --resolution 1280x720 art/campaign-t229/play.tscn -- level=13 until=10 speed=5 out=art/campaign-t229`.
+
+### T230 · Probar el nivel 12 (El cañadón)
+
+Ganar el nivel 11 abre el 12 (o, con el modo de pruebas, elegirlo en **Niveles**). **✅ Comprobar:** mapa **de 26 × 11** con paredes de roca y un camino que baja y sube cinco veces; **un solo lugar por donde entran** (arriba a la izquierda); tres rocas con una A cerca de la entrada; **sin Ametralladora**. En la **oleada 5** sale la tarjeta «Nuevo enemigo: Espejo»: cuando una torre a **menos de 2,5 casillas** le dispara, aparece «¡Rebote!» y la torre queda **aturdida 2 s**; un Francotirador (alcance 6) o el Mortero le pegan sin problema. En la **pestaña «Infraestructura»**, el **bosque** (cuadro verde con árboles) dice *Habilitar · 100 de oro*, *2 recursos por oleada*, *reserva 8*. Se puede ganar sin usarlo.
+
+Para medir: `... -s tools/balance_sim.gd -- sin_recursos,demoler,extraer_temprano,extraer_tarde level=12 seeds=5` y `... -- x check_rule=1 levels=12`. Partida real (necesita pantalla y mueve el puntero): `godot --path . --resolution 1280x720 art/campaign-t229/play.tscn -- level=12 until=7 speed=5 out=art/campaign-t229`.
+
+### T229 · Probar el nivel 11 (Puesto seco)
+
+Con el proyecto abierto (o `godot --path .`): ganar el nivel 10 abre el 11 (o, con el modo de pruebas, elegirlo en **Niveles**). **✅ Comprobar:** el mapa es **grande** y del desierto, con **una sola entrada** (arriba a la izquierda) y la salida abajo a la derecha, **dos pozos azules** y tres rocas con una A; la barra **no tiene la Ametralladora** (8 botones; 10 con las colecciones completas, y entonces la Disruptora y el Mecánico aparecen); en la **tarjeta del nivel** la Disruptora aparece como «Nueva» (la tarjeta avisa lo que ofrece el nivel, aunque todavía falte la colección). En la **oleada 5** sale una tarjeta «Nuevo enemigo: Chamán» y, unos segundos después, un rayo magenta **apaga la torre más cercana** (3 s): un Francotirador lo mata antes. El Guardián y el Curandero llegan juntos en la 8. Se puede ganar sin la mina ni los removibles.
+
+Para medir: `godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- sin_recursos,demoler,extraer_temprano,extraer_tarde level=11 seeds=5`, `... -- x check_rule=1 levels=11` y, para la Disruptora, `... -- mix level=11 seeds=5 disruptor=0` contra `disruptor=1`. Partida de verificación con la escena real (necesita pantalla y **mueve el puntero**): `godot --path . --resolution 1280x720 art/campaign-t229/play.tscn -- level=11 until=7 speed=6 out=art/campaign-t229`. Detalle en `art/campaign-t229/README.md`.
+
 ### T197 · Comprobar los modos de juego
 
 Abrí el juego (o el proyecto con F5) y entrá a **Jugar**.
