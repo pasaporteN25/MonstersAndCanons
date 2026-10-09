@@ -135,3 +135,42 @@ func test_mode_records_are_its_own() -> void:
 	assert_eq(position, 0)
 	assert_eq(SaveManager.scores(ModePacks.map_level(siege, 0).id).size(), 1)
 	assert_eq(SaveManager.scores(GameFlow.level(0).id).size(), 0, "no van al top 5 del nivel de la campaña")
+
+
+# --- T235: Asedio sin piezas y sin textos de lore (Q-31 y RF-468) ---
+
+func test_asedio_maps_are_campaign_maps_in_order() -> void:
+	# T235: el bot no gana los mapas 10 a 15 al 115 %, así que Asedio sigue con el 1 al 9 (decisión de Lucas pendiente).
+	assert_eq(siege["errors"].size(), 0)
+	var maps: Array = siege["maps"]
+	assert_gt(maps.size(), 0)
+	assert_lte(maps.size(), GameFlow.level_count())
+	for i: int in maps.size():
+		assert_not_null(maps[i]["level"], "el mapa %d se lee sin errores" % (i + 1))
+		assert_eq(maps[i]["level"].display_name, GameFlow.level(i).display_name)
+
+
+func test_no_asedio_map_offers_pieces_or_texts() -> void:
+	for i: int in siege["maps"].size():
+		GameFlow.current_mode_index = i
+		GameFlow.intro_pending = true  # como si se llegara eligiendo el mapa
+		var game: Game = _play()
+		var tag: String = "mapa %d" % (i + 1)
+		assert_null(game.collectible, tag + ": sin colección")
+		assert_false(game._collects_pieces(), tag + ": no se recogen piezas de ruinas (Q-31)")
+		assert_false(game.shows_texts(), tag + ": sin textos de lore (RF-468)")
+		assert_false(game.level_intro.is_open(), tag + ": sin cartel de entrada")
+		assert_false(game.is_paused(), tag + ": la partida no arranca pausada por un cartel")
+		game.session.state_changed.emit(LevelSession.State.WON)
+		assert_eq(game.end_screen.win_text(), "", tag + ": sin texto de victoria")
+		game.queue_free()
+		await get_tree().process_frame
+
+
+func test_asedio_hides_the_texts_of_the_last_campaign_levels_if_they_are_ever_added() -> void:
+	# Si Lucas suma el 10 al 15 a Asedio, sus textos de lore tampoco se ven.
+	for index: int in range(9, GameFlow.level_count()):
+		var game: Game = GAME_SCENE.instantiate()
+		game.level_data = GameFlow.level(index).duplicate()
+		add_child_autofree(game)
+		assert_false(game.shows_texts(), "nivel %d" % (index + 1))
