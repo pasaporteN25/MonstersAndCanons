@@ -13,6 +13,11 @@
   },
   "torres": ["frost","cannon","sniper","fire","multi","burst","tesla","mortar","disruptor","mechanical_standard"],
   "demoledora": false,
+  "textos": {
+    "lugar": "El paso hacia el norte",
+    "entrada": "El único paso hacia el norte es un cañadón de paredes altas.\nLos tiros vuelven contra las torres, como si las paredes los devolvieran.\nCruzarlo es la única forma de llegar al resto de la región.",
+    "victoria": "Cañadón asegurado. El paso al norte quedó abierto.\nEn las paredes quedaron las marcas de los tiros que volvieron."
+  },
   "mapa": [
     "A##.hX.######.XX.######.XX",
     "XX#XX.X#XXXX#X.X.#XXXX#XXX",

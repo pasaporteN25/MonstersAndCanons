@@ -16,6 +16,11 @@
   },
   "torres": ["frost","cannon","sniper","fire","multi","burst","tesla","mortar","disruptor","mechanical_standard"],
   "demoledora": false,
+  "textos": {
+    "lugar": "Asentamientos de los Moradores",
+    "entrada": "Los poblados están a la vista, pero no sale humo de ninguno.\nLos Moradores se llevaron lo que pudieron.\nAun así, algo todavía defiende el lugar.",
+    "victoria": "Los poblados están vacíos.\nLas brasas todavía están tibias."
+  },
   "mapa": [
     "XX.######################A",
     "XX.#X.XXsXXXX.XXcXX..XX.sX",
