@@ -218,7 +218,7 @@ Hasta ahora toda torre ocupa **una** casilla. Esta etapa enseña al juego a mane
   | 3 | 350 | 220 | 0,25 | 5,5 | 2,2 |
 
   Son **números de partida**: se afinan con el bot (T141). Comparado con el Cañón (100 de oro, 20 de daño cada 1,7 s, radio 1,0), el Mortero cuesta tres veces más **y ocupa cuatro casillas**: tiene que valer la pena por pegar fuerte y de lejos, no por ser más de lo mismo. Proyectil: una **bomba** lenta (velocidad 6 casillas por segundo, RF-55) que recorre un tramo largo sin fallar (RF-52).
-- **RF-297** **La barra y las teclas:** con el Mortero hay **9 torres**: la barra inferior y las teclas pasan de 8 a **9** (tecla `9`, acción `build_9`). Los botones **entran** sin tapar "Próxima oleada" (RF-170 se actualiza). El límite de la barra sube a 9.
+- **RF-297** **La barra y las teclas:** con el Mortero hay **9 torres**: la barra inferior y las teclas pasan de 8 a **9** (tecla `9`, acción `build_9`). Los botones **entran** sin tapar "Próxima oleada" (RF-170 se actualiza). El límite de la barra sube a 9. *(Ampliado en M53, RF-456: la tecla `0` elige la décima torre y, en los niveles con infraestructura, la barra tiene pestañas, RF-454 y RF-455.)*
 - **RF-298** **Aviso y Wiki:** al elegir el Mortero el HUD agrega *"Necesita 2×2 casillas libres"* (RF-171) y la Wiki lo anota en su ficha (**"Tamaño: 2×2 casillas"**, RF-231). `CONTENIDO.md` explica `footprint`. *(Lucas, 2026-09-30: el Mortero **no** está en todos los niveles, ver RF-300.)*
 - **RF-300** **Torres reservadas** *(pedido por Lucas, 2026-09-30: "la torre de 4 dejarla por ahora solo para el nivel 10")*: `TowerData` gana `reserved` (`false` por defecto). Una torre reservada **no aparece en la barra** de un nivel salvo que su archivo la habilite con el campo opcional `"torres_extra": ["mortar"]`. Un id que no existe es un **error** que lista los que hay (RF-204); uno repetido cuenta una vez; el editor **conserva** el campo. La barra y las teclas de ese nivel son las comunes más las habilitadas. El Mortero es reservada y **solo el nivel 10 la habilitará** *(enmendado en M50, RF-420: Lucas, 2026-10-08, Q-21, lo adelanta al **nivel 9** y pasa a costar oro y recursos)*; hasta que exista, se puede probar con `tools/ejemplos/mapa_torres_apagadas.json`. Sigue apareciendo en la Wiki.
 - **RF-299** **Dibujos:** una **torreta de mortero** nueva (tubo corto y ancho apuntando hacia adelante, sobre una placa) y una **bomba** como proyectil, según la guía de arte (RF-151). La base es la de siempre, agrandada; no hay dibujos de base nuevos.
@@ -856,7 +856,7 @@ Es el último nivel del bloque 2 («Fuera del oasis») y el **prototipo completo
 
 - **RF-100** Arriba: **oro**, **vidas**, **oleada actual / total** (por ejemplo "Oleada 3/10") y *(M6)* **puntos** (RF-190).
 - **RF-101** Abajo: un **botón por torre**, con su forma, nombre y costo. Desactivado (gris) si no alcanza el oro. *(M5: ver RF-170.)*
-- **RF-170** *(M5; en M19 pasa a **9 torres**, RF-297)* **Barra para 8 torres:** cada botón muestra el **dibujo** de la torre, su **costo** y, en una esquina, su **tecla**. El nombre no entra: aparece al pasar el mouse por encima y al elegirla (RF-171).
+- **RF-170** *(M5; en M19 pasa a **9 torres**, RF-297)* **Barra para 8 torres:** cada botón muestra el **dibujo** de la torre, su **costo** y, en una esquina, su **tecla**. El nombre no entra: aparece al pasar el mouse por encima y al elegirla (RF-171). *(M53, RF-455: en los niveles con infraestructura los botones se achican, de 76 a 56 px como mínimo, para dejar lugar a las pestañas.)*
 - **RF-171** *(M5)* Al elegir una torre para construir, encima de la barra se ve su **nombre, costo y una frase** que dice para qué sirve (`TowerData.description`).
 
   | Torre | Frase |
@@ -876,13 +876,15 @@ Es el último nivel del bloque 2 («Fuera del oasis») y el **prototipo completo
 
 | Tecla | Acción | Hito |
 |---|---|---|
-| `1`–`8` | Elegir torre para construir | M1 (1–3), M2 (4), M5 (5–8) |
+| `1`–`9` | Elegir torre para construir | M1 (1–3), M2 (4), M5 (5–8), M19 (9) |
 | `Esc` | Cancelar construcción / cerrar panel / *(M3)* menú de pausa | M1 |
 | `Espacio` | Empezar oleada (si se puede) | M1 |
 | `P` | Pausar / reanudar | M2 |
 | `F` | Alternar velocidad x1 / x2 | M2 |
 | `U` | Mejorar torre seleccionada | M2 |
 | `S` | Vender torre seleccionada | M2 |
+| `0` | Elegir la décima torre para construir | M53 (RF-456) |
+| `Tab` | Cambiar de pestaña de la barra (solo en niveles con infraestructura) | M53 (RF-456) |
 
 - **RF-104** *(M2)* **Pausa** detiene todo (enemigos, torres, cuenta atrás), pero se puede seguir mirando el mapa y seleccionar torres. No se puede construir en pausa, pero **sí mejorar y vender** (así se puede pensar con calma). Mientras está en pausa se ve el cartel **"PAUSA"** en el centro.
 - **RF-105** *(M2)* **Velocidad x2:** todo el juego va al doble (enemigos, disparos, oleadas, cuenta atrás, efectos). Al reintentar o salir, la velocidad vuelve a x1 y la pausa se quita.
@@ -1393,6 +1395,7 @@ Los cuatro enemigos que gustaron, con lo necesario para convertirlos en spec cua
 - **"¿Qué es esto?" desde la partida:** al tocar un enemigo o una torre durante la partida, un botón que abre su entrada de la wiki (con `show_target`) y al volver retoma la partida en pausa. Ojo con la pausa, con el celular (el toque ya selecciona torres) y con no dejar espiar enemigos que todavía están cerrados en el bestiario.
 - ~~**Guía de arte del juego:** a partir del rediseño de los nueve enemigos (T127) se ve un estilo propio: contorno oscuro grueso, formas angulosas con facetas, un brillo por dibujo, mirando a la derecha, un color por especie. Escribirlo en un documento corto (`specs/05-guia-de-arte.md`: paleta por enemigo y por tema, grosor del contorno, cómo se hace una faceta, qué se evita) ayudaría a que los ~25 dibujos de M15 y los enemigos nuevos salgan iguales. Idea inspirada en el rol de "director de arte" del repositorio Claude Code Game Studios.~~ **Hecho (T129, D-040): [`specs/05-guia-de-arte.md`](05-guia-de-arte.md).**
 - ~~**Reglas por carpeta para Claude** (`.claude/rules/`): por ejemplo "en `scripts/` y `scenes/` se sangra con tabuladores", "los números de balance van en `data/`, no en el código" y "un dibujo nuevo sigue `specs/05-guia-de-arte.md`". Hoy esas reglas están en la constitución y en mi cabeza; ponerlas por carpeta evitaría errores repetidos (por ejemplo, editar con espacios un archivo de tabuladores).~~ **Hecho (T129, D-040): [`.claude/rules/`](../.claude/rules/).**
+- **El menú de pausa también confirma al abandonar** *(2026-10-08, T247)*: «Salir al menú» y «Reintentar» del menú de pausa (RF-114) descartan las piezas de colección recogidas en la partida (RF-359, RF-427) **sin avisar**. La flecha del RF-459 va a avisar con un diálogo (RF-460); la sugerencia es que esos dos botones usen **el mismo diálogo**. Es un cambio chico en `game.gd` y `pause_menu.gd`. **No está en M53:** no se implementa sin el OK de Lucas (pregunta P7 de M53).
 - **Que demoler valga la pena en los niveles 6 a 9** *(2026-10-08, T245)*: medido con el bot, demoler **nunca da ventaja**: pierde 5 de 5 en el 6, 3 de 5 en el 9 y gana con menos vidas en el 7 (13 contra 16), porque cada removible suma muy poca cobertura sobre la mejor casilla libre y el mapa tiene ~115 casillas libres. Mover los removibles a las mejores casillas empeoró el 6 (rompe la regla de oro). Opciones a decidir con Lucas en el G4: bajar el costo de árboles, rocas y escombros en las leyendas, o que el valor de demoler sea el drop (más recursos o más chance) y no la casilla. Además, el Mortero del 9 (300 de oro + 3 recursos) no lo compró ninguna estrategia: los recursos del 9 salen solo de 3 comunes al 50 % y la pieza, y lo máximo que se juntó fueron 2.
 - **Parte útil del repositorio Claude Code Game Studios** (Lucas: "no hace falta `validate-commit`"; del resto, ver D-040):
   - **Informe de prueba** (su `playtest-report`): una plantilla corta para anotar lo que se siente al probar el juego (¿se entendió?, ¿dónde te trabaste?, ¿qué te aburrió?) y guardarla en `specs/pruebas/`. Hoy las impresiones de Lucas quedan en la charla.
@@ -1777,7 +1780,7 @@ Valores: los números de este bloque son **iniciales** (los pidió así Lucas en
 
 #### Demoledora *(Q-08 y Q-13; D-082)*
 
-- **RF-411** **Habilitada por el nivel y comprada en un panel global (Q-08):** el campo opcional `"demoledora": true` del nivel (falso si no está) la habilita. Un nivel que la habilita muestra en el HUD un botón **"Infraestructura"** que abre un panel con la demoledora: su precio, un botón **Comprar** y, ya comprada, *"Demoledora activa"*. La máquina **no ocupa casillas** ni se mueve por el mapa. Sin el campo, el botón **no aparece** y el nivel se comporta como hoy. El editor conserva el campo y lo edita (RF-434).
+- **RF-411** **Habilitada por el nivel y comprada en un panel global (Q-08):** el campo opcional `"demoledora": true` del nivel (falso si no está) la habilita. Un nivel que la habilita muestra en el HUD un botón **"Infraestructura"** que abre un panel con la demoledora: su precio, un botón **Comprar** y, ya comprada, *"Demoledora activa"*. La máquina **no ocupa casillas** ni se mueve por el mapa. Sin el campo, el botón **no aparece** y el nivel se comporta como hoy. El editor conserva el campo y lo edita (RF-434). *(Enmendado en M53, RF-457 y RF-458: el botón y el panel «Infraestructura» de arriba a la derecha pasan a ser la pestaña «Infraestructura» de la barra de abajo; el precio, la compra única y el criterio de arriba no cambian.)*
 - **RF-412** **Se compra una vez y no se vende (Q-13):** el precio inicial es **180 de oro** (3 veces el de una roca, 07 §5) y está en `data/obstaculos.json`. Se cobra al comprar; **comprarla otra vez** no es posible; **no se puede vender ni devolver** (así no hay ganancia comprándola y vendiéndola). Dura toda la partida y se pierde al reintentar (RF-409).
 - **RF-413** **Qué hace (Q-10 ✎ y Q-13):** desde la compra, **cada demolición siguiente, en todo el mapa**, cuesta menos y tarda un poco menos:
   - **Costo con máquina** = el **10 %** del costo del objeto (redondeado al entero más cercano), con un **mínimo de 5** y **nunca más** que el costo sin máquina. Con los valores iniciales: árbol 5, roca 6 y escombro 9. Son `costo_uso_porcentaje` y `costo_uso_minimo` en los datos.
@@ -1983,7 +1986,7 @@ Valores: los números de este bloque son **los de Lucas (Q-33)** salvo los que d
   - **Costo:** `resource_cost = 2` (RF-418): se pagan **130 de oro y 2 recursos a la vez**, o ninguno. Un mapa que ofrece la Disruptora **sin tener recursos** da el aviso de RF-421 (*"la Disruptora cuesta recursos y este mapa no tiene cómo conseguirlos"*): la torre queda en la barra, deshabilitada, con ese motivo.
   - **Se ve siempre en la Wiki**, con su ficha, aunque la colección esté incompleta (RF-300), con el progreso de la colección y la torre que desbloquea (RF-431, RF-437).
   - **En el modo de pruebas** (RF-436): con "Habilitar todas las colecciones" la Disruptora aparece en la barra del nivel actual **aunque el nivel no la ofrezca** (como los estandartes con el interruptor de RF-360), así se la prueba sin jugar la campaña, y "+10 recursos" paga su costo. No se escribe nada en el guardado.
-- **RF-448** **La barra y las teclas:** la Disruptora va **después del Mortero** en el orden canónico de las torres (en `Game.tower_types`: la décima), y **no corre las teclas de las demás**: las teclas siguen siendo la posición en la barra del nivel (RF-393). La barra del HUD tiene 9 teclas (`build_1` a `build_9`, RF-297); un nivel que ofrezca **más de 9** torres (con el Mecánico que se agrega al final, RF-361) deja **sin tecla** a las del lugar 10 en adelante, que se eligen con el mouse y no llevan etiqueta de tecla, como hoy. Los niveles de rotación (11 a 15, Q-29) eligen qué torres ofrecen (RF-393), así que cada uno puede mantenerse en 9 (punto 5 de "Para revisar"). La barra muestra *"130 + 2 recursos"* (RF-418) y el texto de ayuda de construcción, abajo.
+- **RF-448** **La barra y las teclas:** la Disruptora va **después del Mortero** en el orden canónico de las torres (en `Game.tower_types`: la décima), y **no corre las teclas de las demás**: las teclas siguen siendo la posición en la barra del nivel (RF-393). La barra del HUD tiene 9 teclas (`build_1` a `build_9`, RF-297); un nivel que ofrezca **más de 9** torres (con el Mecánico que se agrega al final, RF-361) deja **sin tecla** a las del lugar 10 en adelante, que se eligen con el mouse y no llevan etiqueta de tecla, como hoy. Los niveles de rotación (11 a 15, Q-29) eligen qué torres ofrecen (RF-393), así que cada uno puede mantenerse en 9 (punto 5 de "Para revisar"). La barra muestra *"130 + 2 recursos"* (RF-418) y el texto de ayuda de construcción, abajo. *(Enmendado en M53, RF-456: la décima torre ya tiene tecla, `0`; la torre 11 y las siguientes siguen sin tecla.)*
 
 > **Criterio de aceptación RF-446 a RF-448**
 > **Dado** una partida con la colección `disruptor` completa en un nivel que **no** la ofrece → **Entonces** la barra no la muestra. **Dado** un nivel con `"torres": ["cannon", "frost", "disruptor"]` y la colección **sin** completar → **Entonces** no aparece. **Dado** los dos requisitos y 130 de oro con 1 recurso → **Entonces** el botón está deshabilitado y dice qué falta; con 2 recursos → **Entonces** se construye y quedan 0 de oro y 0 recursos. **Dado** esa Disruptora → **Cuando** se mejora a nivel 2 → **Entonces** cuesta 100 de oro y ningún recurso, y su radio pasa a 3,0 y su supresión a 3,0 s. **Dado** que se la vende en nivel 1 → **Entonces** devuelve 91 de oro (70 % de 130) y 1 recurso. **Dado** un mapa que la ofrece sin recursos → **Entonces** `check_level` avisa y la barra la muestra deshabilitada.
@@ -2041,3 +2044,146 @@ Los puntos donde conviene que Lucas mire con más atención antes de programar (
 5. **La barra y la décima torre (RF-448).** Con la rotación del bloque 3, un nivel con muchas torres deja a la Disruptora, o al Mecánico, **sin tecla**. Conviene que cada mapa del bloque 3 ofrezca como mucho 9, o se agrega una tecla `0` (cambio chico, no incluido).
 6. **Con el Mecánico en nivel 3 la cobertura es del 100 % (RF-445).** Es un premio por combinar a propósito, pero puede ser demasiado fuerte: el bot (T217) lo mide.
 7. **La marca blanco azulada y el celeste del Hielo (RF-449).** Se separan por la forma y el lugar, no por el color: hay que verlo en pantalla (T216 y T217) antes de darlo por bueno.
+
+---
+
+### M53 · Barra con pestañas y flecha al menú (Lucas, 2026-10-08; T247)
+
+**Estado: especificada en T247, a la espera del OK de Lucas. Todavía no hay código** (lo hace T248). Es una spec de **interfaz**: no cambia ninguna regla del juego, ningún número de balance ni ningún dato de torres, enemigos o niveles.
+
+**Idea general, en pocas palabras:** a partir del nivel 6, la barra de abajo deja de ser solo una fila de torres y pasa a tener **dos pestañas**, como las de un navegador: **«Cañones»** (las torres de siempre) e **«Infraestructura»** (todo lo de demoler, la demoledora y la extracción, que hoy vive en un panel suelto arriba a la derecha). Además, arriba a la izquierda aparece una **flecha** para volver al menú principal. Los niveles 1 a 5 se ven y se juegan **exactamente como hoy**.
+
+**Por qué** *(pedido de Lucas, 2026-10-08)*: (1) con la Disruptora hay **10 torres** y las teclas solo llegan al 9; (2) el panel «Infraestructura» quedó pegado arriba: por las coordenadas del código (`infrastructure_panel.gd` lo pone en (1030, 5) con 230 × 38 px) cae **encima de los botones de Pausa y Velocidad** (`hud.tscn`: (1016–1260, 8–40)); *no lo miré en pantalla*; (3) hace falta lugar en la barra para **sumar más torres y herramientas** sin seguir apretando botones.
+
+**Cómo se lee este bloque:** cada punto trae su **RF**, su criterio de aceptación y, cuando hay algo que decide Lucas, una línea **«Recomendación (decide Lucas)»**. La lista corta de preguntas está al final, en «Preguntas para Lucas».
+
+#### 1. Cuándo aparecen las pestañas
+
+- **RF-454** **Solo en niveles que usan infraestructura.** Un nivel «usa infraestructura» (`LevelData.uses_infrastructure()`, función nueva, hermana de `uses_resources()`, RF-416) cuando **habilita la demoledora** (RF-411) **o** tiene **algún removible o punto de extracción** (RF-398). Se decide **por los datos del mapa y no por el número del nivel**, así que vale igual en la campaña, los modos, la comunidad, el editor («Probar») y el modo de pruebas (RF-410).
+  - Hoy eso son los **niveles 6 a 10** de la campaña (todos tienen removibles en sus datos; `level_06.json` y `level_07.json` traen además `demoledora`, y `level_10.json` una mina); los niveles **1 a 5** no tienen ninguno.
+  - **Sin infraestructura la barra no cambia en nada:** no hay pestañas, ni columna a la izquierda, ni tecla `Tab`; los botones miden lo que miden hoy (76 × 60), el panel «Infraestructura» tampoco aparece (como hoy, RF-411) y las teclas son las de hoy. Lo único que sí se suma en **todos** los niveles es la flecha de arriba (RF-459).
+  - Un mapa que ofrece **10 o más torres pero no usa infraestructura** (un mapa de la comunidad o un modo) **sigue como hoy**: sin pestañas, con la barra de una fila. Los botones se achican para que entren (RF-455) y las teclas siguen el RF-456.
+
+> **Criterio de aceptación RF-454**
+> **Dado** un nivel de la campaña del 1 al 5 → **Entonces** la barra es idéntica a la de hoy (mismo tamaño, posición y orden de botones) y no hay pestañas ni panel «Infraestructura». **Dado** un nivel del 6 al 10 → **Entonces** la barra muestra las dos pestañas con «Cañones» activa. **Dado** un mapa de la comunidad con un solo árbol removible y sin demoledora → **Entonces** muestra las pestañas. **Dado** un mapa con 10 torres y ningún removible → **Entonces** no muestra pestañas. **Dado** el modo de pruebas en el nivel 3 → **Entonces** no muestra pestañas (el modo de pruebas no cambia los datos del mapa).
+
+**Recomendación (decide Lucas):** la regla por **datos** (como está escrita) y no «nivel ≥ 6». Para la campaña da lo mismo que pidió Lucas; para los demás mapas evita que un mapa de la comunidad con demolición quede sin dónde comprar la demoledora. Pregunta P1.
+
+#### 2. Qué tiene cada pestaña y cómo conviven con las teclas
+
+- **RF-455** **La barra con pestañas** (medidas en el lienzo base de 1280 × 720, que es el de la ventana por defecto):
+  - **Las pestañas** son dos botones apilados en una **columna a la izquierda** de la barra de abajo (x de 12 a 108, **96 × 44 px** cada uno, uno encima del otro; la barra mide 96 de alto). La activa se ve **hundida y con borde de bronce**, la otra apagada, como los botones de torre elegidos. Llevan el texto **«Cañones»** e **«Infraestructura»** (esta última con letra de 13 puntos para que entre). Arrancan siempre en **«Cañones»**; la última pestaña **no se guarda**.
+  - **«Cañones»** muestra los **mismos botones de torre de hoy**, con el mismo contenido (dibujo, costo, ícono de recurso, tecla, gris si falta oro o recursos, ayuda al pasar el mouse; RF-170, RF-418, RF-419) y la misma ayuda de construcción de arriba (RF-171). Cambia solo el **ancho**: los botones se reparten el espacio que hay entre la columna de pestañas y «Próxima oleada» (de x = 118 a x = 792, **674 px**), con **tope de 76** (el de hoy) y **piso de 56**. Con 9 torres miden unos 71; con 10, unos 63; con 11 (todas las que existen: 8 comunes, Mecánico, Mortero y Disruptora), unos 57. **La cifra exacta la fija T248 con una captura**; si con 10 u 11 no se lee el costo o la insignia del recurso, se achica la letra o se acorta el texto, **no se saca información**.
+  - **«Infraestructura»** muestra las tarjetas del RF-457 en el mismo espacio (x de 118 a 792).
+  - **No se mueve nada más:** «Próxima oleada» y «Empezar oleada» quedan donde están (x de 800 y de 1016); la ayuda de construcción (y = 592 a 622) y el panel de la torre colocada tampoco cambian.
+  - **Más tipos más adelante:** las pestañas salen de una lista (`BarTabs`, plan técnico), así que una torre o herramienta de otro tipo se suma con **una pestaña nueva** sin rehacer la barra. **M53 define solo estas dos.**
+- **RF-456** **Teclas** (amplía §9.2 y RF-297, RF-448):
+
+  | Tecla | Acción |
+  |---|---|
+  | `1`–`9` | Elegir la torre 1 a 9 de la pestaña «Cañones» (la posición en la barra del nivel, RF-448) |
+  | `0` | Elegir la **décima** torre (acción nueva `build_10`) |
+  | `Tab` | Pasar de una pestaña a la otra (acción nueva `switch_tab`); solo en los niveles con pestañas |
+
+  - **La torre 11 y las siguientes** no tienen tecla: se eligen con el mouse o el dedo, y su ayuda no dice «tecla N» (como hoy con la décima, RF-448).
+  - **Una tecla de torre estando en «Infraestructura»** vuelve a «Cañones» **y elige esa torre**: ninguna tecla queda muerta.
+  - **Cambiar de pestaña con una torre elegida para construir cancela la construcción** (la vista previa no puede quedar sobre el mapa con sus botones ocultos). Una **torre ya colocada** o un **objeto del mapa** seleccionados **no se deseleccionan** al cambiar de pestaña.
+  - **Con el menú de pausa abierto** (o el diálogo del RF-460), estas teclas no hacen nada, como las demás (RF-114).
+  - **`Esc`, `P`, `F`, `U`, `S` y `Espacio` no cambian.** `Tab` no choca con ninguna tecla de la partida.
+  - **Error que hoy pasa sin que se vea (se arregla acá):** `BuildController` pregunta por la acción `build_N` de **cada torre** del nivel, y `build_10` **no existe**. Comprobado en esta tarea con un script suelto: Godot imprime `The InputMap action "build_10" doesn't exist`. Por el código, les pasa a los niveles 9 y 10, que ya ofrecen 10 torres, cada vez que llega una tecla o un clic. T248 crea la acción y deja de preguntar por las que no existen.
+
+> **Criterio de aceptación RF-455 y RF-456**
+> **Dado** un nivel con 10 torres y pestañas → **Entonces** «Cañones» muestra las 10, ninguna toca «Próxima oleada» y las 10 se leen. **Dado** esa barra → **Cuando** se pulsa `0` → **Entonces** se elige la décima; **cuando** se pulsa `1` → **Entonces** se elige la primera. **Dado** «Infraestructura» activa → **Cuando** se pulsa `3` → **Entonces** vuelve «Cañones» con la tercera elegida. **Dado** una torre elegida para construir → **Cuando** se pulsa `Tab` → **Entonces** pasa a «Infraestructura» y no queda ninguna vista previa en el mapa. **Dado** un objeto del mapa seleccionado → **Cuando** se pulsa `Tab` → **Entonces** sigue seleccionado. **Dado** un nivel del 1 al 5 → **Cuando** se pulsa `Tab` o `0` → **Entonces** no pasa nada. **Dado** un nivel con 10 torres → **Cuando** llega cualquier tecla → **Entonces** el motor no imprime ningún error de acción inexistente.
+
+**Recomendación (decide Lucas):** `1` a `9` para las 9 primeras, **`0` para la décima** y `Tab` para cambiar de pestaña; la torre 11 sin tecla. Es lo que se espera de un teclado (la fila de números termina en el 0) y no pide inventar teclas raras. Alternativas en la decisión D-088. Pregunta P2.
+
+#### 3. Qué muestra «Infraestructura»
+
+- **RF-457** **Las tarjetas** de la pestaña, de izquierda a derecha. Una tarjeta que no corresponde al nivel **no se dibuja** y las demás se reparten el ancho. Todos los textos se arman leyendo los datos (RF-164); ningún número va escrito en el código.
+  1. **Trabajo en curso** (siempre que haya pestañas). Sin trabajo: *«Sin demolición en curso. Tocá un objeto del mapa para demolerlo.»*. Con trabajo: el nombre del objeto, una **barra de progreso**, *«Faltan 4 s»* (tiempo de **juego**: respeta la pausa y la velocidad, RF-406) y el botón **Cancelar** (devuelve todo el oro, RF-407).
+  2. **Demoledora** (solo si el nivel la habilita, RF-411). Sin comprar: *«Demoledora · 180 de oro»* y el botón **Comprar** (gris con *«Te faltan N de oro»* si no alcanza; en pausa, igual que hoy). Comprada: *«Demoledora activa»* y la ventaja leída de los datos, *«Cada demolición cuesta el 10 % y tarda el 80 %»* (RF-413). Es **el único lugar** donde se compra (RF-412 sigue igual: una vez, sin vender).
+  3. **Extracción** (solo si el mapa tiene puntos de extracción, RF-422). Una ficha por punto, con el tipo (*Mina*, *Bosque*) y su estado: **sin habilitar** («Habilitar · 100 de oro» y el botón **Habilitar**, gris si falta oro); **activo** («Activa · reserva 6/8 · +2 por oleada»); **agotado** («Agotada»). Muestra hasta **3 fichas** a la vez y, si hay más, dos flechitas **◀ ▶** pasan de a una (no hace falta arrastrar: §11). **Tocar el nombre de un punto lo selecciona en el mapa**, igual que tocarlo en el mapa (abre su panel, RF-404).
+  4. **Recursos** (solo si el mapa usa recursos, RF-416): *«Recursos: 3»* y, si hay puntos activos, *«Al terminar la oleada: +2»* (la suma de `min(producción, reserva)` de los puntos activos, RF-423). **No** predice el drop al azar de los removibles (RF-417): no se puede saber.
+  - Los botones **Comprar**, **Habilitar** y **Cancelar** de la pestaña llaman a **lo mismo que los del panel del objeto** (`InfrastructureController.buy_machine`, `enable`, `cancel_job`), con las mismas reglas y los mismos precios. Esta spec **no** cambia RF-405 a RF-414 ni RF-422 a RF-424.
+  - El **estado** se actualiza solo con la señal `changed` del controlador (oro, trabajo, oleada completada): la pestaña no guarda nada propio.
+- **RF-458** **Tocar un objeto del mapa sigue funcionando igual** (RF-404):
+  - Tocar o hacer clic en un removible, una mina o un bosque, **estando en cualquier pestaña**, lo selecciona y abre **el mismo panel del objeto** en el mismo lugar (a la derecha, x = 1000), con *Demoler*, *Cancelar* o *Habilitar*. Esta spec no cambia ese panel.
+  - **La pestaña no cambia sola** al seleccionar: quien está construyendo no pierde su barra de torres por rozar una roca. En cambio, **mientras hay una demolición en curso, la pestaña «Infraestructura» muestra el tiempo que falta** (*«Infraestructura · 4 s»*), así se ve el avance sin abrirla.
+  - **Una sola selección a la vez** (RF-73, RF-404): elegir una torre en «Cañones» deselecciona el objeto, y al revés, como hoy.
+  - El botón y el panel **«Infraestructura» de arriba a la derecha desaparecen**: en todo nivel con demoledora hay pestañas (RF-454), así que el panel suelto no hace falta. RF-411 queda enmendado en este sentido.
+
+> **Criterio de aceptación RF-457 y RF-458**
+> **Dado** el nivel 6 (demoledora, sin extracción) → **Entonces** «Infraestructura» muestra las tarjetas *Trabajo en curso*, *Demoledora* y *Recursos*, y no la de *Extracción*. **Dado** el nivel 10 (mina, sin demoledora) → **Entonces** muestra *Trabajo en curso*, *Extracción* y *Recursos*, y no *Demoledora*. **Dado** 200 de oro y la demoledora de 180 → **Cuando** se pulsa *Comprar* → **Entonces** quedan 20 de oro y la tarjeta dice «Demoledora activa». **Dado** una roca de 60 de oro con 100 → **Cuando** se toca la roca en el mapa estando en «Cañones» → **Entonces** se abre el panel de la roca, la pestaña activa sigue siendo «Cañones», y **cuando** se pulsa *Demoler* → **Entonces** el oro baja a 40 y la pestaña «Infraestructura» muestra «4 s» y baja con el tiempo de juego. **Dado** ese trabajo → **Cuando** se cancela desde la pestaña → **Entonces** el oro vuelve a 100 y el panel de la roca (si estaba abierto) vuelve a decir *Demoler*. **Dado** una mina de 100 de oro → **Cuando** se pulsa *Habilitar* en su ficha → **Entonces** pasa a «Activa · reserva 8/8». **Dado** el nivel 6 → **Entonces** no hay botón «Infraestructura» arriba a la derecha.
+
+**Recomendación (decide Lucas):** las cuatro tarjetas de arriba, con la pestaña que **no cambia sola** y el aviso del tiempo en su título. La alternativa —que tocar un objeto abra «Infraestructura» automáticamente— deja la información a la vista pero saca al jugador de la barra de torres cada vez que toca una roca. Preguntas P3 y P4.
+
+#### 4. La flecha al menú principal
+
+- **RF-459** **Dónde está y qué hace:** un botón **«← Menú»** (80 × 32 px) en la **esquina de arriba a la izquierda** de la barra superior (x de 8 a 88, y de 8 a 40). El grupo de estadísticas (oro, vidas, puntos, oleada, colección, recursos) se corre a la derecha, de x = 20 a x = 96, y conserva su ancho útil hasta x = 1000. Ayuda al pasar el mouse: *«Volver al menú principal»*.
+  - **Aparece en todos los niveles y modos** (no solo del 6 en adelante): no es parte de la barra de torres, y salir de la partida se necesita igual en el nivel 1. *(Lo único «del 6 en adelante» son las pestañas.)*
+  - **Se oculta cuando la partida terminó** (la pantalla de resultado ya trae sus botones).
+  - **Probando un mapa desde el editor** (RF-217) dice **«← Editor»** y vuelve al editor con el borrador intacto, **sin pedir confirmación** (no se pierde nada). Es el mismo cambio de texto que ya hace el menú de pausa (`set_quit_text`).
+  - **No toma el foco del teclado** (como los demás botones de la barra) y **no tiene tecla propia**: así no se sale por un `Espacio` o un `Enter` de más. El botón «atrás» de Android sigue igual (RF-142): abre el menú de pausa, no la flecha.
+- **RF-460** **Confirmación y qué se pierde** (coordinada con RF-359, RF-409, RF-427 y RF-429):
+  - **Tocar la flecha siempre pregunta** (menos en «Probar», arriba). El diálogo se abre **en el centro**, atenúa el fondo (mismo estilo que el menú de pausa) y dice **«¿Volver al menú principal?»**, con lo que se pierde **según el estado de la partida**:
+    - Siempre: *«Se abandona esta partida. El oro, las torres y la oleada actual no se guardan.»*
+    - **Si hay piezas de colección recogidas en esta partida** —pendientes **o ya confirmadas**, de los avances tecnológicos (RF-358) o de una pieza de ruina (RF-427)—: *«Perdés 2 piezas de colección recogidas en esta partida (Avances tecnológicos, Disruptora). Se guardan recién al terminar la partida.»* La cuenta y los nombres salen de la partida (`CollectibleRun`, `FindingRun.pending()` y `confirmed()`); **abandonar descarta las dos cosas** (RF-359: *«incluso si la oleada terminó»*; RF-427: *«antes del resultado»*).
+    - **Si hay una demolición en curso:** *«La demolición en curso se pierde y no devuelve el oro.»* (RF-409).
+  - **Lo que no se pierde** y el diálogo lo dice en una línea: *«Lo que ya ganaste (niveles, estrellas, récords y piezas guardadas) se conserva.»*
+  - Dos botones: **«Seguir jugando»** (con el foco; `Esc` hace lo mismo) y **«Salir al menú»**. Confirmar llama a `GameFlow.go_to_main_menu()` y **no escribe nada en el guardado**: ni piezas, ni progreso, ni récords.
+  - **Mientras el diálogo está abierto la partida queda en pausa**, como con el menú de pausa (RF-104). Al elegir «Seguir jugando» vuelve **al estado anterior**: si estaba corriendo, sigue corriendo a la misma velocidad (RF-105); si ya estaba pausada con `P`, sigue pausada. Los modos y los mapas de la comunidad, donde no se recogen piezas (RF-429), dicen solo la primera línea y la de «lo que no se pierde».
+  - El diálogo **no se abre** con la partida terminada ni con otro diálogo o el menú de pausa abierto.
+- **RF-461** **Relación con el menú de pausa que ya existe** (RF-114): **M53 no lo cambia.** Sigue abriéndose con `Esc` y trae Continuar, Reintentar, Opciones y «Salir al menú» (que hoy sale **directo** al menú principal, sin preguntar). La flecha **no abre ese menú**: es un camino aparte, más corto, al mismo destino. Esc con el diálogo de la flecha abierto cierra el diálogo; el menú de pausa no se abre debajo. **Sugerencia de Claude, no incluida** (anotada en §13): que «Salir al menú» y «Reintentar» del menú de pausa usen **el mismo diálogo**, porque hoy también descartan las piezas sin avisar.
+
+> **Criterio de aceptación RF-459 a RF-461**
+> **Dado** cualquier nivel en curso → **Entonces** hay una flecha «← Menú» arriba a la izquierda, las estadísticas no se tapan y los botones de Pausa y Velocidad siguen como hoy. **Dado** una partida sin piezas → **Cuando** se toca la flecha → **Entonces** el diálogo dice la primera línea y la de «lo que no se pierde», la partida se pausa y **cuando** se elige «Seguir jugando» → **Entonces** sigue como estaba. **Dado** una pieza de la Disruptora **pendiente** (o ya confirmada pero sin resultado) → **Cuando** se toca la flecha y se elige «Salir al menú» → **Entonces** se llega al menú principal y la colección guardada **no** tiene esa pieza. **Dado** una demolición en curso → **Entonces** el diálogo avisa que se pierde sin devolver el oro. **Dado** la partida pausada con `P` → **Cuando** se cancela el diálogo → **Entonces** sigue pausada. **Dado** «Probar» desde el editor → **Entonces** la flecha dice «← Editor» y vuelve al editor sin diálogo. **Dado** la partida terminada → **Entonces** la flecha no se ve. **Dado** el menú de pausa → **Entonces** es el de siempre.
+
+**Recomendación (decide Lucas):** que la flecha **siempre pregunte** y diga **qué se pierde de verdad** (incluidas las piezas ya confirmadas pero sin guardar, que son lo que más duele); que **esté en todos los niveles**; y que el menú de pausa **no cambie** por ahora. Preguntas P5, P6 y P7.
+
+#### 5. Ventana por defecto, mapas grandes y celular
+
+- **RF-462** **Funciona en los tres casos, sin tapar el mapa:**
+  - **Ventana por defecto (1280 × 720).** Todo lo nuevo vive **dentro de las dos barras que ya existen** (la de arriba, de 0 a 48 px, y la de abajo, de 624 a 720). No se agrega ninguna franja ni panel nuevo sobre el mapa: el **área del mapa (`MAP_AREA`) no cambia**.
+  - **Mapas grandes con zoom (RF-251).** Como el área del mapa no cambia, el zoom (por ejemplo 0,75 en 26 × 12) y la cámara **tampoco**. Las pestañas, la flecha y los diálogos están en la capa de la interfaz y **no se achican** con el zoom (RF-251). El panel del objeto y la ayuda de construcción quedan donde están.
+  - **Ventana de otro tamaño.** El juego estira el lienzo base de 1280 × 720 (`canvas_items`), así que las medidas de arriba se escalan juntas.
+  - **Celular (toque, RF-143).** Tocar equivale al clic: tocar una pestaña la activa, tocar la flecha abre el diálogo, tocar un objeto abre su panel. **No hay gestos nuevos** (§11) ni teclas necesarias: **cambiar de pestaña, elegir cualquier torre (también la décima y las siguientes), comprar, habilitar, cancelar y salir se hacen con toques.** Las pestañas miden 96 × 44 (más altas que el botón de Pausa, 32), la flecha 80 × 32 como Pausa. *Son las «adaptaciones mínimas» de §9.4: el celular no queda mejor que el resto de la interfaz, que ya es chica.* El botón «atrás» de Android sigue igual (RF-142).
+  - **Límite honesto:** estas medidas salen de las coordenadas del código y de la cuenta de ancho; **no se vieron en pantalla ni en un celular**. T248 hace capturas de 1280 × 720 y de un mapa con zoom, y deja escrito lo que no pudo probar (el celular, seguro).
+
+> **Criterio de aceptación RF-462**
+> **Dado** el nivel 10 (24 × 11, con zoom) → **Entonces** el mapa se ve igual que sin pestañas y ninguna pestaña, ficha ni diálogo lo tapa. **Dado** la ventana de 1280 × 720 con 10 torres → **Entonces** los botones no se pisan con las pestañas ni con «Próxima oleada». **Dado** un toque simulado en cada botón nuevo → **Entonces** hace lo mismo que el clic. **Dado** cualquier acción de este bloque → **Entonces** se puede hacer sin teclado.
+
+#### 6. Compatibilidad
+
+- **RF-463** **Nada de lo existente cambia, salvo lo dicho:**
+  - **Guardados:** no hay campos nuevos. La pestaña activa no se guarda, y el formato de `save.json` y de `progression.json` queda igual.
+  - **Datos:** no hay campos nuevos en niveles, torres ni enemigos. **No se toca ningún número** de `data/` (el costo y el tiempo de la demoledora, RF-412 y RF-413, siguen como están). Los mapas de la campaña y de la comunidad cargan igual.
+  - **Modos (M49) y comunidad:** la regla del RF-454 vale igual en el modo Asedio y en los mapas de la comunidad.
+  - **Editor:** no cambia su interfaz. «Probar» (RF-217) usa la partida normal, con las pestañas y la flecha «← Editor».
+  - **Modo de pruebas (RF-184, RF-436):** el panel `F1` queda en x = 20, y = 60 (no se pisa con la flecha ni con las pestañas). «Habilitar todas las colecciones» puede sumar la Disruptora a la barra del nivel actual (RF-447): la barra se arma con las torres que haya, como hoy.
+  - **Tests:** `tests/test_tower_bar.gd` y los de HUD que miran la posición del panel «Infraestructura» se **actualizan** en T248; ninguno puede quedar sin correr. El conteo total de tests no baja.
+  - **Constitución:** la lógica de decisión (¿hay pestañas?, ¿cuánto mide un botón?, ¿qué se pierde?) va en funciones puras fuera de la escena (P10) y se prueba sin abrir ventanas.
+
+> **Criterio de aceptación RF-463**
+> **Dado** un guardado de la versión anterior → **Entonces** carga sin cambios y, tras jugar un nivel del 6 al 10, sigue siendo legible por la versión anterior. **Dado** un mapa de la comunidad cualquiera → **Entonces** carga y se juega igual que antes. **Dado** los tests de antes de T248 → **Entonces** pasan, salvo los que se reescriben por el cambio de lugar del panel.
+
+#### Lo que M53 no incluye
+
+- **Más pestañas o más tipos de torre** (queda preparado, RF-455; no se define ninguno).
+- **Cambiar el menú de pausa** (RF-461) ni el botón «atrás» de Android.
+- **Cualquier cambio de reglas o de balance** de demolición, demoledora, extracción o recursos.
+- **Arte final** de los íconos de las pestañas: se usan los textos y figuras simples hasta que haya asset (T221 ya trae íconos de recurso, piezas y demoledora; integrarlos es una tarea aparte).
+- **Teclas para elegir objetos del mapa** o para comprar la demoledora: se hace con el mouse o el dedo.
+- **Guardar la última pestaña** o cualquier preferencia de interfaz.
+
+#### Preguntas para Lucas
+
+Corta, en orden de importancia. Cada una trae mi recomendación; si no contestás, T248 **no arranca** (la compuerta es tuya).
+
+1. **P1 · ¿Pestañas por datos o por número de nivel?** Recomiendo **por datos**: aparecen en todo mapa que tenga removibles, extracción o demoledora (hoy: niveles 6 a 10). La otra opción es «a partir del nivel 6», que dejaría sin pestañas a un mapa de la comunidad con demolición.
+2. **P2 · Teclas.** Recomiendo `1`–`9`, **`0` para la décima** y `Tab` para cambiar de pestaña; la torre 11 solo con mouse o dedo. ¿Te sirve `Tab`, o preferís otra tecla (por ejemplo `Q`)?
+3. **P3 · ¿Qué lleva «Infraestructura»?** Recomiendo cuatro tarjetas: trabajo en curso, demoledora, extracción y recursos (RF-457). ¿Falta algo o sobra algo?
+4. **P4 · ¿Tocar una roca abre «Infraestructura» sola?** Recomiendo **que no** (la pestaña muestra el tiempo que falta del trabajo, pero no se mueve sola).
+5. **P5 · ¿La flecha va en todos los niveles o solo del 6 en adelante?** Recomiendo **en todos**; las pestañas son lo único que empieza en el 6.
+6. **P6 · La confirmación.** Recomiendo que **siempre pregunte** y avise de las piezas (incluso las ya confirmadas, que se pierden igual si no se llegó al resultado) y de la demolición en curso. ¿Alcanza con ese texto?
+7. **P7 · El menú de pausa.** Recomiendo **no tocarlo ahora**. Pero «Salir al menú» y «Reintentar» de ahí hoy descartan las piezas **sin avisar**: ¿querés que usen el mismo diálogo (cambio chico, en otra tarea)?
+8. **P8 · Texto de la flecha.** «← Menú» (recomendado: se entiende sin pasar el mouse, importante en el celular) o solo «←».

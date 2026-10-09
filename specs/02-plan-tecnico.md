@@ -867,3 +867,85 @@ Con `tools/ejemplos/mapa_disruptora.json` y **3 semillas** (`seed=`), el bot `mi
 - **La décima torre y las teclas** (RF-448): un nivel con más de 9 torres deja a la Disruptora o al Mecánico sin tecla.
 - **El Espejo se excluye por `reflect_range_tiles`** (D-087): un enemigo nuevo con rebote queda fuera del pulso sin avisar; es lo buscado, pero hay que recordarlo al crear enemigos.
 - **El desgaste** hace que la Disruptora deje de ser útil rápido (un solo impacto la lleva a 20 %): es lo que pide RF-367 para cualquier torre.
+
+### M53 / T247 · Barra con pestañas y flecha al menú (RF-454 a RF-463, D-088)
+
+**Estado: diseño; todavía no hay código.** Se programa en **T248**, después del OK de Lucas a la spec (M53) y a sus preguntas P1 a P8. Depende de que el código de **T207, T208 y T210** (`InfrastructureController`, `ObstaclePanel`, `InfrastructurePanel`) esté en la rama base, como ya está en `feature/integracion-v1`. Es interfaz pura: **ninguna regla ni dato de balance cambia**.
+
+#### Qué hay hoy (leído en T247)
+
+- `scenes/game/hud.tscn`: `TopBar` (0–48 px; `Stats` de x = 20 a 1000, `PauseButton` 1016–1146, `SpeedButton` 1156–1260), `BottomBar` (624–720; `TowerButtons` de x = 20 a 980 con botones de 76 × 60, `NextWave` en x = 800 a 1004, `StartWaveButton` en 1016 a 1260), `BuildInfo` (y = 592 a 622) y `TowerPanel`.
+- `scenes/game/hud.gd`: `setup_towers()` arma un botón por torre y solo le pone etiqueta de tecla `i < 9`; emite `tower_button_pressed(index)`. `_ready()` crea a mano `ObstaclePanel` e `InfrastructurePanel` como hijos del HUD. `show_collection()` y `show_selected_tower()` ya existen.
+- `scenes/ui/infrastructure_panel.gd`: un botón «Infraestructura» en (1030, 5) y un panel de 260 × 132 en (1000, 52), con la compra de la demoledora. Señal `buy_pressed`. Lo conecta `game.gd` (línea ~204) a `infrastructure.buy_machine`.
+- `scenes/game/build_controller.gd` `_unhandled_input()`: `for i in _tower_types.size(): if event.is_action_pressed("build_%d" % (i + 1))`. **Con 10 torres pregunta por `build_10`, que no existe** y el motor imprime un error (comprobado con un script suelto).
+- `scenes/game/game.gd`: `PauseMenu` con `quit_pressed → GameFlow.go_to_main_menu` (o `go_to_editor` al probar); `_commit_collection()` guarda las piezas **solo al mostrar el resultado**; `findings: FindingRun` (`pending()`, `confirmed()`) y el portador de avances (`CollectibleRun`).
+- `project.godot`: acciones `build_1` a `build_9` (teclas físicas 49 a 57), `cancel`, `pause`, `toggle_speed`, `start_wave`, `upgrade`, `sell`.
+
+#### Archivos
+
+**Lógica pura** (`scripts/logic/`, sin escena, con tests; P10):
+
+- **`bar_layout.gd`** (`class_name BarLayout`, nuevo): constantes de interfaz (lo único que no va en `data/`, regla de `gdscript.md`) y funciones estáticas:
+  - `static func button_width(count: int) -> int`: `clampi(floori((TOWER_AREA_WIDTH - (count - 1) * GAP) / count), MIN_BUTTON_WIDTH, MAX_BUTTON_WIDTH)` con `TOWER_AREA_WIDTH = 674` (x de 118 a 792), `GAP = 4`, `MIN_BUTTON_WIDTH = 56`, `MAX_BUTTON_WIDTH = 76`. Sin pestañas (`tabs == false`) el área es la de hoy y el ancho es **76 siempre** (RF-454).
+  - `static func key_label(index: int) -> String`: `"1"`–`"9"`, `"0"` para el índice 9 y `""` desde el 10 (RF-456).
+  - `static func action_for(index: int) -> StringName`: `&"build_%d"` (el 10 → `&"build_10"`), solo si `InputMap.has_action`.
+- **`exit_text.gd`** (`class_name ExitText`, nuevo): `static func message(pieces: Array[String], job_active: bool) -> String` arma el texto del RF-460 (la línea de siempre, la de las piezas con su cuenta y nombres, la de la demolición y la de «lo que no se pierde»). Los nombres de colección salen de `CollectionDefinitions.name_of()`.
+- **`scripts/data/level_data.gd`**: `func uses_infrastructure() -> bool: return machine_enabled or not obstacles.is_empty()` (junto a `uses_resources()`; RF-454). `obstacles` solo trae removibles y puntos de extracción (`ObstacleSpec.Kind` tiene esos dos valores), así que una decoración común no cuenta.
+- **`scripts/logic/infrastructure_summary.gd`** (nuevo, opcional si `InfrastructureController` ya expone esto): `static func expected_resources(field: ObstacleField) -> int` (suma de `min(producción, reserva)` de los puntos activos, RF-457 tarjeta 4). **Reusar** lo que haga `ObstacleField.complete_wave()`; no duplicar la regla.
+
+**Interfaz** (`scenes/ui/` y `scenes/game/`):
+
+- **`scenes/ui/bar_tabs.gd`** (`class_name BarTabs`, `Control`, nuevo): la columna de pestañas. `setup(tabs: Array[Dictionary])` con `[{id, text}]`; `select(id)`; `signal tab_selected(id: StringName)`; `func set_badge(id, text)` para el *«Infraestructura · 4 s»* (RF-458). Sin saber nada de torres ni de infraestructura: solo muestra y avisa (principio P6 de la constitución). Dos ids: `&"cannons"` y `&"infrastructure"`.
+- **`scenes/ui/infrastructure_tab.gd`** (`class_name InfrastructureTab`, `Control`, nuevo): reemplaza a `InfrastructurePanel`. Las cuatro tarjetas del RF-457. Señales hacia arriba: `buy_pressed`, `cancel_pressed`, `enable_pressed(cell: Vector2i)`, `site_selected(cell: Vector2i)`. Métodos de entrada: `show_job(name, fraction, seconds_left)` / `clear_job()`, `show_machine(enabled, owned, price, gold, effect_text)`, `show_sites(sites: Array[Dictionary])` con `{cell, kind_name, state, price, reserve, max_reserve, production}`, `show_resources(have, expected)`. **No decide nada**: no cobra ni habilita.
+- **`scenes/ui/exit_dialog.gd`** + `exit_dialog.tscn` (`class_name ExitDialog`, `CanvasLayer`, nuevo): modelado sobre `PauseMenu` (mismo panel, mismo atenuado, mismo `Audio.add_click_sounds`). `open(text: String)`, `signal confirmed`, `signal cancelled`; `Esc` cancela; el foco inicial va a «Seguir jugando».
+- **`scenes/game/hud.gd`**:
+  - Elimina la creación de `InfrastructurePanel`; crea `BarTabs` e `InfrastructureTab` en `setup_towers()`/un `setup_bar(level_data)` nuevo, **solo si `level.uses_infrastructure()`** (si no, el HUD queda como hoy).
+  - `setup_towers()` usa `BarLayout.button_width()` y `BarLayout.key_label()` (en vez de `i < 9`), y al cambiar de pestaña muestra u oculta `_tower_button_row` y la tarjeta de infraestructura. **No** cambia el orden ni los índices: `tower_button_pressed(index)` conserva su significado.
+  - Botón **«← Menú»** (`ExitButton`, 80 × 32 en (8, 8)): `signal menu_pressed`; el texto cambia con `set_exit_text("← Editor")` (igual que `PauseMenu.set_quit_text`). `Stats` se corre a `offset_left = 96` **en `hud.tscn`** (no por código). Se oculta con `hide_exit()` cuando la partida termina.
+  - `signal tab_changed(id: StringName)` y `func show_tab(id)`. Cambiar de pestaña **emite hacia arriba**; `Game` decide si cancela la construcción (RF-456).
+  - `show_infrastructure(...)`: Game se lo da armado; el HUD no lee el controlador (señales hacia arriba, llamadas hacia abajo).
+- **`scenes/game/hud.tscn`**: `Stats` corrido; el resto, igual. El hijo `TowerButtons` pasa a empezar en x = 118 **solo cuando hay pestañas** (por código; sin pestañas queda en x = 20).
+- **`scenes/game/build_controller.gd`**: el ciclo de `_unhandled_input` usa `BarLayout.action_for(i)` y **saltea** los índices sin acción (arregla el error de `build_10`). Para cancelar la construcción al cambiar de pestaña, `Game` usa el `cancel()` que ya existe.
+- **`scenes/game/game.gd`**:
+  - Conecta `hud.tab_changed` (→ `build_controller.cancel()` si pasa a «Infraestructura»), `hud.menu_pressed` (→ `_request_exit()`) y `exit_dialog.confirmed` / `cancelled`.
+  - `_request_exit()`: si es «Probar», va directo a `GameFlow.go_to_editor`; si no, junta `findings.pending() + findings.confirmed()` y los avances del portador, arma el texto con `ExitText.message()`, **guarda si estaba en pausa** (`is_paused()`), pausa (`set_paused(true)`) y abre el diálogo. Al cancelar, `set_paused(was_paused)`. Al confirmar, `GameFlow.go_to_main_menu()` **sin** llamar a `_commit_collection()`.
+  - `_unhandled_input`: `Esc` con el diálogo abierto lo cierra (antes que el menú de pausa); `Tab` (`switch_tab`) alterna pestañas si el nivel tiene; con el menú de pausa o el diálogo abiertos no hace nada.
+  - `_refresh_infrastructure_panel()` pasa a alimentar `InfrastructureTab` desde `infrastructure.changed` (oro, trabajo, extracción, oleada completada).
+  - Sin pestañas (`not level_data.uses_infrastructure()`) **no se crea nada** de lo anterior excepto la flecha.
+- **`scenes/ui/infrastructure_panel.gd`**: se **borra** (con su `.uid`) y se actualizan los tests que lo mencionan. Buscar `InfrastructurePanel` y `infrastructure_panel` en todo el proyecto antes de borrar.
+- **`project.godot`**: dos acciones nuevas, `build_10` (tecla física `0`, código 48) y `switch_tab` (`Tab`, código 4194306). **Editar el archivo con Edit, no con un script que reordene.** Verificar que `Tab` no tiene otro uso en las escenas de la partida (los botones de la barra no toman foco, así que el foco por teclado no interviene).
+
+#### Cómo se arma el trabajo (orden sugerido para T248)
+
+1. **Lógica y datos primero** (sin escena): `BarLayout`, `ExitText`, `LevelData.uses_infrastructure()`; sus tests. Correr todo.
+2. **Acciones y `BuildController`**: `build_10`, saltar acciones inexistentes; test que simula 10 torres y comprueba **0 errores del motor** (`SCRIPT ERROR` / `ERROR` nuevos en la salida) y que `0` elige la décima.
+3. **`BarTabs` + `InfrastructureTab`** y su conexión en `Hud`/`Game`, reemplazando a `InfrastructurePanel`. Test de las cuatro tarjetas (RF-457) y de que tocar un objeto no cambia la pestaña (RF-458).
+4. **Flecha + diálogo** (RF-459 a RF-461).
+5. **Captura real** de 1280 × 720 en el nivel 6 (demoledora) y en el 10 (24 × 11 con zoom, mina), con 9 y con 10/11 torres (modo de pruebas con «Habilitar todas las colecciones»). Mirar que nada se pise y que el mapa quede igual. Guardar las capturas en `art/m53-barra/` con un `README.md` breve.
+6. **Documentos:** `CHANGELOG.md` (lo ve quien juega), `README.md` y `ONBOARDING.md` (teclas y barra), `CONTENIDO.md` si menciona el panel «Infraestructura».
+
+#### Pruebas que T248 tiene que escribir
+
+1. **`BarLayout`:** el ancho de botón con 1, 8, 9, 10 y 11 torres (sin pestañas siempre 76; con pestañas, 71 / 63 / 57; nunca menos de 56 ni más de 76); `key_label` de 0 a 11.
+2. **`LevelData.uses_infrastructure()`:** los niveles 1 a 5 → `false`; los niveles 6 a 10 → `true`; un nivel con solo `demoledora` → `true`; un nivel con decoración pero sin removibles ni extracción → `false`.
+3. **HUD sin pestañas:** en el nivel 1 la posición y el tamaño de `TowerButtons` y de sus botones son **idénticos** a los de antes (la prueba que cuida el RF-454), y no existen `BarTabs` ni `InfrastructureTab`.
+4. **HUD con pestañas:** en el nivel 6, «Cañones» activa; `Tab` pasa a «Infraestructura» y oculta los botones de torre; con una torre elegida cancela la construcción; una tecla de torre vuelve a «Cañones».
+5. **Teclas:** `0` elige la décima torre; `Tab` y `0` en el nivel 1 no hacen nada; **ningún error de acción inexistente** con 10 torres.
+6. **Tarjetas:** Demoledora (comprar, gris sin oro, «activa»), Extracción (habilitar, activa, agotada, tres fichas y flechas), Trabajo en curso (progreso, cancelar devuelve el oro), Recursos (esperados). Cada botón llama a la **misma función** que el panel del objeto.
+7. **Objeto del mapa:** seleccionar una roca en «Cañones» abre su panel y **no cambia la pestaña**; el título de la pestaña muestra el tiempo del trabajo.
+8. **Flecha y diálogo:** sin piezas (solo la línea de siempre), con una pieza pendiente, con una pieza confirmada sin guardar, con demolición en curso; cancelar restaura pausa y velocidad; en «Probar» no hay diálogo y vuelve al editor; confirmar **no escribe nada** en `user://test_*.json` (la colección guardada no cambia); con la partida terminada la flecha no se ve.
+9. **Compatibilidad:** un nivel de la comunidad cargado igual; `save.json` de la versión anterior se lee igual.
+10. **Los tests existentes** de la barra (`test_tower_bar.gd`) y los que nombran `InfrastructurePanel` se actualizan, y el total no baja de la línea de base (1017 el 2026-10-07; usar el último número de `03-tareas.md`).
+
+#### Riesgos y cosas que no se saben
+
+- **Ancho de 10 y 11 botones:** la cuenta da 63 y 57 px, pero el contenido de un botón (dibujo de 34 px, costo «130 + 2» y la insignia del recurso, más la del Francotirador «o 120 + 1» de 46 px) **no se midió** a esos anchos. Es el primer punto que T248 tiene que mirar en una captura.
+- **El texto «Infraestructura» en 96 px** con letra de 13: no se midió. Si no entra, se acorta la letra, no se cambia el texto.
+- **El tamaño táctil** (44 px de alto) no se probó en un celular real.
+- **Zoom y cámara:** no cambian porque no se toca el área del mapa; aun así, T248 hace la captura del nivel 10 para confirmarlo.
+- **La flecha y las estadísticas:** correr `Stats` 76 px supone que su contenido (oro, vidas, puntos, oleada, colección, recursos) mide menos de 904 px; con 6 estadísticas debería sobrar, pero no se midió.
+- **`Tab` y el foco:** si algún `Control` de la partida tomara el foco, `Tab` podría moverlo en vez de cambiar la pestaña. Los botones de la barra son `FOCUS_NONE`; hay que confirmarlo con una prueba en la partida real.
+
+#### Lo que M53 no toca
+
+`ObstaclePanel` y sus reglas (RF-404 a RF-410, RF-422 a RF-424), `InfrastructureController`, `ObstacleField`, `FindingRun`, `CollectibleRun`, el menú de pausa, `GameFlow` y el editor. El pedido es solo de interfaz.

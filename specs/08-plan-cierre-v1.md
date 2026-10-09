@@ -202,6 +202,8 @@ Cada ficha detallada se completa en la tarea de cada nivel con lo que pide el 07
 | [T224](tareas/T224-niveles-8-9.md) | Niveles 8 y 9: ruinas, piezas 1 y 2, debut del Mortero y rebalance | Sonnet medio | T209, T211, T223 | Mediano |
 | [T225](tareas/T225-nivel-10.md) | Nivel 10: la mina vieja (extracción y pieza 3/3; cierre del bloque 2) | Sonnet alto | T210, T211, T214, T224 | Mediano |
 | [T226](tareas/T226-prueba-bloque-2.md) | 🚦 G4 · Lucas juega del 6 al 10 y llena el informe | **Lucas** | T225 | 2–3 h |
+| T247 | 📜 🚦 Spec de la barra con pestañas (Cañones / Infraestructura) y de la flecha al menú (M53; sin ficha propia: se hizo desde el pedido de Lucas del 2026-10-08) | Sonnet alto + **Lucas** | T225 | Chico |
+| [T248](tareas/T248-barra-con-pestanas.md) | Barra con pestañas y flecha al menú: código | Sonnet medio | T247 🚦, T207, T208, T210 | Mediano |
 | [T227](tareas/T227-spec-lore-bloque-3.md) | 📜 Spec del lore en el juego (enmienda de §11), del bloque 3 y del final | Sonnet alto | T201, T226 | Mediano |
 | [T228](tareas/T228-textos-wiki-lore.md) | Textos por nivel, pantalla de entrada y victoria, y categoría Lore en la Wiki | Sonnet medio | T227 | Mediano |
 | [T229](tareas/T229-niveles-11-14.md) | Nivel 11 (y, con la misma ficha, 12, 13 y 14 como T230, T231 y T232) | Sonnet medio | T217, T227 | Mediano c/u |

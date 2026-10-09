@@ -675,3 +675,30 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
   - **Que el pulso no toque al Chamán, al Ladrón ni al Embestidor:** posible (punto 1 de "Para revisar"); queda como alternativa de un cambio chico.
   - **Excluir al Espejo por su `id`:** rompe el principio de que todo son datos (RF-164); con `reflect_range_tiles` un enemigo nuevo con rebote queda fuera solo.
   - **Una tecla `0` para la décima torre:** cambia el HUD y el mapa de teclas (RF-297); no hace falta si cada nivel ofrece 9.
+
+## D-088 · La barra de abajo con pestañas por tipo (Cañones e Infraestructura) y una flecha al menú principal
+- **Fecha:** 2026-10-08 · **Estado:** Propuesta en la spec (RF-454 a RF-463, M53), **a la espera del OK de Lucas** · **Decidió:** Lucas (el pedido y las dos pestañas) / Claude (el detalle: medidas, teclas, textos y recomendaciones de las preguntas P1 a P8)
+- **Qué:**
+  - Los niveles que **usan infraestructura** (demoledora, removibles o extracción; hoy del 6 al 10) tienen una barra con **dos pestañas**: **«Cañones»** (las torres de hoy) e **«Infraestructura»** (trabajo en curso, demoledora, extracción y recursos). Los niveles 1 a 5 no cambian.
+  - Las teclas: `1`–`9` para las torres 1 a 9, **`0` para la décima** y **`Tab`** para cambiar de pestaña. Los botones de torre se achican (de 76 a 56 px como mínimo) para que entren hasta 11.
+  - El botón y el panel «Infraestructura» de arriba a la derecha **desaparecen**: la pestaña es el único lugar. Tocar un objeto del mapa **funciona igual** que hoy, en cualquier pestaña, y no cambia la pestaña sola.
+  - Una **flecha «← Menú»** arriba a la izquierda, en todos los niveles, que **pide confirmación** y dice qué se pierde (las piezas de colección de la partida, aunque estén confirmadas, y la demolición en curso). El menú de pausa **no cambia**.
+- **Por qué:**
+  - **Hace falta lugar y no hay:** con el Mecánico, el Mortero y la Disruptora hay hasta 11 torres y las teclas llegan al 9. Seguir apretando botones en una sola fila no escala; una pestaña por tipo sí: una torre o herramienta nueva de otro tipo es **una pestaña nueva**, no un rediseño (Lucas: «poder sumar más torres y herramientas en la misma barra»).
+  - **Todo lo de infraestructura en un solo lugar:** hoy el panel de la demoledora cae, por las coordenadas del código, encima de Pausa y Velocidad; el trabajo en curso solo se ve tocando el objeto; y la extracción solo se ve tocando la mina. La pestaña reúne el estado del trabajo, la compra y la extracción con las **mismas** reglas y los mismos controladores (nada de lógica nueva).
+  - **Por datos y no por número de nivel:** para la campaña da lo mismo que «a partir del 6», pero un mapa de la comunidad o de un modo con demolición tiene el mismo problema y la misma solución; y los niveles 1 a 5 quedan intactos porque no tienen ningún dato de infraestructura.
+  - **`0` para la décima:** es la continuación natural de la fila de números y no pide una tecla nueva que memorizar. **`Tab`** no choca con ninguna tecla de la partida y es la tecla que se espera para cambiar de pestaña. La torre 11 queda sin tecla, como hoy la décima: se elige con el mouse o el dedo, y todo lo de este bloque se puede hacer sin teclado (celular).
+  - **La pestaña no cambia sola:** quien está construyendo toca rocas sin querer; sacarlo de su barra de torres cada vez molesta más de lo que ayuda. Para no perder de vista el trabajo, la pestaña muestra el tiempo que falta.
+  - **La flecha siempre pregunta:** abandonar descarta las piezas de colección de la partida **aunque ya estén confirmadas** (se guardan recién al mostrar el resultado, RF-359 y RF-427), y eso se descubre tarde. La flecha queda cerca de Pausa y Velocidad, así que un toque de más no tiene que costar una pieza.
+  - **El menú de pausa queda como está:** no se pidió cambiarlo. Que sus dos botones también confirmen es una idea mía, anotada en §13 y como pregunta P7.
+- **Alternativas descartadas:**
+  - **Una segunda fila de botones debajo o encima de la actual:** la barra mide 96 px y lo de arriba es el mapa; una fila más le quita alto al área del mapa (de 48 a 624 px, RF-251) y obliga a achicar el zoom de los mapas grandes.
+  - **Desplazar la barra de torres de costado o pasar de página con flechas:** funciona con mouse pero en el celular pide arrastrar (gestos, §11) y esconde torres; las pestañas muestran todas las de su tipo a la vez.
+  - **Dejar el panel «Infraestructura» arriba a la derecha y sumar solo la fila de torres con más teclas:** no resuelve el panel pegado arriba ni la compra de la demoledora y la extracción en un solo lugar.
+  - **Menú radial o ventana emergente de torres:** más tocadas por construcción; la barra fija es lo que el juego ya enseña.
+  - **«Nivel ≥ 6» como regla de aparición:** deja sin pestañas a mapas con demolición que no son de la campaña, y obliga a tocar código cada vez que cambie la lista de niveles.
+  - **Pestañas que se abren solas al tocar un objeto:** deja el estado a la vista pero saca al jugador de su barra de torres (decide Lucas, P4).
+  - **Teclas `Q`/`E` o `C`/`I` para las pestañas:** son posibles (pregunta P2); `Tab` quedó porque no se pisa con nada y vale igual con dos pestañas o con cinco.
+  - **Una tecla propia para la flecha:** se descarta a propósito: salir del juego no debe estar a un `Espacio` de distancia.
+  - **Que la flecha abra el menú de pausa:** duplica `Esc` y no sirve para el caso de salir de una vez; el menú de pausa sigue donde estaba.
+  - **Guardar la última pestaña usada:** un guardado más sin ganancia; arrancar siempre en «Cañones» es lo previsible.
