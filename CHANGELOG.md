@@ -2,6 +2,12 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Nivel 12: El cañadón *(T230, 2026-10-09)*
+
+- **La campaña tiene 12 niveles.** El nuevo se abre al ganar el 11: **El cañadón**, «el paso hacia el norte»: un mapa **grande** (26 × 11) del **desierto** con **una entrada** y un camino que **zigzaguea entre paredes de roca** (cinco tramos verticales). Hay pocas casillas buenas (45), tres rocas marcadas en la boca del cañadón, cinco rocas y escombros que pueden dar 1 recurso y, en lugar de la mina, un **bosque explotable** (100 de oro, 2 recursos por oleada, 8 en total).
+- **Debuta el Espejo**, solo, en la oleada 5: **devuelve los tiros de las torres cercanas** (a menos de 2,5 casillas) y las aturde un par de segundos. Lo que rinde es **pegarle de lejos** (Francotirador, Mortero, Incendiaria) y no poner las torres pegadas al camino. Desde la oleada 8 se mezclan el Chamán, el Guardián y el Curandero, y desde la 12 el Espejo viaja con ellos.
+- Sigue sin Ametralladora; con las colecciones completas están la Disruptora y el Mecánico. **Se gana sin tocar el bosque ni los removibles.** El nivel es **más difícil que el 11** (aumento de vida de 27 % por oleada, 24 oleadas).
+
 ## Nivel 11: Puesto seco *(T229, 2026-10-09)*
 
 - **La campaña tiene 11 niveles.** El nuevo se abre al ganar el 10: **Puesto seco**, «el punto de agua», un mapa **grande** (24 × 11) del **desierto** con **una sola entrada** y un camino largo en serpentina. Tiene **dos pozos de agua** y tres rocas marcadas al costado del camino, una **mina** (100 de oro, 2 recursos por oleada) y cinco rocas y escombros que pueden dar 1 recurso.

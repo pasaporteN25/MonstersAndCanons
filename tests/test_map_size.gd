@@ -132,8 +132,10 @@ func test_the_official_levels_keep_their_size() -> void:
 	for level: LevelData in GameFlow.campaign.levels:
 		var grid: MapGrid = MapGrid.parse(level.map_rows, level.legend)
 		assert_true(grid.is_valid(), str(level.id))
-		# T225 y T229: los niveles 10 (la mina vieja) y 11 (puesto seco) son de mapa grande (24 × 11).
+		# T225, T229 y T230: los niveles 10 (la mina vieja) y 11 (puesto seco) son de 24 × 11 y el 12 (el cañadón), de 26 × 11.
 		var size: Vector2i = Vector2i(24, 11) if str(level.id) in ["level_10", "level_11"] else Vector2i(20, 9)
+		if str(level.id) == "level_12":
+			size = Vector2i(26, 11)
 		assert_eq(Vector2i(grid.width, grid.height), size, "%s no cambia de tamaño" % level.id)
 
 

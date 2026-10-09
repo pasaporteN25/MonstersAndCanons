@@ -298,6 +298,10 @@ Validación M45:954/954 pruebas y62/62 finales de contenido.24 corridas más rep
 
 Cierra el bloque 2 con un mapa grande (24 × 11) del desierto, dos entradas y 20 oleadas con los enemigos de los niveles 6 a 9 (sin debuts). Tiene una **mina** de reserva finita (100 de oro, 2 recursos por oleada, 8 en total), seis removibles que pueden dar 1 recurso, la **pieza 3/3 de la Disruptora** y el Mortero. Es un mapa de **espacio limitado** (43 casillas libres): el bot sin recursos lo gana con 7 a 13 vidas y las estrategias de extracción y de demolición lo ganan con 17 y 18. La ficha completa está en `specs/01-spec.md` §7.12 (RF-453) y la evidencia, en `art/campaign-t225/README.md`.
 
+### T230 · Nivel 12: El cañadón
+
+Un cañadón de 26 × 11 del desierto con **una entrada** y un zigzag entre paredes, un **bosque explotable** en lugar de la mina y 24 oleadas. **Debuta el Espejo** (devuelve los tiros de las torres cercanas y las aturde), solo, en la oleada 5; desde la 12 viaja con las auras y el Chamán. El bot sin recursos lo gana con 3 a 5 vidas (el 11: 6). Ficha: `specs/01-spec.md` §7.14 (RF-477); evidencia: `art/campaign-t229/README.md`.
+
 ### T229 · Nivel 11: Puesto seco
 
 Abre el bloque 3 con un mapa grande (24 × 11) del desierto, **una entrada**, 22 oleadas, dos pozos, una mina y cinco removibles. **Ya no hay Ametralladora** (rotación de torres, RF-474), se ofrece la **Disruptora** (con su colección) y **debuta el Chamán**, solo, en la oleada 5. El bot sin recursos lo gana con 6 vidas (el nivel 10: 7 a 13); con la Disruptora el bot **pierde** (la tabla está para que Lucas decida). La ficha completa está en `specs/01-spec.md` §7.13 (RF-476) y la evidencia, en `art/campaign-t229/README.md`.

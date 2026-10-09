@@ -48,3 +48,26 @@ La estrategia `mix` (la única que compra la Disruptora; simula la colección co
 ### Partida real (ventana de 1777 × 1000, torres con clics, `speed=6`, oleadas 1 a 7)
 
 `play_level_11.json`: 13 torres, 17 vidas. Se vio: la tarjeta **«Nuevo enemigo: Chamán»** en la oleada 5, una torre **aturdida 3,0 s** (RF-285) con el rayo magenta del Chamán a un Cañón, las tarjetas de los enemigos nuevos del guardado vacío, y los clics de la compra (botón de la torre y casilla) sin ningún fallo.
+
+## Nivel 12 · El cañadón
+
+Mapa de **26 × 11**, tema `desierto`, **una entrada** (A arriba a la izquierda, S abajo a la derecha), **zigzag de cinco patas verticales** unidas por el borde de arriba y el de abajo (76 casillas). **45 casillas libres**, cuatro bloques de 2×2 en (14,3), (4,4), (19,5) y (9,6), un **bosque explotable** en (6,5), **cinco removibles** (rocas en (15,6), (5,7), (9,9); escombros en (10,3), (20,8)) y tres `roca_marcada` en (4,0), (0,3) y (1,6). **24 oleadas**, 440 de oro, 20 vidas, **aumento de vida 27 %** (la ficha traía 26). **El Espejo debuta en la oleada 5, solo** (1 Espejo + 5 Trolls); el Chamán, el Guardián y el Curandero se mezclan desde la 8; el Espejo se les suma desde la 12; el Soberano en las 11, 17, 21 y 24.
+
+### Bot, 5 semillas (vidas; todas ganaron las 24 oleadas)
+
+| Estrategia | Sem. 1 | Sem. 2 | Sem. 3 | Sem. 4 | Sem. 5 |
+|---|---|---|---|---|---|
+| `sin_recursos` | 5 | 3 | 3 | 5 | 3 |
+| `demoler` / `demoledora` (el nivel no habilita la máquina) | 14 | 14 | 14 | 14 | 14 |
+| `extraer_temprano` | 14 | 14 | 12 | 14 | 14 |
+| `extraer_tarde` | 18 | 18 | 18 | 18 | 18 |
+| `mix` sin Disruptora (`disruptor=0`) | 5 | 3 | 3 | 5 | 3 |
+| `mix` con Disruptora (`disruptor=1`) | 4 | 1 | 1 | 1 | 1 |
+
+(El nivel 11: `sin_recursos` 6, 6, 6, 6, 6.) **Regla de oro:** `check_rule=1 levels=12` → 5 de 5, «SE CUMPLE». Oleadas 1 a 3 sin perder vidas en 5 de 5. **La Disruptora, otra vez, no ayuda al bot** (gana igual, pero con 1 a 4 vidas contra 3 a 5).
+
+**Precipicios:** el nivel tiene oleadas que cuestan varias vidas de golpe (el Soberano que se escapa vale 10): con pequeños cambios de composición las vidas finales saltan de 15 a 5 o a una derrota, por eso el aumento de vida solo no sirve para afinarlo.
+
+### Partida real (ventana de 1777 × 1000, clics reales, `speed=5`, oleadas 1 a 7)
+
+`play_level_12.json`: 13 torres, 13 vidas, 0 problemas. Se vio la tarjeta **«Nuevo enemigo: Espejo»** (oleada 5), el **«¡Rebote!»** con una torre de (3,2) **aturdida 2,0 s** (`level_12_rebote.png`), y el resto de las tarjetas del guardado vacío.

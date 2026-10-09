@@ -31,6 +31,10 @@ var _seen_intro: Dictionary = {}
 var _seen_reflect: bool = false
 var _stun_left_max: float = 0.0
 var _debug_left: int = 3
+var _watched_mirrors: Dictionary = {}
+var _reflect_seen: bool = false
+var _reflect_count: int = 0
+var _pending_reflect_shot: bool = false
 
 
 func _ready() -> void:
@@ -186,7 +190,23 @@ func _buy() -> void:
 		_order_pos += 1
 
 
+func _on_reflected(_mirror: Enemy, tower: Tower, first: bool) -> void:
+	_reflect_count += 1
+	if not _reflect_seen:
+		_reflect_seen = true
+		_note("oleada %d: el Espejo devolvió un tiro y la torre de %s quedó aturdida (primera vez: %s)" % [game.session.wave, tower.origin_cell, first])
+		_pending_reflect_shot = true
+
+
 func _watch() -> void:
+	for node: Node in get_tree().get_nodes_in_group(Enemy.GROUP):
+		var enemy := node as Enemy
+		if enemy.data != null and enemy.data.id == &"mirror" and not _watched_mirrors.has(enemy.get_instance_id()):
+			_watched_mirrors[enemy.get_instance_id()] = true
+			enemy.reflected.connect(_on_reflected)
+	if _pending_reflect_shot:
+		_pending_reflect_shot = false
+		await _shot("rebote")
 	for node: Node in get_tree().get_nodes_in_group(Tower.GROUP):
 		var tower := node as Tower
 		_stun_left_max = maxf(_stun_left_max, tower.stun_left())
@@ -250,6 +270,7 @@ func _finish() -> void:
 	report["speed"] = speed
 	report["towers"] = game.available_towers.map(func(t: TowerData) -> String: return String(t.id))
 	report["shaman_stun_seen"] = _seen_stun
+	report["mirror_reflects_seen"] = _reflect_count
 	report["max_stun_left"] = _stun_left_max
 	report["intro_cards"] = _seen_intro
 	report["lives_end"] = game.session.lives

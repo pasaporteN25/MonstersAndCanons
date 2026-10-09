@@ -425,6 +425,7 @@ Hasta ahora los enemigos no le hacían nada a las torres. Estos dos sí: las **a
 | 9 | Taller asediado | 20 | 320 | Dos entradas, debut Curandero junto al Guardián, presión combinada y posiciones expuestas reparables. | M45 |
 | 10 | La mina vieja | 20 | 360 | Mapa grande (24×11) del desierto con **mina** de reserva finita, removibles que dan recursos, la **pieza 3/3** de la Disruptora y el Mortero. Cierra el bloque 2 (§7.12). | M50 |
 | 11 | Puesto seco | 22 | 420 | Mapa de 24×11 del desierto con **una entrada**, dos pozos, una mina y cinco removibles; abre la rotación de torres **sin Ametralladora**, ofrece la Disruptora y debuta el **Chamán**, solo (§7.13). | M52 |
+| 12 | El cañadón | 24 | 440 | Cañadón de 26×11 del desierto con **una entrada**, un zigzag entre paredes, un **bosque explotable** en vez de la mina y el debut del **Espejo**, solo (§7.14). | M52 |
 
 ### Oleadas del nivel 1
 
@@ -890,6 +891,14 @@ Lo que **no** depende de G4 y queda firme: el lugar, el bioma, las señales, los
 7. **Recursos y hallazgos.** Un **bosque explotable** (Q-19: 100 de oro, 2 por oleada, reserva 8) y los removibles. Sin hallazgos. **A REVISAR TRAS G4 (b)**, igual que en el 11.
 8. **Estrategia sin recursos.** Igual que el 11: `sin_recursos` gana al menos 4 de 5, sin demoler ni extraer ni usar la Disruptora. La contramedida del Espejo está en las comunes (Francotirador, Incendiaria). **A REVISAR TRAS G4 (c).**
 9. **Textos y transición.** `11-textos-lore.md`, nivel 12. Artículo de Lore: ninguno nuevo (el siguiente es el del 14). Transición: al ganar se abre el 13, «Paso alto», ya en la nieve.
+
+**Valores finales (T230, 2026-10-09).** Lo que quedó en `data/levels/level_12.json` (detalle y tablas del bot en `art/campaign-t229/README.md`):
+
+- **Mapa de 26 × 11:** A arriba a la izquierda y S abajo a la derecha, cinco patas verticales unidas por el borde de arriba y el de abajo (un **zigzag entre paredes**), un camino de **76 casillas**, **45 casillas libres** y **cuatro bloques de 2×2** libres para el Mortero en (14,3), (4,4), (19,5) y (9,6). Las nueve esquinas del Embestidor tienen una casilla libre pegada y otra cerca para el apoyo (RF-379).
+- **Señales:** tres `roca_marcada` (el `hito`, que todavía no existe) en la boca del cañadón: (4,0), (0,3) y (1,6). Huesos y cactus salen solos del tema.
+- **Infraestructura:** un **bosque explotable** en (6,5) (`clase: bosque_explotable`, Q-19: 100 de oro, 2 por oleada, reserva 8) y **cinco removibles** (rocas en (15,6), (5,7) y (9,9); escombros en (10,3) y (20,8)) con 1 recurso al 50 %. **A REVISAR TRAS G4 (a) y (b)** sigue en pie.
+- **Oleadas:** 24. **El Espejo debuta en la 5, solo** (1 Espejo y 5 Trolls, sin Chamán, Guardián ni Curandero); desde la 8 se mezclan el Chamán, el Guardián y el Curandero; **desde la 12 el Espejo viaja con ellos**; el Soberano, en las 11, 17, 21 y 24. **Oro 440, 20 vidas y aumento de vida de 27 %** (la ficha traía 26: con 26 % y las oleadas de ese momento el bot lo ganaba con 12 a 15 vidas, más fácil que el 11).
+- **Textos:** igual que el 11, el campo `"textos"` lo agrega T228.
 
 - **RF-477** **Nivel 12 en la campaña:** **dada** la campaña, **cuando** se gana el nivel 11, **entonces** se abre `level_12` («El cañadón», tema `desierto`, 26 × 11, una entrada, 24 oleadas, 440 de oro, 20 vidas). **Dado** ese nivel, **entonces** no ofrece `basic`, tiene un bosque explotable y de 4 a 6 removibles, trae el Espejo por primera vez en una oleada de la 4 a la 6 **sin** Chamán, Guardián ni Curandero, y ningún otro enemigo debuta. **Dado** el bot con 5 semillas, **entonces** `sin_recursos` gana al menos 4 y su tabla no es más fácil que la del 11 (RF-475).
 

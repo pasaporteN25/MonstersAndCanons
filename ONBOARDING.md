@@ -431,6 +431,12 @@ Con el proyecto abierto (o `godot --path .`): ganar el nivel 9 abre el 10 (o, co
 
 Para medir: `godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- sin_recursos,demoler,extraer_temprano,extraer_tarde level=10 seeds=5` y `... -- x check_rule=1 levels=10`. Captura y exposición: `godot --path . --resolution 1920x1080 art/campaign-t225/capture.tscn` (necesita pantalla) y `godot --headless --path . art/campaign-t225/exposure.tscn`. Detalle en `art/campaign-t225/README.md`.
 
+### T230 · Probar el nivel 12 (El cañadón)
+
+Ganar el nivel 11 abre el 12 (o, con el modo de pruebas, elegirlo en **Niveles**). **✅ Comprobar:** mapa **de 26 × 11** con paredes de roca y un camino que baja y sube cinco veces; **un solo lugar por donde entran** (arriba a la izquierda); tres rocas con una A cerca de la entrada; **sin Ametralladora**. En la **oleada 5** sale la tarjeta «Nuevo enemigo: Espejo»: cuando una torre a **menos de 2,5 casillas** le dispara, aparece «¡Rebote!» y la torre queda **aturdida 2 s**; un Francotirador (alcance 6) o el Mortero le pegan sin problema. En la **pestaña «Infraestructura»**, el **bosque** (cuadro verde con árboles) dice *Habilitar · 100 de oro*, *2 recursos por oleada*, *reserva 8*. Se puede ganar sin usarlo.
+
+Para medir: `... -s tools/balance_sim.gd -- sin_recursos,demoler,extraer_temprano,extraer_tarde level=12 seeds=5` y `... -- x check_rule=1 levels=12`. Partida real (necesita pantalla y mueve el puntero): `godot --path . --resolution 1280x720 art/campaign-t229/play.tscn -- level=12 until=7 speed=5 out=art/campaign-t229`.
+
 ### T229 · Probar el nivel 11 (Puesto seco)
 
 Con el proyecto abierto (o `godot --path .`): ganar el nivel 10 abre el 11 (o, con el modo de pruebas, elegirlo en **Niveles**). **✅ Comprobar:** el mapa es **grande** y del desierto, con **una sola entrada** (arriba a la izquierda) y la salida abajo a la derecha, **dos pozos azules** y tres rocas con una A; la barra **no tiene la Ametralladora** (8 botones; 10 con las colecciones completas, y entonces la Disruptora y el Mecánico aparecen); en la **tarjeta del nivel** la Disruptora aparece como «Nueva» (la tarjeta avisa lo que ofrece el nivel, aunque todavía falte la colección). En la **oleada 5** sale una tarjeta «Nuevo enemigo: Chamán» y, unos segundos después, un rayo magenta **apaga la torre más cercana** (3 s): un Francotirador lo mata antes. El Guardián y el Curandero llegan juntos en la 8. Se puede ganar sin la mina ni los removibles.

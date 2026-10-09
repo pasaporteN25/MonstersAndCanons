@@ -16,16 +16,16 @@ func _game_with_level(index: int) -> Game:
 
 # --- Campaña (spec §7) ---
 
-func test_campaign_has_eleven_levels_in_order() -> void:
+func test_campaign_has_twelve_levels_in_order() -> void:
 	var ids: Array[StringName] = []
 	for level: LevelData in campaign.levels:
 		ids.append(level.id)
-	assert_eq(ids, [&"level_01", &"level_02", &"level_03", &"level_04", &"level_05", &"level_06", &"level_07", &"level_08", &"level_09", &"level_10", &"level_11"] as Array[StringName])
+	assert_eq(ids, [&"level_01", &"level_02", &"level_03", &"level_04", &"level_05", &"level_06", &"level_07", &"level_08", &"level_09", &"level_10", &"level_11", &"level_12"] as Array[StringName])
 
 
 func test_levels_match_spec_table() -> void:
 	# [oleadas, oro inicial, entradas]
-	var expected: Array = [[10, 150, 1], [15, 200, 1], [20, 250, 2], [15, 200, 1], [20, 300, 3], [15, 250, 2], [20, 300, 2], [18, 300, 1], [20, 320, 2], [20, 360, 2], [22, 420, 1]]
+	var expected: Array = [[10, 150, 1], [15, 200, 1], [20, 250, 2], [15, 200, 1], [20, 300, 3], [15, 250, 2], [20, 300, 2], [18, 300, 1], [20, 320, 2], [20, 360, 2], [22, 420, 1], [24, 440, 1]]
 	for i: int in expected.size():
 		var game: Game = _game_with_level(i)
 		assert_eq(game.level_data.waves.size(), expected[i][0], "nivel %d: oleadas" % (i + 1))
@@ -34,11 +34,15 @@ func test_levels_match_spec_table() -> void:
 		assert_eq(game.session.lives, 20, "nivel %d: vidas" % (i + 1))
 
 
-func test_every_level_is_20_by_9_but_the_tenth_and_the_eleventh() -> void:
+func test_every_level_is_20_by_9_but_the_tenth_to_the_twelfth() -> void:
 	for i: int in campaign.levels.size():
 		var game: Game = _game_with_level(i)
-		# T225 y T229: los niveles 10 (la mina vieja) y 11 (puesto seco) usan un mapa grande (RF-250).
-		var size: Rect2i = Rect2i(0, 0, 24, 11) if i == 9 or i == 10 else Rect2i(0, 0, 20, 9)
+		# T225, T229 y T230: los niveles 10 (la mina vieja), 11 (puesto seco) y 12 (el cañadón) usan un mapa grande (RF-250).
+		var size: Rect2i = Rect2i(0, 0, 20, 9)
+		if i == 9 or i == 10:
+			size = Rect2i(0, 0, 24, 11)
+		elif i == 11:
+			size = Rect2i(0, 0, 26, 11)
 		assert_eq(game.level.ground.get_used_rect(), size, "nivel %d: RF-01 / RF-250" % (i + 1))
 
 

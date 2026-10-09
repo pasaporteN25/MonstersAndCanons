@@ -141,15 +141,15 @@ func test_the_bar_shows_eight_towers_without_the_machine_gun_and_the_opening_is_
 		await get_tree().process_frame
 
 
-func test_the_gold_climbs_and_the_health_scale_does_not_climb() -> void:
+func test_the_gold_climbs_and_each_level_has_its_own_health_scale() -> void:
+	# La ficha trae el aumento de vida como valor inicial (28, 26, 25, 24) y el bot lo ajusta nivel por nivel (T229 a T232):
+	# lo que no puede faltar es que cada nivel traiga el suyo y que el oro inicial suba.
 	var previous_gold: int = _load(10).starting_gold
-	var previous_scale: int = _load(10).health_scale_percent_per_wave
 	for n: int in _block():
 		var level: LevelData = _load(n)
 		assert_gt(level.starting_gold, previous_gold, "nivel %d: más oro que el anterior" % n)
-		assert_lte(level.health_scale_percent_per_wave, previous_scale, "nivel %d: el aumento de vida no sube (ficha: 28, 26, 25, 24)" % n)
+		assert_between(level.health_scale_percent_per_wave, 20, 60, "nivel %d: trae su aumento de vida" % n)
 		previous_gold = level.starting_gold
-		previous_scale = level.health_scale_percent_per_wave
 
 
 func test_waves_stay_inside_the_limits_and_use_known_entrances() -> void:
