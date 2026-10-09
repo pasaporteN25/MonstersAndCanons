@@ -466,6 +466,16 @@ Campaña ampliada con level_08 (Bastión) y level_09 (Taller asediado). JSON en 
 
 `data/levels/level_10.json`, último de `data/campaign.json`. Es el **único nivel oficial de mapa grande** (24 × 11, RF-250) y de tema `desierto`, con las ruinas de los niveles 8 y 9 contadas por la leyenda (`p` columna, `s` símbolo A, `u` y `e` escombros). Su leyenda usa 6 de las 10 letras: `u` escombro con `hallazgo: disruptor` (la pieza 3/3), `e` escombro común (1 recurso al 50 %), `r` roca removible (1 recurso al 50 %), `m` mina (clase `mina`, sin sobrescribir: 100 de oro, 2 por oleada, reserva 8), `s` y `p` decoración. Para cambiar la dificultad sin tocar el mapa se mueve `aumento_vida` (30) y, con cuidado, las cantidades de las oleadas: con 33 `sin_recursos` ya pierde 2 de 5, así que **después de cualquier cambio** hay que correr `godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- x check_rule=1 levels=10` (regla de oro, RF-432). Es un mapa de **espacio limitado** (43 casillas libres, ver §7.12 de la spec): agregar casillas libres lo vuelve más fácil para todos los bots. La exposición del Embestidor y la captura están en `art/campaign-t225/`.
 
+### T243 · El Coloso, jefe supremo del nivel 15 (diseño aprobado; todavía no está en el juego)
+
+El jefe del último nivel es un ejemplo de **un enemigo que se parte con solo datos**, igual que la Araña y sus Crías: **dos archivos en `data/enemies/`**, sin tocar el código (RF-481 a RF-484, D-092).
+
+- `colossus.tres` (**Coloso**): vida 600, velocidad 0.5, armadura 5, resiste la mitad de la ralentización, quita 12 vidas y da 200 de oro. Su `death_spawn` es `colossus_shard` y su `death_spawn_count`, 3.
+- `colossus_shard.tres` (**Pedazo**): vida 180, velocidad 1.0, sin armadura, quita 4 vidas y da 30 de oro. No suelta nada.
+- **El Pedazo no se pone en ninguna oleada:** solo lo suelta el Coloso, como la Cría. Los grupos de `level_15.json` nombran únicamente a `colossus`.
+- **Son números iniciales**, sin medir: los ajusta T234 con el bot. Aparecen solos en la Wiki ("Enemigos") y el texto de lore del Coloso está en el artículo «La Central» (`specs/11-textos-lore.md`).
+- **Para hacer un enemigo parecido** (uno que se parte al caer): duplicar `spider.tres`, cambiar `death_spawn` por el enemigo-hijo y `death_spawn_count` por la cantidad, y cuidar que **las vidas del hijo × la cantidad** no superen las del padre si no querés que matarlo salga más caro que dejarlo pasar (acá: 4 × 3 = 12).
+
 ### M49 · Modos de juego (RF-388 a RF-392)
 
 Un **modo** es un grupo de mapas con reglas propias. Aparece como una solapa en **Jugar**: los oficiales después de "Campaña" y los propios después de "Mapas de la comunidad". No hace falta programar: es una carpeta con un archivo `modo.json`.

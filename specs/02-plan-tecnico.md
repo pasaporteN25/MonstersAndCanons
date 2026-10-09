@@ -1034,3 +1034,81 @@ Se programa en **T248**, después del OK de Lucas a la spec (M53) y a sus pregun
 #### Lo que M53 no toca
 
 `ObstaclePanel` y sus reglas (RF-404 a RF-410, RF-422 a RF-424), `InfrastructureController`, `ObstacleField`, `FindingRun`, `CollectibleRun`, el menú de pausa, `GameFlow` y el editor. El pedido es solo de interfaz.
+
+### M54 / T243 · El Coloso, jefe supremo del nivel 15 (RF-481 a RF-484, D-092)
+
+**Estado: diseño aprobado por Lucas el 2026-10-09; todavía no hay código ni datos.** Se hace en **T244** (el arte) y **T234** (los dos `.tres`, las oleadas finales y el balance con el bot). Es **solo datos**: no cambia ninguna regla de combate, ningún campo de `EnemyData` ni ninguna pantalla. Todos los números son **iniciales y no se midieron** (ni con el bot ni en partida).
+
+#### Qué hay hoy (leído en T243)
+
+- `scripts/data/enemy_data.gd` ya trae todo lo que hace falta: `death_spawn` y `death_spawn_count` (RF-166), `slow_resistance`, `armor`, `lives_damage`, `size_tiles`, `visual_scale`, `walk_atlas` y `walk_stride_tiles`. **No se agrega ningún campo.**
+- `scenes/game/wave_spawner.gd`: `_spawn_enemy` calcula la vida con `Rules.scaled_health_percent(base, oleada, % del nivel)` y, si el enemigo tiene `death_spawn`, conecta `died` a `_on_enemy_died_with_spawn`, que crea los hijos **sumándolos a los vivos antes de que el padre deje el árbol** (así la oleada no termina antes) y los escalona hacia atrás en el camino. Si el enemigo llega a la salida, `died` no se emite: no suelta nada. **Los Pedazos heredan la vida de la oleada en curso** sin código nuevo. `Rules.scaled_health_percent` es `floor(base × (100 + % × (oleada − 1)) / 100)`: con 22 %, oleada 30 → 738 %, o sea Coloso `600 → 4428` y Pedazo `180 → 1328`.
+- `scripts/logic/rules.gd`: `is_dangerous` = `lives_damage >= 5` (corona, RF-136): el Coloso sí, el Pedazo no. `scripts/logic/dev_start.gd` `enemy_reward` ya **suma el oro de los hijos** (hasta una profundidad máxima), así que el oro automático (RF-320) cuenta los Pedazos.
+- `scripts/logic/wiki.gd`: la entrada de un enemigo ya escribe «Al morir suelta N × Nombre», «Lo suelta al morir: …» y «Dónde aparece» leyendo `data/enemies/` y la campaña; **no hay artículo que escribir a mano**. El bestiario (RF-238) lo abre con `seen_enemies` del guardado: nada nuevo.
+- `tests/test_content.gd` revisa **todos** los enemigos: frase de presentación no vacía, `size_tiles` entre 0.05 y 0.5 y que las crías no encadenen más de 10.
+
+#### Archivos
+
+**Datos** (los hace T234; el arte, T244):
+
+- `data/enemies/colossus.tres` y `data/enemies/colossus_shard.tres` (`id` igual al nombre del archivo), con los valores de RF-481. Se copian de `spider.tres` / `spiderling.tres`, que usan el mismo mecanismo:
+
+  | Campo | `colossus` | `colossus_shard` |
+  |---|---|---|
+  | `display_name` | `"Coloso"` | `"Pedazo"` |
+  | `description` | la frase de RF-484 | la frase de RF-484 |
+  | `max_health` | 600 | 180 |
+  | `speed_tiles` | 0.5 | 1.0 |
+  | `armor` | 5 | 0 |
+  | `reward` | 200 | 30 |
+  | `lives_damage` | 12 | 4 |
+  | `slow_resistance` | 0.5 | 0 (el valor por defecto) |
+  | `death_spawn` / `death_spawn_count` | `colossus_shard` / 3 | vacío / 0 |
+  | `size_tiles` | 0.5 (el máximo que acepta el test) | 0.3 |
+  | `visual_scale` | 1.6 (inicial; lo ajusta T244 al ver el arte) | 1.2 |
+  | `flip_when_walking_left` | `false` | `false` |
+  | `texture`, `walk_atlas`, `walk_stride_tiles`, `walk_art_scale` | los de T244 | los de T244 |
+  | `color` | el de la paleta del concepto aprobado (T244) | un tono de la misma familia |
+
+- `data/levels/level_15.json` (T234): el Coloso (`"colossus"`) en las oleadas 26, 28 y 30 y la escolta completa en la 30. El `.json` **nombra** al Coloso; el Pedazo **no se nombra** en ninguna oleada (solo lo suelta).
+- `data/wiki/lore/la_central.json` (T234, o T228 si ya lo creó): suma el párrafo del Coloso de `specs/11-textos-lore.md` §4.10, **tal cual**.
+- `assets/sprites/enemies/` (SVG de 64 × 64 de respaldo, como los demás) y `assets/sprites/enemies/rendered/`: `colossus.png` y `colossus_shard.png` (256 × 256, una sola vista, luz arriba a la izquierda, sin sombra dibujada, pies en y = 191), `colossus_walk.png` y `colossus_shard_walk.png` (**atlas de 1024 × 1024: 4 poses por fila y 4 filas —derecha, abajo, izquierda, arriba—, cuadros de 256**, M31). Los fija T244; los dos PNG de caminata tienen que pasar los tests de ciclos (16 poses propias, márgenes y apoyo constante).
+
+**Código: ninguno.** Solo se **actualizan listas de pruebas** que nombran los enemigos uno por uno:
+
+- `tests/test_enemy_visual.gd` (tres listas con los quince `id` de hoy: escala visual 1.2, regiones del ciclo, ciclos completos y únicos, ralentización de los pasos). T244 suma `colossus` y `colossus_shard` a las que correspondan; **la de `visual_scale == 1.2` no vale para el Coloso** (su escala es la que decida T244) y esa excepción se escribe en el test, no se esconde.
+- `tests/test_editor_panels.gd` (lista de enemigos del editor) y cualquier test que cuente los enemigos de la campaña o de `data/enemies/`: buscar con `git grep "troll\|spiderling"` en `tests/` antes de dar por cerrada la tarea.
+- `tools/balance_sim.gd` usa una lista fija de enemigos en la línea de las estrategias (`normal`, `fast`, …, `boss`): **no hace falta tocarla**, porque el bot lee los grupos del nivel; T234 lo confirma jugando el 15.
+
+#### Orden de trabajo
+
+1. **T244 · concepto** (cuerpo y Pedazo, 2 o 3 poses, paleta y silueta contra el Guardián a 34 px), **OK de Lucas**; producción; PNG y atlas; hoja de contacto; captura en una partida con un `.tres` de prueba. Mientras no esté aprobado, T234 usa arte provisional hecho en código (Q-40).
+2. **T234 · los dos `.tres`** y la prueba de que cargan (`test_content`), con el arte provisional o el final.
+3. **T234 · las oleadas finales** del 15 (26, 28 y 30) y la escolta de la 30, con el bot: 5 semillas, las 5 estrategias.
+4. **T234 · balance:** primero la vida de los Pedazos (si queda mal, el bot los deja pasar en masa) y después la armadura del Coloso. Todo cambio de número va a los `.tres` y se anota en el Resultado; **si cambia la cantidad de Pedazos o las vidas, también el texto de RF-484 y la frase del Coloso**.
+
+#### Pruebas que T234 tiene que escribir (además de las de RF-480)
+
+1. **Datos:** `colossus` y `colossus_shard` cargan, tienen los números de RF-481, `colossus.death_spawn` es el Pedazo con cantidad 3 y el Pedazo no suelta nada.
+2. **Partir:** un Coloso que **muere** suelta 3 Pedazos con la vida de la oleada en curso (oleada 30 del 15 → 1328), y la oleada **no termina** hasta que mueren o llegan los 3; un Coloso que **llega** quita 12 vidas y no suelta nada.
+3. **Vidas:** 3 Pedazos que llegan quitan 12 en total; el Pedazo, 4 cada uno.
+4. **Armadura y ralentización:** un golpe de 8 le hace 3 al Coloso y 8 al Pedazo; el Hielo ralentiza al Coloso a la mitad y al Pedazo completo (reusar las pruebas de `slow_resistance` del Jefe).
+5. **Nivel 15:** el Coloso está en la 26, la 28 y la 30, la escolta completa solo en la 30, no hay Soberano; ningún otro nivel de la campaña nombra al Coloso.
+6. **Wiki:** la entrada del Coloso dice «Al morir suelta 3 × Pedazo» y «Nivel 15 · La Central»; la del Pedazo, «Lo suelta al morir: Coloso»; la corona de peligro aparece en el Coloso y no en el Pedazo; con el guardado nuevo las dos están cerradas.
+7. **Lore:** ganar el 15 abre «La Central» y el párrafo del Coloso es el de `11-textos-lore.md`.
+8. **Bot:** `check_rule=1 levels=15` «SE CUMPLE», y la tabla del 15 es la más difícil de la campaña (RF-475).
+
+#### Riesgos y cosas que no se saben
+
+- **Ningún número se midió.** La vida de los Pedazos es lo primero a mirar: con ≈ 1330 de vida cada uno y velocidad 1.0, el bot puede dejar pasar los tres juntos y perder 12 vidas de una; con muy poca vida, el Coloso se vuelve un Soberano grande.
+- **Las 20 vidas:** una fuga del Coloso deja 8; si T234 ve que el 15 se pierde casi siempre por una sola fuga, lo informa a Lucas con la tabla antes de bajar las 12 vidas (que son una decisión suya).
+- **La escolta estirada:** los Pedazos (1.0) corren más que el Guardián (0.7) y se separan del aura; no se probó si eso ayuda o estorba. T234 decide si alinea los `desde` (RF-203).
+- **El tamaño:** `size_tiles = 0.5` es el tope que acepta `test_content` («tiene que caber en el camino»). Si el dibujo a ×1.6 tapa casillas vecinas o la barra de vida, lo ajusta T244 con una captura; el radio lógico no se toca.
+- **El Pedazo en la lista de «próxima oleada»:** el Pedazo no figura en ninguna oleada, así que no sale en la barra de la próxima oleada, y su tarjeta de presentación (RF-134) sale cuando aparece por primera vez, mitad de la partida. No se probó cómo se ve ni que la tarjeta no tape nada.
+- **No se comprobó que `check_level` y los tests acepten un enemigo solo-hijo** (que está en `data/enemies/` pero no en ninguna oleada). La Cría ya es así, así que debería pasar; T234 lo confirma.
+- **La frase del Coloso** (~130 caracteres) es más larga que las de hoy; no se midió si entra en la tarjeta de 6 segundos. Si no entra, se acorta.
+- **El texto del lore dice «tres».** Es lo único del texto que depende de un número del balance (ver arriba).
+
+#### Lo que M54 no toca
+
+`EnemyData`, `WaveSpawner`, `Rules`, la Wiki (`wiki.gd`), el guardado, el Soberano (`boss.tres`) y el resto de los enemigos. Tampoco las escoltas de los niveles 13 y 14. El pedido es de **dos archivos de datos**, su dibujo y las oleadas finales del 15.

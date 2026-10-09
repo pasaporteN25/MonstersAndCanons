@@ -137,7 +137,7 @@ Los niveles 6 a 9 **cambian de balance** porque los removibles abren casillas. S
 | 12 | El cañadón | `desierto` | Combinar Disruptora con apoyo; auras y aturdimiento juntos. | **Espejo** (rebote). | Ídem. |
 | 13 | Paso alto | `nieve` | Ataques **coordinados**: grupos mixtos con escolta (Guardián + Curandero + Chamán) y dos entradas. | — | Ídem (y el Lanzamisiles, si Q-28 lo aprueba). |
 | 14 | Los poblados vacíos | `ruinas` | Todas las amenazas. Las señales culminan: las comunidades se retiraron. | — | Ídem. |
-| 15 | **La Central** | `pradera` (valle) | **Final:** defender la central de energía y la cadena de abastecimiento. Mapa grande (hasta 26 × 12). El líder es un **jefe supremo nuevo** (diseño en T243, arte en T244) con escolta coordinada (Q-32, cambiado por Lucas el 2026-10-08). Epílogo ambiguo. | — | Todas las disponibles. |
+| 15 | **La Central** | `pradera` (valle) | **Final:** defender la central de energía y la cadena de abastecimiento. Mapa grande (hasta 26 × 12). El líder es un **jefe supremo nuevo**, el **Coloso** (una masa de piedra que se parte en tres Pedazos; diseño de T243 con RF-481 a RF-484 y D-092, elegido por Lucas el 2026-10-09; arte en T244) con escolta coordinada (Q-32, cambiado por Lucas el 2026-10-08). Epílogo ambiguo. | — | Todas las disponibles. |
 
 Cada ficha detallada se completa en la tarea de cada nivel con lo que pide el 07 §3: posiciones, recursos, estrategia sin recursos, textos y transición.
 

@@ -3,6 +3,8 @@
 > **Estado: APROBADO por Lucas (2026-10-09).** Escrito el 2026-10-08 por Claude (Sonnet 5.5), tarea **T227**. Nada de lo que está acá se cargó en el juego: lo carga **T228** (niveles 1 a 10, Wiki Lore y pantallas) y, para el 11 al 15, las tareas de cada nivel, **solo después de que Lucas diga que sí**.
 >
 > **OK de Lucas:** dado el 2026-10-09 («todas ✔», P1 a P8 de M52). Lo marcado «A REVISAR TRAS G4» en las fichas se confirma al cerrar su partida del 6 al 10.
+>
+> **Agregado por T243 (2026-10-09):** el artículo 10, «La Central», suma **un párrafo sobre el Coloso**, el jefe supremo que eligió Lucas. Es el texto de tono del informe de T243, que no cambia ningún otro texto de este documento. **Lucas todavía no lo leyó en su lugar**: si le parece mal, se corrige acá y se copia al artículo de la Wiki Lore. Dice «tres» porque el Coloso suelta tres Pedazos (RF-481): **si el balance cambia ese número, se corrige también acá.**
 
 **Qué es este documento.** Los textos finales que muestra el juego (M52, `01-spec.md`): el **lugar**, la **entrada** y la **victoria** de los 15 niveles, el **epílogo**, los **créditos** y **10 artículos** de la categoría Lore de la Wiki. Es el **único lugar** donde viven los textos: la ficha de cada nivel (§7.13 a §7.17 de la spec) y las tareas T228 a T234 los **copian tal cual** de acá, y si Lucas corrige uno se corrige acá primero.
 
@@ -32,7 +34,7 @@ Una «línea» es un renglón del archivo (separado por `\n`), no lo que ocupa e
 - **El 8, el 11 y el 14 parten de los tres ejemplos de tono de la biblia** (§8). El 11 y el 14 usan sus frases de victoria casi tal cual (partidas en dos líneas); el 8 reescribe la entrada de ejemplo en tres líneas. Esos ejemplos eran *ilustraciones de tono, no textos finales*: que Lucas haya aprobado la biblia en G2 no los vuelve definitivos, así que también necesitan su OK.
 - **Las victorias no suponen nada opcional.** Ninguna menciona una pieza de colección, un recurso ni la demoledora: se ganan igual sin ellas.
 - **El 13 habla de «hitos de piedra»**: depende de que se dibuje la señal `hito` (P-6 de la biblia, ver T233). Si Lucas no quiere ese dibujo, la entrada y la victoria del 13 se reescriben con «las rocas marcadas».
-- **El 15 no dice nada del jefe supremo** más que «lo más grande que vimos hasta ahora»: su diseño es de T243.
+- **El 15 no dice nada del jefe supremo en su entrada ni en su victoria** más que «lo más grande que vimos hasta ahora»: no hace falta, el jugador lo ve venir. **El Coloso (T243, RF-484, D-092) se nombra una sola vez, en el artículo «La Central» (§4.10)**, que se abre recién al ganar el 15.
 
 ---
 
@@ -362,6 +364,8 @@ Diez artículos en `data/wiki/lore/` (RF-469). Cada uno se **abre al ganar un ni
 
   > Con ella, la región queda asegurada: agua, luz y camino. No es todo el planeta, y nadie en la Compañía dice que lo sea.
 
+  > Los colonos lo llaman el Coloso. Es de la misma piedra que los Guardianes. Cuando cae, se parte en tres y los pedazos siguen camino.
+
   > El informe termina ahí. No dice qué se hará con lo que falta.
 
 ---
@@ -374,6 +378,7 @@ Diez artículos en `data/wiki/lore/` (RF-469). Cada uno se **abre al ganar un ni
 - Cada artículo de Lore menciona solo lo que ya apareció hasta el nivel que lo abre (revisado a mano contra los debuts de la biblia §7: p. ej. «Los Moradores» se abre en el 9 y habla de **dos** oficios porque el Chamán recién debuta en el 11, donde lo cuenta «Los pozos»).
 
 **No se comprobó:**
+0. **El párrafo del Coloso** (T243) no pasó por la mirada de nadie más que la mía; revisa que no use las palabras vetadas («enemigo», «bestia», «malvado», etc.) y que no nombre nada que debute después del 15. Que «es de la misma piedra que los Guardianes» insinúe una pertenencia a los Moradores sin afirmarla es justamente la ambigüedad que Lucas aceptó.
 1. **Que suenen bien dichos en el juego.** Los leí contra la sección de tono de la biblia, pero el criterio es de Lucas: puede haber frases que le parezcan frías, ambiguas de más o, al revés, demasiado explícitas.
 2. **Que entren en pantalla.** Los límites son de caracteres; el cartel y la tarjeta (T228) los miden en una captura real, y si una tarjeta no alcanza para 32 caracteres se baja el límite y se acorta el lugar.
 3. **Los hechos que los textos suponen del juego** (que el 9 «prueba el primer mortero», que el 11 «apaga torres», que el 13 trae una escolta por dos caminos) son los de la biblia y el plan 08 §5. Si la partida de Lucas del 6 al 10 (T226, todavía sin cerrar) cambia algo de eso, los textos afectados son el 9 (mortero) y los de las fichas marcadas **A REVISAR TRAS G4** en la spec.

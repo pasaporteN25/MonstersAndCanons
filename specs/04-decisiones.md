@@ -755,7 +755,7 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Por qué:**
   - **Fichas por datos y no un mapa dibujado:** las coordenadas de los niveles 6 a 10 se rehicieron varias veces con el bot (T223 a T225 y T245). Fijar casillas acá, sin que Lucas haya jugado el 6 al 10, sería fijar lo que probablemente cambie.
   - **Sin Ametralladora desde el 11:** es la rotación que pidió Lucas (07 §4: «algunas torres baratas o repetidas pueden retirarse»); el riesgo es la apertura, y por eso la comprueba el bot con la regla de RF-475.
-  - **El hueco del jefe supremo:** Lucas pidió que su diseño sea de T243 y que **nadie lo invente** fuera de esa spec.
+  - **El hueco del jefe supremo:** Lucas pidió que su diseño sea de T243 y que **nadie lo invente** fuera de esa spec. *(Resuelto el 2026-10-09: D-092, el Coloso.)*
   - **La central como cuatro dibujos:** un objeto grande de verdad (que ocupe 2 × 2 casillas con un solo dibujo) es un sistema nuevo de decoración; con cuatro cuartos se resuelve con lo que la leyenda ya hace.
   - **Marcar G4 en vez de esperar:** Lucas pidió dejar la spec lista para su OK sin frenar por la partida; marcar cada punto dudoso permite aprobar lo firme hoy y corregir lo marcado después.
 - **Alternativas descartadas:**
@@ -765,3 +765,25 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
   - **La central como la salida del mapa:** exige un objeto de salida nuevo y tocar el recorrido; es un sistema nuevo.
   - **Que el 15 repita el Soberano con escolta:** la respuesta Q-32 de Lucas cambió esto (jefe supremo nuevo).
   - **Agregar el Lanzamisiles al 13:** Q-28 lo dejó para una actualización posterior.
+
+## D-092 · El jefe supremo del nivel 15 es el Coloso: una masa de piedra que se parte en tres pedazos, con datos que ya existen
+- **Fecha:** 2026-10-09 · **Estado:** Aprobada por Lucas (concepto, vidas, oleadas, nombre y pertenencia) · **Decidió:** Lucas (eligió el concepto C y aceptó las propuestas de las otras cuatro preguntas del informe de T243, el 2026-10-09) / Claude (los conceptos, los números iniciales y el texto)
+- **Qué:**
+  - El nivel 15 trae al **Coloso** (`colossus`) y a su **Pedazo** (`colossus_shard`) en lugar del Soberano (RF-481 a RF-484, §7.17). El Coloso tiene 600 de vida base, velocidad 0.5, armadura 5 y resiste la mitad de la ralentización; al morir por daño **suelta 3 Pedazos** (180 de vida, velocidad 1.0, sin armadura) con `death_spawn` (RF-166). **Quita 12 de las 20 vidas** si llega; cada Pedazo, 4.
+  - Aparece en las oleadas **26, 28 y 30**; la **escolta completa** (Guardián + Curandero + Chamán) viene **solo con la 30**. Las cantidades exactas las cierra T234 con el bot.
+  - **Nombre «Coloso»** (nombre de informe, por el tamaño) y **pertenencia ambigua** a los Moradores, como el Espejo: el juego no lo aclara y el Coloso no lleva el símbolo A.
+  - **No hay sistema nuevo ni campo nuevo en `EnemyData`:** son dos archivos de datos, un dibujo del cuerpo y otro del Pedazo (con ciclo de caminata), y el texto de la Wiki Lore.
+- **Por qué:**
+  - **Es un cierre y no «un jefe más» (10 §4.4, punto 1).** La ficha del 15 dice que el nivel no enseña nada nuevo, sino que **junta lo aprendido**. El Coloso castiga a quien juega con una sola idea: la primera mitad pide golpe fuerte (la lección del Blindado) y la segunda pide área y ralentización (la lección del Hielo, el Cañón y la Araña). Ninguno de los otros jefes obliga a tener las dos cosas a la vez.
+  - **Tiene función propia.** El Soberano es vida y armadura; el Guardián, aura; el Chamán, sabotaje. «Se parte» es una función que nadie tiene.
+  - **No exige nada nuevo** (la ficha de T243 manda frenar si hacía falta un sistema). `death_spawn` ya existe, está probado con la Araña y las Crías, y la Wiki ya sabe escribir «Al morir suelta» y «Lo suelta al morir».
+  - **La contramedida está entre las torres comunes** (Francotirador, Cañón, Incendiaria, Hielo, Tesla), así que `sin_recursos` puede ganarle sin Disruptora, Mortero ni Mecánico (ficha del 15, punto 8).
+  - **12 vidas de 20:** una sola fuga lo deja en el límite y dos pierden la partida, así que es «la amenaza más grande del juego» (más que las 10 del Soberano) sin ser una derrota automática. **3 Pedazos × 4 vidas = 12**: matarlo y dejarlo pasar cuestan lo mismo en el peor caso, y nadie queda castigado por haberlo roto.
+  - **Oleadas 26, 28 y 30 y escolta completa solo en la 30:** el jefe se anuncia, se aprende y recién en la última oleada se combina con todo (07 §4: primero se enseña la amenaza, después se combina).
+  - **Pertenencia ambigua:** un gólem de la misma piedra que los Guardianes haría la escolta más natural, pero lo acercaría a «el líder de ellos», y el tono de la biblia (10 §8) pide **no tener un villano**. Un cuerpo que se parte no tiene intención ni mensaje: avanza.
+- **Alternativas descartadas:**
+  - **A · «El Custodio» (el muro que avanza):** un gólem con 700 de vida, armadura 4 y un aura más grande que la del Guardián. Es **un Soberano con aura** y repite la función del Guardián, que la ficha pedía no repetir; se sentía como «el jefe de siempre, más grande». Queda como plan B barato si T244 no llegara a dibujar dos cuerpos; no hizo falta.
+  - **B · «El Vocero» (el gran sabotaje):** un Chamán mayor que aturde **4 torres** a la vez. Repite la función del Chamán y, con poca vida, es más molesto que peligroso; subirle la vida lo vuelve un Chamán gordo. Además **necesitaba un campo nuevo** (`stun_targets` en `EnemyData`) y un cambio de código. Si Lucas quiere un Chamán mayor, queda para una entrega futura.
+  - **Una mezcla** (el informe ofrecía, por ejemplo, el Coloso con el aura de A): Lucas eligió el concepto C tal cual. Un aura sobre el Coloso repetiría la función del Guardián, que es justamente lo que se le criticaba a A; la armadura de aura de los demás la sigue poniendo el Guardián de la escolta.
+  - **Más de 12 vidas, o menos:** con 20 o más, una sola fuga pierde; con 10 o menos, es el Soberano. Con 12 la decisión de dejarlo pasar o romperlo importa.
+  - **Que el Pedazo no tenga ficha propia en la Wiki:** la Cría la tiene y el Pedazo es un enemigo distinto (sin armadura, rápido); sin ficha, quien lo ve por primera vez no sabría qué es.
