@@ -1,6 +1,8 @@
 # T243 · Conceptos del jefe supremo del nivel 15 (para que elija Lucas)
 
-> **Estado: PROPUESTA. Lucas todavía no eligió.** Escrito el 2026-10-09 por Claude (Sonnet 5.5), tarea **T243**. Acá **no hay RF ni D**: se escriben recién cuando Lucas elija un concepto (los números libres son **RF-481** y **D-092**, verificados con `git grep` en todas las ramas `feature/*` y `origin/feature/*`: la más alta es RF-480 y D-091, y esos dos números solo aparecen nombrados como «el siguiente libre»). Los números de abajo son **iniciales y no se midieron con el bot**: los ajusta T234.
+> **Estado: RESUELTO el 2026-10-09. Lucas eligió el concepto C, «El Coloso»**, y aceptó las propuestas del §6: **12 de 20 vidas**, oleadas **26, 28 y 30** (escolta completa solo en la 30), nombre **«Coloso»** y pertenencia **ambigua**. Quedó escrito como **RF-481 a RF-484**, **D-092** y el plan «M54 / T243». Lo que sigue es el informe original, sin cambios, tal como lo leyó Lucas (incluidas frases como «Lucas todavía no eligió» y «los números libres son RF-481 y D-092», que eran ciertas ese día).
+>
+> *(Texto original:)* Escrito el 2026-10-09 por Claude (Sonnet 5.5), tarea **T243**. Acá **no hay RF ni D**: se escriben recién cuando Lucas elija un concepto (los números libres son **RF-481** y **D-092**, verificados con `git grep` en todas las ramas `feature/*` y `origin/feature/*`: la más alta es RF-480 y D-091, y esos dos números solo aparecen nombrados como «el siguiente libre»). Los números de abajo son **iniciales y no se midieron con el bot**: los ajusta T234.
 
 ## 1. Lo que ya está decidido (no se discute acá)
 

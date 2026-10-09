@@ -1,5 +1,7 @@
 # T243 · 📜 🚦 Spec del jefe supremo del nivel 15
 
+> **HECHA el 2026-10-09.** Lucas eligió el concepto C, **«El Coloso»**. Quedó escrito como **RF-481 a RF-484** (`01-spec.md`, §7.17), **D-092** (`04-decisiones.md`) y el plan «M54 / T243». Los tres conceptos y la comparación están en `specs/tareas/informes/T243-conceptos-jefe-supremo.md`. El Resultado, en `03-tareas.md`.
+
 - **Ejecutor:** Sonnet 5.5 · esfuerzo **alto**, junto con **Lucas** (diseña y aprueba) · **Tamaño:** chico · 📜
 - **Depende de:** T227 (spec del lore y de la ficha del 15, **con el OK de Lucas**; sin otra 📜 abierta). **Los siguientes números libres son RF-481 y D-092** (T227 usó RF-464 a RF-480 y D-089 a D-091); confirmarlo con `git grep` en todas las ramas `feature/*` antes de escribir · **Compuerta:** Lucas aprueba el diseño antes de programar y antes de dibujar · **Origen:** Q-32 ✎ (Lucas, 2026-10-08)
 

@@ -185,10 +185,20 @@ El resto del documento escribe "las comunidades" y vale para las dos lecturas.
 - **Un tipo (recomendado).** "Soberano" es un rango entre las bestias: hay uno en cada nivel con Jefe. Evita explicar cómo "el mismo" Soberano muere y vuelve y deja que cada mapa tenga el suyo.
 - **Un individuo único.** Una sola bestia que reaparece. Más épico, pero choca con que lo matemos en cada nivel.
 
-**El nivel 15 no tiene al Soberano.** Por decisión de Lucas (Q-32), el último nivel tiene un **jefe supremo nuevo**, con la escolta coordinada (Guardián + Curandero + Chamán). Esta biblia **no lo define**: su función, sus contramedidas y su aspecto los fija la tarea **T243**, con Lucas. Solo deja las restricciones de coherencia:
+**El nivel 15 no tiene al Soberano.** Por decisión de Lucas (Q-32), el último nivel tiene un **jefe supremo nuevo**, con la escolta coordinada (Guardián + Curandero + Chamán). **T243 lo diseñó y Lucas eligió el concepto el 2026-10-09: es el Coloso (§4.5).** Las restricciones de coherencia que lo guiaron:
 1. Tiene que ser la amenaza más grande del juego y sentirse como un cierre, no como un "jefe más".
 2. Respeta el tono (§8): nada de villano caricaturesco.
-3. Por la escolta, lo natural es que **pertenezca al lado de las comunidades**, pero es una opción que decide T243, no un canon.
+3. Por la escolta, lo natural era que **perteneciera al lado de las comunidades**, pero T243 lo dejó **ambiguo** (§4.5).
+
+### 4.5 El Coloso
+
+**Quién es. [CANON]** (Lucas, 2026-10-09; RF-481 a RF-484, D-092) Un gólem de piedra del tamaño de dos Guardianes. Los colonos lo llaman **Coloso** (como «Soberano», es un nombre de informe, por el tamaño). Es el jefe supremo del nivel 15, el último. **Cuando cae, se parte en tres Pedazos** que siguen camino hacia la salida.
+
+**Qué busca. [CANON]** Nada que se sepa. No habla, no tiene gesto de nada: avanza. Un cuerpo que se parte no tiene intención ni mensaje.
+
+**Pertenencia ambigua. [CANON]** (como el Espejo, §4.2) No se dice si los Moradores lo guían o si solo comparten camino con él. Lo único que se ve es que su piedra se parece a la de los Guardianes. **No lleva el símbolo A.** Es intencional: un gólem con la marca sería «el líder de ellos», y la biblia pide no tener villano (§8).
+
+**En la Wiki.** El texto de lore está en `11-textos-lore.md`, artículo «La Central»: *«Los colonos lo llaman el Coloso. Es de la misma piedra que los Guardianes. Cuando cae, se parte en tres y los pedazos siguen camino.»*
 
 ---
 
