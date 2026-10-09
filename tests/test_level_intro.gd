@@ -299,11 +299,12 @@ func test_an_unlocked_card_shows_the_place_and_keeps_its_size() -> void:
 	var card: Button = _card(select, 0)
 	var place: Label = card.get_node_or_null("Place")
 	assert_not_null(place, "el nivel 1 está desbloqueado")
-	assert_eq(place.text, "Campamento de aterrizaje")
+	assert_true(place.text.ends_with("…"), "el lugar largo se recorta con puntos suspensivos")
 	assert_eq(card.size, select.CARD_SIZE, "el tamaño de la tarjeta no cambia")
 	assert_true(card.tooltip_text.begins_with("Campamento de aterrizaje"), "el tooltip lleva el lugar completo")
 	assert_gt(place.get_theme_font_size("font_size"), 0)
 	assert_lt(place.get_theme_font_size("font_size"), card.get_theme_font_size("font_size"), "letra más chica")
+	assert_string_contains(card.get_node("LevelNumber").text, "10 oleadas")
 
 
 func test_a_locked_card_does_not_show_the_place() -> void:
@@ -313,7 +314,7 @@ func test_a_locked_card_does_not_show_the_place() -> void:
 	var locked: Button = _card(select, 7)
 	assert_true(locked.disabled)
 	assert_null(locked.get_node_or_null("Place"), "no adelanta el nivel")
-	assert_false(locked.text.contains("bastión"))
+	assert_false(locked.tooltip_text.contains("El bastión sobre ruinas"), "el lugar tampoco se filtra por tooltip")
 
 
 func test_the_place_follows_the_unlock_state() -> void:
@@ -334,7 +335,9 @@ func test_a_card_without_a_place_is_the_same_as_before() -> void:
 	level.place_text = saved
 	autofree(card)
 	assert_null(card.get_node_or_null("Place"))
-	assert_eq(card.text, "Nivel 1\n%s\n%d oleadas\n¡Jugar!\n\n" % [level.display_name, level.waves.size()])
+	assert_eq(card.text, "", "las etiquetas están en controles independientes")
+	assert_eq(card.get_node("LevelName").text, level.display_name)
+	assert_string_contains(card.get_node("LevelNumber").text, "%d oleadas" % level.waves.size())
 
 
 func test_the_place_label_sits_between_the_name_and_the_waves() -> void:
@@ -343,8 +346,10 @@ func test_the_place_label_sits_between_the_name_and_the_waves() -> void:
 	await wait_process_frames(2)
 	var card: Button = _card(select, 0)
 	var place: Label = card.get_node("Place")
-	assert_gt(place.position.y, 20.0)
-	assert_lt(place.position.y + place.size.y, card.size.y - 60.0, "deja lugar a las torres y las estrellas")
+	var name: Label = card.get_node("LevelName")
+	var icons: Control = card.get_node("TowerIcons")
+	assert_gte(place.position.y, name.position.y + name.size.y, "el lugar va directamente debajo del nombre")
+	assert_gte(icons.position.y, place.position.y + place.size.y, "los íconos van debajo del lugar")
 
 
 # --- Medidas (RF-466: que entre en 1280 × 720 y en el celular, sin tapar los botones de arriba) ---

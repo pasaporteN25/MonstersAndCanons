@@ -187,3 +187,62 @@ func test_the_card_shows_one_icon_per_offered_tower() -> void:
 	assert_eq(row.get_child_count(), TowerOffer.offered(GameFlow.level(0), all_towers).size())
 	assert_not_null(row.get_child(0).get_node_or_null("NewMark"), "en el nivel 1 todas debutan")
 	assert_string_contains(card.tooltip_text, "Nueva")
+
+
+func test_the_largest_campaign_card_keeps_all_parts_separate() -> void:
+	var select: Control = load("res://scenes/ui/level_select.tscn").instantiate()
+	add_child_autofree(select)
+	await get_tree().process_frame
+	var levels: Array[LevelData] = _campaign()
+	var max_index: int = 0
+	for i: int in levels.size():
+		if TowerOffer.offered(levels[i], all_towers).size() > TowerOffer.offered(levels[max_index], all_towers).size():
+			max_index = i
+	var card: Button = select._make_card(max_index)
+	card.size = Vector2(200, 214)
+	add_child_autofree(card)
+	await get_tree().process_frame
+	await _assert_card_parts_do_not_overlap(card, levels[max_index], all_towers)
+
+
+func test_a_map_offering_many_towers_wraps_without_clipping() -> void:
+	var select: Control = load("res://scenes/ui/level_select.tscn").instantiate()
+	add_child_autofree(select)
+	await get_tree().process_frame
+	var many: LevelData = _level(null)
+	many.towers = PackedStringArray(_ids(all_towers))
+	var card := Button.new()
+	card.custom_minimum_size = Vector2(200, 214)
+	card.size = card.custom_minimum_size
+	select._add_campaign_card_text(card, 0, many, true)
+	select._add_tower_icons(card, 0, many, true)
+	select._add_campaign_stars(card, 0, true, 0)
+	add_child_autofree(card)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var row: HFlowContainer = card.get_node("TowerIcons")
+	assert_eq(row.get_child_count(), all_towers.size(), "el mapa muestra todas las torres que ofrece")
+	assert_gt(all_towers.size(), 8, "el caso de mapa cubre nueve o más íconos")
+	var icon_rows: Dictionary = {}
+	for icon: TextureRect in row.get_children():
+		icon_rows[snappedf(icon.position.y, 1.0)] = true
+	assert_gt(icon_rows.size(), 1, "los íconos pasan a un segundo renglón")
+	await _assert_card_parts_do_not_overlap(card, many, all_towers)
+
+
+func _assert_card_parts_do_not_overlap(card: Button, level: LevelData, towers: Array[TowerData]) -> void:
+	var elements: Array[Control] = []
+	for child: Node in card.get_children():
+		if child is Control and (child as Control).visible:
+			elements.append(child as Control)
+		var rect: Rect2 = (child as Control).get_global_rect() if child is Control else Rect2()
+		if child is Control and (child as Control).visible:
+			assert_true(card.get_global_rect().encloses(rect), "%s entra en la tarjeta: %s" % [child.name, rect])
+	for first_index: int in elements.size():
+		for second_index: int in range(first_index + 1, elements.size()):
+			assert_false(elements[first_index].get_global_rect().intersects(elements[second_index].get_global_rect()),
+				"%s no se pisa con %s" % [elements[first_index].name, elements[second_index].name])
+	var icon_row: HFlowContainer = card.get_node("TowerIcons")
+	assert_eq(icon_row.get_child_count(), TowerOffer.offered(level, towers).size())
+	for icon: TextureRect in icon_row.get_children():
+		assert_true(icon_row.get_global_rect().encloses(icon.get_global_rect()), "%s queda dentro de la fila" % icon.name)

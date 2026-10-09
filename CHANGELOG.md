@@ -2,6 +2,11 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Tarjetas de nivel sin superposiciones *(T250, 2026-10-09)*
+
+- En la selección de nivel, el nombre, el lugar, los íconos de las torres, las estrellas y el resultado ahora tienen su propio espacio. «Bloqueado» y «Mejor: N vidas» ya no pisan los íconos.
+- Si un nivel ofrece 9 o más torres, los íconos pasan a otro renglón y siguen dentro de la tarjeta; la marca naranja y el tooltip «Nueva» se conservan.
+
 ## Textos de los niveles y Lore en la Wiki *(T228, 2026-10-09)*
 
 - **Cada nivel de la campaña (1 a 10) cuenta dónde estás.** La **tarjeta** del nivel (si ya está desbloqueado) muestra su lugar bajo el nombre, por ejemplo «El paso del agua». Al entrar a un nivel aparece un **cartel** con el nombre, el lugar y tres líneas de entrada: **la partida espera mientras lo leés** y se cierra con un toque, `Espacio`, `Enter` o `Esc`. **«Reintentar» no lo vuelve a mostrar.** Al ganar, la pantalla de victoria suma dos líneas bajo las estrellas.
