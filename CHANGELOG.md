@@ -2,6 +2,11 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Retoques de arte provisional *(T249, 2026-10-09)*
+
+- Las señales de piedra muestran el símbolo A con más contraste y el poste tiene cintas gastadas más claras. La **Disruptora** gana anillos más anchos y un disco emisor más legible en el mapa y la barra.
+- Se retocaron también los SVG de removibles, minas, bosque e íconos; su integración visual completa sigue pendiente. Comparación antes/después y límites en `art/t249-mejoras/`. Todo sigue siendo **provisional**, sujeto a la aprobación de Lucas.
+
 ## Arreglo del botón «Infraestructura» *(T246, 2026-10-08)*
 
 - En el **Cruce** (nivel 7) el botón **Infraestructura** estaba **encima de «Pausa» y «Velocidad»** y se veía como texto suelto. Ahora va en la barra de arriba, a la izquierda de «Pausa», con el mismo marco que los demás botones.

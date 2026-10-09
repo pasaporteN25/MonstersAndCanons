@@ -7,5 +7,7 @@
  <linearGradient id="cloth" x1="0" y1="0" x2=".25" y2="1"><stop stop-color="#b77563"/><stop offset=".52" stop-color="#8c5148"/><stop offset="1" stop-color="#4b3838"/></linearGradient>
  <linearGradient id="ruin" x1="0" y1="0" x2=".25" y2="1"><stop stop-color="#d2c6ad"/><stop offset=".52" stop-color="#9e9381"/><stop offset="1" stop-color="#61594e"/></linearGradient>
 </defs>
-<ellipse cx="32" cy="55" rx="22" ry="4" fill="#202330" opacity=".20"/><path d="M9 48 7 35 13 25 22 18 38 15 51 23 56 37 51 49 39 53 20 52Z" fill="url(#stone)" stroke="#2b2233" stroke-width="2" stroke-linejoin="round"/><path d="m13 27 10-9 15-3 13 8-9 7-17-1Z" fill="#c3b99f" opacity=".82"/><path d="m39 30 12-7 5 14-5 12-12 4Z" fill="#6e675a" opacity=".72"/><path d="m25 40 7-13 7 13m-10-4h7" fill="none" stroke="#554a3e" stroke-width="2.6" stroke-linecap="square" stroke-linejoin="miter"/><path d="m26 39 6-11 6 11m-9-3h6" fill="none" stroke="#e2d3b4" stroke-width=".8" stroke-linecap="round"/>
+<ellipse cx="32" cy="55" rx="22" ry="4" fill="#2b2233" opacity=".20"/><path d="M9 48 7 35 13 25 22 18 38 15 51 23 56 37 51 49 39 53 20 52Z" fill="url(#stone)" stroke="#2b2233" stroke-width="2" stroke-linejoin="round"/><path d="m13 27 10-9 15-3 13 8-9 7-17-1Z" fill="#c3b99f" opacity=".82"/><path d="m39 30 12-7 5 14-5 12-12 4Z" fill="#6e675a" opacity=".72"/>
+<path d="M23 43 32 25 41 43M27 36h10" fill="none" stroke="#e2d3b4" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M23 42 32 24 41 42M27 35h10" fill="none" stroke="#4b4037" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
