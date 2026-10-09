@@ -7,6 +7,9 @@ signal demolish_pressed(cell: Vector2i)
 signal cancel_pressed
 signal enable_pressed(cell: Vector2i)
 
+## Ancho del panel (270) menos los márgenes (12 + 12) y los bordes del estilo (2 + 2).
+const TEXT_WIDTH: float = 242.0
+
 var _cell: Vector2i = InfrastructureController.NONE
 var _title: Label
 var _cost: Label
@@ -50,6 +53,7 @@ func _label(parent: Control, size: int, color: Color = Color.WHITE) -> Label:
 	label.add_theme_font_size_override("font_size", size)
 	label.add_theme_color_override("font_color", color)
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.custom_minimum_size = Vector2(TEXT_WIDTH, 0)  # T246: sin ancho, el panel sale altísimo hasta que se acomoda
 	parent.add_child(label)
 	return label
 

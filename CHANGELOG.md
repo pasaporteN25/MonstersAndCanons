@@ -2,6 +2,12 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Arreglo del botón «Infraestructura» *(T246, 2026-10-08)*
+
+- En el **Cruce** (nivel 7) el botón **Infraestructura** estaba **encima de «Pausa» y «Velocidad»** y se veía como texto suelto. Ahora va en la barra de arriba, a la izquierda de «Pausa», con el mismo marco que los demás botones.
+- El panel de compra de la demoledora ya no sale altísimo por un instante al abrirse, y el panel de cada removible tampoco.
+- En los niveles 8 y 9 el panel de los escombros funciona al tocarlos (se comprobó con clics reales de mouse); si algo no responde en tu máquina, avisá con el nivel y la casilla.
+
 ## Herramientas para probar recursos, demoliciones y colecciones *(T213, 2026-10-08)*
 
 - El panel de pruebas suma **+10 recursos** (el contador aparece aunque el mapa no tenga fuentes), **Terminar demolición** para cobrar la recompensa normal del trabajo en curso y **Habilitar todas las colecciones** para probar las torres que las requieren sin completar ni guardar piezas.
