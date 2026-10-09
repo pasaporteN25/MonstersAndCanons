@@ -1,8 +1,8 @@
 # 11 — Textos del lore dentro del juego
 
-> **Estado: BORRADOR a la espera del OK de Lucas.** Escrito el 2026-10-08 por Claude (Sonnet 5.5), tarea **T227**. Nada de lo que está acá se cargó en el juego: lo carga **T228** (niveles 1 a 10, Wiki Lore y pantallas) y, para el 11 al 15, las tareas de cada nivel, **solo después de que Lucas diga que sí**.
+> **Estado: APROBADO por Lucas (2026-10-09).** Escrito el 2026-10-08 por Claude (Sonnet 5.5), tarea **T227**. Nada de lo que está acá se cargó en el juego: lo carga **T228** (niveles 1 a 10, Wiki Lore y pantallas) y, para el 11 al 15, las tareas de cada nivel, **solo después de que Lucas diga que sí**.
 >
-> **OK de Lucas:** *pendiente.* Cuando llegue se anota acá, con la fecha, y el estado pasa a **APROBADO**.
+> **OK de Lucas:** dado el 2026-10-09 («todas ✔», P1 a P8 de M52). Lo marcado «A REVISAR TRAS G4» en las fichas se confirma al cerrar su partida del 6 al 10.
 
 **Qué es este documento.** Los textos finales que muestra el juego (M52, `01-spec.md`): el **lugar**, la **entrada** y la **victoria** de los 15 niveles, el **epílogo**, los **créditos** y **10 artículos** de la categoría Lore de la Wiki. Es el **único lugar** donde viven los textos: la ficha de cada nivel (§7.13 a §7.17 de la spec) y las tareas T228 a T234 los **copian tal cual** de acá, y si Lucas corrige uno se corrige acá primero.
 

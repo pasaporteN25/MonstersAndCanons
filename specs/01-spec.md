@@ -2289,6 +2289,8 @@ Los puntos donde conviene que Lucas mire con más atención antes de programar (
 
 Corta, en orden de importancia. Cada una trae mi recomendación; **sin el OK de la P8, T228 y T229 a T235 no arrancan** (la compuerta es tuya).
 
+**Respuesta de Lucas (2026-10-09): ✔ todas (P1 a P8), con la recomendación de cada pregunta.** Los textos de `11-textos-lore.md` y las fichas del 11 al 15 quedan aprobados; lo marcado «A REVISAR TRAS G4» se confirma cuando Lucas cierre su partida del 6 al 10. La compuerta está abierta: T228 y T229 pueden arrancar.
+
 1. **P1 · El cartel de entrada.** Recomiendo que **pause** la partida mientras se lee, que se cierre con un toque, y que **no** aparezca al reintentar ni en el modo de pruebas (RF-466). ¿Sirve?
 2. **P2 · Los modos oficiales (Asedio).** Recomiendo que **no** muestren los textos aunque el mapa los tenga (RF-468). La otra opción es que los muestren porque el archivo del mapa los trae.
 3. **P3 · La Wiki Lore.** Recomiendo artículos **cerrados pero visibles** («???» + «Se abre al ganar el nivel N»), como el bestiario (RF-470). La otra opción es que no se vean hasta ganarse.
