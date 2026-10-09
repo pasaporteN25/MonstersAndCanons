@@ -2,6 +2,12 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Nivel 14: Los poblados vacíos *(T232, 2026-10-09)*
+
+- **La campaña tiene 14 niveles.** El nuevo se abre al ganar el 13: **Los poblados vacíos**, «asentamientos de los Moradores», un mapa **grande** (26 × 12) de **ruinas** con **dos entradas** a la derecha cuyos caminos se unen y siguen juntos hasta la salida, a la izquierda. Los poblados están **vacíos pero con huellas recientes**: campamentos con restos de fuego, cuerdas y pieles, el símbolo A por todas partes y columnas rotas. Hay una mina y un bosque (uno por entrada) y cinco removibles, las casas del poblado.
+- **No hay enemigos nuevos: es el examen antes del final.** Vienen **todos juntos**: la escolta (Guardián, Curandero y Chamán) con el **Espejo** y **Voladores**, el Ladrón, el Embestidor y el Soberano, en **26 oleadas**. Es **el nivel más difícil hasta ahora** (aumento de vida de 30 % por oleada).
+- Sin Ametralladora. **Se gana sin tocar la mina, el bosque ni los removibles.** Con la Disruptora, conviene ponerla donde se juntan los caminos.
+
 ## Nivel 13: Paso alto *(T231, 2026-10-09)*
 
 - **La campaña tiene 13 niveles.** El nuevo se abre al ganar el 12: **Paso alto**, «el camino al resto de la región», un mapa **grande** (26 × 12) de **nieve** con **dos entradas** (arriba y abajo a la izquierda) cuyos caminos **se unen** y siguen juntos hasta la salida, una **laguna de hielo** en el medio (no se construye) y cuatro rocas marcadas a lo largo de los caminos. Hay una **mina** del lado de la entrada de arriba y un **bosque** del lado de la de abajo (2 recursos por oleada cada uno), y cinco removibles.

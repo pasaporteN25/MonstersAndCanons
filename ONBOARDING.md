@@ -431,6 +431,12 @@ Con el proyecto abierto (o `godot --path .`): ganar el nivel 9 abre el 10 (o, co
 
 Para medir: `godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- sin_recursos,demoler,extraer_temprano,extraer_tarde level=10 seeds=5` y `... -- x check_rule=1 levels=10`. Captura y exposición: `godot --path . --resolution 1920x1080 art/campaign-t225/capture.tscn` (necesita pantalla) y `godot --headless --path . art/campaign-t225/exposure.tscn`. Detalle en `art/campaign-t225/README.md`.
 
+### T232 · Probar el nivel 14 (Los poblados vacíos)
+
+Ganar el nivel 13 abre el 14 (o, con el modo de pruebas, elegirlo en **Niveles**). **✅ Comprobar:** mapa **de ruinas** (adoquines grises, columnas rotas, estatuas) de 26 × 12 con **dos entradas a la derecha** que se juntan en el medio-derecha y siguen juntas hasta la salida de la izquierda; **cinco campamentos vacíos** (tiendas oscuras con restos de fuego), **muchas rocas con una A** y cinco removibles; en «Infraestructura» una mina (arriba) y un bosque (abajo). **Sin enemigos nuevos:** la escolta (Guardián + Curandero + Chamán) llega con el Espejo y Voladores desde la oleada 12, por una o por las dos entradas. **La sensación a mirar:** que los poblados se vean abandonados hace poco, mientras la defensa sigue siendo necesaria.
+
+Para medir: `... -s tools/balance_sim.gd -- sin_recursos,demoler,extraer_temprano,extraer_tarde level=14 seeds=5` y `... -- x check_rule=1 levels=14`. Partida real (necesita pantalla y mueve el puntero): `godot --path . --resolution 1280x720 art/campaign-t229/play.tscn -- level=14 until=10 speed=5 out=art/campaign-t229`.
+
 ### T231 · Probar el nivel 13 (Paso alto)
 
 Ganar el nivel 12 abre el 13 (o, con el modo de pruebas, elegirlo en **Niveles**). **✅ Comprobar:** mapa **de nieve** de 26 × 12 con **dos entradas** (arriba y abajo a la izquierda) que se juntan a la izquierda del medio y siguen juntas hasta la salida, a la derecha; una **laguna de hielo** celeste en el medio donde no se puede construir; **la barra tiene 8 torres** (sin Ametralladora ni Lanzamisiles). En la **pestaña «Infraestructura»** hay **dos fuentes**: la mina (arriba) y el bosque (abajo), cada una *Habilitar · 100 de oro*. En la **oleada 9** llegan juntos un Guardián, un Curandero y un Chamán por **una** entrada (la tarjeta «Nuevo enemigo» sale por cada uno si es tu primera vez); desde la **14**, por las dos entradas a la vez. Con la Disruptora, se la pone donde se juntan los caminos.

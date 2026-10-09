@@ -92,3 +92,24 @@ Mapa de **26 × 12**, tema `nieve`, **dos entradas**: A arriba a la izquierda (7
 ### Partida real (ventana de 1777 × 1000, clics reales, `speed=5`, oleadas 1 a 10)
 
 `play_level_13.json`: 20 torres, 15 vidas, 0 problemas. **Primera escolta completa en la oleada 9** (tarjetas del Guardián, el Curandero y el Chamán, y una torre **aturdida 3,0 s**: `level_13_aturdida.png`).
+
+## Nivel 14 · Los poblados vacíos
+
+Mapa de **26 × 12**, tema `ruinas`, **dos entradas** a la derecha (A arriba, 72 casillas; B abajo, 71) que se **unen en (23,6)** y siguen por un tronco de 23 casillas hasta la salida (0,6): el trazado del 13 espejado. **51 casillas libres**, tres bloques de 2×2 en (19,1), (7,4) y (15,7), una **mina** en (14,2) y un **bosque** en (14,10), cinco removibles (rocas (9,2), (20,5), (6,8); escombros (11,5), (17,7)), **cinco `campamento_vacio`**, **ocho `simbolo_ruina`** y cinco columnas. **26 oleadas**, 480 de oro, 20 vidas, **aumento de vida 30 %** (la ficha traía 24). Los 14 enemigos, sin debuts; Guardián + Curandero + Chamán + Espejo (y Voladores) a la vez en las oleadas 12, 14, 16, 19, 20, 22, 24, 25 y 26.
+
+### Bot, 5 semillas (vidas; todas ganaron las 26 oleadas)
+
+| Estrategia | Sem. 1 | Sem. 2 | Sem. 3 | Sem. 4 | Sem. 5 |
+|---|---|---|---|---|---|
+| `sin_recursos` | 3 | 3 | 3 | 3 | 3 |
+| `demoler` / `demoledora` | 16 | 16 | 16 | 16 | 16 |
+| `extraer_temprano` (16 recursos) | 13 | 13 | 13 | 13 | 13 |
+| `extraer_tarde` | 20 | 20 | 20 | 20 | 20 |
+| `mix` sin Disruptora | 3 | 3 | 3 | 3 | 3 |
+| `mix` con Disruptora | pierde (26) | pierde (26) | pierde (26) | pierde (26) | pierde (26) |
+
+**Cómo se eligió el 30 %** (`sin_recursos`, semilla 1; 5 semillas en 29 y 30): 24 % → 16 vidas; 27 % → 15; 29 % → 11 (×5); **30 % → 3 (×5)**; 33 % → pierde en la última; 36 % → pierde en la 22; 42 % → pierde en la 19. Entre 29 y 30 hay un precipicio de 8 vidas (las oleadas 22 a 26).
+
+### Partida real (ventana de 1777 × 1000, clics reales, `speed=5`, oleadas 1 a 10)
+
+`play_level_14.json`: 20 torres, 19 vidas, 0 problemas. Primera escolta en la oleada 9 (tarjetas del Guardián, el Curandero y el Chamán, y una torre aturdida 3,0 s: `level_14_aturdida.png`). El mapa se ve como se pidió en la ficha: adoquines grises, columnas rotas, campamentos oscuros con restos y la roca con la A por todas partes (`level_14_apertura.png`).

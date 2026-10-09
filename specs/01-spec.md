@@ -427,6 +427,7 @@ Hasta ahora los enemigos no le hacían nada a las torres. Estos dos sí: las **a
 | 11 | Puesto seco | 22 | 420 | Mapa de 24×11 del desierto con **una entrada**, dos pozos, una mina y cinco removibles; abre la rotación de torres **sin Ametralladora**, ofrece la Disruptora y debuta el **Chamán**, solo (§7.13). | M52 |
 | 12 | El cañadón | 24 | 440 | Cañadón de 26×11 del desierto con **una entrada**, un zigzag entre paredes, un **bosque explotable** en vez de la mina y el debut del **Espejo**, solo (§7.14). | M52 |
 | 13 | Paso alto | 24 | 460 | Paso de nieve de 26×12 con **dos entradas** que se unen, una laguna de hielo, una mina y un bosque (uno por entrada) y las **escoltas coordinadas** (Guardián + Curandero + Chamán), sin debuts (§7.15). | M52 |
+| 14 | Los poblados vacíos | 26 | 480 | Mapa de ruinas de 26×12 con **dos entradas**, las señales que culminan (campamentos vacíos y el símbolo A por todas partes) y **todas las amenazas juntas**, sin debuts: el examen antes del final (§7.16). | M52 |
 
 ### Oleadas del nivel 1
 
@@ -946,6 +947,14 @@ Lo que **no** depende de G4 y queda firme: el lugar, el bioma, las señales, los
 7. **Recursos y hallazgos.** Un **bosque explotable** y una **mina** (reserva 8 cada uno). Sin hallazgos. **A REVISAR TRAS G4 (b).**
 8. **Estrategia sin recursos.** Igual que los anteriores (≥ 4 de 5), y es donde mejor se ve si el Mortero y la Disruptora son «una estrategia más» o quedan como adorno. **A REVISAR TRAS G4 (b) y (c).**
 9. **Textos y transición.** `11-textos-lore.md`, nivel 14 (la victoria es la frase de ejemplo de la biblia). Artículo de Lore: **«Los poblados vacíos»**. Transición: al ganar se abre el 15, «La Central».
+
+**Valores finales (T232, 2026-10-09).** Lo que quedó en `data/levels/level_14.json` (detalle y tablas del bot en `art/campaign-t229/README.md`):
+
+- **Mapa de 26 × 12**, tema `ruinas`, **dos entradas**: A arriba a la derecha y B abajo a la derecha, que se **unen en (23,6)** y siguen por un tronco común hasta la salida S, a la izquierda, al medio (el 13 al revés: los Voladores cruzan de derecha a izquierda). Recorridos de **72 (A) y 71 (B)** casillas. **51 casillas libres** y **tres bloques de 2×2** en (19,1), (7,4) y (15,7).
+- **Señales (culminan):** **cinco** `campamento_vacio` en (16,1), (5,4), (22,4), (10,7) y (21,8); **ocho** `simbolo_ruina` en (8,1), (24,1), (18,2), (3,5), (14,5), (7,7), (13,8) y (25,9); y **cinco columnas** rotas.
+- **Infraestructura:** una **mina** en (14,2) (lado A) y un **bosque explotable** en (14,10) (lado B); **cinco removibles** («las casas»: rocas en (9,2), (20,5), (6,8); escombros en (11,5), (17,7)) con 1 recurso al 50 %. **A REVISAR TRAS G4 (a) y (b)** sigue en pie.
+- **Oleadas:** 26. **Los 14 enemigos** (Normal, Rápido, Tanque, Blindado, Volador, Troll, Araña, Ladrón, Embestidor, Guardián, Curandero, Chamán, Espejo y Soberano), **sin debuts**. **Guardián, Curandero, Chamán y Espejo a la vez** en 9 oleadas (12, 14, 16, 19, 20, 22, 24, 25 y 26), todas con Voladores; el Soberano en las 11, 17, 21, 24, 25 y 26. **Oro 480, 20 vidas y aumento de vida de 30 %** (la ficha traía 24: con 24 el bot ganaba con 16 vidas).
+- **Textos:** el campo `"textos"` y el artículo de Lore «Los poblados vacíos» los agrega T228.
 
 - **RF-479** **Nivel 14 en la campaña:** **dada** la campaña, **cuando** se gana el nivel 13, **entonces** se abre `level_14` («Los poblados vacíos», tema `ruinas`, 26 × 12, 26 oleadas, 480 de oro, 20 vidas). **Dado** ese nivel, **entonces** no ofrece `basic`, no estrena enemigos, trae a la vez Guardián, Curandero, Chamán y Espejo en al menos 6 oleadas, tiene al menos cuatro `campamento_vacio` y seis `simbolo_ruina`, y **su tabla del bot no es más fácil que la del 13**. **Dado** el bot con 5 semillas, **entonces** `sin_recursos` gana al menos 4.
 

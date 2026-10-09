@@ -298,6 +298,10 @@ Validación M45:954/954 pruebas y62/62 finales de contenido.24 corridas más rep
 
 Cierra el bloque 2 con un mapa grande (24 × 11) del desierto, dos entradas y 20 oleadas con los enemigos de los niveles 6 a 9 (sin debuts). Tiene una **mina** de reserva finita (100 de oro, 2 recursos por oleada, 8 en total), seis removibles que pueden dar 1 recurso, la **pieza 3/3 de la Disruptora** y el Mortero. Es un mapa de **espacio limitado** (43 casillas libres): el bot sin recursos lo gana con 7 a 13 vidas y las estrategias de extracción y de demolición lo ganan con 17 y 18. La ficha completa está en `specs/01-spec.md` §7.12 (RF-453) y la evidencia, en `art/campaign-t225/README.md`.
 
+### T232 · Nivel 14: Los poblados vacíos
+
+Un mapa de ruinas de 26 × 12 con **dos entradas** que se unen (el 13 espejado), las **señales que culminan** (campamentos vacíos, el símbolo A por todas partes y columnas) y 26 oleadas con **todas las amenazas juntas**, sin enemigos nuevos: es el examen antes del final. El bot sin recursos lo gana con 3 vidas (el 13: 6). Ficha: `specs/01-spec.md` §7.16 (RF-479); evidencia: `art/campaign-t229/README.md`.
+
 ### T231 · Nivel 13: Paso alto
 
 Un paso de nieve de 26 × 12 con **dos entradas** que se unen, una laguna de hielo, una mina y un bosque (uno por entrada) y 24 oleadas **sin enemigos nuevos**: lo nuevo es **la escolta** (Guardián + Curandero + Chamán que salen juntos, primero por una entrada y desde la oleada 14 por las dos). El bot sin recursos lo gana con 6 vidas. Ficha: `specs/01-spec.md` §7.15 (RF-478); evidencia: `art/campaign-t229/README.md`.
