@@ -2,6 +2,13 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Nivel 11: Puesto seco *(T229, 2026-10-09)*
+
+- **La campaña tiene 11 niveles.** El nuevo se abre al ganar el 10: **Puesto seco**, «el punto de agua», un mapa **grande** (24 × 11) del **desierto** con **una sola entrada** y un camino largo en serpentina. Tiene **dos pozos de agua** y tres rocas marcadas al costado del camino, una **mina** (100 de oro, 2 recursos por oleada) y cinco rocas y escombros que pueden dar 1 recurso.
+- **Desde acá ya no hay Ametralladora.** El nivel ofrece las otras torres (Cañón, Hielo, Francotirador, Incendiaria, Múltiple, Ráfaga, Eléctrica y Mortero) y, si completaste sus colecciones, la **Disruptora** (que en este nivel aparece marcada como «Nueva») y el Mecánico. La apertura es con el **Hielo** y una torre de entre 90 y 110 de oro.
+- **Debuta el Chamán**, y lo hace solo, en la oleada 5: **apaga la torre más cercana** unos segundos. Un Francotirador lo alcanza antes de que lance el hechizo. El Guardián y el Curandero llegan juntos desde la oleada 8; el Chamán se les suma desde la 12 (ahí sirve la Disruptora contra las auras). El Soberano aparece a mitad del nivel.
+- **Se gana sin tocar la mina, los removibles ni los recursos.** El nivel es más difícil que el 10 (con aumento de vida de 27 % por oleada).
+
 ## La barra con pestañas y la flecha al menú *(T248, 2026-10-08)*
 
 - **Del nivel 6 en adelante, la barra de abajo tiene dos pestañas:** **«Cañones»** (las torres de siempre) e **«Infraestructura»** (todo lo de demoler, la demoledora, la extracción y los recursos). Aparecen en **todo mapa que tenga removibles, minas o demoledora** (hoy, los niveles 6 a 10, y también un mapa de la comunidad con un solo árbol removible). **Los niveles 1 a 5 se ven y se juegan exactamente igual.**

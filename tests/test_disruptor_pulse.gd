@@ -316,12 +316,18 @@ func test_it_is_the_tenth_tower_and_no_key_moves() -> void:
 	assert_eq(ids.slice(0, 10), ["basic", "cannon", "frost", "sniper", "fire", "multi", "burst", "tesla", "mortar", "disruptor"])
 
 
-func test_no_campaign_level_offers_it_even_with_the_collection() -> void:
+func test_no_campaign_level_before_the_eleventh_offers_it_even_with_the_collection() -> void:
+	# T229: el nivel 11 (puesto seco) es el primero que la ofrece (RF-474); los niveles 1 a 10 no.
 	var all: Array[TowerData] = TowerOffer.canonical_towers()
-	for i: int in GameFlow.level_count():
+	for i: int in mini(GameFlow.level_count(), 10):
 		var offered: Array[TowerData] = GameFlow.level(i).available_towers(all, func(_c: StringName) -> bool: return true)
 		for tower: TowerData in offered:
 			assert_ne(tower.id, &"disruptor", "el nivel %d no la ofrece" % (i + 1))
+	for i: int in range(10, GameFlow.level_count()):
+		var with_collection: Array[TowerData] = GameFlow.level(i).available_towers(all, func(_c: StringName) -> bool: return true)
+		var without: Array[TowerData] = GameFlow.level(i).available_towers(all, func(_c: StringName) -> bool: return false)
+		assert_true(with_collection.has(disruptor), "el nivel %d la ofrece con la colección" % (i + 1))
+		assert_false(without.has(disruptor), "el nivel %d no la ofrece sin la colección (RF-395)" % (i + 1))
 
 
 func test_naming_it_enables_it_only_with_the_collection() -> void:

@@ -1,0 +1,97 @@
+{
+	"checks": [
+		"nivel 11 «Puesto seco»: 22 oleadas, 8 torres en la barra: [\"cannon\", \"frost\", \"sniper\", \"fire\", \"multi\", \"burst\", \"tesla\", \"mortar\"]",
+		"oleada 1: se ve la tarjeta «Nuevo enemigo: Normal»",
+		"oleada 2: se ve la tarjeta «Nuevo enemigo: Rápido»",
+		"oleada 2: se ve la tarjeta «Nuevo enemigo: Troll»",
+		"oleada 3: se ve la tarjeta «Nuevo enemigo: Blindado»",
+		"oleada 4: se ve la tarjeta «Nuevo enemigo: Volador»",
+		"oleada 4: se ve la tarjeta «Nuevo enemigo: Araña»",
+		"oleada 4: se ve la tarjeta «Nuevo enemigo: Cría»",
+		"oleada 5: se ve la tarjeta «Nuevo enemigo: Chamán»",
+		"oleada 5: una torre quedó aturdida (3.0 s) en (19, 1)",
+		"oleada 6: se ve la tarjeta «Nuevo enemigo: Tanque»",
+		"oleada 6: se ve la tarjeta «Nuevo enemigo: Ladrón»",
+		"oleada 7: se ve la tarjeta «Nuevo enemigo: Embestidor»"
+	],
+	"intro_cards": {
+		"Nuevo enemigo: Araña": 4,
+		"Nuevo enemigo: Blindado": 3,
+		"Nuevo enemigo: Chamán": 5,
+		"Nuevo enemigo: Cría": 4,
+		"Nuevo enemigo: Embestidor": 7,
+		"Nuevo enemigo: Ladrón": 6,
+		"Nuevo enemigo: Normal": 1,
+		"Nuevo enemigo: Rápido": 2,
+		"Nuevo enemigo: Tanque": 6,
+		"Nuevo enemigo: Troll": 2,
+		"Nuevo enemigo: Volador": 4
+	},
+	"level": 11,
+	"lives_end": 17,
+	"max_stun_left": 3.0,
+	"problems": [],
+	"shaman_stun_seen": true,
+	"speed": 6.0,
+	"towers": [
+		"cannon",
+		"frost",
+		"sniper",
+		"fire",
+		"multi",
+		"burst",
+		"tesla",
+		"mortar"
+	],
+	"waves": [
+		{
+			"gold": 0,
+			"lives": 20,
+			"state": "2",
+			"towers": 5,
+			"wave": 1
+		},
+		{
+			"gold": 116,
+			"lives": 20,
+			"state": "2",
+			"towers": 5,
+			"wave": 2
+		},
+		{
+			"gold": 87,
+			"lives": 20,
+			"state": "2",
+			"towers": 7,
+			"wave": 3
+		},
+		{
+			"gold": 105,
+			"lives": 18,
+			"state": "2",
+			"towers": 8,
+			"wave": 4
+		},
+		{
+			"gold": 120,
+			"lives": 18,
+			"state": "2",
+			"towers": 9,
+			"wave": 5
+		},
+		{
+			"gold": 104,
+			"lives": 18,
+			"state": "2",
+			"towers": 11,
+			"wave": 6
+		},
+		{
+			"gold": 109,
+			"lives": 17,
+			"state": "2",
+			"towers": 13,
+			"wave": 7
+		}
+	]
+}

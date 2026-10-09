@@ -60,8 +60,12 @@ func test_the_official_levels_1_to_5_only_decoration_and_6_to_9_have_their_theme
 			assert_eq(level.theme, &"ruinas", str(level.id))
 			continue
 		# T225: el nivel 10 (la mina vieja) es del desierto, con ruinas que quedan atrás (los revisa test_level_10.gd).
+		# T229: del 11 en adelante cada nivel tiene su propio tema y su archivo de tests (test_level_11.gd, etc.).
 		if str(level.id) == "level_10":
 			assert_eq(level.theme, &"desierto", str(level.id))
+			continue
+		if int(str(level.id).trim_prefix("level_")) >= 11:
+			assert_ne(level.theme, &"pradera", str(level.id))
 			continue
 		assert_eq(level.theme, &"pradera", str(level.id))
 		var grid: MapGrid = MapGrid.parse(level.map_rows, level.legend)

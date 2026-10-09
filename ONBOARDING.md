@@ -431,6 +431,12 @@ Con el proyecto abierto (o `godot --path .`): ganar el nivel 9 abre el 10 (o, co
 
 Para medir: `godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- sin_recursos,demoler,extraer_temprano,extraer_tarde level=10 seeds=5` y `... -- x check_rule=1 levels=10`. Captura y exposición: `godot --path . --resolution 1920x1080 art/campaign-t225/capture.tscn` (necesita pantalla) y `godot --headless --path . art/campaign-t225/exposure.tscn`. Detalle en `art/campaign-t225/README.md`.
 
+### T229 · Probar el nivel 11 (Puesto seco)
+
+Con el proyecto abierto (o `godot --path .`): ganar el nivel 10 abre el 11 (o, con el modo de pruebas, elegirlo en **Niveles**). **✅ Comprobar:** el mapa es **grande** y del desierto, con **una sola entrada** (arriba a la izquierda) y la salida abajo a la derecha, **dos pozos azules** y tres rocas con una A; la barra **no tiene la Ametralladora** (8 botones; 10 con las colecciones completas, y entonces la Disruptora y el Mecánico aparecen); en la **tarjeta del nivel** la Disruptora aparece como «Nueva» (la tarjeta avisa lo que ofrece el nivel, aunque todavía falte la colección). En la **oleada 5** sale una tarjeta «Nuevo enemigo: Chamán» y, unos segundos después, un rayo magenta **apaga la torre más cercana** (3 s): un Francotirador lo mata antes. El Guardián y el Curandero llegan juntos en la 8. Se puede ganar sin la mina ni los removibles.
+
+Para medir: `godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- sin_recursos,demoler,extraer_temprano,extraer_tarde level=11 seeds=5`, `... -- x check_rule=1 levels=11` y, para la Disruptora, `... -- mix level=11 seeds=5 disruptor=0` contra `disruptor=1`. Partida de verificación con la escena real (necesita pantalla y **mueve el puntero**): `godot --path . --resolution 1280x720 art/campaign-t229/play.tscn -- level=11 until=7 speed=6 out=art/campaign-t229`. Detalle en `art/campaign-t229/README.md`.
+
 ### T197 · Comprobar los modos de juego
 
 Abrí el juego (o el proyecto con F5) y entrá a **Jugar**.
