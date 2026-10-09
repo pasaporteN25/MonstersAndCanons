@@ -426,6 +426,7 @@ Hasta ahora los enemigos no le hacían nada a las torres. Estos dos sí: las **a
 | 10 | La mina vieja | 20 | 360 | Mapa grande (24×11) del desierto con **mina** de reserva finita, removibles que dan recursos, la **pieza 3/3** de la Disruptora y el Mortero. Cierra el bloque 2 (§7.12). | M50 |
 | 11 | Puesto seco | 22 | 420 | Mapa de 24×11 del desierto con **una entrada**, dos pozos, una mina y cinco removibles; abre la rotación de torres **sin Ametralladora**, ofrece la Disruptora y debuta el **Chamán**, solo (§7.13). | M52 |
 | 12 | El cañadón | 24 | 440 | Cañadón de 26×11 del desierto con **una entrada**, un zigzag entre paredes, un **bosque explotable** en vez de la mina y el debut del **Espejo**, solo (§7.14). | M52 |
+| 13 | Paso alto | 24 | 460 | Paso de nieve de 26×12 con **dos entradas** que se unen, una laguna de hielo, una mina y un bosque (uno por entrada) y las **escoltas coordinadas** (Guardián + Curandero + Chamán), sin debuts (§7.15). | M52 |
 
 ### Oleadas del nivel 1
 
@@ -918,6 +919,14 @@ Lo que **no** depende de G4 y queda firme: el lugar, el bioma, las señales, los
 7. **Recursos y hallazgos.** Una **mina** y un **bosque explotable**, uno por entrada (2 por oleada cada uno, reserva 8: 16 recursos en total si se habilitan los dos). Sin hallazgos. **A REVISAR TRAS G4 (b).**
 8. **Estrategia sin recursos.** Igual que los anteriores (≥ 4 de 5). **A REVISAR TRAS G4 (c):** con dos escoltas a la vez, el aura es el problema que la Disruptora resuelve mejor; si no rinde, la dificultad de este nivel depende de lo que decida Lucas sobre la torre.
 9. **Textos y transición.** `11-textos-lore.md`, nivel 13 (dependen de que exista el `hito`, P-6). Sin artículo de Lore nuevo. Transición: al ganar se abre el 14, «Los poblados vacíos».
+
+**Valores finales (T231, 2026-10-09).** Lo que quedó en `data/levels/level_13.json` (detalle y tablas del bot en `art/campaign-t229/README.md`):
+
+- **Mapa de 26 × 12**, tema `nieve`, **dos entradas**: A arriba a la izquierda y B abajo a la izquierda, cada una con dos rectas largas (23 y 21 casillas) que se **unen en (2,6)** y siguen por un tronco común de 23 casillas hasta la salida S, a la derecha, al medio. Recorridos de **72 (A) y 71 (B)** casillas. **59 casillas libres** y **cuatro bloques de 2×2** en (4,1), (12,1), (5,4) y (18,7). Las seis esquinas del Embestidor tienen casilla libre pegada y otra cerca para el apoyo.
+- **Señales:** una **laguna de hielo** de 3 × 2 en (15..17, 4..5) (`hielo`, no se construye) y **cuatro** `roca_marcada` (el `hito`, que todavía no existe) en (7,1), (11,4), (20,5) y (8,7), repartidas por los dos caminos.
+- **Infraestructura:** una **mina** en (10,1), del lado de A, y un **bosque explotable** en (11,10), del lado de B (16 recursos si se habilitan los dos); **cinco removibles** (rocas en (6,2), (14,5), (20,8); escombros en (3,5), (16,7)) con 1 recurso al 50 %. **A REVISAR TRAS G4 (a) y (b)** sigue en pie.
+- **Oleadas:** 24, **sin debuts**. **Escolta completa** (Guardián + Curandero + Chamán con el mismo `desde` y la misma entrada) en las oleadas **9** (solo por A), 12 (solo por B), **14** (por las dos), 16, **19** (por las dos), 20, **22** (por las dos) y 24; el Soberano en las 11, 17, 21 y 24; el Espejo, conocido del 12, se mezcla desde la 16. **Oro 460, 20 vidas y aumento de vida de 40 %** (la ficha traía 25: con 25 el bot ganaba con 20 vidas, y recién con 38 a 40 el nivel queda a la altura del 12; el bot es el que manda, RF-475 punto 3).
+- **Textos:** igual que el 11 y el 12, el campo `"textos"` lo agrega T228.
 
 - **RF-478** **Nivel 13 en la campaña:** **dada** la campaña, **cuando** se gana el nivel 12, **entonces** se abre `level_13` («Paso alto», tema `nieve`, 26 × 12, dos entradas, 24 oleadas, 460 de oro, 20 vidas). **Dado** ese nivel, **entonces** no ofrece `basic`, no estrena ningún enemigo, trae la escolta (Guardián, Curandero y Chamán con el mismo `desde`) en al menos 6 oleadas y, desde la 14, por las dos entradas a la vez. **Dado** el bot con 5 semillas, **entonces** `sin_recursos` gana al menos 4 y su tabla no es más fácil que la del 12.
 

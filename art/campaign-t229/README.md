@@ -71,3 +71,24 @@ Mapa de **26 × 11**, tema `desierto`, **una entrada** (A arriba a la izquierda,
 ### Partida real (ventana de 1777 × 1000, clics reales, `speed=5`, oleadas 1 a 7)
 
 `play_level_12.json`: 13 torres, 13 vidas, 0 problemas. Se vio la tarjeta **«Nuevo enemigo: Espejo»** (oleada 5), el **«¡Rebote!»** con una torre de (3,2) **aturdida 2,0 s** (`level_12_rebote.png`), y el resto de las tarjetas del guardado vacío.
+
+## Nivel 13 · Paso alto
+
+Mapa de **26 × 12**, tema `nieve`, **dos entradas**: A arriba a la izquierda (72 casillas hasta la salida) y B abajo a la izquierda (71), con dos rectas largas cada una (filas 0 y 3 para A, filas 11 y 9 para B) que se **unen en (2,6)** y siguen por un tronco de 23 casillas por la fila 6 hasta la salida (25,6). **59 casillas libres**, cuatro bloques de 2×2 en (4,1), (12,1), (5,4) y (18,7), una **laguna de hielo** en (15..17, 4..5), cuatro `roca_marcada` en (7,1), (11,4), (20,5) y (8,7), una **mina** en (10,1) (lado A), un **bosque explotable** en (11,10) (lado B) y cinco removibles (rocas (6,2), (14,5), (20,8); escombros (3,5), (16,7)). **24 oleadas**, 460 de oro, 20 vidas, **aumento de vida 40 %** (la ficha traía 25). **Sin debuts.** Escolta completa en las oleadas 9 (por A), 12 (por B), 14 (A y B), 16, 19 (A y B), 20, 22 (A y B) y 24; el Soberano en 11, 17, 21 y 24.
+
+### Bot, 5 semillas (vidas; todas ganaron las 24 oleadas)
+
+| Estrategia | Sem. 1 | Sem. 2 | Sem. 3 | Sem. 4 | Sem. 5 |
+|---|---|---|---|---|---|
+| `sin_recursos` | 6 | 6 | 6 | 6 | 6 |
+| `demoler` / `demoledora` | 7 | 8 | 8 | 10 | 8 |
+| `extraer_temprano` (16 recursos) | 14 | 14 | 14 | 14 | 14 |
+| `extraer_tarde` | 13 | 11 | 11 | 11 | 11 |
+| `mix` sin Disruptora | 6 | 6 | 6 | 6 | 6 |
+| `mix` con Disruptora | pierde (22) | pierde (22) | pierde (22) | pierde (22) | pierde (22) |
+
+**Cómo se eligió el 40 %** (`sin_recursos`, semilla 1; las oleadas fueron cambiando un poco entre una medición y otra, sobre todo la 23): 25 % → 20 vidas; 35 % → 13; 38 % → 5; 39 % → pierde en la 23; 40 % → 6; 41 % → 1; 42 % → 1; 44 % → pierde. La oleada 23 es un precipicio (con tanques 22 pierde con 39 y con 14 gana con 40); las oleadas 22 y 24 también (con más escoltas pierde de golpe): no se pudo acercar la tabla a la del 12 (3 a 5 vidas).
+
+### Partida real (ventana de 1777 × 1000, clics reales, `speed=5`, oleadas 1 a 10)
+
+`play_level_13.json`: 20 torres, 15 vidas, 0 problemas. **Primera escolta completa en la oleada 9** (tarjetas del Guardián, el Curandero y el Chamán, y una torre **aturdida 3,0 s**: `level_13_aturdida.png`).

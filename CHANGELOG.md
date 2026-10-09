@@ -2,6 +2,12 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Nivel 13: Paso alto *(T231, 2026-10-09)*
+
+- **La campaña tiene 13 niveles.** El nuevo se abre al ganar el 12: **Paso alto**, «el camino al resto de la región», un mapa **grande** (26 × 12) de **nieve** con **dos entradas** (arriba y abajo a la izquierda) cuyos caminos **se unen** y siguen juntos hasta la salida, una **laguna de hielo** en el medio (no se construye) y cuatro rocas marcadas a lo largo de los caminos. Hay una **mina** del lado de la entrada de arriba y un **bosque** del lado de la de abajo (2 recursos por oleada cada uno), y cinco removibles.
+- **No hay enemigos nuevos: lo nuevo es cómo vienen.** Aparece **la escolta**: un **Guardián, un Curandero y un Chamán juntos**, que protegen, curan y apagan torres a la vez. La primera llega en la oleada 9 por una sola entrada; desde la 14 vienen **por las dos entradas al mismo tiempo**. Conviene **repartir las defensas** entre las dos entradas y apagar las auras (con la Disruptora, si la tenés) donde los caminos se juntan.
+- Sin Ametralladora ni Lanzamisiles. **Se gana sin tocar la mina, el bosque ni los removibles.** El nivel es **tan difícil como el 11** (con aumento de vida de 40 % por oleada, 24 oleadas).
+
 ## Nivel 12: El cañadón *(T230, 2026-10-09)*
 
 - **La campaña tiene 12 niveles.** El nuevo se abre al ganar el 11: **El cañadón**, «el paso hacia el norte»: un mapa **grande** (26 × 11) del **desierto** con **una entrada** y un camino que **zigzaguea entre paredes de roca** (cinco tramos verticales). Hay pocas casillas buenas (45), tres rocas marcadas en la boca del cañadón, cinco rocas y escombros que pueden dar 1 recurso y, en lugar de la mina, un **bosque explotable** (100 de oro, 2 recursos por oleada, 8 en total).
