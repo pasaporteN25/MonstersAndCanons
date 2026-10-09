@@ -72,7 +72,9 @@ static func locked_enemy_entry(enemy: EnemyData) -> WikiEntry:
 
 
 ## La entrada de un enemigo. `all_enemies` sirve para saber quién lo suelta al morir.
-static func enemy_entry(enemy: EnemyData, all_enemies: Array[EnemyData], campaign: Array[LevelData]) -> WikiEntry:
+## `towers` = qué torres cuentan para la "Contramedida" (RF-450); si no se pasa, todas las de `data/towers/`.
+static func enemy_entry(enemy: EnemyData, all_enemies: Array[EnemyData], campaign: Array[LevelData],
+		towers: Array[TowerData] = []) -> WikiEntry:
 	var entry := WikiEntry.new()
 	entry.id = enemy.id
 	entry.title = enemy.display_name
@@ -111,6 +113,9 @@ static func enemy_entry(enemy: EnemyData, all_enemies: Array[EnemyData], campaig
 			facts.append(["Aura de armadura", "+%d de armadura a los enemigos %s" % [enemy.aura_armor_bonus, reach]])
 		if enemy.aura_heal_percent_per_second > 0.0:
 			facts.append(["Aura de cura", "cura %s %% de la vida por segundo a los enemigos %s" % [_number(enemy.aura_heal_percent_per_second), reach]])
+	var counters: Array[String] = TowerText.suppressors_of(enemy, towers if not towers.is_empty() else _all_towers())
+	if not counters.is_empty():  # RF-450: "Contramedida", leída de los datos de las torres
+		facts.append(["Contramedida", "%s (le apaga el aura unos segundos)" % TowerText.join_names(counters)])
 	entry.add_facts(facts)
 
 	entry.add_heading("Dónde aparece")
@@ -163,6 +168,15 @@ static func _tower_entries(_campaign: Array[LevelData], _is_seen: Callable) -> A
 	return entries
 
 
+## Todos los enemigos de `data/enemies/`.
+static func _all_enemies() -> Array[EnemyData]:
+	var enemies: Array[EnemyData] = []
+	for resource: Resource in _load_all(LevelFile.ENEMIES_DIR):
+		if resource is EnemyData:
+			enemies.append(resource)
+	return enemies
+
+
 ## Todas las torres de `data/towers/` (las que tienen niveles).
 static func _all_towers() -> Array[TowerData]:
 	var towers: Array[TowerData] = []
@@ -188,6 +202,9 @@ static func tower_entry(tower: TowerData, towers: Array[TowerData] = []) -> Wiki
 	var facts: Array = [["Función", "Apoyo de cadencia; no dispara"]] if tower.support_only else [["Golpea voladores", "sí" if tower.can_hit_air else "no"]]
 	if tower.required_collection != &"":
 		facts.append(["Requisito", "%d %s distintos y permiso del nivel" % [CollectionDefinitions.required(tower.required_collection), "avances" if CollectionDefinitions.origin(tower.required_collection) == CollectionDefinitions.ORIGIN_CARRIER else "piezas"]])
+	if first.suppress_seconds > 0.0:  # RF-444, RF-450
+		facts.append(["Pulso", TowerText.pulse_line(first, TowerText.emitter_names(_all_enemies()))])
+		facts.append(["Límites", "No alcanza al Espejo y no apaga otras habilidades."])
 	if tower.footprint > 1:  # RF-298
 		facts.append(["Tamaño", "%d×%d casillas" % [tower.footprint, tower.footprint]])
 	facts.append_array(TowerText.cost_facts(tower))  # RF-437
@@ -231,9 +248,16 @@ static func _collection_entries(_campaign: Array[LevelData], _is_seen: Callable)
 	var tree: SceneTree = Engine.get_main_loop() as SceneTree
 	var save: Node = null if tree == null else tree.root.get_node_or_null("SaveManager")
 	for id: StringName in CollectionDefinitions.ids():
-		var collected: int = 0 if save == null else save.collected_sources(id).size()
-		entries.append(collection_entry(id, collected, _all_towers()))
+		entries.append(collection_entry(id, _collected_count(id), _all_towers()))
 	return entries
+
+
+## Cuántas piezas juntó el jugador. Se busca el autoload por nombre (no se lo nombra en el código) porque los
+## scripts de `tools/` se compilan antes que los autoloads y esta clase los arrastra (gdscript.md).
+static func _collected_count(id: StringName) -> int:
+	var tree := Engine.get_main_loop() as SceneTree
+	var save: Node = tree.root.get_node_or_null("SaveManager") if tree != null else null
+	return 0 if save == null else (save.call("collected_sources", id) as PackedStringArray).size()
 
 
 ## RF-431: una colección con su progreso y qué torre desbloquea. `collected` se pasa de afuera para probarla.

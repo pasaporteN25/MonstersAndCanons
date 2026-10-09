@@ -98,7 +98,7 @@ func refresh(gold: int) -> void:
 		_stats.text += "\n" + line.replace(" %", " %")
 	_stats.text = _stats.text.strip_edges()
 	_stats.visible = not _stats.text.is_empty()
-	_targeting_button.disabled = _tower.data.support_only
+	_targeting_button.disabled = _tower.data.support_only or _tower.is_pulse_tower()  # RF-438: el pulso no apunta
 	_targeting_button.text = "Apuntar: %s" % _tower.targeting_name()
 	var next: TowerLevelData = _tower.next_level_stats()
 	if next == null:

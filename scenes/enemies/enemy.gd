@@ -52,6 +52,9 @@ const AURA_DURATION: float = 0.35
 const AURA_ARMOR_COLOR := Color(0.94, 0.85, 0.63)
 const AURA_HEAL_COLOR := Color(0.72, 0.89, 0.29)
 const AURA_INK := Color(0.125, 0.137, 0.188)
+## RF-449: la marca de supresión (aura apagada por la Disruptora): blanco azulado, distinto del celeste del Hielo.
+const SUPPRESS_COLOR := Color(0.86, 0.92, 1.0)
+const SUPPRESS_EDGE := Color(0.50, 0.66, 1.0)
 
 var data: EnemyData
 var max_health: int = 0
@@ -80,6 +83,9 @@ var _aura_heal: float = 0.0
 var _aura_heal_left: float = 0.0
 ## Cuánto falta para la próxima emisión, si este enemigo tiene aura.
 var _aura_pulse_left: float = 0.0
+## RF-442: segundos que le quedan sin emitir su aura (suprimido por una Disruptora), y el total de ese pulso.
+var _suppress_left: float = 0.0
+var _suppress_total: float = 0.0
 ## RF-282: cuánto falta para el próximo hechizo (si tiene). Llega a 0 y espera hasta que haya una torre.
 var _stun_cast_left: float = 0.0
 ## RF-318: qué estados aprovecha alguna torre del mapa (lo avisa Game con set_exploitable).
@@ -212,6 +218,30 @@ func aura_heal() -> float:
 ## RF-270: true si este enemigo da algún aura a los que lo rodean.
 func has_aura() -> bool:
 	return data.aura_radius_tiles > 0.0 and (data.aura_armor_bonus > 0 or data.aura_heal_percent_per_second > 0.0)
+
+
+## RF-442: la Disruptora le apaga el aura `seconds` segundos. No se suma: queda el tiempo que más dura.
+## Un enemigo sin aura no queda suprimido de nada.
+func suppress(seconds: float) -> void:
+	if _is_done or seconds <= 0.0 or not has_aura():
+		return
+	_suppress_left = maxf(_suppress_left, seconds)
+	_suppress_total = maxf(_suppress_total, _suppress_left)
+	queue_redraw()
+
+
+func is_suppressed() -> bool:
+	return _suppress_left > 0.0
+
+
+## Segundos que le quedan suprimido (0 = emite normalmente).
+func suppress_left() -> float:
+	return _suppress_left
+
+
+## RF-444: el Espejo (rebote de golpes) queda fuera del pulso de la Disruptora. Se decide por el dato.
+func is_pulse_immune() -> bool:
+	return data.reflect_range_tiles > 0.0
 
 
 ## RF-271, RF-272: un aura de otro enemigo lo alcanza. Queda el valor MÁS FUERTE (no se suman); un aura
@@ -361,10 +391,17 @@ func _update_aura(delta: float) -> void:
 			_aura_heal_left = 0.0
 			_aura_heal = 0.0
 			queue_redraw()
+	if _suppress_left > 0.0:
+		_suppress_left -= delta
+		if _suppress_left <= 0.0001:
+			_suppress_left = 0.0
+			_suppress_total = 0.0
+		queue_redraw()  # el ícono se vacía de a poco (RF-449)
 	if not has_aura():
 		return
 	_aura_pulse_left -= delta
-	if _aura_pulse_left <= 0.0:
+	# RF-442: suprimido, el reloj de emisión sigue corriendo pero no emite; al vencer emite en el acto.
+	if _aura_pulse_left <= 0.0 and not is_suppressed():
 		_aura_pulse_left += AURA_TICK
 		_pulse_aura()
 
@@ -537,6 +574,12 @@ func _draw() -> void:
 func _draw_aura_ring() -> void:
 	var radius: float = Rules.tiles_to_px(data.aura_radius_tiles)
 	var pulse: float = 0.5 + 0.15 * sin(_anim_time * 3.0)
+	if is_suppressed():
+		# RF-449: "aura apagada": anillo roto (4 arcos de ~60° con huecos de ~30°), quieto y más tenue.
+		for i: int in 4:
+			var start: float = TAU * i / 4.0
+			draw_arc(Vector2.ZERO, radius, start, start + deg_to_rad(60.0), 16, Color(SUPPRESS_COLOR, 0.45), 1.2, true)
+		return
 	var rings: Array[Color] = []
 	if data.aura_armor_bonus > 0:
 		rings.append(AURA_ARMOR_COLOR)
@@ -560,11 +603,14 @@ func _draw_aura_icons(top: float) -> void:
 	for kind: Combo in [Combo.SLOWED, Combo.BURNING]:
 		if shows_vulnerable_mark(kind):
 			marks.append(kind)
-	if _aura_armor <= 0 and _aura_heal <= 0.0 and marks.is_empty():
+	if _aura_armor <= 0 and _aura_heal <= 0.0 and marks.is_empty() and not is_suppressed():
 		return
 	var r: float = Rules.tiles_to_px(data.size_tiles)
 	var x: float = maxf(r, 12.0) + 6.0
 	var y: float = -top - 6.0
+	if is_suppressed():
+		_draw_suppress_icon(Vector2(x, y))
+		x += 15.0
 	if _aura_armor > 0:
 		var shield := PackedVector2Array([Vector2(x - 5, y - 5), Vector2(x + 5, y - 5), Vector2(x + 5, y + 1), Vector2(x, y + 6), Vector2(x - 5, y + 1)])
 		draw_colored_polygon(shield, AURA_ARMOR_COLOR)
@@ -580,6 +626,16 @@ func _draw_aura_icons(top: float) -> void:
 		# +2: la dianita es un poco más ancha que el escudo y si no, pisa la punta de la barra de vida.
 		_draw_vulnerable_mark(Vector2(x + 2.0, y), EffectsLayer.combo_color(kind))
 		x += 17.0
+
+
+## RF-449: tres arcos de un anillo roto sobre un círculo oscuro; se apagan de a uno al acabarse la supresión.
+func _draw_suppress_icon(center: Vector2) -> void:
+	draw_circle(center, 6.5, AURA_INK)
+	var left_ratio: float = _suppress_left / maxf(_suppress_total, 0.001)
+	var visible_arcs: int = ceili(left_ratio * 3.0)
+	for i: int in visible_arcs:
+		var start: float = TAU * i / 3.0 + deg_to_rad(15.0)
+		draw_arc(center, 4.2, start, start + deg_to_rad(80.0), 8, SUPPRESS_COLOR, 2.0, true)
 
 
 ## RF-318: una dianita: círculo oscuro, aro del color del estado y cuatro marcas que lo cruzan.

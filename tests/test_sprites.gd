@@ -89,6 +89,8 @@ func test_towers_of_every_level_are_drawn() -> void:
 	# Las torres de 2×2 (M19) se ponen donde haya un cuadrado libre.
 	for i: int in range(cells.size(), game.tower_types.size()):
 		var big: TowerData = game.tower_types[i]
+		if big.required_collection != &"":
+			continue  # la Disruptora pide su colección y un nivel que la ofrezca (RF-447)
 		var origin := Vector2i(-1, -1)
 		for y: int in range(0, 8):
 			for x: int in range(0, 19):
@@ -215,6 +217,8 @@ func test_hit_flash_is_a_white_silhouette_of_the_drawing() -> void:
 
 func test_every_tower_has_its_projectile() -> void:
 	for data: TowerData in game.tower_types:
+		if data.levels[0].suppress_seconds > 0.0:
+			continue  # RF-438: la torre de pulso no dispara proyectiles
 		var texture: Texture2D = data.projectile_texture
 		assert_not_null(texture, "%s: proyectil" % data.id)
 		if texture != null:

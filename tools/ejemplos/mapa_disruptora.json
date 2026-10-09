@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "nombre": "Ejemplo Disruptora",
+  "oro": 200,
+  "vidas": 20,
+  "aumento_vida": 35,
+  "tema": "bosque",
+  "torres": ["basic", "cannon", "frost", "sniper", "fire", "multi", "burst", "tesla", "disruptor"],
+  "leyenda": {
+    "r": {"removible": {"clase": "roca", "costo": 30, "tiempo": 3, "probabilidad": 100}}
+  },
+  "mapa": [
+    "..r.................",
+    "A##################.",
+    "..................#.",
+    "..###############.#.",
+    "..#.......X.....#.#X",
+    "X.#..S###########.#.",
+    "..#...............#.",
+    "..#################.",
+    "...................."
+  ],
+  "oleadas": [
+    [{"enemigo":"normal","cantidad":10,"cada":1}],
+    [{"enemigo":"normal","cantidad":12,"cada":0.9},{"enemigo":"fast","cantidad":6,"cada":0.7,"desde":5}],
+    [{"enemigo":"normal","cantidad":12,"cada":0.8},{"enemigo":"tank","cantidad":2,"cada":3,"desde":4}],
+    [{"enemigo":"armored","cantidad":6,"cada":1.5},{"enemigo":"guardian","cantidad":3,"cada":2,"desde":2},{"enemigo":"healer","cantidad":2,"cada":3,"desde":3}],
+    [{"enemigo":"tank","cantidad":7,"cada":1.6},{"enemigo":"guardian","cantidad":4,"cada":2,"desde":2},{"enemigo":"healer","cantidad":3,"cada":2.5,"desde":3}],
+    [{"enemigo":"armored","cantidad":9,"cada":1.1},{"enemigo":"guardian","cantidad":5,"cada":1.8,"desde":2},{"enemigo":"healer","cantidad":4,"cada":2,"desde":3},{"enemigo":"troll","cantidad":3,"cada":2.5,"desde":5}],
+    [{"enemigo":"tank","cantidad":10,"cada":1.2},{"enemigo":"guardian","cantidad":6,"cada":1.7,"desde":2},{"enemigo":"healer","cantidad":5,"cada":1.8,"desde":3}],
+    [{"enemigo":"armored","cantidad":12,"cada":0.9},{"enemigo":"guardian","cantidad":7,"cada":1.6,"desde":2},{"enemigo":"healer","cantidad":6,"cada":1.8,"desde":3},{"enemigo":"troll","cantidad":4,"cada":2,"desde":5}],
+    [{"enemigo":"tank","cantidad":12,"cada":1.0},{"enemigo":"guardian","cantidad":8,"cada":1.5,"desde":2},{"enemigo":"healer","cantidad":8,"cada":1.5,"desde":3},{"enemigo":"troll","cantidad":5,"cada":2,"desde":5}],
+    [{"enemigo":"boss","cantidad":2,"cada":6},{"enemigo":"guardian","cantidad":8,"cada":1.5,"desde":2},{"enemigo":"healer","cantidad":8,"cada":1.5,"desde":3},{"enemigo":"armored","cantidad":14,"cada":0.8,"desde":4}]
+  ]
+}

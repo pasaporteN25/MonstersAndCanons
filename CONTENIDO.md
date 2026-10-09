@@ -114,6 +114,7 @@ Los niveles son JSON, un formato de texto común que se edita a mano. Un `.tres`
 | `extra_targets` | Dispara a tantos enemigos **más** a la vez (Múltiple, RF-161). |
 | `burst_count` | Lanza tantas púas en círculo, en línea recta (Ráfaga, RF-162). |
 | `chain_extra_targets`, `chain_range_tiles` | El golpe salta a tantos enemigos más, hasta esa distancia (Eléctrica, RF-163). |
+| `suppress_seconds` | **Torre de pulso** (Disruptora, RF-439): segundos que un enemigo con aura alcanzado por el pulso deja de emitirla. Con esto mayor que 0 la torre no dispara: `fire_rate` son pulsos por segundo, `range_tiles` el radio del pulso y `damage` el golpe a cada alcanzado (menos al Espejo). No se combina con púas, rayos, área, ralentización ni quemadura. La Disruptora necesita su colección `disruptor` y cuesta recursos (`resource_cost`); un nivel la ofrece nombrándola en `"torres"`. |
 
 **Ejemplos de combinaciones** (sin programar nada): un Cañón que además quema (`splash_radius_tiles` + `burn_damage_per_second`); una Múltiple que frena (`extra_targets` + `slow_amount`); un rayo que quema (`chain_extra_targets` + `burn_damage_per_second`).
 

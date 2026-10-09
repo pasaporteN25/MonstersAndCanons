@@ -413,6 +413,8 @@ func show_selected_tower(index: int) -> void:
 		_build_info_text.text = tower.description
 		if tower.footprint > 1:  # RF-298
 			_build_info_text.text += " Necesita %d×%d casillas libres." % [tower.footprint, tower.footprint]
+		if tower.levels[0].suppress_seconds > 0.0:  # RF-450
+			_build_info_text.text += " " + TowerText.pulse_line(tower.levels[0], TowerText.emitter_names(Wiki._all_enemies()))
 		var combo: String = TowerText.combo_hint(tower, _tower_types)  # RF-317
 		if combo != "":
 			_build_info_text.text += " " + combo

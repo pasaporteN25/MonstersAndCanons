@@ -39,6 +39,11 @@ Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle t�
 - **Nido («El lindero»)** y **Cruce («El aserradero»)** pasan al **bosque**, con árboles y rocas que se pueden **demoler** pagando oro y esperando (un clic sobre el objeto). Despejarlos libera casillas buenas entre las rectas del camino. En el Nido son 3 y **no dan recursos**; se gana sin demoler.
 - En el Cruce hay 6 removibles, la **demoledora** se puede comprar desde el botón *Infraestructura* y cada removible **puede entregar 1 recurso** (50 % de probabilidad). Con un recurso, el Francotirador cuesta 120 de oro en vez de 150; nunca es obligatorio. Se suman señales nuevas (un poste con cintas y una roca con una marca tallada).
 - El camino y las oleadas no cambian.
+## Disruptora *(T217, 2026-10-08; en revisión de balance)*
+
+- Torre nueva, la **Disruptora** (130 de oro + 2 recursos): no dispara; cada 4 s emite un **pulso** en un círculo de 2,5 casillas. Si el pulso alcanza a un **Guardián o un Curandero**, ese enemigo **deja de emitir su aura 2,5 s** (3 y 3,5 s en los niveles 2 y 3), y todos los alcanzados reciben un golpe muy débil (5). No toca al Espejo ni apaga otras habilidades (Chamán, Ladrón, Embestidor). Si no hay ningún emisor de aura a su alcance, no pulsa.
+- Solo la tienen quienes completaron la colección **Disruptora** y en los niveles que la ofrecen: **ningún nivel de 1 a 10 la ofrece**.
+- Se ve como un anillo blanco azulado que se expande; el enemigo suprimido muestra el anillo del suelo roto y un ícono de tres arcos que se apagan. La Wiki suma la ficha de la torre, la línea **Contramedida** en el Guardián y el Curandero y un párrafo en "Efectos de las torres".
 
 ## Demoledora global *(T208, 2026-10-08)*
 

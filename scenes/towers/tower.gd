@@ -6,6 +6,8 @@ extends Node2D
 
 signal fired(projectile: Projectile)
 signal wear_changed(current: float, change: float)
+## RF-449: la Disruptora emitió un pulso de ese radio (en píxeles). Game lo dibuja.
+signal pulsed(radius_px: float)
 const WEAR_BALANCE: BalanceConfig = preload("res://data/balance.tres")
 const WEAR_ICON: Texture2D = preload("res://assets/ui/tower_wear.svg")
 const REPAIR_ICON: Texture2D = preload("res://assets/ui/tower_repair.svg")
@@ -210,7 +212,9 @@ func _physics_process(delta: float) -> void:
 	if data.support_only:
 		_animate(delta)
 		return
-	if _cooldown <= 0.0 and stats().burst_count > 0:
+	if _cooldown <= 0.0 and is_pulse_tower():
+		_fire_pulse()  # RF-440: no dispara proyectiles ni elige objetivo
+	elif _cooldown <= 0.0 and stats().burst_count > 0:
 		# RF-162: ráfaga en círculo, si hay alguien en alcance (no apunta a nadie en particular).
 		if find_target() != null:
 			_fire_burst()
@@ -225,6 +229,53 @@ func _physics_process(delta: float) -> void:
 			aim_angle = (_target.global_position - global_position).angle()  # mira al principal
 			_cooldown = 1.0 / effective_fire_rate()
 	_animate(delta)
+
+
+## RF-439: una torre de pulso no dispara: apaga el aura de los enemigos con aura a su alrededor.
+func is_pulse_tower() -> bool:
+	return stats().suppress_seconds > 0.0
+
+
+## RF-440, RF-441, RF-442: pulsa solo si hay al menos un emisor de aura en el radio (y si no, no gasta la espera).
+## Daña a todos los alcanzados menos al Espejo y suprime a los que tienen aura. Sin estados ni combos.
+func _fire_pulse() -> void:
+	var reached: Array[Enemy] = []
+	var has_emitter: bool = false
+	for node: Node in get_tree().get_nodes_in_group(Enemy.GROUP):
+		var enemy := node as Enemy
+		if enemy == null or not enemy.is_active() or enemy.is_pulse_immune():
+			continue
+		if global_position.distance_to(enemy.global_position) > range_px():
+			continue
+		reached.append(enemy)
+		if enemy.has_aura():
+			has_emitter = true
+	if not has_emitter:
+		return
+	# Primero se junta la lista y después se aplica: un golpe que mata libera el nodo.
+	var damage: int = stats().damage
+	var seconds: float = stats().suppress_seconds
+	for enemy: Enemy in reached:
+		if not is_instance_valid(enemy):
+			continue
+		if enemy.has_aura():
+			enemy.suppress(seconds)
+		enemy.take_hit(damage)
+	_cooldown = 1.0 / effective_fire_rate()
+	_flash_left = FLASH_DURATION
+	pulsed.emit(range_px())
+
+
+## RF-449: ¿hay algún emisor de aura en el radio? Sirve para encender el disco emisor.
+func has_emitter_in_range() -> bool:
+	if not is_inside_tree():
+		return false
+	for node: Node in get_tree().get_nodes_in_group(Enemy.GROUP):
+		var enemy := node as Enemy
+		if enemy != null and enemy.is_active() and enemy.has_aura() and not enemy.is_pulse_immune() \
+				and global_position.distance_to(enemy.global_position) <= range_px():
+			return true
+	return false
 
 
 ## RF-161: los `count` mejores objetivos en alcance, del mejor al peor según el modo de apuntado.
