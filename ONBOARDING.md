@@ -140,7 +140,11 @@ El botón **"Editor de mapas"** (spec §10.3) está **para todos en PC** (desde 
 
 ### 6.1.0 La Wiki (en todas las versiones)
 
-Menú principal → **Wiki**. Comprobá que hay tres solapas (Enemigos, Torres, Guía), que cada enemigo y cada torre tienen su dibujo y sus números, y que se puede recorrer con el mouse y con el teclado (▲/▼ entre entradas, ◄/► entre solapas, Esc para volver). Los enemigos que todavía no viste en una partida salen como "???" (con el contador "Enemigos 4/9"): en el `.exe` normal empiezan cerrados y se abren al cruzártelos; en el de pruebas se ve todo. Un enemigo o una torre nuevos deberían aparecer sin tocar nada más; los artículos de la Guía están en `data/wiki/*.json` ([`CONTENIDO.md`](CONTENIDO.md)).
+Menú principal → **Wiki**. Comprobá que hay cinco solapas (Enemigos, Torres, Colecciones, Guía, Lore), que cada enemigo y cada torre tienen su dibujo y sus números, y que se puede recorrer con el mouse y con el teclado (▲/▼ entre entradas, ◄/► entre solapas, Esc para volver). Los enemigos que todavía no viste en una partida salen como "???" (con el contador "Enemigos 4/9"): en el `.exe` normal empiezan cerrados y se abren al cruzártelos; en el de pruebas se ve todo. Un enemigo o una torre nuevos deberían aparecer sin tocar nada más; los artículos de la Guía están en `data/wiki/*.json` ([`CONTENIDO.md`](CONTENIDO.md)).
+
+### 6.1.001 Textos de los niveles y Lore (M52, T228; en todas las versiones)
+
+Con el `.exe` normal (no el modo de pruebas, que no muestra textos): **Niveles** → los desbloqueados traen su **lugar** en letra chica bajo el nombre (los bloqueados, no). Entrá a uno: aparece un **cartel** con el nombre, el lugar y 3 líneas, y la partida **espera** (la cuenta atrás no corre) hasta que tocás la pantalla, o apretás `Espacio`, `Enter` o `Esc` (`Esc` **no** abre la pausa). «Reintentar» **no** vuelve a mostrarlo; «Siguiente nivel» y elegir el nivel otra vez, sí. Al ganar, la pantalla de victoria trae 2 líneas bajo las estrellas. En **Wiki → Lore** los artículos se abren al ganar el nivel que dicen (cerrados: «???» y «Se abre al ganar el nivel N.»). **Sin probar en un celular real:** el cartel entra en 1280 × 720 y se comprobó por medidas, pero el tamaño táctil de «Empezar» y que no tape el botón de pausa hay que mirarlo con el dedo.
 
 ### 6.1.05 Mapas más grandes (zoom)
 

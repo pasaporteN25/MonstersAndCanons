@@ -2213,6 +2213,7 @@ Los puntos donde conviene que Lucas mire con más atención antes de programar (
 
 - **RF-469** **Una categoría nueva: «Lore».** La Wiki (RF-230 a RF-240) suma una categoría **«Lore»**, después de «Guía», con artículos escritos en archivos de texto `data/wiki/lore/*.json`. El formato es el de los artículos de la Guía (RF-235: `version`, `titulo`, `subtitulo`, `orden` y `bloques` de los tipos `titulo`, `texto`, `datos` y `tabla`) **más una clave nueva obligatoria**, `"desbloqueo"`: el id del nivel de la campaña que, al ganarse, abre el artículo (por ejemplo `"level_08"`).
   - **La Guía no los ve:** vive en la subcarpeta `lore/`; la Guía sigue con los artículos de `data/wiki/` y nada más.
+  - **Nota de T228:** mientras la campaña tenga menos de 15 niveles, los artículos cuyo nivel todavía no está en `campaign.json` no se ven (hoy la solapa dice «Lore n/7»); aparecen solos cuando el nivel se suma.
   - **Validación (RF-236):** un artículo de Lore sin `"desbloqueo"`, con uno que no es un id, o que no figura en `campaign.json`, **no se muestra**, no impide ver el resto y **hace fallar el test** de los artículos oficiales. La clave `"desbloqueo"` en un artículo de la Guía es un error de clave desconocida.
   - **Orden:** por `orden`; a igual orden, por título.
   - **Los artículos iniciales** son los 10 de `specs/11-textos-lore.md` §4 (el oasis, Cántaro, la Compañía Meridiana, el Soberano, las criaturas que van solas, las ruinas, los Moradores, los pozos, los poblados vacíos y la Central), cada uno con su nivel de desbloqueo.

@@ -1,0 +1,17 @@
+{
+ "version": 1,
+ "titulo": "El Soberano",
+ "subtitulo": "Quien va al frente de las manadas",
+ "orden": 4,
+ "desbloqueo": "level_04",
+ "bloques": [
+  {
+   "tipo": "texto",
+   "texto": "Al final de una oleada aparece a veces un animal enorme, carmesí y cornudo. Las manadas parecen seguirlo, o dejarle paso. Los colonos le dicen Soberano."
+  },
+  {
+   "tipo": "texto",
+   "texto": "No es uno solo: hay uno por cada paraje, y ninguno se parece del todo al anterior. Nadie sabe si manda o si solo va adelante."
+  }
+ ]
+}

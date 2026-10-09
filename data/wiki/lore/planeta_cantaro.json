@@ -1,0 +1,21 @@
+{
+ "version": 1,
+ "titulo": "Cántaro",
+ "subtitulo": "El planeta, o lo que se conoce de él",
+ "orden": 2,
+ "desbloqueo": "level_02",
+ "bloques": [
+  {
+   "tipo": "texto",
+   "texto": "Los colonos le pusieron Cántaro al planeta, por el oasis: un poco de agua guardada en una tierra seca."
+  },
+  {
+   "tipo": "texto",
+   "texto": "Lo que se conoce es un solo rincón: el oasis y lo que lo rodea. Más allá, todavía no se llegó."
+  },
+  {
+   "tipo": "texto",
+   "texto": "Cada tramo que se asegura se agrega al mapa de la Compañía. El mapa tiene más blanco que dibujo."
+  }
+ ]
+}

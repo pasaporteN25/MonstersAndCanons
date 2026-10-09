@@ -14,6 +14,7 @@
 [ext_resource type="Resource" path="res://data/towers/disruptor.tres" id="21_disruptor"]
 [ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="15_pause"]
 [ext_resource type="PackedScene" path="res://scenes/ui/exit_dialog.tscn" id="22_exit"]
+[ext_resource type="PackedScene" path="res://scenes/ui/level_intro.tscn" id="23_intro"]
 [ext_resource type="Script" path="res://scripts/data/tower_data.gd" id="7_tower_data"]
 [ext_resource type="Script" path="res://scenes/game/build_controller.gd" id="8_build"]
 [ext_resource type="Script" path="res://scenes/game/wave_spawner.gd" id="9_spawner"]
@@ -52,3 +53,5 @@ script = ExtResource("10_session")
 [node name="PauseMenu" parent="." instance=ExtResource("15_pause")]
 
 [node name="ExitDialog" parent="." instance=ExtResource("22_exit")]
+
+[node name="LevelIntro" parent="." instance=ExtResource("23_intro")]

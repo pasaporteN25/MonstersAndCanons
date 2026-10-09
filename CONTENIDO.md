@@ -176,7 +176,7 @@ Los voladores ignoran el camino: van en línea recta de su entrada a la salida.
 | `oro` | Oro al empezar. | Sí |
 | `vidas` | Vidas al empezar (los niveles oficiales usan 20). | Sí |
 | `aumento_vida` | % de vida extra de los enemigos en cada oleada (spec §7.4). Si no está, se usa el general de `balance.tres`. | No |
-| `textos` | *(M52, RF-464; **todavía no lo lee el juego**, lo hace T228)* Los textos breves del nivel: `"lugar"` (1 línea, 32 caracteres; sale en la tarjeta), `"entrada"` (hasta 3 líneas y 240 caracteres; un cartel al empezar), `"victoria"` (hasta 2 líneas y 160 caracteres; sale en la pantalla de victoria) y `"epilogo"` (3 a 5 líneas, solo para el último nivel de la campaña). Las líneas se separan con `\n` y ninguna pasa de 90 caracteres. Ejemplo: `"textos": {"lugar": "El paso del agua", "victoria": "Paso asegurado."}`. Un mapa de la comunidad o de un modo propio los muestra **solo si el archivo los trae**. Los textos oficiales están en `specs/11-textos-lore.md`. | No |
+| `textos` | *(M52, RF-464, T228)* Los textos breves del nivel: `"lugar"` (1 línea, 32 caracteres; sale en la tarjeta), `"entrada"` (hasta 3 líneas y 240 caracteres; un cartel al empezar), `"victoria"` (hasta 2 líneas y 160 caracteres; sale en la pantalla de victoria) y `"epilogo"` (3 a 5 líneas, solo para el último nivel de la campaña). Las líneas se separan con `\n` y ninguna pasa de 90 caracteres. Ejemplo: `"textos": {"lugar": "El paso del agua", "victoria": "Paso asegurado."}`. Un mapa de la comunidad o de un modo propio los muestra **solo si el archivo los trae**; los modos oficiales (Asedio), el modo de pruebas y probar desde el editor **no los muestran nunca**. El `"lugar"` sale en la tarjeta (solo si el nivel está desbloqueado), la `"entrada"` en un cartel que pausa la partida hasta que se toca la pantalla (o `Espacio`, `Enter`, `Esc`) y no vuelve al «Reintentar», y la `"victoria"` bajo las estrellas. Una clave de más, un texto vacío o pasarse de líneas o de caracteres es un error que dice cuánto tiene y cuánto es el máximo (los saltos de línea cuentan como caracteres). El editor de mapas **conserva** el campo al abrir y guardar, pero no lo edita: se escribe a mano en el archivo. Los textos oficiales están en `specs/11-textos-lore.md` (un test comprueba que los niveles traen exactamente esos). | No |
 | `oleadas` | La lista de oleadas (abajo). | Sí |
 
 ### Las oleadas
@@ -338,13 +338,14 @@ Lo más fácil: en el juego, **Jugar → solapa "Mapas de la comunidad" → "Abr
 
 ## La Wiki: qué se agrega solo y cómo escribir un artículo
 
-La **Wiki** (menú principal) tiene tres categorías:
+La **Wiki** (menú principal) tiene cinco categorías (Enemigos, Torres, Colecciones, Guía y Lore):
 
 | Categoría | De dónde sale | Qué hay que hacer |
 |---|---|---|
 | **Enemigos** | Un `.tres` de `data/enemies/` | Nada: se agrega sola, ordenada de más débil a más fuerte. Los números salen del `.tres` y "dónde aparece" sale de la campaña. Es un **bestiario**: cada enemigo aparece "???" (en silueta) hasta que el jugador lo ve en una partida; el enemigo nuevo queda cerrado para todos hasta que se lo cruzan. |
 | **Torres** | Un `.tres` de `data/towers/` | Nada: se agrega sola, de la más barata a la más cara. |
 | **Guía** | Un `.json` de `data/wiki/` | Escribir el artículo (abajo). |
+| **Lore** | Un `.json` de `data/wiki/lore/` | Escribir el artículo con su `"desbloqueo"` (al final de esta sección). |
 
 Un artículo es un archivo de texto (el nombre del archivo es su id: minúsculas, números y `_`):
 
@@ -368,7 +369,7 @@ Un artículo es un archivo de texto (el nombre del archivo es su id: minúsculas
 - **No copies números que ya viven en los datos** (vida, daño, costos, porcentajes): explicá la regla y mandá a la entrada del enemigo o la torre. Si se rebalancea, el artículo quedaría mintiendo.
 - Si te equivocás, el artículo simplemente no aparece; `tests/test_wiki_articles.gd` falla y dice **qué archivo y qué error**.
 - Para una categoría nueva (Niveles, Lore…) hay que sumar una función en `scripts/logic/wiki.gd`; la pantalla no cambia (plan técnico §6.10).
-- **Lore** *(M52, RF-469; **todavía no existe**, lo hace T228)*: será una cuarta categoría después de la Guía, con artículos en `data/wiki/lore/` (subcarpeta: la Guía no los ve) que llevan además la clave obligatoria `"desbloqueo"` (el id del nivel de la campaña que, al ganarse, los abre, por ejemplo `"level_08"`). Antes de ganarlo se ven como «???» con *«Se abre al ganar el nivel N.»*.
+- **Lore** *(M52, RF-469 y RF-470, T228)*: la categoría después de la Guía, con artículos en `data/wiki/lore/` (subcarpeta: la Guía no los ve). Tienen el mismo formato que los de la Guía **más la clave obligatoria `"desbloqueo"`**: el id de un nivel **que figure en `data/campaign.json`** (por ejemplo `"level_08"`); el artículo se abre cuando el jugador gana ese nivel (sale del guardado, no hay campo nuevo). Antes se ve como «???» con *«Se abre al ganar el nivel N.»* (el número, nunca el nombre ni nada del contenido) y la solapa cuenta «Lore 3/7». En el modo de pruebas está todo abierto. Un artículo sin `"desbloqueo"`, o con uno que no está en la campaña, no se muestra y hace fallar `tests/test_lore_wiki.gd`. Los 10 artículos oficiales son los de `specs/11-textos-lore.md` §4; **los de los niveles 11, 14 y 15 no se ven hasta que esos niveles entren en la campaña** (T229 a T234), y entonces aparecen solos.
 
 ---
 

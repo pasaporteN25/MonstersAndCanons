@@ -28,6 +28,16 @@ var obstacles: Array[ObstacleSpec] = []
 @export var enemy_health_percent: int = 100
 ## M49 (RF-388): torres que permite un modo (`"torres"`). Vacío = las de siempre.
 @export var allowed_towers: PackedStringArray = []
+## M52 (RF-464): los textos del nivel (`"textos"` del archivo). Cadena vacía = ese texto no está.
+@export var place_text: String = ""
+@export var intro_text: String = ""
+@export var win_text: String = ""
+@export var epilogue_text: String = ""
+
+
+## M52: ¿trae algún texto?
+func has_texts() -> bool:
+	return place_text != "" or intro_text != "" or win_text != "" or epilogue_text != ""
 
 
 ## RF-454: el nivel usa infraestructura (la barra lleva pestañas) si habilita la demoledora o tiene algún

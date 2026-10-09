@@ -17,6 +17,13 @@ const VISIBLE_ROWS: int = 2
 const CARD_STAR_SIZE: float = 26.0
 const TOWER_ICON_SIZE: float = 22.0
 const NEW_COLOR := Color(1.0, 0.6, 0.15)
+## RF-465: el lugar bajo el nombre, en letra chica y de color suave.
+const PLACE_COLOR := Color(0.72, 0.76, 0.84)
+const PLACE_FONT_SIZE: int = 14
+const CARD_FONT_SIZE: int = 20
+const CARD_FONT_SIZE_PLACE: int = 18
+## Un renglón «en blanco» que Godot no descarta (RF-465).
+const PLACE_SPACER: String = "\u200C"
 const ERROR_COLOR := Color(1.0, 0.55, 0.55)
 ## RF-319: tope del oro que se puede escribir a mano en la franja de pruebas.
 const DEV_MAX_GOLD: int = 999999
@@ -314,10 +321,48 @@ func _make_card(index: int) -> Button:
 	elif CollectibleRun.eligible(&"technology", level.id):
 		card.tooltip_text = "Avance de este nivel: %s. Una pieza distinta por nivel1–5." % ("conseguido" if SaveManager.collected_sources(&"technology").has(String(level.id)) else "pendiente")
 	card.disabled = not GameFlow.is_level_unlocked(index)
+	if not card.disabled and level.place_text != "":
+		_add_place(card, index, level)
 	_add_tower_icons(card, index)
 	card.pressed.connect(GameFlow.start_level.bind(index))
 	_add_stars(card, GameFlow.level_stars(index), GameFlow.is_level_unlocked(index))
 	return card
+
+
+## RF-465: el lugar del nivel en UNA línea debajo del nombre. La tarjeta es un Button con un solo texto, así
+## que se le reserva un renglón bajo el nombre y el lugar se pone encima, con letra chica. Godot descarta los
+## renglones que solo tienen espacios (los «\n\n» del final de la tarjeta tampoco ocupan lugar), por eso los
+## renglones reservados llevan un carácter invisible (U+200C). Con el renglón de más el texto ya no entra
+## entre el nombre y las torres, así que la tarjeta con lugar usa letra de 18 y dos renglones invisibles
+## al final que suben el bloque (centrado). Si el lugar no entra en el ancho se corta con «…» y el cuadro de
+## ayuda (tooltip) lo muestra completo. El tamaño de la tarjeta no cambia y la tarjeta sin lugar es idéntica a
+## la de siempre. Se llama solo en niveles desbloqueados y con lugar.
+func _add_place(card: Button, index: int, level: LevelData) -> void:
+	card.text = "Nivel %d\n%s\n%s\n%d oleadas\n%s\n%s\n%s" % [index + 1, level.display_name, PLACE_SPACER, level.waves.size(),
+		status_text(index), PLACE_SPACER, PLACE_SPACER]
+	card.add_theme_font_size_override("font_size", CARD_FONT_SIZE_PLACE)
+	var font: Font = card.get_theme_font("font")
+	var margins: Vector2 = card.get_theme_stylebox("normal").get_minimum_size()
+	var inner_width: float = CARD_SIZE.x - margins.x
+	var flags: int = TextServer.BREAK_MANDATORY | TextServer.BREAK_WORD_BOUND | TextServer.BREAK_ADAPTIVE
+	var above: Vector2 = font.get_multiline_string_size("Nivel %d\n%s\n" % [index + 1, level.display_name],
+		HORIZONTAL_ALIGNMENT_CENTER, inner_width, CARD_FONT_SIZE_PLACE, -1, flags)
+	var whole: Vector2 = font.get_multiline_string_size(card.text, HORIZONTAL_ALIGNMENT_CENTER, inner_width, CARD_FONT_SIZE_PLACE, -1, flags)
+	var line_height: float = font.get_height(CARD_FONT_SIZE_PLACE)
+	var label := Label.new()
+	label.name = "Place"
+	label.text = level.place_text
+	label.add_theme_font_size_override("font_size", PLACE_FONT_SIZE)
+	label.add_theme_color_override("font_color", PLACE_COLOR)
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	label.size = Vector2(CARD_SIZE.x - 12.0, line_height)
+	# El bloque de texto va centrado en la tarjeta: el renglón reservado empieza donde termina el nombre.
+	label.position = Vector2(6.0, (CARD_SIZE.y - whole.y) / 2.0 + above.y)
+	card.add_child(label)
+	card.tooltip_text = level.place_text + ("\n" + card.tooltip_text if card.tooltip_text != "" else "")
 
 
 ## RF-397: íconos chicos de las torres que ofrece el nivel (los de la barra) y, en las que debutan ahí,
@@ -372,7 +417,7 @@ func _make_community_card(entry: Dictionary) -> Button:
 func _new_card() -> Button:
 	var card := Button.new()
 	card.custom_minimum_size = CARD_SIZE
-	card.add_theme_font_size_override("font_size", 20)
+	card.add_theme_font_size_override("font_size", CARD_FONT_SIZE)
 	card.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART  # un nombre largo baja de renglón
 	return card
 

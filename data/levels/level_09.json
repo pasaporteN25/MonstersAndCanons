@@ -11,6 +11,11 @@
     "s": {"dibujo":"simbolo_ruina"}
   },
   "torres_extra": ["mechanical_standard","mortar"],
+  "textos": {
+    "lugar": "El taller",
+    "entrada": "Entre las ruinas hay un galpón que puede servir de taller.\nLos que lo rodean no parecen animales: algunos curan a los suyos.\nHoy se prueba el primer mortero de la colonia.",
+    "victoria": "Taller asegurado. El horno se encendió por primera vez fuera del oasis.\nLa forja ya no depende de lo que trajo la nave."
+  },
   "mapa": [
     "......s...B.........",
     "A#####....#.........",

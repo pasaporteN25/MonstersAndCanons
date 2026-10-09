@@ -108,6 +108,9 @@ static func from_text(text: String, id: String = "") -> LevelDraft:
 	# RF-411: se conserva tal cual al guardar (aunque no sea true/false: check() lo marca).
 	if source.has("demoledora"):
 		draft.data["demoledora"] = source["demoledora"]
+	# M52 (RF-464): los textos del nivel se conservan tal cual (el editor no los edita; check() los revisa).
+	if source.has("textos"):
+		draft.data["textos"] = source["textos"].duplicate(true) if source["textos"] is Dictionary else source["textos"]
 	# El orden de las claves del texto lo fija to_text(), no este diccionario.
 	return draft
 
@@ -631,6 +634,8 @@ func to_text() -> String:
 		lines.append("  \"torres\": %s," % JSON.stringify(data["torres"]))
 	if data.has("demoledora"):
 		lines.append("  \"demoledora\": %s," % JSON.stringify(data["demoledora"]))
+	if data.has("textos"):
+		lines.append(_texts_text())
 	lines.append("  \"mapa\": [")
 	var map_rows: PackedStringArray = rows()
 	for y: int in map_rows.size():
@@ -646,6 +651,25 @@ func to_text() -> String:
 	lines.append("  ]")
 	lines.append("}")
 	return "\n".join(lines) + "\n"
+
+
+## M52 (RF-464): el campo "textos" como lo escriben los niveles oficiales, una clave por renglón. Lo que no es un
+## objeto, o trae claves de más, se escribe igual (check() lo marca): el editor conserva lo que no edita.
+func _texts_text() -> String:
+	if not data["textos"] is Dictionary:
+		return "  \"textos\": %s," % JSON.stringify(data["textos"])
+	var texts: Dictionary = data["textos"]
+	var keys: Array = []
+	for key: String in LevelTexts.KEYS:
+		if texts.has(key):
+			keys.append(key)
+	for key: Variant in texts.keys():
+		if not keys.has(key):
+			keys.append(key)
+	var entries: PackedStringArray = []
+	for key: Variant in keys:
+		entries.append("    %s: %s" % [JSON.stringify(str(key)), JSON.stringify(texts[key])])
+	return "  \"textos\": {\n" + ",\n".join(entries) + "\n  },"
 
 
 ## Un nombre de archivo válido: minúsculas, números y "_" (RF-216).

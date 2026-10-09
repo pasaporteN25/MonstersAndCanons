@@ -14,6 +14,11 @@
     "p": {"dibujo":"columna"}
   },
   "torres_extra": ["mechanical_standard","mortar"],
+  "textos": {
+    "lugar": "Primer puesto de abastecimiento",
+    "entrada": "Las galerías ya estaban cavadas cuando llegamos.\nSi se las retoma, la colonia tiene mineral a pocos días del campamento.\nHay que sostener la boca de la mina.",
+    "victoria": "Mina asegurada. Es el primer puesto de abastecimiento de la colonia.\nLas galerías no las cavamos nosotros, y nadie vino a reclamarlas."
+  },
   "mapa": [
     "XXXXXXXXXXXXXXBXXXXXXXXX",
     "A#####################.X",

@@ -1,0 +1,21 @@
+{
+ "version": 1,
+ "titulo": "La Central",
+ "subtitulo": "Energía y abastecimiento",
+ "orden": 10,
+ "desbloqueo": "level_15",
+ "bloques": [
+  {
+   "tipo": "texto",
+   "texto": "La central quedó en el valle donde aterrizó la nave. Produce la energía que necesita la colonia y alimenta la línea que la une con la mina."
+  },
+  {
+   "tipo": "texto",
+   "texto": "Con ella, la región queda asegurada: agua, luz y camino. No es todo el planeta, y nadie en la Compañía dice que lo sea."
+  },
+  {
+   "tipo": "texto",
+   "texto": "El informe termina ahí. No dice qué se hará con lo que falta."
+  }
+ ]
+}

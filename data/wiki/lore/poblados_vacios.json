@@ -1,0 +1,21 @@
+{
+ "version": 1,
+ "titulo": "Los poblados vacíos",
+ "subtitulo": "Lo que quedó en pie",
+ "orden": 9,
+ "desbloqueo": "level_14",
+ "bloques": [
+  {
+   "tipo": "texto",
+   "texto": "Los poblados del valle bajo son de piedra y paja. Tienen fogones, cuerdas y pieles todavía en su sitio."
+  },
+  {
+   "tipo": "texto",
+   "texto": "No hay nadie. Las brasas están tibias, así que se fueron hace poco, y se llevaron lo que podían cargar."
+  },
+  {
+   "tipo": "texto",
+   "texto": "La Compañía registra los poblados como «posiciones desocupadas»."
+  }
+ ]
+}

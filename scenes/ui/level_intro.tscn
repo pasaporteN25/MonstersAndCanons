@@ -1,0 +1,94 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/level_intro.gd" id="1_intro"]
+[ext_resource type="StyleBox" path="res://assets/ui/game_panel_style.tres" id="2_style"]
+[ext_resource type="Theme" path="res://assets/ui/menu_theme.tres" id="3_theme"]
+
+[node name="LevelIntro" type="CanvasLayer"]
+layer = 20
+script = ExtResource("1_intro")
+
+[node name="IntroPanel" type="Control" parent="."]
+unique_name_in_owner = true
+theme = ExtResource("3_theme")
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dim" type="ColorRect" parent="IntroPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.55)
+
+[node name="Center" type="CenterContainer" parent="IntroPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="IntroPanel/Center"]
+custom_minimum_size = Vector2(640, 0)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("2_style")
+
+[node name="Margin" type="MarginContainer" parent="IntroPanel/Center/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 26
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 26
+
+[node name="Rows" type="VBoxContainer" parent="IntroPanel/Center/Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="IntroPanel/Center/Panel/Margin/Rows"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.84, 0.3, 1)
+theme_override_font_sizes/font_size = 36
+text = "Nivel"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Place" type="Label" parent="IntroPanel/Center/Panel/Margin/Rows"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.76, 0.84, 1)
+theme_override_font_sizes/font_size = 22
+text = "Lugar"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Lines" type="Label" parent="IntroPanel/Center/Panel/Margin/Rows"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(576, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Entrada"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="StartButton" type="Button" parent="IntroPanel/Center/Panel/Margin/Rows"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 56)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 24
+text = "Empezar"
+
+[node name="Hint" type="Label" parent="IntroPanel/Center/Panel/Margin/Rows"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.76, 0.84, 0.7)
+theme_override_font_sizes/font_size = 15
+text = "Tocá en cualquier parte para empezar."
+horizontal_alignment = 1

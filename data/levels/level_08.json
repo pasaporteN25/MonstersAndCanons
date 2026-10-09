@@ -11,6 +11,11 @@
     "s": {"dibujo":"simbolo_ruina"}
   },
   "torres_extra": ["mechanical_standard"],
+  "textos": {
+    "lugar": "El bastión sobre ruinas",
+    "entrada": "Sobre la loma hay muros de piedra vieja, a medio enterrar.\nLas rocas tienen la misma marca que las del campamento.\nAlguien la puso antes que nosotros.",
+    "victoria": "Bastión asegurado. La colonia tiene una posición alta sobre la loma.\nLos muros son de otros; los usamos igual."
+  },
   "mapa": [
     "............s.......",
     "A########...........",

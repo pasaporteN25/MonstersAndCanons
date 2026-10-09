@@ -11,7 +11,7 @@ const ENEMIES_DIR: String = "res://data/enemies/"
 const TOWERS_DIR: String = "res://data/towers/"
 const CAMPAIGN_PATH: String = "res://data/campaign.json"
 
-const LEVEL_KEYS: PackedStringArray = ["version", "nombre", "oro", "vidas", "aumento_vida", "tema", "leyenda", "torres_extra", "torres", "demoledora", "mapa", "oleadas"]
+const LEVEL_KEYS: PackedStringArray = ["version", "nombre", "oro", "vidas", "aumento_vida", "tema", "leyenda", "torres_extra", "torres", "demoledora", "textos", "mapa", "oleadas"]
 const LEGEND_KEYS: PackedStringArray = ["dibujo", "construible", "removible", "extraccion"]
 const GROUP_KEYS: PackedStringArray = ["enemigo", "cantidad", "cada", "desde", "entrada", "probabilidad"]
 const CAMPAIGN_KEYS: PackedStringArray = ["version", "niveles"]
@@ -69,6 +69,11 @@ static func parse(text: String, id: StringName) -> Dictionary:
 			errors.append("demoledora: tiene que ser true o false.")
 		else:
 			level.machine_enabled = data["demoledora"]
+	var texts: Dictionary = LevelTexts.parse(data.get("textos"), errors)  # RF-464
+	level.place_text = texts[LevelTexts.KEY_PLACE]
+	level.intro_text = texts[LevelTexts.KEY_INTRO]
+	level.win_text = texts[LevelTexts.KEY_WIN]
+	level.epilogue_text = texts[LevelTexts.KEY_EPILOGUE]
 	level.extra_towers = _read_extra_towers(data, errors)
 	level.towers = _read_towers(data, errors)
 

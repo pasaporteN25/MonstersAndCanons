@@ -1,0 +1,21 @@
+{
+ "version": 1,
+ "titulo": "Los Moradores",
+ "subtitulo": "Los que ya estaban",
+ "orden": 7,
+ "desbloqueo": "level_09",
+ "bloques": [
+  {
+   "tipo": "texto",
+   "texto": "Así llama la Compañía a las comunidades que viven en Cántaro. Es un nombre de informe: cómo se llaman ellos a sí mismos no figura en ningún registro."
+  },
+  {
+   "tipo": "texto",
+   "texto": "Hasta ahora se vieron dos oficios: los que protegen, de piedra y escudo dorado, y los que curan, con una semilla en el pecho. No está claro si son un solo pueblo o varios que se juntaron."
+  },
+  {
+   "tipo": "texto",
+   "texto": "Tampoco está claro si guían a los animales de las manadas o si solo cuidan sus propios caminos."
+  }
+ ]
+}

@@ -870,7 +870,7 @@ Con `tools/ejemplos/mapa_disruptora.json` y **3 semillas** (`seed=`), el bot `mi
 
 ### M52 / T227 · Lore en el juego y bloque 3 (RF-464 a RF-480, D-089 a D-091)
 
-**Estado: diseño; todavía no hay código.** Se programa en **T228** (textos, cartel, tarjeta, Wiki Lore) y **T234** (epílogo y créditos, junto con el nivel 15), después del OK de Lucas a la spec (M52, §7.13 a §7.17) y a los textos (`specs/11-textos-lore.md`). Los niveles 11 a 14 son **solo datos** (T229 a T232). Es todo interfaz y datos: **ninguna regla de combate ni número de balance cambia**.
+**Estado: T228 programada (2026-10-09): textos por nivel, tarjeta, cartel, victoria y Wiki Lore (ver «Lo que cambió al programarla» al final de esta sección); el epílogo y los créditos siguen en diseño.** Se programó en **T228** (textos, cartel, tarjeta, Wiki Lore) y se programa en **T234** (epílogo y créditos, junto con el nivel 15), después del OK de Lucas a la spec (M52, §7.13 a §7.17) y a los textos (`specs/11-textos-lore.md`). Los niveles 11 a 14 son **solo datos** (T229 a T232). Es todo interfaz y datos: **ninguna regla de combate ni número de balance cambia**.
 
 #### Qué hay hoy (leído en T227)
 
@@ -938,6 +938,14 @@ Con `tools/ejemplos/mapa_disruptora.json` y **3 semillas** (`seed=`), el bot `mi
 - **El guardado de `LevelData` en el editor:** no se miró en esta tarea cómo serializa los campos que no edita. Si el editor reconstruye el nivel campo por campo, `"textos"` se perdería; T228 lo prueba con un nivel real.
 - **La central de cuatro dibujos (T233/T234):** el formato de los cuartos (SVG o PNG de 64 × 64, con alfa y anclajes estables) y cómo se ve junto a la salida no se probó. Si T233 propone otro formato, decide Lucas en el concepto.
 - **Los niveles 11 a 14 dependen de G4** (§7.13): si la partida de Lucas del 6 al 10 cambia algo de demolición, del Mortero o de la Disruptora, las fichas se ajustan antes de T229.
+
+#### Lo que cambió al programarla (T228, 2026-10-09)
+
+- **Archivos reales:** `scripts/logic/level_texts.gd` (`LevelTexts`: `parse`, límites, mensajes), `scripts/logic/lore_unlock.gd` (`LoreUnlock`: `is_open`, `locked_text`, `level_number`), `scenes/ui/level_intro.gd` y `.tscn` (`LevelIntro`). `LevelData` guarda **cuatro `String`** (`place_text`, `intro_text`, `win_text`, `epilogue_text`) y `has_texts()`. `GameFlow.intro_pending` (se enciende en `start_level`, `start_community` y `start_mode_level`, y se apaga en `play_test`) lo consume `Game._ready`; la regla de si se muestra es `Game.shows_texts()` (no en modo de pruebas ni «Probar», ni en un modo oficial).
+- **El cartel** atiende todo en `_input` (así `Esc` le gana al menú de pausa): `Espacio`, `Enter`, `Esc` y el **soltar** del clic cierran; el apretar del clic se traga (el toque del celular llega como clic emulado y no tiene que llegar a la construcción). Mientras está abierto: `set_paused(true)` + `build_controller.input_blocked`, como el diálogo de la flecha.
+- **Wiki:** `Wiki.categories(campaign, is_seen, is_completed)` recibe una tercera función; `articles(dir, lore, campaign_ids)` y `parse_article(text, id, lore, campaign_ids)` exigen `"desbloqueo"` y que figure en la campaña; `locked_lore_entry` arma la entrada cerrada. `WikiScreen.is_completed` es la costura de los tests y vale `DevMode.enabled or SaveManager.is_completed`.
+- **Editor:** `LevelDraft.from_text` conserva `"textos"` y `to_text` lo escribe en el mismo formato de los niveles oficiales (una clave por renglón), así que abrir y guardar un nivel oficial da el mismo texto (lo comprueba `test_level_draft.gd`).
+- **La tarjeta:** el lugar es un `Label` encima de un renglón reservado (U+200C), porque Godot descarta los renglones que solo tienen espacios (los `\n\n` finales de la tarjeta de siempre tampoco ocupan lugar). Ver el Resultado de T228 sobre cómo se ve.
 
 #### Lo que M52 no toca
 
