@@ -1594,6 +1594,7 @@
 - [ ] **T243** · 📜 🚦 Spec del jefe supremo del nivel 15.
   **Refs:** Q-32 ✎, §7.17 (el hueco), D-091, restricciones de coherencia de 10 §4.4. **Depende de:** T227 (esta spec, con el OK de Lucas); **la siguiente 📜 libre arranca en RF-481 y D-092.** **Ficha:** `specs/tareas/T243-spec-jefe-supremo.md`.
   **Hecho cuando:** hay un RF y una D, Lucas aprobó el concepto y queda claro qué dibuja T244 y qué programa T234.
+  **Avance (2026-10-09, Claude Sonnet 5.5): PROPUESTA LISTA, A LA ESPERA DE LA ELECCIÓN DE LUCAS. La tarea sigue abierta.** Los tres conceptos (A · Custodio, B · Vocero, C · Coloso), con función, contramedida, habilidad, números iniciales y cómo se combinan con la escolta, están en `specs/tareas/informes/T243-conceptos-jefe-supremo.md`, con una recomendación (C: no necesita ningún campo ni sistema nuevo, solo `death_spawn`). **Todavía no se escribió el RF ni la D**: cuando Lucas elija van **RF-481** y **D-092** (verificados libres con `git grep` en todas las ramas `feature/*` y `origin/feature/*`; la más alta es RF-480 y D-091). **Qué no se hizo:** ningún número se midió con el bot ni en partida; no se tocó código, datos ni `01-spec.md`.
 - [ ] **T244** · 🎨 Arte del jefe supremo (Codex).
 - [ ] **T234** · Nivel 15 y epílogo.
   **Refs:** M52 (RF-471, RF-472, RF-474, RF-475, RF-480), §7.17, D-090, D-091, plan «M52 / T227»; Q-32 ✎. **Depende de:** T232, T228 y **T243 (el diseño del jefe supremo; sin él no se cierran las oleadas finales)**; T233 y T244 para el arte final. **Ficha:** `specs/tareas/T234-nivel-15.md`.
