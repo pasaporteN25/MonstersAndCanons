@@ -2180,6 +2180,8 @@ Los puntos donde conviene que Lucas mire con más atención antes de programar (
 
 Corta, en orden de importancia. Cada una trae mi recomendación; si no contestás, T248 **no arranca** (la compuerta es tuya).
 
+**Respuesta de Lucas (2026-10-08): ✔ todas, con la recomendación de cada pregunta (P1 a P8).** La compuerta está abierta: T248 puede arrancar.
+
 1. **P1 · ¿Pestañas por datos o por número de nivel?** Recomiendo **por datos**: aparecen en todo mapa que tenga removibles, extracción o demoledora (hoy: niveles 6 a 10). La otra opción es «a partir del nivel 6», que dejaría sin pestañas a un mapa de la comunidad con demolición.
 2. **P2 · Teclas.** Recomiendo `1`–`9`, **`0` para la décima** y `Tab` para cambiar de pestaña; la torre 11 solo con mouse o dedo. ¿Te sirve `Tab`, o preferís otra tecla (por ejemplo `Q`)?
 3. **P3 · ¿Qué lleva «Infraestructura»?** Recomiendo cuatro tarjetas: trabajo en curso, demoledora, extracción y recursos (RF-457). ¿Falta algo o sobra algo?

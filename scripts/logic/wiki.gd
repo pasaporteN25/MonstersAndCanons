@@ -245,8 +245,6 @@ static func _collection_entries(_campaign: Array[LevelData], _is_seen: Callable)
 	var entries: Array[WikiEntry] = []
 	# SaveManager es un autoload: se lo busca por el árbol para que `tools/` (que se compila antes que los
 	# autoloads) pueda cargar este script. Sin autoload (herramientas), el progreso es 0.
-	var tree: SceneTree = Engine.get_main_loop() as SceneTree
-	var save: Node = null if tree == null else tree.root.get_node_or_null("SaveManager")
 	for id: StringName in CollectionDefinitions.ids():
 		entries.append(collection_entry(id, _collected_count(id), _all_towers()))
 	return entries
