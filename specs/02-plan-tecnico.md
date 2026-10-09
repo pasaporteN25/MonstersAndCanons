@@ -870,7 +870,7 @@ Con `tools/ejemplos/mapa_disruptora.json` y **3 semillas** (`seed=`), el bot `mi
 
 ### M52 / T227 · Lore en el juego y bloque 3 (RF-464 a RF-480, D-089 a D-091)
 
-**Estado: T228 programada (2026-10-09): textos por nivel, tarjeta, cartel, victoria y Wiki Lore (ver «Lo que cambió al programarla» al final de esta sección); el epílogo y los créditos siguen en diseño.** Se programó en **T228** (textos, cartel, tarjeta, Wiki Lore) y se programa en **T234** (epílogo y créditos, junto con el nivel 15), después del OK de Lucas a la spec (M52, §7.13 a §7.17) y a los textos (`specs/11-textos-lore.md`). Los niveles 11 a 14 son **solo datos** (T229 a T232). Es todo interfaz y datos: **ninguna regla de combate ni número de balance cambia**.
+**Estado: T228 programada (2026-10-09): textos por nivel, tarjeta, cartel, victoria y Wiki Lore (ver «Lo que cambió al programarla» al final de esta sección); el epílogo, los créditos y el nivel 15 se programaron en T234 (2026-10-09; ver «Lo que cambió al programarla (T234)» al final de esta sección).** Se programó en **T228** (textos, cartel, tarjeta, Wiki Lore) y se programa en **T234** (epílogo y créditos, junto con el nivel 15), después del OK de Lucas a la spec (M52, §7.13 a §7.17) y a los textos (`specs/11-textos-lore.md`). Los niveles 11 a 14 son **solo datos** (T229 a T232). Es todo interfaz y datos: **ninguna regla de combate ni número de balance cambia**.
 
 #### Qué hay hoy (leído en T227)
 
@@ -946,6 +946,13 @@ Con `tools/ejemplos/mapa_disruptora.json` y **3 semillas** (`seed=`), el bot `mi
 - **Wiki:** `Wiki.categories(campaign, is_seen, is_completed)` recibe una tercera función; `articles(dir, lore, campaign_ids)` y `parse_article(text, id, lore, campaign_ids)` exigen `"desbloqueo"` y que figure en la campaña; `locked_lore_entry` arma la entrada cerrada. `WikiScreen.is_completed` es la costura de los tests y vale `DevMode.enabled or SaveManager.is_completed`.
 - **Editor:** `LevelDraft.from_text` conserva `"textos"` y `to_text` lo escribe en el mismo formato de los niveles oficiales (una clave por renglón), así que abrir y guardar un nivel oficial da el mismo texto (lo comprueba `test_level_draft.gd`).
 - **La tarjeta:** el lugar es un `Label` encima de un renglón reservado (U+200C), porque Godot descarta los renglones que solo tienen espacios (los `\n\n` finales de la tarjeta de siempre tampoco ocupan lugar). Ver el Resultado de T228 sobre cómo se ve.
+
+#### Lo que cambió al programarla (T234, 2026-10-09)
+
+- **Archivos reales:** `scripts/logic/credits.gd` (`Credits`: `load_file` y `parse`, con `MAX_LINES = 40` y `LINE_MAX = 90`), `data/creditos.json`, `scenes/ui/epilogue_screen.gd` (`EpilogueScreen`) y `scenes/ui/credits_screen.gd` (`CreditsScreen`). **Las dos pantallas se arman por código, sin `.tscn`**, como `HallOfFame`: son `CanvasLayer` que se agregan encima de la pantalla de victoria **dentro de la misma escena de la partida** (capa 15 el epílogo, 18 los créditos, 20 el Salón de la fama). Por eso «Esc o un toque vuelven a la pantalla de victoria» es solo cerrar la capa: la victoria sigue ahí debajo, con sus récords, y no hay que recargarla.
+- **El botón:** `EndScreen.show_victory(…, win_text, has_epilogue)` cambia el texto de `NextButton` a «Epílogo» y emite `epilogue_pressed` (no `next_pressed`); la derrota y las victorias siguientes lo devuelven a «Siguiente nivel». `Game` decide `has_epilogue = shows_texts() and GameFlow.has_epilogue()` (no en modo de pruebas, no probando desde el editor, no en un modo oficial) y `GameFlow.has_epilogue()` pide: campaña (sin modo, comunidad ni `test_level`), último nivel y `epilogue_text` no vacío. `GameFlow.is_campaign_complete()` deduce «campaña terminada» de los niveles completados: **no hay ningún campo nuevo en el guardado** (un test compara el archivo antes y después de ver el epílogo y los créditos).
+- **El nivel 15 usa 12 letras de leyenda** (D-093): `LevelFile.MAX_LEGEND` sube de 10 a 12. `MapDrawings` suma 8 dibujos de tipo objeto (`central_1` a `central_4`, `supply_depot`, `supply_line_pole`, `supply_cart`, `supply_conveyor`), con los SVG de T233 por `preload`.
+- **Datos del Coloso (M54):** `data/enemies/colossus.tres` y `colossus_shard.tres` con los números de RF-481 y los parámetros visuales de T244 (`visual_scale` 1.8 y 1.2, `walk_stride_tiles` 1.1 y 0.55). **Ningún campo ni código nuevo.**
 
 #### Lo que M52 no toca
 
@@ -1037,7 +1044,7 @@ Se programa en **T248**, después del OK de Lucas a la spec (M53) y a sus pregun
 
 ### M54 / T243 · El Coloso, jefe supremo del nivel 15 (RF-481 a RF-484, D-092)
 
-**Estado: diseño aprobado por Lucas el 2026-10-09; todavía no hay código ni datos.** Se hace en **T244** (el arte) y **T234** (los dos `.tres`, las oleadas finales y el balance con el bot). Es **solo datos**: no cambia ninguna regla de combate, ningún campo de `EnemyData` ni ninguna pantalla. Todos los números son **iniciales y no se midieron** (ni con el bot ni en partida).
+**Estado: hecho en T234 (2026-10-09): los dos `.tres`, las oleadas 26, 28 y 30 del nivel 15 y el balance con el bot (ver «Lo que cambió al programarla (T234)» en M52 y el Resultado de T234).** *(Diseño aprobado por Lucas el 2026-10-09.)* Se hace en **T244** (el arte) y **T234** (los dos `.tres`, las oleadas finales y el balance con el bot). Es **solo datos**: no cambia ninguna regla de combate, ningún campo de `EnemyData` ni ninguna pantalla. Todos los números son **iniciales y no se midieron** (ni con el bot ni en partida).
 
 #### Qué hay hoy (leído en T243)
 

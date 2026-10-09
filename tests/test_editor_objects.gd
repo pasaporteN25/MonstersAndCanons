@@ -149,19 +149,19 @@ func test_a_stroke_of_objects_is_one_undo_step() -> void:
 
 func _fill_legend_with_decor(count: int) -> void:
 	var legend: Dictionary = {}
-	for letter: String in "pfgwk~+-=*".left(count):
+	for letter: String in "pfgwk~+-=*&%".left(count):
 		legend[letter] = {"dibujo": "helecho"}
 	draft.data["leyenda"] = legend
 
 
-func test_the_tenth_letter_still_fits_and_the_eleventh_warns_without_painting() -> void:
-	_fill_legend_with_decor(9)
-	assert_true(_paint(LevelDraft.Tool.TREE, Vector2i(2, 1)), "la décima entra")
+func test_the_last_letter_still_fits_and_the_next_warns_without_painting() -> void:
+	_fill_legend_with_decor(LevelFile.MAX_LEGEND - 1)
+	assert_true(_paint(LevelDraft.Tool.TREE, Vector2i(2, 1)), "la última entra")
 	assert_eq(draft.last_problem, "")
 	assert_eq((draft.data["leyenda"] as Dictionary).size(), LevelFile.MAX_LEGEND)
 	var rows_before: PackedStringArray = draft.rows()
-	assert_false(_paint(LevelDraft.Tool.ROCK, Vector2i(3, 1)), "la undécima no")
-	assert_true(draft.last_problem.contains("10"), draft.last_problem)
+	assert_false(_paint(LevelDraft.Tool.ROCK, Vector2i(3, 1)), "una más no")
+	assert_true(draft.last_problem.contains(str(LevelFile.MAX_LEGEND)), draft.last_problem)
 	assert_eq(draft.rows(), rows_before, "no pinta")
 	assert_eq((draft.data["leyenda"] as Dictionary).size(), LevelFile.MAX_LEGEND)
 	assert_true(_paint(LevelDraft.Tool.TREE, Vector2i(3, 1)), "reusar una letra existente no suma")
@@ -170,7 +170,7 @@ func test_the_tenth_letter_still_fits_and_the_eleventh_warns_without_painting() 
 
 
 func test_a_refused_brush_does_not_leave_an_undo_step() -> void:
-	_fill_legend_with_decor(10)
+	_fill_legend_with_decor(LevelFile.MAX_LEGEND)
 	draft.dirty = false
 	assert_false(_paint(LevelDraft.Tool.MINE, Vector2i(3, 1)))
 	assert_false(draft.can_undo())
@@ -178,8 +178,8 @@ func test_a_refused_brush_does_not_leave_an_undo_step() -> void:
 
 
 func test_painting_over_the_last_cell_of_another_object_frees_its_slot() -> void:
-	_fill_legend_with_decor(9)
-	_paint(LevelDraft.Tool.TREE, Vector2i(2, 1))  # llena las 10
+	_fill_legend_with_decor(LevelFile.MAX_LEGEND - 1)
+	_paint(LevelDraft.Tool.TREE, Vector2i(2, 1))  # llena todas
 	assert_true(_paint(LevelDraft.Tool.ROCK, Vector2i(2, 1)), "la roca ocupa el lugar que deja el árbol")
 	assert_eq((draft.data["leyenda"] as Dictionary).size(), LevelFile.MAX_LEGEND)
 	assert_false(draft.obstacle_letters().has("t"))
@@ -450,14 +450,14 @@ func test_the_object_brushes_have_buttons_and_keys() -> void:
 func test_hitting_the_legend_limit_says_so_in_the_messages_line() -> void:
 	_open()
 	var legend: Dictionary = {}
-	for letter: String in "pfgwk~+-=*":
+	for letter: String in "pfgwk~+-=*&%":
 		legend[letter] = {"dibujo": "helecho"}
 	editor.draft.data["leyenda"] = legend
 	editor.refresh()
 	editor.set_tool(LevelDraft.Tool.MINE)
 	_click(editor, Vector2i(3, 2))
 	assert_eq(editor.draft.letter_at(Vector2i(3, 2)), ".", "no pinta")
-	assert_true(editor.message_text().contains("⚠ La leyenda ya tiene 10 letras"), editor.message_text())
+	assert_true(editor.message_text().contains("⚠ La leyenda ya tiene %d letras" % LevelFile.MAX_LEGEND), editor.message_text())
 	editor.set_tool(LevelDraft.Tool.GRASS)  # el aviso es de cada intento: con otro pincel desaparece
 	_click(editor, Vector2i(4, 2))
 	assert_false(editor.message_text().contains("La leyenda ya tiene"), editor.message_text())

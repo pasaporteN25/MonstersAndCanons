@@ -64,6 +64,10 @@ func test_the_official_levels_1_to_5_only_decoration_and_6_to_9_have_their_theme
 		if str(level.id) == "level_10":
 			assert_eq(level.theme, &"desierto", str(level.id))
 			continue
+		# T234: el nivel 15 vuelve al valle (pradera, como el oasis: el círculo se cierra, §7.17) y lo revisa test_level_15.gd.
+		if str(level.id) == "level_15":
+			assert_eq(level.theme, &"pradera", str(level.id))
+			continue
 		if int(str(level.id).trim_prefix("level_")) >= 11:
 			assert_ne(level.theme, &"pradera", str(level.id))
 			continue
@@ -202,20 +206,22 @@ func test_a_legend_that_is_not_an_object_is_an_error() -> void:
 	assert_string_contains(_errors_of({"leyenda": {"~": "agua"}}), "tiene que ser un objeto")
 
 
-func test_the_legend_limit_is_ten_letters() -> void:
+func test_the_legend_limit_is_twelve_letters() -> void:
+	# D-093 (T234): eran 10; el nivel 15 necesita 12 (la central en cuatro cuartos, tres piezas de la cadena,
+	# la mina, el bosque, los removibles y dos señales).
 	var ok: Dictionary = {}
-	for letter: String in ["~", ",", "a", "b", "c", "d", "e", "f", "g", "h"]:
+	for letter: String in ["~", ",", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]:
 		ok[letter] = {"dibujo": "roca"}
 	var result: Dictionary = LevelFile.parse(_text({"leyenda": ok}), &"prueba")
-	assert_eq(LevelFile.MAX_LEGEND, 10)
-	assert_eq((result["level"] as LevelData).legend.size(), 10, "diez sí")
-	ok["i"] = {"dibujo": "roca"}
-	assert_string_contains(_errors_of({"leyenda": ok}), "el máximo es 10")
+	assert_eq(LevelFile.MAX_LEGEND, 12)
+	assert_eq((result["level"] as LevelData).legend.size(), 12, "doce sí")
+	ok["k"] = {"dibujo": "roca"}
+	assert_string_contains(_errors_of({"leyenda": ok}), "el máximo es 12")
 
 
 func test_the_whole_catalog_is_accepted() -> void:
 	var ids: PackedStringArray = MapDrawings.ids()
-	assert_eq(ids.size(), 25)
+	assert_eq(ids.size(), 33)
 	for id: String in ids:
 		var result: Dictionary = LevelFile.parse(_text({"leyenda": {"~": {"dibujo": id}}}, _rows_with(Vector2i(3, 1), "~")), &"prueba")
 		assert_eq(result["errors"], PackedStringArray(), id)

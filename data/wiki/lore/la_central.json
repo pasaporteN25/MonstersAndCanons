@@ -15,6 +15,10 @@
   },
   {
    "tipo": "texto",
+   "texto": "Los colonos lo llaman el Coloso. Es de la misma piedra que los Guardianes. Cuando cae, se parte en tres y los pedazos siguen camino."
+  },
+  {
+   "tipo": "texto",
    "texto": "El informe termina ahí. No dice qué se hará con lo que falta."
   }
  ]

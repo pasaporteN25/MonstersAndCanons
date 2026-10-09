@@ -27,8 +27,8 @@ const MAX_GOLD: int = 99999
 const MAX_LIVES: int = 999
 const MAX_HEALTH_SCALE: int = 300
 const MAX_NAME_LENGTH: int = 30
-## RF-262, RF-265: letras que puede declarar la leyenda de un nivel.
-const MAX_LEGEND: int = 10
+## RF-262, RF-265: letras que puede declarar la leyenda de un nivel (D-093: 12; eran 10 hasta el nivel 15).
+const MAX_LEGEND: int = 12
 
 
 ## Lee el archivo de un nivel. El id del nivel es el nombre del archivo (RF-200).

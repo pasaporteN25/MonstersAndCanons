@@ -169,6 +169,24 @@ func has_next_level() -> bool:
 	return current_index >= 0 and current_index + 1 < level_count()
 
 
+## RF-471: ¿se está jugando el último nivel de la campaña, desde la campaña (no un modo, la comunidad ni «Probar»)
+## y con texto de epílogo? Entonces ganarlo ofrece «Epílogo» en lugar de «Siguiente nivel».
+func has_epilogue() -> bool:
+	if not current_mode.is_empty() or current_community != null or test_level != null:
+		return false
+	return current_index >= 0 and current_index == level_count() - 1 and level(current_index).epilogue_text != ""
+
+
+## RF-471: la campaña está terminada cuando todos sus niveles figuran completados. No se guarda un campo aparte.
+func is_campaign_complete() -> bool:
+	if level_count() == 0:
+		return false
+	for i: int in level_count():
+		if not SaveManager.is_completed(level(i).id):
+			return false
+	return true
+
+
 ## RF-90 y RF-112: guarda la victoria y desbloquea el siguiente nivel.
 func level_won(lives: int, score: int = 0) -> void:
 	if dev_partial_run():

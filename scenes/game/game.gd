@@ -44,6 +44,8 @@ var testing: bool = false
 var dev_panel: DevPanel
 ## RF-194: el Salón de la fama, mientras está abierto. null si no.
 var hall_of_fame: HallOfFame
+## RF-471: el epílogo del último nivel de la campaña (se crea al tocar «Epílogo»).
+var epilogue: EpilogueScreen
 var _shake_left: float = 0.0
 ## RF-325: el informe de esta partida de pruebas. null en el juego normal.
 var dev_stats: DevStats
@@ -150,6 +152,7 @@ func _ready() -> void:
 	session.state_changed.connect(_on_state_changed)
 	end_screen.retry_pressed.connect(restart)
 	end_screen.next_pressed.connect(GameFlow.next_level)
+	end_screen.epilogue_pressed.connect(open_epilogue)
 	if testing:
 		# RF-217: al terminar o salir, se vuelve al editor con el borrador intacto.
 		end_screen.levels_pressed.connect(GameFlow.go_to_editor)
@@ -803,13 +806,24 @@ func _on_state_changed(state: LevelSession.State) -> void:
 		GameFlow.level_won(session.lives, session.score)  # RF-112, RF-115 y RF-194: desbloquea y guarda
 		var stars: int = Rules.stars_for(session.lives, level_data.starting_lives, balance)  # RF-93
 		end_screen.show_victory(session.lives, stars, GameFlow.has_next_level(), can_leave, session.score,
-			level_data.win_text if shows_texts() else "")  # RF-467
+			level_data.win_text if shows_texts() else "", shows_texts() and GameFlow.has_epilogue())  # RF-467, RF-471
 		Audio.play(&"victory")
 	else:
 		end_screen.show_defeat(session.wave, session.total_waves, can_leave, session.score)
 		Audio.play(&"defeat")
 	if saves_progress:
 		_show_level_records()  # RF-191: los récords cuentan desde el menú (RF-196, RF-224)
+
+
+# --- Epílogo (RF-471) ---
+
+## Abre el epílogo encima de la pantalla de victoria: «Niveles» va a la selección; `Esc` o un toque vuelven a la victoria.
+func open_epilogue() -> void:
+	if epilogue == null:
+		epilogue = EpilogueScreen.new()
+		add_child(epilogue)
+		epilogue.levels_pressed.connect(GameFlow.go_to_level_select)
+	epilogue.open(level_data.epilogue_text)
 
 
 # --- Récords (RF-191 a RF-193) ---

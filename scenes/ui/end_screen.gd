@@ -5,6 +5,8 @@ extends CanvasLayer
 
 signal retry_pressed
 signal next_pressed
+## RF-471: en el último nivel de la campaña el botón de «Siguiente nivel» pasa a ser «Epílogo».
+signal epilogue_pressed
 signal levels_pressed
 ## RF-192: se confirmaron las iniciales pedidas con ask_name().
 signal name_entered(name: String)
@@ -14,6 +16,8 @@ const RECORD_COLOR := Color(1, 0.84, 0.3)
 ## RF-467: el texto de victoria del nivel, más chico y de color suave. Mismo ancho que el panel (420 menos los márgenes).
 const WIN_TEXT_COLOR := Color(0.78, 0.82, 0.9)
 const WIN_TEXT_WIDTH: float = 356.0
+const NEXT_TEXT: String = "Siguiente nivel"
+const EPILOGUE_TEXT: String = "Epílogo"
 
 @onready var _rows: VBoxContainer = %Rows
 @onready var _title: Label = %Title
@@ -31,12 +35,14 @@ var _table: ScoreTable
 ## Qué botones corresponden a esta partida (se esconden mientras se piden las iniciales).
 var _show_next: bool = false
 var _show_levels: bool = false
+## RF-471: el botón de arriba es «Epílogo» (la victoria del último nivel de la campaña).
+var _epilogue_mode: bool = false
 
 
 func _ready() -> void:
 	visible = false
 	_retry_button.pressed.connect(retry_pressed.emit)
-	_next_button.pressed.connect(next_pressed.emit)
+	_next_button.pressed.connect(_on_next_button_pressed)
 	_levels_button.pressed.connect(levels_pressed.emit)
 	# Puntos, título de récords, entrada de iniciales y tabla: debajo del detalle.
 	_win_label = _label(17, WIN_TEXT_COLOR)
@@ -65,7 +71,9 @@ func set_levels_text(text: String) -> void:
 ## `has_next`: hay un nivel siguiente (y se juega desde la campaña).
 ## `in_campaign`: se llegó desde el menú; si no (F6, tests), no hay a dónde volver.
 ## `win_text` (RF-467): el texto de victoria del nivel, bajo las estrellas y antes de los puntos. Vacío = no se ve nada.
-func show_victory(lives_left: int, stars: int, has_next: bool, in_campaign: bool, score: int = 0, win_text: String = "") -> void:
+## `has_epilogue` (RF-471): es el último nivel de la campaña; en lugar de «Siguiente nivel» (que no existe) está «Epílogo».
+func show_victory(lives_left: int, stars: int, has_next: bool, in_campaign: bool, score: int = 0, win_text: String = "",
+		has_epilogue: bool = false) -> void:
 	_title.text = "¡Victoria!"
 	_stars.count = stars  # RF-93
 	_stars.visible = true
@@ -74,7 +82,9 @@ func show_victory(lives_left: int, stars: int, has_next: bool, in_campaign: bool
 	_win_label.text = win_text
 	_win_label.visible = win_text != ""
 	_score_label.text = "Puntos: %d" % score  # RF-190
-	_show_next = has_next
+	_epilogue_mode = has_epilogue
+	_next_button.text = EPILOGUE_TEXT if has_epilogue else NEXT_TEXT
+	_show_next = has_next or has_epilogue
 	_show_levels = in_campaign
 	_set_buttons_visible(true)
 	visible = true
@@ -87,6 +97,8 @@ func show_defeat(wave: int, total_waves: int, in_campaign: bool, score: int = 0)
 	_detail.text = "Llegaste a la oleada %d de %d" % [wave, total_waves]
 	_win_label.visible = false  # RF-467: no hay texto en la derrota
 	_score_label.text = "Puntos: %d" % score  # RF-190
+	_epilogue_mode = false
+	_next_button.text = NEXT_TEXT
 	_show_next = false
 	_show_levels = in_campaign
 	_set_buttons_visible(true)
@@ -127,6 +139,13 @@ func show_scores(title: String, table: Array, highlight: int = -1) -> void:
 	_table.show_scores(table, highlight)
 	_table.visible = true
 	_set_buttons_visible(true)
+
+
+func _on_next_button_pressed() -> void:
+	if _epilogue_mode:
+		epilogue_pressed.emit()
+	else:
+		next_pressed.emit()
 
 
 func _on_name_confirmed(name: String) -> void:

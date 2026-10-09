@@ -2,6 +2,15 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Nivel 15: La Central, el Coloso, el epílogo y los créditos *(T234, 2026-10-09)*
+
+- **La campaña tiene 15 niveles y termina.** El nuevo se abre al ganar el 14: **La Central**, «energía y abastecimiento», un mapa **grande** (26 × 12) en el **valle** donde aterrizó la nave, con **tres entradas**. Al lado de la salida está la **central de energía** (un edificio de cuatro piezas) y, por el borde del mapa, la **cadena de abastecimiento** (un depósito, un poste de línea y una vagoneta) que la une con la mina. Hay una mina, dos bosques y cinco escombros, y también tres campamentos vacíos y dos rocas marcadas, como en el primer nivel. Es **el nivel más difícil de la campaña**: **30 oleadas**, 520 de oro y 20 vidas.
+- **Llega el Coloso.** Es el jefe del final y **reemplaza al Soberano**: una masa de piedra lenta (velocidad 0.5), con mucha vida y armadura, que **al caer se parte en tres Pedazos** rápidos y sin armadura que siguen camino. Si el Coloso llega a la salida **quita 12 de tus 20 vidas** (y no se parte); cada Pedazo que llega, 4. **Los golpes fuertes lo rompen** (Francotirador, Cañón, la quemadura de la Incendiaria, la Eléctrica) y **el Hielo y las torres de área barren los Pedazos**: hace falta tener las dos cosas. Sale en las oleadas **26** (uno, con enemigos ya conocidos), **28** (dos) y **30** (tres, con la **escolta completa**: Guardianes, Curanderos y Chamanes en formación y por dos entradas a la vez). La oleada 25 es un respiro.
+- **Ganar el 15 muestra el «Epílogo».** En la pantalla de victoria, en lugar de «Siguiente nivel» (no hay otro) aparece el botón **«Epílogo»**: la imagen del final con cuatro líneas y los botones **«Créditos»** y **«Niveles»**. `Esc` o un toque sobre la imagen vuelven a la pantalla de victoria; los puntos, las iniciales y los récords funcionan **antes**, como siempre. **Los créditos** son una pantalla de texto con «Volver». Solo se ve ganando el 15 desde la campaña (no en los modos, los mapas de la comunidad, el editor ni el modo de pruebas), y **no se guarda nada nuevo**: la campaña queda terminada cuando los 15 niveles figuran ganados.
+- **Wiki:** al ganar el 15 se abre el artículo de Lore **«La Central»** (con lo que dicen los colonos del Coloso); y los de los niveles 11 («Los pozos») y 14 («Los poblados vacíos») ya se ven al ganar esos niveles. **Enemigos** suma al **Coloso** (con la corona de «Peligroso») y al **Pedazo**, que se abren cuando los ves por primera vez.
+- Sin Ametralladora ni Lanzamisiles. **Se gana sin tocar la mina, los bosques ni los escombros.**
+- Para quien arma mapas: la **leyenda** de un mapa puede tener ahora hasta **12 letras** (eran 10), y hay ocho dibujos nuevos para las piezas de la central y de la cadena de abastecimiento.
+
 ## Tarjetas de nivel sin superposiciones *(T250, 2026-10-09)*
 
 - En la selección de nivel, el nombre, el lugar, los íconos de las torres, las estrellas y el resultado ahora tienen su propio espacio. «Bloqueado» y «Mejor: N vidas» ya no pisan los íconos.

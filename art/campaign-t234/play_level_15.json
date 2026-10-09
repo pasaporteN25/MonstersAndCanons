@@ -1,0 +1,111 @@
+{
+	"checks": [
+		"nivel 15 «La Central»: 30 oleadas, 8 torres en la barra: [\"cannon\", \"frost\", \"sniper\", \"fire\", \"multi\", \"burst\", \"tesla\", \"mortar\"]",
+		"cartel de entrada abierto, partida en pausa: true; texto: Falta cerrar el valle: la central de energía y la línea que la une con la mina. / Si se sostiene, la colonia queda asentada en esta región. / Hoy llega lo más grande que vimos hasta ahora, y no viene solo.",
+		"el clic cerró el cartel y la partida sigue (en pausa: false)",
+		"AYUDA DE VERIFICACIÓN: 9000 de oro y las oleadas 1 a 24 dadas por completadas con la sesión (no se juegan)",
+		"ayuda de verificación: skip=24",
+		"después de la ayuda: oleada 24, 20 vidas, 72 torres, 3420 de oro",
+		"oleada 25: se ve la tarjeta «Nuevo enemigo: Rápido»: Muy veloz pero frágil. Las Ametralladoras lo frenan bien.",
+		"oleada 25: se ve la tarjeta «Nuevo enemigo: Volador»: Vuela en línea recta hacia la salida. ¡El Cañón no le pega!",
+		"oleada 26: se ve la tarjeta «Nuevo enemigo: Coloso»: Masa de piedra lenta y muy blindada: los golpes fuertes la rompen. Al caer se parte en tres pedazos rápidos. ¡Si llega, quita 12 vidas!",
+		"oleada 26: se ve la tarjeta «Nuevo enemigo: Tanque»: Lento y con mucha vida. Si llega, quita 2 vidas.",
+		"oleada 26: se ve la tarjeta «Nuevo enemigo: Guardián»: Da armadura a los enemigos que lo rodean. Conviene eliminarlo primero, o pegarle de lejos.",
+		"oleada 26: se ve la tarjeta «Nuevo enemigo: Curandero»: Cura a los enemigos que lo rodean. Conviene eliminarlo primero; el fuego frena la cura.",
+		"oleada 26: el Coloso se partió: 3 Pedazos de 1215 de vida cada uno",
+		"oleada 26: se ve la tarjeta «Nuevo enemigo: Pedazo»: Rápido y sin armadura. El Hielo lo frena y las torres de área lo barren.",
+		"oleada 27: se ve la tarjeta «Nuevo enemigo: Blindado»: Su armadura le quita 3 a cada golpe: la Ametralladora casi no le hace nada. Usa Cañón o Francotirador.",
+		"oleada 27: se ve la tarjeta «Nuevo enemigo: Troll»: Se cura solo con el tiempo. El fuego de la Incendiaria le corta la curación.",
+		"oleada 28: se ve la tarjeta «Nuevo enemigo: Chamán»: Cada tanto apaga la torre más cercana. Un Francotirador lo alcanza antes de que lance su hechizo.",
+		"oleada 28: se ve la tarjeta «Nuevo enemigo: Espejo»: Devuelve los tiros de las torres cercanas y las aturde. El fuego y las torres de largo alcance lo golpean sin problema.",
+		"oleada 29: se ve la tarjeta «Nuevo enemigo: Embestidor»: Carga después de 3 casillas rectas. Al llegar al giro o salida desgasta una torre cercana a ese extremo. Hielo fuerte corta su carga. No destruye torres; el Mecánico repara el desgaste.",
+		"oleada 29: se ve la tarjeta «Nuevo enemigo: Araña»: Al morir suelta 4 crías. La Múltiple, la Ráfaga y el Cañón las barren.",
+		"oleada 29: se ve la tarjeta «Nuevo enemigo: Cría»: Frágil y rápida, pero salen de a muchas.",
+		"el Salón de la fama se abre antes que la victoria (RF-194): pide las 5 letras",
+		"el Salón de la fama se cerró: true",
+		"victoria: botón «Epílogo» visible=true; «Reintentar» visible=true; «Niveles» visible=true; texto de victoria: Central encendida. La línea de abastecimiento está completa. / La colonia tiene luz propia.",
+		"campaña terminada (se deduce de los 15 niveles): true",
+		"epílogo abierto; texto: La central se encendió al anochecer. La colonia tiene, por primera vez, luz propia. / Hay agua, energía y un camino de abastecimiento que une la mina con el valle. / Del otro lado del paso, los fuegos de los Moradores se ven cada vez más lejos. / El resto de Cántaro sigue ahí.",
+		"epílogo: botones «Créditos» (true) y «Niveles» (true)",
+		"créditos abiertos: Monsters & Canons / Un juego de Lucas / Hecho con Godot Engine / Software libre bajo la licencia GPL-3.0-or-later (los detalles, en Wiki → Licencias)",
+		"«Volver» cierra los créditos: true; el epílogo sigue abierto: true",
+		"Esc cierra el epílogo: true; la victoria sigue a la vista: true",
+		"el guardado es idéntico antes y después de ver el epílogo y los créditos: true"
+	],
+	"colossus_seen_wave": 30,
+	"intro_cards": {
+		"Nuevo enemigo: Araña": 29,
+		"Nuevo enemigo: Blindado": 27,
+		"Nuevo enemigo: Chamán": 28,
+		"Nuevo enemigo: Coloso": 26,
+		"Nuevo enemigo: Cría": 29,
+		"Nuevo enemigo: Curandero": 26,
+		"Nuevo enemigo: Embestidor": 29,
+		"Nuevo enemigo: Espejo": 28,
+		"Nuevo enemigo: Guardián": 26,
+		"Nuevo enemigo: Pedazo": 26,
+		"Nuevo enemigo: Rápido": 25,
+		"Nuevo enemigo: Tanque": 26,
+		"Nuevo enemigo: Troll": 27,
+		"Nuevo enemigo: Volador": 25
+	},
+	"level": 15,
+	"lives_end": 6,
+	"max_shards_seen_at_once": 3,
+	"problems": [],
+	"speed": 6.0,
+	"towers": [
+		"cannon",
+		"frost",
+		"sniper",
+		"fire",
+		"multi",
+		"burst",
+		"tesla",
+		"mortar"
+	],
+	"waves": [
+		{
+			"gold": 3725,
+			"lives": 20,
+			"state": "2",
+			"towers": 72,
+			"wave": 25
+		},
+		{
+			"gold": 4503,
+			"lives": 19,
+			"state": "2",
+			"towers": 72,
+			"wave": 26
+		},
+		{
+			"gold": 5170,
+			"lives": 15,
+			"state": "2",
+			"towers": 72,
+			"wave": 27
+		},
+		{
+			"gold": 6287,
+			"lives": 12,
+			"state": "2",
+			"towers": 72,
+			"wave": 28
+		},
+		{
+			"gold": 6798,
+			"lives": 12,
+			"state": "2",
+			"towers": 72,
+			"wave": 29
+		},
+		{
+			"gold": 8367,
+			"lives": 6,
+			"state": "3",
+			"towers": 72,
+			"wave": 30
+		}
+	]
+}

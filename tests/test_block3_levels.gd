@@ -1,4 +1,4 @@
-# T229 a T232: lo que tienen en común los niveles 11 a 14 del bloque 3 (RF-474 y RF-475): la rotación de torres
+# T229 a T232 y T234: lo que tienen en común los niveles 11 a 15 del bloque 3 (RF-474 y RF-475): la rotación de torres
 # sin Ametralladora, la apertura viable con Hielo y una torre de 90 a 110, la escalera de oro y de aumento de vida,
 # sin demoledora y con recursos. Cada nivel tiene además su propio archivo (test_level_11.gd, etc.).
 extends GutTest
@@ -7,8 +7,8 @@ const PATH: String = "user://test_block3_levels.json"
 const GAME_SCENE: PackedScene = preload("res://scenes/game/game.tscn")
 ## RF-474: las torres de la campaña menos la Ametralladora.
 const ROTATION: Array[String] = ["frost", "cannon", "sniper", "fire", "multi", "burst", "tesla", "mortar", "disruptor", "mechanical_standard"]
-## Los niveles del bloque 3 que ya existen (T229 a T232) y su oro inicial según la ficha (§7.13 a §7.16).
-const GOLD: Dictionary = {11: 420, 12: 440, 13: 460, 14: 480}
+## Los niveles del bloque 3 que ya existen (T229 a T232 y T234) y su oro inicial según la ficha (§7.13 a §7.17).
+const GOLD: Dictionary = {11: 420, 12: 440, 13: 460, 14: 480, 15: 520}
 
 var old_path: String
 var old_index: int
@@ -156,7 +156,7 @@ func test_waves_stay_inside_the_limits_and_use_known_entrances() -> void:
 	for n: int in _block():
 		var level: LevelData = _load(n)
 		var entrances: int = MapGrid.parse(level.map_rows, level.legend).routes.size()
-		assert_between(level.waves.size(), 22, 26, "nivel %d: 22 a 26 oleadas" % n)
+		assert_between(level.waves.size(), 22, 30, "nivel %d: 22 a 30 oleadas" % n)
 		for i: int in level.waves.size():
 			assert_lte(level.waves[i].groups.size(), LevelFile.MAX_GROUPS)
 			for group: SpawnGroup in level.waves[i].groups:

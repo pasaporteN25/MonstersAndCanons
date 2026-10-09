@@ -5,7 +5,7 @@
 
 Juego *tower defense* 2D hecho en **Godot 4** con **GDScript**, construido con **SDD (Spec-Driven Development)**.
 
-> **Estado actual:** M1 a M45 ✅ (nuevo logo Monsters & Canons, botones del menú de hierro y bronce, Normal, Rápido y Tanque con arte renderizado de una sola vista; campaña jugable, 10 niveles, 9 torres (una de 2×2) con arte renderizado de ocho vistas más el apoyo Mecánico, tres familias visuales y combos por estado, modo de pruebas con editor de mapas, mapas de la comunidad, Wiki con bestiario, mapas de tamaño variable con zoom, siete temas de paisaje y leyenda, récords, niveles en archivos de texto y versión para Linux). Lucas probó la APK en su celular (informado el 2026-10-07). Tests automáticos en GitHub (D-030).
+> **Estado actual:** M1 a M45 ✅ (nuevo logo Monsters & Canons, botones del menú de hierro y bronce, Normal, Rápido y Tanque con arte renderizado de una sola vista; campaña jugable y completa de **15 niveles** (el último trae al jefe **Coloso**, que al caer se parte en tres Pedazos, y termina en un **epílogo** y los créditos), 9 torres (una de 2×2) con arte renderizado de ocho vistas más el apoyo Mecánico, tres familias visuales y combos por estado, modo de pruebas con editor de mapas, mapas de la comunidad, Wiki con bestiario, mapas de tamaño variable con zoom, siete temas de paisaje y leyenda, récords, niveles en archivos de texto y versión para Linux). Lucas probó la APK en su celular (informado el 2026-10-07). Tests automáticos en GitHub (D-030).
 >
 > **Versión de Godot:** 4.7.2 estable (renderizador *Compatibility*).
 >
@@ -297,6 +297,10 @@ Validación M45:954/954 pruebas y62/62 finales de contenido.24 corridas más rep
 ### T225 · Nivel 10: La mina vieja
 
 Cierra el bloque 2 con un mapa grande (24 × 11) del desierto, dos entradas y 20 oleadas con los enemigos de los niveles 6 a 9 (sin debuts). Tiene una **mina** de reserva finita (100 de oro, 2 recursos por oleada, 8 en total), seis removibles que pueden dar 1 recurso, la **pieza 3/3 de la Disruptora** y el Mortero. Es un mapa de **espacio limitado** (43 casillas libres): el bot sin recursos lo gana con 7 a 13 vidas y las estrategias de extracción y de demolición lo ganan con 17 y 18. La ficha completa está en `specs/01-spec.md` §7.12 (RF-453) y la evidencia, en `art/campaign-t225/README.md`.
+
+### T234 · Nivel 15: La Central, el Coloso y el epílogo
+
+Cierra la campaña: un mapa de pradera de 26 × 12 con **tres entradas**, la **central de energía** (cuatro dibujos de 64 × 64 junto a la salida) y la cadena de abastecimiento, y **30 oleadas** sin el Soberano. El jefe es el **Coloso** (oleadas 26, 28 y 30), que al caer se parte en tres Pedazos; en la 30 viene con la escolta completa. Al ganar, la pantalla de victoria ofrece **«Epílogo»** (imagen, cuatro líneas, «Créditos» y «Niveles») en lugar de «Siguiente nivel», sin guardar nada nuevo. Ficha: `specs/01-spec.md` §7.17 (RF-480 a RF-484, RF-471 y RF-472); evidencia: `art/campaign-t234/README.md`.
 
 ### T232 · Nivel 14: Los poblados vacíos
 

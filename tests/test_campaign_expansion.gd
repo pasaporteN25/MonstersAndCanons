@@ -42,7 +42,7 @@ func test_winning_eight_unlocks_nine_and_each_next_one_until_the_last() -> void:
 	SaveManager.load_save()
 	assert_true(GameFlow.is_level_unlocked(8))
 	assert_true(SaveManager.is_unlocked(&"level_09"))
-	# T225 y T229 a T232: del 9 al 13 ya tienen siguiente; el último de la campaña (hoy el 14) no.
+	# T225 y T229 a T232: del 9 al 14 ya tienen siguiente; el último de la campaña (hoy el 15) no.
 	GameFlow.current_index = 8
 	assert_true(GameFlow.has_next_level())
 	GameFlow.level_won(15,1234)
@@ -69,7 +69,13 @@ func test_winning_eight_unlocks_nine_and_each_next_one_until_the_last() -> void:
 	GameFlow.level_won(15,1234)
 	SaveManager.load_save()
 	assert_true(SaveManager.is_unlocked(&"level_14"))
+	GameFlow.current_index = 13
+	assert_true(GameFlow.has_next_level())
+	GameFlow.level_won(15,1234)
+	SaveManager.load_save()
+	assert_true(SaveManager.is_unlocked(&"level_15"), "T234: ganar el 14 abre la central")
 	GameFlow.current_index = LevelFile.campaign_ids().size() - 1
+	assert_eq(GameFlow.level(GameFlow.current_index).id, &"level_15", "el último es el 15")
 	assert_false(GameFlow.has_next_level(), "el último de la campaña no tiene siguiente")
 
 func test_campaign_tail_and_collection_gate_for_the_new_levels() -> void:

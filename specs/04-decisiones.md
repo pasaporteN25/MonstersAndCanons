@@ -787,3 +787,14 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
   - **Una mezcla** (el informe ofrecía, por ejemplo, el Coloso con el aura de A): Lucas eligió el concepto C tal cual. Un aura sobre el Coloso repetiría la función del Guardián, que es justamente lo que se le criticaba a A; la armadura de aura de los demás la sigue poniendo el Guardián de la escolta.
   - **Más de 12 vidas, o menos:** con 20 o más, una sola fuga pierde; con 10 o menos, es el Soberano. Con 12 la decisión de dejarlo pasar o romperlo importa.
   - **Que el Pedazo no tenga ficha propia en la Wiki:** la Cría la tiene y el Pedazo es un enemigo distinto (sin armadura, rápido); sin ficha, quien lo ve por primera vez no sabría qué es.
+
+## D-093 · El tope de letras de la leyenda de un nivel sube de 10 a 12 (el nivel 15 necesita 12)
+- **Fecha:** 2026-10-09 · **Estado:** Aplicada en T234 · **Decidió:** Claude (Sonnet 5.5), dentro de lo que la spec de M50 ya dejaba previsto («si un nivel se pasa, el tope se sube en la tarea del nivel con una `D` nueva», riesgo 6); Lucas lo ve en el Resultado de T234.
+- **Qué:** `LevelFile.MAX_LEGEND` pasa de **10 a 12** letras (RF-262, RF-265, RF-399 y RF-434). Es el único cambio: los mapas que ya existen tienen 7 letras o menos, así que cargan igual; el editor avisa «La leyenda ya tiene 12 letras» en lugar de 10.
+- **Por qué:** la ficha del 15 (§7.17) pide **cuatro cuartos de la central** (`central_1` a `central_4`, una letra cada uno, P5 de M52), **de 2 a 4 piezas de la cadena de abastecimiento**, **una mina**, **un bosque explotable** (las dos fuentes comparten letra), **removibles**, **`campamento_vacio`** y **`roca_marcada`**. Con el mínimo de dos piezas de la cadena son 11 letras; con la tercera, que ayuda a que la cadena se lea de punta a punta del borde, son 12. Son 12 y no 11 para dejar el tope redondo.
+- **Alternativas descartadas:**
+  - **Sacar la `roca_marcada` del 15** para quedarse en 10: la ficha la pide («de nuevo, como en el 1») y es la única señal que cierra el círculo con el nivel 1.
+  - **Un solo cuarto con un dibujo de 128 × 128:** exige un objeto grande nuevo (P5 de M52 lo descartó: es un sistema nuevo).
+  - **Compartir letra entre las piezas de la cadena:** se perdería la diferencia entre depósito, poste y vagoneta, que es justamente lo que cuenta la cadena.
+  - **Subir el tope a un número mayor:** 12 alcanza y un mapa de la comunidad con más letras que eso ya es difícil de leer.
+- **Qué cambia:** `scripts/logic/level_file.gd` (la constante), los tests de la leyenda y del editor (que ahora leen la constante), `01-spec.md` (RF-265, RF-399, RF-434 y el riesgo 6 de M50), `CONTENIDO.md`. **Los mapas de la comunidad hechos con 11 o 12 letras se rechazan en una versión anterior del juego** (como pasó con la clave `"leyenda"` en RF-267).

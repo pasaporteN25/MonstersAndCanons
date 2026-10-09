@@ -5,8 +5,8 @@ extends GutTest
 const TEST_SAVE: String = "user://test_lore_save.json"
 const TEST_DIR: String = "user://test_lore_articles/"
 const WIKI_SCENE: PackedScene = preload("res://scenes/ui/wiki_screen.tscn")
-## La campaña terminada tiene 15 niveles; mientras T229 a T234 no los sumen a campaign.json, los artículos
-## de los niveles 11, 14 y 15 todavía no se ven. Este test los valida contra los 15 anunciados.
+## La campaña terminada tiene 15 niveles (T234 sumó el último): los artículos de los niveles 11, 14 y 15 ya se ven
+## cuando se gana su nivel. Este test valida los artículos contra esa lista fija, aunque la campaña cambie.
 const PLANNED_CAMPAIGN: Array = ["level_01", "level_02", "level_03", "level_04", "level_05", "level_06", "level_07", "level_08",
 	"level_09", "level_10", "level_11", "level_12", "level_13", "level_14", "level_15"]
 

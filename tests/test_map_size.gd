@@ -136,7 +136,7 @@ func test_the_official_levels_keep_their_size() -> void:
 		var size: Vector2i = Vector2i(24, 11) if str(level.id) in ["level_10", "level_11"] else Vector2i(20, 9)
 		if str(level.id) == "level_12":
 			size = Vector2i(26, 11)
-		if str(level.id) in ["level_13", "level_14"]:
+		if str(level.id) in ["level_13", "level_14", "level_15"]:  # T234: la central también es de 26 × 12
 			size = Vector2i(26, 12)
 		assert_eq(Vector2i(grid.width, grid.height), size, "%s no cambia de tamaño" % level.id)
 
