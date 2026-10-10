@@ -6,7 +6,7 @@ extends GutTest
 
 ## T253: la Cuadrilla usa arte provisional (la forma geométrica, RF-156) hasta que T257 la dibuje. Cuando tengan
 ## dibujo, sacarlos de esta lista para que el chequeo vuelva a valer para todos.
-const PROVISIONAL_ART: Array[StringName] = [&"ratero", &"cargador"]
+const PROVISIONAL_ART: Array[StringName] = []  # T259: la Cuadrilla ya tiene arte; la lista queda para el próximo arte pendiente
 
 const GAME_SCENE: PackedScene = preload("res://scenes/game/game.tscn")
 ## RF-170 y RF-297: la barra y las teclas 1–9 no admiten más.
