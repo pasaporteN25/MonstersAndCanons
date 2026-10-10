@@ -2,13 +2,21 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Asedio con los 15 mapas y una dificultad propia por mapa *(T258, 2026-10-10)*
+
+- **Asedio tiene ahora los 15 mapas de la campaña.** Cada mapa se abre al ganar el anterior, como siempre: ganar el 9 abre el 10, y así hasta **La Central**. Tienen progreso, estrellas y récords propios y no tocan la campaña.
+- **Cada mapa tiene su propia dureza.** Los monstruos de Asedio ya no tienen todos 115 % de vida: van de **101 % a 118 %** según el mapa (por ejemplo, los tres primeros 105 %, el 10 y el 14 118 %, y el 4 y el 15 siguen en 115 %). La campaña no cambió en nada.
+- **Todavía no es la dificultad final:** los porcentajes salen de un bot de pruebas, no de una persona. Se ajustan después de que Lucas juegue del 1 al 15.
+- **Para quien arma modos propios:** un `modo.json` puede traer la tabla `"vida_monstruos_por_mapa_%"` dentro de `reglas` (ver `CONTENIDO.md`). **Una versión anterior del juego no abre un modo que la traiga**: lo muestra con error.
+- El editor de mapas **conserva** la tabla al guardar un mapa en un modo, pero no la edita: se escribe a mano en el archivo.
+
 ## La Cuadrilla: una banda nueva en los niveles 7, 10, 13 y 14 *(T253, 2026-10-10)*
 
 - **Dos enemigos nuevos, el Ratero y el Cargador.** Son criaturas que **andan en banda**: el **Ratero** es chico y rapidísimo (14 de vida, velocidad 2,2, quita 1 vida) y el **Cargador** es grande y lento (110 de vida, armadura 1, quita 2 vidas). **Los dos roban oro** como el Ladrón, pero **cada uno por su cuenta**: el Ratero 2 de oro cada 2 segundos y el Cargador 4, sin bajar nunca de 10. Se barren con **torres de área** (Ratero) y con **daño sostenido** (Cargador); el Hielo los frena.
 - **Dónde salen.** Debutan en el **nivel 7** (oleada 8) y vuelven en el **10**, el **13** y el **14**, **cuatro veces en cada uno**, siempre en oleadas sin Guardián, Curandero, Chamán, Espejo ni Soberano. Los demás niveles no cambian, y el 15 tampoco.
 - **Wiki.** Los dos tienen su entrada en **Enemigos** (se abre la primera vez que los ves, con la línea «Robo» y los niveles donde aparecen) y hay un artículo nuevo en **Lore**, **«La Cuadrilla»**, que se abre al ganar el nivel 7; los artículos siguientes conservan su orden.
 - **Todavía sin dibujo propio:** por ahora se ven como una **forma de color** (un rombo ocre el Ratero y un hexágono más oscuro el Cargador) y en la Wiki aparecen sin ilustración. El arte llega después.
-- **Modo Asedio:** el mapa 7 hereda a la Cuadrilla, así que ahí se vuelve más difícil.
+- **Modo Asedio:** los mapas 7, 10, 13 y 14 heredan a la Cuadrilla, así que ahí se vuelven más difíciles.
 - Los números del Ladrón, del Soberano, del Coloso y de las torres **no cambian**.
 
 ## Versión 1.0: el juego pasa a llamarse «Monsters & Canons» *(T237, 2026-10-09)*

@@ -486,7 +486,7 @@ Una banda de criaturas independientes que roban en grupo, hecha **solo con datos
 - **Para ajustar un nivel con ellos** (RF-488): primero la cantidad o la oleada de la Cuadrilla, después sacar relleno de esa oleada y recién último el `aumento_vida`. El bot (`sin_recursos`, 5 semillas) tiene que ganar al menos 4 con 3 vidas o más, el 14 con 3 o más y el 15 con 2; la tabla del bot ahora trae también la columna **«oro robado»**.
 - **Arte provisional:** los dos **no tienen `texture` ni `walk_atlas`**, así que se dibujan como forma geométrica (Ratero: rombo ocre; Cargador: hexágono marrón, RF-156). La tarjeta y la barra de próxima oleada los muestran con esa forma; la Wiki los lista **sin ilustración** hasta que T257 los dibuje. Al agregarles dibujo hay que sacarlos de la lista `PROVISIONAL_ART` de `tests/test_content.gd`, `test_wiki.gd` y `test_bestiary.gd`.
 - **Wiki:** las dos entradas de Enemigos salen solas de los datos (línea «Robo» y «Dónde aparece: niveles 7, 10, 13 y 14»). El artículo de Lore **«La Cuadrilla»** es `data/wiki/lore/la_cuadrilla.json` (`orden` 6, se abre al ganar el nivel 7, texto de `specs/11-textos-lore.md` §4.11); los artículos de las ruinas en adelante pasaron a `orden` 7 a 11.
-- **Asedio:** el mapa 7 de Asedio hereda las oleadas, así que **hereda la Cuadrilla** (el bot lo pierde en la oleada 11 de 20). Es una decisión abierta de Lucas (P2 de M55); para quitársela alcanzaría con una copia del mapa 7 en `data/modos/asedio/` sin esos grupos.
+- **Asedio:** con los 15 mapas, los niveles 7, 10, 13 y 14 de Asedio heredan las oleadas y, con ellas, **la Cuadrilla**. Lucas decidió que el 7 la hereda; T258 bajó su porcentaje de vida a 101 %, el mínimo permitido, y aun así una semilla del bot termina con 1 vida: queda para que Lucas decida (ver el Resultado de T258 en `specs/03-tareas.md`). Para quitársela a un mapa alcanzaría con una copia en `data/modos/asedio/` sin esos grupos (y sacar su entrada de la tabla si ya no hace falta).
 
 ### T229 · Nivel 11 (Puesto seco)
 
@@ -515,7 +515,7 @@ Una banda de criaturas independientes que roban en grupo, hecha **solo con datos
 Un **modo** es un grupo de mapas con reglas propias. Aparece como una solapa en **Jugar**: los oficiales después de "Campaña" y los propios después de "Mapas de la comunidad". No hace falta programar: es una carpeta con un archivo `modo.json`.
 
 **Dónde va cada uno:**
-- **Oficiales:** `data/modos/<id>/modo.json`, en el repositorio. Hoy existe **Asedio** (`data/modos/asedio/`).
+- **Oficiales:** `data/modos/<id>/modo.json`, en el repositorio. Hoy existe **Asedio** (`data/modos/asedio/`, con los 15 mapas).
 - **Propios:** `user://modos/<id>/modo.json`; en Windows, `%APPDATA%\Godot\app_userdata\JuegoA\modos\`. El editor de mapas los crea solo con **"En un modo…"**.
 - El `<id>` es el nombre de la carpeta: minúsculas, números y `_`. Un modo propio no puede llamarse igual que uno oficial.
 
@@ -541,7 +541,9 @@ Un **modo** es un grupo de mapas con reglas propias. Aparece como una solapa en 
 | `descripcion` | No | Se ve al pasar el mouse por la solapa (hasta 200 letras). |
 | `mapas` | Sí | Los mapas en orden, sin `.json`. Cada uno se busca primero en la carpeta del modo y, si no está, entre los niveles oficiales (`data/levels/`). Así se pueden reusar mapas de la campaña sin copiarlos. Hasta 50; ninguno puede llamarse `modo`. |
 | `torres` | No | Las torres que se pueden construir (ids de `data/towers/`). Sin esta clave, las de siempre. |
-| `reglas` | No | `oro_inicial_%` (10 a 1000, sobre el oro del mapa), `vidas` (1 a 999, reemplaza las del mapa) y `vida_monstruos_%` (10 a 1000, sobre la vida de cada monstruo). Sin reglas, el mapa se juega tal cual. |
+| `reglas` | No | `oro_inicial_%` (10 a 1000, sobre el oro del mapa), `vidas` (1 a 999, reemplaza las del mapa), `vida_monstruos_%` (10 a 1000, sobre la vida de cada monstruo) y `vida_monstruos_por_mapa_%` (M56, T258: un objeto `{"level_01": 105}` con el porcentaje propio de cada mapa; ver abajo). Sin reglas, el mapa se juega tal cual. |
+
+**Vida de los monstruos por mapa** *(M56, RF-492, T258)*: dentro de `reglas`, `"vida_monstruos_por_mapa_%"` es un objeto con el id de un mapa y su porcentaje. Ejemplo: `"reglas": {"vida_monstruos_%": 115, "vida_monstruos_por_mapa_%": {"level_01": 105, "level_02": 108}}`. Cada mapa toma **su** porcentaje; el que no está en la tabla toma el `vida_monstruos_%` global y, si tampoco hay global, 100. Cada clave tiene que ser un mapa de `"mapas"` (un id que no está es un **error** que lista los del modo) y cada valor un **entero de 10 a 1000**. `{ }` vacío es válido y no cambia nada. No toca el oro, las vidas ni las torres. Una **versión anterior del juego rechaza** un modo con esta clave («clave desconocida»). El editor de mapas la **conserva** al guardar un mapa en el modo, pero no la edita: se escribe a mano.
 
 **Progreso y desbloqueo:**
 - Cada mapa de un modo guarda vidas, estrellas, puntaje y su top 5 aparte, con el id `modo_<modo>_<mapa>`.
@@ -556,4 +558,11 @@ Un **modo** es un grupo de mapas con reglas propias. Aparece como una solapa en 
 godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- mix modo=asedio level=2
 ```
 
-**Asedio:** usa los mapas 1 a 9 de la campaña con `vida_monstruos_%` 115 y el mismo oro. El valor salió del bot: con 150 % y 80 % de oro, el bot perdía en la oleada 4.
+Las opciones del bot para modos (T258): `mejoras=llenar` (cuando ya no queda casilla libre, mejora la torre de menor nivel y menor costo, una por frame, pagando como el jugador), `mejoras=temprana` (lo mismo desde las 3 torres) y `perfil=asedio` (los 15 mapas del modo con 5 semillas y la política fija de cada mapa de `tools/asedio_politicas.json`; imprime la tabla y el promedio de vidas por bloque y termina con código 1 si algún mapa no gana las 5 con 3 vidas o más o si los bloques suben). Cada partida imprime la variante que usó.
+
+```bash
+godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- x perfil=asedio
+godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- sin_recursos modo=asedio levels=1-15 seeds=5 mejoras=llenar
+```
+
+**Asedio:** usa **los 15 mapas** de la campaña con el mismo oro, `vida_monstruos_%` 115 como regla global y una tabla `vida_monstruos_por_mapa_%` de 13 excepciones (de 101 % a 118 %; el 4 y el 15 toman el 115 % global). No hay ninguna copia de mapa en `data/modos/asedio/`: para cambiar la dureza de un mapa se cambia **su número en la tabla** de `data/modos/asedio/modo.json`. Los valores son **iniciales**: salen del bot (T255, y T258 para los mapas con la Cuadrilla) y se ajustan cuando Lucas juegue. Con 150 % y 80 % de oro, el bot perdía en la oleada 4.

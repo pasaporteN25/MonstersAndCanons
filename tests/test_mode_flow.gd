@@ -69,6 +69,26 @@ func test_monsters_come_out_with_the_mode_health() -> void:
 		"RF-391: la vida del monstruo con el % del modo")
 
 
+func test_the_per_map_health_of_the_mode_reaches_the_spawner() -> void:
+	# RF-492: el mapa 4 toma el 115 % global y el 10 su 118 %: llegan al generador por el mismo camino.
+	for case: Array in [[3, 115], [9, 118], [5, 101]]:
+		GameFlow.current_mode_index = case[0]
+		var game: Game = _play()
+		assert_eq(game.spawner._health_percent, case[1], "mapa %d" % (case[0] + 1))
+		game.queue_free()
+		await get_tree().process_frame
+
+
+func test_winning_map_9_opens_map_10_of_asedio() -> void:
+	GameFlow.current_mode_index = 8
+	var game: Game = _play()
+	_win(game)
+	assert_true(SaveManager.is_completed(ModePacks.map_level(siege, 8).id))
+	assert_true(GameFlow.is_mode_level_unlocked(siege, 9), "el 10 se abre al ganar el 9")
+	assert_false(GameFlow.is_mode_level_unlocked(siege, 10), "el 11 sigue cerrado")
+	assert_true(GameFlow.has_next_level())
+
+
 func test_the_campaign_wins_over_the_mode_in_the_game() -> void:
 	GameFlow.current_index = 1
 	var game: Game = _play()
@@ -140,11 +160,11 @@ func test_mode_records_are_its_own() -> void:
 # --- T235: Asedio sin piezas y sin textos de lore (Q-31 y RF-468) ---
 
 func test_asedio_maps_are_campaign_maps_in_order() -> void:
-	# T235: el bot no gana los mapas 10 a 15 al 115 %, así que Asedio sigue con el 1 al 9 (decisión de Lucas pendiente).
+	# T258: Asedio tiene los 15 mapas de la campaña, cada uno con su porcentaje de vida (M56).
 	assert_eq(siege["errors"].size(), 0)
 	var maps: Array = siege["maps"]
-	assert_gt(maps.size(), 0)
-	assert_lte(maps.size(), GameFlow.level_count())
+	assert_eq(maps.size(), 15)
+	assert_eq(maps.size(), GameFlow.level_count())
 	for i: int in maps.size():
 		assert_not_null(maps[i]["level"], "el mapa %d se lee sin errores" % (i + 1))
 		assert_eq(maps[i]["level"].display_name, GameFlow.level(i).display_name)
@@ -167,8 +187,8 @@ func test_no_asedio_map_offers_pieces_or_texts() -> void:
 		await get_tree().process_frame
 
 
-func test_asedio_hides_the_texts_of_the_last_campaign_levels_if_they_are_ever_added() -> void:
-	# Si Lucas suma el 10 al 15 a Asedio, sus textos de lore tampoco se ven.
+func test_asedio_hides_the_texts_of_the_last_campaign_levels() -> void:
+	# T258: los mapas 10 a 15 ya están en Asedio y sus textos de lore tampoco se ven.
 	for index: int in range(9, GameFlow.level_count()):
 		var game: Game = GAME_SCENE.instantiate()
 		game.level_data = GameFlow.level(index).duplicate()

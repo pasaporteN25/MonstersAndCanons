@@ -159,7 +159,7 @@ En **Jugar → "Mapas de la comunidad"** aparecen todos los archivos `.json` que
 ## Modos de juego
 
 En **Jugar** hay una solapa por modo (M49):
-- **Modos oficiales**, después de "Campaña". Hoy está **Asedio**: los nueve mapas de la campaña con monstruos más duros (vida 115 %). Cada mapa se abre al ganar el anterior.
+- **Modos oficiales**, después de "Campaña". Hoy está **Asedio**: los 15 mapas de la campaña con monstruos más duros (vida de 101 % a 118 % según el mapa, 115 % de base). Cada mapa se abre al ganar el anterior.
 - **Modos propios**, después de "Mapas de la comunidad". Todos sus mapas están abiertos.
 
 Cada modo tiene su progreso, sus estrellas y su top 5. No toca la campaña, el Salón de la fama ni los avances.
@@ -291,9 +291,9 @@ Validación M45:954/954 pruebas y62/62 finales de contenido.24 corridas más rep
 
 ### T197 · Modos de juego
 
-- Solapa **Asedio** en Jugar: los mapas de la campaña con monstruos más duros y progreso propio.
+- Solapa **Asedio** en Jugar: los 15 mapas de la campaña con monstruos más duros (dureza propia por mapa, T258) y progreso propio.
 - Modos propios: desde el editor con "En un modo…", o con un `modo.json` (ver `CONTENIDO.md`).
-- El bot de balance acepta `modo=asedio`.
+- El bot de balance acepta `modo=asedio`, `mejoras=llenar|temprana` y `perfil=asedio` (T258).
 
 ### T225 · Nivel 10: La mina vieja
 

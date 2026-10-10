@@ -59,24 +59,44 @@ func test_siege_is_harder_than_the_campaign() -> void:
 	assert_lte(int(rules.get(ModePacks.RULE_GOLD, 100)), 100, "nunca más oro que en la campaña")
 
 
+## RF-494: los porcentajes de vida por mapa, escritos acá a propósito: si el modo.json y la spec dejan de decir
+## lo mismo, este test avisa. El 4 y el 15 no están en la tabla: toman el 115 % global.
+const SIEGE_HEALTH: Array[int] = [105, 105, 105, 115, 108, 101, 101, 101, 101, 118, 101, 110, 101, 118, 115]
+
+
 func test_siege_reads_with_its_rules() -> void:
 	var rules: Dictionary = siege_rules()
 	var mode: Dictionary = ModePacks.read(ModePacks.OFFICIAL_DIR, "asedio", true)
 	assert_eq(mode["errors"], PackedStringArray(), "Asedio no tiene errores")
 	assert_eq(mode["name"], "Asedio")
 	var maps: Array = mode["maps"]
-	# T225: la campaña ya tiene 10 niveles, pero Asedio sigue con los mapas 1 a 9 (consulta para Lucas).
-	assert_eq(maps.size(), 9, "los mapas 1 a 9 de la campaña")
+	assert_eq(maps.size(), 15, "T258: los 15 mapas de la campaña")
+	assert_eq(maps.size(), GameFlow.level_count(), "los mismos que la campaña")
 	for i: int in maps.size():
 		var level: LevelData = ModePacks.map_level(mode, i)
 		var campaign: LevelData = GameFlow.level(i)
 		assert_not_null(level, "mapa %d" % (i + 1))
+		assert_eq(maps[i]["file"], "level_%02d" % (i + 1), "en orden")
 		assert_eq(level.id, StringName("modo_asedio_" + String(campaign.id)), "RF-390: id propio")
-		assert_eq(level.waves.size(), campaign.waves.size(), "las mismas oleadas")
+		assert_eq(level.waves.size(), campaign.waves.size(), "mapa %d: las mismas oleadas" % (i + 1))
+		for w: int in level.waves.size():
+			assert_eq(level.waves[w].groups.size(), campaign.waves[w].groups.size(), "mapa %d, oleada %d: los mismos grupos" % [i + 1, w + 1])
 		assert_eq(level.starting_gold, Rules.percent_of(campaign.starting_gold, int(rules.get(ModePacks.RULE_GOLD, 100))))
-		assert_eq(level.enemy_health_percent, int(rules[ModePacks.RULE_HEALTH]), "más vida")
+		assert_eq(level.starting_gold, campaign.starting_gold, "el oro es el de la campaña")
+		assert_eq(level.enemy_health_percent, SIEGE_HEALTH[i], "RF-494: la vida del mapa %d" % (i + 1))
+		assert_gt(level.enemy_health_percent, 100, "mapa %d: siempre más duro que la campaña" % (i + 1))
 		assert_eq(level.starting_lives, campaign.starting_lives, "las vidas no cambian")
 		assert_eq(level.extra_towers, campaign.extra_towers, "las torres reservadas del nivel siguen igual")
+	assert_eq(int(rules[ModePacks.RULE_HEALTH]), 115, "el global sigue en 115 %")
+	var table: Dictionary = rules[ModePacks.RULE_HEALTH_BY_MAP]
+	assert_eq(table.size(), 13, "13 excepciones: el 4 y el 15 toman el global")
+	assert_false(table.has("level_04"))
+	assert_false(table.has("level_15"))
+
+
+func test_siege_has_no_copy_of_a_map() -> void:
+	var files: PackedStringArray = DirAccess.get_files_at(ModePacks.OFFICIAL_DIR + "asedio/")
+	assert_eq(files, PackedStringArray([ModePacks.FILE_NAME]), "RF-493: ningún mapa copiado")
 
 
 func test_the_campaign_is_not_touched_by_the_mode() -> void:
@@ -175,6 +195,101 @@ func test_rules_change_gold_lives_and_health() -> void:
 	assert_eq(level.starting_gold, Rules.percent_of(GameFlow.level(0).starting_gold, 50))
 	assert_eq(level.starting_lives, 5)
 	assert_eq(level.enemy_health_percent, 200)
+
+
+# --- Porcentaje de vida por mapa (M56, RF-492) ---
+
+func _health_of(mode: Dictionary, index: int) -> int:
+	return ModePacks.map_level(mode, index).enemy_health_percent
+
+
+func test_the_per_map_table_wins_over_the_global_percent() -> void:
+	_mode(USER, "tabla", {"version": 1, "nombre": "Tabla", "mapas": ["level_01", "level_02", "level_03"],
+		"reglas": {"vida_monstruos_%": 115, "vida_monstruos_por_mapa_%": {"level_02": 105}}})
+	var mode: Dictionary = ModePacks.read(USER, "tabla", false)
+	assert_eq(mode["errors"], PackedStringArray())
+	assert_eq(_health_of(mode, 0), 115, "sin entrada: el global")
+	assert_eq(_health_of(mode, 1), 105, "el de la tabla")
+	assert_eq(_health_of(mode, 2), 115)
+
+
+func test_the_per_map_table_without_a_global_percent_leaves_the_rest_at_100() -> void:
+	_mode(USER, "tabla", {"version": 1, "nombre": "Tabla", "mapas": ["level_01", "level_02"],
+		"reglas": {"vida_monstruos_por_mapa_%": {"level_02": 150}}})
+	var mode: Dictionary = ModePacks.read(USER, "tabla", false)
+	assert_eq(_health_of(mode, 0), 100)
+	assert_eq(_health_of(mode, 1), 150)
+
+
+func test_each_wrong_per_map_table_says_its_reason() -> void:
+	var cases: Dictionary = {
+		'{"level_09": 105}': "level_09",
+		'{"level_01": 105.5}': "level_01",
+		'{"level_01": "105"}': "level_01",
+		'{"level_01": 5}': "entre 10 y 1000",
+		'{"level_01": 1001}': "entre 10 y 1000",
+		'[105, 110]': "entre { }",
+		'"105"': "entre { }",
+	}
+	_mode(USER, "sano", {"version": 1, "nombre": "Sano", "mapas": ["level_01"]})
+	for table: String in cases:
+		_remove(USER + "malo")
+		_write(ModePacks.dir_of(USER, "malo") + ModePacks.FILE_NAME,
+			'{"version": 1, "nombre": "A", "mapas": ["level_01", "level_02"], "reglas": {"vida_monstruos_por_mapa_%": ' + table + '}}')
+		var mode: Dictionary = ModePacks.read(USER, "malo", false)
+		var errors: PackedStringArray = mode["errors"]
+		assert_false(errors.is_empty(), table)
+		assert_true(" ".join(errors).contains(cases[table]), "%s → %s" % [table, errors])
+		assert_true(" ".join(errors).contains("vida_monstruos_por_mapa_%"), "nombra la clave: %s" % errors)
+		assert_null(ModePacks.map_level(mode, 0), "el modo con error no se juega")
+		assert_eq(ModePacks.read(USER, "sano", false)["errors"], PackedStringArray(), "los otros modos siguen igual")
+
+
+func test_an_unknown_map_in_the_table_lists_the_maps_of_the_mode() -> void:
+	_mode(USER, "malo", {"version": 1, "nombre": "A", "mapas": ["level_01", "level_02"],
+		"reglas": {"vida_monstruos_por_mapa_%": {"level_07": 105}}})
+	var errors: PackedStringArray = ModePacks.read(USER, "malo", false)["errors"]
+	assert_true(" ".join(errors).contains("level_01, level_02"), str(errors))
+
+
+func test_an_empty_per_map_table_is_valid_and_changes_nothing() -> void:
+	_mode(USER, "vacia", {"version": 1, "nombre": "Vacía", "mapas": ["level_01"],
+		"reglas": {"vida_monstruos_%": 130, "vida_monstruos_por_mapa_%": {}}})
+	var mode: Dictionary = ModePacks.read(USER, "vacia", false)
+	assert_eq(mode["errors"], PackedStringArray())
+	assert_eq(_health_of(mode, 0), 130)
+
+
+func test_the_per_map_table_does_not_touch_gold_or_lives() -> void:
+	_mode(USER, "tabla", {"version": 1, "nombre": "Tabla", "mapas": ["level_01"],
+		"reglas": {"oro_inicial_%": 100, "vidas": 7, "vida_monstruos_por_mapa_%": {"level_01": 140}}})
+	var level: LevelData = ModePacks.map_level(ModePacks.read(USER, "tabla", false), 0)
+	assert_eq(level.enemy_health_percent, 140)
+	assert_eq(level.starting_gold, GameFlow.level(0).starting_gold)
+	assert_eq(level.starting_lives, 7)
+
+
+func test_a_mode_without_the_table_loads_as_before() -> void:
+	_mode(USER, "viejo", {"version": 1, "nombre": "Viejo", "mapas": ["level_01", "level_02"],
+		"reglas": {"vida_monstruos_%": 120}})
+	var mode: Dictionary = ModePacks.read(USER, "viejo", false)
+	assert_eq(mode["errors"], PackedStringArray())
+	assert_eq(_health_of(mode, 0), 120)
+	assert_eq(_health_of(mode, 1), 120)
+
+
+func test_adding_a_map_keeps_the_per_map_table_with_whole_numbers() -> void:
+	_mode(USER, "tabla", {"version": 1, "nombre": "Tabla", "mapas": ["level_01"],
+		"reglas": {"vida_monstruos_%": 115, "vida_monstruos_por_mapa_%": {"level_01": 105}}})
+	assert_eq(ModePacks.add_map(ModePacks.dir_of(USER, "tabla"), "level_02"), "")
+	var text: String = FileAccess.get_file_as_string(ModePacks.dir_of(USER, "tabla") + ModePacks.FILE_NAME)
+	assert_true(text.contains("105,") or text.contains("105\n"), "sigue siendo un entero, no 105.0: " + text)
+	assert_false(text.contains("105.0"))
+	var mode: Dictionary = ModePacks.read(USER, "tabla", false)
+	assert_eq(mode["errors"], PackedStringArray())
+	assert_eq((mode["maps"] as Array).size(), 2)
+	assert_eq(_health_of(mode, 0), 105, "la tabla se conservó")
+	assert_eq(_health_of(mode, 1), 115)
 
 
 func test_without_rules_the_map_stays_as_it_is() -> void:
