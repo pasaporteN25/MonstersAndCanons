@@ -19,7 +19,9 @@
 # enemigos y torres. Termina con un resumen en una línea.
 extends Node
 
-const GAME_SCENE: PackedScene = preload("res://scenes/game/game.tscn")
+## Se carga en tiempo de ejecución, no con preload: la revisión de sintaxis de CI (--check-only -s) compila este script
+## sin los autoloads, y game.tscn arrastra a todos.
+const GAME_SCENE_PATH: String = "res://scenes/game/game.tscn"
 ## Mismo orden de compra que el bot en mapas sin Ametralladora; la Disruptora al final para que haya pulsos.
 const ORDER: Array[String] = ["cannon", "frost", "cannon", "sniper", "cannon", "multi", "sniper", "tesla", "cannon",
 	"burst", "disruptor", "sniper", "fire", "cannon", "frost", "disruptor", "tesla", "sniper", "burst", "multi", "mortar"]
@@ -33,7 +35,8 @@ var off: String = ""
 var shot_path: String = ""
 ## Para diagnosticar: corta la medición de cada oleada a los N segundos (0 = la oleada entera).
 var max_seconds: float = 0.0
-var game: Game
+## Sin tipo a propósito (Game e InfrastructureController dependen de los autoloads, ver GAME_SCENE_PATH).
+var game
 var _order_pos: int = 0
 var _bad_cells: Dictionary = {}
 var _summary: Array[String] = []
@@ -57,24 +60,28 @@ func _ready() -> void:
 	if not vsync:
 		DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
 		Engine.max_fps = 0
-	DevMode.enabled = false
-	SaveManager.save_path = "user://perf_levels_%d.json" % level_number
-	if FileAccess.file_exists(SaveManager.save_path):
-		DirAccess.remove_absolute(SaveManager.save_path)
-	SaveManager.load_save()
+	# Los autoloads se piden por ruta: este script se compila antes que ellos en la revisión de CI.
+	var dev_mode = get_node("/root/DevMode")
+	var save_manager = get_node("/root/SaveManager")
+	var game_flow = get_node("/root/GameFlow")
+	dev_mode.enabled = false
+	save_manager.save_path = "user://perf_levels_%d.json" % level_number
+	if FileAccess.file_exists(save_manager.save_path):
+		DirAccess.remove_absolute(save_manager.save_path)
+	save_manager.load_save()
 	# Con las dos colecciones completas, así la Disruptora y el resto están en la barra.
 	for source: String in ["level_08", "level_09", "level_10"]:
-		SaveManager.collect_source(&"disruptor", StringName(source))
-	GameFlow.current_index = level_number - 1
-	GameFlow.current_community = null
-	GameFlow.intro_pending = false
-	GameFlow.forced_seed = 3
-	game = GAME_SCENE.instantiate()
+		save_manager.collect_source(&"disruptor", StringName(source))
+	game_flow.current_index = level_number - 1
+	game_flow.current_community = null
+	game_flow.intro_pending = false
+	game_flow.forced_seed = 3
+	game = (load(GAME_SCENE_PATH) as PackedScene).instantiate()
 	add_child(game)
 	await _frames(4)
 	await _run()
-	if FileAccess.file_exists(SaveManager.save_path):
-		DirAccess.remove_absolute(SaveManager.save_path)
+	if FileAccess.file_exists(save_manager.save_path):
+		DirAccess.remove_absolute(save_manager.save_path)
 	get_tree().quit()
 
 
@@ -95,7 +102,7 @@ func _run() -> void:
 	game.session.infinite_lives = true
 	game.session.earn(20000)
 	await _buy()
-	var infra: InfrastructureController = game.infrastructure
+	var infra = game.infrastructure
 	infra.buy_machine()
 	for cell: Vector2i in infra.field.extraction_cells():
 		infra.enable(cell)
@@ -115,7 +122,7 @@ func _run() -> void:
 
 func _wave() -> void:
 	await _buy()
-	var infra: InfrastructureController = game.infrastructure
+	var infra = game.infrastructure
 	game.start_next_wave()
 	if off == "towers":
 		for tower: Node in game.tower_container.get_children():
@@ -136,7 +143,7 @@ func _wave() -> void:
 		var now: int = Time.get_ticks_usec()
 		deltas.append((now - last) / 1000.0)
 		last = now
-		max_enemies = maxi(max_enemies, get_tree().get_nodes_in_group(Enemy.GROUP).size())
+		max_enemies = maxi(max_enemies, get_tree().get_nodes_in_group("enemies").size())
 		proc_sum += Performance.get_monitor(Performance.TIME_PROCESS)
 		phys_sum += Performance.get_monitor(Performance.TIME_PHYSICS_PROCESS)
 		draws_sum += Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME)
