@@ -2552,7 +2552,7 @@ Corta, en orden de importancia. Cada una trae mi recomendación; si no contestá
 
 ### M55 · La Cuadrilla: una banda de criaturas independientes (Lucas, 2026-10-10; T252)
 
-**Estado: concepto aprobado por Lucas (opción A del informe de T251); niveles, números y textos propuestos por Claude y medidos con el bot, a la espera del OK de Lucas (P1 a P6, al final). Sin datos ni código: lo que sigue es spec.** Lo hace **T253** (datos, oleadas, reajuste y tests) y el arte, **T254**. Respaldo: `specs/tareas/informes/T252-medicion-cuadrilla.md` (método, tablas por semilla y apéndice para repetirlo) y D-094.
+**Estado: concepto aprobado por Lucas (opción A del informe de T251); niveles, números y textos propuestos por Claude y medidos con el bot, a la espera del OK de Lucas (P1 a P6, al final). Sin datos ni código: lo que sigue es spec.** Lo hace **T253** (datos, oleadas, reajuste y tests) y el arte, **T257**. Respaldo: `specs/tareas/informes/T252-medicion-cuadrilla.md` (método, tablas por semilla y apéndice para repetirlo) y D-094.
 
 **Qué pidió Lucas.** *(2026-10-10, en el encargo de T252, después de leer el informe de T251, `specs/tareas/informes/T251-conceptos-nuevos-enemigos.md`)* Eligió el concepto **A · La Cuadrilla**: una banda de criaturas **independientes**, no Moradores, **sin símbolo A y sin jefe**, formada por los **Rateros** (chicos y rápidos) y el **Cargador** (grande y lento, lleva la bolsa). **Entra en la V1** y queda anotada en la biblia (`10-universo.md`) como **semilla para la v2 en 3D**, sin preparar nada de 3D. Pidió además que se midiera con el bot **en qué niveles del 6 al 14** entra sin romper la regla de oro (RF-432).
 
@@ -2618,10 +2618,10 @@ Corta, en orden de importancia. Cada una trae mi recomendación; si no contestá
   - **Wiki → Lore: un artículo nuevo, «La Cuadrilla»** (`data/wiki/lore/la_cuadrilla.json`, **el artículo 11**), que **se abre al ganar el nivel 7** (RF-469 y RF-470). Texto **propuesto** en `specs/11-textos-lore.md` §4.11 (Lucas lo aprueba en P3). **No se agrega un párrafo al artículo 5** porque ese artículo se abre al ganar el 6, y **un artículo nunca nombra algo que debuta después de su nivel**; el artículo 5 **no cambia** y sigue diciendo que el Ladrón va solo. El campo `orden` de la Cuadrilla va entre el del artículo 5 y el del 6, así que los artículos 6 a 10 pasan a `orden` 7 a 11 (solo cambia ese campo).
   - **Los textos de nivel (RF-464)** del 7, el 10, el 13 y el 14 **no cambian**: ninguno nombra a la Cuadrilla, y la biblia pide mostrar antes que explicar.
 
-- **RF-490** **Aspecto y reglas del lore** *(lo dibuja T254, con concepto aprobado por Lucas)*:
+- **RF-490** **Aspecto y reglas del lore** *(lo dibuja T257, con concepto aprobado por Lucas)*:
   - **Capa de la biblia (10 §4.2):** criaturas **independientes**. **No lleva el símbolo A ni ninguna marca de las comunidades**: extiende la regla del Ladrón. No hay jefe, ni mando; no obedecen a nadie (07 §2.3).
   - **Se distinguen del Ladrón a 34 px por tamaño y silueta:** el **Ratero** es más chico que el Ladrón, **sin capa**, bajo y alargado, y el **Cargador** es ancho, con la **bolsa más grande que el cuerpo**. Ninguno con capucha: los «dos encapuchados» (Ladrón y Chamán) siguen siendo dos.
-  - **Colores:** distintos del gris violeta del Ladrón y de los tonos de cada enemigo de la guía de arte; un color por especie, y entre ellos **la misma familia** (se leen como una banda). Lo fija el concepto de T254.
+  - **Colores:** distintos del gris violeta del Ladrón y de los tonos de cada enemigo de la guía de arte; un color por especie, y entre ellos **la misma familia** (se leen como una banda). Lo fija el concepto de T257.
   - **Un ciclo de caminata por enemigo** como los demás (atlas de 16 poses, M31). **Mientras no haya arte aprobado**, T253 usa arte provisional hecho en código o el dibujo de reemplazo (RF-156), como hizo T234 con el Coloso.
   - **Tono (10 §8):** nada de caricatura. Los colonos los llaman «cuadrilla» **por cómo llegan** (juntos, como una cuadrilla de obra), no porque se sepa algo de ellos. Lo que se muestra son **consecuencias** (oro que falta), no sentencias.
   - **Semilla para la v2 en 3D** *(Lucas, 2026-10-10)*: la biblia (`10-universo.md` §9) anota **La Cuadrilla** como semilla. **No está prometida y no se prepara nada de 3D en la V1:** ni modelos, ni campos, ni nombres reservados.
@@ -2642,12 +2642,12 @@ Corta, en orden de importancia. Cada una trae mi recomendación; si no contestá
 
 #### Lo que M55 no incluye
 
-- **Ningún dato ni código.** Los `.tres`, las oleadas, los tests y el arte son T253 y T254.
+- **Ningún dato ni código.** Los `.tres`, las oleadas, los tests y el arte son T253 y T257.
 - **Un jefe, un mando o un aura de la Cuadrilla**, ni «velocidad compartida» (piden código nuevo, T251 §4.4).
 - **La Cuadrilla en el 15, en Asedio 10 a 15 o como arreglo de Asedio:** T251 mostró que ningún grupo nuevo hace ganable Asedio al 115 %. La decisión de qué hacer con Asedio 10 a 15 sigue abierta en T235.
 - **Los Correos (B) y las Luminarias (C)** del informe de T251: quedan como ideas, sin fecha.
 - **Una tribu de ladrones de los Moradores:** descartada (D-094).
-- **Arte final:** el arte lo hace T254 con el OK de Lucas.
+- **Arte final:** el arte lo hace T257 con el OK de Lucas.
 - **La Cuadrilla en 3D:** solo una semilla de la biblia.
 
 #### Preguntas para Lucas

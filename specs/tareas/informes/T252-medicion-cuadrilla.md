@@ -139,7 +139,7 @@ Asedio hoy tiene los mapas 1 a 9 (`data/modos/asedio/modo.json`, 115 % de vida, 
 **Se comprobó:**
 - Que `file=` reproduce la campaña: la base del 11 con la semilla 1 da V6 y 2222 de oro sobrante, igual que `level=11`.
 - Las 135 + 16 + 12 partidas, **sin `SCRIPT ERROR`** en ningún log.
-- Los números libres RF-485 y D-094, M55 y T252 a T254 con `git grep` en todas las ramas locales y de `origin`.
+- Los números libres RF-485 y D-094, M55 y T252 a T257 con `git grep` en todas las ramas locales y de `origin`.
 
 **No se comprobó:**
 1. **Una sola intensidad por nivel** (cuatro apariciones de 6+1 a 10+2, en oleadas elegidas con una regla fija). Con otra intensidad o en otras oleadas el resultado puede cambiar: T253 las ajusta. **Los números de vida, velocidad y robo son los del informe de T251, sin tocar.**

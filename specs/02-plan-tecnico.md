@@ -1123,7 +1123,7 @@ Se programa en **T248**, después del OK de Lucas a la spec (M53) y a sus pregun
 
 ### M55 / T252 · La Cuadrilla: una banda de criaturas independientes (RF-485 a RF-491, D-094)
 
-**Estado: especificada en T252 (2026-10-10), sin datos ni código.** Los datos, las oleadas, el reajuste con el bot, el artículo y los tests son **T253**; el arte, **T254**. *(Concepto aprobado por Lucas el 2026-10-10; los niveles, los números y los textos esperan su OK, P1 a P6 de M55.)* Es **solo datos**: no cambia ninguna regla de combate, ningún campo de `EnemyData` ni ninguna pantalla. Todos los números son los del informe de T251, **sin tocar**, y la medición que decide los niveles está en `specs/tareas/informes/T252-medicion-cuadrilla.md`.
+**Estado: especificada en T252 (2026-10-10), sin datos ni código.** Los datos, las oleadas, el reajuste con el bot, el artículo y los tests son **T253**; el arte, **T257**. *(Concepto aprobado por Lucas el 2026-10-10; los niveles, los números y los textos esperan su OK, P1 a P6 de M55.)* Es **solo datos**: no cambia ninguna regla de combate, ningún campo de `EnemyData` ni ninguna pantalla. Todos los números son los del informe de T251, **sin tocar**, y la medición que decide los niveles está en `specs/tareas/informes/T252-medicion-cuadrilla.md`.
 
 #### Qué hay hoy (leído en T252)
 
@@ -1138,7 +1138,7 @@ Se programa en **T248**, después del OK de Lucas a la spec (M53) y a sus pregun
 
 #### Archivos
 
-**Datos** (los hace T253; el arte, T254):
+**Datos** (los hace T253; el arte, T257):
 
 - `data/enemies/ratero.tres` y `data/enemies/cargador.tres` (`id` igual al archivo), con los valores de RF-485. Se copian de `thief.tres` (el robo) y de `fast.tres` / `tank.tres` (el formato):
 
@@ -1154,12 +1154,12 @@ Se programa en **T248**, después del OK de Lucas a la spec (M53) y a sus pregun
   | `size_tiles` | 0.20 | 0.33 |
   | `gold_drain_amount` / `gold_drain_interval` / `gold_drain_floor` | 2 / 2.0 / 10 | 4 / 2.0 / 10 |
   | `optional_wave_limit` | 0 | 0 |
-  | `color` | un tono de una familia propia, distinto del gris violeta del Ladrón (lo fija T254; provisional en T253) | de la misma familia |
-  | `texture`, `walk_atlas`, `walk_stride_tiles`, `walk_art_scale`, `visual_scale` | los de T254; **mientras no haya arte, vacíos** (forma geométrica, RF-156) | ídem |
+  | `color` | un tono de una familia propia, distinto del gris violeta del Ladrón (lo fija T257; provisional en T253) | de la misma familia |
+  | `texture`, `walk_atlas`, `walk_stride_tiles`, `walk_art_scale`, `visual_scale` | los de T257; **mientras no haya arte, vacíos** (forma geométrica, RF-156) | ídem |
 
 - `data/levels/level_07.json`, `level_10.json`, `level_13.json` y `level_14.json` (T253): **cuatro apariciones** por nivel, como en la tabla de RF-487 (un grupo `ratero` con `"cada": 0.4` y uno `cargador` con `"cada": 3.0`, sin `"desde"` ni `"probabilidad"`, en la entrada `"A"`). El `.json` **nombra** a los dos enemigos.
 - `data/wiki/lore/la_cuadrilla.json` (T253, **solo si Lucas aprueba el texto**): `"desbloqueo": "level_07"`, el texto de `specs/11-textos-lore.md` §4.11 y un `orden` entre el del artículo 5 y el del 6; los artículos 6 a 10 pasan a `orden` 7 a 11.
-- `assets/sprites/enemies/rendered/` (T254): `ratero.png`, `cargador.png` y los atlas `ratero_walk.png` y `cargador_walk.png` (256 × 256 y 1024 × 1024, 4 × 4 poses, como el resto, M31).
+- `assets/sprites/enemies/rendered/` (T257): `ratero.png`, `cargador.png` y los atlas `ratero_walk.png` y `cargador_walk.png` (256 × 256 y 1024 × 1024, 4 × 4 poses, como el resto, M31).
 
 **Código: ninguno.** Opcional, de **herramienta** y no del juego: una columna de **oro robado** en `tools/balance_sim.gd` (conectar `session.gold_stolen`, está en el apéndice del informe). Las listas de pruebas que nombran los enemigos uno por uno:
 
@@ -1175,7 +1175,7 @@ Se programa en **T248**, después del OK de Lucas a la spec (M53) y a sus pregun
 3. **T253 · las oleadas** del 7, el 10, el 13 y el 14, y `check_level`.
 4. **T253 · el bot:** 5 semillas, `sin_recursos` y las otras cuatro estrategias; el reajuste (RF-488, punto 5) y **Asedio 7** (P2).
 5. **T253 · el artículo y los tests** (§ «Qué hay que hacer» de su ficha), y los documentos.
-6. **T254 · el arte** (concepto con OK de Lucas, atlas, hoja de contacto); **no bloquea** a T253.
+6. **T257 · el arte** (concepto con OK de Lucas, atlas, hoja de contacto); **no bloquea** a T253.
 
 #### Pruebas que T253 tiene que escribir
 
