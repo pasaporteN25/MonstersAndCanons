@@ -1120,3 +1120,78 @@ Se programa en **T248**, después del OK de Lucas a la spec (M53) y a sus pregun
 #### Lo que M54 no toca
 
 `EnemyData`, `WaveSpawner`, `Rules`, la Wiki (`wiki.gd`), el guardado, el Soberano (`boss.tres`) y el resto de los enemigos. Tampoco las escoltas de los niveles 13 y 14. El pedido es de **dos archivos de datos**, su dibujo y las oleadas finales del 15.
+
+### M55 / T252 · La Cuadrilla: una banda de criaturas independientes (RF-485 a RF-491, D-094)
+
+**Estado: especificada en T252 (2026-10-10), sin datos ni código.** Los datos, las oleadas, el reajuste con el bot, el artículo y los tests son **T253**; el arte, **T257**. *(Concepto aprobado por Lucas el 2026-10-10; los niveles, los números y los textos esperan su OK, P1 a P6 de M55.)* Es **solo datos**: no cambia ninguna regla de combate, ningún campo de `EnemyData` ni ninguna pantalla. Todos los números son los del informe de T251, **sin tocar**, y la medición que decide los niveles está en `specs/tareas/informes/T252-medicion-cuadrilla.md`.
+
+#### Qué hay hoy (leído en T252)
+
+- `scripts/data/enemy_data.gd` ya trae todo: `gold_drain_amount`, `gold_drain_interval`, `gold_drain_floor` y `optional_wave_limit` (el robo de M39), más `max_health`, `speed_tiles`, `armor`, `reward`, `lives_damage`, `size_tiles`, `color`, `texture` y `walk_atlas`. **No se agrega ningún campo.**
+- `scenes/enemies/enemy.gd` (`_update_gold_drain`): **cada enemigo lleva su propio reloj** (`_drain_clock`) y emite `gold_drain` cada `gold_drain_interval` solo mientras **sigue en el camino**; ocho Rateros roban cada uno por su cuenta, no hay un reloj de grupo.
+- `scenes/game/level_session.gd` (`steal`): descuenta `min(monto, oro − piso)`, sin crear ni quitar monedas por debajo del piso, y emite `gold_stolen`. `game.gd` conecta la señal y muestra el aviso ámbar (RF-365).
+- `scenes/game/wave_spawner.gd` (`start_wave`): el «máximo uno por oleada» (`optional_wave_limit`) **solo** se aplica a grupos con `probability < 1`. Un grupo sin `"probabilidad"` sale **siempre y entero**.
+- `scripts/logic/wiki.gd`: la entrada de un enemigo ya escribe la línea **«Robo»** (`:106`) y «Dónde aparece» leyendo la campaña; **no hay entrada escrita a mano**. El bestiario (RF-238) lo abre con `seen_enemies`.
+- `scenes/game/hud.gd` (`show_enemy_intro`): las tarjetas de presentación **se encolan** (`_intro_queue`) y salen una tras otra; con dos enemigos nuevos en la misma oleada salen **dos**.
+- `scripts/logic/rules.gd` (`is_dangerous`): corona con `lives_damage >= 5`; ni el Ratero (1) ni el Cargador (2) la llevan.
+- `tests/test_content.gd` revisa **todos** los enemigos de `data/enemies/` (frase no vacía, `size_tiles` entre 0.05 y 0.5, cadena de crías).
+
+#### Archivos
+
+**Datos** (los hace T253; el arte, T257):
+
+- `data/enemies/ratero.tres` y `data/enemies/cargador.tres` (`id` igual al archivo), con los valores de RF-485. Se copian de `thief.tres` (el robo) y de `fast.tres` / `tank.tres` (el formato):
+
+  | Campo | `ratero` | `cargador` |
+  |---|---|---|
+  | `display_name` | `"Ratero"` | `"Cargador"` |
+  | `description` | la frase de RF-489 | la frase de RF-489 |
+  | `max_health` | 14 | 110 |
+  | `speed_tiles` | 2.2 | 0.9 |
+  | `armor` | 0 | 1 |
+  | `reward` | 5 | 30 |
+  | `lives_damage` | 1 | 2 |
+  | `size_tiles` | 0.20 | 0.33 |
+  | `gold_drain_amount` / `gold_drain_interval` / `gold_drain_floor` | 2 / 2.0 / 10 | 4 / 2.0 / 10 |
+  | `optional_wave_limit` | 0 | 0 |
+  | `color` | un tono de una familia propia, distinto del gris violeta del Ladrón (lo fija T257; provisional en T253) | de la misma familia |
+  | `texture`, `walk_atlas`, `walk_stride_tiles`, `walk_art_scale`, `visual_scale` | los de T257; **mientras no haya arte, vacíos** (forma geométrica, RF-156) | ídem |
+
+- `data/levels/level_07.json`, `level_10.json`, `level_13.json` y `level_14.json` (T253): **cuatro apariciones** por nivel, como en la tabla de RF-487 (un grupo `ratero` con `"cada": 0.4` y uno `cargador` con `"cada": 3.0`, sin `"desde"` ni `"probabilidad"`, en la entrada `"A"`). El `.json` **nombra** a los dos enemigos.
+- `data/wiki/lore/la_cuadrilla.json` (T253, **solo si Lucas aprueba el texto**): `"desbloqueo": "level_07"`, el texto de `specs/11-textos-lore.md` §4.11 y un `orden` entre el del artículo 5 y el del 6; los artículos 6 a 10 pasan a `orden` 7 a 11.
+- `assets/sprites/enemies/rendered/` (T257): `ratero.png`, `cargador.png` y los atlas `ratero_walk.png` y `cargador_walk.png` (256 × 256 y 1024 × 1024, 4 × 4 poses, como el resto, M31).
+
+**Código: ninguno.** Opcional, de **herramienta** y no del juego: una columna de **oro robado** en `tools/balance_sim.gd` (conectar `session.gold_stolen`, está en el apéndice del informe). Las listas de pruebas que nombran los enemigos uno por uno:
+
+- `tests/test_enemy_visual.gd` (listas con los `id` de hoy): sumar `ratero` y `cargador` a las que correspondan **solo cuando haya atlas**, con el mismo recaudo que el Coloso (`ResourceLoader.exists`).
+- `tests/test_lore_wiki.gd` (`:68`: «los 10 artículos» pasa a 11; `:180`: la lista de artículos abiertos con el 7 ganado).
+- Cualquier test que cuente los archivos de `data/enemies/`: buscar con `git grep "colossus_shard\|spiderling" tests/` antes de cerrar T253.
+- `tools/balance_sim.gd` lee los grupos del nivel: **no hace falta tocar** su lista de enemigos (T253 lo confirma jugando el 7).
+
+#### Orden de trabajo
+
+1. **T253 · compuerta** (Lucas contestó P1, P2, P4 y P5).
+2. **T253 · los dos `.tres`** y la prueba de que cargan (`test_content`), con arte provisional.
+3. **T253 · las oleadas** del 7, el 10, el 13 y el 14, y `check_level`.
+4. **T253 · el bot:** 5 semillas, `sin_recursos` y las otras cuatro estrategias; el reajuste (RF-488, punto 5) y **Asedio 7** (P2).
+5. **T253 · el artículo y los tests** (§ «Qué hay que hacer» de su ficha), y los documentos.
+6. **T257 · el arte** (concepto con OK de Lucas, atlas, hoja de contacto); **no bloquea** a T253.
+
+#### Pruebas que T253 tiene que escribir
+
+Las diez de la ficha (`specs/tareas/T253-cuadrilla-datos-y-reajuste.md`): datos; sin el tope del Ladrón; robo con piso y reloj propio; fuga del Ratero y del Cargador; **solo** los niveles 7, 10, 13 y 14; **sin auras ni jefe** en esas oleadas; la Wiki Enemigos (cerrados con un guardado nuevo); el artículo de Lore que se abre al ganar el 7 y deja intacto al 5; y que no hay ningún campo nuevo de `EnemyData`.
+
+#### Riesgos y cosas que no se saben
+
+- **Una sola intensidad por nivel.** Las cuatro apariciones (6 + 1, 8 + 1, 8 + 1, 10 + 2) y las oleadas salen de una regla fija, no de un diseño por nivel. T253 puede encontrar que un nivel pide menos.
+- **El robo depende del oro que tenga el jugador.** El bot nunca mejora torres y deja miles de oro sin gastar al final (T251 §2.5); una persona que mejora torres tiene menos oro «parado» y siente más cada robo, o menos si lo gasta rápido. **No se probó con una persona.**
+- **El 13 y el 14 tienen dos entradas** y se midieron con la `"A"`. Repartir la Cuadrilla entre las dos **no se probó**.
+- **Asedio 7 hereda la Cuadrilla** y el bot lo pierde nueve oleadas antes (11 de 20 contra 19 o 20). Lo decide Lucas (P2).
+- **Dos tarjetas seguidas** (12 s) en una oleada del nivel 7 que ya tiene otros enemigos: no se miró en pantalla cómo se ve ni que no tape nada.
+- **Sin dibujo:** que la Wiki, la tarjeta y la barra de «próxima oleada» se vean bien con la forma geométrica es una hipótesis (RF-156 lo prevé, pero no se probó con estos dos).
+- **El texto del lore y las frases dependen de los números del robo** (2 y 4 de oro cada 2 s): si T253 los cambia, se corrigen las frases (como la del Ladrón).
+- **El precipicio del final** del 8 y el 9 hace que las vidas con la vida igualada (1 a 4) sean ruidosas; por eso esos niveles quedaron fuera y no por una regla de diseño.
+
+#### Lo que M55 no toca
+
+`EnemyData`, `WaveSpawner`, `Rules`, `enemy.gd`, `level_session.gd`, la Wiki (`wiki.gd`), el guardado, el Ladrón, el Soberano, el Coloso, el nivel 15, el artículo 5 de Lore y los textos de nivel. El pedido es de **dos archivos de datos**, su dibujo, las oleadas de cuatro niveles y un artículo.

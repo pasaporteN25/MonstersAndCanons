@@ -1494,7 +1494,7 @@ Ideas **aprobadas como dirección**, pero **sin fecha**: no se programan hasta c
 
 **Recomendación de Claude:** empezar por el **Guardián** y el **Chamán**. El Guardián es una aura (un dato y una búsqueda de enemigos cercanos, como la del rayo en cadena). El Chamán necesita una regla nueva, "torre aturdida", que también usaría el enemigo espejo (B-06). "Torres con vida" conviene dejarla para un modo aparte (B-05), porque cambia la base del juego.
 
-### B-07 · Diseño ampliado de los enemigos con habilidades *(Lucas, 2026-09-29: "me gustaron, desarrollalos"; **Guardián y Curandero hechos en M17** (RF-270 a RF-277) y **Chamán y Espejo en M18** (RF-280 a RF-287); Ladrón hecho en M39, Excavador sin fecha)*
+### B-07 · Diseño ampliado de los enemigos con habilidades *(Lucas, 2026-09-29: "me gustaron, desarrollalos"; **Guardián y Curandero hechos en M17** (RF-270 a RF-277) y **Chamán y Espejo en M18** (RF-280 a RF-287); Ladrón hecho en M39, Excavador sin fecha; **La Cuadrilla** —una banda de criaturas independientes que roban en grupo— especificada en M55, T252)*
 
 Los cuatro enemigos que gustaron, con lo necesario para convertirlos en spec cuando se tomen. Todos siguen RF-164: son **datos** del enemigo, apagados por defecto (valen 0), y se pueden combinar. Los colores son los libres de la guía de arte (`specs/05-guia-de-arte.md`).
 
@@ -2547,3 +2547,116 @@ Corta, en orden de importancia. Cada una trae mi recomendación; si no contestá
 6. **P6 · La confirmación.** Recomiendo que **siempre pregunte** y avise de las piezas (incluso las ya confirmadas, que se pierden igual si no se llegó al resultado) y de la demolición en curso. ¿Alcanza con ese texto?
 7. **P7 · El menú de pausa.** Recomiendo **no tocarlo ahora**. Pero «Salir al menú» y «Reintentar» de ahí hoy descartan las piezas **sin avisar**: ¿querés que usen el mismo diálogo (cambio chico, en otra tarea)?
 8. **P8 · Texto de la flecha.** «← Menú» (recomendado: se entiende sin pasar el mouse, importante en el celular) o solo «←».
+
+---
+
+### M55 · La Cuadrilla: una banda de criaturas independientes (Lucas, 2026-10-10; T252)
+
+**Estado: concepto aprobado por Lucas (opción A del informe de T251); niveles, números y textos propuestos por Claude y medidos con el bot, a la espera del OK de Lucas (P1 a P6, al final). Sin datos ni código: lo que sigue es spec.** Lo hace **T253** (datos, oleadas, reajuste y tests) y el arte, **T257**. Respaldo: `specs/tareas/informes/T252-medicion-cuadrilla.md` (método, tablas por semilla y apéndice para repetirlo) y D-094.
+
+**Qué pidió Lucas.** *(2026-10-10, en el encargo de T252, después de leer el informe de T251, `specs/tareas/informes/T251-conceptos-nuevos-enemigos.md`)* Eligió el concepto **A · La Cuadrilla**: una banda de criaturas **independientes**, no Moradores, **sin símbolo A y sin jefe**, formada por los **Rateros** (chicos y rápidos) y el **Cargador** (grande y lento, lleva la bolsa). **Entra en la V1** y queda anotada en la biblia (`10-universo.md`) como **semilla para la v2 en 3D**, sin preparar nada de 3D. Pidió además que se midiera con el bot **en qué niveles del 6 al 14** entra sin romper la regla de oro (RF-432).
+
+**Idea en pocas palabras.** El Ladrón roba **solo** y de a uno. La Cuadrilla es **lo mismo, pero en banda**: varios drenajes a la vez, y un enemigo grande y lento (el Cargador) que aguanta. No cambia cuánta vida hay que romper (T251 mostró que ningún grupo nuevo arregla Asedio): **cambia la jugada**, porque el robo deja de ser un hecho aislado y pasa a ser una **presión de oro que hay que barrer rápido**. Es una especie **distinta** del Ladrón: así el texto ya aprobado de la Wiki, *«el Ladrón va solo»*, sigue siendo cierto.
+
+**Hecho con datos que ya existen.** No hay campo nuevo en `EnemyData` ni sistema nuevo: el robo (`gold_drain_*`, RF-363), la velocidad, la armadura y las vidas que quita ya están. Son **dos archivos de `data/enemies/`**, sus dibujos y las oleadas de cuatro niveles.
+
+- **RF-485** **Los dos enemigos:** el juego suma dos tipos de enemigo, **`ratero`** (el **Ratero**) y **`cargador`** (el **Cargador**), con estos números de partida:
+
+  | ID | Nombre | Vida | Velocidad | Armadura | Oro | Vidas que quita | Vuela | Robo | Tamaño |
+  |---|---|---|---|---|---|---|---|---|---|
+  | `ratero` | **Ratero** | 14 | 2.2 | 0 | 5 | 1 | No | 2 de oro cada 2 s, piso 10 | 0.20 |
+  | `cargador` | **Cargador** | 110 | 0.9 | 1 | 30 | 2 | No | 4 de oro cada 2 s, piso 10 | 0.33 |
+
+  - **El robo es el de RF-363, sin cambios:** mientras el enemigo sigue vivo en el camino, cada **2 s** pide oro a la caja (`gold_drain_amount` 2 y 4, `gold_drain_interval` 2.0) **sin bajar de 10** (`gold_drain_floor`). Con menos oro no crea ni quita monedas; morir, escapar o terminar la partida corta el robo; **no hay un robo extra al escapar**. Cada Ratero roba 1 de oro por segundo y el Cargador, 2.
+  - **Sin el tope del Ladrón:** `optional_wave_limit` vale **0** (el valor por omisión). El «máximo uno por oleada» de RF-364 solo vale para grupos con probabilidad menor que 1 (`wave_spawner.gd:61`); la Cuadrilla va **siempre**, con probabilidad 1, en las oleadas que la nombran.
+  - **Con la vida de la oleada en curso (RF-36):** por ejemplo, en el 7 (aumento 24 %), oleada 8: Ratero ≈ **37**, Cargador ≈ **294**; en el 13 (aumento 40 %), oleada 18: Ratero ≈ **109**, Cargador ≈ **858**. *Son cuentas, no mediciones.*
+  - **Ninguno es «peligroso» (RF-136):** quitan 1 y 2 vidas, así que no llevan corona. Ninguno vuela, ninguno se cura, ninguno tiene aura, hechizo ni carga, y ninguno resiste la ralentización: **todo su peso es el robo, la velocidad del Ratero y la vida del Cargador**.
+  - **No se mandan entre sí:** no hay jefe, ni mando, ni velocidad compartida. «Cuadrilla» es **cómo los llaman los colonos** porque salen juntos; mecánicamente son dos enemigos independientes que comparten oleada.
+
+- **RF-486** **Qué obliga a hacer y qué los frena** *(todo entre las torres comunes: ni la Disruptora, ni el Mortero, ni el Mecánico hacen falta, RF-433)*:
+  - **Ratero** (poca vida, sin armadura, rápido): lo barre el **área y el daño repetido** (**Cañón, Múltiple, Ráfaga, Eléctrica**) y el **Hielo** (no resiste la ralentización). La Incendiaria, también.
+  - **Cargador** (armadura 1, lento, mucha vida): necesita **daño sostenido** o un **golpe fuerte** (**Francotirador, Cañón**); el Hielo lo frena completo. Es el que más tarda en caer y **el que se queda robando** si la defensa solo barre chicos.
+  - **La jugada nueva:** una defensa de solo golpe fuerte deja pasar a los Rateros (rápidos, muchos); una de solo área no le hace casi nada al Cargador de las últimas oleadas. Hay que **cubrir el camino con las dos cosas** y **no dejar oro parado** (se roba solo el que está en la caja).
+  - **Qué los distingue del Ladrón** (que la Wiki muestre que son otra cosa): el Ladrón es **uno, con probabilidad, con capa y bolsa** (24 de vida, 3 de oro cada 2 s); la Cuadrilla es **una banda, siempre, de dos tamaños** y **sin capa**.
+
+- **RF-487** **Dónde y cuándo aparece** *(propuesta medida con el bot, ver el informe de T252; Lucas la confirma en P1)*:
+  - **Niveles:** **7** (donde **debuta**), **10**, **13** y **14**. **En ningún otro nivel** de la campaña: ni en el 1 al 5, ni en el 6 (**la regla de oro se rompe**, 0 de 5), ni en el 8, el 9, el 11 y el 12 (quedan al borde de las vidas, ver RF-488), ni en el **15** (el Coloso y las 2 vidas: no se toca).
+  - **Cuatro apariciones por nivel**, en estas oleadas y con esta composición (valores iniciales **medidos**; los cierra T253):
+
+    | Nivel | Oleadas | Composición de las cuatro apariciones |
+    |---|---|---|
+    | 7 · Cruce (20 oleadas) | 8, 11, 13 y 16 | 6 Rateros + 1 Cargador · 8 + 1 · 8 + 1 · 10 + 2 |
+    | 10 · La mina vieja (20) | 8, 12, 14 y 16 | ídem |
+    | 13 · Paso alto (24) | 10, 13, 15 y 18 | ídem |
+    | 14 · Los poblados vacíos (26) | 10, 13, 15 y 18 | ídem |
+
+    Los Rateros salen **cada 0,4 s** y los Cargadores **cada 3 s**, todos desde el segundo 0 de la oleada (`"desde"` sin escribir, RF-203), **encima** de lo que la oleada ya traía.
+  - **Debut (RF-475, punto 1):** la primera aparición del 7 (oleada 8) trae la Cuadrilla **sin ninguna otra amenaza que el jugador no haya visto** (la oleada ya trae Blindados y Tanques) y con tiempo de preparación antes. El nivel 7 **no estrena otro enemigo**.
+  - **Sin auras ni jefe:** en esta spec **ninguna aparición comparte oleada** con un Guardián, un Curandero, un Chamán, un Espejo ni el Soberano. Mezclarlos **no se midió**: si T253 quiere hacerlo, lo mide y lo informa.
+  - **Entrada:** la entrada `"A"` (RF-203). En el 13 y el 14, que tienen dos entradas, **repartirla no se probó**.
+  - **No cambia ningún otro enemigo**: los números del Ladrón, del Soberano y de los demás son los de hoy.
+
+- **RF-488** **Lo que se tiene que cumplir al armar y ajustar** *(es lo que T253 comprueba con el bot; los números del informe de T252 son la referencia)*:
+  1. **Regla de oro (RF-432):** con la Cuadrilla, `sin_recursos` gana **al menos 4 de 5** semillas en cada nivel donde entra. *(Medido: 5 de 5 en el 7, el 10, el 13 y el 14.)*
+  2. **Margen:** `sin_recursos` termina con **3 vidas o más en todas las semillas**. Que gane con 1 o 2 es un precipicio, no un nivel. *(Medido: el 7 termina con 5 a 13; el 10, con 7 a 11; el 13, con 3 a 5; el 14, con 3.)*
+  3. **Escalera (RF-475, punto 3):** el **14 termina con 3 vidas o más** y **el 15 sigue en 2**: la Cuadrilla **no puede volver al 14 tan difícil como el 15**. El 13 no termina con menos vidas que el 14. *(Medido: el 14 queda en 3 con las dos formas de armar la oleada.)*
+  4. **Muerde, pero no ahoga:** el oro que roba en una partida del bot es la referencia. *Medido (semilla 1, `sin_recursos`):* **326 a 807** de oro por partida en los cuatro niveles, contra **21 a 66** del Ladrón solo. Si T253 ve que en un nivel roba **menos de 100** (no tiene dientes) o **más de 1000** (casi el doble del máximo medido), lo informa a Lucas con la tabla antes de tocar un número. *(Los dos umbrales los propongo yo; no tienen otra medida detrás que el rango visto.)*
+  5. **Qué se toca primero si un nivel no pasa:** (a) la **cantidad** o la **oleada** de la Cuadrilla en ese nivel; (b) **sacar relleno** (Normales, Rápidos, Voladores) de esas oleadas, hasta igualar la vida (la versión «reemplazo» del informe); (c) recién último, el `aumento_vida` del nivel, **de a un punto y anotado** en el Resultado. **No se tocan** los números del Ratero, del Cargador ni de ningún enemigo que ya existía sin avisar a Lucas.
+  6. **La apertura** (oleadas 1 a 3, RF-475 punto 4) **no cambia**: la Cuadrilla no entra antes de la oleada 8.
+  7. **Las otras estrategias** (RF-475 pide las cinco) **se miran y se anotan**; no son el criterio.
+
+- **RF-489** **Presentación, Wiki y textos:**
+  - **Tarjeta de presentación (RF-134):** frases de `EnemyData.description`, **propuestas** (las confirma Lucas en P5):
+
+    | Enemigo | Frase de presentación |
+    |---|---|
+    | Ratero | Chico y veloz. Anda en cuadrilla y cada uno roba 2 de oro cada 2 segundos, sin bajar de 10. Se barren con área. |
+    | Cargador | Grande y lento: lleva la bolsa de la cuadrilla y roba 4 de oro cada 2 segundos, sin bajar de 10. Hace falta daño sostenido. |
+
+    Los dos debutan **en la misma oleada**, así que salen **una tarjeta tras otra** (la cola del HUD, `hud.gd`, 6 s cada una). *No se probó cómo se ve.* Si el robo cambia de número, **se corrige la frase** (como la del Ladrón).
+  - **Wiki → Enemigos (RF-233 y RF-238):** **no hay entrada escrita a mano**: las dos salen solas de los datos y se abren **cuando se las ve por primera vez**. Traen la línea **«Robo»** que ya escribe `wiki.gd` y **«Dónde aparece»** con los **niveles 7, 10, 13 y 14** (se deduce de la campaña). Los textos de **«Enemigos especiales» de la Guía no cambian** (tampoco mencionan al Ladrón).
+  - **Wiki → Lore: un artículo nuevo, «La Cuadrilla»** (`data/wiki/lore/la_cuadrilla.json`, **el artículo 11**), que **se abre al ganar el nivel 7** (RF-469 y RF-470). Texto **propuesto** en `specs/11-textos-lore.md` §4.11 (Lucas lo aprueba en P3). **No se agrega un párrafo al artículo 5** porque ese artículo se abre al ganar el 6, y **un artículo nunca nombra algo que debuta después de su nivel**; el artículo 5 **no cambia** y sigue diciendo que el Ladrón va solo. El campo `orden` de la Cuadrilla va entre el del artículo 5 y el del 6, así que los artículos 6 a 10 pasan a `orden` 7 a 11 (solo cambia ese campo).
+  - **Los textos de nivel (RF-464)** del 7, el 10, el 13 y el 14 **no cambian**: ninguno nombra a la Cuadrilla, y la biblia pide mostrar antes que explicar.
+
+- **RF-490** **Aspecto y reglas del lore** *(lo dibuja T257, con concepto aprobado por Lucas)*:
+  - **Capa de la biblia (10 §4.2):** criaturas **independientes**. **No lleva el símbolo A ni ninguna marca de las comunidades**: extiende la regla del Ladrón. No hay jefe, ni mando; no obedecen a nadie (07 §2.3).
+  - **Se distinguen del Ladrón a 34 px por tamaño y silueta:** el **Ratero** es más chico que el Ladrón, **sin capa**, bajo y alargado, y el **Cargador** es ancho, con la **bolsa más grande que el cuerpo**. Ninguno con capucha: los «dos encapuchados» (Ladrón y Chamán) siguen siendo dos.
+  - **Colores:** distintos del gris violeta del Ladrón y de los tonos de cada enemigo de la guía de arte; un color por especie, y entre ellos **la misma familia** (se leen como una banda). Lo fija el concepto de T257.
+  - **Un ciclo de caminata por enemigo** como los demás (atlas de 16 poses, M31). **Mientras no haya arte aprobado**, T253 usa arte provisional hecho en código o el dibujo de reemplazo (RF-156), como hizo T234 con el Coloso.
+  - **Tono (10 §8):** nada de caricatura. Los colonos los llaman «cuadrilla» **por cómo llegan** (juntos, como una cuadrilla de obra), no porque se sepa algo de ellos. Lo que se muestra son **consecuencias** (oro que falta), no sentencias.
+  - **Semilla para la v2 en 3D** *(Lucas, 2026-10-10)*: la biblia (`10-universo.md` §9) anota **La Cuadrilla** como semilla. **No está prometida y no se prepara nada de 3D en la V1:** ni modelos, ni campos, ni nombres reservados.
+
+- **RF-491** **Asedio, el editor y lo que no cambia:**
+  - **Asedio hereda las oleadas** (RF-391: «mismas oleadas»). De los cuatro niveles, **solo el 7 está en Asedio** (que tiene los mapas 1 a 9; el 10, el 13 y el 14 no). **Medido:** el bot pierde Asedio 7 **sin** la Cuadrilla en la oleada 19 o 20 de 20, y **con** ella en la **11 de 20** (con `sin_recursos` y con `mix`, 3 semillas). Si algún día Asedio suma el 10, el 13 o el 14, también la heredan. **Lucas decide** en P2.
+  - **El editor, Pruebas y los mapas de la comunidad** pueden usar `ratero` y `cargador` como cualquier enemigo: las listas salen de `data/enemies/` (RF-203 y RF-233). Un mapa de la comunidad ya guardado carga igual.
+  - **No cambia:** el Ladrón, el Soberano, el Coloso, las torres, el guardado (no hay campo nuevo: lo que se vio se recuerda con `seen_enemies`), la Guía ni las pantallas.
+  - **Las fichas de los niveles 7, 10, 13 y 14** (§7 y los RF de campaña, entre ellos RF-453, RF-478 y RF-479) **no se reescriben acá**: los datos todavía no existen. **T253 les suma una línea** cuando cargue la Cuadrilla. **RF-453 («no estrena enemigos») sigue siendo cierto:** el 10 no la estrena, la estrena el 7.
+
+> **Criterio de aceptación RF-485 a RF-491**
+> **Dado** `data/enemies/ratero.tres` y `cargador.tres` → **Entonces** tienen los números de la tabla de RF-485, `optional_wave_limit` en 0, ningún campo nuevo de `EnemyData`, una frase de presentación no vacía y `size_tiles` entre 0.05 y 0.5, y los tests de contenido (`test_content`) pasan.
+> **Dado** un nivel de la campaña → **Entonces** solo el 7, el 10, el 13 y el 14 nombran `ratero` o `cargador` en sus oleadas, con cuatro apariciones cada uno; **ningún otro** nivel de la campaña (1 a 6, 8, 9, 11, 12 y 15) los nombra, y ninguna oleada con Cuadrilla trae un Guardián, un Curandero, un Chamán, un Espejo ni el Soberano.
+> **Dado** un Ratero vivo en el camino con 100 de oro en la caja → **Cuando** pasan 2 s → **Entonces** la caja baja en 2, y con 11 de oro baja en 1 (piso 10); **dado** un Cargador, baja en 4 cada 2 s con el mismo piso; **cuando** el Ratero llega a la salida → **entonces** quita 1 vida y **no** roba más.
+> **Dado** 8 Rateros y 1 Cargador recién aparecidos en el camino (el reloj de robo de cada uno en 0), 200 de oro en la caja y ninguna torre que los toque → **Cuando** pasan 4 s → **Entonces** el oro baja en **40** (8 Rateros × 4 + el Cargador × 8: cada uno roba en su propio reloj, RF-363).
+> **Dado** el bot con 5 semillas en el 7, el 10, el 13 y el 14, con `sin_recursos` → **Entonces** gana al menos 4 de 5, termina con 3 vidas o más en todas, el 14 termina con 3 o más y el 15 termina con 2 (RF-488).
+> **Dado** una partida que ve a la Cuadrilla por primera vez → **Entonces** salen las dos tarjetas de RF-134 una tras otra y la Wiki abre las entradas del Ratero y del Cargador. **Dado** el 7 ganado → **Entonces** la Wiki Lore abre «La Cuadrilla» con el texto de `11-textos-lore.md` §4.11, y el artículo 5 no cambia.
+
+#### Lo que M55 no incluye
+
+- **Ningún dato ni código.** Los `.tres`, las oleadas, los tests y el arte son T253 y T257.
+- **Un jefe, un mando o un aura de la Cuadrilla**, ni «velocidad compartida» (piden código nuevo, T251 §4.4).
+- **La Cuadrilla en el 15, en Asedio 10 a 15 o como arreglo de Asedio:** T251 mostró que ningún grupo nuevo hace ganable Asedio al 115 %. La decisión de qué hacer con Asedio 10 a 15 sigue abierta en T235.
+- **Los Correos (B) y las Luminarias (C)** del informe de T251: quedan como ideas, sin fecha.
+- **Una tribu de ladrones de los Moradores:** descartada (D-094).
+- **Arte final:** el arte lo hace T257 con el OK de Lucas.
+- **La Cuadrilla en 3D:** solo una semilla de la biblia.
+
+#### Preguntas para Lucas
+
+Corta, en orden de importancia. Cada una trae mi recomendación; **sin tu OK a P1, T253 no arranca** (la compuerta es tuya).
+
+1. **P1 · ¿Los niveles 7, 10, 13 y 14, con el debut en el 7?** Recomiendo que **sí**. Son los únicos donde el bot gana con margen con las dos formas de armar la oleada (RF-488); el 7 es el nivel más holgado (16 vidas), no estrena otro enemigo y viene justo después del Ladrón (6). Las otras opciones: **debutar en el 10** (cambia RF-453, «no estrena enemigos», y el bloque 2 cierra con extracción y pieza: lo desaconsejo), o **solo en el 13 y el 14** (más corto, pero el 13 ya debuta las escoltas).
+2. **P2 · Asedio 7.** El mapa 7 de Asedio hereda la Cuadrilla (RF-391) y el bot pasa de perderlo en la 19 a perderlo en la 11. Recomiendo **dejar que herede**: el bot ya lo perdía, Asedio «no es balance definitivo» (RF-391) y tener una copia propia sin la Cuadrilla es un cambio de RF aparte. La otra opción es **una copia del mapa 7 propia del modo, sin Cuadrilla** (solo datos, RF-388; pero deja de ser «mismas oleadas»).
+3. **P3 · El texto de «La Cuadrilla» en la Wiki** (`11-textos-lore.md` §4.11). **Lo aprobás vos** (los textos son tuyos); mientras tanto es borrador y no se carga.
+4. **P4 · Los nombres.** *Ratero* y *Cargador* (de informe, como «Soberano» y «Coloso»), y «la cuadrilla» como lo que dicen los colonos. ¿Sirven?
+5. **P5 · Las frases de las tarjetas** de RF-489.
+6. **P6 · El arte.** Recomiendo **primero provisional** (T253 con las formas de reemplazo, RF-156) y el concepto de Codex **después**, igual que el Coloso; así la medición y el reajuste no esperan al dibujo.

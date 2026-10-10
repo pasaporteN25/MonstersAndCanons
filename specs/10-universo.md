@@ -3,6 +3,8 @@
 > **Estado: CANON** (aprobado por Lucas en G2 el 2026-10-08). Escrito el 2026-10-08 por Claude (Sonnet 5.5), tarea **T201**.
 >
 > **OK de Lucas (G2):** dado el 2026-10-08. Eligió los nombres (planeta **Cántaro**, colonia **Compañía Meridiana**, comunidades **Moradores**) y aceptó todas las recomendaciones P-1 a P-7. Las marcas **[PROPUESTA]** y **[OPCIÓN]** de abajo pasan a canon según esas respuestas; lo marcado **[SEMILLA]** sigue sin estar prometido.
+>
+> **Agregado por T252 (2026-10-10):** §4.2 suma **La Cuadrilla** (los Rateros y el Cargador), una banda de criaturas independientes que Lucas eligió el 2026-10-10 (opción A del informe de T251) y que entra en la V1 (RF-485 a RF-491, D-094). Es **canon** que existe y cómo es; **en qué niveles aparece** y sus textos siguen siendo propuesta hasta que Lucas conteste P1 a P6 de M55. §7 anota dónde se ve y §9, la **semilla para la v2 en 3D**. No cambia ninguna otra línea del documento.
 
 **Qué es este documento.** El **canon** del universo: lo que comparten la V1, *Monsters & Canons 3D* y *Monsters & Canons 2*. Es una referencia para escribir textos, dibujar señales y diseñar mapas. **No es una spec**: no tiene `RF` ni `D`, no cambia reglas del juego y no hay que programar nada a partir de él.
 
@@ -151,6 +153,13 @@ Seres especiales o mágicos que **van por su cuenta**. No pertenecen a ninguna c
 
 - **Ladrón** — *encapuchado gris violeta con bolsa.* Roba oro de la caja de la colonia mientras está en pantalla y no baja de cierto mínimo. **Busca:** lo que brilla; no se sabe para qué. Es el ejemplo que dio Lucas de criatura independiente. **Regla de lore:** **nunca lleva el símbolo A**, para no confundirlo con el Chamán (T202 los marca como "los dos encapuchados"). *Es una regla de arte que sale de este documento: no se verificó contra el dibujo.* **[PROPUESTA]**
 - **Espejo** — *tortuga de cristal facetado.* Devuelve los tiros de las torres cercanas y las aturde. **Busca:** nada que se sepa. Aparece en el nivel 12, **junto a las comunidades**, sin que quede claro si ellas la guían o si solo comparten el camino. La ambigüedad es intencional. **[PROPUESTA]**
+- **La Cuadrilla** — una **banda** de dos especies que salen juntas. **[CANON]** (Lucas, 2026-10-10; RF-485 a RF-491, D-094)
+  - **Ratero** — *criatura chica, baja y alargada, sin capa.* Veloz y frágil; anda en grupo. Roba oro de la caja mientras está en pantalla, como el Ladrón, pero **cada uno el suyo y todos a la vez**. **Busca:** lo que brilla; no se sabe para qué. **[PROPUESTA]**
+  - **Cargador** — *criatura ancha y lenta, con una bolsa más grande que el cuerpo.* Es la que **lleva lo de todas**: roba, aguanta y tarda en caer. **Busca:** lo mismo que los Rateros, que lo siguen o lo preceden sin que se vea quién va adelante. **[PROPUESTA]**
+  - **Qué es y qué no es. [CANON]** Criaturas **independientes**, de **otra especie que el Ladrón**: por eso el texto aprobado de la Wiki, *«el Ladrón va solo»*, sigue siendo cierto. **No son Moradores, no llevan el símbolo A y no tienen jefe ni mando:** «cuadrilla» es **cómo las llaman los colonos** porque llegan juntas (como una cuadrilla de obra), no porque se sepa que se organicen. Se juntan por lo mismo que cada una busca. **No obedecen a nadie** (07 §2.3), como el Ladrón y el Espejo.
+  - **Regla de lore (arte):** ninguna lleva el símbolo A ni capucha. Se distinguen del Ladrón (gris violeta, con capa y bolsa) por el **tamaño y la silueta**.
+  - **Por qué no una «tribu organizada».** Una banda que se organiza para robar sería de la capa 3, y eso convertiría a los habitantes en ladrones: lo que §8 pide evitar. Con criaturas independientes la ambigüedad del juego queda intacta.
+  - **Dónde se ve. [PROPUESTA]** (pendiente del OK de Lucas, P1 de M55) Debuta en el **nivel 7** (El aserradero) y reaparece en el 10, el 13 y el 14. No está en el 15.
 
 ### 4.3 Comunidades organizadas — desde el nivel 8
 
@@ -283,18 +292,18 @@ Una línea por mapa, para guiar los textos de T227. Los nombres y lugares vienen
 | # | Mapa · lugar | Qué asegura la colonia | Qué se ve o se sabe |
 |---|---|---|---|
 | 6 | **Nido** · El lindero | El borde del bosque. | Primeros árboles que se talan. Aparecen el Ladrón y el Embestidor. |
-| 7 | **Cruce** · El aserradero | La madera, que es lo que la colonia necesita para crecer. | Primer indicio decorativo del símbolo A. |
+| 7 | **Cruce** · El aserradero | La madera, que es lo que la colonia necesita para crecer. | Primer indicio decorativo del símbolo A. **[PROPUESTA]** Debuta la Cuadrilla (§4.2). |
 | 8 | **Bastión** · El bastión sobre ruinas | Una posición alta, construida sobre piedra vieja. | **Revelación:** las ruinas tienen el símbolo A. Debuta el Guardián. Pieza 1/3. |
 | 9 | **Taller asediado** · El taller | El primer taller de la colonia fuera del oasis. | Una ruina con la pieza 2/3. Debuta el Curandero y el Mortero. |
-| 10 | **La mina vieja** *(nombre provisorio)* · Primer puesto de abastecimiento | Una mina que *ya estaba cavada*. | Las galerías son de otros; la colonia las retoma. Pieza 3/3. Cierra el bloque. |
+| 10 | **La mina vieja** *(nombre provisorio)* · Primer puesto de abastecimiento | Una mina que *ya estaba cavada*. | Las galerías son de otros; la colonia las retoma. Pieza 3/3. Cierra el bloque. **[PROPUESTA]** Reaparece la Cuadrilla. |
 
 ### Bloque 3 · Territorio disputado (11–15): consolidar el hogar
 | # | Mapa · lugar | Qué asegura la colonia | Qué se ve o se sabe |
 |---|---|---|---|
 | 11 | **Puesto seco** · Desierto | Un punto de agua en el camino seco. | Debuta el Chamán: el primer sabotaje. Llega la Disruptora. |
 | 12 | **El cañadón** · Desierto | El paso hacia el norte. | Debuta el Espejo. Las auras y el aturdimiento se combinan. |
-| 13 | **Paso alto** · Nieve | El paso que comunica con el resto de la región. | Ataques coordinados: escolta con dos entradas. Hitos de límite. |
-| 14 | **Los poblados vacíos** · Ruinas | Los asentamientos que las comunidades dejaron. | Campamentos vacíos, fuegos fríos, el símbolo A por todas partes: **se fueron**. |
+| 13 | **Paso alto** · Nieve | El paso que comunica con el resto de la región. | Ataques coordinados: escolta con dos entradas. Hitos de límite. **[PROPUESTA]** Reaparece la Cuadrilla. |
+| 14 | **Los poblados vacíos** · Ruinas | Los asentamientos que las comunidades dejaron. | Campamentos vacíos, fuegos fríos, el símbolo A por todas partes: **se fueron**. **[PROPUESTA]** Reaparece la Cuadrilla. |
 | 15 | **La Central** · Valle | La central de energía y la cadena de abastecimiento. | Defensa final contra el jefe supremo y su escolta. Epílogo. |
 
 ### El final (nivel 15)
@@ -361,6 +370,7 @@ Ninguna se diseña ni se implementa en la V1. Están acá para que el canon **no
 | **El nombre y la lengua de las comunidades** | §4.3 | Los colonos las nombran; ellas no. |
 | **Volcán y pantano** | §2 | Regiones sin visitar. |
 | **Contar con el escenario en 3D** (ruinas, estatuas, campamentos) | 06 §9 | Las señales de la V1 pueden crecer en esa dirección. |
+| **La Cuadrilla en la v2 en 3D** (la banda que anda junta, sin jefe) | Lucas, 2026-10-10; T252 | Que sigan **sin mando ni símbolo A**. En 3D se podrían ver andando juntas por el mismo terreno, con el Cargador marcando el paso. **No se prepara nada de 3D en la V1** (ni modelos, ni campos ni nombres reservados). |
 
 ---
 
