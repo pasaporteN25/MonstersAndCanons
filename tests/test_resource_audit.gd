@@ -11,6 +11,11 @@ const PATH_PATTERN: String = "res://[A-Za-z0-9_./\\-]+\\.(?:svg|png|wav|ogg|mp3|
 ## y «agotado» esperan a que alguien los enchufe, y el ícono de supresión y los anillos de la Disruptora quedaron
 ## sin cablear. Si se usan, se sacan de esta lista; si se borran, también. Un dibujo NUEVO sin uso hace fallar el test.
 const KNOWN_UNUSED: Array[String] = [
+	# T257: arte provisional; T253 debe retirar estas entradas al integrar las rutas en los datos.
+	"res://assets/sprites/enemies/rendered/ratero.png",
+	"res://assets/sprites/enemies/rendered/ratero_walk.png",
+	"res://assets/sprites/enemies/rendered/cargador.png",
+	"res://assets/sprites/enemies/rendered/cargador_walk.png",
 	"res://assets/sprites/ui/coleccion_disruptor.svg", "res://assets/sprites/ui/stat_resources.svg",
 	"res://assets/sprites/map/roca_removible_trabajo.svg", "res://assets/sprites/map/despejado_ruinas.svg",
 	"res://assets/sprites/map/bosque_explotable_agotado.svg", "res://assets/sprites/map/reserva_vacia.svg",

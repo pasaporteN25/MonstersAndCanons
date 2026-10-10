@@ -1,0 +1,297 @@
+{
+  "estado": "PROVISIONAL — pendiente de aprobación de Lucas",
+  "formato": {
+    "estatica": [
+      256,
+      256
+    ],
+    "atlas": [
+      1024,
+      1024
+    ],
+    "cuadro": [
+      256,
+      256
+    ],
+    "direcciones": [
+      "derecha",
+      "abajo",
+      "izquierda",
+      "arriba"
+    ],
+    "fases": 4,
+    "apoyo_y": 191
+  },
+  "criaturas": {
+    "ratero": {
+      "texture": "res://assets/sprites/enemies/rendered/ratero.png",
+      "walk_atlas": "res://assets/sprites/enemies/rendered/ratero_walk.png",
+      "poses_unicas": 16,
+      "limites_alfa": [
+        [
+          38,
+          75,
+          218,
+          191
+        ],
+        [
+          38,
+          75,
+          218,
+          191
+        ],
+        [
+          38,
+          75,
+          218,
+          191
+        ],
+        [
+          38,
+          75,
+          218,
+          191
+        ],
+        [
+          60,
+          69,
+          183,
+          191
+        ],
+        [
+          60,
+          69,
+          183,
+          191
+        ],
+        [
+          60,
+          69,
+          183,
+          191
+        ],
+        [
+          60,
+          69,
+          183,
+          191
+        ],
+        [
+          38,
+          75,
+          218,
+          191
+        ],
+        [
+          38,
+          75,
+          218,
+          191
+        ],
+        [
+          38,
+          75,
+          218,
+          191
+        ],
+        [
+          38,
+          75,
+          218,
+          191
+        ],
+        [
+          60,
+          69,
+          183,
+          191
+        ],
+        [
+          60,
+          69,
+          183,
+          191
+        ],
+        [
+          60,
+          69,
+          183,
+          191
+        ],
+        [
+          60,
+          69,
+          183,
+          191
+        ]
+      ],
+      "paleta": [
+        "#f6c3a9",
+        "#c98269",
+        "#76453f"
+      ],
+      "sha256": {
+        "ratero.png": "085214f88c22bb5f8c080e2440ba124288a1b87e624189ee3c0e3fc07e70e998",
+        "ratero_walk.png": "99de515b8fcf7ac7279a25c06c821b0117808e65e13a9f4f27e2218c977ca7ff"
+      },
+      "parametros_visuales_propuestos": {
+        "walk_stride_tiles": 0.45,
+        "walk_art_scale": 1.0,
+        "visual_scale": 1.2,
+        "flip_when_walking_left": false
+      }
+    },
+    "cargador": {
+      "texture": "res://assets/sprites/enemies/rendered/cargador.png",
+      "walk_atlas": "res://assets/sprites/enemies/rendered/cargador_walk.png",
+      "poses_unicas": 16,
+      "limites_alfa": [
+        [
+          47,
+          15,
+          221,
+          191
+        ],
+        [
+          47,
+          15,
+          221,
+          191
+        ],
+        [
+          47,
+          15,
+          221,
+          191
+        ],
+        [
+          47,
+          15,
+          221,
+          191
+        ],
+        [
+          59,
+          15,
+          196,
+          191
+        ],
+        [
+          54,
+          15,
+          202,
+          191
+        ],
+        [
+          59,
+          15,
+          196,
+          191
+        ],
+        [
+          59,
+          15,
+          192,
+          191
+        ],
+        [
+          35,
+          15,
+          209,
+          191
+        ],
+        [
+          35,
+          15,
+          209,
+          191
+        ],
+        [
+          35,
+          15,
+          209,
+          191
+        ],
+        [
+          35,
+          15,
+          209,
+          191
+        ],
+        [
+          59,
+          15,
+          196,
+          191
+        ],
+        [
+          54,
+          15,
+          202,
+          191
+        ],
+        [
+          59,
+          15,
+          196,
+          191
+        ],
+        [
+          59,
+          15,
+          192,
+          191
+        ]
+      ],
+      "paleta": [
+        "#dca58f",
+        "#a5614c",
+        "#583c36"
+      ],
+      "sha256": {
+        "cargador.png": "afdf04e042ea9bb8e73317f2e94fdd76346b3656c3861fa691b9b00d48f1c5ef",
+        "cargador_walk.png": "8c529f8dcc8df2d0935f86c0f7da2c21c42f51aae93024e11c2db51660938cfc"
+      },
+      "parametros_visuales_propuestos": {
+        "walk_stride_tiles": 0.9,
+        "walk_art_scale": 1.0,
+        "visual_scale": 1.2,
+        "flip_when_walking_left": false
+      }
+    }
+  },
+  "fuentes_sha256": {
+    "cargador_0_0.svg": "cd125ab2bf70668612dc39c14e2690f941e8ea2e2cc4ca4a6bf877fe33036c31",
+    "cargador_0_1.svg": "6a86d2f31ef425c187fd40a2ef6e06ff47cf494eb858c2180b5b85a1a57a9ef6",
+    "cargador_0_2.svg": "6238ff7915d485d68d5a9c6cfbf6f100987ac8661f40ac8f9029217b51f89934",
+    "cargador_0_3.svg": "8f4e8b422b8d406e17bd944f1f5a575620be138c6204088a4cba049ae072e105",
+    "cargador_1_0.svg": "02e9fe7a975a5cbf1fd3428035c7bc86e37e6f9e7da63cd39d460ee6db8b121a",
+    "cargador_1_1.svg": "0efb7db09aed60b8f20e6ade3a2fe423f2bf1d1a22c2fbaf29db70dbdad78df3",
+    "cargador_1_2.svg": "a4a039918ed205b34b22fe0406409722ce53f3eb4add9de6b9c85c48d5c031aa",
+    "cargador_1_3.svg": "9fb3efc8d8f3f005ea2314d53946a676f51330ea32fad33cb6731f2d2db4123a",
+    "cargador_2_0.svg": "d90633fd460f51f1af6fffeb1970f678e4cc2ed317087a6026f52638fa6f8fa5",
+    "cargador_2_1.svg": "5e67e12341de8e714a239da680a512ba36ad5c8900ebae1233146e888a6310f9",
+    "cargador_2_2.svg": "acdb509000ce70aa8611272e12343c09f217882f5efd9667120bba4c4c8c1eb9",
+    "cargador_2_3.svg": "8c9ba0f4858ab69b7b473577585dbc890d22a228a2111f8b3109c3435bf018c4",
+    "cargador_3_0.svg": "03a95c1e7f650f6b276c0b80e4b3e33ba8af6026b70523b8f199c820020aed58",
+    "cargador_3_1.svg": "a569e06c579444b4fbb5ad93bfd33b5520d51f50892aa444647694d6e83d0b6a",
+    "cargador_3_2.svg": "bcdd705727721040ae4d0fdcf95b20c915c35ce1ee0cdf38d875edee476bcafe",
+    "cargador_3_3.svg": "c3082847e70725b5a21e1fdd0a46977ba1684d0eba18ac77e35565d81a225c71",
+    "ratero_0_0.svg": "affc5988d72374e4c09ba35a4625aef7661e7b0d2889e2d31dcdbd0a5608bd07",
+    "ratero_0_1.svg": "4c39db00a096d069cda265619810ddfa29ccb31e3587a320de358d7fda35af3c",
+    "ratero_0_2.svg": "0ef434d1af27e23c64ba88a2427391b3085cfcd8fe68ddbf693d51f773c9cc37",
+    "ratero_0_3.svg": "3f48c7d5f687278f15df7332042f60831b1ed12ecbeb8423d3e908f64a776dc1",
+    "ratero_1_0.svg": "6e72dcacf177c8596f7d45e10aa682f9ee75e289831a7f6efcceed2058d1c099",
+    "ratero_1_1.svg": "cc19bde607e280ab92b26d65809b0dcae8c15a00eb0900acfa7d2bf8d8317c5d",
+    "ratero_1_2.svg": "8b47e191ae1de3aafbfd935d20366afe1ac2d03ad0ab98cb15414e26be584bdf",
+    "ratero_1_3.svg": "99e13d32ab1437b47642503d09326d88c5bd8b2237302078fb9e745db80ac60e",
+    "ratero_2_0.svg": "8854f2b37c9db25ed35ed604f3926b277bddd1f93fb9f7d8a61a0e2b3d84a8b2",
+    "ratero_2_1.svg": "4cf2bba344f3ad5a27d5acb3d6786da9fce3ef4b890ae4d66dc5324c6d15e5bf",
+    "ratero_2_2.svg": "bad90319f813dd54654197830c0ace141cb479cf20e08d9b0ab95f334f66d997",
+    "ratero_2_3.svg": "aa9d2dcff64e22b44a23279eb951491898228395e6d737c35c7b88f6bc20a1b3",
+    "ratero_3_0.svg": "d89a8ff3992935c471dc9b107c722fdb4a35a87283b678fa2ab417235e762b59",
+    "ratero_3_1.svg": "d868ffda91fec4ae6c265f0f5b4925cbeffb994339cb41aa1e28bbed4daf4fa4",
+    "ratero_3_2.svg": "5db3ab81b9d6f12411325d7c514fa518b01d95115977756bddef37dc4feb9d06",
+    "ratero_3_3.svg": "c7f1ec89ac9f302800e15f0bf2ea69189703a5dfdf0d0701f0be567f32776cbc"
+  }
+}

@@ -47,8 +47,10 @@ Cada terna es **luz / medio / sombra** del degradé de relleno. Los nuevos enemi
 | Espejo | Tortuga de cristal facetado (cian frío) | `#d7f6ff` | `#7fd0e6` | `#2f7f9d` |
 | Coloso (T244, **PROVISIONAL**) | Basalto cálido con vetas ámbar apagadas | `#a69b88` | `#625d54` | `#302f2d` |
 | Pedazo (T244, **PROVISIONAL**) | Lasca del mismo basalto, caras de fractura oscuras | `#948a77` | `#555149` | `#292827` |
+| Ratero (T257, **PROVISIONAL**) | Criatura baja y alargada, cobre rosado claro | `#f6c3a9` | `#c98269` | `#76453f` |
+| Cargador (T257, **PROVISIONAL**) | Criatura ancha, terracota oscura, bolsa de lona dominante | `#dca58f` | `#a5614c` | `#583c36` |
 
-Paletas propuestas, todavía **no aprobadas**: son referencias de material de los PNG renderizados, no tres colores planos exactos. Se reservan para la revisión de Lucas.
+Paletas de T244 y T257, todavía **no aprobadas**: las de T244 son referencias de material de los PNG renderizados, no tres colores planos exactos; las de T257 son las ternas exactas de los degradés SVG que se rasterizan a PNG. Se reservan para la revisión de Lucas.
 
 **Tonos que todavía están libres** para enemigos nuevos: **ninguno de los grandes**; para un enemigo más habría que **oscurecer o aclarar** uno existente con cuidado, o usar un detalle distintivo (un brillo, una piedra). Ya se usaron el marfil y el amarillo verdoso (Guardián y Curandero) y el rosa magenta y el cian frío (Chamán y Espejo). Las crías y sus madres son de la misma familia de color, y los enemigos "de la misma banda" (por ejemplo, los que dan aura) pueden compartir un detalle (un brillo, una piedra) sin compartir el color.
 
@@ -105,3 +107,7 @@ Ladrón: vector nativo encapuchado con bolsa; Embestidor: Bestia B reservada de 
 Embestidor: anatomía pesada del antiguo Curandero, casco óseo/cuerno frontal, placas hierro/bronce y piel oliva oscura; sin bulbo ni resplandor de cura. Curandero: criatura erguida vegetal, semilla medicinal verde amarillenta en herramienta, bolsa de hierbas; silueta distinta del Chamán por cabeza descubierta y textura orgánica. Ladrón: encapuchado gris violeta desaturado, manos/bolsa reconocibles. Mecánico: estatua fija de hierro/plata/bronce, casco y engranaje, mismas bases y luz que los cañones. PNG con alfa, cuatro direcciones por cuatro fases en enemigos; anclaje/escala uniformes. Materiales predominan sobre color; no reflejar atlas ni alterar parámetros jugables. Producción inicial para revisión de Lucas, no aprobación definitiva.
 
 **Aprobación M43:** Lucas aprobó los cuatro rediseños el 2026-10-04 (“Excelente los apruebo”). Son la referencia vigente para estos personajes; B31 cerrado. Fuentes y prompts conservados.
+
+### T257 · La Cuadrilla (provisional, RF-490)
+
+Ratero y Cargador son criaturas independientes: sin símbolo A, marcas comunitarias, capucha ni capa. Ratero bajo y horizontal; Cargador ancho con bolsa más grande que el cuerpo. Familia cobre rosado / terracota; lona neutra. Fuentes SVG nativas rasterizadas a PNG RGBA 256×256 y ciclos 1024×1024 (4 direcciones × 4 fases), apoyo en y=191, sin sombra. La iluminación no se refleja con la dirección. Las paletas y siluetas están **pendientes de aprobación de Lucas**; hoja con el Ladrón aprobado en `art/t257-cuadrilla/captures/contact_sheet.png`. Es una propuesta vectorial más simple que los PNG renderizados, no arte definitivo. No integrada ni capturada en partida en este despacho.
