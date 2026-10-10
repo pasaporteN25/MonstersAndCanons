@@ -679,6 +679,7 @@ Diseño en spec RF-388 a RF-392 y D-078.
 - **Bot:** `balance_sim.gd -- mix modo=asedio level=N`.
 - **Datos:** `data/modos/asedio/modo.json`.
 - **Tests:** `test_mode_packs`, `test_mode_flow`, `test_mode_select` y `test_editor_modes`, siempre en carpetas `user://test_*`. `test_editor_files` fija una carpeta de modos de prueba para no leer la del jugador.
+- **Revisión (T256, D-095):** el modo gana una tabla opcional de porcentajes de vida por mapa y Asedio pasa a 15 mapas; el diseño está en **M56 / T256**, más abajo. Todo lo de esta sección sigue valiendo.
 
 ### M50 / T205 · Infraestructura: demolición, recursos y hallazgos (RF-398 a RF-437, D-080 a D-085)
 
@@ -1195,3 +1196,69 @@ Las diez de la ficha (`specs/tareas/T253-cuadrilla-datos-y-reajuste.md`): datos;
 #### Lo que M55 no toca
 
 `EnemyData`, `WaveSpawner`, `Rules`, `enemy.gd`, `level_session.gd`, la Wiki (`wiki.gd`), el guardado, el Ladrón, el Soberano, el Coloso, el nivel 15, el artículo 5 de Lore y los textos de nivel. El pedido es de **dos archivos de datos**, su dibujo, las oleadas de cuatro niveles y un artículo.
+
+### M56 / T256 · Asedio con los 15 mapas y porcentaje de vida por mapa (RF-492 a RF-496, D-095)
+
+**Estado: especificada en T256 (2026-10-10), sin datos ni código.** La clave nueva, los datos de Asedio, las opciones del bot, los tests y los documentos son **T258**. *(La estructura la aprobó Lucas el 2026-10-10; los **valores** de la tabla son los de T255 y quedan «iniciales»; los mapas 7, 10, 13 y 14 se remiden cuando entre La Cuadrilla, T253.)* Es **solo datos y una clave nueva del lector de modos**: no cambia ninguna regla de combate, ningún campo de `LevelData` ni `LevelFile`, ni el generador de oleadas. La medición que respalda los números está en `specs/tareas/informes/T255-curva-dificultad-asedio.md`.
+
+#### Qué hay hoy (leído en T256)
+
+- `scripts/logic/mode_packs.gd`:
+  - `KEYS` es la lista de claves de primer nivel del `modo.json` (`version`, `nombre`, `descripcion`, `mapas`, `torres`, `reglas`) y `RULE_KEYS`, la de `reglas` (`oro_inicial_%`, `vidas` y `vida_monstruos_%`). **Una clave desconocida es un error del modo**, con la lista de las que se usan.
+  - `_read_settings` lee la lista de `mapas` **antes** que las `reglas`. `_read_rules` valida con `_whole` (entero entre `MIN_PERCENT` = 10 y `MAX_PERCENT` = 1000 para el oro y la vida; 1 a `LevelFile.MAX_LIVES` para las vidas).
+  - `_read_map` lee cada mapa con `LevelFile.parse` y llama a `_apply(level, settings)`, que escribe `level.enemy_health_percent = rules["vida_monstruos_%"]` **igual para todos los mapas**.
+  - `add_map` y `create` reescriben el `modo.json` con `_write`, que vuelve enteros los números enteros (`_whole_numbers`, recursivo).
+- `scripts/data/level_data.gd`: `enemy_health_percent` (100 por omisión) ya está y es lo que consume el generador (`WaveSpawner.setup`, que aplica el % después de la escala por oleada).
+- `data/modos/asedio/modo.json`: `mapas` 1 a 9, `oro_inicial_%` 100 y `vida_monstruos_%` 115.
+- `tools/balance_sim.gd`: `modo=asedio level=N` lee el mapa **con `ModePacks.map_level`**, o sea que **ya recibe el porcentaje por mapa sin tocar nada**. No tiene mejoras de torres ni política por mapa.
+
+#### Archivos
+
+**Código** (lo hace T258):
+
+- `scripts/logic/mode_packs.gd`: constante `RULE_HEALTH_BY_MAP = "vida_monstruos_por_mapa_%"` (en `RULE_KEYS`); `_read_rules` recibe la lista de mapas y valida la tabla (objeto; cada clave **en `mapas`**; cada valor entero entre 10 y 1000, con `_whole`); `_apply` recibe el id del mapa y elige **tabla → global → 100**. Nada más del archivo cambia. **Es la única pieza de código del juego.**
+- `tools/balance_sim.gd`: `mejoras=llenar|temprana` (apagado por omisión), una política por mapa en un archivo de datos de la herramienta y una corrida de perfil que imprime la tabla y los promedios por bloque. **Debe compilar con `--check-only`** (T254).
+
+**Datos:**
+
+- `data/modos/asedio/modo.json`: `level_01` a `level_15`, `vida_monstruos_%` 115 y la tabla de **13 excepciones** de RF-494.
+- La política del bot por mapa (en `tools/`, no en el juego): `level_02` → `smart` + `llenar`; `level_04` → `sin_recursos` + `temprana`; el resto → `sin_recursos` + `llenar`.
+
+#### Cómo se decide la vida de un mapa (referencia para quien programa)
+
+```
+vida efectiva de un enemigo en un mapa del modo
+  = max(1, percent_of( scaled_health_percent(vida base, oleada), P ))
+    (dos redondeos, igual que hoy: primero la escala por oleada, `Rules.scaled_health_percent`, que da un
+     entero; después `Rules.percent_of`, al entero más cercano; `wave_spawner.gd:112`)
+
+  P = reglas["vida_monstruos_por_mapa_%"][id del mapa]     si el mapa está en la tabla
+      reglas["vida_monstruos_%"]                           si no, y el modo lo trae
+      100                                                  si no
+```
+
+#### Orden de trabajo
+
+1. **T258 · dependencias** (T253 hecha o no: decide si 7, 10, 13 y 14 se miden o quedan «a remedir»).
+2. **T258 · la clave y su validación** (`ModePacks`), con sus tests de errores y de compatibilidad.
+3. **T258 · los datos** del modo Asedio y los tests del Asedio oficial.
+4. **T258 · el bot** (mejoras y política por mapa) y las 75 partidas.
+5. **T258 · los documentos** (`CONTENIDO.md`, `README.md`, `ONBOARDING.md`, `CHANGELOG.md`, M56, `03-tareas.md`, plan 08).
+
+#### Pruebas que T258 tiene que escribir
+
+Las de la ficha (`specs/tareas/T258-asedio-porcentajes-por-mapa.md`, paso 6): tabla y global; tabla sin global; cada error con su motivo; tabla vacía; compatibilidad con los modos que ya existen; oro y vidas intactos; `add_map` conserva la tabla; el Asedio oficial con 15 mapas, las mismas oleadas que la campaña y los 15 porcentajes de RF-494; 15 tarjetas en la selección; el 10 se abre al ganar el 9; sin textos ni piezas en los 15.
+
+#### Riesgos y cosas que no se saben
+
+- **Las cuatro filas «a remedir»** (7, 10, 13 y 14) están medidas **sin La Cuadrilla**. Con ella el bot ya pasó de perder Asedio 7 en la oleada 19–20 a perderlo en la 11 (T252, al 115 %). Si T258 se hace antes de T253, esos cuatro números **no valen** hasta repetirlos.
+- **Una persona no jugó nada.** Los porcentajes salen del bot, que **no mejora, vende ni repara como lo haría quien juega**; las vidas son un indicador de margen, no una escala de dificultad. La progresión **por bloques** baja (16,00 · 11,72 · 6,84) pero **no es estricta mapa por mapa**. Se juega en G5.
+- **Los porcentajes bajos (101 %) casi no cambian la vida** de los enemigos chicos por el redondeo: el 101 % del mapa 13 no lo hace «más difícil» que la campaña en todo el nivel (T255 §4.1). **«Mayor que 100» es una condición de formato, no una garantía de dificultad.**
+- **Una semilla no alcanza.** El mapa 14 al 122 % ganaba la semilla 1 y perdía las otras cuatro. Por eso el criterio es **cinco semillas** (RF-495).
+- **El bot elige la política por mapa** (`smart` en el 2, mejoras tempranas en el 4): son decisiones del instrumento fijadas antes de medir, y si cambian, la tabla puede cambiar. Están en un archivo aparte para que se vean.
+- **Una versión anterior del juego rechaza** un modo con la tabla. Es un cambio de formato compatible hacia atrás solamente: los paquetes viejos cargan en la versión nueva, no al revés.
+- **El editor no edita la tabla** (la conserva). Un modo propio con la tabla se arma a mano.
+
+#### Lo que M56 no toca
+
+La campaña y sus 15 niveles, `LevelFile`, `LevelData`, `WaveSpawner`, `Rules`, el guardado, la Wiki, los textos del lore, el arte, las tablas del bot de la regla de oro (`sin_recursos` sin mejoras, RF-432 y RF-475) y el selector de modos (más allá de listar 15 tarjetas en vez de 9).

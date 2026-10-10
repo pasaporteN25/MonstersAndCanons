@@ -75,7 +75,7 @@ Columna "Tu respuesta": ✔ acepto · ✘ no · ✎ cambio (escribir cuál).
 | Q-34 | ¿Aprobás las **fichas de los 15 mapas** del plan 08, sección 5? | Aprobarlas como **dirección**. Cada tarea de nivel completa los detalles. | ✔ (2026-10-08) como dirección, **con el reparto nuevo** del plan 08 §5: nivel 7 suma el primer drop de recursos, el Francotirador con recurso y un primer indicio del símbolo A; nivel 8 queda con el debut del Guardián, la pieza 1/3 y la revelación del símbolo A; nivel 9 suma el debut del Mortero (más la pieza 2/3 y el Curandero); nivel 10 es la mina explotable y la pieza 3/3. |
 | Q-35 | ¿Chamán (11) y Espejo (12) debutan en el bloque 3? | **Sí.** Ya están hechos y el Chamán es el "sabotaje" del lore (07 §2.5). | ✔ (2026-10-08) |
 | Q-36 | Niveles 1 a 5: ¿solo decoración y textos, sin tocar casillas ni oleadas? | **Sí.** Las señales reemplazan casillas `X`, que ya estaban bloqueadas. | ✔ (2026-10-08) |
-| Q-37 | ¿Asedio pasa a tener los 15 mapas? | **Sí**, al final (T235). Es solo datos. | ✔ (2026-10-08) |
+| Q-37 | ¿Asedio pasa a tener los 15 mapas? | **Sí**, al final (T235). Es solo datos. | ✔ (2026-10-08) · ✎ (2026-10-10): **sí, los 15, con 115 % global y un porcentaje de vida por mapa** (D-095, M56; lo hace T258, porque el bot no ganaba el 10 a 15 al 115 %) |
 
 ## G. Arte
 

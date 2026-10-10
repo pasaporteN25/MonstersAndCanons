@@ -1895,12 +1895,15 @@ Como el juego se va a regalar, no tiene sentido un ejecutable aparte para el mod
 ### M49 · Prueba de modos unificada con el gestor de mapas (Lucas, 2026-10-07)
 **Estado: hecha en T197 (2026-10-07).** Es la prueba chica de modos de B-05 (D-078). Un modo es un paquete de datos, igual que un mapa de la comunidad pero con varios mapas y reglas. Épocas pasó al otro juego (D-076).
 
+**Revisada en T256 (2026-10-10, D-095):** Asedio pasa a los **15 mapas** y a un **porcentaje de vida por mapa**, con una tabla opcional en el paquete. El texto de RF-388 y RF-391 **no se reescribe**: queda como se hizo en T197 y lo que cambia está en **M56 (RF-492 a RF-496)**, que **manda** donde difiera. Hasta que T258 lo programe, el juego sigue con los mapas 1 a 9 y el 115 % uniforme.
+
 - **RF-388** **Paquete de modo.**
   - Es una carpeta con un `modo.json` y sus mapas JSON (formato §7.8). El `modo.json` lleva versión, nombre, descripción y la lista ordenada de mapas, y como opcionales las torres disponibles y las reglas `oro_inicial_%`, `vidas` y `vida_monstruos_%`.
   - Cada mapa de la lista se busca primero en la carpeta del modo y, si no está, entre los niveles oficiales (`data/levels/`). Así un modo puede reusar mapas de la campaña sin copiarlos *(aclarado en T197)*.
   - Los modos oficiales viven en `res://data/modos/<id>/` y los propios en `user://modos/<id>/`. Un modo propio con el mismo nombre de carpeta que uno oficial se muestra con error, para que sus récords no se mezclen.
   - **Solo datos:** un modo nunca trae código (como RF-204).
   - **Dado** un paquete roto, **cuando** se listan los modos, **entonces** aparece con su motivo y los demás se ven igual (como RF-222).
+  - *(Ampliado en T256, RF-492: dentro de `"reglas"` puede venir una tabla opcional de porcentajes de vida por id de mapa, que manda sobre `vida_monstruos_%` en ese mapa.)*
 - **RF-389** **Selección de nivel con modos.**
   - Arriba hay un selector de modo:
     - **Campaña:** la de siempre, sin mover archivos.
@@ -1908,20 +1911,24 @@ Como el juego se va a regalar, no tiene sentido un ejecutable aparte para el mod
     - **Comunidad:** los mapas sueltos de `user://maps/`, como hoy.
     - **Los modos propios.**
   - **Cuando** se elige un modo, **entonces** se ven sus mapas en orden, con sus estrellas.
+  - *(T256, RF-496: sin cambios de regla; Asedio pasa a mostrar 15 tarjetas.)*
 - **RF-390** **Progreso por modo.**
   - Cada mapa de un modo guarda vidas, estrellas, puntaje y top 5 con el id `modo_<modo>_<mapa>`.
   - No cuenta para la campaña, el total de estrellas de la campaña, el Salón de la fama ni la colección de avances.
   - En un modo oficial el primer mapa está abierto y cada uno se habilita al ganar el anterior del mismo modo. En los modos propios, todos están abiertos. El modo de pruebas abre todo (RF-183).
+  - *(T256, RF-496: sin cambios de regla; con 15 mapas, el 10 se abre al ganar el 9 de Asedio, y el progreso ya guardado de los mapas 1 a 9 no se toca.)*
 - **RF-391** **Modo oficial de prueba "Asedio".**
   - Son los mapas 1 a 9 de la campaña con sus mismas oleadas y monstruos con más vida. Valor en datos: **vida 115 %**, con el mismo oro, ajustable. *(Ajustado en T197 con el bot: la propuesta inicial de vida 150 % y oro 80 % hacía perder al bot en la oleada 4 de los mapas 1 a 3, y hasta 125 % con el mismo oro perdía temprano. Con 115 % gana el mapa 1 con 3 vidas y el 3 con 6, contra 20 y 18 en la campaña.)*
   - Cubre también los "niveles difíciles" de B-10.
   - **Dado** el bot de balance, **cuando** juega los primeros mapas de Asedio, **entonces** se informa si se pueden ganar. No es balance definitivo.
+  - *(Revisado en T256, RF-493 y RF-494: **los 15 mapas** de la campaña y **115 % como regla global con un porcentaje propio por mapa**. Los valores de arriba (mapas 1 a 9, 115 % uniforme) son los de T197 y valen hasta que T258 programe M56. El criterio «no es balance definitivo» sigue vigente.)*
 - **RF-392** **El editor guarda en modos.**
   - "Guardar" sigue como hoy: mapa suelto (Comunidad) o el modo donde ya está el mapa.
   - Nueva acción **"Guardar en un modo…"**: se elige un modo propio existente o uno nuevo (con su nombre) y el nombre del archivo *(aclarado en T197)*.
   - Crear un modo desde el editor arma la carpeta y su `modo.json`; cada mapa nuevo se agrega al final de la lista. Después, "Guardar" sigue guardando en ese modo.
   - Abrir un mapa en el editor lista también los de los modos propios.
   - Nunca toca `data/` ni `campaign.json` (RF-210).
+  - *(T256, RF-496: guardar o agregar un mapa a un modo propio que ya trae la tabla de RF-492 **no la borra ni la cambia**. El editor **no** tiene pantalla para editarla: se escribe a mano en el `modo.json`, como el campo `"textos"`.)*
 
 ### M50 · Infraestructura: demolición, recursos y hallazgos (Lucas, 2026-10-08; T205)
 **Estado: especificada en T205, a la espera del OK de Lucas (compuerta G3). Todavía no hay código.** Salen del documento 07 (§5 a §8, §12) y de las respuestas de Lucas al cuestionario 09 del 2026-10-08 (Q-08 a Q-27 y Q-31, con los cambios ✎ de Q-10, Q-18 y Q-21). Las razones y las alternativas descartadas están en D-080 a D-085, y el cómo técnico, en la sección M50 de `02-plan-tecnico.md`. Las tareas de código son T206 a T214.
@@ -2082,6 +2089,7 @@ Valores: los números de este bloque son **iniciales** (los pidió así Lucas en
 - **RF-432** **Todo mapa con recursos se gana sin recursos:** **dado** cualquier nivel de la **campaña** que **tenga recursos** (RF-416), **cuando** el bot de balance juega la estrategia **`sin_recursos`** con **5 semillas**, **entonces gana en al menos 4**. Los números son **N = 5** y **M = 4** (valores iniciales, en la herramienta y no en el juego).
   - La estrategia `sin_recursos` es una partida de verdad con las reglas de siempre: **no demuele** nada, **no compra la demoledora**, **no habilita extracción**, **no usa la forma de pago con recursos** del Francotirador, **no construye torres con `resource_cost`**, no empieza con recursos regalados y no usa las herramientas de administración. Si el mapa se gana así, ningún removible es obligatorio y ningún recurso es indispensable.
   - La comprueba `tools/balance_sim.gd` (`check_rule=1`, T214), que termina con código de salida 1 si no se cumple. La corre **cada tarea de nivel** que agrega o cambia un mapa con recursos (T223 a T225 y T229 a T234) y la regresión final (T236).
+  - *(T256, RF-495: `sin_recursos` **sin mejoras de torres** sigue siendo la referencia histórica de esta regla y de las tablas de la campaña. Las variantes con mejoras del bot sirven para medir Asedio y **no la reemplazan**.)*
   - El bot **no reemplaza** a las partidas de Lucas (G4 y G5), pero un mapa que no cumple la regla **no se entrega**.
 - **RF-433** **Lo que no puede ser obligatorio (07 §12):**
   - Ningún removible, mina o bosque es necesario para ganar, ni para llegar a un camino o a una casilla indispensable; los recorridos no dependen de la demolición (RF-400).
@@ -2381,7 +2389,7 @@ Los puntos donde conviene que Lucas mire con más atención antes de programar (
   7. **Textos:** de `11-textos-lore.md`, tal cual, en el campo `"textos"` (RF-464).
   8. **Disruptora (decisión de Lucas, T217):** su balance se **reevalúa en el 11**. El Resultado de T229 trae la tabla del bot **con y sin** Disruptora, y **Lucas decide** si se toca algo (costo, supresión o cadencia, Q-33); la tarea no cambia esos números por su cuenta.
   9. **Las marcas «A REVISAR TRAS G4»** de las fichas se confirman o se corrigen **antes** de empezar el nivel que las tiene.
-  10. **Asedio:** los niveles 11 a 15 no se suman a Asedio en sus tareas; lo hace T235.
+  10. **Asedio:** los niveles 11 a 15 no se suman a Asedio en sus tareas; lo hace T235. *(T256: Asedio suma los 15 mapas con un porcentaje de vida por mapa, RF-493; la escalera de este punto sigue midiéndose con `sin_recursos` sin mejoras, RF-495.)*
 
 > **Criterio de aceptación RF-474 y RF-475**
 > **Dado** cualquier nivel del 11 al 15 → **Entonces** su `"torres"` no incluye `basic` e incluye el Mortero, la Disruptora y el Mecánico. **Dado** un guardado sin la colección de la Disruptora → **Entonces** el 11 ofrece 8 torres (o 9 con el Mecánico) y se gana igual. **Dado** el bot con 5 semillas en un nivel del bloque 3 → **Entonces** `sin_recursos` gana al menos 4, y pasa las oleadas 1 a 3 sin perder vidas en al menos 4. **Dado** el 11 → **Entonces** el Chamán aparece por primera vez en una oleada sin Guardián, Curandero ni Espejo.
@@ -2635,6 +2643,7 @@ Corta, en orden de importancia. Cada una trae mi recomendación; si no contestá
   - **Semilla para la v2 en 3D** *(Lucas, 2026-10-10)*: la biblia (`10-universo.md` §9) anota **La Cuadrilla** como semilla. **No está prometida y no se prepara nada de 3D en la V1:** ni modelos, ni campos, ni nombres reservados.
 
 - **RF-491** **Asedio, el editor y lo que no cambia:**
+  - *(Actualizado en T256: Asedio pasa a los 15 mapas (RF-493), así que **los cuatro niveles** (7, 10, 13 y 14) quedan en Asedio y heredan la Cuadrilla; sus porcentajes de vida hay que **remedirlos** con ella, RF-494. Lo que sigue se escribió con Asedio en 9 mapas.)*
   - **Asedio hereda las oleadas** (RF-391: «mismas oleadas»). De los cuatro niveles, **solo el 7 está en Asedio** (que tiene los mapas 1 a 9; el 10, el 13 y el 14 no). **Medido:** el bot pierde Asedio 7 **sin** la Cuadrilla en la oleada 19 o 20 de 20, y **con** ella en la **11 de 20** (con `sin_recursos` y con `mix`, 3 semillas). Si algún día Asedio suma el 10, el 13 o el 14, también la heredan. **Lucas decide** en P2.
   - **El editor, Pruebas y los mapas de la comunidad** pueden usar `ratero` y `cargador` como cualquier enemigo: las listas salen de `data/enemies/` (RF-203 y RF-233). Un mapa de la comunidad ya guardado carga igual.
   - **No cambia:** el Ladrón, el Soberano, el Coloso, las torres, el guardado (no hay campo nuevo: lo que se vio se recuerda con `seen_enemies`), la Guía ni las pantallas.
@@ -2663,8 +2672,14 @@ Corta, en orden de importancia. Cada una trae mi recomendación; si no contestá
 Corta, en orden de importancia. Cada una trae mi recomendación; **sin tu OK a P1, T253 no arranca** (la compuerta es tuya).
 
 1. ✔ **P1 · ¿Los niveles 7, 10, 13 y 14, con el debut en el 7?** *(Lucas: sí, 2026-10-10)* Recomiendo que **sí**. Son los únicos donde el bot gana con margen con las dos formas de armar la oleada (RF-488); el 7 es el nivel más holgado (16 vidas), no estrena otro enemigo y viene justo después del Ladrón (6). Las otras opciones: **debutar en el 10** (cambia RF-453, «no estrena enemigos», y el bloque 2 cierra con extracción y pieza: lo desaconsejo), o **solo en el 13 y el 14** (más corto, pero el 13 ya debuta las escoltas).
-2. ⏳ **P2 · Asedio 7** *(abierta: T253 lo dejó heredando, midió 11 de 20 con `sin_recursos` y `mix` y **no cerró** la decisión)*. El mapa 7 de Asedio hereda la Cuadrilla (RF-391) y el bot pasa de perderlo en la 19 a perderlo en la 11. Recomiendo **dejar que herede**: el bot ya lo perdía, Asedio «no es balance definitivo» (RF-391) y tener una copia propia sin la Cuadrilla es un cambio de RF aparte. La otra opción es **una copia del mapa 7 propia del modo, sin Cuadrilla** (solo datos, RF-388; pero deja de ser «mismas oleadas»).
+2. ✔ **P2 · Asedio 7** *(Lucas: que herede, 2026-10-10; T253 lo dejó heredando y midió 11 de 20 con `sin_recursos` y `mix`; se compensa con el porcentaje por mapa de M56)*. El mapa 7 de Asedio hereda la Cuadrilla (RF-391) y el bot pasa de perderlo en la 19 a perderlo en la 11. Recomiendo **dejar que herede**: el bot ya lo perdía, Asedio «no es balance definitivo» (RF-391) y tener una copia propia sin la Cuadrilla es un cambio de RF aparte. La otra opción es **una copia del mapa 7 propia del modo, sin Cuadrilla** (solo datos, RF-388; pero deja de ser «mismas oleadas»).
 3. ✔ **P3 · El texto de «La Cuadrilla» en la Wiki** *(Lucas: aprobado, 2026-10-10)* (`11-textos-lore.md` §4.11). **Lo aprobás vos** (los textos son tuyos). *(Aprobado: T253 lo cargó.)*
 4. ✔ **P4 · Los nombres.** *(Lucas: Ratero y Cargador, 2026-10-10)* *Ratero* y *Cargador* (de informe, como «Soberano» y «Coloso»), y «la cuadrilla» como lo que dicen los colonos. ¿Sirven?
 5. ✔ **P5 · Las frases de las tarjetas** de RF-489. *(Lucas: confirmadas, 2026-10-10)*
 6. ✔ **P6 · El arte.** *(Lucas: primero provisional, 2026-10-10)* Recomiendo **primero provisional** (T253 con las formas de reemplazo, RF-156) y el concepto de Codex **después**, igual que el Coloso; así la medición y el reajuste no esperan al dibujo.
+
+Cortas y en orden de importancia. Ninguna frena a T258: el código y el formato valen igual con cualquier valor de la tabla.
+
+1. **P1 · ¿Jugás la tabla en G5 antes de dar los porcentajes por buenos?** Recomiendo que **sí**, y por eso los valores quedan «iniciales» (RF-494). Probaría con atención los mapas **1 a 4, 6 a 9 y 13 a 15**, que es donde el bot muestra los saltos.
+2. **P2 · ¿Alcanza con escribir la tabla a mano en el `modo.json`?** Recomiendo **sí por ahora**: el editor la conserva pero no la edita (RF-496). Una pantalla para editarla es una tarea aparte y no hace falta para Asedio.
+3. **P3 · La Cuadrilla en Asedio (P2 de M55).** Con los 15 mapas, **los cuatro niveles con Cuadrilla** (7, 10, 13 y 14) quedan en Asedio, no solo el 7. Recomiendo **que hereden** y que T258 remida los cuatro porcentajes. La otra opción es una copia propia del mapa sin Cuadrilla en el modo (solo datos, RF-388), que deja de ser «mismas oleadas».

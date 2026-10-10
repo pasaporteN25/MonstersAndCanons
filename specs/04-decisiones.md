@@ -523,6 +523,8 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
   - Es un modo claramente más difícil. Este bot es simple, así que hace falta una prueba jugando; 110 % es la alternativa si resulta demasiado.
 - **Limitación conocida:** con más de dos modos propios, las solapas no entran en la fila de 1280 px.
 
+**Revisada por D-095 (T256, 2026-10-10):** el esquema del modo gana una tabla opcional de porcentajes de vida por mapa y Asedio pasa a los 15 mapas. Lo de arriba (nueve niveles, 115 % uniforme) **queda como historial** de T197.
+
 ## D-079 · Torres por mapa: lista de las que se ofrecen
 - **Fecha:** 2026-10-08 · **Estado:** Aceptada, hecha en T203 · **Decidió:** Lucas (Q-29 y Q-30 del cuestionario 09) / Claude (formato)
 - **Qué:** el nivel gana el campo opcional `"torres"` con la lista de las torres que ofrece; la tarjeta de la selección muestra sus íconos y marca "Nueva" donde una torre debuta. Con un modo, vale la intersección. Detalle en RF-393 a RF-397.
@@ -828,3 +830,31 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
   - **Solo en Asedio:** los textos no se ven ahí (RF-468), no se cuenta nada del lore, y no arregla Asedio.
   - **En el 15:** ya tiene al Coloso y termina con 2 vidas; el pedido fue no tocarlo.
 - **Qué cambia:** `01-spec.md` (M55, RF-485 a RF-491; una línea en B-07), `10-universo.md` (§4.2, §7 y §9: la Cuadrilla y la semilla), `11-textos-lore.md` (§4.11, borrador), `02-plan-tecnico.md` (M55), `03-tareas.md` (T252 hecha; T253 y T257 pendientes), `08-plan-cierre-v1.md` (tres filas), `specs/tareas/T253-cuadrilla-datos-y-reajuste.md` y el informe `specs/tareas/informes/T252-medicion-cuadrilla.md`. **No cambia ningún dato ni código:** los `.tres`, las oleadas, el artículo de la Wiki y los tests los hace T253.
+
+## D-095 · Asedio con los 15 mapas y un porcentaje de vida por mapa (115 % global y una tabla opcional por id de mapa)
+- **Fecha:** 2026-10-10 · **Estado:** Estructura aprobada por Lucas; **los números de la tabla son iniciales** (medidos en T255 sin La Cuadrilla; los mapas 7, 10, 13 y 14 a remedir), a la espera de G5 · **Decidió:** Lucas (conservar los 15 mapas y la campaña, 115 % global y una tabla opcional de porcentajes por id de mapa) / Claude (formato, validación y valores iniciales, medidos con el bot en T255). **Revisa D-078** y conserva su historial.
+- **Qué:**
+  - El modo oficial **Asedio** pasa de los mapas 1 a 9 a los **15 mapas de la campaña**, con sus mismas oleadas, caminos y enemigos y **sin copiar ningún mapa** (RF-493).
+  - El `modo.json` gana, dentro de `"reglas"`, una **tabla opcional `"vida_monstruos_por_mapa_%"`** con un porcentaje entero por id de mapa. Para cada mapa vale **primero la tabla, después `vida_monstruos_%` y después 100** (RF-492). La `"version"` sigue en 1 y todos los paquetes que ya existen cargan igual.
+  - `vida_monstruos_%` queda en **115 %** como regla global y la tabla trae **13 excepciones**: 105 % en los mapas 1, 2 y 3; 108 % en el 5; 101 % en el 6, 8, 9, 11 y 13; 103 % en el 7; 110 % en el 12; 118 % en el 10 y el 14. Los mapas **4 y 15** toman el 115 % global (RF-494).
+  - El margen de cada mapa se comprueba con el bot, **cinco semillas, política fija por mapa y tres vidas o más** (RF-495).
+  - **La campaña no cambia.**
+- **Por qué:**
+  - **Un solo número no alcanza.** Con 115 % para todos, el bot gana **3 de 15 mapas** y, aun mejorando torres, **6 de 15** (T255). Con la tabla gana **75 de 75** partidas (cinco semillas en cada uno de los 15 mapas). Los porcentajes que dejan al bot ganando con margen van **de 101 % a 118 %**: cada mapa multiplica una base de vida distinta, así que no se pueden juntar bajo un número.
+  - **Resuelve el pendiente de T235.** Lucas había dicho que Asedio tuviera los 15 (Q-37) y T235 frenó porque el bot no ganaba el 10 a 15 al 115 %, con las opciones de dejarlo en 9, sumar solo el 10 y el 12, sumar los 15 igual o bajar el porcentaje de los últimos. Esta decisión es **«los 15, con porcentaje por mapa»**: no pierde ningún mapa ni toca la campaña.
+  - **No hay que tocar nada de la campaña ni de sus niveles.** Se conservan sus oleadas, y su regla de oro y sus tablas del bot (RF-432, RF-475) quedan como estaban.
+  - **Cambia lo mínimo del formato:** una clave opcional dentro de `reglas`, validada con las mismas reglas de `vida_monstruos_%` y el mismo lector. Un id desconocido es un error, no se ignora.
+  - **Los valores salen de datos y no de las ganas,** con cinco semillas por mapa. El caso del mapa 14 lo muestra: **122 %** ganaba con una semilla y perdía las otras cuatro, mientras que **118 %** gana las cinco. Se usó el segundo.
+  - **Se conserva la honestidad sobre lo que no se sabe.** La tabla no demuestra que Lucas sienta bien la progresión (nadie la jugó) ni una curva estricta mapa por mapa (el 4 recompensa mejorar temprano, el 7 deja más vidas que el 6): solo que **el bot gana con margen y los bloques bajan** (16,00 · 11,72 · 6,84 vidas). Por eso es «inicial» y se juega en G5.
+- **Alternativas descartadas:**
+  - **Dejar Asedio en 9 mapas** (opción a de T235): sacrifica seis mapas ya hechos y contradice lo que Lucas pidió en Q-37.
+  - **Sumar solo el 10 y el 12** (opción b de T235): son los únicos de esos seis que el bot gana en la campaña con `mix`, pero así se elige por lo que gana el bot y no por lo que Lucas quiere para el modo; tampoco arregla los mapas 1 a 9, donde el 115 % ya deja al bot con 3 vidas en el 1 y lo hace perder el 2, el 4, el 6, el 7, el 8 y el 9 (sin mejoras, T255).
+  - **Un porcentaje único más bajo** (por ejemplo 105 % o 101 %): con 101 a 105 % el bot gana la apertura, pero **los mapas 10 y 14 quedarían con mucho margen** (al 115 % y mejorando, el bot los gana con 10 y con 12 a 14 vidas) y recién se acercan al borde con 118 %: con un solo número unos mapas quedan regalados y otros imposibles.
+  - **Seis copias de los mapas 10 a 15 con menos aumento de vida por oleada** (la alternativa de T255 §5): **no necesita código** (RF-388 ya busca los mapas en la carpeta del modo) y mantiene la apertura al 115 %, pero **no corrige los picos de 1 a 9**, hay que **sincronizar las copias** cada vez que cambie la campaña y el modo deja de ser «mismas oleadas». Queda como **plan B** si Lucas prefiere no extender el formato, copiando solo los mapas que el 115 % no deja ganar y con la validación de cinco semillas.
+  - **Un campo `vida_monstruos_%` dentro del JSON de cada nivel:** `LevelFile` **no lo acepta** y haría que un mapa de la campaña o de la comunidad traiga una regla que es del modo.
+  - **Convertir `"mapas"` en una lista de objetos** (`{"mapa": "level_07", "vida_%": 103}`): rompe el formato de la versión 1 y todo lector existente, y obliga a subir la versión del paquete sin necesidad.
+  - **Porcentajes por bloque** (`"1-5": 105`): más corta, pero **se mueve sola** si se reordena o se suma un mapa; por id es explícito.
+  - **Escribir los 15 porcentajes, incluidos el 4 y el 15:** el global dejaría de significar algo y mover el 115 % no mueve a esos dos. Se escriben las 13 excepciones.
+  - **Bajar la dificultad de la campaña para que el bot de la regla de oro gane el mapa 2:** el mapa 2 lo pierde `sin_recursos` por su orden de compra y lo gana `smart` (T236), no es un fallo del juego.
+  - **Hacer que el bot de referencia mejore siempre y cambiar así las tablas de campaña:** se confundiría el instrumento con la dificultad. Las variantes con mejoras se **suman** como opciones de la herramienta; la referencia histórica (`sin_recursos` sin mejoras) queda (RF-495, punto 6).
+- **Qué cambia:** `01-spec.md` (M56, RF-492 a RF-496; notas en el encabezado de M49 y en RF-388, RF-389, RF-390, RF-391, RF-392, RF-432, RF-475 y RF-491), `02-plan-tecnico.md` (M56), `03-tareas.md` (T256 hecha; T258 pendiente; una nota en T235), `08-plan-cierre-v1.md` (dos filas), `09-decisiones-pendientes-v1.md` (una línea en Q-37), `specs/tareas/T258-asedio-porcentajes-por-mapa.md` y el informe `specs/tareas/informes/T255-curva-dificultad-asedio.md` como respaldo. **No cambia ningún dato ni código:** el `modo.json`, `ModePacks`, el bot y los tests los hace T258.
