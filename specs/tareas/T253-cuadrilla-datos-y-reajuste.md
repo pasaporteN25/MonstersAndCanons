@@ -1,6 +1,6 @@
 # T253 · Datos y reajuste de La Cuadrilla (niveles 7, 10, 13 y 14)
 
-> **Estado: PENDIENTE, a la espera del OK de Lucas a P1 de M55** (qué niveles). La spec es **M55** (`01-spec.md`, RF-485 a RF-491), la decisión es **D-094** y la medición que la respalda, `specs/tareas/informes/T252-medicion-cuadrilla.md`. Esta ficha **manda sobre lo que el informe deja abierto**; si algo de acá contradice la spec, manda la spec.
+> **Estado: HECHA (2026-10-10).** Lucas aprobó P1, P3, P4, P5 y P6; P2 (Asedio 7) quedó abierta y se dejó heredando. El Resultado, con las tablas del bot, está en `specs/03-tareas.md`. *(Lo que sigue es la ficha original.)* ~~PENDIENTE, a la espera del OK de Lucas a P1 de M55~~ (qué niveles). La spec es **M55** (`01-spec.md`, RF-485 a RF-491), la decisión es **D-094** y la medición que la respalda, `specs/tareas/informes/T252-medicion-cuadrilla.md`. Esta ficha **manda sobre lo que el informe deja abierto**; si algo de acá contradice la spec, manda la spec.
 
 - **Ejecutor:** Sonnet 5.5 · esfuerzo **medio** · **Tamaño:** mediano (dos archivos de datos, cuatro niveles, un artículo, tests y el bot)
 - **Depende de:** T252 (**hecha**) · **Compuerta:** 🚦 Lucas contestó **P1** (niveles), **P2** (Asedio 7), **P4** (nombres) y **P5** (frases) de M55; **P3** (el texto del artículo) solo hace falta para cargarlo · **El arte (T257) no bloquea:** se usa arte provisional.

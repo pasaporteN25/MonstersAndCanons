@@ -2,6 +2,15 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## La Cuadrilla: una banda nueva en los niveles 7, 10, 13 y 14 *(T253, 2026-10-10)*
+
+- **Dos enemigos nuevos, el Ratero y el Cargador.** Son criaturas que **andan en banda**: el **Ratero** es chico y rapidísimo (14 de vida, velocidad 2,2, quita 1 vida) y el **Cargador** es grande y lento (110 de vida, armadura 1, quita 2 vidas). **Los dos roban oro** como el Ladrón, pero **cada uno por su cuenta**: el Ratero 2 de oro cada 2 segundos y el Cargador 4, sin bajar nunca de 10. Se barren con **torres de área** (Ratero) y con **daño sostenido** (Cargador); el Hielo los frena.
+- **Dónde salen.** Debutan en el **nivel 7** (oleada 8) y vuelven en el **10**, el **13** y el **14**, **cuatro veces en cada uno**, siempre en oleadas sin Guardián, Curandero, Chamán, Espejo ni Soberano. Los demás niveles no cambian, y el 15 tampoco.
+- **Wiki.** Los dos tienen su entrada en **Enemigos** (se abre la primera vez que los ves, con la línea «Robo» y los niveles donde aparecen) y hay un artículo nuevo en **Lore**, **«La Cuadrilla»**, que se abre al ganar el nivel 7; los artículos siguientes conservan su orden.
+- **Todavía sin dibujo propio:** por ahora se ven como una **forma de color** (un rombo ocre el Ratero y un hexágono más oscuro el Cargador) y en la Wiki aparecen sin ilustración. El arte llega después.
+- **Modo Asedio:** el mapa 7 hereda a la Cuadrilla, así que ahí se vuelve más difícil.
+- Los números del Ladrón, del Soberano, del Coloso y de las torres **no cambian**.
+
 ## Versión 1.0: el juego pasa a llamarse «Monsters & Canons» *(T237, 2026-10-09)*
 
 - **Nuevo nombre en la ventana y en los archivos.** El juego se abre como **Monsters & Canons**, y los archivos son `MonstersCanons.exe` (Windows), `MonstersCanons.x86_64` (Linux) y `MonstersCanons.apk` (Android). La versión es la **1.0.0**.

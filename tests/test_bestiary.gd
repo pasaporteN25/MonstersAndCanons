@@ -1,6 +1,10 @@
 # Tests del bestiario que se va llenando (T114, RF-238 a RF-240, D-036).
 extends GutTest
 
+## T253: la Cuadrilla usa arte provisional (la forma geométrica, RF-156) hasta que T257 la dibuje. Cuando tengan
+## dibujo, sacarlos de esta lista para que el chequeo vuelva a valer para todos.
+const PROVISIONAL_ART: Array[StringName] = [&"ratero", &"cargador"]
+
 const TEST_PATH: String = "user://test_save_bestiary.json"
 const SCREEN: PackedScene = preload("res://scenes/ui/wiki_screen.tscn")
 
@@ -68,7 +72,8 @@ func test_a_locked_entry_keeps_its_id_its_drawing_and_its_place() -> void:
 	assert_eq(locked.entries.size(), open.entries.size())
 	for i: int in open.entries.size():
 		assert_eq(locked.entries[i].id, open.entries[i].id, "el orden no cambia al abrir enemigos")
-		assert_eq(locked.entries[i].icon.size(), 1, "el dibujo se ve en silueta")
+		var expected_icons: int = 0 if locked.entries[i].id in PROVISIONAL_ART else 1
+		assert_eq(locked.entries[i].icon.size(), expected_icons, "el dibujo se ve en silueta")
 
 
 func test_towers_and_the_guide_are_never_locked() -> void:

@@ -6,7 +6,7 @@
 >
 > **Agregado por T243 (2026-10-09):** el artículo 10, «La Central», suma **un párrafo sobre el Coloso**, el jefe supremo que eligió Lucas. Es el texto de tono del informe de T243, que no cambia ningún otro texto de este documento. **Lucas todavía no lo leyó en su lugar**: si le parece mal, se corrige acá y se copia al artículo de la Wiki Lore. Dice «tres» porque el Coloso suelta tres Pedazos (RF-481): **si el balance cambia ese número, se corrige también acá.**
 
-> **Agregado por T252 (2026-10-10):** el artículo **11, «La Cuadrilla»** (§4.11), sobre la banda de Rateros y Cargador que Lucas eligió para la V1 (M55, RF-489, D-094). **Es un borrador que Lucas todavía no leyó** y **no se carga en el juego** hasta que diga que sí (P3 de M55). No cambia ningún otro texto de este documento: en particular, el artículo 5 sigue diciendo que el Ladrón va solo.
+> **Agregado por T252 (2026-10-10):** el artículo **11, «La Cuadrilla»** (§4.11), sobre la banda de Rateros y Cargador que Lucas eligió para la V1 (M55, RF-489, D-094). **Lucas lo aprobó el 2026-10-10** (P3 de M55, en el encargo de T253) y **T253 lo cargó** en `data/wiki/lore/la_cuadrilla.json`, tal cual. No cambia ningún otro texto de este documento: en particular, el artículo 5 sigue diciendo que el Ladrón va solo.
 
 **Qué es este documento.** Los textos finales que muestra el juego (M52, `01-spec.md`): el **lugar**, la **entrada** y la **victoria** de los 15 niveles, el **epílogo**, los **créditos** y **10 artículos** de la categoría Lore de la Wiki (más el borrador del 11, T252). Es el **único lugar** donde viven los textos: la ficha de cada nivel (§7.13 a §7.17 de la spec) y las tareas T228 a T234 los **copian tal cual** de acá, y si Lucas corrige uno se corrige acá primero.
 
@@ -250,7 +250,7 @@ Diez artículos aprobados en `data/wiki/lore/` (RF-469), más un **undécimo en 
 | 8 | `los_pozos.json` | Los pozos | nivel 11 |
 | 9 | `poblados_vacios.json` | Los poblados vacíos | nivel 14 |
 | 10 | `la_central.json` | La Central | nivel 15 |
-| 11 *(borrador, T252)* | `la_cuadrilla.json` | La Cuadrilla | nivel 7 *(su `orden` va entre el del 5 y el del 6)* |
+| 11 *(aprobado, T253)* | `la_cuadrilla.json` | La Cuadrilla | nivel 7 *(su `orden` va entre el del 5 y el del 6)* |
 
 
 ### 1. El oasis
@@ -371,7 +371,7 @@ Diez artículos aprobados en `data/wiki/lore/` (RF-469), más un **undécimo en 
 
   > El informe termina ahí. No dice qué se hará con lo que falta.
 
-### 11. La Cuadrilla *(borrador de T252; Lucas todavía no lo leyó)*
+### 11. La Cuadrilla *(aprobado por Lucas el 2026-10-10; cargado por T253)*
 
 - **Subtítulo:** Los que andan juntos
 - **Se abre al ganar:** el nivel 7 (`level_07`)
@@ -403,7 +403,7 @@ Diez artículos aprobados en `data/wiki/lore/` (RF-469), más un **undécimo en 
 3. **Los hechos que los textos suponen del juego** (que el 9 «prueba el primer mortero», que el 11 «apaga torres», que el 13 trae una escolta por dos caminos) son los de la biblia y el plan 08 §5. Si la partida de Lucas del 6 al 10 (T226, todavía sin cerrar) cambia algo de eso, los textos afectados son el 9 (mortero) y los de las fichas marcadas **A REVISAR TRAS G4** en la spec.
 4. **Los artículos de Lore no pasaron por la mirada de nadie más** que la mía. En particular «Los poblados vacíos» termina con una frase de informe burocrático («posiciones desocupadas») que busca decir mucho sin decirlo: si a Lucas le parece que subraya de más, se saca esa línea.
 
-5. **El artículo 11, «La Cuadrilla»** (T252) **no pasó por la mirada de nadie más que la mía.** Revisé a mano que no use las palabras vetadas ni nombre nada que debute después del nivel 7 (no nombra a los Moradores, la marca ni a ningún enemigo de otros niveles) y que concuerde con el artículo 5 («va solo» / «andan juntas»). No se comprobó que suene bien ni que «Rateros» y «Cargador» sean los nombres que Lucas quiere (P3 y P4 de M55). Si cambia el nivel del debut, **cambia también el artículo que lo abre** y hay que volver a revisar qué puede nombrar.
+5. **El artículo 11, «La Cuadrilla»** (T252) **no pasó por la mirada de nadie más que la mía** *(hasta que Lucas lo aprobó el 2026-10-10; T253 lo cargó)*. Revisé a mano que no use las palabras vetadas ni nombre nada que debute después del nivel 7 (no nombra a los Moradores, la marca ni a ningún enemigo de otros niveles) y que concuerde con el artículo 5 («va solo» / «andan juntas»). No se comprobó que suene bien ni que «Rateros» y «Cargador» sean los nombres que Lucas quiere (P3 y P4 de M55). Si cambia el nivel del debut, **cambia también el artículo que lo abre** y hay que volver a revisar qué puede nombrar.
 
 ## 6. Cómo aprobar
 

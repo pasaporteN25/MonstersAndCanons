@@ -176,3 +176,23 @@ func _visual_data(id: String) -> EnemyData:
 	data.size_tiles = 0.5 if id == "colossus" else 0.3
 	data.slow_resistance = 0.5 if id == "colossus" else 0.0
 	return data
+
+# T253: la Cuadrilla usa arte provisional (RF-156): sin `texture` ni `walk_atlas` se dibuja la forma geométrica,
+# así que no entra en las listas de ciclos de caminata de arriba hasta que T257 los dibuje.
+func test_the_band_without_art_falls_back_to_the_shape_until_it_has_an_atlas() -> void:
+	var path := Path2D.new()
+	path.curve = Curve2D.new()
+	path.curve.add_point(Vector2.ZERO)
+	path.curve.add_point(Vector2(1000, 0))
+	add_child_autofree(path)
+	for id: String in ["ratero", "cargador"]:
+		var data: EnemyData = load("res://data/enemies/" + id + ".tres") as EnemyData
+		var enemy: Enemy = ENEMY_SCENE.instantiate()
+		enemy.setup(data, path, data.max_health)
+		add_child_autofree(enemy)
+		enemy.set_physics_process(false)
+		if data.walk_atlas != null:
+			assert_true(enemy.visual_frame_region().has_area(), id + ": con atlas, ciclo integrado")
+		else:
+			assert_eq(enemy.visual_frame_region(), Rect2(), id + ": sin atlas, forma de reemplazo")
+			assert_same(enemy.visual_texture(), data.texture)

@@ -1,0 +1,21 @@
+{
+ "version": 1,
+ "titulo": "La Cuadrilla",
+ "subtitulo": "Los que andan juntos",
+ "orden": 6,
+ "desbloqueo": "level_07",
+ "bloques": [
+  {
+   "tipo": "texto",
+   "texto": "Cerca del aserradero se vieron criaturas chicas y rápidas que se llevan lo que brilla, igual que el Ladrón. A diferencia de él, no andan solas: llegan juntas, y los colonos las llaman Rateros."
+  },
+  {
+   "tipo": "texto",
+   "texto": "Con ellas viene siempre una más grande y lenta, con una bolsa más grande que ella misma donde parece juntarse lo de todas. La llaman el Cargador, y a todas juntas, la cuadrilla, por cómo llegan."
+  },
+  {
+   "tipo": "texto",
+   "texto": "Nadie vio que alguna mande ni que alguna obedezca. Parece que van juntas porque buscan lo mismo."
+  }
+ ]
+}

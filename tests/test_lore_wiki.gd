@@ -65,7 +65,7 @@ func _write(file_name: String, text: String) -> void:
 func test_the_official_lore_articles_have_no_errors() -> void:
 	var result: Dictionary = Wiki.articles(Wiki.LORE_DIR, true, PLANNED_CAMPAIGN)
 	assert_eq(result["errors"].size(), 0, str(result["errors"]))
-	assert_eq((result["entries"] as Array).size(), 10, "los 10 artículos de 11-textos-lore.md §4")
+	assert_eq((result["entries"] as Array).size(), 11, "los 10 artículos de 11-textos-lore.md §4 y «La Cuadrilla» (T253)")
 
 
 func test_the_official_lore_articles_are_the_approved_ones_in_order() -> void:
@@ -74,9 +74,10 @@ func test_the_official_lore_articles_are_the_approved_ones_in_order() -> void:
 	for entry: WikiEntry in result["entries"]:
 		titles.append(entry.title)
 	assert_eq(titles, PackedStringArray(["El oasis", "Cántaro", "La Compañía Meridiana", "El Soberano",
-		"Las criaturas que van solas", "Las ruinas", "Los Moradores", "Los pozos", "Los poblados vacíos", "La Central"]))
+		"Las criaturas que van solas", "La Cuadrilla", "Las ruinas", "Los Moradores", "Los pozos", "Los poblados vacíos", "La Central"]))
 	var unlocks: Dictionary = result["unlocks"]
 	assert_eq(unlocks[&"el_oasis"], &"level_01")
+	assert_eq(unlocks[&"la_cuadrilla"], &"level_07")
 	assert_eq(unlocks[&"las_ruinas"], &"level_08")
 	assert_eq(unlocks[&"la_central"], &"level_15")
 
@@ -169,7 +170,7 @@ func test_a_closed_article_says_the_level_number_and_nothing_else() -> void:
 	assert_eq(entry.blocks.size(), 1)
 
 
-func test_a_save_that_won_1_to_9_has_seven_open() -> void:
+func test_a_save_that_won_1_to_9_has_eight_open() -> void:
 	for i: int in range(1, 10):
 		_win(StringName("level_%02d" % i))
 	var lore: WikiCategory = _lore()
@@ -177,7 +178,7 @@ func test_a_save_that_won_1_to_9_has_seven_open() -> void:
 	for entry: WikiEntry in lore.entries:
 		if not entry.locked:
 			open.append(entry.id)
-	assert_eq(open, PackedStringArray(["el_oasis", "planeta_cantaro", "la_compania", "el_soberano", "criaturas_solas", "las_ruinas", "los_moradores"]))
+	assert_eq(open, PackedStringArray(["el_oasis", "planeta_cantaro", "la_compania", "el_soberano", "criaturas_solas", "la_cuadrilla", "las_ruinas", "los_moradores"]))
 
 
 func test_the_order_does_not_change_when_one_opens() -> void:

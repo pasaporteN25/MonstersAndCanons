@@ -299,6 +299,10 @@ Validación M45:954/954 pruebas y62/62 finales de contenido.24 corridas más rep
 
 Cierra el bloque 2 con un mapa grande (24 × 11) del desierto, dos entradas y 20 oleadas con los enemigos de los niveles 6 a 9 (sin debuts). Tiene una **mina** de reserva finita (100 de oro, 2 recursos por oleada, 8 en total), seis removibles que pueden dar 1 recurso, la **pieza 3/3 de la Disruptora** y el Mortero. Es un mapa de **espacio limitado** (43 casillas libres): el bot sin recursos lo gana con 7 a 13 vidas y las estrategias de extracción y de demolición lo ganan con 17 y 18. La ficha completa está en `specs/01-spec.md` §7.12 (RF-453) y la evidencia, en `art/campaign-t225/README.md`.
 
+### T253 · La Cuadrilla: el Ratero y el Cargador
+
+Dos enemigos nuevos que **roban en banda**: el **Ratero** (chico y veloz, 2 de oro cada 2 s) y el **Cargador** (grande y lento, 4 de oro cada 2 s), cada uno en su propio reloj y sin bajar la caja de 10 de oro. Debutan en el **nivel 7** (oleada 8) y vuelven en el **10**, el **13** y el **14**, cuatro veces por nivel, sin auras ni jefe en esas oleadas. Todo con datos que ya existían; arte provisional (forma geométrica) hasta T257. Hay un artículo nuevo de Lore, **«La Cuadrilla»**, que se abre al ganar el 7. Spec: `specs/01-spec.md` M55 (RF-485 a RF-491), decisión D-094; medición en el Resultado de T253 (`specs/03-tareas.md`).
+
 ### T234 · Nivel 15: La Central, el Coloso y el epílogo
 
 Cierra la campaña: un mapa de pradera de 26 × 12 con **tres entradas**, la **central de energía** (cuatro dibujos de 64 × 64 junto a la salida) y la cadena de abastecimiento, y **30 oleadas** sin el Soberano. El jefe es el **Coloso** (oleadas 26, 28 y 30), que al caer se parte en tres Pedazos; en la 30 viene con la escolta completa. Al ganar, la pantalla de victoria ofrece **«Epílogo»** (imagen, cuatro líneas, «Créditos» y «Niveles») en lugar de «Siguiente nivel», sin guardar nada nuevo. Ficha: `specs/01-spec.md` §7.17 (RF-480 a RF-484, RF-471 y RF-472); evidencia: `art/campaign-t234/README.md`.

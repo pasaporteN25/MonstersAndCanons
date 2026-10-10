@@ -2,7 +2,7 @@
  "version": 1,
  "titulo": "La Central",
  "subtitulo": "Energía y abastecimiento",
- "orden": 10,
+ "orden": 11,
  "desbloqueo": "level_15",
  "bloques": [
   {

@@ -127,6 +127,8 @@ var _had_job: bool = false
 var _watched: LevelSession
 var _res_last: int = 0
 var _res_gained: int = 0
+## Oro que le robaron en la partida (T253: mide a La Cuadrilla; no cambia ningún resultado).
+var _stolen: int = 0
 var _infra_gold: int = 0
 var _machine_wave: int = -1
 var _first_resource_tower_wave: int = -1
@@ -181,6 +183,7 @@ func _start_next_run() -> bool:
 	_watched = null
 	_res_last = 0
 	_res_gained = 0
+	_stolen = 0
 	_infra_gold = 0
 	_machine_wave = -1
 	_first_resource_tower_wave = -1
@@ -334,6 +337,7 @@ func _process(_delta: float) -> bool:
 	if _watched != session:
 		_watched = session
 		session.resources_changed.connect(_on_resources_changed)
+		session.gold_stolen.connect(func(amount: int) -> void: _stolen += amount)
 	var single_run: bool = _rows.is_empty() and _queue.is_empty()
 	if single_run and session.wave > last_reported_wave and session.state != LevelSession.State.WAVE_RUNNING:
 		last_reported_wave = session.wave
@@ -341,14 +345,14 @@ func _process(_delta: float) -> bool:
 			session.wave, session.lives, session.gold, built])
 	if session.is_over():
 		var won: bool = session.state == LevelSession.State.WON
-		print("RESULTADO: %s · oleada %d/%d · vidas %d" % [
-			"VICTORIA" if won else "DERROTA", session.wave, session.total_waves, session.lives])
+		print("RESULTADO: %s · oleada %d/%d · vidas %d · oro robado %d" % [
+			"VICTORIA" if won else "DERROTA", session.wave, session.total_waves, session.lives, _stolen])
 		_rows.append({
 			"level": _current["level"], "strategy": strategy, "seed": _current["seed"],
 			"won": won, "lives": session.lives, "wave": session.wave,
 			"total_waves": session.total_waves, "gold": session.gold,
 			"machine_wave": _machine_wave, "resources_gained": _res_gained, "resources_left": session.resources,
-			"infra_gold": _infra_gold, "first_resource_tower_wave": _first_resource_tower_wave})
+			"gold_stolen": _stolen, "infra_gold": _infra_gold, "first_resource_tower_wave": _first_resource_tower_wave})
 		root.remove_child(game)
 		game.queue_free()
 		game = null
@@ -371,7 +375,7 @@ func _print_summary() -> void:
 	var infra: bool = false
 	for row: Dictionary in _rows:
 		infra = infra or BalanceArgs.is_infra_strategy(row["strategy"])
-	var header: String = "mapa | estrategia       | semilla | resultado | vidas | oleada | oro sobrante"
+	var header: String = "mapa | estrategia       | semilla | resultado | vidas | oleada | oro sobrante | oro robado"
 	if infra:
 		header += " | máquina | recursos obt. | recursos sobr. | oro infra. | 1.ª torre rec."
 	print(header)
@@ -379,6 +383,7 @@ func _print_summary() -> void:
 		var line: String = "%4d | %-16s | %7d | %-9s | %5d | %2d/%-3d | %5d" % [
 			row["level"], row["strategy"], row["seed"], "VICTORIA" if row["won"] else "DERROTA",
 			row["lives"], row["wave"], row["total_waves"], row["gold"]]
+		line += " | %10d" % row["gold_stolen"]
 		if infra:
 			line += " | %7s | %13d | %14d | %10d | %14s" % [
 				_wave_text(row["machine_wave"]), row["resources_gained"], row["resources_left"],
