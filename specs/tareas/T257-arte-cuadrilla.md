@@ -63,3 +63,7 @@ La comprobación estructural verificó 32 cuadros distintos, alfa real, margen e
 **Pendiente:** aprobación de Lucas, captura en una partida real y calibración de parámetros visuales en T253. No se probó balance, rendimiento, exportación, Windows ni Android; no se tocaron datos ni código del juego. La hoja usa colores de suelo/camino de pradera como muestra, no es una captura de juego; el GIF usa una cadencia común para revisar fases, no las velocidades finales de cada especie.
 
 La validación conserva salidas completas en archivos `.txt` dentro de `art/t257-cuadrilla/validation/`; los `.log` de ejecución quedan locales. La importación mostró el aviso de ADB (`cannot connect to daemon at tcp:5037`), sin errores de script. No se modificó la configuración del sistema.
+
+## Integración · T259 · 2026-10-10
+
+El arte quedó **integrado en los datos** (`data/enemies/ratero.tres` y `cargador.tres`: `texture`, `walk_atlas`, `walk_art_scale = 1.0`, `visual_scale = 1.2`, `flip_when_walking_left = false`, `walk_stride_tiles` 0.45 y 0.9) y sigue siendo **provisional, pendiente de aprobación de Lucas**. Los cuatro PNG salieron de `KNOWN_UNUSED`. Suite completa: 1547/1547, sin `SCRIPT ERROR`. Falta la captura en partida real y calibrar los parámetros visuales.

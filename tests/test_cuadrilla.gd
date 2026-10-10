@@ -109,8 +109,8 @@ func test_neither_is_dangerous_and_neither_has_special_behaviour() -> void:
 		assert_null(data.death_spawn, id)
 		assert_eq(data.optional_wave_limit, 0, "%s: sin el tope del Ladrón" % id)
 		assert_ne(data.color, _enemy_data("thief").color, "%s se distingue del Ladrón" % id)
-		assert_null(data.texture, "%s: arte provisional, sin dibujo (RF-156)" % id)
-		assert_null(data.walk_atlas, id)
+		assert_not_null(data.texture, "%s: arte provisional integrado (T259)" % id)
+		assert_not_null(data.walk_atlas, id)
 
 
 func test_the_two_have_different_shape_and_color() -> void:
@@ -292,12 +292,12 @@ func test_the_open_entries_show_the_robbery_and_the_four_levels() -> void:
 		assert_false(text.contains("Nivel 15"), id)
 
 
-func test_the_card_and_the_wiki_draw_without_art() -> void:
-	# RF-156: sin `texture` el juego usa la forma geométrica; nada se rompe sin dibujo.
+func test_the_card_and_the_wiki_draw_with_the_provisional_art() -> void:
+	# T259: el arte provisional de T257 está integrado; la Wiki muestra la ilustración.
 	for id: StringName in BAND:
 		var enemy: Enemy = _spawn(String(id))
-		assert_null(enemy.visual_texture(), id)
-		assert_false(enemy.visual_frame_region().has_area(), id)
+		assert_not_null(enemy.visual_texture(), id)
+		assert_true(enemy.visual_frame_region().has_area(), id)
 		var entry: WikiEntry = _enemies_category(func(_id: StringName) -> bool: return true).find(id)
 		assert_not_null(entry)
 		assert_string_contains(entry.plain_text(), _enemy_data(String(id)).description)

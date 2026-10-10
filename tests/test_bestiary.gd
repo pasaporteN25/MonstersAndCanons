@@ -3,7 +3,7 @@ extends GutTest
 
 ## T253: la Cuadrilla usa arte provisional (la forma geométrica, RF-156) hasta que T257 la dibuje. Cuando tengan
 ## dibujo, sacarlos de esta lista para que el chequeo vuelva a valer para todos.
-const PROVISIONAL_ART: Array[StringName] = [&"ratero", &"cargador"]
+const PROVISIONAL_ART: Array[StringName] = []  # T259: la Cuadrilla ya tiene arte; la lista queda para el próximo arte pendiente
 
 const TEST_PATH: String = "user://test_save_bestiary.json"
 const SCREEN: PackedScene = preload("res://scenes/ui/wiki_screen.tscn")
