@@ -215,6 +215,8 @@ Cada ficha detallada se completa en la tarea de cada nivel con lo que pide el 07
 | T252 | 📜 Spec de La Cuadrilla (M55, RF-485 a RF-491, D-094): los Rateros y el Cargador, y en qué niveles entran (medido con el bot). Sin ficha propia: salió del pedido de Lucas del 2026-10-10 sobre el informe de T251 | Sonnet alto | T251 | Chico |
 | [T253](tareas/T253-cuadrilla-datos-y-reajuste.md) | Datos, oleadas y reajuste de La Cuadrilla (niveles 7, 10, 13 y 14), artículo de la Wiki y tests | Sonnet medio | T252 + el OK de Lucas a P1 de M55; **antes de T238** | Mediano |
 | T257 | 🎨 Arte de La Cuadrilla (Ratero y Cargador, con ciclo de caminata); **no bloquea a T253** | **Codex** | T252 | Mediano |
+| T256 | 📜 Spec de Asedio con porcentaje de vida por mapa (M56, RF-492 a RF-496, D-095): los 15 mapas, 115 % global y una tabla opcional por id de mapa (medida en T255). Sin ficha propia: salió del pedido de Lucas del 2026-10-10 sobre el informe de T255 | Sonnet alto | T255 | Chico |
+| [T258](tareas/T258-asedio-porcentajes-por-mapa.md) | Asedio con los 15 mapas y porcentaje de vida por mapa: la clave en `ModePacks`, los datos, las opciones del bot y los tests. **Resuelve los mapas de T235** | Sonnet medio | T256; **después de T253** (los mapas 7, 10, 13 y 14); **antes de T238** | Mediano |
 
 ### Fase 7 · Candidato de entrega
 | T | Tarea | Ejecutor | Depende de | Tamaño |
@@ -252,6 +254,7 @@ T226 ─ T227 ─ T228 ─ T229..T232 ─ T234 ─ T235 ─ T236 ─ T237 ─ T2
                                   T233 🎨 ──┘
 T227 ─ T243 🚦 ─ T244 🎨 ─ (T234)
 T251 ─ T252 ─ T253 (antes de T238) ; T252 ─ T257 🎨 (en paralelo, sin bloquear)
+T255 ─ T256 ─ T258 (después de T253 y antes de T238; los mapas de T235)
 T238 ─ T240 🚦G6 ─ T241 🎨 ─ T242
 ```
 
