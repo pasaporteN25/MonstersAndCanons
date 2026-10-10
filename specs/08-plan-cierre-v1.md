@@ -212,6 +212,9 @@ Cada ficha detallada se completa en la tarea de cada nivel con lo que pide el 07
 | [T244](tareas/T244-arte-jefe-supremo.md) | 🎨 Arte del jefe supremo | **Codex** | T243 | Mediano |
 | [T234](tareas/T234-nivel-15.md) | Nivel 15 y epílogo | Sonnet alto | T228, T232, T243 (T233 y T244 para el arte final) | Mediano |
 | [T235](tareas/T235-asedio-y-modos.md) | Asedio con 15 mapas y pulido de modos | Sonnet bajo · *apto Qwen* (solo datos) | T234 | Chico |
+| T252 | 📜 Spec de La Cuadrilla (M55, RF-485 a RF-491, D-094): los Rateros y el Cargador, y en qué niveles entran (medido con el bot). Sin ficha propia: salió del pedido de Lucas del 2026-10-10 sobre el informe de T251 | Sonnet alto | T251 | Chico |
+| [T253](tareas/T253-cuadrilla-datos-y-reajuste.md) | Datos, oleadas y reajuste de La Cuadrilla (niveles 7, 10, 13 y 14), artículo de la Wiki y tests | Sonnet medio | T252 + el OK de Lucas a P1 de M55; **antes de T238** | Mediano |
+| T254 | 🎨 Arte de La Cuadrilla (Ratero y Cargador, con ciclo de caminata); **no bloquea a T253** | **Codex** | T252 | Mediano |
 
 ### Fase 7 · Candidato de entrega
 | T | Tarea | Ejecutor | Depende de | Tamaño |
@@ -248,6 +251,7 @@ T200 (Lucas) ──┬─ T202 ─ T201 🚦G2 ───────────
 T226 ─ T227 ─ T228 ─ T229..T232 ─ T234 ─ T235 ─ T236 ─ T237 ─ T238 🚦G5 ─ T239
                                   T233 🎨 ──┘
 T227 ─ T243 🚦 ─ T244 🎨 ─ (T234)
+T251 ─ T252 ─ T253 (antes de T238) ; T252 ─ T254 🎨 (en paralelo, sin bloquear)
 T238 ─ T240 🚦G6 ─ T241 🎨 ─ T242
 ```
 
