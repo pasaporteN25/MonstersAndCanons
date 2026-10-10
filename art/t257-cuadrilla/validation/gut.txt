@@ -1,0 +1,4055 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+---  GUT  ---
+[INFO]:  using [/home/newman/.local/share/JuegoA] for temporary output.
+Godot version:  4.7.2
+GUT version:  9.7.1
+
+
+res://tests/test_audio_options_pause.gd
+* test_every_game_event_has_a_sound
+* test_music_loops
+* test_play_returns_false_for_unknown_sounds
+* test_same_sound_is_not_repeated_too_fast
+* test_a_sound_can_ask_for_a_longer_gap
+* test_music_and_sfx_have_their_own_buses
+* test_volume_zero_mutes_the_bus
+* test_options_menu_saves_on_close
+* test_escape_opens_the_pause_menu_and_pauses
+* test_android_back_button_opens_the_pause_menu
+* test_pause_menu_does_not_open_after_game_over
+11/11 passed.
+
+
+res://tests/test_aura_enemies.gd
+* test_the_guardian_has_the_numbers_of_the_spec
+* test_the_healer_has_the_numbers_of_the_spec
+* test_the_presentation_phrases_are_the_ones_of_the_spec
+* test_only_these_two_enemies_have_an_aura
+* test_their_colors_do_not_look_like_any_other_enemy
+* test_they_have_a_drawing
+* test_they_are_found_by_name_like_any_other_enemy
+* test_the_wiki_writes_down_their_aura
+* test_they_start_closed_in_the_bestiary
+* test_auras_do_not_appear_before_their_campaign_debut
+* test_the_guardian_protects_a_normal_enemy_in_a_real_game
+* test_auras_are_drawn_without_errors
+12/12 passed.
+
+
+res://tests/test_balance_args.gd
+* test_levels_single
+* test_levels_range
+* test_levels_invalid_is_empty
+* test_seeds_up_to
+* test_strategies_list
+* test_infra_strategy_names
+* test_rule_holds_border
+* test_rule_needs_all_the_seeds
+* test_rule_summary_ignores_other_strategies
+* test_exit_code_zero_when_every_map_holds
+* test_exit_code_one_when_one_map_fails
+* test_exit_code_one_when_nothing_was_played
+12/12 passed.
+
+
+res://tests/test_bar_layout.gd
+* test_width_with_tabs_matches_the_spec
+* test_width_never_leaves_the_limits
+* test_without_tabs_up_to_nine_towers_are_exactly_as_before
+* test_without_tabs_ten_or_more_towers_shrink_to_fit
+* test_the_row_never_reaches_next_wave
+* test_edge_counts
+* test_key_labels
+* test_actions_exist_for_the_first_ten_towers_and_not_beyond
+* test_build_10_is_the_zero_key_and_switch_tab_is_tab
+* test_campaign_levels_1_to_5_do_not_use_infrastructure
+* test_campaign_levels_6_to_10_use_infrastructure
+* test_a_level_with_only_the_machine_uses_infrastructure
+* test_a_level_with_one_tree_uses_infrastructure
+* test_a_level_with_only_a_mine_uses_infrastructure
+* test_a_level_with_only_decoration_does_not_use_infrastructure
+* test_exit_text_without_pieces_has_only_the_two_lines
+* test_exit_text_counts_the_pieces_and_names_their_collections
+* test_exit_text_one_piece_and_the_same_collection_twice
+* test_exit_text_warns_about_the_demolition_in_progress
+* test_exit_text_order_is_always_then_pieces_then_job_then_kept
+* test_the_badge_seconds_round_up
+* test_machine_texts_come_from_the_data
+* test_site_lines
+* test_expected_resources_matches_what_the_wave_really_delivers
+* test_sites_list_is_ordered_and_complete
+25/25 passed.
+
+
+res://tests/test_bar_tabs.gd
+* test_levels_1_to_5_keep_the_exact_bar_of_before
+* test_tab_and_zero_do_nothing_in_a_level_without_tabs
+* test_the_arrow_is_in_every_level_and_the_stats_do_not_overlap_it
+* test_levels_6_to_10_show_both_tabs_with_cannons_active
+* test_the_map_area_and_the_map_do_not_change_with_tabs
+* test_tab_switches_and_hides_the_tower_buttons
+* test_tab_with_a_tower_chosen_cancels_the_construction
+* test_a_tower_key_in_infrastructure_goes_back_to_cannons_and_chooses_it
+* test_clicking_a_tower_button_never_changes_the_tab
+* test_tab_keeps_a_placed_tower_and_a_map_object_selected
+* test_tab_wins_over_the_keyboard_focus_of_the_interface
+* test_tabs_by_click_and_by_touch
+* test_ten_towers_fit_and_read_in_level_10
+* test_resource_badges_stay_inside_narrow_buttons_and_off_the_key_label
+* test_zero_chooses_the_tenth_and_one_the_first_without_engine_errors
+* test_an_eleventh_tower_has_no_key_and_no_key_tooltip
+* test_the_testing_mode_can_add_the_collection_towers_and_the_bar_rearranges
+* test_selecting_a_map_object_keeps_the_tab_and_opens_its_panel
+* test_the_tab_title_shows_the_demolition_time_and_goes_back
+* test_cancel_from_the_tab_gives_back_all_the_gold_and_updates_the_object_panel
+* test_level_7_cards_are_job_machine_and_resources_without_extraction
+* test_level_10_cards_are_job_extraction_and_resources_without_machine
+* test_level_6_has_no_machine_card_because_its_file_has_no_demoledora
+* test_buying_the_machine_from_the_card
+* test_the_buy_button_is_grey_with_what_is_missing
+* test_the_extraction_card_enables_a_mine_and_shows_its_reserve
+* test_a_site_with_not_enough_gold_is_grey
+* test_touching_a_site_name_selects_it_on_the_map
+* test_four_sites_show_three_and_two_arrows_scroll_one_by_one
+* test_depleted_and_active_sites_have_no_button_to_enable
+* test_the_job_card_follows_the_demolition_and_cancel_button_calls_the_controller
+* test_resources_card_follows_the_session_and_is_hidden_when_the_map_has_none
+* test_the_arrow_asks_before_leaving_and_pauses_the_game
+* test_keep_playing_restores_a_running_game_at_the_same_speed
+* test_keep_playing_keeps_a_game_that_was_paused_with_p
+* test_escape_closes_the_dialog_and_does_not_open_the_pause_menu
+* test_confirming_leaves_to_the_menu_and_writes_nothing_to_the_save
+* test_a_confirmed_piece_without_a_result_is_also_lost_and_listed
+* test_a_technology_piece_is_counted_with_its_name
+* test_the_dialog_warns_about_a_demolition_in_progress
+* test_testing_a_map_goes_back_to_the_editor_without_asking
+* test_the_arrow_hides_when_the_game_is_over_and_does_not_open
+* test_the_dialog_does_not_open_over_the_pause_menu
+* test_with_the_dialog_open_keys_do_nothing
+* test_opening_the_dialog_drops_the_construction_and_the_selection
+* test_every_new_button_works_with_a_touch
+46/46 passed.
+
+
+res://tests/test_bestiary.gd
+* test_a_seen_enemy_is_open_and_an_unseen_one_is_locked
+* test_a_locked_entry_leaks_no_real_data
+* test_a_locked_entry_keeps_its_id_its_drawing_and_its_place
+* test_towers_and_the_guide_are_never_locked
+* test_without_a_seen_function_everything_is_open
+* test_the_category_counts_its_open_entries
+* test_the_screen_shows_question_marks_and_the_counter
+    10 Orphans
+        * [@Label@3404:<Label#1911210122771>]
+        * [@HBoxContainer@3400:<HBoxContainer#1911075905071>] + 3
+        * [@Label@3409:<Label#1914783669902>]
+        * [@HBoxContainer@3405:<HBoxContainer#1914649452205>] + 3
+* test_the_counter_disappears_when_all_are_seen
+* test_every_locked_entry_can_be_opened
+    85 Orphans
+        * [@HBoxContainer@3679:<HBoxContainer#1946928815059>] + 3
+        * [@Label@3708:<Label#1947985779682>]
+        * [@Label@3688:<Label#1947247582200>]
+        * [@HBoxContainer@3699:<HBoxContainer#1947667012622>] + 3
+        * [@Label@3703:<Label#1947801230395>]
+        * [@HBoxContainer@3714:<HBoxContainer#1948220660813>] + 3
+        * [@HBoxContainer@3664:<HBoxContainer#1946375167073>] + 3
+        * [@Label@3743:<Label#1949277625460>]
+        * [@Label@3738:<Label#1949093076197>]
+        * [@HBoxContainer@3669:<HBoxContainer#1946559716602>] + 3
+        * [@Label@3723:<Label#1948539428110>]
+        * [@Label@3713:<Label#1948170329391>]
+        * [@Label@3678:<Label#1946878483804>]
+        * [@HBoxContainer@3719:<HBoxContainer#1948405210502>] + 3
+        * [@HBoxContainer@3739:<HBoxContainer#1949143408027>] + 3
+        * [@HBoxContainer@3709:<HBoxContainer#1948036111794>] + 3
+        * [@Label@3663:<Label#1943137164749>]
+        * [@HBoxContainer@3694:<HBoxContainer#1947482463739>] + 3
+        * [@HBoxContainer@3729:<HBoxContainer#1948774309385>] + 3
+        * [@HBoxContainer@3674:<HBoxContainer#1946744266321>] + 3
+        * [@Label@3698:<Label#1947616681592>]
+        * [@Label@3683:<Label#1947063033469>]
+        * [@Label@3718:<Label#1948354879103>]
+        * [@HBoxContainer@3724:<HBoxContainer#1948589760152>] + 3
+        * [@HBoxContainer@3704:<HBoxContainer#1947851562665>] + 3
+        * [@Label@3668:<Label#1946509385395>]
+        * [@Label@3693:<Label#1947432132285>]
+        * [@HBoxContainer@3689:<HBoxContainer#1947297914563>] + 3
+        * [@HBoxContainer@3684:<HBoxContainer#1947113365189>] + 3
+        * [@Label@3733:<Label#1948908527305>]
+        * [@HBoxContainer@3734:<HBoxContainer#1948958858961>] + 3
+        * [@Label@3728:<Label#1948723977948>]
+        * [@Label@3673:<Label#1946693934826>]
+        * [@HBoxContainer@3659:<HBoxContainer#1943002947321>] + 3
+* test_seeing_an_enemy_in_a_game_opens_it_in_the_wiki
+* test_the_test_mode_sees_everything
+85 orphans
+11/11 passed.
+
+
+res://tests/test_big_towers.gd
+* test_footprint_is_one_by_default_for_the_current_towers
+* test_footprint_cells_are_a_square
+* test_builds_on_four_free_cells_and_occupies_them_all
+* test_the_tower_sits_in_the_center_of_the_square
+* test_three_free_cells_are_not_enough
+* test_cannot_overlap_another_tower
+* test_a_small_tower_blocks_a_big_one
+* test_cannot_build_off_the_map_edge
+* test_cannot_build_without_gold
+* test_a_click_on_any_cell_selects_the_tower
+* test_selling_frees_the_four_cells_and_gives_70_percent
+* test_upgrade_works_like_any_other_tower
+* test_small_towers_keep_working_as_before
+* test_the_preview_origin_is_the_usual_cell_for_small_towers
+* test_the_preview_of_a_big_tower_is_centered_on_the_mouse
+* test_a_big_tower_is_drawn_twice_as_big
+* test_range_and_enemies_are_measured_from_the_center
+17/17 passed.
+
+
+res://tests/test_block3_levels.gd
+* test_the_block_is_in_the_campaign_in_order_after_the_tenth
+* test_every_level_offers_the_rotation_without_the_machine_gun_and_without_the_machine
+* test_without_collections_a_level_has_eight_towers_and_with_them_ten
+* test_the_eleventh_marks_the_disruptor_as_new
+* test_the_bar_shows_eight_towers_without_the_machine_gun_and_the_opening_is_viable
+* test_the_gold_climbs_and_each_level_has_its_own_health_scale
+* test_waves_stay_inside_the_limits_and_use_known_entrances
+7/7 passed.
+
+
+res://tests/test_build_and_end.gd
+* test_build_on_free_cell
+* test_cannot_build_on_the_path
+* test_cannot_build_on_rocks_or_outside
+* test_cannot_build_twice_on_the_same_cell
+* test_cannot_build_without_gold
+* test_tower_buttons_turn_grey_without_gold
+* test_selecting_a_tower_marks_its_button
+* test_killing_enemies_gives_gold
+* test_end_screen_hidden_at_start
+* test_defeat_shows_end_screen_and_freezes_the_world
+* test_victory_shows_end_screen
+11/11 passed.
+
+
+res://tests/test_campaign_expansion.gd
+* test_old_last_level_victory_opens_only_the_next_without_writing
+* test_winning_eight_unlocks_nine_and_each_next_one_until_the_last
+* test_campaign_tail_and_collection_gate_for_the_new_levels
+* test_introductions_and_economic_encounters_have_preparation
+* test_every_used_entrance_has_charge_endpoint_and_legal_support_position
+5/5 passed.
+
+
+res://tests/test_charge_wear.gd
+* test_collinear_points_are_one_straight_and_turns_reset_geometry
+* test_only_one_tower_near_end_gets_wear_and_no_repeat
+* test_short_straight_never_impacts_even_when_tower_is_near
+* test_slow_interrupts_charge_preparation_and_speed
+* test_translated_path_uses_world_endpoint
+* test_wear_cap_upgrade_support_and_stun_are_independent
+* test_no_wear_keeps_existing_cadence_and_invalid_impacts_are_safe
+* test_first_five_unchanged_and_trial_counts_in_six_seven
+8/8 passed.
+
+
+res://tests/test_collections.gd
+* test_both_collections_coexist_and_technology_is_unchanged
+* test_collectible_run_wrappers_match_definitions
+* test_collection_of_level_falls_back_to_technology
+* test_piece_id_is_collection_and_level
+* test_piece_is_pending_then_confirmed_with_the_wave
+* test_repeating_a_piece_does_not_duplicate
+* test_a_level_that_is_not_a_source_gives_no_piece
+* test_several_pending_pieces_confirm_separately
+* test_old_version_one_save_loads_and_disruptor_starts_empty
+* test_both_collections_are_saved_side_by_side
+* test_save_with_unknown_collection_and_foreign_levels_loads_without_breaking
+* test_completing_the_collection_enables_a_test_tower
+* test_campaign_ruin_gives_a_piece_that_is_confirmed_and_saved
+* test_defeat_before_confirming_loses_the_piece
+* test_piece_taken_during_a_wave_confirms_with_that_wave
+* test_repeating_the_ruin_does_not_duplicate_and_the_panel_says_so
+* test_panel_says_pending_before_demolishing
+* test_a_level_that_is_not_a_source_behaves_as_a_plain_ruin
+* test_outside_the_campaign_no_pieces_are_collected
+* test_community_and_test_mode_do_not_collect
+* test_hud_bar_shows_the_collection_of_the_level
+* test_technology_level_keeps_showing_technology_in_the_bar
+* test_wiki_shows_each_collection_with_progress_and_tower
+* test_wiki_has_a_collections_category
+24/24 passed.
+
+
+res://tests/test_colossus.gd
+* test_the_colossus_has_the_numbers_of_rf_481
+    18 Orphans
+        * [@HBoxContainer@6216:<HBoxContainer#2745725619335>] + 2
+        * [@HBoxContainer@6219:<HBoxContainer#2745859841269>] + 2
+        * [@HBoxContainer@6244:<HBoxContainer#2748812631599>] + 2
+        * [@HBoxContainer@6222:<HBoxContainer#2745994059633>] + 2
+        * [@HBoxContainer@6247:<HBoxContainer#2748946849672>] + 2
+        * [@HBoxContainer@6250:<HBoxContainer#2749081067863>] + 2
+* test_the_shard_has_the_numbers_of_rf_481_and_drops_nothing
+    18 Orphans
+        * [@HBoxContainer@6329:<HBoxContainer#2761328434152>] + 2
+        * [@HBoxContainer@6335:<HBoxContainer#2761596869757>] + 2
+        * [@HBoxContainer@6304:<HBoxContainer#2758375644469>] + 2
+        * [@HBoxContainer@6332:<HBoxContainer#2761462652302>] + 2
+        * [@HBoxContainer@6301:<HBoxContainer#2758241426867>] + 2
+        * [@HBoxContainer@6307:<HBoxContainer#2758509863052>] + 2
+* test_three_shards_times_four_lives_is_the_colossus_twelve
+    18 Orphans
+        * [@HBoxContainer@6386:<HBoxContainer#2770706897958>] + 2
+        * [@HBoxContainer@6389:<HBoxContainer#2770841116168>] + 2
+        * [@HBoxContainer@6414:<HBoxContainer#2773793906190>] + 2
+        * [@HBoxContainer@6417:<HBoxContainer#2773928124422>] + 2
+        * [@HBoxContainer@6420:<HBoxContainer#2774062342253>] + 2
+        * [@HBoxContainer@6392:<HBoxContainer#2770975334512>] + 2
+* test_only_the_colossus_is_dangerous_and_the_pair_uses_provisional_art_in_place
+    18 Orphans
+        * [@HBoxContainer@6471:<HBoxContainer#2783054929014>] + 2
+        * [@HBoxContainer@6502:<HBoxContainer#2786276154512>] + 2
+        * [@HBoxContainer@6474:<HBoxContainer#2783189147055>] + 2
+        * [@HBoxContainer@6499:<HBoxContainer#2786141937193>] + 2
+        * [@HBoxContainer@6477:<HBoxContainer#2783323365106>] + 2
+        * [@HBoxContainer@6505:<HBoxContainer#2786410372906>] + 2
+* test_every_other_enemy_keeps_its_numbers
+    18 Orphans
+        * [@HBoxContainer@6562:<HBoxContainer#2795688172678>] + 2
+        * [@HBoxContainer@6590:<HBoxContainer#2798775180685>] + 2
+        * [@HBoxContainer@6584:<HBoxContainer#2798506745237>] + 2
+        * [@HBoxContainer@6556:<HBoxContainer#2795419737515>] + 2
+        * [@HBoxContainer@6559:<HBoxContainer#2795553956125>] + 2
+        * [@HBoxContainer@6587:<HBoxContainer#2798640963976>] + 2
+* test_a_colossus_that_dies_leaves_three_shards_with_the_health_of_the_wave
+    27 Orphans
+        * [@HBoxContainer@6675:<HBoxContainer#2811458755650>] + 2
+        * [@HBoxContainer@6641:<HBoxContainer#2808103312839>] + 2
+        * [@HBoxContainer@6644:<HBoxContainer#2808237530684>] + 2
+        * [@HBoxContainer@6684:<HBoxContainer#2811945295606>] + 2
+        * [@HBoxContainer@6669:<HBoxContainer#2811190320958>] + 2
+        * [@HBoxContainer@6672:<HBoxContainer#2811324538723>] + 2
+        * [@HBoxContainer@6681:<HBoxContainer#2811811078133>] + 2
+        * [@HBoxContainer@6647:<HBoxContainer#2808371748922>] + 2
+        * [@HBoxContainer@6678:<HBoxContainer#2811676860583>] + 2
+* test_with_the_initial_numbers_the_shard_of_wave_30_has_about_1330_health
+    18 Orphans
+        * [@HBoxContainer@6775:<HBoxContainer#2824846973909>] + 2
+        * [@HBoxContainer@6753:<HBoxContainer#2822028401713>] + 2
+        * [@HBoxContainer@6747:<HBoxContainer#2821759966788>] + 2
+        * [@HBoxContainer@6778:<HBoxContainer#2824981192376>] + 2
+        * [@HBoxContainer@6750:<HBoxContainer#2821894184983>] + 2
+        * [@HBoxContainer@6781:<HBoxContainer#2825115410616>] + 2
+* test_the_wave_does_not_end_until_the_three_shards_die
+* test_each_shard_gives_its_own_gold
+    54 Orphans
+        * [@HBoxContainer@7004:<HBoxContainer#2856572689546>] + 2
+        * [@HBoxContainer@7032:<HBoxContainer#2859659697292>] + 2
+        * [@HBoxContainer@7070:<HBoxContainer#2861605854363>] + 2
+        * [@HBoxContainer@7055:<HBoxContainer#2860951543073>] + 2
+        * [@HBoxContainer@7058:<HBoxContainer#2861085760821>] + 2
+        * [@HBoxContainer@7085:<HBoxContainer#2862243388918>] + 2
+        * [@HBoxContainer@7038:<HBoxContainer#2860012019192>] + 2
+        * [@HBoxContainer@7073:<HBoxContainer#2861740072464>] + 2
+        * [@HBoxContainer@7035:<HBoxContainer#2859793915693>] + 2
+        * [@HBoxContainer@7088:<HBoxContainer#2862377606967>] + 2
+        * [@HBoxContainer@7041:<HBoxContainer#2860146237252>] + 2
+        * [@HBoxContainer@7029:<HBoxContainer#2859525480265>] + 2
+        * [@HBoxContainer@7001:<HBoxContainer#2856438472569>] + 2
+        * [@HBoxContainer@7007:<HBoxContainer#2856706908074>] + 2
+        * [@HBoxContainer@7044:<HBoxContainer#2860280455157>] + 2
+        * [@HBoxContainer@7091:<HBoxContainer#2862511824949>] + 2
+        * [@HBoxContainer@7061:<HBoxContainer#2861219979586>] + 2
+        * [@HBoxContainer@7076:<HBoxContainer#2861874291039>] + 2
+* test_a_colossus_that_reaches_the_exit_takes_twelve_lives_and_leaves_nothing
+    18 Orphans
+        * [@HBoxContainer@7155:<HBoxContainer#2872125168885>] + 2
+        * [@HBoxContainer@7158:<HBoxContainer#2872259386652>] + 2
+        * [@HBoxContainer@7180:<HBoxContainer#2875077959281>] + 2
+        * [@HBoxContainer@7186:<HBoxContainer#2875346394912>] + 2
+        * [@HBoxContainer@7183:<HBoxContainer#2875212177279>] + 2
+        * [@HBoxContainer@7152:<HBoxContainer#2871990951878>] + 2
+* test_each_shard_that_reaches_the_exit_takes_four_and_three_take_twelve
+    18 Orphans
+        * [@HBoxContainer@7274:<HBoxContainer#2888180964292>] + 2
+        * [@HBoxContainer@7268:<HBoxContainer#2887912529202>] + 2
+        * [@HBoxContainer@7243:<HBoxContainer#2884959739413>] + 2
+        * [@HBoxContainer@7246:<HBoxContainer#2885093957201>] + 2
+        * [@HBoxContainer@7240:<HBoxContainer#2884825522121>] + 2
+        * [@HBoxContainer@7271:<HBoxContainer#2888046747645>] + 2
+* test_armor_a_hit_of_8_does_3_to_the_colossus_1_with_the_guardian_aura_and_8_to_the_shard
+    18 Orphans
+        * [@HBoxContainer@7336:<HBoxContainer#2897945304149>] + 2
+        * [@HBoxContainer@7358:<HBoxContainer#2900763876678>] + 2
+        * [@HBoxContainer@7330:<HBoxContainer#2897676869296>] + 2
+        * [@HBoxContainer@7333:<HBoxContainer#2897811087472>] + 2
+        * [@HBoxContainer@7364:<HBoxContainer#2901032312995>] + 2
+        * [@HBoxContainer@7361:<HBoxContainer#2900898095509>] + 2
+* test_the_ice_slows_the_colossus_by_half_as_much_and_the_shard_completely
+    18 Orphans
+        * [@HBoxContainer@7424:<HBoxContainer#2910461107097>] + 2
+        * [@HBoxContainer@7418:<HBoxContainer#2910192671756>] + 2
+        * [@HBoxContainer@7449:<HBoxContainer#2913413898227>] + 2
+        * [@HBoxContainer@7421:<HBoxContainer#2910326890627>] + 2
+        * [@HBoxContainer@7452:<HBoxContainer#2913548116261>] + 2
+        * [@HBoxContainer@7446:<HBoxContainer#2913279680895>] + 2
+* test_the_wiki_writes_both_entries_by_itself_with_the_corona_and_the_drop
+    18 Orphans
+        * [@HBoxContainer@7508:<HBoxContainer#2922708475017>] + 2
+        * [@HBoxContainer@7542:<HBoxContainer#2926063918303>] + 2
+        * [@HBoxContainer@7536:<HBoxContainer#2925795483029>] + 2
+        * [@HBoxContainer@7511:<HBoxContainer#2922842693022>] + 2
+        * [@HBoxContainer@7539:<HBoxContainer#2925929701454>] + 2
+        * [@HBoxContainer@7514:<HBoxContainer#2922976911441>] + 2
+* test_in_a_new_save_both_entries_are_closed_until_they_are_seen
+    18 Orphans
+        * [@HBoxContainer@7599:<HBoxContainer#2944082648678>] + 2
+        * [@HBoxContainer@7596:<HBoxContainer#2943948431279>] + 2
+        * [@HBoxContainer@7621:<HBoxContainer#2946901221364>] + 2
+        * [@HBoxContainer@7593:<HBoxContainer#2943814213745>] + 2
+        * [@HBoxContainer@7627:<HBoxContainer#2947169657173>] + 2
+        * [@HBoxContainer@7624:<HBoxContainer#2947035439495>] + 2
+* test_the_guide_does_not_name_the_colossus
+    18 Orphans
+        * [@HBoxContainer@7709:<HBoxContainer#2970187996657>] + 2
+        * [@HBoxContainer@7712:<HBoxContainer#2970322214408>] + 2
+        * [@HBoxContainer@7678:<HBoxContainer#2966966771359>] + 2
+        * [@HBoxContainer@7681:<HBoxContainer#2967100989355>] + 2
+        * [@HBoxContainer@7706:<HBoxContainer#2970053779397>] + 2
+        * [@HBoxContainer@7684:<HBoxContainer#2967235207224>] + 2
+18 orphans
+16/16 passed.
+
+
+res://tests/test_combat.gd
+* test_targets_the_enemy_closest_to_the_exit
+* test_ignores_enemies_out_of_range
+* test_cannon_ignores_flyers_but_basic_does_not
+* test_basic_tower_kills_a_normal_enemy
+* test_fire_rate
+* test_projectile_without_target_vanishes_without_error
+* test_armor_reduces_damage
+* test_cannon_splash_hits_everyone_within_one_tile
+* test_splash_does_not_hit_flyers_if_tower_cannot
+* test_frost_slows_to_60_percent_for_2_seconds
+* test_slows_do_not_stack
+* test_stronger_slow_wins
+* test_health_bar_only_after_first_hit
+13/13 passed.
+
+
+res://tests/test_community_maps.gd
+* test_a_missing_folder_has_no_maps_and_no_errors
+* test_an_empty_folder_has_no_maps
+* test_a_valid_map_is_listed_with_its_level
+* test_maps_come_in_alphabetical_order
+* test_only_json_files_count
+* test_the_id_never_clashes_with_official_levels_or_the_hall
+* test_a_broken_map_is_an_entry_with_its_reason
+* test_a_broken_map_does_not_hide_the_good_ones
+* test_an_invalid_file_name_is_refused_with_the_reason
+* test_a_file_that_is_too_big_is_refused_without_reading_it
+* test_warnings_come_with_the_entry
+* test_only_the_first_maps_are_read
+* test_folder_path_is_a_real_path_for_the_person
+13/13 passed.
+
+
+res://tests/test_community_play.gd
+* test_the_game_plays_the_community_map
+* test_played_level_is_the_campaign_or_the_community_map
+* test_the_campaign_wins_over_the_community_map_in_the_game
+* test_winning_saves_its_own_progress
+* test_a_community_win_does_not_touch_the_campaign
+* test_a_community_win_never_counts_for_the_hall_of_fame
+* test_a_defeat_saves_no_victory
+* test_two_community_maps_have_separate_progress
+* test_a_community_win_asks_for_initials_and_keeps_its_own_top_5
+    15 Orphans
+        * [@VBoxContainer@8114:<VBoxContainer#3099607441483>(name_entry.gd)] + 14
+* test_the_records_of_two_maps_do_not_mix
+* test_the_end_screen_goes_back_to_levels_and_has_no_next
+    15 Orphans
+        * [@VBoxContainer@8220:<VBoxContainer#3121015169081>(name_entry.gd)] + 14
+* test_the_pause_menu_goes_to_the_main_menu
+* test_the_select_page_defaults_to_the_campaign
+* test_the_campaign_still_saves_and_unlocks
+14/14 passed.
+
+
+res://tests/test_community_select.gd
+* test_it_opens_on_the_campaign_by_default
+* test_the_community_tab_says_how_many_maps
+* test_switching_tabs_rebuilds_the_cards
+    241 Orphans
+        * [@Button@8368:<Button#3281556348142>] + 14
+        * [@Button@8367:<Button#3279677300069>] + 15
+        * [@Button@8366:<Button#3277949247499>] + 13
+        * [@Button@8362:<Button#3270516940860>] + 22
+        * [@Button@8365:<Button#3276221194324>] + 13
+        * [@Button@8363:<Button#3272765088143>] + 13
+        * [@Button@8364:<Button#3274493141416>] + 13
+        * [@Button@8369:<Button#3283401843123>] + 14
+        * [@Button@8370:<Button#3285247336932>] + 16
+        * [@Button@8371:<Button#3287310934555>] + 15
+        * [@Button@8372:<Button#3289340977744>] + 16
+        * [@Button@8373:<Button#3291438129799>] + 15
+        * [@Button@8374:<Button#3293501727420>] + 15
+        * [@Button@8375:<Button#3295565325041>] + 15
+        * [@Button@8376:<Button#3297628922662>] + 15
+        * [@Button@8378:<Button#3299692520283>] + 1
+* test_the_tab_buttons_switch_pages
+    241 Orphans
+        * [@Button@8402:<Button#3369905167592>] + 15
+        * [@Button@8410:<Button#3385793191335>] + 15
+        * [@Button@8405:<Button#3375475203605>] + 16
+        * [@Button@8401:<Button#3368177114675>] + 13
+        * [@Button@8404:<Button#3373629710012>] + 14
+        * [@Button@8400:<Button#3366449061669>] + 13
+        * [@Button@8407:<Button#3379568844763>] + 16
+        * [@Button@8398:<Button#3362992955471>] + 13
+        * [@Button@8406:<Button#3377538801758>] + 15
+        * [@Button@8409:<Button#3383729594464>] + 15
+        * [@Button@8411:<Button#3387856789626>] + 15
+        * [@Button@8397:<Button#3360744808644>] + 22
+        * [@Button@8408:<Button#3381665997047>] + 15
+        * [@Button@8403:<Button#3371784216887>] + 14
+        * [@Button@8399:<Button#3364721009027>] + 13
+        * [@Button@8413:<Button#3389920387952>] + 1
+* test_it_remembers_the_page_it_was_left_on
+* test_one_card_per_map_in_alphabetical_order
+* test_a_card_shows_name_waves_and_is_open
+* test_a_played_map_shows_its_best_result_and_stars
+* test_a_card_starts_its_own_map
+* test_a_long_name_wraps_inside_the_card
+* test_a_broken_map_is_a_disabled_card_with_the_reason
+* test_an_invalid_file_name_is_a_disabled_card_too
+* test_with_no_maps_it_says_where_to_put_them
+* test_one_map_is_singular
+* test_the_folder_button_opens_the_folder_and_creates_it
+* test_a_map_added_later_appears_when_the_screen_opens_again
+* test_many_maps_fit_on_the_screen_and_scroll
+* test_the_area_height_follows_the_rows
+18/18 passed.
+
+
+res://tests/test_content.gd
+* test_every_enemy_is_complete
+* test_death_spawns_never_loop
+* test_every_tower_is_complete
+* test_every_tower_is_in_the_game
+* test_every_level_file_is_valid_and_in_the_campaign
+* test_the_campaign_loads_every_level_once
+6/6 passed.
+
+
+res://tests/test_damage_numbers.gd
+* test_hit_shows_the_real_damage
+* test_armor_turns_the_number_grey
+* test_small_armor_keeps_the_number_white
+* test_numbers_can_be_turned_off
+* test_never_more_than_the_cap
+* test_counter_goes_down_when_numbers_fade
+6/6 passed.
+
+
+res://tests/test_data_files.gd
+* test_normal
+* test_fast
+* test_tank
+* test_basic_tower
+* test_cannon_tower
+* test_frost_tower
+* test_sniper_tower
+* test_flyer
+* test_armored
+* test_boss
+* test_level_01_basics
+* test_level_01_waves_match_spec
+* test_every_enemy_has_a_description
+* test_only_the_boss_is_dangerous
+14/14 passed.
+
+
+res://tests/test_demolition.gd
+* test_job_progress_and_done
+* test_order_starts_a_job_with_fixed_price_and_time
+* test_machine_applies_data_percentages_and_minimum
+* test_machine_discount_never_exceeds_original_cost
+* test_machine_amortization_examples_from_rf_414
+* test_only_one_job_at_a_time
+* test_cannot_order_what_is_not_removable
+* test_finishing_clears_and_emits_once
+* test_cancel_refunds_everything_and_leaves_it_intact
+* test_discard_job_gives_nothing_back
+* test_drop_is_drawn_at_setup_in_row_column_order
+* test_drop_is_not_redrawn_by_cancelling_or_by_order
+* test_same_seed_same_drops_and_extreme_chances
+* test_ruin_with_finding_gives_piece_or_repeat_resources
+* test_panel_texts_come_from_data
+* test_order_charges_and_finishing_allows_building
+* test_machine_purchase_is_level_gated_and_updates_prices_globally
+* test_machine_cannot_be_bought_without_gold_or_when_level_disables_it
+* test_machine_purchase_does_not_change_existing_job_and_retry_removes_it
+* test_cannot_order_without_gold
+* test_cancel_in_game_refunds_gold
+* test_second_obstacle_is_refused_while_busy
+* test_wave_end_keeps_the_job_and_game_over_discards_it
+* test_pause_stops_the_clock
+* test_double_speed_halves_real_time
+    --- Awaiting 0.6 seconds  ---
+* test_retry_restores_everything
+* test_reward_is_not_duplicated_after_clearing
+* test_obstacle_selection_rules
+* test_click_on_obstacle_selects_it_even_in_build_mode
+* test_panel_states
+30/30 passed.
+
+
+res://tests/test_dev_mode.gd
+* test_tests_and_normal_builds_run_without_dev_mode
+* test_without_dev_mode_levels_stay_locked
+* test_dev_mode_opens_every_level
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_dev_mode_shows_its_banner
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_dev_mode_uses_its_own_save
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_one_export_per_platform_and_none_is_a_test_build
+6/6 passed.
+
+
+res://tests/test_dev_panel.gd
+* test_without_dev_mode_there_is_no_panel
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_dev_mode_game_has_the_panel_closed
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_add_gold
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_add_ten_resources_shows_the_counter_without_map_sources
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_finish_demolition_finishes_the_current_job_and_grants_its_reward
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_all_collections_toggle_unlocks_collection_towers_without_collecting_pieces
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_dev_actions_do_not_write_the_normal_save
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_infinite_lives
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_kill_all_gives_no_gold
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_skip_wave_completes_it
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_win_and_lose
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_spawn_any_enemy
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_metrics_stay_visible_when_panel_closes_and_can_be_disabled
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_enemy_wheel_selects_without_opening_or_spawning_and_clamps_ends
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_click_release_and_horizontal_wheel_are_not_selection_steps
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_spawn_button_uses_enemy_chosen_with_wheel
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_enemy_popup_is_bounded_opaque_and_hover_has_no_clipped_shadow
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_enemy_popup_real_height_and_last_item_remain_accessible
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+18/18 passed.
+
+
+res://tests/test_dev_shortcuts.gd
+* test_every_shortcut_has_exactly_one_f_key
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_no_shortcut_key_is_used_by_another_action
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_no_shortcut_key_is_a_digit_or_reserved
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_the_game_keys_are_still_where_they_were
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_the_normal_game_does_not_have_the_actions
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_f2_kills_everyone_like_the_button
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_f3_skips_the_wave_like_the_button
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_f4_toggles_infinite_lives_and_the_panel_follows
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_f6_and_f7_step_through_the_speeds
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_the_speed_shortcuts_stop_at_the_ends
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_shortcuts_work_with_the_panel_closed
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_shortcuts_do_nothing_with_the_pause_menu_open
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_a_shortcut_does_not_leak_to_the_normal_game
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_the_panel_writes_each_key
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_step_speed
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+15/15 passed.
+
+
+res://tests/test_dev_speed.gd
+* test_speed_text
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_the_hud_button_does_not_round_to_x0
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_there_is_one_button_per_configured_speed
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_each_button_sets_the_time_scale
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_only_the_current_speed_is_marked
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_the_mark_follows_the_f_key_too
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_the_banner_says_the_speed
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_the_banner_fits_its_text
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_leaving_the_game_goes_back_to_x1
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_finishing_the_game_goes_back_to_x1
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_f_alternates_x1_and_x2
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_f_from_another_speed_goes_back_to_x1
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_f_in_the_normal_game_is_the_same_as_always
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+13/13 passed.
+
+
+res://tests/test_dev_start.gd
+* test_clamp_wave_keeps_a_valid_wave
+* test_clamp_wave_limits
+* test_wave_1_gold_is_the_level_gold
+* test_gold_adds_rewards_and_bonuses_of_skipped_waves
+* test_gold_for_a_wave_beyond_the_total_counts_all_waves_once
+* test_manual_gold_wins_even_when_zero
+* test_spawned_young_add_to_the_reward
+* test_a_loop_of_young_does_not_hang
+* test_real_level_1_gold_matches_its_data
+* test_the_spider_young_count_in_the_real_data
+* test_dev_config_has_the_numbers
+* test_jump_to_wave_leaves_the_session_ready_for_that_wave
+* test_jump_to_wave_clamps_and_ignores_wave_1
+* test_jump_to_wave_only_before_the_first_wave
+* test_hud_shows_the_target_wave_as_next
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+15/15 passed.
+
+
+res://tests/test_dev_start_select.gd
+* test_the_strip_exists_only_in_dev_mode
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_strip_changes_what_game_will_use
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_the_wave_spinner_goes_up_to_the_longest_level
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_opening_the_select_screen_starts_from_wave_1_again
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_game_starts_in_the_chosen_wave_with_automatic_gold
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_game_uses_the_manual_gold
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_wave_1_is_the_game_as_always
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_a_wave_past_the_total_uses_the_last_one
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_a_community_map_uses_it_too
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_without_a_menu_level_nothing_is_applied
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_retrying_repeats_the_same_game
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_forget_dev_start_goes_back_to_wave_1
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_a_partial_game_does_not_save_a_victory
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_a_whole_game_still_saves_a_victory
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_a_partial_game_does_not_save_seen_enemies
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+15/15 passed.
+
+
+res://tests/test_dev_stats.gd
+* test_the_report_has_the_documented_names
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_the_three_results
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_an_empty_report_has_no_wave_rows
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_seconds_are_rounded_to_a_tenth
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_the_report_does_not_change_after_it_is_made
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_write_replaces_the_file_and_reads_back
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_write_to_an_impossible_path_returns_false
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_a_test_save_has_its_own_stats_file
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+Modo de pruebas activado. Guardado: user://save_pruebas.json
+Enemigos disponibles: 17
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_finishing_a_won_game_writes_the_report
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_a_lost_game
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_leaving_before_the_end_says_left
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_leaving_after_the_end_does_not_overwrite_the_result
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_one_row_per_finished_wave_with_the_numbers_of_that_moment
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_a_game_from_wave_6_records_it
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_each_game_replaces_the_report
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_seconds_count_game_time_and_not_the_pause
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_the_normal_game_writes_nothing
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_a_game_freed_after_the_mode_was_turned_off_writes_nothing
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+18/18 passed.
+
+
+res://tests/test_disruptor_pulse.gd
+* test_a_suppressed_emitter_stops_giving_its_aura
+* test_the_emitter_gives_its_aura_again_when_the_suppression_ends
+* test_suppressing_again_keeps_the_longest_time_not_the_sum
+* test_an_enemy_without_aura_is_never_suppressed
+* test_suppression_does_not_advance_while_the_enemy_is_not_processed
+* test_only_the_mirror_is_pulse_immune
+* test_it_pulses_only_with_an_emitter_in_range_and_keeps_its_wait
+* test_the_pulse_hits_everyone_in_range_armor_included
+* test_the_damage_has_a_minimum_of_one
+* test_the_mirror_is_left_out_and_the_tower_is_not_stunned
+* test_a_mirror_alone_does_not_make_it_pulse
+* test_other_abilities_are_not_suppressed
+* test_a_stunned_tower_does_not_pulse_and_does_when_it_recovers
+* test_the_pulse_waits_the_cadence_and_wear_spaces_it
+* test_upgrading_widens_the_radius_and_the_suppression
+* test_a_level_3_tower_with_a_level_3_mechanic_never_lets_the_emitter_talk
+* test_a_pulse_that_kills_does_not_break_the_loop
+* test_the_data_match_the_spec
+* test_a_pulse_tower_has_no_other_behaviour
+* test_it_is_the_tenth_tower_and_no_key_moves
+* test_no_campaign_level_before_the_eleventh_offers_it_even_with_the_collection
+* test_naming_it_enables_it_only_with_the_collection
+22/22 passed.
+
+
+res://tests/test_disruptor_text.gd
+* test_pulse_line_is_built_from_the_numbers
+* test_pulse_line_follows_a_changed_number
+* test_pulse_line_is_empty_for_a_common_tower
+* test_the_panel_effects_include_the_pulse
+* test_emitters_are_found_in_the_data_and_pluralized
+* test_suppressors_are_listed_only_for_enemies_with_aura
+* test_the_wiki_names_the_countermeasure_on_the_aura_enemies_only
+* test_the_wiki_tower_entry_shows_pulse_and_limits
+* test_the_effects_article_explains_suppression_without_numbers
+9/9 passed.
+
+
+res://tests/test_editor_files.gd
+* test_saving_a_new_level_asks_for_a_file_name
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_accepting_saves_the_file_and_tells_where
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_the_saved_file_reads_back_the_same
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_saving_again_writes_without_asking
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_cancelling_the_name_saves_nothing
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_the_name_is_checked_while_typing
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_an_existing_own_map_can_be_replaced_after_a_warning
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+    84 Orphans
+        * [@HBoxContainer@17082:<HBoxContainer#5770204686149>] + 7
+        * [@HBoxContainer@17120:<HBoxContainer#5774214440990>] + 7
+* test_a_draft_with_errors_can_be_saved
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_ctrl_s_saves
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_new_replaces_a_clean_draft_at_once
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+    84 Orphans
+        * [@HBoxContainer@17640:<HBoxContainer#5813305353652>] + 7
+        * [@HBoxContainer@17677:<HBoxContainer#5816342029973>] + 7
+* test_new_asks_first_when_there_are_unsaved_changes
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+    84 Orphans
+        * [@HBoxContainer@17911:<HBoxContainer#5834562086248>] + 7
+        * [@HBoxContainer@17872:<HBoxContainer#5830703327387>] + 7
+* test_a_dialog_cancelled_does_not_leak_into_the_next_one
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_open_lists_own_maps_and_official_levels
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_open_without_saved_maps_says_so
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_opening_an_own_map
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+    168 Orphans
+        * [@HBoxContainer@18668:<HBoxContainer#6034445837732>] + 7
+        * [@HBoxContainer@18704:<HBoxContainer#6107728717453>] + 7
+        * [@HBoxContainer@18593:<HBoxContainer#6027030308497>] + 7
+        * [@HBoxContainer@18633:<HBoxContainer#6031811815696>] + 7
+* test_opening_an_official_level_gives_a_template
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+    84 Orphans
+        * [@HBoxContainer@18936:<HBoxContainer#6196463413233>] + 7
+        * [@HBoxContainer@18899:<HBoxContainer#6123566409846>] + 7
+* test_the_panels_follow_the_opened_level
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+    84 Orphans
+        * [@HBoxContainer@19131:<HBoxContainer#6217166497677>] + 7
+        * [@HBoxContainer@19168:<HBoxContainer#6290063501721>] + 7
+* test_open_asks_first_when_there_are_unsaved_changes
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_double_click_opens
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+    84 Orphans
+        * [@HBoxContainer@19526:<HBoxContainer#6394686219995>] + 7
+        * [@HBoxContainer@19563:<HBoxContainer#6467583223629>] + 7
+* test_a_level_with_errors_cannot_be_tried
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_a_valid_level_is_sent_to_be_played
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_a_level_with_warnings_can_still_be_tried
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_trying_does_not_save_anything
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_leaving_with_nothing_to_lose_goes_at_once
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_leaving_with_unsaved_changes_asks_first
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_saving_then_leaving_does_not_ask
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_escape_closes_the_dialog_and_does_not_leave
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_keys_do_nothing_while_a_dialog_is_open
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_the_top_bar_has_the_new_buttons
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_the_buttons_do_what_the_functions_do
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+30/30 passed.
+
+
+res://tests/test_editor_modes.gd
+* test_the_top_bar_has_the_save_in_mode_button
+* test_a_new_mode_is_created_and_the_map_goes_inside
+* test_saving_again_stays_in_the_mode_without_asking
+* test_a_second_map_goes_to_an_existing_mode
+    84 Orphans
+        * [@HBoxContainer@22030:<HBoxContainer#6726002681141>] + 7
+        * [@HBoxContainer@22068:<HBoxContainer#6730264094406>] + 7
+* test_cancelling_the_file_name_leaves_the_draft_where_it_was
+* test_mode_names_and_file_names_are_checked_while_typing
+* test_open_lists_the_maps_of_each_own_mode
+    84 Orphans
+        * [@HBoxContainer@22625:<HBoxContainer#6776065893596>] + 7
+        * [@HBoxContainer@22587:<HBoxContainer#6771804481050>] + 7
+* test_opening_a_mode_map_keeps_saving_into_that_mode
+    168 Orphans
+        * [@HBoxContainer@22893:<HBoxContainer#6868508354152>] + 7
+        * [@HBoxContainer@22858:<HBoxContainer#6865874331532>] + 7
+        * [@HBoxContainer@22820:<HBoxContainer#6861612918808>] + 7
+        * [@HBoxContainer@22929:<HBoxContainer#6942378437038>] + 7
+168 orphans
+8/8 passed.
+
+
+res://tests/test_editor_objects.gd
+* test_each_brush_creates_its_letter_and_the_level_reads_it
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_painting_again_reuses_the_same_letter
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_a_letter_with_overrides_is_not_reused
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_a_preferred_letter_taken_by_something_else_falls_back_to_a_free_one
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_erasing_the_last_cell_forgets_the_letter_but_not_while_others_remain
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_erasing_never_touches_letters_the_file_already_had
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_painting_an_object_over_the_entrance_removes_it_like_the_other_tools
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_a_stroke_of_objects_is_one_undo_step
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_the_last_letter_still_fits_and_the_next_warns_without_painting
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_a_refused_brush_does_not_leave_an_undo_step
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_painting_over_the_last_cell_of_another_object_frees_its_slot
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_a_value_override_applies_to_every_cell_with_the_letter
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_setting_the_class_value_again_removes_the_override
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_override_values_are_kept_inside_what_the_level_file_accepts
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_extraction_has_its_own_fields_and_removibles_do_not_take_them
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_the_finding_is_disabled_in_a_new_map
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_the_finding_can_be_edited_while_the_draft_is_a_campaign_level
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_a_finding_already_in_the_file_is_kept_even_when_it_cannot_be_edited
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_saving_a_campaign_template_as_a_community_map_closes_the_finding
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_the_editor_never_writes_into_data
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_the_machine_flag_turns_on_and_off
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_an_explicit_false_or_odd_machine_value_is_kept_on_save
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_without_a_list_the_map_offers_the_usual_towers
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_unchecking_a_tower_writes_the_full_list_in_canonical_order
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_the_last_tower_cannot_be_unchecked
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_back_to_the_usual_towers_erases_the_field
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_a_tower_id_the_game_does_not_know_survives_editing_the_list
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_every_example_map_and_official_level_reads_back_the_same
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_the_t206_t210_example_map_can_be_rebuilt_in_the_editor
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_the_object_brushes_have_buttons_and_keys
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_hitting_the_legend_limit_says_so_in_the_messages_line
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_try_play_a_map_with_objects_hands_the_level_with_them
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_objects_panel_edits_the_values_of_the_selected_letter
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_objects_panel_without_objects_explains_what_to_do
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_finding_field_is_locked_with_its_explanation_outside_the_campaign
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_finding_field_works_in_a_campaign_level_opened_as_template
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+    84 Orphans
+        * [@HBoxContainer@24146:<HBoxContainer#7263276246609>] + 7
+        * [@HBoxContainer@24109:<HBoxContainer#7260189239178>] + 7
+* test_settings_panel_demolisher_and_towers
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_the_last_tower_checkbox_snaps_back
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+38/38 passed.
+
+
+res://tests/test_editor_panels.gd
+* test_panels_start_closed_and_the_buttons_open_them
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_only_one_panel_is_open_at_a_time
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+    42 Orphans
+        * [@HBoxContainer@24832:<HBoxContainer#7328824829238>] + 7
+* test_settings_show_the_draft
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_changing_the_numbers_changes_the_draft
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_the_name_is_saved_when_you_finish_typing
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_typing_a_name_is_one_undo_step
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_undo_refreshes_the_open_panel
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_invalid_numbers_show_in_the_editor_message
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_the_panel_shows_the_first_wave
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+    42 Orphans
+        * [@HBoxContainer@26004:<HBoxContainer#7415126829119>] + 7
+* test_every_enemy_of_the_game_can_be_chosen
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+    42 Orphans
+        * [@HBoxContainer@26200:<HBoxContainer#7429152581076>] + 7
+* test_an_unknown_enemy_is_shown_as_it_is
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+    42 Orphans
+        * [@HBoxContainer@26558:<HBoxContainer#7454905607925>] + 7
+* test_editing_a_group_changes_the_draft
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+    42 Orphans
+        * [@HBoxContainer@26754:<HBoxContainer#7469266901995>] + 7
+* test_editing_a_number_does_not_rebuild_the_row
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+    42 Orphans
+        * [@HBoxContainer@26954:<HBoxContainer#7485373032479>] + 7
+* test_entrance_choices_follow_the_map
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+    126 Orphans
+        * [@HBoxContainer@27151:<HBoxContainer#7499667220129>] + 7
+        * [@HBoxContainer@27188:<HBoxContainer#7502687119319>] + 7
+        * [@HBoxContainer@27224:<HBoxContainer#7505723795553>] + 7
+* test_add_and_remove_groups
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+    168 Orphans
+        * [@HBoxContainer@27457:<HBoxContainer#7524631717906>] + 7
+        * [@HBoxContainer@27492:<HBoxContainer#7527265740849>] + 7
+        * [@HBoxContainer@27420:<HBoxContainer#7521611819116>] + 7
+        * [@HBoxContainer@27527:<HBoxContainer#7529899763994>] + 7
+* test_a_wave_without_groups_is_an_error
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+    84 Orphans
+        * [@HBoxContainer@27760:<HBoxContainer#7548790908314>] + 7
+        * [@HBoxContainer@27723:<HBoxContainer#7545771009665>] + 7
+* test_a_zero_count_shows_the_error
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+    42 Orphans
+        * [@HBoxContainer@27920:<HBoxContainer#7560585291680>] + 7
+* test_add_copy_and_remove_waves
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+    168 Orphans
+        * [@HBoxContainer@28226:<HBoxContainer#7584425714962>] + 7
+        * [@HBoxContainer@28189:<HBoxContainer#7580801836537>] + 7
+        * [@HBoxContainer@28154:<HBoxContainer#7578167813738>] + 7
+        * [@HBoxContainer@28117:<HBoxContainer#7575147915124>] + 7
+* test_prev_and_next_move_between_waves
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+    168 Orphans
+        * [@HBoxContainer@28494:<HBoxContainer#7606118654687>] + 7
+        * [@HBoxContainer@28422:<HBoxContainer#7600464733516>] + 7
+        * [@HBoxContainer@28530:<HBoxContainer#7609239218176>] + 7
+        * [@HBoxContainer@28459:<HBoxContainer#7603484633108>] + 7
+* test_the_last_wave_cannot_be_removed
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+    42 Orphans
+        * [@HBoxContainer@28724:<HBoxContainer#7624221271240>] + 7
+* test_undo_refreshes_the_waves_panel
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+    168 Orphans
+        * [@HBoxContainer@28994:<HBoxContainer#7644588811623>] + 7
+        * [@HBoxContainer@28957:<HBoxContainer#7641183036904>] + 7
+        * [@HBoxContainer@28920:<HBoxContainer#7638163138118>] + 7
+        * [@HBoxContainer@29029:<HBoxContainer#7647256389634>] + 7
+* test_a_full_level_built_in_the_panels_is_valid
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+    126 Orphans
+        * [@HBoxContainer@29225:<HBoxContainer#7663412848070>] + 7
+        * [@HBoxContainer@29262:<HBoxContainer#7666432747753>] + 7
+        * [@HBoxContainer@29297:<HBoxContainer#7669066770861>] + 7
+126 orphans
+22/22 passed.
+
+
+res://tests/test_effects.gd
+* test_death_shows_burst_and_gold_text
+* test_escaping_shows_no_death_effects
+* test_effects_remove_themselves
+* test_tower_barrel_points_at_its_target
+* test_projectile_impact_creates_effect
+* test_screen_shake_returns_to_origin
+6/6 passed.
+
+
+res://tests/test_enemy_aura.gd
+* test_aura_data_is_off_by_default
+* test_the_armor_bonus_reduces_the_damage_of_a_tower
+* test_the_minimum_damage_still_applies
+* test_the_aura_adds_to_the_own_armor
+* test_only_enemies_inside_the_radius_get_it
+* test_the_aura_reaches_enemies_behind_and_flying_ones
+* test_burning_ignores_the_armor_of_the_aura
+* test_two_armor_auras_do_not_add_up
+* test_the_strongest_armor_aura_wins
+* test_the_aura_fades_in_under_half_a_second_when_the_carrier_dies
+* test_the_aura_fades_when_the_target_leaves_the_radius
+* test_a_weak_aura_does_not_keep_a_dead_strong_one_alive
+* test_time_stopped_means_aura_stopped
+* test_the_heal_aura_recovers_a_percent_of_max_health_per_second
+* test_the_heal_never_goes_over_the_maximum
+* test_the_heal_adds_to_the_own_regeneration
+* test_a_burning_enemy_is_not_healed_by_the_aura
+* test_the_carrier_is_not_healed_by_its_own_aura
+* test_one_carrier_can_give_armor_and_heal_at_once
+* test_two_heal_auras_do_not_add_up
+20/20 passed.
+
+
+res://tests/test_enemy_visual.gd
+* test_four_directions_wrap_and_choose_nearest_view
+* test_steps_follow_distance_and_stop_when_distance_stops
+* test_scaled_sprite_keeps_feet_and_collision_radius
+* test_enemy_uses_regions_for_walk_flight_and_static_fallback
+* test_slowed_walk_really_uses_less_distance_and_fewer_poses
+* test_flight_loops_and_all_frames_fit
+* test_desktop_size_fits_monitor_and_preserves_aspect_ratio
+* test_static_fallback_still_draws_without_a_cycle
+* test_remaining_cycles_are_complete_unique_and_inside_transparent_frames
+* test_every_ground_cycle_slows_steps_and_keeps_boss_resistance
+10/10 passed.
+
+
+res://tests/test_enemy_warnings.gd
+* test_wave_enemy_counts_merge_groups_of_the_same_enemy
+* test_shows_the_first_wave_before_starting
+* test_shows_the_following_wave_once_one_starts
+* test_the_busiest_wave_fits_in_one_row
+* test_nothing_after_the_last_wave
+* test_boss_wave_banner
+* test_no_boss_line_in_normal_waves
+* test_first_appearance_shows_the_card
+* test_card_appears_only_once_per_type
+* test_two_new_enemies_are_shown_one_after_the_other
+* test_seen_enemies_survive_closing_the_game
+* test_outside_the_campaign_nothing_is_written
+* test_in_the_campaign_it_is_saved
+13/13 passed.
+
+
+res://tests/test_epilogue.gd
+* test_the_end_screen_swaps_next_level_for_epilogue_and_emits_its_own_signal
+* test_without_epilogue_the_button_is_next_level_as_before
+* test_the_epilogue_label_does_not_stick_after_a_defeat_or_another_victory
+* test_winning_the_last_level_of_the_campaign_offers_the_epilogue_and_no_next_level
+    18 Orphans
+        * [@HBoxContainer@30321:<HBoxContainer#7911984080081>] + 2
+        * [@HBoxContainer@30287:<HBoxContainer#7908611860259>] + 2
+        * [@HBoxContainer@30293:<HBoxContainer#7908880295797>] + 2
+        * [@HBoxContainer@30290:<HBoxContainer#7908746078495>] + 2
+        * [@HBoxContainer@30318:<HBoxContainer#7911849863545>] + 2
+        * [@HBoxContainer@30315:<HBoxContainer#7911715645943>] + 2
+* test_winning_the_fourteenth_still_offers_the_next_level
+    12 Orphans
+        * [@HBoxContainer@30376:<HBoxContainer#7921144440228>] + 2
+        * [@HBoxContainer@30398:<HBoxContainer#7923963012634>] + 2
+        * [@HBoxContainer@30401:<HBoxContainer#7924097230379>] + 2
+        * [@HBoxContainer@30373:<HBoxContainer#7921010222991>] + 2
+* test_losing_the_last_level_offers_no_epilogue
+    18 Orphans
+        * [@HBoxContainer@30481:<HBoxContainer#7936193602773>] + 2
+        * [@HBoxContainer@30484:<HBoxContainer#7936327820646>] + 2
+        * [@HBoxContainer@30450:<HBoxContainer#7932972377470>] + 2
+        * [@HBoxContainer@30456:<HBoxContainer#7933240813124>] + 2
+        * [@HBoxContainer@30478:<HBoxContainer#7936059386300>] + 2
+        * [@HBoxContainer@30453:<HBoxContainer#7933106596309>] + 2
+* test_the_epilogue_is_only_in_the_campaign
+* test_the_test_mode_shows_no_epilogue_button
+    27 Orphans
+        * [@HBoxContainer@30570:<HBoxContainer#7948726181613>] + 2
+        * [@HBoxContainer@30567:<HBoxContainer#7948591965002>] + 2
+        * [@HBoxContainer@30542:<HBoxContainer#7945672729814>] + 2
+        * [@HBoxContainer@30576:<HBoxContainer#7949078504677>] + 2
+        * [@HBoxContainer@30539:<HBoxContainer#7945538512198>] + 2
+        * [@HBoxContainer@30573:<HBoxContainer#7948944287117>] + 2
+        * [@HBoxContainer@30536:<HBoxContainer#7945404294689>] + 2
+        * [@HBoxContainer@30564:<HBoxContainer#7948457748529>] + 2
+        * [@HBoxContainer@30579:<HBoxContainer#7949212723343>] + 2
+* test_a_last_level_without_epilogue_text_has_no_button
+* test_the_campaign_is_complete_when_the_fifteen_levels_are_completed_without_a_new_field
+* test_epilogue_button_opens_the_picture_with_the_four_lines_and_two_buttons
+    18 Orphans
+        * [@HBoxContainer@30677:<HBoxContainer#7962617718061>] + 2
+        * [@HBoxContainer@30671:<HBoxContainer#7962349282717>] + 2
+        * [@HBoxContainer@30699:<HBoxContainer#7965436290820>] + 2
+        * [@HBoxContainer@30702:<HBoxContainer#7965570508651>] + 2
+        * [@HBoxContainer@30674:<HBoxContainer#7962483501256>] + 2
+        * [@HBoxContainer@30705:<HBoxContainer#7965704726976>] + 2
+* test_the_epilogue_text_is_the_approved_one
+* test_escape_or_a_tap_on_the_picture_goes_back_to_the_victory_screen
+    18 Orphans
+        * [@HBoxContainer@30804:<HBoxContainer#7978774175967>] + 2
+        * [@HBoxContainer@30807:<HBoxContainer#7978908394842>] + 2
+        * [@HBoxContainer@30776:<HBoxContainer#7975687169429>] + 2
+        * [@HBoxContainer@30810:<HBoxContainer#7979042613023>] + 2
+        * [@HBoxContainer@30779:<HBoxContainer#7975821387706>] + 2
+        * [@HBoxContainer@30782:<HBoxContainer#7975955605725>] + 2
+* test_credits_open_from_the_epilogue_and_back_returns_to_the_epilogue
+    18 Orphans
+        * [@HBoxContainer@30909:<HBoxContainer#7992061732079>] + 2
+        * [@HBoxContainer@30912:<HBoxContainer#7992195949861>] + 2
+        * [@HBoxContainer@30884:<HBoxContainer#7989108942497>] + 2
+        * [@HBoxContainer@30881:<HBoxContainer#7988974724781>] + 2
+        * [@HBoxContainer@30887:<HBoxContainer#7989243160454>] + 2
+        * [@HBoxContainer@30915:<HBoxContainer#7992330168698>] + 2
+* test_escape_in_the_credits_closes_only_the_credits
+    18 Orphans
+        * [@HBoxContainer@30996:<HBoxContainer#8002681707749>] + 2
+        * [@HBoxContainer@31018:<HBoxContainer#8005500282322>] + 2
+        * [@HBoxContainer@30990:<HBoxContainer#8002413275104>] + 2
+        * [@HBoxContainer@31021:<HBoxContainer#8005634500580>] + 2
+        * [@HBoxContainer@31024:<HBoxContainer#8005768718615>] + 2
+        * [@HBoxContainer@30993:<HBoxContainer#8002547493230>] + 2
+* test_levels_button_of_the_epilogue_asks_to_go_to_the_level_select
+    18 Orphans
+        * [@HBoxContainer@31133:<HBoxContainer#8019173713177>] + 2
+        * [@HBoxContainer@31099:<HBoxContainer#8015818270153>] + 2
+        * [@HBoxContainer@31102:<HBoxContainer#8015952488216>] + 2
+        * [@HBoxContainer@31130:<HBoxContainer#8019039495992>] + 2
+        * [@HBoxContainer@31105:<HBoxContainer#8016086706192>] + 2
+        * [@HBoxContainer@31127:<HBoxContainer#8018905278568>] + 2
+* test_seeing_the_epilogue_and_the_credits_leaves_the_save_identical
+    18 Orphans
+        * [@HBoxContainer@31254:<HBoxContainer#8033048470346>] + 2
+        * [@HBoxContainer@31229:<HBoxContainer#8030095680767>] + 2
+        * [@HBoxContainer@31251:<HBoxContainer#8032914253122>] + 2
+        * [@HBoxContainer@31257:<HBoxContainer#8033182688683>] + 2
+        * [@HBoxContainer@31226:<HBoxContainer#8029961464031>] + 2
+        * [@HBoxContainer@31223:<HBoxContainer#8029827246463>] + 2
+* test_the_credits_file_has_the_approved_lines_and_nothing_unverifiable
+* test_the_credits_parser_reports_each_problem
+* test_the_credits_screen_scrolls_when_the_text_does_not_fit_and_shows_the_back_button
+20/20 passed.
+
+
+res://tests/test_extraction.gd
+* test_site_starts_disabled_with_full_reserve
+* test_does_not_produce_when_not_enabled
+* test_produces_two_four_times_then_depletes
+* test_never_produces_more_than_the_reserve
+* test_odd_reserve_ends_with_the_remainder
+* test_cannot_enable_twice_or_when_depleted_or_a_removable
+* test_reserve_zero_is_born_depleted
+* test_setup_restores_the_reserve
+* test_many_sites_are_independent
+* test_site_can_be_selected_in_all_states
+    12 Orphans
+        * [@HBoxContainer@31382:<HBoxContainer#8048768722197>] + 2
+        * [@HBoxContainer@31406:<HBoxContainer#8051620849549>] + 2
+        * [@HBoxContainer@31403:<HBoxContainer#8051402745814>] + 2
+        * [@HBoxContainer@31410:<HBoxContainer#8051855730913>] + 2
+* test_enable_charges_gold_immediately
+    12 Orphans
+        * [@HBoxContainer@31474:<HBoxContainer#8063482340776>] + 2
+        * [@HBoxContainer@31481:<HBoxContainer#8063918548979>] + 2
+        * [@HBoxContainer@31477:<HBoxContainer#8063700445198>] + 2
+        * [@HBoxContainer@31453:<HBoxContainer#8060848318802>] + 2
+* test_enable_without_gold_changes_nothing
+    6 Orphans
+        * [@HBoxContainer@31524:<HBoxContainer#8072944690390>] + 2
+        * [@HBoxContainer@31545:<HBoxContainer#8075578714074>] + 2
+* test_playable_example_gives_2_2_2_2_and_depletes
+    66 Orphans
+        * [@HBoxContainer@31668:<HBoxContainer#8091332517000>] + 2
+        * [@HBoxContainer@31655:<HBoxContainer#8090392993538>] + 2
+        * [@HBoxContainer@31675:<HBoxContainer#8092070715891>] + 2
+        * [@HBoxContainer@31633:<HBoxContainer#8088732050126>] + 2
+        * [@HBoxContainer@31646:<HBoxContainer#8089671574785>] + 2
+        * [@HBoxContainer@31659:<HBoxContainer#8090611098938>] + 2
+        * [@HBoxContainer@31610:<HBoxContainer#8087322764895>] + 2
+        * [@HBoxContainer@31589:<HBoxContainer#8084688742030>] + 2
+        * [@HBoxContainer@31626:<HBoxContainer#8088346175193>] + 2
+        * [@HBoxContainer@31629:<HBoxContainer#8088513947454>] + 2
+        * [@HBoxContainer@31639:<HBoxContainer#8089285699444>] + 2
+        * [@HBoxContainer@31662:<HBoxContainer#8090963421105>] + 2
+        * [@HBoxContainer@31649:<HBoxContainer#8090023897105>] + 2
+        * [@HBoxContainer@31665:<HBoxContainer#8091164747835>] + 2
+        * [@HBoxContainer@31620:<HBoxContainer#8087977076849>] + 2
+        * [@HBoxContainer@31672:<HBoxContainer#8091550623930>] + 2
+        * [@HBoxContainer@31636:<HBoxContainer#8089084373279>] + 2
+        * [@HBoxContainer@31652:<HBoxContainer#8090225224021>] + 2
+        * [@HBoxContainer@31623:<HBoxContainer#8088144849346>] + 2
+        * [@HBoxContainer@31642:<HBoxContainer#8089453472209>] + 2
+        * [@HBoxContainer@31617:<HBoxContainer#8087758973415>] + 2
+        * [@HBoxContainer@31613:<HBoxContainer#8087540869626>] + 2
+* test_no_production_when_not_enabled_or_by_waiting
+    18 Orphans
+        * [@HBoxContainer@31752:<HBoxContainer#8105207276763>] + 2
+        * [@HBoxContainer@31739:<HBoxContainer#8104167089825>] + 2
+        * [@HBoxContainer@31718:<HBoxContainer#8101533067037>] + 2
+        * [@HBoxContainer@31749:<HBoxContainer#8104821401707>] + 2
+        * [@HBoxContainer@31742:<HBoxContainer#8104385194168>] + 2
+        * [@HBoxContainer@31746:<HBoxContainer#8104603298155>] + 2
+* test_jumping_to_a_wave_does_not_produce
+    12 Orphans
+        * [@HBoxContainer@31795:<HBoxContainer#8114233417938>] + 2
+        * [@HBoxContainer@31819:<HBoxContainer#8117085544768>] + 2
+        * [@HBoxContainer@31823:<HBoxContainer#8117303649919>] + 2
+        * [@HBoxContainer@31816:<HBoxContainer#8116867442539>] + 2
+* test_enabled_during_the_wave_counts_that_wave
+    24 Orphans
+        * [@HBoxContainer@31901:<HBoxContainer#8129802673381>] + 2
+        * [@HBoxContainer@31895:<HBoxContainer#8129416798338>] + 2
+        * [@HBoxContainer@31888:<HBoxContainer#8128980591940>] + 2
+        * [@HBoxContainer@31891:<HBoxContainer#8129198696151>] + 2
+        * [@HBoxContainer@31907:<HBoxContainer#8130171774933>] + 2
+        * [@HBoxContainer@31867:<HBoxContainer#8126346569775>] + 2
+        * [@HBoxContainer@31904:<HBoxContainer#8130004003009>] + 2
+        * [@HBoxContainer@31898:<HBoxContainer#8129634904293>] + 2
+* test_floating_text_is_shown_on_production
+    24 Orphans
+        * [@HBoxContainer@31951:<HBoxContainer#8139382465905>] + 2
+        * [@HBoxContainer@31982:<HBoxContainer#8142670800447>] + 2
+        * [@HBoxContainer@31991:<HBoxContainer#8143207671669>] + 2
+        * [@HBoxContainer@31972:<HBoxContainer#8142016489348>] + 2
+        * [@HBoxContainer@31985:<HBoxContainer#8142838573062>] + 2
+        * [@HBoxContainer@31979:<HBoxContainer#8142452697236>] + 2
+        * [@HBoxContainer@31975:<HBoxContainer#8142234593618>] + 2
+        * [@HBoxContainer@31988:<HBoxContainer#8143039900153>] + 2
+* test_panel_shows_each_state
+    60 Orphans
+        * [@HBoxContainer@32095:<HBoxContainer#8157854178767>] + 2
+        * [@HBoxContainer@32059:<HBoxContainer#8155270487545>] + 2
+        * [@HBoxContainer@32069:<HBoxContainer#8155958353645>] + 2
+        * [@HBoxContainer@32108:<HBoxContainer#8158793703615>] + 2
+        * [@HBoxContainer@32101:<HBoxContainer#8158223279344>] + 2
+        * [@HBoxContainer@32035:<HBoxContainer#8152418362774>] + 2
+        * [@HBoxContainer@32092:<HBoxContainer#8157501859255>] + 2
+        * [@HBoxContainer@32082:<HBoxContainer#8156914656780>] + 2
+        * [@HBoxContainer@32088:<HBoxContainer#8157283755954>] + 2
+        * [@HBoxContainer@32072:<HBoxContainer#8156159682586>] + 2
+        * [@HBoxContainer@32075:<HBoxContainer#8156327454761>] + 2
+        * [@HBoxContainer@32105:<HBoxContainer#8158441383978>] + 2
+        * [@HBoxContainer@32079:<HBoxContainer#8156545558573>] + 2
+        * [@HBoxContainer@32111:<HBoxContainer#8158995032194>] + 2
+        * [@HBoxContainer@32114:<HBoxContainer#8159162804375>] + 2
+        * [@HBoxContainer@32056:<HBoxContainer#8155052386589>] + 2
+        * [@HBoxContainer@32085:<HBoxContainer#8157115984180>] + 2
+        * [@HBoxContainer@32098:<HBoxContainer#8158055508280>] + 2
+        * [@HBoxContainer@32063:<HBoxContainer#8155538925957>] + 2
+        * [@HBoxContainer@32066:<HBoxContainer#8155757029841>] + 2
+* test_panel_disables_the_button_without_gold
+    6 Orphans
+        * [@HBoxContainer@32179:<HBoxContainer#8171225621974>] + 2
+        * [@HBoxContainer@32158:<HBoxContainer#8168591599721>] + 2
+* test_removable_panel_shows_the_button_again_after_a_site
+    12 Orphans
+        * [@HBoxContainer@32223:<HBoxContainer#8180218207383>] + 2
+        * [@HBoxContainer@32247:<HBoxContainer#8183070336232>] + 2
+        * [@HBoxContainer@32251:<HBoxContainer#8183288440169>] + 2
+        * [@HBoxContainer@32244:<HBoxContainer#8182852232667>] + 2
+12 orphans
+20/20 passed.
+
+
+res://tests/test_hall_of_fame.gd
+* test_best_victory_score_is_kept
+* test_the_hall_needs_every_level_won
+* test_campaign_total_is_the_sum_of_the_best_scores
+* test_only_asked_again_when_the_total_goes_up
+* test_hall_entries_have_five_letters_and_are_saved
+* test_outside_the_campaign_there_is_no_hall
+* test_winning_the_last_level_opens_the_hall_after_the_level_record
+    33 Orphans
+        * [@HBoxContainer@32325:<HBoxContainer#8196206895839>] + 2
+        * [@HBoxContainer@32331:<HBoxContainer#8196475331403>] + 2
+        * [@HBoxContainer@32328:<HBoxContainer#8196341114350>] + 2
+        * [@HBoxContainer@32303:<HBoxContainer#8193388324557>] + 2
+        * [@HBoxContainer@32297:<HBoxContainer#8193119889272>] + 2
+        * [@VBoxContainer@32356:<VBoxContainer#8197230307516>(name_entry.gd)] + 14
+        * [@HBoxContainer@32300:<HBoxContainer#8193254107526>] + 2
+* test_losing_never_opens_the_hall
+    33 Orphans
+        * [@HBoxContainer@32468:<HBoxContainer#8211105064181>] + 2
+        * [@HBoxContainer@32474:<HBoxContainer#8211373499849>] + 2
+        * [@HBoxContainer@32443:<HBoxContainer#8208152274538>] + 2
+        * [@HBoxContainer@32440:<HBoxContainer#8208018056990>] + 2
+        * [@VBoxContainer@32499:<VBoxContainer#8212078143674>(name_entry.gd)] + 14
+        * [@HBoxContainer@32446:<HBoxContainer#8208286492949>] + 2
+        * [@HBoxContainer@32471:<HBoxContainer#8211239283063>] + 2
+33 orphans
+8/8 passed.
+
+
+res://tests/test_level_10.gd
+* test_level_10_is_in_the_campaign_in_a_big_desert_map
+* test_one_mine_seven_removables_and_a_single_piece
+* test_the_mortar_and_the_mechanic_are_available_and_the_sniper_keeps_both_prices
+* test_the_waves_have_no_debuts_and_pair_guardian_with_healer
+* test_rammer_has_something_to_hit_at_every_corner_and_removables_do_not_cover_it
+* test_there_are_free_2x2_blocks_for_the_mortar
+    6 Orphans
+        * [@HBoxContainer@32546:<HBoxContainer#8266134332917>] + 2
+        * [@HBoxContainer@32570:<HBoxContainer#8269221341021>] + 2
+* test_the_mine_pays_for_a_mortar_in_two_waves_and_the_level_works_without_it
+    45 Orphans
+        * [@HBoxContainer@32642:<HBoxContainer#8285897891447>] + 2
+        * [@HBoxContainer@32639:<HBoxContainer#8285679787980>] + 2
+        * [@HBoxContainer@32652:<HBoxContainer#8286585758962>] + 2
+        * [@HBoxContainer@32658:<HBoxContainer#8286971634952>] + 2
+        * [@HBoxContainer@32665:<HBoxContainer#8287357510953>] + 2
+        * [@HBoxContainer@32655:<HBoxContainer#8286770308504>] + 2
+        * [@HBoxContainer@32649:<HBoxContainer#8286367655373>] + 2
+        * [@HBoxContainer@32668:<HBoxContainer#8287760164427>] + 2
+        * [@HBoxContainer@32646:<HBoxContainer#8286149551762>] + 2
+        * [@HBoxContainer@32615:<HBoxContainer#8282592782010>] + 2
+        * [@HBoxContainer@32671:<HBoxContainer#8287961491133>] + 2
+        * [@HBoxContainer@32681:<HBoxContainer#8288750020347>] + 2
+        * [@HBoxContainer@32678:<HBoxContainer#8288347367365>] + 2
+        * [@HBoxContainer@32674:<HBoxContainer#8288129263648>] + 2
+        * [@HBoxContainer@32661:<HBoxContainer#8287139408311>] + 2
+* test_the_third_piece_completes_the_disruptor_collection
+    24 Orphans
+        * [@HBoxContainer@32726:<HBoxContainer#8302524112203>] + 2
+        * [@HBoxContainer@32772:<HBoxContainer#8307439836993>] + 2
+        * [@HBoxContainer@32763:<HBoxContainer#8306600977721>] + 2
+        * [@HBoxContainer@32757:<HBoxContainer#8306114438675>] + 2
+        * [@HBoxContainer@32760:<HBoxContainer#8306382874156>] + 2
+        * [@HBoxContainer@32753:<HBoxContainer#8305829226129>] + 2
+        * [@HBoxContainer@32750:<HBoxContainer#8305611123039>] + 2
+        * [@HBoxContainer@32767:<HBoxContainer#8307070740964>] + 2
+* test_the_piece_is_not_collected_outside_the_campaign
+    21 Orphans
+        * [@HBoxContainer@32817:<HBoxContainer#8321297817126>] + 2
+        * [@HBoxContainer@32844:<HBoxContainer#8324569374991>] + 2
+        * [@HBoxContainer@32841:<HBoxContainer#8324351272304>] + 2
+        * [@HBoxContainer@32857:<HBoxContainer#8325391460003>] + 2
+        * [@HBoxContainer@32854:<HBoxContainer#8325206910944>] + 2
+        * [@HBoxContainer@32848:<HBoxContainer#8324787480796>] + 2
+        * [@HBoxContainer@32851:<HBoxContainer#8325022362023>] + 2
+21 orphans
+9/9 passed.
+
+
+res://tests/test_level_11.gd
+* test_level_11_follows_the_tenth_in_a_big_desert_map_with_one_entrance
+* test_two_wells_three_markers_one_mine_and_five_removables_without_findings
+* test_there_are_about_fifty_free_cells_and_free_2x2_blocks_for_the_mortar
+    6 Orphans
+        * [@HBoxContainer@32905:<HBoxContainer#8354567038663>] + 2
+        * [@HBoxContainer@32927:<HBoxContainer#8357385611356>] + 2
+* test_the_shaman_debuts_alone_in_wave_4_to_6_and_nothing_else_is_new
+* test_auras_arrive_together_from_wave_8_and_the_shaman_joins_them_from_wave_12
+* test_rammer_has_something_to_hit_at_every_corner_and_removables_do_not_cover_it
+* test_the_mine_pays_for_a_mortar_in_two_waves_and_the_level_works_without_it
+    45 Orphans
+        * [@HBoxContainer@33016:<HBoxContainer#8409747299959>] + 2
+        * [@HBoxContainer@33010:<HBoxContainer#8409378201661>] + 2
+        * [@HBoxContainer@33036:<HBoxContainer#8411274027887>] + 2
+        * [@HBoxContainer@33023:<HBoxContainer#8410317727044>] + 2
+        * [@HBoxContainer@33029:<HBoxContainer#8410686825946>] + 2
+        * [@HBoxContainer@32994:<HBoxContainer#8408287684084>] + 2
+        * [@HBoxContainer@33026:<HBoxContainer#8410519053824>] + 2
+        * [@HBoxContainer@33004:<HBoxContainer#8408975549992>] + 2
+        * [@HBoxContainer@32972:<HBoxContainer#8405469112040>] + 2
+        * [@HBoxContainer@33020:<HBoxContainer#8409965406019>] + 2
+        * [@HBoxContainer@32997:<HBoxContainer#8408505788289>] + 2
+        * [@HBoxContainer@33007:<HBoxContainer#8409193654158>] + 2
+        * [@HBoxContainer@33013:<HBoxContainer#8409579530164>] + 2
+        * [@HBoxContainer@33001:<HBoxContainer#8408757446786>] + 2
+        * [@HBoxContainer@33033:<HBoxContainer#8410904930713>] + 2
+* test_the_third_piece_is_not_here_because_the_collection_was_completed_in_the_ten
+8/8 passed.
+
+
+res://tests/test_level_12.gd
+* test_level_12_follows_the_eleventh_in_a_canyon_of_26_by_11_with_one_entrance
+* test_a_forest_instead_of_the_mine_five_removables_markers_and_no_findings
+* test_there_are_40_to_45_free_cells_and_free_2x2_blocks_for_the_mortar
+    6 Orphans
+        * [@HBoxContainer@33105:<HBoxContainer#8452394982385>] + 2
+        * [@HBoxContainer@33083:<HBoxContainer#8449576411823>] + 2
+* test_the_mirror_debuts_alone_in_wave_4_to_6_and_nothing_else_is_new
+* test_known_enemies_mix_from_wave_8_and_the_mirror_joins_them_from_wave_12
+* test_rammer_has_something_to_hit_at_every_corner_and_removables_do_not_cover_it
+* test_the_forest_pays_for_a_mortar_in_two_waves_and_the_level_works_without_it
+    45 Orphans
+        * [@HBoxContainer@33201:<HBoxContainer#8514118360614>] + 2
+        * [@HBoxContainer@33207:<HBoxContainer#8514487459946>] + 2
+        * [@HBoxContainer@33198:<HBoxContainer#8513766040837>] + 2
+        * [@HBoxContainer@33211:<HBoxContainer#8514705565068>] + 2
+        * [@HBoxContainer@33179:<HBoxContainer#8512558081474>] + 2
+        * [@HBoxContainer@33188:<HBoxContainer#8513178838760>] + 2
+        * [@HBoxContainer@33204:<HBoxContainer#8514319689539>] + 2
+        * [@HBoxContainer@33172:<HBoxContainer#8512088320013>] + 2
+        * [@HBoxContainer@33214:<HBoxContainer#8515074664495>] + 2
+        * [@HBoxContainer@33194:<HBoxContainer#8513547937900>] + 2
+        * [@HBoxContainer@33185:<HBoxContainer#8512994289830>] + 2
+        * [@HBoxContainer@33182:<HBoxContainer#8512776186154>] + 2
+        * [@HBoxContainer@33150:<HBoxContainer#8509269748112>] + 2
+        * [@HBoxContainer@33191:<HBoxContainer#8513380166119>] + 2
+        * [@HBoxContainer@33175:<HBoxContainer#8512306424296>] + 2
+* test_free_cells_exist_inside_and_outside_the_mirror_reach_but_inside_the_sniper_reach
+    6 Orphans
+        * [@HBoxContainer@33281:<HBoxContainer#8532590074876>] + 2
+        * [@HBoxContainer@33259:<HBoxContainer#8529771504043>] + 2
+6 orphans
+8/8 passed.
+
+
+res://tests/test_level_13.gd
+* test_level_13_follows_the_twelfth_in_a_snowy_pass_of_26_by_12_with_two_entrances
+* test_an_ice_lagoon_markers_a_mine_and_a_forest_one_per_entrance_and_five_removables
+* test_the_mine_and_the_forest_are_near_their_own_entrance
+* test_there_are_about_sixty_free_cells_and_free_2x2_blocks_for_the_mortar
+    12 Orphans
+        * [@HBoxContainer@33356:<HBoxContainer#8578492537883>] + 2
+        * [@HBoxContainer@33353:<HBoxContainer#8578358320392>] + 2
+        * [@HBoxContainer@33328:<HBoxContainer#8575405532775>] + 2
+        * [@HBoxContainer@33331:<HBoxContainer#8575539751122>] + 2
+* test_no_enemy_debuts_and_the_mirror_and_the_auras_are_known
+* test_the_escort_comes_together_first_through_one_entrance_and_from_wave_14_through_both
+* test_rammer_has_something_to_hit_at_every_corner_and_removables_do_not_cover_it
+* test_the_mine_and_the_forest_together_pay_a_mortar_after_one_wave
+    90 Orphans
+        * [@HBoxContainer@33490:<HBoxContainer#8650651343811>] + 2
+        * [@HBoxContainer@33510:<HBoxContainer#8651808972260>] + 2
+        * [@HBoxContainer@33513:<HBoxContainer#8651926412875>] + 2
+        * [@HBoxContainer@33497:<HBoxContainer#8650986888935>] + 2
+        * [@HBoxContainer@33478:<HBoxContainer#8650080919361>] + 2
+        * [@HBoxContainer@33504:<HBoxContainer#8651322433383>] + 2
+        * [@HBoxContainer@33487:<HBoxContainer#8650483572684>] + 2
+        * [@HBoxContainer@33481:<HBoxContainer#8650198360170>] + 2
+        * [@HBoxContainer@33451:<HBoxContainer#8648621301882>] + 2
+        * [@HBoxContainer@33493:<HBoxContainer#8650768786074>] + 2
+        * [@HBoxContainer@33507:<HBoxContainer#8651439874756>] + 2
+        * [@HBoxContainer@33500:<HBoxContainer#8651104330605>] + 2
+        * [@HBoxContainer@33448:<HBoxContainer#8648487085289>] + 2
+        * [@HBoxContainer@33404:<HBoxContainer#8644460553491>] + 2
+        * [@HBoxContainer@33429:<HBoxContainer#8647413343568>] + 2
+        * [@HBoxContainer@33466:<HBoxContainer#8649476941168>] + 2
+        * [@HBoxContainer@33475:<HBoxContainer#8649879594379>] + 2
+        * [@HBoxContainer@33442:<HBoxContainer#8648134763916>] + 2
+        * [@HBoxContainer@33469:<HBoxContainer#8649594381786>] + 2
+        * [@HBoxContainer@33432:<HBoxContainer#8647547561518>] + 2
+        * [@HBoxContainer@33445:<HBoxContainer#8648268981807>] + 2
+        * [@HBoxContainer@33460:<HBoxContainer#8649141397224>] + 2
+        * [@HBoxContainer@33435:<HBoxContainer#8647765665543>] + 2
+        * [@HBoxContainer@33454:<HBoxContainer#8648839407381>] + 2
+        * [@HBoxContainer@33472:<HBoxContainer#8649762154387>] + 2
+        * [@HBoxContainer@33463:<HBoxContainer#8649258838058>] + 2
+        * [@HBoxContainer@33484:<HBoxContainer#8650366134352>] + 2
+        * [@HBoxContainer@33438:<HBoxContainer#8647899883806>] + 2
+        * [@HBoxContainer@33457:<HBoxContainer#8648956848552>] + 2
+        * [@HBoxContainer@33407:<HBoxContainer#8644594772435>] + 2
+90 orphans
+8/8 passed.
+
+
+res://tests/test_level_14.gd
+* test_level_14_follows_the_thirteenth_in_a_ruined_map_of_26_by_12_with_two_entrances
+* test_the_signs_culminate_four_empty_camps_and_six_ruin_symbols
+* test_a_mine_and_a_forest_five_removables_as_houses_and_no_findings
+* test_there_are_about_fifty_five_free_cells_and_free_2x2_blocks_for_the_mortar
+    12 Orphans
+        * [@HBoxContainer@33591:<HBoxContainer#8708364967535>] + 2
+        * [@HBoxContainer@33588:<HBoxContainer#8708230750031>] + 2
+        * [@HBoxContainer@33563:<HBoxContainer#8705277962297>] + 2
+        * [@HBoxContainer@33566:<HBoxContainer#8705412180253>] + 2
+* test_all_the_threats_appear_and_none_debuts
+* test_guardian_healer_shaman_and_mirror_come_together_in_at_least_six_waves_with_flyers
+* test_rammer_has_something_to_hit_at_every_corner_and_removables_do_not_cover_it
+* test_the_mine_and_the_forest_together_pay_a_mortar_after_one_wave
+    90 Orphans
+        * [@HBoxContainer@33683:<HBoxContainer#8792871803903>] + 2
+        * [@HBoxContainer@33686:<HBoxContainer#8793006022214>] + 2
+        * [@HBoxContainer@33748:<HBoxContainer#8796311133769>] + 2
+        * [@HBoxContainer@33716:<HBoxContainer#8794583080680>] + 2
+        * [@HBoxContainer@33742:<HBoxContainer#8795824594674>] + 2
+        * [@HBoxContainer@33725:<HBoxContainer#8795036065654>] + 2
+        * [@HBoxContainer@33692:<HBoxContainer#8793341567122>] + 2
+        * [@HBoxContainer@33735:<HBoxContainer#8795489050924>] + 2
+        * [@HBoxContainer@33739:<HBoxContainer#8795707154733>] + 2
+        * [@HBoxContainer@33745:<HBoxContainer#8796193694090>] + 2
+        * [@HBoxContainer@33698:<HBoxContainer#8793643557344>] + 2
+        * [@HBoxContainer@33728:<HBoxContainer#8795153506946>] + 2
+        * [@HBoxContainer@33689:<HBoxContainer#8793224127117>] + 2
+        * [@HBoxContainer@33701:<HBoxContainer#8793861661416>] + 2
+        * [@HBoxContainer@33680:<HBoxContainer#8792653702391>] + 2
+        * [@HBoxContainer@33642:<HBoxContainer#8788979492104>] + 2
+        * [@HBoxContainer@33667:<HBoxContainer#8791932282196>] + 2
+        * [@HBoxContainer@33722:<HBoxContainer#8794868295106>] + 2
+        * [@HBoxContainer@33704:<HBoxContainer#8793979102720>] + 2
+        * [@HBoxContainer@33673:<HBoxContainer#8792284604041>] + 2
+        * [@HBoxContainer@33639:<HBoxContainer#8788845274949>] + 2
+        * [@HBoxContainer@33670:<HBoxContainer#8792150386552>] + 2
+        * [@HBoxContainer@33713:<HBoxContainer#8794465642504>] + 2
+        * [@HBoxContainer@33695:<HBoxContainer#8793526118409>] + 2
+        * [@HBoxContainer@33707:<HBoxContainer#8794146875427>] + 2
+        * [@HBoxContainer@33677:<HBoxContainer#8792519485481>] + 2
+        * [@HBoxContainer@33719:<HBoxContainer#8794750855298>] + 2
+        * [@HBoxContainer@33710:<HBoxContainer#8794264316045>] + 2
+        * [@HBoxContainer@33664:<HBoxContainer#8791798065585>] + 2
+        * [@HBoxContainer@33732:<HBoxContainer#8795371612638>] + 2
+90 orphans
+8/8 passed.
+
+
+res://tests/test_level_15.gd
+* test_level_15_closes_the_campaign_in_the_valley_with_three_entrances
+* test_the_legend_uses_the_twelve_letters_d093_allows
+* test_the_central_is_four_quarters_next_to_the_exit_not_the_exit_itself
+* test_the_central_cannot_be_built_on_nor_crossed
+    27 Orphans
+        * [@HBoxContainer@33832:<HBoxContainer#8849142587171>] + 2
+        * [@HBoxContainer@33829:<HBoxContainer#8849008369874>] + 2
+        * [@HBoxContainer@33841:<HBoxContainer#8849629127194>] + 2
+        * [@HBoxContainer@33798:<HBoxContainer#8845787145049>] + 2
+        * [@HBoxContainer@33804:<HBoxContainer#8846055581745>] + 2
+        * [@HBoxContainer@33826:<HBoxContainer#8848874154206>] + 2
+        * [@HBoxContainer@33801:<HBoxContainer#8845921364288>] + 2
+        * [@HBoxContainer@33838:<HBoxContainer#8849494911436>] + 2
+        * [@HBoxContainer@33835:<HBoxContainer#8849360693713>] + 2
+* test_two_to_four_supply_pieces_along_the_border_and_two_or_three_empty_camps
+* test_one_mine_two_forests_four_to_six_removables_and_no_findings
+* test_about_sixty_five_free_cells_and_four_free_2x2_blocks
+* test_the_sovereign_is_not_in_the_level_and_the_shard_is_never_named
+* test_the_colossus_comes_in_waves_26_28_and_30_one_each_and_never_before
+* test_the_full_escort_comes_with_the_colossus_only_in_wave_30_and_by_several_entrances
+* test_the_colossus_debuts_with_only_known_enemies_and_after_a_lighter_wave
+* test_all_the_other_threats_are_known_from_the_earlier_levels
+* test_only_the_fifteenth_names_the_colossus_in_any_level_of_the_game
+* test_entrances_exist_and_all_three_are_used
+* test_the_mine_and_the_forests_pay_a_mortar
+    153 Orphans
+        * [@HBoxContainer@34048:<HBoxContainer#9013072764051>] + 2
+        * [@HBoxContainer@33990:<HBoxContainer#9010371632423>] + 2
+        * [@HBoxContainer@33895:<HBoxContainer#9003862072790>] + 2
+        * [@HBoxContainer@34029:<HBoxContainer#9012217126387>] + 2
+        * [@HBoxContainer@33987:<HBoxContainer#9010237414930>] + 2
+        * [@HBoxContainer@34051:<HBoxContainer#9013190204964>] + 2
+        * [@HBoxContainer@34032:<HBoxContainer#9012334567123>] + 2
+        * [@HBoxContainer@34041:<HBoxContainer#9012737220473>] + 2
+        * [@HBoxContainer@33951:<HBoxContainer#9008442253363>] + 2
+        * [@HBoxContainer@34038:<HBoxContainer#9012619780191>] + 2
+        * [@HBoxContainer@33945:<HBoxContainer#9008089931906>] + 2
+        * [@HBoxContainer@33999:<HBoxContainer#9010807840920>] + 2
+        * [@HBoxContainer@33975:<HBoxContainer#9009700544674>] + 2
+        * [@HBoxContainer@34023:<HBoxContainer#9011931914556>] + 2
+        * [@HBoxContainer@33981:<HBoxContainer#9009952203108>] + 2
+        * [@HBoxContainer@34064:<HBoxContainer#9013760631163>] + 2
+        * [@HBoxContainer@33978:<HBoxContainer#9009817985417>] + 2
+        * [@HBoxContainer@33993:<HBoxContainer#9010572960175>] + 2
+        * [@HBoxContainer@34002:<HBoxContainer#9010975613440>] + 2
+        * [@HBoxContainer@33996:<HBoxContainer#9010690400799>] + 2
+        * [@HBoxContainer@33929:<HBoxContainer#9007301403173>] + 2
+        * [@HBoxContainer@34058:<HBoxContainer#9013525750321>] + 2
+        * [@HBoxContainer@34035:<HBoxContainer#9012452008530>] + 2
+        * [@HBoxContainer@34017:<HBoxContainer#9011646702180>] + 2
+        * [@HBoxContainer@34011:<HBoxContainer#9011411821209>] + 2
+        * [@HBoxContainer@34005:<HBoxContainer#9011093054165>] + 2
+        * [@HBoxContainer@34008:<HBoxContainer#9011210494686>] + 2
+        * [@HBoxContainer@33954:<HBoxContainer#9008576471793>] + 2
+        * [@HBoxContainer@34026:<HBoxContainer#9012049355513>] + 2
+        * [@HBoxContainer@34044:<HBoxContainer#9012854661899>] + 2
+        * [@HBoxContainer@34014:<HBoxContainer#9011529261850>] + 2
+        * [@HBoxContainer@34061:<HBoxContainer#9013643191071>] + 2
+        * [@HBoxContainer@33984:<HBoxContainer#9010119975721>] + 2
+        * [@HBoxContainer@34054:<HBoxContainer#9013307646791>] + 2
+        * [@HBoxContainer@34020:<HBoxContainer#9011814474583>] + 2
+        * [@HBoxContainer@33966:<HBoxContainer#9009230783703>] + 2
+        * [@HBoxContainer@33892:<HBoxContainer#9003727856966>] + 2
+        * [@HBoxContainer@33957:<HBoxContainer#9008794576227>] + 2
+        * [@HBoxContainer@33920:<HBoxContainer#9006814864815>] + 2
+        * [@HBoxContainer@33948:<HBoxContainer#9008308037178>] + 2
+        * [@HBoxContainer@33942:<HBoxContainer#9007955715643>] + 2
+        * [@HBoxContainer@33939:<HBoxContainer#9007821498030>] + 2
+        * [@HBoxContainer@33923:<HBoxContainer#9006949082939>] + 2
+        * [@HBoxContainer@33963:<HBoxContainer#9009063012203>] + 2
+        * [@HBoxContainer@33935:<HBoxContainer#9007569839990>] + 2
+        * [@HBoxContainer@33972:<HBoxContainer#9009499219842>] + 2
+        * [@HBoxContainer@33926:<HBoxContainer#9007083301160>] + 2
+        * [@HBoxContainer@33898:<HBoxContainer#9003996293423>] + 2
+        * [@HBoxContainer@33932:<HBoxContainer#9007435622715>] + 2
+        * [@HBoxContainer@33969:<HBoxContainer#9009365002580>] + 2
+        * [@HBoxContainer@33960:<HBoxContainer#9008928795128>] + 2
+* test_the_place_the_entry_and_the_victory_are_the_approved_ones
+* test_winning_the_fifteenth_opens_the_central_article_with_the_colossus_paragraph
+* test_with_the_fifteen_levels_won_the_lore_has_ten_open_articles
+18/18 passed.
+
+
+res://tests/test_level_draft.gd
+* test_new_level_is_valid_without_warnings
+* test_new_level_has_a_straight_road_from_a_to_the_exit
+* test_each_tool_paints_its_letter
+* test_painting_the_same_thing_or_outside_changes_nothing
+* test_entrances_get_the_next_free_letter
+* test_there_are_at_most_eight_entrances
+* test_the_exit_moves
+* test_erasing_the_exit_leaves_the_map_without_one
+* test_painting_over_an_entrance_removes_it_and_renumbers
+* test_removing_the_first_entrance_shifts_all_the_others
+* test_removing_an_entrance_fixes_the_waves
+* test_a_gap_in_the_letters_takes_the_free_one
+* test_undo_and_redo_one_change
+* test_a_stroke_is_one_undo_step
+* test_a_stroke_that_changes_nothing_records_nothing
+* test_a_new_change_clears_redo
+* test_undo_covers_settings_and_waves_too
+* test_undo_keeps_only_the_last_fifty_steps
+* test_settings
+* test_setting_the_same_value_records_nothing
+* test_add_duplicate_and_remove_waves
+* test_the_last_wave_cannot_be_removed
+* test_groups
+* test_set_group_reports_whether_it_changed
+* test_default_values_are_not_written
+* test_the_text_reads_back_the_same_with_level_file
+* test_opening_and_writing_official_levels_gives_the_same_text
+* test_from_text_rejects_what_is_not_a_level
+* test_from_text_completes_what_is_missing
+* test_save_and_open
+* test_a_saved_file_checks_the_same_as_the_draft
+* test_a_draft_with_errors_can_still_be_saved
+* test_invalid_file_names_are_refused
+* test_an_official_name_is_refused
+* test_official_level_opens_as_a_template
+* test_clean_file_id
+* test_settings_are_capped_at_the_limits
+* test_group_numbers_are_capped_at_the_limits
+* test_waves_and_groups_stop_at_the_maximum
+39/39 passed.
+
+
+res://tests/test_level_file.gd
+* test_reads_the_level_fields
+* test_reads_waves_and_defaults
+* test_without_health_scale_uses_the_general_one
+* test_broken_json_says_the_line
+* test_misspelled_key
+* test_enemy_that_does_not_exist
+* test_entrance_the_map_does_not_have
+* test_numbers_out_of_range
+* test_missing_parts
+* test_map_errors_come_with_their_prefix
+* test_built_map_has_the_cells_of_the_letters
+* test_built_paths_match_the_old_level_6
+* test_an_inner_exit_ends_at_the_center_and_gets_a_gate
+* test_campaign_reads_levels_in_order_and_skips_broken_ones
+ERROR: El nivel no_existe tiene errores y no se va a jugar:
+- No existe el archivo res://data/levels/no_existe.json.
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] load_campaign (res://scripts/logic/level_file.gd:127)
+       [1] test_campaign_reads_levels_in_order_and_skips_broken_ones (res://tests/test_level_file.gd:188)
+       [2] _run_test (res://addons/gut/gut.gd:622)
+       [3] _test_the_scripts (res://addons/gut/gut.gd:835)
+[ExpectedError]Expected push_error error containing 'no se va a jugar'.
+* test_a_dead_end_loads_with_a_warning
+* test_a_stray_cell_that_makes_a_shortcut_warns
+* test_clean_level_has_no_warnings
+* test_official_levels_have_no_warnings
+* test_enemy_ids_lists_every_enemy_file_in_order
+* test_find_enemy_only_accepts_plain_names
+* test_gold_limit
+* test_lives_limit
+* test_health_scale_limit
+* test_name_limit
+* test_count_limit
+* test_seconds_limits
+* test_groups_per_wave_limit
+* test_waves_limit
+* test_absurd_numbers_are_refused_and_do_not_break_anything
+* test_official_levels_are_within_the_limits
+30/30 passed.
+
+
+res://tests/test_level_intro.gd
+* test_the_intro_shows_title_place_and_lines
+* test_the_intro_without_a_place_hides_the_subtitle
+* test_each_way_of_skipping_closes_it_once
+* test_pressing_the_mouse_alone_does_not_close_it_but_release_does
+* test_entering_a_level_from_the_select_screen_opens_the_intro_and_pauses
+* test_the_countdown_does_not_advance_while_the_intro_is_open_and_does_after
+* test_closing_the_intro_resumes_exactly_where_it_was
+* test_escape_closes_the_intro_before_the_pause_menu_can_open
+* test_space_while_the_intro_is_open_does_not_start_a_wave
+* test_retry_does_not_show_the_intro_again
+* test_a_level_without_entrada_starts_as_always
+* test_a_community_map_with_textos_shows_the_intro
+* test_testing_from_the_editor_never_shows_texts
+* test_dev_mode_never_shows_texts
+* test_official_modes_never_show_texts_even_with_a_campaign_map
+* test_the_victory_shows_the_win_text_only_when_texts_are_shown
+* test_victory_screen_shows_the_win_text_under_the_stars_and_before_the_score
+* test_victory_screen_without_a_win_text_is_as_before
+* test_defeat_shows_no_text_and_the_text_does_not_stick
+* test_the_win_text_does_not_break_the_initials_entry
+* test_an_unlocked_card_shows_the_place_and_keeps_its_size
+* test_a_locked_card_does_not_show_the_place
+* test_the_place_follows_the_unlock_state
+* test_a_card_without_a_place_is_the_same_as_before
+* test_the_place_label_sits_between_the_name_and_the_waves
+* test_the_intro_panel_fits_between_the_top_and_bottom_bars_for_every_official_level
+* test_the_start_button_is_big_enough_to_touch
+27/27 passed.
+
+
+res://tests/test_level_paths.gd
+* test_there_is_at_least_one_level
+* test_every_level_has_an_entrance
+* test_every_ground_path_stays_on_the_road
+* test_detects_a_path_point_on_the_grass
+* test_level_01_cell_types
+* test_level_01_is_20_by_9
+6/6 passed.
+
+
+res://tests/test_level_session.gd
+* test_starts_with_level_values
+* test_spend_when_affordable
+* test_cannot_spend_more_than_you_have
+* test_earn
+* test_lose_lives
+* test_lives_never_go_below_zero_and_game_is_lost
+* test_begin_wave
+* test_cannot_start_a_wave_while_one_is_running
+* test_completing_a_wave_gives_bonus_and_starts_countdown
+* test_countdown_emits_finished
+* test_completing_the_last_wave_wins
+* test_nothing_changes_after_losing
+12/12 passed.
+
+
+res://tests/test_level_texts.gd
+* test_no_field_gives_empty_texts_and_no_errors
+* test_each_valid_key_alone_is_read
+* test_the_limits_are_accepted_exactly
+* test_an_unknown_key_lists_the_valid_ones
+* test_a_value_that_is_not_text_is_an_error
+* test_an_empty_text_is_an_error_that_says_to_remove_the_key
+* test_too_many_lines_or_characters_say_how_much_and_the_maximum
+* test_a_line_of_91_characters_is_an_error
+* test_a_control_character_is_an_error_but_a_line_break_is_not
+* test_a_blank_line_between_lines_is_an_error
+* test_the_epilogue_needs_3_to_5_lines
+* test_a_wrong_key_does_not_hide_the_good_ones
+* test_level_file_reads_the_texts_into_the_level
+* test_a_level_without_the_field_is_read_as_before
+* test_level_file_reports_a_bad_text_and_refuses_the_level
+* test_the_editor_keeps_the_texts_when_it_opens_and_writes_a_level
+* test_the_editor_does_not_invent_the_field
+* test_the_approved_document_has_the_15_levels
+* test_official_levels_carry_exactly_the_approved_texts_within_the_limits
+* test_official_texts_avoid_the_banned_vocabulary
+* test_no_official_level_explains_the_signals_before_the_8
+21/21 passed.
+
+
+res://tests/test_levels.gd
+* test_campaign_has_fifteen_levels_in_order
+* test_levels_match_spec_table
+    60 Orphans
+        * [@HBoxContainer@35423:<HBoxContainer#9920317503072>] + 2
+        * [@HBoxContainer@35447:<HBoxContainer#9923370956466>] + 2
+        * [@HBoxContainer@35493:<HBoxContainer#9931642124429>] + 2
+        * [@HBoxContainer@35515:<HBoxContainer#9934427142360>] + 2
+        * [@HBoxContainer@35561:<HBoxContainer#9942698310323>] + 2
+        * [@HBoxContainer@35583:<HBoxContainer#9945483328254>] + 2
+        * [@HBoxContainer@35629:<HBoxContainer#9953821605085>] + 2
+        * [@HBoxContainer@35632:<HBoxContainer#9953955822821>] + 2
+        * [@HBoxContainer@35654:<HBoxContainer#9956740840752>] + 2
+        * [@HBoxContainer@35657:<HBoxContainer#9956875058490>] + 2
+        * [@HBoxContainer@35706:<HBoxContainer#9965347553055>] + 2
+        * [@HBoxContainer@35709:<HBoxContainer#9965481770791>] + 2
+        * [@HBoxContainer@35731:<HBoxContainer#9968266788722>] + 2
+        * [@HBoxContainer@35734:<HBoxContainer#9968401006460>] + 2
+        * [@HBoxContainer@35783:<HBoxContainer#9976940609893>] + 2
+        * [@HBoxContainer@35786:<HBoxContainer#9977074827629>] + 2
+        * [@HBoxContainer@35789:<HBoxContainer#9977209045365>] + 2
+        * [@HBoxContainer@35811:<HBoxContainer#9979994063296>] + 2
+        * [@HBoxContainer@35814:<HBoxContainer#9980128281034>] + 2
+        * [@HBoxContainer@35817:<HBoxContainer#9980262498770>] + 2
+* test_every_level_is_20_by_9_but_the_tenth_to_the_fifteenth
+    60 Orphans
+        * [@HBoxContainer@36675:<HBoxContainer#10136055717285>] + 2
+        * [@HBoxContainer@36595:<HBoxContainer#10124378775218>] + 2
+        * [@HBoxContainer@36678:<HBoxContainer#10136189935983>] + 2
+        * [@HBoxContainer@36518:<HBoxContainer#10112903160221>] + 2
+        * [@HBoxContainer@36644:<HBoxContainer#10132868047448>] + 2
+        * [@HBoxContainer@36515:<HBoxContainer#10112768943012>] + 2
+        * [@HBoxContainer@36493:<HBoxContainer#10109983925654>] + 2
+        * [@HBoxContainer@36570:<HBoxContainer#10121459541739>] + 2
+        * [@HBoxContainer@36567:<HBoxContainer#10121325324173>] + 2
+        * [@HBoxContainer@36650:<HBoxContainer#10133136484286>] + 2
+        * [@HBoxContainer@36647:<HBoxContainer#10133002266687>] + 2
+        * [@HBoxContainer@36490:<HBoxContainer#10109849708677>] + 2
+        * [@HBoxContainer@36672:<HBoxContainer#10135921502495>] + 2
+        * [@HBoxContainer@36592:<HBoxContainer#10124244560296>] + 2
+        * [@HBoxContainer@36422:<HBoxContainer#10098776746869>] + 2
+        * [@HBoxContainer@36444:<HBoxContainer#10101561764800>] + 2
+        * [@HBoxContainer@36354:<HBoxContainer#10087770893753>] + 2
+        * [@HBoxContainer@36376:<HBoxContainer#10090555911621>] + 2
+        * [@HBoxContainer@36284:<HBoxContainer#10076496604872>] + 2
+        * [@HBoxContainer@36308:<HBoxContainer#10079550058246>] + 2
+* test_entrance_indexes_exist_in_their_map
+    60 Orphans
+        * [@HBoxContainer@37511:<HBoxContainer#10288761938118>] + 2
+        * [@HBoxContainer@37508:<HBoxContainer#10288627723882>] + 2
+        * [@HBoxContainer@37169:<HBoxContainer#10235259401747>] + 2
+        * [@HBoxContainer@37505:<HBoxContainer#10288493508285>] + 2
+        * [@HBoxContainer@37237:<HBoxContainer#10246248478433>] + 2
+        * [@HBoxContainer@37145:<HBoxContainer#10232205948866>] + 2
+        * [@HBoxContainer@37215:<HBoxContainer#10243463461068>] + 2
+        * [@HBoxContainer@37283:<HBoxContainer#10254452537635>] + 2
+        * [@HBoxContainer@37305:<HBoxContainer#10257237555529>] + 2
+        * [@HBoxContainer@37453:<HBoxContainer#10279886798172>] + 2
+        * [@HBoxContainer@37456:<HBoxContainer#10280021015910>] + 2
+        * [@HBoxContainer@37376:<HBoxContainer#10268427959998>] + 2
+        * [@HBoxContainer@37379:<HBoxContainer#10268562177738>] + 2
+        * [@HBoxContainer@37354:<HBoxContainer#10265642942162>] + 2
+        * [@HBoxContainer@37351:<HBoxContainer#10265508724631>] + 2
+        * [@HBoxContainer@37428:<HBoxContainer#10276967563279>] + 2
+        * [@HBoxContainer@37431:<HBoxContainer#10277101781231>] + 2
+        * [@HBoxContainer@37533:<HBoxContainer#10291546964363>] + 2
+        * [@HBoxContainer@37536:<HBoxContainer#10291681182101>] + 2
+        * [@HBoxContainer@37539:<HBoxContainer#10291815399843>] + 2
+* test_each_group_comes_out_of_its_entrance
+* test_both_entrances_lead_to_the_same_exit
+* test_only_the_spiral_and_the_cross_have_their_exit_inside_the_map
+    60 Orphans
+        * [@HBoxContainer@38471:<HBoxContainer#10466835308045>] + 2
+        * [@HBoxContainer@38446:<HBoxContainer#10463916072551>] + 2
+        * [@HBoxContainer@38391:<HBoxContainer#10455091257023>] + 2
+        * [@HBoxContainer@38468:<HBoxContainer#10466701090659>] + 2
+        * [@HBoxContainer@38388:<HBoxContainer#10454957039648>] + 2
+        * [@HBoxContainer@38440:<HBoxContainer#10463647637881>] + 2
+        * [@HBoxContainer@38363:<HBoxContainer#10452037804478>] + 2
+        * [@HBoxContainer@38314:<HBoxContainer#10443548533538>] + 2
+        * [@HBoxContainer@38286:<HBoxContainer#10440495080358>] + 2
+        * [@HBoxContainer@38289:<HBoxContainer#10440629298392>] + 2
+        * [@HBoxContainer@38366:<HBoxContainer#10452172023746>] + 2
+        * [@HBoxContainer@38474:<HBoxContainer#10466969528521>] + 2
+        * [@HBoxContainer@38443:<HBoxContainer#10463781857626>] + 2
+        * [@HBoxContainer@38218:<HBoxContainer#10429355010874>] + 2
+        * [@HBoxContainer@38311:<HBoxContainer#10443414318105>] + 2
+        * [@HBoxContainer@38240:<HBoxContainer#10432140029389>] + 2
+        * [@HBoxContainer@38150:<HBoxContainer#10418282049048>] + 2
+        * [@HBoxContainer@38080:<HBoxContainer#10406940651089>] + 2
+        * [@HBoxContainer@38172:<HBoxContainer#10421067067202>] + 2
+        * [@HBoxContainer@38104:<HBoxContainer#10409994104857>] + 2
+* test_fortress_entrance_c_comes_from_the_top
+* test_all_fortress_entrances_share_the_exit
+* test_levels_use_their_health_scale
+* test_level_can_override_health_scale
+* test_scaled_health_percent
+12/12 passed.
+
+
+res://tests/test_levels_6_7.gd
+* test_levels_6_and_7_are_forest_with_the_expected_removables
+* test_level_6_gives_no_resources_and_level_7_gives_one_at_random
+* test_removables_do_not_change_the_routes
+* test_removables_keep_the_rammer_impact_cells_free
+* test_most_removables_replace_cells_that_were_already_blocked
+5/5 passed.
+
+
+res://tests/test_levels_8_9.gd
+* test_levels_8_and_9_are_ruins_with_removables_and_resources
+* test_the_mortar_debuts_in_level_9_only
+* test_waves_and_routes_are_unchanged
+* test_removables_keep_the_rammer_impact_cells_free
+* test_the_piece_is_picked_confirmed_and_saved_in_the_campaign
+* test_the_piece_is_not_collected_outside_the_campaign
+6/6 passed.
+
+
+res://tests/test_levels_signals.gd
+* test_levels_1_to_5_keep_blocked_cells_path_and_routes
+1/1 passed.
+
+
+res://tests/test_license.gd
+* test_license_file_is_the_gpl_version_3
+* test_wiki_explains_the_game_and_engine_licenses
+2/2 passed.
+
+
+res://tests/test_lore_wiki.gd
+* test_the_official_lore_articles_have_no_errors
+* test_the_official_lore_articles_are_the_approved_ones_in_order
+* test_lore_articles_do_not_repeat_game_numbers_in_a_table
+* test_the_guide_does_not_see_the_lore_subfolder
+* test_the_categories_keep_their_order_with_lore_after_the_guide
+* test_a_lore_article_needs_a_desbloqueo
+* test_desbloqueo_must_be_a_level_id_of_the_campaign
+* test_a_broken_lore_article_is_skipped_and_the_rest_still_show
+* test_the_guide_rejects_the_desbloqueo_key
+* test_a_new_save_has_all_lore_closed
+* test_winning_level_1_opens_the_oasis_only
+* test_a_closed_article_says_the_level_number_and_nothing_else
+* test_a_save_that_won_1_to_9_has_seven_open
+* test_the_order_does_not_change_when_one_opens
+* test_without_a_completion_function_everything_is_open
+* test_lore_unlock_text_uses_the_campaign_position_or_the_id
+* test_the_screen_tab_counts_lore_and_a_closed_entry_does_not_break_the_icon
+    82 Orphans
+        * [@Button@38823:<Button#10729851722921>] + 3
+        * [@Button@38771:<Button#10727888788762>] + 3
+        * [@HBoxContainer@38841:<HBoxContainer#10730623475008>] + 3
+        * [@Label@38879:<Label#10740991794622>]
+        * [@Button@38815:<Button#10729549733424>] + 3
+        * [@Label@38840:<Label#10730589921537>]
+        * [@Button@38811:<Button#10729398739243>] + 3
+        * [@Label@38845:<Label#10730757693787>]
+        * [@Button@38831:<Button#10730153714309>] + 3
+        * [@Button@38807:<Button#10729247744763>] + 3
+        * [@Button@38791:<Button#10728643765103>] + 3
+        * [@Button@38803:<Button#10729096749940>] + 3
+        * [@Button@38795:<Button#10728794760065>] + 3
+        * [@HBoxContainer@38836:<HBoxContainer#10730455704513>] + 3
+        * [@Button@38799:<Button#10728945755432>] + 3
+        * [@Button@38819:<Button#10729700730765>] + 3
+        * [@Button@38835:<Button#10730304710714>] + 3
+        * [@Button@38827:<Button#10730002721265>] + 3
+        * [@HBoxContainer@38876:<HBoxContainer#10740891138721>] + 2
+        * [@Button@38775:<Button#10728039793171>] + 3
+        * [@Button@38779:<Button#10728190788120>] + 3
+        * [@Button@38783:<Button#10728341783065>] + 3
+        * [@Button@38787:<Button#10728492778014>] + 3
+* test_the_screen_shows_an_open_article_after_winning
+    85 Orphans
+        * [@Label@39019:<Label#10752769399775>]
+        * [@Button@38928:<Button#10749246184420>] + 3
+        * [@Label@39018:<Label#10752735845958>]
+        * [@Button@38932:<Button#10749397180136>] + 3
+        * [@Label@38982:<Label#10751360114493>]
+        * [@Button@38920:<Button#10748944195479>] + 3
+        * [@Button@38908:<Button#10748491210773>] + 3
+        * [@Button@38956:<Button#10750303150143>] + 3
+        * [@Button@38940:<Button#10749699170433>] + 3
+        * [@HBoxContainer@38978:<HBoxContainer#10751225897244>] + 3
+        * [@Button@38912:<Button#10748642205994>] + 3
+        * [@Label@38977:<Label#10751192342950>]
+        * [@Button@38944:<Button#10749850165707>] + 3
+        * [@Button@38948:<Button#10750001160859>] + 3
+        * [@HBoxContainer@39013:<HBoxContainer#10752568074933>] + 3
+        * [@Button@38960:<Button#10750454145958>] + 3
+        * [@Label@39017:<Label#10752702293348>]
+        * [@Button@38916:<Button#10748793202337>] + 3
+        * [@Button@38924:<Button#10749095192647>] + 3
+        * [@Button@38936:<Button#10749548177584>] + 3
+        * [@Button@38968:<Button#10750756137788>] + 3
+        * [@Button@38952:<Button#10750152158233>] + 3
+        * [@Button@38964:<Button#10750605143504>] + 3
+        * [@Button@38972:<Button#10750907133431>] + 3
+        * [@HBoxContainer@38973:<HBoxContainer#10751058128416>] + 3
+* test_dev_mode_opens_all_the_lore
+    85 Orphans
+        * [@Button@39115:<Button#10771744431041>] + 3
+        * [@Button@39091:<Button#10770838461439>] + 3
+        * [@Button@39103:<Button#10771291446344>] + 3
+        * [@Button@39071:<Button#10770083487319>] + 3
+        * [@Button@39079:<Button#10770385477222>] + 3
+        * [@Button@39087:<Button#10770687467341>] + 3
+        * [@Button@39095:<Button#10770989457723>] + 3
+        * [@Button@39051:<Button#10769328513566>] + 3
+        * [@Button@39099:<Button#10771140452897>] + 3
+        * [@Button@39107:<Button#10771442443642>] + 3
+        * [@Label@39162:<Label#10773623481830>]
+        * [@Button@39111:<Button#10771593438756>] + 3
+        * [@Button@39075:<Button#10770234484341>] + 3
+        * [@HBoxContainer@39156:<HBoxContainer#10773422155601>] + 3
+        * [@HBoxContainer@39116:<HBoxContainer#10771895428984>] + 3
+        * [@HBoxContainer@39121:<HBoxContainer#10772063201168>] + 3
+        * [@Label@39160:<Label#10773556373400>]
+        * [@Button@39083:<Button#10770536474923>] + 3
+        * [@Label@39161:<Label#10773589928409>]
+        * [@Button@39059:<Button#10769630505979>] + 3
+        * [@Button@39055:<Button#10769479511637>] + 3
+        * [@Button@39063:<Button#10769781501977>] + 3
+        * [@Button@39067:<Button#10769932499617>] + 3
+        * [@Label@39125:<Label#10772197425693>]
+        * [@Label@39120:<Label#10772029653534>]
+85 orphans
+19/19 passed.
+
+
+res://tests/test_m36_effects_audio.gd
+* test_death_residue_preserves_pose_and_is_capped_without_losing_rewards
+* test_healing_has_visual_feedback_without_damage_numbers_and_is_capped
+* test_shots_cannot_replace_alert_voices
+* test_new_sounds_and_both_music_loops_are_imported
+* test_master_limits_simultaneous_voices_and_sources_have_headroom
+* test_requesting_the_same_music_keeps_playback
+6/6 passed.
+
+
+res://tests/test_main_menu_style.gd
+* test_logo_replaces_the_old_titles
+* test_logo_keeps_alpha_and_a_sensible_size
+* test_logo_height_shrinks_when_the_window_is_short
+* test_logo_and_buttons_fit_in_the_screen_without_overlap
+* test_buttons_have_iron_bronze_style_and_amber_accent
+* test_button_text_has_enough_contrast
+* test_menu_buttons_use_the_theme_and_stay_keyboard_navigable
+* test_theme_is_not_applied_to_the_rest_of_the_game
+8/8 passed.
+
+
+res://tests/test_map_drawings.gd
+* test_every_object_has_a_drawing_and_every_ground_has_colors
+* test_the_catalog_has_four_grounds_and_twenty_nine_objects
+* test_the_six_community_signals_are_static_objects
+* test_an_unknown_drawing_is_nothing
+* test_grounds_are_told_apart_by_color
+* test_every_drawing_paints_in_a_level_without_errors
+* test_every_drawing_paints_in_every_theme
+* test_the_legend_never_changes_what_can_be_built_except_for_buildable_ones
+* test_the_editor_view_draws_the_legend_too
+* test_the_example_map_of_every_theme_is_valid_and_has_no_warnings
+* test_the_example_maps_have_the_same_routes_as_the_map_they_came_from
+11/11 passed.
+
+
+res://tests/test_map_editor.gd
+* test_the_menu_button_exists_in_the_normal_game_and_in_dev_mode
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_the_editor_is_not_offered_on_mobile_unless_in_dev_mode
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_editing_in_the_normal_game_does_not_touch_the_progress
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_it_opens_with_a_valid_new_level
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_it_resumes_the_draft_it_already_had
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_ten_tools_and_their_keys
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_only_the_chosen_tool_button_is_pressed
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_clicking_paints_with_the_chosen_tool
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_right_click_erases_whatever_the_tool
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_dragging_paints_a_line_and_is_one_undo_step
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_dragging_diagonally_leaves_no_gaps
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_entrance_and_exit_are_placed_one_at_a_time_not_dragged
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_the_exit_tool_moves_the_exit
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_breaking_the_map_shows_the_error_and_fixing_it_clears_it
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_several_errors_say_how_many_more
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_a_stretch_nobody_walks_gives_a_warning
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_the_title_marks_unsaved_changes
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_undo_and_redo_with_keys_and_buttons
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_the_view_hover_follows_the_mouse
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_the_view_lays_out_like_the_game
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+20/20 passed.
+
+
+res://tests/test_map_editor_size.gd
+* test_a_draft_keeps_the_size_of_the_map_it_opens
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_a_new_level_is_still_twenty_by_nine
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_an_impossible_size_is_corrected_to_the_nearest_allowed
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_editing_and_saving_a_big_map_does_not_crop_it
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_removing_the_exit_and_entrance_works_in_a_big_map
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_a_usual_map_is_laid_out_exactly_as_before
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_a_big_map_is_shown_whole_and_centered
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_the_view_refits_when_a_map_of_another_size_is_opened
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_clicks_land_on_the_right_cell_with_zoom
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_hover_follows_the_cell_under_the_mouse_with_zoom
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_the_usual_map_keeps_the_old_click_math
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+11/11 passed.
+
+
+res://tests/test_map_grid.gd
+* test_letters_give_each_cell_its_type
+* test_entrances_in_letter_order_and_the_exit
+* test_straight_route_has_two_corners
+* test_routes_follow_the_road_and_join
+* test_route_is_the_shortest
+* test_every_route_cell_is_a_neighbor_of_the_next
+* test_a_tie_is_an_error
+* test_wrong_size
+* test_unknown_letter_says_where
+* test_exit_missing_or_repeated
+* test_entrance_problems
+* test_a_map_without_grass_is_invalid
+* test_clean_maps_have_no_warnings
+* test_unused_path_cells_give_a_warning_but_the_map_is_valid
+* test_a_dead_end_stub_also_warns
+* test_many_unused_cells_are_summarized
+* test_a_map_with_errors_has_no_warnings
+17/17 passed.
+
+
+res://tests/test_map_legend.gd
+* test_a_level_without_theme_or_legend_is_the_usual_one
+* test_the_official_levels_1_to_5_only_decoration_and_6_to_9_have_their_theme
+* test_every_theme_is_accepted
+* test_an_unknown_theme_lists_the_valid_ones
+* test_a_theme_that_is_not_text_is_an_error
+* test_a_legend_letter_reads_with_its_drawing_and_buildable_flag
+* test_legend_letters_are_grass_or_blocked_and_never_path
+* test_the_routes_are_identical_with_and_without_a_legend
+* test_a_legend_letter_never_becomes_an_entrance_or_exit_or_path
+* test_an_undeclared_letter_mentions_the_legend
+* test_a_declared_but_unused_letter_is_only_a_warning
+* test_forbidden_letters_are_errors
+* test_a_key_that_is_not_a_single_character_is_an_error
+* test_an_unknown_drawing_lists_the_catalog
+* test_a_missing_drawing_or_a_bad_flag_is_an_error
+* test_a_legend_entry_with_a_misspelled_key_is_an_error
+* test_a_legend_that_is_not_an_object_is_an_error
+* test_the_legend_limit_is_twelve_letters
+* test_the_whole_catalog_is_accepted
+* test_the_editor_keeps_theme_and_legend_when_opening_and_saving
+* test_a_draft_without_theme_or_legend_writes_neither
+21/21 passed.
+
+
+res://tests/test_map_size.gd
+* test_the_usual_size_still_works
+* test_the_biggest_size_is_valid_and_measured
+* test_every_size_in_between_is_valid
+* test_sizes_outside_the_limits_are_invalid_and_say_so
+* test_rows_of_different_length_are_invalid
+* test_the_border_is_the_border_of_the_real_size
+* test_an_entrance_inside_the_map_is_still_a_valid_entrance
+* test_unused_path_cells_are_found_in_the_whole_map
+* test_the_ground_has_the_size_of_the_map
+* test_the_route_enters_and_leaves_from_outside_the_real_border
+* test_a_level_file_with_a_big_map_reads
+* test_a_level_file_with_a_map_too_big_says_why
+* test_the_official_levels_keep_their_size
+* test_the_example_big_map_is_a_valid_26_by_12_level
+* test_a_big_map_shows_up_in_the_community_folder_without_errors
+15/15 passed.
+
+
+res://tests/test_map_themes.gd
+* test_there_are_seven_themes_and_each_has_a_full_palette
+* test_the_meadow_is_exactly_the_old_look
+* test_an_unknown_theme_uses_the_meadow
+* test_every_other_theme_has_its_own_ground_and_path_colors
+* test_the_path_always_reads_against_the_ground
+* test_each_theme_has_its_own_blocked_decoration
+* test_the_decoration_of_a_cell_never_changes
+* test_the_meadow_decoration_is_the_old_one
+* test_the_new_drawings_exist_and_are_64_square
+* test_every_theme_builds_and_draws_without_errors
+* test_the_level_data_passes_its_theme_to_the_map
+* test_the_editor_view_takes_the_theme_of_the_draft
+* test_rendered_ground_materials_and_fallback
+13/13 passed.
+
+
+res://tests/test_map_towers.gd
+* test_the_canonical_order_is_the_bar_order
+* test_without_the_field_the_level_offers_what_it_always_did
+* test_with_the_field_only_those_show_in_canonical_order
+* test_a_reserved_tower_in_the_list_is_enabled
+* test_the_list_wins_over_torres_extra
+* test_an_unknown_id_is_an_error_that_lists_the_valid_ones
+* test_a_wrong_shape_or_an_empty_list_is_an_error
+* test_a_repeated_id_counts_once
+* test_the_editor_keeps_the_field
+* test_the_example_level_is_valid
+* test_the_collection_still_applies
+* test_mode_and_level_use_the_intersection
+* test_an_empty_intersection_is_an_error_of_the_mode
+* test_new_towers_are_those_no_earlier_level_offered
+* test_the_real_campaign_marks_each_tower_once
+* test_the_card_shows_one_icon_per_offered_tower
+* test_the_largest_campaign_card_keeps_all_parts_separate
+* test_a_map_offering_many_towers_wraps_without_clipping
+18/18 passed.
+
+
+res://tests/test_map_zoom.gd
+* test_zoom_is_one_for_the_usual_size
+* test_zoom_of_the_biggest_size_is_three_quarters
+* test_zoom_is_limited_by_the_tighter_side
+* test_zoom_never_enlarges_and_always_fits
+* test_the_map_is_centered_in_the_map_area_for_every_size
+* test_a_usual_map_has_no_camera
+* test_the_level_reports_its_size
+* test_a_big_map_gets_a_camera_with_the_right_zoom_and_center
+* test_the_camera_maps_the_world_where_the_formula_says
+* test_the_cell_under_a_screen_point_is_the_right_one
+* test_towers_and_ranges_keep_their_world_coordinates
+* test_the_bars_do_not_shrink
+* test_a_big_map_can_be_played_through_a_whole_wave
+13/13 passed.
+
+
+res://tests/test_menus_and_flow.gd
+* test_campaign_starts_with_level_01
+* test_only_the_first_level_is_unlocked_at_start
+* test_winning_unlocks_the_next_level_and_saves
+* test_winning_outside_the_campaign_saves_nothing
+* test_game_plays_the_campaign_level
+* test_victory_in_campaign_shows_levels_button_and_saves
+    15 Orphans
+        * [@VBoxContainer@44036:<VBoxContainer#11751567401858>(name_entry.gd)] + 14
+* test_victory_outside_campaign_hides_menu_buttons
+* test_main_menu_has_its_buttons
+* test_level_select_shows_one_card_per_level
+* test_level_select_shows_best_result
+* test_victory_screen_shows_stars
+* test_defeat_screen_hides_stars
+* test_level_stars_come_from_best_lives
+* test_level_select_shows_total_stars
+* test_no_card_leaves_the_screen_however_many_levels
+* test_cards_wrap_into_rows_of_five
+* test_it_scrolls_only_when_there_are_more_than_two_rows
+* test_one_row_when_there_are_five_levels_or_fewer
+18/18 passed.
+
+
+res://tests/test_mirror.gd
+* test_the_mirror_has_the_numbers_of_the_spec
+* test_the_reflection_data_is_off_by_default
+* test_the_reflection_range_is_below_the_long_range_towers
+* test_a_close_tower_is_reflected_and_a_far_one_is_not
+* test_the_border_is_two_and_a_half_tiles
+* test_it_is_measured_when_the_shot_lands
+* test_slow_does_not_pass_through_a_reflected_shot
+* test_burning_is_not_reflected
+* test_splash_hits_the_others_and_reflects_only_on_the_mirror
+* test_chain_lightning_reflects_on_the_mirror_and_keeps_chaining
+* test_a_straight_shot_is_reflected_too
+* test_every_projectile_of_a_volley_is_reflected_but_the_stun_does_not_grow
+* test_a_projectile_without_source_hits_normally
+* test_a_sold_tower_does_not_break_its_shot
+* test_a_real_tower_puts_itself_as_the_source_of_its_shots
+* test_the_wiki_writes_down_the_reflection_and_it_starts_closed
+* test_its_color_is_its_own
+* test_in_a_real_game_a_tower_next_to_the_path_gets_switched_off_by_the_mirror
+18/18 passed.
+
+
+res://tests/test_mode_flow.gd
+* test_the_game_plays_the_mode_map_with_its_rules
+* test_monsters_come_out_with_the_mode_health
+* test_the_campaign_wins_over_the_mode_in_the_game
+* test_a_mode_map_never_offers_a_collectible
+* test_played_level_is_the_mode_map
+* test_winning_saves_its_own_progress_and_opens_the_next_map
+* test_a_mode_victory_never_touches_the_campaign
+* test_the_next_map_is_locked_before_winning
+* test_dev_mode_opens_every_map
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_the_last_map_has_no_next
+Modo de pruebas activado. Guardado: user://test_save_pruebas.json
+Enemigos disponibles: 17
+* test_mode_records_are_its_own
+* test_asedio_maps_are_campaign_maps_in_order
+* test_no_asedio_map_offers_pieces_or_texts
+* test_asedio_hides_the_texts_of_the_last_campaign_levels_if_they_are_ever_added
+14/14 passed.
+
+
+res://tests/test_mode_packs.gd
+* test_siege_is_harder_than_the_campaign
+* test_siege_reads_with_its_rules
+* test_the_campaign_is_not_touched_by_the_mode
+* test_maps_come_from_the_mode_folder_or_the_official_levels
+* test_a_missing_map_has_its_reason_and_the_others_still_play
+* test_a_broken_map_file_has_its_reason
+* test_broken_mode_files_say_why
+* test_a_folder_without_its_file_or_with_a_bad_name_is_an_error
+* test_an_own_mode_named_like_an_official_one_is_an_error
+* test_no_folder_means_no_modes
+* test_rules_change_gold_lives_and_health
+* test_without_rules_the_map_stays_as_it_is
+* test_the_tower_list_limits_the_bar
+* test_percent_of_rounds_to_the_nearest_whole_number
+* test_official_modes_open_one_map_after_the_other
+* test_own_modes_are_all_open
+* test_creating_a_mode_makes_its_folder_and_file
+* test_mode_names_are_checked
+* test_adding_maps_keeps_the_order_and_never_repeats
+* test_adding_a_map_to_a_mode_without_file_says_why
+20/20 passed.
+
+
+res://tests/test_mode_select.gd
+* test_official_modes_go_after_the_campaign_and_own_modes_after_the_community
+* test_without_modes_only_the_two_tabs_are_there
+* test_choosing_a_mode_shows_its_maps_in_order
+    239 Orphans
+        * [@Button@45472:<Button#13268647158573>] + 13
+        * [@Button@45471:<Button#13266399013547>] + 22
+        * [@Button@45473:<Button#13270375213765>] + 13
+        * [@Button@45475:<Button#13273831320834>] + 13
+        * [@Button@45474:<Button#13272103267668>] + 13
+        * [@Button@45479:<Button#13281129410051>] + 16
+        * [@Button@45485:<Button#13293510995520>] + 15
+        * [@Button@45481:<Button#13285223051330>] + 16
+        * [@Button@45477:<Button#13277438423270>] + 14
+        * [@Button@45480:<Button#13283193008376>] + 15
+        * [@Button@45484:<Button#13291447398655>] + 15
+        * [@Button@45482:<Button#13287320203570>] + 15
+        * [@Button@45483:<Button#13289383801218>] + 15
+        * [@Button@45476:<Button#13275559375339>] + 15
+        * [@Button@45478:<Button#13279283917791>] + 14
+* test_the_remembered_mode_page_opens_again
+* test_a_page_of_a_mode_that_is_gone_falls_back_to_the_campaign
+* test_official_maps_open_one_after_the_other
+* test_winning_a_mode_map_opens_the_next_one_on_the_screen
+* test_winning_the_campaign_level_does_not_open_the_mode_map
+* test_own_mode_maps_are_all_open
+* test_a_broken_mode_shows_one_card_with_the_reason
+* test_a_broken_map_is_a_disabled_card_and_the_rest_still_play
+* test_an_empty_own_mode_says_how_to_add_maps
+* test_own_modes_open_their_own_folder_and_official_ones_none
+    10 Orphans
+        * [@Button@45582:<Button#13430295637616>] + 1
+        * [@Button@45578:<Button#13430127866386>] + 1
+        * [@Button@45576:<Button#13430043980533>] + 1
+        * [@Button@45580:<Button#13430211753361>] + 1
+        * [@Button@45574:<Button#13429960095122>] + 1
+10 orphans
+13/13 passed.
+
+
+res://tests/test_mortar.gd
+* test_the_mortar_has_the_numbers_of_the_spec
+* test_the_mortar_has_its_own_drawings_and_sound
+* test_the_mortar_is_the_ninth_tower_and_the_others_stay_the_same
+* test_key_9_chooses_the_mortar
+* test_the_bar_shows_the_mortar_with_its_cost_and_key
+* test_choosing_the_mortar_says_it_needs_a_square
+* test_building_a_real_mortar_takes_four_cells_and_its_300_gold
+* test_the_mortar_needs_its_300_gold
+* test_the_mortar_fires_a_bomb_with_area_damage
+* test_the_wiki_writes_the_size
+* test_a_normal_level_does_not_offer_the_mortar
+* test_a_level_that_lists_it_offers_it
+* test_the_level_file_reads_torres_extra
+* test_torres_extra_with_a_wrong_name_or_shape_is_an_error
+* test_a_repeated_name_counts_once
+* test_the_editor_keeps_torres_extra
+16/16 passed.
+
+
+res://tests/test_new_content.gd
+* test_fire_tower_matches_spec
+* test_burn_deals_its_damage_per_second
+* test_burn_ignores_armor
+* test_burns_do_not_stack
+* test_a_new_burn_restarts_the_time
+* test_burning_to_death_counts_as_a_kill
+* test_fire_projectile_sets_the_enemy_on_fire
+* test_troll_matches_spec
+* test_troll_regenerates_a_percent_per_second
+* test_regeneration_stops_at_max_health
+* test_burning_troll_does_not_regenerate
+* test_healing_is_reported_at_most_once_per_second
+* test_spider_and_spiderling_match_spec
+* test_spider_leaves_four_spiderlings_where_it_died
+* test_wave_ends_only_when_the_spiderlings_die
+* test_spider_reaching_the_exit_leaves_nothing
+* test_multi_tower_matches_spec
+* test_multi_shoots_its_two_best_targets_at_once
+* test_multi_level_3_shoots_four
+* test_multi_with_one_enemy_shoots_once
+* test_burst_tower_matches_spec
+* test_burst_fires_eight_spikes_evenly_around
+* test_burst_does_not_fire_without_enemies_in_range
+* test_each_spike_hits_only_the_first_enemy_it_touches
+* test_burst_spikes_ignore_flyers
+* test_tesla_tower_matches_spec
+* test_lightning_jumps_to_the_two_nearest
+* test_lightning_never_hits_the_same_enemy_twice
+* test_lightning_does_not_jump_too_far
+29/29 passed.
+
+
+res://tests/test_new_units.gd
+* test_sniper_is_the_fourth_tower
+* test_sniper_reaches_six_tiles
+* test_flyers_use_the_straight_air_path
+* test_ground_enemies_keep_using_the_road
+* test_cannon_ignores_flyers_in_a_real_game
+* test_armor_spec_example
+* test_boss_resists_half_of_the_frost
+7/7 passed.
+
+
+res://tests/test_obstacles_format.gd
+* test_catalog_has_the_initial_classes_and_values
+* test_catalog_rejects_misspelled_keys_and_bad_value_types
+WARNING: No se cargaron los removibles: El archivo user://test_obstacles_catalog.json tiene errores: removibles.arbol: clave desconocida "costro".; removibles.arbol: falta "costo".; roca.costo: tiene que ser un número de 0 para arriba.; roca.probabilidad: no puede superar 100.. El juego seguirá sin sus valores.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _unavailable (res://scripts/logic/obstacle_catalog.gd:37)
+         [1] load_data (res://scripts/logic/obstacle_catalog.gd:30)
+         [2] test_catalog_rejects_misspelled_keys_and_bad_value_types (res://tests/test_obstacles_format.gd:48)
+         [3] _run_test (res://addons/gut/gut.gd:622)
+         [4] _test_the_scripts (res://addons/gut/gut.gd:835)
+* test_removable_and_extraction_resolve_defaults_and_overrides
+* test_removable_is_blocked_and_clear_cell_leaves_routes_unchanged
+* test_invalid_obstacle_format_reports_specific_errors
+* test_editor_preserves_new_legend_fields_and_machine_flag
+* test_example_and_official_levels_remain_valid
+* test_catalog_drawings_cover_every_obstacle_class
+8/8 passed.
+
+
+res://tests/test_old_saves.gd
+* test_first_format_with_only_levels_and_three_settings_loads
+* test_before_m50_save_keeps_everything
+* test_before_m50_save_opens_level_10_when_level_9_was_won
+* test_before_m50_save_survives_a_new_victory_without_losing_anything
+* test_before_m50_save_roundtrip_is_identical
+* test_full_collections_save_loads_and_keeps_both_complete
+* test_collection_with_a_source_that_no_longer_counts_drops_only_that_source
+* test_dev_mode_save_loads_apart_and_does_not_touch_the_real_one
+Modo de pruebas activado. Guardado: user://test_old_saves_pruebas.json
+Enemigos disponibles: 17
+* test_unreadable_or_foreign_version_saves_start_from_zero
+WARNING: Guardado ilegible o de otra versión: se empieza de cero (user://test_old_saves.json)
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] load_save (res://scripts/autoload/save_manager.gd:57)
+         [1] test_unreadable_or_foreign_version_saves_start_from_zero (res://tests/test_old_saves.gd:215)
+         [2] _run_test (res://addons/gut/gut.gd:622)
+         [3] _test_the_scripts (res://addons/gut/gut.gd:835)
+WARNING: Guardado ilegible o de otra versión: se empieza de cero (user://test_old_saves.json)
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] load_save (res://scripts/autoload/save_manager.gd:57)
+         [1] test_unreadable_or_foreign_version_saves_start_from_zero (res://tests/test_old_saves.gd:215)
+         [2] _run_test (res://addons/gut/gut.gd:622)
+         [3] _test_the_scripts (res://addons/gut/gut.gd:835)
+WARNING: Guardado ilegible o de otra versión: se empieza de cero (user://test_old_saves.json)
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] load_save (res://scripts/autoload/save_manager.gd:57)
+         [1] test_unreadable_or_foreign_version_saves_start_from_zero (res://tests/test_old_saves.gd:215)
+         [2] _run_test (res://addons/gut/gut.gd:622)
+         [3] _test_the_scripts (res://addons/gut/gut.gd:835)
+WARNING: Guardado ilegible o de otra versión: se empieza de cero (user://test_old_saves.json)
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] load_save (res://scripts/autoload/save_manager.gd:57)
+         [1] test_unreadable_or_foreign_version_saves_start_from_zero (res://tests/test_old_saves.gd:215)
+         [2] _run_test (res://addons/gut/gut.gd:622)
+         [3] _test_the_scripts (res://addons/gut/gut.gd:835)
+WARNING: Guardado ilegible o de otra versión: se empieza de cero (user://test_old_saves.json)
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] load_save (res://scripts/autoload/save_manager.gd:57)
+         [1] test_unreadable_or_foreign_version_saves_start_from_zero (res://tests/test_old_saves.gd:215)
+         [2] _run_test (res://addons/gut/gut.gd:622)
+         [3] _test_the_scripts (res://addons/gut/gut.gd:835)
+* test_fields_with_the_wrong_type_are_ignored_one_by_one
+10/10 passed.
+
+
+res://tests/test_options_admin.gd
+* test_pause_options_never_offer_dev_mode
+* test_pause_options_hide_it_even_while_dev_mode_is_on
+Modo de pruebas activado. Guardado: user://test_options_pruebas.json
+Enemigos disponibles: 17
+* test_main_menu_options_offer_dev_mode
+* test_activating_asks_first
+* test_cancel_changes_nothing
+* test_confirming_turns_on_dev_mode_with_its_own_save
+Modo de pruebas activado. Guardado: user://test_options_pruebas.json
+Enemigos disponibles: 17
+* test_back_to_normal_needs_no_confirmation
+Modo de pruebas activado. Guardado: user://test_options_pruebas.json
+Enemigos disponibles: 17
+* test_real_progress_is_untouched_by_dev_mode
+Modo de pruebas activado. Guardado: user://test_options_pruebas.json
+Enemigos disponibles: 17
+* test_options_changed_before_switching_stay_in_their_save
+Modo de pruebas activado. Guardado: user://test_options_pruebas.json
+Enemigos disponibles: 17
+9/9 passed.
+
+
+res://tests/test_pause_speed.gd
+* test_pause_freezes_the_world_but_not_the_interface
+* test_cannot_build_while_paused_but_can_upgrade_and_sell
+* test_toggle_pause_twice_resumes
+* test_cannot_pause_after_game_over
+* test_toggle_speed
+* test_game_over_returns_to_normal_speed
+* test_leaving_the_game_resets_pause_and_speed
+7/7 passed.
+
+
+res://tests/test_progression_support.gd
+* test_one_random_carrier_per_run_and_escaping_gives_nothing
+* test_drop_is_not_kept_before_its_wave_finishes
+* test_abandon_discards_even_a_confirmed_drop
+* test_duplicates_unknown_collections_and_nonofficial_sources_do_not_unlock
+* test_collection_roundtrip_preserves_existing_progress
+* test_old_save_and_malformed_collection_are_safe
+* test_level_permission_and_collection_are_both_required
+* test_admin_can_enable_and_disable_without_collecting_and_without_duplicate_buttons
+    61 Orphans
+        * [@Button@47018:<Button#13811742415959>] + 1
+        * [@Button@47094:<Button#13820651118776>] + 1
+        * [@Button@47112:<Button#13822681162541>] + 1
+        * [@Button@47026:<Button#13812598057866>] + 1
+        * [@Button@47078:<Button#13818386197414>] + 1
+        * [@Button@47016:<Button#13811507538961>] + 1
+        * [@Button@47030:<Button#13813067820160>] + 1
+        * [@Button@47086:<Button#13819241835868>] + 1
+        * [@Button@47032:<Button#13813302701427>] + 1
+        * [@Button@47074:<Button#13817916435961>] + 1
+        * [@Button@47096:<Button#13820886003237>] + 1
+        * [@Button@47020:<Button#13811977301672>] + 1
+        * [@Button@47106:<Button#13821976522430>] + 1
+        * [@Button@47082:<Button#13818621079368>] + 4
+        * [@Button@47076:<Button#13818151317465>] + 1
+        * [@Button@47028:<Button#13812832940263>] + 1
+        * [@Button@47110:<Button#13822446285039>] + 1
+        * [@Button@47024:<Button#13812212183296>] + 4
+        * [@Button@47084:<Button#13819006955877>] + 1
+        * [@Button@47102:<Button#13821355766139>] + 4
+        * [@Button@47104:<Button#13821741642190>] + 1
+        * [@Button@47098:<Button#13821120885327>] + 1
+        * [@Button@47092:<Button#13819946480434>] + 1
+        * [@Button@47090:<Button#13819711599412>] + 1
+        * [@Button@47108:<Button#13822211404791>] + 1
+        * [@Button@47088:<Button#13819476718712>] + 1
+* test_normal_mode_cannot_use_admin_enable
+* test_game_does_not_persist_collection_before_result_and_keeps_it_on_later_defeat
+* test_defeat_during_pickup_wave_does_not_keep_drop
+* test_original_spawn_is_carrier_but_admin_spawn_is_not
+* test_second_play_of_collected_source_has_no_drop
+* test_abandoning_a_game_after_confirmation_does_not_write_collection
+* test_old_save_without_new_fields_keeps_progress_and_starts_collection_empty
+* test_community_map_never_supplies_an_official_collection_source
+* test_wiki_support_explains_its_role_and_requirement
+* test_aura_bounds_disabled_source_and_nonstacking
+* test_live_support_stun_upgrade_and_sale_change_bonus_without_shooting
+* test_first_five_levels_do_not_offer_new_support_even_when_unlocked
+* test_collection_counter_is_top_bar_and_tracks_pending_confirmed_and_saved
+21/21 passed.
+
+
+res://tests/test_real_scene_clicks.gd
+* test_official_levels_read_the_machine_flag_from_the_file
+* test_level_7_has_the_infrastructure_tab_and_no_loose_button
+* test_level_7_buy_button_buys_the_machine
+* test_the_bar_does_not_move_with_the_zoom_of_big_maps
+* test_levels_without_the_machine_have_tabs_but_no_machine_card
+* test_clicking_every_removable_shows_its_panel
+* test_clicking_grass_clears_the_panel
+* test_clicking_a_removable_in_build_mode_and_with_a_wave_running
+* test_clicking_a_removable_with_saved_progress
+9/9 passed.
+
+
+res://tests/test_records.gd
+* test_higher_scores_go_first
+* test_only_five_entries_are_kept
+* test_a_tie_goes_below_the_older_entry
+* test_what_does_not_qualify
+* test_names_are_three_capital_letters
+* test_scores_and_initials_survive_closing_the_game
+* test_broken_scores_in_the_file_are_ignored
+* test_outside_the_campaign_nothing_is_recorded
+* test_a_new_record_asks_for_initials_even_when_losing
+    15 Orphans
+        * [@VBoxContainer@48635:<VBoxContainer#14304975794973>(name_entry.gd)] + 14
+* test_no_record_shows_the_table_directly
+* test_name_entry_with_the_keyboard
+11/11 passed.
+
+
+res://tests/test_records_screen.gd
+* test_starts_with_the_first_level
+* test_arrows_change_level_and_wrap_around
+    9 Orphans
+        * [@Label@48733:<Label#14319639079832>]
+        * [@HBoxContainer@48728:<HBoxContainer#14319370644490>] + 3
+        * [@HBoxContainer@48732:<HBoxContainer#14319504863787>] + 3
+* test_hall_of_fame_opens_and_closes
+9 orphans
+3/3 passed.
+
+
+res://tests/test_rendered_art.gd
+* test_all_production_towers_have_complete_transparent_atlases
+* test_atlas_only_tower_has_an_icon_and_does_not_modify_source
+* test_rendered_impacts_appear_and_free_themselves
+* test_evolution_atlas_selection_and_legacy_fallback
+* test_all_evolutions_have_eight_views_and_special_monsters_use_approved_art
+5/5 passed.
+
+
+res://tests/test_repair.gd
+* test_repair_clamps_and_rejects_negative_rate_time
+* test_rate_nonstacking_bounds_upgrade_and_sale
+* test_source_wear_reduces_repair_and_can_be_repaired_only_by_another_source
+* test_repair_does_not_remove_stun_upgrade_or_cost
+* test_complete_repair_restores_cadence_and_stops_indicator
+* test_wiki_and_panel_explain_repair_and_show_effective_state
+* test_actual_pause_freezes_and_speed_scales_repair
+* test_real_paths_six_and_seven_charge_impact_and_mechanic_recovery
+* test_small_steps_finish_at_exact_zero_and_clear_repair_state
+9/9 passed.
+
+
+res://tests/test_resource_audit.gd
+* test_every_res_path_named_by_data_scenes_and_scripts_exists
+* test_every_tres_resource_loads
+* test_every_enemy_and_tower_named_by_a_level_exists
+* test_collections_point_to_real_levels_and_towers
+* test_wiki_and_lore_articles_have_no_errors_and_unlock_real_levels
+* test_no_new_unused_drawing_or_sound
+* test_known_unused_list_is_not_stale
+7/7 passed.
+
+
+res://tests/test_resources.gd
+* test_the_data_of_the_two_towers
+* test_no_tower_mixes_resource_cost_with_a_second_payment
+* test_other_towers_do_not_cost_resources
+* test_session_starts_at_zero_and_restarts_at_zero
+* test_add_resources_emits_and_ignores_zero
+* test_spend_both_is_atomic
+* test_mortar_needs_both_gold_and_resources
+* test_upgrading_does_not_cost_resources
+* test_selling_returns_gold_and_resources_rounded_down
+* test_a_tower_without_resources_returns_none
+* test_sniper_gold_payment_is_as_always
+* test_sniper_alt_payment_charges_120_and_1_resource
+* test_sniper_alt_payment_without_resources_fails_and_charges_nothing
+* test_alt_payment_on_a_normal_tower_is_just_gold_only
+* test_payment_choice_starts_gold_only_and_resets
+* test_demolition_adds_the_resource_once
+* test_demolition_with_zero_chance_gives_nothing
+* test_example_play_demolish_then_build_the_mortar
+* test_counter_is_hidden_on_a_map_without_resources
+* test_counter_shows_on_a_map_with_resources_and_follows_the_session
+* test_towers_that_cost_resources_do_not_turn_the_counter_on
+* test_bar_shows_both_prices_and_disables_with_the_reason
+* test_bar_disables_the_mortar_on_a_map_without_resources_and_says_why
+* test_sniper_button_stays_enabled_with_gold_only
+* test_sniper_help_shows_two_payment_buttons
+* test_second_payment_is_disabled_on_a_map_without_resources
+* test_help_of_a_normal_tower_hides_the_payment_buttons
+* test_panel_shows_what_the_sale_returns
+* test_text_helpers_read_the_data
+* test_wiki_sheet_shows_the_resource_cost
+* test_warning_for_a_resource_tower_on_a_map_without_resources
+* test_no_warning_with_resources_or_without_the_tower
+32/32 passed.
+
+
+res://tests/test_rules.gd
+* test_balance_matches_spec
+* test_armor_reduces_damage
+* test_armor_always_leaves_at_least_one_damage
+* test_no_armor_means_full_damage
+* test_wave_one_keeps_base_health
+* test_health_grows_and_rounds_down
+* test_health_has_no_rounding_errors_on_exact_results
+* test_wave_bonus
+* test_sell_refund_spec_example
+* test_sell_refund_rounds_down
+* test_sell_refund_has_no_rounding_errors
+* test_effective_slow_without_resistance
+* test_boss_resists_half_of_the_slow
+* test_tiles_to_px
+* test_star_thresholds_match_spec
+* test_stars_for
+16/16 passed.
+
+
+res://tests/test_sanity.gd
+* test_one_plus_one_is_two
+1/1 passed.
+
+
+res://tests/test_save_manager.gd
+* test_starts_empty_without_a_file
+* test_progress_survives_closing_the_game
+* test_best_lives_keeps_the_best
+* test_settings_survive_closing_the_game
+* test_file_has_the_documented_format
+* test_corrupt_file_starts_from_zero
+WARNING: Guardado ilegible o de otra versión: se empieza de cero (user://test_save.json)
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] load_save (res://scripts/autoload/save_manager.gd:57)
+         [1] test_corrupt_file_starts_from_zero (res://tests/test_save_manager.gd:82)
+         [2] _run_test (res://addons/gut/gut.gd:622)
+         [3] _test_the_scripts (res://addons/gut/gut.gd:835)
+* test_other_version_starts_from_zero
+WARNING: Guardado ilegible o de otra versión: se empieza de cero (user://test_save.json)
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] load_save (res://scripts/autoload/save_manager.gd:57)
+         [1] test_other_version_starts_from_zero (res://tests/test_save_manager.gd:88)
+         [2] _run_test (res://addons/gut/gut.gd:622)
+         [3] _test_the_scripts (res://addons/gut/gut.gd:835)
+* test_weird_values_are_ignored
+8/8 passed.
+
+
+res://tests/test_score.gd
+* test_points_come_from_balance
+* test_game_starts_with_zero_points
+* test_killing_gives_ten_points_per_gold
+* test_spiderlings_also_give_points
+* test_winning_adds_a_hundred_per_life
+* test_losing_adds_nothing
+* test_dev_panel_kills_give_no_points
+7/7 passed.
+
+
+res://tests/test_shaman.gd
+* test_the_shaman_has_the_numbers_of_the_spec
+* test_the_spell_data_is_off_by_default
+* test_a_long_range_tower_outranges_the_spell
+* test_the_first_spell_comes_one_interval_after_it_appears
+* test_it_casts_again_every_interval
+* test_it_stuns_the_nearest_tower
+* test_it_skips_a_tower_that_is_already_stunned
+* test_the_range_is_four_tiles
+* test_with_no_tower_in_range_it_waits_and_does_not_store_spells
+* test_a_dead_shaman_stops_casting
+* test_a_sold_tower_does_not_break_the_spell
+* test_it_is_found_by_name_and_starts_closed_in_the_bestiary
+* test_the_wiki_writes_down_the_spell
+* test_its_color_is_its_own
+* test_in_a_real_game_the_shaman_switches_off_a_tower_and_the_bolt_is_drawn
+15/15 passed.
+
+
+res://tests/test_sprites.gd
+* test_every_tower_has_a_turret_drawing
+* test_each_level_has_its_own_base
+* test_tower_buttons_show_the_tower
+* test_tower_icon_is_the_base_with_the_turret_on_top
+* test_tower_without_drawings_gets_no_icon
+* test_towers_of_every_level_are_drawn
+* test_a_tower_without_drawings_still_works
+* test_every_enemy_has_its_drawing
+* test_walking_right_faces_right
+* test_walking_left_faces_left
+* test_going_down_keeps_facing_where_it_was
+* test_every_enemy_is_drawn_hit_and_slowed
+* test_an_enemy_without_drawing_still_works
+* test_hit_flash_is_a_white_silhouette_of_the_drawing
+* test_every_tower_has_its_projectile
+* test_projectile_points_at_its_target
+* test_blocked_cells_always_show_the_same_thing
+* test_every_level_map_is_drawn
+* test_rendered_monsters_keep_their_alpha_and_have_margins
+* test_rendered_monsters_stand_on_the_same_ground_line
+* test_rendered_monsters_do_not_flip_and_the_others_do
+* test_rendered_monsters_keep_their_balance_numbers
+* test_rendered_monsters_draw_every_state_without_errors
+23/23 passed.
+
+
+res://tests/test_synergy_discovery.gd
+* test_the_frost_names_every_tower_that_uses_the_slow
+* test_in_a_level_without_the_mortar_it_is_not_named
+* test_the_fire_names_the_tesla
+* test_towers_that_put_no_state_say_nothing
+* test_a_new_tower_with_a_bonus_shows_up_by_itself
+* test_names_are_joined_in_spanish
+* test_the_build_bar_hint_from_both_sides
+* test_the_wiki_entry_of_the_frost_names_all_the_towers
+* test_the_effects_article_explains_combos_without_numbers
+* test_the_panel_of_a_built_frost_names_its_partners_in_this_level
+* test_the_build_bar_line_fits_for_every_tower
+* test_the_panel_never_splits_the_percent
+* test_the_build_bar_says_the_combo
+* test_the_mark_needs_the_state_and_a_tower_that_uses_it
+* test_an_enemy_without_the_state_has_no_mark
+* test_the_burning_mark_needs_a_tesla
+* test_the_marks_are_drawn_without_errors
+17/17 passed.
+
+
+res://tests/test_synergy_states.gd
+* test_damage_with_bonus_rounds_to_the_nearest
+* test_the_cannon_hits_a_slowed_enemy_for_25_and_a_normal_one_for_20
+* test_the_tesla_hits_a_burning_enemy_for_17
+* test_a_slowed_enemy_does_not_help_the_tesla_and_a_burning_one_does_not_help_the_cannon
+* test_the_two_states_add_up
+* test_the_bonus_goes_before_the_armor
+* test_a_hit_does_not_help_itself_with_the_state_it_applies
+* test_the_combo_signal_only_fires_with_a_bonus
+* test_the_combo_says_which_state_it_used
+* test_with_both_states_the_bigger_bonus_wins
+* test_a_burn_tick_is_never_a_combo
+* test_the_area_checks_each_enemy_separately
+* test_the_chain_checks_each_jump
+* test_a_reflected_hit_has_no_bonus_and_no_combo
+* test_only_the_big_slow_hitters_and_the_tesla_have_a_bonus
+15/15 passed.
+
+
+res://tests/test_synergy_visuals.gd
+* test_a_combo_hit_shows_its_own_number_in_the_state_color
+* test_the_combo_is_never_golden
+* test_the_first_time_text_shows_once_per_state
+* test_a_burning_combo_is_orange
+* test_a_normal_hit_shows_no_combo
+* test_with_the_numbers_off_the_ring_and_the_text_stay
+* test_an_area_combo_on_a_group_shows_one_number_and_every_ring
+* test_combos_apart_in_time_or_space_show_their_numbers
+* test_combo_numbers_have_their_own_limit
+* test_the_panel_and_the_wiki_say_the_bonus
+10/10 passed.
+
+
+res://tests/test_test_play.gd
+* test_the_game_plays_the_editor_level
+* test_a_normal_game_is_not_testing
+* test_the_campaign_wins_over_a_test_level
+* test_victory_offers_to_go_back_to_the_editor
+* test_defeat_offers_to_go_back_to_the_editor
+* test_the_pause_menu_goes_back_to_the_editor
+* test_a_test_game_saves_nothing
+* test_a_test_victory_does_not_ask_for_initials
+* test_a_test_game_does_not_unlock_or_touch_the_campaign
+9/9 passed.
+
+
+res://tests/test_thief.gd
+* test_floor_income_and_finished_session
+* test_clock_stops_on_death_and_vanish
+* test_large_delta_counts_only_time_on_path_and_escape_has_no_extra_theft
+* test_real_game_connections_and_floor_resume
+* test_optional_groups_can_be_absent_and_caps_reset_per_wave
+* test_editor_probability_roundtrip_validation_and_undo
+* test_campaign_introduces_threats_only_after_five_levels
+* test_actual_pause_freezes_and_time_scale_accelerates_clock
+8/8 passed.
+
+
+res://tests/test_tower_bar.gd
+* test_button_shows_cost_and_name_on_hover
+* test_nine_towers_fit_without_covering_next_wave
+* test_keys_1_to_9_choose_each_tower
+* test_choosing_a_tower_shows_its_name_and_phrase
+* test_every_tower_has_a_phrase
+5/5 passed.
+
+
+res://tests/test_tower_panel_layout.gd
+* test_long_description_keeps_actions_inside_and_resets_scroll_on_selection
+1/1 passed.
+
+
+res://tests/test_tower_perf.gd
+* test_enemies_in_reach_match_can_target_for_every_enemy
+* test_removed_enemies_are_not_found
+* test_out_of_range_enemy_is_not_found
+* test_empty_field_finds_nothing
+* test_aim_change_within_the_same_view_does_not_redraw
+* test_aim_change_to_another_view_redraws
+* test_without_atlas_any_aim_change_redraws
+* test_an_idle_tower_stays_still_and_a_firing_one_animates
+8/8 passed.
+
+
+res://tests/test_tower_stun.gd
+* test_a_stunned_tower_does_not_shoot_and_recovers_by_itself
+* test_stun_counts_down_with_time
+* test_stuns_do_not_add_up_the_longest_stays
+* test_a_zero_or_negative_stun_does_nothing
+* test_the_cooldown_keeps_running_while_stunned
+* test_a_stunned_tower_can_still_be_upgraded_and_keeps_the_stun
+* test_a_stunned_tower_can_change_its_targeting
+* test_towers_are_in_their_group
+* test_a_paused_game_does_not_run_its_towers
+* test_the_panel_says_when_the_tower_is_stunned_and_counts_down
+* test_the_panel_of_an_unstunned_tower_is_unchanged
+* test_a_stunned_tower_draws_without_errors
+12/12 passed.
+
+
+res://tests/test_tower_upgrade_glow.gd
+* test_every_upgrade_uses_its_atlas_and_glow_is_hidden_at_level_one
+* test_glow_tracks_pose_recoil_and_footprint_then_turns_off_when_stunned
+* test_missing_atlas_uses_legacy_fallback_without_glow
+3/3 passed.
+
+
+res://tests/test_tower_visual.gd
+* test_mount_keeps_base_fixed_and_recoil_follows_aim
+* test_eight_directions_and_angle_wrap
+* test_frame_regions_are_inside_atlas
+* test_extracted_frame_contains_only_selected_direction
+4/4 passed.
+
+
+res://tests/test_upgrade_sell.gd
+* test_every_tower_has_three_levels
+* test_upgrade_table_matches_spec
+* test_upgrade_costs_gold_and_changes_stats
+* test_cannot_upgrade_past_level_three
+* test_cannot_upgrade_without_gold
+* test_sell_spec_example
+* test_panel_opens_on_selection_and_closes_on_deselection
+* test_panel_updates_after_upgrade
+* test_upgrade_button_greys_out_without_gold
+* test_panel_says_max_level
+* test_selling_the_selected_tower_closes_the_panel
+* test_build_mode_and_selection_are_exclusive
+* test_targeting_modes_pick_different_enemies
+13/13 passed.
+
+
+res://tests/test_wave_flow.gd
+* test_hud_shows_starting_values
+* test_no_enemies_before_starting
+* test_enemies_come_out_one_per_second
+* test_enemy_walks_the_path_at_its_speed
+* test_full_wave_without_towers
+* test_enemies_get_more_health_each_wave
+* test_stat_icons_explain_their_meaning_without_redundant_labels
+7/7 passed.
+
+
+res://tests/test_wiki.gd
+* test_there_is_one_entry_per_enemy_file
+* test_enemies_go_from_weakest_to_strongest
+* test_enemy_numbers_come_from_the_data
+* test_a_flying_or_dangerous_enemy_says_so
+* test_enemy_extras_only_show_when_they_apply
+* test_the_spider_says_what_it_drops_and_the_spiderling_who_drops_it
+* test_where_an_enemy_appears_uses_the_campaign_it_is_given
+* test_every_official_enemy_appears_in_some_level_or_is_dropped
+* test_there_is_one_entry_per_tower_file
+* test_towers_go_from_cheapest_to_most_expensive
+* test_the_tower_table_has_one_row_per_level_with_the_real_numbers
+* test_a_tower_lists_its_effects_and_whether_it_hits_air
+* test_a_tower_entry_has_its_drawing_layers
+* test_every_entry_has_a_title_a_drawing_and_something_to_read
+* test_an_empty_category_is_left_out
+* test_tower_text_describes_a_level
+16/16 passed.
+
+
+res://tests/test_wiki_articles.gd
+* test_every_official_article_reads_without_errors
+* test_the_official_guide_has_its_articles_in_order
+* test_the_guide_category_is_in_the_wiki
+* test_articles_do_not_repeat_numbers_that_live_in_the_data
+* test_a_good_article_reads
+* test_a_broken_article_gives_its_reason_and_no_entry
+* test_a_folder_is_read_in_order_and_ignores_other_files
+* test_a_broken_article_does_not_stop_the_others
+* test_a_missing_folder_gives_no_articles_and_no_errors
+9/9 passed.
+
+
+res://tests/test_wiki_screen.gd
+* test_it_has_one_tab_per_category_and_starts_on_enemies
+* test_the_first_entry_is_shown_at_the_start
+* test_changing_category_changes_the_list_and_the_detail
+    90 Orphans
+        * [@Button@53885:<Button#15864401239148>] + 3
+        * [@Button@53889:<Button#15864552235595>] + 3
+        * [@Button@53893:<Button#15864703230910>] + 3
+        * [@Button@53925:<Button#15865911190927>] + 3
+        * [@Button@53877:<Button#15864099252940>] + 3
+        * [@Button@53917:<Button#15865609202482>] + 3
+        * [@Button@53909:<Button#15865307212714>] + 3
+        * [@Button@53881:<Button#15864250248366>] + 3
+        * [@Button@53937:<Button#15866364177721>] + 3
+        * [@Label@53985:<Label#15868109008295>]
+        * [@HBoxContainer@53964:<HBoxContainer#15867404365275>] + 4
+        * [@Button@53929:<Button#15866062188043>] + 3
+        * [@Button@53913:<Button#15865458208306>] + 3
+        * [@Button@53905:<Button#15865156218545>] + 3
+        * [@Button@53921:<Button#15865760198501>] + 3
+        * [@Button@53901:<Button#15865005223955>] + 3
+        * [@MarginContainer@53984:<MarginContainer#15868075454531>] + 1
+        * [@GridContainer@53982:<GridContainer#15867605692644>] + 12
+        * [@Button@53933:<Button#15866213183868>] + 3
+        * [@Button@53941:<Button#15866515173813>] + 3
+        * [@Button@53897:<Button#15864854229608>] + 3
+        * [@Label@53969:<Label#15867572138762>]
+* test_an_unknown_category_or_entry_does_nothing
+* test_an_enemy_shows_its_data
+    112 Orphans
+        * [@Button@54223:<Button#15902502296684>] + 3
+        * [@Button@54271:<Button#15904314236821>] + 3
+        * [@Button@54247:<Button#15903408268070>] + 3
+        * [@Label@54421:<Label#15913038390166>]
+        * [@Button@54275:<Button#15904465232901>] + 3
+        * [@GridContainer@54328:<GridContainer#15906008736923>] + 12
+        * [@Button@54259:<Button#15903861253885>] + 3
+        * [@Button@54287:<Button#15904918218523>] + 3
+        * [@Button@54239:<Button#15903106279987>] + 3
+        * [@Button@54231:<Button#15902804290252>] + 3
+        * [@Button@54243:<Button#15903257275169>] + 3
+        * [@Button@54255:<Button#15903710260209>] + 3
+        * [@Button@54283:<Button#15904767224867>] + 3
+        * [@GridContainer@54418:<GridContainer#15912535075954>] + 12
+        * [@Button@54279:<Button#15904616230036>] + 3
+        * [@Button@54227:<Button#15902653295790>] + 3
+        * [@HBoxContainer@54310:<HBoxContainer#15905807412608>] + 4
+        * [@Button@54251:<Button#15903559265868>] + 3
+        * [@MarginContainer@54420:<MarginContainer#15913004838660>] + 1
+        * [@Label@54331:<Label#15906512056166>]
+        * [@Label@54315:<Label#15905975185276>]
+        * [@Button@54263:<Button#15904012251341>] + 3
+        * [@Button@54267:<Button#15904163246293>] + 3
+        * [@MarginContainer@54330:<MarginContainer#15906478502172>] + 1
+        * [@Label@54405:<Label#15912501523221>]
+        * [@Button@54235:<Button#15902955287485>] + 3
+        * [@HBoxContainer@54400:<HBoxContainer#15912333751255>] + 4
+* test_a_tower_shows_its_level_table
+    126 Orphans
+        * [@Label@54562:<Label#15928204992031>]
+        * [@Button@54498:<Button#15925789073006>] + 3
+        * [@Button@54506:<Button#15926091062914>] + 3
+        * [@Button@54530:<Button#15926997035398>] + 3
+        * [@GridContainer@54631:<GridContainer#15933825362620>] + 2
+        * [@Button@54474:<Button#15924883106856>] + 3
+        * [@Label@54578:<Label#15928741866621>]
+        * [@Button@54534:<Button#15927148031273>] + 3
+        * [@Button@54526:<Button#15926846041401>] + 3
+        * [@Button@54486:<Button#15925336091962>] + 3
+        * [@MarginContainer@54577:<MarginContainer#15928708312392>] + 1
+        * [@Button@54510:<Button#15926242061749>] + 3
+        * [@Button@54490:<Button#15925487087120>] + 3
+        * [@Button@54470:<Button#15924732112484>] + 3
+        * [@Button@54494:<Button#15925638082150>] + 3
+        * [@Button@54522:<Button#15926695046822>] + 3
+        * [@Button@54502:<Button#15925940072168>] + 3
+        * [@Button@54478:<Button#15925034102633>] + 3
+        * [@HBoxContainer@54557:<HBoxContainer#15928037224446>] + 4
+        * [@Button@54518:<Button#15926544052242>] + 3
+        * [@MarginContainer@54633:<MarginContainer#15933959581741>] + 1
+        * [@Button@54514:<Button#15926393057336>] + 3
+        * [@HBoxContainer@54623:<HBoxContainer#15933624037547>] + 4
+        * [@Label@54628:<Label#15933791809889>]
+        * [@GridContainer@54575:<GridContainer#15928238551665>] + 12
+        * [@GridContainer@54658:<GridContainer#15933993136915>] + 24
+        * [@Button@54482:<Button#15925185098873>] + 3
+* test_an_article_shows_headings_and_paragraphs
+    104 Orphans
+        * [@Button@54768:<Button#15948606086025>] + 3
+        * [@Button@54748:<Button#15947851112599>] + 3
+        * [@Button@54724:<Button#15946945145965>] + 3
+        * [@Button@54752:<Button#15948002110586>] + 3
+        * [@Button@54744:<Button#15947700120736>] + 3
+        * [@Button@54788:<Button#15949361065182>] + 3
+        * [@Button@54780:<Button#15949059075367>] + 3
+        * [@Label@54870:<Label#15955585412403>]
+        * [@Label@54832:<Label#15950954900871>]
+        * [@Label@54867:<Label#15955484749362>]
+        * [@Button@54764:<Button#15948455095873>] + 3
+        * [@MarginContainer@54869:<MarginContainer#15955551858359>] + 1
+        * [@Label@54816:<Label#15950418030265>]
+        * [@Button@54740:<Button#15947549126332>] + 3
+        * [@GridContainer@54829:<GridContainer#15950451584703>] + 12
+        * [@Button@54732:<Button#15947247136472>] + 3
+        * [@Button@54736:<Button#15947398131528>] + 3
+        * [@Button@54760:<Button#15948304101193>] + 3
+        * [@Button@54776:<Button#15948908081086>] + 3
+        * [@Button@54772:<Button#15948757086193>] + 3
+        * [@Button@54784:<Button#15949210071084>] + 3
+        * [@Label@54861:<Label#15955283423282>]
+        * [@MarginContainer@54863:<MarginContainer#15955350532155>] + 1
+        * [@HBoxContainer@54811:<HBoxContainer#15950250258501>] + 4
+        * [@MarginContainer@54831:<MarginContainer#15950921347283>] + 1
+        * [@Button@54728:<Button#15947096142294>] + 3
+        * [@HBoxContainer@54857:<HBoxContainer#15955149206320>] + 3
+        * [@MarginContainer@54866:<MarginContainer#15955451196209>] + 1
+        * [@Label@54864:<Label#15955384087397>]
+        * [@Button@54756:<Button#15948153107385>] + 3
+* test_the_keys_article_draws_its_table
+    104 Orphans
+        * [@Button@54938:<Button#15968101211101>] + 3
+        * [@Button@54910:<Button#15967044247703>] + 3
+        * [@Label@54998:<Label#15970366137111>]
+        * [@HBoxContainer@54993:<HBoxContainer#15970198365281>] + 4
+        * [@Button@54950:<Button#15968554198124>] + 3
+        * [@Button@54966:<Button#15969158179744>] + 3
+        * [@GridContainer@55011:<GridContainer#15970399693838>] + 12
+        * [@Button@54934:<Button#15967950220397>] + 3
+        * [@Button@54942:<Button#15968252210290>] + 3
+        * [@Button@54906:<Button#15966893255802>] + 3
+        * [@Button@54914:<Button#15967195245728>] + 3
+        * [@Button@54946:<Button#15968403205287>] + 3
+        * [@MarginContainer@55045:<MarginContainer#15975265086797>] + 1
+        * [@Label@55049:<Label#15975399304707>]
+        * [@Label@55052:<Label#15975499968035>]
+        * [@Label@55046:<Label#15975298641561>]
+        * [@Button@54918:<Button#15967346241212>] + 3
+        * [@Button@54926:<Button#15967648231128>] + 3
+        * [@Button@54922:<Button#15967497236296>] + 3
+        * [@Button@54962:<Button#15969007185844>] + 3
+        * [@Button@54954:<Button#15968705195957>] + 3
+        * [@HBoxContainer@55039:<HBoxContainer#15975063760900>] + 3
+        * [@MarginContainer@55051:<MarginContainer#15975466414187>] + 1
+        * [@MarginContainer@55048:<MarginContainer#15975365750955>] + 1
+        * [@MarginContainer@55013:<MarginContainer#15970869457095>] + 1
+        * [@Button@54930:<Button#15967799226838>] + 3
+        * [@Label@55043:<Label#15975197979142>]
+        * [@Label@55014:<Label#15970903012152>]
+        * [@Button@54970:<Button#15969309176633>] + 3
+        * [@Button@54958:<Button#15968856191918>] + 3
+* test_the_detail_is_rebuilt_and_not_piled_up
+* test_every_entry_of_every_category_can_be_shown
+    1376 Orphans
+        * [@Button@55666:<Button#16023096925072>] + 3
+        * [@HBoxContainer@56247:<HBoxContainer#16043363802179>] + 4
+        * [@MarginContainer@56497:<MarginContainer#16051836296309>] + 1
+        * [@Label@56290:<Label#16044806642808>]
+        * [@Label@56216:<Label#16042306837630>]
+        * [@Label@55986:<Label#16034287328425>]
+        * [@Label@56036:<Label#16036015381755>]
+        * [@MarginContainer@55985:<MarginContainer#16034253774224>] + 1
+        * [@Button@55586:<Button#16017073905238>] + 3
+        * [@Button@56162:<Button#16040327126641>] + 3
+        * [@Label@55862:<Label#16030042693250>]
+        * [@Label@56287:<Label#16044705980069>]
+        * [@HBoxContainer@55987:<HBoxContainer#16034337660669>] + 4
+        * [@Button@55690:<Button#16024002895617>] + 3
+        * [@Button@56150:<Button#16039874142031>] + 3
+        * [@MarginContainer@56284:<MarginContainer#16044605316988>] + 1
+        * [@Label@56060:<Label#16036837466060>]
+        * [@Button@56166:<Button#16040478121968>] + 3
+        * [@Label@56422:<Label#16049302937621>]
+        * [@Button@55678:<Button#16023549911092>] + 3
+        * [@HBoxContainer@56031:<HBoxContainer#16035847610431>] + 4
+        * [@Label@56086:<Label#16037726658634>]
+        * [@HBoxContainer@56175:<HBoxContainer#16040931106929>] + 4
+        * [@Label@56455:<Label#16050410233991>]
+        * [@GridContainer@56101:<GridContainer#16037760213264>] + 14
+        * [@Label@56296:<Label#16045024747825>]
+        * [@Button@55694:<Button#16024153891129>] + 3
+        * [@Label@55992:<Label#16034505433453>]
+        * [@MarginContainer@56386:<MarginContainer#16048078201242>] + 1
+        * [@GridContainer@56468:<GridContainer#16050729001390>] + 4
+        * [@Label@56014:<Label#16035260408256>]
+        * [@Button@55674:<Button#16023398916568>] + 3
+        * [@GridContainer@56219:<GridContainer#16042340393435>] + 2
+        * [@GridContainer@55885:<GridContainer#16030294352377>] + 16
+        * [@HBoxContainer@56291:<HBoxContainer#16044856975879>] + 4
+        * [@GridContainer@55725:<GridContainer#16024959197715>] + 12
+        * [@MarginContainer@56427:<MarginContainer#16049470710311>] + 1
+        * [@Label@56498:<Label#16051869852213>]
+        * [@GridContainer@56127:<GridContainer#16038582297150>] + 16
+        * [@MarginContainer@56345:<MarginContainer#16046685692490>] + 1
+        * [@Button@55590:<Button#16017224901201>] + 3
+        * [@Label@56286:<Label#16044672426582>]
+        * [@Button@55646:<Button#16022341952106>] + 3
+        * [@Label@56457:<Label#16050477343340>]
+        * [@GridContainer@56343:<GridContainer#16046551474823>] + 2
+        * [@GridContainer@56005:<GridContainer#16034538988191>] + 12
+        * [@Button@56154:<Button#16040025137851>] + 3
+        * [@Button@55658:<Button#16022794937083>] + 3
+        * [@HBoxContainer@56081:<HBoxContainer#16037558887181>] + 4
+        * [@Label@55846:<Label#16029505823545>]
+        * [@GridContainer@56051:<GridContainer#16036048937798>] + 14
+        * [@MarginContainer@56372:<MarginContainer#16047591662482>] + 1
+        * [@Button@55686:<Button#16023851901843>] + 3
+        * [@Label@56500:<Label#16051936961468>]
+        * [@Label@56104:<Label#16038330639320>]
+        * [@MarginContainer@56333:<MarginContainer#16046266262502>] + 1
+        * [@Button@55550:<Button#16015714952168>] + 3
+        * [@MarginContainer@56470:<MarginContainer#16050930328562>] + 1
+        * [@HBoxContainer@56458:<HBoxContainer#16050527675440>] + 4
+        * [@MarginContainer@56103:<MarginContainer#16038297084984>] + 1
+        * [@Label@56180:<Label#16041098880064>]
+        * [@Label@55818:<Label#16028532745324>]
+        * [@MarginContainer@56413:<MarginContainer#16048984171640>] + 1
+        * [@Label@56110:<Label#16038548743297>]
+        * [@Label@56506:<Label#16052155065481>]
+        * [@HBoxContainer@56105:<HBoxContainer#16038380971151>] + 4
+        * [@Label@56499:<Label#16051903407286>]
+        * [@MarginContainer@55961:<MarginContainer#16033431692486>] + 1
+        * [@Button@56146:<Button#16039723148499>] + 3
+        * [@GridContainer@56282:<GridContainer#16043732903142>] + 24
+        * [@Label@56252:<Label#16043531576595>]
+        * [@GridContainer@56326:<GridContainer#16045226075432>] + 24
+        * [@MarginContainer@56079:<MarginContainer#16037475001670>] + 1
+        * [@Label@56285:<Label#16044638872913>]
+        * [@GridContainer@55983:<GridContainer#16033716905313>] + 14
+        * [@MarginContainer@56007:<MarginContainer#16035008750957>] + 1
+        * [@Label@56054:<Label#16036619363705>]
+        * [@Button@56174:<Button#16040780113407>] + 3
+        * [@HBoxContainer@55963:<HBoxContainer#16033515578901>] + 4
+        * [@Label@55968:<Label#16033683351088>]
+        * [@GridContainer@56299:<GridContainer#16045058303559>] + 2
+        * [@GridContainer@56425:<GridContainer#16049336493741>] + 2
+        * [@Label@56008:<Label#16035042305740>]
+        * [@Label@55622:<Label#16018432861960>]
+        * [@Button@55578:<Button#16016771917582>] + 3
+        * [@HBoxContainer@56009:<HBoxContainer#16035092637549>] + 4
+        * [@Button@55650:<Button#16022492948412>] + 3
+        * [@Label@55944:<Label#16032861267921>]
+        * [@Button@55670:<Button#16023247923238>] + 3
+        * [@Button@55582:<Button#16016922912874>] + 3
+        * [@GridContainer@56411:<GridContainer#16048111757431>] + 24
+        * [@Button@56170:<Button#16040629119100>] + 3
+        * [@GridContainer@56246:<GridContainer#16042508167295>] + 24
+        * [@GridContainer@56027:<GridContainer#16035293964449>] + 12
+        * [@GridContainer@55959:<GridContainer#16032894822575>] + 14
+        * [@GridContainer@55635:<GridContainer#16018466416849>] + 12
+        * [@GridContainer@56077:<GridContainer#16036871022859>] + 16
+        * [@Label@56030:<Label#16035797281150>]
+        * [@MarginContainer@56289:<MarginContainer#16044773091714>] + 1
+        * [@HBoxContainer@55889:<HBoxContainer#16030982220166>] + 4
+        * [@Label@55938:<Label#16032643164677>]
+        * [@MarginContainer@56129:<MarginContainer#16039186278929>] + 1
+        * [@MarginContainer@56053:<MarginContainer#16036585810455>] + 1
+        * [@MarginContainer@56519:<MarginContainer#16052591274531>] + 1
+        * [@MarginContainer@55913:<MarginContainer#16031787526694>] + 1
+        * [@Label@56340:<Label#16046517922362>]
+        * [@MarginContainer@56454:<MarginContainer#16050376682045>] + 1
+        * [@Label@56463:<Label#16050695449150>]
+        * [@GridContainer@56370:<GridContainer#16046719248961>] + 24
+        * [@Label@55712:<Label#16024925645389>]
+        * [@Label@56456:<Label#16050443790927>]
+        * [@MarginContainer@56301:<MarginContainer#16045192522341>] + 1
+        * [@Button@56142:<Button#16039572155020>] + 3
+        * [@GridContainer@56544:<GridContainer#16052624829089>] + 24
+        * [@MarginContainer@55937:<MarginContainer#16032609610403>] + 1
+        * [@Button@56134:<Button#16039270165177>] + 3
+        * [@GridContainer@55859:<GridContainer#16029539379899>] + 12
+        * [@HBoxContainer@55707:<HBoxContainer#16024757873347>] + 4
+        * [@GridContainer@55837:<GridContainer#16028784405189>] + 12
+        * [@MarginContainer@55771:<MarginContainer#16026922134218>] + 1
+        * [@Button@55530:<Button#16014959979212>] + 3
+        * [@Button@55558:<Button#16016016943859>] + 3
+        * [@HBoxContainer@55729:<HBoxContainer#16025496070929>] + 4
+        * [@GridContainer@56452:<GridContainer#16049504267027>] + 24
+        * [@GridContainer@55911:<GridContainer#16031183547168>] + 16
+        * [@HBoxContainer@56335:<HBoxContainer#16046350150443>] + 4
+        * [@HBoxContainer@55939:<HBoxContainer#16032693496637>] + 4
+        * [@Label@56331:<Label#16046199155533>]
+        * [@Label@56374:<Label#16047658773327>]
+        * [@Label@56329:<Label#16046132046672>]
+        * [@GridContainer@56495:<GridContainer#16050963884881>] + 24
+        * [@Label@56415:<Label#16049051282265>]
+        * [@Button@55682:<Button#16023700908916>] + 3
+        * [@Label@55800:<Label#16027928767392>]
+        * [@Label@55778:<Label#16027173792691>]
+        * [@Button@56138:<Button#16039421160381>] + 3
+        * [@Label@55888:<Label#16030931889090>]
+        * [@HBoxContainer@56417:<HBoxContainer#16049135168461>] + 4
+        * [@Label@56416:<Label#16049084836817>]
+        * [@HBoxContainer@56211:<HBoxContainer#16042139069394>] + 4
+        * [@HBoxContainer@56501:<HBoxContainer#16051987295233>] + 4
+        * [@Label@56330:<Label#16046165601289>]
+        * [@GridContainer@56210:<GridContainer#16041300208655>] + 24
+        * [@Button@55538:<Button#16015261969455>] + 3
+        * [@Label@55914:<Label#16031821081653>]
+        * [@MarginContainer@55727:<MarginContainer#16025428962366>] + 1
+        * [@Label@56375:<Label#16047692328010>]
+        * [@Label@56373:<Label#16047625219147>]
+        * [@HBoxContainer@56376:<HBoxContainer#16047742659665>] + 4
+        * [@GridContainer@56384:<GridContainer#16047943986262>] + 2
+        * [@MarginContainer@56185:<MarginContainer#16041266654301>] + 1
+        * [@Label@56381:<Label#16047910431840>]
+        * [@MarginContainer@55861:<MarginContainer#16030009142387>] + 1
+        * [@Label@55868:<Label#16030260800671>]
+        * [@HBoxContainer@55819:<HBoxContainer#16028583079076>] + 4
+        * [@Button@55542:<Button#16015412964573>] + 3
+        * [@HBoxContainer@56055:<HBoxContainer#16036669697260>] + 4
+        * [@MarginContainer@56221:<MarginContainer#16042474613998>] + 1
+        * [@Button@55594:<Button#16017375898868>] + 3
+        * [@Label@55728:<Label#16025462517003>]
+        * [@MarginContainer@55887:<MarginContainer#16030898335019>] + 1
+        * [@Button@55554:<Button#16015865949493>] + 3
+        * [@GridContainer@56517:<GridContainer#16052188622154>] + 10
+        * [@Label@56334:<Label#16046299819384>]
+        * [@Label@55734:<Label#16025663843709>]
+        * [@GridContainer@56255:<GridContainer#16043565133207>] + 2
+        * [@MarginContainer@55749:<MarginContainer#16026167160254>] + 1
+        * [@GridContainer@56183:<GridContainer#16041132436938>] + 2
+        * [@Label@56414:<Label#16049017728462>]
+        * [@Button@55546:<Button#16015563959811>] + 3
+        * [@Label@55772:<Label#16026955689493>]
+        * [@Label@56130:<Label#16039219834406>]
+        * [@Button@55570:<Button#16016469929538>] + 3
+        * [@HBoxContainer@55841:<HBoxContainer#16029338054220>] + 4
+        * [@MarginContainer@56546:<MarginContainer#16053497245335>] + 1
+        * [@HBoxContainer@55773:<HBoxContainer#16027006021336>] + 4
+        * [@Label@55638:<Label#16018969734881>]
+        * [@MarginContainer@55637:<MarginContainer#16018936180472>] + 1
+        * [@MarginContainer@56257:<MarginContainer#16043699351309>] + 1
+        * [@GridContainer@55769:<GridContainer#16026452373277>] + 12
+        * [@HBoxContainer@55617:<HBoxContainer#16018265091934>] + 4
+        * [@MarginContainer@56328:<MarginContainer#16046098493288>] + 1
+        * [@Button@55698:<Button#16024304889710>] + 3
+        * [@HBoxContainer@55795:<HBoxContainer#16027760996208>] + 4
+        * [@MarginContainer@55817:<MarginContainer#16028499193724>] + 1
+        * [@GridContainer@55815:<GridContainer#16027962322821>] + 14
+        * [@Label@55920:<Label#16032039186311>]
+        * [@Button@55654:<Button#16022643945377>] + 3
+        * [@Button@55642:<Button#16022190960548>] + 3
+        * [@Button@55566:<Button#16016318934968>] + 3
+        * [@Button@55662:<Button#16022945935298>] + 3
+        * [@HBoxContainer@55915:<HBoxContainer#16031871414233>] + 4
+        * [@Label@55824:<Label#16028750852065>]
+        * [@GridContainer@56646:<GridContainer#16056701693926>] + 6
+        * [@Label@56639:<Label#16056668139500>]
+        * [@HBoxContainer@55863:<HBoxContainer#16030093029390>] + 4
+        * [@Label@55794:<Label#16027710664720>]
+        * [@Label@55840:<Label#16029287723043>]
+        * [@MarginContainer@55839:<MarginContainer#16029254168617>] + 1
+        * [@MarginContainer@55793:<MarginContainer#16027677110314>] + 1
+        * [@HBoxContainer@56799:<HBoxContainer#16062305284216>] + 3
+        * [@Button@56731:<Button#16059822256258>] + 2
+        * [@Button@56734:<Button#16059939696777>] + 2
+        * [@Button@56737:<Button#16060057137296>] + 2
+        * [@Button@56740:<Button#16060174577815>] + 2
+        * [@HBoxContainer@56744:<HBoxContainer#16060409458856>] + 3
+        * [@HBoxContainer@55751:<HBoxContainer#16026251047125>] + 4
+        * [@Button@55702:<Button#16024455885021>] + 3
+        * [@Label@56751:<Label#16060644339957>]
+        * [@GridContainer@55935:<GridContainer#16032072741113>] + 14
+        * [@GridContainer@55791:<GridContainer#16027207348474>] + 12
+        * [@Button@55574:<Button#16016620925187>] + 3
+        * [@Label@55962:<Label#16033465250063>]
+        * [@GridContainer@55747:<GridContainer#16025697399090>] + 12
+        * [@Label@55894:<Label#16031149994300>]
+        * [@MarginContainer@56630:<MarginContainer#16056349372820>] + 1
+        * [@Label@56631:<Label#16056382927254>]
+        * [@Label@56632:<Label#16056416481688>]
+        * [@Label@56633:<Label#16056450036122>]
+        * [@HBoxContainer@56634:<HBoxContainer#16056500367772>] + 4
+        * [@Label@56748:<Label#16060543676874>]
+        * [@MarginContainer@56648:<MarginContainer#16056970129893>] + 1
+        * [@GridContainer@56673:<GridContainer#16057003684328>] + 24
+        * [@Label@55750:<Label#16026200715794>]
+        * [@Button@56686:<Button#16058178089496>] + 3
+        * [@HBoxContainer@56687:<HBoxContainer#16058329084457>] + 4
+        * [@Button@55706:<Button#16024606880305>] + 3
+        * [@Button@55562:<Button#16016167940662>] + 3
+        * [@GridContainer@56601:<GridContainer#16055242076746>] + 4
+        * [@MarginContainer@56875:<MarginContainer#16064922530389>] + 1
+        * [@Label@56876:<Label#16064956084822>]
+        * [@Label@56877:<Label#16064989639259>]
+        * [@Label@56589:<Label#16054956864108>]
+        * [@Label@56588:<Label#16054923309678>]
+        * [@HBoxContainer@56591:<HBoxContainer#16055040750199>] + 4
+        * [@GridContainer@56697:<GridContainer#16058530411195>] + 4
+        * [@Label@56771:<Label#16061315429055>]
+        * [@HBoxContainer@56772:<HBoxContainer#16061365760705>] + 3
+        * [@MarginContainer@56587:<MarginContainer#16054889755335>] + 1
+        * [@MarginContainer@56603:<MarginContainer#16055443403474>] + 1
+        * [@GridContainer@56628:<GridContainer#16055476957914>] + 24
+        * [@MarginContainer@56753:<MarginContainer#16060711449319>] + 1
+        * [@MarginContainer@56750:<MarginContainer#16060610786025>] + 1
+        * [@Label@56754:<Label#16060745003767>]
+        * [@Label@56080:<Label#16037508559620>]
+        * [@Label@55756:<Label#16026418819876>]
+        * [@Label@56677:<Label#16057943208791>]
+        * [@MarginContainer@56675:<MarginContainer#16057876099928>] + 1
+        * [@Label@56678:<Label#16057976763228>]
+        * [@Button@56682:<Button#16058027094877>] + 3
+        * [@Label@56676:<Label#16057909654368>]
+        * [@Label@56590:<Label#16054990418802>]
+        * [@Label@56596:<Label#16055208522616>]
+        * [@MarginContainer@56879:<MarginContainer#16065056748414>] + 1
+        * [@Label@56880:<Label#16065090302848>]
+        * [@Label@56881:<Label#16065123857282>]
+        * [@MarginContainer@56883:<MarginContainer#16065190966150>] + 1
+        * [@Label@56884:<Label#16065224520584>]
+        * [@Label@56714:<Label#16059251831713>]
+        * [@MarginContainer@56791:<MarginContainer#16062020072364>] + 1
+        * [@Button@55534:<Button#16015110976445>] + 3
+        * [@Label@56792:<Label#16062053626854>]
+        * [@MarginContainer@56794:<MarginContainer#16062120735722>] + 1
+        * [@Label@56795:<Label#16062154290156>]
+        * [@MarginContainer@56797:<MarginContainer#16062221399024>] + 1
+        * [@HBoxContainer@56833:<HBoxContainer#16063479690263>] + 3
+        * [@Label@56869:<Label#16064704427034>]
+        * [@HBoxContainer@56870:<HBoxContainer#16064754758690>] + 3
+        * [@Label@56934:<Label#16067137123372>]
+        * [@HBoxContainer@56935:<HBoxContainer#16067187455022>] + 2
+        * [@Label@56762:<Label#16061013439541>]
+        * [@MarginContainer@56764:<MarginContainer#16061080548412>] + 1
+        * [@Label@56765:<Label#16061114102847>]
+        * [@MarginContainer@56770:<MarginContainer#16061281875008>] + 1
+        * [@MarginContainer@56767:<MarginContainer#16061181211714>] + 1
+        * [@Label@56768:<Label#16061214766149>]
+        * [@Label@56798:<Label#16062254953542>]
+        * [@Button@56158:<Button#16040176137300>] + 3
+        * [@Label@56845:<Label#16063882343526>]
+        * [@GridContainer@56868:<GridContainer#16064066892905>] + 18
+        * [@Button@56722:<Button#16059469935733>] + 2
+        * [@HBoxContainer@56923:<HBoxContainer#16066734470276>] + 2
+        * [@Label@56692:<Label#16058496857238>]
+        * [@HBoxContainer@56810:<HBoxContainer#16062691161293>] + 3
+        * [@MarginContainer@56824:<MarginContainer#16063160923372>] + 1
+        * [@MarginContainer@56827:<MarginContainer#16063261586672>] + 1
+        * [@Label@56828:<Label#16063295141105>]
+        * [@Label@56825:<Label#16063194477812>]
+        * [@MarginContainer@56831:<MarginContainer#16063395804410>] + 1
+        * [@Label@56829:<Label#16063328695548>]
+        * [@Label@56832:<Label#16063429358850>]
+        * [@Button@56725:<Button#16059587376394>] + 2
+        * [@MarginContainer@56838:<MarginContainer#16063647462667>] + 1
+        * [@Label@56839:<Label#16063681017102>]
+        * [@MarginContainer@56841:<MarginContainer#16063748125969>] + 1
+        * [@Label@56842:<Label#16063781680412>]
+        * [@Label@56555:<Label#16053816014124>]
+        * [@GridContainer@56558:<GridContainer#16053849568558>] + 2
+        * [@MarginContainer@56560:<MarginContainer#16053983786294>] + 1
+        * [@GridContainer@56585:<GridContainer#16054017340728>] + 24
+        * [@Button@56743:<Button#16060292019533>] + 2
+        * [@Label@56776:<Label#16061499979094>]
+        * [@MarginContainer@56778:<MarginContainer#16061567087961>] + 1
+        * [@Label@56779:<Label#16061600642395>]
+        * [@MarginContainer@56781:<MarginContainer#16061667751263>] + 1
+        * [@Label@56782:<Label#16061701305697>]
+        * [@MarginContainer@56784:<MarginContainer#16061768414564>] + 1
+        * [@Label@56785:<Label#16061801968998>]
+        * [@HBoxContainer@56786:<HBoxContainer#16061852300649>] + 3
+        * [@HBoxContainer@56915:<HBoxContainer#16066449257849>] + 2
+        * [@Label@56918:<Label#16066549921154>]
+        * [@Label@56922:<Label#16066684138887>]
+        * [@HBoxContainer@56919:<HBoxContainer#16066583475594>] + 2
+        * [@Label@56926:<Label#16066835133845>]
+        * [@HBoxContainer@56931:<HBoxContainer#16067036460442>] + 2
+        * [@HBoxContainer@56927:<HBoxContainer#16066885465501>] + 2
+        * [@HBoxContainer@56846:<HBoxContainer#16063932675489>] + 3
+        * [@MarginContainer@56844:<MarginContainer#16063848789410>] + 1
+        * [@Label@56930:<Label#16066986128803>]
+        * [@GridContainer@56719:<GridContainer#16059285386664>] + 4
+        * [@Label@56547:<Label#16053530801613>]
+        * [@Label@56548:<Label#16053564356047>]
+        * [@Label@56549:<Label#16053597910481>]
+        * [@HBoxContainer@56550:<HBoxContainer#16053648242131>] + 4
+        * [@MarginContainer@56821:<MarginContainer#16063060260370>] + 1
+        * [@HBoxContainer@56698:<HBoxContainer#16058698184257>] + 4
+        * [@MarginContainer@56815:<MarginContainer#16062858933931>] + 1
+        * [@Label@56816:<Label#16062892488367>]
+        * [@Label@56809:<Label#16062640830132>]
+        * [@Label@56954:<Label#16067892098820>]
+        * [@HBoxContainer@56939:<HBoxContainer#16067338450712>] + 2
+        * [@Label@56942:<Label#16067439114013>]
+        * [@HBoxContainer@56943:<HBoxContainer#16067489445663>] + 2
+        * [@Label@56703:<Label#16058865956702>]
+        * [@GridContainer@56708:<GridContainer#16058899511136>] + 4
+        * [@HBoxContainer@56709:<HBoxContainer#16059084060522>] + 4
+        * [@Button@56728:<Button#16059704817525>] + 2
+        * [@Label@56803:<Label#16062439503735>]
+        * [@MarginContainer@56805:<MarginContainer#16062506612603>] + 1
+        * [@Label@56806:<Label#16062540167037>]
+        * [@MarginContainer@56808:<MarginContainer#16062607275905>] + 1
+        * [@Label@56822:<Label#16063093815172>]
+        * [@MarginContainer@56818:<MarginContainer#16062959597521>] + 1
+        * [@Label@56819:<Label#16062993151955>]
+        * [@MarginContainer@56756:<MarginContainer#16060812113956>] + 1
+        * [@Label@56757:<Label#16060845668390>]
+        * [@HBoxContainer@56758:<HBoxContainer#16060879222824>] + 3
+        * [@Label@56950:<Label#16067741104189>]
+        * [@HBoxContainer@56951:<HBoxContainer#16067791435844>] + 2
+        * [@Label@56938:<Label#16067288119720>]
+        * [@Label@56946:<Label#16067590109614>]
+        * [@HBoxContainer@56947:<HBoxContainer#16067640441264>] + 2
+        * [@MarginContainer@56029:<MarginContainer#16035763733005>] + 1
+* test_clicking_a_tab_and_an_entry_works
+    162 Orphans
+        * [@Label@57177:<Label#16094735642221>]
+        * [@GridContainer@57180:<GridContainer#16094769196655>] + 2
+        * [@HBoxContainer@57172:<HBoxContainer#16094567870887>] + 4
+        * [@HBoxContainer@57136:<HBoxContainer#16093359911449>] + 4
+        * [@GridContainer@57088:<GridContainer#16087957648063>] + 12
+        * [@MarginContainer@57182:<MarginContainer#16094903415623>] + 1
+        * [@GridContainer@57207:<GridContainer#16094936970056>] + 24
+        * [@Button@56987:<Button#16084602205086>] + 3
+        * [@Button@57019:<Button#16085810164761>] + 3
+        * [@Button@57007:<Button#16085357179999>] + 3
+        * [@Button@56991:<Button#16084753200232>] + 3
+        * [@Button@57039:<Button#16086565139662>] + 3
+        * [@Button@57027:<Button#16086112154862>] + 3
+        * [@Button@57023:<Button#16085961159928>] + 3
+        * [@Button@56983:<Button#16084451210496>] + 3
+        * [@Button@57015:<Button#16085659170064>] + 3
+        * [@Label@57075:<Label#16087924094291>]
+        * [@HBoxContainer@57070:<HBoxContainer#16087756322135>] + 4
+        * [@Button@57011:<Button#16085508175266>] + 3
+        * [@Button@56995:<Button#16084904195565>] + 3
+        * [@MarginContainer@57146:<MarginContainer#16093695456841>] + 1
+        * [@GridContainer@57171:<GridContainer#16093729011274>] + 24
+        * [@Button@56999:<Button#16085055190605>] + 3
+        * [@Button@57003:<Button#16085206185550>] + 3
+        * [@Button@57035:<Button#16086414145198>] + 3
+        * [@GridContainer@57144:<GridContainer#16093561239391>] + 2
+        * [@Label@57141:<Label#16093527684969>]
+        * [@Button@57047:<Button#16086867130234>] + 3
+        * [@Button@57043:<Button#16086716135297>] + 3
+        * [@Button@57031:<Button#16086263150469>] + 3
+        * [@Label@57091:<Label#16088460965924>]
+        * [@MarginContainer@57090:<MarginContainer#16088427411494>] + 1
+* test_left_and_right_switch_category_and_wrap_around
+    442 Orphans
+        * [@Button@57688:<Button#16126478130328>] + 3
+        * [@HBoxContainer@57520:<HBoxContainer#16120320892354>] + 4
+        * [@Button@57536:<Button#16120824208961>] + 2
+        * [@Button@57504:<Button#16119649803920>] + 3
+        * [@Button@57624:<Button#16124062211768>] + 3
+        * [@MarginContainer@57731:<MarginContainer#16128038411992>] + 1
+        * [@Label@57694:<Label#16126796898015>]
+        * [@Button@57656:<Button#16125270171482>] + 3
+        * [@Label@57732:<Label#16128071966741>]
+        * [@HBoxContainer@57509:<HBoxContainer#16119951794214>] + 4
+        * [@Button@57652:<Button#16125119177056>] + 3
+        * [@HBoxContainer@57763:<HBoxContainer#16129313481114>] + 2
+        * [@Label@57716:<Label#16127535096305>]
+        * [@HBoxContainer@57711:<HBoxContainer#16127367324238>] + 4
+        * [@Button@57668:<Button#16125723157113>] + 3
+        * [@Button@57684:<Button#16126327137222>] + 3
+        * [@Label@57710:<Label#16127333770183>]
+        * [@Button@57664:<Button#16125572162583>] + 3
+        * [@Button@57680:<Button#16126176142361>] + 3
+        * [@Label@57620:<Label#16124011881533>]
+        * [@GridContainer@57707:<GridContainer#16126830453906>] + 12
+        * [@HBoxContainer@57689:<HBoxContainer#16126629127355>] + 4
+        * [@Label@57514:<Label#16120119567571>]
+        * [@Button@57508:<Button#16119800800543>] + 3
+        * [@Button@57648:<Button#16124968184005>] + 3
+        * [@Button@57644:<Button#16124817189411>] + 3
+        * [@GridContainer@57729:<GridContainer#16127568652866>] + 12
+        * [@Button@57628:<Button#16124213209668>] + 3
+        * [@Button@57676:<Button#16126025149013>] + 3
+        * [@Button@57672:<Button#16125874154080>] + 3
+        * [@Button@57539:<Button#16120941652927>] + 2
+        * [@Label@57766:<Label#16129414147152>]
+        * [@Button@57533:<Button#16120706772124>] + 2
+        * [@GridContainer@57519:<GridContainer#16120153124075>] + 4
+        * [@MarginContainer@57709:<MarginContainer#16127300218243>] + 1
+        * [@Button@57632:<Button#16124364205690>] + 3
+        * [@Button@57636:<Button#16124515200643>] + 3
+        * [@Button@57640:<Button#16124666195596>] + 3
+        * [@Button@57660:<Button#16125421170484>] + 3
+        * [@Button@57296:<Button#16109046607997>] + 3
+        * [@Button@57416:<Button#16116596355199>] + 3
+        * [@Button@57412:<Button#16116445360258>] + 3
+        * [@GridContainer@57500:<GridContainer#16118777393296>] + 24
+        * [@Label@57525:<Label#16120488669334>]
+        * [@MarginContainer@57561:<MarginContainer#16121847624075>] + 1
+        * [@Label@57562:<Label#16121881178509>]
+        * [@MarginContainer@57564:<MarginContainer#16121948287377>] + 1
+        * [@Button@57542:<Button#16121059094932>] + 2
+        * [@Button@57424:<Button#16116898345454>] + 3
+        * [@Button@57600:<Button#16123189801485>] + 2
+        * [@Button@57551:<Button#16121411416595>] + 2
+        * [@Button@57554:<Button#16121528857114>] + 2
+        * [@HBoxContainer@57465:<HBoxContainer#16118408294945>] + 4
+        * [@MarginContainer@57567:<MarginContainer#16122048950856>] + 1
+        * [@Button@57388:<Button#16115539391056>] + 3
+        * [@HBoxContainer@57363:<HBoxContainer#16111596745301>] + 4
+        * [@GridContainer@57473:<GridContainer#16118609621611>] + 2
+        * [@Label@57579:<Label#16122451604086>]
+        * [@Label@57582:<Label#16122552267462>]
+        * [@MarginContainer@57581:<MarginContainer#16122518713032>] + 1
+        * [@HBoxContainer@57569:<HBoxContainer#16122116059851>] + 3
+        * [@Label@57565:<Label#16121981842128>]
+        * [@Button@57545:<Button#16121176535765>] + 2
+        * [@Button@57548:<Button#16121293976284>] + 2
+        * [@GridContainer@57530:<GridContainer#16120522224358>] + 4
+        * [@MarginContainer@57475:<MarginContainer#16118743839493>] + 1
+        * [@Label@57470:<Label#16118576067426>]
+        * [@Label@57573:<Label#16122250277741>]
+        * [@Label@57576:<Label#16122350941040>]
+        * [@MarginContainer@57578:<MarginContainer#16122418049907>] + 1
+        * [@MarginContainer@57575:<MarginContainer#16122317386617>] + 1
+        * [@Label@57568:<Label#16122082505595>]
+        * [@Label@57368:<Label#16111764517768>]
+        * [@Label@57434:<Label#16117368107946>]
+        * [@HBoxContainer@57429:<HBoxContainer#16117200335844>] + 4
+        * [@GridContainer@57464:<GridContainer#16117569434603>] + 24
+        * [@HBoxContainer@57555:<HBoxContainer#16121646298112>] + 3
+        * [@Label@57559:<Label#16121780515861>]
+        * [@Button@57328:<Button#16110254568472>] + 3
+        * [@Button@57396:<Button#16115841381403>] + 3
+        * [@Button@57420:<Button#16116747351078>] + 3
+        * [@Button@57280:<Button#16108442629182>] + 3
+        * [@Button@57276:<Button#16108291634240>] + 3
+        * [@Button@57336:<Button#16110556558439>] + 3
+        * [@Button@57392:<Button#16115690386542>] + 3
+        * [@Button@57594:<Button#16122954921088>] + 2
+        * [@Button@57304:<Button#16109348598988>] + 3
+        * [@Button@57308:<Button#16109499593933>] + 3
+        * [@Button@57320:<Button#16109952578803>] + 3
+        * [@Button@57324:<Button#16110103573754>] + 3
+        * [@Button@57332:<Button#16110405563661>] + 3
+        * [@Button@57404:<Button#16116143371554>] + 3
+        * [@HBoxContainer@57613:<HBoxContainer#16123777004843>] + 2
+        * [@Button@57609:<Button#16123542123825>] + 2
+        * [@Button@57606:<Button#16123424683318>] + 2
+        * [@Button@57585:<Button#16122602599737>] + 2
+        * [@Button@57588:<Button#16122720040256>] + 2
+        * [@Button@57288:<Button#16108744619352>] + 3
+        * [@Button@57428:<Button#16117049341275>] + 3
+        * [@MarginContainer@57439:<MarginContainer#16117535880544>] + 1
+        * [@GridContainer@57437:<GridContainer#16117401662824>] + 2
+        * [@GridContainer@57381:<GridContainer#16111798072708>] + 12
+        * [@Button@57597:<Button#16123072361869>] + 2
+        * [@Button@57340:<Button#16110707553697>] + 3
+        * [@HBoxContainer@57617:<HBoxContainer#16123911222732>] + 2
+        * [@Label@57616:<Label#16123877668302>]
+        * [@Button@57612:<Button#16123659564501>] + 2
+        * [@Button@57591:<Button#16122837480948>] + 2
+        * [@Button@57603:<Button#16123307243002>] + 2
+        * [@Button@57400:<Button#16115992377204>] + 3
+        * [@Button@57300:<Button#16109197604729>] + 3
+        * [@Button@57292:<Button#16108895614842>] + 3
+        * [@Button@57316:<Button#16109801584516>] + 3
+        * [@Label@57384:<Label#16112301389754>]
+        * [@Button@57312:<Button#16109650589650>] + 3
+        * [@Button@57284:<Button#16108593625128>] + 3
+        * [@MarginContainer@57383:<MarginContainer#16112267835453>] + 1
+        * [@Button@57408:<Button#16116294367742>] + 3
+* test_escape_and_back_leave
+* test_the_main_menu_has_the_wiki_button
+14/14 passed.
+
+
+
+
+==============================================
+= Run Summary
+==============================================
+
+Totals
+------
+Scripts             112
+Tests              1524
+Passing Tests      1524
+Asserts           17367
+Time              104.638s
+
+
+---- All tests passed! ----
