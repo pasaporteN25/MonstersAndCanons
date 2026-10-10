@@ -1,4 +1,4 @@
-# T253 · Curva de dificultad y nivelación de Asedio
+# T255 · Curva de dificultad y nivelación de Asedio
 
 > Investigación del 2026-10-10 para que decida Lucas. Referencia: D-078, RF-388 a RF-392 y T251 §7. No se cambiaron datos ni código del juego. Las modificaciones del bot son experimentos temporales dentro de tools/; este informe no aprueba una nueva regla de Asedio.
 
@@ -134,7 +134,7 @@ RF-388 permite buscar una copia en la carpeta del modo; no hace falta implementa
 
 ### 5.2 Requisitos y documentos afectados
 
-Estos son cambios propuestos, **no modificaciones hechas por T253**:
+Estos son cambios propuestos, **no modificaciones hechas por T255**:
 
 - **RF-391:** reemplazar el alcance 1 a 9 por 1 a 15 y el 115 % uniforme por la política que elija Lucas. Definir cómo se comprueba el margen de cada mapa y la progresión entre bloques; conservar la campaña. Si se eligen copias, permitir explícitamente distinto aumento de vida por oleada y aclarar que grupos, cantidades, entradas y tiempos se conservan.
 - **RF-388, sólo si se eligen porcentajes por mapa:** agregar una tabla opcional de porcentajes por id de mapa al paquete, con precedencia sobre la regla global. Mantener válidos los paquetes actuales. Validar enteros dentro del rango ya admitido, ids presentes en la lista y errores de forma; no aceptar silenciosamente una entrada desconocida.
@@ -246,7 +246,7 @@ Copiar tools/balance_sim.gd de la revisión indicada en §1 a tools/_t253_balanc
      #
      # --fixed-fps 60 hace que cada frame cuente como 1/60 s sin esperar al reloj real,
      # así una partida de ~10 minutos se simula en segundos.
-    +# T253: copia temporal para medir; no modifica archivos del juego.
+    +# T255: copia temporal para medir; no modifica archivos del juego.
      extends SceneTree
 
      ## Orden de compra de "smart" (índices de Game.tower_types): primero Ametralladoras
@@ -318,7 +318,7 @@ Copiar tools/balance_sim.gd de la revisión indicada en §1 a tools/_t253_balanc
      \tquit(code)
     +
     +
-    +## T253: una mejora por frame cuando ya no quedan casillas libres.
+    +## T255: una mejora por frame cuando ya no quedan casillas libres.
     +## Prioriza menor nivel y luego menor costo; usa el cobro normal del juego.
     +func _upgrade_surplus() -> void:
     +\tif not upgrades_enabled or not _free_cells().is_empty():
