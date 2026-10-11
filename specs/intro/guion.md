@@ -1,6 +1,6 @@
 # Guion de la intro de Monsters & Canons
 
-> **Estado: PROPUESTA** (escrita el 2026-10-11 por Claude, Sonnet 5.5, tarea **T240**). **Falta el OK de Lucas** (compuerta 🚦 **G6**): al guion, al funcionamiento y a las cinco preguntas del final. Hasta que lo dé, **nadie dibuja las láminas (T241) ni programa la pantalla (T242)**.
+> **Estado: APROBADO por Lucas el 2026-10-11** (compuerta 🚦 **G6**): el guion, el funcionamiento y las cinco preguntas P1 a P5 **tal como las recomendaba la propuesta** (P1: directo al nivel 1 si el guardado es nuevo; P2: botón «Ver la intro» en la Wiki, solapa Lore; P3: estilo **A · Cuaderno de bitácora** y el epílogo se repasa después si hace falta; P4: el planeta sin nombre en la intro; P5: «una sola nave», «años de viaje» y los cuatro colonos). Escrita por Claude (Sonnet 5.5, tarea **T240**).
 >
 > **Dónde vive qué.** Este documento es **el único lugar donde se escriben y se corrigen los textos de la intro** (igual que `specs/11-textos-lore.md` lo es para los niveles y la Wiki): T242 los copia tal cual a `data/intro/intro.json`. El **funcionamiento** (cuándo se ve, cómo se maneja, a dónde lleva) es requisito: está en **M57** de `specs/01-spec.md` (**RF-497 a RF-501**) y en **D-096** de `specs/04-decisiones.md`. Acá solo se resume.
 

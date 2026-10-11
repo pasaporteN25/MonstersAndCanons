@@ -1,6 +1,6 @@
 # T242 · Intro: reproducir, omitir y volver a ver
 
-> **Estado: PENDIENTE. Espera T241 (láminas) y el OK de Lucas (G6).** La spec es **M57** (`01-spec.md`, RF-497 a RF-501), la decisión **D-096**, el plan técnico «M57 / T240» (`02-plan-tecnico.md`) y el guion `specs/intro/guion.md`.
+> **Estado: EN CURSO. Lucas aprobó el guion y M57 el 2026-10-11** (P1 y P2 como se recomendaban). Se hacen primero los pasos 1 a 5 con imágenes provisorias; el paso 6 espera a T241. La spec es **M57** (`01-spec.md`, RF-497 a RF-501), la decisión **D-096**, el plan técnico «M57 / T240» (`02-plan-tecnico.md`) y el guion `specs/intro/guion.md`.
 
 - **Ejecutor:** Sonnet 5.5 · esfuerzo **medio** · **Depende de:** T241 (las láminas), aunque **los pasos 1 a 5 se pueden hacer antes con imágenes provisorias** · **Tamaño:** chico a mediano (un lector de datos, una pantalla, una clave del guardado y dos botones)
 

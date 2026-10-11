@@ -1692,7 +1692,7 @@
   - **Archivos:** `project.godot`, `export_presets.cfg`, `scripts/autoload/dev_mode.gd` (solo un comentario), `CLAUDE.md`, `README.md`, `ONBOARDING.md`, `CONTENIDO.md`, `CHANGELOG.md`, `specs/01-spec.md`, `specs/02-plan-tecnico.md`, `specs/tareas/T237-marca-exportaciones.md`.
 - [ ] **T238** · 🚦 G5 · Lucas juega del 1 al 15.
 - [ ] **T239** · Publicación.
-- [x] **T240** · 📜 🚦 G6 · Guion de la intro *(escrita; **el OK de Lucas está pendiente**)*.
+- [x] **T240** · 📜 🚦 G6 · Guion de la intro *(**aprobada por Lucas el 2026-10-11**: guion, funcionamiento y P1 a P5 como se recomendaban; estilo A)*.
   **Refs:** pedido de Lucas del 2026-10-11 (manda sobre la ficha), Q-01 (D-089), 07 §11.F, biblia `10-universo.md` (§1, §3, §6 y §8), `11-textos-lore.md`; **M57 (RF-497 a RF-501), D-096**, plan «M57 / T240». **Depende de:** T238 *(sin hacer; el despacho pidió igual el guion, que no depende del juego jugado)*. **Ficha:** `specs/tareas/T240-guion-intro.md`. **Guion:** `specs/intro/guion.md`.
   **Hecho cuando:** hay un guion de 5 a 8 láminas con ilustración, texto y duración, dos referencias de estilo y un funcionamiento escrito como requisito (RF, D y ficha), y **Lucas lo aprobó con fecha**. **Esto último falta.**
   **Compuerta: 🚦 G6 abierta.** Lucas tiene que contestar P1 a P5 de M57 (`guion.md` §10); sin su OK **T241 y T242 no arrancan**.

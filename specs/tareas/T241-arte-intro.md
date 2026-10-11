@@ -1,6 +1,6 @@
 # T241 · 🎨 Láminas de la intro
 
-> **Estado: PENDIENTE. Espera el OK de Lucas al guion (G6, T240) y al estilo (la lámina de prueba de abajo).** El guion es `specs/intro/guion.md`; la spec, **M57** (`01-spec.md`, RF-497 a RF-501); la decisión, **D-096**.
+> **Estado: EN CURSO. Lucas aprobó el guion y el estilo A «Cuaderno de bitácora» el 2026-10-11** (no hace falta la versión B de la lámina de prueba; se hacen las siete en A y Lucas revisa la hoja de miniaturas). El guion es `specs/intro/guion.md`; la spec, **M57** (`01-spec.md`, RF-497 a RF-501); la decisión, **D-096**.
 
 - **Ejecutor:** **Codex** · **Depende de:** T240 (**escrita**; falta el OK de Lucas) · **Compuerta:** 🎨 Lucas aprueba **una lámina de prueba** (estilo) antes de hacer el resto · **Tamaño:** mediano
 
