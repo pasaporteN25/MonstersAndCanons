@@ -29,14 +29,6 @@ const KNOWN_UNUSED: Array[String] = [
 	"res://assets/sprites/towers/rendered/disruptor_pulse_ring.png",
 	"res://assets/sprites/enemies/rendered/healer_walk.png",
 	"res://assets/audio/music_loop.wav",  # la música de combate es music_combat; solo la nombran tests
-	# T241: láminas producidas para revisión; T242 las integra y las saca de esta lista.
-	"res://assets/intro/01_la_nave.png",
-	"res://assets/intro/02_la_bodega.png",
-	"res://assets/intro/03_los_turnos.png",
-	"res://assets/intro/04_la_ventana.png",
-	"res://assets/intro/05_el_descenso.png",
-	"res://assets/intro/06_los_motores_apagados.png",
-	"res://assets/intro/07_el_oasis.png",
 ]
 
 var _files: Dictionary = {}   # { ruta: texto } de todo lo que puede nombrar un recurso
