@@ -1322,7 +1322,7 @@ Se deja por escrito para no caer en la tentación (constitución P4). Si más ad
 - ~~Versión para móvil~~ → pasó al hito **MA** (§9.4, D-021), **solo** con adaptaciones mínimas. Sigue fuera: controles táctiles propios (arrastrar para construir, gestos, zoom) y una interfaz pensada para pantallas chicas.
 - Llamar oleadas antes de tiempo con bonus de oro.
 - Meta-progresión (mejoras permanentes entre partidas, tienda).
-- ~~Historia, diálogos o cinemáticas.~~ → **Diálogos entre personajes, cinemáticas animadas y voces.** *(Enmienda del 2026-10-08, D-089, respuesta Q-01 de Lucas; ver M52 y `specs/11-textos-lore.md`.)* Sí entran, con los límites de M52: textos breves por nivel (lugar, entrada de hasta 3 líneas y victoria de hasta 2), una categoría Lore en la Wiki, un epílogo en la victoria del último nivel y una intro de láminas que se pueda omitir y volver a ver (la spec de la intro es de T240; todavía no existe). Siguen excluidos los diálogos entre personajes, las cinemáticas animadas y las voces.
+- ~~Historia, diálogos o cinemáticas.~~ → **Diálogos entre personajes, cinemáticas animadas y voces.** *(Enmienda del 2026-10-08, D-089, respuesta Q-01 de Lucas; ver M52 y `specs/11-textos-lore.md`.)* Sí entran, con los límites de M52: textos breves por nivel (lugar, entrada de hasta 3 líneas y victoria de hasta 2), una categoría Lore en la Wiki, un epílogo en la victoria del último nivel y una intro de láminas que se pueda omitir y volver a ver (**su spec es M57**, RF-497 a RF-501, escrita en T240; el guion está en `specs/intro/guion.md`). Siguen excluidos los diálogos entre personajes, las cinemáticas animadas y las voces.
 - Logros.
 - Construir laberintos (los enemigos nunca cambian de camino).
 
@@ -1616,6 +1616,7 @@ Los cuatro enemigos que gustaron, con lo necesario para convertirlos en spec cua
 - **Una casilla en Opciones para no ver los carteles de entrada** *(2026-10-08, T227)*: el cartel de RF-466 no vuelve al reintentar, pero sí cada vez que se entra a un nivel desde la selección. Para quien rejuega la campaña puede cansar. La idea: una casilla *«Mostrar los textos de los niveles»* (activada por defecto) en Opciones, guardada como las demás preferencias (`SaveManager.get_setting`). **No incluida** en M52.
 - **Acceso al epílogo y a los créditos desde el menú principal, una vez terminada la campaña** *(2026-10-08, T227)*: hoy (RF-471) el epílogo solo se vuelve a ver ganando el 15 de nuevo. La idea: un botón *«Epílogo»* en el menú principal que aparece cuando los 15 niveles figuran completados (se deduce del guardado, sin campo nuevo). Toca `main_menu.gd`. **No incluido** en M52.
 - **Que el bot de balance mejore torres** *(2026-10-09, T251)*: `tools/balance_sim.gd` nunca mejora ni vende torres; llena el mapa con torres de nivel 1 y deja el oro sin usar (al perder Asedio 10 a 15 al 115 % quedaban 2054, 1039, 2859 y 3881 de oro en los mapas 10, 12, 14 y 15). Una persona lo gasta en mejoras (el Francotirador pasa de 40 a 70 y a 120 de daño por 150 y 225). Gastar ese oro sobrante en mejoras cuando el mapa está lleno es un cambio de la **herramienta**, no del juego. **Ojo:** las tablas de T229 a T234 se ajustaron contra el bot sin mejoras, así que con mejoras todos los niveles le saldrían más fáciles y habría que revisar la referencia. **No implementado.** Detalle y medición en `specs/tareas/informes/T251-conceptos-nuevos-enemigos.md`, §2.5.
+- **Un zoom lentísimo sobre cada lámina de la intro** *(2026-10-11, T240)*: para que las siete láminas se sientan más «película» y menos «presentación», cada una podría acercarse un 3 a 5 % durante sus segundos (un `Tween` sobre la escala de la imagen, sin tocar el texto). Sumaría una pizca de movimiento sin animar nada ni tocar Q-01. **No incluido en M57:** Lucas pidió «imágenes tipo diapositiva» y la excepción de §11 prohíbe las cinemáticas animadas, así que **no se implementa sin su OK**. Se agregaría como una clave opcional (`"zoom_%"`) de `data/intro/intro.json`.
 - **Parte útil del repositorio Claude Code Game Studios** (Lucas: "no hace falta `validate-commit`"; del resto, ver D-040):
   - **Informe de prueba** (su `playtest-report`): una plantilla corta para anotar lo que se siente al probar el juego (¿se entendió?, ¿dónde te trabaste?, ¿qué te aburrió?) y guardarla en `specs/pruebas/`. Hoy las impresiones de Lucas quedan en la charla.
   - **Auditoría de recursos** (su `asset-audit`): un test que revise que **todos** los dibujos y sonidos existen, miden lo que dice la guía y que ningún dato apunta a un archivo que falta.
@@ -2397,7 +2398,7 @@ Los puntos donde conviene que Lucas mire con más atención antes de programar (
 #### Lo que M52 no incluye
 
 - **Diálogos entre personajes, cinemáticas animadas y voces** (§11 sigue excluyéndolos).
-- **La intro de láminas.** Q-01 la permite, pero su spec es de T240 (guion), T241 y T242; no existe todavía.
+- **La intro de láminas.** Q-01 la permite; su spec es **M57** (RF-497 a RF-501, T240) y el guion, `specs/intro/guion.md`. El arte es de T241 y la pantalla, de T242.
 - **Los textos del modo Asedio, de la comunidad o del editor** más allá de lo que diga el archivo del mapa (RF-468), y una pantalla para **editar** textos en el editor.
 - **Un acceso al epílogo o a los créditos desde el menú principal**, y un campo «campaña terminada» en el guardado.
 - **El diseño del jefe supremo del 15** (función, vida, habilidad, contramedidas, aspecto y texto propio): lo resolvió **T243** con el **Coloso** (RF-481 a RF-484, D-092).
@@ -2790,3 +2791,105 @@ Cortas y en orden de importancia. Ninguna frena a T258: el código y el formato 
 1. **P1 · ¿Jugás la tabla en G5 antes de dar los porcentajes por buenos?** Recomiendo que **sí**, y por eso los valores quedan «iniciales» (RF-494). Probaría con atención los mapas **1 a 4, 6 a 9 y 13 a 15**, que es donde el bot muestra los saltos.
 2. **P2 · ¿Alcanza con escribir la tabla a mano en el `modo.json`?** Recomiendo **sí por ahora**: el editor la conserva pero no la edita (RF-496). Una pantalla para editarla es una tarea aparte y no hace falta para Asedio.
 3. **P3 · La Cuadrilla en Asedio (P2 de M55).** *(T258: el 7 hereda por decisión de Lucas; los cuatro se remidieron. El 10, el 13 y el 14 cumplen RF-495 sin tocar el porcentaje; el 7 no cumple ni al 101 %: ver el Resultado de T258.)* Con los 15 mapas, **los cuatro niveles con Cuadrilla** (7, 10, 13 y 14) quedan en Asedio, no solo el 7. Recomiendo **que hereden** y que T258 remida los cuatro porcentajes. La otra opción es una copia propia del mapa sin Cuadrilla en el modo (solo datos, RF-388), que deja de ser «mismas oleadas».
+
+---
+
+### M57 · La intro de láminas (Lucas, 2026-10-11; T240)
+
+**Estado: ESPECIFICADA en T240 (2026-10-11), a la espera del OK de Lucas al guion y al funcionamiento (compuerta 🚦 G6, P1 a P5 de abajo). No hay arte ni código:** las láminas son de **T241** (Codex, con el OK de Lucas al estilo) y la pantalla es de **T242**. El guion, con los textos, las siete ilustraciones descriptas, las referencias de estilo y las dudas, es **`specs/intro/guion.md`**. La decisión es **D-096**.
+
+**Qué pidió Lucas.** *(2026-10-11, en el encargo de T240; manda sobre la ficha)* Una **mini película casera hecha con imágenes tipo diapositiva y el texto abajo**, con **fuerte sensación de nave y de viaje**, que **termina con una lámina panorámica del oasis verde en medio de la nada**; **después aparece el mapa jugable**. **Entra en la versión 1.0.** Se ve **la primera vez que se toca «Jugar»**, **se puede omitir siempre**, **se puede volver a ver** desde la Wiki o con un botón «Intro», y **avanza con un toque o sola**. De 5 a 8 láminas; sin adelantar el conflicto con las comunidades.
+
+**Idea en pocas palabras.** Una pantalla de intro que muestra **siete láminas quietas** (imagen 16:9 y, abajo, una franja con 1 o 2 líneas de texto) con un **fundido** entre una y otra. Las láminas, los textos y las duraciones salen de **un archivo de datos**, así que se pueden corregir sin tocar código. Q-01 (D-089) ya permitía «una intro de láminas que se pueda omitir y volver a ver» y excluía «cinemáticas animadas» y «voces»: **esto no cambia ninguna regla de §11.** Las láminas **no se animan** (el fundido es una transición, no una animación de personajes) y **la intro no explica cómo se juega**: eso es del nivel 1.
+
+- **RF-497** **Los datos de la intro** *(archivo nuevo, `data/intro/intro.json`)*: la intro es una lista de **5 a 8 láminas** con esta forma:
+
+  ```json
+  {
+  	"version": 1,
+  	"fundido_s": 0.6,
+  	"laminas": [
+  		{"imagen": "res://assets/intro/01_la_nave.png",
+  		 "texto": "La Compañía Meridiana mandó una sola nave.\nNo lleva soldados: lleva gente de oficio.",
+  		 "segundos": 7}
+  	]
+  }
+  ```
+
+  | Clave | Qué es | Límite |
+  |---|---|---|
+  | `"version"` | Versión del formato. | Entero, hoy **1**. Otra → error. |
+  | `"fundido_s"` | Cuánto dura el fundido entre láminas, en segundos. | Número de **0 a 2**. Opcional (por omisión 0,6). |
+  | `"laminas"` | Las láminas, en orden. | **De 5 a 8**. |
+  | `"imagen"` | El PNG de la lámina. | Una ruta `res://` que **existe**. **1920 × 1080**, sin texto dibujado adentro. |
+  | `"texto"` | Lo que se lee abajo. | **1 o 2 líneas** (separadas por `\n`), **90 caracteres por línea**, **160 en total**, texto plano; no vacío. Son los límites de la victoria de un nivel (RF-464). |
+  | `"segundos"` | Cuánto se queda sola la lámina antes de pasar a la siguiente. | Entero de **4 a 12**. |
+
+  - **Los números van en el archivo** (fundido y segundos), no en el código (`.claude/rules/gdscript.md`).
+  - **Los textos son los de `specs/intro/guion.md`, tal cual** (igual que RF-464 con `11-textos-lore.md`): si Lucas corrige uno, se corrige primero en el guion.
+  - **Una duración que alcance para leer** (regla del guion, §2): `segundos ≥ 2 + caracteres / 20`, redondeado hacia arriba y nunca menos de 5. La **comprueba un test sobre los datos oficiales**; el lector del formato **no** la exige (un archivo de la comunidad no es rechazado por eso).
+  - **Errores en castellano** que nombran la lámina («la lámina 3 tiene 3 líneas y el máximo es 2», «la lámina 5 no encuentra la imagen `res://…`», «hay 4 láminas y el mínimo es 5»).
+  - **Es un archivo oficial, no de comunidad:** no hay editor ni carpeta de usuario para la intro (queda fuera de M57).
+
+- **RF-498** **Cuándo se muestra sola:**
+  - **Dónde:** al tocar **«Jugar»** en el menú principal (RF-110), **solo** si el guardado **no tiene** `"intro_seen": true`.
+  - **El campo:** `"intro_seen"` (booleano) es una **clave nueva y aditiva** del guardado. **`SAVE_VERSION` no cambia** (sigue en 1, como cuando se sumaron `collections` o `hall_total`). **Un guardado sin la clave se lee como «no vista»**, aunque tenga niveles ganados: **la ve una vez**. Una clave que no es booleana se lee como «no vista».
+  - **Cuándo se marca:** **al abrirse** la intro, y se guarda enseguida (no al terminarla): quien cierra el juego a la mitad **no** la vuelve a ver sola; si quiere, la pide (RF-501).
+  - **Cuándo no salta sola:** en el **modo de pruebas** (usa su guardado aparte, RF-181; la ve quien la pida con RF-501), ni al elegir un nivel o un mapa de la comunidad, ni en «Siguiente nivel», «Reintentar», los modos (Asedio), «Probar» del editor o el editor. **Solo «Jugar» la dispara.**
+  - **Si el archivo falla** (no existe, no se puede leer o tiene errores de RF-497): **«Jugar» va a la selección de niveles como siempre** y el error se avisa en la salida (`push_warning`). **La intro nunca bloquea jugar.**
+
+- **RF-499** **Cómo se ve y cómo se maneja:**
+  - **Pantalla completa**, con el fondo del menú principal oscurecido. La lámina se ve **entera, sin recortar** (`KEEP_ASPECT`): si la pantalla no es 16:9 quedan barras de un color oscuro. Abajo, **una franja** con el texto, en el mismo estilo de hierro y bronce del cartel de entrada (RF-466) y del epílogo (RF-471), centrada.
+  - **Avanzar:** un **toque o clic** en cualquier parte, `Espacio`, `Enter` o `→` pasan a la siguiente lámina; **sola**, cuando pasan los `segundos` de la lámina. El cambio es un **fundido** de `fundido_s`. Un toque durante el fundido salta a la lámina siguiente sin esperar. En la **última**, un toque o el tiempo **terminan** la intro.
+  - **Omitir:** un botón **«Omitir»** **siempre visible** (arriba a la derecha, del tamaño de los botones del menú), `Esc` y el «atrás» de Android **terminan la intro entera** (no solo la lámina). No pide confirmación.
+  - **El toque que termina o omite no llega a lo que viene después** (se traga al apretar y se cierra al soltar, como RF-466): no construye ni elige nada en la pantalla siguiente.
+  - **Sonido:** la **música de menú sigue**, sin cortes; **no hay sonidos nuevos**. Los botones suenan como los demás.
+  - **Lo que no tiene:** animación de las láminas, voces, volver a la anterior ni pausa (ver «Lo que M57 no incluye»).
+
+- **RF-500** **A dónde se va al terminar u omitir:**
+  - **Si se abrió desde «Jugar»:** si el guardado **no tiene ningún nivel de la campaña ganado**, se abre **el nivel 1** (como si se hubiera elegido en la selección: con su cartel de entrada, RF-466); si **ya hay niveles ganados** (un guardado anterior), la **selección de niveles**, como hoy.
+  - **Si se abrió desde la Wiki** (RF-501): **vuelve a la Wiki**, en la solapa Lore.
+  - **En los dos casos** terminar y omitir hacen **exactamente lo mismo**.
+
+- **RF-501** **Cómo se vuelve a ver:** un botón **«Ver la intro»** en la **Wiki**, **arriba de la lista de la solapa Lore** (RF-469).
+  - **Siempre disponible**: no depende de niveles ganados ni del modo de pruebas (la intro no cuenta nada que el nivel 1 no muestre).
+  - **No toca el guardado** (`intro_seen` queda como estaba) y no cambia nada de la Wiki (artículos abiertos, solapa, selección).
+  - **No hay botón nuevo en el menú principal ni en la partida.** *(Recomendación mía; ver P2.)*
+
+> **Criterio de aceptación RF-497 a RF-501**
+> **Dado** un guardado nuevo → **Cuando** se toca «Jugar» → **Entonces** se abre la intro en la lámina 1 y el guardado **ya** dice `"intro_seen": true`.
+> **Dado** un guardado con `"intro_seen": true` → **Cuando** se toca «Jugar» → **Entonces** se abre la selección de niveles, sin intro.
+> **Dado** un guardado de antes de M57 (sin la clave) con los niveles 1 a 5 ganados → **Cuando** se toca «Jugar» → **Entonces** se ve la intro **una vez**, y al terminar se abre la **selección de niveles** (no el nivel 1); la segunda vez va directo a la selección.
+> **Dado** un guardado con `"intro_seen": "si"` o `1` → **Entonces** se lee como «no vista» y no rompe nada.
+> **Dado** la intro abierta → **Cuando** pasa `segundos` de la lámina, o se toca, o se aprieta `Espacio`, `Enter` o `→` → **Entonces** se pasa a la siguiente con un fundido; en la última, **termina**.
+> **Dado** la intro abierta en cualquier lámina → **Cuando** se toca «Omitir» o se aprieta `Esc` → **Entonces** termina **enseguida**, sin pasar por las que faltan, y el toque no llega a la pantalla de después.
+> **Dado** una intro que termina desde «Jugar» con el guardado sin niveles ganados → **Entonces** se abre el nivel 1 y muestra su cartel de entrada.
+> **Dado** una intro abierta desde la Wiki → **Cuando** termina o se omite → **Entonces** se vuelve a la Wiki, en la solapa Lore, y `intro_seen` no cambió.
+> **Dado** el **modo de pruebas** → **Cuando** se toca «Jugar» → **Entonces** va a la selección de niveles sin intro; **Cuando** se toca «Ver la intro» en la Wiki → **Entonces** se ve.
+> **Dado** un mapa de la comunidad, un modo (Asedio), «Probar» o «Siguiente nivel» → **Entonces** no se abre la intro.
+> **Dado** un `intro.json` con 4 o 9 láminas, una línea de 91 caracteres, un texto de 3 líneas o de 161 caracteres, un texto vacío, una duración de 3 o de 13, un fundido de 3, una imagen que no existe o un `"version"` distinto de 1 → **Entonces** el lector devuelve un error en castellano que nombra la lámina, **y «Jugar» sigue yendo a la selección de niveles**.
+> **Dado** los **datos oficiales** → **Entonces** hay de 5 a 8 láminas, cada imagen existe y mide **1920 × 1080**, cada texto es **el mismo** que figura en `specs/intro/guion.md`, ninguno usa las palabras vetadas del vocabulario (`11-textos-lore.md`, «Cómo se escribió») ni nombra al planeta, y cada duración cumple la regla de lectura de RF-497.
+> **Dado** una ventana 16:9, 20:9 o 4:3 → **Entonces** la lámina se ve entera y el texto entra en su franja sin salirse.
+> **Dado** el guardado → **Entonces** la clave nueva **no** cambia niveles, récords, colecciones, ajustes ni Salón de la fama, y un guardado que la trae sigue cargando en la versión anterior del juego (la ignora).
+
+#### Lo que M57 no incluye
+
+- **Animación de las láminas** (zoom lento, paneo, partículas), **voces**, **música propia** de la intro y **sonidos nuevos**. Todo lo prohíbe o lo deja fuera Q-01 (D-089). *(El zoom lento es una sugerencia, abajo.)*
+- **Volver a la lámina anterior**, **pausar** o ver una **lista de láminas**.
+- **Un botón en el menú principal o en Opciones.** Recomendación: solo la Wiki (RF-501); es P2.
+- **Una casilla «Mostrar la intro al arrancar»**, o que se vea **cada vez** que se abre el juego o con **cada guardado nuevo**.
+- **Un editor de la intro**, intros de mapas de la comunidad o paquetes de modos con su propia intro.
+- **Explicar el juego.** La intro cuenta la llegada; las torres, el oro y las oleadas se aprenden jugando el nivel 1.
+- **Idiomas** y **subtítulos para quien no ve la imagen**. Las explicaciones esenciales ya existen dentro del juego (07 §11.F): la Wiki Lore (RF-469) y los textos de los niveles (RF-464).
+- **Cambiar el arte de los menús o del epílogo.** Si Lucas quiere repasar el epílogo con el estilo de la intro, es otra tarea (P3).
+- **El dibujo de las láminas y la pantalla.** Son T241 y T242.
+
+#### Preguntas para Lucas
+
+Cortas y en orden de importancia. Cada una con mi recomendación; la respuesta puede ser «✔ todas». Las 5 también están, con el contexto, en `specs/intro/guion.md` §10.
+
+1. **P1 · «Después aparece el mapa jugable».** Recomiendo que la intro termine **directo en el nivel 1** si el guardado no tiene niveles ganados, y en la **selección de niveles** si ya hay (RF-500). La otra lectura es que siempre vaya a la selección.
+2. **P2 · Dónde se vuelve a ver.** Recomiendo **«Ver la intro» en la Wiki, solapa Lore** (RF-501) y **ningún botón nuevo en el menú principal** (cada botón le saca alto al logo, RF-331). Alternativas: un botón «Intro» en el menú principal, o en Opciones.
+3. **P3 · El estilo y el epílogo.** **A · Cuaderno de bitácora** o **B · Diapositiva pintada** (`guion.md` §6). Recomiendo **A**, con **las dos versiones de la lámina 7** como lámina de prueba. Y: ¿la intro puede verse distinta del epílogo (pintura digital realista) o lo repasamos con el estilo elegido?
+4. **P4 · El planeta no se nombra en la intro.** Recomiendo **sí**: «Cántaro» llega después, por el oasis (artículo 2 de la Wiki).
+5. **P5 · Lo que inventé** (`guion.md` §9): «una sola nave», «años de viaje» y los cuatro colonos que se repiten para que Codex mantenga la continuidad.

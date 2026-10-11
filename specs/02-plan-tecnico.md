@@ -1262,3 +1262,66 @@ Las de la ficha (`specs/tareas/T258-asedio-porcentajes-por-mapa.md`, paso 6): ta
 #### Lo que M56 no toca
 
 La campaña y sus 15 niveles, `LevelFile`, `LevelData`, `WaveSpawner`, `Rules`, el guardado, la Wiki, los textos del lore, el arte, las tablas del bot de la regla de oro (`sin_recursos` sin mejoras, RF-432 y RF-475) y el selector de modos (más allá de listar 15 tarjetas en vez de 9).
+
+---
+
+### M57 / T240 · La intro de láminas (RF-497 a RF-501, D-096)
+
+> **Estado: especificada en T240 (2026-10-11), a la espera del OK de Lucas (G6). No se programó nada.** La spec es **M57** (`01-spec.md`); el guion, `specs/intro/guion.md`; la ficha de código, `specs/tareas/T242-intro-integracion.md`. Los nombres de archivos y de funciones de abajo son **propuestos**: T242 los confirma al leer el código.
+
+#### Qué hay hoy (leído en el código, no supuesto)
+
+- **«Jugar»** (`scenes/ui/main_menu.gd`, en `_ready`): `_play_button.pressed.connect(GameFlow.go_to_level_select)`. No hay nada entre el botón y la selección.
+- **Overlays que «solo muestran y avisan»:** `EpilogueScreen` (`scenes/ui/epilogue_screen.gd`) y `LevelIntro` (`scenes/ui/level_intro.gd`) son `CanvasLayer` con una señal (`closed`); **quien los abre decide qué pasa después** (constitución P6). `LevelIntro` atiende todo en `_input` y traga el clic. `EpilogueScreen` pone la imagen con `STRETCH_KEEP_ASPECT_COVERED` y una franja de texto abajo. **El modelo de la intro es ese.**
+- **Guardado** (`scripts/autoload/save_manager.gd`): `save()` arma un diccionario fijo con las claves de siempre; `load_save()` lee cada clave con su `_read_*` y **ignora las desconocidas**; si `version != SAVE_VERSION` empieza de cero (por eso la clave nueva **no** sube la versión). El modo de pruebas usa otro archivo (`DevMode.SAVE_PATH`, RF-181).
+- **Música** (`scripts/autoload/audio.gd`, `_process`): toda escena que no sea `game.tscn` reproduce `music_menu`. Un overlay sobre el menú **no la corta**.
+- **Wiki** (`scenes/ui/wiki_screen.gd`): arma la interfaz por código (`_build_layout`), las solapas con `_add_tab`, y tiene `on_leave: Callable` y `show_category`. La solapa Lore la sirve `Wiki.categories(...)`.
+- **Textos:** `LevelTexts` (`scripts/logic/level_texts.gd`) es el modelo de un validador de texto con mensajes en castellano: **lógica pura, límites como constantes** (son de interfaz, no de balance).
+- **Qué no hay:** ningún archivo `intro`, ninguna imagen de intro y ninguna clave de guardado para esto.
+
+#### Qué se agrega
+
+| Archivo (propuesto) | Qué es |
+|---|---|
+| `data/intro/intro.json` | Los datos (RF-497): `version`, `fundido_s`, `laminas[]` con `imagen`, `texto`, `segundos`. **Los números van acá**, no en el código. |
+| `scripts/logic/intro_data.gd` | `IntroData` (`RefCounted`, lógica pura): `load_file(path) -> IntroData` con `laminas`, `fundido_s`, `errors` y `is_valid()`. Valida cantidad (5 a 8), líneas y caracteres (los de `LevelTexts.WIN_*` y `LINE_MAX_CHARS`: reusarlos, no copiarlos), `segundos` (4 a 12), `fundido_s` (0 a 2), que la imagen exista, `version`. Mensajes en castellano que nombran la lámina. |
+| `scripts/logic/intro_flow.gd` | `IntroFlow` (lógica pura, **testeable sin cambiar de escena**): `should_auto_show(intro_seen, dev_enabled, data_valid) -> bool` (RF-498) y `after_finish(has_won_levels) -> Destination` (`LEVEL_1` o `LEVEL_SELECT`, RF-500). |
+| `scenes/ui/intro_screen.gd` | `IntroScreen` (`CanvasLayer`, por código como `EpilogueScreen`): `open(data)`, `signal finished`, `is_open()`. La imagen con `KEEP_ASPECT` y barras oscuras; franja de texto abajo; botón «Omitir»; fundido con `Tween`; avance por clic, `Espacio`, `Enter`, `→` y por tiempo (`_process` con un reloj propio, para que el test no espere). **No sabe a dónde se va después.** |
+| `assets/intro/01_*.png` a `07_*.png` | Las láminas (T241). 1920 × 1080. |
+
+**Qué cambia:**
+- `save_manager.gd`: la clave `"intro_seen"` (leer: solo `true` booleano cuenta; escribir en `save()`), `intro_seen() -> bool` y `mark_intro_seen()` (que guarda enseguida). `load_save()` la resetea a `false` junto con el resto.
+- `main_menu.gd`: «Jugar» deja de ir directo a `GameFlow.go_to_level_select`: llama a un método propio que, según `IntroFlow.should_auto_show`, abre el overlay o va a la selección. Al `finished`: `IntroFlow.after_finish` → `GameFlow.start_level(0)` o `GameFlow.go_to_level_select()`.
+- `wiki_screen.gd`: el botón «Ver la intro» arriba de la lista de la solapa Lore; abre el mismo overlay; al `finished` solo lo cierra (la Wiki queda como estaba).
+- **Sin cambios:** `GameFlow` (salvo que T242 prefiera ponerle un método), `Audio`, los niveles, el editor, los modos, la Wiki y el guardado de los demás datos.
+
+#### Orden de trabajo (T242)
+
+1. **Datos y lector:** `data/intro/intro.json` con los textos del guion y `IntroData`, con sus tests (cada error). Las imágenes pueden ser **provisorias** (un PNG liso de 1920 × 1080) hasta que T241 entregue.
+2. **Guardado:** la clave y sus tests (nuevo, con la clave, sin la clave, no booleana, guardado anterior, no toca el resto).
+3. **`IntroFlow`** y su tabla de decisiones.
+4. **`IntroScreen`** y sus tests de manejo.
+5. **Conectar** «Jugar» y la Wiki.
+6. **Con las láminas de T241:** medir el texto en 1280 × 720 y en tamaño de celular, y exportar otra vez (T237).
+
+#### Pruebas que T242 tiene que escribir
+
+- **`IntroData`:** el archivo oficial sin errores; 4 y 9 láminas; línea de 91; 3 líneas; 161 caracteres; texto vacío; `segundos` 3 y 13; `fundido_s` 3; imagen inexistente; `version` 2; el error nombra la lámina.
+- **Datos oficiales:** cada imagen existe y mide 1920 × 1080; **cada texto es el de `specs/intro/guion.md`** (el test lee el documento y compara, como `test_level_texts.gd` con `11-textos-lore.md`); sin vocabulario vetado ni «Cántaro»; cada duración cumple `2 + caracteres/20`.
+- **Guardado:** `intro_seen` en `save.json` y su lectura; `1`, `"si"` y `null` → no vista; el resto del guardado no cambia; **un guardado de antes** (formato real, como en `test_old_saves.gd`).
+- **`IntroFlow`:** guardado nuevo → se muestra; con la clave → no; modo de pruebas → no; archivo roto → no; sin niveles ganados → nivel 1; con niveles ganados → selección.
+- **`IntroScreen`:** un toque, `Espacio`, `Enter` y `→` pasan; el tiempo pasa (reloj inyectado); un toque durante el fundido salta; la última termina; «Omitir» y `Esc` terminan **una sola vez** (`finished`); el clic final no llega a lo de atrás; la lámina se ve entera en 16:9, 20:9 y 4:3.
+- **Menú y Wiki, sin cambiar de escena** (`.claude/rules/tests.md`): «Jugar» emite lo que corresponde y no navega con la intro abierta; el botón «Ver la intro» existe en la solapa Lore, abre el overlay y no toca `intro_seen`. **Ojo:** `test_menus_and_flow.gd` y `test_main_menu_style.gd` usan `%PlayButton`: revisar que no asuman que «Jugar» va directo a la selección.
+
+#### Riesgos y cosas que no se saben
+
+- **El peso.** Siete PNG de 1920 × 1080 pintados pueden pasar de 3 MB cada uno (≈ 20 MB). T242 lo mide y lo anota; si es mucho, se optimizan (o se importan comprimidos) **sin cambiar la resolución** sin avisarle a Lucas.
+- **Que el texto entre en la franja** a 1280 × 720 y en el celular con la misma fuente del epílogo (22 pt): no se midió. Dos líneas de 90 caracteres es el peor caso.
+- **El «atrás» de Android** y `Esc`: hay que atenderlos en `_input` antes que el menú, como hace `LevelIntro`.
+- **El modo de pruebas.** Al encender o apagar el modo, el menú se recarga (`go_to_main_menu`): con el overlay abierto no debería poder pasar (no hay acceso a Opciones), pero T242 lo comprueba.
+- **Una sola lámina rota** (imagen que no carga en la exportación) no tiene que tumbar la intro: se omite esa lámina y se avisa en la salida. *(Propuesta de T242; no está en RF-497 y queda a su criterio.)*
+- **El estilo de las láminas depende de Lucas** (P3): ningún código cambia con él.
+
+#### Lo que M57 no toca
+
+La campaña y sus niveles, `LevelFile`, la Wiki más allá de un botón, el epílogo, los créditos, los modos, el editor, la música y los efectos, y el formato del guardado salvo la clave nueva.

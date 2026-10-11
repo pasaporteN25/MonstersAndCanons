@@ -8,6 +8,8 @@
 
 > **Agregado por T252 (2026-10-10):** el artículo **11, «La Cuadrilla»** (§4.11), sobre la banda de Rateros y Cargador que Lucas eligió para la V1 (M55, RF-489, D-094). **Lucas lo aprobó el 2026-10-10** (P3 de M55, en el encargo de T253) y **T253 lo cargó** en `data/wiki/lore/la_cuadrilla.json`, tal cual. No cambia ningún otro texto de este documento: en particular, el artículo 5 sigue diciendo que el Ladrón va solo.
 
+> **Agregado por T240 (2026-10-11):** los **textos de la intro de láminas** (siete láminas de 1 o 2 líneas) **no están acá**: viven en [`specs/intro/guion.md`](intro/guion.md), junto a la ilustración de cada una, porque no se pueden corregir sin verla. Es **el único lugar** donde se escriben y se corrigen, con la misma regla que este documento (T242 los copia tal cual a `data/intro/intro.json`) y los mismos límites de RF-464 para la victoria (2 líneas, 160 caracteres, 90 por línea). Su spec es M57 (RF-497 a RF-501). **No cambia ningún texto de este documento.**
+
 **Qué es este documento.** Los textos finales que muestra el juego (M52, `01-spec.md`): el **lugar**, la **entrada** y la **victoria** de los 15 niveles, el **epílogo**, los **créditos** y **10 artículos** de la categoría Lore de la Wiki (más el borrador del 11, T252). Es el **único lugar** donde viven los textos: la ficha de cada nivel (§7.13 a §7.17 de la spec) y las tareas T228 a T234 los **copian tal cual** de acá, y si Lucas corrige uno se corrige acá primero.
 
 **Cómo se escribió.** Según la biblia (`10-universo.md`, §8 «Tono y reglas de escritura»):
