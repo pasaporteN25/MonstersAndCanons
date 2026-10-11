@@ -1267,7 +1267,7 @@ La campaña y sus 15 niveles, `LevelFile`, `LevelData`, `WaveSpawner`, `Rules`, 
 
 ### M57 / T240 · La intro de láminas (RF-497 a RF-501, D-096)
 
-> **Estado: especificada en T240 (2026-10-11), a la espera del OK de Lucas (G6). No se programó nada.** La spec es **M57** (`01-spec.md`); el guion, `specs/intro/guion.md`; la ficha de código, `specs/tareas/T242-intro-integracion.md`. Los nombres de archivos y de funciones de abajo son **propuestos**: T242 los confirma al leer el código.
+> **Estado: especificada en T240 y aprobada por Lucas (G6, 2026-10-11); programada en T242 con láminas provisorias (falta el paso 6: las láminas de T241, medir el texto y reexportar).** La spec es **M57** (`01-spec.md`); el guion, `specs/intro/guion.md`; la ficha de código, `specs/tareas/T242-intro-integracion.md`. Los nombres de archivos y de funciones de abajo son **propuestos**: T242 los confirma al leer el código.
 
 #### Qué hay hoy (leído en el código, no supuesto)
 

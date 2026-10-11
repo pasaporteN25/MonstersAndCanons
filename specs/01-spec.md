@@ -2796,7 +2796,7 @@ Cortas y en orden de importancia. Ninguna frena a T258: el código y el formato 
 
 ### M57 · La intro de láminas (Lucas, 2026-10-11; T240)
 
-**Estado: ESPECIFICADA en T240 (2026-10-11), a la espera del OK de Lucas al guion y al funcionamiento (compuerta 🚦 G6, P1 a P5 de abajo). No hay arte ni código:** las láminas son de **T241** (Codex, con el OK de Lucas al estilo) y la pantalla es de **T242**. El guion, con los textos, las siete ilustraciones descriptas, las referencias de estilo y las dudas, es **`specs/intro/guion.md`**. La decisión es **D-096**.
+**Estado: APROBADA por Lucas el 2026-10-11 (compuerta 🚦 G6, P1 a P5 como se recomendaban). Programada en T242** (pasos 1 a 5, 7 y 8; con láminas **provisorias**: las definitivas son de **T241** y el paso 6, medir el texto y reexportar, sigue pendiente). El guion, con los textos, las siete ilustraciones descriptas, las referencias de estilo y las dudas, es **`specs/intro/guion.md`**. La decisión es **D-096**.
 
 **Qué pidió Lucas.** *(2026-10-11, en el encargo de T240; manda sobre la ficha)* Una **mini película casera hecha con imágenes tipo diapositiva y el texto abajo**, con **fuerte sensación de nave y de viaje**, que **termina con una lámina panorámica del oasis verde en medio de la nada**; **después aparece el mapa jugable**. **Entra en la versión 1.0.** Se ve **la primera vez que se toca «Jugar»**, **se puede omitir siempre**, **se puede volver a ver** desde la Wiki o con un botón «Intro», y **avanza con un toque o sola**. De 5 a 8 láminas; sin adelantar el conflicto con las comunidades.
 
