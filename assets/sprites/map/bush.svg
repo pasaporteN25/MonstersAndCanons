@@ -1,28 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- Arbusto con frutos (casilla bloqueada). Mismo truco de doble dibujo que el árbol. -->
-  <ellipse cx="34" cy="51" rx="24" ry="6.5" fill="#000000" opacity="0.22"/>
-  <g fill="#2b2233">
-    <circle cx="20" cy="38" r="13.2"/>
-    <circle cx="36" cy="33" r="14.2"/>
-    <circle cx="47" cy="41" r="11.2"/>
-  </g>
-  <g fill="#4c9a3f">
-    <circle cx="20" cy="38" r="11"/>
-    <circle cx="36" cy="33" r="12"/>
-    <circle cx="47" cy="41" r="9"/>
-  </g>
-  <g fill="#3b7f32">
-    <circle cx="25" cy="44" r="5"/>
-    <circle cx="42" cy="45" r="5"/>
-  </g>
-  <g fill="#6cbc57">
-    <circle cx="31" cy="26" r="4"/>
-    <circle cx="15" cy="34" r="3"/>
-  </g>
-  <g fill="#e2474f" stroke="#2b2233" stroke-width="1">
-    <circle cx="24" cy="35" r="2.3"/>
-    <circle cx="40" cy="30" r="2.3"/>
-    <circle cx="47" cy="42" r="2.3"/>
-    <circle cx="33" cy="41" r="2.1"/>
-  </g>
+<!-- Arbusto bajo de hojas agrupadas y frutos rojos; vista lateral hacia la derecha; fondo transparente. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" stroke-linecap="round" stroke-linejoin="round">
+<defs><linearGradient id="leaf" x1="0" y1="0" x2=".25" y2="1"><stop offset="0" stop-color="#6cbc57"/><stop offset=".52" stop-color="#4c9a3f"/><stop offset="1" stop-color="#3b7f32"/></linearGradient><linearGradient id="wood" x1="0" y1="0" x2=".25" y2="1"><stop offset="0" stop-color="#ac8050"/><stop offset=".52" stop-color="#7a4f2a"/><stop offset="1" stop-color="#503622"/></linearGradient><linearGradient id="berry" x1="0" y1="0" x2=".25" y2="1"><stop offset="0" stop-color="#fb9690"/><stop offset=".52" stop-color="#e2474f"/><stop offset="1" stop-color="#a32e43"/></linearGradient></defs>
+<ellipse cx="33" cy="53" rx="23" ry="4" fill="#2b2233" opacity=".10"/><ellipse cx="33" cy="53" rx="18" ry="2.4" fill="#2b2233" opacity=".10"/><path d="M7 45Q2 35 13 28Q16 20 25 25Q30 14 41 21Q49 20 51 30Q62 32 58 44Q52 53 42 50Q31 55 23 50Q12 54 7 45Z" fill="url(#leaf)" stroke="#2b2233" stroke-width="2.2"/><path d="M8 40Q8 29 20 29Q28 28 29 39Q28 48 18 47Q8 49 8 40Z" fill="url(#leaf)"/><path d="M24 31Q23 21 35 22Q46 20 47 32Q45 42 34 41Q24 42 24 31Z" fill="url(#leaf)"/><path d="M39 42Q38 32 49 32Q58 33 56 43Q53 50 45 48Z" fill="url(#leaf)"/><path d="M12 36Q15 31 21 33M28 28Q33 24 39 27M44 38Q48 35 52 38" fill="none" stroke="#9bd27f" stroke-width="1.6"/><circle cx="23" cy="37" r="2.4" fill="url(#berry)" stroke="#2b2233" stroke-width=".8"/><circle cx="36" cy="31" r="2.4" fill="url(#berry)" stroke="#2b2233" stroke-width=".8"/><circle cx="46" cy="42" r="2.4" fill="url(#berry)" stroke="#2b2233" stroke-width=".8"/><circle cx="31" cy="45" r="2.4" fill="url(#berry)" stroke="#2b2233" stroke-width=".8"/>
 </svg>

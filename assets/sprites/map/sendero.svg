@@ -1,5 +1,6 @@
-<!-- Tres piedras planas acomodadas en una curva corta junto al agua; vista lateral hacia la derecha; fondo transparente. -->
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+<!-- Tres piedras planas acomodadas en una curva corta junto al agua; vista lateral hacia la derecha; fondo transparente.; material pulido, vista lateral hacia la derecha; fondo transparente. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" stroke-linecap="round" stroke-linejoin="round">
+<defs></defs>
 <defs>
  <linearGradient id="stone" x1="0" y1="0" x2=".25" y2="1"><stop stop-color="#e0d8c6"/><stop offset=".52" stop-color="#a99f8b"/><stop offset="1" stop-color="#625d53"/></linearGradient>
  <linearGradient id="wood" x1="0" y1="0" x2=".25" y2="1"><stop stop-color="#c4955f"/><stop offset=".52" stop-color="#87603e"/><stop offset="1" stop-color="#4d392f"/></linearGradient>
@@ -8,4 +9,5 @@
  <linearGradient id="ruin" x1="0" y1="0" x2=".25" y2="1"><stop stop-color="#d2c6ad"/><stop offset=".52" stop-color="#9e9381"/><stop offset="1" stop-color="#61594e"/></linearGradient>
 </defs>
 <ellipse cx="32" cy="55" rx="24" ry="3" fill="#2b2233" opacity=".18"/><path d="M5 43 10 37 19 37 23 42 21 48 7 49Z" fill="url(#stone)" stroke="#2b2233" stroke-width="1.7"/><path d="M25 34 30 28 38 29 42 34 40 40 26 41Z" fill="url(#stone)" stroke="#2b2233" stroke-width="1.7"/><path d="M44 43 48 37 56 39 59 45 55 50 44 49Z" fill="url(#stone)" stroke="#2b2233" stroke-width="1.7"/><path d="M9 40h10M29 32h8M48 41l7 1" fill="none" stroke="#eee2cb" stroke-width="1.5" stroke-linecap="round"/>
+<path d="M12 45H19M31 37H38M49 47H55" stroke="#504b43" stroke-width="1"/>
 </svg>

@@ -1,12 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- Grupo de piedras (casilla bloqueada). -->
-  <ellipse cx="33" cy="49" rx="25" ry="7" fill="#000000" opacity="0.22"/>
+<!-- Grupo de piedras (casilla bloqueada).; material pulido, vista lateral hacia la derecha; fondo transparente. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" stroke-linecap="round" stroke-linejoin="round">
+<defs><linearGradient id="material0" x1="0" y1="0" x2=".25" y2="1"><stop offset="0" stop-color="#919198"/><stop offset=".52" stop-color="#7b7b83"/><stop offset="1" stop-color="#626269"/></linearGradient><linearGradient id="material1" x1="0" y1="0" x2=".25" y2="1"><stop offset="0" stop-color="#9f9fa5"/><stop offset=".52" stop-color="#8b8b93"/><stop offset="1" stop-color="#6f6f76"/></linearGradient><linearGradient id="material2" x1="0" y1="0" x2=".25" y2="1"><stop offset="0" stop-color="#ababb2"/><stop offset=".52" stop-color="#9a9aa2"/><stop offset="1" stop-color="#7b7b82"/></linearGradient><linearGradient id="material3" x1="0" y1="0" x2=".25" y2="1"><stop offset="0" stop-color="#acacb3"/><stop offset=".52" stop-color="#9b9ba3"/><stop offset="1" stop-color="#7c7c82"/></linearGradient><linearGradient id="material4" x1="0" y1="0" x2=".25" y2="1"><stop offset="0" stop-color="#bbbbc2"/><stop offset=".52" stop-color="#adadb5"/><stop offset="1" stop-color="#8a8a91"/></linearGradient><linearGradient id="material5" x1="0" y1="0" x2=".25" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".52" stop-color="#ffffff"/><stop offset="1" stop-color="#cccccc"/></linearGradient></defs>
+
+  <ellipse cx="33" cy="49" rx="25" ry="7" fill="#2b2233" opacity=".13"/>
   <g stroke="#2b2233" stroke-width="2.4" stroke-linejoin="round">
-    <path d="M9 40 L11 25 L23 18 L35 22 L37 37 L26 44 Z" fill="#8b8b93"/>
-    <path d="M31 47 L33 34 L44 29 L55 33 L57 44 L46 51 Z" fill="#7b7b83"/>
-    <ellipse cx="18" cy="50" rx="7" ry="4.5" fill="#9a9aa2"/>
+    <path d="M9 40 L11 25 L23 18 L35 22 L37 37 L26 44 Z" fill="url(#material1)"/>
+    <path d="M31 47 L33 34 L44 29 L55 33 L57 44 L46 51 Z" fill="url(#material0)"/>
+    <ellipse cx="18" cy="50" rx="7" ry="4.5" fill="url(#material2)"/>
   </g>
-  <polygon points="12.5,26 23,20 34,23.5 26,28" fill="#adadb5"/>
-  <polygon points="34.5,35 44,31 54,34.5 45,38" fill="#9b9ba3"/>
-  <ellipse cx="16" cy="48.5" rx="3" ry="1.5" fill="#ffffff" opacity="0.35"/>
+  <polygon points="12.5,26 23,20 34,23.5 26,28" fill="url(#material4)"/>
+  <polygon points="34.5,35 44,31 54,34.5 45,38" fill="url(#material3)"/>
+  <ellipse cx="16" cy="48.5" rx="3" ry="1.5" fill="url(#material5)" opacity="0.35"/>
+<path d="M14 29 21 24 27 25M37 38 44 34 49 35" fill="none" stroke="#d0cfd4" stroke-width="1.3"/>
 </svg>

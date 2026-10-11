@@ -1,0 +1,218 @@
+[
+  {
+    "archivo": "assets/sprites/map/flores.svg",
+    "posicion": 0,
+    "fila": 1,
+    "columna": 1,
+    "antes_sha256": "7bd876ed4a5ea3ce90111dbf82cd2b66c358eaafa633437c0f46fa58d5f4a98e",
+    "despues_sha256": "f77b3911becb593f599abf72b5400c1be9a42674bc7c13bc03c3a9da218ace26"
+  },
+  {
+    "archivo": "assets/sprites/map/bush.svg",
+    "posicion": 1,
+    "fila": 1,
+    "columna": 2,
+    "antes_sha256": "dfc0bcb105bda41587a6f75ab5b1f23a915c920606e8b1924db762458ca95b17",
+    "despues_sha256": "36294f72b5dbc916afbd9b3511f39d2e8369e16e2feb585a348e48c73089e1cb"
+  },
+  {
+    "archivo": "assets/sprites/map/tree.svg",
+    "posicion": 2,
+    "fila": 1,
+    "columna": 3,
+    "antes_sha256": "de397c2e25d897c7b335b9903080db8a6953088b079a0119dd2d6a94c3babd30",
+    "despues_sha256": "1cd4ac6be7592f51f6915353bdb4efb4f1a429f02d0d1f0ac6d03d8f18647734"
+  },
+  {
+    "archivo": "assets/sprites/map/abeto.svg",
+    "posicion": 3,
+    "fila": 1,
+    "columna": 4,
+    "antes_sha256": "9ff87c3bb3dfa24d89f61d901191d105bad010cebaafd1a0081f3e2dc1e36e0e",
+    "despues_sha256": "249bafc2a4c38ca34e6349764e73f494be7a630d4fa19c5085ef4c57f3126316"
+  },
+  {
+    "archivo": "assets/sprites/map/pino.svg",
+    "posicion": 4,
+    "fila": 1,
+    "columna": 5,
+    "antes_sha256": "c62936a529e12120912f2ad3011eba952aca09d752399ad9ff2df967728dd792",
+    "despues_sha256": "6dff8af6f4fa16d4c52f91abea9b1d3f3e1b98baac839473bb30e63963c5ca4b"
+  },
+  {
+    "archivo": "assets/sprites/map/rock_a.svg",
+    "posicion": 5,
+    "fila": 1,
+    "columna": 6,
+    "antes_sha256": "1ed991368441358632736913722c86a7024ef13b10822a7fbb47f28737c55d8f",
+    "despues_sha256": "82791abcb661bcd1e8c75ba3e5a0ee4f244fd1bbcb31fc57e6e1f257ff7bc766"
+  },
+  {
+    "archivo": "assets/sprites/map/rock_b.svg",
+    "posicion": 6,
+    "fila": 1,
+    "columna": 7,
+    "antes_sha256": "7c00d029d256055f0aa001f29ae6a776471d02e3261cc970f541f109dbadeea6",
+    "despues_sha256": "980edd93e09e79b81815a0d9bd8ba3e6fbb4acb43a46e86c8cd1a89d722d58a2"
+  },
+  {
+    "archivo": "assets/sprites/map/roca_roja.svg",
+    "posicion": 7,
+    "fila": 2,
+    "columna": 1,
+    "antes_sha256": "22a1de738448e9e2944cb26f28ce395202ae9bdbe91d866396873f4052a49561",
+    "despues_sha256": "edf1cd78cc9165762c61e6952f69957c415c44fd1e36742bed32db1f9f68688a"
+  },
+  {
+    "archivo": "assets/sprites/map/roca_negra.svg",
+    "posicion": 8,
+    "fila": 2,
+    "columna": 2,
+    "antes_sha256": "515baae6c0559c3ad43469f2c48955aa8a783e63f4523a81c46200ae598b6270",
+    "despues_sha256": "1061bbad317b6fae0e92635675d8b4e8ba517b587ac11cb208626b4a89bbd538"
+  },
+  {
+    "archivo": "assets/sprites/map/roca_nieve.svg",
+    "posicion": 9,
+    "fila": 2,
+    "columna": 3,
+    "antes_sha256": "259034643a37c66d68dd390ebdefac4e69a6c4a6f9377c7d555cfe3c3d661950",
+    "despues_sha256": "0579fcc57af83db00449299efeaecdbc981907ff06e77385582886b66cd4a90d"
+  },
+  {
+    "archivo": "assets/sprites/map/cactus.svg",
+    "posicion": 10,
+    "fila": 2,
+    "columna": 4,
+    "antes_sha256": "bc9bc5025dd598740f5a32cc3f2143d030f1e042af644cfb4477c86765bbf6a6",
+    "despues_sha256": "abf4bd7d84d5abd0b900bb73a4c7cfc36f3e8cf35e5c4505679bb7619834a30f"
+  },
+  {
+    "archivo": "assets/sprites/map/columna.svg",
+    "posicion": 11,
+    "fila": 2,
+    "columna": 5,
+    "antes_sha256": "9f54ee95c097deb24c95a3b6a7a31f206b5766c3b84d379aab0d8358b4cb9336",
+    "despues_sha256": "b7bf54b381aee7ab437150c73b7c4f2a02c1d6b7d4c535597e2543d82600d190"
+  },
+  {
+    "archivo": "assets/sprites/map/estatua.svg",
+    "posicion": 12,
+    "fila": 2,
+    "columna": 6,
+    "antes_sha256": "c1b119303c2fa3f18a4d5cf2db497e1275603f967e384ea0dcc44483fff55151",
+    "despues_sha256": "dcffa9238b528afde43362a0cd0652fc2e1ada0f444341b733c69c32ce604fa1"
+  },
+  {
+    "archivo": "assets/sprites/map/bloque.svg",
+    "posicion": 13,
+    "fila": 2,
+    "columna": 7,
+    "antes_sha256": "f30b3a6bd5fddf2612e902dbb3ae05bb33c5fc78b64af209b8b6c407cf14e0fc",
+    "despues_sha256": "d74ac32ff37e40173d00c6e85bf00e5df1f517a38613b0f8024ca9a795b43e74"
+  },
+  {
+    "archivo": "assets/sprites/map/helecho.svg",
+    "posicion": 14,
+    "fila": 3,
+    "columna": 1,
+    "antes_sha256": "7b6e72e31f1157fc41e136fa3f87d4f8dd6dfcbee3a4b18ca28563661474f1b3",
+    "despues_sha256": "cddde24ba3e96bdf411de5ef51788d73345c683e3eead88ffcd13d80fa93185a"
+  },
+  {
+    "archivo": "assets/sprites/map/tronco.svg",
+    "posicion": 15,
+    "fila": 3,
+    "columna": 2,
+    "antes_sha256": "857476475508a36e3a95650abcb079e4c6a2993e1978927c579526d5170779c3",
+    "despues_sha256": "1b41f3fd7a4872d8e3041a5db1b50ea5a25f0819f6e8156bdc0b28d32f2c801d"
+  },
+  {
+    "archivo": "assets/sprites/map/junco.svg",
+    "posicion": 16,
+    "fila": 3,
+    "columna": 3,
+    "antes_sha256": "dae27acd61163d0c4ae9ffe3b9693b1987055af098f6bbff6135cb92f725c619",
+    "despues_sha256": "5f27884182334a4bf803b7c58122380720334e75ae224a9c9627f92b21c6a33c"
+  },
+  {
+    "archivo": "assets/sprites/map/hongo.svg",
+    "posicion": 17,
+    "fila": 3,
+    "columna": 4,
+    "antes_sha256": "7d16552e588f9c6b243194c8ef24d044a78ea0b4a37d6a5339a801f4ccf02ed0",
+    "despues_sha256": "d3e7eeae5484512b51ea8ac0d809a3f41137389968a004a25ada7da6d5945a5e"
+  },
+  {
+    "archivo": "assets/sprites/map/huesos.svg",
+    "posicion": 18,
+    "fila": 3,
+    "columna": 5,
+    "antes_sha256": "91540481084da5316f59c28e6d8fc7061dc6a3cb17fcb94871f0ed02eb44786e",
+    "despues_sha256": "429c2dbf4266e257999f8228cb4f530e15fc290d166a23d265e579d83aa01b87"
+  },
+  {
+    "archivo": "assets/sprites/map/grieta.svg",
+    "posicion": 19,
+    "fila": 3,
+    "columna": 6,
+    "antes_sha256": "e3f1df790a72c6ed174f368876d2fedc29efe8c8bd80999fbfe061a5fd2f4461",
+    "despues_sha256": "ab7b5da934a501909d095632d06a7e0fc570ff6f8c10ca926cd3907fed5fcc88"
+  },
+  {
+    "archivo": "assets/sprites/map/roca_marcada.svg",
+    "posicion": 20,
+    "fila": 3,
+    "columna": 7,
+    "antes_sha256": "73f2547862adb6f2d5f24460f11e3ae5246387dc031062603287ea4cf96f577e",
+    "despues_sha256": "cc6d963c3c4e1914bfe39b504149fd11ddd0ed1f40153368eb1e4b22d672a4ae"
+  },
+  {
+    "archivo": "assets/sprites/map/simbolo_ruina.svg",
+    "posicion": 21,
+    "fila": 4,
+    "columna": 1,
+    "antes_sha256": "a5b21a59007c209b271678b0ded103fca0db43b097f55427579290c7d768dba6",
+    "despues_sha256": "48be1d1ba9435742e1bb8241025c52e7d36b7e7af960ea61e94f99f273b35c2a"
+  },
+  {
+    "archivo": "assets/sprites/map/sendero.svg",
+    "posicion": 22,
+    "fila": 4,
+    "columna": 2,
+    "antes_sha256": "bfef2fa1cd4bd7c5c2186d5c2af874386ee138bda94dcc5d0da6dab5a84bc9a4",
+    "despues_sha256": "28fe723cf7a5ab3a35eeae5c2449aafb3d1ff2dab249eb68b328fa8969b1c3c9"
+  },
+  {
+    "archivo": "assets/sprites/map/poste_cintas.svg",
+    "posicion": 23,
+    "fila": 4,
+    "columna": 3,
+    "antes_sha256": "326660ba7fe239667536d647aaf32ec00b361bfb340e6ee9a32f674591eb06e4",
+    "despues_sha256": "5a7247d2c38c2f339ea811c7bd9d46ce6e7014b97517be6e6d640ae75bc9ea3d"
+  },
+  {
+    "archivo": "assets/sprites/map/herramienta.svg",
+    "posicion": 24,
+    "fila": 4,
+    "columna": 4,
+    "antes_sha256": "998f4e3d5351d07f4531a7d1a275d82111e6cdb7c39d3f54adb4dc1a0f74e580",
+    "despues_sha256": "24c307d8ea8a6d7d6dceb624369fa176d9fa46cfb6323662ab3194c9cf690352"
+  },
+  {
+    "archivo": "assets/sprites/map/campamento_vacio.svg",
+    "posicion": 25,
+    "fila": 4,
+    "columna": 5,
+    "antes_sha256": "51e8507dc36a87c161c8375dc2d80b4357dc8dc1cfbe1118d9490322378c9e40",
+    "despues_sha256": "ea6f942eae164ef79947f90057c5b887dea913a6f061d22e9f1d18c850ae5526"
+  },
+  {
+    "archivo": "assets/sprites/map/hito.svg",
+    "posicion": 26,
+    "fila": 4,
+    "columna": 6,
+    "antes_sha256": "c538fa707bb05c70f0788ee6fe80fe96d850514f2674dcdc67cb9b8c3cb95a1c",
+    "despues_sha256": "8f9333de76075d3a5e4061cc6adcd15fc184194379cadf8a60b96377fe953c53"
+  }
+]

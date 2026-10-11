@@ -1,25 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- Pino nevado (casilla bloqueada de la nieve): tres pisos de ramas verde oscuro con nieve encima. -->
-  <ellipse cx="34" cy="55" rx="19" ry="5.5" fill="#000000" opacity="0.22"/>
-  <rect x="28.5" y="46" width="8" height="10" rx="2" fill="#6b4526" stroke="#2b2233" stroke-width="2.4"/>
-  <g fill="#2b2233" stroke="#2b2233" stroke-width="5" stroke-linejoin="round">
-    <polygon points="12,49 32,25 52,49"/>
-    <polygon points="15,37 32,15 49,37"/>
-    <polygon points="21,25 32,6 43,25"/>
-  </g>
-  <g fill="#2f6b4b">
-    <polygon points="12,49 32,25 52,49"/>
-    <polygon points="15,37 32,15 49,37"/>
-    <polygon points="21,25 32,6 43,25"/>
-  </g>
-  <g fill="#245a3f">
-    <polygon points="32,25 52,49 32,49"/>
-    <polygon points="32,15 49,37 32,37"/>
-    <polygon points="32,6 43,25 32,25"/>
-  </g>
-  <g fill="#f6fbff" stroke="#bcd2ea" stroke-width="1" stroke-linejoin="round">
-    <polygon points="32,6 37.6,15 35.5,14 33.5,17.5 31,14 28.6,17 26.4,15"/>
-    <polygon points="32,15 40.5,26 38,24.5 35,28.5 32,24.5 29,28 26,24.5 23.5,26"/>
-    <polygon points="32,25 43,37.5 40,36 36,40.5 32,36 28,40 24,36 21,37.5"/>
-  </g>
+<!-- Pino nevado con tres pisos escalonados; vista lateral hacia la derecha; fondo transparente. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" stroke-linecap="round" stroke-linejoin="round">
+<defs><linearGradient id="leaf" x1="0" y1="0" x2=".25" y2="1"><stop offset="0" stop-color="#579569"/><stop offset=".52" stop-color="#2f6b4b"/><stop offset="1" stop-color="#245a3f"/></linearGradient><linearGradient id="wood" x1="0" y1="0" x2=".25" y2="1"><stop offset="0" stop-color="#a47747"/><stop offset=".52" stop-color="#6b4526"/><stop offset="1" stop-color="#493326"/></linearGradient><linearGradient id="snow" x1="0" y1="0" x2=".25" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".52" stop-color="#f6fbff"/><stop offset="1" stop-color="#bcd2ea"/></linearGradient></defs>
+<ellipse cx="33" cy="55" rx="21" ry="4" fill="#2b2233" opacity=".10"/><ellipse cx="33" cy="55" rx="16" ry="2.4" fill="#2b2233" opacity=".10"/><path d="M29 56 29 43 36 43 36 56Z" fill="url(#wood)" stroke="#2b2233" stroke-width="2"/><path d="M32 27 49 41 46 41 55 51 45 50 41 53 32 51 22 53 18 50 9 51 18 41 15 41Z" fill="url(#leaf)" stroke="#2b2233" stroke-width="2"/><path d="M32 27 45.11 40.2 39.6038 38.7 36.1952 42.2 32 39.2 27.8048 42.2 24.3962 38.7 18.89 40.2Z" fill="url(#snow)"/><path d="M31 30 24.5273 37.2" stroke="#ffffff" stroke-width="1.2"/><path d="M32 16 43 28 40 28 49 38 39 37 35 40 32 38 28 40 24 37 15 38 24 28 21 28Z" fill="url(#leaf)" stroke="#2b2233" stroke-width="2"/><path d="M32 16 41.69 28.1 37.6202 26.6 35.1008 30.1 32 27.1 28.8992 30.1 26.3798 26.6 22.310000000000002 28.1Z" fill="url(#snow)"/><path d="M31 19 26.4767 25.1" stroke="#ffffff" stroke-width="1.2"/><path d="M32 6 36 16 33 16 42 26 32 25 28 28 32 26 35 28 31 25 22 26 31 16 28 16Z" fill="url(#leaf)" stroke="#2b2233" stroke-width="2"/><path d="M32 6 37.7 17.0 35.306 15.5 33.824 19.0 32 16.0 30.176000000000002 19.0 28.694000000000003 15.5 26.3 17.0Z" fill="url(#snow)"/><path d="M31 9 28.751 14.0" stroke="#ffffff" stroke-width="1.2"/><path d="M15 54Q19 50 24 53M40 55Q45 50 50 54" fill="none" stroke="#e2edf8" stroke-width="3"/>
 </svg>

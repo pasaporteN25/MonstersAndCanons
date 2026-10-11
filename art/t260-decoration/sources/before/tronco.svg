@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Tronco caído (bosque y pantano): un tronco tumbado con los anillos a la vista, un muñón de rama y
+       musgo arriba. -->
+  <ellipse cx="33" cy="52" rx="25" ry="5.5" fill="#000000" opacity="0.22"/>
+  <g fill="#2b2233" stroke="#2b2233" stroke-width="5" stroke-linejoin="round">
+    <rect x="11" y="31" width="45" height="19" rx="8.5"/>
+    <rect x="40" y="22" width="8" height="14" rx="3"/>
+  </g>
+  <rect x="11" y="31" width="45" height="19" rx="8.5" fill="#7a4f2a"/>
+  <rect x="40" y="22" width="8" height="14" rx="3" fill="#8a5a30"/>
+  <rect x="16" y="33" width="38" height="5" rx="2.5" fill="#96683b"/>
+  <rect x="16" y="45" width="38" height="3.6" rx="1.8" fill="#5b3a20"/>
+  <path d="M27 40 h8 M33 44 h10 M47 39 h5" fill="none" stroke="#4f3219" stroke-width="1.5" stroke-linecap="round"/>
+  <ellipse cx="16" cy="40.5" rx="6.5" ry="9.2" fill="#d6a565" stroke="#2b2233" stroke-width="2.2"/>
+  <ellipse cx="16" cy="40.5" rx="4.2" ry="6.2" fill="none" stroke="#a67a45" stroke-width="1.4"/>
+  <ellipse cx="16" cy="40.5" rx="1.8" ry="3" fill="none" stroke="#a67a45" stroke-width="1.4"/>
+  <path d="M28 31 q3 -4.5 7 -1.2 q3.5 -3 7 1.2 z" fill="#5fa04a" stroke="#2b2233" stroke-width="1.6" stroke-linejoin="round"/>
+</svg>

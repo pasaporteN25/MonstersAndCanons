@@ -1,20 +1,22 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- Estatua de piedra (ruinas): un guerrero sobre un pedestal, con la espada en alto, agrietado
-       y con musgo. -->
-  <ellipse cx="33" cy="55" rx="20" ry="5.5" fill="#000000" opacity="0.22"/>
-  <rect x="17" y="46" width="30" height="9" rx="2" fill="#a8a397" stroke="#2b2233" stroke-width="2.4"/>
-  <rect x="17" y="46" width="30" height="2.6" rx="1.3" fill="#cfcabd"/>
-  <polygon points="44.6,23 46.4,7 48.2,23" fill="#d3d7dc" stroke="#2b2233" stroke-width="1.8" stroke-linejoin="round"/>
+<!-- Estatua de piedra (ruinas); material pulido, vista lateral hacia la derecha; fondo transparente. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" stroke-linecap="round" stroke-linejoin="round">
+<defs><linearGradient id="material0" x1="0" y1="0" x2=".25" y2="1"><stop offset="0" stop-color="#87ab69"/><stop offset=".52" stop-color="#6f9a4a"/><stop offset="1" stop-color="#597b3b"/></linearGradient><linearGradient id="material1" x1="0" y1="0" x2=".25" y2="1"><stop offset="0" stop-color="#aeaaa0"/><stop offset=".52" stop-color="#9d988c"/><stop offset="1" stop-color="#7e7a70"/></linearGradient><linearGradient id="material2" x1="0" y1="0" x2=".25" y2="1"><stop offset="0" stop-color="#b7b3a9"/><stop offset=".52" stop-color="#a8a397"/><stop offset="1" stop-color="#868279"/></linearGradient><linearGradient id="material3" x1="0" y1="0" x2=".25" y2="1"><stop offset="0" stop-color="#c8c4b9"/><stop offset=".52" stop-color="#bdb8ab"/><stop offset="1" stop-color="#979389"/></linearGradient><linearGradient id="material4" x1="0" y1="0" x2=".25" y2="1"><stop offset="0" stop-color="#d2cec3"/><stop offset=".52" stop-color="#c9c4b7"/><stop offset="1" stop-color="#a19d92"/></linearGradient><linearGradient id="material5" x1="0" y1="0" x2=".25" y2="1"><stop offset="0" stop-color="#d7d3c8"/><stop offset=".52" stop-color="#cfcabd"/><stop offset="1" stop-color="#a6a297"/></linearGradient><linearGradient id="material6" x1="0" y1="0" x2=".25" y2="1"><stop offset="0" stop-color="#dadee2"/><stop offset=".52" stop-color="#d3d7dc"/><stop offset="1" stop-color="#a9acb0"/></linearGradient></defs>
+
+  <ellipse cx="33" cy="55" rx="20" ry="5.5" fill="#2b2233" opacity=".13"/>
+  <rect x="17" y="46" width="30" height="9" rx="2" fill="url(#material2)" stroke="#2b2233" stroke-width="2.4"/>
+  <rect x="17" y="46" width="30" height="2.6" rx="1.3" fill="url(#material5)"/>
+  <polygon points="44.6,23 46.4,7 48.2,23" fill="url(#material6)" stroke="#2b2233" stroke-width="1.8" stroke-linejoin="round"/>
   <path d="M42 24 H51" fill="none" stroke="#2b2233" stroke-width="3.6" stroke-linecap="round"/>
   <path d="M42 24 H51" fill="none" stroke="#a8a397" stroke-width="1.6" stroke-linecap="round"/>
   <path d="M37 29 L44 24" fill="none" stroke="#2b2233" stroke-width="6" stroke-linecap="round"/>
   <path d="M37 29 L44 24" fill="none" stroke="#bdb8ab" stroke-width="3" stroke-linecap="round"/>
-  <path d="M23 47 L26 28 Q32 23 38 28 L41 47 Z" fill="#bdb8ab" stroke="#2b2233" stroke-width="2.4" stroke-linejoin="round"/>
-  <path d="M32 26 L38 28 L41 47 L32 47 Z" fill="#9d988c"/>
+  <path d="M23 47 L26 28 Q32 23 38 28 L41 47 Z" fill="url(#material3)" stroke="#2b2233" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M32 26 L38 28 L41 47 L32 47 Z" fill="url(#material1)"/>
   <path d="M27 30 Q32 33 37 30" fill="none" stroke="#d7d3c7" stroke-width="1.6" stroke-linecap="round"/>
-  <circle cx="32" cy="20" r="5.4" fill="#c9c4b7" stroke="#2b2233" stroke-width="2.2"/>
-  <path d="M26.6 19 Q32 11 37.4 19" fill="#a8a397" stroke="#2b2233" stroke-width="1.8" stroke-linejoin="round"/>
+  <circle cx="32" cy="20" r="5.4" fill="url(#material4)" stroke="#2b2233" stroke-width="2.2"/>
+  <path d="M26.6 19 Q32 11 37.4 19" fill="url(#material2)" stroke="#2b2233" stroke-width="1.8" stroke-linejoin="round"/>
   <path d="M30 34 l3 5 -2 6" fill="none" stroke="#7d796e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <ellipse cx="22" cy="50" rx="4.6" ry="2" fill="#6f9a4a"/>
-  <ellipse cx="42" cy="49" rx="3.2" ry="1.7" fill="#6f9a4a"/>
+  <ellipse cx="22" cy="50" rx="4.6" ry="2" fill="url(#material0)"/>
+  <ellipse cx="42" cy="49" rx="3.2" ry="1.7" fill="url(#material0)"/>
+<path d="M29 17 33 15M20 50H29" stroke="#eee8d9" stroke-width="1.2"/><path d="M25 40 27 43 30 43M35 34 37 39" fill="none" stroke="#797469" stroke-width="1.1"/>
 </svg>
