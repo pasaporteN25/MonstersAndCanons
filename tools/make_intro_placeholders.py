@@ -1,5 +1,6 @@
 """Genera las láminas PROVISORIAS de la intro (T242): un rectángulo de color liso de 1920 x 1080 con el
-número de la lámina y la palabra PROVISORIA. T241 las reemplaza por las definitivas, con los mismos nombres.
+número de la lámina y la palabra PROVISORIA. T241 las reemplazó por las definitivas, con los mismos nombres:
+NO correrlo, pisaría el arte aprobado (solo sirve para armar una intro de prueba en otra carpeta).
 
 Uso (desde la raíz del proyecto): python3 tools/make_intro_placeholders.py
 """

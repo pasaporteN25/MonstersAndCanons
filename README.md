@@ -98,7 +98,7 @@ Requiere las plantillas de exportación de Godot 4.7.2 (en el editor: *Editor �
 godot --headless --path . --export-release "Windows Desktop" build/MonstersCanons.exe
 ```
 
-- El resultado es **un solo archivo** (`build/MonstersCanons.exe`, ~110 MB: casi todo es el motor de Godot). Se puede copiar a cualquier carpeta o computadora con Windows y jugar sin instalar nada.
+- El resultado es **un solo archivo** (`build/MonstersCanons.exe`, ~160 MB con las láminas de la intro: casi todo es el motor de Godot). Se puede copiar a cualquier carpeta o computadora con Windows y jugar sin instalar nada.
 - La configuración está en `export_presets.cfg`: deja fuera `tests/`, `tools/`, `specs/` y GUT.
 - La carpeta `build/` no se sube a git.
 - El progreso se guarda en `%APPDATA%\Godot\app_userdata\JuegoA\save.json`.
@@ -110,7 +110,7 @@ godot --headless --path . --export-release "Linux" build/MonstersCanons.x86_64
 tar --mode=755 -czf build/MonstersCanons_linux.tar.gz -C build MonstersCanons.x86_64
 ```
 
-- Es **un solo archivo** (`MonstersCanons.x86_64`, ~75 MB, para procesadores de 64 bits Intel/AMD) con los datos adentro, igual que el `.exe`. Usa las mismas plantillas de exportación de Godot 4.7.2 (las de Linux vienen con las de Windows).
+- Es **un solo archivo** (`MonstersCanons.x86_64`, ~127 MB, para procesadores de 64 bits Intel/AMD) con los datos adentro, igual que el `.exe`. Usa las mismas plantillas de exportación de Godot 4.7.2 (las de Linux vienen con las de Windows).
 - Un archivo copiado desde Windows **pierde el permiso de ejecución**. Por eso también se arma el `.tar.gz`, que lo conserva: en Linux, `tar -xzf MonstersCanons_linux.tar.gz` y `./MonstersCanons.x86_64`. Si se copió el archivo suelto: `chmod +x MonstersCanons.x86_64`.
 - Necesita una computadora con escritorio (X11 o Wayland) y OpenGL. El progreso se guarda en `~/.local/share/godot/app_userdata/JuegoA/save.json`.
 - **Todavía no se probó en una computadora Linux real**: los tests sí corren en Linux en cada push (GitHub, D-030), pero el ejecutable no se abrió.
@@ -305,7 +305,7 @@ Dos enemigos nuevos que **roban en banda**: el **Ratero** (chico y veloz, 2 de o
 
 ### T242 · La intro de láminas
 
-Al tocar «Jugar» por primera vez (guardado sin la marca `"intro_seen": true`, fuera del modo de pruebas) se abre una **intro de siete láminas** con el texto abajo, un fundido y avance por toque, teclas o tiempo; «Omitir», `Esc` y el «atrás» de Android la terminan. Al terminar va al **nivel 1** (sin niveles ganados) o a la **selección** (con niveles ganados); se vuelve a ver desde **Wiki → Lore → «Ver la intro»**. Los datos están en `data/intro/intro.json` (`IntroData`, `IntroFlow`, `scenes/ui/intro_screen.gd`). Las láminas de `assets/intro/` son **provisorias** (T241 las reemplaza con los mismos nombres; `tools/make_intro_placeholders.py` genera las de prueba). Ficha: `specs/01-spec.md` M57 (RF-497 a RF-501), D-096 y `specs/intro/guion.md`.
+Al tocar «Jugar» por primera vez (guardado sin la marca `"intro_seen": true`, fuera del modo de pruebas) se abre una **intro de siete láminas** con el texto abajo, un fundido y avance por toque, teclas o tiempo; «Omitir», `Esc` y el «atrás» de Android la terminan. Al terminar va al **nivel 1** (sin niveles ganados) o a la **selección** (con niveles ganados); se vuelve a ver desde **Wiki → Lore → «Ver la intro»**. Los datos están en `data/intro/intro.json` (`IntroData`, `IntroFlow`, `scenes/ui/intro_screen.gd`). Las láminas de `assets/intro/` son las **definitivas** de T241 (aprobadas el 2026-10-11; suman unos 24 MB en cada ejecutable). `tools/capture_intro.tscn` las captura con ventana y `tools/check_intro_pack.tscn` comprueba que cargan (ver T242 en `specs/03-tareas.md`). Ficha: `specs/01-spec.md` M57 (RF-497 a RF-501), D-096 y `specs/intro/guion.md`.
 
 ### T234 · Nivel 15: La Central, el Coloso y el epílogo
 

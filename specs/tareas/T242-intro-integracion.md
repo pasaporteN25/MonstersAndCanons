@@ -1,6 +1,6 @@
 # T242 · Intro: reproducir, omitir y volver a ver
 
-> **Estado: EN CURSO. Lucas aprobó el guion y M57 el 2026-10-11** (P1 y P2 como se recomendaban). **Los pasos 1 a 5, 7 y 8 están hechos (2026-10-11) con imágenes provisorias** (`assets/intro/`, generadas con `tools/make_intro_placeholders.py`); **falta el paso 6**, que espera a T241 y a la reexportación de T237. El Resultado está en `03-tareas.md`. La spec es **M57** (`01-spec.md`, RF-497 a RF-501), la decisión **D-096**, el plan técnico «M57 / T240» (`02-plan-tecnico.md`) y el guion `specs/intro/guion.md`.
+> **Estado: HECHA (2026-10-11: el paso 6 se cerró con las láminas definitivas; ver el Resultado en `03-tareas.md`).** Antes, en curso: **Lucas aprobó el guion y M57 el 2026-10-11** (P1 y P2 como se recomendaban). **Los pasos 1 a 5, 7 y 8 están hechos (2026-10-11) con imágenes provisorias** (`assets/intro/`, generadas con `tools/make_intro_placeholders.py`); **el paso 6 (medir el texto y reexportar) se hizo después**, con las láminas de T241 aprobadas. El Resultado está en `03-tareas.md`. La spec es **M57** (`01-spec.md`, RF-497 a RF-501), la decisión **D-096**, el plan técnico «M57 / T240» (`02-plan-tecnico.md`) y el guion `specs/intro/guion.md`.
 
 - **Ejecutor:** Sonnet 5.5 · esfuerzo **medio** · **Depende de:** T241 (las láminas), aunque **los pasos 1 a 5 se pueden hacer antes con imágenes provisorias** · **Tamaño:** chico a mediano (un lector de datos, una pantalla, una clave del guardado y dos botones)
 

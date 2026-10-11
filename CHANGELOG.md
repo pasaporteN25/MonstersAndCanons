@@ -9,7 +9,7 @@ Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle t�
 - **A dónde lleva al terminar:** si todavía no ganaste ningún nivel, **directo al nivel 1**; si ya jugaste antes, a la **selección de niveles** como siempre. Un guardado de una versión anterior la ve **una sola vez**.
 - **Para volver a verla:** **Wiki → Lore → «Ver la intro»**. Funciona siempre y no toca tu progreso. En el modo de pruebas no salta sola (se pide desde la Wiki).
 - **Si el archivo de la intro falla, el juego sigue:** «Jugar» va a la selección de niveles.
-- **Por ahora las láminas son provisorias:** un color liso con el número. Los dibujos definitivos llegan después; los textos ya son los aprobados.
+- **Las siete láminas son las definitivas** (dibujos en estilo «cuaderno de bitácora», aprobados el 2026-10-11): ocupan unos **24 MB** del juego (el instalable de Android pasa de unos 60 MB a unos 87 MB). El texto entra en la franja de abajo en cualquier tamaño de pantalla, también el peor caso de dos líneas de 90 caracteres.
 - Tu progreso no cambia: el guardado suma solo una marca («intro vista») y una versión anterior del juego lo sigue leyendo.
 
 ## Asedio con los 15 mapas y una dificultad propia por mapa *(T258, 2026-10-10)*
