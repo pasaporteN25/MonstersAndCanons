@@ -18,3 +18,10 @@ art/redesign-m23/*.log
 
 # Segundo proyecto Godot vacío, sin relación con el juego principal
 /monters-&-canons/
+
+# Claves y firmas: nunca al repositorio (T239)
+*.keystore
+*.jks
+.env
+*.apk
+*.aab
