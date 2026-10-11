@@ -1,0 +1,111 @@
+{
+  "task": "T241",
+  "style": "A · Cuaderno de bitácora",
+  "generator": "image_gen integrado",
+  "approval": "Pendiente de revisión de las siete láminas por Lucas",
+  "text_zone": {
+    "y_start": 842,
+    "y_end": 1080
+  },
+  "total_bytes": 24354763,
+  "images": [
+    {
+      "id": "01",
+      "title": "La nave",
+      "source": "sources/01_la_nave.png",
+      "source_size": [
+        1672,
+        941
+      ],
+      "file": "assets/intro/01_la_nave.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 2771004,
+      "sha256": "17e7e5c597406a303c36490b0c08448aa1a79d47401bb3f1e063f9a320f5d8ad"
+    },
+    {
+      "id": "02",
+      "title": "La bodega",
+      "source": "sources/02_la_bodega.png",
+      "source_size": [
+        1672,
+        941
+      ],
+      "file": "assets/intro/02_la_bodega.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 3701846,
+      "sha256": "68ace2238cd98e8bb0db693e0644c0f3f255e58dfe95b1056520b307bed664fe"
+    },
+    {
+      "id": "03",
+      "title": "Los turnos",
+      "source": "sources/03_los_turnos.png",
+      "source_size": [
+        1672,
+        941
+      ],
+      "file": "assets/intro/03_los_turnos.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 3513701,
+      "sha256": "2d033983201f8fbb91a80059460513b8a64c5b21e830bf827f76b8d6d71bc962"
+    },
+    {
+      "id": "04",
+      "title": "La ventana",
+      "source": "sources/04_la_ventana.png",
+      "source_size": [
+        1672,
+        941
+      ],
+      "file": "assets/intro/04_la_ventana.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 3422857,
+      "sha256": "b9d6b8d5ad6bd132b024a445ba04fe52f3476503ed6ae09f172d4d0cae03053a"
+    },
+    {
+      "id": "05",
+      "title": "El descenso",
+      "source": "sources/05_el_descenso.png",
+      "source_size": [
+        1672,
+        941
+      ],
+      "file": "assets/intro/05_el_descenso.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 3279054,
+      "sha256": "b0cab39c4b10257dc99e3b4bacf663356d213c5ec9cf502af924fdd1c80d3671"
+    },
+    {
+      "id": "06",
+      "title": "Los motores apagados",
+      "source": "sources/06_los_motores_apagados.png",
+      "source_size": [
+        1672,
+        941
+      ],
+      "file": "assets/intro/06_los_motores_apagados.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 3715778,
+      "sha256": "a2016ec2c7b018766839d4eb81963375cbf0a30063426dd024e19735eb184f8b"
+    },
+    {
+      "id": "07",
+      "title": "El oasis",
+      "source": "sources/07_el_oasis.png",
+      "source_size": [
+        1672,
+        941
+      ],
+      "file": "assets/intro/07_el_oasis.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 3950523,
+      "sha256": "f6b9b764dfe04665f1df7fe0def0d39840e3d11da29b896ae86e52e5d36175e2"
+    }
+  ]
+}

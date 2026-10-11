@@ -1,8 +1,8 @@
 # T241 · 🎨 Láminas de la intro
 
-> **Estado: EN CURSO. Lucas aprobó el guion y el estilo A «Cuaderno de bitácora» el 2026-10-11** (no hace falta la versión B de la lámina de prueba; se hacen las siete en A y Lucas revisa la hoja de miniaturas). El guion es `specs/intro/guion.md`; la spec, **M57** (`01-spec.md`, RF-497 a RF-501); la decisión, **D-096**.
+> **Estado: PRODUCCIÓN ENTREGADA, pendiente de revisión visual de Lucas. Lucas aprobó el guion y el estilo A «Cuaderno de bitácora» el 2026-10-11** (no hace falta la versión B de la lámina de prueba; se hacen las siete en A y Lucas revisa la hoja de miniaturas). El guion es `specs/intro/guion.md`; la spec, **M57** (`01-spec.md`, RF-497 a RF-501); la decisión, **D-096**. Revisión: `art/intro-v1/comparison.html`.
 
-- **Ejecutor:** **Codex** · **Depende de:** T240 (**escrita**; falta el OK de Lucas) · **Compuerta:** 🎨 Lucas aprueba **una lámina de prueba** (estilo) antes de hacer el resto · **Tamaño:** mediano
+- **Ejecutor:** **Codex** · **Depende de:** T240 (**aprobada el 2026-10-11**) · **Compuerta:** 🎨 estilo A aprobado; falta la revisión visual de las siete láminas · **Tamaño:** mediano
 
 ## Leer
 `specs/tareas/README.md` §6, **`specs/intro/guion.md` entero** (sobre todo §3 «Hoja de continuidad», §4 «Las siete láminas» y §6 «Dos referencias de estilo»), `specs/10-universo.md` (§3 «Aspecto de la expedición», §1 y §6) y `.claude/rules/arte.md`. La guía de arte (`05`) es de sprites de 64 px: **de ahí vale la paleta de la familia A (hierro, bronce y madera)** y nada más; las láminas no son SVG.
@@ -16,9 +16,9 @@
 - **Una hoja con las siete en miniatura**, para revisar la continuidad.
 
 ## Pasos
-1. **Lámina de prueba: la 7, en las dos referencias de estilo** (A «Cuaderno de bitácora» y B «Diapositiva pintada»), para que Lucas compare con lo mismo adelante. **Lucas elige una (o pide mezclar).** Sin su OK no se sigue.
-2. **El resto de las láminas** (1 a 6) en el estilo elegido. Cuidar la nave y **la ingeniera** (aparece en la 2, 3, 4 y 6) y que el herrero sea el mismo en la 2, la 4 y la 7.
-3. **La hoja de miniaturas** y la revisión de Lucas **antes del PR**.
+1. **Las siete en A «Cuaderno de bitácora»**, según el OK de Lucas del 2026-10-11. No producir B ni volver a pedir la elección de estilo.
+2. Cuidar la nave y **la ingeniera** (aparece en la 2, 3, 4 y 6) y que el herrero sea el mismo en la 2, la 4 y la 7.
+3. **La hoja de miniaturas**, recortes de continuidad y comparación HTML, para que Lucas revise las siete **antes del PR**.
 
 ## Hecho cuando
 Las siete láminas aprobadas y en `assets/intro/`, con fuentes, prompts y manifest. Cada una mide 1920 × 1080 y pesa lo razonable (anotar cuánto: T242 mide el total en la APK). Commit `T241: …` y PR.
