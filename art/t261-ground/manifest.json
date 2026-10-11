@@ -1,0 +1,47 @@
+[
+  {
+    "archivo": "assets/tiles/rendered/ground_pradera.png",
+    "sha256_antes": "cb98b34a2329e49c8066d2662020a10d3a43647ce5117dc37a1f348413369224",
+    "sha256_despues": "0f7ea2e48bf70b59b8b9cadd8b50c8068c2c61fe470ac3bff61fc848d95206e7"
+  },
+  {
+    "archivo": "assets/tiles/rendered/ground_desierto.png",
+    "sha256_antes": "14d0bdc0fdf0cb942847917d31e5de626fbc95da45425c3391c6e4d2d6e1bc84",
+    "sha256_despues": "3706b3a998958cbcf859284407a15abefa9f55b819d4f694aa8c31a9aba2bba1"
+  },
+  {
+    "archivo": "assets/tiles/rendered/ground_nieve.png",
+    "sha256_antes": "69d1d4054f7551c1f231ff9fb10933f4a05554c7bc9aa29424a29c2f44a3f74f",
+    "sha256_despues": "e2d40c6b222c0caca9bd2599b13779b4a9b791a7c233650dffb2da820f627f86"
+  },
+  {
+    "archivo": "assets/tiles/rendered/ground_volcan.png",
+    "sha256_antes": "4921fb8183aea67b51ab7fca46e1bc3e9e0942d1bc48b990462814b41f61e81c",
+    "sha256_despues": "894677629a96e7c14acedb6cd26523d96c6ade6a214a9763f1419060a23bf4dc"
+  },
+  {
+    "archivo": "assets/tiles/rendered/ground_bosque.png",
+    "sha256_antes": "ea73de787b8715e88a81504407c43b8a86793b8caee9a7300226f3ce7af7633a",
+    "sha256_despues": "1f24f5a810b53edb1f571cebda057363d4a38a22e11e765819f2b654ab006a84"
+  },
+  {
+    "archivo": "assets/tiles/rendered/ground_pantano.png",
+    "sha256_antes": "8b1a293f832a65e91f246d8d4afdd1a1baed046309679dc052298c04adb8e563",
+    "sha256_despues": "5bced16de266394ed7ea09cec5191cd8f9cc0efb13a32fb7ee2e0edce9662d72"
+  },
+  {
+    "archivo": "assets/tiles/rendered/ground_ruinas.png",
+    "sha256_antes": "3588c580e0de81f341e33969f0dc012dbd89dc63aa3de8c769570ff744e989cd",
+    "sha256_despues": "5c7419d075d8a64eda1d5ecc994a499c1b087a27135ec427fec1024a16d2015f"
+  },
+  {
+    "archivo": "assets/tiles/rendered/path.png",
+    "sha256_antes": "14cd62dc1474ea477351cd859f82cff149bc2587caa068076666a067715b1a1d",
+    "sha256_despues": "aa4d90a55eb12103b09c76e702a677ff85e6aa05611fee940decfcbfd1ce4f0f"
+  },
+  {
+    "archivo": "assets/sprites/map/flores.svg",
+    "sha256_antes": "7bd876ed4a5ea3ce90111dbf82cd2b66c358eaafa633437c0f46fa58d5f4a98e",
+    "sha256_despues": "292c319ba263830d7755495c930f88fa2c5004b45b92dfef0d28b49ab9b7fab9"
+  }
+]

@@ -1,0 +1,2 @@
+/home/newman/orca/workspaces/TDv1/t261-arte-suelo/art/t261-ground/refine_vectors.py:21: DeprecationWarning: Rsvg.Handle.get_pixbuf is deprecated
+  handle.get_pixbuf().savev(str(dest), 'png', [], [])
