@@ -303,6 +303,10 @@ Cierra el bloque 2 con un mapa grande (24 × 11) del desierto, dos entradas y 20
 
 Dos enemigos nuevos que **roban en banda**: el **Ratero** (chico y veloz, 2 de oro cada 2 s) y el **Cargador** (grande y lento, 4 de oro cada 2 s), cada uno en su propio reloj y sin bajar la caja de 10 de oro. Debutan en el **nivel 7** (oleada 8) y vuelven en el **10**, el **13** y el **14**, cuatro veces por nivel, sin auras ni jefe en esas oleadas. Todo con datos que ya existían; arte provisional (forma geométrica) hasta T257. Hay un artículo nuevo de Lore, **«La Cuadrilla»**, que se abre al ganar el 7. Spec: `specs/01-spec.md` M55 (RF-485 a RF-491), decisión D-094; medición en el Resultado de T253 (`specs/03-tareas.md`).
 
+### T242 · La intro de láminas
+
+Al tocar «Jugar» por primera vez (guardado sin la marca `"intro_seen": true`, fuera del modo de pruebas) se abre una **intro de siete láminas** con el texto abajo, un fundido y avance por toque, teclas o tiempo; «Omitir», `Esc` y el «atrás» de Android la terminan. Al terminar va al **nivel 1** (sin niveles ganados) o a la **selección** (con niveles ganados); se vuelve a ver desde **Wiki → Lore → «Ver la intro»**. Los datos están en `data/intro/intro.json` (`IntroData`, `IntroFlow`, `scenes/ui/intro_screen.gd`). Las láminas de `assets/intro/` son **provisorias** (T241 las reemplaza con los mismos nombres; `tools/make_intro_placeholders.py` genera las de prueba). Ficha: `specs/01-spec.md` M57 (RF-497 a RF-501), D-096 y `specs/intro/guion.md`.
+
 ### T234 · Nivel 15: La Central, el Coloso y el epílogo
 
 Cierra la campaña: un mapa de pradera de 26 × 12 con **tres entradas**, la **central de energía** (cuatro dibujos de 64 × 64 junto a la salida) y la cadena de abastecimiento, y **30 oleadas** sin el Soberano. El jefe es el **Coloso** (oleadas 26, 28 y 30), que al caer se parte en tres Pedazos; en la 30 viene con la escolta completa. Al ganar, la pantalla de victoria ofrece **«Epílogo»** (imagen, cuatro líneas, «Créditos» y «Niveles») en lugar de «Siguiente nivel», sin guardar nada nuevo. Ficha: `specs/01-spec.md` §7.17 (RF-480 a RF-484, RF-471 y RF-472); evidencia: `art/campaign-t234/README.md`.

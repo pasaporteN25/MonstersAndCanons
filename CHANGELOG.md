@@ -2,6 +2,16 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## La intro: siete láminas con texto, que se pueden omitir y volver a ver *(T242, 2026-10-11)*
+
+- **Al tocar «Jugar» por primera vez se ve una intro de siete láminas** (unos 50 segundos) con el texto abajo y un fundido entre una y otra: la nave, qué lleva, los años de viaje, el planeta seco con un único punto verde, la bajada, los motores apagados y el oasis. Cuenta la llegada; no explica cómo se juega.
+- **Avanza sola o con un toque** (clic, `Espacio`, `Enter` o `→`). **«Omitir»** (arriba a la derecha), `Esc` y el «atrás» del celular la terminan entera, sin pedir confirmación.
+- **A dónde lleva al terminar:** si todavía no ganaste ningún nivel, **directo al nivel 1**; si ya jugaste antes, a la **selección de niveles** como siempre. Un guardado de una versión anterior la ve **una sola vez**.
+- **Para volver a verla:** **Wiki → Lore → «Ver la intro»**. Funciona siempre y no toca tu progreso. En el modo de pruebas no salta sola (se pide desde la Wiki).
+- **Si el archivo de la intro falla, el juego sigue:** «Jugar» va a la selección de niveles.
+- **Por ahora las láminas son provisorias:** un color liso con el número. Los dibujos definitivos llegan después; los textos ya son los aprobados.
+- Tu progreso no cambia: el guardado suma solo una marca («intro vista») y una versión anterior del juego lo sigue leyendo.
+
 ## Asedio con los 15 mapas y una dificultad propia por mapa *(T258, 2026-10-10)*
 
 - **Asedio tiene ahora los 15 mapas de la campaña.** Cada mapa se abre al ganar el anterior, como siempre: ganar el 9 abre el 10, y así hasta **La Central**. Tienen progreso, estrellas y récords propios y no tocan la campaña.

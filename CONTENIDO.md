@@ -500,6 +500,21 @@ Una banda de criaturas independientes que roban en grupo, hecha **solo con datos
 
 `data/levels/level_13.json`, de **26 × 12**, tema `nieve` y **dos entradas** (A y B) que se unen en la casilla (2,6): los dos recorridos comparten un tronco hasta la salida. Su leyenda usa 6 de las 12 letras: `e` y `r` removibles (1 recurso al 50 %), `m` mina y `b` bosque explotable (una fuente por entrada), `i` **hielo** (la laguna: no se construye) y `h` `roca_marcada` (el `hito`). `"torres"` de RF-474 (sin Ametralladora ni Lanzamisiles) y `"demoledora": false`. **La escolta** se escribe con tres grupos del mismo `desde` y la misma `entrada` (`guardian`, `healer`, `shaman`), p. ej. `{"enemigo": "guardian", "cantidad": 2, "cada": 3.0, "entrada": "B"}` más los otros dos con el mismo `desde`. Para cambiar la dificultad se mueve `aumento_vida` (40; con 41 el bot gana con 1 vida y con 42 pierde) y, con cuidado, las oleadas 14, 22 y 23, que son **precipicios**. **Después de cualquier cambio:** `... -s tools/balance_sim.gd -- x check_rule=1 levels=13`.
 
+### T242 · La intro (`data/intro/intro.json`)
+
+La intro se arma con un archivo, sin programar: `{"version": 1, "fundido_s": 0.6, "laminas": [{"imagen": "res://assets/intro/01_la_nave.png", "texto": "Línea 1\nLínea 2", "segundos": 7}, …]}`.
+
+| Clave | Qué es | Límite |
+|---|---|---|
+| `"version"` | Versión del formato | Hoy **1** |
+| `"fundido_s"` | Segundos del fundido entre láminas | De **0 a 2**; opcional (0,6) |
+| `"laminas"` | Las láminas, en orden | De **5 a 8** |
+| `"imagen"` | El PNG de la lámina | Ruta `res://` que existe; **1920 × 1080**, sin texto dibujado; el 22 % de abajo queda tranquilo (ahí va la franja) |
+| `"texto"` | Lo que se lee abajo | **1 o 2 líneas** (`\n`), **90 caracteres por línea**, **160 en total** |
+| `"segundos"` | Cuánto se queda sola la lámina | Entero de **4 a 12**; para poder leerla, al menos `2 + caracteres / 20` redondeado hacia arriba y nunca menos de 5 (lo revisa un test) |
+
+Los textos oficiales son **los de `specs/intro/guion.md`**: si hay que corregir uno, se corrige primero ahí. Un archivo con errores no se muestra (el error sale en la salida) y «Jugar» sigue yendo a la selección de niveles. Para cambiar una lámina alcanza con reemplazar el PNG con el mismo nombre. **Hoy las siete son provisorias** (color liso con el número); las definitivas son de T241.
+
 ### T234 · Nivel 15 (La Central) y el final
 
 `data/levels/level_15.json`, de **26 × 12**, tema `pradera` y **tres entradas** a la izquierda (A arriba, C en el medio y B abajo) que se unen al principio de un tronco común y siguen juntas hasta la salida de la derecha (recorridos de 65, 76 y 70). Su leyenda usa las **12 letras** que permite `LevelFile.MAX_LEGEND` (D-093): `1`, `2`, `3` y `4` son los cuatro cuartos de la central (`central_1` a `central_4`, de arriba a la izquierda a abajo a la derecha), `d`, `p` y `v` las piezas de la cadena de abastecimiento (`supply_depot`, `supply_line_pole`, `supply_cart`; también existe `supply_conveyor`), `m` mina y `b` bosque explotable (dos), `e` escombro removible (5, 1 recurso al 50 %), `c` `campamento_vacio` (3) y `s` `roca_marcada` (2). **La central** son cuatro casillas contiguas **al lado de la salida** (no la salida): para moverla basta cambiar esas cuatro letras de lugar, siempre en ese orden. `"torres"` de RF-474 y `"demoledora": false`. **No lleva al Soberano** (`boss`): el jefe es `colossus`, que se nombra en las oleadas 26, 28 y 30 (uno, dos y tres); la escolta completa (Guardián + Curandero + Chamán con el mismo `desde` y la misma `entrada`) acompaña al Coloso solo en la 30, por B y por C. La oleada 25 es un respiro a propósito. `aumento_vida` es 23: con 22 el bot sin recursos termina con 3 vidas y con 24 pierde; **después de cualquier cambio** `... -s tools/balance_sim.gd -- x check_rule=1 levels=15`.
