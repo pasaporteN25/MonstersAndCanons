@@ -1,13 +1,10 @@
-<!-- Roca negra volcánica (casilla bloqueada del volcán); material pulido, vista lateral hacia la derecha; fondo transparente. -->
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" stroke-linecap="round" stroke-linejoin="round">
-<defs><linearGradient id="material0" x1="0" y1="0" x2=".25" y2="1"><stop offset="0" stop-color="#4f4e57"/><stop offset=".52" stop-color="#2b2a34"/><stop offset="1" stop-color="#22222a"/></linearGradient><linearGradient id="material1" x1="0" y1="0" x2=".25" y2="1"><stop offset="0" stop-color="#605f6a"/><stop offset=".52" stop-color="#403e4b"/><stop offset="1" stop-color="#33323c"/></linearGradient><linearGradient id="material2" x1="0" y1="0" x2=".25" y2="1"><stop offset="0" stop-color="#7a798a"/><stop offset=".52" stop-color="#5f5d72"/><stop offset="1" stop-color="#4c4a5b"/></linearGradient></defs>
-
-  <ellipse cx="35" cy="50" rx="23" ry="7" fill="#2b2233" opacity=".13"/>
-  <path d="M12 44 L10 30 L20 18 L36 14 L50 20 L55 34 L50 46 L32 50 Z" fill="url(#material1)"/>
-  <polygon points="20,18 36,14 50,20 42,28 24,28" fill="url(#material2)"/>
-  <polygon points="42,28 50,20 55,34 50,46" fill="url(#material0)"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Roca negra volcánica (casilla bloqueada del volcán): basalto con una vena de brasa entre las grietas. -->
+  <ellipse cx="35" cy="50" rx="23" ry="7" fill="#000000" opacity="0.22"/>
+  <path d="M12 44 L10 30 L20 18 L36 14 L50 20 L55 34 L50 46 L32 50 Z" fill="#403e4b"/>
+  <polygon points="20,18 36,14 50,20 42,28 24,28" fill="#5f5d72"/>
+  <polygon points="42,28 50,20 55,34 50,46" fill="#2b2a34"/>
   <path d="M25 32 L30 38 L28 44 L33 47" fill="none" stroke="#ff7a2e" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M25 32 L30 38 L28 44 L33 47" fill="none" stroke="#ffd27a" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M12 44 L10 30 L20 18 L36 14 L50 20 L55 34 L50 46 L32 50 Z" fill="none" stroke="#2b2233" stroke-width="2.5" stroke-linejoin="round"/>
-<path d="M17 29 24 22 34 20" fill="none" stroke="#827b96" stroke-width="1.5"/><path d="M41 32 44 39 42 44" fill="none" stroke="#282632" stroke-width="1.2"/>
+  <path d="M12 44 L10 30 L20 18 L36 14 L50 20 L55 34 L50 46 L32 50 Z" fill="none" stroke="#1c1b22" stroke-width="2.5" stroke-linejoin="round"/>
 </svg>

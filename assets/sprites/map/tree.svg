@@ -1,5 +1,25 @@
-<!-- Árbol de copa ramificada y tronco bifurcado; vista lateral hacia la derecha; fondo transparente. -->
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" stroke-linecap="round" stroke-linejoin="round">
-<defs><linearGradient id="leaf" x1="0" y1="0" x2=".25" y2="1"><stop offset="0" stop-color="#6cbc57"/><stop offset=".52" stop-color="#3f8a3a"/><stop offset="1" stop-color="#2f6e2c"/></linearGradient><linearGradient id="wood" x1="0" y1="0" x2=".25" y2="1"><stop offset="0" stop-color="#ac8050"/><stop offset=".52" stop-color="#7a4f2a"/><stop offset="1" stop-color="#503622"/></linearGradient><linearGradient id="berry" x1="0" y1="0" x2=".25" y2="1"><stop offset="0" stop-color="#fb9690"/><stop offset=".52" stop-color="#e2474f"/><stop offset="1" stop-color="#a32e43"/></linearGradient></defs>
-<ellipse cx="33" cy="55" rx="23" ry="4" fill="#2b2233" opacity=".10"/><ellipse cx="33" cy="55" rx="18" ry="2.4" fill="#2b2233" opacity=".10"/><path d="M26 55 29 37 24 30 28 29 33 36 39 29 42 32 36 40 37 55Z" fill="url(#wood)" stroke="#2b2233" stroke-width="2"/><path d="M30 46 29 53M33 40V48" stroke="#c29861" stroke-width="1.3"/><path d="M9 37Q2 29 10 20Q9 12 21 12Q25 2 35 5Q46 3 48 15Q59 18 57 29Q62 40 48 44Q39 50 29 43Q17 48 9 37Z" fill="url(#leaf)" stroke="#2b2233" stroke-width="2.2"/><path d="M9 28Q9 17 21 17Q28 12 34 22Q34 31 26 35Q15 39 9 28Z" fill="url(#leaf)"/><path d="M24 14Q24 6 34 7Q45 5 46 16Q46 24 36 26Q25 25 24 14Z" fill="url(#leaf)"/><path d="M34 31Q35 21 46 21Q56 24 55 34Q52 43 42 42Q32 42 34 31Z" fill="url(#leaf)"/><path d="M13 24Q17 19 23 20M28 13Q33 9 39 12M39 29Q44 25 49 28" fill="none" stroke="#91cb73" stroke-width="1.7"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Árbol (casilla bloqueada). La copa se dibuja dos veces: primero con borde grueso
+       y después sin borde, así solo queda el contorno de afuera. -->
+  <ellipse cx="35" cy="54" rx="20" ry="6" fill="#000000" opacity="0.22"/>
+  <rect x="28" y="40" width="8" height="15" rx="2" fill="#7a4f2a" stroke="#2b2233" stroke-width="2.4"/>
+  <g fill="#2b2233">
+    <circle cx="22" cy="31" r="15"/>
+    <circle cx="42" cy="30" r="15.5"/>
+    <circle cx="32" cy="18" r="15"/>
+  </g>
+  <g fill="#3f8a3a">
+    <circle cx="22" cy="31" r="12.6"/>
+    <circle cx="42" cy="30" r="13.1"/>
+    <circle cx="32" cy="18" r="12.6"/>
+  </g>
+  <g fill="#2f6e2c">
+    <circle cx="26" cy="38" r="7"/>
+    <circle cx="44" cy="37" r="7"/>
+  </g>
+  <g fill="#5fae4c">
+    <circle cx="27" cy="13" r="5"/>
+    <circle cx="16" cy="27" r="3.5"/>
+    <circle cx="39" cy="24" r="4"/>
+  </g>
 </svg>

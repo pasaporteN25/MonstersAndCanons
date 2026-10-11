@@ -1,6 +1,5 @@
-<!-- Herramienta manual tallada, de madera oscura con punta de hueso, apoyada en el suelo; fondo transparente.; material pulido, vista lateral hacia la derecha; fondo transparente. -->
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" stroke-linecap="round" stroke-linejoin="round">
-<defs></defs>
+<!-- Herramienta manual tallada, de madera oscura con punta de hueso, apoyada en el suelo; fondo transparente. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
 <defs>
  <linearGradient id="stone" x1="0" y1="0" x2=".25" y2="1"><stop stop-color="#e0d8c6"/><stop offset=".52" stop-color="#a99f8b"/><stop offset="1" stop-color="#625d53"/></linearGradient>
  <linearGradient id="wood" x1="0" y1="0" x2=".25" y2="1"><stop stop-color="#c4955f"/><stop offset=".52" stop-color="#87603e"/><stop offset="1" stop-color="#4d392f"/></linearGradient>
@@ -10,5 +9,4 @@
 </defs>
 <ellipse cx="32" cy="55" rx="20" ry="3" fill="#2b2233" opacity=".18"/><path d="m12 48 31-31q2-2 4 0l2 2q1 2-1 4L17 52q-3 1-5-1Z" fill="url(#wood)" stroke="#2b2233" stroke-width="2" stroke-linejoin="round"/><path d="M39 19 44 10 57 12 54 28 46 30Z" fill="url(#bone)" stroke="#2b2233" stroke-width="2" stroke-linejoin="round"/><path d="m16 47 26-26" stroke="#d7ae72" stroke-width="1.4" stroke-linecap="round"/><path d="m46 17 5-1-2 7" fill="none" stroke="#fff0ce" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M42 23 48 28M44 20 50 25" stroke="#4d392f" stroke-width="2" stroke-linecap="round"/>
-<path d="M48 11 51 15 56 16" fill="none" stroke="#b69b76" stroke-width="1.2"/><path d="M23 44 29 38" stroke="#4d392f" stroke-width="1.1"/>
 </svg>
