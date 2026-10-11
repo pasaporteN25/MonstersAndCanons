@@ -229,7 +229,7 @@ Cada ficha detallada se completa en la tarea de cada nivel con lo que pide el 07
 ### Fase 8 · Intro (última)
 | T | Tarea | Ejecutor | Depende de | Tamaño |
 |---|---|---|---|---|
-| [T240](tareas/T240-guion-intro.md) | 🚦 G6 · Guion de la intro (láminas) | Sonnet alto + **Lucas** | T238 | Chico |
+| [T240](tareas/T240-guion-intro.md) | 🚦 G6 · Guion de la intro (láminas) **· escrito 2026-10-11, falta el OK de Lucas** (`intro/guion.md`, M57, RF-497 a RF-501, D-096) | Sonnet alto + **Lucas** | T238 | Chico |
 | [T241](tareas/T241-arte-intro.md) | 🎨 Láminas ilustradas con aspecto dibujado a mano | **Codex** | T240 | Mediano |
 | [T242](tareas/T242-intro-integracion.md) | Intro: reproducir, omitir y volver a ver | Sonnet medio | T241 | Chico |
 
