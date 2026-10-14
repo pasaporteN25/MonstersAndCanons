@@ -2,6 +2,154 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Versión 1.0: el juego pasa a llamarse «Monsters & Canons» *(T237, 2026-10-09)*
+
+- **Nuevo nombre en la ventana y en los archivos.** El juego se abre como **Monsters & Canons**, y los archivos son `MonstersCanons.exe` (Windows), `MonstersCanons.x86_64` (Linux) y `MonstersCanons.apk` (Android). La versión es la **1.0.0**.
+- **Tu progreso se conserva en PC.** Los guardados, récords, mapas y modos propios siguen en la misma carpeta de siempre, así que no se pierde nada.
+- **En el celular se instala como otra app.** El paquete cambió a `com.monsterscanons.v1`: la APK vieja queda aparte y se puede desinstalar a mano; el progreso del celular viejo **no pasa** a la app nueva. *(La APK nueva todavía no está generada: falta preparar el SDK de Android en la máquina de trabajo.)*
+- No cambia ninguna regla ni número del juego.
+
+## Torres más livianas con muchas en pantalla *(T236, 2026-10-09)*
+
+- **El juego va más fluido en las oleadas finales.** Con 60 o más torres en el mapa del final, las torres quietas ya no se vuelven a dibujar en cada instante: solo se redibujan cuando giran de verdad, disparan o están aturdidas. En la prueba del nivel 15 (oleada 30, 64 torres) los cuadros por segundo pasaron de unos 30–45 a unos 95–100 en los primeros 30 segundos de la oleada. No cambia cómo se ven ni cómo apuntan ni ninguna regla ni número.
+- Los guardados de versiones anteriores (solo con niveles, de antes de la Disruptora, con las colecciones completas y los del modo de pruebas) se siguen leyendo sin perder nada, y ganar el 9 sigue abriendo el 10.
+
+## Nivel 15: La Central, el Coloso, el epílogo y los créditos *(T234, 2026-10-09)*
+
+- **La campaña tiene 15 niveles y termina.** El nuevo se abre al ganar el 14: **La Central**, «energía y abastecimiento», un mapa **grande** (26 × 12) en el **valle** donde aterrizó la nave, con **tres entradas**. Al lado de la salida está la **central de energía** (un edificio de cuatro piezas) y, por el borde del mapa, la **cadena de abastecimiento** (un depósito, un poste de línea y una vagoneta) que la une con la mina. Hay una mina, dos bosques y cinco escombros, y también tres campamentos vacíos y dos rocas marcadas, como en el primer nivel. Es **el nivel más difícil de la campaña**: **30 oleadas**, 520 de oro y 20 vidas.
+- **Llega el Coloso.** Es el jefe del final y **reemplaza al Soberano**: una masa de piedra lenta (velocidad 0.5), con mucha vida y armadura, que **al caer se parte en tres Pedazos** rápidos y sin armadura que siguen camino. Si el Coloso llega a la salida **quita 12 de tus 20 vidas** (y no se parte); cada Pedazo que llega, 4. **Los golpes fuertes lo rompen** (Francotirador, Cañón, la quemadura de la Incendiaria, la Eléctrica) y **el Hielo y las torres de área barren los Pedazos**: hace falta tener las dos cosas. Sale en las oleadas **26** (uno, con enemigos ya conocidos), **28** (dos) y **30** (tres, con la **escolta completa**: Guardianes, Curanderos y Chamanes en formación y por dos entradas a la vez). La oleada 25 es un respiro.
+- **Ganar el 15 muestra el «Epílogo».** En la pantalla de victoria, en lugar de «Siguiente nivel» (no hay otro) aparece el botón **«Epílogo»**: la imagen del final con cuatro líneas y los botones **«Créditos»** y **«Niveles»**. `Esc` o un toque sobre la imagen vuelven a la pantalla de victoria; los puntos, las iniciales y los récords funcionan **antes**, como siempre. **Los créditos** son una pantalla de texto con «Volver». Solo se ve ganando el 15 desde la campaña (no en los modos, los mapas de la comunidad, el editor ni el modo de pruebas), y **no se guarda nada nuevo**: la campaña queda terminada cuando los 15 niveles figuran ganados.
+- **Wiki:** al ganar el 15 se abre el artículo de Lore **«La Central»** (con lo que dicen los colonos del Coloso); y los de los niveles 11 («Los pozos») y 14 («Los poblados vacíos») ya se ven al ganar esos niveles. **Enemigos** suma al **Coloso** (con la corona de «Peligroso») y al **Pedazo**, que se abren cuando los ves por primera vez.
+- Sin Ametralladora ni Lanzamisiles. **Se gana sin tocar la mina, los bosques ni los escombros.**
+- Para quien arma mapas: la **leyenda** de un mapa puede tener ahora hasta **12 letras** (eran 10), y hay ocho dibujos nuevos para las piezas de la central y de la cadena de abastecimiento.
+
+## Tarjetas de nivel sin superposiciones *(T250, 2026-10-09)*
+
+- En la selección de nivel, el nombre, el lugar, los íconos de las torres, las estrellas y el resultado ahora tienen su propio espacio. «Bloqueado» y «Mejor: N vidas» ya no pisan los íconos.
+- Si un nivel ofrece 9 o más torres, los íconos pasan a otro renglón y siguen dentro de la tarjeta; la marca naranja y el tooltip «Nueva» se conservan.
+
+## Textos de los niveles y Lore en la Wiki *(T228, 2026-10-09)*
+
+- **Cada nivel de la campaña (1 a 10) cuenta dónde estás.** La **tarjeta** del nivel (si ya está desbloqueado) muestra su lugar bajo el nombre, por ejemplo «El paso del agua». Al entrar a un nivel aparece un **cartel** con el nombre, el lugar y tres líneas de entrada: **la partida espera mientras lo leés** y se cierra con un toque, `Espacio`, `Enter` o `Esc`. **«Reintentar» no lo vuelve a mostrar.** Al ganar, la pantalla de victoria suma dos líneas bajo las estrellas.
+- **No se ven** en el modo de pruebas, al probar un mapa desde el editor ni en el modo Asedio. Un mapa de la comunidad los muestra solo si su archivo trae el campo `"textos"` (ver `CONTENIDO.md`).
+- **Wiki → Lore:** una solapa nueva con artículos sobre el oasis, Cántaro, la Compañía Meridiana, el Soberano y más. Cada uno **se abre al ganar un nivel** (quien ya había ganado hasta el 9 los tiene abiertos); antes se ve «???» y «Se abre al ganar el nivel N.». Hoy son **7 artículos**; los de los niveles 11, 14 y 15 aparecen cuando esos niveles lleguen a la campaña.
+- No cambió ningún número del juego ni el guardado.
+## Nivel 14: Los poblados vacíos *(T232, 2026-10-09)*
+
+- **La campaña tiene 14 niveles.** El nuevo se abre al ganar el 13: **Los poblados vacíos**, «asentamientos de los Moradores», un mapa **grande** (26 × 12) de **ruinas** con **dos entradas** a la derecha cuyos caminos se unen y siguen juntos hasta la salida, a la izquierda. Los poblados están **vacíos pero con huellas recientes**: campamentos con restos de fuego, cuerdas y pieles, el símbolo A por todas partes y columnas rotas. Hay una mina y un bosque (uno por entrada) y cinco removibles, las casas del poblado.
+- **No hay enemigos nuevos: es el examen antes del final.** Vienen **todos juntos**: la escolta (Guardián, Curandero y Chamán) con el **Espejo** y **Voladores**, el Ladrón, el Embestidor y el Soberano, en **26 oleadas**. Es **el nivel más difícil hasta ahora** (aumento de vida de 30 % por oleada).
+- Sin Ametralladora. **Se gana sin tocar la mina, el bosque ni los removibles.** Con la Disruptora, conviene ponerla donde se juntan los caminos.
+
+## Nivel 13: Paso alto *(T231, 2026-10-09)*
+
+- **La campaña tiene 13 niveles.** El nuevo se abre al ganar el 12: **Paso alto**, «el camino al resto de la región», un mapa **grande** (26 × 12) de **nieve** con **dos entradas** (arriba y abajo a la izquierda) cuyos caminos **se unen** y siguen juntos hasta la salida, una **laguna de hielo** en el medio (no se construye) y cuatro rocas marcadas a lo largo de los caminos. Hay una **mina** del lado de la entrada de arriba y un **bosque** del lado de la de abajo (2 recursos por oleada cada uno), y cinco removibles.
+- **No hay enemigos nuevos: lo nuevo es cómo vienen.** Aparece **la escolta**: un **Guardián, un Curandero y un Chamán juntos**, que protegen, curan y apagan torres a la vez. La primera llega en la oleada 9 por una sola entrada; desde la 14 vienen **por las dos entradas al mismo tiempo**. Conviene **repartir las defensas** entre las dos entradas y apagar las auras (con la Disruptora, si la tenés) donde los caminos se juntan.
+- Sin Ametralladora ni Lanzamisiles. **Se gana sin tocar la mina, el bosque ni los removibles.** El nivel es **tan difícil como el 11** (con aumento de vida de 40 % por oleada, 24 oleadas).
+
+## Nivel 12: El cañadón *(T230, 2026-10-09)*
+
+- **La campaña tiene 12 niveles.** El nuevo se abre al ganar el 11: **El cañadón**, «el paso hacia el norte»: un mapa **grande** (26 × 11) del **desierto** con **una entrada** y un camino que **zigzaguea entre paredes de roca** (cinco tramos verticales). Hay pocas casillas buenas (45), tres rocas marcadas en la boca del cañadón, cinco rocas y escombros que pueden dar 1 recurso y, en lugar de la mina, un **bosque explotable** (100 de oro, 2 recursos por oleada, 8 en total).
+- **Debuta el Espejo**, solo, en la oleada 5: **devuelve los tiros de las torres cercanas** (a menos de 2,5 casillas) y las aturde un par de segundos. Lo que rinde es **pegarle de lejos** (Francotirador, Mortero, Incendiaria) y no poner las torres pegadas al camino. Desde la oleada 8 se mezclan el Chamán, el Guardián y el Curandero, y desde la 12 el Espejo viaja con ellos.
+- Sigue sin Ametralladora; con las colecciones completas están la Disruptora y el Mecánico. **Se gana sin tocar el bosque ni los removibles.** El nivel es **más difícil que el 11** (aumento de vida de 27 % por oleada, 24 oleadas).
+
+## Nivel 11: Puesto seco *(T229, 2026-10-09)*
+
+- **La campaña tiene 11 niveles.** El nuevo se abre al ganar el 10: **Puesto seco**, «el punto de agua», un mapa **grande** (24 × 11) del **desierto** con **una sola entrada** y un camino largo en serpentina. Tiene **dos pozos de agua** y tres rocas marcadas al costado del camino, una **mina** (100 de oro, 2 recursos por oleada) y cinco rocas y escombros que pueden dar 1 recurso.
+- **Desde acá ya no hay Ametralladora.** El nivel ofrece las otras torres (Cañón, Hielo, Francotirador, Incendiaria, Múltiple, Ráfaga, Eléctrica y Mortero) y, si completaste sus colecciones, la **Disruptora** (que en este nivel aparece marcada como «Nueva») y el Mecánico. La apertura es con el **Hielo** y una torre de entre 90 y 110 de oro.
+- **Debuta el Chamán**, y lo hace solo, en la oleada 5: **apaga la torre más cercana** unos segundos. Un Francotirador lo alcanza antes de que lance el hechizo. El Guardián y el Curandero llegan juntos desde la oleada 8; el Chamán se les suma desde la 12 (ahí sirve la Disruptora contra las auras). El Soberano aparece a mitad del nivel.
+- **Se gana sin tocar la mina, los removibles ni los recursos.** El nivel es más difícil que el 10 (con aumento de vida de 27 % por oleada).
+
+## La barra con pestañas y la flecha al menú *(T248, 2026-10-08)*
+
+- **Del nivel 6 en adelante, la barra de abajo tiene dos pestañas:** **«Cañones»** (las torres de siempre) e **«Infraestructura»** (todo lo de demoler, la demoledora, la extracción y los recursos). Aparecen en **todo mapa que tenga removibles, minas o demoledora** (hoy, los niveles 6 a 10, y también un mapa de la comunidad con un solo árbol removible). **Los niveles 1 a 5 se ven y se juegan exactamente igual.**
+- **El botón «Infraestructura» de arriba a la derecha desaparece:** la demoledora se compra ahora en la pestaña, que además muestra el **trabajo en curso** (con barra y «Cancelar»), la **extracción** (una ficha por mina o bosque, con «Habilitar») y los **recursos**. Tocar una roca o un árbol del mapa funciona igual que antes y **no cambia de pestaña**: mientras demolés, el título de la pestaña dice «Infraestructura · 4 s».
+- **Teclas:** `1` a `9` eligen las torres 1 a 9, **`0` elige la décima** y **`Tab` cambia de pestaña** (solo en los niveles con pestañas). Con una torre elegida, `Tab` cancela la construcción; apretar la tecla de una torre desde «Infraestructura» vuelve a «Cañones» y la elige. Todo se puede hacer también con el mouse o con el dedo.
+- **Los botones de torre se achican** (de 76 a 57 px) cuando hay más de 9, para que entren todas sin tapar «Próxima oleada»; el costo y el ícono del recurso se siguen leyendo.
+- **Arreglo escondido:** con 10 torres, cada tecla o clic hacía que el juego anotara un error de «acción inexistente» (`build_10`) en el registro. Ya no.
+- **Una flecha «← Menú» arriba a la izquierda, en todos los niveles.** **Siempre pregunta** antes de salir y te dice qué perdés: las **piezas de colección recogidas en la partida (aunque ya estén confirmadas)** y la **demolición en curso**; lo que ya ganaste (niveles, estrellas, récords y piezas guardadas) se conserva. Mientras decidís, la partida queda en pausa, y «Seguir jugando» la deja como estaba (corriendo a la misma velocidad, o en pausa si ya lo estaba). Al probar un mapa desde el editor, la flecha dice **«← Editor»** y vuelve sin preguntar. El menú de pausa (`Esc`) no cambió.
+## Retoques de arte provisional *(T249, 2026-10-09)*
+
+- Las señales de piedra muestran el símbolo A con más contraste y el poste tiene cintas gastadas más claras. La **Disruptora** gana anillos más anchos y un disco emisor más legible en el mapa y la barra.
+- Se retocaron también los SVG de removibles, minas, bosque e íconos; su integración visual completa sigue pendiente. Comparación antes/después y límites en `art/t249-mejoras/`. Todo sigue siendo **provisional**, sujeto a la aprobación de Lucas.
+
+## Arreglo del botón «Infraestructura» *(T246, 2026-10-08)*
+
+- En el **Cruce** (nivel 7) el botón **Infraestructura** estaba **encima de «Pausa» y «Velocidad»** y se veía como texto suelto. Ahora va en la barra de arriba, a la izquierda de «Pausa», con el mismo marco que los demás botones.
+- El panel de compra de la demoledora ya no sale altísimo por un instante al abrirse, y el panel de cada removible tampoco.
+- En los niveles 8 y 9 el panel de los escombros funciona al tocarlos (se comprobó con clics reales de mouse); si algo no responde en tu máquina, avisá con el nivel y la casilla.
+
+## Herramientas para probar recursos, demoliciones y colecciones *(T213, 2026-10-08)*
+
+- El panel de pruebas suma **+10 recursos** (el contador aparece aunque el mapa no tenga fuentes), **Terminar demolición** para cobrar la recompensa normal del trabajo en curso y **Habilitar todas las colecciones** para probar las torres que las requieren sin completar ni guardar piezas.
+- La habilitación de colecciones dura solo la partida actual; nada de estas acciones modifica el guardado normal.
+## Nivel 10: La mina vieja *(T225, 2026-10-08)*
+
+- **La campaña tiene 10 niveles.** El nuevo se abre al ganar el 9: **La mina vieja**, un mapa **grande** (24 × 11) del **desierto**, con dos entradas y un camino en serpentina. Las ruinas de los niveles 8 y 9 quedan atrás: se ven columnas rotas, escombros y el símbolo A en tres rocas.
+- **Una mina para habilitar** (100 de oro): da **2 recursos por oleada completada** y se agota a los 8. Hay también **seis removibles** (rocas y escombros) que pueden entregar 1 recurso (50 %, al azar).
+- **La pieza 3/3 de la Disruptora** está en un escombro del centro del mapa. Con las piezas del 8 y del 9, la colección queda **completa** y la Disruptora estará lista para el nivel 11.
+- El **Mortero** sigue disponible (300 de oro + 3 recursos), con cuatro bloques de 2×2 libres. El Francotirador mantiene sus dos precios (150 de oro, o 120 + 1 recurso).
+- **Hay pocas casillas buenas** (43): el espacio es lo que falta, no el oro. Los enemigos son los de los niveles 6 a 9, sin ninguno nuevo; el Guardián y el Curandero van juntos en varias oleadas. **Se gana sin tocar la mina, los removibles ni los recursos.**
+- El modo **Asedio** sigue con los mapas 1 a 9.
+
+## Editor: removibles, minas, demoledora y torres del mapa *(T212, 2026-10-08)*
+
+- El **editor de mapas** suma cinco pinceles: **Árbol**, **Roca**, **Escombro**, **Mina** y **Bosque** (teclas `6` a `0`). Se pintan como el pasto o el camino y el editor arma solo la leyenda del archivo. Si la leyenda ya tiene sus 10 letras, avisa abajo en lugar de pintar.
+- Un botón nuevo, **Objetos**, deja cambiar el costo, el tiempo, los recursos y la probabilidad de un removible (o la producción y la reserva de una mina) para todas las casillas de ese tipo, viendo siempre el valor de la clase.
+- **Ajustes** suma *Demoledora disponible* y *Torres del mapa* (casillas para elegir cuáles ofrece el nivel; "Usar las de siempre" las deja como antes). **Probar** funciona con todo esto.
+- La **pieza de colección** de una ruina solo se puede elegir al editar un nivel de la campaña; en los mapas de la comunidad y de los modos el campo está deshabilitado y explica por qué (si el archivo ya tenía una, se conserva).
+## Niveles 8 y 9 en las ruinas *(T224, 2026-10-08)*
+
+- **Bastión («El bastión sobre ruinas»)** y **Taller asediado («El taller»)** pasan a las **ruinas**, con escombros que se pueden **demoler** (90 de oro, 10 segundos). Algunos entregan 1 recurso (50 %) y se ve el símbolo A grabado en la piedra.
+- En cada nivel hay un **escombro especial** con una **pieza de la Disruptora** (la 1.ª en el Bastión y la 2.ª en el Taller). Se confirma al completar la oleada y queda guardada en la campaña; la 3.ª aparece más adelante.
+- El **Mortero debuta en el Taller** y cuesta 300 de oro y 3 recursos; el Bastión no lo tiene. Con los escombros del Bastión el mapa es un poco más exigente si no se demuele.
+- El camino y las oleadas no cambian.
+
+## Niveles 6 y 7 en el bosque *(T223, 2026-10-08)*
+
+- **Nido («El lindero»)** y **Cruce («El aserradero»)** pasan al **bosque**, con árboles y rocas que se pueden **demoler** pagando oro y esperando (un clic sobre el objeto). Despejarlos libera casillas buenas entre las rectas del camino. En el Nido son 3 y **no dan recursos**; se gana sin demoler.
+- En el Cruce hay 6 removibles, la **demoledora** se puede comprar desde el botón *Infraestructura* y cada removible **puede entregar 1 recurso** (50 % de probabilidad). Con un recurso, el Francotirador cuesta 120 de oro en vez de 150; nunca es obligatorio. Se suman señales nuevas (un poste con cintas y una roca con una marca tallada).
+- El camino y las oleadas no cambian.
+## Disruptora *(T217, 2026-10-08; en revisión de balance)*
+
+- Torre nueva, la **Disruptora** (130 de oro + 2 recursos): no dispara; cada 4 s emite un **pulso** en un círculo de 2,5 casillas. Si el pulso alcanza a un **Guardián o un Curandero**, ese enemigo **deja de emitir su aura 2,5 s** (3 y 3,5 s en los niveles 2 y 3), y todos los alcanzados reciben un golpe muy débil (5). No toca al Espejo ni apaga otras habilidades (Chamán, Ladrón, Embestidor). Si no hay ningún emisor de aura a su alcance, no pulsa.
+- Solo la tienen quienes completaron la colección **Disruptora** y en los niveles que la ofrecen: **ningún nivel de 1 a 10 la ofrece**.
+- Se ve como un anillo blanco azulado que se expande; el enemigo suprimido muestra el anillo del suelo roto y un ícono de tres arcos que se apagan. La Wiki suma la ficha de la torre, la línea **Contramedida** en el Guardián y el Curandero y un párrafo en "Efectos de las torres".
+
+## Demoledora global *(T208, 2026-10-08)*
+
+- En los niveles que la habilitan, el botón **Infraestructura** permite comprar una demoledora por 180 de oro, una sola vez. Cada demolición posterior cuesta el 10 % del precio original (mínimo 5) y tarda el 80 % del tiempo; el panel de cada objeto muestra el ahorro antes de comprarla. Las demoliciones ya iniciadas conservan su costo y duración, y al reiniciar se pierde la compra.
+## Minas y bosques que se pueden explotar *(T210, 2026-10-08)*
+
+- Un clic en una **mina** o un **bosque explotable** abre su panel: *"Habilitar extracción (100 de oro)"*, *"Produce 2 recursos por oleada"* y *"Reserva 8/8"*. Habilitar cobra el oro al instante; no se cancela ni se devuelve. Se pueden habilitar todos los puntos que alcance el oro.
+- Un punto activo entrega sus recursos **cada vez que se completa una oleada** (también la que estaba en curso al habilitarlo) y aparece un "+2 recursos" sobre él. **No produce por esperar** ni cuando el modo de pruebas salta de oleada. Una mina con la reserva de 8 entrega 2, 2, 2 y 2, y queda **agotada**.
+- En el mapa se ve el estado (velo gris y marco ámbar sin habilitar, marco verde activa, velo oscuro agotada) y la reserva como **segmentos que se vacían**. El dibujo es provisional: el arte final llega más adelante.
+
+## Recursos y torres que cuestan recursos *(T209, 2026-10-08)*
+
+- En un mapa que tenga **recursos** (removibles que pueden entregarlos o minas), la barra de arriba muestra un **contador de recursos** con un ícono provisional. Los recursos son solo de esa partida: empiezan en 0, no se guardan y los que sobran se pierden. Al terminar una demolición, el recurso (si salió) entra una sola vez.
+- El **Mortero** ahora cuesta **300 de oro + 3 recursos**: la barra muestra "300 + 3" y lo deshabilita diciendo qué falta. Al venderlo se devuelve el 70 % del oro y de los recursos, redondeado hacia abajo (210 y 2). Mejorarlo sigue costando solo oro. Los niveles 1 a 8 no lo ofrecen, así que no cambian.
+- El **Francotirador** se puede comprar de dos formas en la misma partida: **150 de oro** (como siempre) o **120 de oro + 1 recurso**. Al elegirlo aparecen dos botones chicos de pago (arranca "solo oro"); el segundo se apaga si faltan recursos o el mapa no tiene. Con 1 recurso, la venta no devuelve ninguno.
+- El panel de la torre y la Wiki muestran los costos en recursos. El validador (`check_level`) avisa si un mapa ofrece una torre que cuesta recursos y no tiene cómo conseguirlos.
+## Colecciones por tecnología y piezas en ruinas *(T211, 2026-10-08)*
+
+- Ahora hay **dos colecciones**: los avances tecnológicos de siempre (niveles 1 a 5, sin cambios) y una nueva, la de la **Disruptora**, con 3 piezas que se encuentran en **ruinas** (escombros con hallazgo) de los niveles 8, 9 y 10. Los niveles actuales todavía no tienen ruinas con hallazgo: la colección empieza vacía y se llena cuando lleguen esos mapas.
+- Al terminar de demoler una ruina, la pieza queda **pendiente**; se **confirma** al completar la oleada en curso (o la siguiente, si demoliste antes de empezar). Una derrota antes de confirmar, abandonar o reintentar la pierde; una pieza confirmada se guarda aunque después pierdas. El panel de la ruina dice **"pendiente"** o **"ya recuperada"** antes de demoler.
+- Las piezas **solo se consiguen en la campaña**: en los modos, la comunidad, el editor y el modo de pruebas la ruina se puede demoler, pero el panel avisa "Aquí no se recogen piezas" y no se guarda nada.
+- La barra superior muestra la colección del nivel que jugás, y la Wiki tiene una solapa nueva, **Colecciones**, con el progreso de cada una y qué torre desbloquea. Los guardados viejos cargan igual.
+
+## Demolición directa de obstáculos *(T207, 2026-10-08)*
+
+- En un mapa que tenga **removibles** (árboles, rocas o escombros marcados con una estaca ámbar), un clic abre un panel con el costo, el tiempo y la recompensa. **Demoler** cobra el oro y empieza un trabajo que avanza con el reloj de la partida (se frena en pausa y va más rápido a ×2). Se puede **cancelar** y se devuelve todo el oro. Al terminar la casilla queda libre para construir.
+- Una sola demolición a la vez. Los 9 niveles actuales no tienen removibles: no cambian. Los recursos y las piezas todavía no se entregan (llegan en tareas siguientes).
+
+## Torres por mapa y aviso en la selección *(T203, 2026-10-08)*
+
+- Un nivel puede decir qué torres ofrece (`"torres"` en su archivo): la barra muestra solo esas. Sin el campo, todo sigue igual; los 9 niveles actuales no cambian.
+- Las tarjetas de la campaña muestran las torres de cada nivel y marcan con un punto naranja (y "Nueva" al pasar el mouse) la que debuta ahí. La Wiki sigue mostrando todas.
+## Señales y oasis en los niveles 1 a 5 *(T222, 2026-10-08)*
+
+- Los cinco primeros mapas suman unas rocas talladas, charcos de agua y flores donde antes había casillas bloqueadas. Es solo decoración: el camino, dónde se puede construir, las oleadas, el oro y las vidas son los mismos de siempre.
+
 ## Android normal y pruebas *(M34, 2026-10-02)*
 
 - Dos APK con los últimos diseños e interfaces del PR#1, con paquetes separados para instalarlas juntas. La variante de pruebas conserva su panel de administración; la normal no lo habilita.

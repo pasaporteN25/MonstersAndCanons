@@ -1,0 +1,24 @@
+{
+	"version": 1,
+	"nombre": "Demoledora y cinco removibles",
+	"oro": 240,
+	"vidas": 20,
+	"demoledora": true,
+	"leyenda": {
+		"t": {"removible": {"clase": "arbol"}},
+		"r": {"removible": {"clase": "roca"}},
+		"m": {"extraccion": {"clase": "mina", "reserva": 6}}
+	},
+	"mapa": [
+		"....................",
+		"....r...............",
+		"........r...........",
+		"...........r........",
+		"A##################S",
+		".....r..............",
+		"..............t.....",
+		"...m................",
+		"...................."
+	],
+	"oleadas": [[{"enemigo": "normal", "cantidad": 2, "cada": 1.0}]]
+}

@@ -22,7 +22,10 @@ func test_every_object_has_a_drawing_and_every_ground_has_colors() -> void:
 	for id: String in MapDrawings.ids():
 		match MapDrawings.kind(id):
 			MapDrawings.KIND_OBJECT:
-				assert_not_null(MapDrawings.texture(id), "%s sin dibujo" % id)
+				if id in ["escombro", "mina", "bosque_explotable"]:
+					assert_null(MapDrawings.texture(id), "%s se dibuja con figuras simples" % id)
+				else:
+					assert_not_null(MapDrawings.texture(id), "%s sin dibujo" % id)
 				assert_true(MapDrawings.ground_colors(id).is_empty())
 			MapDrawings.KIND_GROUND:
 				assert_null(MapDrawings.texture(id))
@@ -33,7 +36,7 @@ func test_every_object_has_a_drawing_and_every_ground_has_colors() -> void:
 				fail_test("%s no es ni suelo ni objeto" % id)
 
 
-func test_the_catalog_has_four_grounds_and_twelve_objects() -> void:
+func test_the_catalog_has_four_grounds_and_twenty_nine_objects() -> void:
 	var grounds: int = 0
 	var objects: int = 0
 	for id: String in MapDrawings.ids():
@@ -42,7 +45,18 @@ func test_the_catalog_has_four_grounds_and_twelve_objects() -> void:
 		else:
 			objects += 1
 	assert_eq(grounds, 4)
-	assert_eq(objects, 12)
+	assert_eq(objects, 29)
+
+
+func test_the_six_community_signals_are_static_objects() -> void:
+	for id: String in ["roca_marcada", "sendero", "herramienta", "poste_cintas", "simbolo_ruina", "campamento_vacio"]:
+		assert_true(MapDrawings.is_valid(id), "%s está en el catálogo cerrado" % id)
+		assert_eq(MapDrawings.kind(id), MapDrawings.KIND_OBJECT, "%s es decoración de casilla" % id)
+		var texture: Texture2D = MapDrawings.texture(id)
+		assert_not_null(texture, "%s usa una textura precargada" % id)
+		if texture != null:
+			assert_eq(texture.get_size(), Vector2(128, 128), "%s: SVG importado a 2x" % id)
+			assert_true(texture.get_image().detect_alpha() != Image.ALPHA_NONE, "%s conserva alfa" % id)
 
 
 func test_an_unknown_drawing_is_nothing() -> void:
@@ -67,7 +81,7 @@ func test_every_drawing_paints_in_a_level_without_errors() -> void:
 		add_child_autofree(level)
 		assert_eq(level.legend_cells.size(), 8, id)
 		await wait_physics_frames(2)
-	assert_true(true, "se pintaron los 16")
+	assert_true(true, "se pintaron los 33")
 
 
 func test_every_drawing_paints_in_every_theme() -> void:
@@ -129,7 +143,7 @@ func test_the_example_map_of_every_theme_is_valid_and_has_no_warnings() -> void:
 
 func test_the_example_maps_have_the_same_routes_as_the_map_they_came_from() -> void:
 	# Son el nivel 4 con parches de leyenda: el recorrido no puede haber cambiado (RF-264).
-	var original: MapGrid = MapGrid.parse(GameFlow.level(3).map_rows)
+	var original: MapGrid = MapGrid.parse(GameFlow.level(3).map_rows, GameFlow.level(3).legend)
 	for theme: String in EXAMPLES:
 		var level: LevelData = LevelFile.load_level("res://tools/ejemplos/tema_%s.json" % theme)["level"]
 		var grid: MapGrid = MapGrid.parse(level.map_rows, level.legend)

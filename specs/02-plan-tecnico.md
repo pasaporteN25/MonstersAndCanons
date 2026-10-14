@@ -53,7 +53,7 @@ El nodo del mapa se coloca en `position = (0, 48)`.
 ## 3. Estructura de carpetas
 
 ```
-JuegoA/
+JuegoA/   # (la carpeta del repositorio no se renombra; el juego es «Monsters & Canons», T237)
 ├── README.md
 ├── specs/                        ← estos documentos
 ├── project.godot
@@ -108,7 +108,8 @@ JuegoA/
 │   └── ...                     ← (M3/M4) sonidos, imágenes, fuentes
 ├── tools/
 │   ├── balance_sim.gd            ← bot que juega solo para revisar el balance (spec §7.1)
-│   └── perf_test.gd              ← prueba de rendimiento con ventana (T56, P7)
+│   ├── perf_test.gd              ← prueba de rendimiento con ventana (T56, P7)
+│   └── perf_levels.gd / .tscn    ← rendimiento de un nivel real con sus oleadas finales (T236, P7)
 └── tests/
     ├── test_rules.gd
     ├── test_level_paths.gd
@@ -506,6 +507,8 @@ godot --headless --path . -s addons/gut/gut_cmdln.gd -gdir=res://tests -gexit
 - **Bot de balance:** las estrategias de hoy usan solo los índices 0–7, así que **no cambian**; se suma una (`mortar`) que compra Morteros donde haya 2×2 libres.
 - **Torres reservadas (D-045, RF-300):** `TowerData.reserved`; `LevelData.extra_towers` se lee de `"torres_extra"` (`LevelFile._read_extra_towers`, con `LevelFile.tower_ids()`) y `LevelData.available_towers(todas)` filtra. `Game.available_towers` alimenta a `BuildController` y al HUD; `tower_types` sigue siendo la lista completa. `LevelDraft` conserva y escribe el campo.
 
+- **Torres por mapa (D-079, RF-393 a RF-397, T203):** `LevelData.towers` se lee de `"torres"` (`LevelFile._read_towers`, mismos mensajes que `torres_extra`). `LevelData.available_towers` recorre las torres en el orden de `Game.tower_types` (el canónico), así que la lista del archivo no cambia el orden; con `towers` no vacío manda sobre `extra_towers` y la colección se sigue mirando. El modo escribe su propio `allowed_towers` (RF-388): el filtro aplica los dos (intersección) y `ModePacks._towers_conflict` convierte una intersección vacía en error del mapa. `TowerOffer` (lógica pura) calcula qué ofrece cada nivel y dónde debuta cada torre; `level_select.gd` dibuja los íconos con `Tower.make_icon`. `LevelDraft` conserva el campo.
+
 ### 6.16 Sinergias: reacciones por estado *(M20, D-046)*
 
 - `TowerLevelData` gana `bonus_vs_slowed_percent` y `bonus_vs_burning_percent`.
@@ -676,3 +679,444 @@ Diseño en spec RF-388 a RF-392 y D-078.
 - **Bot:** `balance_sim.gd -- mix modo=asedio level=N`.
 - **Datos:** `data/modos/asedio/modo.json`.
 - **Tests:** `test_mode_packs`, `test_mode_flow`, `test_mode_select` y `test_editor_modes`, siempre en carpetas `user://test_*`. `test_editor_files` fija una carpeta de modos de prueba para no leer la del jugador.
+
+### M50 / T205 · Infraestructura: demolición, recursos y hallazgos (RF-398 a RF-437, D-080 a D-085)
+
+**Estado: diseño, a la espera del OK de Lucas (G3).** Se programa en T206 a T214 (código) con arte provisional hecho por código (Q-40); el arte final es de Codex (T219 a T221). Este plan está escrito para que un Sonnet en esfuerzo medio pueda implementar cada tarea **sin tomar decisiones de diseño**: si algo no está acá ni en la spec, se frena y se pregunta (`specs/tareas/README.md` §5).
+
+#### Datos
+
+- **`data/obstaculos.json`** (nuevo, RF-398). Lo lee `ObstacleCatalog` (lógica pura, `scripts/logic/obstacle_catalog.gd`), que valida claves y tipos, y devuelve los números de cada clase. Estructura:
+  ```json
+  {
+    "version": 1,
+    "demoledora": {"precio": 180, "costo_uso_porcentaje": 10, "costo_uso_minimo": 5, "tiempo_porcentaje": 80},
+    "removibles": {
+      "arbol":    {"costo": 40, "tiempo": 4.0,  "recursos": 1, "probabilidad": 50},
+      "roca":     {"costo": 60, "tiempo": 6.0,  "recursos": 1, "probabilidad": 50},
+      "escombro": {"costo": 90, "tiempo": 10.0, "recursos": 0, "probabilidad": 0, "recursos_si_recuperado": 1}
+    },
+    "extraccion": {
+      "mina":              {"costo": 100, "produccion": 2, "reserva": 8},
+      "bosque_explotable": {"costo": 100, "produccion": 2, "reserva": 8}
+    }
+  }
+  ```
+  Todos son valores iniciales. Un test de datos comprueba que cada clase del archivo tiene su dibujo en `MapDrawings` (mismo nombre) y que no sobra ninguna clave.
+- **`data/progression.json`** (RF-425): se suma `disruptor` (`origen: "hallazgo"`, `nombre`, 3 fuentes). `technology` no cambia (puede ganar `nombre`).
+- **`TowerData`** (`scripts/data/tower_data.gd`): `resource_cost: int = 0`, `alt_gold_cost: int = 0`, `alt_resource_cost: int = 0`. En `mortar.tres`: `resource_cost = 3`. En `sniper.tres`: `alt_gold_cost = 120`, `alt_resource_cost = 1`. Un test de datos comprueba RF-419 (no los dos a la vez, `alt_gold_cost` menor que el costo de oro).
+- **`LevelData`**: `obstacles: Array[ObstacleSpec]` (ya resueltos), `machine_enabled: bool`, y `uses_resources() -> bool` (RF-416: algún removible con `probabilidad` y `recursos` mayores que 0, o algún punto de extracción).
+- **`ObstacleSpec`** (`RefCounted`, `scripts/data/obstacle_spec.gd`): `cell: Vector2i`, `letter`, `kind` (`REMOVABLE` o `EXTRACTION`), `class_id`, `cost`, `seconds`, `reward_amount`, `chance_percent`, `finding_collection` (`&""` si no hay), `repeat_reward`, `production`, `reserve`. Lo arma `LevelFile` cruzando la leyenda con las casillas del mapa, **con los números de la clase y las sobrescrituras ya aplicadas**; así el resto del código nunca vuelve a mirar el catálogo.
+
+#### Clases nuevas
+
+| Clase | Tipo | Dónde | Qué hace |
+|---|---|---|---|
+| `ObstacleCatalog` | lógica pura, estático | `scripts/logic/` | Lee y valida `data/obstaculos.json`; `removable(class)`, `extraction(class)`, `machine()`, `class_ids()`. |
+| `ObstacleSpec` | datos | `scripts/data/` | Ver arriba. |
+| `ObstacleField` | `RefCounted`, lógica pura | `scripts/logic/` | **El estado de la partida de cada obstáculo** y las reglas de demolición y extracción. Sin nodos: se prueba con GUT. |
+| `DemolitionJob` | `RefCounted` | `scripts/logic/` | **Un trabajo activo**: celda, segundos totales, transcurridos, oro pagado. `tick(delta)`, `progress()`, `is_done()`. |
+| `CollectionDefinitions` | lógica pura, estático | `scripts/logic/` | Generaliza `CollectibleRun.definitions()`: `all()`, `required(id)`, `eligible(id, source)`, `origin(id)`, `name_of(id)`, `icon_of(id)`, `collection_of_level(level_id)`. `CollectibleRun.definitions/eligible/required` quedan como **envoltorios** que lo llaman (los tests de M37 y M38 no cambian). |
+| `FindingRun` | `RefCounted`, lógica pura | `scripts/logic/` | Las **piezas** de una partida: `pick(collection, source, wave_to_confirm)`, `complete_wave(wave)`, `pending()`, `confirmed()`. **No toca `CollectibleRun`** (el portador de `technology` queda idéntico). |
+| `InfrastructureController` | `Node` | `scenes/game/` | El pegamento con la partida: dueño del `ObstacleField`, cobra y reembolsa en `LevelSession`, escucha `wave_completed`, y emite las señales que usan la vista y el panel. Hermano de `BuildController`. |
+| `ObstaclePanel` | `Control` | `scenes/ui/` | El panel de un removible o de un punto de extracción (RF-404, RF-422). Estilo hierro y bronce, copia de `tower_panel.gd`. |
+| `InfrastructurePanel` | `Control` | `scenes/ui/` | El botón y el panel "Infraestructura" con la demoledora (RF-411). |
+| `ObstacleLayer` | `Node2D` | `scenes/levels/` | Dibuja el **estado** de cada obstáculo sobre el suelo: marca, barra de progreso, despejado, mina activa o agotada y reserva. Escucha al `InfrastructureController`. |
+
+**`ObstacleField` (API que fijan los tests de T207):**
+- `setup(specs: Array[ObstacleSpec], rng: RandomNumberGenerator, recovered: Dictionary)`. Sortea **ahora** el drop de cada removible (RF-417), en **orden de fila y columna**, con `rng.randi_range(1, 100) <= chance_percent`. `recovered` dice qué hallazgos ya están recuperados o no se recogen en este contexto (RF-428, RF-429).
+- Estado de cada celda: `Removable { INTACT, WORKING, CLEARED }` o `Site { DISABLED, ACTIVE, DEPLETED }`, con `state_of(cell)`.
+- `can_order(cell) -> StringName`: `&""` si se puede, o el motivo (`&"busy"`, `&"cleared"`, `&"not_removable"`).
+- `cost_of(cell) -> int` y `seconds_of(cell) -> float`: **con la máquina** si la hay (RF-413).
+- `order(cell) -> DemolitionJob`: **el cobro lo hace el llamador** (`InfrastructureController`), que ya comprobó el oro. Guarda el costo pagado en el trabajo.
+- `tick(delta)`: avanza el trabajo; al terminar, despeja y emite `job_finished(cell, reward)`.
+- `cancel() -> int`: devuelve el oro pagado y deja el objeto `INTACT`.
+- `buy_machine()` / `has_machine`, `machine_price()`.
+- `reward_of(cell) -> Dictionary` (solo al terminar): `{"resources": int, "finding": {"collection": StringName, "source": StringName}}`.
+- `enable_site(cell)`, `complete_wave() -> Dictionary` (celda → recursos producidos) y `reserve_left(cell)`.
+- Señales: `job_started(cell)`, `job_progress(cell, fraction)`, `job_finished(cell, reward)`, `job_cancelled(cell, refund)`, `site_changed(cell)`.
+- `discard_job()`: al terminar la partida (RF-409).
+
+**`LevelSession` (RF-415, `scenes/game/level_session.gd`):** agrega `resources: int`, la señal `resources_changed(resources: int)`, `add_resources(n)`, `can_afford_both(gold, resources)` y `spend_both(gold, resources) -> bool` (**atómico**: o cobra los dos o ninguno). `spend(cost)` y `can_afford(cost)` **no cambian**. El reinicio vuelve `resources` a 0.
+
+**`Tower`:** guarda `resources_invested: int` (RF-418). `BuildController.sell_value` devuelve el oro como hoy y se suma `sell_resource_value(tower) = Rules.sell_refund(tower.resources_invested, cfg)` (el mismo `floori`, así que redondea hacia abajo). `try_build(tower_data, cell, pay_alt := false)` cobra con `spend_both`.
+
+#### La semilla (RF-417)
+
+`Game` crea un `RandomNumberGenerator` por partida: `randomize()` por omisión, o `seed = N` si se lo piden (`GameFlow.forced_seed`, usado por el bot y los tests). **Ese generador solo se usa para el drop** y se consume una vez por removible, en orden de fila y columna, al empezar. No se mezcla con el generador del portador (`CollectibleRun`) ni con el del `WaveSpawner`, así que `technology` y las oleadas **no cambian** con M50.
+
+#### Reglas del flujo (qué llama a qué)
+
+1. **Elegir.** `BuildController._handle_selection_input` pregunta al `InfrastructureController` `obstacle_at(cell)` antes de mirar torres; si hay uno, lo selecciona y emite `obstacle_selected(spec, state)` (el HUD abre el `ObstaclePanel`). Deselecciona lo demás (RF-73) y `Esc` o un clic fuera lo cierran. En modo construcción, el clic sobre un removible **selecciona**, no construye.
+2. **Demoler.** `ObstaclePanel` emite `demolish_pressed(cell)`. El controlador comprueba `can_order` y `session.can_afford(cost_of(cell))`, **cobra con `session.spend`**, llama a `field.order(cell)` y empieza a llamar a `field.tick(delta)` desde su `_process`. El controlador se crea con `process_mode = PAUSABLE`, igual que los nodos del mundo (se suma a `Game._world_nodes()`, junto a `enemies` y `tower_container`, y también al congelado de `_on_state_changed`), y `Engine.time_scale` ya escala el `delta`: así la **pausa y la velocidad se respetan sin código extra**.
+3. **Terminar.** `job_finished` → el controlador llama a `MapGrid.clear_cell(cell)`, suma recursos a la sesión (`add_resources`), y si hay hallazgo y se recoge (RF-429) llama a `FindingRun.pick(colección, nivel, wave_to_confirm)` con `wave_to_confirm = wave` si el estado es `WAVE_RUNNING` y `wave + 1` en cualquier otro. Emite un aviso flotante (`floating_text.gd`) y un sonido ya existente.
+4. **Cancelar.** `session.earn(refund)` (el reembolso no es ganancia: no entra en estadísticas de oro ganado, si las hay) y `field.cancel()`.
+5. **Oleada completa.** El controlador escucha `session.wave_completed`: `field.complete_wave()` devuelve lo que produjo cada punto y lo suma a `session.add_resources`; `FindingRun.complete_wave(wave)` confirma. **No** escucha `jump_to_wave` (que no emite `wave_completed`).
+6. **Fin de partida.** En `Game._on_state_changed` (WON/LOST), `field.discard_job()` y, junto a `_commit_collection`, se llama a `_commit_findings()`: guarda las piezas confirmadas con `SaveManager.collect_source` (y `SaveManager.save()` como hoy) si **no** `DevMode.enabled`, **no** `testing`, hay campaña (`GameFlow.current_index >= 0`), ni comunidad ni modo.
+
+#### Archivos que toca cada tarea
+
+| Tarea | Crea | Modifica |
+|---|---|---|
+| **T206** · formato | `data/obstaculos.json`, `scripts/logic/obstacle_catalog.gd`, `scripts/data/obstacle_spec.gd`, `tools/ejemplos/mapa_removibles.json`, tests | `scripts/logic/level_file.gd` (`LEGEND_KEYS`, `_read_legend`, claves `demoledora`), `scripts/data/level_data.gd`, `scripts/logic/map_grid.gd` (`clear_cell`), `scripts/logic/map_drawings.gd` (3 dibujos), `scenes/levels/level_decor.gd`, `tools/check_level.gd`, `scripts/logic/level_draft.gd` (conserva campos), `CONTENIDO.md` |
+| **T207** · demolición | `scripts/logic/obstacle_field.gd`, `scripts/logic/demolition_job.gd`, `scenes/game/infrastructure_controller.gd`, `scenes/ui/obstacle_panel.gd`, `scenes/levels/obstacle_layer.gd`, tests | `scenes/game/game.gd` (crea el controlador, la semilla, el fin de partida), `scenes/game/build_controller.gd` (selección), `scenes/game/hud.gd` (abre el panel) |
+| **T208** · demoledora | `scenes/ui/infrastructure_panel.gd` | `obstacle_field.gd` (`buy_machine`, `cost_of`, `seconds_of`), `hud.gd`, `obstacle_panel.gd` (muestra "Con la demoledora…") |
+| **T209** · recursos | tests | `level_session.gd` (`resources`, `spend_both`), `tower_data.gd`, `tower.gd`, `build_controller.gd`, `hud.gd` (contador, barra, ayuda de construcción con los dos botones de pago), `tower_panel.gd`, `tower_text.gd`, `wiki.gd`, `data/towers/mortar.tres`, `data/towers/sniper.tres`, `check_level.gd` (aviso RF-421), `CONTENIDO.md` |
+| **T210** · extracción | tests | `obstacle_field.gd` (`enable_site`, `complete_wave`), `infrastructure_controller.gd`, `obstacle_panel.gd`, `obstacle_layer.gd` (estados y reserva) |
+| **T211** · colecciones | `scripts/logic/collection_definitions.gd`, `scripts/logic/finding_run.gd`, tests | `collectible_run.gd` (envoltorios), `save_manager.gd` (solo lo que haga falta; el formato **no cambia**), `data/progression.json`, `game.gd` (`_commit_findings`), `hud.gd` (la barra elige la colección del nivel), `scripts/logic/wiki.gd` |
+| **T212** · editor | tests | `scripts/logic/level_draft.gd`, `scenes/editor/map_editor.gd`, `editor_panel.gd`, `settings_panel.gd`, `map_view.gd` |
+| **T213** · pruebas | tests | `scenes/game/dev_panel.gd`, `scripts/autoload/dev_mode.gd`, `scenes/game/game.gd` (los atajos) |
+| **T214** · bot | tests | `tools/balance_sim.gd` (estrategias, `seeds=`, `check_rule=1`) |
+
+`T215` y `T217` (Disruptora) **reusan** `resource_cost` (2 recursos, 130 de oro) y la colección `disruptor`. `T223` a `T225` usan `obstaculos.json` y la regla de oro. `T219` a `T221` usan la lista de estados que sigue.
+
+#### Estados visuales que dibuja Codex (T219 a T221)
+
+La vista decide qué dibujar así: la **clase** del obstáculo (`arbol`, `roca`, `escombro`, `mina`, `bosque_explotable`) y su **estado**. Todo es SVG de **64 × 64** con sombra suave en el suelo (Q-38, guía §4). Mientras no llegue el arte, `ObstacleLayer` dibuja los mismos estados con figuras simples. Los nombres son una propuesta para que Codex y el código se pongan de acuerdo; se guardan en `assets/sprites/map/` salvo los íconos.
+
+| Estado | Archivo propuesto | Cuándo se ve | Notas |
+|---|---|---|---|
+| Árbol removible, **intacto** | `arbol_removible.svg` | Letra con `removible` de clase `arbol`, sin trabajo | Distinto del árbol permanente. Lleva la **marca ámbar** (cinta o estaca). |
+| Árbol removible, **en trabajo** | `arbol_removible_trabajo.svg` | Mientras dura el trabajo | Andamio, hacha clavada o cortes. |
+| Roca removible, intacta / en trabajo | `roca_removible.svg`, `roca_removible_trabajo.svg` | Ídem con `roca` | Misma marca ámbar. Cuñas y grietas en trabajo. |
+| Escombro, intacto / en trabajo | `escombro.svg`, `escombro_trabajo.svg` | Ídem con `escombro` | Piedra de ruina con el símbolo (T218). Marca ámbar. |
+| **Pieza pendiente** | `marca_pieza.svg` (32 × 32) | Sobre un escombro con hallazgo **pendiente** | Brillo plateado. No se ve si ya está recuperada o si no se recogen piezas. |
+| **Despejado** | `despejado_<tema>.svg` para `pradera`, `bosque`, `ruinas` y `desierto` | Casilla ya despejada | Suelo con tocón o restos chatos, **construible** (que no parezca bloqueado). Un tema sin archivo usa `despejado_pradera.svg`. |
+| Mina, **sin habilitar** / **activa** / **agotada** | `mina.svg`, `mina_activa.svg`, `mina_agotada.svg` | Estados `DISABLED`, `ACTIVE`, `DEPLETED` | Boca con tablas; vagoneta y brillo de mineral; tapiada. **No se confunde con una torre.** |
+| Bosque explotable, **sin habilitar** / **activo** / **agotado** | `bosque_explotable.svg`, `bosque_explotable_activo.svg`, `bosque_explotable_agotado.svg` | Ídem | Árboles marcados; troncos apilados; tocones. Distinto del árbol removible. |
+| **Reserva legible** | `reserva_llena.svg`, `reserva_vacia.svg` (8 × 8) | Sobre un punto de extracción habilitado | 8 segmentos; legibles a 34 px. |
+| Máquina trabajando *(opcional)* | `demoledora_trabajo.svg` (2 a 4 cuadros) | Sobre el removible durante un trabajo **con** la máquina | Solo si Lucas lo pide en la ficha de arte. |
+| Íconos | `assets/sprites/ui/stat_resources.svg`, `coleccion_disruptor.svg`, `demoledora.svg` | Contador de recursos y costos; barra de la colección y panel; botón "Infraestructura" | Mismo formato que `stat_gold.svg` y el avance plateado (Q-39). |
+
+La **barra de progreso** del trabajo y el aviso flotante los dibuja el código (no son arte).
+
+#### Riesgos y límites conocidos
+
+- **El tope de 10 letras** de la leyenda (RF-262) puede quedar corto en un nivel con muchos tipos de objeto: se resuelve en la tarea del nivel (punto 6 de "Para revisar en G3").
+- **`tiempo_porcentaje` (80 %) y las probabilidades** (50 %) no están medidos: salen del 09 y de la intuición, no del bot. T214 y T223 los revisan.
+- **`FindingRun` y `CollectibleRun`** conviven. Si en T211 resulta más claro unificarlos, se hace sin cambiar el comportamiento ni los tests de M37 y M38, y se anota.
+- El **bot** (`balance_sim.gd`) no es determinista en el oro (se vio en T203); para la regla de oro se usa el resultado de victoria, no el oro final.
+
+### M51 / T215 · Disruptora (RF-438 a RF-452, D-086 y D-087)
+
+**Estado: diseño; todavía no hay código.** Se programa en **T217** (con arte provisional hecho por código, Q-40); el arte final es de Codex (**T216**, ficha en `art/m51-disruptora/FICHA.md`). Depende de **T209** (`resource_cost`) y de **T211** (la colección `disruptor`): sin ellos, T217 **no puede terminar** la parte de disponibilidad. Está escrito para que un Sonnet en esfuerzo medio lo implemente **sin tomar decisiones de diseño**.
+
+#### Datos
+
+- **`scripts/data/tower_level_data.gd`** suma `@export var suppress_seconds: float = 0.0` (RF-439; comentario: "segundos que un enemigo con aura alcanzado por el pulso deja de emitir su aura; 0 = no es una torre de pulso"). **Es la única clase de datos que cambia.** `TowerData` no cambia (usa `reserved`, `required_collection` y, de T209, `resource_cost`).
+- **`data/towers/disruptor.tres`** (nuevo, copiar la estructura de `tesla.tres`): `id = &"disruptor"`, `display_name = "Disruptora"`, `description` (una frase: *"Apaga un rato el aura del Guardián y del Curandero. Casi no hace daño."*), `can_hit_air = true`, `reserved = true`, `required_collection = &"disruptor"`, `resource_cost = 2`, `color` blanco azulado (`Color(0.86, 0.92, 1.0)`). Sin `projectile_texture` ni `projectile_speed_tiles` (no dispara). Tres niveles:
+
+  | Nivel | `cost` | `damage` | `fire_rate` | `range_tiles` | `suppress_seconds` |
+  |---|---|---|---|---|---|
+  | 1 | 130 | 5 | 0.25 | 2.5 | 2.5 |
+  | 2 | 100 | 5 | 0.25 | 3.0 | 3.0 |
+  | 3 | 150 | 5 | 0.25 | 3.5 | 3.5 |
+
+  Los costos de los niveles 2 y 3 son **provisionales** (RF-446). Sin `turret_atlas` ni `base_texture` hasta T216: la torre cae a la forma de color (RF-156) y T217 le suma el dibujo provisional por código. Con T216, se agregan `turret_atlas`, `turret_texture` y las variantes de nivel 2 y 3, y **solo** esas rutas.
+- **`scenes/game/game.tscn`:** `tower_types` suma `disruptor` **al final** (después del Mortero): es la décima. **No se tocan las teclas** (RF-448): la posición en la barra del nivel manda.
+- **`CONTENIDO.md`:** una fila nueva en la tabla de campos de torre para `suppress_seconds`, marcada *"todavía no la lee el juego"* hasta T217, y una nota de que la Disruptora necesita su colección y los recursos.
+- **El texto de los enemigos con aura** (`has_aura`) **no se escribe a mano**: se lee de los datos (RF-450).
+
+#### Lógica
+
+- **`scenes/enemies/enemy.gd`** (enemigo):
+  - `var _suppress_left: float = 0.0` y tres funciones: `suppress(seconds: float)` (si `_is_done` o `not has_aura()`, no hace nada; si no, `_suppress_left = maxf(_suppress_left, seconds)` y `queue_redraw()` si pasó de 0 a mayor), `is_suppressed() -> bool` y `suppress_left() -> float`.
+  - **`_update_aura(delta)`:** baja `_suppress_left` con el tiempo del juego (se agrega **antes** de `if not has_aura()`) y, al llegar a 0, `queue_redraw()`. El **timer de emisión** `_aura_pulse_left` **sigue corriendo** durante la supresión, pero `_pulse_aura()` **no se llama** mientras `is_suppressed()`: al vencer, vuelve a emitir en menos de `AURA_TICK` (RF-442). **Una línea**: `if _aura_pulse_left <= 0.0 and not is_suppressed()`; si está suprimido, no recarga el timer hasta que venza (así vuelve a emitir en el acto).
+  - **`receive_aura` y las funciones de armadura y cura no cambian** (RF-443).
+  - `func is_pulse_immune() -> bool: return data.reflect_range_tiles > 0.0` (RF-444). `Enemy.GROUP` y `is_active()` ya existen.
+  - **Dibujo:** en `_draw_aura_ring()`, si `is_suppressed()`: en vez de los anillos marfil o verde, `draw_arc` de **4 arcos separados** (≈ 60° de arco y 30° de hueco) de color `SUPPRESS_COLOR` (blanco azulado, alfa 0,45, **sin latido**, grosor 1,2). En `_draw_aura_icons`: el **ícono de supresión** (3 arcos de un anillo roto sobre un círculo `AURA_INK` de 6,5 px, blanco azulado; se apagan de a uno con `suppress_left() / suppress_total`; hace falta guardar `_suppress_total` para eso) **va en la misma fila**, delante del escudo y la cruz, y **la condición de salida temprana** (`if _aura_armor <= 0 and _aura_heal <= 0.0 and marks.is_empty(): return`) **también tiene que considerar** `is_suppressed()`. El cuerpo **no se tiñe** (`SLOW_MODULATE` queda solo para la ralentización, RF-449).
+  - Constantes nuevas: `SUPPRESS_COLOR := Color(0.86, 0.92, 1.0)` y `SUPPRESS_EDGE := Color(0.50, 0.66, 1.0)`.
+- **`scenes/towers/tower.gd`** (torre):
+  - `signal pulsed(radius_px: float)` (señal **hacia arriba**, P6; `Game` la conecta, como `fired`).
+  - `func is_pulse_tower() -> bool: return stats().suppress_seconds > 0.0`.
+  - En `_physics_process`, **antes** del `elif _cooldown <= 0.0` de los disparos: `elif _cooldown <= 0.0 and is_pulse_tower(): _fire_pulse()` (después del aturdimiento y de `support_only`, así que una torre aturdida **no pulsa**, RF-445).
+  - `func _fire_pulse() -> void`: busca los enemigos activos a menos de `range_px()` (`get_tree().get_nodes_in_group(Enemy.GROUP)`, `is_active()`, `not is_pulse_immune()`); **si ninguno** `has_aura()`, **sale sin tocar** `_cooldown` (RF-440); si hay, a **cada uno** `take_hit(stats().damage)` (sin ralentización y sin combos) y a los `has_aura()`, además, `suppress(stats().suppress_seconds)`; `_cooldown = 1.0 / effective_fire_rate()`; `_flash_left = FLASH_DURATION`; `pulsed.emit(range_px())`. **Se junta la lista primero y se aplica después** (un golpe que mata libera el nodo y no debe romper el recorrido).
+  - `can_target`/`find_target` **no se usan** para el pulso. `cycle_targeting` queda sin efecto visible para esta torre: el panel **esconde** el botón de apuntado cuando `is_pulse_tower()` (igual que la Ráfaga si ya lo hace; si no, se deja y se anota).
+  - **Dibujo provisional:** si no hay `turret_atlas`, `_draw` pinta una **pila de 3 anillos** que se ensanchan hacia arriba y un **disco** blanco azulado arriba; el disco se enciende cuando `_cooldown <= 0` y hay un emisor en el radio (se calcula cada 0,25 s, no en cada cuadro) y se apaga si está aturdida (RF-449).
+- **`scenes/effects/effects_layer.gd`:** `func pulse_ring(position_: Vector2, radius: float)`: **dos** `RingEffect` (el principal con `SUPPRESS_COLOR`, de `radius * 0.2` a `radius`, 0,3 s, grosor 3; y uno más fino y más tenue, de 0,35 s, grosor 1,4), con un tope de **8 anillos** vivos. Lo llama `Game` desde la señal `pulsed`; respeta pausa y velocidad como el resto.
+- **`scenes/game/game.gd`:** conecta `tower.pulsed` (como `tower.fired`, línea ~493) a `effects.pulse_ring` y a un **sonido** (reusar el del rayo o uno nuevo chico: el audio es de T217, no bloquea). **No** cambia la creación de torres ni la disponibilidad (T209 y T211 ya lo resolvieron).
+- **Texto:** `scripts/logic/tower_text.gd` suma `pulse_line(level: TowerLevelData, emitters: Array[String]) -> String` (arma *"Pulso cada 4 s · radio 2,5 · apaga las auras 2,5 s · 5 de daño"* con `Rules`/números formateados como las otras) y `suppressors_of(enemy: EnemyData, towers: Array[TowerData]) -> Array[String]` (los nombres de las torres con `suppress_seconds > 0` en algún nivel, **solo si el enemigo tiene aura**). `scripts/logic/wiki.gd`: la ficha de la torre usa `pulse_line` y la frase de RF-450; la del enemigo con aura suma *"Contramedida: …"* con `suppressors_of` (**un apartado como el de "Combos"** de RF-317). `data/wiki/efectos.json`: un bloque nuevo sobre la supresión, **sin números**. El panel (`tower_panel`), `effects()` y la barra de construcción llaman a lo mismo.
+- **`tools/balance_sim.gd`** (RF-452): una función `_wants_disruptor() -> bool` (disponible + algún grupo de las oleadas con `EnemyData.has_aura`-equivalente: `aura_radius_tiles > 0` y bono o cura > 0 + 3 torres comunes + máximo 2); en `_buy_towers()` de `mix` la compra **por id** (`game.available_towers`), no por posición, **antes** de seguir con `MIX_ORDER`. `sin_recursos` (T214) nunca la compra.
+- **`tools/check_level.gd`:** el aviso de RF-421 ya cubre "torre con `resource_cost` en un mapa sin recursos" (T209); T217 comprueba que **nombre a la Disruptora** en el mensaje (se arma con `display_name`, no a mano).
+- **`tools/ejemplos/mapa_disruptora.json`** (nuevo): un mapa de ejemplo con `"torres": ["cannon", "frost", "disruptor"]`, una roca con `probabilidad: 100` (para tener los 2 recursos) y grupos con Guardianes y Curanderos. Sirve para el criterio de aceptación del bot y para probarla en el modo de pruebas.
+
+#### Qué toca cada tarea
+
+| Tarea | Archivos nuevos | Archivos que cambia |
+|---|---|---|
+| **T216** · arte | `art/m51-disruptora/` (fuentes, `prompts.md`, `manifest.json`, `pack.gd`, hojas y capturas), `assets/sprites/towers/rendered/disruptor_atlas.png`, `turret_disruptor.png`, `disruptor_level_2.png`, `disruptor_level_3.png`, una textura de anillo de pulso y el ícono de supresión (32 × 32) | Solo, si T217 ya creó la torre: las rutas de textura de `data/towers/disruptor.tres`. **Ningún código.** |
+| **T217** · código | `data/towers/disruptor.tres`, `tools/ejemplos/mapa_disruptora.json`, `tests/test_disruptor_pulse.gd`, `tests/test_disruptor_text.gd` | `scripts/data/tower_level_data.gd`, `scenes/enemies/enemy.gd`, `scenes/towers/tower.gd`, `scenes/effects/effects_layer.gd`, `scenes/game/game.gd` y `game.tscn`, `scenes/ui/tower_panel*` (apuntado), `scripts/logic/tower_text.gd`, `scripts/logic/wiki.gd`, `data/wiki/efectos.json`, `tools/balance_sim.gd`, `tools/check_level.gd` (solo si hace falta), `CONTENIDO.md`, `CHANGELOG.md` |
+
+#### Pruebas que T217 tiene que escribir (todas con GUT, sin cambiar de escena)
+
+1. **Enemigo:** suprimido no emite (el Normal junto al Guardián no recibe el +2 pasados 0,35 s); al vencer vuelve a emitir; refrescar toma el **máximo**; `suppress` en un enemigo **sin aura** no hace nada; en pausa no corre; el timer de emisión no se desfasa.
+2. **Torre:** pulsa solo con un emisor a su alcance y no gasta su espera si no hay; **todos** los alcanzados reciben `damage − armadura` (mínimo 1); el **Espejo** no recibe nada y la torre **no** queda aturdida; el Chamán, el Ladrón y el Embestidor reciben el golpe y siguen con su habilidad; un volador sin aura recibe el golpe; **aturdida no pulsa** y al recuperarse pulsa; el **desgaste** espacia los pulsos (40 → cada 6,67 s); el **Mecánico** de nivel 3 la acelera (3,33 s) y con la Disruptora de nivel 3 no hay hueco; un golpe que mata no rompe el recorrido; mejorar a 2 y 3 cambia radio y supresión.
+3. **Datos:** `disruptor.tres` cumple RF-446 (3 niveles, números), `reserved`, `required_collection`, `resource_cost = 2`, sin `burst_count`/`extra_targets`/`chain_extra_targets`/`splash_radius_tiles`/ralentización/quemadura (RF-439); **no aparece** en los niveles 1 a 10 y sí en un mapa que la nombra con la colección completa; sin colección no aparece aunque la nombre (RF-395).
+4. **Costo:** 130 de oro + 2 recursos juntos o ninguno; mejorar sin recursos; vender devuelve 91 y 1 (RF-418).
+5. **Texto y Wiki:** `pulse_line` sale de los datos y cambia si se cambia el `.tres`; el Guardián y el Curandero **nombran** a la Disruptora y la Wiki no la nombra en un enemigo **sin** aura; el artículo de efectos no repite números.
+6. **Vista:** el anillo y el ícono se dibujan sin errores (con un Guardián suprimido); el tope de 8 anillos.
+7. **Bot:** compra la Disruptora en el mapa de ejemplo con 3 torres y como mucho 2; `sin_recursos` nunca; un mapa sin emisores, nunca.
+
+#### Cómo se comprueba que sirve (RF-452)
+
+Con `tools/ejemplos/mapa_disruptora.json` y **3 semillas** (`seed=`), el bot `mix` **con** y **sin** la Disruptora (`disruptor=0`, una opción nueva de la herramienta, valor por omisión 1). Se anotan en el Resultado de T217 las **vidas perdidas** y la **oleada donde se pierde** de cada corrida. El bot no es determinista en el oro (T203): se mira la **victoria y las vidas**, no el oro final. **Si con la Disruptora no se pierde menos, se frena y se avisa.**
+
+#### Riesgos y límites conocidos
+
+- **Los números de mejora (100 y 150) y la cobertura** no están medidos: son valores iniciales (RF-446).
+- **El color blanco azulado y el celeste del Hielo** se parecen: la separación depende de la forma y del lugar (RF-449); hay que mirarlo en una captura real de T216/T217.
+- **La décima torre y las teclas** (RF-448): un nivel con más de 9 torres deja a la Disruptora o al Mecánico sin tecla.
+- **El Espejo se excluye por `reflect_range_tiles`** (D-087): un enemigo nuevo con rebote queda fuera del pulso sin avisar; es lo buscado, pero hay que recordarlo al crear enemigos.
+- **El desgaste** hace que la Disruptora deje de ser útil rápido (un solo impacto la lleva a 20 %): es lo que pide RF-367 para cualquier torre.
+
+### M52 / T227 · Lore en el juego y bloque 3 (RF-464 a RF-480, D-089 a D-091)
+
+**Estado: T228 programada (2026-10-09): textos por nivel, tarjeta, cartel, victoria y Wiki Lore (ver «Lo que cambió al programarla» al final de esta sección); el epílogo, los créditos y el nivel 15 se programaron en T234 (2026-10-09; ver «Lo que cambió al programarla (T234)» al final de esta sección).** Se programó en **T228** (textos, cartel, tarjeta, Wiki Lore) y se programa en **T234** (epílogo y créditos, junto con el nivel 15), después del OK de Lucas a la spec (M52, §7.13 a §7.17) y a los textos (`specs/11-textos-lore.md`). Los niveles 11 a 14 son **solo datos** (T229 a T232). Es todo interfaz y datos: **ninguna regla de combate ni número de balance cambia**.
+
+#### Qué hay hoy (leído en T227)
+
+- `scripts/logic/level_file.gd`: `LEVEL_KEYS` (línea 14) lista las claves permitidas del nivel; una clave que no está es un error (RF-204). `MAX_NAME_LENGTH = 30`. `LevelFile.parse` arma un `LevelData`.
+- `scenes/ui/level_select.gd`: `_make_card(index)` arma el texto de la tarjeta (`"Nivel %d\n%s\n%d oleadas\n%s\n\n"`) y `card.disabled = not GameFlow.is_level_unlocked(index)`; la tarjeta mide `CARD_SIZE = (200, 214)`.
+- `scripts/autoload/game_flow.gd`: `start_level(index)` cambia a la escena de la partida; «Siguiente nivel» es `GameFlow.next_level`; `has_next_level()` dice si hay otro. `Reintentar` es `restart()` en `scenes/game/game.gd` (línea ~365), que hace `reload_current_scene()`: **no pasa por `start_level`**.
+- `scenes/ui/end_screen.gd`: `show_victory(lives_left, stars, has_next, in_campaign, score)` arma «¡Victoria!», estrellas, `Detail` (vidas), puntos y récords; `_next_button` es «Siguiente nivel».
+- `scripts/logic/wiki.gd`: `categories()` recorre `_providers()` (cuatro hoy: enemigos, torres, colecciones y guía; el encabezado dice que sumar una categoría es una función y una línea). `articles(dir)` lee todos los `.json` de **una carpeta** (no baja a las subcarpetas) y `parse_article()` valida con `ARTICLE_KEYS`. `WikiEntry.locked` ya existe (bestiario) y `WikiCategory` ya cuenta `has_locked()` y `unlocked_count()`; `wiki_screen.gd` ya escribe «n/m» en la solapa.
+- `scripts/autoload/save_manager.gd`: `is_completed(level_id)`; **ya basta** para el desbloqueo, no hace falta ningún campo.
+- `data/campaign.json` (`"niveles"`) manda en el orden de la campaña; hoy son 10.
+
+#### Archivos
+
+**Lógica pura** (`scripts/logic/`, sin escena, con tests; P10):
+
+- **`level_texts.gd`** (`class_name LevelTexts`, nuevo): constantes de largo (`LUGAR_MAX = 32`, `ENTRADA_MAX_LINES = 3`, `ENTRADA_MAX_CHARS = 240`, `VICTORIA_MAX_LINES = 2`, `VICTORIA_MAX_CHARS = 160`, `EPILOGO_MIN_LINES = 3`, `EPILOGO_MAX_LINES = 5`, `EPILOGO_MAX_CHARS = 400`, `LINE_MAX = 90`; son de interfaz y no de balance, así que viven en el código, como las de `BarLayout`) y `static func parse(raw: Variant, errors: PackedStringArray) -> Dictionary` que devuelve `{lugar, entrada, victoria, epilogo}` con **cadenas vacías** donde falta. Reusa el estilo de mensajes de `LevelFile` (`_check_keys`, que lista las claves válidas).
+- **`lore_unlock.gd`** (`class_name LoreUnlock`, nuevo): `static func is_open(unlock_level: StringName, is_completed: Callable) -> bool`; `static func locked_text(unlock_level: StringName, campaign_ids: Array) -> String` arma *«Se abre al ganar el nivel N.»* con el **número** del nivel en la campaña (nada de su nombre).
+- **`scripts/data/level_data.gd`**: nuevo campo `texts: Dictionary` (o cuatro `String`: `place_text`, `intro_text`, `win_text`, `epilogue_text`) y `func has_texts() -> bool`.
+- **`scripts/logic/level_file.gd`**: `"textos"` entra en `LEVEL_KEYS`; `parse` lo pasa por `LevelTexts.parse` y lo guarda en el `LevelData`. El **guardado del editor** (`level_file` ↔ `LevelData` para el editor) lo conserva tal cual, como la leyenda (RF-266); buscar dónde se serializa el nivel antes de tocar.
+- **`scripts/logic/wiki.gd`**: `ARTICLE_KEYS` no cambia para la Guía. Un parámetro nuevo de `parse_article`/`articles` (`lore: bool`) que, si es verdadero, **exige** y valida `"desbloqueo"` (y la Guía lo rechaza como clave desconocida). Un proveedor nuevo `{"id": &"lore", "title": "Lore", "build": _lore_entries}` **después** de la Guía; `_lore_entries` lee `res://data/wiki/lore/` y marca `locked` cada entrada cuyo nivel no está completo (`LoreUnlock`). Para el aviso de «cerrado», la entrada lleva el texto de `LoreUnlock.locked_text()` y **ningún bloque real**.
+- **`scripts/logic/credits.gd`** (`class_name Credits`, nuevo, opcional): lee `data/creditos.json` (`version` y `lineas`) con los mismos controles de forma que los otros JSON de datos.
+
+**Interfaz** (`scenes/ui/` y `scenes/game/`):
+
+- **`scenes/ui/level_select.gd`**: `_make_card` suma, si el nivel está desbloqueado y tiene `place_text`, una línea debajo del nombre. El tamaño de la tarjeta (`CARD_SIZE`) **no cambia**; si no entra, se corta con «…» y el `tooltip_text` lleva el texto completo.
+- **`scenes/ui/level_intro.gd`** + `level_intro.tscn` (`class_name LevelIntro`, `CanvasLayer`, nuevo): el cartel de RF-466, modelado sobre `PauseMenu` (mismo panel y atenuado). `open(title, place, lines)`, `signal closed`. Cierra con clic o toque, `Espacio`, `Enter`, `Esc` o el botón «Empezar». No sabe de la partida: solo muestra y avisa.
+- **`scenes/game/game.gd`**: en `_ready`, si `GameFlow.intro_pending` y el nivel tiene `intro_text` y no es modo de pruebas ni «Probar», abre `LevelIntro`, **pausa** (`set_paused(true)`, guardando el estado anterior como hace el diálogo de salida de M53) y al `closed` restaura. `GameFlow.intro_pending` es un `bool` de ejecución (no se guarda): lo pone en `true` **`start_level`** (y por lo tanto «Siguiente nivel») y lo consume `Game._ready`; `restart()` no pasa por `start_level`, así que el reintento **no** lo muestra. `start_community`, `start_mode_level` y `play_test` dejan `intro_pending` en `false` salvo que el archivo del mapa traiga `"entrada"` (RF-468; **modo oficial → nunca**).
+- **`scenes/ui/end_screen.gd`**: `show_victory` recibe además `win_text: String` y `has_epilogue: bool`; muestra el texto bajo las estrellas (en `Detail` o un `Label` nuevo antes de los puntos) y, si `has_epilogue`, **reemplaza** el texto de `_next_button` por «Epílogo» (señal nueva `epilogue_pressed`). `Game` decide `has_epilogue`: partida de campaña, último nivel de `campaign.json`, `epilogue_text != ""`.
+- **`scenes/ui/epilogue_screen.gd`** + `.tscn` (nuevo, T234): imagen de fondo (la de T233, o el cielo provisional dibujado con `_draw`), franja de texto y botones «Créditos» y «Niveles». **`scenes/ui/credits_screen.gd`** + `.tscn` (nuevo): texto centrado con `ScrollContainer`, botón «Volver».
+- **`scenes/ui/wiki_screen.gd`**: sin cambios previstos (ya dibuja entradas cerradas y el «n/m»); T228 comprueba que una entrada cerrada **sin dibujo** no rompe `WikiIcon`.
+- **Editor** (`scenes/editor/`): conserva `"textos"` (un campo más en lo que se carga y se guarda). **No** hay pantalla de edición.
+
+**Datos:**
+
+- `data/levels/level_01.json` a `level_10.json`: se les suma `"textos"` en T228. `level_11.json` a `level_15.json`: nacen con `"textos"` en T229 a T232 y T234.
+- `data/wiki/lore/*.json` (10 artículos, T228) y `data/creditos.json` (T234).
+- `data/campaign.json`: suma `level_11` a `level_15` **de a uno**, en cada tarea de nivel (así la campaña nunca apunta a un archivo que no existe).
+
+#### Orden de trabajo
+
+1. **T228 · lógica y datos primero:** `LevelTexts`, `LevelData`, `LevelFile`; sus tests. Correr todo.
+2. **T228 · selección y victoria:** `level_select` (tarjeta) y `end_screen` (`win_text`); tests con la escena y con un nivel de mentira.
+3. **T228 · cartel:** `LevelIntro` y el `intro_pending` de `GameFlow`; test de que `restart()` no lo abre, que pausa y restaura, y que no aparece en modo de pruebas, «Probar» ni Asedio.
+4. **T228 · Wiki Lore:** `Wiki` (proveedor, parámetro `lore`), `LoreUnlock`, los 10 artículos y sus tests con un guardado de prueba (`user://test_*.json`).
+5. **T228 · cargar los textos aprobados** en los niveles 1 a 10 y en `data/wiki/lore/`, **copiados de `11-textos-lore.md`**. Capturas de PC y de tamaño celular.
+6. **T229 a T232:** niveles 11 a 14 (solo datos), cada uno con sus textos y su RF de campaña.
+7. **T234:** nivel 15, `EpilogueScreen`, `CreditsScreen`, `data/creditos.json`, el botón «Epílogo».
+
+#### Pruebas que T228 y T234 tienen que escribir
+
+1. **`LevelTexts`:** sin campo → todo vacío y sin errores; cada clave válida sola; una clave desconocida lista las válidas; valor que no es texto; texto vacío; 4 líneas de entrada; 3 de victoria; una línea de 91 caracteres; 241 caracteres de entrada; control `\u0001`; el epílogo de 2 y de 6 líneas.
+2. **Niveles oficiales:** los 15 (según vayan existiendo) cumplen los límites y **sus textos son los de `11-textos-lore.md`** (un test lee el documento y compara; si eso resulta frágil, compara contra una copia en `tests/fixtures/`).
+3. **Tarjeta:** el lugar aparece en una tarjeta desbloqueada y no en una bloqueada; el tamaño no cambia; sin `"textos"` es idéntica a la de hoy.
+4. **Cartel:** aparece al entrar con `start_level`; no al `restart()`; pausa y restaura (cuenta atrás intacta y velocidad conservada); no aparece en el modo de pruebas, probando, ni desde Asedio; sí en un mapa de la comunidad que trae `"entrada"`.
+5. **Victoria:** el texto sale bajo las estrellas; en el último nivel de la campaña el botón dice «Epílogo» y no hay «Siguiente nivel»; desde un mapa de la comunidad no.
+6. **Wiki Lore:** guardado nuevo → 0/10 y todas cerradas; con el nivel 1 ganado → «El oasis» abierto; el texto de la cerrada dice el número y no el nombre; un artículo sin `"desbloqueo"` falla el test oficial; la Guía conserva sus artículos; modo de pruebas → todo abierto.
+7. **Epílogo y créditos (T234):** el flujo victoria → epílogo → créditos → volver; **el guardado no cambia** antes y después de verlo.
+8. **Los tests existentes** que cuentan categorías de la Wiki, botones de la victoria o claves de nivel se actualizan; el total no baja de la línea de base.
+
+#### Riesgos y cosas que no se saben
+
+- **La tarjeta:** no se midió si 32 caracteres entran en 200 px a la letra de la tarjeta. Si no entran, se baja el límite o la tarjeta usa dos líneas.
+- **El cartel en el celular:** no se probó el tamaño táctil de «Empezar» ni que el cartel no tape el botón de pausa. T228 hace la captura.
+- **`Esc` con el cartel abierto:** hoy `Esc` abre el menú de pausa; el cartel debe recibir `Esc` **antes** (igual que `BuildController` recibe `Esc` primero). Hay que confirmarlo con una prueba en la escena real.
+- **El guardado de `LevelData` en el editor:** no se miró en esta tarea cómo serializa los campos que no edita. Si el editor reconstruye el nivel campo por campo, `"textos"` se perdería; T228 lo prueba con un nivel real.
+- **La central de cuatro dibujos (T233/T234):** el formato de los cuartos (SVG o PNG de 64 × 64, con alfa y anclajes estables) y cómo se ve junto a la salida no se probó. Si T233 propone otro formato, decide Lucas en el concepto.
+- **Los niveles 11 a 14 dependen de G4** (§7.13): si la partida de Lucas del 6 al 10 cambia algo de demolición, del Mortero o de la Disruptora, las fichas se ajustan antes de T229.
+
+#### Lo que cambió al programarla (T228, 2026-10-09)
+
+- **Archivos reales:** `scripts/logic/level_texts.gd` (`LevelTexts`: `parse`, límites, mensajes), `scripts/logic/lore_unlock.gd` (`LoreUnlock`: `is_open`, `locked_text`, `level_number`), `scenes/ui/level_intro.gd` y `.tscn` (`LevelIntro`). `LevelData` guarda **cuatro `String`** (`place_text`, `intro_text`, `win_text`, `epilogue_text`) y `has_texts()`. `GameFlow.intro_pending` (se enciende en `start_level`, `start_community` y `start_mode_level`, y se apaga en `play_test`) lo consume `Game._ready`; la regla de si se muestra es `Game.shows_texts()` (no en modo de pruebas ni «Probar», ni en un modo oficial).
+- **El cartel** atiende todo en `_input` (así `Esc` le gana al menú de pausa): `Espacio`, `Enter`, `Esc` y el **soltar** del clic cierran; el apretar del clic se traga (el toque del celular llega como clic emulado y no tiene que llegar a la construcción). Mientras está abierto: `set_paused(true)` + `build_controller.input_blocked`, como el diálogo de la flecha.
+- **Wiki:** `Wiki.categories(campaign, is_seen, is_completed)` recibe una tercera función; `articles(dir, lore, campaign_ids)` y `parse_article(text, id, lore, campaign_ids)` exigen `"desbloqueo"` y que figure en la campaña; `locked_lore_entry` arma la entrada cerrada. `WikiScreen.is_completed` es la costura de los tests y vale `DevMode.enabled or SaveManager.is_completed`.
+- **Editor:** `LevelDraft.from_text` conserva `"textos"` y `to_text` lo escribe en el mismo formato de los niveles oficiales (una clave por renglón), así que abrir y guardar un nivel oficial da el mismo texto (lo comprueba `test_level_draft.gd`).
+- **La tarjeta:** el lugar es un `Label` encima de un renglón reservado (U+200C), porque Godot descarta los renglones que solo tienen espacios (los `\n\n` finales de la tarjeta de siempre tampoco ocupan lugar). Ver el Resultado de T228 sobre cómo se ve.
+
+#### Lo que cambió al programarla (T234, 2026-10-09)
+
+- **Archivos reales:** `scripts/logic/credits.gd` (`Credits`: `load_file` y `parse`, con `MAX_LINES = 40` y `LINE_MAX = 90`), `data/creditos.json`, `scenes/ui/epilogue_screen.gd` (`EpilogueScreen`) y `scenes/ui/credits_screen.gd` (`CreditsScreen`). **Las dos pantallas se arman por código, sin `.tscn`**, como `HallOfFame`: son `CanvasLayer` que se agregan encima de la pantalla de victoria **dentro de la misma escena de la partida** (capa 15 el epílogo, 18 los créditos, 20 el Salón de la fama). Por eso «Esc o un toque vuelven a la pantalla de victoria» es solo cerrar la capa: la victoria sigue ahí debajo, con sus récords, y no hay que recargarla.
+- **El botón:** `EndScreen.show_victory(…, win_text, has_epilogue)` cambia el texto de `NextButton` a «Epílogo» y emite `epilogue_pressed` (no `next_pressed`); la derrota y las victorias siguientes lo devuelven a «Siguiente nivel». `Game` decide `has_epilogue = shows_texts() and GameFlow.has_epilogue()` (no en modo de pruebas, no probando desde el editor, no en un modo oficial) y `GameFlow.has_epilogue()` pide: campaña (sin modo, comunidad ni `test_level`), último nivel y `epilogue_text` no vacío. `GameFlow.is_campaign_complete()` deduce «campaña terminada» de los niveles completados: **no hay ningún campo nuevo en el guardado** (un test compara el archivo antes y después de ver el epílogo y los créditos).
+- **El nivel 15 usa 12 letras de leyenda** (D-093): `LevelFile.MAX_LEGEND` sube de 10 a 12. `MapDrawings` suma 8 dibujos de tipo objeto (`central_1` a `central_4`, `supply_depot`, `supply_line_pole`, `supply_cart`, `supply_conveyor`), con los SVG de T233 por `preload`.
+- **Datos del Coloso (M54):** `data/enemies/colossus.tres` y `colossus_shard.tres` con los números de RF-481 y los parámetros visuales de T244 (`visual_scale` 1.8 y 1.2, `walk_stride_tiles` 1.1 y 0.55). **Ningún campo ni código nuevo.**
+
+#### Lo que M52 no toca
+
+`ObstaclePanel` y la infraestructura, las reglas de combate, los números de `data/enemies`, `data/towers` y `data/obstaculos.json`, el guardado (`save.json` y `progression.json`), el menú de pausa, el menú principal y `ModePacks`. El pedido es de textos, de una categoría de la Wiki, de un epílogo y de la guía de los últimos niveles.
+
+### M53 / T247 · Barra con pestañas y flecha al menú (RF-454 a RF-463, D-088)
+
+**Estado: programado en T248 (2026-10-08)**, con el OK de Lucas a la spec (M53) y a sus preguntas P1 a P8. **Lo que cambió al programarlo respecto del diseño de abajo:** (1) hay un archivo de lógica más, `scripts/logic/infrastructure_text.gd` (`InfrastructureText`: los textos de las tarjetas, `expected_resources` y la lista de puntos de extracción); `InfrastructureController` y `ObstacleField` **no se tocaron**; (2) `ExitText.message(collections, job_active)` recibe una entrada por pieza con el **id de la colección**, no los nombres; (3) `BarLayout.button_width(count, tabs)` y `gap(count, tabs)` reciben si hay pestañas, y sin pestañas con 10 o más torres los botones se achican (73 con 10, 66 con 11); (4) `Game` tiene las costuras `leave_to_menu` y `leave_to_editor` (los tests no pueden cambiar de pantalla) y `BuildController.input_blocked` (con el diálogo abierto, ninguna tecla de torre ni clic llega a la construcción); (5) `Tab` se atiende en `Game._input`, para ganarle al foco del teclado; (6) `Hud` expone `bar_tabs`, `infrastructure_tab`, `setup_bar(tabs)`, `show_tab`, `switch_tab`, `show_job_badge` y `shows_resources()`; elegir una torre (con tecla o con el mouse) vuelve a «Cañones» sin avisar; (7) las pestañas usan 12 pt y márgenes de 3 px (13 pt no entra). La sección de abajo es el diseño original.
+
+Se programa en **T248**, después del OK de Lucas a la spec (M53) y a sus preguntas P1 a P8. Depende de que el código de **T207, T208 y T210** (`InfrastructureController`, `ObstaclePanel`, `InfrastructurePanel`) esté en la rama base, como ya está en `feature/integracion-v1`. Es interfaz pura: **ninguna regla ni dato de balance cambia**.
+
+#### Qué hay hoy (leído en T247)
+
+- `scenes/game/hud.tscn`: `TopBar` (0–48 px; `Stats` de x = 20 a 1000, `PauseButton` 1016–1146, `SpeedButton` 1156–1260), `BottomBar` (624–720; `TowerButtons` de x = 20 a 980 con botones de 76 × 60, `NextWave` en x = 800 a 1004, `StartWaveButton` en 1016 a 1260), `BuildInfo` (y = 592 a 622) y `TowerPanel`.
+- `scenes/game/hud.gd`: `setup_towers()` arma un botón por torre y solo le pone etiqueta de tecla `i < 9`; emite `tower_button_pressed(index)`. `_ready()` crea a mano `ObstaclePanel` e `InfrastructurePanel` como hijos del HUD. `show_collection()` y `show_selected_tower()` ya existen.
+- `scenes/ui/infrastructure_panel.gd`: un botón «Infraestructura» en (1030, 5) y un panel de 260 × 132 en (1000, 52), con la compra de la demoledora. Señal `buy_pressed`. Lo conecta `game.gd` (línea ~204) a `infrastructure.buy_machine`.
+- `scenes/game/build_controller.gd` `_unhandled_input()`: `for i in _tower_types.size(): if event.is_action_pressed("build_%d" % (i + 1))`. **Con 10 torres pregunta por `build_10`, que no existe** y el motor imprime un error (comprobado con un script suelto).
+- `scenes/game/game.gd`: `PauseMenu` con `quit_pressed → GameFlow.go_to_main_menu` (o `go_to_editor` al probar); `_commit_collection()` guarda las piezas **solo al mostrar el resultado**; `findings: FindingRun` (`pending()`, `confirmed()`) y el portador de avances (`CollectibleRun`).
+- `project.godot`: acciones `build_1` a `build_9` (teclas físicas 49 a 57), `cancel`, `pause`, `toggle_speed`, `start_wave`, `upgrade`, `sell`.
+
+#### Archivos
+
+**Lógica pura** (`scripts/logic/`, sin escena, con tests; P10):
+
+- **`bar_layout.gd`** (`class_name BarLayout`, nuevo): constantes de interfaz (lo único que no va en `data/`, regla de `gdscript.md`) y funciones estáticas:
+  - `static func button_width(count: int) -> int`: `clampi(floori((TOWER_AREA_WIDTH - (count - 1) * GAP) / count), MIN_BUTTON_WIDTH, MAX_BUTTON_WIDTH)` con `TOWER_AREA_WIDTH = 674` (x de 118 a 792), `GAP = 4`, `MIN_BUTTON_WIDTH = 56`, `MAX_BUTTON_WIDTH = 76`. Sin pestañas (`tabs == false`) el área es la de hoy y el ancho es **76 siempre** (RF-454).
+  - `static func key_label(index: int) -> String`: `"1"`–`"9"`, `"0"` para el índice 9 y `""` desde el 10 (RF-456).
+  - `static func action_for(index: int) -> StringName`: `&"build_%d"` (el 10 → `&"build_10"`), solo si `InputMap.has_action`.
+- **`exit_text.gd`** (`class_name ExitText`, nuevo): `static func message(pieces: Array[String], job_active: bool) -> String` arma el texto del RF-460 (la línea de siempre, la de las piezas con su cuenta y nombres, la de la demolición y la de «lo que no se pierde»). Los nombres de colección salen de `CollectionDefinitions.name_of()`.
+- **`scripts/data/level_data.gd`**: `func uses_infrastructure() -> bool: return machine_enabled or not obstacles.is_empty()` (junto a `uses_resources()`; RF-454). `obstacles` solo trae removibles y puntos de extracción (`ObstacleSpec.Kind` tiene esos dos valores), así que una decoración común no cuenta.
+- **`scripts/logic/infrastructure_summary.gd`** (nuevo, opcional si `InfrastructureController` ya expone esto): `static func expected_resources(field: ObstacleField) -> int` (suma de `min(producción, reserva)` de los puntos activos, RF-457 tarjeta 4). **Reusar** lo que haga `ObstacleField.complete_wave()`; no duplicar la regla.
+
+**Interfaz** (`scenes/ui/` y `scenes/game/`):
+
+- **`scenes/ui/bar_tabs.gd`** (`class_name BarTabs`, `Control`, nuevo): la columna de pestañas. `setup(tabs: Array[Dictionary])` con `[{id, text}]`; `select(id)`; `signal tab_selected(id: StringName)`; `func set_badge(id, text)` para el *«Infraestructura · 4 s»* (RF-458). Sin saber nada de torres ni de infraestructura: solo muestra y avisa (principio P6 de la constitución). Dos ids: `&"cannons"` y `&"infrastructure"`.
+- **`scenes/ui/infrastructure_tab.gd`** (`class_name InfrastructureTab`, `Control`, nuevo): reemplaza a `InfrastructurePanel`. Las cuatro tarjetas del RF-457. Señales hacia arriba: `buy_pressed`, `cancel_pressed`, `enable_pressed(cell: Vector2i)`, `site_selected(cell: Vector2i)`. Métodos de entrada: `show_job(name, fraction, seconds_left)` / `clear_job()`, `show_machine(enabled, owned, price, gold, effect_text)`, `show_sites(sites: Array[Dictionary])` con `{cell, kind_name, state, price, reserve, max_reserve, production}`, `show_resources(have, expected)`. **No decide nada**: no cobra ni habilita.
+- **`scenes/ui/exit_dialog.gd`** + `exit_dialog.tscn` (`class_name ExitDialog`, `CanvasLayer`, nuevo): modelado sobre `PauseMenu` (mismo panel, mismo atenuado, mismo `Audio.add_click_sounds`). `open(text: String)`, `signal confirmed`, `signal cancelled`; `Esc` cancela; el foco inicial va a «Seguir jugando».
+- **`scenes/game/hud.gd`**:
+  - Elimina la creación de `InfrastructurePanel`; crea `BarTabs` e `InfrastructureTab` en `setup_towers()`/un `setup_bar(level_data)` nuevo, **solo si `level.uses_infrastructure()`** (si no, el HUD queda como hoy).
+  - `setup_towers()` usa `BarLayout.button_width()` y `BarLayout.key_label()` (en vez de `i < 9`), y al cambiar de pestaña muestra u oculta `_tower_button_row` y la tarjeta de infraestructura. **No** cambia el orden ni los índices: `tower_button_pressed(index)` conserva su significado.
+  - Botón **«← Menú»** (`ExitButton`, 80 × 32 en (8, 8)): `signal menu_pressed`; el texto cambia con `set_exit_text("← Editor")` (igual que `PauseMenu.set_quit_text`). `Stats` se corre a `offset_left = 96` **en `hud.tscn`** (no por código). Se oculta con `hide_exit()` cuando la partida termina.
+  - `signal tab_changed(id: StringName)` y `func show_tab(id)`. Cambiar de pestaña **emite hacia arriba**; `Game` decide si cancela la construcción (RF-456).
+  - `show_infrastructure(...)`: Game se lo da armado; el HUD no lee el controlador (señales hacia arriba, llamadas hacia abajo).
+- **`scenes/game/hud.tscn`**: `Stats` corrido; el resto, igual. El hijo `TowerButtons` pasa a empezar en x = 118 **solo cuando hay pestañas** (por código; sin pestañas queda en x = 20).
+- **`scenes/game/build_controller.gd`**: el ciclo de `_unhandled_input` usa `BarLayout.action_for(i)` y **saltea** los índices sin acción (arregla el error de `build_10`). Para cancelar la construcción al cambiar de pestaña, `Game` usa el `cancel()` que ya existe.
+- **`scenes/game/game.gd`**:
+  - Conecta `hud.tab_changed` (→ `build_controller.cancel()` si pasa a «Infraestructura»), `hud.menu_pressed` (→ `_request_exit()`) y `exit_dialog.confirmed` / `cancelled`.
+  - `_request_exit()`: si es «Probar», va directo a `GameFlow.go_to_editor`; si no, junta `findings.pending() + findings.confirmed()` y los avances del portador, arma el texto con `ExitText.message()`, **guarda si estaba en pausa** (`is_paused()`), pausa (`set_paused(true)`) y abre el diálogo. Al cancelar, `set_paused(was_paused)`. Al confirmar, `GameFlow.go_to_main_menu()` **sin** llamar a `_commit_collection()`.
+  - `_unhandled_input`: `Esc` con el diálogo abierto lo cierra (antes que el menú de pausa); `Tab` (`switch_tab`) alterna pestañas si el nivel tiene; con el menú de pausa o el diálogo abiertos no hace nada.
+  - `_refresh_infrastructure_panel()` pasa a alimentar `InfrastructureTab` desde `infrastructure.changed` (oro, trabajo, extracción, oleada completada).
+  - Sin pestañas (`not level_data.uses_infrastructure()`) **no se crea nada** de lo anterior excepto la flecha.
+- **`scenes/ui/infrastructure_panel.gd`**: se **borra** (con su `.uid`) y se actualizan los tests que lo mencionan. Buscar `InfrastructurePanel` y `infrastructure_panel` en todo el proyecto antes de borrar.
+- **`project.godot`**: dos acciones nuevas, `build_10` (tecla física `0`, código 48) y `switch_tab` (`Tab`, código 4194306). **Editar el archivo con Edit, no con un script que reordene.** Verificar que `Tab` no tiene otro uso en las escenas de la partida (los botones de la barra no toman foco, así que el foco por teclado no interviene).
+
+#### Cómo se arma el trabajo (orden sugerido para T248)
+
+1. **Lógica y datos primero** (sin escena): `BarLayout`, `ExitText`, `LevelData.uses_infrastructure()`; sus tests. Correr todo.
+2. **Acciones y `BuildController`**: `build_10`, saltar acciones inexistentes; test que simula 10 torres y comprueba **0 errores del motor** (`SCRIPT ERROR` / `ERROR` nuevos en la salida) y que `0` elige la décima.
+3. **`BarTabs` + `InfrastructureTab`** y su conexión en `Hud`/`Game`, reemplazando a `InfrastructurePanel`. Test de las cuatro tarjetas (RF-457) y de que tocar un objeto no cambia la pestaña (RF-458).
+4. **Flecha + diálogo** (RF-459 a RF-461).
+5. **Captura real** de 1280 × 720 en el nivel 6 (demoledora) y en el 10 (24 × 11 con zoom, mina), con 9 y con 10/11 torres (modo de pruebas con «Habilitar todas las colecciones»). Mirar que nada se pise y que el mapa quede igual. Guardar las capturas en `art/m53-barra/` con un `README.md` breve.
+6. **Documentos:** `CHANGELOG.md` (lo ve quien juega), `README.md` y `ONBOARDING.md` (teclas y barra), `CONTENIDO.md` si menciona el panel «Infraestructura».
+
+#### Pruebas que T248 tiene que escribir
+
+1. **`BarLayout`:** el ancho de botón con 1, 8, 9, 10 y 11 torres (sin pestañas siempre 76; con pestañas, 71 / 63 / 57; nunca menos de 56 ni más de 76); `key_label` de 0 a 11.
+2. **`LevelData.uses_infrastructure()`:** los niveles 1 a 5 → `false`; los niveles 6 a 10 → `true`; un nivel con solo `demoledora` → `true`; un nivel con decoración pero sin removibles ni extracción → `false`.
+3. **HUD sin pestañas:** en el nivel 1 la posición y el tamaño de `TowerButtons` y de sus botones son **idénticos** a los de antes (la prueba que cuida el RF-454), y no existen `BarTabs` ni `InfrastructureTab`.
+4. **HUD con pestañas:** en el nivel 6, «Cañones» activa; `Tab` pasa a «Infraestructura» y oculta los botones de torre; con una torre elegida cancela la construcción; una tecla de torre vuelve a «Cañones».
+5. **Teclas:** `0` elige la décima torre; `Tab` y `0` en el nivel 1 no hacen nada; **ningún error de acción inexistente** con 10 torres.
+6. **Tarjetas:** Demoledora (comprar, gris sin oro, «activa»), Extracción (habilitar, activa, agotada, tres fichas y flechas), Trabajo en curso (progreso, cancelar devuelve el oro), Recursos (esperados). Cada botón llama a la **misma función** que el panel del objeto.
+7. **Objeto del mapa:** seleccionar una roca en «Cañones» abre su panel y **no cambia la pestaña**; el título de la pestaña muestra el tiempo del trabajo.
+8. **Flecha y diálogo:** sin piezas (solo la línea de siempre), con una pieza pendiente, con una pieza confirmada sin guardar, con demolición en curso; cancelar restaura pausa y velocidad; en «Probar» no hay diálogo y vuelve al editor; confirmar **no escribe nada** en `user://test_*.json` (la colección guardada no cambia); con la partida terminada la flecha no se ve.
+9. **Compatibilidad:** un nivel de la comunidad cargado igual; `save.json` de la versión anterior se lee igual.
+10. **Los tests existentes** de la barra (`test_tower_bar.gd`) y los que nombran `InfrastructurePanel` se actualizan, y el total no baja de la línea de base (1017 el 2026-10-07; usar el último número de `03-tareas.md`).
+
+#### Riesgos y cosas que no se saben
+
+- **Ancho de 10 y 11 botones:** la cuenta da 63 y 57 px, pero el contenido de un botón (dibujo de 34 px, costo «130 + 2» y la insignia del recurso, más la del Francotirador «o 120 + 1» de 46 px) **no se midió** a esos anchos. Es el primer punto que T248 tiene que mirar en una captura.
+- **El texto «Infraestructura» en 96 px** con letra de 13: no se midió. Si no entra, se acorta la letra, no se cambia el texto.
+- **El tamaño táctil** (44 px de alto) no se probó en un celular real.
+- **Zoom y cámara:** no cambian porque no se toca el área del mapa; aun así, T248 hace la captura del nivel 10 para confirmarlo.
+- **La flecha y las estadísticas:** correr `Stats` 76 px supone que su contenido (oro, vidas, puntos, oleada, colección, recursos) mide menos de 904 px; con 6 estadísticas debería sobrar, pero no se midió.
+- **`Tab` y el foco:** si algún `Control` de la partida tomara el foco, `Tab` podría moverlo en vez de cambiar la pestaña. Los botones de la barra son `FOCUS_NONE`; hay que confirmarlo con una prueba en la partida real.
+
+#### Lo que M53 no toca
+
+`ObstaclePanel` y sus reglas (RF-404 a RF-410, RF-422 a RF-424), `InfrastructureController`, `ObstacleField`, `FindingRun`, `CollectibleRun`, el menú de pausa, `GameFlow` y el editor. El pedido es solo de interfaz.
+
+### M54 / T243 · El Coloso, jefe supremo del nivel 15 (RF-481 a RF-484, D-092)
+
+**Estado: hecho en T234 (2026-10-09): los dos `.tres`, las oleadas 26, 28 y 30 del nivel 15 y el balance con el bot (ver «Lo que cambió al programarla (T234)» en M52 y el Resultado de T234).** *(Diseño aprobado por Lucas el 2026-10-09.)* Se hace en **T244** (el arte) y **T234** (los dos `.tres`, las oleadas finales y el balance con el bot). Es **solo datos**: no cambia ninguna regla de combate, ningún campo de `EnemyData` ni ninguna pantalla. Todos los números son **iniciales y no se midieron** (ni con el bot ni en partida).
+
+#### Qué hay hoy (leído en T243)
+
+- `scripts/data/enemy_data.gd` ya trae todo lo que hace falta: `death_spawn` y `death_spawn_count` (RF-166), `slow_resistance`, `armor`, `lives_damage`, `size_tiles`, `visual_scale`, `walk_atlas` y `walk_stride_tiles`. **No se agrega ningún campo.**
+- `scenes/game/wave_spawner.gd`: `_spawn_enemy` calcula la vida con `Rules.scaled_health_percent(base, oleada, % del nivel)` y, si el enemigo tiene `death_spawn`, conecta `died` a `_on_enemy_died_with_spawn`, que crea los hijos **sumándolos a los vivos antes de que el padre deje el árbol** (así la oleada no termina antes) y los escalona hacia atrás en el camino. Si el enemigo llega a la salida, `died` no se emite: no suelta nada. **Los Pedazos heredan la vida de la oleada en curso** sin código nuevo. `Rules.scaled_health_percent` es `floor(base × (100 + % × (oleada − 1)) / 100)`: con 22 %, oleada 30 → 738 %, o sea Coloso `600 → 4428` y Pedazo `180 → 1328`.
+- `scripts/logic/rules.gd`: `is_dangerous` = `lives_damage >= 5` (corona, RF-136): el Coloso sí, el Pedazo no. `scripts/logic/dev_start.gd` `enemy_reward` ya **suma el oro de los hijos** (hasta una profundidad máxima), así que el oro automático (RF-320) cuenta los Pedazos.
+- `scripts/logic/wiki.gd`: la entrada de un enemigo ya escribe «Al morir suelta N × Nombre», «Lo suelta al morir: …» y «Dónde aparece» leyendo `data/enemies/` y la campaña; **no hay artículo que escribir a mano**. El bestiario (RF-238) lo abre con `seen_enemies` del guardado: nada nuevo.
+- `tests/test_content.gd` revisa **todos** los enemigos: frase de presentación no vacía, `size_tiles` entre 0.05 y 0.5 y que las crías no encadenen más de 10.
+
+#### Archivos
+
+**Datos** (los hace T234; el arte, T244):
+
+- `data/enemies/colossus.tres` y `data/enemies/colossus_shard.tres` (`id` igual al nombre del archivo), con los valores de RF-481. Se copian de `spider.tres` / `spiderling.tres`, que usan el mismo mecanismo:
+
+  | Campo | `colossus` | `colossus_shard` |
+  |---|---|---|
+  | `display_name` | `"Coloso"` | `"Pedazo"` |
+  | `description` | la frase de RF-484 | la frase de RF-484 |
+  | `max_health` | 600 | 180 |
+  | `speed_tiles` | 0.5 | 1.0 |
+  | `armor` | 5 | 0 |
+  | `reward` | 200 | 30 |
+  | `lives_damage` | 12 | 4 |
+  | `slow_resistance` | 0.5 | 0 (el valor por defecto) |
+  | `death_spawn` / `death_spawn_count` | `colossus_shard` / 3 | vacío / 0 |
+  | `size_tiles` | 0.5 (el máximo que acepta el test) | 0.3 |
+  | `visual_scale` | 1.6 (inicial; lo ajusta T244 al ver el arte) | 1.2 |
+  | `flip_when_walking_left` | `false` | `false` |
+  | `texture`, `walk_atlas`, `walk_stride_tiles`, `walk_art_scale` | los de T244 | los de T244 |
+  | `color` | el de la paleta del concepto aprobado (T244) | un tono de la misma familia |
+
+- `data/levels/level_15.json` (T234): el Coloso (`"colossus"`) en las oleadas 26, 28 y 30 y la escolta completa en la 30. El `.json` **nombra** al Coloso; el Pedazo **no se nombra** en ninguna oleada (solo lo suelta).
+- `data/wiki/lore/la_central.json` (T234, o T228 si ya lo creó): suma el párrafo del Coloso de `specs/11-textos-lore.md` §4.10, **tal cual**.
+- `assets/sprites/enemies/` (SVG de 64 × 64 de respaldo, como los demás) y `assets/sprites/enemies/rendered/`: `colossus.png` y `colossus_shard.png` (256 × 256, una sola vista, luz arriba a la izquierda, sin sombra dibujada, pies en y = 191), `colossus_walk.png` y `colossus_shard_walk.png` (**atlas de 1024 × 1024: 4 poses por fila y 4 filas —derecha, abajo, izquierda, arriba—, cuadros de 256**, M31). Los fija T244; los dos PNG de caminata tienen que pasar los tests de ciclos (16 poses propias, márgenes y apoyo constante).
+
+**Código: ninguno.** Solo se **actualizan listas de pruebas** que nombran los enemigos uno por uno:
+
+- `tests/test_enemy_visual.gd` (tres listas con los quince `id` de hoy: escala visual 1.2, regiones del ciclo, ciclos completos y únicos, ralentización de los pasos). T244 suma `colossus` y `colossus_shard` a las que correspondan; **la de `visual_scale == 1.2` no vale para el Coloso** (su escala es la que decida T244) y esa excepción se escribe en el test, no se esconde.
+- `tests/test_editor_panels.gd` (lista de enemigos del editor) y cualquier test que cuente los enemigos de la campaña o de `data/enemies/`: buscar con `git grep "troll\|spiderling"` en `tests/` antes de dar por cerrada la tarea.
+- `tools/balance_sim.gd` usa una lista fija de enemigos en la línea de las estrategias (`normal`, `fast`, …, `boss`): **no hace falta tocarla**, porque el bot lee los grupos del nivel; T234 lo confirma jugando el 15.
+
+#### Orden de trabajo
+
+1. **T244 · concepto** (cuerpo y Pedazo, 2 o 3 poses, paleta y silueta contra el Guardián a 34 px), **OK de Lucas**; producción; PNG y atlas; hoja de contacto; captura en una partida con un `.tres` de prueba. Mientras no esté aprobado, T234 usa arte provisional hecho en código (Q-40).
+2. **T234 · los dos `.tres`** y la prueba de que cargan (`test_content`), con el arte provisional o el final.
+3. **T234 · las oleadas finales** del 15 (26, 28 y 30) y la escolta de la 30, con el bot: 5 semillas, las 5 estrategias.
+4. **T234 · balance:** primero la vida de los Pedazos (si queda mal, el bot los deja pasar en masa) y después la armadura del Coloso. Todo cambio de número va a los `.tres` y se anota en el Resultado; **si cambia la cantidad de Pedazos o las vidas, también el texto de RF-484 y la frase del Coloso**.
+
+#### Pruebas que T234 tiene que escribir (además de las de RF-480)
+
+1. **Datos:** `colossus` y `colossus_shard` cargan, tienen los números de RF-481, `colossus.death_spawn` es el Pedazo con cantidad 3 y el Pedazo no suelta nada.
+2. **Partir:** un Coloso que **muere** suelta 3 Pedazos con la vida de la oleada en curso (oleada 30 del 15 → 1328), y la oleada **no termina** hasta que mueren o llegan los 3; un Coloso que **llega** quita 12 vidas y no suelta nada.
+3. **Vidas:** 3 Pedazos que llegan quitan 12 en total; el Pedazo, 4 cada uno.
+4. **Armadura y ralentización:** un golpe de 8 le hace 3 al Coloso y 8 al Pedazo; el Hielo ralentiza al Coloso a la mitad y al Pedazo completo (reusar las pruebas de `slow_resistance` del Jefe).
+5. **Nivel 15:** el Coloso está en la 26, la 28 y la 30, la escolta completa solo en la 30, no hay Soberano; ningún otro nivel de la campaña nombra al Coloso.
+6. **Wiki:** la entrada del Coloso dice «Al morir suelta 3 × Pedazo» y «Nivel 15 · La Central»; la del Pedazo, «Lo suelta al morir: Coloso»; la corona de peligro aparece en el Coloso y no en el Pedazo; con el guardado nuevo las dos están cerradas.
+7. **Lore:** ganar el 15 abre «La Central» y el párrafo del Coloso es el de `11-textos-lore.md`.
+8. **Bot:** `check_rule=1 levels=15` «SE CUMPLE», y la tabla del 15 es la más difícil de la campaña (RF-475).
+
+#### Riesgos y cosas que no se saben
+
+- **Ningún número se midió.** La vida de los Pedazos es lo primero a mirar: con ≈ 1330 de vida cada uno y velocidad 1.0, el bot puede dejar pasar los tres juntos y perder 12 vidas de una; con muy poca vida, el Coloso se vuelve un Soberano grande.
+- **Las 20 vidas:** una fuga del Coloso deja 8; si T234 ve que el 15 se pierde casi siempre por una sola fuga, lo informa a Lucas con la tabla antes de bajar las 12 vidas (que son una decisión suya).
+- **La escolta estirada:** los Pedazos (1.0) corren más que el Guardián (0.7) y se separan del aura; no se probó si eso ayuda o estorba. T234 decide si alinea los `desde` (RF-203).
+- **El tamaño:** `size_tiles = 0.5` es el tope que acepta `test_content` («tiene que caber en el camino»). Si el dibujo a ×1.6 tapa casillas vecinas o la barra de vida, lo ajusta T244 con una captura; el radio lógico no se toca.
+- **El Pedazo en la lista de «próxima oleada»:** el Pedazo no figura en ninguna oleada, así que no sale en la barra de la próxima oleada, y su tarjeta de presentación (RF-134) sale cuando aparece por primera vez, mitad de la partida. No se probó cómo se ve ni que la tarjeta no tape nada.
+- **No se comprobó que `check_level` y los tests acepten un enemigo solo-hijo** (que está en `data/enemies/` pero no en ninguna oleada). La Cría ya es así, así que debería pasar; T234 lo confirma.
+- **La frase del Coloso** (~130 caracteres) es más larga que las de hoy; no se midió si entra en la tarjeta de 6 segundos. Si no entra, se acorta.
+- **El texto del lore dice «tres».** Es lo único del texto que depende de un número del balance (ver arriba).
+
+#### Lo que M54 no toca
+
+`EnemyData`, `WaveSpawner`, `Rules`, la Wiki (`wiki.gd`), el guardado, el Soberano (`boss.tres`) y el resto de los enemigos. Tampoco las escoltas de los niveles 13 y 14. El pedido es de **dos archivos de datos**, su dibujo y las oleadas finales del 15.

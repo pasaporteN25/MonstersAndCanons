@@ -28,7 +28,7 @@
    - rotación (Q-29);
    - Disruptora desde el 11;
    - extracción;
-   - el final del 15 (Q-32: el Soberano con escolta).
+   - el final del 15 (Q-32 ✎: un jefe supremo nuevo con escolta; su diseño es de T243, esta spec solo deja el hueco en la ficha del 15).
 5. En `03-tareas.md`: las entradas de T228 a T235, revisando las fichas de `specs/tareas/` si algo cambió.
 
 ## Hecho cuando

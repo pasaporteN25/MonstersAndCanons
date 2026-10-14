@@ -15,6 +15,16 @@ const CARD_SPACING: float = 16.0
 const CARDS_PER_ROW: int = 5
 const VISIBLE_ROWS: int = 2
 const CARD_STAR_SIZE: float = 26.0
+const TOWER_ICON_SIZE: float = 22.0
+const TOWER_ICON_COLUMNS: int = 8
+const CARD_CONTENT_LEFT: float = 6.0
+const CARD_CONTENT_WIDTH: float = CARD_SIZE.x - CARD_CONTENT_LEFT * 2.0
+const NEW_COLOR := Color(1.0, 0.6, 0.15)
+## RF-465: el lugar bajo el nombre, en letra chica y de color suave.
+const PLACE_COLOR := Color(0.72, 0.76, 0.84)
+const PLACE_FONT_SIZE: int = 14
+const CARD_FONT_SIZE: int = 20
+const CAMPAIGN_TITLE_FONT_SIZE: int = 16
 const ERROR_COLOR := Color(1.0, 0.55, 0.55)
 ## RF-319: tope del oro que se puede escribir a mano en la franja de pruebas.
 const DEV_MAX_GOLD: int = 999999
@@ -29,6 +39,7 @@ var modes_user_dir: String = ModePacks.USER_DIR
 ## Cómo se abre la carpeta en el explorador. Los tests lo reemplazan (si no, abrirían una ventana).
 var folder_opener: Callable = OS.shell_open
 
+var _all_towers: Array[TowerData] = []
 var _page: StringName = PAGE_CAMPAIGN
 var _entries: Array[Dictionary] = []
 ## RF-389: los modos (ModePacks.all) y la solapa de cada uno, por página (&"mode:<id>").
@@ -304,16 +315,102 @@ func open_folder() -> void:
 func _make_card(index: int) -> Button:
 	var level: LevelData = GameFlow.level(index)
 	var card := _new_card()
-	card.text = "Nivel %d\n%s\n%d oleadas\n%s\n\n" % [
-		index + 1, level.display_name, level.waves.size(), status_text(index)]
+	card.text = ""
 	if level.extra_towers.has("mechanical_standard"):
 		card.tooltip_text = "Estandarte mecánico: requiere cinco avances de niveles1–5 (%d/5)." % SaveManager.collected_sources(&"technology").size()
 	elif CollectibleRun.eligible(&"technology", level.id):
 		card.tooltip_text = "Avance de este nivel: %s. Una pieza distinta por nivel1–5." % ("conseguido" if SaveManager.collected_sources(&"technology").has(String(level.id)) else "pendiente")
-	card.disabled = not GameFlow.is_level_unlocked(index)
+	var unlocked: bool = GameFlow.is_level_unlocked(index)
+	card.disabled = not unlocked
+	_add_campaign_card_text(card, index, level, unlocked)
+	_add_tower_icons(card, index, level, unlocked)
 	card.pressed.connect(GameFlow.start_level.bind(index))
-	_add_stars(card, GameFlow.level_stars(index), GameFlow.is_level_unlocked(index))
+	_add_campaign_stars(card, GameFlow.level_stars(index), unlocked, index)
 	return card
+
+
+## RF-397 y RF-465: cada pieza tiene su propio rectángulo y no depende de renglones vacíos
+## dentro del texto del botón, que Godot puede descartar al dibujarlo.
+func _add_campaign_card_text(card: Button, index: int, level: LevelData, unlocked: bool) -> void:
+	_card_label(card, "LevelNumber", "Nivel %d · %d oleadas" % [index + 1, level.waves.size()], 14, Rect2(8, 5, CARD_SIZE.x - 16, 23))
+	var title: Label = _card_label(card, "LevelName", level.display_name, CAMPAIGN_TITLE_FONT_SIZE, Rect2(8, 28, CARD_SIZE.x - 16, 36))
+	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	if unlocked and level.place_text != "":
+		var place_text: String = _fit_line(level.place_text, get_theme_font("font"), PLACE_FONT_SIZE, CARD_SIZE.x - 40.0)
+		var place: Label = _card_label(card, "Place", place_text, PLACE_FONT_SIZE, Rect2(8, 64, CARD_SIZE.x - 16, 23))
+		place.add_theme_color_override("font_color", PLACE_COLOR)
+		place.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		place.size = Vector2(CARD_SIZE.x - 16.0, 23.0)
+		card.tooltip_text = level.place_text + ("\n" + card.tooltip_text if card.tooltip_text != "" else "")
+	if not unlocked:
+		for child: Node in card.get_children():
+			if child is Control:
+				(child as Control).modulate = Color(0.58, 0.58, 0.58, 1.0)
+
+
+func _card_label(card: Button, label_name: String, text: String, font_size: int, rect: Rect2) -> Label:
+	var label := Label.new()
+	label.name = label_name
+	label.text = text
+	label.add_theme_font_size_override("font_size", font_size)
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	label.position = rect.position
+	label.size = rect.size
+	card.add_child(label)
+	return label
+
+
+func _fit_line(text: String, font: Font, font_size: int, width: float) -> String:
+	var result: String = text
+	while not result.is_empty() and font.get_string_size(result, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x > width:
+		result = result.left(result.length() - 1)
+	return result + "…" if result != text else result
+
+
+## RF-397: íconos chicos de las torres que ofrece el nivel (los de la barra) y, en las que debutan ahí,
+## una marca naranja y "Nueva" al pasar el mouse. Se calcula en el momento, desde los datos.
+func _add_tower_icons(card: Button, index: int, level: LevelData, unlocked: bool) -> void:
+	if _all_towers.is_empty():
+		_all_towers = TowerOffer.canonical_towers()
+	var levels: Array[LevelData] = []
+	for i: int in GameFlow.level_count():
+		levels.append(GameFlow.level(i))
+	var fresh: PackedStringArray = TowerOffer.new_tower_ids(levels, index, _all_towers)
+	var offered: Array[TowerData] = TowerOffer.offered(level, _all_towers)
+	var rows: int = maxi(ceili(float(offered.size()) / TOWER_ICON_COLUMNS), 1)
+	var icon_size: float = minf(TOWER_ICON_SIZE, 44.0 / float(rows))
+	var row := HFlowContainer.new()
+	row.name = "TowerIcons"
+	row.add_theme_constant_override("h_separation", 0)
+	row.add_theme_constant_override("v_separation", 0)
+	row.alignment = FlowContainer.ALIGNMENT_CENTER
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.position = Vector2(CARD_CONTENT_LEFT, 89.0 + (44.0 - float(rows) * icon_size) / 2.0)
+	row.size = Vector2(CARD_CONTENT_WIDTH, float(rows) * icon_size)
+	for tower: TowerData in offered:
+		var icon := TextureRect.new()
+		icon.name = String(tower.id)
+		icon.texture = Tower.make_icon(tower)
+		icon.custom_minimum_size = Vector2(icon_size, icon_size)
+		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		icon.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+		icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		icon.modulate = Color.WHITE if unlocked else Color(0.58, 0.58, 0.58, 1.0)
+		var is_new: bool = fresh.has(String(tower.id))
+		card.tooltip_text += "%s%s%s" % ["\n" if card.tooltip_text != "" else "", tower.display_name, " · Nueva" if is_new else ""]
+		if is_new:
+			var mark := ColorRect.new()
+			mark.name = "NewMark"
+			mark.color = NEW_COLOR
+			mark.size = Vector2(minf(7.0, icon_size * 0.35), minf(7.0, icon_size * 0.35))
+			mark.position = Vector2(icon_size - mark.size.x - 1.0, 1.0)
+			mark.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			icon.add_child(mark)
+		row.add_child(icon)
+	card.add_child(row)
 
 
 ## Una tarjeta de un mapa de la comunidad (RF-221). Con errores: deshabilitada y con el motivo (RF-222).
@@ -331,7 +428,7 @@ func _make_community_card(entry: Dictionary) -> Button:
 func _new_card() -> Button:
 	var card := Button.new()
 	card.custom_minimum_size = CARD_SIZE
-	card.add_theme_font_size_override("font_size", 20)
+	card.add_theme_font_size_override("font_size", CARD_FONT_SIZE)
 	card.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART  # un nombre largo baja de renglón
 	return card
 
@@ -346,6 +443,20 @@ func _add_stars(card: Button, count: int, shown: bool) -> void:
 	stars.size = stars.custom_minimum_size
 	stars.position = Vector2((CARD_SIZE.x - stars.size.x) / 2.0, CARD_SIZE.y - CARD_STAR_SIZE - 18.0)
 	card.add_child(stars)
+
+
+func _add_campaign_stars(card: Button, count: int, shown: bool, index: int) -> void:
+	var stars := StarsDisplay.new()
+	stars.name = "Stars"
+	stars.star_size = CARD_STAR_SIZE
+	stars.count = count
+	stars.visible = shown
+	stars.size = stars.custom_minimum_size
+	stars.position = Vector2((CARD_SIZE.x - stars.size.x) / 2.0, 158.0)
+	card.add_child(stars)
+	var status: Label = _card_label(card, "Status", status_text(index), 16, Rect2(8, 186, CARD_SIZE.x - 16, 23))
+	if not shown:
+		status.modulate = Color(0.58, 0.58, 0.58, 1.0)
 
 
 ## Lo que se ve cuando la solapa de la comunidad está vacía: dónde poner los mapas (RF-221).

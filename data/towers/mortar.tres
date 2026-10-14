@@ -56,5 +56,6 @@ turret_texture = ExtResource("7_turret")
 turret_atlas = ExtResource("rendered_atlas")
 projectile_texture = ExtResource("6_proj")
 footprint = 2
+resource_cost = 3
 reserved = true
 levels = Array[ExtResource("1_lvl")]([SubResource("Resource_l1"), SubResource("Resource_l2"), SubResource("Resource_l3")])

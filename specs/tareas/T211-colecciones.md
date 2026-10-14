@@ -4,7 +4,7 @@
 - **Depende de:** T207 · **Compuerta:** ninguna · **Tamaño:** mediano
 
 ## Leer
-- Los RF de M50 de **colecciones**, su D, y Q-25 a Q-27 y Q-31.
+- **RF-425 a RF-431** (colecciones), D-085 y Q-25 a Q-27 y Q-31, y la sección M50 del plan técnico (`CollectionDefinitions`, `FindingRun` y archivos de T211).
 - RF-358 a RF-362 (los avances actuales y su confirmación).
 - `scripts/logic/collectible_run.gd`, `scripts/autoload/save_manager.gd` (`_collections`, `collect_source`, `collection_complete`, `_read_collections`), `data/progression.json`, `scenes/game/game.gd` (`grep -n "collect\|Collectible" scenes/game/game.gd`), la barra de la colección en `scenes/game/hud.gd` (RF-362) y `scripts/data/tower_data.gd` (`required_collection`).
 - Los tests actuales de la colección: `grep -l "collect" tests/*.gd`. **Todos tienen que seguir pasando sin cambiarlos**, salvo un ajuste justificado y anotado.
@@ -17,7 +17,7 @@
 5. La barra (RF-362) muestra la colección relevante del mapa. La Wiki muestra cada colección con su progreso y qué desbloquea.
 
 ## Pasos
-1. Generalizar `CollectibleRun.definitions` sin cambiar el comportamiento de `technology`. El formato nuevo del JSON es el que fijó T205.
+1. Crear `CollectionDefinitions` (RF-425) y dejar `CollectibleRun.definitions/eligible/required` como envoltorios, sin cambiar el comportamiento de `technology`. Crear `FindingRun` para las piezas (RF-427). El formato del JSON es el de RF-425.
 2. `SaveManager`: guardar las piezas como **ids únicos** dentro de `_collections[colección]`. Un guardado viejo (versión 1, solo `technology`) carga igual. Test con un JSON viejo literal.
 3. El flujo de la partida: pieza recogida, oleada completada, confirmada; derrota antes de confirmar, se pierde; abandonar o reintentar, se descarta (como hoy).
 4. `required_collection = &"disruptor"` en la Disruptora queda para T217. Acá se prueba con una torre de test.

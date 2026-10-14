@@ -1,0 +1,26 @@
+[
+	{
+		"entrance": 0,
+		"level": 10,
+		"long_straights": 5,
+		"threatened_cells": [
+			"(22, 1)",
+			"(22, 5)",
+			"(3, 4)",
+			"(3, 10)"
+		],
+		"threatened_with_support_nearby": 4
+	},
+	{
+		"entrance": 1,
+		"level": 10,
+		"long_straights": 5,
+		"threatened_cells": [
+			"(22, 1)",
+			"(22, 5)",
+			"(3, 4)",
+			"(3, 10)"
+		],
+		"threatened_with_support_nearby": 4
+	}
+]

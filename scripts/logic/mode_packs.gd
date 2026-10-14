@@ -311,6 +311,10 @@ static func _read_map(mode: Dictionary, map_id: String, settings: Dictionary) ->
 	var level: LevelData = result["level"]
 	if level != null:
 		_apply(level, settings)
+		var conflict: String = _towers_conflict(level, map_id)
+		if conflict != "":  # RF-396: nivel y modo no comparten ninguna torre
+			entry["errors"] = PackedStringArray(entry["errors"]) + PackedStringArray([conflict])
+			level = null
 	entry["level"] = level
 	return entry
 
@@ -325,6 +329,17 @@ static func _apply(level: LevelData, settings: Dictionary) -> void:
 	if rules.has(RULE_HEALTH):
 		level.enemy_health_percent = rules[RULE_HEALTH]
 	level.allowed_towers = settings["towers"]
+
+
+## RF-396: si el modo y el mapa limitan las torres y no tienen ninguna en común, el mensaje del error; si no, "".
+static func _towers_conflict(level: LevelData, map_id: String) -> String:
+	if level.towers.is_empty() or level.allowed_towers.is_empty():
+		return ""
+	for id: String in level.towers:
+		if level.allowed_towers.has(id):
+			return ""
+	return "El mapa '%s' ofrece las torres %s y este modo permite %s: no tienen ninguna en común, así que no habría con qué defenderse." \
+		% [map_id, ", ".join(level.towers), ", ".join(level.allowed_towers)]
 
 
 static func _parse(text: String, errors: PackedStringArray) -> Dictionary:

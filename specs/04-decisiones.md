@@ -522,3 +522,279 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
   - Valor elegido: **vida 115 %, el mismo oro**. Gana los mapas 1, 3 y 5 con 3, 6 y 4 vidas; en la campaña gana 8 de 9.
   - Es un modo claramente más difícil. Este bot es simple, así que hace falta una prueba jugando; 110 % es la alternativa si resulta demasiado.
 - **Limitación conocida:** con más de dos modos propios, las solapas no entran en la fila de 1280 px.
+
+## D-079 · Torres por mapa: lista de las que se ofrecen
+- **Fecha:** 2026-10-08 · **Estado:** Aceptada, hecha en T203 · **Decidió:** Lucas (Q-29 y Q-30 del cuestionario 09) / Claude (formato)
+- **Qué:** el nivel gana el campo opcional `"torres"` con la lista de las torres que ofrece; la tarjeta de la selección muestra sus íconos y marca "Nueva" donde una torre debuta. Con un modo, vale la intersección. Detalle en RF-393 a RF-397.
+- **Por qué:**
+  - El 07 §4 dice que la rotación de torres va **por datos del mapa** y que **no hay pantalla de mazo**: el jugador no arma nada, el mapa decide.
+  - Una lista de las que **se ofrecen** se lee de un vistazo (qué hay en este mapa) y se escribe igual que `"torres"` de los modos (RF-388), así que el formato y la validación se copian.
+  - Sin el campo todo queda como hoy: los 9 niveles actuales no cambian.
+  - "Nueva" se calcula desde los datos y no se guarda, así no hay nada que migrar ni que se desincronice.
+- **Alternativas descartadas:**
+  - Una lista de torres **a quitar** (`"sin_torres"`): hay que saber cuáles son las comunes para entender qué queda, y si mañana se suma una torre común, entra sola en todos los mapas sin que nadie lo decida.
+  - Una pantalla de mazo antes del nivel: el 07 §4 la descarta.
+  - Guardar en el guardado qué torres "ya vio" el jugador: complica el guardado y deja de ser un dato del contenido.
+
+## D-080 · Removibles y puntos de extracción: se declaran en la leyenda del mapa
+- **Fecha:** 2026-10-08 · **Estado:** Aceptada en la spec (RF-398 a RF-403), a la espera del OK de Lucas (G3) · **Decidió:** Lucas (Q-09, Q-17, Q-19, Q-31 y Q-38 del cuestionario 09) / Claude (formato)
+- **Qué:** un removible o un punto de extracción es una **letra de la leyenda** del mapa (RF-262) que lleva `"removible"` o `"extraccion"` con su `clase`. Los números de cada clase (costo, tiempo, recursos, probabilidad, producción, reserva) están en `data/obstaculos.json` y la letra puede sobrescribirlos. Intacto es una casilla bloqueada, despejado es pasto construible, y **nunca es camino**.
+- **Por qué:**
+  - La leyenda ya es el lugar donde un mapa dice "esta letra se dibuja así y se construye o no" (RF-262 a RF-265). Extenderla sirve al editor, a la comunidad y a los modos sin formato nuevo (Q-31), y mantiene el principio de que un mapa es solo datos (RF-204).
+  - **Por clase, en datos** (Q-09): lo pidió Lucas, y es P2 (los números no van en el código). Que la letra pueda sobrescribir un valor deja ajustar un mapa sin tocar la clase.
+  - Que **nunca sea camino** (RF-264, Q-17) deja intactos los recorridos, el cálculo de RF-202 y el bot: despejar solo abre casillas laterales. No hay atajos.
+  - `dibujo` opcional evita que el mapa se contradiga (una `clase: roca` con `dibujo: arbol`).
+- **Alternativas descartadas:**
+  - **Un campo aparte** (`"obstaculos": [{"fila": 2, "columna": 5, …}]`): hay que mantenerlo sincronizado con el mapa de letras y el editor tendría que pintar en dos lugares.
+  - **Un solo archivo de datos sin sobrescritura**: obliga a clases nuevas para cada ajuste de un mapa.
+  - **Subir el tope de 10 letras ya**: no hace falta todavía; se decide en la tarea del nivel que se pase (punto 6 de "Para revisar en G3").
+  - **Que despejar vuelva la casilla camino**: abre atajos y rutas dinámicas, que la V1 no incluye (07 §5).
+
+## D-081 · Demolición directa: se cobra al ordenar, tarda en tiempo de juego, una a la vez
+- **Fecha:** 2026-10-08 · **Estado:** Aceptada en la spec (RF-404 a RF-410), a la espera del OK de Lucas (G3) · **Decidió:** Lucas (Q-09 a Q-12 y Q-14 a Q-17, 2026-10-08) / Claude (detalle)
+- **Qué:** tocar un removible abre un panel con costo, tiempo y recompensa; **Demoler** cobra el oro y empieza un trabajo que dura segundos de juego (pausa y velocidad respetadas). Hay uno solo a la vez y sin cola. Se puede cancelar con reembolso total. Al terminar se despeja la casilla y se entrega la recompensa **una sola vez**. Al terminar la oleada sigue; al terminar la partida se pierde.
+- **Por qué:**
+  - **Se cobra al ordenar** (Q-11): así nadie se queda sin oro a mitad de un trabajo, y cancelar devuelve todo; como la recompensa llega recién al final, no hay ganancia posible cancelando.
+  - **El trabajo tarda tiempo de juego** (07 §5): la demolición es una **decisión de inversión** (oro ahora, casilla útil después), no un clic instantáneo. Tiene que respetar pausa y velocidad para no ser trampa ni frustrante, igual que el reloj del Ladrón (RF-363).
+  - **Una sola a la vez y sin cola** (Q-15): lo acordado en el 07 y lo más simple; el panel dice por qué no se puede.
+  - **Tocar el objeto** (Q-16) reusa la selección de torres, sin gestos nuevos (§11). Los removibles se marcan para no confundirlos con lo permanente.
+  - **Solo se pierde al terminar la partida** (Q-14), porque se demuele en preparación y en las oleadas.
+  - No es una "habilidad activa del jugador" (§11 la excluye): es una compra con espera, como construir.
+- **Alternativas descartadas:**
+  - **Cobrar al terminar:** se puede quedar sin oro a mitad de trabajo y hay que definir qué pasa.
+  - **Cancelar con reembolso parcial o nulo:** castiga el error y complica; con el total no hay ganancia.
+  - **Cola de órdenes o varias demoliciones a la vez:** más reglas y más interfaz sin pedido.
+  - **Demolición instantánea:** no sería una decisión de inversión.
+  - **Entregar la recompensa al ordenar:** sería ganancia al cancelar.
+
+## D-082 · Demoledora: una compra global, sin venta, baja precio y un poco el tiempo
+- **Fecha:** 2026-10-08 · **Estado:** Aceptada en la spec (RF-411 a RF-414), a la espera del OK de Lucas (G3); el valor del tiempo es provisional · **Decidió:** Lucas (Q-08, Q-10 ✎ y Q-13) / Claude (fórmulas)
+- **Qué:** si el nivel dice `"demoledora": true`, el HUD tiene un botón "Infraestructura" donde se compra la máquina una vez (**180 de oro**). Desde ahí, cada demolición cuesta el 10 % (mínimo 5) y tarda el 80 % del tiempo. No se vende.
+- **Por qué:**
+  - **Botón global, no estructura** (Q-08): el descuento ya está acordado como global (07 §5), así que no tiene sentido que ocupe una casilla; evita construir un objeto más con vida, estado y arte propios.
+  - **Sin venta** (Q-13): comprarla y venderla sería una forma de ganar plata.
+  - **Precio 3 × una roca** (Q-13, 07 §5): convierte la decisión en un cálculo de amortización. Con los valores iniciales se paga sola desde 4 rocas, 6 árboles o 3 escombros (RF-414).
+  - **También baja el tiempo** (Q-10 ✎): Lucas lo cambió respecto de la recomendación ("solo baja el precio"). Lo que no se pudo cerrar es **cuánto**: Lucas pidió fijarlo "con el bot", y como la demolición no existe, el bot no puede medirla. Se dejó **80 %** como valor provisional en datos y se revisa en T214 y T223. *Anotado como pendiente en "Para revisar en G3".*
+  - **Un trabajo ya ordenado conserva su precio y su tiempo**: es más simple y justo; la diferencia no se reembolsa.
+- **Alternativas descartadas:**
+  - **Máquina como estructura en una casilla:** ocupa lugar, hay que dibujarla y animarla (07 pide que se vea el trabajo solo sobre el objeto) y no cambia el descuento.
+  - **Descuento por radio local:** el 07 lo descarta.
+  - **Máquina vendible con reembolso parcial:** abre ganancias y casos borde sin pedido.
+  - **Que baje solo el precio (la recomendación original):** Lucas pidió que baje también el tiempo.
+
+## D-083 · Recursos locales: un solo tipo, sin guardar, con drop al azar con semilla y torres que cuestan recursos
+- **Fecha:** 2026-10-08 · **Estado:** Aceptada en la spec (RF-415 a RF-421 y RF-432 a RF-433), a la espera del OK de Lucas (G3); los números son iniciales · **Decidió:** Lucas (Q-18 ✎, Q-21 ✎, Q-22, Q-23, Q-24 y Q-07) / Claude (detalle)
+- **Qué:**
+  - Un recurso genérico, **local** a la partida (en `LevelSession`), que no se guarda ni da puntaje. El contador solo se ve en mapas **con fuentes**.
+  - Los removibles entregan 1 recurso **con una probabilidad por clase** (50 % inicial), sorteada **al empezar la partida** con una semilla que el bot y los tests fijan. Es la única excepción a "sin sorteos".
+  - `TowerData.resource_cost` (el **Mortero**, 300 + 3, debuta en el nivel 9) y `alt_gold_cost` / `alt_resource_cost` (el **Francotirador**: 150 de oro o 120 + 1 recurso). Mejorar no cuesta recursos y vender devuelve el 70 % redondeado hacia abajo.
+  - **Regla de oro:** todo mapa de la campaña con recursos se gana con la estrategia `sin_recursos` (4 de 5 semillas).
+- **Por qué:**
+  - **Local y sin guardar** (07 §7, Q-24): evita acumular recursos varios niveles y una economía persistente.
+  - **Desde el nivel 7 y al azar** (Q-18 ✎): Lucas quiso que la mecánica empiece antes del 10. Para que los recursos "tengan uso donde aparecen" (plan 08 §2.2), el Francotirador gana una forma de pago chica con recurso, y el Mortero ya cuesta recursos desde el 9.
+  - **Sorteo fijado al empezar, no al terminar:** el resultado no depende del orden de demolición ni de cancelar y reordenar (nadie puede "tirar de nuevo"), y el bot compara estrategias sobre **la misma** partida. El jugador no ve el resultado hasta terminar, así que sigue habiendo sorpresa.
+  - **Contador solo con fuentes:** con "torres que cuestan recursos" como criterio, aparecería en los niveles 1 a 6 por el Francotirador, donde no hay forma de conseguir recursos.
+  - **Dos formas de pago a la vez** (Q-21 ✎): la de oro cuesta lo mismo que hoy, así que el Francotirador y los niveles 1 a 6 no cambian, y nunca es indispensable.
+  - **Mejorar no cuesta recursos** (Q-22): menos reglas. **Vender devuelve con el mismo %** (Q-23): comprar y vender no da ganancia.
+  - **Regla de oro** (07 §7, Q-07): es lo que garantiza que los recursos son "una estrategia más" y no un requisito encubierto; se mide con el bot y después con las partidas de Lucas.
+- **Alternativas descartadas:**
+  - **Sortear al terminar cada demolición:** depende del orden y de las cancelaciones, y el bot no compara bien las estrategias.
+  - **Una semilla escrita en el archivo del mapa:** el resultado sería siempre el mismo y desaparecería el azar que pidió Lucas (punto 2 de "Para revisar en G3").
+  - **Recursos con costo en las mejoras** (Q-22) y **que sobrantes den puntaje** (Q-24): más reglas, y el puntaje cambiaría.
+  - **Varias monedas** (madera, piedra): el 07 pide un recurso genérico.
+  - **Que el recurso empiece en el 10** (la recomendación original): Lucas lo adelantó al 7.
+  - **Que el mapa decida si "usa recursos" con una bandera propia:** se deduce de las fuentes, sin otro campo que mantener.
+
+## D-084 · Extracción finita: se habilita con oro y produce al completar oleadas hasta agotar la reserva
+- **Fecha:** 2026-10-08 · **Estado:** Aceptada en la spec (RF-422 a RF-424), a la espera del OK de Lucas (G3) · **Decidió:** Lucas (Q-19 y Q-20) / Claude (detalle)
+- **Qué:** una mina o un bosque explotable se habilita pagando **100 de oro** tocándolo como un removible, produce **2 recursos por oleada completada** hasta agotar una **reserva de 8**, y no produce por esperar. No hay límite de puntos activos. Mina y bosque funcionan igual; cambia el dibujo.
+- **Por qué:**
+  - **Pagar oro para habilitar** (07 §6): la extracción es una **inversión** que hay que recuperar con las oleadas.
+  - **Solo por oleada completada** (07 §6): evita generar recursos esperando y repitiendo; la **reserva finita** evita que la economía crezca sin tope.
+  - **Sin límite de puntos** (Q-20): lo limita el oro; es lo más simple.
+  - **Que cuente la oleada en curso:** habilitar en medio de una oleada ya aprovecha su final; no se pidió algo más estricto y cuesta menos explicarlo ("produce cada oleada que se completa mientras está activa").
+  - **No la abarata la demoledora:** no es una demolición.
+  - Con los valores iniciales, 100 de oro compran 8 recursos; si **no se recupera** frente al valor de lo que se compra con ellos, es un dato para el balance (T214), no un error de la regla.
+- **Alternativas descartadas:**
+  - **Producción por tiempo:** premia esperar y deja de ser una decisión.
+  - **Límite de puntos activos o de extracción simultánea:** más reglas, y el oro ya lo limita.
+  - **Reserva infinita o que se recupera:** rompe "finito" (07 §6).
+  - **Que la producción empiece con la oleada siguiente:** más estricta pero más difícil de explicar (punto 5 de "Para revisar en G3").
+
+## D-085 · Colecciones por tecnología: varias en `progression.json`, con pieza en una ruina
+- **Fecha:** 2026-10-08 · **Estado:** Aceptada en la spec (RF-425 a RF-431), a la espera del OK de Lucas (G3) · **Decidió:** Lucas (Q-25 a Q-27 y Q-31) / Claude (formato)
+- **Qué:** `progression.json` admite **varias colecciones**; cada una dice cuántas piezas necesita y qué niveles son su fuente. La nueva, `disruptor`, tiene 3 piezas fijas, una en una ruina de los niveles **8, 9 y 10**. Una pieza se **recoge** al terminar la demolición de la ruina y se **confirma** como los avances actuales (RF-359). Una ruina ya recuperada da 1 recurso si el mapa tiene recursos. **Solo en la campaña.**
+- **Por qué:**
+  - **Mismas reglas que los avances de hoy** (Q-26): una sola idea de "recogido, pendiente y confirmado" para el jugador, y el código de M37 se reutiliza.
+  - **Guardado igual que hoy:** la pieza es el id del nivel dentro de la lista de su colección. No cambia la versión del guardado, un guardado viejo carga igual, y una versión anterior del juego que lea uno nuevo ignora la colección que no conoce (aunque al volver a guardar la descartaría).
+  - **`technology` queda idéntica**: el `origen` por omisión es `"portador"`, y los tests de M37 y M38 siguen valiendo sin tocarlos.
+  - **Pieza fija y garantizada, sin sorteos** (Q-27, 07 §8): nadie tiene que repetir un mapa por suerte; la identidad única evita duplicados por repetir la ruina.
+  - **Solo campaña** (Q-31, RF-358): los mapas de la comunidad o un editor no pueden "fabricar" piezas.
+  - **La ruina ya recuperada da 1 recurso** (Q-27) para que repetir un mapa tenga algún sentido sin dar piezas repetidas.
+- **Alternativas descartadas:**
+  - **Una pieza por enemigo portador** (como los 5 avances): no sirve para una ruina que se demuele.
+  - **Piezas sorteadas** o un 2.º hallazgo por ruina: lo descarta Q-27.
+  - **Un guardado nuevo con versión 2:** migraciones y riesgo sin necesidad.
+  - **Que la comunidad pueda dar piezas:** se podrían fabricar.
+  - **Un id global distinto del nivel:** hoy una pieza por colección y nivel alcanza (RF-426); si hiciera falta más de una, se cambia con una `D` nueva.
+
+## D-086 · Disruptora: una torre de pulso que apaga el aura de los emisores, no una segunda Eléctrica
+- **Fecha:** 2026-10-08 · **Estado:** Aceptada en la spec (RF-438 a RF-452), a la espera de que Lucas revise los puntos de "Para revisar" de M51 · **Decidió:** Lucas (Q-33 y 07 §9) / Claude (detalle)
+- **Qué:** la Disruptora (bobina Tesla, pedido de Lucas) emite cada 4 s un **pulso** en un radio de 2,5 casillas (3 y 3,5 al mejorar). Los enemigos **con aura** (Guardián, Curandero y cualquiera con `has_aura()`) que el pulso alcanza **no emiten su aura** durante 2,5 s (3 y 3,5 al mejorar). Todos los alcanzados reciben 5 de daño. Cuesta 130 de oro + 2 recursos y pide la colección `disruptor`. **Solo apaga auras:** ninguna otra habilidad enemiga.
+- **Por qué:**
+  - **Suprimir al que emite** (y no cortar el efecto en el que lo recibe): el aura ya tiene una vida corta (0,35 s, D-042), así que dejar de emitir la apaga **en menos de medio segundo** sin tocar el código de los receptores, y sigue la frase de Lucas en Q-33 ("pierden su aura 2,5 s"). Es un estado más del enemigo, como la ralentización o la quemadura, y se muestra igual (RF-449).
+  - **Es otra cosa que la Eléctrica** (la torre con la que más se parece por el aspecto de bobina): la **Eléctrica** pega fuerte a varios con un rayo y es la respuesta al **grupo**; la **Disruptora** casi no daña (≈13 % del daño por segundo de la Eléctrica de nivel 1) y es la respuesta a **la ayuda** que dan el Guardián y el Curandero. Sin ella, la contramedida era "matarlos primero" (D-041); con ella hay una segunda, que además **combina** con el resto (el Mecánico la acelera, el Hielo y el Cañón rematan). No hay forma de que la Disruptora reemplace a la Eléctrica ni al revés.
+  - **Frente al Aislador** (relegado en 07 §9): el 07 solo lo llama "defensivo preventivo" y dice que Lucas lo encontró parecido al Disruptor; **no tiene reglas escritas**. Se lo dejó de lado para no tener dos torres que hacen casi lo mismo, y la Disruptora es la que quedó con reglas concretas (Q-33): actúa **sobre los enemigos con aura, durante la oleada** y se paga con una colección. No se comparan más detalles porque no hay de dónde sacarlos.
+  - **Un ritmo con huecos a propósito** (cobertura 62,5 % a 87,5 %): una torre que apaga un aura **para siempre** haría inútiles al Guardián y al Curandero, y los niveles que los usan perderían sentido. Cubrirlo todo pide invertir (nivel 3 + Mecánico o dos Disruptoras, RF-445).
+  - **Daño bajo a todos** (Q-33): el pulso no es un efecto sin cuerpo; el daño es tan chico que no compite con las demás torres, pero termina a los enemigos débiles que ya venían heridos.
+  - **Los números son de Lucas** (Q-33). Lo que Q-33 no fija (el costo en oro de mejorar) quedó como **valor inicial** y se ajusta con el bot.
+- **Alternativas descartadas:**
+  - **Suprimir todas las habilidades enemigas:** 07 §9 dice que no se da por aprobado; Q-33 descartó al Chamán, al Espejo y a otras habilidades. Una torre que apaga todo es una respuesta única a todos los enemigos especiales.
+  - **Cortar el aura ya recibida en el receptor:** toca RF-271 y RF-272 (M17) para ganar menos de 0,35 s (RF-443).
+  - **Una zona que apaga auras mientras el emisor está adentro:** pide una entidad persistente, estados que entran y salen y más dibujos; Q-33 describe un estado de segundos, no una zona.
+  - **Más daño y menos supresión** (una Eléctrica con un extra): 07 §9 pide una torre que "interrumpe" con "poco daño directo", y con más daño se parecería a la Eléctrica.
+  - **Una torre pasiva o un aura propia:** la distinguiría menos del Mecánico (apoyo) y no tendría el ritmo de pulsos.
+  - **Que dispare un proyectil al emisor:** reabre reglas de proyectiles, bloqueos y el Espejo; el pulso en área es más simple y se lee mejor.
+
+## D-087 · Disruptora: reglas de borde (espera a un emisor, el Espejo queda fuera, lo recibido no se corta)
+- **Fecha:** 2026-10-08 · **Estado:** Aceptada en la spec (RF-440, RF-443, RF-444, RF-445 y RF-448), a la espera de que Lucas revise los puntos 1, 3, 4 y 5 de "Para revisar" de M51 · **Decidió:** Claude (detalle) sobre lo que dijo Lucas en Q-33
+- **Qué:**
+  - **Cuándo pulsa:** cuando está lista **y** hay al menos un emisor de aura a su alcance. Sin emisor no pulsa ni gasta su espera.
+  - **Quién queda fuera:** el **Espejo** (por su dato `reflect_range_tiles`, no por el nombre) no recibe nada del pulso, y por eso no hay rebote. El Chamán, el Ladrón y el Embestidor reciben el golpe de daño bajo pero **conservan su habilidad**.
+  - **Lo ya recibido** del aura no se corta: caduca solo (0,35 s).
+  - **Las otras torres:** el Chamán la aturde como a cualquiera; el desgaste del Embestidor y el Mecánico cambian su cadencia como en todas las torres; la barra sigue el orden canónico y la Disruptora es la décima.
+- **Por qué:**
+  - **Esperar un emisor:** los pulsos de 4 s son escasos; gastarlos con cualquier enemigo los pierde justo cuando aparece el Guardián. También la separa de la Eléctrica (D-086).
+  - **El Espejo:** RF-284 dice que **todo** golpe de torre que lo alcanza rebota, incluidos los de área. Si el pulso lo tocara, la Disruptora quedaría aturdida, lo que contradice Q-33 ("no afecta al Espejo"). Dejarlo fuera **sin tocar RF-284** es lo más chico: ningún RF existente cambia y los proyectiles siguen rebotando como siempre.
+  - **El Chamán, el Ladrón y el Embestidor reciben el golpe:** Q-33 habla de **habilidades**, no de inmunidad. Recibir 5 de daño no cambia lo que hacen. Si Lucas prefiere que no los toque en nada, es un cambio chico (punto 1 de "Para revisar").
+  - **Lo ya recibido no se corta:** el aura caduca en 0,35 s (RF-273); cortarla antes exigiría tocar a los receptores (D-086).
+  - **La décima torre:** la barra y las teclas llegan a 9 (RF-297). No se agrega una tecla nueva en esta etapa; los niveles del bloque 3 eligen qué ofrecen (RF-393).
+- **Alternativas descartadas:**
+  - **Pulsar siempre que haya cualquier enemigo:** más "viva" a la vista, pero deja huecos (punto 3 de "Para revisar").
+  - **Que el pulso rebote en el Espejo o lo aturda:** contradice Q-33.
+  - **Que el pulso no toque al Chamán, al Ladrón ni al Embestidor:** posible (punto 1 de "Para revisar"); queda como alternativa de un cambio chico.
+  - **Excluir al Espejo por su `id`:** rompe el principio de que todo son datos (RF-164); con `reflect_range_tiles` un enemigo nuevo con rebote queda fuera solo.
+  - **Una tecla `0` para la décima torre:** cambia el HUD y el mapa de teclas (RF-297); no hace falta si cada nivel ofrece 9.
+
+## D-088 · La barra de abajo con pestañas por tipo (Cañones e Infraestructura) y una flecha al menú principal
+- **Fecha:** 2026-10-08 · **Estado:** **Aprobada por Lucas el 2026-10-08** (preguntas P1 a P8 de M53, todas con la recomendación de cada una: pestañas por datos del mapa, teclas `1`–`9` más `0` y `Tab`, cuatro tarjetas en «Infraestructura», la flecha «← Menú» en todos los niveles con confirmación, el menú de pausa sin tocar); programada en T248 · **Decidió:** Lucas (el pedido y las dos pestañas) / Claude (el detalle: medidas, teclas, textos y recomendaciones de las preguntas P1 a P8)
+- **Qué:**
+  - Los niveles que **usan infraestructura** (demoledora, removibles o extracción; hoy del 6 al 10) tienen una barra con **dos pestañas**: **«Cañones»** (las torres de hoy) e **«Infraestructura»** (trabajo en curso, demoledora, extracción y recursos). Los niveles 1 a 5 no cambian.
+  - Las teclas: `1`–`9` para las torres 1 a 9, **`0` para la décima** y **`Tab`** para cambiar de pestaña. Los botones de torre se achican (de 76 a 56 px como mínimo) para que entren hasta 11.
+  - El botón y el panel «Infraestructura» de arriba a la derecha **desaparecen**: la pestaña es el único lugar. Tocar un objeto del mapa **funciona igual** que hoy, en cualquier pestaña, y no cambia la pestaña sola.
+  - Una **flecha «← Menú»** arriba a la izquierda, en todos los niveles, que **pide confirmación** y dice qué se pierde (las piezas de colección de la partida, aunque estén confirmadas, y la demolición en curso). El menú de pausa **no cambia**.
+- **Por qué:**
+  - **Hace falta lugar y no hay:** con el Mecánico, el Mortero y la Disruptora hay hasta 11 torres y las teclas llegan al 9. Seguir apretando botones en una sola fila no escala; una pestaña por tipo sí: una torre o herramienta nueva de otro tipo es **una pestaña nueva**, no un rediseño (Lucas: «poder sumar más torres y herramientas en la misma barra»).
+  - **Todo lo de infraestructura en un solo lugar:** hoy el panel de la demoledora cae, por las coordenadas del código, encima de Pausa y Velocidad; el trabajo en curso solo se ve tocando el objeto; y la extracción solo se ve tocando la mina. La pestaña reúne el estado del trabajo, la compra y la extracción con las **mismas** reglas y los mismos controladores (nada de lógica nueva).
+  - **Por datos y no por número de nivel:** para la campaña da lo mismo que «a partir del 6», pero un mapa de la comunidad o de un modo con demolición tiene el mismo problema y la misma solución; y los niveles 1 a 5 quedan intactos porque no tienen ningún dato de infraestructura.
+  - **`0` para la décima:** es la continuación natural de la fila de números y no pide una tecla nueva que memorizar. **`Tab`** no choca con ninguna tecla de la partida y es la tecla que se espera para cambiar de pestaña. La torre 11 queda sin tecla, como hoy la décima: se elige con el mouse o el dedo, y todo lo de este bloque se puede hacer sin teclado (celular).
+  - **La pestaña no cambia sola:** quien está construyendo toca rocas sin querer; sacarlo de su barra de torres cada vez molesta más de lo que ayuda. Para no perder de vista el trabajo, la pestaña muestra el tiempo que falta.
+  - **La flecha siempre pregunta:** abandonar descarta las piezas de colección de la partida **aunque ya estén confirmadas** (se guardan recién al mostrar el resultado, RF-359 y RF-427), y eso se descubre tarde. La flecha queda cerca de Pausa y Velocidad, así que un toque de más no tiene que costar una pieza.
+  - **El menú de pausa queda como está:** no se pidió cambiarlo. Que sus dos botones también confirmen es una idea mía, anotada en §13 y como pregunta P7.
+- **Alternativas descartadas:**
+  - **Una segunda fila de botones debajo o encima de la actual:** la barra mide 96 px y lo de arriba es el mapa; una fila más le quita alto al área del mapa (de 48 a 624 px, RF-251) y obliga a achicar el zoom de los mapas grandes.
+  - **Desplazar la barra de torres de costado o pasar de página con flechas:** funciona con mouse pero en el celular pide arrastrar (gestos, §11) y esconde torres; las pestañas muestran todas las de su tipo a la vez.
+  - **Dejar el panel «Infraestructura» arriba a la derecha y sumar solo la fila de torres con más teclas:** no resuelve el panel pegado arriba ni la compra de la demoledora y la extracción en un solo lugar.
+  - **Menú radial o ventana emergente de torres:** más tocadas por construcción; la barra fija es lo que el juego ya enseña.
+  - **«Nivel ≥ 6» como regla de aparición:** deja sin pestañas a mapas con demolición que no son de la campaña, y obliga a tocar código cada vez que cambie la lista de niveles.
+  - **Pestañas que se abren solas al tocar un objeto:** deja el estado a la vista pero saca al jugador de su barra de torres (decide Lucas, P4).
+  - **Teclas `Q`/`E` o `C`/`I` para las pestañas:** son posibles (pregunta P2); `Tab` quedó porque no se pisa con nada y vale igual con dos pestañas o con cinco.
+  - **Una tecla propia para la flecha:** se descarta a propósito: salir del juego no debe estar a un `Espacio` de distancia.
+  - **Que la flecha abra el menú de pausa:** duplica `Esc` y no sirve para el caso de salir de una vez; el menú de pausa sigue donde estaba.
+  - **Guardar la última pestaña usada:** un guardado más sin ganancia; arrancar siempre en «Cañones» es lo previsible.
+
+- **Ajustes al programarla (T248, 2026-10-08)** *(no cambian lo decidido; salieron de medir en una ventana real)*:
+  - «Infraestructura» a 13 pt no entra en 96 px (mide 96): las pestañas usan 12 pt con 3 px de margen. Los botones de torre miden 71, 63 y 57 px con 9, 10 y 11 torres, como la cuenta; el costo y la insignia de la segunda forma de pago se achican en los botones angostos (RF-455).
+  - Sin pestañas y con 10 o más torres (mapa de la comunidad o de un modo) los botones miden 73 y 66 px: la spec dejaba «siempre 76» en una frase y «se achican» en otra, y a 76 la décima tapaba «Próxima oleada» (RF-454).
+  - `Tab` se atiende en `_input` y no en `_unhandled_input`: los íconos de arriba aceptan el foco del teclado y, con uno enfocado, el motor se quedaba `Tab` para mover el foco. Probado con un ícono enfocado en la ventana real.
+  - El nivel 6 no tiene demoledora (solo el 7): la tarjeta de la demoledora no se dibuja en el 6.
+## D-089 · Se enmienda §11: entran los textos breves, el Lore de la Wiki, el epílogo y la intro; siguen fuera los diálogos, las cinemáticas animadas y las voces
+- **Fecha:** 2026-10-08 · **Estado:** Aprobada por Lucas (la enmienda, Q-01) · **Decidió:** Lucas (la enmienda y sus límites, respuesta **Q-01 ✔** del cuestionario `09-decisiones-pendientes-v1.md`, el 2026-10-08) / Claude (el texto de la enmienda y de su nota en §11)
+- **Cita de la respuesta de Lucas (Q-01):** *«Sí, de forma acotada. Se permiten textos breves por nivel (entrada de hasta 3 líneas y victoria de hasta 2), una categoría Lore en la Wiki, un epílogo en la victoria del 15 y una intro de láminas que se pueda omitir y volver a ver. Siguen excluidos: diálogos entre personajes, cinemáticas animadas y voces.»* (respondida con ✔: Lucas aceptó la recomendación tal cual).
+- **Qué:**
+  - En §11 («Qué NO incluye este juego»), la línea «Historia, diálogos o cinemáticas» pasa a **«Diálogos entre personajes, cinemáticas animadas y voces»**, con una nota que manda a **M52** (`01-spec.md`) y a `specs/11-textos-lore.md`.
+  - Lo que entra queda acotado por M52: un campo opcional `"textos"` por nivel (lugar, entrada de hasta 3 líneas, victoria de hasta 2, y un epílogo de 3 a 5 líneas solo en el último nivel), una categoría **Lore** en la Wiki y créditos. La **intro de láminas** también queda permitida, pero su spec es de T240 y todavía no existe.
+- **Por qué:**
+  - El 07 pide que la victoria muestre el logro y su costo, y que las explicaciones esenciales estén **dentro del juego**. Sin textos no hay dónde decirlo, y la constitución (P4) pide enmendar §11 **antes** de agregar algo que figura como excluido.
+  - Se mantiene excluido lo que cambiaría el tipo de juego: personajes que hablan, escenas animadas y voces piden guion, animación y actores, y no hacen falta para un cierre ambiguo y sobrio (biblia §8).
+- **Alternativas descartadas:**
+  - **No enmendar §11 y contar todo con las señales del terreno:** el 07 §12 pide explicaciones esenciales dentro del juego; las señales por sí solas no cuentan el logro y el costo de la victoria.
+  - **Sacar «Historia» de §11 por completo:** abría la puerta a diálogos y cinemáticas, que Lucas dejó fuera.
+  - **Enmendar §11 sin límites de largo:** los límites (3 líneas, 2 líneas, 3 a 5 de epílogo) son los que hacen que los textos sean «breves» y no una novela; sin límite, un texto de la comunidad podría tapar la pantalla.
+
+## D-090 · Los textos viven en el archivo de cada nivel y la Wiki Lore se abre por niveles ganados, sin campos nuevos en el guardado
+- **Fecha:** 2026-10-08 · **Estado:** Propuesta en la spec (RF-464 a RF-473, M52), **a la espera del OK de Lucas** · **Decidió:** Lucas (la forma general: texto de entrada/victoria por nivel, Lore en la Wiki que se desbloquea y epílogo en el 15; Q-01 y 07 §1, §2 y §12) / Claude (el detalle: formato, límites, cartel, desbloqueo y recomendaciones de las preguntas P1 a P8 de M52)
+- **Qué:**
+  - El campo opcional **`"textos"`** vive **en el JSON del nivel**, con `lugar`, `entrada`, `victoria` y `epilogo` (límites de RF-464). Es un dato como la leyenda: lo conserva el editor, lo valida `check_level` y un mapa de la comunidad lo puede traer.
+  - La entrada es un **cartel al empezar** que **pausa** la partida mientras se lee, se omite con un toque y no vuelve al reintentar. La victoria sale en la pantalla de victoria; el lugar, en la tarjeta de selección (solo si el nivel está desbloqueado).
+  - La Wiki suma **«Lore»**: artículos en `data/wiki/lore/*.json` con una clave `"desbloqueo"` (el id del nivel que los abre). Se abren con `SaveManager.is_completed`: **no hay campos nuevos en el guardado**.
+  - El **epílogo** es un botón en la pantalla de victoria del último nivel, que abre una pantalla con la imagen, el texto y «Créditos» (`data/creditos.json`). «Campaña terminada» se **deduce** (los 15 niveles completados).
+  - Los textos mismos viven en **un solo documento**, `specs/11-textos-lore.md`, y las tareas los copian tal cual.
+- **Por qué:**
+  - **En el archivo del nivel, no en un archivo aparte:** un nivel nuevo (o un mapa de la comunidad) trae su historia con él, sin tocar código ni otra lista (constitución P2 y P10). Es lo que dice el pedido: «salvo que el mapa los traiga».
+  - **Pausar mientras se lee:** un cartel que no pausa obliga a leer con la cuenta atrás corriendo; un jugador de celular perdería segundos. No es el menú de pausa: no cambia ninguna regla.
+  - **Reintentar sin cartel:** el cartel es para entrar al nivel; repetirlo cinco veces cansa y empuja a saltearlo siempre.
+  - **Desbloquear por nivel ganado y no por un campo nuevo:** el guardado ya sabe qué niveles se ganaron. Así los guardados viejos abren los artículos retroactivamente, no hay migración y no hay nada que se pueda desincronizar.
+  - **Un solo documento de textos:** los textos se corrigen y se aprueban en un lugar; evita que la spec, la ficha de cada nivel y los JSON digan cosas distintas.
+- **Alternativas descartadas:**
+  - **Un archivo de textos aparte (`data/lore.json`) con todos los niveles:** el mapa de la comunidad no podría traer sus textos, y renombrar o sumar un nivel obligaría a tocar dos archivos.
+  - **Que el cartel no pause:** más simple, pero castiga la lectura (ver arriba).
+  - **Guardar «visto» por texto o por artículo:** un campo más en el guardado y una migración, sin ganancia: reaparecería lo que ya se vio solo si se borra el guardado, que es lo esperable.
+  - **Un estado «campaña terminada» en el guardado:** se deduce sin guardar nada y no puede quedar mal.
+  - **Un modo «ver historia» aparte, con todos los textos en fila:** es una pantalla nueva que nadie pidió. La Wiki Lore cumple ese papel para el que la quiera releer.
+  - **Mostrar los textos también en Asedio:** Asedio reusa los mapas con monstruos más fuertes; «asegurar este lugar» no es lo que pasa ahí (decide Lucas, P2).
+
+## D-091 · Bloque 3 (niveles 11 a 15): fichas por datos, rotación sin Ametralladora, central de cuatro dibujos y las dudas de G4 marcadas
+- **Fecha:** 2026-10-08 · **Estado:** Propuesta en la spec (RF-474 a RF-480, §7.13 a §7.17), **a la espera del OK de Lucas** · **Decidió:** Lucas (la rotación, Q-29; Chamán en el 11 y Espejo en el 12, Q-35; jefe supremo nuevo en el 15, Q-32 ✎; Disruptora desde el 11 con su balance a reevaluar ahí, T217; recursos desde el 7 y Mortero en el 9, Q-18 ✎ y Q-21 ✎) / Claude (el detalle de las fichas y los valores iniciales)
+- **Qué:**
+  - Los niveles **11 a 15** tienen el campo `"torres"` con las del juego **menos la Ametralladora** (Q-29); la Disruptora, el Mortero y el Mecánico entran en la lista y la colección de las dos que la tienen sigue mandando (RF-395).
+  - Cada nivel tiene su **ficha de 9 puntos** (07 §3) como subsección de §7 y su RF de campaña. Las fichas dicen **qué** debe tener cada mapa y los **números iniciales**; las coordenadas y las oleadas las arma cada tarea con el bot.
+  - **Debuts:** Chamán en el 11 y Espejo en el 12, **solos** en su primera oleada (07 §4); el 13 es **cómo vienen** (la escolta coordinada, solo con oleadas, RF-203); el 14 junta todo; el 15 deja un **hueco** para el jefe supremo de T243.
+  - **La central de energía** se arma con **cuatro dibujos de 64 × 64** al lado de la salida, sin sistema nuevo de objetos grandes.
+  - **Lo que depende de la partida de Lucas del 6 al 10 (T226, G4) está marcado «A REVISAR TRAS G4»:** (a) si la demolición convence, (b) si el Mortero del 9 se alcanza y (c) si la Disruptora rinde. Se confirman antes de arrancar cada nivel.
+- **Por qué:**
+  - **Fichas por datos y no un mapa dibujado:** las coordenadas de los niveles 6 a 10 se rehicieron varias veces con el bot (T223 a T225 y T245). Fijar casillas acá, sin que Lucas haya jugado el 6 al 10, sería fijar lo que probablemente cambie.
+  - **Sin Ametralladora desde el 11:** es la rotación que pidió Lucas (07 §4: «algunas torres baratas o repetidas pueden retirarse»); el riesgo es la apertura, y por eso la comprueba el bot con la regla de RF-475.
+  - **El hueco del jefe supremo:** Lucas pidió que su diseño sea de T243 y que **nadie lo invente** fuera de esa spec. *(Resuelto el 2026-10-09: D-092, el Coloso.)*
+  - **La central como cuatro dibujos:** un objeto grande de verdad (que ocupe 2 × 2 casillas con un solo dibujo) es un sistema nuevo de decoración; con cuatro cuartos se resuelve con lo que la leyenda ya hace.
+  - **Marcar G4 en vez de esperar:** Lucas pidió dejar la spec lista para su OK sin frenar por la partida; marcar cada punto dudoso permite aprobar lo firme hoy y corregir lo marcado después.
+- **Alternativas descartadas:**
+  - **Esperar a G4 para escribir las fichas:** frena el lore y los textos, que sí están firmes.
+  - **Fichas con las coordenadas y las oleadas completas:** se rehacen al medir; solo suman ruido a la revisión de Lucas.
+  - **Retirar más torres en el bloque 3 (por ejemplo la Ráfaga):** Q-29 retiró solo la Ametralladora; más cambios empeoran la apertura y el 07 no los pide.
+  - **La central como la salida del mapa:** exige un objeto de salida nuevo y tocar el recorrido; es un sistema nuevo.
+  - **Que el 15 repita el Soberano con escolta:** la respuesta Q-32 de Lucas cambió esto (jefe supremo nuevo).
+  - **Agregar el Lanzamisiles al 13:** Q-28 lo dejó para una actualización posterior.
+
+## D-092 · El jefe supremo del nivel 15 es el Coloso: una masa de piedra que se parte en tres pedazos, con datos que ya existen
+- **Fecha:** 2026-10-09 · **Estado:** Aprobada por Lucas (concepto, vidas, oleadas, nombre y pertenencia) · **Decidió:** Lucas (eligió el concepto C y aceptó las propuestas de las otras cuatro preguntas del informe de T243, el 2026-10-09) / Claude (los conceptos, los números iniciales y el texto)
+- **Qué:**
+  - El nivel 15 trae al **Coloso** (`colossus`) y a su **Pedazo** (`colossus_shard`) en lugar del Soberano (RF-481 a RF-484, §7.17). El Coloso tiene 600 de vida base, velocidad 0.5, armadura 5 y resiste la mitad de la ralentización; al morir por daño **suelta 3 Pedazos** (180 de vida, velocidad 1.0, sin armadura) con `death_spawn` (RF-166). **Quita 12 de las 20 vidas** si llega; cada Pedazo, 4.
+  - Aparece en las oleadas **26, 28 y 30**; la **escolta completa** (Guardián + Curandero + Chamán) viene **solo con la 30**. Las cantidades exactas las cierra T234 con el bot.
+  - **Nombre «Coloso»** (nombre de informe, por el tamaño) y **pertenencia ambigua** a los Moradores, como el Espejo: el juego no lo aclara y el Coloso no lleva el símbolo A.
+  - **No hay sistema nuevo ni campo nuevo en `EnemyData`:** son dos archivos de datos, un dibujo del cuerpo y otro del Pedazo (con ciclo de caminata), y el texto de la Wiki Lore.
+- **Por qué:**
+  - **Es un cierre y no «un jefe más» (10 §4.4, punto 1).** La ficha del 15 dice que el nivel no enseña nada nuevo, sino que **junta lo aprendido**. El Coloso castiga a quien juega con una sola idea: la primera mitad pide golpe fuerte (la lección del Blindado) y la segunda pide área y ralentización (la lección del Hielo, el Cañón y la Araña). Ninguno de los otros jefes obliga a tener las dos cosas a la vez.
+  - **Tiene función propia.** El Soberano es vida y armadura; el Guardián, aura; el Chamán, sabotaje. «Se parte» es una función que nadie tiene.
+  - **No exige nada nuevo** (la ficha de T243 manda frenar si hacía falta un sistema). `death_spawn` ya existe, está probado con la Araña y las Crías, y la Wiki ya sabe escribir «Al morir suelta» y «Lo suelta al morir».
+  - **La contramedida está entre las torres comunes** (Francotirador, Cañón, Incendiaria, Hielo, Tesla), así que `sin_recursos` puede ganarle sin Disruptora, Mortero ni Mecánico (ficha del 15, punto 8).
+  - **12 vidas de 20:** una sola fuga lo deja en el límite y dos pierden la partida, así que es «la amenaza más grande del juego» (más que las 10 del Soberano) sin ser una derrota automática. **3 Pedazos × 4 vidas = 12**: matarlo y dejarlo pasar cuestan lo mismo en el peor caso, y nadie queda castigado por haberlo roto.
+  - **Oleadas 26, 28 y 30 y escolta completa solo en la 30:** el jefe se anuncia, se aprende y recién en la última oleada se combina con todo (07 §4: primero se enseña la amenaza, después se combina).
+  - **Pertenencia ambigua:** un gólem de la misma piedra que los Guardianes haría la escolta más natural, pero lo acercaría a «el líder de ellos», y el tono de la biblia (10 §8) pide **no tener un villano**. Un cuerpo que se parte no tiene intención ni mensaje: avanza.
+- **Alternativas descartadas:**
+  - **A · «El Custodio» (el muro que avanza):** un gólem con 700 de vida, armadura 4 y un aura más grande que la del Guardián. Es **un Soberano con aura** y repite la función del Guardián, que la ficha pedía no repetir; se sentía como «el jefe de siempre, más grande». Queda como plan B barato si T244 no llegara a dibujar dos cuerpos; no hizo falta.
+  - **B · «El Vocero» (el gran sabotaje):** un Chamán mayor que aturde **4 torres** a la vez. Repite la función del Chamán y, con poca vida, es más molesto que peligroso; subirle la vida lo vuelve un Chamán gordo. Además **necesitaba un campo nuevo** (`stun_targets` en `EnemyData`) y un cambio de código. Si Lucas quiere un Chamán mayor, queda para una entrega futura.
+  - **Una mezcla** (el informe ofrecía, por ejemplo, el Coloso con el aura de A): Lucas eligió el concepto C tal cual. Un aura sobre el Coloso repetiría la función del Guardián, que es justamente lo que se le criticaba a A; la armadura de aura de los demás la sigue poniendo el Guardián de la escolta.
+  - **Más de 12 vidas, o menos:** con 20 o más, una sola fuga pierde; con 10 o menos, es el Soberano. Con 12 la decisión de dejarlo pasar o romperlo importa.
+  - **Que el Pedazo no tenga ficha propia en la Wiki:** la Cría la tiene y el Pedazo es un enemigo distinto (sin armadura, rápido); sin ficha, quien lo ve por primera vez no sabría qué es.
+
+## D-093 · El tope de letras de la leyenda de un nivel sube de 10 a 12 (el nivel 15 necesita 12)
+- **Fecha:** 2026-10-09 · **Estado:** Aplicada en T234 · **Decidió:** Claude (Sonnet 5.5), dentro de lo que la spec de M50 ya dejaba previsto («si un nivel se pasa, el tope se sube en la tarea del nivel con una `D` nueva», riesgo 6); Lucas lo ve en el Resultado de T234.
+- **Qué:** `LevelFile.MAX_LEGEND` pasa de **10 a 12** letras (RF-262, RF-265, RF-399 y RF-434). Es el único cambio: los mapas que ya existen tienen 7 letras o menos, así que cargan igual; el editor avisa «La leyenda ya tiene 12 letras» en lugar de 10.
+- **Por qué:** la ficha del 15 (§7.17) pide **cuatro cuartos de la central** (`central_1` a `central_4`, una letra cada uno, P5 de M52), **de 2 a 4 piezas de la cadena de abastecimiento**, **una mina**, **un bosque explotable** (las dos fuentes comparten letra), **removibles**, **`campamento_vacio`** y **`roca_marcada`**. Con el mínimo de dos piezas de la cadena son 11 letras; con la tercera, que ayuda a que la cadena se lea de punta a punta del borde, son 12. Son 12 y no 11 para dejar el tope redondo.
+- **Alternativas descartadas:**
+  - **Sacar la `roca_marcada` del 15** para quedarse en 10: la ficha la pide («de nuevo, como en el 1») y es la única señal que cierra el círculo con el nivel 1.
+  - **Un solo cuarto con un dibujo de 128 × 128:** exige un objeto grande nuevo (P5 de M52 lo descartó: es un sistema nuevo).
+  - **Compartir letra entre las piezas de la cadena:** se perdería la diferencia entre depósito, poste y vagoneta, que es justamente lo que cuenta la cadena.
+  - **Subir el tope a un número mayor:** 12 alcanza y un mapa de la comunidad con más letras que eso ya es difícil de leer.
+- **Qué cambia:** `scripts/logic/level_file.gd` (la constante), los tests de la leyenda y del editor (que ahora leen la constante), `01-spec.md` (RF-265, RF-399, RF-434 y el riesgo 6 de M50), `CONTENIDO.md`. **Los mapas de la comunidad hechos con 11 o 12 letras se rechazan en una versión anterior del juego** (como pasó con la clave `"leyenda"` en RF-267).

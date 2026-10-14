@@ -10,6 +10,8 @@
 
 ## Entregables
 
+Nombres propuestos en la sección M50 del plan técnico: `assets/sprites/ui/stat_resources.svg`, `coleccion_disruptor.svg` y `demoledora.svg`. Cada colección de `progression.json` tiene su `icono` (RF-425, RF-431).
+
 | Ícono | Uso | Formato |
 |---|---|---|
 | Recurso genérico | Contador del HUD, costos de la barra y Wiki | Mismo formato y tamaño que `stat_gold.svg`. **No** es oro ni madera ni piedra: es "material" genérico (propuesta: un lingote o paquete de hierro y bronce con una correa). |

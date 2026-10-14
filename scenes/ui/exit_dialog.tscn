@@ -1,0 +1,85 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/exit_dialog.gd" id="1_exit"]
+[ext_resource type="StyleBox" path="res://assets/ui/game_panel_style.tres" id="2_style"]
+[ext_resource type="Theme" path="res://assets/ui/menu_theme.tres" id="3_theme"]
+
+[node name="ExitDialog" type="CanvasLayer"]
+layer = 21
+script = ExtResource("1_exit")
+
+[node name="DialogPanel" type="Control" parent="."]
+unique_name_in_owner = true
+theme = ExtResource("3_theme")
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dim" type="ColorRect" parent="DialogPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.55)
+
+[node name="Center" type="CenterContainer" parent="DialogPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="DialogPanel/Center"]
+custom_minimum_size = Vector2(460, 0)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("2_style")
+
+[node name="Margin" type="MarginContainer" parent="DialogPanel/Center/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 24
+
+[node name="Rows" type="VBoxContainer" parent="DialogPanel/Center/Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Title" type="Label" parent="DialogPanel/Center/Panel/Margin/Rows"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "¿Volver al menú principal?"
+horizontal_alignment = 1
+
+[node name="Message" type="Label" parent="DialogPanel/Center/Panel/Margin/Rows"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(404, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+autowrap_mode = 3
+
+[node name="Buttons" type="HBoxContainer" parent="DialogPanel/Center/Panel/Margin/Rows"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="KeepButton" type="Button" parent="DialogPanel/Center/Panel/Margin/Rows/Buttons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+text = "Seguir jugando"
+
+[node name="LeaveButton" type="Button" parent="DialogPanel/Center/Panel/Margin/Rows/Buttons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+text = "Salir al menú"

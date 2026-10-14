@@ -1,4 +1,5 @@
-# Ajustes del nivel (spec §10.3, RF-214): nombre, oro, vidas y aumento de vida por oleada.
+# Ajustes del nivel (spec §10.3, RF-214, RF-434): nombre, oro, vidas, aumento de vida por oleada,
+# demoledora disponible y torres que ofrece el mapa.
 class_name SettingsPanel
 extends EditorPanel
 
@@ -6,6 +7,12 @@ var _name_edit := LineEdit.new()
 var _gold_spin: SpinBox
 var _lives_spin: SpinBox
 var _scale_spin: SpinBox
+var _machine_check := CheckBox.new()
+var _tower_box := GridContainer.new()
+var _tower_checks: Dictionary = {}  # id de torre → CheckBox
+var _default_towers_button := Button.new()
+var _towers_note: Label
+var _all_towers: Array[TowerData] = []
 
 
 func _init() -> void:
@@ -37,6 +44,30 @@ func _init() -> void:
 	note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	note.custom_minimum_size = Vector2(380, 0)
 	_body.add_child(note)
+	_machine_check.text = "Demoledora disponible"
+	_machine_check.tooltip_text = "El nivel habilita comprar la demoledora para despejar removibles (RF-411)."
+	_machine_check.toggled.connect(func(on: bool) -> void:
+		if not _filling and draft != null and draft.set_machine_enabled(on):
+			edited.emit())
+	_body.add_child(_machine_check)
+	var towers_title := Label.new()
+	towers_title.text = "Torres del mapa"
+	towers_title.add_theme_color_override("font_color", TITLE_COLOR)
+	_body.add_child(towers_title)
+	_tower_box.columns = 2
+	_tower_box.add_theme_constant_override("h_separation", 24)
+	_body.add_child(_tower_box)
+	_towers_note = _header("")
+	_towers_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_towers_note.custom_minimum_size = Vector2(380, 0)
+	_body.add_child(_towers_note)
+	_default_towers_button.text = "Usar las de siempre"
+	_default_towers_button.name = "DefaultTowersButton"
+	_default_towers_button.pressed.connect(func() -> void:
+		if draft != null and draft.use_default_towers():
+			edited.emit()
+			refresh())
+	_body.add_child(_default_towers_button)
 
 
 func _fill() -> void:
@@ -44,6 +75,33 @@ func _fill() -> void:
 	_gold_spin.set_value_no_signal(draft.gold())
 	_lives_spin.set_value_no_signal(draft.lives())
 	_scale_spin.set_value_no_signal(draft.health_scale())
+	_machine_check.set_pressed_no_signal(draft.machine_enabled())
+	_fill_towers()
+
+
+## Las casillas de las torres se arman la primera vez que se llena el panel (cargar la lista de torres es lo más pesado).
+func _fill_towers() -> void:
+	if _tower_checks.is_empty():
+		_all_towers = TowerOffer.canonical_towers()
+		for tower: TowerData in _all_towers:
+			var check := CheckBox.new()
+			check.text = tower.display_name
+			check.name = "Tower_" + String(tower.id)
+			var id: String = String(tower.id)
+			check.toggled.connect(func(on: bool) -> void:
+				if _filling or draft == null:
+					return
+				if draft.set_tower_offered(id, on, _all_towers):
+					edited.emit()
+				refresh())  # si no se pudo (era la última), la casilla vuelve a como estaba
+			_tower_box.add_child(check)
+			_tower_checks[id] = check
+	var offered: PackedStringArray = draft.offered_tower_ids(_all_towers)
+	for id: String in _tower_checks:
+		(_tower_checks[id] as CheckBox).set_pressed_no_signal(offered.has(id))
+	_default_towers_button.disabled = not draft.has_tower_list()
+	_towers_note.text = "El mapa ofrece solo las marcadas (RF-393). Tiene que quedar al menos una." if draft.has_tower_list() \
+		else "Sin lista propia: se ofrecen las de siempre (las comunes más las de torres_extra). Marcar o desmarcar una arma la lista."
 
 
 ## Para los tests y para el editor: aplica el nombre que hay escrito.
@@ -69,3 +127,15 @@ func lives_spin() -> SpinBox:
 
 func scale_spin() -> SpinBox:
 	return _scale_spin
+
+
+func machine_check() -> CheckBox:
+	return _machine_check
+
+
+func tower_check(id: String) -> CheckBox:
+	return _tower_checks.get(id)
+
+
+func default_towers_button() -> Button:
+	return _default_towers_button

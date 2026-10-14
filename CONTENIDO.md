@@ -78,7 +78,7 @@ Los niveles son JSON, un formato de texto común que se edita a mano. Un `.tres`
 1. **Dibujos:** `assets/sprites/towers/turret_<id>.svg` (la torreta) y `assets/sprites/projectiles/<id>.svg`. Las **bases** (madera, piedra, piedra con oro) son las mismas para todas.
 2. **Sonido** *(opcional)*: `assets/audio/shot_<id>.wav`. Se puede generar uno agregando una línea en `tools/make_sounds.gd` y corriendo `godot --headless --path . -s tools/make_sounds.gd -- shot_<id>` (así no se tocan los otros sonidos).
 3. **Datos:** duplicar una torre parecida de `data/towers/` y completar (tabla de abajo). Cada torre tiene **3 niveles** (`levels`): el nivel 1 es al construirla; en los niveles 2 y 3, `cost` es lo que cuesta mejorarla.
-4. **Sumarla al juego:** abrir `scenes/game/game.tscn`, seleccionar el nodo **Game** y agregarla al final de **Tower Types**. Entran **hasta 9** (teclas 1 a 9, RF-170 y RF-297). Si te olvidás, un test te avisa.
+4. **Sumarla al juego:** abrir `scenes/game/game.tscn`, seleccionar el nodo **Game** y agregarla al final de **Tower Types**. Entran **hasta 11** *(M53)*: las teclas son `1` a `9` y `0` (la décima); de la torre 11 en adelante no hay tecla y se elige con el mouse. Los botones de la barra se achican solos (de 76 a 57 px) cuando hay más de 9; en un nivel con removibles, minas o demoledora la barra además lleva dos pestañas (RF-170, RF-297, RF-454 a RF-456). Si te olvidás, un test te avisa.
 5. **Probar:** tests y el bot de balance (más abajo).
    *Aparece sola en la **Wiki** ("Torres"), con su tabla de niveles y sus efectos.*
 
@@ -91,6 +91,8 @@ Los niveles son JSON, un formato de texto común que se edita a mano. Un `.tres`
 | `can_hit_air` | Si le pega a los voladores. |
 | `bonus_vs_slowed_percent` / `bonus_vs_burning_percent` | **Sinergia por estado** (RF-310): % de daño extra contra un enemigo ralentizado o que se quema. Se mira al impactar, se suman si tiene los dos y se calcula antes de la armadura. 0 = nada. Va en cada **nivel** de la torre. Con solo poner el dato, el juego ya lo muestra todo (RF-315 a RF-318): el número del combo, el panel y la Wiki de la torre que pone el estado ("Combo: … +25 % a los que frena", con el porcentaje del nivel 1), la frase de la barra y la dianita de "vulnerable". | `25`, `0` |
 | `reserved` | `true` = la torre **no** está en la barra salvo que el nivel la habilite con `"torres_extra"` (RF-300). Hoy: el Mortero. | `true` |
+| `resource_cost` | **Recursos** que cuesta construirla además del oro (RF-418). `0` (por omisión) = solo oro. Mejorar no cuesta recursos; vender devuelve el mismo % que el oro, redondeado hacia abajo. Aparece sola en la barra ("300 + 3"), el panel y la Wiki. Hoy: el Mortero. | `3` |
+| `alt_gold_cost` y `alt_resource_cost` | **Segunda forma de pago** (RF-419): oro más recursos. Con `alt_resource_cost` mayor que 0, la ayuda de construcción ofrece dos botones ("150 de oro" y "120 de oro + 1 recurso"). `alt_gold_cost` tiene que ser menor que el costo de oro del nivel 1 y no se puede combinar con `resource_cost`. Hoy: el Francotirador. | `120` y `1` |
 | `footprint` | **Lado** de la torre en casillas (RF-290). `1` = una casilla (la común), `2` = cuadrado de 2×2 como el Mortero. Necesita todas sus casillas libres; usa los mismos dibujos de base agrandados. | `2` |
 | `projectile_speed_tiles` | Velocidad de sus proyectiles (casi todas: 10). |
 | `color` | Color de sus efectos (anillo al construir). |
@@ -112,6 +114,7 @@ Los niveles son JSON, un formato de texto común que se edita a mano. Un `.tres`
 | `extra_targets` | Dispara a tantos enemigos **más** a la vez (Múltiple, RF-161). |
 | `burst_count` | Lanza tantas púas en círculo, en línea recta (Ráfaga, RF-162). |
 | `chain_extra_targets`, `chain_range_tiles` | El golpe salta a tantos enemigos más, hasta esa distancia (Eléctrica, RF-163). |
+| `suppress_seconds` | **Torre de pulso** (Disruptora, RF-439): segundos que un enemigo con aura alcanzado por el pulso deja de emitirla. Con esto mayor que 0 la torre no dispara: `fire_rate` son pulsos por segundo, `range_tiles` el radio del pulso y `damage` el golpe a cada alcanzado (menos al Espejo). No se combina con púas, rayos, área, ralentización ni quemadura. La Disruptora necesita su colección `disruptor` y cuesta recursos (`resource_cost`); un nivel la ofrece nombrándola en `"torres"`. |
 
 **Ejemplos de combinaciones** (sin programar nada): un Cañón que además quema (`splash_radius_tiles` + `burn_damage_per_second`); una Múltiple que frena (`extra_targets` + `slow_amount`); un rayo que quema (`chain_extra_targets` + `burn_damage_per_second`).
 
@@ -173,6 +176,7 @@ Los voladores ignoran el camino: van en línea recta de su entrada a la salida.
 | `oro` | Oro al empezar. | Sí |
 | `vidas` | Vidas al empezar (los niveles oficiales usan 20). | Sí |
 | `aumento_vida` | % de vida extra de los enemigos en cada oleada (spec §7.4). Si no está, se usa el general de `balance.tres`. | No |
+| `textos` | *(M52, RF-464, T228)* Los textos breves del nivel: `"lugar"` (1 línea, 32 caracteres; sale en la tarjeta), `"entrada"` (hasta 3 líneas y 240 caracteres; un cartel al empezar), `"victoria"` (hasta 2 líneas y 160 caracteres; sale en la pantalla de victoria) y `"epilogo"` (3 a 5 líneas, solo para el último nivel de la campaña). Las líneas se separan con `\n` y ninguna pasa de 90 caracteres. Ejemplo: `"textos": {"lugar": "El paso del agua", "victoria": "Paso asegurado."}`. Un mapa de la comunidad o de un modo propio los muestra **solo si el archivo los trae**; los modos oficiales (Asedio), el modo de pruebas y probar desde el editor **no los muestran nunca**. El `"lugar"` sale en la tarjeta (solo si el nivel está desbloqueado), la `"entrada"` en un cartel que pausa la partida hasta que se toca la pantalla (o `Espacio`, `Enter`, `Esc`) y no vuelve al «Reintentar», y la `"victoria"` bajo las estrellas. Una clave de más, un texto vacío o pasarse de líneas o de caracteres es un error que dice cuánto tiene y cuánto es el máximo (los saltos de línea cuentan como caracteres). El editor de mapas **conserva** el campo al abrir y guardar, pero no lo edita: se escribe a mano en el archivo. Los textos oficiales están en `specs/11-textos-lore.md` (un test comprueba que los niveles traen exactamente esos). | No |
 | `oleadas` | La lista de oleadas (abajo). | Sí |
 
 ### Las oleadas
@@ -206,15 +210,18 @@ El juego avisa todos estos (y un nivel con errores no se juega, pero el resto de
 
 ### Hacerlo con el editor, sin escribir el archivo a mano
 
-En el menú principal, en el **`JuegoA.exe` normal y en el de pruebas** (no en el celular), está el botón **"Editor de mapas"**. Es lo mismo que escribir el JSON, pero se dibuja con el mouse:
+En el menú principal, en el **`MonstersCanons.exe` normal y en el de pruebas** (no en el celular), está el botón **"Editor de mapas"**. Es lo mismo que escribir el JSON, pero se dibuja con el mouse:
 
 | Qué | Cómo |
 |---|---|
 | **Pintar** | Elegir una herramienta abajo (o las teclas `1` a `5`): Pasto, Camino, Bloqueada, Entrada, Salida. Clic o arrastrar. **Clic derecho borra.** |
+| **Objetos** *(M50, T212)* | Cinco pinceles más (teclas `6`, `7`, `8`, `9` y `0`): **Árbol** y **Roca** removibles, **Escombro**, **Mina** y **Bosque**. Cada uno crea (o reusa) por debajo la letra de la leyenda con esa clase, así que no hay que tocar el JSON. Si la leyenda ya tiene sus **12 letras** (eran 10 hasta T234, D-093), el pincel no pinta y avisa abajo. Borrar la última casilla de un objeto saca su letra de la leyenda. |
+| **Valores de los objetos** | Botón **Objetos**: se elige una letra y se cambian `costo`, `tiempo`, `recursos` y `probabilidad` (o `produccion` y `reserva`) para **todas** las casillas con esa letra. Cada dato muestra el valor de la clase; escribir ese mismo número borra la sobrescritura. Si querés valores distintos en dos árboles, pintá uno, cambiale los valores y pintá el otro con el pincel: como la primera letra ya no es "común", el pincel crea otra. |
+| **Pieza de un escombro** | En el panel **Objetos**, un escombro tiene el campo *Pieza de colección* (`hallazgo`). **Solo se puede editar en un nivel de la campaña**, es decir, uno oficial abierto como plantilla y todavía sin guardar. En un mapa de la comunidad o de un modo el campo aparece deshabilitado ("Las piezas de colección solo se consiguen en la campaña"), pero un hallazgo que el archivo ya traía se **conserva** al guardar. |
 | **Entradas** | La herramienta Entrada pone la próxima letra libre (`A`, `B`…). Pintar encima de una entrada la quita y las letras siguientes bajan un lugar (las oleadas se acomodan solas). |
 | **Salida** | Hay una sola: si ya estaba, se mueve. |
 | **Ver si está bien** | Abajo, un mensaje dice si el nivel es válido (con el largo de cada recorrido) o qué está mal y dónde. Sobre el mapa se dibuja el recorrido de cada entrada y las casillas que nadie pisa. |
-| **Ajustes y oleadas** | Botones **Ajustes** (nombre, oro, vidas, vida extra por oleada) y **Oleadas** (agregar, copiar y quitar oleadas; en cada una, los grupos de enemigos). |
+| **Ajustes y oleadas** | Botones **Ajustes** (nombre, oro, vidas, vida extra por oleada, **Demoledora disponible** y **Torres del mapa**) y **Oleadas** (agregar, copiar y quitar oleadas; en cada una, los grupos de enemigos). En *Torres del mapa* se marcan las torres que ofrece el nivel (`"torres"`); sin tocarlas se ofrecen las de siempre, y **"Usar las de siempre"** borra la lista. Tiene que quedar al menos una marcada. |
 | **Deshacer** | `Ctrl+Z` y `Ctrl+Y` (hasta 50 pasos). |
 | **Probar** | Juega ese nivel en el momento, sin guardar progreso ni récords. Al terminar (o con "Volver al editor" en la pausa) se vuelve al editor con todo como estaba. No se puede probar un nivel con errores. |
 | **Guardar / Abrir** | `Ctrl+S`. Guarda en `user://maps/<nombre>.json` (en Windows: `%APPDATA%\Godot\app_userdata\JuegoA\maps`). "Abrir" lista tus mapas y los niveles oficiales (que se abren como **plantilla**: al guardar pide otro nombre y **nunca pisa el oficial**). |
@@ -242,6 +249,7 @@ Dos campos **opcionales** del nivel (sin ellos, el nivel se ve como siempre). Ha
 
 - **`tema`** cambia los colores y la decoración de todo el mapa: `pradera` (el de siempre), `desierto`, `nieve`, `volcan`, `bosque`, `pantano` o `ruinas`. Es solo visual.
 - **`torres_extra`** (opcional) habilita torres **reservadas** en este nivel, por ejemplo `"torres_extra": ["mortar"]` (RF-300). Un nombre que no existe es un error.
+- **`torres`** (opcional, RF-393) dice **qué torres ofrece** el nivel, por ejemplo `"torres": ["frost", "cannon", "tesla"]`. Sin el campo, el nivel ofrece las 8 comunes más las de `torres_extra`, como siempre. Con el campo, la barra y las teclas muestran **solo esas**, siempre en el orden de la barra (Ametralladora, Cañón, Hielo, Francotirador, Incendiaria, Ráfaga múltiple, Ráfaga, Tesla, Mortero), no en el orden en que las escribas. Se pueden nombrar torres reservadas (equivale a habilitarlas). Un nombre que no existe es un error que lista los que hay; uno repetido cuenta una vez; la lista no puede estar vacía. Una torre que pide una colección sigue pidiéndola. Si un modo (`modo.json`) también limita las torres, vale lo que tengan **en común**; si no tienen nada en común, el mapa de ese modo da error. La tarjeta del nivel muestra las torres que ofrece y marca **"Nueva"** donde debuta cada una. Ejemplo: `tools/ejemplos/mapa_torres_por_mapa.json`.
 - **`leyenda`** declara letras nuevas (hasta 10) para usar en el `"mapa"`. Cada una dice un **`dibujo`** y, si se puede construir encima, `"construible": true` (si no se escribe, no se puede). La letra es **una sola** y no puede ser `. # X S` ni una entrada (`A` a `H`).
 - **Nunca son camino:** una letra de la leyenda es pasto (si es construible) o casilla bloqueada. Los recorridos de los enemigos no cambian.
 - **Los dibujos** son una lista cerrada:
@@ -250,11 +258,34 @@ Dos campos **opcionales** del nivel (sin ellos, el nivel se ve como siempre). Ha
 |---|---|---|
 | `roca`, `arbol`, `arbusto`, `flores` | objeto | los de la pradera; las flores son decoración |
 | `cactus`, `pino`, `columna`, `tronco`, `helecho`, `junco`, `hongo`, `estatua` | objeto | uno o dos por paisaje |
+| `escombro`, `mina`, `bosque_explotable` | objeto | removibles y puntos de extracción de M50 |
 | `agua`, `hielo`, `lava`, `barro` | suelo | cubren toda la casilla y se unen entre sí; tienen un borde donde terminan |
 
+- **Objetos que se pueden retirar y minas** *(M50, RF-398 a RF-403; formato, validación, dibujo y `check_level` en T206; **demolición directa en T207** (clic, panel, cobro, trabajo con reloj de partida, cancelar); recursos, extracción y piezas, en T209 a T211; demoledora global en T208)*. Una letra de la leyenda puede llevar **`removible`** (un objeto que se retira pagando oro y esperando) **o** **`extraccion`** (una mina o un bosque que produce recursos), nunca los dos. Ejemplo:
+- **Objetos que se pueden retirar y minas** *(M50, RF-398 a RF-403; formato, validación, dibujo y `check_level` en T206; **demolición directa en T207** (clic, panel, cobro, trabajo con reloj de partida, cancelar); recursos en T209; **extracción finita en T210** (habilitar con oro, producir al completar oleadas hasta agotar la reserva); demoledora y piezas, en T208 y T211)*. Una letra de la leyenda puede llevar **`removible`** (un objeto que se retira pagando oro y esperando) **o** **`extraccion`** (una mina o un bosque que produce recursos), nunca los dos. Ejemplo:
+
+```json
+"leyenda": {
+  "t": {"removible": {"clase": "arbol"}},
+  "r": {"removible": {"clase": "roca", "costo": 50, "probabilidad": 0}},
+  "u": {"removible": {"clase": "escombro", "hallazgo": "technology"}},
+  "m": {"extraccion": {"clase": "mina", "reserva": 6}}
+}
+```
+
+  - **`clase`** es obligatoria: `arbol`, `roca` o `escombro` (removibles), `mina` o `bosque_explotable` (extracción). Los números de cada clase están en `data/obstaculos.json`, que se puede editar sin programar.
+  - **Se pueden cambiar por letra**, solo para ese mapa: `costo` (oro), `tiempo` (segundos), `recursos` (cuántos entrega) y `probabilidad` (de 0 a 100, la chance de que los entregue) en un removible; `costo`, `produccion` y `reserva` en una extracción. Lo que no se escribe sale de la clase. Con `"probabilidad": 0` el objeto solo abre la casilla.
+  - **`hallazgo`** (solo en un `escombro`) identifica una colección de `data/progression.json`, por ejemplo `"technology"`. Solo se recoge jugando la **campaña**, y un nivel solo puede tener una pieza por colección. La pieza solo cuenta si el id del nivel está en `sources` de esa colección en `data/progression.json`; si no, la ruina es común.
+  - **Colecciones (`data/progression.json`, T211):** un diccionario `{id: {"required": N, "sources": [niveles], "origen": "portador" | "hallazgo", "nombre": "…", "icono": "res://…"}}`. `origen`, `nombre` e `icono` son opcionales (`portador` por omisión; sin `icono` se usa el disco plateado). `required` tiene que ser igual a la cantidad de `sources`: un test lo comprueba. Hoy: `technology` (5, portadores, niveles 1 a 5) y `disruptor` (3, hallazgo, niveles 8 a 10). La torre que una colección desbloquea es el `required_collection` de su `.tres`.
+  - **`dibujo`** se puede omitir: es el de la clase. Si se escribe, tiene que ser el mismo.
+  - Un removible **intacto** es una casilla bloqueada y **ya despejado** es pasto construible. **Nunca es camino**: los recorridos no cambian. Cuentan para el tope de letras (12; eran 10 hasta T234).
+  - **`"demoledora": true`** (opcional, en el nivel, no en la leyenda) declara que el nivel habilita la demoledora. La pestaña **Infraestructura** de la barra de abajo (M53, RF-457) permite comprarla una vez por 180 de oro; después cada demolición cuesta el 10 % (mínimo 5) y tarda el 80 % del tiempo de clase. El editor lo conserva y lo edita (casilla *Demoladora disponible* en Ajustes). El ejemplo jugable `tools/ejemplos/mapa_demoledora.json` tiene cinco removibles, cuatro rocas para comprobar la amortización, y una mina. Para probar el bot de balance con infraestructura hay un mapa más largo, `tools/ejemplos/mapa_extraccion.json` (30 removibles pegados al camino, una mina, un bosque explotable, demoledora y el Mortero y el Francotirador, 6 oleadas).
+  - **Errores comunes:** `removible` y `extraccion` en la misma letra; `construible: true` en un removible; una `clase` que no existe (el mensaje lista las que hay); `hallazgo` fuera de un `escombro`; dos `hallazgo` de la misma colección en un mismo nivel. **Avisos:** `demoledora` en un mapa sin removibles, y una torre que cuesta recursos en un mapa sin forma de conseguirlos.
+  - Los dibujos `escombro`, `mina` y `bosque_explotable` se suman a la lista cerrada de arriba.
+  - **Mapa con recursos:** tiene recursos si algún removible puede entregarlos (`probabilidad` y `recursos` mayores que 0) o si tiene una mina o un bosque. Solo entonces el HUD muestra el contador. **Todo mapa de la campaña con recursos tiene que poderse ganar sin usarlos** (el bot lo comprueba con la estrategia `sin_recursos`).
 - **Errores comunes:** una letra usada en el mapa que no está en la leyenda ("Letra desconocida"), un nombre de dibujo o de tema mal escrito (el mensaje lista los que existen) y una letra de la leyenda que no se usa (solo un aviso).
 - **Un dibujo nuevo** (para el catálogo) es un SVG de 64×64 en `assets/sprites/map/` que sigue `specs/05-guia-de-arte.md`, y un nombre nuevo en `scripts/logic/map_drawings.gd`. Un tema nuevo es una paleta y una lista de decoración en `scripts/logic/map_themes.gd`.
-- El editor de mapas **conserva** el tema y la leyenda al abrir y guardar, pero **todavía no los edita**: se escriben a mano en el archivo.
+- El editor de mapas **conserva** el tema y la leyenda al abrir y guardar. Desde M50 (T212) también **edita** los removibles y la extracción de la leyenda, `"demoledora"` y `"torres"` (ver la tabla del editor, más arriba). Lo que sigue siendo a mano: el tema y las letras de decoración. Al guardar, los números de la leyenda quedan como decimales (`50.0`): es lo mismo que `50` para el juego.
 
 ---
 
@@ -307,13 +338,14 @@ Lo más fácil: en el juego, **Jugar → solapa "Mapas de la comunidad" → "Abr
 
 ## La Wiki: qué se agrega solo y cómo escribir un artículo
 
-La **Wiki** (menú principal) tiene tres categorías:
+La **Wiki** (menú principal) tiene cinco categorías (Enemigos, Torres, Colecciones, Guía y Lore):
 
 | Categoría | De dónde sale | Qué hay que hacer |
 |---|---|---|
 | **Enemigos** | Un `.tres` de `data/enemies/` | Nada: se agrega sola, ordenada de más débil a más fuerte. Los números salen del `.tres` y "dónde aparece" sale de la campaña. Es un **bestiario**: cada enemigo aparece "???" (en silueta) hasta que el jugador lo ve en una partida; el enemigo nuevo queda cerrado para todos hasta que se lo cruzan. |
 | **Torres** | Un `.tres` de `data/towers/` | Nada: se agrega sola, de la más barata a la más cara. |
 | **Guía** | Un `.json` de `data/wiki/` | Escribir el artículo (abajo). |
+| **Lore** | Un `.json` de `data/wiki/lore/` | Escribir el artículo con su `"desbloqueo"` (al final de esta sección). |
 
 Un artículo es un archivo de texto (el nombre del archivo es su id: minúsculas, números y `_`):
 
@@ -337,6 +369,7 @@ Un artículo es un archivo de texto (el nombre del archivo es su id: minúsculas
 - **No copies números que ya viven en los datos** (vida, daño, costos, porcentajes): explicá la regla y mandá a la entrada del enemigo o la torre. Si se rebalancea, el artículo quedaría mintiendo.
 - Si te equivocás, el artículo simplemente no aparece; `tests/test_wiki_articles.gd` falla y dice **qué archivo y qué error**.
 - Para una categoría nueva (Niveles, Lore…) hay que sumar una función en `scripts/logic/wiki.gd`; la pantalla no cambia (plan técnico §6.10).
+- **Lore** *(M52, RF-469 y RF-470, T228)*: la categoría después de la Guía, con artículos en `data/wiki/lore/` (subcarpeta: la Guía no los ve). Tienen el mismo formato que los de la Guía **más la clave obligatoria `"desbloqueo"`**: el id de un nivel **que figure en `data/campaign.json`** (por ejemplo `"level_08"`); el artículo se abre cuando el jugador gana ese nivel (sale del guardado, no hay campo nuevo). Antes se ve como «???» con *«Se abre al ganar el nivel N.»* (el número, nunca el nombre ni nada del contenido) y la solapa cuenta «Lore 3/7». En el modo de pruebas está todo abierto. Un artículo sin `"desbloqueo"`, o con uno que no está en la campaña, no se muestra y hace fallar `tests/test_lore_wiki.gd`. Los 10 artículos oficiales son los de `specs/11-textos-lore.md` §4; **los de los niveles 11, 14 y 15 no se ven hasta que esos niveles entren en la campaña** (T229 a T234), y entonces aparecen solos.
 
 ---
 
@@ -428,6 +461,41 @@ Perfiles de compra/ubicación/mejoras y variantes de frecuencia viven en art/bal
 ### M45 · Niveles8/9
 
 Campaña ampliada con level_08 (Bastión) y level_09 (Taller asediado). JSON en formato canónico del editor; torres_extra permite Mecánico, sin nuevas fuentes de colección. Guardián debuta en8/oleada4 y Curandero en9/oleada5; robos opcionales comienzan6 y embestidas8, con combinaciones posteriores. Carga/auras/desgaste/reparación reutilizan recursos existentes y no cambian sus estadísticas. Datos y recorridos1–7 intactos. Detalle, bots/capturas y límites en art/campaign-m45/README.md.
+
+### T225 · Nivel 10 (La mina vieja)
+
+`data/levels/level_10.json`, último de `data/campaign.json`. Es el **único nivel oficial de mapa grande** (24 × 11, RF-250) y de tema `desierto`, con las ruinas de los niveles 8 y 9 contadas por la leyenda (`p` columna, `s` símbolo A, `u` y `e` escombros). Su leyenda usa 6 de las 12 letras: `u` escombro con `hallazgo: disruptor` (la pieza 3/3), `e` escombro común (1 recurso al 50 %), `r` roca removible (1 recurso al 50 %), `m` mina (clase `mina`, sin sobrescribir: 100 de oro, 2 por oleada, reserva 8), `s` y `p` decoración. Para cambiar la dificultad sin tocar el mapa se mueve `aumento_vida` (30) y, con cuidado, las cantidades de las oleadas: con 33 `sin_recursos` ya pierde 2 de 5, así que **después de cualquier cambio** hay que correr `godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- x check_rule=1 levels=10` (regla de oro, RF-432). Es un mapa de **espacio limitado** (43 casillas libres, ver §7.12 de la spec): agregar casillas libres lo vuelve más fácil para todos los bots. La exposición del Embestidor y la captura están en `art/campaign-t225/`.
+
+### T243 · El Coloso, jefe supremo del nivel 15 (diseño aprobado; todavía no está en el juego)
+
+El jefe del último nivel es un ejemplo de **un enemigo que se parte con solo datos**, igual que la Araña y sus Crías: **dos archivos en `data/enemies/`**, sin tocar el código (RF-481 a RF-484, D-092).
+
+- `colossus.tres` (**Coloso**): vida 600, velocidad 0.5, armadura 5, resiste la mitad de la ralentización, quita 12 vidas y da 200 de oro. Su `death_spawn` es `colossus_shard` y su `death_spawn_count`, 3.
+- `colossus_shard.tres` (**Pedazo**): vida 180, velocidad 1.0, sin armadura, quita 4 vidas y da 30 de oro. No suelta nada.
+- **El Pedazo no se pone en ninguna oleada:** solo lo suelta el Coloso, como la Cría. Los grupos de `level_15.json` nombran únicamente a `colossus`.
+- **Los números son los de RF-481 y T234 no los cambió:** midió con el bot que ningún Pedazo ni Coloso llega a la salida con la defensa que arma (ver el Resultado de T234); el balance del nivel se mueve con `aumento_vida` y con las cantidades de las oleadas 26, 28 y 30 de `level_15.json`, no con estos dos archivos. Aparecen solos en la Wiki ("Enemigos") y el texto de lore del Coloso está en el artículo «La Central» (`specs/11-textos-lore.md`).
+- **Para hacer un enemigo parecido** (uno que se parte al caer): duplicar `spider.tres`, cambiar `death_spawn` por el enemigo-hijo y `death_spawn_count` por la cantidad, y cuidar que **las vidas del hijo × la cantidad** no superen las del padre si no querés que matarlo salga más caro que dejarlo pasar (acá: 4 × 3 = 12).
+### T229 · Nivel 11 (Puesto seco)
+
+`data/levels/level_11.json`, último de `data/campaign.json`. Mapa de **24 × 11**, tema `desierto`, **una entrada** (A, arriba a la izquierda) y la salida abajo a la derecha. Su leyenda usa 5 de las 12 letras: `e` escombro común y `r` roca removible (1 recurso al 50 %), `m` mina (clase `mina`, sin sobrescribir), `w` agua (los pozos: no se construyen) y `h` `roca_marcada` (el `hito` de la biblia, hasta que llegue su dibujo). Es el primero con el campo `"torres"` del bloque 3 (RF-474: las torres de la campaña **menos la Ametralladora**; la Disruptora y el Mecánico aparecen solo con su colección) y con `"demoledora": false`. Para cambiar la dificultad sin tocar el mapa se mueve `aumento_vida` (27): con 28 `sin_recursos` gana con solo 1 vida, así que **después de cualquier cambio** hay que correr `godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- x check_rule=1 levels=11` (regla de oro, RF-432) y mirar que las oleadas 1 a 3 no pierdan vidas. La oleada 14 (Guardianes, Curanderos, Trolls y un Chamán) es un precipicio de dificultad. **El bot sin Ametralladora** abre con `NO_BASIC_ORDER` (Cañón y Hielo; `tools/balance_sim.gd`). La partida de verificación con la escena real y las tablas del bot están en `art/campaign-t229/`.
+
+### T230 · Nivel 12 (El cañadón)
+
+`data/levels/level_12.json`, de **26 × 11** y tema `desierto`, con **una entrada** y cinco patas verticales (un zigzag de 76 casillas). Su leyenda usa 4 letras: `e` escombro y `r` roca removibles (1 recurso al 50 %), `b` **bosque explotable** (clase `bosque_explotable`, sin sobrescribir: 100 de oro, 2 por oleada, reserva 8) y `h` `roca_marcada` (el `hito`). `"torres"` de RF-474 y `"demoledora": false`. Es de **espacio limitado** (45 casillas libres, 4 bloques de 2×2): agregar casillas libres lo vuelve más fácil. Para cambiar la dificultad se mueve `aumento_vida` (27) y, con cuidado, las oleadas 14, 20, 22, 23 y 24, que tienen **precipicios** (el Soberano que se escapa cuesta 10 vidas de golpe); **después de cualquier cambio**: `godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- x check_rule=1 levels=12`.
+
+### T231 · Nivel 13 (Paso alto)
+
+`data/levels/level_13.json`, de **26 × 12**, tema `nieve` y **dos entradas** (A y B) que se unen en la casilla (2,6): los dos recorridos comparten un tronco hasta la salida. Su leyenda usa 6 de las 12 letras: `e` y `r` removibles (1 recurso al 50 %), `m` mina y `b` bosque explotable (una fuente por entrada), `i` **hielo** (la laguna: no se construye) y `h` `roca_marcada` (el `hito`). `"torres"` de RF-474 (sin Ametralladora ni Lanzamisiles) y `"demoledora": false`. **La escolta** se escribe con tres grupos del mismo `desde` y la misma `entrada` (`guardian`, `healer`, `shaman`), p. ej. `{"enemigo": "guardian", "cantidad": 2, "cada": 3.0, "entrada": "B"}` más los otros dos con el mismo `desde`. Para cambiar la dificultad se mueve `aumento_vida` (40; con 41 el bot gana con 1 vida y con 42 pierde) y, con cuidado, las oleadas 14, 22 y 23, que son **precipicios**. **Después de cualquier cambio:** `... -s tools/balance_sim.gd -- x check_rule=1 levels=13`.
+
+### T234 · Nivel 15 (La Central) y el final
+
+`data/levels/level_15.json`, de **26 × 12**, tema `pradera` y **tres entradas** a la izquierda (A arriba, C en el medio y B abajo) que se unen al principio de un tronco común y siguen juntas hasta la salida de la derecha (recorridos de 65, 76 y 70). Su leyenda usa las **12 letras** que permite `LevelFile.MAX_LEGEND` (D-093): `1`, `2`, `3` y `4` son los cuatro cuartos de la central (`central_1` a `central_4`, de arriba a la izquierda a abajo a la derecha), `d`, `p` y `v` las piezas de la cadena de abastecimiento (`supply_depot`, `supply_line_pole`, `supply_cart`; también existe `supply_conveyor`), `m` mina y `b` bosque explotable (dos), `e` escombro removible (5, 1 recurso al 50 %), `c` `campamento_vacio` (3) y `s` `roca_marcada` (2). **La central** son cuatro casillas contiguas **al lado de la salida** (no la salida): para moverla basta cambiar esas cuatro letras de lugar, siempre en ese orden. `"torres"` de RF-474 y `"demoledora": false`. **No lleva al Soberano** (`boss`): el jefe es `colossus`, que se nombra en las oleadas 26, 28 y 30 (uno, dos y tres); la escolta completa (Guardián + Curandero + Chamán con el mismo `desde` y la misma `entrada`) acompaña al Coloso solo en la 30, por B y por C. La oleada 25 es un respiro a propósito. `aumento_vida` es 23: con 22 el bot sin recursos termina con 3 vidas y con 24 pierde; **después de cualquier cambio** `... -s tools/balance_sim.gd -- x check_rule=1 levels=15`.
+
+**El epílogo y los créditos** no se arman con código: el texto del epílogo es el campo `"epilogo"` del nivel 15 (de 3 a 5 líneas, RF-464) y los créditos están en `data/creditos.json` (`{"version": 1, "lineas": ["…", …]}`, hasta 40 líneas de 90 caracteres). La imagen es `assets/sprites/story/epilogue.png` (16:9; si no entra se recorta). El botón «Epílogo» aparece solo en el último nivel de la campaña, jugado desde la campaña, y solo si ese nivel trae `"epilogo"`.
+
+### T232 · Nivel 14 (Los poblados vacíos)
+
+`data/levels/level_14.json`, de **26 × 12**, tema `ruinas` y **dos entradas** a la derecha (A arriba y B abajo) que se unen en (23,6) y siguen juntas hasta la salida de la izquierda: es el trazado del nivel 13 **espejado**. Su leyenda usa 7 de las 12 letras: `e` y `r` removibles (las casas, 1 recurso al 50 %), `m` mina y `b` bosque explotable, `c` **`campamento_vacio`** (5), `s` **`simbolo_ruina`** (8) y `p` `columna` (5): las señales que culminan; las que cuentan son las cuatro o más de `campamento_vacio` y las seis o más de `simbolo_ruina` (RF-479). `"torres"` de RF-474 y `"demoledora": false`. Trae los 14 enemigos y las escoltas con el Espejo y Voladores. `aumento_vida` es 30: con 29 el bot gana con 11 vidas y con 33 pierde; **después de cualquier cambio** `... -s tools/balance_sim.gd -- x check_rule=1 levels=14`.
 
 ### M49 · Modos de juego (RF-388 a RF-392)
 

@@ -1,0 +1,87 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+[   0% ] first_scan_filesystem | Started Inicialización del proyecto (5 steps)
+[   0% ] first_scan_filesystem | Escaneando la estructura del archivo...
+[  16% ] first_scan_filesystem | Cargando nombres de clases globales...
+[  33% ] first_scan_filesystem | Verificando GDExtensions...
+[  50% ] first_scan_filesystem | Creando scripts de carga automática...
+[  66% ] first_scan_filesystem | Inicializando plugins...
+[  83% ] first_scan_filesystem | Iniciando escaneo de archivos...
+[ DONE ] first_scan_filesystem
+
+[   0% ] _update_scan_actions | Started Escaneando acciones... (41 steps)
+[   0% ] _update_scan_actions | contact_34.png
+[   2% ] _update_scan_actions | contact_64.png
+[   4% ] _update_scan_actions | contact_112.png
+[   7% ] _update_scan_actions | contact_220.png
+[   9% ] _update_scan_actions | gallery_level_01.png
+[  11% ] _update_scan_actions | gallery_level_06.png
+[  14% ] _update_scan_actions | gallery_level_08.png
+[  16% ] _update_scan_actions | gallery_level_10.png
+[  19% ] _update_scan_actions | contact_34.png
+[  21% ] _update_scan_actions | contact_64.png
+[  23% ] _update_scan_actions | contact_112.png
+[  26% ] _update_scan_actions | contact_220.png
+[  28% ] _update_scan_actions | gallery_level_01.png
+[  30% ] _update_scan_actions | gallery_level_06.png
+[  33% ] _update_scan_actions | gallery_level_08.png
+[  35% ] _update_scan_actions | gallery_level_10.png
+[  38% ] _update_scan_actions | arbol_removible.svg
+[  40% ] _update_scan_actions | arbol_removible_trabajo.svg
+[  42% ] _update_scan_actions | bosque_explotable.svg
+[  45% ] _update_scan_actions | bosque_explotable_activo.svg
+[  47% ] _update_scan_actions | bosque_explotable_agotado.svg
+[  50% ] _update_scan_actions | campamento_vacio.svg
+[  52% ] _update_scan_actions | despejado_bosque.svg
+[  54% ] _update_scan_actions | despejado_desierto.svg
+[  57% ] _update_scan_actions | despejado_pradera.svg
+[  59% ] _update_scan_actions | despejado_ruinas.svg
+[  61% ] _update_scan_actions | escombro.svg
+[  64% ] _update_scan_actions | escombro_trabajo.svg
+[  66% ] _update_scan_actions | herramienta.svg
+[  69% ] _update_scan_actions | mina.svg
+[  71% ] _update_scan_actions | mina_activa.svg
+[  73% ] _update_scan_actions | mina_agotada.svg
+[  76% ] _update_scan_actions | poste_cintas.svg
+[  78% ] _update_scan_actions | roca_marcada.svg
+[  80% ] _update_scan_actions | roca_removible.svg
+[  83% ] _update_scan_actions | roca_removible_trabajo.svg
+[  85% ] _update_scan_actions | sendero.svg
+[  88% ] _update_scan_actions | simbolo_ruina.svg
+[  90% ] _update_scan_actions | coleccion_disruptor.svg
+[  92% ] _update_scan_actions | demoledora.svg
+[  95% ] _update_scan_actions | stat_resources.svg
+[ DONE ] _update_scan_actions
+
+[   0% ] reimport | Started (Re)Importación de Assets (9 steps)
+[   0% ] reimport | Preparando archivos para reimportarlos...
+[  10% ] reimport | Preparando archivos para reimportarlos...
+[  20% ] reimport | Preparando archivos para reimportarlos...
+[  30% ] reimport | Preparando archivos para reimportarlos...
+[  40% ] reimport | Preparando archivos para reimportarlos...
+[  50% ] reimport | Preparando archivos para reimportarlos...
+[  60% ] reimport | Preparando archivos para reimportarlos...
+[  70% ] reimport | Preparando archivos para reimportarlos...
+[  80% ] reimport | Preparando archivos para reimportarlos...
+[   0% ] reimport | Ejecutando operaciones de pre-reimportación...
+[   0% ] reimport | contact_34.png
+[  10% ] reimport | contact_64.png
+[  20% ] reimport | contact_112.png
+[  30% ] reimport | contact_220.png
+[  40% ] reimport | gallery_level_01.png
+[  50% ] reimport | gallery_level_06.png
+[  60% ] reimport | gallery_level_08.png
+[  70% ] reimport | gallery_level_10.png
+[  80% ] reimport | campamento_vacio.svg
+[  90% ] reimport | Finalizando la importación de recursos...
+[ DONE ] reimport
+
+[   0% ] reimport | Started (Re)Importación de Assets (9 steps)
+[   0% ] reimport | Ejecutando operaciones post-reimportación...
+[ DONE ] reimport
+
+[   0% ] loading_editor_layout | Started Cargando editor (5 steps)
+[   0% ] loading_editor_layout | Cargando diseño del editor...
+[  16% ] loading_editor_layout | Cargando docks...
+[ DONE ] loading_editor_layout
+

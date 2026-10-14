@@ -1,0 +1,15 @@
+{
+  "tarea": "T219",
+  "estado": "provisional",
+  "fecha": "2026-10-08",
+  "formato": "SVG transparente; mapa 64x64, indicador 32x32",
+  "fuentes": "sources/",
+  "finales": [
+    "arbol_removible.svg", "arbol_removible_trabajo.svg",
+    "roca_removible.svg", "roca_removible_trabajo.svg",
+    "escombro.svg", "escombro_trabajo.svg", "marca_pieza.svg",
+    "despejado_pradera.svg", "despejado_bosque.svg", "despejado_ruinas.svg", "despejado_desierto.svg"
+  ],
+  "integracion": "Pendiente de T206/T207; todavía no existe el sistema de obstáculos que consume estos recursos.",
+  "aprobacion_lucas": "Pendiente"
+}

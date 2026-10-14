@@ -1,0 +1,54 @@
+[gd_resource type="Resource" script_class="TowerData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tower_level_data.gd" id="1_levels"]
+[ext_resource type="Script" path="res://scripts/data/tower_data.gd" id="2_tower"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/base_1.png" id="3_base1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/base_2.png" id="4_base2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/base_3.png" id="5_base3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/turret_disruptor.png" id="6_turret"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/disruptor_atlas.png" id="7_atlas"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/disruptor_level_2.png" id="8_level2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/towers/rendered/disruptor_level_3.png" id="9_level3"]
+
+[sub_resource type="Resource" id="level1"]
+script = ExtResource("1_levels")
+cost = 130
+damage = 5
+fire_rate = 0.25
+range_tiles = 2.5
+base_texture = ExtResource("3_base1")
+suppress_seconds = 2.5
+
+[sub_resource type="Resource" id="level2"]
+script = ExtResource("1_levels")
+cost = 100
+damage = 5
+fire_rate = 0.25
+range_tiles = 3.0
+base_texture = ExtResource("4_base2")
+turret_atlas = ExtResource("8_level2")
+suppress_seconds = 3.0
+
+[sub_resource type="Resource" id="level3"]
+script = ExtResource("1_levels")
+cost = 150
+damage = 5
+fire_rate = 0.25
+range_tiles = 3.5
+base_texture = ExtResource("5_base3")
+turret_atlas = ExtResource("9_level3")
+suppress_seconds = 3.5
+
+[resource]
+script = ExtResource("2_tower")
+id = &"disruptor"
+display_name = "Disruptora"
+description = "Apaga un rato el aura del Guardián y del Curandero. Casi no hace daño."
+can_hit_air = true
+color = Color(0.86, 0.92, 1, 1)
+turret_texture = ExtResource("6_turret")
+turret_atlas = ExtResource("7_atlas")
+reserved = true
+required_collection = &"disruptor"
+resource_cost = 2
+levels = Array[ExtResource("1_levels")]([SubResource("level1"), SubResource("level2"), SubResource("level3")])

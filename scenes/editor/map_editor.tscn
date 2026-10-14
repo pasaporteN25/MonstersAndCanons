@@ -125,6 +125,15 @@ focus_mode = 0
 toggle_mode = true
 text = "Oleadas"
 
+[node name="ObjectsButton" type="Button" parent="TopBar/Margin/Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+tooltip_text = "Los valores de los removibles y de la extracción que hay en el mapa"
+text = "Objetos"
+
 [node name="BackButton" type="Button" parent="TopBar/Margin/Row"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(110, 0)

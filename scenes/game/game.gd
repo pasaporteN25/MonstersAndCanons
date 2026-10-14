@@ -31,6 +31,8 @@ signal dev_infinite_lives_changed(on: bool)
 var available_towers: Array[TowerData] = []
 const MECHANICAL_STANDARD: TowerData = preload("res://data/towers/mechanical_standard.tres")
 var collectible: CollectibleRun
+## RF-427: las piezas de las ruinas de esta partida (T211).
+var findings: FindingRun = FindingRun.new()
 var _carrier: Enemy
 
 var level: Level
@@ -42,6 +44,8 @@ var testing: bool = false
 var dev_panel: DevPanel
 ## RF-194: el Salón de la fama, mientras está abierto. null si no.
 var hall_of_fame: HallOfFame
+## RF-471: el epílogo del último nivel de la campaña (se crea al tocar «Epílogo»).
+var epilogue: EpilogueScreen
 var _shake_left: float = 0.0
 ## RF-325: el informe de esta partida de pruebas. null en el juego normal.
 var dev_stats: DevStats
@@ -55,11 +59,23 @@ var _exploit_burning: bool = false
 @onready var projectiles: Node2D = $Projectiles
 @onready var effects: EffectsLayer = $Effects
 @onready var build_controller: BuildController = $BuildController
+## RF-404 a RF-409: la demolición directa. Se crea en `_ready`.
+var infrastructure: InfrastructureController
+var obstacle_layer: ObstacleLayer
 @onready var spawner: WaveSpawner = $WaveSpawner
 @onready var session: LevelSession = $Session
 @onready var hud: Hud = $HUD
 @onready var end_screen: EndScreen = $EndScreen
 @onready var pause_menu: PauseMenu = $PauseMenu
+## RF-460: el diálogo de la flecha «← Menú».
+@onready var exit_dialog: ExitDialog = $ExitDialog
+## M52 (RF-466): el cartel de entrada del nivel.
+@onready var level_intro: LevelIntro = $LevelIntro
+## RF-460: si la partida ya estaba en pausa (con `P`) cuando se abrió el diálogo.
+var _exit_was_paused: bool = false
+## Costuras para los tests (`.claude/rules/tests.md`): a dónde sale la flecha. Por omisión, las pantallas de verdad.
+var leave_to_menu: Callable = func() -> void: GameFlow.go_to_main_menu()
+var leave_to_editor: Callable = func() -> void: GameFlow.go_to_editor()
 
 
 func _ready() -> void:
@@ -84,6 +100,8 @@ func _ready() -> void:
 	move_child(level, 0)  # primero en la lista = se dibuja debajo de todo
 	_fit_map()
 
+	_setup_infrastructure()
+
 	# RF-104: la partida (y la interfaz, que hereda) sigue funcionando en pausa;
 	# el "mundo" se congela.
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -97,7 +115,7 @@ func _ready() -> void:
 	_setup_collection()
 	_update_collection_notice()
 	for support: TowerData in support_catalog():
-		if (level_data.extra_towers.has(String(support.id)) or (DevMode.enabled and DevMode.support_unlocked)) and not tower_types.has(support):
+		if (level_data.extra_towers.has(String(support.id)) or level_data.towers.has(String(support.id)) or (DevMode.enabled and DevMode.support_unlocked)) and not tower_types.has(support):
 			tower_types.append(support)
 	available_towers = level_data.available_towers(tower_types, SaveManager.collection_complete)
 	if DevMode.enabled and DevMode.support_unlocked:
@@ -111,9 +129,12 @@ func _ready() -> void:
 	build_controller.selection_changed.connect(hud.show_selected_tower)
 	build_controller.placed_selection_changed.connect(_refresh_tower_panel.unbind(1))
 
+	hud.setup_resources(level_data.uses_resources())  # RF-416: antes de setup_towers
 	hud.setup_towers(available_towers)
 	hud.setup_waves(level_data.waves)  # RF-133, RF-135: antes de bind()
 	hud.tower_button_pressed.connect(build_controller.select)
+	hud.payment_pressed.connect(build_controller.set_pay_alt)  # RF-419
+	build_controller.payment_changed.connect(hud.show_payment)
 	hud.start_wave_pressed.connect(start_next_wave)
 	hud.bind(session)
 
@@ -124,12 +145,14 @@ func _ready() -> void:
 	panel.sell_pressed.connect(func() -> void: build_controller.sell(build_controller.selected_placed()))
 	panel.targeting_pressed.connect(_on_targeting_pressed)
 	session.gold_changed.connect(panel.refresh)
+	session.resources_changed.connect(_refresh_tower_panel.unbind(1))  # RF-418: la venta muestra recursos
 
 	session.wave_completed.connect(_collection_wave_completed)
 	session.countdown_finished.connect(start_next_wave)
 	session.state_changed.connect(_on_state_changed)
 	end_screen.retry_pressed.connect(restart)
 	end_screen.next_pressed.connect(GameFlow.next_level)
+	end_screen.epilogue_pressed.connect(open_epilogue)
 	if testing:
 		# RF-217: al terminar o salir, se vuelve al editor con el borrador intacto.
 		end_screen.levels_pressed.connect(GameFlow.go_to_editor)
@@ -152,6 +175,13 @@ func _ready() -> void:
 	else:
 		pause_menu.quit_pressed.connect(GameFlow.go_to_main_menu)
 
+	# RF-459 a RF-461: la flecha «← Menú» pregunta antes de salir; probando un mapa del editor vuelve directo.
+	hud.menu_pressed.connect(_request_exit)
+	exit_dialog.confirmed.connect(_on_exit_confirmed)
+	exit_dialog.cancelled.connect(_on_exit_cancelled)
+	if testing:
+		hud.set_exit_text("← Editor", "Volver al editor")
+
 	# RF-116: sonidos de la partida (los disparos, al construir cada torre).
 	session.wave_changed.connect(func(wave: int, _total: int) -> void:
 		if wave > 0:
@@ -164,6 +194,94 @@ func _ready() -> void:
 	_start_dev_stats()
 	if DevMode.enabled:
 		_add_dev_panel()
+	_open_intro_if_pending()
+
+
+## RF-404 a RF-409: el controlador de la demolición, su vista y el panel del HUD. El sorteo del drop
+## usa un generador propio con semilla (RF-417): nueva en cada partida, o `GameFlow.forced_seed`.
+func _setup_infrastructure() -> void:
+	var rng := RandomNumberGenerator.new()
+	if GameFlow.forced_seed >= 0:
+		rng.seed = GameFlow.forced_seed
+	else:
+		rng.randomize()
+	infrastructure = InfrastructureController.new()
+	infrastructure.name = "Infrastructure"
+	add_child(infrastructure)
+	infrastructure.setup(level, session, level_data.obstacles, rng, effects, _recovered_collections(), level_data.id,
+		level_data.machine_enabled, _collects_pieces())
+	infrastructure.demolished.connect(_on_obstacle_demolished)
+	hud.setup_bar(level_data.uses_infrastructure())  # RF-454: las pestañas, solo si el nivel usa infraestructura
+	obstacle_layer = ObstacleLayer.new()
+	obstacle_layer.name = "ObstacleLayer"
+	add_child(obstacle_layer)
+	obstacle_layer.setup(infrastructure, level)
+	build_controller.obstacles = infrastructure
+	var panel: ObstaclePanel = hud.obstacle_panel
+	panel.demolish_pressed.connect(infrastructure.order)
+	panel.cancel_pressed.connect(infrastructure.cancel_job)
+	panel.enable_pressed.connect(infrastructure.enable)
+	infrastructure.selection_changed.connect(_refresh_obstacle_panel.unbind(1))
+	infrastructure.changed.connect(_refresh_obstacle_panel)
+	if hud.infrastructure_tab != null:  # RF-457: las tarjetas llaman a lo mismo que el panel del objeto
+		var tab: InfrastructureTab = hud.infrastructure_tab
+		tab.buy_pressed.connect(infrastructure.buy_machine)
+		tab.cancel_pressed.connect(infrastructure.cancel_job)
+		tab.enable_pressed.connect(infrastructure.enable)
+		tab.site_selected.connect(_on_site_selected)
+		hud.tab_changed.connect(_on_tab_changed)
+		infrastructure.changed.connect(_refresh_infrastructure_tab)
+		session.resources_changed.connect(_refresh_infrastructure_tab.unbind(1))
+		_refresh_infrastructure_tab()
+
+
+## Muestra en el panel el removible elegido (o lo oculta si no hay ninguno).
+func _refresh_obstacle_panel() -> void:
+	var cell: Vector2i = infrastructure.selected_cell()
+	var spec: ObstacleSpec = infrastructure.obstacle_at(cell)
+	if spec == null:
+		hud.obstacle_panel.show_obstacle(null, ObstacleField.State.INTACT, false, session.gold, 0.0, false)
+		return
+	var field: ObstacleField = infrastructure.field
+	var job: DemolitionJob = field.job()
+	hud.obstacle_panel.show_obstacle(spec, field.state_of(cell), field.has_job() and job.cell != cell,
+			session.gold, 0.0 if job == null else job.seconds_left(), field.finding_recovered(cell),
+			job.paid if job != null and job.cell == cell else field.cost_of(cell),
+			field.seconds_of(cell), field.cost_with_machine(cell) if infrastructure.machine_enabled and not field.has_machine else -1,
+			field.reserve_left(cell), _collects_pieces())
+
+
+## RF-457 y RF-458: alimenta las cuatro tarjetas de «Infraestructura» y el aviso del título, leyendo lo que ya
+## expone el controlador. La pestaña no guarda nada propio.
+func _refresh_infrastructure_tab() -> void:
+	var tab: InfrastructureTab = hud.infrastructure_tab
+	if tab == null:
+		return
+	var field: ObstacleField = infrastructure.field
+	var job: DemolitionJob = field.job()
+	if job != null:
+		tab.show_job(ObstacleText.display_name(field.spec_at(job.cell)), job.progress(), job.seconds_left())
+	else:
+		tab.clear_job()
+	hud.show_job_badge(0.0 if job == null else job.seconds_left(), job != null)
+	tab.show_machine(infrastructure.machine_enabled, field.has_machine, field.machine_price(), session.gold,
+			InfrastructureText.machine_effect())
+	tab.show_sites(InfrastructureText.sites(field), session.gold)
+	tab.show_resources(hud.shows_resources(), session.resources, InfrastructureText.expected_resources(field))
+
+
+## RF-458: tocar el nombre de un punto lo elige en el mapa, igual que tocarlo allá (una sola selección, RF-73).
+func _on_site_selected(cell: Vector2i) -> void:
+	build_controller.cancel()
+	build_controller.deselect_placed()
+	infrastructure.select(cell)
+
+
+## RF-456: pasar a «Infraestructura» con una torre elegida para construir cancela la construcción (la vista previa
+## no puede quedar sobre el mapa con sus botones ocultos). Una torre ya colocada o un objeto elegido siguen igual.
+func _on_tab_changed(id: StringName) -> void:
+	if id != Hud.TAB_CANNONS:
+		build_controller.cancel()
 
 
 ## RF-251: un mapa más grande que 20×9 se muestra con zoom, con una cámara. Una cámara no cambia
@@ -198,7 +316,22 @@ func _process(delta: float) -> void:
 ## quedar el juego en pausa ni acelerado (RF-105, plan §6.7).
 func _exit_tree() -> void:
 	_write_dev_stats(DevStats.RESULT_LEFT)  # si la partida ya terminó, no pisa su informe
+	DevMode.collections_unlocked = false  # RF-436: la habilitación dura solo esta partida.
 	_reset_time()
+
+
+## RF-456: `Tab` cambia de pestaña. Va en `_input` y no en `_unhandled_input` para que el foco de la interfaz
+## (los íconos de arriba lo aceptan) no se lo quede para moverse entre controles.
+func _input(event: InputEvent) -> void:
+	if not event.is_action_pressed("switch_tab") or not hud.has_tabs():
+		return
+	if exit_dialog.is_open() or pause_menu.is_open() or level_intro.is_open() or session.is_over():
+		return  # con un diálogo abierto o la partida terminada, no hace nada
+	var focus: Control = get_viewport().gui_get_focus_owner()
+	if focus is LineEdit or focus is TextEdit:
+		return  # escribiendo en un campo (el panel de pruebas): Tab es de ese campo
+	hud.switch_tab()
+	get_viewport().set_input_as_handled()
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -210,12 +343,14 @@ func _unhandled_input(event: InputEvent) -> void:
 	# BuildController recibe Esc primero (cancelar construcción o selección);
 	# si nadie lo usó, llega aquí y abre o cierra el menú de pausa (RF-114).
 	if event.is_action_pressed("cancel"):
-		if pause_menu.is_open():
+		if exit_dialog.is_open():
+			exit_dialog.handle_cancel()  # RF-461: Esc cierra el diálogo; el menú de pausa no se abre debajo
+		elif pause_menu.is_open():
 			pause_menu.handle_cancel()
 		else:
 			open_pause_menu()
-	elif pause_menu.is_open():
-		return  # con el menú abierto, las otras teclas no hacen nada
+	elif pause_menu.is_open() or exit_dialog.is_open() or level_intro.is_open():
+		return  # con el menú o el diálogo abiertos, las otras teclas no hacen nada
 	elif dev_panel != null and _handle_dev_shortcut(event):
 		get_viewport().set_input_as_handled()
 	elif event.is_action_pressed("start_wave"):
@@ -233,6 +368,7 @@ func open_pause_menu() -> void:
 		return
 	build_controller.cancel()
 	build_controller.deselect_placed()
+	infrastructure.deselect()
 	set_paused(true)
 	hud.show_paused(true, false)  # el menú ya dice "Pausa"
 	pause_menu.open()
@@ -241,6 +377,85 @@ func open_pause_menu() -> void:
 func close_pause_menu() -> void:
 	pause_menu.close()
 	set_paused(false)
+
+
+# --- El cartel de entrada (M52, RF-466 a RF-468) ---
+
+## RF-468: ¿esta partida muestra los textos del nivel (cartel y victoria)? La campaña, siempre; un mapa de la
+## comunidad o de un modo propio, solo si su archivo los trae (si no, los textos están vacíos y no hay nada que
+## mostrar). No los muestran el modo de pruebas, probar desde el editor ni los modos oficiales (Asedio).
+func shows_texts() -> bool:
+	if DevMode.enabled or testing:
+		return false
+	return GameFlow.current_mode.is_empty() or not bool(GameFlow.current_mode.get("official", false))
+
+
+## RF-466: si se llegó eligiendo el nivel (`GameFlow.intro_pending`) y trae `"entrada"`, abre el cartel y la partida
+## espera. El aviso se consume siempre: «Reintentar» recarga la escena y no lo vuelve a encender.
+func _open_intro_if_pending() -> void:
+	var pending: bool = GameFlow.intro_pending
+	GameFlow.intro_pending = false
+	level_intro.closed.connect(_on_intro_closed)
+	if not pending or not shows_texts() or level_data.intro_text == "":
+		return
+	build_controller.cancel()
+	build_controller.input_blocked = true  # leer no cuesta tiempo ni deja construir
+	set_paused(true)
+	hud.show_paused(true, false)  # el cartel no es el menú de pausa: no dice «PAUSA»
+	level_intro.open(level_data.display_name, level_data.place_text, level_data.intro_text)
+
+
+## Al cerrarlo la partida sigue exactamente como estaba: la misma cuenta atrás, a la misma velocidad.
+func _on_intro_closed() -> void:
+	build_controller.input_blocked = false
+	set_paused(false)
+
+
+# --- La flecha «← Menú» (RF-459 a RF-461) ---
+
+## Las piezas de colección que se perderían: una entrada por pieza, con el id de su colección. Cuentan las
+## pendientes y las ya confirmadas, porque las dos se guardan recién al mostrar el resultado (RF-359, RF-427).
+func lost_pieces() -> Array[String]:
+	var collections: Array[String] = []
+	for piece: Dictionary in findings.pending() + findings.confirmed():
+		collections.append(String(piece["collection"]))
+	if collectible != null and collectible.picked_wave > 0:
+		collections.append(String(collectible.collection))
+	return collections
+
+
+## El texto del diálogo para el estado actual de la partida.
+func exit_message() -> String:
+	return ExitText.message(lost_pieces(), infrastructure.field.has_job())
+
+
+## RF-460: pregunta qué se pierde y pausa la partida. Probando desde el editor no se pierde nada: vuelve directo.
+func _request_exit() -> void:
+	if session.is_over() or exit_dialog.is_open() or pause_menu.is_open():
+		return
+	if testing:
+		leave_to_editor.call()
+		return
+	build_controller.cancel()
+	build_controller.deselect_placed()
+	infrastructure.deselect()
+	_exit_was_paused = is_paused()
+	build_controller.input_blocked = true
+	set_paused(true)
+	hud.show_paused(true, false)  # el diálogo ya cubre la pantalla
+	exit_dialog.open(exit_message())
+
+
+## «Seguir jugando» o Esc: la partida vuelve al estado anterior (corriendo a la misma velocidad, o en pausa si ya lo estaba).
+func _on_exit_cancelled() -> void:
+	build_controller.input_blocked = false
+	set_paused(_exit_was_paused)
+
+
+## «Salir al menú»: no se guarda nada (ni piezas ni progreso ni récords), así que no se llama a `_commit_collection()`.
+func _on_exit_confirmed() -> void:
+	build_controller.input_blocked = false
+	leave_to_menu.call()
 
 
 # --- Pausa y velocidad (RF-104, RF-105) ---
@@ -284,7 +499,7 @@ func _reset_time() -> void:
 
 ## Las partes del mundo que se congelan en pausa y al terminar la partida.
 func _world_nodes() -> Array[Node]:
-	return [level, tower_container, enemies, projectiles, effects, spawner, session]
+	return [level, tower_container, enemies, projectiles, effects, spawner, session, infrastructure, obstacle_layer]
 
 
 ## RF-32 y RF-34: la oleada empieza con el botón, con Espacio o al terminar la cuenta atrás.
@@ -361,6 +576,21 @@ func _add_dev_panel() -> void:
 
 func dev_add_gold() -> void:
 	session.earn(DevMode.config.gold_step)  # RF-324: el número vive en data/dev_config.tres
+
+
+## RF-436: suma recursos solo a la sesión actual.
+func dev_add_resources() -> void:
+	if DevMode.enabled and not session.is_over():
+		hud.setup_resources(true)
+		session.add_resources(10)
+
+
+## RF-436: avanza el trabajo por el mismo camino que una demolición normal.
+func dev_finish_demolition() -> void:
+	if not DevMode.enabled or session.is_over() or not infrastructure.field.has_job():
+		return
+	var job: DemolitionJob = infrastructure.field.job()
+	infrastructure.field.tick(job.seconds_left())
 
 
 func dev_set_infinite_lives(on: bool) -> void:
@@ -494,6 +724,10 @@ func _on_tower_built(tower: Tower) -> void:
 	# Cada torre suena distinto: el sonido se llama "shot_" + el id de la torre.
 	var shot_sound := StringName("shot_%s" % tower.data.id)
 	tower.fired.connect(func(_projectile: Projectile) -> void: Audio.play(shot_sound))
+	# RF-449: el pulso de la Disruptora (señal hacia arriba, P6): anillo y su sonido.
+	tower.pulsed.connect(func(radius_px: float) -> void:
+		effects.pulse_ring(tower.global_position, radius_px)
+		Audio.play(&"shot_disruptor"))
 	effects.tower_built(tower.global_position, tower.data.color, tower.data.footprint)
 	_refresh_exploitable()
 	Audio.play(&"build")
@@ -506,7 +740,7 @@ func _on_tower_upgraded(tower: Tower) -> void:
 	Audio.play(&"upgrade")
 
 
-func _on_tower_sold(tower: Tower, refund: int) -> void:
+func _on_tower_sold(tower: Tower, refund: int, _resource_refund: int) -> void:
 	effects.tower_sold(tower.global_position, refund, tower.data.footprint)
 	_refresh_exploitable(tower)  # todavía está en el árbol: se borra al final del cuadro
 	Audio.play(&"sell")
@@ -539,7 +773,8 @@ func _on_targeting_pressed() -> void:
 func _refresh_tower_panel() -> void:
 	var tower: Tower = build_controller.selected_placed()
 	var value: int = build_controller.sell_value(tower) if tower != null else 0
-	hud.tower_panel.show_tower(tower, value, session.gold)
+	var resource_value: int = build_controller.sell_resource_value(tower) if tower != null else 0
+	hud.tower_panel.show_tower(tower, value, session.gold, resource_value)
 
 
 func _on_tower_fired(projectile: Projectile) -> void:
@@ -553,10 +788,12 @@ func _on_tower_fired(projectile: Projectile) -> void:
 func _on_state_changed(state: LevelSession.State) -> void:
 	if state != LevelSession.State.WON and state != LevelSession.State.LOST:
 		return
+	hud.hide_exit()  # RF-459: la pantalla de resultado ya trae sus botones
 	_commit_collection()
 	_write_dev_stats(DevStats.RESULT_WON if state == LevelSession.State.WON else DevStats.RESULT_LOST)
 	# RF-91: el juego se detiene. Se congela el "mundo", pero no la interfaz.
-	for node: Node in [enemies, tower_container, projectiles, spawner]:
+	infrastructure.discard_job()  # RF-409: el trabajo se pierde
+	for node: Node in [enemies, tower_container, projectiles, spawner, infrastructure]:
 		node.process_mode = Node.PROCESS_MODE_DISABLED
 	build_controller.cancel()
 	build_controller.deselect_placed()
@@ -568,13 +805,25 @@ func _on_state_changed(state: LevelSession.State) -> void:
 	if state == LevelSession.State.WON:
 		GameFlow.level_won(session.lives, session.score)  # RF-112, RF-115 y RF-194: desbloquea y guarda
 		var stars: int = Rules.stars_for(session.lives, level_data.starting_lives, balance)  # RF-93
-		end_screen.show_victory(session.lives, stars, GameFlow.has_next_level(), can_leave, session.score)
+		end_screen.show_victory(session.lives, stars, GameFlow.has_next_level(), can_leave, session.score,
+			level_data.win_text if shows_texts() else "", shows_texts() and GameFlow.has_epilogue())  # RF-467, RF-471
 		Audio.play(&"victory")
 	else:
 		end_screen.show_defeat(session.wave, session.total_waves, can_leave, session.score)
 		Audio.play(&"defeat")
 	if saves_progress:
 		_show_level_records()  # RF-191: los récords cuentan desde el menú (RF-196, RF-224)
+
+
+# --- Epílogo (RF-471) ---
+
+## Abre el epílogo encima de la pantalla de victoria: «Niveles» va a la selección; `Esc` o un toque vuelven a la victoria.
+func open_epilogue() -> void:
+	if epilogue == null:
+		epilogue = EpilogueScreen.new()
+		add_child(epilogue)
+		epilogue.levels_pressed.connect(GameFlow.go_to_level_select)
+	epilogue.open(level_data.epilogue_text)
 
 
 # --- Récords (RF-191 a RF-193) ---
@@ -626,20 +875,64 @@ func _setup_collection() -> void:
 		collectible.setup(&"technology", level_data.id, count, rng)
 	_update_collection_notice()
 
+## RF-362 y RF-431: la barra muestra la colección de la que este nivel es fuente (o `technology`).
 func _update_collection_notice() -> void:
-	var count: int = SaveManager.collected_sources(&"technology").size()
-	var state: String = "conseguido aquí" if SaveManager.collected_sources(&"technology").has(String(level_data.id)) else "pendiente aquí"
-	if collectible != null and collectible.picked_wave > 0:
+	var id: StringName = CollectionDefinitions.collection_of_level(level_data.id)
+	var count: int = SaveManager.collected_sources(id).size()
+	var state: String = "conseguido aquí" if SaveManager.collected_sources(id).has(String(level_data.id)) else "pendiente aquí"
+	if id == &"technology":
+		if collectible != null and collectible.picked_wave > 0:
+			count += 1
+			state = "oleada confirmada; pendiente del resultado" if collectible.confirmed else "completar oleada"
+	elif findings.has_piece(id, level_data.id):
 		count += 1
-		state = "oleada confirmada; pendiente del resultado" if collectible.confirmed else "completar oleada"
-	hud.show_collection(count, CollectibleRun.required(&"technology"), state)
+		state = "oleada confirmada; pendiente del resultado" if findings.is_confirmed(id, level_data.id) else "completar oleada"
+	hud.show_collection(count, CollectionDefinitions.required(id), state, id)
 
 func _collection_wave_completed(wave: int, _bonus: int) -> void:
+	findings.complete_wave(wave)  # RF-427
 	if collectible != null:
 		collectible.complete_wave(wave)
+	_update_collection_notice()
+
+## RF-429: las piezas de colección solo se recogen en la campaña jugada desde el menú.
+func _collects_pieces() -> bool:
+	return not (DevMode.enabled or testing or GameFlow.current_index < 0 or GameFlow.current_community != null \
+			or GameFlow.current_mode_level() != null)
+
+## RF-428 y RF-429: qué colecciones de hallazgo ya no entregan pieza en esta partida: las que ya
+## están recuperadas en el guardado y todas, si acá no se recogen piezas.
+func _recovered_collections() -> Dictionary:
+	var result: Dictionary = {}
+	var collects: bool = _collects_pieces()
+	for id: StringName in CollectionDefinitions.ids():
+		if CollectionDefinitions.origin(id) == CollectionDefinitions.ORIGIN_FINDING:
+			result[id] = not collects or SaveManager.collected_sources(id).has(String(level_data.id))
+	return result
+
+## RF-427: la pieza se recoge al terminar la demolición y se confirma con la oleada en curso, o con
+## la siguiente si se demolió en preparación o en la cuenta atrás.
+func _on_obstacle_demolished(_cell: Vector2i, reward: Dictionary) -> void:
+	var finding: Dictionary = reward.get("finding", {})
+	if finding.is_empty() or not _collects_pieces() or session.is_over():
+		return
+	var wave_to_confirm: int = session.wave if session.state == LevelSession.State.WAVE_RUNNING else session.wave + 1
+	if findings.pick(finding["collection"], finding["source"], wave_to_confirm):
 		_update_collection_notice()
 
+## RF-427: al mostrarse el resultado se guardan las piezas confirmadas, aunque la partida se pierda.
+func _commit_findings() -> void:
+	if not _collects_pieces():
+		return
+	var saved: bool = false
+	for piece: Dictionary in findings.confirmed():
+		SaveManager.collect_source(piece["collection"], piece["source"])
+		saved = true
+	if saved:
+		SaveManager.save()
+
 func _commit_collection() -> void:
+	_commit_findings()
 	if collectible == null or DevMode.enabled or testing:
 		return
 	for source: String in collectible.result_sources(true):
@@ -653,15 +946,32 @@ func dev_enable_support(on: bool) -> void:
 	if not DevMode.enabled:
 		return
 	DevMode.support_unlocked = on
-	if on:
-		for support: TowerData in support_catalog():
-			if not tower_types.has(support):
-				tower_types.append(support)
-	available_towers = level_data.available_towers(tower_types, SaveManager.collection_complete)
-	if on:
+	_refresh_dev_towers()
+
+
+## RF-436: las torres de colección quedan disponibles en esta partida, aunque el nivel no las ofrezca.
+func dev_enable_collections(on: bool) -> void:
+	if not DevMode.enabled:
+		return
+	DevMode.collections_unlocked = on
+	_refresh_dev_towers()
+
+
+func _refresh_dev_towers() -> void:
+	var catalog: Array[TowerData] = tower_types.duplicate()
+	for support: TowerData in support_catalog():
+		if not catalog.has(support):
+			catalog.append(support)
+	available_towers = level_data.available_towers(catalog, func(collection: StringName) -> bool:
+		return DevMode.collections_unlocked or SaveManager.collection_complete(collection))
+	if DevMode.enabled and DevMode.support_unlocked:
 		for support: TowerData in support_catalog():
 			if not available_towers.has(support):
 				available_towers.append(support)
+	if DevMode.enabled and DevMode.collections_unlocked:
+		for tower: TowerData in catalog:
+			if tower.required_collection != &"" and not available_towers.has(tower):
+				available_towers.append(tower)
 	build_controller.cancel()
 	build_controller.setup(level, session, balance, available_towers, tower_container)
 	hud.setup_towers(available_towers)

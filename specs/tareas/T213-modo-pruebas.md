@@ -14,7 +14,7 @@ Que Lucas y el bot puedan probar los sistemas nuevos **sin jugar todo**. El pane
 3. "Habilitar todas las colecciones en esta partida", como RF-360: aplica al nivel actual **sin escribir** colección ni progreso normal.
 
 ## Reglas
-Igual que el resto del modo de pruebas: guardado aparte, nada cuenta para el progreso real. Si estas acciones no tienen RF, **agregarlas como RF** es parte de esta tarea. Es chico, pero es 📜: coordinarlo para que no haya otra 📜 al mismo tiempo.
+Igual que el resto del modo de pruebas: guardado aparte, nada cuenta para el progreso real. Los RF **ya están escritos en T205: RF-436** (con RF-429 y RF-410). Esta tarea **solo programa**: no escribe `RF` ni `D`.
 
 ## Hecho cuando
 - Los tests cubren las tres acciones y que **no** escriben en el guardado real.

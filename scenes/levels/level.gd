@@ -17,6 +17,9 @@ const ATLAS_OF: Dictionary = {
 ## M15: el paisaje (RF-260) y los dibujos que pidió la leyenda (RF-262, casilla → dibujo).
 var theme: StringName = MapThemes.DEFAULT
 var legend_cells: Dictionary = {}
+var removable_cells: Array[Vector2i] = []
+## El mapa de letras del que salió: despejar un removible lo actualiza (RF-400).
+var grid: MapGrid
 
 @onready var ground: TileMapLayer = $Ground
 @onready var entrances: Node2D = $Entrances
@@ -29,7 +32,9 @@ static func build(grid: MapGrid, map_theme: StringName = MapThemes.DEFAULT) -> L
 	var level := Level.new()
 	level.name = "Level"
 	level.theme = map_theme
+	level.grid = grid
 	level.legend_cells = grid.legend_cells
+	level.removable_cells = grid.removable_cells
 	level.add_child(make_ground(grid))
 	var entrances_node := Node2D.new()
 	entrances_node.name = "Entrances"
@@ -104,7 +109,18 @@ static func _center(cell: Vector2i) -> Vector2:
 func _ready() -> void:
 	var decor := get_node_or_null("Decor") as LevelDecor
 	if decor != null:
-		decor.paint(ground, inner_exit_cells(), theme, legend_cells)
+		decor.paint(ground, inner_exit_cells(), theme, legend_cells, removable_cells)
+
+
+## RF-400 y RF-408: el removible de `cell` queda despejado: pasto construible. No recalcula recorridos.
+func clear_removable(cell: Vector2i) -> bool:
+	if grid == null or not grid.clear_cell(cell):
+		return false
+	ground.set_cell(cell, 0, ATLAS_GRASS)
+	var decor := get_node_or_null("Decor") as CanvasItem
+	if decor != null:
+		decor.queue_redraw()
+	return true
 
 
 ## RF-06: casillas donde termina algún camino DENTRO del mapa (ahí se dibuja una puerta).

@@ -1,0 +1,21 @@
+{
+ "version": 1,
+ "titulo": "La Compañía Meridiana",
+ "subtitulo": "Quiénes somos",
+ "orden": 3,
+ "desbloqueo": "level_03",
+ "bloques": [
+  {
+   "tipo": "texto",
+   "texto": "La Compañía Meridiana armó la expedición. No es un ejército: es gente de oficio (ingenieros, herreros, carpinteros, agricultores) con herramientas, semillas y planos."
+  },
+  {
+   "tipo": "texto",
+   "texto": "La nave no puede volver a despegar. Se la va desarmando de a poco para hacer casas, cañerías y torres, y lo que se rompe se arregla con lo que hay."
+  },
+  {
+   "tipo": "texto",
+   "texto": "Por eso las torres son de hierro, bronce y cristal: se pueden reparar en el lugar. Entre la carga venían también planos y piezas de repuesto, que se van recuperando de entre los restos del aterrizaje."
+  }
+ ]
+}

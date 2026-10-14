@@ -1,0 +1,24 @@
+{
+	"version": 1,
+	"nombre": "Mapa con recursos",
+	"oro": 700,
+	"vidas": 20,
+	"torres": ["basic", "cannon", "sniper", "mortar"],
+	"leyenda": {
+		"r": {"removible": {"clase": "roca", "costo": 30, "tiempo": 3, "probabilidad": 100}},
+		"t": {"removible": {"clase": "arbol", "costo": 30, "tiempo": 3, "probabilidad": 100}},
+		"u": {"removible": {"clase": "roca", "costo": 30, "tiempo": 3, "probabilidad": 100}}
+	},
+	"mapa": [
+		"....................",
+		"....t...............",
+		"....................",
+		"...........r....u...",
+		"A##################S",
+		"....................",
+		"....................",
+		"....................",
+		"...................."
+	],
+	"oleadas": [[{"enemigo": "normal", "cantidad": 3, "cada": 1.5}], [{"enemigo": "normal", "cantidad": 5, "cada": 1.2}]]
+}

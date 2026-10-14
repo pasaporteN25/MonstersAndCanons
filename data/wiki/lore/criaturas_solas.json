@@ -1,0 +1,17 @@
+{
+ "version": 1,
+ "titulo": "Las criaturas que van solas",
+ "subtitulo": "Lo que no pertenece a ninguna manada",
+ "orden": 5,
+ "desbloqueo": "level_06",
+ "bloques": [
+  {
+   "tipo": "texto",
+   "texto": "En el bosque hay seres que no andan con ninguna manada. El Ladrón, por ejemplo, va solo, con una capa gris y una bolsa, y se lleva lo que brilla del campamento: monedas, herramientas, un botón."
+  },
+  {
+   "tipo": "texto",
+   "texto": "Los informes las llaman criaturas, para distinguirlas de los animales. No obedecen a nadie, y nadie sabe cuántas hay."
+  }
+ ]
+}

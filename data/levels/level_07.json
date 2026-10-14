@@ -4,17 +4,30 @@
   "oro": 300,
   "vidas": 20,
   "aumento_vida": 24,
+  "tema": "bosque",
+  "leyenda": {
+    "t": {"removible":{"clase":"arbol","probabilidad":50.0,"recursos":1.0}},
+    "r": {"removible":{"clase":"roca","probabilidad":50.0,"recursos":1.0}},
+    "m": {"dibujo":"roca_marcada"},
+    "f": {"dibujo":"helecho"}
+  },
   "torres_extra": ["mechanical_standard"],
+  "demoledora": true,
+  "textos": {
+    "lugar": "El aserradero",
+    "entrada": "El mejor sitio para cortar madera es un cruce de caminos.\nSe arma un aserradero, y para eso hay que despejar el terreno.\nTodo lo que estorbe se retira.",
+    "victoria": "Aserradero en marcha. La colonia ya tiene madera propia.\nLa primera carga sale mañana hacia el campamento."
+  },
   "mapa": [
     "....................",
     "A#################..",
-    "....X...X.....X..#..",
-    ".X....X......#####..",
+    "....X...t.....r..#..",
+    ".m....t......#####..",
     "........##S#.#......",
     "..#######..###...X..",
-    "..#.......X....X....",
+    "..#.......r....t....",
     "..#################B",
-    ".....X......X......."
+    ".....f......r......."
   ],
   "oleadas": [
     [{"enemigo": "normal", "cantidad": 12, "cada": 0.7},

@@ -4,17 +4,29 @@
   "oro": 250,
   "vidas": 20,
   "aumento_vida": 30,
+  "tema": "bosque",
+  "leyenda": {
+    "t": {"removible":{"clase":"arbol","probabilidad":0.0}},
+    "r": {"removible":{"clase":"roca","probabilidad":0.0}},
+    "p": {"dibujo":"poste_cintas"},
+    "f": {"dibujo":"helecho"}
+  },
   "torres_extra": ["mechanical_standard"],
+  "textos": {
+    "lugar": "El lindero",
+    "entrada": "El bosque empieza donde termina el cerco.\nHay madera para varios años, y también criaturas que no habíamos visto.\nDel campamento empezaron a faltar cosas.",
+    "victoria": "Lindero asegurado. Se taló el primer tramo.\nLa madera alcanza para dos casas."
+  },
   "mapa": [
     "..........B.........",
-    "A#####....#.......X.",
+    "A#####....#.......p.",
     ".....#....#.........",
     "...X.#############..",
-    ".................#..",
+    ".............t...#..",
     "..################..",
-    "..#.........X.......",
+    "..#....t....r.......",
     "..#################S",
-    ".......X............"
+    ".......f............"
   ],
   "oleadas": [
     [{"enemigo": "normal", "cantidad": 10, "cada": 0.8}],

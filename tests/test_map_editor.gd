@@ -111,13 +111,13 @@ func test_it_resumes_the_draft_it_already_had() -> void:
 	assert_true((editor.get_node("%Title") as Label).text.contains("Volví"))
 
 
-func test_five_tools_and_their_keys() -> void:
+func test_ten_tools_and_their_keys() -> void:
 	_open()
 	assert_eq(editor.tool, LevelDraft.Tool.PATH, "empieza con el camino")
 	for i: int in MapEditor.TOOL_KEYS.size():
 		_key(editor, MapEditor.TOOL_KEYS[i])
 		assert_eq(editor.tool, i as LevelDraft.Tool, "tecla %d" % (i + 1))
-	assert_eq((editor.get_node("%Tools") as HBoxContainer).get_child_count(), 5 + 1 + 2, "5 herramientas, un espacio y deshacer y rehacer")
+	assert_eq((editor.get_node("%Tools") as HBoxContainer).get_child_count(), 10 + 1 + 2, "10 herramientas, un espacio y deshacer y rehacer")
 
 
 func test_only_the_chosen_tool_button_is_pressed() -> void:
@@ -232,8 +232,8 @@ func test_the_title_marks_unsaved_changes() -> void:
 func test_undo_and_redo_with_keys_and_buttons() -> void:
 	_open()
 	_click(editor, Vector2i(3, 1))
-	var undo_button: Button = editor.get_node("%Tools").get_child(6)
-	var redo_button: Button = editor.get_node("%Tools").get_child(7)
+	var undo_button: Button = editor.get_node("%Tools").get_child(11)
+	var redo_button: Button = editor.get_node("%Tools").get_child(12)
 	assert_false(undo_button.disabled)
 	assert_true(redo_button.disabled)
 	_key(editor, KEY_Z, true)

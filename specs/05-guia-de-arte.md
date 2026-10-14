@@ -4,6 +4,7 @@ Cómo se dibuja todo lo que se ve en el juego, para que **los enemigos, las torr
 
 ## 1. Qué se busca
 
+- **Excepción provisional T244 (RF-484):** Coloso y Pedazo son piedra que camina, sin ojos, cara, gesto, garras ni intención; no llevan marcas de los Moradores ni escudo. Comparte material pétreo con el Guardián, en basalto más oscuro y vetas ámbar apagadas. Pendiente de aprobación artística de Lucas.
 - **Bestias con carácter, nunca infantiles:** ojos chicos y rasgados, colmillos, garras, púas. Nada de ojos redondos enormes, sonrisas ni caritas.
 - **Se reconocen por la silueta.** Un enemigo tiene que distinguirse de los otros **tapando los colores**: por eso cada especie tiene una forma propia (lobo, lagarto, tortuga, wyvern, escarabajo, troll, araña…).
 - **Se leen chicos.** Los dibujos se ven a **34 px** en el juego y en los íconos, y a **112 px** en la Wiki. Un detalle que desaparece a 34 px no aporta: se saca o se agranda.
@@ -44,6 +45,10 @@ Cada terna es **luz / medio / sombra** del degradé de relleno. Los nuevos enemi
 | Curandero | Criatura con un bulbo luminoso (verde amarillento) | `#e8f08a` | `#b6cf3c` | `#5f7a23` |
 | Chamán | Encapuchado con un bastón que chispea (rosa magenta) | `#f0a3d8` | `#c8449e` | `#6b1f5a` |
 | Espejo | Tortuga de cristal facetado (cian frío) | `#d7f6ff` | `#7fd0e6` | `#2f7f9d` |
+| Coloso (T244, **PROVISIONAL**) | Basalto cálido con vetas ámbar apagadas | `#a69b88` | `#625d54` | `#302f2d` |
+| Pedazo (T244, **PROVISIONAL**) | Lasca del mismo basalto, caras de fractura oscuras | `#948a77` | `#555149` | `#292827` |
+
+Paletas propuestas, todavía **no aprobadas**: son referencias de material de los PNG renderizados, no tres colores planos exactos. Se reservan para la revisión de Lucas.
 
 **Tonos que todavía están libres** para enemigos nuevos: **ninguno de los grandes**; para un enemigo más habría que **oscurecer o aclarar** uno existente con cuidado, o usar un detalle distintivo (un brillo, una piedra). Ya se usaron el marfil y el amarillo verdoso (Guardián y Curandero) y el rosa magenta y el cian frío (Chamán y Espejo). Las crías y sus madres son de la misma familia de color, y los enemigos "de la misma banda" (por ejemplo, los que dan aura) pueden compartir un detalle (un brillo, una piedra) sin compartir el color.
 

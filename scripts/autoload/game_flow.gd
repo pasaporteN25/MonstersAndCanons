@@ -23,6 +23,8 @@ var editor_draft: LevelDraft
 ## Mientras hay uno, la partida no guarda progreso, estrellas ni récords, y al terminar vuelve
 ## al editor.
 var test_level: LevelData
+## RF-417: semilla fija del sorteo de los removibles (el bot y los tests). -1 = una nueva en cada partida.
+var forced_seed: int = -1
 ## RF-224: el mapa de la comunidad que se está jugando (null = ninguno). Tiene su progreso y sus
 ## récords propios, con el id `comunidad_<archivo>`, y no toca la campaña.
 var current_community: LevelData
@@ -33,6 +35,10 @@ var select_page: StringName = &"campaign"
 ## Vacío / -1 = no se juega un modo.
 var current_mode: Dictionary = {}
 var current_mode_index: int = -1
+## M52 (RF-466): la próxima partida que se abre viene de elegir un nivel (o «Siguiente nivel»), así que puede
+## mostrar el cartel de entrada. `Game._ready` lo consume y lo apaga; no se guarda. «Reintentar» recarga la
+## escena sin pasar por acá, por eso el cartel no vuelve (y probar desde el editor nunca lo enciende).
+var intro_pending: bool = false
 
 
 func _ready() -> void:
@@ -163,6 +169,24 @@ func has_next_level() -> bool:
 	return current_index >= 0 and current_index + 1 < level_count()
 
 
+## RF-471: ¿se está jugando el último nivel de la campaña, desde la campaña (no un modo, la comunidad ni «Probar»)
+## y con texto de epílogo? Entonces ganarlo ofrece «Epílogo» en lugar de «Siguiente nivel».
+func has_epilogue() -> bool:
+	if not current_mode.is_empty() or current_community != null or test_level != null:
+		return false
+	return current_index >= 0 and current_index == level_count() - 1 and level(current_index).epilogue_text != ""
+
+
+## RF-471: la campaña está terminada cuando todos sus niveles figuran completados. No se guarda un campo aparte.
+func is_campaign_complete() -> bool:
+	if level_count() == 0:
+		return false
+	for i: int in level_count():
+		if not SaveManager.is_completed(level(i).id):
+			return false
+	return true
+
+
 ## RF-90 y RF-112: guarda la victoria y desbloquea el siguiente nivel.
 func level_won(lives: int, score: int = 0) -> void:
 	if dev_partial_run():
@@ -262,6 +286,7 @@ func start_level(index: int) -> void:
 	current_community = null
 	_clear_mode()
 	select_page = &"campaign"
+	intro_pending = true
 	get_tree().change_scene_to_file(GAME_SCENE)
 
 
@@ -272,6 +297,7 @@ func start_community(community_level: LevelData) -> void:
 	current_community = community_level
 	_clear_mode()
 	select_page = &"community"
+	intro_pending = true  # RF-468: solo se muestra si el archivo del mapa trae "textos"
 	get_tree().change_scene_to_file(GAME_SCENE)
 
 
@@ -281,6 +307,7 @@ func play_test(level_to_test: LevelData) -> void:
 	test_level = level_to_test
 	current_community = null
 	_clear_mode()
+	intro_pending = false  # RF-468: probando desde el editor no hay cartel
 	get_tree().change_scene_to_file(GAME_SCENE)
 
 
@@ -294,6 +321,7 @@ func start_mode_level(mode: Dictionary, index: int) -> void:
 	current_mode = mode
 	current_mode_index = index
 	select_page = ModePacks.page_of(mode)
+	intro_pending = true  # RF-468: los modos oficiales nunca lo muestran; los propios, si el mapa trae "textos"
 	get_tree().change_scene_to_file(GAME_SCENE)
 
 

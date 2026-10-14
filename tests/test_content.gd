@@ -6,7 +6,8 @@ extends GutTest
 
 const GAME_SCENE: PackedScene = preload("res://scenes/game/game.tscn")
 ## RF-170 y RF-297: la barra y las teclas 1–9 no admiten más.
-const MAX_TOWERS: int = 9
+## 9 con tecla (RF-297) y la Disruptora, la décima, sin tecla (RF-448).
+const MAX_TOWERS: int = 10
 
 
 func _resources_in(dir: String) -> Array[Resource]:
@@ -64,9 +65,10 @@ func test_every_tower_is_complete() -> void:
 		assert_ne(t.display_name, "", who + ": nombre")
 		assert_ne(t.description, "", who + ": frase (RF-171)")
 		assert_not_null(t.turret_texture, who + ": dibujo de la torreta (RF-150)")
-		if not t.support_only:
+		var is_pulse: bool = t.levels[0].suppress_seconds > 0.0  # RF-438: la torre de pulso no dispara proyectiles
+		if not t.support_only and not is_pulse:
 			assert_not_null(t.projectile_texture, who + ": dibujo del proyectil (RF-153)")
-		if not t.support_only:
+		if not t.support_only and not is_pulse:
 			assert_gt(t.projectile_speed_tiles, 0.0, who + ": velocidad del proyectil")
 		if not t.support_only:
 			assert_true(Audio.has_sound(StringName("shot_%s" % t.id)), who + ": sonido shot_%s.wav (RF-116)" % t.id)
@@ -101,7 +103,7 @@ func test_every_tower_is_in_the_game() -> void:
 	for resource: Resource in _resources_in("res://data/towers/"):
 		assert_has(ids, (resource as TowerData).id,
 			"torre '%s': falta agregarla a Game → Tower Types (game.tscn)" % _file_id(resource))
-	assert_lte(game.tower_types.size(), MAX_TOWERS, "RF-297: entran hasta 9 torres (teclas 1–9)")
+	assert_lte(game.tower_types.size(), MAX_TOWERS, "RF-297 y RF-448: hasta 10 torres (la décima, sin tecla)")
 
 
 # --- Niveles (data/levels/, spec §7.8) ---

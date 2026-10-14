@@ -1,0 +1,4 @@
+9 SVG 64×64: tres paradas, sin texto/filtros/imágenes incrustadas.
+PNG del epílogo: 1920×1080.
+Montaje de central: alfa idéntico, 23 píxeles con diferencia máxima 1/255 en RGB.
+Importación SVG al doble según D-023 (128×128 de textura, lienzo lógico 64×64).

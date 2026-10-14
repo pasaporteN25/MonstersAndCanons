@@ -1,0 +1,21 @@
+{
+ "version": 1,
+ "titulo": "El oasis",
+ "subtitulo": "Donde aterrizó la nave",
+ "orden": 1,
+ "desbloqueo": "level_01",
+ "bloques": [
+  {
+   "tipo": "texto",
+   "texto": "El oasis es un valle chico de agua dulce, pasto y flores, rodeado de tierra seca. Es el único sitio con agua a la vista que encontró el reconocimiento, y por eso la nave bajó acá."
+  },
+  {
+   "tipo": "texto",
+   "texto": "Los primeros días se armó el campamento junto al agua. Desde entonces, todo lo que la colonia necesita (madera, mineral, un lugar donde sembrar) hay que ir a buscarlo más lejos."
+  },
+  {
+   "tipo": "texto",
+   "texto": "Los registros de la Compañía lo llaman «el único lugar seguro». No aclaran seguro de qué."
+  }
+ ]
+}

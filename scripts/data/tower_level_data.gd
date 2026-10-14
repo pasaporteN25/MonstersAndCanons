@@ -38,6 +38,11 @@ extends Resource
 ## RF-163: distancia máxima de cada salto, en casillas.
 @export var chain_range_tiles: float = 0.0
 
+## RF-439: segundos que un enemigo con aura alcanzado por el pulso deja de emitir su aura.
+## 0 = no es una torre de pulso. En una torre de pulso, `fire_rate` son pulsos por segundo,
+## `range_tiles` el radio del pulso y `damage` el golpe a cada alcanzado.
+@export var suppress_seconds: float = 0.0
+
 # --- Sinergias por estado (M20, RF-310): cuánto más daño hace contra un enemigo en cierto estado. 0 = nada. ---
 
 ## RF-310: % de daño extra contra un enemigo ralentizado.

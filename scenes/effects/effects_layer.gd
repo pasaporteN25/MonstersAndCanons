@@ -40,6 +40,11 @@ const MAX_DAMAGE_NUMBERS: int = 40
 const MAX_COMBO_NUMBERS: int = 12
 const MAX_DEATH_RESIDUES: int = 12
 const MAX_HEAL_PULSES: int = 16
+## RF-449: el pulso de la Disruptora (blanco azulado) y su tope de anillos a la vez.
+const PULSE_COLOR := Color(0.86, 0.92, 1.0)
+const PULSE_EDGE_COLOR := Color(0.50, 0.66, 1.0)
+const MAX_PULSE_RINGS: int = 8
+var _pulse_rings_alive: int = 0
 var _death_residues_alive: int = 0
 var _heal_pulses_alive: int = 0
 
@@ -105,6 +110,18 @@ func _is_near_recent_combo(position_: Vector2) -> bool:
 		near = near or position_.distance_to(entry[0]) < COMBO_GROUP_PX
 	_recent_combos = still_recent
 	return near
+
+
+## RF-449: el pulso de la Disruptora: un anillo que se expande hasta el radio, con otro más fino detrás.
+## Dibuja como mucho MAX_PULSE_RINGS pulsos a la vez; el exceso no se dibuja.
+func pulse_ring(position_: Vector2, radius: float) -> void:
+	if _pulse_rings_alive >= MAX_PULSE_RINGS:
+		return
+	_pulse_rings_alive += 1
+	var main := RingEffect.new().setup(PULSE_COLOR, radius * 0.2, radius, 0.3, 3.0)
+	main.tree_exited.connect(func() -> void: _pulse_rings_alive -= 1)
+	_add(main, position_)
+	_add(RingEffect.new().setup(Color(PULSE_EDGE_COLOR, 0.6), radius * 0.15, radius, 0.35, 1.4), position_)
 
 
 ## RF-165: "+N" verde cuando un enemigo se cura. Mismas reglas que los números de daño.

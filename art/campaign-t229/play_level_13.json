@@ -1,0 +1,121 @@
+{
+	"checks": [
+		"nivel 13 «Paso alto»: 24 oleadas, 8 torres en la barra: [\"cannon\", \"frost\", \"sniper\", \"fire\", \"multi\", \"burst\", \"tesla\", \"mortar\"]",
+		"oleada 1: se ve la tarjeta «Nuevo enemigo: Normal»",
+		"oleada 2: se ve la tarjeta «Nuevo enemigo: Rápido»",
+		"oleada 2: se ve la tarjeta «Nuevo enemigo: Troll»",
+		"oleada 3: se ve la tarjeta «Nuevo enemigo: Blindado»",
+		"oleada 4: se ve la tarjeta «Nuevo enemigo: Volador»",
+		"oleada 4: se ve la tarjeta «Nuevo enemigo: Araña»",
+		"oleada 4: se ve la tarjeta «Nuevo enemigo: Cría»",
+		"oleada 6: se ve la tarjeta «Nuevo enemigo: Tanque»",
+		"oleada 7: se ve la tarjeta «Nuevo enemigo: Embestidor»",
+		"oleada 8: se ve la tarjeta «Nuevo enemigo: Guardián»",
+		"oleada 8: se ve la tarjeta «Nuevo enemigo: Curandero»",
+		"oleada 9: se ve la tarjeta «Nuevo enemigo: Chamán»",
+		"oleada 9: una torre quedó aturdida (3.0 s) en (21, 4)"
+	],
+	"intro_cards": {
+		"Nuevo enemigo: Araña": 4,
+		"Nuevo enemigo: Blindado": 3,
+		"Nuevo enemigo: Chamán": 9,
+		"Nuevo enemigo: Cría": 4,
+		"Nuevo enemigo: Curandero": 8,
+		"Nuevo enemigo: Embestidor": 7,
+		"Nuevo enemigo: Guardián": 8,
+		"Nuevo enemigo: Normal": 1,
+		"Nuevo enemigo: Rápido": 2,
+		"Nuevo enemigo: Tanque": 6,
+		"Nuevo enemigo: Troll": 2,
+		"Nuevo enemigo: Volador": 4
+	},
+	"level": 13,
+	"lives_end": 15,
+	"max_stun_left": 3.0,
+	"mirror_reflects_seen": 0,
+	"problems": [],
+	"shaman_stun_seen": true,
+	"speed": 5.0,
+	"towers": [
+		"cannon",
+		"frost",
+		"sniper",
+		"fire",
+		"multi",
+		"burst",
+		"tesla",
+		"mortar"
+	],
+	"waves": [
+		{
+			"gold": 80,
+			"lives": 20,
+			"state": "2",
+			"towers": 5,
+			"wave": 1
+		},
+		{
+			"gold": 96,
+			"lives": 20,
+			"state": "2",
+			"towers": 6,
+			"wave": 2
+		},
+		{
+			"gold": 147,
+			"lives": 20,
+			"state": "2",
+			"towers": 7,
+			"wave": 3
+		},
+		{
+			"gold": 155,
+			"lives": 18,
+			"state": "2",
+			"towers": 8,
+			"wave": 4
+		},
+		{
+			"gold": 98,
+			"lives": 18,
+			"state": "2",
+			"towers": 10,
+			"wave": 5
+		},
+		{
+			"gold": 0,
+			"lives": 18,
+			"state": "2",
+			"towers": 13,
+			"wave": 6
+		},
+		{
+			"gold": 104,
+			"lives": 15,
+			"state": "2",
+			"towers": 14,
+			"wave": 7
+		},
+		{
+			"gold": 189,
+			"lives": 15,
+			"state": "2",
+			"towers": 15,
+			"wave": 8
+		},
+		{
+			"gold": 119,
+			"lives": 15,
+			"state": "2",
+			"towers": 17,
+			"wave": 9
+		},
+		{
+			"gold": 119,
+			"lives": 15,
+			"state": "2",
+			"towers": 20,
+			"wave": 10
+		}
+	]
+}

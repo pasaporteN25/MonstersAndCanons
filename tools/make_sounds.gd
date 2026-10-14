@@ -43,6 +43,8 @@ func _init() -> void:
 	_save("shot_tesla", _mix([_tone(Wave.SQUARE, 180.0, 120.0, 0.12, 0.25), _tone(Wave.NOISE, 0.0, 0.0, 0.1, 0.3)]))
 	# M19: el Mortero: un golpe grave y largo, con algo de ruido (la bomba sale del tubo).
 	_save("shot_mortar", _mix([_tone(Wave.SINE, 95.0, 38.0, 0.4, 0.8), _tone(Wave.NOISE, 0.0, 0.0, 0.22, 0.4)]))
+	# M51: el pulso de la Disruptora: un "bum" grave que sube y se apaga, con un brillo agudo.
+	_save("shot_disruptor", _mix([_tone(Wave.SINE, 110.0, 260.0, 0.3, 0.6), _tone(Wave.TRIANGLE, 900.0, 1400.0, 0.12, 0.2)]))
 	# --- Partida ---
 	_save("enemy_death", _mix([_tone(Wave.SINE, 520.0, 180.0, 0.13, 0.45), _tone(Wave.NOISE, 0.0, 0.0, 0.06, 0.2)]))
 	_save("life_lost", _tone(Wave.SQUARE, 190.0, 110.0, 0.28, 0.35))

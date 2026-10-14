@@ -127,6 +127,14 @@
 		"source": "Síntesis original tools/make_sounds.gd; sin muestras externas",
 		"stereo": false
 	},
+	"shot_disruptor": {
+		"peak": 0.71380078792572,
+		"rate": 44100,
+		"rms": 0.184701939834376,
+		"seconds": 0.3,
+		"source": "Síntesis original tools/make_sounds.gd; sin muestras externas",
+		"stereo": false
+	},
 	"shot_fire": {
 		"peak": 0.493012487888336,
 		"rate": 44100,

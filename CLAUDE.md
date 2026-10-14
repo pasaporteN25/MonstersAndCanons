@@ -1,4 +1,4 @@
-# JuegoA (TDv1)
+# Monsters & Canons (TDv1)
 
 Tower defense 2D en **Godot 4.7** con **GDScript**, hecho con **spec primero**. Lucas escribe en español (rioplatense): **todo lo que se le dice y se escribe en los documentos va en español**, con explicaciones claras y detalladas. Nombres de código, archivos y escenas, en inglés.
 
@@ -11,7 +11,7 @@ godot --headless --import                                              # antes d
 godot --headless -s addons/gut/gut_cmdln.gd -gdir=res://tests -gexit   # todos los tests de GUT
 godot --headless -s addons/gut/gut_cmdln.gd -gtest=res://tests/test_x.gd -gexit   # uno solo
 godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- mix level=3  # el bot de balance (uso en el encabezado del archivo)
-godot --headless --path . --export-release "Windows Desktop" build/JuegoA.exe   # el único ejecutable de Windows (el modo de pruebas se activa en Opciones, D-077)
+godot --headless --path . --export-release "Windows Desktop" build/MonstersCanons.exe   # el único ejecutable de Windows (el modo de pruebas se activa en Opciones, D-077)
 ```
 
 - Un test que pasa pero imprime `SCRIPT ERROR` **es un fallo**: mirar la salida completa, no solo el resumen.
@@ -45,7 +45,7 @@ Viven en `.claude/rules/` y se cargan solas según el archivo que se edita. No s
 
 ## Dónde está cada cosa
 
-La **constitución** (`specs/00-constitucion.md`, principios P1 a P10) manda sobre todo lo demás. `README.md` explica el proyecto, `ONBOARDING.md` cómo instalarlo y probar cada hito, `CONTENIDO.md` qué datos se pueden agregar sin programar, `CHANGELOG.md` lo nuevo para quien juega. `specs/06-monsters-canons-3d.md` es el concepto de la segunda entrega en 3D (por ahora no se avanza con ella). **El plan vigente para cerrar la V1** es `specs/08-plan-cierre-v1.md`, que sale del lore de `specs/07-lore-y-cierre-v1.md`. Las decisiones que faltan están en `specs/09-decisiones-pendientes-v1.md`, y las fichas para delegar cada tarea, en `specs/tareas/` (empezar por su `README.md`).
+La **constitución** (`specs/00-constitucion.md`, principios P1 a P10) manda sobre todo lo demás. `README.md` explica el proyecto, `ONBOARDING.md` cómo instalarlo y probar cada hito, `CONTENIDO.md` qué datos se pueden agregar sin programar, `CHANGELOG.md` lo nuevo para quien juega. `specs/06-monsters-canons-3d.md` es el concepto de la segunda entrega en 3D (por ahora no se avanza con ella). **El plan vigente para cerrar la V1** es `specs/08-plan-cierre-v1.md`, que sale del lore de `specs/07-lore-y-cierre-v1.md`. Las decisiones que faltan están en `specs/09-decisiones-pendientes-v1.md`, y las fichas para delegar cada tarea, en `specs/tareas/` (empezar por su `README.md`). **El canon del universo** (planeta Cántaro, colonia Compañía Meridiana, Moradores, señales y tono) está en `specs/10-universo.md`: es una referencia, no una spec, y es canon desde que Lucas lo aprobó en G2 (2026-10-08). **Los textos del juego** (lugar, entrada y victoria de los 15 niveles, epílogo, créditos y los artículos de Lore) están en `specs/11-textos-lore.md`: son el único lugar donde se escriben y se corrigen, y las tareas los copian tal cual; hasta que Lucas diga que sí, son borrador y **no se cargan en el juego**. Su spec es M52 en `specs/01-spec.md`.
 
 ## Ramas Git
 Lucas, 2026-10-03: usar siempre el prefijo `feature/` para ramas nuevas; nunca `codex/`. La instrucción del usuario prevalece sobre el prefijo sugerido por la app.

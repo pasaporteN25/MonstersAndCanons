@@ -6,6 +6,8 @@ extends Node2D
 
 signal fired(projectile: Projectile)
 signal wear_changed(current: float, change: float)
+## RF-449: la Disruptora emitió un pulso de ese radio (en píxeles). Game lo dibuja.
+signal pulsed(radius_px: float)
 const WEAR_BALANCE: BalanceConfig = preload("res://data/balance.tres")
 const WEAR_ICON: Texture2D = preload("res://assets/ui/tower_wear.svg")
 const REPAIR_ICON: Texture2D = preload("res://assets/ui/tower_repair.svg")
@@ -35,6 +37,8 @@ var data: TowerData
 var level_index: int = 0
 ## Oro gastado en esta torre (construcción + mejoras). Sirve para vender (RF-72).
 var total_invested: int = 0
+## RF-418: recursos gastados al construirla (las mejoras no cuestan recursos). Sirve para vender.
+var resources_invested: int = 0
 var targeting: TargetMode = TargetMode.FIRST
 ## RF-293: casilla de arriba a la izquierda de la torre (la única, si ocupa una sola casilla).
 var origin_cell: Vector2i = Vector2i.ZERO
@@ -60,9 +64,11 @@ var _recovery_left: float = 0.0
 
 
 ## Se llama ANTES de agregar la torre al árbol.
-func setup(tower_data: TowerData) -> void:
+## `alt` = se pagó con la segunda forma de pago (RF-419).
+func setup(tower_data: TowerData, alt: bool = false) -> void:
 	data = tower_data
-	total_invested = tower_data.levels[0].cost
+	total_invested = tower_data.build_gold(alt)
+	resources_invested = tower_data.build_resources(alt)
 
 
 func _ready() -> void:
@@ -206,7 +212,9 @@ func _physics_process(delta: float) -> void:
 	if data.support_only:
 		_animate(delta)
 		return
-	if _cooldown <= 0.0 and stats().burst_count > 0:
+	if _cooldown <= 0.0 and is_pulse_tower():
+		_fire_pulse()  # RF-440: no dispara proyectiles ni elige objetivo
+	elif _cooldown <= 0.0 and stats().burst_count > 0:
 		# RF-162: ráfaga en círculo, si hay alguien en alcance (no apunta a nadie en particular).
 		if find_target() != null:
 			_fire_burst()
@@ -223,6 +231,53 @@ func _physics_process(delta: float) -> void:
 	_animate(delta)
 
 
+## RF-439: una torre de pulso no dispara: apaga el aura de los enemigos con aura a su alrededor.
+func is_pulse_tower() -> bool:
+	return stats().suppress_seconds > 0.0
+
+
+## RF-440, RF-441, RF-442: pulsa solo si hay al menos un emisor de aura en el radio (y si no, no gasta la espera).
+## Daña a todos los alcanzados menos al Espejo y suprime a los que tienen aura. Sin estados ni combos.
+func _fire_pulse() -> void:
+	var reached: Array[Enemy] = []
+	var has_emitter: bool = false
+	for node: Node in get_tree().get_nodes_in_group(Enemy.GROUP):
+		var enemy := node as Enemy
+		if enemy == null or not enemy.is_active() or enemy.is_pulse_immune():
+			continue
+		if global_position.distance_to(enemy.global_position) > range_px():
+			continue
+		reached.append(enemy)
+		if enemy.has_aura():
+			has_emitter = true
+	if not has_emitter:
+		return
+	# Primero se junta la lista y después se aplica: un golpe que mata libera el nodo.
+	var damage: int = stats().damage
+	var seconds: float = stats().suppress_seconds
+	for enemy: Enemy in reached:
+		if not is_instance_valid(enemy):
+			continue
+		if enemy.has_aura():
+			enemy.suppress(seconds)
+		enemy.take_hit(damage)
+	_cooldown = 1.0 / effective_fire_rate()
+	_flash_left = FLASH_DURATION
+	pulsed.emit(range_px())
+
+
+## RF-449: ¿hay algún emisor de aura en el radio? Sirve para encender el disco emisor.
+func has_emitter_in_range() -> bool:
+	if not is_inside_tree():
+		return false
+	for node: Node in get_tree().get_nodes_in_group(Enemy.GROUP):
+		var enemy := node as Enemy
+		if enemy != null and enemy.is_active() and enemy.has_aura() and not enemy.is_pulse_immune() \
+				and global_position.distance_to(enemy.global_position) <= range_px():
+			return true
+	return false
+
+
 ## RF-161: los `count` mejores objetivos en alcance, del mejor al peor según el modo de apuntado.
 func find_targets(count: int) -> Array[Enemy]:
 	var candidates: Array[Enemy] = []
@@ -231,10 +286,8 @@ func find_targets(count: int) -> Array[Enemy]:
 		if best != null:
 			candidates.append(best)
 		return candidates
-	for node: Node in get_tree().get_nodes_in_group(Enemy.GROUP):
-		var enemy := node as Enemy
-		if can_target(enemy):
-			candidates.append(enemy)
+	for enemy: Enemy in _enemies_in_reach():
+		candidates.append(enemy)
 	candidates.sort_custom(_is_better_target)
 	return candidates.slice(0, count)
 
@@ -243,13 +296,27 @@ func find_targets(count: int) -> Array[Enemy]:
 ## Se mide la distancia a cada enemigo (D-014) en vez de usar áreas de colisión.
 func find_target() -> Enemy:
 	var best: Enemy = null
-	for node: Node in get_tree().get_nodes_in_group(Enemy.GROUP):
-		var enemy := node as Enemy
-		if not can_target(enemy):
-			continue
+	for enemy: Enemy in _enemies_in_reach():
 		if best == null or _is_better_target(enemy, best):
 			best = enemy
 	return best
+
+
+## Los mismos enemigos que aceptaría `can_target`, pero sin recalcular el alcance y la posición de la torre por
+## cada uno (T236: con 60 torres y 40 enemigos esa búsqueda, repetida en cada tick, era lo que más costaba).
+func _enemies_in_reach() -> Array[Enemy]:
+	var found: Array[Enemy] = []
+	var origin: Vector2 = global_position
+	var reach: float = range_px()
+	var reach_squared: float = reach * reach
+	var hits_air: bool = data.can_hit_air
+	for node: Node in get_tree().get_nodes_in_group(Enemy.GROUP):
+		var enemy := node as Enemy
+		if not enemy.is_active() or (enemy.data.is_flying and not hits_air):
+			continue
+		if origin.distance_squared_to(enemy.global_position) <= reach_squared:
+			found.append(enemy)
+	return found
 
 
 ## true si `a` es mejor objetivo que `b` según el modo actual.
@@ -312,13 +379,31 @@ func _fire_burst() -> void:
 ## RF-120 y RF-121: el cañón sigue al objetivo; el retroceso y el destello se apagan solos.
 func _animate(delta: float) -> void:
 	_upgrade_time += delta
+	var aim_before: float = aim_angle
+	var recoil_before: float = _recoil
+	var flash_before: float = _flash_left
 	if _target != null:
 		var desired: float = (_target.global_position - global_position).angle()
 		aim_angle = lerp_angle(aim_angle, desired, minf(1.0, AIM_SPEED * delta))
 	_recoil = move_toward(_recoil, 0.0, delta * 8.0)
 	_flash_left = maxf(0.0, _flash_left - delta)
 	_sync_upgrade_glow()
-	queue_redraw()
+	# T236: una torre quieta no se vuelve a dibujar en cada tick (con 60 torres era lo que más costaba). Se redibuja
+	# si cambió algo de lo que `_draw` usa y se mueve solo: la puntería, el retroceso, el destello, o si está aturdida o
+	# recuperándose. El resto (nivel, desgaste, reparación) ya pide su propio `queue_redraw`.
+	if _aim_changed_visibly(aim_before) or _recoil != recoil_before or _flash_left != flash_before \
+			or is_stunned() or _recovery_left > 0.0:
+		queue_redraw()
+
+
+## ¿Cambió la puntería de forma que se vea? Con la torreta de vistas (atlas) solo importa el cambio de dirección
+## entre las del dibujo; sin ella la torreta gira de verdad y cualquier cambio se ve.
+func _aim_changed_visibly(before: float) -> bool:
+	if aim_angle == before:
+		return false
+	if current_turret_atlas() == null:
+		return true
+	return TowerVisual.direction_index(aim_angle) != TowerVisual.direction_index(before)
 
 
 ## RF-295: lado de la torre en casillas (1 = la de siempre); lo que se dibuja se escala con él.

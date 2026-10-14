@@ -9,8 +9,12 @@ extends RefCounted
 
 const TOWERS_DIR: String = "res://data/towers/"
 const ARTICLES_DIR: String = "res://data/wiki/"
+## M52 (RF-469): los artículos de Lore viven en una subcarpeta que la Guía no lee.
+const LORE_DIR: String = "res://data/wiki/lore/"
 const ARTICLE_VERSION: int = 1
 const ARTICLE_KEYS: PackedStringArray = ["version", "titulo", "subtitulo", "orden", "bloques"]
+## RF-469: los artículos de Lore suman la clave obligatoria "desbloqueo" (el nivel que, al ganarse, los abre).
+const LORE_KEYS: PackedStringArray = ["version", "titulo", "subtitulo", "orden", "bloques", "desbloqueo"]
 const DEFAULT_ORDER: int = 100
 const LOCKED_TITLE: String = "???"
 const LOCKED_TEXT: String = "Todavía no te cruzaste con este enemigo. Aparece acá cuando lo enfrentes en una partida."
@@ -19,12 +23,14 @@ const LOCKED_TEXT: String = "Todavía no te cruzaste con este enemigo. Aparece a
 ## Las categorías con sus entradas. Una categoría sin entradas no se incluye (RF-232).
 ## `campaign` son los niveles de la campaña (para "dónde aparece"); se pasa de afuera para probarlo
 ## con una campaña de mentira. `is_seen` es una función (id del enemigo → bool) que dice si el jugador
-## ya lo vio (bestiario, RF-238); sin función, todo está abierto.
-static func categories(campaign: Array[LevelData] = [], is_seen: Callable = Callable()) -> Array[WikiCategory]:
+## ya lo vio (bestiario, RF-238); sin función, todo está abierto. `is_completed` es una función (id del nivel
+## → bool) que dice si el jugador ganó ese nivel (Lore, RF-470); igual, sin función todo está abierto.
+static func categories(campaign: Array[LevelData] = [], is_seen: Callable = Callable(),
+		is_completed: Callable = Callable()) -> Array[WikiCategory]:
 	var result: Array[WikiCategory] = []
 	for provider: Dictionary in _providers():
 		var build: Callable = provider["build"]
-		var entries: Array[WikiEntry] = build.call(campaign, is_seen)
+		var entries: Array[WikiEntry] = build.call(campaign, is_seen, is_completed)
 		if not entries.is_empty():
 			result.append(WikiCategory.new(provider["id"], provider["title"], entries))
 	return result
@@ -34,13 +40,15 @@ static func _providers() -> Array[Dictionary]:
 	return [
 		{"id": &"enemigos", "title": "Enemigos", "build": _enemy_entries},
 		{"id": &"torres", "title": "Torres", "build": _tower_entries},
+		{"id": &"colecciones", "title": "Colecciones", "build": _collection_entries},
 		{"id": &"guia", "title": "Guía", "build": _article_entries},
+		{"id": &"lore", "title": "Lore", "build": _lore_entries},  # RF-469
 	]
 
 
 # --- Enemigos ---
 
-static func _enemy_entries(campaign: Array[LevelData], is_seen: Callable) -> Array[WikiEntry]:
+static func _enemy_entries(campaign: Array[LevelData], is_seen: Callable, _is_completed: Callable) -> Array[WikiEntry]:
 	var enemies: Array[EnemyData] = []
 	for resource: Resource in _load_all(LevelFile.ENEMIES_DIR):
 		if resource is EnemyData:
@@ -71,7 +79,9 @@ static func locked_enemy_entry(enemy: EnemyData) -> WikiEntry:
 
 
 ## La entrada de un enemigo. `all_enemies` sirve para saber quién lo suelta al morir.
-static func enemy_entry(enemy: EnemyData, all_enemies: Array[EnemyData], campaign: Array[LevelData]) -> WikiEntry:
+## `towers` = qué torres cuentan para la "Contramedida" (RF-450); si no se pasa, todas las de `data/towers/`.
+static func enemy_entry(enemy: EnemyData, all_enemies: Array[EnemyData], campaign: Array[LevelData],
+		towers: Array[TowerData] = []) -> WikiEntry:
 	var entry := WikiEntry.new()
 	entry.id = enemy.id
 	entry.title = enemy.display_name
@@ -110,6 +120,9 @@ static func enemy_entry(enemy: EnemyData, all_enemies: Array[EnemyData], campaig
 			facts.append(["Aura de armadura", "+%d de armadura a los enemigos %s" % [enemy.aura_armor_bonus, reach]])
 		if enemy.aura_heal_percent_per_second > 0.0:
 			facts.append(["Aura de cura", "cura %s %% de la vida por segundo a los enemigos %s" % [_number(enemy.aura_heal_percent_per_second), reach]])
+	var counters: Array[String] = TowerText.suppressors_of(enemy, towers if not towers.is_empty() else _all_towers())
+	if not counters.is_empty():  # RF-450: "Contramedida", leída de los datos de las torres
+		facts.append(["Contramedida", "%s (le apaga el aura unos segundos)" % TowerText.join_names(counters)])
 	entry.add_facts(facts)
 
 	entry.add_heading("Dónde aparece")
@@ -149,7 +162,7 @@ static func _levels_with(enemy: EnemyData, campaign: Array[LevelData]) -> Packed
 
 # --- Torres ---
 
-static func _tower_entries(_campaign: Array[LevelData], _is_seen: Callable) -> Array[WikiEntry]:
+static func _tower_entries(_campaign: Array[LevelData], _is_seen: Callable, _is_completed: Callable) -> Array[WikiEntry]:
 	var towers: Array[TowerData] = _all_towers()
 	# De la más barata a la más cara (RF-234).
 	towers.sort_custom(func(a: TowerData, b: TowerData) -> bool:
@@ -160,6 +173,15 @@ static func _tower_entries(_campaign: Array[LevelData], _is_seen: Callable) -> A
 	for tower: TowerData in towers:
 		entries.append(tower_entry(tower, towers))
 	return entries
+
+
+## Todos los enemigos de `data/enemies/`.
+static func _all_enemies() -> Array[EnemyData]:
+	var enemies: Array[EnemyData] = []
+	for resource: Resource in _load_all(LevelFile.ENEMIES_DIR):
+		if resource is EnemyData:
+			enemies.append(resource)
+	return enemies
 
 
 ## Todas las torres de `data/towers/` (las que tienen niveles).
@@ -186,9 +208,13 @@ static func tower_entry(tower: TowerData, towers: Array[TowerData] = []) -> Wiki
 		entry.add_text(tower.description)
 	var facts: Array = [["Función", "Apoyo de cadencia; no dispara"]] if tower.support_only else [["Golpea voladores", "sí" if tower.can_hit_air else "no"]]
 	if tower.required_collection != &"":
-		facts.append(["Requisito", "%d avances distintos y permiso del nivel" % CollectibleRun.required(tower.required_collection)])
+		facts.append(["Requisito", "%d %s distintos y permiso del nivel" % [CollectionDefinitions.required(tower.required_collection), "avances" if CollectionDefinitions.origin(tower.required_collection) == CollectionDefinitions.ORIGIN_CARRIER else "piezas"]])
+	if first.suppress_seconds > 0.0:  # RF-444, RF-450
+		facts.append(["Pulso", TowerText.pulse_line(first, TowerText.emitter_names(_all_enemies()))])
+		facts.append(["Límites", "No alcanza al Espejo y no apaga otras habilidades."])
 	if tower.footprint > 1:  # RF-298
 		facts.append(["Tamaño", "%d×%d casillas" % [tower.footprint, tower.footprint]])
+	facts.append_array(TowerText.cost_facts(tower))  # RF-437
 	entry.add_facts(facts)
 	entry.add_heading("Niveles")
 	var rows: Array = [["Nivel", "Oro", "Daño", "Cadencia", "Daño/s", "Alcance"]]
@@ -220,42 +246,115 @@ static func tower_entry(tower: TowerData, towers: Array[TowerData] = []) -> Wiki
 	return entry
 
 
+# --- Colecciones (RF-431) ---
+
+static func _collection_entries(_campaign: Array[LevelData], _is_seen: Callable, _is_completed: Callable) -> Array[WikiEntry]:
+	var entries: Array[WikiEntry] = []
+	# SaveManager es un autoload: se lo busca por el árbol para que `tools/` (que se compila antes que los
+	# autoloads) pueda cargar este script. Sin autoload (herramientas), el progreso es 0.
+	for id: StringName in CollectionDefinitions.ids():
+		entries.append(collection_entry(id, _collected_count(id), _all_towers()))
+	return entries
+
+
+## Cuántas piezas juntó el jugador. Se busca el autoload por nombre (no se lo nombra en el código) porque los
+## scripts de `tools/` se compilan antes que los autoloads y esta clase los arrastra (gdscript.md).
+static func _collected_count(id: StringName) -> int:
+	var tree := Engine.get_main_loop() as SceneTree
+	var save: Node = tree.root.get_node_or_null("SaveManager") if tree != null else null
+	return 0 if save == null else (save.call("collected_sources", id) as PackedStringArray).size()
+
+
+## RF-431: una colección con su progreso y qué torre desbloquea. `collected` se pasa de afuera para probarla.
+static func collection_entry(id: StringName, collected: int, towers: Array[TowerData]) -> WikiEntry:
+	var entry := WikiEntry.new()
+	entry.id = id
+	entry.title = CollectionDefinitions.name_of(id)
+	var icon_path: String = CollectionDefinitions.icon_of(id)
+	if ResourceLoader.exists(icon_path):
+		entry.icon.append(load(icon_path) as Texture2D)
+	var from_finding: bool = CollectionDefinitions.origin(id) == CollectionDefinitions.ORIGIN_FINDING
+	entry.subtitle = "Piezas en ruinas" if from_finding else "Avances de enemigos portadores"
+	var unlocks := PackedStringArray()
+	for tower: TowerData in towers:
+		if tower.required_collection == id:
+			unlocks.append(tower.display_name)
+	entry.add_text("Se completa con %d piezas distintas, una por nivel de origen. Se guardan al terminar la partida." % CollectionDefinitions.required(id))
+	entry.add_facts([
+		["Progreso", "%d/%d" % [collected, CollectionDefinitions.required(id)]],
+		["Desbloquea", ", ".join(unlocks) if not unlocks.is_empty() else "todavía ninguna torre"],
+	])
+	return entry
+
+
 # --- Guía (artículos en data/wiki/*.json) ---
 
-static func _article_entries(_campaign: Array[LevelData], _is_seen: Callable) -> Array[WikiEntry]:
+static func _article_entries(_campaign: Array[LevelData], _is_seen: Callable, _is_completed: Callable) -> Array[WikiEntry]:
 	return articles(ARTICLES_DIR)["entries"]
 
 
+# --- Lore (RF-469, RF-470; artículos en data/wiki/lore/*.json) ---
+
+## Los artículos de Lore, en su orden. Los que todavía no se abrieron (el nivel de su "desbloqueo" no figura
+## ganado) se ven cerrados: «???» y el aviso «Se abre al ganar el nivel N.», sin título ni texto del artículo.
+static func _lore_entries(_campaign: Array[LevelData], _is_seen: Callable, is_completed: Callable) -> Array[WikiEntry]:
+	var campaign_ids: Array = Array(LevelFile.campaign_ids())
+	var loaded: Dictionary = articles(LORE_DIR, true, campaign_ids)
+	var unlocks: Dictionary = loaded["unlocks"]
+	var entries: Array[WikiEntry] = []
+	for entry: WikiEntry in loaded["entries"]:
+		if LoreUnlock.is_open(unlocks[entry.id], is_completed):
+			entries.append(entry)
+		else:
+			entries.append(locked_lore_entry(entry.id, unlocks[entry.id], campaign_ids))
+	return entries
+
+
+## La entrada cerrada de un artículo de Lore (RF-470): nada de su título ni su texto, solo el número del nivel.
+static func locked_lore_entry(id: StringName, unlock_level: StringName, campaign_ids: Array) -> WikiEntry:
+	var entry := WikiEntry.new()
+	entry.id = id
+	entry.title = LOCKED_TITLE
+	entry.locked = true
+	entry.add_text(LoreUnlock.locked_text(unlock_level, campaign_ids))
+	return entry
+
+
 ## Lee todos los artículos de una carpeta. Devuelve {"entries": Array[WikiEntry] (ordenadas),
-## "errors": PackedStringArray}. Un artículo roto se salta y deja su motivo en `errors` (RF-236):
-## el juego lo ignora, pero los tests exigen que la lista esté vacía con los artículos oficiales.
-static func articles(dir: String) -> Dictionary:
+## "errors": PackedStringArray, "unlocks": {id → nivel que lo abre}}. Un artículo roto se salta y deja su
+## motivo en `errors` (RF-236): el juego lo ignora, pero los tests exigen que la lista esté vacía con los
+## artículos oficiales. Con `lore` (RF-469) cada artículo trae "desbloqueo", que tiene que ser un nivel de
+## `campaign_ids`.
+static func articles(dir: String, lore: bool = false, campaign_ids: Array = []) -> Dictionary:
 	var entries: Array[WikiEntry] = []
 	var errors: PackedStringArray = []
+	var unlocks: Dictionary = {}
 	if not DirAccess.dir_exists_absolute(dir):
-		return {"entries": entries, "errors": errors}
+		return {"entries": entries, "errors": errors, "unlocks": unlocks}
 	var files: PackedStringArray = DirAccess.get_files_at(dir)
 	files.sort()
 	var orders: Dictionary = {}
 	for file: String in files:
 		if not file.ends_with(".json"):
 			continue
-		var parsed: Dictionary = parse_article(FileAccess.get_file_as_string(dir.path_join(file)), StringName(file.get_basename()))
+		var parsed: Dictionary = parse_article(FileAccess.get_file_as_string(dir.path_join(file)), StringName(file.get_basename()), lore, campaign_ids)
 		for error: String in parsed["errors"]:
 			errors.append("%s: %s" % [file, error])
 		if parsed["entry"] != null:
 			var entry: WikiEntry = parsed["entry"]
 			entries.append(entry)
 			orders[entry.id] = parsed["order"]
+			unlocks[entry.id] = parsed["unlock"]
 	entries.sort_custom(func(a: WikiEntry, b: WikiEntry) -> bool:
 		if orders[a.id] != orders[b.id]:
 			return orders[a.id] < orders[b.id]
 		return String(a.id) < String(b.id))
-	return {"entries": entries, "errors": errors}
+	return {"entries": entries, "errors": errors, "unlocks": unlocks}
 
 
-## Lee el texto de un artículo. Devuelve {"entry": WikiEntry o null, "order": int, "errors": PackedStringArray}.
-static func parse_article(text: String, id: StringName) -> Dictionary:
+## Lee el texto de un artículo. Devuelve {"entry": WikiEntry o null, "order": int, "unlock": StringName,
+## "errors": PackedStringArray}. `lore`: es un artículo de Lore y exige "desbloqueo" (RF-469).
+static func parse_article(text: String, id: StringName, lore: bool = false, campaign_ids: Array = []) -> Dictionary:
 	var errors: PackedStringArray = []
 	var json := JSON.new()  # parse() y no parse_string(): un texto roto no debe imprimir errores del motor
 	if json.parse(text) != OK:
@@ -263,9 +362,19 @@ static func parse_article(text: String, id: StringName) -> Dictionary:
 	if not json.data is Dictionary:
 		return _article_failed(["El archivo tiene que empezar con { y terminar con }."])
 	var data: Dictionary = json.data
+	var known_keys: PackedStringArray = LORE_KEYS if lore else ARTICLE_KEYS
 	for key: Variant in data.keys():
-		if not ARTICLE_KEYS.has(str(key)):
-			errors.append("La clave \"%s\" no existe (las válidas: %s)." % [key, ", ".join(ARTICLE_KEYS)])
+		if not known_keys.has(str(key)):
+			errors.append("La clave \"%s\" no existe (las válidas: %s)." % [key, ", ".join(known_keys)])
+	var unlock: StringName = &""
+	if lore:
+		var raw_unlock: Variant = data.get("desbloqueo")
+		if not LoreUnlock.is_level_id(raw_unlock):
+			errors.append("Falta \"desbloqueo\": el id del nivel que abre el artículo, como \"level_08\".")
+		elif not campaign_ids.has(raw_unlock) and not campaign_ids.has(StringName(raw_unlock)):
+			errors.append("\"desbloqueo\": el nivel \"%s\" no figura en la campaña." % raw_unlock)
+		else:
+			unlock = StringName(raw_unlock)
 	if not data.has("version") or not _is_whole(data["version"]) or int(data["version"]) != ARTICLE_VERSION:
 		errors.append("Falta \"version\": %d." % ARTICLE_VERSION)
 	var title: String = str(data.get("titulo", "")).strip_edges() if data.get("titulo") is String else ""
@@ -299,7 +408,7 @@ static func parse_article(text: String, id: StringName) -> Dictionary:
 	entry.title = title
 	entry.subtitle = subtitle
 	entry.blocks = blocks
-	return {"entry": entry, "order": order, "errors": errors}
+	return {"entry": entry, "order": order, "unlock": unlock, "errors": errors}
 
 
 static func _read_block(raw: Variant, where: String, errors: PackedStringArray) -> Variant:
@@ -348,7 +457,7 @@ static func _cell_text(value: Variant) -> String:
 
 
 static func _article_failed(errors: PackedStringArray) -> Dictionary:
-	return {"entry": null, "order": DEFAULT_ORDER, "errors": errors}
+	return {"entry": null, "order": DEFAULT_ORDER, "unlock": &"", "errors": errors}
 
 
 ## Un número entero (JSON lo lee como decimal: 3 llega como 3.0).

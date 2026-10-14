@@ -1,0 +1,306 @@
+{
+  "tarea": "T249",
+  "estado": "PROVISIONAL; pendiente de aprobación artística de Lucas",
+  "rama": "feature/t249-mejoras-assets",
+  "base_commit": "ebcbf8a",
+  "fecha": "2026-10-09",
+  "motor": "Godot 4.7.2; OpenGL NVIDIA GTX 1660 SUPER",
+  "capturas": {
+    "ventana": [
+      1777,
+      1000
+    ],
+    "niveles": [
+      1,
+      6,
+      7,
+      8,
+      10
+    ],
+    "partida_humana": false,
+    "comparacion": "before/ y after/; capturas del viewport de escenas reales en ventanas GPU",
+    "galeria": "muestras rotuladas sobre terreno real; no equivalen a integración en los objetos de campaña"
+  },
+  "formatos": {
+    "mapa": "SVG 64×64",
+    "marca_pieza": "SVG 32×32, conservado",
+    "reserva": "SVG 8×8, conservado",
+    "torre": "PNG RGBA 128×128; atlas 512×256, cuadros 128×128; ocho vistas estáticas repetidas",
+    "hojas": [
+      34,
+      64,
+      112,
+      220
+    ]
+  },
+  "archivos": [
+    {
+      "posicion_hoja": 1,
+      "archivo": "assets/sprites/map/roca_marcada.svg",
+      "modificado": true,
+      "sha256_antes": "146bbcf91f472bd25173aaf04ed9c2780d6e46c391b2546b85d3026ea79d4489",
+      "sha256_despues": "73f2547862adb6f2d5f24460f11e3ae5246387dc031062603287ea4cf96f577e"
+    },
+    {
+      "posicion_hoja": 2,
+      "archivo": "assets/sprites/map/sendero.svg",
+      "modificado": true,
+      "sha256_antes": "dc02dd8110f069db4be2b34b258db9588b1c648d702e58bc1d6a083d981b4978",
+      "sha256_despues": "bfef2fa1cd4bd7c5c2186d5c2af874386ee138bda94dcc5d0da6dab5a84bc9a4"
+    },
+    {
+      "posicion_hoja": 3,
+      "archivo": "assets/sprites/map/herramienta.svg",
+      "modificado": true,
+      "sha256_antes": "f1437b1ca59db7040cc2231e7229170605b80e3c7b41dc085fa9aaa8142eea98",
+      "sha256_despues": "998f4e3d5351d07f4531a7d1a275d82111e6cdb7c39d3f54adb4dc1a0f74e580"
+    },
+    {
+      "posicion_hoja": 4,
+      "archivo": "assets/sprites/map/poste_cintas.svg",
+      "modificado": true,
+      "sha256_antes": "bdbf70b3803157f86283b191abd50980834d66d64c3a53425ff74043a222a0d5",
+      "sha256_despues": "326660ba7fe239667536d647aaf32ec00b361bfb340e6ee9a32f674591eb06e4"
+    },
+    {
+      "posicion_hoja": 5,
+      "archivo": "assets/sprites/map/simbolo_ruina.svg",
+      "modificado": true,
+      "sha256_antes": "6427c46bd4d7e228ec97ef285b5a506b0e4f561fc754b922a20b91313d918b33",
+      "sha256_despues": "a5b21a59007c209b271678b0ded103fca0db43b097f55427579290c7d768dba6"
+    },
+    {
+      "posicion_hoja": 6,
+      "archivo": "assets/sprites/map/campamento_vacio.svg",
+      "modificado": true,
+      "sha256_antes": "d6188903886f41b996d1eafaf079a7348f229ecc06bd7519921c0a8f12b27e4d",
+      "sha256_despues": "51e8507dc36a87c161c8375dc2d80b4357dc8dc1cfbe1118d9490322378c9e40"
+    },
+    {
+      "posicion_hoja": 7,
+      "archivo": "assets/sprites/map/arbol_removible.svg",
+      "modificado": true,
+      "sha256_antes": "dd03184df313da12be393d7bf22e4c2b732aede26587991456317ae5f26bc0ff",
+      "sha256_despues": "264c396aca1310037bcd438e661b52326a2b62ea6a13852d671e33f23a15ce1e"
+    },
+    {
+      "posicion_hoja": 8,
+      "archivo": "assets/sprites/map/arbol_removible_trabajo.svg",
+      "modificado": true,
+      "sha256_antes": "ce7bab3930cc49a86774146afe9b12195c5c213b3c20550d47740d5dbef277ff",
+      "sha256_despues": "9851ccfe1e044e78046d848070f58bbc712de88d7284dfa09d363c78612826d4"
+    },
+    {
+      "posicion_hoja": 9,
+      "archivo": "assets/sprites/map/roca_removible.svg",
+      "modificado": true,
+      "sha256_antes": "6eb04b8abcbde3fd818c3b475925d91c8e70ef9174a732126ad10c9f26e1914b",
+      "sha256_despues": "c1d135f91db26dc563dd353dde237b1355153be40f17277e1451deca481f0e61"
+    },
+    {
+      "posicion_hoja": 10,
+      "archivo": "assets/sprites/map/roca_removible_trabajo.svg",
+      "modificado": true,
+      "sha256_antes": "1643d34a97fe9cf46b46c1840875904ac3e74673529ac265d05ea1049e1a1e4d",
+      "sha256_despues": "a93ff4e5e57bacdb06a25c7636d095dbe3545a013b6f5c7fcf10e0888d035866"
+    },
+    {
+      "posicion_hoja": 11,
+      "archivo": "assets/sprites/map/escombro.svg",
+      "modificado": true,
+      "sha256_antes": "0e5224bc85ba040e831c140194da72138d53111219c7bba23b28d9324439ed67",
+      "sha256_despues": "90f4f88b8522810e162d4107b435b82f96453c1c38783be822d1bec2acd4d25b"
+    },
+    {
+      "posicion_hoja": 12,
+      "archivo": "assets/sprites/map/escombro_trabajo.svg",
+      "modificado": true,
+      "sha256_antes": "f55fbf5800ff1c93a237bb57dec6aedb8d94da0d465e3cb390327267d6be8a1c",
+      "sha256_despues": "3a7913abe7b5cc4d050e34139ff17243b5bf894dd65ac217bd6947a28107741f"
+    },
+    {
+      "posicion_hoja": 13,
+      "archivo": "assets/sprites/map/despejado_pradera.svg",
+      "modificado": true,
+      "sha256_antes": "43662973986fdeafad9bfce466df75350329bd5942a8ac93b55777d00eedb9e2",
+      "sha256_despues": "83e150c90ad0b20db12787ef36235522fbb2374226ac982c2296d500f757b75e"
+    },
+    {
+      "posicion_hoja": 14,
+      "archivo": "assets/sprites/map/despejado_bosque.svg",
+      "modificado": true,
+      "sha256_antes": "21ef6102e9fdcb8b9d9ae15b007d79e4eb93ca43100cfb6e90173af74b39fb84",
+      "sha256_despues": "8976f95afd966c5adde3bd026aaf3dd9143ba7d7711819b8ddbb6dd59579679a"
+    },
+    {
+      "posicion_hoja": 15,
+      "archivo": "assets/sprites/map/despejado_ruinas.svg",
+      "modificado": true,
+      "sha256_antes": "543d407d79f92a6592abfb268ee85b7dcc2d4af3224f5f86669d8a045eddfb52",
+      "sha256_despues": "25d0c4305526c574c1f2289d175bbfaac3aa1e0343a606d0014dddf2f97f07bc"
+    },
+    {
+      "posicion_hoja": 16,
+      "archivo": "assets/sprites/map/despejado_desierto.svg",
+      "modificado": true,
+      "sha256_antes": "405bdafe847f8ff795f483b6eca98949a585da541a65598dfc1eb69612cd0176",
+      "sha256_despues": "285dce45710436e073fd4f81132bdbd55b2ee76d6cdc90458d9f6751188764cc"
+    },
+    {
+      "posicion_hoja": 17,
+      "archivo": "assets/sprites/map/marca_pieza.svg",
+      "modificado": false,
+      "sha256_antes": "de54e4f29084c60c27e36887c56aa86d8cec6069bdfa9e0124c2d75c54cb16e4",
+      "sha256_despues": "de54e4f29084c60c27e36887c56aa86d8cec6069bdfa9e0124c2d75c54cb16e4"
+    },
+    {
+      "posicion_hoja": 18,
+      "archivo": "assets/sprites/map/mina.svg",
+      "modificado": true,
+      "sha256_antes": "cb6e24a0da86c3cc916f9da3cf49b53ac494a44914af0f4f7e086187fea18f32",
+      "sha256_despues": "2bf2399bce84826f8420f7853999cadd83d55f18472b3429921d6cb9fe0eebfb"
+    },
+    {
+      "posicion_hoja": 19,
+      "archivo": "assets/sprites/map/mina_activa.svg",
+      "modificado": true,
+      "sha256_antes": "c64feff1b2144a910e1083a6ce74da9ec38314a9d0e0f07acc2e3100c6d01cda",
+      "sha256_despues": "10a232c3cc3864a38d0f0380aa270fa7c78918ddfe204150e49e3d819a628da7"
+    },
+    {
+      "posicion_hoja": 20,
+      "archivo": "assets/sprites/map/mina_agotada.svg",
+      "modificado": true,
+      "sha256_antes": "7ce1bd99440591ea516547fa871582e2e111ebbad74ec17d6a8aca55ac12c4b0",
+      "sha256_despues": "61117d45f773c1bb101d90deec5bb19484221b098a53aab0a5e0b53dff7693f2"
+    },
+    {
+      "posicion_hoja": 21,
+      "archivo": "assets/sprites/map/bosque_explotable.svg",
+      "modificado": true,
+      "sha256_antes": "f580251f46b34f84fa20cae91593192c76d39c55d70c76777c5e5e9dbf563048",
+      "sha256_despues": "cf27cd4041d1a35a9b3ded3792183452f5da5fedd6751b691741392af22e362d"
+    },
+    {
+      "posicion_hoja": 22,
+      "archivo": "assets/sprites/map/bosque_explotable_activo.svg",
+      "modificado": true,
+      "sha256_antes": "2872b0dd3bf34e5028020640d27a59e9aba31e3db3d3419c3290040436011fc6",
+      "sha256_despues": "0e4efd9ff7f86be32d37054df3b65520981a9a402c566bc5bd17687f68d997ca"
+    },
+    {
+      "posicion_hoja": 23,
+      "archivo": "assets/sprites/map/bosque_explotable_agotado.svg",
+      "modificado": true,
+      "sha256_antes": "cb5e046507208d5622ece3c58871937f62c7d6ca98e48b8559e61371302318fb",
+      "sha256_despues": "f042320d34e8e94b837d8930ed4fe0585867d2079f5b0808cc043a6c910844e4"
+    },
+    {
+      "posicion_hoja": 24,
+      "archivo": "assets/sprites/map/reserva_llena.svg",
+      "modificado": false,
+      "sha256_antes": "afa4edbaba277ba11b1d09136e59ed1d272ac0c02fa5e94a081cb6f5591b0962",
+      "sha256_despues": "afa4edbaba277ba11b1d09136e59ed1d272ac0c02fa5e94a081cb6f5591b0962"
+    },
+    {
+      "posicion_hoja": 25,
+      "archivo": "assets/sprites/map/reserva_vacia.svg",
+      "modificado": false,
+      "sha256_antes": "66cff8e21ab46746ccdaae4f5e11b1f4bd0c4397ec8b831f85b44bebb155121c",
+      "sha256_despues": "66cff8e21ab46746ccdaae4f5e11b1f4bd0c4397ec8b831f85b44bebb155121c"
+    },
+    {
+      "posicion_hoja": 26,
+      "archivo": "assets/sprites/ui/stat_resources.svg",
+      "modificado": true,
+      "sha256_antes": "afb819d223d827761984f0c582f6a3dd80b9cee8e968c0aec79ecc2b35feead0",
+      "sha256_despues": "50796a043490c9e2e23b9c17577e4a183095cf2c689ffbde743372f8d90c2094"
+    },
+    {
+      "posicion_hoja": 27,
+      "archivo": "assets/sprites/ui/coleccion_disruptor.svg",
+      "modificado": true,
+      "sha256_antes": "b6ef2e1768c9255159043549d640eed18724e0eb0e12087df60d46fc53fea2af",
+      "sha256_despues": "363badae54a34f47fb971229750c72e093dd8f5e3ae77d75ba91a0c39a85969a"
+    },
+    {
+      "posicion_hoja": 28,
+      "archivo": "assets/sprites/ui/demoledora.svg",
+      "modificado": true,
+      "sha256_antes": "87642ee60d3f963a6a4ac7d2a17ccacf82cb11b232d0035acbe77d62c52a7c32",
+      "sha256_despues": "cc93e9a7f82626c44b735a1f0750e26f28ef40e5b3e1fbd6677870e40582520c"
+    },
+    {
+      "posicion_hoja": 29,
+      "archivo": "assets/sprites/towers/rendered/turret_disruptor.png",
+      "modificado": true,
+      "sha256_antes": "bf25cb9b2b96127e6040df27e67187f80e7a9d46780e4e9d0c304b8311961285",
+      "sha256_despues": "db4285586ce704f0ad615fcadc8cddbc10b34a29d3c6b41254751345fcb3e6b0"
+    },
+    {
+      "posicion_hoja": 30,
+      "archivo": "assets/sprites/towers/rendered/disruptor_atlas.png",
+      "modificado": true,
+      "sha256_antes": "7c10e5f588747b41c3729e7b78e1aac414c085333c50ccd5adf2da57f72027d5",
+      "sha256_despues": "ba22d669f436569775f71b5b4d2aecd951d038966516632269b240cb54c69958"
+    },
+    {
+      "posicion_hoja": 31,
+      "archivo": "assets/sprites/towers/rendered/disruptor_level_2.png",
+      "modificado": true,
+      "sha256_antes": "382e959d5dd522e734732d66bfdc51cc2d7d66aa936e8bfc58358f3cb52f5659",
+      "sha256_despues": "2e2ac30420b1400c9ae9653646798e696389faba1fbfca3c0c7489cfc1ad2283"
+    },
+    {
+      "posicion_hoja": 32,
+      "archivo": "assets/sprites/towers/rendered/disruptor_level_3.png",
+      "modificado": true,
+      "sha256_antes": "7c10e5f588747b41c3729e7b78e1aac414c085333c50ccd5adf2da57f72027d5",
+      "sha256_despues": "983d3c7cea487c87d5091cd300dad5caa30a45acc109e3dde17cacfc25de148f"
+    },
+    {
+      "posicion_hoja": 33,
+      "archivo": "assets/sprites/towers/rendered/disruptor_pulse_ring.png",
+      "modificado": false,
+      "sha256_antes": "6930ee43708cc1545eac172bea202a968efc52c2e610deb7aa4ee1263c7d9790",
+      "sha256_despues": "6930ee43708cc1545eac172bea202a968efc52c2e610deb7aa4ee1263c7d9790"
+    },
+    {
+      "posicion_hoja": 34,
+      "archivo": "assets/sprites/towers/rendered/disruptor_suppression_icon.png",
+      "modificado": false,
+      "sha256_antes": "a5ec846a6ed418ae335b06a9f206d01d7042923476b581f3dfeb27d36b96fb49",
+      "sha256_despues": "a5ec846a6ed418ae335b06a9f206d01d7042923476b581f3dfeb27d36b96fb49"
+    },
+    {
+      "posicion_hoja": 35,
+      "archivo": "assets/sprites/towers/rendered/disruptor_suppression_arc_1.png",
+      "modificado": false,
+      "sha256_antes": "763173fb4380fed7c525b5af03281bc8d6a3d657415afc2c86d7474b6d4b75b9",
+      "sha256_despues": "763173fb4380fed7c525b5af03281bc8d6a3d657415afc2c86d7474b6d4b75b9"
+    },
+    {
+      "posicion_hoja": 36,
+      "archivo": "assets/sprites/towers/rendered/disruptor_suppression_arc_2.png",
+      "modificado": false,
+      "sha256_antes": "e9da4626b047c4e18e4404d3db3347e9c54b78ad878de2a2fa206e1286e9f088",
+      "sha256_despues": "e9da4626b047c4e18e4404d3db3347e9c54b78ad878de2a2fa206e1286e9f088"
+    },
+    {
+      "posicion_hoja": 37,
+      "archivo": "assets/sprites/towers/rendered/disruptor_suppression_arc_3.png",
+      "modificado": false,
+      "sha256_antes": "cd78e20e176a58e6e917f07d3240d870a1e875ec4868cbda8adef5fabdabe699",
+      "sha256_despues": "cd78e20e176a58e6e917f07d3240d870a1e875ec4868cbda8adef5fabdabe699"
+    }
+  ],
+  "pruebas": {
+    "base": "1263/1263; 11410 asserts; 96 scripts; 0 SCRIPT ERROR/Parse Error",
+    "final": "1263/1263; 11410 asserts; 96 scripts; 0 SCRIPT ERROR/Parse Error; solo ERROR esperado de no_existe"
+  },
+  "limites": [
+    "Integración de SVG T219/T220 y de íconos T221 pendiente de definición con coordinación.",
+    "Niveles 1 y 2 de la Disruptora muy similares.",
+    "Sin aprobación definitiva, exportación Windows, balance humano ni medición de rendimiento."
+  ]
+}

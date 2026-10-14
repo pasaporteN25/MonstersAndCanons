@@ -1,0 +1,18 @@
+<!-- Restos de campamento abandonado: fogón apagado, lona caída y estacas, sin personas; vista lateral; fondo transparente. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+<defs>
+ <linearGradient id="stone" x1="0" y1="0" x2=".25" y2="1"><stop stop-color="#e0d8c6"/><stop offset=".52" stop-color="#a99f8b"/><stop offset="1" stop-color="#625d53"/></linearGradient>
+ <linearGradient id="wood" x1="0" y1="0" x2=".25" y2="1"><stop stop-color="#c4955f"/><stop offset=".52" stop-color="#87603e"/><stop offset="1" stop-color="#4d392f"/></linearGradient>
+ <linearGradient id="bone" x1="0" y1="0" x2=".25" y2="1"><stop stop-color="#fff0ce"/><stop offset=".55" stop-color="#dfc69e"/><stop offset="1" stop-color="#ab8c69"/></linearGradient>
+ <linearGradient id="cloth" x1="0" y1="0" x2=".25" y2="1"><stop stop-color="#b77563"/><stop offset=".52" stop-color="#8c5148"/><stop offset="1" stop-color="#4b3838"/></linearGradient>
+ <linearGradient id="ruin" x1="0" y1="0" x2=".25" y2="1"><stop stop-color="#d2c6ad"/><stop offset=".52" stop-color="#9e9381"/><stop offset="1" stop-color="#61594e"/></linearGradient>
+</defs>
+<ellipse cx="32" cy="56" rx="25" ry="3.5" fill="#2b2233" opacity=".18"/>
+<path d="M11 46 19 28 30 34 45 39 53 48 41 50 29 42 18 50Z" fill="url(#cloth)" stroke="#2b2233" stroke-width="2" stroke-linejoin="round"/>
+<path d="M19 29 23 37 38 41" fill="none" stroke="#e2a28a" stroke-width="1.5" stroke-linecap="round"/>
+<path d="M18 50 22 35 29 42 26 49Z" fill="#493c38" stroke="#2b2233" stroke-width="1.5"/>
+<path d="M11 50 17 31M47 48 49 34" stroke="#2b2233" stroke-width="3" stroke-linecap="round"/>
+<ellipse cx="37" cy="53" rx="8" ry="4" fill="#4b4542" stroke="#2b2233" stroke-width="1.5"/>
+<path d="M29 52 33 49 39 49 44 52 41 55 34 56Z" fill="none" stroke="#aaa08b" stroke-width="3" stroke-linejoin="round"/>
+<path d="M34 52 39 54M34 54 40 51" stroke="#2b2233" stroke-width="2" stroke-linecap="round"/>
+</svg>

@@ -9,18 +9,15 @@ var spawned: int = 0
 var picked_wave: int = -1
 var confirmed: bool = false
 
+# Envoltorios: la lógica vive en CollectionDefinitions (RF-425); los tests de M37 y M38 no cambian.
 static func definitions() -> Dictionary:
-	var json := JSON.new()
-	if json.parse(FileAccess.get_file_as_string("res://data/progression.json")) != OK:
-		return {}
-	return json.data if json.data is Dictionary else {}
+	return CollectionDefinitions.all()
 
 static func eligible(collection_id: StringName, source_id: StringName) -> bool:
-	var definition: Dictionary = definitions().get(String(collection_id), {})
-	return (definition.get("sources", []) as Array).has(String(source_id))
+	return CollectionDefinitions.eligible(collection_id, source_id)
 
 static func required(collection_id: StringName) -> int:
-	return int((definitions().get(String(collection_id), {}) as Dictionary).get("required", 0))
+	return CollectionDefinitions.required(collection_id)
 
 func setup(collection_id: StringName, source_id: StringName, enemy_count: int, rng: RandomNumberGenerator) -> void:
 	collection = collection_id

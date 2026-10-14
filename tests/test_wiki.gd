@@ -173,7 +173,7 @@ func test_every_entry_has_a_title_a_drawing_and_something_to_read() -> void:
 			assert_false(entry.blocks.is_empty(), "%s sin contenido" % entry.id)
 			assert_false(ids.has(entry.id), "id repetido: %s" % entry.id)
 			ids[entry.id] = true
-			if category.id != &"guia":
+			if category.id != &"guia" and category.id != &"lore":  # la Guía y el Lore no llevan dibujo (RF-469)
 				assert_false(entry.icon.is_empty(), "%s sin dibujo" % entry.id)
 
 

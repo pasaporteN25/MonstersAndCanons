@@ -1,0 +1,13 @@
+{
+	"version": 1,
+	"demoledora": {"precio": 180, "costo_uso_porcentaje": 10, "costo_uso_minimo": 5, "tiempo_porcentaje": 80},
+	"removibles": {
+		"arbol": {"costo": 40, "tiempo": 4.0, "recursos": 1, "probabilidad": 50},
+		"roca": {"costo": 60, "tiempo": 6.0, "recursos": 1, "probabilidad": 50},
+		"escombro": {"costo": 90, "tiempo": 10.0, "recursos": 0, "probabilidad": 0, "recursos_si_recuperado": 1}
+	},
+	"extraccion": {
+		"mina": {"costo": 100, "produccion": 2, "reserva": 8},
+		"bosque_explotable": {"costo": 100, "produccion": 2, "reserva": 8}
+	}
+}

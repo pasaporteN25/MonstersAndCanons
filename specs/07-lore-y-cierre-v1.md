@@ -225,6 +225,8 @@ Primero revisar las reglas actuales de checkpoints, resultado y guardado; no sus
 
 Pendientes: duración, recarga, selección de objetivo, alcance, mejoras, efectos sobre otros enemigos y reglas de acumulación. No dar por aprobada la supresión de todas las habilidades enemigas.
 
+**Cerrado en T215 (2026-10-08):** las reglas están en `01-spec.md` M51 (RF-438 a RF-452), D-086 y D-087, con los números de Lucas (Q-33): pulso cada 4 s, radio 2,5, supresión 2,5 s, daño 5, 130 de oro + 2 recursos. Solo apaga auras (la supresión de otras habilidades sigue sin aprobarse). Quedan para revisar los puntos del final de M51.
+
 ### Lanzamisiles: candidato propuesto por Lucas
 
 Ataque que alcance enemigos dentro de un radio de 3 casillas de camino, con tiempo de carga o lanzamientos limitados por partida. Reemplaza al Aislador como candidato principal; no tiene todavía diseño cerrado.
@@ -354,6 +356,8 @@ Lucas propone slides con ilustraciones de aspecto dibujado a mano que cuenten la
 - Validación e iteración: https://www.gdcvault.com/play/1028982/Building-Sustainable-Game-Economies-The
 
 - **Plan de ejecución (T199, 2026-10-07):** [08-plan-cierre-v1.md](08-plan-cierre-v1.md), con el cuestionario [09-decisiones-pendientes-v1.md](09-decisiones-pendientes-v1.md) y las fichas de [`tareas/`](tareas/).
+- **Biblia del universo (T201, 2026-10-08):** [10-universo.md](10-universo.md), el canon que desarrolla este lore (aprobado por Lucas en G2 el 2026-10-08).
+- **Lore dentro del juego (T227, 2026-10-08):** la spec es M52 en [`01-spec.md`](01-spec.md) (RF-464 a RF-480) y los textos, en [11-textos-lore.md](11-textos-lore.md) (borrador a la espera del OK de Lucas).
 
 ## 15. Estado de esta incorporación
 

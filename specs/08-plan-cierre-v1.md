@@ -35,7 +35,7 @@ Fecha: 2026-10-07. Lo preparó Claude (Opus 5.5) a pedido de Lucas, a partir de 
   - Nivel 8: Guardián. Nivel 9: Curandero.
 - **Contenido hecho que la campaña no usa:**
   - **Chamán** (aturde torres) y **Espejo** (rebote), de M18, que no aparecen en ningún nivel.
-  - El **Mortero**, reservado para el nivel 10 (RF-300), que todavía no existe.
+  - El **Mortero**, reservado hoy para el nivel 10 (RF-300), que todavía no existe. Por decisión de Lucas (Q-21, 2026-10-08) pasa a debutar en el nivel 9.
 - **Torres:** 8 comunes y 2 reservadas (Mortero y Estandarte mecánico). El Mecánico pide la colección de 5 avances plateados de los niveles 1 a 5.
 
 ### 2.1 Piezas que ya existen y conviene extender (no rehacer)
@@ -52,7 +52,7 @@ Fecha: 2026-10-07. Lo preparó Claude (Opus 5.5) a pedido de Lucas, a partir de 
 ### 2.2 Tensiones que hay que resolver (están en el cuestionario 09)
 
 1. **§11 de la spec excluye "Historia, diálogos o cinemáticas".** La intro ilustrada, los textos por nivel y el epílogo del 07 necesitan una **enmienda explícita** de §11 (P4). → Q-01.
-2. **"Árbol y roca dan 1 recurso"** choca con **"los recursos tienen que tener un uso en el mapa donde aparecen"**. Propuesta: los removibles de los niveles 6 a 9 no dan recursos, y los recursos aparecen en el 10, junto con su primer uso. → Q-18.
+2. **"Árbol y roca dan 1 recurso"** choca con **"los recursos tienen que tener un uso en el mapa donde aparecen"**. Propuesta original: los recursos aparecen recién en el 10. **Resuelto por Lucas (2026-10-08):** los recursos caen al azar (con semilla) **desde el nivel 7**, donde el Francotirador se puede comprar también con 120 de oro + 1 recurso (nunca indispensable), y el Mortero debuta en el 9. → Q-18 y Q-21.
 3. **El documento 06 (§10.3) pedía hacer B-14, B-23, B-08 y B-09 antes de los niveles 10 a 15**, para no balancear dos veces. El foco nuevo es otro, así que la propuesta es pasarlos a después de la entrega. → Q-06.
 4. **El ejecutable y el paquete se llaman `JuegoA`**, y el repositorio es privado. La licencia GPL obliga a ofrecer el código fuente. → Q-04 y Q-05.
 5. **Nombres inconsistentes:** el Normal es "lobo de ceniza" en la guía §3 y "diablillo rojo" en M24. Para una franquicia hace falta un glosario canónico (T202).
@@ -69,7 +69,7 @@ Se arma sobre la V1. **No anticipa el 3D:**
    - Qué es **canon** y qué es **semilla** para entregas futuras (elegir bando, rebeldes).
    - La reusan M&C 3D y M&C 2 tal cual.
 2. **Glosario canónico** (T202): un nombre por especie, torre, lugar y facción, aplicado en datos, Wiki y documentos.
-3. **Lore dentro del juego** (T227 y T228): textos breves por nivel, una categoría Lore en la Wiki y el epílogo.
+3. **Lore dentro del juego** (T227 y T228): textos breves por nivel, una categoría Lore en la Wiki y el epílogo. La spec es M52 (`01-spec.md`) y los textos viven en [`11-textos-lore.md`](11-textos-lore.md).
 4. **Marca** (T237): "Monsters & Canons" en ventana, ejecutables y paquete, si Lucas lo aprueba.
 5. **Datos reutilizables:** los sistemas nuevos se definen por datos (leyenda, `modo.json` y `progression.json`), como ya pide P10, para llevarlos a otra entrega sin reescribirlos.
 
@@ -95,14 +95,14 @@ Las compuertas 🚦 son los puntos donde **se pide intervención de Lucas**. Un 
 
 ---
 
-## 5. Fichas de los 15 mapas · PROPUESTA DE CLAUDE (se aprueba en T200)
+## 5. Fichas de los 15 mapas · aprobadas como dirección por Lucas el 2026-10-08 (Q-34), con el reparto del bloque 2 ya incorporado
 
 Criterios:
 - No tocar el balance de los niveles 1 a 5.
 - Un sistema nuevo por mapa.
 - Primero se enseña la amenaza y después la herramienta.
 - Usar Chamán y Espejo, que ya están hechos, antes de inventar enemigos.
-- Mortero en el 10 (RF-300).
+- Mortero en el 9 (enmienda de RF-300, Q-21).
 - Los nombres de mapa actuales se conservan y se suma un **subtítulo de lugar** (lore).
 
 ### Bloque 1 · El oasis (1–5): asegurar la posición y sobrevivir
@@ -122,10 +122,10 @@ Tema `pradera`, con agua y flores de la leyenda donde ya hay casillas `X`. **No 
 | # | Mapa | Lugar | Tema | Sistema que enseña | Enemigos | Torres |
 |---|---|---|---|---|---|---|
 | 6 | Nido | El lindero | `bosque` | **Demolición directa** con oro: 2 o 3 árboles o rocas que abren buenas casillas en una curva. Sin recursos. | Los actuales (Troll, Araña, Ladrón y Embestidor). | 8 comunes y Mecánico. |
-| 7 | Cruce | El aserradero | `bosque` | **Demoledora**: 5 o 6 removibles, para que comprarla convenga. Sin recursos. | Los actuales. | Ídem. |
+| 7 | Cruce | El aserradero | `bosque` | **Demoledora**: 5 o 6 removibles, para que comprarla convenga. **Primer drop de recursos al azar** (con semilla) y **Francotirador con recurso** (150 de oro, o 120 + 1 recurso; nunca indispensable). Primer indicio decorativo del símbolo A. | Los actuales. | Ídem. |
 | 8 | Bastión | El bastión sobre ruinas | `ruinas` | **Primera ruina:** su escombro guarda la **pieza 1/3 de la Disruptora**. Las ruinas muestran **el símbolo A** (revelación). | Los actuales (debut del Guardián). | Ídem. |
-| 9 | Taller asediado | El taller | `ruinas` | Ruina con la **pieza 2/3**. | Los actuales (debut del Curandero). | Ídem. |
-| 10 | **Nuevo** | La mina vieja (primer puesto de abastecimiento) | `ruinas` → `desierto` | **Recursos y extracción:** una mina con reserva finita, removibles que dan 1 recurso y el **Mortero** (oro + recursos). Ruina con la **pieza 3/3**, que completa la colección de la Disruptora. | Mezcla del 6 al 9, con Guardián y Curandero juntos. **Sin debuts.** | 8 comunes, Mecánico y **Mortero**. |
+| 9 | Taller asediado | El taller | `ruinas` | Ruina con la **pieza 2/3**. **Debut del Mortero** (oro + recursos). | Los actuales (debut del Curandero). | 8 comunes, Mecánico y **Mortero**. |
+| 10 | **Nuevo** | La mina vieja (primer puesto de abastecimiento) | `ruinas` → `desierto` | **Extracción:** una mina o bosque explotable con reserva finita (100 de oro, 2 recursos por oleada, reserva de 8) y removibles que dan 1 recurso. Ruina con la **pieza 3/3**, que completa la colección de la Disruptora. | Mezcla del 6 al 9, con Guardián y Curandero juntos. **Sin debuts.** | 8 comunes, Mecánico y Mortero. |
 
 Los niveles 6 a 9 **cambian de balance** porque los removibles abren casillas. Se rebalancean con el bot (T223 y T224) y los juega Lucas (G4).
 
@@ -137,7 +137,7 @@ Los niveles 6 a 9 **cambian de balance** porque los removibles abren casillas. S
 | 12 | El cañadón | `desierto` | Combinar Disruptora con apoyo; auras y aturdimiento juntos. | **Espejo** (rebote). | Ídem. |
 | 13 | Paso alto | `nieve` | Ataques **coordinados**: grupos mixtos con escolta (Guardián + Curandero + Chamán) y dos entradas. | — | Ídem (y el Lanzamisiles, si Q-28 lo aprueba). |
 | 14 | Los poblados vacíos | `ruinas` | Todas las amenazas. Las señales culminan: las comunidades se retiraron. | — | Ídem. |
-| 15 | **La Central** | `pradera` (valle) | **Final:** defender la central de energía y la cadena de abastecimiento. Mapa grande (hasta 26 × 12). El líder es el Soberano con escolta coordinada (Q-32). Epílogo ambiguo. | — | Todas las disponibles. |
+| 15 | **La Central** | `pradera` (valle) | **Final:** defender la central de energía y la cadena de abastecimiento. Mapa grande (hasta 26 × 12). El líder es un **jefe supremo nuevo**, el **Coloso** (una masa de piedra que se parte en tres Pedazos; diseño de T243 con RF-481 a RF-484 y D-092, elegido por Lucas el 2026-10-09; arte en T244) con escolta coordinada (Q-32, cambiado por Lucas el 2026-10-08). Epílogo ambiguo. | — | Todas las disponibles. |
 
 Cada ficha detallada se completa en la tarea de cada nivel con lo que pide el 07 §3: posiciones, recursos, estrategia sin recursos, textos y transición.
 
@@ -198,15 +198,19 @@ Cada ficha detallada se completa en la tarea de cada nivel con lo que pide el 07
 | T | Tarea | Ejecutor | Depende de | Tamaño |
 |---|---|---|---|---|
 | [T222](tareas/T222-niveles-1-5-senales.md) | Niveles 1 a 5: señales y oasis, sin cambiar el juego | Sonnet bajo · *apto Qwen* | T200 (T218 para el arte final) | Chico |
-| [T223](tareas/T223-niveles-6-7.md) | Niveles 6 y 7: bosque, removibles y rebalance | Sonnet medio | T208, T204 | Mediano |
-| [T224](tareas/T224-niveles-8-9.md) | Niveles 8 y 9: ruinas, piezas 1 y 2, y rebalance | Sonnet medio | T211, T223 | Mediano |
-| [T225](tareas/T225-nivel-10.md) | Nivel 10: la mina vieja (prototipo completo del bloque 2) | Sonnet alto | T210, T211, T214, T224 | Mediano |
+| [T223](tareas/T223-niveles-6-7.md) | Niveles 6 y 7: bosque, removibles, primer drop de recursos y rebalance | Sonnet medio | T208, T209, T204 | Mediano |
+| [T224](tareas/T224-niveles-8-9.md) | Niveles 8 y 9: ruinas, piezas 1 y 2, debut del Mortero y rebalance | Sonnet medio | T209, T211, T223 | Mediano |
+| [T225](tareas/T225-nivel-10.md) | Nivel 10: la mina vieja (extracción y pieza 3/3; cierre del bloque 2) | Sonnet alto | T210, T211, T214, T224 | Mediano |
 | [T226](tareas/T226-prueba-bloque-2.md) | 🚦 G4 · Lucas juega del 6 al 10 y llena el informe | **Lucas** | T225 | 2–3 h |
+| T247 | 📜 🚦 Spec de la barra con pestañas (Cañones / Infraestructura) y de la flecha al menú (M53; sin ficha propia: se hizo desde el pedido de Lucas del 2026-10-08) | Sonnet alto + **Lucas** | T225 | Chico |
+| [T248](tareas/T248-barra-con-pestanas.md) | Barra con pestañas y flecha al menú: código | Sonnet medio | T247 🚦, T207, T208, T210 | Mediano |
 | [T227](tareas/T227-spec-lore-bloque-3.md) | 📜 Spec del lore en el juego (enmienda de §11), del bloque 3 y del final | Sonnet alto | T201, T226 | Mediano |
 | [T228](tareas/T228-textos-wiki-lore.md) | Textos por nivel, pantalla de entrada y victoria, y categoría Lore en la Wiki | Sonnet medio | T227 | Mediano |
 | [T229](tareas/T229-niveles-11-14.md) | Nivel 11 (y, con la misma ficha, 12, 13 y 14 como T230, T231 y T232) | Sonnet medio | T217, T227 | Mediano c/u |
 | [T233](tareas/T233-arte-final.md) | 🎨 Central de energía, abastecimiento e imagen del final | **Codex** | T227 | Mediano |
-| [T234](tareas/T234-nivel-15.md) | Nivel 15 y epílogo | Sonnet alto | T228, T232 (T233 para el arte final) | Mediano |
+| [T243](tareas/T243-spec-jefe-supremo.md) | 📜 🚦 Spec del jefe supremo del 15 (función, contramedidas, habilidad y textos) | Sonnet alto + **Lucas** | T227 | Chico |
+| [T244](tareas/T244-arte-jefe-supremo.md) | 🎨 Arte del jefe supremo | **Codex** | T243 | Mediano |
+| [T234](tareas/T234-nivel-15.md) | Nivel 15 y epílogo | Sonnet alto | T228, T232, T243 (T233 y T244 para el arte final) | Mediano |
 | [T235](tareas/T235-asedio-y-modos.md) | Asedio con 15 mapas y pulido de modos | Sonnet bajo · *apto Qwen* (solo datos) | T234 | Chico |
 
 ### Fase 7 · Candidato de entrega
@@ -225,7 +229,7 @@ Cada ficha detallada se completa en la tarea de cada nivel con lo que pide el 07
 | [T242](tareas/T242-intro-integracion.md) | Intro: reproducir, omitir y volver a ver | Sonnet medio | T241 | Chico |
 
 **Fuera del mínimo** (se anotan en §13 y van después de la entrega, salvo que Lucas diga otra cosa en el cuestionario):
-- Lanzamisiles (Q-28) y un líder nuevo (Q-32).
+- Lanzamisiles (Q-28). (El líder nuevo del 15 **sí entra** en la V1 por decisión de Lucas, Q-32: T243 y T244.)
 - Transiciones de bioma extra.
 - B-14, B-23, B-08, B-09, B-16, B-04, B-11, B-12, B-29 y B-30 (Q-06).
 
@@ -243,6 +247,7 @@ T200 (Lucas) ──┬─ T202 ─ T201 🚦G2 ───────────
                │          T205 ─ T219 / T220 / T221 🎨 (en paralelo, Codex)
 T226 ─ T227 ─ T228 ─ T229..T232 ─ T234 ─ T235 ─ T236 ─ T237 ─ T238 🚦G5 ─ T239
                                   T233 🎨 ──┘
+T227 ─ T243 🚦 ─ T244 🎨 ─ (T234)
 T238 ─ T240 🚦G6 ─ T241 🎨 ─ T242
 ```
 

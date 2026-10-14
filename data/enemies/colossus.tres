@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Resource" path="res://data/enemies/colossus_shard.tres" id="1_shard"]
+[ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="2_colos"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/rendered/colossus.png" id="3_colos"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/rendered/colossus_walk.png" id="4_colos"]
+
+[resource]
+script = ExtResource("2_colos")
+id = &"colossus"
+display_name = "Coloso"
+description = "Masa de piedra lenta y muy blindada: los golpes fuertes la rompen. Al caer se parte en tres pedazos rápidos. ¡Si llega, quita 12 vidas!"
+max_health = 600
+speed_tiles = 0.5
+armor = 5
+reward = 200
+lives_damage = 12
+slow_resistance = 0.5
+color = Color(0.38, 0.36, 0.33, 1)
+texture = ExtResource("3_colos")
+visual_scale = 1.8
+flip_when_walking_left = false
+size_tiles = 0.5
+death_spawn = ExtResource("1_shard")
+death_spawn_count = 3
+walk_atlas = ExtResource("4_colos")
+walk_stride_tiles = 1.1

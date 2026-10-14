@@ -11,8 +11,8 @@ const ENEMIES_DIR: String = "res://data/enemies/"
 const TOWERS_DIR: String = "res://data/towers/"
 const CAMPAIGN_PATH: String = "res://data/campaign.json"
 
-const LEVEL_KEYS: PackedStringArray = ["version", "nombre", "oro", "vidas", "aumento_vida", "tema", "leyenda", "torres_extra", "mapa", "oleadas"]
-const LEGEND_KEYS: PackedStringArray = ["dibujo", "construible"]
+const LEVEL_KEYS: PackedStringArray = ["version", "nombre", "oro", "vidas", "aumento_vida", "tema", "leyenda", "torres_extra", "torres", "demoledora", "textos", "mapa", "oleadas"]
+const LEGEND_KEYS: PackedStringArray = ["dibujo", "construible", "removible", "extraccion"]
 const GROUP_KEYS: PackedStringArray = ["enemigo", "cantidad", "cada", "desde", "entrada", "probabilidad"]
 const CAMPAIGN_KEYS: PackedStringArray = ["version", "niveles"]
 
@@ -27,8 +27,8 @@ const MAX_GOLD: int = 99999
 const MAX_LIVES: int = 999
 const MAX_HEALTH_SCALE: int = 300
 const MAX_NAME_LENGTH: int = 30
-## RF-262, RF-265: letras que puede declarar la leyenda de un nivel.
-const MAX_LEGEND: int = 10
+## RF-262, RF-265: letras que puede declarar la leyenda de un nivel (D-093: 12; eran 10 hasta el nivel 15).
+const MAX_LEGEND: int = 12
 
 
 ## Lee el archivo de un nivel. El id del nivel es el nombre del archivo (RF-200).
@@ -64,7 +64,18 @@ static func parse(text: String, id: StringName) -> Dictionary:
 
 	level.theme = _read_theme(data, errors)
 	level.legend = _read_legend(data, errors)
+	if data.has("demoledora"):
+		if not data["demoledora"] is bool:
+			errors.append("demoledora: tiene que ser true o false.")
+		else:
+			level.machine_enabled = data["demoledora"]
+	var texts: Dictionary = LevelTexts.parse(data.get("textos"), errors)  # RF-464
+	level.place_text = texts[LevelTexts.KEY_PLACE]
+	level.intro_text = texts[LevelTexts.KEY_INTRO]
+	level.win_text = texts[LevelTexts.KEY_WIN]
+	level.epilogue_text = texts[LevelTexts.KEY_EPILOGUE]
 	level.extra_towers = _read_extra_towers(data, errors)
+	level.towers = _read_towers(data, errors)
 
 	var grid: MapGrid = null
 	if not data.has("mapa"):
@@ -78,6 +89,8 @@ static func parse(text: String, id: StringName) -> Dictionary:
 			errors.append("mapa: " + problem)
 		if not grid.is_valid():
 			grid = null
+	if grid != null:
+		level.obstacles = _read_obstacles(level.map_rows, level.legend, errors)
 
 	if not data.has("oleadas"):
 		errors.append("Falta \"oleadas\".")
@@ -95,6 +108,12 @@ static func parse(text: String, id: StringName) -> Dictionary:
 	var warnings: PackedStringArray = []
 	for problem: String in grid.warnings:
 		warnings.append("mapa: " + problem)
+	if level.machine_enabled and level.obstacles.filter(func(obstacle: ObstacleSpec) -> bool: return obstacle.kind == ObstacleSpec.Kind.REMOVABLE).is_empty():
+		warnings.append("demoledora: el nivel la habilita pero no tiene removibles.")
+	if not level.uses_resources():  # RF-421: ofrece una torre que cuesta recursos y no hay cómo conseguirlos
+		for tower: TowerData in level.available_towers(Wiki._all_towers()):
+			if tower.resource_cost > 0:
+				warnings.append("torres: el %s cuesta recursos y este mapa no tiene cómo conseguirlos." % tower.display_name)
 	return {"level": level, "errors": errors, "warnings": warnings}
 
 
@@ -238,6 +257,24 @@ static func _read_extra_towers(data: Dictionary, errors: PackedStringArray) -> P
 	return result
 
 
+## RF-393/RF-394: `"torres"`, la lista de torres que el nivel ofrece. No puede estar vacía; un id que no
+## existe es un error; uno repetido cuenta una vez.
+static func _read_towers(data: Dictionary, errors: PackedStringArray) -> PackedStringArray:
+	var result: PackedStringArray = []
+	if not data.has("torres"):
+		return result
+	if not _is_list_of_text(data["torres"]) or (data["torres"] as Array).is_empty():
+		errors.append("torres: tiene que ser una lista con al menos una torre entre comillas, como [\"frost\", \"cannon\"].")
+		return result
+	var known: PackedStringArray = tower_ids()
+	for id: String in data["torres"]:
+		if not known.has(id):
+			errors.append("torres: la torre \"%s\" no existe. Las que hay: %s." % [id, ", ".join(known)])
+		elif not result.has(id):
+			result.append(id)
+	return result
+
+
 # --- Tema y leyenda (RF-260, RF-262, RF-265) ---
 
 ## El tema del nivel. Sin el campo, `pradera` (el de siempre).
@@ -266,6 +303,8 @@ static func _read_legend(data: Dictionary, errors: PackedStringArray) -> Diction
 		errors.append("leyenda: tiene que ser un objeto con una letra por entrada, como {\"~\": {\"dibujo\": \"agua\"}}.")
 		return legend
 	var source: Dictionary = data["leyenda"]
+	var catalog_result: Dictionary = ObstacleCatalog.load_data()
+	var catalog: Dictionary = catalog_result["data"]
 	if source.size() > MAX_LEGEND:
 		errors.append("leyenda: hay %d letras y el máximo es %d." % [source.size(), MAX_LEGEND])
 	for key: Variant in source.keys():
@@ -280,16 +319,173 @@ static func _read_legend(data: Dictionary, errors: PackedStringArray) -> Diction
 			continue
 		var entry: Dictionary = source[key]
 		_check_keys(entry, LEGEND_KEYS, where, errors)
-		var drawing: Variant = entry.get("dibujo")
-		if not drawing is String or not MapDrawings.is_valid(drawing):
-			errors.append("%s: el dibujo %s no existe. Los que hay: %s." % [where, JSON.stringify(drawing), ", ".join(MapDrawings.ids())])
+		var has_removable: bool = entry.has("removible")
+		var has_extraction: bool = entry.has("extraccion")
+		if has_removable and has_extraction:
+			errors.append("%s: no puede tener \"removible\" y \"extraccion\" a la vez." % where)
+			continue
+		var category: String = "removibles" if has_removable else "extraccion" if has_extraction else ""
+		var obstacle_data: Dictionary = {}
+		var expected_drawing: String = ""
+		if category != "":
+			var obstacle_key: String = "removible" if has_removable else "extraccion"
+			if catalog_result["errors"].is_empty():
+				var resolved: Dictionary = _read_obstacle_entry(entry[obstacle_key], category, where, catalog, errors)
+				if resolved.is_empty():
+					continue
+				obstacle_data = resolved
+				expected_drawing = str(resolved["drawing"])
+			else:
+				var raw_obstacle: Variant = entry[obstacle_key]
+				if not raw_obstacle is Dictionary or not raw_obstacle.get("clase") is String:
+					_add(errors, where, "%s: falta \"clase\" (tiene que ser un texto)." % category)
+					continue
+				expected_drawing = raw_obstacle["clase"]
+		var drawing: Variant = entry.get("dibujo", expected_drawing)
+		if entry.has("dibujo") or category == "":
+			if not drawing is String or not MapDrawings.is_valid(drawing):
+				errors.append("%s: el dibujo %s no existe. Los que hay: %s." % [where, JSON.stringify(drawing), ", ".join(MapDrawings.ids())])
+				continue
+		elif category != "" and not MapDrawings.is_valid(drawing):
+			errors.append("%s: el dibujo de la clase \"%s\" no existe." % [where, expected_drawing])
+			continue
+		if category != "" and drawing != expected_drawing:
+			errors.append("%s: el dibujo tiene que ser \"%s\", como la clase." % [where, expected_drawing])
 			continue
 		var buildable: Variant = entry.get("construible", false)
 		if not buildable is bool:
 			errors.append("%s: \"construible\" tiene que ser true o false." % where)
 			continue
-		legend[letter] = {"dibujo": drawing, "construible": buildable}
+		if category != "" and buildable:
+			errors.append("%s: \"construible\" no puede ser true en un removible ni en una extracción." % where)
+			continue
+		var normalized: Dictionary = {"dibujo": drawing, "construible": buildable}
+		if has_removable and not obstacle_data.is_empty():
+			normalized["removible"] = obstacle_data
+		elif has_extraction and not obstacle_data.is_empty():
+			normalized["extraccion"] = obstacle_data
+		legend[letter] = normalized
 	return legend
+
+
+static func _read_obstacle_entry(value: Variant, category: String, where: String, catalog: Dictionary, errors: PackedStringArray) -> Dictionary:
+	if not value is Dictionary:
+		_add(errors, where, "\"%s\" tiene que ser un objeto." % category)
+		return {}
+	var source: Dictionary = value
+	var allowed: PackedStringArray = ["clase", "costo", "tiempo", "recursos", "probabilidad", "hallazgo"] if category == "removibles" \
+		else ["clase", "costo", "produccion", "reserva"]
+	_check_keys(source, allowed, where + " → " + category, errors)
+	if not source.has("clase") or not source["clase"] is String:
+		_add(errors, where, "%s: falta \"clase\" (tiene que ser un texto)." % category)
+		return {}
+	var class_id: String = source["clase"]
+	var defaults: Dictionary = ObstacleCatalog.removable(class_id, catalog) if category == "removibles" else ObstacleCatalog.extraction(class_id, catalog)
+	if defaults.is_empty():
+		_add(errors, where, "%s: la clase \"%s\" no existe. Las que hay: %s." % [category, class_id, ", ".join(ObstacleCatalog.class_ids(catalog))])
+		return {}
+	var result: Dictionary = defaults.duplicate(true)
+	for key: Variant in source.keys():
+		if key != "clase" and key != "hallazgo":
+			result[key] = source[key]
+	if category == "removibles":
+		for key: String in ["costo", "recursos"]:
+			if not _nonnegative_whole(result.get(key), where + " → removible → " + key, errors, key == "costo"):
+				return {}
+		if not _positive_number(result.get("tiempo"), where + " → removible → tiempo", errors):
+			return {}
+		if not _probability(result.get("probabilidad"), where, errors):
+			return {}
+		result["drawing"] = class_id
+		result["class"] = class_id
+		result["finding"] = StringName(source.get("hallazgo", ""))
+		result["repeat_reward"] = int(defaults.get("recursos_si_recuperado", 0))
+		if source.has("hallazgo"):
+			if class_id != "escombro":
+				_add(errors, where, "\"hallazgo\" solo se puede usar en un escombro.")
+				return {}
+			var collections: Dictionary = _collection_definitions()
+			if not collections.has(source["hallazgo"]):
+				_add(errors, where, "la colección \"%s\" no existe en progression.json." % source["hallazgo"])
+				return {}
+	else:
+		for key: String in ["costo", "produccion", "reserva"]:
+			if not _nonnegative_whole(result.get(key), where + " → extraccion → " + key, errors, key == "costo"):
+				return {}
+		result["drawing"] = class_id
+		result["class"] = class_id
+	return result
+
+
+static func _read_obstacles(rows: PackedStringArray, legend: Dictionary, errors: PackedStringArray) -> Array[ObstacleSpec]:
+	var result: Array[ObstacleSpec] = []
+	var findings: Dictionary = {}
+	var finding_letters: Dictionary = {}
+	for y: int in rows.size():
+		for x: int in rows[y].length():
+			var letter: String = rows[y][x]
+			if not legend.has(letter):
+				continue
+			var entry: Dictionary = legend[letter]
+			var is_removable: bool = entry.has("removible")
+			if not is_removable and not entry.has("extraccion"):
+				continue
+			var values: Dictionary = entry["removible"] if is_removable else entry["extraccion"]
+			var obstacle := ObstacleSpec.new()
+			obstacle.cell = Vector2i(x, y)
+			obstacle.letter = StringName(letter)
+			obstacle.kind = ObstacleSpec.Kind.REMOVABLE if is_removable else ObstacleSpec.Kind.EXTRACTION
+			obstacle.class_id = StringName(values["class"])
+			obstacle.cost = int(values["costo"])
+			if is_removable:
+				obstacle.seconds = float(values["tiempo"])
+				obstacle.reward_amount = int(values["recursos"])
+				obstacle.chance_percent = int(values["probabilidad"])
+				obstacle.finding_collection = values["finding"]
+				obstacle.repeat_reward = int(values["repeat_reward"])
+				if obstacle.finding_collection != &"":
+					if finding_letters.has(letter):
+						pass  # La misma letra puede ocupar varias casillas: sigue siendo una sola pieza del nivel.
+					else:
+						finding_letters[letter] = true
+						if findings.has(obstacle.finding_collection):
+							_add(errors, "leyenda \"%s\" en %s" % [letter, MapGrid.where(obstacle.cell)], "ya hay un hallazgo de la colección \"%s\" en este nivel (letra \"%s\")." % [obstacle.finding_collection, findings[obstacle.finding_collection]])
+						else:
+							findings[obstacle.finding_collection] = letter
+			else:
+				obstacle.production = int(values["produccion"])
+				obstacle.reserve = int(values["reserva"])
+			result.append(obstacle)
+	return result
+
+
+static func _collection_definitions() -> Dictionary:
+	var parser := JSON.new()
+	if parser.parse(FileAccess.get_file_as_string("res://data/progression.json")) != OK or not parser.data is Dictionary:
+		return {}
+	return parser.data
+
+
+static func _nonnegative_whole(value: Variant, where: String, errors: PackedStringArray, must_be_positive: bool) -> bool:
+	if not _is_number(value) or float(value) != floorf(float(value)) or float(value) < 0.0 or (must_be_positive and float(value) <= 0.0):
+		_add(errors, where, "tiene que ser %s." % ("un número entero mayor que 0" if must_be_positive else "un número entero de 0 para arriba"))
+		return false
+	return true
+
+
+static func _positive_number(value: Variant, where: String, errors: PackedStringArray) -> bool:
+	if not _is_number(value) or float(value) <= 0.0:
+		_add(errors, where, "tiene que ser mayor que 0.")
+		return false
+	return true
+
+
+static func _probability(value: Variant, where: String, errors: PackedStringArray) -> bool:
+	if not _nonnegative_whole(value, where + " → probabilidad", errors, false) or float(value) > 100.0:
+		if _is_number(value) and float(value) > 100.0:
+			_add(errors, where, "\"probabilidad\" no puede superar 100.")
+		return false
+	return true
 
 
 ## Por qué una letra no sirve para la leyenda ("" si sirve): una sola, y que no sea una que ya significa algo.

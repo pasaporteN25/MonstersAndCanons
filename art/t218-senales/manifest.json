@@ -1,0 +1,15 @@
+{
+  "tarea": "T218",
+  "estado": "arte PROVISIONAL; aprobación visual pendiente",
+  "formato": {"lienzo": "64x64 SVG", "estados": ["estático"], "alfa": true},
+  "piezas": [
+    {"id": "roca_marcada", "origen": "sources/roca_marcada.svg", "destinos": [1, 5, 8]},
+    {"id": "sendero", "origen": "sources/sendero.svg", "destinos": [2]},
+    {"id": "herramienta", "origen": "sources/herramienta.svg", "destinos": [3]},
+    {"id": "poste_cintas", "origen": "sources/poste_cintas.svg", "destinos": [4]},
+    {"id": "simbolo_ruina", "origen": "sources/simbolo_ruina.svg", "destinos": [8, 9, 10]},
+    {"id": "campamento_vacio", "origen": "sources/campamento_vacio.svg", "destinos": [14, 15]}
+  ],
+  "verificacion_visual": ["concepto a 220 px", "concepto a 34 px", "fondos de pradera, bosque y ruinas"],
+  "limites": ["La aprobación de Lucas sigue pendiente.", "La captura de partida y las hojas requieren revisión visual de Lucas para cerrar el arte."]
+}

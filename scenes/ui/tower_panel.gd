@@ -9,6 +9,8 @@ signal targeting_pressed
 
 var _tower: Tower
 var _sell_value: int = 0
+## RF-418: recursos que devuelve la venta.
+var _sell_resources: int = 0
 var _gold: int = 0
 ## RF-280: los segundos de aturdimiento que se muestran (para refrescar solo cuando cambian).
 var _shown_stun: int = 0
@@ -40,11 +42,12 @@ func _ready() -> void:
 
 
 ## Muestra la torre (o se oculta si es null). `gold` decide si Mejorar está activo.
-func show_tower(tower: Tower, sell_value: int, gold: int) -> void:
+func show_tower(tower: Tower, sell_value: int, gold: int, sell_resources: int = 0) -> void:
 	if tower != _tower:
 		_details.scroll_vertical = 0
 	_tower = tower
 	_sell_value = sell_value
+	_sell_resources = sell_resources
 	visible = tower != null
 	if tower != null:
 		refresh(gold)
@@ -81,6 +84,9 @@ func refresh(gold: int) -> void:
 	_description.visible = not _description.text.is_empty()
 	_air.text = "Voladores: %s" % ("sí" if _tower.data.can_hit_air else "no")
 	_stats.text = "\n".join(TowerText.effects(s))
+	var invested: String = TowerText.invested_line(_tower.data, _tower.resources_invested)  # RF-418
+	if invested != "":
+		_stats.text += "\n" + invested
 	if _shown_repair > 0:
 		_stats.text += "\nReparación recibida: %.1f puntos/s" % _shown_repair
 	if _tower.data.support_only and _shown_wear > 0:
@@ -92,7 +98,7 @@ func refresh(gold: int) -> void:
 		_stats.text += "\n" + line.replace(" %", " %")
 	_stats.text = _stats.text.strip_edges()
 	_stats.visible = not _stats.text.is_empty()
-	_targeting_button.disabled = _tower.data.support_only
+	_targeting_button.disabled = _tower.data.support_only or _tower.is_pulse_tower()  # RF-438: el pulso no apunta
 	_targeting_button.text = "Apuntar: %s" % _tower.targeting_name()
 	var next: TowerLevelData = _tower.next_level_stats()
 	if next == null:
@@ -102,4 +108,4 @@ func refresh(gold: int) -> void:
 		_upgrade_button.text = "Mejorar (%d)  [U]" % next.cost
 		_upgrade_button.disabled = gold < next.cost
 	_upgrade_button.tooltip_text = "Nivel máximo alcanzado" if next == null else ("Faltan %d de oro" % (next.cost - gold) if gold < next.cost else "Mejorar torre · U")
-	_sell_button.text = "Vender (+%d)  [S]" % _sell_value
+	_sell_button.text = "Vender (+%s)  [S]" % TowerText.refund_text(_sell_value, _sell_resources)

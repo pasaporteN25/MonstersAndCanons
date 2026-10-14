@@ -16,5 +16,7 @@
 
 Una mina activa **no se puede confundir con una torre** (guía §4).
 
+**Nombres de archivo y estados:** los de la tabla "Estados visuales" de la sección M50 del plan técnico (`mina.svg`, `mina_activa.svg`, `mina_agotada.svg`, `bosque_explotable*.svg`, `reserva_llena.svg` y `reserva_vacia.svg`). Un punto de extracción es siempre una casilla bloqueada y nunca se despeja (RF-400).
+
 ## Pasos
 Concepto, OK de Lucas, producción, integración de rutas (o anotarla), hoja de contacto, captura y tests en verde. Commit `T220: …` y PR.

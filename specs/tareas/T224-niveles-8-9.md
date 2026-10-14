@@ -1,7 +1,7 @@
 # T224 · Niveles 8 y 9: ruinas, piezas 1 y 2 de la Disruptora y rebalance
 
 - **Ejecutor:** Sonnet 5.5 · esfuerzo **medio**
-- **Depende de:** T211 (colecciones) y T223 (mismo método) · **Compuerta:** G4 (T226) · **Tamaño:** mediano
+- **Depende de:** T209 (recursos), T211 (colecciones) y T223 (mismo método) · **Compuerta:** G4 (T226) · **Tamaño:** mediano
 
 ## Leer
 - Las fichas 8 y 9 del plan 08 §5, los RF de M50 (colecciones), y Q-25 a Q-27.
@@ -10,9 +10,9 @@
 - El Resultado de T223, para usar el mismo método.
 
 ## Objetivo
-- **Nivel 8 (Bastión, "El bastión sobre ruinas")**: tema `ruinas`, removibles comunes (sin recursos) y **un escombro con la pieza `disruptor` 1/3**. Señal de **revelación**: el símbolo A en las ruinas (T218).
-- **Nivel 9 (Taller asediado, "El taller")**: tema `ruinas` y un escombro con la **pieza 2/3**.
-- Las oleadas y los debuts (Guardián en el 8, Curandero en el 9) **se conservan**.
+- **Nivel 8 (Bastión, "El bastión sobre ruinas")**: tema `ruinas`, removibles comunes (con el drop de recursos al azar del 7, que sigue) y **un escombro con la pieza `disruptor` 1/3**. Señal de **revelación**: el símbolo A en las ruinas (T218).
+- **Nivel 9 (Taller asediado, "El taller")**: tema `ruinas`, un escombro con la **pieza 2/3** y el **debut del Mortero** (300 de oro + 3 recursos, valores iniciales, Q-21 ✎; `torres_extra`; enmienda de RF-300). El bot documenta en qué oleada lo compra cada estrategia, y `sin_recursos` tiene que seguir ganando.
+- Las oleadas y los debuts de enemigos (Guardián en el 8, Curandero en el 9) **se conservan**. El 8 queda sin Mortero a propósito, para no acumular novedades (Lucas, 2026-10-08).
 - **Regla:** la pieza tiene que ser **alcanzable sin perder**. La ruina se puede demoler con el oro de las primeras oleadas en la estrategia `demoler` del bot, y el panel dice "Pieza de la Disruptora: pendiente".
 
 ## Pasos

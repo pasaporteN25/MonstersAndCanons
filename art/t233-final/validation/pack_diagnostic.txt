@@ -1,0 +1,36 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+WARNING: Loaded resource as image file, this will not work on export: 'res://art/t233-final/sources/epilogue_generated.png'. Instead, import the image file as an Image resource and load it normally as a resource.
+     at: load_from_file (core/io/image.cpp:2780)
+     GDScript backtrace (most recent call first):
+         [0] _initialize (res://art/t233-final/pack.gd:7)
+Diferencia en 81,49: (0.5765, 0.4235, 0.2784, 1.0) / (0.5765, 0.4196, 0.2784, 1.0)
+Diferencia en 77,50: (0.6431, 0.4706, 0.2941, 1.0) / (0.6431, 0.4667, 0.2941, 1.0)
+Diferencia en 96,60: (0.6039, 0.5686, 0.498, 1.0) / (0.6, 0.5647, 0.4941, 1.0)
+Diferencia en 92,61: (0.6039, 0.5686, 0.498, 1.0) / (0.6, 0.5647, 0.4941, 1.0)
+Diferencia en 88,62: (0.6039, 0.5686, 0.498, 1.0) / (0.6, 0.5647, 0.4941, 1.0)
+Diferencia en 96,62: (0.5922, 0.5608, 0.4902, 1.0) / (0.5922, 0.5569, 0.4902, 1.0)
+Diferencia en 92,63: (0.5922, 0.5608, 0.4902, 1.0) / (0.5922, 0.5569, 0.4902, 1.0)
+Diferencia en 88,64: (0.5922, 0.5608, 0.4902, 1.0) / (0.5922, 0.5569, 0.4902, 1.0)
+Diferencia en 77,69: (0.7216, 0.6039, 0.4667, 1.0) / (0.7176, 0.6, 0.4667, 1.0)
+Diferencia en 69,71: (0.5686, 0.4118, 0.2706, 1.0) / (0.5647, 0.4078, 0.2706, 1.0)
+Diferencia en 82,74: (0.3686, 0.4314, 0.4549, 1.0) / (0.3686, 0.4314, 0.451, 1.0)
+Diferencia en 94,75: (0.5412, 0.5098, 0.4471, 1.0) / (0.5373, 0.5098, 0.4471, 1.0)
+Diferencia en 96,83: (0.5059, 0.4745, 0.4196, 1.0) / (0.502, 0.4745, 0.4196, 1.0)
+Diferencia en 92,84: (0.5059, 0.4745, 0.4196, 1.0) / (0.502, 0.4745, 0.4196, 1.0)
+Diferencia en 88,85: (0.5059, 0.4745, 0.4196, 1.0) / (0.502, 0.4745, 0.4196, 1.0)
+Diferencia en 93,92: (0.4706, 0.4431, 0.3922, 1.0) / (0.4667, 0.4431, 0.3922, 1.0)
+Diferencia en 94,96: (0.451, 0.4275, 0.3765, 1.0) / (0.451, 0.4235, 0.3765, 1.0)
+Diferencia en 74,101: (0.451, 0.4275, 0.3765, 1.0) / (0.451, 0.4235, 0.3765, 1.0)
+Diferencia en 70,102: (0.451, 0.4275, 0.3765, 1.0) / (0.451, 0.4235, 0.3765, 1.0)
+Diferencia en 95,102: (0.4235, 0.4039, 0.3569, 1.0) / (0.4235, 0.4, 0.3569, 1.0)
+Diferencia en 91,103: (0.4235, 0.4039, 0.3569, 1.0) / (0.4235, 0.4, 0.3569, 1.0)
+Diferencia en 83,105: (0.4235, 0.4039, 0.3569, 1.0) / (0.4235, 0.4, 0.3569, 1.0)
+Diferencia en 79,106: (0.4235, 0.4039, 0.3569, 1.0) / (0.4235, 0.4, 0.3569, 1.0)
+Diferencias raster fuente/cuatro cuartos: 23
+Máxima diferencia de canal en bordes: 0.00392156839371
+T233: epílogo 1920×1080, montaje 128×128 y hojas 34/64/112/220.
+WARNING: 2 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)
+ERROR: 1 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

@@ -4,13 +4,24 @@
   "oro": 200,
   "vidas": 20,
   "aumento_vida": 20,
+  "tema": "pradera",
+  "leyenda": {
+    "p": {"dibujo":"tronco"},
+    "~": {"dibujo":"agua"},
+    ",": {"dibujo":"flores"}
+  },
+  "textos": {
+    "lugar": "El pozo",
+    "entrada": "El arroyo no alcanza para toda la colonia.\nHay que cavar un pozo en el centro del valle.\nEl camino hasta ahí da muchas vueltas: que les cueste llegar.",
+    "victoria": "Pozo terminado. Hay agua para toda la colonia.\nSe armó un turno de guardia para cuidarlo."
+  },
   "mapa": [
     "....................",
     "A##################.",
     "..................#.",
     "..###############.#.",
-    "..#.......X.....#.#X",
-    "X.#..S###########.#.",
+    "..#.......~.....#.#,",
+    "p.#..S###########.#.",
     "..#...............#.",
     "..#################.",
     "...................."

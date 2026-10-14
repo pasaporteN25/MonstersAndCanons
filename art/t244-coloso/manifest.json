@@ -1,0 +1,49 @@
+{
+	"anchor": [
+		128,
+		191
+	],
+	"creatures": {
+		"colossus": {
+			"atlas_sha256": "612350b6207286d4ce90f71d6393844687bdf2eb2fc86eccc1a396c05bc4fe1d",
+			"flip_when_walking_left": false,
+			"scale": 0.551020408163265,
+			"source_sha256": "d574f2422de81502a07a8079353d5d66b304ef363306683c9a1b0b88621876c7",
+			"source_size": [
+				1254,
+				1254
+			],
+			"static_sha256": "3dae9124d74db9934b2845ced391129d48160a8f23e32e03771dc82674861b3e",
+			"texture": "res://assets/sprites/enemies/rendered/colossus.png",
+			"unique_poses": 16,
+			"visual_scale": 1.8,
+			"walk_art_scale": 1.0,
+			"walk_atlas": "res://assets/sprites/enemies/rendered/colossus_walk.png",
+			"walk_stride_tiles": 1.1
+		},
+		"colossus_shard": {
+			"atlas_sha256": "5d590899b5c19609151d70c585fce8cda7e7e9a71f8c82025a173abc72c40e43",
+			"flip_when_walking_left": false,
+			"scale": 0.538205980066445,
+			"source_sha256": "ed0b9023ff96934eecaf56110d582901cc5e15d1c78bb20af94b19b70fbe03c8",
+			"source_size": [
+				1254,
+				1254
+			],
+			"static_sha256": "b8faa6df519850e29ad8a6daa0f0e95aff57caaa17b57c79b9a0749be0fb8b48",
+			"texture": "res://assets/sprites/enemies/rendered/colossus_shard.png",
+			"unique_poses": 16,
+			"visual_scale": 1.2,
+			"walk_art_scale": 1.0,
+			"walk_atlas": "res://assets/sprites/enemies/rendered/colossus_shard_walk.png",
+			"walk_stride_tiles": 0.55
+		}
+	},
+	"directions": [
+		"east",
+		"south",
+		"west",
+		"north"
+	],
+	"status": "PROVISIONAL"
+}

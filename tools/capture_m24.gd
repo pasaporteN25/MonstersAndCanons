@@ -4,8 +4,9 @@
 extends Node
 
 const OUT := "res://art/m24-integracion/"
-const GAME: PackedScene = preload("res://scenes/game/game.tscn")
-const MENU: PackedScene = preload("res://scenes/ui/main_menu.tscn")
+## Se cargan en tiempo de ejecución: la revisión de sintaxis de CI compila este script sin los autoloads.
+const GAME_PATH: String = "res://scenes/game/game.tscn"
+const MENU_PATH: String = "res://scenes/ui/main_menu.tscn"
 
 
 func _ready() -> void:
@@ -31,7 +32,7 @@ func shot(file: String) -> void:
 
 
 func capture_menu() -> void:
-	var menu: Control = MENU.instantiate()
+	var menu: Control = (load(MENU_PATH) as PackedScene).instantiate()
 	add_child(menu)
 	await get_tree().create_timer(0.6).timeout
 	await shot("menu_reposo.png")
@@ -56,7 +57,7 @@ func capture_wiki() -> void:
 
 
 func capture_monsters() -> void:
-	var game: Game = GAME.instantiate()
+	var game = (load(GAME_PATH) as PackedScene).instantiate()
 	add_child(game)
 	await get_tree().process_frame
 	game.session.earn(10000)
@@ -64,11 +65,11 @@ func capture_monsters() -> void:
 		game.build_controller.try_build(game.tower_types[i], Vector2i(3 + i * 4, 2))
 	var ids: Array[String] = ["normal", "fast", "tank"]
 	var spots: Array[float] = [60.0, 190.0, 330.0, 470.0, 610.0, 760.0, 900.0, 1100.0, 1300.0, 1500.0, 1700.0, 1900.0]
-	var spawned: Array[Enemy] = []
+	var spawned: Array = []
 	for i: int in spots.size():
 		game.spawner.spawn_now(load("res://data/enemies/%s.tres" % ids[i % 3]))
 	for node: Node in game.enemies.get_children():
-		spawned.append(node as Enemy)
+		spawned.append(node)
 	for i: int in spawned.size():
 		spawned[i].distance = spots[i]
 	# Estados: golpeado (barra de vida), ralentizado, quemado.
@@ -84,7 +85,7 @@ func capture_monsters() -> void:
 	for tower: Node in game.tower_container.get_children():
 		tower.set_physics_process(false)  # las torres no disparan: la captura es de los dibujos
 	game.set_process(false)
-	for enemy: Enemy in spawned:
+	for enemy in spawned:
 		enemy.set_physics_process(false)
 		enemy._update_position()
 		enemy._animate(0.1)

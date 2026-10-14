@@ -48,11 +48,35 @@ func test_a_level_without_theme_or_legend_is_the_usual_one() -> void:
 	assert_true(level.legend.is_empty())
 
 
-func test_the_official_levels_have_no_theme_or_legend_and_the_same_routes() -> void:
+func test_the_official_levels_1_to_5_only_decoration_and_6_to_9_have_their_theme() -> void:
+	# T222 (Q-36): los niveles 1 a 5 tienen señales y oasis, siempre no construibles (reemplazan casillas X).
+	# T223: los niveles 6 y 7 son de bosque y tienen removibles (los revisa test_levels_6_7.gd).
 	for level: LevelData in GameFlow.campaign.levels:
+		if str(level.id) in ["level_06", "level_07"]:
+			assert_eq(level.theme, &"bosque", str(level.id))
+			continue
+		# T224: los niveles 8 y 9 son de ruinas y tienen removibles (los revisa test_levels_8_9.gd).
+		if str(level.id) in ["level_08", "level_09"]:
+			assert_eq(level.theme, &"ruinas", str(level.id))
+			continue
+		# T225: el nivel 10 (la mina vieja) es del desierto, con ruinas que quedan atrás (los revisa test_level_10.gd).
+		# T229: del 11 en adelante cada nivel tiene su propio tema y su archivo de tests (test_level_11.gd, etc.).
+		if str(level.id) == "level_10":
+			assert_eq(level.theme, &"desierto", str(level.id))
+			continue
+		# T234: el nivel 15 vuelve al valle (pradera, como el oasis: el círculo se cierra, §7.17) y lo revisa test_level_15.gd.
+		if str(level.id) == "level_15":
+			assert_eq(level.theme, &"pradera", str(level.id))
+			continue
+		if int(str(level.id).trim_prefix("level_")) >= 11:
+			assert_ne(level.theme, &"pradera", str(level.id))
+			continue
 		assert_eq(level.theme, &"pradera", str(level.id))
-		assert_true(level.legend.is_empty(), str(level.id))
-		assert_true(MapGrid.parse(level.map_rows).legend_cells.is_empty())
+		var grid: MapGrid = MapGrid.parse(level.map_rows, level.legend)
+		if level.legend.is_empty():
+			assert_true(grid.legend_cells.is_empty(), str(level.id))
+		for letter: String in level.legend.keys():
+			assert_false(level.legend[letter].get("construible", false), "%s: '%s'" % [level.id, letter])
 
 
 # --- Tema (RF-260) ---
@@ -182,20 +206,22 @@ func test_a_legend_that_is_not_an_object_is_an_error() -> void:
 	assert_string_contains(_errors_of({"leyenda": {"~": "agua"}}), "tiene que ser un objeto")
 
 
-func test_the_legend_limit_is_ten_letters() -> void:
+func test_the_legend_limit_is_twelve_letters() -> void:
+	# D-093 (T234): eran 10; el nivel 15 necesita 12 (la central en cuatro cuartos, tres piezas de la cadena,
+	# la mina, el bosque, los removibles y dos señales).
 	var ok: Dictionary = {}
-	for letter: String in ["~", ",", "a", "b", "c", "d", "e", "f", "g", "h"]:
+	for letter: String in ["~", ",", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]:
 		ok[letter] = {"dibujo": "roca"}
 	var result: Dictionary = LevelFile.parse(_text({"leyenda": ok}), &"prueba")
-	assert_eq(LevelFile.MAX_LEGEND, 10)
-	assert_eq((result["level"] as LevelData).legend.size(), 10, "diez sí")
-	ok["i"] = {"dibujo": "roca"}
-	assert_string_contains(_errors_of({"leyenda": ok}), "el máximo es 10")
+	assert_eq(LevelFile.MAX_LEGEND, 12)
+	assert_eq((result["level"] as LevelData).legend.size(), 12, "doce sí")
+	ok["k"] = {"dibujo": "roca"}
+	assert_string_contains(_errors_of({"leyenda": ok}), "el máximo es 12")
 
 
 func test_the_whole_catalog_is_accepted() -> void:
 	var ids: PackedStringArray = MapDrawings.ids()
-	assert_eq(ids.size(), 16)
+	assert_eq(ids.size(), 33)
 	for id: String in ids:
 		var result: Dictionary = LevelFile.parse(_text({"leyenda": {"~": {"dibujo": id}}}, _rows_with(Vector2i(3, 1), "~")), &"prueba")
 		assert_eq(result["errors"], PackedStringArray(), id)

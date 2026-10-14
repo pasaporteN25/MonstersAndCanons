@@ -1,4 +1,4 @@
-# Onboarding — cómo preparar una computadora para trabajar en JuegoA
+# Onboarding — cómo preparar una computadora para trabajar en Monsters & Canons (TDv1)
 
 > **Para quién es:** para ti en una computadora nueva, o para cualquier persona que se sume al proyecto.
 > **Qué cubre:** todo lo que hay que instalar y configurar **fuera del código** (programas, rutas, ajustes del editor) para poder abrir, probar, balancear y exportar el juego. Cada paso dice **cómo comprobar que quedó bien**.
@@ -16,8 +16,8 @@
 | 3 | [Clonar el repositorio y abrir el proyecto](#3-clonar-y-abrir-el-proyecto) | Sí | F5 abre el menú principal |
 | 4 | [Comprobar los tests (GUT)](#4-tests-gut) | Sí | 145 tests en verde |
 | 5 | [Plantillas de exportación](#5-plantillas-de-exportación) | Para exportar | aparece `export_templates/4.7.2.stable` |
-| 6 | [Exportar para Windows](#6-exportar-para-windows-exe) | Para exportar | se crea `build/JuegoA.exe` |
-| 7 | [Preparar Android](#7-android-apk) | Solo para el celular | se crea `build/JuegoA.apk` |
+| 6 | [Exportar para Windows](#6-exportar-para-windows-exe) | Para exportar | se crea `build/MonstersCanons.exe` |
+| 7 | [Preparar Android](#7-android-apk) | Solo para el celular | se crea `build/MonstersCanons.apk` |
 
 Las versiones exactas con las que se hizo el proyecto están en [Versiones de referencia](#versiones-de-referencia).
 
@@ -79,7 +79,7 @@ Tiene que mostrar `4.7.2.stable.official…`.
 2. Abrir el **editor** de Godot → en el Gestor de proyectos, **Importar** → elegir `JuegoA/project.godot` → **Importar y editar**.
    La primera vez tarda unos segundos: Godot "importa" las imágenes y sonidos y crea la carpeta `.godot/`. Esa carpeta es un caché local y **no** se sube a git.
 
-**✅ Comprobar:** pulsar **F5**. Tiene que abrirse el **menú principal** (título "JuegoA" con el mapa de fondo).
+**✅ Comprobar:** pulsar **F5**. Tiene que abrirse el **menú principal** (logo «Monsters & Canons» con el mapa de fondo).
 
 > 💡 **F5 vs F6:** F5 abre el juego desde el menú, igual que lo ve un jugador. **F6** ejecuta solo la escena abierta en el editor; sirve para probar una partida directo (`scenes/game/game.tscn`), pero así **no se guarda el progreso** (spec RF-117).
 
@@ -117,16 +117,16 @@ En el editor: **Editor → Administrar plantillas de exportación** → **Descar
 La configuración ya está en el repositorio (`export_presets.cfg`, preset **"Windows Desktop"**). Deja fuera del juego los tests, las herramientas, las specs y GUT.
 
 ```bash
-godot --headless --path . --export-release "Windows Desktop" build/JuegoA.exe
+godot --headless --path . --export-release "Windows Desktop" build/MonstersCanons.exe
 ```
 
-**✅ Comprobar:** se crea `build/JuegoA.exe` (~110 MB, casi todo es el motor). Copiarlo a otra carpeta y abrirlo: tiene que funcionar sin Godot.
+**✅ Comprobar:** se crea `build/MonstersCanons.exe` (~110 MB, casi todo es el motor). Copiarlo a otra carpeta y abrirlo: tiene que funcionar sin Godot.
 
 > ℹ️ La carpeta `build/` no se sube a git.
 
 ### 6.1 El modo de pruebas (desde Opciones)
 
-Para probar todos los niveles y el contenido sin ganar cada nivel (spec §10.2). Desde M48 (D-077) **no hay un ejecutable aparte**: se activa en el mismo `JuegoA.exe` (o la APK), desde **Opciones → Administración → Activar modo de pruebas → Sí, activar**.
+Para probar todos los niveles y el contenido sin ganar cada nivel (spec §10.2). Desde M48 (D-077) **no hay un ejecutable aparte**: se activa en el mismo `MonstersCanons.exe` (o la APK), desde **Opciones → Administración → Activar modo de pruebas → Sí, activar**.
 
 **✅ Comprobar:**
 - Al confirmar, el menú se vuelve a armar y abajo al centro dice "MODO PRUEBAS · F1: panel". Todos los niveles se pueden elegir y en la partida `F1` abre el panel de pruebas. En el log aparece "Modo de pruebas activado".
@@ -134,13 +134,17 @@ Para probar todos los niveles y el contenido sin ganar cada nivel (spec §10.2).
 - Opciones ahora dice **"Volver al juego normal"**, y desde el menú de pausa la sección no aparece.
 - Si cerrás el juego en modo de pruebas, la próxima vez arranca normal.
 
-Para arrancar directo en modo de pruebas, por ejemplo con un acceso directo para desarrollo: `JuegoA.exe -- --pruebas`.
+Para arrancar directo en modo de pruebas, por ejemplo con un acceso directo para desarrollo: `MonstersCanons.exe -- --pruebas`.
 
 El botón **"Editor de mapas"** (spec §10.3) está **para todos en PC** (desde M14, D-038; en el celular solo con el modo de pruebas activo): se dibujan niveles con el mouse, se prueban al instante y se guardan en `%APPDATA%\Godot\app_userdata\JuegoA\maps`. Comprobá que abrirlo no cambia el progreso. Cómo se usa y cómo volver oficial un mapa: [`CONTENIDO.md`](CONTENIDO.md).
 
 ### 6.1.0 La Wiki (en todas las versiones)
 
-Menú principal → **Wiki**. Comprobá que hay tres solapas (Enemigos, Torres, Guía), que cada enemigo y cada torre tienen su dibujo y sus números, y que se puede recorrer con el mouse y con el teclado (▲/▼ entre entradas, ◄/► entre solapas, Esc para volver). Los enemigos que todavía no viste en una partida salen como "???" (con el contador "Enemigos 4/9"): en el `.exe` normal empiezan cerrados y se abren al cruzártelos; en el de pruebas se ve todo. Un enemigo o una torre nuevos deberían aparecer sin tocar nada más; los artículos de la Guía están en `data/wiki/*.json` ([`CONTENIDO.md`](CONTENIDO.md)).
+Menú principal → **Wiki**. Comprobá que hay cinco solapas (Enemigos, Torres, Colecciones, Guía, Lore), que cada enemigo y cada torre tienen su dibujo y sus números, y que se puede recorrer con el mouse y con el teclado (▲/▼ entre entradas, ◄/► entre solapas, Esc para volver). Los enemigos que todavía no viste en una partida salen como "???" (con el contador "Enemigos 4/9"): en el `.exe` normal empiezan cerrados y se abren al cruzártelos; en el de pruebas se ve todo. Un enemigo o una torre nuevos deberían aparecer sin tocar nada más; los artículos de la Guía están en `data/wiki/*.json` ([`CONTENIDO.md`](CONTENIDO.md)).
+
+### 6.1.001 Textos de los niveles y Lore (M52, T228; en todas las versiones)
+
+Con el `.exe` normal (no el modo de pruebas, que no muestra textos): **Niveles** → los desbloqueados traen su **lugar** en letra chica bajo el nombre (los bloqueados, no). Entrá a uno: aparece un **cartel** con el nombre, el lugar y 3 líneas, y la partida **espera** (la cuenta atrás no corre) hasta que tocás la pantalla, o apretás `Espacio`, `Enter` o `Esc` (`Esc` **no** abre la pausa). «Reintentar» **no** vuelve a mostrarlo; «Siguiente nivel» y elegir el nivel otra vez, sí. Al ganar, la pantalla de victoria trae 2 líneas bajo las estrellas. En **Wiki → Lore** los artículos se abren al ganar el nivel que dicen (cerrados: «???» y «Se abre al ganar el nivel N.»). **Sin probar en un celular real:** el cartel entra en 1280 × 720 y se comprobó por medidas, pero el tamaño táctil de «Empezar» y que no tape el botón de pausa hay que mirarlo con el dedo.
 
 ### 6.1.05 Mapas más grandes (zoom)
 
@@ -168,7 +172,7 @@ Qué mirar con ojo crítico: si el "tin" se vuelve molesto en una oleada cargada
 
 ### 6.1.09 El Mortero (2×2)
 
-El Mortero es una torre **reservada** (solo el nivel 10 la tendrá): para probarla, abrí el mapa `tools/ejemplos/mapa_torres_apagadas.json` (copialo a la carpeta de mapas de la comunidad). Elegí el **Mortero** (novena torre, tecla **9**, 300 de oro) y pasá el mouse por el mapa: el cuadrado de **2×2** queda centrado en el mouse y se ve **verde** donde entra y **rojo** si una de las cuatro casillas es camino, roca u otra torre. Construilo: ocupa las cuatro casillas, un clic en cualquiera lo selecciona, dispara una bomba cada 4 segundos con daño de área, y al **venderlo** devuelve el 70 % y libera las cuatro casillas. La barra de abajo debe mostrar las 9 torres sin tapar "Próxima oleada".
+El Mortero es una torre **reservada** (debuta en el nivel 9, T224, y sigue en el 10, T225) y **cuesta 300 de oro + 3 recursos** (T209): para probarla, abrí el mapa `tools/ejemplos/mapa_recursos.json` (copialo a la carpeta de mapas de la comunidad). Arriba aparece el contador de recursos (con ícono verde); demolé la roca y el árbol del mapa (30 de oro cada uno, 3 s; los dos entregan 1 recurso) y la roca de la derecha para llegar a 3. En la barra, el Mortero dice **"300 + 3"** y está gris (con el motivo al pasar el mouse) hasta tener los 3 recursos. Elegí el **Mortero** (tecla **4** en ese mapa) y pasá el mouse por el mapa: el cuadrado de **2×2** queda centrado en el mouse y se ve **verde** donde entra y **rojo** si una de las cuatro casillas es camino, roca u otra torre. Construilo: ocupa las cuatro casillas, un clic en cualquiera lo selecciona, dispara una bomba cada 4 segundos con daño de área, y al **venderlo** devuelve el 70 % del oro y de los recursos (210 y 2) y libera las cuatro casillas. En el mismo mapa, elegí el **Francotirador**: la ayuda de abajo muestra dos botones chicos, "150 de oro" (elegido de entrada) y "120 de oro + 1 recurso" (apagado hasta tener un recurso); con el segundo, la venta devuelve 0 recursos. En cualquier mapa sin removibles (por ejemplo el nivel 1) no hay contador y la segunda opción dice que el mapa no tiene recursos. La barra de abajo debe mostrar las 9 torres sin tapar "Próxima oleada".
 
 ### 6.1.08 Chamán y Espejo (modo de pruebas)
 
@@ -193,13 +197,13 @@ Los `.json` de `%APPDATA%\Godot\app_userdata\JuegoA\maps` (la misma carpeta dond
 ### 6.2 La versión para GNU/Linux
 
 ```bash
-godot --headless --path . --export-release "Linux" build/JuegoA.x86_64
-tar --mode=755 -czf build/JuegoA_linux.tar.gz -C build JuegoA.x86_64
+godot --headless --path . --export-release "Linux" build/MonstersCanons.x86_64
+tar --mode=755 -czf build/MonstersCanons_linux.tar.gz -C build MonstersCanons.x86_64
 ```
 
-**✅ Comprobar:** se crea `build/JuegoA.x86_64` (~75 MB). Para verificar que es de Linux: `file build/JuegoA.x86_64` dice "ELF 64-bit LSB executable, x86-64". Necesita las plantillas de Linux, que vienen con las de Windows (paso 6, arriba).
+**✅ Comprobar:** se crea `build/MonstersCanons.x86_64` (~75 MB). Para verificar que es de Linux: `file build/MonstersCanons.x86_64` dice "ELF 64-bit LSB executable, x86-64". Necesita las plantillas de Linux, que vienen con las de Windows (paso 6, arriba).
 
-**En una computadora Linux:** `tar -xzf JuegoA_linux.tar.gz` y `./JuegoA.x86_64`. Si se copió el archivo suelto desde Windows, hay que darle permiso: `chmod +x JuegoA.x86_64`.
+**En una computadora Linux:** `tar -xzf MonstersCanons_linux.tar.gz` y `./MonstersCanons.x86_64`. Si se copió el archivo suelto desde Windows, hay que darle permiso: `chmod +x MonstersCanons.x86_64`.
 
 > ⚠️ Desde Windows no se puede abrir, así que probarlo en una computadora Linux real sigue pendiente. Si falla al abrir, lo primero que hay que mirar es la terminal: el ejecutable imprime ahí sus errores.
 
@@ -249,10 +253,10 @@ Las dos líneas tienen que tener una ruta, no `""`.
 La configuración está en `export_presets.cfg`, preset **"Android"**: paquete `com.juegoa.towerdefense`, solo celulares de 64 bits (arm64), sin Gradle. El proyecto ya tiene activada la compresión de texturas **ETC2/ASTC** (la que usan los celulares) y un ícono propio (`assets/icon.png`, generado con `tools/make_icon.gd`).
 
 ```bash
-godot --headless --path . --export-debug "Android" build/JuegoA.apk
+godot --headless --path . --export-debug "Android" build/MonstersCanons.apk
 ```
 
-Se usa `--export-debug` porque la versión de **prueba** se firma sola con la clave de depuración. (Publicar en la Play Store requiere una clave propia y `--export-release`; eso no está hecho.)
+Se usa `--export-debug` porque la versión de **prueba** se firma sola con la clave de depuración. (Publicar en la Play Store requiere una clave propia y `--export-release`; eso no está hecho.) Mientras no esté el SDK de Android (T237), la APK `MonstersCanons.apk` no se genera en la máquina Linux.
 
 ### 7.4 Instalar en el celular
 
@@ -262,10 +266,10 @@ Se usa `--export-debug` porque la versión de **prueba** se firma sola con la cl
 3. Conectar el celular por USB y aceptar el aviso que aparece en él.
 4. Instalar:
    ```bash
-   "$LOCALAPPDATA/Android/Sdk/platform-tools/adb.exe" install -r build/JuegoA.apk
+   "$LOCALAPPDATA/Android/Sdk/platform-tools/adb.exe" install -r build/MonstersCanons.apk
    ```
 
-**Opción B — copiando el archivo:** pasar `JuegoA.apk` al celular (cable, Drive, WhatsApp…), abrirlo y aceptar **"Permitir instalar apps de origen desconocido"**. Android lo pide porque no viene de la Play Store.
+**Opción B — copiando el archivo:** pasar `MonstersCanons.apk` al celular (cable, Drive, WhatsApp…), abrirlo y aceptar **"Permitir instalar apps de origen desconocido"**. Android lo pide porque no viene de la Play Store.
 
 **Cómo se juega en el celular** (spec §9.4): tocar = clic; el botón **"atrás"** = `Esc` (abre el menú de pausa y **no** cierra el juego); el juego queda siempre en horizontal.
 
@@ -293,8 +297,9 @@ Se ejecutan desde la carpeta del proyecto. Más detalle dentro de cada archivo.
 | Comando | Para qué |
 |---|---|
 | `godot --headless --path . -s addons/gut/gut_cmdln.gd -gdir=res://tests -gexit` | Correr todos los tests. |
-| `godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- smart level=1` | Bot que juega solo, para revisar el balance (spec §7.1). Estrategias: `smart`, `basic`, `naive`. |
+| `godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- smart level=1` | Bot que juega solo, para revisar el balance (spec §7.1). Estrategias: `smart`, `mix`, `heavy`, `basic`, `naive` y, de M50, `sin_recursos`, `demoler`, `demoledora`, `pieza` (T245), `extraer_temprano`, `extraer_tarde`; con `seeds=N` y `levels=A-B` juega muchas partidas y da una tabla. `check_rule=1` comprueba la regla de oro. |
 | `godot --path . -s tools/perf_test.gd` | Prueba de rendimiento: 200 enemigos y 60 torres. Abre una ventana. |
+| `godot --path . res://tools/perf_levels.tscn -- level=15 from=27` | Rendimiento en un nivel real (T236): `level` es el mapa, `from` cuántas oleadas se dan por jugadas antes de medir; opciones `to`, `towers`, `seconds`, `vsync=1`. Imprime los FPS de cada oleada. Abre una ventana. |
 | `godot --headless --path . -s tools/make_sounds.gd` | Volver a generar los sonidos (D-020). Con `-- shot_fire`, solo ese. |
 | `godot --headless --path . -s tools/check_level.gd -- data/levels/level_06.json` | Revisar un nivel sin jugarlo (sin archivo: todos los de la campaña). Cómo hacer un nivel: `CONTENIDO.md`. |
 | `godot --headless --path . -s tools/make_icon.gd` | Volver a generar el ícono del juego (`assets/icon.png`). |
@@ -425,6 +430,42 @@ Ver art/balance-m44/README.md para perfiles, semillas, ejecución y límites. Ru
 
 Abrir el editor o ejecutar Godot desde el proyecto: los EXE/APK anteriores no incluyen esta etapa y no se regeneraron. Ganar7 habilita8 incluso en un guardado antiguo; ganar8 habilita9. Admin permite elegir ambos niveles y habilitar Mecánico sin avances. En modo normal construirlo exige5/5 y permiso del nivel. Verificar presentación Guardián8/Curandero9, encuentros opcionales de Ladrón y carga al extremo de rectas con torres cercanas; probar apoyo en grupo y reparación después de impacto. Capturas/bots y criterios en art/campaign-m45/README.md; no confundir capturas controladas con sesión humana de balance.
 
+### T225 · Probar el nivel 10 (La mina vieja)
+
+Con el proyecto abierto (o `godot --path .`): ganar el nivel 9 abre el 10 (o, con el modo de pruebas activo, elegirlo en **Niveles**). **✅ Comprobar:** el mapa es **más grande** que los otros y se ve entero (zoom), con arena, cactus y huesos; arriba aparece el contador de recursos. Tocá la **mina** (bloque oscuro arriba, al centro): el panel dice *Habilitar extracción · 100 de oro*, *2 recursos por oleada completada* y *Reserva 8*; al habilitarla y completar una oleada, el contador suma 2 con un aviso "+2" sobre la mina. Tocá el escombro del centro de la banda de abajo: *Pieza de la Disruptora: pendiente*; demolerlo (90 de oro, 10 s) y completar la oleada confirma la pieza (la barra muestra la colección **3/3** si ya tenías las del 8 y el 9). Con 3 recursos y 300 de oro, el **Mortero** (tecla 9) se construye en uno de los cuatro bloques libres de 2×2. Se puede ganar sin tocar nada de esto.
+
+Para medir: `godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- sin_recursos,demoler,extraer_temprano,extraer_tarde level=10 seeds=5` y `... -- x check_rule=1 levels=10`. Captura y exposición: `godot --path . --resolution 1920x1080 art/campaign-t225/capture.tscn` (necesita pantalla) y `godot --headless --path . art/campaign-t225/exposure.tscn`. Detalle en `art/campaign-t225/README.md`.
+
+### T234 · Probar el nivel 15 (La Central, el Coloso y el epílogo)
+
+Ganar el nivel 14 abre el 15 (o, con el modo de pruebas, elegirlo en **Niveles**). **✅ Comprobar:** al entrar, el **cartel** con «Energía y abastecimiento» y las tres líneas de entrada (la partida espera; un clic lo cierra); mapa **de pradera** de 26 × 12 con **tres entradas a la izquierda** que se juntan y siguen juntas hasta la salida de la derecha; **al lado de la salida, la central** (un edificio de piedra de cuatro cuadros) y, por el borde, un depósito, un poste y una vagoneta; **dos o tres campamentos vacíos**; en «Infraestructura» una mina y dos bosques. En la **oleada 26** sale la tarjeta «Nuevo enemigo: Coloso»: lento, grande, con la corona de «Peligroso». **Al caer se parte en tres Pedazos** chicos y rápidos que siguen camino (la Wiki los abre cuando los ves). En la **28** salen dos Colosos y en la **30**, tres, con la escolta completa por dos entradas. Al ganar: la pantalla de victoria muestra el texto «Central encendida…», los récords de siempre y el botón **«Epílogo»** (no «Siguiente nivel»); el epílogo muestra la imagen con cuatro líneas y los botones «Créditos» y «Niveles»; `Esc` o un toque sobre la imagen vuelven a la victoria; «Créditos» tiene «Volver». En **Wiki → Lore** se abre «La Central».
+
+Para medir: `... -s tools/balance_sim.gd -- sin_recursos,demoler,extraer_temprano,extraer_tarde level=15 seeds=5` y `... -- x check_rule=1 levels=15` (cada partida tarda unos 3 minutos; conviene correr una semilla por proceso). Partida real con clics del mouse y capturas del cartel, el Coloso, el epílogo y los créditos (necesita pantalla y mueve el puntero): `godot --path . --resolution 1280x720 art/campaign-t234/play.tscn -- speed=6 out=art/campaign-t234`.
+
+### T232 · Probar el nivel 14 (Los poblados vacíos)
+
+Ganar el nivel 13 abre el 14 (o, con el modo de pruebas, elegirlo en **Niveles**). **✅ Comprobar:** mapa **de ruinas** (adoquines grises, columnas rotas, estatuas) de 26 × 12 con **dos entradas a la derecha** que se juntan en el medio-derecha y siguen juntas hasta la salida de la izquierda; **cinco campamentos vacíos** (tiendas oscuras con restos de fuego), **muchas rocas con una A** y cinco removibles; en «Infraestructura» una mina (arriba) y un bosque (abajo). **Sin enemigos nuevos:** la escolta (Guardián + Curandero + Chamán) llega con el Espejo y Voladores desde la oleada 12, por una o por las dos entradas. **La sensación a mirar:** que los poblados se vean abandonados hace poco, mientras la defensa sigue siendo necesaria.
+
+Para medir: `... -s tools/balance_sim.gd -- sin_recursos,demoler,extraer_temprano,extraer_tarde level=14 seeds=5` y `... -- x check_rule=1 levels=14`. Partida real (necesita pantalla y mueve el puntero): `godot --path . --resolution 1280x720 art/campaign-t229/play.tscn -- level=14 until=10 speed=5 out=art/campaign-t229`.
+
+### T231 · Probar el nivel 13 (Paso alto)
+
+Ganar el nivel 12 abre el 13 (o, con el modo de pruebas, elegirlo en **Niveles**). **✅ Comprobar:** mapa **de nieve** de 26 × 12 con **dos entradas** (arriba y abajo a la izquierda) que se juntan a la izquierda del medio y siguen juntas hasta la salida, a la derecha; una **laguna de hielo** celeste en el medio donde no se puede construir; **la barra tiene 8 torres** (sin Ametralladora ni Lanzamisiles). En la **pestaña «Infraestructura»** hay **dos fuentes**: la mina (arriba) y el bosque (abajo), cada una *Habilitar · 100 de oro*. En la **oleada 9** llegan juntos un Guardián, un Curandero y un Chamán por **una** entrada (la tarjeta «Nuevo enemigo» sale por cada uno si es tu primera vez); desde la **14**, por las dos entradas a la vez. Con la Disruptora, se la pone donde se juntan los caminos.
+
+Para medir: `... -s tools/balance_sim.gd -- sin_recursos,demoler,extraer_temprano,extraer_tarde level=13 seeds=5` y `... -- x check_rule=1 levels=13`. Partida real (necesita pantalla y mueve el puntero): `godot --path . --resolution 1280x720 art/campaign-t229/play.tscn -- level=13 until=10 speed=5 out=art/campaign-t229`.
+
+### T230 · Probar el nivel 12 (El cañadón)
+
+Ganar el nivel 11 abre el 12 (o, con el modo de pruebas, elegirlo en **Niveles**). **✅ Comprobar:** mapa **de 26 × 11** con paredes de roca y un camino que baja y sube cinco veces; **un solo lugar por donde entran** (arriba a la izquierda); tres rocas con una A cerca de la entrada; **sin Ametralladora**. En la **oleada 5** sale la tarjeta «Nuevo enemigo: Espejo»: cuando una torre a **menos de 2,5 casillas** le dispara, aparece «¡Rebote!» y la torre queda **aturdida 2 s**; un Francotirador (alcance 6) o el Mortero le pegan sin problema. En la **pestaña «Infraestructura»**, el **bosque** (cuadro verde con árboles) dice *Habilitar · 100 de oro*, *2 recursos por oleada*, *reserva 8*. Se puede ganar sin usarlo.
+
+Para medir: `... -s tools/balance_sim.gd -- sin_recursos,demoler,extraer_temprano,extraer_tarde level=12 seeds=5` y `... -- x check_rule=1 levels=12`. Partida real (necesita pantalla y mueve el puntero): `godot --path . --resolution 1280x720 art/campaign-t229/play.tscn -- level=12 until=7 speed=5 out=art/campaign-t229`.
+
+### T229 · Probar el nivel 11 (Puesto seco)
+
+Con el proyecto abierto (o `godot --path .`): ganar el nivel 10 abre el 11 (o, con el modo de pruebas, elegirlo en **Niveles**). **✅ Comprobar:** el mapa es **grande** y del desierto, con **una sola entrada** (arriba a la izquierda) y la salida abajo a la derecha, **dos pozos azules** y tres rocas con una A; la barra **no tiene la Ametralladora** (8 botones; 10 con las colecciones completas, y entonces la Disruptora y el Mecánico aparecen); en la **tarjeta del nivel** la Disruptora aparece como «Nueva» (la tarjeta avisa lo que ofrece el nivel, aunque todavía falte la colección). En la **oleada 5** sale una tarjeta «Nuevo enemigo: Chamán» y, unos segundos después, un rayo magenta **apaga la torre más cercana** (3 s): un Francotirador lo mata antes. El Guardián y el Curandero llegan juntos en la 8. Se puede ganar sin la mina ni los removibles.
+
+Para medir: `godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- sin_recursos,demoler,extraer_temprano,extraer_tarde level=11 seeds=5`, `... -- x check_rule=1 levels=11` y, para la Disruptora, `... -- mix level=11 seeds=5 disruptor=0` contra `disruptor=1`. Partida de verificación con la escena real (necesita pantalla y **mueve el puntero**): `godot --path . --resolution 1280x720 art/campaign-t229/play.tscn -- level=11 until=7 speed=6 out=art/campaign-t229`. Detalle en `art/campaign-t229/README.md`.
+
 ### T197 · Comprobar los modos de juego
 
 Abrí el juego (o el proyecto con F5) y entrá a **Jugar**.
@@ -435,5 +476,20 @@ Abrí el juego (o el proyecto con F5) y entrá a **Jugar**.
 - En el **Editor de mapas**, **"En un modo…"** → **+ Nuevo modo…** → un nombre → un nombre de archivo. Al volver a **Jugar**, aparece una solapa con ese modo después de "Mapas de la comunidad", con el mapa abierto y el botón "Abrir carpeta del modo".
 - "Guardar" después de eso sigue guardando en el modo, y "Abrir" lista el mapa bajo "— Modo … —".
 - Para balancear: `godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- mix modo=asedio level=1`.
+- **Varias semillas y varios mapas (T204):** `... -s tools/balance_sim.gd -- mix levels=6-9 seeds=5 report=user://balance.json`. `seed=N` fija una semilla, `seeds=N` juega las semillas 1 a N, `levels=A-B` juega los mapas A a B y se pueden pedir varias estrategias (`mix,smart`). La misma semilla da siempre el mismo resultado. Al final imprime una tabla (mapa, estrategia, semilla, resultado, vidas, oleada y oro sobrante) y, con `report=`, la guarda en JSON (`user://` es `~/.local/share/godot/app_userdata/<proyecto>/`).
+- **Estrategias de infraestructura y regla de oro (T214):** `... -s tools/balance_sim.gd -- sin_recursos,demoler,demoledora,extraer_temprano,extraer_tarde seeds=3 file=tools/ejemplos/mapa_extraccion.json`. Las cinco usan el orden de compra de `mix` y solo las torres que ofrece el mapa. `sin_recursos` no toca la infraestructura; `demoler` demuele de a uno los removibles cuya casilla alcanzaría más camino que la mejor casilla libre que queda; `demoledora` compra la máquina cuando quedan 4 o más removibles que valen la pena; `pieza` (T245) juega como `sin_recursos` pero, pasadas las 2 primeras torres, junta oro y demuele solo la ruina con la pieza de colección; `extraer_temprano` habilita los puntos de extracción desde la oleada 1 y `extraer_tarde` a mitad del nivel, y las dos construyen torres con recursos apenas alcanzan (la primera del mapa que alcance, con la segunda forma de pago si la tiene). Para juntar oro, el bot deja de comprar torres (después de las 2 primeras) hasta pagar lo que quiere. La tabla suma cinco columnas: oleada de la compra de la máquina, recursos obtenidos y sobrantes, oro invertido en infraestructura y oleada de la primera torre con recursos. El drop de los removibles usa la misma semilla (`GameFlow.forced_seed`).
+- **`check_rule=1` (RF-432):** juega `sin_recursos` con 5 semillas en cada mapa con recursos y **termina con código 1** si algún mapa gana menos de 4. Sin `level`, `levels`, `file` ni `modo` mira toda la campaña y se salta los mapas sin recursos; con alguno de ellos comprueba ese mapa siempre. Ejemplo: `... -s tools/balance_sim.gd -- x check_rule=1 file=tools/ejemplos/mapa_extraccion.json` (código 0); con `hp=20` el mismo mapa da código 1. Lo corre cada tarea de nivel con recursos y la regresión final (T236).
 
 Con más de dos modos propios, las solapas ya no entran en la fila (limitación conocida de esta primera prueba).
+
+### T248 · Probar la barra con pestañas y la flecha al menú (M53)
+
+Con el proyecto abierto (o `godot --path .`). **✅ Comprobar:**
+
+- **Nivel 1 (o cualquiera del 1 al 5):** la barra de abajo es la de siempre (sin pestañas) y arriba a la izquierda hay una flecha **«← Menú»**, con los contadores a su derecha. `Tab` y `0` no hacen nada.
+- **Nivel 7 («El aserradero», con demoledora):** a la izquierda de la barra hay dos pestañas, «Cañones» (activa) e «Infraestructura». Tocá **Infraestructura** (o apretá `Tab`): se ven tres tarjetas, *Trabajo en curso*, *Demoledora · 180 de oro* con su botón **Comprar**, y *Recursos*. Comprá la demoledora: dice «Demoledora activa» y «Cada demolición cuesta el 10 % y tarda el 80 %». Volvé a «Cañones», tocá un árbol del mapa (la pestaña **no** cambia, se abre su panel a la derecha) y **Demoler**: el título de la otra pestaña pasa a «Infraestructura · 3 s» y baja; en la pestaña se ve la barra de avance y **Cancelar** (devuelve todo el oro). Elegí una torre y apretá `Tab`: la construcción se cancela. Desde «Infraestructura», apretá `3`: vuelve a «Cañones» con la tercera elegida. En el **nivel 6** no hay tarjeta de demoledora (su archivo no la trae).
+- **Nivel 10 («La mina vieja»):** «Infraestructura» muestra la **Mina** con su botón *Habilitar · 100 de oro* (y, ya habilitada, «Activa · reserva 8/8 · +2 por oleada»). Con el modo de pruebas y **Habilitar todas las colecciones** hay 11 torres: los botones se achican a 57 px, se lee el costo y la insignia verde del recurso, ninguno toca «Próxima oleada», y `0` elige la décima. El mapa se ve igual (con zoom) con o sin pestañas.
+- **La flecha:** tocala. Aparece «¿Volver al menú principal?» con la partida en pausa y el foco en «Seguir jugando» (`Esc` hace lo mismo). Si recogiste una pieza de colección o hay una demolición en curso, el texto lo avisa. «Seguir jugando» deja todo como estaba (en pausa si ya lo estaba); «Salir al menú» vuelve al menú principal y **no guarda** la pieza. Al probar un mapa desde el editor, la flecha dice «← Editor» y vuelve sin preguntar. Con la partida terminada la flecha no se ve.
+- **Con toques:** todo lo anterior se hace sin teclado. **No se probó en un celular real.**
+
+Capturas y mediciones en `art/m53-barra/` (`README.md`).

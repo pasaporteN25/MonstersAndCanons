@@ -80,6 +80,7 @@ func test_tower_without_drawings_gets_no_icon() -> void:
 
 func test_towers_of_every_level_are_drawn() -> void:
 	game.session.earn(5000)
+	game.session.add_resources(10)  # RF-420: el Mortero cuesta recursos
 	# Casillas libres del nivel 1, una por torre (las ocho de una casilla).
 	var cells: Array[Vector2i] = [Vector2i(1, 2), Vector2i(4, 2), Vector2i(8, 2), Vector2i(11, 2),
 		Vector2i(5, 6), Vector2i(8, 6), Vector2i(15, 6), Vector2i(18, 6)]
@@ -88,6 +89,8 @@ func test_towers_of_every_level_are_drawn() -> void:
 	# Las torres de 2×2 (M19) se ponen donde haya un cuadrado libre.
 	for i: int in range(cells.size(), game.tower_types.size()):
 		var big: TowerData = game.tower_types[i]
+		if big.required_collection != &"":
+			continue  # la Disruptora pide su colección y un nivel que la ofrezca (RF-447)
 		var origin := Vector2i(-1, -1)
 		for y: int in range(0, 8):
 			for x: int in range(0, 19):
@@ -214,6 +217,8 @@ func test_hit_flash_is_a_white_silhouette_of_the_drawing() -> void:
 
 func test_every_tower_has_its_projectile() -> void:
 	for data: TowerData in game.tower_types:
+		if data.levels[0].suppress_seconds > 0.0:
+			continue  # RF-438: la torre de pulso no dispara proyectiles
 		var texture: Texture2D = data.projectile_texture
 		assert_not_null(texture, "%s: proyectil" % data.id)
 		if texture != null:

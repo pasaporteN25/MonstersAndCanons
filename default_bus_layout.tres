@@ -1,8 +1,7 @@
-[gd_resource type="AudioBusLayout" format=3]
+[gd_resource type="AudioBusLayout" format=3 uid="uid://cb7a4ogart8b2"]
 
 [sub_resource type="AudioEffectHardLimiter" id="master_limiter"]
 ceiling_db = -1.0
-release = 0.1
 
 [resource]
 bus/0/effect/0/effect = SubResource("master_limiter")

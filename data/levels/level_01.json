@@ -3,16 +3,27 @@
   "nombre": "Pradera",
   "oro": 150,
   "vidas": 20,
+  "tema": "pradera",
+  "leyenda": {
+    "m": {"dibujo":"estatua"},
+    "~": {"dibujo":"agua"},
+    ",": {"dibujo":"flores"}
+  },
+  "textos": {
+    "lugar": "Campamento de aterrizaje",
+    "entrada": "La nave quedó en el borde del oasis.\nHay agua, pasto y un terreno firme donde armar el campamento.\nAntes de descargar, hay que defenderlo.",
+    "victoria": "Campamento asegurado. Las primeras torres quedaron en pie.\nLa carga de la nave se baja esta noche."
+  },
   "mapa": [
-    "..................X.",
+    "..................~.",
     "A################...",
-    "......X.........#...",
+    "......,.........#...",
     "................#...",
     "...##############...",
-    "...#........XX......",
+    "...#........mX......",
     "...#................",
     "...################S",
-    ".........X.........."
+    ".........,.........."
   ],
   "oleadas": [
     [{"enemigo": "normal", "cantidad": 8, "cada": 1.0}],

@@ -26,9 +26,9 @@ func test_scaled_sprite_keeps_feet_and_collision_radius() -> void:
 	assert_almost_eq(original.position.y + original.size.y * 191.0 / 256.0,
 		enlarged.position.y + enlarged.size.y * 191.0 / 256.0, 0.001, "los pies no flotan")
 	assert_gt(EnemyShape.sprite_top(16, 1.2), EnemyShape.sprite_top(16), "barra sobre la cabeza ampliada")
-	for id: String in ["normal", "fast", "tank", "flyer", "armored", "troll", "spider", "spiderling", "guardian", "healer", "shaman", "mirror", "boss", "rammer", "thief"]:
-		var data: EnemyData = load("res://data/enemies/" + id + ".tres")
-		assert_eq(data.visual_scale, 1.2, id)
+	for id: String in ["normal", "fast", "tank", "flyer", "armored", "troll", "spider", "spiderling", "guardian", "healer", "shaman", "mirror", "boss", "rammer", "thief", "colossus", "colossus_shard"]:
+		var data: EnemyData = _visual_data(id)
+		assert_eq(data.visual_scale, 1.8 if id == "colossus" else 1.2, id)  # Coloso: escala visual excepcional, sin ampliar colisión.
 		assert_true(data.texture.resource_path.contains("/rendered/"), id)
 		assert_false(data.flip_when_walking_left, id)
 
@@ -38,8 +38,8 @@ func test_enemy_uses_regions_for_walk_flight_and_static_fallback() -> void:
 	path.curve.add_point(Vector2.ZERO)
 	path.curve.add_point(Vector2(1000, 0))
 	add_child_autofree(path)
-	for id: String in ["normal", "fast", "tank", "flyer", "armored", "troll", "spider", "spiderling", "guardian", "healer", "shaman", "mirror", "boss", "rammer", "thief"]:
-		var data: EnemyData = load("res://data/enemies/" + id + ".tres")
+	for id: String in ["normal", "fast", "tank", "flyer", "armored", "troll", "spider", "spiderling", "guardian", "healer", "shaman", "mirror", "boss", "rammer", "thief", "colossus", "colossus_shard"]:
+		var data: EnemyData = _visual_data(id)
 		var enemy: Enemy = ENEMY_SCENE.instantiate()
 		enemy.setup(data, path, data.max_health)
 		add_child_autofree(enemy)
@@ -116,8 +116,8 @@ func test_static_fallback_still_draws_without_a_cycle() -> void:
 	await wait_process_frames(2)
 
 func test_remaining_cycles_are_complete_unique_and_inside_transparent_frames() -> void:
-	for id: String in ["armored", "troll", "spider", "spiderling", "guardian", "healer", "shaman", "mirror", "boss", "rammer", "thief"]:
-		var data: EnemyData = load("res://data/enemies/" + id + ".tres")
+	for id: String in ["armored", "troll", "spider", "spiderling", "guardian", "healer", "shaman", "mirror", "boss", "rammer", "thief", "colossus", "colossus_shard"]:
+		var data: EnemyData = _visual_data(id)
 		assert_not_null(data.walk_atlas, id)
 		if data.walk_atlas == null:
 			continue
@@ -146,8 +146,8 @@ func test_every_ground_cycle_slows_steps_and_keeps_boss_resistance() -> void:
 	path.curve.add_point(Vector2.ZERO)
 	path.curve.add_point(Vector2(1000, 0))
 	add_child_autofree(path)
-	for id: String in ["armored", "troll", "spider", "spiderling", "guardian", "healer", "shaman", "mirror", "boss", "rammer", "thief"]:
-		var data: EnemyData = load("res://data/enemies/" + id + ".tres")
+	for id: String in ["armored", "troll", "spider", "spiderling", "guardian", "healer", "shaman", "mirror", "boss", "rammer", "thief", "colossus", "colossus_shard"]:
+		var data: EnemyData = _visual_data(id)
 		var enemy: Enemy = ENEMY_SCENE.instantiate()
 		enemy.setup(data, path, data.max_health)
 		add_child_autofree(enemy)
@@ -158,3 +158,21 @@ func test_every_ground_cycle_slows_steps_and_keeps_boss_resistance() -> void:
 		var expected: float = Rules.tiles_to_px(data.walk_stride_tiles) * 0.3 * (1.0 - 0.5 * (1.0 - data.slow_resistance))
 		assert_almost_eq(enemy.distance, expected, 0.001, id)
 		assert_eq(enemy.visual_frame_region().position.x, 0.0, id + ": no llega al paso siguiente mientras está lento")
+
+
+# T234 crea los .tres: hasta entonces probamos assets con una copia aislada,
+# sin registrar enemigos, tocar balance ni ampliar el catálogo de campaña.
+func _visual_data(id: String) -> EnemyData:
+	if id not in ["colossus", "colossus_shard"] or ResourceLoader.exists("res://data/enemies/" + id + ".tres"):
+		return load("res://data/enemies/" + id + ".tres") as EnemyData
+	var data: EnemyData = (preload("res://data/enemies/guardian.tres") as EnemyData).duplicate()
+	data.id = StringName(id)
+	data.texture = preload("res://assets/sprites/enemies/rendered/colossus.png") if id == "colossus" else preload("res://assets/sprites/enemies/rendered/colossus_shard.png")
+	data.walk_atlas = preload("res://assets/sprites/enemies/rendered/colossus_walk.png") if id == "colossus" else preload("res://assets/sprites/enemies/rendered/colossus_shard_walk.png")
+	data.walk_stride_tiles = 1.1 if id == "colossus" else 0.55
+	data.walk_art_scale = 1.0
+	data.visual_scale = 1.8 if id == "colossus" else 1.2
+	data.flip_when_walking_left = false
+	data.size_tiles = 0.5 if id == "colossus" else 0.3
+	data.slow_resistance = 0.5 if id == "colossus" else 0.0
+	return data

@@ -21,6 +21,7 @@ func before_each() -> void:
 	game = _game_with_mortar()
 	mortar = load("res://data/towers/mortar.tres")
 	game.session.earn(2000)
+	game.session.add_resources(10)  # RF-420: el Mortero cuesta oro y recursos
 
 
 func _free_block() -> Vector2i:
@@ -61,7 +62,7 @@ func test_the_mortar_has_its_own_drawings_and_sound() -> void:
 
 
 func test_the_mortar_is_the_ninth_tower_and_the_others_stay_the_same() -> void:
-	assert_eq(game.tower_types.size(), 9, "RF-297")
+	assert_gte(game.tower_types.size(), 9, "RF-297 (la Disruptora, décima, va después: RF-448)")
 	assert_eq(game.tower_types[8], mortar, "tecla 9")
 	assert_eq(game.tower_types[0].id, &"basic", "las ocho de antes siguen en su lugar")
 	assert_eq(game.tower_types[7].id, &"tesla")
@@ -80,7 +81,7 @@ func test_key_9_chooses_the_mortar() -> void:
 
 func test_the_bar_shows_the_mortar_with_its_cost_and_key() -> void:
 	var button: Button = game.hud._tower_buttons[8]
-	assert_eq(button.text, "300")
+	assert_eq(button.text, "300 + 3", "RF-418: oro y recursos")
 	assert_string_contains(button.tooltip_text, "Mortero")
 	assert_string_contains(button.tooltip_text, "tecla 9")
 
@@ -151,7 +152,7 @@ func test_a_normal_level_does_not_offer_the_mortar() -> void:
 	assert_false(plain.available_towers.has(mortar))
 	assert_eq(plain.hud._tower_buttons.size(), 8, "la barra no la muestra")
 	assert_true(mortar.reserved)
-	assert_eq(plain.tower_types.size(), 9, "existe en el juego, pero no se ofrece")
+	assert_true(plain.tower_types.has(mortar), "existe en el juego, pero no se ofrece")
 
 
 func test_a_level_that_lists_it_offers_it() -> void:
