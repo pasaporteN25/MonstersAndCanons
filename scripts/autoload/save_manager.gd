@@ -28,6 +28,8 @@ var _last_initials: Dictionary = {}
 var _hall_total: int = 0
 ## RF-359: fuentes únicas por colección; opcional para guardados anteriores.
 var _collections: Dictionary = {}
+## RF-498: ¿ya se mostró la intro? Clave aditiva (no sube SAVE_VERSION); sin ella, o si no es booleana, vale `false`.
+var _intro_seen: bool = false
 
 
 func _ready() -> void:
@@ -44,6 +46,7 @@ func load_save() -> void:
 	_last_initials = {}
 	_hall_total = 0
 	_collections = {}
+	_intro_seen = false
 	if not FileAccess.file_exists(save_path):
 		return
 	var file := FileAccess.open(save_path, FileAccess.READ)
@@ -64,6 +67,8 @@ func load_save() -> void:
 	_read_initials((parsed as Dictionary).get("initials", {}))
 	var hall_total: Variant = (parsed as Dictionary).get("hall_total", 0)
 	_hall_total = int(hall_total) if typeof(hall_total) in [TYPE_INT, TYPE_FLOAT] else 0
+	var intro_seen: Variant = (parsed as Dictionary).get("intro_seen", false)
+	_intro_seen = typeof(intro_seen) == TYPE_BOOL and intro_seen  # solo `true` booleano cuenta (RF-498)
 
 
 func save() -> bool:
@@ -72,9 +77,22 @@ func save() -> bool:
 		push_warning("No se pudo guardar en %s" % save_path)
 		return false
 	var data := {"version": SAVE_VERSION, "levels": _levels, "settings": _settings,
-		"seen_enemies": _seen_enemies, "scores": _scores, "initials": _last_initials, "hall_total": _hall_total, "collections": _collections}
+		"seen_enemies": _seen_enemies, "scores": _scores, "initials": _last_initials, "hall_total": _hall_total, "collections": _collections,
+		"intro_seen": _intro_seen}
 	file.store_string(JSON.stringify(data, "  "))
 	return true
+
+
+# --- La intro (RF-498) ---
+
+func intro_seen() -> bool:
+	return _intro_seen
+
+
+## Marca la intro como vista y guarda enseguida (al abrirse, no al terminarla).
+func mark_intro_seen() -> void:
+	_intro_seen = true
+	save()
 
 
 # --- Colecciones (RF-359/360) ---

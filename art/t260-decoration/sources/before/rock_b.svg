@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Grupo de piedras (casilla bloqueada). -->
+  <ellipse cx="33" cy="49" rx="25" ry="7" fill="#000000" opacity="0.22"/>
+  <g stroke="#2b2233" stroke-width="2.4" stroke-linejoin="round">
+    <path d="M9 40 L11 25 L23 18 L35 22 L37 37 L26 44 Z" fill="#8b8b93"/>
+    <path d="M31 47 L33 34 L44 29 L55 33 L57 44 L46 51 Z" fill="#7b7b83"/>
+    <ellipse cx="18" cy="50" rx="7" ry="4.5" fill="#9a9aa2"/>
+  </g>
+  <polygon points="12.5,26 23,20 34,23.5 26,28" fill="#adadb5"/>
+  <polygon points="34.5,35 44,31 54,34.5 45,38" fill="#9b9ba3"/>
+  <ellipse cx="16" cy="48.5" rx="3" ry="1.5" fill="#ffffff" opacity="0.35"/>
+</svg>

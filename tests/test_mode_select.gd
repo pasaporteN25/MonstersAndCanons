@@ -105,6 +105,19 @@ func test_choosing_a_mode_shows_its_maps_in_order() -> void:
 	assert_eq((select.get_node("%TotalStars") as Label).text, "Estrellas: 0 de 9")
 
 
+func test_the_real_asedio_shows_15_cards_with_only_the_first_open() -> void:
+	DirAccess.make_dir_recursive_absolute(ModePacks.dir_of(OFFICIAL, "asedio"))
+	var text: String = FileAccess.get_file_as_string(ModePacks.OFFICIAL_DIR + "asedio/" + ModePacks.FILE_NAME)
+	var file := FileAccess.open(ModePacks.dir_of(OFFICIAL, "asedio") + ModePacks.FILE_NAME, FileAccess.WRITE)
+	file.store_string(text)
+	file.close()
+	var cards: Array[Node] = _cards(_open(&"mode:asedio"))
+	assert_eq(cards.size(), 15, "T258: los 15 mapas")
+	assert_false((cards[0] as Button).disabled)
+	for i: int in range(1, 15):
+		assert_true((cards[i] as Button).disabled, "mapa %d bloqueado en un guardado nuevo" % (i + 1))
+
+
 func test_the_remembered_mode_page_opens_again() -> void:
 	_with_modes()
 	var select: Control = _open(&"mode:mio")

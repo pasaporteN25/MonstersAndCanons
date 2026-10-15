@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Roca con nieve (casilla bloqueada de la nieve): piedra gris azulada con la parte de arriba nevada. -->
+  <ellipse cx="35" cy="50" rx="23" ry="7" fill="#000000" opacity="0.22"/>
+  <path d="M12 44 L10 30 L20 18 L36 14 L50 20 L55 34 L50 46 L32 50 Z" fill="#7f8a9b"/>
+  <polygon points="42,28 50,20 55,34 50,46" fill="#5f6a7c"/>
+  <path d="M26 35 L31 41 L29 47" fill="none" stroke="#4d576a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M10 30 L20 18 L36 14 L50 20 L55 34 L47 31 L42 35 L36 30 L30 36 L24 30 L17 34 Z" fill="#f4f8fd"/>
+  <path d="M36 14 L50 20 L55 34 L47 31 L44 24 Z" fill="#cfe0f2"/>
+  <path d="M12 44 L10 30 L20 18 L36 14 L50 20 L55 34 L50 46 L32 50 Z" fill="none" stroke="#2b2233" stroke-width="2.5" stroke-linejoin="round"/>
+</svg>

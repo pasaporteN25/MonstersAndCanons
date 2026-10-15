@@ -8,6 +8,7 @@ const MUTED: Color = Color(0.72, 0.76, 0.84)
 const LIST_WIDTH: float = 320.0
 const ICON_BIG: float = 112.0
 const ICON_SMALL: float = 40.0
+const LORE_CATEGORY: StringName = &"lore"
 
 ## Se llama al salir (Volver o Esc). Es una "costura": los tests la reemplazan para no cambiar de pantalla.
 var on_leave: Callable = GameFlow.go_to_main_menu
@@ -21,6 +22,12 @@ var is_seen: Callable = func(enemy_id: StringName) -> bool:
 var is_completed: Callable = func(level_id: StringName) -> bool:
 	return DevMode.enabled or SaveManager.is_completed(level_id)
 
+## RF-501: de dónde se lee la intro del botón «Ver la intro». Costura de los tests.
+var intro_path: String = IntroData.DEFAULT_PATH
+
+## RF-501: la intro que abre «Ver la intro». Al terminar solo se cierra: no toca el guardado ni la Wiki.
+var intro_screen: IntroScreen
+
 var _categories: Array[WikiCategory] = []
 var _category: WikiCategory
 var _entry: WikiEntry
@@ -32,6 +39,7 @@ var _list_scroll: ScrollContainer
 var _detail: VBoxContainer
 var _detail_scroll: ScrollContainer
 var _back_button: Button
+var _intro_button: Button
 var _tab_buttons: Dictionary = {}
 var _entry_buttons: Dictionary = {}
 
@@ -94,6 +102,7 @@ func show_category(category_id: StringName) -> void:
 	if _category == null or _category.id != category_id:
 		return
 	(_tab_buttons[category_id] as Button).set_pressed_no_signal(true)
+	_intro_button.visible = category_id == LORE_CATEGORY
 	_fill_list()
 	if not _category.entries.is_empty():
 		show_entry(_category.entries[0].id)
@@ -172,8 +181,18 @@ func _build_layout() -> void:
 	var list_panel := _panel()
 	list_panel.custom_minimum_size = Vector2(LIST_WIDTH, 0)
 	body.add_child(list_panel)
+	var list_rows := VBoxContainer.new()
+	list_rows.add_theme_constant_override("separation", 8)
+	list_panel.add_child(list_rows)
+	_intro_button = Button.new()  # RF-501: arriba de la lista, solo en la solapa Lore
+	_intro_button.text = "Ver la intro"
+	_intro_button.custom_minimum_size = Vector2(0, 46)
+	_intro_button.add_theme_font_size_override("font_size", 21)
+	_intro_button.visible = false
+	_intro_button.pressed.connect(show_intro)
+	list_rows.add_child(_intro_button)
 	_list_scroll = _scroll()
-	list_panel.add_child(_list_scroll)
+	list_rows.add_child(_list_scroll)
 	_list = VBoxContainer.new()
 	_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_list.add_theme_constant_override("separation", 4)
@@ -196,6 +215,8 @@ func _build_layout() -> void:
 	_back_button.add_theme_font_size_override("font_size", 22)
 	_back_button.pressed.connect(_leave)
 	rows.add_child(_back_button)
+	intro_screen = IntroScreen.new()
+	add_child(intro_screen)
 
 
 func _panel() -> PanelContainer:
@@ -340,6 +361,23 @@ func _clear(container: Node) -> void:
 	for child: Node in container.get_children():
 		container.remove_child(child)
 		child.queue_free()
+
+
+## RF-501: abre la intro. Siempre disponible (no depende de niveles ni del modo de pruebas) y no toca el
+## guardado. Un archivo roto se avisa en la salida y no hace nada más.
+func show_intro() -> void:
+	if intro_screen.is_open():
+		return
+	var data: IntroData = IntroData.load_file(intro_path)
+	if not data.is_valid():
+		push_warning("La intro no se muestra: %s" % "; ".join(data.errors))
+		return
+	intro_screen.open(data)
+
+
+## El botón «Ver la intro» (para los tests): es visible solo en la solapa Lore.
+func intro_button() -> Button:
+	return _intro_button
 
 
 # --- Salir y teclado ---

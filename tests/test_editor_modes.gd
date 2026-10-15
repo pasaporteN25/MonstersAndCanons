@@ -108,6 +108,25 @@ func test_saving_again_stays_in_the_mode_without_asking() -> void:
 	assert_eq(_mode_maps("mi_modo"), ["mapa_a"], "no se repite en la lista")
 
 
+func test_saving_a_map_in_a_mode_with_the_health_table_keeps_the_table() -> void:
+	# RF-496: el editor no edita la tabla de vida por mapa, pero tampoco la pierde.
+	DirAccess.make_dir_recursive_absolute(ModePacks.dir_of(MODES, "con_tabla"))
+	var file := FileAccess.open(ModePacks.dir_of(MODES, "con_tabla") + ModePacks.FILE_NAME, FileAccess.WRITE)
+	file.store_string('{"version": 1, "nombre": "Con tabla", "mapas": ["level_01"], "reglas": {"vida_monstruos_%": 115, '
+		+ '"vida_monstruos_por_mapa_%": {"level_01": 105}}}')
+	file.close()
+	editor.save_to_mode()
+	_choose("Con tabla (con_tabla)")
+	_accept()
+	_type("mapa_c")
+	_accept()
+	assert_eq(_mode_maps("con_tabla"), ["level_01", "mapa_c"])
+	var mode: Dictionary = ModePacks.read(MODES, "con_tabla", false)
+	assert_eq(mode["errors"], PackedStringArray())
+	assert_eq(ModePacks.map_level(mode, 0).enemy_health_percent, 105, "la tabla sigue mandando")
+	assert_eq(ModePacks.map_level(mode, 1).enemy_health_percent, 115)
+
+
 func test_a_second_map_goes_to_an_existing_mode() -> void:
 	_save_in_new_mode("Mi Modo", "mapa_a")
 	editor.new_level()

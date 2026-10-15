@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Roca negra volcánica (casilla bloqueada del volcán): basalto con una vena de brasa entre las grietas. -->
+  <ellipse cx="35" cy="50" rx="23" ry="7" fill="#000000" opacity="0.22"/>
+  <path d="M12 44 L10 30 L20 18 L36 14 L50 20 L55 34 L50 46 L32 50 Z" fill="#403e4b"/>
+  <polygon points="20,18 36,14 50,20 42,28 24,28" fill="#5f5d72"/>
+  <polygon points="42,28 50,20 55,34 50,46" fill="#2b2a34"/>
+  <path d="M25 32 L30 38 L28 44 L33 47" fill="none" stroke="#ff7a2e" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M25 32 L30 38 L28 44 L33 47" fill="none" stroke="#ffd27a" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M12 44 L10 30 L20 18 L36 14 L50 20 L55 34 L50 46 L32 50 Z" fill="none" stroke="#1c1b22" stroke-width="2.5" stroke-linejoin="round"/>
+</svg>

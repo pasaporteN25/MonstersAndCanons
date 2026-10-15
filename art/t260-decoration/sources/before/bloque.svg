@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Bloques de piedra caídos (ruinas): dos sillares tallados, uno sobre el otro, con las juntas a la vista. -->
+  <ellipse cx="34" cy="54" rx="24" ry="5.5" fill="#000000" opacity="0.22"/>
+  <polygon points="6,34 14,27 46,27 38,34" fill="#d3cfc2" stroke="#2b2233" stroke-width="2.4" stroke-linejoin="round"/>
+  <polygon points="6,34 38,34 38,52 6,52" fill="#b4b0a4" stroke="#2b2233" stroke-width="2.4" stroke-linejoin="round"/>
+  <polygon points="38,34 46,27 46,45 38,52" fill="#8f8b80" stroke="#2b2233" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M6 43 H38 M22 34 V43 M14 43 V52 M30 43 V52" fill="none" stroke="#8f8b80" stroke-width="1.5" stroke-linecap="round"/>
+  <polygon points="30,26 36,16 54,20 56,29 48,33" fill="#c3bfb2" stroke="#2b2233" stroke-width="2.4" stroke-linejoin="round"/>
+  <polygon points="36,16 54,20 56,29 46,24" fill="#dedad0"/>
+  <path d="M40 28 l6 -1 M50 30 l3 -1" fill="none" stroke="#8f8b80" stroke-width="1.4" stroke-linecap="round"/>
+  <ellipse cx="12" cy="52" rx="5" ry="2" fill="#6f9a4a"/>
+</svg>

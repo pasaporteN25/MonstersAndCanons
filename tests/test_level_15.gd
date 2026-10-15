@@ -402,11 +402,11 @@ func test_winning_the_fifteenth_opens_the_central_article_with_the_colossus_para
 	assert_eq(load("res://data/enemies/colossus.tres").death_spawn_count, 3)
 
 
-func test_with_the_fifteen_levels_won_the_lore_has_ten_open_articles() -> void:
+func test_with_the_fifteen_levels_won_the_lore_has_eleven_open_articles() -> void:
 	for id: String in LevelFile.campaign_ids():
 		SaveManager.record_victory(StringName(id), 10, 100)
 	for category: WikiCategory in Wiki.categories(GameFlow.campaign.levels, Callable(), SaveManager.is_completed):
 		if category.id == &"lore":
-			assert_eq(category.entries.size(), 10)
-			assert_eq(category.unlocked_count(), 10)
+			assert_eq(category.entries.size(), 11, "los 10 de 11-textos-lore.md y «La Cuadrilla» (T253)")
+			assert_eq(category.unlocked_count(), 11)
 			assert_false(category.has_locked())

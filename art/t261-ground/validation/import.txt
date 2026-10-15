@@ -1,0 +1,2291 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+Could not find version of build tools that matches Target SDK, using 35.0.1
+[   0% ] first_scan_filesystem | Started Inicialización del proyecto (5 steps)
+[   0% ] first_scan_filesystem | Escaneando la estructura del archivo...
+[  16% ] first_scan_filesystem | Cargando nombres de clases globales...
+[  33% ] first_scan_filesystem | Verificando GDExtensions...
+[  50% ] first_scan_filesystem | Creando scripts de carga automática...
+[  66% ] first_scan_filesystem | Inicializando plugins...
+[  83% ] first_scan_filesystem | Iniciando escaneo de archivos...
+[ DONE ] first_scan_filesystem
+
+[   0% ] update_scripts_classes | Started Registrando clases globales... (384 steps)
+[   0% ] update_scripts_classes |
+[   0% ] update_scripts_classes |
+[   0% ] update_scripts_classes |
+[   0% ] update_scripts_classes |
+[   1% ] update_scripts_classes |
+[   1% ] update_scripts_classes |
+[   1% ] update_scripts_classes |
+[   1% ] update_scripts_classes |
+[   2% ] update_scripts_classes |
+[   2% ] update_scripts_classes |
+[   2% ] update_scripts_classes |
+[   2% ] update_scripts_classes |
+[   3% ] update_scripts_classes |
+[   3% ] update_scripts_classes |
+[   3% ] update_scripts_classes |
+[   3% ] update_scripts_classes |
+[   4% ] update_scripts_classes |
+[   4% ] update_scripts_classes |
+[   4% ] update_scripts_classes |
+[   4% ] update_scripts_classes |
+[   5% ] update_scripts_classes |
+[   5% ] update_scripts_classes |
+[   5% ] update_scripts_classes |
+[   5% ] update_scripts_classes |
+[   6% ] update_scripts_classes |
+[   6% ] update_scripts_classes |
+[   6% ] update_scripts_classes |
+[   7% ] update_scripts_classes |
+[   7% ] update_scripts_classes |
+[   7% ] update_scripts_classes |
+[   7% ] update_scripts_classes |
+[   8% ] update_scripts_classes |
+[   8% ] update_scripts_classes |
+[   8% ] update_scripts_classes |
+[   8% ] update_scripts_classes |
+[   9% ] update_scripts_classes |
+[   9% ] update_scripts_classes |
+[   9% ] update_scripts_classes |
+[   9% ] update_scripts_classes |
+[  10% ] update_scripts_classes | GutErrorTracker
+[  10% ] update_scripts_classes |
+[  10% ] update_scripts_classes |
+[  10% ] update_scripts_classes | GutMain
+[  11% ] update_scripts_classes |
+[  11% ] update_scripts_classes |
+[  11% ] update_scripts_classes |
+[  11% ] update_scripts_classes | GutConstants
+[  12% ] update_scripts_classes |
+[  12% ] update_scripts_classes |
+[  12% ] update_scripts_classes |
+[  12% ] update_scripts_classes |
+[  13% ] update_scripts_classes |
+[  13% ] update_scripts_classes | GutTrackedError
+[  13% ] update_scripts_classes |
+[  14% ] update_scripts_classes | GutHookScript
+[  14% ] update_scripts_classes |
+[  14% ] update_scripts_classes | GutInputFactory
+[  14% ] update_scripts_classes | GutInputSender
+[  15% ] update_scripts_classes |
+[  15% ] update_scripts_classes |
+[  15% ] update_scripts_classes |
+[  15% ] update_scripts_classes |
+[  16% ] update_scripts_classes |
+[  16% ] update_scripts_classes |
+[  16% ] update_scripts_classes |
+[  16% ] update_scripts_classes |
+[  17% ] update_scripts_classes |
+[  17% ] update_scripts_classes |
+[  17% ] update_scripts_classes |
+[  17% ] update_scripts_classes |
+[  18% ] update_scripts_classes |
+[  18% ] update_scripts_classes |
+[  18% ] update_scripts_classes | GutStringUtils
+[  18% ] update_scripts_classes |
+[  19% ] update_scripts_classes |
+[  19% ] update_scripts_classes |
+[  19% ] update_scripts_classes |
+[  20% ] update_scripts_classes | GutTest
+[  20% ] update_scripts_classes |
+[  20% ] update_scripts_classes |
+[  20% ] update_scripts_classes |
+[  21% ] update_scripts_classes |
+[  21% ] update_scripts_classes | GutUtils
+[  21% ] update_scripts_classes |
+[  21% ] update_scripts_classes |
+[  22% ] update_scripts_classes |
+[  22% ] update_scripts_classes |
+[  22% ] update_scripts_classes |
+[  22% ] update_scripts_classes |
+[  23% ] update_scripts_classes |
+[  23% ] update_scripts_classes |
+[  23% ] update_scripts_classes |
+[  23% ] update_scripts_classes |
+[  24% ] update_scripts_classes |
+[  24% ] update_scripts_classes |
+[  24% ] update_scripts_classes |
+[  24% ] update_scripts_classes |
+[  25% ] update_scripts_classes |
+[  25% ] update_scripts_classes |
+[  25% ] update_scripts_classes |
+[  25% ] update_scripts_classes |
+[  26% ] update_scripts_classes |
+[  26% ] update_scripts_classes |
+[  26% ] update_scripts_classes |
+[  27% ] update_scripts_classes |
+[  27% ] update_scripts_classes |
+[  27% ] update_scripts_classes |
+[  27% ] update_scripts_classes |
+[  28% ] update_scripts_classes |
+[  28% ] update_scripts_classes |
+[  28% ] update_scripts_classes |
+[  28% ] update_scripts_classes |
+[  29% ] update_scripts_classes |
+[  29% ] update_scripts_classes |
+[  29% ] update_scripts_classes |
+[  29% ] update_scripts_classes |
+[  30% ] update_scripts_classes |
+[  30% ] update_scripts_classes |
+[  30% ] update_scripts_classes |
+[  30% ] update_scripts_classes |
+[  31% ] update_scripts_classes |
+[  31% ] update_scripts_classes |
+[  31% ] update_scripts_classes |
+[  31% ] update_scripts_classes |
+[  32% ] update_scripts_classes |
+[  32% ] update_scripts_classes |
+[  32% ] update_scripts_classes |
+[  32% ] update_scripts_classes |
+[  33% ] update_scripts_classes |
+[  33% ] update_scripts_classes |
+[  33% ] update_scripts_classes |
+[  34% ] update_scripts_classes |
+[  34% ] update_scripts_classes |
+[  34% ] update_scripts_classes |
+[  34% ] update_scripts_classes |
+[  35% ] update_scripts_classes |
+[  35% ] update_scripts_classes |
+[  35% ] update_scripts_classes |
+[  35% ] update_scripts_classes |
+[  36% ] update_scripts_classes |
+[  36% ] update_scripts_classes |
+[  36% ] update_scripts_classes |
+[  36% ] update_scripts_classes |
+[  37% ] update_scripts_classes |
+[  37% ] update_scripts_classes |
+[  37% ] update_scripts_classes |
+[  37% ] update_scripts_classes |
+[  38% ] update_scripts_classes |
+[  38% ] update_scripts_classes |
+[  38% ] update_scripts_classes |
+[  38% ] update_scripts_classes |
+[  39% ] update_scripts_classes |
+[  39% ] update_scripts_classes |
+[  39% ] update_scripts_classes |
+[  40% ] update_scripts_classes |
+[  40% ] update_scripts_classes |
+[  40% ] update_scripts_classes |
+[  40% ] update_scripts_classes |
+[  41% ] update_scripts_classes | EditorDialog
+[  41% ] update_scripts_classes | EditorPanel
+[  41% ] update_scripts_classes | MapEditor
+[  41% ] update_scripts_classes | MapView
+[  42% ] update_scripts_classes | ObjectsPanel
+[  42% ] update_scripts_classes | SettingsPanel
+[  42% ] update_scripts_classes | WavesPanel
+[  42% ] update_scripts_classes | BurstEffect
+[  43% ] update_scripts_classes | DeathEffect
+[  43% ] update_scripts_classes | EffectsLayer
+[  43% ] update_scripts_classes | FireImpactEffect
+[  43% ] update_scripts_classes | FloatingText
+[  44% ] update_scripts_classes | ImpactSpriteEffect
+[  44% ] update_scripts_classes | LightningEffect
+[  44% ] update_scripts_classes | ReflectionEffect
+[  44% ] update_scripts_classes | RestorationEffect
+[  45% ] update_scripts_classes | RingEffect
+[  45% ] update_scripts_classes | Enemy
+[  45% ] update_scripts_classes | EnemyShape
+[  45% ] update_scripts_classes | BuildController
+[  46% ] update_scripts_classes | DevPanel
+[  46% ] update_scripts_classes | Game
+[  46% ] update_scripts_classes | Hud
+[  47% ] update_scripts_classes | InfrastructureController
+[  47% ] update_scripts_classes | LevelSession
+[  47% ] update_scripts_classes | WaveSpawner
+[  47% ] update_scripts_classes | Level
+[  48% ] update_scripts_classes | LevelDecor
+[  48% ] update_scripts_classes | ObstacleLayer
+[  48% ] update_scripts_classes | Projectile
+[  48% ] update_scripts_classes | Tower
+[  49% ] update_scripts_classes | BarTabs
+[  49% ] update_scripts_classes | CreditsScreen
+[  49% ] update_scripts_classes | EndScreen
+[  49% ] update_scripts_classes | EnemyIcon
+[  50% ] update_scripts_classes | EpilogueScreen
+[  50% ] update_scripts_classes | ExitDialog
+[  50% ] update_scripts_classes | HallOfFame
+[  50% ] update_scripts_classes | InfrastructureTab
+[  51% ] update_scripts_classes | LevelIntro
+[  51% ] update_scripts_classes |
+[  51% ] update_scripts_classes | MainMenu
+[  51% ] update_scripts_classes |
+[  52% ] update_scripts_classes | NameEntry
+[  52% ] update_scripts_classes | ObstaclePanel
+[  52% ] update_scripts_classes | OptionsMenu
+[  52% ] update_scripts_classes | PauseMenu
+[  53% ] update_scripts_classes |
+[  53% ] update_scripts_classes | ScoreTable
+[  53% ] update_scripts_classes | StarsDisplay
+[  54% ] update_scripts_classes | TowerPanel
+[  54% ] update_scripts_classes | WikiIcon
+[  54% ] update_scripts_classes |
+[  54% ] update_scripts_classes |
+[  55% ] update_scripts_classes |
+[  55% ] update_scripts_classes |
+[  55% ] update_scripts_classes |
+[  55% ] update_scripts_classes | BalanceConfig
+[  56% ] update_scripts_classes | CampaignData
+[  56% ] update_scripts_classes | DevConfig
+[  56% ] update_scripts_classes | EnemyData
+[  56% ] update_scripts_classes | LevelData
+[  57% ] update_scripts_classes | ObstacleSpec
+[  57% ] update_scripts_classes | SpawnGroup
+[  57% ] update_scripts_classes | TowerData
+[  57% ] update_scripts_classes | TowerLevelData
+[  58% ] update_scripts_classes | WaveData
+[  58% ] update_scripts_classes | BalanceArgs
+[  58% ] update_scripts_classes | BarLayout
+[  58% ] update_scripts_classes | ChargeRules
+[  59% ] update_scripts_classes | CollectibleRun
+[  59% ] update_scripts_classes | CollectionDefinitions
+[  59% ] update_scripts_classes | CommunityMaps
+[  60% ] update_scripts_classes | Credits
+[  60% ] update_scripts_classes | DemolitionJob
+[  60% ] update_scripts_classes | DesktopWindow
+[  60% ] update_scripts_classes | DevStart
+[  61% ] update_scripts_classes | DevStats
+[  61% ] update_scripts_classes | EnemyVisual
+[  61% ] update_scripts_classes | ExitText
+[  61% ] update_scripts_classes | FindingRun
+[  62% ] update_scripts_classes | HighScores
+[  62% ] update_scripts_classes | InfrastructureText
+[  62% ] update_scripts_classes | LevelDraft
+[  62% ] update_scripts_classes | LevelFile
+[  63% ] update_scripts_classes | LevelTexts
+[  63% ] update_scripts_classes | LoreUnlock
+[  63% ] update_scripts_classes | MapDrawings
+[  63% ] update_scripts_classes | MapGrid
+[  64% ] update_scripts_classes | MapThemes
+[  64% ] update_scripts_classes | ModePacks
+[  64% ] update_scripts_classes | ObstacleCatalog
+[  64% ] update_scripts_classes | ObstacleField
+[  65% ] update_scripts_classes | ObstacleText
+[  65% ] update_scripts_classes | Rules
+[  65% ] update_scripts_classes | SupportRules
+[  65% ] update_scripts_classes | TowerOffer
+[  66% ] update_scripts_classes | TowerText
+[  66% ] update_scripts_classes | TowerVisual
+[  66% ] update_scripts_classes | WearRules
+[  67% ] update_scripts_classes | Wiki
+[  67% ] update_scripts_classes | WikiCategory
+[  67% ] update_scripts_classes | WikiEntry
+[  67% ] update_scripts_classes |
+[  68% ] update_scripts_classes |
+[  68% ] update_scripts_classes |
+[  68% ] update_scripts_classes |
+[  68% ] update_scripts_classes |
+[  69% ] update_scripts_classes |
+[  69% ] update_scripts_classes |
+[  69% ] update_scripts_classes |
+[  69% ] update_scripts_classes |
+[  70% ] update_scripts_classes |
+[  70% ] update_scripts_classes |
+[  70% ] update_scripts_classes |
+[  70% ] update_scripts_classes |
+[  71% ] update_scripts_classes |
+[  71% ] update_scripts_classes |
+[  71% ] update_scripts_classes |
+[  71% ] update_scripts_classes |
+[  72% ] update_scripts_classes |
+[  72% ] update_scripts_classes |
+[  72% ] update_scripts_classes |
+[  72% ] update_scripts_classes |
+[  73% ] update_scripts_classes |
+[  73% ] update_scripts_classes |
+[  73% ] update_scripts_classes |
+[  74% ] update_scripts_classes |
+[  74% ] update_scripts_classes |
+[  74% ] update_scripts_classes |
+[  74% ] update_scripts_classes |
+[  75% ] update_scripts_classes |
+[  75% ] update_scripts_classes |
+[  75% ] update_scripts_classes |
+[  75% ] update_scripts_classes |
+[  76% ] update_scripts_classes |
+[  76% ] update_scripts_classes |
+[  76% ] update_scripts_classes |
+[  76% ] update_scripts_classes |
+[  77% ] update_scripts_classes |
+[  77% ] update_scripts_classes |
+[  77% ] update_scripts_classes |
+[  77% ] update_scripts_classes |
+[  78% ] update_scripts_classes |
+[  78% ] update_scripts_classes |
+[  78% ] update_scripts_classes |
+[  78% ] update_scripts_classes |
+[  79% ] update_scripts_classes |
+[  79% ] update_scripts_classes |
+[  79% ] update_scripts_classes |
+[  80% ] update_scripts_classes |
+[  80% ] update_scripts_classes |
+[  80% ] update_scripts_classes |
+[  80% ] update_scripts_classes |
+[  81% ] update_scripts_classes |
+[  81% ] update_scripts_classes |
+[  81% ] update_scripts_classes |
+[  81% ] update_scripts_classes |
+[  82% ] update_scripts_classes |
+[  82% ] update_scripts_classes |
+[  82% ] update_scripts_classes |
+[  82% ] update_scripts_classes |
+[  83% ] update_scripts_classes |
+[  83% ] update_scripts_classes |
+[  83% ] update_scripts_classes |
+[  83% ] update_scripts_classes |
+[  84% ] update_scripts_classes |
+[  84% ] update_scripts_classes |
+[  84% ] update_scripts_classes |
+[  84% ] update_scripts_classes |
+[  85% ] update_scripts_classes |
+[  85% ] update_scripts_classes |
+[  85% ] update_scripts_classes |
+[  85% ] update_scripts_classes |
+[  86% ] update_scripts_classes |
+[  86% ] update_scripts_classes |
+[  86% ] update_scripts_classes |
+[  87% ] update_scripts_classes |
+[  87% ] update_scripts_classes |
+[  87% ] update_scripts_classes |
+[  87% ] update_scripts_classes |
+[  88% ] update_scripts_classes |
+[  88% ] update_scripts_classes |
+[  88% ] update_scripts_classes |
+[  88% ] update_scripts_classes |
+[  89% ] update_scripts_classes |
+[  89% ] update_scripts_classes |
+[  89% ] update_scripts_classes |
+[  89% ] update_scripts_classes |
+[  90% ] update_scripts_classes |
+[  90% ] update_scripts_classes |
+[  90% ] update_scripts_classes |
+[  90% ] update_scripts_classes |
+[  91% ] update_scripts_classes |
+[  91% ] update_scripts_classes |
+[  91% ] update_scripts_classes |
+[  91% ] update_scripts_classes |
+[  92% ] update_scripts_classes |
+[  92% ] update_scripts_classes |
+[  92% ] update_scripts_classes |
+[  92% ] update_scripts_classes |
+[  93% ] update_scripts_classes |
+[  93% ] update_scripts_classes |
+[  93% ] update_scripts_classes |
+[  94% ] update_scripts_classes |
+[  94% ] update_scripts_classes |
+[  94% ] update_scripts_classes |
+[  94% ] update_scripts_classes |
+[  95% ] update_scripts_classes |
+[  95% ] update_scripts_classes |
+[  95% ] update_scripts_classes |
+[  95% ] update_scripts_classes |
+[  96% ] update_scripts_classes |
+[  96% ] update_scripts_classes |
+[  96% ] update_scripts_classes |
+[  96% ] update_scripts_classes |
+[  97% ] update_scripts_classes |
+[  97% ] update_scripts_classes |
+[  97% ] update_scripts_classes |
+[  97% ] update_scripts_classes |
+[  98% ] update_scripts_classes |
+[  98% ] update_scripts_classes |
+[  98% ] update_scripts_classes |
+[  98% ] update_scripts_classes |
+[  99% ] update_scripts_classes |
+[  99% ] update_scripts_classes |
+[ DONE ] update_scripts_classes
+
+[   0% ] _update_scan_actions | Started Escaneando acciones... (662 steps)
+[   0% ] _update_scan_actions | AnonymousPro-Bold.ttf
+[   0% ] _update_scan_actions | AnonymousPro-BoldItalic.ttf
+[   0% ] _update_scan_actions | AnonymousPro-Italic.ttf
+[   0% ] _update_scan_actions | AnonymousPro-Regular.ttf
+[   0% ] _update_scan_actions | CourierPrime-Bold.ttf
+[   0% ] _update_scan_actions | CourierPrime-BoldItalic.ttf
+[   0% ] _update_scan_actions | CourierPrime-Italic.ttf
+[   1% ] _update_scan_actions | CourierPrime-Regular.ttf
+[   1% ] _update_scan_actions | LobsterTwo-Bold.ttf
+[   1% ] _update_scan_actions | LobsterTwo-BoldItalic.ttf
+[   1% ] _update_scan_actions | LobsterTwo-Italic.ttf
+[   1% ] _update_scan_actions | LobsterTwo-Regular.ttf
+[   1% ] _update_scan_actions | arrow.png
+[   1% ] _update_scan_actions | play.png
+[   2% ] _update_scan_actions | eyey.png
+[   2% ] _update_scan_actions | Folder.svg
+[   2% ] _update_scan_actions | green.png
+[   2% ] _update_scan_actions | GutIconV2_base.png
+[   2% ] _update_scan_actions | GutIconV2_no_shine.png
+[   2% ] _update_scan_actions | HSplitContainer.svg
+[   3% ] _update_scan_actions | red.png
+[   3% ] _update_scan_actions | Script.svg
+[   3% ] _update_scan_actions | VSplitContainer.svg
+[   3% ] _update_scan_actions | yellow.png
+[   3% ] _update_scan_actions | icon.png
+[   3% ] _update_scan_actions | source_code_pro.fnt
+[   3% ] _update_scan_actions | camara_1.jpg
+[   4% ] _update_scan_actions | camara_2.jpg
+[   4% ] _update_scan_actions | camara_3.jpg
+[   4% ] _update_scan_actions | camara_4.jpg
+[   4% ] _update_scan_actions | camara_5.jpg
+[   4% ] _update_scan_actions | camara_6.jpg
+[   4% ] _update_scan_actions | camara_pruebas.jpg
+[   4% ] _update_scan_actions | comparacion_detalle.jpg
+[   5% ] _update_scan_actions | comparacion_vistas.jpg
+[   5% ] _update_scan_actions | jugar_a.jpg
+[   5% ] _update_scan_actions | jugar_b.jpg
+[   5% ] _update_scan_actions | jugar_c.jpg
+[   5% ] _update_scan_actions | jugar_d.jpg
+[   5% ] _update_scan_actions | vista_a.jpg
+[   6% ] _update_scan_actions | vista_b.jpg
+[   6% ] _update_scan_actions | vista_c.jpg
+[   6% ] _update_scan_actions | vista_d.jpg
+[   6% ] _update_scan_actions | level_08.png
+[   6% ] _update_scan_actions | level_09.png
+[   6% ] _update_scan_actions | level_10.png
+[   6% ] _update_scan_actions | level_11_apertura.png
+[   7% ] _update_scan_actions | level_11_aturdida.png
+[   7% ] _update_scan_actions | level_11_final.png
+[   7% ] _update_scan_actions | level_12_apertura.png
+[   7% ] _update_scan_actions | level_12_final.png
+[   7% ] _update_scan_actions | level_12_rebote.png
+[   7% ] _update_scan_actions | level_13_apertura.png
+[   7% ] _update_scan_actions | level_13_aturdida.png
+[   8% ] _update_scan_actions | level_13_final.png
+[   8% ] _update_scan_actions | level_14_apertura.png
+[   8% ] _update_scan_actions | level_14_aturdida.png
+[   8% ] _update_scan_actions | level_14_final.png
+[   8% ] _update_scan_actions | cartel_desde_seleccion.png
+[   8% ] _update_scan_actions | level_15_apertura.png
+[   9% ] _update_scan_actions | level_15_cartel.png
+[   9% ] _update_scan_actions | level_15_coloso_herido_26.png
+[   9% ] _update_scan_actions | level_15_coloso_herido_28.png
+[   9% ] _update_scan_actions | level_15_coloso_herido_30.png
+[   9% ] _update_scan_actions | level_15_creditos.png
+[   9% ] _update_scan_actions | level_15_epilogo.png
+[   9% ] _update_scan_actions | level_15_epilogo_de_vuelta.png
+[  10% ] _update_scan_actions | level_15_inicio.png
+[  10% ] _update_scan_actions | level_15_oleada_30_fin.png
+[  10% ] _update_scan_actions | level_15_pedazos_26.png
+[  10% ] _update_scan_actions | level_15_pedazos_28.png
+[  10% ] _update_scan_actions | level_15_pedazos_30.png
+[  10% ] _update_scan_actions | level_15_salon_de_la_fama.png
+[  11% ] _update_scan_actions | level_15_tarjeta_coloso.png
+[  11% ] _update_scan_actions | level_15_tarjeta_pedazo.png
+[  11% ] _update_scan_actions | level_15_victoria.png
+[  11% ] _update_scan_actions | level_15_victoria_de_vuelta.png
+[  11% ] _update_scan_actions | level_15_victoria_iniciales.png
+[  11% ] _update_scan_actions | seleccion_15_abierto.png
+[  11% ] _update_scan_actions | seleccion_15_bloqueado.png
+[  12% ] _update_scan_actions | seleccion_15_visible.png
+[  12% ] _update_scan_actions | menu_foco.png
+[  12% ] _update_scan_actions | menu_reposo.png
+[  12% ] _update_scan_actions | monstruos_mapa.png
+[  12% ] _update_scan_actions | monstruos_zoom.png
+[  12% ] _update_scan_actions | wiki_fast.png
+[  12% ] _update_scan_actions | wiki_normal.png
+[  13% ] _update_scan_actions | wiki_tank.png
+[  13% ] _update_scan_actions | evolutions_map.png
+[  13% ] _update_scan_actions | special_monsters_map.png
+[  13% ] _update_scan_actions | demolicion.png
+[  13% ] _update_scan_actions | concept_sheet.png
+[  13% ] _update_scan_actions | concept_provisional.png
+[  14% ] _update_scan_actions | contact_34px.png
+[  14% ] _update_scan_actions | contact_112px.png
+[  14% ] _update_scan_actions | n01_sin_pestanas.png
+[  14% ] _update_scan_actions | n06_canones.png
+[  14% ] _update_scan_actions | n06_infra.png
+[  14% ] _update_scan_actions | n07_demoliendo_en_canones.png
+[  14% ] _update_scan_actions | n07_infra_sin_comprar.png
+[  15% ] _update_scan_actions | n07_infra_trabajo.png
+[  15% ] _update_scan_actions | n07_salir.png
+[  15% ] _update_scan_actions | n07_tab_con_foco_en_un_icono.png
+[  15% ] _update_scan_actions | n10_canones_9.png
+[  15% ] _update_scan_actions | n10_canones_10.png
+[  15% ] _update_scan_actions | n10_canones_11.png
+[  15% ] _update_scan_actions | n10_infra_mina.png
+[  16% ] _update_scan_actions | n10_salir_con_pieza_pendiente.png
+[  16% ] _update_scan_actions | n10_tecla_0_elige_la_decima.png
+[  16% ] _update_scan_actions | desgaste_reparacion.png
+[  16% ] _update_scan_actions | editor_probabilidad.png
+[  16% ] _update_scan_actions | panel_mecanico.png
+[  16% ] _update_scan_actions | admin.png
+[  17% ] _update_scan_actions | avance_confirmado.png
+[  17% ] _update_scan_actions | avance_pendiente.png
+[  17% ] _update_scan_actions | estandarte.png
+[  17% ] _update_scan_actions | combate.png
+[  17% ] _update_scan_actions | conjunto_m23.png
+[  17% ] _update_scan_actions | direcciones_m23.png
+[  17% ] _update_scan_actions | efectos_en_juego.png
+[  18% ] _update_scan_actions | en_juego.png
+[  18% ] _update_scan_actions | map_preview.png
+[  18% ] _update_scan_actions | menu_preview.png
+[  18% ] _update_scan_actions | monsters_comparison.png
+[  18% ] _update_scan_actions | upgrades_comparison.png
+[  18% ] _update_scan_actions | physical_monsters.png
+[  19% ] _update_scan_actions | walks_comparison.png
+[  19% ] _update_scan_actions | walks_godot.png
+[  19% ] _update_scan_actions | before.png
+[  19% ] _update_scan_actions | map_preview.png
+[  19% ] _update_scan_actions | menu_preview.png
+[  19% ] _update_scan_actions | props_sheet.png
+[  19% ] _update_scan_actions | terrain_sheet.png
+[  20% ] _update_scan_actions | torres_full_hd.png
+[  20% ] _update_scan_actions | hud_admin.png
+[  20% ] _update_scan_actions | pause.png
+[  20% ] _update_scan_actions | editor.png
+[  20% ] _update_scan_actions | end_screen.png
+[  20% ] _update_scan_actions | hall.png
+[  20% ] _update_scan_actions | level_select.png
+[  21% ] _update_scan_actions | options_menu.png
+[  21% ] _update_scan_actions | records_screen.png
+[  21% ] _update_scan_actions | wiki_screen.png
+[  21% ] _update_scan_actions | aturdida.png
+[  21% ] _update_scan_actions | aturdida_1280.png
+[  21% ] _update_scan_actions | hielo_sinergias.png
+[  22% ] _update_scan_actions | hielo_sinergias_1280.png
+[  22% ] _update_scan_actions | nivel1.png
+[  22% ] _update_scan_actions | nivel1_1280.png
+[  22% ] _update_scan_actions | nivel2_sin_oro.png
+[  22% ] _update_scan_actions | nivel2_sin_oro_1280.png
+[  22% ] _update_scan_actions | nivel3.png
+[  22% ] _update_scan_actions | nivel3_1280.png
+[  23% ] _update_scan_actions | texto_largo_foco.png
+[  23% ] _update_scan_actions | texto_largo_foco_1280.png
+[  23% ] _update_scan_actions | bestiario_muertes.png
+[  23% ] _update_scan_actions | bestiario_muertes_media.png
+[  23% ] _update_scan_actions | bestiario_vivo.png
+[  23% ] _update_scan_actions | cura_rebote.png
+[  23% ] _update_scan_actions | profundidad_oblicua2d.png
+[  24% ] _update_scan_actions | profundidad_relieve2d.png
+[  24% ] _update_scan_actions | profundidad_suelo3d.png
+[  24% ] _update_scan_actions | torres_aturdidas.png
+[  24% ] _update_scan_actions | torres_niveles.png
+[  24% ] _update_scan_actions | torres_recuperacion.png
+[  24% ] _update_scan_actions | healer.png
+[  25% ] _update_scan_actions | mechanical_standard.png
+[  25% ] _update_scan_actions | rammer.png
+[  25% ] _update_scan_actions | thief.png
+[  25% ] _update_scan_actions | direcciones.png
+[  25% ] _update_scan_actions | partida.png
+[  25% ] _update_scan_actions | wiki_curandero.png
+[  25% ] _update_scan_actions | wiki_mecanico.png
+[  26% ] _update_scan_actions | partida_nivel_10.png
+[  26% ] _update_scan_actions | seleccion_guardado_viejo.png
+[  26% ] _update_scan_actions | seleccion_guardado_viejo_10.png
+[  26% ] _update_scan_actions | partida.png
+[  26% ] _update_scan_actions | campamento_vacio.svg
+[  26% ] _update_scan_actions | herramienta.svg
+[  26% ] _update_scan_actions | poste_cintas.svg
+[  27% ] _update_scan_actions | roca_marcada.svg
+[  27% ] _update_scan_actions | sendero.svg
+[  27% ] _update_scan_actions | simbolo_ruina.svg
+[  27% ] _update_scan_actions | hoja_34.png
+[  27% ] _update_scan_actions | hoja_220.png
+[  27% ] _update_scan_actions | arbol_removible.svg
+[  28% ] _update_scan_actions | arbol_removible_trabajo.svg
+[  28% ] _update_scan_actions | despejado_bosque.svg
+[  28% ] _update_scan_actions | despejado_desierto.svg
+[  28% ] _update_scan_actions | despejado_pradera.svg
+[  28% ] _update_scan_actions | despejado_ruinas.svg
+[  28% ] _update_scan_actions | escombro.svg
+[  28% ] _update_scan_actions | escombro_trabajo.svg
+[  29% ] _update_scan_actions | marca_pieza.svg
+[  29% ] _update_scan_actions | roca_removible.svg
+[  29% ] _update_scan_actions | roca_removible_trabajo.svg
+[  29% ] _update_scan_actions | hoja_34.png
+[  29% ] _update_scan_actions | hoja_220.png
+[  29% ] _update_scan_actions | bosque_explotable.svg
+[  30% ] _update_scan_actions | bosque_explotable_activo.svg
+[  30% ] _update_scan_actions | bosque_explotable_agotado.svg
+[  30% ] _update_scan_actions | mina.svg
+[  30% ] _update_scan_actions | mina_activa.svg
+[  30% ] _update_scan_actions | mina_agotada.svg
+[  30% ] _update_scan_actions | reserva_llena.svg
+[  30% ] _update_scan_actions | reserva_vacia.svg
+[  31% ] _update_scan_actions | hoja_34.png
+[  31% ] _update_scan_actions | hoja_220.png
+[  31% ] _update_scan_actions | coleccion_disruptor.svg
+[  31% ] _update_scan_actions | demoledora.svg
+[  31% ] _update_scan_actions | stat_resources.svg
+[  31% ] _update_scan_actions | hoja_34.png
+[  31% ] _update_scan_actions | hoja_220.png
+[  32% ] _update_scan_actions | central_assembled.png
+[  32% ] _update_scan_actions | contact_34.png
+[  32% ] _update_scan_actions | contact_64.png
+[  32% ] _update_scan_actions | contact_112.png
+[  32% ] _update_scan_actions | contact_220.png
+[  32% ] _update_scan_actions | epilogue_preview.png
+[  33% ] _update_scan_actions | game_samples.png
+[  33% ] _update_scan_actions | central_1.svg
+[  33% ] _update_scan_actions | central_2.svg
+[  33% ] _update_scan_actions | central_3.svg
+[  33% ] _update_scan_actions | central_4.svg
+[  33% ] _update_scan_actions | central_master.svg
+[  33% ] _update_scan_actions | epilogue_generated.png
+[  34% ] _update_scan_actions | hito.svg
+[  34% ] _update_scan_actions | supply_cart.svg
+[  34% ] _update_scan_actions | supply_conveyor.svg
+[  34% ] _update_scan_actions | supply_depot.svg
+[  34% ] _update_scan_actions | supply_line_pole.svg
+[  34% ] _update_scan_actions | contact_34.png
+[  34% ] _update_scan_actions | contact_64.png
+[  35% ] _update_scan_actions | contact_112.png
+[  35% ] _update_scan_actions | contact_220.png
+[  35% ] _update_scan_actions | game_step_0.png
+[  35% ] _update_scan_actions | game_step_1.png
+[  35% ] _update_scan_actions | game_step_2.png
+[  35% ] _update_scan_actions | game_step_3.png
+[  36% ] _update_scan_actions | colossus.png
+[  36% ] _update_scan_actions | colossus_shard.png
+[  36% ] _update_scan_actions | contact_34.png
+[  36% ] _update_scan_actions | contact_64.png
+[  36% ] _update_scan_actions | contact_112.png
+[  36% ] _update_scan_actions | contact_220.png
+[  36% ] _update_scan_actions | disruptor_toolbar.png
+[  37% ] _update_scan_actions | gallery_level_01.png
+[  37% ] _update_scan_actions | gallery_level_06.png
+[  37% ] _update_scan_actions | gallery_level_08.png
+[  37% ] _update_scan_actions | gallery_level_10.png
+[  37% ] _update_scan_actions | level_01.png
+[  37% ] _update_scan_actions | level_06.png
+[  38% ] _update_scan_actions | level_06_cleared.png
+[  38% ] _update_scan_actions | level_06_working.png
+[  38% ] _update_scan_actions | level_07.png
+[  38% ] _update_scan_actions | level_07_cleared.png
+[  38% ] _update_scan_actions | level_07_working.png
+[  38% ] _update_scan_actions | level_08.png
+[  38% ] _update_scan_actions | level_08_cleared.png
+[  39% ] _update_scan_actions | level_08_working.png
+[  39% ] _update_scan_actions | level_10.png
+[  39% ] _update_scan_actions | level_10_cleared.png
+[  39% ] _update_scan_actions | level_10_working.png
+[  39% ] _update_scan_actions | towers_34.png
+[  39% ] _update_scan_actions | towers_64.png
+[  39% ] _update_scan_actions | towers_112.png
+[  40% ] _update_scan_actions | contact_34.png
+[  40% ] _update_scan_actions | contact_64.png
+[  40% ] _update_scan_actions | contact_112.png
+[  40% ] _update_scan_actions | contact_220.png
+[  40% ] _update_scan_actions | disruptor_toolbar.png
+[  40% ] _update_scan_actions | gallery_level_01.png
+[  41% ] _update_scan_actions | gallery_level_06.png
+[  41% ] _update_scan_actions | gallery_level_08.png
+[  41% ] _update_scan_actions | gallery_level_10.png
+[  41% ] _update_scan_actions | level_01.png
+[  41% ] _update_scan_actions | level_06.png
+[  41% ] _update_scan_actions | level_06_cleared.png
+[  41% ] _update_scan_actions | level_06_working.png
+[  42% ] _update_scan_actions | level_07.png
+[  42% ] _update_scan_actions | level_07_cleared.png
+[  42% ] _update_scan_actions | level_07_working.png
+[  42% ] _update_scan_actions | level_08.png
+[  42% ] _update_scan_actions | level_08_cleared.png
+[  42% ] _update_scan_actions | level_08_working.png
+[  42% ] _update_scan_actions | level_10.png
+[  43% ] _update_scan_actions | level_10_cleared.png
+[  43% ] _update_scan_actions | level_10_working.png
+[  43% ] _update_scan_actions | towers_34.png
+[  43% ] _update_scan_actions | towers_64.png
+[  43% ] _update_scan_actions | towers_112.png
+[  43% ] _update_scan_actions | arbol_removible.svg
+[  44% ] _update_scan_actions | arbol_removible_trabajo.svg
+[  44% ] _update_scan_actions | bosque_explotable.svg
+[  44% ] _update_scan_actions | bosque_explotable_activo.svg
+[  44% ] _update_scan_actions | bosque_explotable_agotado.svg
+[  44% ] _update_scan_actions | campamento_vacio.svg
+[  44% ] _update_scan_actions | despejado_bosque.svg
+[  44% ] _update_scan_actions | despejado_desierto.svg
+[  45% ] _update_scan_actions | despejado_pradera.svg
+[  45% ] _update_scan_actions | despejado_ruinas.svg
+[  45% ] _update_scan_actions | escombro.svg
+[  45% ] _update_scan_actions | escombro_trabajo.svg
+[  45% ] _update_scan_actions | herramienta.svg
+[  45% ] _update_scan_actions | marca_pieza.svg
+[  46% ] _update_scan_actions | mina.svg
+[  46% ] _update_scan_actions | mina_activa.svg
+[  46% ] _update_scan_actions | mina_agotada.svg
+[  46% ] _update_scan_actions | poste_cintas.svg
+[  46% ] _update_scan_actions | reserva_llena.svg
+[  46% ] _update_scan_actions | reserva_vacia.svg
+[  46% ] _update_scan_actions | roca_marcada.svg
+[  47% ] _update_scan_actions | roca_removible.svg
+[  47% ] _update_scan_actions | roca_removible_trabajo.svg
+[  47% ] _update_scan_actions | sendero.svg
+[  47% ] _update_scan_actions | simbolo_ruina.svg
+[  47% ] _update_scan_actions | disruptor_atlas.png
+[  47% ] _update_scan_actions | disruptor_level_2.png
+[  47% ] _update_scan_actions | disruptor_level_3.png
+[  48% ] _update_scan_actions | disruptor_pulse_ring.png
+[  48% ] _update_scan_actions | disruptor_suppression_arc_1.png
+[  48% ] _update_scan_actions | disruptor_suppression_arc_2.png
+[  48% ] _update_scan_actions | disruptor_suppression_arc_3.png
+[  48% ] _update_scan_actions | disruptor_suppression_icon.png
+[  48% ] _update_scan_actions | turret_disruptor.png
+[  49% ] _update_scan_actions | coleccion_disruptor.svg
+[  49% ] _update_scan_actions | demoledora.svg
+[  49% ] _update_scan_actions | stat_resources.svg
+[  49% ] _update_scan_actions | disruptor_generated.png
+[  49% ] _update_scan_actions | disruptor_level_2_generated.png
+[  49% ] _update_scan_actions | disruptor_level_3_generated.png
+[  49% ] _update_scan_actions | level_01_unlocked.png
+[  50% ] _update_scan_actions | level_06_locked.png
+[  50% ] _update_scan_actions | level_06_unlocked.png
+[  50% ] _update_scan_actions | level_08_locked.png
+[  50% ] _update_scan_actions | level_08_unlocked.png
+[  50% ] _update_scan_actions | level_10_locked.png
+[  50% ] _update_scan_actions | level_10_unlocked.png
+[  50% ] _update_scan_actions | level_01_unlocked.png
+[  51% ] _update_scan_actions | level_06_locked.png
+[  51% ] _update_scan_actions | level_06_unlocked.png
+[  51% ] _update_scan_actions | level_08_locked.png
+[  51% ] _update_scan_actions | level_08_unlocked.png
+[  51% ] _update_scan_actions | level_10_locked.png
+[  51% ] _update_scan_actions | level_10_unlocked.png
+[  52% ] _update_scan_actions | contact_sheet.png
+[  52% ] _update_scan_actions | walk_cycles.png
+[  52% ] _update_scan_actions | cargador_0_0.svg
+[  52% ] _update_scan_actions | cargador_0_1.svg
+[  52% ] _update_scan_actions | cargador_0_2.svg
+[  52% ] _update_scan_actions | cargador_0_3.svg
+[  52% ] _update_scan_actions | cargador_1_0.svg
+[  53% ] _update_scan_actions | cargador_1_1.svg
+[  53% ] _update_scan_actions | cargador_1_2.svg
+[  53% ] _update_scan_actions | cargador_1_3.svg
+[  53% ] _update_scan_actions | cargador_2_0.svg
+[  53% ] _update_scan_actions | cargador_2_1.svg
+[  53% ] _update_scan_actions | cargador_2_2.svg
+[  53% ] _update_scan_actions | cargador_2_3.svg
+[  54% ] _update_scan_actions | cargador_3_0.svg
+[  54% ] _update_scan_actions | cargador_3_1.svg
+[  54% ] _update_scan_actions | cargador_3_2.svg
+[  54% ] _update_scan_actions | cargador_3_3.svg
+[  54% ] _update_scan_actions | ratero_0_0.svg
+[  54% ] _update_scan_actions | ratero_0_1.svg
+[  55% ] _update_scan_actions | ratero_0_2.svg
+[  55% ] _update_scan_actions | ratero_0_3.svg
+[  55% ] _update_scan_actions | ratero_1_0.svg
+[  55% ] _update_scan_actions | ratero_1_1.svg
+[  55% ] _update_scan_actions | ratero_1_2.svg
+[  55% ] _update_scan_actions | ratero_1_3.svg
+[  55% ] _update_scan_actions | ratero_2_0.svg
+[  56% ] _update_scan_actions | ratero_2_1.svg
+[  56% ] _update_scan_actions | ratero_2_2.svg
+[  56% ] _update_scan_actions | ratero_2_3.svg
+[  56% ] _update_scan_actions | ratero_3_0.svg
+[  56% ] _update_scan_actions | ratero_3_1.svg
+[  56% ] _update_scan_actions | ratero_3_2.svg
+[  57% ] _update_scan_actions | ratero_3_3.svg
+[  57% ] _update_scan_actions | contact_34.png
+[  57% ] _update_scan_actions | contact_220.png
+[  57% ] _update_scan_actions | flowers.png
+[  57% ] _update_scan_actions | seam_mosaic.png
+[  57% ] _update_scan_actions | contact_34.png
+[  57% ] _update_scan_actions | contact_220.png
+[  58% ] _update_scan_actions | flowers.png
+[  58% ] _update_scan_actions | seam_mosaic.png
+[  58% ] _update_scan_actions | bosque.svg
+[  58% ] _update_scan_actions | desierto.svg
+[  58% ] _update_scan_actions | flowers.svg
+[  58% ] _update_scan_actions | nieve.svg
+[  58% ] _update_scan_actions | pantano.svg
+[  59% ] _update_scan_actions | path.svg
+[  59% ] _update_scan_actions | pradera.svg
+[  59% ] _update_scan_actions | ruinas.svg
+[  59% ] _update_scan_actions | volcan.svg
+[  59% ] _update_scan_actions | flores.svg
+[  59% ] _update_scan_actions | ground_bosque.png
+[  60% ] _update_scan_actions | ground_desierto.png
+[  60% ] _update_scan_actions | ground_nieve.png
+[  60% ] _update_scan_actions | ground_pantano.png
+[  60% ] _update_scan_actions | ground_pradera.png
+[  60% ] _update_scan_actions | ground_ruinas.png
+[  60% ] _update_scan_actions | ground_volcan.png
+[  60% ] _update_scan_actions | path.png
+[  61% ] _update_scan_actions | selector-final.png
+[  61% ] _update_scan_actions | selector.png
+[  61% ] _update_scan_actions | build.wav
+[  61% ] _update_scan_actions | click.wav
+[  61% ] _update_scan_actions | combo.wav
+[  61% ] _update_scan_actions | defeat.wav
+[  61% ] _update_scan_actions | enemy_death.wav
+[  62% ] _update_scan_actions | heal.wav
+[  62% ] _update_scan_actions | impact.wav
+[  62% ] _update_scan_actions | life_lost.wav
+[  62% ] _update_scan_actions | music_combat.wav
+[  62% ] _update_scan_actions | music_loop.wav
+[  62% ] _update_scan_actions | music_menu.wav
+[  63% ] _update_scan_actions | reflect.wav
+[  63% ] _update_scan_actions | sell.wav
+[  63% ] _update_scan_actions | shot_basic.wav
+[  63% ] _update_scan_actions | shot_burst.wav
+[  63% ] _update_scan_actions | shot_cannon.wav
+[  63% ] _update_scan_actions | shot_disruptor.wav
+[  63% ] _update_scan_actions | shot_fire.wav
+[  64% ] _update_scan_actions | shot_frost.wav
+[  64% ] _update_scan_actions | shot_mortar.wav
+[  64% ] _update_scan_actions | shot_multi.wav
+[  64% ] _update_scan_actions | shot_sniper.wav
+[  64% ] _update_scan_actions | shot_tesla.wav
+[  64% ] _update_scan_actions | stun.wav
+[  65% ] _update_scan_actions | upgrade.wav
+[  65% ] _update_scan_actions | victory.wav
+[  65% ] _update_scan_actions | wave_start.wav
+[  65% ] _update_scan_actions | explosion.png
+[  65% ] _update_scan_actions | flame.png
+[  65% ] _update_scan_actions | frost.png
+[  65% ] _update_scan_actions | spark.png
+[  66% ] _update_scan_actions | flame.svg
+[  66% ] _update_scan_actions | armored.png
+[  66% ] _update_scan_actions | armored_walk.png
+[  66% ] _update_scan_actions | boss.png
+[  66% ] _update_scan_actions | boss_walk.png
+[  66% ] _update_scan_actions | cargador.png
+[  66% ] _update_scan_actions | cargador_walk.png
+[  67% ] _update_scan_actions | colossus.png
+[  67% ] _update_scan_actions | colossus_shard.png
+[  67% ] _update_scan_actions | colossus_shard_walk.png
+[  67% ] _update_scan_actions | colossus_walk.png
+[  67% ] _update_scan_actions | fast.png
+[  67% ] _update_scan_actions | fast_walk.png
+[  68% ] _update_scan_actions | flyer.png
+[  68% ] _update_scan_actions | flyer_flap.png
+[  68% ] _update_scan_actions | guardian.png
+[  68% ] _update_scan_actions | guardian_walk.png
+[  68% ] _update_scan_actions | healer.png
+[  68% ] _update_scan_actions | healer_m43.png
+[  68% ] _update_scan_actions | healer_m43_walk.png
+[  69% ] _update_scan_actions | healer_walk.png
+[  69% ] _update_scan_actions | mirror.png
+[  69% ] _update_scan_actions | mirror_walk.png
+[  69% ] _update_scan_actions | normal.png
+[  69% ] _update_scan_actions | normal_walk.png
+[  69% ] _update_scan_actions | rammer_m43.png
+[  69% ] _update_scan_actions | rammer_m43_walk.png
+[  70% ] _update_scan_actions | ratero.png
+[  70% ] _update_scan_actions | ratero_walk.png
+[  70% ] _update_scan_actions | shaman.png
+[  70% ] _update_scan_actions | shaman_walk.png
+[  70% ] _update_scan_actions | spider.png
+[  70% ] _update_scan_actions | spiderling.png
+[  71% ] _update_scan_actions | spiderling_walk.png
+[  71% ] _update_scan_actions | spider_walk.png
+[  71% ] _update_scan_actions | tank.png
+[  71% ] _update_scan_actions | tank_walk.png
+[  71% ] _update_scan_actions | thief_m43.png
+[  71% ] _update_scan_actions | thief_m43_walk.png
+[  71% ] _update_scan_actions | troll.png
+[  72% ] _update_scan_actions | troll_walk.png
+[  72% ] _update_scan_actions | armored.svg
+[  72% ] _update_scan_actions | boss.svg
+[  72% ] _update_scan_actions | fast.svg
+[  72% ] _update_scan_actions | flyer.svg
+[  72% ] _update_scan_actions | guardian.svg
+[  73% ] _update_scan_actions | healer.svg
+[  73% ] _update_scan_actions | mirror.svg
+[  73% ] _update_scan_actions | normal.svg
+[  73% ] _update_scan_actions | rammer.png
+[  73% ] _update_scan_actions | shaman.svg
+[  73% ] _update_scan_actions | spider.svg
+[  73% ] _update_scan_actions | spiderling.svg
+[  74% ] _update_scan_actions | tank.svg
+[  74% ] _update_scan_actions | thief.svg
+[  74% ] _update_scan_actions | troll.svg
+[  74% ] _update_scan_actions | bush.png
+[  74% ] _update_scan_actions | gate.png
+[  74% ] _update_scan_actions | rock_a.png
+[  74% ] _update_scan_actions | rock_b.png
+[  75% ] _update_scan_actions | tree.png
+[  75% ] _update_scan_actions | abeto.svg
+[  75% ] _update_scan_actions | arbol_removible.svg
+[  75% ] _update_scan_actions | arbol_removible_trabajo.svg
+[  75% ] _update_scan_actions | bloque.svg
+[  75% ] _update_scan_actions | bosque_explotable.svg
+[  76% ] _update_scan_actions | bosque_explotable_activo.svg
+[  76% ] _update_scan_actions | bosque_explotable_agotado.svg
+[  76% ] _update_scan_actions | bush.svg
+[  76% ] _update_scan_actions | cactus.svg
+[  76% ] _update_scan_actions | campamento_vacio.svg
+[  76% ] _update_scan_actions | central_1.svg
+[  76% ] _update_scan_actions | central_2.svg
+[  77% ] _update_scan_actions | central_3.svg
+[  77% ] _update_scan_actions | central_4.svg
+[  77% ] _update_scan_actions | columna.svg
+[  77% ] _update_scan_actions | despejado_bosque.svg
+[  77% ] _update_scan_actions | despejado_desierto.svg
+[  77% ] _update_scan_actions | despejado_pradera.svg
+[  77% ] _update_scan_actions | despejado_ruinas.svg
+[  78% ] _update_scan_actions | escombro.svg
+[  78% ] _update_scan_actions | escombro_trabajo.svg
+[  78% ] _update_scan_actions | estatua.svg
+[  78% ] _update_scan_actions | flores.svg
+[  78% ] _update_scan_actions | gate.svg
+[  78% ] _update_scan_actions | grieta.svg
+[  79% ] _update_scan_actions | helecho.svg
+[  79% ] _update_scan_actions | herramienta.svg
+[  79% ] _update_scan_actions | hito.svg
+[  79% ] _update_scan_actions | hongo.svg
+[  79% ] _update_scan_actions | huesos.svg
+[  79% ] _update_scan_actions | junco.svg
+[  79% ] _update_scan_actions | marca_pieza.svg
+[  80% ] _update_scan_actions | mina.svg
+[  80% ] _update_scan_actions | mina_activa.svg
+[  80% ] _update_scan_actions | mina_agotada.svg
+[  80% ] _update_scan_actions | pino.svg
+[  80% ] _update_scan_actions | poste_cintas.svg
+[  80% ] _update_scan_actions | reserva_llena.svg
+[  80% ] _update_scan_actions | reserva_vacia.svg
+[  81% ] _update_scan_actions | roca_marcada.svg
+[  81% ] _update_scan_actions | roca_negra.svg
+[  81% ] _update_scan_actions | roca_nieve.svg
+[  81% ] _update_scan_actions | roca_removible.svg
+[  81% ] _update_scan_actions | roca_removible_trabajo.svg
+[  81% ] _update_scan_actions | roca_roja.svg
+[  82% ] _update_scan_actions | rock_a.svg
+[  82% ] _update_scan_actions | rock_b.svg
+[  82% ] _update_scan_actions | sendero.svg
+[  82% ] _update_scan_actions | simbolo_ruina.svg
+[  82% ] _update_scan_actions | supply_cart.svg
+[  82% ] _update_scan_actions | supply_conveyor.svg
+[  82% ] _update_scan_actions | supply_depot.svg
+[  83% ] _update_scan_actions | supply_line_pole.svg
+[  83% ] _update_scan_actions | tree.svg
+[  83% ] _update_scan_actions | tronco.svg
+[  83% ] _update_scan_actions | basic.png
+[  83% ] _update_scan_actions | burst.png
+[  83% ] _update_scan_actions | cannon.png
+[  84% ] _update_scan_actions | fire.png
+[  84% ] _update_scan_actions | frost.png
+[  84% ] _update_scan_actions | mortar.png
+[  84% ] _update_scan_actions | multi.png
+[  84% ] _update_scan_actions | sniper.png
+[  84% ] _update_scan_actions | tesla.png
+[  84% ] _update_scan_actions | basic.svg
+[  85% ] _update_scan_actions | burst.svg
+[  85% ] _update_scan_actions | cannon.svg
+[  85% ] _update_scan_actions | fire.svg
+[  85% ] _update_scan_actions | frost.svg
+[  85% ] _update_scan_actions | mortar.svg
+[  85% ] _update_scan_actions | multi.svg
+[  85% ] _update_scan_actions | sniper.svg
+[  86% ] _update_scan_actions | tesla.svg
+[  86% ] _update_scan_actions | epilogue.png
+[  86% ] _update_scan_actions | base_1.png
+[  86% ] _update_scan_actions | base_2.png
+[  86% ] _update_scan_actions | base_3.png
+[  86% ] _update_scan_actions | basic_atlas.png
+[  87% ] _update_scan_actions | basic_level_2.png
+[  87% ] _update_scan_actions | basic_level_3.png
+[  87% ] _update_scan_actions | burst_atlas.png
+[  87% ] _update_scan_actions | burst_level_2.png
+[  87% ] _update_scan_actions | burst_level_3.png
+[  87% ] _update_scan_actions | cannon_atlas.png
+[  87% ] _update_scan_actions | cannon_level_2.png
+[  88% ] _update_scan_actions | cannon_level_2_icon.png
+[  88% ] _update_scan_actions | cannon_level_3.png
+[  88% ] _update_scan_actions | cannon_level_3_icon.png
+[  88% ] _update_scan_actions | disruptor_atlas.png
+[  88% ] _update_scan_actions | disruptor_level_2.png
+[  88% ] _update_scan_actions | disruptor_level_3.png
+[  88% ] _update_scan_actions | disruptor_pulse_ring.png
+[  89% ] _update_scan_actions | disruptor_suppression_arc_1.png
+[  89% ] _update_scan_actions | disruptor_suppression_arc_2.png
+[  89% ] _update_scan_actions | disruptor_suppression_arc_3.png
+[  89% ] _update_scan_actions | disruptor_suppression_icon.png
+[  89% ] _update_scan_actions | fire_atlas.png
+[  89% ] _update_scan_actions | fire_level_2.png
+[  90% ] _update_scan_actions | fire_level_3.png
+[  90% ] _update_scan_actions | frost_atlas.png
+[  90% ] _update_scan_actions | frost_level_2.png
+[  90% ] _update_scan_actions | frost_level_3.png
+[  90% ] _update_scan_actions | mechanical_standard_m43.png
+[  90% ] _update_scan_actions | mortar_atlas.png
+[  90% ] _update_scan_actions | mortar_level_2.png
+[  91% ] _update_scan_actions | mortar_level_3.png
+[  91% ] _update_scan_actions | multi_atlas.png
+[  91% ] _update_scan_actions | multi_level_2.png
+[  91% ] _update_scan_actions | multi_level_3.png
+[  91% ] _update_scan_actions | sniper_atlas.png
+[  91% ] _update_scan_actions | sniper_level_2.png
+[  92% ] _update_scan_actions | sniper_level_3.png
+[  92% ] _update_scan_actions | tesla_atlas.png
+[  92% ] _update_scan_actions | tesla_level_2.png
+[  92% ] _update_scan_actions | tesla_level_3.png
+[  92% ] _update_scan_actions | turret_basic.png
+[  92% ] _update_scan_actions | turret_burst.png
+[  92% ] _update_scan_actions | turret_cannon.png
+[  93% ] _update_scan_actions | turret_disruptor.png
+[  93% ] _update_scan_actions | turret_fire.png
+[  93% ] _update_scan_actions | turret_frost.png
+[  93% ] _update_scan_actions | turret_mortar.png
+[  93% ] _update_scan_actions | turret_multi.png
+[  93% ] _update_scan_actions | turret_sniper.png
+[  93% ] _update_scan_actions | turret_tesla.png
+[  94% ] _update_scan_actions | base_1.svg
+[  94% ] _update_scan_actions | base_2.svg
+[  94% ] _update_scan_actions | base_3.svg
+[  94% ] _update_scan_actions | mechanical_standard.svg
+[  94% ] _update_scan_actions | turret_basic.svg
+[  94% ] _update_scan_actions | turret_burst.svg
+[  95% ] _update_scan_actions | turret_cannon.svg
+[  95% ] _update_scan_actions | turret_fire.svg
+[  95% ] _update_scan_actions | turret_frost.svg
+[  95% ] _update_scan_actions | turret_mortar.svg
+[  95% ] _update_scan_actions | turret_multi.svg
+[  95% ] _update_scan_actions | turret_sniper.svg
+[  95% ] _update_scan_actions | turret_tesla.svg
+[  96% ] _update_scan_actions | coleccion_disruptor.svg
+[  96% ] _update_scan_actions | demoledora.svg
+[  96% ] _update_scan_actions | stat_gold.svg
+[  96% ] _update_scan_actions | stat_lives.svg
+[  96% ] _update_scan_actions | stat_points.svg
+[  96% ] _update_scan_actions | stat_resources.svg
+[  96% ] _update_scan_actions | stat_wave.svg
+[  97% ] _update_scan_actions | trophy.svg
+[  97% ] _update_scan_actions | ground_bosque.png
+[  97% ] _update_scan_actions | ground_desierto.png
+[  97% ] _update_scan_actions | ground_nieve.png
+[  97% ] _update_scan_actions | ground_pantano.png
+[  97% ] _update_scan_actions | ground_pradera.png
+[  98% ] _update_scan_actions | ground_ruinas.png
+[  98% ] _update_scan_actions | ground_volcan.png
+[  98% ] _update_scan_actions | path.png
+[  98% ] _update_scan_actions | tiles.png
+[  98% ] _update_scan_actions | check_off.svg
+[  98% ] _update_scan_actions | check_on.svg
+[  98% ] _update_scan_actions | logo.png
+[  99% ] _update_scan_actions | slider_grip.svg
+[  99% ] _update_scan_actions | technology_token.svg
+[  99% ] _update_scan_actions | tower_repair.svg
+[  99% ] _update_scan_actions | tower_wear.svg
+[  99% ] _update_scan_actions | icon.png
+[ DONE ] _update_scan_actions
+
+[   0% ] reimport | Started (Re)Importación de Assets (606 steps)
+[   0% ] reimport | Preparando archivos para reimportarlos...
+[   0% ] reimport | Preparando archivos para reimportarlos...
+[   0% ] reimport | Preparando archivos para reimportarlos...
+[   0% ] reimport | Preparando archivos para reimportarlos...
+[   0% ] reimport | Preparando archivos para reimportarlos...
+[   0% ] reimport | Preparando archivos para reimportarlos...
+[   0% ] reimport | Preparando archivos para reimportarlos...
+[   1% ] reimport | Preparando archivos para reimportarlos...
+[   1% ] reimport | Preparando archivos para reimportarlos...
+[   1% ] reimport | Preparando archivos para reimportarlos...
+[   1% ] reimport | Preparando archivos para reimportarlos...
+[   1% ] reimport | Preparando archivos para reimportarlos...
+[   1% ] reimport | Preparando archivos para reimportarlos...
+[   2% ] reimport | Preparando archivos para reimportarlos...
+[   2% ] reimport | Preparando archivos para reimportarlos...
+[   2% ] reimport | Preparando archivos para reimportarlos...
+[   2% ] reimport | Preparando archivos para reimportarlos...
+[   2% ] reimport | Preparando archivos para reimportarlos...
+[   2% ] reimport | Preparando archivos para reimportarlos...
+[   3% ] reimport | Preparando archivos para reimportarlos...
+[   3% ] reimport | Preparando archivos para reimportarlos...
+[   3% ] reimport | Preparando archivos para reimportarlos...
+[   3% ] reimport | Preparando archivos para reimportarlos...
+[   3% ] reimport | Preparando archivos para reimportarlos...
+[   3% ] reimport | Preparando archivos para reimportarlos...
+[   4% ] reimport | Preparando archivos para reimportarlos...
+[   4% ] reimport | Preparando archivos para reimportarlos...
+[   4% ] reimport | Preparando archivos para reimportarlos...
+[   4% ] reimport | Preparando archivos para reimportarlos...
+[   4% ] reimport | Preparando archivos para reimportarlos...
+[   4% ] reimport | Preparando archivos para reimportarlos...
+[   5% ] reimport | Preparando archivos para reimportarlos...
+[   5% ] reimport | Preparando archivos para reimportarlos...
+[   5% ] reimport | Preparando archivos para reimportarlos...
+[   5% ] reimport | Preparando archivos para reimportarlos...
+[   5% ] reimport | Preparando archivos para reimportarlos...
+[   5% ] reimport | Preparando archivos para reimportarlos...
+[   6% ] reimport | Preparando archivos para reimportarlos...
+[   6% ] reimport | Preparando archivos para reimportarlos...
+[   6% ] reimport | Preparando archivos para reimportarlos...
+[   6% ] reimport | Preparando archivos para reimportarlos...
+[   6% ] reimport | Preparando archivos para reimportarlos...
+[   6% ] reimport | Preparando archivos para reimportarlos...
+[   7% ] reimport | Preparando archivos para reimportarlos...
+[   7% ] reimport | Preparando archivos para reimportarlos...
+[   7% ] reimport | Preparando archivos para reimportarlos...
+[   7% ] reimport | Preparando archivos para reimportarlos...
+[   7% ] reimport | Preparando archivos para reimportarlos...
+[   7% ] reimport | Preparando archivos para reimportarlos...
+[   8% ] reimport | Preparando archivos para reimportarlos...
+[   8% ] reimport | Preparando archivos para reimportarlos...
+[   8% ] reimport | Preparando archivos para reimportarlos...
+[   8% ] reimport | Preparando archivos para reimportarlos...
+[   8% ] reimport | Preparando archivos para reimportarlos...
+[   8% ] reimport | Preparando archivos para reimportarlos...
+[   9% ] reimport | Preparando archivos para reimportarlos...
+[   9% ] reimport | Preparando archivos para reimportarlos...
+[   9% ] reimport | Preparando archivos para reimportarlos...
+[   9% ] reimport | Preparando archivos para reimportarlos...
+[   9% ] reimport | Preparando archivos para reimportarlos...
+[   9% ] reimport | Preparando archivos para reimportarlos...
+[  10% ] reimport | Preparando archivos para reimportarlos...
+[  10% ] reimport | Preparando archivos para reimportarlos...
+[  10% ] reimport | Preparando archivos para reimportarlos...
+[  10% ] reimport | Preparando archivos para reimportarlos...
+[  10% ] reimport | Preparando archivos para reimportarlos...
+[  10% ] reimport | Preparando archivos para reimportarlos...
+[  11% ] reimport | Preparando archivos para reimportarlos...
+[  11% ] reimport | Preparando archivos para reimportarlos...
+[  11% ] reimport | Preparando archivos para reimportarlos...
+[  11% ] reimport | Preparando archivos para reimportarlos...
+[  11% ] reimport | Preparando archivos para reimportarlos...
+[  11% ] reimport | Preparando archivos para reimportarlos...
+[  12% ] reimport | Preparando archivos para reimportarlos...
+[  12% ] reimport | Preparando archivos para reimportarlos...
+[  12% ] reimport | Preparando archivos para reimportarlos...
+[  12% ] reimport | Preparando archivos para reimportarlos...
+[  12% ] reimport | Preparando archivos para reimportarlos...
+[  12% ] reimport | Preparando archivos para reimportarlos...
+[  13% ] reimport | Preparando archivos para reimportarlos...
+[  13% ] reimport | Preparando archivos para reimportarlos...
+[  13% ] reimport | Preparando archivos para reimportarlos...
+[  13% ] reimport | Preparando archivos para reimportarlos...
+[  13% ] reimport | Preparando archivos para reimportarlos...
+[  13% ] reimport | Preparando archivos para reimportarlos...
+[  14% ] reimport | Preparando archivos para reimportarlos...
+[  14% ] reimport | Preparando archivos para reimportarlos...
+[  14% ] reimport | Preparando archivos para reimportarlos...
+[  14% ] reimport | Preparando archivos para reimportarlos...
+[  14% ] reimport | Preparando archivos para reimportarlos...
+[  14% ] reimport | Preparando archivos para reimportarlos...
+[  14% ] reimport | Preparando archivos para reimportarlos...
+[  15% ] reimport | Preparando archivos para reimportarlos...
+[  15% ] reimport | Preparando archivos para reimportarlos...
+[  15% ] reimport | Preparando archivos para reimportarlos...
+[  15% ] reimport | Preparando archivos para reimportarlos...
+[  15% ] reimport | Preparando archivos para reimportarlos...
+[  15% ] reimport | Preparando archivos para reimportarlos...
+[  16% ] reimport | Preparando archivos para reimportarlos...
+[  16% ] reimport | Preparando archivos para reimportarlos...
+[  16% ] reimport | Preparando archivos para reimportarlos...
+[  16% ] reimport | Preparando archivos para reimportarlos...
+[  16% ] reimport | Preparando archivos para reimportarlos...
+[  16% ] reimport | Preparando archivos para reimportarlos...
+[  17% ] reimport | Preparando archivos para reimportarlos...
+[  17% ] reimport | Preparando archivos para reimportarlos...
+[  17% ] reimport | Preparando archivos para reimportarlos...
+[  17% ] reimport | Preparando archivos para reimportarlos...
+[  17% ] reimport | Preparando archivos para reimportarlos...
+[  17% ] reimport | Preparando archivos para reimportarlos...
+[  18% ] reimport | Preparando archivos para reimportarlos...
+[  18% ] reimport | Preparando archivos para reimportarlos...
+[  18% ] reimport | Preparando archivos para reimportarlos...
+[  18% ] reimport | Preparando archivos para reimportarlos...
+[  18% ] reimport | Preparando archivos para reimportarlos...
+[  18% ] reimport | Preparando archivos para reimportarlos...
+[  19% ] reimport | Preparando archivos para reimportarlos...
+[  19% ] reimport | Preparando archivos para reimportarlos...
+[  19% ] reimport | Preparando archivos para reimportarlos...
+[  19% ] reimport | Preparando archivos para reimportarlos...
+[  19% ] reimport | Preparando archivos para reimportarlos...
+[  19% ] reimport | Preparando archivos para reimportarlos...
+[  20% ] reimport | Preparando archivos para reimportarlos...
+[  20% ] reimport | Preparando archivos para reimportarlos...
+[  20% ] reimport | Preparando archivos para reimportarlos...
+[  20% ] reimport | Preparando archivos para reimportarlos...
+[  20% ] reimport | Preparando archivos para reimportarlos...
+[  20% ] reimport | Preparando archivos para reimportarlos...
+[  21% ] reimport | Preparando archivos para reimportarlos...
+[  21% ] reimport | Preparando archivos para reimportarlos...
+[  21% ] reimport | Preparando archivos para reimportarlos...
+[  21% ] reimport | Preparando archivos para reimportarlos...
+[  21% ] reimport | Preparando archivos para reimportarlos...
+[  21% ] reimport | Preparando archivos para reimportarlos...
+[  22% ] reimport | Preparando archivos para reimportarlos...
+[  22% ] reimport | Preparando archivos para reimportarlos...
+[  22% ] reimport | Preparando archivos para reimportarlos...
+[  22% ] reimport | Preparando archivos para reimportarlos...
+[  22% ] reimport | Preparando archivos para reimportarlos...
+[  22% ] reimport | Preparando archivos para reimportarlos...
+[  23% ] reimport | Preparando archivos para reimportarlos...
+[  23% ] reimport | Preparando archivos para reimportarlos...
+[  23% ] reimport | Preparando archivos para reimportarlos...
+[  23% ] reimport | Preparando archivos para reimportarlos...
+[  23% ] reimport | Preparando archivos para reimportarlos...
+[  23% ] reimport | Preparando archivos para reimportarlos...
+[  24% ] reimport | Preparando archivos para reimportarlos...
+[  24% ] reimport | Preparando archivos para reimportarlos...
+[  24% ] reimport | Preparando archivos para reimportarlos...
+[  24% ] reimport | Preparando archivos para reimportarlos...
+[  24% ] reimport | Preparando archivos para reimportarlos...
+[  24% ] reimport | Preparando archivos para reimportarlos...
+[  25% ] reimport | Preparando archivos para reimportarlos...
+[  25% ] reimport | Preparando archivos para reimportarlos...
+[  25% ] reimport | Preparando archivos para reimportarlos...
+[  25% ] reimport | Preparando archivos para reimportarlos...
+[  25% ] reimport | Preparando archivos para reimportarlos...
+[  25% ] reimport | Preparando archivos para reimportarlos...
+[  26% ] reimport | Preparando archivos para reimportarlos...
+[  26% ] reimport | Preparando archivos para reimportarlos...
+[  26% ] reimport | Preparando archivos para reimportarlos...
+[  26% ] reimport | Preparando archivos para reimportarlos...
+[  26% ] reimport | Preparando archivos para reimportarlos...
+[  26% ] reimport | Preparando archivos para reimportarlos...
+[  27% ] reimport | Preparando archivos para reimportarlos...
+[  27% ] reimport | Preparando archivos para reimportarlos...
+[  27% ] reimport | Preparando archivos para reimportarlos...
+[  27% ] reimport | Preparando archivos para reimportarlos...
+[  27% ] reimport | Preparando archivos para reimportarlos...
+[  27% ] reimport | Preparando archivos para reimportarlos...
+[  28% ] reimport | Preparando archivos para reimportarlos...
+[  28% ] reimport | Preparando archivos para reimportarlos...
+[  28% ] reimport | Preparando archivos para reimportarlos...
+[  28% ] reimport | Preparando archivos para reimportarlos...
+[  28% ] reimport | Preparando archivos para reimportarlos...
+[  28% ] reimport | Preparando archivos para reimportarlos...
+[  28% ] reimport | Preparando archivos para reimportarlos...
+[  29% ] reimport | Preparando archivos para reimportarlos...
+[  29% ] reimport | Preparando archivos para reimportarlos...
+[  29% ] reimport | Preparando archivos para reimportarlos...
+[  29% ] reimport | Preparando archivos para reimportarlos...
+[  29% ] reimport | Preparando archivos para reimportarlos...
+[  29% ] reimport | Preparando archivos para reimportarlos...
+[  30% ] reimport | Preparando archivos para reimportarlos...
+[  30% ] reimport | Preparando archivos para reimportarlos...
+[  30% ] reimport | Preparando archivos para reimportarlos...
+[  30% ] reimport | Preparando archivos para reimportarlos...
+[  30% ] reimport | Preparando archivos para reimportarlos...
+[  30% ] reimport | Preparando archivos para reimportarlos...
+[  31% ] reimport | Preparando archivos para reimportarlos...
+[  31% ] reimport | Preparando archivos para reimportarlos...
+[  31% ] reimport | Preparando archivos para reimportarlos...
+[  31% ] reimport | Preparando archivos para reimportarlos...
+[  31% ] reimport | Preparando archivos para reimportarlos...
+[  31% ] reimport | Preparando archivos para reimportarlos...
+[  32% ] reimport | Preparando archivos para reimportarlos...
+[  32% ] reimport | Preparando archivos para reimportarlos...
+[  32% ] reimport | Preparando archivos para reimportarlos...
+[  32% ] reimport | Preparando archivos para reimportarlos...
+[  32% ] reimport | Preparando archivos para reimportarlos...
+[  32% ] reimport | Preparando archivos para reimportarlos...
+[  33% ] reimport | Preparando archivos para reimportarlos...
+[  33% ] reimport | Preparando archivos para reimportarlos...
+[  33% ] reimport | Preparando archivos para reimportarlos...
+[  33% ] reimport | Preparando archivos para reimportarlos...
+[  33% ] reimport | Preparando archivos para reimportarlos...
+[  33% ] reimport | Preparando archivos para reimportarlos...
+[  34% ] reimport | Preparando archivos para reimportarlos...
+[  34% ] reimport | Preparando archivos para reimportarlos...
+[  34% ] reimport | Preparando archivos para reimportarlos...
+[  34% ] reimport | Preparando archivos para reimportarlos...
+[  34% ] reimport | Preparando archivos para reimportarlos...
+[  34% ] reimport | Preparando archivos para reimportarlos...
+[  35% ] reimport | Preparando archivos para reimportarlos...
+[  35% ] reimport | Preparando archivos para reimportarlos...
+[  35% ] reimport | Preparando archivos para reimportarlos...
+[  35% ] reimport | Preparando archivos para reimportarlos...
+[  35% ] reimport | Preparando archivos para reimportarlos...
+[  35% ] reimport | Preparando archivos para reimportarlos...
+[  36% ] reimport | Preparando archivos para reimportarlos...
+[  36% ] reimport | Preparando archivos para reimportarlos...
+[  36% ] reimport | Preparando archivos para reimportarlos...
+[  36% ] reimport | Preparando archivos para reimportarlos...
+[  36% ] reimport | Preparando archivos para reimportarlos...
+[  36% ] reimport | Preparando archivos para reimportarlos...
+[  37% ] reimport | Preparando archivos para reimportarlos...
+[  37% ] reimport | Preparando archivos para reimportarlos...
+[  37% ] reimport | Preparando archivos para reimportarlos...
+[  37% ] reimport | Preparando archivos para reimportarlos...
+[  37% ] reimport | Preparando archivos para reimportarlos...
+[  37% ] reimport | Preparando archivos para reimportarlos...
+[  38% ] reimport | Preparando archivos para reimportarlos...
+[  38% ] reimport | Preparando archivos para reimportarlos...
+[  38% ] reimport | Preparando archivos para reimportarlos...
+[  38% ] reimport | Preparando archivos para reimportarlos...
+[  38% ] reimport | Preparando archivos para reimportarlos...
+[  38% ] reimport | Preparando archivos para reimportarlos...
+[  39% ] reimport | Preparando archivos para reimportarlos...
+[  39% ] reimport | Preparando archivos para reimportarlos...
+[  39% ] reimport | Preparando archivos para reimportarlos...
+[  39% ] reimport | Preparando archivos para reimportarlos...
+[  39% ] reimport | Preparando archivos para reimportarlos...
+[  39% ] reimport | Preparando archivos para reimportarlos...
+[  40% ] reimport | Preparando archivos para reimportarlos...
+[  40% ] reimport | Preparando archivos para reimportarlos...
+[  40% ] reimport | Preparando archivos para reimportarlos...
+[  40% ] reimport | Preparando archivos para reimportarlos...
+[  40% ] reimport | Preparando archivos para reimportarlos...
+[  40% ] reimport | Preparando archivos para reimportarlos...
+[  41% ] reimport | Preparando archivos para reimportarlos...
+[  41% ] reimport | Preparando archivos para reimportarlos...
+[  41% ] reimport | Preparando archivos para reimportarlos...
+[  41% ] reimport | Preparando archivos para reimportarlos...
+[  41% ] reimport | Preparando archivos para reimportarlos...
+[  41% ] reimport | Preparando archivos para reimportarlos...
+[  42% ] reimport | Preparando archivos para reimportarlos...
+[  42% ] reimport | Preparando archivos para reimportarlos...
+[  42% ] reimport | Preparando archivos para reimportarlos...
+[  42% ] reimport | Preparando archivos para reimportarlos...
+[  42% ] reimport | Preparando archivos para reimportarlos...
+[  42% ] reimport | Preparando archivos para reimportarlos...
+[  42% ] reimport | Preparando archivos para reimportarlos...
+[  43% ] reimport | Preparando archivos para reimportarlos...
+[  43% ] reimport | Preparando archivos para reimportarlos...
+[  43% ] reimport | Preparando archivos para reimportarlos...
+[  43% ] reimport | Preparando archivos para reimportarlos...
+[  43% ] reimport | Preparando archivos para reimportarlos...
+[  43% ] reimport | Preparando archivos para reimportarlos...
+[  44% ] reimport | Preparando archivos para reimportarlos...
+[  44% ] reimport | Preparando archivos para reimportarlos...
+[  44% ] reimport | Preparando archivos para reimportarlos...
+[  44% ] reimport | Preparando archivos para reimportarlos...
+[  44% ] reimport | Preparando archivos para reimportarlos...
+[  44% ] reimport | Preparando archivos para reimportarlos...
+[  45% ] reimport | Preparando archivos para reimportarlos...
+[  45% ] reimport | Preparando archivos para reimportarlos...
+[  45% ] reimport | Preparando archivos para reimportarlos...
+[  45% ] reimport | Preparando archivos para reimportarlos...
+[  45% ] reimport | Preparando archivos para reimportarlos...
+[  45% ] reimport | Preparando archivos para reimportarlos...
+[  46% ] reimport | Preparando archivos para reimportarlos...
+[  46% ] reimport | Preparando archivos para reimportarlos...
+[  46% ] reimport | Preparando archivos para reimportarlos...
+[  46% ] reimport | Preparando archivos para reimportarlos...
+[  46% ] reimport | Preparando archivos para reimportarlos...
+[  46% ] reimport | Preparando archivos para reimportarlos...
+[  47% ] reimport | Preparando archivos para reimportarlos...
+[  47% ] reimport | Preparando archivos para reimportarlos...
+[  47% ] reimport | Preparando archivos para reimportarlos...
+[  47% ] reimport | Preparando archivos para reimportarlos...
+[  47% ] reimport | Preparando archivos para reimportarlos...
+[  47% ] reimport | Preparando archivos para reimportarlos...
+[  48% ] reimport | Preparando archivos para reimportarlos...
+[  48% ] reimport | Preparando archivos para reimportarlos...
+[  48% ] reimport | Preparando archivos para reimportarlos...
+[  48% ] reimport | Preparando archivos para reimportarlos...
+[  48% ] reimport | Preparando archivos para reimportarlos...
+[  48% ] reimport | Preparando archivos para reimportarlos...
+[  49% ] reimport | Preparando archivos para reimportarlos...
+[  49% ] reimport | Preparando archivos para reimportarlos...
+[  49% ] reimport | Preparando archivos para reimportarlos...
+[  49% ] reimport | Preparando archivos para reimportarlos...
+[  49% ] reimport | Preparando archivos para reimportarlos...
+[  49% ] reimport | Preparando archivos para reimportarlos...
+[  50% ] reimport | Preparando archivos para reimportarlos...
+[  50% ] reimport | Preparando archivos para reimportarlos...
+[  50% ] reimport | Preparando archivos para reimportarlos...
+[  50% ] reimport | Preparando archivos para reimportarlos...
+[  50% ] reimport | Preparando archivos para reimportarlos...
+[  50% ] reimport | Preparando archivos para reimportarlos...
+[  51% ] reimport | Preparando archivos para reimportarlos...
+[  51% ] reimport | Preparando archivos para reimportarlos...
+[  51% ] reimport | Preparando archivos para reimportarlos...
+[  51% ] reimport | Preparando archivos para reimportarlos...
+[  51% ] reimport | Preparando archivos para reimportarlos...
+[  51% ] reimport | Preparando archivos para reimportarlos...
+[  52% ] reimport | Preparando archivos para reimportarlos...
+[  52% ] reimport | Preparando archivos para reimportarlos...
+[  52% ] reimport | Preparando archivos para reimportarlos...
+[  52% ] reimport | Preparando archivos para reimportarlos...
+[  52% ] reimport | Preparando archivos para reimportarlos...
+[  52% ] reimport | Preparando archivos para reimportarlos...
+[  53% ] reimport | Preparando archivos para reimportarlos...
+[  53% ] reimport | Preparando archivos para reimportarlos...
+[  53% ] reimport | Preparando archivos para reimportarlos...
+[  53% ] reimport | Preparando archivos para reimportarlos...
+[  53% ] reimport | Preparando archivos para reimportarlos...
+[  53% ] reimport | Preparando archivos para reimportarlos...
+[  54% ] reimport | Preparando archivos para reimportarlos...
+[  54% ] reimport | Preparando archivos para reimportarlos...
+[  54% ] reimport | Preparando archivos para reimportarlos...
+[  54% ] reimport | Preparando archivos para reimportarlos...
+[  54% ] reimport | Preparando archivos para reimportarlos...
+[  54% ] reimport | Preparando archivos para reimportarlos...
+[  55% ] reimport | Preparando archivos para reimportarlos...
+[  55% ] reimport | Preparando archivos para reimportarlos...
+[  55% ] reimport | Preparando archivos para reimportarlos...
+[  55% ] reimport | Preparando archivos para reimportarlos...
+[  55% ] reimport | Preparando archivos para reimportarlos...
+[  55% ] reimport | Preparando archivos para reimportarlos...
+[  56% ] reimport | Preparando archivos para reimportarlos...
+[  56% ] reimport | Preparando archivos para reimportarlos...
+[  56% ] reimport | Preparando archivos para reimportarlos...
+[  56% ] reimport | Preparando archivos para reimportarlos...
+[  56% ] reimport | Preparando archivos para reimportarlos...
+[  56% ] reimport | Preparando archivos para reimportarlos...
+[  57% ] reimport | Preparando archivos para reimportarlos...
+[  57% ] reimport | Preparando archivos para reimportarlos...
+[  57% ] reimport | Preparando archivos para reimportarlos...
+[  57% ] reimport | Preparando archivos para reimportarlos...
+[  57% ] reimport | Preparando archivos para reimportarlos...
+[  57% ] reimport | Preparando archivos para reimportarlos...
+[  57% ] reimport | Preparando archivos para reimportarlos...
+[  58% ] reimport | Preparando archivos para reimportarlos...
+[  58% ] reimport | Preparando archivos para reimportarlos...
+[  58% ] reimport | Preparando archivos para reimportarlos...
+[  58% ] reimport | Preparando archivos para reimportarlos...
+[  58% ] reimport | Preparando archivos para reimportarlos...
+[  58% ] reimport | Preparando archivos para reimportarlos...
+[  59% ] reimport | Preparando archivos para reimportarlos...
+[  59% ] reimport | Preparando archivos para reimportarlos...
+[  59% ] reimport | Preparando archivos para reimportarlos...
+[  59% ] reimport | Preparando archivos para reimportarlos...
+[  59% ] reimport | Preparando archivos para reimportarlos...
+[  59% ] reimport | Preparando archivos para reimportarlos...
+[  60% ] reimport | Preparando archivos para reimportarlos...
+[  60% ] reimport | Preparando archivos para reimportarlos...
+[  60% ] reimport | Preparando archivos para reimportarlos...
+[  60% ] reimport | Preparando archivos para reimportarlos...
+[  60% ] reimport | Preparando archivos para reimportarlos...
+[  60% ] reimport | Preparando archivos para reimportarlos...
+[  61% ] reimport | Preparando archivos para reimportarlos...
+[  61% ] reimport | Preparando archivos para reimportarlos...
+[  61% ] reimport | Preparando archivos para reimportarlos...
+[  61% ] reimport | Preparando archivos para reimportarlos...
+[  61% ] reimport | Preparando archivos para reimportarlos...
+[  61% ] reimport | Preparando archivos para reimportarlos...
+[  62% ] reimport | Preparando archivos para reimportarlos...
+[  62% ] reimport | Preparando archivos para reimportarlos...
+[  62% ] reimport | Preparando archivos para reimportarlos...
+[  62% ] reimport | Preparando archivos para reimportarlos...
+[  62% ] reimport | Preparando archivos para reimportarlos...
+[  62% ] reimport | Preparando archivos para reimportarlos...
+[  63% ] reimport | Preparando archivos para reimportarlos...
+[  63% ] reimport | Preparando archivos para reimportarlos...
+[  63% ] reimport | Preparando archivos para reimportarlos...
+[  63% ] reimport | Preparando archivos para reimportarlos...
+[  63% ] reimport | Preparando archivos para reimportarlos...
+[  63% ] reimport | Preparando archivos para reimportarlos...
+[  64% ] reimport | Preparando archivos para reimportarlos...
+[  64% ] reimport | Preparando archivos para reimportarlos...
+[  64% ] reimport | Preparando archivos para reimportarlos...
+[  64% ] reimport | Preparando archivos para reimportarlos...
+[  64% ] reimport | Preparando archivos para reimportarlos...
+[  64% ] reimport | Preparando archivos para reimportarlos...
+[  65% ] reimport | Preparando archivos para reimportarlos...
+[  65% ] reimport | Preparando archivos para reimportarlos...
+[  65% ] reimport | Preparando archivos para reimportarlos...
+[  65% ] reimport | Preparando archivos para reimportarlos...
+[  65% ] reimport | Preparando archivos para reimportarlos...
+[  65% ] reimport | Preparando archivos para reimportarlos...
+[  66% ] reimport | Preparando archivos para reimportarlos...
+[  66% ] reimport | Preparando archivos para reimportarlos...
+[  66% ] reimport | Preparando archivos para reimportarlos...
+[  66% ] reimport | Preparando archivos para reimportarlos...
+[  66% ] reimport | Preparando archivos para reimportarlos...
+[  66% ] reimport | Preparando archivos para reimportarlos...
+[  67% ] reimport | Preparando archivos para reimportarlos...
+[  67% ] reimport | Preparando archivos para reimportarlos...
+[  67% ] reimport | Preparando archivos para reimportarlos...
+[  67% ] reimport | Preparando archivos para reimportarlos...
+[  67% ] reimport | Preparando archivos para reimportarlos...
+[  67% ] reimport | Preparando archivos para reimportarlos...
+[  68% ] reimport | Preparando archivos para reimportarlos...
+[  68% ] reimport | Preparando archivos para reimportarlos...
+[  68% ] reimport | Preparando archivos para reimportarlos...
+[  68% ] reimport | Preparando archivos para reimportarlos...
+[  68% ] reimport | Preparando archivos para reimportarlos...
+[  68% ] reimport | Preparando archivos para reimportarlos...
+[  69% ] reimport | Preparando archivos para reimportarlos...
+[  69% ] reimport | Preparando archivos para reimportarlos...
+[  69% ] reimport | Preparando archivos para reimportarlos...
+[  69% ] reimport | Preparando archivos para reimportarlos...
+[  69% ] reimport | Preparando archivos para reimportarlos...
+[  69% ] reimport | Preparando archivos para reimportarlos...
+[  70% ] reimport | Preparando archivos para reimportarlos...
+[  70% ] reimport | Preparando archivos para reimportarlos...
+[  70% ] reimport | Preparando archivos para reimportarlos...
+[  70% ] reimport | Preparando archivos para reimportarlos...
+[  70% ] reimport | Preparando archivos para reimportarlos...
+[  70% ] reimport | Preparando archivos para reimportarlos...
+[  71% ] reimport | Preparando archivos para reimportarlos...
+[  71% ] reimport | Preparando archivos para reimportarlos...
+[  71% ] reimport | Preparando archivos para reimportarlos...
+[  71% ] reimport | Preparando archivos para reimportarlos...
+[  71% ] reimport | Preparando archivos para reimportarlos...
+[  71% ] reimport | Preparando archivos para reimportarlos...
+[  71% ] reimport | Preparando archivos para reimportarlos...
+[  72% ] reimport | Preparando archivos para reimportarlos...
+[  72% ] reimport | Preparando archivos para reimportarlos...
+[  72% ] reimport | Preparando archivos para reimportarlos...
+[  72% ] reimport | Preparando archivos para reimportarlos...
+[  72% ] reimport | Preparando archivos para reimportarlos...
+[  72% ] reimport | Preparando archivos para reimportarlos...
+[  73% ] reimport | Preparando archivos para reimportarlos...
+[  73% ] reimport | Preparando archivos para reimportarlos...
+[  73% ] reimport | Preparando archivos para reimportarlos...
+[  73% ] reimport | Preparando archivos para reimportarlos...
+[  73% ] reimport | Preparando archivos para reimportarlos...
+[  73% ] reimport | Preparando archivos para reimportarlos...
+[  74% ] reimport | Preparando archivos para reimportarlos...
+[  74% ] reimport | Preparando archivos para reimportarlos...
+[  74% ] reimport | Preparando archivos para reimportarlos...
+[  74% ] reimport | Preparando archivos para reimportarlos...
+[  74% ] reimport | Preparando archivos para reimportarlos...
+[  74% ] reimport | Preparando archivos para reimportarlos...
+[  75% ] reimport | Preparando archivos para reimportarlos...
+[  75% ] reimport | Preparando archivos para reimportarlos...
+[  75% ] reimport | Preparando archivos para reimportarlos...
+[  75% ] reimport | Preparando archivos para reimportarlos...
+[  75% ] reimport | Preparando archivos para reimportarlos...
+[  75% ] reimport | Preparando archivos para reimportarlos...
+[  76% ] reimport | Preparando archivos para reimportarlos...
+[  76% ] reimport | Preparando archivos para reimportarlos...
+[  76% ] reimport | Preparando archivos para reimportarlos...
+[  76% ] reimport | Preparando archivos para reimportarlos...
+[  76% ] reimport | Preparando archivos para reimportarlos...
+[  76% ] reimport | Preparando archivos para reimportarlos...
+[  77% ] reimport | Preparando archivos para reimportarlos...
+[  77% ] reimport | Preparando archivos para reimportarlos...
+[  77% ] reimport | Preparando archivos para reimportarlos...
+[  77% ] reimport | Preparando archivos para reimportarlos...
+[  77% ] reimport | Preparando archivos para reimportarlos...
+[  77% ] reimport | Preparando archivos para reimportarlos...
+[  78% ] reimport | Preparando archivos para reimportarlos...
+[  78% ] reimport | Preparando archivos para reimportarlos...
+[  78% ] reimport | Preparando archivos para reimportarlos...
+[  78% ] reimport | Preparando archivos para reimportarlos...
+[  78% ] reimport | Preparando archivos para reimportarlos...
+[  78% ] reimport | Preparando archivos para reimportarlos...
+[  79% ] reimport | Preparando archivos para reimportarlos...
+[  79% ] reimport | Preparando archivos para reimportarlos...
+[  79% ] reimport | Preparando archivos para reimportarlos...
+[  79% ] reimport | Preparando archivos para reimportarlos...
+[  79% ] reimport | Preparando archivos para reimportarlos...
+[  79% ] reimport | Preparando archivos para reimportarlos...
+[  80% ] reimport | Preparando archivos para reimportarlos...
+[  80% ] reimport | Preparando archivos para reimportarlos...
+[  80% ] reimport | Preparando archivos para reimportarlos...
+[  80% ] reimport | Preparando archivos para reimportarlos...
+[  80% ] reimport | Preparando archivos para reimportarlos...
+[  80% ] reimport | Preparando archivos para reimportarlos...
+[  81% ] reimport | Preparando archivos para reimportarlos...
+[  81% ] reimport | Preparando archivos para reimportarlos...
+[  81% ] reimport | Preparando archivos para reimportarlos...
+[  81% ] reimport | Preparando archivos para reimportarlos...
+[  81% ] reimport | Preparando archivos para reimportarlos...
+[  81% ] reimport | Preparando archivos para reimportarlos...
+[  82% ] reimport | Preparando archivos para reimportarlos...
+[  82% ] reimport | Preparando archivos para reimportarlos...
+[  82% ] reimport | Preparando archivos para reimportarlos...
+[  82% ] reimport | Preparando archivos para reimportarlos...
+[  82% ] reimport | Preparando archivos para reimportarlos...
+[  82% ] reimport | Preparando archivos para reimportarlos...
+[  83% ] reimport | Preparando archivos para reimportarlos...
+[  83% ] reimport | Preparando archivos para reimportarlos...
+[  83% ] reimport | Preparando archivos para reimportarlos...
+[  83% ] reimport | Preparando archivos para reimportarlos...
+[  83% ] reimport | Preparando archivos para reimportarlos...
+[  83% ] reimport | Preparando archivos para reimportarlos...
+[  84% ] reimport | Preparando archivos para reimportarlos...
+[  84% ] reimport | Preparando archivos para reimportarlos...
+[  84% ] reimport | Preparando archivos para reimportarlos...
+[  84% ] reimport | Preparando archivos para reimportarlos...
+[  84% ] reimport | Preparando archivos para reimportarlos...
+[  84% ] reimport | Preparando archivos para reimportarlos...
+[  85% ] reimport | Preparando archivos para reimportarlos...
+[  85% ] reimport | Preparando archivos para reimportarlos...
+[  85% ] reimport | Preparando archivos para reimportarlos...
+[  85% ] reimport | Preparando archivos para reimportarlos...
+[  85% ] reimport | Preparando archivos para reimportarlos...
+[  85% ] reimport | Preparando archivos para reimportarlos...
+[  85% ] reimport | Preparando archivos para reimportarlos...
+[  86% ] reimport | Preparando archivos para reimportarlos...
+[  86% ] reimport | Preparando archivos para reimportarlos...
+[  86% ] reimport | Preparando archivos para reimportarlos...
+[  86% ] reimport | Preparando archivos para reimportarlos...
+[  86% ] reimport | Preparando archivos para reimportarlos...
+[  86% ] reimport | Preparando archivos para reimportarlos...
+[  87% ] reimport | Preparando archivos para reimportarlos...
+[  87% ] reimport | Preparando archivos para reimportarlos...
+[  87% ] reimport | Preparando archivos para reimportarlos...
+[  87% ] reimport | Preparando archivos para reimportarlos...
+[  87% ] reimport | Preparando archivos para reimportarlos...
+[  87% ] reimport | Preparando archivos para reimportarlos...
+[  88% ] reimport | Preparando archivos para reimportarlos...
+[  88% ] reimport | Preparando archivos para reimportarlos...
+[  88% ] reimport | Preparando archivos para reimportarlos...
+[  88% ] reimport | Preparando archivos para reimportarlos...
+[  88% ] reimport | Preparando archivos para reimportarlos...
+[  88% ] reimport | Preparando archivos para reimportarlos...
+[  89% ] reimport | Preparando archivos para reimportarlos...
+[  89% ] reimport | Preparando archivos para reimportarlos...
+[  89% ] reimport | Preparando archivos para reimportarlos...
+[  89% ] reimport | Preparando archivos para reimportarlos...
+[  89% ] reimport | Preparando archivos para reimportarlos...
+[  89% ] reimport | Preparando archivos para reimportarlos...
+[  90% ] reimport | Preparando archivos para reimportarlos...
+[  90% ] reimport | Preparando archivos para reimportarlos...
+[  90% ] reimport | Preparando archivos para reimportarlos...
+[  90% ] reimport | Preparando archivos para reimportarlos...
+[  90% ] reimport | Preparando archivos para reimportarlos...
+[  90% ] reimport | Preparando archivos para reimportarlos...
+[  91% ] reimport | Preparando archivos para reimportarlos...
+[  91% ] reimport | Preparando archivos para reimportarlos...
+[  91% ] reimport | Preparando archivos para reimportarlos...
+[  91% ] reimport | Preparando archivos para reimportarlos...
+[  91% ] reimport | Preparando archivos para reimportarlos...
+[  91% ] reimport | Preparando archivos para reimportarlos...
+[  92% ] reimport | Preparando archivos para reimportarlos...
+[  92% ] reimport | Preparando archivos para reimportarlos...
+[  92% ] reimport | Preparando archivos para reimportarlos...
+[  92% ] reimport | Preparando archivos para reimportarlos...
+[  92% ] reimport | Preparando archivos para reimportarlos...
+[  92% ] reimport | Preparando archivos para reimportarlos...
+[  93% ] reimport | Preparando archivos para reimportarlos...
+[  93% ] reimport | Preparando archivos para reimportarlos...
+[  93% ] reimport | Preparando archivos para reimportarlos...
+[  93% ] reimport | Preparando archivos para reimportarlos...
+[  93% ] reimport | Preparando archivos para reimportarlos...
+[  93% ] reimport | Preparando archivos para reimportarlos...
+[  94% ] reimport | Preparando archivos para reimportarlos...
+[  94% ] reimport | Preparando archivos para reimportarlos...
+[  94% ] reimport | Preparando archivos para reimportarlos...
+[  94% ] reimport | Preparando archivos para reimportarlos...
+[  94% ] reimport | Preparando archivos para reimportarlos...
+[  94% ] reimport | Preparando archivos para reimportarlos...
+[  95% ] reimport | Preparando archivos para reimportarlos...
+[  95% ] reimport | Preparando archivos para reimportarlos...
+[  95% ] reimport | Preparando archivos para reimportarlos...
+[  95% ] reimport | Preparando archivos para reimportarlos...
+[  95% ] reimport | Preparando archivos para reimportarlos...
+[  95% ] reimport | Preparando archivos para reimportarlos...
+[  96% ] reimport | Preparando archivos para reimportarlos...
+[  96% ] reimport | Preparando archivos para reimportarlos...
+[  96% ] reimport | Preparando archivos para reimportarlos...
+[  96% ] reimport | Preparando archivos para reimportarlos...
+[  96% ] reimport | Preparando archivos para reimportarlos...
+[  96% ] reimport | Preparando archivos para reimportarlos...
+[  97% ] reimport | Preparando archivos para reimportarlos...
+[  97% ] reimport | Preparando archivos para reimportarlos...
+[  97% ] reimport | Preparando archivos para reimportarlos...
+[  97% ] reimport | Preparando archivos para reimportarlos...
+[  97% ] reimport | Preparando archivos para reimportarlos...
+[  97% ] reimport | Preparando archivos para reimportarlos...
+[  98% ] reimport | Preparando archivos para reimportarlos...
+[  98% ] reimport | Preparando archivos para reimportarlos...
+[  98% ] reimport | Preparando archivos para reimportarlos...
+[  98% ] reimport | Preparando archivos para reimportarlos...
+[  98% ] reimport | Preparando archivos para reimportarlos...
+[  98% ] reimport | Preparando archivos para reimportarlos...
+[  99% ] reimport | Preparando archivos para reimportarlos...
+[  99% ] reimport | Preparando archivos para reimportarlos...
+[  99% ] reimport | Preparando archivos para reimportarlos...
+[  99% ] reimport | Preparando archivos para reimportarlos...
+[  99% ] reimport | Preparando archivos para reimportarlos...
+[   0% ] reimport | Ejecutando operaciones de pre-reimportación...
+[   0% ] reimport | source_code_pro.fnt
+[   0% ] reimport | source_code_pro.fnt
+[   0% ] reimport | LobsterTwo-Regular.ttf
+[   0% ] reimport | LobsterTwo-Italic.ttf
+[   0% ] reimport | LobsterTwo-BoldItalic.ttf
+[   0% ] reimport | LobsterTwo-Bold.ttf
+[   0% ] reimport | CourierPrime-Italic.ttf
+[   1% ] reimport | CourierPrime-BoldItalic.ttf
+[   1% ] reimport | CourierPrime-Bold.ttf
+[   1% ] reimport | AnonymousPro-Italic.ttf
+[   1% ] reimport | AnonymousPro-BoldItalic.ttf
+[   1% ] reimport | source_code_pro.fnt
+[   1% ] reimport | LobsterTwo-Regular.ttf
+[   2% ] reimport | LobsterTwo-Italic.ttf
+[   2% ] reimport | LobsterTwo-BoldItalic.ttf
+[   2% ] reimport | LobsterTwo-Bold.ttf
+[   2% ] reimport | CourierPrime-Italic.ttf
+[   2% ] reimport | CourierPrime-BoldItalic.ttf
+[   2% ] reimport | CourierPrime-Bold.ttf
+[   3% ] reimport | AnonymousPro-Italic.ttf
+[   3% ] reimport | AnonymousPro-BoldItalic.ttf
+[   3% ] reimport | AnonymousPro-Bold.ttf
+[   3% ] reimport | flores.svg
+[   3% ] reimport | ground_bosque.png
+[   3% ] reimport | ground_desierto.png
+[   4% ] reimport | ground_nieve.png
+[   4% ] reimport | ground_pantano.png
+[   4% ] reimport | ground_pradera.png
+[   4% ] reimport | ground_ruinas.png
+[   4% ] reimport | ground_volcan.png
+[   4% ] reimport | path.png
+[   5% ] reimport | selector-final.png
+[   5% ] reimport | selector.png
+[   5% ] reimport | explosion.png
+[   5% ] reimport | flame.png
+[   5% ] reimport | frost.png
+[   5% ] reimport | spark.png
+[   6% ] reimport | flame.svg
+[   6% ] reimport | armored.png
+[   6% ] reimport | ratero_3_3.svg
+[   6% ] reimport | contact_34.png
+[   6% ] reimport | contact_220.png
+[   6% ] reimport | flowers.png
+[   7% ] reimport | seam_mosaic.png
+[   7% ] reimport | contact_34.png
+[   7% ] reimport | contact_220.png
+[   7% ] reimport | flowers.png
+[   7% ] reimport | seam_mosaic.png
+[   7% ] reimport | bosque.svg
+[   8% ] reimport | desierto.svg
+[   8% ] reimport | flowers.svg
+[   8% ] reimport | nieve.svg
+[   8% ] reimport | pantano.svg
+[   8% ] reimport | path.svg
+[   8% ] reimport | pradera.svg
+[   9% ] reimport | ruinas.svg
+[   9% ] reimport | volcan.svg
+[   9% ] reimport | healer_walk.png
+[   9% ] reimport | mirror.png
+[   9% ] reimport | mirror_walk.png
+[   9% ] reimport | normal.png
+[  10% ] reimport | normal_walk.png
+[  10% ] reimport | rammer_m43.png
+[  10% ] reimport | rammer_m43_walk.png
+[  10% ] reimport | ratero.png
+[  10% ] reimport | ratero_walk.png
+[  10% ] reimport | shaman.png
+[  11% ] reimport | shaman_walk.png
+[  11% ] reimport | spider.png
+[  11% ] reimport | spiderling.png
+[  11% ] reimport | spiderling_walk.png
+[  11% ] reimport | spider_walk.png
+[  11% ] reimport | tank.png
+[  12% ] reimport | tank_walk.png
+[  12% ] reimport | thief_m43.png
+[  12% ] reimport | armored_walk.png
+[  12% ] reimport | boss.png
+[  12% ] reimport | boss_walk.png
+[  12% ] reimport | cargador.png
+[  13% ] reimport | cargador_walk.png
+[  13% ] reimport | colossus.png
+[  13% ] reimport | colossus_shard.png
+[  13% ] reimport | colossus_shard_walk.png
+[  13% ] reimport | colossus_walk.png
+[  13% ] reimport | fast.png
+[  14% ] reimport | fast_walk.png
+[  14% ] reimport | flyer.png
+[  14% ] reimport | flyer_flap.png
+[  14% ] reimport | guardian.png
+[  14% ] reimport | guardian_walk.png
+[  14% ] reimport | healer.png
+[  14% ] reimport | healer_m43.png
+[  15% ] reimport | healer_m43_walk.png
+[  15% ] reimport | coleccion_disruptor.svg
+[  15% ] reimport | demoledora.svg
+[  15% ] reimport | stat_resources.svg
+[  15% ] reimport | disruptor_generated.png
+[  15% ] reimport | disruptor_level_2_generated.png
+[  16% ] reimport | disruptor_level_3_generated.png
+[  16% ] reimport | level_01_unlocked.png
+[  16% ] reimport | level_06_locked.png
+[  16% ] reimport | level_06_unlocked.png
+[  16% ] reimport | level_08_locked.png
+[  16% ] reimport | level_08_unlocked.png
+[  17% ] reimport | level_10_locked.png
+[  17% ] reimport | level_10_unlocked.png
+[  17% ] reimport | level_01_unlocked.png
+[  17% ] reimport | level_06_locked.png
+[  17% ] reimport | level_06_unlocked.png
+[  17% ] reimport | level_08_locked.png
+[  18% ] reimport | mina_agotada.svg
+[  18% ] reimport | poste_cintas.svg
+[  18% ] reimport | reserva_llena.svg
+[  18% ] reimport | reserva_vacia.svg
+[  18% ] reimport | roca_marcada.svg
+[  18% ] reimport | roca_removible.svg
+[  19% ] reimport | roca_removible_trabajo.svg
+[  19% ] reimport | sendero.svg
+[  19% ] reimport | simbolo_ruina.svg
+[  19% ] reimport | disruptor_atlas.png
+[  19% ] reimport | disruptor_level_2.png
+[  19% ] reimport | disruptor_level_3.png
+[  20% ] reimport | disruptor_pulse_ring.png
+[  20% ] reimport | disruptor_suppression_arc_1.png
+[  20% ] reimport | disruptor_suppression_arc_2.png
+[  20% ] reimport | disruptor_suppression_arc_3.png
+[  20% ] reimport | disruptor_suppression_icon.png
+[  20% ] reimport | turret_disruptor.png
+[  21% ] reimport | cargador_3_1.svg
+[  21% ] reimport | cargador_3_2.svg
+[  21% ] reimport | cargador_3_3.svg
+[  21% ] reimport | ratero_0_0.svg
+[  21% ] reimport | ratero_0_1.svg
+[  21% ] reimport | ratero_0_2.svg
+[  22% ] reimport | ratero_0_3.svg
+[  22% ] reimport | ratero_1_0.svg
+[  22% ] reimport | ratero_1_1.svg
+[  22% ] reimport | ratero_1_2.svg
+[  22% ] reimport | ratero_1_3.svg
+[  22% ] reimport | ratero_2_0.svg
+[  23% ] reimport | ratero_2_1.svg
+[  23% ] reimport | ratero_2_2.svg
+[  23% ] reimport | ratero_2_3.svg
+[  23% ] reimport | ratero_3_0.svg
+[  23% ] reimport | ratero_3_1.svg
+[  23% ] reimport | ratero_3_2.svg
+[  24% ] reimport | level_08_unlocked.png
+[  24% ] reimport | level_10_locked.png
+[  24% ] reimport | level_10_unlocked.png
+[  24% ] reimport | contact_sheet.png
+[  24% ] reimport | walk_cycles.png
+[  24% ] reimport | cargador_0_0.svg
+[  25% ] reimport | cargador_0_1.svg
+[  25% ] reimport | cargador_0_2.svg
+[  25% ] reimport | cargador_0_3.svg
+[  25% ] reimport | cargador_1_0.svg
+[  25% ] reimport | cargador_1_1.svg
+[  25% ] reimport | cargador_1_2.svg
+[  26% ] reimport | cargador_1_3.svg
+[  26% ] reimport | cargador_2_0.svg
+[  26% ] reimport | cargador_2_1.svg
+[  26% ] reimport | cargador_2_2.svg
+[  26% ] reimport | cargador_2_3.svg
+[  26% ] reimport | cargador_3_0.svg
+[  27% ] reimport | frost_level_3.png
+[  27% ] reimport | mechanical_standard_m43.png
+[  27% ] reimport | mortar_atlas.png
+[  27% ] reimport | mortar_level_2.png
+[  27% ] reimport | mortar_level_3.png
+[  27% ] reimport | multi_atlas.png
+[  28% ] reimport | multi_level_2.png
+[  28% ] reimport | multi_level_3.png
+[  28% ] reimport | sniper_atlas.png
+[  28% ] reimport | sniper_level_2.png
+[  28% ] reimport | sniper_level_3.png
+[  28% ] reimport | tesla_atlas.png
+[  28% ] reimport | tesla_level_2.png
+[  29% ] reimport | tesla_level_3.png
+[  29% ] reimport | turret_basic.png
+[  29% ] reimport | turret_burst.png
+[  29% ] reimport | turret_cannon.png
+[  29% ] reimport | cannon_atlas.png
+[  29% ] reimport | cannon_level_2.png
+[  30% ] reimport | cannon_level_2_icon.png
+[  30% ] reimport | cannon_level_3.png
+[  30% ] reimport | cannon_level_3_icon.png
+[  30% ] reimport | disruptor_atlas.png
+[  30% ] reimport | disruptor_level_2.png
+[  30% ] reimport | disruptor_level_3.png
+[  31% ] reimport | disruptor_pulse_ring.png
+[  31% ] reimport | disruptor_suppression_arc_1.png
+[  31% ] reimport | disruptor_suppression_arc_2.png
+[  31% ] reimport | disruptor_suppression_arc_3.png
+[  31% ] reimport | disruptor_suppression_icon.png
+[  31% ] reimport | fire_atlas.png
+[  32% ] reimport | fire_level_2.png
+[  32% ] reimport | fire_level_3.png
+[  32% ] reimport | frost_atlas.png
+[  32% ] reimport | frost_level_2.png
+[  32% ] reimport | turret_sniper.svg
+[  32% ] reimport | turret_tesla.svg
+[  33% ] reimport | coleccion_disruptor.svg
+[  33% ] reimport | demoledora.svg
+[  33% ] reimport | stat_gold.svg
+[  33% ] reimport | stat_lives.svg
+[  33% ] reimport | stat_points.svg
+[  33% ] reimport | stat_resources.svg
+[  34% ] reimport | stat_wave.svg
+[  34% ] reimport | trophy.svg
+[  34% ] reimport | check_off.svg
+[  34% ] reimport | check_on.svg
+[  34% ] reimport | logo.png
+[  34% ] reimport | slider_grip.svg
+[  35% ] reimport | technology_token.svg
+[  35% ] reimport | tower_repair.svg
+[  35% ] reimport | tower_wear.svg
+[  35% ] reimport | icon.png
+[  35% ] reimport | turret_disruptor.png
+[  35% ] reimport | turret_fire.png
+[  36% ] reimport | turret_frost.png
+[  36% ] reimport | turret_mortar.png
+[  36% ] reimport | turret_multi.png
+[  36% ] reimport | turret_sniper.png
+[  36% ] reimport | turret_tesla.png
+[  36% ] reimport | base_1.svg
+[  37% ] reimport | base_2.svg
+[  37% ] reimport | base_3.svg
+[  37% ] reimport | mechanical_standard.svg
+[  37% ] reimport | turret_basic.svg
+[  37% ] reimport | turret_burst.svg
+[  37% ] reimport | turret_cannon.svg
+[  38% ] reimport | turret_fire.svg
+[  38% ] reimport | turret_frost.svg
+[  38% ] reimport | turret_mortar.svg
+[  38% ] reimport | turret_multi.svg
+[  38% ] reimport | arbol_removible.svg
+[  38% ] reimport | arbol_removible_trabajo.svg
+[  39% ] reimport | bosque_explotable.svg
+[  39% ] reimport | bosque_explotable_activo.svg
+[  39% ] reimport | bosque_explotable_agotado.svg
+[  39% ] reimport | bush.svg
+[  39% ] reimport | despejado_bosque.svg
+[  39% ] reimport | despejado_desierto.svg
+[  40% ] reimport | despejado_pradera.svg
+[  40% ] reimport | despejado_ruinas.svg
+[  40% ] reimport | escombro.svg
+[  40% ] reimport | escombro_trabajo.svg
+[  40% ] reimport | gate.svg
+[  40% ] reimport | hito.svg
+[  41% ] reimport | marca_pieza.svg
+[  41% ] reimport | mina.svg
+[  41% ] reimport | mina_activa.svg
+[  41% ] reimport | thief_m43_walk.png
+[  41% ] reimport | troll.png
+[  41% ] reimport | troll_walk.png
+[  42% ] reimport | armored.svg
+[  42% ] reimport | boss.svg
+[  42% ] reimport | fast.svg
+[  42% ] reimport | flyer.svg
+[  42% ] reimport | guardian.svg
+[  42% ] reimport | healer.svg
+[  42% ] reimport | mirror.svg
+[  43% ] reimport | normal.svg
+[  43% ] reimport | rammer.png
+[  43% ] reimport | shaman.svg
+[  43% ] reimport | spider.svg
+[  43% ] reimport | spiderling.svg
+[  43% ] reimport | tank.svg
+[  44% ] reimport | thief.svg
+[  44% ] reimport | troll.svg
+[  44% ] reimport | burst.svg
+[  44% ] reimport | cannon.svg
+[  44% ] reimport | fire.svg
+[  44% ] reimport | frost.svg
+[  45% ] reimport | mortar.svg
+[  45% ] reimport | multi.svg
+[  45% ] reimport | sniper.svg
+[  45% ] reimport | tesla.svg
+[  45% ] reimport | epilogue.png
+[  45% ] reimport | base_1.png
+[  46% ] reimport | base_2.png
+[  46% ] reimport | base_3.png
+[  46% ] reimport | basic_atlas.png
+[  46% ] reimport | basic_level_2.png
+[  46% ] reimport | basic_level_3.png
+[  46% ] reimport | burst_atlas.png
+[  47% ] reimport | burst_level_2.png
+[  47% ] reimport | burst_level_3.png
+[  47% ] reimport | mina_agotada.svg
+[  47% ] reimport | reserva_llena.svg
+[  47% ] reimport | reserva_vacia.svg
+[  47% ] reimport | roca_removible.svg
+[  48% ] reimport | roca_removible_trabajo.svg
+[  48% ] reimport | rock_a.svg
+[  48% ] reimport | rock_b.svg
+[  48% ] reimport | tree.svg
+[  48% ] reimport | basic.png
+[  48% ] reimport | burst.png
+[  49% ] reimport | cannon.png
+[  49% ] reimport | fire.png
+[  49% ] reimport | frost.png
+[  49% ] reimport | mortar.png
+[  49% ] reimport | multi.png
+[  49% ] reimport | sniper.png
+[  50% ] reimport | tesla.png
+[  50% ] reimport | basic.svg
+[  50% ] reimport | en_juego.png
+[  50% ] reimport | map_preview.png
+[  50% ] reimport | menu_preview.png
+[  50% ] reimport | monsters_comparison.png
+[  51% ] reimport | upgrades_comparison.png
+[  51% ] reimport | physical_monsters.png
+[  51% ] reimport | walks_comparison.png
+[  51% ] reimport | walks_godot.png
+[  51% ] reimport | before.png
+[  51% ] reimport | map_preview.png
+[  52% ] reimport | menu_preview.png
+[  52% ] reimport | props_sheet.png
+[  52% ] reimport | terrain_sheet.png
+[  52% ] reimport | torres_full_hd.png
+[  52% ] reimport | hud_admin.png
+[  52% ] reimport | pause.png
+[  53% ] reimport | editor.png
+[  53% ] reimport | end_screen.png
+[  53% ] reimport | hall.png
+[  53% ] reimport | n07_salir.png
+[  53% ] reimport | n07_tab_con_foco_en_un_icono.png
+[  53% ] reimport | n10_canones_9.png
+[  54% ] reimport | n10_canones_10.png
+[  54% ] reimport | n10_canones_11.png
+[  54% ] reimport | n10_infra_mina.png
+[  54% ] reimport | n10_salir_con_pieza_pendiente.png
+[  54% ] reimport | n10_tecla_0_elige_la_decima.png
+[  54% ] reimport | desgaste_reparacion.png
+[  55% ] reimport | editor_probabilidad.png
+[  55% ] reimport | panel_mecanico.png
+[  55% ] reimport | admin.png
+[  55% ] reimport | avance_confirmado.png
+[  55% ] reimport | avance_pendiente.png
+[  55% ] reimport | estandarte.png
+[  56% ] reimport | combate.png
+[  56% ] reimport | conjunto_m23.png
+[  56% ] reimport | direcciones_m23.png
+[  56% ] reimport | efectos_en_juego.png
+[  56% ] reimport | profundidad_oblicua2d.png
+[  56% ] reimport | profundidad_relieve2d.png
+[  57% ] reimport | profundidad_suelo3d.png
+[  57% ] reimport | torres_aturdidas.png
+[  57% ] reimport | torres_niveles.png
+[  57% ] reimport | torres_recuperacion.png
+[  57% ] reimport | healer.png
+[  57% ] reimport | mechanical_standard.png
+[  57% ] reimport | rammer.png
+[  58% ] reimport | thief.png
+[  58% ] reimport | direcciones.png
+[  58% ] reimport | partida.png
+[  58% ] reimport | wiki_curandero.png
+[  58% ] reimport | wiki_mecanico.png
+[  58% ] reimport | partida_nivel_10.png
+[  59% ] reimport | seleccion_guardado_viejo.png
+[  59% ] reimport | seleccion_guardado_viejo_10.png
+[  59% ] reimport | partida.png
+[  59% ] reimport | campamento_vacio.svg
+[  59% ] reimport | level_select.png
+[  59% ] reimport | options_menu.png
+[  60% ] reimport | records_screen.png
+[  60% ] reimport | wiki_screen.png
+[  60% ] reimport | aturdida.png
+[  60% ] reimport | aturdida_1280.png
+[  60% ] reimport | hielo_sinergias.png
+[  60% ] reimport | hielo_sinergias_1280.png
+[  61% ] reimport | nivel1.png
+[  61% ] reimport | nivel1_1280.png
+[  61% ] reimport | nivel2_sin_oro.png
+[  61% ] reimport | nivel2_sin_oro_1280.png
+[  61% ] reimport | nivel3.png
+[  61% ] reimport | nivel3_1280.png
+[  62% ] reimport | texto_largo_foco.png
+[  62% ] reimport | texto_largo_foco_1280.png
+[  62% ] reimport | bestiario_muertes.png
+[  62% ] reimport | bestiario_muertes_media.png
+[  62% ] reimport | bestiario_vivo.png
+[  62% ] reimport | cura_rebote.png
+[  63% ] reimport | level_08.png
+[  63% ] reimport | level_09.png
+[  63% ] reimport | level_10.png
+[  63% ] reimport | level_11_apertura.png
+[  63% ] reimport | level_11_aturdida.png
+[  63% ] reimport | level_11_final.png
+[  64% ] reimport | level_12_apertura.png
+[  64% ] reimport | level_12_final.png
+[  64% ] reimport | level_12_rebote.png
+[  64% ] reimport | level_13_apertura.png
+[  64% ] reimport | level_13_aturdida.png
+[  64% ] reimport | level_13_final.png
+[  65% ] reimport | level_14_apertura.png
+[  65% ] reimport | level_14_aturdida.png
+[  65% ] reimport | level_14_final.png
+[  65% ] reimport | cartel_desde_seleccion.png
+[  65% ] reimport | level_15_apertura.png
+[  65% ] reimport | level_15_cartel.png
+[  66% ] reimport | level_15_coloso_herido_26.png
+[  66% ] reimport | Folder.svg
+[  66% ] reimport | GutIconV2_no_shine.png
+[  66% ] reimport | Script.svg
+[  66% ] reimport | camara_1.jpg
+[  66% ] reimport | camara_2.jpg
+[  67% ] reimport | camara_3.jpg
+[  67% ] reimport | camara_4.jpg
+[  67% ] reimport | camara_5.jpg
+[  67% ] reimport | camara_6.jpg
+[  67% ] reimport | camara_pruebas.jpg
+[  67% ] reimport | comparacion_detalle.jpg
+[  68% ] reimport | comparacion_vistas.jpg
+[  68% ] reimport | jugar_a.jpg
+[  68% ] reimport | jugar_b.jpg
+[  68% ] reimport | jugar_c.jpg
+[  68% ] reimport | jugar_d.jpg
+[  68% ] reimport | vista_a.jpg
+[  69% ] reimport | vista_b.jpg
+[  69% ] reimport | vista_c.jpg
+[  69% ] reimport | vista_d.jpg
+[  69% ] reimport | menu_reposo.png
+[  69% ] reimport | monstruos_mapa.png
+[  69% ] reimport | monstruos_zoom.png
+[  70% ] reimport | wiki_fast.png
+[  70% ] reimport | wiki_normal.png
+[  70% ] reimport | wiki_tank.png
+[  70% ] reimport | evolutions_map.png
+[  70% ] reimport | special_monsters_map.png
+[  70% ] reimport | demolicion.png
+[  71% ] reimport | concept_sheet.png
+[  71% ] reimport | concept_provisional.png
+[  71% ] reimport | contact_34px.png
+[  71% ] reimport | contact_112px.png
+[  71% ] reimport | n01_sin_pestanas.png
+[  71% ] reimport | n06_canones.png
+[  71% ] reimport | n06_infra.png
+[  72% ] reimport | n07_demoliendo_en_canones.png
+[  72% ] reimport | n07_infra_sin_comprar.png
+[  72% ] reimport | n07_infra_trabajo.png
+[  72% ] reimport | level_15_coloso_herido_28.png
+[  72% ] reimport | level_15_coloso_herido_30.png
+[  72% ] reimport | level_15_creditos.png
+[  73% ] reimport | level_15_epilogo.png
+[  73% ] reimport | level_15_epilogo_de_vuelta.png
+[  73% ] reimport | level_15_inicio.png
+[  73% ] reimport | level_15_oleada_30_fin.png
+[  73% ] reimport | level_15_pedazos_26.png
+[  73% ] reimport | level_15_pedazos_28.png
+[  74% ] reimport | level_15_pedazos_30.png
+[  74% ] reimport | level_15_salon_de_la_fama.png
+[  74% ] reimport | level_15_tarjeta_coloso.png
+[  74% ] reimport | level_15_tarjeta_pedazo.png
+[  74% ] reimport | level_15_victoria.png
+[  74% ] reimport | level_15_victoria_de_vuelta.png
+[  75% ] reimport | level_15_victoria_iniciales.png
+[  75% ] reimport | seleccion_15_abierto.png
+[  75% ] reimport | seleccion_15_bloqueado.png
+[  75% ] reimport | seleccion_15_visible.png
+[  75% ] reimport | menu_foco.png
+[  75% ] reimport | gallery_level_10.png
+[  76% ] reimport | level_01.png
+[  76% ] reimport | level_06.png
+[  76% ] reimport | level_06_cleared.png
+[  76% ] reimport | level_06_working.png
+[  76% ] reimport | level_07.png
+[  76% ] reimport | level_07_cleared.png
+[  77% ] reimport | level_07_working.png
+[  77% ] reimport | level_08.png
+[  77% ] reimport | level_08_cleared.png
+[  77% ] reimport | level_08_working.png
+[  77% ] reimport | level_10.png
+[  77% ] reimport | level_10_cleared.png
+[  78% ] reimport | level_10_working.png
+[  78% ] reimport | towers_34.png
+[  78% ] reimport | towers_64.png
+[  78% ] reimport | towers_112.png
+[  78% ] reimport | contact_34.png
+[  78% ] reimport | contact_64.png
+[  79% ] reimport | supply_depot.svg
+[  79% ] reimport | supply_line_pole.svg
+[  79% ] reimport | contact_34.png
+[  79% ] reimport | contact_64.png
+[  79% ] reimport | contact_112.png
+[  79% ] reimport | contact_220.png
+[  80% ] reimport | game_step_0.png
+[  80% ] reimport | game_step_1.png
+[  80% ] reimport | game_step_2.png
+[  80% ] reimport | game_step_3.png
+[  80% ] reimport | colossus.png
+[  80% ] reimport | colossus_shard.png
+[  81% ] reimport | contact_34.png
+[  81% ] reimport | contact_64.png
+[  81% ] reimport | contact_112.png
+[  81% ] reimport | contact_220.png
+[  81% ] reimport | disruptor_toolbar.png
+[  81% ] reimport | gallery_level_01.png
+[  82% ] reimport | gallery_level_06.png
+[  82% ] reimport | gallery_level_08.png
+[  82% ] reimport | towers_34.png
+[  82% ] reimport | towers_64.png
+[  82% ] reimport | towers_112.png
+[  82% ] reimport | arbol_removible.svg
+[  83% ] reimport | arbol_removible_trabajo.svg
+[  83% ] reimport | bosque_explotable.svg
+[  83% ] reimport | bosque_explotable_activo.svg
+[  83% ] reimport | bosque_explotable_agotado.svg
+[  83% ] reimport | campamento_vacio.svg
+[  83% ] reimport | despejado_bosque.svg
+[  84% ] reimport | despejado_desierto.svg
+[  84% ] reimport | despejado_pradera.svg
+[  84% ] reimport | despejado_ruinas.svg
+[  84% ] reimport | escombro.svg
+[  84% ] reimport | escombro_trabajo.svg
+[  84% ] reimport | herramienta.svg
+[  85% ] reimport | marca_pieza.svg
+[  85% ] reimport | mina.svg
+[  85% ] reimport | mina_activa.svg
+[  85% ] reimport | contact_112.png
+[  85% ] reimport | contact_220.png
+[  85% ] reimport | disruptor_toolbar.png
+[  85% ] reimport | gallery_level_01.png
+[  86% ] reimport | gallery_level_06.png
+[  86% ] reimport | gallery_level_08.png
+[  86% ] reimport | gallery_level_10.png
+[  86% ] reimport | level_01.png
+[  86% ] reimport | level_06.png
+[  86% ] reimport | level_06_cleared.png
+[  87% ] reimport | level_06_working.png
+[  87% ] reimport | level_07.png
+[  87% ] reimport | level_07_cleared.png
+[  87% ] reimport | level_07_working.png
+[  87% ] reimport | level_08.png
+[  87% ] reimport | level_08_cleared.png
+[  88% ] reimport | level_08_working.png
+[  88% ] reimport | level_10.png
+[  88% ] reimport | level_10_cleared.png
+[  88% ] reimport | level_10_working.png
+[  88% ] reimport | hoja_34.png
+[  88% ] reimport | reserva_vacia.svg
+[  89% ] reimport | reserva_llena.svg
+[  89% ] reimport | mina_agotada.svg
+[  89% ] reimport | mina_activa.svg
+[  89% ] reimport | mina.svg
+[  89% ] reimport | bosque_explotable_agotado.svg
+[  89% ] reimport | bosque_explotable_activo.svg
+[  90% ] reimport | bosque_explotable.svg
+[  90% ] reimport | hoja_220.png
+[  90% ] reimport | hoja_34.png
+[  90% ] reimport | roca_removible_trabajo.svg
+[  90% ] reimport | roca_removible.svg
+[  90% ] reimport | marca_pieza.svg
+[  91% ] reimport | escombro_trabajo.svg
+[  91% ] reimport | escombro.svg
+[  91% ] reimport | despejado_ruinas.svg
+[  91% ] reimport | despejado_pradera.svg
+[  91% ] reimport | despejado_desierto.svg
+[  91% ] reimport | despejado_bosque.svg
+[  92% ] reimport | arbol_removible_trabajo.svg
+[  92% ] reimport | arbol_removible.svg
+[  92% ] reimport | hoja_220.png
+[  92% ] reimport | hoja_34.png
+[  92% ] reimport | simbolo_ruina.svg
+[  92% ] reimport | sendero.svg
+[  93% ] reimport | roca_marcada.svg
+[  93% ] reimport | poste_cintas.svg
+[  93% ] reimport | herramienta.svg
+[  93% ] reimport | hoja_220.png
+[  93% ] reimport | coleccion_disruptor.svg
+[  93% ] reimport | demoledora.svg
+[  94% ] reimport | stat_resources.svg
+[  94% ] reimport | hoja_34.png
+[  94% ] reimport | hoja_220.png
+[  94% ] reimport | central_assembled.png
+[  94% ] reimport | contact_34.png
+[  94% ] reimport | contact_64.png
+[  95% ] reimport | contact_112.png
+[  95% ] reimport | contact_220.png
+[  95% ] reimport | source_code_pro.fnt
+[  95% ] reimport | LobsterTwo-Regular.ttf
+[  95% ] reimport | LobsterTwo-Italic.ttf
+[  95% ] reimport | LobsterTwo-BoldItalic.ttf
+[  96% ] reimport | LobsterTwo-Bold.ttf
+[  96% ] reimport | CourierPrime-Italic.ttf
+[  96% ] reimport | CourierPrime-BoldItalic.ttf
+[  96% ] reimport | CourierPrime-Bold.ttf
+[  96% ] reimport | AnonymousPro-Italic.ttf
+[  96% ] reimport | AnonymousPro-BoldItalic.ttf
+[  97% ] reimport | AnonymousPro-Bold.ttf
+[  97% ] reimport | flores.svg
+[  97% ] reimport | ground_bosque.png
+[  97% ] reimport | ground_desierto.png
+[  97% ] reimport | ground_nieve.png
+[  97% ] reimport | ground_pantano.png
+[  98% ] reimport | ground_pradera.png
+[  98% ] reimport | ground_ruinas.png
+[  98% ] reimport | ground_volcan.png
+[  98% ] reimport | path.png
+[  98% ] reimport | selector-final.png
+[  98% ] reimport | selector.png
+[  99% ] reimport | explosion.png
+[  99% ] reimport | flame.png
+[  99% ] reimport | frost.png
+[  99% ] reimport | spark.png
+[  99% ] reimport | flame.svg
+[  99% ] reimport | Finalizando la importación de recursos...
+[ DONE ] reimport
+
+[   0% ] reimport | Started (Re)Importación de Assets (606 steps)
+[   0% ] reimport | Ejecutando operaciones post-reimportación...
+[ DONE ] reimport
+
+[   0% ] loading_editor_layout | Started Cargando editor (5 steps)
+[   0% ] loading_editor_layout | Cargando diseño del editor...
+[  16% ] loading_editor_layout | Cargando docks...
+[ DONE ] loading_editor_layout
+
+cannot connect to daemon at tcp:5037: Connection refused

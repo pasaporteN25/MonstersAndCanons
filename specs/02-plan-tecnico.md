@@ -679,6 +679,7 @@ Diseño en spec RF-388 a RF-392 y D-078.
 - **Bot:** `balance_sim.gd -- mix modo=asedio level=N`.
 - **Datos:** `data/modos/asedio/modo.json`.
 - **Tests:** `test_mode_packs`, `test_mode_flow`, `test_mode_select` y `test_editor_modes`, siempre en carpetas `user://test_*`. `test_editor_files` fija una carpeta de modos de prueba para no leer la del jugador.
+- **Revisión (T256, D-095):** el modo gana una tabla opcional de porcentajes de vida por mapa y Asedio pasa a 15 mapas; el diseño está en **M56 / T256**, más abajo. Todo lo de esta sección sigue valiendo.
 
 ### M50 / T205 · Infraestructura: demolición, recursos y hallazgos (RF-398 a RF-437, D-080 a D-085)
 
@@ -1120,3 +1121,207 @@ Se programa en **T248**, después del OK de Lucas a la spec (M53) y a sus pregun
 #### Lo que M54 no toca
 
 `EnemyData`, `WaveSpawner`, `Rules`, la Wiki (`wiki.gd`), el guardado, el Soberano (`boss.tres`) y el resto de los enemigos. Tampoco las escoltas de los niveles 13 y 14. El pedido es de **dos archivos de datos**, su dibujo y las oleadas finales del 15.
+
+### M55 / T252 · La Cuadrilla: una banda de criaturas independientes (RF-485 a RF-491, D-094)
+
+**Estado: HECHA en T253 (2026-10-10), con arte provisional.** Los datos, las oleadas, el reajuste con el bot, el artículo y los tests son **T253** (Resultado en `specs/03-tareas.md`); el arte, **T257**. *(Lucas aprobó el 2026-10-10 los niveles, los nombres, las frases, el artículo y el arte provisional; Asedio 7, P2, sigue abierta.)* **Lo que cambió al programarla:** (1) ninguna cantidad ni oleada del plan se tocó: las cuatro apariciones de RF-487 pasaron RF-488 tal cual, así que no hubo reajuste ni se movió ningún `aumento_vida`; (2) **`tools/balance_sim.gd` suma la columna «oro robado»** (escucha `gold_stolen`; no cambia ningún resultado); (3) **ningún código del juego**: la Wiki, la tarjeta y la barra de próxima oleada ya aceptaban un enemigo sin `texture` (la Wiki solo omite el dibujo); (4) los tests que pedían dibujo o contaban 10 artículos de Lore (`test_content`, `test_wiki`, `test_bestiary`, `test_level_15`, `test_lore_wiki`) se actualizaron: los dos enemigos están en una lista `PROVISIONAL_ART` que se vacía cuando T257 los dibuje. Es **solo datos**: no cambia ninguna regla de combate, ningún campo de `EnemyData` ni ninguna pantalla. Todos los números son los del informe de T251, **sin tocar**, y la medición que decide los niveles está en `specs/tareas/informes/T252-medicion-cuadrilla.md`.
+
+#### Qué hay hoy (leído en T252)
+
+- `scripts/data/enemy_data.gd` ya trae todo: `gold_drain_amount`, `gold_drain_interval`, `gold_drain_floor` y `optional_wave_limit` (el robo de M39), más `max_health`, `speed_tiles`, `armor`, `reward`, `lives_damage`, `size_tiles`, `color`, `texture` y `walk_atlas`. **No se agrega ningún campo.**
+- `scenes/enemies/enemy.gd` (`_update_gold_drain`): **cada enemigo lleva su propio reloj** (`_drain_clock`) y emite `gold_drain` cada `gold_drain_interval` solo mientras **sigue en el camino**; ocho Rateros roban cada uno por su cuenta, no hay un reloj de grupo.
+- `scenes/game/level_session.gd` (`steal`): descuenta `min(monto, oro − piso)`, sin crear ni quitar monedas por debajo del piso, y emite `gold_stolen`. `game.gd` conecta la señal y muestra el aviso ámbar (RF-365).
+- `scenes/game/wave_spawner.gd` (`start_wave`): el «máximo uno por oleada» (`optional_wave_limit`) **solo** se aplica a grupos con `probability < 1`. Un grupo sin `"probabilidad"` sale **siempre y entero**.
+- `scripts/logic/wiki.gd`: la entrada de un enemigo ya escribe la línea **«Robo»** (`:106`) y «Dónde aparece» leyendo la campaña; **no hay entrada escrita a mano**. El bestiario (RF-238) lo abre con `seen_enemies`.
+- `scenes/game/hud.gd` (`show_enemy_intro`): las tarjetas de presentación **se encolan** (`_intro_queue`) y salen una tras otra; con dos enemigos nuevos en la misma oleada salen **dos**.
+- `scripts/logic/rules.gd` (`is_dangerous`): corona con `lives_damage >= 5`; ni el Ratero (1) ni el Cargador (2) la llevan.
+- `tests/test_content.gd` revisa **todos** los enemigos de `data/enemies/` (frase no vacía, `size_tiles` entre 0.05 y 0.5, cadena de crías).
+
+#### Archivos
+
+**Datos** (los hace T253; el arte, T257):
+
+- `data/enemies/ratero.tres` y `data/enemies/cargador.tres` (`id` igual al archivo), con los valores de RF-485. Se copian de `thief.tres` (el robo) y de `fast.tres` / `tank.tres` (el formato):
+
+  | Campo | `ratero` | `cargador` |
+  |---|---|---|
+  | `display_name` | `"Ratero"` | `"Cargador"` |
+  | `description` | la frase de RF-489 | la frase de RF-489 |
+  | `max_health` | 14 | 110 |
+  | `speed_tiles` | 2.2 | 0.9 |
+  | `armor` | 0 | 1 |
+  | `reward` | 5 | 30 |
+  | `lives_damage` | 1 | 2 |
+  | `size_tiles` | 0.20 | 0.33 |
+  | `gold_drain_amount` / `gold_drain_interval` / `gold_drain_floor` | 2 / 2.0 / 10 | 4 / 2.0 / 10 |
+  | `optional_wave_limit` | 0 | 0 |
+  | `color` | un tono de una familia propia, distinto del gris violeta del Ladrón (lo fija T257; provisional en T253) | de la misma familia |
+  | `texture`, `walk_atlas`, `walk_stride_tiles`, `walk_art_scale`, `visual_scale` | los de T257; **mientras no haya arte, vacíos** (forma geométrica, RF-156) | ídem |
+
+- `data/levels/level_07.json`, `level_10.json`, `level_13.json` y `level_14.json` (T253): **cuatro apariciones** por nivel, como en la tabla de RF-487 (un grupo `ratero` con `"cada": 0.4` y uno `cargador` con `"cada": 3.0`, sin `"desde"` ni `"probabilidad"`, en la entrada `"A"`). El `.json` **nombra** a los dos enemigos.
+- `data/wiki/lore/la_cuadrilla.json` (T253, **solo si Lucas aprueba el texto**): `"desbloqueo": "level_07"`, el texto de `specs/11-textos-lore.md` §4.11 y un `orden` entre el del artículo 5 y el del 6; los artículos 6 a 10 pasan a `orden` 7 a 11.
+- `assets/sprites/enemies/rendered/` (T257): `ratero.png`, `cargador.png` y los atlas `ratero_walk.png` y `cargador_walk.png` (256 × 256 y 1024 × 1024, 4 × 4 poses, como el resto, M31).
+
+**Código: ninguno.** Opcional, de **herramienta** y no del juego: una columna de **oro robado** en `tools/balance_sim.gd` (conectar `session.gold_stolen`, está en el apéndice del informe). Las listas de pruebas que nombran los enemigos uno por uno:
+
+- `tests/test_enemy_visual.gd` (listas con los `id` de hoy): sumar `ratero` y `cargador` a las que correspondan **solo cuando haya atlas**, con el mismo recaudo que el Coloso (`ResourceLoader.exists`).
+- `tests/test_lore_wiki.gd` (`:68`: «los 10 artículos» pasa a 11; `:180`: la lista de artículos abiertos con el 7 ganado).
+- Cualquier test que cuente los archivos de `data/enemies/`: buscar con `git grep "colossus_shard\|spiderling" tests/` antes de cerrar T253.
+- `tools/balance_sim.gd` lee los grupos del nivel: **no hace falta tocar** su lista de enemigos (T253 lo confirma jugando el 7).
+
+#### Orden de trabajo
+
+1. **T253 · compuerta** (Lucas contestó P1, P2, P4 y P5).
+2. **T253 · los dos `.tres`** y la prueba de que cargan (`test_content`), con arte provisional.
+3. **T253 · las oleadas** del 7, el 10, el 13 y el 14, y `check_level`.
+4. **T253 · el bot:** 5 semillas, `sin_recursos` y las otras cuatro estrategias; el reajuste (RF-488, punto 5) y **Asedio 7** (P2).
+5. **T253 · el artículo y los tests** (§ «Qué hay que hacer» de su ficha), y los documentos.
+6. **T257 · el arte** (concepto con OK de Lucas, atlas, hoja de contacto); **no bloquea** a T253.
+
+#### Pruebas que T253 tiene que escribir
+
+Las diez de la ficha (`specs/tareas/T253-cuadrilla-datos-y-reajuste.md`): datos; sin el tope del Ladrón; robo con piso y reloj propio; fuga del Ratero y del Cargador; **solo** los niveles 7, 10, 13 y 14; **sin auras ni jefe** en esas oleadas; la Wiki Enemigos (cerrados con un guardado nuevo); el artículo de Lore que se abre al ganar el 7 y deja intacto al 5; y que no hay ningún campo nuevo de `EnemyData`.
+
+#### Riesgos y cosas que no se saben
+
+- **Una sola intensidad por nivel.** Las cuatro apariciones (6 + 1, 8 + 1, 8 + 1, 10 + 2) y las oleadas salen de una regla fija, no de un diseño por nivel. T253 puede encontrar que un nivel pide menos.
+- **El robo depende del oro que tenga el jugador.** El bot nunca mejora torres y deja miles de oro sin gastar al final (T251 §2.5); una persona que mejora torres tiene menos oro «parado» y siente más cada robo, o menos si lo gasta rápido. **No se probó con una persona.**
+- **El 13 y el 14 tienen dos entradas** y se midieron con la `"A"`. Repartir la Cuadrilla entre las dos **no se probó**.
+- **Asedio 7 hereda la Cuadrilla** y el bot lo pierde nueve oleadas antes (11 de 20 contra 19 o 20). Lo decide Lucas (P2).
+- **Dos tarjetas seguidas** (12 s) en una oleada del nivel 7 que ya tiene otros enemigos: no se miró en pantalla cómo se ve ni que no tape nada.
+- **Sin dibujo:** que la Wiki, la tarjeta y la barra de «próxima oleada» se vean bien con la forma geométrica es una hipótesis (RF-156 lo prevé, pero no se probó con estos dos).
+- **El texto del lore y las frases dependen de los números del robo** (2 y 4 de oro cada 2 s): si T253 los cambia, se corrigen las frases (como la del Ladrón).
+- **El precipicio del final** del 8 y el 9 hace que las vidas con la vida igualada (1 a 4) sean ruidosas; por eso esos niveles quedaron fuera y no por una regla de diseño.
+
+#### Lo que M55 no toca
+
+`EnemyData`, `WaveSpawner`, `Rules`, `enemy.gd`, `level_session.gd`, la Wiki (`wiki.gd`), el guardado, el Ladrón, el Soberano, el Coloso, el nivel 15, el artículo 5 de Lore y los textos de nivel. El pedido es de **dos archivos de datos**, su dibujo, las oleadas de cuatro niveles y un artículo.
+
+### M56 / T256 · Asedio con los 15 mapas y porcentaje de vida por mapa (RF-492 a RF-496, D-095)
+
+**Estado: HECHA en T258 (2026-10-10).** Lo de abajo se escribió en T256 como diseño; **lo que cambió al programarla:** (1) `_read_rules` recibe `PackedStringArray` de ids de mapa y la validación vive en `_read_health_by_map`, con el mensaje del mapa o del valor; (2) la lista de políticas del bot quedó en `tools/asedio_politicas.json` (`por_defecto`, `level_02`, `level_04`) y la lógica pura (regla de mejora, elección de la torre, veredicto por mapa y por bloque) en `BalanceArgs`, con tests; (3) el bot suma `vida=N` para remedir un porcentaje sin tocar el `modo.json` y no nombra el tipo `Tower` (usa el grupo `towers`) para compilar con `--check-only`; (4) los mapas 7, 10, 13 y 14 se midieron **con** la Cuadrilla y **solo el 7 pidió bajar** (de 103 % a 101 %, y aun así una semilla queda en 1 vida: pregunta abierta para Lucas). *(La estructura la aprobó Lucas el 2026-10-10; los **valores** de la tabla son los de T255 y quedan «iniciales»; los mapas 7, 10, 13 y 14 se remiden cuando entre La Cuadrilla, T253.)* Es **solo datos y una clave nueva del lector de modos**: no cambia ninguna regla de combate, ningún campo de `LevelData` ni `LevelFile`, ni el generador de oleadas. La medición que respalda los números está en `specs/tareas/informes/T255-curva-dificultad-asedio.md`.
+
+#### Qué hay hoy (leído en T256)
+
+- `scripts/logic/mode_packs.gd`:
+  - `KEYS` es la lista de claves de primer nivel del `modo.json` (`version`, `nombre`, `descripcion`, `mapas`, `torres`, `reglas`) y `RULE_KEYS`, la de `reglas` (`oro_inicial_%`, `vidas` y `vida_monstruos_%`). **Una clave desconocida es un error del modo**, con la lista de las que se usan.
+  - `_read_settings` lee la lista de `mapas` **antes** que las `reglas`. `_read_rules` valida con `_whole` (entero entre `MIN_PERCENT` = 10 y `MAX_PERCENT` = 1000 para el oro y la vida; 1 a `LevelFile.MAX_LIVES` para las vidas).
+  - `_read_map` lee cada mapa con `LevelFile.parse` y llama a `_apply(level, settings)`, que escribe `level.enemy_health_percent = rules["vida_monstruos_%"]` **igual para todos los mapas**.
+  - `add_map` y `create` reescriben el `modo.json` con `_write`, que vuelve enteros los números enteros (`_whole_numbers`, recursivo).
+- `scripts/data/level_data.gd`: `enemy_health_percent` (100 por omisión) ya está y es lo que consume el generador (`WaveSpawner.setup`, que aplica el % después de la escala por oleada).
+- `data/modos/asedio/modo.json`: `mapas` 1 a 9, `oro_inicial_%` 100 y `vida_monstruos_%` 115.
+- `tools/balance_sim.gd`: `modo=asedio level=N` lee el mapa **con `ModePacks.map_level`**, o sea que **ya recibe el porcentaje por mapa sin tocar nada**. No tiene mejoras de torres ni política por mapa.
+
+#### Archivos
+
+**Código** (lo hace T258):
+
+- `scripts/logic/mode_packs.gd`: constante `RULE_HEALTH_BY_MAP = "vida_monstruos_por_mapa_%"` (en `RULE_KEYS`); `_read_rules` recibe la lista de mapas y valida la tabla (objeto; cada clave **en `mapas`**; cada valor entero entre 10 y 1000, con `_whole`); `_apply` recibe el id del mapa y elige **tabla → global → 100**. Nada más del archivo cambia. **Es la única pieza de código del juego.**
+- `tools/balance_sim.gd`: `mejoras=llenar|temprana` (apagado por omisión), una política por mapa en un archivo de datos de la herramienta y una corrida de perfil que imprime la tabla y los promedios por bloque. **Debe compilar con `--check-only`** (T254).
+
+**Datos:**
+
+- `data/modos/asedio/modo.json`: `level_01` a `level_15`, `vida_monstruos_%` 115 y la tabla de **13 excepciones** de RF-494.
+- La política del bot por mapa (en `tools/`, no en el juego): `level_02` → `smart` + `llenar`; `level_04` → `sin_recursos` + `temprana`; el resto → `sin_recursos` + `llenar`.
+
+#### Cómo se decide la vida de un mapa (referencia para quien programa)
+
+```
+vida efectiva de un enemigo en un mapa del modo
+  = max(1, percent_of( scaled_health_percent(vida base, oleada), P ))
+    (dos redondeos, igual que hoy: primero la escala por oleada, `Rules.scaled_health_percent`, que da un
+     entero; después `Rules.percent_of`, al entero más cercano; `wave_spawner.gd:112`)
+
+  P = reglas["vida_monstruos_por_mapa_%"][id del mapa]     si el mapa está en la tabla
+      reglas["vida_monstruos_%"]                           si no, y el modo lo trae
+      100                                                  si no
+```
+
+#### Orden de trabajo
+
+1. **T258 · dependencias** (T253 hecha o no: decide si 7, 10, 13 y 14 se miden o quedan «a remedir»).
+2. **T258 · la clave y su validación** (`ModePacks`), con sus tests de errores y de compatibilidad.
+3. **T258 · los datos** del modo Asedio y los tests del Asedio oficial.
+4. **T258 · el bot** (mejoras y política por mapa) y las 75 partidas.
+5. **T258 · los documentos** (`CONTENIDO.md`, `README.md`, `ONBOARDING.md`, `CHANGELOG.md`, M56, `03-tareas.md`, plan 08).
+
+#### Pruebas que T258 tiene que escribir
+
+Las de la ficha (`specs/tareas/T258-asedio-porcentajes-por-mapa.md`, paso 6): tabla y global; tabla sin global; cada error con su motivo; tabla vacía; compatibilidad con los modos que ya existen; oro y vidas intactos; `add_map` conserva la tabla; el Asedio oficial con 15 mapas, las mismas oleadas que la campaña y los 15 porcentajes de RF-494; 15 tarjetas en la selección; el 10 se abre al ganar el 9; sin textos ni piezas en los 15.
+
+#### Riesgos y cosas que no se saben
+
+- *(Resuelto en T258: se remidieron con la Cuadrilla; 10, 13 y 14 pasan igual y el 7 queda en 101 % con una semilla en 1 vida.)* **Las cuatro filas «a remedir»** (7, 10, 13 y 14) estaban medidas **sin La Cuadrilla**. Con ella el bot ya pasó de perder Asedio 7 en la oleada 19–20 a perderlo en la 11 (T252, al 115 %). Si T258 se hace antes de T253, esos cuatro números **no valen** hasta repetirlos.
+- **Una persona no jugó nada.** Los porcentajes salen del bot, que **no mejora, vende ni repara como lo haría quien juega**; las vidas son un indicador de margen, no una escala de dificultad. La progresión **por bloques** baja (16,00 · 11,72 · 6,84) pero **no es estricta mapa por mapa**. Se juega en G5.
+- **Los porcentajes bajos (101 %) casi no cambian la vida** de los enemigos chicos por el redondeo: el 101 % del mapa 13 no lo hace «más difícil» que la campaña en todo el nivel (T255 §4.1). **«Mayor que 100» es una condición de formato, no una garantía de dificultad.**
+- **Una semilla no alcanza.** El mapa 14 al 122 % ganaba la semilla 1 y perdía las otras cuatro. Por eso el criterio es **cinco semillas** (RF-495).
+- **El bot elige la política por mapa** (`smart` en el 2, mejoras tempranas en el 4): son decisiones del instrumento fijadas antes de medir, y si cambian, la tabla puede cambiar. Están en un archivo aparte para que se vean.
+- **Una versión anterior del juego rechaza** un modo con la tabla. Es un cambio de formato compatible hacia atrás solamente: los paquetes viejos cargan en la versión nueva, no al revés.
+- **El editor no edita la tabla** (la conserva). Un modo propio con la tabla se arma a mano.
+
+#### Lo que M56 no toca
+
+La campaña y sus 15 niveles, `LevelFile`, `LevelData`, `WaveSpawner`, `Rules`, el guardado, la Wiki, los textos del lore, el arte, las tablas del bot de la regla de oro (`sin_recursos` sin mejoras, RF-432 y RF-475) y el selector de modos (más allá de listar 15 tarjetas en vez de 9).
+
+---
+
+### M57 / T240 · La intro de láminas (RF-497 a RF-501, D-096)
+
+> **Estado: especificada en T240 y aprobada por Lucas (G6, 2026-10-11); programada en T242 con láminas provisorias (falta el paso 6: las láminas de T241, medir el texto y reexportar).** La spec es **M57** (`01-spec.md`); el guion, `specs/intro/guion.md`; la ficha de código, `specs/tareas/T242-intro-integracion.md`. Los nombres de archivos y de funciones de abajo son **propuestos**: T242 los confirma al leer el código.
+
+#### Qué hay hoy (leído en el código, no supuesto)
+
+- **«Jugar»** (`scenes/ui/main_menu.gd`, en `_ready`): `_play_button.pressed.connect(GameFlow.go_to_level_select)`. No hay nada entre el botón y la selección.
+- **Overlays que «solo muestran y avisan»:** `EpilogueScreen` (`scenes/ui/epilogue_screen.gd`) y `LevelIntro` (`scenes/ui/level_intro.gd`) son `CanvasLayer` con una señal (`closed`); **quien los abre decide qué pasa después** (constitución P6). `LevelIntro` atiende todo en `_input` y traga el clic. `EpilogueScreen` pone la imagen con `STRETCH_KEEP_ASPECT_COVERED` y una franja de texto abajo. **El modelo de la intro es ese.**
+- **Guardado** (`scripts/autoload/save_manager.gd`): `save()` arma un diccionario fijo con las claves de siempre; `load_save()` lee cada clave con su `_read_*` y **ignora las desconocidas**; si `version != SAVE_VERSION` empieza de cero (por eso la clave nueva **no** sube la versión). El modo de pruebas usa otro archivo (`DevMode.SAVE_PATH`, RF-181).
+- **Música** (`scripts/autoload/audio.gd`, `_process`): toda escena que no sea `game.tscn` reproduce `music_menu`. Un overlay sobre el menú **no la corta**.
+- **Wiki** (`scenes/ui/wiki_screen.gd`): arma la interfaz por código (`_build_layout`), las solapas con `_add_tab`, y tiene `on_leave: Callable` y `show_category`. La solapa Lore la sirve `Wiki.categories(...)`.
+- **Textos:** `LevelTexts` (`scripts/logic/level_texts.gd`) es el modelo de un validador de texto con mensajes en castellano: **lógica pura, límites como constantes** (son de interfaz, no de balance).
+- **Qué no hay:** ningún archivo `intro`, ninguna imagen de intro y ninguna clave de guardado para esto.
+
+#### Qué se agrega
+
+| Archivo (propuesto) | Qué es |
+|---|---|
+| `data/intro/intro.json` | Los datos (RF-497): `version`, `fundido_s`, `laminas[]` con `imagen`, `texto`, `segundos`. **Los números van acá**, no en el código. |
+| `scripts/logic/intro_data.gd` | `IntroData` (`RefCounted`, lógica pura): `load_file(path) -> IntroData` con `laminas`, `fundido_s`, `errors` y `is_valid()`. Valida cantidad (5 a 8), líneas y caracteres (los de `LevelTexts.WIN_*` y `LINE_MAX_CHARS`: reusarlos, no copiarlos), `segundos` (4 a 12), `fundido_s` (0 a 2), que la imagen exista, `version`. Mensajes en castellano que nombran la lámina. |
+| `scripts/logic/intro_flow.gd` | `IntroFlow` (lógica pura, **testeable sin cambiar de escena**): `should_auto_show(intro_seen, dev_enabled, data_valid) -> bool` (RF-498) y `after_finish(has_won_levels) -> Destination` (`LEVEL_1` o `LEVEL_SELECT`, RF-500). |
+| `scenes/ui/intro_screen.gd` | `IntroScreen` (`CanvasLayer`, por código como `EpilogueScreen`): `open(data)`, `signal finished`, `is_open()`. La imagen con `KEEP_ASPECT` y barras oscuras; franja de texto abajo; botón «Omitir»; fundido con `Tween`; avance por clic, `Espacio`, `Enter`, `→` y por tiempo (`_process` con un reloj propio, para que el test no espere). **No sabe a dónde se va después.** |
+| `assets/intro/01_*.png` a `07_*.png` | Las láminas (T241). 1920 × 1080. |
+
+**Qué cambia:**
+- `save_manager.gd`: la clave `"intro_seen"` (leer: solo `true` booleano cuenta; escribir en `save()`), `intro_seen() -> bool` y `mark_intro_seen()` (que guarda enseguida). `load_save()` la resetea a `false` junto con el resto.
+- `main_menu.gd`: «Jugar» deja de ir directo a `GameFlow.go_to_level_select`: llama a un método propio que, según `IntroFlow.should_auto_show`, abre el overlay o va a la selección. Al `finished`: `IntroFlow.after_finish` → `GameFlow.start_level(0)` o `GameFlow.go_to_level_select()`.
+- `wiki_screen.gd`: el botón «Ver la intro» arriba de la lista de la solapa Lore; abre el mismo overlay; al `finished` solo lo cierra (la Wiki queda como estaba).
+- **Sin cambios:** `GameFlow` (salvo que T242 prefiera ponerle un método), `Audio`, los niveles, el editor, los modos, la Wiki y el guardado de los demás datos.
+
+#### Orden de trabajo (T242)
+
+1. **Datos y lector:** `data/intro/intro.json` con los textos del guion y `IntroData`, con sus tests (cada error). Las imágenes pueden ser **provisorias** (un PNG liso de 1920 × 1080) hasta que T241 entregue.
+2. **Guardado:** la clave y sus tests (nuevo, con la clave, sin la clave, no booleana, guardado anterior, no toca el resto).
+3. **`IntroFlow`** y su tabla de decisiones.
+4. **`IntroScreen`** y sus tests de manejo.
+5. **Conectar** «Jugar» y la Wiki.
+6. **Con las láminas de T241:** medir el texto en 1280 × 720 y en tamaño de celular, y exportar otra vez (T237).
+
+#### Pruebas que T242 tiene que escribir
+
+- **`IntroData`:** el archivo oficial sin errores; 4 y 9 láminas; línea de 91; 3 líneas; 161 caracteres; texto vacío; `segundos` 3 y 13; `fundido_s` 3; imagen inexistente; `version` 2; el error nombra la lámina.
+- **Datos oficiales:** cada imagen existe y mide 1920 × 1080; **cada texto es el de `specs/intro/guion.md`** (el test lee el documento y compara, como `test_level_texts.gd` con `11-textos-lore.md`); sin vocabulario vetado ni «Cántaro»; cada duración cumple `2 + caracteres/20`.
+- **Guardado:** `intro_seen` en `save.json` y su lectura; `1`, `"si"` y `null` → no vista; el resto del guardado no cambia; **un guardado de antes** (formato real, como en `test_old_saves.gd`).
+- **`IntroFlow`:** guardado nuevo → se muestra; con la clave → no; modo de pruebas → no; archivo roto → no; sin niveles ganados → nivel 1; con niveles ganados → selección.
+- **`IntroScreen`:** un toque, `Espacio`, `Enter` y `→` pasan; el tiempo pasa (reloj inyectado); un toque durante el fundido salta; la última termina; «Omitir» y `Esc` terminan **una sola vez** (`finished`); el clic final no llega a lo de atrás; la lámina se ve entera en 16:9, 20:9 y 4:3.
+- **Menú y Wiki, sin cambiar de escena** (`.claude/rules/tests.md`): «Jugar» emite lo que corresponde y no navega con la intro abierta; el botón «Ver la intro» existe en la solapa Lore, abre el overlay y no toca `intro_seen`. **Ojo:** `test_menus_and_flow.gd` y `test_main_menu_style.gd` usan `%PlayButton`: revisar que no asuman que «Jugar» va directo a la selección.
+
+#### Riesgos y cosas que no se saben
+
+- **El peso.** Siete PNG de 1920 × 1080 pintados pueden pasar de 3 MB cada uno (≈ 20 MB). T242 lo mide y lo anota; si es mucho, se optimizan (o se importan comprimidos) **sin cambiar la resolución** sin avisarle a Lucas.
+- **Que el texto entre en la franja** a 1280 × 720 y en el celular con la misma fuente del epílogo (22 pt): no se midió. Dos líneas de 90 caracteres es el peor caso.
+- **El «atrás» de Android** y `Esc`: hay que atenderlos en `_input` antes que el menú, como hace `LevelIntro`.
+- **El modo de pruebas.** Al encender o apagar el modo, el menú se recarga (`go_to_main_menu`): con el overlay abierto no debería poder pasar (no hay acceso a Opciones), pero T242 lo comprueba.
+- **Una sola lámina rota** (imagen que no carga en la exportación) no tiene que tumbar la intro: se omite esa lámina y se avisa en la salida. *(Propuesta de T242; no está en RF-497 y queda a su criterio.)*
+- **El estilo de las láminas depende de Lucas** (P3): ningún código cambia con él.
+
+#### Lo que M57 no toca
+
+La campaña y sus niveles, `LevelFile`, la Wiki más allá de un botón, el epílogo, los créditos, los modos, el editor, la música y los efectos, y el formato del guardado salvo la clave nueva.

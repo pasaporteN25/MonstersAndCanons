@@ -6,7 +6,11 @@
 >
 > **Agregado por T243 (2026-10-09):** el artículo 10, «La Central», suma **un párrafo sobre el Coloso**, el jefe supremo que eligió Lucas. Es el texto de tono del informe de T243, que no cambia ningún otro texto de este documento. **Lucas todavía no lo leyó en su lugar**: si le parece mal, se corrige acá y se copia al artículo de la Wiki Lore. Dice «tres» porque el Coloso suelta tres Pedazos (RF-481): **si el balance cambia ese número, se corrige también acá.**
 
-**Qué es este documento.** Los textos finales que muestra el juego (M52, `01-spec.md`): el **lugar**, la **entrada** y la **victoria** de los 15 niveles, el **epílogo**, los **créditos** y **10 artículos** de la categoría Lore de la Wiki. Es el **único lugar** donde viven los textos: la ficha de cada nivel (§7.13 a §7.17 de la spec) y las tareas T228 a T234 los **copian tal cual** de acá, y si Lucas corrige uno se corrige acá primero.
+> **Agregado por T252 (2026-10-10):** el artículo **11, «La Cuadrilla»** (§4.11), sobre la banda de Rateros y Cargador que Lucas eligió para la V1 (M55, RF-489, D-094). **Lucas lo aprobó el 2026-10-10** (P3 de M55, en el encargo de T253) y **T253 lo cargó** en `data/wiki/lore/la_cuadrilla.json`, tal cual. No cambia ningún otro texto de este documento: en particular, el artículo 5 sigue diciendo que el Ladrón va solo.
+
+> **Agregado por T240 (2026-10-11):** los **textos de la intro de láminas** (siete láminas de 1 o 2 líneas) **no están acá**: viven en [`specs/intro/guion.md`](intro/guion.md), junto a la ilustración de cada una, porque no se pueden corregir sin verla. Es **el único lugar** donde se escriben y se corrigen, con la misma regla que este documento (T242 los copia tal cual a `data/intro/intro.json`) y los mismos límites de RF-464 para la victoria (2 líneas, 160 caracteres, 90 por línea). Su spec es M57 (RF-497 a RF-501). **No cambia ningún texto de este documento.**
+
+**Qué es este documento.** Los textos finales que muestra el juego (M52, `01-spec.md`): el **lugar**, la **entrada** y la **victoria** de los 15 niveles, el **epílogo**, los **créditos** y **10 artículos** de la categoría Lore de la Wiki (más el borrador del 11, T252). Es el **único lugar** donde viven los textos: la ficha de cada nivel (§7.13 a §7.17 de la spec) y las tareas T228 a T234 los **copian tal cual** de acá, y si Lucas corrige uno se corrige acá primero.
 
 **Cómo se escribió.** Según la biblia (`10-universo.md`, §8 «Tono y reglas de escritura»):
 1. El desenlace es ambiguo: **logro y costo**, sin ganador moral.
@@ -234,7 +238,7 @@ Pantalla sencilla a la que se llega desde el epílogo (RF-472). **Solo lleva lo 
 
 ## 4. Artículos de Lore para la Wiki
 
-Diez artículos en `data/wiki/lore/` (RF-469). Cada uno se **abre al ganar un nivel** de la campaña (columna «Se abre al ganar»); antes se ve cerrado, como el bestiario (RF-470). No repiten números del juego (constitución P2) y ninguno anticipa lo que el jugador todavía no vio: **un artículo nunca nombra algo que debuta después de su nivel**.
+Diez artículos aprobados en `data/wiki/lore/` (RF-469), más un **undécimo en borrador** (T252, abajo). Cada uno se **abre al ganar un nivel** de la campaña (columna «Se abre al ganar»); antes se ve cerrado, como el bestiario (RF-470). No repiten números del juego (constitución P2) y ninguno anticipa lo que el jugador todavía no vio: **un artículo nunca nombra algo que debuta después de su nivel**.
 
 | # | Archivo | Título | Se abre al ganar |
 |---|---|---|---|
@@ -248,6 +252,7 @@ Diez artículos en `data/wiki/lore/` (RF-469). Cada uno se **abre al ganar un ni
 | 8 | `los_pozos.json` | Los pozos | nivel 11 |
 | 9 | `poblados_vacios.json` | Los poblados vacíos | nivel 14 |
 | 10 | `la_central.json` | La Central | nivel 15 |
+| 11 *(aprobado, T253)* | `la_cuadrilla.json` | La Cuadrilla | nivel 7 *(su `orden` va entre el del 5 y el del 6)* |
 
 
 ### 1. El oasis
@@ -368,6 +373,22 @@ Diez artículos en `data/wiki/lore/` (RF-469). Cada uno se **abre al ganar un ni
 
   > El informe termina ahí. No dice qué se hará con lo que falta.
 
+### 11. La Cuadrilla *(aprobado por Lucas el 2026-10-10; cargado por T253)*
+
+- **Subtítulo:** Los que andan juntos
+- **Se abre al ganar:** el nivel 7 (`level_07`)
+- **`orden`:** entre el del artículo 5 y el del 6 (los artículos 6 a 10 pasan a 7 a 11; solo cambia ese campo).
+- **Texto** (un bloque `texto` por párrafo):
+
+  > Cerca del aserradero se vieron criaturas chicas y rápidas que se llevan lo que brilla, igual que el Ladrón. A diferencia de él, no andan solas: llegan juntas, y los colonos las llaman Rateros.
+
+  > Con ellas viene siempre una más grande y lenta, con una bolsa más grande que ella misma donde parece juntarse lo de todas. La llaman el Cargador, y a todas juntas, la cuadrilla, por cómo llegan.
+
+  > Nadie vio que alguna mande ni que alguna obedezca. Parece que van juntas porque buscan lo mismo.
+
+- **Por qué es un artículo propio y no un párrafo del 5:** el 5 se abre al ganar el 6 y la Cuadrilla debuta en el 7; un artículo nunca nombra algo que debuta después de su nivel (arriba). Y el 5 está aprobado.
+- **Lo que cuida el texto:** que **no llevan la marca** ni dependen de los Moradores (no los nombra: el artículo 7 recién se abre en el 9, y la marca se revela en el 8); que **«la cuadrilla» es un nombre de los colonos**, no un hecho; que nadie manda; y que **no hay un juicio** sobre ellas (tono de §8 de la biblia).
+
 ---
 
 ## 5. Qué se comprobó y qué no
@@ -383,6 +404,8 @@ Diez artículos en `data/wiki/lore/` (RF-469). Cada uno se **abre al ganar un ni
 2. **Que entren en pantalla.** Los límites son de caracteres; el cartel y la tarjeta (T228) los miden en una captura real, y si una tarjeta no alcanza para 32 caracteres se baja el límite y se acorta el lugar.
 3. **Los hechos que los textos suponen del juego** (que el 9 «prueba el primer mortero», que el 11 «apaga torres», que el 13 trae una escolta por dos caminos) son los de la biblia y el plan 08 §5. Si la partida de Lucas del 6 al 10 (T226, todavía sin cerrar) cambia algo de eso, los textos afectados son el 9 (mortero) y los de las fichas marcadas **A REVISAR TRAS G4** en la spec.
 4. **Los artículos de Lore no pasaron por la mirada de nadie más** que la mía. En particular «Los poblados vacíos» termina con una frase de informe burocrático («posiciones desocupadas») que busca decir mucho sin decirlo: si a Lucas le parece que subraya de más, se saca esa línea.
+
+5. **El artículo 11, «La Cuadrilla»** (T252) **no pasó por la mirada de nadie más que la mía** *(hasta que Lucas lo aprobó el 2026-10-10; T253 lo cargó)*. Revisé a mano que no use las palabras vetadas ni nombre nada que debute después del nivel 7 (no nombra a los Moradores, la marca ni a ningún enemigo de otros niveles) y que concuerde con el artículo 5 («va solo» / «andan juntas»). No se comprobó que suene bien ni que «Rateros» y «Cargador» sean los nombres que Lucas quiere (P3 y P4 de M55). Si cambia el nivel del debut, **cambia también el artículo que lo abre** y hay que volver a revisar qué puede nombrar.
 
 ## 6. Cómo aprobar
 

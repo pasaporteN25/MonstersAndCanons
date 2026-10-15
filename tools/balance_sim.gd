@@ -59,6 +59,20 @@
 #   El bot no recoge piezas ni extrae recursos: simula la colección completa y le da 4 recursos al empezar.
 #   "sin_recursos" (T214) nunca la compra.
 #
+# Mejoras de torres y perfil de Asedio (T258, RF-495). Por omisión el bot no mejora nada (no cambia ningún resultado):
+#   mejoras=llenar    cuando ya no queda ninguna casilla construible libre, una mejora por frame: la torre de menor
+#                     nivel y, entre ellas, la de menor costo de mejora, pagada por BuildController.try_upgrade.
+#   mejoras=temprana  lo mismo, pero desde que hay 3 torres construidas, aunque queden casillas libres.
+#   perfil=asedio     juega los 15 mapas del modo oficial Asedio con 5 semillas y la política fija de cada mapa
+#                     (tools/asedio_politicas.json, o politicas=ruta), imprime la tabla y el promedio de vidas por
+#                     bloque (1–5, 6–10, 11–15) y termina con código 1 si algún mapa no gana las 5 con 3 vidas o más
+#                     o si los promedios por bloque suben. levels=A-B juega solo esos mapas. Ejemplos:
+#     godot ... -s tools/balance_sim.gd -- x perfil=asedio
+#     godot ... -s tools/balance_sim.gd -- sin_recursos modo=asedio levels=1-15 seeds=5 mejoras=llenar
+#   vida=N            fuerza el % de vida de los monstruos del mapa (para remedir un porcentaje de la tabla de Asedio sin
+#                     tocar el modo.json; la variante impresa dice el % efectivo).
+#   Cada partida imprime la variante que usó (estrategia, mejoras, vida de los monstruos y semilla).
+#
 # --fixed-fps 60 hace que cada frame cuente como 1/60 s sin esperar al reloj real,
 # así una partida de ~10 minutos se simula en segundos.
 extends SceneTree
@@ -74,6 +88,8 @@ const NO_BASIC_ORDER: Array[int] = [1, 2, 1, 3, 1, 5, 3, 7, 1, 6, 3, 4, 1, 2, 7,
 ## Orden de compra de "heavy" (M19): como "mix" más el Mortero (8) cada tanto.
 const HEAVY_ORDER: Array[int] = [0, 0, 0, 7, 1, 4, 0, 8, 5, 3, 6, 8, 2, 7, 0, 4, 8, 5, 6, 3, 1]
 ## RF-452: id de la Disruptora y cuántas compra como máximo el bot (valores de la herramienta, no del juego).
+## T258: el grupo de las torres construidas (Tower.GROUP; el tipo Tower no se puede nombrar acá).
+const TOWER_GROUP: StringName = &"towers"
 const DISRUPTOR_ID: StringName = &"disruptor"
 const DISRUPTOR_MAX: int = 2
 const DISRUPTOR_AFTER_COMMON: int = 3
@@ -105,6 +121,20 @@ var mode_id: String = ""
 ## levelscale=N: prueba otro % de vida por oleada para el nivel elegido (D-019). -1 = no tocar.
 var level_scale_override: int = -1
 var starting_gold_override: int = -1
+## T258: regla de mejoras de la partida en curso ("", "llenar" o "temprana") y la que se pidió con mejoras=.
+var upgrades_mode: String = ""
+var upgrades_requested: String = ""
+## vida=N: fuerza el % de vida de los monstruos del mapa (para remedir un porcentaje sin tocar el modo.json). -1 = no tocar.
+var health_percent_override: int = -1
+var upgrade_count: int = 0
+var upgrade_gold: int = 0
+## T258: perfil=asedio y el archivo de políticas por mapa.
+var _profile: bool = false
+var _policies_path: String = "res://tools/asedio_politicas.json"
+var _policies: Dictionary = {}
+## Cache de "no queda ninguna casilla libre" (solo cambia al construir; se refresca cada 60 frames por si acaso).
+var _free_count_built: int = -1
+var _free_count: int = 0
 ## T204: mapas y semillas a jugar, y la cola de partidas pendientes.
 var level_numbers: Array[int] = []
 var seed_list: Array[int] = [BalanceArgs.DEFAULT_SEED]
@@ -127,6 +157,8 @@ var _had_job: bool = false
 var _watched: LevelSession
 var _res_last: int = 0
 var _res_gained: int = 0
+## Oro que le robaron en la partida (T253: mide a La Cuadrilla; no cambia ningún resultado).
+var _stolen: int = 0
 var _infra_gold: int = 0
 var _machine_wave: int = -1
 var _first_resource_tower_wave: int = -1
@@ -149,6 +181,8 @@ func _initialize() -> void:
 		_apply_override(arg)
 	if _check_rule:
 		_prepare_rule_check()
+	if _profile:
+		_prepare_profile()
 	# Este script se compila antes que los autoloads: no puede usar GameFlow por su nombre.
 	_campaign = _keep(LevelFile.load_campaign())
 	if level_numbers.is_empty() and not _check_rule:
@@ -156,7 +190,14 @@ func _initialize() -> void:
 	for level_n: int in level_numbers:
 		for strategy_name: String in strategies:
 			for seed_n: int in seed_list:
-				_queue.append({"level": level_n, "strategy": strategy_name, "seed": seed_n})
+				var entry: Dictionary = {"level": level_n, "strategy": strategy_name, "seed": seed_n, "mejoras": upgrades_requested}
+				if _profile:  # T258: la política fija de cada mapa (RF-495)
+					var policy: Dictionary = BalanceArgs.policy_for(_policies, "level_%02d" % level_n)
+					entry["strategy"] = policy["estrategia"]
+					entry["mejoras"] = policy["mejoras"]
+					if strategy_name != strategies[0]:
+						continue
+				_queue.append(entry)
 	if _queue.is_empty() and _check_rule:
 		_finish_rule_check()  # ningún mapa con recursos: no hay nada que comprobar
 		return
@@ -169,6 +210,10 @@ func _start_next_run() -> bool:
 		return false
 	_current = _queue.pop_front()
 	strategy = _current["strategy"]
+	upgrades_mode = _current["mejoras"]
+	upgrade_count = 0
+	upgrade_gold = 0
+	_free_count_built = -1
 	level_number = _current["level"]
 	built = 0
 	disruptors_built = 0
@@ -181,6 +226,7 @@ func _start_next_run() -> bool:
 	_watched = null
 	_res_last = 0
 	_res_gained = 0
+	_stolen = 0
 	_infra_gold = 0
 	_machine_wave = -1
 	_first_resource_tower_wave = -1
@@ -220,6 +266,8 @@ func _start_next_run() -> bool:
 		game.level_data.extra_towers = PackedStringArray(["mortar"])  # RF-300: los niveles comunes no lo traen
 	if starting_gold_override >= 0:
 		game.level_data.starting_gold = starting_gold_override
+	if health_percent_override > 0:
+		game.level_data.enemy_health_percent = health_percent_override
 	if level_scale_override >= 0:
 		game.level_data.health_scale_percent_per_wave = level_scale_override
 	root.add_child(game)
@@ -227,6 +275,9 @@ func _start_next_run() -> bool:
 	print("Nivel: %s · estrategia: %s · semilla: %d · vida del Normal: %d" % [
 		game.level_data.display_name, strategy, _current["seed"],
 		(load("res://data/enemies/normal.tres") as EnemyData).max_health])
+	# T258 (RF-495, punto 6): la variante exacta de la partida.
+	print("Variante: estrategia %s · mejoras %s · vida de los monstruos %d %% · semilla %d" % [
+		strategy, upgrades_mode if upgrades_mode != "" else "ninguna", game.level_data.enemy_health_percent, _current["seed"]])
 	return true
 
 
@@ -244,6 +295,24 @@ func _apply_override(arg: String) -> void:
 		return
 	if parts[0] == "modo":
 		mode_id = parts[1]  # RF-391: el mapa level=N de ese modo oficial, con sus reglas
+		return
+	if parts[0] == "mejoras":
+		if not BalanceArgs.is_upgrade_mode(parts[1]):
+			print("mejoras=%s no es válido (llenar o temprana)." % parts[1])
+			quit(1)
+		upgrades_requested = parts[1]
+		return
+	if parts[0] == "vida":
+		health_percent_override = parts[1].to_int()
+		return
+	if parts[0] == "perfil":
+		_profile = parts[1] == "asedio"
+		if not _profile:
+			print("perfil=%s no es válido (se usa perfil=asedio)." % parts[1])
+			quit(1)
+		return
+	if parts[0] == "politicas":
+		_policies_path = parts[1] if parts[1].begins_with("res://") else "res://" + parts[1]
 		return
 	if parts[0] == "report":
 		report_path = parts[1]
@@ -334,6 +403,7 @@ func _process(_delta: float) -> bool:
 	if _watched != session:
 		_watched = session
 		session.resources_changed.connect(_on_resources_changed)
+		session.gold_stolen.connect(func(amount: int) -> void: _stolen += amount)
 	var single_run: bool = _rows.is_empty() and _queue.is_empty()
 	if single_run and session.wave > last_reported_wave and session.state != LevelSession.State.WAVE_RUNNING:
 		last_reported_wave = session.wave
@@ -341,14 +411,16 @@ func _process(_delta: float) -> bool:
 			session.wave, session.lives, session.gold, built])
 	if session.is_over():
 		var won: bool = session.state == LevelSession.State.WON
-		print("RESULTADO: %s · oleada %d/%d · vidas %d" % [
-			"VICTORIA" if won else "DERROTA", session.wave, session.total_waves, session.lives])
+		print("RESULTADO: %s · oleada %d/%d · vidas %d · oro robado %d" % [
+			"VICTORIA" if won else "DERROTA", session.wave, session.total_waves, session.lives, _stolen])
 		_rows.append({
 			"level": _current["level"], "strategy": strategy, "seed": _current["seed"],
 			"won": won, "lives": session.lives, "wave": session.wave,
 			"total_waves": session.total_waves, "gold": session.gold,
+			"upgrades_mode": upgrades_mode, "upgrades": upgrade_count, "upgrade_gold": upgrade_gold,
+			"health_percent": game.level_data.enemy_health_percent,
 			"machine_wave": _machine_wave, "resources_gained": _res_gained, "resources_left": session.resources,
-			"infra_gold": _infra_gold, "first_resource_tower_wave": _first_resource_tower_wave})
+			"gold_stolen": _stolen, "infra_gold": _infra_gold, "first_resource_tower_wave": _first_resource_tower_wave})
 		root.remove_child(game)
 		game.queue_free()
 		game = null
@@ -357,8 +429,11 @@ func _process(_delta: float) -> bool:
 		_print_summary()
 		if _check_rule:
 			_finish_rule_check()
+		if _profile:
+			_finish_profile()
 		return true
 	_buy_towers()
+	_upgrade_towers()
 	if session.can_start_wave():
 		game.start_next_wave()  # sin esperar la cuenta atrás
 	return false
@@ -371,7 +446,7 @@ func _print_summary() -> void:
 	var infra: bool = false
 	for row: Dictionary in _rows:
 		infra = infra or BalanceArgs.is_infra_strategy(row["strategy"])
-	var header: String = "mapa | estrategia       | semilla | resultado | vidas | oleada | oro sobrante"
+	var header: String = "mapa | estrategia       | semilla | resultado | vidas | oleada | oro sobrante | oro robado"
 	if infra:
 		header += " | máquina | recursos obt. | recursos sobr. | oro infra. | 1.ª torre rec."
 	print(header)
@@ -379,6 +454,7 @@ func _print_summary() -> void:
 		var line: String = "%4d | %-16s | %7d | %-9s | %5d | %2d/%-3d | %5d" % [
 			row["level"], row["strategy"], row["seed"], "VICTORIA" if row["won"] else "DERROTA",
 			row["lives"], row["wave"], row["total_waves"], row["gold"]]
+		line += " | %10d" % row["gold_stolen"]
 		if infra:
 			line += " | %7s | %13d | %14d | %10d | %14s" % [
 				_wave_text(row["machine_wave"]), row["resources_gained"], row["resources_left"],
@@ -768,3 +844,88 @@ func _finish_rule_check() -> void:
 		code = 0 if level_numbers.is_empty() else 1
 	print("REGLA DE ORO: %s" % ("SE CUMPLE" if code == 0 else "NO SE CUMPLE"))
 	quit(code)
+
+
+# --- T258: mejoras de torres (T255 §2) y perfil de Asedio (RF-495) ---
+
+## Una mejora por frame según `upgrades_mode`: la torre de menor nivel y, entre ellas, la de menor costo de
+## mejora. Paga con BuildController.try_upgrade (el cobro normal): no hay oro ni daño gratis. Si la elegida no
+## alcanza, espera. No vende, no repara y no cambia objetivos.
+func _upgrade_towers() -> void:
+	if upgrades_mode == "":
+		return
+	if upgrades_mode == BalanceArgs.UPGRADE_FILL:
+		if _free_count_built != built or Engine.get_process_frames() % 60 == 0:
+			_free_count_built = built
+			_free_count = _free_cells().size()
+		if _free_count > 0:
+			return
+	elif not BalanceArgs.wants_upgrade(upgrades_mode, built, 1):
+		return
+	# Sin el tipo Tower (arrastra autoloads y la herramienta no compilaría con --check-only): son Node.
+	var towers: Array[Node] = []
+	var candidates: Array[Dictionary] = []
+	for tower: Node in game.get_tree().get_nodes_in_group(TOWER_GROUP):
+		if not tower.can_upgrade():
+			continue
+		towers.append(tower)
+		candidates.append({"level": tower.level_index, "cost": tower.next_level_stats().cost})
+	var index: int = BalanceArgs.pick_upgrade(candidates)
+	if index < 0:
+		return
+	if game.build_controller.try_upgrade(towers[index]):
+		upgrade_count += 1
+		upgrade_gold += candidates[index]["cost"]
+
+
+## perfil=asedio: el modo oficial, los 15 mapas (o los de levels=), 5 semillas y la política de cada mapa.
+func _prepare_profile() -> void:
+	mode_id = "asedio"
+	seed_list = BalanceArgs.seeds_up_to(BalanceArgs.ASEDIO_SEEDS)
+	if _seeds_given:
+		print("perfil=asedio usa siempre %d semillas (RF-495): se ignora seed=/seeds=." % BalanceArgs.ASEDIO_SEEDS)
+	strategies = [strategies[0]]  # la estrategia de cada mapa sale del archivo de políticas
+	var file := FileAccess.open(_policies_path, FileAccess.READ)
+	if file == null:
+		print("No se pudo leer el archivo de políticas %s." % _policies_path)
+		quit(1)
+		return
+	var parsed: Dictionary = BalanceArgs.parse_policies(file.get_as_text())
+	if parsed["error"] != "":
+		print("%s: %s" % [_policies_path, parsed["error"]])
+		quit(1)
+		return
+	_policies = parsed["policies"]
+	if level_numbers.is_empty():
+		var count: int = ModePacks.read(ModePacks.OFFICIAL_DIR, mode_id, true)["maps"].size()
+		level_numbers = BalanceArgs.parse_levels("1-%d" % count)
+	print("Perfil de Asedio: políticas de %s · semillas 1 a %d · mapas %s" % [
+		_policies_path, BalanceArgs.ASEDIO_SEEDS, level_numbers])
+
+
+## Imprime el veredicto por mapa y por bloque y termina con código 0 (cumple) o 1 (no cumple).
+func _finish_profile() -> void:
+	var verdict: Dictionary = BalanceArgs.asedio_verdict(_rows)
+	print("")
+	print("Perfil de Asedio (RF-495): cada mapa tiene que ganar las %d con %d vidas o más." % [
+		BalanceArgs.ASEDIO_SEEDS, BalanceArgs.ASEDIO_MIN_LIVES])
+	print("mapa | % vida | estrategia   | mejoras  | victorias | vidas mín. | veredicto")
+	var levels: Dictionary = verdict["levels"]
+	for level_n: int in levels:
+		var entry: Dictionary = levels[level_n]
+		var sample: Dictionary = {}
+		for row: Dictionary in _rows:
+			if row["level"] == level_n:
+				sample = row
+				break
+		print("%4d | %5d%% | %-12s | %-8s | %5d/%-3d | %10s | %s" % [
+			level_n, sample["health_percent"], sample["strategy"], sample["upgrades_mode"],
+			entry["wins"], entry["total"], str(entry["min_lives"]) if entry["wins"] > 0 else "—",
+			"CUMPLE" if entry["holds"] else "NO CUMPLE"])
+	var blocks: Array[float] = verdict["blocks"]
+	for index: int in blocks.size():
+		var block: Vector2i = BalanceArgs.ASEDIO_BLOCKS[index]
+		print("Promedio de vidas, mapas %d–%d: %s" % [block.x, block.y, "%.2f" % blocks[index] if blocks[index] >= 0.0 else "— (bloque incompleto)"])
+	print("Los promedios por bloque %s." % ("SUBEN (no cumple)" if verdict["blocks_rise"] else "no suben"))
+	print("PERFIL DE ASEDIO: %s" % ("SE CUMPLE" if verdict["exit_code"] == 0 else "NO SE CUMPLE"))
+	quit(verdict["exit_code"])

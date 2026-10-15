@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="script"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/rendered/ratero.png" id="art"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/rendered/ratero_walk.png" id="walk"]
+
+[resource]
+script = ExtResource("script")
+id = &"ratero"
+display_name = "Ratero"
+description = "Chico y veloz. Anda en cuadrilla y cada uno roba 2 de oro cada 2 segundos, sin bajar de 10. Se barren con área."
+max_health = 14
+speed_tiles = 2.2
+reward = 5
+lives_damage = 1
+shape = 3
+color = Color(0.78, 0.55, 0.3, 1)
+texture = ExtResource("art")
+walk_atlas = ExtResource("walk")
+walk_stride_tiles = 0.45
+walk_art_scale = 1.0
+visual_scale = 1.2
+flip_when_walking_left = false
+size_tiles = 0.2
+gold_drain_amount = 2
+gold_drain_interval = 2.0
+gold_drain_floor = 10
+optional_wave_limit = 0

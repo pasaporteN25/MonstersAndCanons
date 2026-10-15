@@ -187,6 +187,14 @@ func is_campaign_complete() -> bool:
 	return true
 
 
+## RF-500: ¿el guardado tiene algún nivel de la campaña ganado? Decide a dónde va la intro al terminar.
+func has_won_campaign_level() -> bool:
+	for i: int in level_count():
+		if SaveManager.is_completed(level(i).id):
+			return true
+	return false
+
+
 ## RF-90 y RF-112: guarda la victoria y desbloquea el siguiente nivel.
 func level_won(lives: int, score: int = 0) -> void:
 	if dev_partial_run():

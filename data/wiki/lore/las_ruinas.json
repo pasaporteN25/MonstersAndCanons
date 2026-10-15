@@ -2,7 +2,7 @@
  "version": 1,
  "titulo": "Las ruinas",
  "subtitulo": "Lo que había antes",
- "orden": 6,
+ "orden": 7,
  "desbloqueo": "level_08",
  "bloques": [
   {

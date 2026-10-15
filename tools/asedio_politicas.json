@@ -1,0 +1,5 @@
+{
+	"por_defecto": {"estrategia": "sin_recursos", "mejoras": "llenar"},
+	"level_02": {"estrategia": "smart", "mejoras": "llenar"},
+	"level_04": {"estrategia": "sin_recursos", "mejoras": "temprana"}
+}

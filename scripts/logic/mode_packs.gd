@@ -2,6 +2,9 @@
 # sus mapas (los mismos JSON de §7.8). Los oficiales viven en data/modos/ y los propios en
 # user://modos/. Solo se leen datos: un modo nunca puede traer código. Nunca corta el juego: un modo o
 # un mapa roto queda con su motivo y los demás se ven igual (como CommunityMaps).
+# `reglas` admite oro_inicial_%, vidas, vida_monstruos_% (global) y, desde RF-492 (M56, D-095),
+# vida_monstruos_por_mapa_%: un objeto {"level_01": 105} con el porcentaje propio de cada mapa
+# (el mapa que no está en la tabla toma el global y, sin global, 100).
 class_name ModePacks
 extends RefCounted
 
@@ -19,7 +22,8 @@ const KEYS: PackedStringArray = ["version", "nombre", "descripcion", "mapas", "t
 const RULE_GOLD: String = "oro_inicial_%"
 const RULE_LIVES: String = "vidas"
 const RULE_HEALTH: String = "vida_monstruos_%"
-const RULE_KEYS: PackedStringArray = [RULE_GOLD, RULE_LIVES, RULE_HEALTH]
+const RULE_HEALTH_BY_MAP: String = "vida_monstruos_por_mapa_%"
+const RULE_KEYS: PackedStringArray = [RULE_GOLD, RULE_LIVES, RULE_HEALTH, RULE_HEALTH_BY_MAP]
 ## Topes de formato (como RF-223), para que un modo ajeno no cuelgue el juego.
 const MAX_MODES: int = 50
 const MAX_MAPS: int = 50
@@ -233,7 +237,7 @@ static func _read_settings(data: Dictionary, errors: PackedStringArray) -> Dicti
 	if data.has("torres"):
 		settings["towers"] = _read_towers(data["torres"], errors)
 	if data.has("reglas"):
-		settings["rules"] = _read_rules(data["reglas"], errors)
+		settings["rules"] = _read_rules(data["reglas"], settings["maps"], errors)
 	return settings
 
 
@@ -270,7 +274,7 @@ static func _read_towers(value: Variant, errors: PackedStringArray) -> PackedStr
 	return towers
 
 
-static func _read_rules(value: Variant, errors: PackedStringArray) -> Dictionary:
+static func _read_rules(value: Variant, map_ids: PackedStringArray, errors: PackedStringArray) -> Dictionary:
 	var rules: Dictionary = {}
 	if not value is Dictionary:
 		errors.append("\"reglas\" tiene que estar entre { }, como {\"vida_monstruos_%\": 150}.")
@@ -284,7 +288,25 @@ static func _read_rules(value: Variant, errors: PackedStringArray) -> Dictionary
 			rules[key] = _whole(data[key], key, MIN_PERCENT, MAX_PERCENT, errors)
 	if data.has(RULE_LIVES):
 		rules[RULE_LIVES] = _whole(data[RULE_LIVES], RULE_LIVES, 1, LevelFile.MAX_LIVES, errors)
+	if data.has(RULE_HEALTH_BY_MAP):
+		rules[RULE_HEALTH_BY_MAP] = _read_health_by_map(data[RULE_HEALTH_BY_MAP], map_ids, errors)
 	return rules
+
+
+## RF-492: la tabla {"id_de_mapa": porcentaje}. Cada clave tiene que ser un mapa del modo.
+static func _read_health_by_map(value: Variant, map_ids: PackedStringArray, errors: PackedStringArray) -> Dictionary:
+	var table: Dictionary = {}
+	if not value is Dictionary:
+		errors.append("\"reglas\": \"%s\" tiene que estar entre { }, como {\"level_01\": 105}." % RULE_HEALTH_BY_MAP)
+		return table
+	for key: Variant in (value as Dictionary).keys():
+		var map_id: String = str(key)
+		if not map_ids.has(map_id):
+			errors.append("\"reglas\": \"%s\" nombra el mapa '%s', que no está en \"mapas\" (los del modo: %s)." \
+				% [RULE_HEALTH_BY_MAP, map_id, ", ".join(map_ids)])
+			continue
+		table[map_id] = _whole(value[key], "%s\" para el mapa \"%s" % [RULE_HEALTH_BY_MAP, map_id], MIN_PERCENT, MAX_PERCENT, errors)
+	return table
 
 
 static func _whole(value: Variant, key: String, minimum: int, maximum: int, errors: PackedStringArray) -> int:
@@ -310,7 +332,7 @@ static func _read_map(mode: Dictionary, map_id: String, settings: Dictionary) ->
 	entry["errors"] = result["errors"]
 	var level: LevelData = result["level"]
 	if level != null:
-		_apply(level, settings)
+		_apply(level, settings, map_id)
 		var conflict: String = _towers_conflict(level, map_id)
 		if conflict != "":  # RF-396: nivel y modo no comparten ninguna torre
 			entry["errors"] = PackedStringArray(entry["errors"]) + PackedStringArray([conflict])
@@ -320,7 +342,7 @@ static func _read_map(mode: Dictionary, map_id: String, settings: Dictionary) ->
 
 
 ## RF-388: las reglas del modo sobre un mapa ya leído.
-static func _apply(level: LevelData, settings: Dictionary) -> void:
+static func _apply(level: LevelData, settings: Dictionary, map_id: String) -> void:
 	var rules: Dictionary = settings["rules"]
 	if rules.has(RULE_GOLD):
 		level.starting_gold = Rules.percent_of(level.starting_gold, rules[RULE_GOLD])
@@ -328,6 +350,9 @@ static func _apply(level: LevelData, settings: Dictionary) -> void:
 		level.starting_lives = rules[RULE_LIVES]
 	if rules.has(RULE_HEALTH):
 		level.enemy_health_percent = rules[RULE_HEALTH]
+	var by_map: Dictionary = rules.get(RULE_HEALTH_BY_MAP, {})
+	if by_map.has(map_id):  # RF-492: el porcentaje del mapa gana sobre el global
+		level.enemy_health_percent = by_map[map_id]
 	level.allowed_towers = settings["towers"]
 
 

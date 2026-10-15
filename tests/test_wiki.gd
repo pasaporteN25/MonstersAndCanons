@@ -1,6 +1,10 @@
 # Tests del modelo de la wiki (T110, RF-233, RF-234, RF-237, D-035).
 extends GutTest
 
+## T253: la Cuadrilla usa arte provisional (la forma geométrica, RF-156) hasta que T257 la dibuje. Cuando tengan
+## dibujo, sacarlos de esta lista para que el chequeo vuelva a valer para todos.
+const PROVISIONAL_ART: Array[StringName] = []  # T259: la Cuadrilla ya tiene arte; la lista queda para el próximo arte pendiente
+
 
 func _category(id: StringName) -> WikiCategory:
 	for category: WikiCategory in Wiki.categories(GameFlow.campaign.levels):
@@ -173,7 +177,8 @@ func test_every_entry_has_a_title_a_drawing_and_something_to_read() -> void:
 			assert_false(entry.blocks.is_empty(), "%s sin contenido" % entry.id)
 			assert_false(ids.has(entry.id), "id repetido: %s" % entry.id)
 			ids[entry.id] = true
-			if category.id != &"guia" and category.id != &"lore":  # la Guía y el Lore no llevan dibujo (RF-469)
+			# La Guía y el Lore no llevan dibujo (RF-469); la Cuadrilla, hasta que T257 la dibuje (RF-156).
+			if category.id != &"guia" and category.id != &"lore" and entry.id not in PROVISIONAL_ART:
 				assert_false(entry.icon.is_empty(), "%s sin dibujo" % entry.id)
 
 

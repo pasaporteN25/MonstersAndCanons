@@ -759,6 +759,8 @@ f8   ·····▲······▲·······
 
 Oro inicial **300**, 20 vidas, **20 oleadas**, con todos los enemigos (Normal, Rápido, Tanque, Volador, Blindado, Jefe, Troll y Araña): las oleadas 1 a 8 los presentan de a pares, y de la 9 en adelante se mezclan; la 20 trae 6 Jefes, Arañas y Trolls. La lista completa está en el archivo del nivel.
 
+**T253 (La Cuadrilla, M55):** en las **oleadas 8, 11, 13 y 16** suma el **Ratero** y el **Cargador** (6 + 1, 8 + 1, 8 + 1 y 10 + 2): es donde **debutan**. `sin_recursos` gana 5 de 5 con 5 a 12 vidas (antes 16); el nivel no estrena otro enemigo y el aumento de vida no cambió.
+
 **Aumento de vida por oleada: 24 %** (ver §7.4). Con 15 % y con 20 % el bot que mezcla ganaba casi sin perder vidas (20 y 19); con 30 % perdía en la oleada 18 y con 45 %, en la 6: el salto entre 24 % y 30 % es muy brusco, así que conviene no subirlo sin revisar.
 
 **T223 (bloque 2, «El aserradero»):** tema `bosque`, **demoledora habilitada** y **6 removibles** (3 árboles y 3 rocas, todos sobre casillas `X`) que **entregan 1 recurso con 50 % de probabilidad** (el primer drop, Q-18). El Francotirador se compra por 150 de oro o 120 + 1 recurso, y el mapa se gana sin comprarlo con recursos. Una roca marcada (símbolo A) y un helecho reemplazan casillas `X`. El recorrido no cambia (30 y 29 casillas); el bot `mix` gana 5 de 5 con 16 vidas, igual que antes.
@@ -838,8 +840,10 @@ Es el último nivel del bloque 2 («Fuera del oasis») y el **prototipo completo
 8. **Estrategia sin recursos.** Se gana **sin demoler, sin extraer y sin usar recursos** (RF-432): el bot `sin_recursos` gana **5 de 5** con **7 a 13 vidas**. La mina, los removibles y la pieza ayudan, pero nada es obligatorio (RF-433).
 9. **Textos y transición.** El juego todavía no muestra textos de entrada, de victoria ni de transición por nivel: eso es de la spec del lore (M52, RF-464 a RF-473); los textos del 10 están en `specs/11-textos-lore.md`. Para el 10 queda el hilo del canon (10 §«Bloque 2»): la colonia **retoma una mina ajena** y, con la pieza 3/3, tiene todo para la Disruptora; el 11 («Puesto seco», desierto) sigue por el camino seco.
 
-- **RF-453** **Nivel 10 en la campaña:** **dada** la campaña, **cuando** se gana el nivel 9, **entonces** se abre `level_10` («La mina vieja», 24×11, tema `desierto`, 20 oleadas, 360 de oro, 20 vidas), que es **el último** de la campaña (después del 10 no hay «siguiente nivel»). **Dado** ese nivel, **entonces** tiene una mina (RF-422), siete removibles (seis con 1 recurso al 50 % y uno con la pieza 3/3 de la Disruptora, RF-426), ofrece el Mortero y el Mecánico y no estrena enemigos. **Dada** la pieza recogida y confirmada en el 10 con las del 8 y el 9 ya guardadas, **cuando** se guarda la partida, **entonces** la colección `disruptor` queda **completa** (3 de 3). **Dado** el bot de balance con 5 semillas, **entonces** `sin_recursos` gana al menos 4 (RF-432) y las estrategias de extracción ganan con más vidas que `sin_recursos` (medido en T225).
+- **RF-453** **Nivel 10 en la campaña:** **dada** la campaña, **cuando** se gana el nivel 9, **entonces** se abre `level_10` («La mina vieja», 24×11, tema `desierto`, 20 oleadas, 360 de oro, 20 vidas), que es **el último** de la campaña (después del 10 no hay «siguiente nivel»). **Dado** ese nivel, **entonces** tiene una mina (RF-422), siete removibles (seis con 1 recurso al 50 % y uno con la pieza 3/3 de la Disruptora, RF-426), ofrece el Mortero y el Mecánico y no estrena enemigos. **Dada** la pieza recogida y confirmada en el 10 con las del 8 y el 9 ya guardadas, **cuando** se guarda la partida, **entonces** la colección `disruptor` queda **completa** (3 de 3). **Dado** el bot de balance con 5 semillas, **entonces** `sin_recursos` gana al menos 4 (RF-432) y las estrategias de extracción ganan con más vidas que `sin_recursos` (medido en T225). **T253 (2026-10-10):** el 10 trae **cuatro apariciones de La Cuadrilla** (oleadas 8, 12, 14 y 16, RF-487); **sigue sin estrenar enemigos** (la Cuadrilla debuta en el 7) y `sin_recursos` gana 5 de 5 con 7 a 11 vidas.
 - **Lo que no incluye:** textos de la historia del nivel (T227), la demoledora, la rotación de torres (desde el 11) y el nivel 10 en el modo **Asedio**, que sigue con los mapas 1 a 9 *(consulta para Lucas: sumar el 10 pide medir su balance con monstruos al 115 %)*.
+
+- **La Cuadrilla (T253, M55):** en las **oleadas 8, 12, 14 y 16** suma el Ratero y el Cargador (6 + 1, 8 + 1, 8 + 1 y 10 + 2), sin Guardián, Curandero, Chamán, Espejo ni Soberano en esas oleadas. No estrena enemigos (debutan en el 7). `sin_recursos` gana 5 de 5 con 7 a 11 vidas y las estrategias de extracción, con 17 y 18.
 
 > **Criterio de aceptación RF-453**
 > **Dado** un guardado que ganó el nivel 9 → **Entonces** el nivel 10 está abierto. **Dado** el nivel 10 → **Entonces** carga sin errores ni avisos, mide 24 × 11, sus recorridos tienen 68 y 55 casillas, tiene una mina con reserva 8, siete removibles y una sola pieza, ofrece el Mortero y todos sus enemigos ya aparecieron en los niveles 6 a 9. **Dada** una partida con 2 recursos → **Entonces** el Mortero no se puede construir; con la mina activa y dos oleadas completadas (4 recursos) → **Entonces** se construye y quedan 1 recurso. **Dado** el nivel 10 desde un modo o la comunidad → **Entonces** la pieza no se recoge (RF-429).
@@ -930,7 +934,9 @@ Lo que **no** depende de G4 y queda firme: el lugar, el bioma, las señales, los
 - **Oleadas:** 24, **sin debuts**. **Escolta completa** (Guardián + Curandero + Chamán con el mismo `desde` y la misma entrada) en las oleadas **9** (solo por A), 12 (solo por B), **14** (por las dos), 16, **19** (por las dos), 20, **22** (por las dos) y 24; el Soberano en las 11, 17, 21 y 24; el Espejo, conocido del 12, se mezcla desde la 16. **Oro 460, 20 vidas y aumento de vida de 40 %** (la ficha traía 25: con 25 el bot ganaba con 20 vidas, y recién con 38 a 40 el nivel queda a la altura del 12; el bot es el que manda, RF-475 punto 3).
 - **Textos:** igual que el 11 y el 12, el campo `"textos"` lo agrega T228.
 
-- **RF-478** **Nivel 13 en la campaña:** **dada** la campaña, **cuando** se gana el nivel 12, **entonces** se abre `level_13` («Paso alto», tema `nieve`, 26 × 12, dos entradas, 24 oleadas, 460 de oro, 20 vidas). **Dado** ese nivel, **entonces** no ofrece `basic`, no estrena ningún enemigo, trae la escolta (Guardián, Curandero y Chamán con el mismo `desde`) en al menos 6 oleadas y, desde la 14, por las dos entradas a la vez. **Dado** el bot con 5 semillas, **entonces** `sin_recursos` gana al menos 4 y su tabla no es más fácil que la del 12.
+- **RF-478** **Nivel 13 en la campaña:** **dada** la campaña, **cuando** se gana el nivel 12, **entonces** se abre `level_13` («Paso alto», tema `nieve`, 26 × 12, dos entradas, 24 oleadas, 460 de oro, 20 vidas). **Dado** ese nivel, **entonces** no ofrece `basic`, no estrena ningún enemigo, trae la escolta (Guardián, Curandero y Chamán con el mismo `desde`) en al menos 6 oleadas y, desde la 14, por las dos entradas a la vez. **Dado** el bot con 5 semillas, **entonces** `sin_recursos` gana al menos 4 y su tabla no es más fácil que la del 12. **T253 (2026-10-10):** el 13 suma **cuatro apariciones de La Cuadrilla** (oleadas 10, 13, 15 y 18) y **sigue sin estrenar enemigos** (debuta en el 7); `sin_recursos` gana 5 de 5 con 5 vidas (antes 6).
+
+- **La Cuadrilla (T253, M55):** en las **oleadas 10, 13, 15 y 18** suma el Ratero y el Cargador (6 + 1, 8 + 1, 8 + 1 y 10 + 2), todos por la entrada A y sin auras ni jefe en esas oleadas. No estrena enemigos. `sin_recursos` gana 5 de 5 con **5 vidas** (antes 6); `demoler` y `demoledora` **pierden en la oleada 20 de 24** (ganaban con 7 u 8).
 
 > **Criterio de aceptación RF-478**
 > **Dado** un guardado que ganó el 12 → **Entonces** el 13 está abierto. **Dado** el nivel 13 → **Entonces** carga sin errores ni avisos, mide 26 × 12, tiene dos entradas, una laguna de hielo no construible, y ningún enemigo es nuevo respecto del 12. **Dado** sus oleadas → **Entonces** hay al menos 6 con los tres miembros de la escolta con el mismo `desde`, y al menos 2 que los traen por las dos entradas. **Dado** `check_rule=1 levels=13` → **Entonces** «SE CUMPLE».
@@ -957,7 +963,9 @@ Lo que **no** depende de G4 y queda firme: el lugar, el bioma, las señales, los
 - **Oleadas:** 26. **Los 14 enemigos** (Normal, Rápido, Tanque, Blindado, Volador, Troll, Araña, Ladrón, Embestidor, Guardián, Curandero, Chamán, Espejo y Soberano), **sin debuts**. **Guardián, Curandero, Chamán y Espejo a la vez** en 9 oleadas (12, 14, 16, 19, 20, 22, 24, 25 y 26), todas con Voladores; el Soberano en las 11, 17, 21, 24, 25 y 26. **Oro 480, 20 vidas y aumento de vida de 30 %** (la ficha traía 24: con 24 el bot ganaba con 16 vidas).
 - **Textos:** el campo `"textos"` y el artículo de Lore «Los poblados vacíos» los agrega T228.
 
-- **RF-479** **Nivel 14 en la campaña:** **dada** la campaña, **cuando** se gana el nivel 13, **entonces** se abre `level_14` («Los poblados vacíos», tema `ruinas`, 26 × 12, 26 oleadas, 480 de oro, 20 vidas). **Dado** ese nivel, **entonces** no ofrece `basic`, no estrena enemigos, trae a la vez Guardián, Curandero, Chamán y Espejo en al menos 6 oleadas, tiene al menos cuatro `campamento_vacio` y seis `simbolo_ruina`, y **su tabla del bot no es más fácil que la del 13**. **Dado** el bot con 5 semillas, **entonces** `sin_recursos` gana al menos 4.
+- **RF-479** **Nivel 14 en la campaña:** **dada** la campaña, **cuando** se gana el nivel 13, **entonces** se abre `level_14` («Los poblados vacíos», tema `ruinas`, 26 × 12, 26 oleadas, 480 de oro, 20 vidas). **Dado** ese nivel, **entonces** no ofrece `basic`, no estrena enemigos, trae a la vez Guardián, Curandero, Chamán y Espejo en al menos 6 oleadas, tiene al menos cuatro `campamento_vacio` y seis `simbolo_ruina`, y **su tabla del bot no es más fácil que la del 13**. **Dado** el bot con 5 semillas, **entonces** `sin_recursos` gana al menos 4. **T253 (2026-10-10):** el 14 suma **cuatro apariciones de La Cuadrilla** (oleadas 10, 13, 15 y 18; sigue sin estrenar enemigos) y `sin_recursos` gana 5 de 5 con **3 vidas**, como antes; el 15 sigue en 2.
+
+- **La Cuadrilla (T253, M55):** en las **oleadas 10, 13, 15 y 18** suma el Ratero y el Cargador (6 + 1, 8 + 1, 8 + 1 y 10 + 2), todos por la entrada A y sin auras ni jefe en esas oleadas. No estrena enemigos. `sin_recursos` gana 5 de 5 con **3 vidas**, igual que antes; el 15 sigue en 2.
 
 > **Criterio de aceptación RF-479**
 > **Dado** un guardado que ganó el 13 → **Entonces** el 14 está abierto. **Dado** el nivel 14 → **Entonces** carga sin errores ni avisos, mide 26 × 12, y todos sus enemigos aparecieron antes. **Dado** su leyenda → **Entonces** tiene al menos cuatro `campamento_vacio` y seis `simbolo_ruina`. **Dado** `check_rule=1 levels=14` → **Entonces** «SE CUMPLE». **Dado** el 14 ganado → **Entonces** la Wiki Lore abre «Los poblados vacíos».
@@ -1314,7 +1322,7 @@ Se deja por escrito para no caer en la tentación (constitución P4). Si más ad
 - ~~Versión para móvil~~ → pasó al hito **MA** (§9.4, D-021), **solo** con adaptaciones mínimas. Sigue fuera: controles táctiles propios (arrastrar para construir, gestos, zoom) y una interfaz pensada para pantallas chicas.
 - Llamar oleadas antes de tiempo con bonus de oro.
 - Meta-progresión (mejoras permanentes entre partidas, tienda).
-- ~~Historia, diálogos o cinemáticas.~~ → **Diálogos entre personajes, cinemáticas animadas y voces.** *(Enmienda del 2026-10-08, D-089, respuesta Q-01 de Lucas; ver M52 y `specs/11-textos-lore.md`.)* Sí entran, con los límites de M52: textos breves por nivel (lugar, entrada de hasta 3 líneas y victoria de hasta 2), una categoría Lore en la Wiki, un epílogo en la victoria del último nivel y una intro de láminas que se pueda omitir y volver a ver (la spec de la intro es de T240; todavía no existe). Siguen excluidos los diálogos entre personajes, las cinemáticas animadas y las voces.
+- ~~Historia, diálogos o cinemáticas.~~ → **Diálogos entre personajes, cinemáticas animadas y voces.** *(Enmienda del 2026-10-08, D-089, respuesta Q-01 de Lucas; ver M52 y `specs/11-textos-lore.md`.)* Sí entran, con los límites de M52: textos breves por nivel (lugar, entrada de hasta 3 líneas y victoria de hasta 2), una categoría Lore en la Wiki, un epílogo en la victoria del último nivel y una intro de láminas que se pueda omitir y volver a ver (**su spec es M57**, RF-497 a RF-501, escrita en T240; el guion está en `specs/intro/guion.md`). Siguen excluidos los diálogos entre personajes, las cinemáticas animadas y las voces.
 - Logros.
 - Construir laberintos (los enemigos nunca cambian de camino).
 
@@ -1494,7 +1502,7 @@ Ideas **aprobadas como dirección**, pero **sin fecha**: no se programan hasta c
 
 **Recomendación de Claude:** empezar por el **Guardián** y el **Chamán**. El Guardián es una aura (un dato y una búsqueda de enemigos cercanos, como la del rayo en cadena). El Chamán necesita una regla nueva, "torre aturdida", que también usaría el enemigo espejo (B-06). "Torres con vida" conviene dejarla para un modo aparte (B-05), porque cambia la base del juego.
 
-### B-07 · Diseño ampliado de los enemigos con habilidades *(Lucas, 2026-09-29: "me gustaron, desarrollalos"; **Guardián y Curandero hechos en M17** (RF-270 a RF-277) y **Chamán y Espejo en M18** (RF-280 a RF-287); Ladrón hecho en M39, Excavador sin fecha)*
+### B-07 · Diseño ampliado de los enemigos con habilidades *(Lucas, 2026-09-29: "me gustaron, desarrollalos"; **Guardián y Curandero hechos en M17** (RF-270 a RF-277) y **Chamán y Espejo en M18** (RF-280 a RF-287); Ladrón hecho en M39, Excavador sin fecha; **La Cuadrilla** —una banda de criaturas independientes que roban en grupo— especificada en M55, T252)*
 
 Los cuatro enemigos que gustaron, con lo necesario para convertirlos en spec cuando se tomen. Todos siguen RF-164: son **datos** del enemigo, apagados por defecto (valen 0), y se pueden combinar. Los colores son los libres de la guía de arte (`specs/05-guia-de-arte.md`).
 
@@ -1608,6 +1616,7 @@ Los cuatro enemigos que gustaron, con lo necesario para convertirlos en spec cua
 - **Una casilla en Opciones para no ver los carteles de entrada** *(2026-10-08, T227)*: el cartel de RF-466 no vuelve al reintentar, pero sí cada vez que se entra a un nivel desde la selección. Para quien rejuega la campaña puede cansar. La idea: una casilla *«Mostrar los textos de los niveles»* (activada por defecto) en Opciones, guardada como las demás preferencias (`SaveManager.get_setting`). **No incluida** en M52.
 - **Acceso al epílogo y a los créditos desde el menú principal, una vez terminada la campaña** *(2026-10-08, T227)*: hoy (RF-471) el epílogo solo se vuelve a ver ganando el 15 de nuevo. La idea: un botón *«Epílogo»* en el menú principal que aparece cuando los 15 niveles figuran completados (se deduce del guardado, sin campo nuevo). Toca `main_menu.gd`. **No incluido** en M52.
 - **Que el bot de balance mejore torres** *(2026-10-09, T251)*: `tools/balance_sim.gd` nunca mejora ni vende torres; llena el mapa con torres de nivel 1 y deja el oro sin usar (al perder Asedio 10 a 15 al 115 % quedaban 2054, 1039, 2859 y 3881 de oro en los mapas 10, 12, 14 y 15). Una persona lo gasta en mejoras (el Francotirador pasa de 40 a 70 y a 120 de daño por 150 y 225). Gastar ese oro sobrante en mejoras cuando el mapa está lleno es un cambio de la **herramienta**, no del juego. **Ojo:** las tablas de T229 a T234 se ajustaron contra el bot sin mejoras, así que con mejoras todos los niveles le saldrían más fáciles y habría que revisar la referencia. **No implementado.** Detalle y medición en `specs/tareas/informes/T251-conceptos-nuevos-enemigos.md`, §2.5.
+- **Un zoom lentísimo sobre cada lámina de la intro** *(2026-10-11, T240)*: para que las siete láminas se sientan más «película» y menos «presentación», cada una podría acercarse un 3 a 5 % durante sus segundos (un `Tween` sobre la escala de la imagen, sin tocar el texto). Sumaría una pizca de movimiento sin animar nada ni tocar Q-01. **No incluido en M57:** Lucas pidió «imágenes tipo diapositiva» y la excepción de §11 prohíbe las cinemáticas animadas, así que **no se implementa sin su OK**. Se agregaría como una clave opcional (`"zoom_%"`) de `data/intro/intro.json`.
 - **Parte útil del repositorio Claude Code Game Studios** (Lucas: "no hace falta `validate-commit`"; del resto, ver D-040):
   - **Informe de prueba** (su `playtest-report`): una plantilla corta para anotar lo que se siente al probar el juego (¿se entendió?, ¿dónde te trabaste?, ¿qué te aburrió?) y guardarla en `specs/pruebas/`. Hoy las impresiones de Lucas quedan en la charla.
   - **Auditoría de recursos** (su `asset-audit`): un test que revise que **todos** los dibujos y sonidos existen, miden lo que dice la guía y que ningún dato apunta a un archivo que falta.
@@ -1887,12 +1896,15 @@ Como el juego se va a regalar, no tiene sentido un ejecutable aparte para el mod
 ### M49 · Prueba de modos unificada con el gestor de mapas (Lucas, 2026-10-07)
 **Estado: hecha en T197 (2026-10-07).** Es la prueba chica de modos de B-05 (D-078). Un modo es un paquete de datos, igual que un mapa de la comunidad pero con varios mapas y reglas. Épocas pasó al otro juego (D-076).
 
+**Revisada en T256 (2026-10-10, D-095):** Asedio pasa a los **15 mapas** y a un **porcentaje de vida por mapa**, con una tabla opcional en el paquete. El texto de RF-388 y RF-391 **no se reescribe**: queda como se hizo en T197 y lo que cambia está en **M56 (RF-492 a RF-496)**, que **manda** donde difiera. **T258 lo programó (2026-10-10):** Asedio tiene los 15 mapas y su porcentaje por mapa.
+
 - **RF-388** **Paquete de modo.**
   - Es una carpeta con un `modo.json` y sus mapas JSON (formato §7.8). El `modo.json` lleva versión, nombre, descripción y la lista ordenada de mapas, y como opcionales las torres disponibles y las reglas `oro_inicial_%`, `vidas` y `vida_monstruos_%`.
   - Cada mapa de la lista se busca primero en la carpeta del modo y, si no está, entre los niveles oficiales (`data/levels/`). Así un modo puede reusar mapas de la campaña sin copiarlos *(aclarado en T197)*.
   - Los modos oficiales viven en `res://data/modos/<id>/` y los propios en `user://modos/<id>/`. Un modo propio con el mismo nombre de carpeta que uno oficial se muestra con error, para que sus récords no se mezclen.
   - **Solo datos:** un modo nunca trae código (como RF-204).
   - **Dado** un paquete roto, **cuando** se listan los modos, **entonces** aparece con su motivo y los demás se ven igual (como RF-222).
+  - *(Ampliado en T256, RF-492: dentro de `"reglas"` puede venir una tabla opcional de porcentajes de vida por id de mapa, que manda sobre `vida_monstruos_%` en ese mapa.)*
 - **RF-389** **Selección de nivel con modos.**
   - Arriba hay un selector de modo:
     - **Campaña:** la de siempre, sin mover archivos.
@@ -1900,20 +1912,24 @@ Como el juego se va a regalar, no tiene sentido un ejecutable aparte para el mod
     - **Comunidad:** los mapas sueltos de `user://maps/`, como hoy.
     - **Los modos propios.**
   - **Cuando** se elige un modo, **entonces** se ven sus mapas en orden, con sus estrellas.
+  - *(T256, RF-496: sin cambios de regla; Asedio pasa a mostrar 15 tarjetas.)*
 - **RF-390** **Progreso por modo.**
   - Cada mapa de un modo guarda vidas, estrellas, puntaje y top 5 con el id `modo_<modo>_<mapa>`.
   - No cuenta para la campaña, el total de estrellas de la campaña, el Salón de la fama ni la colección de avances.
   - En un modo oficial el primer mapa está abierto y cada uno se habilita al ganar el anterior del mismo modo. En los modos propios, todos están abiertos. El modo de pruebas abre todo (RF-183).
+  - *(T256, RF-496: sin cambios de regla; con 15 mapas, el 10 se abre al ganar el 9 de Asedio, y el progreso ya guardado de los mapas 1 a 9 no se toca.)*
 - **RF-391** **Modo oficial de prueba "Asedio".**
   - Son los mapas 1 a 9 de la campaña con sus mismas oleadas y monstruos con más vida. Valor en datos: **vida 115 %**, con el mismo oro, ajustable. *(Ajustado en T197 con el bot: la propuesta inicial de vida 150 % y oro 80 % hacía perder al bot en la oleada 4 de los mapas 1 a 3, y hasta 125 % con el mismo oro perdía temprano. Con 115 % gana el mapa 1 con 3 vidas y el 3 con 6, contra 20 y 18 en la campaña.)*
   - Cubre también los "niveles difíciles" de B-10.
   - **Dado** el bot de balance, **cuando** juega los primeros mapas de Asedio, **entonces** se informa si se pueden ganar. No es balance definitivo.
+  - *(Revisado en T256, RF-493 y RF-494: **los 15 mapas** de la campaña y **115 % como regla global con un porcentaje propio por mapa**. Los valores de arriba (mapas 1 a 9, 115 % uniforme) son los de T197 y **dejaron de valer en T258**, que programó M56. El criterio «no es balance definitivo» sigue vigente.)*
 - **RF-392** **El editor guarda en modos.**
   - "Guardar" sigue como hoy: mapa suelto (Comunidad) o el modo donde ya está el mapa.
   - Nueva acción **"Guardar en un modo…"**: se elige un modo propio existente o uno nuevo (con su nombre) y el nombre del archivo *(aclarado en T197)*.
   - Crear un modo desde el editor arma la carpeta y su `modo.json`; cada mapa nuevo se agrega al final de la lista. Después, "Guardar" sigue guardando en ese modo.
   - Abrir un mapa en el editor lista también los de los modos propios.
   - Nunca toca `data/` ni `campaign.json` (RF-210).
+  - *(T256, RF-496: guardar o agregar un mapa a un modo propio que ya trae la tabla de RF-492 **no la borra ni la cambia**. El editor **no** tiene pantalla para editarla: se escribe a mano en el `modo.json`, como el campo `"textos"`.)*
 
 ### M50 · Infraestructura: demolición, recursos y hallazgos (Lucas, 2026-10-08; T205)
 **Estado: especificada en T205, a la espera del OK de Lucas (compuerta G3). Todavía no hay código.** Salen del documento 07 (§5 a §8, §12) y de las respuestas de Lucas al cuestionario 09 del 2026-10-08 (Q-08 a Q-27 y Q-31, con los cambios ✎ de Q-10, Q-18 y Q-21). Las razones y las alternativas descartadas están en D-080 a D-085, y el cómo técnico, en la sección M50 de `02-plan-tecnico.md`. Las tareas de código son T206 a T214.
@@ -2074,6 +2090,7 @@ Valores: los números de este bloque son **iniciales** (los pidió así Lucas en
 - **RF-432** **Todo mapa con recursos se gana sin recursos:** **dado** cualquier nivel de la **campaña** que **tenga recursos** (RF-416), **cuando** el bot de balance juega la estrategia **`sin_recursos`** con **5 semillas**, **entonces gana en al menos 4**. Los números son **N = 5** y **M = 4** (valores iniciales, en la herramienta y no en el juego).
   - La estrategia `sin_recursos` es una partida de verdad con las reglas de siempre: **no demuele** nada, **no compra la demoledora**, **no habilita extracción**, **no usa la forma de pago con recursos** del Francotirador, **no construye torres con `resource_cost`**, no empieza con recursos regalados y no usa las herramientas de administración. Si el mapa se gana así, ningún removible es obligatorio y ningún recurso es indispensable.
   - La comprueba `tools/balance_sim.gd` (`check_rule=1`, T214), que termina con código de salida 1 si no se cumple. La corre **cada tarea de nivel** que agrega o cambia un mapa con recursos (T223 a T225 y T229 a T234) y la regresión final (T236).
+  - *(T256, RF-495: `sin_recursos` **sin mejoras de torres** sigue siendo la referencia histórica de esta regla y de las tablas de la campaña. Las variantes con mejoras del bot sirven para medir Asedio y **no la reemplazan**.)*
   - El bot **no reemplaza** a las partidas de Lucas (G4 y G5), pero un mapa que no cumple la regla **no se entrega**.
 - **RF-433** **Lo que no puede ser obligatorio (07 §12):**
   - Ningún removible, mina o bosque es necesario para ganar, ni para llegar a un camino o a una casilla indispensable; los recorridos no dependen de la demolición (RF-400).
@@ -2373,7 +2390,7 @@ Los puntos donde conviene que Lucas mire con más atención antes de programar (
   7. **Textos:** de `11-textos-lore.md`, tal cual, en el campo `"textos"` (RF-464).
   8. **Disruptora (decisión de Lucas, T217):** su balance se **reevalúa en el 11**. El Resultado de T229 trae la tabla del bot **con y sin** Disruptora, y **Lucas decide** si se toca algo (costo, supresión o cadencia, Q-33); la tarea no cambia esos números por su cuenta.
   9. **Las marcas «A REVISAR TRAS G4»** de las fichas se confirman o se corrigen **antes** de empezar el nivel que las tiene.
-  10. **Asedio:** los niveles 11 a 15 no se suman a Asedio en sus tareas; lo hace T235.
+  10. **Asedio:** los niveles 11 a 15 no se suman a Asedio en sus tareas; lo hace T235. *(T256: Asedio suma los 15 mapas con un porcentaje de vida por mapa, RF-493; la escalera de este punto sigue midiéndose con `sin_recursos` sin mejoras, RF-495.)*
 
 > **Criterio de aceptación RF-474 y RF-475**
 > **Dado** cualquier nivel del 11 al 15 → **Entonces** su `"torres"` no incluye `basic` e incluye el Mortero, la Disruptora y el Mecánico. **Dado** un guardado sin la colección de la Disruptora → **Entonces** el 11 ofrece 8 torres (o 9 con el Mecánico) y se gana igual. **Dado** el bot con 5 semillas en un nivel del bloque 3 → **Entonces** `sin_recursos` gana al menos 4, y pasa las oleadas 1 a 3 sin perder vidas en al menos 4. **Dado** el 11 → **Entonces** el Chamán aparece por primera vez en una oleada sin Guardián, Curandero ni Espejo.
@@ -2381,7 +2398,7 @@ Los puntos donde conviene que Lucas mire con más atención antes de programar (
 #### Lo que M52 no incluye
 
 - **Diálogos entre personajes, cinemáticas animadas y voces** (§11 sigue excluyéndolos).
-- **La intro de láminas.** Q-01 la permite, pero su spec es de T240 (guion), T241 y T242; no existe todavía.
+- **La intro de láminas.** Q-01 la permite; su spec es **M57** (RF-497 a RF-501, T240) y el guion, `specs/intro/guion.md`. El arte es de T241 y la pantalla, de T242.
 - **Los textos del modo Asedio, de la comunidad o del editor** más allá de lo que diga el archivo del mapa (RF-468), y una pantalla para **editar** textos en el editor.
 - **Un acceso al epílogo o a los créditos desde el menú principal**, y un campo «campaña terminada» en el guardado.
 - **El diseño del jefe supremo del 15** (función, vida, habilidad, contramedidas, aspecto y texto propio): lo resolvió **T243** con el **Coloso** (RF-481 a RF-484, D-092).
@@ -2547,3 +2564,332 @@ Corta, en orden de importancia. Cada una trae mi recomendación; si no contestá
 6. **P6 · La confirmación.** Recomiendo que **siempre pregunte** y avise de las piezas (incluso las ya confirmadas, que se pierden igual si no se llegó al resultado) y de la demolición en curso. ¿Alcanza con ese texto?
 7. **P7 · El menú de pausa.** Recomiendo **no tocarlo ahora**. Pero «Salir al menú» y «Reintentar» de ahí hoy descartan las piezas **sin avisar**: ¿querés que usen el mismo diálogo (cambio chico, en otra tarea)?
 8. **P8 · Texto de la flecha.** «← Menú» (recomendado: se entiende sin pasar el mouse, importante en el celular) o solo «←».
+
+---
+
+### M55 · La Cuadrilla: una banda de criaturas independientes (Lucas, 2026-10-10; T252)
+
+**Estado: HECHA en T253 (2026-10-10), con arte provisional. Lucas aprobó los niveles 7, 10, 13 y 14, los nombres Ratero y Cargador, las frases, el artículo de la Wiki y el arte provisional (P1, P3, P4, P5 y P6 de M55); queda abierta P2 (Asedio 7): hoy hereda la Cuadrilla y Lucas no lo cerró.** Los datos, las oleadas, el reajuste y los tests son de **T253** (medición en su Resultado, `specs/03-tareas.md`); el arte, **T257**. Respaldo: `specs/tareas/informes/T252-medicion-cuadrilla.md` (método, tablas por semilla y apéndice para repetirlo) y D-094.
+
+**Qué pidió Lucas.** *(2026-10-10, en el encargo de T252, después de leer el informe de T251, `specs/tareas/informes/T251-conceptos-nuevos-enemigos.md`)* Eligió el concepto **A · La Cuadrilla**: una banda de criaturas **independientes**, no Moradores, **sin símbolo A y sin jefe**, formada por los **Rateros** (chicos y rápidos) y el **Cargador** (grande y lento, lleva la bolsa). **Entra en la V1** y queda anotada en la biblia (`10-universo.md`) como **semilla para la v2 en 3D**, sin preparar nada de 3D. Pidió además que se midiera con el bot **en qué niveles del 6 al 14** entra sin romper la regla de oro (RF-432).
+
+**Idea en pocas palabras.** El Ladrón roba **solo** y de a uno. La Cuadrilla es **lo mismo, pero en banda**: varios drenajes a la vez, y un enemigo grande y lento (el Cargador) que aguanta. No cambia cuánta vida hay que romper (T251 mostró que ningún grupo nuevo arregla Asedio): **cambia la jugada**, porque el robo deja de ser un hecho aislado y pasa a ser una **presión de oro que hay que barrer rápido**. Es una especie **distinta** del Ladrón: así el texto ya aprobado de la Wiki, *«el Ladrón va solo»*, sigue siendo cierto.
+
+**Hecho con datos que ya existen.** No hay campo nuevo en `EnemyData` ni sistema nuevo: el robo (`gold_drain_*`, RF-363), la velocidad, la armadura y las vidas que quita ya están. Son **dos archivos de `data/enemies/`**, sus dibujos y las oleadas de cuatro niveles.
+
+- **RF-485** **Los dos enemigos:** el juego suma dos tipos de enemigo, **`ratero`** (el **Ratero**) y **`cargador`** (el **Cargador**), con estos números de partida:
+
+  | ID | Nombre | Vida | Velocidad | Armadura | Oro | Vidas que quita | Vuela | Robo | Tamaño |
+  |---|---|---|---|---|---|---|---|---|---|
+  | `ratero` | **Ratero** | 14 | 2.2 | 0 | 5 | 1 | No | 2 de oro cada 2 s, piso 10 | 0.20 |
+  | `cargador` | **Cargador** | 110 | 0.9 | 1 | 30 | 2 | No | 4 de oro cada 2 s, piso 10 | 0.33 |
+
+  - **El robo es el de RF-363, sin cambios:** mientras el enemigo sigue vivo en el camino, cada **2 s** pide oro a la caja (`gold_drain_amount` 2 y 4, `gold_drain_interval` 2.0) **sin bajar de 10** (`gold_drain_floor`). Con menos oro no crea ni quita monedas; morir, escapar o terminar la partida corta el robo; **no hay un robo extra al escapar**. Cada Ratero roba 1 de oro por segundo y el Cargador, 2.
+  - **Sin el tope del Ladrón:** `optional_wave_limit` vale **0** (el valor por omisión). El «máximo uno por oleada» de RF-364 solo vale para grupos con probabilidad menor que 1 (`wave_spawner.gd:61`); la Cuadrilla va **siempre**, con probabilidad 1, en las oleadas que la nombran.
+  - **Con la vida de la oleada en curso (RF-36):** por ejemplo, en el 7 (aumento 24 %), oleada 8: Ratero ≈ **37**, Cargador ≈ **294**; en el 13 (aumento 40 %), oleada 18: Ratero ≈ **109**, Cargador ≈ **858**. *Son cuentas, no mediciones.*
+  - **Ninguno es «peligroso» (RF-136):** quitan 1 y 2 vidas, así que no llevan corona. Ninguno vuela, ninguno se cura, ninguno tiene aura, hechizo ni carga, y ninguno resiste la ralentización: **todo su peso es el robo, la velocidad del Ratero y la vida del Cargador**.
+  - **No se mandan entre sí:** no hay jefe, ni mando, ni velocidad compartida. «Cuadrilla» es **cómo los llaman los colonos** porque salen juntos; mecánicamente son dos enemigos independientes que comparten oleada.
+
+- **RF-486** **Qué obliga a hacer y qué los frena** *(todo entre las torres comunes: ni la Disruptora, ni el Mortero, ni el Mecánico hacen falta, RF-433)*:
+  - **Ratero** (poca vida, sin armadura, rápido): lo barre el **área y el daño repetido** (**Cañón, Múltiple, Ráfaga, Eléctrica**) y el **Hielo** (no resiste la ralentización). La Incendiaria, también.
+  - **Cargador** (armadura 1, lento, mucha vida): necesita **daño sostenido** o un **golpe fuerte** (**Francotirador, Cañón**); el Hielo lo frena completo. Es el que más tarda en caer y **el que se queda robando** si la defensa solo barre chicos.
+  - **La jugada nueva:** una defensa de solo golpe fuerte deja pasar a los Rateros (rápidos, muchos); una de solo área no le hace casi nada al Cargador de las últimas oleadas. Hay que **cubrir el camino con las dos cosas** y **no dejar oro parado** (se roba solo el que está en la caja).
+  - **Qué los distingue del Ladrón** (que la Wiki muestre que son otra cosa): el Ladrón es **uno, con probabilidad, con capa y bolsa** (24 de vida, 3 de oro cada 2 s); la Cuadrilla es **una banda, siempre, de dos tamaños** y **sin capa**.
+
+- **RF-487** **Dónde y cuándo aparece** *(propuesta medida con el bot, ver el informe de T252; **Lucas la confirmó en P1 el 2026-10-10** y T253 la cargó sin cambiar ninguna cantidad ni oleada)*:
+  - **Niveles:** **7** (donde **debuta**), **10**, **13** y **14**. **En ningún otro nivel** de la campaña: ni en el 1 al 5, ni en el 6 (**la regla de oro se rompe**, 0 de 5), ni en el 8, el 9, el 11 y el 12 (quedan al borde de las vidas, ver RF-488), ni en el **15** (el Coloso y las 2 vidas: no se toca).
+  - **Cuatro apariciones por nivel**, en estas oleadas y con esta composición (valores iniciales **medidos**; los cierra T253):
+
+    | Nivel | Oleadas | Composición de las cuatro apariciones |
+    |---|---|---|
+    | 7 · Cruce (20 oleadas) | 8, 11, 13 y 16 | 6 Rateros + 1 Cargador · 8 + 1 · 8 + 1 · 10 + 2 |
+    | 10 · La mina vieja (20) | 8, 12, 14 y 16 | ídem |
+    | 13 · Paso alto (24) | 10, 13, 15 y 18 | ídem |
+    | 14 · Los poblados vacíos (26) | 10, 13, 15 y 18 | ídem |
+
+    Los Rateros salen **cada 0,4 s** y los Cargadores **cada 3 s**, todos desde el segundo 0 de la oleada (`"desde"` sin escribir, RF-203), **encima** de lo que la oleada ya traía.
+  - **Debut (RF-475, punto 1):** la primera aparición del 7 (oleada 8) trae la Cuadrilla **sin ninguna otra amenaza que el jugador no haya visto** (la oleada ya trae Blindados y Tanques) y con tiempo de preparación antes. El nivel 7 **no estrena otro enemigo**.
+  - **Sin auras ni jefe:** en esta spec **ninguna aparición comparte oleada** con un Guardián, un Curandero, un Chamán, un Espejo ni el Soberano. Mezclarlos **no se midió**: si T253 quiere hacerlo, lo mide y lo informa.
+  - **Entrada:** la entrada `"A"` (RF-203). En el 13 y el 14, que tienen dos entradas, **repartirla no se probó**.
+  - **No cambia ningún otro enemigo**: los números del Ladrón, del Soberano y de los demás son los de hoy.
+
+- **RF-488** **Lo que se tiene que cumplir al armar y ajustar** *(es lo que T253 comprueba con el bot; los números del informe de T252 son la referencia)*:
+  1. **Regla de oro (RF-432):** con la Cuadrilla, `sin_recursos` gana **al menos 4 de 5** semillas en cada nivel donde entra. *(Medido: 5 de 5 en el 7, el 10, el 13 y el 14.)*
+  2. **Margen:** `sin_recursos` termina con **3 vidas o más en todas las semillas**. Que gane con 1 o 2 es un precipicio, no un nivel. *(Medido: el 7 termina con 5 a 13; el 10, con 7 a 11; el 13, con 3 a 5; el 14, con 3.)*
+  3. **Escalera (RF-475, punto 3):** el **14 termina con 3 vidas o más** y **el 15 sigue en 2**: la Cuadrilla **no puede volver al 14 tan difícil como el 15**. El 13 no termina con menos vidas que el 14. *(Medido: el 14 queda en 3 con las dos formas de armar la oleada.)*
+  4. **Muerde, pero no ahoga:** el oro que roba en una partida del bot es la referencia. *Medido (semilla 1, `sin_recursos`):* **326 a 807** de oro por partida en los cuatro niveles, contra **21 a 66** del Ladrón solo. Si T253 ve que en un nivel roba **menos de 100** (no tiene dientes) o **más de 1000** (casi el doble del máximo medido), lo informa a Lucas con la tabla antes de tocar un número. *(Los dos umbrales los propongo yo; no tienen otra medida detrás que el rango visto.)*
+  5. **Qué se toca primero si un nivel no pasa:** (a) la **cantidad** o la **oleada** de la Cuadrilla en ese nivel; (b) **sacar relleno** (Normales, Rápidos, Voladores) de esas oleadas, hasta igualar la vida (la versión «reemplazo» del informe); (c) recién último, el `aumento_vida` del nivel, **de a un punto y anotado** en el Resultado. **No se tocan** los números del Ratero, del Cargador ni de ningún enemigo que ya existía sin avisar a Lucas.
+  6. **La apertura** (oleadas 1 a 3, RF-475 punto 4) **no cambia**: la Cuadrilla no entra antes de la oleada 8.
+  7. **Las otras estrategias** (RF-475 pide las cinco) **se miran y se anotan**; no son el criterio.
+
+- **RF-489** **Presentación, Wiki y textos:**
+  - **Tarjeta de presentación (RF-134):** frases de `EnemyData.description` (**confirmadas por Lucas en P5, 2026-10-10**; T253 las cargó tal cual):
+
+    | Enemigo | Frase de presentación |
+    |---|---|
+    | Ratero | Chico y veloz. Anda en cuadrilla y cada uno roba 2 de oro cada 2 segundos, sin bajar de 10. Se barren con área. |
+    | Cargador | Grande y lento: lleva la bolsa de la cuadrilla y roba 4 de oro cada 2 segundos, sin bajar de 10. Hace falta daño sostenido. |
+
+    Los dos debutan **en la misma oleada**, así que salen **una tarjeta tras otra** (la cola del HUD, `hud.gd`, 6 s cada una). *No se probó cómo se ve.* Si el robo cambia de número, **se corrige la frase** (como la del Ladrón).
+  - **Wiki → Enemigos (RF-233 y RF-238):** **no hay entrada escrita a mano**: las dos salen solas de los datos y se abren **cuando se las ve por primera vez**. Traen la línea **«Robo»** que ya escribe `wiki.gd` y **«Dónde aparece»** con los **niveles 7, 10, 13 y 14** (se deduce de la campaña). Los textos de **«Enemigos especiales» de la Guía no cambian** (tampoco mencionan al Ladrón).
+  - **Wiki → Lore: un artículo nuevo, «La Cuadrilla»** (`data/wiki/lore/la_cuadrilla.json`, **el artículo 11**), que **se abre al ganar el nivel 7** (RF-469 y RF-470). Texto de `specs/11-textos-lore.md` §4.11 (**aprobado por Lucas en P3, 2026-10-10**; T253 lo cargó tal cual). **No se agrega un párrafo al artículo 5** porque ese artículo se abre al ganar el 6, y **un artículo nunca nombra algo que debuta después de su nivel**; el artículo 5 **no cambia** y sigue diciendo que el Ladrón va solo. El campo `orden` de la Cuadrilla va entre el del artículo 5 y el del 6, así que los artículos 6 a 10 pasan a `orden` 7 a 11 (solo cambia ese campo).
+  - **Los textos de nivel (RF-464)** del 7, el 10, el 13 y el 14 **no cambian**: ninguno nombra a la Cuadrilla, y la biblia pide mostrar antes que explicar.
+
+- **RF-490** **Aspecto y reglas del lore** *(lo dibuja T257, con concepto aprobado por Lucas)*:
+  - **Capa de la biblia (10 §4.2):** criaturas **independientes**. **No lleva el símbolo A ni ninguna marca de las comunidades**: extiende la regla del Ladrón. No hay jefe, ni mando; no obedecen a nadie (07 §2.3).
+  - **Se distinguen del Ladrón a 34 px por tamaño y silueta:** el **Ratero** es más chico que el Ladrón, **sin capa**, bajo y alargado, y el **Cargador** es ancho, con la **bolsa más grande que el cuerpo**. Ninguno con capucha: los «dos encapuchados» (Ladrón y Chamán) siguen siendo dos.
+  - **Colores:** distintos del gris violeta del Ladrón y de los tonos de cada enemigo de la guía de arte; un color por especie, y entre ellos **la misma familia** (se leen como una banda). Lo fija el concepto de T257.
+  - **Un ciclo de caminata por enemigo** como los demás (atlas de 16 poses, M31). **Mientras no haya arte aprobado**, T253 usa arte provisional hecho en código o el dibujo de reemplazo (RF-156), como hizo T234 con el Coloso.
+  - **Tono (10 §8):** nada de caricatura. Los colonos los llaman «cuadrilla» **por cómo llegan** (juntos, como una cuadrilla de obra), no porque se sepa algo de ellos. Lo que se muestra son **consecuencias** (oro que falta), no sentencias.
+  - **Semilla para la v2 en 3D** *(Lucas, 2026-10-10)*: la biblia (`10-universo.md` §9) anota **La Cuadrilla** como semilla. **No está prometida y no se prepara nada de 3D en la V1:** ni modelos, ni campos, ni nombres reservados.
+
+- **RF-491** **Asedio, el editor y lo que no cambia:**
+  - *(Actualizado en T256: Asedio pasa a los 15 mapas (RF-493), así que **los cuatro niveles** (7, 10, 13 y 14) quedan en Asedio y heredan la Cuadrilla; sus porcentajes de vida hay que **remedirlos** con ella, RF-494. Lo que sigue se escribió con Asedio en 9 mapas.)*
+  - **Asedio hereda las oleadas** (RF-391: «mismas oleadas»). De los cuatro niveles, **solo el 7 está en Asedio** (que tiene los mapas 1 a 9; el 10, el 13 y el 14 no). **Medido:** el bot pierde Asedio 7 **sin** la Cuadrilla en la oleada 19 o 20 de 20, y **con** ella en la **11 de 20** (con `sin_recursos` y con `mix`, 3 semillas). Si algún día Asedio suma el 10, el 13 o el 14, también la heredan. **Lucas decide** en P2.
+  - **El editor, Pruebas y los mapas de la comunidad** pueden usar `ratero` y `cargador` como cualquier enemigo: las listas salen de `data/enemies/` (RF-203 y RF-233). Un mapa de la comunidad ya guardado carga igual.
+  - **No cambia:** el Ladrón, el Soberano, el Coloso, las torres, el guardado (no hay campo nuevo: lo que se vio se recuerda con `seen_enemies`), la Guía ni las pantallas.
+  - **Las fichas de los niveles 7, 10, 13 y 14** (§7 y los RF de campaña, entre ellos RF-453, RF-478 y RF-479) **no se reescriben acá**: los datos todavía no existen. **T253 les suma una línea** cuando cargue la Cuadrilla. **RF-453 («no estrena enemigos») sigue siendo cierto:** el 10 no la estrena, la estrena el 7.
+
+> **Criterio de aceptación RF-485 a RF-491**
+> **Dado** `data/enemies/ratero.tres` y `cargador.tres` → **Entonces** tienen los números de la tabla de RF-485, `optional_wave_limit` en 0, ningún campo nuevo de `EnemyData`, una frase de presentación no vacía y `size_tiles` entre 0.05 y 0.5, y los tests de contenido (`test_content`) pasan.
+> **Dado** un nivel de la campaña → **Entonces** solo el 7, el 10, el 13 y el 14 nombran `ratero` o `cargador` en sus oleadas, con cuatro apariciones cada uno; **ningún otro** nivel de la campaña (1 a 6, 8, 9, 11, 12 y 15) los nombra, y ninguna oleada con Cuadrilla trae un Guardián, un Curandero, un Chamán, un Espejo ni el Soberano.
+> **Dado** un Ratero vivo en el camino con 100 de oro en la caja → **Cuando** pasan 2 s → **Entonces** la caja baja en 2, y con 11 de oro baja en 1 (piso 10); **dado** un Cargador, baja en 4 cada 2 s con el mismo piso; **cuando** el Ratero llega a la salida → **entonces** quita 1 vida y **no** roba más.
+> **Dado** 8 Rateros y 1 Cargador recién aparecidos en el camino (el reloj de robo de cada uno en 0), 200 de oro en la caja y ninguna torre que los toque → **Cuando** pasan 4 s → **Entonces** el oro baja en **40** (8 Rateros × 4 + el Cargador × 8: cada uno roba en su propio reloj, RF-363).
+> **Dado** el bot con 5 semillas en el 7, el 10, el 13 y el 14, con `sin_recursos` → **Entonces** gana al menos 4 de 5, termina con 3 vidas o más en todas, el 14 termina con 3 o más y el 15 termina con 2 (RF-488).
+> **Dado** una partida que ve a la Cuadrilla por primera vez → **Entonces** salen las dos tarjetas de RF-134 una tras otra y la Wiki abre las entradas del Ratero y del Cargador. **Dado** el 7 ganado → **Entonces** la Wiki Lore abre «La Cuadrilla» con el texto de `11-textos-lore.md` §4.11, y el artículo 5 no cambia.
+
+#### Lo que M55 no incluye
+
+- **Ningún dato ni código en T252.** Los `.tres`, las oleadas y los tests son de **T253** (hecha); el arte, de T257.
+- **Un jefe, un mando o un aura de la Cuadrilla**, ni «velocidad compartida» (piden código nuevo, T251 §4.4).
+- **La Cuadrilla en el 15, en Asedio 10 a 15 o como arreglo de Asedio:** T251 mostró que ningún grupo nuevo hace ganable Asedio al 115 %. La decisión de qué hacer con Asedio 10 a 15 sigue abierta en T235.
+- **Los Correos (B) y las Luminarias (C)** del informe de T251: quedan como ideas, sin fecha.
+- **Una tribu de ladrones de los Moradores:** descartada (D-094).
+- **Arte final:** el arte lo hace T257 con el OK de Lucas.
+- **La Cuadrilla en 3D:** solo una semilla de la biblia.
+
+#### Preguntas para Lucas
+
+Corta, en orden de importancia. Cada una trae mi recomendación; **sin tu OK a P1, T253 no arranca** (la compuerta es tuya).
+
+1. ✔ **P1 · ¿Los niveles 7, 10, 13 y 14, con el debut en el 7?** *(Lucas: sí, 2026-10-10)* Recomiendo que **sí**. Son los únicos donde el bot gana con margen con las dos formas de armar la oleada (RF-488); el 7 es el nivel más holgado (16 vidas), no estrena otro enemigo y viene justo después del Ladrón (6). Las otras opciones: **debutar en el 10** (cambia RF-453, «no estrena enemigos», y el bloque 2 cierra con extracción y pieza: lo desaconsejo), o **solo en el 13 y el 14** (más corto, pero el 13 ya debuta las escoltas).
+2. ✔ **P2 · Asedio 7** *(Lucas: que herede, 2026-10-10; T253 lo dejó heredando y midió 11 de 20 con `sin_recursos` y `mix`; se compensa con el porcentaje por mapa de M56)*. El mapa 7 de Asedio hereda la Cuadrilla (RF-391) y el bot pasa de perderlo en la 19 a perderlo en la 11. Recomiendo **dejar que herede**: el bot ya lo perdía, Asedio «no es balance definitivo» (RF-391) y tener una copia propia sin la Cuadrilla es un cambio de RF aparte. La otra opción es **una copia del mapa 7 propia del modo, sin Cuadrilla** (solo datos, RF-388; pero deja de ser «mismas oleadas»).
+3. ✔ **P3 · El texto de «La Cuadrilla» en la Wiki** *(Lucas: aprobado, 2026-10-10)* (`11-textos-lore.md` §4.11). **Lo aprobás vos** (los textos son tuyos). *(Aprobado: T253 lo cargó.)*
+4. ✔ **P4 · Los nombres.** *(Lucas: Ratero y Cargador, 2026-10-10)* *Ratero* y *Cargador* (de informe, como «Soberano» y «Coloso»), y «la cuadrilla» como lo que dicen los colonos. ¿Sirven?
+5. ✔ **P5 · Las frases de las tarjetas** de RF-489. *(Lucas: confirmadas, 2026-10-10)*
+6. ✔ **P6 · El arte.** *(Lucas: primero provisional, 2026-10-10)* Recomiendo **primero provisional** (T253 con las formas de reemplazo, RF-156) y el concepto de Codex **después**, igual que el Coloso; así la medición y el reajuste no esperan al dibujo.
+
+---
+
+### M56 · Asedio con los 15 mapas y porcentaje de vida por mapa (Lucas, 2026-10-10; T256)
+
+**Estado: HECHA en T258 (2026-10-10).** Estructura aprobada por Lucas; los valores de la tabla son **iniciales** (medidos con el bot: T255 para los mapas sin Cuadrilla y T258 para el 7, el 10, el 13 y el 14, ya con La Cuadrilla; ver la columna «Estado» de RF-494). `ModePacks` lee y valida la clave, `data/modos/asedio/modo.json` trae los 15 mapas y la tabla, y el bot tiene `mejoras=` y `perfil=asedio`. Respaldo: `specs/tareas/informes/T255-curva-dificultad-asedio.md` (§5.3 trae el perfil y §7 cómo repetirlo) y D-095, que revisa D-078. Cambia **RF-388** (formato del paquete) y **RF-391** (qué es Asedio); toca sin cambiarlos RF-389, RF-390, RF-392, RF-432 y RF-475.
+
+**Qué pidió Lucas.** *(2026-10-10, después de leer el informe de T255)* Aprobó el **perfil de porcentajes de vida por mapa** del informe (§5): **conservar los 15 mapas y la campaña**, dejar **115 % como regla global** y sumar una **tabla opcional de porcentajes por id de mapa**.
+
+**Idea en pocas palabras.** Hoy Asedio es «los mapas 1 a 9 con 115 % de vida» y el bot **no gana 6 de los 15** al 115 % ni aun mejorando torres (T255). Un porcentaje único no sirve: el bot gana la apertura al 101–105 % y el cierre recién al 115–118 %, porque cada mapa multiplica **una base distinta** de vida. Entonces el modo conserva **todos los mapas, oleadas, caminos y enemigos** de la campaña y cada mapa lleva **su propio porcentaje**. No se copia ningún mapa ni se toca la campaña.
+
+- **RF-492** **Tabla opcional de porcentajes de vida por mapa** *(cambia RF-388)*:
+  - **Dónde va:** dentro de `"reglas"` del `modo.json`, con la clave **`"vida_monstruos_por_mapa_%"`**. Es un objeto cuyas claves son **ids de mapa** (los mismos nombres de la lista `"mapas"`, como `"level_07"`) y cuyos valores son **números enteros**. Ejemplo:
+
+    ```json
+    "reglas": {
+        "oro_inicial_%": 100,
+        "vida_monstruos_%": 115,
+        "vida_monstruos_por_mapa_%": {"level_01": 105, "level_07": 103, "level_10": 118}
+    }
+    ```
+
+  - **Precedencia:** para un mapa, vale **primero** su entrada de la tabla; si no la tiene, **`vida_monstruos_%`**; si tampoco hay, **100**. La tabla **no cambia** el oro, las vidas ni las torres del modo, que siguen siendo globales.
+  - **Se aplica igual que el global:** el porcentaje del mapa sobre la vida de cada monstruo **después** de la escala por oleada (RF-36 y RF-388), con el mismo redondeo y el mismo mínimo de 1 de vida. Lo único que cambia es de dónde sale el número.
+  - **Validación** (cada motivo se dice en castellano y nombra el mapa; un error en la tabla deja al **modo** con error, como cualquier otro error de `reglas`, y no se juega ningún mapa suyo):
+    1. la tabla tiene que ser un **objeto** `{ }`;
+    2. cada clave tiene que estar **en la lista `"mapas"`**: un id desconocido **no se ignora**, es un error (así un mapa renombrado o mal escrito no queda sin su porcentaje sin que nadie se entere);
+    3. cada valor tiene que ser un **entero entre 10 y 1000**, el mismo rango que `vida_monstruos_%`.
+  - **Compatibilidad:** la tabla es **opcional**. **Dado** cualquier `modo.json` que ya existe (sin la tabla), **entonces** carga y se juega exactamente igual. La `"version"` del paquete **sigue en 1**. Una versión del juego anterior a M56 rechaza un modo con la tabla («clave desconocida» en `"reglas"`), igual que pasó con `"textos"` y con `"leyenda"`: se avisa en `CONTENIDO.md` y en el `CHANGELOG.md`.
+  - **Una tabla vacía `{ }`** es válida y no cambia nada.
+  - **No hay otra forma de poner el porcentaje por mapa:** ni un campo `vida_monstruos_%` dentro del JSON de un nivel (el formato de nivel de §7.8 **no lo acepta** y no se cambia), ni una lista de objetos en `"mapas"`. Sigue siendo **solo datos** (RF-388).
+
+- **RF-493** **Asedio con los 15 mapas** *(cambia RF-391)*:
+  - **Mapas:** `level_01` a `level_15` de la campaña, **en ese orden**, con **sus mismas oleadas, enemigos, caminos, oro inicial, vidas y torres** (RF-388: se buscan entre los niveles oficiales, sin copiarlos). **No se crea ninguna copia de mapa** para el modo.
+  - **Reglas del modo:** `oro_inicial_%` **100**, **`vida_monstruos_%` 115** como regla global, y la tabla de RF-494 para las excepciones. **Todos los porcentajes efectivos son mayores que 100:** Asedio nunca es más fácil que la campaña en vida de monstruos.
+  - **La campaña no cambia:** ni sus datos, ni sus tablas del bot, ni su dificultad (RF-432, RF-475). Si un mapa de Asedio no se puede ajustar sin tocar la campaña, **se informa a Lucas** y no se toca.
+  - **Cubre también** los «niveles difíciles» de B-10, como decía RF-391.
+  - **Sigue siendo «no es balance definitivo».** Lo que se garantiza es que **el bot de referencia lo gana con margen** (RF-495); que la progresión **se sienta bien** lo decide Lucas jugando en G5 (T238). Si el salto que siente es distinto del que muestran las vidas, se ajusta **el porcentaje de ese mapa** y se repiten sus cinco semillas.
+  - **Los textos y las piezas** siguen sin mostrarse ni generarse en Asedio (RF-468 y RF-429): los mapas 10 a 15 tampoco.
+
+- **RF-494** **La tabla inicial** *(valores de T255; **iniciales**, no definitivos)*:
+
+  | Mapa | Vida | Cómo sale | Medido en T255 (bot, 5 semillas) | Estado |
+  |---|---:|---|---|---|
+  | 1 · Pradera | **105 %** | tabla | 5/5 · V20 | inicial |
+  | 2 · Desfiladero | **105 %** | tabla | 5/5 · V13 *(con `smart`)* | inicial |
+  | 3 · Encrucijada | **105 %** | tabla | 5/5 · V15 | inicial |
+  | 4 · Espiral | **115 %** | **global** | 5/5 · V20 *(mejoras tempranas)* | inicial |
+  | 5 · Fortaleza | **108 %** | tabla | 5/5 · V12 | inicial |
+  | 6 · Nido | **101 %** | tabla | 5/5 · V11 | inicial |
+  | 7 · Cruce | **101 %** | tabla | T255: 5/5 · V15–16 con 103 % sin Cuadrilla · **T258 con Cuadrilla: 5/5 · V1, 10, 10, 10, 10** | **medida con La Cuadrilla (T258); NO cumple RF-495** (una semilla en 1 vida, ni con 101 %): decide Lucas |
+  | 8 · Bastión | **101 %** | tabla | 5/5 · V12–16 | inicial |
+  | 9 · Taller asediado | **101 %** | tabla | 5/5 · V8–9 | inicial |
+  | 10 · La mina vieja | **118 %** | tabla | 5/5 · V8–10 | medida con La Cuadrilla (T258): 5/5 · V8–10, cumple |
+  | 11 · Puesto seco | **101 %** | tabla | 5/5 · V6 | inicial |
+  | 12 · El cañadón | **110 %** | tabla | 5/5 · V6–8 | inicial |
+  | 13 · Paso alto | **101 %** | tabla | 5/5 · V8 | medida con La Cuadrilla (T258): 5/5 · V4–10, cumple |
+  | 14 · Los poblados vacíos | **118 %** | tabla | 5/5 · V8–9 | medida con La Cuadrilla (T258): 5/5 · V4–7, cumple |
+  | 15 · La Central | **115 %** | **global** | 5/5 · V5 | inicial |
+
+  - **En el archivo van 13 entradas** (los mapas 4 y 15 **no** se escriben: toman el global de 115 %). Así mover el global mueve a esos dos y **la tabla muestra solo las excepciones**. Los porcentajes efectivos de los 15 mapas son los de la tabla de arriba.
+  - **Qué significa «inicial».** Son los números **medidos en T255** con el bot y sirven de punto de partida para G5 (T238). **Ningún jugador humano los probó.** No hay que leer los porcentajes como una escala de dificultad ni esperar que suban en orden: **multiplican bases de vida distintas** (el mismo porcentaje pesa distinto en cada mapa).
+  - **Qué significa «a remedir».** T255 midió **sin La Cuadrilla**. T253 la suma a los niveles **7, 10, 13 y 14** (RF-487) y el mapa 7 de Asedio ya mostró que **cambia el resultado** (el bot pasa de perderlo en la oleada 19 o 20 a perderlo en la 11, con 115 %, T252). Entonces esos cuatro porcentajes **no se dan por buenos** hasta repetir sus cinco semillas con los datos finales de T253; si T253 además cambia el `aumento_vida` o las oleadas de uno de esos niveles (RF-488, punto 5), vale lo mismo.
+  - **Regla general:** una fila de la tabla **vale para los datos del nivel con los que se midió**. Cualquier tarea que cambie las oleadas, el `aumento_vida`, el oro, las vidas o las torres de un mapa de la campaña **remide su fila** de Asedio (o anota por qué no pudo) y deja el resultado en su Resultado.
+  - **Si Lucas elige en M55 (P2) que Asedio 7 no herede la Cuadrilla**, el mapa 7 de Asedio se mide con **esa** copia propia del modo; el porcentaje sigue siendo el de la fila.
+  - **Quién los ajusta:** T258 los carga y los verifica; el reajuste por la Cuadrilla lo hace T258 si T253 ya está hecha, o una tarea de seguimiento si no. **Nadie los sube por su cuenta** (RF-495, punto 5).
+
+- **RF-495** **Cómo se comprueba el margen de cada mapa** *(cambia lo que RF-391 dejaba como «se informa si se pueden ganar»; toca RF-432 y RF-475 sin cambiarlos)*:
+  1. **Criterio por mapa:** con su **política fija** (punto 3), el bot **gana las 5 semillas** (1 a 5) y termina con **3 vidas o más** en todas. Una derrota en la última oleada **es una derrota**. *(La tabla inicial cumple: 75 de 75, el mínimo es V5, en el mapa 15.)*
+  2. **Nunca con una sola semilla.** T255 mostró que el mapa 14 al 122 % ganaba la semilla 1 y perdía las otras cuatro (al 118 % gana las cinco): **cinco semillas, siempre**.
+  3. **La política se fija por mapa antes de mirar el resultado**, no por semilla ni para que el número dé. Son las de T255:
+     - **`sin_recursos` + mejoras «al llenar»** (la de casi todos los mapas): el bot compra como siempre y, **cuando ya no queda ninguna casilla libre**, gasta el oro en mejorar torres (la de menor nivel y, entre ellas, la de menor costo), pagando como cualquiera por el flujo normal del juego.
+     - **`sin_recursos` + mejoras «tempranas»** (solo el **mapa 4**): igual, pero mejora **desde que tiene tres torres**, aunque queden casillas libres. Con «al llenar» el 4 **pierde al 115 %** (en la oleada 15 de 15) y solo lo gana bajando a 101–103 %, con 5 vidas; con mejoras tempranas gana al 115 % con 20. Bajar el porcentaje del 4 para compensar al bot sería calibrar una limitación del bot.
+     - **`smart` + «al llenar»** (solo el **mapa 2**): con `sin_recursos` el bot pierde el 2 incluso en la campaña por su orden de compra (T236), así que no sirve de instrumento ahí.
+     - Ninguna se le **impone** a quien juega: son el instrumento de medida. Una persona puede mejorar, vender o no hacerlo como quiera.
+  4. **Escalera por bloques, no mapa por mapa.** El promedio de vidas de cada bloque (**1 a 5, 6 a 10, 11 a 15**) **no sube** de un bloque al siguiente. *(Medido: 16,00 · 11,72 · 6,84.)* **No** se exige que cada mapa deje menos vidas que el anterior: el 4 recompensa mejorar temprano, una fuga de jefe da saltos y el bot no es una persona.
+  5. **Qué se toca si una fila no pasa:** (a) **bajar el porcentaje de ese mapa**, de a poco y repitiendo las cinco semillas, **sin bajar de 101 %**; (b) si ni 101 % pasa, **se informa a Lucas** con la tabla: **no** se toca la campaña, ni los datos del nivel, ni el bot. **Subir** un porcentaje solo lo hace Lucas, después de jugarlo.
+  6. **Los dos instrumentos no se mezclan.** `sin_recursos` **sin mejoras** (RF-432, RF-475 y las tablas de campaña) **sigue igual**. Cada medición de Asedio dice **qué variante usó** (estrategia, mejoras, porcentaje y semillas), para que nadie concluya que «el juego se volvió más fácil» por haber cambiado el instrumento. La regla de oro **no** autoriza a exigir Disruptora, Mortero ni extracción en Asedio (RF-433).
+  7. **Dónde vive la política:** en la **herramienta** (`tools/`), no en el juego ni en `modo.json`: es un dato del bot, no una regla para el jugador.
+
+- **RF-496** **Lo que M56 no cambia y lo que hay que comprobar al ampliar el modo** *(RF-389, RF-390 y RF-392)*:
+  - **Selección (RF-389):** el selector muestra **15 tarjetas** de Asedio en orden, con sus estrellas, sin el lugar ni los textos (RF-468) y cada una con su porcentaje real aplicado. Con un solo modo oficial las solapas siguen entrando en la fila; **el problema de más de dos modos propios** que dejó T197 **no** es de esta spec (sigue en T235).
+  - **Progreso (RF-390):** ids `modo_asedio_level_10` a `modo_asedio_level_15` para los mapas nuevos; los de 1 a 9 **no cambian** y **un guardado que ya tenía ganado el 9 ve abierto el 10**. Sigue sin contar para la campaña, el Salón de la fama ni la colección.
+  - **Editor (RF-392):** guardar o agregar un mapa a un modo propio **conserva** la tabla de RF-492 (el editor reescribe el `modo.json` y no debe perder claves de `reglas`). **No hay interfaz** para editarla (sería alcance adicional: lo decide Lucas, P2).
+  - **Modos propios y de la comunidad:** pueden usar la tabla igual que Asedio; el formato está en `CONTENIDO.md`.
+  - **Lo que no cambia:** la campaña, los niveles 1 a 15, `LevelFile`, `WaveSpawner`, `Rules`, el guardado (no hay campo nuevo), el bot de la regla de oro, los textos del lore (RF-468 ya los excluye de los modos) y el arte.
+
+> **Criterio de aceptación RF-492 a RF-496**
+> **Dado** un `modo.json` con `"vida_monstruos_%": 115` y `"vida_monstruos_por_mapa_%": {"level_01": 105}` → **Cuando** se lee el modo → **Entonces** el mapa `level_01` se juega con **105 %** y los demás con **115 %**, y el oro y las vidas son los de siempre.
+> **Dado** un modo con la tabla y **sin** `vida_monstruos_%` → **Entonces** los mapas fuera de la tabla se juegan con **100 %**.
+> **Dado** una tabla con una clave que **no está** en `"mapas"`, con un valor que **no es entero** (`105.5`, `"105"`) o **fuera de 10 a 1000**, o que **no es un objeto** (`[105]`) → **Cuando** se lista el modo → **Entonces** aparece con el motivo en castellano (nombrando el mapa o el valor) y no se juega ningún mapa suyo; **los demás modos se ven igual**.
+> **Dado** cualquier `modo.json` sin la tabla (los que ya existen) → **Entonces** carga con exactamente las mismas reglas y los mismos porcentajes de antes.
+> **Dado** el modo Asedio oficial → **Entonces** lista `level_01` a `level_15` en orden, cada mapa con **el mismo** contenido que en la campaña, y su porcentaje efectivo es el de la tabla de RF-494 (115 % el 4 y el 15), todos **mayores que 100**; ganar el 9 abre el 10.
+> **Dado** un modo propio con la tabla → **Cuando** el editor guarda un mapa en él → **Entonces** el `modo.json` conserva la tabla con los mismos números y los enteros siguen siendo enteros.
+> **Dado** el bot con la política fija de cada mapa y 5 semillas → **Entonces** cada fila de RF-494 gana las cinco con **3 vidas o más**, y los promedios por bloque no suben; las filas 7, 10, 13 y 14 **se anotan como medidas con La Cuadrilla** (o como «a remedir» si T253 todavía no está).
+
+#### Lo que M56 no incluye
+
+- **Cambiar la campaña**, bajar su dificultad para que `sin_recursos` gane el mapa 2, o sacar mapas de Asedio.
+- **Copias de los mapas 10 a 15 con menos aumento de vida por oleada** (la alternativa del informe): queda como plan B si Lucas prefiere no extender el formato (D-095).
+- **Mejoras de torres para el jugador, o un bot que se adapte:** el bot de `tools/` ya tiene las variantes; el juego no cambia.
+- **Una pantalla para editar la tabla** en el editor o en el selector de modos (P2).
+- **Los récords de los modos** en la pantalla de Récords y las **solapas con más de dos modos propios** (quedan en T235 como estaban).
+- **Una dificultad «definitiva»:** la jugará Lucas en G5; hasta entonces los números son medidas del bot.
+- **Porcentajes por oleada o por tipo de enemigo:** solo el porcentaje por mapa.
+
+#### Preguntas para Lucas
+
+Cortas y en orden de importancia. Ninguna frena a T258: el código y el formato valen igual con cualquier valor de la tabla.
+
+1. **P1 · ¿Jugás la tabla en G5 antes de dar los porcentajes por buenos?** Recomiendo que **sí**, y por eso los valores quedan «iniciales» (RF-494). Probaría con atención los mapas **1 a 4, 6 a 9 y 13 a 15**, que es donde el bot muestra los saltos.
+2. **P2 · ¿Alcanza con escribir la tabla a mano en el `modo.json`?** Recomiendo **sí por ahora**: el editor la conserva pero no la edita (RF-496). Una pantalla para editarla es una tarea aparte y no hace falta para Asedio.
+3. **P3 · La Cuadrilla en Asedio (P2 de M55).** *(T258: el 7 hereda por decisión de Lucas; los cuatro se remidieron. El 10, el 13 y el 14 cumplen RF-495 sin tocar el porcentaje; el 7 no cumple ni al 101 %: ver el Resultado de T258.)* Con los 15 mapas, **los cuatro niveles con Cuadrilla** (7, 10, 13 y 14) quedan en Asedio, no solo el 7. Recomiendo **que hereden** y que T258 remida los cuatro porcentajes. La otra opción es una copia propia del mapa sin Cuadrilla en el modo (solo datos, RF-388), que deja de ser «mismas oleadas».
+
+---
+
+### M57 · La intro de láminas (Lucas, 2026-10-11; T240)
+
+**Estado: APROBADA por Lucas el 2026-10-11 (compuerta 🚦 G6, P1 a P5 como se recomendaban). Programada en T242** (pasos 1 a 5, 7 y 8; con láminas **provisorias**: las definitivas son de **T241** y el paso 6, medir el texto y reexportar, sigue pendiente). El guion, con los textos, las siete ilustraciones descriptas, las referencias de estilo y las dudas, es **`specs/intro/guion.md`**. La decisión es **D-096**.
+
+**Qué pidió Lucas.** *(2026-10-11, en el encargo de T240; manda sobre la ficha)* Una **mini película casera hecha con imágenes tipo diapositiva y el texto abajo**, con **fuerte sensación de nave y de viaje**, que **termina con una lámina panorámica del oasis verde en medio de la nada**; **después aparece el mapa jugable**. **Entra en la versión 1.0.** Se ve **la primera vez que se toca «Jugar»**, **se puede omitir siempre**, **se puede volver a ver** desde la Wiki o con un botón «Intro», y **avanza con un toque o sola**. De 5 a 8 láminas; sin adelantar el conflicto con las comunidades.
+
+**Idea en pocas palabras.** Una pantalla de intro que muestra **siete láminas quietas** (imagen 16:9 y, abajo, una franja con 1 o 2 líneas de texto) con un **fundido** entre una y otra. Las láminas, los textos y las duraciones salen de **un archivo de datos**, así que se pueden corregir sin tocar código. Q-01 (D-089) ya permitía «una intro de láminas que se pueda omitir y volver a ver» y excluía «cinemáticas animadas» y «voces»: **esto no cambia ninguna regla de §11.** Las láminas **no se animan** (el fundido es una transición, no una animación de personajes) y **la intro no explica cómo se juega**: eso es del nivel 1.
+
+- **RF-497** **Los datos de la intro** *(archivo nuevo, `data/intro/intro.json`)*: la intro es una lista de **5 a 8 láminas** con esta forma:
+
+  ```json
+  {
+  	"version": 1,
+  	"fundido_s": 0.6,
+  	"laminas": [
+  		{"imagen": "res://assets/intro/01_la_nave.png",
+  		 "texto": "La Compañía Meridiana mandó una sola nave.\nNo lleva soldados: lleva gente de oficio.",
+  		 "segundos": 7}
+  	]
+  }
+  ```
+
+  | Clave | Qué es | Límite |
+  |---|---|---|
+  | `"version"` | Versión del formato. | Entero, hoy **1**. Otra → error. |
+  | `"fundido_s"` | Cuánto dura el fundido entre láminas, en segundos. | Número de **0 a 2**. Opcional (por omisión 0,6). |
+  | `"laminas"` | Las láminas, en orden. | **De 5 a 8**. |
+  | `"imagen"` | El PNG de la lámina. | Una ruta `res://` que **existe**. **1920 × 1080**, sin texto dibujado adentro. |
+  | `"texto"` | Lo que se lee abajo. | **1 o 2 líneas** (separadas por `\n`), **90 caracteres por línea**, **160 en total**, texto plano; no vacío. Son los límites de la victoria de un nivel (RF-464). |
+  | `"segundos"` | Cuánto se queda sola la lámina antes de pasar a la siguiente. | Entero de **4 a 12**. |
+
+  - **Los números van en el archivo** (fundido y segundos), no en el código (`.claude/rules/gdscript.md`).
+  - **Los textos son los de `specs/intro/guion.md`, tal cual** (igual que RF-464 con `11-textos-lore.md`): si Lucas corrige uno, se corrige primero en el guion.
+  - **Una duración que alcance para leer** (regla del guion, §2): `segundos ≥ 2 + caracteres / 20`, redondeado hacia arriba y nunca menos de 5. La **comprueba un test sobre los datos oficiales**; el lector del formato **no** la exige (un archivo de la comunidad no es rechazado por eso).
+  - **Errores en castellano** que nombran la lámina («la lámina 3 tiene 3 líneas y el máximo es 2», «la lámina 5 no encuentra la imagen `res://…`», «hay 4 láminas y el mínimo es 5»).
+  - **Es un archivo oficial, no de comunidad:** no hay editor ni carpeta de usuario para la intro (queda fuera de M57).
+
+- **RF-498** **Cuándo se muestra sola:**
+  - **Dónde:** al tocar **«Jugar»** en el menú principal (RF-110), **solo** si el guardado **no tiene** `"intro_seen": true`.
+  - **El campo:** `"intro_seen"` (booleano) es una **clave nueva y aditiva** del guardado. **`SAVE_VERSION` no cambia** (sigue en 1, como cuando se sumaron `collections` o `hall_total`). **Un guardado sin la clave se lee como «no vista»**, aunque tenga niveles ganados: **la ve una vez**. Una clave que no es booleana se lee como «no vista».
+  - **Cuándo se marca:** **al abrirse** la intro, y se guarda enseguida (no al terminarla): quien cierra el juego a la mitad **no** la vuelve a ver sola; si quiere, la pide (RF-501).
+  - **Cuándo no salta sola:** en el **modo de pruebas** (usa su guardado aparte, RF-181; la ve quien la pida con RF-501), ni al elegir un nivel o un mapa de la comunidad, ni en «Siguiente nivel», «Reintentar», los modos (Asedio), «Probar» del editor o el editor. **Solo «Jugar» la dispara.**
+  - **Si el archivo falla** (no existe, no se puede leer o tiene errores de RF-497): **«Jugar» va a la selección de niveles como siempre** y el error se avisa en la salida (`push_warning`). **La intro nunca bloquea jugar.**
+
+- **RF-499** **Cómo se ve y cómo se maneja:**
+  - **Pantalla completa**, con el fondo del menú principal oscurecido. La lámina se ve **entera, sin recortar** (`KEEP_ASPECT`): si la pantalla no es 16:9 quedan barras de un color oscuro. Abajo, **una franja** con el texto, en el mismo estilo de hierro y bronce del cartel de entrada (RF-466) y del epílogo (RF-471), centrada.
+  - **Avanzar:** un **toque o clic** en cualquier parte, `Espacio`, `Enter` o `→` pasan a la siguiente lámina; **sola**, cuando pasan los `segundos` de la lámina. El cambio es un **fundido** de `fundido_s`. Un toque durante el fundido salta a la lámina siguiente sin esperar. En la **última**, un toque o el tiempo **terminan** la intro.
+  - **Omitir:** un botón **«Omitir»** **siempre visible** (arriba a la derecha, del tamaño de los botones del menú), `Esc` y el «atrás» de Android **terminan la intro entera** (no solo la lámina). No pide confirmación.
+  - **El toque que termina o omite no llega a lo que viene después** (se traga al apretar y se cierra al soltar, como RF-466): no construye ni elige nada en la pantalla siguiente.
+  - **Sonido:** la **música de menú sigue**, sin cortes; **no hay sonidos nuevos**. Los botones suenan como los demás.
+  - **Lo que no tiene:** animación de las láminas, voces, volver a la anterior ni pausa (ver «Lo que M57 no incluye»).
+
+- **RF-500** **A dónde se va al terminar u omitir:**
+  - **Si se abrió desde «Jugar»:** si el guardado **no tiene ningún nivel de la campaña ganado**, se abre **el nivel 1** (como si se hubiera elegido en la selección: con su cartel de entrada, RF-466); si **ya hay niveles ganados** (un guardado anterior), la **selección de niveles**, como hoy.
+  - **Si se abrió desde la Wiki** (RF-501): **vuelve a la Wiki**, en la solapa Lore.
+  - **En los dos casos** terminar y omitir hacen **exactamente lo mismo**.
+
+- **RF-501** **Cómo se vuelve a ver:** un botón **«Ver la intro»** en la **Wiki**, **arriba de la lista de la solapa Lore** (RF-469).
+  - **Siempre disponible**: no depende de niveles ganados ni del modo de pruebas (la intro no cuenta nada que el nivel 1 no muestre).
+  - **No toca el guardado** (`intro_seen` queda como estaba) y no cambia nada de la Wiki (artículos abiertos, solapa, selección).
+  - **No hay botón nuevo en el menú principal ni en la partida.** *(Recomendación mía; ver P2.)*
+
+> **Criterio de aceptación RF-497 a RF-501**
+> **Dado** un guardado nuevo → **Cuando** se toca «Jugar» → **Entonces** se abre la intro en la lámina 1 y el guardado **ya** dice `"intro_seen": true`.
+> **Dado** un guardado con `"intro_seen": true` → **Cuando** se toca «Jugar» → **Entonces** se abre la selección de niveles, sin intro.
+> **Dado** un guardado de antes de M57 (sin la clave) con los niveles 1 a 5 ganados → **Cuando** se toca «Jugar» → **Entonces** se ve la intro **una vez**, y al terminar se abre la **selección de niveles** (no el nivel 1); la segunda vez va directo a la selección.
+> **Dado** un guardado con `"intro_seen": "si"` o `1` → **Entonces** se lee como «no vista» y no rompe nada.
+> **Dado** la intro abierta → **Cuando** pasa `segundos` de la lámina, o se toca, o se aprieta `Espacio`, `Enter` o `→` → **Entonces** se pasa a la siguiente con un fundido; en la última, **termina**.
+> **Dado** la intro abierta en cualquier lámina → **Cuando** se toca «Omitir» o se aprieta `Esc` → **Entonces** termina **enseguida**, sin pasar por las que faltan, y el toque no llega a la pantalla de después.
+> **Dado** una intro que termina desde «Jugar» con el guardado sin niveles ganados → **Entonces** se abre el nivel 1 y muestra su cartel de entrada.
+> **Dado** una intro abierta desde la Wiki → **Cuando** termina o se omite → **Entonces** se vuelve a la Wiki, en la solapa Lore, y `intro_seen` no cambió.
+> **Dado** el **modo de pruebas** → **Cuando** se toca «Jugar» → **Entonces** va a la selección de niveles sin intro; **Cuando** se toca «Ver la intro» en la Wiki → **Entonces** se ve.
+> **Dado** un mapa de la comunidad, un modo (Asedio), «Probar» o «Siguiente nivel» → **Entonces** no se abre la intro.
+> **Dado** un `intro.json` con 4 o 9 láminas, una línea de 91 caracteres, un texto de 3 líneas o de 161 caracteres, un texto vacío, una duración de 3 o de 13, un fundido de 3, una imagen que no existe o un `"version"` distinto de 1 → **Entonces** el lector devuelve un error en castellano que nombra la lámina, **y «Jugar» sigue yendo a la selección de niveles**.
+> **Dado** los **datos oficiales** → **Entonces** hay de 5 a 8 láminas, cada imagen existe y mide **1920 × 1080**, cada texto es **el mismo** que figura en `specs/intro/guion.md`, ninguno usa las palabras vetadas del vocabulario (`11-textos-lore.md`, «Cómo se escribió») ni nombra al planeta, y cada duración cumple la regla de lectura de RF-497.
+> **Dado** una ventana 16:9, 20:9 o 4:3 → **Entonces** la lámina se ve entera y el texto entra en su franja sin salirse.
+> **Dado** el guardado → **Entonces** la clave nueva **no** cambia niveles, récords, colecciones, ajustes ni Salón de la fama, y un guardado que la trae sigue cargando en la versión anterior del juego (la ignora).
+
+#### Lo que M57 no incluye
+
+- **Animación de las láminas** (zoom lento, paneo, partículas), **voces**, **música propia** de la intro y **sonidos nuevos**. Todo lo prohíbe o lo deja fuera Q-01 (D-089). *(El zoom lento es una sugerencia, abajo.)*
+- **Volver a la lámina anterior**, **pausar** o ver una **lista de láminas**.
+- **Un botón en el menú principal o en Opciones.** Recomendación: solo la Wiki (RF-501); es P2.
+- **Una casilla «Mostrar la intro al arrancar»**, o que se vea **cada vez** que se abre el juego o con **cada guardado nuevo**.
+- **Un editor de la intro**, intros de mapas de la comunidad o paquetes de modos con su propia intro.
+- **Explicar el juego.** La intro cuenta la llegada; las torres, el oro y las oleadas se aprenden jugando el nivel 1.
+- **Idiomas** y **subtítulos para quien no ve la imagen**. Las explicaciones esenciales ya existen dentro del juego (07 §11.F): la Wiki Lore (RF-469) y los textos de los niveles (RF-464).
+- **Cambiar el arte de los menús o del epílogo.** Si Lucas quiere repasar el epílogo con el estilo de la intro, es otra tarea (P3).
+- **El dibujo de las láminas y la pantalla.** Son T241 y T242.
+
+#### Preguntas para Lucas
+
+Cortas y en orden de importancia. Cada una con mi recomendación; la respuesta puede ser «✔ todas». Las 5 también están, con el contexto, en `specs/intro/guion.md` §10.
+
+1. **P1 · «Después aparece el mapa jugable».** Recomiendo que la intro termine **directo en el nivel 1** si el guardado no tiene niveles ganados, y en la **selección de niveles** si ya hay (RF-500). La otra lectura es que siempre vaya a la selección.
+2. **P2 · Dónde se vuelve a ver.** Recomiendo **«Ver la intro» en la Wiki, solapa Lore** (RF-501) y **ningún botón nuevo en el menú principal** (cada botón le saca alto al logo, RF-331). Alternativas: un botón «Intro» en el menú principal, o en Opciones.
+3. **P3 · El estilo y el epílogo.** **A · Cuaderno de bitácora** o **B · Diapositiva pintada** (`guion.md` §6). Recomiendo **A**, con **las dos versiones de la lámina 7** como lámina de prueba. Y: ¿la intro puede verse distinta del epílogo (pintura digital realista) o lo repasamos con el estilo elegido?
+4. **P4 · El planeta no se nombra en la intro.** Recomiendo **sí**: «Cántaro» llega después, por el oasis (artículo 2 de la Wiki).
+5. **P5 · Lo que inventé** (`guion.md` §9): «una sola nave», «años de viaje» y los cuatro colonos que se repiten para que Codex mantenga la continuidad.

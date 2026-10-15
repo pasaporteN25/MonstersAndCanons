@@ -212,6 +212,11 @@ Cada ficha detallada se completa en la tarea de cada nivel con lo que pide el 07
 | [T244](tareas/T244-arte-jefe-supremo.md) | 🎨 Arte del jefe supremo | **Codex** | T243 | Mediano |
 | [T234](tareas/T234-nivel-15.md) | Nivel 15 y epílogo | Sonnet alto | T228, T232, T243 (T233 y T244 para el arte final) | Mediano |
 | [T235](tareas/T235-asedio-y-modos.md) | Asedio con 15 mapas y pulido de modos | Sonnet bajo · *apto Qwen* (solo datos) | T234 | Chico |
+| T252 | 📜 Spec de La Cuadrilla (M55, RF-485 a RF-491, D-094): los Rateros y el Cargador, y en qué niveles entran (medido con el bot). Sin ficha propia: salió del pedido de Lucas del 2026-10-10 sobre el informe de T251 | Sonnet alto | T251 | Chico |
+| [T253](tareas/T253-cuadrilla-datos-y-reajuste.md) | Datos, oleadas y reajuste de La Cuadrilla (niveles 7, 10, 13 y 14), artículo de la Wiki y tests | Sonnet medio | T252 + el OK de Lucas a P1 de M55; **antes de T238** | Mediano |
+| T257 | 🎨 Arte de La Cuadrilla (Ratero y Cargador, con ciclo de caminata); **no bloquea a T253** | **Codex** | T252 | Mediano |
+| T256 | 📜 Spec de Asedio con porcentaje de vida por mapa (M56, RF-492 a RF-496, D-095): los 15 mapas, 115 % global y una tabla opcional por id de mapa (medida en T255). Sin ficha propia: salió del pedido de Lucas del 2026-10-10 sobre el informe de T255 | Sonnet alto | T255 | Chico |
+| [T258](tareas/T258-asedio-porcentajes-por-mapa.md) | ✅ **Hecha (2026-10-10).** Asedio con los 15 mapas y porcentaje de vida por mapa: la clave en `ModePacks`, los datos, las opciones del bot y los tests. **Resuelve los mapas de T235.** Queda **una fila a decidir por Lucas: el mapa 7 con la Cuadrilla** (ni 101 % da 3 vidas en las cinco semillas; ver el Resultado en `03-tareas.md`) | Sonnet medio | T256; **después de T253** (los mapas 7, 10, 13 y 14); **antes de T238** | Mediano |
 
 ### Fase 7 · Candidato de entrega
 | T | Tarea | Ejecutor | Depende de | Tamaño |
@@ -224,7 +229,7 @@ Cada ficha detallada se completa en la tarea de cada nivel con lo que pide el 07
 ### Fase 8 · Intro (última)
 | T | Tarea | Ejecutor | Depende de | Tamaño |
 |---|---|---|---|---|
-| [T240](tareas/T240-guion-intro.md) | 🚦 G6 · Guion de la intro (láminas) | Sonnet alto + **Lucas** | T238 | Chico |
+| [T240](tareas/T240-guion-intro.md) | 🚦 G6 · Guion de la intro (láminas) **· escrito 2026-10-11, falta el OK de Lucas** (`intro/guion.md`, M57, RF-497 a RF-501, D-096) | Sonnet alto + **Lucas** | T238 | Chico |
 | [T241](tareas/T241-arte-intro.md) | 🎨 Láminas ilustradas con aspecto dibujado a mano | **Codex** | T240 | Mediano |
 | [T242](tareas/T242-intro-integracion.md) | Intro: reproducir, omitir y volver a ver | Sonnet medio | T241 | Chico |
 
@@ -248,6 +253,8 @@ T200 (Lucas) ──┬─ T202 ─ T201 🚦G2 ───────────
 T226 ─ T227 ─ T228 ─ T229..T232 ─ T234 ─ T235 ─ T236 ─ T237 ─ T238 🚦G5 ─ T239
                                   T233 🎨 ──┘
 T227 ─ T243 🚦 ─ T244 🎨 ─ (T234)
+T251 ─ T252 ─ T253 (antes de T238) ; T252 ─ T257 🎨 (en paralelo, sin bloquear)
+T255 ─ T256 ─ T258 (después de T253 y antes de T238; los mapas de T235)
 T238 ─ T240 🚦G6 ─ T241 🎨 ─ T242
 ```
 

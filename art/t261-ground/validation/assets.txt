@@ -1,0 +1,10 @@
+assets/tiles/rendered/ground_pradera.png: 256×256 RGBA opaco, bordes opuestos idénticos (delta 0); cambio máximo de media RGB 0.99/255.
+assets/tiles/rendered/ground_desierto.png: 256×256 RGBA opaco, bordes opuestos idénticos (delta 0); cambio máximo de media RGB 0.51/255.
+assets/tiles/rendered/ground_nieve.png: 256×256 RGBA opaco, bordes opuestos idénticos (delta 0); cambio máximo de media RGB 0.73/255.
+assets/tiles/rendered/ground_volcan.png: 256×256 RGBA opaco, bordes opuestos idénticos (delta 0); cambio máximo de media RGB 0.46/255.
+assets/tiles/rendered/ground_bosque.png: 256×256 RGBA opaco, bordes opuestos idénticos (delta 0); cambio máximo de media RGB 0.70/255.
+assets/tiles/rendered/ground_pantano.png: 256×256 RGBA opaco, bordes opuestos idénticos (delta 0); cambio máximo de media RGB 1.08/255.
+assets/tiles/rendered/ground_ruinas.png: 256×256 RGBA opaco, bordes opuestos idénticos (delta 0); cambio máximo de media RGB 1.11/255.
+assets/tiles/rendered/path.png: 256×256 RGBA opaco, bordes opuestos idénticos (delta 0); cambio máximo de media RGB 0.40/255.
+assets/sprites/map/flores.svg: 64×64, alfa real, 5 degradés de tres paradas, sin filtros/texto/imágenes.
+9 recursos válidos.

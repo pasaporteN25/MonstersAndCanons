@@ -2,7 +2,7 @@
  "version": 1,
  "titulo": "Los Moradores",
  "subtitulo": "Los que ya estaban",
- "orden": 7,
+ "orden": 8,
  "desbloqueo": "level_09",
  "bloques": [
   {

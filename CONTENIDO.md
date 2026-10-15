@@ -475,6 +475,19 @@ El jefe del último nivel es un ejemplo de **un enemigo que se parte con solo da
 - **El Pedazo no se pone en ninguna oleada:** solo lo suelta el Coloso, como la Cría. Los grupos de `level_15.json` nombran únicamente a `colossus`.
 - **Los números son los de RF-481 y T234 no los cambió:** midió con el bot que ningún Pedazo ni Coloso llega a la salida con la defensa que arma (ver el Resultado de T234); el balance del nivel se mueve con `aumento_vida` y con las cantidades de las oleadas 26, 28 y 30 de `level_15.json`, no con estos dos archivos. Aparecen solos en la Wiki ("Enemigos") y el texto de lore del Coloso está en el artículo «La Central» (`specs/11-textos-lore.md`).
 - **Para hacer un enemigo parecido** (uno que se parte al caer): duplicar `spider.tres`, cambiar `death_spawn` por el enemigo-hijo y `death_spawn_count` por la cantidad, y cuidar que **las vidas del hijo × la cantidad** no superen las del padre si no querés que matarlo salga más caro que dejarlo pasar (acá: 4 × 3 = 12).
+### T253 · La Cuadrilla: el Ratero y el Cargador (niveles 7, 10, 13 y 14)
+
+Una banda de criaturas independientes que roban en grupo, hecha **solo con datos que ya existían** (RF-485 a RF-491, D-094): dos archivos de `data/enemies/`, cuatro apariciones en cuatro niveles y un artículo de la Wiki. No hay campo ni sistema nuevo: el robo es el mismo del Ladrón (`gold_drain_*`).
+
+- `ratero.tres` (**Ratero**): vida 14, velocidad 2.2, sin armadura, da 5 de oro y quita 1 vida. Roba **2 de oro cada 2 s, sin bajar de 10**. Tamaño 0.20.
+- `cargador.tres` (**Cargador**): vida 110, velocidad 0.9, armadura 1, da 30 de oro y quita 2 vidas. Roba **4 de oro cada 2 s, sin bajar de 10**. Tamaño 0.33.
+- **`optional_wave_limit` queda en 0** (no tienen el tope «uno por oleada» del Ladrón): en un grupo de 8 Rateros salen los 8. Cada uno roba **en su propio reloj**.
+- **Dónde salen:** en `level_07.json` (oleadas 8, 11, 13 y 16) y `level_10.json` (8, 12, 14 y 16), `level_13.json` (10, 13, 15 y 18) y `level_14.json` (10, 13, 15 y 18), siempre como **dos grupos al final de la oleada**: `ratero` con `"cada": 0.4` y `cargador` con `"cada": 3.0`, sin `desde`, sin `probabilidad` y por la entrada por omisión (la A). Son 6 + 1, 8 + 1, 8 + 1 y 10 + 2. **Para moverlos** basta cambiar `cantidad` o pasar los dos grupos a otra oleada; la regla es **no ponerlos en una oleada con Guardián, Curandero, Chamán, Espejo ni jefe** (no se midió) y **no en el nivel 6, el 8, el 9, el 11, el 12 ni el 15** (RF-487).
+- **Para ajustar un nivel con ellos** (RF-488): primero la cantidad o la oleada de la Cuadrilla, después sacar relleno de esa oleada y recién último el `aumento_vida`. El bot (`sin_recursos`, 5 semillas) tiene que ganar al menos 4 con 3 vidas o más, el 14 con 3 o más y el 15 con 2; la tabla del bot ahora trae también la columna **«oro robado»**.
+- **Arte provisional:** los dos **no tienen `texture` ni `walk_atlas`**, así que se dibujan como forma geométrica (Ratero: rombo ocre; Cargador: hexágono marrón, RF-156). La tarjeta y la barra de próxima oleada los muestran con esa forma; la Wiki los lista **sin ilustración** hasta que T257 los dibuje. Al agregarles dibujo hay que sacarlos de la lista `PROVISIONAL_ART` de `tests/test_content.gd`, `test_wiki.gd` y `test_bestiary.gd`.
+- **Wiki:** las dos entradas de Enemigos salen solas de los datos (línea «Robo» y «Dónde aparece: niveles 7, 10, 13 y 14»). El artículo de Lore **«La Cuadrilla»** es `data/wiki/lore/la_cuadrilla.json` (`orden` 6, se abre al ganar el nivel 7, texto de `specs/11-textos-lore.md` §4.11); los artículos de las ruinas en adelante pasaron a `orden` 7 a 11.
+- **Asedio:** con los 15 mapas, los niveles 7, 10, 13 y 14 de Asedio heredan las oleadas y, con ellas, **la Cuadrilla**. Lucas decidió que el 7 la hereda; T258 bajó su porcentaje de vida a 101 %, el mínimo permitido, y aun así una semilla del bot termina con 1 vida: queda para que Lucas decida (ver el Resultado de T258 en `specs/03-tareas.md`). Para quitársela a un mapa alcanzaría con una copia en `data/modos/asedio/` sin esos grupos (y sacar su entrada de la tabla si ya no hace falta).
+
 ### T229 · Nivel 11 (Puesto seco)
 
 `data/levels/level_11.json`, último de `data/campaign.json`. Mapa de **24 × 11**, tema `desierto`, **una entrada** (A, arriba a la izquierda) y la salida abajo a la derecha. Su leyenda usa 5 de las 12 letras: `e` escombro común y `r` roca removible (1 recurso al 50 %), `m` mina (clase `mina`, sin sobrescribir), `w` agua (los pozos: no se construyen) y `h` `roca_marcada` (el `hito` de la biblia, hasta que llegue su dibujo). Es el primero con el campo `"torres"` del bloque 3 (RF-474: las torres de la campaña **menos la Ametralladora**; la Disruptora y el Mecánico aparecen solo con su colección) y con `"demoledora": false`. Para cambiar la dificultad sin tocar el mapa se mueve `aumento_vida` (27): con 28 `sin_recursos` gana con solo 1 vida, así que **después de cualquier cambio** hay que correr `godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- x check_rule=1 levels=11` (regla de oro, RF-432) y mirar que las oleadas 1 a 3 no pierdan vidas. La oleada 14 (Guardianes, Curanderos, Trolls y un Chamán) es un precipicio de dificultad. **El bot sin Ametralladora** abre con `NO_BASIC_ORDER` (Cañón y Hielo; `tools/balance_sim.gd`). La partida de verificación con la escena real y las tablas del bot están en `art/campaign-t229/`.
@@ -486,6 +499,21 @@ El jefe del último nivel es un ejemplo de **un enemigo que se parte con solo da
 ### T231 · Nivel 13 (Paso alto)
 
 `data/levels/level_13.json`, de **26 × 12**, tema `nieve` y **dos entradas** (A y B) que se unen en la casilla (2,6): los dos recorridos comparten un tronco hasta la salida. Su leyenda usa 6 de las 12 letras: `e` y `r` removibles (1 recurso al 50 %), `m` mina y `b` bosque explotable (una fuente por entrada), `i` **hielo** (la laguna: no se construye) y `h` `roca_marcada` (el `hito`). `"torres"` de RF-474 (sin Ametralladora ni Lanzamisiles) y `"demoledora": false`. **La escolta** se escribe con tres grupos del mismo `desde` y la misma `entrada` (`guardian`, `healer`, `shaman`), p. ej. `{"enemigo": "guardian", "cantidad": 2, "cada": 3.0, "entrada": "B"}` más los otros dos con el mismo `desde`. Para cambiar la dificultad se mueve `aumento_vida` (40; con 41 el bot gana con 1 vida y con 42 pierde) y, con cuidado, las oleadas 14, 22 y 23, que son **precipicios**. **Después de cualquier cambio:** `... -s tools/balance_sim.gd -- x check_rule=1 levels=13`.
+
+### T242 · La intro (`data/intro/intro.json`)
+
+La intro se arma con un archivo, sin programar: `{"version": 1, "fundido_s": 0.6, "laminas": [{"imagen": "res://assets/intro/01_la_nave.png", "texto": "Línea 1\nLínea 2", "segundos": 7}, …]}`.
+
+| Clave | Qué es | Límite |
+|---|---|---|
+| `"version"` | Versión del formato | Hoy **1** |
+| `"fundido_s"` | Segundos del fundido entre láminas | De **0 a 2**; opcional (0,6) |
+| `"laminas"` | Las láminas, en orden | De **5 a 8** |
+| `"imagen"` | El PNG de la lámina | Ruta `res://` que existe; **1920 × 1080**, sin texto dibujado; el 22 % de abajo queda tranquilo (ahí va la franja) |
+| `"texto"` | Lo que se lee abajo | **1 o 2 líneas** (`\n`), **90 caracteres por línea**, **160 en total** |
+| `"segundos"` | Cuánto se queda sola la lámina | Entero de **4 a 12**; para poder leerla, al menos `2 + caracteres / 20` redondeado hacia arriba y nunca menos de 5 (lo revisa un test) |
+
+Los textos oficiales son **los de `specs/intro/guion.md`**: si hay que corregir uno, se corrige primero ahí. Un archivo con errores no se muestra (el error sale en la salida) y «Jugar» sigue yendo a la selección de niveles. Para cambiar una lámina alcanza con reemplazar el PNG con el mismo nombre. **Hoy las siete son provisorias** (color liso con el número); las definitivas son de T241.
 
 ### T234 · Nivel 15 (La Central) y el final
 
@@ -502,7 +530,7 @@ El jefe del último nivel es un ejemplo de **un enemigo que se parte con solo da
 Un **modo** es un grupo de mapas con reglas propias. Aparece como una solapa en **Jugar**: los oficiales después de "Campaña" y los propios después de "Mapas de la comunidad". No hace falta programar: es una carpeta con un archivo `modo.json`.
 
 **Dónde va cada uno:**
-- **Oficiales:** `data/modos/<id>/modo.json`, en el repositorio. Hoy existe **Asedio** (`data/modos/asedio/`).
+- **Oficiales:** `data/modos/<id>/modo.json`, en el repositorio. Hoy existe **Asedio** (`data/modos/asedio/`, con los 15 mapas).
 - **Propios:** `user://modos/<id>/modo.json`; en Windows, `%APPDATA%\Godot\app_userdata\JuegoA\modos\`. El editor de mapas los crea solo con **"En un modo…"**.
 - El `<id>` es el nombre de la carpeta: minúsculas, números y `_`. Un modo propio no puede llamarse igual que uno oficial.
 
@@ -528,7 +556,9 @@ Un **modo** es un grupo de mapas con reglas propias. Aparece como una solapa en 
 | `descripcion` | No | Se ve al pasar el mouse por la solapa (hasta 200 letras). |
 | `mapas` | Sí | Los mapas en orden, sin `.json`. Cada uno se busca primero en la carpeta del modo y, si no está, entre los niveles oficiales (`data/levels/`). Así se pueden reusar mapas de la campaña sin copiarlos. Hasta 50; ninguno puede llamarse `modo`. |
 | `torres` | No | Las torres que se pueden construir (ids de `data/towers/`). Sin esta clave, las de siempre. |
-| `reglas` | No | `oro_inicial_%` (10 a 1000, sobre el oro del mapa), `vidas` (1 a 999, reemplaza las del mapa) y `vida_monstruos_%` (10 a 1000, sobre la vida de cada monstruo). Sin reglas, el mapa se juega tal cual. |
+| `reglas` | No | `oro_inicial_%` (10 a 1000, sobre el oro del mapa), `vidas` (1 a 999, reemplaza las del mapa), `vida_monstruos_%` (10 a 1000, sobre la vida de cada monstruo) y `vida_monstruos_por_mapa_%` (M56, T258: un objeto `{"level_01": 105}` con el porcentaje propio de cada mapa; ver abajo). Sin reglas, el mapa se juega tal cual. |
+
+**Vida de los monstruos por mapa** *(M56, RF-492, T258)*: dentro de `reglas`, `"vida_monstruos_por_mapa_%"` es un objeto con el id de un mapa y su porcentaje. Ejemplo: `"reglas": {"vida_monstruos_%": 115, "vida_monstruos_por_mapa_%": {"level_01": 105, "level_02": 108}}`. Cada mapa toma **su** porcentaje; el que no está en la tabla toma el `vida_monstruos_%` global y, si tampoco hay global, 100. Cada clave tiene que ser un mapa de `"mapas"` (un id que no está es un **error** que lista los del modo) y cada valor un **entero de 10 a 1000**. `{ }` vacío es válido y no cambia nada. No toca el oro, las vidas ni las torres. Una **versión anterior del juego rechaza** un modo con esta clave («clave desconocida»). El editor de mapas la **conserva** al guardar un mapa en el modo, pero no la edita: se escribe a mano.
 
 **Progreso y desbloqueo:**
 - Cada mapa de un modo guarda vidas, estrellas, puntaje y su top 5 aparte, con el id `modo_<modo>_<mapa>`.
@@ -543,4 +573,11 @@ Un **modo** es un grupo de mapas con reglas propias. Aparece como una solapa en 
 godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- mix modo=asedio level=2
 ```
 
-**Asedio:** usa los mapas 1 a 9 de la campaña con `vida_monstruos_%` 115 y el mismo oro. El valor salió del bot: con 150 % y 80 % de oro, el bot perdía en la oleada 4.
+Las opciones del bot para modos (T258): `mejoras=llenar` (cuando ya no queda casilla libre, mejora la torre de menor nivel y menor costo, una por frame, pagando como el jugador), `mejoras=temprana` (lo mismo desde las 3 torres) y `perfil=asedio` (los 15 mapas del modo con 5 semillas y la política fija de cada mapa de `tools/asedio_politicas.json`; imprime la tabla y el promedio de vidas por bloque y termina con código 1 si algún mapa no gana las 5 con 3 vidas o más o si los bloques suben). Cada partida imprime la variante que usó.
+
+```bash
+godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- x perfil=asedio
+godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- sin_recursos modo=asedio levels=1-15 seeds=5 mejoras=llenar
+```
+
+**Asedio:** usa **los 15 mapas** de la campaña con el mismo oro, `vida_monstruos_%` 115 como regla global y una tabla `vida_monstruos_por_mapa_%` de 13 excepciones (de 101 % a 118 %; el 4 y el 15 toman el 115 % global). No hay ninguna copia de mapa en `data/modos/asedio/`: para cambiar la dureza de un mapa se cambia **su número en la tabla** de `data/modos/asedio/modo.json`. Los valores son **iniciales**: salen del bot (T255, y T258 para los mapas con la Cuadrilla) y se ajustan cuando Lucas juegue. Con 150 % y 80 % de oro, el bot perdía en la oleada 4.

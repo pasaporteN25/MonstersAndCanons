@@ -1,5 +1,5 @@
 # Menú principal (RF-110): Jugar, Récords, Wiki, Editor de mapas (RF-210: no en el celular), Opciones
-# y Salir.
+# y Salir. «Jugar» abre la intro la primera vez (M57, RF-498) y después va a la selección de niveles.
 class_name MainMenu
 extends Control
 
@@ -20,9 +20,20 @@ const SCREEN_MARGIN: float = 24.0
 const LOGO_MIN_HEIGHT: float = 70.0
 const LOGO_MAX_HEIGHT: float = 240.0
 
+## Costuras de los tests (no cambian de escena): a dónde se va y de dónde se lee la intro.
+var open_level_select: Callable = GameFlow.go_to_level_select
+var open_first_level: Callable = GameFlow.start_level.bind(0)
+var intro_path: String = IntroData.DEFAULT_PATH
+
+## La intro (RF-499). Es hija del menú: la música de menú sigue sonando por debajo.
+var intro_screen: IntroScreen
+
 
 func _ready() -> void:
-	_play_button.pressed.connect(GameFlow.go_to_level_select)
+	intro_screen = IntroScreen.new()
+	add_child(intro_screen)
+	intro_screen.finished.connect(_on_intro_finished)
+	_play_button.pressed.connect(play)
 	_records_button.pressed.connect(GameFlow.go_to_records)  # RF-195
 	_wiki_button.pressed.connect(GameFlow.go_to_wiki)  # RF-230
 	_editor_button.visible = editor_available(OS.has_feature("mobile"))  # RF-210
@@ -39,6 +50,31 @@ func _ready() -> void:
 	resized.connect(_fit_logo)
 	_fit_logo()
 	_play_button.grab_focus()  # se puede jugar con Enter sin tocar el mouse
+
+
+## RF-498: «Jugar». Abre la intro si el guardado no la vio (fuera del modo de pruebas y con el archivo en orden);
+## si no, la selección de niveles. Una intro rota se avisa en la salida y nunca bloquea jugar.
+func play() -> void:
+	if intro_screen.is_open():
+		return
+	if not IntroFlow.should_auto_show(SaveManager.intro_seen(), DevMode.enabled, true):
+		open_level_select.call()
+		return
+	var data: IntroData = IntroData.load_file(intro_path)
+	if not IntroFlow.should_auto_show(SaveManager.intro_seen(), DevMode.enabled, data.is_valid()):
+		push_warning("La intro no se muestra: %s" % "; ".join(data.errors))
+		open_level_select.call()
+		return
+	SaveManager.mark_intro_seen()  # al abrirse, no al terminar (RF-498)
+	intro_screen.open(data)
+
+
+## RF-500: al terminar u omitir, el nivel 1 si no hay niveles ganados; la selección si los hay.
+func _on_intro_finished() -> void:
+	if IntroFlow.after_finish(GameFlow.has_won_campaign_level()) == IntroFlow.Destination.LEVEL_1:
+		open_first_level.call()
+	else:
+		open_level_select.call()
 
 
 ## RF-331: el alto del logo para que, con `button_count` botones, todo entre en una ventana de
