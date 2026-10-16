@@ -11,6 +11,7 @@ const DEFAULT_PATH: String = "user://save.json"
 const HALL_OF_FAME_ID: StringName = &"hall_of_fame"
 const DEFAULT_SETTINGS: Dictionary = {
 	"music_volume": 0.7, "sfx_volume": 0.8, "fullscreen": false, "damage_numbers": true,
+	"ui_mode": 0,
 }
 
 ## Los tests lo cambian para no tocar el guardado real del jugador.
@@ -30,6 +31,8 @@ var _hall_total: int = 0
 var _collections: Dictionary = {}
 ## RF-498: ¿ya se mostró la intro? Clave aditiva (no sube SAVE_VERSION); sin ella, o si no es booleana, vale `false`.
 var _intro_seen: bool = false
+## RF-508: preferencias aditivas de posición y lado de los botones flotantes.
+var _ui_prefs: UiPrefs
 
 
 func _ready() -> void:
@@ -47,6 +50,7 @@ func load_save() -> void:
 	_hall_total = 0
 	_collections = {}
 	_intro_seen = false
+	_ui_prefs = UiPrefs.new()
 	if not FileAccess.file_exists(save_path):
 		return
 	var file := FileAccess.open(save_path, FileAccess.READ)
@@ -69,6 +73,7 @@ func load_save() -> void:
 	_hall_total = int(hall_total) if typeof(hall_total) in [TYPE_INT, TYPE_FLOAT] else 0
 	var intro_seen: Variant = (parsed as Dictionary).get("intro_seen", false)
 	_intro_seen = typeof(intro_seen) == TYPE_BOOL and intro_seen  # solo `true` booleano cuenta (RF-498)
+	_ui_prefs = UiPrefs.read((parsed as Dictionary).get("ui_prefs", null))
 
 
 func save() -> bool:
@@ -78,7 +83,7 @@ func save() -> bool:
 		return false
 	var data := {"version": SAVE_VERSION, "levels": _levels, "settings": _settings,
 		"seen_enemies": _seen_enemies, "scores": _scores, "initials": _last_initials, "hall_total": _hall_total, "collections": _collections,
-		"intro_seen": _intro_seen}
+		"intro_seen": _intro_seen, "ui_prefs": _ui_prefs.to_dict()}
 	file.store_string(JSON.stringify(data, "  "))
 	return true
 
@@ -209,6 +214,15 @@ func get_setting(key: String) -> Variant:
 
 func set_setting(key: String, value: Variant) -> void:
 	_settings[key] = value
+
+
+func get_ui_prefs() -> UiPrefs:
+	return UiPrefs.read(_ui_prefs.to_dict())
+
+
+func set_ui_prefs(prefs: UiPrefs) -> void:
+	_ui_prefs = UiPrefs.read(prefs.to_dict())
+	save()
 
 
 # --- Lectura defensiva: cualquier dato raro se ignora ---

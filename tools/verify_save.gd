@@ -37,5 +37,6 @@ func _initialize() -> void:
 	print("Colección technology: %s" % [Array(save_manager.collected_sources(&"technology"))])
 	print("Colección disruptor: %s" % [Array(save_manager.collected_sources(&"disruptor"))])
 	print("Intro ya vista: %s" % save_manager.intro_seen())
+	print("Preferencias de interfaz: %s" % save_manager.get_ui_prefs().to_dict())
 	print("Archivo sin modificar: %s" % (FileAccess.get_md5(path) == md5_before))
 	quit()

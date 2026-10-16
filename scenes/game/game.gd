@@ -38,6 +38,9 @@ var _carrier: Enemy
 var level: Level
 ## RF-251: solo existe si el mapa es más grande que 20×9 (hay que achicar el mundo para que entre).
 var camera: Camera2D
+var mobile_hud: MobileHud
+var camera_controller: CameraController
+var minimum_map_zoom: float = 1.0
 ## RF-217: se está probando el nivel del editor (no hay campaña: no se guarda nada).
 var testing: bool = false
 ## RF-184: el panel de pruebas. null si no es el modo de pruebas.
@@ -95,7 +98,7 @@ func _ready() -> void:
 		level_data = GameFlow.level(0)
 
 	level = level_data.build_map()
-	level.position = MAP_OFFSET
+	level.position = Vector2(0.0, float(MobileUiConfig.load_from().get_value("barra_alta_px"))) if UiMode.is_mobile() else MAP_OFFSET
 	add_child(level)
 	move_child(level, 0)  # primero en la lista = se dibuja debajo de todo
 	_fit_map()
@@ -123,6 +126,32 @@ func _ready() -> void:
 			if not available_towers.has(support):
 				available_towers.append(support)
 	build_controller.setup(level, session, balance, available_towers, tower_container)
+	if UiMode.is_mobile():
+		mobile_hud = MobileHud.new()
+		mobile_hud.name = "MobileHUD"
+		add_child(mobile_hud)
+		mobile_hud.confirm_placement_pressed.connect(build_controller.confirm_ghost)
+		mobile_hud.cancel_placement_pressed.connect(build_controller.cancel)
+		mobile_hud.exit_pressed.connect(_request_exit)
+		mobile_hud.tower_chosen.connect(_on_mobile_tower_chosen)
+		mobile_hud.infrastructure_tool_chosen.connect(_on_mobile_infrastructure_tool_chosen)
+		mobile_hud.catalog_opened.connect(_on_mobile_catalog_opened)
+		hud.tower_panel.hide()
+		mobile_hud.upgrade_pressed.connect(_on_mobile_upgrade_pressed)
+		mobile_hud.sell_pressed.connect(_on_mobile_sell_pressed)
+		mobile_hud.targeting_pressed.connect(_on_targeting_pressed)
+		mobile_hud.clear_selection_pressed.connect(build_controller.deselect_placed)
+		build_controller.mobile_infrastructure_targeted.connect(_on_mobile_infrastructure_targeted)
+		build_controller.mobile_map_tapped.connect(mobile_hud.clear_sell_arm)
+		_refresh_mobile_catalog()
+		session.gold_changed.connect(_on_mobile_catalog_money_changed)
+		session.resources_changed.connect(func(_resources: int) -> void: _refresh_mobile_catalog())
+	camera_controller = CameraController.new()
+	camera_controller.name = "CameraController"
+	add_child(camera_controller)
+	camera_controller.setup(level, camera, minimum_map_zoom, Callable(self, "_create_interactive_camera"), mobile_hud, UiMode.is_mobile())
+	if mobile_hud != null:
+		mobile_hud.view_all_pressed.connect(camera_controller.view_all)
 	build_controller.tower_built.connect(_on_tower_built)
 	build_controller.tower_upgraded.connect(_on_tower_upgraded)
 	build_controller.tower_sold.connect(_on_tower_sold)
@@ -235,6 +264,98 @@ func _setup_infrastructure() -> void:
 		_refresh_infrastructure_tab()
 
 
+func _on_mobile_catalog_opened(open: bool) -> void:
+	build_controller.input_blocked = open
+	if open:
+		_refresh_mobile_catalog()
+
+
+func _on_mobile_tower_chosen(index: int, use_alt_payment: bool) -> void:
+	build_controller.select(index, use_alt_payment)
+
+
+func _on_mobile_infrastructure_tool_chosen(tool: StringName, class_id: StringName) -> void:
+	if tool == &"machine":
+		infrastructure.buy_machine()
+		return
+	build_controller.select_mobile_infrastructure_tool(tool, class_id)
+
+
+func _on_mobile_infrastructure_targeted(cell: Vector2i, tool: StringName, class_id: StringName) -> void:
+	var spec: ObstacleSpec = infrastructure.obstacle_at(cell)
+	if spec == null or spec.class_id != class_id:
+		return
+	var completed: bool = false
+	if tool == &"demolish" and spec.kind == ObstacleSpec.Kind.REMOVABLE:
+		completed = infrastructure.order(cell)
+	elif tool == &"extract" and spec.kind == ObstacleSpec.Kind.EXTRACTION:
+		completed = infrastructure.enable(cell)
+	if completed:
+		build_controller.cancel()
+
+
+func _on_mobile_catalog_money_changed(_gold: int) -> void:
+	_refresh_mobile_catalog()
+
+
+func _refresh_mobile_catalog() -> void:
+	if mobile_hud == null:
+		return
+	var all_towers: Array[TowerData] = Wiki._all_towers()
+	var options: Array[Dictionary] = _mobile_infrastructure_options()
+	mobile_hud.set_catalog_data(all_towers, available_towers, session.gold, session.resources,
+		level_data.uses_resources(), options)
+
+
+func _mobile_infrastructure_options() -> Array[Dictionary]:
+	var options: Array[Dictionary] = []
+	if level_data == null or infrastructure == null:
+		return options
+	if infrastructure.machine_enabled and not infrastructure.field.has_machine:
+		var machine_price: int = infrastructure.field.machine_price()
+		var machine_reason: String = "Faltan %d de oro" % (machine_price - session.gold) if session.gold < machine_price else ""
+		options.append({"tool": &"machine", "class_id": &"", "name": "Demoledora",
+			"cost_text": "%d de oro" % machine_price, "disabled_reason": machine_reason, "icon": null})
+	var seen: Dictionary = {}
+	for spec: ObstacleSpec in level_data.obstacles:
+		var tool: StringName = &"demolish" if spec.kind == ObstacleSpec.Kind.REMOVABLE else &"extract"
+		var key: String = "%s:%s" % [tool, spec.class_id]
+		if seen.has(key):
+			continue
+		seen[key] = true
+		var available: bool = false
+		var required_gold: int = 0
+		var disabled_reason: String = ""
+		for target: ObstacleSpec in level_data.obstacles:
+			if target.kind != spec.kind or target.class_id != spec.class_id:
+				continue
+			var cell: Vector2i = target.cell
+			var cost: int = infrastructure.field.cost_of(cell)
+			required_gold = cost
+			var reason: StringName = infrastructure.field.can_order(cell) if tool == &"demolish" else infrastructure.field.can_enable(cell)
+			if reason == &"" and session.gold >= cost:
+				available = true
+				break
+			if reason == &"" and session.gold < cost:
+				disabled_reason = "Faltan %d de oro" % (cost - session.gold)
+			elif reason == &"busy":
+				disabled_reason = "Ya hay una demolición en curso"
+			elif reason == &"active":
+				disabled_reason = "El punto ya está activo"
+			elif reason == &"depleted":
+				disabled_reason = "El punto está agotado"
+			elif reason == &"cleared":
+				disabled_reason = "No queda ningún objeto de esa clase"
+		if available:
+			disabled_reason = ""
+		var action_name: String = "Demoler" if tool == &"demolish" else "Habilitar"
+		options.append({"tool": tool, "class_id": spec.class_id,
+			"name": "%s · %s" % [action_name, ObstacleText.display_name(spec)],
+			"cost_text": "%d de oro" % required_gold,
+			"disabled_reason": disabled_reason, "icon": null})
+	return options
+
+
 ## Muestra en el panel el removible elegido (o lo oculta si no hay ninguno).
 func _refresh_obstacle_panel() -> void:
 	var cell: Vector2i = infrastructure.selected_cell()
@@ -289,16 +410,64 @@ func _on_tab_changed(id: StringName) -> void:
 func _fit_map() -> void:
 	var size: Vector2i = level.map_size()
 	var zoom: float = Rules.map_zoom(size.x, size.y)
+	if UiMode.is_mobile():
+		var mobile_config: MobileUiConfig = MobileUiConfig.load_from()
+		var top_height: float = float(mobile_config.get_value("barra_alta_px"))
+		var bottom_height: float = float(hud.get_node("BottomBar").size.y)
+		zoom = minf(1.0, minf(Rules.SCREEN_SIZE.x / (size.x * Rules.TILE_SIZE), (Rules.SCREEN_SIZE.y - top_height - bottom_height) / (size.y * Rules.TILE_SIZE)))
+	minimum_map_zoom = zoom
 	if zoom >= 1.0:
 		return
 	camera = Camera2D.new()
 	camera.zoom = Vector2(zoom, zoom)
-	camera.position = Rules.map_camera_center(size.x, size.y)
+	var top_height: float = float(MobileUiConfig.load_from().get_value("barra_alta_px")) if UiMode.is_mobile() else 48.0
+	var area := Rect2(0.0, top_height, Rules.SCREEN_SIZE.x, Rules.SCREEN_SIZE.y - top_height - float(hud.get_node("BottomBar").size.y))
+	var map_center: Vector2 = level.position + Vector2(size) * Rules.TILE_SIZE / 2.0
+	camera.position = map_center + (Rules.SCREEN_SIZE / 2.0 - area.get_center()) / zoom
 	add_child(camera)
 	camera.make_current()
 
 
+func _create_interactive_camera() -> Camera2D:
+	if camera != null:
+		return camera
+	camera = Camera2D.new()
+	camera.zoom = Vector2.ONE * minimum_map_zoom
+	var size: Vector2i = level.map_size()
+	var top_height: float = float(MobileUiConfig.load_from().get_value("barra_alta_px")) if UiMode.is_mobile() else 48.0
+	var bottom_height: float = float(hud.get_node("BottomBar").size.y)
+	var area := Rect2(0.0, top_height, Rules.SCREEN_SIZE.x, Rules.SCREEN_SIZE.y - top_height - bottom_height)
+	var map_center: Vector2 = level.position + Vector2(size) * Rules.TILE_SIZE / 2.0
+	camera.position = map_center + (Rules.SCREEN_SIZE / 2.0 - area.get_center()) / minimum_map_zoom
+	add_child(camera)
+	camera.make_current()
+	return camera
+
+
 func _process(delta: float) -> void:
+	if mobile_hud != null:
+		mobile_hud.set_game_over(session.is_over())
+		mobile_hud.set_cart_active(build_controller.selected_tower() != null or build_controller.selected_placed() != null or build_controller.mobile_action_active())
+		var selected_tower: TowerData = build_controller.selected_tower()
+		hud.set_mobile_wave_controls_visible(selected_tower == null and build_controller.selected_placed() == null)
+		if selected_tower == null:
+			mobile_hud.set_placement_visible(false)
+			var placed: Tower = build_controller.selected_placed()
+			var refund: int = build_controller.sell_value(placed) if placed != null else 0
+			var resource_refund: int = build_controller.sell_resource_value(placed) if placed != null else 0
+			var can_improve: bool = placed != null and build_controller.can_upgrade(placed)
+			var unavailable_reason: String = ""
+			if placed != null and placed.can_upgrade() and session.gold < placed.next_level_stats().cost:
+				unavailable_reason = "Faltan %d de oro" % (placed.next_level_stats().cost - session.gold)
+			mobile_hud.show_selected_tower(placed, session.gold, refund, resource_refund,
+				can_improve, unavailable_reason)
+		else:
+			mobile_hud.show_ghost_status(selected_tower.display_name, TowerText.cost_text(selected_tower, build_controller.pay_alt()))
+			var ghost: GhostPlacement = build_controller.ghost_placement()
+			var ghost_world_pos: Vector2 = level.cell_center(ghost.cell)
+			var zoom: float = camera.zoom.x if camera != null else minimum_map_zoom
+			var ghost_size: Vector2 = Vector2.ONE * Rules.TILE_SIZE * selected_tower.footprint * zoom
+			mobile_hud.show_placement(ghost_world_pos, TowerText.cost_text(selected_tower, build_controller.pay_alt()), ghost.valid, ghost.reason, ghost_size)
 	if dev_stats != null and not get_tree().paused and not session.is_over():
 		dev_stats.seconds += delta  # RF-325: tiempo de juego, sin pausa
 	# RF-128: se mueve todo el "mundo"; el HUD está en otra capa y no se sacude.
@@ -372,11 +541,15 @@ func open_pause_menu() -> void:
 	set_paused(true)
 	hud.show_paused(true, false)  # el menú ya dice "Pausa"
 	pause_menu.open()
+	if mobile_hud != null:
+		mobile_hud.set_modal_open(true)
 
 
 func close_pause_menu() -> void:
 	pause_menu.close()
 	set_paused(false)
+	if mobile_hud != null:
+		mobile_hud.set_modal_open(false)
 
 
 # --- El cartel de entrada (M52, RF-466 a RF-468) ---
@@ -403,12 +576,16 @@ func _open_intro_if_pending() -> void:
 	set_paused(true)
 	hud.show_paused(true, false)  # el cartel no es el menú de pausa: no dice «PAUSA»
 	level_intro.open(level_data.display_name, level_data.place_text, level_data.intro_text)
+	if mobile_hud != null:
+		mobile_hud.set_modal_open(true)
 
 
 ## Al cerrarlo la partida sigue exactamente como estaba: la misma cuenta atrás, a la misma velocidad.
 func _on_intro_closed() -> void:
 	build_controller.input_blocked = false
 	set_paused(false)
+	if mobile_hud != null:
+		mobile_hud.set_modal_open(false)
 
 
 # --- La flecha «← Menú» (RF-459 a RF-461) ---
@@ -444,12 +621,16 @@ func _request_exit() -> void:
 	set_paused(true)
 	hud.show_paused(true, false)  # el diálogo ya cubre la pantalla
 	exit_dialog.open(exit_message())
+	if mobile_hud != null:
+		mobile_hud.set_modal_open(true)
 
 
 ## «Seguir jugando» o Esc: la partida vuelve al estado anterior (corriendo a la misma velocidad, o en pausa si ya lo estaba).
 func _on_exit_cancelled() -> void:
 	build_controller.input_blocked = false
 	set_paused(_exit_was_paused)
+	if mobile_hud != null:
+		mobile_hud.set_modal_open(false)
 
 
 ## «Salir al menú»: no se guarda nada (ni piezas ni progreso ni récords), así que no se llama a `_commit_collection()`.
@@ -769,11 +950,38 @@ func _on_targeting_pressed() -> void:
 		_refresh_tower_panel()
 
 
+func _on_mobile_upgrade_pressed() -> void:
+	if mobile_hud == null:
+		return
+	var tower: Tower = build_controller.selected_placed()
+	if tower != null and build_controller.try_upgrade(tower):
+		mobile_hud.begin_upgrade_lock(tower.level_number())
+		_refresh_tower_panel()
+
+
+func _on_mobile_sell_pressed() -> void:
+	if mobile_hud == null:
+		return
+	var tower: Tower = build_controller.selected_placed()
+	if tower != null:
+		build_controller.sell(tower)
+		mobile_hud.clear_sell_arm()
+		_refresh_tower_panel()
+
+
 ## Muestra en el panel la torre seleccionada (o lo oculta si no hay ninguna).
 func _refresh_tower_panel() -> void:
 	var tower: Tower = build_controller.selected_placed()
 	var value: int = build_controller.sell_value(tower) if tower != null else 0
 	var resource_value: int = build_controller.sell_resource_value(tower) if tower != null else 0
+	if mobile_hud != null:
+		hud.tower_panel.hide()
+		var reason: String = ""
+		if tower != null and tower.can_upgrade() and session.gold < tower.next_level_stats().cost:
+			reason = "Faltan %d de oro" % (tower.next_level_stats().cost - session.gold)
+		mobile_hud.show_selected_tower(tower, session.gold, value, resource_value,
+		tower != null and build_controller.can_upgrade(tower), reason)
+		return
 	hud.tower_panel.show_tower(tower, value, session.gold, resource_value)
 
 

@@ -25,14 +25,16 @@ var normal_save_path: String = ""
 @onready var _sfx_slider: HSlider = %SfxSlider
 @onready var _fullscreen_check: CheckBox = %FullscreenCheck
 @onready var _damage_numbers_check: CheckBox = %DamageNumbersCheck
+@onready var _rows: Control = $Center/Panel/Margin/Rows
 @onready var _admin_section: Label = %AdminSection
 @onready var _admin_button: Button = %AdminButton
 @onready var _admin_confirm: Control = %AdminConfirm
 @onready var _admin_confirm_button: Button = %AdminConfirmButton
 @onready var _admin_cancel_button: Button = %AdminCancelButton
 @onready var _back_button: Button = %BackButton
-@onready var _rows: Control = $Center/Panel/Margin/Rows
 @onready var _title: Control = $Center/Panel/Margin/Rows/Title
+
+var _ui_mode_selector: OptionButton
 
 
 func _ready() -> void:
@@ -42,6 +44,7 @@ func _ready() -> void:
 	_fullscreen_check.toggled.connect(_on_fullscreen_toggled)
 	_damage_numbers_check.toggled.connect(
 		func(on: bool) -> void: SaveManager.set_setting("damage_numbers", on))  # RF-132
+	_build_ui_mode_selector()
 	_admin_button.pressed.connect(_on_admin_pressed)
 	_admin_confirm_button.pressed.connect(set_dev_mode.bind(true))
 	_admin_cancel_button.pressed.connect(_on_admin_cancel)
@@ -56,6 +59,7 @@ func open() -> void:
 	_sfx_slider.set_value_no_signal(float(SaveManager.get_setting("sfx_volume")))
 	_fullscreen_check.set_pressed_no_signal(bool(SaveManager.get_setting("fullscreen")))
 	_damage_numbers_check.set_pressed_no_signal(bool(SaveManager.get_setting("damage_numbers")))
+	_ui_mode_selector.select(UiMode.read_setting(SaveManager.get_setting("ui_mode")))
 	_set_confirming(false)
 	visible = true
 
@@ -134,3 +138,19 @@ func _on_sfx_changed(value: float) -> void:
 func _on_fullscreen_toggled(on: bool) -> void:
 	SaveManager.set_setting("fullscreen", on)
 	GameFlow.apply_display_settings()
+
+
+func _build_ui_mode_selector() -> void:
+	var label := Label.new()
+	label.text = "Interfaz"
+	label.add_theme_font_size_override("font_size", 20)
+	_rows.add_child(label)
+	_ui_mode_selector = OptionButton.new()
+	_ui_mode_selector.name = "UiModeSelector"
+	_ui_mode_selector.add_item("Automática", UiMode.AUTOMATIC)
+	_ui_mode_selector.add_item("Celular", UiMode.MOBILE)
+	_ui_mode_selector.add_item("PC", UiMode.PC)
+	_ui_mode_selector.custom_minimum_size.y = 44
+	_rows.add_child(_ui_mode_selector)
+	_ui_mode_selector.item_selected.connect(func(index: int) -> void:
+		SaveManager.set_setting("ui_mode", _ui_mode_selector.get_item_id(index)))
