@@ -2,14 +2,11 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
-## Lo que viene: los niveles 2 y 7 más justos *(M59, spec del 2026-10-16; todavía no está en el juego)*
+## Niveles 2 y 7 más justos *(T279, 2026-10-16)*
 
-**Esto es lo que Lucas aprobó y quedó escrito; los datos todavía no cambiaron.** Un tester contó que el 2 y el 7 eran los más difíciles, y al medirlos se confirmó. Cuando se aplique:
+El bot confirmó que los cambios de oleadas alivian los picos sin cambiar el aumento de vida. El nivel 2 ahora tiene un Jefe y no trae los 12 Blindados finales; el nivel 7 reduce los Rápidos de las oleadas 2, 11 y 18 y los Voladores de la 18. En cinco semillas, `mix` gana el nivel 2 con 16 vidas y `smart` con 17; en el nivel 7 ganan `smart` (5–6), `mix` (12), mejoras tempranas (9–11) y `demoler` (13). La regla de oro sigue cumpliéndose y los niveles 13, 14 y 15 conservaron sus mínimos (5, 3 y 2 vidas).
 
-- **Nivel 2 (Desfiladero):** la última oleada trae **un solo Jefe** (antes dos) y **ya no termina con 12 Blindados**. El resto del nivel queda igual. Hay que seguir mezclando torres: quien juega solo con Ametralladoras todavía pierde ahí.
-- **Nivel 7 (Cruce):** los tres enjambres de Rápidos son más chicos: en la oleada 2, **10 + 10** por las dos entradas (antes 15 + 15); en la 11, **22** (antes 30); y en la 18, **30 Rápidos y 20 Voladores** (antes 40 y 25). Sigue siendo el más exigente de su tramo, pero deja de ser un muro para quien no usa torres de área.
-- **Los niveles 13, 14 y 15 no cambian.**
-- Lucas va a jugar los niveles 1 → 2 → 3 y 6 → 7 → 8 antes de que se reenvíe el juego.
+Lucas todavía tiene que jugar 1 → 2 → 3 y 6 → 7 → 8, además de las partidas específicas de T280. No se hicieron partidas humanas; falta esa validación antes de reenviar el juego al tester.
 
 ## Lo que viene al celular: carrito, zoom y torre fantasma *(M58, spec del 2026-10-16; todavía no está en el juego)*
 
