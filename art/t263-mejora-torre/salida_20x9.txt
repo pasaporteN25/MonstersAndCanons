@@ -1,0 +1,76 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 580.178.04 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1660 SUPER
+
+T263 captura res://art/t263-mejora-torre/antes_normal_20x9.png
+T263 medidas antes normal: Mejorar 22.8 × 3.2 mm · distancia Mejorar–Vender 6 px virtuales = 0.6 mm
+T263 captura res://art/t263-mejora-torre/antes_derecha_20x9.png
+T263 tapa antes derecha: 13 % del mapa · la torre queda debajo=true
+T263 tapa antes normal: 13 % del mapa · la torre queda debajo=false
+T263 captura res://art/t263-mejora-torre/antes_sin_oro_20x9.png
+T263 captura res://art/t263-mejora-torre/antes_maximo_20x9.png
+T263 captura res://art/t263-mejora-torre/a_normal_20x9.png
+T263 medidas a normal: Mejorar 33.9 × 7.9 mm · distancia Mejorar–Vender 372 px virtuales = 35.0 mm
+T263 captura res://art/t263-mejora-torre/a_derecha_20x9.png
+T263 tapa a derecha: 0 % del mapa · la torre queda debajo=false
+T263 tapa a normal: 0 % del mapa · la torre queda debajo=false
+T263 captura res://art/t263-mejora-torre/a_sin_oro_20x9.png
+T263 captura res://art/t263-mejora-torre/a_maximo_20x9.png
+T263 captura res://art/t263-mejora-torre/a_vender_armado_20x9.png
+T263 captura res://art/t263-mejora-torre/a_detalles_20x9.png
+T263 medidas a detalles: Mejorar 33.9 × 7.9 mm · distancia Mejorar–Vender 372 px virtuales = 35.0 mm
+T263 captura res://art/t263-mejora-torre/b_normal_20x9.png
+T263 medidas b normal: Mejorar 26.0 × 7.9 mm · distancia Mejorar–Vender 14 px virtuales = 1.3 mm
+T263 captura res://art/t263-mejora-torre/b_derecha_20x9.png
+T263 tapa b derecha: 9 % del mapa · la torre queda debajo=false
+T263 tapa b normal: 9 % del mapa · la torre queda debajo=false
+T263 captura res://art/t263-mejora-torre/b_sin_oro_20x9.png
+T263 captura res://art/t263-mejora-torre/b_maximo_20x9.png
+T263 captura res://art/t263-mejora-torre/b_vender_armado_20x9.png
+T263 captura res://art/t263-mejora-torre/b_detalles_20x9.png
+T263 medidas b detalles: Mejorar 26.0 × 7.9 mm · distancia Mejorar–Vender 14 px virtuales = 1.3 mm
+T263 captura res://art/t263-mejora-torre/c_normal_20x9.png
+T263 medidas c normal: Mejorar 25.0 × 7.9 mm · distancia Mejorar–Vender 88 px virtuales = 8.3 mm
+T263 captura res://art/t263-mejora-torre/c_derecha_20x9.png
+T263 tapa c derecha: 12 % del mapa · la torre queda debajo=false
+T263 tapa c normal: 12 % del mapa · la torre queda debajo=false
+T263 captura res://art/t263-mejora-torre/c_sin_oro_20x9.png
+T263 captura res://art/t263-mejora-torre/c_maximo_20x9.png
+T263 captura res://art/t263-mejora-torre/c_vender_armado_20x9.png
+T263 captura res://art/t263-mejora-torre/c_detalles_20x9.png
+T263 medidas c detalles: Mejorar 25.0 × 7.9 mm · distancia Mejorar–Vender 88 px virtuales = 8.3 mm
+T263 toques corridos antes (49 toques alrededor de Mejorar): { "mejorar": 23, "vender": 11, "nada": 11, "mapa:deselecciona": 1, "apuntar": 3 }
+T263 toques corridos antes detalle: abajo0=mejorar abajo12=mejorar abajo24=vender abajo36=vender abajo48=vender abajo60=nada abajo72=mapa:deselecciona abajo84=nada abajo96=nada arriba12=mejorar arriba24=apuntar arriba36=apuntar arriba48=apuntar arriba60=nada arriba72=nada arriba84=nada arriba96=nada izq12=mejorar izq24=mejorar izq36=mejorar izq48=mejorar izq60=mejorar izq72=mejorar izq84=mejorar izq96=mejorar der12=mejorar der24=mejorar der36=mejorar der48=mejorar der60=mejorar der72=mejorar der84=mejorar der96=mejorar abajo_der12=mejorar abajo_der24=mejorar abajo_der36=vender abajo_der48=vender abajo_der60=vender abajo_der72=vender abajo_der84=nada abajo_der96=nada abajo_izq12=mejorar abajo_izq24=mejorar abajo_izq36=vender abajo_izq48=vender abajo_izq60=vender abajo_izq72=vender abajo_izq84=nada abajo_izq96=nada
+T263 1 toque(s) seguidos en Vender antes: ["vender"]
+T263 2 toque(s) seguidos en Vender antes: ["vender", "vender"]
+T263 doble toque en Mejorar antes: nivel 1 -> 3
+T263 toques corridos a (49 toques alrededor de Mejorar): { "mejorar": 30, "nada": 15, "mapa:deselecciona": 4 }
+T263 toques corridos a detalle: abajo0=mejorar abajo12=mejorar abajo24=mejorar abajo36=mejorar abajo48=nada abajo60=nada abajo72=nada abajo84=nada abajo96=nada arriba12=mejorar arriba24=mejorar arriba36=mejorar arriba48=nada arriba60=mapa:deselecciona arriba72=mapa:deselecciona arriba84=mapa:deselecciona arriba96=mapa:deselecciona izq12=mejorar izq24=mejorar izq36=mejorar izq48=mejorar izq60=mejorar izq72=mejorar izq84=mejorar izq96=mejorar der12=mejorar der24=mejorar der36=mejorar der48=mejorar der60=mejorar der72=mejorar der84=mejorar der96=mejorar abajo_der12=mejorar abajo_der24=nada abajo_der36=mejorar abajo_der48=mejorar abajo_der60=nada abajo_der72=nada abajo_der84=nada abajo_der96=nada abajo_izq12=mejorar abajo_izq24=mejorar abajo_izq36=mejorar abajo_izq48=mejorar abajo_izq60=nada abajo_izq72=nada abajo_izq84=nada abajo_izq96=nada
+T263 1 toque(s) seguidos en Vender a: ["vender_armado"]
+T263 2 toque(s) seguidos en Vender a: ["vender_armado", "vender_muy_rapido"]
+T263 doble toque en Mejorar a: nivel 1 -> 2
+T263 toques corridos b (49 toques alrededor de Mejorar): { "mejorar": 29, "nada": 12, "apuntar": 4, "mapa:deselecciona": 1, "vender_armado": 2, "detalles": 1 }
+T263 toques corridos b detalle: abajo0=mejorar abajo12=nada abajo24=mejorar abajo36=mejorar abajo48=nada abajo60=apuntar abajo72=apuntar abajo84=apuntar abajo96=apuntar arriba12=mejorar arriba24=mejorar arriba36=mejorar arriba48=nada arriba60=nada arriba72=nada arriba84=nada arriba96=mapa:deselecciona izq12=mejorar izq24=mejorar izq36=mejorar izq48=mejorar izq60=mejorar izq72=mejorar izq84=mejorar izq96=mejorar der12=mejorar der24=nada der36=mejorar der48=mejorar der60=mejorar der72=mejorar der84=mejorar der96=mejorar abajo_der12=mejorar abajo_der24=mejorar abajo_der36=mejorar abajo_der48=mejorar abajo_der60=nada abajo_der72=nada abajo_der84=vender_armado abajo_der96=vender_armado abajo_izq12=mejorar abajo_izq24=mejorar abajo_izq36=mejorar abajo_izq48=mejorar abajo_izq60=nada abajo_izq72=nada abajo_izq84=detalles abajo_izq96=nada
+T263 1 toque(s) seguidos en Vender b: ["vender_armado"]
+T263 2 toque(s) seguidos en Vender b: ["vender_armado", "vender_muy_rapido"]
+T263 doble toque en Mejorar b: nivel 1 -> 2
+T263 toques corridos c (49 toques alrededor de Mejorar): { "mejorar": 31, "nada": 12, "apuntar": 3, "detalles": 3 }
+T263 toques corridos c detalle: abajo0=mejorar abajo12=mejorar abajo24=mejorar abajo36=mejorar abajo48=nada abajo60=nada abajo72=nada abajo84=nada abajo96=nada arriba12=mejorar arriba24=mejorar arriba36=mejorar arriba48=nada arriba60=nada arriba72=nada arriba84=nada arriba96=nada izq12=mejorar izq24=mejorar izq36=mejorar izq48=mejorar izq60=mejorar izq72=mejorar izq84=mejorar izq96=mejorar der12=mejorar der24=mejorar der36=mejorar der48=mejorar der60=mejorar der72=mejorar der84=mejorar der96=mejorar abajo_der12=mejorar abajo_der24=mejorar abajo_der36=mejorar abajo_der48=mejorar abajo_der60=nada abajo_der72=apuntar abajo_der84=apuntar abajo_der96=apuntar abajo_izq12=mejorar abajo_izq24=mejorar abajo_izq36=mejorar abajo_izq48=mejorar abajo_izq60=nada abajo_izq72=detalles abajo_izq84=detalles abajo_izq96=detalles
+T263 1 toque(s) seguidos en Vender c: ["vender_armado"]
+T263 2 toque(s) seguidos en Vender c: ["vender_armado", "vender_muy_rapido"]
+T263 doble toque en Mejorar c: nivel 1 -> 2
+T263 flujo mejorar antes: nivel 1 -> 2 con 2 toques, -> 3 con 3 toques
+T263 flujo vender antes: torre elegida=true · vendida=true con 2 toques · botones: []
+T263 flujo mejorar a: nivel 1 -> 2 con 2 toques, -> 3 con 3 toques
+T263 flujo vender a: torre elegida=true · vendida=true con 3 toques · botones: ["vender_armado", "vender"]
+T263 flujo mejorar b: nivel 1 -> 2 con 2 toques, -> 3 con 3 toques
+T263 flujo vender b: torre elegida=true · vendida=true con 3 toques · botones: ["vender_armado", "vender"]
+T263 flujo mejorar c: nivel 1 -> 2 con 2 toques, -> 3 con 3 toques
+T263 flujo vender c: torre elegida=true · vendida=true con 3 toques · botones: ["vender_armado", "vender"]
+T263 lámina res://art/t263-mejora-torre/lamina_normal_20x9.png
+T263 lámina res://art/t263-mejora-torre/lamina_derecha_20x9.png
+T263 lámina res://art/t263-mejora-torre/lamina_sin_oro_20x9.png
+T263 lámina res://art/t263-mejora-torre/lamina_maximo_20x9.png
+T263 lámina res://art/t263-mejora-torre/lamina_estados_a_20x9.png
+T263 lámina res://art/t263-mejora-torre/lamina_estados_b_20x9.png
+T263 lámina res://art/t263-mejora-torre/lamina_estados_c_20x9.png
+T263 fin
