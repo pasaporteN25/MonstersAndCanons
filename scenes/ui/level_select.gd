@@ -17,6 +17,7 @@ const VISIBLE_ROWS: int = 2
 const CARD_STAR_SIZE: float = 26.0
 const TOWER_ICON_SIZE: float = 22.0
 const TOWER_ICON_COLUMNS: int = 8
+const TOWER_BADGE_SIZE: float = 23.0
 const CARD_CONTENT_LEFT: float = 6.0
 const CARD_CONTENT_WIDTH: float = CARD_SIZE.x - CARD_CONTENT_LEFT * 2.0
 const NEW_COLOR := Color(1.0, 0.6, 0.15)
@@ -380,20 +381,53 @@ func _add_tower_icons(card: Button, index: int, level: LevelData, unlocked: bool
 	var fresh: PackedStringArray = TowerOffer.new_tower_ids(levels, index, _all_towers)
 	var offered: Array[TowerData] = TowerOffer.offered(level, _all_towers)
 	var rows: int = maxi(ceili(float(offered.size()) / TOWER_ICON_COLUMNS), 1)
-	var icon_size: float = minf(TOWER_ICON_SIZE, 44.0 / float(rows))
+	var plate := Panel.new()
+	plate.name = "TowerPlate"
+	plate.position = Vector2(CARD_CONTENT_LEFT, 88.0)
+	plate.size = Vector2(CARD_CONTENT_WIDTH, 64.0 if rows > 1 else 41.0)
+	plate.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var plate_style := StyleBoxFlat.new()
+	plate_style.bg_color = Color(0.12, 0.15, 0.19, 0.84)
+	plate_style.border_color = Color(0.37, 0.29, 0.19, 0.9)
+	plate_style.set_border_width_all(1)
+	plate_style.set_corner_radius_all(7)
+	plate.add_theme_stylebox_override("panel", plate_style)
+	card.add_child(plate)
+	var title := Label.new()
+	title.name = "TowerTitle"
+	title.text = "Torres  ·  %d" % offered.size()
+	title.add_theme_font_size_override("font_size", 11)
+	title.add_theme_color_override("font_color", Color(0.76, 0.59, 0.34))
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	title.position = Vector2(0, 0)
+	title.size = Vector2(CARD_CONTENT_WIDTH, 14)
+	plate.add_child(title)
 	var row := HFlowContainer.new()
 	row.name = "TowerIcons"
 	row.add_theme_constant_override("h_separation", 0)
 	row.add_theme_constant_override("v_separation", 0)
 	row.alignment = FlowContainer.ALIGNMENT_CENTER
 	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	row.position = Vector2(CARD_CONTENT_LEFT, 89.0 + (44.0 - float(rows) * icon_size) / 2.0)
-	row.size = Vector2(CARD_CONTENT_WIDTH, float(rows) * icon_size)
+	row.position = Vector2(0, 15.0)
+	row.size = Vector2(CARD_CONTENT_WIDTH, float(rows) * TOWER_BADGE_SIZE)
+	plate.add_child(row)
 	for tower: TowerData in offered:
+		var badge := Panel.new()
+		badge.name = "Badge_%s" % tower.id
+		badge.custom_minimum_size = Vector2(TOWER_BADGE_SIZE, TOWER_BADGE_SIZE)
+		badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		var badge_style := StyleBoxFlat.new()
+		badge_style.bg_color = Color(0.20, 0.21, 0.22, 0.98)
+		badge_style.border_color = Color(0.63, 0.43, 0.22, 1.0)
+		badge_style.set_border_width_all(1)
+		badge_style.set_corner_radius_all(12)
+		badge.add_theme_stylebox_override("panel", badge_style)
 		var icon := TextureRect.new()
 		icon.name = String(tower.id)
 		icon.texture = Tower.make_icon(tower)
-		icon.custom_minimum_size = Vector2(icon_size, icon_size)
+		icon.custom_minimum_size = Vector2(TOWER_ICON_SIZE, TOWER_ICON_SIZE)
 		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		icon.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
@@ -405,12 +439,16 @@ func _add_tower_icons(card: Button, index: int, level: LevelData, unlocked: bool
 			var mark := ColorRect.new()
 			mark.name = "NewMark"
 			mark.color = NEW_COLOR
-			mark.size = Vector2(minf(7.0, icon_size * 0.35), minf(7.0, icon_size * 0.35))
-			mark.position = Vector2(icon_size - mark.size.x - 1.0, 1.0)
+			mark.size = Vector2(7, 7)
 			mark.mouse_filter = Control.MOUSE_FILTER_IGNORE
 			icon.add_child(mark)
-		row.add_child(icon)
-	card.add_child(row)
+		badge.add_child(icon)
+		icon.position = Vector2((TOWER_BADGE_SIZE - TOWER_ICON_SIZE) / 2.0, (TOWER_BADGE_SIZE - TOWER_ICON_SIZE) / 2.0)
+		icon.size = Vector2(TOWER_ICON_SIZE, TOWER_ICON_SIZE)
+		var new_mark: ColorRect = icon.get_node_or_null("NewMark") as ColorRect
+		if new_mark != null:
+			new_mark.position = Vector2(icon.size.x - new_mark.size.x - 1.0, 1.0)
+		row.add_child(badge)
 
 
 ## Una tarjeta de un mapa de la comunidad (RF-221). Con errores: deshabilitada y con el motivo (RF-222).

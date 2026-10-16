@@ -19,7 +19,7 @@ Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle t�
 - **Se coloca con una torre fantasma:** tocás una casilla, ves cómo queda, y confirmás con la **tilde** (o cancelás con la **cruz**). **Nada se compra al apoyar el dedo.** Al colocar, la torre se deselecciona.
 - **Zoom con los dedos:** pinza para acercar y alejar, dos dedos para mover el mapa y un botón «Ver todo». En la computadora, con la rueda del mouse y el botón del medio.
 - **La barra de abajo muestra la torre elegida:** nombre, nivel, estadísticas, «Mejorar» (con el costo o el motivo si no se puede) y «Vender», que pide un segundo toque.
-- **Las tarjetas de nivel muestran las torres como insignias de bronce** (en PC y en celular).
+- **Las tarjetas de nivel ya muestran las torres como insignias de bronce** (T270, en PC y en celular).
 - **La PC queda igual** y en Opciones se podrá forzar el modo celular o el de PC para probar.
 - **Las estatuas de los mapas pasarán a ser estatuas de torres de piedra**, en lugar de la persona con espada.
 

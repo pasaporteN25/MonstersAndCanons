@@ -347,9 +347,50 @@ func test_the_place_label_sits_between_the_name_and_the_waves() -> void:
 	var card: Button = _card(select, 0)
 	var place: Label = card.get_node("Place")
 	var name: Label = card.get_node("LevelName")
-	var icons: Control = card.get_node("TowerIcons")
+	var plate: Control = card.get_node("TowerPlate")
+	var icons: Control = plate.get_node("TowerIcons")
 	assert_gte(place.position.y, name.position.y + name.size.y, "el lugar va directamente debajo del nombre")
-	assert_gte(icons.position.y, place.position.y + place.size.y, "los íconos van debajo del lugar")
+	assert_gte(plate.position.y + icons.position.y, place.position.y + place.size.y, "los íconos van debajo del lugar")
+
+
+func test_campaign_cards_keep_the_same_tower_offer_and_show_badges_for_all_levels() -> void:
+	var select: Control = SELECT_SCENE.instantiate()
+	add_child_autofree(select)
+	await wait_process_frames(2)
+	var towers: Array[TowerData] = TowerOffer.canonical_towers()
+	var levels: Array[LevelData] = []
+	for index: int in GameFlow.level_count():
+		levels.append(GameFlow.level(index))
+	for index: int in GameFlow.level_count():
+		var card: Button = _card(select, index)
+		var level: LevelData = levels[index]
+		var expected: Array[TowerData] = TowerOffer.offered(level, towers)
+		var icons: Control = card.get_node("TowerPlate/TowerIcons")
+		var actual: Array[String] = []
+		for badge: Node in icons.get_children():
+			actual.append(String((badge as Control).get_child(0).name))
+		assert_eq(actual, _tower_ids(expected), "nivel %d: conserva la lista y el orden" % (index + 1))
+		assert_eq(card.get_node("TowerPlate/TowerTitle").text, "Torres  ·  %d" % expected.size())
+		assert_true(card.tooltip_text.contains(expected[0].display_name), "nivel %d: conserva el tooltip" % (index + 1))
+		for badge: Node in icons.get_children():
+			assert_lte((badge as Control).position.x + (badge as Control).size.x, icons.size.x + 0.1)
+		assert_lte(card.get_node("TowerPlate").position.y + card.get_node("TowerPlate").size.y,
+			card.get_node("Stars").position.y, "nivel %d: la placa no pisa las estrellas" % (index + 1))
+	assert_eq(select.get_node("%Cards").get_child(0).get_node("TowerPlate/TowerIcons").get_child_count(), 8,
+		"el nivel 1 usa una fila de ocho insignias")
+	assert_eq(select.get_node("%Cards").get_child(11).get_node("TowerPlate/TowerIcons").get_child_count(), 10,
+		"el nivel 12 muestra las diez torres en dos filas")
+	assert_true(select.get_node("%Cards").get_child(0).tooltip_text.contains("Nueva"),
+		"se conserva el indicador de torre nueva en el tooltip")
+	assert_not_null(select.get_node("%Cards").get_child(0).find_child("NewMark", true, false),
+		"se conserva la marca naranja de torre nueva")
+
+
+func _tower_ids(towers: Array[TowerData]) -> Array[String]:
+	var result: Array[String] = []
+	for tower: TowerData in towers:
+		result.append(String(tower.id))
+	return result
 
 
 # --- Medidas (RF-466: que entre en 1280 × 720 y en el celular, sin tapar los botones de arriba) ---
