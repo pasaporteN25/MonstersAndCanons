@@ -5,6 +5,7 @@ const PATH: String = "res://data/ui/mobile_ui.json"
 const DEFAULTS: Dictionary = {
 	"boton_alto_px": 56,
 	"barra_alta_px": 64,
+	"barra_baja_px": 96,
 	"separacion_px": 8,
 	"flotante_min_px": 82,
 	"flotante_min_mm": 7.6,
@@ -23,7 +24,11 @@ const DEFAULTS: Dictionary = {
 	"vender_min_s": 0.4,
 	"mejorar_bloqueo_s": 0.35,
 	"zoom_casilla_max_px": 96,
+	"zoom_rueda_factor": 1.1,
 	"fantasma_distancia_botones": 1,
+	"fantasma_botones_arriba_px": 8,
+	"ver_todo_x_px": 1188,
+	"ver_todo_y_px": 74,
 }
 
 var values: Dictionary = DEFAULTS.duplicate(true)

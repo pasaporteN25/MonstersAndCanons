@@ -123,3 +123,63 @@ func test_mobile_placement_buttons_show_cost_and_disable_invalid_placement() -> 
 	mobile_hud.show_placement(Vector2(500.0, 400.0), "300 + 3", false, "Ahí no")
 	assert_true(confirm.disabled)
 	assert_true(confirm.text.contains("Ahí no"))
+
+
+func test_camera_zoom_is_clamped_between_automatic_and_cell_limits() -> void:
+	assert_eq(CameraController.clamp_zoom(0.25, 0.75, 1.5), 0.75)
+	assert_eq(CameraController.clamp_zoom(1.1, 0.75, 1.5), 1.1)
+	assert_eq(CameraController.clamp_zoom(2.0, 0.75, 1.5), 1.5)
+	assert_eq(CameraController.clamp_center(Vector2(-10.0, 200.0), Rect2(0.0, 0.0, 100.0, 100.0)), Vector2(0.0, 100.0))
+
+
+func test_mobile_double_tap_builds_once_and_deselects() -> void:
+	var original_setting: Variant = SaveManager.get_setting("ui_mode")
+	SaveManager.set_setting("ui_mode", UiMode.MOBILE)
+	var game: Game = (load("res://scenes/game/game.tscn") as PackedScene).instantiate() as Game
+	add_child_autofree(game)
+	await get_tree().process_frame
+	var controller: BuildController = game.build_controller
+	var tower: TowerData = game.available_towers[0]
+	var cell := Vector2i.ZERO
+	for y: int in game.level.map_size().y:
+		for x: int in game.level.map_size().x:
+			var candidate := Vector2i(x, y)
+			if game.level.is_buildable(candidate) and controller.cells_free(tower, candidate):
+				cell = candidate
+				break
+		if controller.cells_free(tower, cell):
+			break
+	var starting_gold: int = game.session.gold
+	controller.select(0)
+	controller._mobile_map_tap(game.level.cell_center(cell), 1000)
+	assert_eq(game.session.gold, starting_gold, "el primer toque deja el fantasma sin cobrar")
+	assert_eq(game.tower_container.get_child_count(), 0)
+	controller._mobile_map_tap(game.level.cell_center(cell), 1349)
+	assert_eq(game.session.gold, starting_gold - tower.build_gold(false))
+	assert_eq(game.tower_container.get_child_count(), 1)
+	assert_null(controller.selected_tower(), "después de construir se deselecciona")
+	var camera: CameraController = game.camera_controller
+	var current_ghost_cell: Vector2i = controller.ghost_placement().cell
+	camera._zoom_at(Vector2(640.0, 344.0), 10.0)
+	assert_eq(game.camera.zoom.x, 1.5)
+	assert_true(game.mobile_hud.get_node("ViewAll").visible)
+	camera.view_all()
+	assert_true(is_equal_approx(game.camera.zoom.x, game.minimum_map_zoom))
+	assert_false(game.mobile_hud.get_node("ViewAll").visible)
+	assert_eq(controller.ghost_placement().cell, current_ghost_cell, "el zoom no mueve el fantasma")
+	SaveManager.set_setting("ui_mode", original_setting)
+
+
+func test_pc_camera_input_adds_zoom_without_mobile_controls() -> void:
+	var original_setting: Variant = SaveManager.get_setting("ui_mode")
+	SaveManager.set_setting("ui_mode", UiMode.PC)
+	var game: Game = (load("res://scenes/game/game.tscn") as PackedScene).instantiate() as Game
+	add_child_autofree(game)
+	await get_tree().process_frame
+	assert_null(game.mobile_hud, "la PC no agrega botones visibles")
+	game.camera_controller._zoom_at(Vector2(640.0, 336.0), 1.1)
+	assert_true(is_equal_approx(game.camera.zoom.x, 1.1))
+	game.camera_controller._pan_by_screen_delta(Vector2(5000.0, 5000.0))
+	var map_rect := Rect2(game.level.position, Vector2(game.level.map_size()) * Rules.TILE_SIZE)
+	assert_eq(game.camera.position, CameraController.clamp_center(game.camera.position, map_rect))
+	SaveManager.set_setting("ui_mode", original_setting)

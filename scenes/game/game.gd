@@ -39,6 +39,8 @@ var level: Level
 ## RF-251: solo existe si el mapa es más grande que 20×9 (hay que achicar el mundo para que entre).
 var camera: Camera2D
 var mobile_hud: MobileHud
+var camera_controller: CameraController
+var minimum_map_zoom: float = 1.0
 ## RF-217: se está probando el nivel del editor (no hay campaña: no se guarda nada).
 var testing: bool = false
 ## RF-184: el panel de pruebas. null si no es el modo de pruebas.
@@ -130,6 +132,12 @@ func _ready() -> void:
 		add_child(mobile_hud)
 		mobile_hud.confirm_placement_pressed.connect(build_controller.confirm_ghost)
 		mobile_hud.cancel_placement_pressed.connect(build_controller.cancel)
+	camera_controller = CameraController.new()
+	camera_controller.name = "CameraController"
+	add_child(camera_controller)
+	camera_controller.setup(level, camera, minimum_map_zoom, Callable(self, "_create_interactive_camera"), mobile_hud, UiMode.is_mobile())
+	if mobile_hud != null:
+		mobile_hud.view_all_pressed.connect(camera_controller.view_all)
 	build_controller.tower_built.connect(_on_tower_built)
 	build_controller.tower_upgraded.connect(_on_tower_upgraded)
 	build_controller.tower_sold.connect(_on_tower_sold)
@@ -300,16 +308,34 @@ func _fit_map() -> void:
 		var mobile_config: MobileUiConfig = MobileUiConfig.load_from()
 		var top_height: float = float(mobile_config.get_value("barra_alta_px"))
 		var bottom_height: float = float(hud.get_node("BottomBar").size.y)
-		zoom = minf(1.0, minf(1280.0 / (size.x * Rules.TILE_SIZE), (720.0 - top_height - bottom_height) / (size.y * Rules.TILE_SIZE)))
+		zoom = minf(1.0, minf(Rules.SCREEN_SIZE.x / (size.x * Rules.TILE_SIZE), (Rules.SCREEN_SIZE.y - top_height - bottom_height) / (size.y * Rules.TILE_SIZE)))
+	minimum_map_zoom = zoom
 	if zoom >= 1.0:
 		return
 	camera = Camera2D.new()
 	camera.zoom = Vector2(zoom, zoom)
-	var area := Rect2(0.0, 64.0 if UiMode.is_mobile() else 48.0, 1280.0, 720.0 - (64.0 if UiMode.is_mobile() else 48.0) - float(hud.get_node("BottomBar").size.y))
+	var top_height: float = float(MobileUiConfig.load_from().get_value("barra_alta_px")) if UiMode.is_mobile() else 48.0
+	var area := Rect2(0.0, top_height, Rules.SCREEN_SIZE.x, Rules.SCREEN_SIZE.y - top_height - float(hud.get_node("BottomBar").size.y))
 	var map_center: Vector2 = level.position + Vector2(size) * Rules.TILE_SIZE / 2.0
 	camera.position = map_center + (Rules.SCREEN_SIZE / 2.0 - area.get_center()) / zoom
 	add_child(camera)
 	camera.make_current()
+
+
+func _create_interactive_camera() -> Camera2D:
+	if camera != null:
+		return camera
+	camera = Camera2D.new()
+	camera.zoom = Vector2.ONE * minimum_map_zoom
+	var size: Vector2i = level.map_size()
+	var top_height: float = float(MobileUiConfig.load_from().get_value("barra_alta_px")) if UiMode.is_mobile() else 48.0
+	var bottom_height: float = float(hud.get_node("BottomBar").size.y)
+	var area := Rect2(0.0, top_height, Rules.SCREEN_SIZE.x, Rules.SCREEN_SIZE.y - top_height - bottom_height)
+	var map_center: Vector2 = level.position + Vector2(size) * Rules.TILE_SIZE / 2.0
+	camera.position = map_center + (Rules.SCREEN_SIZE / 2.0 - area.get_center()) / minimum_map_zoom
+	add_child(camera)
+	camera.make_current()
+	return camera
 
 
 func _process(delta: float) -> void:
