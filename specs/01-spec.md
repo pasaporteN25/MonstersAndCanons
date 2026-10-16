@@ -1344,6 +1344,58 @@ Cosas que **no** hace falta decidir ahora; se deciden antes del hito indicado.
 
 Ideas **aprobadas como dirección**, pero **sin fecha**: no se programan hasta convertirse en un hito con sus propias reglas (RF) y tareas. Se anotan aquí para no perderlas ni mezclarlas con el trabajo actual.
 
+### Prioridad máxima · Devolución de Lucas y testers, 2026-10-16
+
+**Este bloque tiene precedencia sobre las prioridades históricas de este backlog.** Se registra el pedido; **no autoriza todavía implementación, cambios de balance ni producción de assets**. Tareas pendientes y criterios en [03-tareas.md](03-tareas.md#prioridad-máxima--mobile-presentación-y-próxima-prueba-2026-10-16).
+
+| Entrada | Pedido | Tareas | Prioridad |
+|---|---|---|---|
+| B-33 | Analizar y optimizar la experiencia mobile hasta equipararla a la calidad actual de desktop. | T262 | Máxima |
+| B-34 | Reducir diálogos e información al mejorar torres desde el celular. | T263 | Máxima |
+| B-35 | Zoom táctil y compra/colocación de torres más cómoda y segura. | T264 | Máxima |
+| B-36 | Rediseñar la presentación de torres disponibles en la selección de niveles, en ambas plataformas. | T265 | Máxima |
+| B-37 | Auditar la progresión de dificultad de toda la campaña, especialmente niveles 2 y 7. | T266 | Máxima; resolver antes de la próxima entrega al tester |
+| B-38 | Mejorar nuevamente los assets de los primeros y últimos niveles. | T267 | Máxima; resolver antes de la próxima entrega al tester |
+| B-39 | Verificar el guardado del primer tester y preparar la próxima prueba. | T268 | Máxima; antes del reenvío |
+
+### B-33 · Análisis integral y optimización mobile
+
+Comparar mobile con el desktop actual: comodidad, legibilidad, navegación, cantidad de pasos, superficie útil del mapa y rendimiento. Probar en celulares reales y medir antes de optimizar. Entregar problemas priorizados, evidencia y propuestas de tareas pequeñas; incluir B-34/B-35/B-36. No asumir que el diseño de escritorio alcanza por escalarlo. **T262** produce el análisis, sin implementar.
+
+### B-34 · Mejoras de torre con menos fricción en mobile
+
+Reducir ventanas de diálogo y exceso de información para que subir una torre sea rápido y claro. Mostrar la acción y su costo con buena jerarquía; evaluar información secundaria bajo demanda y cómo evitar mejoras o ventas accidentales. La forma final se define después del análisis. No reabre como incompleto el rediseño histórico B-28: es una nueva revisión de la experiencia táctil. **T263**.
+
+### B-35 · Zoom, tienda y colocación táctil de torres
+
+**Clave para Lucas:** poder hacer zoom en el celular. Estudiar zoom con gesto de pinza y desplazamiento, sin que el gesto construya o seleccione por accidente. Evaluar torres de compra más grandes y, como alternativa, un botón de tienda/carrito que abra el catálogo solo cuando se quiere comprar y libere espacio del mapa al cerrarse.
+
+Comparar dos flujos: seleccionar torre → previsualizar y ajustar su casilla → aceptar con tilde/cancelar; o colocación automática con una protección frente a errores por tocar sin haber hecho zoom. **La tilde, el carrito y la colocación automática son alternativas por resolver, no decisiones cerradas.** Evaluar precisión con el dedo, oclusión, costo en pasos, rapidez durante oleadas y torres de 2×2. Entregar recomendación y casos de error antes de implementar. **T264**.
+
+### B-36 · Torres disponibles en la selección de niveles
+
+Conservar la información de qué torres se pueden usar: Lucas la considera útil. Cambiar su presentación actual, que resulta poco estética, para **desktop y mobile**. Proponer variantes que encajen con la dirección visual del juego, con jerarquía, tamaños legibles y buena integración en las tarjetas; comparar niveles con pocas y muchas torres, sin saturar ni recortar. Relacionado con la tarjeta T250; no implica quitar la información. **T265**.
+
+### B-37 · Curva progresiva y estrategias de la campaña
+
+Un tester señaló que los niveles **2 y 7 eran los más difíciles en una versión vieja que solo tenía siete niveles**. Es evidencia histórica para investigar, no una medición del balance actual. Revisar los **15 niveles actuales**, los saltos entre vecinos y la influencia de la estrategia (composición, ubicación y mejoras de torres, recursos y comprensión de contramedidas), contrastando partidas humanas con varias estrategias y semillas del bot. Separar campaña de Asedio y sus antecedentes T255/T258.
+
+La progresión debe ser razonable: puede haber un descanso deliberado al introducir una mecánica (por ejemplo, que el 9 sea más fácil que el 8), pero no picos tempranos injustificados como los reportados. Documentar causas, excepciones pedagógicas y ajustes propuestos con comparación antes/después; no ajustar solo para una estrategia del bot. **T266**. Resolver y validar los problemas encontrados antes de volver a enviar el juego al primer tester.
+
+### B-38 · Nueva mejora de assets en primeros y últimos niveles
+
+Lucas sigue disconforme con los últimos assets incorporados a ambos extremos de la campaña. Relevar los assets realmente integrados y señalar cuáles conviene mejorar; no suponer que se refiere solo a suelo o decoración. Considerar T260 (revertida salvo flores), T261 (revertida), T233 y el arte final integrado. Presentar comparación del estado actual con propuestas, a escala real en mapa, antes de producir e integrar una nueva tanda.
+
+**Asignación obligatoria de Lucas: GPT 6.1 Sol (`gpt-6.1-sol`), esfuerzo medio, sí o sí.** Aplica a esta tarea de revisión y mejora de assets; no sustituir por otro modelo/esfuerzo. **T267**. Completar la mejora y validarla antes de la próxima entrega al tester; este registro no inicia generación ni modifica assets.
+
+### B-39 · Progreso del tester y condición de la próxima entrega
+
+Verificar con una copia del guardado real del tester que la versión nueva conserva su progreso y abre los niveles siguientes. El código actual usa `SAVE_VERSION = 1`, `user://save.json` y el directorio personalizado `JuegoA`; hay regresiones con formatos antiguos en `tests/test_old_saves.gd`. Esto respalda compatibilidad de formato, pero no verifica el archivo ni la build concreta del tester. Diferenciar progreso permanente de reanudar una partida a mitad de nivel: no se guarda el estado de oleada/torres para continuarla después de cerrar.
+
+En Windows, respaldar `%APPDATA%\Godot\app_userdata\JuegoA\save.json` con el juego cerrado antes de probar la actualización. Mismo usuario, misma carpeta de datos y guardado válido deberían conservar el progreso aunque el ejecutable esté en otra carpeta. El modo de pruebas usa `save_pruebas.json`; no confundirlo con el normal. No hay sincronización de progreso implementada entre máquinas o plataformas. Si cambia la ubicación, el formato es incompatible o el archivo está dañado, no prometer recuperación automática.
+
+**Lucas acepta pedir una campaña nueva**, pero primero deben quedar resueltos y validados **balance (B-37/T266) y assets (B-38/T267)**. Conservar el respaldo aun si se decide probar desde cero y documentar qué build se envía. **T268**; no reenviar el juego todavía.
+
 ### B-01 · Épocas: la guerra evoluciona con el tiempo
 **Trasladado por Lucas, 2026-10-07 (D-076):** Épocas no se hace en la V1; pasa al backlog de *Monsters & Canons 3D* o de *M&C 2* ([`06-monsters-canons-3d.md`](06-monsters-canons-3d.md) §15). La documentación de Épocas que menciona B-03 viaja con ella. El texto siguiente queda como registro.
 *Propuesta de Lucas, 2026-09-28.*
