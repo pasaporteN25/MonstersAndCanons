@@ -28,22 +28,30 @@ const SIGNAL_TOOL: Texture2D = preload("res://assets/sprites/map/herramienta.svg
 const SIGNAL_RIBBONS: Texture2D = preload("res://assets/sprites/map/poste_cintas.svg")
 const SIGNAL_RUIN: Texture2D = preload("res://assets/sprites/map/simbolo_ruina.svg")
 const SIGNAL_CAMP: Texture2D = preload("res://assets/sprites/map/campamento_vacio.svg")
-## T234 (RF-480): la central de energía del nivel 15, en cuatro cuartos de 64 × 64 (noroeste, noreste, suroeste y
+## T234 (RF-480): la central de energía del nivel 15, en cuatro PNG de 128 × 128 (noroeste, noreste, suroeste y
 ## sureste) sobre cuatro casillas contiguas, y las piezas de la cadena de abastecimiento. Son decoración permanente.
-const CENTRAL_1: Texture2D = preload("res://assets/sprites/map/central_1.svg")
-const CENTRAL_2: Texture2D = preload("res://assets/sprites/map/central_2.svg")
-const CENTRAL_3: Texture2D = preload("res://assets/sprites/map/central_3.svg")
-const CENTRAL_4: Texture2D = preload("res://assets/sprites/map/central_4.svg")
+const CENTRAL_1: Texture2D = preload("res://assets/sprites/map/rendered/central_1.png")
+const CENTRAL_2: Texture2D = preload("res://assets/sprites/map/rendered/central_2.png")
+const CENTRAL_3: Texture2D = preload("res://assets/sprites/map/rendered/central_3.png")
+const CENTRAL_4: Texture2D = preload("res://assets/sprites/map/rendered/central_4.png")
 const SUPPLY_DEPOT: Texture2D = preload("res://assets/sprites/map/supply_depot.svg")
 const SUPPLY_LINE_POLE: Texture2D = preload("res://assets/sprites/map/supply_line_pole.svg")
 const SUPPLY_CART: Texture2D = preload("res://assets/sprites/map/supply_cart.svg")
 const SUPPLY_CONVEYOR: Texture2D = preload("res://assets/sprites/map/supply_conveyor.svg")
 
+## T277: arte aprobado; los estados son visuales y no agregan ids a la leyenda.
+const MINE: Array[Texture2D] = [preload("res://assets/sprites/map/rendered/mine_idle.png"), preload("res://assets/sprites/map/rendered/mine_active.png"), preload("res://assets/sprites/map/rendered/mine_depleted.png")]
+const FOREST: Array[Texture2D] = [preload("res://assets/sprites/map/rendered/forest_idle.png"), preload("res://assets/sprites/map/rendered/forest_active.png"), preload("res://assets/sprites/map/rendered/forest_depleted.png")]
+const RUBBLE: Array[Texture2D] = [preload("res://assets/sprites/map/rendered/rubble_idle.png"), preload("res://assets/sprites/map/rendered/rubble_working.png")]
+const STATUES_MOSS: Array[Texture2D] = [preload("res://assets/sprites/map/rendered/statue_cannon_moss.png"), preload("res://assets/sprites/map/rendered/statue_sniper_moss.png"), preload("res://assets/sprites/map/rendered/statue_basic_moss.png")]
+const STATUES_FROST: Array[Texture2D] = [preload("res://assets/sprites/map/rendered/statue_cannon_frost.png"), preload("res://assets/sprites/map/rendered/statue_sniper_frost.png"), preload("res://assets/sprites/map/rendered/statue_basic_frost.png")]
+
 ## El dibujo de cada objeto. Van con `preload` (se cargan con el script).
 const TEXTURES: Dictionary = {
 	"roca": MapThemes.ROCK_A, "arbol": MapThemes.TREE, "arbusto": MapThemes.BUSH, "flores": FLOWERS,
 	"cactus": MapThemes.CACTUS, "pino": MapThemes.PINE, "columna": MapThemes.COLUMN, "tronco": MapThemes.LOG,
-	"helecho": MapThemes.FERN, "junco": MapThemes.REEDS, "hongo": MapThemes.MUSHROOM, "estatua": MapThemes.STATUE,
+	"helecho": MapThemes.FERN, "junco": MapThemes.REEDS, "hongo": MapThemes.MUSHROOM, "estatua": STATUES_MOSS[0],
+	"mina": MINE[0], "bosque_explotable": FOREST[0], "escombro": RUBBLE[0],
 	"roca_marcada": SIGNAL_ROCK, "sendero": SIGNAL_PATH, "herramienta": SIGNAL_TOOL,
 	"poste_cintas": SIGNAL_RIBBONS, "simbolo_ruina": SIGNAL_RUIN, "campamento_vacio": SIGNAL_CAMP,
 	"central_1": CENTRAL_1, "central_2": CENTRAL_2, "central_3": CENTRAL_3, "central_4": CENTRAL_4,
@@ -80,3 +88,18 @@ static func texture(id: String) -> Texture2D:
 ## Los colores de un suelo (vacío si es un objeto o no existe).
 static func ground_colors(id: String) -> Dictionary:
 	return GROUNDS.get(id, {})
+
+
+## La variante depende solo de la coordenada, sin tocar las casillas del mapa.
+static func statue_texture(cell: Vector2i, theme: StringName) -> Texture2D:
+	var variants: Array[Texture2D] = STATUES_FROST if theme == &"nieve" else STATUES_MOSS
+	return variants[posmod(cell.x + cell.y * 7, variants.size())]
+
+
+static func state_texture(drawing: String, state: ObstacleField.State) -> Texture2D:
+	var index: int = 2 if state == ObstacleField.State.DEPLETED else (1 if state == ObstacleField.State.ACTIVE else 0)
+	match drawing:
+		"mina": return MINE[index]
+		"bosque_explotable": return FOREST[index]
+		"escombro": return RUBBLE[1 if state == ObstacleField.State.WORKING else 0]
+	return texture(drawing)

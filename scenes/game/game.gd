@@ -245,6 +245,7 @@ func _setup_infrastructure() -> void:
 	obstacle_layer.name = "ObstacleLayer"
 	add_child(obstacle_layer)
 	obstacle_layer.setup(infrastructure, level)
+	(level.get_node("Decor") as LevelDecor).bind_field(infrastructure.field)
 	build_controller.obstacles = infrastructure
 	var panel: ObstaclePanel = hud.obstacle_panel
 	panel.demolish_pressed.connect(infrastructure.order)

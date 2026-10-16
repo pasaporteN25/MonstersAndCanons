@@ -2,6 +2,10 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Arte aprobado en el mapa *(T277, 2026-10-16)*
+
+Las estatuas de los niveles 1, 3 y 5 ahora representan Cañón, Francotirador y Ametralladora tallados en piedra con musgo y pedestal; siguen siendo decoración sin selección ni alcance. Mina y bosque explotable muestran dibujos renderizados distintos al habilitarse y agotarse; los escombros cambian durante la demolición. La Central del nivel 15 usa el edificio aprobado, continuo sobre sus cuatro casillas. Se conservan suelos, flores, torres, casillas y reglas de juego.
+
 ## Niveles 2 y 7 más justos *(T279, 2026-10-16)*
 
 El bot confirmó que los cambios de oleadas alivian los picos sin cambiar el aumento de vida. El nivel 2 ahora tiene un Jefe y no trae los 12 Blindados finales; el nivel 7 reduce los Rápidos de las oleadas 2, 11 y 18 y los Voladores de la 18. En cinco semillas, `mix` gana el nivel 2 con 16 vidas y `smart` con 17; en el nivel 7 ganan `smart` (5–6), `mix` (12), mejoras tempranas (9–11) y `demoler` (13). La regla de oro sigue cumpliéndose y los niveles 13, 14 y 15 conservaron sus mínimos (5, 3 y 2 vidas).
@@ -29,7 +33,7 @@ Lucas todavía tiene que jugar 1 → 2 → 3 y 6 → 7 → 8, además de las par
 - **La barra de abajo muestra la torre elegida:** nombre, nivel, estadísticas, «Mejorar» (con el costo o el motivo si no se puede) y «Vender», que pide un segundo toque.
 - **Las tarjetas de nivel ya muestran las torres como insignias de bronce** (T270, en PC y en celular).
 - **La PC queda igual**; el selector para forzar el modo celular o de PC ya está en Opciones.
-- **Las estatuas de los mapas pasarán a ser estatuas de torres de piedra**, en lugar de la persona con espada.
+- **Las estatuas de los niveles 1, 3 y 5 ya son torres de piedra** con el arte aprobado (T277).
 
 ## La intro: siete láminas con texto, que se pueden omitir y volver a ver *(T242, 2026-10-11)*
 

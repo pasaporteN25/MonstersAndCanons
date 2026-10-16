@@ -1,0 +1,23 @@
+{
+  "godot": "4.7.2",
+  "import_exit": 0,
+  "capture_exit": 0,
+  "gut_exit": 0,
+  "tests": 1660,
+  "passing": 1660,
+  "asserts": 20135,
+  "scripts": 118,
+  "script_errors": 0,
+  "parse_errors": 0,
+  "failed_to_load_script": 0,
+  "captures": 32,
+  "capture_resolution": [
+    1280,
+    720
+  ],
+  "approved_png_identical": 18,
+  "central_reconstructs_master": true,
+  "human_playthrough": false,
+  "physical_input": false,
+  "mobile_device": false
+}
