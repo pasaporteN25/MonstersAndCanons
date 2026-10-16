@@ -33,10 +33,11 @@
   Evaluar pinza y desplazamiento del mapa, opciones de compra más grandes y tienda/carrito desplegable. Comparar previsualización ajustable con tilde/cancelación frente a colocación automática protegida, incluyendo el caso de quien toca sin hacer zoom. No dar estas alternativas por aprobadas.
   **Hecho cuando:** hay flujos y muestras comparables, recomendación justificada, casos de torres de 1×1 y 2×2 y criterios para evitar compras al hacer gestos, colocar en casilla equivocada u ocultar el destino con el dedo; quedan explícitas las decisiones pendientes. Sin código.
 
-- [ ] **T265 · Rediseñar la presentación de torres disponibles en los niveles. Prioridad máxima.**
+- [x] **T265 · Rediseñar la presentación de torres disponibles en los niveles. Prioridad máxima.**
   **Refs:** B-36, T250 como antecedente. **Depende de:** ninguna para explorar variantes; coordinar mobile con T262.
   Conservar la información de torres disponibles y mejorar su estética e integración en la selección de niveles de desktop y mobile.
   **Hecho cuando:** hay variantes visuales comparadas con la pantalla actual, en ambas plataformas y en niveles con pocas/muchas torres; se verifica jerarquía, legibilidad y ausencia de saturación o recortes. Entrega una propuesta para elegir, sin tocar la interfaz implementada.
+  **Resultado (2026-10-16, Codex):** tres propuestas (Arsenal, Insignias e Inventario), comparación visual de los niveles 1 y 12 a 1280 × 720 y 20:9, con capturas reales de la selección y los prototipos de memoria en [`art/t265-torres-en-tarjetas/`](../../art/t265-torres-en-tarjetas/). Recomendación: Insignias; la elección de Lucas queda pendiente para G7. Informe: [`tareas/informes/T265-torres-en-tarjetas.md`](tareas/informes/T265-torres-en-tarjetas.md). Se probó `godot --headless --import` (código 0), `--check-only` del prototipo y la suite de GUT: 1635/1635 tests, 19 704 asserts, sin `SCRIPT ERROR`. No se modificó la interfaz del juego; las capturas mobile son proporción de escritorio, sin prueba en celular real.
 
 - [ ] **T266 · Auditar y corregir la progresión de dificultad antes de la próxima entrega. Prioridad máxima.**
   **Refs:** B-37; T255/T258 como antecedentes de Asedio, sin confundirlos con campaña. **Depende de:** ninguna para auditar; spec y decisiones antes de ajustar.
