@@ -8,6 +8,10 @@ signal exit_pressed
 signal catalog_opened(open: bool)
 signal tower_chosen(index: int, use_alt_payment: bool)
 signal infrastructure_tool_chosen(tool: StringName, class_id: StringName)
+signal upgrade_pressed
+signal sell_pressed
+signal targeting_pressed
+signal clear_selection_pressed
 
 var _config: MobileUiConfig
 var _prefs: UiPrefs
@@ -44,6 +48,25 @@ var _dragging: bool = false
 var _layout_tween: Tween
 var _target_cart_position: Vector2 = Vector2(-1000.0, -1000.0)
 var _target_exit_position: Vector2 = Vector2(-1000.0, -1000.0)
+var _status_bar: Control
+var _status_label: Label
+var _upgrade_button: Button
+var _target_button: Button
+var _sell_button: Button
+var _status_state: String = "empty"
+var _selected_placed: Tower
+var _sell_armed: bool = false
+var _sell_arm_left: float = 0.0
+var _sell_elapsed: float = 0.0
+var _upgrade_lock_left: float = 0.0
+var _upgrade_level_text: String = ""
+var _selected_sell_value: int = 0
+var _selected_resource_value: int = 0
+var _bottom_confirm: Button
+var _bottom_cancel: Button
+var _sell_gap: Control
+var _status_touch_button: Button
+var _status_touch_index: int = -1
 
 
 func _ready() -> void:
@@ -53,9 +76,218 @@ func _ready() -> void:
 	_build_placement_buttons()
 	_build_view_all_button()
 	_build_floating_buttons()
+	_build_status_bar()
 	_build_empty_catalog()
 	set_placement_visible(false)
 	_apply_saved_positions()
+
+
+func _build_status_bar() -> void:
+	var height: float = float(_config.get_value("barra_baja_px"))
+	_status_bar = Control.new()
+	_status_bar.name = "MobileStatusBar"
+	_status_bar.position = Vector2.ZERO
+	_status_bar.size = Vector2(Rules.SCREEN_SIZE.x, height)
+	_status_bar.position.y = Rules.SCREEN_SIZE.y - height
+	_status_bar.mouse_filter = Control.MOUSE_FILTER_PASS
+	add_child(_status_bar)
+	var row := HBoxContainer.new()
+	var margin_x: float = float(_config.get_value("barra_margen_x_px"))
+	var margin_y: float = float(_config.get_value("barra_margen_y_px"))
+	row.position = Vector2(margin_x, margin_y)
+	row.size = Vector2(Rules.SCREEN_SIZE.x - margin_x * 2.0, height - margin_y * 2.0)
+	row.mouse_filter = Control.MOUSE_FILTER_PASS
+	row.add_theme_constant_override("separation", int(_config.get_value("separacion_px")))
+	_status_bar.add_child(row)
+	_status_label = Label.new()
+	_status_label.name = "StatusText"
+	_status_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_status_label.custom_minimum_size.x = float(_config.get_value("barra_texto_min_ancho_px"))
+	_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_status_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_status_label.add_theme_font_size_override("font_size", int(_config.get_value("barra_fuente_px")))
+	row.add_child(_status_label)
+	_bottom_confirm = Button.new()
+	_bottom_confirm.name = "BottomConfirmPlacement"
+	_bottom_confirm.text = "✓"
+	_bottom_confirm.custom_minimum_size = Vector2(float(_config.get_value("tilde_ancho_px")), float(_config.get_value("tilde_alto_px")))
+	_bottom_confirm.pressed.connect(confirm_placement_pressed.emit)
+	row.add_child(_bottom_confirm)
+	_bottom_cancel = Button.new()
+	_bottom_cancel.name = "BottomCancelPlacement"
+	_bottom_cancel.text = "×"
+	_bottom_cancel.custom_minimum_size = Vector2(float(_config.get_value("cruz_lado_px")), float(_config.get_value("cruz_lado_px")))
+	_bottom_cancel.pressed.connect(_on_bottom_cancel_pressed)
+	row.add_child(_bottom_cancel)
+	_target_button = Button.new()
+	_target_button.name = "MobileTargeting"
+	_target_button.custom_minimum_size = Vector2(float(_config.get_value("apuntar_ancho_px")), float(_config.get_value("apuntar_alto_px")))
+	_target_button.add_theme_font_size_override("font_size", int(_config.get_value("accion_fuente_px")))
+	_target_button.pressed.connect(targeting_pressed.emit)
+	row.add_child(_target_button)
+	_upgrade_button = Button.new()
+	_upgrade_button.name = "MobileUpgrade"
+	_upgrade_button.custom_minimum_size = Vector2(float(_config.get_value("mejorar_ancho_px")), float(_config.get_value("mejorar_alto_px")))
+	_upgrade_button.add_theme_font_size_override("font_size", int(_config.get_value("accion_fuente_px")))
+	_upgrade_button.pressed.connect(_on_upgrade_pressed)
+	row.add_child(_upgrade_button)
+	_sell_gap = Control.new()
+	_sell_gap.name = "SellSeparation"
+	_sell_gap.custom_minimum_size.x = _catalog_virtual_mm(float(_config.get_value("vender_separacion_mm")))
+	_sell_gap.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(_sell_gap)
+	_sell_button = Button.new()
+	_sell_button.name = "MobileSell"
+	_sell_button.custom_minimum_size = Vector2(float(_config.get_value("vender_ancho_px")), float(_config.get_value("vender_alto_px")))
+	_sell_button.add_theme_font_size_override("font_size", int(_config.get_value("accion_fuente_px")))
+	_sell_button.pressed.connect(_on_sell_pressed)
+	row.add_child(_sell_button)
+	_set_empty_status()
+
+
+func _set_empty_status() -> void:
+	_status_state = "empty"
+	_status_label.text = "Tocá el carrito para elegir una torre"
+	_status_label.visible = true
+	_target_button.hide()
+	_upgrade_button.hide()
+	_sell_button.hide()
+	_sell_gap.hide()
+	_bottom_confirm.hide()
+	_bottom_cancel.hide()
+
+
+func show_ghost_status(tower_name: String, cost_text: String) -> void:
+	_status_state = "ghost"
+	_status_label.text = "%s  ·  %s" % [tower_name, cost_text]
+	_status_label.visible = true
+	_target_button.hide()
+	_upgrade_button.hide()
+	_sell_button.hide()
+	_sell_gap.hide()
+	_bottom_confirm.show()
+	_bottom_cancel.show()
+	_bottom_confirm.disabled = not _confirm_button.disabled
+	_bottom_confirm.text = "✓\n%s" % _confirm_button.text.get_slice("\n", 1) if not _confirm_button.disabled else "✕\n%s" % _confirm_button.text.get_slice("\n", 1)
+
+
+func show_selected_tower(tower: Tower, gold: int, sell_value: int, resource_value: int,
+		can_upgrade: bool, disabled_reason: String = "") -> void:
+	if tower == null:
+		_selected_placed = null
+		clear_sell_arm()
+		_set_empty_status()
+		return
+	if _selected_placed != tower:
+		clear_sell_arm()
+	_selected_placed = tower
+	_selected_sell_value = sell_value
+	_selected_resource_value = resource_value
+	_status_state = "tower"
+	var level_text: String = "Nivel %d de %d" % [tower.level_number(), tower.data.levels.size()]
+	var dots: String = "●".repeat(tower.level_number()) + "○".repeat(maxi(0, tower.data.levels.size() - tower.level_number()))
+	var state_text: String = ""
+	if tower.stun_left() > 0.0:
+		state_text = "  ·  Aturdida"
+	elif tower.wear_percent > 0:
+		state_text = "  ·  Desgaste %d%%" % tower.wear_percent
+	var stats: TowerLevelData = tower.stats()
+	_status_label.text = "%s%s\n%s  %s  ·  Daño %d  ·  Cadencia %.2f  ·  Alcance %d" % [
+		tower.data.display_name, state_text, level_text, dots, stats.damage,
+		tower.effective_fire_rate(), stats.range_tiles]
+	_status_label.visible = true
+	_target_button.show()
+	_bottom_cancel.show()
+	_bottom_cancel.text = "×"
+	_target_button.text = "Apuntar: %s" % tower.targeting_name()
+	_target_button.disabled = tower.data.support_only or tower.is_pulse_tower()
+	_upgrade_button.show()
+	if _upgrade_lock_left > 0.0:
+		_upgrade_button.text = _upgrade_level_text
+		_upgrade_button.disabled = true
+	elif not tower.can_upgrade():
+		_upgrade_button.text = "Nivel máximo"
+		_upgrade_button.disabled = true
+	elif not can_upgrade:
+		_upgrade_button.text = disabled_reason if disabled_reason != "" else "Faltan %d de oro" % maxi(0, tower.next_level_stats().cost - gold)
+		_upgrade_button.disabled = true
+	else:
+		_upgrade_button.text = "Mejorar → N%d\n%d de oro" % [tower.level_number() + 1, tower.next_level_stats().cost]
+		_upgrade_button.disabled = false
+	_sell_button.show()
+	_sell_gap.show()
+	_bottom_confirm.hide()
+	if resource_value > 0:
+		_sell_button.tooltip_text = "Devuelve %d de oro y %d recursos" % [sell_value, resource_value]
+	else:
+		_sell_button.tooltip_text = "Devuelve %d de oro" % sell_value
+	_refresh_sell_button(sell_value, resource_value)
+
+
+func begin_upgrade_lock(level_number: int) -> void:
+	_upgrade_lock_left = float(_config.get_value("mejorar_bloqueo_s"))
+	_upgrade_level_text = "¡Nivel %d!" % level_number
+
+
+func clear_sell_arm() -> void:
+	_sell_armed = false
+	_sell_arm_left = 0.0
+	_sell_elapsed = 0.0
+	if _selected_placed != null:
+		_refresh_sell_button(_selected_sell_value, _selected_resource_value)
+
+
+func _refresh_sell_button(sell_value: int, resource_value: int = 0) -> void:
+	if _sell_armed:
+		var refund: String = TowerText.refund_text(sell_value, resource_value)
+		_sell_button.text = "╔════╗\n🪙 Vender por %s\n╚════╝" % refund
+		_sell_button.add_theme_color_override("font_color", Color(1.0, 0.8, 0.25))
+		_sell_button.add_theme_stylebox_override("normal", _double_border_style())
+	else:
+		_sell_button.text = "Vender"
+		_sell_button.remove_theme_color_override("font_color")
+		_sell_button.remove_theme_stylebox_override("normal")
+
+
+func _double_border_style() -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color(0.34, 0.18, 0.08)
+	style.border_color = Color(1.0, 0.77, 0.25)
+	style.set_border_width_all(int(_config.get_value("vender_borde_px")))
+	style.set_corner_radius_all(int(_config.get_value("vender_radio_px")))
+	style.content_margin_left = float(_config.get_value("vender_padding_x_px"))
+	style.content_margin_right = float(_config.get_value("vender_padding_x_px"))
+	style.content_margin_top = float(_config.get_value("vender_padding_y_px"))
+	style.content_margin_bottom = float(_config.get_value("vender_padding_y_px"))
+	return style
+
+
+func _on_upgrade_pressed() -> void:
+	if _upgrade_lock_left <= 0.0 and not _upgrade_button.disabled:
+		upgrade_pressed.emit()
+
+
+func _on_bottom_cancel_pressed() -> void:
+	if _status_state == "tower":
+		clear_selection_pressed.emit()
+	else:
+		cancel_placement_pressed.emit()
+
+
+func _on_sell_pressed() -> void:
+	if _selected_placed == null:
+		return
+	if not _sell_armed:
+		_sell_armed = true
+		_sell_elapsed = 0.0
+		_sell_arm_left = float(_config.get_value("vender_rearmar_s"))
+		_refresh_sell_button(_selected_sell_value, _selected_resource_value)
+		return
+	if _sell_elapsed < float(_config.get_value("vender_min_s")):
+		return
+	clear_sell_arm()
+	sell_pressed.emit()
 
 
 func _build_placement_buttons() -> void:
@@ -312,6 +544,10 @@ func show_placement(world_position: Vector2, cost_text: String, valid: bool, rea
 	_confirm_button.disabled = not valid
 	_confirm_button.tooltip_text = "Confirmar construcción" if valid else reason
 	_cancel_button.tooltip_text = "Cancelar construcción"
+	_bottom_confirm.visible = true
+	_bottom_cancel.visible = true
+	_bottom_confirm.disabled = _confirm_button.disabled
+	_bottom_confirm.text = _confirm_button.text
 	set_placement_visible(true)
 	_update_placement_position()
 	_update_floating_layout()
@@ -327,6 +563,9 @@ func set_placement_visible(enabled: bool) -> void:
 		_cart_button.modulate.a = float(_config.get_value("opacidad_con_fantasma")) if enabled else 1.0
 		_exit_button.modulate.a = float(_config.get_value("opacidad_con_fantasma")) if enabled else 1.0
 	if not enabled:
+		if _bottom_confirm != null:
+			_bottom_confirm.hide()
+			_bottom_cancel.hide()
 		_update_floating_layout()
 
 
@@ -343,12 +582,15 @@ func set_cart_active(active: bool) -> void:
 func set_game_over(over: bool) -> void:
 	_game_over = over
 	if over:
+		clear_sell_arm()
 		close_catalog()
 	_update_floating_visibility()
 
 
 func set_modal_open(open: bool) -> void:
 	_modal_open = open
+	if open:
+		clear_sell_arm()
 	_update_floating_visibility()
 
 
@@ -362,6 +604,7 @@ func is_catalog_open() -> bool:
 
 
 func open_catalog() -> void:
+	clear_sell_arm()
 	_catalog_open = true
 	_catalog_dim.show()
 	_catalog_panel.show()
@@ -380,7 +623,8 @@ func close_catalog() -> void:
 func is_interactive_at(screen_pos: Vector2) -> bool:
 	if _catalog_open and (_catalog_panel.get_global_rect().has_point(screen_pos) or _catalog_dim.get_global_rect().has_point(screen_pos)):
 		return true
-	for button: Button in [_confirm_button, _cancel_button, _view_all_button, _cart_button, _exit_button]:
+	for button: Button in [_confirm_button, _cancel_button, _view_all_button, _cart_button, _exit_button,
+			_upgrade_button, _target_button, _sell_button]:
 		if button != null and button.visible and button.get_global_rect().has_point(screen_pos):
 			return true
 	return false
@@ -393,6 +637,8 @@ func _input(event: InputEvent) -> void:
 		return
 	if event is InputEventScreenTouch:
 		var touch: InputEventScreenTouch = event as InputEventScreenTouch
+		if _handle_status_touch(touch.index, touch.position, touch.pressed):
+			return
 		_handle_drag_touch(touch.index, touch.position, touch.pressed)
 	elif event is InputEventScreenDrag:
 		var drag: InputEventScreenDrag = event as InputEventScreenDrag
@@ -407,6 +653,26 @@ func _input(event: InputEvent) -> void:
 		var motion: InputEventMouseMotion = event as InputEventMouseMotion
 		_update_drag(motion.position)
 		get_viewport().set_input_as_handled()
+
+
+func _handle_status_touch(index: int, pos: Vector2, pressed: bool) -> bool:
+	if pressed:
+		for button: Button in [_bottom_confirm, _bottom_cancel, _target_button, _upgrade_button, _sell_button]:
+			if button != null and button.visible and button.get_global_rect().has_point(pos):
+				_status_touch_button = button
+				_status_touch_index = index
+				get_viewport().set_input_as_handled()
+				return true
+		return false
+	if _status_touch_button == null or _status_touch_index != index:
+		return false
+	var button: Button = _status_touch_button
+	_status_touch_button = null
+	_status_touch_index = -1
+	if button.visible and not button.disabled and button.get_global_rect().has_point(pos):
+		button.pressed.emit()
+	get_viewport().set_input_as_handled()
+	return true
 
 
 func _handle_drag_touch(index: int, pos: Vector2, pressed: bool) -> void:
@@ -543,7 +809,14 @@ func _on_cart_pressed() -> void:
 		open_catalog()
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
+	if _upgrade_lock_left > 0.0:
+		_upgrade_lock_left = maxf(0.0, _upgrade_lock_left - delta)
+	if _sell_armed:
+		_sell_elapsed += delta
+		_sell_arm_left -= delta
+		if _sell_arm_left <= 0.0:
+			clear_sell_arm()
 	if _ghost_visible:
 		_update_placement_position()
 		_update_floating_layout()

@@ -80,6 +80,8 @@ var bar_tabs: BarTabs
 var infrastructure_tab: InfrastructureTab
 ## Cuántas torres tiene la barra y si lleva pestañas: de ahí salen el ancho de los botones y sus teclas.
 var _tabs_enabled: bool = false
+var _mobile_wave_controls_visible: bool = true
+var _has_next_wave: bool = false
 @onready var _exit_button: Button = %ExitButton
 @onready var _pause_button: Button = %PauseButton
 @onready var _speed_button: Button = %SpeedButton
@@ -261,7 +263,8 @@ func setup_waves(waves: Array[WaveData]) -> void:
 func show_next_wave(wave: WaveData) -> void:
 	for child: Node in _next_wave_icons.get_children():
 		child.queue_free()
-	_next_wave.visible = wave != null
+	_has_next_wave = wave != null
+	_next_wave.visible = _has_next_wave and _mobile_wave_controls_visible
 	if wave == null:
 		return
 	var counts: Dictionary = wave.enemy_counts()
@@ -273,6 +276,14 @@ func show_next_wave(wave: WaveData) -> void:
 				icon.mouse_filter = Control.MOUSE_FILTER_PASS
 				icon.tooltip_text += " · encuentro opcional (grupo %.0f %%)" % (group.probability * 100.0)
 		_next_wave_icons.add_child(icon)
+
+
+func set_mobile_wave_controls_visible(enabled: bool) -> void:
+	_mobile_wave_controls_visible = enabled
+	if not _mobile_mode:
+		return
+	_start_wave_button.visible = enabled
+	_next_wave.visible = enabled and _has_next_wave
 
 
 ## RF-134: tarjeta "Nuevo enemigo" con su forma, nombre y qué hace.

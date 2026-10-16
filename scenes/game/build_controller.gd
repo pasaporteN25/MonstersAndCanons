@@ -18,6 +18,7 @@ signal selection_changed(index: int)
 ## Cambió la torre construida seleccionada. null = ninguna (RF-73).
 signal placed_selection_changed(tower: Tower)
 signal mobile_infrastructure_targeted(cell: Vector2i, tool: StringName, class_id: StringName)
+signal mobile_map_tapped
 
 const TOWER_SCENE: PackedScene = preload("res://scenes/towers/tower.tscn")
 const VALID_TINT := Color(0.3, 1.0, 0.3, 0.3)
@@ -361,6 +362,7 @@ func _in_map_area(screen_pos: Vector2) -> bool:
 
 
 func _mobile_map_tap(world_pos: Vector2, time_ms: int) -> void:
+	mobile_map_tapped.emit()
 	var cell: Vector2i = _level.cell_at(world_pos)
 	if not _level.is_inside(cell):
 		return

@@ -11,7 +11,7 @@ Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle t�
 - **Los niveles 13, 14 y 15 no cambian.**
 - Lucas va a jugar los niveles 1 → 2 → 3 y 6 → 7 → 8 antes de que se reenvíe el juego.
 
-## Interfaz para celular: modo, gestos, cámara, botones y catálogo *(T271 a T275, 2026-10-16)*
+## Interfaz para celular: modo, gestos, cámara, catálogo y barra de torre *(T271 a T276, 2026-10-16)*
 
 - **Opciones → Interfaz** permite elegir «Automática», «Celular» o «PC». La elección se guarda y se aplica al abrir la próxima partida; no cambia una partida en curso.
 - En modo Celular, la barra superior crece a 64 px, muestra Pausa y velocidad con botones de 56 px, y oculta «← Menú» y los atajos de teclado. Los números de esta interfaz se cargan desde `data/ui/mobile_ui.json`; si el archivo está dañado, se usan los valores por omisión.
@@ -19,13 +19,13 @@ Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle t�
 - **Zoom y movimiento del mapa:** en celular, pinza para acercar o alejar, dos dedos para mover y «Ver todo» para volver al encuadre. En PC, rueda para acercar y alejar alrededor del puntero y botón central para desplazar; no aparece un control nuevo.
 - **Carrito y salida:** en modo Celular, el carrito y la X flotan sobre el mapa. Se arrastran hasta el borde izquierdo o derecho, recuerdan su ubicación por dispositivo y se apartan temporalmente del fantasma. El carrito abre un catálogo de torres y, cuando el nivel los usa, una pestaña de infraestructura; las opciones que no se pueden elegir muestran el motivo. La X muestra la confirmación de salida de siempre y, al probar desde el editor, vuelve directo al editor.
 - **El catálogo no pausa la partida:** al elegir una torre aparece el fantasma; las herramientas de demolición y extracción se eligen allí y se aplican al tocar el objeto compatible del mapa. Tocar afuera o usar «atrás» cierra el catálogo sin enviar ese toque al mapa.
+- **La barra inferior móvil** alterna entre una sugerencia con las oleadas, la torre fantasma con tilde/cruz duplicadas y la torre elegida con nivel, estadísticas, apuntado, mejora y venta protegida por dos toques. Una mejora bloquea el botón durante 0,35 s; la venta armada expira y el toque a 8 px debajo de «Mejorar» no la activa.
 - **La PC conserva su interfaz actual.** La medición en un celular real y las capturas de los niveles 1 y 15 quedan pendientes.
 
-## Lo que viene al celular: barra de torre y estatuas *(M58, spec del 2026-10-16)*
+## Lo que viene al celular: insignias y estatuas *(M58, spec del 2026-10-16)*
 
 **Esto es lo que Lucas pidió y todavía falta implementar:**
 
-- **La barra de abajo muestra la torre elegida:** nombre, nivel, estadísticas, «Mejorar» (con el costo o el motivo si no se puede) y «Vender», que pide un segundo toque.
 - **Las tarjetas de nivel muestran las torres como insignias de bronce** (en PC y en celular).
 - **La PC queda igual**; el selector para forzar el modo celular o de PC ya está en Opciones.
 - **Las estatuas de los mapas pasarán a ser estatuas de torres de piedra**, en lugar de la persona con espada.

@@ -123,6 +123,111 @@ func test_mobile_placement_buttons_show_cost_and_disable_invalid_placement() -> 
 	mobile_hud.show_placement(Vector2(500.0, 400.0), "300 + 3", false, "Ahí no")
 	assert_true(confirm.disabled)
 	assert_true(confirm.text.contains("Ahí no"))
+	assert_true((mobile_hud.find_child("BottomConfirmPlacement", true, false) as Button).visible)
+	assert_eq((mobile_hud.find_child("MobileUpgrade", true, false) as Button).custom_minimum_size.y, 84.0)
+	assert_eq((mobile_hud.find_child("MobileSell", true, false) as Button).custom_minimum_size.y, 82.0)
+
+
+func test_mobile_selected_tower_upgrade_lock_and_protected_sale() -> void:
+	var original_setting: Variant = SaveManager.get_setting("ui_mode")
+	SaveManager.set_setting("ui_mode", UiMode.MOBILE)
+	var game: Game = (load("res://scenes/game/game.tscn") as PackedScene).instantiate() as Game
+	add_child_autofree(game)
+	await get_tree().process_frame
+	game.session.earn(5000)
+	var tower_data: TowerData = game.available_towers[0]
+	var cell := Vector2i.ZERO
+	for y: int in game.level.map_size().y:
+		for x: int in game.level.map_size().x:
+			var candidate := Vector2i(x, y)
+			if game.level.is_buildable(candidate) and game.build_controller.cells_free(tower_data, candidate):
+				cell = candidate
+				break
+		if game.level.is_buildable(cell) and game.build_controller.cells_free(tower_data, cell):
+			break
+	assert_true(game.build_controller.try_build(tower_data, cell))
+	var tower: Tower = game.build_controller.tower_at(cell)
+	game.build_controller.select_placed(tower)
+	game.mobile_hud.show_ghost_status(tower_data.display_name, TowerText.cost_text(tower_data))
+	assert_true((game.mobile_hud.find_child("BottomConfirmPlacement", true, false) as Button).visible)
+	assert_false((game.mobile_hud.find_child("MobileUpgrade", true, false) as Button).visible)
+	game._refresh_tower_panel()
+	var status: Label = game.mobile_hud.find_child("StatusText", true, false) as Label
+	var improve: Button = game.mobile_hud.find_child("MobileUpgrade", true, false) as Button
+	var target: Button = game.mobile_hud.find_child("MobileTargeting", true, false) as Button
+	var sell: Button = game.mobile_hud.find_child("MobileSell", true, false) as Button
+	assert_true(status.text.contains(tower.data.display_name))
+	assert_true(status.text.contains("Nivel 1 de"))
+	assert_true(status.text.contains("Daño") and status.text.contains("Cadencia") and status.text.contains("Alcance"))
+	assert_true(improve.text.contains("Mejorar"))
+	assert_false(improve.disabled)
+	var clear_selection: Button = game.mobile_hud.find_child("BottomCancelPlacement", true, false) as Button
+	assert_true(clear_selection.visible)
+	clear_selection.pressed.emit()
+	assert_null(game.build_controller.selected_placed(), "la cruz inferior suelta la torre elegida")
+	game.build_controller.select_placed(tower)
+	game._refresh_tower_panel()
+	var level_before: int = tower.level_number()
+	improve.pressed.emit()
+	improve.pressed.emit()
+	assert_eq(tower.level_number(), level_before + 1, "el doble toque mejora una sola vez")
+	assert_true(improve.text.contains("¡Nivel 2!"))
+	await get_tree().create_timer(0.36).timeout
+	game.session.set_gold(0)
+	game.mobile_hud.show_selected_tower(tower, game.session.gold,
+		game.build_controller.sell_value(tower), 0, game.build_controller.can_upgrade(tower))
+	assert_true(improve.disabled)
+	assert_true(improve.text.contains("Faltan"))
+	game.session.earn(5000)
+	while tower.can_upgrade():
+		assert_true(game.build_controller.try_upgrade(tower))
+	game.mobile_hud.show_selected_tower(tower, game.session.gold,
+		game.build_controller.sell_value(tower), 0, game.build_controller.can_upgrade(tower))
+	assert_true(improve.disabled)
+	assert_eq(improve.text, "Nivel máximo")
+	game.mobile_hud._on_sell_pressed()
+	game.open_pause_menu()
+	assert_false(game.mobile_hud._sell_armed, "pausar desarma la venta")
+	game.close_pause_menu()
+	game.build_controller.select_placed(tower)
+	game.mobile_hud._on_sell_pressed()
+	game.build_controller._mobile_map_tap(game.level.cell_center(Vector2i.ZERO), Time.get_ticks_msec())
+	assert_false(game.mobile_hud._sell_armed, "tocar el mapa desarma la venta")
+	game.build_controller.select_placed(tower)
+	game.mobile_hud._on_sell_pressed()
+	game.mobile_hud.set_game_over(true)
+	assert_false(game.mobile_hud._sell_armed, "terminar la partida desarma la venta")
+	game.mobile_hud.set_game_over(false)
+	game.build_controller.select_placed(tower)
+	game.mobile_hud._on_sell_pressed()
+	assert_true(sell.text.contains("Vender por"))
+	game.mobile_hud._process(float(MobileUiConfig.load_from().get_value("vender_rearmar_s")) + 0.01)
+	assert_false(game.mobile_hud._sell_armed, "la confirmación vence a los tres segundos")
+	game.mobile_hud._on_sell_pressed()
+	game.mobile_hud.open_catalog()
+	assert_false(game.mobile_hud._sell_armed, "abrir el carrito desarma la venta")
+	game.mobile_hud.close_catalog()
+	game.mobile_hud._on_sell_pressed()
+	game.mobile_hud._on_sell_pressed()
+	assert_true(is_instance_valid(tower) and not tower.is_queued_for_deletion(), "antes de 0,4 s no vende")
+	await get_tree().create_timer(0.41).timeout
+	game.mobile_hud._on_sell_pressed()
+	assert_true(tower.is_queued_for_deletion(), "el segundo toque válido vende")
+	assert_false(game.mobile_hud._sell_armed)
+	assert_false(target.disabled)
+	var support_data: TowerData
+	for candidate: TowerData in Wiki._all_towers():
+		if candidate.support_only:
+			support_data = candidate
+			break
+	assert_not_null(support_data)
+	var support_tower := Tower.new()
+	support_tower.setup(support_data)
+	add_child_autofree(support_tower)
+	await get_tree().process_frame
+	game.mobile_hud.show_selected_tower(support_tower, game.session.gold, 0, 0, false)
+	assert_true(target.disabled, "una torre de apoyo no admite prioridad de apuntado")
+	SaveManager.set_setting("ui_mode", original_setting)
 
 
 func test_camera_zoom_is_clamped_between_automatic_and_cell_limits() -> void:

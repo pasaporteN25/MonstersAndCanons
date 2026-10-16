@@ -42,6 +42,22 @@ const DEFAULTS: Dictionary = {
 	"catalogo_titulo_fuente_px": 24,
 	"catalogo_tarjeta_fuente_px": 15,
 	"catalogo_icono_ancho_px": 68,
+	"barra_fuente_px": 16,
+	"accion_fuente_px": 17,
+	"apuntar_ancho_px": 172,
+	"apuntar_alto_px": 88,
+	"mejorar_ancho_px": 196,
+	"mejorar_alto_px": 84,
+	"vender_ancho_px": 150,
+	"vender_alto_px": 82,
+	"barra_margen_x_px": 8,
+	"barra_margen_y_px": 2,
+	"vender_borde_px": 3,
+	"vender_radio_px": 8,
+	"vender_padding_x_px": 8,
+	"vender_padding_y_px": 4,
+	"vender_separacion_mm": 35.0,
+	"barra_texto_min_ancho_px": 200,
 }
 
 var values: Dictionary = DEFAULTS.duplicate(true)

@@ -136,7 +136,13 @@ func _ready() -> void:
 		mobile_hud.tower_chosen.connect(_on_mobile_tower_chosen)
 		mobile_hud.infrastructure_tool_chosen.connect(_on_mobile_infrastructure_tool_chosen)
 		mobile_hud.catalog_opened.connect(_on_mobile_catalog_opened)
+		hud.tower_panel.hide()
+		mobile_hud.upgrade_pressed.connect(_on_mobile_upgrade_pressed)
+		mobile_hud.sell_pressed.connect(_on_mobile_sell_pressed)
+		mobile_hud.targeting_pressed.connect(_on_targeting_pressed)
+		mobile_hud.clear_selection_pressed.connect(build_controller.deselect_placed)
 		build_controller.mobile_infrastructure_targeted.connect(_on_mobile_infrastructure_targeted)
+		build_controller.mobile_map_tapped.connect(mobile_hud.clear_sell_arm)
 		_refresh_mobile_catalog()
 		session.gold_changed.connect(_on_mobile_catalog_money_changed)
 		session.resources_changed.connect(func(_resources: int) -> void: _refresh_mobile_catalog())
@@ -443,9 +449,20 @@ func _process(delta: float) -> void:
 		mobile_hud.set_game_over(session.is_over())
 		mobile_hud.set_cart_active(build_controller.selected_tower() != null or build_controller.selected_placed() != null or build_controller.mobile_action_active())
 		var selected_tower: TowerData = build_controller.selected_tower()
+		hud.set_mobile_wave_controls_visible(selected_tower == null and build_controller.selected_placed() == null)
 		if selected_tower == null:
 			mobile_hud.set_placement_visible(false)
+			var placed: Tower = build_controller.selected_placed()
+			var refund: int = build_controller.sell_value(placed) if placed != null else 0
+			var resource_refund: int = build_controller.sell_resource_value(placed) if placed != null else 0
+			var can_improve: bool = placed != null and build_controller.can_upgrade(placed)
+			var unavailable_reason: String = ""
+			if placed != null and placed.can_upgrade() and session.gold < placed.next_level_stats().cost:
+				unavailable_reason = "Faltan %d de oro" % (placed.next_level_stats().cost - session.gold)
+			mobile_hud.show_selected_tower(placed, session.gold, refund, resource_refund,
+				can_improve, unavailable_reason)
 		else:
+			mobile_hud.show_ghost_status(selected_tower.display_name, TowerText.cost_text(selected_tower, build_controller.pay_alt()))
 			var ghost: GhostPlacement = build_controller.ghost_placement()
 			var ghost_world_pos: Vector2 = level.cell_center(ghost.cell)
 			var zoom: float = camera.zoom.x if camera != null else minimum_map_zoom
@@ -933,11 +950,38 @@ func _on_targeting_pressed() -> void:
 		_refresh_tower_panel()
 
 
+func _on_mobile_upgrade_pressed() -> void:
+	if mobile_hud == null:
+		return
+	var tower: Tower = build_controller.selected_placed()
+	if tower != null and build_controller.try_upgrade(tower):
+		mobile_hud.begin_upgrade_lock(tower.level_number())
+		_refresh_tower_panel()
+
+
+func _on_mobile_sell_pressed() -> void:
+	if mobile_hud == null:
+		return
+	var tower: Tower = build_controller.selected_placed()
+	if tower != null:
+		build_controller.sell(tower)
+		mobile_hud.clear_sell_arm()
+		_refresh_tower_panel()
+
+
 ## Muestra en el panel la torre seleccionada (o lo oculta si no hay ninguna).
 func _refresh_tower_panel() -> void:
 	var tower: Tower = build_controller.selected_placed()
 	var value: int = build_controller.sell_value(tower) if tower != null else 0
 	var resource_value: int = build_controller.sell_resource_value(tower) if tower != null else 0
+	if mobile_hud != null:
+		hud.tower_panel.hide()
+		var reason: String = ""
+		if tower != null and tower.can_upgrade() and session.gold < tower.next_level_stats().cost:
+			reason = "Faltan %d de oro" % (tower.next_level_stats().cost - session.gold)
+		mobile_hud.show_selected_tower(tower, session.gold, value, resource_value,
+		tower != null and build_controller.can_upgrade(tower), reason)
+		return
 	hud.tower_panel.show_tower(tower, value, session.gold, resource_value)
 
 

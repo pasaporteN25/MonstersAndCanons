@@ -35,6 +35,7 @@ var out_dir: String = "res://art/t262-mobile/"
 var target := Vector2i(2400, 1080)
 var ppi: float = 405.0
 var only: PackedStringArray = []
+var select_mobile_ui: bool = false
 var _csv: PackedStringArray = ["pantalla,control,ancho_virtual,alto_virtual,ancho_px_celular,alto_px_celular,ancho_mm,alto_mm,menor_a_7_6_mm"]
 ## Sin tipo a propósito: Game y los autoloads no existen cuando se compila este script (ver GAME_SCENE_PATH).
 var game
@@ -57,6 +58,7 @@ func _ready() -> void:
 			"target": target = _parse_size(parts[1], target)
 			"ppi": ppi = float(parts[1])
 			"only": only = parts[1].split(",")
+			"ui": select_mobile_ui = parts[1] == "mobile"
 	if tag == "":
 		tag = "%dx%d" % [res.x, res.y]
 	if not out_dir.ends_with("/"):
@@ -86,6 +88,8 @@ func run() -> void:
 		DirAccess.remove_absolute(SAVE_PATH)
 	save_manager.load_save()
 	save_manager.mark_intro_seen()
+	if select_mobile_ui:
+		await _select_mobile_ui_mode()
 	# Campaña a medio jugar: 1 a 9 ganados, el 10 abierto. Así la selección muestra estrellas, abiertos y bloqueados.
 	for i: int in 9:
 		save_manager.unlock(game_flow.level(i).id)
@@ -336,6 +340,22 @@ func _start_game(index: int, intro: bool) -> void:
 	await _frames(6)
 
 
+func _select_mobile_ui_mode() -> void:
+	var options = (load("res://scenes/ui/options_menu.tscn") as PackedScene).instantiate()
+	add_child(options)
+	await _frames(2)
+	var selector: OptionButton = options.find_child("UiModeSelector", true, false) as OptionButton
+	if selector == null:
+		push_error("PROBE no encontró el selector Interfaz")
+		return
+	selector.select(1)
+	selector.item_selected.emit(1)
+	await _frames(2)
+	print("PROBE selector Interfaz: Celular -> %s" % ["ok" if int(save_manager.get_setting("ui_mode")) == 1 else "falló"])
+	options.queue_free()
+	await _frames(2)
+
+
 func _end_game() -> void:
 	get_tree().paused = false
 	Engine.time_scale = 1.0
@@ -371,6 +391,9 @@ func _towers() -> int:
 
 
 func _probe_game() -> void:
+	if select_mobile_ui:
+		await _probe_mobile_game()
+		return
 	# El cartel de entrada, como lo ve quien entra al nivel 1 desde la selección.
 	await _start_game(0, true)
 	await get_tree().create_timer(0.4).timeout
@@ -378,6 +401,7 @@ func _probe_game() -> void:
 		await _shot("cartel_entrada")
 		_measure("cartel_entrada", game.level_intro)
 	await _end_game()
+
 
 	await _start_game(0, false)
 	var hud = game.hud
@@ -516,6 +540,102 @@ func _probe_game() -> void:
 		game.exit_dialog.handle_cancel()
 	await _end_game()
 
+
+func _probe_mobile_game() -> void:
+	await _start_game(0, false)
+	game.session.earn(5000)
+	await _frames(4)
+	var mobile = game.mobile_hud
+	if mobile == null:
+		push_error("PROBE se pidió Interfaz: Celular pero no existe MobileHud")
+		await _end_game()
+		return
+	var empty_marks: Array = _measure("movil_barra_vacia", mobile)
+	var measured_targets: int = empty_marks.size()
+	await _shot("movil_barra_vacia", empty_marks)
+	var cart: Button = mobile.get_node("CartButton") as Button
+	await _tap(_center(cart))
+	print("PROBE T276 carrito: rect=%s · centro=%s · catálogo_abierto=%s" % [cart.get_global_rect(), _center(cart), mobile.is_catalog_open()])
+	var chosen = game.available_towers[0]
+	var card: Button
+	var tower_grid: Node = mobile.find_child("TowerCards", true, false)
+	for candidate: Node in tower_grid.get_children():
+		var candidate_button: Button = candidate as Button
+		if candidate_button != null and not candidate_button.disabled and candidate_button.text.begins_with(chosen.display_name):
+			card = candidate_button
+			break
+	if card == null:
+		push_error("PROBE no encontró la tarjeta de la torre inicial")
+		await _end_game()
+		return
+	await _tap(_center(card))
+	var ghost_started: bool = game.build_controller.selected_tower() == chosen
+	var cell: Vector2i = _free_cell(Vector2i(17, 5))
+	await _tap(_cell_screen(cell))
+	await _frames(2)
+	await _shot("movil_fantasma")
+	var bottom_tick: Button = mobile.find_child("BottomConfirmPlacement", true, false) as Button
+	print("PROBE T276 tilde: rect=%s · centro=%s · deshabilitada=%s · fantasma_válido=%s" % [bottom_tick.get_global_rect(), _center(bottom_tick), bottom_tick.disabled, game.build_controller.ghost_placement().valid])
+	await _tap(_center(bottom_tick))
+	print("PROBE T276 tilde tras toque: seleccionada=%s · torres=%d" % [game.build_controller.selected_tower() != null, _towers()])
+	var tower = game.build_controller.tower_at(cell)
+	var placed: bool = tower != null
+	if tower == null:
+		if game.tower_container.get_child_count() > 0:
+			tower = game.tower_container.get_child(0)
+			cell = tower.origin_cell
+			placed = true
+	if tower == null:
+		push_error("PROBE la tilde inferior no construyó la torre")
+		await _end_game()
+		return
+	var right_cell: Vector2i = _free_cell(Vector2i(17, 5))
+	if right_cell != cell:
+		game.build_controller.sell(tower)
+		await _frames(2)
+		if game.build_controller.try_build(chosen, right_cell):
+			tower = game.build_controller.tower_at(right_cell)
+			cell = right_cell
+	print("PROBE T276 captura derecha: celda=%s · torre=%s" % [cell, tower != null])
+	var map_tap_count: Array[int] = [0]
+	game.build_controller.mobile_map_tapped.connect(func() -> void: map_tap_count[0] += 1)
+	print("PROBE T276 toque torre: pantalla=%s · celda prevista=%s" % [_cell_screen(cell), cell])
+	await _tap(_cell_screen(cell))
+	var map_tap_selected: bool = game.build_controller.selected_placed() == tower
+	print("PROBE T276 mapa: eventos=%d · seleccionó=%s · resultado=%s" % [map_tap_count[0], map_tap_selected, game.level.cell_at(game.build_controller._screen_to_world(_cell_screen(cell)))])
+	if not map_tap_selected:
+		game.build_controller._mobile_map_tap(tower.global_position, Time.get_ticks_msec())
+	await _frames(3)
+	var selected_marks: Array = _measure("movil_torre_elegida", mobile)
+	var selected_targets: int = selected_marks.size()
+	await _shot("movil_torre_elegida", selected_marks)
+	var improve: Button = mobile.find_child("MobileUpgrade", true, false) as Button
+	mobile._on_sell_pressed()
+	await _shot("movil_vender_armado")
+	mobile._process(float(MobileUiConfig.load_from().get_value("vender_rearmar_s")) + 0.01)
+	var sale_timeout_disarmed: bool = not mobile._sell_armed
+	var level_before: int = tower.level_number()
+	await _tap(_center(improve))
+	await _tap(_center(improve))
+	await _frames(2)
+	var level_after: int = tower.level_number()
+	var sell_count_before: int = _towers()
+	var below: Vector2 = Vector2(_center(improve).x, improve.get_global_rect().end.y + 8.0)
+	await _tap(below)
+	var accidental_sale: bool = mobile._sell_armed or _towers() < sell_count_before
+	print("PROBE T276 móvil: carrito+tarjeta=2 toques al fantasma; ya seleccionada, 1 toque en Mejorar; selección+Mejorar=2; selección+armar+confirmar=3 para vender. Toque de mapa seleccionó=%s; doble toque mejora %d nivel(es); toque 8 px debajo armó venta=%s" % [map_tap_selected, level_after - level_before, accidental_sale])
+	await _shot("movil_mejorada")
+	game.session.set_gold(0)
+	await _frames(3)
+	await _shot("movil_sin_oro")
+	while tower.can_upgrade():
+		game.session.earn(5000)
+		if not game.build_controller.try_upgrade(tower):
+			break
+	await _frames(3)
+	await _shot("movil_nivel_maximo")
+	print("PROBE T276 resultado: selector Celular=%s · fantasma=%s · construida=%s · doble toque=%d nivel · 8 px no armó venta=%s · vencimiento desarmó=%s · controles medidos: vacío=%d, torre elegida=%d" % [int(save_manager.get_setting("ui_mode")) == 1, ghost_started, placed, level_after - level_before, not accidental_sale, sale_timeout_disarmed, measured_targets, selected_targets])
+	await _end_game()
 
 # --- Partida: nivel 15 (26 × 12, con cámara) ---
 
