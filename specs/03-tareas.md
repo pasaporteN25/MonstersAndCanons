@@ -11,6 +11,50 @@
 
 ---
 
+## Prioridad máxima · Mobile, presentación y próxima prueba (2026-10-16)
+
+**Pedido de Lucas:** registrar y pushear el backlog, sin tocar código, datos, escenas ni assets. Todas las tareas de este bloque quedan **pendientes**; su registro no autoriza ejecutarlas todavía. Este bloque se atiende antes que los pendientes históricos de menor prioridad. **Refs generales:** backlog §13, B-33 a B-39. Antes de implementar, convertir las propuestas elegidas en spec y decisiones conforme a P3.
+
+- [ ] **T262 · Analizar cómo mejorar y optimizar la versión mobile. Prioridad máxima.**
+  **Refs:** B-33 a B-36, P4. **Depende de:** ninguna para el análisis.
+  Comparar la experiencia con el desktop actual y relevar uso táctil, diálogos, legibilidad, navegación, espacio del mapa y rendimiento en dispositivos reales. Medir tiempos de cuadro y tirones en escenas representativas; registrar dispositivo, resolución y build, sin atribuir causas sin evidencia.
+  **Hecho cuando:** existe un informe con problemas reproducibles, evidencia, mediciones, propuestas ordenadas por impacto y costo, y tareas pequeñas para equiparar la calidad mobile con desktop; explicita qué no se probó. No implementa optimizaciones.
+
+- [ ] **T263 · Diseñar mejoras de torre más simples en mobile. Prioridad máxima.**
+  **Refs:** B-34; B-28 como antecedente. **Depende de:** T262 para cerrar la propuesta.
+  Reducir diálogos y la información que interrumpe subir una torre; comparar una acción principal clara con detalles bajo demanda y protección frente a acciones accidentales.
+  **Hecho cuando:** hay muestras a tamaño de celular, comparación de pasos del flujo actual y propuesto, costo y estado de mejora legibles y revisión de errores posibles; propuesta lista para decidir y especificar, sin implementación.
+
+- [ ] **T264 · Diseñar zoom táctil y flujo de compra/colocación de torres. Prioridad máxima.**
+  **Refs:** B-35. **Depende de:** T262 para cerrar la propuesta.
+  Evaluar pinza y desplazamiento del mapa, opciones de compra más grandes y tienda/carrito desplegable. Comparar previsualización ajustable con tilde/cancelación frente a colocación automática protegida, incluyendo el caso de quien toca sin hacer zoom. No dar estas alternativas por aprobadas.
+  **Hecho cuando:** hay flujos y muestras comparables, recomendación justificada, casos de torres de 1×1 y 2×2 y criterios para evitar compras al hacer gestos, colocar en casilla equivocada u ocultar el destino con el dedo; quedan explícitas las decisiones pendientes. Sin código.
+
+- [ ] **T265 · Rediseñar la presentación de torres disponibles en los niveles. Prioridad máxima.**
+  **Refs:** B-36, T250 como antecedente. **Depende de:** ninguna para explorar variantes; coordinar mobile con T262.
+  Conservar la información de torres disponibles y mejorar su estética e integración en la selección de niveles de desktop y mobile.
+  **Hecho cuando:** hay variantes visuales comparadas con la pantalla actual, en ambas plataformas y en niveles con pocas/muchas torres; se verifica jerarquía, legibilidad y ausencia de saturación o recortes. Entrega una propuesta para elegir, sin tocar la interfaz implementada.
+
+- [ ] **T266 · Auditar y corregir la progresión de dificultad antes de la próxima entrega. Prioridad máxima.**
+  **Refs:** B-37; T255/T258 como antecedentes de Asedio, sin confundirlos con campaña. **Depende de:** ninguna para auditar; spec y decisiones antes de ajustar.
+  Investigar el reporte histórico de niveles 2 y 7 como los más difíciles en la build de siete niveles. Evaluar los 15 niveles actuales, varias estrategias humanas y del bot y varias semillas; identificar si el problema es balance, explicación de contramedidas o dependencia excesiva de una estrategia. Permitir descansos pedagógicos justificados (ejemplo 9 frente a 8), evitando picos tempranos sin razón.
+  **Hecho cuando:** informe con versión de referencia, resultados por nivel/estrategia, causas y excepciones justificadas; luego de aprobar y especificar ajustes, comparación antes/después y validación humana de la progresión, especialmente 1→2→3 y 6→7→8. Los problemas detectados quedan resueltos o explícitamente pendientes, en cuyo caso no habilita el reenvío al tester. **Ahora solo se registra.**
+
+- [ ] **T267 · Mejorar los assets de los primeros y últimos niveles. Prioridad máxima.**
+  **Ejecutor obligatorio:** **GPT 6.1 Sol (`gpt-6.1-sol`) · esfuerzo medio**, por pedido expreso de Lucas. No sustituir modelo ni esfuerzo.
+  **Refs:** B-38, guía de arte; T260/T261 revertidas y T233 como antecedentes. **Depende de:** inventario de lo integrado y selección de piezas; aprobación de propuesta visual antes de producción.
+  Revisar qué assets recientes de los primeros y últimos niveles no alcanzan la calidad buscada; delimitar piezas concretas sin asumir que solo son terrenos/decoración. Comparar propuestas con el estado actual en contexto de juego.
+  **Hecho cuando:** inventario y propuesta aprobada, piezas seleccionadas mejoradas e integradas en una tarea futura autorizada, comparación a escala real en ambos extremos de la campaña y validación visual, con límites documentados. Debe estar resuelta antes de reenviar el juego al tester. **No generar ni cambiar assets en este registro.**
+
+- [ ] **T268 · Verificar el guardado del primer tester y preparar el reenvío. Prioridad máxima.**
+  **Refs:** B-39, RF-115, RF-381, `tests/test_old_saves.gd`. **Depende de:** T266 y T267 resueltas para enviar; la comprobación del guardado puede hacerse antes.
+  Respaldar el archivo original con el juego cerrado y verificar una copia con la nueva build: niveles ganados, desbloqueos y demás progreso. Confirmar plataforma, usuario, ubicación y modo normal/pruebas; diferenciar progreso de campaña de reanudar una oleada. No asumir compatibilidad de la build concreta sin comprobarla.
+  **Hecho cuando:** recuperación comprobada o límites explicados, respaldo conservado, build de envío identificada y balance/assets validados. Si se pide jugar desde cero, registrar que Lucas lo acepta y conservar el progreso anterior. **No enviar todavía ni reiniciar guardados en esta tarea de registro.**
+
+**Registro realizado (2026-10-16):** se agregaron B-33 a B-39 y T262 a T268, con prioridad máxima, alternativas de interacción abiertas, modelo/esfuerzo obligatorio para arte y condiciones de reenvío. Solo documentación; revisión estática del guardado y sus tests existentes. No se ejecutó GUT ni se verificó el archivo del tester, y no se modificó el juego.
+
+---
+
 ## M0 — Preparación
 
 - [x] **T00 · Instalar herramientas**

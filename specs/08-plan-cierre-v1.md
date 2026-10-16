@@ -12,6 +12,8 @@ Fecha: 2026-10-07. Lo preparó Claude (Opus 5.5) a pedido de Lucas, a partir de 
 
 ## 1. Quién hace qué
 
+> **Prioridades actualizadas por Lucas, 2026-10-16:** antes de los pendientes históricos de menor prioridad, atender el bloque de prioridad máxima [T262 a T268 en el tablero](03-tareas.md#prioridad-máxima--mobile-presentación-y-próxima-prueba-2026-10-16): análisis y optimización mobile, mejoras de torre con menos diálogos, zoom y compra/colocación táctil, presentación de torres disponibles en niveles para ambas plataformas, progresión de dificultad y revisión de assets iniciales/finales. El arte de **T267 exige `gpt-6.1-sol` con esfuerzo medio**, por pedido de Lucas, por encima de la asignación genérica de la tabla. **No reenviar al primer tester hasta resolver y validar balance (T266) y assets (T267)**; T268 verifica su guardado y prepara esa entrega. Por ahora solo se registra el backlog: no se autoriza implementación ni producción de arte.
+
 | Ejecutor | Para qué | Cómo se le pasa el trabajo |
 |---|---|---|
 | **Lucas** | Decisiones, aprobaciones (las compuertas 🚦) y partidas de prueba. | El cuestionario 09 y las fichas que dicen "Lucas". |
