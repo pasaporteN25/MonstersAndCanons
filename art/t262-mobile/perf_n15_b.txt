@@ -1,0 +1,18 @@
+=== n15_b res=1600x720 args=level=15 from=27 window=1600x720 inicio 03:01:18
+UPTIME_ANTES  03:01:18 up 10 days,  7:59,  1 user,  load average: 5,95, 5,87, 4,69
+BOTS_ANTES 9
+PERF nivel 15 «La Central» · NVIDIA GeForce GTX 1660 SUPER · ventana (1600, 720) · sin vsync · oleadas jugadas 28 a 30 de 30
+PERF defensa: 64 torres, 30475 de oro, 20 vidas
+PERF   detalle oleada 28: proceso 12.1 ms · física 6.0 ms por frame · 1322 llamadas de dibujo · hasta 480 nodos
+PERF oleada 28: 154 FPS promedio · 1% más lento 13.8 ms (72 FPS) · peor frame 53.7 ms · 29 de 15982 frames > 16,6 ms · hasta 28 enemigos · 64 torres · 5 demoliciones · vidas 20 · 104 s
+PERF   tirones oleada 28: 7 frames > 33,3 ms · 0.1 s (52 ms), 2.7 s (54 ms), 3.5 s (53 ms), 4.6 s (49 ms), 9.9 s (53 ms), 13.3 s (53 ms), 77.7 s (51 ms)
+PERF   detalle oleada 29: proceso 9.6 ms · física 11.6 ms por frame · 1419 llamadas de dibujo · hasta 548 nodos
+PERF oleada 29: 148 FPS promedio · 1% más lento 13.0 ms (77 FPS) · peor frame 63.0 ms · 9 de 5138 frames > 16,6 ms · hasta 47 enemigos · 69 torres · 0 demoliciones · vidas 20 · 35 s
+PERF   tirones oleada 29: 5 frames > 33,3 ms · 0.7 s (51 ms), 3.4 s (51 ms), 7.8 s (54 ms), 12.7 s (51 ms), 21.6 s (63 ms)
+PERF   detalle oleada 30: proceso 9.1 ms · física 5.5 ms por frame · 1494 llamadas de dibujo · hasta 525 nodos
+PERF oleada 30: 130 FPS promedio · 1% más lento 16.8 ms (60 FPS) · peor frame 51.7 ms · 179 de 16700 frames > 16,6 ms · hasta 43 enemigos · 69 torres · 0 demoliciones · vidas 20 · 128 s
+PERF   tirones oleada 30: 2 frames > 33,3 ms · 6.1 s (52 ms), 128.3 s (43 ms)
+PERF RESUMEN nivel 15: 28: 154 FPS (peor 54 ms) | 29: 148 FPS (peor 63 ms) | 30: 130 FPS (peor 52 ms)
+UPTIME_DESPUES  03:05:48 up 10 days,  8:04,  1 user,  load average: 8,05, 6,63, 5,27
+BOTS_DESPUES 9
+=== fin 03:05:48
