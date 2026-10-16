@@ -938,3 +938,21 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
   - **Que las estatuas se puedan seleccionar y muestren una descripción:** agrega una interacción que nadie pidió y puede confundirse con el panel de torres.
   - **Una sola variante en todos los niveles:** posible y barata, pero queda como la pregunta P6 para que Lucas elija cuántas.
 - **Qué cambia:** `01-spec.md` (RF-515), `05-guia-de-arte.md` (§9), `03-tareas.md` (T277). **No cambia ningún asset ni código:** el dibujo y su integración son T277, con muestras aprobadas por Lucas antes de integrarse.
+
+## D-099 · Los picos de los niveles 2 y 7 se corrigen aplanando solo el escalón de oleadas (un Jefe menos en el 2, enjambres más chicos en el 7), sin tocar el aumento de vida
+- **Fecha:** 2026-10-16 · **Estado:** Aprobada en lo que decide (Lucas, G7); su implementación (T279) y la validación con partidas (T280) están pendientes · **Decidió:** Lucas (que se ajusten estos dos niveles con la opción A del informe y con los números del 7) / Claude (los requisitos, el orden de medición y qué queda fuera)
+- **Qué:** en `data/levels/level_02.json`, la oleada 15 pasa de 2 Jefes a **1** y pierde el último grupo de 12 Blindados (RF-516). En `data/levels/level_07.json`, las oleadas 2, 11 y 18 pasan de 15 + 15, 30 y 40 Rápidos + 25 Voladores a **10 + 10, 22 y 30 + 20** (RF-517). Nada más cambia: ni el aumento de vida (35 % y 24 %), ni oro, ni vidas, ni La Cuadrilla, ni los niveles 13 a 15 (RF-518).
+- **Por qué:**
+  - **El reporte del tester se reproduce hoy** (T266): el 2 lo pierden en la oleada 15 `mix` y `basic` (solo `smart` gana, con 17 vidas) y el 7 lo pierde en la 18 quien usa solo las cuatro torres clásicas (`smart`, 0 de 5). Son **picos tempranos sin justificación**: el Jefe del 2 es el más duro de los niveles 1 a 7 (1770 de vida con armadura 3) y el 7 tiene enjambres por dos entradas sin aviso de contramedida.
+  - **La causa es un escalón puntual, no la vida general.** Bajar el aumento no alcanza: en el 2, entre 28 y 32 % `mix` gana siempre con exactamente 10 (se le sigue escapando un Jefe) y con mejoras tempranas pierde o queda en 2; en el 7, con 20 % `smart` sigue perdiendo en la 18.
+  - **Con A, `mix` y `smart` quedan parejos** (16 y 17 vidas) y **solo Ametralladoras sigue perdiendo**, que es lo que pide la spec del 2 (§7.4: desde el nivel 2 hay que mezclar torres). En el 7 las **tres** oleadas hacen falta (con la 11 sola no cambia nada; con 2 y 11 `smart` gana 2 de 5): `smart` pasa a 5 de 5 con 5 a 6 vidas, `mix` queda en 12 y desaparece la semilla con 5.
+  - **No es un ajuste para un bot:** cada variante se midió con varias estrategias y con mejoras tempranas, 5 semillas (T266 §5), y el 7 sigue siendo el nivel más exigente de su trío para quien no usa área.
+  - **Los niveles 13 a 15 están al borde** (RF-432: 14 en 3 vidas, 15 en 2): ningún dato de ellos se toca y `check_rule=1` con 5 semillas lo comprueba.
+- **Alternativas descartadas:**
+  - **Bajar el aumento de vida del 2 (28, 30 o 32 %) o del 7 (20 %):** ajusta para el bot `mix` sin arreglar la causa (arriba).
+  - **Sacar solo un Jefe del 2 (sin quitar los Blindados):** el último grupo de Blindados llega cuando las torres todavía pelean con el Jefe; `mix` gana con 6 en lugar de 16.
+  - **Variante B del 2 (aumento 30 % + 1 Jefe):** más generosa (`mix` 20, `smart` 18, y gana hasta con solo Ametralladoras, 10) pero deja el 2 tan fácil como el 1 y afloja más a Asedio 2 (de 13 a 18 vidas). **Queda preparada** si las partidas humanas con A todavía se sienten un muro; pasarla sería D-100.
+  - **Tocar solo la oleada 11 o las oleadas 2 y 11 del 7:** no alcanza (T266 §5.2).
+  - **Agregar un consejo de contramedida en los carteles de entrada** («Cañón y Francotirador» en el 2; «Múltiple, Ráfaga o Eléctrica» en el 7): son textos de lore y nadie lo pidió; sigue en «Sugerencias de Claude» (§13).
+  - **Subir el porcentaje de Asedio de los mapas 2 y 7 dentro de M59:** se remide primero (RF-519) y se decide aparte.
+- **Qué cambia:** `01-spec.md` (M59, RF-516 a RF-519; notas en §7.2, §7.4, §7.9 y RF-487), `02-plan-tecnico.md` (M59), `03-tareas.md` (T278 hecha; T279 y T280 pendientes; nota en T266), `12-plan-t262-t268.md` (estado) y `CHANGELOG.md` (nota). **No cambia ningún dato ni código:** los dos archivos de nivel se tocan recién en T279.

@@ -2,6 +2,15 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Lo que viene: los niveles 2 y 7 más justos *(M59, spec del 2026-10-16; todavía no está en el juego)*
+
+**Esto es lo que Lucas aprobó y quedó escrito; los datos todavía no cambiaron.** Un tester contó que el 2 y el 7 eran los más difíciles, y al medirlos se confirmó. Cuando se aplique:
+
+- **Nivel 2 (Desfiladero):** la última oleada trae **un solo Jefe** (antes dos) y **ya no termina con 12 Blindados**. El resto del nivel queda igual. Hay que seguir mezclando torres: quien juega solo con Ametralladoras todavía pierde ahí.
+- **Nivel 7 (Cruce):** los tres enjambres de Rápidos son más chicos: en la oleada 2, **10 + 10** por las dos entradas (antes 15 + 15); en la 11, **22** (antes 30); y en la 18, **30 Rápidos y 20 Voladores** (antes 40 y 25). Sigue siendo el más exigente de su tramo, pero deja de ser un muro para quien no usa torres de área.
+- **Los niveles 13, 14 y 15 no cambian.**
+- Lucas va a jugar los niveles 1 → 2 → 3 y 6 → 7 → 8 antes de que se reenvíe el juego.
+
 ## Lo que viene al celular: carrito, zoom y torre fantasma *(M58, spec del 2026-10-16; todavía no está en el juego)*
 
 **Esto es lo que Lucas pidió y quedó escrito; no se puede probar todavía.** Cuando se programe:

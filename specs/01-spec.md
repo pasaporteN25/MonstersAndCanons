@@ -500,7 +500,7 @@ Los Voladores cruzan en línea recta por la fila 1.
 | 12 | 12 × Tanque (cada 1.0 s) + 20 × Normal (cada 0.4 s, tras 4 s) |
 | 13 | 16 × Volador (cada 0.4 s) + 12 × Blindado (cada 0.8 s, tras 3 s) |
 | 14 | 2 × **Jefe** (cada 4.0 s) + 20 × Rápido (cada 0.3 s, tras 4 s) |
-| 15 | 2 × **Jefe** (cada 3.0 s) + 12 × Tanque (cada 1.0 s, tras 2 s) + 16 × Volador (cada 0.4 s, tras 6 s) + 12 × Blindado (cada 0.8 s, tras 10 s) |
+| 15 | 1 × **Jefe** (cada 3.0 s) + 12 × Tanque (cada 1.0 s, tras 2 s) + 16 × Volador (cada 0.4 s, tras 6 s) *(M59, RF-516: antes 2 × Jefe y además 12 × Blindado, cada 0.8 s, tras 10 s; **el archivo todavía tiene los valores viejos hasta T279**)* |
 
 ### 7.3 Nivel 3 — Encrucijada *(M3)*
 
@@ -559,6 +559,8 @@ Con +40 % por oleada, un nivel de 15 o 20 oleadas terminaría con enemigos 7 a 9
 | 7 · Cruce *(M8)* | **24 %** | Pierde en la oleada 18 | — | Pierde en la oleada 4 |
 
 **Con las 8 torres (M5, bot "mix"):** nivel 1 gana con 19 vidas · 2 pierde en la última oleada · 3 gana con 16 · 4 gana con 9 · 5 gana con 16 · **6 gana con 10** · **7 gana con 7**. Queda parejo con los bots de siempre (a veces mejor, a veces peor): las torres nuevas suman opciones sin regalar los niveles. El nivel 6 es el más exigente: con 35 % ningún bot pasaba la oleada 7 (10 Trolls y 6 Arañas).
+
+**M59 (2026-10-16, RF-516 a RF-519):** la tabla de arriba y el párrafo anterior son lo que medía el bot **antes** de M59. El informe T266 midió que el nivel 2 lo pierden en la oleada 15 `mix` y `basic` (solo `smart` gana, con 17) y que el nivel 7 lo pierde en la 18 quien juega solo con las cuatro torres clásicas. M59 ajusta **solo las oleadas** (no el aumento de vida): con el nivel 2 corregido, `mix` gana con 16 vidas y `smart` con 17, y **solo Ametralladoras sigue perdiendo**; con el nivel 7 corregido, `smart` gana con 5 o 6 y `mix` con 12. Los números definitivos los fija T279 al aplicarlo.
 
 La curva de dificultad buscada: en el nivel 1 alcanza con una sola torre bien usada; **desde el nivel 2 hay que mezclar torres** para ganar; el nivel 3 es el más exigente. (Con 40 %, el nivel 3 se perdía siempre en la oleada 6.)
 
@@ -758,6 +760,8 @@ f8   ·····▲······▲·······
 (`■` es camino y `▲`, casilla bloqueada, como en los otros mapas; `A`, `B` y `S` son las entradas y la salida.)
 
 Oro inicial **300**, 20 vidas, **20 oleadas**, con todos los enemigos (Normal, Rápido, Tanque, Volador, Blindado, Jefe, Troll y Araña): las oleadas 1 a 8 los presentan de a pares, y de la 9 en adelante se mezclan; la 20 trae 6 Jefes, Arañas y Trolls. La lista completa está en el archivo del nivel.
+
+**M59 (RF-517):** los tres enjambres de Rápidos por las dos entradas se suavizan: **oleada 2** de 15 + 15 a **10 + 10**, **oleada 11** de 30 a **22** y **oleada 18** de 40 Rápidos + 25 Voladores a **30 + 20**. El resto del nivel (oro, vidas, 24 %, las demás oleadas y La Cuadrilla) no cambia. Hasta T279 el archivo tiene los valores viejos.
 
 **T253 (La Cuadrilla, M55):** en las **oleadas 8, 11, 13 y 16** suma el **Ratero** y el **Cargador** (6 + 1, 8 + 1, 8 + 1 y 10 + 2): es donde **debutan**. `sin_recursos` gana 5 de 5 con 5 a 12 vidas (antes 16); el nivel no estrena otro enemigo y el aumento de vida no cambió.
 
@@ -2685,6 +2689,8 @@ Corta, en orden de importancia. Cada una trae mi recomendación; si no contestá
     | 13 · Paso alto (24) | 10, 13, 15 y 18 | ídem |
     | 14 · Los poblados vacíos (26) | 10, 13, 15 y 18 | ídem |
 
+    *(Nota M59, RF-517: la Cuadrilla del 7 **no cambia** —ninguna aparición, cantidad ni oleada—; solo la oleada 11 pasa a traer 22 Rápidos en lugar de 30, y la Cuadrilla de esa oleada sigue igual.)*
+
     Los Rateros salen **cada 0,4 s** y los Cargadores **cada 3 s**, todos desde el segundo 0 de la oleada (`"desde"` sin escribir, RF-203), **encima** de lo que la oleada ya traía.
   - **Debut (RF-475, punto 1):** la primera aparición del 7 (oleada 8) trae la Cuadrilla **sin ninguna otra amenaza que el jugador no haya visto** (la oleada ya trae Blindados y Tanques) y con tiempo de preparación antes. El nivel 7 **no estrena otro enemigo**.
   - **Sin auras ni jefe:** en esta spec **ninguna aparición comparte oleada** con un Guardián, un Curandero, un Chamán, un Espejo ni el Soberano. Mezclarlos **no se midió**: si T253 quiere hacerlo, lo mide y lo informa.
@@ -3163,3 +3169,82 @@ Cortas y con mi recomendación; «✔ todas» alcanza.
 5. **P5 · La barra de arriba pierde «← Menú»** pero conserva puntos, colección y «Pruebas»: ¿confirmás que esos se quedan?
 6. **P6 · Las estatuas de torres:** ¿cuáles se esculpen (una por nivel, varias variantes) y se mantiene la regla de la guía de arte (piedra gris erosionada, musgo en pradera, escarcha en nieve)? Recomiendo tres variantes (cañón, mortero y torre de hielo) para empezar.
 7. **P7 · «Interfaz» en Opciones:** ¿también visible en el celular real, o solo en el modo de pruebas? Recomiendo siempre visible (es un solo selector).
+
+### M59 · Balance de los niveles 2 y 7: un Jefe menos en el 2 y enjambres más chicos en el 7 (Lucas, 2026-10-16; T278)
+
+**Estado: DECIDIDA por Lucas (G7, 2026-10-16, plan 12 §7 punto 5); lo que falta es programar T279 y que Lucas valide jugando (T280).** Esta spec solo ordena el cambio: **no cambia ningún dato todavía** (`data/levels/level_02.json` y `level_07.json` siguen como estaban). Todos los números salen del informe `specs/tareas/informes/T266-auditoria-dificultad.md` (auditoría con el bot, commit `93f780a`), §5.1 y §5.2; no hay ninguno inventado.
+
+**Qué pidió Lucas.** Un tester dijo que los niveles **2 y 7** eran los más difíciles (en una versión vieja de siete niveles). T266 comprobó que **se reproduce hoy** y Lucas aprobó los ajustes que el informe propuso (opción **A** para el 2).
+
+**Idea en pocas palabras.** Los dos picos no son de «vida de los monstruos» sino de **un escalón puntual**: en el 2, la **oleada 15** (dos Jefes de 1770 de vida con armadura 3, más un grupo final de 12 Blindados); en el 7, **tres enjambres de Rápidos** por las dos entradas (oleadas 2, 11 y 18). Bajar el aumento de vida no lo arregla (T266 §5: con 20 % en el 7 `smart` sigue perdiendo en la 18). Se aplana **solo ese escalón** y se deja todo lo demás igual.
+
+#### Requisitos
+
+- **RF-516** **Nivel 2 (Desfiladero), oleada 15:** en `data/levels/level_02.json`, la oleada 15 pasa de **2 Jefes** a **1 Jefe** y **se quita el último grupo de 12 Blindados** (`armored`, cada 0,8 s, desde 10 s). Quedan el Tanque (12) y el Volador (16) como están.
+
+  | Campo de la oleada 15 | Antes | Después |
+  |---|---|---|
+  | `boss` · `cantidad` | 2 | **1** |
+  | `tank` · `cantidad` (cada 1.0, desde 2.0) | 12 | 12 (igual) |
+  | `flyer` · `cantidad` (cada 0.4, desde 6.0) | 16 | 16 (igual) |
+  | `armored` · `cantidad` (cada 0.8, desde 10.0) | 12 | **el grupo se quita** |
+
+  **No cambian** el oro (200), las vidas (20), el aumento de vida (**35 %**), las oleadas 1 a 14, el mapa ni los textos. Es la **variante A** de T266 (§5.1).
+- **RF-517** **Nivel 7 (Cruce), oleadas 2, 11 y 18:** en `data/levels/level_07.json`, solo cambian estas cantidades:
+
+  | Oleada | Grupo | Antes | Después |
+  |---|---|---|---|
+  | 2 | `fast` entrada A (cada 0.4) | 15 | **10** |
+  | 2 | `fast` entrada B (cada 0.4, desde 2.0) | 15 | **10** |
+  | 11 | `fast` (cada 0.25, entrada A) | 30 | **22** |
+  | 18 | `fast` (cada 0.2, entrada A) | 40 | **30** |
+  | 18 | `flyer` entrada B (cada 0.3, desde 2.0) | 25 | **20** |
+
+  **No cambian** el oro (300), las vidas (20), el aumento (**24 %**), las demás oleadas, **La Cuadrilla** (oleadas 8, 11, 13 y 16 con las mismas cantidades, RF-487), el resto de la oleada 11 (15 Voladores, 8 Rateros, 1 Cargador) ni el Embestidor de la 18. Es la combinación «o2 + o11 + o18» de T266 (§5.2); **las tres hacen falta**: con solo la 11 no cambia nada y con la 2 y la 11 `smart` gana 2 de 5 (T266).
+- **RF-518** **Qué no se toca y cómo se comprueba** *(la regla de oro)*:
+  1. **Los niveles 13, 14 y 15 no se tocan** (`level_13.json`, `level_14.json`, `level_15.json`): están **al borde** (el 14 termina con 3 vidas, el 15 con 2, T266 §4) y ningún ajuste de M59 puede cambiarlos. Tampoco se toca ningún otro archivo de `data/` salvo `level_02.json` y `level_07.json`: ni torres, ni enemigos, ni `balance.json`, ni el aumento de vida.
+  2. **RF-432 se sigue cumpliendo:** `check_rule=1` con **5 semillas** y `sin_recursos` da **«REGLA DE ORO: SE CUMPLE»** en los nueve mapas con recursos, y el 7 sigue ganando **5 de 5**. Los mínimos del 13 (3 a 5), del 14 (3) y del 15 (2) quedan **igual que antes**; cualquier diferencia en 11 a 15 es un error.
+  3. **Se mide antes y después con 5 semillas** (1 a 5), con las mismas estrategias y mejoras de T266, y se comparan con su tabla (valores esperados en el criterio de aceptación).
+  4. **Se valida con personas** (T280): Lucas juega **1 → 2 → 3** y **6 → 7 → 8** en una campaña nueva y anota resultados. **Si una partida humana contradice al bot, manda la partida humana** y se reabre la propuesta (alternativa B del 2, abajo) **antes de reenviar el juego al tester**. Hasta entonces T266 y T268 siguen abiertas.
+- **RF-519** **Asedio hereda los dos mapas** *(RF-391, RF-495)*: Asedio reusa las oleadas de los mapas 2 y 7, así que M59 también los afloja. T279 los **remide** con la política fija de cada mapa (T258: mapa 2 `smart`, mapa 7 `sin_recursos`, mejoras al llenar, 5 semillas) y lo informa. **El porcentaje de vida de Asedio (105 % en el 2, 101 % en el 7) no se cambia en M59**: si Lucas lo quiere subir porque los mapas quedaron más fáciles que sus vecinos, es una decisión aparte. Los otros 13 mapas de Asedio **no cambian**.
+
+> **Criterio de aceptación RF-516 a RF-519**
+> **Dado** el nivel 2 con los datos de M59 → **Cuando** el bot juega con 5 semillas (aumento 35 %) → **Entonces** `mix` gana 5 de 5 (referencia T266: **16 vidas**; 0 de 5 antes), `smart` gana 5 de 5 (**17**, igual que antes), `mix` con mejoras tempranas gana 5 de 5 (**6**) y **solo Ametralladoras (`basic`) sigue perdiendo, en la oleada 15** (es lo buscado: desde el nivel 2 hay que mezclar torres, §7.4).
+> **Dado** la oleada 15 del nivel 2 → **Entonces** trae 1 Jefe, 12 Tanques y 16 Voladores, y **ningún** Blindado.
+> **Dado** el nivel 7 con los datos de M59 → **Cuando** el bot juega con 5 semillas (aumento 24 %) → **Entonces** `smart` gana 5 de 5 con **5 a 6 vidas** (referencia T266; 0 de 5 y derrota en la oleada 18 antes), `mix` gana 5 de 5 con **12 en las cinco** (antes una semilla terminaba con 5), `mix` con mejoras tempranas gana 5 de 5 con 9 a 11 y `demoler` gana con 13. `sin_recursos` (RF-432) gana 5 de 5.
+> **Dado** las oleadas 2, 11 y 18 del nivel 7 → **Entonces** traen 10 + 10, 22 y 30 Rápidos + 20 Voladores, y las apariciones de La Cuadrilla (oleadas 8, 11, 13 y 16) son las mismas de antes.
+> **Dado** cualquier ejecución de `check_rule=1` con 5 semillas → **Entonces** dice «REGLA DE ORO: SE CUMPLE», y los niveles 13, 14 y 15 terminan con los mismos mínimos que antes de M59 (3 a 5, 3 y 2 vidas).
+> **Dado** el `git diff` de T279 → **Entonces** solo cambian `data/levels/level_02.json` y `data/levels/level_07.json` (más los documentos); ningún otro `.json`, `.tres`, `.gd`, `.tscn` ni asset.
+> **Dado** Asedio → **Cuando** se remiden los mapas 2 y 7 con su política → **Entonces** ganan 5 de 5 (referencia T266: mapa 2 con 13 vidas, igual que hoy; mapa 7 con 6, antes entre 1 y 10) y los demás mapas de Asedio dan lo mismo que antes.
+> **Dado** las partidas de Lucas 1 → 2 → 3 y 6 → 7 → 8 → **Entonces** el 2 es más difícil que el 1 **pero no un muro**, el 3 no se siente más fácil que el 2, el 7 es el más exigente de su trío **pero no un muro**, el 8 se siente como un respiro (debut del Guardián), y quien juega el 2 solo con Ametralladoras **pierde y entiende por qué** (el Jefe y la armadura).
+
+#### Lo que decidí por defecto *(Lucas no lo definió; cambia con su respuesta)*
+
+1. **El aumento de vida no se toca** (35 % y 24 %). Lucas aprobó los cambios de oleadas; T266 mostró que bajar el aumento es «un ajuste para el bot `mix`, no para el nivel».
+2. **El campo `cada` del Jefe del 2 queda en 3.0** aunque con un solo Jefe ya no separa a nadie: es el valor de la variante A medida (`l02_final_suave`) y no cambia el resultado.
+3. **El porcentaje de Asedio no se toca** (RF-519), aunque el mapa 7 quede más parejo; se informa y se decide aparte.
+4. **T279 cambia los dos archivos, mide y recién después documenta.** Si un número medido difiere de la referencia de T266 en más de una o dos vidas, se informa y **no** se ajusta a ojo.
+5. **El consejo de contramedida en el cartel de entrada** (sugerencia de T266 §5.2) **no entra**: es lore y sigue en «Sugerencias de Claude» (§13) hasta que Lucas diga que sí.
+
+#### Alternativa preparada si las partidas humanas lo piden
+
+- **Nivel 2, variante B de T266:** aumento **30 %** más 1 Jefe (en el bot: `mix` V20, `smart` V18, `basic` V10; todas las estrategias razonables ganan). **No se aplica ahora**: se pasa a B solo si Lucas, jugando A, todavía pierde o gana «de casualidad» en la 15. Con B, Asedio 2 sube de 13 a 18 vidas y habría que remedir su porcentaje (T266 §5.3). Sería una decisión nueva (D-100).
+
+#### Lo que M59 no incluye
+
+- **Cualquier cambio de código, de torres, de enemigos, de `balance.json`, de arte o de textos.** Solo dos archivos de nivel.
+- **Los niveles 3 a 6 y 8 a 15.** T266 no encontró picos sin justificación en ellos (4 y 5 dependen de la estrategia con causa conocida y explicada; el 8 es un descanso pedagógico justificado).
+- **La trampa de la Disruptora** en el 11 y el 13 (RF-452, RF-475 punto 8): sigue pendiente de Lucas, fuera de M59.
+- **El consejo de contramedida en los carteles de entrada** (§13, Sugerencias de Claude).
+- **Cambiar el porcentaje de vida de Asedio.**
+- **Probar con personas dentro de T279.** Las partidas son T280 y las juega Lucas.
+
+#### Lo que no se probó (al escribir esta spec)
+
+**Nada se programó ni se corrió:** todos los números son del informe T266, medidos por el bot en copias fuera del repositorio. **Ninguna persona jugó.** El bot no mira la próxima oleada ni cambia de plan, así que «5 a 6 vidas» del `smart` en el 7 es un margen del bot, no de una persona.
+
+#### Preguntas para Lucas
+
+1. **P1 · ¿La variante A del 2 va como está** o preferís arrancar directo con la B (30 % + 1 Jefe)? Recomiendo A, y B solo si jugando todavía se siente un muro.
+2. **P2 · ¿El porcentaje de Asedio queda como está** (105 % y 101 %) hasta ver los números remedidos? Recomiendo que sí.
+3. **P3 · ¿Querés el consejo de contramedida** en los carteles del 2 y del 7? Sigue como sugerencia (§13); sin tu OK no entra.

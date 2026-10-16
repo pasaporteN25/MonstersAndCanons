@@ -1390,3 +1390,37 @@ La campaña y sus niveles, `LevelFile`, la Wiki más allá de un botón, el epí
 - **El catálogo abierto con la partida en marcha** puede tapar un ataque. Es la decisión por defecto 1; si molesta, el cambio es una línea.
 - **Infraestructura dentro del catálogo:** M53 arma sus pestañas con `bar_tabs.gd`; T275 comprueba que el flujo de demoler y extraer funciona con el catálogo cerrado.
 - **Un guardado con `ui_prefs` roto** no puede impedir jugar: la prueba de guardados dañados de T268a (`tools/verify_save.gd`) se amplía con ese caso.
+
+### M59 / T278 · Balance de los niveles 2 y 7 (RF-516 a RF-519, D-099)
+
+> **Estado: especificada en T278 (decidida por Lucas en G7; sin programar).** La spec es **M59** (`01-spec.md`), la decisión **D-099** y las tareas **T279** (aplicar y medir) y **T280** (partidas de Lucas). El informe con todas las mediciones es `specs/tareas/informes/T266-auditoria-dificultad.md`.
+
+#### Qué hay hoy
+
+- Los niveles son archivos de texto (`data/levels/level_02.json` y `level_07.json`, RF-203): cada oleada es una lista de grupos `{enemigo, cantidad, cada, desde, entrada}`. Cambiar una cantidad **no necesita código**.
+- El bot `tools/balance_sim.gd` lee el nivel de la campaña (`level=N`) o un archivo (`file=`), con `seed=`, `mejoras=` y `report=`; `check_rule=1` comprueba la regla de oro (RF-432). Los archivos de T266 (`tools/t266/*.json`) **no están en el repositorio**: se hicieron en una copia (variantes `l02_final_suave` y `l07_o2_o11_o18`).
+- Asedio carga los mismos mapas con `data/modos/asedio/modo.json` (porcentaje de vida por mapa, T258).
+
+#### Qué se cambia
+
+| Archivo | Cambio |
+|---|---|
+| `data/levels/level_02.json` | Oleada 15: `boss.cantidad` 2 → 1; se quita el grupo `armored` (12, cada 0.8, desde 10.0). |
+| `data/levels/level_07.json` | Oleada 2: los dos grupos `fast` 15 → 10. Oleada 11: `fast` (entrada A) 30 → 22. Oleada 18: `fast` 40 → 30 y `flyer` (entrada B) 25 → 20. |
+
+Nada más: ni `balance.json`, ni `.tres`, ni código, ni assets, ni los niveles 13 a 15 (RF-518).
+
+#### Cómo se prueba
+
+1. **Antes** (con los archivos sin tocar) y **después**, con `nice -n 19` y a lo sumo 4 procesos a la vez: niveles 2 y 7 con **5 semillas** (1 a 5) y las estrategias de la tabla de T266 §5.1 y §5.2 (`mix`, `smart`, `basic`, `naive` en el 2; `mix`, `smart`, `demoler`, `naive` en el 7; con y sin `mejoras=llenar` y `temprana`). Se compara con la referencia de T266 (criterio de aceptación de M59).
+2. **Regla de oro:** `godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- x check_rule=1`, 5 semillas, toda la campaña: «REGLA DE ORO: SE CUMPLE» y los mínimos del 13, 14 y 15 iguales que antes (hay que correrla **antes** también para tener con qué comparar).
+3. **Asedio:** `modo=asedio level=2` y `level=7` con la política de T258 (mapa 2 `smart`, mapa 7 `sin_recursos`, mejoras al llenar) y 5 semillas.
+4. **Tests de GUT:** la suite completa (los tests de niveles y de oleadas leen estos archivos: si alguno cuenta enemigos de la oleada 15 del 2 o de las 2, 11 o 18 del 7, **se actualiza ese número**, no el dato).
+5. **Partidas humanas (T280, las juega Lucas):** 1 → 2 → 3, 6 → 7 → 8 y las seis partidas de T266 §7. No las reemplaza ningún bot.
+6. **No se prueba** (límites): el tacto y el ojo humano (T280), el rendimiento y el celular.
+
+#### Riesgos
+
+- **Tests que cuentan enemigos** de esas oleadas (arriba, punto 4).
+- **El 7 de Asedio queda más parejo, no más fácil:** T266 midió 5 de 5 con 6 vidas (antes 1 a 10); una explicación posible, no verificada, es que con menos Rápidos el bot cobra menos oro. Se remide en T279.
+- **Que una partida humana contradiga al bot:** por RF-518 manda la partida humana y se pasa a la variante B del 2 (D-100) o se reabre el 7.
