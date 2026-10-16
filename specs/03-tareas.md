@@ -13,6 +13,8 @@
 
 ## Prioridad máxima · Mobile, presentación y próxima prueba (2026-10-16)
 
+> **Plan de ejecución (2026-10-16):** el orden, los modelos y las compuertas de T262 a T268 están en [12-plan-t262-t268.md](12-plan-t262-t268.md).
+
 **Pedido de Lucas:** registrar y pushear el backlog, sin tocar código, datos, escenas ni assets. Todas las tareas de este bloque quedan **pendientes**; su registro no autoriza ejecutarlas todavía. Este bloque se atiende antes que los pendientes históricos de menor prioridad. **Refs generales:** backlog §13, B-33 a B-39. Antes de implementar, convertir las propuestas elegidas en spec y decisiones conforme a P3.
 
 - [ ] **T262 · Analizar cómo mejorar y optimizar la versión mobile. Prioridad máxima.**
