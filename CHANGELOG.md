@@ -2,6 +2,18 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Lo que viene al celular: carrito, zoom y torre fantasma *(M58, spec del 2026-10-16; todavía no está en el juego)*
+
+**Esto es lo que Lucas pidió y quedó escrito; no se puede probar todavía.** Cuando se programe:
+
+- **Un carrito flotante** abre el catálogo de torres sobre el mapa y se cierra solo al elegir una; **una X flotante** lleva al menú (con la confirmación de siempre). Los dos se **arrastran y se pegan al borde** izquierdo o derecho, y el juego recuerda dónde los dejaste.
+- **Se coloca con una torre fantasma:** tocás una casilla, ves cómo queda, y confirmás con la **tilde** (o cancelás con la **cruz**). **Nada se compra al apoyar el dedo.** Al colocar, la torre se deselecciona.
+- **Zoom con los dedos:** pinza para acercar y alejar, dos dedos para mover el mapa y un botón «Ver todo». En la computadora, con la rueda del mouse y el botón del medio.
+- **La barra de abajo muestra la torre elegida:** nombre, nivel, estadísticas, «Mejorar» (con el costo o el motivo si no se puede) y «Vender», que pide un segundo toque.
+- **Las tarjetas de nivel muestran las torres como insignias de bronce** (en PC y en celular).
+- **La PC queda igual** y en Opciones se podrá forzar el modo celular o el de PC para probar.
+- **Las estatuas de los mapas pasarán a ser estatuas de torres de piedra**, en lugar de la persona con espada.
+
 ## La intro: siete láminas con texto, que se pueden omitir y volver a ver *(T242, 2026-10-11)*
 
 - **Al tocar «Jugar» por primera vez se ve una intro de siete láminas** (unos 50 segundos) con el texto abajo y un fundido entre una y otra: la nave, qué lleva, los años de viaje, el planeta seco con un único punto verde, la bajada, los motores apagados y el oasis. Cuenta la llegada; no explica cómo se juega.

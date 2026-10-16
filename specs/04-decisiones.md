@@ -890,3 +890,51 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
   - **Subir `SAVE_VERSION`:** un cambio de versión descarta guardados (`save_manager.gd`: «se empieza de cero»); una clave aditiva no.
   - **Textos en `11-textos-lore.md`:** ese documento es el único lugar de los textos de los niveles y la Wiki, pero la intro necesita sus **ilustraciones, su hoja de continuidad y sus preguntas** al lado de cada texto. Se deja en `specs/intro/guion.md` y `11-textos-lore.md` lo apunta.
 - **Qué cambia:** `01-spec.md` (M57, RF-497 a RF-501; §11 y M52 apuntan a ella; una sugerencia en §13), `02-plan-tecnico.md` (M57), `03-tareas.md` (T240 hecha a la espera del OK; T241 y T242 pendientes), `08-plan-cierre-v1.md` (fila de T240), `11-textos-lore.md` (una nota), `specs/intro/guion.md` (nuevo), y las fichas `specs/tareas/T241-arte-intro.md` y `specs/tareas/T242-intro-integracion.md`. **No cambia ningún dato ni código:** el archivo `intro.json`, las láminas, la pantalla, el botón de la Wiki y el campo del guardado los hacen T241 y T242.
+
+## D-097 · El celular tiene su propio modo de interfaz: carrito y salir flotantes, barra de la torre elegida, torre fantasma con tilde y cruz, y zoom con los dedos
+- **Fecha:** 2026-10-16 · **Estado:** Propuesta, a la espera del OK de Lucas sobre la spec M58 (las decisiones de fondo ya las tomó Lucas en G7) · **Decidió:** Lucas (qué: solo celular; carrito y X flotantes, arrastrables y pegados a un costado, con la posición guardada; barra de arriba sin «Menú»; barra de abajo como barra de la torre elegida, alternativa A de T263; torre fantasma con tilde y cruz, C1 de T264; zoom Z1; tarjetas con Insignias; PC igual que hoy; interruptor en Opciones; qué queda fuera) / Claude (los números, los casos de error, el campo del guardado y lo que figura en «Lo que decidí por defecto» de M58).
+- **Qué:**
+  - Un **modo de interfaz «celular»** distinto del de PC. Se elige solo (`OS.has_feature("mobile")`) y se puede forzar desde Opciones (**Automática / Celular / PC**, clave `ui_mode` en `settings`) para probar sin celular (RF-502).
+  - **Nada se compra ni se elige al apoyar el dedo**; se decide al soltar, y dos dedos o un dedo que se movió más de 2 mm nunca construyen (RF-504).
+  - **Colocar** en dos pasos: el catálogo (carrito) elige, el **fantasma** se mueve (toque o arrastre relativo) y la **tilde** construye; la **cruz** cancela; la torre se deselecciona al colocarla (RF-505, RF-510).
+  - **Zoom** con pinza y dos dedos para desplazar, «Ver todo» solo en el celular; rueda y botón central en PC, sin botón (RF-506).
+  - **Dos botones flotantes** (carrito y X) de 7,6 mm o más, arrastrables y pegados al borde, con la posición en una clave nueva **`ui_prefs`** del guardado (lado y altura; si falla la lectura, valor por omisión) y con reglas para no tapar el fantasma (RF-507 a RF-509, RF-511).
+  - **Barra de abajo** = barra de la torre elegida, con estados vacía / fantasma / elegida, «Mejorar» y «Vender» en extremos opuestos, y **Vender con segundo toque** (RF-512, RF-513).
+  - **Tarjetas de nivel con Insignias** en PC y celular (RF-514).
+  - Los números sueltos (56, 64, 82 px, 2 mm, 150 ms, 3 s, 0,4 s, 0,35 s, 45 %) van en un archivo de datos y se ajustan después de la prueba real.
+- **Por qué:**
+  - **Porque hoy el celular es la PC achicada y se nota (T262):** botones de 3 mm, un panel que tapa el 13 % del mapa, y 11 de 49 toques corridos alrededor de «Mejorar» que **venden la torre**. Un modo propio permite arreglar el celular **sin tocar la PC**, que Lucas pidió que quede igual.
+  - **Fantasma con tilde (C1) y no compra al apoyar** porque T264 midió que arrastrar o pinzar con una torre elegida hoy **compra por error** y que con tilde las compras por error de los ocho casos pasaron de 3 a 0. El arrastre relativo evita que el dedo tape el fantasma, y la tilde y la cruz van del lado contrario al botón para que tampoco los tape.
+  - **Carrito flotante y no barra de torres fija** porque el catálogo ocupa el mapa solo cuando se compra; las tarjetas muestran nombre y costo y miden 18 × 10 mm (hoy 7,1 × 5,6 mm y sin nombre). Cuesta **un toque más** al cambiar de torre (T264 §4.2); Lucas lo aceptó al elegirlo.
+  - **Botones flotantes arrastrables y pegados a un costado** porque la mano que juega, el tamaño del celular y la funda son de cada persona: nadie tapa su propio mapa si puede poner el botón donde le queda cómodo. Pegados al borde porque en el medio estorban.
+  - **La barra de abajo con la torre elegida (A)** porque tapa **0 %** del mapa, deja «Vender» a unos 35 mm de «Mejorar» y combina con el zoom (no depende de dónde esté la torre en pantalla); B y C tenían que seguir a la torre al mover el mapa.
+  - **La preferencia en el guardado y no en un archivo aparte:** el guardado ya es por dispositivo y se lee con tolerancia a errores (RF-115). Una clave aditiva no sube `SAVE_VERSION` (como `intro_seen` en D-096): un guardado viejo carga con los valores por omisión y uno nuevo carga en una versión anterior. `ui_mode` va en `settings` porque es una opción más; `ui_prefs` es aparte porque guarda texto y números que `settings` no admite hoy.
+  - **El corrimiento automático de los botones es temporal:** si cambiara la preferencia, el botón quedaría en un lugar que el jugador no eligió.
+- **Alternativas descartadas:**
+  - **Un solo modo para todos (más grande y con zoom también en PC):** cambia lo que Lucas pidió que quede igual y no ayuda a la PC.
+  - **Detectar el celular solo por `OS.has_feature("mobile")` sin interruptor:** no se podría probar en la PC de Lucas, que no tiene celular ni SVM para el emulador (G7, punto 9).
+  - **Colocación automática protegida (C2 de T264):** más rápida (7 contra 11 toques en cinco torres) pero exige zoom antes de colocar y deja un «Deshacer» que toca reglas de oro y recursos. Lucas eligió C1.
+  - **Compra al soltar el dedo sin fantasma (C0 corregido):** evita comprar al apoyar pero no deja corregir antes de pagar.
+  - **Barra plegable (S3) o botones grandes en la barra (S1):** no liberan el mapa o no entran con 10 torres (T264 §4.2).
+  - **Barra de torre como ficha junto a la torre (B) o panel al costado (C):** tapan el mapa justo alrededor de la torre y «Vender» queda a 1,3 mm de «Mejorar».
+  - **Un solo botón flotante que despliega varias acciones (menú, pausa, velocidad):** Lucas dejó Pausa y x2 arriba y la X sola; un menú desplegable agrega un toque a cada acción.
+  - **Un diálogo al vender:** el segundo toque en el mismo botón protege igual, sin una ventana más (B-34 pide menos diálogos).
+  - **Guardar la posición de los botones en un archivo aparte o en `settings`:** el primero duplica la lectura tolerante; el segundo solo guarda números y booleanos hoy.
+  - **Que los botones se pausen o desaparezcan con el fantasma:** no se ven si no hay forma de abrir el carrito o salir; semitransparentes y que se corran alcanza.
+  - **Nuevas teclas o gestos de desplazamiento con un dedo:** un dedo ya selecciona y mueve el fantasma; desplazar con uno sería otra fuente de errores (T264, G3).
+- **Qué cambia:** `01-spec.md` (M58, RF-502 a RF-515; notas en RF-104, RF-113, RF-143, RF-251 y RF-459; backlog B-40 a B-44), `02-plan-tecnico.md` (M58), `03-tareas.md` (T269 hecha; T270 a T277 pendientes), `CONTENIDO.md`, `README.md`, `ONBOARDING.md` y `CHANGELOG.md` (notas), y `12-plan-t262-t268.md` (estado). **No cambia ningún dato ni código:** el modo de interfaz, los botones, los gestos, el fantasma, el zoom, la barra, las tarjetas y el archivo de números los hacen T270 a T276.
+
+## D-098 · Las estatuas decorativas de los mapas son estatuas de torres de piedra erosionada, no de personas con espada
+- **Fecha:** 2026-10-16 · **Estado:** Propuesta (dirección decidida por Lucas; qué torres se esculpen, abierto: P6 de M58) · **Decidió:** Lucas (el cambio de concepto: «estatuas de las torres, no de hombres con espada, porque son nuestras armas y no hay hombres con espadas en el juego»; de las muestras de T267a, la estatua es la única que le convence) / Claude (el material, la casilla y la regla para no confundirla con el Estandarte).
+- **Qué:** la estatua decorativa de los niveles 1, 3 y 5 (`assets/sprites/map/estatua.svg`) pasa a representar **torres**: **piedra gris erosionada** (con **musgo** en la pradera y **escarcha** en la nieve), con **pedestal**, de **una casilla**, **sin círculo de alcance**, **no seleccionable** y **distinta del Estandarte mecánico** (RF-515; regla de arte en `05-guia-de-arte.md` §9).
+- **Por qué:**
+  - **Lore y coherencia:** en el universo (`10-universo.md`) no hay personas con espada; las armas de la colonia son las torres. Una estatua de una torre cuenta que la Compañía las honra, sin inventar una cultura.
+  - **Piedra y no metal** porque el Estandarte mecánico es una torre jugable «estatua de ingeniería» de hierro, plata y bronce (`10-universo.md` §3); la decoración tiene que leerse como **piedra vieja** a primera vista, para que nadie intente tocarla creyendo que es la torre de apoyo.
+  - **Musgo y escarcha** porque los temas del mapa (§5 de la guía de arte) ya cambian la textura del suelo; la estatua tiene que vivir en el mismo clima.
+  - **Sin círculo de alcance ni selección** para que ni siquiera al tocarla parezca una torre (y para que no se pueda construir encima como si fuera una).
+- **Alternativas descartadas:**
+  - **Conservar la estatua del hombre con espada:** Lucas la rechazó.
+  - **Estatuas de metal o bronce:** se confundirían con el Estandarte y con las torres reales.
+  - **Que las estatuas se puedan seleccionar y muestren una descripción:** agrega una interacción que nadie pidió y puede confundirse con el panel de torres.
+  - **Una sola variante en todos los niveles:** posible y barata, pero queda como la pregunta P6 para que Lucas elija cuántas.
+- **Qué cambia:** `01-spec.md` (RF-515), `05-guia-de-arte.md` (§9), `03-tareas.md` (T277). **No cambia ningún asset ni código:** el dibujo y su integración son T277, con muestras aprobadas por Lucas antes de integrarse.

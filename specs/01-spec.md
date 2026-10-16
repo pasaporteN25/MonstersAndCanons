@@ -772,7 +772,7 @@ Oro inicial **300**, 20 vidas, **20 oleadas**, con todos los enemigos (Normal, R
 Para poder hacer niveles más altos (9 y 10) con más lugar para construir y caminos más largos, un mapa puede ser **un poco más grande** que 20×9. No hay cámara que se desplaza: el juego **achica todo** (zoom) para que el mapa entre entero en pantalla, y la interfaz no cambia.
 
 - **RF-250** **Tamaños posibles:** de **20×9** (el de siempre y el de todos los niveles actuales) hasta **26×12** casillas. Cada fila del `mapa` tiene que tener **el mismo largo** (entre 20 y 26 letras) y la cantidad de filas va de 9 a 12. La casilla sigue midiendo 64×64 en los números del juego: **alcance, velocidad y daño no cambian con el tamaño**.
-- **RF-251** **Zoom automático:** el mapa se muestra con un zoom de `mínimo(1; 1280 ÷ (ancho × 64); 576 ÷ (alto × 64))`, **centrado** en el área que hay entre la barra de arriba y la de abajo. Con 20×9 el zoom es 1 (todo igual que hoy); con 26×12, 0,75. La barra de arriba, la de torres y los paneles **no se achican**: solo el mundo (mapa, torres, enemigos, disparos y efectos).
+- **RF-251** **Zoom automático:** el mapa se muestra con un zoom de `mínimo(1; 1280 ÷ (ancho × 64); 576 ÷ (alto × 64))`, **centrado** en el área que hay entre la barra de arriba y la de abajo. Con 20×9 el zoom es 1 (todo igual que hoy); con 26×12, 0,75. La barra de arriba, la de torres y los paneles **no se achican**: solo el mundo (mapa, torres, enemigos, disparos y efectos). *(M58, RF-506: es el **zoom mínimo** y el de «Ver todo»; desde ahí se puede acercar con la pinza o la rueda.)*
 - **RF-252** **Todo funciona igual con zoom:** la casilla que se marca con el mouse o el dedo es la que está debajo del puntero; los alcances, los disparos y el daño dan lo mismo que sin zoom.
 - **RF-253** **Validación:** un mapa con filas de distinto largo, de menos de 20×9 o de más de 26×12 es inválido y el mensaje dice qué tamaño tiene y cuáles se aceptan. Las entradas tienen que estar en el borde del mapa **real** (no de 20×9). Los topes de RF-223 suman estos.
 - **RF-254** **El editor (§10.3) respeta el tamaño:** abrir, guardar y probar un mapa de otro tamaño no lo recorta ni lo corrige a 20×9, y el mapa se ve entero en el editor (con su propio zoom). El nivel nuevo sigue siendo de 20×9; **cambiar el tamaño desde el editor** todavía no se puede (queda para cuando se pida).
@@ -1100,7 +1100,7 @@ Lo que **no** depende de G4 y queda firme: el lugar, el bioma, las señales, los
 | `0` | Elegir la décima torre para construir | M53 (RF-456) |
 | `Tab` | Cambiar de pestaña de la barra (solo en niveles con infraestructura) | M53 (RF-456) |
 
-- **RF-104** *(M2)* **Pausa** detiene todo (enemigos, torres, cuenta atrás), pero se puede seguir mirando el mapa y seleccionar torres. No se puede construir en pausa, pero **sí mejorar y vender** (así se puede pensar con calma). Mientras está en pausa se ve el cartel **"PAUSA"** en el centro.
+- **RF-104** *(M2; M58: en el modo celular, pausar también suelta el fantasma y la torre elegida)* **Pausa** detiene todo (enemigos, torres, cuenta atrás), pero se puede seguir mirando el mapa y seleccionar torres. No se puede construir en pausa, pero **sí mejorar y vender** (así se puede pensar con calma). Mientras está en pausa se ve el cartel **"PAUSA"** en el centro.
 - **RF-105** *(M2)* **Velocidad x2:** todo el juego va al doble (enemigos, disparos, oleadas, cuenta atrás, efectos). Al reintentar o salir, la velocidad vuelve a x1 y la pausa se quita.
 
 ### 9.3 Efectos visuales *(M1.5)*
@@ -1151,7 +1151,7 @@ Adaptaciones **mínimas** para que el juego funcione en un celular. No es un red
 - **RF-140** Se exporta un `.apk` que se instala en un celular Android (versión de prueba, firmada con la clave de depuración).
 - **RF-141** El juego se ve siempre **en horizontal** (girando el celular hacia cualquiera de los dos lados).
 - **RF-142** El **botón "atrás"** de Android hace lo mismo que `Esc`: en la partida cancela la construcción o la selección, o abre y cierra el menú de pausa; en las opciones las cierra; en la selección de nivel vuelve al menú principal. **Nunca cierra el juego de golpe** (para salir está el botón "Salir" del menú principal).
-- **RF-143** **Tocar** equivale a un clic izquierdo: tocar un botón lo pulsa; con una torre elegida, tocar una casilla construye; tocar una torre la selecciona. Como no hay "pasar el mouse por encima", la vista previa aparece donde se tocó. Para dejar de construir se toca otra vez el botón de la torre elegida.
+- **RF-143** **Tocar** equivale a un clic izquierdo: tocar un botón lo pulsa; con una torre elegida, tocar una casilla construye; tocar una torre la selecciona. Como no hay "pasar el mouse por encima", la vista previa aparece donde se tocó. Para dejar de construir se toca otra vez el botón de la torre elegida. *(M58, RF-504 y RF-505: en el **modo celular** esto cambia: tocar el mapa **no construye**, solo pone la torre fantasma; se construye con la tilde. La PC no cambia.)*
 
 ### 9.6 Arte provisional *(M4, pedido por Lucas, D-023)*
 
@@ -1187,7 +1187,7 @@ Dibujos simples para dejar de ver formas geométricas. Es un **primer intento "p
 - **RF-111** **Selección de nivel:** muestra los niveles. Los bloqueados dicen "Bloqueado". Los completados muestran sus **estrellas** (RF-93) y la mejor cantidad de vidas conseguida. Arriba se ve el **total de estrellas** de la campaña ("Estrellas: 7 de 15").
 - **RF-116** *(M9)* **La selección de nivel admite cualquier cantidad de niveles:** las tarjetas se acomodan en **filas de hasta 5**, centradas; se ven **2 filas** y, si hay más, el área **se desplaza** (rueda del mouse, arrastrar con el dedo o las flechas del teclado, que siguen a la tarjeta elegida). Con 5 niveles o menos hay una sola fila. Ningún nivel queda fuera de la pantalla, sin importar cuántos haya.
 - **RF-112** Al principio solo está desbloqueado el nivel 1. **Ganar** el nivel N desbloquea el N+1.
-- **RF-113** **Opciones:** volumen de música, volumen de efectos, pantalla completa sí/no, **números de daño sí/no** *(M4, RF-132)*.
+- **RF-113** **Opciones:** volumen de música, volumen de efectos, pantalla completa sí/no, **números de daño sí/no** *(M4, RF-132)*. *(M58, RF-502: se suma el selector **«Interfaz»**: Automática, Celular o PC.)*
 - **RF-114** **Menú de pausa** (con `Esc` durante la partida): Continuar, Reintentar, Opciones, Salir al menú.
 - **RF-115** El progreso (niveles desbloqueados, mejores resultados) y las opciones **se guardan automáticamente** y siguen ahí al cerrar y volver a abrir el juego.
 - **RF-116** **Sonido básico:** disparo de cada torre, muerte de enemigo, enemigo llega a la salida, victoria, derrota, clic de botón. Música de menú y combate, con transiciones y mezcla (RF-354).
@@ -1357,6 +1357,11 @@ Ideas **aprobadas como dirección**, pero **sin fecha**: no se programan hasta c
 | B-37 | Auditar la progresión de dificultad de toda la campaña, especialmente niveles 2 y 7. | T266 | Máxima; resolver antes de la próxima entrega al tester |
 | B-38 | Mejorar nuevamente los assets de los primeros y últimos niveles. | T267 | Máxima; resolver antes de la próxima entrega al tester |
 | B-39 | Verificar el guardado del primer tester y preparar la próxima prueba. | T268 | Máxima; antes del reenvío |
+| B-40 | Opción para que la torre no se deseleccione tras colocarla (celular). | — | Backlog, sin fecha |
+| B-41 | Rediseñar la barra de la torre elegida (celular). | — | Backlog, sin fecha |
+| B-42 | Evaluar doble toque en lugar de toque simple para colocar (celular). | — | Backlog, sin fecha |
+| B-43 | Registro acumulado de partidas en el modo de administrador. | — | Backlog, sin fecha |
+| B-44 | Copia automática de `save.json` antes de la primera escritura de una build nueva. | T268b | Antes del reenvío |
 
 ### B-33 · Análisis integral y optimización mobile
 
@@ -1395,6 +1400,26 @@ Verificar con una copia del guardado real del tester que la versión nueva conse
 En Windows, respaldar `%APPDATA%\Godot\app_userdata\JuegoA\save.json` con el juego cerrado antes de probar la actualización. Mismo usuario, misma carpeta de datos y guardado válido deberían conservar el progreso aunque el ejecutable esté en otra carpeta. El modo de pruebas usa `save_pruebas.json`; no confundirlo con el normal. No hay sincronización de progreso implementada entre máquinas o plataformas. Si cambia la ubicación, el formato es incompatible o el archivo está dañado, no prometer recuperación automática.
 
 **Lucas acepta pedir una campaña nueva**, pero primero deben quedar resueltos y validados **balance (B-37/T266) y assets (B-38/T267)**. Conservar el respaldo aun si se decide probar desde cero y documentar qué build se envía. **T268**; no reenviar el juego todavía.
+
+### B-40 · Opción para que la torre no se deseleccione tras colocarla
+
+**Lucas, 2026-10-16 (G7); queda fuera de M58.** M58 (RF-505) deselecciona la torre apenas se coloca: para otra hay que abrir el carrito de nuevo. Lucas quiere poder **elegir** en Opciones que la torre elegida **siga elegida** (útil para poner varias iguales seguidas, como hace la PC, RF-43). Evaluar al probar en el celular real cuántos toques cuesta poner cinco torres iguales (T264 contó 7 con zoom y 11 sin él).
+
+### B-41 · Rediseñar la barra de la torre elegida
+
+**Lucas, 2026-10-16 (G7); queda fuera de M58.** La barra de RF-512 es la alternativa A de T263 con lo mínimo: sin «Detalles» (descripción, efectos, «Voladores», combinaciones) y sin las variantes B y C. Rediseñarla después de probarla en un celular real: qué más mostrar, con qué jerarquía y si Detalles vuelve como botón.
+
+### B-42 · Doble toque en lugar de toque simple para colocar
+
+**Lucas, 2026-10-16 (G7); queda fuera de M58.** En M58, un toque simple en una casilla mueve el fantasma (RF-505). Evaluar que haga falta un **doble toque** para mover el fantasma o colocar, para reducir los corrimientos por toques perdidos. Medir antes con K4 y K11 del kit de T262 (aciertos de 10) y comparar contra el arrastre relativo.
+
+### B-43 · Registro acumulado de partidas en el modo de administrador
+
+**Lucas, 2026-10-16 (G7); queda fuera de M58.** En el modo de pruebas (el «modo de administrador» que se activa en Opciones, RF-383), un **registro acumulado** de las partidas jugadas con: dispositivo, versión del juego, resolución, FPS (mínimo y típico) y resultado, más un botón para **exportar el registro** a un archivo. Sirve para que un tester mande datos reales del celular sin armar planillas a mano (el kit de T262 §6 se hace hoy a mano). Cuidar la privacidad: nada que identifique a la persona, solo datos del aparato y de la partida.
+
+### B-44 · Copia automática de `save.json` antes de la primera escritura de una build nueva
+
+**Lucas, 2026-10-16 (G7); es la tarea T268b.** Antes de que una build **nueva** escriba por primera vez en `save.json`, el juego copia el archivo existente a un respaldo al lado (por ejemplo `save.json.bak-<versión>`), una sola vez por versión, para que un tester pueda volver atrás si algo sale mal. Hoy el respaldo es manual y solo está descripto para Windows (T268a, §6). Falta definir el nombre del respaldo, cuántos se conservan y qué pasa si la copia falla (avisar, no bloquear el juego). Requiere RF y D propios antes de programarse (P3); no forma parte de M58.
 
 ### B-01 · Épocas: la guerra evoluciona con el tiempo
 **Trasladado por Lucas, 2026-10-07 (D-076):** Épocas no se hace en la V1; pasa al backlog de *Monsters & Canons 3D* o de *M&C 2* ([`06-monsters-canons-3d.md`](06-monsters-canons-3d.md) §15). La documentación de Épocas que menciona B-03 viaja con ella. El texto siguiente queda como registro.
@@ -2547,7 +2572,7 @@ Corta, en orden de importancia. Cada una trae mi recomendación; **sin el OK de 
 
 #### 4. La flecha al menú principal
 
-- **RF-459** **Dónde está y qué hace:** un botón **«← Menú»** (80 × 32 px) en la **esquina de arriba a la izquierda** de la barra superior (x de 8 a 88, y de 8 a 40). El grupo de estadísticas (oro, vidas, puntos, oleada, colección, recursos) se corre a la derecha, de x = 20 a x = 96, y conserva su ancho útil hasta x = 1000. Ayuda al pasar el mouse: *«Volver al menú principal»*.
+- **RF-459** *(M58, RF-503 y RF-511: en el **modo celular** este botón no existe; su lugar lo toma la X flotante. En PC no cambia.)* **Dónde está y qué hace:** un botón **«← Menú»** (80 × 32 px) en la **esquina de arriba a la izquierda** de la barra superior (x de 8 a 88, y de 8 a 40). El grupo de estadísticas (oro, vidas, puntos, oleada, colección, recursos) se corre a la derecha, de x = 20 a x = 96, y conserva su ancho útil hasta x = 1000. Ayuda al pasar el mouse: *«Volver al menú principal»*.
   - **Aparece en todos los niveles y modos** (no solo del 6 en adelante): no es parte de la barra de torres, y salir de la partida se necesita igual en el nivel 1. *(Lo único «del 6 en adelante» son las pestañas.)*
   - **Se oculta cuando la partida terminó** (la pantalla de resultado ya trae sus botones).
   - **Probando un mapa desde el editor** (RF-217) dice **«← Editor»** y vuelve al editor con el borrador intacto, **sin pedir confirmación** (no se pierde nada). Es el mismo cambio de texto que ya hace el menú de pausa (`set_quit_text`).
@@ -2946,3 +2971,195 @@ Cortas y en orden de importancia. Cada una con mi recomendación; la respuesta p
 3. **P3 · El estilo y el epílogo.** **A · Cuaderno de bitácora** o **B · Diapositiva pintada** (`guion.md` §6). Recomiendo **A**, con **las dos versiones de la lámina 7** como lámina de prueba. Y: ¿la intro puede verse distinta del epílogo (pintura digital realista) o lo repasamos con el estilo elegido?
 4. **P4 · El planeta no se nombra en la intro.** Recomiendo **sí**: «Cántaro» llega después, por el oasis (artículo 2 de la Wiki).
 5. **P5 · Lo que inventé** (`guion.md` §9): «una sola nave», «años de viaje» y los cuatro colonos que se repiten para que Codex mantenga la continuidad.
+
+### M58 · Interfaz para el celular: carrito, botones flotantes, zoom, torre fantasma y barra de la torre elegida (Lucas, 2026-10-16; T269)
+
+**Estado: BORRADOR, a la espera del OK de Lucas.** Las decisiones de fondo ya las tomó Lucas en la compuerta G7 (2026-10-16, ver `specs/12-plan-t262-t268.md` §7 y §7.1) y están acá escritas como requisitos; lo que **yo** completé para que se pueda programar sin adivinar está en la lista «Lo que decidí por defecto» y en las preguntas del final. **No se programó nada**: las tareas son T270 a T277 (`03-tareas.md`) y no arrancan hasta el OK. Las decisiones son **D-097** y **D-098**. Los informes que lo respaldan son los de **T262 a T265** (`specs/tareas/informes/`), con sus medidas y capturas.
+
+**Qué pidió Lucas.** *(G7, 2026-10-16; manda sobre los informes)*
+
+1. **Solo en el celular:** dos **botones flotantes que se arrastran y se pegan al borde izquierdo o derecho**: un **carrito** (abre el catálogo de torres en pantalla sobre el juego; al elegir una torre se cierra solo y aparece el fantasma; al colocarla, la torre se deselecciona y para otra hay que volver a abrir el carrito) y una **X para salir al menú** (con la confirmación que ya existe). La posición se guarda como preferencia de interfaz.
+2. **Barra de arriba en el celular:** oro, vidas, oleada, recursos, **Pausa** y **x2**, sin el botón «Menú».
+3. **Barra de abajo en el celular:** pasa a ser la **barra de la torre elegida** (alternativa A de T263).
+4. **Colocar con torre fantasma, con tilde y cruz** (C1 de T264), en torres de 1 × 1 y de 2 × 2.
+5. **Zoom Z1:** pinza, dos dedos para desplazar y botón «Ver todo»; en PC, rueda y botón central, sin botón visible.
+6. **Tarjetas de nivel con Insignias** (T265), en PC y en celular.
+7. **PC queda igual que hoy**, y un interruptor en Opciones permite forzar el modo celular o el de PC para probar.
+
+**Idea en pocas palabras.** Hoy el celular usa la misma interfaz que la PC, achicada: botones de 3 mm, una barra de torres que casi no se toca bien, un panel que tapa el 13 % del mapa y compras que ocurren al apoyar el dedo (T262). M58 agrega un **modo de interfaz «celular»** (se activa solo en un celular o a mano desde Opciones) con: una barra de arriba solo informativa, un catálogo de torres que aparece **sobre** el mapa y se cierra solo, una barra de abajo que muestra **la torre elegida**, una colocación en dos pasos (fantasma y tilde) donde **nada se compra al apoyar el dedo**, y zoom con los dedos. **En PC no cambia nada** (salvo el interruptor de Opciones, la rueda y el botón central del mouse para el zoom, y las tarjetas con Insignias, que son para las dos).
+
+- **RF-502** **Modo de interfaz: celular o PC.**
+  - **Qué es:** el juego tiene dos modos de interfaz, «celular» y «PC». **PC es la interfaz de hoy, sin ningún cambio** (RF-43, RF-73, RF-143 de escritorio, M53, etc.). Todo lo que M58 llama «en el celular» vale **solo** en el modo celular.
+  - **Cuál se usa:** en Opciones (RF-113) se suma un selector **«Interfaz»** con tres valores: **«Automática»** (por omisión: modo celular si `OS.has_feature("mobile")`, modo PC si no), **«Celular»** y **«PC»**. Se guarda como la clave nueva `"ui_mode"` dentro de `settings` (entero **0** automática, **1** celular, **2** PC). Un valor que no sea 0, 1 o 2, o que falte, se lee como **0**.
+  - **Cuándo se aplica:** al abrir la **próxima** partida o la próxima selección de niveles; **no** cambia una partida en curso. Cambiarlo no toca el progreso.
+  - **Para probar sin celular:** en modo «Celular» en una PC, el mouse hace de dedo (un clic es un toque; arrastrar con el botón izquierdo, un arrastre de un dedo). La **pinza** no se puede probar con el mouse (el zoom se prueba con la rueda y el botón central, RF-506, o en el celular real).
+  - **En el modo de pruebas** (RF-180) el selector también existe y se guarda en `save_pruebas.json`, como cualquier opción.
+
+- **RF-503** **La barra de arriba y los botones, en el celular.**
+  - **La barra de arriba** muestra **oro, vidas, oleada** (con la **cuenta atrás** hasta la siguiente, RF-34, que así se ve aunque «Empezar oleada» no esté a la vista, RF-512), **recursos** (RF-398 en adelante, cuando el nivel los usa), **Pausa** y **x1/x2** (velocidad). **No tiene el botón «← Menú»** de RF-459: salir es la X flotante (RF-511). Las demás cosas que hoy puede mostrar (puntos, colección, avances, «Pruebas» del modo de pruebas) **siguen donde están**; M58 solo saca «← Menú».
+  - **Botones más grandes:** en el modo celular, **Pausa, x1/x2, los botones del panel de infraestructura y los de la pestaña Infraestructura** miden **al menos 56 px virtuales de alto** (unos 5,3 mm en el celular supuesto de T262), con **8 px** entre botones vecinos. La barra de arriba crece lo necesario (hoy 48 px; **64 px**, valor a medir en el celular) y el zoom automático de RF-251 se calcula con esa altura. *(No llegan a 7,6 mm porque no caben en la barra; los controles que sí pueden —flotantes, tilde, cruz, Mejorar y Vender— llegan, RF-507 y RF-512. Es el compromiso que propuso T262, tarea 3.)*
+  - **Sin atajos en los rótulos:** en el modo celular los botones **no muestran** `[P]`, `[F]`, `[U]`, `[S]` ni los números de las torres (no hay teclado). Las teclas siguen funcionando si hay un teclado conectado.
+  - **El texto** de la barra de arriba y de la barra de abajo se lee de **12 sp o más** (unos 20 px virtuales en el celular supuesto).
+
+- **RF-504** **Gestos táctiles: nada se compra ni se elige al apoyar el dedo** *(reglas G1 a G8 de T264, comunes a todo el modo celular)*:
+  1. Un toque se decide **al soltar**, no al apoyar. Un botón o una casilla actúan al soltar el dedo y solo si el dedo **se apoyó** sobre ellos.
+  2. Si en algún momento del gesto hubo **dos dedos o más**, el gesto es de zoom o de desplazamiento: **no pone el fantasma, no elige, no compra**, aunque un dedo se levante antes que el otro.
+  3. Un dedo que se movió **más de 2 mm** (unos **21 px virtuales** en el celular supuesto; el valor va en datos) **no es un toque**: mueve el fantasma (RF-505) o no hace nada. Un temblor menor sigue siendo un toque.
+  4. Durante **150 ms** después de terminar una pinza se ignoran los toques de un dedo.
+  5. Un toque que **empieza sobre la interfaz** (barras, botones flotantes, catálogo, tilde, cruz) nunca llega al mapa, y uno que empieza en el mapa nunca pulsa la interfaz al soltar.
+  6. La casilla sale de la **posición del toque** pasada por la cámara (no de la posición del mouse emulado). El juego lee `InputEventScreenTouch` e `InputEventScreenDrag` y **deja de actuar con los clics emulados en el mapa**; `emulate_mouse_from_touch` sigue sirviendo para los botones.
+  7. **Un toque simple sigue seleccionando** una torre construida, sin desplazar el mapa por accidente (consecuencia de 3).
+
+- **RF-505** **Colocar una torre con fantasma, tilde y cruz** *(C1 de T264; solo en el modo celular)*:
+  - **Elegir.** Al elegir una torre en el catálogo (RF-510) el catálogo se cierra solo y aparece el **fantasma** de esa torre en la casilla válida más cercana al **centro de lo que se ve del mapa** (si no hay ninguna válida, en el centro, en rojo). **No se cobra nada.**
+  - **Mover.** Un **toque simple** en otra casilla pone el fantasma ahí. Un **arrastre de un dedo** lo mueve **de a casilla, lo mismo que se movió el dedo** (arrastre relativo): el dedo puede estar lejos del fantasma y no lo tapa. Mientras se arrastra, la tilde y la cruz se esconden y vuelven al soltar. **Pinzar o desplazar el mapa no mueve el fantasma ni compra**: el fantasma se queda en su casilla y la tilde y la cruz lo siguen (RF-504 punto 2).
+  - **Cómo se ve.** La vista previa de hoy (casillas verdes o rojas y círculo de alcance, RF-41, RF-292), más la **tilde** (verde, con el **costo**; **96 × 88 px**, unos 9,0 × 8,3 mm) y la **cruz** (**84 × 84 px**, unos 7,9 mm), separadas **48 px**, **arriba del fantasma** y **abiertas hacia el lado opuesto al botón flotante** más cercano (RF-509). Ninguno de los dos mide menos de 7,6 mm (mismo cálculo que RF-507).
+  - **Confirmar.** Soltar el dedo sobre la **tilde** construye y cobra (oro y, si corresponde, recursos). **Después de colocar, la torre se deselecciona**: no queda fantasma ni tipo de torre elegido. Para otra torre se abre otra vez el carrito. *(Distinto de la PC, donde la vista previa sigue activa, RF-43.)*
+  - **Cancelar.** La **cruz**, `Esc` y el «atrás» de Android sueltan el fantasma sin cobrar. Pausar también (RF-104: en pausa no se construye).
+  - **Si no se puede.** Casilla ocupada, de camino o fuera del mapa → fantasma **rojo**, tilde **apagada** que dice el **motivo** («Ahí no», con el motivo de hoy), sin cobrar. Si no alcanza el oro o los recursos → tilde apagada con **«Faltan N»**.
+  - **Torre de 2 × 2** (Mortero, RF-292): el cuadrado se ancla como en RF-292, con las **cuatro** casillas verdes o rojas; la tilde y la cruz van **arriba del cuadrado**, no de una casilla. Si una de las cuatro quedara fuera del mapa, el fantasma **se corre hacia adentro** lo justo (hoy la vista previa queda roja). Si una casilla está ocupada → cuadrado entero rojo y la tilde apagada dice **cuál** falla. El costo muestra los dos números («300 + 3»).
+  - **Tocar una torre ya construida con un fantasma activo** suelta el fantasma y elige esa torre (no compra): es el camino más corto para corregir (D8 de T264).
+
+- **RF-506** **Zoom del mapa** *(Z1 de T264)*:
+  - **Celular:** **pinza** con dos dedos para acercar y alejar (centrada en el punto medio de los dedos); **dos dedos juntos** para desplazar; un botón **«Ver todo»** (en una esquina del área del mapa, ≥ 7,6 mm) que **vuelve al encuadre automático** de RF-251. «Ver todo» **solo se ve cuando el zoom no es el de RF-251**. Un dedo que arrastra **no** desplaza el mapa (RF-504).
+  - **PC:** **rueda del mouse** (acerca y aleja alrededor del puntero) y **arrastre con el botón central** para desplazar. **No hay botón visible.** (También valen en el modo celular forzado en una PC.)
+  - **Límites:** el **mínimo** es el encuadre de RF-251 (no se aleja más: «Ver todo» y el mínimo son lo mismo); el **máximo** deja la casilla en **96 px virtuales** (unos 9,0 mm; zoom absoluto 1,5; en los niveles 13 a 15 son dos veces el encuadre). Ambos valores van en datos. El mapa **no se puede sacar de la vista**: el centro de lo que se ve queda siempre dentro del mapa.
+  - **No cambia el juego:** la cámara no cambia las coordenadas del mundo (D-037): alcances, disparos y la casilla bajo el dedo valen lo mismo. **La interfaz no se achica ni se agranda** con el zoom.
+  - **Cuándo:** funciona también en pausa y con el catálogo cerrado. **No se guarda**: cada partida empieza en el encuadre de RF-251.
+  - **Se puede acercar con un fantasma activo** (RF-505) y con una torre elegida (RF-512).
+
+- **RF-507** **Los botones flotantes** *(solo en el modo celular)*: hay dos, el **carrito** (RF-510) y la **X de salir** (RF-511).
+  - **Tamaño:** cada uno mide **al menos 7,6 mm de lado**. Se calcula con los píxeles por pulgada reales de la pantalla y la escala del lienzo; si no se pueden saber (o en el modo celular forzado en una PC), valen **82 px virtuales** (unos 7,7 mm en el celular supuesto). El mismo mínimo vale para la tilde, la cruz, «Mejorar» y «Vender» (alto). **El zoom no los afecta** (viven en la interfaz, no en el mapa).
+  - **Arrastre:** un dedo apoyado sobre el botón que se mueve **más de 2 mm** lo arrastra por toda el área de juego (entre la barra de arriba y la de abajo); mientras tanto no hace su acción. Al **soltar**, el botón **se pega al borde izquierdo o al derecho, el más cercano**, y conserva la altura donde se soltó. Un toque que no se mueve hace la acción del botón.
+  - **Franja de borde:** a cada lado hay una franja de **56 px virtuales** de ancho (dato) reservada a los botones; el botón queda **pegado al borde** de la pantalla, y como mide más que la franja, el resto sobresale hacia el mapa.
+  - **Entre ellos:** si los dos quedan del mismo lado a menos de un botón de distancia, el que se soltó después se corre hacia arriba o hacia abajo lo justo para no pisar al otro.
+  - **No toman el foco del teclado** ni tienen tecla propia (como RF-459).
+  - **No se ven** con la partida terminada (la pantalla de resultado trae sus botones).
+
+- **RF-508** **La posición se guarda como preferencia de interfaz.**
+  - **Qué se guarda:** una clave nueva y aditiva del guardado, **`"ui_prefs"`**, con `"cart_side"` y `"exit_side"` (`"left"` o `"right"`) y `"cart_y"` y `"exit_y"` (número de **0 a 1**: la altura dentro del área de juego, 0 arriba y 1 abajo). **`SAVE_VERSION` no cambia** (como `collections`, `hall_total` o `intro_seen`).
+  - **Por dispositivo:** como el guardado es un archivo de cada dispositivo (y no se sincroniza), cada celular tiene su preferencia. El modo de pruebas usa la suya (`save_pruebas.json`, RF-181).
+  - **Valores por omisión:** carrito **a la derecha, altura 0,45**; X de salir **a la izquierda, altura 0,10** (donde estaba «← Menú»).
+  - **Si falla la lectura:** si falta la clave, no es un diccionario, o un campo no es del tipo esperado (un lado que no es `"left"` ni `"right"`, una altura que no es número) o está fuera de 0 a 1, **ese campo vale su valor por omisión**, sin error ni aviso al jugador (solo `push_warning` en la salida). Un campo roto no rompe a los demás ni al resto del guardado.
+  - **Cuándo se escribe:** al soltar un botón después de arrastrarlo, y nada más. **El corrimiento automático** de RF-509 **no** se guarda.
+  - **Compatibilidad:** una versión anterior del juego ignora la clave; un guardado sin ella carga con los valores por omisión.
+
+- **RF-509** **Reglas para que los botones no tapen lo que se está haciendo:**
+  1. **Semitransparentes mientras hay fantasma activo** (RF-505): los dos botones bajan a **45 % de opacidad** y vuelven a 100 % al terminar el fantasma. Siguen recibiendo toques.
+  2. **Se corren solos al otro lado** si el fantasma (el cuadrado entero en un 2 × 2) queda **a menos de un botón de distancia** de ellos (medida en pantalla, entre el borde del fantasma y el del botón). El corrimiento dura unos 0,2 s, **es temporal** (no cambia la preferencia guardada) y el botón **vuelve a su lugar** al terminar el fantasma. Si el otro lado también estaría a menos de un botón, el botón se queda donde está (y semitransparente).
+  3. **La tilde y la cruz se abren hacia el lado opuesto** al del botón flotante más cercano al fantasma. Si ninguno está cerca, hacia donde haya más lugar en pantalla.
+  4. **Tamaño mínimo y zoom:** RF-507.
+  5. **Arrastrar un botón sobre el mapa no construye ni selecciona nada.**
+
+- **RF-510** **El carrito y el catálogo de torres.**
+  - **El carrito** es un botón flotante con el dibujo de un carrito. Con una torre elegida o un fantasma activo muestra además un puntito. **Tocarlo abre el catálogo.**
+  - **El catálogo** es una pantalla que se abre **sobre el mapa** (no tiene su propia pantalla ni pausa la partida): tarjetas de torres con **dibujo, nombre y costo**, de **18 × 10 mm** como mínimo cada una, en filas; una **cruz** (≥ 7,6 mm) para cerrar. Una torre que hoy no se puede elegir (por oro, por recursos o por el nivel) se ve **apagada con el motivo** («Faltan N») y no se elige. En los niveles con infraestructura (RF-454), las pestañas **Torres** e **Infraestructura** están **dentro del catálogo** (la barra de abajo ya no tiene pestañas en el celular).
+  - **Al elegir una torre:** el catálogo se **cierra solo** y aparece el fantasma (RF-505). **Esa es toda la compra: 2 toques para llegar al fantasma** (carrito y tarjeta).
+  - **Cómo se cierra sin elegir:** la cruz, tocar fuera del catálogo, `Esc` o el «atrás» de Android. **Con el catálogo abierto, «atrás» lo cierra** (RF-142: lo primero que se cancela es lo último que se abrió).
+  - **Con el catálogo abierto la partida sigue corriendo** (no se pausa sola): es un compromiso, porque tapa parte del mapa; quien quiera pensar con calma usa Pausa (RF-104).
+  - **Con el catálogo abierto** no se construye ni se elige en el mapa; el toque fuera lo cierra y **no llega al mapa**.
+
+- **RF-511** **Salir al menú: la X flotante.**
+  - **Qué hace:** tocar la **X** abre la **confirmación de siempre** (RF-460: «¿Volver al menú principal?», qué se pierde, «Seguir jugando» y «Salir al menú», partida en pausa mientras está abierta). **Nada de RF-460 cambia.** Al confirmar llama a `GameFlow.go_to_main_menu()` y no escribe nada en el guardado.
+  - **Probando un mapa desde el editor** (RF-217) la X **sale sin confirmación** al editor con el borrador intacto, como lo hacía «← Editor» (RF-459).
+  - **No hay otra salida nueva** en el celular: el menú de pausa (RF-114) y el «atrás» de Android (RF-142) quedan como están.
+
+- **RF-512** **La barra de abajo, en el celular: la barra de la torre elegida** *(alternativa A de T263)*. Ocupa el lugar de la barra de torres de hoy (96 px de alto, **0 % del mapa tapado**) y tiene **tres estados**; nunca hay dos a la vez (RF-73):
+
+  | Estado | Qué muestra |
+  |---|---|
+  | **Vacía** (nada elegido) | Una **sugerencia** de una línea («Tocá el carrito para elegir una torre») y, a la derecha, **«Próxima oleada»** y **«Empezar oleada»** como hoy (RF-102). |
+  | **Con fantasma** (RF-505) | **Nombre** de la torre, **costo**, y la **tilde** y la **cruz** (las mismas del fantasma, también acá por si el dedo no llega a las que están en el mapa). |
+  | **Con una torre construida elegida** | **Nombre**, **nivel** («Nivel 2 de 3», con puntos), sus **estadísticas** (daño, cadencia, alcance), **«Mejorar»** con su costo, la **prioridad de objetivo** (el selector de apuntado de hoy, RF-54) y **«Vender»**. El estado de la torre (aturdida, con desgaste, RF-280, RF-360) se ve **en el renglón del nombre**, sin abrir nada. |
+
+  - **«Mejorar»** es el botón grande (≥ 84 px de alto) y dice **a qué nivel pasa y cuánto cuesta**. **Al nivel máximo** queda **deshabilitado** y dice **«Nivel máximo»** (un estado, no solo gris). **Sin oro** queda **deshabilitado** y dice **«Faltan N de oro»** (y de recursos, si corresponde): el motivo está **a la vista**, sin tooltip. Apenas llega el oro, se habilita solo. Tocarlo sin oro **no hace nada** (no queda «pendiente»).
+  - **Contra el doble toque:** después de mejorar, «Mejorar» queda **0,35 s** sin responder (dice «¡Nivel N!» mientras tanto), así un doble toque rápido **no sube dos niveles** (T263 midió que hoy sí).
+  - **«Vender»** está en el **extremo opuesto** de la barra respecto de «Mejorar» (unos 35 mm de distancia), por lo que un dedo corrido no puede caer en él (RF-513).
+  - **Prioridad de objetivo:** el selector de hoy (RF-51, RF-54). En una torre que no apunta (apoyo, pulso) el selector va **deshabilitado**, igual que hoy, y el lugar no queda vacío.
+  - **Tocar el mapa vacío** o la cruz de la barra suelta la torre y la barra vuelve a «Vacía». **En PC** el panel de torre de hoy no cambia.
+  - **Detalles** (descripción, «Voladores», efectos, combinaciones): **no están en la barra**. Se consultan en la Wiki. *(Rediseñar la barra con un botón «Detalles» queda en el backlog, B-41.)*
+
+- **RF-513** **Vender protegido** *(solo en el modo celular)*:
+  - **Primer toque** en «Vender»: el botón **se arma**: cambia a **«Vender por N»** (N = lo que devuelve), con **otro color y un dibujo de moneda y un borde doble**, de modo que **no depende solo del color**. **Segundo toque** sobre el mismo botón: vende.
+  - **Se desarma solo a los 3 s** y vuelve a «Vender». Un segundo toque **antes de 0,4 s** no cuenta (un doble toque sin querer no vende).
+  - **El armado se borra** al cambiar la selección (tocar otra torre, tocar el mapa vacío, abrir el carrito), al pausar y al terminar la partida.
+  - **La venta** no pide ningún diálogo ni se puede deshacer; devuelve lo de siempre (el 70 %, RF-72).
+  - **En PC** no cambia: sigue vendiéndose como hoy.
+
+- **RF-514** **Tarjetas de nivel con Insignias** *(PC y celular; elección de Lucas sobre la variante B de T265)*. En la selección de niveles (RF-111), el bloque de **torres disponibles** de cada tarjeta se dibuja así:
+  - Una **placa de hierro oscura** y discreta, con el título **«Torres»** y la **cantidad** en bronce, en el mismo lugar del bloque de hoy.
+  - **Cada torre** va en un **aro redondeado de bronce** (una «insignia») con su silueta de **22 px**; **hasta dos filas** (ocho por fila). El nivel 1 (8 torres) ocupa una fila; el 12 (10 torres), dos.
+  - **Se conserva** el indicador naranja de **torre nueva** y la información emergente de hoy. **No hay controles nuevos** ni nombres impresos junto a los íconos.
+  - **No pisa** el nombre, el lugar, las estrellas ni el estado de la tarjeta, ni se corta contra los bordes, en 1280 × 720 y en 20:9 (el lienzo sigue siendo 16:9 centrado, RF-251).
+  - Las torres que se muestran son **las mismas** que hoy: M58 cambia el dibujo, no qué torres aparecen.
+
+- **RF-515** **Las estatuas decorativas de los mapas representan torres** *(regla de arte; Lucas, 2026-10-16: «son nuestras armas y no hay hombres con espadas en el juego»)*.
+  - **Qué cambia:** la estatua de hombre con espada (`assets/sprites/map/estatua.svg`, en los niveles 1, 3 y 5) se **reemplaza** por **estatuas de torres**. Cuáles, cuántas variantes y en qué nivel es una pregunta abierta (P6). La regla de arte vive en `05-guia-de-arte.md` §9.
+  - **Qué no cambia:** siguen siendo **decoración**: ocupan **una casilla** como hoy, **no se pueden seleccionar**, **no muestran círculo de alcance ni panel**, no disparan y no tienen hitbox de torre.
+  - **No se confunde con el Estandarte mecánico** (la torre de ingeniería del canon, `10-universo.md` §3): el Estandarte es una torre jugable con su propio dibujo de hierro, plata y bronce; las estatuas son de **piedra gris erosionada**, con pedestal.
+  - **El dibujo no es parte de este requisito**: es la tarea 🎨 T277, con muestras aprobadas por Lucas antes de integrarse (B-38).
+
+> **Criterio de aceptación RF-502 a RF-515**
+> **Dado** un celular (o «Interfaz: Celular») → **Entonces** la barra de arriba no tiene «← Menú», tiene Pausa y x1/x2 de 56 px de alto como mínimo y sin `[P]` ni `[F]`; hay un carrito y una X flotantes de 82 px o más; y la barra de abajo está vacía con la sugerencia. **Dado** «Interfaz: PC» en la misma máquina → **Entonces** todo es como antes de M58.
+> **Dado** un guardado sin `ui_mode`, con `ui_mode = 7` o con `ui_mode = "celular"` → **Entonces** se lee como 0 (automática) y no rompe nada.
+> **Dado** el modo celular → **Cuando** se apoya el dedo en una casilla con una torre elegida, o se arrastra o se pinza → **Entonces** **no se construye ni se cobra nada** (ni al apoyar ni al soltar, si hubo dos dedos o se movió más de 2 mm).
+> **Dado** el carrito → **Cuando** se lo toca → **Entonces** se abre el catálogo sobre el mapa y la partida sigue; **Cuando** se toca la tarjeta de una torre que alcanza → **Entonces** el catálogo se cierra, aparece el fantasma en el centro de lo visible, y el oro **no cambió**.
+> **Dado** un fantasma en una casilla libre → **Cuando** se suelta el dedo sobre la tilde → **Entonces** se construye, se descuenta el costo, el fantasma y la elección **desaparecen** y la barra de abajo vuelve a «Vacía». **Cuando** en cambio se toca la cruz, `Esc` o «atrás» → **Entonces** no se cobra nada y no queda torre elegida.
+> **Dado** un fantasma → **Cuando** se arrastra un dedo 2 casillas lejos del fantasma → **Entonces** el fantasma se mueve 2 casillas, la tilde y la cruz se esconden y vuelven al soltar. **Cuando** se pinza → **Entonces** el fantasma se queda en su casilla y no se compra.
+> **Dado** un fantasma en una casilla de camino, ocupada o fuera del mapa → **Entonces** se ve rojo, la tilde está apagada con el motivo y tocarla **no cobra**. **Dado** que no alcanza el oro → **Entonces** la tilde dice «Faltan N» y no cobra.
+> **Dado** el Mortero (2 × 2) con una de sus cuatro casillas ocupada → **Entonces** el cuadrado entero se ve rojo y la tilde dice cuál falla. **Dado** el Mortero cerca del borde del mapa → **Entonces** el fantasma se corre hacia adentro hasta entrar entero.
+> **Dado** un fantasma con un botón flotante a menos de un botón de distancia → **Entonces** los botones están semitransparentes (45 %) y el cercano se corrió al otro lado; **Cuando** el fantasma termina → **Entonces** vuelven a su lugar y a 100 %, y la preferencia guardada **no cambió**.
+> **Dado** la tilde y la cruz con el botón flotante a la derecha del fantasma → **Entonces** se abren hacia la izquierda.
+> **Dado** el carrito arrastrado hasta el lado izquierdo, a mitad de altura → **Cuando** se suelta → **Entonces** queda pegado al borde izquierdo a esa altura y el guardado dice `cart_side: "left"`, `cart_y` cerca de 0,5. **Dado** que se cierra y se vuelve a abrir el juego → **Entonces** sigue ahí.
+> **Dado** un `ui_prefs` ausente, que no es un diccionario, con `cart_side: "arriba"`, con `cart_y: "x"` o con `cart_y: 3` → **Entonces** el campo roto vale su valor por omisión (los demás campos sanos se conservan) y el juego abre sin error.
+> **Dado** dos botones soltados del mismo lado a menos de un botón de distancia → **Entonces** el segundo se corre lo justo para no pisar al primero.
+> **Dado** la X flotante → **Cuando** se la toca → **Entonces** se abre el diálogo de RF-460, la partida queda en pausa, y «Seguir jugando» la devuelve al estado anterior. **Dado** una partida de «Probar» del editor → **Entonces** la X vuelve al editor sin diálogo.
+> **Dado** el modo celular con la partida terminada → **Entonces** el carrito y la X no se ven.
+> **Dado** una torre construida → **Cuando** se la toca → **Entonces** la barra de abajo muestra nombre, nivel, estadísticas, prioridad de objetivo, «Mejorar» con su costo y «Vender», y el panel de torre de PC **no** se abre. **Cuando** se toca el mapa vacío → **Entonces** la barra vuelve a «Vacía».
+> **Dado** una torre al nivel máximo → **Entonces** «Mejorar» está deshabilitado y dice «Nivel máximo». **Dado** que faltan 25 de oro → **Entonces** «Mejorar» está deshabilitado y dice «Faltan 25 de oro»; **Cuando** llega el oro → **Entonces** se habilita solo.
+> **Dado** «Mejorar» → **Cuando** se lo toca dos veces en menos de 0,35 s → **Entonces** la torre sube **un** solo nivel y se cobra una sola vez.
+> **Dado** «Vender» → **Cuando** se lo toca una vez → **Entonces** pasa a «Vender por N» con otro color, la moneda y el borde doble, y la torre sigue ahí. **Cuando** pasan 3 s → **Entonces** vuelve a «Vender» sin vender. **Cuando** se lo toca dos veces con 0,5 s entre los toques → **Entonces** se vende y se devuelve N. **Cuando** el segundo toque cae antes de 0,4 s → **Entonces** no vende.
+> **Dado** «Vender» armado → **Cuando** se toca otra torre, el mapa vacío o el carrito, se pausa o termina la partida → **Entonces** vuelve a «Vender» sin vender.
+> **Dado** un dedo que cae 8 px virtuales más abajo del borde de «Mejorar» → **Entonces** no cae sobre «Vender» (están en extremos opuestos de la barra).
+> **Dado** el zoom → **Cuando** se pinza → **Entonces** el mapa se acerca o aleja alrededor del punto medio, entre el encuadre de RF-251 y la casilla de 96 px; **Cuando** se desplazan dos dedos → **Entonces** el mapa se mueve y la interfaz no; **Cuando** se toca «Ver todo» → **Entonces** vuelve al encuadre de RF-251 y el botón desaparece.
+> **Dado** un toque simple (movimiento de menos de 2 mm) sobre una torre con zoom → **Entonces** la selecciona y el mapa no se mueve.
+> **Dado** la PC → **Cuando** se gira la rueda o se arrastra con el botón central → **Entonces** hay zoom y desplazamiento; **Entonces** no hay ningún botón nuevo en pantalla.
+> **Dado** el zoom al máximo → **Entonces** los botones flotantes, la barra y el catálogo miden lo mismo que sin zoom, y el alcance de las torres, en casillas, es el mismo.
+> **Dado** la selección de niveles (PC o celular) → **Entonces** cada tarjeta muestra su placa «Torres · N» con una insignia por torre de las que ofrece el nivel (8 en el 1, en una fila; 10 en el 12, en dos), sin pisar nombre, lugar, estrellas ni estado, y las torres son las mismas que antes.
+> **Dado** una estatua decorativa → **Cuando** se la toca → **Entonces** no se abre panel ni se ve círculo de alcance; **Y** no se parece al Estandarte mecánico (mismo tamaño de casilla, otro material y otra silueta).
+> **Dado** «atrás» de Android con el catálogo abierto → **Entonces** lo cierra; **Dado** con un fantasma → **Entonces** lo suelta; **Dado** con una torre elegida → **Entonces** la suelta; **Dado** nada de eso → **Entonces** abre el menú de pausa (RF-142). Nunca cierra el juego.
+> **Dado** PC con una partida cualquiera, **antes y después de M58** → **Entonces** los datos de las tablas, los resultados del bot y los tests de PC dan lo mismo.
+
+#### Lo que decidí por defecto *(Lucas no lo definió; cambia con su respuesta)*
+
+1. **La partida no se pausa con el catálogo abierto** (RF-510). Alternativa: pausar sola; choca con RF-104 (en pausa no se construye).
+2. **El fantasma aparece en el centro de lo visible** (RF-505), porque Lucas dijo «aparece el fantasma» sin decir dónde y todavía no se tocó ninguna casilla.
+3. **«Empezar oleada» y «Próxima oleada» están solo en el estado vacío de la barra de abajo** (RF-512). Con un fantasma o una torre elegida hay que soltar primero (un toque más). T263 ya había medido ese costo para la alternativa A.
+4. **Tocar una torre construida con un fantasma activo suelta el fantasma y elige la torre** (RF-505; D8 de T264).
+5. **«Mejorar» se bloquea 0,35 s después de usarse** y **«Vender» exige 0,4 s entre toques** (RF-512, RF-513): protecciones de T263, no pedidas por Lucas.
+6. **La barra de arriba crece a 64 px** para que los botones midan 56 px (RF-503), y los botones de la barra de arriba **no llegan a 7,6 mm** (la marca de 7,6 mm es una guía de Android, no una regla del proyecto, T263).
+7. **La franja de borde de 56 px** (RF-507) la interpreté como la zona reservada a los botones, que miden más que la franja y sobresalen hacia el mapa. Si Lucas quiso decir otra cosa (por ejemplo, un margen entre el botón y el borde), cambia RF-507 y nada más.
+8. **Las pestañas Torres e Infraestructura van dentro del catálogo** (RF-510), como propuso T264 para la tienda; cómo se elige cada acción de infraestructura (demoledora, extracción) **sigue como en M53**, y T275 tiene que comprobar que el catálogo cerrado no rompe su flujo.
+9. **«Detalles»** (descripción y efectos) **no está** en la barra de la torre elegida (RF-512): quedan en la Wiki. Si Lucas lo extraña, B-41.
+10. **Pausar suelta el fantasma y la torre elegida** (RF-104 como hoy).
+
+#### Lo que M58 no incluye
+
+- **Cualquier cosa de la PC** salvo las tarjetas con Insignias, la rueda y el botón central, y el selector de Opciones.
+- **Una opción para que la torre no se deseleccione tras colocarla** (B-40), **rediseñar la barra de la torre elegida** (B-41), **doble toque en lugar de toque simple para colocar** (B-42), **el registro acumulado de partidas en el modo de administrador** (B-43) y **la copia automática de `save.json`** (B-44). Están en el backlog (§13).
+- **Alternativa táctil a los tooltips** (toque largo), **usar el ancho de 20:9** (`aspect = expand`), **letra mínima en todo el juego**, **un mapa en miniatura** y **una lupa**: tareas de T262/T264 que no se eligieron.
+- **Los datos de balance, las olas y los niveles** (eso es M59, con T266).
+- **El arte de las estatuas** (T277) y **los demás assets** de T267.
+- **Medir en un celular real.** Hasta que Lucas lo pruebe en otra máquina, todo es «analizado en escritorio con la proporción del celular» (plan 12, §6). El kit de pruebas es el de T262 §6.
+
+#### Preguntas para Lucas
+
+Cortas y con mi recomendación; «✔ todas» alcanza.
+
+1. **P1 · Lo que decidí por defecto** (los 10 puntos de arriba). ¿Alguno no va?
+2. **P2 · «Empezar oleada» durante la colocación.** Recomiendo dejarlo como está (solo en la barra vacía). La alternativa es un botón flotante más, o ponerlo en la barra de arriba junto a x1/x2.
+3. **P3 · El catálogo ¿pausa?** Recomiendo que no (punto 1).
+4. **P4 · Los números a medir en el celular** (`data/ui/mobile_ui.json`): 56 px de los botones, 64 px de la barra, 45 % de opacidad, 2 mm, 150 ms, 3 s, 0,4 s y 0,35 s. Se ajustan después de la prueba real.
+5. **P5 · La barra de arriba pierde «← Menú»** pero conserva puntos, colección y «Pruebas»: ¿confirmás que esos se quedan?
+6. **P6 · Las estatuas de torres:** ¿cuáles se esculpen (una por nivel, varias variantes) y se mantiene la regla de la guía de arte (piedra gris erosionada, musgo en pradera, escarcha en nieve)? Recomiendo tres variantes (cañón, mortero y torre de hielo) para empezar.
+7. **P7 · «Interfaz» en Opciones:** ¿también visible en el celular real, o solo en el modo de pruebas? Recomiendo siempre visible (es un solo selector).
