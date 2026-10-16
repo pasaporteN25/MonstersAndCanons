@@ -54,6 +54,8 @@ var _resource_stat: HBoxContainer
 var _resource_label: Label
 var _pay_gold_button: Button
 var _pay_alt_button: Button
+var _mobile_mode: bool = false
+var _mobile_config: MobileUiConfig
 
 @onready var _gold_label: Label = %GoldLabel
 @onready var _lives_label: Label = %LivesLabel
@@ -125,6 +127,9 @@ func _ready() -> void:
 	add_child(hint)
 	var bar: Control = get_node("TopBar")
 	bar.theme = preload("res://assets/ui/menu_theme.tres")
+	_mobile_mode = UiMode.is_mobile()
+	if _mobile_mode:
+		_configure_mobile_top_bar(bar)
 	BarTabs.tighten(_exit_button)  # RF-459: 80 px de ancho; con el margen del tema el botón crecía a 94
 	_build_resource_stat(bar.get_node("Stats"))
 	_build_payment_buttons()
@@ -238,13 +243,13 @@ func setup_resources(enabled: bool) -> void:
 ## RF-104: texto del botón y cartel "PAUSA".
 ## `show_label` = false cuando el menú de pausa ya lo dice (no mostrar dos veces).
 func show_paused(paused: bool, show_label: bool = true) -> void:
-	_pause_button.text = "Seguir  [P]" if paused else "Pausa  [P]"
+	_pause_button.text = ("Seguir" if paused else "Pausa") if _mobile_mode else ("Seguir  [P]" if paused else "Pausa  [P]")
 	_pause_label.visible = paused and show_label
 
 
 ## RF-105: el botón muestra la velocidad actual.
 func show_speed(speed: float) -> void:
-	_speed_button.text = "%s  [F]" % Rules.speed_text(speed)  # RF-322: x0,5 no se redondea a x0
+	_speed_button.text = "%s%s" % [Rules.speed_text(speed), "" if _mobile_mode else "  [F]"]  # RF-322
 
 
 ## Game le pasa las oleadas del nivel ANTES de bind() (RF-133, RF-135).
@@ -339,6 +344,8 @@ func setup_bar(tabs: bool) -> void:
 	infrastructure_tab = InfrastructureTab.new()
 	infrastructure_tab.name = "InfrastructureTab"
 	bottom.add_child(infrastructure_tab)
+	if _mobile_mode:
+		infrastructure_tab.set_mobile_touch_targets(float(_mobile_config.get_value("boton_alto_px")))
 	show_tab(TAB_CANNONS)
 
 
@@ -414,9 +421,11 @@ func setup_towers(tower_types: Array[TowerData]) -> void:
 		# RF-170: dibujo arriba, costo abajo y la tecla en una esquina. El nombre, al pasar el mouse.
 		button.text = TowerText.bar_text(tower)  # RF-418: "300 + 3"
 		var key: String = BarLayout.key_label(i)
-		if key != "":
+		if key != "" and not _mobile_mode:
 			button.tooltip_text = "%s (tecla %s): %s" % [tower.display_name, key, TowerText.cost_text(tower)]
 			button.add_child(_key_label(key))
+		elif key != "":
+			button.tooltip_text = "%s: %s" % [tower.display_name, TowerText.cost_text(tower)]
 		else:  # RF-456: de la torre 11 en adelante no hay tecla
 			button.tooltip_text = "%s: %s" % [tower.display_name, TowerText.cost_text(tower)]
 		button.add_theme_font_size_override("font_size", _cost_font_size(button, width))
@@ -643,6 +652,38 @@ func _on_state_changed(state: LevelSession.State) -> void:
 ## RF-34 / RF-102: el botón muestra la cuenta atrás.
 func _on_countdown_changed(seconds_left: float) -> void:
 	_start_wave_button.text = "Empezar oleada (%d)" % ceili(seconds_left)
+	if _mobile_mode:
+		_wave_label.text = "%s · %ds" % [_wave_label.text.get_slice(" · ", 0), ceili(seconds_left)]
+
+
+func _configure_mobile_top_bar(bar: Control) -> void:
+	_mobile_config = MobileUiConfig.load_from()
+	var height: float = float(_mobile_config.get_value("barra_alta_px"))
+	bar.size.y = height
+	bar.custom_minimum_size.y = height
+	bar.get_node("Stats").position.y = 0.0
+	bar.get_node("Stats").position.x = 20.0
+	bar.get_node("Stats").size.y = height
+	_exit_button.hide()
+	_pause_button.text = "Pausa"
+	_speed_button.text = "x1"
+	var button_height: float = float(_mobile_config.get_value("boton_alto_px"))
+	_pause_button.custom_minimum_size.y = button_height
+	_speed_button.custom_minimum_size.y = button_height
+	_pause_button.custom_minimum_size.x = _pause_button.size.x
+	_speed_button.custom_minimum_size.x = _speed_button.size.x
+	_pause_button.position.y = 4.0
+	_speed_button.position.y = 4.0
+	_pause_button.size.y = button_height
+	_speed_button.size.y = button_height
+	var separation: float = float(_mobile_config.get_value("separacion_px"))
+	_speed_button.position.x = _pause_button.position.x + _pause_button.size.x + separation
+	var top_edge: ColorRect = ColorRect.new()
+	top_edge.color = Color(0.52, 0.36, 0.17)
+	top_edge.position = Vector2(0.0, height - 2.0)
+	top_edge.size = Vector2(1280.0, 2.0)
+	top_edge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	bar.add_child(top_edge)
 
 
 func _set_button(text: String, enabled: bool) -> void:

@@ -11,6 +11,7 @@ const DEFAULT_PATH: String = "user://save.json"
 const HALL_OF_FAME_ID: StringName = &"hall_of_fame"
 const DEFAULT_SETTINGS: Dictionary = {
 	"music_volume": 0.7, "sfx_volume": 0.8, "fullscreen": false, "damage_numbers": true,
+	"ui_mode": 0,
 }
 
 ## Los tests lo cambian para no tocar el guardado real del jugador.

@@ -11,16 +11,22 @@ Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle t�
 - **Los niveles 13, 14 y 15 no cambian.**
 - Lucas va a jugar los niveles 1 → 2 → 3 y 6 → 7 → 8 antes de que se reenvíe el juego.
 
-## Lo que viene al celular: carrito, zoom y torre fantasma *(M58, spec del 2026-10-16; todavía no está en el juego)*
+## Interfaz para celular: primera etapa *(T271, 2026-10-16)*
 
-**Esto es lo que Lucas pidió y quedó escrito; no se puede probar todavía.** Cuando se programe:
+- **Opciones → Interfaz** permite elegir «Automática», «Celular» o «PC». La elección se guarda y se aplica al abrir la próxima partida; no cambia una partida en curso.
+- En modo Celular, la barra superior crece a 64 px, muestra Pausa y velocidad con botones de 56 px, y oculta «← Menú» y los atajos de teclado. Los números de esta interfaz se cargan desde `data/ui/mobile_ui.json`; si el archivo está dañado, se usan los valores por omisión.
+- **La PC conserva su interfaz actual.** La medición en un celular real y las capturas de los niveles 1 y 15 quedan pendientes.
+
+## Lo que viene al celular: carrito, zoom y torre fantasma *(M58, spec del 2026-10-16)*
+
+**Esto es lo que Lucas pidió y todavía falta implementar:**
 
 - **Un carrito flotante** abre el catálogo de torres sobre el mapa y se cierra solo al elegir una; **una X flotante** lleva al menú (con la confirmación de siempre). Los dos se **arrastran y se pegan al borde** izquierdo o derecho, y el juego recuerda dónde los dejaste.
 - **Se coloca con una torre fantasma:** tocás una casilla, ves cómo queda, y confirmás con la **tilde** (o cancelás con la **cruz**). **Nada se compra al apoyar el dedo.** Al colocar, la torre se deselecciona.
 - **Zoom con los dedos:** pinza para acercar y alejar, dos dedos para mover el mapa y un botón «Ver todo». En la computadora, con la rueda del mouse y el botón del medio.
 - **La barra de abajo muestra la torre elegida:** nombre, nivel, estadísticas, «Mejorar» (con el costo o el motivo si no se puede) y «Vender», que pide un segundo toque.
 - **Las tarjetas de nivel muestran las torres como insignias de bronce** (en PC y en celular).
-- **La PC queda igual** y en Opciones se podrá forzar el modo celular o el de PC para probar.
+- **La PC queda igual**; el selector para forzar el modo celular o de PC ya está en Opciones.
 - **Las estatuas de los mapas pasarán a ser estatuas de torres de piedra**, en lugar de la persona con espada.
 
 ## La intro: siete láminas con texto, que se pueden omitir y volver a ver *(T242, 2026-10-11)*

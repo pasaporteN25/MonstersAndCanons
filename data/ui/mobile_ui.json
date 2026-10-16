@@ -1,0 +1,17 @@
+{
+  "boton_alto_px": 56,
+  "barra_alta_px": 64,
+  "separacion_px": 8,
+  "flotante_min_px": 82,
+  "flotante_min_mm": 7.6,
+  "franja_px": 56,
+  "toque_max_mm": 2.0,
+  "pinza_gracia_ms": 150,
+  "opacidad_con_fantasma": 0.45,
+  "corrimiento_s": 0.2,
+  "vender_rearmar_s": 3.0,
+  "vender_min_s": 0.4,
+  "mejorar_bloqueo_s": 0.35,
+  "zoom_casilla_max_px": 96,
+  "fantasma_distancia_botones": 1
+}

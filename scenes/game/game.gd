@@ -95,7 +95,7 @@ func _ready() -> void:
 		level_data = GameFlow.level(0)
 
 	level = level_data.build_map()
-	level.position = MAP_OFFSET
+	level.position = Vector2(0.0, float(MobileUiConfig.load_from().get_value("barra_alta_px"))) if UiMode.is_mobile() else MAP_OFFSET
 	add_child(level)
 	move_child(level, 0)  # primero en la lista = se dibuja debajo de todo
 	_fit_map()
@@ -289,11 +289,18 @@ func _on_tab_changed(id: StringName) -> void:
 func _fit_map() -> void:
 	var size: Vector2i = level.map_size()
 	var zoom: float = Rules.map_zoom(size.x, size.y)
+	if UiMode.is_mobile():
+		var mobile_config: MobileUiConfig = MobileUiConfig.load_from()
+		var top_height: float = float(mobile_config.get_value("barra_alta_px"))
+		var bottom_height: float = float(hud.get_node("BottomBar").size.y)
+		zoom = minf(1.0, minf(1280.0 / (size.x * Rules.TILE_SIZE), (720.0 - top_height - bottom_height) / (size.y * Rules.TILE_SIZE)))
 	if zoom >= 1.0:
 		return
 	camera = Camera2D.new()
 	camera.zoom = Vector2(zoom, zoom)
-	camera.position = Rules.map_camera_center(size.x, size.y)
+	var area := Rect2(0.0, 64.0 if UiMode.is_mobile() else 48.0, 1280.0, 720.0 - (64.0 if UiMode.is_mobile() else 48.0) - float(hud.get_node("BottomBar").size.y))
+	var map_center: Vector2 = level.position + Vector2(size) * Rules.TILE_SIZE / 2.0
+	camera.position = map_center + (Rules.SCREEN_SIZE / 2.0 - area.get_center()) / zoom
 	add_child(camera)
 	camera.make_current()
 
