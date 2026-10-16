@@ -1,0 +1,2 @@
+?? art/t267b/
+?? specs/tareas/informes/T267b-propuesta-nueva.md

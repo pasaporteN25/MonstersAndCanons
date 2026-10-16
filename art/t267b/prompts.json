@@ -1,0 +1,110 @@
+{
+  "descripcion": "Prompts originales enviados a imagegen. Una llamada por pieza o variante, fondo transparente. El primer bosque activo quedó como borrador; forest_revision.json documenta el reemplazo.",
+  "jobs": [
+    {
+      "id": "mine_active",
+      "prompt": "Use case: stylized-concept. ONE standalone PNG RGBA game sprite, transparent background. Match Monsters & Canons reference: chunky detailed hand-painted 3D render, elevated orthographic camera, light upper left, broad beveled surfaces, rich material texture, dark crevices. NOT SVG, NOT flat vector, NOT outlined cartoon. Square composition, full object with 8% transparent padding, ground contact near 90% height. Readable silhouette at 34 px. No text, no symbols, no letters, no range circle, no UI, no floor, no cast ground shadow, no glow. Same mine entrance as reference mine_idle, same rock mound wood and bronze gate framework, angle and scale. ACTIVE state: the entire gate is opened, a huge pitch dark unobstructed tunnel, short mine rail and wooden ore trolley near entrance. Preserve recognizable massive lintel and stone profile.",
+      "references": [
+        "art/t267b/sources/mine_idle.png"
+      ]
+    },
+    {
+      "id": "mine_depleted",
+      "prompt": "Use case: stylized-concept. ONE standalone PNG RGBA game sprite, transparent background. Match Monsters & Canons reference: chunky detailed hand-painted 3D render, elevated orthographic camera, light upper left, broad beveled surfaces, rich material texture, dark crevices. NOT SVG, NOT flat vector, NOT outlined cartoon. Square composition, full object with 8% transparent padding, ground contact near 90% height. Readable silhouette at 34 px. No text, no symbols, no letters, no range circle, no UI, no floor, no cast ground shadow, no glow. Same mine entrance as reference mine_idle, same rock mound wood bronze framework, angle and scale. DEPLETED state: boarded diagonally with TWO very broad crossed pale weathered planks covering the dark entrance, no ore trolley. Must still read as exhausted mine not rubble.",
+      "references": [
+        "art/t267b/sources/mine_idle.png"
+      ]
+    },
+    {
+      "id": "forest_idle",
+      "prompt": "Use case: stylized-concept. ONE standalone PNG RGBA game sprite, transparent background. Match Monsters & Canons reference: chunky detailed hand-painted 3D render, elevated orthographic camera, light upper left, broad beveled surfaces, rich material texture, dark crevices. NOT SVG, NOT flat vector, NOT outlined cartoon. Square composition, full object with 8% transparent padding, ground contact near 90% height. Readable silhouette at 34 px. No text, no symbols, no letters, no range circle, no UI, no floor, no cast ground shadow, no glow. A harvestable compact grove of THREE broad deciduous trees, two foreground exposed branching brown trunks separated clearly and one taller rear tree. Chunky yellow olive foliage like reference tree, clear dark gaps between crowns. Two broad ochre harvesting ribbons on trunks. No tools. Not conifers.",
+      "references": [
+        "assets/sprites/map/rendered/tree.png"
+      ]
+    },
+    {
+      "id": "forest_active",
+      "prompt": "Use case: stylized-concept. ONE standalone PNG RGBA game sprite, transparent background. Match Monsters & Canons reference: chunky detailed hand-painted 3D render, elevated orthographic camera, light upper left, broad beveled surfaces, rich material texture, dark crevices. NOT SVG, NOT flat vector, NOT outlined cartoon. Square composition, full object with 8% transparent padding, ground contact near 90% height. Readable silhouette at 34 px. No text, no symbols, no letters, no range circle, no UI, no floor, no cast ground shadow, no glow. A harvestable compact grove of THREE broad deciduous trees, two foreground branching brown trunks separated clearly and one taller rear tree, chunky yellow olive foliage like reference. ACTIVE forestry: one front tree cut to a broad pale stump with few thick freshly sawn logs beside it, two trees still standing. Large forms only.",
+      "references": [
+        "assets/sprites/map/rendered/tree.png"
+      ]
+    },
+    {
+      "id": "forest_depleted",
+      "prompt": "Use case: stylized-concept. ONE standalone PNG RGBA game sprite, transparent background. Match Monsters & Canons reference: chunky detailed hand-painted 3D render, elevated orthographic camera, light upper left, broad beveled surfaces, rich material texture, dark crevices. NOT SVG, NOT flat vector, NOT outlined cartoon. Square composition, full object with 8% transparent padding, ground contact near 90% height. Readable silhouette at 34 px. No text, no symbols, no letters, no range circle, no UI, no floor, no cast ground shadow, no glow. Exhausted logging grove: THREE broad sawn tree stumps with exposed pale wood growth rings, one short stack of three thick logs, tiny low green shoots. Same warm brown textured wood and elevated ortho perspective as reference tree. No standing trees. Permanent resource site silhouette, not blank soil.",
+      "references": [
+        "assets/sprites/map/rendered/tree.png"
+      ]
+    },
+    {
+      "id": "rubble_idle",
+      "prompt": "Use case: stylized-concept. ONE standalone PNG RGBA game sprite, transparent background. Match Monsters & Canons reference: chunky detailed hand-painted 3D render, elevated orthographic camera, light upper left, broad beveled surfaces, rich material texture, dark crevices. NOT SVG, NOT flat vector, NOT outlined cartoon. Square composition, full object with 8% transparent padding, ground contact near 90% height. Readable silhouette at 34 px. No text, no symbols, no letters, no range circle, no UI, no floor, no cast ground shadow, no glow. Low wide pile of clearly CONSTRUCTED BROKEN MASONRY: a fallen square stone lintel with carved beveled block edges, three broken rectangular gray blocks, one rusty bent iron beam. Irregular stepped horizontal silhouette, NOT a natural boulder. No A glyph or any inscription. Same stone quality as reference rock.",
+      "references": [
+        "assets/sprites/map/rendered/rock_a.png"
+      ]
+    },
+    {
+      "id": "rubble_working",
+      "prompt": "Use case: stylized-concept. ONE standalone PNG RGBA game sprite, transparent background. Match Monsters & Canons reference: chunky detailed hand-painted 3D render, elevated orthographic camera, light upper left, broad beveled surfaces, rich material texture, dark crevices. NOT SVG, NOT flat vector, NOT outlined cartoon. Square composition, full object with 8% transparent padding, ground contact near 90% height. Readable silhouette at 34 px. No text, no symbols, no letters, no range circle, no UI, no floor, no cast ground shadow, no glow. Demolition working state of low wide pile of broken CONSTRUCTED MASONRY: fallen square lintel now broken into two, three rectangular gray blocks, rusty bent iron beam, one large pickaxe laid diagonally across foreground stones and small sorted broken block stack. No inscription, NO A glyph, no natural boulder. Same stone quality as reference rock.",
+      "references": [
+        "assets/sprites/map/rendered/rock_a.png"
+      ]
+    },
+    {
+      "id": "central_master",
+      "prompt": "Use case: stylized-concept. ONE standalone PNG RGBA game sprite, transparent background. Match Monsters & Canons reference: chunky detailed hand-painted 3D render, elevated orthographic camera, light upper left, broad beveled surfaces, rich material texture, dark crevices. NOT SVG, NOT flat vector, NOT outlined cartoon. Square composition, full object with 8% transparent padding, ground contact near 90% height. Readable silhouette at 34 px. No text, no symbols, no letters, no range circle, no UI, no floor, no cast ground shadow, no glow. The Central: compact two-by-two tile industrial colony utility building matching cannon tower language. Chunky bevels, weathered dark iron steel and warm bronze fasteners, gray stone plinth and wood structural braces. Broad squat silhouette, copper hipped main roof, large steel louvered front vent, short thick chimney at rear left, two small side pipes and big reinforced door. Elevated orthographic view showing roof front right side, warm upper-left light. Civil engineering colony installation, no weapons, no sci-fi, no glowing reactor. ONE coherent building centered in square canvas, will be split into four equal quadrants WITHOUT gutters. 8% external padding only.",
+      "references": [
+        "assets/sprites/towers/rendered/turret_cannon.png",
+        "assets/sprites/towers/rendered/turret_basic.png"
+      ]
+    },
+    {
+      "id": "statue_cannon_moss",
+      "prompt": "Use case: stylized-concept. ONE standalone PNG RGBA game sprite, transparent background. Match Monsters & Canons reference: chunky detailed hand-painted 3D render, elevated orthographic camera, light upper left, broad beveled surfaces, rich material texture, dark crevices. NOT SVG, NOT flat vector, NOT outlined cartoon. Square composition, full object with 8% transparent padding, ground contact near 90% height. Readable silhouette at 34 px. No text, no symbols, no letters, no range circle, no UI, no floor, no cast ground shadow, no glow. Decorative stone monument of the EXACT TOWER MACHINE in reference, NOT a person. Short fat barrel cannon on robust side trunnions. The ENTIRE machine including gun barrel is carved from weathered MATTE GRAY STONE, no actual metal no colored paint no wood, ancient inert memorial. Barrel chipped and slightly broken, weapon fixed into integral rectangular tall tiered square stone pedestal with broad square plinth; pedestal occupies lower 40% of height. Muted green moss in cracks and pedestal corners. Eroded sculptural carving with large stone chips. Must look like static ruin decoration, not playable tower. No human, no sword, no helmet, no gear emblem, no bronze, no aura, no range circle. Machine points right. Fully gray memorial without machinery colors.",
+      "references": [
+        "assets/sprites/towers/rendered/turret_cannon.png",
+        "assets/sprites/map/rendered/rock_a.png"
+      ]
+    },
+    {
+      "id": "statue_cannon_frost",
+      "prompt": "Use case: stylized-concept. ONE standalone PNG RGBA game sprite, transparent background. Match Monsters & Canons reference: chunky detailed hand-painted 3D render, elevated orthographic camera, light upper left, broad beveled surfaces, rich material texture, dark crevices. NOT SVG, NOT flat vector, NOT outlined cartoon. Square composition, full object with 8% transparent padding, ground contact near 90% height. Readable silhouette at 34 px. No text, no symbols, no letters, no range circle, no UI, no floor, no cast ground shadow, no glow. Decorative stone monument of the EXACT TOWER MACHINE in reference, NOT a person. Short fat barrel cannon on robust side trunnions. The ENTIRE machine including gun barrel is carved from weathered MATTE GRAY STONE, no actual metal no colored paint no wood, ancient inert memorial. Barrel chipped and slightly broken, weapon fixed into integral rectangular tall tiered square stone pedestal with broad square plinth; pedestal occupies lower 40% of height. White frost and little snow accumulated on upper stone edges and pedestal, visible gray stone remains dominant. Eroded sculptural carving with large stone chips. Must look like static ruin decoration, not playable tower. No human, no sword, no helmet, no gear emblem, no bronze, no aura, no range circle. Machine points right. Fully gray memorial without machinery colors.",
+      "references": [
+        "assets/sprites/towers/rendered/turret_cannon.png",
+        "assets/sprites/map/rendered/rock_a.png"
+      ]
+    },
+    {
+      "id": "statue_sniper_moss",
+      "prompt": "Use case: stylized-concept. ONE standalone PNG RGBA game sprite, transparent background. Match Monsters & Canons reference: chunky detailed hand-painted 3D render, elevated orthographic camera, light upper left, broad beveled surfaces, rich material texture, dark crevices. NOT SVG, NOT flat vector, NOT outlined cartoon. Square composition, full object with 8% transparent padding, ground contact near 90% height. Readable silhouette at 34 px. No text, no symbols, no letters, no range circle, no UI, no floor, no cast ground shadow, no glow. Decorative stone monument of the EXACT TOWER MACHINE in reference, NOT a person. Very long thin sniper rifle barrel with large box breech and scope. The ENTIRE machine including gun barrel is carved from weathered MATTE GRAY STONE, no actual metal no colored paint no wood, ancient inert memorial. Barrel chipped and slightly broken, weapon fixed into integral rectangular tall tiered square stone pedestal with broad square plinth; pedestal occupies lower 40% of height. Muted green moss in cracks and pedestal corners. Eroded sculptural carving with large stone chips. Must look like static ruin decoration, not playable tower. No human, no sword, no helmet, no gear emblem, no bronze, no aura, no range circle. Machine points right. Fully gray memorial without machinery colors.",
+      "references": [
+        "assets/sprites/towers/rendered/turret_sniper.png",
+        "assets/sprites/map/rendered/rock_a.png"
+      ]
+    },
+    {
+      "id": "statue_sniper_frost",
+      "prompt": "Use case: stylized-concept. ONE standalone PNG RGBA game sprite, transparent background. Match Monsters & Canons reference: chunky detailed hand-painted 3D render, elevated orthographic camera, light upper left, broad beveled surfaces, rich material texture, dark crevices. NOT SVG, NOT flat vector, NOT outlined cartoon. Square composition, full object with 8% transparent padding, ground contact near 90% height. Readable silhouette at 34 px. No text, no symbols, no letters, no range circle, no UI, no floor, no cast ground shadow, no glow. Decorative stone monument of the EXACT TOWER MACHINE in reference, NOT a person. Very long thin sniper rifle barrel with large box breech and scope. The ENTIRE machine including gun barrel is carved from weathered MATTE GRAY STONE, no actual metal no colored paint no wood, ancient inert memorial. Barrel chipped and slightly broken, weapon fixed into integral rectangular tall tiered square stone pedestal with broad square plinth; pedestal occupies lower 40% of height. White frost and little snow accumulated on upper stone edges and pedestal, visible gray stone remains dominant. Eroded sculptural carving with large stone chips. Must look like static ruin decoration, not playable tower. No human, no sword, no helmet, no gear emblem, no bronze, no aura, no range circle. Machine points right. Fully gray memorial without machinery colors.",
+      "references": [
+        "assets/sprites/towers/rendered/turret_sniper.png",
+        "assets/sprites/map/rendered/rock_a.png"
+      ]
+    },
+    {
+      "id": "statue_basic_moss",
+      "prompt": "Use case: stylized-concept. ONE standalone PNG RGBA game sprite, transparent background. Match Monsters & Canons reference: chunky detailed hand-painted 3D render, elevated orthographic camera, light upper left, broad beveled surfaces, rich material texture, dark crevices. NOT SVG, NOT flat vector, NOT outlined cartoon. Square composition, full object with 8% transparent padding, ground contact near 90% height. Readable silhouette at 34 px. No text, no symbols, no letters, no range circle, no UI, no floor, no cast ground shadow, no glow. Decorative stone monument of the EXACT TOWER MACHINE in reference, NOT a person. Armored squat machine gun turret with short paired thick barrels and box breech. The ENTIRE machine including gun barrel is carved from weathered MATTE GRAY STONE, no actual metal no colored paint no wood, ancient inert memorial. Barrel chipped and slightly broken, weapon fixed into integral rectangular tall tiered square stone pedestal with broad square plinth; pedestal occupies lower 40% of height. Muted green moss in cracks and pedestal corners. Eroded sculptural carving with large stone chips. Must look like static ruin decoration, not playable tower. No human, no sword, no helmet, no gear emblem, no bronze, no aura, no range circle. Machine points right. Fully gray memorial without machinery colors.",
+      "references": [
+        "assets/sprites/towers/rendered/turret_basic.png",
+        "assets/sprites/map/rendered/rock_a.png"
+      ]
+    },
+    {
+      "id": "statue_basic_frost",
+      "prompt": "Use case: stylized-concept. ONE standalone PNG RGBA game sprite, transparent background. Match Monsters & Canons reference: chunky detailed hand-painted 3D render, elevated orthographic camera, light upper left, broad beveled surfaces, rich material texture, dark crevices. NOT SVG, NOT flat vector, NOT outlined cartoon. Square composition, full object with 8% transparent padding, ground contact near 90% height. Readable silhouette at 34 px. No text, no symbols, no letters, no range circle, no UI, no floor, no cast ground shadow, no glow. Decorative stone monument of the EXACT TOWER MACHINE in reference, NOT a person. Armored squat machine gun turret with short paired thick barrels and box breech. The ENTIRE machine including gun barrel is carved from weathered MATTE GRAY STONE, no actual metal no colored paint no wood, ancient inert memorial. Barrel chipped and slightly broken, weapon fixed into integral rectangular tall tiered square stone pedestal with broad square plinth; pedestal occupies lower 40% of height. White frost and little snow accumulated on upper stone edges and pedestal, visible gray stone remains dominant. Eroded sculptural carving with large stone chips. Must look like static ruin decoration, not playable tower. No human, no sword, no helmet, no gear emblem, no bronze, no aura, no range circle. Machine points right. Fully gray memorial without machinery colors.",
+      "references": [
+        "assets/sprites/towers/rendered/turret_basic.png",
+        "assets/sprites/map/rendered/rock_a.png"
+      ]
+    }
+  ]
+}

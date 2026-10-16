@@ -1,0 +1,20 @@
+{
+  "godot": "4.7.2.stable.official.ed1daf0bf",
+  "captures": 34,
+  "capture_size": [
+    1280,
+    720
+  ],
+  "script_errors": {
+    "import": 0,
+    "capture": 0,
+    "gut": 0
+  },
+  "gut": {
+    "scripts": 117,
+    "tests": 1635,
+    "passing": 1635,
+    "asserts": 19704,
+    "seconds": 61.47
+  }
+}
