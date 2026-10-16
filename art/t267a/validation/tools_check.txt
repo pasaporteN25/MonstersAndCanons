@@ -1,0 +1,66 @@
+
+HERRAMIENTA tools/balance_sim.gd — salida 0
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+
+HERRAMIENTA tools/capture_intro.gd — salida 0
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+
+HERRAMIENTA tools/capture_m24.gd — salida 0
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+
+HERRAMIENTA tools/check_intro_pack.gd — salida 0
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+
+HERRAMIENTA tools/check_level.gd — salida 0
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+
+HERRAMIENTA tools/make_icon.gd — salida 0
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+
+HERRAMIENTA tools/make_sounds.gd — salida 0
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+
+HERRAMIENTA tools/mobile_probe.gd — salida 0
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+
+HERRAMIENTA tools/perf_levels.gd — salida 0
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+
+HERRAMIENTA tools/perf_test.gd — salida 0
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+
+HERRAMIENTA tools/prepare_logo.gd — salida 0
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+
+HERRAMIENTA tools/prepare_monster_sprites.gd — salida 0
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+
+HERRAMIENTA tools/prepare_tower_sprites.gd — salida 0
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+
+HERRAMIENTA tools/t263_upgrade_mock.gd — salida 0
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+
+HERRAMIENTA tools/t264_touch_mockups.gd — salida 0
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+
+HERRAMIENTA tools/verify_save.gd — salida 0
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+
+RESULTADO: 16 herramientas; fallos: []
