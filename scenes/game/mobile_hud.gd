@@ -6,6 +6,8 @@ signal cancel_placement_pressed
 signal view_all_pressed
 signal exit_pressed
 signal catalog_opened(open: bool)
+signal tower_chosen(index: int, use_alt_payment: bool)
+signal infrastructure_tool_chosen(tool: StringName, class_id: StringName)
 
 var _config: MobileUiConfig
 var _prefs: UiPrefs
@@ -16,6 +18,15 @@ var _cart_button: Button
 var _exit_button: Button
 var _catalog_panel: PanelContainer
 var _catalog_dim: ColorRect
+var _catalog_tabs: TabContainer
+var _tower_grid: GridContainer
+var _infrastructure_grid: GridContainer
+var _catalog_towers: Array[TowerData] = []
+var _available_towers: Array[TowerData] = []
+var _infrastructure_options: Array[Dictionary] = []
+var _catalog_gold: int = 0
+var _catalog_resources: int = 0
+var _catalog_uses_resources: bool = false
 var _catalog_open: bool = false
 var _game_over: bool = false
 var _modal_open: bool = false
@@ -134,24 +145,162 @@ func _build_empty_catalog() -> void:
 	_catalog_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	add_child(_catalog_panel)
 	var rows := VBoxContainer.new()
-	rows.add_theme_constant_override("separation", 8)
+	rows.add_theme_constant_override("separation", int(_config.get_value("catalogo_separacion_px")))
 	_catalog_panel.add_child(rows)
+	var heading := HBoxContainer.new()
+	rows.add_child(heading)
 	var title := Label.new()
-	title.text = "Torres"
-	title.add_theme_font_size_override("font_size", 28)
-	rows.add_child(title)
-	var empty := Label.new()
-	empty.text = "Catálogo vacío"
-	empty.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	empty.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	empty.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	rows.add_child(empty)
+	title.text = "Elegí una opción"
+	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title.add_theme_font_size_override("font_size", int(_config.get_value("catalogo_titulo_fuente_px")))
+	heading.add_child(title)
 	var close_button := Button.new()
 	close_button.name = "CloseCatalog"
-	close_button.text = "Cerrar"
-	close_button.custom_minimum_size.y = float(_config.get_value("flotante_min_px"))
+	close_button.text = "×"
+	close_button.custom_minimum_size = Vector2.ONE * _minimum_touch_size()
 	close_button.pressed.connect(close_catalog)
-	rows.add_child(close_button)
+	heading.add_child(close_button)
+	_catalog_tabs = TabContainer.new()
+	_catalog_tabs.name = "CatalogTabs"
+	_catalog_tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	rows.add_child(_catalog_tabs)
+	var tower_scroll := ScrollContainer.new()
+	tower_scroll.name = "Torres"
+	tower_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_catalog_tabs.add_child(tower_scroll)
+	_tower_grid = GridContainer.new()
+	_tower_grid.name = "TowerCards"
+	_tower_grid.columns = int(_config.get_value("catalogo_columnas"))
+	tower_scroll.add_child(_tower_grid)
+	var infrastructure_scroll := ScrollContainer.new()
+	infrastructure_scroll.name = "Infraestructura"
+	infrastructure_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	infrastructure_scroll.visible = false
+	_catalog_tabs.add_child(infrastructure_scroll)
+	_infrastructure_grid = GridContainer.new()
+	_infrastructure_grid.name = "InfrastructureCards"
+	_infrastructure_grid.columns = int(_config.get_value("catalogo_columnas"))
+	infrastructure_scroll.add_child(_infrastructure_grid)
+	_refresh_catalog()
+
+
+func set_catalog_data(towers: Array[TowerData], available: Array[TowerData], gold: int,
+		resources: int, uses_resources: bool, infrastructure_options: Array[Dictionary]) -> void:
+	_catalog_towers = towers.duplicate()
+	_available_towers = available.duplicate()
+	_catalog_gold = gold
+	_catalog_resources = resources
+	_catalog_uses_resources = uses_resources
+	_infrastructure_options = infrastructure_options.duplicate(true)
+	_refresh_catalog()
+
+
+func _refresh_catalog() -> void:
+	if _tower_grid == null:
+		return
+	var card_width: float = _catalog_virtual_mm(float(_config.get_value("catalogo_tarjeta_ancho_mm")))
+	var separation: float = float(_config.get_value("catalogo_separacion_px"))
+	var content_width: float = float(_config.get_value("catalogo_ancho_px")) - separation * 2.0
+	var fit_columns: int = maxi(1, floori((content_width + separation) / (card_width + separation)))
+	var columns: int = mini(int(_config.get_value("catalogo_columnas")), fit_columns)
+	_tower_grid.columns = columns
+	_infrastructure_grid.columns = columns
+	_clear_children(_tower_grid)
+	_clear_children(_infrastructure_grid)
+	for tower: TowerData in _catalog_towers:
+		var available_index: int = -1
+		for i: int in _available_towers.size():
+			if _available_towers[i].id == tower.id:
+				available_index = i
+				break
+		var primary_reason: String = TowerText.missing_text(tower, false,
+			_catalog_gold, _catalog_resources, _catalog_uses_resources)
+		var use_alt: bool = false
+		var reason: String = ""
+		if available_index < 0:
+			reason = "No disponible en este nivel"
+			if tower.required_collection != &"" and not SaveManager.collection_complete(tower.required_collection):
+				reason = "Falta completar la colección"
+		elif primary_reason != "":
+			var alternate_reason: String = TowerText.missing_text(tower, true,
+				_catalog_gold, _catalog_resources, _catalog_uses_resources)
+			if tower.has_alt_payment() and alternate_reason == "":
+				use_alt = true
+			else:
+				reason = primary_reason
+				if tower.has_alt_payment() and alternate_reason != "":
+					reason = alternate_reason if alternate_reason.length() < primary_reason.length() else primary_reason
+		var cost_text: String = TowerText.cost_text(tower, use_alt)
+		if tower.has_alt_payment():
+			cost_text = "%s / %s" % [TowerText.cost_text(tower), TowerText.cost_text(tower, true)]
+		_add_catalog_card(_tower_grid, tower.display_name, cost_text, reason,
+			Tower.make_icon(tower), available_index, use_alt)
+	for option: Dictionary in _infrastructure_options:
+		_add_catalog_card(_infrastructure_grid, String(option.get("name", "Infraestructura")),
+			String(option.get("cost_text", "")), String(option.get("disabled_reason", "")),
+			option.get("icon"), -1, false, StringName(option.get("tool", "")),
+			StringName(option.get("class_id", "")))
+	var infrastructure_tab: Control = _catalog_tabs.get_child(1)
+	infrastructure_tab.visible = not _infrastructure_options.is_empty()
+	if not infrastructure_tab.visible and _catalog_tabs.current_tab == 1:
+		_catalog_tabs.current_tab = 0
+
+
+func _add_catalog_card(parent: GridContainer, title: String, cost: String, reason: String,
+		icon: Variant, tower_index: int, use_alt: bool, tool: StringName = &"",
+		class_id: StringName = &"") -> void:
+	var minimum_width: float = _catalog_virtual_mm(float(_config.get_value("catalogo_tarjeta_ancho_mm")))
+	var minimum_height: float = _catalog_virtual_mm(float(_config.get_value("catalogo_tarjeta_alto_mm")))
+	var card := Button.new()
+	var safe_title: String = title.to_snake_case().replace("·", "").replace("__", "_").trim_prefix("_").trim_suffix("_")
+	card.name = "CatalogCard_%s" % safe_title
+	card.custom_minimum_size = Vector2(minimum_width, minimum_height)
+	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	card.focus_mode = Control.FOCUS_NONE
+	card.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	card.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	card.vertical_icon_alignment = VERTICAL_ALIGNMENT_TOP
+	card.expand_icon = true
+	card.add_theme_constant_override("icon_max_width", int(_config.get_value("catalogo_icono_ancho_px")))
+	card.add_theme_font_size_override("font_size", int(_config.get_value("catalogo_tarjeta_fuente_px")))
+	var text: String = "%s\n%s" % [title, cost]
+	if reason != "":
+		text += "\n%s" % reason
+	card.text = text
+	card.tooltip_text = reason if reason != "" else "%s · %s" % [title, cost]
+	if icon is Texture2D:
+		card.icon = icon
+	card.disabled = reason != ""
+	if tower_index >= 0:
+		card.pressed.connect(_on_tower_card_pressed.bind(tower_index, use_alt))
+	else:
+		card.pressed.connect(_on_infrastructure_card_pressed.bind(tool, class_id))
+	parent.add_child(card)
+
+
+func _on_tower_card_pressed(index: int, use_alt_payment: bool) -> void:
+	tower_chosen.emit(index, use_alt_payment)
+	close_catalog()
+
+
+func _on_infrastructure_card_pressed(tool: StringName, class_id: StringName) -> void:
+	infrastructure_tool_chosen.emit(tool, class_id)
+	close_catalog()
+
+
+func _catalog_virtual_mm(millimeters: float) -> float:
+	var minimum_mm: float = float(_config.get_value("flotante_min_mm"))
+	var fallback: float = float(_config.get_value("flotante_min_px")) * millimeters / minimum_mm
+	if not OS.has_feature("mobile"):
+		return fallback
+	var dpi: float = float(DisplayServer.screen_get_dpi())
+	var canvas_scale: float = get_viewport().get_stretch_transform().x.length() * get_viewport().get_window().content_scale_factor
+	return millimeters * dpi / 25.4 / canvas_scale if dpi > 0.0 and canvas_scale > 0.0 else fallback
+
+
+func _clear_children(parent: Node) -> void:
+	for child: Node in parent.get_children():
+		child.queue_free()
 
 
 func show_placement(world_position: Vector2, cost_text: String, valid: bool, reason: String,

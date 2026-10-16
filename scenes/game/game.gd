@@ -133,7 +133,13 @@ func _ready() -> void:
 		mobile_hud.confirm_placement_pressed.connect(build_controller.confirm_ghost)
 		mobile_hud.cancel_placement_pressed.connect(build_controller.cancel)
 		mobile_hud.exit_pressed.connect(_request_exit)
-		mobile_hud.catalog_opened.connect(func(open: bool) -> void: build_controller.input_blocked = open)
+		mobile_hud.tower_chosen.connect(_on_mobile_tower_chosen)
+		mobile_hud.infrastructure_tool_chosen.connect(_on_mobile_infrastructure_tool_chosen)
+		mobile_hud.catalog_opened.connect(_on_mobile_catalog_opened)
+		build_controller.mobile_infrastructure_targeted.connect(_on_mobile_infrastructure_targeted)
+		_refresh_mobile_catalog()
+		session.gold_changed.connect(_on_mobile_catalog_money_changed)
+		session.resources_changed.connect(func(_resources: int) -> void: _refresh_mobile_catalog())
 	camera_controller = CameraController.new()
 	camera_controller.name = "CameraController"
 	add_child(camera_controller)
@@ -252,6 +258,98 @@ func _setup_infrastructure() -> void:
 		_refresh_infrastructure_tab()
 
 
+func _on_mobile_catalog_opened(open: bool) -> void:
+	build_controller.input_blocked = open
+	if open:
+		_refresh_mobile_catalog()
+
+
+func _on_mobile_tower_chosen(index: int, use_alt_payment: bool) -> void:
+	build_controller.select(index, use_alt_payment)
+
+
+func _on_mobile_infrastructure_tool_chosen(tool: StringName, class_id: StringName) -> void:
+	if tool == &"machine":
+		infrastructure.buy_machine()
+		return
+	build_controller.select_mobile_infrastructure_tool(tool, class_id)
+
+
+func _on_mobile_infrastructure_targeted(cell: Vector2i, tool: StringName, class_id: StringName) -> void:
+	var spec: ObstacleSpec = infrastructure.obstacle_at(cell)
+	if spec == null or spec.class_id != class_id:
+		return
+	var completed: bool = false
+	if tool == &"demolish" and spec.kind == ObstacleSpec.Kind.REMOVABLE:
+		completed = infrastructure.order(cell)
+	elif tool == &"extract" and spec.kind == ObstacleSpec.Kind.EXTRACTION:
+		completed = infrastructure.enable(cell)
+	if completed:
+		build_controller.cancel()
+
+
+func _on_mobile_catalog_money_changed(_gold: int) -> void:
+	_refresh_mobile_catalog()
+
+
+func _refresh_mobile_catalog() -> void:
+	if mobile_hud == null:
+		return
+	var all_towers: Array[TowerData] = Wiki._all_towers()
+	var options: Array[Dictionary] = _mobile_infrastructure_options()
+	mobile_hud.set_catalog_data(all_towers, available_towers, session.gold, session.resources,
+		level_data.uses_resources(), options)
+
+
+func _mobile_infrastructure_options() -> Array[Dictionary]:
+	var options: Array[Dictionary] = []
+	if level_data == null or infrastructure == null:
+		return options
+	if infrastructure.machine_enabled and not infrastructure.field.has_machine:
+		var machine_price: int = infrastructure.field.machine_price()
+		var machine_reason: String = "Faltan %d de oro" % (machine_price - session.gold) if session.gold < machine_price else ""
+		options.append({"tool": &"machine", "class_id": &"", "name": "Demoledora",
+			"cost_text": "%d de oro" % machine_price, "disabled_reason": machine_reason, "icon": null})
+	var seen: Dictionary = {}
+	for spec: ObstacleSpec in level_data.obstacles:
+		var tool: StringName = &"demolish" if spec.kind == ObstacleSpec.Kind.REMOVABLE else &"extract"
+		var key: String = "%s:%s" % [tool, spec.class_id]
+		if seen.has(key):
+			continue
+		seen[key] = true
+		var available: bool = false
+		var required_gold: int = 0
+		var disabled_reason: String = ""
+		for target: ObstacleSpec in level_data.obstacles:
+			if target.kind != spec.kind or target.class_id != spec.class_id:
+				continue
+			var cell: Vector2i = target.cell
+			var cost: int = infrastructure.field.cost_of(cell)
+			required_gold = cost
+			var reason: StringName = infrastructure.field.can_order(cell) if tool == &"demolish" else infrastructure.field.can_enable(cell)
+			if reason == &"" and session.gold >= cost:
+				available = true
+				break
+			if reason == &"" and session.gold < cost:
+				disabled_reason = "Faltan %d de oro" % (cost - session.gold)
+			elif reason == &"busy":
+				disabled_reason = "Ya hay una demolición en curso"
+			elif reason == &"active":
+				disabled_reason = "El punto ya está activo"
+			elif reason == &"depleted":
+				disabled_reason = "El punto está agotado"
+			elif reason == &"cleared":
+				disabled_reason = "No queda ningún objeto de esa clase"
+		if available:
+			disabled_reason = ""
+		var action_name: String = "Demoler" if tool == &"demolish" else "Habilitar"
+		options.append({"tool": tool, "class_id": spec.class_id,
+			"name": "%s · %s" % [action_name, ObstacleText.display_name(spec)],
+			"cost_text": "%d de oro" % required_gold,
+			"disabled_reason": disabled_reason, "icon": null})
+	return options
+
+
 ## Muestra en el panel el removible elegido (o lo oculta si no hay ninguno).
 func _refresh_obstacle_panel() -> void:
 	var cell: Vector2i = infrastructure.selected_cell()
@@ -343,7 +441,7 @@ func _create_interactive_camera() -> Camera2D:
 func _process(delta: float) -> void:
 	if mobile_hud != null:
 		mobile_hud.set_game_over(session.is_over())
-		mobile_hud.set_cart_active(build_controller.selected_tower() != null or build_controller.selected_placed() != null)
+		mobile_hud.set_cart_active(build_controller.selected_tower() != null or build_controller.selected_placed() != null or build_controller.mobile_action_active())
 		var selected_tower: TowerData = build_controller.selected_tower()
 		if selected_tower == null:
 			mobile_hud.set_placement_visible(false)

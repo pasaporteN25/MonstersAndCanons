@@ -35,6 +35,13 @@ const DEFAULTS: Dictionary = {
 	"salida_y_default": 0.1,
 	"catalogo_ancho_px": 800,
 	"catalogo_alto_px": 480,
+	"catalogo_tarjeta_ancho_mm": 18.0,
+	"catalogo_tarjeta_alto_mm": 10.0,
+	"catalogo_columnas": 3,
+	"catalogo_separacion_px": 8,
+	"catalogo_titulo_fuente_px": 24,
+	"catalogo_tarjeta_fuente_px": 15,
+	"catalogo_icono_ancho_px": 68,
 }
 
 var values: Dictionary = DEFAULTS.duplicate(true)

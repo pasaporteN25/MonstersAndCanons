@@ -17,6 +17,7 @@ signal payment_changed(alt: bool)
 signal selection_changed(index: int)
 ## Cambió la torre construida seleccionada. null = ninguna (RF-73).
 signal placed_selection_changed(tower: Tower)
+signal mobile_infrastructure_targeted(cell: Vector2i, tool: StringName, class_id: StringName)
 
 const TOWER_SCENE: PackedScene = preload("res://scenes/towers/tower.tscn")
 const VALID_TINT := Color(0.3, 1.0, 0.3, 0.3)
@@ -37,6 +38,8 @@ var _hover_cell: Vector2i = Vector2i.ZERO
 ## RF-419: la torre elegida se paga con la segunda forma (oro + recursos). Arranca en false.
 var _pay_alt: bool = false
 var _mobile_mode: bool = false
+var _mobile_infrastructure_tool: StringName = &""
+var _mobile_infrastructure_class: StringName = &""
 var _mobile_config: MobileUiConfig
 var _touch_gesture := TouchGesture.new()
 var _ghost_placement := GhostPlacement.new()
@@ -72,14 +75,17 @@ func selected_tower() -> TowerData:
 
 
 ## Elegir la misma torre otra vez la deselecciona.
-func select(index: int) -> void:
+func select(index: int, use_alt_payment: bool = false) -> void:
 	if index < 0 or index >= _tower_types.size():
 		return
+	var already_selected: bool = index == _selected
 	deselect_placed()  # RF-73: nunca las dos cosas a la vez
 	if obstacles != null:
 		obstacles.deselect()
-	_selected = -1 if index == _selected else index
-	set_pay_alt(false)  # RF-419: "solo oro" elegido de entrada
+	_mobile_infrastructure_tool = &""
+	_mobile_infrastructure_class = &""
+	_selected = -1 if already_selected else index
+	set_pay_alt(use_alt_payment)  # RF-419: usa la forma que se puede pagar desde el catálogo
 	if _mobile_mode and _selected >= 0:
 		_start_mobile_ghost()
 	selection_changed.emit(_selected)
@@ -87,12 +93,28 @@ func select(index: int) -> void:
 
 
 func cancel() -> void:
-	if _selected == -1:
+	if _selected == -1 and _mobile_infrastructure_tool == &"":
 		return
-	_selected = -1
-	set_pay_alt(false)
-	selection_changed.emit(_selected)
+	if _selected != -1:
+		_selected = -1
+		set_pay_alt(false)
+		selection_changed.emit(_selected)
+	_mobile_infrastructure_tool = &""
+	_mobile_infrastructure_class = &""
 	queue_redraw()
+
+
+func select_mobile_infrastructure_tool(tool: StringName, class_id: StringName = &"") -> void:
+	cancel()
+	deselect_placed()
+	if obstacles != null:
+		obstacles.deselect()
+	_mobile_infrastructure_tool = tool
+	_mobile_infrastructure_class = class_id
+
+
+func mobile_action_active() -> bool:
+	return _mobile_infrastructure_tool != &""
 
 
 ## RF-419: elige la forma de pago de la torre elegida. Si no tiene dos formas, queda en solo oro.
@@ -314,9 +336,18 @@ func _handle_mobile_input(event: InputEvent) -> bool:
 		_accept()
 		return true
 	if event.is_action_pressed("cancel"):
-		cancel()
-		_accept()
-		return true
+		if _selected >= 0 or _mobile_infrastructure_tool != &"":
+			cancel()
+			_accept()
+			return true
+		if _selected_placed != null:
+			deselect_placed()
+			_accept()
+			return true
+		if obstacles != null and obstacles.has_selection():
+			obstacles.deselect()
+			_accept()
+			return true
 	return false
 
 
@@ -332,6 +363,9 @@ func _in_map_area(screen_pos: Vector2) -> bool:
 func _mobile_map_tap(world_pos: Vector2, time_ms: int) -> void:
 	var cell: Vector2i = _level.cell_at(world_pos)
 	if not _level.is_inside(cell):
+		return
+	if _mobile_infrastructure_tool != &"":
+		mobile_infrastructure_targeted.emit(cell, _mobile_infrastructure_tool, _mobile_infrastructure_class)
 		return
 	if _selected < 0:
 		var tower: Tower = tower_at(cell)

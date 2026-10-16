@@ -346,6 +346,8 @@ func setup_bar(tabs: bool) -> void:
 	bottom.add_child(infrastructure_tab)
 	if _mobile_mode:
 		infrastructure_tab.set_mobile_touch_targets(float(_mobile_config.get_value("boton_alto_px")))
+		bar_tabs.hide()
+		infrastructure_tab.hide()
 	show_tab(TAB_CANNONS)
 
 
@@ -363,6 +365,10 @@ func show_tab(id: StringName) -> void:
 	if bar_tabs == null or not bar_tabs.has_tab(id):
 		return
 	bar_tabs.select(id)
+	if _mobile_mode:
+		_tower_button_row.hide()
+		infrastructure_tab.hide()
+		return
 	_tower_button_row.visible = id == TAB_CANNONS
 	infrastructure_tab.visible = id == TAB_INFRASTRUCTURE
 
@@ -406,6 +412,8 @@ func setup_towers(tower_types: Array[TowerData]) -> void:
 		old.queue_free()
 	_tower_buttons.clear()
 	_tower_types = tower_types
+	if _mobile_mode:
+		_tower_button_row.hide()  # RF-510: el celular elige las torres desde el carrito.
 	# RF-455: el reparto sale de BarLayout. Sin pestañas y hasta 9 torres: lo de siempre (x = 20, 76 de ancho, 10 de separación).
 	var width: int = BarLayout.button_width(tower_types.size(), _tabs_enabled)
 	_tower_button_row.offset_left = BarLayout.left(_tabs_enabled)
