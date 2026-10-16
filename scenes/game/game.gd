@@ -38,6 +38,7 @@ var _carrier: Enemy
 var level: Level
 ## RF-251: solo existe si el mapa es más grande que 20×9 (hay que achicar el mundo para que entre).
 var camera: Camera2D
+var mobile_hud: MobileHud
 ## RF-217: se está probando el nivel del editor (no hay campaña: no se guarda nada).
 var testing: bool = false
 ## RF-184: el panel de pruebas. null si no es el modo de pruebas.
@@ -123,6 +124,12 @@ func _ready() -> void:
 			if not available_towers.has(support):
 				available_towers.append(support)
 	build_controller.setup(level, session, balance, available_towers, tower_container)
+	if UiMode.is_mobile():
+		mobile_hud = MobileHud.new()
+		mobile_hud.name = "MobileHUD"
+		add_child(mobile_hud)
+		mobile_hud.confirm_placement_pressed.connect(build_controller.confirm_ghost)
+		mobile_hud.cancel_placement_pressed.connect(build_controller.cancel)
 	build_controller.tower_built.connect(_on_tower_built)
 	build_controller.tower_upgraded.connect(_on_tower_upgraded)
 	build_controller.tower_sold.connect(_on_tower_sold)
@@ -306,6 +313,14 @@ func _fit_map() -> void:
 
 
 func _process(delta: float) -> void:
+	if mobile_hud != null:
+		var selected_tower: TowerData = build_controller.selected_tower()
+		if selected_tower == null:
+			mobile_hud.set_placement_visible(false)
+		else:
+			var ghost: GhostPlacement = build_controller.ghost_placement()
+			var ghost_world_pos: Vector2 = level.cell_center(ghost.cell)
+			mobile_hud.show_placement(ghost_world_pos, TowerText.cost_text(selected_tower, build_controller.pay_alt()), ghost.valid, ghost.reason)
 	if dev_stats != null and not get_tree().paused and not session.is_over():
 		dev_stats.seconds += delta  # RF-325: tiempo de juego, sin pausa
 	# RF-128: se mueve todo el "mundo"; el HUD está en otra capa y no se sacude.

@@ -11,10 +11,11 @@ Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle t�
 - **Los niveles 13, 14 y 15 no cambian.**
 - Lucas va a jugar los niveles 1 → 2 → 3 y 6 → 7 → 8 antes de que se reenvíe el juego.
 
-## Interfaz para celular: primera etapa *(T271, 2026-10-16)*
+## Interfaz para celular: primera etapa *(T271 y T272, 2026-10-16)*
 
 - **Opciones → Interfaz** permite elegir «Automática», «Celular» o «PC». La elección se guarda y se aplica al abrir la próxima partida; no cambia una partida en curso.
 - En modo Celular, la barra superior crece a 64 px, muestra Pausa y velocidad con botones de 56 px, y oculta «← Menú» y los atajos de teclado. Los números de esta interfaz se cargan desde `data/ui/mobile_ui.json`; si el archivo está dañado, se usan los valores por omisión.
+- **Construcción en dos pasos:** al elegir una torre aparece un fantasma; tocar mueve el fantasma y la tilde construye. La cruz o `Esc` cancelan; un doble toque rápido en una misma casilla también confirma. Un toque, arrastre o gesto de dos dedos no compra.
 - **La PC conserva su interfaz actual.** La medición en un celular real y las capturas de los niveles 1 y 15 quedan pendientes.
 
 ## Lo que viene al celular: carrito, zoom y torre fantasma *(M58, spec del 2026-10-16)*

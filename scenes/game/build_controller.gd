@@ -36,6 +36,14 @@ var _occupied: Dictionary = {}
 var _hover_cell: Vector2i = Vector2i.ZERO
 ## RF-419: la torre elegida se paga con la segunda forma (oro + recursos). Arranca en false.
 var _pay_alt: bool = false
+var _mobile_mode: bool = false
+var _mobile_config: MobileUiConfig
+var _touch_gesture := TouchGesture.new()
+var _ghost_placement := GhostPlacement.new()
+var _touch_start_screen_cell: Vector2i = Vector2i.ZERO
+var _touch_start_ghost_cell: Vector2i = Vector2i.ZERO
+var _mouse_touch_start_cell: Vector2i = Vector2i.ZERO
+var _mouse_touch_start_ghost: Vector2i = Vector2i.ZERO
 ## RF-404: los removibles del mapa. Lo pone Game; null = este controlador no los conoce (sirve para los tests).
 var obstacles: InfrastructureController
 ## RF-456: con el diálogo de la flecha abierto (RF-460) ninguna tecla ni clic llega a la construcción.
@@ -51,6 +59,10 @@ func setup(level: Level, session: LevelSession, balance: BalanceConfig,
 	_tower_types = tower_types
 	_container = container
 	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS  # D-023: torre fantasma
+	_mobile_mode = UiMode.is_mobile()
+	if _mobile_mode:
+		_mobile_config = MobileUiConfig.load_from()
+		_touch_gesture.configure(float(_mobile_config.get_value("toque_max_px")), int(_mobile_config.get_value("pinza_gracia_ms")))
 
 
 # --- Elegir torre para construir (RF-40, RF-43) ---
@@ -68,6 +80,8 @@ func select(index: int) -> void:
 		obstacles.deselect()
 	_selected = -1 if index == _selected else index
 	set_pay_alt(false)  # RF-419: "solo oro" elegido de entrada
+	if _mobile_mode and _selected >= 0:
+		_start_mobile_ghost()
 	selection_changed.emit(_selected)
 	queue_redraw()
 
@@ -229,7 +243,7 @@ func sell(tower: Tower) -> int:
 # --- Entrada y dibujo ---
 
 func _process(_delta: float) -> void:
-	if _selected < 0:
+	if _selected < 0 or _mobile_mode:
 		return
 	_hover_cell = origin_for(get_global_mouse_position(), _tower_types[_selected].footprint)
 	queue_redraw()  # se redibuja siempre: el color también cambia si cambia el oro
@@ -237,6 +251,8 @@ func _process(_delta: float) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if input_blocked:
+		return
+	if _mobile_mode and _handle_mobile_input(event):
 		return
 	for i: int in _tower_types.size():
 		var action: StringName = BarLayout.action_for(i)  # RF-456: la torre 11 en adelante no tiene tecla
@@ -248,6 +264,148 @@ func _unhandled_input(event: InputEvent) -> void:
 		_handle_build_mode_input(event)
 	else:
 		_handle_selection_input(event)
+
+
+func _handle_mobile_input(event: InputEvent) -> bool:
+	var now_ms: int = Time.get_ticks_msec()
+	if event is InputEventScreenTouch:
+		var touch: InputEventScreenTouch = event as InputEventScreenTouch
+		if touch.pressed:
+			_touch_start_ghost_cell = _ghost_placement.cell
+			_touch_start_screen_cell = _level.cell_at(_screen_to_world(touch.position))
+			_touch_gesture.down(touch.index, touch.position, now_ms)
+		else:
+			var result: TouchGesture.Gesture = _touch_gesture.up(touch.index, touch.position, now_ms)
+			if result == TouchGesture.Gesture.TAP and not _touch_gesture.ignores_single_touch(now_ms) and _in_map_area(touch.position):
+				_mobile_map_tap(_screen_to_world(touch.position), now_ms)
+		_accept()
+		return true
+	if event is InputEventScreenDrag:
+		var drag: InputEventScreenDrag = event as InputEventScreenDrag
+		var result: TouchGesture.Gesture = _touch_gesture.move(drag.index, drag.position, now_ms)
+		if result == TouchGesture.Gesture.DRAG and _selected >= 0 and _in_map_area(drag.position):
+			var current_cell: Vector2i = _level.cell_at(_screen_to_world(drag.position))
+			var delta: Vector2i = current_cell - _touch_start_screen_cell
+			_move_mobile_ghost(_touch_start_ghost_cell + delta)
+		_accept()
+		return true
+	if event is InputEventMouseButton:
+		if OS.has_feature("mobile"):
+			_accept()
+			return true
+		var mouse: InputEventMouseButton = event as InputEventMouseButton
+		if mouse.button_index == MOUSE_BUTTON_LEFT:
+			if mouse.pressed:
+				_mouse_touch_start_cell = _level.cell_at(_screen_to_world(mouse.position))
+				_mouse_touch_start_ghost = _ghost_placement.cell
+				_touch_gesture.down(-1, mouse.position, now_ms)
+			else:
+				var result: TouchGesture.Gesture = _touch_gesture.up(-1, mouse.position, now_ms)
+				if result == TouchGesture.Gesture.TAP and _in_map_area(mouse.position) and not _touch_gesture.ignores_single_touch(now_ms):
+					_mobile_map_tap(_screen_to_world(mouse.position), now_ms)
+			_accept()
+		return true
+	if event is InputEventMouseMotion and not OS.has_feature("mobile") and _selected >= 0 and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+		var motion: InputEventMouseMotion = event as InputEventMouseMotion
+		var result: TouchGesture.Gesture = _touch_gesture.move(-1, motion.position, now_ms)
+		if result == TouchGesture.Gesture.DRAG and _in_map_area(motion.position):
+			var current_cell: Vector2i = _level.cell_at(_screen_to_world(motion.position))
+			_move_mobile_ghost(_mouse_touch_start_ghost + current_cell - _mouse_touch_start_cell)
+		_accept()
+		return true
+	if event.is_action_pressed("cancel"):
+		cancel()
+		_accept()
+		return true
+	return false
+
+
+func _screen_to_world(screen_pos: Vector2) -> Vector2:
+	return get_viewport().get_canvas_transform().affine_inverse() * screen_pos
+
+
+func _in_map_area(screen_pos: Vector2) -> bool:
+	var top: float = float(_mobile_config.get_value("barra_alta_px"))
+	return screen_pos.x >= 0.0 and screen_pos.x < 1280.0 and screen_pos.y >= top and screen_pos.y < 624.0
+
+
+func _mobile_map_tap(world_pos: Vector2, time_ms: int) -> void:
+	var cell: Vector2i = _level.cell_at(world_pos)
+	if not _level.is_inside(cell):
+		return
+	if _selected < 0:
+		var tower: Tower = tower_at(cell)
+		if tower != null:
+			select_placed(tower)
+		elif obstacles != null and obstacles.obstacle_at(cell) != null:
+			_select_obstacle(cell)
+		else:
+			deselect_placed()
+			if obstacles != null:
+				obstacles.deselect()
+		return
+	if tower_at(cell) != null:
+		cancel()
+		select_placed(tower_at(cell))
+		return
+	var double_tap_ms: int = roundi(float(_mobile_config.get_value("doble_toque_s")) * 1000.0)
+	if _ghost_placement.is_double_tap(cell, time_ms, double_tap_ms):
+		_move_mobile_ghost(cell)
+		confirm_ghost()
+		return
+	_move_mobile_ghost(cell)
+
+
+func _start_mobile_ghost() -> void:
+	var tower: TowerData = selected_tower()
+	if tower == null:
+		return
+	_ghost_placement.select_tower(tower.id, tower.footprint, tower.build_gold(_pay_alt), tower.build_resources(_pay_alt))
+	var map_size: Vector2i = _level.map_size()
+	var center := Vector2i(floori(float(map_size.x) / 2.0), floori(float(map_size.y) / 2.0))
+	var best_cell: Vector2i = center
+	var best_distance: float = INF
+	for y: int in map_size.y:
+		for x: int in map_size.x:
+			var candidate := Vector2i(x, y)
+			if not cells_free(tower, candidate):
+				continue
+			var distance: float = Vector2(candidate).distance_squared_to(Vector2(center))
+			if distance < best_distance:
+				best_distance = distance
+				best_cell = candidate
+	_move_mobile_ghost(best_cell)
+
+
+func _move_mobile_ghost(cell: Vector2i) -> void:
+	var tower: TowerData = selected_tower()
+	if tower == null:
+		return
+	_ghost_placement.size = tower.footprint
+	_ghost_placement.cell = cell
+	_ghost_placement.clamp_inside(_level.map_size())
+	var reason: String = ""
+	if not cells_free(tower, _ghost_placement.cell):
+		reason = "Ahí no"
+	else:
+		reason = TowerText.missing_text(tower, _pay_alt, _session.gold, _session.resources, true)
+	_ghost_placement.move_to(_ghost_placement.cell, reason == "", reason)
+	_hover_cell = _ghost_placement.cell
+	queue_redraw()
+
+
+func ghost_placement() -> GhostPlacement:
+	return _ghost_placement
+
+
+func confirm_ghost() -> bool:
+	var tower: TowerData = selected_tower()
+	if tower == null or not bool(_ghost_placement.can_confirm(_session.gold, _session.resources)["ok"]):
+		return false
+	if not try_build(tower, _ghost_placement.cell, _pay_alt):
+		return false
+	cancel()
+	return true
 
 
 ## RF-404: el removible bajo el mouse, si lo hay (null si no hay o no se puede elegir).
