@@ -1,0 +1,18 @@
+=== n07_b res=1600x720 args=level=7 from=17 towers=30 window=1600x720 inicio 02:59:16
+UPTIME_ANTES  02:59:16 up 10 days,  7:57,  1 user,  load average: 5,83, 5,80, 4,50
+BOTS_ANTES 9
+PERF nivel 7 «Cruce» · NVIDIA GeForce GTX 1660 SUPER · ventana (1600, 720) · sin vsync · oleadas jugadas 18 a 20 de 20
+PERF defensa: 30 torres, 26850 de oro, 20 vidas
+PERF   detalle oleada 18: proceso 11.0 ms · física 9.8 ms por frame · 650 llamadas de dibujo · hasta 427 nodos
+PERF oleada 18: 270 FPS promedio · 1% más lento 8.1 ms (123 FPS) · peor frame 55.3 ms · 4 de 5225 frames > 16,6 ms · hasta 52 enemigos · 30 torres · 6 demoliciones · vidas 20 · 19 s
+PERF   tirones oleada 18: 2 frames > 33,3 ms · 1.4 s (52 ms), 9.2 s (55 ms)
+PERF   detalle oleada 19: proceso 6.0 ms · física 8.3 ms por frame · 687 llamadas de dibujo · hasta 442 nodos
+PERF oleada 19: 270 FPS promedio · 1% más lento 8.3 ms (120 FPS) · peor frame 48.9 ms · 4 de 11246 frames > 16,6 ms · hasta 45 enemigos · 30 torres · 0 demoliciones · vidas 20 · 42 s
+PERF   tirones oleada 19: 4 frames > 33,3 ms · 2.9 s (48 ms), 5.1 s (44 ms), 6.2 s (49 ms), 15.2 s (47 ms)
+PERF   detalle oleada 20: proceso 5.1 ms · física 3.9 ms por frame · 637 llamadas de dibujo · hasta 438 nodos
+PERF oleada 20: 309 FPS promedio · 1% más lento 7.2 ms (139 FPS) · peor frame 60.0 ms · 2 de 17990 frames > 16,6 ms · hasta 35 enemigos · 30 torres · 0 demoliciones · vidas 20 · 58 s
+PERF   tirones oleada 20: 2 frames > 33,3 ms · 5.3 s (60 ms), 58.2 s (37 ms)
+PERF RESUMEN nivel 7: 18: 270 FPS (peor 55 ms) | 19: 270 FPS (peor 49 ms) | 20: 309 FPS (peor 60 ms)
+UPTIME_DESPUES  03:01:18 up 10 days,  7:59,  1 user,  load average: 5,95, 5,87, 4,69
+BOTS_DESPUES 9
+=== fin 03:01:18

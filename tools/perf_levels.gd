@@ -11,6 +11,8 @@
 #   seconds=N  mide solo los primeros N segundos de cada oleada (diagnóstico)
 #   shot=ruta  guarda una captura (PNG) a los 10 segundos de cada oleada; sirve para mirar qué se ve
 #   vsync=1    deja el vsync prendido (por omisión se apaga para medir lo que el equipo puede dar)
+#   window=WxH tamaño de la ventana (T262: por ejemplo 1600x720, la proporción 20:9 de un celular). Sin esto, la ventana
+#              la acomoda DesktopWindow al monitor.
 #
 # Compra defensa con `try_build` (no con clics: acá se mide el dibujo y la simulación, no la interfaz), usa la máquina
 # demoledora y demuele los removibles, habilita los puntos de extracción y deja a la Disruptora disparar sus pulsos cuando el
@@ -44,6 +46,7 @@ var _summary: Array[String] = []
 
 func _ready() -> void:
 	var vsync: bool = false
+	var window_size := Vector2i.ZERO
 	for arg: String in OS.get_cmdline_user_args():
 		var parts: PackedStringArray = arg.split("=")
 		if parts.size() != 2:
@@ -57,6 +60,12 @@ func _ready() -> void:
 			"shot": shot_path = parts[1]
 			"seconds": max_seconds = float(parts[1])
 			"vsync": vsync = parts[1] == "1"
+			"window":
+				var size: PackedStringArray = parts[1].split("x")
+				if size.size() == 2:
+					window_size = Vector2i(int(size[0]), int(size[1]))
+	if window_size != Vector2i.ZERO:
+		DisplayServer.window_set_size(window_size)
 	if not vsync:
 		DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
 		Engine.max_fps = 0
@@ -186,6 +195,17 @@ func _report(wave: int, deltas: Array[float], max_enemies: int, demolitions: int
 		game.tower_container.get_child_count(), demolitions, game.session.lives, sum / 1000.0]
 	print("PERF ", line)
 	_summary.append("%d: %.0f FPS (peor %.0f ms)" % [wave, fps, sorted[-1]])
+	# T262: cuándo caen los tirones (segundo de la oleada) y cuántos pasan de 33,3 ms (dos cuadros a 60 FPS).
+	var spikes: PackedStringArray = []
+	var elapsed: float = 0.0
+	var long_frames: int = 0
+	for d: float in deltas:
+		elapsed += d
+		if d > 1000.0 / 30.0:
+			long_frames += 1
+			if spikes.size() < 8:
+				spikes.append("%.1f s (%.0f ms)" % [elapsed / 1000.0, d])
+	print("PERF   tirones oleada %d: %d frames > 33,3 ms · %s" % [wave, long_frames, ", ".join(spikes) if not spikes.is_empty() else "ninguno"])
 
 
 func _tower_index(id: String) -> int:
