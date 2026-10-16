@@ -1,0 +1,37 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 580.178.04 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1660 SUPER
+
+T267b: level_01_current
+T267b: level_01_proposal
+T267b: level_01_proposal_state_1
+T267b: level_01_proposal_state_2
+T267b: level_03_current
+T267b: level_03_proposal
+T267b: level_03_proposal_state_1
+T267b: level_03_proposal_state_2
+T267b: level_05_current
+T267b: level_05_proposal
+T267b: level_05_proposal_state_1
+T267b: level_05_proposal_state_2
+T267b: level_11_current
+T267b: level_11_proposal
+T267b: level_11_proposal_state_1
+T267b: level_11_proposal_state_2
+T267b: level_12_current
+T267b: level_12_proposal
+T267b: level_12_proposal_state_1
+T267b: level_12_proposal_state_2
+T267b: level_13_current
+T267b: level_13_proposal
+T267b: level_13_proposal_state_1
+T267b: level_13_proposal_state_2
+T267b: level_13_statue_samples_before
+T267b: level_13_statue_samples_after
+T267b: level_14_current
+T267b: level_14_proposal
+T267b: level_14_proposal_state_1
+T267b: level_14_proposal_state_2
+T267b: level_15_current
+T267b: level_15_proposal
+T267b: level_15_proposal_state_1
+T267b: level_15_proposal_state_2
