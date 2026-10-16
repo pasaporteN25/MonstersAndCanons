@@ -132,6 +132,8 @@ func _ready() -> void:
 		add_child(mobile_hud)
 		mobile_hud.confirm_placement_pressed.connect(build_controller.confirm_ghost)
 		mobile_hud.cancel_placement_pressed.connect(build_controller.cancel)
+		mobile_hud.exit_pressed.connect(_request_exit)
+		mobile_hud.catalog_opened.connect(func(open: bool) -> void: build_controller.input_blocked = open)
 	camera_controller = CameraController.new()
 	camera_controller.name = "CameraController"
 	add_child(camera_controller)
@@ -340,13 +342,17 @@ func _create_interactive_camera() -> Camera2D:
 
 func _process(delta: float) -> void:
 	if mobile_hud != null:
+		mobile_hud.set_game_over(session.is_over())
+		mobile_hud.set_cart_active(build_controller.selected_tower() != null or build_controller.selected_placed() != null)
 		var selected_tower: TowerData = build_controller.selected_tower()
 		if selected_tower == null:
 			mobile_hud.set_placement_visible(false)
 		else:
 			var ghost: GhostPlacement = build_controller.ghost_placement()
 			var ghost_world_pos: Vector2 = level.cell_center(ghost.cell)
-			mobile_hud.show_placement(ghost_world_pos, TowerText.cost_text(selected_tower, build_controller.pay_alt()), ghost.valid, ghost.reason)
+			var zoom: float = camera.zoom.x if camera != null else minimum_map_zoom
+			var ghost_size: Vector2 = Vector2.ONE * Rules.TILE_SIZE * selected_tower.footprint * zoom
+			mobile_hud.show_placement(ghost_world_pos, TowerText.cost_text(selected_tower, build_controller.pay_alt()), ghost.valid, ghost.reason, ghost_size)
 	if dev_stats != null and not get_tree().paused and not session.is_over():
 		dev_stats.seconds += delta  # RF-325: tiempo de juego, sin pausa
 	# RF-128: se mueve todo el "mundo"; el HUD está en otra capa y no se sacude.
@@ -420,11 +426,15 @@ func open_pause_menu() -> void:
 	set_paused(true)
 	hud.show_paused(true, false)  # el menú ya dice "Pausa"
 	pause_menu.open()
+	if mobile_hud != null:
+		mobile_hud.set_modal_open(true)
 
 
 func close_pause_menu() -> void:
 	pause_menu.close()
 	set_paused(false)
+	if mobile_hud != null:
+		mobile_hud.set_modal_open(false)
 
 
 # --- El cartel de entrada (M52, RF-466 a RF-468) ---
@@ -451,12 +461,16 @@ func _open_intro_if_pending() -> void:
 	set_paused(true)
 	hud.show_paused(true, false)  # el cartel no es el menú de pausa: no dice «PAUSA»
 	level_intro.open(level_data.display_name, level_data.place_text, level_data.intro_text)
+	if mobile_hud != null:
+		mobile_hud.set_modal_open(true)
 
 
 ## Al cerrarlo la partida sigue exactamente como estaba: la misma cuenta atrás, a la misma velocidad.
 func _on_intro_closed() -> void:
 	build_controller.input_blocked = false
 	set_paused(false)
+	if mobile_hud != null:
+		mobile_hud.set_modal_open(false)
 
 
 # --- La flecha «← Menú» (RF-459 a RF-461) ---
@@ -492,12 +506,16 @@ func _request_exit() -> void:
 	set_paused(true)
 	hud.show_paused(true, false)  # el diálogo ya cubre la pantalla
 	exit_dialog.open(exit_message())
+	if mobile_hud != null:
+		mobile_hud.set_modal_open(true)
 
 
 ## «Seguir jugando» o Esc: la partida vuelve al estado anterior (corriendo a la misma velocidad, o en pausa si ya lo estaba).
 func _on_exit_cancelled() -> void:
 	build_controller.input_blocked = false
 	set_paused(_exit_was_paused)
+	if mobile_hud != null:
+		mobile_hud.set_modal_open(false)
 
 
 ## «Salir al menú»: no se guarda nada (ni piezas ni progreso ni récords), así que no se llama a `_commit_collection()`.

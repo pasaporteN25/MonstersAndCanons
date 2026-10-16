@@ -29,6 +29,12 @@ const DEFAULTS: Dictionary = {
 	"fantasma_botones_arriba_px": 8,
 	"ver_todo_x_px": 1188,
 	"ver_todo_y_px": 74,
+	"carrito_lado_default": "right",
+	"carrito_y_default": 0.45,
+	"salida_lado_default": "left",
+	"salida_y_default": 0.1,
+	"catalogo_ancho_px": 800,
+	"catalogo_alto_px": 480,
 }
 
 var values: Dictionary = DEFAULTS.duplicate(true)

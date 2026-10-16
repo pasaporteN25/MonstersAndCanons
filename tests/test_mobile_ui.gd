@@ -183,3 +183,58 @@ func test_pc_camera_input_adds_zoom_without_mobile_controls() -> void:
 	var map_rect := Rect2(game.level.position, Vector2(game.level.map_size()) * Rules.TILE_SIZE)
 	assert_eq(game.camera.position, CameraController.clamp_center(game.camera.position, map_rect))
 	SaveManager.set_setting("ui_mode", original_setting)
+
+
+func test_ui_prefs_fall_back_per_field_and_snap_to_nearest_edge() -> void:
+	var prefs: UiPrefs = UiPrefs.read({"cart_side": "arriba", "cart_y": 2.0, "exit_side": "right", "exit_y": 0.5})
+	assert_eq(prefs.to_dict(), {"cart_side": "right", "cart_y": 0.45, "exit_side": "right", "exit_y": 0.5})
+	var snapped: Dictionary = FloatButtonLayout.snap(Vector2(1180.0, 320.0), Vector2(1280.0, 720.0),
+		64.0, 96.0, Vector2.ONE * 82.0)
+	assert_eq(snapped["side"], "right")
+	assert_true(float(snapped["y"]) > 0.0 and float(snapped["y"]) < 1.0)
+	var restored: Vector2 = FloatButtonLayout.position_for(String(snapped["side"]), float(snapped["y"]),
+		Vector2(1280.0, 720.0), 64.0, 96.0, Vector2.ONE * 82.0)
+	assert_almost_eq(restored.x, 1198.0, 0.1)
+	assert_eq(FloatButtonLayout.minimum_button_size(0.0, 1.0, 7.6, 82.0), 82.0)
+	assert_almost_eq(FloatButtonLayout.minimum_button_size(320.0, 2.0, 7.6, 82.0), 47.874, 0.01)
+	assert_almost_eq(FloatButtonLayout.minimum_button_size(480.0, 1.0, 7.6, 82.0), 143.622, 0.01)
+	var separated := FloatButtonLayout.avoid(Rect2(Vector2(-100.0, -100.0), Vector2.ZERO),
+		[Rect2(Vector2(0.0, 200.0), Vector2.ONE * 82.0), Rect2(Vector2(0.0, 250.0), Vector2.ONE * 82.0)],
+		["left", "left"], Vector2(1280.0, 720.0), 64.0, 96.0, Vector2.ONE * 82.0, 0.0)
+	assert_true(absf(separated[0].y - separated[1].y) >= 164.0)
+
+
+func test_mobile_hud_catalog_and_exit_keep_the_game_state() -> void:
+	var original_setting: Variant = SaveManager.get_setting("ui_mode")
+	SaveManager.set_setting("ui_mode", UiMode.MOBILE)
+	var game: Game = (load("res://scenes/game/game.tscn") as PackedScene).instantiate() as Game
+	add_child_autofree(game)
+	await get_tree().process_frame
+	game.mobile_hud.open_catalog()
+	assert_true(game.mobile_hud.is_catalog_open())
+	assert_false(game.is_paused(), "el catálogo no pausa la partida")
+	assert_true(game.build_controller.input_blocked)
+	game.mobile_hud.close_catalog()
+	assert_false(game.build_controller.input_blocked)
+	game.mobile_hud.exit_pressed.emit()
+	assert_true(game.exit_dialog.is_open())
+	assert_true(game.is_paused())
+	game.exit_dialog.handle_cancel()
+	assert_false(game.is_paused(), "seguir jugando restaura el estado previo")
+	SaveManager.set_setting("ui_mode", original_setting)
+
+
+func test_mobile_exit_from_editor_returns_directly_without_confirmation() -> void:
+	var original_setting: Variant = SaveManager.get_setting("ui_mode")
+	SaveManager.set_setting("ui_mode", UiMode.MOBILE)
+	var game: Game = (load("res://scenes/game/game.tscn") as PackedScene).instantiate() as Game
+	game.testing = true
+	var editor_calls: Array[String] = []
+	game.leave_to_editor = func() -> void: editor_calls.append("editor")
+	add_child_autofree(game)
+	await get_tree().process_frame
+	game.mobile_hud.exit_pressed.emit()
+	assert_eq(editor_calls, ["editor"])
+	assert_false(game.exit_dialog.is_open())
+	assert_false(game.is_paused())
+	SaveManager.set_setting("ui_mode", original_setting)
