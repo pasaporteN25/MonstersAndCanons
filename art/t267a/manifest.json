@@ -1,0 +1,90 @@
+[
+  {
+    "muestra": "art/t267a/samples/bosque_explotable.svg",
+    "destino_futuro_no_conectado": "assets/sprites/map/bosque_explotable.svg",
+    "lienzo": [
+      64,
+      64
+    ],
+    "sha256_muestra": "cf27cd4041d1a35a9b3ded3792183452f5da5fedd6751b691741392af22e362d",
+    "sha256_actual": "cf27cd4041d1a35a9b3ded3792183452f5da5fedd6751b691741392af22e362d",
+    "procedencia": "SVG existente sin cambios; prueba de conexión visual"
+  },
+  {
+    "muestra": "art/t267a/samples/central_1.svg",
+    "destino_futuro_no_conectado": "assets/sprites/map/central_1.svg",
+    "lienzo": [
+      64,
+      64
+    ],
+    "sha256_muestra": "e04bebfead0e1d046cd9f329aa603b6aa8caab573c340583d927f9764af56e7f",
+    "sha256_actual": "e80653932753ab6258bc598fb372778655ec61bb4d57a073c60811e306330a87",
+    "procedencia": "boceto vectorial nativo aislado"
+  },
+  {
+    "muestra": "art/t267a/samples/central_2.svg",
+    "destino_futuro_no_conectado": "assets/sprites/map/central_2.svg",
+    "lienzo": [
+      64,
+      64
+    ],
+    "sha256_muestra": "1ee2abd21c721c3e890f2ad6bbd369d45890a66a0d4511285abc257cc8e3cb3c",
+    "sha256_actual": "87e66d49d2a8962ecf5e468fb0600e8886e98cd2b7461c594dad5a7914057cbb",
+    "procedencia": "boceto vectorial nativo aislado"
+  },
+  {
+    "muestra": "art/t267a/samples/central_3.svg",
+    "destino_futuro_no_conectado": "assets/sprites/map/central_3.svg",
+    "lienzo": [
+      64,
+      64
+    ],
+    "sha256_muestra": "d6a9eee176578b1c1812370458443a514848ba61ea9ea8c02880260cdb15c2ba",
+    "sha256_actual": "05ec730586d92491809c209ad42c3e7620cbd25fa7e81d60d6cdb468b6808a5e",
+    "procedencia": "boceto vectorial nativo aislado"
+  },
+  {
+    "muestra": "art/t267a/samples/central_4.svg",
+    "destino_futuro_no_conectado": "assets/sprites/map/central_4.svg",
+    "lienzo": [
+      64,
+      64
+    ],
+    "sha256_muestra": "1b5956a7209a08f5682e1442a609356a548f2e38c1a34bedd42235211192e3c6",
+    "sha256_actual": "c501b185a2b9872a8721421084330cad28ca954c3bdc356ec316e948ff70eecf",
+    "procedencia": "boceto vectorial nativo aislado"
+  },
+  {
+    "muestra": "art/t267a/samples/escombro.svg",
+    "destino_futuro_no_conectado": "assets/sprites/map/escombro.svg",
+    "lienzo": [
+      64,
+      64
+    ],
+    "sha256_muestra": "90f4f88b8522810e162d4107b435b82f96453c1c38783be822d1bec2acd4d25b",
+    "sha256_actual": "90f4f88b8522810e162d4107b435b82f96453c1c38783be822d1bec2acd4d25b",
+    "procedencia": "SVG existente sin cambios; prueba de conexión visual"
+  },
+  {
+    "muestra": "art/t267a/samples/estatua.svg",
+    "destino_futuro_no_conectado": "assets/sprites/map/estatua.svg",
+    "lienzo": [
+      64,
+      64
+    ],
+    "sha256_muestra": "9afca6fe5733501190514e99f5d9271296b73af86f1e46829ed01d3d73652bbe",
+    "sha256_actual": "c1b119303c2fa3f18a4d5cf2db497e1275603f967e384ea0dcc44483fff55151",
+    "procedencia": "boceto vectorial nativo aislado"
+  },
+  {
+    "muestra": "art/t267a/samples/mina.svg",
+    "destino_futuro_no_conectado": "assets/sprites/map/mina.svg",
+    "lienzo": [
+      64,
+      64
+    ],
+    "sha256_muestra": "2bf2399bce84826f8420f7853999cadd83d55f18472b3429921d6cb9fe0eebfb",
+    "sha256_actual": "2bf2399bce84826f8420f7853999cadd83d55f18472b3429921d6cb9fe0eebfb",
+    "procedencia": "SVG existente sin cambios; prueba de conexión visual"
+  }
+]

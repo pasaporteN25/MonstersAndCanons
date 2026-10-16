@@ -1,0 +1,82 @@
+[
+  {
+    "pieza": "mina",
+    "nivel": 11,
+    "casilla": [
+      11,
+      2
+    ],
+    "casilla_px": 52.3636363636364,
+    "recorte_nativo": [
+      502,
+      99,
+      726,
+      259
+    ],
+    "imagen": "review/01_mine_native.png"
+  },
+  {
+    "pieza": "bosque_explotable",
+    "nivel": 13,
+    "casilla": [
+      11,
+      10
+    ],
+    "casilla_px": 48.0,
+    "recorte_nativo": [
+      456,
+      464,
+      680,
+      624
+    ],
+    "imagen": "review/02_forest_native.png"
+  },
+  {
+    "pieza": "central_1",
+    "nivel": 15,
+    "casilla": [
+      24,
+      7
+    ],
+    "casilla_px": 48.0,
+    "recorte_nativo": [
+      1056,
+      352,
+      1280,
+      512
+    ],
+    "imagen": "review/03_central_native.png"
+  },
+  {
+    "pieza": "escombro",
+    "nivel": 11,
+    "casilla": [
+      16,
+      2
+    ],
+    "casilla_px": 52.3636363636364,
+    "recorte_nativo": [
+      764,
+      99,
+      988,
+      259
+    ],
+    "imagen": "review/04_rubble_native.png"
+  },
+  {
+    "pieza": "estatua",
+    "nivel": 1,
+    "casilla": [
+      12,
+      5
+    ],
+    "casilla_px": 64.0,
+    "recorte_nativo": [
+      688,
+      320,
+      912,
+      480
+    ],
+    "imagen": "review/05_statue_native.png"
+  }
+]
