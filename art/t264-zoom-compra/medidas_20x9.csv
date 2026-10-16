@@ -1,0 +1,50 @@
+captura,control,ancho_virtual,alto_virtual,ancho_mm,alto_mm,alto_mm_16x9_chico,llega_a_7_6_mm
+z1_n15_zoom,Ver todo,120,96,11.3,9.0,8.3,sí
+z1_n15_zoom_vista,Ver todo,120,96,11.3,9.0,8.3,sí
+z1_n01_zoom,Ver todo,120,96,11.3,9.0,8.3,sí
+s0_n15_barra_hoy,botón de torre (hoy) 100,76,60,7.1,5.6,5.2,no
+s0_n15_barra_hoy,botón de torre (hoy) 75,76,60,7.1,5.6,5.2,no
+s0_n15_barra_hoy,botón de torre (hoy) 150,76,60,7.1,5.6,5.2,no
+s0_n15_barra_hoy,botón de torre (hoy) 90,76,60,7.1,5.6,5.2,no
+s0_n15_barra_hoy,botón de torre (hoy) 100,76,60,7.1,5.6,5.2,no
+s0_n15_barra_hoy,botón de torre (hoy) 110,76,60,7.1,5.6,5.2,no
+s0_n15_barra_hoy,botón de torre (hoy) 130,76,60,7.1,5.6,5.2,no
+s0_n15_barra_hoy,botón de torre (hoy) 300 + 3,76,60,7.1,5.6,5.2,no
+s1_n15_botones_grandes,normal,100,88,9.4,8.3,7.6,sí
+s1_n15_botones_grandes,normal,100,88,9.4,8.3,7.6,sí
+s1_n15_botones_grandes,normal,100,88,9.4,8.3,7.6,sí
+s1_n15_botones_grandes,normal,100,88,9.4,8.3,7.6,sí
+s1_n15_botones_grandes,normal,100,88,9.4,8.3,7.6,sí
+s1_n15_botones_grandes,normal,100,88,9.4,8.3,7.6,sí
+s1_n15_botones_grandes,normal,100,88,9.4,8.3,7.6,sí
+s1_n15_botones_grandes,normal,100,88,9.4,8.3,7.6,sí
+s3_n15_plegable_abierta,Plegar,92,84,8.7,7.9,7.3,sí
+s2_n15_tienda_cerrada,Torres,150,88,14.1,8.3,7.6,sí
+s2_n15_tienda_cerrada,Empezar oleada,232,88,21.8,8.3,7.6,sí
+s2_n15_tienda_abierta,no,84,84,7.9,7.9,7.3,sí
+s2_n15_tienda_abierta,Cañón,196,108,18.4,10.2,9.3,sí
+s2_n15_tienda_abierta,Hielo,196,108,18.4,10.2,9.3,sí
+s2_n15_tienda_abierta,Francotirador,196,108,18.4,10.2,9.3,sí
+s2_n15_tienda_abierta,Incendiaria,196,108,18.4,10.2,9.3,sí
+s2_n15_tienda_abierta,Múltiple,196,108,18.4,10.2,9.3,sí
+s2_n15_tienda_abierta,Ráfaga,196,108,18.4,10.2,9.3,sí
+s2_n15_tienda_abierta,Eléctrica,196,108,18.4,10.2,9.3,sí
+s2_n15_tienda_abierta,Mortero,196,108,18.4,10.2,9.3,sí
+s2_n15_elegida,Torres,150,88,14.1,8.3,7.6,sí
+s2_n15_elegida,Cañón (soltar),300,88,28.2,8.3,7.6,sí
+s2_n15_elegida,Empezar oleada,232,88,21.8,8.3,7.6,sí
+s3_n15_plegable_cerrada,Torres,150,88,14.1,8.3,7.6,sí
+s3_n15_plegable_cerrada,Empezar oleada,232,88,21.8,8.3,7.6,sí
+c1_n01_fantasma,ok,96,88,9.0,8.3,7.6,sí
+c1_n01_fantasma,no,84,84,7.9,7.9,7.3,sí
+c1_n15_sin_zoom,ok,96,88,9.0,8.3,7.6,sí
+c1_n15_sin_zoom,no,84,84,7.9,7.9,7.3,sí
+c1_n15_2x2_zoom,ok,96,88,9.0,8.3,7.6,sí
+c1_n15_2x2_zoom,no,84,84,7.9,7.9,7.3,sí
+c1_n15_invalida,off,96,88,9.0,8.3,7.6,sí
+c1_n15_invalida,no,84,84,7.9,7.9,7.3,sí
+c1_n15_borde,ok,96,88,9.0,8.3,7.6,sí
+c1_n15_borde,no,84,84,7.9,7.9,7.3,sí
+c2_n15_toque_acerca,Ver todo,120,96,11.3,9.0,8.3,sí
+c2_n15_deshacer,Deshacer,160,84,15.1,7.9,7.3,sí
+c2_n15_deshacer,Ver todo,120,96,11.3,9.0,8.3,sí

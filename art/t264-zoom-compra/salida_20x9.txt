@@ -1,0 +1,89 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 580.178.04 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1660 SUPER
+
+T264 ventana (1600, 720) · celular supuesto (2400, 1080) a 405 ppi (escala 1.50): 1 px virtual = 0.094 mm · dedo 10 mm = 106 px virtuales
+T264 captura res://art/t264-zoom-compra/z0_n15_hoy_20x9.png
+T264 captura res://art/t264-zoom-compra/z1_n15_zoom_20x9.png
+T264 captura res://art/t264-zoom-compra/z1_n15_zoom_vista_20x9.png
+T264 captura res://art/t264-zoom-compra/z0_n01_hoy_20x9.png
+T264 captura res://art/t264-zoom-compra/z1_n01_zoom_20x9.png
+T264 captura res://art/t264-zoom-compra/s0_n15_barra_hoy_20x9.png
+T264 captura res://art/t264-zoom-compra/s1_n15_botones_grandes_20x9.png
+T264 captura res://art/t264-zoom-compra/s3_n15_plegable_abierta_20x9.png
+T264 captura res://art/t264-zoom-compra/s2_n15_tienda_cerrada_20x9.png
+T264 captura res://art/t264-zoom-compra/s2_n15_tienda_abierta_20x9.png
+T264 captura res://art/t264-zoom-compra/s2_n15_elegida_20x9.png
+T264 captura res://art/t264-zoom-compra/s3_n15_plegable_cerrada_20x9.png
+T264 captura res://art/t264-zoom-compra/c0_n01_hoy_20x9.png
+T264 captura res://art/t264-zoom-compra/c1_n01_fantasma_20x9.png
+T264 captura res://art/t264-zoom-compra/c1_n01_ajuste_20x9.png
+T264 captura res://art/t264-zoom-compra/c1_n15_sin_zoom_20x9.png
+T264 captura res://art/t264-zoom-compra/c1_n15_2x2_zoom_20x9.png
+T264 captura res://art/t264-zoom-compra/c0_n15_2x2_hoy_20x9.png
+T264 captura res://art/t264-zoom-compra/c1_n15_invalida_20x9.png
+T264 captura res://art/t264-zoom-compra/c1_n15_borde_20x9.png
+T264 captura res://art/t264-zoom-compra/c2_n15_toque_acerca_20x9.png
+T264 captura res://art/t264-zoom-compra/c2_n15_deshacer_20x9.png
+T264 MODELO n01 · C0 · una torre, toque justo: toques 2 · construidas 1 (querían 1) · por error 0 · gestos 0 · ventas o deshacer 0
+T264 MODELO n01 · C0 · una torre, el dedo cae 2,7 mm al costado: toques 2 · construidas 1 (querían 1) · por error 0 · gestos 0 · ventas o deshacer 0
+T264 MODELO n01 · C0 · una torre, toque con temblor de 1 mm: toques 2 · construidas 1 (querían 1) · por error 0 · gestos 0 · ventas o deshacer 0
+T264 MODELO n01 · C0 · arrastrar 2 casillas para mover el mapa: toques 2 · construidas 1 (querían 0) · por error 1 · gestos 1 · ventas o deshacer 0
+T264 MODELO n01 · C0 · pinza para hacer zoom: toques 3 · construidas 1 (querían 0) · por error 1 · gestos 1 · ventas o deshacer 0
+T264 MODELO n01 · C0 · pinza con un dedo que se levanta después: toques 3 · construidas 1 (querían 0) · por error 1 · gestos 1 · ventas o deshacer 0
+T264 MODELO n01 · C0 · cinco torres iguales en fila (en oleada): toques 6 · construidas 5 (querían 5) · por error 0 · gestos 0 · ventas o deshacer 0
+T264 MODELO n01 · C0 · toque en una casilla que no se puede construir: toques 2 · construidas 0 (querían 0) · por error 0 · gestos 0 · ventas o deshacer 0
+T264 MODELO n01 · C1 · una torre, toque justo: toques 3 · construidas 1 (querían 1) · por error 0 · gestos 0 · ventas o deshacer 0
+T264 MODELO n01 · C1 · una torre, el dedo cae 2,7 mm al costado: toques 3 · construidas 1 (querían 1) · por error 0 · gestos 0 · ventas o deshacer 0
+T264 MODELO n01 · C1 · una torre, toque con temblor de 1 mm: toques 3 · construidas 1 (querían 1) · por error 0 · gestos 0 · ventas o deshacer 0
+T264 MODELO n01 · C1 · arrastrar 2 casillas para mover el mapa: toques 2 · construidas 0 (querían 0) · por error 0 · gestos 1 · ventas o deshacer 0
+T264 MODELO n01 · C1 · pinza para hacer zoom: toques 3 · construidas 0 (querían 0) · por error 0 · gestos 1 · ventas o deshacer 0
+T264 MODELO n01 · C1 · pinza con un dedo que se levanta después: toques 3 · construidas 0 (querían 0) · por error 0 · gestos 1 · ventas o deshacer 0
+T264 MODELO n01 · C1 · cinco torres iguales en fila (en oleada): toques 11 · construidas 5 (querían 5) · por error 0 · gestos 0 · ventas o deshacer 0
+T264 MODELO n01 · C1 · toque en una casilla que no se puede construir: toques 3 · construidas 0 (querían 0) · por error 0 · gestos 0 · ventas o deshacer 0
+T264 MODELO n01 · C2 · una torre, toque justo: toques 3 · construidas 1 (querían 1) · por error 0 · gestos 1 · ventas o deshacer 0
+T264 MODELO n01 · C2 · una torre, el dedo cae 2,7 mm al costado: toques 3 · construidas 1 (querían 1) · por error 0 · gestos 1 · ventas o deshacer 0
+T264 MODELO n01 · C2 · una torre, toque con temblor de 1 mm: toques 3 · construidas 1 (querían 1) · por error 0 · gestos 1 · ventas o deshacer 0
+T264 MODELO n01 · C2 · arrastrar 2 casillas para mover el mapa: toques 2 · construidas 0 (querían 0) · por error 0 · gestos 1 · ventas o deshacer 0
+T264 MODELO n01 · C2 · pinza para hacer zoom: toques 3 · construidas 0 (querían 0) · por error 0 · gestos 1 · ventas o deshacer 0
+T264 MODELO n01 · C2 · pinza con un dedo que se levanta después: toques 3 · construidas 0 (querían 0) · por error 0 · gestos 1 · ventas o deshacer 0
+T264 MODELO n01 · C2 · cinco torres iguales en fila (en oleada): toques 7 · construidas 5 (querían 5) · por error 0 · gestos 1 · ventas o deshacer 0
+T264 MODELO n01 · C2 · toque en una casilla que no se puede construir: toques 2 · construidas 0 (querían 0) · por error 0 · gestos 1 · ventas o deshacer 0
+T264 MODELO n15 · C0 · una torre, toque justo: toques 2 · construidas 1 (querían 1) · por error 0 · gestos 0 · ventas o deshacer 0
+T264 MODELO n15 · C0 · una torre, el dedo cae 2,7 mm al costado: toques 7 · construidas 1 (querían 1) · por error 0 · gestos 0 · ventas o deshacer 1
+T264 MODELO n15 · C0 · una torre, toque con temblor de 1 mm: toques 2 · construidas 1 (querían 1) · por error 0 · gestos 0 · ventas o deshacer 0
+T264 MODELO n15 · C0 · arrastrar 2 casillas para mover el mapa: toques 2 · construidas 1 (querían 0) · por error 1 · gestos 1 · ventas o deshacer 0
+T264 MODELO n15 · C0 · pinza para hacer zoom: toques 3 · construidas 1 (querían 0) · por error 1 · gestos 1 · ventas o deshacer 0
+T264 MODELO n15 · C0 · pinza con un dedo que se levanta después: toques 3 · construidas 1 (querían 0) · por error 1 · gestos 1 · ventas o deshacer 0
+T264 MODELO n15 · C0 · cinco torres iguales en fila (en oleada): toques 6 · construidas 5 (querían 5) · por error 0 · gestos 0 · ventas o deshacer 0
+T264 MODELO n15 · C0 · toque en una casilla que no se puede construir: toques 2 · construidas 0 (querían 0) · por error 0 · gestos 0 · ventas o deshacer 0
+T264 MODELO n15 · C1 · una torre, toque justo: toques 3 · construidas 1 (querían 1) · por error 0 · gestos 0 · ventas o deshacer 0
+T264 MODELO n15 · C1 · una torre, el dedo cae 2,7 mm al costado: toques 4 · construidas 1 (querían 1) · por error 0 · gestos 1 · ventas o deshacer 0
+T264 MODELO n15 · C1 · una torre, toque con temblor de 1 mm: toques 3 · construidas 1 (querían 1) · por error 0 · gestos 0 · ventas o deshacer 0
+T264 MODELO n15 · C1 · arrastrar 2 casillas para mover el mapa: toques 2 · construidas 0 (querían 0) · por error 0 · gestos 1 · ventas o deshacer 0
+T264 MODELO n15 · C1 · pinza para hacer zoom: toques 3 · construidas 0 (querían 0) · por error 0 · gestos 1 · ventas o deshacer 0
+T264 MODELO n15 · C1 · pinza con un dedo que se levanta después: toques 3 · construidas 0 (querían 0) · por error 0 · gestos 1 · ventas o deshacer 0
+T264 MODELO n15 · C1 · cinco torres iguales en fila (en oleada): toques 11 · construidas 5 (querían 5) · por error 0 · gestos 0 · ventas o deshacer 0
+T264 MODELO n15 · C1 · toque en una casilla que no se puede construir: toques 3 · construidas 0 (querían 0) · por error 0 · gestos 0 · ventas o deshacer 0
+T264 MODELO n15 · C2 · una torre, toque justo: toques 3 · construidas 1 (querían 1) · por error 0 · gestos 1 · ventas o deshacer 0
+T264 MODELO n15 · C2 · una torre, el dedo cae 2,7 mm al costado: toques 3 · construidas 1 (querían 1) · por error 0 · gestos 1 · ventas o deshacer 0
+T264 MODELO n15 · C2 · una torre, toque con temblor de 1 mm: toques 3 · construidas 1 (querían 1) · por error 0 · gestos 1 · ventas o deshacer 0
+T264 MODELO n15 · C2 · arrastrar 2 casillas para mover el mapa: toques 2 · construidas 0 (querían 0) · por error 0 · gestos 1 · ventas o deshacer 0
+T264 MODELO n15 · C2 · pinza para hacer zoom: toques 3 · construidas 0 (querían 0) · por error 0 · gestos 1 · ventas o deshacer 0
+T264 MODELO n15 · C2 · pinza con un dedo que se levanta después: toques 3 · construidas 0 (querían 0) · por error 0 · gestos 1 · ventas o deshacer 0
+T264 MODELO n15 · C2 · cinco torres iguales en fila (en oleada): toques 7 · construidas 5 (querían 5) · por error 0 · gestos 1 · ventas o deshacer 0
+T264 MODELO n15 · C2 · toque en una casilla que no se puede construir: toques 2 · construidas 0 (querían 0) · por error 0 · gestos 1 · ventas o deshacer 0
+T264 ACIERTO casilla 4.5 mm: σ 1.0 → 95 % σ 1.5 → 75 % σ 2.0 → 55 %
+T264 ACIERTO casilla 4.9 mm: σ 1.0 → 97 % σ 1.5 → 81 % σ 2.0 → 61 %
+T264 ACIERTO casilla 6.0 mm: σ 1.0 → 99 % σ 1.5 → 91 % σ 2.0 → 75 %
+T264 ACIERTO casilla 7.6 mm: σ 1.0 → 100 % σ 1.5 → 98 % σ 2.0 → 89 %
+T264 ACIERTO casilla 9.0 mm: σ 1.0 → 100 % σ 1.5 → 99 % σ 2.0 → 95 %
+T264 ACIERTO casilla 10.5 mm: σ 1.0 → 100 % σ 1.5 → 100 % σ 2.0 → 98 %
+T264 hoja res://art/t264-zoom-compra/comparar_zoom_20x9.png (4 capturas)
+T264 hoja res://art/t264-zoom-compra/comparar_tienda_20x9.png (6 capturas)
+T264 hoja res://art/t264-zoom-compra/comparar_colocacion_20x9.png (6 capturas)
+T264 hoja res://art/t264-zoom-compra/comparar_2x2_y_errores_20x9.png (4 capturas)
+T264 fin
+WARNING: 2 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)
+ERROR: 1 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)
