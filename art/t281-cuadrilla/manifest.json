@@ -1,0 +1,33 @@
+{
+  "generator": "imagegen built-in",
+  "sources": {
+    "sources/cargador_a.png": {
+      "sha256": "c9abcb97ae6dbdd5038054cae819fbcd7fa0cc09b2fe91fe383060fc3ebb1c75",
+      "bytes": 1471696
+    },
+    "sources/cargador_b.png": {
+      "sha256": "4b821cc14d030478ed254c5d309f89e5525f18c8b78bf412525b72de5e509623",
+      "bytes": 857107
+    },
+    "sources/cargador_walk.png": {
+      "sha256": "3b95b8d7b0ab02bdd8b3cc3b2631e4ba8eb2c59ba58162e7e23e7008a5e032ea",
+      "bytes": 2420271
+    },
+    "sources/ratero_a.png": {
+      "sha256": "e86e41bbfaa7f8027e9d711052ec5c399944278783808518f142fd1581820828",
+      "bytes": 2060969
+    },
+    "sources/ratero_b.png": {
+      "sha256": "6f19b0df34ebd64c2f9e1a70f4f599e99d385a1c2f300e5e70ae81418b99beee",
+      "bytes": 605437
+    },
+    "sources/ratero_c.png": {
+      "sha256": "e76730c3d5873d7690e5a365f435b1c1beb976e001b2417e46c88be8339ba269",
+      "bytes": 819068
+    },
+    "sources/ratero_walk.png": {
+      "sha256": "a2268aebca2013c6c4070f14db7911e62f65dc0920721a2e4055c020ce59a8ad",
+      "bytes": 1650351
+    }
+  }
+}

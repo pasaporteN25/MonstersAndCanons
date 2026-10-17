@@ -1,0 +1,71 @@
+{
+  "godot": "4.7.2.stable.official.ed1daf0bf",
+  "gut": {
+    "exit_code": 0,
+    "scripts": 118,
+    "tests": 1660,
+    "passing": 1660,
+    "asserts": 20135,
+    "seconds": 65.559
+  },
+  "import_exit_code": 0,
+  "capture_exit_code": 0,
+  "error_counts": {
+    "review.txt": {
+      "SCRIPT ERROR": 0,
+      "Parse Error": 0,
+      "Failed to load script": 0
+    },
+    "prepare.txt": {
+      "SCRIPT ERROR": 0,
+      "Parse Error": 0,
+      "Failed to load script": 0
+    },
+    "import_final.txt": {
+      "SCRIPT ERROR": 0,
+      "Parse Error": 0,
+      "Failed to load script": 0
+    },
+    "gut.txt": {
+      "SCRIPT ERROR": 0,
+      "Parse Error": 0,
+      "Failed to load script": 0
+    },
+    "capture.txt": {
+      "SCRIPT ERROR": 0,
+      "Parse Error": 0,
+      "Failed to load script": 0
+    },
+    "import.txt": {
+      "SCRIPT ERROR": 0,
+      "Parse Error": 0,
+      "Failed to load script": 0
+    }
+  },
+  "comparison": [
+    {
+      "second": 3,
+      "size": [
+        1280,
+        720
+      ],
+      "changed_outside_actor_regions": null
+    },
+    {
+      "second": 6,
+      "size": [
+        1280,
+        720
+      ],
+      "changed_outside_actor_regions": null
+    },
+    {
+      "second": 9,
+      "size": [
+        1280,
+        720
+      ],
+      "changed_outside_actor_regions": null
+    }
+  ]
+}

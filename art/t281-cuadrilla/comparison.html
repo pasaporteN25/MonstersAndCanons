@@ -1,0 +1,10 @@
+<!doctype html><html lang="es"><meta charset="utf-8"><title>T281 · La Cuadrilla</title>
+<style>body{background:#1c2126;color:#eee;font:16px sans-serif;margin:24px}a{color:#e9bd7a}button,select{font:inherit;padding:8px;margin:6px}img.map{width:1280px;height:720px;max-width:none}.row{display:flex;gap:18px}p{max-width:1000px}</style>
+<h1>T281 · Propuestas de La Cuadrilla</h1><p>Sin aprobación ni integración. Dos Rateros (B/C) y dos Cargadores (A/B). Ciclos exploratorios de Ratero B y Cargador A: Lucas elige antes de integrar. El estudio Ratero A se descartó por realismo y halo.</p>
+<p><a href="review/contact_220.png">Hoja 220 px</a> · <a href="review/contact_34.png">Lienzos 34 px</a> · <a href="review/silhouettes_visible_34.png">Siluetas de 34 px visibles</a></p>
+<img src="review/contact_220.png" width="976"><div class="row"><img src="review/ratero_walk.gif"><img src="review/cargador_walk.gif"></div>
+<p>GIF: cadencia de revisión común por especie; las velocidades del juego dependen del recorrido. Atlas 4 direcciones × 4 fases, no modelo 3D compartido. Hay deriva de proporciones y rasgos entre vistas.</p>
+<h2>Partida real, nivel 7, oleada 8</h2><p>Escena y oleada de producción, avance automático sin torres ni intervención humana. Se salta a la oleada 8 con la función existente de pruebas; a los 3/6/9 segundos se pausa y se cambian solo textura y atlas sobre duplicados de EnemyData en memoria. Mismos enemigos, posición, datos, cámara y HUD en cada par. No se guarda la propuesta en el juego.</p>
+<select id="time"><option>3</option><option>6</option><option>9</option></select><button onclick="phase='before';show()">Antes</button><button onclick="phase='after';show()">Propuesta B / A</button><br><img class="map" id="map">
+<script>let phase='before';function show(){map.src='captures/level_07_wave_08_'+time.value.padStart(2,'0')+'s_'+phase+'.png'}time.onchange=show;show()</script>
+<h2>Recortes nativos (1:1)</h2><p><img src="review/game_native_03s.png" width="640"></p><p><img src="review/game_native_06s.png" width="640"></p><p><img src="review/game_native_09s.png" width="640"></p></html>

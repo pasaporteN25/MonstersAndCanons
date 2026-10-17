@@ -143,6 +143,11 @@
 
 ---
 
+- [x] **T281 · Nuevas propuestas renderizadas del Ratero y del Cargador, sin integrar.**
+  **Refs:** M55, RF-490, D-094, T257, guía de arte y canon §4.2. **Depende de:** datos y arte provisional existentes; despacho de Lucas para rehacerlos. **Compuerta posterior:** elección y aprobación artística de Lucas antes de integrar.
+  **Hecho cuando:** conceptos alternativos, un ciclo exploratorio por criatura en el formato vigente, fuentes/prompts/reproducción, hojas 220/34 con vecinos, capturas reales 1280×720 antes/después, GUT completo y un informe honesto; un commit y push a feature, sin tocar assets/data.
+  **Resultado (2026-10-16, Codex):** dos conceptos de Ratero (B/C) y dos de Cargador (A/B), más el primer Ratero A descartado; ciclos de B/A de 16 fases cada uno, RGBA 1024×1024 y estáticas 256×256, 32 cuadros únicos, apoyo y=191 y márgenes verificados. Fuentes generadas, prompts, normalizador, hojas con Ladrón/Rápido/Embestidor/Coloso y provisionales, GIF y comparador en `art/t281-cuadrilla/`. Seis capturas 1280×720 de la oleada 8 real del nivel 7, avance automático sin torres y sustitución visual en memoria: tres pares sin diferencias externas a los actores seleccionados. GUT **1660/1660**, 20.135 asserts, 118 scripts, sin `SCRIPT ERROR` ni `Parse Error`; importación y capturas con salida 0. `git checkout -- assets` ejecutado. [Informe y límites](tareas/informes/T281-propuesta-cuadrilla.md): hay deriva entre vistas, el ciclo Ratero B se acerca al Ladrón en silueta y no se animaron las alternativas C/B. **Se completa la propuesta, no la aprobación ni T257**; sin integración, partida humana, combate con torres, exportaciones ni evaluación de rendimiento.
+
 ## M0 — Preparación
 
 - [x] **T00 · Instalar herramientas**
