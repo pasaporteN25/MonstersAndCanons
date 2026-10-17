@@ -2,6 +2,10 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Arte aprobado de La Cuadrilla *(T286, 2026-10-16)*
+
+El Ratero usa el concepto B elegido por Lucas y el Cargador el concepto A, con sus atlas de caminata en cuatro direcciones. Se calibró su tamaño visual para acercarlo al del Ladrón; radios, vida, velocidad, robo y oleadas no cambiaron.
+
 ## Arte aprobado en el mapa *(T277, 2026-10-16)*
 
 Las estatuas de los niveles 1, 3 y 5 ahora representan Cañón, Francotirador y Ametralladora tallados en piedra con musgo y pedestal; siguen siendo decoración sin selección ni alcance. Mina y bosque explotable muestran dibujos renderizados distintos al habilitarse y agotarse; los escombros cambian durante la demolición. La Central del nivel 15 usa el edificio aprobado, continuo sobre sus cuatro casillas. Se conservan suelos, flores, torres, casillas y reglas de juego.
