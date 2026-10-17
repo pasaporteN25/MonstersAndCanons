@@ -1427,9 +1427,9 @@ Nada más: ni `balance.json`, ni `.tres`, ni código, ni assets, ni los niveles 
 - **Que una partida humana contradiga al bot:** por RF-518 manda la partida humana y se pasa a la variante B del 2 (D-100) o se reabre el 7.
 
 
-### M60 / T268b · Copia de seguridad automática del guardado (RF-520 a RF-522, D-101)
+### M60 / T268b · Copia de seguridad automática del guardado (RF-520 a RF-522, D-102)
 
-> **Estado: especificada (2026-10-16); sin programar.** La spec es **M60** (`01-spec.md`), la decisión **D-101** y la tarea **T281** (`03-tareas.md`).
+> **Estado: especificada (2026-10-16); sin programar.** La spec es **M60** (`01-spec.md`), la decisión **D-102** y la tarea **T281** (`03-tareas.md`).
 
 #### Qué hay hoy
 

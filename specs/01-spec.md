@@ -3310,7 +3310,7 @@ Con la copia automática, el archivo **tal como lo dejó la build anterior** que
 
 #### Lo que decidí por defecto *(Lucas no lo definió; cambia con su respuesta)*
 
-1. **El nombre lleva la versión de la build** (`save_respaldo_<versión>.json`) y no `save.json.bak` ni números correlativos: razones y alternativas en **D-101**.
+1. **El nombre lleva la versión de la build** (`save_respaldo_<versión>.json`) y no `save.json.bak` ni números correlativos: razones y alternativas en **D-102**.
 2. **Es silencioso** (recomendado por Lucas): sin cartel. Si querés un aviso en pantalla, es una decisión aparte.
 3. **Se copian también los archivos dañados** (son los que más conviene conservar) y **no** los de 0 bytes.
 4. **Si la copia falla, se guarda igual** y se avisa en el log.
