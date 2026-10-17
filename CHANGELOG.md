@@ -10,6 +10,10 @@ Carrito y salida reciben un solo gesto, sin doble pulsación del mouse emulado. 
 
 El Ratero usa el concepto B elegido por Lucas y el Cargador el concepto A, con sus atlas de caminata en cuatro direcciones. Se calibró su tamaño visual para acercarlo al del Ladrón; radios, vida, velocidad, robo y oleadas no cambiaron.
 
+## Copia de seguridad automática del guardado *(T281, 2026-10-16)*
+
+Antes de la primera escritura de `save.json` en una ejecución, el juego copia los bytes originales a `save_respaldo_<versión>.json` en la misma carpeta. Conserva la primera copia de cada versión, también si el guardado está dañado; no copia archivos vacíos y no se activa para el modo de pruebas ni para rutas de tests. Es silenciosa, tiene un tope de 10 copias y no reemplaza el respaldo manual obligatorio del archivo real del tester.
+
 ## Arte aprobado en el mapa *(T277, 2026-10-16)*
 
 Las estatuas de los niveles 1, 3 y 5 ahora representan Cañón, Francotirador y Ametralladora tallados en piedra con musgo y pedestal; siguen siendo decoración sin selección ni alcance. Mina y bosque explotable muestran dibujos renderizados distintos al habilitarse y agotarse; los escombros cambian durante la demolición. La Central del nivel 15 usa el edificio aprobado, continuo sobre sus cuatro casillas. Se conservan suelos, flores, torres, casillas y reglas de juego.

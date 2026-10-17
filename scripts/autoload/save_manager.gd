@@ -7,6 +7,8 @@ extends Node
 
 const SAVE_VERSION: int = 1
 const DEFAULT_PATH: String = "user://save.json"
+const BACKUP_LIMIT: int = 10
+const BACKUP_PREFIX: String = "user://save_respaldo_"
 ## RF-194: la tabla del Salón de la fama se guarda junto a las de los niveles, con este nombre.
 const HALL_OF_FAME_ID: StringName = &"hall_of_fame"
 const DEFAULT_SETTINGS: Dictionary = {
@@ -16,6 +18,10 @@ const DEFAULT_SETTINGS: Dictionary = {
 
 ## Los tests lo cambian para no tocar el guardado real del jugador.
 var save_path: String = DEFAULT_PATH
+## Costuras para probar el respaldo sin tocar archivos del jugador.
+var backup_save_path: String = DEFAULT_PATH
+var backup_prefix: String = BACKUP_PREFIX
+var _backup_checked: bool = false
 
 var _levels: Dictionary = {}    # { "level_01": {"unlocked", "completed", "best_lives", "best_score"} }
 var _settings: Dictionary = {}
@@ -77,6 +83,7 @@ func load_save() -> void:
 
 
 func save() -> bool:
+	_backup_save_if_needed()
 	var file := FileAccess.open(save_path, FileAccess.WRITE)
 	if file == null:
 		push_warning("No se pudo guardar en %s" % save_path)
@@ -86,6 +93,86 @@ func save() -> bool:
 		"intro_seen": _intro_seen, "ui_prefs": _ui_prefs.to_dict()}
 	file.store_string(JSON.stringify(data, "  "))
 	return true
+
+
+func _backup_save_if_needed() -> void:
+	if _backup_checked or save_path != backup_save_path:
+		return
+	_backup_checked = true
+	if not FileAccess.file_exists(backup_save_path):
+		return
+	var version_value: Variant = ProjectSettings.get_setting("application/config/version", "")
+	var version: String = str(version_value)
+	var regex := RegEx.new()
+	regex.compile("[^A-Za-z0-9._-]")
+	version = regex.sub(version, "_", true) if not version.is_empty() else "sin-version"
+	var backup_path: String = "%s%s.json" % [backup_prefix, version]
+	var temporary_path: String = backup_path + ".tmp"
+	if FileAccess.file_exists(backup_path):
+		return
+	var source := FileAccess.open(backup_save_path, FileAccess.READ)
+	if source == null:
+		_remove_backup_temporary(temporary_path)
+		push_warning("No se pudo abrir el guardado para respaldar: %s" % backup_save_path)
+		return
+	var size: int = source.get_length()
+	if size == 0:
+		source.close()
+		return
+	var bytes: PackedByteArray = source.get_buffer(size)
+	var read_error: Error = source.get_error()
+	source.close()
+	if read_error != OK or bytes.size() != size:
+		_remove_backup_temporary(temporary_path)
+		push_warning("No se pudo leer completo el guardado para respaldar: %s" % backup_save_path)
+		return
+	if _backup_count() >= BACKUP_LIMIT:
+		push_warning("No se creó %s: ya hay %d respaldos y se conserva el límite" % [backup_path, BACKUP_LIMIT])
+		return
+	var temporary := FileAccess.open(temporary_path, FileAccess.WRITE)
+	if temporary == null:
+		_remove_backup_temporary(temporary_path)
+		push_warning("No se pudo crear el respaldo temporal %s" % temporary_path)
+		return
+	temporary.store_buffer(bytes)
+	var write_error: Error = temporary.get_error()
+	temporary.close()
+	if write_error != OK or bytes.size() != size:
+		_remove_backup_temporary(temporary_path)
+		push_warning("No se pudo escribir el respaldo temporal %s" % temporary_path)
+		return
+	# `rename_absolute` pisa archivos de destino en Godot/Linux; volver a revisar
+	# evita reemplazar un respaldo que haya aparecido mientras se copiaban los bytes.
+	if FileAccess.file_exists(backup_path):
+		_remove_backup_temporary(temporary_path)
+		return
+	var rename_error: Error = DirAccess.rename_absolute(ProjectSettings.globalize_path(temporary_path), ProjectSettings.globalize_path(backup_path))
+	if rename_error != OK:
+		_remove_backup_temporary(temporary_path)
+		push_warning("No se pudo completar el respaldo %s: %s" % [backup_path, error_string(rename_error)])
+
+
+func _backup_count() -> int:
+	var directory_path: String = backup_prefix.get_base_dir()
+	var file_prefix: String = backup_prefix.get_file()
+	var directory := DirAccess.open(directory_path)
+	if directory == null:
+		return 0
+	var count: int = 0
+	directory.list_dir_begin()
+	var entry: String = directory.get_next()
+	while not entry.is_empty():
+		if not directory.current_is_dir() and entry.begins_with(file_prefix) and entry.ends_with(".json"):
+			count += 1
+		entry = directory.get_next()
+	directory.list_dir_end()
+	return count
+
+
+func _remove_backup_temporary(path: String) -> void:
+	var absolute_path: String = ProjectSettings.globalize_path(path)
+	if FileAccess.file_exists(path):
+		DirAccess.remove_absolute(absolute_path)
 
 
 # --- La intro (RF-498) ---

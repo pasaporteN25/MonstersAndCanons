@@ -1199,6 +1199,8 @@ Dibujos simples para dejar de ver formas geométricas. Es un **primer intento "p
 > **Criterio de aceptación RF-115**
 > **Dado** que gané el nivel 1 → **Cuando** cierro el juego y lo vuelvo a abrir → **Entonces** el nivel 2 aparece desbloqueado.
 
+*(M60, RF-520 a RF-522: antes de la primera escritura de cada ejecución, el juego guarda en silencio una copia de seguridad del `save.json` existente, una por versión de la build y sin pisar nunca una anterior.)*
+
 ### 10.1 Puntos y récords *(M6, pedido por Lucas)*
 
 Récords "a la antigua", como en los arcades: iniciales y un top 5.
@@ -1699,6 +1701,7 @@ Los cuatro enemigos que gustaron, con lo necesario para convertirlos en spec cua
 - **Que el bot de balance mejore torres** *(2026-10-09, T251)*: `tools/balance_sim.gd` nunca mejora ni vende torres; llena el mapa con torres de nivel 1 y deja el oro sin usar (al perder Asedio 10 a 15 al 115 % quedaban 2054, 1039, 2859 y 3881 de oro en los mapas 10, 12, 14 y 15). Una persona lo gasta en mejoras (el Francotirador pasa de 40 a 70 y a 120 de daño por 150 y 225). Gastar ese oro sobrante en mejoras cuando el mapa está lleno es un cambio de la **herramienta**, no del juego. **Ojo:** las tablas de T229 a T234 se ajustaron contra el bot sin mejoras, así que con mejoras todos los niveles le saldrían más fáciles y habría que revisar la referencia. **No implementado.** Detalle y medición en `specs/tareas/informes/T251-conceptos-nuevos-enemigos.md`, §2.5.
 - **Un zoom lentísimo sobre cada lámina de la intro** *(2026-10-11, T240)*: para que las siete láminas se sientan más «película» y menos «presentación», cada una podría acercarse un 3 a 5 % durante sus segundos (un `Tween` sobre la escala de la imagen, sin tocar el texto). Sumaría una pizca de movimiento sin animar nada ni tocar Q-01. **No incluido en M57:** Lucas pidió «imágenes tipo diapositiva» y la excepción de §11 prohíbe las cinemáticas animadas, así que **no se implementa sin su OK**. Se agregaría como una clave opcional (`"zoom_%"`) de `data/intro/intro.json`.
 - **Un consejo de contramedida en el cartel de entrada de algunos niveles** *(2026-10-16, T266)*: con el bot, los picos de los niveles 2 y 7 dependen de la composición de torres (armadura del Jefe en el 2; enjambres de Rápidos por dos entradas en el 7), y el juego no lo anticipa: la presentación de enemigos (RF-134) solo sale la primera vez que se ve un tipo, y el Jefe y el Rápido ya se vieron en el 1. La idea: una línea corta debajo del texto de entrada (RF-466), por ejemplo en el 2 «Los Jefes y los Blindados tienen armadura: Cañón y Francotirador» y en el 7 «Enjambres por las dos entradas: Múltiple, Ráfaga o Eléctrica». Complementa los ajustes de datos propuestos en `specs/tareas/informes/T266-auditoria-dificultad.md` §5, no los reemplaza; los textos de entrada son lore (`specs/11-textos-lore.md`), así que el consejo iría aparte.
+- **Precisar el caso en que falla el respaldo (M60, RF-521):** el criterio dice que, si la copia falla, `save()` debe escribir `save.json` y a la vez «no se pierde el original que había». Si el respaldo no pudo crearse y `save()` abre el mismo archivo con `WRITE`, los bytes anteriores se reemplazan; hace falta aclarar si «original» significa el progreso ya cargado que se vuelve a serializar o si se exige conservar los bytes originales en otro lugar. T281 implementa el comportamiento detallado de RF-521 (avisar y continuar guardando) y no agrega otra copia alternativa sin definición aprobada.
 - **Parte útil del repositorio Claude Code Game Studios** (Lucas: "no hace falta `validate-commit`"; del resto, ver D-040):
   - **Informe de prueba** (su `playtest-report`): una plantilla corta para anotar lo que se siente al probar el juego (¿se entendió?, ¿dónde te trabaste?, ¿qué te aburrió?) y guardarla en `specs/pruebas/`. Hoy las impresiones de Lucas quedan en la charla.
   - **Auditoría de recursos** (su `asset-audit`): un test que revise que **todos** los dibujos y sonidos existen, miden lo que dice la guía y que ningún dato apunta a un archivo que falta.
@@ -3256,3 +3259,83 @@ Cortas y con mi recomendación; «✔ todas» alcanza.
 Pedido de Lucas: el carrito debe abrir al tocarlo incluso pegado a los costados; arrastrarlo solo cambia su posición. Un toque produce una sola acción, aunque Android emule eventos de mouse. Carrito, X, tilde y cruz son compactos y redondeados; no repiten el precio dentro de la tilde. La barra inferior usa el tema oscuro y bronce del juego. El fondo del tema continúa fuera del mapa para eliminar las franjas grises, sin agregar casillas construibles. La barra superior no tiene una línea que la atraviese.
 
 **Dado** el carrito pegado a cualquiera de los bordes → **Cuando** se toca sin arrastrar → **Entonces** abre una sola vez el catálogo. **Cuando** se arrastra y se suelta → **Entonces** guarda la posición y no abre el catálogo. **Dado** un fantasma inválido → **Entonces** la tilde se deshabilita y la barra informa el motivo, sin cobrar. **Dado** un mapa encuadrado → **Entonces** no quedan franjas grises y el borde superior se dibuja solo al pie de la barra.
+
+
+### M60 · Copia de seguridad automática del guardado antes de la primera escritura de cada build (Lucas, 2026-10-16; parte de T268b)
+
+**Estado: especificada (2026-10-16); sin programar.** Se programa en **T281**. Es una red de seguridad **extra**: **no reemplaza** el respaldo a mano que Lucas hace con el archivo real del tester (T268a §6, paso 3).
+
+**Qué pidió Lucas.** Cuando una build nueva abre un `save.json` que ya existe, **antes de la primera vez que lo escribe**, el juego guarda una copia de seguridad, y **nunca pisa una copia anterior**.
+
+**Por qué hace falta (el motivo, con evidencia).** El informe T268a (`specs/tareas/informes/T268a-verificacion-guardado.md`, §0.4, §4 y §5) dejó registrado que:
+
+1. **La primera apertura de la build nueva reescribe `save.json`.** El guardado del tester no tiene la clave `intro_seen` (T242), así que el juego **muestra la intro y guarda enseguida** (`mark_intro_seen()` llama a `save()` «al abrirse, no al terminarla», RF-498). O sea: **el archivo original se modifica sin que el jugador haya hecho nada**, solo por abrir el juego.
+2. **Una clave que la build no conoce se pierde** en ese primer guardado: `save()` escribe solo las claves que conoce (T268a §5.6).
+3. **Un archivo dañado se pisa** en el próximo guardado: cargarlo no lo toca, pero el primer `save()` lo reemplaza por el progreso vacío (T268a §5.7).
+
+Con la copia automática, el archivo **tal como lo dejó la build anterior** queda guardado aunque nadie se haya acordado de respaldarlo a mano.
+
+**Idea en pocas palabras.** Justo antes de la primera escritura de `save.json` en cada ejecución, el juego mira si ya existe una copia para **esta versión de la build**. Si no existe, copia el archivo **tal cual (byte a byte)** a `save_respaldo_<versión>.json` en la misma carpeta de datos (`JuegoA`). Si ya existe, no hace nada. El jugador no ve nada.
+
+#### Requisitos
+
+- **RF-520** **La copia, cuándo y con qué nombre:**
+  1. **Cuándo:** en la **primera llamada a `save()` de cada ejecución**, **antes** de abrir `save.json` para escribir. Se mira **una sola vez por ejecución** (una bandera en memoria). Como `save()` es lo único que escribe `save.json`, cubre la intro, ganar un nivel, Opciones y todo lo demás.
+  2. **Qué se copia:** el **archivo tal como está en el disco**, **sin leerlo como JSON ni interpretarlo** (así también se copia uno dañado, que es justo el que más importa conservar).
+  3. **Nombre:** `user://save_respaldo_<versión>.json`, en la misma carpeta que `save.json`. `<versión>` es el valor de `application/config/version` de `project.godot` (esa clave se **agrega** con el valor **`1.0.0`**, el mismo que ya tiene `export_presets.cfg`). Los caracteres que no sean letras, números, punto, guion o guion bajo se reemplazan por `_`; si la clave está vacía o falta, se usa `sin-version`. Ejemplo: `save_respaldo_1.0.0.json`.
+  4. **Nunca pisa:** si **ya existe** el archivo de esa versión, **no se hace nada** (se conserva el más viejo, que es el que tiene el progreso original). No hay ninguna ruta de código que borre o sobrescriba un respaldo.
+  5. **Sin copias a medias:** se copia primero a `save_respaldo_<versión>.json.tmp` y **recién cuando terminó bien** se renombra al nombre final. Un `.tmp` que quedó de una ejecución cortada **sí se pisa** (es temporal). Así un corte de luz nunca deja un respaldo incompleto con el nombre final, que después bloquearía las copias futuras.
+  6. **Tope:** a lo sumo **10** archivos `save_respaldo_*.json`. Con 10 ya hechos **no se crea otro** (se conservan los más viejos) y se avisa con `push_warning`. El tope es de formato (como el nombre del archivo), no de balance, así que vive en el código.
+- **RF-521** **Qué casos copian y cuáles no** (la copia **nunca** impide jugar ni cambia lo que `save()` escribe):
+  1. **Sin `save.json`** → no hay nada que respaldar; no se crea nada. La bandera se da por cumplida (el archivo que se cree ahora ya es de esta build).
+  2. **`save.json` de 0 bytes** → no se copia (no hay nada que conservar).
+  3. **`save.json` dañado o ilegible como JSON** (truncado, basura, versión distinta) → **sí se copia**, tal cual, y después `save()` sigue normal.
+  4. **Ya hay respaldo de esta versión** → no se hace nada, sin avisos.
+  5. **La copia falla** (disco lleno, permisos, no se puede abrir el original, falla el renombrado) → **`push_warning`** con el motivo, se borra el `.tmp` si quedó, **`save()` continúa y escribe igual** (no se bloquea el guardado: perder el progreso nuevo del jugador es peor que no tener la copia). **No se reintenta** en esa ejecución (un solo aviso, sin repetirlo en cada guardado); en la próxima se vuelve a intentar.
+  6. **Modo de pruebas** (RF-181, RF-383): usa `save_pruebas.json`, que **no es** el guardado real. `save()` solo respalda cuando `save_path` es el guardado normal (`DEFAULT_PATH`), así que en el modo de pruebas **no se hace ninguna copia, ni del real ni del de pruebas**, y **no se toca** `save.json`. Si se pasa de pruebas a normal sin cerrar el juego, la primera escritura de `save.json` sí hace su chequeo.
+  7. **Tests de GUT**: los que cambian `save_path` a `user://test_*.json` (`.claude/rules/tests.md`) **no generan ningún `save_respaldo_*.json` en la carpeta real**. Para probar la copia en sí, el `SaveManager` tiene dos variables que los tests cambian y restauran: la ruta del único guardado que se respalda (por omisión, `DEFAULT_PATH`) y el prefijo de los respaldos (por omisión `user://save_respaldo_`); los tests de la copia apuntan las dos a archivos `user://test_*`.
+- **RF-522** **Dónde queda y si se avisa:**
+  1. **Es silencioso:** no hay mensaje, cartel ni opción para el jugador. Solo si **falla** la copia hay un `push_warning` en el registro (log).
+  2. **Dónde la encuentra Lucas:** en la **misma carpeta de datos que `save.json`**. En Windows, `%APPDATA%\Godot\app_userdata\JuegoA\save_respaldo_<versión>.json`; en la máquina Linux de Lucas, `~/.local/share/JuegoA/save_respaldo_<versión>.json`. Para volver atrás: cerrar el juego, borrar `save.json` y renombrar la copia a `save.json`.
+  3. **Es un `.json` válido** y se puede abrir con el Bloc de notas o con `tools/verify_save.gd` (T268a) para ver qué había.
+  4. **La versión se sube a mano** al preparar cada build de envío (T268b): si dos builds distintas comparten el mismo `config/version`, la segunda **no** hace copia propia (la primera, la más vieja, se conserva). Es un límite aceptado.
+
+> **Criterio de aceptación RF-520 a RF-522**
+> **Dado** un `save.json` con progreso y ningún respaldo de la versión `1.0.0` → **Cuando** el juego hace su primer `save()` (por ejemplo, al abrir la intro) → **Entonces** existe `save_respaldo_1.0.0.json` con **exactamente los mismos bytes** que tenía `save.json` antes de esa escritura, y `save.json` queda con el contenido nuevo.
+> **Dado** que ya existe `save_respaldo_1.0.0.json` → **Cuando** el juego guarda de nuevo, en esa ejecución o en otra → **Entonces** el respaldo **no cambia** (mismo contenido, mismo hash) aunque `save.json` sí haya cambiado.
+> **Dado** que no existe `save.json` → **Cuando** se guarda por primera vez → **Entonces** no se crea ningún respaldo y `save()` funciona igual que hoy.
+> **Dado** un `save.json` de 0 bytes → **Entonces** no se crea respaldo.
+> **Dado** un `save.json` dañado (basura, truncado, `"version": 2`) → **Cuando** se guarda → **Entonces** el respaldo **sí** se crea con los bytes del dañado, y `save()` escribe el progreso nuevo.
+> **Dado** que la copia falla (por ejemplo, ya existe una **carpeta** con el nombre del respaldo, o el destino no se puede escribir) → **Cuando** se guarda → **Entonces** hay un `push_warning`, `save()` **devuelve `true`** y `save.json` queda escrito, y no se pierde el original que había.
+> **Dado** que quedó un `save_respaldo_1.0.0.json.tmp` viejo → **Cuando** se hace la copia → **Entonces** se pisa el `.tmp` y el respaldo final queda completo.
+> **Dado** el modo de pruebas activado (`save_path` = `save_pruebas.json`) → **Cuando** se guarda → **Entonces** no se crea ningún `save_respaldo_*.json` y `save.json` no se toca.
+> **Dado** un test con `save_path = "user://test_x.json"` → **Cuando** se guarda → **Entonces** no aparece ningún `save_respaldo_*.json` en `user://`.
+> **Dado** 10 respaldos de otras versiones → **Cuando** se guarda con una versión nueva → **Entonces** no se crea el 11.º, hay un `push_warning`, y los 10 viejos siguen intactos.
+> **Dado** una versión con caracteres raros (`"1.0 / beta"`) o vacía → **Entonces** el nombre queda como `save_respaldo_1.0___beta.json` o `save_respaldo_sin-version.json`.
+> **Dado** que el original se abre con la build nueva y se juega → **Entonces** el jugador no ve ningún mensaje ni cambio de comportamiento por la copia.
+
+#### Lo que decidí por defecto *(Lucas no lo definió; cambia con su respuesta)*
+
+1. **El nombre lleva la versión de la build** (`save_respaldo_<versión>.json`) y no `save.json.bak` ni números correlativos: razones y alternativas en **D-102**.
+2. **Es silencioso** (recomendado por Lucas): sin cartel. Si querés un aviso en pantalla, es una decisión aparte.
+3. **Se copian también los archivos dañados** (son los que más conviene conservar) y **no** los de 0 bytes.
+4. **Si la copia falla, se guarda igual** y se avisa en el log.
+5. **Tope de 10 copias**, conservando las más viejas.
+
+#### Lo que M60 no incluye
+
+- **Restaurar desde el juego** (un botón «Recuperar copia»): la restauración es a mano (RF-522, punto 2).
+- **Copias periódicas o rotativas** (una por día, por partida, etc.): una por versión de build, nada más.
+- **Respaldar `save_pruebas.json`, los mapas (`user://maps/`) ni los modos (`user://modos/`).**
+- **Android:** ahí `user://` es privado de la app (no hay una carpeta que Lucas pueda abrir sin herramientas) y una APK con otro paquete empieza vacía (T268a §5.3); la copia se hace igual, pero **no se prometió que se pueda recuperar a mano**.
+- **Cambiar el formato del guardado** (`SAVE_VERSION` sigue en 1) ni el orden de las claves.
+
+#### Lo que no se probó (al escribir esta spec)
+
+**Nada se programó ni se corrió**: son solo documentos. No se probó en Windows ni en Android. El comportamiento de `DirAccess.copy` y `DirAccess.rename` en `user://` (por ejemplo, si `rename` pisa un destino existente o si hay que borrar antes) es algo que **T281 tiene que comprobar** en Godot 4.7.2 y anotar; esta spec solo exige el resultado (nunca pisar un respaldo final).
+
+#### Preguntas para Lucas
+
+1. **P1 · ¿Silencioso está bien?** Recomiendo que sí.
+2. **P2 · ¿El nombre `save_respaldo_<versión>.json` en la misma carpeta te sirve?** Recomiendo que sí; la alternativa es una subcarpeta `respaldos/`.
+3. **P3 · ¿Subís `config/version` en cada build de envío?** Recomiendo que sí, y que lo haga la tarea de T268b que arma la build.
