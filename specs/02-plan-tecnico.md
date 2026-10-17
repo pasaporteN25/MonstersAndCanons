@@ -423,6 +423,7 @@ Archivo `user://save.json` (Godot lo guarda en la carpeta de datos del usuario, 
 
 - El campo `version` permite, en el futuro, reconocer guardados viejos y convertirlos.
 - Si el archivo **no existe** o está **corrupto**, se empieza con el progreso por defecto (solo nivel 1 desbloqueado) y **no** se cierra el juego.
+- *(M60, RF-520 a RF-522)* Antes de la primera escritura de cada ejecución, `save()` copia el `save.json` existente a `user://save_respaldo_<versión>.json` (una copia por versión de la build, sin pisar nunca una anterior). Ver la sección M60 más abajo.
 - Se guarda al ganar un nivel, al cerrar la pantalla de opciones y al anotar un récord.
 - *(M6)* `scores`: el top 5 de cada nivel y del Salón de la fama (`hall_of_fame`); `initials`: las últimas iniciales usadas (3 y 5 letras); `hall_total`: el último total de campaña ya anotado; `best_score`: el mejor puntaje en victoria de cada nivel (se suman para el Salón). Son claves nuevas: un guardado de antes de M6 no las tiene y se lee igual (sigue siendo la versión 1).
 - *(M6)* En el modo de pruebas el archivo es `user://save_pruebas.json` (mismo formato).
@@ -1424,3 +1425,47 @@ Nada más: ni `balance.json`, ni `.tres`, ni código, ni assets, ni los niveles 
 - **Tests que cuentan enemigos** de esas oleadas (arriba, punto 4).
 - **El 7 de Asedio queda más parejo, no más fácil:** T266 midió 5 de 5 con 6 vidas (antes 1 a 10); una explicación posible, no verificada, es que con menos Rápidos el bot cobra menos oro. Se remide en T279.
 - **Que una partida humana contradiga al bot:** por RF-518 manda la partida humana y se pasa a la variante B del 2 (D-100) o se reabre el 7.
+
+
+### M60 / T268b · Copia de seguridad automática del guardado (RF-520 a RF-522, D-101)
+
+> **Estado: especificada (2026-10-16); sin programar.** La spec es **M60** (`01-spec.md`), la decisión **D-101** y la tarea **T281** (`03-tareas.md`).
+
+#### Qué hay hoy
+
+- `SaveManager.save()` (`scripts/autoload/save_manager.gd`) abre `save_path` con `FileAccess.WRITE` y escribe todo el diccionario: es **lo único** que escribe `save.json`. `load_save()` solo lee.
+- `save_path` vale `DEFAULT_PATH` (`user://save.json`); el modo de pruebas lo cambia a `user://save_pruebas.json` (`DevMode.set_enabled`), y los tests a `user://test_*.json`.
+- `mark_intro_seen()` llama a `save()` al abrirse la intro: por eso la **primera apertura** de una build nueva sobre un guardado sin `intro_seen` ya reescribe el archivo (T268a §0.4).
+
+#### Qué se cambia
+
+| Archivo | Cambio |
+|---|---|
+| `scripts/autoload/save_manager.gd` | Una función privada que se llama **al principio de `save()`** (una vez por ejecución, bandera en memoria): decide si corresponde, arma el nombre `<prefijo><versión>.json`, copia byte a byte a `.tmp` y renombra. Dos variables públicas para los tests: la ruta que se respalda (por omisión `DEFAULT_PATH`) y el prefijo (`user://save_respaldo_`). `save()` sigue devolviendo lo mismo de siempre. |
+| `project.godot` | Se agrega `config/version="1.0.0"` en `[application]`. |
+| `tests/test_save_backup.gd` | Test nuevo con los casos del criterio de M60 (todos en `user://test_*`). |
+
+Nada más: ni `SAVE_VERSION`, ni el formato del guardado, ni `dev_mode.gd`, ni datos, ni escenas, ni assets.
+
+#### Cómo se decide si se copia (en orden)
+
+1. Si ya se miró en esta ejecución → no.
+2. Si `save_path` no es la ruta que se respalda → no (modo de pruebas y tests); **no** se marca como mirado.
+3. Se marca como mirado.
+4. Si `save.json` no existe o mide 0 bytes → no.
+5. Si el respaldo de esta versión ya existe → no.
+6. Si ya hay 10 respaldos → `push_warning` y no.
+7. Se copia a `.tmp` (pisando un `.tmp` viejo) y se renombra al nombre final; si algo falla → `push_warning`, se borra el `.tmp` y se sigue.
+
+#### A comprobar al programar (no se asume)
+
+- Si `DirAccess.rename` pisa un destino existente en Godot 4.7.2 en Linux: aunque pise, el paso 5 ya garantizó que no existe; solo hay que anotarlo.
+- Cómo reproducir «la copia falla» en un test sin tocar la carpeta real: un directorio con el nombre del `.tmp` o del respaldo final dentro de `user://test_*/`.
+- El tope de 10 es de formato (como el nombre), va como constante en el código.
+
+#### Cómo se prueba
+
+1. `godot --headless --import` y luego `tests/test_save_backup.gd` y la suite completa de GUT (sin `SCRIPT ERROR`).
+2. Antes y después de la suite: `ls ~/.local/share/JuegoA/` **no** muestra ningún `save_respaldo_*.json` nuevo (los tests no ensucian la carpeta real).
+3. Con un `save.json` de prueba copiado a una carpeta de usuario aparte, abrir el juego y comprobar el respaldo con `sha256sum` (límite: en esta máquina Linux, no en Windows).
+4. **No se prueba:** Windows, Android, ni el archivo real del tester (eso es la parte manual de T268).

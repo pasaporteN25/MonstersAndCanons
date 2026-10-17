@@ -2,6 +2,10 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Copia de seguridad automática del guardado *(M60, spec del 2026-10-16; todavía falta programarla, T281)*
+
+**Esto es lo que Lucas pidió y todavía no está hecho.** Cuando una versión nueva del juego abre un `save.json` que ya existe, justo antes de la primera vez que lo escribe, va a guardar una copia del archivo tal como estaba, y **nunca va a pisar una copia anterior**. Hace falta porque abrir una versión nueva sobre un guardado viejo ya lo reescribe solo (muestra la intro y marca que se vio). La copia es **silenciosa** (no aparece ningún mensaje) y queda en la misma carpeta que el guardado, con el nombre `save_respaldo_<versión>.json` (por ejemplo `save_respaldo_1.0.0.json`). Es una copia por versión; el modo de pruebas no hace copias. No reemplaza el respaldo a mano del archivo del tester. Hoy solo está escrita la spec: no se programó nada.
+
 ## Arte aprobado en el mapa *(T277, 2026-10-16)*
 
 Las estatuas de los niveles 1, 3 y 5 ahora representan Cañón, Francotirador y Ametralladora tallados en piedra con musgo y pedestal; siguen siendo decoración sin selección ni alcance. Mina y bosque explotable muestran dibujos renderizados distintos al habilitarse y agotarse; los escombros cambian durante la demolición. La Central del nivel 15 usa el edificio aprobado, continuo sobre sus cuatro casillas. Se conservan suelos, flores, torres, casillas y reglas de juego.
