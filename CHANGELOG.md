@@ -4,9 +4,9 @@ Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle t�
 
 ## Ajustes del HUD móvil tras probar el PR #10 *(T287, 2026-10-16)*
 
-## El Mortero, alcanzable en el nivel 9 *(M61, spec del 2026-10-16; todavía falta aplicarlo, T282)*
+## Escombros comunes del nivel 9 *(T282, 2026-10-17)*
 
-**Esto es lo que Lucas pidió y todavía no está hecho.** El bot midió que el Mortero del nivel 9 (300 de oro + 3 recursos) no se llegaba a comprar: los únicos recursos del mapa salen de demoler escombros, y cada uno daba su recurso solo la mitad de las veces (lo máximo que juntó el bot fueron 2). La propuesta es que los **tres escombros comunes del 9 den siempre su recurso**: demolerlos (90 de oro cada uno) suma justo los 3 recursos del Mortero. No cambia el costo del Mortero ni ningún otro nivel. Ojo: la ruina con la pieza de la Disruptora no suma recursos la primera vez, así que no queda margen (un recurso gastado en el Francotirador impide el Mortero en esa partida). Falta medirlo con el bot (T282) y que Lucas lo juegue (T283); si alcanzarlo cuesta demasiadas vidas, la spec deja opciones para decidir con él.
+Los tres escombros comunes del Taller ahora garantizan 1 recurso cada uno al demolerlos. El bot confirmó que así se reúnen los 3 recursos del Mortero, pero la estrategia que va por ellos pierde en las cinco semillas y no llega a comprarlo; se deja el costo de demolición y el del Mortero como están hasta que Lucas lo pruebe (T283).
 
 ## Copia de seguridad automática del guardado *(M60, spec del 2026-10-16; todavía falta programarla, T281)*
 

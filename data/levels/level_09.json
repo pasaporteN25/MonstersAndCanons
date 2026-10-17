@@ -7,7 +7,7 @@
   "tema": "ruinas",
   "leyenda": {
     "u": {"removible":{"clase":"escombro","hallazgo":"disruptor"}},
-    "e": {"removible":{"clase":"escombro","probabilidad":50.0,"recursos":1.0}},
+    "e": {"removible":{"clase":"escombro","probabilidad":100.0,"recursos":1.0}},
     "s": {"dibujo":"simbolo_ruina"}
   },
   "torres_extra": ["mechanical_standard","mortar"],
