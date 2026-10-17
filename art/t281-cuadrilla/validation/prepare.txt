@@ -1,0 +1,1 @@
+{"ratero": {"unique_frames": 16, "atlas_size": [1024, 1024]}, "cargador": {"unique_frames": 16, "atlas_size": [1024, 1024]}}

@@ -22,10 +22,7 @@ func test_every_object_has_a_drawing_and_every_ground_has_colors() -> void:
 	for id: String in MapDrawings.ids():
 		match MapDrawings.kind(id):
 			MapDrawings.KIND_OBJECT:
-				if id in ["escombro", "mina", "bosque_explotable"]:
-					assert_null(MapDrawings.texture(id), "%s se dibuja con figuras simples" % id)
-				else:
-					assert_not_null(MapDrawings.texture(id), "%s sin dibujo" % id)
+				assert_not_null(MapDrawings.texture(id), "%s sin dibujo" % id)
 				assert_true(MapDrawings.ground_colors(id).is_empty())
 			MapDrawings.KIND_GROUND:
 				assert_null(MapDrawings.texture(id))
@@ -148,3 +145,54 @@ func test_the_example_maps_have_the_same_routes_as_the_map_they_came_from() -> v
 		var level: LevelData = LevelFile.load_level("res://tools/ejemplos/tema_%s.json" % theme)["level"]
 		var grid: MapGrid = MapGrid.parse(level.map_rows, level.legend)
 		assert_eq(grid.routes, original.routes, theme)
+
+
+## T277: la vista sigue transiciones reales del campo, incluida la cancelación.
+func test_approved_art_follows_extraction_and_demolition_states() -> void:
+	var specs: Array[ObstacleSpec] = []
+	for id: String in ["mina", "bosque_explotable", "escombro"]:
+		var spec: ObstacleSpec = ObstacleSpec.new()
+		spec.cell = Vector2i(specs.size(), 1)
+		spec.class_id = StringName(id)
+		spec.kind = ObstacleSpec.Kind.REMOVABLE if id == "escombro" else ObstacleSpec.Kind.EXTRACTION
+		spec.reserve = 2
+		spec.production = 2
+		spec.seconds = 1.0
+		specs.append(spec)
+	var field: ObstacleField = ObstacleField.new()
+	field.setup(specs, RandomNumberGenerator.new())
+	var decor: LevelDecor = LevelDecor.new()
+	add_child_autofree(decor)
+	decor.bind_field(field)
+	for i: int in 2:
+		var id: String = String(specs[i].class_id)
+		var cell: Vector2i = specs[i].cell
+		var initial: Texture2D = decor.object_texture(cell, id)
+		assert_true(field.enable_site(cell))
+		var active: Texture2D = decor.object_texture(cell, id)
+		assert_ne(initial, active)
+		field.complete_wave()
+		var depleted: Texture2D = decor.object_texture(cell, id)
+		assert_ne(active, depleted)
+		assert_ne(initial, depleted)
+	var rubble: Vector2i = specs[2].cell
+	var intact: Texture2D = decor.object_texture(rubble, "escombro")
+	assert_not_null(field.order(rubble))
+	assert_ne(decor.object_texture(rubble, "escombro"), intact)
+	field.cancel()
+	assert_eq(decor.object_texture(rubble, "escombro"), intact)
+
+
+func test_statue_variants_are_deterministic_objects_with_theme_material() -> void:
+	var seen: Array[Texture2D] = []
+	for x: int in 3:
+		var cell: Vector2i = Vector2i(x, 2)
+		var moss: Texture2D = MapDrawings.statue_texture(cell, &"pradera")
+		assert_eq(moss, MapDrawings.statue_texture(cell, &"pradera"))
+		assert_ne(moss, MapDrawings.statue_texture(cell, &"nieve"))
+		assert_false(seen.has(moss))
+		seen.append(moss)
+	assert_eq(MapDrawings.kind("estatua"), MapDrawings.KIND_OBJECT)
+	var level: Level = _level_with("estatua")
+	add_child_autofree(level)
+	assert_false(level.is_buildable(Vector2i(4, 1)))

@@ -44,6 +44,7 @@ var _expected_label: Label
 var _sites: Array[Dictionary] = []
 var _gold: int = 0
 var _first_site: int = 0
+var _mobile_button_height: float = 0.0
 
 
 func _ready() -> void:
@@ -106,10 +107,26 @@ func _button(parent: Control, text: String) -> Button:
 	var button := Button.new()
 	button.text = text
 	button.focus_mode = Control.FOCUS_NONE
-	button.custom_minimum_size = Vector2(0, 26)
+	button.custom_minimum_size = Vector2(0, maxf(26.0, _mobile_button_height))
 	button.add_theme_font_size_override("font_size", CARD_FONT)
 	parent.add_child(button)
 	return button
+
+
+func set_mobile_touch_targets(height: float) -> void:
+	_mobile_button_height = height
+	custom_minimum_size.y = height
+	_apply_mobile_touch_targets(self, height)
+
+
+func _apply_mobile_touch_targets(node: Node, height: float) -> void:
+	if node is Button:
+		var button: Button = node as Button
+		button.custom_minimum_size.y = maxf(button.custom_minimum_size.y, height)
+	if node is HBoxContainer or node is VBoxContainer:
+		(node as BoxContainer).add_theme_constant_override("separation", 8)
+	for child: Node in node.get_children():
+		_apply_mobile_touch_targets(child, height)
 
 
 func _build_job_card() -> void:

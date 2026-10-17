@@ -1,0 +1,9 @@
+pantalla,control,ancho_virtual,alto_virtual,ancho_px_celular,alto_px_celular,ancho_mm,alto_mm,menor_a_7_6_mm
+movil_barra_vacia,CartButton «🛒»,82,82,123,123,7.7,7.7,no
+movil_barra_vacia,ExitButton «×»,82,82,123,123,7.7,7.7,no
+movil_torre_elegida,CartButton «🛒 •»,82,82,123,123,7.7,7.7,no
+movil_torre_elegida,ExitButton «×»,82,82,123,123,7.7,7.7,no
+movil_torre_elegida,BottomCancelPlacement «×»,84,92,126,138,7.9,8.7,no
+movil_torre_elegida,MobileTargeting «Apuntar: Primero»,172,92,258,138,16.2,8.7,no
+movil_torre_elegida,MobileUpgrade «Mejorar → N2 60 de oro»,196,92,294,138,18.4,8.7,no
+movil_torre_elegida,MobileSell «Vender»,150,92,225,138,14.1,8.7,no

@@ -28,7 +28,14 @@ func test_scaled_sprite_keeps_feet_and_collision_radius() -> void:
 	assert_gt(EnemyShape.sprite_top(16, 1.2), EnemyShape.sprite_top(16), "barra sobre la cabeza ampliada")
 	for id: String in ["normal", "fast", "tank", "flyer", "armored", "troll", "spider", "spiderling", "guardian", "healer", "shaman", "mirror", "boss", "rammer", "thief", "ratero", "cargador", "colossus", "colossus_shard"]:
 		var data: EnemyData = _visual_data(id)
-		assert_eq(data.visual_scale, 1.8 if id == "colossus" else 1.2, id)  # Coloso: escala visual excepcional, sin ampliar colisión.
+		var expected_visual_scale: float = 1.8 if id == "colossus" else 1.9 if id == "ratero" else 1.0 if id == "cargador" else 1.2
+		assert_eq(data.visual_scale, expected_visual_scale, id)  # Escalas visuales sin ampliar colisión.
+		if id == "ratero":
+			assert_eq(data.walk_art_scale, 1.0, id)
+			assert_eq(data.size_tiles, 0.2, id + ": colisión sin cambios")
+		elif id == "cargador":
+			assert_eq(data.walk_art_scale, 0.95, id)
+			assert_eq(data.size_tiles, 0.33, id + ": colisión sin cambios")
 		assert_true(data.texture.resource_path.contains("/rendered/"), id)
 		assert_false(data.flip_when_walking_left, id)
 
@@ -124,6 +131,8 @@ func test_remaining_cycles_are_complete_unique_and_inside_transparent_frames() -
 		assert_eq(data.walk_atlas.get_size(), Vector2(1024, 1024), id)
 		assert_gt(data.walk_stride_tiles, 0.0, id)
 		var unique: Dictionary = {}
+		# T281 fija el último píxel visible de los atlas de La Cuadrilla en la fila 191.
+		var expected_floor_row: int = 192 if id in ["ratero", "cargador"] else 191
 		var image: Image = data.walk_atlas.get_image()
 		image.decompress()
 		image.clear_mipmaps()
@@ -137,7 +146,7 @@ func test_remaining_cycles_are_complete_unique_and_inside_transparent_frames() -
 				assert_gt(body.position.x, 0, id + ": margen izquierdo")
 				assert_lt(body.end.x, 256, id + ": margen derecho")
 				assert_gt(body.position.y, 0, id + ": margen de arriba")
-				assert_eq(body.end.y, 191, id + ": apoyo constante")
+				assert_eq(body.end.y, expected_floor_row, id + ": apoyo constante")
 		assert_eq(unique.size(), 16, id + ": poses propias")
 
 func test_every_ground_cycle_slows_steps_and_keeps_boss_resistance() -> void:

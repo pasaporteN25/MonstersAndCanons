@@ -111,3 +111,14 @@ Embestidor: anatomía pesada del antiguo Curandero, casco óseo/cuerno frontal, 
 ### T257 · La Cuadrilla (provisional, RF-490)
 
 Ratero y Cargador son criaturas independientes: sin símbolo A, marcas comunitarias, capucha ni capa. Ratero bajo y horizontal; Cargador ancho con bolsa más grande que el cuerpo. Familia cobre rosado / terracota; lona neutra. Fuentes SVG nativas rasterizadas a PNG RGBA 256×256 y ciclos 1024×1024 (4 direcciones × 4 fases), apoyo en y=191, sin sombra. La iluminación no se refleja con la dirección. Las paletas y siluetas están **pendientes de aprobación de Lucas**; hoja con el Ladrón aprobado en `art/t257-cuadrilla/captures/contact_sheet.png`. Es una propuesta vectorial más simple que los PNG renderizados, no arte definitivo. No integrada ni capturada en partida en este despacho.
+
+## 9. Estatuas decorativas de torres (M58, RF-515, D-098)
+
+Lucas (2026-10-16): las estatuas de los mapas representan **torres**, no personas con espada («son nuestras armas»). Reglas para dibujarlas:
+
+- **Material:** **piedra gris erosionada**, sin brillo metálico. **Musgo** en la pradera, **escarcha** en la nieve; en los demás temas, polvo y desgaste propios del tema (§4).
+- **Forma:** la silueta reconocible de una torre del juego (por ejemplo cañón, mortero o hielo), **tallada en bloque**, sobre un **pedestal** visible. Mismo punto de vista y luz que las torres renderizadas (§7), contorno oscuro y un brillo por dibujo (§1).
+- **Tamaño:** **una casilla**, igual que la estatua actual.
+- **Sin círculo de alcance, sin panel, no seleccionables**: es decoración (un objeto del mapa, `KIND_OBJECT` de `MapDrawings`, como el resto de `assets/sprites/map/`).
+- **No se confunde con el Estandarte mecánico** (la torre de ingeniería del canon, `10-universo.md` §3): el Estandarte es de **hierro, plata y bronce**, con engranaje y base de torre; la estatua es de **piedra** y **no tiene color de metal, engranaje ni base mecánica**. Comprobar poniéndolas juntas a escala real: tienen que distinguirse en un vistazo.
+- **Antes de integrar:** muestras aisladas a escala real, aprobadas por Lucas (B-38, T267).

@@ -1,0 +1,287 @@
+[
+  {
+    "id": "central_master",
+    "source": "sources/central_master.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "alpha_bbox": [
+      0,
+      19,
+      1236,
+      1226
+    ],
+    "output_size": [
+      256,
+      256
+    ],
+    "sha256": "77fdff502c47534c5e66065b23a1455117619146b4f7fd199536d260bc57a5b8"
+  },
+  {
+    "id": "forest_active",
+    "source": "sources/forest_active.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "alpha_bbox": [
+      0,
+      39,
+      1242,
+      1254
+    ],
+    "output_size": [
+      128,
+      128
+    ],
+    "sha256": "ffa31e1b352ba5978654bc7721186899c24829f8a62cea164b47d982cac89548"
+  },
+  {
+    "id": "forest_depleted",
+    "source": "sources/forest_depleted.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "alpha_bbox": [
+      0,
+      9,
+      1234,
+      1254
+    ],
+    "output_size": [
+      128,
+      128
+    ],
+    "sha256": "764140aa935fe610283b8e99b501fab0e5395e2b547df724eccac5c91c47b851"
+  },
+  {
+    "id": "forest_idle",
+    "source": "sources/forest_idle.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "alpha_bbox": [
+      0,
+      47,
+      1226,
+      1226
+    ],
+    "output_size": [
+      128,
+      128
+    ],
+    "sha256": "634f07619caa9a31b14a182ab2d2eedf382853ea45d0f0939f536f3125e2a66f"
+  },
+  {
+    "id": "mine_active",
+    "source": "sources/mine_active.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "alpha_bbox": [
+      0,
+      23,
+      1241,
+      1254
+    ],
+    "output_size": [
+      128,
+      128
+    ],
+    "sha256": "6fd12826cdc0f783b8ab5a0bbb26f3206e05ba81c9dd8026ca9d2ea6204a8900"
+  },
+  {
+    "id": "mine_depleted",
+    "source": "sources/mine_depleted.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "alpha_bbox": [
+      2,
+      53,
+      1242,
+      1254
+    ],
+    "output_size": [
+      128,
+      128
+    ],
+    "sha256": "2f3ded50fbdb1a4f3e8028fafed26709755c446ea68d504281f1c89f9a4b3e14"
+  },
+  {
+    "id": "mine_idle",
+    "source": "sources/mine_idle.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "alpha_bbox": [
+      0,
+      11,
+      1240,
+      1254
+    ],
+    "output_size": [
+      128,
+      128
+    ],
+    "sha256": "f769b963b0166e2289998265fcaecf2f7c8d87fcca92b5e5c1a7ab50e60ba03e"
+  },
+  {
+    "id": "rubble_idle",
+    "source": "sources/rubble_idle.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "alpha_bbox": [
+      0,
+      17,
+      1242,
+      1254
+    ],
+    "output_size": [
+      128,
+      128
+    ],
+    "sha256": "1ae631c5394f3933a932eddf2528b94580e51606c1221f27c336759c0e7b2bcf"
+  },
+  {
+    "id": "rubble_working",
+    "source": "sources/rubble_working.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "alpha_bbox": [
+      0,
+      0,
+      1230,
+      1237
+    ],
+    "output_size": [
+      128,
+      128
+    ],
+    "sha256": "43e311db49dd05ce01d38ff23377d372b1610cf36bb2137c3c179c73441de123"
+  },
+  {
+    "id": "statue_basic_frost",
+    "source": "sources/statue_basic_frost.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "alpha_bbox": [
+      0,
+      0,
+      1224,
+      1254
+    ],
+    "output_size": [
+      128,
+      128
+    ],
+    "sha256": "353786db5acdcacf5ef1154b10e91ada4193894e4353a74a4875a36e7d9091d9"
+  },
+  {
+    "id": "statue_basic_moss",
+    "source": "sources/statue_basic_moss.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "alpha_bbox": [
+      0,
+      9,
+      1248,
+      1254
+    ],
+    "output_size": [
+      128,
+      128
+    ],
+    "sha256": "3e7d18ca492302c27a6fa090dbd5b74b00d775072d1b4c22ec6169a19d6d0fc4"
+  },
+  {
+    "id": "statue_cannon_frost",
+    "source": "sources/statue_cannon_frost.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "alpha_bbox": [
+      0,
+      21,
+      1236,
+      1254
+    ],
+    "output_size": [
+      128,
+      128
+    ],
+    "sha256": "7ea02a8f003c48793122d9a9eeac1fea2bd91a3ce43de3fdaa5145a12670e2cc"
+  },
+  {
+    "id": "statue_cannon_moss",
+    "source": "sources/statue_cannon_moss.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "alpha_bbox": [
+      0,
+      9,
+      1240,
+      1254
+    ],
+    "output_size": [
+      128,
+      128
+    ],
+    "sha256": "fe62ddc22dc700ebe79788d15437d547f753573d75337f8c6c0adc69d567fdfb"
+  },
+  {
+    "id": "statue_sniper_frost",
+    "source": "sources/statue_sniper_frost.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "alpha_bbox": [
+      0,
+      31,
+      1240,
+      1254
+    ],
+    "output_size": [
+      128,
+      128
+    ],
+    "sha256": "0302162ed4547543d277567039e1ccc59c55fadb19effd247bba6e9fff350f07"
+  },
+  {
+    "id": "statue_sniper_moss",
+    "source": "sources/statue_sniper_moss.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "alpha_bbox": [
+      0,
+      21,
+      1216,
+      1254
+    ],
+    "output_size": [
+      128,
+      128
+    ],
+    "sha256": "2c2fbc54435a1036479664fe0c169a8675eb390cf7839a6338e03ec8b911ae26"
+  }
+]

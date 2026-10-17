@@ -9,6 +9,7 @@ extends Node2D
 ## RF-06: puerta de piedra donde termina un camino dentro del mapa.
 const GATE: Texture2D = preload("res://assets/sprites/map/rendered/gate.png")
 
+var _field: ObstacleField
 var _ground: TileMapLayer
 var _exit_cells: Array[Vector2i] = []
 var _theme: StringName = MapThemes.DEFAULT
@@ -66,10 +67,9 @@ func _draw_legend(cell: Vector2i, origin: Vector2, rng: RandomNumberGenerator, d
 	var tile: float = Rules.TILE_SIZE
 	if MapDrawings.kind(drawing) == MapDrawings.KIND_OBJECT:
 		_draw_ground(origin, rng)
-		if MapDrawings.texture(drawing) != null:
-			draw_texture_rect(MapDrawings.texture(drawing), Rect2(origin, Vector2(tile, tile)), false)
-		else:
-			_draw_new_object(drawing, origin, tile)
+		var texture: Texture2D = object_texture(cell, drawing)
+		if texture != null:
+			draw_texture_rect(texture, Rect2(origin, Vector2(tile, tile)), false)
 		if _removable_cells.has(cell):
 			_draw_removable_mark(origin, tile)
 		return
@@ -97,25 +97,21 @@ func _draw_legend(cell: Vector2i, origin: Vector2, rng: RandomNumberGenerator, d
 		draw_line(a + inward, a + along + inward, Color(colors["light"], 0.55), 2.0)
 
 
-## Dibujos provisionales M50 hechos con figuras simples hasta que llegue el arte final.
-func _draw_new_object(drawing: String, origin: Vector2, tile: float) -> void:
-	var dark: Color = Color("#49362c")
-	var mid: Color = Color("#806047")
-	var light: Color = Color("#b08a5f")
-	match drawing:
-		"escombro":
-			draw_colored_polygon(PackedVector2Array([origin + Vector2(12, 39), origin + Vector2(20, 25), origin + Vector2(29, 34), origin + Vector2(38, 19), origin + Vector2(51, 41), origin + Vector2(44, 53), origin + Vector2(17, 51)]), mid)
-			draw_line(origin + Vector2(20, 43), origin + Vector2(44, 43), dark, 3.0)
-			draw_line(origin + Vector2(29, 33), origin + Vector2(32, 43), light, 2.0)
-		"mina":
-			draw_colored_polygon(PackedVector2Array([origin + Vector2(12, 48), origin + Vector2(18, 27), origin + Vector2(46, 27), origin + Vector2(53, 48)]), dark)
-			draw_line(origin + Vector2(17, 28), origin + Vector2(47, 28), light, 4.0)
-			draw_line(origin + Vector2(20, 32), origin + Vector2(26, 46), mid, 3.0)
-			draw_line(origin + Vector2(44, 32), origin + Vector2(38, 46), mid, 3.0)
-		"bosque_explotable":
-			for offset: Vector2 in [Vector2(18, 39), Vector2(32, 29), Vector2(46, 40)]:
-				draw_colored_polygon(PackedVector2Array([origin + offset + Vector2(0, -13), origin + offset + Vector2(-9, 2), origin + offset + Vector2(9, 2)]), Color("#426b3d"))
-				draw_rect(Rect2(origin + offset + Vector2(-2, 2), Vector2(4, 9)), dark)
+## El padre conecta la vista al campo real; las señales solo piden redibujar.
+func bind_field(field: ObstacleField) -> void:
+	_field = field
+	field.job_started.connect(queue_redraw.unbind(1))
+	field.job_cancelled.connect(queue_redraw.unbind(2))
+	field.job_finished.connect(queue_redraw.unbind(2))
+	field.site_changed.connect(queue_redraw.unbind(1))
+	queue_redraw()
+
+
+func object_texture(cell: Vector2i, drawing: String) -> Texture2D:
+	if drawing == "estatua":
+		return MapDrawings.statue_texture(cell, _theme)
+	var state: ObstacleField.State = ObstacleField.State.DISABLED if _field == null else _field.state_of(cell)
+	return MapDrawings.state_texture(drawing, state)
 
 
 func _draw_removable_mark(origin: Vector2, tile: float) -> void:

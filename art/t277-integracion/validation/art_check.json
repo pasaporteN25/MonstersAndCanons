@@ -1,0 +1,83 @@
+{
+  "assets_identical_to_approved": [
+    {
+      "file": "assets/sprites/map/rendered/central_1.png",
+      "sha256": "d824fe2c35a95301df9088f978e2dd4a2d18b234d91f0d41c79e4cce9b371437"
+    },
+    {
+      "file": "assets/sprites/map/rendered/central_2.png",
+      "sha256": "48b94d19df46e3d96d35c83d34cfb1e2812a38279523f17c2065c09bc2d738b6"
+    },
+    {
+      "file": "assets/sprites/map/rendered/central_3.png",
+      "sha256": "bdc5ba116e99175a77caf905a580697443bb1eae891d4b5fdf0b13cfd34dbcae"
+    },
+    {
+      "file": "assets/sprites/map/rendered/central_4.png",
+      "sha256": "9d32ce92f62d4d4d3f3803f59a9d18fe54591bc4496fe905ef3ef13a293b08e6"
+    },
+    {
+      "file": "assets/sprites/map/rendered/forest_active.png",
+      "sha256": "fc67bb3ca942ab840350336d02f19911765a1542c05aef40f14031ed5b39e4a5"
+    },
+    {
+      "file": "assets/sprites/map/rendered/forest_depleted.png",
+      "sha256": "ab58f3d6dbb3582e8b9762785dc43c54fb2185250081295e4f9b06c9ae5607e5"
+    },
+    {
+      "file": "assets/sprites/map/rendered/forest_idle.png",
+      "sha256": "f07c088aa6da71f8b946e1043beaebccc57d9006677c25b0c2cbf11ae197c351"
+    },
+    {
+      "file": "assets/sprites/map/rendered/mine_active.png",
+      "sha256": "69d819eb219c4dd56827f59bfcce983915a187af4faa4d897ff8575a8e0d7263"
+    },
+    {
+      "file": "assets/sprites/map/rendered/mine_depleted.png",
+      "sha256": "3c8b13fdeaec2165ae3171d246b5b74bd06c22615de8bbce11a330fbd9101d9f"
+    },
+    {
+      "file": "assets/sprites/map/rendered/mine_idle.png",
+      "sha256": "a5aae49f49264a57c27af5c5907391c2ae63a407033e95827ec29e55359712a4"
+    },
+    {
+      "file": "assets/sprites/map/rendered/rubble_idle.png",
+      "sha256": "e8bfd55a9c452217c48693fe22fcfc66be7ecfdd5127f2f55e1365d3f9c5f087"
+    },
+    {
+      "file": "assets/sprites/map/rendered/rubble_working.png",
+      "sha256": "905d531f54252048e064fc621f51d150802b84b824fd3fd7007e68575a72e27c"
+    },
+    {
+      "file": "assets/sprites/map/rendered/statue_basic_frost.png",
+      "sha256": "31a99b3c6ab6f76634c076bc3ac8032b35d4ab40e49fc6b22c8651eee210fe4a"
+    },
+    {
+      "file": "assets/sprites/map/rendered/statue_basic_moss.png",
+      "sha256": "ae8f7f938f0b952a1e91207b23e83109409d6469f34e9ac10dec1da5a232387f"
+    },
+    {
+      "file": "assets/sprites/map/rendered/statue_cannon_frost.png",
+      "sha256": "c20244f468870000c48b87f9a45350d4dbebb1440c2c821f6cc36fefbfaf2671"
+    },
+    {
+      "file": "assets/sprites/map/rendered/statue_cannon_moss.png",
+      "sha256": "3c1d4547a4b4d89ad1c3ea8a095aead65c3a10a2c97a8b05b12e8d4e91682c22"
+    },
+    {
+      "file": "assets/sprites/map/rendered/statue_sniper_frost.png",
+      "sha256": "ab77b66ecc73ee4672b7905649c1992b3cee5f7752dc180988c98e85ad3e78b0"
+    },
+    {
+      "file": "assets/sprites/map/rendered/statue_sniper_moss.png",
+      "sha256": "e653457987204eade61c34ecc8f39f097637262a39bbba33482773c5967bbf8e"
+    }
+  ],
+  "central_reconstructs_master": true,
+  "captures": 32,
+  "resolution": [
+    1280,
+    720
+  ],
+  "state_checks": "passed"
+}

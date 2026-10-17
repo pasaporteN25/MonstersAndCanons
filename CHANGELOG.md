@@ -2,6 +2,47 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Ajustes del HUD móvil tras probar el PR #10 *(T287, 2026-10-16)*
+
+Carrito y salida reciben un solo gesto, sin doble pulsación del mouse emulado. Carrito, X, tilde y cruz son más chicos y redondeados, con íconos de marfil y bronce; la tilde ya no repite el precio. El catálogo y la barra inferior comparten el tema oscuro del juego. Se eliminan las franjas grises de los márgenes y la línea que atravesaba la barra superior. El precio sigue en el catálogo y la barra; si no se puede construir, la barra muestra el motivo.
+
+## Arte aprobado de La Cuadrilla *(T286, 2026-10-16)*
+
+El Ratero usa el concepto B elegido por Lucas y el Cargador el concepto A, con sus atlas de caminata en cuatro direcciones. Se calibró su tamaño visual para acercarlo al del Ladrón; radios, vida, velocidad, robo y oleadas no cambiaron.
+
+## Arte aprobado en el mapa *(T277, 2026-10-16)*
+
+Las estatuas de los niveles 1, 3 y 5 ahora representan Cañón, Francotirador y Ametralladora tallados en piedra con musgo y pedestal; siguen siendo decoración sin selección ni alcance. Mina y bosque explotable muestran dibujos renderizados distintos al habilitarse y agotarse; los escombros cambian durante la demolición. La Central del nivel 15 usa el edificio aprobado, continuo sobre sus cuatro casillas. Se conservan suelos, flores, torres, casillas y reglas de juego.
+
+## Niveles 2 y 7 más justos *(T279, 2026-10-16)*
+
+El bot confirmó que los cambios de oleadas alivian los picos sin cambiar el aumento de vida. El nivel 2 ahora tiene un Jefe y no trae los 12 Blindados finales; el nivel 7 reduce los Rápidos de las oleadas 2, 11 y 18 y los Voladores de la 18. En cinco semillas, `mix` gana el nivel 2 con 16 vidas y `smart` con 17; en el nivel 7 ganan `smart` (5–6), `mix` (12), mejoras tempranas (9–11) y `demoler` (13). La regla de oro sigue cumpliéndose y los niveles 13, 14 y 15 conservaron sus mínimos (5, 3 y 2 vidas).
+
+Lucas todavía tiene que jugar 1 → 2 → 3 y 6 → 7 → 8, además de las partidas específicas de T280. No se hicieron partidas humanas; falta esa validación antes de reenviar el juego al tester.
+
+## Interfaz para celular: modo, gestos, cámara, catálogo y barra de torre *(T271 a T276, 2026-10-16)*
+
+- **Opciones → Interfaz** permite elegir «Automática», «Celular» o «PC». La elección se guarda y se aplica al abrir la próxima partida; no cambia una partida en curso.
+- En modo Celular, la barra superior crece a 64 px, muestra Pausa y velocidad con botones de 56 px, y oculta «← Menú» y los atajos de teclado. Los números de esta interfaz se cargan desde `data/ui/mobile_ui.json`; si el archivo está dañado, se usan los valores por omisión.
+- **Construcción en dos pasos:** al elegir una torre aparece un fantasma; tocar mueve el fantasma y la tilde construye. La cruz o `Esc` cancelan; un doble toque rápido en una misma casilla también confirma. Un toque, arrastre o gesto de dos dedos no compra.
+- **Zoom y movimiento del mapa:** en celular, pinza para acercar o alejar, dos dedos para mover y «Ver todo» para volver al encuadre. En PC, rueda para acercar y alejar alrededor del puntero y botón central para desplazar; no aparece un control nuevo.
+- **Carrito y salida:** en modo Celular, el carrito y la X flotan sobre el mapa. Se arrastran hasta el borde izquierdo o derecho, recuerdan su ubicación por dispositivo y se apartan temporalmente del fantasma. El carrito abre un catálogo de torres y, cuando el nivel los usa, una pestaña de infraestructura; las opciones que no se pueden elegir muestran el motivo. La X muestra la confirmación de salida de siempre y, al probar desde el editor, vuelve directo al editor.
+- **El catálogo no pausa la partida:** al elegir una torre aparece el fantasma; las herramientas de demolición y extracción se eligen allí y se aplican al tocar el objeto compatible del mapa. Tocar afuera o usar «atrás» cierra el catálogo sin enviar ese toque al mapa.
+- **La barra inferior móvil** alterna entre una sugerencia con las oleadas, la torre fantasma con tilde/cruz duplicadas y la torre elegida con nivel, estadísticas, apuntado, mejora y venta protegida por dos toques. Una mejora bloquea el botón durante 0,35 s; la venta armada expira y el toque a 8 px debajo de «Mejorar» no la activa.
+- **La PC conserva su interfaz actual.** La medición en un celular real y las capturas de los niveles 1 y 15 quedan pendientes.
+
+## Lo que viene al celular: insignias y estatuas *(M58, spec del 2026-10-16)*
+
+**Esto es lo que Lucas pidió y todavía falta implementar:**
+
+- **Un carrito flotante** abre el catálogo de torres sobre el mapa y se cierra solo al elegir una; **una X flotante** lleva al menú (con la confirmación de siempre). Los dos se **arrastran y se pegan al borde** izquierdo o derecho, y el juego recuerda dónde los dejaste.
+- **Se coloca con una torre fantasma:** tocás una casilla, ves cómo queda, y confirmás con la **tilde** (o cancelás con la **cruz**). **Nada se compra al apoyar el dedo.** Al colocar, la torre se deselecciona.
+- **Zoom con los dedos:** pinza para acercar y alejar, dos dedos para mover el mapa y un botón «Ver todo». En la computadora, con la rueda del mouse y el botón del medio.
+- **La barra de abajo muestra la torre elegida:** nombre, nivel, estadísticas, «Mejorar» (con el costo o el motivo si no se puede) y «Vender», que pide un segundo toque.
+- **Las tarjetas de nivel ya muestran las torres como insignias de bronce** (T270, en PC y en celular).
+- **La PC queda igual**; el selector para forzar el modo celular o de PC ya está en Opciones.
+- **Las estatuas de los niveles 1, 3 y 5 ya son torres de piedra** con el arte aprobado (T277).
+
 ## La intro: siete láminas con texto, que se pueden omitir y volver a ver *(T242, 2026-10-11)*
 
 - **Al tocar «Jugar» por primera vez se ve una intro de siete láminas** (unos 50 segundos) con el texto abajo y un fundido entre una y otra: la nave, qué lleva, los años de viaje, el planeta seco con un único punto verde, la bajada, los motores apagados y el oasis. Cuenta la llegada; no explica cómo se juega.
@@ -25,7 +66,7 @@ Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle t�
 - **Dos enemigos nuevos, el Ratero y el Cargador.** Son criaturas que **andan en banda**: el **Ratero** es chico y rapidísimo (14 de vida, velocidad 2,2, quita 1 vida) y el **Cargador** es grande y lento (110 de vida, armadura 1, quita 2 vidas). **Los dos roban oro** como el Ladrón, pero **cada uno por su cuenta**: el Ratero 2 de oro cada 2 segundos y el Cargador 4, sin bajar nunca de 10. Se barren con **torres de área** (Ratero) y con **daño sostenido** (Cargador); el Hielo los frena.
 - **Dónde salen.** Debutan en el **nivel 7** (oleada 8) y vuelven en el **10**, el **13** y el **14**, **cuatro veces en cada uno**, siempre en oleadas sin Guardián, Curandero, Chamán, Espejo ni Soberano. Los demás niveles no cambian, y el 15 tampoco.
 - **Wiki.** Los dos tienen su entrada en **Enemigos** (se abre la primera vez que los ves, con la línea «Robo» y los niveles donde aparecen) y hay un artículo nuevo en **Lore**, **«La Cuadrilla»**, que se abre al ganar el nivel 7; los artículos siguientes conservan su orden.
-- **Todavía sin dibujo propio:** por ahora se ven como una **forma de color** (un rombo ocre el Ratero y un hexágono más oscuro el Cargador) y en la Wiki aparecen sin ilustración. El arte llega después.
+- **Arte provisional, pendiente de rehacerse:** por ahora se ven como una **forma de color** (un rombo ocre el Ratero y un hexágono más oscuro el Cargador); la Wiki todavía no muestra ilustraciones. Otro agente prepara las nuevas versiones (2026-10-16).
 - **Modo Asedio:** los mapas 7, 10, 13 y 14 heredan a la Cuadrilla, así que ahí se vuelven más difíciles.
 - Los números del Ladrón, del Soberano, del Coloso y de las torres **no cambian**.
 
@@ -49,6 +90,7 @@ Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle t�
 - **Wiki:** al ganar el 15 se abre el artículo de Lore **«La Central»** (con lo que dicen los colonos del Coloso); y los de los niveles 11 («Los pozos») y 14 («Los poblados vacíos») ya se ven al ganar esos niveles. **Enemigos** suma al **Coloso** (con la corona de «Peligroso») y al **Pedazo**, que se abren cuando los ves por primera vez.
 - Sin Ametralladora ni Lanzamisiles. **Se gana sin tocar la mina, los bosques ni los escombros.**
 - Para quien arma mapas: la **leyenda** de un mapa puede tener ahora hasta **12 letras** (eran 10), y hay ocho dibujos nuevos para las piezas de la central y de la cadena de abastecimiento.
+- **Aprobación de arte (2026-10-16):** Lucas aprobó el arte del Coloso y su Pedazo para integración. El Ratero y el Cargador se van a rehacer; los nuevos dibujos los prepara otro agente y todavía no están integrados.
 
 ## Tarjetas de nivel sin superposiciones *(T250, 2026-10-09)*
 

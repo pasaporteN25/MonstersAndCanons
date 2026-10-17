@@ -51,9 +51,8 @@
      {"enemigo": "armored", "cantidad": 12, "cada": 0.8, "desde": 3.0}],
     [{"enemigo": "boss", "cantidad": 2, "cada": 4.0},
      {"enemigo": "fast", "cantidad": 20, "cada": 0.3, "desde": 4.0}],
-    [{"enemigo": "boss", "cantidad": 2, "cada": 3.0},
+    [{"enemigo": "boss", "cantidad": 1, "cada": 3.0},
      {"enemigo": "tank", "cantidad": 12, "cada": 1.0, "desde": 2.0},
-     {"enemigo": "flyer", "cantidad": 16, "cada": 0.4, "desde": 6.0},
-     {"enemigo": "armored", "cantidad": 12, "cada": 0.8, "desde": 10.0}]
+     {"enemigo": "flyer", "cantidad": 16, "cada": 0.4, "desde": 6.0}]
   ]
 }

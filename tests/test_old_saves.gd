@@ -229,3 +229,29 @@ func test_fields_with_the_wrong_type_are_ignored_one_by_one() -> void:
 	assert_eq(SaveManager.scores(&"level_01").size(), 1)
 	assert_eq(SaveManager.hall_total(), 0)
 	assert_true(SaveManager.collected_sources(&"technology").is_empty())
+
+
+func test_ui_prefs_are_additive_and_broken_fields_default_individually() -> void:
+	_write('{"version":1,"ui_prefs":{"cart_side":"arriba","cart_y":"x","exit_side":"right","exit_y":2}}')
+	SaveManager.load_save()
+	var prefs: UiPrefs = SaveManager.get_ui_prefs()
+	assert_eq(prefs.to_dict(), {"cart_side": "right", "cart_y": 0.45, "exit_side": "right", "exit_y": 0.1})
+	assert_true(SaveManager.save())
+	var file := FileAccess.open(PATH, FileAccess.READ)
+	var parsed := JSON.new()
+	assert_eq(parsed.parse(file.get_as_text()), OK)
+	assert_true(parsed.data.has("ui_prefs"), "la preferencia se agrega al guardado sin cambiar su versión")
+	assert_eq(int(parsed.data["version"]), SaveManager.SAVE_VERSION)
+
+
+func test_old_save_without_ui_prefs_uses_defaults() -> void:
+	_write(SAVE_T40)
+	SaveManager.load_save()
+	assert_eq(SaveManager.get_ui_prefs().to_dict(), {"cart_side": "right", "cart_y": 0.45, "exit_side": "left", "exit_y": 0.1})
+
+
+func test_ui_prefs_with_wrong_top_level_type_use_defaults() -> void:
+	for raw: String in ["3", "\"mal\"", "[]"]:
+		_write('{"version":1,"ui_prefs":%s}' % raw)
+		SaveManager.load_save()
+		assert_eq(SaveManager.get_ui_prefs().to_dict(), {"cart_side": "right", "cart_y": 0.45, "exit_side": "left", "exit_y": 0.1})

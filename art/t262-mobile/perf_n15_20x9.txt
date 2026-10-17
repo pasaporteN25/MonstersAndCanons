@@ -1,0 +1,15 @@
+=== n15_20x9 res=1600x720 args=level=15 from=27 inicio 02:52:58
+UPTIME_ANTES  02:52:58 up 10 days,  7:51,  1 user,  load average: 5,59, 5,61, 3,77
+BOTS_ANTES 9
+PERF nivel 15 «La Central» · NVIDIA GeForce GTX 1660 SUPER · ventana (1777, 1000) · sin vsync · oleadas jugadas 28 a 30 de 30
+PERF defensa: 64 torres, 30475 de oro, 20 vidas
+PERF   detalle oleada 28: proceso 11.9 ms · física 6.1 ms por frame · 1323 llamadas de dibujo · hasta 480 nodos
+PERF oleada 28: 153 FPS promedio · 1% más lento 13.5 ms (74 FPS) · peor frame 52.8 ms · 26 de 15775 frames > 16,6 ms · hasta 28 enemigos · 64 torres · 5 demoliciones · vidas 20 · 103 s
+PERF   detalle oleada 29: proceso 9.5 ms · física 10.6 ms por frame · 1409 llamadas de dibujo · hasta 555 nodos
+PERF oleada 29: 148 FPS promedio · 1% más lento 13.8 ms (72 FPS) · peor frame 55.1 ms · 9 de 5439 frames > 16,6 ms · hasta 47 enemigos · 69 torres · 0 demoliciones · vidas 20 · 37 s
+PERF   detalle oleada 30: proceso 9.0 ms · física 5.8 ms por frame · 1489 llamadas de dibujo · hasta 533 nodos
+PERF oleada 30: 130 FPS promedio · 1% más lento 16.6 ms (60 FPS) · peor frame 52.6 ms · 161 de 16403 frames > 16,6 ms · hasta 43 enemigos · 69 torres · 0 demoliciones · vidas 20 · 127 s
+PERF RESUMEN nivel 15: 28: 153 FPS (peor 53 ms) | 29: 148 FPS (peor 55 ms) | 30: 130 FPS (peor 53 ms)
+UPTIME_DESPUES  02:57:28 up 10 days,  7:55,  1 user,  load average: 6,33, 5,91, 4,37
+BOTS_DESPUES 9
+=== fin 02:57:28

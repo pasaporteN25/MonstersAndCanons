@@ -1,0 +1,13 @@
+{
+  "sources": 15,
+  "central_quarters_pixel_identical": true,
+  "sprite_size": [
+    128,
+    128
+  ],
+  "central_size": [
+    256,
+    256
+  ],
+  "transparent_sources": true
+}

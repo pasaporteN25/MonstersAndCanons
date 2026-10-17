@@ -194,6 +194,10 @@ Con el modo de pruebas activo (Opciones), **Jugar**: arriba de las tarjetas hay 
 
 Los `.json` de `%APPDATA%\Godot\app_userdata\JuegoA\maps` (la misma carpeta donde guarda el editor) aparecen en **Jugar → Mapas de la comunidad**, en el `.exe` normal y en el de pruebas. Para comprobarlo: guardar un mapa desde el editor (en cualquiera de los dos `.exe`) y buscarlo en la solapa. Cada versión tiene su propio guardado, así que el progreso en esos mapas no se comparte entre el `.exe` normal y el de pruebas. Detalles en [`CONTENIDO.md`](CONTENIDO.md).
 
+### 6.1.2 Probar el modo celular sin celular (M58; cuando T271 esté hecha)
+
+La spec M58 (RF-502) agrega en **Opciones** un selector **«Interfaz»**: *Automática* (celular si el aparato lo es, PC si no), *Celular* y *PC*. Para ver el modo celular en una computadora: **Opciones → Interfaz → Celular**, y abrir una partida (no cambia una que ya está en curso). El mouse hace de dedo: un clic es un toque y arrastrar es un arrastre de un dedo. **La pinza con dos dedos no se puede probar así** (el zoom se prueba con la rueda y el botón central); para eso y para medir milímetros hace falta el celular, con el kit de `specs/tareas/informes/T262-analisis-mobile.md` §6. **Hasta que T271 esté hecha, este paso no existe.** La posición de los botones flotantes queda en `save.json` (clave `ui_prefs`): para volver a los lugares de fábrica, borrar esa clave o el archivo (ver «Dónde guarda las cosas el juego»).
+
 ### 6.2 La versión para GNU/Linux
 
 ```bash
@@ -285,6 +289,8 @@ Se usa `--export-debug` porque la versión de **prueba** se firma sola con la cl
 | Configuración del editor (rutas de Android, etc.) | `%APPDATA%\Godot\editor_settings-4.7.tres` |
 | Plantillas de exportación | `%APPDATA%\Godot\export_templates\4.7.2.stable` |
 | Caché del proyecto (se regenera sola) | `JuegoA/.godot/` |
+
+> 📱 **M58 (cuando esté programada):** `save.json` suma `settings.ui_mode` (la opción «Interfaz») y la clave `ui_prefs` (lado y altura de los botones flotantes, por dispositivo). Son aditivas: `SAVE_VERSION` no cambia y, si faltan o están rotas, el juego usa los valores por omisión.
 
 > 💡 **Empezar el progreso de cero:** borrar `save.json`. El `.exe` y el juego abierto desde el editor **comparten** ese archivo.
 

@@ -12,14 +12,6 @@ const PATH_PATTERN: String = "res://[A-Za-z0-9_./\\-]+\\.(?:svg|png|wav|ogg|mp3|
 ## sin cablear. Si se usan, se sacan de esta lista; si se borran, también. Un dibujo NUEVO sin uso hace fallar el test.
 const KNOWN_UNUSED: Array[String] = [
 	"res://assets/sprites/ui/coleccion_disruptor.svg", "res://assets/sprites/ui/stat_resources.svg",
-	"res://assets/sprites/map/roca_removible_trabajo.svg", "res://assets/sprites/map/despejado_ruinas.svg",
-	"res://assets/sprites/map/bosque_explotable_agotado.svg", "res://assets/sprites/map/reserva_vacia.svg",
-	"res://assets/sprites/map/despejado_pradera.svg", "res://assets/sprites/map/bosque_explotable_activo.svg",
-	"res://assets/sprites/map/reserva_llena.svg", "res://assets/sprites/map/mina_agotada.svg",
-	"res://assets/sprites/map/escombro_trabajo.svg", "res://assets/sprites/map/marca_pieza.svg",
-	"res://assets/sprites/map/arbol_removible_trabajo.svg", "res://assets/sprites/map/despejado_bosque.svg",
-	"res://assets/sprites/map/arbol_removible.svg", "res://assets/sprites/map/mina_activa.svg",
-	"res://assets/sprites/map/roca_removible.svg", "res://assets/sprites/map/despejado_desierto.svg",
 	"res://assets/sprites/towers/rendered/disruptor_suppression_icon.png",
 	"res://assets/sprites/towers/rendered/cannon_level_3_icon.png",
 	"res://assets/sprites/towers/rendered/disruptor_suppression_arc_2.png",
@@ -27,8 +19,6 @@ const KNOWN_UNUSED: Array[String] = [
 	"res://assets/sprites/towers/rendered/cannon_level_2_icon.png",
 	"res://assets/sprites/towers/rendered/disruptor_suppression_arc_1.png",
 	"res://assets/sprites/towers/rendered/disruptor_pulse_ring.png",
-	"res://assets/sprites/enemies/rendered/healer_walk.png",
-	"res://assets/audio/music_loop.wav",  # la música de combate es music_combat; solo la nombran tests
 ]
 
 var _files: Dictionary = {}   # { ruta: texto } de todo lo que puede nombrar un recurso

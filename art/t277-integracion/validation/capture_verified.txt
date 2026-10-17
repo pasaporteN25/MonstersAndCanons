@@ -1,0 +1,40 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 580.178.04 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1660 SUPER
+
+T277: estatua sin selección ni torre en 1 (12, 5)
+T277: level_01_initial
+T277: level_01_active
+T277: level_01_depleted
+T277: level_01_cleared
+T277: estatua sin selección ni torre en 3 (10, 2)
+T277: level_03_initial
+T277: level_03_active
+T277: level_03_depleted
+T277: level_03_cleared
+T277: estatua sin selección ni torre en 5 (10, 1)
+T277: estatua sin selección ni torre en 5 (3, 4)
+T277: estatua sin selección ni torre en 5 (10, 6)
+T277: level_05_initial
+T277: level_05_active
+T277: level_05_depleted
+T277: level_05_cleared
+T277: level_11_initial
+T277: level_11_active
+T277: level_11_depleted
+T277: level_11_cleared
+T277: level_12_initial
+T277: level_12_active
+T277: level_12_depleted
+T277: level_12_cleared
+T277: level_13_initial
+T277: level_13_active
+T277: level_13_depleted
+T277: level_13_cleared
+T277: level_14_initial
+T277: level_14_active
+T277: level_14_depleted
+T277: level_14_cleared
+T277: level_15_initial
+T277: level_15_active
+T277: level_15_depleted
+T277: level_15_cleared

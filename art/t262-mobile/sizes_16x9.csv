@@ -1,0 +1,107 @@
+pantalla,control,ancho_virtual,alto_virtual,ancho_px_celular,alto_px_celular,ancho_mm,alto_mm,menor_a_7_6_mm
+menu,PlayButton «Jugar»,420,52,420,52,36.3,4.5,sí
+menu,RecordsButton «Récords»,420,52,420,52,36.3,4.5,sí
+menu,WikiButton «Wiki»,420,52,420,52,36.3,4.5,sí
+menu,EditorButton «Editor de mapas»,420,52,420,52,36.3,4.5,sí
+menu,OptionsButton «Opciones»,420,52,420,52,36.3,4.5,sí
+menu,QuitButton «Salir»,420,52,420,52,36.3,4.5,sí
+opciones,MusicSlider,392,52,392,52,33.9,4.5,sí
+opciones,SfxSlider,392,52,392,52,33.9,4.5,sí
+opciones,FullscreenCheck «Pantalla completa»,392,64,392,64,33.9,5.5,sí
+opciones,DamageNumbersCheck «Mostrar números de daño»,392,64,392,64,33.9,5.5,sí
+opciones,AdminButton «Activar modo de pruebas»,392,44,392,44,33.9,3.8,sí
+opciones,BackButton «Volver»,392,52,392,52,33.9,4.5,sí
+seleccion,CampaignTab «Campaña»,150,42,150,42,13.0,3.6,sí
+seleccion,@Button@25 «Asedio»,130,42,130,42,11.2,3.6,sí
+seleccion,CommunityTab «Mapas de la comunidad (0)»,320,42,320,42,27.6,3.6,sí
+seleccion,@Button@26,200,214,200,214,17.3,18.5,no
+seleccion,@Button@27,200,214,200,214,17.3,18.5,no
+seleccion,@Button@28,200,214,200,214,17.3,18.5,no
+seleccion,@Button@29,200,214,200,214,17.3,18.5,no
+seleccion,@Button@30,200,214,200,214,17.3,18.5,no
+seleccion,@Button@31,200,214,200,214,17.3,18.5,no
+seleccion,@Button@32,200,214,200,214,17.3,18.5,no
+seleccion,@Button@33,200,214,200,214,17.3,18.5,no
+seleccion,@Button@34,200,214,200,214,17.3,18.5,no
+seleccion,@Button@35,200,214,200,214,17.3,18.5,no
+seleccion,BackButton «Volver»,220,52,220,52,19.0,4.5,sí
+cartel_entrada,StartButton «Empezar»,133,56,133,56,11.5,4.8,sí
+partida_n01,PauseButton «Pausa  [P]»,130,32,130,32,11.2,2.8,sí
+partida_n01,ExitButton «← Menú»,80,32,80,32,6.9,2.8,sí
+partida_n01,SpeedButton «x1  [F]»,104,32,104,32,9.0,2.8,sí
+partida_n01,@Button@95 «50»,76,60,76,60,6.6,5.2,sí
+partida_n01,@Button@97 «100»,76,60,76,60,6.6,5.2,sí
+partida_n01,@Button@99 «75»,76,60,76,60,6.6,5.2,sí
+partida_n01,@Button@103 «150»,76,60,76,60,6.6,5.2,sí
+partida_n01,@Button@105 «90»,76,60,76,60,6.6,5.2,sí
+partida_n01,@Button@107 «100»,76,60,76,60,6.6,5.2,sí
+partida_n01,@Button@109 «110»,76,60,76,60,6.6,5.2,sí
+partida_n01,@Button@111 «130»,76,60,76,60,6.6,5.2,sí
+partida_n01,StartWaveButton «Empezar oleada»,244,56,244,56,21.1,4.8,sí
+panel_torre,TargetingButton «Apuntar: Primero»,242,32,242,32,20.9,2.8,sí
+panel_torre,UpgradeButton «Mejorar (60)  [U]»,242,34,242,34,20.9,2.9,sí
+panel_torre,SellButton «Vender (+35)  [S]»,242,32,242,32,20.9,2.8,sí
+panel_torre_hud,@Button@95 «50»,76,60,76,60,6.6,5.2,sí
+panel_torre_hud,@Button@97 «100»,76,60,76,60,6.6,5.2,sí
+panel_torre_hud,@Button@99 «75»,76,60,76,60,6.6,5.2,sí
+panel_torre_hud,@Button@103 «150»,76,60,76,60,6.6,5.2,sí
+panel_torre_hud,@Button@105 «90»,76,60,76,60,6.6,5.2,sí
+panel_torre_hud,@Button@107 «100»,76,60,76,60,6.6,5.2,sí
+panel_torre_hud,@Button@109 «110»,76,60,76,60,6.6,5.2,sí
+panel_torre_hud,@Button@111 «130»,76,60,76,60,6.6,5.2,sí
+panel_torre_hud,StartWaveButton «Empezar oleada»,244,56,244,56,21.1,4.8,sí
+pausa,ResumeButton «Continuar»,320,52,320,52,27.6,4.5,sí
+pausa,RetryButton «Reintentar»,320,52,320,52,27.6,4.5,sí
+pausa,OptionsButton «Opciones»,320,52,320,52,27.6,4.5,sí
+pausa,QuitButton «Salir al menú»,320,52,320,52,27.6,4.5,sí
+dialogo_salir,KeepButton «Seguir jugando»,196,52,196,52,16.9,4.5,sí
+dialogo_salir,LeaveButton «Salir al menú»,196,52,196,52,16.9,4.5,sí
+partida_n15,PauseButton «Pausa  [P]»,130,32,130,32,11.2,2.8,sí
+partida_n15,ExitButton «← Menú»,80,32,80,32,6.9,2.8,sí
+partida_n15,SpeedButton «x1  [F]»,104,32,104,32,9.0,2.8,sí
+partida_n15,@Button@173 «100»,76,60,76,60,6.6,5.2,sí
+partida_n15,@Button@175 «75»,76,60,76,60,6.6,5.2,sí
+partida_n15,@Button@179 «150»,76,60,76,60,6.6,5.2,sí
+partida_n15,@Button@181 «90»,76,60,76,60,6.6,5.2,sí
+partida_n15,@Button@183 «100»,76,60,76,60,6.6,5.2,sí
+partida_n15,@Button@185 «110»,76,60,76,60,6.6,5.2,sí
+partida_n15,@Button@187 «130»,76,60,76,60,6.6,5.2,sí
+partida_n15,@Button@190 «300 + 3»,76,60,76,60,6.6,5.2,sí
+partida_n15,StartWaveButton «Empezar oleada»,244,56,244,56,21.1,4.8,sí
+partida_n15,Tab_cannons «Cañones»,96,44,96,44,8.3,3.8,sí
+partida_n15,Tab_infrastructure «Infraestructura»,96,44,96,44,8.3,3.8,sí
+partida_n07,PauseButton «Pausa  [P]»,130,32,130,32,11.2,2.8,sí
+partida_n07,ExitButton «← Menú»,80,32,80,32,6.9,2.8,sí
+partida_n07,SpeedButton «x1  [F]»,104,32,104,32,9.0,2.8,sí
+partida_n07,@Button@267 «50»,76,60,76,60,6.6,5.2,sí
+partida_n07,@Button@269 «100»,76,60,76,60,6.6,5.2,sí
+partida_n07,@Button@271 «75»,76,60,76,60,6.6,5.2,sí
+partida_n07,@Button@275 «150»,76,60,76,60,6.6,5.2,sí
+partida_n07,@Button@277 «90»,76,60,76,60,6.6,5.2,sí
+partida_n07,@Button@279 «100»,76,60,76,60,6.6,5.2,sí
+partida_n07,@Button@281 «110»,76,60,76,60,6.6,5.2,sí
+partida_n07,@Button@283 «130»,76,60,76,60,6.6,5.2,sí
+partida_n07,StartWaveButton «Empezar oleada»,244,56,244,56,21.1,4.8,sí
+partida_n07,Tab_cannons «Cañones»,96,44,96,44,8.3,3.8,sí
+partida_n07,Tab_infrastructure «Infraestructura»,96,44,96,44,8.3,3.8,sí
+partida_n07_infraestructura,PauseButton «Pausa  [P]»,130,32,130,32,11.2,2.8,sí
+partida_n07_infraestructura,ExitButton «← Menú»,80,32,80,32,6.9,2.8,sí
+partida_n07_infraestructura,SpeedButton «x1  [F]»,104,32,104,32,9.0,2.8,sí
+partida_n07_infraestructura,StartWaveButton «Empezar oleada»,244,56,244,56,21.1,4.8,sí
+partida_n07_infraestructura,Tab_cannons «Cañones»,96,44,96,44,8.3,3.8,sí
+partida_n07_infraestructura,Tab_infrastructure «Infraestructura»,96,44,96,44,8.3,3.8,sí
+partida_n07_infraestructura,@Button@258 «Comprar»,205,26,205,26,17.7,2.2,sí
+wiki,@Button@311 «Enemigos»,150,46,150,46,13.0,4.0,sí
+wiki,@Button@312 «Torres»,150,46,150,46,13.0,4.0,sí
+wiki,@Button@313 «Colecciones»,157,46,157,46,13.6,4.0,sí
+wiki,@Button@314 «Guía»,150,46,150,46,13.0,4.0,sí
+wiki,@Button@315 «Lore 8/11»,150,46,150,46,13.0,4.0,sí
+wiki,@Button@463,284,54,284,54,24.5,4.7,sí
+wiki,@Button@467,284,54,284,54,24.5,4.7,sí
+wiki,@Button@471,284,54,284,54,24.5,4.7,sí
+wiki,@Button@475,284,54,284,54,24.5,4.7,sí
+wiki,@Button@479,284,54,284,54,24.5,4.7,sí
+wiki,@Button@483,284,54,284,54,24.5,4.7,sí
+wiki,@Button@487,284,54,284,54,24.5,4.7,sí
+wiki,@Button@491,284,54,284,54,24.5,4.7,sí
+wiki,@Button@302 «Volver»,220,48,220,48,19.0,4.1,sí

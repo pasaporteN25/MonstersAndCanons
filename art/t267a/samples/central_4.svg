@@ -1,0 +1,23 @@
+<!-- Cuarto 4 de la Central, mismo orden NO NE SO SE; muestra provisional; fondo transparente. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><defs><linearGradient id="stone" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="32.0" y2="128"><stop offset="0" stop-color="#d4ccb6"/><stop offset=".5" stop-color="#9b9584"/><stop offset="1" stop-color="#615f56"/></linearGradient><linearGradient id="metal" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="32.0" y2="128"><stop offset="0" stop-color="#b0babc"/><stop offset=".5" stop-color="#67777b"/><stop offset="1" stop-color="#343e45"/></linearGradient><linearGradient id="copper" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="32.0" y2="128"><stop offset="0" stop-color="#d3b380"/><stop offset=".5" stop-color="#95734c"/><stop offset="1" stop-color="#584333"/></linearGradient></defs><g transform="translate(-64 -64)" stroke="#2b2233" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="65" cy="114" rx="55" ry="7" fill="#2b2233" opacity=".18" stroke="none"/>
+<path d="M12 96 36 83 116 96 95 116 15 111Z" fill="url(#stone)"/>
+<path d="M15 105 95 110 116 94V102L95 120 15 114Z" fill="#626257"/>
+<path d="M17 54 39 41 98 47V99L76 111 17 101Z" fill="url(#stone)"/>
+<path d="M76 60 98 47V99L76 111Z" fill="#656b65"/>
+<path d="M11 53 36 30 93 35 106 48 77 65Z" fill="url(#copper)"/>
+<path d="M36 30 93 35 77 55 11 53Z" fill="#b49a6d"/>
+<path d="M77 55 106 48 77 65 11 59 11 53Z" fill="#68543d"/>
+<path d="M19 50 39 34 84 38" fill="none" stroke="#eee0bc" stroke-width="1.5"/>
+<path d="M29 36V15L39 11 46 15V34L39 39Z" fill="url(#metal)"/>
+<path d="M29 15 39 11 46 15 37 19Z" fill="#b3b8ac"/>
+<path d="M24 64 40 65V91L24 89Z" fill="#3b4747"/>
+<path d="M28 67 36 68V86L28 85Z" fill="#e0c28b"/>
+<path d="M47 72 56 65 70 67V100L47 98Z" fill="url(#metal)"/>
+<path d="M47 72 56 65 70 67 61 74Z" fill="#a7aea5"/>
+<path d="M61 74 70 67V100L61 104Z" fill="#344349"/>
+<path d="M48 78 60 79V84L48 83Z" fill="url(#copper)"/>
+<path d="M49 89 59 90M49 94 59 95" fill="none" stroke-width="1.8"/>
+<path d="M87 85 106 78V63L115 59V91L88 102Z" fill="url(#metal)"/>
+<path d="M106 64 115 60 119 64 109 68Z" fill="url(#copper)"/>
+<path d="M22 96 42 99" fill="none" stroke="#e9ddc0"/>
+<path d="M79 72 94 64M79 88 94 80" fill="none" stroke="#535d58"/></g></svg>

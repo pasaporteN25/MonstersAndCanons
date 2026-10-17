@@ -1,0 +1,4 @@
+<!-- Cruz marfil de puntas redondeadas y fondo transparente. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28">
+<path d="m8 8 12 12M20 8 8 20" fill="none" stroke="#f1d9bd" stroke-width="3" stroke-linecap="round"/>
+</svg>

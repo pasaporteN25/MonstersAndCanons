@@ -1325,3 +1325,109 @@ La campaña y sus 15 niveles, `LevelFile`, `LevelData`, `WaveSpawner`, `Rules`, 
 #### Lo que M57 no toca
 
 La campaña y sus niveles, `LevelFile`, la Wiki más allá de un botón, el epílogo, los créditos, los modos, el editor, la música y los efectos, y el formato del guardado salvo la clave nueva.
+
+### M58 / T269 · Interfaz para el celular (RF-502 a RF-515, D-097 y D-098)
+
+> **Estado: especificada en T269 (borrador, a la espera del OK de Lucas); sin programar.** La spec es **M58** (`01-spec.md`), las decisiones **D-097** y **D-098**, y las tareas **T270 a T277** (`03-tareas.md`). Los informes con las medidas y las capturas son los de **T262 a T265**. Los nombres de archivo de abajo son **propuestos**; los que ya existen están marcados.
+
+#### Qué hay hoy (leído en el código, no supuesto)
+
+- **Entrada táctil:** el juego no lee toques propios; Godot los convierte en clics del mouse (`emulate_mouse_from_touch`). `scenes/game/build_controller.gd` (existe) construye con el clic al **apoyar**, toma la casilla de `get_global_mouse_position()` y la vista previa sale de ahí (T262: P-02, P-12).
+- **Cámara:** `scenes/game/game.gd` (existe) crea una `Camera2D` con el zoom automático de RF-251; los alcances y los disparos no dependen de ella (D-037).
+- **Interfaz de la partida:** `scenes/game/hud.gd` y `hud.tscn` (existen) arman la barra de arriba (oro, vidas, oleada, Pausa, x1/x2 y «← Menú»), la de abajo (`BarLayout` en `scripts/logic/bar_layout.gd`, con torres, pestañas `bar_tabs.gd`, «Próxima oleada» y «Empezar oleada») y las muestran sobre una capa que **no** pasa por la cámara. `scenes/ui/tower_panel.gd` (existe) es el panel de torre de la derecha.
+- **Salir:** `game.gd` abre `scenes/ui/exit_dialog.gd` (existe) desde «← Menú» (RF-460).
+- **Guardado:** `scripts/autoload/save_manager.gd` (existe) tiene `DEFAULT_SETTINGS` (solo números y booleanos, `_read_settings` descarta lo demás) y claves aditivas como `_intro_seen` y `_collections`, que se leen con tolerancia.
+- **Detección:** `OS.has_feature("mobile")` ya se usa en `scenes/ui/main_menu.gd` (RF-210). No hay un «modo de interfaz».
+- **Tarjetas:** `scenes/ui/level_select.gd` (existe) arma el bloque de torres disponibles de cada tarjeta.
+- **Qué no hay:** zoom del jugador, ningún botón flotante, ninguna torre fantasma, ninguna clave `ui_mode` ni `ui_prefs`.
+
+#### Qué se agrega
+
+| Archivo (propuesto) | Qué es |
+|---|---|
+| `data/ui/mobile_ui.json` | **Los números** de M58 (RF-503, RF-504, RF-506, RF-507, RF-509, RF-512, RF-513): `boton_alto_px` 56, `barra_alta_px` 64, `separacion_px` 8, `flotante_min_px` 64, `flotante_min_mm` 6.0, `franja_px` 56, `toque_max_mm` 2, `pinza_gracia_ms` 150, `opacidad_con_fantasma` 0.45, `corrimiento_s` 0.2, `vender_rearmar_s` 3, `vender_min_s` 0.4, `mejorar_bloqueo_s` 0.35, `zoom_casilla_max_px` 96, `fantasma_distancia_botones` 1. Lo lee un `MobileUiConfig` (`RefCounted`) con valores por omisión y mensajes en castellano; **un archivo dañado usa los valores por omisión** (no bloquea el juego). |
+| `scripts/logic/ui_mode.gd` | `UiMode` (lógica pura, **testeable sin escena**): `resolve(setting: int, has_mobile_feature: bool) -> bool` (¿modo celular?; un valor fuera de 0 a 2 vale 0) y `read_setting(raw) -> int`. Una función estática `is_mobile()` que lee el `SaveManager` y se usa donde haga falta. |
+| `scripts/logic/touch_gesture.gd` | `TouchGesture` (lógica pura): recibe `down(index, pos, t)`, `move(index, pos, t)` y `up(index, pos, t)` y devuelve el gesto: `TAP`, `DRAG`, `PINCH`, `PAN` o `NONE`, aplicando RF-504 (un dedo que se movió más de `toque_max_mm`, dos dedos en algún momento, gracia de `pinza_gracia_ms`). **Sin nodos**, para probar cada regla con secuencias de toques armadas a mano. |
+| `scripts/logic/ghost_placement.gd` | `GhostPlacement` (lógica pura): el estado del fantasma (`cell`, `tower_id`, `valid`, `reason`, `size` 1 o 2), `move_by_cells(delta)`, `clamp_inside(map_size)` (el 2 × 2 hacia adentro, RF-505) y `can_confirm(gold, resources) -> {ok, motivo, faltan}`. Reusa la validez de `BuildController` y el cálculo de `origin_for` (RF-292). |
+| `scripts/logic/float_button_layout.gd` | `FloatButtonLayout` (lógica pura): `snap(pos, view) -> {side, y}` (el borde más cercano y la altura 0 a 1), `avoid(ghost_rect, buttons) -> {offsets}` (los corrimientos de RF-509 punto 2 y el choque entre botones) y `tick_side(...)` (de qué lado se abre la tilde). |
+| `scripts/logic/ui_prefs.gd` | `UiPrefs` (`RefCounted`): `read(raw) -> UiPrefs` con los cuatro campos y los **valores por omisión por campo** (RF-508), y `to_dict()`. Lo usan `SaveManager` (`ui_prefs`, clave aditiva, `SAVE_VERSION` no cambia) y los botones flotantes. |
+| `scenes/game/mobile_hud.gd` | `MobileHud` (`CanvasLayer` propio, por código como `IntroScreen`): los botones flotantes, el catálogo, la barra de la torre elegida y «Ver todo». Solo se crea si `UiMode.is_mobile()`. |
+| `scenes/game/camera_controller.gd` | `CameraController`: el zoom y el desplazamiento de la `Camera2D` de `game.gd` (RF-506): pinza y dos dedos en el celular, rueda y botón central en PC. Límites desde `MobileUiConfig` y el zoom de RF-251. |
+| `scenes/ui/level_select.gd` (existe) | Se redibuja el bloque de torres de la tarjeta con las Insignias (RF-514), sin cambiar qué torres aparecen. |
+
+**Qué cambia:**
+
+- `scripts/autoload/save_manager.gd`: `DEFAULT_SETTINGS` suma `"ui_mode": 0` (entero; `_read_settings` ya acepta enteros, y un valor fuera de 0 a 2 se lee como 0 en `UiMode.read_setting`); se suma la clave aditiva **`ui_prefs`** (`_ui_prefs: UiPrefs`, `get_ui_prefs()`, `set_ui_prefs()`), que se lee con tolerancia, **no sube `SAVE_VERSION`** y se escribe solo al soltar un botón arrastrado. Mismo patrón que `_intro_seen` (RF-498).
+- `scenes/ui/options_menu.gd` (existe): el selector «Interfaz».
+- `scenes/game/hud.gd` (existe): en el modo celular no crea «← Menú», sube el alto de Pausa y x1/x2, saca los atajos de los rótulos y agrega la cuenta atrás junto a la oleada; en PC no cambia ninguna línea de su comportamiento.
+- `scenes/game/build_controller.gd` (existe): en el modo celular **deja de construir al apoyar** y de usar el mouse emulado: delega el toque en `TouchGesture` y el fantasma en `GhostPlacement`; el camino de la PC (RF-43) queda intacto y se cubre con los tests actuales.
+- `scenes/game/game.gd` (existe): crea `CameraController` y `MobileHud` según el modo y pasa la altura de la barra de arriba al zoom automático.
+- `scenes/ui/tower_panel.gd` (existe): en el modo celular no se muestra; su contenido lo dibuja la barra de la torre elegida.
+
+#### Orden y dependencias
+
+1. **T270 · Tarjetas con Insignias** (RF-514): independiente; sirve en PC y celular.
+2. **T271 · Modo de interfaz, botones táctiles y barra de arriba** (RF-502, RF-503): base de todo lo del celular.
+3. **T272 · Gestos y torre fantasma** (RF-504, RF-505) y **T273 · Zoom** (RF-506): después de T271. Pueden ir en paralelo; el fantasma con zoom se prueba al final.
+4. **T274 · Botones flotantes y preferencia guardada** (RF-507 a RF-509, RF-511) y **T275 · Carrito y catálogo** (RF-510): necesitan T272; T275 necesita también T274.
+5. **T276 · Barra de la torre elegida** (RF-512, RF-513): después de T272.
+6. **T277 · Estatuas de torres** (RF-515, 🎨): independiente.
+
+*(Si la numeración difiere de `03-tareas.md`, vale el tablero.)*
+
+#### Cómo se prueba
+
+- **Lógica pura con tests de GUT** (sin cambiar de escena, `tests/*.gd`): `UiMode` (valores 0, 1, 2 y basura), `TouchGesture` (un toque justo, uno que se corre 1 y 3 mm, una pinza, una pinza con un dedo que se levanta antes, el dedo rezagado dentro de los 150 ms), `GhostPlacement` (1 × 1 y 2 × 2, borde, casilla ocupada, sin oro), `FloatButtonLayout` (adhesión, corrimiento, choque entre botones, lado de la tilde) y `UiPrefs` (ausente, tipo malo, lado inválido, altura fuera de rango, guardado viejo, ida y vuelta). Los guardados de prueba son `user://test_*.json` (`.claude/rules/tests.md`).
+- **Con la herramienta de toques** de T262 (`tools/mobile_probe.gd`, existe): secuencias de toques simulados sobre la partida real del nivel 1 y del 15, para confirmar que no se compra al apoyar, que la pinza y el arrastre no construyen y que 8 px debajo de «Mejorar» no venden.
+- **PC:** los tests existentes y el bot de balance (`tools/balance_sim.gd`) dan **lo mismo** que antes de M58 (RF-515 último criterio). Cualquier diferencia es un error.
+- **Capturas** en 1280 × 720 y en 20:9, con «Interfaz: Celular» en la PC.
+- **No se prueba** (no hay celular): el tacto real, la pinza con dedos de verdad, los milímetros físicos, la muesca, el rendimiento. Eso es el kit de T262 §6, en la máquina de Lucas, y hasta entonces todo queda como «analizado en escritorio con la proporción del celular».
+
+#### Riesgos
+
+- **Clics emulados y toques reales a la vez:** si el mapa sigue leyendo clics emulados, un toque se procesa dos veces (G8). T272 tiene que apagar el camino emulado **solo en el mapa** y dejar los botones como están.
+- **La barra de arriba más alta (64 px)** reduce el mapa: se recalcula el zoom de RF-251; en el nivel 15 la casilla puede bajar de 48 a 47 px. Se mide en T271.
+- **El catálogo abierto con la partida en marcha** puede tapar un ataque. Es la decisión por defecto 1; si molesta, el cambio es una línea.
+- **Infraestructura dentro del catálogo:** M53 arma sus pestañas con `bar_tabs.gd`; T275 comprueba que el flujo de demoler y extraer funciona con el catálogo cerrado.
+- **Un guardado con `ui_prefs` roto** no puede impedir jugar: la prueba de guardados dañados de T268a (`tools/verify_save.gd`) se amplía con ese caso.
+
+### M59 / T278 · Balance de los niveles 2 y 7 (RF-516 a RF-519, D-099)
+
+> **Estado: especificada en T278 (decidida por Lucas en G7; sin programar).** La spec es **M59** (`01-spec.md`), la decisión **D-099** y las tareas **T279** (aplicar y medir) y **T280** (partidas de Lucas). El informe con todas las mediciones es `specs/tareas/informes/T266-auditoria-dificultad.md`.
+
+#### Qué hay hoy
+
+- Los niveles son archivos de texto (`data/levels/level_02.json` y `level_07.json`, RF-203): cada oleada es una lista de grupos `{enemigo, cantidad, cada, desde, entrada}`. Cambiar una cantidad **no necesita código**.
+- El bot `tools/balance_sim.gd` lee el nivel de la campaña (`level=N`) o un archivo (`file=`), con `seed=`, `mejoras=` y `report=`; `check_rule=1` comprueba la regla de oro (RF-432). Los archivos de T266 (`tools/t266/*.json`) **no están en el repositorio**: se hicieron en una copia (variantes `l02_final_suave` y `l07_o2_o11_o18`).
+- Asedio carga los mismos mapas con `data/modos/asedio/modo.json` (porcentaje de vida por mapa, T258).
+
+#### Qué se cambia
+
+| Archivo | Cambio |
+|---|---|
+| `data/levels/level_02.json` | Oleada 15: `boss.cantidad` 2 → 1; se quita el grupo `armored` (12, cada 0.8, desde 10.0). |
+| `data/levels/level_07.json` | Oleada 2: los dos grupos `fast` 15 → 10. Oleada 11: `fast` (entrada A) 30 → 22. Oleada 18: `fast` 40 → 30 y `flyer` (entrada B) 25 → 20. |
+
+Nada más: ni `balance.json`, ni `.tres`, ni código, ni assets, ni los niveles 13 a 15 (RF-518).
+
+#### Cómo se prueba
+
+1. **Antes** (con los archivos sin tocar) y **después**, con `nice -n 19` y a lo sumo 4 procesos a la vez: niveles 2 y 7 con **5 semillas** (1 a 5) y las estrategias de la tabla de T266 §5.1 y §5.2 (`mix`, `smart`, `basic`, `naive` en el 2; `mix`, `smart`, `demoler`, `naive` en el 7; con y sin `mejoras=llenar` y `temprana`). Se compara con la referencia de T266 (criterio de aceptación de M59).
+2. **Regla de oro:** `godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- x check_rule=1`, 5 semillas, toda la campaña: «REGLA DE ORO: SE CUMPLE» y los mínimos del 13, 14 y 15 iguales que antes (hay que correrla **antes** también para tener con qué comparar).
+3. **Asedio:** `modo=asedio level=2` y `level=7` con la política de T258 (mapa 2 `smart`, mapa 7 `sin_recursos`, mejoras al llenar) y 5 semillas.
+4. **Tests de GUT:** la suite completa (los tests de niveles y de oleadas leen estos archivos: si alguno cuenta enemigos de la oleada 15 del 2 o de las 2, 11 o 18 del 7, **se actualiza ese número**, no el dato).
+5. **Partidas humanas (T280, las juega Lucas):** 1 → 2 → 3, 6 → 7 → 8 y las seis partidas de T266 §7. No las reemplaza ningún bot.
+6. **No se prueba** (límites): el tacto y el ojo humano (T280), el rendimiento y el celular.
+
+#### Riesgos
+
+- **Tests que cuentan enemigos** de esas oleadas (arriba, punto 4).
+- **El 7 de Asedio queda más parejo, no más fácil:** T266 midió 5 de 5 con 6 vidas (antes 1 a 10); una explicación posible, no verificada, es que con menos Rápidos el bot cobra menos oro. Se remide en T279.
+- **Que una partida humana contradiga al bot:** por RF-518 manda la partida humana y se pasa a la variante B del 2 (D-100) o se reabre el 7.
+
+### T287 · Correcciones del HUD móvil tras probar el PR #10
+
+1. Centralizar la captura de toque y mouse de los controles móviles; un gesto tiene un solo propietario, sin doble activación por mouse emulado. Cancelar al arrastrar; guardar solo al terminar el arrastre flotante.
+2. Aplicar el tema existente a catálogo y barra; íconos SVG propios en botones redondeados. Medidas desde mobile_ui.json y sus valores de respaldo. Mantener costo en catálogo/barra y motivo inválido en barra.
+3. Pintar detrás del mapa una textura de suelo del tema, sin cambiar la grilla, y dibujar un solo borde superior en su altura correcta.
+4. Regresión con eventos de entrada completos (mouse y toque), ambos bordes, arrastre y colocación; GUT completo y capturas 16:9/20:9. Exportar EXE/APK de prueba, sin dar por validado el tacto real.

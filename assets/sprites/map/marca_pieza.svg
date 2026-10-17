@@ -1,5 +1,0 @@
-<!-- Brillo plateado para señalar una pieza pendiente sobre el escombro; fondo transparente. -->
-<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
-<defs><linearGradient id="silver" x1="0" y1="0" x2=".25" y2="1"><stop stop-color="#fffdf0"/><stop offset=".5" stop-color="#dce7e8"/><stop offset="1" stop-color="#8599a3"/></linearGradient></defs>
-<path d="M16 1 19.5 11 30 16 19.5 20.5 16 31 12 20.5 2 16 12 11Z" fill="url(#silver)" stroke="#2b2233" stroke-width="1.5" stroke-linejoin="round"/><path d="m16 6 2 8 7 2-7 2-2 7-2-7-7-2 7-2Z" fill="#fff" opacity=".68"/>
-</svg>

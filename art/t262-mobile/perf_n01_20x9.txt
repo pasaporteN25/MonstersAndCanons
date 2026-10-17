@@ -1,0 +1,15 @@
+=== n01_20x9 res=1600x720 args=level=1 from=7 inicio 02:50:50
+UPTIME_ANTES  02:50:50 up 10 days,  7:49,  1 user,  load average: 4,70, 5,54, 3,48
+BOTS_ANTES 9
+PERF nivel 1 «Pradera» · NVIDIA GeForce GTX 1660 SUPER · ventana (1777, 1000) · sin vsync · oleadas jugadas 8 a 10 de 10
+PERF defensa: 123 torres, 12650 de oro, 20 vidas
+PERF   detalle oleada 8: proceso 21.5 ms · física 13.8 ms por frame · 1523 llamadas de dibujo · hasta 638 nodos
+PERF oleada 8: 132 FPS promedio · 1% más lento 14.0 ms (71 FPS) · peor frame 102.6 ms · 5 de 2027 frames > 16,6 ms · hasta 15 enemigos · 123 torres · 0 demoliciones · vidas 20 · 15 s
+PERF   detalle oleada 9: proceso 9.5 ms · física 7.5 ms por frame · 1529 llamadas de dibujo · hasta 581 nodos
+PERF oleada 9: 135 FPS promedio · 1% más lento 13.6 ms (74 FPS) · peor frame 49.9 ms · 2 de 2594 frames > 16,6 ms · hasta 16 enemigos · 123 torres · 0 demoliciones · vidas 20 · 19 s
+PERF   detalle oleada 10: proceso 9.4 ms · física 6.4 ms por frame · 1535 llamadas de dibujo · hasta 591 nodos
+PERF oleada 10: 132 FPS promedio · 1% más lento 15.0 ms (67 FPS) · peor frame 52.8 ms · 6 de 3240 frames > 16,6 ms · hasta 28 enemigos · 123 torres · 0 demoliciones · vidas 20 · 25 s
+PERF RESUMEN nivel 1: 8: 132 FPS (peor 103 ms) | 9: 135 FPS (peor 50 ms) | 10: 132 FPS (peor 53 ms)
+UPTIME_DESPUES  02:51:51 up 10 days,  7:50,  1 user,  load average: 5,63, 5,63, 3,64
+BOTS_DESPUES 9
+=== fin 02:51:51

@@ -34,6 +34,30 @@ func test_levels_match_spec_table() -> void:
 		assert_eq(game.session.lives, 20, "nivel %d: vidas" % (i + 1))
 
 
+func _enemy_count(level: LevelData, wave_number: int, enemy_id: StringName) -> int:
+	var total: int = 0
+	for group: SpawnGroup in level.waves[wave_number - 1].groups:
+		if group.enemy.id == enemy_id:
+			total += group.count
+	return total
+
+
+func test_m59_wave_groups_keep_the_approved_counts() -> void:
+	var level_two: LevelData = campaign.levels[1]
+	assert_eq(_enemy_count(level_two, 15, &"boss"), 1, "RF-516: un Jefe en la oleada 15")
+	assert_eq(_enemy_count(level_two, 15, &"tank"), 12)
+	assert_eq(_enemy_count(level_two, 15, &"flyer"), 16)
+	assert_eq(_enemy_count(level_two, 15, &"armored"), 0, "RF-516: no quedan Blindados en la 15")
+
+	var level_seven: LevelData = campaign.levels[6]
+	assert_eq(_enemy_count(level_seven, 2, &"fast"), 20, "RF-517: 10 Rápidos por cada entrada")
+	assert_eq(_enemy_count(level_seven, 11, &"fast"), 22)
+	assert_eq(_enemy_count(level_seven, 18, &"fast"), 30)
+	assert_eq(_enemy_count(level_seven, 18, &"flyer"), 20)
+	assert_eq(_enemy_count(level_seven, 11, &"ratero"), 8, "la Cuadrilla de la 11 queda intacta")
+	assert_eq(_enemy_count(level_seven, 11, &"cargador"), 1, "la Cuadrilla de la 11 queda intacta")
+
+
 func test_every_level_is_20_by_9_but_the_tenth_to_the_fifteenth() -> void:
 	for i: int in campaign.levels.size():
 		var game: Game = _game_with_level(i)

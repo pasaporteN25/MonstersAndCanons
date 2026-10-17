@@ -1,0 +1,37 @@
+PROBE ventana (1600, 720) · escala ahora 1.000 · celular supuesto (2400, 1080) a 405 ppi: escala 1.500, se usa 1920x1080 (80 % del ancho, 100 % del alto) · aspecto keep
+PROBE emulate_mouse_from_touch=true · emulate_touch_from_mouse=false
+PROBE medidas menu: 6 controles, 6 por debajo de 7.6 mm en el celular supuesto
+PROBE medidas opciones: 6 controles, 6 por debajo de 7.6 mm en el celular supuesto
+PROBE medidas seleccion: 14 controles, 4 por debajo de 7.6 mm en el celular supuesto
+PROBE seleccion: 15 tarjetas · área visible (1090.0, 444.0) · contenido (1082.0, 674.0)
+PROBE seleccion toque simple en «Nivel 1»: abre [0]
+PROBE seleccion deslizar 160 px hacia arriba sobre una tarjeta: scroll 0 -> 0 · abre []
+PROBE seleccion rueda del mouse: scroll 0 -> 55
+PROBE medidas cartel_entrada: 1 controles, 1 por debajo de 7.6 mm en el celular supuesto
+PROBE medidas partida_n01: 12 controles, 12 por debajo de 7.6 mm en el celular supuesto
+PROBE partida n01: 8 botones de torre · celda 64 px virtuales
+PROBE A0 sin mover el cursor: dedo en la casilla (8, 3) · torres en [(12, 8)] · el juego lee el mouse en la casilla (12, 8)
+PROBE A dónde quedó: torres en [(8, 3)] · mouse del juego en (8, 3) (pantalla lógica (544.0, 272.0)) · dedo en (544.0, 272.0)
+PROBE A toque en botón de torre: elegida=true · toque en casilla (8, 3): construye en el apoyo del dedo=true · torre en esa casilla=true · toques=2 · diálogos=0
+PROBE B arrastre de 128 px con la torre elegida: torres 1 -> 2 (en (4, 6): true)
+PROBE C pinza con la torre elegida: torres 2 -> 3 · zoom de la cámara sin cámara
+PROBE D segundo toque en el botón: sigue elegida=false
+PROBE E toque en la torre: panel visible=true · rect del panel [P: (1000.0, 260.0), S: (270.0, 356.0)]
+PROBE medidas panel_torre: 3 controles, 3 por debajo de 7.6 mm en el celular supuesto
+PROBE medidas panel_torre_hud: 9 controles, 9 por debajo de 7.6 mm en el celular supuesto
+PROBE E Mejorar [P: (1014.0, 531.0), S: (242.0, 34.0)] · Vender [P: (1014.0, 571.0), S: (242.0, 32.0)] · separación 6 px virtuales
+PROBE E toque en Mejorar: nivel 1 -> 2 · diálogos de confirmación=0
+PROBE E toque 8 px debajo del borde de Mejorar: torres 3 -> 2 (vendida sin confirmar=true)
+PROBE F torre en (17, 5) (pantalla (1120.0, 400.0)): el panel la tapa=true
+PROBE G pausa=true · elegir torre en pausa: elegida=true · toque en el mapa: torres 3 -> 3
+PROBE medidas pausa: 4 controles, 4 por debajo de 7.6 mm en el celular supuesto
+PROBE medidas dialogo_salir: 2 controles, 2 por debajo de 7.6 mm en el celular supuesto
+PROBE nivel 15: mapa (26, 12) · zoom 0.750 · casilla 48.0 px virtuales = 72 px en el celular = 4.5 mm
+PROBE medidas partida_n15: 14 controles, 14 por debajo de 7.6 mm en el celular supuesto
+PROBE nivel 15 toque con cámara: construye en la casilla tocada=true · 29 px virtuales de corrimiento ya es la casilla (14, 5)
+PROBE medidas partida_n07: 14 controles, 14 por debajo de 7.6 mm en el celular supuesto
+PROBE nivel 7: pestañas=true · 8 botones de torre
+PROBE nivel 7: pestaña actual tras tocar «Infraestructura» = infrastructure
+PROBE medidas partida_n07_infraestructura: 7 controles, 7 por debajo de 7.6 mm en el celular supuesto
+PROBE medidas wiki: 14 controles, 14 por debajo de 7.6 mm en el celular supuesto
+PROBE fin
