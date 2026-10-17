@@ -26,7 +26,7 @@ func after_each() -> void:
 
 func test_every_game_event_has_a_sound() -> void:
 	var needed: Array[StringName] = [&"enemy_death", &"life_lost", &"build", &"upgrade", &"sell",
-		&"wave_start", &"victory", &"defeat", &"click", &"music_loop", &"combo"]
+		&"wave_start", &"victory", &"defeat", &"click", &"combo"]
 	var game: Node = GAME_SCENE.instantiate()
 	for tower: TowerData in game.get("tower_types"):
 		needed.append(StringName("shot_%s" % tower.id))
@@ -36,9 +36,10 @@ func test_every_game_event_has_a_sound() -> void:
 
 
 func test_music_loops() -> void:
-	# Al importar el .wav, Godot pierde el bucle si no se lo pide en music_loop.wav.import.
-	var music: AudioStreamWAV = load("res://assets/audio/music_loop.wav")
-	assert_eq(music.loop_mode, AudioStreamWAV.LOOP_FORWARD, "la música no se corta a los 40 s")
+	for track: String in ["music_menu", "music_combat"]:
+		assert_true(Audio.has_sound(StringName(track)), "%s está disponible" % track)
+		var music: AudioStreamWAV = load("res://assets/audio/%s.wav" % track)
+		assert_eq(music.loop_mode, AudioStreamWAV.LOOP_FORWARD, "%s no se corta" % track)
 
 
 func test_play_returns_false_for_unknown_sounds() -> void:

@@ -58,7 +58,7 @@ Lucas todavía tiene que jugar 1 → 2 → 3 y 6 → 7 → 8, además de las par
 - **Dos enemigos nuevos, el Ratero y el Cargador.** Son criaturas que **andan en banda**: el **Ratero** es chico y rapidísimo (14 de vida, velocidad 2,2, quita 1 vida) y el **Cargador** es grande y lento (110 de vida, armadura 1, quita 2 vidas). **Los dos roban oro** como el Ladrón, pero **cada uno por su cuenta**: el Ratero 2 de oro cada 2 segundos y el Cargador 4, sin bajar nunca de 10. Se barren con **torres de área** (Ratero) y con **daño sostenido** (Cargador); el Hielo los frena.
 - **Dónde salen.** Debutan en el **nivel 7** (oleada 8) y vuelven en el **10**, el **13** y el **14**, **cuatro veces en cada uno**, siempre en oleadas sin Guardián, Curandero, Chamán, Espejo ni Soberano. Los demás niveles no cambian, y el 15 tampoco.
 - **Wiki.** Los dos tienen su entrada en **Enemigos** (se abre la primera vez que los ves, con la línea «Robo» y los niveles donde aparecen) y hay un artículo nuevo en **Lore**, **«La Cuadrilla»**, que se abre al ganar el nivel 7; los artículos siguientes conservan su orden.
-- **Todavía sin dibujo propio:** por ahora se ven como una **forma de color** (un rombo ocre el Ratero y un hexágono más oscuro el Cargador) y en la Wiki aparecen sin ilustración. El arte llega después.
+- **Arte provisional, pendiente de rehacerse:** por ahora se ven como una **forma de color** (un rombo ocre el Ratero y un hexágono más oscuro el Cargador); la Wiki todavía no muestra ilustraciones. Otro agente prepara las nuevas versiones (2026-10-16).
 - **Modo Asedio:** los mapas 7, 10, 13 y 14 heredan a la Cuadrilla, así que ahí se vuelven más difíciles.
 - Los números del Ladrón, del Soberano, del Coloso y de las torres **no cambian**.
 
@@ -82,6 +82,7 @@ Lucas todavía tiene que jugar 1 → 2 → 3 y 6 → 7 → 8, además de las par
 - **Wiki:** al ganar el 15 se abre el artículo de Lore **«La Central»** (con lo que dicen los colonos del Coloso); y los de los niveles 11 («Los pozos») y 14 («Los poblados vacíos») ya se ven al ganar esos niveles. **Enemigos** suma al **Coloso** (con la corona de «Peligroso») y al **Pedazo**, que se abren cuando los ves por primera vez.
 - Sin Ametralladora ni Lanzamisiles. **Se gana sin tocar la mina, los bosques ni los escombros.**
 - Para quien arma mapas: la **leyenda** de un mapa puede tener ahora hasta **12 letras** (eran 10), y hay ocho dibujos nuevos para las piezas de la central y de la cadena de abastecimiento.
+- **Aprobación de arte (2026-10-16):** Lucas aprobó el arte del Coloso y su Pedazo para integración. El Ratero y el Cargador se van a rehacer; los nuevos dibujos los prepara otro agente y todavía no están integrados.
 
 ## Tarjetas de nivel sin superposiciones *(T250, 2026-10-09)*
 
