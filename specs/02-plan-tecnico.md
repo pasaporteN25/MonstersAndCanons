@@ -1476,3 +1476,36 @@ Nada más: ni `SAVE_VERSION`, ni el formato del guardado, ni `dev_mode.gd`, ni d
 2. Antes y después de la suite: `ls ~/.local/share/JuegoA/` **no** muestra ningún `save_respaldo_*.json` nuevo (los tests no ensucian la carpeta real).
 3. Con un `save.json` de prueba copiado a una carpeta de usuario aparte, abrir el juego y comprobar el respaldo con `sha256sum` (límite: en esta máquina Linux, no en Windows).
 4. **No se prueba:** Windows, Android, ni el archivo real del tester (eso es la parte manual de T268).
+
+
+### M61 / T282 · El Mortero alcanzable en el nivel 9 (RF-523 a RF-525, D-103)
+
+> **Estado: especificada (2026-10-16); sin programar.** La spec es **M61** (`01-spec.md`), la decisión **D-103** y las tareas **T282** (Codex) y **T283** (Lucas) en `03-tareas.md`.
+
+#### Qué hay hoy
+
+- `data/levels/level_09.json`: la leyenda `e` es `{"removible":{"clase":"escombro","probabilidad":50.0,"recursos":1.0}}` y se usa en tres casillas, (3,2), (14,2) y (7,8). La `u` es la ruina con la pieza de la Disruptora (11,6).
+- `data/obstaculos.json`: la clase `escombro` cuesta 90 de oro y 10 s, con `recursos` 0, `probabilidad` 0 y `recursos_si_recuperado` 1. La leyenda del mapa la sobrescribe por letra (RF-398).
+- `data/towers/mortar.tres`: `cost = 300`, `resource_cost = 3`, `reserved = true`. El 9 lo habilita con `"torres_extra"`.
+- Al empezar la partida se sortea, por cada removible y en orden de fila y columna, si entrega su recurso, con un generador con semilla (RF-417). Con `probabilidad` 100 siempre entrega.
+
+#### Qué se cambia
+
+| Archivo | Cambio |
+|---|---|
+| `data/levels/level_09.json` | `"probabilidad":50.0` → `"probabilidad":100.0` en la letra `e`. Una línea. |
+| `tools/balance_sim.gd`, `scripts/logic/balance_args.gd`, su test, `ONBOARDING.md` | **Solo si** `demoler` no demuele los tres escombros: la estrategia `mortero` (RF-524, punto 5). |
+
+Nada más: ningún otro nivel, ni `obstaculos.json`, ni `mortar.tres`, ni código del juego, ni escenas, ni assets.
+
+#### A comprobar al programar (no se asume)
+
+- Si algún test o documento exige el 50 % del 9 (`tests/test_levels_8_9.gd`, `CONTENIDO.md`): se ajusta a 100 y se anota. El 8 y los demás se mantienen.
+- Que `LevelFile.parse` acepte `100.0` (el tope es «mayor que 100 = error», RF-398).
+- Que el editor de mapas conserve el valor al abrir y guardar el nivel (ida y vuelta).
+
+#### Cómo se prueba
+
+1. `godot --headless --import` y la suite de GUT completa (sin `SCRIPT ERROR`).
+2. Bot, 5 semillas: `check_rule=1` con `levels=6-9`, `levels=10-12` y `levels=13-15`; luego `sin_recursos`, `mix`, `demoler` y `demoledora` en el 9, con la tabla por semilla de RF-524.
+3. **No se prueba:** una partida humana (T283), ni el Mortero visto en pantalla en el 9, ni Windows ni celular.

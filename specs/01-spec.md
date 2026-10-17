@@ -2125,7 +2125,7 @@ Valores: los números de este bloque son **iniciales** (los pidió así Lucas en
   - Una torre **no puede** tener `resource_cost` y `alt_*` a la vez (un test de los datos lo comprueba) y `alt_gold_cost` tiene que ser menor que su costo de oro. Las mejoras cuestan lo mismo en las dos formas.
   - Vender devuelve el oro invertido y, si se pagó con recurso, `floor(1 × 70 / 100) = 0` recursos (RF-418).
   - **Nunca es indispensable**: la forma de oro cuesta lo mismo que antes, así que el Francotirador y los niveles 1 a 6 **no cambian**.
-- **RF-420** **El Mortero cuesta recursos y debuta en el nivel 9 (Q-21 ✎):** `data/towers/mortar.tres` pasa a `resource_cost = 3` (con su `cost` de 300 de oro: **300 + 3 recursos**, valores iniciales). **Enmienda de RF-300:** el Mortero ya **no está reservado para el nivel 10**, sino que **debuta en el nivel 9** (`"torres_extra": ["mortar"]`) y sigue habilitado en el 10. Los niveles 1 a 8 **no lo ofrecen**, así que su balance no cambia. Desde el 11 lo decide la rotación de torres (RF-393).
+- **RF-420** **El Mortero cuesta recursos y debuta en el nivel 9 (Q-21 ✎):** `data/towers/mortar.tres` pasa a `resource_cost = 3` (con su `cost` de 300 de oro: **300 + 3 recursos**, valores iniciales). **Enmienda de RF-300:** el Mortero ya **no está reservado para el nivel 10**, sino que **debuta en el nivel 9** (`"torres_extra": ["mortar"]`) y sigue habilitado en el 10. Los niveles 1 a 8 **no lo ofrecen**, así que su balance no cambia. Desde el 11 lo decide la rotación de torres (RF-393). *(M61, RF-523 a RF-525, 2026-10-16: en el 9 los tres escombros comunes pasan de 50 % a 100 % para que los 3 recursos estén garantizados; el costo del Mortero no cambia.)*
 - **RF-421** **Un mapa que ofrece algo imposible de conseguir:** si un mapa ofrece una torre con `resource_cost` (el Mortero, y más adelante la Disruptora) pero no tiene recursos (RF-416), `check_level` y el editor muestran un **aviso** ("el Mortero cuesta recursos y este mapa no tiene cómo conseguirlos"). No es un error: la torre queda en la barra deshabilitada con ese motivo.
 
 > **Criterio de aceptación RF-415 a RF-421**
@@ -3339,3 +3339,82 @@ Con la copia automática, el archivo **tal como lo dejó la build anterior** que
 1. **P1 · ¿Silencioso está bien?** Recomiendo que sí.
 2. **P2 · ¿El nombre `save_respaldo_<versión>.json` en la misma carpeta te sirve?** Recomiendo que sí; la alternativa es una subcarpeta `respaldos/`.
 3. **P3 · ¿Subís `config/version` en cada build de envío?** Recomiendo que sí, y que lo haga la tarea de T268b que arma la build.
+
+
+### M61 · El Mortero alcanzable en el nivel 9: los tres escombros comunes dan siempre su recurso (Lucas, 2026-10-16; Q-21)
+
+**Estado: especificada (2026-10-16); sin programar.** Se programa en **T282**. Es un cambio **de un solo número en un solo archivo de datos** (`data/levels/level_09.json`). **No toca** ningún otro nivel, el Mortero, la demoledora ni `data/obstaculos.json`.
+
+**Qué pidió Lucas (2026-10-16).** Subir la probabilidad de recursos en el nivel 9, para que el Mortero (que debuta ahí, RF-420) se pueda comprar de verdad.
+
+**Por qué hace falta (el motivo, con evidencia).** El resultado de T245 (punto 4, en `specs/03-tareas.md`) midió con el bot, 5 semillas, que **ninguna estrategia compró el Mortero del 9**:
+
+1. El Mortero cuesta **300 de oro + 3 recursos** (`data/towers/mortar.tres`: `cost = 300`, `resource_cost = 3`).
+2. El nivel 9 **no tiene minas ni bosques** (`extraer_temprano` y `extraer_tarde` dieron lo mismo que `sin_recursos`): los únicos recursos salen de **demoler**.
+3. Hoy hay **tres escombros comunes** (letra `e`, en (3,2), (14,2) y (7,8)) que entregan **1 recurso con 50 %** cada uno, y **una ruina con la pieza** (letra `u`, en (11,6)) que, mientras la pieza está pendiente, entrega la pieza y **ningún recurso** (RF-428).
+4. Lo máximo que juntó el bot fue **2 recursos** (`demoler`, semilla 3). Con 3 sorteos al 50 %, la chance de sacar los 3 es de **1 en 8 (12,5 %)**: en la práctica no se alcanza.
+
+**Un detalle que corrige una lectura anterior.** T245 contó «la ruina de la pieza (1 recurso)» como una fuente más. Según **RF-428** esa ruina da **1 recurso solo si la pieza ya estaba recuperada** (es decir, al rejugar el nivel después de haberla juntado); **la primera vez entrega la pieza y 0 recursos**. Por eso esta spec cuenta con **3 recursos garantizados** (los tres escombros comunes) y trata el cuarto como un extra que solo existe al rejugar.
+
+#### Requisitos
+
+- **RF-523** **Los tres escombros comunes del nivel 9 dan siempre su recurso.** En `data/levels/level_09.json`, la letra `e` de la leyenda cambia **un solo valor**:
+
+  | | Antes | Después |
+  |---|---|---|
+  | `"e"` | `{"removible":{"clase":"escombro","probabilidad":50.0,"recursos":1.0}}` | `{"removible":{"clase":"escombro","probabilidad":100.0,"recursos":1.0}}` |
+
+  1. **Qué queda igual:** `recursos` sigue en 1 por escombro; la letra `u` (la ruina con la pieza, sin `probabilidad` propia, con `recursos_si_recuperado` 1 de su clase); el mapa (las tres `e` y la `u` siguen en sus casillas); las 20 oleadas; el oro (320) y las vidas (20); `"torres_extra"`; los textos; `data/obstaculos.json` (el escombro sigue costando **90 de oro** y **10 s**, `demoledora` sigue deshabilitada en el 9); `data/towers/mortar.tres` (300 + 3) y **todos los demás niveles**.
+  2. **Qué cambia en la práctica:** demoliendo los **tres** escombros comunes (3 × 90 = **270 de oro** y 30 s de trabajo en total) se juntan **exactamente 3 recursos**, los que pide el Mortero. Ya no depende de la suerte. Rejugando el nivel con la pieza ya recuperada, la ruina suma un cuarto recurso (RF-428), que sobra.
+  3. **El sorteo no se mueve:** con `probabilidad` 100 el resultado de cada removible es siempre «entrega» (RF-417); el orden fijo de sorteo (fila y columna) y el consumo del generador con semilla **no cambian**, así que el resto del azar de la partida (temblor, Ladrón) sale **igual** que antes con la misma semilla.
+  4. **Textos que se arman solos** (RF-164): el panel del escombro común pasa de «Puede dar 1 recurso (50 %)» a «Puede dar 1 recurso (100 %)». Si a Lucas le suena raro («Puede… 100 %»), cambiar la frase cuando la probabilidad es 100 es **una decisión aparte** (Pregunta P3); esta spec no lo toca.
+- **RF-524** **Cómo se valida (el bot, y una medición que antes faltaba):** con la misma herramienta de balance (`tools/balance_sim.gd`), **5 semillas** (1 a 5):
+  1. **Regla de oro (RF-432).** `check_rule=1` por tramos, como en T279: `levels=6-9`, `levels=10-12` y `levels=13-15`. Todos los mapas con recursos ganan al menos **4 de 5** con `sin_recursos`. Los niveles **13 a 15 están al borde** (mínimos de vidas medidos hoy: **13 = 5, 14 = 3 y 15 = 2**) y **no se tocan**: se **remiden** y deben dar lo mismo (`sin_recursos` no demuele, así que el cambio del 9 no debería afectarlos; se comprueba, no se supone). Si alguno cambia, no se sigue y se informa.
+  2. **Nivel 9 sin cambios para quien no usa recursos.** `sin_recursos` en el 9 sigue ganando **5 de 5** (hoy con 11 vidas) y `mix` también (hoy 11).
+  3. **Medición explícita del Mortero en el 9** (la que T245 no pudo cerrar): con `demoler` y `demoledora` (esta última queda igual a `demoler`: no está habilitada en el 9), `levels=9`, semillas 1 a 5, se informa **por semilla**: recursos juntados, **si alguna estrategia compró el Mortero, en qué oleada**, oro gastado en demoler, **vidas con las que termina** y resultado. Se compara con la línea de base de T245 (`demoler`: V4 · D · D · V1 · D; `pieza`: V4 · V2 · V2 · V2 · V2; `sin_recursos`: V11 en las 5).
+  4. **Qué cuenta como «alcanzable en la práctica»** (valores iniciales, como N = 5 y M = 4 de RF-432; Lucas los puede cambiar, Pregunta P2): una estrategia que usa recursos **compra el Mortero en las 5 semillas** y **gana al menos 4 de 5**. Con eso el cambio se da por bueno **para el bot**; la validación final es la partida de Lucas (punto 6).
+  5. **Si el bot no demuele los tres escombros por sí solo:** `demoler` elige qué demoler por **cobertura** de casillas, no por el valor de los recursos (T245, límite 1), así que puede no ir por los tres. En ese caso se informa, y T282 puede **agregar a la herramienta** (no al juego) una estrategia `mortero` que, como `pieza` (T245), juega como `sin_recursos` y, pasadas las 2 primeras torres, junta oro y demuele los tres escombros comunes y nada más. Es código de `tools/` y su test, nunca del juego, y se documenta en `ONBOARDING.md`.
+  6. **Lo que el bot no puede decir:** que no sea demasiado difícil para una persona. Es la **partida de Lucas** (T283, igual que T280 con los niveles 2 y 7), y es la validación final.
+- **RF-525** **El riesgo conocido, y qué se hace si aun así no se alcanza (para decidir con Lucas; no se implementa nada de esto):** el camino al Mortero cuesta **270 de oro en demoliciones + 300 del Mortero = 570**, con el nivel arrancando en 320 de oro y un mapa ajustado (el bot ya perdía 3 de 5 partidas al gastar 360 en demoler, T245). Dos riesgos concretos:
+  1. **El oro:** pagar 270 en demoler cuesta defensa en las primeras oleadas. Es posible que el Mortero se *alcance* (ya hay recursos) pero que alcanzarlo cueste vidas o la victoria.
+  2. **Sin margen:** la primera vez hay **exactamente 3 recursos**. Quien gaste uno en el Francotirador por su segunda forma de pago (120 de oro + 1 recurso, Q-21) se queda con 2 y **ya no llega al Mortero** en esa partida.
+
+  Si la medición (RF-524, punto 3) muestra que el Mortero sigue sin comprarse o que comprarlo hace perder, las opciones, **sin implementar ninguna hasta que Lucas elija**, son:
+  - **A · Bajar el costo de demoler solo en el 9:** sobrescribir `costo` de la letra `e` (RF-398 lo permite por letra; hoy 90, por ejemplo a 60 como la roca). Es un dato del nivel, no toca la clase `escombro` ni los niveles 8, 10 a 15. Efecto: los tres escombros bajan de 270 a 180 de oro.
+  - **B · Que la ruina de la pieza también dé su recurso** (`u` con 100 % y 1 recurso aunque la pieza esté pendiente): suma un cuarto recurso la primera vez y deja margen de 1 para el Francotirador. **Contradice RF-428** (la pieza pendiente entrega «ningún recurso»): habría que enmendarlo y escribir otra decisión.
+  - **C · Bajar el costo en oro del Mortero** en el 9: descartada de entrada porque cambia `mortar.tres` y el Mortero de **todos** los niveles que lo ofrecen (10 a 15), con riesgo para los niveles al borde.
+  - **D · No hacer nada más:** si Lucas, jugando, considera que el Mortero «se alcanza pero cuesta» y le parece bien (es la «mejor torre» del 07 §6), se deja como está.
+
+> **Criterio de aceptación RF-523 a RF-525**
+> **Dado** `data/levels/level_09.json` → **Cuando** se carga → **Entonces** la letra `e` tiene `probabilidad` **100** y `recursos` **1**, hay **tres** casillas con `e` en (3,2), (14,2) y (7,8), la `u` sigue en (11,6) con su pieza, y `git diff` de los datos muestra **una sola línea cambiada** en un solo archivo.
+> **Dado** el nivel 9 con la partida iniciada con **cualquier semilla** → **Cuando** se demuelen los tres escombros comunes → **Entonces** el contador de recursos llega a **3** (nunca menos) y el Mortero, con 300 de oro, se puede comprar.
+> **Dado** el nivel 9 con la pieza **pendiente** → **Cuando** se demuele la ruina → **Entonces** entrega la pieza y **ningún** recurso (RF-428, sin cambios); **dada** la pieza ya recuperada, entrega 1.
+> **Dado** cualquier otro nivel → **Entonces** sus archivos de datos, `data/obstaculos.json` y `data/towers/mortar.tres` quedan **byte a byte iguales** (se comprueba con `git diff --stat`).
+> **Dado** el bot con 5 semillas → **Cuando** juega `sin_recursos` los niveles 6 a 15 → **Entonces** gana al menos 4 de 5 en cada uno (RF-432), con los mínimos de los niveles 13, 14 y 15 **iguales** a los de hoy (5, 3 y 2 vidas), y en el 9 sigue ganando 5 de 5.
+> **Dado** el bot con 5 semillas en el nivel 9 → **Cuando** juega `demoler` (y, si hace falta, `mortero`) → **Entonces** el informe dice, por semilla, los recursos juntados, si compró el Mortero y en qué oleada, y con cuántas vidas terminó, y la respuesta a «¿alguna estrategia lo compra?» queda escrita en el «Resultado» de T282 con los números, sea cual sea.
+
+#### Lo que decidí por defecto *(Lucas no lo definió; cambia con su respuesta)*
+
+1. **Solo la letra `e` del 9** (100 %), y **ninguna** otra cosa: ni el 8, ni el 10, ni el costo de demoler ni el del Mortero. Razón y alternativas en **D-103**.
+2. **«Alcanzable» = el bot lo compra en 5 de 5 y gana 4 de 5** (RF-524, punto 4).
+3. **Las opciones A a D de RF-525 no se implementan** sin que Lucas elija.
+4. **La frase del panel («Puede dar 1 recurso (100 %)») no se cambia** en esta spec.
+
+#### Lo que M61 no incluye
+
+- **Tocar el nivel 8, el 10 ni ningún otro** (la probabilidad del 50 % en esos mapas se mantiene), ni la clase `escombro` de `data/obstaculos.json`.
+- **Agregar una mina o un bosque al 9**, ni habilitar la demoledora allí.
+- **Cambiar el costo del Mortero** (300 + 3), su arte o sus estadísticas.
+- **Cambiar RF-428** (la ruina con la pieza pendiente sigue sin dar recursos), salvo que Lucas elija la opción B.
+- **Rebalancear las oleadas del 9** si el Mortero resulta demasiado fuerte o demasiado caro: se mide primero y se decide con Lucas.
+
+#### Lo que no se probó (al escribir esta spec)
+
+**Nada se programó ni se corrió**: son solo documentos. Los números de antes (50 %, 90 de oro, 300 + 3, mínimos 5 / 3 / 2) están leídos de `level_09.json`, `obstaculos.json`, `mortar.tres` y de los «Resultado» de T245 y T279; **no se remidieron** en este commit. Que 3 recursos alcancen para el Mortero es cuenta de los datos, **no** una partida. No se sabe todavía cuántas vidas cuesta ir por el Mortero.
+
+#### Preguntas para Lucas
+
+1. **P1 · ¿Confirmás solo el 100 % en los tres escombros comunes del 9?** Es lo que pediste; recomiendo medirlo antes de tocar nada más.
+2. **P2 · ¿Te sirve «el bot lo compra en 5 de 5 y gana 4 de 5» como criterio de alcanzable?** Recomiendo que sí (mismo criterio que RF-432).
+3. **P3 · ¿Dejamos «Puede dar 1 recurso (100 %)» o preferís «Da 1 recurso»** cuando la probabilidad es 100? Recomiendo dejarlo (es el mismo texto de siempre, armado con los datos).
+4. **P4 · Si la medición muestra que alcanza el Mortero pero se pierden vidas, ¿probamos primero la opción A** (escombros del 9 a 60 de oro)? Recomiendo A antes que B o C.
