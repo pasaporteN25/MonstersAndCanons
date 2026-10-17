@@ -412,6 +412,18 @@ func _fit_map() -> void:
 	var size: Vector2i = level.map_size()
 	var zoom: float = Rules.map_zoom(size.x, size.y)
 	if UiMode.is_mobile():
+		var backdrop_layer := CanvasLayer.new()
+		backdrop_layer.name = "MapBackdrop"
+		backdrop_layer.layer = -10
+		add_child(backdrop_layer)
+		var backdrop := TextureRect.new()
+		backdrop.name = "ThemeGround"
+		backdrop.texture = MapThemes.ground_texture(level.theme)
+		backdrop.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
+		backdrop.stretch_mode = TextureRect.STRETCH_TILE
+		backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		backdrop_layer.add_child(backdrop)
 		var mobile_config: MobileUiConfig = MobileUiConfig.load_from()
 		var top_height: float = float(mobile_config.get_value("barra_alta_px"))
 		var bottom_height: float = float(hud.get_node("BottomBar").size.y)

@@ -137,10 +137,13 @@ func _ready() -> void:
 	_build_payment_buttons()
 	var edge := ColorRect.new()
 	edge.color = Color(0.52, 0.36, 0.17)
-	edge.position = Vector2(0, 46)
+	edge.position = Vector2(0, bar.size.y - 2.0)
 	edge.size = Vector2(1280, 2)
 	edge.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	bar.add_child(edge)
+	if _mobile_mode:
+		get_node("BottomBar").theme = preload("res://assets/ui/menu_theme.tres")
+		get_node("BottomBar").color = Color(0.105, 0.11, 0.125, 1)
 	for pair: Array in [["Gold", "Oro"], ["Lives", "Vidas"], ["Score", "Puntos"], ["Wave", "Oleada"], ["Technology", "Avances tecnológicos"]]:
 		var icon: Control = bar.get_node("Stats/" + pair[0] + "Stat/" + pair[0] + "Icon")
 		icon.tooltip_text = pair[1]
@@ -540,6 +543,9 @@ func show_selected_tower(index: int) -> void:
 		_tower_buttons[i].set_pressed_no_signal(i == index)
 	# RF-171: nombre, costo y para qué sirve la torre elegida.
 	_selected_index = index
+	if _mobile_mode:
+		_build_info.hide()
+		return
 	if index >= 0:
 		show_tab(TAB_CANNONS)  # RF-456: elegir una torre (también con su tecla) vuelve a «Cañones»
 	_build_info.visible = index >= 0
@@ -697,12 +703,6 @@ func _configure_mobile_top_bar(bar: Control) -> void:
 	_speed_button.size.y = button_height
 	var separation: float = float(_mobile_config.get_value("separacion_px"))
 	_speed_button.position.x = _pause_button.position.x + _pause_button.size.x + separation
-	var top_edge: ColorRect = ColorRect.new()
-	top_edge.color = Color(0.52, 0.36, 0.17)
-	top_edge.position = Vector2(0.0, height - 2.0)
-	top_edge.size = Vector2(1280.0, 2.0)
-	top_edge.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	bar.add_child(top_edge)
 
 
 func _set_button(text: String, enabled: bool) -> void:

@@ -956,3 +956,11 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
   - **Agregar un consejo de contramedida en los carteles de entrada** («Cañón y Francotirador» en el 2; «Múltiple, Ráfaga o Eléctrica» en el 7): son textos de lore y nadie lo pidió; sigue en «Sugerencias de Claude» (§13).
   - **Subir el porcentaje de Asedio de los mapas 2 y 7 dentro de M59:** se remide primero (RF-519) y se decide aparte.
 - **Qué cambia:** `01-spec.md` (M59, RF-516 a RF-519; notas en §7.2, §7.4, §7.9 y RF-487), `02-plan-tecnico.md` (M59), `03-tareas.md` (T278 hecha; T279 y T280 pendientes; nota en T266), `12-plan-t262-t268.md` (estado) y `CHANGELOG.md` (nota). **No cambia ningún dato ni código:** los dos archivos de nivel se tocan recién en T279.
+
+## D-101 · Controles móviles compactos y coherentes con el juego
+
+- **Fecha:** 2026-10-16. **Estado:** autorizado por Lucas al probar el PR #10. **Refs:** RF-504, RF-505, RF-507, RF-512, T287.
+- **Qué:** carrito y X responden al toque en el borde, distinguiendo arrastre de pulsación y evitando acciones duplicadas por mouse emulado. Carrito, X, tilde y cruz redondeados de 64 px, mínimo físico 6 mm; tilde sin precio. Barra inferior con tema oscuro y bronce. Fondo del terreno en los márgenes y un solo borde al pie de la barra superior.
+- **Por qué:** Lucas encontró que el carrito abría al separarlo del borde; los controles tapaban demasiado mapa y no compartían la estética del juego. Prefiere controles más compactos al mínimo anterior de 7,6 mm para estas cuatro acciones. Mejorar y Vender conservan sus tamaños y protección.
+- **Alternativa descartada:** conservar el tema genérico y repetir el precio dentro de la tilde. El catálogo y la barra ya lo muestran.
+- **Límite:** las pruebas de escritorio no reemplazan el tacto ni la legibilidad en el celular de Lucas.

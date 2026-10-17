@@ -109,7 +109,7 @@ func test_touch_gesture_two_fingers_that_move_together_are_a_pan() -> void:
 	assert_eq(gesture.move(1, Vector2(115.0, 0.0), 20), TouchGesture.Gesture.PAN)
 
 
-func test_mobile_placement_buttons_show_cost_and_disable_invalid_placement() -> void:
+func test_mobile_placement_buttons_are_compact_and_disable_invalid_placement() -> void:
 	var mobile_hud := MobileHud.new()
 	add_child_autofree(mobile_hud)
 	await get_tree().process_frame
@@ -117,12 +117,13 @@ func test_mobile_placement_buttons_show_cost_and_disable_invalid_placement() -> 
 	var confirm: Button = mobile_hud.get_node("ConfirmPlacement") as Button
 	var cancel: Button = mobile_hud.get_node("CancelPlacement") as Button
 	assert_false(confirm.disabled)
-	assert_true(confirm.text.contains("300 + 3"))
-	assert_eq(confirm.custom_minimum_size, Vector2(96.0, 88.0))
-	assert_eq(cancel.custom_minimum_size, Vector2(84.0, 84.0))
+	assert_eq(confirm.text, "")
+	assert_not_null(confirm.icon)
+	assert_eq(confirm.custom_minimum_size, Vector2(64.0, 64.0))
+	assert_eq(cancel.custom_minimum_size, Vector2(64.0, 64.0))
 	mobile_hud.show_placement(Vector2(500.0, 400.0), "300 + 3", false, "Ahí no")
 	assert_true(confirm.disabled)
-	assert_true(confirm.text.contains("Ahí no"))
+	assert_eq(confirm.tooltip_text, "Ahí no")
 	assert_true((mobile_hud.find_child("BottomConfirmPlacement", true, false) as Button).visible)
 	assert_eq((mobile_hud.find_child("MobileUpgrade", true, false) as Button).custom_minimum_size.y, 84.0)
 	assert_eq((mobile_hud.find_child("MobileSell", true, false) as Button).custom_minimum_size.y, 82.0)
@@ -403,8 +404,9 @@ func test_mobile_catalog_selects_a_tower_in_two_touches_without_spending() -> vo
 		assert_not_null(unavailable_card)
 		assert_true(unavailable_card.disabled)
 		assert_true(unavailable_card.text.contains("No disponible") or unavailable_card.text.contains("Falta completar"))
-	assert_almost_eq(card.custom_minimum_size.x, 82.0 * 18.0 / 7.6, 0.01)
-	assert_almost_eq(card.custom_minimum_size.y, 82.0 * 10.0 / 7.6, 0.01)
+	var virtual_mm: float = game.mobile_hud._minimum_touch_size() / float(MobileUiConfig.load_from().get_value("flotante_min_mm"))
+	assert_almost_eq(card.custom_minimum_size.x, virtual_mm * 18.0, 0.01)
+	assert_almost_eq(card.custom_minimum_size.y, virtual_mm * 10.0, 0.01)
 	card.pressed.emit()
 	assert_false(game.mobile_hud.is_catalog_open())
 	assert_eq(game.build_controller.selected_tower(), chosen)

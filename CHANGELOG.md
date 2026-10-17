@@ -2,6 +2,10 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Ajustes del HUD móvil tras probar el PR #10 *(T287, 2026-10-16)*
+
+Carrito y salida reciben un solo gesto, sin doble pulsación del mouse emulado. Carrito, X, tilde y cruz son más chicos y redondeados, con íconos de marfil y bronce; la tilde ya no repite el precio. El catálogo y la barra inferior comparten el tema oscuro del juego. Se eliminan las franjas grises de los márgenes y la línea que atravesaba la barra superior. El precio sigue en el catálogo y la barra; si no se puede construir, la barra muestra el motivo.
+
 ## Arte aprobado de La Cuadrilla *(T286, 2026-10-16)*
 
 El Ratero usa el concepto B elegido por Lucas y el Cargador el concepto A, con sus atlas de caminata en cuatro direcciones. Se calibró su tamaño visual para acercarlo al del Ladrón; radios, vida, velocidad, robo y oleadas no cambiaron.

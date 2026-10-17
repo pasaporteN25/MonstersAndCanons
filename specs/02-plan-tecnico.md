@@ -1345,7 +1345,7 @@ La campaña y sus niveles, `LevelFile`, la Wiki más allá de un botón, el epí
 
 | Archivo (propuesto) | Qué es |
 |---|---|
-| `data/ui/mobile_ui.json` | **Los números** de M58 (RF-503, RF-504, RF-506, RF-507, RF-509, RF-512, RF-513): `boton_alto_px` 56, `barra_alta_px` 64, `separacion_px` 8, `flotante_min_px` 82, `flotante_min_mm` 7.6, `franja_px` 56, `toque_max_mm` 2, `pinza_gracia_ms` 150, `opacidad_con_fantasma` 0.45, `corrimiento_s` 0.2, `vender_rearmar_s` 3, `vender_min_s` 0.4, `mejorar_bloqueo_s` 0.35, `zoom_casilla_max_px` 96, `fantasma_distancia_botones` 1. Lo lee un `MobileUiConfig` (`RefCounted`) con valores por omisión y mensajes en castellano; **un archivo dañado usa los valores por omisión** (no bloquea el juego). |
+| `data/ui/mobile_ui.json` | **Los números** de M58 (RF-503, RF-504, RF-506, RF-507, RF-509, RF-512, RF-513): `boton_alto_px` 56, `barra_alta_px` 64, `separacion_px` 8, `flotante_min_px` 64, `flotante_min_mm` 6.0, `franja_px` 56, `toque_max_mm` 2, `pinza_gracia_ms` 150, `opacidad_con_fantasma` 0.45, `corrimiento_s` 0.2, `vender_rearmar_s` 3, `vender_min_s` 0.4, `mejorar_bloqueo_s` 0.35, `zoom_casilla_max_px` 96, `fantasma_distancia_botones` 1. Lo lee un `MobileUiConfig` (`RefCounted`) con valores por omisión y mensajes en castellano; **un archivo dañado usa los valores por omisión** (no bloquea el juego). |
 | `scripts/logic/ui_mode.gd` | `UiMode` (lógica pura, **testeable sin escena**): `resolve(setting: int, has_mobile_feature: bool) -> bool` (¿modo celular?; un valor fuera de 0 a 2 vale 0) y `read_setting(raw) -> int`. Una función estática `is_mobile()` que lee el `SaveManager` y se usa donde haga falta. |
 | `scripts/logic/touch_gesture.gd` | `TouchGesture` (lógica pura): recibe `down(index, pos, t)`, `move(index, pos, t)` y `up(index, pos, t)` y devuelve el gesto: `TAP`, `DRAG`, `PINCH`, `PAN` o `NONE`, aplicando RF-504 (un dedo que se movió más de `toque_max_mm`, dos dedos en algún momento, gracia de `pinza_gracia_ms`). **Sin nodos**, para probar cada regla con secuencias de toques armadas a mano. |
 | `scripts/logic/ghost_placement.gd` | `GhostPlacement` (lógica pura): el estado del fantasma (`cell`, `tower_id`, `valid`, `reason`, `size` 1 o 2), `move_by_cells(delta)`, `clamp_inside(map_size)` (el 2 × 2 hacia adentro, RF-505) y `can_confirm(gold, resources) -> {ok, motivo, faltan}`. Reusa la validez de `BuildController` y el cálculo de `origin_for` (RF-292). |
@@ -1424,3 +1424,10 @@ Nada más: ni `balance.json`, ni `.tres`, ni código, ni assets, ni los niveles 
 - **Tests que cuentan enemigos** de esas oleadas (arriba, punto 4).
 - **El 7 de Asedio queda más parejo, no más fácil:** T266 midió 5 de 5 con 6 vidas (antes 1 a 10); una explicación posible, no verificada, es que con menos Rápidos el bot cobra menos oro. Se remide en T279.
 - **Que una partida humana contradiga al bot:** por RF-518 manda la partida humana y se pasa a la variante B del 2 (D-100) o se reabre el 7.
+
+### T287 · Correcciones del HUD móvil tras probar el PR #10
+
+1. Centralizar la captura de toque y mouse de los controles móviles; un gesto tiene un solo propietario, sin doble activación por mouse emulado. Cancelar al arrastrar; guardar solo al terminar el arrastre flotante.
+2. Aplicar el tema existente a catálogo y barra; íconos SVG propios en botones redondeados. Medidas desde mobile_ui.json y sus valores de respaldo. Mantener costo en catálogo/barra y motivo inválido en barra.
+3. Pintar detrás del mapa una textura de suelo del tema, sin cambiar la grilla, y dibujar un solo borde superior en su altura correcta.
+4. Regresión con eventos de entrada completos (mouse y toque), ambos bordes, arrastre y colocación; GUT completo y capturas 16:9/20:9. Exportar EXE/APK de prueba, sin dar por validado el tacto real.

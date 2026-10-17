@@ -67,10 +67,23 @@ var _bottom_cancel: Button
 var _sell_gap: Control
 var _status_touch_button: Button
 var _status_touch_index: int = -1
+var _status_touch_start: Vector2
+var _status_touch_moved: bool = false
+var _ghost_status_text: String = ""
+var _mobile_theme: Theme
+
+const MOBILE_THEME: Theme = preload("res://assets/ui/menu_theme.tres")
+const CART_ICON: Texture2D = preload("res://assets/ui/mobile_cart.svg")
+const CONFIRM_ICON: Texture2D = preload("res://assets/ui/mobile_confirm.svg")
+const CLOSE_ICON: Texture2D = preload("res://assets/ui/mobile_close.svg")
 
 
 func _ready() -> void:
 	_config = MobileUiConfig.load_from()
+	_mobile_theme = MOBILE_THEME.duplicate(true) as Theme
+	for state: String in ["normal", "hover", "pressed", "hover_pressed", "disabled", "focus"]:
+		var style: StyleBoxFlat = _mobile_theme.get_stylebox(state, "Button") as StyleBoxFlat
+		style.set_corner_radius_all(14)
 	_prefs = SaveManager.get_ui_prefs()
 	layer = 3
 	_build_placement_buttons()
@@ -86,6 +99,7 @@ func _build_status_bar() -> void:
 	var height: float = float(_config.get_value("barra_baja_px"))
 	_status_bar = Control.new()
 	_status_bar.name = "MobileStatusBar"
+	_status_bar.theme = _mobile_theme
 	_status_bar.position = Vector2.ZERO
 	_status_bar.size = Vector2(Rules.SCREEN_SIZE.x, height)
 	_status_bar.position.y = Rules.SCREEN_SIZE.y - height
@@ -111,12 +125,14 @@ func _build_status_bar() -> void:
 	_bottom_confirm = Button.new()
 	_bottom_confirm.name = "BottomConfirmPlacement"
 	_bottom_confirm.text = "✓"
+	_style_icon_button(_bottom_confirm, CONFIRM_ICON, true)
 	_bottom_confirm.custom_minimum_size = Vector2(float(_config.get_value("tilde_ancho_px")), float(_config.get_value("tilde_alto_px")))
 	_bottom_confirm.pressed.connect(confirm_placement_pressed.emit)
 	row.add_child(_bottom_confirm)
 	_bottom_cancel = Button.new()
 	_bottom_cancel.name = "BottomCancelPlacement"
 	_bottom_cancel.text = "×"
+	_style_icon_button(_bottom_cancel, CLOSE_ICON)
 	_bottom_cancel.custom_minimum_size = Vector2(float(_config.get_value("cruz_lado_px")), float(_config.get_value("cruz_lado_px")))
 	_bottom_cancel.pressed.connect(_on_bottom_cancel_pressed)
 	row.add_child(_bottom_cancel)
@@ -160,7 +176,8 @@ func _set_empty_status() -> void:
 
 func show_ghost_status(tower_name: String, cost_text: String) -> void:
 	_status_state = "ghost"
-	_status_label.text = "%s  ·  %s" % [tower_name, cost_text]
+	_ghost_status_text = "%s  ·  %s" % [tower_name, cost_text]
+	_status_label.text = _ghost_status_text
 	_status_label.visible = true
 	_target_button.hide()
 	_upgrade_button.hide()
@@ -168,8 +185,7 @@ func show_ghost_status(tower_name: String, cost_text: String) -> void:
 	_sell_gap.hide()
 	_bottom_confirm.show()
 	_bottom_cancel.show()
-	_bottom_confirm.disabled = not _confirm_button.disabled
-	_bottom_confirm.text = "✓\n%s" % _confirm_button.text.get_slice("\n", 1) if not _confirm_button.disabled else "✕\n%s" % _confirm_button.text.get_slice("\n", 1)
+	_bottom_confirm.disabled = _confirm_button.disabled
 
 
 func show_selected_tower(tower: Tower, gold: int, sell_value: int, resource_value: int,
@@ -199,7 +215,6 @@ func show_selected_tower(tower: Tower, gold: int, sell_value: int, resource_valu
 	_status_label.visible = true
 	_target_button.show()
 	_bottom_cancel.show()
-	_bottom_cancel.text = "×"
 	_target_button.text = "Apuntar: %s" % tower.targeting_name()
 	_target_button.disabled = tower.data.support_only or tower.is_pulse_tower()
 	_upgrade_button.show()
@@ -241,7 +256,7 @@ func clear_sell_arm() -> void:
 func _refresh_sell_button(sell_value: int, resource_value: int = 0) -> void:
 	if _sell_armed:
 		var refund: String = TowerText.refund_text(sell_value, resource_value)
-		_sell_button.text = "╔════╗\n🪙 Vender por %s\n╚════╝" % refund
+		_sell_button.text = "Vender por %s\nConfirmar venta" % refund
 		_sell_button.add_theme_color_override("font_color", Color(1.0, 0.8, 0.25))
 		_sell_button.add_theme_stylebox_override("normal", _double_border_style())
 	else:
@@ -294,6 +309,7 @@ func _build_placement_buttons() -> void:
 	_confirm_button = Button.new()
 	_confirm_button.name = "ConfirmPlacement"
 	_confirm_button.text = "✓"
+	_style_icon_button(_confirm_button, CONFIRM_ICON, true)
 	_confirm_button.add_theme_font_size_override("font_size", 32)
 	_confirm_button.custom_minimum_size = Vector2(
 		float(_config.get_value("tilde_ancho_px")), float(_config.get_value("tilde_alto_px")))
@@ -302,6 +318,7 @@ func _build_placement_buttons() -> void:
 	_cancel_button = Button.new()
 	_cancel_button.name = "CancelPlacement"
 	_cancel_button.text = "×"
+	_style_icon_button(_cancel_button, CLOSE_ICON)
 	_cancel_button.add_theme_font_size_override("font_size", 32)
 	var cancel_size: float = float(_config.get_value("cruz_lado_px"))
 	_cancel_button.custom_minimum_size = Vector2(cancel_size, cancel_size)
@@ -312,6 +329,7 @@ func _build_placement_buttons() -> void:
 func _build_view_all_button() -> void:
 	_view_all_button = Button.new()
 	_view_all_button.name = "ViewAll"
+	_view_all_button.theme = MOBILE_THEME
 	_view_all_button.text = "Ver todo"
 	var floating_size: float = float(_config.get_value("flotante_min_px"))
 	_view_all_button.custom_minimum_size = Vector2(floating_size, floating_size)
@@ -325,8 +343,10 @@ func _build_view_all_button() -> void:
 func _build_floating_buttons() -> void:
 	var minimum_size: float = _minimum_touch_size()
 	_float_button_size = Vector2.ONE * minimum_size
-	_cart_button = _floating_button("CartButton", "🛒")
-	_exit_button = _floating_button("ExitButton", "×")
+	_cart_button = _floating_button("CartButton", CART_ICON)
+	_cart_button.tooltip_text = "Elegir torre"
+	_exit_button = _floating_button("ExitButton", CLOSE_ICON)
+	_exit_button.tooltip_text = "Salir al menú"
 	_cart_button.pressed.connect(_on_cart_pressed)
 	_exit_button.pressed.connect(exit_pressed.emit)
 	if _confirm_button != null:
@@ -348,15 +368,35 @@ func _minimum_touch_size() -> float:
 		float(_config.get_value("flotante_min_mm")), fallback)
 
 
-func _floating_button(button_name: String, label: String) -> Button:
+func _floating_button(button_name: String, icon: Texture2D) -> Button:
 	var button := Button.new()
 	button.name = button_name
-	button.text = label
+	_style_icon_button(button, icon)
 	button.focus_mode = Control.FOCUS_NONE
 	button.custom_minimum_size = _float_button_size
 	button.add_theme_font_size_override("font_size", 32)
 	add_child(button)
 	return button
+
+
+func _style_icon_button(button: Button, icon: Texture2D, confirm: bool = false) -> void:
+	button.theme = _mobile_theme
+	button.text = ""
+	button.icon = icon
+	button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	button.add_theme_constant_override("icon_max_width", 28)
+	button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	button.focus_mode = Control.FOCUS_NONE
+	# El gesto se resuelve una sola vez en _input; el mouse emulado no vuelve a pulsarlo.
+	button.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	for state: String in ["normal", "hover", "pressed", "hover_pressed", "disabled"]:
+		var style: StyleBoxFlat = MOBILE_THEME.get_stylebox(state, "Button").duplicate() as StyleBoxFlat
+		style.set_corner_radius_all(int(_config.get_value("icono_radio_px")))
+		style.set_content_margin_all(float(_config.get_value("icono_padding_px")))
+		if confirm and state != "disabled":
+			style.bg_color = Color("#29382a") if state == "normal" else Color("#3b5134")
+			style.border_color = Color("#a5b776")
+		button.add_theme_stylebox_override(state, style)
 
 
 func _build_empty_catalog() -> void:
@@ -371,6 +411,10 @@ func _build_empty_catalog() -> void:
 	var height: float = float(_config.get_value("catalogo_alto_px"))
 	_catalog_panel = PanelContainer.new()
 	_catalog_panel.name = "CatalogPanel"
+	_catalog_panel.theme = _mobile_theme
+	var panel_style: StyleBoxFlat = preload("res://assets/ui/game_panel_style.tres").duplicate() as StyleBoxFlat
+	panel_style.set_content_margin_all(16.0)
+	_catalog_panel.add_theme_stylebox_override("panel", panel_style)
 	_catalog_panel.position = (Rules.SCREEN_SIZE - Vector2(width, height)) / 2.0
 	_catalog_panel.custom_minimum_size = Vector2(width, height)
 	_catalog_panel.visible = false
@@ -389,11 +433,16 @@ func _build_empty_catalog() -> void:
 	var close_button := Button.new()
 	close_button.name = "CloseCatalog"
 	close_button.text = "×"
+	_style_icon_button(close_button, CLOSE_ICON)
+	close_button.mouse_filter = Control.MOUSE_FILTER_STOP
 	close_button.custom_minimum_size = Vector2.ONE * _minimum_touch_size()
 	close_button.pressed.connect(close_catalog)
 	heading.add_child(close_button)
 	_catalog_tabs = TabContainer.new()
 	_catalog_tabs.name = "CatalogTabs"
+	_catalog_tabs.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
+	for pair: Array in [["tab_selected", "pressed"], ["tab_unselected", "normal"], ["tab_hovered", "hover"]]:
+		_catalog_tabs.add_theme_stylebox_override(pair[0], _mobile_theme.get_stylebox(pair[1], "Button"))
 	_catalog_tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	rows.add_child(_catalog_tabs)
 	var tower_scroll := ScrollContainer.new()
@@ -540,14 +589,13 @@ func show_placement(world_position: Vector2, cost_text: String, valid: bool, rea
 	_world_position = world_position
 	_ghost_size = ghost_size
 	_ghost_visible = true
-	_confirm_button.text = "✓\n%s" % cost_text if valid else "✕\n%s" % reason
 	_confirm_button.disabled = not valid
 	_confirm_button.tooltip_text = "Confirmar construcción" if valid else reason
+	_status_label.text = _ghost_status_text if valid else "%s  ·  %s" % [_ghost_status_text, reason]
 	_cancel_button.tooltip_text = "Cancelar construcción"
 	_bottom_confirm.visible = true
 	_bottom_cancel.visible = true
 	_bottom_confirm.disabled = _confirm_button.disabled
-	_bottom_confirm.text = _confirm_button.text
 	set_placement_visible(true)
 	_update_placement_position()
 	_update_floating_layout()
@@ -576,7 +624,7 @@ func show_view_all(enabled: bool) -> void:
 
 func set_cart_active(active: bool) -> void:
 	if _cart_button != null:
-		_cart_button.text = "🛒 •" if active else "🛒"
+		_cart_button.self_modulate = Color("#ffe0a0") if active else Color.WHITE
 
 
 func set_game_over(over: bool) -> void:
@@ -637,18 +685,30 @@ func _input(event: InputEvent) -> void:
 		return
 	if event is InputEventScreenTouch:
 		var touch: InputEventScreenTouch = event as InputEventScreenTouch
-		if _handle_status_touch(touch.index, touch.position, touch.pressed):
+		if not _catalog_open and _handle_status_touch(touch.index, touch.position, touch.pressed):
 			return
 		_handle_drag_touch(touch.index, touch.position, touch.pressed)
 	elif event is InputEventScreenDrag:
 		var drag: InputEventScreenDrag = event as InputEventScreenDrag
+		if _status_touch_button != null and drag.index == _status_touch_index:
+			_status_touch_moved = _status_touch_moved or drag.position.distance_to(_status_touch_start) > float(_config.get_value("toque_max_px"))
+			get_viewport().set_input_as_handled()
+			return
 		if _drag_button != null and drag.index == _drag_index:
 			_update_drag(drag.position)
 			get_viewport().set_input_as_handled()
 	elif event is InputEventMouseButton and not OS.has_feature("mobile"):
 		var mouse: InputEventMouseButton = event as InputEventMouseButton
 		if mouse.button_index == MOUSE_BUTTON_LEFT:
+			if mouse.device == InputEvent.DEVICE_ID_EMULATION:
+				return
+			if not _catalog_open and _handle_status_touch(-1, mouse.position, mouse.pressed):
+				return
 			_handle_drag_touch(-1, mouse.position, mouse.pressed)
+	elif event is InputEventMouseMotion and not OS.has_feature("mobile") and _status_touch_button != null:
+		var motion: InputEventMouseMotion = event as InputEventMouseMotion
+		_status_touch_moved = _status_touch_moved or motion.position.distance_to(_status_touch_start) > float(_config.get_value("toque_max_px"))
+		get_viewport().set_input_as_handled()
 	elif event is InputEventMouseMotion and not OS.has_feature("mobile") and _drag_button != null:
 		var motion: InputEventMouseMotion = event as InputEventMouseMotion
 		_update_drag(motion.position)
@@ -657,10 +717,12 @@ func _input(event: InputEvent) -> void:
 
 func _handle_status_touch(index: int, pos: Vector2, pressed: bool) -> bool:
 	if pressed:
-		for button: Button in [_bottom_confirm, _bottom_cancel, _target_button, _upgrade_button, _sell_button]:
+		for button: Button in [_confirm_button, _cancel_button, _bottom_confirm, _bottom_cancel, _target_button, _upgrade_button, _sell_button]:
 			if button != null and button.visible and button.get_global_rect().has_point(pos):
 				_status_touch_button = button
 				_status_touch_index = index
+				_status_touch_start = pos
+				_status_touch_moved = false
 				get_viewport().set_input_as_handled()
 				return true
 		return false
@@ -669,7 +731,7 @@ func _handle_status_touch(index: int, pos: Vector2, pressed: bool) -> bool:
 	var button: Button = _status_touch_button
 	_status_touch_button = null
 	_status_touch_index = -1
-	if button.visible and not button.disabled and button.get_global_rect().has_point(pos):
+	if not _status_touch_moved and button.visible and not button.disabled and button.get_global_rect().has_point(pos):
 		button.pressed.emit()
 	get_viewport().set_input_as_handled()
 	return true
@@ -677,6 +739,8 @@ func _handle_status_touch(index: int, pos: Vector2, pressed: bool) -> bool:
 
 func _handle_drag_touch(index: int, pos: Vector2, pressed: bool) -> void:
 	if pressed:
+		if _drag_button != null:
+			return
 		if _catalog_open and not _catalog_panel.get_global_rect().has_point(pos):
 			close_catalog()
 			get_viewport().set_input_as_handled()
@@ -696,10 +760,11 @@ func _handle_drag_touch(index: int, pos: Vector2, pressed: bool) -> void:
 	if _dragging:
 		_finish_drag(pos)
 	else:
-		if _drag_button == _cart_button:
-			_on_cart_pressed()
-		else:
-			exit_pressed.emit()
+		if _drag_button.get_global_rect().has_point(pos):
+			if _drag_button == _cart_button:
+				_on_cart_pressed()
+			else:
+				exit_pressed.emit()
 	_drag_button = null
 	_drag_index = -1
 	_dragging = false
