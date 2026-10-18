@@ -142,12 +142,14 @@ func _build_status_bar() -> void:
 	_target_button.name = "MobileTargeting"
 	_target_button.custom_minimum_size = Vector2(float(_config.get_value("apuntar_ancho_px")), float(_config.get_value("apuntar_alto_px")))
 	_target_button.add_theme_font_size_override("font_size", int(_config.get_value("accion_fuente_px")))
+	_target_button.mouse_filter = Control.MOUSE_FILTER_IGNORE  # un solo dueño del toque: _handle_status_touch (T291)
 	_target_button.pressed.connect(targeting_pressed.emit)
 	row.add_child(_target_button)
 	_upgrade_button = Button.new()
 	_upgrade_button.name = "MobileUpgrade"
 	_upgrade_button.custom_minimum_size = Vector2(float(_config.get_value("mejorar_ancho_px")), float(_config.get_value("mejorar_alto_px")))
 	_upgrade_button.add_theme_font_size_override("font_size", int(_config.get_value("accion_fuente_px")))
+	_upgrade_button.mouse_filter = Control.MOUSE_FILTER_IGNORE  # un solo dueño del toque: _handle_status_touch (T291)
 	_upgrade_button.pressed.connect(_on_upgrade_pressed)
 	row.add_child(_upgrade_button)
 	_sell_gap = Control.new()
@@ -159,6 +161,7 @@ func _build_status_bar() -> void:
 	_sell_button.name = "MobileSell"
 	_sell_button.custom_minimum_size = Vector2(float(_config.get_value("vender_ancho_px")), float(_config.get_value("vender_alto_px")))
 	_sell_button.add_theme_font_size_override("font_size", int(_config.get_value("accion_fuente_px")))
+	_sell_button.mouse_filter = Control.MOUSE_FILTER_IGNORE  # un solo dueño del toque: _handle_status_touch (T291)
 	_sell_button.pressed.connect(_on_sell_pressed)
 	row.add_child(_sell_button)
 	_set_empty_status()
@@ -954,3 +957,39 @@ func _update_placement_position() -> void:
 	else:
 		_confirm_button.position = screen_pos + Vector2(-separation / 2.0 - confirm_size.x, -confirm_size.y - above)
 		_cancel_button.position = screen_pos + Vector2(-separation / 2.0 - confirm_size.x - separation - cancel_size.x, -cancel_size.y - above)
+	_clamp_placement_buttons(screen_pos)
+
+
+## Mantiene la tilde y la cruz dentro del área del mapa (entre las barras y los bordes de la pantalla),
+## juntas. Si arriba del fantasma no entran, pasan abajo (T291, H-06): así nunca pisan los botones de la
+## barra de arriba y un toque tiene un solo dueño (RF-504 punto 5).
+func _clamp_placement_buttons(screen_pos: Vector2) -> void:
+	var top: float = float(_config.get_value("barra_alta_px"))
+	var bottom: float = Rules.SCREEN_SIZE.y - float(_config.get_value("barra_baja_px"))
+	var above: float = float(_config.get_value("fantasma_botones_arriba_px"))
+	var height: float = maxf(_confirm_button.size.y, _cancel_button.size.y)
+	var delta_y: float = 0.0
+	if _confirm_button.position.y < top:
+		var below_y: float = screen_pos.y + _ghost_size.y / 2.0 + above
+		if below_y + height <= bottom:
+			delta_y = below_y - _confirm_button.position.y
+	_confirm_button.position.y += delta_y
+	_cancel_button.position.y += delta_y
+	var min_y: float = minf(_confirm_button.position.y, _cancel_button.position.y)
+	var max_y: float = maxf(_confirm_button.position.y + _confirm_button.size.y, _cancel_button.position.y + _cancel_button.size.y)
+	var shift_y: float = 0.0
+	if min_y < top:
+		shift_y = top - min_y
+	elif max_y > bottom:
+		shift_y = bottom - max_y
+	_confirm_button.position.y += shift_y
+	_cancel_button.position.y += shift_y
+	var left: float = minf(_confirm_button.position.x, _cancel_button.position.x)
+	var right: float = maxf(_confirm_button.position.x + _confirm_button.size.x, _cancel_button.position.x + _cancel_button.size.x)
+	var shift_x: float = 0.0
+	if left < 0.0:
+		shift_x = -left
+	elif right > Rules.SCREEN_SIZE.x:
+		shift_x = Rules.SCREEN_SIZE.x - right
+	_confirm_button.position.x += shift_x
+	_cancel_button.position.x += shift_x

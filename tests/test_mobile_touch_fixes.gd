@@ -163,3 +163,92 @@ func test_tab_structure_change_rebuilds_without_leftovers() -> void:
 	_game.mobile_hud.set_catalog_data(_game.mobile_hud._catalog_towers, _game.available_towers,
 		_game.session.gold, _game.session.resources, true, [])
 	assert_eq(grid.get_child_count(), 0, "sin opciones no quedan tarjetas viejas en la grilla")
+
+
+# --- T291 (H-05, H-06 de T289): un solo dueño por toque ---
+
+func _select_placed_tower() -> Tower:
+	var tower_data: TowerData = _game.available_towers[0]
+	_game.session.earn(5000)
+	_game.build_controller.try_build(tower_data, _free_cell(tower_data))
+	var tower: Tower = _game.tower_container.get_child(0)
+	_game.build_controller.select_placed(tower)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	return tower
+
+
+func test_targeting_advances_once_per_android_touch() -> void:
+	await _start(0)
+	var tower: Tower = await _select_placed_tower()
+	var modes: int = Tower.TargetMode.size()
+	for round: int in 3:
+		var before: int = tower.targeting
+		var center: Vector2 = _game.mobile_hud._target_button.get_global_rect().get_center()
+		await _android_touch(center, true)
+		await _android_touch(center, false)
+		assert_eq(tower.targeting, (before + 1) % modes, "toque %d: avanza un solo modo" % round)
+
+
+func test_upgrade_goes_up_one_level_per_android_touch() -> void:
+	await _start(0)
+	var tower: Tower = await _select_placed_tower()
+	var before: int = tower.level_number()
+	var center: Vector2 = _game.mobile_hud._upgrade_button.get_global_rect().get_center()
+	await _android_touch(center, true)
+	await _android_touch(center, false)
+	assert_eq(tower.level_number(), before + 1)
+
+
+func test_sell_needs_two_separate_touches_with_android_order() -> void:
+	await _start(0)
+	var tower: Tower = await _select_placed_tower()
+	var center: Vector2 = _game.mobile_hud._sell_button.get_global_rect().get_center()
+	await _android_touch(center, true)
+	await _android_touch(center, false)
+	assert_true(is_instance_valid(tower) and not tower.is_queued_for_deletion(), "un toque solo arma")
+	assert_true(_game.mobile_hud._sell_armed)
+
+
+func test_status_buttons_do_not_take_the_emulated_click() -> void:
+	await _start(0)
+	for button: Button in [_game.mobile_hud._target_button, _game.mobile_hud._upgrade_button, _game.mobile_hud._sell_button]:
+		assert_eq(button.mouse_filter, Control.MOUSE_FILTER_IGNORE, "%s no recibe el clic emulado" % button.name)
+
+
+func test_placement_buttons_stay_inside_the_map_area_in_every_corner() -> void:
+	await _start(0)
+	_game.build_controller.select(0)
+	await get_tree().process_frame
+	var size: Vector2i = _game.level.map_size()
+	for cell: Vector2i in [Vector2i(0, 0), Vector2i(size.x - 1, 0), Vector2i(0, size.y - 1), Vector2i(size.x - 1, size.y - 1), Vector2i(19, 0), Vector2i(16, 0)]:
+		_game.build_controller._move_mobile_ghost(cell)
+		await get_tree().process_frame
+		await get_tree().process_frame
+		for button: Button in [_game.mobile_hud._confirm_button, _game.mobile_hud._cancel_button]:
+			var rect: Rect2 = button.get_global_rect()
+			assert_gte(rect.position.y, 64.0, "%s en %s: debajo de la barra de arriba" % [button.name, cell])
+			assert_lte(rect.end.y, 624.0, "%s en %s: arriba de la barra de abajo" % [button.name, cell])
+			assert_gte(rect.position.x, 0.0, "%s en %s: dentro por la izquierda" % [button.name, cell])
+			assert_lte(rect.end.x, 1280.0, "%s en %s: dentro por la derecha" % [button.name, cell])
+		var tick: Rect2 = _game.mobile_hud._confirm_button.get_global_rect()
+		var cross: Rect2 = _game.mobile_hud._cancel_button.get_global_rect()
+		assert_false(tick.intersects(cross), "la tilde y la cruz no se pisan en %s" % cell)
+
+
+func test_touch_on_top_bar_speed_button_does_not_also_build() -> void:
+	await _start(0)
+	var tower_data: TowerData = _game.available_towers[0]
+	_game.build_controller.select(0)
+	await get_tree().process_frame
+	_game.build_controller._move_mobile_ghost(Vector2i(19, 0))
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var gold_before: int = _game.session.gold
+	var speed_button: Button = _game.hud.find_child("SpeedButton", true, false) as Button
+	var center: Vector2 = speed_button.get_global_rect().get_center() if speed_button != null else Vector2(1200.0, 30.0)
+	await _android_touch(center, true)
+	await _android_touch(center, false)
+	assert_eq(_game.session.gold, gold_before, "tocar la velocidad no construye")
+	assert_eq(_game.tower_container.get_child_count(), 0)
+	assert_not_null(tower_data)
