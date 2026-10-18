@@ -302,6 +302,9 @@ func _on_mobile_catalog_money_changed(_gold: int) -> void:
 func _refresh_mobile_catalog() -> void:
 	if mobile_hud == null:
 		return
+	# Cerrado y ya armado: no se reconstruye nada; al abrirlo, catalog_opened vuelve a llamar acá (T290, H-04).
+	if mobile_hud.is_catalog_populated() and not mobile_hud.is_catalog_open():
+		return
 	var all_towers: Array[TowerData] = Wiki._all_towers()
 	var options: Array[Dictionary] = _mobile_infrastructure_options()
 	mobile_hud.set_catalog_data(all_towers, available_towers, session.gold, session.resources,

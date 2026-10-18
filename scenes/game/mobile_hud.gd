@@ -26,6 +26,8 @@ var _catalog_tabs: TabContainer
 var _tower_grid: GridContainer
 var _infrastructure_grid: GridContainer
 var _catalog_towers: Array[TowerData] = []
+var _catalog_populated: bool = false
+var _icon_cache: Dictionary = {}
 var _available_towers: Array[TowerData] = []
 var _infrastructure_options: Array[Dictionary] = []
 var _catalog_gold: int = 0
@@ -473,6 +475,7 @@ func set_catalog_data(towers: Array[TowerData], available: Array[TowerData], gol
 	_catalog_resources = resources
 	_catalog_uses_resources = uses_resources
 	_infrastructure_options = infrastructure_options.duplicate(true)
+	_catalog_populated = true
 	_refresh_catalog()
 
 
@@ -486,8 +489,7 @@ func _refresh_catalog() -> void:
 	var columns: int = mini(int(_config.get_value("catalogo_columnas")), fit_columns)
 	_tower_grid.columns = columns
 	_infrastructure_grid.columns = columns
-	_clear_children(_tower_grid)
-	_clear_children(_infrastructure_grid)
+	var tower_descriptors: Array[Dictionary] = []
 	for tower: TowerData in _catalog_towers:
 		var available_index: int = -1
 		for i: int in _available_towers.size():
@@ -514,25 +516,55 @@ func _refresh_catalog() -> void:
 		var cost_text: String = TowerText.cost_text(tower, use_alt)
 		if tower.has_alt_payment():
 			cost_text = "%s / %s" % [TowerText.cost_text(tower), TowerText.cost_text(tower, true)]
-		_add_catalog_card(_tower_grid, tower.display_name, cost_text, reason,
-			Tower.make_icon(tower), available_index, use_alt)
+		tower_descriptors.append({"key": "tower:%s" % tower.id, "title": tower.display_name,
+			"cost": cost_text, "reason": reason, "icon": _tower_icon(tower),
+			"tower_index": available_index, "use_alt": use_alt, "tool": &"", "class_id": &""})
+	var option_descriptors: Array[Dictionary] = []
 	for option: Dictionary in _infrastructure_options:
-		_add_catalog_card(_infrastructure_grid, String(option.get("name", "Infraestructura")),
-			String(option.get("cost_text", "")), String(option.get("disabled_reason", "")),
-			option.get("icon"), -1, false, StringName(option.get("tool", "")),
-			StringName(option.get("class_id", "")))
+		option_descriptors.append({"key": "tool:%s:%s" % [option.get("tool", ""), option.get("class_id", "")],
+			"title": String(option.get("name", "Infraestructura")),
+			"cost": String(option.get("cost_text", "")), "reason": String(option.get("disabled_reason", "")),
+			"icon": option.get("icon"), "tower_index": -1, "use_alt": false,
+			"tool": StringName(option.get("tool", "")), "class_id": StringName(option.get("class_id", ""))})
+	_sync_catalog_grid(_tower_grid, tower_descriptors)
+	_sync_catalog_grid(_infrastructure_grid, option_descriptors)
 	var infrastructure_tab: Control = _catalog_tabs.get_child(1)
 	infrastructure_tab.visible = not _infrastructure_options.is_empty()
 	if not infrastructure_tab.visible and _catalog_tabs.current_tab == 1:
 		_catalog_tabs.current_tab = 0
 
 
-func _add_catalog_card(parent: GridContainer, title: String, cost: String, reason: String,
-		icon: Variant, tower_index: int, use_alt: bool, tool: StringName = &"",
-		class_id: StringName = &"") -> void:
+## Deja la grilla igual a los descriptores. Si las tarjetas son las mismas (misma clave y orden)
+## las actualiza en el lugar: no se destruye ninguna, así que un toque en curso no se pierde (T290, H-03).
+func _sync_catalog_grid(grid: GridContainer, descriptors: Array[Dictionary]) -> void:
+	var same_structure: bool = grid.get_child_count() == descriptors.size()
+	if same_structure:
+		for i: int in descriptors.size():
+			if grid.get_child(i).get_meta("key", "") != descriptors[i]["key"]:
+				same_structure = false
+				break
+	if same_structure:
+		for i: int in descriptors.size():
+			_apply_card(grid.get_child(i) as Button, descriptors[i])
+		return
+	for child: Node in grid.get_children():
+		grid.remove_child(child)
+		child.queue_free()
+	for descriptor: Dictionary in descriptors:
+		grid.add_child(_make_catalog_card(descriptor))
+
+
+func _tower_icon(tower: TowerData) -> Texture2D:
+	if not _icon_cache.has(tower.id):
+		_icon_cache[tower.id] = Tower.make_icon(tower)
+	return _icon_cache[tower.id]
+
+
+func _make_catalog_card(descriptor: Dictionary) -> Button:
 	var minimum_width: float = _catalog_virtual_mm(float(_config.get_value("catalogo_tarjeta_ancho_mm")))
 	var minimum_height: float = _catalog_virtual_mm(float(_config.get_value("catalogo_tarjeta_alto_mm")))
 	var card := Button.new()
+	var title: String = descriptor["title"]
 	var safe_title: String = title.to_snake_case().replace("·", "").replace("__", "_").trim_prefix("_").trim_suffix("_")
 	card.name = "CatalogCard_%s" % safe_title
 	card.custom_minimum_size = Vector2(minimum_width, minimum_height)
@@ -544,19 +576,39 @@ func _add_catalog_card(parent: GridContainer, title: String, cost: String, reaso
 	card.expand_icon = true
 	card.add_theme_constant_override("icon_max_width", int(_config.get_value("catalogo_icono_ancho_px")))
 	card.add_theme_font_size_override("font_size", int(_config.get_value("catalogo_tarjeta_fuente_px")))
+	card.pressed.connect(_on_catalog_card_pressed.bind(card))
+	_apply_card(card, descriptor)
+	return card
+
+
+func _apply_card(card: Button, descriptor: Dictionary) -> void:
+	var title: String = descriptor["title"]
+	var cost: String = descriptor["cost"]
+	var reason: String = descriptor["reason"]
 	var text: String = "%s\n%s" % [title, cost]
 	if reason != "":
 		text += "\n%s" % reason
-	card.text = text
-	card.tooltip_text = reason if reason != "" else "%s · %s" % [title, cost]
-	if icon is Texture2D:
-		card.icon = icon
+	var tooltip: String = reason if reason != "" else "%s · %s" % [title, cost]
+	card.set_meta("key", descriptor["key"])
+	card.set_meta("tower_index", descriptor["tower_index"])
+	card.set_meta("use_alt", descriptor["use_alt"])
+	card.set_meta("tool", descriptor["tool"])
+	card.set_meta("class_id", descriptor["class_id"])
+	if card.text != text:
+		card.text = text
+	if card.tooltip_text != tooltip:
+		card.tooltip_text = tooltip
+	if descriptor["icon"] is Texture2D and card.icon != descriptor["icon"]:
+		card.icon = descriptor["icon"]
 	card.disabled = reason != ""
+
+
+func _on_catalog_card_pressed(card: Button) -> void:
+	var tower_index: int = card.get_meta("tower_index", -1)
 	if tower_index >= 0:
-		card.pressed.connect(_on_tower_card_pressed.bind(tower_index, use_alt))
+		_on_tower_card_pressed(tower_index, card.get_meta("use_alt", false))
 	else:
-		card.pressed.connect(_on_infrastructure_card_pressed.bind(tool, class_id))
-	parent.add_child(card)
+		_on_infrastructure_card_pressed(card.get_meta("tool", &""), card.get_meta("class_id", &""))
 
 
 func _on_tower_card_pressed(index: int, use_alt_payment: bool) -> void:
@@ -577,11 +629,6 @@ func _catalog_virtual_mm(millimeters: float) -> float:
 	var dpi: float = float(DisplayServer.screen_get_dpi())
 	var canvas_scale: float = get_viewport().get_stretch_transform().x.length() * get_viewport().get_window().content_scale_factor
 	return millimeters * dpi / 25.4 / canvas_scale if dpi > 0.0 and canvas_scale > 0.0 else fallback
-
-
-func _clear_children(parent: Node) -> void:
-	for child: Node in parent.get_children():
-		child.queue_free()
 
 
 func show_placement(world_position: Vector2, cost_text: String, valid: bool, reason: String,
@@ -649,6 +696,11 @@ func _update_floating_visibility() -> void:
 
 func is_catalog_open() -> bool:
 	return _catalog_open
+
+
+## Hay tarjetas ya armadas (el primer armado se hace aun cerrado; después solo se actualiza abierto).
+func is_catalog_populated() -> bool:
+	return _catalog_populated
 
 
 func open_catalog() -> void:

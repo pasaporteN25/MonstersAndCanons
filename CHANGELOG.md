@@ -2,6 +2,10 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Catálogo del celular más fluido *(T290, 2026-10-18)*
+
+Elegir una torre en el catálogo ya no falla si justo cambia el oro (por ejemplo, al morir un enemigo con el dedo apoyado), y el juego deja de hacer trabajo de más en cada cambio de oro con el catálogo cerrado.
+
 ## «Empezar oleada» responde al toque en el celular *(T288, 2026-10-18)*
 
 En el modo celular el botón «Empezar oleada» se veía pero no recibía el toque, porque la barra de abajo lo tapaba. Ahora responde.
