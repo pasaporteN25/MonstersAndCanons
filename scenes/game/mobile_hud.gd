@@ -103,14 +103,14 @@ func _build_status_bar() -> void:
 	_status_bar.position = Vector2.ZERO
 	_status_bar.size = Vector2(Rules.SCREEN_SIZE.x, height)
 	_status_bar.position.y = Rules.SCREEN_SIZE.y - height
-	_status_bar.mouse_filter = Control.MOUSE_FILTER_PASS
+	_status_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE  # T288: no tapa a «Empezar oleada» del HUD (capa 1)
 	add_child(_status_bar)
 	var row := HBoxContainer.new()
 	var margin_x: float = float(_config.get_value("barra_margen_x_px"))
 	var margin_y: float = float(_config.get_value("barra_margen_y_px"))
 	row.position = Vector2(margin_x, margin_y)
 	row.size = Vector2(Rules.SCREEN_SIZE.x - margin_x * 2.0, height - margin_y * 2.0)
-	row.mouse_filter = Control.MOUSE_FILTER_PASS
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE  # T288
 	row.add_theme_constant_override("separation", int(_config.get_value("separacion_px")))
 	_status_bar.add_child(row)
 	_status_label = Label.new()

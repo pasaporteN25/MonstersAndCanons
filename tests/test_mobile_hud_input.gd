@@ -106,3 +106,22 @@ func test_placement_reports_reason_without_enlarging_the_tick() -> void:
 	assert_true(_hud._confirm_button.disabled)
 	assert_true(_hud._bottom_confirm.disabled)
 	assert_string_contains(_hud._status_label.text, "Faltan 3 recursos")
+
+
+## T288: la barra de abajo del HUD celular (capa 3) tapaba «Empezar oleada» (capa 1): el toque lo recibía
+## la barra y el botón nunca se pulsaba, aunque se viera habilitado.
+func test_start_wave_button_receives_real_taps_under_the_status_bar() -> void:
+	var button: Button = _game.hud._start_wave_button
+	assert_true(button.is_visible_in_tree())
+	assert_false(button.disabled)
+	var center: Vector2 = button.get_global_rect().get_center()
+	await _mouse(center, true)
+	await _mouse(center, false)
+	assert_eq(_game.session.state, LevelSession.State.WAVE_RUNNING, "el clic en el botón empieza la oleada (mouse)")
+
+
+func test_start_wave_button_receives_touch_under_the_status_bar() -> void:
+	var center: Vector2 = _game.hud._start_wave_button.get_global_rect().get_center()
+	await _touch(center, true)
+	await _touch(center, false)
+	assert_eq(_game.session.state, LevelSession.State.WAVE_RUNNING, "el toque en el botón empieza la oleada")
