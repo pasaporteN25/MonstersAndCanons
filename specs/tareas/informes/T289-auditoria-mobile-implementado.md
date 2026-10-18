@@ -340,6 +340,8 @@ Las marcadas con *(sugerencia de Claude)* no las pidió nadie: si Lucas las quie
 10. **D10 · Construir en pausa en el celular (H-14 k):** RF-104 dice que no. ¿El carrito se apaga en pausa, o se puede preparar el fantasma en pausa y la tilde dice «En pausa»? (Lo segundo es lo que T262 echaba de menos: planear con calma.)
 11. **D11 · Etiquetas `[mobile]`/`[x86]`/`[mobile+x86]` (§5):** ¿se adoptan en `03-tareas.md` con la definición propuesta?
 
+12. **D12 · Temporizadores de la barra con velocidad x2 (H-08), pendiente desde T292:** RF-512 y RF-513 dicen «se desarma solo a los 3 s», «0,35 s sin responder» y «0,4 s entre toques» sin aclarar si son segundos **reales** o **de juego**. Hoy son de juego (con x2 duran la mitad en tiempo real: 1,5 s, 0,18 s, 0,2 s). ¿Se cuentan en tiempo real (más predecible para el dedo; el doble toque del mapa ya lo hace) o se dejan como están? No se cambió hasta que Lucas elija.
+
 ## Apéndice A · Scripts que reproducen los hallazgos
 
 Son tests de GUT **escritos para este informe; no están en `tests/`** (pedido de la tarea). Quien arregle puede pegarlos en un archivo `tests/test_mobile_touch_e2e.gd`. **Verificado:** los copié a una carpeta temporal fuera de `tests/`, los corrí con `gut_cmdln.gd -gtest=…` y **los 8 fallan hoy, cada uno con el motivo del hallazgo** (0 ≠ 1 en la oleada; pestaña 1 ≠ 0 dos veces; 0 ≠ 1 en la tarjeta; 2 ≠ 1 en Apuntar; la tilde arriba de y = 64; «Vender» desarmado; 56 ≠ 99 y 6 ≠ 9; la cámara se acercó), sin `SCRIPT ERROR`. Después borré la carpeta. Un arreglo correcto debería ponerlos en verde.

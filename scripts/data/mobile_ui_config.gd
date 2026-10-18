@@ -81,9 +81,17 @@ static func load_from(path: String = PATH) -> MobileUiConfig:
 	var raw: Dictionary = parser.data
 	for key: String in DEFAULTS:
 		var value: Variant = raw.get(key, DEFAULTS[key])
-		if typeof(value) == typeof(DEFAULTS[key]):
+		var default_value: Variant = DEFAULTS[key]
+		if typeof(value) == typeof(default_value):
 			config.values[key] = value
+		elif _is_number(value) and _is_number(default_value):
+			# JSON entrega los enteros como float: se acepta y se pasa al tipo del valor por omisión (T292, H-13).
+			config.values[key] = roundi(float(value)) if typeof(default_value) == TYPE_INT else float(value)
 	return config
+
+
+static func _is_number(value: Variant) -> bool:
+	return typeof(value) == TYPE_INT or typeof(value) == TYPE_FLOAT
 
 
 func get_value(key: String) -> Variant:

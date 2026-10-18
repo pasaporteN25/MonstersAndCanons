@@ -252,3 +252,47 @@ func test_touch_on_top_bar_speed_button_does_not_also_build() -> void:
 	assert_eq(_game.session.gold, gold_before, "tocar la velocidad no construye")
 	assert_eq(_game.tower_container.get_child_count(), 0)
 	assert_not_null(tower_data)
+
+
+# --- T292 (H-13 de T289): los enteros editados en el archivo de datos se respetan ---
+
+func _config_from_text(text: String) -> MobileUiConfig:
+	var path: String = "user://test_t292_mobile_ui.json"
+	var file := FileAccess.open(path, FileAccess.WRITE)
+	file.store_string(text)
+	file.close()
+	var config: MobileUiConfig = MobileUiConfig.load_from(path)
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
+	return config
+
+
+func test_mobile_ui_config_respects_integer_values() -> void:
+	var config: MobileUiConfig = _config_from_text('{"boton_alto_px": 99, "flotante_min_mm": 9, "barra_alta_px": 80}')
+	assert_eq(config.get_value("boton_alto_px"), 99)
+	assert_eq(config.get_value("flotante_min_mm"), 9)
+	assert_eq(config.get_value("barra_alta_px"), 80)
+	assert_eq(typeof(config.get_value("boton_alto_px")), TYPE_INT, "sigue siendo entero")
+
+
+func test_mobile_ui_config_float_values_stay_float_and_whole_numbers_convert() -> void:
+	var config: MobileUiConfig = _config_from_text('{"toque_max_mm": 3.5, "vender_rearmar_s": 5}')
+	assert_eq(config.get_value("toque_max_mm"), 3.5)
+	assert_eq(config.get_value("vender_rearmar_s"), 5.0)
+	assert_eq(typeof(config.get_value("vender_rearmar_s")), TYPE_FLOAT, "un 5 sin decimales cuenta como 5.0")
+
+
+func test_mobile_ui_config_rejects_wrong_types_and_keeps_defaults() -> void:
+	var defaults: MobileUiConfig = MobileUiConfig.new()
+	var config: MobileUiConfig = _config_from_text('{"boton_alto_px": "alto", "barra_alta_px": null, "flotante_min_mm": [1]}')
+	for key: String in ["boton_alto_px", "barra_alta_px", "flotante_min_mm"]:
+		assert_eq(config.get_value(key), defaults.get_value(key), "%s conserva el valor por omisión" % key)
+
+
+func test_mobile_ui_config_data_file_takes_every_number_as_written() -> void:
+	# Cada número del archivo real llega con el valor del archivo, no con el de omisión.
+	var file := FileAccess.open(MobileUiConfig.PATH, FileAccess.READ)
+	var raw: Dictionary = JSON.parse_string(file.get_as_text())
+	var config: MobileUiConfig = MobileUiConfig.load_from()
+	for key: String in raw:
+		if MobileUiConfig.DEFAULTS.has(key) and (raw[key] is float or raw[key] is int):
+			assert_almost_eq(float(config.get_value(key)), float(raw[key]), 0.0001, key)
