@@ -673,3 +673,16 @@ Los textos, los segundos de cada lámina y el fundido de la intro viven en `data
 - La herramienta **no crea imágenes**: el campo `Imagen` solo puede apuntar a un archivo que ya exista (por ejemplo, para reordenar láminas). Cambiar qué imagen va con qué texto cambia cómo se ve el juego: conviene hablarlo antes.
 
 Si el documento y el JSON se desfasan (alguien editó uno solo), `tests/test_intro_doc.gd` lo avisa.
+
+
+## Cómo agregar las novedades de una versión *(M67, RF-605 y RF-609)*
+
+La pantalla «Novedades de esta versión» (se abre sola una vez por versión y se vuelve a ver en **Opciones → «Créditos y versión»**) lee **`data/novedades/novedades.json`**. Para sacar una versión nueva (por ejemplo, la 1.1.0) **no hace falta tocar código**:
+
+1. **Subí la versión** en `project.godot` (`config/version`), y a mano `file_version` y `product_version` de Windows y `version/code` de Android (`export_presets.cfg`).
+2. **Agregá al principio de `versiones`** una entrada con `"tipo": "mejoras"`, tus novedades y `"borrador": false`. `CHANGELOG.md` sigue siendo la fuente para armarla, pero **el juego no lo lee**. Dejá las entradas viejas: Opciones las usa como historial.
+3. **Revisalo:** `godot --headless --path . -s tools/check_novedades.gd`. Da errores en castellano (con la versión y la novedad) y un **aviso** si la versión de `project.godot` es un número y no tiene entrada aprobada.
+
+**La forma del archivo.** `version` (el formato, hoy 1), `interfaz` (los rótulos fijos: `entendido`, `titulo_novedades`, `titulo_mejoras`, `borrador`, `sin_novedades`) y `versiones`. Cada versión: `id` (**igual** que `config/version`), `tipo` (`"presentacion"` para la 1.0.0, `"mejoras"` para las siguientes), `borrador` (`true` hasta que el texto esté aprobado: **un borrador no sale solo**, pero se puede revisar desde Opciones), `titulo` (hasta 40 caracteres), `subtitulo` (opcional, hasta 80), `cabecera` (opcional, una imagen `res://` que exista) y `novedades`: **de 1 a 8**, cada una con `titulo` (hasta 40), `texto` (hasta 140 caracteres y 2 líneas) e `icono` (opcional, una imagen `res://` que exista).
+
+**Reglas que conviene saber.** Las de tipo «mejoras» muestran arriba «Mejoras de esta versión» y no salen solas a un guardado nuevo (quien instala por primera vez no necesita saber qué cambió). **No sale** con `config/version` en `beta`, en el modo de pruebas ni desde el editor de Godot. **No escribas cifras** que puedan quedar viejas (cantidad de torres, de enemigos…): si hace falta una, `tests/test_news_content.gd` la compara con el juego. Un archivo con errores **no muestra nada** y el juego abre normal.

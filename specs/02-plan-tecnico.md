@@ -1533,7 +1533,7 @@ Los textos, números de tamaño y posiciones nuevos viven en `mobile_ui.json` (P
 
 ### M67 / T370 a T375 · «Novedades de esta versión» (RF-603 a RF-609, D-141 a D-144)
 
-**Estado: solo especificado.** No cambia la partida, el balance ni el progreso. Sigue el molde de la intro (M57, `IntroData`/`IntroFlow`/`IntroScreen`) y del tutorial (M63, `TutorialData`/guardado aditivo).
+**Estado: implementado salvo el arte (T372, T375) y el OK de Lucas a los textos.** No cambia la partida, el balance ni el progreso. Sigue el molde de la intro (M57, `IntroData`/`IntroFlow`/`IntroScreen`) y del tutorial (M63, `TutorialData`/guardado aditivo).
 
 1. **Datos y validador** (T371). `data/novedades/novedades.json` (nace con la lista de versiones vacía, que es válida y no muestra nada, hasta que T374 cargue la 1.0.0); `scripts/logic/news_data.gd` (`NewsData`: `parse`, `load_file`, `entry_for(version)`, `latest()`, `errors`, límites de RF-605); `tools/check_novedades.gd` (errores y avisos en castellano); `tests/test_news_data.gd`.
 2. **Reglas puras** (T371). `scripts/logic/news_flow.gd` (`NewsFlow.should_auto_show(...)`, `NewsFlow.is_new_save(...)`; sin escena, P10) y `tests/test_news_flow.gd` con todos los casos de RF-603 (beta, vacía, igual, distinta, borrador, sin entrada, modo de pruebas, editor, «mejoras» con guardado nuevo y con guardado viejo, «presentacion» con guardado nuevo).

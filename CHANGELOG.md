@@ -13,6 +13,15 @@ El texto no tapa la barra de abajo, la tilde, la cruz ni los botones flotantes d
 ## Entrada del Jefe en el nivel 1 *(T366 y T368, 2026-10-19; arte provisional)*
 
 Cuando llega el **Jefe de la oleada 10 del nivel 1** (jugado desde el menú), sale una entrada corta: un **destello con una grieta** en la entrada del camino, en el mismo instante en que nace, y, cuando se va el cartel de «Oleada 10», un **cartel arriba del mapa** con su retrato, «¡Llega el Jefe!», su nombre y su frase. Dura **1,6 segundos**; con un **toque o un clic sobre el cartel** se saltea al instante (en PC tiene una «✕» chica). **No pausa la partida, no mueve la cámara y no cambia nada del Jefe**: el mapa de alrededor sigue recibiendo toques y se puede construir mientras tanto. La tarjeta «Nuevo enemigo» del Jefe espera a que el cartel se retire y no se pisan. En **Opciones** hay una casilla nueva, **«Entrada de los jefes»** (prendida por omisión; un guardado viejo la lee prendida). El dibujo del destello es **provisional**. Se puede ver sin jugar diez oleadas con el modo de pruebas (F1 → hacer aparecer un Jefe).
+## «Novedades de esta versión»: una pantalla con lo nuevo, una vez por versión *(T371 y T373, 2026-10-19)*
+
+- **Al abrir el juego, una pantalla muestra lo nuevo de la versión instalada**, una sola vez por versión: un panel con título, subtítulo, la lista de novedades (hasta 8, con íconos si los hay) y el botón **«Entendido»**. Se cierra con «Entendido», `Esc` o el «atrás» del celular, y el toque que cierra **no** activa nada del menú de abajo. Si la lista no entra, se desplaza (rueda y barra en PC, un dedo con inercia en el celular).
+- **Para volver a verla:** **Opciones → «Créditos y versión» → «Novedades de esta versión»** (menú principal y pausa, PC y celular). No cambia lo que el juego recuerda.
+- **Cuándo sale sola:** cuando la versión instalada es un número y trae novedades aprobadas, y el guardado todavía no las vio. **No sale** en la versión `beta`, mientras el texto sea un borrador, en el modo de pruebas ni al correr desde el editor de Godot. Si el archivo está roto, el menú abre como siempre.
+- **La presentación de la 1.0.0 sale a todos** (también a quien instala por primera vez, antes de la intro); las versiones siguientes, tipo «Mejoras de esta versión», las ven quienes ya jugaron.
+- **Los textos están en `data/novedades/novedades.json`** y se pueden retocar sin programar (`CONTENIDO.md`). `godot --headless --path . -s tools/check_novedades.gd` los revisa y avisa si falta la entrada de la versión.
+- **Arte provisional:** por ahora la pantalla no tiene cabecera ni íconos propios (un rombo de bronce marca cada novedad); el arte llega con T372 y T375.
+- Tu progreso no cambia: el guardado suma una marca («última versión vista») y una versión anterior del juego lo sigue leyendo.
 
 ## «Ver todo» también cuando corriste el mapa *(T304, 2026-10-19)*
 

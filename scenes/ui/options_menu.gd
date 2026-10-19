@@ -18,6 +18,9 @@ const TUTORIAL_REPLAY_TEXT: String = "Volver a verlo"
 const TUTORIAL_REPLAYED_TEXT: String = "Se verá en el nivel 1"
 ## M66 (RF-600): la entrada de los jefes.
 const BOSS_ENTRANCE_TEXT: String = "Entrada de los jefes"
+## M67 (RF-607): el botón de las novedades y su texto cuando no hay nada para abrir.
+const NEWS_BUTTON_TEXT: String = "Novedades de esta versión"
+const NEWS_EMPTY_TEXT: String = "No hay novedades"
 
 ## RF-383: la sección de administración solo se ofrece desde el menú principal, nunca desde la
 ## pausa (no se cambia de guardado en medio de una partida). La prende `MainMenu`.
@@ -57,6 +60,13 @@ var _two_columns: bool = false
 ## RF-553: los créditos de siempre (RF-472), hijos de Opciones; al cerrarlos se vuelve acá.
 var credits: CreditsScreen
 var _tutorial_check: CheckBox
+## M67 (RF-607): «Novedades de esta versión», debajo de «Ver créditos». Costuras para los tests: de dónde se leen y qué
+## versión está instalada.
+var news: NewsScreen
+var news_path: String = NewsData.DEFAULT_PATH
+var news_version_source: Callable = GameVersion.raw
+var _news_button: Button
+var _news_data: NewsData
 var _tutorial_replay: Button
 var _boss_entrance_check: CheckBox
 
@@ -85,6 +95,7 @@ func _ready() -> void:
 	add_child(credits)
 	credits.closed.connect(_credits_button.grab_focus)
 	_credits_button.pressed.connect(credits.open)
+	_build_news_button()
 	Audio.add_click_sounds(self)
 	_refresh_admin()
 	MenuTouch.attach(self)  # RF-550, RF-551: botones de 56 px y desplazamiento táctil en el celular
@@ -103,6 +114,7 @@ func open() -> void:
 	_tutorial_check.set_pressed_no_signal(SaveManager.tutorial_enabled())
 	_tutorial_replay.text = TUTORIAL_REPLAY_TEXT
 	_tutorial_replay.disabled = false
+	_refresh_news_button()
 	_set_confirming(false)
 	visible = true
 	_fit_scroll()
@@ -274,6 +286,44 @@ func _build_boss_entrance_check() -> void:
 	_rows.move_child(_boss_entrance_check, anchor.get_index() + 1)
 	_boss_entrance_check.toggled.connect(
 		func(on: bool) -> void: SaveManager.set_setting("boss_entrance", on))
+## RF-607: abre las novedades de la versión instalada (o la más nueva del archivo) sin tocar el guardado. Con el
+## archivo roto o sin versiones queda deshabilitado y dice «No hay novedades».
+func _build_news_button() -> void:
+	news = NewsScreen.new()
+	news.layer = 22  # sobre la pausa (20), por si Opciones se abrió desde ahí
+	add_child(news)
+	news.closed.connect(_news_button_focus)
+	_news_button = Button.new()
+	_news_button.name = "NewsButton"
+	_news_button.custom_minimum_size.y = 44
+	_news_button.add_theme_font_size_override("font_size", 20)
+	_credits_button.get_parent().add_child(_news_button)
+	_credits_button.get_parent().move_child(_news_button, _credits_button.get_index() + 1)
+	_news_button.pressed.connect(_on_news_pressed)
+	_refresh_news_button()
+
+
+func _refresh_news_button() -> void:
+	_news_data = NewsData.load_file(news_path)
+	var usable: bool = _news_data.is_valid() and not _news_data.entry_for_options(String(news_version_source.call())).is_empty()
+	if not _news_data.is_valid():
+		push_warning("Las novedades no se pueden abrir: %s" % "; ".join(_news_data.errors))
+	_news_button.disabled = not usable
+	_news_button.text = NEWS_BUTTON_TEXT if usable else String(_news_data.labels.get("sin_novedades", NEWS_EMPTY_TEXT))
+
+
+func _on_news_pressed() -> void:
+	var entry: Dictionary = _news_data.entry_for_options(String(news_version_source.call()))
+	if not entry.is_empty():
+		news.open(entry, _news_data.labels)
+
+
+func _news_button_focus() -> void:
+	_news_button.grab_focus()
+
+
+func news_button() -> Button:
+	return _news_button
 
 
 func _build_ui_mode_selector() -> void:
