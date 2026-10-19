@@ -1208,3 +1208,69 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
   - **Que el cartel de aparición tape el de oleada:** se leerían mal los dos y el de oleada tiene más información (número de oleada).
   - **Mostrar la entrada solo la primera vez:** queda como pregunta P-66-2.
 - **Qué cambia:** `01-spec.md` (RF-597, RF-600), `SaveManager.DEFAULT_SETTINGS`, `OptionsMenu`, `HUD.show_enemy_intro` (espera), `tests/test_old_saves.gd`.
+
+## D-141 · «Novedades de esta versión» es una pantalla propia sobre el menú principal, que sale sola una vez por versión y se vuelve a ver desde Opciones
+- **Fecha:** 2026-10-19 · **Estado:** propuesta (spec M67, sin programar; el arte espera el OK de Lucas) · **Decidió:** Lucas (una pantalla al abrir el juego, una vez por versión, con opción para volver a verla) / Claude (la forma y dónde vive)
+- **Qué:** una capa (`NewsScreen`, `CanvasLayer` como `CreditsScreen`) que `MainMenu` abre al terminar de armarse si corresponde (RF-603), con cabecera, título, lista desplazable de hasta 8 novedades y «Entendido» fijo (RF-604). Se vuelve a ver con un botón en Opciones → «Créditos y versión» (RF-607).
+- **Por qué:**
+  - **Es lo que Lucas pidió** («una pantalla al abrir el juego») y sigue el molde que ya conoce quien juega: la intro y el tutorial se muestran solos una vez y se piden de nuevo desde otro lugar.
+  - **Una capa y no una escena nueva:** no cambia el flujo del menú ni de `GameFlow` (el menú sigue siendo el mismo árbol; la pantalla se abre y se cierra encima).
+  - **El celular:** el menú principal ya tiene seis botones de 56 px (M61); un botón nuevo no entra. Opciones, en cambio, tiene la sección «Créditos y versión» y su panel se desplaza.
+  - **Reutilizable:** como no depende de qué se cuenta, sirve igual para la presentación de la 1.0.0 y para las «Mejoras» de las siguientes (RF-609).
+- **Alternativas descartadas:**
+  - **Una tarjeta chica (aviso) en una esquina del menú:** se ignora; Lucas quiere una pantalla.
+  - **Mostrarla al tocar «Jugar»:** la intro ya usa «Jugar» (RF-498); dos pantallas seguidas en el primer arranque cansan y la de novedades es la primera cosa que debería verse, no la última.
+  - **Mostrarla en cada arranque:** molesta; Lucas pidió una sola vez por versión.
+  - **Un artículo de la Wiki «Novedades»:** la Wiki explica el juego, no la versión, y casi nadie la abre al instalar.
+  - **Un botón nuevo en el menú principal o en la pausa:** rompe el diseño del celular (M61).
+  - **Una casilla en Opciones «No mostrar novedades»:** una opción más para algo que sale una vez; queda como pregunta P-67-7.
+- **Qué cambia:** `01-spec.md` (RF-603, RF-604, RF-607, RF-608), `scenes/ui/news_screen.gd` (nuevo), `MainMenu`, `OptionsMenu`, `tests/`.
+
+## D-142 · La última versión vista se guarda como `"news_version"` (texto) en la raíz del guardado; se compara por igualdad; un guardado viejo ve la presentación de la 1.0.0 una vez
+- **Fecha:** 2026-10-19 · **Estado:** propuesta (spec M67, sin programar) · **Decidió:** Lucas (guardar la última versión vista, compatible con guardados viejos) / Claude (la clave y la semántica)
+- **Qué:** clave aditiva `"news_version"` (texto) en la raíz, como `intro_seen` y `tutorial_done`. Sin la clave, o con una que no es texto, vale `""`. Sale cuando `GameVersion.raw()` es distinta de ella y hay entrada aprobada (RF-603). Una entrada de tipo «mejoras» en un guardado nuevo se marca en silencio (RF-603 punto 4).
+- **Por qué:**
+  - **Compatibilidad:** `SAVE_VERSION` descarta los guardados de otra versión («se empieza de cero»); una clave aditiva **no rompe** ni los guardados viejos ni una versión anterior del juego (la ignora), igual que `collections`, `hall_total`, `intro_seen`, `ui_prefs` y `tutorial_done` (D-127). `tests/test_old_saves.gd` lo comprueba con los guardados de cada época.
+  - **Una cadena y no un booleano:** hay que distinguir «vio la 1.0.0» de «vio la 1.1.0».
+  - **Todos ven la 1.0.0 una vez:** un guardado viejo no tiene la clave y la 1.0.0 es una *presentación*; es lo que Lucas quiere para la salida.
+  - **Igualdad exacta:** `config/version` es un texto que Lucas escribe; interpretarlo como número agregaría reglas (¿`1.0.0-rc1` es anterior a `1.0.0`?) para ganar muy poco. Si alguien vuelve a una versión anterior, la ve de nuevo: aceptable y raro.
+  - **Los jugadores nuevos no ven los «Mejoras»:** una lista de cambios respecto de algo que nunca usaron no les sirve (pero sí ven la presentación).
+- **Alternativas descartadas:**
+  - **`SAVE_VERSION` 2:** el cargador descarta los guardados de otra versión y se perdería todo el progreso de quien vuelva a una versión anterior.
+  - **Un booleano `news_seen`:** no distingue una versión de otra; habría que borrarlo en cada versión.
+  - **Guardarla dentro de `settings`:** mezcla preferencia con progreso (lo mismo que se descartó en D-127).
+  - **Comparar `X.Y.Z` como número y mostrar todo lo que se pasó entre la última vista y la instalada:** requiere ordenar versiones y juntar entradas; Lucas pidió «lo nuevo de la versión instalada».
+  - **Marcar la versión al cerrar la pantalla:** quien cierra el juego a la mitad la vería de nuevo; la intro marca al abrirse (RF-498) y esto sigue ese criterio.
+- **Qué cambia:** `01-spec.md` (RF-603, RF-606), `scripts/autoload/save_manager.gd`, `tests/test_old_saves.gd`.
+
+## D-143 · El contenido vive en `data/novedades/novedades.json`, una entrada por versión, con borrador y validador; el juego no lee `CHANGELOG.md`
+- **Fecha:** 2026-10-19 · **Estado:** propuesta (spec M67, sin programar; los textos de la 1.0.0 son borrador de Lucas) · **Decidió:** Lucas (contenido en un archivo de datos fácil de retocar, presentación primero y «Mejoras» después) / Claude (el formato)
+- **Qué:** un JSON con rótulos de interfaz y una lista `versiones`, de la más nueva a la más vieja; cada entrada con `id`, `tipo` (`presentacion` o `mejoras`), `borrador`, título, subtítulo, cabecera y de 1 a 8 novedades con título, texto e ícono opcional (RF-605). Una entrada en borrador no sale sola, pero se ve desde Opciones con un rótulo (RF-603, RF-607).
+- **Por qué:**
+  - **Fácil de retocar sin tocar código** (P2) y con la misma costumbre que `intro.json` y `tutorial.json`, que Lucas ya conoce, con límites de largo validados en castellano.
+  - **Una entrada por versión, todas en el mismo archivo:** agregar una versión es pegar un bloque al principio (RF-609); las viejas quedan como historial.
+  - **`CHANGELOG.md` es otra cosa:** 75 secciones de cambios técnicos por tarea, pensado para el repositorio. Lo que se muestra al jugador es una selección corta de 8 ítems como máximo; automatizarlo daría una lista larga e inentendible. El `CHANGELOG` sigue siendo la **fuente** para escribir las novedades, a mano.
+  - **El borrador protege la salida:** como con el tutorial (D-128), Lucas quiere ver el texto antes de aprobarlo; acá además la pantalla se abre sola, así que *no* sale mientras sea borrador (se ve desde Opciones).
+- **Alternativas descartadas:**
+  - **Leer y recortar `CHANGELOG.md` en tiempo de ejecución:** frágil (depende del formato del markdown), largo y en tono técnico.
+  - **Un archivo por versión (`novedades_1.0.0.json`):** más archivos para mantener y para listar; con 8 ítems por versión no hace falta.
+  - **Los textos en el código o en un `.tres`:** más difícil de retocar y de revisar.
+  - **No cargar los textos hasta el OK de Lucas (como el lore, M52):** Lucas necesita verla funcionando para aprobarla; el borrador resuelve las dos cosas.
+  - **Que el JSON defina el diseño de la pantalla (colores, posiciones):** es del código; el archivo solo trae contenido.
+- **Qué cambia:** `01-spec.md` (RF-605, RF-609), `CONTENIDO.md` (cómo agregar una versión), `data/novedades/novedades.json`, `scripts/logic/news_data.gd`, `tools/check_novedades.gd`.
+
+## D-144 · Dispara el cambio de `config/version` **con** una entrada aprobada; `beta`, el modo de pruebas y el editor no la disparan; si falta la entrada, no sale una pantalla vacía
+- **Fecha:** 2026-10-19 · **Estado:** propuesta (spec M67, sin programar) · **Decidió:** Lucas (usar `config/version`; no en modo de pruebas ni en el editor) / Claude (qué cuenta como «hay novedades»)
+- **Qué:** `NewsFlow.should_auto_show(raw_version, seen_version, entry, dev_enabled, in_editor, new_save)` es verdadero si la versión instalada no está vacía y difiere de la vista, existe una entrada aprobada y válida con ese `id`, no se está en el modo de pruebas ni en el editor, y no es el caso «mejoras + guardado nuevo» (que se marca en silencio). Sin entrada, el menú abre normal y **no** se marca nada (RF-603).
+- **Por qué:**
+  - **`config/version` es la única fuente de la versión** (RF-554): la misma que ya muestra «Créditos y versión». No hay un segundo número para mantener.
+  - **`beta` no dispara:** hoy el juego es beta y cada compilación se probaría con la misma pantalla; con la 1.0.0, la presentación sale una vez y se acabó.
+  - **Sin entrada, silencio:** si Lucas sube la versión y no escribió las novedades, es mejor un menú normal (más un aviso en `tools/check_novedades.gd`) que una pantalla vacía o con texto equivocado.
+  - **Modo de pruebas y editor:** son las formas de trabajar sobre el juego, no de jugarlo; la pantalla lo interrumpiría en cada arranque. El modo de pruebas ya usa un guardado aparte (RF-181).
+  - **Recordatorio, no obstáculo:** una prueba que fallara al subir la versión sin entrada bloquearía una exportación; un aviso del validador y la lista de T375 alcanzan.
+- **Alternativas descartadas:**
+  - **Disparar con cualquier cambio de versión y mostrar lo que haya:** pantalla vacía o desactualizada.
+  - **Inferir las novedades comparando versiones o el `CHANGELOG`:** ver D-142 y D-143.
+  - **Detectar «primera instalación» con otra marca:** ya se deduce del guardado (ningún nivel ganado, intro sin ver) y solo hace falta para las «mejoras».
+  - **Una prueba que falle si falta la entrada de la versión:** ver arriba.
+- **Qué cambia:** `01-spec.md` (RF-603, RF-608), `scripts/logic/news_flow.gd`, `MainMenu`, `tests/test_news_flow.gd`.

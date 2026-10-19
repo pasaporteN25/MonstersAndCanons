@@ -3666,3 +3666,119 @@ Hallazgos que condicionan el diseño: (1) **no todas suben las mismas cosas** (l
 - **Voces, música nueva o sonidos nuevos** (queda como pregunta P-66-3).
 - **Activar** la entrada en los demás jefes y niveles (el diseño lo permite por datos; es otra tarea, P3).
 - **Probarlo en un celular real.**
+
+### M67 · «Novedades de esta versión» (Lucas, 2026-10-19; T370 a T375)
+
+**Estado: SOLO ESPECIFICADA (T370). Nada de esto está programado ni dibujado, y los textos de la 1.0.0 de más abajo son un BORRADOR para que Lucas los retoque.** Las decisiones son **D-141 a D-144**. No cambia ninguna regla del juego, el balance ni el progreso: es una pantalla que se muestra y se cierra. Se probaría en PC y en el celular.
+
+**Qué pidió Lucas.** *(2026-10-19)* Una **pantalla al abrir el juego** que muestre **lo nuevo de la versión instalada, una sola vez por versión** (se guarda cuál fue la última que se vio, y tiene que funcionar con los guardados viejos). El contenido va en **un archivo de datos fácil de retocar**. **Primero** se planifica como la **presentación de la v1.0.0** (Lucas estima que sale en los próximos días) y **después** se reutiliza como «**Mejoras**» de cada versión. Usa `config/version` de `project.godot` (hoy `beta`, M61). En **modo de pruebas y en el editor no sale**. Hay una **opción para volver a verla**. En PC y en el celular.
+
+**Cómo está hoy (lo que ya existe).**
+- La versión vive en **un solo lugar**: `config/version` de `project.godot`, hoy `"beta"` (RF-554, M61). `GameVersion.raw()` la lee y `GameVersion.label()` la muestra («Beta», «Beta 0.3.0», «Versión 1.0.0»). Opciones tiene la sección «Créditos y versión» con el botón «Ver créditos» (RF-553).
+- **No hay ninguna pantalla de novedades.** `CHANGELOG.md` (470 líneas, 75 secciones) es para quien lee en el repositorio: está en orden de fecha, mezcla cambios chicos de cada tarea y no se lee desde el juego.
+- **El molde que se repite** (y que esta función imita): la intro se muestra sola una vez con una clave aditiva del guardado (`intro_seen`, RF-498) y se vuelve a ver desde otro lugar (RF-501); el tutorial usa `tutorial_done` y una fila en Opciones (RF-575, RF-576); los créditos son una pantalla que se abre, avisa `closed` y deja que quien la abrió decida a dónde volver (`CreditsScreen`). Los textos van en un JSON con validador (`data/tutorial/tutorial.json`, `data/intro/intro.json`).
+- Exportación: la de **Windows** exige una versión numérica (`file_version` y `product_version`, hoy `0.0.0.0`) y la de **Android** tiene `version/code=3`; ninguna se mira desde acá, pero **al pasar a la 1.0.0 hay que tocarlas a mano** (RF-554) y queda en la lista de T375.
+
+- **RF-603** **Cuándo sale sola** *(D-141, D-144)*. Al abrir el menú principal, la pantalla se abre **sola** cuando se cumplen **todas**:
+  1. `GameVersion.raw()` **no está vacío** y es **distinto** de la última versión vista del guardado (RF-606);
+  2. el archivo de novedades (RF-605) **tiene una entrada con el mismo `id` que esa versión**, la entrada es **válida** y **no es borrador** (`"borrador": false`);
+  3. **no** es el **modo de pruebas** (`DevMode.enabled`, que incluye el argumento `--pruebas`), **no** se está corriendo **desde el editor de Godot** (`OS.has_feature("editor")`), ni se abrió la escena suelta (F6) ni es un test;
+  4. si la entrada es de tipo **«mejoras»** y el guardado es **nuevo** (ningún nivel ganado y la intro sin ver), la pantalla **no sale** y la versión **se marca como vista en silencio**: quien instala por primera vez una versión 1.3 no necesita saber qué cambió respecto de una que nunca usó. La **presentación** (tipo «presentacion») sale **a todos**, también a un guardado nuevo.
+  - **Se marca al abrirse**, no al cerrarse (como la intro, RF-498): quien cierra el juego a la mitad **no** la vuelve a ver sola; si quiere, la pide (RF-607).
+  - **Mientras la versión sea `beta`** no sale nunca (no hay una entrada llamada `beta`), y mientras la entrada sea borrador **tampoco**: así no se puede publicar un texto sin aprobar por descuido (D-143).
+  - **El archivo falla** (no existe, no se lee o tiene errores de RF-605): el menú abre **como siempre** y el error sale por la salida (`push_warning`). **Nunca bloquea jugar.**
+  - **Criterio:** **Dado** `config/version = "1.0.0"`, una entrada `1.0.0` aprobada y un guardado sin `news_version` (de cualquier época) → **Cuando** se abre el juego fuera del editor y del modo de pruebas → **Entonces** sale la presentación y el guardado ya dice `"news_version": "1.0.0"`. **Cuando** se abre de nuevo → **Entonces** no sale. **Dado** `config/version = "beta"` → **Entonces** nunca sale. **Dado** una entrada `1.1.0` de tipo «mejoras» y un guardado nuevo → **Entonces** no sale y la versión queda marcada.
+
+- **RF-604** **Cómo se ve y cómo se maneja** *(D-141)*.
+  - **Pantalla completa sobre el menú principal** (capa propia, como `CreditsScreen`), con el fondo oscuro del menú. Un panel de **hierro y bronce** (la misma familia que el cartel de entrada del nivel, RF-466, y la tarjeta del tutorial, RF-574) con, de arriba hacia abajo: una **cabecera ilustrada** (opcional), el **título**, un **subtítulo**, la **lista de novedades** y, fijo abajo, el botón **«Entendido»**.
+  - **Cada novedad** es una fila: un **ícono** de 64 px (opcional), un **título** corto en negrita y debajo su **texto** de hasta 2 líneas. Entran **hasta 8**; si no entran en pantalla, la lista **se desplaza** (rueda y barra en PC; **un dedo con inercia** en el celular, `TouchScroller`, RF-551), con el título y «Entendido» siempre a la vista.
+  - **Medidas:** el panel mide **880 px de ancho** (celular) o **720 px** (PC), y entra en **1280 × 720**. Los textos miden **20 px o más** en el celular (RF-503, 12 sp) y **18 px o más** en PC. El botón «Entendido» mide **`boton_alto_px` (56)** en el celular y **44** en PC, y las filas, **56 px o más de alto** en el celular (RF-550).
+  - **Cerrar:** «Entendido», `Esc` y el «atrás» de Android. **El toque que cierra no llega al menú que hay debajo** (se traga al apretar y se cierra al soltar, como RF-466 y RF-499): no abre «Jugar» ni nada.
+  - **Una línea chica con la versión** («Versión 1.0.0» o «Beta 0.3.0», `GameVersion.label`) al pie del título.
+  - **Sin música ni sonidos nuevos** (la música del menú sigue); los botones suenan como los demás.
+  - **Rendimiento:** los nodos se **crean al abrirse y se borran al cerrarse**; sin `_process` ni animación (un fundido de 0,2 s con `Tween` al abrir, nada más). Las imágenes se cargan al abrir (`load`, no `preload`), así que **no pesan en el arranque** del juego.
+  - **Criterio:** **Dado** 1280 × 720 en modo celular con 8 novedades → **Cuando** se abre → **Entonces** el título y «Entendido» están a la vista, la lista se desplaza con un dedo y ningún control mide menos de 56 px de alto. **Dado** un toque sobre «Entendido» → **Entonces** se cierra y el menú de abajo **no** reacciona.
+
+- **RF-605** **El contenido vive en un archivo de datos** (P2) *(D-143)*: **`data/novedades/novedades.json`**, con esta forma:
+  - **`version`** (formato, hoy 1) e **`interfaz`** (los rótulos fijos: «Entendido», «Novedades de esta versión», «Mejoras de esta versión», «Borrador», «No hay novedades»).
+  - **`versiones`**: una lista, **de la más nueva a la más vieja** (puede estar vacía: es válida y no muestra nada). Cada una:
+    - **`id`**: la versión a la que corresponde, **escrita igual que en `config/version`** (`"1.0.0"`);
+    - **`tipo`**: `"presentacion"` (la 1.0.0: presenta el juego) o `"mejoras"` (las siguientes: qué cambió);
+    - **`borrador`**: `true` o `false` (RF-603);
+    - **`titulo`** (hasta 40 caracteres) y **`subtitulo`** (opcional, hasta 80);
+    - **`cabecera`** (opcional): ruta `res://` de una imagen que existe;
+    - **`novedades`**: de **1 a 8** elementos `{"titulo": hasta 40 caracteres, "texto": hasta 140 caracteres y 2 líneas, "icono": ruta `res://` opcional que existe}`.
+  - **Un validador** (`NewsData`, la lógica en `scripts/logic/`, P10; la herramienta `tools/check_novedades.gd`; un test) con **errores en castellano que nombran la versión y la novedad**: `id` repetido o vacío, `tipo` desconocido, título o texto pasados de largo, 0 o más de 8 novedades, imagen que no existe, y más de 2 líneas. **Avisos** (no bloquean): `config/version` es un número y **no hay entrada aprobada** para esa versión (para no olvidarse al subir la versión, RF-609).
+  - **Los textos no repiten números** de otros datos (cantidad de torres, de niveles…) cuando eso se pueda evitar con otra frase: así no quedan desactualizados. Donde se escriba un número, el test de los datos oficiales lo compara con el juego (por ejemplo, la cantidad de niveles de `campaign.json`).
+  - **Criterio:** **Dado** una novedad con 3 líneas, otra con un ícono que no existe y una versión repetida → **Entonces** el validador da tres errores en castellano con el número de versión y el título, y el juego no muestra la pantalla.
+
+- **RF-606** **Guardado y compatibilidad** *(D-142)*.
+  - **La clave:** `"news_version"` (texto) en la **raíz** del guardado, como `intro_seen` y `tutorial_done`. Guarda **la última versión cuyas novedades se abrieron**. **`SAVE_VERSION` no cambia** (sigue en 1).
+  - **Un guardado sin la clave, o con una que no es texto, se lee como vacío** (`""`): «nunca vio ninguna». Por eso **todo guardado existente** (de cualquier época, con o sin niveles ganados) **ve la presentación de la 1.0.0 una vez**, que es lo buscado.
+  - **Se compara por igualdad exacta** con `GameVersion.raw()` (no se ordena ni se interpreta): lo que se pierde por no ordenar es poco y se explica en D-144.
+  - **El modo de pruebas** usa su guardado aparte (RF-181) y no lo toca, porque la pantalla no sale en ese modo.
+  - **Una versión anterior del juego** ignora la clave y no se rompe (como con las demás claves aditivas).
+  - **API:** `SaveManager.news_version_seen() -> String` y `SaveManager.mark_news_seen(version: String)` (guarda enseguida).
+  - **Criterio:** `tests/test_old_saves.gd` carga los guardados de cada época: ninguno se rompe, todos leen `""`; un guardado con `"news_version": 7` se lee como `""`; guardar y recargar conserva `"1.0.0"`.
+
+- **RF-607** **Volver a verla: en Opciones** *(D-141)*. En Opciones (RF-113), en la sección **«Créditos y versión»**, **debajo de «Ver créditos»**, un botón **«Novedades de esta versión»**.
+  - **Qué abre:** la entrada de la **versión instalada**; si el archivo no tiene una para esa versión (por ejemplo, la `beta`), abre **la más nueva del archivo**. Si es borrador, la pantalla lo dice con un rótulo **«Borrador»** arriba a la derecha (así Lucas puede revisar la 1.0.0 **antes** de publicarla).
+  - **No toca el guardado:** abrirla desde Opciones no marca nada ni cambia `news_version`.
+  - **Dónde:** en el menú principal y en la pausa, en PC y en el celular (igual que «Ver créditos»). Al cerrar vuelve a Opciones, con el foco en el botón.
+  - **Si el archivo falla** o no tiene ninguna entrada válida: el botón queda **deshabilitado** con el texto «No hay novedades».
+  - **En el celular** el botón respeta el mínimo táctil (RF-550) y Opciones sigue entrando en 720 de alto (RF-555): la fila nueva no puede romper el panel de dos columnas de M61.
+  - **Criterio:** **Dado** `config/version = "beta"` y una entrada 1.0.0 en borrador → **Cuando** se toca «Novedades de esta versión» → **Entonces** se abre la 1.0.0 con el rótulo «Borrador» y el guardado no cambia.
+
+- **RF-608** **Dónde no sale y qué no cambia.**
+  - **No sale** en el modo de pruebas, en el editor de Godot, al volver al menú desde un nivel (ya se marcó), ni dentro de una partida. Tampoco al abrir **la escena de un nivel suelta** (F6) o en los tests (`MainMenu` recibe la costura de siempre: ruta del archivo, versión y banderas, para probarlo sin tocar el proyecto real).
+  - **No cambia**: ninguna regla, número ni guardado de progreso; el orden del menú (la pantalla es una capa que se abre y se cierra); la intro (**«Jugar»** sigue abriéndola cuando corresponde); la música.
+  - **No retrasa el arranque:** se lee **un archivo chico** al abrir el menú (menos de 20 KB); las imágenes se cargan recién al abrir la pantalla.
+  - **Imágenes:** cada una se importa **sin mipmaps** (como la intro, RF-560) y su peso importado queda anotado para la APK (T375).
+
+- **RF-609** **Se reutiliza como «Mejoras» en cada versión** *(D-143, D-144)*. Para sacar una versión nueva (por ejemplo, la 1.1.0) **no hace falta tocar código**:
+  1. subir `config/version` en `project.godot` (y, a mano, `file_version` y `product_version` de Windows y `version/code` de Android, RF-554);
+  2. agregar **al principio** de `versiones` una entrada con `"tipo": "mejoras"`, las novedades de esa versión y `"borrador": false` (se arma mirando `CHANGELOG.md`, que sigue siendo la fuente humana, pero **el juego no lo lee**);
+  3. correr `godot --headless --path . -s tools/check_novedades.gd`.
+  - **Los títulos cambian solos según el tipo:** la presentación usa el título que escribe la entrada («Monsters & Canons 1.0»); las de «mejoras» llevan arriba el rótulo **«Mejoras de esta versión»** y la versión.
+  - **El archivo conserva las versiones viejas** (para «Novedades de esta versión» en Opciones y como historial); solo se muestra sola la de la versión instalada.
+  - **Criterio:** **Dado** `config/version = "1.1.0"` y una entrada `1.1.0` de tipo «mejoras» aprobada → **Cuando** un jugador que ya vio la 1.0.0 abre el juego → **Entonces** ve «Mejoras de esta versión» con esa entrada, una vez; el código no cambió.
+
+> **Criterio de aceptación RF-603 a RF-609**
+> **Dado** la versión `1.0.0` con su presentación aprobada y un guardado viejo → **Cuando** se abre el juego → **Entonces** sale la presentación, se cierra con «Entendido» o `Esc` sin activar el menú de abajo, y no vuelve a salir; en Opciones se puede volver a ver. **Dado** el modo de pruebas, el editor o la versión `beta` → **Entonces** no sale. **Dado** una entrada rota → **Entonces** el menú abre normal y la salida dice qué está mal.
+
+#### Borrador del contenido de la 1.0.0 (para que Lucas lo retoque; no se carga hasta su OK)
+
+Tipo «presentacion», **título** «Monsters & Canons 1.0», **subtítulo** «Esto es lo que trae el juego completo.». Todo se verifica contra el juego y `CHANGELOG.md` en T374 antes de cargarlo.
+
+| # | Título | Texto | Ícono (T372) |
+|---|---|---|---|
+| 1 | 15 niveles, una historia | Defendé el campamento de la colonia a lo largo de toda la campaña, con textos de cada lugar y un final. | mapa |
+| 2 | Torres que se mejoran | Torres de distintos estilos, cada una con tres niveles. Combinalas: algunas se potencian entre sí. | torre |
+| 3 | Monstruos con carácter | Jefes, curanderos, chamanes y espejos: cada enemigo se juega distinto. La Wiki explica cómo vencerlos. | monstruo |
+| 4 | Asedio | Un modo aparte para ver hasta dónde aguantás en los mapas de la campaña. | asedio |
+| 5 | Tus propios mapas | En la PC, el editor deja crear niveles y jugarlos. | editor |
+| 6 | PC y celular | Interfaz táctil con zoom, botones flotantes y menús que se desplazan con el dedo, además de mouse y teclado. | celular |
+| 7 | Intro y tutorial | La intro cuenta cómo llegó la expedición y el tutorial del nivel 1 te enseña a jugar. Los dos se pueden saltear. | libro |
+| 8 | *(solo si entran en la 1.0.0)* Mejoras y jefes con entrada | Las torres muestran lo que ganan al mejorarse y los jefes llegan con su presentación. | mejora |
+
+#### Decisiones abiertas para Lucas (M67)
+
+| # | Pregunta | Recomendación de Claude |
+|---|---|---|
+| P-67-1 | ¿Qué dice la presentación de la 1.0.0? El cuadro de arriba es un borrador mío, armado con lo que ya tiene el juego. | Retocá los textos y los ítems que quieras (máximo 8); se cargan en T374 recién con tu OK. |
+| P-67-2 | Quien instala el juego **por primera vez** en la 1.0.0, ¿ve la presentación antes de la intro? | **Sí, una vez**: es la presentación del juego, no un parte de cambios. Es corta y se cierra con un toque. (Para las versiones siguientes, tipo «mejoras», los jugadores nuevos **no** la ven, RF-603.) |
+| P-67-3 | Mientras el texto sea borrador, ¿la pantalla **no sale sola**? | **Sí**: así no se publica un texto sin aprobar por descuido; se revisa desde Opciones. Al aprobarlo se pasa `borrador` a `false`. |
+| P-67-4 | ¿El botón para volver a verla va solo en Opciones? | **Solo en Opciones** («Créditos y versión»): el menú principal del celular ya tiene seis botones de 56 px (M61) y no hay lugar sin romper el diseño. |
+| P-67-5 | ¿Las siguientes versiones se titulan «Mejoras de esta versión» o «Novedades»? | **«Mejoras de esta versión»** para las versiones siguientes y el título propio de la presentación para la 1.0.0 (RF-609). Los rótulos están en el archivo, se cambian ahí. |
+| P-67-6 | ¿Cabecera ilustrada e íconos por novedad, o solo texto? | **Cabecera para la 1.0.0 y un ícono por novedad** (ver T372); las versiones de «mejoras» pueden ir sin imágenes. Si la APK pesa de más, se saca la cabecera y quedan los íconos. |
+| P-67-7 | ¿Una casilla «No mostrar novedades al abrir»? | **No**: ya sale **una sola vez por versión**; otra casilla más en Opciones no hace falta. |
+| P-67-8 | ¿También en la Wiki? | **No**: queda en Opciones, y la Wiki explica el juego, no la versión. |
+
+#### Lo que M67 no incluye
+- **Leer `CHANGELOG.md`** desde el juego ni generar las novedades a partir de las tareas (D-143).
+- **Un historial** navegable de todas las versiones: el archivo guarda las viejas, pero la pantalla muestra **una** por vez.
+- **Avisar que hay una versión nueva disponible** (no hay actualizador ni conexión a internet).
+- **Comparar versiones** como números (D-144) ni mostrar «lo que te perdiste» si se saltea una versión: se muestra la de la versión instalada.
+- **Música, sonidos o animaciones nuevas.**
+- **Cambiar** `file_version`, `product_version` o `version/code` de las exportaciones: se hace a mano al publicar (RF-554, RF-609).
+- **Probarlo en un celular real.**

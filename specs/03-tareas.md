@@ -2176,3 +2176,31 @@ Spec: RF-540 a RF-545. Decisiones: D-110 a D-113. Plan: «M60 / T300». Rama `fe
 - [ ] **T369 · `[mobile]` · Integrar el arte aprobado, medir en el celular y cerrar el piloto.**
   **Refs:** RF-597, RF-602, D-138. **Depende de:** T367 (OK de Lucas) y T368.
   **Hecho cuando:** el arte aprobado reemplaza al provisional sin cambiar el comportamiento; `tools/perf_test.gd` con 200 enemigos y la entrada mantiene los 60 FPS en PC y no suma más de 1 ms por cuadro en modo celular; `CHANGELOG.md`, `CONTENIDO.md` (cómo darle una entrada a otro jefe) y `README.md` actualizados; el peso de los PNG importados está anotado (APK). Se deja escrito cómo extender el piloto a los demás jefes (vaciar `levels`) y que **no** se hizo. Límite: no se probó en un celular real.
+
+## M67 — «Novedades de esta versión» *(pedido por Lucas, 2026-10-19; D-141 a D-144)*
+
+- [x] **T370 · `[x86]` · Spec, decisiones, plan y fichas de M67.**
+  **Refs:** RF-603 a RF-609, D-141 a D-144. **Depende de:** M61 (T315, la versión en `project.godot`).
+  **Hecho cuando:** `01-spec.md` (M67), `04-decisiones.md` (D-141 a D-144), `02-plan-tecnico.md`, esta lista y `specs/tareas/T372-arte-novedades.md` están escritos, con el borrador de la 1.0.0 y las decisiones abiertas para Lucas.
+
+  **Resultado (2026-10-19):** escritos. Se leyeron `GameVersion`, `SaveManager`, `MainMenu`, `OptionsMenu` y `CreditsScreen` para imitar el molde de la intro y el tutorial. **No se programó ni se dibujó nada; no se corrió ningún test.** El borrador de los textos de la 1.0.0 sale de lo que el juego ya tiene, pero **no se contrastó línea por línea** con `CHANGELOG.md`: eso es de T374. Queda esperar el OK de Lucas a la spec y a las preguntas P-67-1 a P-67-8.
+
+- [ ] **T371 · `[mobile+x86]` · Datos, reglas y guardado: `NewsData`, `NewsFlow`, `news_version` y el validador.**
+  **Refs:** RF-603, RF-605, RF-606, D-142 a D-144, P2, P10. **Depende de:** T370 (y el OK de Lucas a la spec).
+  **Hecho cuando:** `NewsData` lee y valida `data/novedades/novedades.json` con los errores y avisos de RF-605 en castellano (nombran la versión y la novedad); `NewsFlow.should_auto_show` cubre en tests todos los casos de RF-603 (`beta`, vacía, igual, distinta, borrador, sin entrada, modo de pruebas, editor, «mejoras» con guardado nuevo y viejo, «presentacion» con guardado nuevo); `SaveManager` guarda y lee `"news_version"` con las reglas de RF-606 y `tests/test_old_saves.gd` pasa con los guardados de cada época y con un valor que no es texto; `tools/check_novedades.gd` corre y avisa si `config/version` es un número y no hay entrada aprobada. Tests completos en verde y sin `SCRIPT ERROR`.
+
+- [ ] **T372 · 🎨 `[x86]` · Arte: cabecera, íconos y variante sobria de «Novedades» (Codex).**
+  **Refs:** RF-604, D-141, ficha `specs/tareas/T372-arte-novedades.md`. **Depende de:** T370 y las respuestas de Lucas a P-67-1 y P-67-6. **Compuerta:** Lucas aprueba las muestras (hoja a escala real) **antes** de T375.
+  **Hecho cuando:** la cabecera de la presentación, la variante sobria, los íconos y la maqueta de la pantalla a escala real (PC y celular), con fuentes, prompts y `manifest.json`, están en `art/novedades-m67/`; Lucas dio su OK por escrito (se anota acá).
+
+- [ ] **T373 · `[mobile+x86]` · La pantalla, el enganche en el menú y el botón de Opciones, con arte provisional.**
+  **Refs:** RF-603, RF-604, RF-607, RF-608, D-141, D-144, P6. **Depende de:** T371.
+  **Hecho cuando:** `NewsScreen` se abre sola en el menú principal con una entrada de prueba aprobada (en un test y en una captura, **sin** cambiar `config/version`), se cierra con «Entendido», `Esc` y el «atrás» de Android sin activar el menú de abajo, y no vuelve a salir; se desplaza con un dedo en modo celular y ningún control mide menos de 56 px; no sale en el modo de pruebas ni en el editor; el botón «Novedades de esta versión» está en Opciones (menú y pausa), abre la entrada de la versión o la más nueva con el rótulo «Borrador» si lo es, no toca el guardado, queda deshabilitado con un archivo roto y Opciones sigue entrando en 720 de alto en modo celular; con un archivo roto el menú abre normal y avisa por la salida. Capturas reales en PC y en modo celular 1280 × 720 revisadas. Tests completos en verde.
+
+- [ ] **T374 · `[x86]` · Contenido de la 1.0.0 y guía para agregar versiones (con Lucas).**
+  **Refs:** RF-605, RF-609, D-143. **Depende de:** T371 y el OK de Lucas a los textos (P-67-1).
+  **Hecho cuando:** `data/novedades/novedades.json` trae la entrada `1.0.0` («presentacion») con los textos que Lucas aprobó, contrastados con el juego y con `CHANGELOG.md`; los números que se escriban (por ejemplo, la cantidad de niveles) los compara un test con los datos del juego; `borrador` queda en `false` **solo** si Lucas dijo que sí; `CONTENIDO.md` explica en tres pasos cómo agregar una versión («Mejoras»); `tools/check_novedades.gd` da cero errores. No cambia `config/version`: eso se hace al publicar (T375).
+
+- [ ] **T375 · `[mobile]` · Integrar el arte aprobado, medir y dejar lista la salida de la 1.0.0.**
+  **Refs:** RF-604, RF-608, RF-609. **Depende de:** T372 (OK de Lucas), T373 y T374.
+  **Hecho cuando:** el arte aprobado reemplaza al provisional sin cambiar el comportamiento, importado sin mipmaps y con su peso anotado (APK); capturas en modo celular con la entrada de la 1.0.0 completa; `CHANGELOG.md`, `README.md` y `ONBOARDING.md` actualizados; **lista de salida escrita en el Resultado** (no ejecutada): subir `config/version` a `1.0.0`, `file_version` y `product_version` de Windows, `version/code` de Android, pasar `borrador` a `false`, correr `check_novedades.gd`, exportar. Límite a dejar escrito: no se probó en un celular real.
