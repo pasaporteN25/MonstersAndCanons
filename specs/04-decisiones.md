@@ -964,3 +964,69 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Por qué:** Lucas encontró que el carrito abría al separarlo del borde; los controles tapaban demasiado mapa y no compartían la estética del juego. Prefiere controles más compactos al mínimo anterior de 7,6 mm para estas cuatro acciones. Mejorar y Vender conservan sus tamaños y protección.
 - **Alternativa descartada:** conservar el tema genérico y repetir el precio dentro de la tilde. El catálogo y la barra ya lo muestran.
 - **Límite:** las pruebas de escritorio no reemplazan el tacto ni la legibilidad en el celular de Lucas.
+
+
+## D-125 · El tutorial del nivel 1 es una tarjeta con un resaltado que espera la acción del jugador, y nunca bloquea el juego
+- **Fecha:** 2026-10-19 · **Estado:** implementada en T331; los textos son borrador a la espera del OK de Lucas · **Decidió:** Lucas (que haya un tutorial en el nivel 1, paso a paso, con resaltado, esperando la acción, salteable y sin bloquear de más) / Claude (cómo se ve y cómo se comporta)
+- **Qué:** al entrar al nivel 1 desde el menú aparece una **tarjeta** de hierro y bronce con un texto corto y, sobre el control o la casilla que hay que usar, un **recuadro amarillo que parpadea con una flecha**. Los pasos son de **lectura** (se pasan con «Siguiente») o de **acción** (esperan que el jugador la haga de verdad: elegir una torre, construirla, empezar la oleada, cambiar la velocidad…). La partida **no se pausa**; «Saltar tutorial» está siempre a la vista (RF-570 a RF-574).
+- **Por qué:**
+  - **Aprender haciendo.** Un texto que se lee y se olvida enseña menos que tocar el botón señalado; por eso los pasos de acción **esperan el evento real** (la señal que ya emite el juego: torre elegida, torre construida, oleada empezada…), no un «Siguiente».
+  - **Sin bloquear.** El nivel 1 es tranquilo: la primera oleada no sale sola (el nivel arranca en preparación) y esa oleada son 8 criaturas básicas. Pausar para leer no hace falta, y una pausa agregaría un estado más para romper (el menú de pausa, el cartel de entrada y el diálogo de salida ya la usan). La tarjeta es una capa por encima del HUD (12) y por debajo de esos tres (20 y 21), y deja pasar el mouse y los toques en todo menos en sí misma.
+  - **El jugador manda.** Se puede adelantar (lo que ya hizo se da por hecho), arrepentirse (si suelta la torre o cierra el catálogo vuelve a un paso anterior) y saltar en cualquier momento. Lo único que el tutorial hace por su cuenta es **volver a elegir la torre construida** para que «Mejorar» y «Vender» se vean (no cobra ni cambia nada).
+  - **Una sola pieza, dos modos.** Lo que cambia entre PC y celular (carrito, catálogo, fantasma, tilde y doble toque) son **pasos distintos** con textos distintos; lo demás se comparte. Los controles se señalan con **el control real** (se le pregunta su rectángulo en cada cuadro), así que sigue a lo que se mueva y no hay coordenadas escritas a mano.
+- **Alternativas descartadas:**
+  - **Pantallas explicativas a pantalla completa o un video:** se leen una vez y no se hacen; en el celular tapan el mapa. Ya existe la intro para contar la historia (M57) y no explica cómo se juega a propósito.
+  - **Pausar el juego en cada paso:** más simple de programar pero más intrusivo, y el paso «pausa» no tendría sentido.
+  - **Obligar a seguir el orden** (bloquear todo lo que no sea el control señalado): frustra a quien ya sabe y puede dejar el juego trabado si algo cambia (una torre que no alcanza de oro, un fantasma cancelado).
+  - **Dejar solo las ayudas de la Wiki:** nadie la abre antes de jugar el primer nivel.
+  - **Que el tutorial construya o empiece la oleada solo, «para mostrar»:** rompe «esperando que el jugador haga la acción» y toca el balance del nivel 1 (que no se debe tocar).
+- **Qué cambia:** `01-spec.md` (M63, RF-570 a RF-578), `02-plan-tecnico.md` (M63), `03-tareas.md` (T330 y T331). **No cambia ningún dato de nivel ni de balance.**
+
+## D-126 · El tutorial se activa, se apaga y se vuelve a ver en Opciones («Tutorial del nivel 1» y «Volver a verlo»), no en la Wiki ni en el menú principal
+- **Fecha:** 2026-10-19 · **Estado:** decidida por Claude (Lucas dijo «decidí con criterio y justificalo»); **a la espera del OK de Lucas** · **Decidió:** Claude
+- **Qué:** una fila en Opciones, debajo de «Mostrar números de daño»: una **casilla «Tutorial del nivel 1»** (apagada = no sale; volver a prenderla = sale de nuevo) y un botón **«Volver a verlo»** que borra la marca de «hecho» y dice «Se verá en el nivel 1». Funciona desde el menú principal y desde la pausa (RF-576).
+- **Por qué:**
+  - **Lucas pidió una opción en Opciones** «como la intro». La intro se apaga sola al verse una vez (`intro_seen`) y se vuelve a ver desde la Wiki porque es **una pantalla aparte** que se puede abrir en cualquier momento. **El tutorial no:** vive **dentro del nivel 1** y necesita la partida para tener algo que señalar; desde la Wiki habría que arrancar el nivel, y la Wiki vuelve a la Wiki (RF-500). Por eso el «volver a verlo» **no abre nada**: deja armado el tutorial para la próxima vez que se entre al nivel 1.
+  - **Opciones es donde se busca «apagar algo».** Es el lugar de las demás preferencias (volumen, pantalla completa, números de daño, interfaz) y ya existe en el menú principal y en la pausa. Quien lo ve de más lo apaga ahí; quien lo salteó sin querer, lo prende ahí.
+  - **Dos controles porque son dos pedidos distintos:** «no quiero verlo» (la casilla; no borra lo que ya hizo) y «quiero verlo otra vez» (el botón; borra la marca). Una sola casilla no los distingue: está prendida **incluso después de completarlo**, así que apagarla y prenderla para repetirlo no se descubre.
+  - **Una sola fila:** el panel de Opciones ya no entraba en 720 de alto desde que se sumó «Interfaz» (M58): el panel medía 691 px sin la sección de pruebas y unos 780 con ella (cuenta mía: 691 medidos + 22 + 44 + 2 separaciones). Se agregó una fila compacta y se envolvieron las filas en un contenedor que se **desplaza** si no entran (RF-576); si entran, se ve igual que antes.
+- **Alternativas descartadas:**
+  - **Botón «Ver el tutorial» en la Wiki, como la intro:** ver arriba; obligaría a un nivel «de práctica» que nadie pidió.
+  - **Botón en la tarjeta del nivel 1 de la selección:** es lo más cercano a donde se usa, pero toca las tarjetas de M58 (Insignias) y agrega un control a una sola de las quince. Queda anotado como posible mejora si Lucas lo prefiere.
+  - **Botón en el menú principal:** cada botón le saca alto al logo (RF-331).
+  - **Mostrarlo siempre que se entra al nivel 1:** cansa a quien rejuega la campaña (como el cartel de entrada, §13).
+  - **Un botón «Tutorial» en el menú de pausa:** se puede entrar a Opciones desde la pausa; un botón más no aporta.
+- **Qué cambia:** `01-spec.md` (RF-576), `scenes/ui/options_menu.gd`, `04-decisiones.md`. **Pregunta para Lucas:** ¿Opciones está bien, o prefiere el botón en la tarjeta del nivel 1?
+
+## D-127 · El guardado suma `"tutorial_done"` y la opción `"tutorial_enabled"`; un guardado viejo con el nivel 1 ganado no lo ve; no se guarda el paso
+- **Fecha:** 2026-10-19 · **Estado:** implementada en T330 · **Decidió:** Claude
+- **Qué:** clave nueva y aditiva `"tutorial_done"` en la raíz del guardado (como `intro_seen`) y `"tutorial_enabled"` (por omisión `true`) en `settings`. Sin la clave, vale «hecho» si el guardado ya ganó el nivel 1 y «no hecho» si no; una clave booleana explícita manda. `SAVE_VERSION` sigue en 1 (RF-575).
+- **Por qué:**
+  - **Compatibilidad:** como con `collections`, `hall_total`, `intro_seen` y `ui_prefs`, una clave aditiva **no rompe** ni los guardados viejos ni una versión anterior del juego (la ignora). `tests/test_old_saves.gd` lo comprueba con los guardados de cada época.
+  - **Quien ya ganó el nivel 1 no necesita aprender a jugar.** Sin la migración, todo jugador con progreso vería el tutorial la próxima vez que rejuegue el nivel 1: justo lo que Lucas no quiere («que no se repita si ya lo completó»). El nivel 1 ganado es la señal más fiable que ya tenemos (no se puede ganar sin construir). Una clave explícita `false` sí se respeta: es lo que escribe «Volver a verlo».
+  - **Preferencia y progreso separados:** la opción (`settings`) es una preferencia como las demás; la marca (raíz) es progreso. Así «Volver a verlo» y la casilla no se pisan.
+  - **Completar y saltar cuentan igual:** si lo salta es porque no lo quiere ver otra vez; si quiere, lo pide en Opciones.
+  - **No se guarda el paso:** un tutorial de un minuto no justifica un estado más; si el jugador cierra el juego o reintenta a la mitad, empieza de nuevo (y puede saltarlo).
+- **Alternativas descartadas:**
+  - **`SAVE_VERSION` 2:** el cargador descarta los guardados de otra versión («se empieza de cero»): perdería todo el progreso de quien vuelva a una versión anterior.
+  - **Sin migración (todos lo ven una vez):** molesta a todos los veteranos.
+  - **Una sola clave en `settings`:** mezcla preferencia con progreso y no deja distinguir «lo apagué» de «lo completé».
+  - **Guardar el paso actual:** estado de más para casi ningún beneficio.
+- **Qué cambia:** `01-spec.md` (RF-575), `scripts/autoload/save_manager.gd`, `tests/test_old_saves.gd`.
+
+## D-128 · Los pasos y los textos del tutorial viven en `data/tutorial/tutorial.json`; qué espera cada paso es del código; los textos son borrador hasta el OK de Lucas
+- **Fecha:** 2026-10-19 · **Estado:** implementada en T330; los textos esperan el OK de Lucas · **Decidió:** Lucas (textos en un archivo de datos, fácil de retocar, con borrador y validador) / Claude (el formato)
+- **Qué:** un JSON con `version`, `borrador`, `nivel`, los rótulos de la tarjeta (`interfaz`) y **dos listas de pasos**, `pc` y `celular`. Cada paso es `{"paso": <uno de los que conoce el juego>, "texto": …}`. El texto, el orden y cuáles se usan los cambia Lucas; **qué evento hace avanzar a cada paso** y qué control señala es del código (RF-571 a RF-574). Un validador en castellano (`TutorialData`, `tools/check_tutorial.gd`) revisa el archivo; un test revisa el oficial.
+- **Por qué:**
+  - **Textos fáciles de retocar sin tocar código** (P2 y el pedido). Los textos cortos también son un dato de interfaz con límites (2 líneas, 80 por línea, 160 en total) que se validan, como los de los niveles y los de la intro.
+  - **Dos listas y no una con textos por modo:** los pasos **no son los mismos** (carrito, catálogo y tilde no existen en PC; elegir y colocar en un clic no existe en el celular), y un orden por modo es más claro de leer y de reordenar.
+  - **Los pasos que existen son del código y los textos son del archivo:** poner las condiciones («cuando se construya una torre») en un JSON sería armar un lenguaje de scripts que nadie pidió (P4). El archivo elige entre pasos que ya funcionan.
+  - **Obligatorios y orden:** sin `pause` + `resume` la partida quedaría en pausa; sin `place_tower` el tutorial dejaría de enseñar lo que Lucas pidió. El validador lo dice en castellano en lugar de dejar un tutorial roto.
+  - **`"borrador": true` solo informa:** Lucas quiere los textos marcados hasta su OK, pero un tutorial que no se ve no se puede probar. Se ven en el juego, el archivo y el validador dicen «BORRADOR», y al aprobarlos se pasa a `false`.
+  - **No repiten números** de otros datos (costos, tiempos): si cambia el precio de una torre, el tutorial no miente.
+- **Alternativas descartadas:**
+  - **Los textos en el código o en un `.tres`:** más difícil de retocar y de revisar; los demás textos del juego van en JSON.
+  - **No cargar los textos hasta el OK** (como el lore, M52): Lucas pidió el tutorial funcionando; el borrador solo avisa.
+  - **Un archivo por modo:** dos archivos para mantener sincronizados.
+  - **Que el JSON defina el evento de cada paso:** ver arriba.
+- **Qué cambia:** `01-spec.md` (RF-571 y RF-578), `CONTENIDO.md` (cómo retocar el tutorial), `data/tutorial/tutorial.json`, `scripts/logic/tutorial_data.gd`, `tools/check_tutorial.gd`.
