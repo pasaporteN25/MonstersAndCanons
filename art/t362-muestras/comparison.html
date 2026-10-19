@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="es-AR">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>T362 · Muestras de mejora</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,sans-serif;background:#111820;color:#e4e9ef}body{margin:0;padding:28px}main{max-width:1640px;margin:auto}h1{font-size:32px;margin:8px 0}h2{font-size:22px;margin-top:36px}p{max-width:920px;line-height:1.6;color:#bfcbd5}.tag{color:#ffd69a;font-size:13px;letter-spacing:.1em}label{display:inline-flex;gap:8px;align-items:center;margin:6px 12px 6px 0}select,button,input{font:inherit}select,button{background:#263442;color:#fff;border:1px solid #637687;border-radius:5px;padding:7px 10px}button{cursor:pointer}button[aria-pressed=true]{border-color:#ffd69a;color:#ffd69a}a{color:#a2d9ff}.toolbar{padding:14px;background:#1b2631;border:1px solid #394b5a;border-radius:9px;position:sticky;top:0;z-index:5}.scroll{overflow:auto;border:1px solid #40505f;border-radius:8px;margin:16px 0;background:#19232c}.scroll canvas{display:block;width:1152px;height:432px}.contact{display:block;width:1600px;max-width:none}figure{margin:18px 0}figcaption{color:#bfd0dc;font-size:14px;margin:8px 0}code{color:#f2dab5}.refs{display:flex;gap:24px;align-items:center;background:#263340;padding:14px;width:max-content}.refs img{width:128px;height:128px}.status{font-size:14px;color:#ffd69a}details{margin:20px 0}summary{cursor:pointer}footer{margin:40px 0;color:#a7b6c3}
+</style>
+<main>
+<div class="tag">MONSTERS &amp; CANONS · T362 · MUESTRAS SIN APROBAR</div>
+<h1>Refuerzo → Maestría</h1>
+<p>El mismo gesto de luz asciende y abre el anillo. Nivel 2 es sobrio; nivel 3 suma un segundo anillo, ocho chispas y un destello en cruz. El centro queda libre para leer el mecanismo. Son montajes de revisión con recursos reales, sin integración ni captura en partida.</p>
+<div class="toolbar">
+<label>Escala <select id="scale"><option value="1">100 % · mapa</option><option value=".7">70 % · Ver todo</option><option value="1.5">150 % · celular</option></select></label>
+<label>Suelo <select id="ground"><option value="pradera">Pradera</option><option value="nieve">Nieve</option><option value="volcan">Volcán</option><option value="desierto">Desierto</option></select></label>
+<label>Tinte <select id="tint"><option value="amber">Ámbar · por omisión</option><option value="frost">Hielo</option><option value="tesla">Tesla</option><option value="fire">Fuego</option><option value="multi">Múltiple</option><option value="neutral">Neutro</option></select></label>
+<label>Mezcla <select id="blend"><option value="source-over">Normal</option><option value="lighter">Aditiva</option></select></label>
+<button id="pause" aria-pressed="false">Pausar</button>
+<label>Cuadro <input id="frame" type="range" min="1" max="8" value="4"><output id="frameValue">4</output></label>
+<div id="status" class="status" role="status">Cargando recursos locales…</div>
+</div>
+<h2>Animación a velocidad real</h2>
+<p>Los ocho cuadros se reparten en exactamente 0,5 s y 0,7 s (16 y 11,4286 cps). Después hay 1 s de descanso. El anillo actual dura 0,3 s: se reconstruye su curva <code>ease_out</code>, radios 16→44,8 px y grosor 3 px. Se centra en la casilla; las muestras se centran en el mecanismo, 12 px más arriba por casilla de footprint.</p>
+<figure><figcaption>Nivel 2 · Refuerzo · seis chispas · diámetro de anillo ≈120 px</figcaption><div class="scroll"><canvas id="l2" width="1152" height="432"></canvas></div></figure>
+<figure><figcaption>Nivel 3 · Maestría · ocho chispas · diámetro de anillo ≈160 px</figcaption><div class="scroll"><canvas id="l3" width="1152" height="432"></canvas></div></figure>
+<p>Las torres usan cuadros E de sus atlas de nivel 2 y 3. La Ametralladora mide 64 px y el Mortero 128 px; el efecto del Mortero también se duplica. El montaje omite el shader de brillo permanente y la sombra del motor. La mezcla aditiva es una referencia Canvas 2D, pendiente de validar en Godot.</p>
+<h2>Todos los cuadros, fondos y tintes</h2>
+<p>Cada hoja muestra los ocho cuadros, primero a 192 px y debajo a 34 px. Incluye neutro y los cinco tintes multiplicados por canal RGB, conservando alfa. Estas hojas usan mezcla normal; la escala de arriba también las modifica. A 100 %, 1 píxel del recurso equivale a 1 píxel CSS con zoom del navegador al 100 %. Hay desplazamiento horizontal para conservar el tamaño.</p>
+<figure><figcaption>Pradera · texturas reales repetidas en casillas de 64 px</figcaption><div class="scroll"><img class="contact" src="contact/pradera.png" width="1600" height="3424" alt="Pradera: niveles 2 y 3, seis variantes de tinte y ocho cuadros a 192 y 34 píxeles"></div></figure>
+<details><summary>Nieve · abrir hoja completa</summary><div class="scroll"><img class="contact" src="contact/nieve.png" width="1600" height="3424" alt="Nieve: los dos efectos, todos los tintes y cuadros"></div></details>
+<details><summary>Volcán · abrir hoja completa</summary><div class="scroll"><img class="contact" src="contact/volcan.png" width="1600" height="3424" alt="Volcán: los dos efectos, todos los tintes y cuadros"></div></details>
+<details><summary>Desierto · abrir hoja completa</summary><div class="scroll"><img class="contact" src="contact/desierto.png" width="1600" height="3424" alt="Desierto: los dos efectos, todos los tintes y cuadros"></div></details>
+<h2>Archivos para revisar</h2>
+<p><a href="upgrade_l2.png">Atlas Refuerzo</a> · <a href="upgrade_l3.png">Atlas Maestría</a> · <a href="preview/upgrade_l2.gif">GIF Refuerzo</a> · <a href="preview/upgrade_l3.gif">GIF Maestría</a> · <a href="README.md">Notas y decisiones abiertas</a> · <a href="manifest.json">Manifest</a></p>
+<p>Los GIF usan una cuantización temporal de 10 ms y 1 s de descanso; conservan la duración total de cada efecto. El HTML reproduce los intervalos exactos. La reproducción del navegador no verifica pausa ni velocidad del juego.</p>
+<h2>Mano de los efectos existentes</h2>
+<div class="refs"><img src="reference/frost.png" alt="Efecto actual de hielo"><img src="reference/explosion.png" alt="Explosión actual"></div>
+<p>Referencia: brillo concentrado y bordes suaves por alfa. La propuesta evita el material de hielo y el fuego de estos efectos: el gesto de mejora debe depender de su forma y funcionar con cualquier tinte.</p>
+<footer>Pendiente: aprobación de Lucas, P-65-6, lectura final en combate y prueba en Godot. Esta hoja no prueba rendimiento ni modifica la lógica.</footer>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const tints={neutral:[1,1,1],amber:[1,.7,.28],frost:[.25,.8,1],tesla:[.75,.4,1],fire:[1,.36,.08],multi:[.3,.65,1]};
+const imgs={};
+let paused=false, phase=0, previous=0, ready=false;
+const files=['upgrade_l2.png','upgrade_l3.png',...[2,3].flatMap(l=>Object.keys(tints).filter(k=>k!=='neutral').map(k=>`preview/tinted/upgrade_l${l}_${k}.png`)),...['pradera','nieve','volcan','desierto'].map(t=>`reference/ground_${t}.png`),...['basic','mortar'].flatMap(n=>[2,3].map(l=>`reference/${n}_level_${l}.png`)), 'reference/base_2.png','reference/base_3.png'];
+function load(src){return new Promise((resolve,reject)=>{const i=new Image();i.onload=()=>{imgs[src]=i;resolve()};i.onerror=()=>reject(Error(`No se pudo cargar ${src}`));i.src=src})}
+// Tintes precalculados por canal: permite abrir el HTML local sin leer píxeles del canvas.
+function tinted(level){const key=$('tint').value;return imgs[key==='neutral'?`upgrade_l${level}.png`:`preview/tinted/upgrade_l${level}_${key}.png`]}
+function render(level){const ctx=$('l'+level).getContext('2d'),duration=level===2?.5:.7;const time=paused?($('frame').value-1)*duration/8:phase%(duration+1);const f=paused?$('frame').value-1:Math.min(7,Math.floor(time/duration*8));const tex=imgs[`reference/ground_${$('ground').value}.png`];ctx.globalCompositeOperation='source-over';for(let y=0;y<432;y+=64)for(let x=0;x<1152;x+=64)ctx.drawImage(tex,x,y,64,64);
+for(let col=0;col<4;col++){const mortar=col>=2,old=col%2===0,factor=mortar?2:1,x=144+col*288,y=246,side=64*factor;ctx.drawImage(imgs[`reference/base_${level}.png`],x-side/2,y-side/2,side,side);ctx.drawImage(imgs[`reference/${mortar?'mortar':'basic'}_level_${level}.png`],0,0,128,128,x-side/2,y-side/2-12*factor,side,side);
+if(old&&time<.3){const p=time/.3,r=(16+(44.8-16)*(1-Math.pow(1-p,3)))*factor;const rgb=(mortar?[.48,.35,.21]:[.47843137,.47843137,.47843137]).map(v=>Math.round((v+(1-v)*.5)*255));ctx.strokeStyle=`rgba(${rgb.join(',')},${1-p})`;ctx.lineWidth=3*factor;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.stroke()}
+if(!old&&(paused||time<duration)){ctx.globalCompositeOperation=$('blend').value;ctx.drawImage(tinted(level),(f%4)*192,Math.floor(f/4)*192,192,192,x-96*factor,y-12*factor-96*factor,192*factor,192*factor);ctx.globalCompositeOperation='source-over'}
+ctx.fillStyle='#141b21';ctx.fillRect(col*288,0,288,60);ctx.fillStyle='#fff';ctx.font='16px system-ui';ctx.fillText(old?'Actual · 0,3 s':`Nivel ${level} · ${duration.toLocaleString('es-AR')} s`,col*288+12,24);ctx.font='13px system-ui';ctx.fillStyle='#bdcdd8';ctx.fillText(mortar?'Mortero · 2×2':'Ametralladora · 1×1',col*288+12,46)}
+}
+function tick(stamp){if(!previous)previous=stamp;if(!paused)phase+=(stamp-previous)/1000;previous=stamp;if(ready){render(2);render(3)}requestAnimationFrame(tick)}
+$('pause').onclick=()=>{paused=!paused;$('pause').textContent=paused?'Reproducir':'Pausar';$('pause').setAttribute('aria-pressed',paused);phase=0};
+$('frame').oninput=()=>{paused=true;$('pause').textContent='Reproducir';$('pause').setAttribute('aria-pressed','true');$('frameValue').value=$('frame').value};
+$('scale').onchange=()=>{const s=Number($('scale').value);document.querySelectorAll('.contact').forEach(i=>{i.style.width=1600*s+'px';i.style.height=3424*s+'px'});document.querySelectorAll('canvas').forEach(c=>{c.style.width=1152*s+'px';c.style.height=432*s+'px'})};
+Promise.all(files.map(load)).then(()=>{ready=true;$('status').textContent='Recursos listos · velocidad real · 1 s de descanso entre repeticiones';requestAnimationFrame(tick)}).catch(e=>{$('status').textContent=e.message});
+</script>
+</html>
