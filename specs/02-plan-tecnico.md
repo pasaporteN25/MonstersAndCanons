@@ -1431,3 +1431,8 @@ Nada más: ni `balance.json`, ni `.tres`, ni código, ni assets, ni los niveles 
 2. Aplicar el tema existente a catálogo y barra; íconos SVG propios en botones redondeados. Medidas desde mobile_ui.json y sus valores de respaldo. Mantener costo en catálogo/barra y motivo inválido en barra.
 3. Pintar detrás del mapa una textura de suelo del tema, sin cambiar la grilla, y dibujar un solo borde superior en su altura correcta.
 4. Regresión con eventos de entrada completos (mouse y toque), ambos bordes, arrastre y colocación; GUT completo y capturas 16:9/20:9. Exportar EXE/APK de prueba, sin dar por validado el tacto real.
+
+### M62 · Peso de la intro y documento editable (RF-560 a RF-563, D-120, D-121)
+
+1. **Peso (T320):** `mipmaps/generate=false` en los siete `assets/intro/*.png.import` (sigue `compress/mode=0`). El peso real es el de los `.ctex` de `.godot/imported/`; `art/intro-v1/peso.py` los mide por variante y arma `art/intro-v1/peso/comparison.html`. La variante WebP (`compress/mode=1`) queda medida y sin aplicar (D-120).
+2. **Documento editable (T321):** `scripts/logic/intro_doc.gd` (`IntroDoc`, lógica pura): `to_markdown`, `parse_markdown` (que valida con `IntroData.parse`), `to_json` (mismo formato y orden de claves que el archivo oficial) y `describe_changes`. `tools/intro_doc.gd` solo lee y escribe archivos (`export`, `import`, `import --dry`). Tests en `tests/test_intro_doc.gd`: ida y vuelta byte por byte, el documento versionado coincide con el JSON, y cada error con su mensaje.
