@@ -2152,3 +2152,27 @@ Spec: RF-540 a RF-545. Decisiones: D-110 a D-113. Plan: «M60 / T300». Rama `fe
 - [ ] **T364 · `[mobile]` · Integrar el arte aprobado, medir en el celular y cerrar.**
   **Refs:** RF-590, RF-595, D-135. **Depende de:** T362 (OK de Lucas) y T363.
   **Hecho cuando:** los dos atlas aprobados reemplazan al dibujo provisional sin cambiar el comportamiento; `tools/perf_test.gd` con 60 torres, 200 enemigos y 10 mejoras seguidas mantiene los 60 FPS en PC y no suma más de 1 ms por cuadro en modo celular; `CHANGELOG.md`, `CONTENIDO.md` (cómo retocar `mejoras.json`) y `README.md` actualizados; el peso de los atlas importados está anotado (APK). Límite a dejar escrito: no se probó en un celular real.
+
+## M66 — Introducción de jefes *(pedido por Lucas, 2026-10-19; D-138 a D-140)*
+
+- [x] **T365 · `[x86]` · Spec, decisiones, plan y fichas de M66.**
+  **Refs:** RF-597 a RF-602, D-138 a D-140. **Depende de:** M63 (T331).
+  **Hecho cuando:** `01-spec.md` (M66), `04-decisiones.md` (D-138 a D-140), `02-plan-tecnico.md`, esta lista y `specs/tareas/T367-arte-entrada-jefes.md` están escritos, con las decisiones abiertas para Lucas.
+
+  **Resultado (2026-10-19):** escritos. Se leyó `level_01.json`: **el nivel 1 sí tiene jefe** (oleada 10 de 10), así que no se propone ninguno ni se toca el balance. **No se programó ni se dibujó nada; no se corrió ningún test.** Queda esperar el OK de Lucas a la spec y a las preguntas P-66-1 a P-66-7.
+
+- [ ] **T366 · `[mobile+x86]` · Datos y reglas: `BossEntranceData`, `EnemyData.entrance`, `entrada_jefes.json` y `BossEntranceRules`.**
+  **Refs:** RF-597, RF-601, RF-602, D-139, P2, P10. **Depende de:** T365 (y el OK de Lucas a la spec).
+  **Hecho cuando:** existen el recurso, el campo opcional (los 19 enemigos actuales siguen cargando igual), `boss.tres` con `levels = ["level_01"]` y `data/ui/entrada_jefes.json`; `BossEntranceRules.should_show` cubre en tests: nivel en la lista, nivel fuera, lista vacía (todos), opción apagada, menos de 8 s desde la anterior, mismo tipo dos veces en la oleada; el validador y un test nombran en castellano un id de nivel inexistente, una frase de más de 80 caracteres, un sonido desconocido y una duración inválida; el archivo oficial no tiene errores. Tests completos en verde y sin `SCRIPT ERROR`.
+
+- [ ] **T367 · 🎨 `[x86]` · Arte: destello de aparición, grieta y marco del cartel (Codex).**
+  **Refs:** RF-597, D-138, ficha `specs/tareas/T367-arte-entrada-jefes.md`. **Depende de:** T365. **Compuerta:** Lucas aprueba las muestras (hoja a escala real) **antes** de T369.
+  **Hecho cuando:** el atlas del destello, la grieta y el marco 9-slice, con fuentes, prompts, `manifest.json`, la hoja a escala real en PC y en el celular y una prueba sobre el suelo y la entrada del nivel 1 están en `art/jefes-m66/`; Lucas dio su OK por escrito (se anota acá).
+
+- [ ] **T368 · `[mobile+x86]` · El destello, el cartel, el salteo y la opción, con arte provisional.**
+  **Refs:** RF-597 a RF-600, RF-602, D-138, D-140, P6. **Depende de:** T366.
+  **Hecho cuando:** en el nivel 1 (menú, con la opción prendida) la oleada 10 muestra el destello al nacer el Jefe y el cartel al irse el cartel de oleada, la tarjeta «Nuevo enemigo» espera a que el cartel se retire y la partida no se pausa ni cambia; un toque retira el cartel; el toque fuera del cartel llega al mapa; la casilla «Entrada de los jefes» está en Opciones (entra en 720 de alto en modo celular, respeta el mínimo táctil, un guardado viejo la lee prendida); con la opción apagada, o en el nivel 2, nada cambia; en el modo de pruebas se puede ver con el panel (F1). `balance_sim.gd` da el mismo informe con y sin la función con la misma semilla. Capturas reales en PC y en modo celular 1280 × 720 revisadas. Tests completos en verde.
+
+- [ ] **T369 · `[mobile]` · Integrar el arte aprobado, medir en el celular y cerrar el piloto.**
+  **Refs:** RF-597, RF-602, D-138. **Depende de:** T367 (OK de Lucas) y T368.
+  **Hecho cuando:** el arte aprobado reemplaza al provisional sin cambiar el comportamiento; `tools/perf_test.gd` con 200 enemigos y la entrada mantiene los 60 FPS en PC y no suma más de 1 ms por cuadro en modo celular; `CHANGELOG.md`, `CONTENIDO.md` (cómo darle una entrada a otro jefe) y `README.md` actualizados; el peso de los PNG importados está anotado (APK). Se deja escrito cómo extender el piloto a los demás jefes (vaciar `levels`) y que **no** se hizo. Límite: no se probó en un celular real.

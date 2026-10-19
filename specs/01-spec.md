@@ -3592,3 +3592,77 @@ Hallazgos que condicionan el diseño: (1) **no todas suben las mismas cosas** (l
 - **Animar** la venta o la construcción (no se pidió).
 - **Partículas** o shaders nuevos, vibración (háptica) ni sonidos nuevos.
 - **Probarlo en un celular real** (se prueba con la escena real en modo celular en una PC, RF-502, y con `tools/perf_test.gd`).
+
+### M66 · Introducción de jefes (Lucas, 2026-10-19; T365 a T369)
+
+**Estado: SOLO ESPECIFICADA (T365). Nada de esto está programado ni dibujado.** Las decisiones son **D-138 a D-140**. Es **solo presentación**: el jefe aparece **en el mismo instante y con los mismos números** que hoy; no se retrasa la oleada, no se pausa la partida y el balance no se toca. Se probaría en PC y en el celular.
+
+**Qué pidió Lucas.** *(2026-10-19)* Una **animación corta de entrada del jefe**, como **prueba piloto en el jefe del nivel 1**, que **no pause de más ni bloquee la partida**, que se pueda **saltear**, **activar y desactivar**, y diseñada para **generalizarse a todos los jefes por datos**. Si el nivel 1 no tuviera jefe, proponer uno sin tocar el balance.
+
+**Cómo aparecen los jefes hoy (lo que ya existe y no se toca).**
+- Un enemigo es **peligroso** si quita **5 vidas o más** (`Rules.is_dangerous`, RF-11). Hoy hay **dos**: el **Jefe** (`boss`, 300 de vida, armadura 3, 10 vidas) y el **Coloso** (`colossus`, 12 vidas, nivel 15). El Jefe aparece en 14 de los 15 niveles; el Coloso, solo en el 15.
+- **El nivel 1 ya tiene jefe**, así que **no hace falta proponer ninguno**: la **oleada 10 de 10** de `data/levels/level_01.json` trae `{"enemigo": "boss", "cantidad": 1, "cada": 1.0}` en el segundo cero, junto con 10 tanques, 20 normales y 15 voladores. Es el **único jefe del nivel**, y es la **oleada final**.
+- Al empezar esa oleada, el cartel de oleada (RF-127, 1,5 s) agrega **«¡Llega el Jefe!»** en rojo (RF-135), y los peligrosos llevan una **corona dorada** (RF-136).
+- La **primera vez en todo el juego** que aparece un tipo de enemigo, `Game._on_enemy_spawned` le pide al HUD la tarjeta **«Nuevo enemigo»** (RF-134, 6 s, no bloquea clics). El jefe de la oleada 10 del nivel 1 es, para un jugador nuevo, **la primera aparición**: hoy es lo único que lo presenta.
+- El jefe nace en `WaveSpawner._spawn_enemy` (señal `enemy_spawned`) y camina desde la entrada del camino. **La partida usa `Engine.time_scale` para la velocidad y `get_tree().paused` para la pausa.**
+
+- **RF-597** **Qué es y cuándo sale** *(D-138, D-139)*. Cuando un enemigo **que tiene datos de entrada** (`EnemyData.entrance`, RF-601) **aparece en la partida**, la opción (RF-600) está prendida y el nivel está en su lista (RF-601), el juego muestra **una entrada** de dos partes:
+  1. **Un destello en la entrada del camino**, en el instante en que el jefe nace: polvo, un resplandor tiñido con el color del enemigo y una grieta en el suelo; **0,7 s**. Es un nodo del mundo, abajo de los enemigos, que no hace nada más.
+  2. **Un cartel de aparición** arriba del mapa, de **1,6 s** en velocidad normal (0,25 s entrando, 1,1 s quieto, 0,25 s saliendo), con el **retrato del jefe** (la imagen que ya tiene en sus datos), **«¡Llega el Jefe!»**, su **nombre** y su **frase** (`EnemyData.description`, salvo que `entrance.line` traiga otra, RF-601). Estilo hierro y bronce, el mismo del cartel de entrada del nivel (RF-466) y del tutorial (RF-574).
+  - **Orden:** el cartel de oleada (RF-127, que dice «¡Llega el Jefe!» en el centro) **se termina antes**: el cartel de aparición espera a que se retire (como mucho 1,5 s) y entra enseguida. El destello, en cambio, sale **en el instante** en que nace el jefe.
+  - **Con la tarjeta «Nuevo enemigo» (RF-134):** si la tarjeta le toca al mismo jefe, **espera** a que el cartel de aparición se retire y recién entonces sale, con sus 6 s de siempre. No se solapan ni se pisan.
+  - **Una vez por oleada y por tipo**, y **no más de una cada 8 s**: si una oleada trae 3 jefes, solo el primero hace la entrada. *(En el nivel 1 hay uno solo.)*
+  - **Criterio:** **Dado** el nivel 1, jugado desde el menú, con la opción prendida → **Cuando** empieza la oleada 10 → **Entonces** al nacer el Jefe sale el destello en la entrada del camino, y al irse el cartel de «Oleada 10» entra el cartel de aparición con el retrato, «¡Llega el Jefe!», «Jefe» y su frase; a los 1,6 s se retira; el Jefe nació en el mismo instante y camina como siempre.
+
+- **RF-598** **No bloquea ni pausa la partida** *(D-138)*.
+  - **La partida sigue corriendo todo el tiempo:** el jefe camina, las torres disparan, el oro y las vidas cambian. **No se pausa**, no se baja la velocidad, **no se mueve ni se acerca la cámara**, no se retrasa el nacimiento de ningún enemigo y no se hace invulnerable al jefe.
+  - **Ocupa poco:** el cartel mide como mucho **720 × 120 px virtuales**, está **centrado arriba del mapa**, **debajo de la barra de arriba** y **lejos de los botones flotantes** (carrito, salida, demolición, «Ver todo») y de la barra de abajo. **Solo el cartel recibe toques**; el mapa de alrededor sigue recibiendo los suyos (se puede construir, elegir y mejorar mientras tanto).
+  - **Respeta la pausa y la velocidad:** si se pausa, el cartel y el destello se congelan; a velocidad doble pasan al doble de rápido (≈ 0,8 s). Es presentación del mundo, como los efectos de M36.
+  - **Criterio:** **Dado** el cartel en pantalla → **Cuando** se toca una casilla del mapa fuera del cartel → **Entonces** el toque llega al mapa (se elige o se construye como siempre). **Dado** la pausa a mitad de la entrada → **Entonces** se congela y sigue al reanudar. **Dado** la misma partida con y sin la entrada, con la misma semilla → **Entonces** el oro, las vidas y el puntaje finales son idénticos.
+
+- **RF-599** **Se puede saltear** *(D-138)*.
+  - **Cómo:** un **toque o clic sobre el cartel** lo retira al instante (con un fundido de 0,1 s). En el celular el cartel entero es el objetivo (mide 120 px de alto; supera el mínimo táctil de 56 px, RF-503); en PC tiene una **«✕» chica** arriba a la derecha además. **No hay teclas nuevas** (Espacio, Esc, P, F, U, S y los números ya tienen dueño).
+  - **Qué hace saltearla:** retira el cartel y el destello, y deja pasar a la tarjeta «Nuevo enemigo» si estaba esperando. **No** cambia nada de la partida ni se guarda (la próxima vez que aparezca un jefe, sale igual).
+  - **Una pista chica** («Tocá para saltear» en el celular, «Clic para saltear» en PC) se ve a la derecha del cartel durante toda la entrada, para que se sepa que se puede.
+  - **Criterio:** **Dado** el cartel en pantalla → **Cuando** se toca → **Entonces** desaparece en 0,1 s, el jefe sigue caminando y la tarjeta «Nuevo enemigo» (si le tocaba) sale.
+
+- **RF-600** **Activarla y desactivarla: en Opciones** *(D-140)*. En Opciones (RF-113), **debajo de «Animaciones de mejora»** (M65) —o de «Mostrar números de daño» si M65 no está—, una casilla **«Entrada de los jefes»**, prendida por omisión, con el ajuste `"boss_entrance"` en `settings` (clave aditiva, `SAVE_VERSION` no cambia; un guardado viejo o un valor no booleano se leen como **prendida**).
+  - **Apagada:** el jefe aparece como hoy: cartel de oleada, corona, tarjeta «Nuevo enemigo» y nada más.
+  - **En el celular** la fila respeta el mínimo táctil (RF-550) y Opciones sigue entrando en 720 de alto (RF-555).
+  - **Criterio:** **Dado** un guardado viejo → **Entonces** la casilla aparece prendida. **Dado** la casilla apagada → **Cuando** aparece el Jefe del nivel 1 → **Entonces** no hay destello ni cartel de aparición, y la tarjeta «Nuevo enemigo» sale sin esperar a nadie.
+
+- **RF-601** **Los datos: se generaliza a todos los jefes sin tocar código** *(D-139)*.
+  - **Un recurso nuevo `BossEntranceData`** (`scripts/data/boss_entrance_data.gd`) con: `levels` (lista de ids de nivel donde sale; **vacía = todos**), `line` (frase del cartel; **vacía = usa `EnemyData.description`**, de 80 caracteres como máximo si se escribe una) y `sound` (id de un sonido que ya existe en `Audio`; **vacío = ninguno**).
+  - **`EnemyData` suma un campo `entrance: BossEntranceData`** (vacío = el enemigo **no** hace entrada). Un enemigo se sirve de lo que ya tiene en sus datos para el resto: el **retrato** es su `texture`, el **nombre** su `display_name`, el **color del destello** su `color`.
+  - **El piloto:** solo `data/enemies/boss.tres` lleva `entrance`, con `levels = ["level_01"]`. **Para sumar otro jefe** (el Coloso, o el Jefe en los otros 14 niveles) alcanza con **agregarle una `entrance` al `.tres` o vaciar la lista de niveles del Jefe** (14 niveles); no hace falta código ni arte nuevo (el destello se tiñe).
+  - **Los números de la animación** (duraciones 0,7 s / 0,25 s / 1,1 s / 0,25 s, ancho y alto del cartel, intervalo mínimo de 8 s, fuente) viven en **`data/ui/entrada_jefes.json`** (P2), con un lector con valores por omisión y un validador (`tools/check_entrada_jefes.gd` + test) que dice en castellano qué campo está mal.
+  - **Qué NO hace el archivo:** no define animaciones ni condiciones (sería armar un lenguaje de scripts, P4). Elige si hay entrada, dónde sale y qué frase dice.
+  - **Criterio:** **Dado** `colossus.tres` con una `entrance` de `levels = []` → **Cuando** aparece el Coloso en el nivel 15 → **Entonces** sale la entrada con su retrato y su nombre, sin tocar ningún `.gd`. **Dado** un `levels` con un id que no existe → **Entonces** el validador lo nombra.
+
+- **RF-602** **Dónde sale, qué no cambia y qué se mide.**
+  - **Sale** en la campaña **jugada desde el menú**, en PC y en el celular, y en el **modo de pruebas** cuando se hace aparecer un jefe con el panel (F1) o se llega a la oleada: así Lucas puede **verla sin jugar 10 oleadas** (con el límite de una cada 8 s). **No sale** en el editor («Probar»), en los mapas de la comunidad, en Asedio, ni cuando se abre la escena suelta (F6, tests), mientras el piloto limite `levels` a `level_01`.
+  - **El bot de balance** (`tools/balance_sim.gd`) **da el mismo informe** con y sin la función (no usa HUD ni capa de efectos).
+  - **No cambia**: la vida, la armadura, la velocidad, las vidas que quita, la recompensa, la oleada, el puntaje ni la corona del jefe; el cartel de oleada; la tarjeta «Nuevo enemigo» (solo puede esperar).
+  - **Rendimiento (P7, el celular):** el cartel son **6 nodos de interfaz** (panel, retrato, tres rótulos, pista) **que se crean al aparecer el jefe y se borran al irse**; el destello es **un `Sprite2D`** que anima su región con un `Tween`; **sin `_process`**, sin shaders ni partículas. Fuera de la entrada, el costo es **cero**. Medición: con 200 enemigos en pantalla, la entrada **no baja de 60 FPS** en PC y **no agrega más de 1 ms por cuadro** en modo celular según `tools/perf_test.gd`. *(En un celular real no se mide.)*
+
+> **Criterio de aceptación RF-597 a RF-602**
+> **Dado** el nivel 1 jugado desde el menú, con la opción prendida → **Cuando** llega la oleada 10 → **Entonces** al nacer el Jefe hay un destello en la entrada del camino y, al retirarse el cartel de oleada, un cartel con su retrato, nombre y frase que dura 1,6 s o se salta con un toque; la partida no se pausó ni cambió; la tarjeta «Nuevo enemigo» sale después. **Dado** la opción apagada, o el nivel 2 → **Entonces** el Jefe aparece como siempre. **Dado** una `entrance` en `colossus.tres` → **Entonces** el Coloso hace la suya sin código.
+
+#### Decisiones abiertas para Lucas (M66)
+
+| # | Pregunta | Recomendación de Claude |
+|---|---|---|
+| P-66-1 | **El nivel 1 sí tiene jefe**: aparece en la oleada 10 (la última). ¿Sirve de piloto, aunque quien pierde antes no lo ve? | **Sí.** Proponer otro jefe antes en el nivel 1 tocaría el balance (y ese nivel ya está ajustado, M59). Para verla enseguida está el modo de pruebas (RF-602). |
+| P-66-2 | ¿La entrada sale **cada vez** que aparece un jefe, o **solo la primera vez en cada partida**? | **Cada vez**, con el límite de una por oleada y cada 8 s: en el nivel 1 es una sola por partida y en los demás niveles el Jefe es rarísimo. Se puede cambiar a «solo la primera» sin rehacer nada. |
+| P-66-3 | ¿Sonido de la entrada? | **Ninguno nuevo por ahora** (el cartel de oleada ya suena). Si querés uno, se elige uno de los que ya existen en `Audio` (`sound` en los datos) o se pide uno nuevo en T368. |
+| P-66-4 | ¿La frase del cartel es la descripción del enemigo («Mucha vida y armadura…») o querés una frase de entrada propia («¡Viene por la salida!»)? | **La descripción**: no repite números ni crea textos nuevos que aprobar. Si querés otra, se escribe en `entrance.line`. |
+| P-66-5 | ¿Un retrato **animado** (el jefe rugiendo, 4 cuadros) o el retrato quieto con un pulso? | **Quieto con pulso** para el piloto (0 arte nuevo, 0 peso). Si el piloto te gusta, se encarga el rugido. |
+| P-66-6 | ¿Se sacude la cámara o se acerca al jefe? | **No**: tocaría el zoom y el desplazamiento del celular (M58, M60) y puede marear. |
+| P-66-7 | ¿Se activa también en el Coloso (nivel 15) en la misma tarea? | **No**: primero el piloto en el nivel 1; el resto es una tarea chica de datos cuando lo apruebes. |
+
+#### Lo que M66 no incluye
+- **Retrasar o pausar** la oleada, **bloquear** la partida, mover la cámara o volver invulnerable al jefe.
+- **Animar el modelo** del jefe (rugido, pose) ni un jefe nuevo, ni un jefe nuevo en el nivel 1.
+- **Voces, música nueva o sonidos nuevos** (queda como pregunta P-66-3).
+- **Activar** la entrada en los demás jefes y niveles (el diseño lo permite por datos; es otra tarea, P3).
+- **Probarlo en un celular real.**

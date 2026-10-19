@@ -1163,3 +1163,48 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
   - **Dos casillas (efecto y texto):** más filas en el celular; queda como pregunta P-65-1.
   - **Sin opción:** Lucas pidió poder apagarlas.
 - **Qué cambia:** `01-spec.md` (RF-593), `SaveManager.DEFAULT_SETTINGS`, `OptionsMenu`, `tests/test_old_saves.gd`, `CONTENIDO.md` y `CHANGELOG.md` cuando se programe.
+
+## D-138 · La entrada del jefe es un destello en el mundo más un cartel de 1,6 s que no pausa, no mueve la cámara y se salta con un toque
+- **Fecha:** 2026-10-19 · **Estado:** propuesta (spec M66, sin programar; el arte espera el OK de Lucas) · **Decidió:** Lucas (animación corta, que no pause de más ni bloquee, salteable) / Claude (la forma)
+- **Qué:** dos partes (RF-597): un destello con grieta en la entrada del camino, en el instante en que nace el jefe, y un cartel arriba del mapa con su retrato, nombre y frase. La partida no se toca (RF-598) y un toque en el cartel lo retira (RF-599).
+- **Por qué:**
+  - **El jugador mira el mapa, no el centro de la pantalla:** el destello marca *dónde* entra y el cartel dice *quién* es; juntos duran menos de 3 s.
+  - **No cambia el juego:** el jefe nace en el mismo instante y la partida no se pausa, así que el balance no se toca (el nivel 1 ya está ajustado, M59). Una entrada que pausara obligaría a rehacer los tiempos y a explicar por qué el reloj se detiene.
+  - **El celular:** la cámara tiene zoom y desplazamiento propios (M58, M60); mover la cámara los pelea.
+  - **Reutiliza lo que el jefe ya tiene** (retrato, nombre, color, frase): cero arte nuevo por jefe.
+- **Alternativas descartadas:**
+  - **Pausar o frenar el juego mientras dura (cinemática):** cambia cómo se juega la oleada final, molesta a quien repite el nivel y obliga a manejar la pausa dentro de la pausa; Lucas pidió que no pause de más.
+  - **Acercar la cámara al jefe:** pelea con el zoom del celular y puede marear.
+  - **Un pantallazo completo con el jefe en grande:** tapa el mapa; en el celular, la mitad de la pantalla.
+  - **Retrasar el nacimiento del jefe hasta que termine:** cambia el tiempo de la oleada final.
+  - **Reutilizar la tarjeta «Nuevo enemigo» (RF-134):** sale una sola vez en la vida del jugador, no es una entrada.
+- **Qué cambia:** `01-spec.md` (RF-597 a RF-599, RF-602), `HUD` (el cartel), `EffectsLayer` (el destello), `Game._on_enemy_spawned`, `data/ui/entrada_jefes.json`, `assets/sprites/effects/jefe/`.
+
+## D-139 · La entrada es un dato del enemigo (`EnemyData.entrance`), con la lista de niveles en el propio recurso; el piloto es solo el Jefe en el nivel 1
+- **Fecha:** 2026-10-19 · **Estado:** propuesta (spec M66, sin programar) · **Decidió:** Lucas (piloto en el jefe del nivel 1, generalizable por datos) / Claude (dónde viven los datos)
+- **Qué:** `BossEntranceData` (`levels`, `line`, `sound`) colgado de `EnemyData.entrance`. Vacío = el enemigo no hace entrada. El piloto: `boss.tres` con `levels = ["level_01"]`. Los tiempos y tamaños, en `data/ui/entrada_jefes.json`.
+- **Por qué:**
+  - **Lo que se agrega a `data/enemies/` ya aparece solo en el juego y en la Wiki** (`.claude/rules/datos.md`); la entrada sigue la misma costumbre: un enemigo nuevo con jefe lleva su entrada en su propio archivo.
+  - **Generalizar es editar un dato:** vaciar `levels` o agregar una `entrance` al Coloso, sin código ni arte (el destello se tiñe con el color del enemigo).
+  - **El piloto es una lista, no una rama de código:** `levels = ["level_01"]` se quita cuando Lucas lo apruebe.
+  - **Números fuera del código** (P2) y **sin lenguaje de scripts** (P4): el archivo elige si hay entrada, dónde y qué frase; qué hace la animación es del código.
+- **Alternativas descartadas:**
+  - **Condicionar por `Rules.is_dangerous` (todos los peligrosos):** activaría el Jefe en 14 niveles y el Coloso de golpe, sin prueba piloto.
+  - **Un archivo JSON aparte con todos los jefes:** otro lugar para mantener sincronizado con `data/enemies/`; se desactualiza si se agrega un jefe.
+  - **Una condición `if enemy.id == "boss" and level == 1` en el código:** es el piloto, pero no se puede generalizar sin tocar código.
+  - **Campos sueltos en `EnemyData` (`entrance_line`, `entrance_sound`…):** ensucia un recurso que usan todos los enemigos; un sub-recurso opcional lo deja limpio.
+- **Qué cambia:** `01-spec.md` (RF-601), `scripts/data/enemy_data.gd`, `scripts/data/boss_entrance_data.gd`, `data/enemies/boss.tres`, `tests/test_content.gd`, `CONTENIDO.md`.
+
+## D-140 · «Entrada de los jefes» es una casilla de Opciones (clave aditiva `boss_entrance`, prendida por omisión); la tarjeta «Nuevo enemigo» espera y no se solapa
+- **Fecha:** 2026-10-19 · **Estado:** propuesta (spec M66, sin programar) · **Decidió:** Lucas (activable y desactivable) / Claude (dónde y cómo se combina con lo que ya hay)
+- **Qué:** casilla en Opciones debajo de «Animaciones de mejora» (RF-600), ajuste `"boss_entrance"` en `settings`, sin subir `SAVE_VERSION`. El cartel de aparición espera a que se retire el cartel de oleada, y la tarjeta RF-134 espera al cartel de aparición (RF-597).
+- **Por qué:**
+  - **Igual que las otras opciones de presentación** (`damage_numbers`, `tutorial_enabled`, M65): un guardado viejo no se rompe y la función se ve sin hacer nada.
+  - **Tres cosas hablan del mismo jefe a la vez** (cartel de oleada «¡Llega el Jefe!», tarjeta «Nuevo enemigo» y la entrada): si salen juntas se pisan en pantalla y ninguna se lee. Una cola corta (cada una espera a la anterior) es lo más simple que las separa, sin tocar sus reglas.
+  - **Una opción y no dos:** el destello y el cartel son una sola función para quien juega.
+- **Alternativas descartadas:**
+  - **Una opción en el menú principal o en la pausa:** Lucas pidió «como las otras opciones», que viven en Opciones.
+  - **Reemplazar la tarjeta «Nuevo enemigo» por el cartel de aparición:** la tarjeta explica qué hace el enemigo en todos los enemigos y debe seguir.
+  - **Que el cartel de aparición tape el de oleada:** se leerían mal los dos y el de oleada tiene más información (número de oleada).
+  - **Mostrar la entrada solo la primera vez:** queda como pregunta P-66-2.
+- **Qué cambia:** `01-spec.md` (RF-597, RF-600), `SaveManager.DEFAULT_SETTINGS`, `OptionsMenu`, `HUD.show_enemy_intro` (espera), `tests/test_old_saves.gd`.
