@@ -35,6 +35,8 @@ var normal_save_path: String = ""
 @onready var _admin_confirm_button: Button = %AdminConfirmButton
 @onready var _admin_cancel_button: Button = %AdminCancelButton
 @onready var _back_button: Button = %BackButton
+@onready var _version_label: Label = %VersionLabel
+@onready var _credits_button: Button = %CreditsButton
 @onready var _title: Control = $Center/Panel/Margin/Frame/Title
 
 ## RF-550: en el modo celular, dos columnas (la de la derecha es `_side`); en PC, una sola (RF-555).
@@ -45,6 +47,8 @@ const WINDOW_MARGIN: float = 24.0
 var _ui_mode_selector: OptionButton
 var _ui_mode_label: Label
 var _two_columns: bool = false
+## RF-553: los créditos de siempre (RF-472), hijos de Opciones; al cerrarlos se vuelve acá.
+var credits: CreditsScreen
 
 
 func _ready() -> void:
@@ -60,6 +64,11 @@ func _ready() -> void:
 	_admin_confirm_button.pressed.connect(set_dev_mode.bind(true))
 	_admin_cancel_button.pressed.connect(_on_admin_cancel)
 	_back_button.pressed.connect(close)
+	_version_label.text = GameVersion.label(GameVersion.raw())  # RF-554
+	credits = CreditsScreen.new()
+	add_child(credits)
+	credits.closed.connect(_credits_button.grab_focus)
+	_credits_button.pressed.connect(credits.open)
 	Audio.add_click_sounds(self)
 	_refresh_admin()
 	MenuTouch.attach(self)  # RF-550, RF-551: botones de 56 px y desplazamiento táctil en el celular
