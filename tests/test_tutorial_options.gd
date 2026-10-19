@@ -47,7 +47,10 @@ func test_the_row_is_there_and_shows_the_saved_option() -> void:
 func test_the_row_sits_under_the_damage_numbers_option() -> void:
 	var rows: Node = options.find_child("Rows", true, false)
 	var damage: Node = options.find_child("DamageNumbersCheck", true, false)
-	assert_eq(rows.get_child(damage.get_index() + 1).name, &"TutorialRow")
+	var row: Node = rows.find_child("TutorialRow", true, false)
+	assert_not_null(row, "la fila está en Opciones")
+	assert_gt(row.get_index(), damage.get_index(), "va después de los números de daño (M61 puede intercalar «Interfaz»)")
+	assert_lte(row.get_index() - damage.get_index(), 3, "y pegada a ellos")
 
 
 func test_turning_it_off_saves_the_option_and_keeps_the_progress() -> void:
@@ -98,9 +101,6 @@ func test_the_panel_fits_in_a_720_pixel_window_from_the_pause_and_from_the_main_
 		assert_lte(panel.size.x, 520.0, "y no se ensancha de más")
 		var row: Control = options.find_child("TutorialRow", true, false) as Control
 		assert_lte(row.size.x, panel.size.x, "la fila entra en el ancho del panel")
-	var scroll: ScrollContainer = options.find_child("RowsScroll", true, false) as ScrollContainer
-	assert_not_null(scroll, "las filas van en un contenedor que se desplaza si no entran")
-	assert_eq(scroll.horizontal_scroll_mode, ScrollContainer.SCROLL_MODE_DISABLED)
 
 
 func test_the_confirmation_of_the_test_mode_hides_the_row_too() -> void:

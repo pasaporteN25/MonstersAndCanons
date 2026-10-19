@@ -16,8 +16,6 @@ const ADMIN_OFF_TEXT: String = "Volver al juego normal"
 const TUTORIAL_CHECK_TEXT: String = "Tutorial del nivel 1"
 const TUTORIAL_REPLAY_TEXT: String = "Volver a verlo"
 const TUTORIAL_REPLAYED_TEXT: String = "Se verá en el nivel 1"
-## Alto máximo de las filas antes de que el panel se desplace (el panel suma 48 de margen y su borde: queda en < 720).
-const MAX_ROWS_HEIGHT: float = 600.0
 
 ## RF-383: la sección de administración solo se ofrece desde el menú principal, nunca desde la
 ## pausa (no se cambia de guardado en medio de una partida). La prende `MainMenu`.
@@ -69,7 +67,6 @@ func _ready() -> void:
 	_build_tutorial_row()
 	_build_ui_mode_selector()
 	_arrange_columns()
-	_make_scrollable()
 	_admin_button.pressed.connect(_on_admin_pressed)
 	_admin_confirm_button.pressed.connect(set_dev_mode.bind(true))
 	_admin_cancel_button.pressed.connect(_on_admin_cancel)
@@ -211,25 +208,6 @@ func _on_fullscreen_toggled(on: bool) -> void:
 	GameFlow.apply_display_settings()
 
 
-## M63 (T331): con las opciones que se fueron sumando (Interfaz en M58, el tutorial en M63) el panel ya no entra en
-## 720 de alto, y una parte quedaba fuera de la pantalla. Las filas van dentro de un `ScrollContainer` que crece con
-## ellas hasta `MAX_ROWS_HEIGHT` y desde ahí se desplaza (con la rueda o con el dedo). Si entran, se ve igual que antes.
-func _make_scrollable() -> void:
-	var margin: Node = _rows.get_parent()
-	var scroll := ScrollContainer.new()
-	scroll.name = "RowsScroll"
-	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	margin.add_child(scroll)
-	_rows.reparent(scroll, false)
-	_rows.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_rows.minimum_size_changed.connect(_fit_scroll.bind(scroll))
-	_fit_scroll.call_deferred(scroll)
-
-
-func _fit_scroll(scroll: ScrollContainer) -> void:
-	scroll.custom_minimum_size.y = minf(_rows.get_combined_minimum_size().y, MAX_ROWS_HEIGHT)
-
-
 ## RF-576: la casilla prende o apaga el tutorial (al prenderla de nuevo, vuelve a salir); el botón lo vuelve a
 ## armar para la próxima vez que se entre al nivel 1. Va debajo de «Mostrar números de daño».
 func _build_tutorial_row() -> void:
@@ -241,6 +219,7 @@ func _build_tutorial_row() -> void:
 	_tutorial_check.text = TUTORIAL_CHECK_TEXT
 	_tutorial_check.add_theme_font_size_override("font_size", 18)
 	_tutorial_check.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_tutorial_check.clip_text = true  # que la fila no ensanche el panel (M61 fija 460 px)
 	row.add_child(_tutorial_check)
 	_tutorial_replay = Button.new()
 	_tutorial_replay.name = "TutorialReplay"
