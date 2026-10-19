@@ -31,6 +31,7 @@ func _ready() -> void:
 	_back_button.pressed.connect(GameFlow.go_to_main_menu)
 	show_level(0)
 	Audio.add_click_sounds(self)
+	MenuTouch.attach(self)  # RF-550: botones de 56 px en el celular
 	_back_button.grab_focus()
 
 

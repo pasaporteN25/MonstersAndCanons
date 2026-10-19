@@ -198,6 +198,13 @@ Los `.json` de `%APPDATA%\Godot\app_userdata\JuegoA\maps` (la misma carpeta dond
 
 La spec M58 (RF-502) agrega en **Opciones** un selector **«Interfaz»**: *Automática* (celular si el aparato lo es, PC si no), *Celular* y *PC*. Para ver el modo celular en una computadora: **Opciones → Interfaz → Celular**, y abrir una partida (no cambia una que ya está en curso). El mouse hace de dedo: un clic es un toque y arrastrar es un arrastre de un dedo. **La pinza con dos dedos no se puede probar así** (el zoom se prueba con la rueda y el botón central); para eso y para medir milímetros hace falta el celular, con el kit de `specs/tareas/informes/T262-analisis-mobile.md` §6. **Hasta que T271 esté hecha, este paso no existe.** La posición de los botones flotantes queda en `save.json` (clave `ui_prefs`): para volver a los lugares de fábrica, borrar esa clave o el archivo (ver «Dónde guarda las cosas el juego»).
 
+### 6.1.3 Menús del celular, mouse en Android y versión (M61)
+
+- **Ver los menús del celular en la computadora:** **Opciones → Interfaz → Celular** y volver al menú principal (se ve en dos columnas). Para **capturas reales** de cada pantalla y un informe de qué botón queda fuera de la ventana o mide menos de 56 px: `godot --path . res://tools/capture_menus.tscn -- /carpeta/de/salida 1280x720 mobile` (o `pc`; hace falta ventana, no sirve `--headless`). En un celular apaisado 16:9 o 20:9 el juego dibuja siempre 1280 × 720 (en el 20:9 sobran franjas a los costados), así que 1280 × 720 es la medida que vale.
+- **Desplazar listas con el dedo:** en el celular, las listas de niveles, la Wiki, Opciones y Créditos se mueven arrastrando un dedo (aunque empiece sobre una tarjeta), con inercia. En la computadora con el modo celular forzado el mouse **no** arrastra listas: usar la rueda o la barra (un clic en la barra de la derecha).
+- **Mouse en Android** (DeX, Chromebook, teclado y mouse): en el modo celular un clic real hace de dedo (mapa, carrito, X, tilde, cruz); el clic que Android fabrica a partir de un toque se descarta. Ya no hace falta «Interfaz: PC». **Nunca se probó en un aparato real: si en DeX algo no responde o se duplica, anotar qué dispositivo era y ajustar `puntero_duplicado_ms` y `puntero_duplicado_px` en `data/ui/mobile_ui.json`.**
+- **La versión** (Opciones → «Créditos y versión» muestra «Beta») se cambia **solo** en `project.godot`, `config/version`. Al exportar un `.exe` hay que mirar que Windows tenga su `file_version` y `product_version` numéricos (hoy `0.0.0.0`, en `export_presets.cfg`); el APK toma la versión del proyecto (su `version/name` está vacío). **Todavía no se exportó nada con este cambio.**
+
 ### 6.2 La versión para GNU/Linux
 
 ```bash

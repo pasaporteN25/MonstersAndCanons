@@ -477,6 +477,14 @@ El modo celular (RF-502 a RF-515, D-097) **no agrega enemigos, torres ni niveles
 - **Las tarjetas de nivel con Insignias** (RF-514) muestran **las torres que ya ofrece cada nivel**: no hay nada para agregar a mano.
 - **Las estatuas de los mapas** serán estatuas de torres de piedra (RF-515, D-098, `specs/05-guia-de-arte.md` §9). Hasta que T277 las dibuje, los niveles 1, 3 y 5 siguen con la estatua de hoy.
 
+### M61 · Menús del celular y entrada por dispositivo (RF-550 a RF-555, D-115 a D-117)
+
+No agrega enemigos, torres ni niveles. **Sí suma números que se ajustan sin programar**, en `data/ui/mobile_ui.json` (los mismos que ya usa el modo celular; si falta uno, el juego usa su valor por omisión):
+
+- **Menús táctiles:** `boton_alto_px` (56: alto mínimo de todo botón de menú en el celular), `menu_deslizador_alto_px` (44: alto de los deslizadores de volumen), `scroll_umbral_px` (12: cuánto puede moverse el dedo y seguir siendo un toque), `scroll_friccion` (4,0: cuánto frena la inercia; más alto = frena antes), `scroll_velocidad_min_px` (30: debajo de esta velocidad la inercia se corta) y `scroll_barra_px` (22: ancho de la barra de desplazamiento).
+- **Mouse y toque a la vez:** `puntero_duplicado_ms` (500) y `puntero_duplicado_px` (32): un clic que cae dentro de ese tiempo y esa distancia de un toque se toma por duplicado y se descarta.
+- **La versión del juego** (RF-554) **no** está en ese archivo: es `config/version` en `project.godot` (hoy `"beta"`). Se cambia **solo ahí**.
+
 ### T243 · El Coloso, jefe supremo del nivel 15 (diseño aprobado; todavía no está en el juego)
 
 El jefe del último nivel es un ejemplo de **un enemigo que se parte con solo datos**, igual que la Araña y sus Crías: **dos archivos en `data/enemies/`**, sin tocar el código (RF-481 a RF-484, D-092).

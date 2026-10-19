@@ -998,3 +998,28 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Por qué:** con el zoom mínimo el mapa se podía correr hacia un costado y no había cómo recentrarlo.
 - **Alternativas descartadas:** bloquear el desplazamiento con el zoom mínimo (se pierde la libertad que pidió Lucas); mostrar el botón en PC también con la rueda (cambia la PC más de lo pedido).
 - **Supuesto:** en PC el botón es el mismo del celular, en el mismo lugar; hasta ahora la PC no tenía ninguno (RF-506). Si Lucas lo prefiere sin botón, se cambia por un atajo del teclado o por el reencuadre al soltar el botón central.
+
+
+## D-115 · Los menús del celular tienen distribución propia (dos columnas) y un desplazamiento táctil propio
+
+- **Fecha:** 2026-10-19. **Estado:** pedido de Lucas; la distribución exacta queda **a validar** en un celular real. **Refs:** RF-550, RF-551, RF-555, T312 a T314.
+- **Qué:** en el modo celular, el menú principal y Opciones pasan a dos columnas, todo control de menú mide al menos 56 px de alto (el mínimo de M58) y las listas se desplazan con **un dedo, con inercia**, incluso si el dedo empieza sobre un botón. Un nodo `TouchScroller` colgado de cada `ScrollContainer` hace el arrastre; `MenuTouch` aplica el mínimo y los `TouchScroller` a una pantalla entera. En PC no cambia nada, salvo que Opciones se desplaza si no entra (RF-555).
+- **Por qué:** con 1280 × 720 virtuales (lo que ve un celular apaisado, 16:9 y 20:9) el menú principal ya no deja margen con botones de 56 px y Opciones no entra ni en PC. El `ScrollContainer` de Godot solo arrastra bien sobre fondos y etiquetas; sobre un botón no (el botón se queda con el toque).
+- **Alternativas descartadas:** (a) dejar el `ScrollContainer` de Godot y solo engrosar la barra: no resuelve arrastrar sobre tarjetas, que es casi toda la pantalla de niveles; (b) achicar los menús con un zoom: botones de menos de 56 px; (c) paginar la lista de niveles: cambia el flujo y no lo pidió nadie.
+- **Límite:** el tacto, la inercia y los 12 px de umbral están calibrados en escritorio con eventos sintéticos; hay que probarlos con un dedo.
+
+## D-116 · En el modo celular el mouse real hace de dedo y el emulado se descarta: manda el dispositivo, no la plataforma
+
+- **Fecha:** 2026-10-19. **Estado:** **propuesta mía, a validar por Lucas** (contesta D6 del informe T289: «¿aceptar la limitación o distinguir el mouse real del emulado?»; Lucas pidió hacerlo lo más multiplataforma posible). **Refs:** RF-552, H-10 y H-18 de T289, T311.
+- **Qué:** el modo celular deja de mirar `OS.has_feature("mobile")` para decidir si acepta un clic. Mira `event.device`: el clic con `DEVICE_ID_EMULATION` (lo fabrica Godot desde un toque) se descarta; cualquier otro clic es un mouse real y se trata como un dedo de índice −1. Un filtro `PointerFilter` (lógica pura) descarta además un clic no marcado que cae a 500 ms y 32 px de un toque. Esto vale igual en Android, Windows y Linux, con o sin pantalla táctil.
+- **Por qué:** en Android con mouse (DeX, Chromebook, teclado y mouse) no se podía tocar el mapa ni el carrito. En Windows y Linux con pantalla táctil el clic emulado se contaba como segundo dedo y rompía la pinza (H-10). Con una sola regla por dispositivo se arreglan los dos y no hace falta elegir «Interfaz: PC».
+- **Alternativas descartadas:** (a) aceptar la limitación (obliga a cambiar el ajuste a mano); (b) cambiar el modo solo al detectar un mouse (parpadeo y estados a medias, y un Chromebook usa los dos); (c) apagar la emulación de mouse desde un toque (`input_devices/pointing/emulate_mouse_from_touch`): rompe los botones y menús de Godot, que se manejan con ese mouse emulado.
+- **Límite:** que Android entregue `DEVICE_ID_EMULATION` en el clic emulado sale del código de `Input` de Godot (el mismo que usa la PC en las pruebas), no de un celular. **No se probó con DeX ni con un teléfono.** Si alguna combinación entrega los dos eventos sin marcar, la red de 500 ms y 32 px lo atrapa; si deja de funcionar, se ajustan esos dos números en `data/ui/mobile_ui.json`.
+
+## D-117 · La versión vive en `config/version` de `project.godot`; hoy es «Beta»
+
+- **Fecha:** 2026-10-19. **Estado:** pedido de Lucas. **Refs:** RF-553, RF-554, T315.
+- **Qué:** se agrega `config/version="beta"` a `project.godot`. Opciones muestra «Beta» (o «Beta X.Y.Z» con un número menor a 1, o «Versión X.Y.Z» desde la 1.0.0). El `version/name` de Android, que decía `1.0.0` a mano, se deja **vacío**: Godot usa entonces la versión del proyecto. Los de Windows (`file_version`, `product_version`) exigen un número y no pueden decir «beta»: pasan de `1.0.0` a `0.0.0.0` y se actualizan a mano cuando la versión del proyecto sea un número. `version/code` de Android (entero que sube con cada APK) no se toca.
+- **Por qué:** «1.0.0» en las exportaciones era mentira mientras el juego está en beta, y repetir la versión en tres archivos garantiza que se desfasen.
+- **Alternativas descartadas:** una constante en GDScript o un archivo `data/version.json` (otro lugar más para editar; `project.godot` ya viaja en las exportaciones).
+- **Límite:** que Godot tome la versión del proyecto cuando `version/name` queda vacío sale de su documentación; **no se exportó** (no se generan ejecutables en esta tarea). Hay que mirar la versión del primer APK o `.exe` que se exporte.

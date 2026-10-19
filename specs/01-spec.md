@@ -3283,3 +3283,56 @@ Pedido de Lucas: el carrito debe abrir al tocarlo incluso pegado a los costados;
 > **Dado** el botón de demolición tocado → **Cuando** se toca un removible con oro suficiente → **Entonces** empieza la demolición, se cobra el costo y la herramienta se suelta; **Cuando** se toca una casilla vacía o sin oro → **Entonces** no se cobra nada y la barra dice el motivo; **Cuando** se toca la cruz → **Entonces** vuelve «Vacía».
 > **Dado** el modo celular con una partida en marcha → **Cuando** la app pasa a segundo plano → **Entonces** la partida queda en pausa. **Dado** una PC → **Cuando** la ventana pierde el foco → **Entonces** la partida no se pausa.
 > **Dado** el zoom mínimo y el mapa corrido con dos dedos → **Entonces** «Ver todo» está a la vista; **Cuando** se lo toca → **Entonces** el encuadre vuelve y el botón desaparece.
+
+
+### M61 · Menús del celular, entrada por dispositivo y «Créditos y versión» (Lucas, 2026-10-19; T310)
+
+**Estado: especificada y programada en T310 a T315. Falta que Lucas la pruebe en un celular real.** Decisiones: **D-115**, **D-116**, **D-117** (las dos primeras quedan **a validar** por Lucas, porque contestan la pregunta D6 del informe `specs/tareas/informes/T289-auditoria-mobile-implementado.md`). Las medidas de «antes» salen de capturas reales con ventana (`tools/capture_menus.gd`) en 1280 × 720 virtuales, que es lo que el juego dibuja en un celular apaisado 16:9 **y** 20:9 (la relación de aspecto es «keep»: el 20:9 solo agrega franjas a los costados, no más alto útil).
+
+**Qué pidió Lucas (2026-10-19).**
+
+1. **Menús del celular:** el menú no se puede desplazar y no entra todo. Distribución propia del celular donde haga falta, scroll táctil, botones de al menos el mínimo táctil de M58, sin recortes. **La PC no cambia.**
+2. **Entrada multiplataforma:** hoy en Android con mouse (DeX, Chromebook, teclado y mouse) no se puede tocar el mapa ni el carrito, y la única salida es «Interfaz: PC». Que los dos modos convivan: aceptar toque **y** mouse según **qué dispositivo generó el evento**, no según la plataforma, sin el clic duplicado del mouse emulado.
+3. **Opciones → «Créditos y versión»:** «Beta» + la versión del proyecto, con el acceso a los créditos; la versión se cambia en un solo lugar.
+
+**Lo que encontró la auditoría de menús (antes de tocar nada, modo celular, 1280 × 720).**
+
+| Pantalla | Qué pasa hoy |
+|---|---|
+| Menú principal | Entra, pero «Salir» termina en y = 682 de 720: cero margen. Con botones de 56 px ya no entra. |
+| Opciones | **No entra, tampoco en PC:** el título queda cortado arriba y «Interfaz» abajo (el panel mide más de 720). Además «Interfaz» quedó **después** de «Volver». |
+| Selección de niveles | Entra, pero la grilla se desplaza solo con la barra (de unos 6 px de ancho) y con la rueda: un dedo sobre una tarjeta no la mueve. |
+| Wiki | Igual: lista con barra finita y filas de 52 px. |
+| Récords, Pausa, Créditos | Entran; los botones de ◄ ► y «Salón de la fama» miden menos de 56 px de alto. |
+
+- **RF-550** **Distribución propia del celular para los menús** *(solo en el modo celular, RF-502; la PC queda exactamente igual salvo lo de RF-555)*.
+  - **Mínimo táctil:** en el modo celular, todo botón, casilla, selector y fila de lista de un menú mide **al menos 56 px virtuales de alto** (`boton_alto_px` de `data/ui/mobile_ui.json`, el mismo de RF-503). Los que ya miden más no cambian.
+  - **Menú principal:** el logo a la izquierda y la columna de botones a la derecha (dos columnas), así los seis botones de 56 px entran con margen en 720 de alto. En PC sigue la columna única de hoy.
+  - **Opciones:** panel ancho de **dos columnas** (Sonido y Visualización a la izquierda; Interfaz, Créditos y versión y Administración a la derecha), con el título y «Volver» **fijos** (arriba y abajo) y el centro con desplazamiento si no entra (RF-551).
+  - **Sin recortes:** ningún botón queda fuera de la ventana virtual de 1280 × 720 ni tapado por otro, en las pantallas del cuadro de arriba. Lo que no entra **se desplaza**, no se corta.
+- **RF-551** **Desplazamiento táctil de un dedo, con inercia** *(modo celular)*.
+  - **Qué hace:** en toda lista o panel con desplazamiento de un menú (niveles, Wiki, Opciones, Créditos, Récords), **arrastrar un dedo** lo mueve, **aunque el dedo empiece sobre un botón o una tarjeta**. Al soltar sigue un poco por inercia y se frena solo.
+  - **Toque o arrastre:** un movimiento de **12 px virtuales o menos** sigue siendo un toque (pulsa el botón). Pasados los 12 px es un arrastre: **ningún botón del recorrido se pulsa** al soltar.
+  - **Controles que no se arrastran:** si el dedo apoya sobre un **deslizador** (volumen) o sobre la **barra de desplazamiento**, el dedo maneja ese control y no desplaza.
+  - **Barra de desplazamiento:** más ancha en el modo celular (22 px) para poder agarrarla.
+  - **Mouse y rueda:** siguen funcionando como hoy (rueda y barra). El arrastre con el dedo es **solo de toques** (RF-552).
+  - **Los números** (12 px, fricción, velocidad mínima, ancho de barra) están en `data/ui/mobile_ui.json` (P2).
+- **RF-552** **La entrada se decide por el dispositivo que genera el evento, no por la plataforma** *(modo celular; resuelve D6 de T289, decisión D-116)*.
+  - **Toque** (`InputEventScreenTouch/Drag`): siempre es un dedo, en cualquier plataforma.
+  - **Mouse real** (clic o movimiento que **no** es la emulación de un toque): en el modo celular **actúa como un dedo** (índice −1) en el mapa, el carrito, la X, la tilde, la cruz y la barra de abajo, **también en Android**. Arrastrar con el botón izquierdo equivale a un arrastre de un dedo.
+  - **Mouse emulado** (el clic que Godot fabrica a partir de un toque, `device = DEVICE_ID_EMULATION`): se **descarta** en el mapa y en los botones flotantes; el toque que lo acompaña ya hizo la acción. Así no hay acción doble en ninguna plataforma.
+  - **Red de seguridad para otras plataformas:** un clic **no marcado como emulado** que cae a **500 ms o menos y 32 px o menos** de un toque se trata como duplicado y se descarta (por si un sistema, por ejemplo Linux con pantalla táctil, entrega los dos).
+  - **Rueda y botón central del mouse** (zoom, RF-506): siguen en todas las plataformas y modos.
+  - **Qué no cambia:** el modo PC (RF-143 de escritorio) no cambia. «Interfaz» sigue pudiendo forzarse en Opciones; con «Automática» un Android sigue siendo «celular» y ahora también se maneja con mouse.
+  - **Los números** (500 ms y 32 px) están en `data/ui/mobile_ui.json`.
+- **RF-553** **Opciones: sección «Créditos y versión».**
+  - **Qué muestra:** un encabezado **«Créditos y versión»**, una línea con la versión (RF-554) y un botón **«Ver créditos»** que abre los créditos de siempre (RF-472). Al cerrarlos se vuelve a Opciones. Está en el menú principal y en la pausa, en PC y en celular.
+  - **Dónde va:** en Opciones, **después de «Visualización» y antes de «Administración»**.
+- **RF-554** **La versión vive en un solo lugar.**
+  - **Dónde:** `config/version` de `project.godot` (sección `[application]`). Hoy vale `"beta"`. Es el **único** lugar que se edita al cambiar de versión: la exportación de **Android** no repite la versión (`version/name` queda vacío y toma la del proyecto). La de **Windows** exige una versión numérica (`file_version` y `product_version`, hoy `0.0.0.0`) y no puede decir «beta»: se actualiza a mano cuando la versión del proyecto pase a ser un número (por ejemplo, al llegar a la 1.0.0).
+  - **Cómo se muestra:** si falta o vale `beta` → **«Beta»**. Si es un número `X.Y.Z` con X = 0 (o lleva sufijo, como `0.3.0-rc1`) → **«Beta X.Y.Z»**. Cuando llegue la **1.0.0** (X ≥ 1 y sin sufijo) → **«Versión 1.0.0»**, sin la palabra Beta. Un valor que no se entienda se muestra tal cual, precedido de «Beta ».
+- **RF-555** **Opciones siempre entra en la ventana, también en PC.** El centro de Opciones se desplaza cuando el panel no entra en 720 de alto (hoy no entra), con el título y «Volver» a la vista, y **«Interfaz» va dentro de «Visualización»** (hoy quedó después de «Volver»). En PC no cambia nada más: misma columna, mismos botones, mismos tamaños.
+
+**Criterio de aceptación.** **Dado** el modo celular en 1280 × 720 → **Cuando** se abre cada pantalla del cuadro → **Entonces** ningún botón queda fuera de la ventana y todos miden 56 px o más. **Dado** un dedo que arrastra más de 12 px sobre una tarjeta de nivel → **Entonces** la grilla se desplaza, sigue un poco al soltar y **no** se abre el nivel. **Dado** un toque corto sobre la tarjeta → **Entonces** se abre. **Dado** Android (o cualquier plataforma) en modo celular → **Cuando** llega un clic de mouse real sobre el mapa → **Entonces** mueve el fantasma como un toque; **Cuando** llega un toque con su clic emulado → **Entonces** la acción ocurre **una sola vez**. **Dado** Opciones → **Entonces** se ve «Beta» (con la versión actual) y «Ver créditos» abre los créditos.
+
+**Fuera de M61 (no se hizo).** Prueba en un celular real, en DeX o en una Chromebook; arrastrar con el mouse para desplazar listas (se usa la rueda o la barra); reacomodar el editor de mapas (no existe en el celular, RF-210) y las pantallas de fin de partida, intro y epílogo (no se auditaron: no estaban en el pedido).

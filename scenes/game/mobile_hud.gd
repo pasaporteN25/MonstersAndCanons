@@ -45,6 +45,8 @@ var _float_button_size: Vector2
 var _base_positions: Array[Vector2] = [Vector2.ZERO, Vector2.ZERO, Vector2.ZERO]
 var _drag_button: Button
 var _drag_index: int = -1
+## RF-552: separa el mouse real del eco de un toque.
+var _pointer_filter := PointerFilter.new()
 var _drag_start: Vector2 = Vector2.ZERO
 var _drag_start_position: Vector2 = Vector2.ZERO
 var _dragging: bool = false
@@ -83,6 +85,7 @@ const DEMOLISH_ICON: Texture2D = preload("res://assets/ui/mobile_demolish.svg")
 
 func _ready() -> void:
 	_config = MobileUiConfig.load_from()
+	_pointer_filter.configure(int(_config.get_value("puntero_duplicado_ms")), float(_config.get_value("puntero_duplicado_px")))
 	_mobile_theme = MOBILE_THEME.duplicate(true) as Theme
 	for state: String in ["normal", "hover", "pressed", "hover_pressed", "disabled", "focus"]:
 		var style: StyleBoxFlat = _mobile_theme.get_stylebox(state, "Button") as StyleBoxFlat
@@ -746,6 +749,7 @@ func _input(event: InputEvent) -> void:
 		return
 	if event is InputEventScreenTouch:
 		var touch: InputEventScreenTouch = event as InputEventScreenTouch
+		_pointer_filter.note_touch(touch.position, Time.get_ticks_msec())
 		if not _catalog_open and _handle_status_touch(touch.index, touch.position, touch.pressed):
 			return
 		_handle_drag_touch(touch.index, touch.position, touch.pressed)
@@ -758,20 +762,26 @@ func _input(event: InputEvent) -> void:
 		if _drag_button != null and drag.index == _drag_index:
 			_update_drag(drag.position)
 			get_viewport().set_input_as_handled()
-	elif event is InputEventMouseButton and not OS.has_feature("mobile"):
+	elif event is InputEventMouseButton:
+		# RF-552: manda el dispositivo, no la plataforma. El clic emulado de un toque se descarta (el toque ya
+		# actuó); un mouse real, también en Android, hace de dedo.
 		var mouse: InputEventMouseButton = event as InputEventMouseButton
 		if mouse.button_index == MOUSE_BUTTON_LEFT:
-			if mouse.device == InputEvent.DEVICE_ID_EMULATION:
+			if not _pointer_filter.accepts_mouse(mouse.device, mouse.position, Time.get_ticks_msec()):
 				return
-			if not _catalog_open and _handle_status_touch(-1, mouse.position, mouse.pressed):
+			if not _catalog_open and _handle_status_touch(PointerFilter.MOUSE_FINGER, mouse.position, mouse.pressed):
 				return
-			_handle_drag_touch(-1, mouse.position, mouse.pressed)
-	elif event is InputEventMouseMotion and not OS.has_feature("mobile") and _status_touch_button != null:
+			_handle_drag_touch(PointerFilter.MOUSE_FINGER, mouse.position, mouse.pressed)
+	elif event is InputEventMouseMotion and _status_touch_button != null:
 		var motion: InputEventMouseMotion = event as InputEventMouseMotion
+		if not _pointer_filter.accepts_mouse(motion.device, motion.position, Time.get_ticks_msec()):
+			return
 		_status_touch_moved = _status_touch_moved or motion.position.distance_to(_status_touch_start) > float(_config.get_value("toque_max_px"))
 		get_viewport().set_input_as_handled()
-	elif event is InputEventMouseMotion and not OS.has_feature("mobile") and _drag_button != null:
+	elif event is InputEventMouseMotion and _drag_button != null:
 		var motion: InputEventMouseMotion = event as InputEventMouseMotion
+		if not _pointer_filter.accepts_mouse(motion.device, motion.position, Time.get_ticks_msec()):
+			return
 		_update_drag(motion.position)
 		get_viewport().set_input_as_handled()
 

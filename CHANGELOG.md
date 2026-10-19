@@ -17,6 +17,21 @@ En los niveles con árboles, escombros o minas hay un **tercer botón flotante**
 ## Un solo catálogo de torres en el celular *(T301, 2026-10-19)*
 
 El catálogo del celular ya no tiene pestañas: es una sola lista con **las torres del nivel** (antes mostraba las 11 del juego, con las que no se podían usar apagadas) y siempre abre mostrando las torres. Antes, en los niveles 6 a 15, abría en «Infraestructura» y volvía ahí cada vez que cambiaba el oro. Donde hay Demoledora, su compra es la última tarjeta. Las herramientas de demoler y habilitar se mueven a un botón propio (T302).
+## Opciones: «Créditos y versión» *(T315, 2026-10-19)*
+
+Opciones tiene una sección nueva, **«Créditos y versión»**, con la versión del juego (hoy **«Beta»**; cuando llegue la 1.0.0 dirá «Versión 1.0.0») y el botón **«Ver créditos»**, que abre los créditos y vuelve a Opciones. Está en el menú principal y en la pausa, en PC y en celular. La versión se cambia en un solo lugar (`config/version` en `project.godot`).
+
+## Niveles, Wiki, Récords y Créditos con el dedo *(T314, 2026-10-19)*
+
+En el modo celular, las listas de la selección de niveles, la Wiki, Opciones y los Créditos se **desplazan arrastrando un dedo** (con un poco de inercia al soltar), aunque el dedo empiece sobre una tarjeta o un botón, y la barra de desplazamiento es más ancha para agarrarla. Un toque corto sigue abriendo el nivel o la entrada, y los deslizadores de volumen siguen siendo del dedo. Todos los botones y las filas de esas pantallas miden al menos 56 px de alto. En PC no cambia nada: rueda y barra de siempre.
+
+## Menú principal, Opciones y Pausa pensados para el celular *(T313, 2026-10-19)*
+
+En el modo celular, el menú principal pone el logo a la izquierda y los botones a la derecha (todos de 56 px de alto, cómodos para el dedo) y Opciones se muestra en **dos columnas** con el título y «Volver» siempre a la vista. En Opciones, «Interfaz» ahora está dentro de «Visualización» (antes quedaba debajo de «Volver») y, en cualquier modo, si el panel no entra en la pantalla **se desplaza** en vez de cortarse. En PC todo sigue igual.
+
+## Mouse y toque conviven en el modo celular *(T311, 2026-10-19)*
+
+En el modo celular ahora se puede usar el **mouse además del dedo**, también en Android (DeX, Chromebook, teclado y mouse): un clic mueve el fantasma, abre el carrito, usa la X, la tilde y la cruz, y arrastrar con el botón izquierdo equivale a arrastrar un dedo. Ya no hace falta cambiar a «Interfaz: PC». Un toque sigue haciendo su acción una sola vez (el clic que el sistema fabrica a partir del toque se descarta), también en una notebook con pantalla táctil, donde antes ese clic hacía de segundo dedo. **No se probó en un celular real.**
 
 ## Un toque, una sola acción en el celular *(T291, 2026-10-18)*
 
