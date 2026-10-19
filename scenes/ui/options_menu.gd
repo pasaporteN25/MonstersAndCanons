@@ -16,6 +16,8 @@ const ADMIN_OFF_TEXT: String = "Volver al juego normal"
 const TUTORIAL_CHECK_TEXT: String = "Tutorial del nivel 1"
 const TUTORIAL_REPLAY_TEXT: String = "Volver a verlo"
 const TUTORIAL_REPLAYED_TEXT: String = "Se verá en el nivel 1"
+## M66 (RF-600): la entrada de los jefes.
+const BOSS_ENTRANCE_TEXT: String = "Entrada de los jefes"
 
 ## RF-383: la sección de administración solo se ofrece desde el menú principal, nunca desde la
 ## pausa (no se cambia de guardado en medio de una partida). La prende `MainMenu`.
@@ -55,6 +57,7 @@ var _two_columns: bool = false
 var credits: CreditsScreen
 var _tutorial_check: CheckBox
 var _tutorial_replay: Button
+var _boss_entrance_check: CheckBox
 
 
 func _ready() -> void:
@@ -66,6 +69,7 @@ func _ready() -> void:
 		func(on: bool) -> void: SaveManager.set_setting("damage_numbers", on))  # RF-132
 	_build_tutorial_row()
 	_build_ui_mode_selector()
+	_build_boss_entrance_check()  # M66
 	_arrange_columns()
 	_admin_button.pressed.connect(_on_admin_pressed)
 	_admin_confirm_button.pressed.connect(set_dev_mode.bind(true))
@@ -89,6 +93,7 @@ func open() -> void:
 	_fullscreen_check.set_pressed_no_signal(bool(SaveManager.get_setting("fullscreen")))
 	_damage_numbers_check.set_pressed_no_signal(bool(SaveManager.get_setting("damage_numbers")))
 	_ui_mode_selector.select(UiMode.read_setting(SaveManager.get_setting("ui_mode")))
+	_boss_entrance_check.set_pressed_no_signal(SaveManager.boss_entrance_enabled())  # M66
 	_tutorial_check.set_pressed_no_signal(SaveManager.tutorial_enabled())
 	_tutorial_replay.text = TUTORIAL_REPLAY_TEXT
 	_tutorial_replay.disabled = false
@@ -245,6 +250,24 @@ func _on_tutorial_replay() -> void:
 	_tutorial_check.set_pressed_no_signal(true)
 	_tutorial_replay.text = TUTORIAL_REPLAYED_TEXT
 	_tutorial_replay.disabled = true
+
+
+## M66, RF-600: «Entrada de los jefes». Va debajo de «Mostrar números de daño» y del tutorial (y de
+## «Animaciones de mejora» si M65 está). Una casilla simple: la lee `Game` al aparecer un jefe.
+func _build_boss_entrance_check() -> void:
+	_boss_entrance_check = CheckBox.new()
+	_boss_entrance_check.name = "BossEntranceCheck"
+	_boss_entrance_check.text = BOSS_ENTRANCE_TEXT
+	_boss_entrance_check.add_theme_font_size_override("font_size", 20)
+	_boss_entrance_check.clip_text = true  # que la fila no ensanche el panel
+	_rows.add_child(_boss_entrance_check)
+	# Después de la fila del tutorial, que tiene que quedar pegada a «Mostrar números de daño» (RF-576).
+	var anchor: Node = _rows.get_node_or_null("TutorialRow")
+	if anchor == null:
+		anchor = _damage_numbers_check
+	_rows.move_child(_boss_entrance_check, anchor.get_index() + 1)
+	_boss_entrance_check.toggled.connect(
+		func(on: bool) -> void: SaveManager.set_setting("boss_entrance", on))
 
 
 func _build_ui_mode_selector() -> void:

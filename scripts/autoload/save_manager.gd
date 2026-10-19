@@ -15,6 +15,7 @@ const DEFAULT_SETTINGS: Dictionary = {
 	"music_volume": 0.7, "sfx_volume": 0.8, "fullscreen": false, "damage_numbers": true,
 	"ui_mode": 0,
 	"tutorial_enabled": true,  # M63, RF-576: el tutorial del nivel 1 está prendido
+	"boss_entrance": true,  # M66, RF-600: la entrada de los jefes está prendida
 }
 
 ## Los tests lo cambian para no tocar el guardado real del jugador.
@@ -241,6 +242,12 @@ func set_last_initials(name: String) -> void:
 
 
 # --- Opciones (RF-113) ---
+
+## M66, RF-600: ¿está prendida la «Entrada de los jefes»? Un valor que no es booleano se lee como prendida.
+func boss_entrance_enabled() -> bool:
+	var value: Variant = get_setting("boss_entrance")
+	return value if typeof(value) == TYPE_BOOL else true
+
 
 func get_setting(key: String) -> Variant:
 	return _settings.get(key, DEFAULT_SETTINGS.get(key))

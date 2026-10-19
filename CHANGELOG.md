@@ -2,6 +2,10 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Entrada del Jefe en el nivel 1 *(T366 y T368, 2026-10-19; arte provisional)*
+
+Cuando llega el **Jefe de la oleada 10 del nivel 1** (jugado desde el menú), sale una entrada corta: un **destello con una grieta** en la entrada del camino, en el mismo instante en que nace, y, cuando se va el cartel de «Oleada 10», un **cartel arriba del mapa** con su retrato, «¡Llega el Jefe!», su nombre y su frase. Dura **1,6 segundos**; con un **toque o un clic sobre el cartel** se saltea al instante (en PC tiene una «✕» chica). **No pausa la partida, no mueve la cámara y no cambia nada del Jefe**: el mapa de alrededor sigue recibiendo toques y se puede construir mientras tanto. La tarjeta «Nuevo enemigo» del Jefe espera a que el cartel se retire y no se pisan. En **Opciones** hay una casilla nueva, **«Entrada de los jefes»** (prendida por omisión; un guardado viejo la lee prendida). El dibujo del destello es **provisional**. Se puede ver sin jugar diez oleadas con el modo de pruebas (F1 → hacer aparecer un Jefe).
+
 ## «Ver todo» también cuando corriste el mapa *(T304, 2026-10-19)*
 
 «Ver todo» aparece ahora también cuando corriste el mapa con dos dedos aunque no hayas acercado nada: antes, con el zoom mínimo no había forma de volver al encuadre. En la computadora el botón aparece solo cuando corrés el mapa con el botón del medio estando con el zoom mínimo (con la rueda del mouse no aparece, como hasta ahora).
