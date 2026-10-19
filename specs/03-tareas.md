@@ -2031,3 +2031,33 @@
 
   **Resultado (2026-10-18):** `MobileUiConfig.load_from` solo aceptaba un valor si su tipo era idéntico al del valor por omisión; Godot entrega los enteros del JSON como `float`, así que 42 de los 57 números se descartaban en silencio. Ahora acepta cualquier número cuando el valor por omisión también es número y lo convierte a ese tipo (entero redondeado o float); texto, `null`, listas y booleanos donde va un número se siguen ignorando. Tests en `tests/test_mobile_touch_fixes.gd` (4; el de enteros fallaba antes: 56 ≠ 99, 6 ≠ 9, 64 ≠ 80).
   **Parte NO hecha, a propósito (H-08, factor de velocidad de «Vender» y «Mejorar»):** RF-512 y RF-513 dicen «3 s», «0,35 s» y «0,4 s» sin aclarar si son reales o de juego, así que es ambiguo y no lo cambié. Hoy cuentan tiempo de juego: con x2 «Vender» se desarma a 1,5 s reales y el bloqueo de «Mejorar» dura 0,18 s. Quedó como **D12** en el informe de T289 (§7), para que Lucas elija. **No se probó:** nada en un celular; tampoco se revisó que cada valor del archivo real tenga sentido (solo que se lee igual que su valor por omisión).
+
+
+
+## M61 · Menús del celular, entrada por dispositivo y «Créditos y versión» (RF-550 a RF-555, D-115 a D-117)
+
+- [x] **T310 · `[mobile+x86]` · Spec, decisiones y plan de M61, y herramienta de capturas de menús.**
+  **Refs:** pedido de Lucas del 2026-10-19 (A, B, C), D6 de T289. **Depende de:** T292.
+  **Hecho cuando:** M61 (RF-550 a RF-555), D-115 a D-117, el plan y las tareas están escritos; `tools/capture_menus.gd` guarda un PNG por pantalla en el modo celular y en el de PC e informa qué botones quedan fuera de la ventana.
+
+  **Resultado (2026-10-19):** M61 (RF-550 a RF-555), D-115 a D-117, plan y tareas T310 a T315 escritos. `tools/capture_menus.gd` abre cada pantalla con ventana real (probado con DISPLAY del escritorio, 1280 × 720) y deja un PNG y un informe por pantalla. **Medido antes de tocar nada (modo celular):** Opciones no entra ni en PC (título y «Interfaz» cortados; «Interfaz» quedó después de «Volver»); el menú principal deja 0 px de margen; 6 pantallas tienen botones de 42 a 52 px (la Wiki, 25 filas de 46). **Qué no:** la herramienta solo corre en 1280 × 720 de ventana; el 20:9 se razona (relación «keep»: mismas 720 de alto virtuales con franjas a los costados), no se capturó otra relación; ningún celular real.
+
+- [ ] **T311 · `[mobile+x86]` · La entrada se decide por dispositivo: el mouse real hace de dedo y el emulado se descarta.**
+  **Refs:** RF-552, D-116, H-10 y H-18 de T289. **Depende de:** T310.
+  **Hecho cuando:** en modo celular, un clic de mouse real mueve el fantasma, abre el carrito, usa la X, la tilde y la barra **también con `OS.has_feature("mobile")`**; un toque con su clic emulado hace la acción una sola vez; un clic no marcado a ≤ 500 ms y ≤ 32 px de un toque se descarta; la rueda y el botón central siguen andando; el modo PC no cambia.
+
+- [ ] **T312 · `[mobile]` · Desplazamiento táctil de un dedo con inercia para los menús.**
+  **Refs:** RF-551, D-115. **Depende de:** T311.
+  **Hecho cuando:** un arrastre de más de 12 px sobre una tarjeta o un botón desplaza la lista, sigue por inercia y no pulsa nada; un toque corto sí pulsa; un deslizador no desplaza; las barras son más anchas en celular; en PC no hay ningún cambio.
+
+- [ ] **T313 · `[mobile]` · Menú principal, Opciones y Pausa para el celular.**
+  **Refs:** RF-550, RF-555, D-115. **Depende de:** T312.
+  **Hecho cuando:** en 1280 × 720 y modo celular el menú principal está en dos columnas con botones de 56 px o más, y Opciones (con y sin Administración) entra con el título y «Volver» a la vista y el centro desplazable; «Interfaz» queda dentro de «Visualización»; en PC el menú principal es idéntico y Opciones solo se desplaza si no entra.
+
+- [ ] **T314 · `[mobile]` · Selección de niveles, Wiki, Récords, Salón de la fama y Créditos para el celular.**
+  **Refs:** RF-550, RF-551, D-115. **Depende de:** T313.
+  **Hecho cuando:** esas cinco pantallas, en modo celular, tienen controles de 56 px o más, desplazamiento táctil y ningún botón fuera de la ventana de 1280 × 720 (informe de `tools/capture_menus.gd` antes y después).
+
+- [ ] **T315 · `[mobile+x86]` · Opciones: «Créditos y versión», con la versión en `project.godot`.**
+  **Refs:** RF-553, RF-554, D-117. **Depende de:** T313.
+  **Hecho cuando:** `project.godot` tiene `config/version="beta"`; Opciones (menú y pausa) muestra «Beta» y un botón «Ver créditos» que abre los créditos y vuelve a Opciones; los ajustes de exportación no repiten la versión; `GameVersion.label` cubre vacío, `beta`, `0.x.y`, `0.x.y-sufijo`, `1.x.y` y basura.

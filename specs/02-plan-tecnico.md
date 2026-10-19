@@ -1431,3 +1431,15 @@ Nada más: ni `balance.json`, ni `.tres`, ni código, ni assets, ni los niveles 
 2. Aplicar el tema existente a catálogo y barra; íconos SVG propios en botones redondeados. Medidas desde mobile_ui.json y sus valores de respaldo. Mantener costo en catálogo/barra y motivo inválido en barra.
 3. Pintar detrás del mapa una textura de suelo del tema, sin cambiar la grilla, y dibujar un solo borde superior en su altura correcta.
 4. Regresión con eventos de entrada completos (mouse y toque), ambos bordes, arrastre y colocación; GUT completo y capturas 16:9/20:9. Exportar EXE/APK de prueba, sin dar por validado el tacto real.
+
+
+
+### M61 / T310 · Menús del celular, entrada por dispositivo y «Créditos y versión» (RF-550 a RF-555, D-115 a D-117)
+
+#### Cómo se hace
+
+1. **Entrada por dispositivo (T311).** Lógica pura `scripts/logic/pointer_filter.gd` (`PointerFilter`): `note_touch(pos, now_ms)` guarda el último toque; `accepts_mouse(device, pos, now_ms)` es falso para `DEVICE_ID_EMULATION` y para un clic a ≤ 500 ms y ≤ 32 px de un toque. `BuildController._handle_mobile_input` y `MobileHud._input` usan una instancia cada uno (llaman `note_touch` con cada `InputEventScreenTouch` y filtran los `InputEventMouseButton/Motion`) y pierden las condiciones `OS.has_feature("mobile")` de los caminos de mouse. Los números van a `data/ui/mobile_ui.json` (`puntero_duplicado_ms`, `puntero_duplicado_px`).
+2. **Desplazamiento táctil (T312).** `scripts/logic/kinetic_scroll.gd` (`KineticScroll`, puro): umbral de arrastre, frenado exponencial y velocidad mínima. `scenes/ui/touch_scroller.gd` (`TouchScroller`, un `Node` hijo del `ScrollContainer`): en `_input` toma `InputEventScreenTouch/Drag` dentro del rectángulo del contenedor (no si el dedo apoya en un `Range`: deslizador o barra), mueve `scroll_vertical`/`scroll_horizontal`, marca el evento como atendido, **traga los clics emulados mientras dura el arrastre** (el orden de Godot es clic emulado primero, T289 A.4) y le saca el foco al botón apoyado para que no quede «apretado». `scenes/ui/menu_touch.gd` (`MenuTouch.attach(root)`): en modo celular sube los botones de la pantalla a 56 px, engrosa las barras y cuelga un `TouchScroller` de cada `ScrollContainer`, y lo repite para lo que se agregue después (`SceneTree.node_added`).
+3. **Distribución del celular (T313, T314).** `MainMenu`: en modo celular arma dos columnas (logo / botones). `OptionsMenu`: se reestructura la escena (`Frame` con título, `Scroll` con dos columnas y «Volver»); en PC las dos columnas se juntan en una. El resto de las pantallas solo llama a `MenuTouch.attach(self)`.
+4. **Versión (T315).** `scripts/logic/game_version.gd` (`GameVersion`): `raw()` lee `application/config/version`; `label(raw)` da el texto (RF-554). Opciones agrega la sección. `export_presets.cfg`: versiones vacías.
+5. **Verificación.** `tools/capture_menus.gd` (T310): capturas reales con ventana por pantalla y modo, e informe de botones fuera de la ventana. Tests de GUT por tarea; suite completa sin `SCRIPT ERROR` ni `Parse Error`.
