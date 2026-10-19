@@ -758,7 +758,7 @@ func start_next_wave() -> void:
 ## RF-92: reinicia el nivel desde cero recargando la escena.
 func restart() -> void:
 	_reset_time()
-	get_tree().reload_current_scene()
+	GameFlow.reload_current()  # RF-584: con pantalla de carga
 
 
 # --- Modo de pruebas (RF-184): lo que hace cada botón del panel ---

@@ -1119,3 +1119,43 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
   - **Un archivo por modo:** dos archivos para mantener sincronizados.
   - **Que el JSON defina el evento de cada paso:** ver arriba.
 - **Qué cambia:** `01-spec.md` (RF-571 y RF-578), `CONTENIDO.md` (cómo retocar el tutorial), `data/tutorial/tutorial.json`, `scripts/logic/tutorial_data.gd`, `tools/check_tutorial.gd`.
+
+## D-130 · Un servicio único de cambio de escena (`SceneTransition`) con un núcleo sin dependencias y una capa fina en `GameFlow`
+- **Fecha:** 2026-10-19 · **Estado:** implementada en T340 · **Decidió:** Lucas (una pantalla de carga general y reutilizable) / Claude (el diseño)
+- **Qué:** una clase `SceneTransition` (`scripts/logic/scene_transition.gd`) que cambia de escena mostrando la capa de carga, y que **no nombra nada del juego** (ni autoloads, ni guardado, ni escenas, ni colores propios: todo se le pasa por propiedades). `GameFlow` la crea en `_ready`, le pone el tema de los menús, el mínimo y los colores, y manda **todos** sus cambios por `_change_scene`. Un test lee el archivo y falla si aparece un nombre del proyecto.
+- **Por qué:** el pedido es reutilizarla en otros juegos; separar núcleo y conexión es lo que lo permite, y además deja probar el núcleo con una escena falsa (`swapper`) sin cortar la corrida de GUT (`.claude/rules/tests.md`).
+- **Alternativas descartadas:**
+  - **Un autoload propio:** un autoload más en `project.godot` y un orden de carga más; `GameFlow` ya es el dueño de los cambios de pantalla.
+  - **Meterlo todo en `GameFlow`:** no se puede reutilizar y se prueba peor.
+- **Qué cambia:** `01-spec.md` (RF-580, RF-581), `scripts/logic/scene_transition.gd`, `scripts/autoload/game_flow.gd`.
+
+## D-131 · El defecto se corrige en dos capas: las funciones del flujo salen si hay un cambio en curso, y la ventana ignora la entrada
+- **Fecha:** 2026-10-19 · **Estado:** implementada en T340 · **Decidió:** Claude
+- **Qué:** (1) `GameFlow.is_changing()` y cada función que cambia de pantalla (`start_*`, `go_to_*`, `next_level`, `play_test`, `reload_current`) **sale antes de tocar el estado**. (2) Durante el cambio y unos cuadros después, `get_tree().root.set_disable_input(true)` descarta toques, mouse, teclas y «atrás»; la capa (control con `MOUSE_FILTER_STOP`) frena además el mouse. (3) El «atrás» de Android no simula `cancel` si hay un cambio en curso.
+- **Por qué:** una sola defensa no alcanza. Solo el bloqueo de la ventana no protege si algo llama al flujo por código; solo la guarda no descarta los eventos acumulados que se entregan cuando la escena nueva ya está. `Viewport.disable_input` es el único bloqueo que corta también `_input`/`_unhandled_input` (un `Control` que cubre la pantalla no frena las teclas ni el «atrás»).
+- **Alternativas descartadas:**
+  - **Solo una capa de pantalla completa que come toques:** deja pasar teclas y «atrás», y no descarta lo acumulado.
+  - **Desactivar los botones de la selección:** hay que hacerlo en cada pantalla y se olvida en la próxima.
+  - **Solo un `bool` en `GameFlow`:** corrige este defecto pero no el «atrás» ni las teclas.
+- **Qué cambia:** `01-spec.md` (RF-582, RF-583), `scripts/autoload/game_flow.gd`, `scripts/logic/scene_transition.gd`.
+
+## D-132 · Carga en un hilo, con tiempo mínimo y gracia posterior medidos en tiempo real
+- **Fecha:** 2026-10-19 · **Estado:** implementada en T340 · **Decidió:** Claude
+- **Qué:** `ResourceLoader.load_threaded_request` y `load_threaded_get_status` cada cuadro; mínimo de 0,4 s con la capa visible; después de `change_scene_to_packed` se esperan 2 cuadros y 0,15 s con la entrada todavía bloqueada. Todo con `Time.get_ticks_msec`. Instanciar y el `_ready` de la escena nueva siguen en el hilo principal (Godot no permite otra cosa): ahí la barra se congela, y por eso el bloqueo sigue unos instantes.
+- **Por qué:** el reloj real hace que la pausa y `Engine.time_scale` no cambien el comportamiento; el mínimo evita un destello de 1 cuadro en escenas livianas; la gracia absorbe los toques acumulados mientras el motor armaba la escena.
+- **Alternativas descartadas:** `load()` directo (congela el cuadro y la capa no se llega a dibujar); usar `delta` (se estira con la pausa); un mínimo en `data/balance.tres` (es de interfaz, no de balance).
+- **Qué cambia:** `01-spec.md` (RF-584, RF-585), `scripts/logic/scene_transition.gd`.
+
+## D-133 · La pantalla de carga se dibuja por código y vive en una capa propia
+- **Fecha:** 2026-10-19 · **Estado:** implementada en T340 · **Decidió:** Claude
+- **Qué:** un `CanvasLayer` en la capa 128 con un fondo liso (el de los menús), el texto «Cargando…» (tema de los menús) y una barra (un riel y un tramo que va y viene; si hay avance real, el riel se llena). Sin escenas ni imágenes.
+- **Por qué:** sin archivos que copiar, el núcleo se puede llevar a otro juego como un único `.gd`; el fondo liso se ve igual en PC y en el celular y no depende de cargar nada.
+- **Alternativas descartadas:** una escena `.tscn` (dos archivos y rutas); el mapa de fondo de los menús (hay que armarlo, o sea, trabajo pesado justo mientras se carga).
+- **Qué cambia:** `01-spec.md` (RF-580), `scripts/logic/scene_transition.gd`.
+
+## D-134 · «Reintentar» también carga por la pantalla de carga, con la ruta de la escena actual
+- **Fecha:** 2026-10-19 · **Estado:** implementada en T340 · **Decidió:** Claude
+- **Qué:** `Game.restart` llama a `GameFlow.reload_current()`, que pide `SceneTransition.go(scene_file_path)` de la escena actual (si no tiene ruta, usa `reload_current_scene`).
+- **Por qué:** es el mismo problema (un toque de más durante la recarga) y el mismo remedio.
+- **Alternativas descartadas:** dejar `reload_current_scene` (un hueco en el bloqueo).
+- **Qué cambia:** `01-spec.md` (RF-584), `scenes/game/game.gd`, `scripts/autoload/game_flow.gd`.

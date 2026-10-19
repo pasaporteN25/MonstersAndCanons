@@ -3490,3 +3490,33 @@ Pedido de Lucas: (A) bajar el peso de las imágenes de la intro para que la APK 
 - **Ayudas en pantalla fuera del nivel 1** ni **consejos de contramedida** (siguen en «Sugerencias de Claude», §13).
 - **Enseñar** el Mortero (2 × 2), la infraestructura, las combinaciones ni los enemigos con habilidades: la tarjeta de «nuevo enemigo» (RF-134) y la Wiki ya cumplen ese papel.
 - **Probarlo en un celular real**: se probó con la escena real en modo celular en una PC (RF-502).
+
+### M64 · Pantalla de carga general y entrada bloqueada durante el cambio de escena (Lucas, 2026-10-19; T340 y T341) `[mobile+x86]`
+
+**Estado: especificada y programada en T340.** Las decisiones son **D-130 a D-134**. No cambia el balance, los niveles, el modo de pruebas ni el editor.
+
+**Qué pidió Lucas.** *(2026-10-19, en el celular)* Al elegir un nivel la carga tarda y, si se toca la pantalla mientras carga, **se ejecuta el nivel que queda debajo del dedo** en la selección (si está disponible): un toque de más lanza otro nivel. Hay que reproducirlo con un test, arreglarlo de raíz y agregar una **pantalla de carga general**, reutilizable, que bloquee toda la entrada mientras dura.
+
+**Causa.** Cambiar de escena no es instantáneo: la escena nueva se carga y se arma en el hilo principal, y la vieja sigue en pantalla, activa y tocable. Cada toque extra llega a la selección, que llama otra vez a `GameFlow.start_level` con *otro* nivel: pisa `current_index` y pide otro cambio. Además, los toques que se juntan mientras el motor está ocupado se entregan **después**, cuando ya está la escena nueva.
+
+- **RF-580** **Todo cambio de pantalla pasa por la pantalla de carga.** Menú, selección, récords, wiki, editor, nivel de la campaña, mapa de la comunidad o de un modo, probar desde el editor, «Siguiente nivel» y «Reintentar» (RF-92). Se ve una capa con el fondo de los menús, el texto «Cargando…» y una barra animada dibujada por código (sin imágenes).
+- **RF-581** **Dos piezas.** Un **núcleo genérico** (`SceneTransition`, `scripts/logic/scene_transition.gd`) que no nombra nada de este proyecto y se puede copiar a otro juego, y una **capa fina** en `GameFlow` que le pone el tema, el mínimo de tiempo y los colores del juego. Un test lee el archivo del núcleo y falla si aparece un nombre del proyecto.
+- **RF-582** **Un solo cambio a la vez.** Mientras hay uno en curso, un segundo pedido se ignora: `SceneTransition.go` devuelve `false` y **cada función de `GameFlow` que cambia de pantalla sale antes de tocar el estado** (`current_index`, `current_mode`…). Es la corrección de raíz del defecto.
+- **RF-583** **La entrada se bloquea de verdad.** Desde que empieza hasta que termina, y unos cuadros más (`release_frames`, `release_seconds`) para descartar lo acumulado, la ventana principal ignora **toques, mouse, teclas y la acción «atrás»** (`Viewport.set_disable_input`); la capa además frena el mouse; y el botón «atrás» de Android (`NOTIFICATION_WM_GO_BACK_REQUEST`) no hace nada. Al terminar se restaura el valor que había (no se fuerza a «habilitada»).
+- **RF-584** **Carga en un hilo.** `ResourceLoader.load_threaded_request` y `load_threaded_get_status` cada cuadro (la barra muestra el avance real si lo hay); si el hilo no se puede pedir, se carga de una vez con la capa ya dibujada. «Reintentar» pide la ruta de la escena actual.
+- **RF-585** **Tiempo mínimo.** La capa se ve al menos `LOADING_MIN_SECONDS` (0,4 s) aunque la escena cargue antes, para que no parpadee. Se mide con el reloj real: ni la pausa ni `Engine.time_scale` lo alargan.
+- **RF-586** **Respeta la pausa.** El nodo trabaja con el árbol en pausa (por ejemplo, «Niveles» desde el menú de pausa) y no cambia la pausa de nadie.
+- **RF-587** **Si falla, se vuelve.** Si la escena no existe o no carga, se avisa con `push_warning` y la señal `failed`, la escena vieja queda donde estaba y la entrada se libera. Si el nodo sale del árbol a mitad de un cambio, la entrada también se libera.
+- **RF-588** **No cambia lo demás.** El modo de pruebas (RF-180), el editor de mapas y las partidas de la comunidad se comportan igual; solo cambia cómo se llega a ellos.
+- **RF-589** **Una skill reutilizable (borrador).** `docs/skills-borrador/godot-pantalla-de-carga/SKILL.md` explica el patrón, las trampas y un ejemplo mínimo para otros proyectos. No se instala en ningún lado (T341).
+
+> **Criterio de aceptación RF-580 a RF-589**
+> **Dado** la selección de niveles con varios niveles abiertos → **Cuando** se toca un nivel y, durante la carga, se tocan otras tarjetas (mouse o toque), se toca «atrás» o se llama a otra función del flujo → **Entonces** se carga **un solo** nivel (el primero) y `current_index` no cambia.
+> **Dado** un evento que llega mientras el motor arma la escena nueva → **Entonces** se descarta; recién después la entrada vuelve a andar.
+> **Dado** una escena que carga al instante → **Entonces** la capa se ve al menos 0,4 s. **Dado** una ruta que no existe → **Entonces** avisa, no cambia nada y no deja la entrada bloqueada.
+
+#### Lo que M64 no incluye
+
+- **Medir el tiempo de carga real en un celular** (no se midió) ni **probar el bloqueo en un celular real**.
+- **Un logo, un consejo o una animación elaborada** en la capa (P4): texto, fondo y una barra.
+- **Cargar la escena siguiente por adelantado** (precarga mientras el jugador elige).

@@ -1492,3 +1492,14 @@ Los textos, números de tamaño y posiciones nuevos viven en `mobile_ui.json` (P
 7. Capturas reales: `godot --path . res://tools/capture_tutorial.tscn -- <carpeta fuera del repo> 1280x720`.
 
 **Riesgos.** (1) Un cambio futuro en los nombres de los controles del HUD se nota en los tests (los descriptores devuelven `null`). (2) `MobileHud` maneja los toques de su barra con código propio: la tarjeta queda **fuera** de esa barra y de los botones flotantes (se ubica entre las barras). (3) Solo se probó en una PC (RF-502): el tacto y la legibilidad en un celular real quedan para Lucas.
+
+### M64 / T340 y T341 · Pantalla de carga general (RF-580 a RF-589, D-130 a D-134)
+
+| Pieza | Qué es |
+|---|---|
+| `scripts/logic/scene_transition.gd` (`SceneTransition`) | **Núcleo genérico**, sin nombres del proyecto. `go(path)`, `is_busy()`, `progress()`, señales `started`/`finished`/`failed`; propiedades de tiempos, colores, tema y las costuras `swapper` y `load_override`. Corrutina `_run`: dibuja la capa, carga en hilo, espera el mínimo, cambia, espera cuadros y gracia, libera. |
+| `GameFlow.transition`, `is_changing()`, `_change_scene()`, `reload_current()` | **Capa fina:** crea el núcleo con el tema de los menús, el mínimo y los colores; todo `go_to_*`/`start_*` pasa por ahí y sale antes de tocar el estado si hay un cambio en curso. |
+| `Game.restart` | Llama a `GameFlow.reload_current()`. |
+| `docs/skills-borrador/godot-pantalla-de-carga/SKILL.md` | Borrador de skill (T341). No se instala. |
+
+**Cómo se bloquea la entrada:** `get_tree().root.set_disable_input(true)` (corta `_input`, la GUI y las acciones), una capa con `MOUSE_FILTER_STOP` y `GameFlow._notification` ignorando el «atrás» de Android. **Cómo se prueba:** `tests/test_scene_transition.gd` (núcleo, con `swapper` falso, eventos reales y experimentos de control) y `tests/test_loading_flow.gd` (la selección real, tarjetas tocadas durante el cambio). Suite completa sin `SCRIPT ERROR` ni `Parse Error`.

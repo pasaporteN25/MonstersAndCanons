@@ -2,6 +2,10 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Pantalla de carga y toques bloqueados al cambiar de pantalla *(T340, 2026-10-19)*
+
+Al elegir un nivel, volver al menú, reintentar o pasar al siguiente nivel, el juego muestra ahora una **pantalla de carga** («Cargando…» con una barra que se mueve) y **no hace caso a nada** (toques, clics, teclas ni el botón «atrás») hasta que la pantalla nueva está lista. Antes, si tocabas de más mientras el nivel cargaba en el celular, se podía lanzar **otro nivel** (el que quedaba debajo del dedo en la selección). Ahora entra solo el que elegiste. La pantalla de carga se ve como mínimo 0,4 segundos, así que en equipos rápidos es un destello corto y no un parpadeo.
+
 ## «Ver todo» también cuando corriste el mapa *(T304, 2026-10-19)*
 
 «Ver todo» aparece ahora también cuando corriste el mapa con dos dedos aunque no hayas acercado nada: antes, con el zoom mínimo no había forma de volver al encuadre. En la computadora el botón aparece solo cuando corrés el mapa con el botón del medio estando con el zoom mínimo (con la rueda del mouse no aparece, como hasta ahora).
