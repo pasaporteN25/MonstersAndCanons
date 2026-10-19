@@ -193,6 +193,20 @@ func test_a_block_dodges_several_zones() -> void:
 		assert_false(block.intersects(zone))
 
 
+func test_a_block_at_the_top_edge_dodges_a_button_sideways_when_there_is_no_room_above() -> void:
+	var button := Rect2(0, 100, 64, 64)  # un botón flotante pegado al borde de arriba de la vista
+	var placed: Vector2 = UpgradeDeltas.place_block(Vector2(60, 140), Vector2(200, 80), [button] as Array[Rect2], VIEW)
+	var block := Rect2(placed.x - 100.0, placed.y - 80.0, 200, 80)
+	assert_false(block.intersects(button), "se corre al costado (o abajo) porque arriba no hay lugar")
+	assert_true(VIEW.encloses(block))
+
+
+func test_an_impossible_block_still_returns_a_position_inside_the_view() -> void:
+	var everything := Rect2(0, 0, 1280, 720)
+	var placed: Vector2 = UpgradeDeltas.place_block(Vector2(600, 300), Vector2(200, 80), [everything] as Array[Rect2], VIEW)
+	assert_true(VIEW.encloses(Rect2(placed.x - 100.0, placed.y - 80.0, 200, 80)), "no hay lugar libre: al menos queda a la vista")
+
+
 # --- el archivo y su validador (RF-594) ---
 
 func _write(text: String) -> void:

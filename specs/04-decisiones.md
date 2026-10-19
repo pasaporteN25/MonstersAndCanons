@@ -1121,7 +1121,7 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Qué cambia:** `01-spec.md` (RF-571 y RF-578), `CONTENIDO.md` (cómo retocar el tutorial), `data/tutorial/tutorial.json`, `scripts/logic/tutorial_data.gd`, `tools/check_tutorial.gd`.
 
 ## D-135 · La animación de mejora es un solo efecto de sprites en 2 variantes (nivel 2 y nivel 3), teñido con el color de la torre
-- **Fecha:** 2026-10-19 · **Estado:** propuesta (spec M65, sin programar; el arte espera el OK de Lucas) · **Decidió:** Lucas (un efecto breve, distinto por nivel de mejora, liviano en el celular) / Claude (la forma)
+- **Fecha:** 2026-10-19 · **Estado:** implementada con arte provisional (T363, 2026-10-19; el arte definitivo espera el OK de Lucas y T364) · **Decidió:** Lucas (un efecto breve, distinto por nivel de mejora, liviano en el celular) / Claude (la forma)
 - **Qué:** un atlas de 8 cuadros por variante («refuerzo» para el nivel 2, 0,5 s; «maestría» para el nivel 3, 0,7 s), dibujado claro y neutro. Un `Sprite2D` lo reproduce con un `Tween` sobre la región y el juego lo tiñe con `TowerVisual.upgrade_glow_color(id)`, que ya existe. Reemplaza al anillo de construir en las mejoras si la opción está prendida (RF-590).
 - **Por qué:**
   - **Distinto por nivel sin multiplicar el arte:** 2 atlas sirven para las 11 torres; el tinte ya está resuelto para el brillo permanente.
@@ -1136,7 +1136,7 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Qué cambia:** `01-spec.md` (RF-590, RF-595), `EffectsLayer`, `Game._on_tower_upgraded`, `data/ui/mejoras.json`, `assets/sprites/effects/mejora/`.
 
 ## D-136 · El texto con lo que suma la mejora sale de los datos de la torre, con una tabla de estadísticas en un archivo, mostrando solo lo que cambió
-- **Fecha:** 2026-10-19 · **Estado:** propuesta (spec M65, sin programar) · **Decidió:** Lucas (un texto flotante con lo que suma la mejora) / Claude (cómo se calcula y se escribe)
+- **Fecha:** 2026-10-19 · **Estado:** implementada (T361 y T363, 2026-10-19), con las recomendaciones de Claude en P-65-2, P-65-3 y P-65-5 hasta que Lucas conteste · **Decidió:** Lucas (un texto flotante con lo que suma la mejora) / Claude (cómo se calcula y se escribe)
 - **Qué:** `UpgradeDeltas` (lógica pura) resta el nivel anterior al nuevo de `TowerData.levels` para cada campo de una tabla (`data/ui/mejoras.json`: campo, etiqueta, formato). Solo se muestran los que cambian, hasta 4 en 2 renglones, más una cabecera «¡Nivel N!» (RF-591).
 - **Por qué:**
   - **Sin duplicar números** (P2): el texto se arma con los mismos `.tres` que usa el combate; si cambia el balance, el texto lo sigue solo.
@@ -1151,7 +1151,7 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Qué cambia:** `01-spec.md` (RF-591, RF-594), `scripts/logic/upgrade_deltas.gd`, `tools/check_mejoras.gd`, `tests/test_upgrade_deltas.gd`.
 
 ## D-137 · Una sola opción en Opciones, «Animaciones de mejora», prendida por omisión, que controla el efecto y el texto; clave aditiva en `settings`
-- **Fecha:** 2026-10-19 · **Estado:** propuesta (spec M65, sin programar) · **Decidió:** Lucas (una opción para apagarlas, «como números de daño») / Claude (una sola casilla y la clave)
+- **Fecha:** 2026-10-19 · **Estado:** implementada (T363, 2026-10-19), con la recomendación de Claude en P-65-1 hasta que Lucas conteste · **Decidió:** Lucas (una opción para apagarlas, «como números de daño») / Claude (una sola casilla y la clave)
 - **Qué:** casilla «Animaciones de mejora» debajo de «Mostrar números de daño» (RF-593); ajuste `"upgrade_fx"` en `settings`, sin subir `SAVE_VERSION`. Apagada: sin efecto ni texto, pero con el anillo y el sonido de siempre.
 - **Por qué:**
   - **Opciones ya está justa en el celular** (M61, RF-555): una fila menos que dos.

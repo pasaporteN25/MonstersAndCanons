@@ -9,19 +9,25 @@ var _font_size: int = 20
 var _duration: float = 0.8
 var _rise_px: float = 36.0
 var _time: float = 0.0
+## M65: segundos que espera antes de aparecer (los renglones de la mejora salen escalonados).
+var _delay: float = 0.0
 
 
 func setup(text: String, color: Color, font_size: int = 20, duration: float = 0.8,
-		rise_px: float = 36.0) -> FloatingText:
+		rise_px: float = 36.0, delay: float = 0.0) -> FloatingText:
 	_text = text
 	_color = color
 	_font_size = font_size
 	_duration = duration
 	_rise_px = rise_px
+	_delay = maxf(delay, 0.0)
 	return self
 
 
 func _process(delta: float) -> void:
+	if _delay > 0.0:
+		_delay -= delta
+		return
 	_time += delta
 	if _time >= _duration:
 		queue_free()
@@ -30,6 +36,8 @@ func _process(delta: float) -> void:
 
 
 func _draw() -> void:
+	if _delay > 0.0:
+		return
 	var t: float = _time / _duration
 	var font: Font = ThemeDB.fallback_font
 	var width: float = font.get_string_size(_text, HORIZONTAL_ALIGNMENT_LEFT, -1, _font_size).x

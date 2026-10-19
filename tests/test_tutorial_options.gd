@@ -50,7 +50,7 @@ func test_the_row_sits_under_the_damage_numbers_option() -> void:
 	var row: Node = rows.find_child("TutorialRow", true, false)
 	assert_not_null(row, "la fila está en Opciones")
 	assert_gt(row.get_index(), damage.get_index(), "va después de los números de daño (M61 puede intercalar «Interfaz»)")
-	assert_lte(row.get_index() - damage.get_index(), 3, "y pegada a ellos")
+	assert_lte(row.get_index() - damage.get_index(), 4, "y pegada a ellos (M65 suma «Animaciones de mejora» y M61 «Interfaz»)")
 
 
 func test_turning_it_off_saves_the_option_and_keeps_the_progress() -> void:

@@ -521,6 +521,16 @@ Con el proyecto abierto (o `godot --path .`). **✅ Comprobar:**
 
 Capturas y mediciones en `art/m53-barra/` (`README.md`).
 
+### T363 · Probar la animación de mejora de torres
+
+**En PC.** Jugá cualquier nivel, construí una torre (por ejemplo la Ametralladora) y mejorala con **Mejorar** o con `U`. **✅ Comprobar:** sale un anillo de luz con chispas del color de la torre (medio segundo) y, arriba, «¡Nivel 2!» con «+3 daño · +0,5 disp/s», todo desaparece en poco más de un segundo y el oro baja lo mismo que antes. Mejorala otra vez: el efecto es más grande y la cabecera dice «¡Nivel máximo!». Probalo con una torre en la **fila de abajo** (el texto no pisa la barra de abajo) y pegada al borde izquierdo (queda dentro del mapa). En pausa, el efecto se congela.
+
+**En el celular (o con la interfaz forzada).** **Opciones → Interfaz → Celular**, abrí un nivel y mejorá una torre de la fila de abajo y otra de la última columna. **✅ Comprobar:** el texto no tapa la barra de abajo, la tilde, la cruz ni los botones flotantes, y se lee con el zoom por defecto y con «Ver todo». **No se probó en un celular real.**
+
+**Apagarlo.** **Opciones → «Animaciones de mejora»** apagada: al mejorar solo se ven el anillo de siempre y se oye el sonido. Un guardado viejo la muestra prendida.
+
+Tests: `-gtest=res://tests/test_upgrade_deltas.gd`, `test_upgrade_fx.gd` y `test_old_saves.gd`. Para ver el efecto en imágenes: `godot --path . res://tools/capture_upgrade.tscn -- /ruta/de/salida 1280x720`. Para revisar el archivo de datos: `godot --headless --path . -s tools/check_mejoras.gd`.
+
 ### T331 · Probar el tutorial del nivel 1
 
 **En PC.** Con un guardado nuevo (o sin la marca `"tutorial_done"` en `save.json`, en esta máquina `~/.local/share/JuegoA/`), elegí **Jugar → Nivel 1** (si es un guardado nuevo, la intro termina en el nivel 1; cerrá el cartel con «Empezar»). **✅ Comprobar:** aparece una tarjeta «Tutorial · Paso 1 de 14» con «Siguiente» y «Saltar tutorial». Pasá los pasos de lectura: el **camino** se tiñe y se señalan la entrada y la salida, después el **oro** y las **vidas**. En «Elegí una torre» **no hay «Siguiente»**: hacé clic en la primera torre de la barra de abajo (o apretá `1`) y avanza solo; después un recuadro marca **una casilla de pasto junto al camino** (podés construir en cualquier otra). Construí, apretá **«Empezar oleada»**, soltá la torre con clic derecho y hacé clic en la tuya: el recuadro señala **«Mejorar»** y después **«Vender»** (los dos con «Siguiente», sin gastar nada). Cambiá la **velocidad**, **pausá** y **seguí**; el último paso dice «¡A jugar!». La partida **no se pausó sola** en ningún momento. Al terminar, volvé a entrar al nivel 1: **no sale de nuevo**.

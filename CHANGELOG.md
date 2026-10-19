@@ -2,6 +2,12 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Animación al mejorar una torre *(T363, 2026-10-19)*
+
+Al mejorar una torre sale ahora un **efecto breve sobre ella**, distinto según el nivel: un anillo de luz con chispas al **nivel 2** (medio segundo) y uno más grande, con doble anillo, destello en cruz y chispas en abanico, al **nivel máximo** (0,7 s). Se tiñe con el color de la torre. Junto con el efecto sube un **texto con lo que sumó la mejora**, leído de los datos reales de la torre y solo lo que cambió: por ejemplo, la Ametralladora al nivel 2 dice «¡Nivel 2!» y «+3 daño · +0,5 disp/s»; la Tesla al máximo, «¡Nivel máximo!», «+8 daño · +0,1 disp/s» y «+1 saltos · +0,5 alcance».
+
+El texto no tapa la barra de abajo, la tilde, la cruz ni los botones flotantes del celular, se corre hacia adentro del mapa si la torre está en un borde y se agranda para leerse con el zoom. Se apaga en **Opciones → «Animaciones de mejora»** (debajo de «Mostrar números de daño»): apagada, queda el anillo y el sonido de siempre. **El dibujo del efecto es provisional** (lo reemplazará el arte que apruebe Lucas) y el juego no cambia en nada: costos, niveles y balance son los de antes.
+
 ## «Ver todo» también cuando corriste el mapa *(T304, 2026-10-19)*
 
 «Ver todo» aparece ahora también cuando corriste el mapa con dos dedos aunque no hayas acercado nada: antes, con el zoom mínimo no había forma de volver al encuadre. En la computadora el botón aparece solo cuando corrés el mapa con el botón del medio estando con el zoom mínimo (con la rueda del mouse no aparece, como hasta ahora).

@@ -15,6 +15,7 @@ const DEFAULT_SETTINGS: Dictionary = {
 	"music_volume": 0.7, "sfx_volume": 0.8, "fullscreen": false, "damage_numbers": true,
 	"ui_mode": 0,
 	"tutorial_enabled": true,  # M63, RF-576: el tutorial del nivel 1 está prendido
+	"upgrade_fx": true,  # M65, RF-593: animaciones de mejora de torres prendidas
 }
 
 ## Los tests lo cambian para no tocar el guardado real del jugador.
@@ -244,6 +245,13 @@ func set_last_initials(name: String) -> void:
 
 func get_setting(key: String) -> Variant:
 	return _settings.get(key, DEFAULT_SETTINGS.get(key))
+
+
+## M65, RF-593: ¿están prendidas las «Animaciones de mejora»? Sin la clave, o con un valor que no es
+## booleano (un guardado viejo o dañado), vale prendida.
+func upgrade_fx_enabled() -> bool:
+	var value: Variant = get_setting("upgrade_fx")
+	return value if typeof(value) == TYPE_BOOL else true
 
 
 func set_setting(key: String, value: Variant) -> void:

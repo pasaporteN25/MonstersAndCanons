@@ -979,10 +979,33 @@ func _on_tower_built(tower: Tower) -> void:
 
 
 func _on_tower_upgraded(tower: Tower) -> void:
-	effects.tower_built(tower.global_position, tower.data.color, tower.data.footprint)  # RF-75: mismo anillo
+	# M65 (RF-590, RF-593): el efecto y el texto de la mejora; con la opción apagada, el anillo de siempre (RF-75).
+	if not effects.tower_upgraded(tower, get_viewport().get_canvas_transform(), _upgrade_fx_safe_rects(), _upgrade_fx_view_rect()):
+		effects.tower_built(tower.global_position, tower.data.color, tower.data.footprint)
 	_refresh_tower_panel()
 	_refresh_exploitable()
 	Audio.play(&"upgrade")
+
+
+## M65, RF-592: lo que el texto de la mejora no puede pisar (barra de abajo, tilde, cruz, botones flotantes).
+func _upgrade_fx_safe_rects() -> Array[Rect2]:
+	var rects: Array[Rect2] = []
+	var bottom: Control = hud.get_node_or_null("BottomBar") as Control
+	if bottom != null and bottom.is_visible_in_tree():
+		rects.append(bottom.get_global_rect())
+	if mobile_hud != null:
+		rects.append_array(mobile_hud.forbidden_rects())
+	return rects
+
+
+## M65, RF-592: el área de mapa que se ve (entre la barra de arriba y la de abajo).
+func _upgrade_fx_view_rect() -> Rect2:
+	var mobile_config: MobileUiConfig = MobileUiConfig.load_from()
+	var top_height: float = float(mobile_config.get_value("barra_alta_px")) if UiMode.is_mobile() else 48.0
+	var bottom: Control = hud.get_node_or_null("BottomBar") as Control
+	var bottom_height: float = float(mobile_config.get_value("barra_baja_px")) if UiMode.is_mobile() \
+			else (bottom.size.y if bottom != null and bottom.is_visible_in_tree() else 0.0)
+	return Rect2(0.0, top_height, Rules.SCREEN_SIZE.x, Rules.SCREEN_SIZE.y - top_height - bottom_height)
 
 
 func _on_tower_sold(tower: Tower, refund: int, _resource_refund: int) -> void:

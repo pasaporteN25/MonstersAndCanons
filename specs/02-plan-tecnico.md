@@ -1495,7 +1495,7 @@ Los textos, números de tamaño y posiciones nuevos viven en `mobile_ui.json` (P
 
 ### M65 / T360 a T364 · Animaciones de mejora de torres (RF-590 a RF-596, D-135 a D-137)
 
-**Estado: solo especificado.** Presentación pura: ningún cambio en `Tower`, `TowerData`, `BuildController.try_upgrade` ni en el balance.
+**Estado: programado con arte provisional (T361, T363); falta el arte (T362) y su integración (T364).** Presentación pura: ningún cambio en `Tower`, `TowerData`, `BuildController.try_upgrade` ni en el balance. Lo implementado: `FloatingText` ganó un retraso opcional (`delay`) para el escalonado, `EffectsLayer.tower_upgraded(tower, canvas, safe_rects, view_rect)` devuelve `false` si no mostró nada (opción apagada, tope) y entonces `Game` dibuja el anillo de siempre, `MobileHud.forbidden_rects()` da las zonas de pantalla y `SaveManager.upgrade_fx_enabled()` lee la opción (un valor que no es booleano vale prendida). Las capturas las hace `tools/capture_upgrade.tscn`.
 
 1. **Datos** (T361). `data/ui/mejoras.json` (duraciones, cuadros, escala, aclarado, fuente, escalonado, máximos, tabla de estadísticas) y `scripts/data/upgrade_fx_config.gd` (lector con valores por omisión si falta o está mal, como `MobileUiConfig`). `tools/check_mejoras.gd` valida y nombra el campo con error.
 2. **Lógica pura** (T361). `scripts/logic/upgrade_deltas.gd` (`UpgradeDeltas`): `compute(from: TowerLevelData, to: TowerLevelData, table) -> Array[Dictionary]` (campo, delta, texto), `format_number(value, kind) -> String` (signo, coma decimal, sin ceros de más), `header(level, is_max) -> String` y `place_block(anchor, size, safe_rects, view_rect) -> Vector2` (corre el bloque dentro de la pantalla y fuera de las zonas prohibidas). Todo sin escena (P10).

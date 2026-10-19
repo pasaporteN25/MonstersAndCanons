@@ -75,26 +75,52 @@ static func rows(deltas: Array[Dictionary], per_row: int = 2) -> Array[String]:
 
 ## Dónde queda el bloque de texto. `anchor` es el punto de abajo al centro que se quería; `size` el tamaño
 ## del bloque (con lo que sube); todo en pantalla. Lo corre adentro de `view_rect` y, si cae sobre alguna zona
-## prohibida (barra de abajo, tilde, cruz, botones flotantes), lo sube hasta dejarlo libre. Devuelve el nuevo anchor.
+## prohibida (barra de abajo, tilde, cruz, botones flotantes), lo sube hasta dejarlo libre; si arriba no hay
+## lugar (una torre pegada al borde de arriba) prueba al costado y, al final, abajo. Devuelve el nuevo anchor.
 static func place_block(anchor: Vector2, size: Vector2, safe_rects: Array[Rect2], view_rect: Rect2) -> Vector2:
-	var left: float = anchor.x - size.x / 2.0
-	if size.x >= view_rect.size.x:
-		left = view_rect.position.x + (view_rect.size.x - size.x) / 2.0
-	else:
-		left = clampf(left, view_rect.position.x, view_rect.end.x - size.x)
-	var top: float = maxf(anchor.y - size.y, view_rect.position.y)
-	for _attempt: int in range(safe_rects.size() + 1):
-		var block := Rect2(left, top, size.x, size.y)
-		var blocker: Variant = null
-		for zone: Rect2 in safe_rects:
-			if block.intersects(zone):
-				blocker = zone
+	var base: Vector2 = _clamp_corner(Vector2(anchor.x - size.x / 2.0, anchor.y - size.y), size, view_rect)
+	var best: Vector2 = base
+	if _is_blocked(base, size, safe_rects):
+		var best_cost: float = INF
+		var frontier: Array[Vector2] = [base]
+		for _depth: int in range(3):
+			var next: Array[Vector2] = []
+			for corner: Vector2 in frontier:
+				var block := Rect2(corner, size)
+				for zone: Rect2 in safe_rects:
+					if not block.intersects(zone):
+						continue
+					for candidate: Vector2 in [Vector2(corner.x, zone.position.y - size.y), Vector2(corner.x, zone.end.y),
+							Vector2(zone.end.x, corner.y), Vector2(zone.position.x - size.x, corner.y)]:
+						candidate = _clamp_corner(candidate, size, view_rect)
+						if _is_blocked(candidate, size, safe_rects):
+							next.append(candidate)
+							continue
+						# Subir es lo preferido; bajar o correr al costado, un poco menos.
+						var moved_up: float = base.y - candidate.y
+						var cost: float = absf(candidate.x - base.x) * 1.5 + (moved_up if moved_up > 0.0 else -moved_up * 2.0)
+						if cost < best_cost:
+							best_cost = cost
+							best = candidate
+			if best_cost < INF:
 				break
-		if blocker == null:
-			break
-		var moved: float = (blocker as Rect2).position.y - size.y
-		if moved < view_rect.position.y or moved >= top:
-			top = maxf(moved, view_rect.position.y)
-			break
-		top = moved
-	return Vector2(left + size.x / 2.0, top + size.y)
+			frontier = next
+	return Vector2(best.x + size.x / 2.0, best.y + size.y)
+
+
+static func _clamp_corner(corner: Vector2, size: Vector2, view_rect: Rect2) -> Vector2:
+	var x: float = view_rect.position.x + (view_rect.size.x - size.x) / 2.0
+	if size.x < view_rect.size.x:
+		x = clampf(corner.x, view_rect.position.x, view_rect.end.x - size.x)
+	var y: float = view_rect.position.y
+	if size.y < view_rect.size.y:
+		y = clampf(corner.y, view_rect.position.y, view_rect.end.y - size.y)
+	return Vector2(x, y)
+
+
+static func _is_blocked(corner: Vector2, size: Vector2, safe_rects: Array[Rect2]) -> bool:
+	var block := Rect2(corner, size)
+	for zone: Rect2 in safe_rects:
+		if block.intersects(zone):
+			return true
+	return false
