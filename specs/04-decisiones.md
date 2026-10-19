@@ -1204,7 +1204,7 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Qué cambia:** `01-spec.md` (RF-593), `SaveManager.DEFAULT_SETTINGS`, `OptionsMenu`, `tests/test_old_saves.gd`, `CONTENIDO.md` y `CHANGELOG.md` cuando se programe.
 
 ## D-138 · La entrada del jefe es un destello en el mundo más un cartel de 1,6 s que no pausa, no mueve la cámara y se salta con un toque
-- **Fecha:** 2026-10-19 · **Estado:** propuesta (spec M66, sin programar; el arte espera el OK de Lucas) · **Decidió:** Lucas (animación corta, que no pause de más ni bloquee, salteable) / Claude (la forma)
+- **Fecha:** 2026-10-19 · **Estado:** programada con arte provisional (T366/T368; el arte espera el OK de Lucas, T367/T369) · **Decidió:** Lucas (animación corta, que no pause de más ni bloquee, salteable) / Claude (la forma)
 - **Qué:** dos partes (RF-597): un destello con grieta en la entrada del camino, en el instante en que nace el jefe, y un cartel arriba del mapa con su retrato, nombre y frase. La partida no se toca (RF-598) y un toque en el cartel lo retira (RF-599).
 - **Por qué:**
   - **El jugador mira el mapa, no el centro de la pantalla:** el destello marca *dónde* entra y el cartel dice *quién* es; juntos duran menos de 3 s.
@@ -1220,7 +1220,7 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Qué cambia:** `01-spec.md` (RF-597 a RF-599, RF-602), `HUD` (el cartel), `EffectsLayer` (el destello), `Game._on_enemy_spawned`, `data/ui/entrada_jefes.json`, `assets/sprites/effects/jefe/`.
 
 ## D-139 · La entrada es un dato del enemigo (`EnemyData.entrance`), con la lista de niveles en el propio recurso; el piloto es solo el Jefe en el nivel 1
-- **Fecha:** 2026-10-19 · **Estado:** propuesta (spec M66, sin programar) · **Decidió:** Lucas (piloto en el jefe del nivel 1, generalizable por datos) / Claude (dónde viven los datos)
+- **Fecha:** 2026-10-19 · **Estado:** programada con arte provisional (T366/T368; el arte espera el OK de Lucas, T367/T369) · **Decidió:** Lucas (piloto en el jefe del nivel 1, generalizable por datos) / Claude (dónde viven los datos)
 - **Qué:** `BossEntranceData` (`levels`, `line`, `sound`) colgado de `EnemyData.entrance`. Vacío = el enemigo no hace entrada. El piloto: `boss.tres` con `levels = ["level_01"]`. Los tiempos y tamaños, en `data/ui/entrada_jefes.json`.
 - **Por qué:**
   - **Lo que se agrega a `data/enemies/` ya aparece solo en el juego y en la Wiki** (`.claude/rules/datos.md`); la entrada sigue la misma costumbre: un enemigo nuevo con jefe lleva su entrada en su propio archivo.
@@ -1235,7 +1235,7 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Qué cambia:** `01-spec.md` (RF-601), `scripts/data/enemy_data.gd`, `scripts/data/boss_entrance_data.gd`, `data/enemies/boss.tres`, `tests/test_content.gd`, `CONTENIDO.md`.
 
 ## D-140 · «Entrada de los jefes» es una casilla de Opciones (clave aditiva `boss_entrance`, prendida por omisión); la tarjeta «Nuevo enemigo» espera y no se solapa
-- **Fecha:** 2026-10-19 · **Estado:** propuesta (spec M66, sin programar) · **Decidió:** Lucas (activable y desactivable) / Claude (dónde y cómo se combina con lo que ya hay)
+- **Fecha:** 2026-10-19 · **Estado:** programada con arte provisional (T366/T368; el arte espera el OK de Lucas, T367/T369) · **Decidió:** Lucas (activable y desactivable) / Claude (dónde y cómo se combina con lo que ya hay)
 - **Qué:** casilla en Opciones debajo de «Animaciones de mejora» (RF-600), ajuste `"boss_entrance"` en `settings`, sin subir `SAVE_VERSION`. El cartel de aparición espera a que se retire el cartel de oleada, y la tarjeta RF-134 espera al cartel de aparición (RF-597).
 - **Por qué:**
   - **Igual que las otras opciones de presentación** (`damage_numbers`, `tutorial_enabled`, M65): un guardado viejo no se rompe y la función se ve sin hacer nada.

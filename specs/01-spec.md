@@ -3626,7 +3626,7 @@ Hallazgos que condicionan el diseño: (1) **no todas suben las mismas cosas** (l
 
 ### M66 · Introducción de jefes (Lucas, 2026-10-19; T365 a T369)
 
-**Estado: SOLO ESPECIFICADA (T365). Nada de esto está programado ni dibujado.** Las decisiones son **D-138 a D-140**. Es **solo presentación**: el jefe aparece **en el mismo instante y con los mismos números** que hoy; no se retrasa la oleada, no se pausa la partida y el balance no se toca. Se probaría en PC y en el celular.
+**Estado: PROGRAMADA con arte provisional (T366 y T368, 2026-10-19; falta el arte aprobado de T367 y su integración, T369).** El destello es un dibujo provisional con `_draw`; el cartel usa el estilo hierro y bronce que ya existe. Las preguntas P-66-1 a P-66-7 se resolvieron con la recomendación de Claude (ver la tabla) hasta que Lucas diga otra cosa. Las decisiones son **D-138 a D-140**. Es **solo presentación**: el jefe aparece **en el mismo instante y con los mismos números** que hoy; no se retrasa la oleada, no se pausa la partida y el balance no se toca. Se probaría en PC y en el celular.
 
 **Qué pidió Lucas.** *(2026-10-19)* Una **animación corta de entrada del jefe**, como **prueba piloto en el jefe del nivel 1**, que **no pause de más ni bloquee la partida**, que se pueda **saltear**, **activar y desactivar**, y diseñada para **generalizarse a todos los jefes por datos**. Si el nivel 1 no tuviera jefe, proponer uno sin tocar el balance.
 
@@ -3690,6 +3690,8 @@ Hallazgos que condicionan el diseño: (1) **no todas suben las mismas cosas** (l
 | P-66-5 | ¿Un retrato **animado** (el jefe rugiendo, 4 cuadros) o el retrato quieto con un pulso? | **Quieto con pulso** para el piloto (0 arte nuevo, 0 peso). Si el piloto te gusta, se encarga el rugido. |
 | P-66-6 | ¿Se sacude la cámara o se acerca al jefe? | **No**: tocaría el zoom y el desplazamiento del celular (M58, M60) y puede marear. |
 | P-66-7 | ¿Se activa también en el Coloso (nivel 15) en la misma tarea? | **No**: primero el piloto en el nivel 1; el resto es una tarea chica de datos cuando lo apruebes. |
+
+**Resolución provisional (T368, 2026-10-19):** mientras Lucas no conteste, se programó la **recomendación de Claude en las siete preguntas**: P-66-1 el piloto es el Jefe de la oleada 10 del nivel 1; P-66-2 sale cada vez, con el límite de una por oleada y por tipo y de 8 s entre entradas; P-66-3 sin sonido (queda `sound` en los datos); P-66-4 la frase es la descripción del enemigo; P-66-5 retrato quieto con un pulso; P-66-6 la cámara no se toca; P-66-7 el Coloso no se activa. Cambiar cualquiera es un dato o una tarea chica.
 
 #### Lo que M66 no incluye
 - **Retrasar o pausar** la oleada, **bloquear** la partida, mover la cámara o volver invulnerable al jefe.

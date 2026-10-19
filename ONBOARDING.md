@@ -530,6 +530,15 @@ Capturas y mediciones en `art/m53-barra/` (`README.md`).
 **Apagarlo.** **Opciones → «Animaciones de mejora»** apagada: al mejorar solo se ven el anillo de siempre y se oye el sonido. Un guardado viejo la muestra prendida.
 
 Tests: `-gtest=res://tests/test_upgrade_deltas.gd`, `test_upgrade_fx.gd` y `test_old_saves.gd`. Para ver el efecto en imágenes: `godot --path . res://tools/capture_upgrade.tscn -- /ruta/de/salida 1280x720`. Para revisar el archivo de datos: `godot --headless --path . -s tools/check_mejoras.gd`. Para medir el rendimiento (con la máquina libre): `godot --path . -s tools/perf_test.gd -- mejoras` contra `-- mejoras sin_fx`, y con `celular` para el modo del celular.
+### T368 · Probar la entrada del Jefe (M66)
+
+**En PC.** Con un guardado nuevo, **Jugar → Nivel 1** (tutorial apagado o ya hecho), y llegá a la oleada 10 o, más rápido, **Opciones → Activar modo de pruebas**, entrá al nivel 1 y con **F1** hacé aparecer un **Jefe**. **✅ Comprobar:** en el instante en que nace, un **destello con grietas** en la entrada del camino (0,7 s); al irse el cartel de «Oleada N», un **cartel arriba del mapa** con el retrato, «¡Llega el Jefe!», «Jefe» y su frase, que dura 1,6 s; la tarjeta «Nuevo enemigo: Jefe» sale **después** (solo la primera vez en el guardado). **Un clic sobre el cartel** lo retira al instante; un clic en una casilla del mapa fuera del cartel construye/elige como siempre. La partida **no se pausó ni cambió**. **Pausa (P)** a mitad: el cartel y el destello se congelan.
+
+**En el celular (o con la interfaz forzada).** **Opciones → Interfaz → Celular**: el cartel queda debajo de la barra, no tapa el carrito, la X ni «Ver todo», dice «Tocá para saltear» y no tiene la «✕». **No se probó en un celular real.**
+
+**Probar las salidas.** (1) **Opciones → «Entrada de los jefes»** apagada: el Jefe aparece como siempre, sin destello ni cartel, y la tarjeta sale sin esperar. (2) En el **nivel 2** no hay entrada (el piloto es solo el nivel 1). (3) No sale en el editor, en mapas de la comunidad ni en Asedio. (4) Un guardado viejo la lee prendida. (5) `godot --headless --path . -s tools/check_entrada_jefes.gd` revisa `data/ui/entrada_jefes.json` y la `entrance` de los enemigos y dice qué está mal.
+
+Tests: `-gtest=res://tests/test_boss_entrance_rules.gd`, `test_boss_entrance_data.gd`, `test_boss_entrance_options.gd` y **`test_boss_entrance_hud.gd`** (con la escena real de la partida). Capturas reales: `godot --path . res://tools/capture_boss_entrance.tscn -- <carpeta fuera del repo> 1280x720`.
 
 ### T331 · Probar el tutorial del nivel 1
 

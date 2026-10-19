@@ -70,6 +70,24 @@ Los niveles son JSON, un formato de texto común que se edita a mano. Un `.tres`
 | `stun_interval` / `stun_seconds` / `stun_range_tiles` | El **hechizo** que apaga torres (RF-281): cada cuántos segundos, cuánto aturde y a qué distancia. 0 = no lanza. | `8.0`, `3.0`, `4.0` |
 | `reflect_range_tiles` / `reflect_stun_seconds` | El **rebote** (RF-283): a qué distancia rebota el tiro de una torre y cuánto la aturde. La quemadura no rebota. | `2.5`, `2.0` |
 | `aura_heal_percent_per_second` | % de vida máxima por segundo que hace recuperar a los demás dentro del radio (RF-272); no mientras se queman. | `3.0` |
+| `entrance` | La **entrada** del jefe (RF-601, M66): vacío = el enemigo no hace entrada. Ver más abajo. | `BossEntranceData` |
+
+### Darle una entrada a un jefe (M66, RF-601)
+
+Cuando un enemigo con `entrance` aparece en una partida de la **campaña jugada desde el menú** (también en el modo de pruebas), sale un **destello** en la entrada del camino y un **cartel** de 1,6 s con su retrato, «¡Llega el <nombre>!», su nombre y su frase. No hace falta código ni arte: el retrato es su `texture`, el nombre su `display_name` y el destello se tiñe con su `color`.
+
+1. En el `.tres` del enemigo, en el Inspector de Godot, el campo **`entrance`** → *Nuevo BossEntranceData*.
+2. Completá lo que haga falta:
+
+| Campo | Qué es | Ejemplo |
+|---|---|---|
+| `levels` | Ids de los niveles donde sale. **Vacía = en todos.** Un id que no existe es un error. | `["level_01"]` o vacía |
+| `line` | La frase del cartel (80 caracteres como máximo). **Vacía = usa la `description` del enemigo.** | `¡Viene por la salida!` |
+| `sound` | Id de un sonido que ya existe (un `.wav` de `assets/audio/`). Vacío = ninguno. | `impact` |
+
+3. Revisalo: `godot --headless --path . -s tools/check_entrada_jefes.gd` dice, en castellano, qué está mal.
+
+**Hoy** solo el **Jefe** (`boss.tres`) tiene `entrance`, con `levels = ["level_01"]`: es el piloto. **No se activó en los demás a propósito** (spec M66, P-66-7). Para extenderlo: **(a)** el Jefe en sus otros 14 niveles = vaciar la lista `levels` de `boss.tres`; **(b)** el Coloso (nivel 15) = agregarle una `entrance` con `levels` vacía o `["level_15"]` a `colossus.tres`. Los tiempos y el tamaño del cartel están en `data/ui/entrada_jefes.json` (`destello_s`, `cartel_entra_s`, `cartel_quieto_s`, `cartel_sale_s`, `cartel_ancho_px` hasta 720, `cartel_alto_px` hasta 120, `intervalo_min_s`, fuentes) y el mismo validador los revisa. El jugador la prende y la apaga en **Opciones → «Entrada de los jefes»**. Solo sale una vez por oleada y por tipo, y no más de una cada 8 s.
 
 ---
 
