@@ -3362,3 +3362,131 @@ Pedido de Lucas: (A) bajar el peso de las imágenes de la intro para que la APK 
 - **No aplica compresión con pérdida** a las láminas (queda como decisión, D-120).
 - **No agrega voces, sonidos ni campos nuevos** a `intro.json` (las notas viven solo en el documento).
 - **No toca `art/intro-v1/sources/`** ni los PNG de `assets/intro/`.
+
+### M63 · El tutorial del nivel 1 (Lucas, 2026-10-19; T330 y T331)
+
+**Estado: especificada y programada en T330 y T331; los textos son BORRADOR hasta el OK de Lucas** (el archivo lo dice con `"borrador": true`, RF-571). Las decisiones son **D-125 a D-128**. No cambia el balance ni el contenido de ningún nivel, ni el modo de pruebas, ni el editor, ni los niveles 2 en adelante.
+
+**Qué pidió Lucas.** *(2026-10-19)* Un **tutorial en el primer nivel** que **se pueda activar y desactivar como la intro** (una opción en Opciones) y **se pueda volver a ver**; donde Claude decida con criterio, justificado en la decisión (**D-126**). Tiene que enseñar **paso a paso**: elegir una torre, colocarla, qué es el camino, empezar la oleada, el oro, las vidas, mejorar y vender, y que existen la velocidad y la pausa. Con **textos cortos en español rioplatense**, el control **resaltado** (flecha o recuadro), **esperando que el jugador haga la acción** (no solo leer), **sin bloquear el juego** de más, **salteable en cualquier momento** y que **no se repita** si ya lo completó (con guardado, **compatible con los guardados viejos**). Tiene que funcionar **en PC y en el modo celular** (RF-502 a RF-515: carrito, fantasma, tilde y cruz, doble toque): los pasos y los textos se adaptan al modo. Los textos van en **un archivo de datos** fácil de retocar, marcados como borrador, con **un validador**.
+
+**Idea en pocas palabras.** Al entrar al nivel 1 desde el menú, una **tarjeta** chica (arriba o abajo del mapa, donde no tape nada) dice qué hacer, y un **recuadro amarillo que parpadea, con una flecha**, señala el botón o la casilla. Hay dos clases de paso: los de **lectura** (oro, vidas, camino…) se pasan con **«Siguiente»**; los de **acción** (elegir la torre, construirla, empezar la oleada…) **esperan a que el jugador lo haga de verdad** y pasan solos. La partida **sigue corriendo**: el tutorial no la pausa, no cobra ni construye nada por el jugador. **«Saltar tutorial»** está siempre a la vista.
+
+- **RF-570** **Cuándo sale solo.** El tutorial arranca solo cuando se cumplen **todas** estas condiciones:
+  1. la partida es la del **nivel que dice el archivo** (`"nivel"`, hoy `level_01`), **jugada desde el menú** (la selección de niveles o «Siguiente nivel»): no desde F6, ni probando un mapa del editor, ni un mapa de la comunidad ni un modo (Asedio);
+  2. **no** es el **modo de pruebas** (RF-180);
+  3. la opción **«Tutorial del nivel 1»** de Opciones está **prendida** (RF-576; por omisión sí);
+  4. el guardado **no** dice que ya se completó o se saltó (RF-575);
+  5. el archivo de datos es **válido** (RF-571). Si no lo es, el nivel se juega como siempre y el error sale por la salida (`push_warning`): **el tutorial nunca bloquea jugar**.
+  - **Con el cartel de entrada** (RF-466): el tutorial **espera** a que se cierre el cartel y entonces empieza; la partida no cambia de estado por eso.
+  - **«Reintentar»** (RF-92) recarga el nivel: si el tutorial no se completó ni se saltó, **vuelve a empezar desde el primer paso** (no se guarda por qué paso iba).
+  - Con la **intro** (M57) no se mezcla: la intro termina en el nivel 1 con su cartel, y recién después empieza el tutorial.
+
+- **RF-571** **Los datos del tutorial** *(archivo nuevo, `data/tutorial/tutorial.json`)*:
+
+  ```json
+  {
+  	"version": 1,
+  	"borrador": true,
+  	"nivel": "level_01",
+  	"interfaz": {"titulo": "Tutorial", "paso": "Paso %d de %d", "siguiente": "Siguiente",
+  	             "saltar": "Saltar tutorial", "terminar": "¡A jugar!"},
+  	"pc": [{"paso": "welcome", "texto": "¡Bienvenido! …"}, …],
+  	"celular": [{"paso": "welcome", "texto": "¡Bienvenido! …"}, …]
+  }
+  ```
+
+  | Clave | Qué es | Límite |
+  |---|---|---|
+  | `"version"` | Versión del formato. | Entero, hoy **1**. Otra → error. |
+  | `"borrador"` | `true` mientras Lucas no aprobó los textos. **Solo informa** (no cambia nada del juego); al aprobarlos se pasa a `false`. | Booleano, **obligatorio**. |
+  | `"nivel"` | El id del nivel donde se muestra. | Texto no vacío. |
+  | `"interfaz"` | Los rótulos de la tarjeta: `titulo`, `paso` (lleva **dos `%d`**: número y total), `siguiente`, `saltar` y `terminar` (el botón del último paso). | Los cinco, texto no vacío de **hasta 40** caracteres. |
+  | `"pc"` y `"celular"` | Los pasos **en orden**, uno por modo. | Ver abajo. |
+  | `"paso"` | Cuál de los pasos que conoce el juego es (tabla de RF-572 y RF-573). | Uno de la tabla, **permitido en ese modo** y **sin repetir**. |
+  | `"texto"` | Lo que dice la tarjeta. | **1 o 2 líneas** (separadas por `\n`), **80 caracteres por línea**, **160 en total**, texto plano, sin vacío ni caracteres de control. |
+
+  - **Qué hace cada paso (su evento) es del código; el texto, el orden y cuáles se usan son de Lucas.** Se puede reordenar, cambiar un texto o quitar un paso **opcional** sin programar.
+  - **Pasos obligatorios** (sin ellos el archivo no vale, porque el tutorial dejaría de enseñar algo que Lucas pidió): en PC, `path`, `gold`, `lives`, `pick_tower`, `place_tower`, `start_wave`, `upgrade`, `sell`, `speed` y `pause`; en el celular, los mismos con `open_cart`, `pick_card` y `confirm_tower` en lugar de `pick_tower` y `place_tower`. Son **opcionales** `welcome`, `select_tower`, `resume` y `done`.
+  - **Reglas de orden:** `pick_tower` antes que `place_tower`; `open_cart` antes que `pick_card` y este antes que `confirm_tower`; si está `pause` tiene que estar `resume` **después** (si no, la partida quedaría en pausa); si está `done`, es el **último**.
+  - **Los textos no repiten números de otros datos** (costos, porcentajes, tiempos): explican la regla y listo (`.claude/rules/datos.md`). Los textos del celular **no hablan de teclado ni de mouse**, y los de PC **no hablan de toques, carrito ni fantasma** (los comprueba un test).
+  - **Errores en castellano** que nombran el paso: «el paso 2 de pc ("path") tiene 3 líneas y el máximo es 2», «la lista "celular" no tiene el paso "confirm_tower" y hace falta», «el paso "open_cart" no se usa en la PC».
+  - **Un validador, como el resto del proyecto** (RF-578): `godot --headless --path . -s tools/check_tutorial.gd` dice qué hay que arreglar, y un test revisa el archivo oficial.
+
+- **RF-572** **Los pasos en PC (teclado y mouse).** Cada paso de **lectura** tiene el botón «Siguiente» (el último dice «¡A jugar!»); cada paso de **acción** espera su evento y **no** tiene botón de avance:
+
+  | Paso | Qué señala | Qué espera | Texto (borrador) |
+  |---|---|---|---|
+  | `welcome` | nada | «Siguiente» | Bienvenida y aviso de que se puede saltar. |
+  | `path` | la **entrada** y la **salida** del camino (recuadro y flecha) y **todo el camino** teñido de amarillo suave | «Siguiente» | Los monstruos entran por acá y siguen el camino hasta la salida. Si llegan, perdés vidas. |
+  | `gold` | el contador de oro | «Siguiente» | Qué es el oro y de dónde sale. |
+  | `lives` | el contador de vidas | «Siguiente» | Qué son las vidas y qué pasa si se acaban. |
+  | `pick_tower` | el **primer botón de la barra de torres** | **elegir una torre** (clic en el botón o tecla `1`) | Elegí una torre en la barra de abajo. |
+  | `place_tower` | la **casilla sugerida** (la libre que más camino tiene alrededor; así la torre dispara bastante) | **construir** la torre (en **cualquier** casilla válida, no hace falta la sugerida) | Clic en una casilla de pasto junto al camino. Cuesta oro. |
+  | `start_wave` | el botón «Empezar oleada» | **empezar la oleada** (botón o `Espacio`) | Apretá «Empezar oleada». |
+  | `select_tower` | la torre recién construida | **elegir una torre ya construida** (en PC con una torre elegida para construir, el clic derecho o `Esc` la suelta primero) | Clic derecho para soltar la torre; después, clic en la tuya. |
+  | `upgrade` | el botón «Mejorar» del panel de la torre | «Siguiente» | Qué hace «Mejorar». |
+  | `sell` | el botón «Vender» del panel | «Siguiente» | Qué hace «Vender». |
+  | `speed` | el botón de velocidad (`x1`) | **cambiar la velocidad** | Acelera al doble; de nuevo, vuelve. |
+  | `pause` | el botón «Pausa» | **pausar** (botón, `P` o `Esc`) | «Pausa» congela todo. Probala. |
+  | `resume` | el botón «Seguir» | **reanudar** | Apretá «Seguir». |
+  | `done` | nada | «¡A jugar!» | Cierre. |
+
+- **RF-573** **Los pasos en el modo celular** *(RF-502 a RF-515)*. Mismos pasos que en PC **salvo** estos, que reemplazan a `pick_tower` y `place_tower`; los textos hablan de toques y no de teclas:
+
+  | Paso | Qué señala | Qué espera |
+  |---|---|---|
+  | `open_cart` | el **carrito** | **abrir el catálogo** (tocar el carrito) |
+  | `pick_card` | la **primera torre que se puede elegir** del catálogo | **elegir una torre** (aparece el fantasma, RF-505) |
+  | `confirm_tower` | la **casilla sugerida** y la **tilde** | **construir** (tilde, o **doble toque** en la misma casilla, RF-505) |
+
+  - En `select_tower` se toca la torre en el mapa; «Vender» pide dos toques (RF-513) y el texto lo dice; «Mejorar» y «Vender» son los de la **barra de la torre elegida** (RF-512).
+  - **Cuando el jugador se arrepiente:** si en `pick_card` cierra el catálogo sin elegir, vuelve a `open_cart`; si en `confirm_tower` cancela el fantasma (cruz), vuelve a `open_cart`; en PC, si en `place_tower` suelta la torre, vuelve a `pick_tower`. El tutorial **nunca se queda esperando algo que ya no se puede hacer**.
+
+- **RF-574** **Cómo se ve y cómo se comporta.**
+  - **La tarjeta** (hierro y bronce, como el cartel de entrada, RF-466): el rótulo «Tutorial · Paso N de M», el texto (**21 px** en PC y **22 px** en el celular, más que el mínimo de RF-503), **«Saltar tutorial»** arriba a la derecha y, en los pasos de lectura, **«Siguiente»**. Los botones miden **44 px** de alto en PC y **`boton_alto_px` (56)** en el celular. Se ubica **donde no tape lo señalado** (arriba o abajo del mapa, la que quede más lejos; sobre la barra de abajo cuando el catálogo del celular ya la oscurece), **sin salirse de la pantalla** y sin tapar la barra de abajo ni el texto de la torre que se va a construir.
+  - **El resaltado:** un **recuadro amarillo que parpadea** sobre el control o la casilla, con una **flecha** que apunta desde el lado de la tarjeta (o desde la izquierda si es un botón ancho, para no tapar al vecino). Sigue al control si se mueve (el fantasma, el zoom, un catálogo que se abre).
+  - **No bloquea:** el recuadro y la flecha **dejan pasar** el mouse y los toques; **solo la tarjeta** los recibe (así un toque en «Siguiente» no construye ni elige nada en el mapa). La partida **no se pausa** (la cuenta atrás, los enemigos y el reloj siguen). Los botones de la tarjeta **no toman el foco del teclado**: `Espacio` y `Enter` siguen siendo del juego.
+  - **El jugador puede adelantarse:** si hace una acción **antes** de que le toque (por ejemplo, construye durante `path`), cuando el tutorial llega a ese paso **lo da por hecho** y sigue al siguiente. Un paso de **lectura** nunca se saltea solo.
+  - **«Mejorar» y «Vender»** solo se ven con una torre construida elegida: al llegar a `upgrade` o `sell`, si el jugador la soltó, **el tutorial la vuelve a elegir** (es lo único que hace por su cuenta, y no cuesta nada); si la suelta de nuevo durante el paso, también.
+  - **Si pasa algo más grande** (menú de pausa o diálogo de salida abiertos, partida ganada o perdida): lo de encima manda (el tutorial queda por debajo, capa 12) y, al terminar la partida, **se esconde sin marcarse como completado**.
+  - **No suma sonidos ni animaciones** más que el parpadeo.
+
+- **RF-575** **Guardado y compatibilidad.**
+  - **La marca:** `"tutorial_done"` (booleano), **clave nueva y aditiva** del guardado (como `intro_seen`, `hall_total` o `ui_prefs`). **`SAVE_VERSION` no cambia** (sigue en 1) y **una versión anterior del juego la ignora**. Se escribe **al completar o al saltar** el tutorial (los dos cuentan: **no se repite**); cerrar el juego a la mitad **no** la escribe.
+  - **Guardados viejos:** un guardado **sin la clave** (o con una que no es booleana) se lee así: si **ya ganó el nivel 1** → «hecho» (quien ya jugó no necesita el tutorial); si no → «no hecho» (lo ve una vez). **Una clave booleana explícita manda** (`false` aunque haya ganado el nivel 1: lo pidió con «Volver a verlo»).
+  - **La opción:** `"tutorial_enabled"` (booleano) dentro de `settings`, **por omisión `true`**. Un valor que no es booleano ni número se lee como `true`.
+  - **Modo de pruebas:** usa su guardado aparte (RF-181) y **nunca** muestra el tutorial; si se prende o apaga la opción ahí, queda en `save_pruebas.json`.
+  - **No cambia nada más del guardado:** ni niveles, ni récords, ni colecciones, ni ajustes, ni Salón de la fama.
+
+- **RF-576** **Activarlo, desactivarlo y volver a verlo: en Opciones** *(D-126)*. En Opciones (RF-113), **debajo de «Mostrar números de daño»**, una fila con:
+  - la casilla **«Tutorial del nivel 1»**: apagada, el tutorial **no sale** (y no se pierde lo que ya se hizo); **volver a prenderla** lo hace salir de nuevo (borra la marca de «hecho»);
+  - el botón **«Volver a verlo»**: prende la opción, borra la marca y **guarda enseguida**; el botón pasa a decir **«Se verá en el nivel 1»** y queda apagado hasta que se vuelve a abrir Opciones. El tutorial se ve **la próxima vez que se entra al nivel 1** desde la selección (también con el nivel ya ganado).
+  - Disponible **desde el menú principal y desde la pausa** (a diferencia del modo de pruebas, RF-383: no cambia de guardado). Se aplica **a la próxima partida**, no a la que está en curso.
+  - **El panel de Opciones se desplaza si no entra** en 720 de alto (con las opciones que se sumaron en M58 y M63 ya no entraba): las filas van dentro de un contenedor con desplazamiento que crece hasta 600 px; si entran, se ve igual que antes.
+
+- **RF-577** **Dónde no sale y qué no cambia.** No sale en: el modo de pruebas, el editor («Probar»), los mapas de la comunidad, los modos (Asedio), los niveles 2 a 15, ni cuando se abre la escena sin pasar por el menú (F6, tests). **No cambia**: el oro, las vidas, las oleadas ni el mapa del nivel 1, el balance, las torres, el orden de los controles, ni lo que cuesta nada: el tutorial **no construye, no vende, no mejora, no empieza la oleada ni cambia la velocidad por el jugador**.
+
+- **RF-578** **El validador.** `tools/check_tutorial.gd` y los tests de `tests/test_tutorial_data.gd` revisan el archivo con los errores de RF-571; los datos oficiales los revisa un test: que no tenga errores, que enseñe todo lo pedido en los dos modos, que siga marcado como borrador hasta que Lucas lo apruebe, y que los textos del celular y de PC no se mezclen.
+
+> **Criterio de aceptación RF-570 a RF-578**
+> **Dado** un guardado nuevo → **Cuando** se entra al nivel 1 desde la selección → **Entonces** (después del cartel de entrada) aparece la tarjeta «Tutorial · Paso 1 de 14» (15 en el celular) y la partida **no** está en pausa.
+> **Dado** el tutorial abierto en PC → **Cuando** se recorre: «Siguiente» ×4, elegir la primera torre, construirla, empezar la oleada, elegir la torre construida, «Siguiente» ×2, cambiar la velocidad, pausar y reanudar, «¡A jugar!» → **Entonces** cada paso de acción avanzó **solo** al hacer la acción, el guardado dice `"tutorial_done": true` y la tarjeta se fue.
+> **Dado** el modo celular → **Cuando** se recorre con el carrito, la tarjeta del catálogo, un toque en la casilla sugerida y la tilde (o un doble toque) → **Entonces** pasa lo mismo, y ningún texto habla de teclado, mouse ni clic.
+> **Dado** el tutorial abierto en cualquier paso → **Cuando** se toca «Saltar tutorial» → **Entonces** desaparece, el guardado dice `"tutorial_done": true`, **nada** se construyó ni se cobró por el jugador y la próxima vez no sale.
+> **Dado** un paso de acción → **Cuando** el jugador ya había hecho esa acción antes → **Entonces** el tutorial lo saltea. **Dado** que suelta la torre o cierra el catálogo → **Entonces** vuelve a un paso anterior.
+> **Dado** un guardado de antes de M63 con el nivel 1 ganado (y sin la clave) → **Entonces** el tutorial **no** sale. **Dado** uno sin el nivel 1 ganado → **Entonces** sale una vez.
+> **Dado** la opción apagada, el modo de pruebas, el nivel 2, F6, un mapa del editor o un archivo con errores → **Entonces** el tutorial no sale y el nivel se juega como siempre.
+> **Dado** el botón «Volver a verlo» → **Entonces** el guardado queda con `"tutorial_done": false` y la opción prendida, y el tutorial sale al entrar al nivel 1.
+> **Dado** un `tutorial.json` con un paso que no existe, uno de otro modo, uno repetido, un texto de 3 líneas, de 81 caracteres por línea o de más de 160, un paso obligatorio faltante, `pause` sin `resume` o `pick_tower` después de `place_tower` → **Entonces** el validador devuelve un error en castellano que nombra el paso, y el nivel 1 se juega sin tutorial.
+> **Dado** una ventana de 1280 × 720 → **Entonces** la tarjeta entra entera, no tapa lo señalado y el panel de Opciones se puede recorrer.
+
+#### Lo que M63 no incluye
+
+- **Tutoriales para otros niveles** (el 2 presenta mezclar torres, el 4 la Wiki…): el formato ya trae `"nivel"`, pero hoy hay **uno solo**. Sería otra tarea (P3).
+- **Voces, animaciones, un personaje que habla** ni **sonidos nuevos**: la intro ya fijó ese límite (Q-01, D-089).
+- **Obligar** a hacer los pasos: nada se bloquea; siempre se puede saltar, y el juego se puede jugar mientras tanto (el tutorial solo no avanza hasta que se haga la acción).
+- **Recordar por qué paso iba** si se cierra el juego o se reintenta: vuelve a empezar (D-127).
+- **Un botón «Tutorial» en el menú principal, en la Wiki o en la pausa** (D-126: solo Opciones).
+- **Ayudas en pantalla fuera del nivel 1** ni **consejos de contramedida** (siguen en «Sugerencias de Claude», §13).
+- **Enseñar** el Mortero (2 × 2), la infraestructura, las combinaciones ni los enemigos con habilidades: la tarjeta de «nuevo enemigo» (RF-134) y la Wiki ya cumplen ese papel.
+- **Probarlo en un celular real**: se probó con la escena real en modo celular en una PC (RF-502).

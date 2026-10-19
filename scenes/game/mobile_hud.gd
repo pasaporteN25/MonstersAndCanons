@@ -705,6 +705,29 @@ func _update_floating_visibility() -> void:
 	_demolish_button.visible = _demolish_available and not _game_over and not _modal_open
 
 
+## M63 (RF-574): el control que señala el tutorial (null si no existe o no se ve ahora). Nombres: `cart`,
+## `first_card` (la primera torre que se puede elegir del catálogo abierto), `confirm` (la tilde: la que está
+## junto al fantasma o, si no se ve, la de la barra de abajo), `upgrade` y `sell`.
+func target_control(target: StringName) -> Control:
+	var control: Control = null
+	match target:
+		&"cart":
+			control = _cart_button
+		&"first_card":
+			if _catalog_open and _tower_grid != null:
+				for card: Node in _tower_grid.get_children():
+					if int((card as Button).get_meta("tower_index", -1)) >= 0 and not (card as Button).disabled:
+						control = card as Button
+						break
+		&"confirm":
+			control = _confirm_button if _confirm_button != null and _confirm_button.is_visible_in_tree() else _bottom_confirm
+		&"upgrade":
+			control = _upgrade_button
+		&"sell":
+			control = _sell_button
+	return control if control != null and control.is_visible_in_tree() else null
+
+
 func is_catalog_open() -> bool:
 	return _catalog_open
 

@@ -12,6 +12,12 @@ signal dev_mode_changed(on: bool)
 
 const ADMIN_ON_TEXT: String = "Activar modo de pruebas"
 const ADMIN_OFF_TEXT: String = "Volver al juego normal"
+## M63 (RF-576): el tutorial del nivel 1, en una sola fila para que el panel no crezca.
+const TUTORIAL_CHECK_TEXT: String = "Tutorial del nivel 1"
+const TUTORIAL_REPLAY_TEXT: String = "Volver a verlo"
+const TUTORIAL_REPLAYED_TEXT: String = "Se verá en el nivel 1"
+## Alto máximo de las filas antes de que el panel se desplace (el panel suma 48 de margen y su borde: queda en < 720).
+const MAX_ROWS_HEIGHT: float = 600.0
 
 ## RF-383: la sección de administración solo se ofrece desde el menú principal, nunca desde la
 ## pausa (no se cambia de guardado en medio de una partida). La prende `MainMenu`.
@@ -49,6 +55,8 @@ var _ui_mode_label: Label
 var _two_columns: bool = false
 ## RF-553: los créditos de siempre (RF-472), hijos de Opciones; al cerrarlos se vuelve acá.
 var credits: CreditsScreen
+var _tutorial_check: CheckBox
+var _tutorial_replay: Button
 
 
 func _ready() -> void:
@@ -58,8 +66,10 @@ func _ready() -> void:
 	_fullscreen_check.toggled.connect(_on_fullscreen_toggled)
 	_damage_numbers_check.toggled.connect(
 		func(on: bool) -> void: SaveManager.set_setting("damage_numbers", on))  # RF-132
+	_build_tutorial_row()
 	_build_ui_mode_selector()
 	_arrange_columns()
+	_make_scrollable()
 	_admin_button.pressed.connect(_on_admin_pressed)
 	_admin_confirm_button.pressed.connect(set_dev_mode.bind(true))
 	_admin_cancel_button.pressed.connect(_on_admin_cancel)
@@ -82,6 +92,9 @@ func open() -> void:
 	_fullscreen_check.set_pressed_no_signal(bool(SaveManager.get_setting("fullscreen")))
 	_damage_numbers_check.set_pressed_no_signal(bool(SaveManager.get_setting("damage_numbers")))
 	_ui_mode_selector.select(UiMode.read_setting(SaveManager.get_setting("ui_mode")))
+	_tutorial_check.set_pressed_no_signal(SaveManager.tutorial_enabled())
+	_tutorial_replay.text = TUTORIAL_REPLAY_TEXT
+	_tutorial_replay.disabled = false
 	_set_confirming(false)
 	visible = true
 	_fit_scroll()
@@ -196,6 +209,63 @@ func _on_sfx_changed(value: float) -> void:
 func _on_fullscreen_toggled(on: bool) -> void:
 	SaveManager.set_setting("fullscreen", on)
 	GameFlow.apply_display_settings()
+
+
+## M63 (T331): con las opciones que se fueron sumando (Interfaz en M58, el tutorial en M63) el panel ya no entra en
+## 720 de alto, y una parte quedaba fuera de la pantalla. Las filas van dentro de un `ScrollContainer` que crece con
+## ellas hasta `MAX_ROWS_HEIGHT` y desde ahí se desplaza (con la rueda o con el dedo). Si entran, se ve igual que antes.
+func _make_scrollable() -> void:
+	var margin: Node = _rows.get_parent()
+	var scroll := ScrollContainer.new()
+	scroll.name = "RowsScroll"
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	margin.add_child(scroll)
+	_rows.reparent(scroll, false)
+	_rows.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_rows.minimum_size_changed.connect(_fit_scroll.bind(scroll))
+	_fit_scroll.call_deferred(scroll)
+
+
+func _fit_scroll(scroll: ScrollContainer) -> void:
+	scroll.custom_minimum_size.y = minf(_rows.get_combined_minimum_size().y, MAX_ROWS_HEIGHT)
+
+
+## RF-576: la casilla prende o apaga el tutorial (al prenderla de nuevo, vuelve a salir); el botón lo vuelve a
+## armar para la próxima vez que se entre al nivel 1. Va debajo de «Mostrar números de daño».
+func _build_tutorial_row() -> void:
+	var row := HBoxContainer.new()
+	row.name = "TutorialRow"
+	row.add_theme_constant_override("separation", 8)
+	_tutorial_check = CheckBox.new()
+	_tutorial_check.name = "TutorialCheck"
+	_tutorial_check.text = TUTORIAL_CHECK_TEXT
+	_tutorial_check.add_theme_font_size_override("font_size", 18)
+	_tutorial_check.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_child(_tutorial_check)
+	_tutorial_replay = Button.new()
+	_tutorial_replay.name = "TutorialReplay"
+	_tutorial_replay.text = TUTORIAL_REPLAY_TEXT
+	_tutorial_replay.add_theme_font_size_override("font_size", 15)
+	_tutorial_replay.custom_minimum_size.y = 44
+	row.add_child(_tutorial_replay)
+	_rows.add_child(row)
+	_rows.move_child(row, _damage_numbers_check.get_index() + 1)
+	_tutorial_check.toggled.connect(_on_tutorial_toggled)
+	_tutorial_replay.pressed.connect(_on_tutorial_replay)
+
+
+func _on_tutorial_toggled(on: bool) -> void:
+	if on:
+		SaveManager.reset_tutorial()  # volver a prenderlo = querer verlo de nuevo
+	else:
+		SaveManager.set_setting("tutorial_enabled", false)
+
+
+func _on_tutorial_replay() -> void:
+	SaveManager.reset_tutorial()
+	_tutorial_check.set_pressed_no_signal(true)
+	_tutorial_replay.text = TUTORIAL_REPLAYED_TEXT
+	_tutorial_replay.disabled = true
 
 
 func _build_ui_mode_selector() -> void:

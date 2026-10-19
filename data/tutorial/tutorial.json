@@ -1,0 +1,45 @@
+{
+	"version": 1,
+	"borrador": true,
+	"nivel": "level_01",
+	"interfaz": {
+		"titulo": "Tutorial",
+		"paso": "Paso %d de %d",
+		"siguiente": "Siguiente",
+		"saltar": "Saltar tutorial",
+		"terminar": "¡A jugar!"
+	},
+	"pc": [
+		{"paso": "welcome", "texto": "¡Bienvenido! En un minuto aprendés lo básico.\nPodés saltar el tutorial cuando quieras."},
+		{"paso": "path", "texto": "Los monstruos entran por acá y siguen el camino hasta la salida.\nSi llegan, perdés vidas."},
+		{"paso": "gold", "texto": "Este es tu oro. Lo ganás derrotando monstruos y terminando oleadas."},
+		{"paso": "lives", "texto": "Estas son tus vidas. Si te quedás sin ninguna, se pierde el nivel."},
+		{"paso": "pick_tower", "texto": "Elegí una torre en la barra de abajo (o apretá la tecla 1)."},
+		{"paso": "place_tower", "texto": "Hacé clic en una casilla de pasto junto al camino para construirla.\nCuesta oro."},
+		{"paso": "start_wave", "texto": "Cuando estés listo, apretá «Empezar oleada» (o Espacio)."},
+		{"paso": "select_tower", "texto": "Clic derecho para soltar la torre; después, clic en la tuya para elegirla."},
+		{"paso": "upgrade", "texto": "«Mejorar» hace más fuerte a la torre elegida. Cuesta oro."},
+		{"paso": "sell", "texto": "«Vender» te devuelve parte del oro si te arrepentís."},
+		{"paso": "speed", "texto": "Este botón acelera la partida al doble.\nApretalo de nuevo para volver a la velocidad normal."},
+		{"paso": "pause", "texto": "«Pausa» congela todo para que pienses con calma. Probala."},
+		{"paso": "resume", "texto": "Apretá «Seguir» para continuar."},
+		{"paso": "done", "texto": "¡Listo! Ya sabés lo básico. Defendé el campamento hasta la última oleada."}
+	],
+	"celular": [
+		{"paso": "welcome", "texto": "¡Bienvenido! En un minuto aprendés lo básico.\nPodés saltar el tutorial cuando quieras."},
+		{"paso": "path", "texto": "Los monstruos entran por acá y siguen el camino hasta la salida.\nSi llegan, perdés vidas."},
+		{"paso": "gold", "texto": "Este es tu oro. Lo ganás derrotando monstruos y terminando oleadas."},
+		{"paso": "lives", "texto": "Estas son tus vidas. Si te quedás sin ninguna, se pierde el nivel."},
+		{"paso": "open_cart", "texto": "Tocá el carrito para abrir la lista de torres."},
+		{"paso": "pick_card", "texto": "Tocá una torre. Aparece un fantasma sobre el mapa."},
+		{"paso": "confirm_tower", "texto": "Tocá una casilla junto al camino y confirmá con la tilde ✓.\nTambién sirve tocar dos veces la misma casilla."},
+		{"paso": "start_wave", "texto": "Cuando estés listo, tocá «Empezar oleada»."},
+		{"paso": "select_tower", "texto": "Tocá tu torre en el mapa para elegirla."},
+		{"paso": "upgrade", "texto": "«Mejorar» hace más fuerte a la torre elegida. Cuesta oro."},
+		{"paso": "sell", "texto": "«Vender» pide dos toques y te devuelve parte del oro."},
+		{"paso": "speed", "texto": "Este botón acelera la partida al doble.\nTocalo de nuevo para volver a la velocidad normal."},
+		{"paso": "pause", "texto": "«Pausa» congela todo para que pienses con calma. Probala."},
+		{"paso": "resume", "texto": "Tocá «Seguir» para continuar."},
+		{"paso": "done", "texto": "¡Listo! Ya sabés lo básico. Defendé el campamento hasta la última oleada."}
+	]
+}

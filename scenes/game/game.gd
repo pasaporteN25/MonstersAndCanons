@@ -74,6 +74,8 @@ var obstacle_layer: ObstacleLayer
 @onready var exit_dialog: ExitDialog = $ExitDialog
 ## M52 (RF-466): el cartel de entrada del nivel.
 @onready var level_intro: LevelIntro = $LevelIntro
+## M63 (RF-570): el tutorial del nivel 1. null si esta partida no lo muestra.
+var tutorial: TutorialController
 ## RF-460: si la partida ya estaba en pausa (con `P`) cuando se abrió el diálogo.
 var _exit_was_paused: bool = false
 var _tool_message: String = ""  # RF-543: por qué no sirvió el último toque de la herramienta de demolición
@@ -226,6 +228,7 @@ func _ready() -> void:
 	if DevMode.enabled:
 		_add_dev_panel()
 	_open_intro_if_pending()
+	_start_tutorial_if_due()
 
 
 ## RF-404 a RF-409: el controlador de la demolición, su vista y el panel del HUD. El sorteo del drop
@@ -621,6 +624,32 @@ func _on_intro_closed() -> void:
 	set_paused(false)
 	if mobile_hud != null:
 		mobile_hud.set_modal_open(false)
+
+
+# --- El tutorial del nivel 1 (M63, RF-570 a RF-577) ---
+
+## RF-570: si esta partida es la del nivel 1 jugada desde el menú (no el modo de pruebas ni el editor) y el jugador
+## no lo desactivó ni lo completó antes, arma el tutorial. Empieza al cerrarse el cartel de entrada (si lo hay).
+## Un archivo con errores no se muestra: el nivel se juega como siempre y el error sale por la salida.
+func _start_tutorial_if_due() -> void:
+	if testing or DevMode.enabled or GameFlow.current_level() == null or SaveManager.tutorial_done() \
+			or not SaveManager.tutorial_enabled():
+		return  # lo barato primero: así el archivo solo se lee cuando hace falta
+	var data: TutorialData = TutorialData.load_file()
+	if not data.is_valid():
+		push_warning("El tutorial no se muestra: %s" % "; ".join(data.errors))
+		return
+	if not TutorialFlow.should_auto_show(SaveManager.tutorial_enabled(), SaveManager.tutorial_done(), DevMode.enabled, testing,
+			String(level_data.id) == data.level_id, data.is_valid()):
+		return
+	tutorial = TutorialController.new()
+	tutorial.name = "Tutorial"
+	add_child(tutorial)
+	tutorial.setup(self, data)
+	if level_intro.is_open():
+		level_intro.closed.connect(tutorial.begin, CONNECT_ONE_SHOT)
+	else:
+		tutorial.begin()
 
 
 # --- La flecha «← Menú» (RF-459 a RF-461) ---

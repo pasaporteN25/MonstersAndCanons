@@ -71,7 +71,8 @@ func _snapshot() -> Dictionary:
 		"hall": SaveManager.hall_total(), "initials": [SaveManager.last_initials(3), SaveManager.last_initials(5)],
 		"seen": [SaveManager.has_seen_enemy(&"normal"), SaveManager.has_seen_enemy(&"fast"), SaveManager.has_seen_enemy(&"boss")],
 		"settings": [SaveManager.get_setting("music_volume"), SaveManager.get_setting("sfx_volume"),
-			SaveManager.get_setting("fullscreen"), SaveManager.get_setting("damage_numbers")]}
+			SaveManager.get_setting("fullscreen"), SaveManager.get_setting("damage_numbers")],
+		"tutorial": [SaveManager.tutorial_done(), SaveManager.tutorial_enabled()]}
 
 
 func _assert_roundtrip_is_identical(label: String) -> void:
@@ -99,6 +100,26 @@ func test_first_format_with_only_levels_and_three_settings_loads() -> void:
 	assert_eq(SaveManager.hall_total(), 0)
 	assert_false(SaveManager.has_seen_enemy(&"normal"))
 	_assert_roundtrip_is_identical("formato T40")
+
+
+# --- El tutorial del nivel 1 (M63, RF-575): una clave nueva que los guardados viejos no tienen ---
+
+func test_old_saves_that_won_level_1_do_not_get_the_tutorial_and_new_ones_do() -> void:
+	for text: String in [SAVE_T40, SAVE_BEFORE_M50, SAVE_FULL_COLLECTIONS]:
+		_write(text)
+		SaveManager.load_save()
+		assert_true(SaveManager.tutorial_done(), "quien ya ganó el nivel 1 no lo ve")
+		assert_true(SaveManager.tutorial_enabled(), "la opción nueva arranca prendida")
+		_assert_roundtrip_is_identical("con el tutorial")
+		assert_true(bool(JSON.parse_string(FileAccess.get_file_as_string(PATH))["tutorial_done"]), "al guardar queda escrita")
+	_write(SAVE_DEV)  # sin el nivel 1 ganado
+	SaveManager.load_save()
+	assert_false(SaveManager.tutorial_done())
+	_write('{"version":1}')
+	SaveManager.load_save()
+	assert_false(SaveManager.tutorial_done())
+	SaveManager.save()
+	assert_eq(int(JSON.parse_string(FileAccess.get_file_as_string(PATH))["version"]), 1, "la versión no cambia")
 
 
 # --- Antes de M50: niveles 1 a 9 y technology ---

@@ -1457,3 +1457,38 @@ Los textos, números de tamaño y posiciones nuevos viven en `mobile_ui.json` (P
 
 1. **Peso (T320):** `mipmaps/generate=false` en los siete `assets/intro/*.png.import` (sigue `compress/mode=0`). El peso real es el de los `.ctex` de `.godot/imported/`; `art/intro-v1/peso.py` los mide por variante y arma `art/intro-v1/peso/comparison.html`. La variante WebP (`compress/mode=1`) queda medida y sin aplicar (D-120).
 2. **Documento editable (T321):** `scripts/logic/intro_doc.gd` (`IntroDoc`, lógica pura): `to_markdown`, `parse_markdown` (que valida con `IntroData.parse`), `to_json` (mismo formato y orden de claves que el archivo oficial) y `describe_changes`. `tools/intro_doc.gd` solo lee y escribe archivos (`export`, `import`, `import --dry`). Tests en `tests/test_intro_doc.gd`: ida y vuelta byte por byte, el documento versionado coincide con el JSON, y cada error con su mensaje.
+
+### M63 / T330 y T331 · El tutorial del nivel 1 (RF-570 a RF-578, D-125 a D-128)
+
+**Piezas** (la lógica pura se prueba sin ventanas, P10; las escenas solo muestran y avisan, P6):
+
+| Pieza | Qué es |
+|---|---|
+| `data/tutorial/tutorial.json` | Los pasos y los textos: dos listas (`pc`, `celular`), los rótulos de la tarjeta y `"borrador"`. |
+| `scripts/logic/tutorial_data.gd` (`TutorialData`) | Lee y valida el archivo (errores en castellano que nombran el paso). Trae la tabla `STEPS`: qué evento espera cada paso y en qué modo se usa. |
+| `scripts/logic/tutorial_flow.gd` (`TutorialFlow`) | `should_auto_show(...)` (RF-570) y la máquina de pasos: `next()`, `notify(evento)`, `skip()`, `skip_satisfied(...)`, `rewind_to(...)`. Emite `step_changed` y `finished(completado)`. |
+| `scripts/logic/tutorial_layout.gd` (`TutorialLayout`) | Dónde va la tarjeta para no tapar lo señalado y dónde apoya la flecha. |
+| `scenes/ui/tutorial_overlay.gd` (`TutorialOverlay`, `CanvasLayer` capa 12) | La tarjeta, el recuadro y la flecha. Armada en código. Solo la tarjeta recibe el mouse y los toques. Consulta en cada cuadro **de dónde** sacar lo señalado (`targets_provider`, `fills_provider`). |
+| `scenes/game/tutorial_controller.gd` (`TutorialController`) | El director: escucha las señales de la partida (`BuildController`, `LevelSession`, `Game.pause_changed`, `speed_changed`, `MobileHud.catalog_opened`), se las pasa a `TutorialFlow` y le dice a la tarjeta qué mostrar y qué señalar. Elige la casilla sugerida. |
+| `Hud.target_control`, `MobileHud.target_control`, `TowerPanel.upgrade_button/sell_button` | Descriptores de **qué control señalar**: el tutorial no busca nodos por ruta. |
+| `Game._start_tutorial_if_due()` | Decide si arma el tutorial (lo barato primero; el archivo solo se lee si hace falta) y lo arranca al cerrarse el cartel de entrada. |
+| `SaveManager` | `tutorial_done()`, `tutorial_enabled()`, `mark_tutorial_done()`, `reset_tutorial()`; la clave `tutorial_done` y la opción `tutorial_enabled`. |
+| `OptionsMenu` | La fila «Tutorial del nivel 1» / «Volver a verlo» y el contenedor con desplazamiento. |
+| `tools/check_tutorial.gd`, `tools/capture_tutorial.tscn` | El validador por consola y las capturas reales (un PNG por paso, PC y celular). |
+
+**Cómo se señala algo.** Cada paso pide, en cada cuadro, los rectángulos en **pantalla** de lo que señala: para un control, `get_global_rect()`; para una casilla, su posición en el mundo pasada por `get_canvas_transform()` (así vale con zoom y con cámara). Un control que no se ve ahora (el catálogo cerrado, el panel de una torre que no está elegida) devuelve `null` y no se dibuja nada: **no hay coordenadas escritas a mano**.
+
+**Cómo se pasa de paso.** Los pasos de acción esperan un evento de `TutorialData` (`tower_selected`, `tower_built`, `catalog_opened`, `wave_started`, `placed_selected`, `speed_changed`, `paused`, `resumed`). Al llegar a un paso, `skip_satisfied` consulta si ya se cumplió (el jugador se adelantó). Si el jugador suelta la torre o cierra el catálogo, `rewind_to` vuelve a un paso anterior (tabla `REWIND_ON_DESELECT`).
+
+**Qué no toca.** Ningún dato de nivel ni de balance, `BuildController` (solo se conecta a sus señales y llama `select_placed` para volver a elegir la torre construida), el HUD (solo se le suma `target_control`), el modo de pruebas ni el editor (`Game._start_tutorial_if_due` sale antes si `testing` o `DevMode.enabled`).
+
+**Cómo se prueba.**
+1. `tests/test_tutorial_data.gd`: el lector, **cada** error, los límites exactos y el archivo oficial.
+2. `tests/test_tutorial_flow.gd`: `should_auto_show` (una condición por vez), la máquina de pasos, `rewind_to`, el guardado y la compatibilidad con guardados viejos.
+3. `tests/test_tutorial_layout.gd`: la tarjeta no tapa lo señalado y queda dentro de la pantalla; la flecha.
+4. `tests/test_tutorial_game.gd`: **la escena real** (`game.tscn`) recorrida entera en PC y en el celular (botones del HUD, catálogo, toques sobre el mapa, tilde y doble toque), más saltar, no repetir, apagar, guardado viejo, modo de pruebas, otro nivel, F6, editor, cartel de entrada y fin de partida.
+5. `tests/test_tutorial_options.gd`: la fila de Opciones y que el panel entre en 720.
+6. `tests/test_old_saves.gd`: la clave nueva con los guardados de cada época.
+7. Capturas reales: `godot --path . res://tools/capture_tutorial.tscn -- <carpeta fuera del repo> 1280x720`.
+
+**Riesgos.** (1) Un cambio futuro en los nombres de los controles del HUD se nota en los tests (los descriptores devuelven `null`). (2) `MobileHud` maneja los toques de su barra con código propio: la tarjeta queda **fuera** de esa barra y de los botones flotantes (se ubica entre las barras). (3) Solo se probó en una PC (RF-502): el tacto y la legibilidad en un celular real quedan para Lucas.
