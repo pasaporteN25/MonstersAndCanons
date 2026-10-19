@@ -1,0 +1,33 @@
+{
+  "variantes": {
+    "refuerzo": { "duracion_s": 0.5, "cuadros": 8, "escala": 1.0 },
+    "maestria": { "duracion_s": 0.7, "cuadros": 8, "escala": 1.5 }
+  },
+  "aclarado_blanco": 0.4,
+  "fuente_base_px": 22,
+  "fuente_min_px": 20,
+  "fuente_max_px": 30,
+  "texto_duracion_s": 1.1,
+  "texto_sube_px": 24,
+  "escalonado_s": 0.12,
+  "max_estadisticas": 4,
+  "max_por_renglon": 2,
+  "tope_efectos": 8,
+  "tope_textos": 4,
+  "estadisticas": [
+    { "campo": "damage", "etiqueta": "daño", "formato": "entero" },
+    { "campo": "fire_rate", "etiqueta": "disp/s", "formato": "decimal" },
+    { "campo": "chain_extra_targets", "etiqueta": "saltos", "formato": "entero" },
+    { "campo": "range_tiles", "etiqueta": "alcance", "formato": "decimal" },
+    { "campo": "splash_radius_tiles", "etiqueta": "área", "formato": "decimal" },
+    { "campo": "burst_count", "etiqueta": "púas", "formato": "entero" },
+    { "campo": "extra_targets", "etiqueta": "objetivos", "formato": "entero" },
+    { "campo": "slow_amount", "etiqueta": "frenado", "formato": "porcentaje", "escala": 100 },
+    { "campo": "slow_duration", "etiqueta": "s de frenado", "formato": "decimal" },
+    { "campo": "burn_damage_per_second", "etiqueta": "quemadura/s", "formato": "entero" },
+    { "campo": "burn_duration", "etiqueta": "s de quemadura", "formato": "decimal" },
+    { "campo": "suppress_seconds", "etiqueta": "s de pulso", "formato": "decimal" },
+    { "campo": "support_rate_percent", "etiqueta": "apoyo", "formato": "porcentaje" },
+    { "campo": "support_repair_per_second", "etiqueta": "reparación/s", "formato": "decimal" }
+  ]
+}
