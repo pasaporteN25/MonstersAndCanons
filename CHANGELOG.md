@@ -2,6 +2,10 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Pausa al pasar la app a segundo plano *(T303, 2026-10-19)*
+
+En el celular, si llega una llamada o tocás el botón de inicio, la partida **se pausa sola** y queda en pausa al volver (se sigue con «Seguir»). En la computadora, perder el foco de la ventana **no** pausa.
+
 ## Botón de demolición en el celular *(T302, 2026-10-19)*
 
 En los niveles con árboles, escombros o minas hay un **tercer botón flotante** (un pico) para demoler y habilitar: se arrastra y se guarda como el carrito y la X, y ya no hay que abrir el catálogo. Al tocarlo se tiñe y la barra de abajo dice «Demoler o habilitar: tocá un objeto del mapa» y trae una cruz para salir (también salen volviendo a tocar el botón, con «atrás» o eligiendo una torre). Un solo toque sirve para un árbol o para una mina; si sale bien, la herramienta se suelta sola, y si no alcanza el oro o ya hay una demolición en curso, la barra dice el motivo y no cobra nada. Mientras está elegida no se ven «Empezar oleada» ni «Próxima oleada». Los tres botones flotantes no se pisan entre sí.

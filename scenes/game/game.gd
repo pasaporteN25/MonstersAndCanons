@@ -498,6 +498,24 @@ func _process(delta: float) -> void:
 		position = Vector2(randf_range(-1.0, 1.0), randf_range(-1.0, 1.0)) * strength
 
 
+## RF-544: al pasar la app a segundo plano (una llamada, el botón de inicio, otra app) la partida se pausa sola.
+## `APPLICATION_PAUSED` es el aviso de Android; `APPLICATION_FOCUS_OUT` solo cuenta en un dispositivo móvil:
+## en una PC, perder el foco de la ventana no pausa (no cambia nada para quien juega en la computadora).
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_APPLICATION_PAUSED:
+		pause_for_background()
+	elif what == NOTIFICATION_APPLICATION_FOCUS_OUT and OS.has_feature("mobile"):
+		pause_for_background()
+
+
+## Deja la partida en pausa (la misma de RF-104: se sigue con el botón Pausa). No hace nada si ya está en pausa
+## (un menú, un diálogo o el cartel de entrada ya la pausaron) ni si la partida terminó.
+func pause_for_background() -> void:
+	if session == null or session.is_over() or is_paused():
+		return
+	set_paused(true)
+
+
 ## Al salir de la partida (reintentar, cerrar, o un test que la borra) nunca debe
 ## quedar el juego en pausa ni acelerado (RF-105, plan §6.7).
 func _exit_tree() -> void:
