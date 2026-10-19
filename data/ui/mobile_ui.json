@@ -55,5 +55,11 @@
   "vender_padding_x_px": 8,
   "vender_padding_y_px": 4,
   "vender_separacion_mm": 35.0,
-  "barra_texto_min_ancho_px": 200
+  "barra_texto_min_ancho_px": 200,
+  "puntero_duplicado_ms": 500,
+  "puntero_duplicado_px": 32,
+  "scroll_umbral_px": 12,
+  "scroll_friccion": 4.0,
+  "scroll_velocidad_min_px": 30,
+  "scroll_barra_px": 22
 }

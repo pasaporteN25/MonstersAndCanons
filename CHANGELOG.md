@@ -2,6 +2,10 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Mouse y toque conviven en el modo celular *(T311, 2026-10-19)*
+
+En el modo celular ahora se puede usar el **mouse además del dedo**, también en Android (DeX, Chromebook, teclado y mouse): un clic mueve el fantasma, abre el carrito, usa la X, la tilde y la cruz, y arrastrar con el botón izquierdo equivale a arrastrar un dedo. Ya no hace falta cambiar a «Interfaz: PC». Un toque sigue haciendo su acción una sola vez (el clic que el sistema fabrica a partir del toque se descarta), también en una notebook con pantalla táctil, donde antes ese clic hacía de segundo dedo. **No se probó en un celular real.**
+
 ## Un toque, una sola acción en el celular *(T291, 2026-10-18)*
 
 «Apuntar» avanzaba dos modos por toque; ahora avanza uno. La tilde y la cruz de construir ya no salen de la pantalla ni se suben a la barra de arriba (donde un toque podía cambiar la velocidad o pausar además de construir): si arriba no entran, se ponen abajo de la torre.
