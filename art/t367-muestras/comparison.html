@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="es-AR"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>T367 · Muestras de entrada de jefes</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#17191d;color:#e8e2d7;font:18px/1.5 system-ui}main{padding:28px;max-width:1600px;margin:auto}h1{font-size:32px}h2{margin-top:48px;font-size:25px}p{max-width:1000px}a{color:#e2bb7b}button,select,input{font:inherit}button,select{padding:8px 14px;background:#34353b;color:#fff;border:1px solid #a27a47;border-radius:5px}.scroll{overflow:auto;border:1px solid #555;margin:16px 0;background:#24262b}.row{display:flex;gap:16px;width:max-content}figure{margin:0}figcaption{padding:8px;color:#d8c4a4}img{display:block;max-width:none}small{color:#c6bdaf}.checker{background:repeating-conic-gradient(#555 0 25%,#383838 0 50%) 0/16px 16px}.controls{display:flex;gap:14px;align-items:center;flex-wrap:wrap}canvas{display:block}nav{display:flex;gap:20px;flex-wrap:wrap}.note{padding:16px;border-left:3px solid #b88e52;background:#26282e}#sequence img{width:1280px;height:720px}
+</style><main>
+<h1>T367 · Entrada de jefes</h1>
+<p class="note">Muestras para aprobar. Sin integración ni cambios de lógica. Los montajes usan una <strong>captura real archivada de T277</strong>; las imágenes superpuestas no son una captura de M66 funcionando. Zoom del navegador al 100 % para revisar las medidas en píxeles CSS.</p>
+<nav><a href="#burst">Destello y tintes</a><a href="#level">Entrada real</a><a href="#card">Cartel</a><a href="#pieces">Piezas</a><a href="README.md">README</a><a href="manifest.json">Manifest</a></nav>
+<h2 id="burst">Los ocho cuadros · 256 px y 34 px</h2>
+<p>Cada tira grande tiene ocho cuadros de 256 px, sin reducir. Cada tira chica conserva el efecto a 34 px y el retrato existente a 34 px al lado. Suelo y camino tomados de la pradera real. Desplazá horizontalmente para comparar.</p>
+<label>Tinte <select id="tint"><option value="neutral">Neutro</option><option value="crimson" selected>Carmesí de la ficha · #ba403e</option><option value="steel">Azul acero · #547ea9</option><option value="green">Verde · #72954e</option><option value="data_red">Rojo de boss.tres · #c0392b</option></select></label>
+<div class="scroll"><img id="contact" src="review/contact_crimson_256.png" width="2048" height="304" alt="Ocho cuadros del destello a tamaño nativo sobre la pradera"></div>
+<div class="scroll"><img id="small" src="review/contact_crimson_34.png" width="608" height="94" alt="Los mismos cuadros reducidos a 34 píxeles junto al jefe"></div>
+<p><small>El tinte multiplica RGB; conserva el alfa. Se muestra también el rojo real de los datos porque difiere del carmesí pedido en la ficha. El cuadro 8 no tiene cobertura. El verde pierde contraste sobre el pasto, sobre todo a 34 px: queda observado para revisión, sin aprobación de legibilidad.</small></p>
+<h2 id="level">Entrada del nivel 1 · 1280 × 720</h2>
+<p>Centro del efecto y pies en (32, 144); casillas de 64 px. El atlas se muestra 1:1 y se corta naturalmente a la izquierda. El Jefe usa los cuadros existentes de <code>boss_walk.png</code>. El recorrido y su tamaño son aproximaciones de revisión, sin ejecutar el juego.</p>
+<div class="controls"><button id="play">Reproducir</button><label>Cuadro <input id="step" type="range" min="1" max="8" value="3"></label><output id="counter">3 / 8</output></div>
+<div class="scroll"><img id="preview" src="review/level_frame_03.png" width="1280" height="720" alt="Montaje del destello, grieta y jefe sobre la entrada real"></div>
+<p>Animación de revisión: 8 cuadros en 0,7 s y una espera de 1,4 s entre repeticiones. El reproductor HTML usa 87,5 ms por cuadro; el GIF redondea a centésimas y suma los mismos 700 ms.</p>
+<details><summary>GIF independiente a velocidad real</summary><div class="scroll"><img src="review/entrance_loop.gif" width="1280" height="720" alt="Bucle del montaje de entrada a velocidad real"></div></details>
+<details open><summary>Los ocho montajes en fila, a escala real</summary><div class="scroll"><div class="row" id="sequence">
+<figure><figcaption>Cuadro 1 · 0.0000 s</figcaption><img src="review/level_frame_01.png" width="1280" height="720" alt="Montaje cuadro 1"></figure>
+<figure><figcaption>Cuadro 2 · 0.0875 s</figcaption><img src="review/level_frame_02.png" width="1280" height="720" alt="Montaje cuadro 2"></figure>
+<figure><figcaption>Cuadro 3 · 0.1750 s</figcaption><img src="review/level_frame_03.png" width="1280" height="720" alt="Montaje cuadro 3"></figure>
+<figure><figcaption>Cuadro 4 · 0.2625 s</figcaption><img src="review/level_frame_04.png" width="1280" height="720" alt="Montaje cuadro 4"></figure>
+<figure><figcaption>Cuadro 5 · 0.3500 s</figcaption><img src="review/level_frame_05.png" width="1280" height="720" alt="Montaje cuadro 5"></figure>
+<figure><figcaption>Cuadro 6 · 0.4375 s</figcaption><img src="review/level_frame_06.png" width="1280" height="720" alt="Montaje cuadro 6"></figure>
+<figure><figcaption>Cuadro 7 · 0.5250 s</figcaption><img src="review/level_frame_07.png" width="1280" height="720" alt="Montaje cuadro 7"></figure>
+<figure><figcaption>Cuadro 8 · 0.6125 s</figcaption><img src="review/level_frame_08.png" width="1280" height="720" alt="Montaje cuadro 8"></figure>
+</div></div></details>
+<h2 id="card">Cartel con el retrato existente</h2>
+<p>720 × 120 px; retrato de 96 px. Tres rótulos: título de 23 px, nombre de 20 px y descripción completa de 20 px que se parte en dos renglones. El fondo oscuro pertenece al montaje del panel; el centro del PNG del marco permanece transparente.</p>
+<div class="scroll"><img src="review/card_720.png" width="720" height="120" alt="Cartel completo a tamaño real"></div>
+<div class="scroll"><img src="review/card_pc_1280.png" width="1280" height="720" alt="Cartel debajo de la barra superior en PC"></div>
+<p>Celular de referencia: pantalla 2400 × 1080, lienzo de 1280 × 720 ampliado al 150 %, bandas laterales de 240 px. Cartel de 1080 × 180 px físicos, retrato de 144 px y texto mínimo de 30 px. Es un montaje de escala; no valida el HUD ni la adaptación de Android.</p>
+<div class="scroll"><img src="review/card_phone_2400.png" width="2400" height="1080" alt="Montaje de escala al 150 por ciento en una pantalla de 2400 por 1080"></div>
+<h2 id="pieces">Piezas aisladas · alfa real</h2>
+<p>Sin texto en las piezas, sin sombras pintadas y sin marcas comunitarias. Los fondos cuadriculados son solo del HTML.</p>
+<div class="scroll checker"><img src="boss_burst.png" width="1024" height="512" alt="Atlas neutro 4 por 2 de ocho cuadros"></div>
+<div class="row"><figure class="checker"><img src="boss_crack.png" width="192" height="96" alt="Grieta neutra oscura"></figure><figure class="checker"><img src="boss_card_frame.png" width="192" height="128" alt="Marco original con centro transparente"></figure></div>
+<p>9-slice: 32 px en cada lado; cuatro remaches contenidos en las esquinas. Bordes lisos estirables. Prueba a 720 × 120 sin fondo:</p>
+<div class="scroll checker"><img src="review/frame_720.png" width="720" height="120" alt="Marco estirado con esquinas conservadas"></div>
+<p><a href="README.md">Límites, decisiones abiertas y reproducción</a> · <a href="validation.json">Validación mecánica</a> · <a href="prompts.md">Instrucciones de diseño</a></p>
+</main><script>
+const tint=document.getElementById('tint');tint.onchange=()=>{document.getElementById('contact').src=`review/contact_${tint.value}_256.png`;document.getElementById('small').src=`review/contact_${tint.value}_34.png`};
+const slider=document.getElementById('step'), preview=document.getElementById('preview'), counter=document.getElementById('counter'), play=document.getElementById('play');let timer=null,started=0;
+function show(n){slider.value=n;counter.value=`${n} / 8`;preview.src=`review/level_frame_${String(n).padStart(2,'0')}.png`}
+function stop(){clearInterval(timer);timer=null;play.textContent='Reproducir'}slider.oninput=()=>{stop();show(Number(slider.value))};play.onclick=()=>{if(timer){stop();return}started=performance.now();show(1);play.textContent='Detener';timer=setInterval(()=>{const elapsed=(performance.now()-started)%2100;show(Math.min(8,Math.floor(elapsed/87.5)+1))},16)};
+for(let i=1;i<=8;i++){new Image().src=`review/level_frame_${String(i).padStart(2,'0')}.png`}
+</script></html>

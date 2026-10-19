@@ -1,0 +1,331 @@
+{
+  "passed": true,
+  "check_count": 42,
+  "checks": {
+    "boss_burst.png": {
+      "ok": true,
+      "detail": {
+        "size": [
+          1024,
+          512
+        ],
+        "bytes": 54987,
+        "mode": "RGBA"
+      }
+    },
+    "boss_crack.png": {
+      "ok": true,
+      "detail": {
+        "size": [
+          192,
+          96
+        ],
+        "bytes": 10924,
+        "mode": "RGBA"
+      }
+    },
+    "boss_card_frame.png": {
+      "ok": true,
+      "detail": {
+        "size": [
+          192,
+          128
+        ],
+        "bytes": 3748,
+        "mode": "RGBA"
+      }
+    },
+    "frame_1_margin": {
+      "ok": true,
+      "detail": [
+        76,
+        139,
+        181,
+        181
+      ]
+    },
+    "frame_1_neutral": {
+      "ok": true,
+      "detail": null
+    },
+    "frame_2_margin": {
+      "ok": true,
+      "detail": [
+        68,
+        118,
+        188,
+        187
+      ]
+    },
+    "frame_2_neutral": {
+      "ok": true,
+      "detail": null
+    },
+    "frame_3_margin": {
+      "ok": true,
+      "detail": [
+        60,
+        102,
+        197,
+        191
+      ]
+    },
+    "frame_3_neutral": {
+      "ok": true,
+      "detail": null
+    },
+    "frame_4_margin": {
+      "ok": true,
+      "detail": [
+        54,
+        95,
+        202,
+        195
+      ]
+    },
+    "frame_4_neutral": {
+      "ok": true,
+      "detail": null
+    },
+    "frame_5_margin": {
+      "ok": true,
+      "detail": [
+        47,
+        98,
+        209,
+        199
+      ]
+    },
+    "frame_5_neutral": {
+      "ok": true,
+      "detail": null
+    },
+    "frame_6_margin": {
+      "ok": true,
+      "detail": [
+        40,
+        111,
+        216,
+        203
+      ]
+    },
+    "frame_6_neutral": {
+      "ok": true,
+      "detail": null
+    },
+    "frame_7_margin": {
+      "ok": true,
+      "detail": [
+        31,
+        129,
+        225,
+        206
+      ]
+    },
+    "frame_7_neutral": {
+      "ok": true,
+      "detail": null
+    },
+    "frame_8_margin": {
+      "ok": true,
+      "detail": null
+    },
+    "frame_8_neutral": {
+      "ok": true,
+      "detail": null
+    },
+    "frame_8_empty": {
+      "ok": true,
+      "detail": null
+    },
+    "frame_1_nearly_empty": {
+      "ok": true,
+      "detail": {
+        "frame": 1,
+        "alpha_bbox": [
+          76,
+          139,
+          181,
+          181
+        ],
+        "max_alpha": 12
+      }
+    },
+    "frame_center_transparent": {
+      "ok": true,
+      "detail": null
+    },
+    "corner_nw": {
+      "ok": true,
+      "detail": null
+    },
+    "corner_ne": {
+      "ok": true,
+      "detail": null
+    },
+    "corner_sw": {
+      "ok": true,
+      "detail": null
+    },
+    "corner_se": {
+      "ok": true,
+      "detail": null
+    },
+    "hud_unmodified_1": {
+      "ok": true,
+      "detail": null
+    },
+    "hud_unmodified_2": {
+      "ok": true,
+      "detail": null
+    },
+    "hud_unmodified_3": {
+      "ok": true,
+      "detail": null
+    },
+    "hud_unmodified_4": {
+      "ok": true,
+      "detail": null
+    },
+    "hud_unmodified_5": {
+      "ok": true,
+      "detail": null
+    },
+    "hud_unmodified_6": {
+      "ok": true,
+      "detail": null
+    },
+    "hud_unmodified_7": {
+      "ok": true,
+      "detail": null
+    },
+    "hud_unmodified_8": {
+      "ok": true,
+      "detail": null
+    },
+    "card_720.png": {
+      "ok": true,
+      "detail": null
+    },
+    "card_pc_1280.png": {
+      "ok": true,
+      "detail": null
+    },
+    "card_phone_2400.png": {
+      "ok": true,
+      "detail": null
+    },
+    "gif_cycle_2100ms": {
+      "ok": true,
+      "detail": {
+        "durations_ms": [
+          90,
+          90,
+          80,
+          90,
+          90,
+          80,
+          90,
+          1490
+        ],
+        "total_ms": 2100,
+        "effect_ms": 700,
+        "wait_ms": 1400
+      }
+    },
+    "reference_level_01_reference.png": {
+      "ok": true,
+      "detail": null
+    },
+    "reference_boss_reference.png": {
+      "ok": true,
+      "detail": null
+    },
+    "reference_boss_walk_reference.png": {
+      "ok": true,
+      "detail": null
+    },
+    "html_local_links": {
+      "ok": true,
+      "detail": 24
+    }
+  },
+  "frames": [
+    {
+      "frame": 1,
+      "alpha_bbox": [
+        76,
+        139,
+        181,
+        181
+      ],
+      "max_alpha": 12
+    },
+    {
+      "frame": 2,
+      "alpha_bbox": [
+        68,
+        118,
+        188,
+        187
+      ],
+      "max_alpha": 171
+    },
+    {
+      "frame": 3,
+      "alpha_bbox": [
+        60,
+        102,
+        197,
+        191
+      ],
+      "max_alpha": 255
+    },
+    {
+      "frame": 4,
+      "alpha_bbox": [
+        54,
+        95,
+        202,
+        195
+      ],
+      "max_alpha": 227
+    },
+    {
+      "frame": 5,
+      "alpha_bbox": [
+        47,
+        98,
+        209,
+        199
+      ],
+      "max_alpha": 164
+    },
+    {
+      "frame": 6,
+      "alpha_bbox": [
+        40,
+        111,
+        216,
+        203
+      ],
+      "max_alpha": 99
+    },
+    {
+      "frame": 7,
+      "alpha_bbox": [
+        31,
+        129,
+        225,
+        206
+      ],
+      "max_alpha": 45
+    },
+    {
+      "frame": 8,
+      "alpha_bbox": null,
+      "max_alpha": 0
+    }
+  ],
+  "limits": "Validación mecánica y de montajes; no es validación dentro de Godot."
+}
