@@ -1,0 +1,17 @@
+{
+  "destello_s": 0.7,
+  "cartel_entra_s": 0.25,
+  "cartel_quieto_s": 1.1,
+  "cartel_sale_s": 0.25,
+  "salteo_s": 0.1,
+  "cartel_ancho_px": 720,
+  "cartel_alto_px": 120,
+  "intervalo_min_s": 8.0,
+  "retrato_px": 88,
+  "titulo_fuente_px": 15,
+  "nombre_fuente_px": 28,
+  "frase_fuente_px": 16,
+  "pista_fuente_px": 13,
+  "arriba_pc_px": 56,
+  "arriba_celular_px": 72
+}
