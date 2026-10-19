@@ -600,3 +600,21 @@ godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- sin_recursos
 ```
 
 **Asedio:** usa **los 15 mapas** de la campaña con el mismo oro, `vida_monstruos_%` 115 como regla global y una tabla `vida_monstruos_por_mapa_%` de 13 excepciones (de 101 % a 118 %; el 4 y el 15 toman el 115 % global). No hay ninguna copia de mapa en `data/modos/asedio/`: para cambiar la dureza de un mapa se cambia **su número en la tabla** de `data/modos/asedio/modo.json`. Los valores son **iniciales**: salen del bot (T255, y T258 para los mapas con la Cuadrilla) y se ajustan cuando Lucas juegue. Con 150 % y 80 % de oro, el bot perdía en la oleada 4.
+
+
+## Editar los textos de la intro *(M62, RF-561 a RF-563)*
+
+Los textos, los segundos de cada lámina y el fundido de la intro viven en `data/intro/intro.json`, pero **no hace falta tocar ese archivo**: se editan en un documento más cómodo, **`specs/intro/intro-editable.md`** (una sección por lámina, con el texto, los segundos, la imagen y un lugar para tus notas).
+
+1. **Editá** el documento: el texto va debajo de `Texto:`, **cada línea con `> ` adelante**; los segundos van en `- Segundos:`; las notas, debajo de `Notas:` (no se cargan al juego).
+2. **Probá sin guardar nada:** `godot --headless --path . -s tools/intro_doc.gd -- import --dry`. Muestra los cambios (`CAMBIA: lámina 5, texto: …`), los avisos y los errores.
+3. **Pasalo al juego:** el mismo comando sin `--dry`. **Si hay un error, no cambia nada** y dice cuál es, con el número de línea o de lámina (por ejemplo «la lámina 3 tiene 3 líneas y el máximo es 2»).
+4. **Volver a empezar** desde lo que carga el juego: `... -- export` (reescribe el documento y **conserva las notas**).
+
+**Reglas** (las mismas que revisa el juego, RF-497): de 5 a 8 láminas; texto de 1 o 2 líneas, hasta 90 caracteres por línea y 160 en total; segundos enteros de 4 a 12; fundido de 0 a 2; la imagen tiene que existir. Un **aviso** (no un error) te dice si una lámina dura menos de lo que pide su texto para leerse (`2 s + caracteres / 20`).
+
+**Dos cosas que conviene saber:**
+- Los textos oficiales **también** están en `specs/intro/guion.md`, y un test (`tests/test_intro_data.gd`) los compara con `intro.json`. Si cambiás un texto con esta herramienta, **el test va a avisar** hasta que el guion diga lo mismo: pedile a Claude que lo actualice o corregilo vos.
+- La herramienta **no crea imágenes**: el campo `Imagen` solo puede apuntar a un archivo que ya exista (por ejemplo, para reordenar láminas). Cambiar qué imagen va con qué texto cambia cómo se ve el juego: conviene hablarlo antes.
+
+Si el documento y el JSON se desfasan (alguien editó uno solo), `tests/test_intro_doc.gd` lo avisa.

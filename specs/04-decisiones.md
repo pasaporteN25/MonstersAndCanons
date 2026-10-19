@@ -1023,3 +1023,34 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Por qué:** «1.0.0» en las exportaciones era mentira mientras el juego está en beta, y repetir la versión en tres archivos garantiza que se desfasen.
 - **Alternativas descartadas:** una constante en GDScript o un archivo `data/version.json` (otro lugar más para editar; `project.godot` ya viaja en las exportaciones).
 - **Límite:** que Godot tome la versión del proyecto cuando `version/name` queda vacío sale de su documentación; **no se exportó** (no se generan ejecutables en esta tarea). Hay que mirar la versión del primer APK o `.exe` que se exporte.
+## D-120 · Las láminas de la intro se importan sin pérdida y sin mipmaps; el WebP con pérdida queda como decisión de Lucas
+- **Fecha:** 2026-10-19 · **Estado:** la parte sin pérdida, aplicada (T320); la parte con pérdida, **pendiente de Lucas** · **Decidió:** Claude (lo que no cambia ningún píxel) / Lucas (cualquier pérdida de imagen)
+- **Qué:** `mipmaps/generate=false` en los siete `assets/intro/*.png.import` (sigue `compress/mode=0`, sin pérdida). Medido en `.ctex` reales: **24,46 MiB → 17,88 MiB (−27 %)**; píxeles idénticos al PNG. La medición completa y los recortes lado a lado están en `art/intro-v1/peso/comparison.html` (los reproduce `art/intro-v1/peso.py`).
+- **Por qué:** el hallazgo de T289 (H-22) fue que las imágenes de 1920 × 1080 pesan ~28 MB en la APK, con mipmaps (+33 %) y sin pérdida. **Recodificar los PNG no baja nada** (Godot guarda el recurso en WebP sin pérdida a partir de los píxeles, no del PNG) y `etc2_astc=true` no interviene porque el modo 0 no usa compresión de VRAM, así que tampoco infla. Quitar los mipmaps es lo único que reduce el peso sin cambiar un píxel.
+- **Con pérdida (no aplicado, mediciones de las 7 láminas):**
+
+| Variante | Recurso importado | % del actual | PSNR medio |
+|---|---:|---:|---:|
+| actual (sin pérdida, con mipmaps) | 24,46 MiB | 100 % | idéntico |
+| **sin pérdida, sin mipmaps (aplicada)** | **17,88 MiB** | **73 %** | **idéntico** |
+| WebP calidad 0,95 | 5,56 MiB | 23 % | 40,2 dB |
+| WebP calidad 0,90 | 4,00 MiB | 16 % | 38,5 dB |
+| WebP calidad 0,85 | 3,04 MiB | 12 % | 36,9 dB |
+
+  La calidad 0,95 ahorra otros ~12 MiB y a ojo es casi imposible de distinguir, pero **sí cambia píxeles** (suaviza algo el trazo fino y la trama; diferencia máxima por canal de 32 a 49 sobre 255 en los peores puntos). Por la instrucción de Lucas («si el arte cambia visualmente algo, frená») **no se aplica**: se deja la muestra.
+- **Alternativas descartadas:**
+  - **Recodificar o cuantizar los PNG de origen:** no cambia el peso en la APK (arriba) y la cuantización sí cambia colores.
+  - **Compresión de VRAM (ASTC/ETC2):** una ilustración con degradés mostraría bloques; cambia más que WebP. No se midió.
+  - **Bajar la resolución de las láminas:** contradice RF-497 (1920 × 1080).
+- **Para decidir:** Lucas mira `art/intro-v1/peso/comparison.html`; si elige WebP, se cambia `compress/mode=1` y `compress/lossy_quality=0.95` (o 0,9) en los siete `.import` y se mide la APK (decisión nueva, D-124 reservada).
+- **Qué cambia:** `assets/intro/*.png.import`, `art/intro-v1/peso.py` y `peso/`, `01-spec.md` (RF-560), `03-tareas.md` (T320).
+
+## D-121 · El documento editable de la intro es una vista del JSON, no una fuente nueva
+- **Fecha:** 2026-10-19 · **Estado:** aprobada para implementar (pedido de Lucas, M62) · **Decidió:** Claude (el formato) / Lucas (que exista)
+- **Qué:** `specs/intro/intro-editable.md` se genera desde `data/intro/intro.json` y se vuelve a cargar con `tools/intro_doc.gd`. **El juego sigue leyendo solo el JSON.** Las notas del documento no van al juego.
+- **Por qué:** Lucas pidió editar a mano sin tocar JSON ni comillas escapadas. Mantener el JSON como fuente evita que el juego dependa de un parser de Markdown y conserva `IntroData` (RF-497) como única validación del juego. El parser vive en `scripts/logic/intro_doc.gd` y **reusa `IntroData.parse`**, así que el documento no puede aceptar lo que el juego rechazaría.
+- **Alternativas descartadas:**
+  - **Que el juego lea el Markdown:** más superficie de error en tiempo de ejecución y dos validadores.
+  - **Un CSV o un JSON con otra forma:** más incómodos para textos de dos líneas.
+  - **Reemplazar `guion.md` por el nuevo documento:** `guion.md` es el guion aprobado (G6) y un test lo compara con los datos; fusionarlos es una decisión de Lucas. Hoy: si cambia un texto, el test avisa y se actualiza el guion.
+- **Qué cambia:** `01-spec.md` (RF-561 a RF-563), `scripts/logic/intro_doc.gd`, `tools/intro_doc.gd`, `tests/test_intro_doc.gd`, `specs/intro/intro-editable.md`, `CONTENIDO.md`, `03-tareas.md` (T321).
