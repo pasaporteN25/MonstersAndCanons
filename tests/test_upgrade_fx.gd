@@ -179,7 +179,11 @@ func test_pause_freezes_the_effect_and_resuming_continues_it() -> void:
 	var tower: Tower = _build(_tower_data("basic"))
 	game.build_controller.try_upgrade(tower)
 	var effect := _effects()[0] as UpgradeEffect
-	await get_tree().create_timer(0.1).timeout
+	# Con la máquina cargada 0,1 s reales pueden no alcanzar para un cuadro: se espera a que avance de verdad.
+	var guard: int = 0
+	while effect.progress <= 0.0 and guard < 120:
+		await get_tree().process_frame
+		guard += 1
 	game.set_paused(true)
 	var frozen_at: float = effect.progress
 	assert_gt(frozen_at, 0.0)

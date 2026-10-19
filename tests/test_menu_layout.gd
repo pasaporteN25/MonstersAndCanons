@@ -108,11 +108,10 @@ func test_mobile_options_fit_in_two_columns_with_back_in_view() -> void:
 	options.open()
 	await get_tree().process_frame
 	await get_tree().process_frame
-	var buttons: Array[Button] = []
-	for button: Button in _visible_buttons(options):
-		buttons.append(button)
+	# Las filas del centro (casillas) se alcanzan desplazando: solo los botones fijos tienen que estar a la vista.
+	var buttons: Array[Button] = _fixed_buttons(options)
 	_assert_buttons_inside_window(buttons, "Opciones (celular)")
-	_assert_min_height(buttons, 56.0, "Opciones (celular)")
+	_assert_min_height(_visible_buttons(options), 56.0, "Opciones (celular)")
 	var panel: Control = options.get_node("%Panel")
 	assert_true(WINDOW.encloses(panel.get_global_rect()), "el panel entra en la ventana: %s" % panel.get_global_rect())
 	var scroll: ScrollContainer = options.get_node("%Scroll")
