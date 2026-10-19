@@ -77,6 +77,7 @@ func _init() -> void:
 	_continue.add_theme_color_override("font_color", GOLD)
 	_continue.pressed.connect(closed.emit)
 	rows.add_child(_continue)
+	MenuTouch.attach(self)  # RF-550: botones de 56 px en el celular
 
 
 ## Pide las 5 letras para anotar `total` (RF-194).

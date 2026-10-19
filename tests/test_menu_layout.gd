@@ -181,3 +181,61 @@ func test_mobile_pause_menu_has_tall_buttons_and_fits() -> void:
 	var buttons: Array[Button] = _visible_buttons(pause)
 	_assert_buttons_inside_window(buttons, "Pausa (celular)")
 	_assert_min_height(buttons, 56.0, "Pausa (celular)")
+
+
+# --- T314: las otras pantallas ---
+
+func _assert_touch_screen(path: String, what: String) -> Node:
+	var screen: Node = await _open_scene(path, UiMode.MOBILE)
+	var buttons: Array[Button] = _visible_buttons(screen)
+	_assert_buttons_inside_window(_fixed_buttons(screen), what)
+	_assert_min_height(buttons, 56.0, what)
+	for node: Node in screen.find_children("*", "ScrollContainer", true, false):
+		assert_not_null(node.find_child("TouchScroller", false, false), "%s: cada lista se desplaza con el dedo" % what)
+	return screen
+
+
+func test_mobile_level_select_is_touch_ready() -> void:
+	var screen: Node = await _assert_touch_screen("res://scenes/ui/level_select.tscn", "niveles")
+	var scroll: ScrollContainer = screen.get_node("%Scroll")
+	assert_not_null(scroll.find_child("TouchScroller", false, false))
+	var content: Control = scroll.get_child(0) as Control
+	if scroll.get_v_scroll_bar().visible:
+		assert_almost_eq(content.size.x, scroll.size.x - 22.0, 0.5, "la barra de 22 px no tapa el borde de las tarjetas")
+
+
+func test_mobile_wiki_is_touch_ready() -> void:
+	var screen: Node = await _assert_touch_screen("res://scenes/ui/wiki_screen.tscn", "Wiki")
+	var scrolls: Array[Node] = screen.find_children("*", "ScrollContainer", true, false)
+	assert_gte(scrolls.size(), 2, "la lista y el detalle")
+
+
+func test_mobile_records_are_touch_ready() -> void:
+	await _assert_touch_screen("res://scenes/ui/records_screen.tscn", "Récords")
+
+
+func test_mobile_credits_are_touch_ready() -> void:
+	SaveManager.set_setting("ui_mode", UiMode.MOBILE)
+	var credits := CreditsScreen.new()
+	_viewport.add_child(credits)
+	credits.open(PackedStringArray(["Línea 1", "Línea 2"]))
+	await get_tree().process_frame
+	await get_tree().process_frame
+	_assert_min_height(_visible_buttons(credits), 56.0, "Créditos")
+	assert_not_null(credits.find_child("TouchScroller", true, false), "los créditos largos se desplazan con el dedo")
+	var long_lines := PackedStringArray()
+	for i: int in 60:
+		long_lines.append("Línea %d de los créditos" % i)
+	credits.open(long_lines)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	_assert_buttons_inside_window(_visible_buttons(credits), "Créditos largos")
+
+
+func test_pc_screens_get_no_touch_help() -> void:
+	for path: String in ["res://scenes/ui/level_select.tscn", "res://scenes/ui/wiki_screen.tscn", "res://scenes/ui/records_screen.tscn"]:
+		var screen: Node = await _open_scene(path, UiMode.PC)
+		assert_null(screen.find_child("MenuTouch", true, false), "%s: nada cambia en PC" % path)
+		assert_null(screen.find_child("TouchScroller", true, false), "%s: sin desplazamiento táctil en PC" % path)
+		screen.queue_free()
+		await get_tree().process_frame

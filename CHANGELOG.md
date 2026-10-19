@@ -2,6 +2,10 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Niveles, Wiki, Récords y Créditos con el dedo *(T314, 2026-10-19)*
+
+En el modo celular, las listas de la selección de niveles, la Wiki, Opciones y los Créditos se **desplazan arrastrando un dedo** (con un poco de inercia al soltar), aunque el dedo empiece sobre una tarjeta o un botón, y la barra de desplazamiento es más ancha para agarrarla. Un toque corto sigue abriendo el nivel o la entrada, y los deslizadores de volumen siguen siendo del dedo. Todos los botones y las filas de esas pantallas miden al menos 56 px de alto. En PC no cambia nada: rueda y barra de siempre.
+
 ## Menú principal, Opciones y Pausa pensados para el celular *(T313, 2026-10-19)*
 
 En el modo celular, el menú principal pone el logo a la izquierda y los botones a la derecha (todos de 56 px de alto, cómodos para el dedo) y Opciones se muestra en **dos columnas** con el título y «Volver» siempre a la vista. En Opciones, «Interfaz» ahora está dentro de «Visualización» (antes quedaba debajo de «Volver») y, en cualquier modo, si el panel no entra en la pantalla **se desplaza** en vez de cortarse. En PC todo sigue igual.

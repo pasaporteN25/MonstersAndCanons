@@ -134,7 +134,7 @@ func test_mobile_menu_touch_raises_buttons_bars_and_adds_the_scroller() -> void:
 		assert_gte(button.custom_minimum_size.y, 56.0)
 	assert_gte((_scroll.find_child("Volume", true, false) as Control).custom_minimum_size.y, 44.0, "el deslizador también se agranda")
 	assert_not_null(_scroll.find_child("TouchScroller", false, false))
-	assert_gte(_scroll.get_v_scroll_bar().custom_minimum_size.x, 22.0, "la barra es más ancha")
+	assert_gte(_scroll.get_v_scroll_bar().get_minimum_size().x, 22.0, "la barra es más ancha (lo que el contenedor le reserva)")
 
 
 func test_late_added_buttons_are_raised_too() -> void:

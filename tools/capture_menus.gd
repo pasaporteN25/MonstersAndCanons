@@ -102,4 +102,9 @@ func _report(screen: String, holder: Node) -> void:
 		var button: Button = node as Button
 		if button.is_visible_in_tree() and button.size.y < 55.5:
 			small.append("%s %.0f" % [button.name, button.size.y])
+	for node: Node in holder.find_children("*", "ScrollContainer", true, false):
+		var scroll: ScrollContainer = node as ScrollContainer
+		if scroll.is_visible_in_tree() and scroll.get_child_count() > 0 and scroll.get_child(0) is Control:
+			var content: Control = scroll.get_child(0) as Control
+			print("  desplazable %s: %s, contenido %s (mínimo %s), barra %s visible=%s" % [scroll.name, scroll.size, content.size, content.get_combined_minimum_size(), scroll.get_v_scroll_bar().size.x, scroll.get_v_scroll_bar().visible])
 	print("%s: botones fuera = %d %s; menores de 56 px = %d %s" % [screen, bad.size(), bad.slice(0, 4), small.size(), small.slice(0, 5)])

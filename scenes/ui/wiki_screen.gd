@@ -52,6 +52,7 @@ func _ready() -> void:
 	if not _categories.is_empty():
 		show_category(_categories[0].id)
 	Audio.add_click_sounds(self)
+	MenuTouch.attach(self)  # RF-550, RF-551: filas de 56 px y desplazamiento táctil en el celular
 	_focus_first_entry()
 
 

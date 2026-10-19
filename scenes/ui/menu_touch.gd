@@ -59,9 +59,29 @@ func _adapt(node: Node) -> void:
 		slider.custom_minimum_size.y = maxf(slider.custom_minimum_size.y, _slider_height)
 	elif node is ScrollContainer:
 		var scroll: ScrollContainer = node as ScrollContainer
-		scroll.get_v_scroll_bar().custom_minimum_size.x = _bar_width
-		scroll.get_h_scroll_bar().custom_minimum_size.y = _bar_width
+		_thicken(scroll.get_v_scroll_bar(), true)
+		_thicken(scroll.get_h_scroll_bar(), false)
 		if scroll.find_child("TouchScroller", false, false) == null:
 			var scroller := TouchScroller.new()
 			scroller.name = "TouchScroller"
 			scroll.add_child(scroller)
+
+
+## Barra más ancha. El ancho que el `ScrollContainer` le reserva al contenido sale del estilo «scroll» de la barra
+## (no de `custom_minimum_size`, que no cuenta ahí y la dejaba tapando el borde de las tarjetas): por eso el grosor
+## se pone como margen del estilo.
+func _thicken(bar: ScrollBar, vertical: bool) -> void:
+	var track := StyleBoxFlat.new()
+	track.bg_color = Color(0.055, 0.06, 0.075, 0.85)
+	track.set_corner_radius_all(int(_bar_width / 2.0))
+	if vertical:
+		track.content_margin_left = _bar_width
+	else:
+		track.content_margin_top = _bar_width
+	bar.add_theme_stylebox_override("scroll", track)
+	bar.add_theme_stylebox_override("scroll_focus", track)
+	for state: String in ["grabber", "grabber_highlight", "grabber_pressed"]:
+		var grabber := StyleBoxFlat.new()
+		grabber.bg_color = Color(0.52, 0.36, 0.17) if state == "grabber" else Color(0.86, 0.59, 0.22)
+		grabber.set_corner_radius_all(int(_bar_width / 2.0))
+		bar.add_theme_stylebox_override(state, grabber)
