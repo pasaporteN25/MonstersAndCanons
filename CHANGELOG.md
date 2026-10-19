@@ -2,6 +2,10 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Un solo catálogo de torres en el celular *(T301, 2026-10-19)*
+
+El catálogo del celular ya no tiene pestañas: es una sola lista con **las torres del nivel** (antes mostraba las 11 del juego, con las que no se podían usar apagadas) y siempre abre mostrando las torres. Antes, en los niveles 6 a 15, abría en «Infraestructura» y volvía ahí cada vez que cambiaba el oro. Donde hay Demoledora, su compra es la última tarjeta. Las herramientas de demoler y habilitar se mueven a un botón propio (T302).
+
 ## Un toque, una sola acción en el celular *(T291, 2026-10-18)*
 
 «Apuntar» avanzaba dos modos por toque; ahora avanza uno. La tilde y la cruz de construir ya no salen de la pantalla ni se suben a la barra de arriba (donde un toque podía cambiar la velocidad o pausar además de construir): si arriba no entran, se ponen abajo de la torre.

@@ -22,14 +22,12 @@ var _cart_button: Button
 var _exit_button: Button
 var _catalog_panel: PanelContainer
 var _catalog_dim: ColorRect
-var _catalog_tabs: TabContainer
+var _catalog_scroll: ScrollContainer
 var _tower_grid: GridContainer
-var _infrastructure_grid: GridContainer
-var _catalog_towers: Array[TowerData] = []
 var _catalog_populated: bool = false
 var _icon_cache: Dictionary = {}
 var _available_towers: Array[TowerData] = []
-var _infrastructure_options: Array[Dictionary] = []
+var _machine_option: Dictionary = {}
 var _catalog_gold: int = 0
 var _catalog_resources: int = 0
 var _catalog_uses_resources: bool = false
@@ -443,41 +441,29 @@ func _build_empty_catalog() -> void:
 	close_button.custom_minimum_size = Vector2.ONE * _minimum_touch_size()
 	close_button.pressed.connect(close_catalog)
 	heading.add_child(close_button)
-	_catalog_tabs = TabContainer.new()
-	_catalog_tabs.name = "CatalogTabs"
-	_catalog_tabs.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
-	for pair: Array in [["tab_selected", "pressed"], ["tab_unselected", "normal"], ["tab_hovered", "hover"]]:
-		_catalog_tabs.add_theme_stylebox_override(pair[0], _mobile_theme.get_stylebox(pair[1], "Button"))
-	_catalog_tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	rows.add_child(_catalog_tabs)
-	var tower_scroll := ScrollContainer.new()
-	tower_scroll.name = "Torres"
-	tower_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	_catalog_tabs.add_child(tower_scroll)
+	# RF-540: una sola grilla de torres, sin pestañas; siempre abre en la primera fila.
+	_catalog_scroll = ScrollContainer.new()
+	_catalog_scroll.name = "CatalogScroll"
+	_catalog_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_catalog_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	rows.add_child(_catalog_scroll)
 	_tower_grid = GridContainer.new()
 	_tower_grid.name = "TowerCards"
+	_tower_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_tower_grid.columns = int(_config.get_value("catalogo_columnas"))
-	tower_scroll.add_child(_tower_grid)
-	var infrastructure_scroll := ScrollContainer.new()
-	infrastructure_scroll.name = "Infraestructura"
-	infrastructure_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	infrastructure_scroll.visible = false
-	_catalog_tabs.add_child(infrastructure_scroll)
-	_infrastructure_grid = GridContainer.new()
-	_infrastructure_grid.name = "InfrastructureCards"
-	_infrastructure_grid.columns = int(_config.get_value("catalogo_columnas"))
-	infrastructure_scroll.add_child(_infrastructure_grid)
+	_catalog_scroll.add_child(_tower_grid)
 	_refresh_catalog()
 
 
-func set_catalog_data(towers: Array[TowerData], available: Array[TowerData], gold: int,
-		resources: int, uses_resources: bool, infrastructure_options: Array[Dictionary]) -> void:
-	_catalog_towers = towers.duplicate()
+## `available` son las torres que el nivel ofrece, en el orden de la barra de PC (RF-541). `machine_option`
+## es la compra de la Demoledora ({} si el nivel no la ofrece o ya está comprada): va de última (RF-540).
+func set_catalog_data(available: Array[TowerData], gold: int, resources: int, uses_resources: bool,
+		machine_option: Dictionary = {}) -> void:
 	_available_towers = available.duplicate()
 	_catalog_gold = gold
 	_catalog_resources = resources
 	_catalog_uses_resources = uses_resources
-	_infrastructure_options = infrastructure_options.duplicate(true)
+	_machine_option = machine_option.duplicate(true)
 	_catalog_populated = true
 	_refresh_catalog()
 
@@ -489,25 +475,15 @@ func _refresh_catalog() -> void:
 	var separation: float = float(_config.get_value("catalogo_separacion_px"))
 	var content_width: float = float(_config.get_value("catalogo_ancho_px")) - separation * 2.0
 	var fit_columns: int = maxi(1, floori((content_width + separation) / (card_width + separation)))
-	var columns: int = mini(int(_config.get_value("catalogo_columnas")), fit_columns)
-	_tower_grid.columns = columns
-	_infrastructure_grid.columns = columns
-	var tower_descriptors: Array[Dictionary] = []
-	for tower: TowerData in _catalog_towers:
-		var available_index: int = -1
-		for i: int in _available_towers.size():
-			if _available_towers[i].id == tower.id:
-				available_index = i
-				break
+	_tower_grid.columns = mini(int(_config.get_value("catalogo_columnas")), fit_columns)
+	var descriptors: Array[Dictionary] = []
+	for i: int in _available_towers.size():
+		var tower: TowerData = _available_towers[i]
 		var primary_reason: String = TowerText.missing_text(tower, false,
 			_catalog_gold, _catalog_resources, _catalog_uses_resources)
 		var use_alt: bool = false
 		var reason: String = ""
-		if available_index < 0:
-			reason = "No disponible en este nivel"
-			if tower.required_collection != &"" and not SaveManager.collection_complete(tower.required_collection):
-				reason = "Falta completar la colección"
-		elif primary_reason != "":
+		if primary_reason != "":
 			var alternate_reason: String = TowerText.missing_text(tower, true,
 				_catalog_gold, _catalog_resources, _catalog_uses_resources)
 			if tower.has_alt_payment() and alternate_reason == "":
@@ -519,22 +495,14 @@ func _refresh_catalog() -> void:
 		var cost_text: String = TowerText.cost_text(tower, use_alt)
 		if tower.has_alt_payment():
 			cost_text = "%s / %s" % [TowerText.cost_text(tower), TowerText.cost_text(tower, true)]
-		tower_descriptors.append({"key": "tower:%s" % tower.id, "title": tower.display_name,
+		descriptors.append({"key": "tower:%s" % tower.id, "title": tower.display_name,
 			"cost": cost_text, "reason": reason, "icon": _tower_icon(tower),
-			"tower_index": available_index, "use_alt": use_alt, "tool": &"", "class_id": &""})
-	var option_descriptors: Array[Dictionary] = []
-	for option: Dictionary in _infrastructure_options:
-		option_descriptors.append({"key": "tool:%s:%s" % [option.get("tool", ""), option.get("class_id", "")],
-			"title": String(option.get("name", "Infraestructura")),
-			"cost": String(option.get("cost_text", "")), "reason": String(option.get("disabled_reason", "")),
-			"icon": option.get("icon"), "tower_index": -1, "use_alt": false,
-			"tool": StringName(option.get("tool", "")), "class_id": StringName(option.get("class_id", ""))})
-	_sync_catalog_grid(_tower_grid, tower_descriptors)
-	_sync_catalog_grid(_infrastructure_grid, option_descriptors)
-	var infrastructure_tab: Control = _catalog_tabs.get_child(1)
-	infrastructure_tab.visible = not _infrastructure_options.is_empty()
-	if not infrastructure_tab.visible and _catalog_tabs.current_tab == 1:
-		_catalog_tabs.current_tab = 0
+			"tower_index": i, "use_alt": use_alt, "tool": &""})
+	if not _machine_option.is_empty():
+		descriptors.append({"key": "tool:machine", "title": String(_machine_option.get("name", "Demoledora")),
+			"cost": String(_machine_option.get("cost_text", "")), "reason": String(_machine_option.get("disabled_reason", "")),
+			"icon": _machine_option.get("icon"), "tower_index": -1, "use_alt": false, "tool": &"machine"})
+	_sync_catalog_grid(_tower_grid, descriptors)
 
 
 ## Deja la grilla igual a los descriptores. Si las tarjetas son las mismas (misma clave y orden)
@@ -596,7 +564,6 @@ func _apply_card(card: Button, descriptor: Dictionary) -> void:
 	card.set_meta("tower_index", descriptor["tower_index"])
 	card.set_meta("use_alt", descriptor["use_alt"])
 	card.set_meta("tool", descriptor["tool"])
-	card.set_meta("class_id", descriptor["class_id"])
 	if card.text != text:
 		card.text = text
 	if card.tooltip_text != tooltip:
@@ -611,7 +578,7 @@ func _on_catalog_card_pressed(card: Button) -> void:
 	if tower_index >= 0:
 		_on_tower_card_pressed(tower_index, card.get_meta("use_alt", false))
 	else:
-		_on_infrastructure_card_pressed(card.get_meta("tool", &""), card.get_meta("class_id", &""))
+		_on_infrastructure_card_pressed(card.get_meta("tool", &""))
 
 
 func _on_tower_card_pressed(index: int, use_alt_payment: bool) -> void:
@@ -619,8 +586,8 @@ func _on_tower_card_pressed(index: int, use_alt_payment: bool) -> void:
 	close_catalog()
 
 
-func _on_infrastructure_card_pressed(tool: StringName, class_id: StringName) -> void:
-	infrastructure_tool_chosen.emit(tool, class_id)
+func _on_infrastructure_card_pressed(tool: StringName) -> void:
+	infrastructure_tool_chosen.emit(tool, &"")
 	close_catalog()
 
 
@@ -709,6 +676,7 @@ func is_catalog_populated() -> bool:
 func open_catalog() -> void:
 	clear_sell_arm()
 	_catalog_open = true
+	_catalog_scroll.scroll_vertical = 0  # RF-540: siempre abre en la primera fila
 	_catalog_dim.show()
 	_catalog_panel.show()
 	catalog_opened.emit(true)

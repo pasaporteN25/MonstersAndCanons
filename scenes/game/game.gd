@@ -305,59 +305,20 @@ func _refresh_mobile_catalog() -> void:
 	# Cerrado y ya armado: no se reconstruye nada; al abrirlo, catalog_opened vuelve a llamar acá (T290, H-04).
 	if mobile_hud.is_catalog_populated() and not mobile_hud.is_catalog_open():
 		return
-	var all_towers: Array[TowerData] = Wiki._all_towers()
-	var options: Array[Dictionary] = _mobile_infrastructure_options()
-	mobile_hud.set_catalog_data(all_towers, available_towers, session.gold, session.resources,
-		level_data.uses_resources(), options)
+	mobile_hud.set_catalog_data(available_towers, session.gold, session.resources,
+		level_data.uses_resources(), _mobile_machine_option())
 
 
-func _mobile_infrastructure_options() -> Array[Dictionary]:
-	var options: Array[Dictionary] = []
+## RF-540: la compra de la Demoledora es la última tarjeta del catálogo ({} si el nivel no la ofrece o ya la tiene).
+func _mobile_machine_option() -> Dictionary:
 	if level_data == null or infrastructure == null:
-		return options
-	if infrastructure.machine_enabled and not infrastructure.field.has_machine:
-		var machine_price: int = infrastructure.field.machine_price()
-		var machine_reason: String = "Faltan %d de oro" % (machine_price - session.gold) if session.gold < machine_price else ""
-		options.append({"tool": &"machine", "class_id": &"", "name": "Demoledora",
-			"cost_text": "%d de oro" % machine_price, "disabled_reason": machine_reason, "icon": null})
-	var seen: Dictionary = {}
-	for spec: ObstacleSpec in level_data.obstacles:
-		var tool: StringName = &"demolish" if spec.kind == ObstacleSpec.Kind.REMOVABLE else &"extract"
-		var key: String = "%s:%s" % [tool, spec.class_id]
-		if seen.has(key):
-			continue
-		seen[key] = true
-		var available: bool = false
-		var required_gold: int = 0
-		var disabled_reason: String = ""
-		for target: ObstacleSpec in level_data.obstacles:
-			if target.kind != spec.kind or target.class_id != spec.class_id:
-				continue
-			var cell: Vector2i = target.cell
-			var cost: int = infrastructure.field.cost_of(cell)
-			required_gold = cost
-			var reason: StringName = infrastructure.field.can_order(cell) if tool == &"demolish" else infrastructure.field.can_enable(cell)
-			if reason == &"" and session.gold >= cost:
-				available = true
-				break
-			if reason == &"" and session.gold < cost:
-				disabled_reason = "Faltan %d de oro" % (cost - session.gold)
-			elif reason == &"busy":
-				disabled_reason = "Ya hay una demolición en curso"
-			elif reason == &"active":
-				disabled_reason = "El punto ya está activo"
-			elif reason == &"depleted":
-				disabled_reason = "El punto está agotado"
-			elif reason == &"cleared":
-				disabled_reason = "No queda ningún objeto de esa clase"
-		if available:
-			disabled_reason = ""
-		var action_name: String = "Demoler" if tool == &"demolish" else "Habilitar"
-		options.append({"tool": tool, "class_id": spec.class_id,
-			"name": "%s · %s" % [action_name, ObstacleText.display_name(spec)],
-			"cost_text": "%d de oro" % required_gold,
-			"disabled_reason": disabled_reason, "icon": null})
-	return options
+		return {}
+	if not infrastructure.machine_enabled or infrastructure.field.has_machine:
+		return {}
+	var machine_price: int = infrastructure.field.machine_price()
+	var machine_reason: String = "Faltan %d de oro" % (machine_price - session.gold) if session.gold < machine_price else ""
+	return {"tool": &"machine", "name": "Demoledora", "cost_text": "%d de oro" % machine_price,
+		"disabled_reason": machine_reason, "icon": null}
 
 
 ## Muestra en el panel el removible elegido (o lo oculta si no hay ninguno).
