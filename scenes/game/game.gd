@@ -76,6 +76,7 @@ var obstacle_layer: ObstacleLayer
 @onready var level_intro: LevelIntro = $LevelIntro
 ## RF-460: si la partida ya estaba en pausa (con `P`) cuando se abrió el diálogo.
 var _exit_was_paused: bool = false
+var _tool_message: String = ""  # RF-543: por qué no sirvió el último toque de la herramienta de demolición
 ## Costuras para los tests (`.claude/rules/tests.md`): a dónde sale la flecha. Por omisión, las pantallas de verdad.
 var leave_to_menu: Callable = func() -> void: GameFlow.go_to_main_menu()
 var leave_to_editor: Callable = func() -> void: GameFlow.go_to_editor()
@@ -135,6 +136,7 @@ func _ready() -> void:
 		mobile_hud.exit_pressed.connect(_request_exit)
 		mobile_hud.tower_chosen.connect(_on_mobile_tower_chosen)
 		mobile_hud.infrastructure_tool_chosen.connect(_on_mobile_infrastructure_tool_chosen)
+		mobile_hud.demolish_pressed.connect(_on_mobile_demolish_pressed)
 		mobile_hud.catalog_opened.connect(_on_mobile_catalog_opened)
 		hud.tower_panel.hide()
 		mobile_hud.upgrade_pressed.connect(_on_mobile_upgrade_pressed)
@@ -275,24 +277,49 @@ func _on_mobile_tower_chosen(index: int, use_alt_payment: bool) -> void:
 	build_controller.select(index, use_alt_payment)
 
 
-func _on_mobile_infrastructure_tool_chosen(tool: StringName, class_id: StringName) -> void:
+func _on_mobile_infrastructure_tool_chosen(tool: StringName, _class_id: StringName) -> void:
 	if tool == &"machine":
 		infrastructure.buy_machine()
-		return
-	build_controller.select_mobile_infrastructure_tool(tool, class_id)
 
 
-func _on_mobile_infrastructure_targeted(cell: Vector2i, tool: StringName, class_id: StringName) -> void:
+## RF-542: el botón de demolición elige la herramienta; tocarlo de nuevo la suelta.
+func _on_mobile_demolish_pressed() -> void:
+	_tool_message = ""
+	if build_controller.mobile_action_active():
+		build_controller.cancel()
+	else:
+		build_controller.select_mobile_infrastructure_tool(&"obstacle")
+
+
+## RF-542: la herramienta reconoce el objeto tocado. Si la acción sale bien, se suelta sola; si no, queda
+## elegida y la barra dice el motivo (RF-543).
+func _on_mobile_infrastructure_targeted(cell: Vector2i, _tool: StringName, _class_id: StringName) -> void:
 	var spec: ObstacleSpec = infrastructure.obstacle_at(cell)
-	if spec == null or spec.class_id != class_id:
+	if spec == null:
+		_tool_message = "Ahí no hay nada para demoler ni habilitar"
 		return
-	var completed: bool = false
-	if tool == &"demolish" and spec.kind == ObstacleSpec.Kind.REMOVABLE:
-		completed = infrastructure.order(cell)
-	elif tool == &"extract" and spec.kind == ObstacleSpec.Kind.EXTRACTION:
-		completed = infrastructure.enable(cell)
+	var field: ObstacleField = infrastructure.field
+	var removable: bool = spec.kind == ObstacleSpec.Kind.REMOVABLE
+	var reason: StringName = field.can_order(cell) if removable else field.can_enable(cell)
+	var cost: int = field.cost_of(cell)
+	_tool_message = ""
+	if reason == &"busy":
+		_tool_message = "Ya hay una demolición en curso"
+	elif reason == &"active":
+		_tool_message = "El punto ya está activo"
+	elif reason == &"depleted":
+		_tool_message = "El punto está agotado"
+	elif reason != &"":
+		_tool_message = "No se puede usar ahí"
+	elif session.gold < cost:
+		_tool_message = "Faltan %d de oro" % (cost - session.gold)
+	if _tool_message != "":
+		return
+	var completed: bool = infrastructure.order(cell) if removable else infrastructure.enable(cell)
 	if completed:
 		build_controller.cancel()
+	else:
+		_tool_message = "No se pudo"
 
 
 func _on_mobile_catalog_money_changed(_gold: int) -> void:
@@ -307,6 +334,11 @@ func _refresh_mobile_catalog() -> void:
 		return
 	mobile_hud.set_catalog_data(available_towers, session.gold, session.resources,
 		level_data.uses_resources(), _mobile_machine_option())
+
+
+## RF-542: ¿este nivel tiene algo para demoler o habilitar? (si no, no hay botón de demolición)
+func _has_demolition_targets() -> bool:
+	return level_data != null and not level_data.obstacles.is_empty()
 
 
 ## RF-540: la compra de la Demoledora es la última tarjeta del catálogo ({} si el nivel no la ofrece o ya la tiene).
@@ -424,9 +456,14 @@ func _create_interactive_camera() -> Camera2D:
 func _process(delta: float) -> void:
 	if mobile_hud != null:
 		mobile_hud.set_game_over(session.is_over())
-		mobile_hud.set_cart_active(build_controller.selected_tower() != null or build_controller.selected_placed() != null or build_controller.mobile_action_active())
+		mobile_hud.set_cart_active(build_controller.selected_tower() != null or build_controller.selected_placed() != null)
+		mobile_hud.set_demolish_available(_has_demolition_targets())
+		mobile_hud.set_demolish_active(build_controller.mobile_action_active())
 		var selected_tower: TowerData = build_controller.selected_tower()
-		hud.set_mobile_wave_controls_visible(selected_tower == null and build_controller.selected_placed() == null)
+		var tool_active: bool = build_controller.mobile_action_active()
+		if not tool_active:
+			_tool_message = ""
+		hud.set_mobile_wave_controls_visible(selected_tower == null and build_controller.selected_placed() == null and not tool_active)
 		if selected_tower == null:
 			mobile_hud.set_placement_visible(false)
 			var placed: Tower = build_controller.selected_placed()
@@ -436,8 +473,11 @@ func _process(delta: float) -> void:
 			var unavailable_reason: String = ""
 			if placed != null and placed.can_upgrade() and session.gold < placed.next_level_stats().cost:
 				unavailable_reason = "Faltan %d de oro" % (placed.next_level_stats().cost - session.gold)
-			mobile_hud.show_selected_tower(placed, session.gold, refund, resource_refund,
-				can_improve, unavailable_reason)
+			if placed == null and tool_active:
+				mobile_hud.show_tool_status(_tool_message)
+			else:
+				mobile_hud.show_selected_tower(placed, session.gold, refund, resource_refund,
+					can_improve, unavailable_reason)
 		else:
 			mobile_hud.show_ghost_status(selected_tower.display_name, TowerText.cost_text(selected_tower, build_controller.pay_alt()))
 			var ghost: GhostPlacement = build_controller.ghost_placement()

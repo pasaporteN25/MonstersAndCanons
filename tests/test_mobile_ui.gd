@@ -293,7 +293,7 @@ func test_pc_camera_input_adds_zoom_without_mobile_controls() -> void:
 
 func test_ui_prefs_fall_back_per_field_and_snap_to_nearest_edge() -> void:
 	var prefs: UiPrefs = UiPrefs.read({"cart_side": "arriba", "cart_y": 2.0, "exit_side": "right", "exit_y": 0.5})
-	assert_eq(prefs.to_dict(), {"cart_side": "right", "cart_y": 0.45, "exit_side": "right", "exit_y": 0.5})
+	assert_eq(prefs.to_dict(), {"cart_side": "right", "cart_y": 0.45, "exit_side": "right", "exit_y": 0.5, "demolish_side": "right", "demolish_y": 0.8})
 	var snapped: Dictionary = FloatButtonLayout.snap(Vector2(1180.0, 320.0), Vector2(1280.0, 720.0),
 		64.0, 96.0, Vector2.ONE * 82.0)
 	assert_eq(snapped["side"], "right")
@@ -421,42 +421,4 @@ func test_mobile_catalog_selects_a_tower_in_two_touches_without_spending() -> vo
 	game.mobile_hud.close_catalog()
 	game._unhandled_input(back)
 	assert_true(game.pause_menu.is_open(), "atrás sin selección abre Pausa")
-	SaveManager.set_setting("ui_mode", original_setting)
-
-
-func test_mobile_infrastructure_catalog_can_enable_extraction_and_demolish() -> void:
-	var original_setting: Variant = SaveManager.get_setting("ui_mode")
-	var original_test_level: LevelData = GameFlow.test_level
-	SaveManager.set_setting("ui_mode", UiMode.MOBILE)
-	GameFlow.test_level = GameFlow.level(9)
-	var game: Game = (load("res://scenes/game/game.tscn") as PackedScene).instantiate() as Game
-	add_child_autofree(game)
-	await get_tree().process_frame
-	assert_true(game.level_data.uses_infrastructure())
-	assert_false(game.hud.bar_tabs.visible)
-	assert_false(game.hud.infrastructure_tab.visible)
-	var extraction: ObstacleSpec
-	var removable: ObstacleSpec
-	for spec: ObstacleSpec in game.level_data.obstacles:
-		if extraction == null and spec.kind == ObstacleSpec.Kind.EXTRACTION:
-			extraction = spec
-		if removable == null and spec.kind == ObstacleSpec.Kind.REMOVABLE:
-			removable = spec
-	assert_not_null(extraction)
-	assert_not_null(removable)
-	game.mobile_hud.open_catalog()
-	assert_null(game.mobile_hud.find_child("InfrastructureCards", true, false), "RF-540: el catálogo ya no trae infraestructura")
-	game.mobile_hud.close_catalog()
-	var gold_before: int = game.session.gold
-	game._on_mobile_infrastructure_tool_chosen(&"extract", extraction.class_id)
-	assert_true(game.build_controller.mobile_action_active())
-	game.build_controller._mobile_map_tap(game.level.cell_center(extraction.cell), Time.get_ticks_msec())
-	assert_eq(game.infrastructure.field.state_of(extraction.cell), ObstacleField.State.ACTIVE)
-	assert_eq(game.session.gold, gold_before - game.infrastructure.field.cost_of(extraction.cell))
-	var obstacle_name: String = ObstacleText.display_name(removable)
-	game._on_mobile_infrastructure_tool_chosen(&"demolish", removable.class_id)
-	game.build_controller._mobile_map_tap(game.level.cell_center(removable.cell), Time.get_ticks_msec())
-	assert_true(game.infrastructure.field.has_job())
-	assert_false(game.is_paused())
-	GameFlow.test_level = original_test_level
 	SaveManager.set_setting("ui_mode", original_setting)

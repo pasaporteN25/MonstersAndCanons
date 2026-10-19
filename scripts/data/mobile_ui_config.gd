@@ -35,6 +35,8 @@ const DEFAULTS: Dictionary = {
 	"carrito_y_default": 0.45,
 	"salida_lado_default": "left",
 	"salida_y_default": 0.1,
+	"demoler_lado_default": "right",
+	"demoler_y_default": 0.8,
 	"catalogo_ancho_px": 800,
 	"catalogo_alto_px": 480,
 	"catalogo_tarjeta_ancho_mm": 18.0,
