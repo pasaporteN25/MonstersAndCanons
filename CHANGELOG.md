@@ -2,6 +2,10 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## «Ver todo» también cuando corriste el mapa *(T304, 2026-10-19)*
+
+«Ver todo» aparece ahora también cuando corriste el mapa con dos dedos aunque no hayas acercado nada: antes, con el zoom mínimo no había forma de volver al encuadre. En la computadora el botón aparece solo cuando corrés el mapa con el botón del medio estando con el zoom mínimo (con la rueda del mouse no aparece, como hasta ahora).
+
 ## Pausa al pasar la app a segundo plano *(T303, 2026-10-19)*
 
 En el celular, si llega una llamada o tocás el botón de inicio, la partida **se pausa sola** y queda en pausa al volver (se sigue con «Seguir»). En la computadora, perder el foco de la ventana **no** pausa.
