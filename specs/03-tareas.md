@@ -2031,3 +2031,28 @@
 
   **Resultado (2026-10-18):** `MobileUiConfig.load_from` solo aceptaba un valor si su tipo era idéntico al del valor por omisión; Godot entrega los enteros del JSON como `float`, así que 42 de los 57 números se descartaban en silencio. Ahora acepta cualquier número cuando el valor por omisión también es número y lo convierte a ese tipo (entero redondeado o float); texto, `null`, listas y booleanos donde va un número se siguen ignorando. Tests en `tests/test_mobile_touch_fixes.gd` (4; el de enteros fallaba antes: 56 ≠ 99, 6 ≠ 9, 64 ≠ 80).
   **Parte NO hecha, a propósito (H-08, factor de velocidad de «Vender» y «Mejorar»):** RF-512 y RF-513 dicen «3 s», «0,35 s» y «0,4 s» sin aclarar si son reales o de juego, así que es ambiguo y no lo cambié. Hoy cuentan tiempo de juego: con x2 «Vender» se desarma a 1,5 s reales y el bloqueo de «Mejorar» dura 0,18 s. Quedó como **D12** en el informe de T289 (§7), para que Lucas elija. **No se probó:** nada en un celular; tampoco se revisó que cada valor del archivo real tenga sentido (solo que se lee igual que su valor por omisión).
+
+## M60 · HUD celular: catálogo único, demolición, pausa y «Ver todo» (Lucas, 2026-10-19)
+
+Spec: RF-540 a RF-545. Decisiones: D-110 a D-113. Plan: «M60 / T300». Rama `feature/m60-hud-movil-catalogo`. Lo que sigue pendiente de Lucas y **no** se hace acá: D4 (franja de 56 px), D10 (construir en pausa) y D12 (tiempos reales o de juego de Vender y Mejorar).
+
+- [x] **T300 · `[mobile]` · Spec, decisiones y plan de M60.**
+  **Refs:** informe T289 (H-02, H-09, H-12, H-20, H-22; D1, D2, D3, D5, D9). **Depende de:** T292.
+  **Hecho cuando:** RF-540 a RF-545 con su criterio, D-110 a D-113, la sección M60 del plan y las tareas T301 a T304 escritas, antes de tocar código.
+  **Resultado (2026-10-19):** escrito. No cambia código. Supuestos anotados en las decisiones: la Demoledora queda como última tarjeta del catálogo (D-110) y el botón «Ver todo» de PC aparece solo con el zoom mínimo y el mapa corrido (D-113). **No se probó** nada (es solo documentación).
+
+- [ ] **T301 · `[mobile]` · Un solo catálogo de torres, con las del nivel, que abre en las torres.**
+  **Refs:** RF-540, RF-541, D-110, H-02 y H-20 de T289. **Depende de:** T300.
+  **Hecho cuando:** el catálogo no tiene pestañas; en los niveles 1, 7 y 15 abre mostrando las torres y cambiar el oro no mueve nada; solo hay tarjetas de las torres del nivel (8 en el 1, 10 en el 12) más la Demoledora donde corresponde; test con esos tres niveles.
+
+- [ ] **T302 · `[mobile]` · Botón flotante «Demoler / Habilitar» con su estado en la barra.**
+  **Refs:** RF-542, RF-543, RF-508, RF-509, D-111, H-09 de T289. **Depende de:** T301.
+  **Hecho cuando:** en un nivel con infraestructura hay tres botones flotantes (y dos si no la hay); el tercero se arrastra y se guarda; elegirlo tiñe el botón, muestra la línea y la cruz en la barra y oculta «Empezar oleada»; tocar un removible o una mina lo usa y se suelta solo; un toque inútil deja el motivo; la cruz, `Esc` y volver a tocarlo lo sueltan; los tres botones no se pisan; tests.
+
+- [ ] **T303 · `[mobile]` · Pausa al pasar la app a segundo plano.**
+  **Refs:** RF-544, D-112, H-22 de T289. **Depende de:** T300.
+  **Hecho cuando:** `APPLICATION_PAUSED` pausa la partida en marcha; en PC `FOCUS_OUT` no pausa; con la partida ya en pausa o terminada no hace nada; test.
+
+- [ ] **T304 · `[mobile+x86]` · «Ver todo» también con el encuadre corrido.**
+  **Refs:** RF-545, D-113, H-12 de T289. **Depende de:** T300.
+  **Hecho cuando:** con el zoom mínimo, dos dedos o el botón central corren el mapa y «Ver todo» aparece; tocarlo lo devuelve y desaparece; en PC con la rueda y otro zoom no aparece; test.

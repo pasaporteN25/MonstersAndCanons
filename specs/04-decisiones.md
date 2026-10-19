@@ -964,3 +964,37 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Por qué:** Lucas encontró que el carrito abría al separarlo del borde; los controles tapaban demasiado mapa y no compartían la estética del juego. Prefiere controles más compactos al mínimo anterior de 7,6 mm para estas cuatro acciones. Mejorar y Vender conservan sus tamaños y protección.
 - **Alternativa descartada:** conservar el tema genérico y repetir el precio dentro de la tilde. El catálogo y la barra ya lo muestran.
 - **Límite:** las pruebas de escritorio no reemplazan el tacto ni la legibilidad en el celular de Lucas.
+
+## D-110 · El catálogo del celular es una sola grilla con las torres del nivel
+
+- **Fecha:** 2026-10-19. **Estado:** decidido por Lucas (respuestas D1 y D2 de la auditoría T289). **Refs:** RF-540, RF-541, H-02 y H-20 de T289, T301.
+- **Qué:** se saca la pestaña «Infraestructura» del catálogo del celular; queda una única grilla, que abre siempre en las torres, y muestra **solo** las torres que el nivel ofrece (las no disponibles ya no aparecen apagadas). La compra de la Demoledora queda como última tarjeta de esa grilla.
+- **Por qué:** en los niveles 6 a 15 el catálogo abría y volvía solo a «Infraestructura» con cada cambio de oro (un `TabContainer` usa `visible` para elegir la pestaña), y la compra costaba tres toques en vez de dos. Mostrar las 11 torres mezcladas, tres de cada cuatro apagadas en el nivel 1, obligaba a desplazar y ocupaba lugar con cosas que no se pueden usar. Lucas pidió un solo catálogo, sin dividirlo por tipo.
+- **Alternativas descartadas:** recordar la última pestaña usada (D1, opción 2): sigue siendo un catálogo dividido y no arregla el salto; mostrar las no disponibles al final (D2, opción b): sigue ocupando lugar; pasar a 4 columnas: con 18 mm por tarjeta no entran en 800 px.
+- **Supuesto (para que Lucas lo confirme):** la Demoledora queda en la grilla de torres porque Lucas no la mencionó; si prefiere otro lugar (por ejemplo, junto al botón de demolición), se mueve sin tocar lo demás.
+- **Límite:** no se probó en un celular real; las capturas de escritorio no reemplazan el tacto.
+
+## D-111 · Un botón flotante de demolición y una herramienta que reconoce el objeto
+
+- **Fecha:** 2026-10-19. **Estado:** decidido por Lucas (respuesta D3 de T289). **Refs:** RF-542, RF-543, H-09 de T289, T302.
+- **Qué:** la herramienta de infraestructura («Demoler» / «Habilitar») sale del catálogo y pasa a un **tercer botón flotante**, con su estado en la barra de abajo (línea + cruz) y la herramienta que se suelta sola al salir bien. Hay **una sola** herramienta: decide demoler o habilitar según el objeto tocado (removible o punto de extracción).
+- **Por qué:** en el catálogo había una opción por clase de objeto (hasta cuatro o cinco en un nivel), y al elegir una el catálogo se cerraba sin dejar a la vista cómo salir (H-09). Un botón propio sale en un toque, tiene estado visible y cruz, y reconocer el objeto evita elegir antes la clase.
+- **Alternativas descartadas:** mantener las tarjetas por clase (obliga a abrir el catálogo para cada demolición y hace falta elegir la clase); un botón por herramienta (dos botones más, y tapan más el mapa).
+- **Convivencia con los otros botones (RF-509):** las reglas de semitransparencia, corrimiento y apertura de la tilde y la cruz ahora cuentan tres botones; la separación entre botones se aplica solo entre los **del mismo lado** (antes se aplicaba también entre lados opuestos).
+- **Límite:** la posición por omisión (derecha, abajo) no se probó con un dedo; se puede mover y se guarda.
+
+## D-112 · El celular se pausa solo al pasar a segundo plano
+
+- **Fecha:** 2026-10-19. **Estado:** decidido por Lucas (respuesta D5 de T289, que era una sugerencia de Claude). **Refs:** RF-544, H-22 de T289, T303.
+- **Qué:** al recibir `NOTIFICATION_APPLICATION_PAUSED` (o `FOCUS_OUT` en un dispositivo móvil) la partida se pausa con la misma pausa de siempre (RF-104). En PC, perder el foco de la ventana no pausa.
+- **Por qué:** con una llamada o el botón de inicio, la oleada seguía corriendo sin que nadie mirara.
+- **Alternativas descartadas:** abrir el menú de pausa (más intrusivo y no pedido); pausar también en PC (Lucas pidió no cambiar la PC).
+- **Límite:** no se probó el aviso del sistema en un Android real, solo que la notificación, entregada al nodo, pausa.
+
+## D-113 · «Ver todo» aparece también con el encuadre corrido
+
+- **Fecha:** 2026-10-19. **Estado:** decidido por Lucas (respuesta D9 de T289). **Refs:** RF-545, H-12 de T289, T304.
+- **Qué:** se elige la opción «se permite correr y aparece “Ver todo”» (y no la de bloquear): el botón sale cuando el encuadre difiere del de RF-251, incluso con el zoom mínimo; en PC, con el botón central, aparece solo con el zoom mínimo y el mapa corrido.
+- **Por qué:** con el zoom mínimo el mapa se podía correr hacia un costado y no había cómo recentrarlo.
+- **Alternativas descartadas:** bloquear el desplazamiento con el zoom mínimo (se pierde la libertad que pidió Lucas); mostrar el botón en PC también con la rueda (cambia la PC más de lo pedido).
+- **Supuesto:** en PC el botón es el mismo del celular, en el mismo lugar; hasta ahora la PC no tenía ninguno (RF-506). Si Lucas lo prefiere sin botón, se cambia por un atajo del teclado o por el reencuadre al soltar el botón central.
