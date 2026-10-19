@@ -122,6 +122,28 @@ func test_old_saves_that_won_level_1_do_not_get_the_tutorial_and_new_ones_do() -
 	assert_eq(int(JSON.parse_string(FileAccess.get_file_as_string(PATH))["version"]), 1, "la versión no cambia")
 
 
+# --- Novedades de esta versión (M67, RF-606): otra clave aditiva ---
+
+func test_old_saves_have_no_news_version_and_the_key_survives_a_roundtrip() -> void:
+	for text: String in [SAVE_T40, SAVE_BEFORE_M50, SAVE_FULL_COLLECTIONS, SAVE_DEV, '{"version":1}']:
+		_write(text)
+		SaveManager.load_save()
+		assert_eq(SaveManager.news_version_seen(), "", "un guardado viejo nunca vio las novedades")
+		_assert_roundtrip_is_identical("con las novedades")
+		assert_eq(String(JSON.parse_string(FileAccess.get_file_as_string(PATH))["news_version"]), "", "al guardar queda escrita")
+	SaveManager.mark_news_seen("1.0.0")
+	SaveManager.load_save()
+	assert_eq(SaveManager.news_version_seen(), "1.0.0", "marcar guarda enseguida")
+	assert_eq(int(JSON.parse_string(FileAccess.get_file_as_string(PATH))["version"]), 1, "SAVE_VERSION no cambia")
+
+
+func test_news_version_with_the_wrong_type_reads_as_empty() -> void:
+	for bad: String in ["7", "true", "null", "[\"1.0.0\"]", "{}"]:
+		_write('{"version":1,"news_version":%s}' % bad)
+		SaveManager.load_save()
+		assert_eq(SaveManager.news_version_seen(), "", "news_version = %s se lee como vacío" % bad)
+
+
 # --- Antes de M50: niveles 1 a 9 y technology ---
 
 func test_before_m50_save_keeps_everything() -> void:

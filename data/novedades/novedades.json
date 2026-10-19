@@ -1,0 +1,11 @@
+{
+	"version": 1,
+	"interfaz": {
+		"entendido": "Entendido",
+		"titulo_novedades": "Novedades de esta versión",
+		"titulo_mejoras": "Mejoras de esta versión",
+		"borrador": "Borrador",
+		"sin_novedades": "No hay novedades"
+	},
+	"versiones": []
+}
