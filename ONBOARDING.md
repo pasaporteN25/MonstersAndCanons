@@ -529,7 +529,7 @@ Capturas y mediciones en `art/m53-barra/` (`README.md`).
 
 **Apagarlo.** **Opciones → «Animaciones de mejora»** apagada: al mejorar solo se ven el anillo de siempre y se oye el sonido. Un guardado viejo la muestra prendida.
 
-Tests: `-gtest=res://tests/test_upgrade_deltas.gd`, `test_upgrade_fx.gd` y `test_old_saves.gd`. Para ver el efecto en imágenes: `godot --path . res://tools/capture_upgrade.tscn -- /ruta/de/salida 1280x720`. Para revisar el archivo de datos: `godot --headless --path . -s tools/check_mejoras.gd`.
+Tests: `-gtest=res://tests/test_upgrade_deltas.gd`, `test_upgrade_fx.gd` y `test_old_saves.gd`. Para ver el efecto en imágenes: `godot --path . res://tools/capture_upgrade.tscn -- /ruta/de/salida 1280x720`. Para revisar el archivo de datos: `godot --headless --path . -s tools/check_mejoras.gd`. Para medir el rendimiento (con la máquina libre): `godot --path . -s tools/perf_test.gd -- mejoras` contra `-- mejoras sin_fx`, y con `celular` para el modo del celular.
 
 ### T331 · Probar el tutorial del nivel 1
 
