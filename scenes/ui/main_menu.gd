@@ -19,6 +19,9 @@ const ROW_GAP: float = 12.0
 const SCREEN_MARGIN: float = 24.0
 const LOGO_MIN_HEIGHT: float = 70.0
 const LOGO_MAX_HEIGHT: float = 240.0
+## RF-550: en el celular, el logo a la izquierda y los botones a la derecha. Medidas de interfaz.
+const MOBILE_LOGO_SIZE: Vector2 = Vector2(560.0, 320.0)
+const MOBILE_COLUMN_GAP: float = 48.0
 
 ## Costuras de los tests (no cambian de escena): a dónde se va y de dónde se lee la intro.
 var open_level_select: Callable = GameFlow.go_to_level_select
@@ -27,6 +30,8 @@ var intro_path: String = IntroData.DEFAULT_PATH
 
 ## La intro (RF-499). Es hija del menú: la música de menú sigue sonando por debajo.
 var intro_screen: IntroScreen
+
+var _two_columns: bool = false
 
 
 func _ready() -> void:
@@ -47,8 +52,10 @@ func _ready() -> void:
 	_options.dev_mode_changed.connect(func(_on: bool) -> void: GameFlow.go_to_main_menu())
 	Audio.add_click_sounds(self)
 	_logo.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS  # D-023: el logo se achica
+	_arrange_mobile_columns()
 	resized.connect(_fit_logo)
 	_fit_logo()
+	MenuTouch.attach(self)  # RF-550, RF-551: botones de 56 px en el celular
 	_play_button.grab_focus()  # se puede jugar con Enter sin tocar el mouse
 
 
@@ -85,7 +92,29 @@ static func logo_height(window_height: float, button_count: int) -> float:
 	return clampf(spare, LOGO_MIN_HEIGHT, LOGO_MAX_HEIGHT)
 
 
+## RF-550: con botones de 56 px, seis botones y el logo ya no entran en una sola columna de 720 de alto. En el modo
+## celular el logo pasa a la izquierda y la columna de botones a la derecha. En PC no se toca nada.
+func _arrange_mobile_columns() -> void:
+	if not UiMode.is_mobile():
+		return
+	_two_columns = true
+	var center: Control = $Center
+	var rows: Control = $Center/Rows
+	var columns := HBoxContainer.new()
+	columns.name = "MobileColumns"
+	columns.add_theme_constant_override("separation", int(MOBILE_COLUMN_GAP))
+	center.add_child(columns)
+	_logo.reparent(columns, false)
+	rows.reparent(columns, false)
+	columns.move_child(_logo, 0)
+	$Center/MobileColumns/Rows/Spacer.queue_free()
+	_logo.custom_minimum_size = MOBILE_LOGO_SIZE
+	_logo.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+
+
 func _fit_logo() -> void:
+	if _two_columns:
+		return
 	var buttons: int = 5 + (1 if _editor_button.visible else 0)
 	_logo.custom_minimum_size.y = logo_height(size.y, buttons)
 

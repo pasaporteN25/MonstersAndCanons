@@ -2,6 +2,10 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Menú principal, Opciones y Pausa pensados para el celular *(T313, 2026-10-19)*
+
+En el modo celular, el menú principal pone el logo a la izquierda y los botones a la derecha (todos de 56 px de alto, cómodos para el dedo) y Opciones se muestra en **dos columnas** con el título y «Volver» siempre a la vista. En Opciones, «Interfaz» ahora está dentro de «Visualización» (antes quedaba debajo de «Volver») y, en cualquier modo, si el panel no entra en la pantalla **se desplaza** en vez de cortarse. En PC todo sigue igual.
+
 ## Mouse y toque conviven en el modo celular *(T311, 2026-10-19)*
 
 En el modo celular ahora se puede usar el **mouse además del dedo**, también en Android (DeX, Chromebook, teclado y mouse): un clic mueve el fantasma, abre el carrito, usa la X, la tilde y la cruz, y arrastrar con el botón izquierdo equivale a arrastrar un dedo. Ya no hace falta cambiar a «Interfaz: PC». Un toque sigue haciendo su acción una sola vez (el clic que el sistema fabrica a partir del toque se descarta), también en una notebook con pantalla táctil, donde antes ese clic hacía de segundo dedo. **No se probó en un celular real.**

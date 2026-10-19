@@ -19,6 +19,7 @@ func _ready() -> void:
 	(%QuitButton as Button).pressed.connect(quit_pressed.emit)
 	_options.closed.connect(_on_options_closed)
 	Audio.add_click_sounds(self)
+	MenuTouch.attach(self)  # RF-550: botones de 56 px en el celular
 
 
 ## Cómo se llama el botón de salir ("Salir al menú", o "Volver al editor" al probar, RF-217).
