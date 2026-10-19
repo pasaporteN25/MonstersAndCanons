@@ -3669,7 +3669,7 @@ Hallazgos que condicionan el diseño: (1) **no todas suben las mismas cosas** (l
 
 ### M67 · «Novedades de esta versión» (Lucas, 2026-10-19; T370 a T375)
 
-**Estado: SOLO ESPECIFICADA (T370). Nada de esto está programado ni dibujado, y los textos de la 1.0.0 de más abajo son un BORRADOR para que Lucas los retoque.** Las decisiones son **D-141 a D-144**. No cambia ninguna regla del juego, el balance ni el progreso: es una pantalla que se muestra y se cierra. Se probaría en PC y en el celular.
+**Estado: PROGRAMADA con arte provisional (T371, T373, T374, 2026-10-19). Falta el arte aprobado (T372, T375) y el OK de Lucas a los textos de la 1.0.0, que están cargados como BORRADOR (no salen solos).** Las decisiones son **D-141 a D-144**. No cambia ninguna regla del juego, el balance ni el progreso: es una pantalla que se muestra y se cierra. Se probaría en PC y en el celular.
 
 **Qué pidió Lucas.** *(2026-10-19)* Una **pantalla al abrir el juego** que muestre **lo nuevo de la versión instalada, una sola vez por versión** (se guarda cuál fue la última que se vio, y tiene que funcionar con los guardados viejos). El contenido va en **un archivo de datos fácil de retocar**. **Primero** se planifica como la **presentación de la v1.0.0** (Lucas estima que sale en los próximos días) y **después** se reutiliza como «**Mejoras**» de cada versión. Usa `config/version` de `project.godot` (hoy `beta`, M61). En **modo de pruebas y en el editor no sale**. Hay una **opción para volver a verla**. En PC y en el celular.
 
@@ -3761,6 +3761,19 @@ Tipo «presentacion», **título** «Monsters & Canons 1.0», **subtítulo** «E
 | 7 | Intro y tutorial | La intro cuenta cómo llegó la expedición y el tutorial del nivel 1 te enseña a jugar. Los dos se pueden saltear. | libro |
 | 8 | *(solo si entran en la 1.0.0)* Mejoras y jefes con entrada | Las torres muestran lo que ganan al mejorarse y los jefes llegan con su presentación. | mejora |
 
+#### Contraste del borrador con el juego y con `CHANGELOG.md` (T374, 2026-10-19)
+
+La entrada está cargada en `data/novedades/novedades.json` con **`"borrador": true`** (no sale sola hasta que Lucas la apruebe; se revisa desde Opciones). Se contrastó cada línea; **discrepancias y cambios respecto del cuadro de arriba:**
+- **#1 «15 niveles»:** correcto (`campaign.json` tiene 15; un test lo compara). Se cambió «el campamento de la colonia» por «la colonia» (el campamento es solo el nivel 1; los últimos niveles son otros lugares) y «un final» por «un epílogo final» (así se llama en el juego).
+- **#2 «tres niveles» y combos:** correcto (las 11 torres tienen 3 niveles; un test lo compara; los combos son las sinergias de M20). No se escribe cuántas torres hay: **el `README.md` dice «9 torres» y hay 11** (discrepancia del README, que no es de M67 y queda anotada).
+- **#3 monstruos:** el Chamán y el Espejo son enemigos que apagan o devuelven los tiros de las torres (CHANGELOG M18): el texto está bien. «La Wiki explica cómo vencerlos» **no es exacto** (la Wiki muestra los enemigos al verlos y su guía explica los especiales): se cambió por «cómo enfrentarlos».
+- **#4 Asedio:** **el borrador estaba mal**: Asedio no mide «hasta dónde aguantás», son **los mapas de la campaña con monstruos más duros**, con estrellas y récords propios (CHANGELOG T258). Se reescribió.
+- **#5 editor:** correcto (en PC; el editor no está en el celular, RF-210).
+- **#6 PC y celular:** correcto (zoom y gestos, carrito y botón de salir flotantes, menús con desplazamiento táctil: T271 a T276 y T313 a T314).
+- **#7 intro y tutorial:** la intro cuenta la llegada de **la nave** (no de «la expedición»): corregido. Ambos se pueden saltear («Omitir», «Saltar tutorial»). Se cambió «nivel 1» por «primer nivel» para no escribir cifras (D-143).
+- **#8 «Mejoras y jefes con entrada»:** **no se cargó**: depende de M65 y M66, que todavía no están programadas ni aprobadas. Se agrega cuando existan (el límite es 8; hoy hay 7).
+- **Los demás datos:** el icono de cada novedad queda en blanco hasta T372/T375 (la pantalla usa un rombo de bronce).
+
 #### Decisiones abiertas para Lucas (M67)
 
 | # | Pregunta | Recomendación de Claude |
@@ -3773,6 +3786,8 @@ Tipo «presentacion», **título** «Monsters & Canons 1.0», **subtítulo** «E
 | P-67-6 | ¿Cabecera ilustrada e íconos por novedad, o solo texto? | **Cabecera para la 1.0.0 y un ícono por novedad** (ver T372); las versiones de «mejoras» pueden ir sin imágenes. Si la APK pesa de más, se saca la cabecera y quedan los íconos. |
 | P-67-7 | ¿Una casilla «No mostrar novedades al abrir»? | **No**: ya sale **una sola vez por versión**; otra casilla más en Opciones no hace falta. |
 | P-67-8 | ¿También en la Wiki? | **No**: queda en Opciones, y la Wiki explica el juego, no la versión. |
+
+**Cómo se resolvieron mientras Lucas no contesta (2026-10-19):** se siguió la **recomendación de Claude** en las ocho (P-67-1: textos retocados por el contraste de T374 y cargados como borrador; P-67-2 a P-67-5, P-67-7 y P-67-8 tal cual; P-67-6: el código acepta cabecera e íconos, pero hasta T372 no hay ninguno). Si Lucas contesta otra cosa, se cambia en el archivo de datos o en un RF nuevo.
 
 #### Lo que M67 no incluye
 - **Leer `CHANGELOG.md`** desde el juego ni generar las novedades a partir de las tareas (D-143).
