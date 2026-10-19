@@ -511,6 +511,24 @@ Una banda de criaturas independientes que roban en grupo, hecha **solo con datos
 
 `data/levels/level_13.json`, de **26 × 12**, tema `nieve` y **dos entradas** (A y B) que se unen en la casilla (2,6): los dos recorridos comparten un tronco hasta la salida. Su leyenda usa 6 de las 12 letras: `e` y `r` removibles (1 recurso al 50 %), `m` mina y `b` bosque explotable (una fuente por entrada), `i` **hielo** (la laguna: no se construye) y `h` `roca_marcada` (el `hito`). `"torres"` de RF-474 (sin Ametralladora ni Lanzamisiles) y `"demoledora": false`. **La escolta** se escribe con tres grupos del mismo `desde` y la misma `entrada` (`guardian`, `healer`, `shaman`), p. ej. `{"enemigo": "guardian", "cantidad": 2, "cada": 3.0, "entrada": "B"}` más los otros dos con el mismo `desde`. Para cambiar la dificultad se mueve `aumento_vida` (40; con 41 el bot gana con 1 vida y con 42 pierde) y, con cuidado, las oleadas 14, 22 y 23, que son **precipicios**. **Después de cualquier cambio:** `... -s tools/balance_sim.gd -- x check_rule=1 levels=13`.
 
+### T330 · El tutorial del nivel 1 (`data/tutorial/tutorial.json`)
+
+El tutorial se retoca con un archivo, sin programar: `{"version": 1, "borrador": true, "nivel": "level_01", "interfaz": {…}, "pc": [{"paso": "welcome", "texto": "…"}, …], "celular": [ … ]}`.
+
+| Clave | Qué es | Límite |
+|---|---|---|
+| `"borrador"` | `true` mientras Lucas no aprobó los textos (solo avisa; se ve igual en el juego). Al aprobarlos, `false`. | Booleano, obligatorio. |
+| `"nivel"` | El nivel donde se muestra. Hoy `level_01`. | Texto. |
+| `"interfaz"` | Los rótulos de la tarjeta: `titulo`, `paso` (con **dos `%d`**: el número y el total), `siguiente`, `saltar` y `terminar`. | Hasta **40** caracteres cada uno. |
+| `"pc"` y `"celular"` | Los pasos, **en orden**, de cada modo. | Ver abajo. |
+| `"paso"` | Cuál de los pasos que sabe hacer el juego: `welcome`, `path`, `gold`, `lives`, `pick_tower`, `place_tower`, `open_cart`, `pick_card`, `confirm_tower`, `start_wave`, `select_tower`, `upgrade`, `sell`, `speed`, `pause`, `resume`, `done`. | `pick_tower` y `place_tower` **solo en PC**; `open_cart`, `pick_card` y `confirm_tower` **solo en el celular**; sin repetir. |
+| `"texto"` | Lo que dice la tarjeta. | **1 o 2 líneas** (`\n`), **80 caracteres por línea**, **160** en total. |
+
+- **Qué hace cada paso** (qué señala y qué espera) **es del juego**; el texto, el orden y cuáles se usan son tuyos. **Obligatorios:** `path`, `gold`, `lives`, `start_wave`, `upgrade`, `sell`, `speed`, `pause` y los de elegir y construir de cada modo. **Opcionales:** `welcome`, `select_tower`, `resume` y `done`. `pick_tower` va antes que `place_tower`; `open_cart`, `pick_card` y `confirm_tower` en ese orden; si hay `pause`, tiene que haber `resume` después; `done`, si está, al final.
+- **No repitas números de otros datos** (costos, tiempos): explicá la regla y listo.
+- **Revisalo** con `godot --headless --path . -s tools/check_tutorial.gd` (dice en castellano qué arreglar). Un archivo con errores **no se muestra** (el error sale en la salida) y el nivel 1 se juega sin tutorial.
+- **Dónde se ve:** solo en el nivel 1 jugado desde el menú, una vez (se completa o se salta). Se apaga y se vuelve a ver en **Opciones**.
+
 ### T242 · La intro (`data/intro/intro.json`)
 
 La intro se arma con un archivo, sin programar: `{"version": 1, "fundido_s": 0.6, "laminas": [{"imagen": "res://assets/intro/01_la_nave.png", "texto": "Línea 1\nLínea 2", "segundos": 7}, …]}`.

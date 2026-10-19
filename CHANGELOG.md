@@ -2,6 +2,18 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Un tutorial en el nivel 1, que se puede apagar y volver a ver *(T330 y T331, 2026-10-19)*
+
+- **Al entrar por primera vez al nivel 1** (después del cartel de entrada) aparece una **tarjeta con un texto corto** y, sobre el botón o la casilla que hay que usar, un **recuadro amarillo que parpadea con una flecha**. Te va mostrando: el **camino** por donde entran los monstruos, tu **oro**, tus **vidas**, cómo **elegir una torre** y **construirla**, cómo **empezar la oleada**, cómo **elegir tu torre**, qué hacen **«Mejorar»** y **«Vender»**, y que existen la **velocidad** y la **pausa**.
+- **Te espera a que lo hagas de verdad:** elegir la torre, construirla, empezar la oleada, cambiar la velocidad o pausar hacen avanzar el tutorial solos. Los pasos que solo se leen se pasan con **«Siguiente»**. **El juego no se pausa** mientras tanto, y si te adelantás, el tutorial lo da por hecho.
+- **En el celular** los pasos son otros y hablan de toques: **el carrito**, **elegir la torre en el catálogo**, **tocar la casilla** y confirmar con **la tilde ✓** (o con un **doble toque**).
+- **Podés saltarlo cuando quieras** con **«Saltar tutorial»**. Si lo completás o lo salteás, **no vuelve a salir**. Quien ya había ganado el nivel 1 antes de esta versión no lo ve.
+- **Para apagarlo o volver a verlo:** **Opciones → «Tutorial del nivel 1»** (casilla) y **«Volver a verlo»** (se ve la próxima vez que entres al nivel 1).
+- **No sale** en el modo de pruebas, en el editor, en los mapas de la comunidad, en los modos ni en los niveles 2 en adelante. No cambia nada del nivel 1 (oro, vidas, oleadas).
+- **Los textos son un borrador** hasta que Lucas los apruebe: están en `data/tutorial/tutorial.json`.
+- **Opciones ahora se desplaza** si no entra en la pantalla (con las opciones nuevas ya no cabía en 720 de alto).
+- Tu progreso no cambia: el guardado suma una marca («tutorial visto») y una opción, y una versión anterior del juego lo sigue leyendo.
+
 ## Un toque, una sola acción en el celular *(T291, 2026-10-18)*
 
 «Apuntar» avanzaba dos modos por toque; ahora avanza uno. La tilde y la cruz de construir ya no salen de la pantalla ni se suben a la barra de arriba (donde un toque podía cambiar la velocidad o pausar además de construir): si arriba no entran, se ponen abajo de la torre.
