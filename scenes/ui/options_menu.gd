@@ -29,6 +29,7 @@ var normal_save_path: String = ""
 @onready var _sfx_slider: HSlider = %SfxSlider
 @onready var _fullscreen_check: CheckBox = %FullscreenCheck
 @onready var _damage_numbers_check: CheckBox = %DamageNumbersCheck
+@onready var _upgrade_fx_check: CheckBox = %UpgradeFxCheck
 @onready var _panel: PanelContainer = %Panel
 @onready var _scroll: ScrollContainer = %Scroll
 @onready var _rows: VBoxContainer = $Center/Panel/Margin/Frame/Scroll/Columns/Rows
@@ -64,8 +65,12 @@ func _ready() -> void:
 	_fullscreen_check.toggled.connect(_on_fullscreen_toggled)
 	_damage_numbers_check.toggled.connect(
 		func(on: bool) -> void: SaveManager.set_setting("damage_numbers", on))  # RF-132
+	_upgrade_fx_check.toggled.connect(
+		func(on: bool) -> void: SaveManager.set_setting("upgrade_fx", on))  # M65, RF-593
 	_build_tutorial_row()
 	_build_ui_mode_selector()
+	# RF-593: justo debajo de «Mostrar números de daño» (las filas de arriba también se meten ahí).
+	_rows.move_child(_upgrade_fx_check, _damage_numbers_check.get_index() + 1)
 	_arrange_columns()
 	_admin_button.pressed.connect(_on_admin_pressed)
 	_admin_confirm_button.pressed.connect(set_dev_mode.bind(true))
@@ -88,6 +93,7 @@ func open() -> void:
 	_sfx_slider.set_value_no_signal(float(SaveManager.get_setting("sfx_volume")))
 	_fullscreen_check.set_pressed_no_signal(bool(SaveManager.get_setting("fullscreen")))
 	_damage_numbers_check.set_pressed_no_signal(bool(SaveManager.get_setting("damage_numbers")))
+	_upgrade_fx_check.set_pressed_no_signal(SaveManager.upgrade_fx_enabled())
 	_ui_mode_selector.select(UiMode.read_setting(SaveManager.get_setting("ui_mode")))
 	_tutorial_check.set_pressed_no_signal(SaveManager.tutorial_enabled())
 	_tutorial_replay.text = TUTORIAL_REPLAY_TEXT

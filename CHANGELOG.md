@@ -5,6 +5,11 @@ Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle t�
 ## Pantalla de carga y toques bloqueados al cambiar de pantalla *(T340, 2026-10-19)*
 
 Al elegir un nivel, volver al menú, reintentar o pasar al siguiente nivel, el juego muestra ahora una **pantalla de carga** («Cargando…» con una barra que se mueve) y **no hace caso a nada** (toques, clics, teclas ni el botón «atrás») hasta que la pantalla nueva está lista. Antes, si tocabas de más mientras el nivel cargaba en el celular, se podía lanzar **otro nivel** (el que quedaba debajo del dedo en la selección). Ahora entra solo el que elegiste. La pantalla de carga se ve como mínimo 0,4 segundos, así que en equipos rápidos es un destello corto y no un parpadeo.
+## Animación al mejorar una torre *(T363, 2026-10-19)*
+
+Al mejorar una torre sale ahora un **efecto breve sobre ella**, distinto según el nivel: un anillo de luz con chispas al **nivel 2** (medio segundo) y uno más grande, con doble anillo, destello en cruz y chispas en abanico, al **nivel máximo** (0,7 s). Se tiñe con el color de la torre. Junto con el efecto sube un **texto con lo que sumó la mejora**, leído de los datos reales de la torre y solo lo que cambió: por ejemplo, la Ametralladora al nivel 2 dice «¡Nivel 2!» y «+3 daño · +0,5 disp/s»; la Tesla al máximo, «¡Nivel máximo!», «+8 daño · +0,1 disp/s» y «+1 saltos · +0,5 alcance».
+
+El texto no tapa la barra de abajo, la tilde, la cruz ni los botones flotantes del celular, se corre hacia adentro del mapa si la torre está en un borde y se agranda para leerse con el zoom. Se apaga en **Opciones → «Animaciones de mejora»** (debajo de «Mostrar números de daño»): apagada, queda el anillo y el sonido de siempre. **El dibujo del efecto es provisional** (lo reemplazará el arte que apruebe Lucas) y el juego no cambia en nada: costos, niveles y balance son los de antes.
 
 ## «Ver todo» también cuando corriste el mapa *(T304, 2026-10-19)*
 

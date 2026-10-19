@@ -3522,7 +3522,7 @@ Pedido de Lucas: (A) bajar el peso de las imágenes de la intro para que la APK 
 - **Cargar la escena siguiente por adelantado** (precarga mientras el jugador elige).
 ### M65 · Animaciones de mejora de torres (Lucas, 2026-10-19; T360 a T364)
 
-**Estado: SOLO ESPECIFICADA (T360). Nada de esto está programado ni dibujado.** Las decisiones son **D-135 a D-137**. Es **solo presentación**: no cambia ningún número de torre, costo, oro, daño, alcance ni el orden de nada (el balance no se toca). Se probaría en PC y en el celular.
+**Estado: PROGRAMADA con arte provisional (T361 y T363, 2026-10-19); falta el arte de T362 (Codex, con el OK de Lucas) y su integración y la medición de T364.** El efecto se dibuja hoy con `_draw`. Las decisiones son **D-135 a D-137**. Es **solo presentación**: no cambia ningún número de torre, costo, oro, daño, alcance ni el orden de nada (el balance no se toca). Se probaría en PC y en el celular.
 
 **Qué pidió Lucas.** *(2026-10-19)* (a) Una **animación al mejorar una torre** que muestre *que* mejoró: un efecto breve sobre la torre, **distinto según el nivel** de mejora. (b) Un **texto flotante**, como los números de daño, con **lo que suma la mejora** (+daño, +alcance, +cadencia…), leído de los datos reales. Una **opción para apagarlas**, como «Mostrar números de daño». Que **no tape** la tilde, la cruz ni la barra del celular. Que corra bien en el celular.
 
@@ -3614,6 +3614,8 @@ Hallazgos que condicionan el diseño: (1) **no todas suben las mismas cosas** (l
 | P-65-5 | ¿Se muestran las **4** estadísticas cuando cambian 4 a la vez, o solo las 2 o 3 principales? | **Hasta 4**, en dos renglones: es la información que pediste y entra. Si lo ves cargado, se baja el máximo en el archivo, sin tocar código. |
 | P-65-6 | El arte (T362): ¿un efecto único teñido (recomendado) o uno propio por familia de torres (A, B y C de la guía de arte §7)? | **Único teñido**: 2 atlas en total; por familia serían 6 y más peso en la APK. |
 | P-65-7 | ¿Sonido nuevo para la mejora al nivel 3? | **No por ahora** (queda `upgrade`); si lo querés, se suma en T364. |
+
+**Cómo se resolvieron (2026-10-19, T363).** Mientras Lucas no conteste, se implementó **la recomendación de Claude en las siete** preguntas: P-65-1 una sola casilla; P-65-2 números absolutos; P-65-3 el color de la torre aclarado (40 % de blanco, se cambia en `aclarado_blanco`); P-65-4 el efecto reemplaza al anillo de construir; P-65-5 hasta 4 estadísticas en dos renglones (`max_estadisticas`); P-65-6 un efecto único teñido (el arte de T362); P-65-7 sin sonido nuevo. Todo se cambia en `data/ui/mejoras.json` o en una línea de código si Lucas decide otra cosa. **Ajustes a lo escrito arriba:** en la tabla de `mejoras.json`, `chain_extra_targets` («saltos») va **antes** de `range_tiles` («alcance») para que la Tesla 2→3 salga como en el ejemplo de RF-591 («+1 saltos · +0,5 alcance»); y si arriba no hay lugar para el texto (una torre pegada al borde de arriba con un botón flotante encima), `place_block` lo corre al costado antes de renunciar.
 
 #### Lo que M65 no incluye
 - **Cambiar** el brillo permanente del mecanismo, los atlas por nivel ni el panel de la torre.

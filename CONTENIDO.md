@@ -537,6 +537,25 @@ El tutorial se retoca con un archivo, sin programar: `{"version": 1, "borrador":
 - **Revisalo** con `godot --headless --path . -s tools/check_tutorial.gd` (dice en castellano qué arreglar). Un archivo con errores **no se muestra** (el error sale en la salida) y el nivel 1 se juega sin tutorial.
 - **Dónde se ve:** solo en el nivel 1 jugado desde el menú, una vez (se completa o se salta). Se apaga y se vuelve a ver en **Opciones**.
 
+### M65 · La animación de mejora de torres (`data/ui/mejoras.json`)
+
+Lo que aparece al mejorar una torre se retoca con un archivo, sin programar. **No hay que escribir ningún número de torre**: el texto («+3 daño · +0,5 disp/s») se calcula restando los niveles de `data/towers/<id>.tres`, así que si cambiás el daño de un `.tres`, el texto cambia solo.
+
+| Clave | Qué es |
+|---|---|
+| `"variantes"` | `refuerzo` (nivel 2) y `maestria` (nivel 3): `duracion_s` (mayor que 0), `cuadros` (para el arte definitivo) y `escala` (tamaño del efecto). |
+| `"aclarado_blanco"` | Cuánto se aclara el color de la torre para el texto (0 a 1; 0,4 = 40 % de blanco). |
+| `"fuente_base_px"`, `"fuente_min_px"`, `"fuente_max_px"` | Tamaño del texto: se compensa con el zoom del mapa para medir entre el mínimo y el máximo **en pantalla** (20 a 30 px). |
+| `"texto_duracion_s"`, `"texto_sube_px"`, `"escalonado_s"` | Cuánto dura el texto, cuánto sube y el retraso entre renglones. |
+| `"max_estadisticas"`, `"max_por_renglon"` | Hasta 4 estadísticas, de a 2 por renglón. Si lo ves cargado, bajá el máximo. |
+| `"tope_efectos"`, `"tope_textos"` | Cuántos efectos (8) y textos (4) pueden estar vivos a la vez. |
+| `"estadisticas"` | La tabla, **en orden de prioridad**: `campo` (un campo de `TowerLevelData`), `etiqueta` (lo que se lee), `formato` (`entero`, `decimal` o `porcentaje`) y, opcional, `escala` (100 para `slow_amount`, que se guarda como fracción). |
+
+- **Solo se muestra lo que cambió** entre niveles (con tolerancia de 0,005). El costo, las texturas, `bonus_vs_*` y `chain_range_tiles` no están en la tabla: si algún día cambian y querés mostrarlos, sumá una línea.
+- **Si agregás un campo nuevo** a `TowerLevelData` que cambia entre niveles, sumalo a la tabla: un test (`test_upgrade_deltas.gd`) avisa si falta.
+- **Revisalo** con `godot --headless --path . -s tools/check_mejoras.gd`. Con un error, el juego usa el valor por omisión de ese campo y sigue andando.
+- **Se apaga** en Opciones → «Animaciones de mejora».
+
 ### T242 · La intro (`data/intro/intro.json`)
 
 La intro se arma con un archivo, sin programar: `{"version": 1, "fundido_s": 0.6, "laminas": [{"imagen": "res://assets/intro/01_la_nave.png", "texto": "Línea 1\nLínea 2", "segundos": 7}, …]}`.

@@ -122,6 +122,33 @@ func test_old_saves_that_won_level_1_do_not_get_the_tutorial_and_new_ones_do() -
 	assert_eq(int(JSON.parse_string(FileAccess.get_file_as_string(PATH))["version"]), 1, "la versión no cambia")
 
 
+# --- Animaciones de mejora (M65, RF-593): clave aditiva dentro de `settings` ---
+
+func test_old_saves_read_the_upgrade_animations_as_on_and_the_version_does_not_change() -> void:
+	for text: String in [SAVE_T40, SAVE_BEFORE_M50, SAVE_FULL_COLLECTIONS, SAVE_DEV]:
+		_write(text)
+		SaveManager.load_save()
+		assert_true(SaveManager.upgrade_fx_enabled(), "un guardado viejo sin la clave la lee prendida")
+		assert_eq(SaveManager.get_setting("upgrade_fx"), true)
+		_assert_roundtrip_is_identical("con las animaciones de mejora")
+	SaveManager.set_setting("upgrade_fx", false)
+	SaveManager.save()
+	var saved: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(PATH))
+	assert_eq(int(saved["version"]), 1, "SAVE_VERSION no cambia")
+	assert_eq(saved["settings"]["upgrade_fx"], false)
+	SaveManager.load_save()
+	assert_false(SaveManager.upgrade_fx_enabled(), "apagada se recuerda")
+
+
+func test_a_non_boolean_upgrade_fx_value_reads_as_on() -> void:
+	_write('{"version":1,"levels":{},"settings":{"upgrade_fx":0,"damage_numbers":false}}')
+	SaveManager.load_save()
+	assert_true(SaveManager.upgrade_fx_enabled(), "un 0 no es «apagada»")
+	_write('{"version":1,"levels":{},"settings":{"upgrade_fx":"no"}}')
+	SaveManager.load_save()
+	assert_true(SaveManager.upgrade_fx_enabled())
+
+
 # --- Antes de M50: niveles 1 a 9 y technology ---
 
 func test_before_m50_save_keeps_everything() -> void:
