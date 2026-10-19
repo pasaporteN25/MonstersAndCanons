@@ -2142,3 +2142,78 @@ Spec: RF-540 a RF-545. Decisiones: D-110 a D-113. Plan: «M60 / T300». Rama `fe
   **Hecho cuando:** existe `docs/skills-borrador/godot-pantalla-de-carga/SKILL.md` con el frontmatter (`name`, `description`), cuándo usarla, el patrón, las trampas (toque que atraviesa, emulación de mouse, hilo, pausa, tiempo mínimo) y un ejemplo mínimo; **no** se instaló nada en `~/.claude` ni en `~/.codex`.
 
   **Resultado (2026-10-19):** escrito el borrador (cuándo usarla, el problema en una línea, la secuencia de `go`, doce trampas, el ejemplo de núcleo y de capa fina, y cómo verificar). El ejemplo se extrajo del documento y **pasó `godot --check-only`** (compila), pero **no se ejecutó** como núcleo aparte: lo que corre y está probado es `scripts/logic/scene_transition.gd`, del que sale. **No** está instalado en ningún lado: Lucas decide si lo pasa a su repo de skills. Sin cambios de código ni de tests (la suite no cambia: 1891 de 1891).
+## M65 — Animaciones de mejora de torres *(pedido por Lucas, 2026-10-19; D-135 a D-137)*
+
+- [x] **T360 · `[x86]` · Spec, decisiones, plan y fichas de M65.**
+  **Refs:** RF-590 a RF-596, D-135 a D-137. **Depende de:** M63 (T331).
+  **Hecho cuando:** `01-spec.md` (M65), `04-decisiones.md` (D-135 a D-137), `02-plan-tecnico.md`, esta lista y `specs/tareas/T362-arte-animacion-mejoras.md` están escritos, con las decisiones abiertas para Lucas.
+
+  **Resultado (2026-10-19):** escritos. Se leyeron los 11 `.tres` de torres para armar la tabla de qué cambia en cada mejora. **No se programó ni se dibujó nada; no se corrió ningún test** (no hay código). Queda esperar el OK de Lucas a la spec y a las preguntas P-65-1 a P-65-7.
+
+- [ ] **T361 · `[mobile+x86]` · Datos y lógica: `data/ui/mejoras.json`, `UpgradeDeltas` y su validador.**
+  **Refs:** RF-591, RF-594, D-136, P2, P10. **Depende de:** T360 (y el OK de Lucas a la spec).
+  **Hecho cuando:** existe `data/ui/mejoras.json` con la tabla de estadísticas; `UpgradeDeltas` calcula los deltas desde `TowerData.levels` y los escribe según RF-591 (signo, coma, sin ceros de más, cabecera, máximo de 4 y de 2 por renglón); `tools/check_mejoras.gd` y un test nombran en castellano un campo inexistente, un formato desconocido y una duración inválida; un test recorre **los 11 `.tres`**, 1→2 y 2→3, y comprueba que ninguna mejora real da una lista vacía y que los ejemplos de la spec (Ametralladora, Disruptora, Tesla) salen tal cual. Tests completos en verde y sin `SCRIPT ERROR`.
+
+- [ ] **T362 · 🎨 `[x86]` · Arte: los dos efectos de mejora (Codex).**
+  **Refs:** RF-590, D-135, ficha `specs/tareas/T362-arte-animacion-mejoras.md`. **Depende de:** T360. **Compuerta:** Lucas aprueba las muestras (hoja a escala real) **antes** de T364.
+  **Hecho cuando:** dos atlas PNG RGBA («refuerzo» y «maestría»), con fuentes, prompts, `manifest.json`, una hoja de contacto a escala real en PC y en el celular (zoom chico) y una captura en partida con un efecto provisional del juego como referencia de tamaño, están en `art/mejoras-m65/`; Lucas dio su OK por escrito (se anota acá).
+
+- [ ] **T363 · `[mobile+x86]` · El efecto, el texto flotante y la opción, con arte provisional.**
+  **Refs:** RF-590 a RF-593, RF-595, RF-596, D-135 a D-137, P6. **Depende de:** T361.
+  **Hecho cuando:** al mejorar una torre con la opción prendida salen el efecto (dibujado con `_draw`, color de la torre, 0,5 s o 0,7 s) y el texto de RF-591; con la opción apagada, todo igual que hoy (anillo y sonido); la casilla «Animaciones de mejora» está en Opciones, entra en 720 de alto en modo celular y respeta el mínimo táctil; el bloque se corre fuera de la barra de abajo, la tilde, la cruz y los botones flotantes, y dentro de la pantalla; un guardado viejo la lee prendida; `balance_sim.gd` da el mismo informe antes y después con la misma semilla; capturas reales en PC y en modo celular 1280 × 720 revisadas. Tests completos en verde.
+
+- [ ] **T364 · `[mobile]` · Integrar el arte aprobado, medir en el celular y cerrar.**
+  **Refs:** RF-590, RF-595, D-135. **Depende de:** T362 (OK de Lucas) y T363.
+  **Hecho cuando:** los dos atlas aprobados reemplazan al dibujo provisional sin cambiar el comportamiento; `tools/perf_test.gd` con 60 torres, 200 enemigos y 10 mejoras seguidas mantiene los 60 FPS en PC y no suma más de 1 ms por cuadro en modo celular; `CHANGELOG.md`, `CONTENIDO.md` (cómo retocar `mejoras.json`) y `README.md` actualizados; el peso de los atlas importados está anotado (APK). Límite a dejar escrito: no se probó en un celular real.
+
+## M66 — Introducción de jefes *(pedido por Lucas, 2026-10-19; D-138 a D-140)*
+
+- [x] **T365 · `[x86]` · Spec, decisiones, plan y fichas de M66.**
+  **Refs:** RF-597 a RF-602, D-138 a D-140. **Depende de:** M63 (T331).
+  **Hecho cuando:** `01-spec.md` (M66), `04-decisiones.md` (D-138 a D-140), `02-plan-tecnico.md`, esta lista y `specs/tareas/T367-arte-entrada-jefes.md` están escritos, con las decisiones abiertas para Lucas.
+
+  **Resultado (2026-10-19):** escritos. Se leyó `level_01.json`: **el nivel 1 sí tiene jefe** (oleada 10 de 10), así que no se propone ninguno ni se toca el balance. **No se programó ni se dibujó nada; no se corrió ningún test.** Queda esperar el OK de Lucas a la spec y a las preguntas P-66-1 a P-66-7.
+
+- [ ] **T366 · `[mobile+x86]` · Datos y reglas: `BossEntranceData`, `EnemyData.entrance`, `entrada_jefes.json` y `BossEntranceRules`.**
+  **Refs:** RF-597, RF-601, RF-602, D-139, P2, P10. **Depende de:** T365 (y el OK de Lucas a la spec).
+  **Hecho cuando:** existen el recurso, el campo opcional (los 19 enemigos actuales siguen cargando igual), `boss.tres` con `levels = ["level_01"]` y `data/ui/entrada_jefes.json`; `BossEntranceRules.should_show` cubre en tests: nivel en la lista, nivel fuera, lista vacía (todos), opción apagada, menos de 8 s desde la anterior, mismo tipo dos veces en la oleada; el validador y un test nombran en castellano un id de nivel inexistente, una frase de más de 80 caracteres, un sonido desconocido y una duración inválida; el archivo oficial no tiene errores. Tests completos en verde y sin `SCRIPT ERROR`.
+
+- [ ] **T367 · 🎨 `[x86]` · Arte: destello de aparición, grieta y marco del cartel (Codex).**
+  **Refs:** RF-597, D-138, ficha `specs/tareas/T367-arte-entrada-jefes.md`. **Depende de:** T365. **Compuerta:** Lucas aprueba las muestras (hoja a escala real) **antes** de T369.
+  **Hecho cuando:** el atlas del destello, la grieta y el marco 9-slice, con fuentes, prompts, `manifest.json`, la hoja a escala real en PC y en el celular y una prueba sobre el suelo y la entrada del nivel 1 están en `art/jefes-m66/`; Lucas dio su OK por escrito (se anota acá).
+
+- [ ] **T368 · `[mobile+x86]` · El destello, el cartel, el salteo y la opción, con arte provisional.**
+  **Refs:** RF-597 a RF-600, RF-602, D-138, D-140, P6. **Depende de:** T366.
+  **Hecho cuando:** en el nivel 1 (menú, con la opción prendida) la oleada 10 muestra el destello al nacer el Jefe y el cartel al irse el cartel de oleada, la tarjeta «Nuevo enemigo» espera a que el cartel se retire y la partida no se pausa ni cambia; un toque retira el cartel; el toque fuera del cartel llega al mapa; la casilla «Entrada de los jefes» está en Opciones (entra en 720 de alto en modo celular, respeta el mínimo táctil, un guardado viejo la lee prendida); con la opción apagada, o en el nivel 2, nada cambia; en el modo de pruebas se puede ver con el panel (F1). `balance_sim.gd` da el mismo informe con y sin la función con la misma semilla. Capturas reales en PC y en modo celular 1280 × 720 revisadas. Tests completos en verde.
+
+- [ ] **T369 · `[mobile]` · Integrar el arte aprobado, medir en el celular y cerrar el piloto.**
+  **Refs:** RF-597, RF-602, D-138. **Depende de:** T367 (OK de Lucas) y T368.
+  **Hecho cuando:** el arte aprobado reemplaza al provisional sin cambiar el comportamiento; `tools/perf_test.gd` con 200 enemigos y la entrada mantiene los 60 FPS en PC y no suma más de 1 ms por cuadro en modo celular; `CHANGELOG.md`, `CONTENIDO.md` (cómo darle una entrada a otro jefe) y `README.md` actualizados; el peso de los PNG importados está anotado (APK). Se deja escrito cómo extender el piloto a los demás jefes (vaciar `levels`) y que **no** se hizo. Límite: no se probó en un celular real.
+
+## M67 — «Novedades de esta versión» *(pedido por Lucas, 2026-10-19; D-141 a D-144)*
+
+- [x] **T370 · `[x86]` · Spec, decisiones, plan y fichas de M67.**
+  **Refs:** RF-603 a RF-609, D-141 a D-144. **Depende de:** M61 (T315, la versión en `project.godot`).
+  **Hecho cuando:** `01-spec.md` (M67), `04-decisiones.md` (D-141 a D-144), `02-plan-tecnico.md`, esta lista y `specs/tareas/T372-arte-novedades.md` están escritos, con el borrador de la 1.0.0 y las decisiones abiertas para Lucas.
+
+  **Resultado (2026-10-19):** escritos. Se leyeron `GameVersion`, `SaveManager`, `MainMenu`, `OptionsMenu` y `CreditsScreen` para imitar el molde de la intro y el tutorial. **No se programó ni se dibujó nada; no se corrió ningún test.** El borrador de los textos de la 1.0.0 sale de lo que el juego ya tiene, pero **no se contrastó línea por línea** con `CHANGELOG.md`: eso es de T374. Queda esperar el OK de Lucas a la spec y a las preguntas P-67-1 a P-67-8.
+
+- [ ] **T371 · `[mobile+x86]` · Datos, reglas y guardado: `NewsData`, `NewsFlow`, `news_version` y el validador.**
+  **Refs:** RF-603, RF-605, RF-606, D-142 a D-144, P2, P10. **Depende de:** T370 (y el OK de Lucas a la spec).
+  **Hecho cuando:** `NewsData` lee y valida `data/novedades/novedades.json` con los errores y avisos de RF-605 en castellano (nombran la versión y la novedad); `NewsFlow.should_auto_show` cubre en tests todos los casos de RF-603 (`beta`, vacía, igual, distinta, borrador, sin entrada, modo de pruebas, editor, «mejoras» con guardado nuevo y viejo, «presentacion» con guardado nuevo); `SaveManager` guarda y lee `"news_version"` con las reglas de RF-606 y `tests/test_old_saves.gd` pasa con los guardados de cada época y con un valor que no es texto; `tools/check_novedades.gd` corre y avisa si `config/version` es un número y no hay entrada aprobada. Tests completos en verde y sin `SCRIPT ERROR`.
+
+- [ ] **T372 · 🎨 `[x86]` · Arte: cabecera, íconos y variante sobria de «Novedades» (Codex).**
+  **Refs:** RF-604, D-141, ficha `specs/tareas/T372-arte-novedades.md`. **Depende de:** T370 y las respuestas de Lucas a P-67-1 y P-67-6. **Compuerta:** Lucas aprueba las muestras (hoja a escala real) **antes** de T375.
+  **Hecho cuando:** la cabecera de la presentación, la variante sobria, los íconos y la maqueta de la pantalla a escala real (PC y celular), con fuentes, prompts y `manifest.json`, están en `art/novedades-m67/`; Lucas dio su OK por escrito (se anota acá).
+
+- [ ] **T373 · `[mobile+x86]` · La pantalla, el enganche en el menú y el botón de Opciones, con arte provisional.**
+  **Refs:** RF-603, RF-604, RF-607, RF-608, D-141, D-144, P6. **Depende de:** T371.
+  **Hecho cuando:** `NewsScreen` se abre sola en el menú principal con una entrada de prueba aprobada (en un test y en una captura, **sin** cambiar `config/version`), se cierra con «Entendido», `Esc` y el «atrás» de Android sin activar el menú de abajo, y no vuelve a salir; se desplaza con un dedo en modo celular y ningún control mide menos de 56 px; no sale en el modo de pruebas ni en el editor; el botón «Novedades de esta versión» está en Opciones (menú y pausa), abre la entrada de la versión o la más nueva con el rótulo «Borrador» si lo es, no toca el guardado, queda deshabilitado con un archivo roto y Opciones sigue entrando en 720 de alto en modo celular; con un archivo roto el menú abre normal y avisa por la salida. Capturas reales en PC y en modo celular 1280 × 720 revisadas. Tests completos en verde.
+
+- [ ] **T374 · `[x86]` · Contenido de la 1.0.0 y guía para agregar versiones (con Lucas).**
+  **Refs:** RF-605, RF-609, D-143. **Depende de:** T371 y el OK de Lucas a los textos (P-67-1).
+  **Hecho cuando:** `data/novedades/novedades.json` trae la entrada `1.0.0` («presentacion») con los textos que Lucas aprobó, contrastados con el juego y con `CHANGELOG.md`; los números que se escriban (por ejemplo, la cantidad de niveles) los compara un test con los datos del juego; `borrador` queda en `false` **solo** si Lucas dijo que sí; `CONTENIDO.md` explica en tres pasos cómo agregar una versión («Mejoras»); `tools/check_novedades.gd` da cero errores. No cambia `config/version`: eso se hace al publicar (T375).
+
+- [ ] **T375 · `[mobile]` · Integrar el arte aprobado, medir y dejar lista la salida de la 1.0.0.**
+  **Refs:** RF-604, RF-608, RF-609. **Depende de:** T372 (OK de Lucas), T373 y T374.
+  **Hecho cuando:** el arte aprobado reemplaza al provisional sin cambiar el comportamiento, importado sin mipmaps y con su peso anotado (APK); capturas en modo celular con la entrada de la 1.0.0 completa; `CHANGELOG.md`, `README.md` y `ONBOARDING.md` actualizados; **lista de salida escrita en el Resultado** (no ejecutada): subir `config/version` a `1.0.0`, `file_version` y `product_version` de Windows, `version/code` de Android, pasar `borrador` a `false`, correr `check_novedades.gd`, exportar. Límite a dejar escrito: no se probó en un celular real.
