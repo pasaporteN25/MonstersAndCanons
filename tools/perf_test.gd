@@ -4,6 +4,8 @@
 # Uso (desde la carpeta del proyecto):
 #   godot --path . -s tools/perf_test.gd
 #   godot --path . -s tools/perf_test.gd -- sin_numeros    (compara sin números de daño)
+#   godot --path . -s tools/perf_test.gd -- entrada_jefe   (M66: nivel 1 «desde el menú» y un Jefe al empezar la medición;
+#                                                         se ven el destello y el cartel durante 1,6 s. Se puede sumar `celular`)
 #
 # Desactiva el vsync para medir cuántos FPS puede dar el juego, no los del monitor.
 extends SceneTree
@@ -25,16 +27,32 @@ var worst_frame_ms: float = 0.0
 ## Frames que tardaron más de 16,6 ms (los que a 60 FPS se notarían como un tirón).
 var slow_frames: int = 0
 var normal: EnemyData = load("res://data/enemies/normal.tres")
+## M66: con `entrada_jefe`, a qué segundo nace el Jefe y si ya nació; y la suma de los tiempos de cuadro medidos.
+const BOSS_ENTRANCE_AT: float = 1.5
+var boss_entrance_fired: bool = false
+var frame_ms_total: float = 0.0
 
 
 func _initialize() -> void:
 	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
 	Engine.max_fps = 0
+
+
+## Los autoloads todavía no existen en `_initialize` (este script se compila antes): la partida se crea en el primer cuadro.
+func _create_game() -> void:
+	if "entrada_jefe" in OS.get_cmdline_user_args():
+		root.get_node("/root/GameFlow").set("current_index", 0)  # campaña desde el menú: así sale la entrada
+		root.get_node("/root/SaveManager").call("set_setting", "tutorial_enabled", false)
+	if "celular" in OS.get_cmdline_user_args():
+		root.get_node("/root/SaveManager").call("set_setting", "ui_mode", 1)
 	game = (load("res://scenes/game/game.tscn") as PackedScene).instantiate()
 	root.add_child(game)
 
 
 func _process(delta: float) -> bool:
+	if game == null:
+		_create_game()
+		return false
 	if game.enemies.get_child_count() == 0 and time == 0.0:
 		# "-- sin_numeros": apaga los números de daño solo en memoria (no se guarda).
 		if "sin_numeros" in OS.get_cmdline_user_args():
@@ -44,8 +62,12 @@ func _process(delta: float) -> bool:
 	_keep_enemy_count()
 	_fake_deaths(delta)
 	time += delta
+	if "entrada_jefe" in OS.get_cmdline_user_args() and not boss_entrance_fired and time > BOSS_ENTRANCE_AT:
+		boss_entrance_fired = true
+		game.spawner.spawn_now(load("res://data/enemies/boss.tres"))
 	if time > WARMUP_SECONDS:
 		frames_measured += 1
+		frame_ms_total += delta * 1000.0
 		worst_frame_ms = maxf(worst_frame_ms, delta * 1000.0)
 		if delta * 1000.0 > 1000.0 / 60.0:
 			slow_frames += 1
@@ -56,6 +78,7 @@ func _process(delta: float) -> bool:
 			game.effects.get_child_count()])
 		print("FPS promedio: %.0f · frame más lento: %.1f ms · frames de más de 16,6 ms: %d de %d" % [
 			fps, worst_frame_ms, slow_frames, frames_measured])
+		print("Tiempo de cuadro promedio: %.2f ms" % (frame_ms_total / maxf(1.0, float(frames_measured))))
 		print("RESULTADO: %s (objetivo: 60 FPS)" % ("OK" if fps >= 60.0 else "LENTO"))
 		return true
 	return false
