@@ -1,0 +1,12 @@
+{
+  "godot": "4.7.2.stable.official.ed1daf0bf",
+  "compress_mode": 0,
+  "mipmaps": false,
+  "ctex_bytes": 291062,
+  "limit_bytes": 1048576,
+  "isolated_project": true,
+  "warnings": [
+    "sockets restringidos por sandbox",
+    "guardado de configuración del editor rechazado fuera del sandbox"
+  ]
+}
