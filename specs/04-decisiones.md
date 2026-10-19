@@ -1119,3 +1119,47 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
   - **Un archivo por modo:** dos archivos para mantener sincronizados.
   - **Que el JSON defina el evento de cada paso:** ver arriba.
 - **Qué cambia:** `01-spec.md` (RF-571 y RF-578), `CONTENIDO.md` (cómo retocar el tutorial), `data/tutorial/tutorial.json`, `scripts/logic/tutorial_data.gd`, `tools/check_tutorial.gd`.
+
+## D-135 · La animación de mejora es un solo efecto de sprites en 2 variantes (nivel 2 y nivel 3), teñido con el color de la torre
+- **Fecha:** 2026-10-19 · **Estado:** propuesta (spec M65, sin programar; el arte espera el OK de Lucas) · **Decidió:** Lucas (un efecto breve, distinto por nivel de mejora, liviano en el celular) / Claude (la forma)
+- **Qué:** un atlas de 8 cuadros por variante («refuerzo» para el nivel 2, 0,5 s; «maestría» para el nivel 3, 0,7 s), dibujado claro y neutro. Un `Sprite2D` lo reproduce con un `Tween` sobre la región y el juego lo tiñe con `TowerVisual.upgrade_glow_color(id)`, que ya existe. Reemplaza al anillo de construir en las mejoras si la opción está prendida (RF-590).
+- **Por qué:**
+  - **Distinto por nivel sin multiplicar el arte:** 2 atlas sirven para las 11 torres; el tinte ya está resuelto para el brillo permanente.
+  - **Liviano:** un nodo, sin `_process`, sin shaders ni partículas; se borra solo. En el celular el costo es casi nulo.
+  - **Coherente con el resto de los efectos finitos** (M36): respetan la pausa y la velocidad y tienen tope.
+- **Alternativas descartadas:**
+  - **Un efecto propio por torre (11 × 2 atlas):** más peso en la APK (M62 acaba de bajar el de la intro) y más arte para aprobar, para una diferencia que el tinte ya da.
+  - **Un efecto por familia de arte (A, B, C de la guía §7):** 6 atlas; el tinte alcanza. Queda como pregunta P-65-6.
+  - **Partículas de Godot (`CPUParticles2D`):** nodos y trabajo por cuadro en el celular, y su forma es más difícil de aprobar con una muestra.
+  - **Un shader sobre la torre (flash, borde brillante):** toca el material de la torre, que ya tiene el shader del brillo permanente; riesgo de pisar el aturdimiento.
+  - **Solo reutilizar el anillo de RF-75:** es lo que hay hoy y no distingue el nivel.
+- **Qué cambia:** `01-spec.md` (RF-590, RF-595), `EffectsLayer`, `Game._on_tower_upgraded`, `data/ui/mejoras.json`, `assets/sprites/effects/mejora/`.
+
+## D-136 · El texto con lo que suma la mejora sale de los datos de la torre, con una tabla de estadísticas en un archivo, mostrando solo lo que cambió
+- **Fecha:** 2026-10-19 · **Estado:** propuesta (spec M65, sin programar) · **Decidió:** Lucas (un texto flotante con lo que suma la mejora) / Claude (cómo se calcula y se escribe)
+- **Qué:** `UpgradeDeltas` (lógica pura) resta el nivel anterior al nuevo de `TowerData.levels` para cada campo de una tabla (`data/ui/mejoras.json`: campo, etiqueta, formato). Solo se muestran los que cambian, hasta 4 en 2 renglones, más una cabecera «¡Nivel N!» (RF-591).
+- **Por qué:**
+  - **Sin duplicar números** (P2): el texto se arma con los mismos `.tres` que usa el combate; si cambia el balance, el texto lo sigue solo.
+  - **Las torres son distintas** (la tabla de la spec lo muestra): un texto fijo «+daño, +alcance» mentiría en la Disruptora, que no sube daño, o en el Francotirador, que en el nivel 2 solo sube daño.
+  - **La tabla en un archivo:** sumar un campo nuevo a `TowerLevelData` (por ejemplo, un tipo de daño futuro) es agregar una línea, sin tocar código.
+- **Alternativas descartadas:**
+  - **Textos escritos a mano en cada `.tres`:** se desactualizan al balancear y repiten números.
+  - **Mostrar todas las estadísticas, aunque no cambien:** ruido («+0 alcance»).
+  - **Mostrar porcentajes:** exageran los valores bajos (Hielo 2→4 sería «+100 %»); queda como pregunta P-65-2.
+  - **Mostrar costos o el total invertido:** no es «lo que suma la mejora» y ya está en el panel de la torre.
+  - **Un renglón por estadística (hasta 4 renglones):** tapa demasiado mapa; con 2 por renglón son 3 en total.
+- **Qué cambia:** `01-spec.md` (RF-591, RF-594), `scripts/logic/upgrade_deltas.gd`, `tools/check_mejoras.gd`, `tests/test_upgrade_deltas.gd`.
+
+## D-137 · Una sola opción en Opciones, «Animaciones de mejora», prendida por omisión, que controla el efecto y el texto; clave aditiva en `settings`
+- **Fecha:** 2026-10-19 · **Estado:** propuesta (spec M65, sin programar) · **Decidió:** Lucas (una opción para apagarlas, «como números de daño») / Claude (una sola casilla y la clave)
+- **Qué:** casilla «Animaciones de mejora» debajo de «Mostrar números de daño» (RF-593); ajuste `"upgrade_fx"` en `settings`, sin subir `SAVE_VERSION`. Apagada: sin efecto ni texto, pero con el anillo y el sonido de siempre.
+- **Por qué:**
+  - **Opciones ya está justa en el celular** (M61, RF-555): una fila menos que dos.
+  - **Independiente de los números de daño:** quien apaga los números por claridad quizá quiera igual ver la mejora, y al revés.
+  - **Aditiva y prendida por omisión:** igual que `damage_numbers` y `tutorial_enabled`; un guardado viejo no se rompe y la novedad se ve.
+  - **El sonido y el anillo no se apagan:** el jugador siempre tiene la confirmación mínima de que mejoró (como RF-132 con el combo).
+- **Alternativas descartadas:**
+  - **Colgarla de `damage_numbers`:** mezcla dos cosas y quien quiere ver los daños pero no la mejora no puede elegir.
+  - **Dos casillas (efecto y texto):** más filas en el celular; queda como pregunta P-65-1.
+  - **Sin opción:** Lucas pidió poder apagarlas.
+- **Qué cambia:** `01-spec.md` (RF-593), `SaveManager.DEFAULT_SETTINGS`, `OptionsMenu`, `tests/test_old_saves.gd`, `CONTENIDO.md` y `CHANGELOG.md` cuando se programe.

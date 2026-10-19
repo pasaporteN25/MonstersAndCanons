@@ -3490,3 +3490,105 @@ Pedido de Lucas: (A) bajar el peso de las imágenes de la intro para que la APK 
 - **Ayudas en pantalla fuera del nivel 1** ni **consejos de contramedida** (siguen en «Sugerencias de Claude», §13).
 - **Enseñar** el Mortero (2 × 2), la infraestructura, las combinaciones ni los enemigos con habilidades: la tarjeta de «nuevo enemigo» (RF-134) y la Wiki ya cumplen ese papel.
 - **Probarlo en un celular real**: se probó con la escena real en modo celular en una PC (RF-502).
+
+### M65 · Animaciones de mejora de torres (Lucas, 2026-10-19; T360 a T364)
+
+**Estado: SOLO ESPECIFICADA (T360). Nada de esto está programado ni dibujado.** Las decisiones son **D-135 a D-137**. Es **solo presentación**: no cambia ningún número de torre, costo, oro, daño, alcance ni el orden de nada (el balance no se toca). Se probaría en PC y en el celular.
+
+**Qué pidió Lucas.** *(2026-10-19)* (a) Una **animación al mejorar una torre** que muestre *que* mejoró: un efecto breve sobre la torre, **distinto según el nivel** de mejora. (b) Un **texto flotante**, como los números de daño, con **lo que suma la mejora** (+daño, +alcance, +cadencia…), leído de los datos reales. Una **opción para apagarlas**, como «Mostrar números de daño». Que **no tape** la tilde, la cruz ni la barra del celular. Que corra bien en el celular.
+
+**Cómo se mejora hoy (lo que ya existe y no se toca).**
+- `BuildController.try_upgrade(tower)` cobra, llama a `Tower.apply_upgrade()` (sube `level_index`, suma `total_invested`) y emite `tower_upgraded`; `Game._on_tower_upgraded` hoy dibuja **el mismo anillo que al construir** (RF-75, `EffectsLayer.tower_built`), refresca el panel y suena `upgrade`.
+- Cada torre tiene **3 niveles** en `data/towers/<id>.tres` (`TowerLevelData`). La mejora de nivel 1→2 y 2→3 cuesta el `cost` de ese nivel.
+- El **mecanismo** de la torre ya se ve distinto en el nivel 2 y 3 (RF-337, atlas por nivel) y tiene un brillo permanente (`Tower._sync_upgrade_glow`, `TowerVisual.upgrade_glow_color/strength`). **Eso queda como está.**
+- Los números de daño son `FloatingText` en la `EffectsLayer`, con tope de nodos vivos y se apagan con el ajuste `damage_numbers` (RF-132).
+
+**Qué estadísticas cambian de verdad en los datos** (leído de `data/towers/*.tres`, 2026-10-19; es la base de RF-591, no se copia a ningún lado):
+
+| Torre | De 1 a 2 | De 2 a 3 |
+|---|---|---|
+| Ametralladora (`basic`) | daño 5→8, cadencia 2→2,5 | daño 8→12, cadencia 2,5→3, alcance 3→3,5 |
+| Ráfaga (`burst`) | daño 10→13, cadencia 0,8→0,9, púas 8→10 | daño 13→17, cadencia 0,9→1, púas 10→12, alcance 2→2,5 |
+| Cañón (`cannon`) | daño 20→32, área 1→1,2 | daño 32→50, área 1,2→1,5, alcance 3→3,5 |
+| Disruptora (`disruptor`) | alcance 2,5→3, pulso 2,5→3 s | alcance 3→3,5, pulso 3→3,5 s |
+| Fuego (`fire`) | daño 5→7, quemadura 8→12 /s | daño 7→10, quemadura 12→18 /s y 3→4 s, alcance 2,5→3 |
+| Hielo (`frost`) | frenado 40→50 %, alcance 2,5→3 | daño 2→4, frenado 50→60 %, duración 2→3 s |
+| Estandarte (`mechanical_standard`) | apoyo 10→15 %, alcance 2→2,5, reparación 2→3 /s | apoyo 15→20 %, alcance 2,5→3, reparación 3→4 /s |
+| Mortero (`mortar`) | daño 90→140, área 1,5→1,8 | daño 140→220, área 1,8→2,2, alcance 5→5,5 |
+| Múltiple (`multi`) | daño 7→9, objetivos extra 1→2 | daño 9→12, objetivos extra 2→3, alcance 3→3,5 |
+| Francotirador (`sniper`) | daño 40→70 | daño 70→120, alcance 6→7 |
+| Tesla (`tesla`) | daño 13→19, cadencia 0,75→0,85, saltos 2→3 | daño 19→27, cadencia 0,85→0,95, saltos 3→4, alcance 2,5→3 |
+
+Hallazgos que condicionan el diseño: (1) **no todas suben las mismas cosas** (la Disruptora no sube el daño; el Estandarte no tiene daño); por eso el texto **no puede ser «+daño» fijo**. (2) A veces el alcance **no cambia**; un «+0 alcance» sería mentira o ruido, así que **solo se muestra lo que cambió**. (3) Hasta **4 estadísticas** cambian a la vez (Ráfaga, Fuego, Hielo y Tesla en el nivel 3).
+
+- **RF-590** **El efecto de mejora** *(D-135)*. Cuando una mejora **se cobra y se aplica** (`tower_upgraded`, o sea después de un `try_upgrade` verdadero) y la opción (RF-593) está prendida, se muestra **sobre la torre** un efecto breve:
+  - **Nivel 2** («refuerzo»): un anillo de luz que sube desde la base y unas pocas chispas; **0,5 s**.
+  - **Nivel 3** («maestría»): más grande y más lleno (doble anillo, destello en cruz y chispas en abanico); **0,7 s**.
+  - **Se tiñe con el color de la torre** (`TowerVisual.upgrade_glow_color`): el arte se hace una sola vez, claro y neutro, y el juego lo tiñe (no hay un dibujo por torre, D-135).
+  - **Se adapta al tamaño de la torre** (`footprint`; el Mortero es 2×2) y **se centra en el mecanismo**, no en la casilla.
+  - **Reemplaza** al anillo de construir en las mejoras **solo cuando la opción está prendida**; con la opción apagada **todo queda exactamente como hoy** (el anillo de RF-75 y el sonido).
+  - **Respeta la pausa y la velocidad** (como el resto de los efectos finitos, M36): en pausa se congela; a velocidad doble pasa el doble de rápido.
+  - **No toca la torre**: ni su `modulate`, ni sus nodos, ni el brillo permanente; el efecto es un nodo aparte que se borra solo.
+  - **Criterio:** **Dado** una torre de nivel 1 con oro suficiente → **Cuando** se mejora → **Entonces** aparece el efecto de «refuerzo» tiñido del color de esa torre, dura 0,5 s, desaparece solo y el oro, el nivel y los números de la torre son los de siempre. **Cuando** se mejora al nivel 3 → **Entonces** aparece el de «maestría», visiblemente más grande que el anterior. **Dado** la pausa a mitad del efecto → **Entonces** se congela y sigue al reanudar.
+
+- **RF-591** **Lo que suma la mejora, como texto flotante** *(D-136)*. Junto con el efecto sale un texto con **lo que subió**, hecho con `FloatingText` (el mismo de los números de daño y del oro).
+  - **Qué se calcula:** `delta = nivel_nuevo − nivel_anterior` para cada estadística de la tabla de RF-594, **leída de `tower.data.levels[...]`** (nunca escrita a mano ni repetida en otro lado: si Lucas cambia el daño del Cañón, el texto cambia solo). Se muestra **solo si `delta` es distinto de cero** (con tolerancia de 0,005 para los decimales).
+  - **Qué estadísticas hay** (campos de `TowerLevelData`; la tabla con sus etiquetas está en `data/ui/mejoras.json`, RF-594), en este **orden de prioridad**: `damage` («daño»), `fire_rate` («disp/s»), `range_tiles` («alcance»), `splash_radius_tiles` («área»), `burst_count` («púas»), `extra_targets` («objetivos»), `chain_extra_targets` («saltos»), `slow_amount` («frenado», en %), `slow_duration` («s de frenado»), `burn_damage_per_second` («quemadura/s»), `burn_duration` («s de quemadura»), `suppress_seconds` («s de pulso»), `support_rate_percent` («apoyo», en %), `support_repair_per_second` («reparación/s»).
+  - **Lo que NO se muestra** aunque esté en los datos: `cost` (es lo que se pagó), las texturas, `bonus_vs_slowed_percent` y `bonus_vs_burning_percent` (hoy no cambian entre niveles; si algún día cambian, se suman a la tabla sin tocar código) y `chain_range_tiles`.
+  - **Cómo se escribe:** una cabecera **«¡Nivel 2!»** (o «¡Nivel 3!»; en el máximo, **«¡Nivel máximo!»**) y debajo hasta **4 estadísticas**, de a **2 por renglón**, separadas con « · ». Los números llevan **signo y coma decimal** (rioplatense: `+0,5`), sin ceros de más (`+3`, no `+3,0`; `+0,5`, no `+0,50`). Ejemplos que saldrían hoy: Ametralladora 1→2 «+3 daño · +0,5 disp/s»; Fuego 1→2 «+2 daño · +4 quemadura/s»; Tesla 2→3 «+8 daño · +0,1 disp/s» y «+1 saltos · +0,5 alcance».
+  - **Si no cambia nada** (un dato mal cargado), sale solo la cabecera.
+  - **Los renglones salen escalonados** (0,12 s entre uno y otro) y suben y se desvanecen como los números de daño (`FloatingText`), **1,1 s** en total. Color: el de la torre aclarado (`upgrade_glow_color` + 40 % de blanco) con el mismo contorno oscuro del resto. *(El color exacto queda para que Lucas lo vea, abierta P-65-3.)*
+  - **El cálculo es lógica pura** (`scripts/logic/upgrade_deltas.gd`, P10) y se prueba con GUT sin escena.
+  - **Criterio:** **Dado** la Ametralladora mejorada de 1 a 2 → **Entonces** el texto dice «+3 daño · +0,5 disp/s» y **no** menciona el alcance (no cambió). **Dado** la Disruptora de 1 a 2 → **Entonces** dice «+0,5 alcance · +0,5 s de pulso» y **no** habla de daño. **Dado** que se cambia `damage` del nivel 2 de la Ametralladora en el `.tres` → **Entonces** el texto cambia sin tocar código.
+
+- **RF-592** **Dónde sale y qué no tapa.**
+  - **Dónde:** los renglones suben desde **arriba de la torre** (como el oro de RF-124), centrados sobre ella, y el efecto está **centrado en el mecanismo**.
+  - **Pantalla visible:** el bloque de texto se **corre hacia adentro del área del mapa** si la torre está cerca de un borde (arriba, izquierda o derecha), con la misma idea con que se mantienen dentro la tilde y la cruz (`MobileHud`, «Mantiene la tilde y la cruz dentro del área del mapa»).
+  - **No tapa los controles del celular:** el bloque **nunca se dibuja sobre** (a) la **barra de abajo** (la de la torre elegida), (b) el rectángulo de la **tilde**, (c) el de la **cruz**, ni (d) los **botones flotantes** (carrito, salida, demolición). Si el bloque cayera encima de alguno, se **corre hacia arriba** hasta quedar libre (siempre hay mapa libre arriba, y el texto es corto). Los efectos y textos **no reciben toques** (no son controles): el dedo sigue llegando a lo que hay debajo.
+  - **Legible con el zoom del celular:** el texto se compensa con el zoom del mapa para medir **al menos 20 px virtuales en pantalla** (los 12 sp que pide RF-503 para los textos del celular), y no más de 30 px aunque el zoom sea chico. El efecto de sprites sí escala con el mundo.
+  - **Criterio:** **Dado** una torre en la fila de abajo del mapa en modo celular, 1280 × 720 → **Cuando** se mejora → **Entonces** ningún renglón queda dentro de la barra de abajo. **Dado** una torre en la columna de la derecha → **Entonces** el bloque entero queda dentro de la pantalla. **Dado** «Ver todo» (zoom chico) → **Entonces** cada renglón mide 20 px o más en pantalla.
+
+- **RF-593** **Opción para apagarlas** *(D-137)*. En Opciones (RF-113), **justo debajo de «Mostrar números de daño»**, una casilla **«Animaciones de mejora»** (prendida por omisión) que controla **las dos cosas** (efecto y texto) con un solo ajuste `"upgrade_fx"` en `settings`.
+  - **Apagada:** al mejorar no hay efecto nuevo ni texto, **pero el sonido y el anillo de siempre siguen** (como RF-132: apagar los números no apaga el combo).
+  - **Independiente de «Mostrar números de daño»:** apagar uno no apaga el otro.
+  - **Guardado:** clave nueva y aditiva dentro de `settings` (`SAVE_VERSION` no cambia, como `damage_numbers` y `tutorial_enabled`). Un guardado viejo sin la clave se lee como **prendida**; un valor que no es booleano, también.
+  - **En el celular** la casilla respeta el mínimo táctil (RF-550) y Opciones sigue entrando en 720 de alto (RF-555): la fila nueva **no puede romper** el panel de dos columnas de M61.
+  - **Criterio:** **Dado** un guardado viejo → **Entonces** la casilla aparece prendida. **Dado** la casilla apagada → **Cuando** se mejora una torre → **Entonces** no sale efecto ni texto, sí el anillo y el sonido, y el nivel sube igual.
+
+- **RF-594** **Los números del efecto viven en un archivo de datos** (P2): `data/ui/mejoras.json`, con la duración de cada variante, los cuadros del atlas, la escala, el color de aclarado, el tamaño de fuente (mínimo y máximo), el escalonado de los renglones, el máximo de estadísticas (4) y de estadísticas por renglón (2), el tope de efectos vivos a la vez (8) y la **tabla de estadísticas** (campo de `TowerLevelData`, etiqueta, formato: entero, decimal o porcentaje). Un **validador** (`tools/check_mejoras.gd` + test) dice en castellano qué campo está mal (un campo que no existe en `TowerLevelData`, un formato desconocido, una duración menor o igual a 0).
+  - **Criterio:** **Dado** un archivo con un campo `daño_x` que no existe → **Entonces** el validador lo nombra y el juego usa los valores por omisión sin romperse.
+
+- **RF-595** **Rendimiento (P7, el celular).**
+  - **Un solo `Sprite2D` por efecto** (con la región del atlas que cambia por un `Tween`; **sin `_process`**) y **hasta 3 `FloatingText`** (cabecera y dos renglones). Cuando termina, **todo se borra** (`queue_free`).
+  - **Tope de 8 efectos vivos** a la vez (si se mejoran muchas torres seguidas, las nuevas saltean primero el texto y después el efecto); **una torre no acumula**: si se vuelve a mejorar mientras dura el efecto, el anterior se reemplaza.
+  - **Las texturas se cargan una vez** (`preload`) y se comparten; **sin shaders nuevos**, sin partículas (`GPUParticles2D`/`CPUParticles2D`).
+  - **Sin animación no hay trabajo por cuadro:** con la opción apagada, o sin mejoras en curso, el costo es **cero**.
+  - **Criterio de medición:** con las 60 torres de P7 en pantalla y 200 enemigos, mejorar 10 torres seguidas **no baja de 60 FPS en PC** y, en modo celular (1280 × 720 virtual), **no agrega más de 1 ms por cuadro** según `tools/perf_test.gd`. *(En un celular real no se mide: límite honesto, como M61.)*
+
+- **RF-596** **Dónde sale y qué no cambia.**
+  - **Sale** en PC y en el celular, en cualquier modo de juego (campaña, comunidad, Asedio, «Probar» del editor, modo de pruebas): es presentación. **Sale también en el tutorial** (paso «Mejorar», M63).
+  - **No sale** al construir, vender ni demoler, ni cuando la mejora **falla** (sin oro, nivel máximo, partida terminada).
+  - **No cambia**: el costo, los niveles, los atlas, el brillo permanente, el panel de la torre, el sonido (`upgrade`), el orden de los controles, ni **ninguna** regla de combate. El bot de balance da **lo mismo** con y sin esta función (no usa la capa de efectos).
+  - **Criterio:** `tools/balance_sim.gd` produce el mismo informe antes y después (misma semilla).
+
+> **Criterio de aceptación RF-590 a RF-596**
+> **Dado** el juego en PC con la opción prendida → **Cuando** se mejora una Tesla del nivel 2 al 3 → **Entonces** hay un efecto de «maestría» tiñido de violeta, la cabecera «¡Nivel máximo!» y los renglones con el daño, la cadencia, los saltos y el alcance que cambiaron en `tesla.tres`, y todo desaparece en 1,1 s o menos. **Dado** la opción apagada → **Entonces** solo se ven y suenan el anillo y el sonido de siempre. **Dado** el celular en 1280 × 720 → **Entonces** ningún renglón pisa la barra de abajo, la tilde ni la cruz.
+
+#### Decisiones abiertas para Lucas (M65)
+
+| # | Pregunta | Recomendación de Claude |
+|---|---|---|
+| P-65-1 | ¿Una opción para las dos cosas (efecto y texto) o una para cada una? | **Una sola** («Animaciones de mejora»). Lo pediste como «opción para apagarlas»; dos casillas más suman filas en el celular, donde Opciones ya está justa. |
+| P-65-2 | El texto, ¿en números **absolutos** («+3 daño») o **porcentuales** («+60 % daño»)? | **Absolutos**: coinciden con lo que ya ves en el panel de la torre. El porcentaje exagera en torres de daño bajo (Hielo 2→4 = «+100 %»). |
+| P-65-3 | ¿Qué **color** tiene el texto? | El color de la torre aclarado. Otra opción: un solo color para todas (por ejemplo, crema) para que «mejora» se lea siempre igual; el oro (dorado), la cura (verde) y el rebote (cian) ya tienen dueño. |
+| P-65-4 | ¿El efecto **reemplaza** al anillo de construir (recomendado) o se suman los dos? | **Reemplaza**, así no se amontonan dos efectos sobre la misma torre. |
+| P-65-5 | ¿Se muestran las **4** estadísticas cuando cambian 4 a la vez, o solo las 2 o 3 principales? | **Hasta 4**, en dos renglones: es la información que pediste y entra. Si lo ves cargado, se baja el máximo en el archivo, sin tocar código. |
+| P-65-6 | El arte (T362): ¿un efecto único teñido (recomendado) o uno propio por familia de torres (A, B y C de la guía de arte §7)? | **Único teñido**: 2 atlas en total; por familia serían 6 y más peso en la APK. |
+| P-65-7 | ¿Sonido nuevo para la mejora al nivel 3? | **No por ahora** (queda `upgrade`); si lo querés, se suma en T364. |
+
+#### Lo que M65 no incluye
+- **Cambiar** el brillo permanente del mecanismo, los atlas por nivel ni el panel de la torre.
+- **Mostrar** costos, el total invertido o el reembolso en el texto.
+- **Animar** la venta o la construcción (no se pidió).
+- **Partículas** o shaders nuevos, vibración (háptica) ni sonidos nuevos.
+- **Probarlo en un celular real** (se prueba con la escena real en modo celular en una PC, RF-502, y con `tools/perf_test.gd`).
