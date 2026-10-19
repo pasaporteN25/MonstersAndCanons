@@ -2,6 +2,16 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## «Novedades de esta versión»: una pantalla con lo nuevo, una vez por versión *(T371 y T373, 2026-10-19)*
+
+- **Al abrir el juego, una pantalla muestra lo nuevo de la versión instalada**, una sola vez por versión: un panel con título, subtítulo, la lista de novedades (hasta 8, con íconos si los hay) y el botón **«Entendido»**. Se cierra con «Entendido», `Esc` o el «atrás» del celular, y el toque que cierra **no** activa nada del menú de abajo. Si la lista no entra, se desplaza (rueda y barra en PC, un dedo con inercia en el celular).
+- **Para volver a verla:** **Opciones → «Créditos y versión» → «Novedades de esta versión»** (menú principal y pausa, PC y celular). No cambia lo que el juego recuerda.
+- **Cuándo sale sola:** cuando la versión instalada es un número y trae novedades aprobadas, y el guardado todavía no las vio. **No sale** en la versión `beta`, mientras el texto sea un borrador, en el modo de pruebas ni al correr desde el editor de Godot. Si el archivo está roto, el menú abre como siempre.
+- **La presentación de la 1.0.0 sale a todos** (también a quien instala por primera vez, antes de la intro); las versiones siguientes, tipo «Mejoras de esta versión», las ven quienes ya jugaron.
+- **Los textos están en `data/novedades/novedades.json`** y se pueden retocar sin programar (`CONTENIDO.md`). `godot --headless --path . -s tools/check_novedades.gd` los revisa y avisa si falta la entrada de la versión.
+- **Arte provisional:** por ahora la pantalla no tiene cabecera ni íconos propios (un rombo de bronce marca cada novedad); el arte llega con T372 y T375.
+- Tu progreso no cambia: el guardado suma una marca («última versión vista») y una versión anterior del juego lo sigue leyendo.
+
 ## «Ver todo» también cuando corriste el mapa *(T304, 2026-10-19)*
 
 «Ver todo» aparece ahora también cuando corriste el mapa con dos dedos aunque no hayas acercado nada: antes, con el zoom mínimo no había forma de volver al encuadre. En la computadora el botón aparece solo cuando corrés el mapa con el botón del medio estando con el zoom mínimo (con la rueda del mouse no aparece, como hasta ahora).
