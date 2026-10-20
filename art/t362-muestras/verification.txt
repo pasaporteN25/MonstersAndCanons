@@ -1,0 +1,26 @@
+T362 · Verificación de muestras · 2026-10-19
+
+python3 art/t362-muestras/validate.py
+116 verificaciones de arte correctas. No verifica Godot ni render del navegador.
+
+Verificación adicional de los 10 atlas teñidos de revisión:
+RGB = round(canal original × tinte); alfa idéntico al atlas neutro.
+Resultado: correcto en los 10 atlas.
+
+JavaScript de comparison.html: sintaxis válida (compilado con Function, sin ejecutarlo).
+git diff --check: sin errores.
+
+Revisión visual mediante PNG/cuadros de GIF:
+- Refuerzo ámbar sobre pradera, cuadros 1 a 8, a 192 y 34 px.
+- Maestría celeste sobre los cuatro suelos, cuadros 1 a 8, a 192 y 34 px.
+- Pico del montaje Maestría ámbar con Ametralladora y Mortero.
+
+No verificado: render ni interacción del HTML en navegador, reproducción visual
+completa del GIF, mezcla aditiva en Godot, integración, partida, pausa/velocidad
+del juego, HUD, zoom móvil del motor, rendimiento, APK ni celular real.
+Firefox/Snap no pudo iniciar por restricciones de escritura; herramienta de
+navegación sin navegadores disponibles. Ver detalles y decisiones abiertas en README.md.
+
+Commit solicitado: no creado. git add falló antes de modificar el índice:
+fatal: Unable to create '/home/newman/Documentos/Proyectos/TDv1/.git/worktrees/codex-t362/index.lock': Read-only file system
+No se hizo push ni PR. Todos los archivos nuevos están en art/t362-muestras/.

@@ -1532,6 +1532,16 @@ Los textos, números de tamaño y posiciones nuevos viven en `mobile_ui.json` (P
 
 **Riesgos.** (1) La cola entre el cartel de oleada, la entrada y la tarjeta RF-134 es lo más delicado: se prueba con los tres a la vez en la oleada 10 del nivel 1 con un guardado nuevo. (2) `Engine.time_scale` y la pausa mueven el `Tween` (es lo buscado), pero un cartel que quedó a medias al salir al menú no puede dejar nodos: se borra en `_exit_tree`. (3) El cartel no puede tapar los botones flotantes del celular: sus rectángulos se verifican con `MobileHud`. (4) Si el atlas del destello pesa mucho, se baja a 6 cuadros (anotado en la ficha de arte).
 
+### M71 / T410 a T415 · Integración del arte aprobado de M65 y M66 (RF-625 a RF-629, D-165)
+
+Presentación pura. Cambia solo el cuerpo visual de tres piezas, sin tocar su comportamiento ni sus firmas públicas (los tests existentes siguen valiendo):
+
+1. **`UpgradeEffect`** (T411): un `Sprite2D` con `hframes = 4`, `vframes = 2` y `preload` del atlas (`assets/sprites/effects/mejora/upgrade_l2.png` y `upgrade_l3.png`); `progress` (0 a 1, movido por el `Tween`) elige el cuadro (`floor(progress * 8)`, tope 7). `modulate` = color de la torre. Escala = `footprint` (parámetro nuevo opcional de `setup`, por omisión 1). Sin `_draw`, sin `_process`.
+2. **`BossEntranceBurst`** (T412): dos `Sprite2D` hijos, grieta debajo (alfa 1 → 0) y destello encima (`offset = (-128, -176)` para que el origen del nodo sea el punto de los pies; `modulate` = color del enemigo). Mismo `Tween`, sin `_process`.
+3. **`BossEntranceCard`** (T413): el `StyleBox` de hierro y bronce pasa a ser un fondo liso sin borde y se le suma un `NinePatchRect` (márgenes 32, `mouse_filter = IGNORE`) con `boss_card_frame.png` arriba de todo.
+4. **Importación**: `.import` de los cinco PNG con `mipmaps/generate = false`. **Sin cambios** en `Game`, `Hud`, `EffectsLayer` más allá del parámetro `footprint`, ni en los datos.
+5. **Medición** (T414): `tools/perf_test.gd` ya trae `mejoras`, `sin_fx`, `celular`, `entrada_jefe`; se corre con la máquina libre, en pares alternados con y sin efecto.
+
 ### M67 / T370 a T375 · «Novedades de esta versión» (RF-603 a RF-609, D-141 a D-144)
 
 **Estado: implementado salvo el arte (T372, T375) y el OK de Lucas a los textos.** No cambia la partida, el balance ni el progreso. Sigue el molde de la intro (M57, `IntroData`/`IntroFlow`/`IntroScreen`) y del tutorial (M63, `TutorialData`/guardado aditivo).

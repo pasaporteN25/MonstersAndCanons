@@ -1361,3 +1361,18 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
   - **Bajar el costo de demoler solo en el 9 (opción A):** puede hacer falta si la medición muestra que alcanzar el Mortero cuesta demasiadas vidas; se decide con datos y con Lucas, no antes.
 - **Límites aceptados:** (1) 270 de oro de demoliciones más 300 del Mortero son 570 de oro en un mapa de 320 de arranque: **alcanzar** el Mortero no garantiza **poder permitírselo sin perder vidas**; se mide en T282 y lo juzga Lucas en T283. (2) La primera vez hay exactamente 3 recursos: quien pague un Francotirador con su segunda forma (120 + 1 recurso) ya no llega al Mortero en esa partida. (3) El panel dirá «Puede dar 1 recurso (100 %)», con la redacción de siempre. (4) Las vidas del bot no predicen las de una persona.
 - **Qué cambia:** `01-spec.md` (M61, RF-523 a RF-525; nota en RF-420), `02-plan-tecnico.md` (M61), `03-tareas.md` (T282 y T283 nuevas), `09-decisiones-pendientes-v1.md` (nota en Q-21), `CHANGELOG.md` y `CONTENIDO.md`. **No cambia ningún código, dato ni asset todavía:** eso es T282.
+
+## D-165 · El arte aprobado de M65 y M66 se integra como atlas en `Sprite2D` (un solo efecto teñido por `modulate`, mezcla normal), el marco del cartel como 9-slice sobre un fondo liso, y todo sigue apagándose con las opciones
+- **Fecha:** 2026-10-20 · **Estado:** programada (T411 a T415) · **Decidió:** Lucas (aprobó el estilo de las muestras de Codex) / Claude (cómo se conecta al código)
+- **Qué:** `UpgradeEffect` usa `upgrade_l2.png` / `upgrade_l3.png`; `BossEntranceBurst` usa `boss_burst.png` y `boss_crack.png`; `BossEntranceCard` usa `boss_card_frame.png` en 9-slice. Los cinco PNG se importan sin mipmaps. Los comportamientos (tiempos, `Tween`, sin `_process`, opciones, pausa y velocidad) no cambian.
+- **Por qué:**
+  - **Un `Sprite2D` con `hframes`/`vframes` es lo más barato** que hay en Godot para un atlas: un nodo, una textura, cero código por cuadro más allá de elegir el número. Cumple RF-595 y RF-629 sin gastar en dibujar curvas cada cuadro, que es lo que hacía el `_draw` provisional.
+  - **`modulate` y mezcla normal:** las muestras fueron revisadas multiplicadas por el color de la torre (`upgrade_glow_color`) y por el del enemigo; la mezcla aditiva nunca se vio en Godot (Codex lo dejó como «no verificado»).
+  - **El marco con fondo liso aparte:** el centro del marco es transparente, así que el fondo oscuro y el contenido van debajo; el marco, arriba de todo y sin tomar toques, para respetar RF-599.
+  - **Las opciones siguen mandando:** el arte solo existe si el efecto se crea, y el efecto solo se crea con la opción prendida (RF-596, RF-600).
+- **Alternativas descartadas:**
+  - **Un `AnimatedSprite2D` con `SpriteFrames`:** más nodos y recursos por una animación que el `Tween` ya mueve (y que se congela con la pausa y acompaña la velocidad sin trabajo extra).
+  - **Mezcla aditiva:** sin revisión visual en Godot; se puede probar después con un cambio de una línea.
+  - **Efecto distinto por familia de torre:** sigue siendo P-65-6; se aprobó el efecto único teñido.
+  - **Hornear el carmesí del Jefe en el destello:** rompería la generalización a otros jefes (RF-601).
+- **Qué cambia:** `01-spec.md` (M71, RF-625 a RF-629), `02-plan-tecnico.md`, `03-tareas.md` (T410 a T415; cierra T362, T364, T367 y T369), `scenes/effects/upgrade_effect.gd`, `scenes/effects/boss_entrance_burst.gd`, `scenes/ui/boss_entrance_card.gd`, `assets/sprites/effects/`, `CHANGELOG.md`, `CONTENIDO.md`, `README.md`, `ONBOARDING.md`.
