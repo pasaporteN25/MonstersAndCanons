@@ -16,6 +16,11 @@ const RECORD_COLOR := Color(1, 0.84, 0.3)
 ## RF-467: el texto de victoria del nivel, más chico y de color suave. Mismo ancho que el panel (420 menos los márgenes).
 const WIN_TEXT_COLOR := Color(0.78, 0.82, 0.9)
 const WIN_TEXT_WIDTH: float = 356.0
+## M70 (RF-636): los consejos de la derrota, más chicos que el detalle y de colores suaves; mismo ancho que el panel.
+const TIP_COLOR := Color(1, 0.88, 0.6)
+const TIP_FONT_SIZE: int = 16
+## Un poco menos que el ancho útil del panel (352): así el texto con salto de línea no ensancha el panel.
+const TIP_WIDTH: float = 340.0
 const NEXT_TEXT: String = "Siguiente nivel"
 const EPILOGUE_TEXT: String = "Epílogo"
 
@@ -28,6 +33,7 @@ const EPILOGUE_TEXT: String = "Epílogo"
 @onready var _levels_button: Button = %LevelsButton
 
 var _score_label: Label
+var _tower_tip_label: Label
 var _win_label: Label
 var _record_title: Label
 var _entry_slot: VBoxContainer
@@ -45,6 +51,7 @@ func _ready() -> void:
 	_next_button.pressed.connect(_on_next_button_pressed)
 	_levels_button.pressed.connect(levels_pressed.emit)
 	# Puntos, título de récords, entrada de iniciales y tabla: debajo del detalle.
+	_tower_tip_label = _tip_label(TIP_COLOR)
 	_win_label = _label(17, WIN_TEXT_COLOR)
 	_win_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_win_label.custom_minimum_size = Vector2(WIN_TEXT_WIDTH, 0)
@@ -55,7 +62,7 @@ func _ready() -> void:
 	_table = ScoreTable.new().setup(20)
 	_table.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	var at: int = _detail.get_index() + 1
-	for node: Control in [_win_label, _score_label, _record_title, _entry_slot, _table]:
+	for node: Control in [_tower_tip_label, _win_label, _score_label, _record_title, _entry_slot, _table]:
 		_rows.add_child(node)
 		_rows.move_child(node, at)
 		at += 1
@@ -81,6 +88,7 @@ func show_victory(lives_left: int, stars: int, has_next: bool, in_campaign: bool
 	_detail.text = "Vidas restantes: %d" % lives_left
 	_win_label.text = win_text
 	_win_label.visible = win_text != ""
+	_show_tips("")  # M70: los consejos son solo de la derrota
 	_score_label.text = "Puntos: %d" % score  # RF-190
 	_epilogue_mode = has_epilogue
 	_next_button.text = EPILOGUE_TEXT if has_epilogue else NEXT_TEXT
@@ -90,12 +98,14 @@ func show_victory(lives_left: int, stars: int, has_next: bool, in_campaign: bool
 	visible = true
 
 
-func show_defeat(wave: int, total_waves: int, in_campaign: bool, score: int = 0) -> void:
+## `tower_tip` (M70, RF-630): los consejos de la derrota; "" = no se ve esa línea.
+func show_defeat(wave: int, total_waves: int, in_campaign: bool, score: int = 0, tower_tip: String = "") -> void:
 	_title.text = "Derrota"
 	_stars.visible = false
 	_title.add_theme_color_override("font_color", Color(1, 0.45, 0.45))
 	_detail.text = "Llegaste a la oleada %d de %d" % [wave, total_waves]
 	_win_label.visible = false  # RF-467: no hay texto en la derrota
+	_show_tips(tower_tip)
 	_score_label.text = "Puntos: %d" % score  # RF-190
 	_epilogue_mode = false
 	_next_button.text = NEXT_TEXT
@@ -115,6 +125,24 @@ func ask_name(title: String, length: int, initial: String) -> void:
 	var entry: NameEntry = NameEntry.new().setup(length, initial)
 	entry.confirmed.connect(_on_name_confirmed)
 	_entry_slot.add_child(entry)
+
+
+## El consejo visible ("" si no hay).
+func tower_tip_text() -> String:
+	return _tower_tip_label.text if _tower_tip_label.visible else ""
+
+
+func _show_tips(tower_tip: String) -> void:
+	_tower_tip_label.text = tower_tip
+	_tower_tip_label.visible = tower_tip != ""
+
+
+func _tip_label(color: Color) -> Label:
+	var label: Label = _label(TIP_FONT_SIZE, color)
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.custom_minimum_size = Vector2(TIP_WIDTH, 0)
+	label.visible = false
+	return label
 
 
 ## El texto de victoria que se ve ("" si no hay).

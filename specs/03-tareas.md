@@ -2298,9 +2298,11 @@ Spec: RF-540 a RF-545. Decisiones: D-110 a D-113. Plan: «M60 / T300». Rama `fe
 
   **Resultado (2026-10-20):** rescatada y renumerada la spec M70 (RF-630 a RF-639, D-171 a D-175). RF-634 queda retirado: se eliminó el recordatorio de oro/mejoras del trabajo incompleto. Datos con 15 reglas y 8 criterios; lógica pura de fugas y selección, sin sugerir torres ausentes ni Hielo como daño antiaéreo. Validador oficial OK; 42 tests de datos/lógica y verificación conjunta de M70: importación + suite **2110/2110**, sin `SCRIPT ERROR` ni `Parse Error`, con directorios XDG aislados. Textos en borrador; sin partidas humanas ni celular real.
 
-- [ ] **T421 · `[mobile+x86]` · Integrar el consejo de torre en la partida y la derrota.**
+- [x] **T421 · `[mobile+x86]` · Integrar el consejo de torre en la partida y la derrota.**
   **Refs:** RF-630, RF-631, RF-636, RF-637. **Depende de:** T420.
   **Hecho cuando:** se registran fugas reales; la derrota muestra solo el consejo de torre; la victoria lo oculta; textos en dos líneas y panel en 1280 × 720 sin cambiar tamaño ni orden de botones. RF-634 retirado: sin recordatorios de oro ni contador de mejoras.
+
+  **Resultado (2026-10-20):** `Game` registra vidas realmente perdidas y pasa solo el consejo de torre a `EndScreen`; no anota fugas tras terminar ni con vidas infinitas. Sin contador de mejoras ni segunda línea de oro. **13 tests** de integración/pantalla en verde, incluyendo victoria que limpia el consejo, torres ofrecidas, botones y textos oficiales en hasta dos líneas. Panel con consejo largo y cinco récords: **420 × 604 px**. Importación y suite conjunta **2110/2110**, sin errores de script y con guardados de prueba aislados. No se probó con una persona ni celular real.
 
 - [ ] **T422 · `[mobile+x86]` · Medir el consejo con el bot en los 15 niveles y documentar.**
   **Refs:** RF-639. **Depende de:** T421.
