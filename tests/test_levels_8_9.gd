@@ -86,7 +86,10 @@ func test_levels_8_and_9_are_ruins_with_removables_and_resources() -> void:
 				assert_eq(obstacle.cell, EXPECTED[n][1], "nivel %d: dónde está la pieza" % n)
 			else:
 				assert_eq(obstacle.reward_amount, 1)
-				assert_between(obstacle.chance_percent, 1, 99, "al azar")
+				if n == 9:
+					assert_eq(obstacle.chance_percent, 100, "nivel 9: los escombros comunes siempre dan su recurso")
+				else:
+					assert_between(obstacle.chance_percent, 1, 99, "nivel 8: al azar")
 		assert_eq(pieces, 1, "nivel %d: una sola pieza" % n)
 
 

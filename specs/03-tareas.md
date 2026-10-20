@@ -159,10 +159,33 @@
 
 > **Compuerta: el OK de Lucas a la spec M61** (la escribió Claude el 2026-10-16; el cambio lo pidió Lucas). Hasta entonces **no se programa**. T282 la hace Codex `gpt-6-luna` (un número en un archivo de datos, más una medición). **T283 es de Lucas** y es la validación final. Una tarea = un commit `Txxx: …`.
 
-- [ ] **T282 · Los tres escombros comunes del nivel 9 dan siempre su recurso, y medir si el Mortero se compra (Codex `gpt-6-luna`).**
+- [x] **T282 · Los tres escombros comunes del nivel 9 dan siempre su recurso, y medir si el Mortero se compra (Codex `gpt-6-luna`).**
   **Refs:** RF-523, RF-524, RF-525, D-103, Q-21, RF-420, RF-428, RF-432, T245 (punto 4), T279. **Depende de:** el OK de Lucas a M61.
   Leer antes `.claude/rules/datos.md` y `.claude/rules/specs.md`. En `data/levels/level_09.json`, cambiar **solo** `"probabilidad":50.0` por `"probabilidad":100.0` en la letra `e` de la leyenda. **No tocar** ningún otro nivel, `data/obstaculos.json`, `data/towers/mortar.tres`, el mapa, las oleadas ni código del juego. Si hay un test que exige el 50 % del 9, ajustarlo a 100 (y nada más). Medir con el bot, **5 semillas** (1 a 5): (a) `check_rule=1` por tramos `levels=6-9`, `levels=10-12` y `levels=13-15` (regla de oro RF-432; los mínimos de 13, 14 y 15 son hoy **5, 3 y 2** vidas y deben dar **lo mismo**); (b) `sin_recursos` y `mix` en el 9 (hoy 11 vidas, 5/5); (c) `demoler` y `demoledora` en el 9, informando **por semilla** recursos juntados, **si compró el Mortero y en qué oleada**, oro gastado en demoler, vidas y resultado. Si `demoler` no demuele los tres escombros, agregar a `tools/balance_sim.gd` la estrategia `mortero` (RF-524, punto 5; como `pieza` de T245: `BalanceArgs.INFRA_STRATEGIES`, un test en `tests/test_balance_args.gd` y una línea en `ONBOARDING.md`) y medirla. **Si el Mortero no se compra o comprarlo hace perder, NO implementar las opciones A a D de RF-525: informar los números y esperar a Lucas.**
   **Hecho cuando:** (1) `git diff` toca solo `data/levels/level_09.json` (una línea), los documentos y, si hizo falta, `tools/balance_sim.gd`, `scripts/logic/balance_args.gd`, su test y `ONBOARDING.md`; (2) `git diff --stat` no muestra ningún otro archivo de `data/`; (3) la medición (a) da la regla de oro cumplida en todos los tramos y los niveles 13, 14 y 15 **iguales** (5, 3 y 2 vidas), o se informa cuál cambió y se frena; (4) el «Resultado» incluye una **tabla por semilla** del punto (c) y responde con números a «¿alguna estrategia compra el Mortero en el 9? ¿en qué oleada? ¿con cuántas vidas termina?», con el costo en oro de las demoliciones (3 × 90 = 270) y se compara con la línea de base de T245; (5) `godot --headless --import` y la suite de GUT completa en verde, sin `SCRIPT ERROR`; (6) `git status` limpio de SVG reescritos por `--import` (`git checkout -- assets`); (7) `CHANGELOG.md` y `CONTENIDO.md` al día; (8) el «Resultado» dice **qué no se probó**: que no jugó ninguna persona y que las vidas del bot no predicen las de Lucas. Commit: `T282: escombros comunes del nivel 9 al 100 %`.
+  **Resultado (2026-10-17, Codex):** En `data/levels/level_09.json` cambié solo la probabilidad de la letra `e` de 50 a 100 %. La prueba de niveles 8–9 ahora exige 100 % en el 9 y conserva el rango probabilístico del 8. Como `demoler` no desmonta los tres escombros comunes en todas las semillas, agregué la estrategia de herramienta `mortero`: tras dos torres de defensa, demuele solo los tres escombros comunes y, reunidos los recursos, reserva oro para el Mortero; sumé su nombre al test de argumentos y a ONBOARDING. No toqué costos ni datos de otros niveles.
+
+  **Línea de base previa al cambio:** `sin_recursos` ganó el 9 en 5/5 con 11 vidas; `mix` (T245) 5/5 con 11. `demoler` y `demoledora` dieron ambos V4, D, D, V1, D; juntaron como máximo 2 recursos y gastaron 180 o 360 de oro de infraestructura. `check_rule=1 levels=13-15` pasó 15/15: mínimos de 5, 3 y 2 vidas en niveles 13, 14 y 15.
+
+  **Medición posterior:** `check_rule=1` por tramos 6–9, 10–12 y 13–15 dio 20/20, 15/15 y 15/15; cada mapa cumplió 5/5. Los niveles 13, 14 y 15 conservaron exactamente 5, 3 y 2 vidas en las cinco semillas. En el 9, `sin_recursos` y `mix` ganaron 5/5, todas con 11 vidas. `demoler` y `demoledora` repitieron las victorias V4, D, D, V1, D; ahora reunieron 3 recursos en semillas 1 y 4, y 2 en las otras; la infraestructura gastó 360 de oro en las victorias y 180 en derrotas (incluye la ruina de la pieza cuando se demuele). La estrategia `mortero` reunió los 3 recursos en todas las semillas, gastó 270 de oro en los tres escombros comunes y no compró el Mortero en ninguna: perdió las cinco en la oleada 3, con 0 vidas y 136 de oro restante. `mix` no lo compró; `heavy` tampoco lo alcanzó y perdió 4/5 en la oleada 6. Así que ninguna de las estrategias medidas compró el Mortero. La base del camino cuesta 270 de oro (3 × 90), más 300 de oro y 3 recursos del Mortero; llegar a los recursos no alcanza para pagarlo a tiempo mientras se defiende. No apliqué opciones A a D de RF-525; queda para decisión de Lucas.
+
+  **Tabla por semilla del nivel 9 (posterior):**
+
+  | Estrategia | Semilla | Recursos reunidos | Mortero (oleada) | Oro en demoliciones | Vidas | Resultado |
+  |---|---:|---:|---|---:|---:|---|
+  | `demoler` | 1 | 3 | No | 360 | 4 | Victoria |
+  | `demoler` | 2 | 2 | No | 180 | 0 | Derrota, oleada 16 |
+  | `demoler` | 3 | 2 | No | 180 | 0 | Derrota, oleada 16 |
+  | `demoler` | 4 | 3 | No | 360 | 1 | Victoria |
+  | `demoler` | 5 | 2 | No | 180 | 0 | Derrota, oleada 16 |
+  | `demoledora` | 1 | 3 | No | 360 | 4 | Victoria |
+  | `demoledora` | 2 | 2 | No | 180 | 0 | Derrota, oleada 16 |
+  | `demoledora` | 3 | 2 | No | 180 | 0 | Derrota, oleada 16 |
+  | `demoledora` | 4 | 3 | No | 360 | 1 | Victoria |
+  | `demoledora` | 5 | 2 | No | 180 | 0 | Derrota, oleada 16 |
+  | `mortero` | 1–5 | 3 cada una | No | 270 cada una | 0 | Derrota, oleada 3 (136 de oro restante) |
+
+  **Verifiqué:** `godot --headless --import` con Godot 4.7.2 (código 0; avisó que usó Android SDK 35.0.1 por discrepancia y que no pudo conectar con `adb`); suite completa de GUT: **1677/1677 tests y 20201 aserciones**, sin `SCRIPT ERROR`; y las mediciones del bot indicadas. Antes del commit restablecí `assets` con `git checkout -- assets`; no quedaron SVG reescritos. **No probado:** nadie jugó una partida humana; las vidas del bot no predicen las de Lucas. Tampoco se probaron Windows ni Android.
 
 - [ ] **T283 · Partida humana del nivel 9 con el Mortero (Lucas). Prioridad media.**
   **Refs:** RF-524 punto 6, RF-525, T282, T280 (mismo estilo). **Depende de:** T282 (en una build con el cambio y un guardado nuevo).

@@ -483,7 +483,7 @@ Perfiles de compra/ubicación/mejoras y variantes de frecuencia viven en art/bal
 
 Campaña ampliada con level_08 (Bastión) y level_09 (Taller asediado). JSON en formato canónico del editor; torres_extra permite Mecánico, sin nuevas fuentes de colección. Guardián debuta en8/oleada4 y Curandero en9/oleada5; robos opcionales comienzan6 y embestidas8, con combinaciones posteriores. Carga/auras/desgaste/reparación reutilizan recursos existentes y no cambian sus estadísticas. Datos y recorridos1–7 intactos. Detalle, bots/capturas y límites en art/campaign-m45/README.md.
 
-**Pendiente (M61, T282):** en `level_09.json` la letra `e` (los tres escombros comunes) pasará de `"probabilidad": 50.0` a `100.0`, para que los 3 recursos del Mortero estén garantizados (la ruina `u` con la pieza no da recursos la primera vez, RF-428). Hasta que se aplique, los datos siguen al 50 %.
+**M61 (T282):** en `level_09.json`, la letra `e` de los tres escombros comunes está al 100 % y garantiza 1 recurso por escombro; la ruina `u` con la pieza no da recursos la primera vez (RF-428). La estrategia específica juntó los 3 recursos, pero perdió en la oleada 3 con 0 vidas y 136 de oro, sin comprar el Mortero; pasó en las 5 semillas. No se cambiaron los costos; falta la partida humana de T283.
 
 ### T225 · Nivel 10 (La mina vieja)
 

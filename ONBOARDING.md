@@ -313,7 +313,7 @@ Se ejecutan desde la carpeta del proyecto. Más detalle dentro de cada archivo.
 | Comando | Para qué |
 |---|---|
 | `godot --headless --path . -s addons/gut/gut_cmdln.gd -gdir=res://tests -gexit` | Correr todos los tests. |
-| `godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- smart level=1` | Bot que juega solo, para revisar el balance (spec §7.1). Estrategias: `smart`, `mix`, `heavy`, `basic`, `naive` y, de M50, `sin_recursos`, `demoler`, `demoledora`, `pieza` (T245), `extraer_temprano`, `extraer_tarde`; con `seeds=N` y `levels=A-B` juega muchas partidas y da una tabla. `check_rule=1` comprueba la regla de oro. |
+| `godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- smart level=1` | Bot que juega solo, para revisar el balance (spec §7.1). Estrategias: `smart`, `mix`, `heavy`, `basic`, `naive` y, de M50, `sin_recursos`, `demoler`, `demoledora`, `pieza` (T245), `mortero` (T282; prueba demoler los tres escombros comunes del nivel 9), `extraer_temprano`, `extraer_tarde`; con `seeds=N` y `levels=A-B` juega muchas partidas y da una tabla. `check_rule=1` comprueba la regla de oro. |
 | `godot --path . -s tools/perf_test.gd` | Prueba de rendimiento: 200 enemigos y 60 torres. Abre una ventana. |
 | `godot --path . res://tools/perf_levels.tscn -- level=15 from=27` | Rendimiento en un nivel real (T236): `level` es el mapa, `from` cuántas oleadas se dan por jugadas antes de medir; opciones `to`, `towers`, `seconds`, `vsync=1`. Imprime los FPS de cada oleada. Abre una ventana. |
 | `godot --headless --path . -s tools/make_sounds.gd` | Volver a generar los sonidos (D-020). Con `-- shot_fire`, solo ese. |
