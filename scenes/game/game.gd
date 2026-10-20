@@ -43,6 +43,11 @@ var camera_controller: CameraController
 var minimum_map_zoom: float = 1.0
 ## RF-217: se está probando el nivel del editor (no hay campaña: no se guarda nada).
 var testing: bool = false
+## M66 (RF-597): los números de la entrada de los jefes y lo que se lleva cuenta para no repetirla.
+var _boss_entrance_config: BossEntranceConfig
+var _boss_entrance_wave: int = -1
+var _boss_entrance_types: Array = []
+var _boss_entrance_last_s: float = BossEntranceRules.NEVER
 ## RF-184: el panel de pruebas. null si no es el modo de pruebas.
 var dev_panel: DevPanel
 ## RF-194: el Salón de la fama, mientras está abierto. null si no.
@@ -758,7 +763,7 @@ func start_next_wave() -> void:
 ## RF-92: reinicia el nivel desde cero recargando la escena.
 func restart() -> void:
 	_reset_time()
-	get_tree().reload_current_scene()
+	GameFlow.reload_current()  # RF-584: con pantalla de carga
 
 
 # --- Modo de pruebas (RF-184): lo que hace cada botón del panel ---
@@ -918,12 +923,45 @@ func _on_enemy_spawned(enemy: Enemy) -> void:
 	enemy.healed.connect(func(e: Enemy, amount: int) -> void:
 		effects.heal_number(e.global_position, amount)
 		Audio.play(&"heal", 0.8))  # RF-165
+	_maybe_boss_entrance(enemy)  # M66: antes que la tarjeta de abajo, que espera al cartel de aparición
 	# RF-134: la primera vez en todo el juego que aparece este tipo, se presenta.
 	if not SaveManager.has_seen_enemy(enemy.data.id):
 		SaveManager.mark_enemy_seen(enemy.data.id)
 		hud.show_enemy_intro(enemy.data)
 		if GameFlow.played_level() != null:
 			SaveManager.save()  # RF-117: solo jugando desde el menú (campaña o comunidad)
+
+
+## M66, RF-597 a RF-602: si el enemigo que nació tiene datos de entrada (`EnemyData.entrance`), el nivel está en su
+## lista, la opción está prendida y no se repitió en la oleada ni hubo otra hace menos de 8 s, sale el destello en
+## la entrada de su camino y el cartel de aparición. Solo presentación: no toca al enemigo, la oleada ni el reloj.
+## Solo en la campaña jugada desde el menú (también con el modo de pruebas): no en el editor, la comunidad,
+## Asedio ni la escena suelta.
+func _maybe_boss_entrance(enemy: Enemy) -> void:
+	if enemy.data.entrance == null:
+		return  # lo barato primero: casi todos los enemigos salen acá
+	var campaign: LevelData = GameFlow.current_level()
+	if campaign == null or level_data == null or campaign.id != level_data.id:
+		return
+	if _boss_entrance_config == null:
+		_boss_entrance_config = BossEntranceConfig.load_from()
+	if session.wave != _boss_entrance_wave:
+		_boss_entrance_wave = session.wave
+		_boss_entrance_types.clear()
+	var now_s: float = Time.get_ticks_msec() / 1000.0
+	if not BossEntranceRules.should_show(enemy.data, String(level_data.id), SaveManager.boss_entrance_enabled(), now_s,
+			_boss_entrance_last_s, _boss_entrance_types, _boss_entrance_config.seconds("intervalo_min_s")):
+		return
+	_boss_entrance_last_s = now_s
+	_boss_entrance_types.append(enemy.data.id)
+	var spot: Vector2 = enemy.global_position
+	var path: Path2D = enemy.path()
+	if path != null and path.curve != null and path.curve.point_count > 0:
+		spot = path.to_global(path.curve.get_point_position(0))
+	effects.boss_entrance(spot, enemy.data.color, _boss_entrance_config.seconds("destello_s"))
+	hud.show_boss_entrance(enemy.data)
+	if enemy.data.entrance.sound != &"":
+		Audio.play(enemy.data.entrance.sound)
 
 
 ## RF-132: el número de daño de cada golpe. Si el golpe hizo combo, su número es el aviso (RF-315) y suena (RF-316).
@@ -979,10 +1017,33 @@ func _on_tower_built(tower: Tower) -> void:
 
 
 func _on_tower_upgraded(tower: Tower) -> void:
-	effects.tower_built(tower.global_position, tower.data.color, tower.data.footprint)  # RF-75: mismo anillo
+	# M65 (RF-590, RF-593): el efecto y el texto de la mejora; con la opción apagada, el anillo de siempre (RF-75).
+	if not effects.tower_upgraded(tower, get_viewport().get_canvas_transform(), _upgrade_fx_safe_rects(), _upgrade_fx_view_rect()):
+		effects.tower_built(tower.global_position, tower.data.color, tower.data.footprint)
 	_refresh_tower_panel()
 	_refresh_exploitable()
 	Audio.play(&"upgrade")
+
+
+## M65, RF-592: lo que el texto de la mejora no puede pisar (barra de abajo, tilde, cruz, botones flotantes).
+func _upgrade_fx_safe_rects() -> Array[Rect2]:
+	var rects: Array[Rect2] = []
+	var bottom: Control = hud.get_node_or_null("BottomBar") as Control
+	if bottom != null and bottom.is_visible_in_tree():
+		rects.append(bottom.get_global_rect())
+	if mobile_hud != null:
+		rects.append_array(mobile_hud.forbidden_rects())
+	return rects
+
+
+## M65, RF-592: el área de mapa que se ve (entre la barra de arriba y la de abajo).
+func _upgrade_fx_view_rect() -> Rect2:
+	var mobile_config: MobileUiConfig = MobileUiConfig.load_from()
+	var top_height: float = float(mobile_config.get_value("barra_alta_px")) if UiMode.is_mobile() else 48.0
+	var bottom: Control = hud.get_node_or_null("BottomBar") as Control
+	var bottom_height: float = float(mobile_config.get_value("barra_baja_px")) if UiMode.is_mobile() \
+			else (bottom.size.y if bottom != null and bottom.is_visible_in_tree() else 0.0)
+	return Rect2(0.0, top_height, Rules.SCREEN_SIZE.x, Rules.SCREEN_SIZE.y - top_height - bottom_height)
 
 
 func _on_tower_sold(tower: Tower, refund: int, _resource_refund: int) -> void:

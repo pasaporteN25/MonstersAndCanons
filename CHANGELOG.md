@@ -5,6 +5,26 @@ Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle t�
 ## La intro pesa mucho menos *(T390, 2026-10-20)*
 
 Las siete láminas de la intro se guardan ahora como WebP con una compresión leve (calidad 0,90): **ocupan unos 4 MiB en vez de casi 18** dentro del juego, y en pantalla se ven igual (no se notan diferencias a simple vista). El juego queda más liviano de instalar y de abrir en el celular.
+## Pantalla de carga y toques bloqueados al cambiar de pantalla *(T340, 2026-10-19)*
+
+Al elegir un nivel, volver al menú, reintentar o pasar al siguiente nivel, el juego muestra ahora una **pantalla de carga** («Cargando…» con una barra que se mueve) y **no hace caso a nada** (toques, clics, teclas ni el botón «atrás») hasta que la pantalla nueva está lista. Antes, si tocabas de más mientras el nivel cargaba en el celular, se podía lanzar **otro nivel** (el que quedaba debajo del dedo en la selección). Ahora entra solo el que elegiste. La pantalla de carga se ve como mínimo 0,4 segundos, así que en equipos rápidos es un destello corto y no un parpadeo.
+## Animación al mejorar una torre *(T363, 2026-10-19)*
+
+Al mejorar una torre sale ahora un **efecto breve sobre ella**, distinto según el nivel: un anillo de luz con chispas al **nivel 2** (medio segundo) y uno más grande, con doble anillo, destello en cruz y chispas en abanico, al **nivel máximo** (0,7 s). Se tiñe con el color de la torre. Junto con el efecto sube un **texto con lo que sumó la mejora**, leído de los datos reales de la torre y solo lo que cambió: por ejemplo, la Ametralladora al nivel 2 dice «¡Nivel 2!» y «+3 daño · +0,5 disp/s»; la Tesla al máximo, «¡Nivel máximo!», «+8 daño · +0,1 disp/s» y «+1 saltos · +0,5 alcance».
+
+El texto no tapa la barra de abajo, la tilde, la cruz ni los botones flotantes del celular, se corre hacia adentro del mapa si la torre está en un borde y se agranda para leerse con el zoom. Se apaga en **Opciones → «Animaciones de mejora»** (debajo de «Mostrar números de daño»): apagada, queda el anillo y el sonido de siempre. **El dibujo del efecto es provisional** (lo reemplazará el arte que apruebe Lucas) y el juego no cambia en nada: costos, niveles y balance son los de antes.
+## Entrada del Jefe en el nivel 1 *(T366 y T368, 2026-10-19; arte provisional)*
+
+Cuando llega el **Jefe de la oleada 10 del nivel 1** (jugado desde el menú), sale una entrada corta: un **destello con una grieta** en la entrada del camino, en el mismo instante en que nace, y, cuando se va el cartel de «Oleada 10», un **cartel arriba del mapa** con su retrato, «¡Llega el Jefe!», su nombre y su frase. Dura **1,6 segundos**; con un **toque o un clic sobre el cartel** se saltea al instante (en PC tiene una «✕» chica). **No pausa la partida, no mueve la cámara y no cambia nada del Jefe**: el mapa de alrededor sigue recibiendo toques y se puede construir mientras tanto. La tarjeta «Nuevo enemigo» del Jefe espera a que el cartel se retire y no se pisan. En **Opciones** hay una casilla nueva, **«Entrada de los jefes»** (prendida por omisión; un guardado viejo la lee prendida). El dibujo del destello es **provisional**. Se puede ver sin jugar diez oleadas con el modo de pruebas (F1 → hacer aparecer un Jefe).
+## «Novedades de esta versión»: una pantalla con lo nuevo, una vez por versión *(T371 y T373, 2026-10-19)*
+
+- **Al abrir el juego, una pantalla muestra lo nuevo de la versión instalada**, una sola vez por versión: un panel con título, subtítulo, la lista de novedades (hasta 8, con íconos si los hay) y el botón **«Entendido»**. Se cierra con «Entendido», `Esc` o el «atrás» del celular, y el toque que cierra **no** activa nada del menú de abajo. Si la lista no entra, se desplaza (rueda y barra en PC, un dedo con inercia en el celular).
+- **Para volver a verla:** **Opciones → «Créditos y versión» → «Novedades de esta versión»** (menú principal y pausa, PC y celular). No cambia lo que el juego recuerda.
+- **Cuándo sale sola:** cuando la versión instalada es un número y trae novedades aprobadas, y el guardado todavía no las vio. **No sale** en la versión `beta`, mientras el texto sea un borrador, en el modo de pruebas ni al correr desde el editor de Godot. Si el archivo está roto, el menú abre como siempre.
+- **La presentación de la 1.0.0 sale a todos** (también a quien instala por primera vez, antes de la intro); las versiones siguientes, tipo «Mejoras de esta versión», las ven quienes ya jugaron.
+- **Los textos están en `data/novedades/novedades.json`** y se pueden retocar sin programar (`CONTENIDO.md`). `godot --headless --path . -s tools/check_novedades.gd` los revisa y avisa si falta la entrada de la versión.
+- **Arte provisional:** por ahora la pantalla no tiene cabecera ni íconos propios (un rombo de bronce marca cada novedad); el arte llega con T372 y T375.
+- Tu progreso no cambia: el guardado suma una marca («última versión vista») y una versión anterior del juego lo sigue leyendo.
 
 ## «Ver todo» también cuando corriste el mapa *(T304, 2026-10-19)*
 
@@ -62,11 +82,21 @@ En el modo celular el botón «Empezar oleada» se veía pero no recibía el toq
 
 ## Ajustes del HUD móvil tras probar el PR #10 *(T287, 2026-10-16)*
 
+## Escombros comunes del nivel 9 *(T282, 2026-10-17)*
+
+Los tres escombros comunes del Taller ahora garantizan 1 recurso cada uno al demolerlos. El bot confirmó que así se reúnen los 3 recursos del Mortero, pero la estrategia que va por ellos pierde en las cinco semillas y no llega a comprarlo; se deja el costo de demolición y el del Mortero como están hasta que Lucas lo pruebe (T283).
+
+## Copia de seguridad automática del guardado *(M60, spec del 2026-10-16; todavía falta programarla, T281)*
+
 Carrito y salida reciben un solo gesto, sin doble pulsación del mouse emulado. Carrito, X, tilde y cruz son más chicos y redondeados, con íconos de marfil y bronce; la tilde ya no repite el precio. El catálogo y la barra inferior comparten el tema oscuro del juego. Se eliminan las franjas grises de los márgenes y la línea que atravesaba la barra superior. El precio sigue en el catálogo y la barra; si no se puede construir, la barra muestra el motivo.
 
 ## Arte aprobado de La Cuadrilla *(T286, 2026-10-16)*
 
 El Ratero usa el concepto B elegido por Lucas y el Cargador el concepto A, con sus atlas de caminata en cuatro direcciones. Se calibró su tamaño visual para acercarlo al del Ladrón; radios, vida, velocidad, robo y oleadas no cambiaron.
+
+## Copia de seguridad automática del guardado *(T281, 2026-10-16)*
+
+Antes de la primera escritura de `save.json` en una ejecución, el juego copia los bytes originales a `save_respaldo_<versión>.json` en la misma carpeta. Conserva la primera copia de cada versión, también si el guardado está dañado; no copia archivos vacíos y no se activa para el modo de pruebas ni para rutas de tests. Es silenciosa, tiene un tope de 10 copias y no reemplaza el respaldo manual obligatorio del archivo real del tester.
 
 ## Arte aprobado en el mapa *(T277, 2026-10-16)*
 

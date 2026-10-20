@@ -1199,6 +1199,8 @@ Dibujos simples para dejar de ver formas geométricas. Es un **primer intento "p
 > **Criterio de aceptación RF-115**
 > **Dado** que gané el nivel 1 → **Cuando** cierro el juego y lo vuelvo a abrir → **Entonces** el nivel 2 aparece desbloqueado.
 
+*(M60, RF-520 a RF-522: antes de la primera escritura de cada ejecución, el juego guarda en silencio una copia de seguridad del `save.json` existente, una por versión de la build y sin pisar nunca una anterior.)*
+
 ### 10.1 Puntos y récords *(M6, pedido por Lucas)*
 
 Récords "a la antigua", como en los arcades: iniciales y un top 5.
@@ -1699,6 +1701,7 @@ Los cuatro enemigos que gustaron, con lo necesario para convertirlos en spec cua
 - **Que el bot de balance mejore torres** *(2026-10-09, T251)*: `tools/balance_sim.gd` nunca mejora ni vende torres; llena el mapa con torres de nivel 1 y deja el oro sin usar (al perder Asedio 10 a 15 al 115 % quedaban 2054, 1039, 2859 y 3881 de oro en los mapas 10, 12, 14 y 15). Una persona lo gasta en mejoras (el Francotirador pasa de 40 a 70 y a 120 de daño por 150 y 225). Gastar ese oro sobrante en mejoras cuando el mapa está lleno es un cambio de la **herramienta**, no del juego. **Ojo:** las tablas de T229 a T234 se ajustaron contra el bot sin mejoras, así que con mejoras todos los niveles le saldrían más fáciles y habría que revisar la referencia. **No implementado.** Detalle y medición en `specs/tareas/informes/T251-conceptos-nuevos-enemigos.md`, §2.5.
 - **Un zoom lentísimo sobre cada lámina de la intro** *(2026-10-11, T240)*: para que las siete láminas se sientan más «película» y menos «presentación», cada una podría acercarse un 3 a 5 % durante sus segundos (un `Tween` sobre la escala de la imagen, sin tocar el texto). Sumaría una pizca de movimiento sin animar nada ni tocar Q-01. **No incluido en M57:** Lucas pidió «imágenes tipo diapositiva» y la excepción de §11 prohíbe las cinemáticas animadas, así que **no se implementa sin su OK**. Se agregaría como una clave opcional (`"zoom_%"`) de `data/intro/intro.json`.
 - **Un consejo de contramedida en el cartel de entrada de algunos niveles** *(2026-10-16, T266)*: con el bot, los picos de los niveles 2 y 7 dependen de la composición de torres (armadura del Jefe en el 2; enjambres de Rápidos por dos entradas en el 7), y el juego no lo anticipa: la presentación de enemigos (RF-134) solo sale la primera vez que se ve un tipo, y el Jefe y el Rápido ya se vieron en el 1. La idea: una línea corta debajo del texto de entrada (RF-466), por ejemplo en el 2 «Los Jefes y los Blindados tienen armadura: Cañón y Francotirador» y en el 7 «Enjambres por las dos entradas: Múltiple, Ráfaga o Eléctrica». Complementa los ajustes de datos propuestos en `specs/tareas/informes/T266-auditoria-dificultad.md` §5, no los reemplaza; los textos de entrada son lore (`specs/11-textos-lore.md`), así que el consejo iría aparte.
+- **Precisar el caso en que falla el respaldo (M60, RF-521):** el criterio dice que, si la copia falla, `save()` debe escribir `save.json` y a la vez «no se pierde el original que había». Si el respaldo no pudo crearse y `save()` abre el mismo archivo con `WRITE`, los bytes anteriores se reemplazan; hace falta aclarar si «original» significa el progreso ya cargado que se vuelve a serializar o si se exige conservar los bytes originales en otro lugar. T281 implementa el comportamiento detallado de RF-521 (avisar y continuar guardando) y no agrega otra copia alternativa sin definición aprobada.
 - **Parte útil del repositorio Claude Code Game Studios** (Lucas: "no hace falta `validate-commit`"; del resto, ver D-040):
   - **Informe de prueba** (su `playtest-report`): una plantilla corta para anotar lo que se siente al probar el juego (¿se entendió?, ¿dónde te trabaste?, ¿qué te aburrió?) y guardarla en `specs/pruebas/`. Hoy las impresiones de Lucas quedan en la charla.
   - **Auditoría de recursos** (su `asset-audit`): un test que revise que **todos** los dibujos y sonidos existen, miden lo que dice la guía y que ningún dato apunta a un archivo que falta.
@@ -2122,7 +2125,7 @@ Valores: los números de este bloque son **iniciales** (los pidió así Lucas en
   - Una torre **no puede** tener `resource_cost` y `alt_*` a la vez (un test de los datos lo comprueba) y `alt_gold_cost` tiene que ser menor que su costo de oro. Las mejoras cuestan lo mismo en las dos formas.
   - Vender devuelve el oro invertido y, si se pagó con recurso, `floor(1 × 70 / 100) = 0` recursos (RF-418).
   - **Nunca es indispensable**: la forma de oro cuesta lo mismo que antes, así que el Francotirador y los niveles 1 a 6 **no cambian**.
-- **RF-420** **El Mortero cuesta recursos y debuta en el nivel 9 (Q-21 ✎):** `data/towers/mortar.tres` pasa a `resource_cost = 3` (con su `cost` de 300 de oro: **300 + 3 recursos**, valores iniciales). **Enmienda de RF-300:** el Mortero ya **no está reservado para el nivel 10**, sino que **debuta en el nivel 9** (`"torres_extra": ["mortar"]`) y sigue habilitado en el 10. Los niveles 1 a 8 **no lo ofrecen**, así que su balance no cambia. Desde el 11 lo decide la rotación de torres (RF-393).
+- **RF-420** **El Mortero cuesta recursos y debuta en el nivel 9 (Q-21 ✎):** `data/towers/mortar.tres` pasa a `resource_cost = 3` (con su `cost` de 300 de oro: **300 + 3 recursos**, valores iniciales). **Enmienda de RF-300:** el Mortero ya **no está reservado para el nivel 10**, sino que **debuta en el nivel 9** (`"torres_extra": ["mortar"]`) y sigue habilitado en el 10. Los niveles 1 a 8 **no lo ofrecen**, así que su balance no cambia. Desde el 11 lo decide la rotación de torres (RF-393). *(M61, RF-523 a RF-525, 2026-10-16: en el 9 los tres escombros comunes pasan de 50 % a 100 % para que los 3 recursos estén garantizados; el costo del Mortero no cambia.)*
 - **RF-421** **Un mapa que ofrece algo imposible de conseguir:** si un mapa ofrece una torre con `resource_cost` (el Mortero, y más adelante la Disruptora) pero no tiene recursos (RF-416), `check_level` y el editor muestran un **aviso** ("el Mortero cuesta recursos y este mapa no tiene cómo conseguirlos"). No es un error: la torre queda en la barra deshabilitada con ese motivo.
 
 > **Criterio de aceptación RF-415 a RF-421**
@@ -3490,3 +3493,502 @@ Pedido de Lucas: (A) bajar el peso de las imágenes de la intro para que la APK 
 - **Ayudas en pantalla fuera del nivel 1** ni **consejos de contramedida** (siguen en «Sugerencias de Claude», §13).
 - **Enseñar** el Mortero (2 × 2), la infraestructura, las combinaciones ni los enemigos con habilidades: la tarjeta de «nuevo enemigo» (RF-134) y la Wiki ya cumplen ese papel.
 - **Probarlo en un celular real**: se probó con la escena real en modo celular en una PC (RF-502).
+
+### M64 · Pantalla de carga general y entrada bloqueada durante el cambio de escena (Lucas, 2026-10-19; T340 y T341) `[mobile+x86]`
+
+**Estado: especificada y programada en T340.** Las decisiones son **D-130 a D-134**. No cambia el balance, los niveles, el modo de pruebas ni el editor.
+
+**Qué pidió Lucas.** *(2026-10-19, en el celular)* Al elegir un nivel la carga tarda y, si se toca la pantalla mientras carga, **se ejecuta el nivel que queda debajo del dedo** en la selección (si está disponible): un toque de más lanza otro nivel. Hay que reproducirlo con un test, arreglarlo de raíz y agregar una **pantalla de carga general**, reutilizable, que bloquee toda la entrada mientras dura.
+
+**Causa.** Cambiar de escena no es instantáneo: la escena nueva se carga y se arma en el hilo principal, y la vieja sigue en pantalla, activa y tocable. Cada toque extra llega a la selección, que llama otra vez a `GameFlow.start_level` con *otro* nivel: pisa `current_index` y pide otro cambio. Además, los toques que se juntan mientras el motor está ocupado se entregan **después**, cuando ya está la escena nueva.
+
+- **RF-580** **Todo cambio de pantalla pasa por la pantalla de carga.** Menú, selección, récords, wiki, editor, nivel de la campaña, mapa de la comunidad o de un modo, probar desde el editor, «Siguiente nivel» y «Reintentar» (RF-92). Se ve una capa con el fondo de los menús, el texto «Cargando…» y una barra animada dibujada por código (sin imágenes).
+- **RF-581** **Dos piezas.** Un **núcleo genérico** (`SceneTransition`, `scripts/logic/scene_transition.gd`) que no nombra nada de este proyecto y se puede copiar a otro juego, y una **capa fina** en `GameFlow` que le pone el tema, el mínimo de tiempo y los colores del juego. Un test lee el archivo del núcleo y falla si aparece un nombre del proyecto.
+- **RF-582** **Un solo cambio a la vez.** Mientras hay uno en curso, un segundo pedido se ignora: `SceneTransition.go` devuelve `false` y **cada función de `GameFlow` que cambia de pantalla sale antes de tocar el estado** (`current_index`, `current_mode`…). Es la corrección de raíz del defecto.
+- **RF-583** **La entrada se bloquea de verdad.** Desde que empieza hasta que termina, y unos cuadros más (`release_frames`, `release_seconds`) para descartar lo acumulado, la ventana principal ignora **toques, mouse, teclas y la acción «atrás»** (`Viewport.set_disable_input`); la capa además frena el mouse; y el botón «atrás» de Android (`NOTIFICATION_WM_GO_BACK_REQUEST`) no hace nada. Al terminar se restaura el valor que había (no se fuerza a «habilitada»).
+- **RF-584** **Carga en un hilo.** `ResourceLoader.load_threaded_request` y `load_threaded_get_status` cada cuadro (la barra muestra el avance real si lo hay); si el hilo no se puede pedir, se carga de una vez con la capa ya dibujada. «Reintentar» pide la ruta de la escena actual.
+- **RF-585** **Tiempo mínimo.** La capa se ve al menos `LOADING_MIN_SECONDS` (0,4 s) aunque la escena cargue antes, para que no parpadee. Se mide con el reloj real: ni la pausa ni `Engine.time_scale` lo alargan.
+- **RF-586** **Respeta la pausa.** El nodo trabaja con el árbol en pausa (por ejemplo, «Niveles» desde el menú de pausa) y no cambia la pausa de nadie.
+- **RF-587** **Si falla, se vuelve.** Si la escena no existe o no carga, se avisa con `push_warning` y la señal `failed`, la escena vieja queda donde estaba y la entrada se libera. Si el nodo sale del árbol a mitad de un cambio, la entrada también se libera.
+- **RF-588** **No cambia lo demás.** El modo de pruebas (RF-180), el editor de mapas y las partidas de la comunidad se comportan igual; solo cambia cómo se llega a ellos.
+- **RF-589** **Una skill reutilizable (borrador).** `docs/skills-borrador/godot-pantalla-de-carga/SKILL.md` explica el patrón, las trampas y un ejemplo mínimo para otros proyectos. No se instala en ningún lado (T341).
+
+> **Criterio de aceptación RF-580 a RF-589**
+> **Dado** la selección de niveles con varios niveles abiertos → **Cuando** se toca un nivel y, durante la carga, se tocan otras tarjetas (mouse o toque), se toca «atrás» o se llama a otra función del flujo → **Entonces** se carga **un solo** nivel (el primero) y `current_index` no cambia.
+> **Dado** un evento que llega mientras el motor arma la escena nueva → **Entonces** se descarta; recién después la entrada vuelve a andar.
+> **Dado** una escena que carga al instante → **Entonces** la capa se ve al menos 0,4 s. **Dado** una ruta que no existe → **Entonces** avisa, no cambia nada y no deja la entrada bloqueada.
+
+#### Lo que M64 no incluye
+
+- **Medir el tiempo de carga real en un celular** (no se midió) ni **probar el bloqueo en un celular real**.
+- **Un logo, un consejo o una animación elaborada** en la capa (P4): texto, fondo y una barra.
+- **Cargar la escena siguiente por adelantado** (precarga mientras el jugador elige).
+### M65 · Animaciones de mejora de torres (Lucas, 2026-10-19; T360 a T364)
+
+**Estado: PROGRAMADA con arte provisional (T361 y T363, 2026-10-19); falta el arte de T362 (Codex, con el OK de Lucas) y su integración y la medición de T364.** El efecto se dibuja hoy con `_draw`. Las decisiones son **D-135 a D-137**. Es **solo presentación**: no cambia ningún número de torre, costo, oro, daño, alcance ni el orden de nada (el balance no se toca). Se probaría en PC y en el celular.
+
+**Qué pidió Lucas.** *(2026-10-19)* (a) Una **animación al mejorar una torre** que muestre *que* mejoró: un efecto breve sobre la torre, **distinto según el nivel** de mejora. (b) Un **texto flotante**, como los números de daño, con **lo que suma la mejora** (+daño, +alcance, +cadencia…), leído de los datos reales. Una **opción para apagarlas**, como «Mostrar números de daño». Que **no tape** la tilde, la cruz ni la barra del celular. Que corra bien en el celular.
+
+**Cómo se mejora hoy (lo que ya existe y no se toca).**
+- `BuildController.try_upgrade(tower)` cobra, llama a `Tower.apply_upgrade()` (sube `level_index`, suma `total_invested`) y emite `tower_upgraded`; `Game._on_tower_upgraded` hoy dibuja **el mismo anillo que al construir** (RF-75, `EffectsLayer.tower_built`), refresca el panel y suena `upgrade`.
+- Cada torre tiene **3 niveles** en `data/towers/<id>.tres` (`TowerLevelData`). La mejora de nivel 1→2 y 2→3 cuesta el `cost` de ese nivel.
+- El **mecanismo** de la torre ya se ve distinto en el nivel 2 y 3 (RF-337, atlas por nivel) y tiene un brillo permanente (`Tower._sync_upgrade_glow`, `TowerVisual.upgrade_glow_color/strength`). **Eso queda como está.**
+- Los números de daño son `FloatingText` en la `EffectsLayer`, con tope de nodos vivos y se apagan con el ajuste `damage_numbers` (RF-132).
+
+**Qué estadísticas cambian de verdad en los datos** (leído de `data/towers/*.tres`, 2026-10-19; es la base de RF-591, no se copia a ningún lado):
+
+| Torre | De 1 a 2 | De 2 a 3 |
+|---|---|---|
+| Ametralladora (`basic`) | daño 5→8, cadencia 2→2,5 | daño 8→12, cadencia 2,5→3, alcance 3→3,5 |
+| Ráfaga (`burst`) | daño 10→13, cadencia 0,8→0,9, púas 8→10 | daño 13→17, cadencia 0,9→1, púas 10→12, alcance 2→2,5 |
+| Cañón (`cannon`) | daño 20→32, área 1→1,2 | daño 32→50, área 1,2→1,5, alcance 3→3,5 |
+| Disruptora (`disruptor`) | alcance 2,5→3, pulso 2,5→3 s | alcance 3→3,5, pulso 3→3,5 s |
+| Fuego (`fire`) | daño 5→7, quemadura 8→12 /s | daño 7→10, quemadura 12→18 /s y 3→4 s, alcance 2,5→3 |
+| Hielo (`frost`) | frenado 40→50 %, alcance 2,5→3 | daño 2→4, frenado 50→60 %, duración 2→3 s |
+| Estandarte (`mechanical_standard`) | apoyo 10→15 %, alcance 2→2,5, reparación 2→3 /s | apoyo 15→20 %, alcance 2,5→3, reparación 3→4 /s |
+| Mortero (`mortar`) | daño 90→140, área 1,5→1,8 | daño 140→220, área 1,8→2,2, alcance 5→5,5 |
+| Múltiple (`multi`) | daño 7→9, objetivos extra 1→2 | daño 9→12, objetivos extra 2→3, alcance 3→3,5 |
+| Francotirador (`sniper`) | daño 40→70 | daño 70→120, alcance 6→7 |
+| Tesla (`tesla`) | daño 13→19, cadencia 0,75→0,85, saltos 2→3 | daño 19→27, cadencia 0,85→0,95, saltos 3→4, alcance 2,5→3 |
+
+Hallazgos que condicionan el diseño: (1) **no todas suben las mismas cosas** (la Disruptora no sube el daño; el Estandarte no tiene daño); por eso el texto **no puede ser «+daño» fijo**. (2) A veces el alcance **no cambia**; un «+0 alcance» sería mentira o ruido, así que **solo se muestra lo que cambió**. (3) Hasta **4 estadísticas** cambian a la vez (Ráfaga, Fuego, Hielo y Tesla en el nivel 3).
+
+- **RF-590** **El efecto de mejora** *(D-135)*. Cuando una mejora **se cobra y se aplica** (`tower_upgraded`, o sea después de un `try_upgrade` verdadero) y la opción (RF-593) está prendida, se muestra **sobre la torre** un efecto breve:
+  - **Nivel 2** («refuerzo»): un anillo de luz que sube desde la base y unas pocas chispas; **0,5 s**.
+  - **Nivel 3** («maestría»): más grande y más lleno (doble anillo, destello en cruz y chispas en abanico); **0,7 s**.
+  - **Se tiñe con el color de la torre** (`TowerVisual.upgrade_glow_color`): el arte se hace una sola vez, claro y neutro, y el juego lo tiñe (no hay un dibujo por torre, D-135).
+  - **Se adapta al tamaño de la torre** (`footprint`; el Mortero es 2×2) y **se centra en el mecanismo**, no en la casilla.
+  - **Reemplaza** al anillo de construir en las mejoras **solo cuando la opción está prendida**; con la opción apagada **todo queda exactamente como hoy** (el anillo de RF-75 y el sonido).
+  - **Respeta la pausa y la velocidad** (como el resto de los efectos finitos, M36): en pausa se congela; a velocidad doble pasa el doble de rápido.
+  - **No toca la torre**: ni su `modulate`, ni sus nodos, ni el brillo permanente; el efecto es un nodo aparte que se borra solo.
+  - **Criterio:** **Dado** una torre de nivel 1 con oro suficiente → **Cuando** se mejora → **Entonces** aparece el efecto de «refuerzo» tiñido del color de esa torre, dura 0,5 s, desaparece solo y el oro, el nivel y los números de la torre son los de siempre. **Cuando** se mejora al nivel 3 → **Entonces** aparece el de «maestría», visiblemente más grande que el anterior. **Dado** la pausa a mitad del efecto → **Entonces** se congela y sigue al reanudar.
+
+- **RF-591** **Lo que suma la mejora, como texto flotante** *(D-136)*. Junto con el efecto sale un texto con **lo que subió**, hecho con `FloatingText` (el mismo de los números de daño y del oro).
+  - **Qué se calcula:** `delta = nivel_nuevo − nivel_anterior` para cada estadística de la tabla de RF-594, **leída de `tower.data.levels[...]`** (nunca escrita a mano ni repetida en otro lado: si Lucas cambia el daño del Cañón, el texto cambia solo). Se muestra **solo si `delta` es distinto de cero** (con tolerancia de 0,005 para los decimales).
+  - **Qué estadísticas hay** (campos de `TowerLevelData`; la tabla con sus etiquetas está en `data/ui/mejoras.json`, RF-594), en este **orden de prioridad**: `damage` («daño»), `fire_rate` («disp/s»), `range_tiles` («alcance»), `splash_radius_tiles` («área»), `burst_count` («púas»), `extra_targets` («objetivos»), `chain_extra_targets` («saltos»), `slow_amount` («frenado», en %), `slow_duration` («s de frenado»), `burn_damage_per_second` («quemadura/s»), `burn_duration` («s de quemadura»), `suppress_seconds` («s de pulso»), `support_rate_percent` («apoyo», en %), `support_repair_per_second` («reparación/s»).
+  - **Lo que NO se muestra** aunque esté en los datos: `cost` (es lo que se pagó), las texturas, `bonus_vs_slowed_percent` y `bonus_vs_burning_percent` (hoy no cambian entre niveles; si algún día cambian, se suman a la tabla sin tocar código) y `chain_range_tiles`.
+  - **Cómo se escribe:** una cabecera **«¡Nivel 2!»** (o «¡Nivel 3!»; en el máximo, **«¡Nivel máximo!»**) y debajo hasta **4 estadísticas**, de a **2 por renglón**, separadas con « · ». Los números llevan **signo y coma decimal** (rioplatense: `+0,5`), sin ceros de más (`+3`, no `+3,0`; `+0,5`, no `+0,50`). Ejemplos que saldrían hoy: Ametralladora 1→2 «+3 daño · +0,5 disp/s»; Fuego 1→2 «+2 daño · +4 quemadura/s»; Tesla 2→3 «+8 daño · +0,1 disp/s» y «+1 saltos · +0,5 alcance».
+  - **Si no cambia nada** (un dato mal cargado), sale solo la cabecera.
+  - **Los renglones salen escalonados** (0,12 s entre uno y otro) y suben y se desvanecen como los números de daño (`FloatingText`), **1,1 s** en total. Color: el de la torre aclarado (`upgrade_glow_color` + 40 % de blanco) con el mismo contorno oscuro del resto. *(El color exacto queda para que Lucas lo vea, abierta P-65-3.)*
+  - **El cálculo es lógica pura** (`scripts/logic/upgrade_deltas.gd`, P10) y se prueba con GUT sin escena.
+  - **Criterio:** **Dado** la Ametralladora mejorada de 1 a 2 → **Entonces** el texto dice «+3 daño · +0,5 disp/s» y **no** menciona el alcance (no cambió). **Dado** la Disruptora de 1 a 2 → **Entonces** dice «+0,5 alcance · +0,5 s de pulso» y **no** habla de daño. **Dado** que se cambia `damage` del nivel 2 de la Ametralladora en el `.tres` → **Entonces** el texto cambia sin tocar código.
+
+- **RF-592** **Dónde sale y qué no tapa.**
+  - **Dónde:** los renglones suben desde **arriba de la torre** (como el oro de RF-124), centrados sobre ella, y el efecto está **centrado en el mecanismo**.
+  - **Pantalla visible:** el bloque de texto se **corre hacia adentro del área del mapa** si la torre está cerca de un borde (arriba, izquierda o derecha), con la misma idea con que se mantienen dentro la tilde y la cruz (`MobileHud`, «Mantiene la tilde y la cruz dentro del área del mapa»).
+  - **No tapa los controles del celular:** el bloque **nunca se dibuja sobre** (a) la **barra de abajo** (la de la torre elegida), (b) el rectángulo de la **tilde**, (c) el de la **cruz**, ni (d) los **botones flotantes** (carrito, salida, demolición). Si el bloque cayera encima de alguno, se **corre hacia arriba** hasta quedar libre (siempre hay mapa libre arriba, y el texto es corto). Los efectos y textos **no reciben toques** (no son controles): el dedo sigue llegando a lo que hay debajo.
+  - **Legible con el zoom del celular:** el texto se compensa con el zoom del mapa para medir **al menos 20 px virtuales en pantalla** (los 12 sp que pide RF-503 para los textos del celular), y no más de 30 px aunque el zoom sea chico. El efecto de sprites sí escala con el mundo.
+  - **Criterio:** **Dado** una torre en la fila de abajo del mapa en modo celular, 1280 × 720 → **Cuando** se mejora → **Entonces** ningún renglón queda dentro de la barra de abajo. **Dado** una torre en la columna de la derecha → **Entonces** el bloque entero queda dentro de la pantalla. **Dado** «Ver todo» (zoom chico) → **Entonces** cada renglón mide 20 px o más en pantalla.
+
+- **RF-593** **Opción para apagarlas** *(D-137)*. En Opciones (RF-113), **justo debajo de «Mostrar números de daño»**, una casilla **«Animaciones de mejora»** (prendida por omisión) que controla **las dos cosas** (efecto y texto) con un solo ajuste `"upgrade_fx"` en `settings`.
+  - **Apagada:** al mejorar no hay efecto nuevo ni texto, **pero el sonido y el anillo de siempre siguen** (como RF-132: apagar los números no apaga el combo).
+  - **Independiente de «Mostrar números de daño»:** apagar uno no apaga el otro.
+  - **Guardado:** clave nueva y aditiva dentro de `settings` (`SAVE_VERSION` no cambia, como `damage_numbers` y `tutorial_enabled`). Un guardado viejo sin la clave se lee como **prendida**; un valor que no es booleano, también.
+  - **En el celular** la casilla respeta el mínimo táctil (RF-550) y Opciones sigue entrando en 720 de alto (RF-555): la fila nueva **no puede romper** el panel de dos columnas de M61.
+  - **Criterio:** **Dado** un guardado viejo → **Entonces** la casilla aparece prendida. **Dado** la casilla apagada → **Cuando** se mejora una torre → **Entonces** no sale efecto ni texto, sí el anillo y el sonido, y el nivel sube igual.
+
+- **RF-594** **Los números del efecto viven en un archivo de datos** (P2): `data/ui/mejoras.json`, con la duración de cada variante, los cuadros del atlas, la escala, el color de aclarado, el tamaño de fuente (mínimo y máximo), el escalonado de los renglones, el máximo de estadísticas (4) y de estadísticas por renglón (2), el tope de efectos vivos a la vez (8) y la **tabla de estadísticas** (campo de `TowerLevelData`, etiqueta, formato: entero, decimal o porcentaje). Un **validador** (`tools/check_mejoras.gd` + test) dice en castellano qué campo está mal (un campo que no existe en `TowerLevelData`, un formato desconocido, una duración menor o igual a 0).
+  - **Criterio:** **Dado** un archivo con un campo `daño_x` que no existe → **Entonces** el validador lo nombra y el juego usa los valores por omisión sin romperse.
+
+- **RF-595** **Rendimiento (P7, el celular).**
+  - **Un solo `Sprite2D` por efecto** (con la región del atlas que cambia por un `Tween`; **sin `_process`**) y **hasta 3 `FloatingText`** (cabecera y dos renglones). Cuando termina, **todo se borra** (`queue_free`).
+  - **Tope de 8 efectos vivos** a la vez (si se mejoran muchas torres seguidas, las nuevas saltean primero el texto y después el efecto); **una torre no acumula**: si se vuelve a mejorar mientras dura el efecto, el anterior se reemplaza.
+  - **Las texturas se cargan una vez** (`preload`) y se comparten; **sin shaders nuevos**, sin partículas (`GPUParticles2D`/`CPUParticles2D`).
+  - **Sin animación no hay trabajo por cuadro:** con la opción apagada, o sin mejoras en curso, el costo es **cero**.
+  - **Criterio de medición:** con las 60 torres de P7 en pantalla y 200 enemigos, mejorar 10 torres seguidas **no baja de 60 FPS en PC** y, en modo celular (1280 × 720 virtual), **no agrega más de 1 ms por cuadro** según `tools/perf_test.gd`. *(En un celular real no se mide: límite honesto, como M61.)*
+
+- **RF-596** **Dónde sale y qué no cambia.**
+  - **Sale** en PC y en el celular, en cualquier modo de juego (campaña, comunidad, Asedio, «Probar» del editor, modo de pruebas): es presentación. **Sale también en el tutorial** (paso «Mejorar», M63).
+  - **No sale** al construir, vender ni demoler, ni cuando la mejora **falla** (sin oro, nivel máximo, partida terminada).
+  - **No cambia**: el costo, los niveles, los atlas, el brillo permanente, el panel de la torre, el sonido (`upgrade`), el orden de los controles, ni **ninguna** regla de combate. El bot de balance da **lo mismo** con y sin esta función (no usa la capa de efectos).
+  - **Criterio:** `tools/balance_sim.gd` produce el mismo informe antes y después (misma semilla).
+
+> **Criterio de aceptación RF-590 a RF-596**
+> **Dado** el juego en PC con la opción prendida → **Cuando** se mejora una Tesla del nivel 2 al 3 → **Entonces** hay un efecto de «maestría» tiñido de violeta, la cabecera «¡Nivel máximo!» y los renglones con el daño, la cadencia, los saltos y el alcance que cambiaron en `tesla.tres`, y todo desaparece en 1,1 s o menos. **Dado** la opción apagada → **Entonces** solo se ven y suenan el anillo y el sonido de siempre. **Dado** el celular en 1280 × 720 → **Entonces** ningún renglón pisa la barra de abajo, la tilde ni la cruz.
+
+#### Decisiones abiertas para Lucas (M65)
+
+| # | Pregunta | Recomendación de Claude |
+|---|---|---|
+| P-65-1 | ¿Una opción para las dos cosas (efecto y texto) o una para cada una? | **Una sola** («Animaciones de mejora»). Lo pediste como «opción para apagarlas»; dos casillas más suman filas en el celular, donde Opciones ya está justa. |
+| P-65-2 | El texto, ¿en números **absolutos** («+3 daño») o **porcentuales** («+60 % daño»)? | **Absolutos**: coinciden con lo que ya ves en el panel de la torre. El porcentaje exagera en torres de daño bajo (Hielo 2→4 = «+100 %»). |
+| P-65-3 | ¿Qué **color** tiene el texto? | El color de la torre aclarado. Otra opción: un solo color para todas (por ejemplo, crema) para que «mejora» se lea siempre igual; el oro (dorado), la cura (verde) y el rebote (cian) ya tienen dueño. |
+| P-65-4 | ¿El efecto **reemplaza** al anillo de construir (recomendado) o se suman los dos? | **Reemplaza**, así no se amontonan dos efectos sobre la misma torre. |
+| P-65-5 | ¿Se muestran las **4** estadísticas cuando cambian 4 a la vez, o solo las 2 o 3 principales? | **Hasta 4**, en dos renglones: es la información que pediste y entra. Si lo ves cargado, se baja el máximo en el archivo, sin tocar código. |
+| P-65-6 | El arte (T362): ¿un efecto único teñido (recomendado) o uno propio por familia de torres (A, B y C de la guía de arte §7)? | **Único teñido**: 2 atlas en total; por familia serían 6 y más peso en la APK. |
+| P-65-7 | ¿Sonido nuevo para la mejora al nivel 3? | **No por ahora** (queda `upgrade`); si lo querés, se suma en T364. |
+
+**Cómo se resolvieron (2026-10-19, T363).** Mientras Lucas no conteste, se implementó **la recomendación de Claude en las siete** preguntas: P-65-1 una sola casilla; P-65-2 números absolutos; P-65-3 el color de la torre aclarado (40 % de blanco, se cambia en `aclarado_blanco`); P-65-4 el efecto reemplaza al anillo de construir; P-65-5 hasta 4 estadísticas en dos renglones (`max_estadisticas`); P-65-6 un efecto único teñido (el arte de T362); P-65-7 sin sonido nuevo. Todo se cambia en `data/ui/mejoras.json` o en una línea de código si Lucas decide otra cosa. **Ajustes a lo escrito arriba:** en la tabla de `mejoras.json`, `chain_extra_targets` («saltos») va **antes** de `range_tiles` («alcance») para que la Tesla 2→3 salga como en el ejemplo de RF-591 («+1 saltos · +0,5 alcance»); y si arriba no hay lugar para el texto (una torre pegada al borde de arriba con un botón flotante encima), `place_block` lo corre al costado antes de renunciar.
+
+#### Lo que M65 no incluye
+- **Cambiar** el brillo permanente del mecanismo, los atlas por nivel ni el panel de la torre.
+- **Mostrar** costos, el total invertido o el reembolso en el texto.
+- **Animar** la venta o la construcción (no se pidió).
+- **Partículas** o shaders nuevos, vibración (háptica) ni sonidos nuevos.
+- **Probarlo en un celular real** (se prueba con la escena real en modo celular en una PC, RF-502, y con `tools/perf_test.gd`).
+
+### M66 · Introducción de jefes (Lucas, 2026-10-19; T365 a T369)
+
+**Estado: PROGRAMADA con arte provisional (T366 y T368, 2026-10-19; falta el arte aprobado de T367 y su integración, T369).** El destello es un dibujo provisional con `_draw`; el cartel usa el estilo hierro y bronce que ya existe. Las preguntas P-66-1 a P-66-7 se resolvieron con la recomendación de Claude (ver la tabla) hasta que Lucas diga otra cosa. Las decisiones son **D-138 a D-140**. Es **solo presentación**: el jefe aparece **en el mismo instante y con los mismos números** que hoy; no se retrasa la oleada, no se pausa la partida y el balance no se toca. Se probaría en PC y en el celular.
+
+**Qué pidió Lucas.** *(2026-10-19)* Una **animación corta de entrada del jefe**, como **prueba piloto en el jefe del nivel 1**, que **no pause de más ni bloquee la partida**, que se pueda **saltear**, **activar y desactivar**, y diseñada para **generalizarse a todos los jefes por datos**. Si el nivel 1 no tuviera jefe, proponer uno sin tocar el balance.
+
+**Cómo aparecen los jefes hoy (lo que ya existe y no se toca).**
+- Un enemigo es **peligroso** si quita **5 vidas o más** (`Rules.is_dangerous`, RF-11). Hoy hay **dos**: el **Jefe** (`boss`, 300 de vida, armadura 3, 10 vidas) y el **Coloso** (`colossus`, 12 vidas, nivel 15). El Jefe aparece en 14 de los 15 niveles; el Coloso, solo en el 15.
+- **El nivel 1 ya tiene jefe**, así que **no hace falta proponer ninguno**: la **oleada 10 de 10** de `data/levels/level_01.json` trae `{"enemigo": "boss", "cantidad": 1, "cada": 1.0}` en el segundo cero, junto con 10 tanques, 20 normales y 15 voladores. Es el **único jefe del nivel**, y es la **oleada final**.
+- Al empezar esa oleada, el cartel de oleada (RF-127, 1,5 s) agrega **«¡Llega el Jefe!»** en rojo (RF-135), y los peligrosos llevan una **corona dorada** (RF-136).
+- La **primera vez en todo el juego** que aparece un tipo de enemigo, `Game._on_enemy_spawned` le pide al HUD la tarjeta **«Nuevo enemigo»** (RF-134, 6 s, no bloquea clics). El jefe de la oleada 10 del nivel 1 es, para un jugador nuevo, **la primera aparición**: hoy es lo único que lo presenta.
+- El jefe nace en `WaveSpawner._spawn_enemy` (señal `enemy_spawned`) y camina desde la entrada del camino. **La partida usa `Engine.time_scale` para la velocidad y `get_tree().paused` para la pausa.**
+
+- **RF-597** **Qué es y cuándo sale** *(D-138, D-139)*. Cuando un enemigo **que tiene datos de entrada** (`EnemyData.entrance`, RF-601) **aparece en la partida**, la opción (RF-600) está prendida y el nivel está en su lista (RF-601), el juego muestra **una entrada** de dos partes:
+  1. **Un destello en la entrada del camino**, en el instante en que el jefe nace: polvo, un resplandor tiñido con el color del enemigo y una grieta en el suelo; **0,7 s**. Es un nodo del mundo, abajo de los enemigos, que no hace nada más.
+  2. **Un cartel de aparición** arriba del mapa, de **1,6 s** en velocidad normal (0,25 s entrando, 1,1 s quieto, 0,25 s saliendo), con el **retrato del jefe** (la imagen que ya tiene en sus datos), **«¡Llega el Jefe!»**, su **nombre** y su **frase** (`EnemyData.description`, salvo que `entrance.line` traiga otra, RF-601). Estilo hierro y bronce, el mismo del cartel de entrada del nivel (RF-466) y del tutorial (RF-574).
+  - **Orden:** el cartel de oleada (RF-127, que dice «¡Llega el Jefe!» en el centro) **se termina antes**: el cartel de aparición espera a que se retire (como mucho 1,5 s) y entra enseguida. El destello, en cambio, sale **en el instante** en que nace el jefe.
+  - **Con la tarjeta «Nuevo enemigo» (RF-134):** si la tarjeta le toca al mismo jefe, **espera** a que el cartel de aparición se retire y recién entonces sale, con sus 6 s de siempre. No se solapan ni se pisan.
+  - **Una vez por oleada y por tipo**, y **no más de una cada 8 s**: si una oleada trae 3 jefes, solo el primero hace la entrada. *(En el nivel 1 hay uno solo.)*
+  - **Criterio:** **Dado** el nivel 1, jugado desde el menú, con la opción prendida → **Cuando** empieza la oleada 10 → **Entonces** al nacer el Jefe sale el destello en la entrada del camino, y al irse el cartel de «Oleada 10» entra el cartel de aparición con el retrato, «¡Llega el Jefe!», «Jefe» y su frase; a los 1,6 s se retira; el Jefe nació en el mismo instante y camina como siempre.
+
+- **RF-598** **No bloquea ni pausa la partida** *(D-138)*.
+  - **La partida sigue corriendo todo el tiempo:** el jefe camina, las torres disparan, el oro y las vidas cambian. **No se pausa**, no se baja la velocidad, **no se mueve ni se acerca la cámara**, no se retrasa el nacimiento de ningún enemigo y no se hace invulnerable al jefe.
+  - **Ocupa poco:** el cartel mide como mucho **720 × 120 px virtuales**, está **centrado arriba del mapa**, **debajo de la barra de arriba** y **lejos de los botones flotantes** (carrito, salida, demolición, «Ver todo») y de la barra de abajo. **Solo el cartel recibe toques**; el mapa de alrededor sigue recibiendo los suyos (se puede construir, elegir y mejorar mientras tanto).
+  - **Respeta la pausa y la velocidad:** si se pausa, el cartel y el destello se congelan; a velocidad doble pasan al doble de rápido (≈ 0,8 s). Es presentación del mundo, como los efectos de M36.
+  - **Criterio:** **Dado** el cartel en pantalla → **Cuando** se toca una casilla del mapa fuera del cartel → **Entonces** el toque llega al mapa (se elige o se construye como siempre). **Dado** la pausa a mitad de la entrada → **Entonces** se congela y sigue al reanudar. **Dado** la misma partida con y sin la entrada, con la misma semilla → **Entonces** el oro, las vidas y el puntaje finales son idénticos.
+
+- **RF-599** **Se puede saltear** *(D-138)*.
+  - **Cómo:** un **toque o clic sobre el cartel** lo retira al instante (con un fundido de 0,1 s). En el celular el cartel entero es el objetivo (mide 120 px de alto; supera el mínimo táctil de 56 px, RF-503); en PC tiene una **«✕» chica** arriba a la derecha además. **No hay teclas nuevas** (Espacio, Esc, P, F, U, S y los números ya tienen dueño).
+  - **Qué hace saltearla:** retira el cartel y el destello, y deja pasar a la tarjeta «Nuevo enemigo» si estaba esperando. **No** cambia nada de la partida ni se guarda (la próxima vez que aparezca un jefe, sale igual).
+  - **Una pista chica** («Tocá para saltear» en el celular, «Clic para saltear» en PC) se ve a la derecha del cartel durante toda la entrada, para que se sepa que se puede.
+  - **Criterio:** **Dado** el cartel en pantalla → **Cuando** se toca → **Entonces** desaparece en 0,1 s, el jefe sigue caminando y la tarjeta «Nuevo enemigo» (si le tocaba) sale.
+
+- **RF-600** **Activarla y desactivarla: en Opciones** *(D-140)*. En Opciones (RF-113), **debajo de «Animaciones de mejora»** (M65) —o de «Mostrar números de daño» si M65 no está—, una casilla **«Entrada de los jefes»**, prendida por omisión, con el ajuste `"boss_entrance"` en `settings` (clave aditiva, `SAVE_VERSION` no cambia; un guardado viejo o un valor no booleano se leen como **prendida**).
+  - **Apagada:** el jefe aparece como hoy: cartel de oleada, corona, tarjeta «Nuevo enemigo» y nada más.
+  - **En el celular** la fila respeta el mínimo táctil (RF-550) y Opciones sigue entrando en 720 de alto (RF-555).
+  - **Criterio:** **Dado** un guardado viejo → **Entonces** la casilla aparece prendida. **Dado** la casilla apagada → **Cuando** aparece el Jefe del nivel 1 → **Entonces** no hay destello ni cartel de aparición, y la tarjeta «Nuevo enemigo» sale sin esperar a nadie.
+
+- **RF-601** **Los datos: se generaliza a todos los jefes sin tocar código** *(D-139)*.
+  - **Un recurso nuevo `BossEntranceData`** (`scripts/data/boss_entrance_data.gd`) con: `levels` (lista de ids de nivel donde sale; **vacía = todos**), `line` (frase del cartel; **vacía = usa `EnemyData.description`**, de 80 caracteres como máximo si se escribe una) y `sound` (id de un sonido que ya existe en `Audio`; **vacío = ninguno**).
+  - **`EnemyData` suma un campo `entrance: BossEntranceData`** (vacío = el enemigo **no** hace entrada). Un enemigo se sirve de lo que ya tiene en sus datos para el resto: el **retrato** es su `texture`, el **nombre** su `display_name`, el **color del destello** su `color`.
+  - **El piloto:** solo `data/enemies/boss.tres` lleva `entrance`, con `levels = ["level_01"]`. **Para sumar otro jefe** (el Coloso, o el Jefe en los otros 14 niveles) alcanza con **agregarle una `entrance` al `.tres` o vaciar la lista de niveles del Jefe** (14 niveles); no hace falta código ni arte nuevo (el destello se tiñe).
+  - **Los números de la animación** (duraciones 0,7 s / 0,25 s / 1,1 s / 0,25 s, ancho y alto del cartel, intervalo mínimo de 8 s, fuente) viven en **`data/ui/entrada_jefes.json`** (P2), con un lector con valores por omisión y un validador (`tools/check_entrada_jefes.gd` + test) que dice en castellano qué campo está mal.
+  - **Qué NO hace el archivo:** no define animaciones ni condiciones (sería armar un lenguaje de scripts, P4). Elige si hay entrada, dónde sale y qué frase dice.
+  - **Criterio:** **Dado** `colossus.tres` con una `entrance` de `levels = []` → **Cuando** aparece el Coloso en el nivel 15 → **Entonces** sale la entrada con su retrato y su nombre, sin tocar ningún `.gd`. **Dado** un `levels` con un id que no existe → **Entonces** el validador lo nombra.
+
+- **RF-602** **Dónde sale, qué no cambia y qué se mide.**
+  - **Sale** en la campaña **jugada desde el menú**, en PC y en el celular, y en el **modo de pruebas** cuando se hace aparecer un jefe con el panel (F1) o se llega a la oleada: así Lucas puede **verla sin jugar 10 oleadas** (con el límite de una cada 8 s). **No sale** en el editor («Probar»), en los mapas de la comunidad, en Asedio, ni cuando se abre la escena suelta (F6, tests), mientras el piloto limite `levels` a `level_01`.
+  - **El bot de balance** (`tools/balance_sim.gd`) **da el mismo informe** con y sin la función (no usa HUD ni capa de efectos).
+  - **No cambia**: la vida, la armadura, la velocidad, las vidas que quita, la recompensa, la oleada, el puntaje ni la corona del jefe; el cartel de oleada; la tarjeta «Nuevo enemigo» (solo puede esperar).
+  - **Rendimiento (P7, el celular):** el cartel son **6 nodos de interfaz** (panel, retrato, tres rótulos, pista) **que se crean al aparecer el jefe y se borran al irse**; el destello es **un `Sprite2D`** que anima su región con un `Tween`; **sin `_process`**, sin shaders ni partículas. Fuera de la entrada, el costo es **cero**. Medición: con 200 enemigos en pantalla, la entrada **no baja de 60 FPS** en PC y **no agrega más de 1 ms por cuadro** en modo celular según `tools/perf_test.gd`. *(En un celular real no se mide.)*
+
+> **Criterio de aceptación RF-597 a RF-602**
+> **Dado** el nivel 1 jugado desde el menú, con la opción prendida → **Cuando** llega la oleada 10 → **Entonces** al nacer el Jefe hay un destello en la entrada del camino y, al retirarse el cartel de oleada, un cartel con su retrato, nombre y frase que dura 1,6 s o se salta con un toque; la partida no se pausó ni cambió; la tarjeta «Nuevo enemigo» sale después. **Dado** la opción apagada, o el nivel 2 → **Entonces** el Jefe aparece como siempre. **Dado** una `entrance` en `colossus.tres` → **Entonces** el Coloso hace la suya sin código.
+
+#### Decisiones abiertas para Lucas (M66)
+
+| # | Pregunta | Recomendación de Claude |
+|---|---|---|
+| P-66-1 | **El nivel 1 sí tiene jefe**: aparece en la oleada 10 (la última). ¿Sirve de piloto, aunque quien pierde antes no lo ve? | **Sí.** Proponer otro jefe antes en el nivel 1 tocaría el balance (y ese nivel ya está ajustado, M59). Para verla enseguida está el modo de pruebas (RF-602). |
+| P-66-2 | ¿La entrada sale **cada vez** que aparece un jefe, o **solo la primera vez en cada partida**? | **Cada vez**, con el límite de una por oleada y cada 8 s: en el nivel 1 es una sola por partida y en los demás niveles el Jefe es rarísimo. Se puede cambiar a «solo la primera» sin rehacer nada. |
+| P-66-3 | ¿Sonido de la entrada? | **Ninguno nuevo por ahora** (el cartel de oleada ya suena). Si querés uno, se elige uno de los que ya existen en `Audio` (`sound` en los datos) o se pide uno nuevo en T368. |
+| P-66-4 | ¿La frase del cartel es la descripción del enemigo («Mucha vida y armadura…») o querés una frase de entrada propia («¡Viene por la salida!»)? | **La descripción**: no repite números ni crea textos nuevos que aprobar. Si querés otra, se escribe en `entrance.line`. |
+| P-66-5 | ¿Un retrato **animado** (el jefe rugiendo, 4 cuadros) o el retrato quieto con un pulso? | **Quieto con pulso** para el piloto (0 arte nuevo, 0 peso). Si el piloto te gusta, se encarga el rugido. |
+| P-66-6 | ¿Se sacude la cámara o se acerca al jefe? | **No**: tocaría el zoom y el desplazamiento del celular (M58, M60) y puede marear. |
+| P-66-7 | ¿Se activa también en el Coloso (nivel 15) en la misma tarea? | **No**: primero el piloto en el nivel 1; el resto es una tarea chica de datos cuando lo apruebes. |
+
+**Resolución provisional (T368, 2026-10-19):** mientras Lucas no conteste, se programó la **recomendación de Claude en las siete preguntas**: P-66-1 el piloto es el Jefe de la oleada 10 del nivel 1; P-66-2 sale cada vez, con el límite de una por oleada y por tipo y de 8 s entre entradas; P-66-3 sin sonido (queda `sound` en los datos); P-66-4 la frase es la descripción del enemigo; P-66-5 retrato quieto con un pulso; P-66-6 la cámara no se toca; P-66-7 el Coloso no se activa. Cambiar cualquiera es un dato o una tarea chica.
+
+#### Lo que M66 no incluye
+- **Retrasar o pausar** la oleada, **bloquear** la partida, mover la cámara o volver invulnerable al jefe.
+- **Animar el modelo** del jefe (rugido, pose) ni un jefe nuevo, ni un jefe nuevo en el nivel 1.
+- **Voces, música nueva o sonidos nuevos** (queda como pregunta P-66-3).
+- **Activar** la entrada en los demás jefes y niveles (el diseño lo permite por datos; es otra tarea, P3).
+- **Probarlo en un celular real.**
+
+### M67 · «Novedades de esta versión» (Lucas, 2026-10-19; T370 a T375)
+
+**Estado: PROGRAMADA con arte provisional (T371, T373, T374, 2026-10-19). Falta el arte aprobado (T372, T375) y el OK de Lucas a los textos de la 1.0.0, que están cargados como BORRADOR (no salen solos).** Las decisiones son **D-141 a D-144**. No cambia ninguna regla del juego, el balance ni el progreso: es una pantalla que se muestra y se cierra. Se probaría en PC y en el celular.
+
+**Qué pidió Lucas.** *(2026-10-19)* Una **pantalla al abrir el juego** que muestre **lo nuevo de la versión instalada, una sola vez por versión** (se guarda cuál fue la última que se vio, y tiene que funcionar con los guardados viejos). El contenido va en **un archivo de datos fácil de retocar**. **Primero** se planifica como la **presentación de la v1.0.0** (Lucas estima que sale en los próximos días) y **después** se reutiliza como «**Mejoras**» de cada versión. Usa `config/version` de `project.godot` (hoy `beta`, M61). En **modo de pruebas y en el editor no sale**. Hay una **opción para volver a verla**. En PC y en el celular.
+
+**Cómo está hoy (lo que ya existe).**
+- La versión vive en **un solo lugar**: `config/version` de `project.godot`, hoy `"beta"` (RF-554, M61). `GameVersion.raw()` la lee y `GameVersion.label()` la muestra («Beta», «Beta 0.3.0», «Versión 1.0.0»). Opciones tiene la sección «Créditos y versión» con el botón «Ver créditos» (RF-553).
+- **No hay ninguna pantalla de novedades.** `CHANGELOG.md` (470 líneas, 75 secciones) es para quien lee en el repositorio: está en orden de fecha, mezcla cambios chicos de cada tarea y no se lee desde el juego.
+- **El molde que se repite** (y que esta función imita): la intro se muestra sola una vez con una clave aditiva del guardado (`intro_seen`, RF-498) y se vuelve a ver desde otro lugar (RF-501); el tutorial usa `tutorial_done` y una fila en Opciones (RF-575, RF-576); los créditos son una pantalla que se abre, avisa `closed` y deja que quien la abrió decida a dónde volver (`CreditsScreen`). Los textos van en un JSON con validador (`data/tutorial/tutorial.json`, `data/intro/intro.json`).
+- Exportación: la de **Windows** exige una versión numérica (`file_version` y `product_version`, hoy `0.0.0.0`) y la de **Android** tiene `version/code=3`; ninguna se mira desde acá, pero **al pasar a la 1.0.0 hay que tocarlas a mano** (RF-554) y queda en la lista de T375.
+
+- **RF-603** **Cuándo sale sola** *(D-141, D-144)*. Al abrir el menú principal, la pantalla se abre **sola** cuando se cumplen **todas**:
+  1. `GameVersion.raw()` **no está vacío** y es **distinto** de la última versión vista del guardado (RF-606);
+  2. el archivo de novedades (RF-605) **tiene una entrada con el mismo `id` que esa versión**, la entrada es **válida** y **no es borrador** (`"borrador": false`);
+  3. **no** es el **modo de pruebas** (`DevMode.enabled`, que incluye el argumento `--pruebas`), **no** se está corriendo **desde el editor de Godot** (`OS.has_feature("editor")`), ni se abrió la escena suelta (F6) ni es un test;
+  4. si la entrada es de tipo **«mejoras»** y el guardado es **nuevo** (ningún nivel ganado y la intro sin ver), la pantalla **no sale** y la versión **se marca como vista en silencio**: quien instala por primera vez una versión 1.3 no necesita saber qué cambió respecto de una que nunca usó. La **presentación** (tipo «presentacion») sale **a todos**, también a un guardado nuevo.
+  - **Se marca al abrirse**, no al cerrarse (como la intro, RF-498): quien cierra el juego a la mitad **no** la vuelve a ver sola; si quiere, la pide (RF-607).
+  - **Mientras la versión sea `beta`** no sale nunca (no hay una entrada llamada `beta`), y mientras la entrada sea borrador **tampoco**: así no se puede publicar un texto sin aprobar por descuido (D-143).
+  - **El archivo falla** (no existe, no se lee o tiene errores de RF-605): el menú abre **como siempre** y el error sale por la salida (`push_warning`). **Nunca bloquea jugar.**
+  - **Criterio:** **Dado** `config/version = "1.0.0"`, una entrada `1.0.0` aprobada y un guardado sin `news_version` (de cualquier época) → **Cuando** se abre el juego fuera del editor y del modo de pruebas → **Entonces** sale la presentación y el guardado ya dice `"news_version": "1.0.0"`. **Cuando** se abre de nuevo → **Entonces** no sale. **Dado** `config/version = "beta"` → **Entonces** nunca sale. **Dado** una entrada `1.1.0` de tipo «mejoras» y un guardado nuevo → **Entonces** no sale y la versión queda marcada.
+
+- **RF-604** **Cómo se ve y cómo se maneja** *(D-141)*.
+  - **Pantalla completa sobre el menú principal** (capa propia, como `CreditsScreen`), con el fondo oscuro del menú. Un panel de **hierro y bronce** (la misma familia que el cartel de entrada del nivel, RF-466, y la tarjeta del tutorial, RF-574) con, de arriba hacia abajo: una **cabecera ilustrada** (opcional), el **título**, un **subtítulo**, la **lista de novedades** y, fijo abajo, el botón **«Entendido»**.
+  - **Cada novedad** es una fila: un **ícono** de 64 px (opcional), un **título** corto en negrita y debajo su **texto** de hasta 2 líneas. Entran **hasta 8**; si no entran en pantalla, la lista **se desplaza** (rueda y barra en PC; **un dedo con inercia** en el celular, `TouchScroller`, RF-551), con el título y «Entendido» siempre a la vista.
+  - **Medidas:** el panel mide **880 px de ancho** (celular) o **720 px** (PC), y entra en **1280 × 720**. Los textos miden **20 px o más** en el celular (RF-503, 12 sp) y **18 px o más** en PC. El botón «Entendido» mide **`boton_alto_px` (56)** en el celular y **44** en PC, y las filas, **56 px o más de alto** en el celular (RF-550).
+  - **Cerrar:** «Entendido», `Esc` y el «atrás» de Android. **El toque que cierra no llega al menú que hay debajo** (se traga al apretar y se cierra al soltar, como RF-466 y RF-499): no abre «Jugar» ni nada.
+  - **Una línea chica con la versión** («Versión 1.0.0» o «Beta 0.3.0», `GameVersion.label`) al pie del título.
+  - **Sin música ni sonidos nuevos** (la música del menú sigue); los botones suenan como los demás.
+  - **Rendimiento:** los nodos se **crean al abrirse y se borran al cerrarse**; sin `_process` ni animación (un fundido de 0,2 s con `Tween` al abrir, nada más). Las imágenes se cargan al abrir (`load`, no `preload`), así que **no pesan en el arranque** del juego.
+  - **Criterio:** **Dado** 1280 × 720 en modo celular con 8 novedades → **Cuando** se abre → **Entonces** el título y «Entendido» están a la vista, la lista se desplaza con un dedo y ningún control mide menos de 56 px de alto. **Dado** un toque sobre «Entendido» → **Entonces** se cierra y el menú de abajo **no** reacciona.
+
+- **RF-605** **El contenido vive en un archivo de datos** (P2) *(D-143)*: **`data/novedades/novedades.json`**, con esta forma:
+  - **`version`** (formato, hoy 1) e **`interfaz`** (los rótulos fijos: «Entendido», «Novedades de esta versión», «Mejoras de esta versión», «Borrador», «No hay novedades»).
+  - **`versiones`**: una lista, **de la más nueva a la más vieja** (puede estar vacía: es válida y no muestra nada). Cada una:
+    - **`id`**: la versión a la que corresponde, **escrita igual que en `config/version`** (`"1.0.0"`);
+    - **`tipo`**: `"presentacion"` (la 1.0.0: presenta el juego) o `"mejoras"` (las siguientes: qué cambió);
+    - **`borrador`**: `true` o `false` (RF-603);
+    - **`titulo`** (hasta 40 caracteres) y **`subtitulo`** (opcional, hasta 80);
+    - **`cabecera`** (opcional): ruta `res://` de una imagen que existe;
+    - **`novedades`**: de **1 a 8** elementos `{"titulo": hasta 40 caracteres, "texto": hasta 140 caracteres y 2 líneas, "icono": ruta `res://` opcional que existe}`.
+  - **Un validador** (`NewsData`, la lógica en `scripts/logic/`, P10; la herramienta `tools/check_novedades.gd`; un test) con **errores en castellano que nombran la versión y la novedad**: `id` repetido o vacío, `tipo` desconocido, título o texto pasados de largo, 0 o más de 8 novedades, imagen que no existe, y más de 2 líneas. **Avisos** (no bloquean): `config/version` es un número y **no hay entrada aprobada** para esa versión (para no olvidarse al subir la versión, RF-609).
+  - **Los textos no repiten números** de otros datos (cantidad de torres, de niveles…) cuando eso se pueda evitar con otra frase: así no quedan desactualizados. Donde se escriba un número, el test de los datos oficiales lo compara con el juego (por ejemplo, la cantidad de niveles de `campaign.json`).
+  - **Criterio:** **Dado** una novedad con 3 líneas, otra con un ícono que no existe y una versión repetida → **Entonces** el validador da tres errores en castellano con el número de versión y el título, y el juego no muestra la pantalla.
+
+- **RF-606** **Guardado y compatibilidad** *(D-142)*.
+  - **La clave:** `"news_version"` (texto) en la **raíz** del guardado, como `intro_seen` y `tutorial_done`. Guarda **la última versión cuyas novedades se abrieron**. **`SAVE_VERSION` no cambia** (sigue en 1).
+  - **Un guardado sin la clave, o con una que no es texto, se lee como vacío** (`""`): «nunca vio ninguna». Por eso **todo guardado existente** (de cualquier época, con o sin niveles ganados) **ve la presentación de la 1.0.0 una vez**, que es lo buscado.
+  - **Se compara por igualdad exacta** con `GameVersion.raw()` (no se ordena ni se interpreta): lo que se pierde por no ordenar es poco y se explica en D-144.
+  - **El modo de pruebas** usa su guardado aparte (RF-181) y no lo toca, porque la pantalla no sale en ese modo.
+  - **Una versión anterior del juego** ignora la clave y no se rompe (como con las demás claves aditivas).
+  - **API:** `SaveManager.news_version_seen() -> String` y `SaveManager.mark_news_seen(version: String)` (guarda enseguida).
+  - **Criterio:** `tests/test_old_saves.gd` carga los guardados de cada época: ninguno se rompe, todos leen `""`; un guardado con `"news_version": 7` se lee como `""`; guardar y recargar conserva `"1.0.0"`.
+
+- **RF-607** **Volver a verla: en Opciones** *(D-141)*. En Opciones (RF-113), en la sección **«Créditos y versión»**, **debajo de «Ver créditos»**, un botón **«Novedades de esta versión»**.
+  - **Qué abre:** la entrada de la **versión instalada**; si el archivo no tiene una para esa versión (por ejemplo, la `beta`), abre **la más nueva del archivo**. Si es borrador, la pantalla lo dice con un rótulo **«Borrador»** arriba a la derecha (así Lucas puede revisar la 1.0.0 **antes** de publicarla).
+  - **No toca el guardado:** abrirla desde Opciones no marca nada ni cambia `news_version`.
+  - **Dónde:** en el menú principal y en la pausa, en PC y en el celular (igual que «Ver créditos»). Al cerrar vuelve a Opciones, con el foco en el botón.
+  - **Si el archivo falla** o no tiene ninguna entrada válida: el botón queda **deshabilitado** con el texto «No hay novedades».
+  - **En el celular** el botón respeta el mínimo táctil (RF-550) y Opciones sigue entrando en 720 de alto (RF-555): la fila nueva no puede romper el panel de dos columnas de M61.
+  - **Criterio:** **Dado** `config/version = "beta"` y una entrada 1.0.0 en borrador → **Cuando** se toca «Novedades de esta versión» → **Entonces** se abre la 1.0.0 con el rótulo «Borrador» y el guardado no cambia.
+
+- **RF-608** **Dónde no sale y qué no cambia.**
+  - **No sale** en el modo de pruebas, en el editor de Godot, al volver al menú desde un nivel (ya se marcó), ni dentro de una partida. Tampoco al abrir **la escena de un nivel suelta** (F6) o en los tests (`MainMenu` recibe la costura de siempre: ruta del archivo, versión y banderas, para probarlo sin tocar el proyecto real).
+  - **No cambia**: ninguna regla, número ni guardado de progreso; el orden del menú (la pantalla es una capa que se abre y se cierra); la intro (**«Jugar»** sigue abriéndola cuando corresponde); la música.
+  - **No retrasa el arranque:** se lee **un archivo chico** al abrir el menú (menos de 20 KB); las imágenes se cargan recién al abrir la pantalla.
+  - **Imágenes:** cada una se importa **sin mipmaps** (como la intro, RF-560) y su peso importado queda anotado para la APK (T375).
+
+- **RF-609** **Se reutiliza como «Mejoras» en cada versión** *(D-143, D-144)*. Para sacar una versión nueva (por ejemplo, la 1.1.0) **no hace falta tocar código**:
+  1. subir `config/version` en `project.godot` (y, a mano, `file_version` y `product_version` de Windows y `version/code` de Android, RF-554);
+  2. agregar **al principio** de `versiones` una entrada con `"tipo": "mejoras"`, las novedades de esa versión y `"borrador": false` (se arma mirando `CHANGELOG.md`, que sigue siendo la fuente humana, pero **el juego no lo lee**);
+  3. correr `godot --headless --path . -s tools/check_novedades.gd`.
+  - **Los títulos cambian solos según el tipo:** la presentación usa el título que escribe la entrada («Monsters & Canons 1.0»); las de «mejoras» llevan arriba el rótulo **«Mejoras de esta versión»** y la versión.
+  - **El archivo conserva las versiones viejas** (para «Novedades de esta versión» en Opciones y como historial); solo se muestra sola la de la versión instalada.
+  - **Criterio:** **Dado** `config/version = "1.1.0"` y una entrada `1.1.0` de tipo «mejoras» aprobada → **Cuando** un jugador que ya vio la 1.0.0 abre el juego → **Entonces** ve «Mejoras de esta versión» con esa entrada, una vez; el código no cambió.
+
+> **Criterio de aceptación RF-603 a RF-609**
+> **Dado** la versión `1.0.0` con su presentación aprobada y un guardado viejo → **Cuando** se abre el juego → **Entonces** sale la presentación, se cierra con «Entendido» o `Esc` sin activar el menú de abajo, y no vuelve a salir; en Opciones se puede volver a ver. **Dado** el modo de pruebas, el editor o la versión `beta` → **Entonces** no sale. **Dado** una entrada rota → **Entonces** el menú abre normal y la salida dice qué está mal.
+
+#### Borrador del contenido de la 1.0.0 (para que Lucas lo retoque; no se carga hasta su OK)
+
+Tipo «presentacion», **título** «Monsters & Canons 1.0», **subtítulo** «Esto es lo que trae el juego completo.». Todo se verifica contra el juego y `CHANGELOG.md` en T374 antes de cargarlo.
+
+| # | Título | Texto | Ícono (T372) |
+|---|---|---|---|
+| 1 | 15 niveles, una historia | Defendé el campamento de la colonia a lo largo de toda la campaña, con textos de cada lugar y un final. | mapa |
+| 2 | Torres que se mejoran | Torres de distintos estilos, cada una con tres niveles. Combinalas: algunas se potencian entre sí. | torre |
+| 3 | Monstruos con carácter | Jefes, curanderos, chamanes y espejos: cada enemigo se juega distinto. La Wiki explica cómo vencerlos. | monstruo |
+| 4 | Asedio | Un modo aparte para ver hasta dónde aguantás en los mapas de la campaña. | asedio |
+| 5 | Tus propios mapas | En la PC, el editor deja crear niveles y jugarlos. | editor |
+| 6 | PC y celular | Interfaz táctil con zoom, botones flotantes y menús que se desplazan con el dedo, además de mouse y teclado. | celular |
+| 7 | Intro y tutorial | La intro cuenta cómo llegó la expedición y el tutorial del nivel 1 te enseña a jugar. Los dos se pueden saltear. | libro |
+| 8 | *(solo si entran en la 1.0.0)* Mejoras y jefes con entrada | Las torres muestran lo que ganan al mejorarse y los jefes llegan con su presentación. | mejora |
+
+#### Contraste del borrador con el juego y con `CHANGELOG.md` (T374, 2026-10-19)
+
+La entrada está cargada en `data/novedades/novedades.json` con **`"borrador": true`** (no sale sola hasta que Lucas la apruebe; se revisa desde Opciones). Se contrastó cada línea; **discrepancias y cambios respecto del cuadro de arriba:**
+- **#1 «15 niveles»:** correcto (`campaign.json` tiene 15; un test lo compara). Se cambió «el campamento de la colonia» por «la colonia» (el campamento es solo el nivel 1; los últimos niveles son otros lugares) y «un final» por «un epílogo final» (así se llama en el juego).
+- **#2 «tres niveles» y combos:** correcto (las 11 torres tienen 3 niveles; un test lo compara; los combos son las sinergias de M20). No se escribe cuántas torres hay: **el `README.md` dice «9 torres» y hay 11** (discrepancia del README, que no es de M67 y queda anotada).
+- **#3 monstruos:** el Chamán y el Espejo son enemigos que apagan o devuelven los tiros de las torres (CHANGELOG M18): el texto está bien. «La Wiki explica cómo vencerlos» **no es exacto** (la Wiki muestra los enemigos al verlos y su guía explica los especiales): se cambió por «cómo enfrentarlos».
+- **#4 Asedio:** **el borrador estaba mal**: Asedio no mide «hasta dónde aguantás», son **los mapas de la campaña con monstruos más duros**, con estrellas y récords propios (CHANGELOG T258). Se reescribió.
+- **#5 editor:** correcto (en PC; el editor no está en el celular, RF-210).
+- **#6 PC y celular:** correcto (zoom y gestos, carrito y botón de salir flotantes, menús con desplazamiento táctil: T271 a T276 y T313 a T314).
+- **#7 intro y tutorial:** la intro cuenta la llegada de **la nave** (no de «la expedición»): corregido. Ambos se pueden saltear («Omitir», «Saltar tutorial»). Se cambió «nivel 1» por «primer nivel» para no escribir cifras (D-143).
+- **#8 «Mejoras y jefes con entrada»:** **no se cargó**: depende de M65 y M66, que todavía no están programadas ni aprobadas. Se agrega cuando existan (el límite es 8; hoy hay 7).
+- **Los demás datos:** el icono de cada novedad queda en blanco hasta T372/T375 (la pantalla usa un rombo de bronce).
+
+#### Decisiones abiertas para Lucas (M67)
+
+| # | Pregunta | Recomendación de Claude |
+|---|---|---|
+| P-67-1 | ¿Qué dice la presentación de la 1.0.0? El cuadro de arriba es un borrador mío, armado con lo que ya tiene el juego. | Retocá los textos y los ítems que quieras (máximo 8); se cargan en T374 recién con tu OK. |
+| P-67-2 | Quien instala el juego **por primera vez** en la 1.0.0, ¿ve la presentación antes de la intro? | **Sí, una vez**: es la presentación del juego, no un parte de cambios. Es corta y se cierra con un toque. (Para las versiones siguientes, tipo «mejoras», los jugadores nuevos **no** la ven, RF-603.) |
+| P-67-3 | Mientras el texto sea borrador, ¿la pantalla **no sale sola**? | **Sí**: así no se publica un texto sin aprobar por descuido; se revisa desde Opciones. Al aprobarlo se pasa `borrador` a `false`. |
+| P-67-4 | ¿El botón para volver a verla va solo en Opciones? | **Solo en Opciones** («Créditos y versión»): el menú principal del celular ya tiene seis botones de 56 px (M61) y no hay lugar sin romper el diseño. |
+| P-67-5 | ¿Las siguientes versiones se titulan «Mejoras de esta versión» o «Novedades»? | **«Mejoras de esta versión»** para las versiones siguientes y el título propio de la presentación para la 1.0.0 (RF-609). Los rótulos están en el archivo, se cambian ahí. |
+| P-67-6 | ¿Cabecera ilustrada e íconos por novedad, o solo texto? | **Cabecera para la 1.0.0 y un ícono por novedad** (ver T372); las versiones de «mejoras» pueden ir sin imágenes. Si la APK pesa de más, se saca la cabecera y quedan los íconos. |
+| P-67-7 | ¿Una casilla «No mostrar novedades al abrir»? | **No**: ya sale **una sola vez por versión**; otra casilla más en Opciones no hace falta. |
+| P-67-8 | ¿También en la Wiki? | **No**: queda en Opciones, y la Wiki explica el juego, no la versión. |
+
+**Cómo se resolvieron mientras Lucas no contesta (2026-10-19):** se siguió la **recomendación de Claude** en las ocho (P-67-1: textos retocados por el contraste de T374 y cargados como borrador; P-67-2 a P-67-5, P-67-7 y P-67-8 tal cual; P-67-6: el código acepta cabecera e íconos, pero hasta T372 no hay ninguno). Si Lucas contesta otra cosa, se cambia en el archivo de datos o en un RF nuevo.
+
+#### Lo que M67 no incluye
+- **Leer `CHANGELOG.md`** desde el juego ni generar las novedades a partir de las tareas (D-143).
+- **Un historial** navegable de todas las versiones: el archivo guarda las viejas, pero la pantalla muestra **una** por vez.
+- **Avisar que hay una versión nueva disponible** (no hay actualizador ni conexión a internet).
+- **Comparar versiones** como números (D-144) ni mostrar «lo que te perdiste» si se saltea una versión: se muestra la de la versión instalada.
+- **Música, sonidos o animaciones nuevas.**
+- **Cambiar** `file_version`, `product_version` o `version/code` de las exportaciones: se hace a mano al publicar (RF-554, RF-609).
+- **Probarlo en un celular real.**
+
+
+### M60 · Copia de seguridad automática del guardado antes de la primera escritura de cada build (Lucas, 2026-10-16; parte de T268b)
+
+**Estado: especificada (2026-10-16); sin programar.** Se programa en **T281**. Es una red de seguridad **extra**: **no reemplaza** el respaldo a mano que Lucas hace con el archivo real del tester (T268a §6, paso 3).
+
+**Qué pidió Lucas.** Cuando una build nueva abre un `save.json` que ya existe, **antes de la primera vez que lo escribe**, el juego guarda una copia de seguridad, y **nunca pisa una copia anterior**.
+
+**Por qué hace falta (el motivo, con evidencia).** El informe T268a (`specs/tareas/informes/T268a-verificacion-guardado.md`, §0.4, §4 y §5) dejó registrado que:
+
+1. **La primera apertura de la build nueva reescribe `save.json`.** El guardado del tester no tiene la clave `intro_seen` (T242), así que el juego **muestra la intro y guarda enseguida** (`mark_intro_seen()` llama a `save()` «al abrirse, no al terminarla», RF-498). O sea: **el archivo original se modifica sin que el jugador haya hecho nada**, solo por abrir el juego.
+2. **Una clave que la build no conoce se pierde** en ese primer guardado: `save()` escribe solo las claves que conoce (T268a §5.6).
+3. **Un archivo dañado se pisa** en el próximo guardado: cargarlo no lo toca, pero el primer `save()` lo reemplaza por el progreso vacío (T268a §5.7).
+
+Con la copia automática, el archivo **tal como lo dejó la build anterior** queda guardado aunque nadie se haya acordado de respaldarlo a mano.
+
+**Idea en pocas palabras.** Justo antes de la primera escritura de `save.json` en cada ejecución, el juego mira si ya existe una copia para **esta versión de la build**. Si no existe, copia el archivo **tal cual (byte a byte)** a `save_respaldo_<versión>.json` en la misma carpeta de datos (`JuegoA`). Si ya existe, no hace nada. El jugador no ve nada.
+
+#### Requisitos
+
+- **RF-520** **La copia, cuándo y con qué nombre:**
+  1. **Cuándo:** en la **primera llamada a `save()` de cada ejecución**, **antes** de abrir `save.json` para escribir. Se mira **una sola vez por ejecución** (una bandera en memoria). Como `save()` es lo único que escribe `save.json`, cubre la intro, ganar un nivel, Opciones y todo lo demás.
+  2. **Qué se copia:** el **archivo tal como está en el disco**, **sin leerlo como JSON ni interpretarlo** (así también se copia uno dañado, que es justo el que más importa conservar).
+  3. **Nombre:** `user://save_respaldo_<versión>.json`, en la misma carpeta que `save.json`. `<versión>` es el valor de `application/config/version` de `project.godot` (esa clave se **agrega** con el valor **`1.0.0`**, el mismo que ya tiene `export_presets.cfg`). Los caracteres que no sean letras, números, punto, guion o guion bajo se reemplazan por `_`; si la clave está vacía o falta, se usa `sin-version`. Ejemplo: `save_respaldo_1.0.0.json`.
+  4. **Nunca pisa:** si **ya existe** el archivo de esa versión, **no se hace nada** (se conserva el más viejo, que es el que tiene el progreso original). No hay ninguna ruta de código que borre o sobrescriba un respaldo.
+  5. **Sin copias a medias:** se copia primero a `save_respaldo_<versión>.json.tmp` y **recién cuando terminó bien** se renombra al nombre final. Un `.tmp` que quedó de una ejecución cortada **sí se pisa** (es temporal). Así un corte de luz nunca deja un respaldo incompleto con el nombre final, que después bloquearía las copias futuras.
+  6. **Tope:** a lo sumo **10** archivos `save_respaldo_*.json`. Con 10 ya hechos **no se crea otro** (se conservan los más viejos) y se avisa con `push_warning`. El tope es de formato (como el nombre del archivo), no de balance, así que vive en el código.
+- **RF-521** **Qué casos copian y cuáles no** (la copia **nunca** impide jugar ni cambia lo que `save()` escribe):
+  1. **Sin `save.json`** → no hay nada que respaldar; no se crea nada. La bandera se da por cumplida (el archivo que se cree ahora ya es de esta build).
+  2. **`save.json` de 0 bytes** → no se copia (no hay nada que conservar).
+  3. **`save.json` dañado o ilegible como JSON** (truncado, basura, versión distinta) → **sí se copia**, tal cual, y después `save()` sigue normal.
+  4. **Ya hay respaldo de esta versión** → no se hace nada, sin avisos.
+  5. **La copia falla** (disco lleno, permisos, no se puede abrir el original, falla el renombrado) → **`push_warning`** con el motivo, se borra el `.tmp` si quedó, **`save()` continúa y escribe igual** (no se bloquea el guardado: perder el progreso nuevo del jugador es peor que no tener la copia). **No se reintenta** en esa ejecución (un solo aviso, sin repetirlo en cada guardado); en la próxima se vuelve a intentar.
+  6. **Modo de pruebas** (RF-181, RF-383): usa `save_pruebas.json`, que **no es** el guardado real. `save()` solo respalda cuando `save_path` es el guardado normal (`DEFAULT_PATH`), así que en el modo de pruebas **no se hace ninguna copia, ni del real ni del de pruebas**, y **no se toca** `save.json`. Si se pasa de pruebas a normal sin cerrar el juego, la primera escritura de `save.json` sí hace su chequeo.
+  7. **Tests de GUT**: los que cambian `save_path` a `user://test_*.json` (`.claude/rules/tests.md`) **no generan ningún `save_respaldo_*.json` en la carpeta real**. Para probar la copia en sí, el `SaveManager` tiene dos variables que los tests cambian y restauran: la ruta del único guardado que se respalda (por omisión, `DEFAULT_PATH`) y el prefijo de los respaldos (por omisión `user://save_respaldo_`); los tests de la copia apuntan las dos a archivos `user://test_*`.
+- **RF-522** **Dónde queda y si se avisa:**
+  1. **Es silencioso:** no hay mensaje, cartel ni opción para el jugador. Solo si **falla** la copia hay un `push_warning` en el registro (log).
+  2. **Dónde la encuentra Lucas:** en la **misma carpeta de datos que `save.json`**. En Windows, `%APPDATA%\Godot\app_userdata\JuegoA\save_respaldo_<versión>.json`; en la máquina Linux de Lucas, `~/.local/share/JuegoA/save_respaldo_<versión>.json`. Para volver atrás: cerrar el juego, borrar `save.json` y renombrar la copia a `save.json`.
+  3. **Es un `.json` válido** y se puede abrir con el Bloc de notas o con `tools/verify_save.gd` (T268a) para ver qué había.
+  4. **La versión se sube a mano** al preparar cada build de envío (T268b): si dos builds distintas comparten el mismo `config/version`, la segunda **no** hace copia propia (la primera, la más vieja, se conserva). Es un límite aceptado.
+
+> **Criterio de aceptación RF-520 a RF-522**
+> **Dado** un `save.json` con progreso y ningún respaldo de la versión `1.0.0` → **Cuando** el juego hace su primer `save()` (por ejemplo, al abrir la intro) → **Entonces** existe `save_respaldo_1.0.0.json` con **exactamente los mismos bytes** que tenía `save.json` antes de esa escritura, y `save.json` queda con el contenido nuevo.
+> **Dado** que ya existe `save_respaldo_1.0.0.json` → **Cuando** el juego guarda de nuevo, en esa ejecución o en otra → **Entonces** el respaldo **no cambia** (mismo contenido, mismo hash) aunque `save.json` sí haya cambiado.
+> **Dado** que no existe `save.json` → **Cuando** se guarda por primera vez → **Entonces** no se crea ningún respaldo y `save()` funciona igual que hoy.
+> **Dado** un `save.json` de 0 bytes → **Entonces** no se crea respaldo.
+> **Dado** un `save.json` dañado (basura, truncado, `"version": 2`) → **Cuando** se guarda → **Entonces** el respaldo **sí** se crea con los bytes del dañado, y `save()` escribe el progreso nuevo.
+> **Dado** que la copia falla (por ejemplo, ya existe una **carpeta** con el nombre del respaldo, o el destino no se puede escribir) → **Cuando** se guarda → **Entonces** hay un `push_warning`, `save()` **devuelve `true`** y `save.json` queda escrito, y no se pierde el original que había.
+> **Dado** que quedó un `save_respaldo_1.0.0.json.tmp` viejo → **Cuando** se hace la copia → **Entonces** se pisa el `.tmp` y el respaldo final queda completo.
+> **Dado** el modo de pruebas activado (`save_path` = `save_pruebas.json`) → **Cuando** se guarda → **Entonces** no se crea ningún `save_respaldo_*.json` y `save.json` no se toca.
+> **Dado** un test con `save_path = "user://test_x.json"` → **Cuando** se guarda → **Entonces** no aparece ningún `save_respaldo_*.json` en `user://`.
+> **Dado** 10 respaldos de otras versiones → **Cuando** se guarda con una versión nueva → **Entonces** no se crea el 11.º, hay un `push_warning`, y los 10 viejos siguen intactos.
+> **Dado** una versión con caracteres raros (`"1.0 / beta"`) o vacía → **Entonces** el nombre queda como `save_respaldo_1.0___beta.json` o `save_respaldo_sin-version.json`.
+> **Dado** que el original se abre con la build nueva y se juega → **Entonces** el jugador no ve ningún mensaje ni cambio de comportamiento por la copia.
+
+#### Lo que decidí por defecto *(Lucas no lo definió; cambia con su respuesta)*
+
+1. **El nombre lleva la versión de la build** (`save_respaldo_<versión>.json`) y no `save.json.bak` ni números correlativos: razones y alternativas en **D-102**.
+2. **Es silencioso** (recomendado por Lucas): sin cartel. Si querés un aviso en pantalla, es una decisión aparte.
+3. **Se copian también los archivos dañados** (son los que más conviene conservar) y **no** los de 0 bytes.
+4. **Si la copia falla, se guarda igual** y se avisa en el log.
+5. **Tope de 10 copias**, conservando las más viejas.
+
+#### Lo que M60 no incluye
+
+- **Restaurar desde el juego** (un botón «Recuperar copia»): la restauración es a mano (RF-522, punto 2).
+- **Copias periódicas o rotativas** (una por día, por partida, etc.): una por versión de build, nada más.
+- **Respaldar `save_pruebas.json`, los mapas (`user://maps/`) ni los modos (`user://modos/`).**
+- **Android:** ahí `user://` es privado de la app (no hay una carpeta que Lucas pueda abrir sin herramientas) y una APK con otro paquete empieza vacía (T268a §5.3); la copia se hace igual, pero **no se prometió que se pueda recuperar a mano**.
+- **Cambiar el formato del guardado** (`SAVE_VERSION` sigue en 1) ni el orden de las claves.
+
+#### Lo que no se probó (al escribir esta spec)
+
+**Nada se programó ni se corrió**: son solo documentos. No se probó en Windows ni en Android. El comportamiento de `DirAccess.copy` y `DirAccess.rename` en `user://` (por ejemplo, si `rename` pisa un destino existente o si hay que borrar antes) es algo que **T281 tiene que comprobar** en Godot 4.7.2 y anotar; esta spec solo exige el resultado (nunca pisar un respaldo final).
+
+#### Preguntas para Lucas
+
+1. **P1 · ¿Silencioso está bien?** Recomiendo que sí.
+2. **P2 · ¿El nombre `save_respaldo_<versión>.json` en la misma carpeta te sirve?** Recomiendo que sí; la alternativa es una subcarpeta `respaldos/`.
+3. **P3 · ¿Subís `config/version` en cada build de envío?** Recomiendo que sí, y que lo haga la tarea de T268b que arma la build.
+
+
+### M61 · El Mortero alcanzable en el nivel 9: los tres escombros comunes dan siempre su recurso (Lucas, 2026-10-16; Q-21)
+
+**Estado: especificada (2026-10-16); sin programar.** Se programa en **T282**. Es un cambio **de un solo número en un solo archivo de datos** (`data/levels/level_09.json`). **No toca** ningún otro nivel, el Mortero, la demoledora ni `data/obstaculos.json`.
+
+**Qué pidió Lucas (2026-10-16).** Subir la probabilidad de recursos en el nivel 9, para que el Mortero (que debuta ahí, RF-420) se pueda comprar de verdad.
+
+**Por qué hace falta (el motivo, con evidencia).** El resultado de T245 (punto 4, en `specs/03-tareas.md`) midió con el bot, 5 semillas, que **ninguna estrategia compró el Mortero del 9**:
+
+1. El Mortero cuesta **300 de oro + 3 recursos** (`data/towers/mortar.tres`: `cost = 300`, `resource_cost = 3`).
+2. El nivel 9 **no tiene minas ni bosques** (`extraer_temprano` y `extraer_tarde` dieron lo mismo que `sin_recursos`): los únicos recursos salen de **demoler**.
+3. Hoy hay **tres escombros comunes** (letra `e`, en (3,2), (14,2) y (7,8)) que entregan **1 recurso con 50 %** cada uno, y **una ruina con la pieza** (letra `u`, en (11,6)) que, mientras la pieza está pendiente, entrega la pieza y **ningún recurso** (RF-428).
+4. Lo máximo que juntó el bot fue **2 recursos** (`demoler`, semilla 3). Con 3 sorteos al 50 %, la chance de sacar los 3 es de **1 en 8 (12,5 %)**: en la práctica no se alcanza.
+
+**Un detalle que corrige una lectura anterior.** T245 contó «la ruina de la pieza (1 recurso)» como una fuente más. Según **RF-428** esa ruina da **1 recurso solo si la pieza ya estaba recuperada** (es decir, al rejugar el nivel después de haberla juntado); **la primera vez entrega la pieza y 0 recursos**. Por eso esta spec cuenta con **3 recursos garantizados** (los tres escombros comunes) y trata el cuarto como un extra que solo existe al rejugar.
+
+#### Requisitos
+
+- **RF-523** **Los tres escombros comunes del nivel 9 dan siempre su recurso.** En `data/levels/level_09.json`, la letra `e` de la leyenda cambia **un solo valor**:
+
+  | | Antes | Después |
+  |---|---|---|
+  | `"e"` | `{"removible":{"clase":"escombro","probabilidad":50.0,"recursos":1.0}}` | `{"removible":{"clase":"escombro","probabilidad":100.0,"recursos":1.0}}` |
+
+  1. **Qué queda igual:** `recursos` sigue en 1 por escombro; la letra `u` (la ruina con la pieza, sin `probabilidad` propia, con `recursos_si_recuperado` 1 de su clase); el mapa (las tres `e` y la `u` siguen en sus casillas); las 20 oleadas; el oro (320) y las vidas (20); `"torres_extra"`; los textos; `data/obstaculos.json` (el escombro sigue costando **90 de oro** y **10 s**, `demoledora` sigue deshabilitada en el 9); `data/towers/mortar.tres` (300 + 3) y **todos los demás niveles**.
+  2. **Qué cambia en la práctica:** demoliendo los **tres** escombros comunes (3 × 90 = **270 de oro** y 30 s de trabajo en total) se juntan **exactamente 3 recursos**, los que pide el Mortero. Ya no depende de la suerte. Rejugando el nivel con la pieza ya recuperada, la ruina suma un cuarto recurso (RF-428), que sobra.
+  3. **El sorteo no se mueve:** con `probabilidad` 100 el resultado de cada removible es siempre «entrega» (RF-417); el orden fijo de sorteo (fila y columna) y el consumo del generador con semilla **no cambian**, así que el resto del azar de la partida (temblor, Ladrón) sale **igual** que antes con la misma semilla.
+  4. **Textos que se arman solos** (RF-164): el panel del escombro común pasa de «Puede dar 1 recurso (50 %)» a «Puede dar 1 recurso (100 %)». Si a Lucas le suena raro («Puede… 100 %»), cambiar la frase cuando la probabilidad es 100 es **una decisión aparte** (Pregunta P3); esta spec no lo toca.
+- **RF-524** **Cómo se valida (el bot, y una medición que antes faltaba):** con la misma herramienta de balance (`tools/balance_sim.gd`), **5 semillas** (1 a 5):
+  1. **Regla de oro (RF-432).** `check_rule=1` por tramos, como en T279: `levels=6-9`, `levels=10-12` y `levels=13-15`. Todos los mapas con recursos ganan al menos **4 de 5** con `sin_recursos`. Los niveles **13 a 15 están al borde** (mínimos de vidas medidos hoy: **13 = 5, 14 = 3 y 15 = 2**) y **no se tocan**: se **remiden** y deben dar lo mismo (`sin_recursos` no demuele, así que el cambio del 9 no debería afectarlos; se comprueba, no se supone). Si alguno cambia, no se sigue y se informa.
+  2. **Nivel 9 sin cambios para quien no usa recursos.** `sin_recursos` en el 9 sigue ganando **5 de 5** (hoy con 11 vidas) y `mix` también (hoy 11).
+  3. **Medición explícita del Mortero en el 9** (la que T245 no pudo cerrar): con `demoler` y `demoledora` (esta última queda igual a `demoler`: no está habilitada en el 9), `levels=9`, semillas 1 a 5, se informa **por semilla**: recursos juntados, **si alguna estrategia compró el Mortero, en qué oleada**, oro gastado en demoler, **vidas con las que termina** y resultado. Se compara con la línea de base de T245 (`demoler`: V4 · D · D · V1 · D; `pieza`: V4 · V2 · V2 · V2 · V2; `sin_recursos`: V11 en las 5).
+  4. **Qué cuenta como «alcanzable en la práctica»** (valores iniciales, como N = 5 y M = 4 de RF-432; Lucas los puede cambiar, Pregunta P2): una estrategia que usa recursos **compra el Mortero en las 5 semillas** y **gana al menos 4 de 5**. Con eso el cambio se da por bueno **para el bot**; la validación final es la partida de Lucas (punto 6).
+  5. **Si el bot no demuele los tres escombros por sí solo:** `demoler` elige qué demoler por **cobertura** de casillas, no por el valor de los recursos (T245, límite 1), así que puede no ir por los tres. En ese caso se informa, y T282 puede **agregar a la herramienta** (no al juego) una estrategia `mortero` que, como `pieza` (T245), juega como `sin_recursos` y, pasadas las 2 primeras torres, junta oro y demuele los tres escombros comunes y nada más. Es código de `tools/` y su test, nunca del juego, y se documenta en `ONBOARDING.md`.
+  6. **Lo que el bot no puede decir:** que no sea demasiado difícil para una persona. Es la **partida de Lucas** (T283, igual que T280 con los niveles 2 y 7), y es la validación final.
+- **RF-525** **El riesgo conocido, y qué se hace si aun así no se alcanza (para decidir con Lucas; no se implementa nada de esto):** el camino al Mortero cuesta **270 de oro en demoliciones + 300 del Mortero = 570**, con el nivel arrancando en 320 de oro y un mapa ajustado (el bot ya perdía 3 de 5 partidas al gastar 360 en demoler, T245). Dos riesgos concretos:
+  1. **El oro:** pagar 270 en demoler cuesta defensa en las primeras oleadas. Es posible que el Mortero se *alcance* (ya hay recursos) pero que alcanzarlo cueste vidas o la victoria.
+  2. **Sin margen:** la primera vez hay **exactamente 3 recursos**. Quien gaste uno en el Francotirador por su segunda forma de pago (120 de oro + 1 recurso, Q-21) se queda con 2 y **ya no llega al Mortero** en esa partida.
+
+  Si la medición (RF-524, punto 3) muestra que el Mortero sigue sin comprarse o que comprarlo hace perder, las opciones, **sin implementar ninguna hasta que Lucas elija**, son:
+  - **A · Bajar el costo de demoler solo en el 9:** sobrescribir `costo` de la letra `e` (RF-398 lo permite por letra; hoy 90, por ejemplo a 60 como la roca). Es un dato del nivel, no toca la clase `escombro` ni los niveles 8, 10 a 15. Efecto: los tres escombros bajan de 270 a 180 de oro.
+  - **B · Que la ruina de la pieza también dé su recurso** (`u` con 100 % y 1 recurso aunque la pieza esté pendiente): suma un cuarto recurso la primera vez y deja margen de 1 para el Francotirador. **Contradice RF-428** (la pieza pendiente entrega «ningún recurso»): habría que enmendarlo y escribir otra decisión.
+  - **C · Bajar el costo en oro del Mortero** en el 9: descartada de entrada porque cambia `mortar.tres` y el Mortero de **todos** los niveles que lo ofrecen (10 a 15), con riesgo para los niveles al borde.
+  - **D · No hacer nada más:** si Lucas, jugando, considera que el Mortero «se alcanza pero cuesta» y le parece bien (es la «mejor torre» del 07 §6), se deja como está.
+
+> **Criterio de aceptación RF-523 a RF-525**
+> **Dado** `data/levels/level_09.json` → **Cuando** se carga → **Entonces** la letra `e` tiene `probabilidad` **100** y `recursos` **1**, hay **tres** casillas con `e` en (3,2), (14,2) y (7,8), la `u` sigue en (11,6) con su pieza, y `git diff` de los datos muestra **una sola línea cambiada** en un solo archivo.
+> **Dado** el nivel 9 con la partida iniciada con **cualquier semilla** → **Cuando** se demuelen los tres escombros comunes → **Entonces** el contador de recursos llega a **3** (nunca menos) y el Mortero, con 300 de oro, se puede comprar.
+> **Dado** el nivel 9 con la pieza **pendiente** → **Cuando** se demuele la ruina → **Entonces** entrega la pieza y **ningún** recurso (RF-428, sin cambios); **dada** la pieza ya recuperada, entrega 1.
+> **Dado** cualquier otro nivel → **Entonces** sus archivos de datos, `data/obstaculos.json` y `data/towers/mortar.tres` quedan **byte a byte iguales** (se comprueba con `git diff --stat`).
+> **Dado** el bot con 5 semillas → **Cuando** juega `sin_recursos` los niveles 6 a 15 → **Entonces** gana al menos 4 de 5 en cada uno (RF-432), con los mínimos de los niveles 13, 14 y 15 **iguales** a los de hoy (5, 3 y 2 vidas), y en el 9 sigue ganando 5 de 5.
+> **Dado** el bot con 5 semillas en el nivel 9 → **Cuando** juega `demoler` (y, si hace falta, `mortero`) → **Entonces** el informe dice, por semilla, los recursos juntados, si compró el Mortero y en qué oleada, y con cuántas vidas terminó, y la respuesta a «¿alguna estrategia lo compra?» queda escrita en el «Resultado» de T282 con los números, sea cual sea.
+
+#### Lo que decidí por defecto *(Lucas no lo definió; cambia con su respuesta)*
+
+1. **Solo la letra `e` del 9** (100 %), y **ninguna** otra cosa: ni el 8, ni el 10, ni el costo de demoler ni el del Mortero. Razón y alternativas en **D-103**.
+2. **«Alcanzable» = el bot lo compra en 5 de 5 y gana 4 de 5** (RF-524, punto 4).
+3. **Las opciones A a D de RF-525 no se implementan** sin que Lucas elija.
+4. **La frase del panel («Puede dar 1 recurso (100 %)») no se cambia** en esta spec.
+
+#### Lo que M61 no incluye
+
+- **Tocar el nivel 8, el 10 ni ningún otro** (la probabilidad del 50 % en esos mapas se mantiene), ni la clase `escombro` de `data/obstaculos.json`.
+- **Agregar una mina o un bosque al 9**, ni habilitar la demoledora allí.
+- **Cambiar el costo del Mortero** (300 + 3), su arte o sus estadísticas.
+- **Cambiar RF-428** (la ruina con la pieza pendiente sigue sin dar recursos), salvo que Lucas elija la opción B.
+- **Rebalancear las oleadas del 9** si el Mortero resulta demasiado fuerte o demasiado caro: se mide primero y se decide con Lucas.
+
+#### Lo que no se probó (al escribir esta spec)
+
+**Nada se programó ni se corrió**: son solo documentos. Los números de antes (50 %, 90 de oro, 300 + 3, mínimos 5 / 3 / 2) están leídos de `level_09.json`, `obstaculos.json`, `mortar.tres` y de los «Resultado» de T245 y T279; **no se remidieron** en este commit. Que 3 recursos alcancen para el Mortero es cuenta de los datos, **no** una partida. No se sabe todavía cuántas vidas cuesta ir por el Mortero.
+
+#### Preguntas para Lucas
+
+1. **P1 · ¿Confirmás solo el 100 % en los tres escombros comunes del 9?** Es lo que pediste; recomiendo medirlo antes de tocar nada más.
+2. **P2 · ¿Te sirve «el bot lo compra en 5 de 5 y gana 4 de 5» como criterio de alcanzable?** Recomiendo que sí (mismo criterio que RF-432).
+3. **P3 · ¿Dejamos «Puede dar 1 recurso (100 %)» o preferís «Da 1 recurso»** cuando la probabilidad es 100? Recomiendo dejarlo (es el mismo texto de siempre, armado con los datos).
+4. **P4 · Si la medición muestra que alcanza el Mortero pero se pierden vidas, ¿probamos primero la opción A** (escombros del 9 a 60 de oro)? Recomiendo A antes que B o C.

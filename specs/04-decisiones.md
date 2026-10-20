@@ -1143,3 +1143,244 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
   - **WebP con pérdida en el repo + import sin pérdida:** 16,01 MiB, no ahorra nada.
 - **Mirado a ojo:** capturas de `IntroScreen` a 1280 × 720 de las láminas 1, 4 y 7: sin diferencias visibles ni bandas.
 - **Qué cambia:** `assets/intro/*.webp(.import)`, `data/intro/intro.json`, `specs/intro/intro-editable.md`, `art/intro-v1/{pack.py,peso.py,manifest.json}`, tests de la intro, `01-spec.md` (RF-560), `02-plan-tecnico.md`, `03-tareas.md` (T390), `CONTENIDO.md`, `README.md`, `ONBOARDING.md`, `CHANGELOG.md`.
+## D-130 · Un servicio único de cambio de escena (`SceneTransition`) con un núcleo sin dependencias y una capa fina en `GameFlow`
+- **Fecha:** 2026-10-19 · **Estado:** implementada en T340 · **Decidió:** Lucas (una pantalla de carga general y reutilizable) / Claude (el diseño)
+- **Qué:** una clase `SceneTransition` (`scripts/logic/scene_transition.gd`) que cambia de escena mostrando la capa de carga, y que **no nombra nada del juego** (ni autoloads, ni guardado, ni escenas, ni colores propios: todo se le pasa por propiedades). `GameFlow` la crea en `_ready`, le pone el tema de los menús, el mínimo y los colores, y manda **todos** sus cambios por `_change_scene`. Un test lee el archivo y falla si aparece un nombre del proyecto.
+- **Por qué:** el pedido es reutilizarla en otros juegos; separar núcleo y conexión es lo que lo permite, y además deja probar el núcleo con una escena falsa (`swapper`) sin cortar la corrida de GUT (`.claude/rules/tests.md`).
+- **Alternativas descartadas:**
+  - **Un autoload propio:** un autoload más en `project.godot` y un orden de carga más; `GameFlow` ya es el dueño de los cambios de pantalla.
+  - **Meterlo todo en `GameFlow`:** no se puede reutilizar y se prueba peor.
+- **Qué cambia:** `01-spec.md` (RF-580, RF-581), `scripts/logic/scene_transition.gd`, `scripts/autoload/game_flow.gd`.
+
+## D-131 · El defecto se corrige en dos capas: las funciones del flujo salen si hay un cambio en curso, y la ventana ignora la entrada
+- **Fecha:** 2026-10-19 · **Estado:** implementada en T340 · **Decidió:** Claude
+- **Qué:** (1) `GameFlow.is_changing()` y cada función que cambia de pantalla (`start_*`, `go_to_*`, `next_level`, `play_test`, `reload_current`) **sale antes de tocar el estado**. (2) Durante el cambio y unos cuadros después, `get_tree().root.set_disable_input(true)` descarta toques, mouse, teclas y «atrás»; la capa (control con `MOUSE_FILTER_STOP`) frena además el mouse. (3) El «atrás» de Android no simula `cancel` si hay un cambio en curso.
+- **Por qué:** una sola defensa no alcanza. Solo el bloqueo de la ventana no protege si algo llama al flujo por código; solo la guarda no descarta los eventos acumulados que se entregan cuando la escena nueva ya está. `Viewport.disable_input` es el único bloqueo que corta también `_input`/`_unhandled_input` (un `Control` que cubre la pantalla no frena las teclas ni el «atrás»).
+- **Alternativas descartadas:**
+  - **Solo una capa de pantalla completa que come toques:** deja pasar teclas y «atrás», y no descarta lo acumulado.
+  - **Desactivar los botones de la selección:** hay que hacerlo en cada pantalla y se olvida en la próxima.
+  - **Solo un `bool` en `GameFlow`:** corrige este defecto pero no el «atrás» ni las teclas.
+- **Qué cambia:** `01-spec.md` (RF-582, RF-583), `scripts/autoload/game_flow.gd`, `scripts/logic/scene_transition.gd`.
+
+## D-132 · Carga en un hilo, con tiempo mínimo y gracia posterior medidos en tiempo real
+- **Fecha:** 2026-10-19 · **Estado:** implementada en T340 · **Decidió:** Claude
+- **Qué:** `ResourceLoader.load_threaded_request` y `load_threaded_get_status` cada cuadro; mínimo de 0,4 s con la capa visible; después de `change_scene_to_packed` se esperan 2 cuadros y 0,15 s con la entrada todavía bloqueada. Todo con `Time.get_ticks_msec`. Instanciar y el `_ready` de la escena nueva siguen en el hilo principal (Godot no permite otra cosa): ahí la barra se congela, y por eso el bloqueo sigue unos instantes.
+- **Por qué:** el reloj real hace que la pausa y `Engine.time_scale` no cambien el comportamiento; el mínimo evita un destello de 1 cuadro en escenas livianas; la gracia absorbe los toques acumulados mientras el motor armaba la escena.
+- **Alternativas descartadas:** `load()` directo (congela el cuadro y la capa no se llega a dibujar); usar `delta` (se estira con la pausa); un mínimo en `data/balance.tres` (es de interfaz, no de balance).
+- **Qué cambia:** `01-spec.md` (RF-584, RF-585), `scripts/logic/scene_transition.gd`.
+
+## D-133 · La pantalla de carga se dibuja por código y vive en una capa propia
+- **Fecha:** 2026-10-19 · **Estado:** implementada en T340 · **Decidió:** Claude
+- **Qué:** un `CanvasLayer` en la capa 128 con un fondo liso (el de los menús), el texto «Cargando…» (tema de los menús) y una barra (un riel y un tramo que va y viene; si hay avance real, el riel se llena). Sin escenas ni imágenes.
+- **Por qué:** sin archivos que copiar, el núcleo se puede llevar a otro juego como un único `.gd`; el fondo liso se ve igual en PC y en el celular y no depende de cargar nada.
+- **Alternativas descartadas:** una escena `.tscn` (dos archivos y rutas); el mapa de fondo de los menús (hay que armarlo, o sea, trabajo pesado justo mientras se carga).
+- **Qué cambia:** `01-spec.md` (RF-580), `scripts/logic/scene_transition.gd`.
+
+## D-134 · «Reintentar» también carga por la pantalla de carga, con la ruta de la escena actual
+- **Fecha:** 2026-10-19 · **Estado:** implementada en T340 · **Decidió:** Claude
+- **Qué:** `Game.restart` llama a `GameFlow.reload_current()`, que pide `SceneTransition.go(scene_file_path)` de la escena actual (si no tiene ruta, usa `reload_current_scene`).
+- **Por qué:** es el mismo problema (un toque de más durante la recarga) y el mismo remedio.
+- **Alternativas descartadas:** dejar `reload_current_scene` (un hueco en el bloqueo).
+- **Qué cambia:** `01-spec.md` (RF-584), `scenes/game/game.gd`, `scripts/autoload/game_flow.gd`.
+## D-135 · La animación de mejora es un solo efecto de sprites en 2 variantes (nivel 2 y nivel 3), teñido con el color de la torre
+- **Fecha:** 2026-10-19 · **Estado:** implementada con arte provisional (T363, 2026-10-19; el arte definitivo espera el OK de Lucas y T364) · **Decidió:** Lucas (un efecto breve, distinto por nivel de mejora, liviano en el celular) / Claude (la forma)
+- **Qué:** un atlas de 8 cuadros por variante («refuerzo» para el nivel 2, 0,5 s; «maestría» para el nivel 3, 0,7 s), dibujado claro y neutro. Un `Sprite2D` lo reproduce con un `Tween` sobre la región y el juego lo tiñe con `TowerVisual.upgrade_glow_color(id)`, que ya existe. Reemplaza al anillo de construir en las mejoras si la opción está prendida (RF-590).
+- **Por qué:**
+  - **Distinto por nivel sin multiplicar el arte:** 2 atlas sirven para las 11 torres; el tinte ya está resuelto para el brillo permanente.
+  - **Liviano:** un nodo, sin `_process`, sin shaders ni partículas; se borra solo. En el celular el costo es casi nulo.
+  - **Coherente con el resto de los efectos finitos** (M36): respetan la pausa y la velocidad y tienen tope.
+- **Alternativas descartadas:**
+  - **Un efecto propio por torre (11 × 2 atlas):** más peso en la APK (M62 acaba de bajar el de la intro) y más arte para aprobar, para una diferencia que el tinte ya da.
+  - **Un efecto por familia de arte (A, B, C de la guía §7):** 6 atlas; el tinte alcanza. Queda como pregunta P-65-6.
+  - **Partículas de Godot (`CPUParticles2D`):** nodos y trabajo por cuadro en el celular, y su forma es más difícil de aprobar con una muestra.
+  - **Un shader sobre la torre (flash, borde brillante):** toca el material de la torre, que ya tiene el shader del brillo permanente; riesgo de pisar el aturdimiento.
+  - **Solo reutilizar el anillo de RF-75:** es lo que hay hoy y no distingue el nivel.
+- **Qué cambia:** `01-spec.md` (RF-590, RF-595), `EffectsLayer`, `Game._on_tower_upgraded`, `data/ui/mejoras.json`, `assets/sprites/effects/mejora/`.
+
+## D-136 · El texto con lo que suma la mejora sale de los datos de la torre, con una tabla de estadísticas en un archivo, mostrando solo lo que cambió
+- **Fecha:** 2026-10-19 · **Estado:** implementada (T361 y T363, 2026-10-19), con las recomendaciones de Claude en P-65-2, P-65-3 y P-65-5 hasta que Lucas conteste · **Decidió:** Lucas (un texto flotante con lo que suma la mejora) / Claude (cómo se calcula y se escribe)
+- **Qué:** `UpgradeDeltas` (lógica pura) resta el nivel anterior al nuevo de `TowerData.levels` para cada campo de una tabla (`data/ui/mejoras.json`: campo, etiqueta, formato). Solo se muestran los que cambian, hasta 4 en 2 renglones, más una cabecera «¡Nivel N!» (RF-591).
+- **Por qué:**
+  - **Sin duplicar números** (P2): el texto se arma con los mismos `.tres` que usa el combate; si cambia el balance, el texto lo sigue solo.
+  - **Las torres son distintas** (la tabla de la spec lo muestra): un texto fijo «+daño, +alcance» mentiría en la Disruptora, que no sube daño, o en el Francotirador, que en el nivel 2 solo sube daño.
+  - **La tabla en un archivo:** sumar un campo nuevo a `TowerLevelData` (por ejemplo, un tipo de daño futuro) es agregar una línea, sin tocar código.
+- **Alternativas descartadas:**
+  - **Textos escritos a mano en cada `.tres`:** se desactualizan al balancear y repiten números.
+  - **Mostrar todas las estadísticas, aunque no cambien:** ruido («+0 alcance»).
+  - **Mostrar porcentajes:** exageran los valores bajos (Hielo 2→4 sería «+100 %»); queda como pregunta P-65-2.
+  - **Mostrar costos o el total invertido:** no es «lo que suma la mejora» y ya está en el panel de la torre.
+  - **Un renglón por estadística (hasta 4 renglones):** tapa demasiado mapa; con 2 por renglón son 3 en total.
+- **Qué cambia:** `01-spec.md` (RF-591, RF-594), `scripts/logic/upgrade_deltas.gd`, `tools/check_mejoras.gd`, `tests/test_upgrade_deltas.gd`.
+
+## D-137 · Una sola opción en Opciones, «Animaciones de mejora», prendida por omisión, que controla el efecto y el texto; clave aditiva en `settings`
+- **Fecha:** 2026-10-19 · **Estado:** implementada (T363, 2026-10-19), con la recomendación de Claude en P-65-1 hasta que Lucas conteste · **Decidió:** Lucas (una opción para apagarlas, «como números de daño») / Claude (una sola casilla y la clave)
+- **Qué:** casilla «Animaciones de mejora» debajo de «Mostrar números de daño» (RF-593); ajuste `"upgrade_fx"` en `settings`, sin subir `SAVE_VERSION`. Apagada: sin efecto ni texto, pero con el anillo y el sonido de siempre.
+- **Por qué:**
+  - **Opciones ya está justa en el celular** (M61, RF-555): una fila menos que dos.
+  - **Independiente de los números de daño:** quien apaga los números por claridad quizá quiera igual ver la mejora, y al revés.
+  - **Aditiva y prendida por omisión:** igual que `damage_numbers` y `tutorial_enabled`; un guardado viejo no se rompe y la novedad se ve.
+  - **El sonido y el anillo no se apagan:** el jugador siempre tiene la confirmación mínima de que mejoró (como RF-132 con el combo).
+- **Alternativas descartadas:**
+  - **Colgarla de `damage_numbers`:** mezcla dos cosas y quien quiere ver los daños pero no la mejora no puede elegir.
+  - **Dos casillas (efecto y texto):** más filas en el celular; queda como pregunta P-65-1.
+  - **Sin opción:** Lucas pidió poder apagarlas.
+- **Qué cambia:** `01-spec.md` (RF-593), `SaveManager.DEFAULT_SETTINGS`, `OptionsMenu`, `tests/test_old_saves.gd`, `CONTENIDO.md` y `CHANGELOG.md` cuando se programe.
+
+## D-138 · La entrada del jefe es un destello en el mundo más un cartel de 1,6 s que no pausa, no mueve la cámara y se salta con un toque
+- **Fecha:** 2026-10-19 · **Estado:** programada con arte provisional (T366/T368; el arte espera el OK de Lucas, T367/T369) · **Decidió:** Lucas (animación corta, que no pause de más ni bloquee, salteable) / Claude (la forma)
+- **Qué:** dos partes (RF-597): un destello con grieta en la entrada del camino, en el instante en que nace el jefe, y un cartel arriba del mapa con su retrato, nombre y frase. La partida no se toca (RF-598) y un toque en el cartel lo retira (RF-599).
+- **Por qué:**
+  - **El jugador mira el mapa, no el centro de la pantalla:** el destello marca *dónde* entra y el cartel dice *quién* es; juntos duran menos de 3 s.
+  - **No cambia el juego:** el jefe nace en el mismo instante y la partida no se pausa, así que el balance no se toca (el nivel 1 ya está ajustado, M59). Una entrada que pausara obligaría a rehacer los tiempos y a explicar por qué el reloj se detiene.
+  - **El celular:** la cámara tiene zoom y desplazamiento propios (M58, M60); mover la cámara los pelea.
+  - **Reutiliza lo que el jefe ya tiene** (retrato, nombre, color, frase): cero arte nuevo por jefe.
+- **Alternativas descartadas:**
+  - **Pausar o frenar el juego mientras dura (cinemática):** cambia cómo se juega la oleada final, molesta a quien repite el nivel y obliga a manejar la pausa dentro de la pausa; Lucas pidió que no pause de más.
+  - **Acercar la cámara al jefe:** pelea con el zoom del celular y puede marear.
+  - **Un pantallazo completo con el jefe en grande:** tapa el mapa; en el celular, la mitad de la pantalla.
+  - **Retrasar el nacimiento del jefe hasta que termine:** cambia el tiempo de la oleada final.
+  - **Reutilizar la tarjeta «Nuevo enemigo» (RF-134):** sale una sola vez en la vida del jugador, no es una entrada.
+- **Qué cambia:** `01-spec.md` (RF-597 a RF-599, RF-602), `HUD` (el cartel), `EffectsLayer` (el destello), `Game._on_enemy_spawned`, `data/ui/entrada_jefes.json`, `assets/sprites/effects/jefe/`.
+
+## D-139 · La entrada es un dato del enemigo (`EnemyData.entrance`), con la lista de niveles en el propio recurso; el piloto es solo el Jefe en el nivel 1
+- **Fecha:** 2026-10-19 · **Estado:** programada con arte provisional (T366/T368; el arte espera el OK de Lucas, T367/T369) · **Decidió:** Lucas (piloto en el jefe del nivel 1, generalizable por datos) / Claude (dónde viven los datos)
+- **Qué:** `BossEntranceData` (`levels`, `line`, `sound`) colgado de `EnemyData.entrance`. Vacío = el enemigo no hace entrada. El piloto: `boss.tres` con `levels = ["level_01"]`. Los tiempos y tamaños, en `data/ui/entrada_jefes.json`.
+- **Por qué:**
+  - **Lo que se agrega a `data/enemies/` ya aparece solo en el juego y en la Wiki** (`.claude/rules/datos.md`); la entrada sigue la misma costumbre: un enemigo nuevo con jefe lleva su entrada en su propio archivo.
+  - **Generalizar es editar un dato:** vaciar `levels` o agregar una `entrance` al Coloso, sin código ni arte (el destello se tiñe con el color del enemigo).
+  - **El piloto es una lista, no una rama de código:** `levels = ["level_01"]` se quita cuando Lucas lo apruebe.
+  - **Números fuera del código** (P2) y **sin lenguaje de scripts** (P4): el archivo elige si hay entrada, dónde y qué frase; qué hace la animación es del código.
+- **Alternativas descartadas:**
+  - **Condicionar por `Rules.is_dangerous` (todos los peligrosos):** activaría el Jefe en 14 niveles y el Coloso de golpe, sin prueba piloto.
+  - **Un archivo JSON aparte con todos los jefes:** otro lugar para mantener sincronizado con `data/enemies/`; se desactualiza si se agrega un jefe.
+  - **Una condición `if enemy.id == "boss" and level == 1` en el código:** es el piloto, pero no se puede generalizar sin tocar código.
+  - **Campos sueltos en `EnemyData` (`entrance_line`, `entrance_sound`…):** ensucia un recurso que usan todos los enemigos; un sub-recurso opcional lo deja limpio.
+- **Qué cambia:** `01-spec.md` (RF-601), `scripts/data/enemy_data.gd`, `scripts/data/boss_entrance_data.gd`, `data/enemies/boss.tres`, `tests/test_content.gd`, `CONTENIDO.md`.
+
+## D-140 · «Entrada de los jefes» es una casilla de Opciones (clave aditiva `boss_entrance`, prendida por omisión); la tarjeta «Nuevo enemigo» espera y no se solapa
+- **Fecha:** 2026-10-19 · **Estado:** programada con arte provisional (T366/T368; el arte espera el OK de Lucas, T367/T369) · **Decidió:** Lucas (activable y desactivable) / Claude (dónde y cómo se combina con lo que ya hay)
+- **Qué:** casilla en Opciones debajo de «Animaciones de mejora» (RF-600), ajuste `"boss_entrance"` en `settings`, sin subir `SAVE_VERSION`. El cartel de aparición espera a que se retire el cartel de oleada, y la tarjeta RF-134 espera al cartel de aparición (RF-597).
+- **Por qué:**
+  - **Igual que las otras opciones de presentación** (`damage_numbers`, `tutorial_enabled`, M65): un guardado viejo no se rompe y la función se ve sin hacer nada.
+  - **Tres cosas hablan del mismo jefe a la vez** (cartel de oleada «¡Llega el Jefe!», tarjeta «Nuevo enemigo» y la entrada): si salen juntas se pisan en pantalla y ninguna se lee. Una cola corta (cada una espera a la anterior) es lo más simple que las separa, sin tocar sus reglas.
+  - **Una opción y no dos:** el destello y el cartel son una sola función para quien juega.
+- **Alternativas descartadas:**
+  - **Una opción en el menú principal o en la pausa:** Lucas pidió «como las otras opciones», que viven en Opciones.
+  - **Reemplazar la tarjeta «Nuevo enemigo» por el cartel de aparición:** la tarjeta explica qué hace el enemigo en todos los enemigos y debe seguir.
+  - **Que el cartel de aparición tape el de oleada:** se leerían mal los dos y el de oleada tiene más información (número de oleada).
+  - **Mostrar la entrada solo la primera vez:** queda como pregunta P-66-2.
+- **Qué cambia:** `01-spec.md` (RF-597, RF-600), `SaveManager.DEFAULT_SETTINGS`, `OptionsMenu`, `HUD.show_enemy_intro` (espera), `tests/test_old_saves.gd`.
+
+## D-141 · «Novedades de esta versión» es una pantalla propia sobre el menú principal, que sale sola una vez por versión y se vuelve a ver desde Opciones
+- **Fecha:** 2026-10-19 · **Estado:** implementada (T371, T373, T374); el arte (T372) y los textos aprobados esperan el OK de Lucas · **Decidió:** Lucas (una pantalla al abrir el juego, una vez por versión, con opción para volver a verla) / Claude (la forma y dónde vive)
+- **Qué:** una capa (`NewsScreen`, `CanvasLayer` como `CreditsScreen`) que `MainMenu` abre al terminar de armarse si corresponde (RF-603), con cabecera, título, lista desplazable de hasta 8 novedades y «Entendido» fijo (RF-604). Se vuelve a ver con un botón en Opciones → «Créditos y versión» (RF-607).
+- **Por qué:**
+  - **Es lo que Lucas pidió** («una pantalla al abrir el juego») y sigue el molde que ya conoce quien juega: la intro y el tutorial se muestran solos una vez y se piden de nuevo desde otro lugar.
+  - **Una capa y no una escena nueva:** no cambia el flujo del menú ni de `GameFlow` (el menú sigue siendo el mismo árbol; la pantalla se abre y se cierra encima).
+  - **El celular:** el menú principal ya tiene seis botones de 56 px (M61); un botón nuevo no entra. Opciones, en cambio, tiene la sección «Créditos y versión» y su panel se desplaza.
+  - **Reutilizable:** como no depende de qué se cuenta, sirve igual para la presentación de la 1.0.0 y para las «Mejoras» de las siguientes (RF-609).
+- **Alternativas descartadas:**
+  - **Una tarjeta chica (aviso) en una esquina del menú:** se ignora; Lucas quiere una pantalla.
+  - **Mostrarla al tocar «Jugar»:** la intro ya usa «Jugar» (RF-498); dos pantallas seguidas en el primer arranque cansan y la de novedades es la primera cosa que debería verse, no la última.
+  - **Mostrarla en cada arranque:** molesta; Lucas pidió una sola vez por versión.
+  - **Un artículo de la Wiki «Novedades»:** la Wiki explica el juego, no la versión, y casi nadie la abre al instalar.
+  - **Un botón nuevo en el menú principal o en la pausa:** rompe el diseño del celular (M61).
+  - **Una casilla en Opciones «No mostrar novedades»:** una opción más para algo que sale una vez; queda como pregunta P-67-7.
+- **Qué cambia:** `01-spec.md` (RF-603, RF-604, RF-607, RF-608), `scenes/ui/news_screen.gd` (nuevo), `MainMenu`, `OptionsMenu`, `tests/`.
+
+## D-142 · La última versión vista se guarda como `"news_version"` (texto) en la raíz del guardado; se compara por igualdad; un guardado viejo ve la presentación de la 1.0.0 una vez
+- **Fecha:** 2026-10-19 · **Estado:** implementada (T371, T373) · **Decidió:** Lucas (guardar la última versión vista, compatible con guardados viejos) / Claude (la clave y la semántica)
+- **Qué:** clave aditiva `"news_version"` (texto) en la raíz, como `intro_seen` y `tutorial_done`. Sin la clave, o con una que no es texto, vale `""`. Sale cuando `GameVersion.raw()` es distinta de ella y hay entrada aprobada (RF-603). Una entrada de tipo «mejoras» en un guardado nuevo se marca en silencio (RF-603 punto 4).
+- **Por qué:**
+  - **Compatibilidad:** `SAVE_VERSION` descarta los guardados de otra versión («se empieza de cero»); una clave aditiva **no rompe** ni los guardados viejos ni una versión anterior del juego (la ignora), igual que `collections`, `hall_total`, `intro_seen`, `ui_prefs` y `tutorial_done` (D-127). `tests/test_old_saves.gd` lo comprueba con los guardados de cada época.
+  - **Una cadena y no un booleano:** hay que distinguir «vio la 1.0.0» de «vio la 1.1.0».
+  - **Todos ven la 1.0.0 una vez:** un guardado viejo no tiene la clave y la 1.0.0 es una *presentación*; es lo que Lucas quiere para la salida.
+  - **Igualdad exacta:** `config/version` es un texto que Lucas escribe; interpretarlo como número agregaría reglas (¿`1.0.0-rc1` es anterior a `1.0.0`?) para ganar muy poco. Si alguien vuelve a una versión anterior, la ve de nuevo: aceptable y raro.
+  - **Los jugadores nuevos no ven los «Mejoras»:** una lista de cambios respecto de algo que nunca usaron no les sirve (pero sí ven la presentación).
+- **Alternativas descartadas:**
+  - **`SAVE_VERSION` 2:** el cargador descarta los guardados de otra versión y se perdería todo el progreso de quien vuelva a una versión anterior.
+  - **Un booleano `news_seen`:** no distingue una versión de otra; habría que borrarlo en cada versión.
+  - **Guardarla dentro de `settings`:** mezcla preferencia con progreso (lo mismo que se descartó en D-127).
+  - **Comparar `X.Y.Z` como número y mostrar todo lo que se pasó entre la última vista y la instalada:** requiere ordenar versiones y juntar entradas; Lucas pidió «lo nuevo de la versión instalada».
+  - **Marcar la versión al cerrar la pantalla:** quien cierra el juego a la mitad la vería de nuevo; la intro marca al abrirse (RF-498) y esto sigue ese criterio.
+- **Qué cambia:** `01-spec.md` (RF-603, RF-606), `scripts/autoload/save_manager.gd`, `tests/test_old_saves.gd`.
+
+## D-143 · El contenido vive en `data/novedades/novedades.json`, una entrada por versión, con borrador y validador; el juego no lee `CHANGELOG.md`
+- **Fecha:** 2026-10-19 · **Estado:** implementada (T371, T374); la entrada 1.0.0 está cargada como borrador, a la espera del OK de Lucas · **Decidió:** Lucas (contenido en un archivo de datos fácil de retocar, presentación primero y «Mejoras» después) / Claude (el formato)
+- **Qué:** un JSON con rótulos de interfaz y una lista `versiones`, de la más nueva a la más vieja; cada entrada con `id`, `tipo` (`presentacion` o `mejoras`), `borrador`, título, subtítulo, cabecera y de 1 a 8 novedades con título, texto e ícono opcional (RF-605). Una entrada en borrador no sale sola, pero se ve desde Opciones con un rótulo (RF-603, RF-607).
+- **Por qué:**
+  - **Fácil de retocar sin tocar código** (P2) y con la misma costumbre que `intro.json` y `tutorial.json`, que Lucas ya conoce, con límites de largo validados en castellano.
+  - **Una entrada por versión, todas en el mismo archivo:** agregar una versión es pegar un bloque al principio (RF-609); las viejas quedan como historial.
+  - **`CHANGELOG.md` es otra cosa:** 75 secciones de cambios técnicos por tarea, pensado para el repositorio. Lo que se muestra al jugador es una selección corta de 8 ítems como máximo; automatizarlo daría una lista larga e inentendible. El `CHANGELOG` sigue siendo la **fuente** para escribir las novedades, a mano.
+  - **El borrador protege la salida:** como con el tutorial (D-128), Lucas quiere ver el texto antes de aprobarlo; acá además la pantalla se abre sola, así que *no* sale mientras sea borrador (se ve desde Opciones).
+- **Alternativas descartadas:**
+  - **Leer y recortar `CHANGELOG.md` en tiempo de ejecución:** frágil (depende del formato del markdown), largo y en tono técnico.
+  - **Un archivo por versión (`novedades_1.0.0.json`):** más archivos para mantener y para listar; con 8 ítems por versión no hace falta.
+  - **Los textos en el código o en un `.tres`:** más difícil de retocar y de revisar.
+  - **No cargar los textos hasta el OK de Lucas (como el lore, M52):** Lucas necesita verla funcionando para aprobarla; el borrador resuelve las dos cosas.
+  - **Que el JSON defina el diseño de la pantalla (colores, posiciones):** es del código; el archivo solo trae contenido.
+- **Qué cambia:** `01-spec.md` (RF-605, RF-609), `CONTENIDO.md` (cómo agregar una versión), `data/novedades/novedades.json`, `scripts/logic/news_data.gd`, `tools/check_novedades.gd`.
+
+## D-144 · Dispara el cambio de `config/version` **con** una entrada aprobada; `beta`, el modo de pruebas y el editor no la disparan; si falta la entrada, no sale una pantalla vacía
+- **Fecha:** 2026-10-19 · **Estado:** implementada (T371, T373) · **Decidió:** Lucas (usar `config/version`; no en modo de pruebas ni en el editor) / Claude (qué cuenta como «hay novedades»)
+- **Qué:** `NewsFlow.should_auto_show(raw_version, seen_version, entry, dev_enabled, in_editor, new_save)` es verdadero si la versión instalada no está vacía y difiere de la vista, existe una entrada aprobada y válida con ese `id`, no se está en el modo de pruebas ni en el editor, y no es el caso «mejoras + guardado nuevo» (que se marca en silencio). Sin entrada, el menú abre normal y **no** se marca nada (RF-603).
+- **Por qué:**
+  - **`config/version` es la única fuente de la versión** (RF-554): la misma que ya muestra «Créditos y versión». No hay un segundo número para mantener.
+  - **`beta` no dispara:** hoy el juego es beta y cada compilación se probaría con la misma pantalla; con la 1.0.0, la presentación sale una vez y se acabó.
+  - **Sin entrada, silencio:** si Lucas sube la versión y no escribió las novedades, es mejor un menú normal (más un aviso en `tools/check_novedades.gd`) que una pantalla vacía o con texto equivocado.
+  - **Modo de pruebas y editor:** son las formas de trabajar sobre el juego, no de jugarlo; la pantalla lo interrumpiría en cada arranque. El modo de pruebas ya usa un guardado aparte (RF-181).
+  - **Recordatorio, no obstáculo:** una prueba que fallara al subir la versión sin entrada bloquearía una exportación; un aviso del validador y la lista de T375 alcanzan.
+- **Alternativas descartadas:**
+  - **Disparar con cualquier cambio de versión y mostrar lo que haya:** pantalla vacía o desactualizada.
+  - **Inferir las novedades comparando versiones o el `CHANGELOG`:** ver D-142 y D-143.
+  - **Detectar «primera instalación» con otra marca:** ya se deduce del guardado (ningún nivel ganado, intro sin ver) y solo hace falta para las «mejoras».
+  - **Una prueba que falle si falta la entrada de la versión:** ver arriba.
+- **Qué cambia:** `01-spec.md` (RF-603, RF-608), `scripts/logic/news_flow.gd`, `MainMenu`, `tests/test_news_flow.gd`.
+## D-102 · Antes de la primera escritura de cada ejecución, el juego copia el `save.json` existente a `save_respaldo_<versión>.json`: una copia por versión de la build, en silencio, sin pisar nunca una anterior
+- **Fecha:** 2026-10-16 · **Estado:** Propuesta (a la espera del OK de Lucas a la spec M60); la implementación es T281 · **Decidió:** Lucas (que haya copia automática antes de la primera escritura y que nunca pise una anterior) / Claude (el nombre, el criterio de «una por versión», el tope, el silencio y los casos de borde; Lucas puede cambiarlos)
+- **Qué:** en `SaveManager.save()`, antes de abrir `save.json` para escribir y **una sola vez por ejecución**, si `save_path` es el guardado normal y el archivo existe y no está vacío, se copia **byte a byte** (sin interpretarlo) a `user://save_respaldo_<versión>.json`, donde `<versión>` sale de `application/config/version` (nueva clave en `project.godot`, valor `1.0.0`). Si ese archivo ya existe, no se hace nada. La copia pasa por un `.tmp` y un renombrado. Tope de 10 respaldos. Si falla, `push_warning` y el guardado sigue. El modo de pruebas y los tests no generan copias. Detalle en `01-spec.md` M60 (RF-520 a RF-522).
+- **Por qué:**
+  - **El motivo es real y está medido:** la primera apertura de la build nueva sobre un guardado sin `intro_seen` **reescribe el archivo** apenas se abre la intro (T268a §0.4 y §4, RF-498), y ese primer `save()` descarta las claves que la build no conoce (§5.6) y pisa los archivos dañados (§5.7). Sin copia previa, el original del tester se pierde por solo abrir el juego.
+  - **Una copia por versión de la build** y no «una por ejecución» ni «una por día»: lo que se quiere conservar es **el estado en que la build anterior dejó el archivo**, y eso es un único momento por cada build nueva. Una copia por ejecución llenaría el tope con copias casi idénticas de la misma sesión de juego y, al llegar al tope, dejaría de proteger justo cuando llega la build siguiente.
+  - **Con la versión en el nombre, Lucas sabe qué es cada copia** (`save_respaldo_1.0.0.json` es «lo que había antes de que 1.0.0 lo tocara») y puede restaurar la que quiera. El nombre termina en `.json`, así se abre con doble clic y con `tools/verify_save.gd`.
+  - **Nunca pisar = no existe ninguna ruta que borre o sobrescriba un respaldo final**, ni siquiera si el `save.json` cambió: lo que vale es el **más viejo**. Por eso también el `.tmp`: un corte de luz a mitad de la copia no deja un respaldo incompleto con el nombre final, que después bloquearía para siempre las copias de esa versión.
+  - **Se copian los archivos dañados** (son justo los que el primer guardado destruye) **y no los de 0 bytes** (no hay nada que conservar).
+  - **Si la copia falla, se guarda igual:** el progreso nuevo del jugador vale más que la red de seguridad; el `push_warning` queda en el registro para que se vea. No se reintenta en la misma ejecución para no llenar el log.
+  - **Silencioso:** nadie pidió un aviso, el jugador no tiene qué hacer con él, y un cartel «se hizo una copia» en la primera apertura asusta más de lo que ayuda (Lucas, que lo recomendó así, lo puede cambiar).
+  - **En la misma carpeta que `save.json`** (`JuegoA`, la que ya usa Lucas para respaldar a mano en T268a §6): no hay que aprender una ruta nueva. En Windows, `%APPDATA%\Godot\app_userdata\JuegoA`; en Linux, `~/.local/share/JuegoA`.
+  - **Solo el guardado normal:** el modo de pruebas tiene su propio `save_pruebas.json` (RF-181) y Lucas pidió que nunca toque el real; los tests usan `user://test_*.json` y no pueden ensuciar la carpeta real (`.claude/rules/tests.md`).
+  - **Tope de 10 conservando las más viejas:** evita que la carpeta crezca sin límite si alguien sube la versión en cada build, y mantiene lo que más importa (lo original).
+- **Alternativas descartadas:**
+  - **`save.json.bak` (un solo archivo):** es lo más simple, pero obliga a decidir «¿se pisa o no?». Si se pisa, la segunda build destruye el original (lo contrario de lo pedido); si no se pisa, la segunda build ya no tiene copia propia y nadie sabe de qué build es la que hay. Además la extensión `.bak` no se abre con doble clic en Windows.
+  - **Copias numeradas (`save.1.json`, `save.2.json`, …) en cada ejecución:** conservan todo, pero se llenan en pocas sesiones con copias casi iguales y no dicen de qué build son.
+  - **Una copia por ejecución con rotación (la nueva reemplaza a la más vieja):** pisa lo más valioso, que es lo original.
+  - **Nombre con la fecha** (`save_2026-10-16.json`): dice cuándo pero no de qué build, y dos builds el mismo día se pisan o se confunden.
+  - **Nombre con un hash del contenido:** evita duplicados pero es ilegible para Lucas y obliga a leer y calcular el hash del archivo en cada guardado.
+  - **Versión sacada del código (una constante en `save_manager.gd`):** hay que acordarse de subirla en dos lugares; `application/config/version` es el lugar que Godot ya ofrece para esto y se puede leer también desde el exportador.
+  - **Subcarpeta `respaldos/`:** más prolija, pero obliga a crear la carpeta (otro punto de falla) y a Lucas a buscar en dos lugares. Queda como pregunta P2 de M60.
+  - **Copiar al cargar (`load_save`) en vez de al guardar:** copiaría también en cada apertura en la que el jugador solo mira el menú, y sin escritura no hay nada que proteger. Copiar justo antes de escribir hace que la copia coincida con el último estado intacto.
+  - **Avisar al jugador en pantalla:** descartado por ahora (ver Por qué).
+  - **Bloquear el guardado si la copia falla:** el jugador no podría guardar por un problema que no es suyo (disco lleno, antivirus).
+  - **Reintentar en cada `save()` si falló:** un aviso por cada guardado llena el registro sin ayudar.
+  - **Depender solo del respaldo manual (T268a §6):** sigue siendo obligatorio para el archivo real del tester, pero el tester puede abrir el juego antes de que alguien lo respalde, y los demás jugadores nunca lo harían.
+- **Límites aceptados:** si dos builds comparten la misma `config/version`, la segunda no hace copia propia (se conserva la primera); subir la versión es un paso manual de cada build de envío. En Android la carpeta es privada de la app, así que la copia existe pero Lucas no la alcanza sin herramientas, y una APK con otro paquete empieza vacía igual (T268a §5.3).
+- **Qué cambia:** `01-spec.md` (M60, RF-520 a RF-522; nota en RF-115), `02-plan-tecnico.md` (M60 y §7.1), `03-tareas.md` (T281 nueva; T268 actualizada), `12-plan-t262-t268.md` (estado), `CHANGELOG.md` y `ONBOARDING.md`. **No cambia ningún código, dato ni asset todavía:** eso es T281.
+
+## D-103 · En el nivel 9, los tres escombros comunes pasan de 50 % a 100 % de dar su recurso, para que el Mortero se pueda comprar; no se toca ningún otro número ni nivel
+- **Fecha:** 2026-10-16 · **Estado:** Propuesta (a la espera del OK de Lucas a la spec M61); la implementación es T282 y la validación final, T283 · **Decidió:** Lucas (subir la probabilidad de recursos en el nivel 9) / Claude (que sea solo la letra `e`, el criterio de «alcanzable», las opciones de respaldo y la medición; Lucas puede cambiarlos)
+- **Qué:** en `data/levels/level_09.json`, la leyenda `e` (`escombro` con `"recursos":1.0`) pasa de `"probabilidad":50.0` a `"probabilidad":100.0`. Las tres casillas `e` del 9 (3,2), (14,2) y (7,8) entregan siempre su recurso: demolerlas (3 × 90 = 270 de oro) da **3 recursos**, justo lo que cuesta el Mortero (300 de oro + 3 recursos, RF-420). Detalle en `01-spec.md` M61 (RF-523 a RF-525).
+- **Por qué:**
+  - **Está medido que hoy no se alcanza** (T245, punto 4): el 9 no tiene minas ni bosques; los únicos recursos vienen de demoler; lo máximo que juntó el bot fueron 2, y con tres sorteos al 50 % las chances de sacar los 3 son 1 en 8. Un debut del Mortero que casi nunca se puede comprar contradice el motivo de Q-21 («el mejor cañón»).
+  - **Lo mínimo que lo arregla:** un número en un archivo de un nivel. Cambia lo que se pidió y nada más, así que el resto del balance (que acaba de ajustarse en T279 y todavía espera a Lucas en T280) no se mueve.
+  - **No se cuenta con la ruina de la pieza:** RF-428 dice que, con la pieza pendiente, la ruina entrega la pieza y ningún recurso. Esa corrección a la lectura de T245 es la razón de que haga falta el 100 % en los **tres** escombros y no en dos.
+  - **El sorteo no se corre de lugar:** con `probabilidad` 100 el removible entrega siempre, pero sigue consumiendo el generador con semilla en el mismo orden (RF-417); el resto del azar de la partida queda igual.
+  - **Es un dato del nivel:** RF-398 permite sobrescribir la probabilidad por letra, así que no hace falta tocar la clase `escombro`, que usan los niveles 8 y 10 a 15.
+- **Alternativas descartadas:**
+  - **Subir la probabilidad de la clase `escombro` en `data/obstaculos.json`:** cambiaría también el 8 y los niveles 10 a 15, justo los que están al borde (13 = 5, 14 = 3, 15 = 2 vidas).
+  - **Dos escombros al 100 % y uno al 50 %:** deja el Mortero otra vez librado al azar.
+  - **Agregar una mina o un bosque al 9:** es rediseñar el mapa y las oleadas; mucho más grande que lo pedido.
+  - **Bajar el costo de recursos o de oro del Mortero:** cambia el Mortero de todos los niveles que lo ofrecen, no solo del 9 (opción C de RF-525).
+  - **Que la ruina de la pieza dé siempre un recurso, aun pendiente:** da margen de 1, pero contradice RF-428; queda como opción B si la medición lo pide.
+  - **Bajar el costo de demoler solo en el 9 (opción A):** puede hacer falta si la medición muestra que alcanzar el Mortero cuesta demasiadas vidas; se decide con datos y con Lucas, no antes.
+- **Límites aceptados:** (1) 270 de oro de demoliciones más 300 del Mortero son 570 de oro en un mapa de 320 de arranque: **alcanzar** el Mortero no garantiza **poder permitírselo sin perder vidas**; se mide en T282 y lo juzga Lucas en T283. (2) La primera vez hay exactamente 3 recursos: quien pague un Francotirador con su segunda forma (120 + 1 recurso) ya no llega al Mortero en esa partida. (3) El panel dirá «Puede dar 1 recurso (100 %)», con la redacción de siempre. (4) Las vidas del bot no predicen las de una persona.
+- **Qué cambia:** `01-spec.md` (M61, RF-523 a RF-525; nota en RF-420), `02-plan-tecnico.md` (M61), `03-tareas.md` (T282 y T283 nuevas), `09-decisiones-pendientes-v1.md` (nota en Q-21), `CHANGELOG.md` y `CONTENIDO.md`. **No cambia ningún código, dato ni asset todavía:** eso es T282.

@@ -423,6 +423,7 @@ Archivo `user://save.json` (Godot lo guarda en la carpeta de datos del usuario, 
 
 - El campo `version` permite, en el futuro, reconocer guardados viejos y convertirlos.
 - Si el archivo **no existe** o está **corrupto**, se empieza con el progreso por defecto (solo nivel 1 desbloqueado) y **no** se cierra el juego.
+- *(M60, RF-520 a RF-522)* Antes de la primera escritura de cada ejecución, `save()` copia el `save.json` existente a `user://save_respaldo_<versión>.json` (una copia por versión de la build, sin pisar nunca una anterior). Ver la sección M60 más abajo.
 - Se guarda al ganar un nivel, al cerrar la pantalla de opciones y al anotar un récord.
 - *(M6)* `scores`: el top 5 de cada nivel y del Salón de la fama (`hall_of_fame`); `initials`: las últimas iniciales usadas (3 y 5 letras); `hall_total`: el último total de campaña ya anotado; `best_score`: el mejor puntaje en victoria de cada nivel (se suman para el Salón). Son claves nuevas: un guardado de antes de M6 no las tiene y se lee igual (sigue siendo la versión 1).
 - *(M6)* En el modo de pruebas el archivo es `user://save_pruebas.json` (mismo formato).
@@ -1492,3 +1493,132 @@ Los textos, números de tamaño y posiciones nuevos viven en `mobile_ui.json` (P
 7. Capturas reales: `godot --path . res://tools/capture_tutorial.tscn -- <carpeta fuera del repo> 1280x720`.
 
 **Riesgos.** (1) Un cambio futuro en los nombres de los controles del HUD se nota en los tests (los descriptores devuelven `null`). (2) `MobileHud` maneja los toques de su barra con código propio: la tarjeta queda **fuera** de esa barra y de los botones flotantes (se ubica entre las barras). (3) Solo se probó en una PC (RF-502): el tacto y la legibilidad en un celular real quedan para Lucas.
+
+### M64 / T340 y T341 · Pantalla de carga general (RF-580 a RF-589, D-130 a D-134)
+
+| Pieza | Qué es |
+|---|---|
+| `scripts/logic/scene_transition.gd` (`SceneTransition`) | **Núcleo genérico**, sin nombres del proyecto. `go(path)`, `is_busy()`, `progress()`, señales `started`/`finished`/`failed`; propiedades de tiempos, colores, tema y las costuras `swapper` y `load_override`. Corrutina `_run`: dibuja la capa, carga en hilo, espera el mínimo, cambia, espera cuadros y gracia, libera. |
+| `GameFlow.transition`, `is_changing()`, `_change_scene()`, `reload_current()` | **Capa fina:** crea el núcleo con el tema de los menús, el mínimo y los colores; todo `go_to_*`/`start_*` pasa por ahí y sale antes de tocar el estado si hay un cambio en curso. |
+| `Game.restart` | Llama a `GameFlow.reload_current()`. |
+| `docs/skills-borrador/godot-pantalla-de-carga/SKILL.md` | Borrador de skill (T341). No se instala. |
+
+**Cómo se bloquea la entrada:** `get_tree().root.set_disable_input(true)` (corta `_input`, la GUI y las acciones), una capa con `MOUSE_FILTER_STOP` y `GameFlow._notification` ignorando el «atrás» de Android. **Cómo se prueba:** `tests/test_scene_transition.gd` (núcleo, con `swapper` falso, eventos reales y experimentos de control) y `tests/test_loading_flow.gd` (la selección real, tarjetas tocadas durante el cambio). Suite completa sin `SCRIPT ERROR` ni `Parse Error`.
+### M65 / T360 a T364 · Animaciones de mejora de torres (RF-590 a RF-596, D-135 a D-137)
+
+**Estado: programado con arte provisional (T361, T363); falta el arte (T362) y su integración (T364).** Presentación pura: ningún cambio en `Tower`, `TowerData`, `BuildController.try_upgrade` ni en el balance. Lo implementado: `FloatingText` ganó un retraso opcional (`delay`) para el escalonado, `EffectsLayer.tower_upgraded(tower, canvas, safe_rects, view_rect)` devuelve `false` si no mostró nada (opción apagada, tope) y entonces `Game` dibuja el anillo de siempre, `MobileHud.forbidden_rects()` da las zonas de pantalla y `SaveManager.upgrade_fx_enabled()` lee la opción (un valor que no es booleano vale prendida). Las capturas las hace `tools/capture_upgrade.tscn`.
+
+1. **Datos** (T361). `data/ui/mejoras.json` (duraciones, cuadros, escala, aclarado, fuente, escalonado, máximos, tabla de estadísticas) y `scripts/data/upgrade_fx_config.gd` (lector con valores por omisión si falta o está mal, como `MobileUiConfig`). `tools/check_mejoras.gd` valida y nombra el campo con error.
+2. **Lógica pura** (T361). `scripts/logic/upgrade_deltas.gd` (`UpgradeDeltas`): `compute(from: TowerLevelData, to: TowerLevelData, table) -> Array[Dictionary]` (campo, delta, texto), `format_number(value, kind) -> String` (signo, coma decimal, sin ceros de más), `header(level, is_max) -> String` y `place_block(anchor, size, safe_rects, view_rect) -> Vector2` (corre el bloque dentro de la pantalla y fuera de las zonas prohibidas). Todo sin escena (P10).
+3. **Efecto** (T363). `scenes/effects/upgrade_effect.gd` (`UpgradeEffect`, `Node2D` con un `Sprite2D` hijo y un `Tween`). `EffectsLayer.tower_upgraded(tower, level)` lo crea con el tope de RF-595 y los `FloatingText` de la cabecera y los renglones. `Game._on_tower_upgraded` llama a esa función en lugar de `tower_built` **solo si** `SaveManager.get_setting("upgrade_fx")`; si no, queda el anillo de hoy. Arte provisional con `_draw` hasta T364 (nunca se espera al arte).
+4. **Zonas prohibidas** (T363). `Game` le pasa a la capa los rectángulos de la barra de abajo, la tilde, la cruz y los botones flotantes que ya conoce `MobileHud` (señal o consulta hacia abajo, P6); el tamaño de la fuente se compensa con el zoom de `CameraController`.
+5. **Opciones** (T363). Casilla `UpgradeFxCheck` debajo de `DamageNumbersCheck`; clave `"upgrade_fx": true` en `DEFAULT_SETTINGS`.
+6. **Arte** (T362, T364). Dos atlas PNG en `assets/sprites/effects/mejora/` (ficha `specs/tareas/T362-arte-animacion-mejoras.md`). Integración tras el OK de Lucas.
+7. **Pruebas.** `tests/test_upgrade_deltas.gd` (los 11 `.tres` reales, 1→2 y 2→3: nunca un delta cero, nunca un campo fuera de la tabla), `tests/test_upgrade_fx.gd` (efecto y textos nacen y se borran; tope de 8; la opción apagada no crea nada; sin escena nueva: se instancia `EffectsLayer`), `tests/test_old_saves.gd` (clave aditiva), `tests/test_options_*` (la casilla entra en 720). Capturas reales: `tools/capture_upgrade.gd` (nuevo, como `capture_tutorial.gd`), en PC y en modo celular, fuera del repo. Rendimiento: `tools/perf_test.gd` con 60 torres y 10 mejoras.
+
+**Riesgos.** (1) Una torre nueva con un campo de `TowerLevelData` que no está en la tabla: no se muestra y un test lo avisa. (2) El tinte puede dar un color poco legible sobre algunos suelos (la nieve): se revisa en la hoja de T362 sobre los siete temas. (3) El efecto y el brillo permanente se pisan visualmente: el efecto va en la capa de efectos, por encima, y es breve. (4) `Engine.time_scale` hace correr el `Tween` más rápido a velocidad doble: es lo buscado.
+
+### M66 / T365 a T369 · Introducción de jefes (RF-597 a RF-602, D-138 a D-140)
+
+**Estado: programado con arte provisional (T366, T368); T369 espera el arte de T367.** Presentación pura: no se tocan `WaveSpawner`, `Enemy`, las oleadas ni el balance. **Lo que quedó distinto del plan:** el destello va en la partida justo antes del nodo `Enemies` (no dentro de `EffectsLayer`, que dibuja arriba de los enemigos) y lo crea `EffectsLayer.boss_entrance`; el cartel y el destello son `PROCESS_MODE_PAUSABLE` (la interfaz corre en pausa, RF-104, y el cartel no); la lista de niveles se compara con `GameFlow.current_level()` (campaña), no con `played_level()`, para que el modo de pruebas con oleada elegida también la vea; `BossEntranceConfig` además lista niveles, sonidos y valida los enemigos (`validate_enemies`).
+
+1. **Datos** (T366). `scripts/data/boss_entrance_data.gd` (`BossEntranceData`: `levels`, `line`, `sound`); `EnemyData.entrance` (opcional, vacío por omisión); `data/enemies/boss.tres` con `levels = ["level_01"]`; `data/ui/entrada_jefes.json` y su lector con valores por omisión (`scripts/data/boss_entrance_config.gd`); `tools/check_entrada_jefes.gd` y un test. `tests/test_content.gd` revisa que `line` no pase de 80 caracteres, que los ids de nivel existan y que `sound` sea un sonido conocido de `Audio`.
+2. **Lógica pura** (T366). `scripts/logic/boss_entrance_rules.gd` (`BossEntranceRules`): `should_show(enemy_data, level_id, option_on, now_s, last_s, last_wave_types) -> bool` (el nivel está en la lista, la opción está prendida, no pasaron menos de 8 s, no se repite el tipo en la oleada) y `cue_for(speed) -> float` si hace falta. Sin escena (P10).
+3. **El destello** (T368). `scenes/effects/boss_entrance_burst.gd`: un `Sprite2D` con la región del atlas animada por un `Tween` y una grieta fija debajo; se tiñe con `EnemyData.color`. `EffectsLayer.boss_entrance(position, color)`. Arte provisional con `_draw` hasta que Lucas apruebe el de T367.
+4. **El cartel** (T368). `scenes/ui/boss_entrance_card.gd` (`BossEntranceCard`, un `PanelContainer` creado en el momento): retrato (`EnemyData.texture`), «¡Llega el Jefe!», nombre, frase y pista de saltear; `Tween` de entrada, quieto y salida; solo el cartel recibe toques (`mouse_filter = STOP` en él, `IGNORE` en el resto). `HUD.show_boss_entrance(data)` lo crea, lo ubica debajo de la barra de arriba y lo borra al terminar o al saltear. La cola con el cartel de oleada y con `show_enemy_intro` (D-140) vive en `HUD`.
+5. **El disparador** (T368). `Game._on_enemy_spawned`, junto al bloque de RF-134: si `BossEntranceRules.should_show(...)` da verdadero, llama a `effects.boss_entrance(...)` y `hud.show_boss_entrance(...)`. El nivel se lee de `GameFlow.played_level()` (solo campaña desde el menú); el modo de pruebas pasa por el mismo camino.
+6. **Opciones** (T368). Casilla `BossEntranceCheck` debajo de «Animaciones de mejora»; `"boss_entrance": true` en `DEFAULT_SETTINGS`.
+7. **Pruebas.** `tests/test_boss_entrance_rules.gd`, `tests/test_boss_entrance_data.gd` (archivo oficial sin errores; el piloto solo en `level_01`), `tests/test_boss_entrance_hud.gd` (se instancia el HUD solo, sin cambiar de escena: el cartel nace y se borra, un toque lo retira, la cola con la tarjeta, la opción apagada no crea nada), `tests/test_old_saves.gd`. Capturas reales con `tools/capture_boss_entrance.gd` (nuevo, como `capture_tutorial.gd`) en PC y en modo celular 1280 × 720. `tools/balance_sim.gd` con y sin la función: mismo informe. `tools/perf_test.gd`: 200 enemigos y la entrada.
+
+**Riesgos.** (1) La cola entre el cartel de oleada, la entrada y la tarjeta RF-134 es lo más delicado: se prueba con los tres a la vez en la oleada 10 del nivel 1 con un guardado nuevo. (2) `Engine.time_scale` y la pausa mueven el `Tween` (es lo buscado), pero un cartel que quedó a medias al salir al menú no puede dejar nodos: se borra en `_exit_tree`. (3) El cartel no puede tapar los botones flotantes del celular: sus rectángulos se verifican con `MobileHud`. (4) Si el atlas del destello pesa mucho, se baja a 6 cuadros (anotado en la ficha de arte).
+
+### M67 / T370 a T375 · «Novedades de esta versión» (RF-603 a RF-609, D-141 a D-144)
+
+**Estado: implementado salvo el arte (T372, T375) y el OK de Lucas a los textos.** No cambia la partida, el balance ni el progreso. Sigue el molde de la intro (M57, `IntroData`/`IntroFlow`/`IntroScreen`) y del tutorial (M63, `TutorialData`/guardado aditivo).
+
+1. **Datos y validador** (T371). `data/novedades/novedades.json` (nace con la lista de versiones vacía, que es válida y no muestra nada, hasta que T374 cargue la 1.0.0); `scripts/logic/news_data.gd` (`NewsData`: `parse`, `load_file`, `entry_for(version)`, `latest()`, `errors`, límites de RF-605); `tools/check_novedades.gd` (errores y avisos en castellano); `tests/test_news_data.gd`.
+2. **Reglas puras** (T371). `scripts/logic/news_flow.gd` (`NewsFlow.should_auto_show(...)`, `NewsFlow.is_new_save(...)`; sin escena, P10) y `tests/test_news_flow.gd` con todos los casos de RF-603 (beta, vacía, igual, distinta, borrador, sin entrada, modo de pruebas, editor, «mejoras» con guardado nuevo y con guardado viejo, «presentacion» con guardado nuevo).
+3. **Guardado** (T371). `SaveManager`: `_news_version: String`, `news_version_seen()`, `mark_news_seen(version)`; lectura tolerante en `load_save` y escritura en `save`; `tests/test_old_saves.gd` con los guardados de cada época.
+4. **La pantalla** (T373). `scenes/ui/news_screen.gd` (`NewsScreen`, `CanvasLayer` capa 17, estilo de `CreditsScreen`): fondo oscuro, panel hierro y bronce, cabecera opcional, título, subtítulo, versión (`GameVersion.label`), lista dentro de un `ScrollContainer` con `MenuTouch.attach` y `TouchScroller` en el celular (M61), y «Entendido» fijo. Señal `closed`. `open(entry, draft_label)` crea los nodos; al cerrar se borran. Se traga el toque que cierra (RF-466/RF-499).
+5. **El enganche** (T373). `MainMenu._ready` (al final): `NewsFlow.should_auto_show(...)` con costuras para los tests (ruta del archivo, versión, banderas); si da verdadero, `SaveManager.mark_news_seen` y `news_screen.open`. `OptionsMenu`: botón `NewsButton` debajo de `CreditsButton` que abre la entrada de RF-607 y devuelve el foco al cerrar; deshabilitado con «No hay novedades» si el archivo no sirve.
+6. **Contenido** (T374). Las entradas de la 1.0.0 con el OK de Lucas; `CONTENIDO.md` («Cómo agregar las novedades de una versión»), `CHANGELOG.md`, `README.md` y `ONBOARDING.md`.
+7. **Arte** (T372, T375). Cabecera, íconos y variante sobria (ficha `specs/tareas/T372-arte-novedades.md`). Hasta el OK de Lucas, la pantalla usa `_draw` sencillo y ningún ícono (nunca se espera al arte).
+8. **Pruebas.** Unidad: `news_data`, `news_flow`, `old_saves`. De escena sin cambiar de escena (`.claude/rules/tests.md`): `tests/test_news_screen.gd` instancia `NewsScreen` sola (abre, lista de 8, se cierra con «Entendido» y con `Esc`, borra sus nodos, el toque que cierra no pasa) y `tests/test_news_options.gd` (el botón, deshabilitado sin archivo, no toca el guardado; Opciones entra en 720 en modo celular). Capturas reales con `tools/capture_news.gd` (nuevo, como `capture_tutorial.gd`) en PC y en modo celular 1280 × 720, con 8 novedades y con 1.
+
+**Riesgos.** (1) Olvidarse de subir `config/version` o de agregar la entrada al publicar: lo cubre `tools/check_novedades.gd` (aviso) y la lista de T375. (2) La pantalla y la intro no compiten (la intro es al tocar «Jugar»), pero sí en el primer arranque de un guardado nuevo: la presentación va primero y se cierra con un toque. (3) En el celular, el panel de 880 px con 8 filas de 56 px o más necesita desplazamiento: se prueba con la lista completa. (4) Las imágenes pesan en la APK (M62): sin mipmaps y con el peso importado anotado.
+
+### M60 / T268b · Copia de seguridad automática del guardado (RF-520 a RF-522, D-102)
+
+> **Estado: especificada (2026-10-16); sin programar.** La spec es **M60** (`01-spec.md`), la decisión **D-102** y la tarea **T281** (`03-tareas.md`).
+
+#### Qué hay hoy
+
+- `SaveManager.save()` (`scripts/autoload/save_manager.gd`) abre `save_path` con `FileAccess.WRITE` y escribe todo el diccionario: es **lo único** que escribe `save.json`. `load_save()` solo lee.
+- `save_path` vale `DEFAULT_PATH` (`user://save.json`); el modo de pruebas lo cambia a `user://save_pruebas.json` (`DevMode.set_enabled`), y los tests a `user://test_*.json`.
+- `mark_intro_seen()` llama a `save()` al abrirse la intro: por eso la **primera apertura** de una build nueva sobre un guardado sin `intro_seen` ya reescribe el archivo (T268a §0.4).
+
+#### Qué se cambia
+
+| Archivo | Cambio |
+|---|---|
+| `scripts/autoload/save_manager.gd` | Una función privada que se llama **al principio de `save()`** (una vez por ejecución, bandera en memoria): decide si corresponde, arma el nombre `<prefijo><versión>.json`, copia byte a byte a `.tmp` y renombra. Dos variables públicas para los tests: la ruta que se respalda (por omisión `DEFAULT_PATH`) y el prefijo (`user://save_respaldo_`). `save()` sigue devolviendo lo mismo de siempre. |
+| `project.godot` | Se agrega `config/version="1.0.0"` en `[application]`. |
+| `tests/test_save_backup.gd` | Test nuevo con los casos del criterio de M60 (todos en `user://test_*`). |
+
+Nada más: ni `SAVE_VERSION`, ni el formato del guardado, ni `dev_mode.gd`, ni datos, ni escenas, ni assets.
+
+#### Cómo se decide si se copia (en orden)
+
+1. Si ya se miró en esta ejecución → no.
+2. Si `save_path` no es la ruta que se respalda → no (modo de pruebas y tests); **no** se marca como mirado.
+3. Se marca como mirado.
+4. Si `save.json` no existe o mide 0 bytes → no.
+5. Si el respaldo de esta versión ya existe → no.
+6. Si ya hay 10 respaldos → `push_warning` y no.
+7. Se copia a `.tmp` (pisando un `.tmp` viejo) y se renombra al nombre final; si algo falla → `push_warning`, se borra el `.tmp` y se sigue.
+
+#### A comprobar al programar (no se asume)
+
+- Si `DirAccess.rename` pisa un destino existente en Godot 4.7.2 en Linux: aunque pise, el paso 5 ya garantizó que no existe; solo hay que anotarlo.
+- Cómo reproducir «la copia falla» en un test sin tocar la carpeta real: un directorio con el nombre del `.tmp` o del respaldo final dentro de `user://test_*/`.
+- El tope de 10 es de formato (como el nombre), va como constante en el código.
+
+#### Cómo se prueba
+
+1. `godot --headless --import` y luego `tests/test_save_backup.gd` y la suite completa de GUT (sin `SCRIPT ERROR`).
+2. Antes y después de la suite: `ls ~/.local/share/JuegoA/` **no** muestra ningún `save_respaldo_*.json` nuevo (los tests no ensucian la carpeta real).
+3. Con un `save.json` de prueba copiado a una carpeta de usuario aparte, abrir el juego y comprobar el respaldo con `sha256sum` (límite: en esta máquina Linux, no en Windows).
+4. **No se prueba:** Windows, Android, ni el archivo real del tester (eso es la parte manual de T268).
+
+
+### M61 / T282 · El Mortero alcanzable en el nivel 9 (RF-523 a RF-525, D-103)
+
+> **Estado: especificada (2026-10-16); sin programar.** La spec es **M61** (`01-spec.md`), la decisión **D-103** y las tareas **T282** (Codex) y **T283** (Lucas) en `03-tareas.md`.
+
+#### Qué hay hoy
+
+- `data/levels/level_09.json`: la leyenda `e` es `{"removible":{"clase":"escombro","probabilidad":50.0,"recursos":1.0}}` y se usa en tres casillas, (3,2), (14,2) y (7,8). La `u` es la ruina con la pieza de la Disruptora (11,6).
+- `data/obstaculos.json`: la clase `escombro` cuesta 90 de oro y 10 s, con `recursos` 0, `probabilidad` 0 y `recursos_si_recuperado` 1. La leyenda del mapa la sobrescribe por letra (RF-398).
+- `data/towers/mortar.tres`: `cost = 300`, `resource_cost = 3`, `reserved = true`. El 9 lo habilita con `"torres_extra"`.
+- Al empezar la partida se sortea, por cada removible y en orden de fila y columna, si entrega su recurso, con un generador con semilla (RF-417). Con `probabilidad` 100 siempre entrega.
+
+#### Qué se cambia
+
+| Archivo | Cambio |
+|---|---|
+| `data/levels/level_09.json` | `"probabilidad":50.0` → `"probabilidad":100.0` en la letra `e`. Una línea. |
+| `tools/balance_sim.gd`, `scripts/logic/balance_args.gd`, su test, `ONBOARDING.md` | **Solo si** `demoler` no demuele los tres escombros: la estrategia `mortero` (RF-524, punto 5). |
+
+Nada más: ningún otro nivel, ni `obstaculos.json`, ni `mortar.tres`, ni código del juego, ni escenas, ni assets.
+
+#### A comprobar al programar (no se asume)
+
+- Si algún test o documento exige el 50 % del 9 (`tests/test_levels_8_9.gd`, `CONTENIDO.md`): se ajusta a 100 y se anota. El 8 y los demás se mantienen.
+- Que `LevelFile.parse` acepte `100.0` (el tope es «mayor que 100 = error», RF-398).
+- Que el editor de mapas conserve el valor al abrir y guardar el nivel (ida y vuelta).
+
+#### Cómo se prueba
+
+1. `godot --headless --import` y la suite de GUT completa (sin `SCRIPT ERROR`).
+2. Bot, 5 semillas: `check_rule=1` con `levels=6-9`, `levels=10-12` y `levels=13-15`; luego `sin_recursos`, `mix`, `demoler` y `demoledora` en el 9, con la tabla por semilla de RF-524.
+3. **No se prueba:** una partida humana (T283), ni el Mortero visto en pantalla en el 9, ni Windows ni celular.

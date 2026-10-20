@@ -38,8 +38,8 @@ static func parse_strategies(text: String) -> Array[String]:
 
 # --- T214: estrategias con infraestructura y regla de oro (RF-432) ---
 
-## Las cinco estrategias de M50. Las demás (smart, mix, heavy, basic, naive) siguen como estaban.
-const INFRA_STRATEGIES: Array[String] = ["sin_recursos", "demoler", "demoledora", "pieza", "extraer_temprano", "extraer_tarde"]
+## Estrategias del bot que usan infraestructura. Las demás (smart, mix, heavy, basic, naive) siguen como estaban.
+const INFRA_STRATEGIES: Array[String] = ["sin_recursos", "demoler", "demoledora", "pieza", "mortero", "extraer_temprano", "extraer_tarde"]
 ## RF-432: N semillas y M victorias mínimas. Viven en la herramienta y no en el juego.
 const RULE_SEEDS: int = 5
 const RULE_MIN_WINS: int = 4

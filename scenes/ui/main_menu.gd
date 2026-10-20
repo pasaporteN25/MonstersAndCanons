@@ -27,9 +27,15 @@ const MOBILE_COLUMN_GAP: float = 48.0
 var open_level_select: Callable = GameFlow.go_to_level_select
 var open_first_level: Callable = GameFlow.start_level.bind(0)
 var intro_path: String = IntroData.DEFAULT_PATH
+## M67 (RF-603, RF-608): de dónde se leen las novedades, qué versión está instalada y si se corre desde el editor.
+var news_path: String = NewsData.DEFAULT_PATH
+var news_version_source: Callable = GameVersion.raw
+var news_in_editor: bool = OS.has_feature("editor")
 
 ## La intro (RF-499). Es hija del menú: la música de menú sigue sonando por debajo.
 var intro_screen: IntroScreen
+## «Novedades de esta versión» (M67). También es hija del menú; sale sola una vez por versión.
+var news_screen: NewsScreen
 
 var _two_columns: bool = false
 
@@ -57,6 +63,10 @@ func _ready() -> void:
 	_fit_logo()
 	MenuTouch.attach(self)  # RF-550, RF-551: botones de 56 px en el celular
 	_play_button.grab_focus()  # se puede jugar con Enter sin tocar el mouse
+	news_screen = NewsScreen.new()
+	add_child(news_screen)
+	news_screen.closed.connect(_play_button.grab_focus)
+	_show_news_if_new()
 
 
 ## RF-498: «Jugar». Abre la intro si el guardado no la vio (fuera del modo de pruebas y con el archivo en orden);
@@ -74,6 +84,26 @@ func play() -> void:
 		return
 	SaveManager.mark_intro_seen()  # al abrirse, no al terminar (RF-498)
 	intro_screen.open(data)
+
+
+## RF-603: al abrir el menú, las novedades de la versión instalada salen solas si corresponde (una vez por versión,
+## fuera del modo de pruebas y del editor). Un archivo roto se avisa en la salida y nunca bloquea el menú.
+func _show_news_if_new() -> void:
+	var version: String = String(news_version_source.call())
+	if version.is_empty() or version == SaveManager.news_version_seen() or DevMode.enabled or news_in_editor:
+		return  # nada que decidir: ni se lee el archivo
+	var data: NewsData = NewsData.load_file(news_path)
+	if not data.is_valid():
+		push_warning("Las novedades no se muestran: %s" % "; ".join(data.errors))
+		return
+	var new_save: bool = NewsFlow.is_new_save(GameFlow.has_won_campaign_level(), SaveManager.intro_seen())
+	var entry: Dictionary = data.entry_for(version)
+	match NewsFlow.decide(version, SaveManager.news_version_seen(), entry, true, DevMode.enabled, news_in_editor, false, new_save):
+		NewsFlow.Decision.SHOW:
+			SaveManager.mark_news_seen(version)  # al abrirse, no al cerrarse (RF-603)
+			news_screen.open(entry, data.labels)
+		NewsFlow.Decision.MARK_SILENTLY:
+			SaveManager.mark_news_seen(version)
 
 
 ## RF-500: al terminar u omitir, el nivel 1 si no hay niveles ganados; la selección si los hay.

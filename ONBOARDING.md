@@ -292,12 +292,15 @@ Se usa `--export-debug` porque la versión de **prueba** se firma sola con la cl
 |---|---|
 | Progreso, récords y opciones del jugador | `%APPDATA%\Godot\app_userdata\JuegoA\save.json` |
 | Lo mismo, pero del modo de pruebas | `%APPDATA%\Godot\app_userdata\JuegoA\save_pruebas.json` |
+| Copia de seguridad automática del progreso, una por versión de la build | `%APPDATA%\Godot\app_userdata\JuegoA\save_respaldo_<versión>.json` (en Linux, `~/.local/share/JuegoA/`) |
 | Registros (logs) de cada ejecución, los últimos 30 | `%APPDATA%\Godot\app_userdata\JuegoA\logs` |
 | Configuración del editor (rutas de Android, etc.) | `%APPDATA%\Godot\editor_settings-4.7.tres` |
 | Plantillas de exportación | `%APPDATA%\Godot\export_templates\4.7.2.stable` |
 | Caché del proyecto (se regenera sola) | `JuegoA/.godot/` |
 
 > 📱 **M58 (cuando esté programada):** `save.json` suma `settings.ui_mode` (la opción «Interfaz») y la clave `ui_prefs` (lado y altura de los botones flotantes, por dispositivo). Son aditivas: `SAVE_VERSION` no cambia y, si faltan o están rotas, el juego usa los valores por omisión.
+
+> 🛟 **Copia de seguridad automática (M60, RF-520 a RF-522):** antes de la primera vez que una build escribe `save.json`, el juego copia el archivo existente a `save_respaldo_<versión>.json` en la misma carpeta. Es **una por versión** (`application/config/version` de `project.godot`), **nunca pisa** una anterior, es **silenciosa** y no se hace en el modo de pruebas ni en los tests. Se copia también un guardado dañado, pero no uno vacío. Hay un máximo de 10 copias; al llegar al tope se avisa en el registro y no se borra ninguna. **Para volver atrás:** cerrar el juego, borrar `save.json` y renombrar la copia a `save.json`. **Al armar una build de envío hay que subir `config/version`**: si dos builds comparten versión, la segunda no hace copia propia. **No reemplaza el respaldo a mano** del archivo real del tester (`specs/tareas/informes/T268a-verificacion-guardado.md` §6, paso 3), que sigue siendo obligatorio. Motivo: la primera apertura de una build nueva reescribe `save.json` (muestra la intro y marca `intro_seen`).
 
 > 💡 **Empezar el progreso de cero:** borrar `save.json`. El `.exe` y el juego abierto desde el editor **comparten** ese archivo.
 
@@ -310,7 +313,7 @@ Se ejecutan desde la carpeta del proyecto. Más detalle dentro de cada archivo.
 | Comando | Para qué |
 |---|---|
 | `godot --headless --path . -s addons/gut/gut_cmdln.gd -gdir=res://tests -gexit` | Correr todos los tests. |
-| `godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- smart level=1` | Bot que juega solo, para revisar el balance (spec §7.1). Estrategias: `smart`, `mix`, `heavy`, `basic`, `naive` y, de M50, `sin_recursos`, `demoler`, `demoledora`, `pieza` (T245), `extraer_temprano`, `extraer_tarde`; con `seeds=N` y `levels=A-B` juega muchas partidas y da una tabla. `check_rule=1` comprueba la regla de oro. |
+| `godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- smart level=1` | Bot que juega solo, para revisar el balance (spec §7.1). Estrategias: `smart`, `mix`, `heavy`, `basic`, `naive` y, de M50, `sin_recursos`, `demoler`, `demoledora`, `pieza` (T245), `mortero` (T282; prueba demoler los tres escombros comunes del nivel 9), `extraer_temprano`, `extraer_tarde`; con `seeds=N` y `levels=A-B` juega muchas partidas y da una tabla. `check_rule=1` comprueba la regla de oro. |
 | `godot --path . -s tools/perf_test.gd` | Prueba de rendimiento: 200 enemigos y 60 torres. Abre una ventana. |
 | `godot --path . res://tools/perf_levels.tscn -- level=15 from=27` | Rendimiento en un nivel real (T236): `level` es el mapa, `from` cuántas oleadas se dan por jugadas antes de medir; opciones `to`, `towers`, `seconds`, `vsync=1`. Imprime los FPS de cada oleada. Abre una ventana. |
 | `godot --headless --path . -s tools/make_sounds.gd` | Volver a generar los sonidos (D-020). Con `-- shot_fire`, solo ese. |
@@ -521,6 +524,25 @@ Con el proyecto abierto (o `godot --path .`). **✅ Comprobar:**
 
 Capturas y mediciones en `art/m53-barra/` (`README.md`).
 
+### T363 · Probar la animación de mejora de torres
+
+**En PC.** Jugá cualquier nivel, construí una torre (por ejemplo la Ametralladora) y mejorala con **Mejorar** o con `U`. **✅ Comprobar:** sale un anillo de luz con chispas del color de la torre (medio segundo) y, arriba, «¡Nivel 2!» con «+3 daño · +0,5 disp/s», todo desaparece en poco más de un segundo y el oro baja lo mismo que antes. Mejorala otra vez: el efecto es más grande y la cabecera dice «¡Nivel máximo!». Probalo con una torre en la **fila de abajo** (el texto no pisa la barra de abajo) y pegada al borde izquierdo (queda dentro del mapa). En pausa, el efecto se congela.
+
+**En el celular (o con la interfaz forzada).** **Opciones → Interfaz → Celular**, abrí un nivel y mejorá una torre de la fila de abajo y otra de la última columna. **✅ Comprobar:** el texto no tapa la barra de abajo, la tilde, la cruz ni los botones flotantes, y se lee con el zoom por defecto y con «Ver todo». **No se probó en un celular real.**
+
+**Apagarlo.** **Opciones → «Animaciones de mejora»** apagada: al mejorar solo se ven el anillo de siempre y se oye el sonido. Un guardado viejo la muestra prendida.
+
+Tests: `-gtest=res://tests/test_upgrade_deltas.gd`, `test_upgrade_fx.gd` y `test_old_saves.gd`. Para ver el efecto en imágenes: `godot --path . res://tools/capture_upgrade.tscn -- /ruta/de/salida 1280x720`. Para revisar el archivo de datos: `godot --headless --path . -s tools/check_mejoras.gd`. Para medir el rendimiento (con la máquina libre): `godot --path . -s tools/perf_test.gd -- mejoras` contra `-- mejoras sin_fx`, y con `celular` para el modo del celular.
+### T368 · Probar la entrada del Jefe (M66)
+
+**En PC.** Con un guardado nuevo, **Jugar → Nivel 1** (tutorial apagado o ya hecho), y llegá a la oleada 10 o, más rápido, **Opciones → Activar modo de pruebas**, entrá al nivel 1 y con **F1** hacé aparecer un **Jefe**. **✅ Comprobar:** en el instante en que nace, un **destello con grietas** en la entrada del camino (0,7 s); al irse el cartel de «Oleada N», un **cartel arriba del mapa** con el retrato, «¡Llega el Jefe!», «Jefe» y su frase, que dura 1,6 s; la tarjeta «Nuevo enemigo: Jefe» sale **después** (solo la primera vez en el guardado). **Un clic sobre el cartel** lo retira al instante; un clic en una casilla del mapa fuera del cartel construye/elige como siempre. La partida **no se pausó ni cambió**. **Pausa (P)** a mitad: el cartel y el destello se congelan.
+
+**En el celular (o con la interfaz forzada).** **Opciones → Interfaz → Celular**: el cartel queda debajo de la barra, no tapa el carrito, la X ni «Ver todo», dice «Tocá para saltear» y no tiene la «✕». **No se probó en un celular real.**
+
+**Probar las salidas.** (1) **Opciones → «Entrada de los jefes»** apagada: el Jefe aparece como siempre, sin destello ni cartel, y la tarjeta sale sin esperar. (2) En el **nivel 2** no hay entrada (el piloto es solo el nivel 1). (3) No sale en el editor, en mapas de la comunidad ni en Asedio. (4) Un guardado viejo la lee prendida. (5) `godot --headless --path . -s tools/check_entrada_jefes.gd` revisa `data/ui/entrada_jefes.json` y la `entrance` de los enemigos y dice qué está mal.
+
+Tests: `-gtest=res://tests/test_boss_entrance_rules.gd`, `test_boss_entrance_data.gd`, `test_boss_entrance_options.gd` y **`test_boss_entrance_hud.gd`** (con la escena real de la partida). Capturas reales: `godot --path . res://tools/capture_boss_entrance.tscn -- <carpeta fuera del repo> 1280x720`.
+
 ### T331 · Probar el tutorial del nivel 1
 
 **En PC.** Con un guardado nuevo (o sin la marca `"tutorial_done"` en `save.json`, en esta máquina `~/.local/share/JuegoA/`), elegí **Jugar → Nivel 1** (si es un guardado nuevo, la intro termina en el nivel 1; cerrá el cartel con «Empezar»). **✅ Comprobar:** aparece una tarjeta «Tutorial · Paso 1 de 14» con «Siguiente» y «Saltar tutorial». Pasá los pasos de lectura: el **camino** se tiñe y se señalan la entrada y la salida, después el **oro** y las **vidas**. En «Elegí una torre» **no hay «Siguiente»**: hacé clic en la primera torre de la barra de abajo (o apretá `1`) y avanza solo; después un recuadro marca **una casilla de pasto junto al camino** (podés construir en cualquier otra). Construí, apretá **«Empezar oleada»**, soltá la torre con clic derecho y hacé clic en la tuya: el recuadro señala **«Mejorar»** y después **«Vender»** (los dos con «Siguiente», sin gastar nada). Cambiá la **velocidad**, **pausá** y **seguí**; el último paso dice «¡A jugar!». La partida **no se pausó sola** en ningún momento. Al terminar, volvé a entrar al nivel 1: **no sale de nuevo**.
@@ -530,3 +552,16 @@ Capturas y mediciones en `art/m53-barra/` (`README.md`).
 **Probar las salidas.** (1) **«Saltar tutorial»** en cualquier paso: la tarjeta se va y, al volver a entrar al nivel 1, no sale. (2) **Opciones → «Tutorial del nivel 1»** apagada: no sale; prendida otra vez, sí. (3) **Opciones → «Volver a verlo»**: el botón dice «Se verá en el nivel 1»; entrá al nivel 1 y sale desde el principio (también con el nivel ya ganado). (4) **No sale** en el nivel 2, en el modo de pruebas, en un mapa de la comunidad, en Asedio ni probando un mapa del editor. (5) Un guardado viejo con el nivel 1 ganado **no** lo ve. (6) Con un `tutorial.json` roto (por ejemplo, borrá un `"paso"` obligatorio) el nivel 1 se juega sin tutorial y el error sale en la salida; `godot --headless --path . -s tools/check_tutorial.gd` dice qué falta. (7) **Opciones** se puede recorrer (rueda o arrastre) y entra en 720 de alto.
 
 Tests: `-gtest=res://tests/test_tutorial_data.gd`, `test_tutorial_flow.gd`, `test_tutorial_layout.gd`, `test_tutorial_options.gd` y **`test_tutorial_game.gd`** (recorre el tutorial entero con la escena real en PC y en el celular). Capturas reales (una por paso): `godot --path . res://tools/capture_tutorial.tscn -- <carpeta fuera del repo> 1280x720`.
+
+## Probar la pantalla de carga *(M64, T340)*
+
+1. Abrí el juego (PC o celular) y elegí un nivel: aparece una pantalla oscura con «Cargando…» y una barra que se mueve, **al menos 0,4 segundos**, y después entra el nivel. Lo mismo con «Siguiente nivel», «Reintentar», «Niveles», el menú, Récords, Wiki, los mapas de la comunidad, los modos y «Probar» del editor.
+2. **El caso que se reportó:** en la selección, tocá un nivel y, mientras carga, **tocá varias veces** otras tarjetas, la pantalla o el botón «atrás». Tiene que entrar **solo el primer nivel**; ningún toque de más lanza otro, y tampoco hace nada en el nivel recién abierto.
+3. Probalo también con la partida **en pausa** («Niveles» o «Menú» desde la pausa) y en el **modo de pruebas**: se ve igual.
+4. Tests: `godot --headless -s addons/gut/gut_cmdln.gd -gtest=res://tests/test_scene_transition.gd -gexit` (el núcleo) y `-gtest=res://tests/test_loading_flow.gd` (la selección real).
+5. **Qué no se probó:** ningún celular real, y no se midió cuánto tarda la carga en un celular. Si en tu celular la barra se queda quieta unos instantes al final, es normal: armar la escena nueva ocupa al motor (la entrada sigue bloqueada ahí).
+### T373 · Probar «Novedades de esta versión»
+
+**Sin tocar `config/version`** (hoy `beta`, donde la pantalla no sale sola). **Ver la pantalla:** **Opciones → «Créditos y versión» → «Novedades de esta versión»** abre la 1.0.0 con el rótulo «Borrador» arriba a la derecha. **✅ Comprobar:** título, subtítulo, «Versión 1.0.0», la lista y «Entendido» siempre abajo; en modo celular (Opciones → Interfaz → Celular) la lista se desplaza con un dedo y ningún botón mide menos de 56 px; `Esc`, el «atrás» y «Entendido» cierran y el clic que cierra no activa nada del menú de atrás; al cerrar, el foco vuelve al botón. Abrirla desde Opciones **no** cambia el guardado (no aparece `news_version` con otro valor).
+**Probar que sale sola** (en una copia): en `project.godot` poné `config/version="1.0.0"`, pasá `"borrador"` a `false` en `data/novedades/novedades.json` y abrí el juego **como ejecutable** (desde el editor de Godot y en el modo de pruebas no sale). Sale una vez y se anota `"news_version": "1.0.0"` en el guardado; al volver a abrir no sale. **Revertí los dos cambios** antes de commitear. Con el archivo roto el menú abre normal. `godot --headless --path . -s tools/check_novedades.gd` da los errores en castellano.
+Tests: `-gtest=res://tests/test_news_data.gd`, `test_news_flow.gd`, `test_news_screen.gd`, `test_news_menu.gd` y los casos de `test_old_saves.gd`. Capturas: `godot --path . res://tools/capture_news.tscn -- <carpeta fuera del repo> 1280x720`.
