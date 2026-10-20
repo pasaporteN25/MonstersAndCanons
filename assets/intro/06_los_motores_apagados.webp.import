@@ -2,22 +2,22 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dwlxciuk0rywu"
-path="res://.godot/imported/06_los_motores_apagados.png-46faa2d8188909767a7d5d59144da5e0.ctex"
+uid="uid://dir8m34wyvsvy"
+path="res://.godot/imported/06_los_motores_apagados.webp-e519d72ca38f2d065d9bc88726aec6cb.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/intro/06_los_motores_apagados.png"
-dest_files=["res://.godot/imported/06_los_motores_apagados.png-46faa2d8188909767a7d5d59144da5e0.ctex"]
+source_file="res://assets/intro/06_los_motores_apagados.webp"
+dest_files=["res://.godot/imported/06_los_motores_apagados.webp-e519d72ca38f2d065d9bc88726aec6cb.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=1
 compress/high_quality=false
-compress/lossy_quality=0.7
+compress/lossy_quality=0.9
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0
 compress/hdr_compression=1

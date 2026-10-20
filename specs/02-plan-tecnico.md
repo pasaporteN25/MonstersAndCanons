@@ -423,6 +423,7 @@ Archivo `user://save.json` (Godot lo guarda en la carpeta de datos del usuario, 
 
 - El campo `version` permite, en el futuro, reconocer guardados viejos y convertirlos.
 - Si el archivo **no existe** o está **corrupto**, se empieza con el progreso por defecto (solo nivel 1 desbloqueado) y **no** se cierra el juego.
+- *(M60, RF-520 a RF-522)* Antes de la primera escritura de cada ejecución, `save()` copia el `save.json` existente a `user://save_respaldo_<versión>.json` (una copia por versión de la build, sin pisar nunca una anterior). Ver la sección M60 más abajo.
 - Se guarda al ganar un nivel, al cerrar la pantalla de opciones y al anotar un récord.
 - *(M6)* `scores`: el top 5 de cada nivel y del Salón de la fama (`hall_of_fame`); `initials`: las últimas iniciales usadas (3 y 5 letras); `hall_total`: el último total de campaña ya anotado; `best_score`: el mejor puntaje en victoria de cada nivel (se suman para el Salón). Son claves nuevas: un guardado de antes de M6 no las tiene y se lee igual (sigue siendo la versión 1).
 - *(M6)* En el modo de pruebas el archivo es `user://save_pruebas.json` (mismo formato).
@@ -1287,7 +1288,7 @@ La campaña y sus 15 niveles, `LevelFile`, `LevelData`, `WaveSpawner`, `Rules`, 
 | `scripts/logic/intro_data.gd` | `IntroData` (`RefCounted`, lógica pura): `load_file(path) -> IntroData` con `laminas`, `fundido_s`, `errors` y `is_valid()`. Valida cantidad (5 a 8), líneas y caracteres (los de `LevelTexts.WIN_*` y `LINE_MAX_CHARS`: reusarlos, no copiarlos), `segundos` (4 a 12), `fundido_s` (0 a 2), que la imagen exista, `version`. Mensajes en castellano que nombran la lámina. |
 | `scripts/logic/intro_flow.gd` | `IntroFlow` (lógica pura, **testeable sin cambiar de escena**): `should_auto_show(intro_seen, dev_enabled, data_valid) -> bool` (RF-498) y `after_finish(has_won_levels) -> Destination` (`LEVEL_1` o `LEVEL_SELECT`, RF-500). |
 | `scenes/ui/intro_screen.gd` | `IntroScreen` (`CanvasLayer`, por código como `EpilogueScreen`): `open(data)`, `signal finished`, `is_open()`. La imagen con `KEEP_ASPECT` y barras oscuras; franja de texto abajo; botón «Omitir»; fundido con `Tween`; avance por clic, `Espacio`, `Enter`, `→` y por tiempo (`_process` con un reloj propio, para que el test no espere). **No sabe a dónde se va después.** |
-| `assets/intro/01_*.png` a `07_*.png` | Las láminas (T241). 1920 × 1080. |
+| `assets/intro/01_*.webp` a `07_*.webp` | Las láminas (T241). 1920 × 1080. |
 
 **Qué cambia:**
 - `save_manager.gd`: la clave `"intro_seen"` (leer: solo `true` booleano cuenta; escribir en `save()`), `intro_seen() -> bool` y `mark_intro_seen()` (que guarda enseguida). `load_save()` la resetea a `false` junto con el resto.
@@ -1455,7 +1456,7 @@ Los textos, números de tamaño y posiciones nuevos viven en `mobile_ui.json` (P
 5. **Verificación.** `tools/capture_menus.gd` (T310): capturas reales con ventana por pantalla y modo, e informe de botones fuera de la ventana. Tests de GUT por tarea; suite completa sin `SCRIPT ERROR` ni `Parse Error`.
 ### M62 · Peso de la intro y documento editable (RF-560 a RF-563, D-120, D-121)
 
-1. **Peso (T320):** `mipmaps/generate=false` en los siete `assets/intro/*.png.import` (sigue `compress/mode=0`). El peso real es el de los `.ctex` de `.godot/imported/`; `art/intro-v1/peso.py` los mide por variante y arma `art/intro-v1/peso/comparison.html`. La variante WebP (`compress/mode=1`) queda medida y sin aplicar (D-120).
+1. **Peso (T320, T390):** primero `mipmaps/generate=false` (sin pérdida, 17,88 MiB). Después (D-150, T390) las láminas son `assets/intro/*.webp` sin pérdida con `compress/mode=1` y `compress/lossy_quality=0.9` en los siete `.webp.import` (4,00 MiB); el archivo es sin pérdida para no comprimir dos veces. El peso real es el de los `.ctex` de `.godot/imported/`; `art/intro-v1/peso.py` los mide por variante y arma `art/intro-v1/peso/comparison.html`. La variante WebP q0,90 se aplicó con el OK de Lucas (D-150).
 2. **Documento editable (T321):** `scripts/logic/intro_doc.gd` (`IntroDoc`, lógica pura): `to_markdown`, `parse_markdown` (que valida con `IntroData.parse`), `to_json` (mismo formato y orden de claves que el archivo oficial) y `describe_changes`. `tools/intro_doc.gd` solo lee y escribe archivos (`export`, `import`, `import --dry`). Tests en `tests/test_intro_doc.gd`: ida y vuelta byte por byte, el documento versionado coincide con el JSON, y cada error con su mensaje.
 
 ### M63 / T330 y T331 · El tutorial del nivel 1 (RF-570 a RF-578, D-125 a D-128)
@@ -1545,3 +1546,79 @@ Los textos, números de tamaño y posiciones nuevos viven en `mobile_ui.json` (P
 8. **Pruebas.** Unidad: `news_data`, `news_flow`, `old_saves`. De escena sin cambiar de escena (`.claude/rules/tests.md`): `tests/test_news_screen.gd` instancia `NewsScreen` sola (abre, lista de 8, se cierra con «Entendido» y con `Esc`, borra sus nodos, el toque que cierra no pasa) y `tests/test_news_options.gd` (el botón, deshabilitado sin archivo, no toca el guardado; Opciones entra en 720 en modo celular). Capturas reales con `tools/capture_news.gd` (nuevo, como `capture_tutorial.gd`) en PC y en modo celular 1280 × 720, con 8 novedades y con 1.
 
 **Riesgos.** (1) Olvidarse de subir `config/version` o de agregar la entrada al publicar: lo cubre `tools/check_novedades.gd` (aviso) y la lista de T375. (2) La pantalla y la intro no compiten (la intro es al tocar «Jugar»), pero sí en el primer arranque de un guardado nuevo: la presentación va primero y se cierra con un toque. (3) En el celular, el panel de 880 px con 8 filas de 56 px o más necesita desplazamiento: se prueba con la lista completa. (4) Las imágenes pesan en la APK (M62): sin mipmaps y con el peso importado anotado.
+
+### M60 / T268b · Copia de seguridad automática del guardado (RF-520 a RF-522, D-102)
+
+> **Estado: especificada (2026-10-16); sin programar.** La spec es **M60** (`01-spec.md`), la decisión **D-102** y la tarea **T281** (`03-tareas.md`).
+
+#### Qué hay hoy
+
+- `SaveManager.save()` (`scripts/autoload/save_manager.gd`) abre `save_path` con `FileAccess.WRITE` y escribe todo el diccionario: es **lo único** que escribe `save.json`. `load_save()` solo lee.
+- `save_path` vale `DEFAULT_PATH` (`user://save.json`); el modo de pruebas lo cambia a `user://save_pruebas.json` (`DevMode.set_enabled`), y los tests a `user://test_*.json`.
+- `mark_intro_seen()` llama a `save()` al abrirse la intro: por eso la **primera apertura** de una build nueva sobre un guardado sin `intro_seen` ya reescribe el archivo (T268a §0.4).
+
+#### Qué se cambia
+
+| Archivo | Cambio |
+|---|---|
+| `scripts/autoload/save_manager.gd` | Una función privada que se llama **al principio de `save()`** (una vez por ejecución, bandera en memoria): decide si corresponde, arma el nombre `<prefijo><versión>.json`, copia byte a byte a `.tmp` y renombra. Dos variables públicas para los tests: la ruta que se respalda (por omisión `DEFAULT_PATH`) y el prefijo (`user://save_respaldo_`). `save()` sigue devolviendo lo mismo de siempre. |
+| `project.godot` | Se agrega `config/version="1.0.0"` en `[application]`. |
+| `tests/test_save_backup.gd` | Test nuevo con los casos del criterio de M60 (todos en `user://test_*`). |
+
+Nada más: ni `SAVE_VERSION`, ni el formato del guardado, ni `dev_mode.gd`, ni datos, ni escenas, ni assets.
+
+#### Cómo se decide si se copia (en orden)
+
+1. Si ya se miró en esta ejecución → no.
+2. Si `save_path` no es la ruta que se respalda → no (modo de pruebas y tests); **no** se marca como mirado.
+3. Se marca como mirado.
+4. Si `save.json` no existe o mide 0 bytes → no.
+5. Si el respaldo de esta versión ya existe → no.
+6. Si ya hay 10 respaldos → `push_warning` y no.
+7. Se copia a `.tmp` (pisando un `.tmp` viejo) y se renombra al nombre final; si algo falla → `push_warning`, se borra el `.tmp` y se sigue.
+
+#### A comprobar al programar (no se asume)
+
+- Si `DirAccess.rename` pisa un destino existente en Godot 4.7.2 en Linux: aunque pise, el paso 5 ya garantizó que no existe; solo hay que anotarlo.
+- Cómo reproducir «la copia falla» en un test sin tocar la carpeta real: un directorio con el nombre del `.tmp` o del respaldo final dentro de `user://test_*/`.
+- El tope de 10 es de formato (como el nombre), va como constante en el código.
+
+#### Cómo se prueba
+
+1. `godot --headless --import` y luego `tests/test_save_backup.gd` y la suite completa de GUT (sin `SCRIPT ERROR`).
+2. Antes y después de la suite: `ls ~/.local/share/JuegoA/` **no** muestra ningún `save_respaldo_*.json` nuevo (los tests no ensucian la carpeta real).
+3. Con un `save.json` de prueba copiado a una carpeta de usuario aparte, abrir el juego y comprobar el respaldo con `sha256sum` (límite: en esta máquina Linux, no en Windows).
+4. **No se prueba:** Windows, Android, ni el archivo real del tester (eso es la parte manual de T268).
+
+
+### M61 / T282 · El Mortero alcanzable en el nivel 9 (RF-523 a RF-525, D-103)
+
+> **Estado: especificada (2026-10-16); sin programar.** La spec es **M61** (`01-spec.md`), la decisión **D-103** y las tareas **T282** (Codex) y **T283** (Lucas) en `03-tareas.md`.
+
+#### Qué hay hoy
+
+- `data/levels/level_09.json`: la leyenda `e` es `{"removible":{"clase":"escombro","probabilidad":50.0,"recursos":1.0}}` y se usa en tres casillas, (3,2), (14,2) y (7,8). La `u` es la ruina con la pieza de la Disruptora (11,6).
+- `data/obstaculos.json`: la clase `escombro` cuesta 90 de oro y 10 s, con `recursos` 0, `probabilidad` 0 y `recursos_si_recuperado` 1. La leyenda del mapa la sobrescribe por letra (RF-398).
+- `data/towers/mortar.tres`: `cost = 300`, `resource_cost = 3`, `reserved = true`. El 9 lo habilita con `"torres_extra"`.
+- Al empezar la partida se sortea, por cada removible y en orden de fila y columna, si entrega su recurso, con un generador con semilla (RF-417). Con `probabilidad` 100 siempre entrega.
+
+#### Qué se cambia
+
+| Archivo | Cambio |
+|---|---|
+| `data/levels/level_09.json` | `"probabilidad":50.0` → `"probabilidad":100.0` en la letra `e`. Una línea. |
+| `tools/balance_sim.gd`, `scripts/logic/balance_args.gd`, su test, `ONBOARDING.md` | **Solo si** `demoler` no demuele los tres escombros: la estrategia `mortero` (RF-524, punto 5). |
+
+Nada más: ningún otro nivel, ni `obstaculos.json`, ni `mortar.tres`, ni código del juego, ni escenas, ni assets.
+
+#### A comprobar al programar (no se asume)
+
+- Si algún test o documento exige el 50 % del 9 (`tests/test_levels_8_9.gd`, `CONTENIDO.md`): se ajusta a 100 y se anota. El 8 y los demás se mantienen.
+- Que `LevelFile.parse` acepte `100.0` (el tope es «mayor que 100 = error», RF-398).
+- Que el editor de mapas conserve el valor al abrir y guardar el nivel (ida y vuelta).
+
+#### Cómo se prueba
+
+1. `godot --headless --import` y la suite de GUT completa (sin `SCRIPT ERROR`).
+2. Bot, 5 semillas: `check_rule=1` con `levels=6-9`, `levels=10-12` y `levels=13-15`; luego `sin_recursos`, `mix`, `demoler` y `demoledora` en el 9, con la tabla por semilla de RF-524.
+3. **No se prueba:** una partida humana (T283), ni el Mortero visto en pantalla en el 9, ni Windows ni celular.

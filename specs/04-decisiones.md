@@ -1024,7 +1024,7 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Alternativas descartadas:** una constante en GDScript o un archivo `data/version.json` (otro lugar más para editar; `project.godot` ya viaja en las exportaciones).
 - **Límite:** que Godot tome la versión del proyecto cuando `version/name` queda vacío sale de su documentación; **no se exportó** (no se generan ejecutables en esta tarea). Hay que mirar la versión del primer APK o `.exe` que se exporte.
 ## D-120 · Las láminas de la intro se importan sin pérdida y sin mipmaps; el WebP con pérdida queda como decisión de Lucas
-- **Fecha:** 2026-10-19 · **Estado:** la parte sin pérdida, aplicada (T320); la parte con pérdida, **pendiente de Lucas** · **Decidió:** Claude (lo que no cambia ningún píxel) / Lucas (cualquier pérdida de imagen)
+- **Fecha:** 2026-10-19 · **Estado:** la parte sin pérdida, aplicada (T320); la parte con pérdida, aplicada en D-150 (T390) · **Decidió:** Claude (lo que no cambia ningún píxel) / Lucas (cualquier pérdida de imagen)
 - **Qué:** `mipmaps/generate=false` en los siete `assets/intro/*.png.import` (sigue `compress/mode=0`, sin pérdida). Medido en `.ctex` reales: **24,46 MiB → 17,88 MiB (−27 %)**; píxeles idénticos al PNG. La medición completa y los recortes lado a lado están en `art/intro-v1/peso/comparison.html` (los reproduce `art/intro-v1/peso.py`).
 - **Por qué:** el hallazgo de T289 (H-22) fue que las imágenes de 1920 × 1080 pesan ~28 MB en la APK, con mipmaps (+33 %) y sin pérdida. **Recodificar los PNG no baja nada** (Godot guarda el recurso en WebP sin pérdida a partir de los píxeles, no del PNG) y `etc2_astc=true` no interviene porque el modo 0 no usa compresión de VRAM, así que tampoco infla. Quitar los mipmaps es lo único que reduce el peso sin cambiar un píxel.
 - **Con pérdida (no aplicado, mediciones de las 7 láminas):**
@@ -1120,6 +1120,29 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
   - **Que el JSON defina el evento de cada paso:** ver arriba.
 - **Qué cambia:** `01-spec.md` (RF-571 y RF-578), `CONTENIDO.md` (cómo retocar el tutorial), `data/tutorial/tutorial.json`, `scripts/logic/tutorial_data.gd`, `tools/check_tutorial.gd`.
 
+## D-150 · Las láminas de la intro pasan a WebP: archivo sin pérdida en `assets/intro/` y calidad 0,90 al importar (≈4,0 MiB en vez de 17,88)
+- **Fecha:** 2026-10-20 · **Estado:** aplicada (T390) · **Decidió:** Lucas (vio `art/intro-v1/peso/comparison.html` y aprobó la calidad 0,90). Cierra la parte pendiente de D-120 (la «D-124 reservada» se usó como D-150).
+- **Qué:** las siete láminas son ahora `assets/intro/NN_nombre.webp` (mismo nombre base, 1920 × 1080). El archivo del repo es WebP **sin pérdida** (mismos píxeles que el PNG normalizado de antes, diferencia máxima 0) y cada `.webp.import` lleva `compress/mode=1` (con pérdida), `compress/lossy_quality=0.9` y `mipmaps/generate=false`. Los PNG originales siguen intactos en `art/intro-v1/sources/` y los de `assets/intro/` se borraron.
+- **Por qué:** el recurso importado (lo que entra al .pck y a la APK) pasa de **17,88 MiB a 4,00 MiB (−78 %)**, que era el peso que dolía en el celular (H-22, T289). La pérdida es la ya medida y aprobada en D-120: PSNR medio 38,5 dB.
+- **Mediciones (7 láminas, `.ctex` en `.godot/imported/`):**
+
+| Variante | Recurso importado | Nota |
+|---|---:|---|
+| PNG, sin pérdida, sin mipmaps (T320, antes) | 17,88 MiB | píxeles idénticos |
+| WebP en archivo + import sin pérdida (`mode=0`) | 16,01 MiB | no ahorra: Godot reguarda los píxeles |
+| **WebP sin pérdida en archivo + import `mode=1` q0,90 (aplicada)** | **4,00 MiB** (4.190.444 B) | PSNR 38,5 dB, igual que lo aprobado |
+| WebP con pérdida q90 en archivo + import `mode=1` q0,90 | 3,59 MiB | **descartada**: pierde dos veces (PSNR 37,1 dB, peor lámina 35,2 dB) |
+| WebP con pérdida q90 en archivo + import `mode=1` q0,95 | 4,48 MiB | descartada: más pesada y también con doble pérdida |
+
+  Por lámina (`.ctex`, B): 01 500.328; 02 937.300; 03 854.478; 04 794.078; 05 805.316; 06 933.446; 07 1.008.122. No se infla en Android: `compress/mode=1` guarda WebP dentro del `.ctex` (no es compresión de VRAM, no interviene `etc2_astc`). La APK real **no se generó** ni se midió (no se pidió); el número es el del `.ctex`.
+- **Por qué el archivo es sin pérdida:** si el WebP del repo ya tuviera pérdida, Godot lo comprimiría otra vez al importar (doble pérdida, tabla de arriba). Con el archivo sin pérdida, lo que se ve es la compresión única que Lucas aprobó. El archivo pesa 2,1 a 2,9 MB (menos que el PNG, 2,8 a 4,0 MB) pero no entra al ejecutable.
+- **Alternativas descartadas:**
+  - **Calidad 0,95** (5,56 MiB, 40,2 dB): más fiel pero ~1,5 MiB más; Lucas eligió 0,90.
+  - **Calidad 0,85** (3,04 MiB, 36,9 dB): ahorra ~1 MiB más, pero suaviza más el trazo fino.
+  - **Sin cambio** (17,88 MiB): el peso en el celular era el problema.
+  - **WebP con pérdida en el repo + import sin pérdida:** 16,01 MiB, no ahorra nada.
+- **Mirado a ojo:** capturas de `IntroScreen` a 1280 × 720 de las láminas 1, 4 y 7: sin diferencias visibles ni bandas.
+- **Qué cambia:** `assets/intro/*.webp(.import)`, `data/intro/intro.json`, `specs/intro/intro-editable.md`, `art/intro-v1/{pack.py,peso.py,manifest.json}`, tests de la intro, `01-spec.md` (RF-560), `02-plan-tecnico.md`, `03-tareas.md` (T390), `CONTENIDO.md`, `README.md`, `ONBOARDING.md`, `CHANGELOG.md`.
 ## D-130 · Un servicio único de cambio de escena (`SceneTransition`) con un núcleo sin dependencias y una capa fina en `GameFlow`
 - **Fecha:** 2026-10-19 · **Estado:** implementada en T340 · **Decidió:** Lucas (una pantalla de carga general y reutilizable) / Claude (el diseño)
 - **Qué:** una clase `SceneTransition` (`scripts/logic/scene_transition.gd`) que cambia de escena mostrando la capa de carga, y que **no nombra nada del juego** (ni autoloads, ni guardado, ni escenas, ni colores propios: todo se le pasa por propiedades). `GameFlow` la crea en `_ready`, le pone el tema de los menús, el mínimo y los colores, y manda **todos** sus cambios por `_change_scene`. Un test lee el archivo y falla si aparece un nombre del proyecto.
@@ -1313,3 +1336,51 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
   - **Detectar «primera instalación» con otra marca:** ya se deduce del guardado (ningún nivel ganado, intro sin ver) y solo hace falta para las «mejoras».
   - **Una prueba que falle si falta la entrada de la versión:** ver arriba.
 - **Qué cambia:** `01-spec.md` (RF-603, RF-608), `scripts/logic/news_flow.gd`, `MainMenu`, `tests/test_news_flow.gd`.
+## D-102 · Antes de la primera escritura de cada ejecución, el juego copia el `save.json` existente a `save_respaldo_<versión>.json`: una copia por versión de la build, en silencio, sin pisar nunca una anterior
+- **Fecha:** 2026-10-16 · **Estado:** Propuesta (a la espera del OK de Lucas a la spec M60); la implementación es T281 · **Decidió:** Lucas (que haya copia automática antes de la primera escritura y que nunca pise una anterior) / Claude (el nombre, el criterio de «una por versión», el tope, el silencio y los casos de borde; Lucas puede cambiarlos)
+- **Qué:** en `SaveManager.save()`, antes de abrir `save.json` para escribir y **una sola vez por ejecución**, si `save_path` es el guardado normal y el archivo existe y no está vacío, se copia **byte a byte** (sin interpretarlo) a `user://save_respaldo_<versión>.json`, donde `<versión>` sale de `application/config/version` (nueva clave en `project.godot`, valor `1.0.0`). Si ese archivo ya existe, no se hace nada. La copia pasa por un `.tmp` y un renombrado. Tope de 10 respaldos. Si falla, `push_warning` y el guardado sigue. El modo de pruebas y los tests no generan copias. Detalle en `01-spec.md` M60 (RF-520 a RF-522).
+- **Por qué:**
+  - **El motivo es real y está medido:** la primera apertura de la build nueva sobre un guardado sin `intro_seen` **reescribe el archivo** apenas se abre la intro (T268a §0.4 y §4, RF-498), y ese primer `save()` descarta las claves que la build no conoce (§5.6) y pisa los archivos dañados (§5.7). Sin copia previa, el original del tester se pierde por solo abrir el juego.
+  - **Una copia por versión de la build** y no «una por ejecución» ni «una por día»: lo que se quiere conservar es **el estado en que la build anterior dejó el archivo**, y eso es un único momento por cada build nueva. Una copia por ejecución llenaría el tope con copias casi idénticas de la misma sesión de juego y, al llegar al tope, dejaría de proteger justo cuando llega la build siguiente.
+  - **Con la versión en el nombre, Lucas sabe qué es cada copia** (`save_respaldo_1.0.0.json` es «lo que había antes de que 1.0.0 lo tocara») y puede restaurar la que quiera. El nombre termina en `.json`, así se abre con doble clic y con `tools/verify_save.gd`.
+  - **Nunca pisar = no existe ninguna ruta que borre o sobrescriba un respaldo final**, ni siquiera si el `save.json` cambió: lo que vale es el **más viejo**. Por eso también el `.tmp`: un corte de luz a mitad de la copia no deja un respaldo incompleto con el nombre final, que después bloquearía para siempre las copias de esa versión.
+  - **Se copian los archivos dañados** (son justo los que el primer guardado destruye) **y no los de 0 bytes** (no hay nada que conservar).
+  - **Si la copia falla, se guarda igual:** el progreso nuevo del jugador vale más que la red de seguridad; el `push_warning` queda en el registro para que se vea. No se reintenta en la misma ejecución para no llenar el log.
+  - **Silencioso:** nadie pidió un aviso, el jugador no tiene qué hacer con él, y un cartel «se hizo una copia» en la primera apertura asusta más de lo que ayuda (Lucas, que lo recomendó así, lo puede cambiar).
+  - **En la misma carpeta que `save.json`** (`JuegoA`, la que ya usa Lucas para respaldar a mano en T268a §6): no hay que aprender una ruta nueva. En Windows, `%APPDATA%\Godot\app_userdata\JuegoA`; en Linux, `~/.local/share/JuegoA`.
+  - **Solo el guardado normal:** el modo de pruebas tiene su propio `save_pruebas.json` (RF-181) y Lucas pidió que nunca toque el real; los tests usan `user://test_*.json` y no pueden ensuciar la carpeta real (`.claude/rules/tests.md`).
+  - **Tope de 10 conservando las más viejas:** evita que la carpeta crezca sin límite si alguien sube la versión en cada build, y mantiene lo que más importa (lo original).
+- **Alternativas descartadas:**
+  - **`save.json.bak` (un solo archivo):** es lo más simple, pero obliga a decidir «¿se pisa o no?». Si se pisa, la segunda build destruye el original (lo contrario de lo pedido); si no se pisa, la segunda build ya no tiene copia propia y nadie sabe de qué build es la que hay. Además la extensión `.bak` no se abre con doble clic en Windows.
+  - **Copias numeradas (`save.1.json`, `save.2.json`, …) en cada ejecución:** conservan todo, pero se llenan en pocas sesiones con copias casi iguales y no dicen de qué build son.
+  - **Una copia por ejecución con rotación (la nueva reemplaza a la más vieja):** pisa lo más valioso, que es lo original.
+  - **Nombre con la fecha** (`save_2026-10-16.json`): dice cuándo pero no de qué build, y dos builds el mismo día se pisan o se confunden.
+  - **Nombre con un hash del contenido:** evita duplicados pero es ilegible para Lucas y obliga a leer y calcular el hash del archivo en cada guardado.
+  - **Versión sacada del código (una constante en `save_manager.gd`):** hay que acordarse de subirla en dos lugares; `application/config/version` es el lugar que Godot ya ofrece para esto y se puede leer también desde el exportador.
+  - **Subcarpeta `respaldos/`:** más prolija, pero obliga a crear la carpeta (otro punto de falla) y a Lucas a buscar en dos lugares. Queda como pregunta P2 de M60.
+  - **Copiar al cargar (`load_save`) en vez de al guardar:** copiaría también en cada apertura en la que el jugador solo mira el menú, y sin escritura no hay nada que proteger. Copiar justo antes de escribir hace que la copia coincida con el último estado intacto.
+  - **Avisar al jugador en pantalla:** descartado por ahora (ver Por qué).
+  - **Bloquear el guardado si la copia falla:** el jugador no podría guardar por un problema que no es suyo (disco lleno, antivirus).
+  - **Reintentar en cada `save()` si falló:** un aviso por cada guardado llena el registro sin ayudar.
+  - **Depender solo del respaldo manual (T268a §6):** sigue siendo obligatorio para el archivo real del tester, pero el tester puede abrir el juego antes de que alguien lo respalde, y los demás jugadores nunca lo harían.
+- **Límites aceptados:** si dos builds comparten la misma `config/version`, la segunda no hace copia propia (se conserva la primera); subir la versión es un paso manual de cada build de envío. En Android la carpeta es privada de la app, así que la copia existe pero Lucas no la alcanza sin herramientas, y una APK con otro paquete empieza vacía igual (T268a §5.3).
+- **Qué cambia:** `01-spec.md` (M60, RF-520 a RF-522; nota en RF-115), `02-plan-tecnico.md` (M60 y §7.1), `03-tareas.md` (T281 nueva; T268 actualizada), `12-plan-t262-t268.md` (estado), `CHANGELOG.md` y `ONBOARDING.md`. **No cambia ningún código, dato ni asset todavía:** eso es T281.
+
+## D-103 · En el nivel 9, los tres escombros comunes pasan de 50 % a 100 % de dar su recurso, para que el Mortero se pueda comprar; no se toca ningún otro número ni nivel
+- **Fecha:** 2026-10-16 · **Estado:** Propuesta (a la espera del OK de Lucas a la spec M61); la implementación es T282 y la validación final, T283 · **Decidió:** Lucas (subir la probabilidad de recursos en el nivel 9) / Claude (que sea solo la letra `e`, el criterio de «alcanzable», las opciones de respaldo y la medición; Lucas puede cambiarlos)
+- **Qué:** en `data/levels/level_09.json`, la leyenda `e` (`escombro` con `"recursos":1.0`) pasa de `"probabilidad":50.0` a `"probabilidad":100.0`. Las tres casillas `e` del 9 (3,2), (14,2) y (7,8) entregan siempre su recurso: demolerlas (3 × 90 = 270 de oro) da **3 recursos**, justo lo que cuesta el Mortero (300 de oro + 3 recursos, RF-420). Detalle en `01-spec.md` M61 (RF-523 a RF-525).
+- **Por qué:**
+  - **Está medido que hoy no se alcanza** (T245, punto 4): el 9 no tiene minas ni bosques; los únicos recursos vienen de demoler; lo máximo que juntó el bot fueron 2, y con tres sorteos al 50 % las chances de sacar los 3 son 1 en 8. Un debut del Mortero que casi nunca se puede comprar contradice el motivo de Q-21 («el mejor cañón»).
+  - **Lo mínimo que lo arregla:** un número en un archivo de un nivel. Cambia lo que se pidió y nada más, así que el resto del balance (que acaba de ajustarse en T279 y todavía espera a Lucas en T280) no se mueve.
+  - **No se cuenta con la ruina de la pieza:** RF-428 dice que, con la pieza pendiente, la ruina entrega la pieza y ningún recurso. Esa corrección a la lectura de T245 es la razón de que haga falta el 100 % en los **tres** escombros y no en dos.
+  - **El sorteo no se corre de lugar:** con `probabilidad` 100 el removible entrega siempre, pero sigue consumiendo el generador con semilla en el mismo orden (RF-417); el resto del azar de la partida queda igual.
+  - **Es un dato del nivel:** RF-398 permite sobrescribir la probabilidad por letra, así que no hace falta tocar la clase `escombro`, que usan los niveles 8 y 10 a 15.
+- **Alternativas descartadas:**
+  - **Subir la probabilidad de la clase `escombro` en `data/obstaculos.json`:** cambiaría también el 8 y los niveles 10 a 15, justo los que están al borde (13 = 5, 14 = 3, 15 = 2 vidas).
+  - **Dos escombros al 100 % y uno al 50 %:** deja el Mortero otra vez librado al azar.
+  - **Agregar una mina o un bosque al 9:** es rediseñar el mapa y las oleadas; mucho más grande que lo pedido.
+  - **Bajar el costo de recursos o de oro del Mortero:** cambia el Mortero de todos los niveles que lo ofrecen, no solo del 9 (opción C de RF-525).
+  - **Que la ruina de la pieza dé siempre un recurso, aun pendiente:** da margen de 1, pero contradice RF-428; queda como opción B si la medición lo pide.
+  - **Bajar el costo de demoler solo en el 9 (opción A):** puede hacer falta si la medición muestra que alcanzar el Mortero cuesta demasiadas vidas; se decide con datos y con Lucas, no antes.
+- **Límites aceptados:** (1) 270 de oro de demoliciones más 300 del Mortero son 570 de oro en un mapa de 320 de arranque: **alcanzar** el Mortero no garantiza **poder permitírselo sin perder vidas**; se mide en T282 y lo juzga Lucas en T283. (2) La primera vez hay exactamente 3 recursos: quien pague un Francotirador con su segunda forma (120 + 1 recurso) ya no llega al Mortero en esa partida. (3) El panel dirá «Puede dar 1 recurso (100 %)», con la redacción de siempre. (4) Las vidas del bot no predicen las de una persona.
+- **Qué cambia:** `01-spec.md` (M61, RF-523 a RF-525; nota en RF-420), `02-plan-tecnico.md` (M61), `03-tareas.md` (T282 y T283 nuevas), `09-decisiones-pendientes-v1.md` (nota en Q-21), `CHANGELOG.md` y `CONTENIDO.md`. **No cambia ningún código, dato ni asset todavía:** eso es T282.

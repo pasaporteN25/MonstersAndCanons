@@ -19,6 +19,8 @@
 #   demoledora       → compra la máquina cuando quedan 4 o más removibles que valgan la pena, y después demuele.
 #   pieza            → como sin_recursos, pero después de las 2 primeras torres junta oro y demuele la ruina con la pieza de
 #                      colección (T245), y nada más. Sirve para ver si la pieza se alcanza sin perder.
+#   mortero          → como sin_recursos, pero después de las 2 primeras torres junta oro y demuele los tres escombros
+#                      comunes del nivel 9 para intentar comprar el Mortero (T282).
 #   extraer_temprano → habilita los puntos de extracción desde la oleada 1 y construye torres con recursos apenas puede.
 #   extraer_tarde    → defiende primero y habilita los puntos a mitad del nivel.
 #   Para juntar oro, el bot deja de comprar torres (después de las 2 primeras) hasta pagar lo que quiere.
@@ -692,12 +694,17 @@ func _order_pick() -> Dictionary:
 	return {}
 
 
-## Solo las estrategias de extracción construyen con recursos (la más simple: la primera torre del mapa que
-## alcance, con la segunda forma de pago si la tiene). Vacío si no hay ninguna que alcance.
+## Las estrategias de extracción construyen la primera torre con recursos que alcancen; "mortero" solo intenta
+## comprar el Mortero. Vacío si la estrategia no usa recursos o todavía no alcanza.
 func _resource_tower_pick() -> Dictionary:
+	var session: LevelSession = game.session
+	if strategy == "mortero":
+		for tower: TowerData in game.available_towers:
+			if tower.id == &"mortar" and session.can_afford_both(tower.build_gold(false), tower.resource_cost):
+				return {"tower": tower, "alt": false}
+		return {}
 	if not strategy.begins_with("extraer"):
 		return {}
-	var session: LevelSession = game.session
 	for tower: TowerData in game.available_towers:
 		if tower.has_alt_payment() and session.can_afford_both(tower.build_gold(true), tower.build_resources(true)):
 			return {"tower": tower, "alt": true}
@@ -718,6 +725,8 @@ func _run_infrastructure() -> int:
 			return _run_demolition(controller, session)
 		"pieza":
 			return _run_piece(controller, session)
+		"mortero":
+			return _run_mortar(controller, session)
 		"extraer_temprano":
 			return _run_extraction(controller, session, 1)
 		"extraer_tarde":
@@ -761,6 +770,29 @@ func _run_piece(controller: Node, session: LevelSession) -> int:
 			_infra_gold += cost
 			return 0
 		return cost
+	return 0
+
+
+## Estrategia "mortero": tras las dos torres iniciales, demuele solo los tres escombros comunes del nivel 9.
+func _run_mortar(controller: Node, session: LevelSession) -> int:
+	if built < MIN_DEFENSE:
+		return 0
+	var field: ObstacleField = controller.field
+	if field.has_job():
+		return 0
+	for spec: ObstacleSpec in game.level_data.obstacles:
+		if spec.kind != ObstacleSpec.Kind.REMOVABLE or spec.class_id != &"escombro" or spec.finding_collection != &"":
+			continue
+		if game.infrastructure.obstacle_at(spec.cell) == null:
+			continue
+		var cost: int = field.cost_of(spec.cell)
+		if session.gold >= cost and controller.order(spec.cell):
+			_infra_gold += cost
+			return 0
+		return cost
+	for tower: TowerData in game.available_towers:
+		if tower.id == &"mortar" and session.resources >= tower.resource_cost:
+			return tower.build_gold(false)
 	return 0
 
 

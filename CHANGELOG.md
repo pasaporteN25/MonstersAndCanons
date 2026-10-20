@@ -2,6 +2,9 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## La intro pesa mucho menos *(T390, 2026-10-20)*
+
+Las siete láminas de la intro se guardan ahora como WebP con una compresión leve (calidad 0,90): **ocupan unos 4 MiB en vez de casi 18** dentro del juego, y en pantalla se ven igual (no se notan diferencias a simple vista). El juego queda más liviano de instalar y de abrir en el celular.
 ## Pantalla de carga y toques bloqueados al cambiar de pantalla *(T340, 2026-10-19)*
 
 Al elegir un nivel, volver al menú, reintentar o pasar al siguiente nivel, el juego muestra ahora una **pantalla de carga** («Cargando…» con una barra que se mueve) y **no hace caso a nada** (toques, clics, teclas ni el botón «atrás») hasta que la pantalla nueva está lista. Antes, si tocabas de más mientras el nivel cargaba en el celular, se podía lanzar **otro nivel** (el que quedaba debajo del dedo en la selección). Ahora entra solo el que elegiste. La pantalla de carga se ve como mínimo 0,4 segundos, así que en equipos rápidos es un destello corto y no un parpadeo.
@@ -79,11 +82,21 @@ En el modo celular el botón «Empezar oleada» se veía pero no recibía el toq
 
 ## Ajustes del HUD móvil tras probar el PR #10 *(T287, 2026-10-16)*
 
+## Escombros comunes del nivel 9 *(T282, 2026-10-17)*
+
+Los tres escombros comunes del Taller ahora garantizan 1 recurso cada uno al demolerlos. El bot confirmó que así se reúnen los 3 recursos del Mortero, pero la estrategia que va por ellos pierde en las cinco semillas y no llega a comprarlo; se deja el costo de demolición y el del Mortero como están hasta que Lucas lo pruebe (T283).
+
+## Copia de seguridad automática del guardado *(M60, spec del 2026-10-16; todavía falta programarla, T281)*
+
 Carrito y salida reciben un solo gesto, sin doble pulsación del mouse emulado. Carrito, X, tilde y cruz son más chicos y redondeados, con íconos de marfil y bronce; la tilde ya no repite el precio. El catálogo y la barra inferior comparten el tema oscuro del juego. Se eliminan las franjas grises de los márgenes y la línea que atravesaba la barra superior. El precio sigue en el catálogo y la barra; si no se puede construir, la barra muestra el motivo.
 
 ## Arte aprobado de La Cuadrilla *(T286, 2026-10-16)*
 
 El Ratero usa el concepto B elegido por Lucas y el Cargador el concepto A, con sus atlas de caminata en cuatro direcciones. Se calibró su tamaño visual para acercarlo al del Ladrón; radios, vida, velocidad, robo y oleadas no cambiaron.
+
+## Copia de seguridad automática del guardado *(T281, 2026-10-16)*
+
+Antes de la primera escritura de `save.json` en una ejecución, el juego copia los bytes originales a `save_respaldo_<versión>.json` en la misma carpeta. Conserva la primera copia de cada versión, también si el guardado está dañado; no copia archivos vacíos y no se activa para el modo de pruebas ni para rutas de tests. Es silenciosa, tiene un tope de 10 copias y no reemplaza el respaldo manual obligatorio del archivo real del tester.
 
 ## Arte aprobado en el mapa *(T277, 2026-10-16)*
 

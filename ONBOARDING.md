@@ -292,12 +292,15 @@ Se usa `--export-debug` porque la versión de **prueba** se firma sola con la cl
 |---|---|
 | Progreso, récords y opciones del jugador | `%APPDATA%\Godot\app_userdata\JuegoA\save.json` |
 | Lo mismo, pero del modo de pruebas | `%APPDATA%\Godot\app_userdata\JuegoA\save_pruebas.json` |
+| Copia de seguridad automática del progreso, una por versión de la build | `%APPDATA%\Godot\app_userdata\JuegoA\save_respaldo_<versión>.json` (en Linux, `~/.local/share/JuegoA/`) |
 | Registros (logs) de cada ejecución, los últimos 30 | `%APPDATA%\Godot\app_userdata\JuegoA\logs` |
 | Configuración del editor (rutas de Android, etc.) | `%APPDATA%\Godot\editor_settings-4.7.tres` |
 | Plantillas de exportación | `%APPDATA%\Godot\export_templates\4.7.2.stable` |
 | Caché del proyecto (se regenera sola) | `JuegoA/.godot/` |
 
 > 📱 **M58 (cuando esté programada):** `save.json` suma `settings.ui_mode` (la opción «Interfaz») y la clave `ui_prefs` (lado y altura de los botones flotantes, por dispositivo). Son aditivas: `SAVE_VERSION` no cambia y, si faltan o están rotas, el juego usa los valores por omisión.
+
+> 🛟 **Copia de seguridad automática (M60, RF-520 a RF-522):** antes de la primera vez que una build escribe `save.json`, el juego copia el archivo existente a `save_respaldo_<versión>.json` en la misma carpeta. Es **una por versión** (`application/config/version` de `project.godot`), **nunca pisa** una anterior, es **silenciosa** y no se hace en el modo de pruebas ni en los tests. Se copia también un guardado dañado, pero no uno vacío. Hay un máximo de 10 copias; al llegar al tope se avisa en el registro y no se borra ninguna. **Para volver atrás:** cerrar el juego, borrar `save.json` y renombrar la copia a `save.json`. **Al armar una build de envío hay que subir `config/version`**: si dos builds comparten versión, la segunda no hace copia propia. **No reemplaza el respaldo a mano** del archivo real del tester (`specs/tareas/informes/T268a-verificacion-guardado.md` §6, paso 3), que sigue siendo obligatorio. Motivo: la primera apertura de una build nueva reescribe `save.json` (muestra la intro y marca `intro_seen`).
 
 > 💡 **Empezar el progreso de cero:** borrar `save.json`. El `.exe` y el juego abierto desde el editor **comparten** ese archivo.
 
@@ -310,7 +313,7 @@ Se ejecutan desde la carpeta del proyecto. Más detalle dentro de cada archivo.
 | Comando | Para qué |
 |---|---|
 | `godot --headless --path . -s addons/gut/gut_cmdln.gd -gdir=res://tests -gexit` | Correr todos los tests. |
-| `godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- smart level=1` | Bot que juega solo, para revisar el balance (spec §7.1). Estrategias: `smart`, `mix`, `heavy`, `basic`, `naive` y, de M50, `sin_recursos`, `demoler`, `demoledora`, `pieza` (T245), `extraer_temprano`, `extraer_tarde`; con `seeds=N` y `levels=A-B` juega muchas partidas y da una tabla. `check_rule=1` comprueba la regla de oro. |
+| `godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- smart level=1` | Bot que juega solo, para revisar el balance (spec §7.1). Estrategias: `smart`, `mix`, `heavy`, `basic`, `naive` y, de M50, `sin_recursos`, `demoler`, `demoledora`, `pieza` (T245), `mortero` (T282; prueba demoler los tres escombros comunes del nivel 9), `extraer_temprano`, `extraer_tarde`; con `seeds=N` y `levels=A-B` juega muchas partidas y da una tabla. `check_rule=1` comprueba la regla de oro. |
 | `godot --path . -s tools/perf_test.gd` | Prueba de rendimiento: 200 enemigos y 60 torres. Abre una ventana. |
 | `godot --path . res://tools/perf_levels.tscn -- level=15 from=27` | Rendimiento en un nivel real (T236): `level` es el mapa, `from` cuántas oleadas se dan por jugadas antes de medir; opciones `to`, `towers`, `seconds`, `vsync=1`. Imprime los FPS de cada oleada. Abre una ventana. |
 | `godot --headless --path . -s tools/make_sounds.gd` | Volver a generar los sonidos (D-020). Con `-- shot_fire`, solo ese. |
@@ -459,7 +462,7 @@ Para medir: `... -s tools/balance_sim.gd -- sin_recursos level=7 seeds=5` (repet
 
 Con un guardado nuevo (o sin la marca `"intro_seen"` en `save.json`), tocar **Jugar** en el menú principal. **✅ Comprobar:** se abre la intro en la lámina 1, con el texto de dos líneas en la franja de abajo y el botón **«Omitir»** arriba a la derecha; avanza sola (7 s la primera) o con un clic, `Espacio`, `Enter` o `→`, con un fundido corto; en la séptima, un toque o el tiempo terminan y se abre **el nivel 1 con su cartel de entrada** (si el guardado ya tenía niveles ganados, la selección de niveles). `Esc` o «Omitir» terminan en cualquier lámina, y el clic que termina **no construye nada** en la pantalla de después. Al volver a tocar «Jugar» ya no aparece. **Para verla de nuevo:** **Wiki → solapa Lore → «Ver la intro»** (vuelve a la Wiki y no toca el guardado), o borrar `"intro_seen"` de `save.json` (la carpeta de datos de usuario del juego; en esta máquina Linux es `~/.local/share/JuegoA/`). En el modo de pruebas «Jugar» no la abre sola. **Las láminas son las definitivas** (T241, aprobadas el 2026-10-11): el texto tiene que verse entero sobre la parte oscura de abajo, sin cortarse. Para probar un archivo roto: renombrar `data/intro/intro.json` y tocar «Jugar»: va a la selección de niveles y avisa en la salida.
 
-Tests: `-gtest=res://tests/test_intro_data.gd`, `test_intro_flow.gd` y `test_intro_screen.gd`. **No correr `tools/make_intro_placeholders.py`: pisaría las láminas definitivas con las provisorias.** Para ver cómo entra el texto en una ventana real: `godot --path . res://tools/capture_intro.tscn -- <carpeta fuera del repo> 1280x720` (guarda un PNG por lámina y dos de peor caso); para comprobar que cargan: `godot --headless --path . res://tools/check_intro_pack.tscn`.
+Tests: `-gtest=res://tests/test_intro_data.gd`, `test_intro_flow.gd` y `test_intro_screen.gd`. **No correr `tools/make_intro_placeholders.py`: crearía PNG provisorios en `assets/intro/` (las definitivas son `.webp`, D-150).** Las láminas se importan con `compress/mode=1` y calidad 0,90: si cambiás un `.webp`, corré `godot --headless --import`. Para ver cómo entra el texto en una ventana real: `godot --path . res://tools/capture_intro.tscn -- <carpeta fuera del repo> 1280x720` (guarda un PNG por lámina y dos de peor caso); para comprobar que cargan: `godot --headless --path . res://tools/check_intro_pack.tscn`.
 
 ### T234 · Probar el nivel 15 (La Central, el Coloso y el epílogo)
 

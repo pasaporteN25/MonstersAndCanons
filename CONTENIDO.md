@@ -483,6 +483,8 @@ Perfiles de compra/ubicación/mejoras y variantes de frecuencia viven en art/bal
 
 Campaña ampliada con level_08 (Bastión) y level_09 (Taller asediado). JSON en formato canónico del editor; torres_extra permite Mecánico, sin nuevas fuentes de colección. Guardián debuta en8/oleada4 y Curandero en9/oleada5; robos opcionales comienzan6 y embestidas8, con combinaciones posteriores. Carga/auras/desgaste/reparación reutilizan recursos existentes y no cambian sus estadísticas. Datos y recorridos1–7 intactos. Detalle, bots/capturas y límites en art/campaign-m45/README.md.
 
+**M61 (T282):** en `level_09.json`, la letra `e` de los tres escombros comunes está al 100 % y garantiza 1 recurso por escombro; la ruina `u` con la pieza no da recursos la primera vez (RF-428). La estrategia específica juntó los 3 recursos, pero perdió en la oleada 3 con 0 vidas y 136 de oro, sin comprar el Mortero; pasó en las 5 semillas. No se cambiaron los costos; falta la partida humana de T283.
+
 ### T225 · Nivel 10 (La mina vieja)
 
 `data/levels/level_10.json`, último de `data/campaign.json`. Es el **único nivel oficial de mapa grande** (24 × 11, RF-250) y de tema `desierto`, con las ruinas de los niveles 8 y 9 contadas por la leyenda (`p` columna, `s` símbolo A, `u` y `e` escombros). Su leyenda usa 6 de las 12 letras: `u` escombro con `hallazgo: disruptor` (la pieza 3/3), `e` escombro común (1 recurso al 50 %), `r` roca removible (1 recurso al 50 %), `m` mina (clase `mina`, sin sobrescribir: 100 de oro, 2 por oleada, reserva 8), `s` y `p` decoración. Para cambiar la dificultad sin tocar el mapa se mueve `aumento_vida` (30) y, con cuidado, las cantidades de las oleadas: con 33 `sin_recursos` ya pierde 2 de 5, así que **después de cualquier cambio** hay que correr `godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- x check_rule=1 levels=10` (regla de oro, RF-432). Es un mapa de **espacio limitado** (43 casillas libres, ver §7.12 de la spec): agregar casillas libres lo vuelve más fácil para todos los bots. La exposición del Embestidor y la captura están en `art/campaign-t225/`.
@@ -576,7 +578,7 @@ Lo que aparece al mejorar una torre se retoca con un archivo, sin programar. **N
 
 ### T242 · La intro (`data/intro/intro.json`)
 
-La intro se arma con un archivo, sin programar: `{"version": 1, "fundido_s": 0.6, "laminas": [{"imagen": "res://assets/intro/01_la_nave.png", "texto": "Línea 1\nLínea 2", "segundos": 7}, …]}`.
+Las láminas son archivos **`.webp`** (sin pérdida, 1920 × 1080) en `assets/intro/`; Godot los comprime a calidad 0,90 al importar (D-150). La intro se arma con un archivo, sin programar: `{"version": 1, "fundido_s": 0.6, "laminas": [{"imagen": "res://assets/intro/01_la_nave.webp", "texto": "Línea 1\nLínea 2", "segundos": 7}, …]}`.
 
 | Clave | Qué es | Límite |
 |---|---|---|
