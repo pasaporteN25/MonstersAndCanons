@@ -1199,6 +1199,8 @@ Dibujos simples para dejar de ver formas geométricas. Es un **primer intento "p
 > **Criterio de aceptación RF-115**
 > **Dado** que gané el nivel 1 → **Cuando** cierro el juego y lo vuelvo a abrir → **Entonces** el nivel 2 aparece desbloqueado.
 
+*(M60, RF-520 a RF-522: antes de la primera escritura de cada ejecución, el juego guarda en silencio una copia de seguridad del `save.json` existente, una por versión de la build y sin pisar nunca una anterior.)*
+
 ### 10.1 Puntos y récords *(M6, pedido por Lucas)*
 
 Récords "a la antigua", como en los arcades: iniciales y un top 5.
@@ -1699,6 +1701,7 @@ Los cuatro enemigos que gustaron, con lo necesario para convertirlos en spec cua
 - **Que el bot de balance mejore torres** *(2026-10-09, T251)*: `tools/balance_sim.gd` nunca mejora ni vende torres; llena el mapa con torres de nivel 1 y deja el oro sin usar (al perder Asedio 10 a 15 al 115 % quedaban 2054, 1039, 2859 y 3881 de oro en los mapas 10, 12, 14 y 15). Una persona lo gasta en mejoras (el Francotirador pasa de 40 a 70 y a 120 de daño por 150 y 225). Gastar ese oro sobrante en mejoras cuando el mapa está lleno es un cambio de la **herramienta**, no del juego. **Ojo:** las tablas de T229 a T234 se ajustaron contra el bot sin mejoras, así que con mejoras todos los niveles le saldrían más fáciles y habría que revisar la referencia. **No implementado.** Detalle y medición en `specs/tareas/informes/T251-conceptos-nuevos-enemigos.md`, §2.5.
 - **Un zoom lentísimo sobre cada lámina de la intro** *(2026-10-11, T240)*: para que las siete láminas se sientan más «película» y menos «presentación», cada una podría acercarse un 3 a 5 % durante sus segundos (un `Tween` sobre la escala de la imagen, sin tocar el texto). Sumaría una pizca de movimiento sin animar nada ni tocar Q-01. **No incluido en M57:** Lucas pidió «imágenes tipo diapositiva» y la excepción de §11 prohíbe las cinemáticas animadas, así que **no se implementa sin su OK**. Se agregaría como una clave opcional (`"zoom_%"`) de `data/intro/intro.json`.
 - **Un consejo de contramedida en el cartel de entrada de algunos niveles** *(2026-10-16, T266)*: con el bot, los picos de los niveles 2 y 7 dependen de la composición de torres (armadura del Jefe en el 2; enjambres de Rápidos por dos entradas en el 7), y el juego no lo anticipa: la presentación de enemigos (RF-134) solo sale la primera vez que se ve un tipo, y el Jefe y el Rápido ya se vieron en el 1. La idea: una línea corta debajo del texto de entrada (RF-466), por ejemplo en el 2 «Los Jefes y los Blindados tienen armadura: Cañón y Francotirador» y en el 7 «Enjambres por las dos entradas: Múltiple, Ráfaga o Eléctrica». Complementa los ajustes de datos propuestos en `specs/tareas/informes/T266-auditoria-dificultad.md` §5, no los reemplaza; los textos de entrada son lore (`specs/11-textos-lore.md`), así que el consejo iría aparte.
+- **Precisar el caso en que falla el respaldo (M60, RF-521):** el criterio dice que, si la copia falla, `save()` debe escribir `save.json` y a la vez «no se pierde el original que había». Si el respaldo no pudo crearse y `save()` abre el mismo archivo con `WRITE`, los bytes anteriores se reemplazan; hace falta aclarar si «original» significa el progreso ya cargado que se vuelve a serializar o si se exige conservar los bytes originales en otro lugar. T281 implementa el comportamiento detallado de RF-521 (avisar y continuar guardando) y no agrega otra copia alternativa sin definición aprobada.
 - **Parte útil del repositorio Claude Code Game Studios** (Lucas: "no hace falta `validate-commit`"; del resto, ver D-040):
   - **Informe de prueba** (su `playtest-report`): una plantilla corta para anotar lo que se siente al probar el juego (¿se entendió?, ¿dónde te trabaste?, ¿qué te aburrió?) y guardarla en `specs/pruebas/`. Hoy las impresiones de Lucas quedan en la charla.
   - **Auditoría de recursos** (su `asset-audit`): un test que revise que **todos** los dibujos y sonidos existen, miden lo que dice la guía y que ningún dato apunta a un archivo que falta.
@@ -2122,7 +2125,7 @@ Valores: los números de este bloque son **iniciales** (los pidió así Lucas en
   - Una torre **no puede** tener `resource_cost` y `alt_*` a la vez (un test de los datos lo comprueba) y `alt_gold_cost` tiene que ser menor que su costo de oro. Las mejoras cuestan lo mismo en las dos formas.
   - Vender devuelve el oro invertido y, si se pagó con recurso, `floor(1 × 70 / 100) = 0` recursos (RF-418).
   - **Nunca es indispensable**: la forma de oro cuesta lo mismo que antes, así que el Francotirador y los niveles 1 a 6 **no cambian**.
-- **RF-420** **El Mortero cuesta recursos y debuta en el nivel 9 (Q-21 ✎):** `data/towers/mortar.tres` pasa a `resource_cost = 3` (con su `cost` de 300 de oro: **300 + 3 recursos**, valores iniciales). **Enmienda de RF-300:** el Mortero ya **no está reservado para el nivel 10**, sino que **debuta en el nivel 9** (`"torres_extra": ["mortar"]`) y sigue habilitado en el 10. Los niveles 1 a 8 **no lo ofrecen**, así que su balance no cambia. Desde el 11 lo decide la rotación de torres (RF-393).
+- **RF-420** **El Mortero cuesta recursos y debuta en el nivel 9 (Q-21 ✎):** `data/towers/mortar.tres` pasa a `resource_cost = 3` (con su `cost` de 300 de oro: **300 + 3 recursos**, valores iniciales). **Enmienda de RF-300:** el Mortero ya **no está reservado para el nivel 10**, sino que **debuta en el nivel 9** (`"torres_extra": ["mortar"]`) y sigue habilitado en el 10. Los niveles 1 a 8 **no lo ofrecen**, así que su balance no cambia. Desde el 11 lo decide la rotación de torres (RF-393). *(M61, RF-523 a RF-525, 2026-10-16: en el 9 los tres escombros comunes pasan de 50 % a 100 % para que los 3 recursos estén garantizados; el costo del Mortero no cambia.)*
 - **RF-421** **Un mapa que ofrece algo imposible de conseguir:** si un mapa ofrece una torre con `resource_cost` (el Mortero, y más adelante la Disruptora) pero no tiene recursos (RF-416), `check_level` y el editor muestran un **aviso** ("el Mortero cuesta recursos y este mapa no tiene cómo conseguirlos"). No es un error: la torre queda en la barra deshabilitada con ese motivo.
 
 > **Criterio de aceptación RF-415 a RF-421**
@@ -3830,3 +3833,162 @@ La entrada está cargada en `data/novedades/novedades.json` con **`"borrador": t
 - **Música, sonidos o animaciones nuevas.**
 - **Cambiar** `file_version`, `product_version` o `version/code` de las exportaciones: se hace a mano al publicar (RF-554, RF-609).
 - **Probarlo en un celular real.**
+
+
+### M60 · Copia de seguridad automática del guardado antes de la primera escritura de cada build (Lucas, 2026-10-16; parte de T268b)
+
+**Estado: especificada (2026-10-16); sin programar.** Se programa en **T281**. Es una red de seguridad **extra**: **no reemplaza** el respaldo a mano que Lucas hace con el archivo real del tester (T268a §6, paso 3).
+
+**Qué pidió Lucas.** Cuando una build nueva abre un `save.json` que ya existe, **antes de la primera vez que lo escribe**, el juego guarda una copia de seguridad, y **nunca pisa una copia anterior**.
+
+**Por qué hace falta (el motivo, con evidencia).** El informe T268a (`specs/tareas/informes/T268a-verificacion-guardado.md`, §0.4, §4 y §5) dejó registrado que:
+
+1. **La primera apertura de la build nueva reescribe `save.json`.** El guardado del tester no tiene la clave `intro_seen` (T242), así que el juego **muestra la intro y guarda enseguida** (`mark_intro_seen()` llama a `save()` «al abrirse, no al terminarla», RF-498). O sea: **el archivo original se modifica sin que el jugador haya hecho nada**, solo por abrir el juego.
+2. **Una clave que la build no conoce se pierde** en ese primer guardado: `save()` escribe solo las claves que conoce (T268a §5.6).
+3. **Un archivo dañado se pisa** en el próximo guardado: cargarlo no lo toca, pero el primer `save()` lo reemplaza por el progreso vacío (T268a §5.7).
+
+Con la copia automática, el archivo **tal como lo dejó la build anterior** queda guardado aunque nadie se haya acordado de respaldarlo a mano.
+
+**Idea en pocas palabras.** Justo antes de la primera escritura de `save.json` en cada ejecución, el juego mira si ya existe una copia para **esta versión de la build**. Si no existe, copia el archivo **tal cual (byte a byte)** a `save_respaldo_<versión>.json` en la misma carpeta de datos (`JuegoA`). Si ya existe, no hace nada. El jugador no ve nada.
+
+#### Requisitos
+
+- **RF-520** **La copia, cuándo y con qué nombre:**
+  1. **Cuándo:** en la **primera llamada a `save()` de cada ejecución**, **antes** de abrir `save.json` para escribir. Se mira **una sola vez por ejecución** (una bandera en memoria). Como `save()` es lo único que escribe `save.json`, cubre la intro, ganar un nivel, Opciones y todo lo demás.
+  2. **Qué se copia:** el **archivo tal como está en el disco**, **sin leerlo como JSON ni interpretarlo** (así también se copia uno dañado, que es justo el que más importa conservar).
+  3. **Nombre:** `user://save_respaldo_<versión>.json`, en la misma carpeta que `save.json`. `<versión>` es el valor de `application/config/version` de `project.godot` (esa clave se **agrega** con el valor **`1.0.0`**, el mismo que ya tiene `export_presets.cfg`). Los caracteres que no sean letras, números, punto, guion o guion bajo se reemplazan por `_`; si la clave está vacía o falta, se usa `sin-version`. Ejemplo: `save_respaldo_1.0.0.json`.
+  4. **Nunca pisa:** si **ya existe** el archivo de esa versión, **no se hace nada** (se conserva el más viejo, que es el que tiene el progreso original). No hay ninguna ruta de código que borre o sobrescriba un respaldo.
+  5. **Sin copias a medias:** se copia primero a `save_respaldo_<versión>.json.tmp` y **recién cuando terminó bien** se renombra al nombre final. Un `.tmp` que quedó de una ejecución cortada **sí se pisa** (es temporal). Así un corte de luz nunca deja un respaldo incompleto con el nombre final, que después bloquearía las copias futuras.
+  6. **Tope:** a lo sumo **10** archivos `save_respaldo_*.json`. Con 10 ya hechos **no se crea otro** (se conservan los más viejos) y se avisa con `push_warning`. El tope es de formato (como el nombre del archivo), no de balance, así que vive en el código.
+- **RF-521** **Qué casos copian y cuáles no** (la copia **nunca** impide jugar ni cambia lo que `save()` escribe):
+  1. **Sin `save.json`** → no hay nada que respaldar; no se crea nada. La bandera se da por cumplida (el archivo que se cree ahora ya es de esta build).
+  2. **`save.json` de 0 bytes** → no se copia (no hay nada que conservar).
+  3. **`save.json` dañado o ilegible como JSON** (truncado, basura, versión distinta) → **sí se copia**, tal cual, y después `save()` sigue normal.
+  4. **Ya hay respaldo de esta versión** → no se hace nada, sin avisos.
+  5. **La copia falla** (disco lleno, permisos, no se puede abrir el original, falla el renombrado) → **`push_warning`** con el motivo, se borra el `.tmp` si quedó, **`save()` continúa y escribe igual** (no se bloquea el guardado: perder el progreso nuevo del jugador es peor que no tener la copia). **No se reintenta** en esa ejecución (un solo aviso, sin repetirlo en cada guardado); en la próxima se vuelve a intentar.
+  6. **Modo de pruebas** (RF-181, RF-383): usa `save_pruebas.json`, que **no es** el guardado real. `save()` solo respalda cuando `save_path` es el guardado normal (`DEFAULT_PATH`), así que en el modo de pruebas **no se hace ninguna copia, ni del real ni del de pruebas**, y **no se toca** `save.json`. Si se pasa de pruebas a normal sin cerrar el juego, la primera escritura de `save.json` sí hace su chequeo.
+  7. **Tests de GUT**: los que cambian `save_path` a `user://test_*.json` (`.claude/rules/tests.md`) **no generan ningún `save_respaldo_*.json` en la carpeta real**. Para probar la copia en sí, el `SaveManager` tiene dos variables que los tests cambian y restauran: la ruta del único guardado que se respalda (por omisión, `DEFAULT_PATH`) y el prefijo de los respaldos (por omisión `user://save_respaldo_`); los tests de la copia apuntan las dos a archivos `user://test_*`.
+- **RF-522** **Dónde queda y si se avisa:**
+  1. **Es silencioso:** no hay mensaje, cartel ni opción para el jugador. Solo si **falla** la copia hay un `push_warning` en el registro (log).
+  2. **Dónde la encuentra Lucas:** en la **misma carpeta de datos que `save.json`**. En Windows, `%APPDATA%\Godot\app_userdata\JuegoA\save_respaldo_<versión>.json`; en la máquina Linux de Lucas, `~/.local/share/JuegoA/save_respaldo_<versión>.json`. Para volver atrás: cerrar el juego, borrar `save.json` y renombrar la copia a `save.json`.
+  3. **Es un `.json` válido** y se puede abrir con el Bloc de notas o con `tools/verify_save.gd` (T268a) para ver qué había.
+  4. **La versión se sube a mano** al preparar cada build de envío (T268b): si dos builds distintas comparten el mismo `config/version`, la segunda **no** hace copia propia (la primera, la más vieja, se conserva). Es un límite aceptado.
+
+> **Criterio de aceptación RF-520 a RF-522**
+> **Dado** un `save.json` con progreso y ningún respaldo de la versión `1.0.0` → **Cuando** el juego hace su primer `save()` (por ejemplo, al abrir la intro) → **Entonces** existe `save_respaldo_1.0.0.json` con **exactamente los mismos bytes** que tenía `save.json` antes de esa escritura, y `save.json` queda con el contenido nuevo.
+> **Dado** que ya existe `save_respaldo_1.0.0.json` → **Cuando** el juego guarda de nuevo, en esa ejecución o en otra → **Entonces** el respaldo **no cambia** (mismo contenido, mismo hash) aunque `save.json` sí haya cambiado.
+> **Dado** que no existe `save.json` → **Cuando** se guarda por primera vez → **Entonces** no se crea ningún respaldo y `save()` funciona igual que hoy.
+> **Dado** un `save.json` de 0 bytes → **Entonces** no se crea respaldo.
+> **Dado** un `save.json` dañado (basura, truncado, `"version": 2`) → **Cuando** se guarda → **Entonces** el respaldo **sí** se crea con los bytes del dañado, y `save()` escribe el progreso nuevo.
+> **Dado** que la copia falla (por ejemplo, ya existe una **carpeta** con el nombre del respaldo, o el destino no se puede escribir) → **Cuando** se guarda → **Entonces** hay un `push_warning`, `save()` **devuelve `true`** y `save.json` queda escrito, y no se pierde el original que había.
+> **Dado** que quedó un `save_respaldo_1.0.0.json.tmp` viejo → **Cuando** se hace la copia → **Entonces** se pisa el `.tmp` y el respaldo final queda completo.
+> **Dado** el modo de pruebas activado (`save_path` = `save_pruebas.json`) → **Cuando** se guarda → **Entonces** no se crea ningún `save_respaldo_*.json` y `save.json` no se toca.
+> **Dado** un test con `save_path = "user://test_x.json"` → **Cuando** se guarda → **Entonces** no aparece ningún `save_respaldo_*.json` en `user://`.
+> **Dado** 10 respaldos de otras versiones → **Cuando** se guarda con una versión nueva → **Entonces** no se crea el 11.º, hay un `push_warning`, y los 10 viejos siguen intactos.
+> **Dado** una versión con caracteres raros (`"1.0 / beta"`) o vacía → **Entonces** el nombre queda como `save_respaldo_1.0___beta.json` o `save_respaldo_sin-version.json`.
+> **Dado** que el original se abre con la build nueva y se juega → **Entonces** el jugador no ve ningún mensaje ni cambio de comportamiento por la copia.
+
+#### Lo que decidí por defecto *(Lucas no lo definió; cambia con su respuesta)*
+
+1. **El nombre lleva la versión de la build** (`save_respaldo_<versión>.json`) y no `save.json.bak` ni números correlativos: razones y alternativas en **D-102**.
+2. **Es silencioso** (recomendado por Lucas): sin cartel. Si querés un aviso en pantalla, es una decisión aparte.
+3. **Se copian también los archivos dañados** (son los que más conviene conservar) y **no** los de 0 bytes.
+4. **Si la copia falla, se guarda igual** y se avisa en el log.
+5. **Tope de 10 copias**, conservando las más viejas.
+
+#### Lo que M60 no incluye
+
+- **Restaurar desde el juego** (un botón «Recuperar copia»): la restauración es a mano (RF-522, punto 2).
+- **Copias periódicas o rotativas** (una por día, por partida, etc.): una por versión de build, nada más.
+- **Respaldar `save_pruebas.json`, los mapas (`user://maps/`) ni los modos (`user://modos/`).**
+- **Android:** ahí `user://` es privado de la app (no hay una carpeta que Lucas pueda abrir sin herramientas) y una APK con otro paquete empieza vacía (T268a §5.3); la copia se hace igual, pero **no se prometió que se pueda recuperar a mano**.
+- **Cambiar el formato del guardado** (`SAVE_VERSION` sigue en 1) ni el orden de las claves.
+
+#### Lo que no se probó (al escribir esta spec)
+
+**Nada se programó ni se corrió**: son solo documentos. No se probó en Windows ni en Android. El comportamiento de `DirAccess.copy` y `DirAccess.rename` en `user://` (por ejemplo, si `rename` pisa un destino existente o si hay que borrar antes) es algo que **T281 tiene que comprobar** en Godot 4.7.2 y anotar; esta spec solo exige el resultado (nunca pisar un respaldo final).
+
+#### Preguntas para Lucas
+
+1. **P1 · ¿Silencioso está bien?** Recomiendo que sí.
+2. **P2 · ¿El nombre `save_respaldo_<versión>.json` en la misma carpeta te sirve?** Recomiendo que sí; la alternativa es una subcarpeta `respaldos/`.
+3. **P3 · ¿Subís `config/version` en cada build de envío?** Recomiendo que sí, y que lo haga la tarea de T268b que arma la build.
+
+
+### M61 · El Mortero alcanzable en el nivel 9: los tres escombros comunes dan siempre su recurso (Lucas, 2026-10-16; Q-21)
+
+**Estado: especificada (2026-10-16); sin programar.** Se programa en **T282**. Es un cambio **de un solo número en un solo archivo de datos** (`data/levels/level_09.json`). **No toca** ningún otro nivel, el Mortero, la demoledora ni `data/obstaculos.json`.
+
+**Qué pidió Lucas (2026-10-16).** Subir la probabilidad de recursos en el nivel 9, para que el Mortero (que debuta ahí, RF-420) se pueda comprar de verdad.
+
+**Por qué hace falta (el motivo, con evidencia).** El resultado de T245 (punto 4, en `specs/03-tareas.md`) midió con el bot, 5 semillas, que **ninguna estrategia compró el Mortero del 9**:
+
+1. El Mortero cuesta **300 de oro + 3 recursos** (`data/towers/mortar.tres`: `cost = 300`, `resource_cost = 3`).
+2. El nivel 9 **no tiene minas ni bosques** (`extraer_temprano` y `extraer_tarde` dieron lo mismo que `sin_recursos`): los únicos recursos salen de **demoler**.
+3. Hoy hay **tres escombros comunes** (letra `e`, en (3,2), (14,2) y (7,8)) que entregan **1 recurso con 50 %** cada uno, y **una ruina con la pieza** (letra `u`, en (11,6)) que, mientras la pieza está pendiente, entrega la pieza y **ningún recurso** (RF-428).
+4. Lo máximo que juntó el bot fue **2 recursos** (`demoler`, semilla 3). Con 3 sorteos al 50 %, la chance de sacar los 3 es de **1 en 8 (12,5 %)**: en la práctica no se alcanza.
+
+**Un detalle que corrige una lectura anterior.** T245 contó «la ruina de la pieza (1 recurso)» como una fuente más. Según **RF-428** esa ruina da **1 recurso solo si la pieza ya estaba recuperada** (es decir, al rejugar el nivel después de haberla juntado); **la primera vez entrega la pieza y 0 recursos**. Por eso esta spec cuenta con **3 recursos garantizados** (los tres escombros comunes) y trata el cuarto como un extra que solo existe al rejugar.
+
+#### Requisitos
+
+- **RF-523** **Los tres escombros comunes del nivel 9 dan siempre su recurso.** En `data/levels/level_09.json`, la letra `e` de la leyenda cambia **un solo valor**:
+
+  | | Antes | Después |
+  |---|---|---|
+  | `"e"` | `{"removible":{"clase":"escombro","probabilidad":50.0,"recursos":1.0}}` | `{"removible":{"clase":"escombro","probabilidad":100.0,"recursos":1.0}}` |
+
+  1. **Qué queda igual:** `recursos` sigue en 1 por escombro; la letra `u` (la ruina con la pieza, sin `probabilidad` propia, con `recursos_si_recuperado` 1 de su clase); el mapa (las tres `e` y la `u` siguen en sus casillas); las 20 oleadas; el oro (320) y las vidas (20); `"torres_extra"`; los textos; `data/obstaculos.json` (el escombro sigue costando **90 de oro** y **10 s**, `demoledora` sigue deshabilitada en el 9); `data/towers/mortar.tres` (300 + 3) y **todos los demás niveles**.
+  2. **Qué cambia en la práctica:** demoliendo los **tres** escombros comunes (3 × 90 = **270 de oro** y 30 s de trabajo en total) se juntan **exactamente 3 recursos**, los que pide el Mortero. Ya no depende de la suerte. Rejugando el nivel con la pieza ya recuperada, la ruina suma un cuarto recurso (RF-428), que sobra.
+  3. **El sorteo no se mueve:** con `probabilidad` 100 el resultado de cada removible es siempre «entrega» (RF-417); el orden fijo de sorteo (fila y columna) y el consumo del generador con semilla **no cambian**, así que el resto del azar de la partida (temblor, Ladrón) sale **igual** que antes con la misma semilla.
+  4. **Textos que se arman solos** (RF-164): el panel del escombro común pasa de «Puede dar 1 recurso (50 %)» a «Puede dar 1 recurso (100 %)». Si a Lucas le suena raro («Puede… 100 %»), cambiar la frase cuando la probabilidad es 100 es **una decisión aparte** (Pregunta P3); esta spec no lo toca.
+- **RF-524** **Cómo se valida (el bot, y una medición que antes faltaba):** con la misma herramienta de balance (`tools/balance_sim.gd`), **5 semillas** (1 a 5):
+  1. **Regla de oro (RF-432).** `check_rule=1` por tramos, como en T279: `levels=6-9`, `levels=10-12` y `levels=13-15`. Todos los mapas con recursos ganan al menos **4 de 5** con `sin_recursos`. Los niveles **13 a 15 están al borde** (mínimos de vidas medidos hoy: **13 = 5, 14 = 3 y 15 = 2**) y **no se tocan**: se **remiden** y deben dar lo mismo (`sin_recursos` no demuele, así que el cambio del 9 no debería afectarlos; se comprueba, no se supone). Si alguno cambia, no se sigue y se informa.
+  2. **Nivel 9 sin cambios para quien no usa recursos.** `sin_recursos` en el 9 sigue ganando **5 de 5** (hoy con 11 vidas) y `mix` también (hoy 11).
+  3. **Medición explícita del Mortero en el 9** (la que T245 no pudo cerrar): con `demoler` y `demoledora` (esta última queda igual a `demoler`: no está habilitada en el 9), `levels=9`, semillas 1 a 5, se informa **por semilla**: recursos juntados, **si alguna estrategia compró el Mortero, en qué oleada**, oro gastado en demoler, **vidas con las que termina** y resultado. Se compara con la línea de base de T245 (`demoler`: V4 · D · D · V1 · D; `pieza`: V4 · V2 · V2 · V2 · V2; `sin_recursos`: V11 en las 5).
+  4. **Qué cuenta como «alcanzable en la práctica»** (valores iniciales, como N = 5 y M = 4 de RF-432; Lucas los puede cambiar, Pregunta P2): una estrategia que usa recursos **compra el Mortero en las 5 semillas** y **gana al menos 4 de 5**. Con eso el cambio se da por bueno **para el bot**; la validación final es la partida de Lucas (punto 6).
+  5. **Si el bot no demuele los tres escombros por sí solo:** `demoler` elige qué demoler por **cobertura** de casillas, no por el valor de los recursos (T245, límite 1), así que puede no ir por los tres. En ese caso se informa, y T282 puede **agregar a la herramienta** (no al juego) una estrategia `mortero` que, como `pieza` (T245), juega como `sin_recursos` y, pasadas las 2 primeras torres, junta oro y demuele los tres escombros comunes y nada más. Es código de `tools/` y su test, nunca del juego, y se documenta en `ONBOARDING.md`.
+  6. **Lo que el bot no puede decir:** que no sea demasiado difícil para una persona. Es la **partida de Lucas** (T283, igual que T280 con los niveles 2 y 7), y es la validación final.
+- **RF-525** **El riesgo conocido, y qué se hace si aun así no se alcanza (para decidir con Lucas; no se implementa nada de esto):** el camino al Mortero cuesta **270 de oro en demoliciones + 300 del Mortero = 570**, con el nivel arrancando en 320 de oro y un mapa ajustado (el bot ya perdía 3 de 5 partidas al gastar 360 en demoler, T245). Dos riesgos concretos:
+  1. **El oro:** pagar 270 en demoler cuesta defensa en las primeras oleadas. Es posible que el Mortero se *alcance* (ya hay recursos) pero que alcanzarlo cueste vidas o la victoria.
+  2. **Sin margen:** la primera vez hay **exactamente 3 recursos**. Quien gaste uno en el Francotirador por su segunda forma de pago (120 de oro + 1 recurso, Q-21) se queda con 2 y **ya no llega al Mortero** en esa partida.
+
+  Si la medición (RF-524, punto 3) muestra que el Mortero sigue sin comprarse o que comprarlo hace perder, las opciones, **sin implementar ninguna hasta que Lucas elija**, son:
+  - **A · Bajar el costo de demoler solo en el 9:** sobrescribir `costo` de la letra `e` (RF-398 lo permite por letra; hoy 90, por ejemplo a 60 como la roca). Es un dato del nivel, no toca la clase `escombro` ni los niveles 8, 10 a 15. Efecto: los tres escombros bajan de 270 a 180 de oro.
+  - **B · Que la ruina de la pieza también dé su recurso** (`u` con 100 % y 1 recurso aunque la pieza esté pendiente): suma un cuarto recurso la primera vez y deja margen de 1 para el Francotirador. **Contradice RF-428** (la pieza pendiente entrega «ningún recurso»): habría que enmendarlo y escribir otra decisión.
+  - **C · Bajar el costo en oro del Mortero** en el 9: descartada de entrada porque cambia `mortar.tres` y el Mortero de **todos** los niveles que lo ofrecen (10 a 15), con riesgo para los niveles al borde.
+  - **D · No hacer nada más:** si Lucas, jugando, considera que el Mortero «se alcanza pero cuesta» y le parece bien (es la «mejor torre» del 07 §6), se deja como está.
+
+> **Criterio de aceptación RF-523 a RF-525**
+> **Dado** `data/levels/level_09.json` → **Cuando** se carga → **Entonces** la letra `e` tiene `probabilidad` **100** y `recursos` **1**, hay **tres** casillas con `e` en (3,2), (14,2) y (7,8), la `u` sigue en (11,6) con su pieza, y `git diff` de los datos muestra **una sola línea cambiada** en un solo archivo.
+> **Dado** el nivel 9 con la partida iniciada con **cualquier semilla** → **Cuando** se demuelen los tres escombros comunes → **Entonces** el contador de recursos llega a **3** (nunca menos) y el Mortero, con 300 de oro, se puede comprar.
+> **Dado** el nivel 9 con la pieza **pendiente** → **Cuando** se demuele la ruina → **Entonces** entrega la pieza y **ningún** recurso (RF-428, sin cambios); **dada** la pieza ya recuperada, entrega 1.
+> **Dado** cualquier otro nivel → **Entonces** sus archivos de datos, `data/obstaculos.json` y `data/towers/mortar.tres` quedan **byte a byte iguales** (se comprueba con `git diff --stat`).
+> **Dado** el bot con 5 semillas → **Cuando** juega `sin_recursos` los niveles 6 a 15 → **Entonces** gana al menos 4 de 5 en cada uno (RF-432), con los mínimos de los niveles 13, 14 y 15 **iguales** a los de hoy (5, 3 y 2 vidas), y en el 9 sigue ganando 5 de 5.
+> **Dado** el bot con 5 semillas en el nivel 9 → **Cuando** juega `demoler` (y, si hace falta, `mortero`) → **Entonces** el informe dice, por semilla, los recursos juntados, si compró el Mortero y en qué oleada, y con cuántas vidas terminó, y la respuesta a «¿alguna estrategia lo compra?» queda escrita en el «Resultado» de T282 con los números, sea cual sea.
+
+#### Lo que decidí por defecto *(Lucas no lo definió; cambia con su respuesta)*
+
+1. **Solo la letra `e` del 9** (100 %), y **ninguna** otra cosa: ni el 8, ni el 10, ni el costo de demoler ni el del Mortero. Razón y alternativas en **D-103**.
+2. **«Alcanzable» = el bot lo compra en 5 de 5 y gana 4 de 5** (RF-524, punto 4).
+3. **Las opciones A a D de RF-525 no se implementan** sin que Lucas elija.
+4. **La frase del panel («Puede dar 1 recurso (100 %)») no se cambia** en esta spec.
+
+#### Lo que M61 no incluye
+
+- **Tocar el nivel 8, el 10 ni ningún otro** (la probabilidad del 50 % en esos mapas se mantiene), ni la clase `escombro` de `data/obstaculos.json`.
+- **Agregar una mina o un bosque al 9**, ni habilitar la demoledora allí.
+- **Cambiar el costo del Mortero** (300 + 3), su arte o sus estadísticas.
+- **Cambiar RF-428** (la ruina con la pieza pendiente sigue sin dar recursos), salvo que Lucas elija la opción B.
+- **Rebalancear las oleadas del 9** si el Mortero resulta demasiado fuerte o demasiado caro: se mide primero y se decide con Lucas.
+
+#### Lo que no se probó (al escribir esta spec)
+
+**Nada se programó ni se corrió**: son solo documentos. Los números de antes (50 %, 90 de oro, 300 + 3, mínimos 5 / 3 / 2) están leídos de `level_09.json`, `obstaculos.json`, `mortar.tres` y de los «Resultado» de T245 y T279; **no se remidieron** en este commit. Que 3 recursos alcancen para el Mortero es cuenta de los datos, **no** una partida. No se sabe todavía cuántas vidas cuesta ir por el Mortero.
+
+#### Preguntas para Lucas
+
+1. **P1 · ¿Confirmás solo el 100 % en los tres escombros comunes del 9?** Es lo que pediste; recomiendo medirlo antes de tocar nada más.
+2. **P2 · ¿Te sirve «el bot lo compra en 5 de 5 y gana 4 de 5» como criterio de alcanzable?** Recomiendo que sí (mismo criterio que RF-432).
+3. **P3 · ¿Dejamos «Puede dar 1 recurso (100 %)» o preferís «Da 1 recurso»** cuando la probabilidad es 100? Recomiendo dejarlo (es el mismo texto de siempre, armado con los datos).
+4. **P4 · Si la medición muestra que alcanza el Mortero pero se pierden vidas, ¿probamos primero la opción A** (escombros del 9 a 60 de oro)? Recomiendo A antes que B o C.

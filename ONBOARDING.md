@@ -292,12 +292,15 @@ Se usa `--export-debug` porque la versión de **prueba** se firma sola con la cl
 |---|---|
 | Progreso, récords y opciones del jugador | `%APPDATA%\Godot\app_userdata\JuegoA\save.json` |
 | Lo mismo, pero del modo de pruebas | `%APPDATA%\Godot\app_userdata\JuegoA\save_pruebas.json` |
+| Copia de seguridad automática del progreso, una por versión de la build | `%APPDATA%\Godot\app_userdata\JuegoA\save_respaldo_<versión>.json` (en Linux, `~/.local/share/JuegoA/`) |
 | Registros (logs) de cada ejecución, los últimos 30 | `%APPDATA%\Godot\app_userdata\JuegoA\logs` |
 | Configuración del editor (rutas de Android, etc.) | `%APPDATA%\Godot\editor_settings-4.7.tres` |
 | Plantillas de exportación | `%APPDATA%\Godot\export_templates\4.7.2.stable` |
 | Caché del proyecto (se regenera sola) | `JuegoA/.godot/` |
 
 > 📱 **M58 (cuando esté programada):** `save.json` suma `settings.ui_mode` (la opción «Interfaz») y la clave `ui_prefs` (lado y altura de los botones flotantes, por dispositivo). Son aditivas: `SAVE_VERSION` no cambia y, si faltan o están rotas, el juego usa los valores por omisión.
+
+> 🛟 **Copia de seguridad automática (M60, RF-520 a RF-522):** antes de la primera vez que una build escribe `save.json`, el juego copia el archivo existente a `save_respaldo_<versión>.json` en la misma carpeta. Es **una por versión** (`application/config/version` de `project.godot`), **nunca pisa** una anterior, es **silenciosa** y no se hace en el modo de pruebas ni en los tests. Se copia también un guardado dañado, pero no uno vacío. Hay un máximo de 10 copias; al llegar al tope se avisa en el registro y no se borra ninguna. **Para volver atrás:** cerrar el juego, borrar `save.json` y renombrar la copia a `save.json`. **Al armar una build de envío hay que subir `config/version`**: si dos builds comparten versión, la segunda no hace copia propia. **No reemplaza el respaldo a mano** del archivo real del tester (`specs/tareas/informes/T268a-verificacion-guardado.md` §6, paso 3), que sigue siendo obligatorio. Motivo: la primera apertura de una build nueva reescribe `save.json` (muestra la intro y marca `intro_seen`).
 
 > 💡 **Empezar el progreso de cero:** borrar `save.json`. El `.exe` y el juego abierto desde el editor **comparten** ese archivo.
 

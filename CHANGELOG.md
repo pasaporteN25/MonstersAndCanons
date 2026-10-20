@@ -79,11 +79,21 @@ En el modo celular el botón «Empezar oleada» se veía pero no recibía el toq
 
 ## Ajustes del HUD móvil tras probar el PR #10 *(T287, 2026-10-16)*
 
+## El Mortero, alcanzable en el nivel 9 *(M61, spec del 2026-10-16; todavía falta aplicarlo, T282)*
+
+**Esto es lo que Lucas pidió y todavía no está hecho.** El bot midió que el Mortero del nivel 9 (300 de oro + 3 recursos) no se llegaba a comprar: los únicos recursos del mapa salen de demoler escombros, y cada uno daba su recurso solo la mitad de las veces (lo máximo que juntó el bot fueron 2). La propuesta es que los **tres escombros comunes del 9 den siempre su recurso**: demolerlos (90 de oro cada uno) suma justo los 3 recursos del Mortero. No cambia el costo del Mortero ni ningún otro nivel. Ojo: la ruina con la pieza de la Disruptora no suma recursos la primera vez, así que no queda margen (un recurso gastado en el Francotirador impide el Mortero en esa partida). Falta medirlo con el bot (T282) y que Lucas lo juegue (T283); si alcanzarlo cuesta demasiadas vidas, la spec deja opciones para decidir con él.
+
+## Copia de seguridad automática del guardado *(M60, spec del 2026-10-16; todavía falta programarla, T281)*
+
 Carrito y salida reciben un solo gesto, sin doble pulsación del mouse emulado. Carrito, X, tilde y cruz son más chicos y redondeados, con íconos de marfil y bronce; la tilde ya no repite el precio. El catálogo y la barra inferior comparten el tema oscuro del juego. Se eliminan las franjas grises de los márgenes y la línea que atravesaba la barra superior. El precio sigue en el catálogo y la barra; si no se puede construir, la barra muestra el motivo.
 
 ## Arte aprobado de La Cuadrilla *(T286, 2026-10-16)*
 
 El Ratero usa el concepto B elegido por Lucas y el Cargador el concepto A, con sus atlas de caminata en cuatro direcciones. Se calibró su tamaño visual para acercarlo al del Ladrón; radios, vida, velocidad, robo y oleadas no cambiaron.
+
+## Copia de seguridad automática del guardado *(T281, 2026-10-16)*
+
+Antes de la primera escritura de `save.json` en una ejecución, el juego copia los bytes originales a `save_respaldo_<versión>.json` en la misma carpeta. Conserva la primera copia de cada versión, también si el guardado está dañado; no copia archivos vacíos y no se activa para el modo de pruebas ni para rutas de tests. Es silenciosa, tiene un tope de 10 copias y no reemplaza el respaldo manual obligatorio del archivo real del tester.
 
 ## Arte aprobado en el mapa *(T277, 2026-10-16)*
 
