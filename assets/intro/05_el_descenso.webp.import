@@ -2,22 +2,22 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://6l1gyjspeyb"
-path="res://.godot/imported/05_el_descenso.png-df0b3ae24d78acaa40ac0e89951948ad.ctex"
+uid="uid://bbstxig8t28ej"
+path="res://.godot/imported/05_el_descenso.webp-30cd2653b9daf8f314f828804bd75e96.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/intro/05_el_descenso.png"
-dest_files=["res://.godot/imported/05_el_descenso.png-df0b3ae24d78acaa40ac0e89951948ad.ctex"]
+source_file="res://assets/intro/05_el_descenso.webp"
+dest_files=["res://.godot/imported/05_el_descenso.webp-30cd2653b9daf8f314f828804bd75e96.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=1
 compress/high_quality=false
-compress/lossy_quality=0.7
+compress/lossy_quality=0.9
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0
 compress/hdr_compression=1

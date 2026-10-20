@@ -9,7 +9,8 @@ Uso (desde la raíz del proyecto; requiere Python 3 y Pillow, y `godot` en el PA
     python3 art/intro-v1/peso.py            # mide y arma peso/ (tarda unos minutos)
     python3 art/intro-v1/peso.py --final    # solo deja la importación elegida (T320) y sale
 
-No toca `art/intro-v1/sources/` ni los PNG de `assets/intro/`.
+No toca `art/intro-v1/sources/` ni los WebP (sin pérdida) de `assets/intro/`. Desde D-150 las láminas son `.webp`
+sin pérdida (mismos píxeles que el PNG normalizado) y la pérdida la aplica Godot al importar (calidad 0,90).
 """
 import glob, io, math, os, re, shutil, subprocess, sys
 from PIL import Image, ImageChops, ImageStat
@@ -22,11 +23,11 @@ VARIANTS = {
     "webp_q90": (1, 0.90, False),
     "webp_q85": (1, 0.85, False),
 }
-FINAL = "sin_pérdida_sin_mipmaps"
+FINAL = "webp_q90"  # D-150: aplicada (antes, "sin_pérdida_sin_mipmaps", D-120)
 SHOWN = ["webp_q95", "webp_q90", "webp_q85"]  # las que se miden contra el original
 SAVED = ["webp_q95", "webp_q85"]  # de estas se guardan recortes para mirarlas
 OUT = "art/intro-v1/peso"
-NAMES = sorted(glob.glob("assets/intro/*.png"))
+NAMES = sorted(glob.glob("assets/intro/*.webp"))
 
 
 def set_import(mode, quality, mipmaps):

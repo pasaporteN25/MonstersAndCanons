@@ -2,22 +2,22 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://drospn2cptyi5"
-path="res://.godot/imported/03_los_turnos.png-aa072a73bf759a570b7f3bb82dd25cce.ctex"
+uid="uid://dc3k6vev0o6vu"
+path="res://.godot/imported/03_los_turnos.webp-e9218869dff1c7a46201952afd6506ef.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/intro/03_los_turnos.png"
-dest_files=["res://.godot/imported/03_los_turnos.png-aa072a73bf759a570b7f3bb82dd25cce.ctex"]
+source_file="res://assets/intro/03_los_turnos.webp"
+dest_files=["res://.godot/imported/03_los_turnos.webp-e9218869dff1c7a46201952afd6506ef.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=1
 compress/high_quality=false
-compress/lossy_quality=0.7
+compress/lossy_quality=0.9
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0
 compress/hdr_compression=1

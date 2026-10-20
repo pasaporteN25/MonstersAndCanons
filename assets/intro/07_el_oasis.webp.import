@@ -2,22 +2,22 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://btve1m430nmuk"
-path="res://.godot/imported/07_el_oasis.png-b3e53e0dbb2a91f5ca8b28e65fde7569.ctex"
+uid="uid://cdw6vsymionwh"
+path="res://.godot/imported/07_el_oasis.webp-ff2629e23d020300a41c6e1228aba282.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/intro/07_el_oasis.png"
-dest_files=["res://.godot/imported/07_el_oasis.png-b3e53e0dbb2a91f5ca8b28e65fde7569.ctex"]
+source_file="res://assets/intro/07_el_oasis.webp"
+dest_files=["res://.godot/imported/07_el_oasis.webp-ff2629e23d020300a41c6e1228aba282.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=1
 compress/high_quality=false
-compress/lossy_quality=0.7
+compress/lossy_quality=0.9
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
