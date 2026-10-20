@@ -1,0 +1,258 @@
+{
+  "task": "T362",
+  "status": "muestras para aprobación; sin integración",
+  "source_spec": "M65 / RF-590, RF-592, RF-595 / D-135 propuesta",
+  "coordinate_system": "Origen arriba a la izquierda; orden fila a fila; píxeles",
+  "assets": [
+    {
+      "file": "upgrade_l2.png",
+      "size": [
+        768,
+        384
+      ],
+      "mode": "RGBA",
+      "frame_size": [
+        192,
+        192
+      ],
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "center": [
+        96,
+        96
+      ],
+      "duration_seconds": 0.5,
+      "fps": 16,
+      "spark_count": 6,
+      "bytes": 27924,
+      "alpha_bounds": [
+        [
+          66,
+          114,
+          126,
+          136
+        ],
+        [
+          53,
+          70,
+          139,
+          129
+        ],
+        [
+          49,
+          64,
+          143,
+          120
+        ],
+        [
+          43,
+          59,
+          150,
+          110
+        ],
+        [
+          35,
+          53,
+          157,
+          101
+        ],
+        [
+          35,
+          47,
+          157,
+          92
+        ],
+        [
+          34,
+          40,
+          157,
+          84
+        ],
+        null
+      ]
+    },
+    {
+      "file": "upgrade_l3.png",
+      "size": [
+        768,
+        384
+      ],
+      "mode": "RGBA",
+      "frame_size": [
+        192,
+        192
+      ],
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "center": [
+        96,
+        96
+      ],
+      "duration_seconds": 0.7,
+      "fps": 11.428571428571429,
+      "spark_count": 8,
+      "bytes": 53552,
+      "alpha_bounds": [
+        [
+          61,
+          114,
+          131,
+          136
+        ],
+        [
+          41,
+          58,
+          151,
+          150
+        ],
+        [
+          36,
+          41,
+          156,
+          140
+        ],
+        [
+          29,
+          41,
+          163,
+          131
+        ],
+        [
+          19,
+          38,
+          173,
+          122
+        ],
+        [
+          19,
+          32,
+          173,
+          112
+        ],
+        [
+          18,
+          25,
+          174,
+          103
+        ],
+        null
+      ]
+    }
+  ],
+  "tints": {
+    "neutral": [
+      1,
+      1,
+      1
+    ],
+    "amber": [
+      1,
+      0.7,
+      0.28
+    ],
+    "frost": [
+      0.25,
+      0.8,
+      1
+    ],
+    "tesla": [
+      0.75,
+      0.4,
+      1
+    ],
+    "fire": [
+      1,
+      0.36,
+      0.08
+    ],
+    "multi": [
+      0.3,
+      0.65,
+      1
+    ]
+  },
+  "references": [
+    {
+      "source": "assets/tiles/rendered/ground_pradera.png",
+      "copy": "reference/ground_pradera.png",
+      "sha256": "cb98b34a2329e49c8066d2662020a10d3a43647ce5117dc37a1f348413369224"
+    },
+    {
+      "source": "assets/tiles/rendered/ground_nieve.png",
+      "copy": "reference/ground_nieve.png",
+      "sha256": "69d1d4054f7551c1f231ff9fb10933f4a05554c7bc9aa29424a29c2f44a3f74f"
+    },
+    {
+      "source": "assets/tiles/rendered/ground_volcan.png",
+      "copy": "reference/ground_volcan.png",
+      "sha256": "4921fb8183aea67b51ab7fca46e1bc3e9e0942d1bc48b990462814b41f61e81c"
+    },
+    {
+      "source": "assets/tiles/rendered/ground_desierto.png",
+      "copy": "reference/ground_desierto.png",
+      "sha256": "14d0bdc0fdf0cb942847917d31e5de626fbc95da45425c3391c6e4d2d6e1bc84"
+    },
+    {
+      "source": "assets/sprites/towers/rendered/basic_level_2.png",
+      "copy": "reference/basic_level_2.png",
+      "sha256": "471a65e2cc311f83c408678e16b5749106de7e4bfbf7eaf73daa752d47345b27"
+    },
+    {
+      "source": "assets/sprites/towers/rendered/basic_level_3.png",
+      "copy": "reference/basic_level_3.png",
+      "sha256": "57360e0309ec0be231f0b45681edf6a5f97b2567144bff79a75b0d9ba2a4de23"
+    },
+    {
+      "source": "assets/sprites/towers/rendered/mortar_level_2.png",
+      "copy": "reference/mortar_level_2.png",
+      "sha256": "fa2d605e09537065e908d89009b0a39e757a56cdb475383375ad6f262366d750"
+    },
+    {
+      "source": "assets/sprites/towers/rendered/mortar_level_3.png",
+      "copy": "reference/mortar_level_3.png",
+      "sha256": "54a3c4ba058278dff482f6182badc47705f4418820745bdebe82b54417f4fe29"
+    },
+    {
+      "source": "assets/sprites/towers/rendered/base_2.png",
+      "copy": "reference/base_2.png",
+      "sha256": "aa31a6a3ea062a8045003142027296fd6f69839bb7ff38d86aaa521fdd5a0639"
+    },
+    {
+      "source": "assets/sprites/towers/rendered/base_3.png",
+      "copy": "reference/base_3.png",
+      "sha256": "86451a72bb6d0dd01e11ad52f90f79bfdd22aab0d78d90d698401799a0741712"
+    },
+    {
+      "source": "assets/sprites/effects/rendered/frost.png",
+      "copy": "reference/frost.png",
+      "sha256": "4a6cb4c99cbeebde17db306eb1a5f084efec774a9546519c72dc1be0d29c5638"
+    },
+    {
+      "source": "assets/sprites/effects/rendered/explosion.png",
+      "copy": "reference/explosion.png",
+      "sha256": "0745ca036c94bb7a737be2b716ab8754c33193b950cc58792ddc64788b7e8133"
+    }
+  ],
+  "preview": {
+    "tile_px": 64,
+    "tower_mount_offset": [
+      0,
+      -12
+    ],
+    "mortar_footprint": 2,
+    "html_scales": [
+      0.7,
+      1,
+      1.5
+    ],
+    "gif_quantization_ms": 10,
+    "loop_gap_ms": 1000
+  },
+  "open_decisions": [
+    "P-65-6: confirmar efecto único teñido o por familia",
+    "Aprobación artística de Lucas"
+  ],
+  "game_logic_changed": false
+}

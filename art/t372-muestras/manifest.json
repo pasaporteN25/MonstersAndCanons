@@ -1,0 +1,89 @@
+{
+  "task": "T372",
+  "stage": "primera muestra; no integrada",
+  "source_commit": "ad45a5a",
+  "assets": [
+    {
+      "file": "news_header_1_0.png",
+      "size": [
+        1280,
+        320
+      ],
+      "mode": "P",
+      "bytes": 282603,
+      "limit_bytes": 350000,
+      "status": "muestra sin aprobar"
+    },
+    {
+      "file": "news_header_plain.png",
+      "size": [
+        1280,
+        160
+      ],
+      "mode": "RGB",
+      "bytes": 4550,
+      "limit_bytes": 100000,
+      "status": "muestra sin aprobar"
+    },
+    {
+      "file": "news_icon_map.png",
+      "size": [
+        96,
+        96
+      ],
+      "mode": "RGBA",
+      "bytes": 10150,
+      "limit_bytes": 20000,
+      "status": "muestra sin aprobar"
+    },
+    {
+      "file": "news_icon_tower.png",
+      "size": [
+        96,
+        96
+      ],
+      "mode": "RGBA",
+      "bytes": 10136,
+      "limit_bytes": 20000,
+      "status": "muestra sin aprobar"
+    }
+  ],
+  "missing_icons": [
+    "monster",
+    "siege",
+    "editor",
+    "mobile",
+    "book",
+    "upgrade"
+  ],
+  "header_crop": [
+    0,
+    190,
+    1983,
+    686
+  ],
+  "contrast": {
+    "title_on_opaque_panel": 14.46,
+    "subtitle_on_opaque_panel": 10.29,
+    "cream_on_raw_header_worst_pixel_in_text_zone": 1.02,
+    "raw_text_zone": [
+      80,
+      205,
+      1200,
+      310
+    ]
+  },
+  "plain_seam": "columnas extremas idénticas; período horizontal 160 px",
+  "mobile_real": {
+    "canvas": [
+      2400,
+      1080
+    ],
+    "logical_viewport": [
+      1280,
+      576
+    ],
+    "scale": 1.875
+  },
+  "imported_ctex_bytes": 291062
+}
