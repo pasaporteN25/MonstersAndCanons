@@ -477,6 +477,14 @@ El modo celular (RF-502 a RF-515, D-097) **no agrega enemigos, torres ni niveles
 - **Las tarjetas de nivel con Insignias** (RF-514) muestran **las torres que ya ofrece cada nivel**: no hay nada para agregar a mano.
 - **Las estatuas de los mapas** serán estatuas de torres de piedra (RF-515, D-098, `specs/05-guia-de-arte.md` §9). Hasta que T277 las dibuje, los niveles 1, 3 y 5 siguen con la estatua de hoy.
 
+### M61 · Menús del celular y entrada por dispositivo (RF-550 a RF-555, D-115 a D-117)
+
+No agrega enemigos, torres ni niveles. **Sí suma números que se ajustan sin programar**, en `data/ui/mobile_ui.json` (los mismos que ya usa el modo celular; si falta uno, el juego usa su valor por omisión):
+
+- **Menús táctiles:** `boton_alto_px` (56: alto mínimo de todo botón de menú en el celular), `menu_deslizador_alto_px` (44: alto de los deslizadores de volumen), `scroll_umbral_px` (12: cuánto puede moverse el dedo y seguir siendo un toque), `scroll_friccion` (4,0: cuánto frena la inercia; más alto = frena antes), `scroll_velocidad_min_px` (30: debajo de esta velocidad la inercia se corta) y `scroll_barra_px` (22: ancho de la barra de desplazamiento).
+- **Mouse y toque a la vez:** `puntero_duplicado_ms` (500) y `puntero_duplicado_px` (32): un clic que cae dentro de ese tiempo y esa distancia de un toque se toma por duplicado y se descarta.
+- **La versión del juego** (RF-554) **no** está en ese archivo: es `config/version` en `project.godot` (hoy `"beta"`). Se cambia **solo ahí**.
+
 ### T243 · El Coloso, jefe supremo del nivel 15 (diseño aprobado; todavía no está en el juego)
 
 El jefe del último nivel es un ejemplo de **un enemigo que se parte con solo datos**, igual que la Araña y sus Crías: **dos archivos en `data/enemies/`**, sin tocar el código (RF-481 a RF-484, D-092).
@@ -510,6 +518,24 @@ Una banda de criaturas independientes que roban en grupo, hecha **solo con datos
 ### T231 · Nivel 13 (Paso alto)
 
 `data/levels/level_13.json`, de **26 × 12**, tema `nieve` y **dos entradas** (A y B) que se unen en la casilla (2,6): los dos recorridos comparten un tronco hasta la salida. Su leyenda usa 6 de las 12 letras: `e` y `r` removibles (1 recurso al 50 %), `m` mina y `b` bosque explotable (una fuente por entrada), `i` **hielo** (la laguna: no se construye) y `h` `roca_marcada` (el `hito`). `"torres"` de RF-474 (sin Ametralladora ni Lanzamisiles) y `"demoledora": false`. **La escolta** se escribe con tres grupos del mismo `desde` y la misma `entrada` (`guardian`, `healer`, `shaman`), p. ej. `{"enemigo": "guardian", "cantidad": 2, "cada": 3.0, "entrada": "B"}` más los otros dos con el mismo `desde`. Para cambiar la dificultad se mueve `aumento_vida` (40; con 41 el bot gana con 1 vida y con 42 pierde) y, con cuidado, las oleadas 14, 22 y 23, que son **precipicios**. **Después de cualquier cambio:** `... -s tools/balance_sim.gd -- x check_rule=1 levels=13`.
+
+### T330 · El tutorial del nivel 1 (`data/tutorial/tutorial.json`)
+
+El tutorial se retoca con un archivo, sin programar: `{"version": 1, "borrador": true, "nivel": "level_01", "interfaz": {…}, "pc": [{"paso": "welcome", "texto": "…"}, …], "celular": [ … ]}`.
+
+| Clave | Qué es | Límite |
+|---|---|---|
+| `"borrador"` | `true` mientras Lucas no aprobó los textos (solo avisa; se ve igual en el juego). Al aprobarlos, `false`. | Booleano, obligatorio. |
+| `"nivel"` | El nivel donde se muestra. Hoy `level_01`. | Texto. |
+| `"interfaz"` | Los rótulos de la tarjeta: `titulo`, `paso` (con **dos `%d`**: el número y el total), `siguiente`, `saltar` y `terminar`. | Hasta **40** caracteres cada uno. |
+| `"pc"` y `"celular"` | Los pasos, **en orden**, de cada modo. | Ver abajo. |
+| `"paso"` | Cuál de los pasos que sabe hacer el juego: `welcome`, `path`, `gold`, `lives`, `pick_tower`, `place_tower`, `open_cart`, `pick_card`, `confirm_tower`, `start_wave`, `select_tower`, `upgrade`, `sell`, `speed`, `pause`, `resume`, `done`. | `pick_tower` y `place_tower` **solo en PC**; `open_cart`, `pick_card` y `confirm_tower` **solo en el celular**; sin repetir. |
+| `"texto"` | Lo que dice la tarjeta. | **1 o 2 líneas** (`\n`), **80 caracteres por línea**, **160** en total. |
+
+- **Qué hace cada paso** (qué señala y qué espera) **es del juego**; el texto, el orden y cuáles se usan son tuyos. **Obligatorios:** `path`, `gold`, `lives`, `start_wave`, `upgrade`, `sell`, `speed`, `pause` y los de elegir y construir de cada modo. **Opcionales:** `welcome`, `select_tower`, `resume` y `done`. `pick_tower` va antes que `place_tower`; `open_cart`, `pick_card` y `confirm_tower` en ese orden; si hay `pause`, tiene que haber `resume` después; `done`, si está, al final.
+- **No repitas números de otros datos** (costos, tiempos): explicá la regla y listo.
+- **Revisalo** con `godot --headless --path . -s tools/check_tutorial.gd` (dice en castellano qué arreglar). Un archivo con errores **no se muestra** (el error sale en la salida) y el nivel 1 se juega sin tutorial.
+- **Dónde se ve:** solo en el nivel 1 jugado desde el menú, una vez (se completa o se salta). Se apaga y se vuelve a ver en **Opciones**.
 
 ### T242 · La intro (`data/intro/intro.json`)
 
@@ -592,3 +618,21 @@ godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- sin_recursos
 ```
 
 **Asedio:** usa **los 15 mapas** de la campaña con el mismo oro, `vida_monstruos_%` 115 como regla global y una tabla `vida_monstruos_por_mapa_%` de 13 excepciones (de 101 % a 118 %; el 4 y el 15 toman el 115 % global). No hay ninguna copia de mapa en `data/modos/asedio/`: para cambiar la dureza de un mapa se cambia **su número en la tabla** de `data/modos/asedio/modo.json`. Los valores son **iniciales**: salen del bot (T255, y T258 para los mapas con la Cuadrilla) y se ajustan cuando Lucas juegue. Con 150 % y 80 % de oro, el bot perdía en la oleada 4.
+
+
+## Editar los textos de la intro *(M62, RF-561 a RF-563)*
+
+Los textos, los segundos de cada lámina y el fundido de la intro viven en `data/intro/intro.json`, pero **no hace falta tocar ese archivo**: se editan en un documento más cómodo, **`specs/intro/intro-editable.md`** (una sección por lámina, con el texto, los segundos, la imagen y un lugar para tus notas).
+
+1. **Editá** el documento: el texto va debajo de `Texto:`, **cada línea con `> ` adelante**; los segundos van en `- Segundos:`; las notas, debajo de `Notas:` (no se cargan al juego).
+2. **Probá sin guardar nada:** `godot --headless --path . -s tools/intro_doc.gd -- import --dry`. Muestra los cambios (`CAMBIA: lámina 5, texto: …`), los avisos y los errores.
+3. **Pasalo al juego:** el mismo comando sin `--dry`. **Si hay un error, no cambia nada** y dice cuál es, con el número de línea o de lámina (por ejemplo «la lámina 3 tiene 3 líneas y el máximo es 2»).
+4. **Volver a empezar** desde lo que carga el juego: `... -- export` (reescribe el documento y **conserva las notas**).
+
+**Reglas** (las mismas que revisa el juego, RF-497): de 5 a 8 láminas; texto de 1 o 2 líneas, hasta 90 caracteres por línea y 160 en total; segundos enteros de 4 a 12; fundido de 0 a 2; la imagen tiene que existir. Un **aviso** (no un error) te dice si una lámina dura menos de lo que pide su texto para leerse (`2 s + caracteres / 20`).
+
+**Dos cosas que conviene saber:**
+- Los textos oficiales **también** están en `specs/intro/guion.md`, y un test (`tests/test_intro_data.gd`) los compara con `intro.json`. Si cambiás un texto con esta herramienta, **el test va a avisar** hasta que el guion diga lo mismo: pedile a Claude que lo actualice o corregilo vos.
+- La herramienta **no crea imágenes**: el campo `Imagen` solo puede apuntar a un archivo que ya exista (por ejemplo, para reordenar láminas). Cambiar qué imagen va con qué texto cambia cómo se ve el juego: conviene hablarlo antes.
+
+Si el documento y el JSON se desfasan (alguien editó uno solo), `tests/test_intro_doc.gd` lo avisa.

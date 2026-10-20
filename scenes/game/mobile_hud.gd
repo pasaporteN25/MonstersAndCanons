@@ -4,6 +4,7 @@ extends CanvasLayer
 signal confirm_placement_pressed
 signal cancel_placement_pressed
 signal view_all_pressed
+signal demolish_pressed
 signal exit_pressed
 signal catalog_opened(open: bool)
 signal tower_chosen(index: int, use_alt_payment: bool)
@@ -20,16 +21,16 @@ var _cancel_button: Button
 var _view_all_button: Button
 var _cart_button: Button
 var _exit_button: Button
+var _demolish_button: Button
+var _demolish_available: bool = false
 var _catalog_panel: PanelContainer
 var _catalog_dim: ColorRect
-var _catalog_tabs: TabContainer
+var _catalog_scroll: ScrollContainer
 var _tower_grid: GridContainer
-var _infrastructure_grid: GridContainer
-var _catalog_towers: Array[TowerData] = []
 var _catalog_populated: bool = false
 var _icon_cache: Dictionary = {}
 var _available_towers: Array[TowerData] = []
-var _infrastructure_options: Array[Dictionary] = []
+var _machine_option: Dictionary = {}
 var _catalog_gold: int = 0
 var _catalog_resources: int = 0
 var _catalog_uses_resources: bool = false
@@ -40,16 +41,17 @@ var _ghost_visible: bool = false
 var _world_position: Vector2 = Vector2.ZERO
 var _ghost_size: Vector2 = Vector2.ONE * Rules.TILE_SIZE
 var _float_button_size: Vector2
-var _base_cart_position: Vector2
-var _base_exit_position: Vector2
+# Posición guardada de los botones flotantes: 0 carrito, 1 salida, 2 demolición (RF-542).
+var _base_positions: Array[Vector2] = [Vector2.ZERO, Vector2.ZERO, Vector2.ZERO]
 var _drag_button: Button
 var _drag_index: int = -1
+## RF-552: separa el mouse real del eco de un toque.
+var _pointer_filter := PointerFilter.new()
 var _drag_start: Vector2 = Vector2.ZERO
 var _drag_start_position: Vector2 = Vector2.ZERO
 var _dragging: bool = false
 var _layout_tween: Tween
-var _target_cart_position: Vector2 = Vector2(-1000.0, -1000.0)
-var _target_exit_position: Vector2 = Vector2(-1000.0, -1000.0)
+var _target_positions: Array[Vector2] = [Vector2(-1000.0, -1000.0), Vector2(-1000.0, -1000.0), Vector2(-1000.0, -1000.0)]
 var _status_bar: Control
 var _status_label: Label
 var _upgrade_button: Button
@@ -78,10 +80,12 @@ const MOBILE_THEME: Theme = preload("res://assets/ui/menu_theme.tres")
 const CART_ICON: Texture2D = preload("res://assets/ui/mobile_cart.svg")
 const CONFIRM_ICON: Texture2D = preload("res://assets/ui/mobile_confirm.svg")
 const CLOSE_ICON: Texture2D = preload("res://assets/ui/mobile_close.svg")
+const DEMOLISH_ICON: Texture2D = preload("res://assets/ui/mobile_demolish.svg")
 
 
 func _ready() -> void:
 	_config = MobileUiConfig.load_from()
+	_pointer_filter.configure(int(_config.get_value("puntero_duplicado_ms")), float(_config.get_value("puntero_duplicado_px")))
 	_mobile_theme = MOBILE_THEME.duplicate(true) as Theme
 	for state: String in ["normal", "hover", "pressed", "hover_pressed", "disabled", "focus"]:
 		var style: StyleBoxFlat = _mobile_theme.get_stylebox(state, "Button") as StyleBoxFlat
@@ -177,6 +181,20 @@ func _set_empty_status() -> void:
 	_sell_gap.hide()
 	_bottom_confirm.hide()
 	_bottom_cancel.hide()
+
+
+## RF-543: la herramienta de demoler/habilitar está elegida. La línea dice qué hacer (o el motivo del último
+## toque que no sirvió) y la cruz la suelta.
+func show_tool_status(message: String = "") -> void:
+	_status_state = "tool"
+	_status_label.text = message if message != "" else "Demoler o habilitar: tocá un objeto del mapa"
+	_status_label.visible = true
+	_target_button.hide()
+	_upgrade_button.hide()
+	_sell_button.hide()
+	_sell_gap.hide()
+	_bottom_confirm.hide()
+	_bottom_cancel.show()
 
 
 func show_ghost_status(tower_name: String, cost_text: String) -> void:
@@ -352,8 +370,12 @@ func _build_floating_buttons() -> void:
 	_cart_button.tooltip_text = "Elegir torre"
 	_exit_button = _floating_button("ExitButton", CLOSE_ICON)
 	_exit_button.tooltip_text = "Salir al menú"
+	_demolish_button = _floating_button("DemolishButton", DEMOLISH_ICON)
+	_demolish_button.tooltip_text = "Demoler o habilitar"
+	_demolish_button.visible = false
 	_cart_button.pressed.connect(_on_cart_pressed)
 	_exit_button.pressed.connect(exit_pressed.emit)
+	_demolish_button.pressed.connect(demolish_pressed.emit)
 	if _confirm_button != null:
 		_confirm_button.custom_minimum_size.x = maxf(_confirm_button.custom_minimum_size.x, minimum_size)
 		_confirm_button.custom_minimum_size.y = maxf(_confirm_button.custom_minimum_size.y, minimum_size)
@@ -443,41 +465,29 @@ func _build_empty_catalog() -> void:
 	close_button.custom_minimum_size = Vector2.ONE * _minimum_touch_size()
 	close_button.pressed.connect(close_catalog)
 	heading.add_child(close_button)
-	_catalog_tabs = TabContainer.new()
-	_catalog_tabs.name = "CatalogTabs"
-	_catalog_tabs.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
-	for pair: Array in [["tab_selected", "pressed"], ["tab_unselected", "normal"], ["tab_hovered", "hover"]]:
-		_catalog_tabs.add_theme_stylebox_override(pair[0], _mobile_theme.get_stylebox(pair[1], "Button"))
-	_catalog_tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	rows.add_child(_catalog_tabs)
-	var tower_scroll := ScrollContainer.new()
-	tower_scroll.name = "Torres"
-	tower_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	_catalog_tabs.add_child(tower_scroll)
+	# RF-540: una sola grilla de torres, sin pestañas; siempre abre en la primera fila.
+	_catalog_scroll = ScrollContainer.new()
+	_catalog_scroll.name = "CatalogScroll"
+	_catalog_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_catalog_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	rows.add_child(_catalog_scroll)
 	_tower_grid = GridContainer.new()
 	_tower_grid.name = "TowerCards"
+	_tower_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_tower_grid.columns = int(_config.get_value("catalogo_columnas"))
-	tower_scroll.add_child(_tower_grid)
-	var infrastructure_scroll := ScrollContainer.new()
-	infrastructure_scroll.name = "Infraestructura"
-	infrastructure_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	infrastructure_scroll.visible = false
-	_catalog_tabs.add_child(infrastructure_scroll)
-	_infrastructure_grid = GridContainer.new()
-	_infrastructure_grid.name = "InfrastructureCards"
-	_infrastructure_grid.columns = int(_config.get_value("catalogo_columnas"))
-	infrastructure_scroll.add_child(_infrastructure_grid)
+	_catalog_scroll.add_child(_tower_grid)
 	_refresh_catalog()
 
 
-func set_catalog_data(towers: Array[TowerData], available: Array[TowerData], gold: int,
-		resources: int, uses_resources: bool, infrastructure_options: Array[Dictionary]) -> void:
-	_catalog_towers = towers.duplicate()
+## `available` son las torres que el nivel ofrece, en el orden de la barra de PC (RF-541). `machine_option`
+## es la compra de la Demoledora ({} si el nivel no la ofrece o ya está comprada): va de última (RF-540).
+func set_catalog_data(available: Array[TowerData], gold: int, resources: int, uses_resources: bool,
+		machine_option: Dictionary = {}) -> void:
 	_available_towers = available.duplicate()
 	_catalog_gold = gold
 	_catalog_resources = resources
 	_catalog_uses_resources = uses_resources
-	_infrastructure_options = infrastructure_options.duplicate(true)
+	_machine_option = machine_option.duplicate(true)
 	_catalog_populated = true
 	_refresh_catalog()
 
@@ -489,25 +499,15 @@ func _refresh_catalog() -> void:
 	var separation: float = float(_config.get_value("catalogo_separacion_px"))
 	var content_width: float = float(_config.get_value("catalogo_ancho_px")) - separation * 2.0
 	var fit_columns: int = maxi(1, floori((content_width + separation) / (card_width + separation)))
-	var columns: int = mini(int(_config.get_value("catalogo_columnas")), fit_columns)
-	_tower_grid.columns = columns
-	_infrastructure_grid.columns = columns
-	var tower_descriptors: Array[Dictionary] = []
-	for tower: TowerData in _catalog_towers:
-		var available_index: int = -1
-		for i: int in _available_towers.size():
-			if _available_towers[i].id == tower.id:
-				available_index = i
-				break
+	_tower_grid.columns = mini(int(_config.get_value("catalogo_columnas")), fit_columns)
+	var descriptors: Array[Dictionary] = []
+	for i: int in _available_towers.size():
+		var tower: TowerData = _available_towers[i]
 		var primary_reason: String = TowerText.missing_text(tower, false,
 			_catalog_gold, _catalog_resources, _catalog_uses_resources)
 		var use_alt: bool = false
 		var reason: String = ""
-		if available_index < 0:
-			reason = "No disponible en este nivel"
-			if tower.required_collection != &"" and not SaveManager.collection_complete(tower.required_collection):
-				reason = "Falta completar la colección"
-		elif primary_reason != "":
+		if primary_reason != "":
 			var alternate_reason: String = TowerText.missing_text(tower, true,
 				_catalog_gold, _catalog_resources, _catalog_uses_resources)
 			if tower.has_alt_payment() and alternate_reason == "":
@@ -519,22 +519,14 @@ func _refresh_catalog() -> void:
 		var cost_text: String = TowerText.cost_text(tower, use_alt)
 		if tower.has_alt_payment():
 			cost_text = "%s / %s" % [TowerText.cost_text(tower), TowerText.cost_text(tower, true)]
-		tower_descriptors.append({"key": "tower:%s" % tower.id, "title": tower.display_name,
+		descriptors.append({"key": "tower:%s" % tower.id, "title": tower.display_name,
 			"cost": cost_text, "reason": reason, "icon": _tower_icon(tower),
-			"tower_index": available_index, "use_alt": use_alt, "tool": &"", "class_id": &""})
-	var option_descriptors: Array[Dictionary] = []
-	for option: Dictionary in _infrastructure_options:
-		option_descriptors.append({"key": "tool:%s:%s" % [option.get("tool", ""), option.get("class_id", "")],
-			"title": String(option.get("name", "Infraestructura")),
-			"cost": String(option.get("cost_text", "")), "reason": String(option.get("disabled_reason", "")),
-			"icon": option.get("icon"), "tower_index": -1, "use_alt": false,
-			"tool": StringName(option.get("tool", "")), "class_id": StringName(option.get("class_id", ""))})
-	_sync_catalog_grid(_tower_grid, tower_descriptors)
-	_sync_catalog_grid(_infrastructure_grid, option_descriptors)
-	var infrastructure_tab: Control = _catalog_tabs.get_child(1)
-	infrastructure_tab.visible = not _infrastructure_options.is_empty()
-	if not infrastructure_tab.visible and _catalog_tabs.current_tab == 1:
-		_catalog_tabs.current_tab = 0
+			"tower_index": i, "use_alt": use_alt, "tool": &""})
+	if not _machine_option.is_empty():
+		descriptors.append({"key": "tool:machine", "title": String(_machine_option.get("name", "Demoledora")),
+			"cost": String(_machine_option.get("cost_text", "")), "reason": String(_machine_option.get("disabled_reason", "")),
+			"icon": _machine_option.get("icon"), "tower_index": -1, "use_alt": false, "tool": &"machine"})
+	_sync_catalog_grid(_tower_grid, descriptors)
 
 
 ## Deja la grilla igual a los descriptores. Si las tarjetas son las mismas (misma clave y orden)
@@ -596,7 +588,6 @@ func _apply_card(card: Button, descriptor: Dictionary) -> void:
 	card.set_meta("tower_index", descriptor["tower_index"])
 	card.set_meta("use_alt", descriptor["use_alt"])
 	card.set_meta("tool", descriptor["tool"])
-	card.set_meta("class_id", descriptor["class_id"])
 	if card.text != text:
 		card.text = text
 	if card.tooltip_text != tooltip:
@@ -611,7 +602,7 @@ func _on_catalog_card_pressed(card: Button) -> void:
 	if tower_index >= 0:
 		_on_tower_card_pressed(tower_index, card.get_meta("use_alt", false))
 	else:
-		_on_infrastructure_card_pressed(card.get_meta("tool", &""), card.get_meta("class_id", &""))
+		_on_infrastructure_card_pressed(card.get_meta("tool", &""))
 
 
 func _on_tower_card_pressed(index: int, use_alt_payment: bool) -> void:
@@ -619,8 +610,8 @@ func _on_tower_card_pressed(index: int, use_alt_payment: bool) -> void:
 	close_catalog()
 
 
-func _on_infrastructure_card_pressed(tool: StringName, class_id: StringName) -> void:
-	infrastructure_tool_chosen.emit(tool, class_id)
+func _on_infrastructure_card_pressed(tool: StringName) -> void:
+	infrastructure_tool_chosen.emit(tool, &"")
 	close_catalog()
 
 
@@ -658,8 +649,9 @@ func set_placement_visible(enabled: bool) -> void:
 	if _cancel_button != null:
 		_cancel_button.visible = enabled
 	if _cart_button != null:
-		_cart_button.modulate.a = float(_config.get_value("opacidad_con_fantasma")) if enabled else 1.0
-		_exit_button.modulate.a = float(_config.get_value("opacidad_con_fantasma")) if enabled else 1.0
+		var opacity: float = float(_config.get_value("opacidad_con_fantasma")) if enabled else 1.0
+		for button: Button in [_cart_button, _exit_button, _demolish_button]:
+			button.modulate.a = opacity
 	if not enabled:
 		if _bottom_confirm != null:
 			_bottom_confirm.hide()
@@ -675,6 +667,21 @@ func show_view_all(enabled: bool) -> void:
 func set_cart_active(active: bool) -> void:
 	if _cart_button != null:
 		_cart_button.self_modulate = Color("#ffe0a0") if active else Color.WHITE
+
+
+## RF-542: el botón de demolición solo existe en los niveles con removibles o puntos de extracción.
+func set_demolish_available(available: bool) -> void:
+	if _demolish_available == available:
+		return
+	_demolish_available = available
+	_update_floating_visibility()
+	_resolve_button_collision()
+	_update_floating_layout()
+
+
+func set_demolish_active(active: bool) -> void:
+	if _demolish_button != null:
+		_demolish_button.self_modulate = Color("#ffe0a0") if active else Color.WHITE
 
 
 func set_game_over(over: bool) -> void:
@@ -695,6 +702,30 @@ func set_modal_open(open: bool) -> void:
 func _update_floating_visibility() -> void:
 	_cart_button.visible = not _game_over and not _modal_open
 	_exit_button.visible = not _game_over and not _modal_open
+	_demolish_button.visible = _demolish_available and not _game_over and not _modal_open
+
+
+## M63 (RF-574): el control que señala el tutorial (null si no existe o no se ve ahora). Nombres: `cart`,
+## `first_card` (la primera torre que se puede elegir del catálogo abierto), `confirm` (la tilde: la que está
+## junto al fantasma o, si no se ve, la de la barra de abajo), `upgrade` y `sell`.
+func target_control(target: StringName) -> Control:
+	var control: Control = null
+	match target:
+		&"cart":
+			control = _cart_button
+		&"first_card":
+			if _catalog_open and _tower_grid != null:
+				for card: Node in _tower_grid.get_children():
+					if int((card as Button).get_meta("tower_index", -1)) >= 0 and not (card as Button).disabled:
+						control = card as Button
+						break
+		&"confirm":
+			control = _confirm_button if _confirm_button != null and _confirm_button.is_visible_in_tree() else _bottom_confirm
+		&"upgrade":
+			control = _upgrade_button
+		&"sell":
+			control = _sell_button
+	return control if control != null and control.is_visible_in_tree() else null
 
 
 func is_catalog_open() -> bool:
@@ -709,6 +740,7 @@ func is_catalog_populated() -> bool:
 func open_catalog() -> void:
 	clear_sell_arm()
 	_catalog_open = true
+	_catalog_scroll.scroll_vertical = 0  # RF-540: siempre abre en la primera fila
 	_catalog_dim.show()
 	_catalog_panel.show()
 	catalog_opened.emit(true)
@@ -727,7 +759,7 @@ func is_interactive_at(screen_pos: Vector2) -> bool:
 	if _catalog_open and (_catalog_panel.get_global_rect().has_point(screen_pos) or _catalog_dim.get_global_rect().has_point(screen_pos)):
 		return true
 	for button: Button in [_confirm_button, _cancel_button, _view_all_button, _cart_button, _exit_button,
-			_upgrade_button, _target_button, _sell_button]:
+			_demolish_button, _upgrade_button, _target_button, _sell_button]:
 		if button != null and button.visible and button.get_global_rect().has_point(screen_pos):
 			return true
 	return false
@@ -740,6 +772,7 @@ func _input(event: InputEvent) -> void:
 		return
 	if event is InputEventScreenTouch:
 		var touch: InputEventScreenTouch = event as InputEventScreenTouch
+		_pointer_filter.note_touch(touch.position, Time.get_ticks_msec())
 		if not _catalog_open and _handle_status_touch(touch.index, touch.position, touch.pressed):
 			return
 		_handle_drag_touch(touch.index, touch.position, touch.pressed)
@@ -752,20 +785,26 @@ func _input(event: InputEvent) -> void:
 		if _drag_button != null and drag.index == _drag_index:
 			_update_drag(drag.position)
 			get_viewport().set_input_as_handled()
-	elif event is InputEventMouseButton and not OS.has_feature("mobile"):
+	elif event is InputEventMouseButton:
+		# RF-552: manda el dispositivo, no la plataforma. El clic emulado de un toque se descarta (el toque ya
+		# actuó); un mouse real, también en Android, hace de dedo.
 		var mouse: InputEventMouseButton = event as InputEventMouseButton
 		if mouse.button_index == MOUSE_BUTTON_LEFT:
-			if mouse.device == InputEvent.DEVICE_ID_EMULATION:
+			if not _pointer_filter.accepts_mouse(mouse.device, mouse.position, Time.get_ticks_msec()):
 				return
-			if not _catalog_open and _handle_status_touch(-1, mouse.position, mouse.pressed):
+			if not _catalog_open and _handle_status_touch(PointerFilter.MOUSE_FINGER, mouse.position, mouse.pressed):
 				return
-			_handle_drag_touch(-1, mouse.position, mouse.pressed)
-	elif event is InputEventMouseMotion and not OS.has_feature("mobile") and _status_touch_button != null:
+			_handle_drag_touch(PointerFilter.MOUSE_FINGER, mouse.position, mouse.pressed)
+	elif event is InputEventMouseMotion and _status_touch_button != null:
 		var motion: InputEventMouseMotion = event as InputEventMouseMotion
+		if not _pointer_filter.accepts_mouse(motion.device, motion.position, Time.get_ticks_msec()):
+			return
 		_status_touch_moved = _status_touch_moved or motion.position.distance_to(_status_touch_start) > float(_config.get_value("toque_max_px"))
 		get_viewport().set_input_as_handled()
-	elif event is InputEventMouseMotion and not OS.has_feature("mobile") and _drag_button != null:
+	elif event is InputEventMouseMotion and _drag_button != null:
 		var motion: InputEventMouseMotion = event as InputEventMouseMotion
+		if not _pointer_filter.accepts_mouse(motion.device, motion.position, Time.get_ticks_msec()):
+			return
 		_update_drag(motion.position)
 		get_viewport().set_input_as_handled()
 
@@ -818,6 +857,8 @@ func _handle_drag_touch(index: int, pos: Vector2, pressed: bool) -> void:
 		if _drag_button.get_global_rect().has_point(pos):
 			if _drag_button == _cart_button:
 				_on_cart_pressed()
+			elif _drag_button == _demolish_button:
+				demolish_pressed.emit()
 			else:
 				exit_pressed.emit()
 	_drag_button = null
@@ -831,6 +872,8 @@ func _float_button_at(pos: Vector2) -> Button:
 		return _cart_button
 	if _exit_button.visible and _exit_button.get_global_rect().has_point(pos):
 		return _exit_button
+	if _demolish_button.visible and _demolish_button.get_global_rect().has_point(pos):
+		return _demolish_button
 	return null
 
 
@@ -857,69 +900,97 @@ func _finish_drag(pos: Vector2) -> void:
 	if _drag_button == _cart_button:
 		_prefs.cart_side = side
 		_prefs.cart_y = y
-		_base_cart_position = snapped_position
+		_base_positions[0] = snapped_position
+	elif _drag_button == _demolish_button:
+		_prefs.demolish_side = side
+		_prefs.demolish_y = y
+		_base_positions[2] = snapped_position
 	else:
 		_prefs.exit_side = side
 		_prefs.exit_y = y
-		_base_exit_position = snapped_position
+		_base_positions[1] = snapped_position
 	SaveManager.set_ui_prefs(_prefs)
 	_resolve_button_collision()
-	_apply_float_positions([_base_cart_position, _base_exit_position], false)
+	_apply_float_positions(_base_positions.duplicate(), false)
+
+
+## Los botones que cuentan para acomodarse: el carrito y la salida siempre, la demolición solo si el nivel la tiene.
+func _active_float_indices() -> Array[int]:
+	var indices: Array[int] = [0, 1]
+	if _demolish_available:
+		indices.append(2)
+	return indices
+
+
+func _float_sides() -> Array[String]:
+	return [_prefs.cart_side, _prefs.exit_side, _prefs.demolish_side]
+
+
+## Acomoda los botones y devuelve las posiciones de los tres (el inactivo conserva la suya).
+func _arranged_positions(ghost_rect: Rect2, distance: float) -> Array[Vector2]:
+	var indices: Array[int] = _active_float_indices()
+	var rects: Array[Rect2] = []
+	var sides: Array[String] = []
+	for index: int in indices:
+		rects.append(Rect2(_base_positions[index], _float_button_size))
+		sides.append(_float_sides()[index])
+	var results: Array[Vector2] = FloatButtonLayout.avoid(ghost_rect, rects, sides, Rules.SCREEN_SIZE,
+		float(_config.get_value("barra_alta_px")), float(_config.get_value("barra_baja_px")),
+		_float_button_size, distance)
+	var positions: Array[Vector2] = _base_positions.duplicate()
+	for i: int in indices.size():
+		positions[indices[i]] = results[i]
+	return positions
 
 
 func _resolve_button_collision() -> void:
-	var rects: Array[Rect2] = [Rect2(_base_cart_position, _float_button_size), Rect2(_base_exit_position, _float_button_size)]
-	var sides: Array[String] = [_prefs.cart_side, _prefs.exit_side]
-	var results: Array[Vector2] = FloatButtonLayout.avoid(Rect2(Vector2(-1000.0, -1000.0), Vector2.ZERO),
-		rects, sides, Rules.SCREEN_SIZE, float(_config.get_value("barra_alta_px")),
-		float(_config.get_value("barra_baja_px")), _float_button_size, 0.0)
-	_base_cart_position = results[0]
-	_base_exit_position = results[1]
+	_base_positions = _arranged_positions(Rect2(Vector2(-1000.0, -1000.0), Vector2.ZERO), 0.0)
 
 
 func _apply_saved_positions() -> void:
 	var top: float = float(_config.get_value("barra_alta_px"))
 	var bottom: float = float(_config.get_value("barra_baja_px"))
-	_base_cart_position = FloatButtonLayout.position_for(_prefs.cart_side, _prefs.cart_y,
-		Rules.SCREEN_SIZE, top, bottom, _float_button_size)
-	_base_exit_position = FloatButtonLayout.position_for(_prefs.exit_side, _prefs.exit_y,
-		Rules.SCREEN_SIZE, top, bottom, _float_button_size)
+	_base_positions = [
+		FloatButtonLayout.position_for(_prefs.cart_side, _prefs.cart_y, Rules.SCREEN_SIZE, top, bottom, _float_button_size),
+		FloatButtonLayout.position_for(_prefs.exit_side, _prefs.exit_y, Rules.SCREEN_SIZE, top, bottom, _float_button_size),
+		FloatButtonLayout.position_for(_prefs.demolish_side, _prefs.demolish_y, Rules.SCREEN_SIZE, top, bottom, _float_button_size)]
 	_resolve_button_collision()
-	_apply_float_positions([_base_cart_position, _base_exit_position], false)
+	_apply_float_positions(_base_positions.duplicate(), false)
 
 
 func _apply_float_positions(targets: Array[Vector2], animate: bool) -> void:
-	if targets[0].is_equal_approx(_target_cart_position) and targets[1].is_equal_approx(_target_exit_position):
+	var buttons: Array[Button] = [_cart_button, _exit_button, _demolish_button]
+	var unchanged: bool = true
+	for i: int in 3:
+		unchanged = unchanged and targets[i].is_equal_approx(_target_positions[i])
+	if unchanged:
 		return
-	_target_cart_position = targets[0]
-	_target_exit_position = targets[1]
+	_target_positions = targets.duplicate()
 	if _layout_tween != null and _layout_tween.is_running():
 		_layout_tween.kill()
 	var duration: float = float(_config.get_value("corrimiento_s")) if animate else 0.0
-	if animate and (not _cart_button.position.is_equal_approx(targets[0]) or not _exit_button.position.is_equal_approx(targets[1])):
+	var moves: bool = false
+	for i: int in 3:
+		moves = moves or not buttons[i].position.is_equal_approx(targets[i])
+	if animate and moves:
 		_layout_tween = create_tween()
 		_layout_tween.set_parallel(true)
-		_layout_tween.tween_property(_cart_button, "position", targets[0], duration)
-		_layout_tween.tween_property(_exit_button, "position", targets[1], duration)
+		for i: int in 3:
+			_layout_tween.tween_property(buttons[i], "position", targets[i], duration)
 	else:
-		_cart_button.position = targets[0]
-		_exit_button.position = targets[1]
+		for i: int in 3:
+			buttons[i].position = targets[i]
 
 
 func _update_floating_layout() -> void:
 	if _cart_button == null:
 		return
 	if not _ghost_visible:
-		_apply_float_positions([_base_cart_position, _base_exit_position], true)
+		_apply_float_positions(_base_positions.duplicate(), true)
 		return
 	var screen_pos: Vector2 = get_viewport().get_canvas_transform() * _world_position
 	var ghost_rect := Rect2(screen_pos - _ghost_size / 2.0, _ghost_size)
-	var rects: Array[Rect2] = [Rect2(_base_cart_position, _float_button_size), Rect2(_base_exit_position, _float_button_size)]
-	var sides: Array[String] = [_prefs.cart_side, _prefs.exit_side]
-	var targets: Array[Vector2] = FloatButtonLayout.avoid(ghost_rect, rects, sides, Rules.SCREEN_SIZE,
-		float(_config.get_value("barra_alta_px")), float(_config.get_value("barra_baja_px")),
-		_float_button_size, float(_config.get_value("fantasma_distancia_botones")))
-	_apply_float_positions(targets, true)
+	_apply_float_positions(_arranged_positions(ghost_rect, float(_config.get_value("fantasma_distancia_botones"))), true)
 
 
 func _on_cart_pressed() -> void:
@@ -949,6 +1020,8 @@ func _update_placement_position() -> void:
 	var cancel_size: Vector2 = _cancel_button.size
 	var above: float = float(_config.get_value("fantasma_botones_arriba_px"))
 	var float_rects: Array[Rect2] = [Rect2(_cart_button.position, _float_button_size), Rect2(_exit_button.position, _float_button_size)]
+	if _demolish_available:
+		float_rects.append(Rect2(_demolish_button.position, _float_button_size))
 	var side: String = FloatButtonLayout.tick_side(Rect2(screen_pos - _ghost_size / 2.0, _ghost_size),
 		float_rects, Rules.SCREEN_SIZE.x, float(_config.get_value("flotante_min_px")))
 	if side == "right":

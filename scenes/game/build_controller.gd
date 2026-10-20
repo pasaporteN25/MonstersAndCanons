@@ -43,6 +43,8 @@ var _mobile_infrastructure_tool: StringName = &""
 var _mobile_infrastructure_class: StringName = &""
 var _mobile_config: MobileUiConfig
 var _touch_gesture := TouchGesture.new()
+## RF-552: separa el mouse real del eco de un toque.
+var _pointer_filter := PointerFilter.new()
 var _ghost_placement := GhostPlacement.new()
 var _touch_start_screen_cell: Vector2i = Vector2i.ZERO
 var _touch_start_ghost_cell: Vector2i = Vector2i.ZERO
@@ -67,6 +69,7 @@ func setup(level: Level, session: LevelSession, balance: BalanceConfig,
 	if _mobile_mode:
 		_mobile_config = MobileUiConfig.load_from()
 		_touch_gesture.configure(float(_mobile_config.get_value("toque_max_px")), int(_mobile_config.get_value("pinza_gracia_ms")))
+		_pointer_filter.configure(int(_mobile_config.get_value("puntero_duplicado_ms")), float(_mobile_config.get_value("puntero_duplicado_px")))
 
 
 # --- Elegir torre para construir (RF-40, RF-43) ---
@@ -293,6 +296,7 @@ func _handle_mobile_input(event: InputEvent) -> bool:
 	var now_ms: int = Time.get_ticks_msec()
 	if event is InputEventScreenTouch:
 		var touch: InputEventScreenTouch = event as InputEventScreenTouch
+		_pointer_filter.note_touch(touch.position, now_ms)
 		if touch.pressed:
 			_touch_start_ghost_cell = _ghost_placement.cell
 			_touch_start_screen_cell = _level.cell_at(_screen_to_world(touch.position))
@@ -312,30 +316,36 @@ func _handle_mobile_input(event: InputEvent) -> bool:
 			_move_mobile_ghost(_touch_start_ghost_cell + delta)
 		_accept()
 		return true
+	# RF-552 (D-116): manda el dispositivo, no la plataforma. El clic emulado de un toque se descarta (el toque ya
+	# actuó); un mouse real, también en Android, hace de dedo (índice -1).
 	if event is InputEventMouseButton:
-		if OS.has_feature("mobile"):
+		var mouse: InputEventMouseButton = event as InputEventMouseButton
+		if not _pointer_filter.accepts_mouse(mouse.device, mouse.position, now_ms):
 			_accept()
 			return true
-		var mouse: InputEventMouseButton = event as InputEventMouseButton
 		if mouse.button_index == MOUSE_BUTTON_LEFT:
 			if mouse.pressed:
 				_mouse_touch_start_cell = _level.cell_at(_screen_to_world(mouse.position))
 				_mouse_touch_start_ghost = _ghost_placement.cell
-				_touch_gesture.down(-1, mouse.position, now_ms)
+				_touch_gesture.down(PointerFilter.MOUSE_FINGER, mouse.position, now_ms)
 			else:
-				var result: TouchGesture.Gesture = _touch_gesture.up(-1, mouse.position, now_ms)
+				var result: TouchGesture.Gesture = _touch_gesture.up(PointerFilter.MOUSE_FINGER, mouse.position, now_ms)
 				if result == TouchGesture.Gesture.TAP and _in_map_area(mouse.position) and not _touch_gesture.ignores_single_touch(now_ms):
 					_mobile_map_tap(_screen_to_world(mouse.position), now_ms)
 			_accept()
 		return true
-	if event is InputEventMouseMotion and not OS.has_feature("mobile") and _selected >= 0 and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+	if event is InputEventMouseMotion:
 		var motion: InputEventMouseMotion = event as InputEventMouseMotion
-		var result: TouchGesture.Gesture = _touch_gesture.move(-1, motion.position, now_ms)
-		if result == TouchGesture.Gesture.DRAG and _in_map_area(motion.position):
-			var current_cell: Vector2i = _level.cell_at(_screen_to_world(motion.position))
-			_move_mobile_ghost(_mouse_touch_start_ghost + current_cell - _mouse_touch_start_cell)
-		_accept()
-		return true
+		if not _pointer_filter.accepts_mouse(motion.device, motion.position, now_ms):
+			_accept()
+			return true
+		if _selected >= 0 and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+			var result: TouchGesture.Gesture = _touch_gesture.move(PointerFilter.MOUSE_FINGER, motion.position, now_ms)
+			if result == TouchGesture.Gesture.DRAG and _in_map_area(motion.position):
+				var current_cell: Vector2i = _level.cell_at(_screen_to_world(motion.position))
+				_move_mobile_ghost(_mouse_touch_start_ghost + current_cell - _mouse_touch_start_cell)
+			_accept()
+			return true
 	if event.is_action_pressed("cancel"):
 		if _selected >= 0 or _mobile_infrastructure_tool != &"":
 			cancel()

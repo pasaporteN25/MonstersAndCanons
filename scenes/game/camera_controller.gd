@@ -18,6 +18,7 @@ var _touches: Dictionary = {}
 var _pinch_distance: float = 0.0
 var _pinch_start_distance: float = 0.0
 var _pinch_midpoint: Vector2 = Vector2.ZERO
+var _pc_view_all_button: Button  # RF-545: «Ver todo» de la PC (solo con el zoom mínimo y el encuadre corrido)
 
 
 func setup(level: Level, camera: Camera2D, minimum_zoom: float, camera_factory: Callable,
@@ -34,6 +35,8 @@ func setup(level: Level, camera: Camera2D, minimum_zoom: float, camera_factory: 
 	_touch_max_distance = float(config.get_value("toque_max_px"))
 	_top_height = float(config.get_value("barra_alta_px")) if _mobile_mode else 48.0
 	_bottom_height = float(config.get_value("barra_baja_px"))
+	if _mobile_hud == null:
+		_build_pc_view_all_button(config)
 	_update_view_all()
 
 
@@ -119,6 +122,7 @@ func _pan_by_screen_delta(delta: Vector2) -> void:
 	_ensure_camera()
 	_camera.position -= delta / _camera.zoom.x
 	_clamp_camera_center()
+	_update_view_all()
 
 
 func _ensure_camera() -> void:
@@ -138,11 +142,46 @@ func _in_map_area(screen_position: Vector2) -> bool:
 	return screen_position.y >= _top_height and screen_position.y < Rules.SCREEN_SIZE.y - _bottom_height
 
 
+## RF-506 y RF-545: «Ver todo» aparece si el zoom pasa el mínimo **o** si el encuadre se corrió (aunque el zoom
+## sea el mínimo). En PC (sin HUD móvil) solo aparece con el zoom mínimo y el encuadre corrido.
 func _update_view_all() -> void:
-	if _mobile_hud == null:
-		return
-	var zoom: float = _minimum_zoom if _camera == null else _camera.zoom.x
-	_mobile_hud.show_view_all(zoom > _minimum_zoom and not is_equal_approx(zoom, _minimum_zoom))
+	var zoomed: bool = _camera != null and _camera.zoom.x > _minimum_zoom and not is_equal_approx(_camera.zoom.x, _minimum_zoom)
+	if _mobile_hud != null:
+		_mobile_hud.show_view_all(zoomed or is_view_displaced())
+	elif _pc_view_all_button != null:
+		_pc_view_all_button.visible = is_view_displaced() and not zoomed
+
+
+## ¿El mapa está corrido respecto del encuadre de RF-251? (con la cámara todavía sin crear, no)
+func is_view_displaced() -> bool:
+	return _camera != null and _level != null and _camera.position.distance_to(_fit_position()) > 0.5
+
+
+## Dónde queda el centro de la cámara con el encuadre de RF-251 (el de «Ver todo»).
+func _fit_position() -> Vector2:
+	var map_size: Vector2i = _level.map_size()
+	var area := Rect2(0.0, _top_height, Rules.SCREEN_SIZE.x, Rules.SCREEN_SIZE.y - _top_height - _bottom_height)
+	var map_center: Vector2 = _level.position + Vector2(map_size) * Rules.TILE_SIZE / 2.0
+	var rect := Rect2(_level.position, Vector2(map_size) * Rules.TILE_SIZE)
+	return clamp_center(map_center + (Rules.SCREEN_SIZE / 2.0 - area.get_center()) / _minimum_zoom, rect)
+
+
+func _build_pc_view_all_button(config: MobileUiConfig) -> void:
+	var layer := CanvasLayer.new()
+	layer.name = "ViewAllLayer"
+	layer.layer = 2
+	add_child(layer)
+	_pc_view_all_button = Button.new()
+	_pc_view_all_button.name = "ViewAll"
+	_pc_view_all_button.theme = preload("res://assets/ui/menu_theme.tres")
+	_pc_view_all_button.text = "Ver todo"
+	_pc_view_all_button.focus_mode = Control.FOCUS_NONE
+	var button_size: float = float(config.get_value("flotante_min_px"))
+	_pc_view_all_button.custom_minimum_size = Vector2(button_size, button_size)
+	_pc_view_all_button.position = Vector2(float(config.get_value("ver_todo_x_px")), float(config.get_value("ver_todo_y_px")))
+	_pc_view_all_button.visible = false
+	_pc_view_all_button.pressed.connect(view_all)
+	layer.add_child(_pc_view_all_button)
 
 
 static func clamp_zoom(value: float, minimum: float, maximum: float) -> float:
@@ -156,9 +195,5 @@ static func clamp_center(center: Vector2, map_rect: Rect2) -> Vector2:
 func view_all() -> void:
 	_ensure_camera()
 	_camera.zoom = Vector2.ONE * _minimum_zoom
-	var map_size: Vector2i = _level.map_size()
-	var area := Rect2(0.0, _top_height, Rules.SCREEN_SIZE.x, Rules.SCREEN_SIZE.y - _top_height - _bottom_height)
-	var map_center: Vector2 = _level.position + Vector2(map_size) * Rules.TILE_SIZE / 2.0
-	_camera.position = map_center + (Rules.SCREEN_SIZE / 2.0 - area.get_center()) / _minimum_zoom
-	_clamp_camera_center()
+	_camera.position = _fit_position()
 	_update_view_all()

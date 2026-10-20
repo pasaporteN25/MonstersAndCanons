@@ -407,6 +407,31 @@ func show_job_badge(seconds_left: float, job_active: bool) -> void:
 	bar_tabs.set_badge(TAB_INFRASTRUCTURE, badge)
 
 
+## M63 (RF-574): el control de la barra que señala el tutorial (null si no existe o no se ve ahora).
+## Nombres: `gold`, `lives`, `start_wave`, `pause`, `speed`, `tower_1` (la primera torre de la barra),
+## `upgrade` y `sell` (los del panel de la torre elegida, en la PC).
+func target_control(target: StringName) -> Control:
+	var control: Control = null
+	match target:
+		&"gold":
+			control = get_node("TopBar/Stats/GoldStat") as Control
+		&"lives":
+			control = get_node("TopBar/Stats/LivesStat") as Control
+		&"start_wave":
+			control = _start_wave_button
+		&"pause":
+			control = _pause_button
+		&"speed":
+			control = _speed_button
+		&"tower_1":
+			control = _tower_buttons[0] if not _tower_buttons.is_empty() else null
+		&"upgrade":
+			control = tower_panel.upgrade_button()
+		&"sell":
+			control = tower_panel.sell_button()
+	return control if control != null and control.is_visible_in_tree() else null
+
+
 ## RF-459: «← Menú», o «← Editor» al probar un mapa del editor (RF-217).
 func set_exit_text(text: String, tooltip: String = "") -> void:
 	_exit_button.text = text

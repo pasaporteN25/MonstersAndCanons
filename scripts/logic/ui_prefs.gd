@@ -5,6 +5,8 @@ var cart_side: String = ""
 var cart_y: float = 0.0
 var exit_side: String = ""
 var exit_y: float = 0.0
+var demolish_side: String = ""
+var demolish_y: float = 0.0
 
 
 func _init() -> void:
@@ -13,6 +15,8 @@ func _init() -> void:
 	cart_y = float(config.get_value("carrito_y_default"))
 	exit_side = str(config.get_value("salida_lado_default"))
 	exit_y = float(config.get_value("salida_y_default"))
+	demolish_side = str(config.get_value("demoler_lado_default"))
+	demolish_y = float(config.get_value("demoler_y_default"))
 
 
 static func read(raw: Variant) -> UiPrefs:
@@ -38,8 +42,20 @@ static func read(raw: Variant) -> UiPrefs:
 		prefs.exit_y = float(values["exit_y"])
 	else:
 		push_warning("Altura de salida inválida; se usa el valor por omisión.")
+	# RF-542: el botón de demolición. Un guardado de antes de M60 no lo trae: vale su valor por omisión, sin aviso.
+	if values.has("demolish_side"):
+		if values["demolish_side"] is String and values["demolish_side"] in ["left", "right"]:
+			prefs.demolish_side = values["demolish_side"]
+		else:
+			push_warning("Lado del botón de demolición inválido; se usa el valor por omisión.")
+	if values.has("demolish_y"):
+		if typeof(values["demolish_y"]) in [TYPE_INT, TYPE_FLOAT] and float(values["demolish_y"]) >= 0.0 and float(values["demolish_y"]) <= 1.0:
+			prefs.demolish_y = float(values["demolish_y"])
+		else:
+			push_warning("Altura del botón de demolición inválida; se usa el valor por omisión.")
 	return prefs
 
 
 func to_dict() -> Dictionary:
-	return {"cart_side": cart_side, "cart_y": cart_y, "exit_side": exit_side, "exit_y": exit_y}
+	return {"cart_side": cart_side, "cart_y": cart_y, "exit_side": exit_side, "exit_y": exit_y,
+		"demolish_side": demolish_side, "demolish_y": demolish_y}

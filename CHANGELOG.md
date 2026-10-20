@@ -2,6 +2,48 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## «Ver todo» también cuando corriste el mapa *(T304, 2026-10-19)*
+
+«Ver todo» aparece ahora también cuando corriste el mapa con dos dedos aunque no hayas acercado nada: antes, con el zoom mínimo no había forma de volver al encuadre. En la computadora el botón aparece solo cuando corrés el mapa con el botón del medio estando con el zoom mínimo (con la rueda del mouse no aparece, como hasta ahora).
+
+## Pausa al pasar la app a segundo plano *(T303, 2026-10-19)*
+
+En el celular, si llega una llamada o tocás el botón de inicio, la partida **se pausa sola** y queda en pausa al volver (se sigue con «Seguir»). En la computadora, perder el foco de la ventana **no** pausa.
+
+## Botón de demolición en el celular *(T302, 2026-10-19)*
+
+En los niveles con árboles, escombros o minas hay un **tercer botón flotante** (un pico) para demoler y habilitar: se arrastra y se guarda como el carrito y la X, y ya no hay que abrir el catálogo. Al tocarlo se tiñe y la barra de abajo dice «Demoler o habilitar: tocá un objeto del mapa» y trae una cruz para salir (también salen volviendo a tocar el botón, con «atrás» o eligiendo una torre). Un solo toque sirve para un árbol o para una mina; si sale bien, la herramienta se suelta sola, y si no alcanza el oro o ya hay una demolición en curso, la barra dice el motivo y no cobra nada. Mientras está elegida no se ven «Empezar oleada» ni «Próxima oleada». Los tres botones flotantes no se pisan entre sí.
+
+## Un solo catálogo de torres en el celular *(T301, 2026-10-19)*
+
+El catálogo del celular ya no tiene pestañas: es una sola lista con **las torres del nivel** (antes mostraba las 11 del juego, con las que no se podían usar apagadas) y siempre abre mostrando las torres. Antes, en los niveles 6 a 15, abría en «Infraestructura» y volvía ahí cada vez que cambiaba el oro. Donde hay Demoledora, su compra es la última tarjeta. Las herramientas de demoler y habilitar se mueven a un botón propio (T302).
+## Opciones: «Créditos y versión» *(T315, 2026-10-19)*
+
+Opciones tiene una sección nueva, **«Créditos y versión»**, con la versión del juego (hoy **«Beta»**; cuando llegue la 1.0.0 dirá «Versión 1.0.0») y el botón **«Ver créditos»**, que abre los créditos y vuelve a Opciones. Está en el menú principal y en la pausa, en PC y en celular. La versión se cambia en un solo lugar (`config/version` en `project.godot`).
+
+## Niveles, Wiki, Récords y Créditos con el dedo *(T314, 2026-10-19)*
+
+En el modo celular, las listas de la selección de niveles, la Wiki, Opciones y los Créditos se **desplazan arrastrando un dedo** (con un poco de inercia al soltar), aunque el dedo empiece sobre una tarjeta o un botón, y la barra de desplazamiento es más ancha para agarrarla. Un toque corto sigue abriendo el nivel o la entrada, y los deslizadores de volumen siguen siendo del dedo. Todos los botones y las filas de esas pantallas miden al menos 56 px de alto. En PC no cambia nada: rueda y barra de siempre.
+
+## Menú principal, Opciones y Pausa pensados para el celular *(T313, 2026-10-19)*
+
+En el modo celular, el menú principal pone el logo a la izquierda y los botones a la derecha (todos de 56 px de alto, cómodos para el dedo) y Opciones se muestra en **dos columnas** con el título y «Volver» siempre a la vista. En Opciones, «Interfaz» ahora está dentro de «Visualización» (antes quedaba debajo de «Volver») y, en cualquier modo, si el panel no entra en la pantalla **se desplaza** en vez de cortarse. En PC todo sigue igual.
+
+## Mouse y toque conviven en el modo celular *(T311, 2026-10-19)*
+
+En el modo celular ahora se puede usar el **mouse además del dedo**, también en Android (DeX, Chromebook, teclado y mouse): un clic mueve el fantasma, abre el carrito, usa la X, la tilde y la cruz, y arrastrar con el botón izquierdo equivale a arrastrar un dedo. Ya no hace falta cambiar a «Interfaz: PC». Un toque sigue haciendo su acción una sola vez (el clic que el sistema fabrica a partir del toque se descarta), también en una notebook con pantalla táctil, donde antes ese clic hacía de segundo dedo. **No se probó en un celular real.**
+## Un tutorial en el nivel 1, que se puede apagar y volver a ver *(T330 y T331, 2026-10-19)*
+
+- **Al entrar por primera vez al nivel 1** (después del cartel de entrada) aparece una **tarjeta con un texto corto** y, sobre el botón o la casilla que hay que usar, un **recuadro amarillo que parpadea con una flecha**. Te va mostrando: el **camino** por donde entran los monstruos, tu **oro**, tus **vidas**, cómo **elegir una torre** y **construirla**, cómo **empezar la oleada**, cómo **elegir tu torre**, qué hacen **«Mejorar»** y **«Vender»**, y que existen la **velocidad** y la **pausa**.
+- **Te espera a que lo hagas de verdad:** elegir la torre, construirla, empezar la oleada, cambiar la velocidad o pausar hacen avanzar el tutorial solos. Los pasos que solo se leen se pasan con **«Siguiente»**. **El juego no se pausa** mientras tanto, y si te adelantás, el tutorial lo da por hecho.
+- **En el celular** los pasos son otros y hablan de toques: **el carrito**, **elegir la torre en el catálogo**, **tocar la casilla** y confirmar con **la tilde ✓** (o con un **doble toque**).
+- **Podés saltarlo cuando quieras** con **«Saltar tutorial»**. Si lo completás o lo salteás, **no vuelve a salir**. Quien ya había ganado el nivel 1 antes de esta versión no lo ve.
+- **Para apagarlo o volver a verlo:** **Opciones → «Tutorial del nivel 1»** (casilla) y **«Volver a verlo»** (se ve la próxima vez que entres al nivel 1).
+- **No sale** en el modo de pruebas, en el editor, en los mapas de la comunidad, en los modos ni en los niveles 2 en adelante. No cambia nada del nivel 1 (oro, vidas, oleadas).
+- **Los textos son un borrador** hasta que Lucas los apruebe: están en `data/tutorial/tutorial.json`.
+- **Opciones ahora se desplaza** si no entra en la pantalla (con las opciones nuevas ya no cabía en 720 de alto).
+- Tu progreso no cambia: el guardado suma una marca («tutorial visto») y una opción, y una versión anterior del juego lo sigue leyendo.
+
 ## Un toque, una sola acción en el celular *(T291, 2026-10-18)*
 
 «Apuntar» avanzaba dos modos por toque; ahora avanza uno. La tilde y la cruz de construir ya no salen de la pantalla ni se suben a la barra de arriba (donde un toque podía cambiar la velocidad o pausar además de construir): si arriba no entran, se ponen abajo de la torre.

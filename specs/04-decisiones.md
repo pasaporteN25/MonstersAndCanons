@@ -964,3 +964,158 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Por qué:** Lucas encontró que el carrito abría al separarlo del borde; los controles tapaban demasiado mapa y no compartían la estética del juego. Prefiere controles más compactos al mínimo anterior de 7,6 mm para estas cuatro acciones. Mejorar y Vender conservan sus tamaños y protección.
 - **Alternativa descartada:** conservar el tema genérico y repetir el precio dentro de la tilde. El catálogo y la barra ya lo muestran.
 - **Límite:** las pruebas de escritorio no reemplazan el tacto ni la legibilidad en el celular de Lucas.
+
+## D-110 · El catálogo del celular es una sola grilla con las torres del nivel
+
+- **Fecha:** 2026-10-19. **Estado:** decidido por Lucas (respuestas D1 y D2 de la auditoría T289). **Refs:** RF-540, RF-541, H-02 y H-20 de T289, T301.
+- **Qué:** se saca la pestaña «Infraestructura» del catálogo del celular; queda una única grilla, que abre siempre en las torres, y muestra **solo** las torres que el nivel ofrece (las no disponibles ya no aparecen apagadas). La compra de la Demoledora queda como última tarjeta de esa grilla.
+- **Por qué:** en los niveles 6 a 15 el catálogo abría y volvía solo a «Infraestructura» con cada cambio de oro (un `TabContainer` usa `visible` para elegir la pestaña), y la compra costaba tres toques en vez de dos. Mostrar las 11 torres mezcladas, tres de cada cuatro apagadas en el nivel 1, obligaba a desplazar y ocupaba lugar con cosas que no se pueden usar. Lucas pidió un solo catálogo, sin dividirlo por tipo.
+- **Alternativas descartadas:** recordar la última pestaña usada (D1, opción 2): sigue siendo un catálogo dividido y no arregla el salto; mostrar las no disponibles al final (D2, opción b): sigue ocupando lugar; pasar a 4 columnas: con 18 mm por tarjeta no entran en 800 px.
+- **Supuesto (para que Lucas lo confirme):** la Demoledora queda en la grilla de torres porque Lucas no la mencionó; si prefiere otro lugar (por ejemplo, junto al botón de demolición), se mueve sin tocar lo demás.
+- **Límite:** no se probó en un celular real; las capturas de escritorio no reemplazan el tacto.
+
+## D-111 · Un botón flotante de demolición y una herramienta que reconoce el objeto
+
+- **Fecha:** 2026-10-19. **Estado:** decidido por Lucas (respuesta D3 de T289). **Refs:** RF-542, RF-543, H-09 de T289, T302.
+- **Qué:** la herramienta de infraestructura («Demoler» / «Habilitar») sale del catálogo y pasa a un **tercer botón flotante**, con su estado en la barra de abajo (línea + cruz) y la herramienta que se suelta sola al salir bien. Hay **una sola** herramienta: decide demoler o habilitar según el objeto tocado (removible o punto de extracción).
+- **Por qué:** en el catálogo había una opción por clase de objeto (hasta cuatro o cinco en un nivel), y al elegir una el catálogo se cerraba sin dejar a la vista cómo salir (H-09). Un botón propio sale en un toque, tiene estado visible y cruz, y reconocer el objeto evita elegir antes la clase.
+- **Alternativas descartadas:** mantener las tarjetas por clase (obliga a abrir el catálogo para cada demolición y hace falta elegir la clase); un botón por herramienta (dos botones más, y tapan más el mapa).
+- **Convivencia con los otros botones (RF-509):** las reglas de semitransparencia, corrimiento y apertura de la tilde y la cruz ahora cuentan tres botones; la separación entre botones se aplica solo entre los **del mismo lado** (antes se aplicaba también entre lados opuestos).
+- **Límite:** la posición por omisión (derecha, abajo) no se probó con un dedo; se puede mover y se guarda.
+
+## D-112 · El celular se pausa solo al pasar a segundo plano
+
+- **Fecha:** 2026-10-19. **Estado:** decidido por Lucas (respuesta D5 de T289, que era una sugerencia de Claude). **Refs:** RF-544, H-22 de T289, T303.
+- **Qué:** al recibir `NOTIFICATION_APPLICATION_PAUSED` (o `FOCUS_OUT` en un dispositivo móvil) la partida se pausa con la misma pausa de siempre (RF-104). En PC, perder el foco de la ventana no pausa.
+- **Por qué:** con una llamada o el botón de inicio, la oleada seguía corriendo sin que nadie mirara.
+- **Alternativas descartadas:** abrir el menú de pausa (más intrusivo y no pedido); pausar también en PC (Lucas pidió no cambiar la PC).
+- **Límite:** no se probó el aviso del sistema en un Android real, solo que la notificación, entregada al nodo, pausa.
+
+## D-113 · «Ver todo» aparece también con el encuadre corrido
+
+- **Fecha:** 2026-10-19. **Estado:** decidido por Lucas (respuesta D9 de T289). **Refs:** RF-545, H-12 de T289, T304.
+- **Qué:** se elige la opción «se permite correr y aparece “Ver todo”» (y no la de bloquear): el botón sale cuando el encuadre difiere del de RF-251, incluso con el zoom mínimo; en PC, con el botón central, aparece solo con el zoom mínimo y el mapa corrido.
+- **Por qué:** con el zoom mínimo el mapa se podía correr hacia un costado y no había cómo recentrarlo.
+- **Alternativas descartadas:** bloquear el desplazamiento con el zoom mínimo (se pierde la libertad que pidió Lucas); mostrar el botón en PC también con la rueda (cambia la PC más de lo pedido).
+- **Supuesto:** en PC el botón es el mismo del celular, en el mismo lugar; hasta ahora la PC no tenía ninguno (RF-506). Si Lucas lo prefiere sin botón, se cambia por un atajo del teclado o por el reencuadre al soltar el botón central.
+
+
+## D-115 · Los menús del celular tienen distribución propia (dos columnas) y un desplazamiento táctil propio
+
+- **Fecha:** 2026-10-19. **Estado:** pedido de Lucas; la distribución exacta queda **a validar** en un celular real. **Refs:** RF-550, RF-551, RF-555, T312 a T314.
+- **Qué:** en el modo celular, el menú principal y Opciones pasan a dos columnas, todo control de menú mide al menos 56 px de alto (el mínimo de M58) y las listas se desplazan con **un dedo, con inercia**, incluso si el dedo empieza sobre un botón. Un nodo `TouchScroller` colgado de cada `ScrollContainer` hace el arrastre; `MenuTouch` aplica el mínimo y los `TouchScroller` a una pantalla entera. En PC no cambia nada, salvo que Opciones se desplaza si no entra (RF-555).
+- **Por qué:** con 1280 × 720 virtuales (lo que ve un celular apaisado, 16:9 y 20:9) el menú principal ya no deja margen con botones de 56 px y Opciones no entra ni en PC. El `ScrollContainer` de Godot solo arrastra bien sobre fondos y etiquetas; sobre un botón no (el botón se queda con el toque).
+- **Alternativas descartadas:** (a) dejar el `ScrollContainer` de Godot y solo engrosar la barra: no resuelve arrastrar sobre tarjetas, que es casi toda la pantalla de niveles; (b) achicar los menús con un zoom: botones de menos de 56 px; (c) paginar la lista de niveles: cambia el flujo y no lo pidió nadie.
+- **Límite:** el tacto, la inercia y los 12 px de umbral están calibrados en escritorio con eventos sintéticos; hay que probarlos con un dedo.
+
+## D-116 · En el modo celular el mouse real hace de dedo y el emulado se descarta: manda el dispositivo, no la plataforma
+
+- **Fecha:** 2026-10-19. **Estado:** **propuesta mía, a validar por Lucas** (contesta D6 del informe T289: «¿aceptar la limitación o distinguir el mouse real del emulado?»; Lucas pidió hacerlo lo más multiplataforma posible). **Refs:** RF-552, H-10 y H-18 de T289, T311.
+- **Qué:** el modo celular deja de mirar `OS.has_feature("mobile")` para decidir si acepta un clic. Mira `event.device`: el clic con `DEVICE_ID_EMULATION` (lo fabrica Godot desde un toque) se descarta; cualquier otro clic es un mouse real y se trata como un dedo de índice −1. Un filtro `PointerFilter` (lógica pura) descarta además un clic no marcado que cae a 500 ms y 32 px de un toque. Esto vale igual en Android, Windows y Linux, con o sin pantalla táctil.
+- **Por qué:** en Android con mouse (DeX, Chromebook, teclado y mouse) no se podía tocar el mapa ni el carrito. En Windows y Linux con pantalla táctil el clic emulado se contaba como segundo dedo y rompía la pinza (H-10). Con una sola regla por dispositivo se arreglan los dos y no hace falta elegir «Interfaz: PC».
+- **Alternativas descartadas:** (a) aceptar la limitación (obliga a cambiar el ajuste a mano); (b) cambiar el modo solo al detectar un mouse (parpadeo y estados a medias, y un Chromebook usa los dos); (c) apagar la emulación de mouse desde un toque (`input_devices/pointing/emulate_mouse_from_touch`): rompe los botones y menús de Godot, que se manejan con ese mouse emulado.
+- **Límite:** que Android entregue `DEVICE_ID_EMULATION` en el clic emulado sale del código de `Input` de Godot (el mismo que usa la PC en las pruebas), no de un celular. **No se probó con DeX ni con un teléfono.** Si alguna combinación entrega los dos eventos sin marcar, la red de 500 ms y 32 px lo atrapa; si deja de funcionar, se ajustan esos dos números en `data/ui/mobile_ui.json`.
+
+## D-117 · La versión vive en `config/version` de `project.godot`; hoy es «Beta»
+
+- **Fecha:** 2026-10-19. **Estado:** pedido de Lucas. **Refs:** RF-553, RF-554, T315.
+- **Qué:** se agrega `config/version="beta"` a `project.godot`. Opciones muestra «Beta» (o «Beta X.Y.Z» con un número menor a 1, o «Versión X.Y.Z» desde la 1.0.0). El `version/name` de Android, que decía `1.0.0` a mano, se deja **vacío**: Godot usa entonces la versión del proyecto. Los de Windows (`file_version`, `product_version`) exigen un número y no pueden decir «beta»: pasan de `1.0.0` a `0.0.0.0` y se actualizan a mano cuando la versión del proyecto sea un número. `version/code` de Android (entero que sube con cada APK) no se toca.
+- **Por qué:** «1.0.0» en las exportaciones era mentira mientras el juego está en beta, y repetir la versión en tres archivos garantiza que se desfasen.
+- **Alternativas descartadas:** una constante en GDScript o un archivo `data/version.json` (otro lugar más para editar; `project.godot` ya viaja en las exportaciones).
+- **Límite:** que Godot tome la versión del proyecto cuando `version/name` queda vacío sale de su documentación; **no se exportó** (no se generan ejecutables en esta tarea). Hay que mirar la versión del primer APK o `.exe` que se exporte.
+## D-120 · Las láminas de la intro se importan sin pérdida y sin mipmaps; el WebP con pérdida queda como decisión de Lucas
+- **Fecha:** 2026-10-19 · **Estado:** la parte sin pérdida, aplicada (T320); la parte con pérdida, **pendiente de Lucas** · **Decidió:** Claude (lo que no cambia ningún píxel) / Lucas (cualquier pérdida de imagen)
+- **Qué:** `mipmaps/generate=false` en los siete `assets/intro/*.png.import` (sigue `compress/mode=0`, sin pérdida). Medido en `.ctex` reales: **24,46 MiB → 17,88 MiB (−27 %)**; píxeles idénticos al PNG. La medición completa y los recortes lado a lado están en `art/intro-v1/peso/comparison.html` (los reproduce `art/intro-v1/peso.py`).
+- **Por qué:** el hallazgo de T289 (H-22) fue que las imágenes de 1920 × 1080 pesan ~28 MB en la APK, con mipmaps (+33 %) y sin pérdida. **Recodificar los PNG no baja nada** (Godot guarda el recurso en WebP sin pérdida a partir de los píxeles, no del PNG) y `etc2_astc=true` no interviene porque el modo 0 no usa compresión de VRAM, así que tampoco infla. Quitar los mipmaps es lo único que reduce el peso sin cambiar un píxel.
+- **Con pérdida (no aplicado, mediciones de las 7 láminas):**
+
+| Variante | Recurso importado | % del actual | PSNR medio |
+|---|---:|---:|---:|
+| actual (sin pérdida, con mipmaps) | 24,46 MiB | 100 % | idéntico |
+| **sin pérdida, sin mipmaps (aplicada)** | **17,88 MiB** | **73 %** | **idéntico** |
+| WebP calidad 0,95 | 5,56 MiB | 23 % | 40,2 dB |
+| WebP calidad 0,90 | 4,00 MiB | 16 % | 38,5 dB |
+| WebP calidad 0,85 | 3,04 MiB | 12 % | 36,9 dB |
+
+  La calidad 0,95 ahorra otros ~12 MiB y a ojo es casi imposible de distinguir, pero **sí cambia píxeles** (suaviza algo el trazo fino y la trama; diferencia máxima por canal de 32 a 49 sobre 255 en los peores puntos). Por la instrucción de Lucas («si el arte cambia visualmente algo, frená») **no se aplica**: se deja la muestra.
+- **Alternativas descartadas:**
+  - **Recodificar o cuantizar los PNG de origen:** no cambia el peso en la APK (arriba) y la cuantización sí cambia colores.
+  - **Compresión de VRAM (ASTC/ETC2):** una ilustración con degradés mostraría bloques; cambia más que WebP. No se midió.
+  - **Bajar la resolución de las láminas:** contradice RF-497 (1920 × 1080).
+- **Para decidir:** Lucas mira `art/intro-v1/peso/comparison.html`; si elige WebP, se cambia `compress/mode=1` y `compress/lossy_quality=0.95` (o 0,9) en los siete `.import` y se mide la APK (decisión nueva, D-124 reservada).
+- **Qué cambia:** `assets/intro/*.png.import`, `art/intro-v1/peso.py` y `peso/`, `01-spec.md` (RF-560), `03-tareas.md` (T320).
+
+## D-121 · El documento editable de la intro es una vista del JSON, no una fuente nueva
+- **Fecha:** 2026-10-19 · **Estado:** aprobada para implementar (pedido de Lucas, M62) · **Decidió:** Claude (el formato) / Lucas (que exista)
+- **Qué:** `specs/intro/intro-editable.md` se genera desde `data/intro/intro.json` y se vuelve a cargar con `tools/intro_doc.gd`. **El juego sigue leyendo solo el JSON.** Las notas del documento no van al juego.
+- **Por qué:** Lucas pidió editar a mano sin tocar JSON ni comillas escapadas. Mantener el JSON como fuente evita que el juego dependa de un parser de Markdown y conserva `IntroData` (RF-497) como única validación del juego. El parser vive en `scripts/logic/intro_doc.gd` y **reusa `IntroData.parse`**, así que el documento no puede aceptar lo que el juego rechazaría.
+- **Alternativas descartadas:**
+  - **Que el juego lea el Markdown:** más superficie de error en tiempo de ejecución y dos validadores.
+  - **Un CSV o un JSON con otra forma:** más incómodos para textos de dos líneas.
+  - **Reemplazar `guion.md` por el nuevo documento:** `guion.md` es el guion aprobado (G6) y un test lo compara con los datos; fusionarlos es una decisión de Lucas. Hoy: si cambia un texto, el test avisa y se actualiza el guion.
+- **Qué cambia:** `01-spec.md` (RF-561 a RF-563), `scripts/logic/intro_doc.gd`, `tools/intro_doc.gd`, `tests/test_intro_doc.gd`, `specs/intro/intro-editable.md`, `CONTENIDO.md`, `03-tareas.md` (T321).
+
+## D-125 · El tutorial del nivel 1 es una tarjeta con un resaltado que espera la acción del jugador, y nunca bloquea el juego
+- **Fecha:** 2026-10-19 · **Estado:** implementada en T331; los textos son borrador a la espera del OK de Lucas · **Decidió:** Lucas (que haya un tutorial en el nivel 1, paso a paso, con resaltado, esperando la acción, salteable y sin bloquear de más) / Claude (cómo se ve y cómo se comporta)
+- **Qué:** al entrar al nivel 1 desde el menú aparece una **tarjeta** de hierro y bronce con un texto corto y, sobre el control o la casilla que hay que usar, un **recuadro amarillo que parpadea con una flecha**. Los pasos son de **lectura** (se pasan con «Siguiente») o de **acción** (esperan que el jugador la haga de verdad: elegir una torre, construirla, empezar la oleada, cambiar la velocidad…). La partida **no se pausa**; «Saltar tutorial» está siempre a la vista (RF-570 a RF-574).
+- **Por qué:**
+  - **Aprender haciendo.** Un texto que se lee y se olvida enseña menos que tocar el botón señalado; por eso los pasos de acción **esperan el evento real** (la señal que ya emite el juego: torre elegida, torre construida, oleada empezada…), no un «Siguiente».
+  - **Sin bloquear.** El nivel 1 es tranquilo: la primera oleada no sale sola (el nivel arranca en preparación) y esa oleada son 8 criaturas básicas. Pausar para leer no hace falta, y una pausa agregaría un estado más para romper (el menú de pausa, el cartel de entrada y el diálogo de salida ya la usan). La tarjeta es una capa por encima del HUD (12) y por debajo de esos tres (20 y 21), y deja pasar el mouse y los toques en todo menos en sí misma.
+  - **El jugador manda.** Se puede adelantar (lo que ya hizo se da por hecho), arrepentirse (si suelta la torre o cierra el catálogo vuelve a un paso anterior) y saltar en cualquier momento. Lo único que el tutorial hace por su cuenta es **volver a elegir la torre construida** para que «Mejorar» y «Vender» se vean (no cobra ni cambia nada).
+  - **Una sola pieza, dos modos.** Lo que cambia entre PC y celular (carrito, catálogo, fantasma, tilde y doble toque) son **pasos distintos** con textos distintos; lo demás se comparte. Los controles se señalan con **el control real** (se le pregunta su rectángulo en cada cuadro), así que sigue a lo que se mueva y no hay coordenadas escritas a mano.
+- **Alternativas descartadas:**
+  - **Pantallas explicativas a pantalla completa o un video:** se leen una vez y no se hacen; en el celular tapan el mapa. Ya existe la intro para contar la historia (M57) y no explica cómo se juega a propósito.
+  - **Pausar el juego en cada paso:** más simple de programar pero más intrusivo, y el paso «pausa» no tendría sentido.
+  - **Obligar a seguir el orden** (bloquear todo lo que no sea el control señalado): frustra a quien ya sabe y puede dejar el juego trabado si algo cambia (una torre que no alcanza de oro, un fantasma cancelado).
+  - **Dejar solo las ayudas de la Wiki:** nadie la abre antes de jugar el primer nivel.
+  - **Que el tutorial construya o empiece la oleada solo, «para mostrar»:** rompe «esperando que el jugador haga la acción» y toca el balance del nivel 1 (que no se debe tocar).
+- **Qué cambia:** `01-spec.md` (M63, RF-570 a RF-578), `02-plan-tecnico.md` (M63), `03-tareas.md` (T330 y T331). **No cambia ningún dato de nivel ni de balance.**
+
+## D-126 · El tutorial se activa, se apaga y se vuelve a ver en Opciones («Tutorial del nivel 1» y «Volver a verlo»), no en la Wiki ni en el menú principal
+- **Fecha:** 2026-10-19 · **Estado:** decidida por Claude (Lucas dijo «decidí con criterio y justificalo»); **a la espera del OK de Lucas** · **Decidió:** Claude
+- **Qué:** una fila en Opciones, debajo de «Mostrar números de daño»: una **casilla «Tutorial del nivel 1»** (apagada = no sale; volver a prenderla = sale de nuevo) y un botón **«Volver a verlo»** que borra la marca de «hecho» y dice «Se verá en el nivel 1». Funciona desde el menú principal y desde la pausa (RF-576).
+- **Por qué:**
+  - **Lucas pidió una opción en Opciones** «como la intro». La intro se apaga sola al verse una vez (`intro_seen`) y se vuelve a ver desde la Wiki porque es **una pantalla aparte** que se puede abrir en cualquier momento. **El tutorial no:** vive **dentro del nivel 1** y necesita la partida para tener algo que señalar; desde la Wiki habría que arrancar el nivel, y la Wiki vuelve a la Wiki (RF-500). Por eso el «volver a verlo» **no abre nada**: deja armado el tutorial para la próxima vez que se entre al nivel 1.
+  - **Opciones es donde se busca «apagar algo».** Es el lugar de las demás preferencias (volumen, pantalla completa, números de daño, interfaz) y ya existe en el menú principal y en la pausa. Quien lo ve de más lo apaga ahí; quien lo salteó sin querer, lo prende ahí.
+  - **Dos controles porque son dos pedidos distintos:** «no quiero verlo» (la casilla; no borra lo que ya hizo) y «quiero verlo otra vez» (el botón; borra la marca). Una sola casilla no los distingue: está prendida **incluso después de completarlo**, así que apagarla y prenderla para repetirlo no se descubre.
+  - **Una sola fila:** el panel de Opciones ya no entraba en 720 de alto desde que se sumó «Interfaz» (M58): el panel medía 691 px sin la sección de pruebas y unos 780 con ella (cuenta mía: 691 medidos + 22 + 44 + 2 separaciones). Se agregó una fila compacta y se envolvieron las filas en un contenedor que se **desplaza** si no entran (RF-576); si entran, se ve igual que antes.
+- **Alternativas descartadas:**
+  - **Botón «Ver el tutorial» en la Wiki, como la intro:** ver arriba; obligaría a un nivel «de práctica» que nadie pidió.
+  - **Botón en la tarjeta del nivel 1 de la selección:** es lo más cercano a donde se usa, pero toca las tarjetas de M58 (Insignias) y agrega un control a una sola de las quince. Queda anotado como posible mejora si Lucas lo prefiere.
+  - **Botón en el menú principal:** cada botón le saca alto al logo (RF-331).
+  - **Mostrarlo siempre que se entra al nivel 1:** cansa a quien rejuega la campaña (como el cartel de entrada, §13).
+  - **Un botón «Tutorial» en el menú de pausa:** se puede entrar a Opciones desde la pausa; un botón más no aporta.
+- **Qué cambia:** `01-spec.md` (RF-576), `scenes/ui/options_menu.gd`, `04-decisiones.md`. **Pregunta para Lucas:** ¿Opciones está bien, o prefiere el botón en la tarjeta del nivel 1?
+
+## D-127 · El guardado suma `"tutorial_done"` y la opción `"tutorial_enabled"`; un guardado viejo con el nivel 1 ganado no lo ve; no se guarda el paso
+- **Fecha:** 2026-10-19 · **Estado:** implementada en T330 · **Decidió:** Claude
+- **Qué:** clave nueva y aditiva `"tutorial_done"` en la raíz del guardado (como `intro_seen`) y `"tutorial_enabled"` (por omisión `true`) en `settings`. Sin la clave, vale «hecho» si el guardado ya ganó el nivel 1 y «no hecho» si no; una clave booleana explícita manda. `SAVE_VERSION` sigue en 1 (RF-575).
+- **Por qué:**
+  - **Compatibilidad:** como con `collections`, `hall_total`, `intro_seen` y `ui_prefs`, una clave aditiva **no rompe** ni los guardados viejos ni una versión anterior del juego (la ignora). `tests/test_old_saves.gd` lo comprueba con los guardados de cada época.
+  - **Quien ya ganó el nivel 1 no necesita aprender a jugar.** Sin la migración, todo jugador con progreso vería el tutorial la próxima vez que rejuegue el nivel 1: justo lo que Lucas no quiere («que no se repita si ya lo completó»). El nivel 1 ganado es la señal más fiable que ya tenemos (no se puede ganar sin construir). Una clave explícita `false` sí se respeta: es lo que escribe «Volver a verlo».
+  - **Preferencia y progreso separados:** la opción (`settings`) es una preferencia como las demás; la marca (raíz) es progreso. Así «Volver a verlo» y la casilla no se pisan.
+  - **Completar y saltar cuentan igual:** si lo salta es porque no lo quiere ver otra vez; si quiere, lo pide en Opciones.
+  - **No se guarda el paso:** un tutorial de un minuto no justifica un estado más; si el jugador cierra el juego o reintenta a la mitad, empieza de nuevo (y puede saltarlo).
+- **Alternativas descartadas:**
+  - **`SAVE_VERSION` 2:** el cargador descarta los guardados de otra versión («se empieza de cero»): perdería todo el progreso de quien vuelva a una versión anterior.
+  - **Sin migración (todos lo ven una vez):** molesta a todos los veteranos.
+  - **Una sola clave en `settings`:** mezcla preferencia con progreso y no deja distinguir «lo apagué» de «lo completé».
+  - **Guardar el paso actual:** estado de más para casi ningún beneficio.
+- **Qué cambia:** `01-spec.md` (RF-575), `scripts/autoload/save_manager.gd`, `tests/test_old_saves.gd`.
+
+## D-128 · Los pasos y los textos del tutorial viven en `data/tutorial/tutorial.json`; qué espera cada paso es del código; los textos son borrador hasta el OK de Lucas
+- **Fecha:** 2026-10-19 · **Estado:** implementada en T330; los textos esperan el OK de Lucas · **Decidió:** Lucas (textos en un archivo de datos, fácil de retocar, con borrador y validador) / Claude (el formato)
+- **Qué:** un JSON con `version`, `borrador`, `nivel`, los rótulos de la tarjeta (`interfaz`) y **dos listas de pasos**, `pc` y `celular`. Cada paso es `{"paso": <uno de los que conoce el juego>, "texto": …}`. El texto, el orden y cuáles se usan los cambia Lucas; **qué evento hace avanzar a cada paso** y qué control señala es del código (RF-571 a RF-574). Un validador en castellano (`TutorialData`, `tools/check_tutorial.gd`) revisa el archivo; un test revisa el oficial.
+- **Por qué:**
+  - **Textos fáciles de retocar sin tocar código** (P2 y el pedido). Los textos cortos también son un dato de interfaz con límites (2 líneas, 80 por línea, 160 en total) que se validan, como los de los niveles y los de la intro.
+  - **Dos listas y no una con textos por modo:** los pasos **no son los mismos** (carrito, catálogo y tilde no existen en PC; elegir y colocar en un clic no existe en el celular), y un orden por modo es más claro de leer y de reordenar.
+  - **Los pasos que existen son del código y los textos son del archivo:** poner las condiciones («cuando se construya una torre») en un JSON sería armar un lenguaje de scripts que nadie pidió (P4). El archivo elige entre pasos que ya funcionan.
+  - **Obligatorios y orden:** sin `pause` + `resume` la partida quedaría en pausa; sin `place_tower` el tutorial dejaría de enseñar lo que Lucas pidió. El validador lo dice en castellano en lugar de dejar un tutorial roto.
+  - **`"borrador": true` solo informa:** Lucas quiere los textos marcados hasta su OK, pero un tutorial que no se ve no se puede probar. Se ven en el juego, el archivo y el validador dicen «BORRADOR», y al aprobarlos se pasa a `false`.
+  - **No repiten números** de otros datos (costos, tiempos): si cambia el precio de una torre, el tutorial no miente.
+- **Alternativas descartadas:**
+  - **Los textos en el código o en un `.tres`:** más difícil de retocar y de revisar; los demás textos del juego van en JSON.
+  - **No cargar los textos hasta el OK** (como el lore, M52): Lucas pidió el tutorial funcionando; el borrador solo avisa.
+  - **Un archivo por modo:** dos archivos para mantener sincronizados.
+  - **Que el JSON defina el evento de cada paso:** ver arriba.
+- **Qué cambia:** `01-spec.md` (RF-571 y RF-578), `CONTENIDO.md` (cómo retocar el tutorial), `data/tutorial/tutorial.json`, `scripts/logic/tutorial_data.gd`, `tools/check_tutorial.gd`.

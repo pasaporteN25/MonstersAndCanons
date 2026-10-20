@@ -35,6 +35,8 @@ const DEFAULTS: Dictionary = {
 	"carrito_y_default": 0.45,
 	"salida_lado_default": "left",
 	"salida_y_default": 0.1,
+	"demoler_lado_default": "right",
+	"demoler_y_default": 0.8,
 	"catalogo_ancho_px": 800,
 	"catalogo_alto_px": 480,
 	"catalogo_tarjeta_ancho_mm": 18.0,
@@ -60,6 +62,13 @@ const DEFAULTS: Dictionary = {
 	"vender_padding_y_px": 4,
 	"vender_separacion_mm": 35.0,
 	"barra_texto_min_ancho_px": 200,
+	"puntero_duplicado_ms": 500,
+	"puntero_duplicado_px": 32,
+	"scroll_umbral_px": 12,
+	"scroll_friccion": 4.0,
+	"scroll_velocidad_min_px": 30,
+	"scroll_barra_px": 22,
+	"menu_deslizador_alto_px": 44,
 }
 
 var values: Dictionary = DEFAULTS.duplicate(true)

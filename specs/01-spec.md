@@ -3256,3 +3256,237 @@ Cortas y con mi recomendación; «✔ todas» alcanza.
 Pedido de Lucas: el carrito debe abrir al tocarlo incluso pegado a los costados; arrastrarlo solo cambia su posición. Un toque produce una sola acción, aunque Android emule eventos de mouse. Carrito, X, tilde y cruz son compactos y redondeados; no repiten el precio dentro de la tilde. La barra inferior usa el tema oscuro y bronce del juego. El fondo del tema continúa fuera del mapa para eliminar las franjas grises, sin agregar casillas construibles. La barra superior no tiene una línea que la atraviese.
 
 **Dado** el carrito pegado a cualquiera de los bordes → **Cuando** se toca sin arrastrar → **Entonces** abre una sola vez el catálogo. **Cuando** se arrastra y se suelta → **Entonces** guarda la posición y no abre el catálogo. **Dado** un fantasma inválido → **Entonces** la tilde se deshabilita y la barra informa el motivo, sin cobrar. **Dado** un mapa encuadrado → **Entonces** no quedan franjas grises y el borde superior se dibuja solo al pie de la barra.
+### M60 · HUD celular: un solo catálogo de torres, botón de demolición, pausa en segundo plano y «Ver todo» con el encuadre corrido (Lucas, 2026-10-19; T300)
+
+**Estado: especificada en T300; el código lo hacen T301 a T304.** Sale de la auditoría `specs/tareas/informes/T289-auditoria-mobile-implementado.md` (hallazgos H-02, H-09, H-12, H-20 y H-22; decisiones D1, D2, D3, D5 y D9 de su §7) y de lo que Lucas decidió el 2026-10-19. Las razones y las alternativas descartadas están en D-110 a D-113, y el cómo técnico, en la sección M60 del plan técnico. Todo es **solo del modo celular**, salvo la pausa en segundo plano (que también cuenta en un celular con la interfaz de PC) y el «Ver todo» en PC (RF-545). **Cambia o completa** a RF-506, RF-508, RF-509, RF-510 y RF-512 de M58, que valen en todo lo demás.
+
+- **RF-540** **Un solo catálogo de torres** *(solo celular; completa a RF-510)*. El catálogo **no se divide en pestañas**: ya no hay «Torres» e «Infraestructura». Siempre es una única grilla de tarjetas de torres, y **abre en ella** (el primer renglón a la vista) sin importar el nivel ni cuántas veces cambie el oro o los recursos con el catálogo abierto (H-02 de T289: antes, en los niveles 6 a 15, abría en «Infraestructura» y volvía ahí con cada cambio de oro).
+  - En los niveles que tienen la **Demoledora** (RF-455), su compra es **la última tarjeta** de la misma grilla («Demoledora · N de oro», con el motivo si falta oro). No es una torre, pero sí una compra de una sola vez, y así sigue a dos toques (carrito y tarjeta).
+  - Elegir una tarjeta de torre se comporta como siempre (RF-510): se cierra el catálogo y aparece el fantasma.
+- **RF-541** **El catálogo muestra solo las torres del nivel** *(solo celular; completa a RF-510)*. Las tarjetas son **las torres que ese nivel ofrece** (las mismas que mostraría la barra de torres de la PC: RF-448, RF-455 y la rotación de M52); las demás torres del juego **no aparecen**, ni apagadas. Una torre del nivel que hoy no se puede elegir (por oro o por recursos) sigue apareciendo **apagada con el motivo** («Faltan N»), como en RF-510, y vuelve a habilitarse sola. El orden es el de la barra de torres de PC. Si no entran sin desplazar, el catálogo se desplaza hacia abajo como hoy.
+  - *Criterio:* nivel 1: 8 tarjetas; nivel 12: 10 (más la Demoledora si el nivel la tiene); ningún nombre de una torre que el nivel no ofrece.
+- **RF-542** **Botón flotante «Demoler / Habilitar»** *(solo celular, y solo en los niveles con infraestructura: RF-454)*. Es un **tercer botón flotante**, junto al carrito y a la X, con el mismo tamaño mínimo (RF-507), la misma regla de arrastre y de guardado (RF-508: `demolish_side`, `demolish_y`, con los mismos controles de campo roto) y las mismas reglas para no tapar la jugada (RF-509: semitransparente con un fantasma, se corre solo, y no se superpone con los otros dos botones **del mismo lado**). No se ve con la partida terminada ni con un diálogo abierto, y **no existe** en los niveles sin removibles ni puntos de extracción.
+  - **Qué hace:** tocarlo **elige la herramienta** (cualquier toque posterior en el mapa sobre un objeto la usa): un **removible** (árbol, escombro, roca…) se manda demoler, y un **punto de extracción** (mina, bosque explotable) se habilita, con el costo y las condiciones de siempre (RF-421, RF-422). Si la acción sale bien, la herramienta **se suelta sola**. Si el toque no sirve (no hay nada ahí, falta oro, ya hay una demolición en curso, etc.), **no cambia nada, la herramienta queda elegida y la barra dice el motivo**.
+  - **El botón queda marcado** (tinte, como el carrito con una torre elegida) mientras la herramienta está elegida; **volver a tocarlo la suelta**. Elegir una torre en el catálogo o abrir el menú de pausa también la sueltan (RF-73: nunca dos cosas elegidas a la vez). Con la herramienta elegida, un toque sobre una torre ya construida **no la selecciona**: cuenta como un toque inútil («Ahí no hay nada para demoler ni habilitar»).
+  - **Dibujo propio:** un martillo/pico (`assets/ui/mobile_demolish.svg`); no depende solo del color.
+- **RF-543** **Cuarto estado de la barra de abajo: «Herramienta»** *(solo celular; completa a RF-512)*. Mientras la herramienta de RF-542 está elegida, la barra muestra una línea («Demoler o habilitar: tocá un objeto del mapa»; el último motivo de error, si lo hubo) y la **cruz** (la misma de RF-512, a la derecha), que **suelta la herramienta** y vuelve a «Vacía». Mientras está así, «Empezar oleada» y «Próxima oleada» **no se ven** (como con un fantasma: nunca dos estados a la vez, RF-73). `Esc` y el «atrás» de Android también la sueltan (RF-142: lo primero que se cancela es lo último que se eligió).
+  - *Criterio:* en el nivel 7: tocar el botón → el botón se tiñe, la barra dice «Demoler o habilitar…» y tiene cruz, y no están «Empezar oleada» ni «Próxima oleada»; tocar un árbol removible con oro → se manda a demoler y la herramienta se suelta; tocar una casilla vacía → el motivo en la barra y la herramienta sigue elegida; la cruz → vuelve a «Vacía».
+- **RF-544** **Pausa al pasar la app a segundo plano.** Si la app pasa a segundo plano (una llamada, el botón de inicio, otra app), la partida se **pausa sola** (RF-104) y queda en pausa al volver: se sigue con el botón Pausa de siempre. Si ya estaba en pausa o la partida terminó, no hace nada. **En una PC no cambia**: perder el foco de la ventana **no** pausa (solo lo hace en un dispositivo móvil, que es donde el aviso «foco perdido» equivale a «segundo plano»).
+- **RF-545** **«Ver todo» cuando el encuadre se corrió** *(celular; en PC, con el botón central)*. «Ver todo» (RF-506) aparece **también** cuando el mapa se corrió con dos dedos (o con el botón central) **aunque el zoom sea el mínimo**, es decir, siempre que el encuadre no sea el de RF-251; tocarlo lo devuelve y el botón desaparece. Antes, con el zoom mínimo el mapa se podía correr y no había cómo volver (H-12 de T289).
+  - **En PC** no hay botón de «Ver todo» en ningún otro caso (RF-506): se agrega **uno solo, en el mismo lugar que en el celular, y solo cuando el zoom es el mínimo y el encuadre está corrido** (con la rueda y el zoom en otro valor no aparece, como hoy). No se agrega ningún otro control a la PC.
+- **No incluye (pendientes de Lucas, no se programan):** D4 (reservar la franja de 56 px a los costados, RF-507), D10 (construir con la partida en pausa) y D12 (si los 3 s, 0,35 s y 0,4 s de Vender y Mejorar son tiempo real o de juego, RF-512 y RF-513).
+
+> **Criterio de aceptación RF-540 a RF-545**
+> **Dado** el modo celular en cualquier nivel → **Cuando** se abre el catálogo → **Entonces** no hay pestañas y se ve la primera fila de tarjetas de torres; **Cuando** cambia el oro o los recursos con el catálogo abierto → **Entonces** se queda en el mismo lugar y las tarjetas se actualizan sin recrearse.
+> **Dado** el nivel 1 → **Entonces** el catálogo tiene 8 tarjetas, todas del nivel; **Dado** el nivel 12 → **Entonces** 10 tarjetas de torre (y la Demoledora, si el nivel la tiene); **Dado** cualquier nivel → **Entonces** no aparece ninguna torre que el nivel no ofrece.
+> **Dado** un nivel con removibles → **Entonces** hay tres botones flotantes; **Dado** un nivel sin removibles ni extracción → **Entonces** solo hay dos. **Cuando** se arrastra el botón de demolición hasta el costado izquierdo a mitad de altura → **Entonces** queda ahí y el guardado dice `demolish_side: "left"`, `demolish_y` cerca de 0,5; **Dado** un `demolish_side` inválido → **Entonces** vale su valor por omisión y los demás campos sanos se conservan.
+> **Dado** el botón de demolición tocado → **Cuando** se toca un removible con oro suficiente → **Entonces** empieza la demolición, se cobra el costo y la herramienta se suelta; **Cuando** se toca una casilla vacía o sin oro → **Entonces** no se cobra nada y la barra dice el motivo; **Cuando** se toca la cruz → **Entonces** vuelve «Vacía».
+> **Dado** el modo celular con una partida en marcha → **Cuando** la app pasa a segundo plano → **Entonces** la partida queda en pausa. **Dado** una PC → **Cuando** la ventana pierde el foco → **Entonces** la partida no se pausa.
+> **Dado** el zoom mínimo y el mapa corrido con dos dedos → **Entonces** «Ver todo» está a la vista; **Cuando** se lo toca → **Entonces** el encuadre vuelve y el botón desaparece.
+
+
+### M61 · Menús del celular, entrada por dispositivo y «Créditos y versión» (Lucas, 2026-10-19; T310)
+
+**Estado: especificada y programada en T310 a T315. Falta que Lucas la pruebe en un celular real.** Decisiones: **D-115**, **D-116**, **D-117** (las dos primeras quedan **a validar** por Lucas, porque contestan la pregunta D6 del informe `specs/tareas/informes/T289-auditoria-mobile-implementado.md`). Las medidas de «antes» salen de capturas reales con ventana (`tools/capture_menus.gd`) en 1280 × 720 virtuales, que es lo que el juego dibuja en un celular apaisado 16:9 **y** 20:9 (la relación de aspecto es «keep»: el 20:9 solo agrega franjas a los costados, no más alto útil).
+
+**Qué pidió Lucas (2026-10-19).**
+
+1. **Menús del celular:** el menú no se puede desplazar y no entra todo. Distribución propia del celular donde haga falta, scroll táctil, botones de al menos el mínimo táctil de M58, sin recortes. **La PC no cambia.**
+2. **Entrada multiplataforma:** hoy en Android con mouse (DeX, Chromebook, teclado y mouse) no se puede tocar el mapa ni el carrito, y la única salida es «Interfaz: PC». Que los dos modos convivan: aceptar toque **y** mouse según **qué dispositivo generó el evento**, no según la plataforma, sin el clic duplicado del mouse emulado.
+3. **Opciones → «Créditos y versión»:** «Beta» + la versión del proyecto, con el acceso a los créditos; la versión se cambia en un solo lugar.
+
+**Lo que encontró la auditoría de menús (antes de tocar nada, modo celular, 1280 × 720).**
+
+| Pantalla | Qué pasa hoy |
+|---|---|
+| Menú principal | Entra, pero «Salir» termina en y = 682 de 720: cero margen. Con botones de 56 px ya no entra. |
+| Opciones | **No entra, tampoco en PC:** el título queda cortado arriba y «Interfaz» abajo (el panel mide más de 720). Además «Interfaz» quedó **después** de «Volver». |
+| Selección de niveles | Entra, pero la grilla se desplaza solo con la barra (de unos 6 px de ancho) y con la rueda: un dedo sobre una tarjeta no la mueve. |
+| Wiki | Igual: lista con barra finita y filas de 52 px. |
+| Récords, Pausa, Créditos | Entran; los botones de ◄ ► y «Salón de la fama» miden menos de 56 px de alto. |
+
+- **RF-550** **Distribución propia del celular para los menús** *(solo en el modo celular, RF-502; la PC queda exactamente igual salvo lo de RF-555)*.
+  - **Mínimo táctil:** en el modo celular, todo botón, casilla, selector y fila de lista de un menú mide **al menos 56 px virtuales de alto** (`boton_alto_px` de `data/ui/mobile_ui.json`, el mismo de RF-503). Los que ya miden más no cambian.
+  - **Menú principal:** el logo a la izquierda y la columna de botones a la derecha (dos columnas), así los seis botones de 56 px entran con margen en 720 de alto. En PC sigue la columna única de hoy.
+  - **Opciones:** panel ancho de **dos columnas** (Sonido y Visualización a la izquierda; Interfaz, Créditos y versión y Administración a la derecha), con el título y «Volver» **fijos** (arriba y abajo) y el centro con desplazamiento si no entra (RF-551).
+  - **Sin recortes:** ningún botón queda fuera de la ventana virtual de 1280 × 720 ni tapado por otro, en las pantallas del cuadro de arriba. Lo que no entra **se desplaza**, no se corta.
+- **RF-551** **Desplazamiento táctil de un dedo, con inercia** *(modo celular)*.
+  - **Qué hace:** en toda lista o panel con desplazamiento de un menú (niveles, Wiki, Opciones, Créditos, Récords), **arrastrar un dedo** lo mueve, **aunque el dedo empiece sobre un botón o una tarjeta**. Al soltar sigue un poco por inercia y se frena solo.
+  - **Toque o arrastre:** un movimiento de **12 px virtuales o menos** sigue siendo un toque (pulsa el botón). Pasados los 12 px es un arrastre: **ningún botón del recorrido se pulsa** al soltar.
+  - **Controles que no se arrastran:** si el dedo apoya sobre un **deslizador** (volumen) o sobre la **barra de desplazamiento**, el dedo maneja ese control y no desplaza.
+  - **Barra de desplazamiento:** más ancha en el modo celular (22 px) para poder agarrarla.
+  - **Mouse y rueda:** siguen funcionando como hoy (rueda y barra). El arrastre con el dedo es **solo de toques** (RF-552).
+  - **Los números** (12 px, fricción, velocidad mínima, ancho de barra) están en `data/ui/mobile_ui.json` (P2).
+- **RF-552** **La entrada se decide por el dispositivo que genera el evento, no por la plataforma** *(modo celular; resuelve D6 de T289, decisión D-116)*.
+  - **Toque** (`InputEventScreenTouch/Drag`): siempre es un dedo, en cualquier plataforma.
+  - **Mouse real** (clic o movimiento que **no** es la emulación de un toque): en el modo celular **actúa como un dedo** (índice −1) en el mapa, el carrito, la X, la tilde, la cruz y la barra de abajo, **también en Android**. Arrastrar con el botón izquierdo equivale a un arrastre de un dedo.
+  - **Mouse emulado** (el clic que Godot fabrica a partir de un toque, `device = DEVICE_ID_EMULATION`): se **descarta** en el mapa y en los botones flotantes; el toque que lo acompaña ya hizo la acción. Así no hay acción doble en ninguna plataforma.
+  - **Red de seguridad para otras plataformas:** un clic **no marcado como emulado** que cae a **500 ms o menos y 32 px o menos** de un toque se trata como duplicado y se descarta (por si un sistema, por ejemplo Linux con pantalla táctil, entrega los dos).
+  - **Rueda y botón central del mouse** (zoom, RF-506): siguen en todas las plataformas y modos.
+  - **Qué no cambia:** el modo PC (RF-143 de escritorio) no cambia. «Interfaz» sigue pudiendo forzarse en Opciones; con «Automática» un Android sigue siendo «celular» y ahora también se maneja con mouse.
+  - **Los números** (500 ms y 32 px) están en `data/ui/mobile_ui.json`.
+- **RF-553** **Opciones: sección «Créditos y versión».**
+  - **Qué muestra:** un encabezado **«Créditos y versión»**, una línea con la versión (RF-554) y un botón **«Ver créditos»** que abre los créditos de siempre (RF-472). Al cerrarlos se vuelve a Opciones. Está en el menú principal y en la pausa, en PC y en celular.
+  - **Dónde va:** en Opciones, **después de «Visualización» y antes de «Administración»**.
+- **RF-554** **La versión vive en un solo lugar.**
+  - **Dónde:** `config/version` de `project.godot` (sección `[application]`). Hoy vale `"beta"`. Es el **único** lugar que se edita al cambiar de versión: la exportación de **Android** no repite la versión (`version/name` queda vacío y toma la del proyecto). La de **Windows** exige una versión numérica (`file_version` y `product_version`, hoy `0.0.0.0`) y no puede decir «beta»: se actualiza a mano cuando la versión del proyecto pase a ser un número (por ejemplo, al llegar a la 1.0.0).
+  - **Cómo se muestra:** si falta o vale `beta` → **«Beta»**. Si es un número `X.Y.Z` con X = 0 (o lleva sufijo, como `0.3.0-rc1`) → **«Beta X.Y.Z»**. Cuando llegue la **1.0.0** (X ≥ 1 y sin sufijo) → **«Versión 1.0.0»**, sin la palabra Beta. Un valor que no se entienda se muestra tal cual, precedido de «Beta ».
+- **RF-555** **Opciones siempre entra en la ventana, también en PC.** El centro de Opciones se desplaza cuando el panel no entra en 720 de alto (hoy no entra), con el título y «Volver» a la vista, y **«Interfaz» va dentro de «Visualización»** (hoy quedó después de «Volver»). En PC no cambia nada más: misma columna, mismos botones, mismos tamaños.
+
+**Criterio de aceptación.** **Dado** el modo celular en 1280 × 720 → **Cuando** se abre cada pantalla del cuadro → **Entonces** ningún botón queda fuera de la ventana y todos miden 56 px o más. **Dado** un dedo que arrastra más de 12 px sobre una tarjeta de nivel → **Entonces** la grilla se desplaza, sigue un poco al soltar y **no** se abre el nivel. **Dado** un toque corto sobre la tarjeta → **Entonces** se abre. **Dado** Android (o cualquier plataforma) en modo celular → **Cuando** llega un clic de mouse real sobre el mapa → **Entonces** mueve el fantasma como un toque; **Cuando** llega un toque con su clic emulado → **Entonces** la acción ocurre **una sola vez**. **Dado** Opciones → **Entonces** se ve «Beta» (con la versión actual) y «Ver créditos» abre los créditos.
+
+**Fuera de M61 (no se hizo).** Prueba en un celular real, en DeX o en una Chromebook; arrastrar con el mouse para desplazar listas (se usa la rueda o la barra); reacomodar el editor de mapas (no existe en el celular, RF-210) y las pantallas de fin de partida, intro y epílogo (no se auditaron: no estaban en el pedido).
+### M62 · La intro pesa menos y sus textos se editan en un documento (Lucas, 2026-10-19; T320 y T321)
+
+Pedido de Lucas: (A) bajar el peso de las imágenes de la intro para que la APK pese menos, **sin pérdida visible a 1920 × 1080**, y (B) tener **un archivo fácil de editar a mano** para revisar y retocar los textos y los tiempos de la intro. **No cambia ningún texto, ninguna imagen ni ninguna regla de M57**: solo cómo se importan las láminas y una herramienta de edición.
+
+- **RF-560** **Importación liviana de las láminas de la intro** `[mobile]`: los siete PNG de `assets/intro/` se importan **sin pérdida** (`compress/mode=0`, como hasta ahora) pero **sin mipmaps** (`mipmaps/generate=false`). El PNG de origen no se toca ni se recodifica (el peso del recurso importado depende de cómo importa Godot, no del tamaño del PNG). Una variante **con pérdida** (WebP) queda medida pero **no se aplica** hasta que Lucas la apruebe (D-120).
+  - **Criterio:** **Dado** el proyecto importado → **Cuando** se miden los `.ctex` de las siete láminas → **Entonces** suman **menos** que antes (medido: 24,46 MiB → 17,88 MiB, −27 %) y los píxeles de la lámina a 1920 × 1080 son **idénticos** a los del PNG (diferencia máxima 0). **Dado** la intro abierta → **Cuando** se muestra una lámina → **Entonces** se ve igual a tamaño real (la lámina se dibuja a un tamaño parecido al original, así que los mipmaps casi no se usaban).
+  - **Límite honesto:** si una pantalla muestra la lámina a **bastante menos de su tamaño** (la lámina se achica más de ~1,5 veces), sin mipmaps puede verse algo más áspera que antes. En el Android de Lucas no se midió.
+
+- **RF-561** **El documento editable de la intro** *(archivo nuevo, `specs/intro/intro-editable.md`)*: un Markdown en castellano que muestra **toda la intro** con una sección por lámina: título (solo para orientarse), imagen, segundos, voz o sonido (hoy «ninguno»: la intro no tiene voces ni sonidos, RF-499), el **texto** (cada línea con `> ` adelante) y **notas libres** que **no se cargan al juego**. Arriba, los **ajustes generales** (versión del formato y fundido entre láminas). Es una **vista editable** de `data/intro/intro.json`: el archivo que lee el juego **sigue siendo el JSON** (D-121).
+- **RF-562** **La herramienta `tools/intro_doc.gd`** (GDScript headless; la lógica vive en `scripts/logic/intro_doc.gd`, P10):
+  1. `-- export`: escribe `data/intro/intro.json` → `specs/intro/intro-editable.md`; si el documento ya existe, **conserva las notas** de cada lámina (se reconocen por la imagen).
+  2. `-- import`: lee el documento, lo **valida** y, solo si no hay errores, reescribe `data/intro/intro.json`. Valida con **las mismas reglas de `IntroData`** (RF-497: de 5 a 8 láminas, imagen `res://` que existe, texto de 1 o 2 líneas de hasta 90 caracteres y 160 en total, segundos enteros de 4 a 12, fundido de 0 a 2, versión 1) **más** las propias del documento (campo obligatorio faltante o repetido, línea que no se entiende). **Cada error en castellano con el número de línea del documento** o de lámina. Con errores **no escribe nada** y termina con código 1.
+  3. `-- import --dry`: valida y dice qué láminas cambiarían, sin escribir.
+  - **Avisos** (no bloquean): una lámina con menos segundos que la regla de lectura del guion (RF-497) y «voz o sonido» distinto de «ninguno» (no se carga).
+  - **Idempotente:** `export` y luego `import` sin editar **deja `intro.json` idéntico byte por byte**.
+  - **Lo que lee el juego no cambia:** el JSON mantiene su forma (RF-497) y el orden de sus claves.
+- **RF-563** **Cómo se edita, documentado:** una sección corta en `CONTENIDO.md` («Editar los textos de la intro»). Aviso escrito allí: **los textos oficiales también viven en `specs/intro/guion.md`** y un test los compara con el JSON; si Lucas cambia un texto, **hay que reflejarlo en el guion** (la tarea que lo cargue lo hace) o el test avisa.
+
+> **Criterio de aceptación RF-561 a RF-563**
+> **Dado** el `intro.json` oficial → **Cuando** se corre `export` → **Entonces** el documento trae 7 láminas con los mismos textos, imágenes y segundos. **Cuando** se edita un texto y se corre `import` → **Entonces** `intro.json` cambia solo en ese texto. **Dado** un documento con 3 líneas en una lámina, una imagen inexistente o sin «Segundos» → **Cuando** se corre `import` → **Entonces** hay un error en castellano con la línea, `intro.json` no se modifica y el código de salida es 1.
+
+#### Lo que M62 no incluye
+- **No cambia ningún texto ni ninguna imagen de la intro**, y **no carga textos nuevos** en el juego.
+- **No aplica compresión con pérdida** a las láminas (queda como decisión, D-120).
+- **No agrega voces, sonidos ni campos nuevos** a `intro.json` (las notas viven solo en el documento).
+- **No toca `art/intro-v1/sources/`** ni los PNG de `assets/intro/`.
+
+### M63 · El tutorial del nivel 1 (Lucas, 2026-10-19; T330 y T331)
+
+**Estado: especificada y programada en T330 y T331; los textos son BORRADOR hasta el OK de Lucas** (el archivo lo dice con `"borrador": true`, RF-571). Las decisiones son **D-125 a D-128**. No cambia el balance ni el contenido de ningún nivel, ni el modo de pruebas, ni el editor, ni los niveles 2 en adelante.
+
+**Qué pidió Lucas.** *(2026-10-19)* Un **tutorial en el primer nivel** que **se pueda activar y desactivar como la intro** (una opción en Opciones) y **se pueda volver a ver**; donde Claude decida con criterio, justificado en la decisión (**D-126**). Tiene que enseñar **paso a paso**: elegir una torre, colocarla, qué es el camino, empezar la oleada, el oro, las vidas, mejorar y vender, y que existen la velocidad y la pausa. Con **textos cortos en español rioplatense**, el control **resaltado** (flecha o recuadro), **esperando que el jugador haga la acción** (no solo leer), **sin bloquear el juego** de más, **salteable en cualquier momento** y que **no se repita** si ya lo completó (con guardado, **compatible con los guardados viejos**). Tiene que funcionar **en PC y en el modo celular** (RF-502 a RF-515: carrito, fantasma, tilde y cruz, doble toque): los pasos y los textos se adaptan al modo. Los textos van en **un archivo de datos** fácil de retocar, marcados como borrador, con **un validador**.
+
+**Idea en pocas palabras.** Al entrar al nivel 1 desde el menú, una **tarjeta** chica (arriba o abajo del mapa, donde no tape nada) dice qué hacer, y un **recuadro amarillo que parpadea, con una flecha**, señala el botón o la casilla. Hay dos clases de paso: los de **lectura** (oro, vidas, camino…) se pasan con **«Siguiente»**; los de **acción** (elegir la torre, construirla, empezar la oleada…) **esperan a que el jugador lo haga de verdad** y pasan solos. La partida **sigue corriendo**: el tutorial no la pausa, no cobra ni construye nada por el jugador. **«Saltar tutorial»** está siempre a la vista.
+
+- **RF-570** **Cuándo sale solo.** El tutorial arranca solo cuando se cumplen **todas** estas condiciones:
+  1. la partida es la del **nivel que dice el archivo** (`"nivel"`, hoy `level_01`), **jugada desde el menú** (la selección de niveles o «Siguiente nivel»): no desde F6, ni probando un mapa del editor, ni un mapa de la comunidad ni un modo (Asedio);
+  2. **no** es el **modo de pruebas** (RF-180);
+  3. la opción **«Tutorial del nivel 1»** de Opciones está **prendida** (RF-576; por omisión sí);
+  4. el guardado **no** dice que ya se completó o se saltó (RF-575);
+  5. el archivo de datos es **válido** (RF-571). Si no lo es, el nivel se juega como siempre y el error sale por la salida (`push_warning`): **el tutorial nunca bloquea jugar**.
+  - **Con el cartel de entrada** (RF-466): el tutorial **espera** a que se cierre el cartel y entonces empieza; la partida no cambia de estado por eso.
+  - **«Reintentar»** (RF-92) recarga el nivel: si el tutorial no se completó ni se saltó, **vuelve a empezar desde el primer paso** (no se guarda por qué paso iba).
+  - Con la **intro** (M57) no se mezcla: la intro termina en el nivel 1 con su cartel, y recién después empieza el tutorial.
+
+- **RF-571** **Los datos del tutorial** *(archivo nuevo, `data/tutorial/tutorial.json`)*:
+
+  ```json
+  {
+  	"version": 1,
+  	"borrador": true,
+  	"nivel": "level_01",
+  	"interfaz": {"titulo": "Tutorial", "paso": "Paso %d de %d", "siguiente": "Siguiente",
+  	             "saltar": "Saltar tutorial", "terminar": "¡A jugar!"},
+  	"pc": [{"paso": "welcome", "texto": "¡Bienvenido! …"}, …],
+  	"celular": [{"paso": "welcome", "texto": "¡Bienvenido! …"}, …]
+  }
+  ```
+
+  | Clave | Qué es | Límite |
+  |---|---|---|
+  | `"version"` | Versión del formato. | Entero, hoy **1**. Otra → error. |
+  | `"borrador"` | `true` mientras Lucas no aprobó los textos. **Solo informa** (no cambia nada del juego); al aprobarlos se pasa a `false`. | Booleano, **obligatorio**. |
+  | `"nivel"` | El id del nivel donde se muestra. | Texto no vacío. |
+  | `"interfaz"` | Los rótulos de la tarjeta: `titulo`, `paso` (lleva **dos `%d`**: número y total), `siguiente`, `saltar` y `terminar` (el botón del último paso). | Los cinco, texto no vacío de **hasta 40** caracteres. |
+  | `"pc"` y `"celular"` | Los pasos **en orden**, uno por modo. | Ver abajo. |
+  | `"paso"` | Cuál de los pasos que conoce el juego es (tabla de RF-572 y RF-573). | Uno de la tabla, **permitido en ese modo** y **sin repetir**. |
+  | `"texto"` | Lo que dice la tarjeta. | **1 o 2 líneas** (separadas por `\n`), **80 caracteres por línea**, **160 en total**, texto plano, sin vacío ni caracteres de control. |
+
+  - **Qué hace cada paso (su evento) es del código; el texto, el orden y cuáles se usan son de Lucas.** Se puede reordenar, cambiar un texto o quitar un paso **opcional** sin programar.
+  - **Pasos obligatorios** (sin ellos el archivo no vale, porque el tutorial dejaría de enseñar algo que Lucas pidió): en PC, `path`, `gold`, `lives`, `pick_tower`, `place_tower`, `start_wave`, `upgrade`, `sell`, `speed` y `pause`; en el celular, los mismos con `open_cart`, `pick_card` y `confirm_tower` en lugar de `pick_tower` y `place_tower`. Son **opcionales** `welcome`, `select_tower`, `resume` y `done`.
+  - **Reglas de orden:** `pick_tower` antes que `place_tower`; `open_cart` antes que `pick_card` y este antes que `confirm_tower`; si está `pause` tiene que estar `resume` **después** (si no, la partida quedaría en pausa); si está `done`, es el **último**.
+  - **Los textos no repiten números de otros datos** (costos, porcentajes, tiempos): explican la regla y listo (`.claude/rules/datos.md`). Los textos del celular **no hablan de teclado ni de mouse**, y los de PC **no hablan de toques, carrito ni fantasma** (los comprueba un test).
+  - **Errores en castellano** que nombran el paso: «el paso 2 de pc ("path") tiene 3 líneas y el máximo es 2», «la lista "celular" no tiene el paso "confirm_tower" y hace falta», «el paso "open_cart" no se usa en la PC».
+  - **Un validador, como el resto del proyecto** (RF-578): `godot --headless --path . -s tools/check_tutorial.gd` dice qué hay que arreglar, y un test revisa el archivo oficial.
+
+- **RF-572** **Los pasos en PC (teclado y mouse).** Cada paso de **lectura** tiene el botón «Siguiente» (el último dice «¡A jugar!»); cada paso de **acción** espera su evento y **no** tiene botón de avance:
+
+  | Paso | Qué señala | Qué espera | Texto (borrador) |
+  |---|---|---|---|
+  | `welcome` | nada | «Siguiente» | Bienvenida y aviso de que se puede saltar. |
+  | `path` | la **entrada** y la **salida** del camino (recuadro y flecha) y **todo el camino** teñido de amarillo suave | «Siguiente» | Los monstruos entran por acá y siguen el camino hasta la salida. Si llegan, perdés vidas. |
+  | `gold` | el contador de oro | «Siguiente» | Qué es el oro y de dónde sale. |
+  | `lives` | el contador de vidas | «Siguiente» | Qué son las vidas y qué pasa si se acaban. |
+  | `pick_tower` | el **primer botón de la barra de torres** | **elegir una torre** (clic en el botón o tecla `1`) | Elegí una torre en la barra de abajo. |
+  | `place_tower` | la **casilla sugerida** (la libre que más camino tiene alrededor; así la torre dispara bastante) | **construir** la torre (en **cualquier** casilla válida, no hace falta la sugerida) | Clic en una casilla de pasto junto al camino. Cuesta oro. |
+  | `start_wave` | el botón «Empezar oleada» | **empezar la oleada** (botón o `Espacio`) | Apretá «Empezar oleada». |
+  | `select_tower` | la torre recién construida | **elegir una torre ya construida** (en PC con una torre elegida para construir, el clic derecho o `Esc` la suelta primero) | Clic derecho para soltar la torre; después, clic en la tuya. |
+  | `upgrade` | el botón «Mejorar» del panel de la torre | «Siguiente» | Qué hace «Mejorar». |
+  | `sell` | el botón «Vender» del panel | «Siguiente» | Qué hace «Vender». |
+  | `speed` | el botón de velocidad (`x1`) | **cambiar la velocidad** | Acelera al doble; de nuevo, vuelve. |
+  | `pause` | el botón «Pausa» | **pausar** (botón, `P` o `Esc`) | «Pausa» congela todo. Probala. |
+  | `resume` | el botón «Seguir» | **reanudar** | Apretá «Seguir». |
+  | `done` | nada | «¡A jugar!» | Cierre. |
+
+- **RF-573** **Los pasos en el modo celular** *(RF-502 a RF-515)*. Mismos pasos que en PC **salvo** estos, que reemplazan a `pick_tower` y `place_tower`; los textos hablan de toques y no de teclas:
+
+  | Paso | Qué señala | Qué espera |
+  |---|---|---|
+  | `open_cart` | el **carrito** | **abrir el catálogo** (tocar el carrito) |
+  | `pick_card` | la **primera torre que se puede elegir** del catálogo | **elegir una torre** (aparece el fantasma, RF-505) |
+  | `confirm_tower` | la **casilla sugerida** y la **tilde** | **construir** (tilde, o **doble toque** en la misma casilla, RF-505) |
+
+  - En `select_tower` se toca la torre en el mapa; «Vender» pide dos toques (RF-513) y el texto lo dice; «Mejorar» y «Vender» son los de la **barra de la torre elegida** (RF-512).
+  - **Cuando el jugador se arrepiente:** si en `pick_card` cierra el catálogo sin elegir, vuelve a `open_cart`; si en `confirm_tower` cancela el fantasma (cruz), vuelve a `open_cart`; en PC, si en `place_tower` suelta la torre, vuelve a `pick_tower`. El tutorial **nunca se queda esperando algo que ya no se puede hacer**.
+
+- **RF-574** **Cómo se ve y cómo se comporta.**
+  - **La tarjeta** (hierro y bronce, como el cartel de entrada, RF-466): el rótulo «Tutorial · Paso N de M», el texto (**21 px** en PC y **22 px** en el celular, más que el mínimo de RF-503), **«Saltar tutorial»** arriba a la derecha y, en los pasos de lectura, **«Siguiente»**. Los botones miden **44 px** de alto en PC y **`boton_alto_px` (56)** en el celular. Se ubica **donde no tape lo señalado** (arriba o abajo del mapa, la que quede más lejos; sobre la barra de abajo cuando el catálogo del celular ya la oscurece), **sin salirse de la pantalla** y sin tapar la barra de abajo ni el texto de la torre que se va a construir.
+  - **El resaltado:** un **recuadro amarillo que parpadea** sobre el control o la casilla, con una **flecha** que apunta desde el lado de la tarjeta (o desde la izquierda si es un botón ancho, para no tapar al vecino). Sigue al control si se mueve (el fantasma, el zoom, un catálogo que se abre).
+  - **No bloquea:** el recuadro y la flecha **dejan pasar** el mouse y los toques; **solo la tarjeta** los recibe (así un toque en «Siguiente» no construye ni elige nada en el mapa). La partida **no se pausa** (la cuenta atrás, los enemigos y el reloj siguen). Los botones de la tarjeta **no toman el foco del teclado**: `Espacio` y `Enter` siguen siendo del juego.
+  - **El jugador puede adelantarse:** si hace una acción **antes** de que le toque (por ejemplo, construye durante `path`), cuando el tutorial llega a ese paso **lo da por hecho** y sigue al siguiente. Un paso de **lectura** nunca se saltea solo.
+  - **«Mejorar» y «Vender»** solo se ven con una torre construida elegida: al llegar a `upgrade` o `sell`, si el jugador la soltó, **el tutorial la vuelve a elegir** (es lo único que hace por su cuenta, y no cuesta nada); si la suelta de nuevo durante el paso, también.
+  - **Si pasa algo más grande** (menú de pausa o diálogo de salida abiertos, partida ganada o perdida): lo de encima manda (el tutorial queda por debajo, capa 12) y, al terminar la partida, **se esconde sin marcarse como completado**.
+  - **No suma sonidos ni animaciones** más que el parpadeo.
+
+- **RF-575** **Guardado y compatibilidad.**
+  - **La marca:** `"tutorial_done"` (booleano), **clave nueva y aditiva** del guardado (como `intro_seen`, `hall_total` o `ui_prefs`). **`SAVE_VERSION` no cambia** (sigue en 1) y **una versión anterior del juego la ignora**. Se escribe **al completar o al saltar** el tutorial (los dos cuentan: **no se repite**); cerrar el juego a la mitad **no** la escribe.
+  - **Guardados viejos:** un guardado **sin la clave** (o con una que no es booleana) se lee así: si **ya ganó el nivel 1** → «hecho» (quien ya jugó no necesita el tutorial); si no → «no hecho» (lo ve una vez). **Una clave booleana explícita manda** (`false` aunque haya ganado el nivel 1: lo pidió con «Volver a verlo»).
+  - **La opción:** `"tutorial_enabled"` (booleano) dentro de `settings`, **por omisión `true`**. Un valor que no es booleano ni número se lee como `true`.
+  - **Modo de pruebas:** usa su guardado aparte (RF-181) y **nunca** muestra el tutorial; si se prende o apaga la opción ahí, queda en `save_pruebas.json`.
+  - **No cambia nada más del guardado:** ni niveles, ni récords, ni colecciones, ni ajustes, ni Salón de la fama.
+
+- **RF-576** **Activarlo, desactivarlo y volver a verlo: en Opciones** *(D-126)*. En Opciones (RF-113), **debajo de «Mostrar números de daño»**, una fila con:
+  - la casilla **«Tutorial del nivel 1»**: apagada, el tutorial **no sale** (y no se pierde lo que ya se hizo); **volver a prenderla** lo hace salir de nuevo (borra la marca de «hecho»);
+  - el botón **«Volver a verlo»**: prende la opción, borra la marca y **guarda enseguida**; el botón pasa a decir **«Se verá en el nivel 1»** y queda apagado hasta que se vuelve a abrir Opciones. El tutorial se ve **la próxima vez que se entra al nivel 1** desde la selección (también con el nivel ya ganado).
+  - Disponible **desde el menú principal y desde la pausa** (a diferencia del modo de pruebas, RF-383: no cambia de guardado). Se aplica **a la próxima partida**, no a la que está en curso.
+  - **El panel de Opciones se desplaza si no entra** en 720 de alto (con las opciones que se sumaron en M58 y M63 ya no entraba): las filas van dentro de un contenedor con desplazamiento que crece hasta 600 px; si entran, se ve igual que antes.
+
+- **RF-577** **Dónde no sale y qué no cambia.** No sale en: el modo de pruebas, el editor («Probar»), los mapas de la comunidad, los modos (Asedio), los niveles 2 a 15, ni cuando se abre la escena sin pasar por el menú (F6, tests). **No cambia**: el oro, las vidas, las oleadas ni el mapa del nivel 1, el balance, las torres, el orden de los controles, ni lo que cuesta nada: el tutorial **no construye, no vende, no mejora, no empieza la oleada ni cambia la velocidad por el jugador**.
+
+- **RF-578** **El validador.** `tools/check_tutorial.gd` y los tests de `tests/test_tutorial_data.gd` revisan el archivo con los errores de RF-571; los datos oficiales los revisa un test: que no tenga errores, que enseñe todo lo pedido en los dos modos, que siga marcado como borrador hasta que Lucas lo apruebe, y que los textos del celular y de PC no se mezclen.
+
+> **Criterio de aceptación RF-570 a RF-578**
+> **Dado** un guardado nuevo → **Cuando** se entra al nivel 1 desde la selección → **Entonces** (después del cartel de entrada) aparece la tarjeta «Tutorial · Paso 1 de 14» (15 en el celular) y la partida **no** está en pausa.
+> **Dado** el tutorial abierto en PC → **Cuando** se recorre: «Siguiente» ×4, elegir la primera torre, construirla, empezar la oleada, elegir la torre construida, «Siguiente» ×2, cambiar la velocidad, pausar y reanudar, «¡A jugar!» → **Entonces** cada paso de acción avanzó **solo** al hacer la acción, el guardado dice `"tutorial_done": true` y la tarjeta se fue.
+> **Dado** el modo celular → **Cuando** se recorre con el carrito, la tarjeta del catálogo, un toque en la casilla sugerida y la tilde (o un doble toque) → **Entonces** pasa lo mismo, y ningún texto habla de teclado, mouse ni clic.
+> **Dado** el tutorial abierto en cualquier paso → **Cuando** se toca «Saltar tutorial» → **Entonces** desaparece, el guardado dice `"tutorial_done": true`, **nada** se construyó ni se cobró por el jugador y la próxima vez no sale.
+> **Dado** un paso de acción → **Cuando** el jugador ya había hecho esa acción antes → **Entonces** el tutorial lo saltea. **Dado** que suelta la torre o cierra el catálogo → **Entonces** vuelve a un paso anterior.
+> **Dado** un guardado de antes de M63 con el nivel 1 ganado (y sin la clave) → **Entonces** el tutorial **no** sale. **Dado** uno sin el nivel 1 ganado → **Entonces** sale una vez.
+> **Dado** la opción apagada, el modo de pruebas, el nivel 2, F6, un mapa del editor o un archivo con errores → **Entonces** el tutorial no sale y el nivel se juega como siempre.
+> **Dado** el botón «Volver a verlo» → **Entonces** el guardado queda con `"tutorial_done": false` y la opción prendida, y el tutorial sale al entrar al nivel 1.
+> **Dado** un `tutorial.json` con un paso que no existe, uno de otro modo, uno repetido, un texto de 3 líneas, de 81 caracteres por línea o de más de 160, un paso obligatorio faltante, `pause` sin `resume` o `pick_tower` después de `place_tower` → **Entonces** el validador devuelve un error en castellano que nombra el paso, y el nivel 1 se juega sin tutorial.
+> **Dado** una ventana de 1280 × 720 → **Entonces** la tarjeta entra entera, no tapa lo señalado y el panel de Opciones se puede recorrer.
+
+#### Lo que M63 no incluye
+
+- **Tutoriales para otros niveles** (el 2 presenta mezclar torres, el 4 la Wiki…): el formato ya trae `"nivel"`, pero hoy hay **uno solo**. Sería otra tarea (P3).
+- **Voces, animaciones, un personaje que habla** ni **sonidos nuevos**: la intro ya fijó ese límite (Q-01, D-089).
+- **Obligar** a hacer los pasos: nada se bloquea; siempre se puede saltar, y el juego se puede jugar mientras tanto (el tutorial solo no avanza hasta que se haga la acción).
+- **Recordar por qué paso iba** si se cierra el juego o se reintenta: vuelve a empezar (D-127).
+- **Un botón «Tutorial» en el menú principal, en la Wiki o en la pausa** (D-126: solo Opciones).
+- **Ayudas en pantalla fuera del nivel 1** ni **consejos de contramedida** (siguen en «Sugerencias de Claude», §13).
+- **Enseñar** el Mortero (2 × 2), la infraestructura, las combinaciones ni los enemigos con habilidades: la tarjeta de «nuevo enemigo» (RF-134) y la Wiki ya cumplen ese papel.
+- **Probarlo en un celular real**: se probó con la escena real en modo celular en una PC (RF-502).

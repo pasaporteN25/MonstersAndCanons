@@ -74,6 +74,7 @@ func _ready() -> void:
 	if DevMode.enabled:
 		_add_dev_strip()
 	Audio.add_click_sounds(self)
+	MenuTouch.attach(self)  # RF-550, RF-551: botones de 56 px y desplazamiento táctil en el celular
 
 
 ## Esc (o "atrás" en Android, RF-142) vuelve al menú principal.

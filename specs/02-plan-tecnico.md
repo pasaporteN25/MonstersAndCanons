@@ -1431,3 +1431,64 @@ Nada más: ni `balance.json`, ni `.tres`, ni código, ni assets, ni los niveles 
 2. Aplicar el tema existente a catálogo y barra; íconos SVG propios en botones redondeados. Medidas desde mobile_ui.json y sus valores de respaldo. Mantener costo en catálogo/barra y motivo inválido en barra.
 3. Pintar detrás del mapa una textura de suelo del tema, sin cambiar la grilla, y dibujar un solo borde superior en su altura correcta.
 4. Regresión con eventos de entrada completos (mouse y toque), ambos bordes, arrastre y colocación; GUT completo y capturas 16:9/20:9. Exportar EXE/APK de prueba, sin dar por validado el tacto real.
+
+### M60 / T300 · HUD celular: catálogo único, demolición, pausa y «Ver todo» (RF-540 a RF-545, D-110 a D-113)
+
+**Dónde:** `scenes/game/mobile_hud.gd`, `scenes/game/game.gd`, `scenes/game/build_controller.gd`, `scenes/game/camera_controller.gd`, `scripts/logic/ui_prefs.gd`, `scripts/logic/float_button_layout.gd`, `data/ui/mobile_ui.json`, `assets/ui/mobile_demolish.svg`.
+
+1. **T301 · Catálogo único.** Se quita el `TabContainer`: queda un `ScrollContainer` con la grilla `TowerCards`. `set_catalog_data(available, gold, resources, uses_resources, machine_option)` arma un descriptor por torre **elegible** (la lista que ya tiene `Game.available_towers`, en su orden) y, si hay Demoledora sin comprar, uno más. `_sync_catalog_grid` (T290) sigue actualizando en el lugar. Al abrir se lleva el scroll al principio. `_infrastructure_options` desaparece del HUD; `Game._mobile_infrastructure_options` se reduce a la opción de la máquina.
+2. **T302 · Botón de demolición.** `UiPrefs` suma `demolish_side` y `demolish_y` (valores por omisión en `mobile_ui.json`: `demoler_lado_default`, `demoler_y_default`). `FloatButtonLayout.avoid` cuenta tres botones y aplica la separación solo entre los del mismo lado. `MobileHud` crea `DemolishButton` (ícono `mobile_demolish.svg`), solo si `Game` se lo pide (`set_demolish_available`). Una herramienta nueva `&"obstacle"` en `BuildController.select_mobile_infrastructure_tool`; `Game._on_mobile_infrastructure_targeted` mira `infrastructure.obstacle_at(cell)`: `REMOVABLE` → `order`, `EXTRACTION` → `enable`; si sale bien, `cancel()`; si no, le pasa el motivo a `MobileHud.show_tool_message`. El estado de la barra `"tool"` (línea + cruz) lo dibuja `show_tool_status`, que `Game._process` llama cada cuadro mientras `mobile_action_active()`; el HUD clásico oculta los controles de oleada también en ese caso.
+3. **T303 · Segundo plano.** `Game._notification`: `APPLICATION_PAUSED` siempre; `APPLICATION_FOCUS_OUT` solo si `OS.has_feature("mobile")`. Ambos llaman `pause_for_background()` (no hace nada si ya está en pausa, si la partida terminó o si hay un diálogo abierto, porque ya pausa).
+4. **T304 · «Ver todo».** `CameraController` recuerda la posición de encuadre (`_fit_position`, la misma cuenta de `view_all`), llama `_update_view_all()` también después de correr (`_pan_by_screen_delta`) y muestra el botón si el zoom pasa el mínimo o la posición difiere en más de medio píxel. Sin `MobileHud` (PC), crea un botón propio, en el mismo lugar, que solo se ve con el zoom mínimo y el encuadre corrido.
+
+Los textos, números de tamaño y posiciones nuevos viven en `mobile_ui.json` (P2), y el mínimo (`MobileUiConfig.DEFAULTS`) trae los mismos valores. **Qué no se prueba:** el tacto, la legibilidad, la posición del tercer botón con un dedo y el aviso real de Android.
+
+
+### M61 / T310 · Menús del celular, entrada por dispositivo y «Créditos y versión» (RF-550 a RF-555, D-115 a D-117)
+
+#### Cómo se hace
+
+1. **Entrada por dispositivo (T311).** Lógica pura `scripts/logic/pointer_filter.gd` (`PointerFilter`): `note_touch(pos, now_ms)` guarda el último toque; `accepts_mouse(device, pos, now_ms)` es falso para `DEVICE_ID_EMULATION` y para un clic a ≤ 500 ms y ≤ 32 px de un toque. `BuildController._handle_mobile_input` y `MobileHud._input` usan una instancia cada uno (llaman `note_touch` con cada `InputEventScreenTouch` y filtran los `InputEventMouseButton/Motion`) y pierden las condiciones `OS.has_feature("mobile")` de los caminos de mouse. Los números van a `data/ui/mobile_ui.json` (`puntero_duplicado_ms`, `puntero_duplicado_px`).
+2. **Desplazamiento táctil (T312).** `scripts/logic/kinetic_scroll.gd` (`KineticScroll`, puro): umbral de arrastre, frenado exponencial y velocidad mínima. `scenes/ui/touch_scroller.gd` (`TouchScroller`, un `Node` hijo del `ScrollContainer`): en `_input` toma `InputEventScreenTouch/Drag` dentro del rectángulo del contenedor (no si el dedo apoya en un `Range`: deslizador o barra), mueve `scroll_vertical`/`scroll_horizontal`, marca el evento como atendido, **traga los clics emulados mientras dura el arrastre** (el orden de Godot es clic emulado primero, T289 A.4) y le saca el foco al botón apoyado para que no quede «apretado». `scenes/ui/menu_touch.gd` (`MenuTouch.attach(root)`): en modo celular sube los botones de la pantalla a 56 px, engrosa las barras y cuelga un `TouchScroller` de cada `ScrollContainer`, y lo repite para lo que se agregue después (`SceneTree.node_added`).
+3. **Distribución del celular (T313, T314).** `MainMenu`: en modo celular arma dos columnas (logo / botones). `OptionsMenu`: se reestructura la escena (`Frame` con título, `Scroll` con dos columnas y «Volver»); en PC las dos columnas se juntan en una. El resto de las pantallas solo llama a `MenuTouch.attach(self)`.
+4. **Versión (T315).** `scripts/logic/game_version.gd` (`GameVersion`): `raw()` lee `application/config/version`; `label(raw)` da el texto (RF-554). Opciones agrega la sección. `export_presets.cfg`: versiones vacías.
+5. **Verificación.** `tools/capture_menus.gd` (T310): capturas reales con ventana por pantalla y modo, e informe de botones fuera de la ventana. Tests de GUT por tarea; suite completa sin `SCRIPT ERROR` ni `Parse Error`.
+### M62 · Peso de la intro y documento editable (RF-560 a RF-563, D-120, D-121)
+
+1. **Peso (T320):** `mipmaps/generate=false` en los siete `assets/intro/*.png.import` (sigue `compress/mode=0`). El peso real es el de los `.ctex` de `.godot/imported/`; `art/intro-v1/peso.py` los mide por variante y arma `art/intro-v1/peso/comparison.html`. La variante WebP (`compress/mode=1`) queda medida y sin aplicar (D-120).
+2. **Documento editable (T321):** `scripts/logic/intro_doc.gd` (`IntroDoc`, lógica pura): `to_markdown`, `parse_markdown` (que valida con `IntroData.parse`), `to_json` (mismo formato y orden de claves que el archivo oficial) y `describe_changes`. `tools/intro_doc.gd` solo lee y escribe archivos (`export`, `import`, `import --dry`). Tests en `tests/test_intro_doc.gd`: ida y vuelta byte por byte, el documento versionado coincide con el JSON, y cada error con su mensaje.
+
+### M63 / T330 y T331 · El tutorial del nivel 1 (RF-570 a RF-578, D-125 a D-128)
+
+**Piezas** (la lógica pura se prueba sin ventanas, P10; las escenas solo muestran y avisan, P6):
+
+| Pieza | Qué es |
+|---|---|
+| `data/tutorial/tutorial.json` | Los pasos y los textos: dos listas (`pc`, `celular`), los rótulos de la tarjeta y `"borrador"`. |
+| `scripts/logic/tutorial_data.gd` (`TutorialData`) | Lee y valida el archivo (errores en castellano que nombran el paso). Trae la tabla `STEPS`: qué evento espera cada paso y en qué modo se usa. |
+| `scripts/logic/tutorial_flow.gd` (`TutorialFlow`) | `should_auto_show(...)` (RF-570) y la máquina de pasos: `next()`, `notify(evento)`, `skip()`, `skip_satisfied(...)`, `rewind_to(...)`. Emite `step_changed` y `finished(completado)`. |
+| `scripts/logic/tutorial_layout.gd` (`TutorialLayout`) | Dónde va la tarjeta para no tapar lo señalado y dónde apoya la flecha. |
+| `scenes/ui/tutorial_overlay.gd` (`TutorialOverlay`, `CanvasLayer` capa 12) | La tarjeta, el recuadro y la flecha. Armada en código. Solo la tarjeta recibe el mouse y los toques. Consulta en cada cuadro **de dónde** sacar lo señalado (`targets_provider`, `fills_provider`). |
+| `scenes/game/tutorial_controller.gd` (`TutorialController`) | El director: escucha las señales de la partida (`BuildController`, `LevelSession`, `Game.pause_changed`, `speed_changed`, `MobileHud.catalog_opened`), se las pasa a `TutorialFlow` y le dice a la tarjeta qué mostrar y qué señalar. Elige la casilla sugerida. |
+| `Hud.target_control`, `MobileHud.target_control`, `TowerPanel.upgrade_button/sell_button` | Descriptores de **qué control señalar**: el tutorial no busca nodos por ruta. |
+| `Game._start_tutorial_if_due()` | Decide si arma el tutorial (lo barato primero; el archivo solo se lee si hace falta) y lo arranca al cerrarse el cartel de entrada. |
+| `SaveManager` | `tutorial_done()`, `tutorial_enabled()`, `mark_tutorial_done()`, `reset_tutorial()`; la clave `tutorial_done` y la opción `tutorial_enabled`. |
+| `OptionsMenu` | La fila «Tutorial del nivel 1» / «Volver a verlo» y el contenedor con desplazamiento. |
+| `tools/check_tutorial.gd`, `tools/capture_tutorial.tscn` | El validador por consola y las capturas reales (un PNG por paso, PC y celular). |
+
+**Cómo se señala algo.** Cada paso pide, en cada cuadro, los rectángulos en **pantalla** de lo que señala: para un control, `get_global_rect()`; para una casilla, su posición en el mundo pasada por `get_canvas_transform()` (así vale con zoom y con cámara). Un control que no se ve ahora (el catálogo cerrado, el panel de una torre que no está elegida) devuelve `null` y no se dibuja nada: **no hay coordenadas escritas a mano**.
+
+**Cómo se pasa de paso.** Los pasos de acción esperan un evento de `TutorialData` (`tower_selected`, `tower_built`, `catalog_opened`, `wave_started`, `placed_selected`, `speed_changed`, `paused`, `resumed`). Al llegar a un paso, `skip_satisfied` consulta si ya se cumplió (el jugador se adelantó). Si el jugador suelta la torre o cierra el catálogo, `rewind_to` vuelve a un paso anterior (tabla `REWIND_ON_DESELECT`).
+
+**Qué no toca.** Ningún dato de nivel ni de balance, `BuildController` (solo se conecta a sus señales y llama `select_placed` para volver a elegir la torre construida), el HUD (solo se le suma `target_control`), el modo de pruebas ni el editor (`Game._start_tutorial_if_due` sale antes si `testing` o `DevMode.enabled`).
+
+**Cómo se prueba.**
+1. `tests/test_tutorial_data.gd`: el lector, **cada** error, los límites exactos y el archivo oficial.
+2. `tests/test_tutorial_flow.gd`: `should_auto_show` (una condición por vez), la máquina de pasos, `rewind_to`, el guardado y la compatibilidad con guardados viejos.
+3. `tests/test_tutorial_layout.gd`: la tarjeta no tapa lo señalado y queda dentro de la pantalla; la flecha.
+4. `tests/test_tutorial_game.gd`: **la escena real** (`game.tscn`) recorrida entera en PC y en el celular (botones del HUD, catálogo, toques sobre el mapa, tilde y doble toque), más saltar, no repetir, apagar, guardado viejo, modo de pruebas, otro nivel, F6, editor, cartel de entrada y fin de partida.
+5. `tests/test_tutorial_options.gd`: la fila de Opciones y que el panel entre en 720.
+6. `tests/test_old_saves.gd`: la clave nueva con los guardados de cada época.
+7. Capturas reales: `godot --path . res://tools/capture_tutorial.tscn -- <carpeta fuera del repo> 1280x720`.
+
+**Riesgos.** (1) Un cambio futuro en los nombres de los controles del HUD se nota en los tests (los descriptores devuelven `null`). (2) `MobileHud` maneja los toques de su barra con código propio: la tarjeta queda **fuera** de esa barra y de los botones flotantes (se ubica entre las barras). (3) Solo se probó en una PC (RF-502): el tacto y la legibilidad en un celular real quedan para Lucas.
