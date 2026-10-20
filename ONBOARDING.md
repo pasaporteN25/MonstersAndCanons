@@ -524,6 +524,12 @@ Con el proyecto abierto (o `godot --path .`). **✅ Comprobar:**
 
 Capturas y mediciones en `art/m53-barra/` (`README.md`).
 
+### T402 · Probar «Ver todo» con tecla y el carrito en pausa (M68)
+
+**En la PC.** Abrí un nivel, acercá el mapa con la rueda. **✅ Comprobar:** aparece el botón «Ver todo» (con la ayuda «Ver todo el mapa · V»); apretá **V**, con la partida en marcha y después en pausa (`P`): el mapa vuelve entero. Con el menú de pausa abierto (`Esc`), la V no hace nada. En **Opciones → «Tecla de «Ver todo»»**, tocá el botón y apretá la **H**: dice «H» y ahora la H hace «Ver todo». Probá la **P** (avisa que ya la usa la pausa), **Esc** (cancela y no cierra Opciones) y **Restaurar**.
+
+**En el celular (o con la interfaz forzada).** **Opciones → Interfaz → Celular**, abrí un nivel, tocá el carrito (abre el catálogo) y pausá. **✅ Comprobar:** el catálogo se cierra, el carrito se ve apagado, tocarlo no abre nada y la barra de abajo dice «En pausa…»; al seguir, vuelve. En un nivel con demolición, el botón de demolición hace lo mismo. Elegí una torre ya construida: la barra trae el renglón **«Al mejorar: …»** (y en la PC, el panel, **«Al nivel N: …»**). **No se probó en un celular real.**
+
 ### T363 · Probar la animación de mejora de torres
 
 **En PC.** Jugá cualquier nivel, construí una torre (por ejemplo la Ametralladora) y mejorala con **Mejorar** o con `U`. **✅ Comprobar:** sale un anillo de luz con chispas del color de la torre (medio segundo) y, arriba, «¡Nivel 2!» con «+3 daño · +0,5 disp/s», todo desaparece en poco más de un segundo y el oro baja lo mismo que antes. Mejorala otra vez: el efecto es más grande y la cabecera dice «¡Nivel máximo!». Probalo con una torre en la **fila de abajo** (el texto no pisa la barra de abajo) y pegada al borde izquierdo (queda dentro del mapa). En pausa, el efecto se congela.

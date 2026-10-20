@@ -11,7 +11,6 @@ const DEFAULTS: Dictionary = {
 	"separacion_px": 8,
 	"flotante_min_px": 64,
 	"flotante_min_mm": 6,
-	"franja_px": 56,
 	"toque_max_mm": 2.0,
 	"toque_max_px": 21,
 	"doble_toque_s": 0.35,
