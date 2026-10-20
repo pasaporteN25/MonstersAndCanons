@@ -114,6 +114,21 @@ func test_the_burst_frame_and_crack_follow_the_progress() -> void:
 	assert_almost_eq(burst.crack_alpha(), 0.0, 0.001, "la grieta se apaga al final")
 
 
+func test_the_card_wears_the_approved_frame_without_taking_touches() -> void:
+	_play()
+	_spawn_boss()
+	var card: BossEntranceCard = game.hud.entrance_card()
+	assert_true(card.has_frame())
+	var frame: NinePatchRect = card.get_node("Frame") as NinePatchRect
+	assert_eq(frame.mouse_filter, Control.MOUSE_FILTER_IGNORE, "el marco no recibe toques")
+	assert_eq(frame.get_patch_margin(SIDE_LEFT), 32)
+	assert_eq(frame.get_patch_margin(SIDE_BOTTOM), 32)
+	assert_eq(frame.texture.get_size(), Vector2(192, 128))
+	assert_eq(card.get_child(card.get_child_count() - 1), frame, "va arriba de todo el contenido")
+	await wait_seconds(0.4)
+	assert_eq(card.size, Vector2(720, 120), "el contenido entra sin agrandar el cartel")
+
+
 func test_the_card_waits_for_the_wave_banner_and_the_new_enemy_card_waits_for_the_card() -> void:
 	_play()
 	game.session.begin_wave()  # sale el cartel de «Oleada N» (1,5 s)
