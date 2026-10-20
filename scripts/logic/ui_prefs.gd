@@ -7,6 +7,8 @@ var exit_side: String = ""
 var exit_y: float = 0.0
 var demolish_side: String = ""
 var demolish_y: float = 0.0
+## M68 (RF-613, RF-615): la tecla de «Ver todo» (código físico de Godot). Por omisión, la V.
+var view_all_key: int = ViewAllBinding.DEFAULT_KEY
 
 
 func _init() -> void:
@@ -53,9 +55,16 @@ static func read(raw: Variant) -> UiPrefs:
 			prefs.demolish_y = float(values["demolish_y"])
 		else:
 			push_warning("Altura del botón de demolición inválida; se usa el valor por omisión.")
+	# RF-615: la tecla de «Ver todo». Un guardado de antes de M68 no la trae: vale la V, sin aviso.
+	if values.has("view_all_key"):
+		var raw_key: Variant = values["view_all_key"]
+		if typeof(raw_key) in [TYPE_INT, TYPE_FLOAT] and ViewAllBinding.is_valid_key(int(raw_key)) and float(raw_key) == float(int(raw_key)):
+			prefs.view_all_key = int(raw_key)
+		else:
+			push_warning("La tecla de «Ver todo» es inválida; se usa la V.")
 	return prefs
 
 
 func to_dict() -> Dictionary:
 	return {"cart_side": cart_side, "cart_y": cart_y, "exit_side": exit_side, "exit_y": exit_y,
-		"demolish_side": demolish_side, "demolish_y": demolish_y}
+		"demolish_side": demolish_side, "demolish_y": demolish_y, "view_all_key": view_all_key}

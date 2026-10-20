@@ -570,6 +570,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		start_next_wave()
 	elif event.is_action_pressed("pause"):
 		toggle_pause()
+	elif event.is_action_pressed(ViewAllBinding.ACTION):
+		camera_controller.view_all()  # M68 (RF-613): también en pausa, la cámara no cambia la partida
+		get_viewport().set_input_as_handled()
 	elif event.is_action_pressed("toggle_speed"):
 		toggle_speed()
 

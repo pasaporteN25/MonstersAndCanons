@@ -117,14 +117,56 @@ func test_pc_has_no_button_until_the_view_is_displaced_at_minimum_zoom() -> void
 	assert_false(_game.camera_controller.is_view_displaced())
 
 
-func test_pc_wheel_zoom_does_not_show_the_button() -> void:
+func test_pc_wheel_zoom_shows_the_button_too() -> void:
 	await _start(UiMode.PC, 14)
 	var button: Button = _game.camera_controller._pc_view_all_button
 	_game.camera_controller._zoom_at(Vector2(640.0, 340.0), 1.3)
 	assert_gt(_game.camera.zoom.x, _game.minimum_map_zoom)
-	assert_false(button.visible, "con otro zoom, la PC queda como antes")
+	assert_true(button.visible, "M68 (RF-612): con otro zoom, la PC también muestra «Ver todo»")
+	button.pressed.emit()
+	assert_false(button.visible)
+	assert_almost_eq(_game.camera.zoom.x, _game.minimum_map_zoom, 0.0001)
 
 
 func test_mobile_has_a_single_view_all_button() -> void:
 	await _start(UiMode.MOBILE, 14)
 	assert_null(_game.camera_controller._pc_view_all_button, "el celular usa el de su HUD")
+
+
+# --- M68 (T402, RF-612, RF-613): la tecla de «Ver todo» y la ayuda del botón de la PC ---
+
+func test_pc_view_all_key_goes_back_to_the_fit_even_while_paused() -> void:
+	await _start(UiMode.PC, 14)
+	_game.camera_controller._zoom_at(Vector2(640.0, 340.0), 1.3)
+	assert_gt(_game.camera.zoom.x, _game.minimum_map_zoom)
+	_game.set_paused(true)
+	var event := InputEventKey.new()
+	event.physical_keycode = KEY_V
+	event.pressed = true
+	_game._unhandled_input(event)
+	assert_almost_eq(_game.camera.zoom.x, _game.minimum_map_zoom, 0.0001, "la V vuelve al encuadre")
+	assert_false(_game.camera_controller.is_view_displaced())
+	assert_false(_game.camera_controller._pc_view_all_button.visible)
+
+
+func test_pc_view_all_key_does_nothing_with_the_pause_menu_open() -> void:
+	await _start(UiMode.PC, 14)
+	_game.camera_controller._zoom_at(Vector2(640.0, 340.0), 1.3)
+	_game.open_pause_menu()
+	var zoom_before: float = _game.camera.zoom.x
+	var event := InputEventKey.new()
+	event.physical_keycode = KEY_V
+	event.pressed = true
+	_game._unhandled_input(event)
+	assert_eq(_game.camera.zoom.x, zoom_before, "con el menú abierto, las teclas no hacen nada")
+	_game.close_pause_menu()
+
+
+func test_pc_button_tooltip_names_the_chosen_key() -> void:
+	await _start(UiMode.PC, 14)
+	_game.camera_controller._zoom_at(Vector2(640.0, 340.0), 1.3)
+	assert_eq(_game.camera_controller._pc_view_all_button.tooltip_text, "Ver todo el mapa · V")
+	ViewAllBinding.apply(KEY_H)
+	_game.camera_controller._zoom_at(Vector2(640.0, 340.0), 1.1)
+	assert_eq(_game.camera_controller._pc_view_all_button.tooltip_text, "Ver todo el mapa · H")
+	ViewAllBinding.apply(ViewAllBinding.DEFAULT_KEY)
