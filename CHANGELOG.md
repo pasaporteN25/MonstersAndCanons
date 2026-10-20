@@ -2,6 +2,18 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Un toque, una sola acción en el celular *(T291, 2026-10-18)*
+
+«Apuntar» avanzaba dos modos por toque; ahora avanza uno. La tilde y la cruz de construir ya no salen de la pantalla ni se suben a la barra de arriba (donde un toque podía cambiar la velocidad o pausar además de construir): si arriba no entran, se ponen abajo de la torre.
+
+## Catálogo del celular más fluido *(T290, 2026-10-18)*
+
+Elegir una torre en el catálogo ya no falla si justo cambia el oro (por ejemplo, al morir un enemigo con el dedo apoyado), y el juego deja de hacer trabajo de más en cada cambio de oro con el catálogo cerrado.
+
+## «Empezar oleada» responde al toque en el celular *(T288, 2026-10-18)*
+
+En el modo celular el botón «Empezar oleada» se veía pero no recibía el toque, porque la barra de abajo lo tapaba. Ahora responde.
+
 ## Ajustes del HUD móvil tras probar el PR #10 *(T287, 2026-10-16)*
 
 ## El Mortero, alcanzable en el nivel 9 *(M61, spec del 2026-10-16; todavía falta aplicarlo, T282)*
