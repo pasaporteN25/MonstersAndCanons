@@ -293,7 +293,7 @@ func test_pc_camera_input_adds_zoom_without_mobile_controls() -> void:
 
 func test_ui_prefs_fall_back_per_field_and_snap_to_nearest_edge() -> void:
 	var prefs: UiPrefs = UiPrefs.read({"cart_side": "arriba", "cart_y": 2.0, "exit_side": "right", "exit_y": 0.5})
-	assert_eq(prefs.to_dict(), {"cart_side": "right", "cart_y": 0.45, "exit_side": "right", "exit_y": 0.5})
+	assert_eq(prefs.to_dict(), {"cart_side": "right", "cart_y": 0.45, "exit_side": "right", "exit_y": 0.5, "demolish_side": "right", "demolish_y": 0.8})
 	var snapped: Dictionary = FloatButtonLayout.snap(Vector2(1180.0, 320.0), Vector2(1280.0, 720.0),
 		64.0, 96.0, Vector2.ONE * 82.0)
 	assert_eq(snapped["side"], "right")
@@ -353,23 +353,28 @@ func test_mobile_catalog_selects_a_tower_in_two_touches_without_spending() -> vo
 	add_child_autofree(game)
 	await get_tree().process_frame
 	assert_false(game.hud.get_node("BottomBar/TowerButtons").visible)
-	assert_eq(game.mobile_hud.find_child("TowerCards", true, false).get_child_count(), Wiki._all_towers().size())
+	assert_eq(game.mobile_hud.find_child("TowerCards", true, false).get_child_count(), game.available_towers.size())
 	var level_twelve: LevelData = GameFlow.level(11)
 	assert_eq(level_twelve.towers.size(), 10)
-	for tower_id: String in level_twelve.towers:
-		var level_twelve_tower: TowerData
-		for catalog_tower: TowerData in Wiki._all_towers():
-			if String(catalog_tower.id) == tower_id:
-				level_twelve_tower = catalog_tower
-				break
-		assert_not_null(level_twelve_tower)
-		var tower_card_found: bool = false
-		for tower_card: Button in game.mobile_hud.find_child("TowerCards", true, false).get_children():
-			tower_card_found = tower_card_found or tower_card.text.contains(level_twelve_tower.display_name)
-		assert_true(tower_card_found, "el catálogo desplazable incluye la torre %s del nivel 12" % tower_id)
+	var twelve: Game = (load("res://scenes/game/game.tscn") as PackedScene).instantiate() as Game
+	twelve.level_data = level_twelve
+	add_child_autofree(twelve)
+	await get_tree().process_frame
+	# Las torres de colección sin completar (RF-448) no son elegibles y no aparecen ni apagadas.
+	var card_texts: Array[String] = []
+	for tower_card: Button in twelve.mobile_hud.find_child("TowerCards", true, false).get_children():
+		card_texts.append(tower_card.text)
+	assert_gte(twelve.available_towers.size(), 8)
+	for tower: TowerData in Wiki._all_towers():
+		var shown: bool = false
+		for card_text: String in card_texts:
+			shown = shown or card_text.begins_with(tower.display_name + "\n")
+		var offered: bool = twelve.available_towers.has(tower)
+		assert_eq(shown, offered, "%s: aparece solo si el nivel 12 la ofrece" % tower.id)
+	twelve.queue_free()
+	await get_tree().process_frame
 	var tower_index: int = -1
 	var use_alt: bool = false
-	var limited_tower: TowerData
 	for i: int in game.available_towers.size():
 		var tower: TowerData = game.available_towers[i]
 		if TowerText.missing_text(tower, false, game.session.gold, game.session.resources, game.level_data.uses_resources()) == "":
@@ -381,13 +386,6 @@ func test_mobile_catalog_selects_a_tower_in_two_touches_without_spending() -> vo
 			break
 	assert_gte(tower_index, 0)
 	var chosen: TowerData = game.available_towers[tower_index]
-	for catalog_tower: TowerData in Wiki._all_towers():
-		var available_here: bool = false
-		for available_tower: TowerData in game.available_towers:
-			available_here = available_here or available_tower.id == catalog_tower.id
-		if not available_here:
-			limited_tower = catalog_tower
-			break
 	var before_gold: int = game.session.gold
 	game.mobile_hud.open_catalog()
 	var back := InputEventAction.new()
@@ -399,11 +397,6 @@ func test_mobile_catalog_selects_a_tower_in_two_touches_without_spending() -> vo
 	var card: Button = game.mobile_hud.find_child("CatalogCard_%s" % chosen.display_name.to_snake_case(), true, false) as Button
 	assert_not_null(card)
 	assert_false(card.disabled)
-	if limited_tower != null:
-		var unavailable_card: Button = game.mobile_hud.find_child("CatalogCard_%s" % limited_tower.display_name.to_snake_case(), true, false) as Button
-		assert_not_null(unavailable_card)
-		assert_true(unavailable_card.disabled)
-		assert_true(unavailable_card.text.contains("No disponible") or unavailable_card.text.contains("Falta completar"))
 	var virtual_mm: float = game.mobile_hud._minimum_touch_size() / float(MobileUiConfig.load_from().get_value("flotante_min_mm"))
 	assert_almost_eq(card.custom_minimum_size.x, virtual_mm * 18.0, 0.01)
 	assert_almost_eq(card.custom_minimum_size.y, virtual_mm * 10.0, 0.01)
@@ -428,48 +421,4 @@ func test_mobile_catalog_selects_a_tower_in_two_touches_without_spending() -> vo
 	game.mobile_hud.close_catalog()
 	game._unhandled_input(back)
 	assert_true(game.pause_menu.is_open(), "atrás sin selección abre Pausa")
-	SaveManager.set_setting("ui_mode", original_setting)
-
-
-func test_mobile_infrastructure_catalog_can_enable_extraction_and_demolish() -> void:
-	var original_setting: Variant = SaveManager.get_setting("ui_mode")
-	var original_test_level: LevelData = GameFlow.test_level
-	SaveManager.set_setting("ui_mode", UiMode.MOBILE)
-	GameFlow.test_level = GameFlow.level(9)
-	var game: Game = (load("res://scenes/game/game.tscn") as PackedScene).instantiate() as Game
-	add_child_autofree(game)
-	await get_tree().process_frame
-	assert_true(game.level_data.uses_infrastructure())
-	assert_false(game.hud.bar_tabs.visible)
-	assert_false(game.hud.infrastructure_tab.visible)
-	var extraction: ObstacleSpec
-	var removable: ObstacleSpec
-	for spec: ObstacleSpec in game.level_data.obstacles:
-		if extraction == null and spec.kind == ObstacleSpec.Kind.EXTRACTION:
-			extraction = spec
-		if removable == null and spec.kind == ObstacleSpec.Kind.REMOVABLE:
-			removable = spec
-	assert_not_null(extraction)
-	assert_not_null(removable)
-	game.mobile_hud.open_catalog()
-	assert_true(game.mobile_hud.find_child("InfrastructureCards", true, false).get_child_count() > 0)
-	var extraction_card: Button = game.mobile_hud.find_child("CatalogCard_habilitar_mina", true, false) as Button
-	assert_not_null(extraction_card)
-	assert_false(extraction_card.disabled)
-	var gold_before: int = game.session.gold
-	extraction_card.pressed.emit()
-	assert_true(game.build_controller.mobile_action_active())
-	game.build_controller._mobile_map_tap(game.level.cell_center(extraction.cell), Time.get_ticks_msec())
-	assert_eq(game.infrastructure.field.state_of(extraction.cell), ObstacleField.State.ACTIVE)
-	assert_eq(game.session.gold, gold_before - game.infrastructure.field.cost_of(extraction.cell))
-	var obstacle_name: String = ObstacleText.display_name(removable)
-	game.mobile_hud.open_catalog()
-	var demolish_card: Button = game.mobile_hud.find_child("CatalogCard_demoler_%s" % obstacle_name.to_snake_case(), true, false) as Button
-	assert_not_null(demolish_card)
-	assert_false(demolish_card.disabled)
-	demolish_card.pressed.emit()
-	game.build_controller._mobile_map_tap(game.level.cell_center(removable.cell), Time.get_ticks_msec())
-	assert_true(game.infrastructure.field.has_job())
-	assert_false(game.is_paused())
-	GameFlow.test_level = original_test_level
 	SaveManager.set_setting("ui_mode", original_setting)

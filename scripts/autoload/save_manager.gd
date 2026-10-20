@@ -11,9 +11,14 @@ const BACKUP_LIMIT: int = 10
 const BACKUP_PREFIX: String = "user://save_respaldo_"
 ## RF-194: la tabla del Salón de la fama se guarda junto a las de los niveles, con este nombre.
 const HALL_OF_FAME_ID: StringName = &"hall_of_fame"
+## RF-575: el nivel cuyo progreso decide si un guardado viejo ya vio el tutorial.
+const TUTORIAL_LEVEL_ID: StringName = &"level_01"
 const DEFAULT_SETTINGS: Dictionary = {
 	"music_volume": 0.7, "sfx_volume": 0.8, "fullscreen": false, "damage_numbers": true,
 	"ui_mode": 0,
+	"tutorial_enabled": true,  # M63, RF-576: el tutorial del nivel 1 está prendido
+	"upgrade_fx": true,  # M65, RF-593: animaciones de mejora de torres prendidas
+	"boss_entrance": true,  # M66, RF-600: la entrada de los jefes está prendida
 }
 
 ## Los tests lo cambian para no tocar el guardado real del jugador.
@@ -37,6 +42,12 @@ var _hall_total: int = 0
 var _collections: Dictionary = {}
 ## RF-498: ¿ya se mostró la intro? Clave aditiva (no sube SAVE_VERSION); sin ella, o si no es booleana, vale `false`.
 var _intro_seen: bool = false
+## RF-575: ¿ya se completó o se saltó el tutorial del nivel 1? Clave aditiva (no sube SAVE_VERSION). Sin la clave
+## (o si no es booleana) vale `true` si el guardado ya ganó el nivel 1 y `false` si no: quien ya jugó no lo ve.
+var _tutorial_done: bool = false
+## RF-606: la última versión cuyas novedades se abrieron (M67). Clave aditiva (no sube SAVE_VERSION); sin ella, o si
+## no es un texto, vale «» (nunca vio ninguna).
+var _news_version: String = ""
 ## RF-508: preferencias aditivas de posición y lado de los botones flotantes.
 var _ui_prefs: UiPrefs
 
@@ -56,6 +67,8 @@ func load_save() -> void:
 	_hall_total = 0
 	_collections = {}
 	_intro_seen = false
+	_tutorial_done = false
+	_news_version = ""
 	_ui_prefs = UiPrefs.new()
 	if not FileAccess.file_exists(save_path):
 		return
@@ -80,6 +93,10 @@ func load_save() -> void:
 	var intro_seen: Variant = (parsed as Dictionary).get("intro_seen", false)
 	_intro_seen = typeof(intro_seen) == TYPE_BOOL and intro_seen  # solo `true` booleano cuenta (RF-498)
 	_ui_prefs = UiPrefs.read((parsed as Dictionary).get("ui_prefs", null))
+	var tutorial_done: Variant = (parsed as Dictionary).get("tutorial_done", null)
+	_tutorial_done = tutorial_done if typeof(tutorial_done) == TYPE_BOOL else is_completed(TUTORIAL_LEVEL_ID)  # RF-575
+	var news_version: Variant = (parsed as Dictionary).get("news_version", "")
+	_news_version = news_version if typeof(news_version) == TYPE_STRING else ""  # RF-606
 
 
 func save() -> bool:
@@ -90,9 +107,47 @@ func save() -> bool:
 		return false
 	var data := {"version": SAVE_VERSION, "levels": _levels, "settings": _settings,
 		"seen_enemies": _seen_enemies, "scores": _scores, "initials": _last_initials, "hall_total": _hall_total, "collections": _collections,
-		"intro_seen": _intro_seen, "ui_prefs": _ui_prefs.to_dict()}
+		"intro_seen": _intro_seen, "ui_prefs": _ui_prefs.to_dict(), "tutorial_done": _tutorial_done, "news_version": _news_version}
 	file.store_string(JSON.stringify(data, "  "))
 	return true
+
+
+# --- El tutorial del nivel 1 (RF-575, RF-576) ---
+
+func tutorial_done() -> bool:
+	return _tutorial_done
+
+
+## ¿La opción «Tutorial del nivel 1» está prendida? (RF-576)
+func tutorial_enabled() -> bool:
+	return bool(get_setting("tutorial_enabled"))
+
+
+## Lo completó o lo saltó: no se repite. Guarda enseguida.
+func mark_tutorial_done() -> void:
+	_tutorial_done = true
+	save()
+
+
+## RF-576: «Volver a verlo»: prende la opción y borra la marca, así el tutorial sale la próxima vez que se entra
+## al nivel 1. Guarda enseguida.
+func reset_tutorial() -> void:
+	_settings["tutorial_enabled"] = true
+	_tutorial_done = false
+	save()
+
+
+# --- Novedades de esta versión (RF-606) ---
+
+## La última versión cuyas novedades se abrieron («» si ninguna).
+func news_version_seen() -> String:
+	return _news_version
+
+
+## Marca `version` como vista y guarda enseguida (al abrirse la pantalla, no al cerrarla).
+func mark_news_seen(version: String) -> void:
+	_news_version = version
+	save()
 
 
 func _backup_save_if_needed() -> void:
@@ -295,8 +350,21 @@ func set_last_initials(name: String) -> void:
 
 # --- Opciones (RF-113) ---
 
+## M66, RF-600: ¿está prendida la «Entrada de los jefes»? Un valor que no es booleano se lee como prendida.
+func boss_entrance_enabled() -> bool:
+	var value: Variant = get_setting("boss_entrance")
+	return value if typeof(value) == TYPE_BOOL else true
+
+
 func get_setting(key: String) -> Variant:
 	return _settings.get(key, DEFAULT_SETTINGS.get(key))
+
+
+## M65, RF-593: ¿están prendidas las «Animaciones de mejora»? Sin la clave, o con un valor que no es
+## booleano (un guardado viejo o dañado), vale prendida.
+func upgrade_fx_enabled() -> bool:
+	var value: Variant = get_setting("upgrade_fx")
+	return value if typeof(value) == TYPE_BOOL else true
 
 
 func set_setting(key: String, value: Variant) -> void:

@@ -51,6 +51,7 @@ func _init() -> void:
 	_back_button.add_theme_font_size_override("font_size", 22)
 	_back_button.pressed.connect(close)
 	column.add_child(_back_button)
+	MenuTouch.attach(self)  # RF-550, RF-551: botón de 56 px y desplazamiento táctil en el celular
 
 
 func _ready() -> void:

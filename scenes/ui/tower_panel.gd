@@ -59,6 +59,15 @@ func _process(_delta: float) -> void:
 		refresh(_gold)
 
 
+## M63 (RF-574): los botones que el tutorial señala.
+func upgrade_button() -> Button:
+	return _upgrade_button
+
+
+func sell_button() -> Button:
+	return _sell_button
+
+
 func refresh(gold: int) -> void:
 	if _tower == null:
 		return

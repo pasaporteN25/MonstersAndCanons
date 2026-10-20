@@ -126,8 +126,6 @@ func test_closed_catalog_is_not_rebuilt_on_gold_changes() -> void:
 	_game.mobile_hud.open_catalog()
 	for child: Node in _game.mobile_hud._tower_grid.get_children():
 		var button: Button = child as Button
-		if button.text.contains("No disponible"):
-			continue
 		assert_true(button.disabled, "sin oro, al abrir todas las disponibles están apagadas")
 
 
@@ -156,13 +154,62 @@ func test_tower_icons_are_cached_between_refreshes() -> void:
 		index += 1
 
 
-func test_tab_structure_change_rebuilds_without_leftovers() -> void:
-	await _start(6)  # nivel 7, con infraestructura
-	_game.mobile_hud.open_catalog()
-	var grid: GridContainer = _game.mobile_hud._infrastructure_grid
-	_game.mobile_hud.set_catalog_data(_game.mobile_hud._catalog_towers, _game.available_towers,
-		_game.session.gold, _game.session.resources, true, [])
-	assert_eq(grid.get_child_count(), 0, "sin opciones no quedan tarjetas viejas en la grilla")
+# --- T301 (M60, RF-540 y RF-541; H-02 y H-20 de T289) ---
+
+func _card_names() -> Array[String]:
+	var names: Array[String] = []
+	for child: Node in _game.mobile_hud._tower_grid.get_children():
+		names.append((child as Button).text.get_slice("\n", 0))
+	return names
+
+
+func test_catalog_has_no_tabs_and_opens_on_the_first_row() -> void:
+	for level_index: int in [0, 6, 14]:
+		await _start(level_index)
+		var hud: MobileHud = _game.mobile_hud
+		assert_null(hud.find_child("CatalogTabs", true, false), "nivel %d: sin pestañas" % (level_index + 1))
+		hud.open_catalog()
+		assert_eq(hud._catalog_scroll.scroll_vertical, 0, "nivel %d: abre en la primera fila" % (level_index + 1))
+		assert_true(hud._tower_grid.is_visible_in_tree(), "nivel %d: las torres se ven" % (level_index + 1))
+		var grid_before: Array[Node] = hud._tower_grid.get_children()
+		_game.session.earn(3)
+		_game.session.spend(3)
+		assert_true(hud._tower_grid.is_visible_in_tree(), "nivel %d: cambiar el oro no mueve nada" % (level_index + 1))
+		assert_eq(hud._tower_grid.get_children(), grid_before, "nivel %d: las tarjetas siguen siendo las mismas" % (level_index + 1))
+		_game.queue_free()
+		await get_tree().process_frame
+
+
+func test_catalog_shows_only_the_towers_the_level_offers() -> void:
+	for level_index: int in [0, 6, 11, 14]:
+		await _start(level_index)
+		var offered: Array[String] = []
+		for tower: TowerData in _game.available_towers:
+			offered.append(tower.display_name)
+		var names: Array[String] = _card_names()
+		var machine_cards: int = 0
+		for card_name: String in names:
+			if card_name == "Demoledora":
+				machine_cards += 1
+			else:
+				assert_true(card_name in offered, "nivel %d: «%s» no es del nivel" % [level_index + 1, card_name])
+		assert_eq(names.size() - machine_cards, offered.size(), "nivel %d: están todas las del nivel" % (level_index + 1))
+		assert_eq(names.size(), offered.size() + (1 if _game._mobile_machine_option().size() > 0 else 0))
+		if machine_cards > 0:
+			assert_eq(names[names.size() - 1], "Demoledora", "la Demoledora va de última")
+		_game.queue_free()
+		await get_tree().process_frame
+	await _start(0)
+	assert_eq(_card_names().size(), 8, "el nivel 1 ofrece 8")
+
+
+func test_a_level_one_catalog_has_no_unavailable_towers() -> void:
+	await _start(0)
+	for card_text: String in _card_names():
+		assert_ne(card_text, "")
+	for child: Node in _game.mobile_hud._tower_grid.get_children():
+		assert_false((child as Button).text.contains("No disponible"))
+		assert_false((child as Button).text.contains("Falta completar"))
 
 
 # --- T291 (H-05, H-06 de T289): un solo dueño por toque ---

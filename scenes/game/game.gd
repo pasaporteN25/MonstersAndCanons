@@ -43,6 +43,11 @@ var camera_controller: CameraController
 var minimum_map_zoom: float = 1.0
 ## RF-217: se está probando el nivel del editor (no hay campaña: no se guarda nada).
 var testing: bool = false
+## M66 (RF-597): los números de la entrada de los jefes y lo que se lleva cuenta para no repetirla.
+var _boss_entrance_config: BossEntranceConfig
+var _boss_entrance_wave: int = -1
+var _boss_entrance_types: Array = []
+var _boss_entrance_last_s: float = BossEntranceRules.NEVER
 ## RF-184: el panel de pruebas. null si no es el modo de pruebas.
 var dev_panel: DevPanel
 ## RF-194: el Salón de la fama, mientras está abierto. null si no.
@@ -74,8 +79,11 @@ var obstacle_layer: ObstacleLayer
 @onready var exit_dialog: ExitDialog = $ExitDialog
 ## M52 (RF-466): el cartel de entrada del nivel.
 @onready var level_intro: LevelIntro = $LevelIntro
+## M63 (RF-570): el tutorial del nivel 1. null si esta partida no lo muestra.
+var tutorial: TutorialController
 ## RF-460: si la partida ya estaba en pausa (con `P`) cuando se abrió el diálogo.
 var _exit_was_paused: bool = false
+var _tool_message: String = ""  # RF-543: por qué no sirvió el último toque de la herramienta de demolición
 ## Costuras para los tests (`.claude/rules/tests.md`): a dónde sale la flecha. Por omisión, las pantallas de verdad.
 var leave_to_menu: Callable = func() -> void: GameFlow.go_to_main_menu()
 var leave_to_editor: Callable = func() -> void: GameFlow.go_to_editor()
@@ -135,6 +143,7 @@ func _ready() -> void:
 		mobile_hud.exit_pressed.connect(_request_exit)
 		mobile_hud.tower_chosen.connect(_on_mobile_tower_chosen)
 		mobile_hud.infrastructure_tool_chosen.connect(_on_mobile_infrastructure_tool_chosen)
+		mobile_hud.demolish_pressed.connect(_on_mobile_demolish_pressed)
 		mobile_hud.catalog_opened.connect(_on_mobile_catalog_opened)
 		hud.tower_panel.hide()
 		mobile_hud.upgrade_pressed.connect(_on_mobile_upgrade_pressed)
@@ -224,6 +233,7 @@ func _ready() -> void:
 	if DevMode.enabled:
 		_add_dev_panel()
 	_open_intro_if_pending()
+	_start_tutorial_if_due()
 
 
 ## RF-404 a RF-409: el controlador de la demolición, su vista y el panel del HUD. El sorteo del drop
@@ -275,24 +285,49 @@ func _on_mobile_tower_chosen(index: int, use_alt_payment: bool) -> void:
 	build_controller.select(index, use_alt_payment)
 
 
-func _on_mobile_infrastructure_tool_chosen(tool: StringName, class_id: StringName) -> void:
+func _on_mobile_infrastructure_tool_chosen(tool: StringName, _class_id: StringName) -> void:
 	if tool == &"machine":
 		infrastructure.buy_machine()
-		return
-	build_controller.select_mobile_infrastructure_tool(tool, class_id)
 
 
-func _on_mobile_infrastructure_targeted(cell: Vector2i, tool: StringName, class_id: StringName) -> void:
+## RF-542: el botón de demolición elige la herramienta; tocarlo de nuevo la suelta.
+func _on_mobile_demolish_pressed() -> void:
+	_tool_message = ""
+	if build_controller.mobile_action_active():
+		build_controller.cancel()
+	else:
+		build_controller.select_mobile_infrastructure_tool(&"obstacle")
+
+
+## RF-542: la herramienta reconoce el objeto tocado. Si la acción sale bien, se suelta sola; si no, queda
+## elegida y la barra dice el motivo (RF-543).
+func _on_mobile_infrastructure_targeted(cell: Vector2i, _tool: StringName, _class_id: StringName) -> void:
 	var spec: ObstacleSpec = infrastructure.obstacle_at(cell)
-	if spec == null or spec.class_id != class_id:
+	if spec == null:
+		_tool_message = "Ahí no hay nada para demoler ni habilitar"
 		return
-	var completed: bool = false
-	if tool == &"demolish" and spec.kind == ObstacleSpec.Kind.REMOVABLE:
-		completed = infrastructure.order(cell)
-	elif tool == &"extract" and spec.kind == ObstacleSpec.Kind.EXTRACTION:
-		completed = infrastructure.enable(cell)
+	var field: ObstacleField = infrastructure.field
+	var removable: bool = spec.kind == ObstacleSpec.Kind.REMOVABLE
+	var reason: StringName = field.can_order(cell) if removable else field.can_enable(cell)
+	var cost: int = field.cost_of(cell)
+	_tool_message = ""
+	if reason == &"busy":
+		_tool_message = "Ya hay una demolición en curso"
+	elif reason == &"active":
+		_tool_message = "El punto ya está activo"
+	elif reason == &"depleted":
+		_tool_message = "El punto está agotado"
+	elif reason != &"":
+		_tool_message = "No se puede usar ahí"
+	elif session.gold < cost:
+		_tool_message = "Faltan %d de oro" % (cost - session.gold)
+	if _tool_message != "":
+		return
+	var completed: bool = infrastructure.order(cell) if removable else infrastructure.enable(cell)
 	if completed:
 		build_controller.cancel()
+	else:
+		_tool_message = "No se pudo"
 
 
 func _on_mobile_catalog_money_changed(_gold: int) -> void:
@@ -305,59 +340,25 @@ func _refresh_mobile_catalog() -> void:
 	# Cerrado y ya armado: no se reconstruye nada; al abrirlo, catalog_opened vuelve a llamar acá (T290, H-04).
 	if mobile_hud.is_catalog_populated() and not mobile_hud.is_catalog_open():
 		return
-	var all_towers: Array[TowerData] = Wiki._all_towers()
-	var options: Array[Dictionary] = _mobile_infrastructure_options()
-	mobile_hud.set_catalog_data(all_towers, available_towers, session.gold, session.resources,
-		level_data.uses_resources(), options)
+	mobile_hud.set_catalog_data(available_towers, session.gold, session.resources,
+		level_data.uses_resources(), _mobile_machine_option())
 
 
-func _mobile_infrastructure_options() -> Array[Dictionary]:
-	var options: Array[Dictionary] = []
+## RF-542: ¿este nivel tiene algo para demoler o habilitar? (si no, no hay botón de demolición)
+func _has_demolition_targets() -> bool:
+	return level_data != null and not level_data.obstacles.is_empty()
+
+
+## RF-540: la compra de la Demoledora es la última tarjeta del catálogo ({} si el nivel no la ofrece o ya la tiene).
+func _mobile_machine_option() -> Dictionary:
 	if level_data == null or infrastructure == null:
-		return options
-	if infrastructure.machine_enabled and not infrastructure.field.has_machine:
-		var machine_price: int = infrastructure.field.machine_price()
-		var machine_reason: String = "Faltan %d de oro" % (machine_price - session.gold) if session.gold < machine_price else ""
-		options.append({"tool": &"machine", "class_id": &"", "name": "Demoledora",
-			"cost_text": "%d de oro" % machine_price, "disabled_reason": machine_reason, "icon": null})
-	var seen: Dictionary = {}
-	for spec: ObstacleSpec in level_data.obstacles:
-		var tool: StringName = &"demolish" if spec.kind == ObstacleSpec.Kind.REMOVABLE else &"extract"
-		var key: String = "%s:%s" % [tool, spec.class_id]
-		if seen.has(key):
-			continue
-		seen[key] = true
-		var available: bool = false
-		var required_gold: int = 0
-		var disabled_reason: String = ""
-		for target: ObstacleSpec in level_data.obstacles:
-			if target.kind != spec.kind or target.class_id != spec.class_id:
-				continue
-			var cell: Vector2i = target.cell
-			var cost: int = infrastructure.field.cost_of(cell)
-			required_gold = cost
-			var reason: StringName = infrastructure.field.can_order(cell) if tool == &"demolish" else infrastructure.field.can_enable(cell)
-			if reason == &"" and session.gold >= cost:
-				available = true
-				break
-			if reason == &"" and session.gold < cost:
-				disabled_reason = "Faltan %d de oro" % (cost - session.gold)
-			elif reason == &"busy":
-				disabled_reason = "Ya hay una demolición en curso"
-			elif reason == &"active":
-				disabled_reason = "El punto ya está activo"
-			elif reason == &"depleted":
-				disabled_reason = "El punto está agotado"
-			elif reason == &"cleared":
-				disabled_reason = "No queda ningún objeto de esa clase"
-		if available:
-			disabled_reason = ""
-		var action_name: String = "Demoler" if tool == &"demolish" else "Habilitar"
-		options.append({"tool": tool, "class_id": spec.class_id,
-			"name": "%s · %s" % [action_name, ObstacleText.display_name(spec)],
-			"cost_text": "%d de oro" % required_gold,
-			"disabled_reason": disabled_reason, "icon": null})
-	return options
+		return {}
+	if not infrastructure.machine_enabled or infrastructure.field.has_machine:
+		return {}
+	var machine_price: int = infrastructure.field.machine_price()
+	var machine_reason: String = "Faltan %d de oro" % (machine_price - session.gold) if session.gold < machine_price else ""
+	return {"tool": &"machine", "name": "Demoledora", "cost_text": "%d de oro" % machine_price,
+		"disabled_reason": machine_reason, "icon": null}
 
 
 ## Muestra en el panel el removible elegido (o lo oculta si no hay ninguno).
@@ -463,9 +464,14 @@ func _create_interactive_camera() -> Camera2D:
 func _process(delta: float) -> void:
 	if mobile_hud != null:
 		mobile_hud.set_game_over(session.is_over())
-		mobile_hud.set_cart_active(build_controller.selected_tower() != null or build_controller.selected_placed() != null or build_controller.mobile_action_active())
+		mobile_hud.set_cart_active(build_controller.selected_tower() != null or build_controller.selected_placed() != null)
+		mobile_hud.set_demolish_available(_has_demolition_targets())
+		mobile_hud.set_demolish_active(build_controller.mobile_action_active())
 		var selected_tower: TowerData = build_controller.selected_tower()
-		hud.set_mobile_wave_controls_visible(selected_tower == null and build_controller.selected_placed() == null)
+		var tool_active: bool = build_controller.mobile_action_active()
+		if not tool_active:
+			_tool_message = ""
+		hud.set_mobile_wave_controls_visible(selected_tower == null and build_controller.selected_placed() == null and not tool_active)
 		if selected_tower == null:
 			mobile_hud.set_placement_visible(false)
 			var placed: Tower = build_controller.selected_placed()
@@ -475,8 +481,11 @@ func _process(delta: float) -> void:
 			var unavailable_reason: String = ""
 			if placed != null and placed.can_upgrade() and session.gold < placed.next_level_stats().cost:
 				unavailable_reason = "Faltan %d de oro" % (placed.next_level_stats().cost - session.gold)
-			mobile_hud.show_selected_tower(placed, session.gold, refund, resource_refund,
-				can_improve, unavailable_reason)
+			if placed == null and tool_active:
+				mobile_hud.show_tool_status(_tool_message)
+			else:
+				mobile_hud.show_selected_tower(placed, session.gold, refund, resource_refund,
+					can_improve, unavailable_reason)
 		else:
 			mobile_hud.show_ghost_status(selected_tower.display_name, TowerText.cost_text(selected_tower, build_controller.pay_alt()))
 			var ghost: GhostPlacement = build_controller.ghost_placement()
@@ -495,6 +504,24 @@ func _process(delta: float) -> void:
 	else:
 		var strength: float = SHAKE_STRENGTH_PX * _shake_left / SHAKE_DURATION
 		position = Vector2(randf_range(-1.0, 1.0), randf_range(-1.0, 1.0)) * strength
+
+
+## RF-544: al pasar la app a segundo plano (una llamada, el botón de inicio, otra app) la partida se pausa sola.
+## `APPLICATION_PAUSED` es el aviso de Android; `APPLICATION_FOCUS_OUT` solo cuenta en un dispositivo móvil:
+## en una PC, perder el foco de la ventana no pausa (no cambia nada para quien juega en la computadora).
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_APPLICATION_PAUSED:
+		pause_for_background()
+	elif what == NOTIFICATION_APPLICATION_FOCUS_OUT and OS.has_feature("mobile"):
+		pause_for_background()
+
+
+## Deja la partida en pausa (la misma de RF-104: se sigue con el botón Pausa). No hace nada si ya está en pausa
+## (un menú, un diálogo o el cartel de entrada ya la pausaron) ni si la partida terminó.
+func pause_for_background() -> void:
+	if session == null or session.is_over() or is_paused():
+		return
+	set_paused(true)
 
 
 ## Al salir de la partida (reintentar, cerrar, o un test que la borra) nunca debe
@@ -604,6 +631,32 @@ func _on_intro_closed() -> void:
 		mobile_hud.set_modal_open(false)
 
 
+# --- El tutorial del nivel 1 (M63, RF-570 a RF-577) ---
+
+## RF-570: si esta partida es la del nivel 1 jugada desde el menú (no el modo de pruebas ni el editor) y el jugador
+## no lo desactivó ni lo completó antes, arma el tutorial. Empieza al cerrarse el cartel de entrada (si lo hay).
+## Un archivo con errores no se muestra: el nivel se juega como siempre y el error sale por la salida.
+func _start_tutorial_if_due() -> void:
+	if testing or DevMode.enabled or GameFlow.current_level() == null or SaveManager.tutorial_done() \
+			or not SaveManager.tutorial_enabled():
+		return  # lo barato primero: así el archivo solo se lee cuando hace falta
+	var data: TutorialData = TutorialData.load_file()
+	if not data.is_valid():
+		push_warning("El tutorial no se muestra: %s" % "; ".join(data.errors))
+		return
+	if not TutorialFlow.should_auto_show(SaveManager.tutorial_enabled(), SaveManager.tutorial_done(), DevMode.enabled, testing,
+			String(level_data.id) == data.level_id, data.is_valid()):
+		return
+	tutorial = TutorialController.new()
+	tutorial.name = "Tutorial"
+	add_child(tutorial)
+	tutorial.setup(self, data)
+	if level_intro.is_open():
+		level_intro.closed.connect(tutorial.begin, CONNECT_ONE_SHOT)
+	else:
+		tutorial.begin()
+
+
 # --- La flecha «← Menú» (RF-459 a RF-461) ---
 
 ## Las piezas de colección que se perderían: una entrada por pieza, con el id de su colección. Cuentan las
@@ -710,7 +763,7 @@ func start_next_wave() -> void:
 ## RF-92: reinicia el nivel desde cero recargando la escena.
 func restart() -> void:
 	_reset_time()
-	get_tree().reload_current_scene()
+	GameFlow.reload_current()  # RF-584: con pantalla de carga
 
 
 # --- Modo de pruebas (RF-184): lo que hace cada botón del panel ---
@@ -870,12 +923,45 @@ func _on_enemy_spawned(enemy: Enemy) -> void:
 	enemy.healed.connect(func(e: Enemy, amount: int) -> void:
 		effects.heal_number(e.global_position, amount)
 		Audio.play(&"heal", 0.8))  # RF-165
+	_maybe_boss_entrance(enemy)  # M66: antes que la tarjeta de abajo, que espera al cartel de aparición
 	# RF-134: la primera vez en todo el juego que aparece este tipo, se presenta.
 	if not SaveManager.has_seen_enemy(enemy.data.id):
 		SaveManager.mark_enemy_seen(enemy.data.id)
 		hud.show_enemy_intro(enemy.data)
 		if GameFlow.played_level() != null:
 			SaveManager.save()  # RF-117: solo jugando desde el menú (campaña o comunidad)
+
+
+## M66, RF-597 a RF-602: si el enemigo que nació tiene datos de entrada (`EnemyData.entrance`), el nivel está en su
+## lista, la opción está prendida y no se repitió en la oleada ni hubo otra hace menos de 8 s, sale el destello en
+## la entrada de su camino y el cartel de aparición. Solo presentación: no toca al enemigo, la oleada ni el reloj.
+## Solo en la campaña jugada desde el menú (también con el modo de pruebas): no en el editor, la comunidad,
+## Asedio ni la escena suelta.
+func _maybe_boss_entrance(enemy: Enemy) -> void:
+	if enemy.data.entrance == null:
+		return  # lo barato primero: casi todos los enemigos salen acá
+	var campaign: LevelData = GameFlow.current_level()
+	if campaign == null or level_data == null or campaign.id != level_data.id:
+		return
+	if _boss_entrance_config == null:
+		_boss_entrance_config = BossEntranceConfig.load_from()
+	if session.wave != _boss_entrance_wave:
+		_boss_entrance_wave = session.wave
+		_boss_entrance_types.clear()
+	var now_s: float = Time.get_ticks_msec() / 1000.0
+	if not BossEntranceRules.should_show(enemy.data, String(level_data.id), SaveManager.boss_entrance_enabled(), now_s,
+			_boss_entrance_last_s, _boss_entrance_types, _boss_entrance_config.seconds("intervalo_min_s")):
+		return
+	_boss_entrance_last_s = now_s
+	_boss_entrance_types.append(enemy.data.id)
+	var spot: Vector2 = enemy.global_position
+	var path: Path2D = enemy.path()
+	if path != null and path.curve != null and path.curve.point_count > 0:
+		spot = path.to_global(path.curve.get_point_position(0))
+	effects.boss_entrance(spot, enemy.data.color, _boss_entrance_config.seconds("destello_s"))
+	hud.show_boss_entrance(enemy.data)
+	if enemy.data.entrance.sound != &"":
+		Audio.play(enemy.data.entrance.sound)
 
 
 ## RF-132: el número de daño de cada golpe. Si el golpe hizo combo, su número es el aviso (RF-315) y suena (RF-316).
@@ -931,10 +1017,33 @@ func _on_tower_built(tower: Tower) -> void:
 
 
 func _on_tower_upgraded(tower: Tower) -> void:
-	effects.tower_built(tower.global_position, tower.data.color, tower.data.footprint)  # RF-75: mismo anillo
+	# M65 (RF-590, RF-593): el efecto y el texto de la mejora; con la opción apagada, el anillo de siempre (RF-75).
+	if not effects.tower_upgraded(tower, get_viewport().get_canvas_transform(), _upgrade_fx_safe_rects(), _upgrade_fx_view_rect()):
+		effects.tower_built(tower.global_position, tower.data.color, tower.data.footprint)
 	_refresh_tower_panel()
 	_refresh_exploitable()
 	Audio.play(&"upgrade")
+
+
+## M65, RF-592: lo que el texto de la mejora no puede pisar (barra de abajo, tilde, cruz, botones flotantes).
+func _upgrade_fx_safe_rects() -> Array[Rect2]:
+	var rects: Array[Rect2] = []
+	var bottom: Control = hud.get_node_or_null("BottomBar") as Control
+	if bottom != null and bottom.is_visible_in_tree():
+		rects.append(bottom.get_global_rect())
+	if mobile_hud != null:
+		rects.append_array(mobile_hud.forbidden_rects())
+	return rects
+
+
+## M65, RF-592: el área de mapa que se ve (entre la barra de arriba y la de abajo).
+func _upgrade_fx_view_rect() -> Rect2:
+	var mobile_config: MobileUiConfig = MobileUiConfig.load_from()
+	var top_height: float = float(mobile_config.get_value("barra_alta_px")) if UiMode.is_mobile() else 48.0
+	var bottom: Control = hud.get_node_or_null("BottomBar") as Control
+	var bottom_height: float = float(mobile_config.get_value("barra_baja_px")) if UiMode.is_mobile() \
+			else (bottom.size.y if bottom != null and bottom.is_visible_in_tree() else 0.0)
+	return Rect2(0.0, top_height, Rules.SCREEN_SIZE.x, Rules.SCREEN_SIZE.y - top_height - bottom_height)
 
 
 func _on_tower_sold(tower: Tower, refund: int, _resource_refund: int) -> void:

@@ -70,6 +70,24 @@ Los niveles son JSON, un formato de texto común que se edita a mano. Un `.tres`
 | `stun_interval` / `stun_seconds` / `stun_range_tiles` | El **hechizo** que apaga torres (RF-281): cada cuántos segundos, cuánto aturde y a qué distancia. 0 = no lanza. | `8.0`, `3.0`, `4.0` |
 | `reflect_range_tiles` / `reflect_stun_seconds` | El **rebote** (RF-283): a qué distancia rebota el tiro de una torre y cuánto la aturde. La quemadura no rebota. | `2.5`, `2.0` |
 | `aura_heal_percent_per_second` | % de vida máxima por segundo que hace recuperar a los demás dentro del radio (RF-272); no mientras se queman. | `3.0` |
+| `entrance` | La **entrada** del jefe (RF-601, M66): vacío = el enemigo no hace entrada. Ver más abajo. | `BossEntranceData` |
+
+### Darle una entrada a un jefe (M66, RF-601)
+
+Cuando un enemigo con `entrance` aparece en una partida de la **campaña jugada desde el menú** (también en el modo de pruebas), sale un **destello** en la entrada del camino y un **cartel** de 1,6 s con su retrato, «¡Llega el <nombre>!», su nombre y su frase. No hace falta código ni arte: el retrato es su `texture`, el nombre su `display_name` y el destello se tiñe con su `color`.
+
+1. En el `.tres` del enemigo, en el Inspector de Godot, el campo **`entrance`** → *Nuevo BossEntranceData*.
+2. Completá lo que haga falta:
+
+| Campo | Qué es | Ejemplo |
+|---|---|---|
+| `levels` | Ids de los niveles donde sale. **Vacía = en todos.** Un id que no existe es un error. | `["level_01"]` o vacía |
+| `line` | La frase del cartel (80 caracteres como máximo). **Vacía = usa la `description` del enemigo.** | `¡Viene por la salida!` |
+| `sound` | Id de un sonido que ya existe (un `.wav` de `assets/audio/`). Vacío = ninguno. | `impact` |
+
+3. Revisalo: `godot --headless --path . -s tools/check_entrada_jefes.gd` dice, en castellano, qué está mal.
+
+**Hoy** solo el **Jefe** (`boss.tres`) tiene `entrance`, con `levels = ["level_01"]`: es el piloto. **No se activó en los demás a propósito** (spec M66, P-66-7). Para extenderlo: **(a)** el Jefe en sus otros 14 niveles = vaciar la lista `levels` de `boss.tres`; **(b)** el Coloso (nivel 15) = agregarle una `entrance` con `levels` vacía o `["level_15"]` a `colossus.tres`. Los tiempos y el tamaño del cartel están en `data/ui/entrada_jefes.json` (`destello_s`, `cartel_entra_s`, `cartel_quieto_s`, `cartel_sale_s`, `cartel_ancho_px` hasta 720, `cartel_alto_px` hasta 120, `intervalo_min_s`, fuentes) y el mismo validador los revisa. El jugador la prende y la apaga en **Opciones → «Entrada de los jefes»**. Solo sale una vez por oleada y por tipo, y no más de una cada 8 s.
 
 ---
 
@@ -479,6 +497,14 @@ El modo celular (RF-502 a RF-515, D-097) **no agrega enemigos, torres ni niveles
 - **Las tarjetas de nivel con Insignias** (RF-514) muestran **las torres que ya ofrece cada nivel**: no hay nada para agregar a mano.
 - **Las estatuas de los mapas** serán estatuas de torres de piedra (RF-515, D-098, `specs/05-guia-de-arte.md` §9). Hasta que T277 las dibuje, los niveles 1, 3 y 5 siguen con la estatua de hoy.
 
+### M61 · Menús del celular y entrada por dispositivo (RF-550 a RF-555, D-115 a D-117)
+
+No agrega enemigos, torres ni niveles. **Sí suma números que se ajustan sin programar**, en `data/ui/mobile_ui.json` (los mismos que ya usa el modo celular; si falta uno, el juego usa su valor por omisión):
+
+- **Menús táctiles:** `boton_alto_px` (56: alto mínimo de todo botón de menú en el celular), `menu_deslizador_alto_px` (44: alto de los deslizadores de volumen), `scroll_umbral_px` (12: cuánto puede moverse el dedo y seguir siendo un toque), `scroll_friccion` (4,0: cuánto frena la inercia; más alto = frena antes), `scroll_velocidad_min_px` (30: debajo de esta velocidad la inercia se corta) y `scroll_barra_px` (22: ancho de la barra de desplazamiento).
+- **Mouse y toque a la vez:** `puntero_duplicado_ms` (500) y `puntero_duplicado_px` (32): un clic que cae dentro de ese tiempo y esa distancia de un toque se toma por duplicado y se descarta.
+- **La versión del juego** (RF-554) **no** está en ese archivo: es `config/version` en `project.godot` (hoy `"beta"`). Se cambia **solo ahí**.
+
 ### T243 · El Coloso, jefe supremo del nivel 15 (diseño aprobado; todavía no está en el juego)
 
 El jefe del último nivel es un ejemplo de **un enemigo que se parte con solo datos**, igual que la Araña y sus Crías: **dos archivos en `data/enemies/`**, sin tocar el código (RF-481 a RF-484, D-092).
@@ -512,6 +538,43 @@ Una banda de criaturas independientes que roban en grupo, hecha **solo con datos
 ### T231 · Nivel 13 (Paso alto)
 
 `data/levels/level_13.json`, de **26 × 12**, tema `nieve` y **dos entradas** (A y B) que se unen en la casilla (2,6): los dos recorridos comparten un tronco hasta la salida. Su leyenda usa 6 de las 12 letras: `e` y `r` removibles (1 recurso al 50 %), `m` mina y `b` bosque explotable (una fuente por entrada), `i` **hielo** (la laguna: no se construye) y `h` `roca_marcada` (el `hito`). `"torres"` de RF-474 (sin Ametralladora ni Lanzamisiles) y `"demoledora": false`. **La escolta** se escribe con tres grupos del mismo `desde` y la misma `entrada` (`guardian`, `healer`, `shaman`), p. ej. `{"enemigo": "guardian", "cantidad": 2, "cada": 3.0, "entrada": "B"}` más los otros dos con el mismo `desde`. Para cambiar la dificultad se mueve `aumento_vida` (40; con 41 el bot gana con 1 vida y con 42 pierde) y, con cuidado, las oleadas 14, 22 y 23, que son **precipicios**. **Después de cualquier cambio:** `... -s tools/balance_sim.gd -- x check_rule=1 levels=13`.
+
+### T330 · El tutorial del nivel 1 (`data/tutorial/tutorial.json`)
+
+El tutorial se retoca con un archivo, sin programar: `{"version": 1, "borrador": true, "nivel": "level_01", "interfaz": {…}, "pc": [{"paso": "welcome", "texto": "…"}, …], "celular": [ … ]}`.
+
+| Clave | Qué es | Límite |
+|---|---|---|
+| `"borrador"` | `true` mientras Lucas no aprobó los textos (solo avisa; se ve igual en el juego). Al aprobarlos, `false`. | Booleano, obligatorio. |
+| `"nivel"` | El nivel donde se muestra. Hoy `level_01`. | Texto. |
+| `"interfaz"` | Los rótulos de la tarjeta: `titulo`, `paso` (con **dos `%d`**: el número y el total), `siguiente`, `saltar` y `terminar`. | Hasta **40** caracteres cada uno. |
+| `"pc"` y `"celular"` | Los pasos, **en orden**, de cada modo. | Ver abajo. |
+| `"paso"` | Cuál de los pasos que sabe hacer el juego: `welcome`, `path`, `gold`, `lives`, `pick_tower`, `place_tower`, `open_cart`, `pick_card`, `confirm_tower`, `start_wave`, `select_tower`, `upgrade`, `sell`, `speed`, `pause`, `resume`, `done`. | `pick_tower` y `place_tower` **solo en PC**; `open_cart`, `pick_card` y `confirm_tower` **solo en el celular**; sin repetir. |
+| `"texto"` | Lo que dice la tarjeta. | **1 o 2 líneas** (`\n`), **80 caracteres por línea**, **160** en total. |
+
+- **Qué hace cada paso** (qué señala y qué espera) **es del juego**; el texto, el orden y cuáles se usan son tuyos. **Obligatorios:** `path`, `gold`, `lives`, `start_wave`, `upgrade`, `sell`, `speed`, `pause` y los de elegir y construir de cada modo. **Opcionales:** `welcome`, `select_tower`, `resume` y `done`. `pick_tower` va antes que `place_tower`; `open_cart`, `pick_card` y `confirm_tower` en ese orden; si hay `pause`, tiene que haber `resume` después; `done`, si está, al final.
+- **No repitas números de otros datos** (costos, tiempos): explicá la regla y listo.
+- **Revisalo** con `godot --headless --path . -s tools/check_tutorial.gd` (dice en castellano qué arreglar). Un archivo con errores **no se muestra** (el error sale en la salida) y el nivel 1 se juega sin tutorial.
+- **Dónde se ve:** solo en el nivel 1 jugado desde el menú, una vez (se completa o se salta). Se apaga y se vuelve a ver en **Opciones**.
+
+### M65 · La animación de mejora de torres (`data/ui/mejoras.json`)
+
+Lo que aparece al mejorar una torre se retoca con un archivo, sin programar. **No hay que escribir ningún número de torre**: el texto («+3 daño · +0,5 disp/s») se calcula restando los niveles de `data/towers/<id>.tres`, así que si cambiás el daño de un `.tres`, el texto cambia solo.
+
+| Clave | Qué es |
+|---|---|
+| `"variantes"` | `refuerzo` (nivel 2) y `maestria` (nivel 3): `duracion_s` (mayor que 0), `cuadros` (para el arte definitivo) y `escala` (tamaño del efecto). |
+| `"aclarado_blanco"` | Cuánto se aclara el color de la torre para el texto (0 a 1; 0,4 = 40 % de blanco). |
+| `"fuente_base_px"`, `"fuente_min_px"`, `"fuente_max_px"` | Tamaño del texto: se compensa con el zoom del mapa para medir entre el mínimo y el máximo **en pantalla** (20 a 30 px). |
+| `"texto_duracion_s"`, `"texto_sube_px"`, `"escalonado_s"` | Cuánto dura el texto, cuánto sube y el retraso entre renglones. |
+| `"max_estadisticas"`, `"max_por_renglon"` | Hasta 4 estadísticas, de a 2 por renglón. Si lo ves cargado, bajá el máximo. |
+| `"tope_efectos"`, `"tope_textos"` | Cuántos efectos (8) y textos (4) pueden estar vivos a la vez. |
+| `"estadisticas"` | La tabla, **en orden de prioridad**: `campo` (un campo de `TowerLevelData`), `etiqueta` (lo que se lee), `formato` (`entero`, `decimal` o `porcentaje`) y, opcional, `escala` (100 para `slow_amount`, que se guarda como fracción). |
+
+- **Solo se muestra lo que cambió** entre niveles (con tolerancia de 0,005). El costo, las texturas, `bonus_vs_*` y `chain_range_tiles` no están en la tabla: si algún día cambian y querés mostrarlos, sumá una línea.
+- **Si agregás un campo nuevo** a `TowerLevelData` que cambia entre niveles, sumalo a la tabla: un test (`test_upgrade_deltas.gd`) avisa si falta.
+- **Revisalo** con `godot --headless --path . -s tools/check_mejoras.gd`. Con un error, el juego usa el valor por omisión de ese campo y sigue andando.
+- **Se apaga** en Opciones → «Animaciones de mejora».
 
 ### T242 · La intro (`data/intro/intro.json`)
 
@@ -594,3 +657,34 @@ godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- sin_recursos
 ```
 
 **Asedio:** usa **los 15 mapas** de la campaña con el mismo oro, `vida_monstruos_%` 115 como regla global y una tabla `vida_monstruos_por_mapa_%` de 13 excepciones (de 101 % a 118 %; el 4 y el 15 toman el 115 % global). No hay ninguna copia de mapa en `data/modos/asedio/`: para cambiar la dureza de un mapa se cambia **su número en la tabla** de `data/modos/asedio/modo.json`. Los valores son **iniciales**: salen del bot (T255, y T258 para los mapas con la Cuadrilla) y se ajustan cuando Lucas juegue. Con 150 % y 80 % de oro, el bot perdía en la oleada 4.
+
+
+## Editar los textos de la intro *(M62, RF-561 a RF-563)*
+
+Los textos, los segundos de cada lámina y el fundido de la intro viven en `data/intro/intro.json`, pero **no hace falta tocar ese archivo**: se editan en un documento más cómodo, **`specs/intro/intro-editable.md`** (una sección por lámina, con el texto, los segundos, la imagen y un lugar para tus notas).
+
+1. **Editá** el documento: el texto va debajo de `Texto:`, **cada línea con `> ` adelante**; los segundos van en `- Segundos:`; las notas, debajo de `Notas:` (no se cargan al juego).
+2. **Probá sin guardar nada:** `godot --headless --path . -s tools/intro_doc.gd -- import --dry`. Muestra los cambios (`CAMBIA: lámina 5, texto: …`), los avisos y los errores.
+3. **Pasalo al juego:** el mismo comando sin `--dry`. **Si hay un error, no cambia nada** y dice cuál es, con el número de línea o de lámina (por ejemplo «la lámina 3 tiene 3 líneas y el máximo es 2»).
+4. **Volver a empezar** desde lo que carga el juego: `... -- export` (reescribe el documento y **conserva las notas**).
+
+**Reglas** (las mismas que revisa el juego, RF-497): de 5 a 8 láminas; texto de 1 o 2 líneas, hasta 90 caracteres por línea y 160 en total; segundos enteros de 4 a 12; fundido de 0 a 2; la imagen tiene que existir. Un **aviso** (no un error) te dice si una lámina dura menos de lo que pide su texto para leerse (`2 s + caracteres / 20`).
+
+**Dos cosas que conviene saber:**
+- Los textos oficiales **también** están en `specs/intro/guion.md`, y un test (`tests/test_intro_data.gd`) los compara con `intro.json`. Si cambiás un texto con esta herramienta, **el test va a avisar** hasta que el guion diga lo mismo: pedile a Claude que lo actualice o corregilo vos.
+- La herramienta **no crea imágenes**: el campo `Imagen` solo puede apuntar a un archivo que ya exista (por ejemplo, para reordenar láminas). Cambiar qué imagen va con qué texto cambia cómo se ve el juego: conviene hablarlo antes.
+
+Si el documento y el JSON se desfasan (alguien editó uno solo), `tests/test_intro_doc.gd` lo avisa.
+
+
+## Cómo agregar las novedades de una versión *(M67, RF-605 y RF-609)*
+
+La pantalla «Novedades de esta versión» (se abre sola una vez por versión y se vuelve a ver en **Opciones → «Créditos y versión»**) lee **`data/novedades/novedades.json`**. Para sacar una versión nueva (por ejemplo, la 1.1.0) **no hace falta tocar código**:
+
+1. **Subí la versión** en `project.godot` (`config/version`), y a mano `file_version` y `product_version` de Windows y `version/code` de Android (`export_presets.cfg`).
+2. **Agregá al principio de `versiones`** una entrada con `"tipo": "mejoras"`, tus novedades y `"borrador": false`. `CHANGELOG.md` sigue siendo la fuente para armarla, pero **el juego no lo lee**. Dejá las entradas viejas: Opciones las usa como historial.
+3. **Revisalo:** `godot --headless --path . -s tools/check_novedades.gd`. Da errores en castellano (con la versión y la novedad) y un **aviso** si la versión de `project.godot` es un número y no tiene entrada aprobada.
+
+**La forma del archivo.** `version` (el formato, hoy 1), `interfaz` (los rótulos fijos: `entendido`, `titulo_novedades`, `titulo_mejoras`, `borrador`, `sin_novedades`) y `versiones`. Cada versión: `id` (**igual** que `config/version`), `tipo` (`"presentacion"` para la 1.0.0, `"mejoras"` para las siguientes), `borrador` (`true` hasta que el texto esté aprobado: **un borrador no sale solo**, pero se puede revisar desde Opciones), `titulo` (hasta 40 caracteres), `subtitulo` (opcional, hasta 80), `cabecera` (opcional, una imagen `res://` que exista) y `novedades`: **de 1 a 8**, cada una con `titulo` (hasta 40), `texto` (hasta 140 caracteres y 2 líneas) e `icono` (opcional, una imagen `res://` que exista).
+
+**Reglas que conviene saber.** Las de tipo «mejoras» muestran arriba «Mejoras de esta versión» y no salen solas a un guardado nuevo (quien instala por primera vez no necesita saber qué cambió). **No sale** con `config/version` en `beta`, en el modo de pruebas ni desde el editor de Godot. **No escribas cifras** que puedan quedar viejas (cantidad de torres, de enemigos…): si hace falta una, `tests/test_news_content.gd` la compara con el juego. Un archivo con errores **no muestra nada** y el juego abre normal.

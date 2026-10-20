@@ -40,16 +40,36 @@ static func avoid(ghost_rect: Rect2, button_rects: Array[Rect2], sides: Array[St
 		if expanded.intersects(current_rect) and not expanded.intersects(alternate_rect):
 			current_position = alternate_position
 		positions.append(current_position)
+	var low: float = top
+	var high: float = maxf(view_size.y - bottom - button_size.y, top)
+	var gap: float = button_size.y * 2.0
 	for i: int in positions.size():
+		# D-111: solo se separan los botones del mismo lado (uno de cada lado no se pisa nunca); con tres
+		# botones, el lugar elegido tiene que quedar libre de todos los anteriores de ese lado.
+		var earlier: Array[float] = []
 		for j: int in i:
-			if absf(positions[i].y - positions[j].y) < button_size.y * 2.0:
-				var low: float = top
-				var high: float = maxf(view_size.y - bottom - button_size.y, top)
-				var new_y: float = positions[j].y + button_size.y * 2.0
-				if new_y > high:
-					new_y = positions[j].y - button_size.y * 2.0
-				positions[i].y = clampf(new_y, low, high)
+			if _is_left(positions[i], view_size, button_size) == _is_left(positions[j], view_size, button_size):
+				earlier.append(positions[j].y)
+		var candidates: Array[float] = [positions[i].y]
+		for other_y: float in earlier:
+			candidates.append(clampf(other_y + gap, low, high))
+			candidates.append(clampf(other_y - gap, low, high))
+		var chosen_y: float = positions[i].y
+		for candidate: float in candidates:
+			var free: bool = true
+			for other_y: float in earlier:
+				if absf(candidate - other_y) < gap - 0.001:
+					free = false
+					break
+			if free:
+				chosen_y = candidate
+				break
+		positions[i].y = chosen_y
 	return positions
+
+
+static func _is_left(position: Vector2, view_size: Vector2, button_size: Vector2) -> bool:
+	return position.x + button_size.x / 2.0 < view_size.x / 2.0
 
 
 static func tick_side(ghost_rect: Rect2, button_rects: Array[Rect2], view_width: float,

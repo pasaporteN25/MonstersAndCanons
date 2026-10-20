@@ -71,7 +71,8 @@ func _snapshot() -> Dictionary:
 		"hall": SaveManager.hall_total(), "initials": [SaveManager.last_initials(3), SaveManager.last_initials(5)],
 		"seen": [SaveManager.has_seen_enemy(&"normal"), SaveManager.has_seen_enemy(&"fast"), SaveManager.has_seen_enemy(&"boss")],
 		"settings": [SaveManager.get_setting("music_volume"), SaveManager.get_setting("sfx_volume"),
-			SaveManager.get_setting("fullscreen"), SaveManager.get_setting("damage_numbers")]}
+			SaveManager.get_setting("fullscreen"), SaveManager.get_setting("damage_numbers")],
+		"tutorial": [SaveManager.tutorial_done(), SaveManager.tutorial_enabled()]}
 
 
 func _assert_roundtrip_is_identical(label: String) -> void:
@@ -99,6 +100,73 @@ func test_first_format_with_only_levels_and_three_settings_loads() -> void:
 	assert_eq(SaveManager.hall_total(), 0)
 	assert_false(SaveManager.has_seen_enemy(&"normal"))
 	_assert_roundtrip_is_identical("formato T40")
+
+
+# --- El tutorial del nivel 1 (M63, RF-575): una clave nueva que los guardados viejos no tienen ---
+
+func test_old_saves_that_won_level_1_do_not_get_the_tutorial_and_new_ones_do() -> void:
+	for text: String in [SAVE_T40, SAVE_BEFORE_M50, SAVE_FULL_COLLECTIONS]:
+		_write(text)
+		SaveManager.load_save()
+		assert_true(SaveManager.tutorial_done(), "quien ya ganó el nivel 1 no lo ve")
+		assert_true(SaveManager.tutorial_enabled(), "la opción nueva arranca prendida")
+		_assert_roundtrip_is_identical("con el tutorial")
+		assert_true(bool(JSON.parse_string(FileAccess.get_file_as_string(PATH))["tutorial_done"]), "al guardar queda escrita")
+	_write(SAVE_DEV)  # sin el nivel 1 ganado
+	SaveManager.load_save()
+	assert_false(SaveManager.tutorial_done())
+	_write('{"version":1}')
+	SaveManager.load_save()
+	assert_false(SaveManager.tutorial_done())
+	SaveManager.save()
+	assert_eq(int(JSON.parse_string(FileAccess.get_file_as_string(PATH))["version"]), 1, "la versión no cambia")
+
+
+# --- Animaciones de mejora (M65, RF-593): clave aditiva dentro de `settings` ---
+
+func test_old_saves_read_the_upgrade_animations_as_on_and_the_version_does_not_change() -> void:
+	for text: String in [SAVE_T40, SAVE_BEFORE_M50, SAVE_FULL_COLLECTIONS, SAVE_DEV]:
+		_write(text)
+		SaveManager.load_save()
+		assert_true(SaveManager.upgrade_fx_enabled(), "un guardado viejo sin la clave la lee prendida")
+		assert_eq(SaveManager.get_setting("upgrade_fx"), true)
+		_assert_roundtrip_is_identical("con las animaciones de mejora")
+	SaveManager.set_setting("upgrade_fx", false)
+	SaveManager.save()
+	var saved: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(PATH))
+	assert_eq(int(saved["version"]), 1, "SAVE_VERSION no cambia")
+	assert_eq(saved["settings"]["upgrade_fx"], false)
+	SaveManager.load_save()
+	assert_false(SaveManager.upgrade_fx_enabled(), "apagada se recuerda")
+
+
+func test_a_non_boolean_upgrade_fx_value_reads_as_on() -> void:
+	_write('{"version":1,"levels":{},"settings":{"upgrade_fx":0,"damage_numbers":false}}')
+	SaveManager.load_save()
+	assert_true(SaveManager.upgrade_fx_enabled(), "un 0 no es «apagada»")
+	_write('{"version":1,"levels":{},"settings":{"upgrade_fx":"no"}}')
+	SaveManager.load_save()
+	assert_true(SaveManager.upgrade_fx_enabled())
+# --- Novedades de esta versión (M67, RF-606): otra clave aditiva ---
+
+func test_old_saves_have_no_news_version_and_the_key_survives_a_roundtrip() -> void:
+	for text: String in [SAVE_T40, SAVE_BEFORE_M50, SAVE_FULL_COLLECTIONS, SAVE_DEV, '{"version":1}']:
+		_write(text)
+		SaveManager.load_save()
+		assert_eq(SaveManager.news_version_seen(), "", "un guardado viejo nunca vio las novedades")
+		_assert_roundtrip_is_identical("con las novedades")
+		assert_eq(String(JSON.parse_string(FileAccess.get_file_as_string(PATH))["news_version"]), "", "al guardar queda escrita")
+	SaveManager.mark_news_seen("1.0.0")
+	SaveManager.load_save()
+	assert_eq(SaveManager.news_version_seen(), "1.0.0", "marcar guarda enseguida")
+	assert_eq(int(JSON.parse_string(FileAccess.get_file_as_string(PATH))["version"]), 1, "SAVE_VERSION no cambia")
+
+
+func test_news_version_with_the_wrong_type_reads_as_empty() -> void:
+	for bad: String in ["7", "true", "null", "[\"1.0.0\"]", "{}"]:
+		_write('{"version":1,"news_version":%s}' % bad)
+		SaveManager.load_save()
+		assert_eq(SaveManager.news_version_seen(), "", "news_version = %s se lee como vacío" % bad)
 
 
 # --- Antes de M50: niveles 1 a 9 y technology ---
@@ -235,7 +303,7 @@ func test_ui_prefs_are_additive_and_broken_fields_default_individually() -> void
 	_write('{"version":1,"ui_prefs":{"cart_side":"arriba","cart_y":"x","exit_side":"right","exit_y":2}}')
 	SaveManager.load_save()
 	var prefs: UiPrefs = SaveManager.get_ui_prefs()
-	assert_eq(prefs.to_dict(), {"cart_side": "right", "cart_y": 0.45, "exit_side": "right", "exit_y": 0.1})
+	assert_eq(prefs.to_dict(), {"cart_side": "right", "cart_y": 0.45, "exit_side": "right", "exit_y": 0.1, "demolish_side": "right", "demolish_y": 0.8})
 	assert_true(SaveManager.save())
 	var file := FileAccess.open(PATH, FileAccess.READ)
 	var parsed := JSON.new()
@@ -247,11 +315,34 @@ func test_ui_prefs_are_additive_and_broken_fields_default_individually() -> void
 func test_old_save_without_ui_prefs_uses_defaults() -> void:
 	_write(SAVE_T40)
 	SaveManager.load_save()
-	assert_eq(SaveManager.get_ui_prefs().to_dict(), {"cart_side": "right", "cart_y": 0.45, "exit_side": "left", "exit_y": 0.1})
+	assert_eq(SaveManager.get_ui_prefs().to_dict(), {"cart_side": "right", "cart_y": 0.45, "exit_side": "left", "exit_y": 0.1, "demolish_side": "right", "demolish_y": 0.8})
 
 
 func test_ui_prefs_with_wrong_top_level_type_use_defaults() -> void:
 	for raw: String in ["3", "\"mal\"", "[]"]:
 		_write('{"version":1,"ui_prefs":%s}' % raw)
 		SaveManager.load_save()
-		assert_eq(SaveManager.get_ui_prefs().to_dict(), {"cart_side": "right", "cart_y": 0.45, "exit_side": "left", "exit_y": 0.1})
+		assert_eq(SaveManager.get_ui_prefs().to_dict(), {"cart_side": "right", "cart_y": 0.45, "exit_side": "left", "exit_y": 0.1, "demolish_side": "right", "demolish_y": 0.8})
+
+
+# --- La entrada de los jefes (M66, RF-600): una clave aditiva de los ajustes que los guardados viejos no tienen ---
+
+func test_old_saves_read_the_boss_entrance_as_on_and_keep_their_version() -> void:
+	for text: String in [SAVE_T40, SAVE_BEFORE_M50, SAVE_FULL_COLLECTIONS, SAVE_DEV]:
+		_write(text)
+		SaveManager.load_save()
+		assert_true(SaveManager.boss_entrance_enabled(), "sin la clave, prendida")
+		_assert_roundtrip_is_identical("con la entrada de los jefes")
+		var saved: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(PATH))
+		assert_eq(int(saved["version"]), SaveManager.SAVE_VERSION, "SAVE_VERSION no cambia")
+		assert_true(bool(saved["settings"]["boss_entrance"]), "al guardar queda escrita")
+
+
+func test_a_saved_off_boss_entrance_survives_and_a_wrong_type_reads_as_on() -> void:
+	_write('{"version":1,"settings":{"boss_entrance":false}}')
+	SaveManager.load_save()
+	assert_false(SaveManager.boss_entrance_enabled())
+	for raw: String in ['"no"', "[]", "null", "0"]:
+		_write('{"version":1,"settings":{"boss_entrance":%s}}' % raw)
+		SaveManager.load_save()
+		assert_true(SaveManager.boss_entrance_enabled(), "un valor %s se lee como prendida" % raw)
