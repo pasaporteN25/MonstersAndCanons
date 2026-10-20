@@ -22,6 +22,7 @@ var _view_all_button: Button
 var _cart_button: Button
 ## M68 (RF-610): la partida está en pausa (el carrito y la demolición no hacen nada).
 var _paused: bool = false
+var _upgrade_fx_config: UpgradeFxConfig
 var _exit_button: Button
 var _demolish_button: Button
 var _demolish_available: bool = false
@@ -174,6 +175,7 @@ func _build_status_bar() -> void:
 
 
 ## M68 (RF-610): con la partida en pausa no se construye; la línea de abajo lo dice.
+const UPGRADE_PREVIEW_PREFIX: String = "Al mejorar:"
 const EMPTY_TEXT: String = "Tocá el carrito para elegir una torre"
 const PAUSED_TEXT: String = "En pausa: seguí la partida para construir"
 
@@ -242,6 +244,9 @@ func show_selected_tower(tower: Tower, gold: int, sell_value: int, resource_valu
 	_status_label.text = "%s%s\n%s  %s  ·  Daño %d  ·  Cadencia %.2f  ·  Alcance %d" % [
 		tower.data.display_name, state_text, level_text, dots, stats.damage,
 		tower.effective_fire_rate(), stats.range_tiles]
+	var preview: String = _upgrade_preview_text(tower)
+	if preview != "":
+		_status_label.text += "\n" + preview
 	_status_label.visible = true
 	_target_button.show()
 	_bottom_cancel.show()
@@ -268,6 +273,18 @@ func show_selected_tower(tower: Tower, gold: int, sell_value: int, resource_valu
 	else:
 		_sell_button.tooltip_text = "Devuelve %d de oro" % sell_value
 	_refresh_sell_button(sell_value, resource_value)
+
+
+## M68 (RF-617): «Al mejorar: daño 5 → 8 · alcance 3 → 3,5». Los números salen de los dos niveles de la torre y la
+## tabla de `data/ui/mejoras.json` (la misma de las animaciones de mejora). Vacío en el nivel máximo.
+func _upgrade_preview_text(tower: Tower) -> String:
+	if _upgrade_fx_config == null:
+		_upgrade_fx_config = UpgradeFxConfig.load_from()
+	var changes: Array[Dictionary] = UpgradeDeltas.preview(tower.data.levels, tower.level_index, _upgrade_fx_config.stats,
+			int(_upgrade_fx_config.get_number("max_por_renglon")))
+	if changes.is_empty():
+		return ""
+	return "%s %s" % [UPGRADE_PREVIEW_PREFIX, UpgradeDeltas.SEPARATOR.join(UpgradeDeltas.rows(changes, changes.size()))]
 
 
 func begin_upgrade_lock(level_number: int) -> void:

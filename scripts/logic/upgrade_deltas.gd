@@ -7,6 +7,7 @@ extends RefCounted
 const TOLERANCE: float = 0.005
 const SEPARATOR: String = " · "
 const MINUS: String = "−"
+const ARROW: String = "→"
 
 
 ## Las estadísticas que cambiaron entre `from` y `to`, en el orden de `table` y hasta `max_stats`.
@@ -30,6 +31,46 @@ static func compute(from: TowerLevelData, to: TowerLevelData, table: Array[Dicti
 			"texto": "%s %s" % [format_number(delta, kind), String(row["etiqueta"])],
 		})
 	return result
+
+
+## M68 (RF-616, RF-617, D-163): lo mismo que `compute`, pero cada estadística dice cómo está **antes** y cómo queda
+## **después** (por ejemplo «daño 5 → 8»). Usa la misma tabla (`data/ui/mejoras.json`), el mismo orden, la misma
+## tolerancia y el mismo tope, así que nunca muestra una estadística que el efecto de la mejora no mostraría.
+## Cada una es { "campo", "antes", "despues" (ya con la escala), "formato", "texto" }.
+static func before_after(from: TowerLevelData, to: TowerLevelData, table: Array[Dictionary], max_stats: int = 4) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for delta: Dictionary in compute(from, to, table, max_stats):
+		var field: String = String(delta["campo"])
+		var scale: float = 1.0
+		var label: String = field
+		for row: Dictionary in table:
+			if String(row["campo"]) == field:
+				scale = float(row.get("escala", 1.0))
+				label = String(row["etiqueta"])
+				break
+		var kind: String = String(delta["formato"])
+		var before: float = float(from.get(field)) * scale
+		var after: float = float(to.get(field)) * scale
+		result.append({
+			"campo": field, "antes": before, "despues": after, "formato": kind,
+			"texto": "%s %s %s %s" % [label, format_value(before, kind), ARROW, format_value(after, kind)],
+		})
+	return result
+
+
+## Lo que cambia al pasar del nivel `level_index` (empieza en 0) al siguiente; vacío en el último nivel (RF-616).
+static func preview(levels: Array[TowerLevelData], level_index: int, table: Array[Dictionary], max_stats: int = 4) -> Array[Dictionary]:
+	if level_index < 0 or level_index + 1 >= levels.size():
+		return []
+	return before_after(levels[level_index], levels[level_index + 1], table, max_stats)
+
+
+## Un valor sin signo: `5`, `1,5`, `30 %`.
+static func format_value(value: float, kind: String) -> String:
+	var text: String = _trim(absf(value)) if kind == "decimal" else str(roundi(absf(value)))
+	if kind == "porcentaje":
+		text += " %"
+	return ("%s%s" % [MINUS, text]) if value < 0.0 and text != "0" else text
 
 
 ## Con signo y coma decimal, sin ceros de más: `+3`, `+0,5`, `−2`, y `+10 %` para el porcentaje.
