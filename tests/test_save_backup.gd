@@ -32,7 +32,10 @@ func _save_manager_to_test_paths() -> void:
 	SaveManager.load_save()
 
 
-func _backup_path(version: String = "1.0.0") -> String:
+func _backup_path(version: String = "") -> String:
+	# Sin argumento, la versión instalada del proyecto (hoy «beta»; el respaldo se nombra con ella).
+	if version.is_empty():
+		version = str(_original_version)
 	return "%s%s.json" % [PREFIX, version]
 
 
@@ -172,7 +175,7 @@ func test_test_prefix_limit_does_not_create_an_eleventh_backup() -> void:
 	_write_text(SOURCE_PATH, "original")
 	assert_true(SaveManager.save())
 	assert_push_warning("ya hay 10 respaldos")
-	assert_false(FileAccess.file_exists("user://test_save_backup_limit_1.0.0.json"))
+	assert_false(FileAccess.file_exists("user://test_save_backup_limit_%s.json" % str(_original_version)))
 	for index: int in 10:
 		assert_eq(_read("user://test_save_backup_limit_%02d.json" % index), ("viejo %d" % index).to_utf8_buffer())
 
