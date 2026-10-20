@@ -2,7 +2,7 @@
 extends SceneTree
 func _init() -> void:
 	var root: String = OS.get_cmdline_user_args()[0]
-	for name: String in ["news_icon_map", "news_icon_tower", "news_header_plain"]:
+	for name: String in ["news_icon_map", "news_icon_tower", "news_icon_monster", "news_icon_siege", "news_icon_editor", "news_icon_mobile", "news_icon_book", "news_icon_upgrade", "news_header_plain"]:
 		var image := Image.new()
 		var error: Error = image.load_svg_from_string(FileAccess.get_file_as_string(root + "/sources/" + name + ".svg"))
 		if error != OK:

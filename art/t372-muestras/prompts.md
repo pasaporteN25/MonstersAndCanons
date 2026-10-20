@@ -22,3 +22,20 @@ Salida conservada sin modificar en `sources/header_revised.png`. `pack.py` aplic
 Cabecera sobria: banda de hierro de tres tonos y borde de bronce, remaches periódicos y grabado abstracto circular de bajo contraste; sin escena ni texto. Patrón horizontal de 160 px y degradé vertical para conservar la costura.
 
 Mapa: mismo medallón de hierro y bronce que la torre; mapa plegado crema, camino y cruz de bronce. Torre: cañón corto de hierro y bronce, base compacta y tres muescas crema. Contorno `#2b2233` de 2 px, degradés de tres paradas y brillo contenido. Tres familias de material: hierro, bronce y papel/crema. Sin letras ni números; alfa real alrededor del disco.
+
+## Continuación: seis íconos (2026-10-20)
+
+Lucas aprobó el estilo anterior y encargó completar la familia sin integración. No se hicieron nuevas llamadas a `image_gen` ni se usó CLI/API: se extendió el dibujo SVG nativo aprobado con `create_sources.py` y el mismo rasterizador Godot. Se mantuvieron intactas las fuentes y los PNG de cabeceras, mapa y torre.
+
+Encargo normalizado común: ocho medallones de 96 × 96, disco de hierro, borde de bronce y cuatro remaches; contorno `#2b2233` de 2 px, un degradé de tres paradas por material y un brillo por pieza grande. Paleta idéntica de hierro, bronce y papel/crema, luz arriba/izquierda, fondo transparente, lectura a 64 y 48 px. Sin texto, números, emblemas, símbolo A, sombras nuevas ni filtros. Conservar exactamente el medallón aprobado.
+
+| Fuente | Motivo normalizado |
+|---|---|
+| `news_icon_monster.svg` | Perfil de bestia cornuda hacia la derecha en bronce, ojo chico y colmillo crema; gesto severo, sin marcas comunitarias. |
+| `news_icon_siege.svg` | Muralla crema con almenas; flecha de bronce ascendente en diagonal que golpea la muralla y dos marcas de impacto. |
+| `news_icon_editor.svg` | Cuadrícula crema, una casilla de bronce y pala diagonal con mango de bronce y hoja de hierro. |
+| `news_icon_mobile.svg` | Monitor con marco de bronce y pantalla de hierro; celular chico delante, pantalla crema. |
+| `news_icon_book.svg` | Cuaderno abierto de hojas crema y cubierta de bronce, pliegue central y líneas abstractas sin letras. |
+| `news_icon_upgrade.svg` | Flecha crema hacia arriba sobre una chispa de bronce; pieza opcional como en la ficha. |
+
+`pack.py` amplía la hoja de contacto, las ocho filas, las maquetas y el HTML; `validate.py` deja las comprobaciones mecánicas en `validation.json`. Ninguna imagen se copió al juego.
