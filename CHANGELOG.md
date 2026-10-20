@@ -26,6 +26,10 @@ Cuando llega el **Jefe de la oleada 10 del nivel 1** (jugado desde el menú), sa
 - **Arte provisional:** por ahora la pantalla no tiene cabecera ni íconos propios (un rombo de bronce marca cada novedad); el arte llega con T372 y T375.
 - Tu progreso no cambia: el guardado suma una marca («última versión vista») y una versión anterior del juego lo sigue leyendo.
 
+## Un consejo cuando perdés: qué torre conviene *(T420 a T422, 2026-10-20)*
+
+La pantalla de **Derrota** muestra una pista corta sobre **qué torre usar**, según los enemigos que llegaron a la salida y la oleada final. Solo nombra torres que ese nivel ofrece; si no hay una causa clara, no muestra consejo. Los textos siguen en borrador en `data/consejos/consejos.json`. No cambia el balance.
+
 ## «Ver todo» también cuando corriste el mapa *(T304, 2026-10-19)*
 
 «Ver todo» aparece ahora también cuando corriste el mapa con dos dedos aunque no hayas acercado nada: antes, con el zoom mínimo no había forma de volver al encuadre. En la computadora el botón aparece solo cuando corrés el mapa con el botón del medio estando con el zoom mínimo (con la rueda del mouse no aparece, como hasta ahora).

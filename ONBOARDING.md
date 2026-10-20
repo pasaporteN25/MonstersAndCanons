@@ -543,6 +543,14 @@ Tests: `-gtest=res://tests/test_upgrade_deltas.gd`, `test_upgrade_fx.gd` y `test
 
 Tests: `-gtest=res://tests/test_boss_entrance_rules.gd`, `test_boss_entrance_data.gd`, `test_boss_entrance_options.gd` y **`test_boss_entrance_hud.gd`** (con la escena real de la partida). Capturas reales: `godot --path . res://tools/capture_boss_entrance.tscn -- <carpeta fuera del repo> 1280x720`.
 
+### T421 · Probar el consejo de derrota
+
+Dejá pasar enemigos hasta perder: debajo de «Llegaste a la oleada N de M» aparece una frase sobre qué torre conviene, con nombres que ese nivel ofrece. Sin fugas suficientes no aparece; ganando tampoco. Los botones conservan orden y tamaño. Probá PC y modo celular; **no se probó en un celular real**. No hay recordatorios sobre oro sobrante o mejoras pendientes.
+
+Los textos están en `data/consejos/consejos.json` (ver `CONTENIDO.md`). `godot --headless --path . -s tools/check_consejos.gd` valida el archivo. Tests: `test_advice_data.gd`, `test_defeat_advice.gd` y `test_defeat_tips.gd`.
+
+Bot: `godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- sin_recursos levels=1-15 seeds=1 limite=1 consejo=probar`. Imprime las fugas y compara las torres aconsejadas con las que rindieron mejor en la misma situación.
+
 ### T331 · Probar el tutorial del nivel 1
 
 **En PC.** Con un guardado nuevo (o sin la marca `"tutorial_done"` en `save.json`, en esta máquina `~/.local/share/JuegoA/`), elegí **Jugar → Nivel 1** (si es un guardado nuevo, la intro termina en el nivel 1; cerrá el cartel con «Empezar»). **✅ Comprobar:** aparece una tarjeta «Tutorial · Paso 1 de 14» con «Siguiente» y «Saltar tutorial». Pasá los pasos de lectura: el **camino** se tiñe y se señalan la entrada y la salida, después el **oro** y las **vidas**. En «Elegí una torre» **no hay «Siguiente»**: hacé clic en la primera torre de la barra de abajo (o apretá `1`) y avanza solo; después un recuadro marca **una casilla de pasto junto al camino** (podés construir en cualquier otra). Construí, apretá **«Empezar oleada»**, soltá la torre con clic derecho y hacé clic en la tuya: el recuadro señala **«Mejorar»** y después **«Vender»** (los dos con «Siguiente», sin gastar nada). Cambiá la **velocidad**, **pausá** y **seguí**; el último paso dice «¡A jugar!». La partida **no se pausó sola** en ningún momento. Al terminar, volvé a entrar al nivel 1: **no sale de nuevo**.

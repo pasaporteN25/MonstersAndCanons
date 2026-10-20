@@ -20,7 +20,7 @@
  },
  "reglas": [
   {"id": "volador", "enemigo": {"vuela": true}, "torres": ["aire"],
-   "texto": "Te colaron voladores. Solo los golpean estas torres: {torres}."},
+   "texto": "Contra voladores, probá con {torres}."},
   {"id": "chaman", "enemigo": {"aturde": true}, "torres": ["largo"],
    "texto": "El Chamán apaga torres cercanas. Pegale de lejos con {torres}."},
   {"id": "espejo", "enemigo": {"rebota": true}, "torres": ["fuego", "largo"],

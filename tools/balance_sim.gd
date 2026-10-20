@@ -75,6 +75,13 @@
 #                     tocar el modo.json; la variante impresa dice el % efectivo).
 #   Cada partida imprime la variante que usó (estrategia, mejoras, vida de los monstruos y semilla).
 #
+# Consejo de la derrota (T422, M70): perder a propósito y mirar qué aconseja el juego.
+#   limite=N     el bot construye como mucho N torres (con pocas torres pierde en todos los mapas).
+#   solo=a,b     el bot compra solo esos ids de torre (los que el mapa ofrece), en el orden de "mix".
+#   consejo=1    al perder, imprime el consejo (regla y torres), las fugas por tipo, y los suma
+#                al informe (report=). Ejemplo:
+#     godot ... -s tools/balance_sim.gd -- sin_recursos levels=1-15 seeds=2 limite=3 consejo=1 report=user://consejo.json
+#
 # --fixed-fps 60 hace que cada frame cuente como 1/60 s sin esperar al reloj real,
 # así una partida de ~10 minutos se simula en segundos.
 extends SceneTree
@@ -129,6 +136,14 @@ var upgrades_requested: String = ""
 ## vida=N: fuerza el % de vida de los monstruos del mapa (para remedir un porcentaje sin tocar el modo.json). -1 = no tocar.
 var health_percent_override: int = -1
 var upgrade_count: int = 0
+## T422: tope de torres construidas (0 = sin tope), lista cerrada de ids de torre (vacía = todas) y si se registra el consejo.
+var tower_limit: int = 0
+var only_towers: PackedStringArray = []
+var advice_enabled: bool = false
+## T422: limite=3,5 juega cada tope; solo= de la línea de comandos; probar=1 repite cada derrota con una sola torre.
+var tower_limits: Array[int] = [0]
+var cli_only_towers: PackedStringArray = []
+var probe_enabled: bool = false
 var upgrade_gold: int = 0
 ## T258: perfil=asedio y el archivo de políticas por mapa.
 var _profile: bool = false
@@ -192,14 +207,16 @@ func _initialize() -> void:
 	for level_n: int in level_numbers:
 		for strategy_name: String in strategies:
 			for seed_n: int in seed_list:
-				var entry: Dictionary = {"level": level_n, "strategy": strategy_name, "seed": seed_n, "mejoras": upgrades_requested}
-				if _profile:  # T258: la política fija de cada mapa (RF-495)
-					var policy: Dictionary = BalanceArgs.policy_for(_policies, "level_%02d" % level_n)
-					entry["strategy"] = policy["estrategia"]
-					entry["mejoras"] = policy["mejoras"]
-					if strategy_name != strategies[0]:
-						continue
-				_queue.append(entry)
+				for limit_n: int in tower_limits:
+					var entry: Dictionary = {"level": level_n, "strategy": strategy_name, "seed": seed_n,
+							"mejoras": upgrades_requested, "limit": limit_n, "tag": "base"}
+					if _profile:  # T258: la política fija de cada mapa (RF-495)
+						var policy: Dictionary = BalanceArgs.policy_for(_policies, "level_%02d" % level_n)
+						entry["strategy"] = policy["estrategia"]
+						entry["mejoras"] = policy["mejoras"]
+						if strategy_name != strategies[0]:
+							continue
+					_queue.append(entry)
 	if _queue.is_empty() and _check_rule:
 		_finish_rule_check()  # ningún mapa con recursos: no hay nada que comprobar
 		return
@@ -213,6 +230,8 @@ func _start_next_run() -> bool:
 	_current = _queue.pop_front()
 	strategy = _current["strategy"]
 	upgrades_mode = _current["mejoras"]
+	tower_limit = int(_current.get("limit", 0))
+	only_towers = _current["solo"] if _current.has("solo") else cli_only_towers
 	upgrade_count = 0
 	upgrade_gold = 0
 	_free_count_built = -1
@@ -303,6 +322,18 @@ func _apply_override(arg: String) -> void:
 			print("mejoras=%s no es válido (llenar o temprana)." % parts[1])
 			quit(1)
 		upgrades_requested = parts[1]
+		return
+	if parts[0] == "limite":
+		tower_limits.clear()
+		for piece: String in parts[1].split(",", false):
+			tower_limits.append(piece.to_int())
+		return
+	if parts[0] == "solo":
+		cli_only_towers = PackedStringArray(parts[1].split(",", false))
+		return
+	if parts[0] == "consejo":
+		advice_enabled = parts[1] == "1" or parts[1] == "probar"
+		probe_enabled = parts[1] == "probar"
 		return
 	if parts[0] == "vida":
 		health_percent_override = parts[1].to_int()
@@ -415,7 +446,11 @@ func _process(_delta: float) -> bool:
 		var won: bool = session.state == LevelSession.State.WON
 		print("RESULTADO: %s · oleada %d/%d · vidas %d · oro robado %d" % [
 			"VICTORIA" if won else "DERROTA", session.wave, session.total_waves, session.lives, _stolen])
+		var advice: Dictionary = _advice_row(won)
+		_queue_probes(advice, won)
 		_rows.append({
+			"advice": advice, "tag": _current.get("tag", "base"), "limit": tower_limit, "score": session.score,
+			"solo": ",".join(only_towers), "base_solo": _current.get("base_solo", ""),
 			"level": _current["level"], "strategy": strategy, "seed": _current["seed"],
 			"won": won, "lives": session.lives, "wave": session.wave,
 			"total_waves": session.total_waves, "gold": session.gold,
@@ -439,6 +474,157 @@ func _process(_delta: float) -> bool:
 	if session.can_start_wave():
 		game.start_next_wave()  # sin esperar la cuenta atrás
 	return false
+
+
+## T422 (probar): tras una derrota de la partida base, vuelve a jugar el mismo mapa, semilla y tope de torres una vez
+## por cada torre que el mapa ofrece (comprando solo esa) y una vez comprando solo las que aconseja el juego.
+func _queue_probes(advice: Dictionary, won: bool) -> void:
+	if not probe_enabled or won or advice.is_empty() or _current.get("tag", "base") != "base":
+		return
+	# Sin lista cerrada (solo la limita el tope): se prueba cada torre sola. Con lista cerrada (un "monocultivo" como
+	# solo=cannon): se prueba sumarle cada otra torre del mapa, y sumarle las que aconseja el juego.
+	var base_solo: Array = Array(only_towers)
+	for tower_id: String in advice["offered"]:
+		var tower: TowerData = _tower_by_id(tower_id)
+		if tower == null or tower.support_only or tower.resource_cost > 0 or base_solo.has(tower_id):
+			continue
+		if base_solo.is_empty():
+			_queue.append(_probe_entry("solo:" + tower_id, [tower_id], ""))
+		else:
+			_queue.append(_probe_entry("mas:" + tower_id, base_solo + [tower_id], ",".join(only_towers)))
+	var advised: Array = Array(advice["towers"])
+	if not advised.is_empty():
+		var ids: Array = base_solo.duplicate()
+		for id: Variant in advised:
+			if not ids.has(id):
+				ids.append(id)
+		_queue.append(_probe_entry("consejo", ids if not base_solo.is_empty() else advised, ",".join(only_towers)))
+
+
+func _probe_entry(tag: String, ids: Array, base_solo: String) -> Dictionary:
+	var entry: Dictionary = _current.duplicate()
+	entry["tag"] = tag
+	entry["solo"] = PackedStringArray(ids)
+	entry["base_solo"] = base_solo
+	return entry
+
+
+func _tower_by_id(id: String) -> TowerData:
+	for tower: TowerData in game.tower_types:
+		if String(tower.id) == id:
+			return tower
+	return null
+
+
+## Cuánto rindió una partida: la oleada a la que llegó (una victoria cuenta una más) y, a igual oleada, los puntos.
+static func _perf(row: Dictionary) -> int:
+	return (int(row["wave"]) + (1 if row["won"] else 0)) * 1000000 + int(row["score"])
+
+
+## T422: ¿el consejo acierta con la contramedida real? Dos modos, según cómo se perdió la partida base:
+##  · Sin lista cerrada (la limita el tope de torres): "mejores torres solas" = la que, comprada sola, llegó más
+##    lejos (a igual oleada, la de más puntos); si empatan, todas. Coincide si el consejo incluye una de ellas.
+##  · Con lista cerrada (un "monocultivo", solo=cannon): se prueba sumarle cada otra torre del mapa. Mejora si
+##    llega más lejos que la base. Se compara el consejo con el promedio de sumar UNA torre cualquiera del mapa.
+func _print_probe() -> void:
+	if not probe_enabled:
+		return
+	print("")
+	print("CONTRAMEDIDA REAL (mismo mapa, semilla y tope de torres):")
+	var checked: int = 0
+	var matched: int = 0
+	var improved: int = 0
+	var chance_sum: float = 0.0
+	var add_checked: int = 0
+	var add_improved: int = 0
+	var add_single_hits: int = 0
+	var add_single_total: int = 0
+	for base: Dictionary in _rows:
+		if base["tag"] != "base" or base["won"] or base["advice"].is_empty():
+			continue
+		var advised: PackedStringArray = base["advice"]["towers"]
+		if advised.is_empty():
+			continue
+		var singles: Dictionary = {}
+		var advised_row: Dictionary = {}
+		for row: Dictionary in _rows:
+			if row["level"] != base["level"] or row["seed"] != base["seed"] or row["limit"] != base["limit"] \
+					or row["base_solo"] != base["solo"] or row["tag"] == "base":
+				continue
+			if String(row["tag"]).begins_with("solo:") or String(row["tag"]).begins_with("mas:"):
+				singles[String(row["tag"]).get_slice(":", 1)] = row
+			elif row["tag"] == "consejo":
+				advised_row = row
+		if singles.is_empty():
+			continue
+		var advised_wave: String = "o%d" % advised_row["wave"] if not advised_row.is_empty() else "—"
+		if base["solo"] == "":
+			var best: int = -1
+			for id: String in singles:
+				best = maxi(best, _perf(singles[id]))
+			var bests: PackedStringArray = []
+			var ranking: Array[String] = []
+			for id: String in singles:
+				ranking.append("%s:%d" % [id, singles[id]["wave"]])
+				if _perf(singles[id]) == best:
+					bests.append(id)
+			var hit: bool = false
+			for id: String in advised:
+				hit = hit or bests.has(id)
+			var better: bool = not advised_row.is_empty() and _perf(advised_row) > _perf(base)
+			checked += 1
+			matched += 1 if hit else 0
+			improved += 1 if better else 0
+			var total: int = singles.size()
+			var miss: float = 1.0
+			for i: int in mini(advised.size(), total):
+				miss *= maxf(float(total - bests.size() - i), 0.0) / maxf(float(total - i), 1.0)
+			chance_sum += 1.0 - maxf(miss, 0.0)
+			print("tope  mapa %2d tope %d · base o%d/%d · consejo %s: %s · mejores solas: %s · consejo solo: %s · coincide: %s · rinde más que la base: %s · ranking: %s" % [
+				base["level"], base["limit"], base["wave"], base["total_waves"], base["advice"]["rule"], ",".join(advised),
+				",".join(bests), advised_wave, "SÍ" if hit else "no", "SÍ" if better else "no", ", ".join(ranking)])
+		else:
+			var better_add: bool = not advised_row.is_empty() and _perf(advised_row) > _perf(base)
+			var improving: PackedStringArray = []
+			for id: String in singles:
+				if _perf(singles[id]) > _perf(base):
+					improving.append(id)
+			add_checked += 1
+			add_improved += 1 if better_add else 0
+			add_single_hits += improving.size()
+			add_single_total += singles.size()
+			print("mono  mapa %2d solo %s · base o%d/%d · consejo %s: %s · con lo aconsejado: %s (%s) · sumar una torre cualquiera mejora con: %s (%d de %d)" % [
+				base["level"], base["solo"], base["wave"], base["total_waves"], base["advice"]["rule"], ",".join(advised), advised_wave,
+				"MEJORA" if better_add else "no mejora", ",".join(improving), improving.size(), singles.size()])
+	if checked > 0:
+		print("TOPE DE TORRES · derrotas con consejo: %d · el consejo incluye una de las mejores torres solas: %d (%.0f %%) · por azar se esperaría %.0f %% · comprar solo lo aconsejado rindió más que la base: %d (%.0f %%)" % [
+			checked, matched, 100.0 * matched / checked, 100.0 * chance_sum / checked, improved, 100.0 * improved / checked])
+	if add_checked > 0:
+		print("MONOCULTIVO · derrotas con consejo: %d · sumar lo aconsejado mejora la base: %d (%.0f %%) · sumar una torre cualquiera del mapa mejora: %d de %d (%.0f %%)" % [
+			add_checked, add_improved, 100.0 * add_improved / add_checked, add_single_hits, add_single_total,
+			100.0 * add_single_hits / maxf(add_single_total, 1.0)])
+	print("Derrotas con consejo y datos: %d" % (checked + add_checked))
+
+
+## T422: lo que aconseja el juego al perder (regla y torres) y las fugas por tipo. {} si no se pide
+## o se ganó. Usa el mismo camino que la pantalla de derrota (`Game.defeat_tips`).
+func _advice_row(won: bool) -> Dictionary:
+	if not advice_enabled or won or _current.get("tag", "base") != "base":
+		return {}
+	var tips: Dictionary = game.defeat_tips()
+	var leaks: Dictionary = {}
+	var log: Variant = game.leak_log
+	for enemy: Variant in log.lives:
+		leaks[String((enemy as EnemyData).id)] = {"fugas": log.leaks[enemy], "vidas": log.lives[enemy]}
+	var offered: PackedStringArray = []
+	for tower: TowerData in game.available_towers:
+		offered.append(String(tower.id))
+	var result: Dictionary = {"rule": tips["rule"], "towers": tips["towers"], "text": tips["tower"],
+			"leaks": leaks, "wave": game.session.wave, "offered": offered}
+	print("CONSEJO: regla=%s · torres=%s · «%s» · fugas=%s" % [
+		str(result["rule"]) if str(result["rule"]) != "" else "ninguna", ",".join(result["towers"]), result["text"],
+		JSON.stringify(leaks)])
+	return result
 
 
 ## Tabla final de todas las partidas (T204) y, con report=ruta, el mismo contenido en JSON.
@@ -467,6 +653,7 @@ func _print_summary() -> void:
 		if row["won"]:
 			wins += 1
 	print("Victorias: %d de %d" % [wins, _rows.size()])
+	_print_probe()
 	if report_path != "":
 		var file := FileAccess.open(report_path, FileAccess.WRITE)
 		if file == null:
@@ -532,6 +719,8 @@ func _buy_towers() -> void:
 		_buy_towers_infra()
 		return
 	while true:
+		if tower_limit > 0 and built >= tower_limit:
+			return
 		if _wants_disruptor():
 			var disruptor: TowerData = _disruptor()
 			if game.build_controller.try_build(disruptor, _best_cell(disruptor)):
@@ -643,6 +832,8 @@ func _buy_towers_infra() -> void:
 	var session: LevelSession = game.session
 	var reserve: int = _run_infrastructure()
 	while true:
+		if tower_limit > 0 and built >= tower_limit:
+			return
 		var tower: TowerData = null
 		var alt: bool = false
 		var advance: int = 0
@@ -686,10 +877,19 @@ func _buy_order() -> Array[int]:
 ## La próxima torre del orden de "mix" que el mapa ofrece y no cuesta recursos. Vacío si no hay ninguna.
 ## `advance` cuenta las entradas del orden que se saltó, para seguir desde ahí.
 func _order_pick() -> Dictionary:
+	if not only_towers.is_empty():
+		# T422: lista cerrada de ids; se turnan en el orden dado, sin pasar por el orden de "mix".
+		for offset: int in only_towers.size():
+			var wanted: String = only_towers[(_order_pos + offset) % only_towers.size()]
+			for tower: TowerData in game.available_towers:
+				if String(tower.id) == wanted and tower.resource_cost == 0 and not tower.support_only:
+					return {"tower": tower, "advance": offset + 1}
+		return {}
 	var order: Array[int] = _buy_order()
 	for offset: int in order.size():
 		var tower: TowerData = game.tower_types[order[(_order_pos + offset) % order.size()] % game.tower_types.size()]
-		if game.available_towers.has(tower) and tower.resource_cost == 0:
+		if game.available_towers.has(tower) and tower.resource_cost == 0 \
+				and (only_towers.is_empty() or only_towers.has(String(tower.id))):
 			return {"tower": tower, "advance": offset + 1}
 	return {}
 
