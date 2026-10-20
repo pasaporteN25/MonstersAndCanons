@@ -9,6 +9,11 @@ const GAME_SCENE: String = "res://scenes/game/game.tscn"
 const RECORDS_SCENE: String = "res://scenes/ui/records_screen.tscn"
 const WIKI_SCENE: String = "res://scenes/ui/wiki_screen.tscn"
 const EDITOR_SCENE: String = "res://scenes/editor/map_editor.tscn"
+## RF-581 (M64): la pantalla de carga. Son valores de interfaz: el fondo es el de los menús y el dorado, el de los títulos.
+const LOADING_THEME: Theme = preload("res://assets/ui/menu_theme.tres")
+const LOADING_MIN_SECONDS: float = 0.4
+const LOADING_BACKGROUND := Color(0.07, 0.08, 0.1, 1.0)
+const LOADING_ACCENT := Color(1.0, 0.84, 0.3, 1.0)
 
 ## Índice del nivel de la campaña que se está jugando.
 ## -1 = no se juega desde la campaña (por ejemplo, game.tscn abierto con F6, o un test):
@@ -39,9 +44,12 @@ var current_mode_index: int = -1
 ## mostrar el cartel de entrada. `Game._ready` lo consume y lo apaga; no se guarda. «Reintentar» recarga la
 ## escena sin pasar por acá, por eso el cartel no vuelve (y probar desde el editor nunca lo enciende).
 var intro_pending: bool = false
+## M64 (RF-580): el cambio de escena con pantalla de carga y la entrada bloqueada. Lo crea `_ready`.
+var transition: SceneTransition
 
 
 func _ready() -> void:
+	_make_transition()
 	DesktopWindow.apply()
 	apply_display_settings()
 
@@ -52,6 +60,8 @@ func _ready() -> void:
 ## de golpe, project.godot tiene application/config/quit_on_go_back = false.)
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_GO_BACK_REQUEST:
+		if is_changing():
+			return  # RF-583: durante la carga «atrás» no hace nada
 		for pressed: bool in [true, false]:
 			var event := InputEventAction.new()
 			event.action = &"cancel"
@@ -287,6 +297,8 @@ func hall_of_fame() -> Array:
 # --- Cambiar de pantalla ---
 
 func start_level(index: int) -> void:
+	if is_changing():
+		return  # RF-582: con un cambio en curso, otro toque no hace nada
 	if not is_level_unlocked(index):
 		return
 	current_index = index
@@ -295,32 +307,38 @@ func start_level(index: int) -> void:
 	_clear_mode()
 	select_page = &"campaign"
 	intro_pending = true
-	get_tree().change_scene_to_file(GAME_SCENE)
+	_change_scene(GAME_SCENE)
 
 
 ## RF-224: juega un mapa de la comunidad, con su propio progreso.
 func start_community(community_level: LevelData) -> void:
+	if is_changing():
+		return  # RF-582: con un cambio en curso, otro toque no hace nada
 	current_index = -1
 	test_level = null
 	current_community = community_level
 	_clear_mode()
 	select_page = &"community"
 	intro_pending = true  # RF-468: solo se muestra si el archivo del mapa trae "textos"
-	get_tree().change_scene_to_file(GAME_SCENE)
+	_change_scene(GAME_SCENE)
 
 
 ## RF-217: juega el nivel del editor. No es de la campaña: no guarda nada.
 func play_test(level_to_test: LevelData) -> void:
+	if is_changing():
+		return  # RF-582: con un cambio en curso, otro toque no hace nada
 	current_index = -1
 	test_level = level_to_test
 	current_community = null
 	_clear_mode()
 	intro_pending = false  # RF-468: probando desde el editor no hay cartel
-	get_tree().change_scene_to_file(GAME_SCENE)
+	_change_scene(GAME_SCENE)
 
 
 ## RF-389: juega el mapa `index` de un modo, con sus reglas y su progreso propio (RF-390).
 func start_mode_level(mode: Dictionary, index: int) -> void:
+	if is_changing():
+		return  # RF-582: con un cambio en curso, otro toque no hace nada
 	if not is_mode_level_unlocked(mode, index):
 		return
 	current_index = -1
@@ -330,10 +348,12 @@ func start_mode_level(mode: Dictionary, index: int) -> void:
 	current_mode_index = index
 	select_page = ModePacks.page_of(mode)
 	intro_pending = true  # RF-468: los modos oficiales nunca lo muestran; los propios, si el mapa trae "textos"
-	get_tree().change_scene_to_file(GAME_SCENE)
+	_change_scene(GAME_SCENE)
 
 
 func next_level() -> void:
+	if is_changing():
+		return  # RF-582
 	if not has_next_level():
 		return
 	forget_dev_start()  # RF-321
@@ -349,46 +369,88 @@ func _clear_mode() -> void:
 
 
 func go_to_main_menu() -> void:
+	if is_changing():
+		return  # RF-582: con un cambio en curso, otro toque no hace nada
 	forget_dev_start()  # RF-321
 	current_index = -1
 	test_level = null
 	current_community = null
 	_clear_mode()
-	get_tree().change_scene_to_file(MAIN_MENU_SCENE)
+	_change_scene(MAIN_MENU_SCENE)
 
 
 func go_to_level_select() -> void:
+	if is_changing():
+		return  # RF-582: con un cambio en curso, otro toque no hace nada
 	forget_dev_start()  # RF-321
 	current_index = -1
 	test_level = null
 	current_community = null
 	_clear_mode()
-	get_tree().change_scene_to_file(LEVEL_SELECT_SCENE)
+	_change_scene(LEVEL_SELECT_SCENE)
 
 
 ## RF-210: el editor de mapas (solo en el modo de pruebas). También es a donde se vuelve al
 ## terminar de probar un nivel (RF-217): el borrador sigue en `editor_draft`.
 func go_to_editor() -> void:
+	if is_changing():
+		return  # RF-582: con un cambio en curso, otro toque no hace nada
 	current_index = -1
 	test_level = null
 	current_community = null
 	_clear_mode()
-	get_tree().change_scene_to_file(EDITOR_SCENE)
+	_change_scene(EDITOR_SCENE)
 
 
 ## RF-195: la pantalla de récords.
 func go_to_records() -> void:
+	if is_changing():
+		return  # RF-582: con un cambio en curso, otro toque no hace nada
 	current_index = -1
 	test_level = null
 	current_community = null
 	_clear_mode()
-	get_tree().change_scene_to_file(RECORDS_SCENE)
+	_change_scene(RECORDS_SCENE)
 
 
 ## RF-230: la wiki.
 func go_to_wiki() -> void:
+	if is_changing():
+		return  # RF-582: con un cambio en curso, otro toque no hace nada
 	current_index = -1
 	test_level = null
 	current_community = null
 	_clear_mode()
-	get_tree().change_scene_to_file(WIKI_SCENE)
+	_change_scene(WIKI_SCENE)
+
+
+## RF-584: «Reintentar»: vuelve a cargar la escena actual con la misma pantalla de carga.
+func reload_current() -> void:
+	if is_changing():
+		return  # RF-582
+	var scene: Node = get_tree().current_scene
+	if scene == null or scene.scene_file_path == "":
+		get_tree().reload_current_scene()
+		return
+	_change_scene(scene.scene_file_path)
+
+
+## RF-582: ¿hay un cambio de pantalla en curso? Mientras tanto ninguna función de acá cambia nada.
+func is_changing() -> bool:
+	return transition != null and transition.is_busy()
+
+
+## RF-580: todo cambio de pantalla pasa por acá y muestra la pantalla de carga.
+func _change_scene(path: String) -> void:
+	transition.go(path)
+
+
+## RF-581: el núcleo genérico (`SceneTransition`) y los colores de este juego.
+func _make_transition() -> void:
+	transition = SceneTransition.new()
+	transition.name = "Transition"
+	transition.ui_theme = LOADING_THEME
+	transition.min_seconds = LOADING_MIN_SECONDS
+	transition.background_color = LOADING_BACKGROUND
+	transition.accent_color = LOADING_ACCENT
+	add_child(transition)

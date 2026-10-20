@@ -728,6 +728,17 @@ func target_control(target: StringName) -> Control:
 	return control if control != null and control.is_visible_in_tree() else null
 
 
+## M65, RF-592: los rectángulos de pantalla (píxeles virtuales) que el texto de una mejora no puede pisar: la barra
+## de abajo, la tilde, la cruz y los botones flotantes. Solo cuenta los que se ven ahora.
+func forbidden_rects() -> Array[Rect2]:
+	var rects: Array[Rect2] = []
+	for control: Control in [_status_bar, _confirm_button, _cancel_button, _bottom_confirm, _bottom_cancel,
+			_cart_button, _exit_button, _demolish_button, _view_all_button]:
+		if control != null and control.is_visible_in_tree():
+			rects.append(control.get_global_rect())
+	return rects
+
+
 func is_catalog_open() -> bool:
 	return _catalog_open
 

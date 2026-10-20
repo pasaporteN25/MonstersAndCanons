@@ -39,6 +39,12 @@ var _tower_buttons: Array[Button] = []
 ## RF-134: si llegan dos enemigos nuevos juntos, sus tarjetas salen una detrás de otra.
 var _intro_queue: Array[EnemyData] = []
 var _intro_busy: bool = false
+## M66 (RF-597): el cartel de aparición de un jefe, el jefe que espera su turno y cuántos carteles de oleada
+## (RF-127) siguen en pantalla. El orden es cartel de oleada, cartel de aparición y tarjeta «Nuevo enemigo».
+var _entrance_card: BossEntranceCard
+var _entrance_pending: EnemyData
+var _wave_banners_active: int = 0
+var _entrance_config: BossEntranceConfig
 ## -1 = todavía no se mostró ningún valor (para no animar el primero).
 var _last_gold: int = -1
 var _last_lives: int = -1
@@ -296,7 +302,62 @@ func show_enemy_intro(enemy: EnemyData) -> void:
 		_show_next_intro()
 
 
+## M66, RF-597: ¿hay un cartel de aparición en pantalla o esperando su turno? La tarjeta de arriba espera.
+func entrance_blocks_intro() -> bool:
+	return _entrance_pending != null or _entrance_card != null
+
+
+## M66, RF-597: el cartel de aparición del jefe (retrato, «¡Llega el Jefe!», nombre y frase). Espera a que se
+## retire el cartel de oleada y a una tarjeta «Nuevo enemigo» que ya esté en pantalla; la tarjeta de este mismo
+## jefe espera a su vez a que el cartel se retire. No pausa nada. Un cartel en curso se reemplaza.
+func show_boss_entrance(enemy: EnemyData) -> void:
+	if enemy == null:
+		return
+	if _entrance_card != null and is_instance_valid(_entrance_card):
+		_entrance_card.dismiss()
+	_entrance_pending = enemy
+	_try_open_entrance()
+
+
+## El cartel de aparición que está en pantalla (o null), para los tests.
+func entrance_card() -> BossEntranceCard:
+	return _entrance_card
+
+
+func _try_open_entrance() -> void:
+	if _entrance_pending == null or _wave_banners_active > 0 or _intro_busy:
+		return
+	var enemy: EnemyData = _entrance_pending
+	_entrance_pending = null
+	if _entrance_config == null:
+		_entrance_config = BossEntranceConfig.load_from()
+	var card: BossEntranceCard = BossEntranceCard.new().setup(enemy, _entrance_config, _mobile_mode)
+	card.finished.connect(_on_entrance_finished.bind(card))
+	add_child(card)
+	_entrance_card = card
+	var top: float = float(_entrance_config.pixels("arriba_celular_px" if _mobile_mode else "arriba_pc_px"))
+	card.start(get_viewport().get_visible_rect().size.x, top)
+
+
+func _on_entrance_finished(card: BossEntranceCard) -> void:
+	if _entrance_card == card:
+		_entrance_card = null
+	if _entrance_pending == null and not _intro_busy and not _intro_queue.is_empty():
+		_show_next_intro()  # la tarjeta «Nuevo enemigo» que esperaba
+
+
+func _on_wave_banner_done() -> void:
+	_wave_banners_active = maxi(0, _wave_banners_active - 1)
+	_try_open_entrance()
+
+
 func _show_next_intro() -> void:
+	if entrance_blocks_intro():
+		# M66: la tarjeta espera al cartel de aparición; si hay uno pendiente, ya puede salir.
+		_intro_busy = false
+		_intro.visible = false
+		_try_open_entrance()
+		return
 	if _intro_queue.is_empty():
 		_intro_busy = false
 		_intro.visible = false
@@ -749,6 +810,8 @@ func _show_wave_banner(wave: int) -> void:
 		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	tween.tween_interval(0.9)
 	tween.tween_property(_wave_banner, "modulate:a", 0.0, 0.4)
+	_wave_banners_active += 1  # M66: el cartel de aparición de un jefe espera a que este se retire
+	tween.finished.connect(_on_wave_banner_done)
 	# RF-135: si la oleada trae un enemigo peligroso, una línea roja abajo, que dura más.
 	var danger: EnemyData = null
 	if wave - 1 < _waves.size():

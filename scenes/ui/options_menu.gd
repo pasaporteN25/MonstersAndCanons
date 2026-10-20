@@ -16,6 +16,11 @@ const ADMIN_OFF_TEXT: String = "Volver al juego normal"
 const TUTORIAL_CHECK_TEXT: String = "Tutorial del nivel 1"
 const TUTORIAL_REPLAY_TEXT: String = "Volver a verlo"
 const TUTORIAL_REPLAYED_TEXT: String = "Se verá en el nivel 1"
+## M66 (RF-600): la entrada de los jefes.
+const BOSS_ENTRANCE_TEXT: String = "Entrada de los jefes"
+## M67 (RF-607): el botón de las novedades y su texto cuando no hay nada para abrir.
+const NEWS_BUTTON_TEXT: String = "Novedades de esta versión"
+const NEWS_EMPTY_TEXT: String = "No hay novedades"
 
 ## RF-383: la sección de administración solo se ofrece desde el menú principal, nunca desde la
 ## pausa (no se cambia de guardado en medio de una partida). La prende `MainMenu`.
@@ -29,6 +34,7 @@ var normal_save_path: String = ""
 @onready var _sfx_slider: HSlider = %SfxSlider
 @onready var _fullscreen_check: CheckBox = %FullscreenCheck
 @onready var _damage_numbers_check: CheckBox = %DamageNumbersCheck
+@onready var _upgrade_fx_check: CheckBox = %UpgradeFxCheck
 @onready var _panel: PanelContainer = %Panel
 @onready var _scroll: ScrollContainer = %Scroll
 @onready var _rows: VBoxContainer = $Center/Panel/Margin/Frame/Scroll/Columns/Rows
@@ -54,7 +60,15 @@ var _two_columns: bool = false
 ## RF-553: los créditos de siempre (RF-472), hijos de Opciones; al cerrarlos se vuelve acá.
 var credits: CreditsScreen
 var _tutorial_check: CheckBox
+## M67 (RF-607): «Novedades de esta versión», debajo de «Ver créditos». Costuras para los tests: de dónde se leen y qué
+## versión está instalada.
+var news: NewsScreen
+var news_path: String = NewsData.DEFAULT_PATH
+var news_version_source: Callable = GameVersion.raw
+var _news_button: Button
+var _news_data: NewsData
 var _tutorial_replay: Button
+var _boss_entrance_check: CheckBox
 
 
 func _ready() -> void:
@@ -64,8 +78,13 @@ func _ready() -> void:
 	_fullscreen_check.toggled.connect(_on_fullscreen_toggled)
 	_damage_numbers_check.toggled.connect(
 		func(on: bool) -> void: SaveManager.set_setting("damage_numbers", on))  # RF-132
+	_upgrade_fx_check.toggled.connect(
+		func(on: bool) -> void: SaveManager.set_setting("upgrade_fx", on))  # M65, RF-593
 	_build_tutorial_row()
 	_build_ui_mode_selector()
+	# RF-593: justo debajo de «Mostrar números de daño» (las filas de arriba también se meten ahí).
+	_rows.move_child(_upgrade_fx_check, _damage_numbers_check.get_index() + 1)
+	_build_boss_entrance_check()  # M66
 	_arrange_columns()
 	_admin_button.pressed.connect(_on_admin_pressed)
 	_admin_confirm_button.pressed.connect(set_dev_mode.bind(true))
@@ -76,6 +95,7 @@ func _ready() -> void:
 	add_child(credits)
 	credits.closed.connect(_credits_button.grab_focus)
 	_credits_button.pressed.connect(credits.open)
+	_build_news_button()
 	Audio.add_click_sounds(self)
 	_refresh_admin()
 	MenuTouch.attach(self)  # RF-550, RF-551: botones de 56 px y desplazamiento táctil en el celular
@@ -88,10 +108,13 @@ func open() -> void:
 	_sfx_slider.set_value_no_signal(float(SaveManager.get_setting("sfx_volume")))
 	_fullscreen_check.set_pressed_no_signal(bool(SaveManager.get_setting("fullscreen")))
 	_damage_numbers_check.set_pressed_no_signal(bool(SaveManager.get_setting("damage_numbers")))
+	_upgrade_fx_check.set_pressed_no_signal(SaveManager.upgrade_fx_enabled())
 	_ui_mode_selector.select(UiMode.read_setting(SaveManager.get_setting("ui_mode")))
+	_boss_entrance_check.set_pressed_no_signal(SaveManager.boss_entrance_enabled())  # M66
 	_tutorial_check.set_pressed_no_signal(SaveManager.tutorial_enabled())
 	_tutorial_replay.text = TUTORIAL_REPLAY_TEXT
 	_tutorial_replay.disabled = false
+	_refresh_news_button()
 	_set_confirming(false)
 	visible = true
 	_fit_scroll()
@@ -245,6 +268,62 @@ func _on_tutorial_replay() -> void:
 	_tutorial_check.set_pressed_no_signal(true)
 	_tutorial_replay.text = TUTORIAL_REPLAYED_TEXT
 	_tutorial_replay.disabled = true
+
+
+## M66, RF-600: «Entrada de los jefes». Va debajo de «Mostrar números de daño» y del tutorial (y de
+## «Animaciones de mejora» si M65 está). Una casilla simple: la lee `Game` al aparecer un jefe.
+func _build_boss_entrance_check() -> void:
+	_boss_entrance_check = CheckBox.new()
+	_boss_entrance_check.name = "BossEntranceCheck"
+	_boss_entrance_check.text = BOSS_ENTRANCE_TEXT
+	_boss_entrance_check.add_theme_font_size_override("font_size", 20)
+	_boss_entrance_check.clip_text = true  # que la fila no ensanche el panel
+	_rows.add_child(_boss_entrance_check)
+	# Después de la fila del tutorial, que tiene que quedar pegada a «Mostrar números de daño» (RF-576).
+	var anchor: Node = _rows.get_node_or_null("TutorialRow")
+	if anchor == null:
+		anchor = _damage_numbers_check
+	_rows.move_child(_boss_entrance_check, anchor.get_index() + 1)
+	_boss_entrance_check.toggled.connect(
+		func(on: bool) -> void: SaveManager.set_setting("boss_entrance", on))
+## RF-607: abre las novedades de la versión instalada (o la más nueva del archivo) sin tocar el guardado. Con el
+## archivo roto o sin versiones queda deshabilitado y dice «No hay novedades».
+func _build_news_button() -> void:
+	news = NewsScreen.new()
+	news.layer = 22  # sobre la pausa (20), por si Opciones se abrió desde ahí
+	add_child(news)
+	news.closed.connect(_news_button_focus)
+	_news_button = Button.new()
+	_news_button.name = "NewsButton"
+	_news_button.custom_minimum_size.y = 44
+	_news_button.add_theme_font_size_override("font_size", 20)
+	_credits_button.get_parent().add_child(_news_button)
+	_credits_button.get_parent().move_child(_news_button, _credits_button.get_index() + 1)
+	_news_button.pressed.connect(_on_news_pressed)
+	_refresh_news_button()
+
+
+func _refresh_news_button() -> void:
+	_news_data = NewsData.load_file(news_path)
+	var usable: bool = _news_data.is_valid() and not _news_data.entry_for_options(String(news_version_source.call())).is_empty()
+	if not _news_data.is_valid():
+		push_warning("Las novedades no se pueden abrir: %s" % "; ".join(_news_data.errors))
+	_news_button.disabled = not usable
+	_news_button.text = NEWS_BUTTON_TEXT if usable else String(_news_data.labels.get("sin_novedades", NEWS_EMPTY_TEXT))
+
+
+func _on_news_pressed() -> void:
+	var entry: Dictionary = _news_data.entry_for_options(String(news_version_source.call()))
+	if not entry.is_empty():
+		news.open(entry, _news_data.labels)
+
+
+func _news_button_focus() -> void:
+	_news_button.grab_focus()
+
+
+func news_button() -> Button:
+	return _news_button
 
 
 func _build_ui_mode_selector() -> void:
