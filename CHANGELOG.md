@@ -2,6 +2,10 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## La intro pesa mucho menos *(T390, 2026-10-20)*
+
+Las siete láminas de la intro se guardan ahora como WebP con una compresión leve (calidad 0,90): **ocupan unos 4 MiB en vez de casi 18** dentro del juego, y en pantalla se ven igual (no se notan diferencias a simple vista). El juego queda más liviano de instalar y de abrir en el celular.
+
 ## «Ver todo» también cuando corriste el mapa *(T304, 2026-10-19)*
 
 «Ver todo» aparece ahora también cuando corriste el mapa con dos dedos aunque no hayas acercado nada: antes, con el zoom mínimo no había forma de volver al encuadre. En la computadora el botón aparece solo cuando corrés el mapa con el botón del medio estando con el zoom mínimo (con la rueda del mouse no aparece, como hasta ahora).

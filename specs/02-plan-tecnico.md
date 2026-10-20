@@ -1287,7 +1287,7 @@ La campaña y sus 15 niveles, `LevelFile`, `LevelData`, `WaveSpawner`, `Rules`, 
 | `scripts/logic/intro_data.gd` | `IntroData` (`RefCounted`, lógica pura): `load_file(path) -> IntroData` con `laminas`, `fundido_s`, `errors` y `is_valid()`. Valida cantidad (5 a 8), líneas y caracteres (los de `LevelTexts.WIN_*` y `LINE_MAX_CHARS`: reusarlos, no copiarlos), `segundos` (4 a 12), `fundido_s` (0 a 2), que la imagen exista, `version`. Mensajes en castellano que nombran la lámina. |
 | `scripts/logic/intro_flow.gd` | `IntroFlow` (lógica pura, **testeable sin cambiar de escena**): `should_auto_show(intro_seen, dev_enabled, data_valid) -> bool` (RF-498) y `after_finish(has_won_levels) -> Destination` (`LEVEL_1` o `LEVEL_SELECT`, RF-500). |
 | `scenes/ui/intro_screen.gd` | `IntroScreen` (`CanvasLayer`, por código como `EpilogueScreen`): `open(data)`, `signal finished`, `is_open()`. La imagen con `KEEP_ASPECT` y barras oscuras; franja de texto abajo; botón «Omitir»; fundido con `Tween`; avance por clic, `Espacio`, `Enter`, `→` y por tiempo (`_process` con un reloj propio, para que el test no espere). **No sabe a dónde se va después.** |
-| `assets/intro/01_*.png` a `07_*.png` | Las láminas (T241). 1920 × 1080. |
+| `assets/intro/01_*.webp` a `07_*.webp` | Las láminas (T241). 1920 × 1080. |
 
 **Qué cambia:**
 - `save_manager.gd`: la clave `"intro_seen"` (leer: solo `true` booleano cuenta; escribir en `save()`), `intro_seen() -> bool` y `mark_intro_seen()` (que guarda enseguida). `load_save()` la resetea a `false` junto con el resto.
@@ -1455,7 +1455,7 @@ Los textos, números de tamaño y posiciones nuevos viven en `mobile_ui.json` (P
 5. **Verificación.** `tools/capture_menus.gd` (T310): capturas reales con ventana por pantalla y modo, e informe de botones fuera de la ventana. Tests de GUT por tarea; suite completa sin `SCRIPT ERROR` ni `Parse Error`.
 ### M62 · Peso de la intro y documento editable (RF-560 a RF-563, D-120, D-121)
 
-1. **Peso (T320):** `mipmaps/generate=false` en los siete `assets/intro/*.png.import` (sigue `compress/mode=0`). El peso real es el de los `.ctex` de `.godot/imported/`; `art/intro-v1/peso.py` los mide por variante y arma `art/intro-v1/peso/comparison.html`. La variante WebP (`compress/mode=1`) queda medida y sin aplicar (D-120).
+1. **Peso (T320, T390):** primero `mipmaps/generate=false` (sin pérdida, 17,88 MiB). Después (D-150, T390) las láminas son `assets/intro/*.webp` sin pérdida con `compress/mode=1` y `compress/lossy_quality=0.9` en los siete `.webp.import` (4,00 MiB); el archivo es sin pérdida para no comprimir dos veces. El peso real es el de los `.ctex` de `.godot/imported/`; `art/intro-v1/peso.py` los mide por variante y arma `art/intro-v1/peso/comparison.html`. La variante WebP q0,90 se aplicó con el OK de Lucas (D-150).
 2. **Documento editable (T321):** `scripts/logic/intro_doc.gd` (`IntroDoc`, lógica pura): `to_markdown`, `parse_markdown` (que valida con `IntroData.parse`), `to_json` (mismo formato y orden de claves que el archivo oficial) y `describe_changes`. `tools/intro_doc.gd` solo lee y escribe archivos (`export`, `import`, `import --dry`). Tests en `tests/test_intro_doc.gd`: ida y vuelta byte por byte, el documento versionado coincide con el JSON, y cada error con su mensaje.
 
 ### M63 / T330 y T331 · El tutorial del nivel 1 (RF-570 a RF-578, D-125 a D-128)

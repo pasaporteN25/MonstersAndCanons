@@ -539,7 +539,7 @@ El tutorial se retoca con un archivo, sin programar: `{"version": 1, "borrador":
 
 ### T242 · La intro (`data/intro/intro.json`)
 
-La intro se arma con un archivo, sin programar: `{"version": 1, "fundido_s": 0.6, "laminas": [{"imagen": "res://assets/intro/01_la_nave.png", "texto": "Línea 1\nLínea 2", "segundos": 7}, …]}`.
+Las láminas son archivos **`.webp`** (sin pérdida, 1920 × 1080) en `assets/intro/`; Godot los comprime a calidad 0,90 al importar (D-150). La intro se arma con un archivo, sin programar: `{"version": 1, "fundido_s": 0.6, "laminas": [{"imagen": "res://assets/intro/01_la_nave.webp", "texto": "Línea 1\nLínea 2", "segundos": 7}, …]}`.
 
 | Clave | Qué es | Límite |
 |---|---|---|

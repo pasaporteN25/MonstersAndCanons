@@ -2,22 +2,22 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dribx3ip4nyg5"
-path="res://.godot/imported/01_la_nave.png-7cfbc95932249e4e00af0279a7adb804.ctex"
+uid="uid://bjuvfufqw6otg"
+path="res://.godot/imported/01_la_nave.webp-e7e7ce01fe9afda7dd0b1f3834d297e9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/intro/01_la_nave.png"
-dest_files=["res://.godot/imported/01_la_nave.png-7cfbc95932249e4e00af0279a7adb804.ctex"]
+source_file="res://assets/intro/01_la_nave.webp"
+dest_files=["res://.godot/imported/01_la_nave.webp-e7e7ce01fe9afda7dd0b1f3834d297e9.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=1
 compress/high_quality=false
-compress/lossy_quality=0.7
+compress/lossy_quality=0.9
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0
 compress/hdr_compression=1

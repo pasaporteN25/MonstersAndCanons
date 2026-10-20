@@ -1024,7 +1024,7 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Alternativas descartadas:** una constante en GDScript o un archivo `data/version.json` (otro lugar más para editar; `project.godot` ya viaja en las exportaciones).
 - **Límite:** que Godot tome la versión del proyecto cuando `version/name` queda vacío sale de su documentación; **no se exportó** (no se generan ejecutables en esta tarea). Hay que mirar la versión del primer APK o `.exe` que se exporte.
 ## D-120 · Las láminas de la intro se importan sin pérdida y sin mipmaps; el WebP con pérdida queda como decisión de Lucas
-- **Fecha:** 2026-10-19 · **Estado:** la parte sin pérdida, aplicada (T320); la parte con pérdida, **pendiente de Lucas** · **Decidió:** Claude (lo que no cambia ningún píxel) / Lucas (cualquier pérdida de imagen)
+- **Fecha:** 2026-10-19 · **Estado:** la parte sin pérdida, aplicada (T320); la parte con pérdida, aplicada en D-150 (T390) · **Decidió:** Claude (lo que no cambia ningún píxel) / Lucas (cualquier pérdida de imagen)
 - **Qué:** `mipmaps/generate=false` en los siete `assets/intro/*.png.import` (sigue `compress/mode=0`, sin pérdida). Medido en `.ctex` reales: **24,46 MiB → 17,88 MiB (−27 %)**; píxeles idénticos al PNG. La medición completa y los recortes lado a lado están en `art/intro-v1/peso/comparison.html` (los reproduce `art/intro-v1/peso.py`).
 - **Por qué:** el hallazgo de T289 (H-22) fue que las imágenes de 1920 × 1080 pesan ~28 MB en la APK, con mipmaps (+33 %) y sin pérdida. **Recodificar los PNG no baja nada** (Godot guarda el recurso en WebP sin pérdida a partir de los píxeles, no del PNG) y `etc2_astc=true` no interviene porque el modo 0 no usa compresión de VRAM, así que tampoco infla. Quitar los mipmaps es lo único que reduce el peso sin cambiar un píxel.
 - **Con pérdida (no aplicado, mediciones de las 7 láminas):**
@@ -1119,3 +1119,27 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
   - **Un archivo por modo:** dos archivos para mantener sincronizados.
   - **Que el JSON defina el evento de cada paso:** ver arriba.
 - **Qué cambia:** `01-spec.md` (RF-571 y RF-578), `CONTENIDO.md` (cómo retocar el tutorial), `data/tutorial/tutorial.json`, `scripts/logic/tutorial_data.gd`, `tools/check_tutorial.gd`.
+
+## D-150 · Las láminas de la intro pasan a WebP: archivo sin pérdida en `assets/intro/` y calidad 0,90 al importar (≈4,0 MiB en vez de 17,88)
+- **Fecha:** 2026-10-20 · **Estado:** aplicada (T390) · **Decidió:** Lucas (vio `art/intro-v1/peso/comparison.html` y aprobó la calidad 0,90). Cierra la parte pendiente de D-120 (la «D-124 reservada» se usó como D-150).
+- **Qué:** las siete láminas son ahora `assets/intro/NN_nombre.webp` (mismo nombre base, 1920 × 1080). El archivo del repo es WebP **sin pérdida** (mismos píxeles que el PNG normalizado de antes, diferencia máxima 0) y cada `.webp.import` lleva `compress/mode=1` (con pérdida), `compress/lossy_quality=0.9` y `mipmaps/generate=false`. Los PNG originales siguen intactos en `art/intro-v1/sources/` y los de `assets/intro/` se borraron.
+- **Por qué:** el recurso importado (lo que entra al .pck y a la APK) pasa de **17,88 MiB a 4,00 MiB (−78 %)**, que era el peso que dolía en el celular (H-22, T289). La pérdida es la ya medida y aprobada en D-120: PSNR medio 38,5 dB.
+- **Mediciones (7 láminas, `.ctex` en `.godot/imported/`):**
+
+| Variante | Recurso importado | Nota |
+|---|---:|---|
+| PNG, sin pérdida, sin mipmaps (T320, antes) | 17,88 MiB | píxeles idénticos |
+| WebP en archivo + import sin pérdida (`mode=0`) | 16,01 MiB | no ahorra: Godot reguarda los píxeles |
+| **WebP sin pérdida en archivo + import `mode=1` q0,90 (aplicada)** | **4,00 MiB** (4.190.444 B) | PSNR 38,5 dB, igual que lo aprobado |
+| WebP con pérdida q90 en archivo + import `mode=1` q0,90 | 3,59 MiB | **descartada**: pierde dos veces (PSNR 37,1 dB, peor lámina 35,2 dB) |
+| WebP con pérdida q90 en archivo + import `mode=1` q0,95 | 4,48 MiB | descartada: más pesada y también con doble pérdida |
+
+  Por lámina (`.ctex`, B): 01 500.328; 02 937.300; 03 854.478; 04 794.078; 05 805.316; 06 933.446; 07 1.008.122. No se infla en Android: `compress/mode=1` guarda WebP dentro del `.ctex` (no es compresión de VRAM, no interviene `etc2_astc`). La APK real **no se generó** ni se midió (no se pidió); el número es el del `.ctex`.
+- **Por qué el archivo es sin pérdida:** si el WebP del repo ya tuviera pérdida, Godot lo comprimiría otra vez al importar (doble pérdida, tabla de arriba). Con el archivo sin pérdida, lo que se ve es la compresión única que Lucas aprobó. El archivo pesa 2,1 a 2,9 MB (menos que el PNG, 2,8 a 4,0 MB) pero no entra al ejecutable.
+- **Alternativas descartadas:**
+  - **Calidad 0,95** (5,56 MiB, 40,2 dB): más fiel pero ~1,5 MiB más; Lucas eligió 0,90.
+  - **Calidad 0,85** (3,04 MiB, 36,9 dB): ahorra ~1 MiB más, pero suaviza más el trazo fino.
+  - **Sin cambio** (17,88 MiB): el peso en el celular era el problema.
+  - **WebP con pérdida en el repo + import sin pérdida:** 16,01 MiB, no ahorra nada.
+- **Mirado a ojo:** capturas de `IntroScreen` a 1280 × 720 de las láminas 1, 4 y 7: sin diferencias visibles ni bandas.
+- **Qué cambia:** `assets/intro/*.webp(.import)`, `data/intro/intro.json`, `specs/intro/intro-editable.md`, `art/intro-v1/{pack.py,peso.py,manifest.json}`, tests de la intro, `01-spec.md` (RF-560), `02-plan-tecnico.md`, `03-tareas.md` (T390), `CONTENIDO.md`, `README.md`, `ONBOARDING.md`, `CHANGELOG.md`.
