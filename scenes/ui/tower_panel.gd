@@ -22,6 +22,9 @@ var partner_towers: Array[TowerData] = []
 
 @onready var _title: Label = %Title
 @onready var _stats: Label = %Stats
+const UPGRADE_PREVIEW_TITLE: String = "Al nivel %d:"
+var _upgrade_preview: Label
+var _upgrade_fx_config: UpgradeFxConfig
 @onready var _description: Label = %Description
 @onready var _damage: Label = %Damage
 @onready var _rate: Label = %Rate
@@ -68,6 +71,29 @@ func sell_button() -> Button:
 	return _sell_button
 
 
+## M68 (RF-616): encima de «Mejorar», lo que cambia al subir de nivel (antes → después). Se crea la primera vez.
+func _refresh_upgrade_preview() -> void:
+	if _upgrade_preview == null:
+		_upgrade_preview = Label.new()
+		_upgrade_preview.name = "UpgradePreview"
+		_upgrade_preview.add_theme_font_size_override("font_size", 13)
+		_upgrade_preview.add_theme_color_override("font_color", Color(0.75, 0.9, 0.6))
+		_upgrade_preview.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		_upgrade_button.get_parent().add_child(_upgrade_preview)
+		_upgrade_button.get_parent().move_child(_upgrade_preview, _upgrade_button.get_index())
+	if _upgrade_fx_config == null:
+		_upgrade_fx_config = UpgradeFxConfig.load_from()
+	var changes: Array[Dictionary] = UpgradeDeltas.preview(_tower.data.levels, _tower.level_index, _upgrade_fx_config.stats,
+			int(_upgrade_fx_config.get_number("max_estadisticas")))
+	if changes.is_empty():
+		_upgrade_preview.visible = false
+		return
+	var lines: Array[String] = [UPGRADE_PREVIEW_TITLE % (_tower.level_number() + 1)]
+	lines.append_array(UpgradeDeltas.rows(changes, int(_upgrade_fx_config.get_number("max_por_renglon"))))
+	_upgrade_preview.text = "\n".join(lines)
+	_upgrade_preview.visible = true
+
+
 func refresh(gold: int) -> void:
 	if _tower == null:
 		return
@@ -110,6 +136,7 @@ func refresh(gold: int) -> void:
 	_targeting_button.disabled = _tower.data.support_only or _tower.is_pulse_tower()  # RF-438: el pulso no apunta
 	_targeting_button.text = "Apuntar: %s" % _tower.targeting_name()
 	var next: TowerLevelData = _tower.next_level_stats()
+	_refresh_upgrade_preview()
 	if next == null:
 		_upgrade_button.text = "Nivel máximo"
 		_upgrade_button.disabled = true

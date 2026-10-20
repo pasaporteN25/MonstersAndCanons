@@ -18,6 +18,10 @@ const TUTORIAL_REPLAY_TEXT: String = "Volver a verlo"
 const TUTORIAL_REPLAYED_TEXT: String = "Se verá en el nivel 1"
 ## M66 (RF-600): la entrada de los jefes.
 const BOSS_ENTRANCE_TEXT: String = "Entrada de los jefes"
+## M68 (RF-614): la tecla de «Ver todo».
+const VIEW_ALL_LABEL: String = "Tecla de «Ver todo»"
+const VIEW_ALL_PROMPT: String = "Presioná una tecla…"
+const VIEW_ALL_RESTORE: String = "Restaurar"
 ## M67 (RF-607): el botón de las novedades y su texto cuando no hay nada para abrir.
 const NEWS_BUTTON_TEXT: String = "Novedades de esta versión"
 const NEWS_EMPTY_TEXT: String = "No hay novedades"
@@ -69,6 +73,11 @@ var _news_button: Button
 var _news_data: NewsData
 var _tutorial_replay: Button
 var _boss_entrance_check: CheckBox
+## M68 (RF-614): la fila de la tecla de «Ver todo» (solo con la interfaz de PC), el botón que la muestra y el aviso.
+var _view_all_button: Button
+var _view_all_restore: Button
+var _view_all_note: Label
+var _view_all_capturing: bool = false
 
 
 func _ready() -> void:
@@ -85,6 +94,8 @@ func _ready() -> void:
 	# RF-593: justo debajo de «Mostrar números de daño» (las filas de arriba también se meten ahí).
 	_rows.move_child(_upgrade_fx_check, _damage_numbers_check.get_index() + 1)
 	_build_boss_entrance_check()  # M66
+	if not UiMode.is_mobile():
+		_build_view_all_row()  # M68: sin teclado no hace falta
 	_arrange_columns()
 	_admin_button.pressed.connect(_on_admin_pressed)
 	_admin_confirm_button.pressed.connect(set_dev_mode.bind(true))
@@ -112,6 +123,8 @@ func open() -> void:
 	_ui_mode_selector.select(UiMode.read_setting(SaveManager.get_setting("ui_mode")))
 	_boss_entrance_check.set_pressed_no_signal(SaveManager.boss_entrance_enabled())  # M66
 	_tutorial_check.set_pressed_no_signal(SaveManager.tutorial_enabled())
+	_stop_view_all_capture()
+	_refresh_view_all_row()
 	_tutorial_replay.text = TUTORIAL_REPLAY_TEXT
 	_tutorial_replay.disabled = false
 	_refresh_news_button()
@@ -121,6 +134,7 @@ func open() -> void:
 
 
 func close() -> void:
+	_stop_view_all_capture()
 	SaveManager.save()
 	visible = false
 	closed.emit()
@@ -286,6 +300,94 @@ func _build_boss_entrance_check() -> void:
 	_rows.move_child(_boss_entrance_check, anchor.get_index() + 1)
 	_boss_entrance_check.toggled.connect(
 		func(on: bool) -> void: SaveManager.set_setting("boss_entrance", on))
+## M68 (RF-614): una fila con el nombre, un botón con la tecla de hoy (al pulsarlo espera la próxima tecla),
+## «Restaurar» (vuelve a la V) y, debajo, el aviso cuando la tecla elegida ya la usa otra cosa.
+func _build_view_all_row() -> void:
+	var box := VBoxContainer.new()
+	box.name = "ViewAllRow"
+	box.add_theme_constant_override("separation", 4)
+	var label := Label.new()
+	label.text = VIEW_ALL_LABEL
+	label.add_theme_font_size_override("font_size", 20)
+	box.add_child(label)
+	var line := HBoxContainer.new()
+	line.add_theme_constant_override("separation", 8)
+	box.add_child(line)
+	_view_all_button = Button.new()
+	_view_all_button.name = "ViewAllKeyButton"
+	_view_all_button.custom_minimum_size = Vector2(150, 40)
+	_view_all_button.pressed.connect(_start_view_all_capture)
+	line.add_child(_view_all_button)
+	_view_all_restore = Button.new()
+	_view_all_restore.name = "ViewAllRestoreButton"
+	_view_all_restore.text = VIEW_ALL_RESTORE
+	_view_all_restore.custom_minimum_size = Vector2(120, 40)
+	_view_all_restore.pressed.connect(set_view_all_key.bind(ViewAllBinding.DEFAULT_KEY))
+	line.add_child(_view_all_restore)
+	_view_all_note = Label.new()
+	_view_all_note.name = "ViewAllNote"
+	_view_all_note.add_theme_font_size_override("font_size", 14)
+	_view_all_note.add_theme_color_override("font_color", Color(1.0, 0.8, 0.25))
+	_view_all_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_view_all_note.custom_minimum_size.x = 300
+	_view_all_note.visible = false
+	box.add_child(_view_all_note)
+	_rows.add_child(box)
+	_rows.move_child(box, _boss_entrance_check.get_index() + 1)
+
+
+func _refresh_view_all_row() -> void:
+	if _view_all_button == null:
+		return
+	var key: int = SaveManager.get_ui_prefs().view_all_key
+	_view_all_button.text = VIEW_ALL_PROMPT if _view_all_capturing else ViewAllBinding.key_text(key)
+	_view_all_restore.disabled = key == ViewAllBinding.DEFAULT_KEY
+
+
+func _start_view_all_capture() -> void:
+	_view_all_capturing = true
+	_view_all_note.visible = false
+	_refresh_view_all_row()
+
+
+func _stop_view_all_capture() -> void:
+	_view_all_capturing = false
+	_refresh_view_all_row()
+
+
+## Prueba la tecla y, si se puede, la guarda. Devuelve true si la cambió; si no, deja el aviso (RF-614).
+func set_view_all_key(keycode: int) -> bool:
+	_view_all_capturing = false
+	var owner_name: String = "" if keycode == ViewAllBinding.DEFAULT_KEY else ViewAllBinding.conflict(keycode)
+	if owner_name != "":
+		_view_all_note.text = "Esa tecla ya la usa %s. Elegí otra." % owner_name
+		_view_all_note.visible = true
+		_refresh_view_all_row()
+		return false
+	var prefs: UiPrefs = SaveManager.get_ui_prefs()
+	prefs.view_all_key = keycode
+	SaveManager.set_ui_prefs(prefs)
+	_view_all_note.visible = false
+	_refresh_view_all_row()
+	return true
+
+
+## Mientras espera la tecla, se queda con la próxima que se aprieta (Esc cancela sin cerrar Opciones).
+func _input(event: InputEvent) -> void:
+	if not _view_all_capturing or not visible:
+		return
+	var key := event as InputEventKey
+	if key == null or not key.pressed or key.echo:
+		return
+	get_viewport().set_input_as_handled()
+	if key.physical_keycode == KEY_ESCAPE:
+		_stop_view_all_capture()
+		return
+	if key.physical_keycode in ViewAllBinding.RESERVED_KEYS:
+		return  # un modificador solo no es una tecla: sigue esperando
+	set_view_all_key(key.physical_keycode as int)
+
+
 ## RF-607: abre las novedades de la versión instalada (o la más nueva del archivo) sin tocar el guardado. Con el
 ## archivo roto o sin versiones queda deshabilitado y dice «No hay novedades».
 func _build_news_button() -> void:

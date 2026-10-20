@@ -142,14 +142,16 @@ func _in_map_area(screen_position: Vector2) -> bool:
 	return screen_position.y >= _top_height and screen_position.y < Rules.SCREEN_SIZE.y - _bottom_height
 
 
-## RF-506 y RF-545: «Ver todo» aparece si el zoom pasa el mínimo **o** si el encuadre se corrió (aunque el zoom
-## sea el mínimo). En PC (sin HUD móvil) solo aparece con el zoom mínimo y el encuadre corrido.
+## RF-506, RF-545 y RF-612: «Ver todo» aparece si el zoom pasa el mínimo **o** si el encuadre se corrió (aunque el
+## zoom sea el mínimo), tanto en el celular como en la PC. En la PC además tiene su tecla (RF-613).
 func _update_view_all() -> void:
 	var zoomed: bool = _camera != null and _camera.zoom.x > _minimum_zoom and not is_equal_approx(_camera.zoom.x, _minimum_zoom)
 	if _mobile_hud != null:
 		_mobile_hud.show_view_all(zoomed or is_view_displaced())
 	elif _pc_view_all_button != null:
-		_pc_view_all_button.visible = is_view_displaced() and not zoomed
+		# M68 (RF-612): en PC, igual que en el celular: con otro zoom o con el mapa corrido.
+		_pc_view_all_button.visible = zoomed or is_view_displaced()
+		_pc_view_all_button.tooltip_text = view_all_tooltip()
 
 
 ## ¿El mapa está corrido respecto del encuadre de RF-251? (con la cámara todavía sin crear, no)
@@ -182,6 +184,12 @@ func _build_pc_view_all_button(config: MobileUiConfig) -> void:
 	_pc_view_all_button.visible = false
 	_pc_view_all_button.pressed.connect(view_all)
 	layer.add_child(_pc_view_all_button)
+
+
+## M68 (RF-612): la ayuda del botón de la PC dice la tecla que tenga elegida.
+static func view_all_tooltip() -> String:
+	var key: int = ViewAllBinding.current_key()
+	return "Ver todo el mapa" if key == 0 else "Ver todo el mapa · %s" % ViewAllBinding.key_text(key)
 
 
 static func clamp_zoom(value: float, minimum: float, maximum: float) -> float:

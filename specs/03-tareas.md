@@ -2290,3 +2290,42 @@ Spec: RF-540 a RF-545. Decisiones: D-110 a D-113. Plan: «M60 / T300». Rama `fe
 - [ ] **T375 · `[mobile]` · Integrar el arte aprobado, medir y dejar lista la salida de la 1.0.0.**
   **Refs:** RF-604, RF-608, RF-609. **Depende de:** T372 (OK de Lucas), T373 y T374.
   **Hecho cuando:** el arte aprobado reemplaza al provisional sin cambiar el comportamiento, importado sin mipmaps y con su peso anotado (APK); capturas en modo celular con la entrada de la 1.0.0 completa; `CHANGELOG.md`, `README.md` y `ONBOARDING.md` actualizados; **lista de salida escrita en el Resultado** (no ejecutada): subir `config/version` a `1.0.0`, `file_version` y `product_version` de Windows, `version/code` de Android, pasar `borrador` a `false`, correr `check_novedades.gd`, exportar. Límite a dejar escrito: no se probó en un celular real.
+
+## M68 · Pausa que bloquea el carrito, «Ver todo» con tecla propia y «Mejorar» con antes → después
+
+Spec: RF-610 a RF-619. Decisiones: D-160 a D-164. Plan: «M68 / T400 a T405». Rama `feature/m68-pausa-vertodo-mejorar`. T406 a T409 quedan reservadas.
+
+- [x] **T400 · `[x86]` · Spec, decisiones, plan y tareas de M68.**
+  **Refs:** RF-610 a RF-619, D-160 a D-164. **Hecho cuando:** los cuatro documentos dicen lo mismo y nombran lo que no se incluye.
+  **Resultado (2026-10-20):** hecho. Spec M68, cinco decisiones, plan y tareas. Se escribió **con las respuestas de Lucas del 2026-10-20** (`~/.agents/decisiones-2026-10-20.md`); no se pidió un OK aparte a la spec porque Lucas ya había decidido cada punto. Lo que **interpreté**: «combinación de teclas» como **una tecla elegible** (sin modificadores, D-161), la V por omisión, y que la demolición también se apague en pausa (D-160). Si Lucas quería otra cosa, cambia la spec antes que el código.
+
+- [x] **T401 · `[mobile]` · El carrito y la demolición se apagan en pausa.**
+  **Refs:** RF-610, RF-611, D-160. **Depende de:** T400.
+  **Hecho cuando:** en el celular, pausar cierra el catálogo, apaga el carrito y la demolición, la barra dice «En pausa…», nada se construye ni se cobra, y al seguir todo vuelve; test.
+  **Resultado (2026-10-20):** hecho. `MobileHud.set_paused` + conexión en `Game`. `tests/test_pause_lock.gd` (7 casos: catálogo abierto, carrito, seguir, botón y menú de pausa, demolición con toque soltado, fantasma y cobro, PC sin cambios). **No se probó en un celular real.**
+
+- [x] **T402 · `[x86]` · «Ver todo» en PC: botón también con otro zoom y tecla configurable.**
+  **Refs:** RF-612 a RF-615, D-161, D-162. **Depende de:** T400.
+  **Hecho cuando:** la acción `view_all` (V) vuelve al encuadre, también en pausa y no con un menú abierto; Opciones cambia la tecla, rechaza las ocupadas y restaura; se guarda en `ui_prefs` sin cambiar `SAVE_VERSION`; un guardado viejo carga; tests.
+  **Resultado (2026-10-20):** hecho. `ViewAllBinding`, `UiPrefs.view_all_key`, fila en Opciones, tecla en `Game`, botón de la PC con otro zoom. `tests/test_view_all_binding.gd` (14) y 3 casos nuevos en `tests/test_view_all_displaced.gd` (el de la rueda en PC se cambió: ahora el botón sí aparece). **Qué no:** no se probó con un teclado físico distinto del de desarrollo, con distribuciones no QWERTY, ni la captura de una tecla con el foco en otro control de Opciones (se prueba llamando a `_input` y a `set_view_all_key`).
+
+- [x] **T403 · `[x86]` · Lógica del antes → después en `UpgradeDeltas`.**
+  **Refs:** RF-616, RF-618, D-163. **Depende de:** T400.
+  **Hecho cuando:** `before_after`/`preview` devuelven las mismas estadísticas que `compute` con antes y después; vacío en el último nivel; tests con los `.tres` reales.
+  **Resultado (2026-10-20):** hecho, en `tests/test_upgrade_preview.gd` (los casos de lógica incluyen que **cada torre de `data/towers/` muestra al menos un cambio por mejora**).
+
+- [x] **T404 · `[mobile+x86]` · Mostrar el antes → después en el panel de la PC y en la barra del celular.**
+  **Refs:** RF-616, RF-617, D-163. **Depende de:** T403.
+  **Hecho cuando:** la PC muestra «Al nivel N:» con las estadísticas encima de «Mejorar», el celular un renglón «Al mejorar: …», y ninguno en el nivel máximo; tests.
+  **Resultado (2026-10-20):** hecho (`TowerPanel`, `MobileHud`). Probado con escenas reales (construir, mejorar hasta el máximo). **No se miró en una captura**: el alto del panel de la PC y que el tercer renglón entre en la barra de 96 px del celular (3 renglones de 16 px) están razonados, no medidos con ventana.
+
+- [x] **T405 · `[x86]` · Documentos: franja de 56 px, README 9→11 torres, §13, T289 §7, CHANGELOG, CONTENIDO y ONBOARDING.**
+  **Refs:** RF-619, D-164. **Depende de:** T400.
+  **Hecho cuando:** ningún documento dice que hay una franja de 56 px reservada ni «9 torres» donde son 11 (en el estado actual del README), §13 anota B descartada y A en M70, T289 §7 tiene las respuestas de Lucas.
+  **Resultado (2026-10-20):** hecho. `franja_px` borrado del dato y de `MobileUiConfig`. Las menciones **históricas** (resultados de tareas viejas, el cuadro de M53 con «9 torres») se dejaron como estaban: cuentan lo que era cierto en su momento.
+
+- [x] **T406 · `[x86]` · Sincronizar el PR #21 con main y resolver el conflicto de CHANGELOG.**
+  **Refs:** M68, T390, T405. **Depende de:** T405.
+  **Hecho cuando:** la rama incorpora `origin/main`, conserva las novedades de M68 y de la intro WebP, pasa importación y suite completa sin `SCRIPT ERROR` ni `Parse Error`, y se publica sin mergear el PR.
+
+  **Resultado (2026-10-20):** rama sincronizada con `origin/main` (`52855f0`), conservando ambas entradas de CHANGELOG (M68 e intro WebP). Importación con código 0, sin `SCRIPT ERROR` ni `Parse Error`. La primera suite concurrente dio 2087/2088 con un fallo en `test_records` (archivo de prueba compartido); se repitió con `XDG_DATA_HOME` y `XDG_CONFIG_HOME` aislados: **150 scripts, 2088/2088 tests, 23.005 aserciones**, código 0, sin errores de script ni parseo. No se cambió código de juego ni se generaron exportaciones. No se probó en un celular real. Publicar esta resolución no mergea el PR: eso queda para Lucas.
