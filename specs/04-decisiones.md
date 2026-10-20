@@ -1384,3 +1384,47 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
   - **Bajar el costo de demoler solo en el 9 (opción A):** puede hacer falta si la medición muestra que alcanzar el Mortero cuesta demasiadas vidas; se decide con datos y con Lucas, no antes.
 - **Límites aceptados:** (1) 270 de oro de demoliciones más 300 del Mortero son 570 de oro en un mapa de 320 de arranque: **alcanzar** el Mortero no garantiza **poder permitírselo sin perder vidas**; se mide en T282 y lo juzga Lucas en T283. (2) La primera vez hay exactamente 3 recursos: quien pague un Francotirador con su segunda forma (120 + 1 recurso) ya no llega al Mortero en esa partida. (3) El panel dirá «Puede dar 1 recurso (100 %)», con la redacción de siempre. (4) Las vidas del bot no predicen las de una persona.
 - **Qué cambia:** `01-spec.md` (M61, RF-523 a RF-525; nota en RF-420), `02-plan-tecnico.md` (M61), `03-tareas.md` (T282 y T283 nuevas), `09-decisiones-pendientes-v1.md` (nota en Q-21), `CHANGELOG.md` y `CONTENIDO.md`. **No cambia ningún código, dato ni asset todavía:** eso es T282.
+## D-171 · Un solo consejo de torre, sin avisos sobre oro ni mejoras
+- **Fecha:** 2026-10-20 · **Estado:** decidida · **Decidió:** Lucas (M70 trata de qué torre conviene; «te sobra oro» descartado).
+- **Qué:** la derrota muestra como máximo un consejo de torre, el de mayor peso (RF-633). No hay segunda línea de oro o mejoras: RF-634 queda retirado.
+- **Por qué:** respetar el alcance aprobado y mantener corto el mensaje de derrota. La comparación antes/después de Mejorar pertenece a M68.
+- **Alternativas descartadas:** varios consejos juntos y el recordatorio de oro/mejoras heredado del trabajo local incompleto, sin autorización en las decisiones vigentes.
+- **Qué cambia:** datos, lógica, pantalla y tests muestran solo el consejo de torre.
+
+## D-172 · El consejo sale solo en la derrota
+- **Fecha:** 2026-10-20 · **Estado:** decidida (T420) · **Decidió:** Lucas (pantalla de derrota) / Claude (nada en la victoria)
+- **Qué:** solo `show_defeat` lo muestra (RF-630).
+- **Por qué:** es cuando el jugador busca por qué perdió. Ganar con fugas no es un problema que haya que explicarle, y el registro de fugas de una victoria no dice qué falló.
+- **Alternativas descartadas:**
+  - **Siempre, también al ganar con vidas perdidas:** es ruido en el momento de celebrar; las estrellas ya dicen cuánto se perdió.
+  - **Durante la partida (aviso en vivo):** es el aviso «te sobra oro» que Lucas descartó.
+- **Qué cambia:** `01-spec.md` (RF-630), `scenes/ui/end_screen.gd`.
+
+## D-173 · El consejo no se apaga en Opciones
+- **Fecha:** 2026-10-20 · **Estado:** decidida (T420) · **Decidió:** Claude (recomendación; Lucas puede pedir la opción)
+- **Qué:** no hay opción nueva ni clave nueva en el guardado.
+- **Por qué:** son una o dos líneas **solo cuando se pierde**; no tapan ni frenan nada (los botones siguen en su orden). Una opción más obligaría a una clave de guardado, a una fila de Opciones (que ya se desplaza porque no entra) y a tests de guardados viejos, para esconder dos frases. El tutorial sí se apaga porque tapa el juego (D-126); esto no.
+- **Alternativas descartadas:**
+  - **Opción «Consejos al perder» (por omisión sí):** costo de guardado y de interfaz mayor que el problema. Si a Lucas le molesta, se agrega en una tarea chica.
+  - **Mostrarlo solo las primeras N derrotas:** estado de más en el guardado.
+- **Qué cambia:** nada en el guardado. `01-spec.md` (RF-630).
+
+## D-174 · Las reglas se escriben por comportamiento del enemigo y criterio de torre, no por nombre
+- **Fecha:** 2026-10-20 · **Estado:** decidida (T420) · **Decidió:** Claude
+- **Qué:** una regla dice «enemigos con `is_flying`», «con armadura ≥ 2»… y «torres que cumplen el criterio `aire`»; el criterio se define en el mismo archivo sobre los **datos reales del nivel 1 de la torre** (RF-632).
+- **Por qué:** cumple «usar solo datos reales» y no se desactualiza: un enemigo o torre nuevo entra sin tocar el archivo, y si cambian los números de una torre, el criterio la incluye o la saca sola. Los textos y los umbrales son lo único que Lucas retoca.
+- **Alternativas descartadas:**
+  - **Tabla por id (`flyer → Ametralladora, Múltiple`):** se rompe con cada enemigo o torre nuevo y puede nombrar torres que el nivel no ofrece.
+  - **Calcular el consejo en código sin tabla:** los textos y los umbrales quedarían escondidos (P2).
+  - **Elegir por simulación (cuál torre mata más de ese enemigo):** costoso, difícil de explicar y fuera del alcance.
+- **Qué cambia:** `01-spec.md` (RF-632), `data/consejos/consejos.json`, `scripts/logic/advice_data.gd`.
+
+## D-175 · El peso de cada enemigo: vidas quitadas por las fugas, y la oleada final como complemento
+- **Fecha:** 2026-10-20 · **Estado:** decidida (T420) · **Decidió:** Lucas (fugas y oleada de la derrota) / Claude (la fórmula)
+- **Qué:** `peso = vidas_quitadas_por_sus_fugas + peso_oleada × vidas_que_quita × cantidad_en_la_oleada_final`, con `peso_oleada` = 0,25, y un piso de `participacion_minima_%` = 30 (RF-633).
+- **Por qué:** lo que **realmente** te quitó vidas manda (un Jefe que pasó pesa 10; una Cría, 1). La oleada final cuenta poco: avisa lo que vino pero no es el único motivo de haber perdido; sirve para completar cuando hay pocas fugas. El piso evita un consejo por un detalle (un solo Rápido entre 20 Normales).
+- **Alternativas descartadas:**
+  - **Solo el que más vidas quitó:** ignora la oleada de la derrota que Lucas pidió mirar.
+  - **Solo la oleada final:** no refleja lo que ya se colaba antes.
+  - **Contar fugas sin las vidas que quita:** una Cría valdría lo mismo que un Jefe.
+- **Qué cambia:** `01-spec.md` (RF-633), `data/consejos/consejos.json` (los números), `scripts/logic/defeat_advice.gd`.

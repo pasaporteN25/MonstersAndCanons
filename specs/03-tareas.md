@@ -2290,3 +2290,18 @@ Spec: RF-540 a RF-545. Decisiones: D-110 a D-113. Plan: «M60 / T300». Rama `fe
 - [ ] **T375 · `[mobile]` · Integrar el arte aprobado, medir y dejar lista la salida de la 1.0.0.**
   **Refs:** RF-604, RF-608, RF-609. **Depende de:** T372 (OK de Lucas), T373 y T374.
   **Hecho cuando:** el arte aprobado reemplaza al provisional sin cambiar el comportamiento, importado sin mipmaps y con su peso anotado (APK); capturas en modo celular con la entrada de la 1.0.0 completa; `CHANGELOG.md`, `README.md` y `ONBOARDING.md` actualizados; **lista de salida escrita en el Resultado** (no ejecutada): subir `config/version` a `1.0.0`, `file_version` y `product_version` de Windows, `version/code` de Android, pasar `borrador` a `false`, correr `check_novedades.gd`, exportar. Límite a dejar escrito: no se probó en un celular real.
+## M70 — Consejo de torre en la derrota *(Lucas, 2026-10-20; D-171 a D-175)*
+
+- [x] **T420 · `[mobile+x86]` · Consejo de derrota: spec, datos, lógica pura y validador.**
+  **Refs:** RF-631 a RF-633, RF-635, RF-638, D-171 a D-175, P2, P10. **Depende de:** T350 (ya integrado en main).
+  **Hecho cuando:** `AdviceData`, `LeakLog` y `DefeatAdvice` prueban la elección usando datos reales y torres ofrecidas; el validador acepta el archivo oficial; suite completa sin errores de script.
+
+  **Resultado (2026-10-20):** rescatada y renumerada la spec M70 (RF-630 a RF-639, D-171 a D-175). RF-634 queda retirado: se eliminó el recordatorio de oro/mejoras del trabajo incompleto. Datos con 15 reglas y 8 criterios; lógica pura de fugas y selección, sin sugerir torres ausentes ni Hielo como daño antiaéreo. Validador oficial OK; 42 tests de datos/lógica y verificación conjunta de M70: importación + suite **2110/2110**, sin `SCRIPT ERROR` ni `Parse Error`, con directorios XDG aislados. Textos en borrador; sin partidas humanas ni celular real.
+
+- [ ] **T421 · `[mobile+x86]` · Integrar el consejo de torre en la partida y la derrota.**
+  **Refs:** RF-630, RF-631, RF-636, RF-637. **Depende de:** T420.
+  **Hecho cuando:** se registran fugas reales; la derrota muestra solo el consejo de torre; la victoria lo oculta; textos en dos líneas y panel en 1280 × 720 sin cambiar tamaño ni orden de botones. RF-634 retirado: sin recordatorios de oro ni contador de mejoras.
+
+- [ ] **T422 · `[mobile+x86]` · Medir el consejo con el bot en los 15 niveles y documentar.**
+  **Refs:** RF-639. **Depende de:** T421.
+  **Hecho cuando:** se pierde a propósito en 15 niveles, se compara cada consejo con torres alternativas en iguales mapa/semilla/tope y se reportan resultados y límites; documentación al día.
