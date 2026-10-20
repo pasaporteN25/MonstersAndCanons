@@ -19,7 +19,7 @@ Cada línea del texto empieza con `> `. Las **notas** son solo para vos: no se c
 
 ## Lámina 1 · La nave
 
-- Imagen: res://assets/intro/01_la_nave.png
+- Imagen: res://assets/intro/01_la_nave.webp
 - Segundos: 7
 - Voz o sonido: ninguno
 
@@ -32,7 +32,7 @@ Notas:
 
 ## Lámina 2 · La bodega
 
-- Imagen: res://assets/intro/02_la_bodega.png
+- Imagen: res://assets/intro/02_la_bodega.webp
 - Segundos: 9
 - Voz o sonido: ninguno
 
@@ -45,7 +45,7 @@ Notas:
 
 ## Lámina 3 · Los turnos
 
-- Imagen: res://assets/intro/03_los_turnos.png
+- Imagen: res://assets/intro/03_los_turnos.webp
 - Segundos: 8
 - Voz o sonido: ninguno
 
@@ -58,7 +58,7 @@ Notas:
 
 ## Lámina 4 · La ventana
 
-- Imagen: res://assets/intro/04_la_ventana.png
+- Imagen: res://assets/intro/04_la_ventana.webp
 - Segundos: 7
 - Voz o sonido: ninguno
 
@@ -71,7 +71,7 @@ Notas:
 
 ## Lámina 5 · El descenso
 
-- Imagen: res://assets/intro/05_el_descenso.png
+- Imagen: res://assets/intro/05_el_descenso.webp
 - Segundos: 5
 - Voz o sonido: ninguno
 
@@ -83,7 +83,7 @@ Notas:
 
 ## Lámina 6 · Los motores apagados
 
-- Imagen: res://assets/intro/06_los_motores_apagados.png
+- Imagen: res://assets/intro/06_los_motores_apagados.webp
 - Segundos: 6
 - Voz o sonido: ninguno
 
@@ -96,7 +96,7 @@ Notas:
 
 ## Lámina 7 · El oasis
 
-- Imagen: res://assets/intro/07_el_oasis.png
+- Imagen: res://assets/intro/07_el_oasis.webp
 - Segundos: 9
 - Voz o sonido: ninguno
 

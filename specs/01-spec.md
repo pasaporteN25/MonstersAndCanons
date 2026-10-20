@@ -2896,7 +2896,7 @@ Cortas y en orden de importancia. Ninguna frena a T258: el código y el formato 
   	"version": 1,
   	"fundido_s": 0.6,
   	"laminas": [
-  		{"imagen": "res://assets/intro/01_la_nave.png",
+  		{"imagen": "res://assets/intro/01_la_nave.webp",
   		 "texto": "La Compañía Meridiana mandó una sola nave.\nNo lleva soldados: lleva gente de oficio.",
   		 "segundos": 7}
   	]
@@ -3343,8 +3343,8 @@ Pedido de Lucas: el carrito debe abrir al tocarlo incluso pegado a los costados;
 
 Pedido de Lucas: (A) bajar el peso de las imágenes de la intro para que la APK pese menos, **sin pérdida visible a 1920 × 1080**, y (B) tener **un archivo fácil de editar a mano** para revisar y retocar los textos y los tiempos de la intro. **No cambia ningún texto, ninguna imagen ni ninguna regla de M57**: solo cómo se importan las láminas y una herramienta de edición.
 
-- **RF-560** **Importación liviana de las láminas de la intro** `[mobile]`: los siete PNG de `assets/intro/` se importan **sin pérdida** (`compress/mode=0`, como hasta ahora) pero **sin mipmaps** (`mipmaps/generate=false`). El PNG de origen no se toca ni se recodifica (el peso del recurso importado depende de cómo importa Godot, no del tamaño del PNG). Una variante **con pérdida** (WebP) queda medida pero **no se aplica** hasta que Lucas la apruebe (D-120).
-  - **Criterio:** **Dado** el proyecto importado → **Cuando** se miden los `.ctex` de las siete láminas → **Entonces** suman **menos** que antes (medido: 24,46 MiB → 17,88 MiB, −27 %) y los píxeles de la lámina a 1920 × 1080 son **idénticos** a los del PNG (diferencia máxima 0). **Dado** la intro abierta → **Cuando** se muestra una lámina → **Entonces** se ve igual a tamaño real (la lámina se dibuja a un tamaño parecido al original, así que los mipmaps casi no se usaban).
+- **RF-560** **Importación liviana de las láminas de la intro** `[mobile]`: las siete láminas de `assets/intro/` son archivos **WebP sin pérdida** (`NN_nombre.webp`; los PNG originales siguen en `art/intro-v1/sources/`) y se importan **con pérdida a calidad 0,90** (`compress/mode=1`, `compress/lossy_quality=0.9`) y **sin mipmaps** (`mipmaps/generate=false`). Lo aprobó Lucas el 2026-10-20 (D-150, que cierra lo que D-120 dejaba pendiente); el paso intermedio de T320 (sin pérdida y sin mipmaps, 17,88 MiB) queda como historia (D-120).
+  - **Criterio:** **Dado** el proyecto importado → **Cuando** se miden los `.ctex` de las siete láminas → **Entonces** suman **menos** que antes (medido: 24,46 MiB con mipmaps → 17,88 MiB sin mipmaps (T320) → **4,00 MiB** con WebP q0,90 (T390, −78 % sobre 17,88); PSNR medio 38,5 dB, sin diferencias visibles a 1280 × 720). **Dado** la intro abierta → **Cuando** se muestra una lámina → **Entonces** se ve igual a tamaño real (la lámina se dibuja a un tamaño parecido al original, así que los mipmaps casi no se usaban).
   - **Límite honesto:** si una pantalla muestra la lámina a **bastante menos de su tamaño** (la lámina se achica más de ~1,5 veces), sin mipmaps puede verse algo más áspera que antes. En el Android de Lucas no se midió.
 
 - **RF-561** **El documento editable de la intro** *(archivo nuevo, `specs/intro/intro-editable.md`)*: un Markdown en castellano que muestra **toda la intro** con una sección por lámina: título (solo para orientarse), imagen, segundos, voz o sonido (hoy «ninguno»: la intro no tiene voces ni sonidos, RF-499), el **texto** (cada línea con `> ` adelante) y **notas libres** que **no se cargan al juego**. Arriba, los **ajustes generales** (versión del formato y fundido entre láminas). Es una **vista editable** de `data/intro/intro.json`: el archivo que lee el juego **sigue siendo el JSON** (D-121).
@@ -3362,9 +3362,9 @@ Pedido de Lucas: (A) bajar el peso de las imágenes de la intro para que la APK 
 
 #### Lo que M62 no incluye
 - **No cambia ningún texto ni ninguna imagen de la intro**, y **no carga textos nuevos** en el juego.
-- **No aplica compresión con pérdida** a las láminas (queda como decisión, D-120).
+- **La compresión con pérdida de las láminas (WebP q0,90) se aplicó después, con OK de Lucas (D-150, T390).**
 - **No agrega voces, sonidos ni campos nuevos** a `intro.json` (las notas viven solo en el documento).
-- **No toca `art/intro-v1/sources/`** ni los PNG de `assets/intro/`.
+- **No toca `art/intro-v1/sources/`** (los PNG originales); T390 reemplazó los PNG de `assets/intro/` por WebP.
 
 ### M63 · El tutorial del nivel 1 (Lucas, 2026-10-19; T330 y T331)
 

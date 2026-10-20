@@ -22,8 +22,8 @@ for name, title in zip(NAMES, TITLES):
         size = list(original.size)
         # Se conserva el cuadro completo: la variación de relación es menor al 0,1 %.
         image = original.convert('RGB').resize((1920, 1080), Image.Resampling.LANCZOS)
-        image.save(DEST / (name + '.png'), optimize=True)
-    target = DEST / (name + '.png')
+        image.save(DEST / (name + '.webp'), 'WEBP', lossless=True, quality=100, method=6, exact=True)  # D-150: sin pérdida; Godot aplica q0,90 al importar
+    target = DEST / (name + '.webp')
     entries.append({'id': name[:2], 'title': title, 'source': 'sources/' + source.name,
                     'source_size': size, 'file': 'assets/intro/' + target.name,
                     'width': 1920, 'height': 1080, 'bytes': target.stat().st_size,

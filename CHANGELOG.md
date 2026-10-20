@@ -2,6 +2,9 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## La intro pesa mucho menos *(T390, 2026-10-20)*
+
+Las siete láminas de la intro se guardan ahora como WebP con una compresión leve (calidad 0,90): **ocupan unos 4 MiB en vez de casi 18** dentro del juego, y en pantalla se ven igual (no se notan diferencias a simple vista). El juego queda más liviano de instalar y de abrir en el celular.
 ## Pantalla de carga y toques bloqueados al cambiar de pantalla *(T340, 2026-10-19)*
 
 Al elegir un nivel, volver al menú, reintentar o pasar al siguiente nivel, el juego muestra ahora una **pantalla de carga** («Cargando…» con una barra que se mueve) y **no hace caso a nada** (toques, clics, teclas ni el botón «atrás») hasta que la pantalla nueva está lista. Antes, si tocabas de más mientras el nivel cargaba en el celular, se podía lanzar **otro nivel** (el que quedaba debajo del dedo en la selección). Ahora entra solo el que elegiste. La pantalla de carga se ve como mínimo 0,4 segundos, así que en equipos rápidos es un destello corto y no un parpadeo.

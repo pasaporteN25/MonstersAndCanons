@@ -38,7 +38,7 @@ func _open_screen(fade_s: float = 0.6) -> void:
 	screen.finished.connect(func() -> void: finished_count += 1)
 	var raw: Dictionary = {"version": 1, "fundido_s": fade_s, "laminas": []}
 	for i: int in 5:
-		raw["laminas"].append({"imagen": "res://assets/intro/01_la_nave.png", "texto": "Lámina %d" % (i + 1), "segundos": 4 + i})
+		raw["laminas"].append({"imagen": "res://assets/intro/01_la_nave.webp", "texto": "Lámina %d" % (i + 1), "segundos": 4 + i})
 	screen.open(IntroData.parse(raw))
 
 

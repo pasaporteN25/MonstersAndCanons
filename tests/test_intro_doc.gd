@@ -3,7 +3,7 @@
 extends GutTest
 
 const DIR: String = "user://test_intro_doc"
-const IMAGE: String = "res://assets/intro/01_la_nave.png"
+const IMAGE: String = "res://assets/intro/01_la_nave.webp"
 
 
 func after_each() -> void:
@@ -104,9 +104,9 @@ func test_no_edit_means_no_changes() -> void:
 
 
 func test_titles_come_from_the_image_name() -> void:
-	assert_eq(IntroDoc.title_of("res://assets/intro/01_la_nave.png"), "La nave")
-	assert_eq(IntroDoc.title_of("res://assets/intro/06_los_motores_apagados.png"), "Los motores apagados")
-	assert_eq(IntroDoc.title_of("res://assets/intro/x.png"), "X")
+	assert_eq(IntroDoc.title_of("res://assets/intro/01_la_nave.webp"), "La nave")
+	assert_eq(IntroDoc.title_of("res://assets/intro/06_los_motores_apagados.webp"), "Los motores apagados")
+	assert_eq(IntroDoc.title_of("res://assets/intro/x.webp"), "X")
 	assert_eq(IntroDoc.title_of(""), "sin título")
 
 
@@ -168,9 +168,9 @@ func test_three_lines_are_rejected_with_the_slide() -> void:
 
 
 func test_a_missing_image_is_rejected() -> void:
-	var body: String = "- Imagen: res://assets/intro/no_existe.png\n- Segundos: 6\n\nTexto:\n\n> Uno.\n"
+	var body: String = "- Imagen: res://assets/intro/no_existe.webp\n- Segundos: 6\n\nTexto:\n\n> Uno.\n"
 	var errors: PackedStringArray = IntroDoc.parse_markdown(_doc(5, body))["errors"]
-	assert_true(_has(errors, "la lámina 1 no encuentra la imagen `res://assets/intro/no_existe.png`"), str(errors))
+	assert_true(_has(errors, "la lámina 1 no encuentra la imagen `res://assets/intro/no_existe.webp`"), str(errors))
 
 
 func test_required_fields_are_reported_with_their_line() -> void:
