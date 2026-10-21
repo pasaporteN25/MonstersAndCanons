@@ -190,15 +190,20 @@ func test_cards_wrap_into_rows_of_five() -> void:
 	assert_eq((cards[6] as Control).global_position.y, (cards[5] as Control).global_position.y, "y el séptimo va con él")
 
 
-func test_it_scrolls_only_when_there_are_more_than_two_rows() -> void:
+func test_campaign_shows_fifteen_levels_without_scroll_and_scrolls_past_them() -> void:
 	var scroll_of: Callable = func(select: Control) -> ScrollContainer: return select.get_node("%Scroll")
 	var seven: ScrollContainer = scroll_of.call(await _select_with(7))
-	assert_lte(seven.get_v_scroll_bar().max_value, seven.size.y + 1.0, "7 niveles = 2 filas: todo se ve, no hace falta desplazar")
+	assert_eq(seven.vertical_scroll_mode, ScrollContainer.SCROLL_MODE_DISABLED, "7 niveles = dos filas visibles")
 	var thirteen: ScrollContainer = scroll_of.call(await _select_with(13))
-	assert_gt(thirteen.get_v_scroll_bar().max_value, thirteen.size.y + 1.0, "13 niveles = 3 filas: hay que desplazar")
+	assert_eq(thirteen.vertical_scroll_mode, ScrollContainer.SCROLL_MODE_DISABLED, "13 niveles = tres filas visibles")
+	var fifteen: ScrollContainer = scroll_of.call(await _select_with(15))
+	assert_eq(fifteen.vertical_scroll_mode, ScrollContainer.SCROLL_MODE_DISABLED, "los quince niveles entran sin scroll")
+	var sixteen: ScrollContainer = scroll_of.call(await _select_with(16))
+	assert_eq(sixteen.vertical_scroll_mode, ScrollContainer.SCROLL_MODE_AUTO, "una campaña más larga conserva el scroll")
+	assert_gt(sixteen.get_v_scroll_bar().max_value, sixteen.size.y + 1.0)
 
 
 func test_one_row_when_there_are_five_levels_or_fewer() -> void:
 	var select: Control = await _select_with(4)
 	var scroll: ScrollContainer = select.get_node("%Scroll")
-	assert_eq(scroll.custom_minimum_size.y, 214.0, "una sola fila de tarjetas")
+	assert_eq(scroll.custom_minimum_size.y, 146.0 if not UiMode.is_mobile() else 214.0, "una sola fila de tarjetas")
