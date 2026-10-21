@@ -2406,10 +2406,11 @@ El alcance de T425 a T432 es desktop. Mobile continúa por su propia experiencia
   Personalizar la tarjeta que describe el nivel con el mismo lenguaje de fondo que su tarjeta de selección. En desktop, quitar el botón redundante «Empezar» si continúa la instrucción de hacer clic en cualquier lugar o presionar cualquier tecla; adaptar el texto para mouse y teclado. Mantener la pausa/cuenta atrás y las transiciones actuales.
   **Hecho cuando:** texto, fondo y nivel coinciden; mouse y teclado continúan una sola vez; no hay dos llamadas a la misma acción; tests de escena/input, capturas, GUT completo. Táctil/mobile queda fuera salvo que T425 lo defina.
 
-- [ ] **T430 · `[x86]` · Rediseñar el panel desktop de torres (Gemini).**
+- [x] **T430 · `[x86]` · Rediseñar el panel desktop de torres (Codex).**
   **Refs:** B-46, T425, B-28 como antecedente. **Depende de:** T425.
   Eliminar la descripción redundante, agrupar daño actual con el cambio de la mejora y expresar «Mejorar a nivel N». Cambiar el texto «Nivel N» por el indicador visual de tres colores que Lucas pidió. Refinar botones y probar transparencia. Resolver el solapamiento que dificulta seleccionar una torre bajo el panel, sin cambiar reglas de entrada, precios, venta ni mejoras.
   **Hecho cuando:** estados de 1→2, 2→3, máximo, sin oro, apoyo, aturdida/desgastada y torre grande se leen; la torre cubierta sigue pudiéndose seleccionar por la solución aprobada en T425; foco/teclado funciona; pruebas de integración, capturas y GUT completo. Solo desktop.
+  **Resultado:** quitada la descripción redundante; daño actual y daño futuro agrupados; indicador de tres segmentos coloreados y botón que nombra el nivel destino. El panel es semitransparente, las zonas pasivas dejan pasar clics y «×» lo oculta/deselecciona para elegir una torre que quede debajo. Se conserva la interacción de botones y teclado. Verificado en capturas PC solicitadas a 1280×720 y 1920×1080 (la segunda quedó en 1853×1042 por el área lógica reportada por Godot), pruebas focales y GUT completo: 154 scripts, 2157 tests y 23408 asserts aprobados. No se verificó manualmente cada estado visual de apoyo/desgaste ni una torre grande en la captura; su cobertura automatizada existente pasó.
 
 - [x] **T431 · `[x86]` · Diagnosticar y proponer mejora barata para la caminata izquierda (Codex + Claude Opus).**
   **Refs:** B-48, guía de arte y D-049. **Depende de:** inventario de personajes y sus atlas actuales.

@@ -18,3 +18,6 @@ Se cubren nivel 1→2, 2→3, máximo, sin oro, estados con apoyo/aturdida/desga
 
 ## No incluye
 Cambios en daño, costo, venta, mejora, interfaz móvil ni balance.
+
+## Resultado
+Quitada la descripción redundante; daño actual y daño al mejorar aparecen juntos; el indicador de tres segmentos muestra el nivel actual y el botón dice el nivel destino. El panel es semitransparente, las zonas pasivas pasan clics y «×» lo oculta/deselecciona para seleccionar otra torre. Capturas PC solicitadas a 1280×720 y 1920×1080; la segunda salió a 1853×1042 por el área lógica reportada por Godot. Pasaron las pruebas focales y GUT completo (154 scripts, 2157 tests, 23408 asserts). No se revisó manualmente cada estado visual de apoyo/desgaste ni una torre grande en las capturas; sí pasaron sus pruebas existentes.
