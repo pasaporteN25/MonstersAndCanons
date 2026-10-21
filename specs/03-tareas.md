@@ -2426,6 +2426,12 @@ El alcance de T425 a T432 es desktop. Mobile continúa por su propia experiencia
   **Hecho cuando:** informe por sistema/nivel con rutas, evidencias, procedencia y deudas conocidas; señala límites de la auditoría y ordena posibles seguimientos. No edita assets ni código.
   **Resultado (2026-10-21):** Opus encontró que en nivel 6 siguen visibles `helecho.svg` (M15, rediseño T260 revertido) y `poste_cintas.svg` (T218/T249, sin aprobación); `tronco.svg` aparece en los niveles 4 y 7. También registró prioridad alta para las estatuas guerreras del tema ruinas en nivel 14, deuda de decoración de niveles 10–14 ya conocida en T267a, guía de arte desactualizada sobre enemigos SVG y posibles huérfanos afectados por referencias dinámicas. Informe: [`T434-auditoria-activos-visuales.md`](tareas/informes/T434-auditoria-activos-visuales.md). Fue una revisión estática/visual; no se editó, importó ni probó el juego. Próximo paso requiere que Lucas priorice las muestras o la limpieza; no se integró arte sin aprobación.
 
+- [x] **T435 · `[x86]` · Corregir el formato documentado de los enemigos (Codex).**
+  **Refs:** T434, `specs/05-guia-de-arte.md` §§6 y 8, `data/enemies/*.tres`. **Depende de:** lectura de los recursos de runtime. **Compuerta:** ninguna; solo documentación.
+  Alinear las secciones con los PNG y atlas de caminata cargados por los `.tres`; distinguir las fuentes SVG históricas de los archivos consumidos por el juego. No tocar arte ni código.
+  **Hecho cuando:** la guía no atribuye al runtime un formato viejo ni dice que Normal/Rápido/Tanque carecen de caminata; `git diff --check` pasa.
+  **Resultado (2026-10-21):** se actualizaron §6 y §8 con las rutas de runtime y el uso de `texture`/`walk_atlas` en `data/enemies/*.tres`. No se modificaron assets, datos ni scripts. `git diff --check` pasó; no correspondía ejecutar GUT por ser una corrección documental.
+
 - [x] **T436 · `[x86]` · Preparar una revisión visual directa de los hallazgos de T434 (Codex, con Claude Sonnet).**
   **Refs:** T434, T260, T267b y T431. **Depende de:** muestras visuales existentes. **Compuerta:** Lucas elige qué propuestas corregir o aprobar antes de integrarlas.
   **Hecho cuando:** una página reúne las muestras de helecho, poste y tronco a 220/34 px, los contextos actuales de nivel 6 y 14, el estado real de aprobación y la referencia a los atlas izquierdos. No cambia assets de producción.
