@@ -8,7 +8,7 @@
 offset_left = 1000.0
 offset_top = 260.0
 offset_right = 1270.0
-offset_bottom = 616.0
+offset_bottom = 580.0
 grow_vertical = 0
 theme = ExtResource("theme")
 theme_override_styles/panel = ExtResource("panel")
@@ -25,15 +25,49 @@ theme_override_constants/margin_bottom = 10
 layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="Title" type="Label" parent="Margin/Rows"]
+[node name="TitleRow" type="HBoxContainer" parent="Margin/Rows"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Title" type="Label" parent="Margin/Rows/TitleRow"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_colors/font_color = Color(1, 0.84, 0.45, 1)
 theme_override_font_sizes/font_size = 18
-text = "Torre · Nivel 1"
+text = "Torre"
 autowrap_mode = 3
 max_lines_visible = 2
 text_overrun_behavior = 3
+
+[node name="LevelCard" type="HBoxContainer" parent="Margin/Rows/TitleRow"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Nivel actual: 1 de 3"
+theme_override_constants/separation = 2
+
+[node name="LevelOne" type="ColorRect" parent="Margin/Rows/TitleRow/LevelCard"]
+custom_minimum_size = Vector2(9, 7)
+layout_mode = 2
+color = Color(0.58, 0.66, 0.73, 1)
+
+[node name="LevelTwo" type="ColorRect" parent="Margin/Rows/TitleRow/LevelCard"]
+custom_minimum_size = Vector2(9, 7)
+layout_mode = 2
+color = Color(0.84, 0.64, 0.36, 0.28)
+
+[node name="LevelThree" type="ColorRect" parent="Margin/Rows/TitleRow/LevelCard"]
+custom_minimum_size = Vector2(9, 7)
+layout_mode = 2
+color = Color(0.94, 0.82, 0.46, 0.28)
+
+[node name="CloseButton" type="Button" parent="Margin/Rows/TitleRow"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(28, 26)
+theme_override_font_sizes/font_size = 18
+text = "×"
+tooltip_text = "Ocultar panel; al elegir otra torre, vuelve a aparecer"
 
 [node name="Status" type="Label" parent="Margin/Rows"]
 unique_name_in_owner = true
@@ -99,12 +133,6 @@ follow_focus = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 7
-
-[node name="Description" type="Label" parent="Margin/Rows/Details/Content"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_font_sizes/font_size = 14
-autowrap_mode = 3
 
 [node name="Stats" type="Label" parent="Margin/Rows/Details/Content"]
 unique_name_in_owner = true
