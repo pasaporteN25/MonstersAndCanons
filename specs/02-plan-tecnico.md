@@ -1545,7 +1545,7 @@ Presentación pura. Cambia solo el cuerpo visual de tres piezas, sin tocar su co
 
 ### M67 / T370 a T375 · «Novedades de esta versión» (RF-603 a RF-609, D-141 a D-144)
 
-**Estado: implementado salvo el arte (T372, T375) y el OK de Lucas a los textos.** No cambia la partida, el balance ni el progreso. Sigue el molde de la intro (M57, `IntroData`/`IntroFlow`/`IntroScreen`) y del tutorial (M63, `TutorialData`/guardado aditivo).
+**Estado: pantalla y datos implementados; T375 integra el arte aprobado. Sigue pendiente el OK de Lucas a los textos.** No cambia la partida, el balance ni el progreso. Sigue el molde de la intro (M57, `IntroData`/`IntroFlow`/`IntroScreen`) y del tutorial (M63, `TutorialData`/guardado aditivo).
 
 1. **Datos y validador** (T371). `data/novedades/novedades.json` (nace con la lista de versiones vacía, que es válida y no muestra nada, hasta que T374 cargue la 1.0.0); `scripts/logic/news_data.gd` (`NewsData`: `parse`, `load_file`, `entry_for(version)`, `latest()`, `errors`, límites de RF-605); `tools/check_novedades.gd` (errores y avisos en castellano); `tests/test_news_data.gd`.
 2. **Reglas puras** (T371). `scripts/logic/news_flow.gd` (`NewsFlow.should_auto_show(...)`, `NewsFlow.is_new_save(...)`; sin escena, P10) y `tests/test_news_flow.gd` con todos los casos de RF-603 (beta, vacía, igual, distinta, borrador, sin entrada, modo de pruebas, editor, «mejoras» con guardado nuevo y con guardado viejo, «presentacion» con guardado nuevo).
@@ -1646,3 +1646,33 @@ Nada más: ningún otro nivel, ni `obstaculos.json`, ni `mortar.tres`, ni códig
 1. `godot --headless --import` y la suite de GUT completa (sin `SCRIPT ERROR`).
 2. Bot, 5 semillas: `check_rule=1` con `levels=6-9`, `levels=10-12` y `levels=13-15`; luego `sin_recursos`, `mix`, `demoler` y `demoledora` en el 9, con la tabla por semilla de RF-524.
 3. **No se prueba:** una partida humana (T283), ni el Mortero visto en pantalla en el 9, ni Windows ni celular.
+### M70 / T420 a T422 · El consejo de la pantalla de derrota (RF-630 a RF-639, D-171 a D-175)
+
+| Pieza | Qué es |
+|---|---|
+| `data/consejos/consejos.json` | Ajustes, criterios de torre, reglas por enemigo. Borrador hasta el OK de Lucas. |
+| `scripts/logic/advice_data.gd` (`AdviceData`) | Lee y valida el archivo (errores en castellano). Evalúa un criterio contra una `TowerData` y una condición contra una `EnemyData`. |
+| `scripts/logic/leak_log.gd` (`LeakLog`) | El registro de fugas: `record(enemy, lives)`, `leaks`, `lives`, `total_lives()`. |
+| `scripts/logic/defeat_advice.gd` (`DefeatAdvice`) | `tower_tip(data, log, wave_counts, offered)` (RF-633). Pura: sin escena ni autoloads. |
+| `Game` | Crea el `LeakLog`, lo alimenta en `_on_enemy_reached_exit`, al perder arma el texto y se los pasa a `EndScreen.show_defeat`. |
+| `EndScreen` | Un `Label` con salto de línea debajo del detalle; solo muestra (P6). |
+| `tools/check_consejos.gd` | Validador por consola (no usa autoloads). |
+| `tools/balance_sim.gd` | Opción `consejo=1`: al perder, imprime el consejo y las fugas (T422). |
+
+**Costo.** Una suma en un diccionario por enemigo que llega; al perder, un recorrido por 15 reglas × 19 enemigos × 11 torres. Nada por cuadro.
+
+**Riesgos.** (1) Un tipo de enemigo sin regla (Normal, Cría…) diluye el peso: el piso del 30 % evita un consejo por un detalle. (2) La medición con bot de RF-639 no reemplaza partidas humanas.
+
+#### T433 · Preferencia para ocultar los consejos (RF-644, D-177)
+
+`SaveManager.DEFAULT_SETTINGS` suma `defeat_advice: true`; el getter defensivo devuelve `true` si la clave falta o no es booleana. `OptionsMenu` agrega «Consejos en la derrota» a las casillas de visualización y lee/escribe esa preferencia desde el mismo menú usado por el menú principal y pausa. `Game` consulta la preferencia antes de cargar o evaluar los consejos; apagada, la derrota recibe texto vacío. La clave se guarda en `settings` sin subir `SAVE_VERSION`.
+
+**Pruebas:** casilla prendida por omisión, apagar/cerrar/abrir y persistencia, guardado antiguo, valor inválido, apertura desde los dos menús, modo celular con altura y área táctil válidas; derrota sin cálculo cuando está apagada y victoria sin consejo. Suite GUT completa.
+
+### T375 · Arte de Novedades (RF-640 a RF-642, D-170)
+
+1. Copiar los diez PNG aprobados a `assets/ui/novedades/`, sin alterar fuentes ni muestras. Importación `compress/mode=0`, `mipmaps/generate=false`; registrar bytes de origen y `.ctex` en `art/t375-integration/import_report.json`.
+2. Conectar en `novedades.json` la cabecera 4:1 y los siete medallones correspondientes. Mantener textos, `borrador`, versión y presets. La banda 8:1 y `upgrade` quedan disponibles para datos posteriores; declararlos con motivo en `KNOWN_UNUSED` de la auditoría de recursos, sin excluir el resto de la carpeta.
+3. `NewsScreen`: cabecera al ancho interior y altura según proporción de la textura; nombres de nodos para comprobar la conexión. Íconos 48/64 según modo, carga al abrir; conservar el rombo para datos sin imagen. Títulos debajo de la ilustración sobre el panel oscuro, sin superposición.
+4. GUT: contenido oficial con arte en ambos modos, proporción de las dos cabeceras, mezcla con/sin ícono, lista larga y botón visible. Importar antes de probar; devolver únicamente los SVG de `assets/` reescritos accidentalmente por el importador. Correr la suite completa y revisar errores del motor además del total.
+5. Capturar con `tools/capture_news.tscn` la entrada oficial y el final de la lista en PC y celular; registrar límites de la prueba y lista de publicación sin ejecutarla. Actualizar solo T375 en el tablero, más changelog y guías afectadas.

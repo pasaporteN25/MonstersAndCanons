@@ -2,6 +2,9 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Consejo en la derrota
+- Podés apagar «Consejos en la derrota» desde Opciones, tanto en el menú principal como durante una partida. Se guarda la preferencia y, por omisión, los consejos siguen prendidos.
+
 ## Pausa que bloquea el carrito, «Ver todo» con tecla y «Mejorar» con antes → después *(T401 a T404, 2026-10-20)*
 
 - **Celular: en pausa no se construye.** Con la partida en pausa (el botón, el menú de pausa, el cartel de entrada o la app en segundo plano) el **carrito** y el botón de **demolición** se ven apagados y no hacen nada; si el catálogo estaba abierto, se cierra. La barra de abajo dice «En pausa: seguí la partida para construir». Al seguir, todo vuelve. Mejorar y vender no cambian.
@@ -9,6 +12,10 @@ Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle t�
 - **«Mejorar» te muestra qué comprás.** En la PC, el panel de la torre elegida dice, encima del botón, **«Al nivel 2: daño 5 → 8 · alcance 3 → 3,5»**; en el celular, la barra de abajo trae un renglón **«Al mejorar: …»**. En el nivel máximo no aparece. Son las mismas estadísticas que muestra la animación al mejorar.
 - **Documentos:** se sacó de la spec la franja de borde de 56 px de los botones flotantes (no se usaba) y el README cuenta **11 torres**.
 - **Qué no se probó:** nada de esto se miró en un celular real ni con un teclado distinto del de desarrollo.
+
+## Arte de «Novedades de esta versión» *(T375, 2026-10-20)*
+
+La presentación de la 1.0.0 tiene ahora una cabecera del campamento y siete medallones de hierro y bronce, con el arte aprobado por Lucas. La imagen se ve completa y los textos quedan debajo, sobre el panel oscuro. Los íconos miden 48 px en PC y 64 px en celular; las novedades sin imagen siguen usando el rombo de bronce. La lista se desplaza y «Entendido» queda a la vista. Los textos siguen en **borrador**, disponibles desde Opciones; este cambio no publica la 1.0.0.
 
 ## La intro pesa mucho menos *(T390, 2026-10-20)*
 
@@ -32,8 +39,12 @@ Cuando llega el **Jefe de la oleada 10 del nivel 1** (jugado desde el menú), sa
 - **Cuándo sale sola:** cuando la versión instalada es un número y trae novedades aprobadas, y el guardado todavía no las vio. **No sale** en la versión `beta`, mientras el texto sea un borrador, en el modo de pruebas ni al correr desde el editor de Godot. Si el archivo está roto, el menú abre como siempre.
 - **La presentación de la 1.0.0 sale a todos** (también a quien instala por primera vez, antes de la intro); las versiones siguientes, tipo «Mejoras de esta versión», las ven quienes ya jugaron.
 - **Los textos están en `data/novedades/novedades.json`** y se pueden retocar sin programar (`CONTENIDO.md`). `godot --headless --path . -s tools/check_novedades.gd` los revisa y avisa si falta la entrada de la versión.
-- **Arte provisional:** por ahora la pantalla no tiene cabecera ni íconos propios (un rombo de bronce marca cada novedad); el arte llega con T372 y T375.
+- **Arte:** T375 integró la cabecera y los medallones aprobados; el rombo de bronce queda para ítems sin imagen.
 - Tu progreso no cambia: el guardado suma una marca («última versión vista») y una versión anterior del juego lo sigue leyendo.
+
+## Un consejo cuando perdés: qué torre conviene *(T420 a T422, 2026-10-20)*
+
+La pantalla de **Derrota** muestra una pista corta sobre **qué torre usar**, según los enemigos que llegaron a la salida y la oleada final. Solo nombra torres que ese nivel ofrece; si no hay una causa clara, no muestra consejo. Los textos siguen en borrador en `data/consejos/consejos.json`. No cambia el balance.
 
 ## «Ver todo» también cuando corriste el mapa *(T304, 2026-10-19)*
 

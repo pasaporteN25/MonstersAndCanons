@@ -1,0 +1,53 @@
+{
+ "version": 1,
+ "borrador": true,
+ "ajustes": {
+  "peso_oleada": 0.25,
+  "participacion_minima_pct": 30,
+  "vidas_minimas": 3,
+  "max_torres": 2,
+  "max_caracteres": 90
+ },
+ "criterios": {
+  "aire": {"golpea_aire": true, "danio_min": 5, "pulso": false},
+  "golpe_alto": {"danio_min": 20, "pulso": false},
+  "fuego": {"quema_min": 1},
+  "area": {"area_min": 0.5},
+  "varios": {"multi": true},
+  "largo": {"alcance_min": 5.0},
+  "frena": {"ralentiza_min": 0.3},
+  "apaga_auras": {"pulso": true}
+ },
+ "reglas": [
+  {"id": "volador", "enemigo": {"vuela": true}, "torres": ["aire"],
+   "texto": "Contra voladores, probá con {torres}."},
+  {"id": "chaman", "enemigo": {"aturde": true}, "torres": ["largo"],
+   "texto": "El Chamán apaga torres cercanas. Pegale de lejos con {torres}."},
+  {"id": "espejo", "enemigo": {"rebota": true}, "torres": ["fuego", "largo"],
+   "texto": "El Espejo devuelve los tiros de cerca. Probá con {torres}."},
+  {"id": "curandero", "enemigo": {"cura_min": 1}, "torres": ["fuego", "golpe_alto"],
+   "texto": "Curan al resto: frená la cura o matalos rápido con {torres}."},
+  {"id": "guardian_aura", "enemigo": {"aura_armadura_min": 1}, "torres": ["apaga_auras"],
+   "texto": "Su aura da armadura al resto. Apagala con {torres}."},
+  {"id": "guardian_largo", "enemigo": {"aura_armadura_min": 1}, "torres": ["largo"],
+   "texto": "Su aura da armadura al resto. Pegale de lejos con {torres}."},
+  {"id": "regenera_fuego", "enemigo": {"regenera_min": 1}, "torres": ["fuego"],
+   "texto": "El Troll se cura solo y el fuego lo frena. Probá con {torres}."},
+  {"id": "regenera_golpe", "enemigo": {"regenera_min": 1}, "torres": ["golpe_alto"],
+   "texto": "Los que se curan solos piden daño concentrado: {torres}."},
+  {"id": "ladron", "enemigo": {"roba_oro": true}, "torres": ["varios"],
+   "texto": "Los que roban oro caen rápido ante varios tiros: {torres}."},
+  {"id": "embestidor", "enemigo": {"embiste": true}, "torres": ["frena"],
+   "texto": "El Embestidor desgasta torres. Frená su carga con {torres}."},
+  {"id": "resistente", "enemigo": {"resiste_ralentizar_min": 0.5}, "torres": ["golpe_alto", "fuego"],
+   "texto": "El Hielo les hace la mitad. No confíes en frenarlos: {torres}."},
+  {"id": "blindado", "enemigo": {"armadura_min": 2}, "torres": ["golpe_alto", "fuego"],
+   "texto": "Con armadura, los tiros chicos no entran. Probá con {torres}."},
+  {"id": "crias", "enemigo": {"suelta_crias": true}, "torres": ["area", "varios"],
+   "texto": "Al morir sueltan crías. El daño en área las limpia: {torres}."},
+  {"id": "rapido", "enemigo": {"velocidad_min": 2.0, "en_tierra": true}, "torres": ["frena", "varios"],
+   "texto": "Son muy rápidos. Ralentizalos o pegales a varios: {torres}."},
+  {"id": "pesado", "enemigo": {"vida_min": 130}, "torres": ["golpe_alto"],
+   "texto": "Aguantan mucho. Conviene el daño concentrado: {torres}."}
+ ]
+}

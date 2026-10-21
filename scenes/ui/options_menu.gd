@@ -18,6 +18,8 @@ const TUTORIAL_REPLAY_TEXT: String = "Volver a verlo"
 const TUTORIAL_REPLAYED_TEXT: String = "Se verá en el nivel 1"
 ## M66 (RF-600): la entrada de los jefes.
 const BOSS_ENTRANCE_TEXT: String = "Entrada de los jefes"
+## M70 (RF-644): preferencia para ocultar los consejos de la pantalla de derrota.
+const DEFEAT_ADVICE_TEXT: String = "Consejos en la derrota"
 ## M68 (RF-614): la tecla de «Ver todo».
 const VIEW_ALL_LABEL: String = "Tecla de «Ver todo»"
 const VIEW_ALL_PROMPT: String = "Presioná una tecla…"
@@ -73,6 +75,7 @@ var _news_button: Button
 var _news_data: NewsData
 var _tutorial_replay: Button
 var _boss_entrance_check: CheckBox
+var _defeat_advice_check: CheckBox
 ## M68 (RF-614): la fila de la tecla de «Ver todo» (solo con la interfaz de PC), el botón que la muestra y el aviso.
 var _view_all_button: Button
 var _view_all_restore: Button
@@ -94,6 +97,7 @@ func _ready() -> void:
 	# RF-593: justo debajo de «Mostrar números de daño» (las filas de arriba también se meten ahí).
 	_rows.move_child(_upgrade_fx_check, _damage_numbers_check.get_index() + 1)
 	_build_boss_entrance_check()  # M66
+	_build_defeat_advice_check()  # M70, RF-644
 	if not UiMode.is_mobile():
 		_build_view_all_row()  # M68: sin teclado no hace falta
 	_arrange_columns()
@@ -122,6 +126,7 @@ func open() -> void:
 	_upgrade_fx_check.set_pressed_no_signal(SaveManager.upgrade_fx_enabled())
 	_ui_mode_selector.select(UiMode.read_setting(SaveManager.get_setting("ui_mode")))
 	_boss_entrance_check.set_pressed_no_signal(SaveManager.boss_entrance_enabled())  # M66
+	_defeat_advice_check.set_pressed_no_signal(SaveManager.defeat_advice_enabled())  # M70, RF-644
 	_tutorial_check.set_pressed_no_signal(SaveManager.tutorial_enabled())
 	_stop_view_all_capture()
 	_refresh_view_all_row()
@@ -300,6 +305,19 @@ func _build_boss_entrance_check() -> void:
 	_rows.move_child(_boss_entrance_check, anchor.get_index() + 1)
 	_boss_entrance_check.toggled.connect(
 		func(on: bool) -> void: SaveManager.set_setting("boss_entrance", on))
+
+
+## M70, RF-644: «Consejos en la derrota». Comparte Opciones entre menú y pausa.
+func _build_defeat_advice_check() -> void:
+	_defeat_advice_check = CheckBox.new()
+	_defeat_advice_check.name = "DefeatAdviceCheck"
+	_defeat_advice_check.text = DEFEAT_ADVICE_TEXT
+	_defeat_advice_check.add_theme_font_size_override("font_size", 20)
+	_defeat_advice_check.clip_text = true
+	_rows.add_child(_defeat_advice_check)
+	_rows.move_child(_defeat_advice_check, _boss_entrance_check.get_index() + 1)
+	_defeat_advice_check.toggled.connect(
+		func(on: bool) -> void: SaveManager.set_setting("defeat_advice", on))
 ## M68 (RF-614): una fila con el nombre, un botón con la tecla de hoy (al pulsarlo espera la próxima tecla),
 ## «Restaurar» (vuelve a la V) y, debajo, el aviso cuando la tecla elegida ya la usa otra cosa.
 func _build_view_all_row() -> void:
