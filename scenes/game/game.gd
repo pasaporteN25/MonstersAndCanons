@@ -185,6 +185,7 @@ func _ready() -> void:
 	panel.upgrade_pressed.connect(func() -> void: build_controller.try_upgrade(build_controller.selected_placed()))
 	panel.sell_pressed.connect(func() -> void: build_controller.sell(build_controller.selected_placed()))
 	panel.targeting_pressed.connect(_on_targeting_pressed)
+	panel.close_pressed.connect(build_controller.deselect_placed)
 	session.gold_changed.connect(panel.refresh)
 	session.resources_changed.connect(_refresh_tower_panel.unbind(1))  # RF-418: la venta muestra recursos
 
