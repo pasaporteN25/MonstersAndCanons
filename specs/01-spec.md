@@ -1427,6 +1427,40 @@ En Windows, respaldar `%APPDATA%\Godot\app_userdata\JuegoA\save.json` con el jue
 
 **Lucas, 2026-10-16 (G7); es la tarea T268b.** Antes de que una build **nueva** escriba por primera vez en `save.json`, el juego copia el archivo existente a un respaldo al lado (por ejemplo `save.json.bak-<versión>`), una sola vez por versión, para que un tester pueda volver atrás si algo sale mal. Hoy el respaldo es manual y solo está descripto para Windows (T268a, §6). Falta definir el nombre del respaldo, cuántos se conservan y qué pasa si la copia falla (avisar, no bloquear el juego). Requiere RF y D propios antes de programarse (P3); no forma parte de M58.
 
+### Pedidos nuevos de Lucas · escritorio y campaña, 2026-10-21
+
+Dirección aprobada para convertir en una spec y tareas antes de programar. El alcance inicial es **desktop**; mobile se analiza aparte y solo comparte lo que la spec determine explícitamente.
+
+| Entrada | Pedido | Tareas | Alcance inicial |
+|---|---|---|---|
+| B-45 | Rediseñar el selector desktop con dos estilos: tarjetas actuales y mapa 2D del planeta. Mostrar los 15 niveles; el mapa refleja el aterrizaje y el avance de la campaña. Tres estrellas representan la zona tomada; con menos, quedan focos rebeldes. | T425–T428 | Desktop; usar las estrellas y desbloqueos existentes, sin alterar balance ni guardado. |
+| B-46 | Ordenar el panel desktop de cada cañón: reducir información duplicada, integrar el daño con la mejora, indicar el nivel al que se sube, rehacer botones y bajar la opacidad sin impedir seleccionar la torre que queda detrás. | T430 | Desktop; sin cambios de precio, daño ni comportamiento de mejoras/venta. |
+| B-47 | Hacer más personal y legible la tarjeta que presenta el nivel, con un fondo relacionado con la tarjeta del selector. Quitar en desktop el botón «Empezar» duplicado si se conserva la instrucción de clic o tecla para continuar. | T429 | Desktop; adaptar el texto a mouse/teclado; revisar mobile por separado. |
+| B-48 | Revisar las caminatas hacia la izquierda de algunos personajes y comparar soluciones de bajo costo con sus costos y límites. | T431 | Revisión de arte; no reflejar automáticamente sprites que tienen luz direccional. |
+| B-49 | Analizar el uso de torres y las estrellas en los primeros niveles antes de decidir si falta variedad, explicación o balance. | T432 | Escritorio; no imponer el uso de torres ni modificar balance sin datos y spec. |
+
+Lucas probó los niveles **1 a 4 en desktop** y los considera bien; el 1 se siente algo más difícil, pero aceptable. En varias partidas usó pocas familias de torres y casi nunca obtuvo tres estrellas. RF-93 asigna las estrellas por vidas restantes: 3 estrellas desde el 90 % (18/20), 2 desde el 50 % (10/20), y 1 por una victoria por debajo. Esto no demuestra por sí solo un defecto de balance ni una relación causal con la variedad de torres; T432 debe contrastarlo antes de proponer cambios.
+
+### B-45 · Dos estilos para elegir nivel: tarjetas y mapa planetario
+
+En desktop, permitir cambiar entre el selector actual rediseñado y una vista 2D de la región del planeta. En la vista de mapa, ubicar el punto de aterrizaje y las 15 zonas; actualizar el territorio según el progreso existente. Con 3 estrellas, la zona se muestra tomada; con menos, persiste presencia rebelde. Las reglas de estrellas y desbloqueos siguen siendo las actuales (RF-93/RF-111): el mapa comunica progreso, no introduce otro sistema de campaña. La spec definirá navegación, densidad, estados no jugados/bloqueados y cómo representar la conquista gradual. Mobile no se incluye por defecto.
+
+### B-46 · Panel desktop de torre más claro y menos obstructivo
+
+Reordenar la información de cada cañón. Quitar la descripción repetida en el panel, agrupar el daño actual con el cambio que ofrece la mejora, expresar la acción como «Mejorar a nivel N» y usar la tarjeta de tres colores para mostrar visualmente el nivel actual, manteniendo accesibles nombre y estadísticas necesarias. Rediseñar los botones y probar un fondo más transparente. El panel debe permitir seleccionar una torre que quede debajo: comparar ubicación, cierre o interacción y definir en la spec una solución que no bloquee esa acción. No alterar economía, datos de torre, precios ni reglas.
+
+### B-47 · Presentación del nivel antes de jugar
+
+Dar una identidad visual propia a la tarjeta de entrada y relacionar su fondo con el arte de la tarjeta del selector para ese nivel. En desktop, evitar dos llamadas simultáneas: conservar la indicación de continuar con clic en cualquier lugar o cualquier tecla y quitar el botón «Empezar». Asegurar que cerrar/continuar funciona con mouse y teclado. El flujo táctil y su llamada de acción se revisan por separado, no se cambian por inferencia.
+
+### B-48 · Caminata hacia la izquierda
+
+Revisar los personajes que se ven menos naturales al caminar hacia la izquierda. Presentar comparación y estimación de costo para opciones como ajustar poses existentes, crear vistas laterales propias o mantener la orientación actual. No reflejar las imágenes sin revisar la iluminación y no producir ciclos nuevos antes de aprobar una propuesta.
+
+### B-49 · Variedad de torres y lectura de las estrellas
+
+Registrar qué torres se usan y qué resultado de estrellas deja la campaña inicial; contrastar esos datos con el diseño de niveles, torres disponibles, tutorial y criterios de RF-93. Distinguir «no hizo falta usar todas las torres» de «faltó una opción útil o una explicación». No convertir cada torre en requisito ni tocar el balance hasta tener evidencia y una propuesta revisable.
+
 ### B-01 · Épocas: la guerra evoluciona con el tiempo
 **Trasladado por Lucas, 2026-10-07 (D-076):** Épocas no se hace en la V1; pasa al backlog de *Monsters & Canons 3D* o de *M&C 2* ([`06-monsters-canons-3d.md`](06-monsters-canons-3d.md) §15). La documentación de Épocas que menciona B-03 viaja con ella. El texto siguiente queda como registro.
 *Propuesta de Lucas, 2026-09-28.*

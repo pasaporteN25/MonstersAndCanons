@@ -276,3 +276,28 @@ T238 ─ T240 🚦G6 ─ T241 🎨 ─ T242
 | Que dos agentes choquen en los números de RF o D, o en el CHANGELOG. | Una sola tarea 📜 a la vez; cada agente toca solo la entrada de su tarea y rebasa sobre `main` antes del PR. |
 | Que el arte frene el código. | Arte provisional en código; Codex integra después. |
 | Que Qwen 4B se equivoque en los datos. | Solo tareas con validador automático, y un Sonnet revisa el PR. |
+
+## 9. Próximo bloque · pulido de desktop y mapa de campaña (pedido de Lucas, 2026-10-21)
+
+La solicitud nueva queda en [B-45 a B-49](01-spec.md#pedidos-nuevos-de-lucas--escritorio-y-campaña-2026-10-21). **T425 escribe la spec primero**; las tareas de código esperan sus RF/decisiones y el OK de Lucas a las muestras de arte. La selección de niveles arranca en desktop; los cambios mobile se deciden aparte. El mapa comunica las estrellas/desbloqueos existentes: no inventa una campaña paralela.
+
+| T | Entrega | Ejecutor previsto | Depende de | Tamaño |
+|---|---|---|---|---|
+| [T423](tareas/T423-revision-visual-t267a.md) | Guía visual grande para revisar las muestras T267a | Gemini · documental | Informe T267a | Chico |
+| T424 | Registrar los pedidos y subdividirlos en tareas delegables | Codex · orquestación/documentación | Dirección de Lucas | Chico |
+| [T425](tareas/T425-spec-pulido-desktop.md) | 📜 Spec, decisiones, plan y fichas de B-45 a B-49 | Claude · spec y arquitectura | T424 | Mediano |
+| [T426](tareas/T426-selector-tarjetas-desktop.md) | Selector actual: 15 niveles visibles, sin número de oleadas, torres integradas y fondos temáticos | Gemini · UI desktop | T425 | Mediano |
+| [T427](tareas/T427-mapa-planetario-arte.md) | 🎨 Muestra de mapa planetario y zonas con tres estados | Codex · concepto de arte | T425; OK de Lucas | Mediano |
+| [T428](tareas/T428-selector-mapa-planetario.md) | Segundo estilo: mapa 2D con aterrizaje, zonas y progreso | Claude · lógica e integración | T425, T426, T427 aprobada | Grande |
+| [T429](tareas/T429-tarjeta-entrada-nivel-desktop.md) | Tarjeta de entrada coordinada con la identidad visual por nivel | Gemini · UI desktop | T425, T426 | Chico |
+| [T430](tareas/T430-panel-torre-desktop.md) | Panel de torre compacto, claro, translúcido y accesible | Gemini · UI desktop | T425 | Mediano |
+| [T431](tareas/T431-caminata-izquierda.md) | Auditoría y propuesta de bajo costo para las caminatas a izquierda | Codex · arte y estimación | Inventario de sprites; OK antes de producir | Chico |
+| [T432](tareas/T432-variedad-torres-estrellas.md) | Informe de uso de torres, vidas y estrellas de niveles 1–4 | Claude · análisis | Datos disponibles; feedback de Lucas | Chico |
+
+### Paralelismo y límites de los agentes
+
+1. **En serie al inicio:** Lucas ya dio la dirección; T424 quedó registrado. Claude completa T425 y fija los contratos; no se escriben RF desde dos agentes al mismo tiempo.
+2. **En paralelo tras T425:** Gemini trabaja T426; Codex prepara T427 y T431 en worktrees separados; Claude analiza T432. T427 se presenta a Lucas antes de integrar su arte.
+3. **Después de T426:** Gemini hace T429 y T430 en ramas separadas; Claude integra T428 cuando las bases están aprobadas. Evitar que dos ramas modifiquen simultáneamente las escenas compartidas del selector.
+4. **Opencode con modelo local** queda limitado a tareas rutinarias de Git (revisión simple, commit o push bajo instrucciones), nunca para diseño, spec, balance o refactors. Gemini, Claude y Codex son los ejecutores del trabajo sustantivo.
+5. Cada tarea tiene su propio worktree, rama `feature/`, commit y PR. La integración permanece a cargo de Lucas; ningún agente mergea.
