@@ -292,19 +292,20 @@ func _card(select: Control, index: int) -> Button:
 	return select.get_node("%Cards").get_child(index)
 
 
-func test_an_unlocked_card_shows_the_place_and_keeps_its_size() -> void:
+func test_an_unlocked_card_shows_the_place_and_uses_the_desktop_grid_size() -> void:
 	var select: Control = SELECT_SCENE.instantiate()
 	add_child_autofree(select)
 	await wait_process_frames(2)
 	var card: Button = _card(select, 0)
 	var place: Label = card.get_node_or_null("Place")
 	assert_not_null(place, "el nivel 1 está desbloqueado")
-	assert_true(place.text.ends_with("…"), "el lugar largo se recorta con puntos suspensivos")
-	assert_eq(card.size, select.CARD_SIZE, "el tamaño de la tarjeta no cambia")
+	assert_false(place.text.is_empty(), "el lugar sigue identificado")
+	assert_eq(card.size, select.CARD_SIZE if UiMode.is_mobile() else select.CAMPAIGN_CARD_SIZE,
+		"el tamaño depende de la presentación actual")
 	assert_true(card.tooltip_text.begins_with("Campamento de aterrizaje"), "el tooltip lleva el lugar completo")
 	assert_gt(place.get_theme_font_size("font_size"), 0)
 	assert_lt(place.get_theme_font_size("font_size"), card.get_theme_font_size("font_size"), "letra más chica")
-	assert_string_contains(card.get_node("LevelNumber").text, "10 oleadas")
+	assert_eq(card.get_node("LevelNumber").text, "Nivel 1", "no repite información de oleadas")
 
 
 func test_a_locked_card_does_not_show_the_place() -> void:
@@ -337,23 +338,23 @@ func test_a_card_without_a_place_is_the_same_as_before() -> void:
 	assert_null(card.get_node_or_null("Place"))
 	assert_eq(card.text, "", "las etiquetas están en controles independientes")
 	assert_eq(card.get_node("LevelName").text, level.display_name)
-	assert_string_contains(card.get_node("LevelNumber").text, "%d oleadas" % level.waves.size())
+	assert_false(card.get_node("LevelNumber").text.contains("oleadas"))
 
 
-func test_the_place_label_sits_between_the_name_and_the_waves() -> void:
+func test_the_place_and_tower_icons_fit_below_the_name() -> void:
 	var select: Control = SELECT_SCENE.instantiate()
 	add_child_autofree(select)
 	await wait_process_frames(2)
 	var card: Button = _card(select, 0)
 	var place: Label = card.get_node("Place")
 	var name: Label = card.get_node("LevelName")
-	var plate: Control = card.get_node("TowerPlate")
-	var icons: Control = plate.get_node("TowerIcons")
+	var icons: Control = card.get_node("TowerIcons")
 	assert_gte(place.position.y, name.position.y + name.size.y, "el lugar va directamente debajo del nombre")
-	assert_gte(plate.position.y + icons.position.y, place.position.y + place.size.y, "los íconos van debajo del lugar")
+	assert_gte(icons.position.y, place.position.y + place.size.y, "los íconos van debajo del lugar")
+	assert_null(card.get_node_or_null("TowerPlate"), "los íconos se integran al marco de la tarjeta")
 
 
-func test_campaign_cards_keep_the_same_tower_offer_and_show_badges_for_all_levels() -> void:
+func test_campaign_cards_keep_the_same_tower_offer_as_unboxed_icons() -> void:
 	var select: Control = SELECT_SCENE.instantiate()
 	add_child_autofree(select)
 	await wait_process_frames(2)
@@ -365,25 +366,41 @@ func test_campaign_cards_keep_the_same_tower_offer_and_show_badges_for_all_level
 		var card: Button = _card(select, index)
 		var level: LevelData = levels[index]
 		var expected: Array[TowerData] = TowerOffer.offered(level, towers)
-		var icons: Control = card.get_node("TowerPlate/TowerIcons")
+		var icons: Control = card.get_node("TowerIcons")
 		var actual: Array[String] = []
-		for badge: Node in icons.get_children():
-			actual.append(String((badge as Control).get_child(0).name))
+		for icon: Node in icons.get_children():
+			actual.append(String((icon as Control).name))
 		assert_eq(actual, _tower_ids(expected), "nivel %d: conserva la lista y el orden" % (index + 1))
-		assert_eq(card.get_node("TowerPlate/TowerTitle").text, "Torres  ·  %d" % expected.size())
 		assert_true(card.tooltip_text.contains(expected[0].display_name), "nivel %d: conserva el tooltip" % (index + 1))
-		for badge: Node in icons.get_children():
-			assert_lte((badge as Control).position.x + (badge as Control).size.x, icons.size.x + 0.1)
-		assert_lte(card.get_node("TowerPlate").position.y + card.get_node("TowerPlate").size.y,
-			card.get_node("Stars").position.y, "nivel %d: la placa no pisa las estrellas" % (index + 1))
-	assert_eq(select.get_node("%Cards").get_child(0).get_node("TowerPlate/TowerIcons").get_child_count(), 8,
-		"el nivel 1 usa una fila de ocho insignias")
-	assert_eq(select.get_node("%Cards").get_child(11).get_node("TowerPlate/TowerIcons").get_child_count(), 10,
+		for icon: Node in icons.get_children():
+			assert_lte((icon as Control).position.x + (icon as Control).size.x, icons.size.x + 0.1)
+		assert_lte(icons.position.y + icons.size.y, card.get_node("Stars").position.y,
+			"nivel %d: los íconos no pisan las estrellas" % (index + 1))
+	assert_eq(select.get_node("%Cards").get_child(0).get_node("TowerIcons").get_child_count(), 8,
+		"el nivel 1 usa una fila de ocho íconos integrados")
+	assert_eq(select.get_node("%Cards").get_child(11).get_node("TowerIcons").get_child_count(), 10,
 		"el nivel 12 muestra las diez torres en dos filas")
 	assert_true(select.get_node("%Cards").get_child(0).tooltip_text.contains("Nueva"),
 		"se conserva el indicador de torre nueva en el tooltip")
 	assert_not_null(select.get_node("%Cards").get_child(0).find_child("NewMark", true, false),
 		"se conserva la marca naranja de torre nueva")
+
+
+func test_desktop_campaign_shows_all_fifteen_cards_without_scroll() -> void:
+	if UiMode.is_mobile():
+		return
+	var select: Control = SELECT_SCENE.instantiate()
+	add_child_autofree(select)
+	await wait_process_frames(2)
+	var cards: HFlowContainer = select.get_node("%Cards")
+	var scroll: ScrollContainer = select.get_node("%Scroll")
+	assert_eq(cards.get_child_count(), 15)
+	assert_eq(scroll.vertical_scroll_mode, ScrollContainer.SCROLL_MODE_DISABLED)
+	assert_gte(cards.get_child(10).position.y, cards.get_child(5).position.y + cards.get_child(5).size.y,
+		"la tercera fila aparece debajo de la segunda")
+	assert_eq(cards.get_child(14).size, select.CAMPAIGN_CARD_SIZE)
+	assert_false(cards.get_child(0).disabled)
+	assert_true(cards.get_child(14).disabled, "se conservan los bloqueos de la campaña")
 
 
 func _tower_ids(towers: Array[TowerData]) -> Array[String]:
