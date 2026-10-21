@@ -27,6 +27,7 @@ func capture() -> void:
 		await get_tree().process_frame
 	var style: String = args[2] if args.size() > 2 else "map"
 	var save: Node = get_node("/root/SaveManager")
+	var game_flow: Node = get_node("/root/GameFlow")
 	var original_save_path: String = String(save.get("save_path"))
 	if FileAccess.file_exists(TEMP_SAVE):
 		DirAccess.remove_absolute(ProjectSettings.globalize_path(TEMP_SAVE))
@@ -34,14 +35,14 @@ func capture() -> void:
 	save.call("load_save")
 	save.call("set_setting", "ui_mode", 2)
 	save.call("set_setting", "selector_style", CampaignMap.STYLE_CARDS if style == "cards" else CampaignMap.STYLE_MAP)
-	var first: LevelData = GameFlow.level(0)
-	var second: LevelData = GameFlow.level(1)
-	var third: LevelData = GameFlow.level(2)
+	var first: LevelData = game_flow.call("level", 0) as LevelData
+	var second: LevelData = game_flow.call("level", 1) as LevelData
+	var third: LevelData = game_flow.call("level", 2) as LevelData
 	save.call("record_victory", first.id, first.starting_lives, 100)
 	save.call("unlock", second.id)
 	save.call("record_victory", second.id, int(float(second.starting_lives) * 0.5), 80)
 	save.call("unlock", third.id)
-	GameFlow.select_page = &"campaign"
+	game_flow.set("select_page", &"campaign")
 	var select: Control = (load(SELECT_SCENE) as PackedScene).instantiate() as Control
 	get_tree().root.add_child(select)
 	get_tree().current_scene = select
