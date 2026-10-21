@@ -1510,3 +1510,24 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Alternativas descartadas:** quitar los consejos hasta tener evidencia de eficacia; permitir solo ocultar el texto mientras se sigue procesando cada derrota; pedir una confirmación en cada partida.
 - **Qué cambia:** RF-630/RF-644, `SaveManager`, `OptionsMenu`, `Game` y sus tests. No sube `SAVE_VERSION`.
 - **Relación con D-173:** esta decisión reemplaza la recomendación de no ofrecer la opción; queda registrada para conservar el motivo original.
+
+## D-178 · El selector de niveles desktop tiene dos estilos con una preferencia de interfaz
+- **Fecha:** 2026-10-21 · **Estado:** decidida · **Decidió:** Lucas.
+- **Qué:** conservar el selector de tarjetas rediseñado y sumar el mapa planetario 2D como estilo alternativo. La elección se guarda en `settings`; un guardado anterior usa tarjetas.
+- **Por qué:** Lucas pidió poder elegir el selector actual mejorado o el mapa; la preferencia no forma parte del progreso de campaña.
+- **Alternativas descartadas:** reemplazar el selector actual; persistir el modo en los datos de campaña; cambiar el modo móvil automáticamente.
+- **Qué cambia:** RF-645, selector desktop y preferencia de interfaz; no cambia `SAVE_VERSION` ni desbloqueos.
+
+## D-179 · Las regiones visualizan el resultado vigente, sin crear progresión nueva
+- **Fecha:** 2026-10-21 · **Estado:** decidida · **Decidió:** Lucas.
+- **Qué:** tres estrellas representan región tomada; una o dos dejan presencia rebelde. Bloqueados y niveles sin victoria tienen estados propios. El aterrizaje es el origen visual fijo del recorrido.
+- **Por qué:** representa «ganar la zona» sin confundirlo con un sistema de campaña adicional.
+- **Alternativas descartadas:** guardar regiones, cambiar el desbloqueo, hacer geografía jugable o basar conquista en otra estadística.
+- **Qué cambia:** RF-647/RF-648 y la presentación del mapa; no cambia `RF-93`, `RF-111` ni el guardado de progreso.
+
+## D-180 · Las mejoras desktop preservan las reglas de interacción y separan mobile
+- **Fecha:** 2026-10-21 · **Estado:** decidida · **Decidió:** Lucas.
+- **Qué:** selector, panel de torre y tarjeta de entrada se pulen para desktop. Mouse y teclado deben conservar acceso; el flujo táctil sigue como está. Un panel transparente no se considera por sí solo una solución al solapamiento de clics.
+- **Por qué:** el pedido de Lucas es explícitamente desktop y la opacidad visual no garantiza que los clics lleguen al mapa.
+- **Alternativas descartadas:** aplicar el rediseño a mobile por semejanza; cambiar la venta/mejora; resolver el clic debajo solo con alfa.
+- **Qué cambia:** RF-646 y RF-649 a RF-654, tareas T426 y T429–T430.
