@@ -2396,10 +2396,11 @@ El alcance de T425 a T432 es desktop. Mobile continúa por su propia experiencia
   Agregar el selector de estilo entre tarjetas y mapa. En el mapa, ubicar aterrizaje y 15 regiones, reflejar el progreso existente y conservar acceso a cada nivel habilitado. Mostrar zona tomada con 3 estrellas y presencia rebelde con menos, según los estados fijados en T425. No crear campaña, geografía jugable ni guardado nuevos.
   **Hecho cuando:** ambos estilos mantienen selección/desbloqueos; cada uno de los 15 niveles tiene estado visual determinista derivado del guardado actual; al cambiar estilo no se modifica progreso; navegación con teclado/mouse y foco accesible; tests de estados y transición, capturas en dos resoluciones y GUT completo. Mobile se conserva como está salvo criterio definido en T425.
 
-- [ ] **T427 · `[x86]` · Arte y prueba visual del mapa planetario (Codex).**
+- [x] **T427 · `[x86]` · Arte y prueba visual del mapa planetario (Codex).**
   **Refs:** B-45, T425. **Depende de:** dirección visual aprobada por Lucas en T425; compuerta 🎨 antes de producir assets finales.
   Preparar una propuesta visual del planeta, punto de aterrizaje y tres estados de zona (sin explorar/bloqueada, con presencia rebelde, tomada), con 15 marcadores legibles. Puede ser una maqueta navegable con arte provisional y muestras finales separadas. Mantener contraste y legibilidad a 1280×720.
   **Hecho cuando:** se entregan muestra y capturas a tamaño de pantalla, con procedencia/archivos fuente; Lucas puede aprobar, pedir cambios o rechazar antes de integrar los assets finales. No cambiar código de juego ni datos de campaña.
+  **Resultado:** se entregó maqueta SVG editable y captura PNG a 1280×720 en `art/t427-mapa-propuesta/`, con 15 marcadores, aterrizaje, leyenda pictográfica y tres estados. Procedencia y peso documentados. Es ilustrativa, no está conectada al guardado y no se integraron assets finales; la integración queda detrás de la aprobación visual de Lucas.
 
 - [ ] **T429 · `[x86]` · Tarjeta de entrada del nivel coherente con el selector (Gemini).**
   **Refs:** B-47, T425–T426. **Depende de:** T425 y dirección visual de las tarjetas aprobada en T426.
