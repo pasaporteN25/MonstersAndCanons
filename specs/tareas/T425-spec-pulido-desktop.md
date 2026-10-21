@@ -1,5 +1,5 @@
 # T425 · Spec y división del rediseño desktop
-- Ejecutor · Claude, esfuerzo alto
+- Ejecutor · Codex, esfuerzo medio/alto
 - Depende de · T424 y dirección de Lucas del 2026-10-21 · Compuerta · preguntar si un criterio contradice la dirección aprobada
 - Tamaño · Mediano
 
@@ -20,6 +20,9 @@ Selector de 15 niveles con dos estilos (tarjetas y mapa planetario), identidad p
 
 ## Hecho cuando
 Cada RF tiene Dado/Cuando/Entonces; la spec precisa cómo se representa la conquista gradual y el aterrizaje sin cambiar los desbloqueos. Cada task tiene alcance, archivos, dependencias, pruebas, ejecutor y compuertas artísticas. No se implementa código ni se produce arte final.
+
+## Resultado (2026-10-21)
+Escritos M72 (RF-645 a RF-654), D-178 a D-180 y el plan de T425–T432. Los estados del mapa se derivan de progreso existente; la preferencia del selector queda en `settings`, no en progreso. Se definieron límites desktop, pruebas/capturas y compuertas para arte. Se agregaron fichas completas T430–T432. No se implementó código, no se produjo arte y no se corrieron tests de juego; `git diff --check` pasó.
 
 ## Frenar si
 El estado de campaña actual no alcanza para derivar los cuatro estados visuales, o una petición requiere cambiar criterios de estrellas/desbloqueos.

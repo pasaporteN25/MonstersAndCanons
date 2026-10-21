@@ -2381,10 +2381,10 @@ El alcance de T425 a T432 es desktop. Mobile continúa por su propia experiencia
   **Hecho cuando:** las ideas quedan en el backlog, el feedback de prueba se registra sin cerrar T280, y se crea una secuencia delegable con límites de plataforma, dependencias, compuertas y asignación de ejecutores.
   **Resultado (2026-10-21):** registrados B-45 a B-49; dividido en T425–T432 y agregado orden de paralelismo para Claude, Gemini y Codex. Opencode local queda limitado a trabajo rutinario de Git. El mapa deriva estrellas/desbloqueos existentes; el trabajo nuevo empieza en desktop. Se actualizaron T280 con el avance parcial 1–4. `git diff --check` pasa; sin tests de juego ni producción de arte.
 
-- [ ] **T425 · `[x86]` · Spec y división del rediseño desktop (Claude).**
+- [x] **T425 · `[x86]` · Spec y división del rediseño desktop (Codex).**
   **Refs:** B-45 a B-49, T262 a T265 y RF-93/RF-111 como contratos existentes. **Depende de:** dirección de Lucas del 2026-10-21; ninguna implementación previa.
-  Escribir requisitos, decisiones, plan y fichas para T426–T432. Separar visuales desktop de mobile y mapear el mapa planetario al progreso actual, sin nuevos campos de guardado ni cambios en estrellas/desbloqueos. Definir estados de las 15 zonas, interacción y accesibilidad con mouse/teclado; integrar las tarjetas actuales, torres y fondos de nivel; panel de torre; tarjeta de entrada; revisión de caminata izquierda; evaluación de uso de torres/estrellas.
   **Hecho cuando:** todos los RF usan aceptación Dado/Cuando/Entonces; las decisiones recogen estados sin jugar, bloqueados, victoria con 1–2 estrellas y 3 estrellas; alcance mobile está explícito; se fijan límites de tamaño/rendimiento y pruebas; cada tarea indica archivos, dependencias, ejecutor, compuerta de arte y estrategia de validación. No se implementa código ni se produce arte final.
+  **Resultado (2026-10-21):** M72 quedó especificado en RF-645 a RF-654, D-178 a D-180, plan técnico y fichas T425–T432. La preferencia del selector queda separada del progreso, y el mapa deriva estados de estrellas/desbloqueos actuales. Se hizo explícita la separación mobile, las capturas/resoluciones, la validación de input bajo el panel y la aprobación previa de muestras. No se implementó código ni se produjo arte; sin tests de juego. `git diff --check` pasó.
 
 - [ ] **T426 · `[x86]` · Selector desktop actual: mostrar los 15 niveles de un vistazo (Gemini).**
   **Refs:** B-45, T425 y los RF aprobados por T425. **Depende de:** T425.
