@@ -142,6 +142,7 @@
   **Refs:** RF-518 punto 4, T266 §7, T268. **Depende de:** T279 (en una build con los ajustes y con un guardado nuevo).
   Lucas juega **1 → 2 → 3** y **6 → 7 → 8** «natural», más el 2 con torres variadas, el 2 solo con Ametralladoras, el 7 con las cuatro clásicas y el 7 mejorando temprano (las seis de T266 §7; la 7.ª, opcional). Anota si ganó, las vidas, en qué oleada perdió vidas y si sintió que «no había forma».
   **Hecho cuando:** Lucas anotó los resultados; el 2 es más difícil que el 1 pero no un muro, el 3 no se siente más fácil que el 2, el 7 es el más exigente de su trío pero no un muro y el 8 es un respiro. **Si una partida contradice al bot, manda la partida humana:** se pasa a la variante B del 2 (D-100) o se reabre el 7 antes de reenviar. Hasta entonces **no se reenvía el juego al tester** (T266 y T268 siguen abiertas).
+  **Avance de Lucas (2026-10-21, desktop; parcial):** jugó los niveles 1 a 4 y los ve bien en general. El 1 se sintió un poco más difícil, pero aceptable; el 2 le gustó. No registró vidas, oleadas, estrellas ni estrategia por nivel. Falta jugar 6→7→8 y completar las variantes de T280; esta observación no cierra la validación ni cubre mobile.
 
 
 ### M60 · Copia de seguridad automática del guardado (spec: RF-520 a RF-522, D-102; plan: `02-plan-tecnico.md` M60)
@@ -2340,3 +2341,57 @@ Spec: RF-610 a RF-619. Decisiones: D-160 a D-164. Plan: «M68 / T400 a T405». R
   **Hecho cuando:** la rama incorpora `origin/main`, conserva las novedades de M68 y de la intro WebP, pasa importación y suite completa sin `SCRIPT ERROR` ni `Parse Error`, y se publica sin mergear el PR.
 
   **Resultado (2026-10-20):** rama sincronizada con `origin/main` (`52855f0`), conservando ambas entradas de CHANGELOG (M68 e intro WebP). Importación con código 0, sin `SCRIPT ERROR` ni `Parse Error`. La primera suite concurrente dio 2087/2088 con un fallo en `test_records` (archivo de prueba compartido); se repitió con `XDG_DATA_HOME` y `XDG_CONFIG_HOME` aislados: **150 scripts, 2088/2088 tests, 23.005 aserciones**, código 0, sin errores de script ni parseo. No se cambió código de juego ni se generaron exportaciones. No se probó en un celular real. Publicar esta resolución no mergea el PR: eso queda para Lucas.
+
+## Nuevas tareas desktop · solicitud de Lucas (2026-10-21)
+
+El alcance de T425 a T432 es desktop. Mobile continúa por su propia experiencia; la tarea de spec debe marcar explícitamente cualquier parte que pueda compartirse. No se cambia balance, economía, guardado ni criterios de estrellas como efecto colateral del rediseño visual.
+
+- [x] **T423 · `[x86]` · Hacer legible la revisión visual del informe T267a (Gemini).**
+  **Refs:** B-38, T267a. **Depende de:** informe T267a existente.
+  **Hecho cuando:** hay una guía breve que enlaza capturas completas originales de 1280×720 y muestra cada comparación a lo ancho de la página; se indica cuándo una imagen está ampliada solo para leerla y se enlaza el informe completo. No se modifican los assets del juego ni se declara aprobada ninguna muestra.
+  **Resultado (2026-10-21):** agregado `specs/tareas/informes/T267a-revision-visual.md` con tres capturas completas y cinco pares comparativos enlazados en grande; el informe original ahora lleva el acceso directo al inicio. Es una reorganización de la vista Markdown: los PNG fuente no se alteraron ni se escalaron. Se verificaron los destinos relativos en el árbol local y `git diff --check`; no requiere GUT.
+
+- [x] **T424 · `[x86]` · Registrar y subdividir el pedido de mejoras desktop (Codex).**
+  **Refs:** B-45 a B-49, pedido de Lucas del 2026-10-21. **Depende de:** solicitud explícita de Lucas.
+  **Hecho cuando:** las ideas quedan en el backlog, el feedback de prueba se registra sin cerrar T280, y se crea una secuencia delegable con límites de plataforma, dependencias, compuertas y asignación de ejecutores.
+  **Resultado (2026-10-21):** registrados B-45 a B-49; dividido en T425–T432 y agregado orden de paralelismo para Claude, Gemini y Codex. Opencode local queda limitado a trabajo rutinario de Git. El mapa deriva estrellas/desbloqueos existentes; el trabajo nuevo empieza en desktop. Se actualizaron T280 con el avance parcial 1–4. `git diff --check` pasa; sin tests de juego ni producción de arte.
+
+- [ ] **T425 · `[x86]` · Spec y división del rediseño desktop (Claude).**
+  **Refs:** B-45 a B-49, T262 a T265 y RF-93/RF-111 como contratos existentes. **Depende de:** dirección de Lucas del 2026-10-21; ninguna implementación previa.
+  Escribir requisitos, decisiones, plan y fichas para T426–T432. Separar visuales desktop de mobile y mapear el mapa planetario al progreso actual, sin nuevos campos de guardado ni cambios en estrellas/desbloqueos. Definir estados de las 15 zonas, interacción y accesibilidad con mouse/teclado; integrar las tarjetas actuales, torres y fondos de nivel; panel de torre; tarjeta de entrada; revisión de caminata izquierda; evaluación de uso de torres/estrellas.
+  **Hecho cuando:** todos los RF usan aceptación Dado/Cuando/Entonces; las decisiones recogen estados sin jugar, bloqueados, victoria con 1–2 estrellas y 3 estrellas; alcance mobile está explícito; se fijan límites de tamaño/rendimiento y pruebas; cada tarea indica archivos, dependencias, ejecutor, compuerta de arte y estrategia de validación. No se implementa código ni se produce arte final.
+
+- [ ] **T426 · `[x86]` · Selector desktop actual: mostrar los 15 niveles de un vistazo (Gemini).**
+  **Refs:** B-45, T425 y los RF aprobados por T425. **Depende de:** T425.
+  Rediseñar el estilo actual de tarjetas. Quitar el número de oleadas; integrar las torres disponibles con forma orgánica dentro del marco general de cada nivel; explorar un fondo temático por tarjeta. Mantener desbloqueos, estrellas, récord, nombre y acciones actuales. Sin tocar el modo de mapa planetario.
+  **Hecho cuando:** se ven y se pueden activar los 15 niveles en 1280×720 sin scroll; estados bloqueado, disponible y completado se distinguen; la tarjeta conserva la información necesaria y la campaña usa los mismos datos; tests de escena e input, capturas a 1280×720 y 1920×1080, GUT completo sin errores. La versión mobile no cambia salvo requisito explícito de T425.
+
+- [ ] **T428 · `[x86]` · Selector alternativo con mapa planetario 2D (Claude, lógica e integración).**
+  **Refs:** B-45, T425, RF-93/RF-111. **Depende de:** T425 y muestra de arte aprobada en T427; puede desarrollarse el flujo con arte provisional en paralelo.
+  Agregar el selector de estilo entre tarjetas y mapa. En el mapa, ubicar aterrizaje y 15 regiones, reflejar el progreso existente y conservar acceso a cada nivel habilitado. Mostrar zona tomada con 3 estrellas y presencia rebelde con menos, según los estados fijados en T425. No crear campaña, geografía jugable ni guardado nuevos.
+  **Hecho cuando:** ambos estilos mantienen selección/desbloqueos; cada uno de los 15 niveles tiene estado visual determinista derivado del guardado actual; al cambiar estilo no se modifica progreso; navegación con teclado/mouse y foco accesible; tests de estados y transición, capturas en dos resoluciones y GUT completo. Mobile se conserva como está salvo criterio definido en T425.
+
+- [ ] **T427 · `[x86]` · Arte y prueba visual del mapa planetario (Codex).**
+  **Refs:** B-45, T425. **Depende de:** dirección visual aprobada por Lucas en T425; compuerta 🎨 antes de producir assets finales.
+  Preparar una propuesta visual del planeta, punto de aterrizaje y tres estados de zona (sin explorar/bloqueada, con presencia rebelde, tomada), con 15 marcadores legibles. Puede ser una maqueta navegable con arte provisional y muestras finales separadas. Mantener contraste y legibilidad a 1280×720.
+  **Hecho cuando:** se entregan muestra y capturas a tamaño de pantalla, con procedencia/archivos fuente; Lucas puede aprobar, pedir cambios o rechazar antes de integrar los assets finales. No cambiar código de juego ni datos de campaña.
+
+- [ ] **T429 · `[x86]` · Tarjeta de entrada del nivel coherente con el selector (Gemini).**
+  **Refs:** B-47, T425–T426. **Depende de:** T425 y dirección visual de las tarjetas aprobada en T426.
+  Personalizar la tarjeta que describe el nivel con el mismo lenguaje de fondo que su tarjeta de selección. En desktop, quitar el botón redundante «Empezar» si continúa la instrucción de hacer clic en cualquier lugar o presionar cualquier tecla; adaptar el texto para mouse y teclado. Mantener la pausa/cuenta atrás y las transiciones actuales.
+  **Hecho cuando:** texto, fondo y nivel coinciden; mouse y teclado continúan una sola vez; no hay dos llamadas a la misma acción; tests de escena/input, capturas, GUT completo. Táctil/mobile queda fuera salvo que T425 lo defina.
+
+- [ ] **T430 · `[x86]` · Rediseñar el panel desktop de torres (Gemini).**
+  **Refs:** B-46, T425, B-28 como antecedente. **Depende de:** T425.
+  Eliminar la descripción redundante, agrupar daño actual con el cambio de la mejora y expresar «Mejorar a nivel N». Cambiar el texto «Nivel N» por el indicador visual de tres colores que Lucas pidió. Refinar botones y probar transparencia. Resolver el solapamiento que dificulta seleccionar una torre bajo el panel, sin cambiar reglas de entrada, precios, venta ni mejoras.
+  **Hecho cuando:** estados de 1→2, 2→3, máximo, sin oro, apoyo, aturdida/desgastada y torre grande se leen; la torre cubierta sigue pudiéndose seleccionar por la solución aprobada en T425; foco/teclado funciona; pruebas de integración, capturas y GUT completo. Solo desktop.
+
+- [ ] **T431 · `[x86]` · Diagnosticar y proponer mejora barata para la caminata izquierda (Codex, propuesta visual).**
+  **Refs:** B-48, guía de arte y D-049. **Depende de:** inventario de personajes y sus atlas actuales.
+  Identificar poses que se sienten peor hacia la izquierda y comparar a tamaño real: animar orientación existente, crear vista lateral específica o conservar el comportamiento. Estimar horas/assets y costo de memoria/importación. No reflejar sprites a ciegas: verificar luz, silueta, anclaje y continuidad de pasos.
+  **Hecho cuando:** un informe muestra antes/después para los personajes concretos, opciones con costo y límites, y recomienda una opción. No se altera producción hasta el OK de Lucas.
+
+- [ ] **T432 · `[x86]` · Analizar variedad de torres y estrellas en niveles 1–4 (Claude).**
+  **Refs:** B-49, RF-93, T266, feedback de Lucas del 2026-10-21. **Depende de:** resultados humanos adicionales si están disponibles; comenzar con datos existentes y dejar lo que falta claramente señalado.
+  Separar cuántas vidas quedan (que determina estrellas), torres ofrecidas, estrategia viable y torres efectivamente necesarias. Contrastar bot con varias estrategias/semillas y los relatos de Lucas; no atribuir la baja puntuación a no usar todas las torres sin evidencia. Recomendar si hace falta cambiar onboarding, variedad o balance.
+  **Hecho cuando:** informe por nivel con estrellas/vidas, torres disponibles/usadas, resultados del bot y límites del muestreo humano; propuesta acotada y dependencias si se necesita una spec nueva. No editar niveles, torre, texto ni balance en esta tarea.
