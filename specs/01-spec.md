@@ -1438,6 +1438,8 @@ Dirección aprobada para convertir en una spec y tareas antes de programar. El a
 | B-47 | Hacer más personal y legible la tarjeta que presenta el nivel, con un fondo relacionado con la tarjeta del selector. Quitar en desktop el botón «Empezar» duplicado si se conserva la instrucción de clic o tecla para continuar. | T429 | Desktop; adaptar el texto a mouse/teclado; revisar mobile por separado. |
 | B-48 | Revisar las caminatas hacia la izquierda de algunos personajes y comparar soluciones de bajo costo con sus costos y límites. | T431 | Revisión de arte; no reflejar automáticamente sprites que tienen luz direccional. |
 | B-49 | Analizar el uso de torres y las estrellas en los primeros niveles antes de decidir si falta variedad, explicación o balance. | T432 | Escritorio; no imponer el uso de torres ni modificar balance sin datos y spec. |
+| B-50 | Rehacer tronco, helecho y poste con el acabado dimensional vigente; el poste del nivel 6 distingue campaña sin victoria y campaña ganada. | T437 | Visual; sin cambio de progreso, estrellas ni guardado. Arte en revisión de Lucas. |
+| B-51 | Explorar un editor cosmético pequeño de estandartes después de decidir alcance, receta, guardado y plataformas. | T438/análisis | Futuro; no implementarlo con T437. |
 
 Lucas probó los niveles **1 a 4 en desktop** y los considera bien; el 1 se siente algo más difícil, pero aceptable. En varias partidas usó pocas familias de torres y casi nunca obtuvo tres estrellas. RF-93 asigna las estrellas por vidas restantes: 3 estrellas desde el 90 % (18/20), 2 desde el 50 % (10/20), y 1 por una victoria por debajo. Esto no demuestra por sí solo un defecto de balance ni una relación causal con la variedad de torres; T432 debe contrastarlo antes de proponer cambios.
 
@@ -4146,3 +4148,21 @@ Lucas autorizó integrar `art/t372-muestras/news_*.png` en el pedido del 2026-10
 - Una campaña persistente de conquista, mapa jugable, geografía que cambie la partida o campo nuevo de progresión.
 - Rediseño mobile, pruebas en teléfono ni cambios de controles táctiles.
 - Producir o integrar arte final sin aprobar primero las muestras; migrar sprites de enemigos, que se audita por separado.
+## B-50 · Rediseño de decoración y estandartes de campaña
+
+Lucas pidió rehacer el tronco, el helecho y el poste con cintas porque las muestras previas no respetan el estilo visual más reciente. La referencia activa es la decoración dimensional de T277, no las variantes vectoriales planas de T260. El poste del nivel 6 debe mostrar estandartes enemigos mientras ese nivel no se haya ganado y estandartes del jugador después de cualquier victoria registrada. El cambio es visual y no depende de obtener tres estrellas.
+
+## B-51 · Editor chico de estandartes (futuro, sin aprobar)
+
+Explorar un editor cosmético breve para diseñar estandartes propios. Antes de implementarlo hay que decidir límites de formas y colores, persistencia, uso en escritorio/celular y cómo preservar el emblema del equipo. La primera entrega es un análisis y una propuesta de MVP; no se implementa ni se agrega carga de imágenes, texto libre o contenido compartido.
+
+
+## M73 · Banderines de conquista y rediseño de decoración (T437; 2026-10-21)
+
+**Estado:** especificada; el arte está en propuesta para revisión de Lucas. El pedido es rehacer los recursos previos, que no siguen el acabado vigente de T277. El comportamiento de campaña no altera estrellas, balance ni guardado.
+
+- **RF-655 · Recursos de decoración renovados.** Tronco y helecho se redibujan con el acabado dimensional que usa el runtime para la decoración T277. El poste mantiene silueta compacta y muestra dos banderines con emblemas, no texto. Las variantes enemiga y del jugador conservan la misma composición; solo cambian paleta y símbolo. Recursos PNG con alfa, cargados con preload y preparados para el tamaño de casilla. Las muestras se enseñan en contacto a 220 y 34 px y en una partida real antes de cerrar la aprobación de arte.
+- **RF-656 · Conquista del nivel 6.** En una partida de campaña, la decoración del poste del nivel 6 es enemiga si el nivel todavía no figura completado y del jugador después de cualquier victoria registrada. No depende de estrellas ni crea una clave nueva. Al volver a entrar, el poste refleja el guardado actual.
+- **RF-657 · Contexto explícito y aislado.** Game consulta el progreso solo si cargó un nivel de campaña y transmite un booleano de finalización al mapa/decoración. MapDrawings y LevelDecor no leen autoloads. Comunidad, editor, modos, niveles de prueba y escenas F6 conservan la variante enemiga aunque sus datos tengan un ID coincidente.
+- **RF-658 · Importación y compatibilidad.** Los recursos nuevos importan sin errores y reemplazan en runtime las piezas activas de tronco y helecho sin cambiar la leyenda del mapa ni el tamaño/cantidad de nodos por casilla. La lista de IDs y los mapas existentes siguen válidos.
+- **RF-659 · Pruebas.** Tests cubren ambas variantes del poste, el contexto falso predeterminado y el contexto de campaña completada. Las capturas del nivel 6 se toman con un guardado de prueba controlado para ambos estados y se restaura el guardado al terminar. Suite completa sin SCRIPT ERROR ni Parse Error.

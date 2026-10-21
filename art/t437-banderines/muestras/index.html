@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>T437 · Rediseño de decoración</title>
+<style>
+:root{color-scheme:dark;font:16px/1.45 system-ui,sans-serif;background:#171d24;color:#f1eadb}
+body{margin:0;padding:2rem;max-width:1200px;margin-inline:auto}
+h1,h2{color:#f4d59a}p{max-width:75ch;color:#d4cdbd}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(160px,1fr));gap:1rem}
+.card{background:#282f35;border:1px solid #59604d;border-radius:12px;padding:1rem;text-align:center}
+.tile{height:270px;display:grid;place-items:center;background-image:url('../../assets/tiles/rendered/ground_bosque.png');background-size:128px 128px;border-radius:8px}
+.tile img{width:220px;height:220px;object-fit:contain;image-rendering:auto}
+.mini{display:flex;gap:1rem;align-items:center;justify-content:center;margin-top:1rem}
+.mini .tile{width:90px;height:90px}
+.mini img{width:34px;height:34px;object-fit:contain}
+a{color:#f2d18f}
+@media(max-width:800px){.grid{grid-template-columns:repeat(2,minmax(140px,1fr))}body{padding:1rem}}
+</style>
+</head>
+<body>
+<h1>T437 · Decoración del bosque y banderines</h1>
+<p>Muestras dimensionales inspiradas en la decoración integrada de T277. Las cuatro piezas son propuestas para revisar, no aprobación de canon: los emblemas de enemigo y colonia todavía necesitan validación narrativa. Tamaño real de revisión: 34 px; muestra ampliada: 220 px.</p>
+<section class="grid">
+<article class="card"><h2>Tronco</h2><div class="tile"><img src="../fuentes/tronco.png" alt="Tronco de bosque"></div><div class="mini"><span>34 px</span><div class="tile"><img src="../fuentes/tronco.png" alt=""></div></div><p><a href="../fuentes/tronco.png">Abrir fuente grande</a></p></article>
+<article class="card"><h2>Helecho</h2><div class="tile"><img src="../fuentes/helecho.png" alt="Helecho de bosque"></div><div class="mini"><span>34 px</span><div class="tile"><img src="../fuentes/helecho.png" alt=""></div></div><p><a href="../fuentes/helecho.png">Abrir fuente grande</a></p></article>
+<article class="card"><h2>Poste enemigo</h2><div class="tile"><img src="../fuentes/poste_enemigo.png" alt="Poste con dos banderines enemigos"></div><div class="mini"><span>34 px</span><div class="tile"><img src="../fuentes/poste_enemigo.png" alt=""></div></div><p><a href="../fuentes/poste_enemigo.png">Abrir fuente grande</a></p></article>
+<article class="card"><h2>Poste jugador</h2><div class="tile"><img src="../fuentes/poste_jugador.png" alt="Poste con dos banderines del jugador"></div><div class="mini"><span>34 px</span><div class="tile"><img src="../fuentes/poste_jugador.png" alt=""></div></div><p><a href="../fuentes/poste_jugador.png">Abrir fuente grande</a></p></article>
+</section>
+<h2>En partida</h2>
+<p>Las capturas muestran el nivel 6 con el poste enemigo antes de ganar y con el estandarte del jugador después de una victoria. El guardado de captura es temporal y aislado.</p>
+<div class="grid">
+<article class="card"><h2>Antes de ganar</h2><a href="../capturas/level_06_enemy.png"><img style="width:100%;height:auto" src="../capturas/level_06_enemy.png" alt="Nivel 6 con estandartes enemigos"></a></article>
+<article class="card"><h2>Después de ganar</h2><a href="../capturas/level_06_player.png"><img style="width:100%;height:auto" src="../capturas/level_06_player.png" alt="Nivel 6 con estandartes del jugador"></a></article>
+</div>
+</body>
+</html>
