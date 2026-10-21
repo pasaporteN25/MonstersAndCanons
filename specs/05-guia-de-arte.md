@@ -72,7 +72,7 @@ Paletas de T244 y T257, todavía **no aprobadas**: las de T244 son referencias d
 
 ## 6. De dónde vienen los dibujos actuales
 
-- Los **nueve enemigos** se redibujaron en T127 con un generador (`redesign.py`, en `build/enemy-redesign/`, que **no se versiona**: la carpeta `build/` está ignorada por git). **La fuente de verdad es el SVG** de `assets/sprites/enemies/`; los originales de antes y las comparaciones "antes/después" quedaron en esa carpeta.
+- Los **nueve enemigos** se redibujaron en T127 con un generador (`redesign.py`, en `build/enemy-redesign/`, que **no se versiona**: la carpeta `build/` está ignorada por git). Las fuentes y comparaciones históricas quedaron en esa carpeta. Los SVG de `assets/sprites/enemies/` son fuentes editables de algunos rediseños, pero no indican por sí solos qué imagen usa el juego: cada enemigo declara su textura y atlas en `data/enemies/<id>.tres`. Los PNG consumidos por los rediseños renderizados están en `assets/sprites/enemies/rendered/`.
 - **Torres, proyectiles, íconos y decoración del mapa** son los de M4/M5 (T70–T73, T84): contorno `#2b2233` y bases de madera, piedra y piedra con oro. Se pueden rediseñar más adelante con esta misma guía; hoy conviven sin problema.
 - **Enemigos con habilidad** (B-07): el Guardián y el Curandero (M17) y el Chamán y el Espejo (M18) ya están; quedan el Excavador y el Ladrón. Sus ideas de aspecto están en el backlog y se ajustan a los tonos libres de la tabla.
 
@@ -92,7 +92,7 @@ Para las torres nuevas, esta sección reemplaza las reglas de SVG y vista latera
 
 ## 8. Monstruos renderizados (M24, D-050)
 
-Normal (diablillo rojo), Rápido (bestia turquesa) y Tanque (ogro de piedra y piel verde) son PNG RGBA de **256×256**, **una sola vista** con la luz arriba a la izquierda, sin sombra dibujada (la pone el juego). Cuerpo al 63,4 % del alto como máximo y pies al 74,55 % del alto; los genera `tools/prepare_monster_sprites.gd` desde `art/redesign-m24/sources/`. **No se reflejan en espejo** (`flip_when_walking_left = false`) y todavía no tienen cuadros de caminar: lo que falta pedir está en `art/FORMATO_PROXIMA_ENTREGA_M24.md`. Los otros diez enemigos siguen con las reglas de §1–2.
+Normal (diablillo rojo), Rápido (bestia turquesa) y Tanque (ogro de piedra y piel verde) usan PNG RGBA de **256×256** para la pose base y un atlas PNG de caminata; el juego los carga desde `assets/sprites/enemies/rendered/`. Las poses base mantienen la luz arriba a la izquierda, sin sombra dibujada, cuerpo de hasta 63,4 % del alto y pies en 74,55 %; la sombra la pone el juego. No se dibujan con espejo al caminar a la izquierda (`flip_when_walking_left = false`). Los `.tres` de `data/enemies/` indican las texturas, escalas y separación de pasos vigentes; consultar esos datos antes de reutilizar tamaños o asumir que un enemigo carece de animación. Las fuentes M24 y su generador están en `art/redesign-m24/sources/` y `tools/prepare_monster_sprites.gd`.
 
 ## M36 · Lectura de estados y efectos
 Placa de nivel: hierro/bronce, remaches ámbar siempre legibles; no depende del brillo animado. Aturdimiento: aro roto violeta y descargas sobre el mecanismo, sin tapar base/sombra. Cura: límite verde amarillento suave y brotes en cura efectiva; no usar oro ni blanco de daño. Muerte: conservar la pose y escala de la criatura, disolver con shader y ocho fragmentos facetados; sin deformaciones corporales, sombras nuevas ni nuevos ciclos falsos. Efectos finitos respetan pausa/velocidad y topes (12 residuos de muerte,16 pulsos de cura).
