@@ -49,6 +49,8 @@ var modes_official_dir: String = ModePacks.OFFICIAL_DIR
 var modes_user_dir: String = ModePacks.USER_DIR
 ## Cómo se abre la carpeta en el explorador. Los tests lo reemplazan (si no, abrirían una ventana).
 var folder_opener: Callable = OS.shell_open
+## M72: cómo se abre un nivel desde el mapa planetario. Los tests lo reemplazan (si no, cambiaría de escena).
+var level_opener: Callable = GameFlow.start_level
 
 var _all_towers: Array[TowerData] = []
 var _page: StringName = PAGE_CAMPAIGN
@@ -69,6 +71,11 @@ var _dev_gold: SpinBox
 @onready var _campaign_tab: Button = %CampaignTab
 @onready var _community_tab: Button = %CommunityTab
 @onready var _folder_button: Button = %FolderButton
+@onready var _style_switch: HBoxContainer = %StyleSwitch
+@onready var _style_cards_button: Button = %StyleCards
+@onready var _style_map_button: Button = %StyleMap
+## M72: el mapa planetario cuando la campaña está en ese estilo; null con tarjetas.
+var map_view: CampaignMapView
 
 
 func _ready() -> void:
@@ -80,7 +87,11 @@ func _ready() -> void:
 	_community_tab.text = "Mapas de la comunidad (%d)" % _entries.size()
 	_modes = ModePacks.all(modes_official_dir, modes_user_dir)  # RF-389: también cada vez
 	_add_mode_tabs()
+	_style_cards_button.pressed.connect(set_style.bind(CampaignMap.STYLE_CARDS))
+	_style_map_button.pressed.connect(set_style.bind(CampaignMap.STYLE_MAP))
 	show_page(GameFlow.select_page)  # RF-225: la solapa en la que se estaba
+	if map_view != null:
+		map_view.focus_selected()  # RF-648: el mapa se puede recorrer con teclado desde que se abre
 	if DevMode.enabled:
 		_add_dev_strip()
 	Audio.add_click_sounds(self)
@@ -110,10 +121,20 @@ func show_page(page: StringName) -> void:
 	for card: Node in _cards.get_children():
 		_cards.remove_child(card)
 		card.queue_free()
+	map_view = null
+	# RF-645: el cambio de estilo es solo de escritorio y solo de la campaña.
+	var show_map: bool = is_campaign and SaveManager.selector_style() == CampaignMap.STYLE_MAP
+	_style_switch.visible = is_campaign
+	_style_cards_button.set_pressed_no_signal(not show_map)
+	_style_map_button.set_pressed_no_signal(show_map)
 	var count: int
 	if page == PAGE_CAMPAIGN:
-		for i: int in GameFlow.level_count():
-			_cards.add_child(_make_card(i))
+		if show_map:
+			map_view = _make_map_view()
+			_cards.add_child(map_view)
+		else:
+			for i: int in GameFlow.level_count():
+				_cards.add_child(_make_card(i))
 		count = GameFlow.level_count()
 		_total_stars.text = "Estrellas: %d de %d" % [GameFlow.total_stars(), GameFlow.max_stars()]
 	elif page == PAGE_COMMUNITY:
@@ -137,10 +158,44 @@ func show_page(page: StringName) -> void:
 	_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED \
 		if is_campaign and rows <= CAMPAIGN_VISIBLE_ROWS else ScrollContainer.SCROLL_MODE_AUTO
 	_scroll.custom_minimum_size.y = shown * card_height + (shown - 1) * row_spacing
+	if show_map:
+		_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+		_scroll.custom_minimum_size.y = CampaignMapView.VIEW_SIZE.y
 
 
 func current_page() -> StringName:
 	return _page
+
+
+## M72, RF-645: cambia el estilo de la campaña y lo recuerda en `settings`. No toca el progreso.
+func set_style(style: int) -> void:
+	var wanted: int = CampaignMap.style_from(style)
+	_style_cards_button.set_pressed_no_signal(wanted == CampaignMap.STYLE_CARDS)
+	_style_map_button.set_pressed_no_signal(wanted == CampaignMap.STYLE_MAP)
+	if wanted == SaveManager.selector_style():
+		return
+	SaveManager.set_setting("selector_style", wanted)
+	SaveManager.save()
+	show_page(_page)
+
+
+## M72, RF-647: los estados salen del desbloqueo y de las estrellas actuales de cada nivel.
+func map_entries() -> Array[Dictionary]:
+	var entries: Array[Dictionary] = []
+	for i: int in GameFlow.level_count():
+		var level: LevelData = GameFlow.level(i)
+		var stars: int = GameFlow.level_stars(i)
+		entries.append({"name": level.display_name, "place": level.place_text, "stars": stars,
+			"state": CampaignMap.state_of(GameFlow.is_level_unlocked(i), SaveManager.is_completed(level.id), stars)})
+	return entries
+
+
+func _make_map_view() -> CampaignMapView:
+	var view := CampaignMapView.new()
+	view.name = "CampaignMapView"
+	view.setup(map_entries())
+	view.level_requested.connect(func(index: int) -> void: level_opener.call(index))
+	return view
 
 
 # --- Modos (RF-389) ---
