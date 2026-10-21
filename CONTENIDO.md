@@ -539,6 +539,22 @@ Una banda de criaturas independientes que roban en grupo, hecha **solo con datos
 
 `data/levels/level_13.json`, de **26 × 12**, tema `nieve` y **dos entradas** (A y B) que se unen en la casilla (2,6): los dos recorridos comparten un tronco hasta la salida. Su leyenda usa 6 de las 12 letras: `e` y `r` removibles (1 recurso al 50 %), `m` mina y `b` bosque explotable (una fuente por entrada), `i` **hielo** (la laguna: no se construye) y `h` `roca_marcada` (el `hito`). `"torres"` de RF-474 (sin Ametralladora ni Lanzamisiles) y `"demoledora": false`. **La escolta** se escribe con tres grupos del mismo `desde` y la misma `entrada` (`guardian`, `healer`, `shaman`), p. ej. `{"enemigo": "guardian", "cantidad": 2, "cada": 3.0, "entrada": "B"}` más los otros dos con el mismo `desde`. Para cambiar la dificultad se mueve `aumento_vida` (40; con 41 el bot gana con 1 vida y con 42 pierde) y, con cuidado, las oleadas 14, 22 y 23, que son **precipicios**. **Después de cualquier cambio:** `... -s tools/balance_sim.gd -- x check_rule=1 levels=13`.
 
+### T420 · Los consejos de la pantalla de derrota (`data/consejos/consejos.json`)
+
+El consejo que sale al perder se retoca con un archivo, sin programar: `{"version": 1, "borrador": true, "ajustes": {…}, "criterios": {…}, "reglas": [ … ]}`.
+
+| Parte | Qué es |
+|---|---|
+| `"ajustes"` | `peso_oleada` (cuánto pesan los enemigos de la oleada final frente a los que ya se colaron; hoy 0,25), `participacion_minima_pct` (qué parte del peso total tiene que explicar una regla; hoy 30), `vidas_minimas` (menos que esto, no hay consejo; hoy 3), `max_torres` (cuántos nombres de torre; hoy 2) y `max_caracteres` (largo máximo de una frase ya armada, para que entre en 2 líneas; hoy 90). |
+| `"criterios"` | Qué torres cuentan como «de golpe alto», «que golpean el aire», «de fuego»… Cada criterio mira los **números del nivel 1 de la torre**: `golpea_aire`, `danio_min`, `quema_min`, `area_min`, `ralentiza_min`, `alcance_min` (números) y `multi`, `pulso` (sí/no). Si cambia el daño de una torre, el criterio la incluye o la saca solo. |
+| `"reglas"` | Una por comportamiento de enemigo, **de lo más específico a lo más general** (a igual peso gana la primera). `"enemigo"`: `vuela`, `en_tierra` (no vuela), `aturde`, `rebota`, `roba_oro`, `embiste`, `suelta_crias` (siempre `true`) o `armadura_min`, `resiste_ralentizar_min`, `regenera_min`, `cura_min`, `aura_armadura_min`, `velocidad_min`, `vida_min` (números mayores que 0). `"torres"`: la lista de criterios que sirven, en orden de preferencia. `"texto"`: la frase, con `{torres}` donde van los nombres. |
+
+- **Una regla solo sale si el nivel ofrece una torre que la cumple**: nunca nombra torres que no están. Si no, pasa a la siguiente regla con peso.
+- **Un enemigo nuevo entra solo** si cumple una condición (por ejemplo, `armor = 4` entra en la regla de armadura). Un tipo de enemigo sin regla (el Normal, el Tanque flaco) simplemente no genera consejo.
+- **Textos cortos:** una frase ya armada, con los nombres más largos, tiene que entrar en **2 líneas** (90 caracteres). No repitas números de otros datos.
+- **Revisalo** con `godot --headless --path . -s tools/check_consejos.gd`: dice en castellano qué arreglar y además comprueba que cada regla aplique a algún enemigo y a alguna torre **reales**. Un archivo con errores **no se usa** (la derrota se muestra sin consejo).
+- Los textos son **borrador** (`"borrador": true`) hasta que Lucas los apruebe.
+
 ### T330 · El tutorial del nivel 1 (`data/tutorial/tutorial.json`)
 
 El tutorial se retoca con un archivo, sin programar: `{"version": 1, "borrador": true, "nivel": "level_01", "interfaz": {…}, "pc": [{"paso": "welcome", "texto": "…"}, …], "celular": [ … ]}`.

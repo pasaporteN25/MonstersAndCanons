@@ -4063,7 +4063,57 @@ Con la copia automática, el archivo **tal como lo dejó la build anterior** que
 2. **P2 · ¿Te sirve «el bot lo compra en 5 de 5 y gana 4 de 5» como criterio de alcanzable?** Recomiendo que sí (mismo criterio que RF-432).
 3. **P3 · ¿Dejamos «Puede dar 1 recurso (100 %)» o preferís «Da 1 recurso»** cuando la probabilidad es 100? Recomiendo dejarlo (es el mismo texto de siempre, armado con los datos).
 4. **P4 · Si la medición muestra que alcanza el Mortero pero se pierden vidas, ¿probamos primero la opción A** (escombros del 9 a 60 de oro)? Recomiendo A antes que B o C.
+### M70 · Un consejo en la pantalla de derrota: qué torre conviene para esas oleadas (Lucas, 2026-10-20; T420 a T422)
 
+**Estado: especificada en T420; el código lo hacen T420 (datos y lógica), T421 (partida y pantalla) y T433 (preferencia de Opciones); T422 mide y cierra la documentación.** `[mobile+x86]`. Las razones y las alternativas están en **D-171 a D-177**. No cambia el balance, los niveles, las torres ni los enemigos. La opción se guarda como una clave aditiva, sin subir la versión del guardado (RF-644).
+
+**Qué pidió Lucas.** *(2026-10-20)* Un **consejo en la pantalla de derrota** encarado por **qué torre conviene** para esas oleadas, según **qué enemigos te hicieron perder** (los que llegaron a la salida y te quitaron vidas, y los de la oleada en que perdiste), usando **solo datos reales del juego** (volador → torres que golpean al aire; armadura alta → daño por golpe alto o fuego; resistente a la ralentización → no confiar en ella; curanderos y regeneración → daño concentrado…), con una tabla enemigo→consejo en un archivo de `data/` fácil de retocar, textos cortos en español rioplatense y **sin nombrar torres que el nivel no ofrece**. El aviso «te sobra oro» **se descartó** (propuesta 2 de T350). Esto es la propuesta A de `specs/tareas/informes/T350-analisis-sin-mejoras-y-8-9.md`, ya reencuadrada por Lucas.
+
+**Idea en pocas palabras.** Mientras se juega, la partida anota **cuántos enemigos de cada tipo llegaron a la salida** (un diccionario que se toca solo cuando un enemigo llega: nada por cuadro). Al perder, una función pura mira esa lista y la oleada en que perdiste, **puntúa cada regla** de la tabla (`data/consejos/consejos.json`) y elige **la de más peso**. Si el nivel ofrece alguna torre que sirva para esa regla, la pantalla de derrota muestra **una frase** («Contra voladores, probá con Ametralladora y Francotirador.»).
+
+- **RF-630** **Cuándo sale.** Si «Consejos en la derrota» está prendido (RF-644), el consejo sale **solo en la pantalla de derrota** (`EndScreen.show_defeat`), si hay datos suficientes (RF-635): campaña, modo, mapa de la comunidad y prueba del editor. **No** sale en la victoria. Si está apagado o no hay datos suficientes, no se calcula ni se muestra.
+  > **Dado** una partida perdida con datos y la opción prendida → **Cuando** aparece «Derrota» → **Entonces** debajo de «Llegaste a la oleada N de M» está el consejo de torre. **Dado** una victoria o la opción apagada → **Entonces** no hay consejo.
+
+- **RF-631** **Registro de fugas.** La partida lleva un **registro liviano** (`LeakLog`, lógica pura): por cada enemigo que **llega a la salida y quita vidas** suma una fuga a su tipo (`EnemyData`) y las vidas que **realmente** quitó (sin pasar de las que quedaban, y nada con vidas infinitas del modo de pruebas ni después de terminada la partida). Se anota **en el momento en que el enemigo llega** (`Game._on_enemy_reached_exit`); no hay trabajo por cuadro. El registro no se guarda en ningún archivo.
+  > **Dado** 3 Voladores y 1 Jefe que llegan a la salida → **Entonces** el registro dice Volador: 3 fugas y 3 vidas; Jefe: 1 fuga y 10 vidas. **Dado** un enemigo que llega con 1 vida restante y quita 10 → **Entonces** se anota 1.
+
+- **RF-632** **La tabla de consejos** *(archivo nuevo, `data/consejos/consejos.json`; lo valida `AdviceData`)*. Un solo archivo con tres partes, todas retocables sin programar:
+  1. **`"ajustes"`**: los números de la selección (RF-633) y los límites de los textos.
+  2. **`"criterios"`**: **qué es** una torre «que golpea el aire», «de golpe alto», «de fuego», «de área», «de alcance largo», «que ralentiza» o «que apaga auras». Cada criterio es un conjunto de condiciones sobre los **datos reales del nivel 1 de la torre** (`can_hit_air`, daño, quemadura, radio de área, ralentización, alcance, pulso…). Si una torre cambia de números, los criterios se actualizan solos.
+  3. **`"reglas"`**: una por cada comportamiento de enemigo. Cada regla dice **a qué enemigos aplica** (por sus datos: `is_flying`, armadura, resistencia a la ralentización, regeneración, aura, hechizo…, **no por nombre**: un enemigo nuevo con armadura entra solo), **qué criterios de torre sirven** y **el texto** (con `{torres}` donde van los nombres).
+  - Los textos son **borrador** hasta el OK de Lucas (`"borrador": true`).
+  > **Dado** un enemigo nuevo con `armor = 4` → **Entonces** la regla de blindados lo toma sin tocar código.
+
+- **RF-633** **Qué consejo se elige.** Lógica pura (`DefeatAdvice`):
+  1. A cada **tipo de enemigo** se le da un **peso** = `las vidas que sus fugas quitaron de verdad` + `peso_oleada` × `vidas que quita al llegar` × `cuántos traía la oleada en que perdiste`. Las fugas mandan; la oleada final pesa poco (`peso_oleada`, hoy 0,25) y desempata y completa.
+  2. El **puntaje de una regla** es la suma de los pesos de los tipos a los que aplica.
+  3. Una regla **cuenta** si el nivel **ofrece al menos una torre** que cumple alguno de sus criterios (solo las torres de la partida: `available_towers`; nunca una torre que el nivel no ofrece ni una de apoyo) y si su puntaje es al menos `participacion_minima_%` del peso total (hoy 30 %).
+  4. Gana la regla de **mayor puntaje**; si empatan, **la que está primero en el archivo** (se ordenan de lo más específico a lo más general). Se nombran **hasta `max_torres` torres** (hoy 2), en el orden de la barra de construcción.
+  5. **Un solo consejo de torre** (D-171).
+  > **Dado** que se perdió por 6 Voladores y el nivel ofrece Ametralladora y Hielo → **Entonces** «…torres que golpean el aire: Ametralladora…» (el Hielo no cuenta como «que pega», RF-632). **Dado** un nivel sin ninguna torre que golpee el aire → **Entonces** esa regla se salta y gana la siguiente que sí tenga torres. **Dado** que el 70 % del peso es de Normales (sin regla) → **Entonces** no hay consejo de torre.
+
+- **RF-634** **Descartado; no implementado.** El recordatorio de oro/mejoras del trabajo local previo se retiró: Lucas descartó «te sobra oro». Este número queda retirado y no se reutiliza.
+
+- **RF-635** **Sin datos, sin consejo.** Si el registro suma menos de `vidas_minimas` vidas (hoy 3), si ninguna regla cuenta (RF-633) o si el archivo es inválido, **no hay consejo de torre** y la pantalla queda como hoy (con un `push_warning` si el archivo es inválido; nunca bloquea la derrota).
+
+- **RF-636** **Cómo se ve.** Una o dos líneas por consejo, en la pantalla de derrota, **debajo de «Llegaste a la oleada N de M»** y antes de los puntos; **sin cambiar el orden ni el tamaño de los botones**. Texto de 16 px de color suave, ancho mínimo de 340 px (el panel tiene 352 útiles, así no se ensancha), centrado y con salto de línea; cada frase ocupa **como máximo 2 líneas** (el validador acota la longitud a `max_caracteres`, hoy 90, y un test mide el texto real con la fuente del juego). Con el consejo y la tabla de récords, el panel **entra entero en 1280 × 720** (PC y modo celular). El panel está centrado, así que al aparecer el consejo crece hacia arriba y abajo por igual; los botones conservan su orden, ancho y alto.
+
+- **RF-637** **Lo que no toca.** No cambia el balance, los números de `data/` de torres y enemigos, la lógica de la partida, el guardado ni el modo de pruebas. Es **solo texto** y un contador. La Wiki no repite los textos del consejo.
+
+- **RF-638** **Validador.** `tools/check_consejos.gd` (y `AdviceData.errors`) revisa el archivo y dice en castellano qué arreglar: versión, claves desconocidas, criterios que no existen, una regla sin texto, sin `{torres}`, sin criterios o sin condición de enemigo, textos que no entran en 2 líneas, números fuera de rango. `tests/test_advice_data.gd` revisa el archivo oficial y, **contra los datos reales**, que cada regla **aplica a algún enemigo** del juego y **se puede cumplir con alguna torre** del juego.
+
+- **RF-639** **Qué se mide y qué no.** T422 hace perder a propósito al bot en los **15 niveles** y registra si el consejo coincide con la **contramedida real** (definición operativa en T422). Es una **hipótesis medida con un bot**, no una prueba con personas: **ningún humano ni celular real** jugó con esto.
+
+- **RF-644 · Preferencia persistente.** Opciones, tanto desde el menú principal como desde pausa, ofrece la casilla «Consejos en la derrota», prendida por omisión. Al apagarla no se calcula ni se muestra el consejo; al prenderla vuelve a estar disponible en las derrotas siguientes. La preferencia queda en `settings` del guardado, sin subir `SAVE_VERSION`; un guardado anterior sin esa clave la interpreta como prendida, y un valor inválido también se lee como prendido. La casilla funciona en PC y celular, con el tamaño táctil establecido. **Dado** un guardado viejo → **Cuando** se abren Opciones → **Entonces** la casilla aparece prendida. **Dado** que se apaga y se cierra Opciones → **Cuando** se vuelve a abrir desde menú o pausa → **Entonces** sigue apagada. **Dado** una derrota con la opción apagada → **Entonces** no se muestra ni se calcula consejo.
+
+> **Dado** un archivo con una regla sin `{torres}`, un criterio inexistente o un texto de 3 líneas → **Entonces** el validador lo dice y la derrota se muestra sin consejo. **Dado** la pantalla de derrota con el texto más largo permitido → **Entonces** el panel mide menos de 720 de alto.
+
+#### Lo que M70 no incluye
+
+- **Avisos sobre oro sobrante o mejoras pendientes** (propuesta 2 de T350, descartada por Lucas), **marcas en las torres mejorables** ni **hitos de primera mejora**.
+- **Consejos en la victoria**, en la pausa o en los carteles de entrada; **más de un consejo de torre** (D-171); cambiar la lógica o el texto del consejo al apagarlo.
+- **Recomendar una posición, una combinación o una estrategia** (solo qué *tipo* de torre).
+- **Medir con personas.** Ni un celular real.
 
 ### T375 · Integración del arte aprobado de Novedades (D-170)
 

@@ -61,6 +61,8 @@ var _stats_written: bool = false
 ## RF-318: alguna torre del mapa aprovecha a los ralentizados / a los quemados.
 var _exploit_slowed: bool = false
 var _exploit_burning: bool = false
+## M70 (RF-631): qué enemigos llegaron a la salida y cuántas vidas quitaron. Se toca solo cuando uno llega.
+var leak_log: LeakLog = LeakLog.new()
 
 @onready var tower_container: Node2D = $Towers
 @onready var enemies: Node2D = $Enemies
@@ -1001,6 +1003,9 @@ func _on_enemy_died(enemy: Enemy) -> void:
 func _on_enemy_reached_exit(enemy: Enemy) -> void:
 	if enemy == _carrier:
 		_carrier = null
+	# M70 (RF-631): las vidas que de verdad quita (no más de las que quedan; nada con vidas infinitas).
+	var taken: int = 0 if session.is_over() or session.infinite_lives else mini(enemy.data.lives_damage, session.lives)
+	leak_log.record(enemy.data, taken)
 	session.lose_lives(enemy.data.lives_damage)  # RF-11
 	_shake_left = SHAKE_DURATION
 	Audio.play(&"life_lost")
@@ -1146,10 +1151,33 @@ func _on_state_changed(state: LevelSession.State) -> void:
 			level_data.win_text if shows_texts() else "", shows_texts() and GameFlow.has_epilogue())  # RF-467, RF-471
 		Audio.play(&"victory")
 	else:
-		end_screen.show_defeat(session.wave, session.total_waves, can_leave, session.score)
+		var tips: Dictionary = defeat_tips()
+		end_screen.show_defeat(session.wave, session.total_waves, can_leave, session.score,
+			String(tips["tower"]))  # RF-630
 		Audio.play(&"defeat")
 	if saves_progress:
 		_show_level_records()  # RF-191: los récords cuentan desde el menú (RF-196, RF-224)
+
+
+## M70 (RF-630 a RF-635): los consejos de la pantalla de derrota. `"tower"`: el de torre.
+## El texto es "" si no corresponde. Un archivo inválido no bloquea la derrota: avisa y no hay consejo.
+func defeat_tips() -> Dictionary:
+	var tips: Dictionary = {"tower": "", "rule": "", "towers": PackedStringArray()}
+	if not SaveManager.defeat_advice_enabled():
+		return tips
+	var advice: AdviceData = AdviceData.load_file()
+	if not advice.is_valid():
+		push_warning("Consejos de derrota: %s" % "; ".join(advice.errors))
+		return tips
+	var wave_counts: Dictionary = {}
+	if session.wave >= 1 and session.wave <= level_data.waves.size():
+		wave_counts = level_data.waves[session.wave - 1].enemy_counts()
+	var tower_tip: Dictionary = DefeatAdvice.tower_tip(advice, leak_log, wave_counts, available_towers)
+	if not tower_tip.is_empty():
+		tips["tower"] = tower_tip["text"]
+		tips["rule"] = tower_tip["id"]
+		tips["towers"] = tower_tip["towers"]
+	return tips
 
 
 # --- Epílogo (RF-471) ---

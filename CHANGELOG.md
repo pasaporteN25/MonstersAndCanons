@@ -2,6 +2,9 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Consejo en la derrota
+- Podés apagar «Consejos en la derrota» desde Opciones, tanto en el menú principal como durante una partida. Se guarda la preferencia y, por omisión, los consejos siguen prendidos.
+
 ## Pausa que bloquea el carrito, «Ver todo» con tecla y «Mejorar» con antes → después *(T401 a T404, 2026-10-20)*
 
 - **Celular: en pausa no se construye.** Con la partida en pausa (el botón, el menú de pausa, el cartel de entrada o la app en segundo plano) el **carrito** y el botón de **demolición** se ven apagados y no hacen nada; si el catálogo estaba abierto, se cierra. La barra de abajo dice «En pausa: seguí la partida para construir». Al seguir, todo vuelve. Mejorar y vender no cambian.
@@ -38,6 +41,10 @@ Cuando llega el **Jefe de la oleada 10 del nivel 1** (jugado desde el menú), sa
 - **Los textos están en `data/novedades/novedades.json`** y se pueden retocar sin programar (`CONTENIDO.md`). `godot --headless --path . -s tools/check_novedades.gd` los revisa y avisa si falta la entrada de la versión.
 - **Arte:** T375 integró la cabecera y los medallones aprobados; el rombo de bronce queda para ítems sin imagen.
 - Tu progreso no cambia: el guardado suma una marca («última versión vista») y una versión anterior del juego lo sigue leyendo.
+
+## Un consejo cuando perdés: qué torre conviene *(T420 a T422, 2026-10-20)*
+
+La pantalla de **Derrota** muestra una pista corta sobre **qué torre usar**, según los enemigos que llegaron a la salida y la oleada final. Solo nombra torres que ese nivel ofrece; si no hay una causa clara, no muestra consejo. Los textos siguen en borrador en `data/consejos/consejos.json`. No cambia el balance.
 
 ## «Ver todo» también cuando corriste el mapa *(T304, 2026-10-19)*
 

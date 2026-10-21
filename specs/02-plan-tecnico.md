@@ -1635,7 +1635,28 @@ Nada más: ningún otro nivel, ni `obstaculos.json`, ni `mortar.tres`, ni códig
 1. `godot --headless --import` y la suite de GUT completa (sin `SCRIPT ERROR`).
 2. Bot, 5 semillas: `check_rule=1` con `levels=6-9`, `levels=10-12` y `levels=13-15`; luego `sin_recursos`, `mix`, `demoler` y `demoledora` en el 9, con la tabla por semilla de RF-524.
 3. **No se prueba:** una partida humana (T283), ni el Mortero visto en pantalla en el 9, ni Windows ni celular.
+### M70 / T420 a T422 · El consejo de la pantalla de derrota (RF-630 a RF-639, D-171 a D-175)
 
+| Pieza | Qué es |
+|---|---|
+| `data/consejos/consejos.json` | Ajustes, criterios de torre, reglas por enemigo. Borrador hasta el OK de Lucas. |
+| `scripts/logic/advice_data.gd` (`AdviceData`) | Lee y valida el archivo (errores en castellano). Evalúa un criterio contra una `TowerData` y una condición contra una `EnemyData`. |
+| `scripts/logic/leak_log.gd` (`LeakLog`) | El registro de fugas: `record(enemy, lives)`, `leaks`, `lives`, `total_lives()`. |
+| `scripts/logic/defeat_advice.gd` (`DefeatAdvice`) | `tower_tip(data, log, wave_counts, offered)` (RF-633). Pura: sin escena ni autoloads. |
+| `Game` | Crea el `LeakLog`, lo alimenta en `_on_enemy_reached_exit`, al perder arma el texto y se los pasa a `EndScreen.show_defeat`. |
+| `EndScreen` | Un `Label` con salto de línea debajo del detalle; solo muestra (P6). |
+| `tools/check_consejos.gd` | Validador por consola (no usa autoloads). |
+| `tools/balance_sim.gd` | Opción `consejo=1`: al perder, imprime el consejo y las fugas (T422). |
+
+**Costo.** Una suma en un diccionario por enemigo que llega; al perder, un recorrido por 15 reglas × 19 enemigos × 11 torres. Nada por cuadro.
+
+**Riesgos.** (1) Un tipo de enemigo sin regla (Normal, Cría…) diluye el peso: el piso del 30 % evita un consejo por un detalle. (2) La medición con bot de RF-639 no reemplaza partidas humanas.
+
+#### T433 · Preferencia para ocultar los consejos (RF-644, D-177)
+
+`SaveManager.DEFAULT_SETTINGS` suma `defeat_advice: true`; el getter defensivo devuelve `true` si la clave falta o no es booleana. `OptionsMenu` agrega «Consejos en la derrota» a las casillas de visualización y lee/escribe esa preferencia desde el mismo menú usado por el menú principal y pausa. `Game` consulta la preferencia antes de cargar o evaluar los consejos; apagada, la derrota recibe texto vacío. La clave se guarda en `settings` sin subir `SAVE_VERSION`.
+
+**Pruebas:** casilla prendida por omisión, apagar/cerrar/abrir y persistencia, guardado antiguo, valor inválido, apertura desde los dos menús, modo celular con altura y área táctil válidas; derrota sin cálculo cuando está apagada y victoria sin consejo. Suite GUT completa.
 
 ### T375 · Arte de Novedades (RF-640 a RF-642, D-170)
 

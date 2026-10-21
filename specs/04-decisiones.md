@@ -1457,3 +1457,56 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Por qué:** respeta las muestras aprobadas y su lectura a escala real. El informe del arte mide contraste insuficiente sobre la ilustración sola: el panel oscuro existente sostiene el texto sin modificar ni oscurecer la imagen.
 - **Alternativas descartadas:** redibujar o recomprimir con pérdida los PNG aprobados (innecesario con estos pesos); mantener cabecera de altura fija (no aprovecha el ancho ni las dos proporciones); superponer texto sin soporte (contraste insuficiente); publicar la versión o aprobar los textos por inferencia (fuera del pedido).
 - **Límites:** aprobar el arte no aprueba los textos; `borrador` sigue en `true`. Sin exportaciones, commit ni push por instrucción de Lucas. La verificación en celular físico queda pendiente.
+
+## D-171 · Un solo consejo de torre, sin avisos sobre oro ni mejoras
+- **Fecha:** 2026-10-20 · **Estado:** decidida · **Decidió:** Lucas (M70 trata de qué torre conviene; «te sobra oro» descartado).
+- **Qué:** la derrota muestra como máximo un consejo de torre, el de mayor peso (RF-633). No hay segunda línea de oro o mejoras: RF-634 queda retirado.
+- **Por qué:** respetar el alcance aprobado y mantener corto el mensaje de derrota. La comparación antes/después de Mejorar pertenece a M68.
+- **Alternativas descartadas:** varios consejos juntos y el recordatorio de oro/mejoras heredado del trabajo local incompleto, sin autorización en las decisiones vigentes.
+- **Qué cambia:** datos, lógica, pantalla y tests muestran solo el consejo de torre.
+
+## D-172 · El consejo sale solo en la derrota
+- **Fecha:** 2026-10-20 · **Estado:** decidida (T420) · **Decidió:** Lucas (pantalla de derrota) / Claude (nada en la victoria)
+- **Qué:** solo `show_defeat` lo muestra (RF-630).
+- **Por qué:** es cuando el jugador busca por qué perdió. Ganar con fugas no es un problema que haya que explicarle, y el registro de fugas de una victoria no dice qué falló.
+- **Alternativas descartadas:**
+  - **Siempre, también al ganar con vidas perdidas:** es ruido en el momento de celebrar; las estrellas ya dicen cuánto se perdió.
+  - **Durante la partida (aviso en vivo):** es el aviso «te sobra oro» que Lucas descartó.
+- **Qué cambia:** `01-spec.md` (RF-630), `scenes/ui/end_screen.gd`.
+
+## D-173 · El consejo no se apaga en Opciones
+- **Fecha:** 2026-10-20 · **Estado:** decidida (T420) · **Decidió:** Claude (recomendación; Lucas puede pedir la opción)
+- **Qué:** no hay opción nueva ni clave nueva en el guardado.
+- **Por qué:** son una o dos líneas **solo cuando se pierde**; no tapan ni frenan nada (los botones siguen en su orden). Una opción más obligaría a una clave de guardado, a una fila de Opciones (que ya se desplaza porque no entra) y a tests de guardados viejos, para esconder dos frases. El tutorial sí se apaga porque tapa el juego (D-126); esto no.
+- **Alternativas descartadas:**
+  - **Opción «Consejos al perder» (por omisión sí):** costo de guardado y de interfaz mayor que el problema. Si a Lucas le molesta, se agrega en una tarea chica.
+  - **Mostrarlo solo las primeras N derrotas:** estado de más en el guardado.
+- **Qué cambia:** nada en el guardado. `01-spec.md` (RF-630).
+
+## D-174 · Las reglas se escriben por comportamiento del enemigo y criterio de torre, no por nombre
+- **Fecha:** 2026-10-20 · **Estado:** decidida (T420) · **Decidió:** Claude
+- **Qué:** una regla dice «enemigos con `is_flying`», «con armadura ≥ 2»… y «torres que cumplen el criterio `aire`»; el criterio se define en el mismo archivo sobre los **datos reales del nivel 1 de la torre** (RF-632).
+- **Por qué:** cumple «usar solo datos reales» y no se desactualiza: un enemigo o torre nuevo entra sin tocar el archivo, y si cambian los números de una torre, el criterio la incluye o la saca sola. Los textos y los umbrales son lo único que Lucas retoca.
+- **Alternativas descartadas:**
+  - **Tabla por id (`flyer → Ametralladora, Múltiple`):** se rompe con cada enemigo o torre nuevo y puede nombrar torres que el nivel no ofrece.
+  - **Calcular el consejo en código sin tabla:** los textos y los umbrales quedarían escondidos (P2).
+  - **Elegir por simulación (cuál torre mata más de ese enemigo):** costoso, difícil de explicar y fuera del alcance.
+- **Qué cambia:** `01-spec.md` (RF-632), `data/consejos/consejos.json`, `scripts/logic/advice_data.gd`.
+
+## D-175 · El peso de cada enemigo: vidas quitadas por las fugas, y la oleada final como complemento
+- **Fecha:** 2026-10-20 · **Estado:** decidida (T420) · **Decidió:** Lucas (fugas y oleada de la derrota) / Claude (la fórmula)
+- **Qué:** `peso = vidas_quitadas_por_sus_fugas + peso_oleada × vidas_que_quita × cantidad_en_la_oleada_final`, con `peso_oleada` = 0,25, y un piso de `participacion_minima_%` = 30 (RF-633).
+- **Por qué:** lo que **realmente** te quitó vidas manda (un Jefe que pasó pesa 10; una Cría, 1). La oleada final cuenta poco: avisa lo que vino pero no es el único motivo de haber perdido; sirve para completar cuando hay pocas fugas. El piso evita un consejo por un detalle (un solo Rápido entre 20 Normales).
+- **Alternativas descartadas:**
+  - **Solo el que más vidas quitó:** ignora la oleada de la derrota que Lucas pidió mirar.
+  - **Solo la oleada final:** no refleja lo que ya se colaba antes.
+  - **Contar fugas sin las vidas que quita:** una Cría valdría lo mismo que un Jefe.
+- **Qué cambia:** `01-spec.md` (RF-633), `data/consejos/consejos.json` (los números), `scripts/logic/defeat_advice.gd`.
+
+## D-177 · La persona puede ocultar los consejos de derrota en Opciones
+- **Fecha:** 2026-10-21 · **Estado:** decidida · **Decidió:** Lucas.
+- **Qué:** «Consejos en la derrota» aparece en Opciones y está prendido por omisión. Se guarda en `settings`; apagarlo omite tanto el cálculo como la presentación del consejo. Guardados anteriores y valores inválidos se interpretan como prendido.
+- **Por qué:** el consejo puede quedar aunque su utilidad no esté demostrada, pero quien juega elige no verlo.
+- **Alternativas descartadas:** quitar los consejos hasta tener evidencia de eficacia; permitir solo ocultar el texto mientras se sigue procesando cada derrota; pedir una confirmación en cada partida.
+- **Qué cambia:** RF-630/RF-644, `SaveManager`, `OptionsMenu`, `Game` y sus tests. No sube `SAVE_VERSION`.
+- **Relación con D-173:** esta decisión reemplaza la recomendación de no ofrecer la opción; queda registrada para conservar el motivo original.

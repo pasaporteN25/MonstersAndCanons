@@ -2342,6 +2342,31 @@ Spec: RF-610 a RF-619. Decisiones: D-160 a D-164. Plan: «M68 / T400 a T405». R
 
   **Resultado (2026-10-20):** rama sincronizada con `origin/main` (`52855f0`), conservando ambas entradas de CHANGELOG (M68 e intro WebP). Importación con código 0, sin `SCRIPT ERROR` ni `Parse Error`. La primera suite concurrente dio 2087/2088 con un fallo en `test_records` (archivo de prueba compartido); se repitió con `XDG_DATA_HOME` y `XDG_CONFIG_HOME` aislados: **150 scripts, 2088/2088 tests, 23.005 aserciones**, código 0, sin errores de script ni parseo. No se cambió código de juego ni se generaron exportaciones. No se probó en un celular real. Publicar esta resolución no mergea el PR: eso queda para Lucas.
 
+## M70 — Consejo de torre en la derrota *(Lucas, 2026-10-20; D-171 a D-175)*
+
+- [x] **T420 · `[mobile+x86]` · Consejo de derrota: spec, datos, lógica pura y validador.**
+  **Refs:** RF-631 a RF-633, RF-635, RF-638, D-171 a D-175, P2, P10. **Depende de:** T350 (ya integrado en main).
+  **Hecho cuando:** `AdviceData`, `LeakLog` y `DefeatAdvice` prueban la elección usando datos reales y torres ofrecidas; el validador acepta el archivo oficial; suite completa sin errores de script.
+
+  **Resultado (2026-10-20):** rescatada y renumerada la spec M70 (RF-630 a RF-639, D-171 a D-175). RF-634 queda retirado: se eliminó el recordatorio de oro/mejoras del trabajo incompleto. Datos con 15 reglas y 8 criterios; lógica pura de fugas y selección, sin sugerir torres ausentes ni Hielo como daño antiaéreo. Validador oficial OK; 42 tests de datos/lógica y verificación conjunta de M70: importación + suite **2110/2110**, sin `SCRIPT ERROR` ni `Parse Error`, con directorios XDG aislados. Textos en borrador; sin partidas humanas ni celular real.
+
+- [x] **T421 · `[mobile+x86]` · Integrar el consejo de torre en la partida y la derrota.**
+  **Refs:** RF-630, RF-631, RF-636, RF-637. **Depende de:** T420.
+  **Hecho cuando:** se registran fugas reales; la derrota muestra solo el consejo de torre; la victoria lo oculta; textos en dos líneas y panel en 1280 × 720 sin cambiar tamaño ni orden de botones. RF-634 retirado: sin recordatorios de oro ni contador de mejoras.
+
+  **Resultado (2026-10-20):** `Game` registra vidas realmente perdidas y pasa solo el consejo de torre a `EndScreen`; no anota fugas tras terminar ni con vidas infinitas. Sin contador de mejoras ni segunda línea de oro. **13 tests** de integración/pantalla en verde, incluyendo victoria que limpia el consejo, torres ofrecidas, botones y textos oficiales en hasta dos líneas. Panel con consejo largo y cinco récords: **420 × 604 px**. Importación y suite conjunta **2110/2110**, sin errores de script y con guardados de prueba aislados. No se probó con una persona ni celular real.
+
+- [x] **T422 · `[mobile+x86]` · Medir el consejo con el bot en los 15 niveles y documentar.**
+  **Refs:** RF-639. **Depende de:** T421.
+  **Hecho cuando:** se pierde a propósito en 15 niveles, se compara cada consejo con torres alternativas en iguales mapa/semilla/tope y se reportan resultados y límites; documentación al día.
+
+  **Resultado (2026-10-20):** bot ampliado con `limite`, `solo` y `consejo=probar`; **137 partidas**, semilla 1/tope 1, con derrota base en los **15 niveles**. Siete derrotas dieron consejo y ocho no. **Resultado negativo:** incluye la mejor torre sola **0/7** (referencia por azar 24 %); primera torre aconsejada mejora la base **1/7**, por puntos a igual oleada. No demuestra utilidad ni consejo óptimo: Hielo complementa daño, no reemplaza una defensa por sí solo. Informe completo: [T422](tareas/informes/T422-consejo-derrota.md). Docs actualizadas y texto de voladores acortado para no afirmar exclusividad falsa. Suite previa a ese último cambio de frase: **2110/2110**, sin errores de script; bot sin `SCRIPT ERROR`/`Parse Error`, aunque avisó recursos/ObjectDB pendientes al salir. **PR en borrador; utilidad pendiente de revisión y partidas humanas.** Sin celular real ni cambios de balance.
+  **Reverificación tras sincronizar con `origin/main` (M68):** importación con código 0; avisos de Android SDK 35.0.1, `adb` no disponible y `.uid` de test recreado (retirado después). GUT aislado: 153 scripts, **2143/2143 tests y 23.243 aserciones**, código 0, sin `SCRIPT ERROR` ni `Parse Error`.
+
+- [x] **T433 · `[mobile+x86]` · Preferencia para apagar consejos de derrota (Codex).**
+  **Refs:** RF-630, RF-644, D-177. **Depende de:** T421 y decisión de Lucas del 2026-10-21.
+  **Hecho cuando:** «Consejos en la derrota» aparece prendido por omisión en Opciones desde menú y pausa; la preferencia persiste en `settings` sin subir `SAVE_VERSION`; guardados viejos y valores inválidos se leen como prendidos; apagarla omite el cálculo y la presentación; las pruebas cubren PC/celular, persistencia, derrota/victoria y área táctil.
+  **Resultado (2026-10-21):** agregado el ajuste persistente `defeat_advice` (prendido por omisión), la casilla de Opciones y el corte antes de calcular recomendaciones. El guardado viejo conserva el valor prendido; no se sube `SAVE_VERSION`. Los tests cubren valor por omisión, persistencia, dato antiguo/inválido y tamaño táctil; el test de derrota verifica que apagado no muestra consejo. Tras sincronizar con `origin/main`, importación de Godot 4.7.2 sin errores de parseo y GUT completo: **154 scripts, 2155/2155 tests, 23.391 aserciones**, sin fallos. La importación avisó que `test_save_backup.gd.uid` no existía y lo regeneró; se retiró ese archivo generado. Sin prueba en teléfono físico.
 ## Nuevas tareas desktop · solicitud de Lucas (2026-10-21)
 
 El alcance de T425 a T432 es desktop. Mobile continúa por su propia experiencia; la tarea de spec debe marcar explícitamente cualquier parte que pueda compartirse. No se cambia balance, economía, guardado ni criterios de estrellas como efecto colateral del rediseño visual.
