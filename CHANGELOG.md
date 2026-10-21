@@ -4,7 +4,7 @@ Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle t�
 
 ## Quince niveles a la vista en desktop *(T426, 2026-10-21)*
 
-El selector de campaña ahora muestra los **15 niveles en tres filas**, sin desplazamiento, en PC. Se quitó el conteo de oleadas y las torres disponibles aparecen integradas en la tarjeta, sin cajas individuales. Los nombres, estados, desbloqueos, récords, estrellas y teclas se conservan; mobile mantiene su presentación anterior. Se preparó una muestra editable de cinco fondos temáticos para revisión: **no se integran** hasta que Lucas apruebe esa dirección visual.
+El selector de campaña ahora muestra los **15 niveles en tres filas**, sin desplazamiento, en PC. Se quitó el conteo de oleadas y las torres disponibles aparecen integradas en la tarjeta, sin cajas individuales. Los nombres, estados, desbloqueos, récords, estrellas y teclas se conservan; mobile mantiene su presentación anterior. Cada tarjeta de PC tiene un fondo temático muy tenue: el suelo del paisaje real de ese nivel (pradera, desierto, nieve, etc.), con un velo oscuro encima para que el nombre, las estrellas y las torres se sigan leyendo; es el mismo lenguaje que la entrada al nivel. Las tarjetas de mobile, de la comunidad y de los modos no cambian.
 
 ## Consejo en la derrota
 - Podés apagar «Consejos en la derrota» desde Opciones, tanto en el menú principal como durante una partida. Se guarda la preferencia y, por omisión, los consejos siguen prendidos.

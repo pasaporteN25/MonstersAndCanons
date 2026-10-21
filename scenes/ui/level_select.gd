@@ -17,6 +17,11 @@ const CARDS_PER_ROW: int = 5
 const VISIBLE_ROWS: int = 2
 const CAMPAIGN_VISIBLE_ROWS: int = 3
 const CAMPAIGN_CARD_SPACING: float = 10.0
+## T426: el fondo temático de la tarjeta desktop es el suelo del tema del nivel (MapThemes), muy tenue,
+## con un velo oscuro del color de borde del tema encima para que texto, estrellas e iconos se lean.
+const CAMPAIGN_BACKDROP_ALPHA: float = 0.30
+const CAMPAIGN_SCRIM_ALPHA: float = 0.62
+const CAMPAIGN_SCRIM_DARKEN: float = 0.55
 const CARD_STAR_SIZE: float = 26.0
 const CAMPAIGN_STAR_SIZE: float = 18.0
 const TOWER_ICON_SIZE: float = 22.0
@@ -337,11 +342,38 @@ func _make_card(index: int) -> Button:
 		card.tooltip_text = "Avance de este nivel: %s. Una pieza distinta por nivel1–5." % ("conseguido" if SaveManager.collected_sources(&"technology").has(String(level.id)) else "pendiente")
 	var unlocked: bool = GameFlow.is_level_unlocked(index)
 	card.disabled = not unlocked
+	if compact:
+		_add_theme_background(card, level.theme)
 	_add_campaign_card_text(card, index, level, unlocked, compact)
 	_add_tower_icons(card, index, level, unlocked, compact)
 	card.pressed.connect(GameFlow.start_level.bind(index))
 	_add_campaign_stars(card, GameFlow.level_stars(index), unlocked, index, compact)
 	return card
+
+
+## T426: suelo del tema del nivel (uno desconocido usa la pradera) y velo oscuro, detrás de todo lo demás.
+## Con `self_modulate` el alpha no se pierde cuando una tarjeta bloqueada atenúa a sus hijos.
+func _add_theme_background(card: Button, theme_id: StringName) -> void:
+	card.clip_contents = true
+	var backdrop := TextureRect.new()
+	backdrop.name = "ThemeBackdrop"
+	backdrop.texture = MapThemes.ground_texture(theme_id)
+	backdrop.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	backdrop.stretch_mode = TextureRect.STRETCH_TILE
+	backdrop.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
+	backdrop.self_modulate = Color(1, 1, 1, CAMPAIGN_BACKDROP_ALPHA)
+	backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	backdrop.position = Vector2.ZERO
+	backdrop.size = CAMPAIGN_CARD_SIZE
+	card.add_child(backdrop)
+	var edge: Color = MapThemes.palette(theme_id)["edge"]
+	var scrim := ColorRect.new()
+	scrim.name = "ThemeScrim"
+	scrim.color = Color(edge.darkened(CAMPAIGN_SCRIM_DARKEN), CAMPAIGN_SCRIM_ALPHA)
+	scrim.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	scrim.position = Vector2.ZERO
+	scrim.size = CAMPAIGN_CARD_SIZE
+	card.add_child(scrim)
 
 
 ## RF-397 y RF-465: cada pieza tiene su propio rectángulo y no depende de renglones vacíos

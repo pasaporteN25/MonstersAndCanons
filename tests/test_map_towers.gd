@@ -233,7 +233,7 @@ func test_a_map_offering_many_towers_wraps_without_clipping() -> void:
 func _assert_card_parts_do_not_overlap(card: Button, level: LevelData, towers: Array[TowerData]) -> void:
 	var elements: Array[Control] = []
 	for child: Node in card.get_children():
-		if child is Control and (child as Control).visible:
+		if child is Control and (child as Control).visible and child.name not in ["ThemeBackdrop", "ThemeScrim"]:
 			elements.append(child as Control)
 		var rect: Rect2 = (child as Control).get_global_rect() if child is Control else Rect2()
 		if child is Control and (child as Control).visible:
