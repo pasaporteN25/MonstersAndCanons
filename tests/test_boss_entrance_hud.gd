@@ -95,9 +95,10 @@ func test_the_burst_uses_the_approved_art_tinted_over_an_untinted_crack() -> voi
 	var flash: Sprite2D = burst.get_child(1) as Sprite2D
 	assert_eq(crack.texture.get_size(), Vector2(192, 96))
 	assert_eq(crack.modulate.r, 1.0, "la grieta no se tiñe")
-	assert_eq(flash.texture.get_size(), Vector2(1024, 512))
+	assert_eq(flash.texture.get_size(), Vector2(512, 256))
+	assert_eq(flash.texture.get_size() * flash.scale / Vector2(4, 2), Vector2(256, 256), "conserva el tamaño visual original")
 	assert_eq(flash.modulate, _boss().color, "el destello se tiñe con el color del jefe")
-	assert_eq(flash.offset, -Vector2(128, 176), "el punto de los pies queda en el origen del nodo")
+	assert_eq(flash.offset * flash.scale, -Vector2(128, 176), "el punto de los pies queda en el origen del nodo")
 	assert_false(burst.is_processing(), "sin _process")
 
 

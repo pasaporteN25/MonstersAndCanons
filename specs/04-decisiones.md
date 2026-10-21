@@ -1376,3 +1376,11 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
   - **Efecto distinto por familia de torre:** sigue siendo P-65-6; se aprobó el efecto único teñido.
   - **Hornear el carmesí del Jefe en el destello:** rompería la generalización a otros jefes (RF-601).
 - **Qué cambia:** `01-spec.md` (M71, RF-625 a RF-629), `02-plan-tecnico.md`, `03-tareas.md` (T410 a T415; cierra T362, T364, T367 y T369), `scenes/effects/upgrade_effect.gd`, `scenes/effects/boss_entrance_burst.gd`, `scenes/ui/boss_entrance_card.gd`, `assets/sprites/effects/`, `CHANGELOG.md`, `CONTENIDO.md`, `README.md`, `ONBOARDING.md`.
+
+## D-176 · Importar los tres atlas de M71 a media resolución y compensar su escala
+- **Fecha:** 2026-10-20 · **Estado:** aprobada para optimización y medición (T414) · **Decidió:** Lucas (autorizó reducir atlas para RF-629) / Codex (importación y compensación).
+- **Qué:** `process/size_limit` de 384 en los atlas de mejora y 512 en el destello. Los originales aprobados no se editan. Se mantiene el tamaño visual con escala 2 y el punto de pies con el offset reducido a la mitad antes de escalar.
+- **Por qué:** reduce de 1.114.112 a 278.528 texels entre los tres atlas (75 %), sin eliminar poses ni cambiar tiempos. La reducción de memoria es concreta; la mejora de tiempo por cuadro debe medirse y no se presupone.
+- **Alternativas descartadas:** regenerar el arte aprobado; quitar cuadros; cambiar las reglas o la cola del cartel y de «Nuevo enemigo» para favorecer el banco.
+- **Medición:** una partida, 200 enemigos, 60 torres realmente construidas, semilla fija, pares con/sin efecto, preferencias y guardados aislados. Jefe conocido solo en memoria en ambos lados para evitar que la tarjeta «Nuevo enemigo» y su cola sesguen la comparación. Promedio de seis segundos y ventana activa simétrica. Los números antiguos con dos partidas o 8–9 torres no son comparables.
+- **Límites:** no se certifica aspecto en celular real ni se atribuye toda variación de proceso a la textura; se registra cualquier incumplimiento RF-629 y la base por debajo de 60 FPS.

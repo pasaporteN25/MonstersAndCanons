@@ -435,10 +435,11 @@ func test_the_effect_shows_the_approved_atlas_frame_by_progress() -> void:
 	var refuerzo := UpgradeEffect.new().setup(Color(1.0, 0.7, 0.2), 51.2, 0.5, false)
 	add_child_autofree(refuerzo)
 	var sprite: Sprite2D = refuerzo.get_child(0) as Sprite2D
-	assert_eq(sprite.texture.get_size(), Vector2(768, 384), "atlas de 4 × 2 cuadros de 192")
+	assert_eq(sprite.texture.get_size(), Vector2(384, 192), "atlas importado de 4 × 2 cuadros de 96")
 	assert_eq(sprite.hframes * sprite.vframes, 8)
+	assert_eq(sprite.texture.get_size() * sprite.scale / Vector2(4, 2), Vector2(192, 192), "el cuadro conserva su tamaño visual")
 	assert_eq(sprite.modulate, Color(1.0, 0.7, 0.2), "se tiñe con el color de la torre")
-	assert_eq(sprite.scale, Vector2.ONE, "1:1 en una torre de 1 × 1")
+	assert_eq(sprite.scale, Vector2(2, 2), "compensa el atlas importado al 50 %")
 	var expected: Dictionary = {0.0: 0, 0.13: 1, 0.5: 4, 0.99: 7, 1.0: 7}
 	for progress: float in expected:
 		refuerzo.progress = progress
@@ -451,7 +452,7 @@ func test_mastery_uses_its_own_atlas_and_the_footprint_scales_it() -> void:
 	var sprite: Sprite2D = maestria.get_child(0) as Sprite2D
 	assert_ne(sprite.texture, UpgradeEffect.ATLAS_REFUERZO)
 	assert_eq(sprite.texture, UpgradeEffect.ATLAS_MAESTRIA)
-	assert_eq(sprite.scale, Vector2(2, 2), "el Mortero (2 × 2) lo agranda")
+	assert_eq(sprite.scale, Vector2(4, 4), "el Mortero (2 × 2) conserva el doble de tamaño visual")
 
 
 func test_the_layer_passes_the_footprint_and_the_option_off_creates_nothing() -> void:

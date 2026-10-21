@@ -1,7 +1,8 @@
 # El destello de la entrada de un jefe (M66, RF-597, RF-626, D-138, D-165): el atlas aprobado en T367 (aro, luz que
 # sube, polvo y esquirlas, 8 cuadros de 256 × 256 px) teñido con el color del enemigo, sobre la grieta del suelo
 # (192 × 96, sin teñir) que se apaga en los mismos 0,7 s. El origen del nodo es el punto de los pies del jefe: la
-# entrada del camino. No hace nada más (RF-598).
+# entrada del camino. El atlas se importa al 50 % con escala y pies compensados (RF-643).
+# No hace nada más (RF-598).
 #
 # Sin `_process`: un `Tween` mueve `progress` y se congela con la pausa y acompaña la velocidad, como el resto
 # de los efectos del mundo.
@@ -55,7 +56,8 @@ func _ready() -> void:
 	_burst.hframes = COLUMNS
 	_burst.vframes = ROWS
 	_burst.centered = false
-	_burst.offset = -FEET
+	_burst.offset = -FEET / 2.0  # coordenadas del cuadro importado a media resolución
+	_burst.scale = Vector2.ONE * 2.0  # RF-643: conserva el tamaño visual y los pies
 	_burst.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	_burst.modulate = _color
 	add_child(_burst)

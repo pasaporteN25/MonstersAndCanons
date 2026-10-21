@@ -1,6 +1,7 @@
 # Efecto de mejora de una torre (M65, RF-590, RF-625, D-135, D-165): el atlas aprobado en T362 sobre el mecanismo.
 # Nivel 2 «refuerzo» (0,5 s) y nivel 3 «maestría» (0,7 s, más grande y lleno): 8 cuadros de 192 × 192 px, centro en
-# (96, 96), claros y neutros; el juego los tiñe con el color de la torre (`modulate`, mezcla normal).
+# (96, 96), claros y neutros; se importan al 50 % con escala compensada (RF-643).
+# El juego los tiñe con el color de la torre (`modulate`, mezcla normal).
 # Es solo visual: no toca la torre y se borra solo. Sin `_process`: un Tween mueve `progress` y el cuadro sale de él.
 class_name UpgradeEffect
 extends Node2D
@@ -64,7 +65,7 @@ func _ready() -> void:
 	_sprite.hframes = COLUMNS
 	_sprite.vframes = ROWS
 	_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR  # sin mipmaps (RF-628)
-	_sprite.scale = Vector2.ONE * _art_scale
+	_sprite.scale = Vector2.ONE * _art_scale * 2.0  # RF-643: compensa la importación al 50 %
 	_sprite.modulate = _color
 	add_child(_sprite)
 	_show_frame()
