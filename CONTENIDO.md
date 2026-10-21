@@ -491,7 +491,7 @@ Campaña ampliada con level_08 (Bastión) y level_09 (Taller asediado). JSON en 
 
 ### M58 · Interfaz para el celular (spec escrita; todavía no está en el juego)
 
-El modo celular (RF-502 a RF-515, D-097) **no agrega enemigos, torres ni niveles**, pero tiene **un archivo de números** que se podrá ajustar sin programar cuando lo haga T271: **`data/ui/mobile_ui.json`** (todavía no existe). Ahí van el alto de los botones de la barra (56 px), el de la barra de arriba (64 px), el tamaño mínimo de los botones flotantes (82 px o 7,6 mm), la franja de borde (56 px), cuánto debe moverse un dedo para dejar de ser un toque (2 mm), los segundos de «Vender» armado (3 s), la espera mínima entre los dos toques de «Vender» (0,4 s), el bloqueo de «Mejorar» (0,35 s), la opacidad con fantasma (45 %) y la casilla máxima del zoom (96 px). **Los valores son los de la spec, a medir en un celular real**; un archivo dañado usa los valores por omisión.
+El modo celular (RF-502 a RF-515, D-097) **no agrega enemigos, torres ni niveles**, pero tiene **un archivo de números** que se podrá ajustar sin programar cuando lo haga T271: **`data/ui/mobile_ui.json`** (todavía no existe). Ahí van el alto de los botones de la barra (56 px), el de la barra de arriba (64 px), el tamaño mínimo de los botones flotantes (82 px o 7,6 mm), cuánto debe moverse un dedo para dejar de ser un toque (2 mm), los segundos de «Vender» armado (3 s), la espera mínima entre los dos toques de «Vender» (0,4 s), el bloqueo de «Mejorar» (0,35 s), la opacidad con fantasma (45 %) y la casilla máxima del zoom (96 px). **Los valores son los de la spec, a medir en un celular real**; un archivo dañado usa los valores por omisión.
 
 - **Lo que cada jugador elige** no es contenido: se guarda en su `save.json`. La opción **«Interfaz»** (Automática / Celular / PC) está en `settings` como `ui_mode`, y la **posición de los botones flotantes** en la clave nueva `ui_prefs` (`cart_side`, `cart_y`, `exit_side`, `exit_y`). Sin ellas el juego usa los valores por omisión.
 - **Las tarjetas de nivel con Insignias** (RF-514) muestran **las torres que ya ofrece cada nivel**: no hay nada para agregar a mano.
@@ -575,12 +575,13 @@ Lo que aparece al mejorar una torre se retoca con un archivo, sin programar. **N
 
 - **Solo se muestra lo que cambió** entre niveles (con tolerancia de 0,005). El costo, las texturas, `bonus_vs_*` y `chain_range_tiles` no están en la tabla: si algún día cambian y querés mostrarlos, sumá una línea.
 - **Si agregás un campo nuevo** a `TowerLevelData` que cambia entre niveles, sumalo a la tabla: un test (`test_upgrade_deltas.gd`) avisa si falta.
+- **La misma tabla arma el «antes → después»** (M68, RF-616 a RF-618): el panel de la torre en la PC («Al nivel 2: daño 5 → 8») y la barra de abajo del celular («Al mejorar: …») muestran las estadísticas de esta tabla, en este orden y con este tope (`max_estadisticas` en la PC; `max_por_renglon` en el celular). No hay un archivo aparte.
 - **Revisalo** con `godot --headless --path . -s tools/check_mejoras.gd`. Con un error, el juego usa el valor por omisión de ese campo y sigue andando.
 - **Se apaga** en Opciones → «Animaciones de mejora».
 
 ### T242 · La intro (`data/intro/intro.json`)
 
-La intro se arma con un archivo, sin programar: `{"version": 1, "fundido_s": 0.6, "laminas": [{"imagen": "res://assets/intro/01_la_nave.png", "texto": "Línea 1\nLínea 2", "segundos": 7}, …]}`.
+Las láminas son archivos **`.webp`** (sin pérdida, 1920 × 1080) en `assets/intro/`; Godot los comprime a calidad 0,90 al importar (D-150). La intro se arma con un archivo, sin programar: `{"version": 1, "fundido_s": 0.6, "laminas": [{"imagen": "res://assets/intro/01_la_nave.webp", "texto": "Línea 1\nLínea 2", "segundos": 7}, …]}`.
 
 | Clave | Qué es | Límite |
 |---|---|---|

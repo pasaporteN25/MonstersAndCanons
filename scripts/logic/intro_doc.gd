@@ -16,7 +16,7 @@ const _MODE_TEXT: int = 1
 const _MODE_NOTES: int = 2
 
 
-## El título de una lámina para orientarse: «res://assets/intro/01_la_nave.png» → «La nave».
+## El título de una lámina para orientarse: «res://assets/intro/01_la_nave.webp» → «La nave».
 ## Solo se muestra en el documento; no se guarda en ningún dato.
 static func title_of(image: String) -> String:
 	var name: String = image.get_file().get_basename()

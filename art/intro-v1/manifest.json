@@ -7,7 +7,7 @@
     "y_start": 842,
     "y_end": 1080
   },
-  "total_bytes": 24354763,
+  "total_bytes": 18246458,
   "images": [
     {
       "id": "01",
@@ -17,11 +17,11 @@
         1672,
         941
       ],
-      "file": "assets/intro/01_la_nave.png",
+      "file": "assets/intro/01_la_nave.webp",
       "width": 1920,
       "height": 1080,
-      "bytes": 2771004,
-      "sha256": "17e7e5c597406a303c36490b0c08448aa1a79d47401bb3f1e063f9a320f5d8ad"
+      "bytes": 2122030,
+      "sha256": "60dac6328a3693fb659081a5e236d4ccd531b1e6da13874741a3d74e9e57f89f"
     },
     {
       "id": "02",
@@ -31,11 +31,11 @@
         1672,
         941
       ],
-      "file": "assets/intro/02_la_bodega.png",
+      "file": "assets/intro/02_la_bodega.webp",
       "width": 1920,
       "height": 1080,
-      "bytes": 3701846,
-      "sha256": "68ace2238cd98e8bb0db693e0644c0f3f255e58dfe95b1056520b307bed664fe"
+      "bytes": 2753344,
+      "sha256": "575ee8a50c1e0b99be3479cfd77e0c87759a976d69c199c090aa1df48464ad2f"
     },
     {
       "id": "03",
@@ -45,11 +45,11 @@
         1672,
         941
       ],
-      "file": "assets/intro/03_los_turnos.png",
+      "file": "assets/intro/03_los_turnos.webp",
       "width": 1920,
       "height": 1080,
-      "bytes": 3513701,
-      "sha256": "2d033983201f8fbb91a80059460513b8a64c5b21e830bf827f76b8d6d71bc962"
+      "bytes": 2634736,
+      "sha256": "b63fe72546b4afcece25f07f2a215c9ef7fceecb185966e57d479fddf31a4ac1"
     },
     {
       "id": "04",
@@ -59,11 +59,11 @@
         1672,
         941
       ],
-      "file": "assets/intro/04_la_ventana.png",
+      "file": "assets/intro/04_la_ventana.webp",
       "width": 1920,
       "height": 1080,
-      "bytes": 3422857,
-      "sha256": "b9d6b8d5ad6bd132b024a445ba04fe52f3476503ed6ae09f172d4d0cae03053a"
+      "bytes": 2555838,
+      "sha256": "7b2e17fc0a81b6075fe9bd00922b2bb707280ce5acf1254770098f02ec9a50f9"
     },
     {
       "id": "05",
@@ -73,11 +73,11 @@
         1672,
         941
       ],
-      "file": "assets/intro/05_el_descenso.png",
+      "file": "assets/intro/05_el_descenso.webp",
       "width": 1920,
       "height": 1080,
-      "bytes": 3279054,
-      "sha256": "b0cab39c4b10257dc99e3b4bacf663356d213c5ec9cf502af924fdd1c80d3671"
+      "bytes": 2446404,
+      "sha256": "d03278b40d852b84fa2f30acf38869c3fa552c40054cea09e7a1f110d604608e"
     },
     {
       "id": "06",
@@ -87,11 +87,11 @@
         1672,
         941
       ],
-      "file": "assets/intro/06_los_motores_apagados.png",
+      "file": "assets/intro/06_los_motores_apagados.webp",
       "width": 1920,
       "height": 1080,
-      "bytes": 3715778,
-      "sha256": "a2016ec2c7b018766839d4eb81963375cbf0a30063426dd024e19735eb184f8b"
+      "bytes": 2832810,
+      "sha256": "c82f50f83586a0f7eb0218e00a08adec04a318133da3f6b3140ba7dc4fadda07"
     },
     {
       "id": "07",
@@ -101,11 +101,11 @@
         1672,
         941
       ],
-      "file": "assets/intro/07_el_oasis.png",
+      "file": "assets/intro/07_el_oasis.webp",
       "width": 1920,
       "height": 1080,
-      "bytes": 3950523,
-      "sha256": "f6b9b764dfe04665f1df7fe0def0d39840e3d11da29b896ae86e52e5d36175e2"
+      "bytes": 2901296,
+      "sha256": "7f9c7976a9bd2ad1092e8cd233de5fad08be2035581538676885a219f043d567"
     }
   ]
 }

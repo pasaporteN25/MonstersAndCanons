@@ -2167,6 +2167,12 @@ Spec: RF-540 a RF-545. Decisiones: D-110 a D-113. Plan: «M60 / T300». Rama `fe
 
 ## M63 — El tutorial del nivel 1 *(pedido por Lucas, 2026-10-19; D-125 a D-128)*
 
+- [x] **T390 · `[mobile]` · Las láminas de la intro pasan a WebP (calidad 0,90).**
+  **Refs:** RF-560, D-150, D-120. **Depende de:** T320, T321.
+  **Hecho cuando:** las siete láminas son `.webp` con el mismo nombre base y `intro.json`, `intro-editable.md`, tests y herramientas apuntan a ellas; los `.webp.import` usan `compress/mode=1` y `lossy_quality=0.9` sin mipmaps; los PNG de `assets/intro/` están borrados y los de `art/intro-v1/sources/` intactos; el peso importado está medido antes y después; `check_intro_pack` e `intro_doc` (ida y vuelta) sin cambios de texto; capturas de las láminas 1, 4 y 7 a 1280 × 720 sin diferencias visibles; suite completa sin `SCRIPT ERROR` ni `Parse Error`.
+
+  **Resultado (2026-10-20):** **17,88 MiB → 4,00 MiB** de `.ctex` (18.744.578 B → 4.190.444 B, −78 %). El archivo del repo es WebP **sin pérdida** (píxeles idénticos al PNG normalizado) y la pérdida la pone Godot una sola vez al importar (q0,90): un WebP con pérdida en el repo habría dado doble pérdida (PSNR 37,1 dB en vez de 38,5 dB; ver D-150). Un WebP con `mode=0` no ahorraba (16,01 MiB). `check_intro_pack`: 0 fallas; `intro_doc export` + `import`: solo cambian las 14 líneas de imagen (`.png` → `.webp`), ningún texto. Capturas de las láminas 1, 4 y 7 a 1280 × 720: sin diferencias visibles. Se actualizaron `art/intro-v1/pack.py` (escribe WebP sin pérdida), `peso.py` (mide los `.webp`) y `manifest.json`. **No se hizo:** no se generó APK ni exe, así que el peso es el de los `.ctex`, no el del paquete; no se probó en el Android de Lucas. `tools/make_intro_placeholders.py` sigue escribiendo PNG provisorios (no se usa; no correrlo).
+
 - [x] **T330 · `[mobile+x86]` · El tutorial del nivel 1: datos, lógica y guardado.**
   **Refs:** RF-570, RF-571, RF-575, RF-578, D-127, D-128, P2, P10. **Depende de:** T292 (rama `feature/t290-arreglos-mobile`).
   **Hecho cuando:** `data/tutorial/tutorial.json` existe con los pasos de PC y de celular marcados como borrador; `TutorialData` lo valida con errores en castellano que nombran el paso (límites de texto, pasos obligatorios, orden, pasos de otro modo, repetidos) y un test revisa cada error y el archivo oficial; `TutorialFlow` decide cuándo sale solo y recorre los pasos (`next`, `notify`, `skip`, `skip_satisfied`, `rewind_to`); el guardado suma `tutorial_done` (aditivo, `SAVE_VERSION` igual) y la opción `tutorial_enabled`, y un guardado viejo con el nivel 1 ganado no lo ve; `tools/check_tutorial.gd` lo revisa por consola.
@@ -2284,6 +2290,45 @@ Spec: RF-540 a RF-545. Decisiones: D-110 a D-113. Plan: «M60 / T300». Rama `fe
 - [ ] **T375 · `[mobile]` · Integrar el arte aprobado, medir y dejar lista la salida de la 1.0.0.**
   **Refs:** RF-604, RF-608, RF-609. **Depende de:** T372 (OK de Lucas), T373 y T374.
   **Hecho cuando:** el arte aprobado reemplaza al provisional sin cambiar el comportamiento, importado sin mipmaps y con su peso anotado (APK); capturas en modo celular con la entrada de la 1.0.0 completa; `CHANGELOG.md`, `README.md` y `ONBOARDING.md` actualizados; **lista de salida escrita en el Resultado** (no ejecutada): subir `config/version` a `1.0.0`, `file_version` y `product_version` de Windows, `version/code` de Android, pasar `borrador` a `false`, correr `check_novedades.gd`, exportar. Límite a dejar escrito: no se probó en un celular real.
+
+## M68 · Pausa que bloquea el carrito, «Ver todo» con tecla propia y «Mejorar» con antes → después
+
+Spec: RF-610 a RF-619. Decisiones: D-160 a D-164. Plan: «M68 / T400 a T405». Rama `feature/m68-pausa-vertodo-mejorar`. T406 a T409 quedan reservadas.
+
+- [x] **T400 · `[x86]` · Spec, decisiones, plan y tareas de M68.**
+  **Refs:** RF-610 a RF-619, D-160 a D-164. **Hecho cuando:** los cuatro documentos dicen lo mismo y nombran lo que no se incluye.
+  **Resultado (2026-10-20):** hecho. Spec M68, cinco decisiones, plan y tareas. Se escribió **con las respuestas de Lucas del 2026-10-20** (`~/.agents/decisiones-2026-10-20.md`); no se pidió un OK aparte a la spec porque Lucas ya había decidido cada punto. Lo que **interpreté**: «combinación de teclas» como **una tecla elegible** (sin modificadores, D-161), la V por omisión, y que la demolición también se apague en pausa (D-160). Si Lucas quería otra cosa, cambia la spec antes que el código.
+
+- [x] **T401 · `[mobile]` · El carrito y la demolición se apagan en pausa.**
+  **Refs:** RF-610, RF-611, D-160. **Depende de:** T400.
+  **Hecho cuando:** en el celular, pausar cierra el catálogo, apaga el carrito y la demolición, la barra dice «En pausa…», nada se construye ni se cobra, y al seguir todo vuelve; test.
+  **Resultado (2026-10-20):** hecho. `MobileHud.set_paused` + conexión en `Game`. `tests/test_pause_lock.gd` (7 casos: catálogo abierto, carrito, seguir, botón y menú de pausa, demolición con toque soltado, fantasma y cobro, PC sin cambios). **No se probó en un celular real.**
+
+- [x] **T402 · `[x86]` · «Ver todo» en PC: botón también con otro zoom y tecla configurable.**
+  **Refs:** RF-612 a RF-615, D-161, D-162. **Depende de:** T400.
+  **Hecho cuando:** la acción `view_all` (V) vuelve al encuadre, también en pausa y no con un menú abierto; Opciones cambia la tecla, rechaza las ocupadas y restaura; se guarda en `ui_prefs` sin cambiar `SAVE_VERSION`; un guardado viejo carga; tests.
+  **Resultado (2026-10-20):** hecho. `ViewAllBinding`, `UiPrefs.view_all_key`, fila en Opciones, tecla en `Game`, botón de la PC con otro zoom. `tests/test_view_all_binding.gd` (14) y 3 casos nuevos en `tests/test_view_all_displaced.gd` (el de la rueda en PC se cambió: ahora el botón sí aparece). **Qué no:** no se probó con un teclado físico distinto del de desarrollo, con distribuciones no QWERTY, ni la captura de una tecla con el foco en otro control de Opciones (se prueba llamando a `_input` y a `set_view_all_key`).
+
+- [x] **T403 · `[x86]` · Lógica del antes → después en `UpgradeDeltas`.**
+  **Refs:** RF-616, RF-618, D-163. **Depende de:** T400.
+  **Hecho cuando:** `before_after`/`preview` devuelven las mismas estadísticas que `compute` con antes y después; vacío en el último nivel; tests con los `.tres` reales.
+  **Resultado (2026-10-20):** hecho, en `tests/test_upgrade_preview.gd` (los casos de lógica incluyen que **cada torre de `data/towers/` muestra al menos un cambio por mejora**).
+
+- [x] **T404 · `[mobile+x86]` · Mostrar el antes → después en el panel de la PC y en la barra del celular.**
+  **Refs:** RF-616, RF-617, D-163. **Depende de:** T403.
+  **Hecho cuando:** la PC muestra «Al nivel N:» con las estadísticas encima de «Mejorar», el celular un renglón «Al mejorar: …», y ninguno en el nivel máximo; tests.
+  **Resultado (2026-10-20):** hecho (`TowerPanel`, `MobileHud`). Probado con escenas reales (construir, mejorar hasta el máximo). **No se miró en una captura**: el alto del panel de la PC y que el tercer renglón entre en la barra de 96 px del celular (3 renglones de 16 px) están razonados, no medidos con ventana.
+
+- [x] **T405 · `[x86]` · Documentos: franja de 56 px, README 9→11 torres, §13, T289 §7, CHANGELOG, CONTENIDO y ONBOARDING.**
+  **Refs:** RF-619, D-164. **Depende de:** T400.
+  **Hecho cuando:** ningún documento dice que hay una franja de 56 px reservada ni «9 torres» donde son 11 (en el estado actual del README), §13 anota B descartada y A en M70, T289 §7 tiene las respuestas de Lucas.
+  **Resultado (2026-10-20):** hecho. `franja_px` borrado del dato y de `MobileUiConfig`. Las menciones **históricas** (resultados de tareas viejas, el cuadro de M53 con «9 torres») se dejaron como estaban: cuentan lo que era cierto en su momento.
+
+- [x] **T406 · `[x86]` · Sincronizar el PR #21 con main y resolver el conflicto de CHANGELOG.**
+  **Refs:** M68, T390, T405. **Depende de:** T405.
+  **Hecho cuando:** la rama incorpora `origin/main`, conserva las novedades de M68 y de la intro WebP, pasa importación y suite completa sin `SCRIPT ERROR` ni `Parse Error`, y se publica sin mergear el PR.
+
+  **Resultado (2026-10-20):** rama sincronizada con `origin/main` (`52855f0`), conservando ambas entradas de CHANGELOG (M68 e intro WebP). Importación con código 0, sin `SCRIPT ERROR` ni `Parse Error`. La primera suite concurrente dio 2087/2088 con un fallo en `test_records` (archivo de prueba compartido); se repitió con `XDG_DATA_HOME` y `XDG_CONFIG_HOME` aislados: **150 scripts, 2088/2088 tests, 23.005 aserciones**, código 0, sin errores de script ni parseo. No se cambió código de juego ni se generaron exportaciones. No se probó en un celular real. Publicar esta resolución no mergea el PR: eso queda para Lucas.
 
 ## M71 · Integración del arte aprobado de M65 y M66 (RF-625 a RF-629, D-165)
 

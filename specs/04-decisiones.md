@@ -1024,7 +1024,7 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Alternativas descartadas:** una constante en GDScript o un archivo `data/version.json` (otro lugar más para editar; `project.godot` ya viaja en las exportaciones).
 - **Límite:** que Godot tome la versión del proyecto cuando `version/name` queda vacío sale de su documentación; **no se exportó** (no se generan ejecutables en esta tarea). Hay que mirar la versión del primer APK o `.exe` que se exporte.
 ## D-120 · Las láminas de la intro se importan sin pérdida y sin mipmaps; el WebP con pérdida queda como decisión de Lucas
-- **Fecha:** 2026-10-19 · **Estado:** la parte sin pérdida, aplicada (T320); la parte con pérdida, **pendiente de Lucas** · **Decidió:** Claude (lo que no cambia ningún píxel) / Lucas (cualquier pérdida de imagen)
+- **Fecha:** 2026-10-19 · **Estado:** la parte sin pérdida, aplicada (T320); la parte con pérdida, aplicada en D-150 (T390) · **Decidió:** Claude (lo que no cambia ningún píxel) / Lucas (cualquier pérdida de imagen)
 - **Qué:** `mipmaps/generate=false` en los siete `assets/intro/*.png.import` (sigue `compress/mode=0`, sin pérdida). Medido en `.ctex` reales: **24,46 MiB → 17,88 MiB (−27 %)**; píxeles idénticos al PNG. La medición completa y los recortes lado a lado están en `art/intro-v1/peso/comparison.html` (los reproduce `art/intro-v1/peso.py`).
 - **Por qué:** el hallazgo de T289 (H-22) fue que las imágenes de 1920 × 1080 pesan ~28 MB en la APK, con mipmaps (+33 %) y sin pérdida. **Recodificar los PNG no baja nada** (Godot guarda el recurso en WebP sin pérdida a partir de los píxeles, no del PNG) y `etc2_astc=true` no interviene porque el modo 0 no usa compresión de VRAM, así que tampoco infla. Quitar los mipmaps es lo único que reduce el peso sin cambiar un píxel.
 - **Con pérdida (no aplicado, mediciones de las 7 láminas):**
@@ -1120,6 +1120,29 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
   - **Que el JSON defina el evento de cada paso:** ver arriba.
 - **Qué cambia:** `01-spec.md` (RF-571 y RF-578), `CONTENIDO.md` (cómo retocar el tutorial), `data/tutorial/tutorial.json`, `scripts/logic/tutorial_data.gd`, `tools/check_tutorial.gd`.
 
+## D-150 · Las láminas de la intro pasan a WebP: archivo sin pérdida en `assets/intro/` y calidad 0,90 al importar (≈4,0 MiB en vez de 17,88)
+- **Fecha:** 2026-10-20 · **Estado:** aplicada (T390) · **Decidió:** Lucas (vio `art/intro-v1/peso/comparison.html` y aprobó la calidad 0,90). Cierra la parte pendiente de D-120 (la «D-124 reservada» se usó como D-150).
+- **Qué:** las siete láminas son ahora `assets/intro/NN_nombre.webp` (mismo nombre base, 1920 × 1080). El archivo del repo es WebP **sin pérdida** (mismos píxeles que el PNG normalizado de antes, diferencia máxima 0) y cada `.webp.import` lleva `compress/mode=1` (con pérdida), `compress/lossy_quality=0.9` y `mipmaps/generate=false`. Los PNG originales siguen intactos en `art/intro-v1/sources/` y los de `assets/intro/` se borraron.
+- **Por qué:** el recurso importado (lo que entra al .pck y a la APK) pasa de **17,88 MiB a 4,00 MiB (−78 %)**, que era el peso que dolía en el celular (H-22, T289). La pérdida es la ya medida y aprobada en D-120: PSNR medio 38,5 dB.
+- **Mediciones (7 láminas, `.ctex` en `.godot/imported/`):**
+
+| Variante | Recurso importado | Nota |
+|---|---:|---|
+| PNG, sin pérdida, sin mipmaps (T320, antes) | 17,88 MiB | píxeles idénticos |
+| WebP en archivo + import sin pérdida (`mode=0`) | 16,01 MiB | no ahorra: Godot reguarda los píxeles |
+| **WebP sin pérdida en archivo + import `mode=1` q0,90 (aplicada)** | **4,00 MiB** (4.190.444 B) | PSNR 38,5 dB, igual que lo aprobado |
+| WebP con pérdida q90 en archivo + import `mode=1` q0,90 | 3,59 MiB | **descartada**: pierde dos veces (PSNR 37,1 dB, peor lámina 35,2 dB) |
+| WebP con pérdida q90 en archivo + import `mode=1` q0,95 | 4,48 MiB | descartada: más pesada y también con doble pérdida |
+
+  Por lámina (`.ctex`, B): 01 500.328; 02 937.300; 03 854.478; 04 794.078; 05 805.316; 06 933.446; 07 1.008.122. No se infla en Android: `compress/mode=1` guarda WebP dentro del `.ctex` (no es compresión de VRAM, no interviene `etc2_astc`). La APK real **no se generó** ni se midió (no se pidió); el número es el del `.ctex`.
+- **Por qué el archivo es sin pérdida:** si el WebP del repo ya tuviera pérdida, Godot lo comprimiría otra vez al importar (doble pérdida, tabla de arriba). Con el archivo sin pérdida, lo que se ve es la compresión única que Lucas aprobó. El archivo pesa 2,1 a 2,9 MB (menos que el PNG, 2,8 a 4,0 MB) pero no entra al ejecutable.
+- **Alternativas descartadas:**
+  - **Calidad 0,95** (5,56 MiB, 40,2 dB): más fiel pero ~1,5 MiB más; Lucas eligió 0,90.
+  - **Calidad 0,85** (3,04 MiB, 36,9 dB): ahorra ~1 MiB más, pero suaviza más el trazo fino.
+  - **Sin cambio** (17,88 MiB): el peso en el celular era el problema.
+  - **WebP con pérdida en el repo + import sin pérdida:** 16,01 MiB, no ahorra nada.
+- **Mirado a ojo:** capturas de `IntroScreen` a 1280 × 720 de las láminas 1, 4 y 7: sin diferencias visibles ni bandas.
+- **Qué cambia:** `assets/intro/*.webp(.import)`, `data/intro/intro.json`, `specs/intro/intro-editable.md`, `art/intro-v1/{pack.py,peso.py,manifest.json}`, tests de la intro, `01-spec.md` (RF-560), `02-plan-tecnico.md`, `03-tareas.md` (T390), `CONTENIDO.md`, `README.md`, `ONBOARDING.md`, `CHANGELOG.md`.
 ## D-130 · Un servicio único de cambio de escena (`SceneTransition`) con un núcleo sin dependencias y una capa fina en `GameFlow`
 - **Fecha:** 2026-10-19 · **Estado:** implementada en T340 · **Decidió:** Lucas (una pantalla de carga general y reutilizable) / Claude (el diseño)
 - **Qué:** una clase `SceneTransition` (`scripts/logic/scene_transition.gd`) que cambia de escena mostrando la capa de carga, y que **no nombra nada del juego** (ni autoloads, ni guardado, ni escenas, ni colores propios: todo se le pasa por propiedades). `GameFlow` la crea en `_ready`, le pone el tema de los menús, el mínimo y los colores, y manda **todos** sus cambios por `_change_scene`. Un test lee el archivo y falla si aparece un nombre del proyecto.
@@ -1361,6 +1384,72 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
   - **Bajar el costo de demoler solo en el 9 (opción A):** puede hacer falta si la medición muestra que alcanzar el Mortero cuesta demasiadas vidas; se decide con datos y con Lucas, no antes.
 - **Límites aceptados:** (1) 270 de oro de demoliciones más 300 del Mortero son 570 de oro en un mapa de 320 de arranque: **alcanzar** el Mortero no garantiza **poder permitírselo sin perder vidas**; se mide en T282 y lo juzga Lucas en T283. (2) La primera vez hay exactamente 3 recursos: quien pague un Francotirador con su segunda forma (120 + 1 recurso) ya no llega al Mortero en esa partida. (3) El panel dirá «Puede dar 1 recurso (100 %)», con la redacción de siempre. (4) Las vidas del bot no predicen las de una persona.
 - **Qué cambia:** `01-spec.md` (M61, RF-523 a RF-525; nota en RF-420), `02-plan-tecnico.md` (M61), `03-tareas.md` (T282 y T283 nuevas), `09-decisiones-pendientes-v1.md` (nota en Q-21), `CHANGELOG.md` y `CONTENIDO.md`. **No cambia ningún código, dato ni asset todavía:** eso es T282.
+
+## D-160 · Con la partida en pausa, el carrito y la demolición del celular se apagan; no se puede «planear» en pausa
+- **Fecha:** 2026-10-20 · **Estado:** implementada (T401) · **Decidió:** Lucas (respuesta a D10 del informe T289: «bloquear el carrito en pausa»; además quiere pensar para qué sirve la pausa, sin apuro) / Claude (que también se apague la demolición y cómo se avisa)
+- **Qué:** `MobileHud.set_paused(true)` cierra el catálogo, deja el carrito y el botón de demolición con el estilo de apagado y corta sus acciones (`_on_cart_pressed`, el toque soltado sobre la demolición y `open_catalog`); la línea de abajo dice «En pausa: seguí la partida para construir». `Game` lo conecta a `pause_changed`, así vale para el botón, el menú de pausa, el cartel de entrada y la pausa en segundo plano.
+- **Por qué:**
+  - **Es lo que Lucas decidió** y lo que RF-104 ya decía para la PC: en pausa no se construye. Antes, en el celular, el carrito dejaba **elegir** una torre y el fantasma, y el error aparecía recién al confirmar: una regla que falla tarde.
+  - **La demolición es otra forma de gastar oro:** dejarla viva en pausa sería la misma trampa por la otra puerta.
+  - **El aviso en la barra** evita que el jugador crea que el botón se rompió; es un texto, no un control nuevo.
+- **Alternativas descartadas:**
+  - **Dejar poner el fantasma en pausa y que la tilde diga «En pausa»** (la segunda opción de D10): es lo que T262 echaba de menos (planear con calma), pero cambia para qué sirve la pausa, y Lucas quiere pensarlo antes. Queda como idea futura.
+  - **Ocultar el carrito en pausa:** el botón desaparece y vuelve, y su lugar arrastrado cambia el diseño; apagado se entiende más rápido.
+  - **Pausar sin tocar la interfaz y dejar que `can_build` falle:** es lo que había.
+- **Límites aceptados:** probado con la escena y toques simulados, **no en un celular real**.
+- **Qué cambia:** `01-spec.md` (M68, RF-610 y RF-611), `02-plan-tecnico.md` (M68), `03-tareas.md` (T401), `CHANGELOG.md`
+
+## D-161 · «Ver todo» en PC: botón igual que en el celular y una tecla propia (acción de input `view_all`, la V)
+- **Fecha:** 2026-10-20 · **Estado:** implementada (T402) · **Decidió:** Lucas («botón y combinación de teclas, configurable, ambos») / Claude (la V por omisión, los choques y que valga en pausa)
+- **Qué:** el botón de la PC (RF-545) se ve con otro zoom **o** con el mapa corrido, como en el celular; la acción `view_all` (V) hace lo mismo y la tecla se cambia desde Opciones con un botón que espera la próxima tecla.
+- **Por qué:**
+  - **Ya había un botón, pero solo con el zoom mínimo y el mapa corrido.** Quien acerca con la rueda no tenía cómo volver salvo la rueda hacia atrás; ahora tiene botón y tecla.
+  - **Una acción de `InputMap` y no una tecla escrita en el código:** es lo que Godot ofrece para remapear y es como ya están `pause` y `upgrade`.
+  - **V por omisión:** libre (las teclas `1` a `0`, `Tab`, `Espacio`, `P`, `F`, `U`, `S`, `Esc` están usadas), mnemotécnica («Ver»).
+  - **Vale en pausa:** mover la cámara no cambia la partida, y en pausa es cuando uno mira el mapa con calma.
+  - **Se rechazan las teclas ocupadas** con un aviso, en vez de dejar dos acciones en la misma tecla.
+- **Alternativas descartadas:**
+  - **Combinaciones con modificadores (Ctrl+V…):** más difícil de capturar y de explicar; «combinación» se entendió como una tecla elegible. Si Lucas quiere modificadores, se agrega.
+  - **Un menú general de teclas:** mucho más grande que lo pedido (idea para el backlog).
+  - **Dejar el botón como estaba (solo zoom mínimo):** no resuelve el caso de la rueda.
+- **Límites aceptados:** solo se configura una tecla simple (sin modificadores) y una sola por acción; no se probó con teclados que no sean QWERTY (se guarda el código físico, así la V es la misma tecla física en cualquier distribución).
+- **Qué cambia:** `project.godot` (acción `view_all`), `01-spec.md` (M68, RF-612 a RF-614; nota en RF-545), `02-plan-tecnico.md`, `03-tareas.md` (T402), `CHANGELOG.md`, `ONBOARDING.md`
+
+## D-162 · La tecla de «Ver todo» se guarda en `ui_prefs` como un campo aditivo, sin tocar `SAVE_VERSION`
+- **Fecha:** 2026-10-20 · **Estado:** implementada (T402) · **Decidió:** Lucas (que sea configurable, sin romper guardados) / Claude (dónde y cómo)
+- **Qué:** `UiPrefs.view_all_key` (entero, el código físico), con la V por omisión; `to_dict` lo escribe y `read` lo valida (entero positivo que no sea `Esc` ni un modificador). Ausente = V sin aviso; inválido = V con `push_warning`. `SaveManager` aplica la tecla al cargar y al guardar las preferencias (`ViewAllBinding.apply`).
+- **Por qué:**
+  - **Aditivo, como `demolish_side` (RF-542), `intro_seen` y `news_version`:** `SAVE_VERSION` descarta los guardados de otra versión («se empieza de cero»); un campo más no rompe nada ni a los guardados viejos ni a una versión anterior del juego.
+  - **`ui_prefs` ya es el lugar de las preferencias de interfaz** (RF-508), con su lectura defensiva y sus tests.
+  - **Código físico y no la letra:** la misma tecla del teclado en cualquier distribución.
+- **Alternativas descartadas:**
+  - **Guardarla en `settings`:** `settings` trae sus valores por omisión en `DEFAULT_SETTINGS` y se valida por tipo; mezclaría una preferencia de interfaz con el volumen.
+  - **Un archivo aparte (`user://input.cfg`):** otro archivo que respaldar y que se desincroniza del guardado.
+  - **Subir `SAVE_VERSION`:** perdería el progreso de todos para guardar un entero.
+- **Qué cambia:** `01-spec.md` (RF-615), `02-plan-tecnico.md` (M68), `03-tareas.md` (T402), `tests/test_view_all_binding.gd`
+
+## D-163 · «Mejorar» muestra el antes → después con `UpgradeDeltas` y `data/ui/mejoras.json` (opción C de T350)
+- **Fecha:** 2026-10-20 · **Estado:** implementada (T403, T404) · **Decidió:** Lucas (la opción C) / Claude (dónde se muestra y cuántas estadísticas)
+- **Qué:** `UpgradeDeltas.before_after` / `preview` devuelven, para las mismas estadísticas que `compute`, el valor antes y después (con la escala de la tabla) y el texto «daño 5 → 8». El panel de la PC lo muestra encima de «Mejorar»; el celular, como un renglón más de la barra de abajo.
+- **Por qué:**
+  - **Reusa lo que ya existe (P2, P10):** la tabla de estadísticas, su orden, la tolerancia y el tope ya los ajusta quien toca `mejoras.json`; mostrar la misma lista antes de pagar y después de mejorar evita que el jugador vea dos cosas distintas.
+  - **Decidir con información:** hoy el botón dice solo el costo; el jugador no sabe qué compra.
+  - **En el celular, un renglón de la barra y no dentro del botón:** el botón mide 196 × 84 px y ya tiene dos renglones; la barra tiene ancho de sobra.
+- **Alternativas descartadas:**
+  - **Poner el detalle en la ayuda (tooltip) del botón:** en el celular no hay pasar-el-mouse.
+  - **Mostrar todas las estadísticas, también las que no cambian:** ruido; se pierde lo que importa.
+  - **Un archivo de datos nuevo:** `mejoras.json` ya existe y es del mismo asunto.
+- **Límites aceptados:** el panel de la PC crece unas dos líneas; el texto del celular se mide a 1280 × 720 en un test de existencia, **no con una captura en un celular real**.
+- **Qué cambia:** `scripts/logic/upgrade_deltas.gd`, `scenes/ui/tower_panel.gd`, `scenes/game/mobile_hud.gd`, `01-spec.md` (RF-616 a RF-618), `tests/test_upgrade_preview.gd`
+
+## D-164 · La franja de borde de 56 px de RF-507 se saca de la spec; «te sobra oro» queda descartada y el consejo en la derrota pasa a M70
+- **Fecha:** 2026-10-20 · **Estado:** implementada (T405) · **Decidió:** Lucas (D4 del informe T289 y propuestas A y B de T350)
+- **Qué:** RF-507 ya no habla de la franja, y se borra el dato `franja_px` de `data/ui/mobile_ui.json` y de `MobileUiConfig`. La propuesta B («te sobra oro») queda descartada en §13. La A se reencuadra como «qué torre conviene para las oleadas» y se hace en M70. El `README.md` pasa de 9 a 11 torres.
+- **Por qué:**
+  - **La franja no se usaba en ningún lado** (T289, H-14 f): los botones se pegan al borde y quedan encima del mapa. Un dato que nadie lee confunde a quien edite el archivo.
+  - **B y A:** decisión de Lucas; no se vuelve a proponer B.
+- **Alternativas descartadas:** reservar de verdad la franja (achicar el mapa a los costados): Lucas prefirió sacarla.
+- **Qué cambia:** `01-spec.md` (RF-507, M60, §13), `02-plan-tecnico.md`, `CONTENIDO.md`, `README.md`, `specs/tareas/informes/T289-auditoria-mobile-implementado.md` (§7), `CHANGELOG.md`
 
 ## D-165 · El arte aprobado de M65 y M66 se integra como atlas en `Sprite2D` (un solo efecto teñido por `modulate`, mezcla normal), el marco del cartel como 9-slice sobre un fondo liso, y todo sigue apagándose con las opciones
 - **Fecha:** 2026-10-20 · **Estado:** programada (T411 a T415) · **Decidió:** Lucas (aprobó el estilo de las muestras de Codex) / Claude (cómo se conecta al código)

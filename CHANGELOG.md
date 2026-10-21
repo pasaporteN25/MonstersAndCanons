@@ -2,6 +2,18 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Pausa que bloquea el carrito, «Ver todo» con tecla y «Mejorar» con antes → después *(T401 a T404, 2026-10-20)*
+
+- **Celular: en pausa no se construye.** Con la partida en pausa (el botón, el menú de pausa, el cartel de entrada o la app en segundo plano) el **carrito** y el botón de **demolición** se ven apagados y no hacen nada; si el catálogo estaba abierto, se cierra. La barra de abajo dice «En pausa: seguí la partida para construir». Al seguir, todo vuelve. Mejorar y vender no cambian.
+- **PC: «Ver todo» con tecla.** Apretá **V** para volver a ver todo el mapa (también con la partida en pausa). El botón «Ver todo» ahora aparece también cuando acercaste con la rueda, no solo cuando corriste el mapa. Podés cambiar la tecla en **Opciones → «Tecla de «Ver todo»»** (tocás el botón y apretás la tecla que quieras; **Esc** cancela y **Restaurar** vuelve a la V). Si la tecla ya la usa otra cosa (las torres, la pausa, Tab, Espacio…), el juego avisa y no la cambia. Se guarda con tus preferencias; un guardado viejo sigue sirviendo.
+- **«Mejorar» te muestra qué comprás.** En la PC, el panel de la torre elegida dice, encima del botón, **«Al nivel 2: daño 5 → 8 · alcance 3 → 3,5»**; en el celular, la barra de abajo trae un renglón **«Al mejorar: …»**. En el nivel máximo no aparece. Son las mismas estadísticas que muestra la animación al mejorar.
+- **Documentos:** se sacó de la spec la franja de borde de 56 px de los botones flotantes (no se usaba) y el README cuenta **11 torres**.
+- **Qué no se probó:** nada de esto se miró en un celular real ni con un teclado distinto del de desarrollo.
+
+## La intro pesa mucho menos *(T390, 2026-10-20)*
+
+Las siete láminas de la intro se guardan ahora como WebP con una compresión leve (calidad 0,90): **ocupan unos 4 MiB en vez de casi 18** dentro del juego, y en pantalla se ven igual (no se notan diferencias a simple vista). El juego queda más liviano de instalar y de abrir en el celular.
+
 ## Pantalla de carga y toques bloqueados al cambiar de pantalla *(T340, 2026-10-19)*
 
 Al elegir un nivel, volver al menú, reintentar o pasar al siguiente nivel, el juego muestra ahora una **pantalla de carga** («Cargando…» con una barra que se mueve) y **no hace caso a nada** (toques, clics, teclas ni el botón «atrás») hasta que la pantalla nueva está lista. Antes, si tocabas de más mientras el nivel cargaba en el celular, se podía lanzar **otro nivel** (el que quedaba debajo del dedo en la selección). Ahora entra solo el que elegiste. La pantalla de carga se ve como mínimo 0,4 segundos, así que en equipos rápidos es un destello corto y no un parpadeo.

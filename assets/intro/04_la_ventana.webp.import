@@ -2,22 +2,22 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://do3x8bptj83at"
-path="res://.godot/imported/02_la_bodega.png-bc77a90994865f7c0ca681dcd1f1a81d.ctex"
+uid="uid://dgavfxlufnndw"
+path="res://.godot/imported/04_la_ventana.webp-7119f42f839828852168408f6a481d83.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/intro/02_la_bodega.png"
-dest_files=["res://.godot/imported/02_la_bodega.png-bc77a90994865f7c0ca681dcd1f1a81d.ctex"]
+source_file="res://assets/intro/04_la_ventana.webp"
+dest_files=["res://.godot/imported/04_la_ventana.webp-7119f42f839828852168408f6a481d83.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=1
 compress/high_quality=false
-compress/lossy_quality=0.7
+compress/lossy_quality=0.9
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
