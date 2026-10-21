@@ -147,6 +147,7 @@ func _ready() -> void:
 		mobile_hud.infrastructure_tool_chosen.connect(_on_mobile_infrastructure_tool_chosen)
 		mobile_hud.demolish_pressed.connect(_on_mobile_demolish_pressed)
 		mobile_hud.catalog_opened.connect(_on_mobile_catalog_opened)
+		pause_changed.connect(mobile_hud.set_paused)  # M68 (RF-610): el carrito se apaga en pausa
 		hud.tower_panel.hide()
 		mobile_hud.upgrade_pressed.connect(_on_mobile_upgrade_pressed)
 		mobile_hud.sell_pressed.connect(_on_mobile_sell_pressed)
@@ -571,6 +572,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		start_next_wave()
 	elif event.is_action_pressed("pause"):
 		toggle_pause()
+	elif event.is_action_pressed(ViewAllBinding.ACTION):
+		camera_controller.view_all()  # M68 (RF-613): también en pausa, la cámara no cambia la partida
+		get_viewport().set_input_as_handled()
 	elif event.is_action_pressed("toggle_speed"):
 		toggle_speed()
 

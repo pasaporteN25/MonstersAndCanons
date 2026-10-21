@@ -20,6 +20,9 @@ var _confirm_button: Button
 var _cancel_button: Button
 var _view_all_button: Button
 var _cart_button: Button
+## M68 (RF-610): la partida está en pausa (el carrito y la demolición no hacen nada).
+var _paused: bool = false
+var _upgrade_fx_config: UpgradeFxConfig
 var _exit_button: Button
 var _demolish_button: Button
 var _demolish_available: bool = false
@@ -171,9 +174,15 @@ func _build_status_bar() -> void:
 	_set_empty_status()
 
 
+## M68 (RF-610): con la partida en pausa no se construye; la línea de abajo lo dice.
+const UPGRADE_PREVIEW_PREFIX: String = "Al mejorar:"
+const EMPTY_TEXT: String = "Tocá el carrito para elegir una torre"
+const PAUSED_TEXT: String = "En pausa: seguí la partida para construir"
+
+
 func _set_empty_status() -> void:
 	_status_state = "empty"
-	_status_label.text = "Tocá el carrito para elegir una torre"
+	_status_label.text = PAUSED_TEXT if _paused else EMPTY_TEXT
 	_status_label.visible = true
 	_target_button.hide()
 	_upgrade_button.hide()
@@ -235,6 +244,9 @@ func show_selected_tower(tower: Tower, gold: int, sell_value: int, resource_valu
 	_status_label.text = "%s%s\n%s  %s  ·  Daño %d  ·  Cadencia %.2f  ·  Alcance %d" % [
 		tower.data.display_name, state_text, level_text, dots, stats.damage,
 		tower.effective_fire_rate(), stats.range_tiles]
+	var preview: String = _upgrade_preview_text(tower)
+	if preview != "":
+		_status_label.text += "\n" + preview
 	_status_label.visible = true
 	_target_button.show()
 	_bottom_cancel.show()
@@ -261,6 +273,18 @@ func show_selected_tower(tower: Tower, gold: int, sell_value: int, resource_valu
 	else:
 		_sell_button.tooltip_text = "Devuelve %d de oro" % sell_value
 	_refresh_sell_button(sell_value, resource_value)
+
+
+## M68 (RF-617): «Al mejorar: daño 5 → 8 · alcance 3 → 3,5». Los números salen de los dos niveles de la torre y la
+## tabla de `data/ui/mejoras.json` (la misma de las animaciones de mejora). Vacío en el nivel máximo.
+func _upgrade_preview_text(tower: Tower) -> String:
+	if _upgrade_fx_config == null:
+		_upgrade_fx_config = UpgradeFxConfig.load_from()
+	var changes: Array[Dictionary] = UpgradeDeltas.preview(tower.data.levels, tower.level_index, _upgrade_fx_config.stats,
+			int(_upgrade_fx_config.get_number("max_por_renglon")))
+	if changes.is_empty():
+		return ""
+	return "%s %s" % [UPGRADE_PREVIEW_PREFIX, UpgradeDeltas.SEPARATOR.join(UpgradeDeltas.rows(changes, changes.size()))]
 
 
 func begin_upgrade_lock(level_number: int) -> void:
@@ -664,6 +688,32 @@ func show_view_all(enabled: bool) -> void:
 		_view_all_button.visible = enabled
 
 
+## M68 (RF-610, RF-611, D-160): en pausa el carrito y el botón de demolición quedan apagados (se ven grises) y no
+## hacen nada; si el catálogo estaba abierto, se cierra. Al seguir, vuelven. Los botones se pueden seguir arrastrando.
+func set_paused(paused: bool) -> void:
+	if _paused == paused:
+		return
+	_paused = paused
+	if paused:
+		close_catalog()
+	for button: Button in [_cart_button, _demolish_button]:
+		if button != null:
+			button.disabled = paused
+	if _status_state == "empty":
+		_status_label.text = PAUSED_TEXT if paused else EMPTY_TEXT
+
+
+func is_paused() -> bool:
+	return _paused
+
+
+## Un toque en un botón apagado por la pausa explica por qué; si hay una torre elegida, la línea no se pisa.
+func _show_paused_hint() -> void:
+	if _status_state == "empty":
+		_status_label.text = PAUSED_TEXT
+		_status_label.visible = true
+
+
 func set_cart_active(active: bool) -> void:
 	if _cart_button != null:
 		_cart_button.self_modulate = Color("#ffe0a0") if active else Color.WHITE
@@ -749,6 +799,8 @@ func is_catalog_populated() -> bool:
 
 
 func open_catalog() -> void:
+	if _paused:
+		return  # M68 (RF-610): con la partida en pausa no se elige torre
 	clear_sell_arm()
 	_catalog_open = true
 	_catalog_scroll.scroll_vertical = 0  # RF-540: siempre abre en la primera fila
@@ -869,7 +921,10 @@ func _handle_drag_touch(index: int, pos: Vector2, pressed: bool) -> void:
 			if _drag_button == _cart_button:
 				_on_cart_pressed()
 			elif _drag_button == _demolish_button:
-				demolish_pressed.emit()
+				if _paused:
+					_show_paused_hint()
+				else:
+					demolish_pressed.emit()
 			else:
 				exit_pressed.emit()
 	_drag_button = null
@@ -1005,6 +1060,11 @@ func _update_floating_layout() -> void:
 
 
 func _on_cart_pressed() -> void:
+	if _paused:
+		if _catalog_open:
+			close_catalog()
+		_show_paused_hint()
+		return
 	if _catalog_open:
 		close_catalog()
 	else:
