@@ -2411,10 +2411,10 @@ El alcance de T425 a T432 es desktop. Mobile continúa por su propia experiencia
   Eliminar la descripción redundante, agrupar daño actual con el cambio de la mejora y expresar «Mejorar a nivel N». Cambiar el texto «Nivel N» por el indicador visual de tres colores que Lucas pidió. Refinar botones y probar transparencia. Resolver el solapamiento que dificulta seleccionar una torre bajo el panel, sin cambiar reglas de entrada, precios, venta ni mejoras.
   **Hecho cuando:** estados de 1→2, 2→3, máximo, sin oro, apoyo, aturdida/desgastada y torre grande se leen; la torre cubierta sigue pudiéndose seleccionar por la solución aprobada en T425; foco/teclado funciona; pruebas de integración, capturas y GUT completo. Solo desktop.
 
-- [ ] **T431 · `[x86]` · Diagnosticar y proponer mejora barata para la caminata izquierda (Codex, propuesta visual).**
+- [x] **T431 · `[x86]` · Diagnosticar y proponer mejora barata para la caminata izquierda (Codex + Claude Opus).**
   **Refs:** B-48, guía de arte y D-049. **Depende de:** inventario de personajes y sus atlas actuales.
-  Identificar poses que se sienten peor hacia la izquierda y comparar a tamaño real: animar orientación existente, crear vista lateral específica o conservar el comportamiento. Estimar horas/assets y costo de memoria/importación. No reflejar sprites a ciegas: verificar luz, silueta, anclaje y continuidad de pasos.
-  **Hecho cuando:** un informe muestra antes/después para los personajes concretos, opciones con costo y límites, y recomienda una opción. No se altera producción hasta el OK de Lucas.
+  **Hecho cuando:** informe con personajes concretos, comparaciones, opciones con costo y límites, y recomendación. No se altera producción hasta el OK de Lucas.
+  **Resultado (2026-10-21):** Opus revisó los 18 atlas: prioridad 1 para Cargador, Coloso, Tanque, Troll, Ladrón, Chamán y Sanador; Jefe y Guardián, prioridad 2. La diferencia percibida parece venir de varias poses izquierdas más frontales; no vio saltos claros de animación. Codex confirmó que son filas direccionales propias y que el espejo solo aplica a sprites sin atlas. Comparación de los 18 y costos/opciones: [`informe T431`](tareas/informes/T431-diagnostico-caminata-izquierda.md) y [`galería HTML`](../art/t431-diagnostico/comparison.html). Es revisión visual, no se abrió partida ni se midieron contornos; no se cambió arte. `git diff --check` pasó. Cualquier retoque queda detrás de la aprobación de Lucas.
 
 - [ ] **T432 · `[x86]` · Analizar variedad de torres y estrellas en niveles 1–4 (Claude).**
   **Refs:** B-49, RF-93, T266, feedback de Lucas del 2026-10-21. **Depende de:** resultados humanos adicionales si están disponibles; comenzar con datos existentes y dejar lo que falta claramente señalado.
