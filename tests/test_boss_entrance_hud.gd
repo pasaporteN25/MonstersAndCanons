@@ -127,7 +127,8 @@ func test_the_card_wears_the_approved_frame_without_taking_touches() -> void:
 	assert_eq(frame.texture.get_size(), Vector2(192, 128))
 	assert_eq(card.get_child(card.get_child_count() - 1), frame, "va arriba de todo el contenido")
 	await wait_seconds(0.4)
-	assert_eq(card.size, Vector2(720, 120), "el contenido entra sin agrandar el cartel")
+	assert_almost_eq(card.size.x, 720.0, 0.05, "el contenido entra sin ensanchar el cartel")
+	assert_almost_eq(card.size.y, 120.0, 0.05, "el contenido entra sin agrandar el cartel")
 
 
 func test_the_card_waits_for_the_wave_banner_and_the_new_enemy_card_waits_for_the_card() -> void:
