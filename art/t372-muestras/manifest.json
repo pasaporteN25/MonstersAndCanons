@@ -1,0 +1,190 @@
+{
+  "task": "T372",
+  "stage": "familia completa de ocho íconos; sin integración",
+  "source_commit": "ad45a5a",
+  "approved_baseline_sha256": {
+    "news_header_1_0.png": "e840cda891cfb54ec81d0d47954cc7f0ad8b946abff1c300e6a9fd61a9e53a61",
+    "news_header_plain.png": "c7dde9c174733a64b775920521ba3a79394ce932b570adef4dd14c4d5eb994ed",
+    "news_icon_map.png": "343b7760345f7cd3363485b6eca4811736fbf92dc78fb2acba9666398bda4b82",
+    "news_icon_tower.png": "33491b78b962ddae0fbe9cf01cda0ad36aab697a419ca0fbc1d9b716a65944be",
+    "sources/news_header_plain.svg": "99a772267f1ca29abeb59f07969a876abc930f49969d1b61d19ab1f7b21ad09e",
+    "sources/news_icon_map.svg": "aea34635ae0d4a4628b8a465c2270644180668220de76c1ec1746546a07d01df",
+    "sources/news_icon_tower.svg": "49179336e946200f7e9e1babb6a3650d62902024c67a32eaf21b66e78a471d79"
+  },
+  "assets": [
+    {
+      "file": "news_header_1_0.png",
+      "size": [
+        1280,
+        320
+      ],
+      "mode": "P",
+      "bytes": 282603,
+      "limit_bytes": 350000,
+      "sha256": "e840cda891cfb54ec81d0d47954cc7f0ad8b946abff1c300e6a9fd61a9e53a61",
+      "source": "sources/header_revised.png",
+      "use": "Cabecera",
+      "status": "muestra aprobada según encargo de Lucas"
+    },
+    {
+      "file": "news_header_plain.png",
+      "size": [
+        1280,
+        160
+      ],
+      "mode": "RGB",
+      "bytes": 4550,
+      "limit_bytes": 100000,
+      "sha256": "c7dde9c174733a64b775920521ba3a79394ce932b570adef4dd14c4d5eb994ed",
+      "source": "sources/news_header_plain.svg",
+      "use": "Cabecera",
+      "status": "muestra aprobada según encargo de Lucas"
+    },
+    {
+      "file": "news_icon_map.png",
+      "size": [
+        96,
+        96
+      ],
+      "mode": "RGBA",
+      "bytes": 10150,
+      "limit_bytes": 20000,
+      "sha256": "343b7760345f7cd3363485b6eca4811736fbf92dc78fb2acba9666398bda4b82",
+      "source": "sources/news_icon_map.svg",
+      "use": "Mapa",
+      "status": "muestra aprobada según encargo de Lucas"
+    },
+    {
+      "file": "news_icon_tower.png",
+      "size": [
+        96,
+        96
+      ],
+      "mode": "RGBA",
+      "bytes": 10136,
+      "limit_bytes": 20000,
+      "sha256": "33491b78b962ddae0fbe9cf01cda0ad36aab697a419ca0fbc1d9b716a65944be",
+      "source": "sources/news_icon_tower.svg",
+      "use": "Torre",
+      "status": "muestra aprobada según encargo de Lucas"
+    },
+    {
+      "file": "news_icon_monster.png",
+      "size": [
+        96,
+        96
+      ],
+      "mode": "RGBA",
+      "bytes": 10649,
+      "limit_bytes": 20000,
+      "sha256": "3aa1d55f9952d2199506a1ee628d3e78c515ae95d98dfdc62dc00539d53c2826",
+      "source": "sources/news_icon_monster.svg",
+      "use": "Monstruo",
+      "status": "nuevo ícono; pendiente de revisión de la hoja completa"
+    },
+    {
+      "file": "news_icon_siege.png",
+      "size": [
+        96,
+        96
+      ],
+      "mode": "RGBA",
+      "bytes": 10052,
+      "limit_bytes": 20000,
+      "sha256": "4f760f888952a03ab63fabb8f5df3499499b91713ec24396e8cc6addf0dd9d06",
+      "source": "sources/news_icon_siege.svg",
+      "use": "Asedio",
+      "status": "nuevo ícono; pendiente de revisión de la hoja completa"
+    },
+    {
+      "file": "news_icon_editor.png",
+      "size": [
+        96,
+        96
+      ],
+      "mode": "RGBA",
+      "bytes": 9999,
+      "limit_bytes": 20000,
+      "sha256": "37f2277c5304d255358f3cd4df5b67d10dcb4ffa260242d32c5edea86cb7b391",
+      "source": "sources/news_icon_editor.svg",
+      "use": "Editor",
+      "status": "nuevo ícono; pendiente de revisión de la hoja completa"
+    },
+    {
+      "file": "news_icon_mobile.png",
+      "size": [
+        96,
+        96
+      ],
+      "mode": "RGBA",
+      "bytes": 9071,
+      "limit_bytes": 20000,
+      "sha256": "644e0038d95b4f5185846c48c426ff201330ea62a96130585be93b2163243e77",
+      "source": "sources/news_icon_mobile.svg",
+      "use": "Celular",
+      "status": "nuevo ícono; pendiente de revisión de la hoja completa"
+    },
+    {
+      "file": "news_icon_book.png",
+      "size": [
+        96,
+        96
+      ],
+      "mode": "RGBA",
+      "bytes": 10002,
+      "limit_bytes": 20000,
+      "sha256": "e11b6e34702c4aa0c6bbb5ff6025a47f62bb1f1634b1385a2a10a74da7c4beae",
+      "source": "sources/news_icon_book.svg",
+      "use": "Libro",
+      "status": "nuevo ícono; pendiente de revisión de la hoja completa"
+    },
+    {
+      "file": "news_icon_upgrade.png",
+      "size": [
+        96,
+        96
+      ],
+      "mode": "RGBA",
+      "bytes": 9930,
+      "limit_bytes": 20000,
+      "sha256": "d08efe363a7e11f0db60b58154cf7b2bf90665412a4ee0444dd3b6ca4a6e6092",
+      "source": "sources/news_icon_upgrade.svg",
+      "use": "Mejora",
+      "status": "nuevo ícono; pendiente de revisión de la hoja completa"
+    }
+  ],
+  "missing_icons": [],
+  "optional_icons": [
+    "upgrade"
+  ],
+  "header_crop": [
+    0,
+    190,
+    1983,
+    686
+  ],
+  "contrast": {
+    "title_on_opaque_panel": 14.46,
+    "subtitle_on_opaque_panel": 10.29,
+    "cream_on_raw_header_worst_pixel_in_text_zone": 1.02,
+    "raw_text_zone": [
+      80,
+      205,
+      1200,
+      310
+    ]
+  },
+  "plain_seam": "columnas extremas idénticas; período horizontal 160 px",
+  "mobile_real": {
+    "canvas": [
+      2400,
+      1080
+    ],
+    "logical_viewport": [
+      1280,
+      576
+    ],
+    "scale": 1.875
+  },
+  "imported_ctex_bytes": 291062
+}

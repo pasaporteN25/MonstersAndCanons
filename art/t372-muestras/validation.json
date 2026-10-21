@@ -1,0 +1,499 @@
+{
+  "passed": true,
+  "check_count": 123,
+  "checks": {
+    "manifest_complete": {
+      "ok": true,
+      "detail": null
+    },
+    "no_missing_icons": {
+      "ok": true,
+      "detail": null
+    },
+    "news_header_1_0.png_format": {
+      "ok": true,
+      "detail": null
+    },
+    "news_header_1_0.png_weight": {
+      "ok": true,
+      "detail": 282603
+    },
+    "news_header_1_0.png_manifest": {
+      "ok": true,
+      "detail": null
+    },
+    "news_header_1_0.png_opaque": {
+      "ok": true,
+      "detail": null
+    },
+    "news_header_plain.png_format": {
+      "ok": true,
+      "detail": null
+    },
+    "news_header_plain.png_weight": {
+      "ok": true,
+      "detail": 4550
+    },
+    "news_header_plain.png_manifest": {
+      "ok": true,
+      "detail": null
+    },
+    "news_header_plain.png_opaque": {
+      "ok": true,
+      "detail": null
+    },
+    "news_icon_map.png_format": {
+      "ok": true,
+      "detail": null
+    },
+    "news_icon_map.png_weight": {
+      "ok": true,
+      "detail": 10150
+    },
+    "news_icon_map.png_manifest": {
+      "ok": true,
+      "detail": null
+    },
+    "news_icon_map.png_alpha": {
+      "ok": true,
+      "detail": null
+    },
+    "news_icon_tower.png_format": {
+      "ok": true,
+      "detail": null
+    },
+    "news_icon_tower.png_weight": {
+      "ok": true,
+      "detail": 10136
+    },
+    "news_icon_tower.png_manifest": {
+      "ok": true,
+      "detail": null
+    },
+    "news_icon_tower.png_alpha": {
+      "ok": true,
+      "detail": null
+    },
+    "news_icon_monster.png_format": {
+      "ok": true,
+      "detail": null
+    },
+    "news_icon_monster.png_weight": {
+      "ok": true,
+      "detail": 10649
+    },
+    "news_icon_monster.png_manifest": {
+      "ok": true,
+      "detail": null
+    },
+    "news_icon_monster.png_alpha": {
+      "ok": true,
+      "detail": null
+    },
+    "news_icon_siege.png_format": {
+      "ok": true,
+      "detail": null
+    },
+    "news_icon_siege.png_weight": {
+      "ok": true,
+      "detail": 10052
+    },
+    "news_icon_siege.png_manifest": {
+      "ok": true,
+      "detail": null
+    },
+    "news_icon_siege.png_alpha": {
+      "ok": true,
+      "detail": null
+    },
+    "news_icon_editor.png_format": {
+      "ok": true,
+      "detail": null
+    },
+    "news_icon_editor.png_weight": {
+      "ok": true,
+      "detail": 9999
+    },
+    "news_icon_editor.png_manifest": {
+      "ok": true,
+      "detail": null
+    },
+    "news_icon_editor.png_alpha": {
+      "ok": true,
+      "detail": null
+    },
+    "news_icon_mobile.png_format": {
+      "ok": true,
+      "detail": null
+    },
+    "news_icon_mobile.png_weight": {
+      "ok": true,
+      "detail": 9071
+    },
+    "news_icon_mobile.png_manifest": {
+      "ok": true,
+      "detail": null
+    },
+    "news_icon_mobile.png_alpha": {
+      "ok": true,
+      "detail": null
+    },
+    "news_icon_book.png_format": {
+      "ok": true,
+      "detail": null
+    },
+    "news_icon_book.png_weight": {
+      "ok": true,
+      "detail": 10002
+    },
+    "news_icon_book.png_manifest": {
+      "ok": true,
+      "detail": null
+    },
+    "news_icon_book.png_alpha": {
+      "ok": true,
+      "detail": null
+    },
+    "news_icon_upgrade.png_format": {
+      "ok": true,
+      "detail": null
+    },
+    "news_icon_upgrade.png_weight": {
+      "ok": true,
+      "detail": 9930
+    },
+    "news_icon_upgrade.png_manifest": {
+      "ok": true,
+      "detail": null
+    },
+    "news_icon_upgrade.png_alpha": {
+      "ok": true,
+      "detail": null
+    },
+    "approved_unchanged_news_header_1_0.png": {
+      "ok": true,
+      "detail": null
+    },
+    "approved_unchanged_news_header_plain.png": {
+      "ok": true,
+      "detail": null
+    },
+    "approved_unchanged_news_icon_map.png": {
+      "ok": true,
+      "detail": null
+    },
+    "approved_unchanged_news_icon_tower.png": {
+      "ok": true,
+      "detail": null
+    },
+    "approved_unchanged_sources/news_header_plain.svg": {
+      "ok": true,
+      "detail": null
+    },
+    "approved_unchanged_sources/news_icon_map.svg": {
+      "ok": true,
+      "detail": null
+    },
+    "approved_unchanged_sources/news_icon_tower.svg": {
+      "ok": true,
+      "detail": null
+    },
+    "map_svg_contract": {
+      "ok": true,
+      "detail": null
+    },
+    "map_same_medal": {
+      "ok": true,
+      "detail": null
+    },
+    "map_same_materials": {
+      "ok": true,
+      "detail": null
+    },
+    "map_no_text_filters_images": {
+      "ok": true,
+      "detail": null
+    },
+    "map_same_rendered_ring": {
+      "ok": true,
+      "detail": null
+    },
+    "map_same_alpha": {
+      "ok": true,
+      "detail": null
+    },
+    "tower_svg_contract": {
+      "ok": true,
+      "detail": null
+    },
+    "tower_same_medal": {
+      "ok": true,
+      "detail": null
+    },
+    "tower_same_materials": {
+      "ok": true,
+      "detail": null
+    },
+    "tower_no_text_filters_images": {
+      "ok": true,
+      "detail": null
+    },
+    "tower_same_rendered_ring": {
+      "ok": true,
+      "detail": null
+    },
+    "tower_same_alpha": {
+      "ok": true,
+      "detail": null
+    },
+    "monster_svg_contract": {
+      "ok": true,
+      "detail": null
+    },
+    "monster_same_medal": {
+      "ok": true,
+      "detail": null
+    },
+    "monster_same_materials": {
+      "ok": true,
+      "detail": null
+    },
+    "monster_no_text_filters_images": {
+      "ok": true,
+      "detail": null
+    },
+    "monster_same_rendered_ring": {
+      "ok": true,
+      "detail": null
+    },
+    "monster_same_alpha": {
+      "ok": true,
+      "detail": null
+    },
+    "siege_svg_contract": {
+      "ok": true,
+      "detail": null
+    },
+    "siege_same_medal": {
+      "ok": true,
+      "detail": null
+    },
+    "siege_same_materials": {
+      "ok": true,
+      "detail": null
+    },
+    "siege_no_text_filters_images": {
+      "ok": true,
+      "detail": null
+    },
+    "siege_same_rendered_ring": {
+      "ok": true,
+      "detail": null
+    },
+    "siege_same_alpha": {
+      "ok": true,
+      "detail": null
+    },
+    "editor_svg_contract": {
+      "ok": true,
+      "detail": null
+    },
+    "editor_same_medal": {
+      "ok": true,
+      "detail": null
+    },
+    "editor_same_materials": {
+      "ok": true,
+      "detail": null
+    },
+    "editor_no_text_filters_images": {
+      "ok": true,
+      "detail": null
+    },
+    "editor_same_rendered_ring": {
+      "ok": true,
+      "detail": null
+    },
+    "editor_same_alpha": {
+      "ok": true,
+      "detail": null
+    },
+    "mobile_svg_contract": {
+      "ok": true,
+      "detail": null
+    },
+    "mobile_same_medal": {
+      "ok": true,
+      "detail": null
+    },
+    "mobile_same_materials": {
+      "ok": true,
+      "detail": null
+    },
+    "mobile_no_text_filters_images": {
+      "ok": true,
+      "detail": null
+    },
+    "mobile_same_rendered_ring": {
+      "ok": true,
+      "detail": null
+    },
+    "mobile_same_alpha": {
+      "ok": true,
+      "detail": null
+    },
+    "book_svg_contract": {
+      "ok": true,
+      "detail": null
+    },
+    "book_same_medal": {
+      "ok": true,
+      "detail": null
+    },
+    "book_same_materials": {
+      "ok": true,
+      "detail": null
+    },
+    "book_no_text_filters_images": {
+      "ok": true,
+      "detail": null
+    },
+    "book_same_rendered_ring": {
+      "ok": true,
+      "detail": null
+    },
+    "book_same_alpha": {
+      "ok": true,
+      "detail": null
+    },
+    "upgrade_svg_contract": {
+      "ok": true,
+      "detail": null
+    },
+    "upgrade_same_medal": {
+      "ok": true,
+      "detail": null
+    },
+    "upgrade_same_materials": {
+      "ok": true,
+      "detail": null
+    },
+    "upgrade_no_text_filters_images": {
+      "ok": true,
+      "detail": null
+    },
+    "upgrade_same_rendered_ring": {
+      "ok": true,
+      "detail": null
+    },
+    "upgrade_same_alpha": {
+      "ok": true,
+      "detail": null
+    },
+    "plain_repeat_160px": {
+      "ok": true,
+      "detail": null
+    },
+    "contact_sheet.png_size": {
+      "ok": true,
+      "detail": null
+    },
+    "all_rows.png_size": {
+      "ok": true,
+      "detail": null
+    },
+    "mockup_pc.png_size": {
+      "ok": true,
+      "detail": null
+    },
+    "mockup_pc_end.png_size": {
+      "ok": true,
+      "detail": null
+    },
+    "mockup_mobile.png_size": {
+      "ok": true,
+      "detail": null
+    },
+    "mockup_mobile_real.png_size": {
+      "ok": true,
+      "detail": null
+    },
+    "mockup_mobile_real_end.png_size": {
+      "ok": true,
+      "detail": null
+    },
+    "contact_map": {
+      "ok": true,
+      "detail": null
+    },
+    "contact_tower": {
+      "ok": true,
+      "detail": null
+    },
+    "contact_monster": {
+      "ok": true,
+      "detail": null
+    },
+    "contact_siege": {
+      "ok": true,
+      "detail": null
+    },
+    "contact_editor": {
+      "ok": true,
+      "detail": null
+    },
+    "contact_mobile": {
+      "ok": true,
+      "detail": null
+    },
+    "contact_book": {
+      "ok": true,
+      "detail": null
+    },
+    "contact_upgrade": {
+      "ok": true,
+      "detail": null
+    },
+    "rows_map": {
+      "ok": true,
+      "detail": null
+    },
+    "rows_tower": {
+      "ok": true,
+      "detail": null
+    },
+    "rows_monster": {
+      "ok": true,
+      "detail": null
+    },
+    "rows_siege": {
+      "ok": true,
+      "detail": null
+    },
+    "rows_editor": {
+      "ok": true,
+      "detail": null
+    },
+    "rows_mobile": {
+      "ok": true,
+      "detail": null
+    },
+    "rows_book": {
+      "ok": true,
+      "detail": null
+    },
+    "rows_upgrade": {
+      "ok": true,
+      "detail": null
+    },
+    "html_local_links": {
+      "ok": true,
+      "detail": 17
+    },
+    "excluded_from_game_import": {
+      "ok": true,
+      "detail": null
+    }
+  },
+  "limits": "Validación de archivos y montajes. No prueba el juego, Android ni la aprobación artística de Lucas."
+}

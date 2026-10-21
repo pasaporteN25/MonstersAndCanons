@@ -1,0 +1,121 @@
+{
+  "task": "T375",
+  "godot": "4.7.2.stable.official.ed1daf0bf",
+  "compress_mode": 0,
+  "mipmaps": false,
+  "assets": [
+    {
+      "file": "assets/ui/novedades/news_header_1_0.png",
+      "size": [
+        1280,
+        320
+      ],
+      "source_bytes": 282603,
+      "imported_ctex_bytes": 291062,
+      "sha256": "e840cda891cfb54ec81d0d47954cc7f0ad8b946abff1c300e6a9fd61a9e53a61",
+      "identical_to_approved_source": true
+    },
+    {
+      "file": "assets/ui/novedades/news_header_plain.png",
+      "size": [
+        1280,
+        160
+      ],
+      "source_bytes": 4550,
+      "imported_ctex_bytes": 2330,
+      "sha256": "c7dde9c174733a64b775920521ba3a79394ce932b570adef4dd14c4d5eb994ed",
+      "identical_to_approved_source": true
+    },
+    {
+      "file": "assets/ui/novedades/news_icon_book.png",
+      "size": [
+        96,
+        96
+      ],
+      "source_bytes": 10002,
+      "imported_ctex_bytes": 8934,
+      "sha256": "e11b6e34702c4aa0c6bbb5ff6025a47f62bb1f1634b1385a2a10a74da7c4beae",
+      "identical_to_approved_source": true
+    },
+    {
+      "file": "assets/ui/novedades/news_icon_editor.png",
+      "size": [
+        96,
+        96
+      ],
+      "source_bytes": 9999,
+      "imported_ctex_bytes": 9314,
+      "sha256": "37f2277c5304d255358f3cd4df5b67d10dcb4ffa260242d32c5edea86cb7b391",
+      "identical_to_approved_source": true
+    },
+    {
+      "file": "assets/ui/novedades/news_icon_map.png",
+      "size": [
+        96,
+        96
+      ],
+      "source_bytes": 10150,
+      "imported_ctex_bytes": 9424,
+      "sha256": "343b7760345f7cd3363485b6eca4811736fbf92dc78fb2acba9666398bda4b82",
+      "identical_to_approved_source": true
+    },
+    {
+      "file": "assets/ui/novedades/news_icon_mobile.png",
+      "size": [
+        96,
+        96
+      ],
+      "source_bytes": 9071,
+      "imported_ctex_bytes": 8488,
+      "sha256": "644e0038d95b4f5185846c48c426ff201330ea62a96130585be93b2163243e77",
+      "identical_to_approved_source": true
+    },
+    {
+      "file": "assets/ui/novedades/news_icon_monster.png",
+      "size": [
+        96,
+        96
+      ],
+      "source_bytes": 10649,
+      "imported_ctex_bytes": 9444,
+      "sha256": "3aa1d55f9952d2199506a1ee628d3e78c515ae95d98dfdc62dc00539d53c2826",
+      "identical_to_approved_source": true
+    },
+    {
+      "file": "assets/ui/novedades/news_icon_siege.png",
+      "size": [
+        96,
+        96
+      ],
+      "source_bytes": 10052,
+      "imported_ctex_bytes": 9008,
+      "sha256": "4f760f888952a03ab63fabb8f5df3499499b91713ec24396e8cc6addf0dd9d06",
+      "identical_to_approved_source": true
+    },
+    {
+      "file": "assets/ui/novedades/news_icon_tower.png",
+      "size": [
+        96,
+        96
+      ],
+      "source_bytes": 10136,
+      "imported_ctex_bytes": 9094,
+      "sha256": "33491b78b962ddae0fbe9cf01cda0ad36aab697a419ca0fbc1d9b716a65944be",
+      "identical_to_approved_source": true
+    },
+    {
+      "file": "assets/ui/novedades/news_icon_upgrade.png",
+      "size": [
+        96,
+        96
+      ],
+      "source_bytes": 9930,
+      "imported_ctex_bytes": 8782,
+      "sha256": "d08efe363a7e11f0db60b58154cf7b2bf90665412a4ee0444dd3b6ca4a6e6092",
+      "identical_to_approved_source": true
+    }
+  ],
+  "total_source_bytes": 367142,
+  "total_imported_ctex_bytes": 365880,
+  "note": "Peso real de las texturas importadas; no se exportó ni midió una APK."
+}

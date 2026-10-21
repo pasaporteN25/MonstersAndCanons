@@ -17,33 +17,41 @@
 			"novedades": [
 				{
 					"titulo": "15 niveles, una historia",
-					"texto": "Defendé la colonia a lo largo de toda la campaña, con textos de cada lugar y un epílogo final."
+					"texto": "Defendé la colonia a lo largo de toda la campaña, con textos de cada lugar y un epílogo final.",
+					"icono": "res://assets/ui/novedades/news_icon_map.png"
 				},
 				{
 					"titulo": "Torres que se mejoran",
-					"texto": "Torres de distintos estilos, cada una con tres niveles. Combinalas: algunas se potencian entre sí."
+					"texto": "Torres de distintos estilos, cada una con tres niveles. Combinalas: algunas se potencian entre sí.",
+					"icono": "res://assets/ui/novedades/news_icon_tower.png"
 				},
 				{
 					"titulo": "Monstruos con carácter",
-					"texto": "Jefes, curanderos, chamanes y espejos: cada enemigo se juega distinto. La Wiki explica cómo enfrentarlos."
+					"texto": "Jefes, curanderos, chamanes y espejos: cada enemigo se juega distinto. La Wiki explica cómo enfrentarlos.",
+					"icono": "res://assets/ui/novedades/news_icon_monster.png"
 				},
 				{
 					"titulo": "Asedio",
-					"texto": "Un modo aparte con los mapas de la campaña y monstruos más duros, con estrellas y récords propios."
+					"texto": "Un modo aparte con los mapas de la campaña y monstruos más duros, con estrellas y récords propios.",
+					"icono": "res://assets/ui/novedades/news_icon_siege.png"
 				},
 				{
 					"titulo": "Tus propios mapas",
-					"texto": "En la PC, el editor deja crear niveles y jugarlos."
+					"texto": "En la PC, el editor deja crear niveles y jugarlos.",
+					"icono": "res://assets/ui/novedades/news_icon_editor.png"
 				},
 				{
 					"titulo": "PC y celular",
-					"texto": "Interfaz táctil con zoom, botones flotantes y menús que se desplazan con el dedo, además de mouse y teclado."
+					"texto": "Interfaz táctil con zoom, botones flotantes y menús que se desplazan con el dedo, además de mouse y teclado.",
+					"icono": "res://assets/ui/novedades/news_icon_mobile.png"
 				},
 				{
 					"titulo": "Intro y tutorial",
-					"texto": "La intro cuenta cómo llegó la nave y el tutorial del primer nivel te enseña a jugar. Los dos se pueden saltear."
+					"texto": "La intro cuenta cómo llegó la nave y el tutorial del primer nivel te enseña a jugar. Los dos se pueden saltear.",
+					"icono": "res://assets/ui/novedades/news_icon_book.png"
 				}
-			]
+			],
+			"cabecera": "res://assets/ui/novedades/news_header_1_0.png"
 		}
 	]
 }

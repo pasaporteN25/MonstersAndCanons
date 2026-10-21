@@ -1,11 +1,12 @@
 # Capturas reales de «Novedades de esta versión» (M67, T373): abre la pantalla con 8 novedades y con 1, en modo PC y
 # en modo celular, y guarda un PNG de cada una. Se corre con ventana (no `--headless`: sin dibujo no hay imagen) y con
 # la carpeta de salida FUERA del repo:
-#   godot --path . res://tools/capture_news.tscn -- /ruta/de/salida [1280x720]
-# No cambia `config/version`: la entrada de prueba se arma acá. Usa un guardado temporal que borra al terminar.
+#   godot --path . res://tools/capture_news.tscn -- /ruta/de/salida [1280x720] [official]
+# Con `official` captura los datos reales y el final de su lista. Sin esa opción usa la entrada de prueba.
+# No cambia `config/version`. Usa un guardado temporal que borra al terminar.
 extends Node
 
-const TEMP_SAVE: String = "user://capture_news.json"
+const TEMP_SAVE: String = "user://test_capture_news.json"
 
 var _out: String = "user://capturas"
 
@@ -23,29 +24,42 @@ func run() -> void:
 		var parts: PackedStringArray = args[1].split("x")
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 		DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, true)
-		get_window().size = Vector2i(int(parts[0]), int(parts[1]))
+		var resolution := Vector2i(int(parts[0]), int(parts[1]))
+		get_window().content_scale_mode = Window.CONTENT_SCALE_MODE_VIEWPORT
+		get_window().content_scale_size = resolution
+		get_window().size = resolution
 		get_window().position = Vector2i.ZERO
 		for _i: int in 10:
 			await get_tree().process_frame
 	var save: Node = get_node("/root/SaveManager")
 	save.save_path = TEMP_SAVE
 	save.load_save()
-	var labels: Dictionary = NewsData.load_file().labels
+	var data: NewsData = NewsData.load_file()
+	var labels: Dictionary = data.labels
+	var official: bool = args.has("official")
 	for mobile: bool in [false, true]:
 		save.set_setting("ui_mode", 1 if mobile else 2)
-		for count: int in [8, 1]:
+		for count: int in ([7] if official else [8, 1]):
 			var screen := NewsScreen.new()
 			add_child(screen)
-			screen.open(_entry(count, count == 8), labels)
+			screen.open(data.entry_for("1.0.0") if official else _entry(count, count == 8), labels)
 			for _i: int in 24:
 				await get_tree().process_frame
 			var image: Image = get_viewport().get_texture().get_image()
 			var path: String = "%s/novedades_%s_%d.png" % [_out, "celular" if mobile else "pc", count]
 			image.save_png(path)
 			print("captura: %s" % path)
+			if official:
+				screen.scroll().scroll_vertical = 10000
+				for _i: int in 4:
+					await get_tree().process_frame
+				var end_path: String = path.trim_suffix(".png") + "_end.png"
+				get_viewport().get_texture().get_image().save_png(end_path)
+				print("captura: %s" % end_path)
 			screen.close()
 			await get_tree().process_frame
 			screen.queue_free()
+			await get_tree().process_frame
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(TEMP_SAVE))
 	save.set_setting("ui_mode", 0)
 	save.save_path = save.DEFAULT_PATH

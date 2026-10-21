@@ -1534,7 +1534,7 @@ Los textos, números de tamaño y posiciones nuevos viven en `mobile_ui.json` (P
 
 ### M67 / T370 a T375 · «Novedades de esta versión» (RF-603 a RF-609, D-141 a D-144)
 
-**Estado: implementado salvo el arte (T372, T375) y el OK de Lucas a los textos.** No cambia la partida, el balance ni el progreso. Sigue el molde de la intro (M57, `IntroData`/`IntroFlow`/`IntroScreen`) y del tutorial (M63, `TutorialData`/guardado aditivo).
+**Estado: pantalla y datos implementados; T375 integra el arte aprobado. Sigue pendiente el OK de Lucas a los textos.** No cambia la partida, el balance ni el progreso. Sigue el molde de la intro (M57, `IntroData`/`IntroFlow`/`IntroScreen`) y del tutorial (M63, `TutorialData`/guardado aditivo).
 
 1. **Datos y validador** (T371). `data/novedades/novedades.json` (nace con la lista de versiones vacía, que es válida y no muestra nada, hasta que T374 cargue la 1.0.0); `scripts/logic/news_data.gd` (`NewsData`: `parse`, `load_file`, `entry_for(version)`, `latest()`, `errors`, límites de RF-605); `tools/check_novedades.gd` (errores y avisos en castellano); `tests/test_news_data.gd`.
 2. **Reglas puras** (T371). `scripts/logic/news_flow.gd` (`NewsFlow.should_auto_show(...)`, `NewsFlow.is_new_save(...)`; sin escena, P10) y `tests/test_news_flow.gd` con todos los casos de RF-603 (beta, vacía, igual, distinta, borrador, sin entrada, modo de pruebas, editor, «mejoras» con guardado nuevo y con guardado viejo, «presentacion» con guardado nuevo).
@@ -1651,3 +1651,11 @@ Nada más: ningún otro nivel, ni `obstaculos.json`, ni `mortar.tres`, ni códig
 **Costo.** Una suma en un diccionario por enemigo que llega; al perder, un recorrido por 15 reglas × 19 enemigos × 11 torres. Nada por cuadro.
 
 **Riesgos.** (1) Un tipo de enemigo sin regla (Normal, Cría…) diluye el peso: el piso del 30 % evita un consejo por un detalle. (2) La medición con bot de RF-639 no reemplaza partidas humanas.
+
+### T375 · Arte de Novedades (RF-640 a RF-642, D-170)
+
+1. Copiar los diez PNG aprobados a `assets/ui/novedades/`, sin alterar fuentes ni muestras. Importación `compress/mode=0`, `mipmaps/generate=false`; registrar bytes de origen y `.ctex` en `art/t375-integration/import_report.json`.
+2. Conectar en `novedades.json` la cabecera 4:1 y los siete medallones correspondientes. Mantener textos, `borrador`, versión y presets. La banda 8:1 y `upgrade` quedan disponibles para datos posteriores; declararlos con motivo en `KNOWN_UNUSED` de la auditoría de recursos, sin excluir el resto de la carpeta.
+3. `NewsScreen`: cabecera al ancho interior y altura según proporción de la textura; nombres de nodos para comprobar la conexión. Íconos 48/64 según modo, carga al abrir; conservar el rombo para datos sin imagen. Títulos debajo de la ilustración sobre el panel oscuro, sin superposición.
+4. GUT: contenido oficial con arte en ambos modos, proporción de las dos cabeceras, mezcla con/sin ícono, lista larga y botón visible. Importar antes de probar; devolver únicamente los SVG de `assets/` reescritos accidentalmente por el importador. Correr la suite completa y revisar errores del motor además del total.
+5. Capturar con `tools/capture_news.tscn` la entrada oficial y el final de la lista en PC y celular; registrar límites de la prueba y lista de publicación sin ejecutarla. Actualizar solo T375 en el tablero, más changelog y guías afectadas.

@@ -188,3 +188,65 @@ func _click(position: Vector2, pressed: bool) -> void:
 	event.position = position
 	event.global_position = position
 	_viewport.push_input(event)
+
+
+# T375: se prueba la conexión de las imágenes importadas con los datos oficiales y los casos sin arte.
+func _assert_official_art(mode: int) -> void:
+	var data: NewsData = NewsData.load_file()
+	assert_true(data.is_valid(), str(data.errors))
+	await _open(data.entry_for("1.0.0"), mode)
+	var header: TextureRect = _screen.find_child("Header", true, false) as TextureRect
+	assert_not_null(header)
+	assert_eq(header.texture.get_size(), Vector2(1280, 320))
+	assert_almost_eq(header.size.x / header.size.y, 4.0, 0.01, "cabecera completa sin deformar")
+	var icons: Array[Node] = _screen.find_children("Icon", "TextureRect", true, false)
+	assert_eq(icons.size(), 7, "cada texto actual tiene su medallón")
+	for node: Node in icons:
+		var icon: TextureRect = node as TextureRect
+		var expected_size: float = 64.0 if mode == UiMode.MOBILE else 48.0
+		assert_eq(icon.size, Vector2(expected_size, expected_size))
+		assert_eq(icon.texture.get_size(), Vector2(96, 96))
+	assert_true(WINDOW.encloses(_screen.panel().get_global_rect()), "el arte no desborda el panel")
+	assert_true(WINDOW.encloses(_screen.button().get_global_rect()), "Entendido sigue visible")
+	var title: Label = _screen.find_child("Title", true, false) as Label
+	assert_true(WINDOW.encloses(title.get_global_rect()))
+	assert_gte(title.global_position.y, header.get_global_rect().end.y, "texto sobre el panel, debajo del arte")
+	assert_gt((_screen.scroll().get_child(0) as Control).get_combined_minimum_size().y, _screen.scroll().size.y)
+	_screen.scroll().scroll_vertical = 10000
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var rows: Array[Node] = _screen.scroll().get_child(0).get_children()
+	var last: Control = rows.back() as Control
+	assert_true(_screen.scroll().get_global_rect().grow(1.0).encloses(last.get_global_rect()), "se llega a la última novedad: lista %s, fila %s, desplazamiento %d" % [_screen.scroll().get_global_rect(), last.get_global_rect(), _screen.scroll().scroll_vertical])
+
+
+func test_official_art_fits_on_pc_and_last_item_is_reachable() -> void:
+	await _assert_official_art(UiMode.PC)
+
+
+func test_official_art_fits_on_mobile_and_last_item_is_reachable() -> void:
+	await _assert_official_art(UiMode.MOBILE)
+
+
+func test_mixed_items_with_missing_and_empty_icons_keep_their_text() -> void:
+	var entry: Dictionary = _entry(3)
+	entry["novedades"][0]["icono"] = "res://assets/ui/novedades/news_icon_map.png"
+	entry["novedades"][1].erase("icono")
+	await _open(entry)
+	assert_eq(_screen.item_count(), 3)
+	assert_eq(_screen.find_children("Icon", "TextureRect", true, false).size(), 1)
+	assert_eq(_screen.find_children("Marker", "Control", true, false).size(), 2)
+	assert_eq(_screen.find_children("ItemTitle", "Label", true, false).size(), 3)
+	assert_eq(_screen.find_children("ItemText", "Label", true, false).size(), 3)
+	assert_null(_screen.find_child("Header", true, false), "sin cabecera no queda un rectángulo vacío")
+
+
+func test_plain_header_keeps_its_eight_to_one_ratio() -> void:
+	var entry: Dictionary = _entry(1, "mejoras")
+	entry["cabecera"] = "res://assets/ui/novedades/news_header_plain.png"
+	await _open(entry, UiMode.MOBILE)
+	var header: TextureRect = _screen.find_child("Header", true, false) as TextureRect
+	assert_eq(header.texture.get_size(), Vector2(1280, 160))
+	assert_almost_eq(header.size.y, header.size.x / 8.0, 1.0, "proporción 8:1 con redondeo a píxel entero")
+	assert_true(WINDOW.encloses(_screen.panel().get_global_rect()))
+	assert_true(WINDOW.encloses(_screen.button().get_global_rect()))

@@ -4,7 +4,7 @@
 #
 # Los nodos se crean al abrirse y se borran al cerrarse; no hay `_process` ni animación salvo un fundido de 0,2 s.
 # Las imágenes (cabecera e íconos) se cargan al abrir con `load`, no con `preload`: no pesan en el arranque.
-# Arte provisional (T373): sin cabecera ni íconos propios, cada novedad lleva un rombo de bronce dibujado.
+# Arte aprobado (T375): cabecera proporcional y medallones de 48/64 px; sin ícono se conserva el rombo de bronce.
 class_name NewsScreen
 extends CanvasLayer
 
@@ -21,8 +21,8 @@ const PANEL_STYLE: StyleBox = preload("res://assets/ui/game_panel_style.tres")
 ## Medidas de interfaz (RF-604), no de balance.
 const PANEL_WIDTH_PC: float = 720.0
 const PANEL_WIDTH_MOBILE: float = 880.0
-const ICON_SIZE: float = 64.0
-const HEADER_HEIGHT: float = 140.0
+const ICON_SIZE_PC: float = 48.0
+const ICON_SIZE_MOBILE: float = 64.0
 const ROW_MIN_HEIGHT: float = 56.0
 const BUTTON_HEIGHT_PC: float = 44.0
 const BUTTON_HEIGHT_MOBILE: float = 56.0
@@ -151,10 +151,14 @@ func _build(entry: Dictionary, labels: Dictionary) -> void:
 	var small: int = SMALL_FONT_MOBILE if _mobile else SMALL_FONT_PC
 	if String(entry.get("cabecera", "")) != "":
 		var header := TextureRect.new()
+		header.name = "Header"
+		header.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		header.texture = load(String(entry["cabecera"]))
 		header.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		header.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		header.custom_minimum_size.y = HEADER_HEIGHT
+		# El ancho interior descuenta el margen propio y el del estilo del panel.
+		var width: float = _panel.custom_minimum_size.x - 48.0 - PANEL_STYLE.get_minimum_size().x
+		header.custom_minimum_size.y = width * header.texture.get_height() / header.texture.get_width()
 		column.add_child(header)
 	var is_improvements: bool = String(entry.get("tipo", "")) == NewsData.TYPE_IMPROVEMENTS
 	var title_text: String = String(labels.get("titulo_mejoras", "")) if is_improvements else String(entry.get("titulo", ""))
@@ -217,10 +221,13 @@ func _make_row(item: Dictionary) -> Control:
 	row.add_theme_constant_override("separation", 14)
 	if String(item.get("icono", "")) != "":
 		var icon := TextureRect.new()
+		icon.name = "Icon"
+		icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		icon.texture = load(String(item["icono"]))
 		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		icon.custom_minimum_size = Vector2(ICON_SIZE, ICON_SIZE)
+		var icon_size: float = ICON_SIZE_MOBILE if _mobile else ICON_SIZE_PC
+		icon.custom_minimum_size = Vector2(icon_size, icon_size)
 		icon.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		row.add_child(icon)
 	else:
@@ -240,11 +247,12 @@ func _make_row(item: Dictionary) -> Control:
 	return row
 
 
-## El rombo de bronce que ocupa el lugar del ícono mientras no hay arte aprobado (T372).
+## El rombo de bronce para una novedad que no tiene ícono (RF-641).
 func _marker() -> Control:
 	var marker := Control.new()
 	marker.name = "Marker"
-	marker.custom_minimum_size = Vector2(ICON_SIZE * 0.5, ICON_SIZE * 0.5)
+	var marker_size: float = (ICON_SIZE_MOBILE if _mobile else ICON_SIZE_PC) * 0.5
+	marker.custom_minimum_size = Vector2(marker_size, marker_size)
 	marker.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	marker.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	marker.draw.connect(func() -> void:

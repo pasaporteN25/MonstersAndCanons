@@ -1,0 +1,31 @@
+<!doctype html><html lang="es"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>T372 · Muestras para aprobar</title><style>body{margin:28px;background:#0e0f13;color:#f4ecd8;font:17px system-ui}h1,h2{color:#edca8b}p{max-width:1000px;line-height:1.5}a{color:#edca8b}figure{margin:12px 0 24px}figcaption{margin:6px 0}.scroll{overflow:auto;border:1px solid #855c2b;padding:12px;background:#1b1c20}img{display:block;max-width:none}button{font:inherit;color:#f4ecd8;background:#27272a;border:2px solid #855c2b;padding:12px 20px;cursor:pointer}.pair{display:flex;gap:24px;align-items:start;flex-wrap:wrap}.hero{position:relative}.safe{position:absolute;bottom:0;height:40%;left:0;right:0;border:1px dashed #f4ecd8;box-sizing:border-box;pointer-events:none}.safe span{background:#1b1c20;font-size:12px}.native{max-width:none}table{border-collapse:collapse}td,th{padding:8px 14px;border:1px solid #855c2b;text-align:left}</style><h1>T372 · Familia completa para revisar</h1>
+<p>Dos cabeceras y ocho íconos. Lucas aprobó el estilo de las muestras previas y autorizó los seis íconos nuevos. Hoja completa pendiente de revisión, sin integración. Mejora sigue siendo opcional. Los textos son el borrador literal de M67. Abrí esta hoja al 100 % de zoom: las imágenes conservan sus píxeles CSS; si falta ancho, desplazá el contenedor.</p>
+<p><a href="README.md">Alcance y límites</a> · <a href="prompts.md">Prompts y fuentes</a> · <a href="manifest.json">Medidas y pesos</a> · <a href="validation.json">Validación mecánica</a></p>
+<h2>Familia visual: intro y cabecera</h2><div class="pair"><figure><img src="intro_reference.png" width="720" height="405" alt="Lámina existente del oasis, referencia de estilo"><figcaption>Intro existente: cuaderno de bitácora. No es una muestra nueva.</figcaption></figure><figure><img src="news_header_1_0.png" width="720" height="180" alt="Cabecera del oasis"><figcaption>Propuesta más luminosa, reducida a 720 px.</figcaption></figure></div>
+<h2>Íconos a escala real</h2><p>96 px de archivo, 64 px en celular y 48 px en PC. Mismo fondo de hierro del menú.</p><div class="scroll"><img src="contact_sheet.png" width="760" height="1120" alt="Los ocho medallones a 96, 64 y 48 píxeles"></div>
+<h2>Cabecera y zona de texto</h2><p>El contorno punteado marca el 40 % inferior reservado. El soporte oscuro de las siguientes vistas pertenece a la maqueta, no al PNG.</p>
+<h3>720 px de ancho</h3><div class="scroll"><div class="hero" style="width:720px;height:180px"><img src="news_header_1_0.png" width="720" height="180" alt="Cabecera sin texto"><div class="safe"><span>40 % inferior</span></div></div><img src="header_720.png" width="720" height="180" alt="Título y subtítulo superpuestos"></div>
+<h3>880 px de ancho</h3><div class="scroll"><div class="hero" style="width:880px;height:220px"><img src="news_header_1_0.png" width="880" height="220" alt="Cabecera sin texto"><div class="safe"><span>40 % inferior</span></div></div><img src="header_880.png" width="880" height="220" alt="Título y subtítulo superpuestos"></div>
+<h2>Variante sobria repetible</h2><p>Original 1280 × 160. Extremos idénticos, patrón de 160 px. Debajo, repetición a 1600 px; sin texto dentro del archivo.</p><div class="scroll"><img src="news_header_plain.png" width="1280" height="160" alt="Banda de hierro y bronce"><div style="width:1600px;height:160px;margin-top:16px;background:url(news_header_plain.png) repeat-x"></div></div>
+<h2>Maquetas: título y botón fijos</h2><p>Alterná entre principio y final de la lista. Esta comparación de imágenes no prueba el desplazamiento del juego. Las ocho filas ya tienen su ícono.</p>
+<h3>PC · panel de 720 px</h3>
+<button onclick="document.getElementById('mockup_pc.png').src='mockup_pc.png'">Inicio</button> <button onclick="document.getElementById('mockup_pc.png').src='mockup_pc_end.png'">Final</button>
+<div class="scroll"><img id="mockup_pc.png" src="mockup_pc.png" width="1280" height="720" alt="Maqueta PC · panel de 720 px"></div>
+<h3>Celular · panel de 880 px en 1280 × 720</h3>
+<div class="scroll"><img id="mockup_mobile.png" src="mockup_mobile.png" width="1280" height="720" alt="Maqueta Celular · panel de 880 px en 1280 × 720"></div>
+<h3>Celular real · 2400 × 1080</h3>
+<button onclick="document.getElementById('mockup_mobile_real.png').src='mockup_mobile_real.png'">Inicio</button> <button onclick="document.getElementById('mockup_mobile_real.png').src='mockup_mobile_real_end.png'">Final</button>
+<div class="scroll"><img id="mockup_mobile_real.png" src="mockup_mobile_real.png" width="2400" height="1080" alt="Maqueta Celular real · 2400 × 1080"></div>
+<p>2400 × 1080 no tiene la misma proporción que 1280 × 720. Para mostrar 1,875× sin deformación, la vista real usa 1280 × 576 lógicos: el área desplazable queda más baja. No es una captura de Android.</p><h2>Las ocho filas del borrador</h2><div class="scroll"><img src="all_rows.png" width="880" height="848" alt="Los ocho textos completos con sus íconos"></div>
+<h2>Verificación</h2><table><tr><th>Archivo</th><th>Píxeles</th><th>Bytes PNG</th></tr>
+<tr><td>news_header_1_0.png</td><td>1280 × 320</td><td>282,603</td></tr>
+<tr><td>news_header_plain.png</td><td>1280 × 160</td><td>4,550</td></tr>
+<tr><td>news_icon_map.png</td><td>96 × 96</td><td>10,150</td></tr>
+<tr><td>news_icon_tower.png</td><td>96 × 96</td><td>10,136</td></tr>
+<tr><td>news_icon_monster.png</td><td>96 × 96</td><td>10,649</td></tr>
+<tr><td>news_icon_siege.png</td><td>96 × 96</td><td>10,052</td></tr>
+<tr><td>news_icon_editor.png</td><td>96 × 96</td><td>9,999</td></tr>
+<tr><td>news_icon_mobile.png</td><td>96 × 96</td><td>9,071</td></tr>
+<tr><td>news_icon_book.png</td><td>96 × 96</td><td>10,002</td></tr>
+<tr><td>news_icon_upgrade.png</td><td>96 × 96</td><td>9,930</td></tr>
+</table><p>Contraste del título crema con soporte #1b1c20: 14.46:1. Subtítulo #d7c8a5: 10.29:1. Sobre la ilustración sin soporte no se garantiza contraste suficiente; revisar README.</p><p>Sin animación ni cambios de lógica. No se importó ni se ejecutó el juego. La importación de peso se verifica en un proyecto Godot aislado.</p></html>
