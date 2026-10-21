@@ -49,6 +49,7 @@
 #   levels=A-B      juega los mapas A a B seguidos (levels=6-9). Con level=N, uno solo.
 #   mix,smart       (la estrategia) se pueden pedir varias separadas por coma.
 #   report=ruta     además de la tabla final, la guarda en JSON (por ejemplo report=user://balance.json).
+#                   Cada partida incluye `tower_usage`, contador por id de las torres que realmente se construyeron.
 #   Ejemplos:
 #     godot ... -s tools/balance_sim.gd -- mix level=6 seeds=5
 #     godot ... -s tools/balance_sim.gd -- mix levels=6-9 seeds=5 report=user://balance.json
@@ -156,6 +157,7 @@ var _free_count: int = 0
 var level_numbers: Array[int] = []
 var seed_list: Array[int] = [BalanceArgs.DEFAULT_SEED]
 var report_path: String = ""
+var tower_usage: Dictionary = {}
 ## RF-452: disruptor=0 apaga la compra de la Disruptora (para comparar).
 var disruptor_enabled: bool = true
 var disruptors_built: int = 0
@@ -237,6 +239,7 @@ func _start_next_run() -> bool:
 	_free_count_built = -1
 	level_number = _current["level"]
 	built = 0
+	tower_usage.clear()
 	disruptors_built = 0
 	_disruptor_prepared = false
 	last_reported_wave = 0
@@ -457,7 +460,8 @@ func _process(_delta: float) -> bool:
 			"upgrades_mode": upgrades_mode, "upgrades": upgrade_count, "upgrade_gold": upgrade_gold,
 			"health_percent": game.level_data.enemy_health_percent,
 			"machine_wave": _machine_wave, "resources_gained": _res_gained, "resources_left": session.resources,
-			"gold_stolen": _stolen, "infra_gold": _infra_gold, "first_resource_tower_wave": _first_resource_tower_wave})
+			"gold_stolen": _stolen, "infra_gold": _infra_gold, "first_resource_tower_wave": _first_resource_tower_wave,
+			"tower_usage": tower_usage.duplicate()})
 		root.remove_child(game)
 		game.queue_free()
 		game = null
@@ -725,6 +729,7 @@ func _buy_towers() -> void:
 			var disruptor: TowerData = _disruptor()
 			if game.build_controller.try_build(disruptor, _best_cell(disruptor)):
 				built += 1
+				_record_tower(disruptor)
 				disruptors_built += 1
 				continue
 		var index: int = 0
@@ -750,6 +755,7 @@ func _buy_towers() -> void:
 		if not game.build_controller.try_build(tower, cell):
 			return
 		built += 1
+		_record_tower(tower)
 		_order_pos += advance
 
 
@@ -858,12 +864,18 @@ func _buy_towers_infra() -> void:
 		if not game.build_controller.try_build(tower, cell, alt):
 			return
 		built += 1
+		_record_tower(tower)
 		_worth_dirty = true
 		if with_resources:
 			if _first_resource_tower_wave < 0:
 				_first_resource_tower_wave = session.wave
 		else:
 			_order_pos += advance
+
+
+func _record_tower(tower: TowerData) -> void:
+	var tower_id: String = String(tower.id)
+	tower_usage[tower_id] = int(tower_usage.get(tower_id, 0)) + 1
 
 
 ## El orden de compra de "mix": el de siempre, o el de NO_BASIC_ORDER si el mapa no ofrece la Ametralladora.
