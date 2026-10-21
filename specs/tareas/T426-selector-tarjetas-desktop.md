@@ -14,3 +14,10 @@ Los 15 niveles se ven y se pueden seleccionar a 1280×720 sin scroll y se leen a
 
 ## No incluye
 El estilo de mapa planetario, cambios mobile o nuevos datos de nivel.
+
+## Resultado (2026-10-21)
+En desktop, las 15 tarjetas entran en tres filas sin scroll a 1280×720; a 1920×1080 mantienen el mismo layout escalado, sin estirar el contenido lógico. Se quitaron las oleadas y los marcos individuales de las torres; se conservaron estados, estrellas, récord, desbloqueos y acciones. Mobile conserva las tarjetas anteriores.
+
+Capturas y muestra editable: [`art/t426-selector-propuesta/`](../../art/t426-selector-propuesta/). La propuesta vectorial de pradera, bosque, ruinas, desierto y nieve se inspira en los temas actuales; no se integraron fondos en el juego porque falta aprobación de Lucas.
+
+GUT: 154 scripts, 2156 pruebas y 23386 aserciones, todo pasó. `git diff --check` pasó. Gemini CLI devolvió 503 y luego cuota cero en Pro; realizó la implementación Codex.

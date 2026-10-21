@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <rect width="1280" height="720" fill="#17191d"/>
+  <text x="640" y="55" fill="#f2c64e" font-family="sans-serif" font-size="30" font-weight="700" text-anchor="middle">Fondos de tarjeta · muestras para revisar</text>
+  <text x="640" y="86" fill="#b9bdc5" font-family="sans-serif" font-size="16" text-anchor="middle">Cinco temas de campaña · patrones de bajo contraste sobre el marco oscuro y bronce</text>
+
+  <g font-family="sans-serif" text-anchor="middle">
+    <g transform="translate(54 132)">
+      <rect width="220" height="438" rx="12" fill="#202125" stroke="#9a6a2d" stroke-width="3"/>
+      <rect x="5" y="5" width="210" height="254" rx="9" fill="#263b24"/>
+      <path d="M5 220 Q50 166 103 207 T215 177 V259 H5Z" fill="#47713b" opacity=".76"/>
+      <path d="M5 237 Q66 205 122 231 T215 211 V259 H5Z" fill="#6c8b43" opacity=".65"/>
+      <g stroke="#9ab65d" stroke-width="3" opacity=".54"><path d="M25 226l-7-13m9 13 8-16m29 11-4-13m7 13 7-17m82 16-5-16m9 16 8-11m30 4-4-13m8 13 7-17"/></g>
+      <text x="110" y="294" fill="#edc34a" font-size="15">PRADERA · NIVEL 1</text>
+      <text x="110" y="329" fill="#f2eee5" font-size="20" font-weight="700">Pradera</text>
+      <text x="110" y="356" fill="#c7cad0" font-size="14">Campamento de aterrizaje</text>
+      <path d="M42 382h136" stroke="#73532b" stroke-width="2"/>
+      <text x="110" y="411" fill="#d4b46e" font-size="14">Prueba: horizonte suave</text>
+    </g>
+
+    <g transform="translate(300 132)">
+      <rect width="220" height="438" rx="12" fill="#202125" stroke="#9a6a2d" stroke-width="3"/>
+      <rect x="5" y="5" width="210" height="254" rx="9" fill="#1c3327"/>
+      <path d="M5 211 Q32 156 59 211 Q85 131 114 207 Q149 145 180 207 Q198 168 215 204 V259 H5Z" fill="#315d38" opacity=".78"/>
+      <path d="M18 210v-93m0 0-24 35m24-21 27 18m-6 57V102m0 0-23 35m23-16 26 17m89 74V89m0 0-26 39m26-19 29 20m-2 62V125m0 0-20 29m20-15 22 13" fill="none" stroke="#79904d" stroke-width="9" opacity=".5"/>
+      <text x="110" y="294" fill="#edc34a" font-size="15">BOSQUE · NIVEL 6</text>
+      <text x="110" y="329" fill="#f2eee5" font-size="20" font-weight="700">Nido</text>
+      <text x="110" y="356" fill="#c7cad0" font-size="14">El lindero</text>
+      <path d="M42 382h136" stroke="#73532b" stroke-width="2"/>
+      <text x="110" y="411" fill="#d4b46e" font-size="14">Prueba: copas y hojas</text>
+    </g>
+
+    <g transform="translate(546 132)">
+      <rect width="220" height="438" rx="12" fill="#202125" stroke="#9a6a2d" stroke-width="3"/>
+      <rect x="5" y="5" width="210" height="254" rx="9" fill="#3b3934"/>
+      <path d="M5 205h47v-45h38v45h31v-68h36v68h58v54H5Z" fill="#777467" opacity=".55"/>
+      <path d="M5 233h42v-25h31v25h27v-42h31v42h30v-28h42v54H5Z" fill="#a6a08c" opacity=".36"/>
+      <path d="M66 166v41m81-73v72m-89-28h15m66-30h17" stroke="#c0bba9" stroke-width="4" opacity=".45"/>
+      <text x="110" y="294" fill="#edc34a" font-size="15">RUINAS · NIVEL 8</text>
+      <text x="110" y="329" fill="#f2eee5" font-size="20" font-weight="700">Bastión</text>
+      <text x="110" y="356" fill="#c7cad0" font-size="14">El bastión sobre ruinas</text>
+      <path d="M42 382h136" stroke="#73532b" stroke-width="2"/>
+      <text x="110" y="411" fill="#d4b46e" font-size="14">Prueba: piedra y columnas</text>
+    </g>
+
+    <g transform="translate(792 132)">
+      <rect width="220" height="438" rx="12" fill="#202125" stroke="#9a6a2d" stroke-width="3"/>
+      <rect x="5" y="5" width="210" height="254" rx="9" fill="#4a3527"/>
+      <path d="M5 201 Q56 169 111 201 T215 190 V259 H5Z" fill="#a9643f" opacity=".72"/>
+      <path d="M5 222 Q62 195 122 222 T215 207 V259 H5Z" fill="#d0a05d" opacity=".68"/>
+      <path d="M18 236q48-17 95 0m-69-25q58-20 124-2m-73-24q43-14 97-1" fill="none" stroke="#efd397" stroke-width="3" opacity=".38"/>
+      <text x="110" y="294" fill="#edc34a" font-size="15">DESIERTO · NIVEL 10</text>
+      <text x="110" y="329" fill="#f2eee5" font-size="20" font-weight="700">La mina vieja</text>
+      <text x="110" y="356" fill="#c7cad0" font-size="14">Primer puesto de abastecimiento</text>
+      <path d="M42 382h136" stroke="#73532b" stroke-width="2"/>
+      <text x="110" y="411" fill="#d4b46e" font-size="14">Prueba: dunas y polvo</text>
+    </g>
+
+    <g transform="translate(1038 132)">
+      <rect width="220" height="438" rx="12" fill="#202125" stroke="#9a6a2d" stroke-width="3"/>
+      <rect x="5" y="5" width="210" height="254" rx="9" fill="#303b48"/>
+      <path d="M5 216 58 150l36 37 40-67 49 64 32-43v118H5Z" fill="#879bb0" opacity=".65"/>
+      <path d="m39 174 19-24 16 17m43-10 17-37 22 28m26 11 21-27 15 21" fill="none" stroke="#e4edf4" stroke-width="5" opacity=".78"/>
+      <g fill="#dbe9f1" opacity=".65"><circle cx="34" cy="54" r="3"/><circle cx="82" cy="92" r="2"/><circle cx="153" cy="47" r="3"/><circle cx="187" cy="99" r="2"/><circle cx="123" cy="70" r="2"/></g>
+      <text x="110" y="294" fill="#edc34a" font-size="15">NIEVE · NIVEL 13</text>
+      <text x="110" y="329" fill="#f2eee5" font-size="20" font-weight="700">Paso alto</text>
+      <text x="110" y="356" fill="#c7cad0" font-size="14">El camino al resto de la región</text>
+      <path d="M42 382h136" stroke="#73532b" stroke-width="2"/>
+      <text x="110" y="411" fill="#d4b46e" font-size="14">Prueba: cumbres nevadas</text>
+    </g>
+  </g>
+
+  <text x="640" y="636" fill="#d0d2d6" font-family="sans-serif" font-size="15" text-anchor="middle">Muestra vectorial inspirada en los temas de MapThemes · no está conectada al juego</text>
+  <text x="640" y="664" fill="#d0d2d6" font-family="sans-serif" font-size="15" text-anchor="middle">Los fondos temáticos quedan pendientes de aprobación y no se integran en el producto en esta propuesta.</text>
+</svg>
