@@ -1502,3 +1502,11 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
   - **Solo la oleada final:** no refleja lo que ya se colaba antes.
   - **Contar fugas sin las vidas que quita:** una Cría valdría lo mismo que un Jefe.
 - **Qué cambia:** `01-spec.md` (RF-633), `data/consejos/consejos.json` (los números), `scripts/logic/defeat_advice.gd`.
+
+## D-177 · La persona puede ocultar los consejos de derrota en Opciones
+- **Fecha:** 2026-10-21 · **Estado:** decidida · **Decidió:** Lucas.
+- **Qué:** «Consejos en la derrota» aparece en Opciones y está prendido por omisión. Se guarda en `settings`; apagarlo omite tanto el cálculo como la presentación del consejo. Guardados anteriores y valores inválidos se interpretan como prendido.
+- **Por qué:** el consejo puede quedar aunque su utilidad no esté demostrada, pero quien juega elige no verlo.
+- **Alternativas descartadas:** quitar los consejos hasta tener evidencia de eficacia; permitir solo ocultar el texto mientras se sigue procesando cada derrota; pedir una confirmación en cada partida.
+- **Qué cambia:** RF-630/RF-644, `SaveManager`, `OptionsMenu`, `Game` y sus tests. No sube `SAVE_VERSION`.
+- **Relación con D-173:** esta decisión reemplaza la recomendación de no ofrecer la opción; queda registrada para conservar el motivo original.

@@ -1163,6 +1163,8 @@ func _on_state_changed(state: LevelSession.State) -> void:
 ## El texto es "" si no corresponde. Un archivo inválido no bloquea la derrota: avisa y no hay consejo.
 func defeat_tips() -> Dictionary:
 	var tips: Dictionary = {"tower": "", "rule": "", "towers": PackedStringArray()}
+	if not SaveManager.defeat_advice_enabled():
+		return tips
 	var advice: AdviceData = AdviceData.load_file()
 	if not advice.is_valid():
 		push_warning("Consejos de derrota: %s" % "; ".join(advice.errors))

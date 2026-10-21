@@ -2,6 +2,9 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Consejo en la derrota
+- Podés apagar «Consejos en la derrota» desde Opciones, tanto en el menú principal como durante una partida. Se guarda la preferencia y, por omisión, los consejos siguen prendidos.
+
 ## Pausa que bloquea el carrito, «Ver todo» con tecla y «Mejorar» con antes → después *(T401 a T404, 2026-10-20)*
 
 - **Celular: en pausa no se construye.** Con la partida en pausa (el botón, el menú de pausa, el cartel de entrada o la app en segundo plano) el **carrito** y el botón de **demolición** se ven apagados y no hacen nada; si el catálogo estaba abierto, se cierra. La barra de abajo dice «En pausa: seguí la partida para construir». Al seguir, todo vuelve. Mejorar y vender no cambian.

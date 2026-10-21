@@ -12,6 +12,7 @@ var _old_save_path: String
 func before_each() -> void:
 	_old_save_path = SaveManager.save_path
 	SaveManager.save_path = "user://test_defeat_tips.json"
+	SaveManager.set_setting("defeat_advice", true)
 	game = GAME_SCENE.instantiate()
 	add_child_autofree(game)
 
@@ -90,6 +91,14 @@ func test_defeat_without_leaks_shows_no_tower_tip() -> void:
 	assert_true(game.end_screen.visible)
 	assert_eq(game.end_screen.tower_tip_text(), "", "sin datos no se inventa nada")
 	assert_eq(_label("Title").text, "Derrota")
+
+
+func test_turning_off_the_option_skips_the_defeat_tip() -> void:
+	_leak("flyer", 6)
+	SaveManager.set_setting("defeat_advice", false)
+	game.session.lose_lives(20)
+	assert_true(game.end_screen.visible)
+	assert_eq(game.end_screen.tower_tip_text(), "")
 
 
 func test_victory_shows_no_tips() -> void:

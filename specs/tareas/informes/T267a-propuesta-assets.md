@@ -2,6 +2,8 @@
 
 **2026-10-16 · Propuesta para revisión de Lucas. No hay assets nuevos integrados ni producción final autorizada. T267 sigue abierta.** Referencia: B-38, [inventario](T267a-inventario-assets.md), guía de arte y antecedentes T233/T260/T261. Versión de referencia: `6c38619`, en `feature/t267a-propuesta-assets`, antes del commit T267a.
 
+**Para revisar las imágenes en grande, empezar por la [guía visual de T267a](T267a-revision-visual.md)**: muestra capturas completas de juego a 1280×720 y las cinco comparaciones de piezas a lo ancho de la página. La ampliación es solo de visualización; las muestras siguen representando su escala real de juego.
+
 **Recomiendo empezar por mina, bosque explotable, Central, escombros y estatua.** En mina, bosque explotable y escombros hay un problema previo al acabado: el juego no consume los SVG entregados y muestra dibujos provisionales por código. En la Central y la estatua se nota especialmente la convivencia de geometría frontal simple con árboles, rocas y cañones renderizados. Después revisaría la Cuadrilla y la decoración repetida de desierto/nieve; no empezaría por reemplazar los suelos que Lucas ya prefirió.
 
 Para elegir: [comparador antes/después a escala nativa](../../../art/t267a/comparison.html). Permite alternar el mapa completo sin mover las piezas. Las cinco comparaciones de abajo son recortes a tamaño real, sin ampliación. Se puede elegir cada pieza por separado, conservar el antes o pedir otra dirección; ninguna muestra se declara aprobada.

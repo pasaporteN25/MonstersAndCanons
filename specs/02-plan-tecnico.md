@@ -1652,6 +1652,12 @@ Nada más: ningún otro nivel, ni `obstaculos.json`, ni `mortar.tres`, ni códig
 
 **Riesgos.** (1) Un tipo de enemigo sin regla (Normal, Cría…) diluye el peso: el piso del 30 % evita un consejo por un detalle. (2) La medición con bot de RF-639 no reemplaza partidas humanas.
 
+#### T433 · Preferencia para ocultar los consejos (RF-644, D-177)
+
+`SaveManager.DEFAULT_SETTINGS` suma `defeat_advice: true`; el getter defensivo devuelve `true` si la clave falta o no es booleana. `OptionsMenu` agrega «Consejos en la derrota» a las casillas de visualización y lee/escribe esa preferencia desde el mismo menú usado por el menú principal y pausa. `Game` consulta la preferencia antes de cargar o evaluar los consejos; apagada, la derrota recibe texto vacío. La clave se guarda en `settings` sin subir `SAVE_VERSION`.
+
+**Pruebas:** casilla prendida por omisión, apagar/cerrar/abrir y persistencia, guardado antiguo, valor inválido, apertura desde los dos menús, modo celular con altura y área táctil válidas; derrota sin cálculo cuando está apagada y victoria sin consejo. Suite GUT completa.
+
 ### T375 · Arte de Novedades (RF-640 a RF-642, D-170)
 
 1. Copiar los diez PNG aprobados a `assets/ui/novedades/`, sin alterar fuentes ni muestras. Importación `compress/mode=0`, `mipmaps/generate=false`; registrar bytes de origen y `.ctex` en `art/t375-integration/import_report.json`.

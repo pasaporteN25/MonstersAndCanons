@@ -1427,6 +1427,40 @@ En Windows, respaldar `%APPDATA%\Godot\app_userdata\JuegoA\save.json` con el jue
 
 **Lucas, 2026-10-16 (G7); es la tarea T268b.** Antes de que una build **nueva** escriba por primera vez en `save.json`, el juego copia el archivo existente a un respaldo al lado (por ejemplo `save.json.bak-<versión>`), una sola vez por versión, para que un tester pueda volver atrás si algo sale mal. Hoy el respaldo es manual y solo está descripto para Windows (T268a, §6). Falta definir el nombre del respaldo, cuántos se conservan y qué pasa si la copia falla (avisar, no bloquear el juego). Requiere RF y D propios antes de programarse (P3); no forma parte de M58.
 
+### Pedidos nuevos de Lucas · escritorio y campaña, 2026-10-21
+
+Dirección aprobada para convertir en una spec y tareas antes de programar. El alcance inicial es **desktop**; mobile se analiza aparte y solo comparte lo que la spec determine explícitamente.
+
+| Entrada | Pedido | Tareas | Alcance inicial |
+|---|---|---|---|
+| B-45 | Rediseñar el selector desktop con dos estilos: tarjetas actuales y mapa 2D del planeta. Mostrar los 15 niveles; el mapa refleja el aterrizaje y el avance de la campaña. Tres estrellas representan la zona tomada; con menos, quedan focos rebeldes. | T425–T428 | Desktop; usar las estrellas y desbloqueos existentes, sin alterar balance ni guardado. |
+| B-46 | Ordenar el panel desktop de cada cañón: reducir información duplicada, integrar el daño con la mejora, indicar el nivel al que se sube, rehacer botones y bajar la opacidad sin impedir seleccionar la torre que queda detrás. | T430 | Desktop; sin cambios de precio, daño ni comportamiento de mejoras/venta. |
+| B-47 | Hacer más personal y legible la tarjeta que presenta el nivel, con un fondo relacionado con la tarjeta del selector. Quitar en desktop el botón «Empezar» duplicado si se conserva la instrucción de clic o tecla para continuar. | T429 | Desktop; adaptar el texto a mouse/teclado; revisar mobile por separado. |
+| B-48 | Revisar las caminatas hacia la izquierda de algunos personajes y comparar soluciones de bajo costo con sus costos y límites. | T431 | Revisión de arte; no reflejar automáticamente sprites que tienen luz direccional. |
+| B-49 | Analizar el uso de torres y las estrellas en los primeros niveles antes de decidir si falta variedad, explicación o balance. | T432 | Escritorio; no imponer el uso de torres ni modificar balance sin datos y spec. |
+
+Lucas probó los niveles **1 a 4 en desktop** y los considera bien; el 1 se siente algo más difícil, pero aceptable. En varias partidas usó pocas familias de torres y casi nunca obtuvo tres estrellas. RF-93 asigna las estrellas por vidas restantes: 3 estrellas desde el 90 % (18/20), 2 desde el 50 % (10/20), y 1 por una victoria por debajo. Esto no demuestra por sí solo un defecto de balance ni una relación causal con la variedad de torres; T432 debe contrastarlo antes de proponer cambios.
+
+### B-45 · Dos estilos para elegir nivel: tarjetas y mapa planetario
+
+En desktop, permitir cambiar entre el selector actual rediseñado y una vista 2D de la región del planeta. En la vista de mapa, ubicar el punto de aterrizaje y las 15 zonas; actualizar el territorio según el progreso existente. Con 3 estrellas, la zona se muestra tomada; con menos, persiste presencia rebelde. Las reglas de estrellas y desbloqueos siguen siendo las actuales (RF-93/RF-111): el mapa comunica progreso, no introduce otro sistema de campaña. La spec definirá navegación, densidad, estados no jugados/bloqueados y cómo representar la conquista gradual. Mobile no se incluye por defecto.
+
+### B-46 · Panel desktop de torre más claro y menos obstructivo
+
+Reordenar la información de cada cañón. Quitar la descripción repetida en el panel, agrupar el daño actual con el cambio que ofrece la mejora, expresar la acción como «Mejorar a nivel N» y usar la tarjeta de tres colores para mostrar visualmente el nivel actual, manteniendo accesibles nombre y estadísticas necesarias. Rediseñar los botones y probar un fondo más transparente. El panel debe permitir seleccionar una torre que quede debajo: comparar ubicación, cierre o interacción y definir en la spec una solución que no bloquee esa acción. No alterar economía, datos de torre, precios ni reglas.
+
+### B-47 · Presentación del nivel antes de jugar
+
+Dar una identidad visual propia a la tarjeta de entrada y relacionar su fondo con el arte de la tarjeta del selector para ese nivel. En desktop, evitar dos llamadas simultáneas: conservar la indicación de continuar con clic en cualquier lugar o cualquier tecla y quitar el botón «Empezar». Asegurar que cerrar/continuar funciona con mouse y teclado. El flujo táctil y su llamada de acción se revisan por separado, no se cambian por inferencia.
+
+### B-48 · Caminata hacia la izquierda
+
+Revisar los personajes que se ven menos naturales al caminar hacia la izquierda. Presentar comparación y estimación de costo para opciones como ajustar poses existentes, crear vistas laterales propias o mantener la orientación actual. No reflejar las imágenes sin revisar la iluminación y no producir ciclos nuevos antes de aprobar una propuesta.
+
+### B-49 · Variedad de torres y lectura de las estrellas
+
+Registrar qué torres se usan y qué resultado de estrellas deja la campaña inicial; contrastar esos datos con el diseño de niveles, torres disponibles, tutorial y criterios de RF-93. Distinguir «no hizo falta usar todas las torres» de «faltó una opción útil o una explicación». No convertir cada torre en requisito ni tocar el balance hasta tener evidencia y una propuesta revisable.
+
 ### B-01 · Épocas: la guerra evoluciona con el tiempo
 **Trasladado por Lucas, 2026-10-07 (D-076):** Épocas no se hace en la V1; pasa al backlog de *Monsters & Canons 3D* o de *M&C 2* ([`06-monsters-canons-3d.md`](06-monsters-canons-3d.md) §15). La documentación de Épocas que menciona B-03 viaja con ella. El texto siguiente queda como registro.
 *Propuesta de Lucas, 2026-09-28.*
@@ -4031,14 +4065,14 @@ Con la copia automática, el archivo **tal como lo dejó la build anterior** que
 4. **P4 · Si la medición muestra que alcanza el Mortero pero se pierden vidas, ¿probamos primero la opción A** (escombros del 9 a 60 de oro)? Recomiendo A antes que B o C.
 ### M70 · Un consejo en la pantalla de derrota: qué torre conviene para esas oleadas (Lucas, 2026-10-20; T420 a T422)
 
-**Estado: especificada en T420; el código lo hacen T420 (datos y lógica) y T421 (partida y pantalla); T422 mide y cierra la documentación.** `[mobile+x86]`. Las razones y las alternativas descartadas están en **D-171 a D-175**. **No cambia el balance, los niveles, las torres, los enemigos ni el guardado.**
+**Estado: especificada en T420; el código lo hacen T420 (datos y lógica), T421 (partida y pantalla) y T433 (preferencia de Opciones); T422 mide y cierra la documentación.** `[mobile+x86]`. Las razones y las alternativas están en **D-171 a D-177**. No cambia el balance, los niveles, las torres ni los enemigos. La opción se guarda como una clave aditiva, sin subir la versión del guardado (RF-644).
 
 **Qué pidió Lucas.** *(2026-10-20)* Un **consejo en la pantalla de derrota** encarado por **qué torre conviene** para esas oleadas, según **qué enemigos te hicieron perder** (los que llegaron a la salida y te quitaron vidas, y los de la oleada en que perdiste), usando **solo datos reales del juego** (volador → torres que golpean al aire; armadura alta → daño por golpe alto o fuego; resistente a la ralentización → no confiar en ella; curanderos y regeneración → daño concentrado…), con una tabla enemigo→consejo en un archivo de `data/` fácil de retocar, textos cortos en español rioplatense y **sin nombrar torres que el nivel no ofrece**. El aviso «te sobra oro» **se descartó** (propuesta 2 de T350). Esto es la propuesta A de `specs/tareas/informes/T350-analisis-sin-mejoras-y-8-9.md`, ya reencuadrada por Lucas.
 
 **Idea en pocas palabras.** Mientras se juega, la partida anota **cuántos enemigos de cada tipo llegaron a la salida** (un diccionario que se toca solo cuando un enemigo llega: nada por cuadro). Al perder, una función pura mira esa lista y la oleada en que perdiste, **puntúa cada regla** de la tabla (`data/consejos/consejos.json`) y elige **la de más peso**. Si el nivel ofrece alguna torre que sirva para esa regla, la pantalla de derrota muestra **una frase** («Contra voladores, probá con Ametralladora y Francotirador.»).
 
-- **RF-630** **Cuándo sale.** El consejo sale **solo en la pantalla de derrota** (`EndScreen.show_defeat`), en toda derrota con datos suficientes (RF-635): campaña, modo, mapa de la comunidad y prueba del editor. **No** sale en la victoria. **No hay opción para apagarlo** (D-173).
-  > **Dado** una partida perdida con datos → **Cuando** aparece «Derrota» → **Entonces** debajo de «Llegaste a la oleada N de M» está el consejo de torre. **Dado** una victoria → **Entonces** no hay consejo.
+- **RF-630** **Cuándo sale.** Si «Consejos en la derrota» está prendido (RF-644), el consejo sale **solo en la pantalla de derrota** (`EndScreen.show_defeat`), si hay datos suficientes (RF-635): campaña, modo, mapa de la comunidad y prueba del editor. **No** sale en la victoria. Si está apagado o no hay datos suficientes, no se calcula ni se muestra.
+  > **Dado** una partida perdida con datos y la opción prendida → **Cuando** aparece «Derrota» → **Entonces** debajo de «Llegaste a la oleada N de M» está el consejo de torre. **Dado** una victoria o la opción apagada → **Entonces** no hay consejo.
 
 - **RF-631** **Registro de fugas.** La partida lleva un **registro liviano** (`LeakLog`, lógica pura): por cada enemigo que **llega a la salida y quita vidas** suma una fuga a su tipo (`EnemyData`) y las vidas que **realmente** quitó (sin pasar de las que quedaban, y nada con vidas infinitas del modo de pruebas ni después de terminada la partida). Se anota **en el momento en que el enemigo llega** (`Game._on_enemy_reached_exit`); no hay trabajo por cuadro. El registro no se guarda en ningún archivo.
   > **Dado** 3 Voladores y 1 Jefe que llegan a la salida → **Entonces** el registro dice Volador: 3 fugas y 3 vidas; Jefe: 1 fuga y 10 vidas. **Dado** un enemigo que llega con 1 vida restante y quita 10 → **Entonces** se anota 1.
@@ -4070,12 +4104,14 @@ Con la copia automática, el archivo **tal como lo dejó la build anterior** que
 
 - **RF-639** **Qué se mide y qué no.** T422 hace perder a propósito al bot en los **15 niveles** y registra si el consejo coincide con la **contramedida real** (definición operativa en T422). Es una **hipótesis medida con un bot**, no una prueba con personas: **ningún humano ni celular real** jugó con esto.
 
+- **RF-644 · Preferencia persistente.** Opciones, tanto desde el menú principal como desde pausa, ofrece la casilla «Consejos en la derrota», prendida por omisión. Al apagarla no se calcula ni se muestra el consejo; al prenderla vuelve a estar disponible en las derrotas siguientes. La preferencia queda en `settings` del guardado, sin subir `SAVE_VERSION`; un guardado anterior sin esa clave la interpreta como prendida, y un valor inválido también se lee como prendido. La casilla funciona en PC y celular, con el tamaño táctil establecido. **Dado** un guardado viejo → **Cuando** se abren Opciones → **Entonces** la casilla aparece prendida. **Dado** que se apaga y se cierra Opciones → **Cuando** se vuelve a abrir desde menú o pausa → **Entonces** sigue apagada. **Dado** una derrota con la opción apagada → **Entonces** no se muestra ni se calcula consejo.
+
 > **Dado** un archivo con una regla sin `{torres}`, un criterio inexistente o un texto de 3 líneas → **Entonces** el validador lo dice y la derrota se muestra sin consejo. **Dado** la pantalla de derrota con el texto más largo permitido → **Entonces** el panel mide menos de 720 de alto.
 
 #### Lo que M70 no incluye
 
 - **Avisos sobre oro sobrante o mejoras pendientes** (propuesta 2 de T350, descartada por Lucas), **marcas en las torres mejorables** ni **hitos de primera mejora**.
-- **Consejos en la victoria**, en la pausa o en los carteles de entrada; **más de un consejo de torre** (D-171); **una opción para apagarlo** (D-173).
+- **Consejos en la victoria**, en la pausa o en los carteles de entrada; **más de un consejo de torre** (D-171); cambiar la lógica o el texto del consejo al apagarlo.
 - **Recomendar una posición, una combinación o una estrategia** (solo qué *tipo* de torre).
 - **Medir con personas.** Ni un celular real.
 
