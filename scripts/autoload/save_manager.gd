@@ -70,6 +70,7 @@ func load_save() -> void:
 	_tutorial_done = false
 	_news_version = ""
 	_ui_prefs = UiPrefs.new()
+	ViewAllBinding.apply(_ui_prefs.view_all_key)  # M68 (RF-613)
 	if not FileAccess.file_exists(save_path):
 		return
 	var file := FileAccess.open(save_path, FileAccess.READ)
@@ -93,6 +94,7 @@ func load_save() -> void:
 	var intro_seen: Variant = (parsed as Dictionary).get("intro_seen", false)
 	_intro_seen = typeof(intro_seen) == TYPE_BOOL and intro_seen  # solo `true` booleano cuenta (RF-498)
 	_ui_prefs = UiPrefs.read((parsed as Dictionary).get("ui_prefs", null))
+	ViewAllBinding.apply(_ui_prefs.view_all_key)  # M68 (RF-613)
 	var tutorial_done: Variant = (parsed as Dictionary).get("tutorial_done", null)
 	_tutorial_done = tutorial_done if typeof(tutorial_done) == TYPE_BOOL else is_completed(TUTORIAL_LEVEL_ID)  # RF-575
 	var news_version: Variant = (parsed as Dictionary).get("news_version", "")
@@ -377,6 +379,7 @@ func get_ui_prefs() -> UiPrefs:
 
 func set_ui_prefs(prefs: UiPrefs) -> void:
 	_ui_prefs = UiPrefs.read(prefs.to_dict())
+	ViewAllBinding.apply(_ui_prefs.view_all_key)  # M68 (RF-613)
 	save()
 
 

@@ -1385,6 +1385,71 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Límites aceptados:** (1) 270 de oro de demoliciones más 300 del Mortero son 570 de oro en un mapa de 320 de arranque: **alcanzar** el Mortero no garantiza **poder permitírselo sin perder vidas**; se mide en T282 y lo juzga Lucas en T283. (2) La primera vez hay exactamente 3 recursos: quien pague un Francotirador con su segunda forma (120 + 1 recurso) ya no llega al Mortero en esa partida. (3) El panel dirá «Puede dar 1 recurso (100 %)», con la redacción de siempre. (4) Las vidas del bot no predicen las de una persona.
 - **Qué cambia:** `01-spec.md` (M61, RF-523 a RF-525; nota en RF-420), `02-plan-tecnico.md` (M61), `03-tareas.md` (T282 y T283 nuevas), `09-decisiones-pendientes-v1.md` (nota en Q-21), `CHANGELOG.md` y `CONTENIDO.md`. **No cambia ningún código, dato ni asset todavía:** eso es T282.
 
+## D-160 · Con la partida en pausa, el carrito y la demolición del celular se apagan; no se puede «planear» en pausa
+- **Fecha:** 2026-10-20 · **Estado:** implementada (T401) · **Decidió:** Lucas (respuesta a D10 del informe T289: «bloquear el carrito en pausa»; además quiere pensar para qué sirve la pausa, sin apuro) / Claude (que también se apague la demolición y cómo se avisa)
+- **Qué:** `MobileHud.set_paused(true)` cierra el catálogo, deja el carrito y el botón de demolición con el estilo de apagado y corta sus acciones (`_on_cart_pressed`, el toque soltado sobre la demolición y `open_catalog`); la línea de abajo dice «En pausa: seguí la partida para construir». `Game` lo conecta a `pause_changed`, así vale para el botón, el menú de pausa, el cartel de entrada y la pausa en segundo plano.
+- **Por qué:**
+  - **Es lo que Lucas decidió** y lo que RF-104 ya decía para la PC: en pausa no se construye. Antes, en el celular, el carrito dejaba **elegir** una torre y el fantasma, y el error aparecía recién al confirmar: una regla que falla tarde.
+  - **La demolición es otra forma de gastar oro:** dejarla viva en pausa sería la misma trampa por la otra puerta.
+  - **El aviso en la barra** evita que el jugador crea que el botón se rompió; es un texto, no un control nuevo.
+- **Alternativas descartadas:**
+  - **Dejar poner el fantasma en pausa y que la tilde diga «En pausa»** (la segunda opción de D10): es lo que T262 echaba de menos (planear con calma), pero cambia para qué sirve la pausa, y Lucas quiere pensarlo antes. Queda como idea futura.
+  - **Ocultar el carrito en pausa:** el botón desaparece y vuelve, y su lugar arrastrado cambia el diseño; apagado se entiende más rápido.
+  - **Pausar sin tocar la interfaz y dejar que `can_build` falle:** es lo que había.
+- **Límites aceptados:** probado con la escena y toques simulados, **no en un celular real**.
+- **Qué cambia:** `01-spec.md` (M68, RF-610 y RF-611), `02-plan-tecnico.md` (M68), `03-tareas.md` (T401), `CHANGELOG.md`
+
+## D-161 · «Ver todo» en PC: botón igual que en el celular y una tecla propia (acción de input `view_all`, la V)
+- **Fecha:** 2026-10-20 · **Estado:** implementada (T402) · **Decidió:** Lucas («botón y combinación de teclas, configurable, ambos») / Claude (la V por omisión, los choques y que valga en pausa)
+- **Qué:** el botón de la PC (RF-545) se ve con otro zoom **o** con el mapa corrido, como en el celular; la acción `view_all` (V) hace lo mismo y la tecla se cambia desde Opciones con un botón que espera la próxima tecla.
+- **Por qué:**
+  - **Ya había un botón, pero solo con el zoom mínimo y el mapa corrido.** Quien acerca con la rueda no tenía cómo volver salvo la rueda hacia atrás; ahora tiene botón y tecla.
+  - **Una acción de `InputMap` y no una tecla escrita en el código:** es lo que Godot ofrece para remapear y es como ya están `pause` y `upgrade`.
+  - **V por omisión:** libre (las teclas `1` a `0`, `Tab`, `Espacio`, `P`, `F`, `U`, `S`, `Esc` están usadas), mnemotécnica («Ver»).
+  - **Vale en pausa:** mover la cámara no cambia la partida, y en pausa es cuando uno mira el mapa con calma.
+  - **Se rechazan las teclas ocupadas** con un aviso, en vez de dejar dos acciones en la misma tecla.
+- **Alternativas descartadas:**
+  - **Combinaciones con modificadores (Ctrl+V…):** más difícil de capturar y de explicar; «combinación» se entendió como una tecla elegible. Si Lucas quiere modificadores, se agrega.
+  - **Un menú general de teclas:** mucho más grande que lo pedido (idea para el backlog).
+  - **Dejar el botón como estaba (solo zoom mínimo):** no resuelve el caso de la rueda.
+- **Límites aceptados:** solo se configura una tecla simple (sin modificadores) y una sola por acción; no se probó con teclados que no sean QWERTY (se guarda el código físico, así la V es la misma tecla física en cualquier distribución).
+- **Qué cambia:** `project.godot` (acción `view_all`), `01-spec.md` (M68, RF-612 a RF-614; nota en RF-545), `02-plan-tecnico.md`, `03-tareas.md` (T402), `CHANGELOG.md`, `ONBOARDING.md`
+
+## D-162 · La tecla de «Ver todo» se guarda en `ui_prefs` como un campo aditivo, sin tocar `SAVE_VERSION`
+- **Fecha:** 2026-10-20 · **Estado:** implementada (T402) · **Decidió:** Lucas (que sea configurable, sin romper guardados) / Claude (dónde y cómo)
+- **Qué:** `UiPrefs.view_all_key` (entero, el código físico), con la V por omisión; `to_dict` lo escribe y `read` lo valida (entero positivo que no sea `Esc` ni un modificador). Ausente = V sin aviso; inválido = V con `push_warning`. `SaveManager` aplica la tecla al cargar y al guardar las preferencias (`ViewAllBinding.apply`).
+- **Por qué:**
+  - **Aditivo, como `demolish_side` (RF-542), `intro_seen` y `news_version`:** `SAVE_VERSION` descarta los guardados de otra versión («se empieza de cero»); un campo más no rompe nada ni a los guardados viejos ni a una versión anterior del juego.
+  - **`ui_prefs` ya es el lugar de las preferencias de interfaz** (RF-508), con su lectura defensiva y sus tests.
+  - **Código físico y no la letra:** la misma tecla del teclado en cualquier distribución.
+- **Alternativas descartadas:**
+  - **Guardarla en `settings`:** `settings` trae sus valores por omisión en `DEFAULT_SETTINGS` y se valida por tipo; mezclaría una preferencia de interfaz con el volumen.
+  - **Un archivo aparte (`user://input.cfg`):** otro archivo que respaldar y que se desincroniza del guardado.
+  - **Subir `SAVE_VERSION`:** perdería el progreso de todos para guardar un entero.
+- **Qué cambia:** `01-spec.md` (RF-615), `02-plan-tecnico.md` (M68), `03-tareas.md` (T402), `tests/test_view_all_binding.gd`
+
+## D-163 · «Mejorar» muestra el antes → después con `UpgradeDeltas` y `data/ui/mejoras.json` (opción C de T350)
+- **Fecha:** 2026-10-20 · **Estado:** implementada (T403, T404) · **Decidió:** Lucas (la opción C) / Claude (dónde se muestra y cuántas estadísticas)
+- **Qué:** `UpgradeDeltas.before_after` / `preview` devuelven, para las mismas estadísticas que `compute`, el valor antes y después (con la escala de la tabla) y el texto «daño 5 → 8». El panel de la PC lo muestra encima de «Mejorar»; el celular, como un renglón más de la barra de abajo.
+- **Por qué:**
+  - **Reusa lo que ya existe (P2, P10):** la tabla de estadísticas, su orden, la tolerancia y el tope ya los ajusta quien toca `mejoras.json`; mostrar la misma lista antes de pagar y después de mejorar evita que el jugador vea dos cosas distintas.
+  - **Decidir con información:** hoy el botón dice solo el costo; el jugador no sabe qué compra.
+  - **En el celular, un renglón de la barra y no dentro del botón:** el botón mide 196 × 84 px y ya tiene dos renglones; la barra tiene ancho de sobra.
+- **Alternativas descartadas:**
+  - **Poner el detalle en la ayuda (tooltip) del botón:** en el celular no hay pasar-el-mouse.
+  - **Mostrar todas las estadísticas, también las que no cambian:** ruido; se pierde lo que importa.
+  - **Un archivo de datos nuevo:** `mejoras.json` ya existe y es del mismo asunto.
+- **Límites aceptados:** el panel de la PC crece unas dos líneas; el texto del celular se mide a 1280 × 720 en un test de existencia, **no con una captura en un celular real**.
+- **Qué cambia:** `scripts/logic/upgrade_deltas.gd`, `scenes/ui/tower_panel.gd`, `scenes/game/mobile_hud.gd`, `01-spec.md` (RF-616 a RF-618), `tests/test_upgrade_preview.gd`
+
+## D-164 · La franja de borde de 56 px de RF-507 se saca de la spec; «te sobra oro» queda descartada y el consejo en la derrota pasa a M70
+- **Fecha:** 2026-10-20 · **Estado:** implementada (T405) · **Decidió:** Lucas (D4 del informe T289 y propuestas A y B de T350)
+- **Qué:** RF-507 ya no habla de la franja, y se borra el dato `franja_px` de `data/ui/mobile_ui.json` y de `MobileUiConfig`. La propuesta B («te sobra oro») queda descartada en §13. La A se reencuadra como «qué torre conviene para las oleadas» y se hace en M70. El `README.md` pasa de 9 a 11 torres.
+- **Por qué:**
+  - **La franja no se usaba en ningún lado** (T289, H-14 f): los botones se pegan al borde y quedan encima del mapa. Un dato que nadie lee confunde a quien edite el archivo.
+  - **B y A:** decisión de Lucas; no se vuelve a proponer B.
+- **Alternativas descartadas:** reservar de verdad la franja (achicar el mapa a los costados): Lucas prefirió sacarla.
+- **Qué cambia:** `01-spec.md` (RF-507, M60, §13), `02-plan-tecnico.md`, `CONTENIDO.md`, `README.md`, `specs/tareas/informes/T289-auditoria-mobile-implementado.md` (§7), `CHANGELOG.md`
 
 ## D-170 · Integrar el arte aprobado de Novedades sin publicar la 1.0.0
 - **Fecha:** 2026-10-20 · **Estado:** Aceptada · **Decidió:** Lucas (aprobación del arte y encargo de T375); Codex (detalle de integración).
