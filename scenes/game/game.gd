@@ -625,7 +625,7 @@ func _open_intro_if_pending() -> void:
 	build_controller.input_blocked = true  # leer no cuesta tiempo ni deja construir
 	set_paused(true)
 	hud.show_paused(true, false)  # el cartel no es el menú de pausa: no dice «PAUSA»
-	level_intro.open(level_data.display_name, level_data.place_text, level_data.intro_text)
+	level_intro.open(level_data.display_name, level_data.place_text, level_data.intro_text, level_data.theme)
 	if mobile_hud != null:
 		mobile_hud.set_modal_open(true)
 

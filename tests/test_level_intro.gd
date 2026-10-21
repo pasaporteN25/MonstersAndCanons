@@ -102,6 +102,69 @@ func test_each_way_of_skipping_closes_it_once() -> void:
 		assert_eq(closed[0], 1, "avisa una sola vez")
 
 
+func test_desktop_replaces_the_start_button_with_a_mouse_and_keyboard_hint() -> void:
+	var intro: LevelIntro = (load("res://scenes/ui/level_intro.tscn") as PackedScene).instantiate()
+	add_child_autofree(intro)
+	intro.open("N", "L", "Línea.")
+	var button: Button = intro.get_node("%StartButton")
+	var hint: Label = intro.get_node("%Hint")
+	if UiMode.is_mobile():
+		assert_true(button.visible, "mobile conserva el botón")
+		assert_eq(hint.text, LevelIntro.HINT_MOBILE)
+		return
+	assert_false(button.visible, "en PC no hay botón redundante")
+	assert_eq(hint.text, LevelIntro.HINT_DESKTOP)
+	assert_true(hint.text.contains("clic") and hint.text.contains("cualquier tecla"),
+		"la indicación nombra mouse y teclado")
+
+
+func test_any_key_closes_the_intro_as_the_hint_promises() -> void:
+	var intro: LevelIntro = (load("res://scenes/ui/level_intro.tscn") as PackedScene).instantiate()
+	add_child_autofree(intro)
+	intro.open("N", "L", "Línea.")
+	intro._input(_key(KEY_A))
+	assert_false(intro.is_open(), "cualquier tecla cierra el cartel")
+
+
+func test_a_click_and_a_key_together_close_it_only_once() -> void:
+	var intro: LevelIntro = (load("res://scenes/ui/level_intro.tscn") as PackedScene).instantiate()
+	add_child_autofree(intro)
+	var closed: Array[int] = [0]
+	intro.closed.connect(func() -> void: closed[0] += 1)
+	intro.open("N", "L", "Línea.")
+	intro._input(_click(false))
+	intro._input(_key(KEY_SPACE))
+	intro._input(_click(false))
+	assert_eq(closed[0], 1, "mouse y teclado seguidos no activan dos veces")
+
+
+func test_the_backdrop_follows_the_level_theme() -> void:
+	var intro: LevelIntro = (load("res://scenes/ui/level_intro.tscn") as PackedScene).instantiate()
+	add_child_autofree(intro)
+	var backdrop: TextureRect = intro.get_node("%ThemeBackdrop")
+	var tint: ColorRect = intro.get_node("%ThemeTint")
+	var seen: Array[Texture2D] = []
+	for id: String in MapThemes.IDS:
+		intro.open("N", "L", "Línea.", StringName(id))
+		assert_eq(backdrop.texture, MapThemes.ground_texture(StringName(id)), "suelo del tema %s" % id)
+		var edge: Color = MapThemes.palette(StringName(id))["edge"]
+		assert_eq(Color(tint.color, 1.0), Color(edge, 1.0), "tinte del tema %s" % id)
+		assert_lt(backdrop.modulate.a, 0.5, "el suelo queda tenue para que el texto se lea")
+		if not seen.has(backdrop.texture):
+			seen.append(backdrop.texture)
+		intro.close()
+	assert_eq(seen.size(), MapThemes.IDS.size(), "cada tema tiene un fondo distinto")
+	intro.open("N", "L", "Línea.", &"inexistente")
+	assert_eq(backdrop.texture, MapThemes.ground_texture(MapThemes.DEFAULT), "un tema desconocido usa la pradera")
+
+
+func test_the_backdrop_does_not_swallow_clicks() -> void:
+	var intro: LevelIntro = (load("res://scenes/ui/level_intro.tscn") as PackedScene).instantiate()
+	add_child_autofree(intro)
+	assert_eq((intro.get_node("%ThemeBackdrop") as Control).mouse_filter, Control.MOUSE_FILTER_IGNORE)
+	assert_eq((intro.get_node("%ThemeTint") as Control).mouse_filter, Control.MOUSE_FILTER_IGNORE)
+
+
 func test_pressing_the_mouse_alone_does_not_close_it_but_release_does() -> void:
 	var intro: LevelIntro = (load("res://scenes/ui/level_intro.tscn") as PackedScene).instantiate()
 	add_child_autofree(intro)
@@ -113,6 +176,12 @@ func test_pressing_the_mouse_alone_does_not_close_it_but_release_does() -> void:
 
 
 # --- En la partida (Game) ---
+
+func test_the_intro_of_a_level_uses_the_theme_of_its_map() -> void:
+	_open_game(7)
+	var backdrop: TextureRect = game.level_intro.get_node("%ThemeBackdrop")
+	assert_eq(backdrop.texture, MapThemes.ground_texture(game.level_data.theme), "el fondo coincide con el nivel")
+
 
 func test_entering_a_level_from_the_select_screen_opens_the_intro_and_pauses() -> void:
 	_open_game(7)  # nivel 8

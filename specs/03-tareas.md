@@ -2404,10 +2404,11 @@ El alcance de T425 a T432 es desktop. Mobile continúa por su propia experiencia
   **Hecho cuando:** se entregan muestra y capturas a tamaño de pantalla, con procedencia/archivos fuente; Lucas puede aprobar, pedir cambios o rechazar antes de integrar los assets finales. No cambiar código de juego ni datos de campaña.
   **Resultado:** se entregó maqueta SVG editable y captura PNG a 1280×720 en `art/t427-mapa-propuesta/`, con 15 marcadores, aterrizaje, leyenda pictográfica y tres estados. Lucas aprobó la dirección visual el 2026-10-21; T428 la integra al selector de campaña. Procedencia y peso están documentados.
 
-- [ ] **T429 · `[x86]` · Tarjeta de entrada del nivel coherente con el selector (Gemini).**
+- [x] **T429 · `[x86]` · Tarjeta de entrada del nivel coherente con el selector (Claude).**
   **Refs:** B-47, T425–T426. **Depende de:** T425 y dirección visual de las tarjetas aprobada en T426.
   Personalizar la tarjeta que describe el nivel con el mismo lenguaje de fondo que su tarjeta de selección. En desktop, quitar el botón redundante «Empezar» si continúa la instrucción de hacer clic en cualquier lugar o presionar cualquier tecla; adaptar el texto para mouse y teclado. Mantener la pausa/cuenta atrás y las transiciones actuales.
   **Hecho cuando:** texto, fondo y nivel coinciden; mouse y teclado continúan una sola vez; no hay dos llamadas a la misma acción; tests de escena/input, capturas, GUT completo. Táctil/mobile queda fuera salvo que T425 lo defina.
+  **Resultado (2026-10-21):** la intro recibe el tema de `level_data.theme` y comparte con el selector el suelo tenue de `MapThemes` y su paleta. En PC no muestra el redundante «Empezar» y permite continuar con clic o cualquier tecla (consumida antes de que llegue a la partida); mobile conserva botón y toque. Se preservan pausa, cuenta atrás y señal `closed` única. Verificado con 35 pruebas focales y GUT completo: 156 scripts, 2194 pruebas, 23917 aserciones aprobadas. Capturas revisadas a 1280×720 y 1920×1080 en `art/t429-intro/`.
 
 - [x] **T430 · `[x86]` · Rediseñar el panel desktop de torres (Codex).**
   **Refs:** B-46, T425, B-28 como antecedente. **Depende de:** T425.

@@ -2,6 +2,10 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## La entrada al nivel en PC, con el paisaje del nivel *(T429, 2026-10-21)*
+
+En PC, el cartel que aparece al entrar a un nivel ya no tiene el botón «Empezar»: dice **«Hacé clic en cualquier lugar, o apretá cualquier tecla, para empezar.»** y sigue arrancando una sola vez, sin tocar la pausa ni la cuenta atrás. Detrás del texto se ve, tenue, el suelo del paisaje de ese nivel (pradera, desierto, nieve, etc.). El celular no cambia: conserva el botón y su texto.
+
 ## Mapa planetario como segunda vista de la campaña en PC *(T428, 2026-10-21)*
 
 En PC, abajo del selector de campaña hay un interruptor **Vista: Tarjetas / Mapa**. El mapa dibuja Cántaro con el aterrizaje y las 15 zonas, con el estilo de la muestra que aprobó Lucas. Cada zona muestra su estado: **bloqueada** (candado), **disponible**, **presencia rebelde** (bandera, victoria con 1 o 2 estrellas) y **zona tomada** (tilde, 3 estrellas); no dependen solo del color. Se recorre con el mouse o con las flechas, y Enter o «Jugar» abren el nivel; una zona bloqueada se puede mirar pero no abrir. Lo elegido se recuerda en Opciones del guardado; los guardados viejos abren con tarjetas. Cambiar de vista no toca el progreso, los desbloqueos ni las estrellas, y el celular no cambia.
