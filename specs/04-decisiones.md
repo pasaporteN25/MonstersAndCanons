@@ -1450,3 +1450,10 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
   - **B y A:** decisión de Lucas; no se vuelve a proponer B.
 - **Alternativas descartadas:** reservar de verdad la franja (achicar el mapa a los costados): Lucas prefirió sacarla.
 - **Qué cambia:** `01-spec.md` (RF-507, M60, §13), `02-plan-tecnico.md`, `CONTENIDO.md`, `README.md`, `specs/tareas/informes/T289-auditoria-mobile-implementado.md` (§7), `CHANGELOG.md`
+
+## D-170 · Integrar el arte aprobado de Novedades sin publicar la 1.0.0
+- **Fecha:** 2026-10-20 · **Estado:** Aceptada · **Decidió:** Lucas (aprobación del arte y encargo de T375); Codex (detalle de integración).
+- **Qué:** copiar los diez `news_*.png` de `art/t372-muestras/` sin cambios a `assets/ui/novedades/`, con importación sin pérdida y sin mipmaps. Conectar la cabecera y siete medallones desde JSON. El octavo medallón y la banda sobria quedan disponibles sin inventar contenido. Cabecera proporcional al ancho interior, texto debajo sobre el panel y medallones de 48 px en PC / 64 px en celular. Se conserva el rombo si falta ícono y la carga al abrir de RF-604.
+- **Por qué:** respeta las muestras aprobadas y su lectura a escala real. El informe del arte mide contraste insuficiente sobre la ilustración sola: el panel oscuro existente sostiene el texto sin modificar ni oscurecer la imagen.
+- **Alternativas descartadas:** redibujar o recomprimir con pérdida los PNG aprobados (innecesario con estos pesos); mantener cabecera de altura fija (no aprovecha el ancho ni las dos proporciones); superponer texto sin soporte (contraste insuficiente); publicar la versión o aprobar los textos por inferencia (fuera del pedido).
+- **Límites:** aprobar el arte no aprueba los textos; `borrador` sigue en `true`. Sin exportaciones, commit ni push por instrucción de Lucas. La verificación en celular físico queda pendiente.

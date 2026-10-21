@@ -53,3 +53,26 @@ func test_the_text_does_not_repeat_other_numbers() -> void:
 		digits.compile("\\d+")
 		for found: RegExMatch in digits.search_all(text):
 			assert_eq(found.get_string().to_int(), GameFlow.level_count(), "la única cifra permitida es la de niveles: «%s»" % text)
+
+
+func test_official_art_maps_each_item_to_its_approved_medallion() -> void:
+	var expected: PackedStringArray = ["map", "tower", "monster", "siege", "editor", "mobile", "book"]
+	assert_eq(_entry()["cabecera"], "res://assets/ui/novedades/news_header_1_0.png")
+	var items: Array = _entry()["novedades"]
+	assert_eq(items.size(), expected.size())
+	for i: int in mini(items.size(), expected.size()):
+		assert_eq(items[i]["icono"], "res://assets/ui/novedades/news_icon_%s.png" % expected[i])
+
+
+func test_all_ten_approved_images_are_imported_without_mipmaps() -> void:
+	var names: PackedStringArray = ["news_header_1_0", "news_header_plain", "news_icon_map", "news_icon_tower",
+		"news_icon_monster", "news_icon_siege", "news_icon_editor", "news_icon_mobile", "news_icon_book", "news_icon_upgrade"]
+	for name: String in names:
+		var path: String = "res://assets/ui/novedades/%s.png" % name
+		var texture: Texture2D = load(path) as Texture2D
+		assert_not_null(texture, path)
+		var config := ConfigFile.new()
+		assert_eq(config.load(path + ".import"), OK)
+		assert_eq(config.get_value("params", "mipmaps/generate"), false, path)
+		assert_eq(config.get_value("params", "compress/mode"), 0, "compresión sin pérdida")
+		assert_false(texture.get_image().has_mipmaps())
