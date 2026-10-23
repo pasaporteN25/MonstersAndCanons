@@ -452,6 +452,7 @@ Recordatorio de `CLAUDE.md`: al cambiar un texto que ya estaba escrito (rótulo 
    - El alcance **reaparece como parte del efecto de la mejora** y, en PC, al **pasar el mouse sobre «Mejorar»** (vista de la ampliación, con una animación).
    - En el celular, la mejora lleva una **animación cosmética** (la mejora se aplica al instante; no hay espera real ni cambio de balance), que se puede **apagar desde Opciones** para quien quiera una mejora automática.
    - La opción de Opciones se simplifica a **Oculto / Sutil / Completo** para la torre seleccionada, con **Oculto por omisión** (el fantasma queda siempre completo).
-   - *Pendiente de detallar en la spec:* cómo se ve el alcance en el celular sin mouse (propuesta: primera pulsación muestra la ampliación, la segunda confirma) y si el arco celeste de las torres de apoyo sigue la misma opción.
+   - **Celular sin mouse:** la primera pulsación en «Mejorar» muestra la ampliación y la segunda confirma (aceptado por Lucas).
+   - **Arco celeste del Estandarte mecánico** (la única torre de apoyo, `support_only`): **sigue la misma opción de alcance** (con «Oculto» desaparece; con «Sutil» o «Completo» se ve siempre).
 4. **Opciones.** Se aprueban los **cinco grupos** tal como están en §4 (Sonido, Pantalla, Partida y ayudas, Controles, Avanzado). La fila **«Interfaz»** se conserva, con **Automática** por omisión, dentro de **Avanzado**.
 5. **Controles.** Hoy solo se puede cambiar la tecla de «Ver todo»; el resto son fijas. Se registra **B-58** (teclas y atajos configurables) en el backlog, sin implementarlo.
