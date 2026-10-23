@@ -384,3 +384,21 @@ NIVEL 14 con F2:         ▓3s▓ una sola vez, en la oleada 11.
 | **P-E12** | ¿Querés ver primero la **maqueta de rectángulos** (T4xx-b) y recién después aprobar la spec, o al revés? | **Primero la maqueta**: decide P-E3, P-E4 y P-E5 con algo a la vista y no con números. |
 
 **Hasta que Lucas conteste P-E1 a P-E5 y P-E10 no se encarga arte (T367).** El código con rectángulos (T4xx-c) puede esperar solo a P-E1 a P-E4, P-E6, P-E7 y P-E9.
+
+## Decisiones de Lucas (2026-10-23)
+
+> Registradas por Claude a partir de las respuestas de Lucas en la sesión. **Todavía no son D ni RF** y nada está implementado; los números de D/RF los fija la tarea de spec. Lo que dice «a aclarar» queda abierto.
+
+1. **Excepción a §11/D-089:** autorizada, **solo para la presentación de jefes**, con nombre propio. La regla «sin cinemáticas animadas» sigue valiendo para todo lo demás.
+2. **Reemplazo de T368:** el destello y el cartel de T368 se reemplazan enteros (no estaban aprobados, según las instrucciones de Lucas).
+3. **Duración:** **5 s la primera vez** que se ve a ese jefe y **3 s después**. Consecuencia: el guardado necesita un dato aditivo con los jefes ya vistos.
+4. **Frecuencia:** la **primera oleada con jefe de cada partida** (15 en la campaña). Reaparece si se reintenta el nivel.
+5. **Salteo:** cualquier tecla o toque tras **0,3 s** de protección.
+6. **Tarjeta «Nuevo enemigo»:** sigue saliendo, **después** de la presentación.
+7. **Asedio:** la presentación **no sale**.
+8. **Tecla P:** saltea y **deja la partida en pausa**.
+9. **Fondo:** **propio por jefe** (elegido contra la recomendación de un fondo genérico teñido). Hoy hay un solo tipo de jefe en los niveles (`boss.tres`, 64 apariciones) más el Coloso, así que son pocos fondos; **a aclarar** cuáles cuentan como jefe.
+10. **Animación:** **por código sobre ilustraciones quietas**.
+11. **Marca de por dónde entra el jefe al volver:** no.
+12. **Opciones:** la misma casilla, renombrada **«Presentación de los jefes»**, en «Partida y ayudas».
+13. **Maqueta de rectángulos 3 s vs 5 s:** **no**; se aprueba la spec directo. El arte final sigue sin producirse hasta aprobar esa spec.
