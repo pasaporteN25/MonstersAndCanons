@@ -1443,6 +1443,19 @@ Dirección aprobada para convertir en una spec y tareas antes de programar. El a
 
 Lucas probó los niveles **1 a 4 en desktop** y los considera bien; el 1 se siente algo más difícil, pero aceptable. En varias partidas usó pocas familias de torres y casi nunca obtuvo tres estrellas. RF-93 asigna las estrellas por vidas restantes: 3 estrellas desde el 90 % (18/20), 2 desde el 50 % (10/20), y 1 por una victoria por debajo. Esto no demuestra por sí solo un defecto de balance ni una relación causal con la variedad de torres; T432 debe contrastarlo antes de proponer cambios.
 
+### Pedidos nuevos de Lucas · última prueba sobre `main`, 2026-10-23
+
+Son **propuestas registradas, sin autorización para implementar** (T446). Antes de código: análisis, spec, decisión, plan y ficha, y la aprobación escrita de Lucas. El detalle de cada una está en el tablero de `specs/03-tareas.md` («Nuevas propuestas de Lucas»).
+
+| Entrada | Pedido | Alcance inicial |
+|---|---|---|
+| B-52 | Selector y modos: explicar o reorganizar Campaña y Asedio; mapa planetario como vista inicial, con las tarjetas como alternativa; aterrizaje sobre tierra y regiones orgánicas; desplazamiento lateral; tocar solo selecciona y «Jugar» inicia. | Análisis y decisión primero. No fusionar modos ni cambiar D-178/RF-645 sin una D nueva. |
+| B-53 | Bordes negros en pantalla completa y pantalla de carga con varios fondos rotativos (probar antes las láminas de la intro y sus recortes). | Diagnóstico con capturas; no deformar sprites. Los fondos de la carga enmiendan RF-580/D-133: requieren decisión. |
+| B-54 | Cámara y HUD: explicar «Ver todo»; sacar lo repetido del panel de mejora (T430); quitar el círculo de alcance al seleccionar una torre o dejar una marca mucho más sutil, configurable en Opciones; reordenar Opciones por grupos. | Análisis y maquetas. No quitar «Ver todo» por suposición. |
+| B-55 | Diseñar 2 o 3 torres futuras que usen banderines e Infraestructura. | Solo informe de diseño; sin datos ni balance en el juego. |
+| B-56 | Explorar consecuencias narrativas de demoler infraestructura. | Solo análisis, contra el tono de `specs/10-universo.md`; no es regla. |
+| B-57 | Presentación de jefes (corrige T367): secuencia animada de 3 o 5 s, a pantalla completa, que pausa la partida. | Reespecificar M66/T367–T369; decidir duración, pausa, salteo y continuidad antes de producir arte. |
+
 ### B-45 · Dos estilos para elegir nivel: tarjetas y mapa planetario
 
 En desktop, permitir cambiar entre el selector actual rediseñado y una vista 2D de la región del planeta. En la vista de mapa, ubicar el punto de aterrizaje y las 15 zonas; actualizar el territorio según el progreso existente. Con 3 estrellas, la zona se muestra tomada; con menos, persiste presencia rebelde. Las reglas de estrellas y desbloqueos siguen siendo las actuales (RF-93/RF-111): el mapa comunica progreso, no introduce otro sistema de campaña. La spec definirá navegación, densidad, estados no jugados/bloqueados y cómo representar la conquista gradual. Mobile no se incluye por defecto.
