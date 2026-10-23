@@ -1,0 +1,46 @@
+{
+  "tarea": "T362 · Efectos de mejora de torres M65",
+  "nota": "Propuesta visual para revisión; no integrada ni aprobada.",
+  "atlas": {
+    "canvas": "768x384",
+    "frame": "192x192",
+    "layout": "4 columnas x 2 filas",
+    "centro": [
+      96,
+      96
+    ],
+    "safe_margin_px": 8,
+    "order": "izquierda a derecha, arriba a abajo",
+    "alfa": "RGBA real; primer cuadro casi vacío, cuadro 8 transparente",
+    "tint": "Un arte neutro marfil/bronce claro, teñido por modulate."
+  },
+  "effects": {
+    "upgrade_l2": {
+      "frames": 8,
+      "fps": 16,
+      "duration_seconds": 0.5,
+      "nominal_visible_diameter_px": 120,
+      "atlas_px": [
+        768,
+        384
+      ],
+      "bytes": 29034
+    },
+    "upgrade_l3": {
+      "frames": 8,
+      "fps": 11,
+      "duration_seconds": 0.7,
+      "nominal_visible_diameter_px": 160,
+      "atlas_px": [
+        768,
+        384
+      ],
+      "bytes": 65649
+    }
+  },
+  "limitations": [
+    "Mockup esquemático: no es captura del juego.",
+    "La maqueta ilustra PC 70 % y celular 150 %; no es medición en dispositivos reales.",
+    "Los tintes son una simulación de modulate; verificar el color definitivo en juego."
+  ]
+}

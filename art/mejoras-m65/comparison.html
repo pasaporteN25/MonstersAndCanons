@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>T362 · Muestra de efectos de mejora</title>
+<style>
+:root{color-scheme:dark;--bg:#201f1d;--panel:#2d2b28;--ink:#f2e8d3;--muted:#c9bda8;--accent:#d8bc86}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,sans-serif}main{max-width:1440px;margin:auto;padding:28px}h1,h2,h3{line-height:1.2}h1{font-size:clamp(28px,4vw,42px)}h2{margin-top:46px;border-bottom:1px solid #625a4b;padding-bottom:8px}p{max-width:1000px}.note{color:var(--muted)}.card{background:var(--panel);border:1px solid #514a3e;border-radius:12px;padding:18px;margin:18px 0}.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:18px}.sample{width:100%;height:auto;border-radius:5px;background:#242424}.wide{width:100%;height:auto}.small{max-width:900px}.pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}.pair figure,figure{margin:0}figcaption{padding:7px 0;color:var(--muted)}a{color:#f0cf91}details{margin:12px 0}code{color:#f6ddad}.atlas{max-width:768px}.tag{display:inline-block;border:1px solid #74664f;color:#e7d4ad;border-radius:99px;padding:2px 10px;margin:2px;font-size:13px}@media(max-width:600px){main{padding:16px}.card{padding:12px}}
+</style>
+</head>
+<body><main>
+<h1>T362 · Efectos de mejora de torres (M65)</h1>
+<p>Propuesta visual para revisar antes de integrar. Dos efectos neutros teñibles: <b>Refuerzo</b> (nivel 2) y <b>Maestría</b> (nivel 3). Las imágenes se pueden abrir en tamaño original con clic.</p>
+<p><span class="tag">8 cuadros</span><span class="tag">192 × 192 px por cuadro</span><span class="tag">atlas 4 × 2</span><span class="tag">PNG RGBA</span><span class="tag">no integrado</span></p>
+<div class="card"><h2>Vista rápida animada</h2><div class="row">
+<figure><h3>Refuerzo · 0,5 s · 16 cps</h3><a href="animation_l2.gif"><img class="sample" src="animation_l2.gif" alt="Animación en bucle del efecto de refuerzo sobre una ametralladora esquemática"></a><figcaption>Bucle ralentizado cuatro veces para inspeccionar el movimiento.</figcaption></figure>
+<figure><h3>Maestría · 0,7 s · ~11 cps</h3><a href="animation_l3.gif"><img class="sample" src="animation_l3.gif" alt="Animación en bucle del efecto de maestría sobre un mortero esquemático"></a><figcaption>Doble anillo, destello en cruz y abanico de ocho chispas.</figcaption></figure>
+</div></div>
+<h2>Atlas propuestos</h2><p>Orden de lectura izquierda a derecha y de arriba abajo. Centro de cuadro en (96, 96); primer cuadro vacío/casi vacío y cuadro ocho transparente. Ambos archivos quedan por debajo del límite de 150 KB.</p>
+<div class="row"><figure class="card"><h3>Refuerzo · 29 KB</h3><a href="upgrade_l2.png"><img class="sample atlas" src="upgrade_l2.png" alt="Atlas PNG del efecto de refuerzo, ocho cuadros en cuatro columnas por dos filas"></a></figure>
+<figure class="card"><h3>Maestría · 52 KB</h3><a href="upgrade_l3.png"><img class="sample atlas" src="upgrade_l3.png" alt="Atlas PNG del efecto de maestría, ocho cuadros en cuatro columnas por dos filas"></a></figure></div>
+<h2>Legibilidad en cuatro terrenos</h2><p>Las dos escalas muestran el mismo cuadro de animación en los cuatro temas; 34 px se aproxima al tamaño pequeño de juego. Las torres y terrenos son esquemáticos, solo para revisar contraste.</p>
+<h3>Refuerzo · 192 px por cuadro</h3><div class="row">
+<figure class="card"><figcaption>Todos los cuadros · pradera</figcaption><a href="contact_l2_pradera_192.png"><img class="sample" src="contact_l2_pradera_192.png" alt="Ocho cuadros del refuerzo sobre pradera a 192 píxeles"></a></figure>
+<figure class="card"><figcaption>Todos los cuadros · nieve</figcaption><a href="contact_l2_nieve_192.png"><img class="sample" src="contact_l2_nieve_192.png" alt="Ocho cuadros del refuerzo sobre nieve a 192 píxeles"></a></figure>
+<figure class="card"><figcaption>Todos los cuadros · volcán</figcaption><a href="contact_l2_volcan_192.png"><img class="sample" src="contact_l2_volcan_192.png" alt="Ocho cuadros del refuerzo sobre volcán a 192 píxeles"></a></figure>
+<figure class="card"><figcaption>Todos los cuadros · desierto</figcaption><a href="contact_l2_desierto_192.png"><img class="sample" src="contact_l2_desierto_192.png" alt="Ocho cuadros del refuerzo sobre desierto a 192 píxeles"></a></figure></div>
+<div class="row"><figure class="card"><figcaption>Refuerzo · 34 px · cuatro terrenos</figcaption><a href="contact_l2_34.png"><img class="sample" src="contact_l2_34.png" alt="Refuerzo reducido a 34 píxeles en pradera, nieve, volcán y desierto"></a></figure></div>
+<h3>Maestría · 192 px por cuadro</h3><div class="row">
+<figure class="card"><figcaption>Todos los cuadros · pradera</figcaption><a href="contact_l3_pradera_192.png"><img class="sample" src="contact_l3_pradera_192.png" alt="Ocho cuadros de maestría sobre pradera a 192 píxeles"></a></figure>
+<figure class="card"><figcaption>Todos los cuadros · nieve</figcaption><a href="contact_l3_nieve_192.png"><img class="sample" src="contact_l3_nieve_192.png" alt="Ocho cuadros de maestría sobre nieve a 192 píxeles"></a></figure>
+<figure class="card"><figcaption>Todos los cuadros · volcán</figcaption><a href="contact_l3_volcan_192.png"><img class="sample" src="contact_l3_volcan_192.png" alt="Ocho cuadros de maestría sobre volcán a 192 píxeles"></a></figure>
+<figure class="card"><figcaption>Todos los cuadros · desierto</figcaption><a href="contact_l3_desierto_192.png"><img class="sample" src="contact_l3_desierto_192.png" alt="Ocho cuadros de maestría sobre desierto a 192 píxeles"></a></figure></div>
+<div class="row"><figure class="card"><figcaption>Maestría · 34 px · cuatro terrenos</figcaption><a href="contact_l3_34.png"><img class="sample" src="contact_l3_34.png" alt="Maestría reducida a 34 píxeles en cuatro terrenos"></a></figure></div>
+<h2>Tinte de cinco familias</h2><p>Simulación del color aplicado por <code>modulate</code>; una fila por nivel. Colores representativos de Ametralladora (ámbar), Hielo (celeste), Tesla (violeta), Fuego (naranja) y Múltiple (azul).</p>
+<figure class="card"><a href="tints_34px.png"><img class="sample" src="tints_34px.png" alt="Efectos de nivel dos y tres teñidos con los cinco colores de torre"></a><figcaption>Vista a escala pequeña; no reemplaza la comprobación en Godot.</figcaption></figure>
+<h2>Escala de cámara y tamaño de torre</h2><p>Maqueta de lectura al 70 % en PC y 150 % en celular, con mecanismos 1×1 y Mortero 2×2. Es un esquema y no captura del juego ni comprobación de viewport real.</p>
+<figure class="card"><a href="scale_mockup.png"><img class="sample" src="scale_mockup.png" alt="Maqueta de escala de los efectos con ametralladora y mortero a dos zooms"></a></figure>
+<h2>Comparación con el anillo actual</h2><p>El anillo actual de construcción (0,3 s) frente a las dos propuestas. La torre del montaje es una silueta simplificada, no un sprite real. La propuesta busca diferenciar ambos niveles sin cubrir el mecanismo.</p>
+<figure class="card"><a href="ring_comparison.png"><img class="sample" src="ring_comparison.png" alt="Comparación del anillo actual con refuerzo y maestría"></a></figure>
+<h2>Notas y límites</h2><div class="card"><ul>
+<li>Son dibujos neutros marfil y bronce pálido; el juego los tiñe con el color de cada torre.</li><li>El anillo se abre al ascender; Maestría agrega el segundo anillo, el destello cruzado y más chispas.</li><li>Los mockups no usan sprites reales ni capturas de una partida. La legibilidad sobre el arte final y el rendimiento en un celular real quedan para T364.</li><li>La ficha cita la P-65-6 como compuerta, pero la spec M65 vigente ya resuelve D-135: un solo diseño neutro teñido. Esta muestra sigue la decisión vigente.</li><li><b>Pendiente:</b> aprobación de Lucas. Nada fue copiado a <code>assets/</code>, no hubo integración, ni prueba en dispositivo.</li></ul><p><a href="manifest.json">Manifest</a> · <a href="prompts.md">Dirección y fuentes</a></p></div>
+</main></body></html>
