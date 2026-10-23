@@ -15,7 +15,7 @@ img{max-width:100%;height:auto;border-radius:6px;border:1px solid var(--line)}
 small{opacity:.75}
 </style></head><body><main>
 <h1>Qué es el «jefe viejo»</h1>
-<p>Es lo que hoy ocurre cuando llega el <b>Jefe de la oleada 10 del nivel 1</b>. Son capturas reales del juego (modo PC y celular) sacadas de <code>main</code>. Tres piezas, todas <b>no aprobadas como concepto final</b>; la presentación nueva (pantalla completa, 3 o 5 s, que pausa) las va a reemplazar.</p>
+<p>Es lo que hoy ocurre cuando llega el <b>Jefe de la oleada 10 del nivel 1</b>. Son capturas reales del juego (modo PC y celular) sacadas de <code>main</code>. Tres piezas; el <b>concepto</b> no está aprobado como final y la presentación nueva (pantalla completa, 3 o 5 s, que pausa) lo va a reemplazar, pero <b>el arte se conserva</b>.</p>
 
 <h2>1 · El destello y la grieta en la entrada del camino</h2>
 <div class="card"><p>En el instante en que nace el Jefe, sale un destello con una grieta en el suelo, en la entrada del camino (a la izquierda). Es chico y dura 0,7 s. En la captura se ve en el borde izquierdo, junto al Jefe.</p>
@@ -28,7 +28,7 @@ small{opacity:.75}
 <img src="celular_2_cartel_de_aparicion.png" alt="Captura en modo celular"></div>
 
 <h2>3 · La tarjeta «Nuevo enemigo» que sale después</h2>
-<div class="card"><p>Esta no es del concepto viejo: ya existía y sigue después de la presentación nueva (decidiste que se mantenga).</p>
+<div class="card"><p>Esta no es del concepto viejo: ya existía. <b>Decisión del 2026-10-23: se quita tras la presentación del jefe</b>, porque con el cartel del jefe y la animación nueva alcanza. (Si también se quita para los demás enemigos nuevos está sin decidir.)</p>
 <img src="pc_3_tarjeta_nuevo_enemigo.png" alt="Captura: tarjeta Nuevo enemigo"></div>
 
 <h2>Los tres archivos de arte (en <code>assets/sprites/effects/jefe/</code>)</h2>
@@ -43,6 +43,6 @@ small{opacity:.75}
 
 <h2>Y el código</h2>
 <div class="card"><p>Son tres archivos que dibujan y animan esas piezas: <code>scenes/effects/boss_entrance_burst.gd</code> (el destello), <code>scenes/ui/boss_entrance_card.gd</code> (el cartel) y <code>scripts/data/boss_entrance_config.gd</code> con <code>data/ui/entrada_jefes.json</code> (tiempos y tamaños). Más la opción «Entrada de los jefes» de Opciones.</p>
-<p><b>Qué hacemos con esto:</b> nada por ahora. Siguen funcionando como piloto en el nivel 1 hasta que se implemente la presentación nueva; en ese momento se borran, o se rescata lo útil (la cola de mensajes y la opción).</p></div>
+<p><b>Qué hacemos con esto:</b> <b>el arte (los tres PNG) se conserva</b>. El código sigue funcionando como piloto en el nivel 1 hasta que se implemente la presentación nueva; entonces se reemplaza y se rescata lo útil (la cola de mensajes y la opción).</p></div>
 <p><small>Capturas: <code>tools/capture_boss_entrance.tscn</code>, 2026-10-23, sobre <code>main</code> en 7fb870d. No se midió rendimiento.</small></p>
 </main></body></html>

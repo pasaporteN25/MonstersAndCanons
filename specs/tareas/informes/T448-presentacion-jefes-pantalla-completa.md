@@ -406,3 +406,8 @@ NIVEL 14 con F2:         ▓3s▓ una sola vez, en la oleada 11.
 ### Ampliación de las decisiones de Lucas (2026-10-23, segunda tanda)
 
 - **Fondos propios por jefe (aclara el punto 9):** para el **Jefe actual, el Coloso y el jefe supremo del 15**. El fondo del jefe supremo queda **pendiente** hasta que se diseñe el personaje (T243).
+
+### Tercera tanda de decisiones de Lucas (2026-10-23)
+
+- **Tarjeta «Nuevo enemigo» (reemplaza el punto 6):** **se quita tras la presentación del jefe**: con el cartel del jefe y la animación nueva alcanza. *A aclarar en la spec:* si también se quita para los demás enemigos nuevos (RF-134); hoy la tarjeta sigue para ellos.
+- **Arte del piloto viejo:** **se conserva** (`boss_burst.png`, `boss_crack.png`, `boss_card_frame.png`); puede reutilizarse en la presentación nueva. Lo que se reemplaza es el código del piloto, no el arte.
