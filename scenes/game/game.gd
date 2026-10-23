@@ -188,6 +188,7 @@ func _ready() -> void:
 	panel.upgrade_pressed.connect(func() -> void: build_controller.try_upgrade(build_controller.selected_placed()))
 	panel.sell_pressed.connect(func() -> void: build_controller.sell(build_controller.selected_placed()))
 	panel.targeting_pressed.connect(_on_targeting_pressed)
+	panel.close_pressed.connect(build_controller.deselect_placed)
 	session.gold_changed.connect(panel.refresh)
 	session.resources_changed.connect(_refresh_tower_panel.unbind(1))  # RF-418: la venta muestra recursos
 
@@ -627,7 +628,7 @@ func _open_intro_if_pending() -> void:
 	build_controller.input_blocked = true  # leer no cuesta tiempo ni deja construir
 	set_paused(true)
 	hud.show_paused(true, false)  # el cartel no es el menú de pausa: no dice «PAUSA»
-	level_intro.open(level_data.display_name, level_data.place_text, level_data.intro_text)
+	level_intro.open(level_data.display_name, level_data.place_text, level_data.intro_text, level_data.theme)
 	if mobile_hud != null:
 		mobile_hud.set_modal_open(true)
 

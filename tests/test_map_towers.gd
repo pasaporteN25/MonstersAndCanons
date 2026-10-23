@@ -183,9 +183,9 @@ func test_the_card_shows_one_icon_per_offered_tower() -> void:
 	add_child_autofree(select)
 	var card: Button = select._make_card(0)
 	autofree(card)
-	var row: Node = card.get_node("TowerPlate/TowerIcons")
+	var row: Node = card.get_node("TowerIcons")
 	assert_eq(row.get_child_count(), TowerOffer.offered(GameFlow.level(0), all_towers).size())
-	assert_not_null(row.get_child(0).get_node("%s/NewMark" % row.get_child(0).get_child(0).name), "en el nivel 1 todas debutan")
+	assert_not_null(row.get_child(0).get_node("NewMark"), "en el nivel 1 todas debutan")
 	assert_string_contains(card.tooltip_text, "Nueva")
 
 
@@ -220,7 +220,7 @@ func test_a_map_offering_many_towers_wraps_without_clipping() -> void:
 	add_child_autofree(card)
 	await get_tree().process_frame
 	await get_tree().process_frame
-	var row: HFlowContainer = card.get_node("TowerPlate/TowerIcons")
+	var row: HFlowContainer = card.find_child("TowerIcons", true, false) as HFlowContainer
 	assert_eq(row.get_child_count(), all_towers.size(), "el mapa muestra todas las torres que ofrece")
 	assert_gt(all_towers.size(), 8, "el caso de mapa cubre nueve o más íconos")
 	var icon_rows: Dictionary = {}
@@ -233,7 +233,7 @@ func test_a_map_offering_many_towers_wraps_without_clipping() -> void:
 func _assert_card_parts_do_not_overlap(card: Button, level: LevelData, towers: Array[TowerData]) -> void:
 	var elements: Array[Control] = []
 	for child: Node in card.get_children():
-		if child is Control and (child as Control).visible:
+		if child is Control and (child as Control).visible and child.name not in ["ThemeBackdrop", "ThemeScrim"]:
 			elements.append(child as Control)
 		var rect: Rect2 = (child as Control).get_global_rect() if child is Control else Rect2()
 		if child is Control and (child as Control).visible:
@@ -242,7 +242,7 @@ func _assert_card_parts_do_not_overlap(card: Button, level: LevelData, towers: A
 		for second_index: int in range(first_index + 1, elements.size()):
 			assert_false(elements[first_index].get_global_rect().intersects(elements[second_index].get_global_rect()),
 				"%s no se pisa con %s" % [elements[first_index].name, elements[second_index].name])
-	var icon_row: HFlowContainer = card.get_node("TowerPlate/TowerIcons")
+	var icon_row: HFlowContainer = card.find_child("TowerIcons", true, false) as HFlowContainer
 	assert_eq(icon_row.get_child_count(), TowerOffer.offered(level, towers).size())
-	for badge: Control in icon_row.get_children():
-		assert_true(icon_row.get_global_rect().encloses(badge.get_global_rect()), "%s queda dentro de la fila" % badge.name)
+	for icon: Control in icon_row.get_children():
+		assert_true(icon_row.get_global_rect().encloses(icon.get_global_rect()), "%s queda dentro de la fila" % icon.name)
