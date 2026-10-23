@@ -306,3 +306,15 @@ La solicitud nueva queda en [B-45 a B-49](01-spec.md#pedidos-nuevos-de-lucas--es
 B-50 se implementa en T437: rehacer tronco, helecho y poste en el acabado dimensional de T277, y cambiar la variante del poste del nivel 6 según SaveManager.is_completed() de la campaña. La muestra queda en el PR para que Lucas la revise; D-183 está propuesta, no se declara aprobación artística. No se agrega progreso ni se exige una cantidad concreta de estrellas.
 
 B-51 queda como análisis futuro. Opus recomienda alcance y decisiones para un editor cosmético acotado; no se construye el editor hasta que Lucas decida el MVP. La skill genérica de Godot se mantiene en el repositorio Godot-Skills y en un PR independiente.
+
+## 11. Hub de herramientas y editor de banderines (M74; pedido de Lucas, 2026-10-22)
+
+| T | Entrega | Ejecutor previsto | Depende de | Tamaño |
+|---|---|---|---|---|
+| T439 | Spec, decisiones, plan y fichas para editor de banderines + hub | Codex · documental, Opus ya analizó | Autorización de Lucas | Chico |
+| T440 | Muestra visual del catálogo cerrado a 220/34 px | Codex · arte | T439; aprobación antes de arte final | Chico |
+| T441 | Hub Herramientas y continuidad del editor de mapas | Sonnet · UI/flujo | T439 | Chico |
+| T442 | Catálogo, receta validada y persistencia aislada | Sonnet · lógica | T439 | Mediano |
+| T443 | UI del editor, preview y aplicación al poste del nivel 6 | Sonnet · integración; revisión Codex | T440 aprobada, T441 y T442 | Mediano |
+
+**Orden:** T439 define los contratos. T441 y T442 pueden implementarse en ramas independientes desde su base especificada. T440 puede preparar muestras en paralelo; T443 espera aprobación visual de Lucas y las dos piezas funcionales. Cada tarea conserva su propia rama `feature/`, commit y PR a `main`; ningún agente mergea. Opus ya completó el análisis T438. Claude Sonnet implementa UI/lógica, Gemini puede hacer revisión independiente cuando esté disponible, Codex revisa arte, pruebas e integración. Opencode local se limita a Git rutinario.
