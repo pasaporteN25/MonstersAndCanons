@@ -110,7 +110,8 @@ func _ready() -> void:
 	# RF-656, RF-657: el guardado se consulta solo acá y solo en la campaña; el resto conserva el poste enemigo.
 	var post_conquered: bool = campaign_level != null and campaign_level.id == &"level_06" \
 			and SaveManager.is_completed(campaign_level.id)
-	level = level_data.build_map(post_conquered)
+	var banner_recipe: BannerRecipe = BannerRecipeStore.load_recipe() if post_conquered else null
+	level = level_data.build_map(post_conquered, banner_recipe)
 	level.position = Vector2(0.0, float(MobileUiConfig.load_from().get_value("barra_alta_px"))) if UiMode.is_mobile() else MAP_OFFSET
 	add_child(level)
 	move_child(level, 0)  # primero en la lista = se dibuja debajo de todo

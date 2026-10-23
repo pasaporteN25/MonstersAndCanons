@@ -2461,19 +2461,22 @@ El alcance de T425 a T432 es desktop. Mobile continúa por su propia experiencia
   **Hecho cuando:** quedan registrados el alcance desktop, la separación entre ambos editores, aplicación solo al poste del jugador en nivel 6 ganado, persistencia aislada, límites del catálogo y compuerta de aprobación visual; se crean fichas implementables y orden de dependencias. Sin código de juego ni arte final.
   **Resultado (2026-10-22):** M74 definido en RF-660–RF-665 y D-184–D-186; se crearon las fichas T439–T443 y el orden del cierre v1. El catálogo final queda bajo compuerta de revisión visual. `git diff --check` pasó; sin tests de juego porque este PR solo cambia documentación.
 
-- [ ] **T440 · [x86] · Presentar muestra visual del catálogo de banderines.**
+- [x] **T440 · [x86] · Presentar muestra visual del catálogo de banderines.**
   **Refs:** RF-662, RF-663, reglas de arte y T437. **Depende de:** T439.
   **Hecho cuando:** paletas y emblemas abstractos se ven en postes a 220 px y a 34 px, en contacto legible y con fuente editable/procedencia. La muestra se adjunta a un PR para revisión de Lucas; no se declara aprobación ni se integra como arte final.
+  **Resultado (2026-10-22):** la lámina 4×4 y la lectura a 34 px se presentaron en PR #44. Lucas aprobó la muestra; T443 produjo los recursos de runtime derivados y conserva láminas y procedencia en `art/t443-banderines/`.
 
 - [x] **T441 · [x86] · Agrupar los editores bajo Herramientas.**
   **Refs:** RF-660, RF-661, D-184. **Depende de:** T439.
   **Hecho cuando:** el menú abre un hub con tarjetas de mapas y banderines, las reglas de disponibilidad del editor de mapas se conservan, su salida vuelve al hub y «Probar» restaura el borrador. Tests de rutas y captura a 1280×720/1920×1080; sin cambios al guardado.
   **Resultado (2026-10-22):** el menú abre el hub Herramientas; el editor de mapas queda disponible, banderines muestra «Próximamente», la salida normal vuelve al hub y «Probar» conserva el retorno al borrador. Capturas en `art/t441-herramientas/` a 1280×720 y 1920×1080. Corregidos dos tests del editor para desconectar la nueva ruta a `GameFlow.go_to_tools`; GUT completo: **2205/2205 tests, 23966 aserciones**. Importación Godot 4.7.2 y sintaxis de herramientas pasan localmente. No se probó mobile porque el alcance es desktop; el CI remoto del commit correctivo queda pendiente.
 
-- [ ] **T442 · [x86] · Crear catálogo y persistencia aislada de receta cosmética.**
+- [x] **T442 · [x86] · Crear catálogo y persistencia aislada de receta cosmética.**
   **Refs:** RF-662, RF-664, D-186. **Depende de:** T439.
   **Hecho cuando:** la lógica pura valida ids y valores de catálogo; predeterminado estable ante archivo ausente, corrupto, versión no compatible o ids desconocidos; lectura/escritura no modifica progreso, `settings` ni `SAVE_VERSION`; tests focales de ida/vuelta y recuperación.
+  **Resultado (2026-10-22):** catálogo cerrado, receta validada y archivo atómico `user://banner.json` integrados en PR #43. La suite focal y GUT completo pasan con esos recursos en T443; el progreso y las opciones permanecen separados.
 
-- [ ] **T443 · [x86] · Integrar el editor de banderines en el poste de campaña.**
+- [x] **T443 · [x86] · Integrar el editor de banderines en el poste de campaña.**
   **Refs:** RF-663 a RF-665, D-185. **Depende de:** T440 aprobado por Lucas, T441 y T442.
   **Hecho cuando:** UI desktop permite preview grande/34 px, aplicar, cancelar/Escape y restaurar; Game pasa contexto explícito y solo el poste del nivel 6 ganado muestra la receta del jugador. Enemigo y modos ajenos mantienen la variante fija. Capturas, tests focales y suite completa; resultado informa límites de prueba física.
+  **Resultado (2026-10-23):** editor desktop en Herramientas con receta de borrador, guardar/cancelar/restaurar y 16 variantes en una atlas; solo la campaña completada del nivel 6 carga la receta. El resto conserva el poste fijo. Capturas reales Linux desktop a 1280×720 y 1920×1080, más poste a 34 px en el mapa del nivel 6, en `art/t443-banderines/`. GUT completo: **2224/2224 tests, 24150 aserciones**; tests focales: **30/30**. Godot 4.7.2 importó el proyecto; no se probó en celular físico ni se modificaron layouts móviles.

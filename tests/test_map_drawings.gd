@@ -58,15 +58,20 @@ func test_the_six_community_signals_are_static_objects() -> void:
 
 # --- T437: el poste de banderines (RF-656, RF-657, RF-659) ---
 
-func test_the_banner_post_has_two_distinct_variants_and_defaults_to_enemy() -> void:
+func test_the_banner_post_defaults_to_enemy_and_resolves_all_catalog_variants() -> void:
 	assert_eq(MapDrawings.post_texture(), MapDrawings.POST_ENEMY, "sin contexto, la enemiga")
 	assert_eq(MapDrawings.post_texture(false), MapDrawings.POST_ENEMY)
-	assert_eq(MapDrawings.post_texture(true), MapDrawings.POST_PLAYER)
+	assert_eq(MapDrawings.post_texture(true), MapDrawings.post_texture(true, BannerRecipe.default_recipe()))
 	assert_ne(MapDrawings.POST_ENEMY, MapDrawings.POST_PLAYER)
 	assert_eq(MapDrawings.texture(MapDrawings.POST_DRAWING), MapDrawings.POST_ENEMY, "el catálogo guarda la de reserva")
-	for variant: Texture2D in [MapDrawings.POST_ENEMY, MapDrawings.POST_PLAYER]:
-		assert_eq(variant.get_size(), Vector2(128, 128))
-		assert_true(variant.get_image().detect_alpha() != Image.ALPHA_NONE, "conserva alfa")
+	assert_eq(MapDrawings.POST_ENEMY.get_size(), Vector2(128, 128))
+	for palette: String in BannerCatalog.palette_ids():
+		for emblem: String in BannerCatalog.emblem_ids():
+			var variant: Texture2D = MapDrawings.post_texture(true, BannerRecipe.make(palette, emblem))
+			assert_eq(MapDrawings.post_texture(false, BannerRecipe.make(palette, emblem)), MapDrawings.POST_ENEMY, "la receta nunca cambia el poste enemigo")
+			assert_eq(variant.get_size(), Vector2(128, 128), "%s/%s" % [palette, emblem])
+			assert_true(variant.get_image().detect_alpha() != Image.ALPHA_NONE, "conserva alfa")
+			assert_ne(variant, MapDrawings.POST_ENEMY)
 
 
 func test_a_map_built_without_context_shows_the_enemy_post() -> void:
@@ -85,11 +90,14 @@ func test_the_conquered_context_reaches_the_decor_of_that_map_only() -> void:
 	rows[1] = "...p".rpad(20, ".")
 	var grid: MapGrid = MapGrid.parse(rows, {"p": {"dibujo": "poste_cintas"}})
 	var conquered: Level = Level.build(grid, MapThemes.DEFAULT, true)
+	var customized: Level = Level.build(grid, MapThemes.DEFAULT, true, BannerRecipe.make("marea", "rombo"))
 	var pending: Level = Level.build(grid, MapThemes.DEFAULT)
 	add_child_autofree(conquered)
+	add_child_autofree(customized)
 	add_child_autofree(pending)
 	var cell := Vector2i(3, 1)
-	assert_eq((conquered.get_node("Decor") as LevelDecor).object_texture(cell, "poste_cintas"), MapDrawings.POST_PLAYER)
+	assert_eq((conquered.get_node("Decor") as LevelDecor).object_texture(cell, "poste_cintas"), MapDrawings.post_texture(true))
+	assert_eq((customized.get_node("Decor") as LevelDecor).object_texture(cell, "poste_cintas"), MapDrawings.post_texture(true, BannerRecipe.make("marea", "rombo")))
 	assert_eq((pending.get_node("Decor") as LevelDecor).object_texture(cell, "poste_cintas"), MapDrawings.POST_ENEMY, "el otro mapa no se contagia")
 	# Otro dibujo no cambia con el contexto.
 	assert_eq((conquered.get_node("Decor") as LevelDecor).object_texture(cell, "helecho"), MapDrawings.texture("helecho"))
@@ -102,10 +110,13 @@ func test_level_data_passes_the_post_context_and_defaults_to_enemy() -> void:
 	data.legend = {"p": {"dibujo": "poste_cintas"}}
 	var plain: Level = data.build_map()
 	var won: Level = data.build_map(true)
+	var custom: Level = data.build_map(true, BannerRecipe.make("brasa", "estrella"))
 	add_child_autofree(plain)
 	add_child_autofree(won)
+	add_child_autofree(custom)
 	assert_false(plain.post_conquered)
 	assert_true(won.post_conquered)
+	assert_eq((custom.get_node("Decor") as LevelDecor).object_texture(Vector2i(3, 1), "poste_cintas"), MapDrawings.post_texture(true, BannerRecipe.make("brasa", "estrella")))
 	await wait_physics_frames(2)
 
 

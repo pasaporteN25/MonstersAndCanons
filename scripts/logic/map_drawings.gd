@@ -31,6 +31,9 @@ const SIGNAL_CAMP: Texture2D = preload("res://assets/sprites/map/campamento_vaci
 ## reserva; la del jugador solo aparece si quien arma el mapa dice que la campaña ya ganó el nivel.
 const POST_ENEMY: Texture2D = preload("res://assets/sprites/map/rendered/banner_post_enemy.png")
 const POST_PLAYER: Texture2D = preload("res://assets/sprites/map/rendered/banner_post_player.png")
+## T443: una atlas compacta de 4 × 4 variantes aprobadas para el banderín del jugador.
+const POST_VARIANTS_ATLAS: Texture2D = preload("res://assets/sprites/map/rendered/banner_variants_atlas.png")
+static var _post_variant_cache: Dictionary = {}
 ## El dibujo de la leyenda que usa el poste de banderines.
 const POST_DRAWING: String = "poste_cintas"
 ## T234 (RF-480): la central de energía del nivel 15, en cuatro PNG de 128 × 128 (noroeste, noreste, suroeste y
@@ -102,8 +105,27 @@ static func statue_texture(cell: Vector2i, theme: StringName) -> Texture2D:
 
 
 ## RF-656, RF-657: el poste según el contexto que recibe (nunca consulta el guardado).
-static func post_texture(conquered: bool = false) -> Texture2D:
-	return POST_PLAYER if conquered else POST_ENEMY
+static func post_texture(conquered: bool = false, recipe: BannerRecipe = null) -> Texture2D:
+	if not conquered:
+		return POST_ENEMY
+	var selected: BannerRecipe = BannerRecipe.default_recipe() if recipe == null or not recipe.is_valid() else recipe
+	var key: String = "%s/%s" % [selected.palette, selected.emblem]
+	if _post_variant_cache.has(key):
+		return _post_variant_cache[key]
+	var palette_index: int = BannerCatalog.palette_ids().find(selected.palette)
+	var emblem_index: int = BannerCatalog.emblem_ids().find(selected.emblem)
+	var atlas_width: int = POST_VARIANTS_ATLAS.get_width()
+	var atlas_height: int = POST_VARIANTS_ATLAS.get_height()
+	var x0: int = roundi(float(palette_index * atlas_width) / 4.0)
+	var y0: int = roundi(float(emblem_index * atlas_height) / 4.0)
+	var x1: int = roundi(float((palette_index + 1) * atlas_width) / 4.0)
+	var y1: int = roundi(float((emblem_index + 1) * atlas_height) / 4.0)
+	var region := AtlasTexture.new()
+	region.atlas = POST_VARIANTS_ATLAS
+	region.region = Rect2(x0, y0, x1 - x0, y1 - y0)
+	region.filter_clip = true
+	_post_variant_cache[key] = region
+	return region
 
 
 static func state_texture(drawing: String, state: ObstacleField.State) -> Texture2D:
