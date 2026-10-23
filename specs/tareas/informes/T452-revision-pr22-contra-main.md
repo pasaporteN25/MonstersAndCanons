@@ -80,3 +80,12 @@ Después: `godot --headless --import`, `git checkout -- assets` de lo no tocado 
 - **P-1:** ¿cerrar el PR #22 como «reemplazado» cuando exista la rama de rescate? Alternativas: (a) cerrarlo; (b) dejarlo draft como archivo; (c) rehacerlo recortado en su propia rama. Recomendación: (a), solo con tu OK.
 - **P-2:** ¿se conserva la importación a media resolución de los atlas de mejora (RF-643/D-176) sin medición limpia? Alternativas: A conservar, B tamaño original hasta medir. Recomendación: B hasta tener una medición con la máquina libre.
 - **P-3:** ¿se guarda `art/t367-muestras/` (referencia del concepto viejo) o se descarta? Recomendación: descartar de `main`, queda en la rama del PR.
+
+## Decisiones de Lucas (2026-10-23)
+
+> Registradas por Claude a partir de las respuestas de Lucas en la sesión. **Todavía no son D ni RF** y nada está implementado; los números de D/RF los fija la tarea de spec. Lo que dice «a aclarar» queda abierto.
+
+1. **P-1:** el PR #22 se **cierra como «reemplazado»** cuando exista la rama de rescate con solo lo aprobado.
+2. **P-2:** se **conserva la importación a media resolución** de los atlas de mejora, **contra la recomendación** de importar normal hasta medir. **No hay medición limpia:** T364 sigue abierta y se mide con la máquina libre.
+3. **P-3:** se **descarta** `art/t367-muestras/` y el arte del jefe viejo (quedan en la historia de git).
+4. **T350:** se trae **solo el informe** `T350-analisis-sin-mejoras-y-8-9.md` en un PR aparte (arregla referencias colgadas); **T436: se descarta**. No se borra ninguna rama.
