@@ -14,7 +14,8 @@ func run() -> void:
 	get_window().content_scale_size = resolution
 	get_window().size = resolution
 	get_window().position = Vector2i.ZERO
-	var level_data: LevelData = GameFlow.level(5)
+	var campaign: CampaignData = LevelFile.load_campaign()
+	var level_data: LevelData = campaign.levels[5]
 	assert(level_data.id == &"level_06", "el índice 5 debe ser el nivel 6 de campaña")
 	var level: Level = level_data.build_map(true, BannerRecipe.make("marea", "estrella"))
 	add_child(level)
