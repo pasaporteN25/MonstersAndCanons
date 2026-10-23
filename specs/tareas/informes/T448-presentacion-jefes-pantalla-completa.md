@@ -407,7 +407,9 @@ NIVEL 14 con F2:         ▓3s▓ una sola vez, en la oleada 11.
 
 - **Fondos propios por jefe (aclara el punto 9):** para el **Jefe actual, el Coloso y el jefe supremo del 15**. El fondo del jefe supremo queda **pendiente** hasta que se diseñe el personaje (T243).
 
-### Tercera tanda de decisiones de Lucas (2026-10-23)
+## Aclaraciones posteriores de Lucas (2026-10-23)
 
-- **Tarjeta «Nuevo enemigo» (reemplaza el punto 6):** **se quita tras la presentación del jefe**: con el cartel del jefe y la animación nueva alcanza. *A aclarar en la spec:* si también se quita para los demás enemigos nuevos (RF-134); hoy la tarjeta sigue para ellos.
-- **Arte del piloto viejo:** **se conserva** (`boss_burst.png`, `boss_crack.png`, `boss_card_frame.png`); puede reutilizarse en la presentación nueva. Lo que se reemplaza es el código del piloto, no el arte.
+- **Tarjeta «Nuevo enemigo»:** omitirla para el jefe presentado, según PR #59. No mostrarla después de la secuencia; los demás enemigos conservan RF-134.
+- **Modo de pruebas:** no mostrar la presentación; queda solo en campaña normal. No se abre un acceso de prueba con F1.
+- **Arte del piloto viejo:** se conserva en el repositorio hasta T461. En la implementación se audita si alguna pieza sirve; el mismo PR retira lo que quede sin uso (destello, cartel con marco y PNG asociados).
+- La secuencia sigue sin maqueta previa 3 s/5 s; la spec directa recoge 5 s primera vez por jefe y 3 s después.

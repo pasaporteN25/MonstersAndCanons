@@ -70,24 +70,13 @@ Los niveles son JSON, un formato de texto común que se edita a mano. Un `.tres`
 | `stun_interval` / `stun_seconds` / `stun_range_tiles` | El **hechizo** que apaga torres (RF-281): cada cuántos segundos, cuánto aturde y a qué distancia. 0 = no lanza. | `8.0`, `3.0`, `4.0` |
 | `reflect_range_tiles` / `reflect_stun_seconds` | El **rebote** (RF-283): a qué distancia rebota el tiro de una torre y cuánto la aturde. La quemadura no rebota. | `2.5`, `2.0` |
 | `aura_heal_percent_per_second` | % de vida máxima por segundo que hace recuperar a los demás dentro del radio (RF-272); no mientras se queman. | `3.0` |
-| `entrance` | La **entrada** del jefe (RF-601, M66): vacío = el enemigo no hace entrada. Ver más abajo. | `BossEntranceData` |
+| `entrance` | Dato del piloto viejo T366/T368, pendiente de reemplazo por T461; no agregar ni extender para el M66 aprobado. | `BossEntranceData`
 
-### Darle una entrada a un jefe (M66, RF-601)
+### Presentación de jefes (M66; T457, pendiente de aprobación e implementación)
 
-Cuando un enemigo con `entrance` aparece en una partida de la **campaña jugada desde el menú** (también en el modo de pruebas), sale un **destello** en la entrada del camino y un **cartel** de 1,6 s con su retrato, «¡Llega el <nombre>!», su nombre y su frase. No hace falta código ni arte: el retrato es su `texture`, el nombre su `display_name` y el destello se tiñe con su `color`.
+El piloto actual todavía puede tener `BossEntranceData`, `data/ui/entrada_jefes.json`, destello y cartel. Ese formato describe el concepto anterior y queda en retirada: no agregues `entrance` a más enemigos ni cambies `levels` para extenderlo. La propuesta de spec T457, pendiente del OK de Lucas, define una presentación a pantalla completa que pausa la campaña normal; el código nuevo espera el OK de Lucas. El jefe presentado no lleva tarjeta «Nuevo enemigo» (PR #59); la opción cambia de nombre y de grupo.
 
-1. En el `.tres` del enemigo, en el Inspector de Godot, el campo **`entrance`** → *Nuevo BossEntranceData*.
-2. Completá lo que haga falta:
-
-| Campo | Qué es | Ejemplo |
-|---|---|---|
-| `levels` | Ids de los niveles donde sale. **Vacía = en todos.** Un id que no existe es un error. | `["level_01"]` o vacía |
-| `line` | La frase del cartel (80 caracteres como máximo). **Vacía = usa la `description` del enemigo.** | `¡Viene por la salida!` |
-| `sound` | Id de un sonido que ya existe (un `.wav` de `assets/audio/`). Vacío = ninguno. | `impact` |
-
-3. Revisalo: `godot --headless --path . -s tools/check_entrada_jefes.gd` dice, en castellano, qué está mal.
-
-**Hoy** solo el **Jefe** (`boss.tres`) tiene `entrance`, con `levels = ["level_01"]`: es el piloto. **No se activó en los demás a propósito** (spec M66, P-66-7). Para extenderlo: **(a)** el Jefe en sus otros 14 niveles = vaciar la lista `levels` de `boss.tres`; **(b)** el Coloso (nivel 15) = agregarle una `entrance` con `levels` vacía o `["level_15"]` a `colossus.tres`. Los tiempos y el tamaño del cartel están en `data/ui/entrada_jefes.json` (`destello_s`, `cartel_entra_s`, `cartel_quieto_s`, `cartel_sale_s`, `cartel_ancho_px` hasta 720, `cartel_alto_px` hasta 120, `intervalo_min_s`, fuentes) y el mismo validador los revisa. El jugador la prende y la apaga en **Opciones → «Entrada de los jefes»**. Solo sale una vez por oleada y por tipo, y no más de una cada 8 s.
+T461 debe revisar todas las referencias antes de retirar lectores, datos, escenas y assets que queden sin uso. Los fondos aprobados para el Jefe y el Coloso se preparan en T367. El jefe supremo del nivel 15 queda pendiente de T243/T463. Ver [M66](specs/01-spec.md), [T457](specs/03-tareas.md) y la [ficha de muestras T367](specs/tareas/T367-arte-entrada-jefes.md).
 
 ---
 
@@ -710,3 +699,9 @@ La pantalla «Novedades de esta versión» (se abre sola una vez por versión y 
 
 
 **Arte de Novedades (T375):** en `assets/ui/novedades/` están `news_header_1_0.png` (presentación, 4:1), `news_header_plain.png` (mejoras, 8:1) y los medallones `news_icon_<nombre>.png`, con nombres `map`, `tower`, `monster`, `siege`, `editor`, `mobile`, `book` y `upgrade`. Poné la ruta `res://` en `cabecera` o `icono` para usarlos. La cabecera se ajusta al ancho interior del panel sin recorte; el texto queda debajo. Los íconos miden 48 px en PC y 64 px en celular. Si omitís `icono`, queda un rombo de bronce; si omitís `cabecera`, no se reserva espacio. Importar sin mipmaps. La 1.0.0 sigue en borrador hasta aprobar los textos.
+
+## Presentación de jefes (M66, T457; pendiente de implementación)
+
+La spec nueva reemplaza el piloto de destello y cartel. La opción existente conserva su clave, pero pasa a llamarse «Presentación de los jefes» y queda en «Partida y ayudas». La presentación pausa la campaña normal, dura 5 s la primera vez que el guardado ve a ese jefe y 3 s después, y no sale en Asedio ni en modo de pruebas. Se omite la tarjeta «Nuevo enemigo» para el jefe presentado. La animación se hará por código sobre ilustraciones quietas, con un fondo propio para el Jefe y otro para el Coloso. El jefe supremo del nivel 15 espera a T243.
+
+El piloto T366/T368 todavía puede estar en el código actual; no lo extiendas ni copies sus assets como si fueran el diseño aprobado. La implementación y los pasos de prueba se documentarán después del OK de Lucas a T457. Ver [M66](specs/01-spec.md), [T457](specs/03-tareas.md) y la [ficha de arte T367](specs/tareas/T367-arte-entrada-jefes.md).
