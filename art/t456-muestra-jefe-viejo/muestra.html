@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Muestra del jefe viejo</title>
+<style>
+:root{--bg:#f4f1ea;--fg:#1d1b17;--card:#fff;--line:#d9d3c6;--accent:#8a3a1e}
+@media (prefers-color-scheme:dark){:root{--bg:#16171c;--fg:#ece8df;--card:#20222a;--line:#34363f;--accent:#e08a5f}}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 system-ui,sans-serif}
+main{max-width:980px;margin:0 auto;padding:24px 16px 64px}
+h1{font-size:1.6rem;margin:.2em 0}h2{font-size:1.15rem;margin:1.8em 0 .4em;color:var(--accent)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;margin:12px 0}
+img{max-width:100%;height:auto;border-radius:6px;border:1px solid var(--line)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.dark{background:#2a2d38;padding:8px;border-radius:6px}
+.dark img{border:0;background:#2a2d38;image-rendering:pixelated}
+small{opacity:.75}
+</style></head><body><main>
+<h1>Qué es el «jefe viejo»</h1>
+<p>Es lo que hoy ocurre cuando llega el <b>Jefe de la oleada 10 del nivel 1</b>. Son capturas reales del juego (modo PC y celular) sacadas de <code>main</code>. Tres piezas, todas <b>no aprobadas como concepto final</b>; la presentación nueva (pantalla completa, 3 o 5 s, que pausa) las va a reemplazar.</p>
+
+<h2>1 · El destello y la grieta en la entrada del camino</h2>
+<div class="card"><p>En el instante en que nace el Jefe, sale un destello con una grieta en el suelo, en la entrada del camino (a la izquierda). Es chico y dura 0,7 s. En la captura se ve en el borde izquierdo, junto al Jefe.</p>
+<img src="pc_1_destello_y_cartel_de_oleada.png" alt="Captura: destello en la entrada del camino y cartel Oleada 1"></div>
+
+<h2>2 · El cartel «¡Llega el Jefe!» con su marco</h2>
+<div class="card"><p>Un cartel horizontal arriba con el retrato, el nombre, un consejo y «Clic para saltear». El marco dorado con remaches es el arte «marco 9-slice». <b>No pausa la partida</b>: es lo que no te gustó (querías una secuencia a pantalla completa).</p>
+<img src="pc_2_cartel_de_aparicion.png" alt="Captura: cartel de aparición del Jefe con marco">
+<p><small>En celular (misma pieza):</small></p>
+<img src="celular_2_cartel_de_aparicion.png" alt="Captura en modo celular"></div>
+
+<h2>3 · La tarjeta «Nuevo enemigo» que sale después</h2>
+<div class="card"><p>Esta no es del concepto viejo: ya existía y sigue después de la presentación nueva (decidiste que se mantenga).</p>
+<img src="pc_3_tarjeta_nuevo_enemigo.png" alt="Captura: tarjeta Nuevo enemigo"></div>
+
+<h2>Los tres archivos de arte (en <code>assets/sprites/effects/jefe/</code>)</h2>
+<div class="grid">
+<div class="card"><b>boss_burst.png</b><br><small>8 cuadros del destello. Es casi blanco porque el juego lo tiñe con el color del enemigo; acá, sobre fondo oscuro.</small>
+<div class="dark"><img src="../../assets/sprites/effects/jefe/boss_burst.png" alt="boss_burst"></div></div>
+<div class="card"><b>boss_crack.png</b><br><small>La grieta en el suelo.</small>
+<div class="dark"><img src="../../assets/sprites/effects/jefe/boss_crack.png" alt="boss_crack"></div></div>
+<div class="card"><b>boss_card_frame.png</b><br><small>El marco del cartel.</small>
+<div class="dark"><img src="../../assets/sprites/effects/jefe/boss_card_frame.png" alt="boss_card_frame"></div></div>
+</div>
+
+<h2>Y el código</h2>
+<div class="card"><p>Son tres archivos que dibujan y animan esas piezas: <code>scenes/effects/boss_entrance_burst.gd</code> (el destello), <code>scenes/ui/boss_entrance_card.gd</code> (el cartel) y <code>scripts/data/boss_entrance_config.gd</code> con <code>data/ui/entrada_jefes.json</code> (tiempos y tamaños). Más la opción «Entrada de los jefes» de Opciones.</p>
+<p><b>Qué hacemos con esto:</b> nada por ahora. Siguen funcionando como piloto en el nivel 1 hasta que se implemente la presentación nueva; en ese momento se borran, o se rescata lo útil (la cola de mensajes y la opción).</p></div>
+<p><small>Capturas: <code>tools/capture_boss_entrance.tscn</code>, 2026-10-23, sobre <code>main</code> en 7fb870d. No se midió rendimiento.</small></p>
+</main></body></html>
