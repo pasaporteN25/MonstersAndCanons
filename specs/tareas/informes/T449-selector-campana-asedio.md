@@ -462,3 +462,19 @@ Los números son provisionales: los asigna la tarea 📜 que registre M75. Hay t
 | **L-10** | ¿El doble clic inicia? ¿Y el segundo clic sobre la ya seleccionada? | Sí / no | **No a los dos.** |
 | **L-11** | ¿El mapa llega al celular? | No en la V1 / sí, con un RF propio | **No en la V1.** |
 | **L-12** | ¿Asedio 7 al 101 % ya cumple? (T444, hallazgo 2) | Confirmar el remedido de T279 / mantener «no cumple» | Confirmarlo en G5. **No es de este frente:** lo anoto porque cambia la tabla que mostraría A-7. |
+
+## Decisiones de Lucas (2026-10-23)
+
+> Registradas por Claude a partir de las respuestas de Lucas en la sesión. **Todavía no son D ni RF** y nada está implementado; los números de D/RF los fija la tarea de spec. Lo que dice «a aclarar» queda abierto.
+
+1. **Campaña vs Asedio (L-1):** **Asedio se desbloquea mapa por mapa** al ganar el mismo nivel en campaña (Asedio 3 al ganar el nivel 3, etc.). **Cambia el acceso actual** (hoy Asedio está abierto desde el principio). Los **guardados que ya jugaron Asedio conservan el acceso** y sus récords. A aclarar en la spec: modo de pruebas, y el orden de la prueba G5 (L-12 queda como confirmación en G5).
+2. **Vista inicial (L-3):** el **mapa planetario es la vista inicial ya**, con las tarjetas como alternativa, y se actualiza cuando esté la geografía nueva. **Vale también para el celular**, lo que **enmienda RF-653** («el selector celular queda igual») y exige definir gestos táctiles (tocar, arrastrar, desplazar); el mapa nunca se probó en un celular real.
+3. **Migración (L-4):** **todos los guardados pasan al mapa una vez** (hace falta una clave nueva).
+4. **Geografía (L-5/L-6):** camino **en serrucho de oeste a este**, aterrizaje **en tierra**, y scroll lateral **solo si hace falta**. Las zonas no conquistadas se ven **más grises**; la forma de cada zona **no es geométrica** sino orgánica, como los límites de un mapa.
+5. **Arte (L-7):** Codex hace una muestra que **rehace la de T427**, y **nada se integra sin la aprobación de Lucas**.
+6. **Tocar selecciona (L-8):** **solo el mapa**; las tarjetas siguen iniciando con un clic (RF-646). **Enter** sobre la región enfocada **inicia** (L-9); el **doble clic no** (L-10).
+7. **T235 (L-2):** **se absorbe** en el trabajo del selector.
+8. **Estandarte de conquista en el selector:** además de las 3 estrellas, el **banderín del jugador** se muestra en la **tarjeta** y en el **mapa**, como fondo del círculo que contiene el número del nivel. Una zona **no tomada por completo** muestra un fondo **mitad escudo rebelde, mitad el nuestro**.
+9. **Limpieza visual del mapa:** se **quitan las aclaraciones «tomada / rebeldes / bloqueada»** (se sobreentienden) y a los números de nivel se les **saca el cero** a la izquierda (01 → 1); **a aclarar** en qué pantallas.
+10. **Banderines en el nivel:** la idea es un **poste con banderín** en los mapas, con la receta del editor, cuando se logran las 3 estrellas. **Hoy solo el nivel 6 tiene poste** (`level_06.json`; RF-656 lo hace cambiar con cualquier victoria, no con 3 estrellas). Lucas pidió sumar postes en los niveles 2 y 3 y en los últimos cinco, sin hacerlo en todos; cambiar mapas **requiere spec y su OK a cada uno**.
+11. **L-11:** el mapa **sí llega al celular** (ver punto 2). **L-12:** Asedio 7 al 101 % se confirma en G5.
