@@ -532,6 +532,8 @@ Capturas y mediciones en `art/m53-barra/` (`README.md`).
 
 ### T363 · Probar la animación de mejora de torres
 
+M71 integra los atlas aprobados de refuerzo y maestría (importados a media resolución con escala compensada, RF-643); la entrada del jefe también usa el destello, la grieta y el marco aprobados. No se verificó en un celular real.
+
 **En PC.** Jugá cualquier nivel, construí una torre (por ejemplo la Ametralladora) y mejorala con **Mejorar** o con `U`. **✅ Comprobar:** sale un anillo de luz con chispas del color de la torre (medio segundo) y, arriba, «¡Nivel 2!» con «+3 daño · +0,5 disp/s», todo desaparece en poco más de un segundo y el oro baja lo mismo que antes. Mejorala otra vez: el efecto es más grande y la cabecera dice «¡Nivel máximo!». Probalo con una torre en la **fila de abajo** (el texto no pisa la barra de abajo) y pegada al borde izquierdo (queda dentro del mapa). En pausa, el efecto se congela.
 
 **En el celular (o con la interfaz forzada).** **Opciones → Interfaz → Celular**, abrí un nivel y mejorá una torre de la fila de abajo y otra de la última columna. **✅ Comprobar:** el texto no tapa la barra de abajo, la tilde, la cruz ni los botones flotantes, y se lee con el zoom por defecto y con «Ver todo». **No se probó en un celular real.**
@@ -539,6 +541,8 @@ Capturas y mediciones en `art/m53-barra/` (`README.md`).
 **Apagarlo.** **Opciones → «Animaciones de mejora»** apagada: al mejorar solo se ven el anillo de siempre y se oye el sonido. Un guardado viejo la muestra prendida.
 
 Tests: `-gtest=res://tests/test_upgrade_deltas.gd`, `test_upgrade_fx.gd` y `test_old_saves.gd`. Para ver el efecto en imágenes: `godot --path . res://tools/capture_upgrade.tscn -- /ruta/de/salida 1280x720`. Para revisar el archivo de datos: `godot --headless --path . -s tools/check_mejoras.gd`. Para medir el rendimiento (con la máquina libre): `godot --path . -s tools/perf_test.gd -- mejoras` contra `-- mejoras sin_fx`, y con `celular` para el modo del celular.
+Para comparar M71, correr dos veces cada par con la máquina libre: `-- mejoras sin_fx` / `-- mejoras`, y `-- entrada_jefe sin_fx` / `-- entrada_jefe`; repetir ambos pares agregando `celular`. La base de entrada genera el mismo jefe con la presentación apagada; ambos lo marcan conocido en memoria para excluir la tarjeta «Nuevo enemigo» y su cola de esta medición. La herramienta crea una sola partida y fija la semilla; usar carpetas XDG de prueba aisladas para preservar el guardado real.
+
 ### T368 · Probar la entrada del Jefe (M66)
 
 **En PC.** Con un guardado nuevo, **Jugar → Nivel 1** (tutorial apagado o ya hecho), y llegá a la oleada 10 o, más rápido, **Opciones → Activar modo de pruebas**, entrá al nivel 1 y con **F1** hacé aparecer un **Jefe**. **✅ Comprobar:** en el instante en que nace, un **destello con grietas** en la entrada del camino (0,7 s); al irse el cartel de «Oleada N», un **cartel arriba del mapa** con el retrato, «¡Llega el Jefe!», «Jefe» y su frase, que dura 1,6 s; la tarjeta «Nuevo enemigo: Jefe» sale **después** (solo la primera vez en el guardado). **Un clic sobre el cartel** lo retira al instante; un clic en una casilla del mapa fuera del cartel construye/elige como siempre. La partida **no se pausó ni cambió**. **Pausa (P)** a mitad: el cartel y el destello se congelan.

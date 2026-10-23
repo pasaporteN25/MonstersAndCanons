@@ -1451,6 +1451,28 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Alternativas descartadas:** reservar de verdad la franja (achicar el mapa a los costados): Lucas prefirió sacarla.
 - **Qué cambia:** `01-spec.md` (RF-507, M60, §13), `02-plan-tecnico.md`, `CONTENIDO.md`, `README.md`, `specs/tareas/informes/T289-auditoria-mobile-implementado.md` (§7), `CHANGELOG.md`
 
+## D-165 · El arte aprobado de M65 y M66 se integra como atlas en `Sprite2D` (un solo efecto teñido por `modulate`, mezcla normal), el marco del cartel como 9-slice sobre un fondo liso, y todo sigue apagándose con las opciones
+- **Fecha:** 2026-10-20 · **Estado:** programada (T411 a T415) · **Decidió:** Lucas (aprobó el estilo de las muestras de Codex) / Claude (cómo se conecta al código)
+- **Qué:** `UpgradeEffect` usa `upgrade_l2.png` / `upgrade_l3.png`; `BossEntranceBurst` usa `boss_burst.png` y `boss_crack.png`; `BossEntranceCard` usa `boss_card_frame.png` en 9-slice. Los cinco PNG se importan sin mipmaps. Los comportamientos (tiempos, `Tween`, sin `_process`, opciones, pausa y velocidad) no cambian.
+- **Por qué:**
+  - **Un `Sprite2D` con `hframes`/`vframes` es lo más barato** que hay en Godot para un atlas: un nodo, una textura, cero código por cuadro más allá de elegir el número. Cumple RF-595 y RF-629 sin gastar en dibujar curvas cada cuadro, que es lo que hacía el `_draw` provisional.
+  - **`modulate` y mezcla normal:** las muestras fueron revisadas multiplicadas por el color de la torre (`upgrade_glow_color`) y por el del enemigo; la mezcla aditiva nunca se vio en Godot (Codex lo dejó como «no verificado»).
+  - **El marco con fondo liso aparte:** el centro del marco es transparente, así que el fondo oscuro y el contenido van debajo; el marco, arriba de todo y sin tomar toques, para respetar RF-599.
+  - **Las opciones siguen mandando:** el arte solo existe si el efecto se crea, y el efecto solo se crea con la opción prendida (RF-596, RF-600).
+- **Alternativas descartadas:**
+  - **Un `AnimatedSprite2D` con `SpriteFrames`:** más nodos y recursos por una animación que el `Tween` ya mueve (y que se congela con la pausa y acompaña la velocidad sin trabajo extra).
+  - **Mezcla aditiva:** sin revisión visual en Godot; se puede probar después con un cambio de una línea.
+  - **Efecto distinto por familia de torre:** sigue siendo P-65-6; se aprobó el efecto único teñido.
+  - **Hornear el carmesí del Jefe en el destello:** rompería la generalización a otros jefes (RF-601).
+- **Qué cambia:** `01-spec.md` (M71, RF-625 a RF-629), `02-plan-tecnico.md`, `03-tareas.md` (T410 a T415; cierra T362, T364, T367 y T369), `scenes/effects/upgrade_effect.gd`, `scenes/effects/boss_entrance_burst.gd`, `scenes/ui/boss_entrance_card.gd`, `assets/sprites/effects/`, `CHANGELOG.md`, `CONTENIDO.md`, `README.md`, `ONBOARDING.md`.
+
+## D-176 · Importar los tres atlas de M71 a media resolución y compensar su escala
+- **Fecha:** 2026-10-20 · **Estado:** aprobada para optimización y medición (T414) · **Decidió:** Lucas (autorizó reducir atlas para RF-629) / Codex (importación y compensación).
+- **Qué:** `process/size_limit` de 384 en los atlas de mejora y 512 en el destello. Los originales aprobados no se editan. Se mantiene el tamaño visual con escala 2 y el punto de pies con el offset reducido a la mitad antes de escalar.
+- **Por qué:** reduce de 1.114.112 a 278.528 texels entre los tres atlas (75 %), sin eliminar poses ni cambiar tiempos. La reducción de memoria es concreta; la mejora de tiempo por cuadro debe medirse y no se presupone.
+- **Alternativas descartadas:** regenerar el arte aprobado; quitar cuadros; cambiar las reglas o la cola del cartel y de «Nuevo enemigo» para favorecer el banco.
+- **Medición:** una partida, 200 enemigos, 60 torres realmente construidas, semilla fija, pares con/sin efecto, preferencias y guardados aislados. Jefe conocido solo en memoria en ambos lados para evitar que la tarjeta «Nuevo enemigo» y su cola sesguen la comparación. Promedio de seis segundos y ventana activa simétrica. Los números antiguos con dos partidas o 8–9 torres no son comparables.
+- **Límites:** no se certifica aspecto en celular real ni se atribuye toda variación de proceso a la textura; se registra cualquier incumplimiento RF-629 y la base por debajo de 60 FPS.
 ## D-170 · Integrar el arte aprobado de Novedades sin publicar la 1.0.0
 - **Fecha:** 2026-10-20 · **Estado:** Aceptada · **Decidió:** Lucas (aprobación del arte y encargo de T375); Codex (detalle de integración).
 - **Qué:** copiar los diez `news_*.png` de `art/t372-muestras/` sin cambios a `assets/ui/novedades/`, con importación sin pérdida y sin mipmaps. Conectar la cabecera y siete medallones desde JSON. El octavo medallón y la banda sobria quedan disponibles sin inventar contenido. Cabecera proporcional al ancho interior, texto debajo sobre el panel y medallones de 48 px en PC / 64 px en celular. Se conserva el rombo si falta ícono y la carga al abrir de RF-604.

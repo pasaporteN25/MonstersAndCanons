@@ -2945,13 +2945,13 @@ Cortas y en orden de importancia. Ninguna frena a T258: el código y el formato 
 
   ```json
   {
-  	"version": 1,
-  	"fundido_s": 0.6,
-  	"laminas": [
-  		{"imagen": "res://assets/intro/01_la_nave.webp",
-  		 "texto": "La Compañía Meridiana mandó una sola nave.\nNo lleva soldados: lleva gente de oficio.",
-  		 "segundos": 7}
-  	]
+    "version": 1,
+    "fundido_s": 0.6,
+    "laminas": [
+      {"imagen": "res://assets/intro/01_la_nave.webp",
+       "texto": "La Compañía Meridiana mandó una sola nave.\nNo lleva soldados: lleva gente de oficio.",
+       "segundos": 7}
+    ]
   }
   ```
 
@@ -4079,6 +4079,22 @@ Con la copia automática, el archivo **tal como lo dejó la build anterior** que
 2. **P2 · ¿Te sirve «el bot lo compra en 5 de 5 y gana 4 de 5» como criterio de alcanzable?** Recomiendo que sí (mismo criterio que RF-432).
 3. **P3 · ¿Dejamos «Puede dar 1 recurso (100 %)» o preferís «Da 1 recurso»** cuando la probabilidad es 100? Recomiendo dejarlo (es el mismo texto de siempre, armado con los datos).
 4. **P4 · Si la medición muestra que alcanza el Mortero pero se pierden vidas, ¿probamos primero la opción A** (escombros del 9 a 60 de oro)? Recomiendo A antes que B o C.
+### M71 · Integración del arte aprobado de M65 y M66 y medición de rendimiento (Lucas, 2026-10-20; T410 a T415)
+
+**Estado: PROGRAMADA (T411 a T415, 2026-10-20).** Lucas aprobó el estilo de las muestras de Codex (T362: dos atlas de mejora; T367: destello, grieta y marco). Esta mejora **no agrega funciones**: cambia el dibujo provisional (`_draw`) de `UpgradeEffect` (M65) y de `BossEntranceBurst` (M66), y el borde provisional de `BossEntranceCard`, por el arte aprobado. Cierra T364 y T369 (que esperaban el arte). La decisión es **D-165**. **Solo presentación:** no cambia ninguna regla, costo, tiempo jugable, dato de nivel ni guardado.
+
+- **RF-625** **El efecto de mejora usa el atlas aprobado** *(D-165)*. `UpgradeEffect` muestra el atlas `upgrade_l2.png` (nivel 2, «refuerzo», 0,5 s) o `upgrade_l3.png` (nivel 3, «maestría», 0,7 s): 8 cuadros de 192 × 192 px, centro en (96, 96), un `Sprite2D` que avanza de cuadro con el mismo `Tween` de siempre (sin `_process`). Se tiñe con `TowerVisual.upgrade_glow_color` (`modulate`, mezcla normal) y se agranda con el `footprint` de la torre (a 1:1 en una torre de 1 × 1). Sigue centrado en el mecanismo, dura lo mismo (RF-590) y se borra solo.
+  - **Criterio:** **Dado** la opción «Animaciones de mejora» prendida → **Cuando** se mejora una torre al nivel 2 o 3 → **Entonces** sale el atlas que corresponde, con el color de la torre, y a los 0,5 s o 0,7 s ya no queda ningún nodo del efecto; con la opción apagada, nada cambia (anillo y sonido de siempre).
+- **RF-626** **El destello de la entrada de un jefe usa el atlas aprobado** *(D-165)*. `BossEntranceBurst` muestra `boss_burst.png` (8 cuadros de 256 × 256 px, 0,7 s, **punto de los pies en (128, 176)** colocado en la entrada del camino, a 1:1) teñido con `EnemyData.color`, y debajo `boss_crack.png` (192 × 96, **sin teñir**), que se desvanece en los mismos 0,7 s. Dentro de la partida sigue yendo antes del nodo `Enemies` (el jefe se ve encima). Mismos tiempos y mismas reglas de RF-597/RF-598.
+- **RF-627** **El marco del cartel de aparición** *(D-165)*. `BossEntranceCard` pone `boss_card_frame.png` como 9-slice (márgenes de 32 px, centro transparente) sobre un fondo oscuro liso, a 720 × 120 px. El marco **no recibe toques** (`mouse_filter = IGNORE`: solo el cartel entero los recibe, RF-599). Texto, retrato y pista no cambian de contenido ni de lugar más allá de lo que exige el marco.
+- **RF-628** **El arte sigue siendo opcional** *(P6)*. Las opciones «Animaciones de mejora» (`upgrade_fx`, RF-596) y «Entrada de los jefes» (`boss_entrance`, RF-600) apagan **todo**, arte incluido: con una apagada no se crea ningún nodo del efecto y el resto del juego queda igual que antes. Los PNG se importan **sin mipmaps** (como la intro, M62) y su peso queda anotado para la APK.
+- **RF-629** **Rendimiento** *(P7)*. Con la máquina libre, `tools/perf_test.gd -- mejoras`, `sin_fx`, `celular` y `entrada_jefe` miden el costo del arte: **a lo sumo 1 ms por cuadro** de sobrecosto frente a la misma corrida sin el efecto. Si no se cumple, se optimiza (atlas más chico, menos cuadros, menos nodos) o se informa con los números reales. Las mediciones y lo que **no** se probó (celular real) se anotan en `03-tareas.md`.
+  - **Criterio:** **Dado** la máquina sin otras cargas → **Cuando** se corren las cuatro pruebas → **Entonces** la diferencia de tiempo de proceso entre «con efecto» y «sin efecto» es ≤ 1 ms, o queda escrito por qué no.
+
+- **RF-643** **Atlas importados a media resolución sin cambiar su tamaño en el mundo** *(D-176, T414; Lucas, 2026-10-20)*. Para optimizar RF-629, los PNG fuente aprobados de RF-625/626 conservan sus ocho cuadros y dimensiones originales; la importación limita los atlas de mejora a 384 × 192 (cuadros de 96 px) y el destello a 512 × 256 (cuadros de 128 px). Los sprites compensan con escala 2: el tamaño visual, el `footprint`, los tiempos, el tinte y el punto de los pies siguen iguales. Grieta y marco no cambian.
+  - **Criterio:** **Dado** los atlas importados y una torre de 1 × 1 o 2 × 2 → **Cuando** se muestra la mejora o la entrada → **Entonces** la textura tiene la mitad de ancho y alto, el tamaño visual y los pies coinciden con RF-625/626, y se repiten dos pares de medición con/sin efecto en PC y modo celular, sin afirmar rendimiento en un celular real.
+
+**Fuera de alcance:** los íconos de «Novedades» (M67, T372/T375, los termina Codex aparte); redibujar el arte o cambiar cuadros y colores (RF-643 solo reduce resolución de importación); otras mezclas (aditiva); un efecto distinto por familia de torre (P-65-6 sigue con el efecto único teñido); animar al jefe.
 ### M70 · Un consejo en la pantalla de derrota: qué torre conviene para esas oleadas (Lucas, 2026-10-20; T420 a T422)
 
 **Estado: especificada en T420; el código lo hacen T420 (datos y lógica), T421 (partida y pantalla) y T433 (preferencia de Opciones); T422 mide y cierra la documentación.** `[mobile+x86]`. Las razones y las alternativas están en **D-171 a D-177**. No cambia el balance, los niveles, las torres ni los enemigos. La opción se guarda como una clave aditiva, sin subir la versión del guardado (RF-644).

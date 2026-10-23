@@ -239,7 +239,7 @@ func tower_upgraded(tower: Tower, canvas: Transform2D = Transform2D.IDENTITY, sa
 	if tower.current_turret_atlas() != null:
 		center += TowerVisual.MOUNT_OFFSET * float(footprint)
 	var effect := UpgradeEffect.new().setup(color, Rules.TILE_SIZE * 0.8 * footprint * float(variant["escala"]),
-			float(variant["duracion_s"]), level_number >= 3)
+			float(variant["duracion_s"]), level_number >= 3, float(footprint))
 	_add(effect, center)
 	var entry: Dictionary = {"effect": effect, "texts": [] as Array[FloatingText]}
 	_upgrade_live[key] = entry

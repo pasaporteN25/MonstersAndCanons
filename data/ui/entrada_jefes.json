@@ -8,9 +8,9 @@
   "cartel_alto_px": 120,
   "intervalo_min_s": 8.0,
   "retrato_px": 88,
-  "titulo_fuente_px": 14,
-  "nombre_fuente_px": 26,
-  "frase_fuente_px": 15,
+  "titulo_fuente_px": 13,
+  "nombre_fuente_px": 20,
+  "frase_fuente_px": 14,
   "pista_fuente_px": 13,
   "arriba_pc_px": 56,
   "arriba_celular_px": 72

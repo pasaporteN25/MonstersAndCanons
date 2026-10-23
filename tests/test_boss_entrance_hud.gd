@@ -86,6 +86,51 @@ func test_the_burst_tints_with_the_enemy_color_and_goes_away() -> void:
 	assert_false(is_instance_valid(burst) and burst.is_inside_tree(), "dura 0,7 s y se borra solo")
 
 
+func test_the_burst_uses_the_approved_art_tinted_over_an_untinted_crack() -> void:
+	_play()
+	_spawn_boss()
+	var burst: BossEntranceBurst = _bursts()[0] as BossEntranceBurst
+	assert_eq(burst.get_child_count(), 2, "la grieta y el destello: dos Sprite2D")
+	var crack: Sprite2D = burst.get_child(0) as Sprite2D
+	var flash: Sprite2D = burst.get_child(1) as Sprite2D
+	assert_eq(crack.texture.get_size(), Vector2(192, 96))
+	assert_eq(crack.modulate.r, 1.0, "la grieta no se tiñe")
+	assert_eq(flash.texture.get_size(), Vector2(512, 256))
+	assert_eq(flash.texture.get_size() * flash.scale / Vector2(4, 2), Vector2(256, 256), "conserva el tamaño visual original")
+	assert_eq(flash.modulate, _boss().color, "el destello se tiñe con el color del jefe")
+	assert_eq(flash.offset * flash.scale, -Vector2(128, 176), "el punto de los pies queda en el origen del nodo")
+	assert_false(burst.is_processing(), "sin _process")
+
+
+func test_the_burst_frame_and_crack_follow_the_progress() -> void:
+	var burst := BossEntranceBurst.new().setup(Color.WHITE, 0.7)
+	add_child_autofree(burst)
+	var expected: Dictionary = {0.0: 0, 0.2: 1, 0.5: 4, 0.99: 7, 1.0: 7}
+	for progress: float in expected:
+		burst.progress = progress
+		assert_eq(burst.frame(), expected[progress], "progreso %s" % progress)
+	burst.progress = 0.0
+	assert_almost_eq(burst.crack_alpha(), 1.0, 0.001)
+	burst.progress = 1.0
+	assert_almost_eq(burst.crack_alpha(), 0.0, 0.001, "la grieta se apaga al final")
+
+
+func test_the_card_wears_the_approved_frame_without_taking_touches() -> void:
+	_play()
+	_spawn_boss()
+	var card: BossEntranceCard = game.hud.entrance_card()
+	assert_true(card.has_frame())
+	var frame: NinePatchRect = card.get_node("Frame") as NinePatchRect
+	assert_eq(frame.mouse_filter, Control.MOUSE_FILTER_IGNORE, "el marco no recibe toques")
+	assert_eq(frame.get_patch_margin(SIDE_LEFT), 32)
+	assert_eq(frame.get_patch_margin(SIDE_BOTTOM), 32)
+	assert_eq(frame.texture.get_size(), Vector2(192, 128))
+	assert_eq(card.get_child(card.get_child_count() - 1), frame, "va arriba de todo el contenido")
+	await wait_seconds(0.4)
+	assert_almost_eq(card.size.x, 720.0, 0.05, "el contenido entra sin ensanchar el cartel")
+	assert_almost_eq(card.size.y, 120.0, 0.05, "el contenido entra sin agrandar el cartel")
+
+
 func test_the_card_waits_for_the_wave_banner_and_the_new_enemy_card_waits_for_the_card() -> void:
 	_play()
 	game.session.begin_wave()  # sale el cartel de «Oleada N» (1,5 s)

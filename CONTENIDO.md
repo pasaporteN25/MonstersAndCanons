@@ -575,6 +575,8 @@ El tutorial se retoca con un archivo, sin programar: `{"version": 1, "borrador":
 
 ### M65 · La animación de mejora de torres (`data/ui/mejoras.json`)
 
+El arte aprobado está integrado (M71): `assets/sprites/effects/mejora/upgrade_l2.png` y `upgrade_l3.png`, atlas de 4 × 2 cuadros de 192 px. Para los jefes, `assets/sprites/effects/jefe/` contiene el destello (4 × 2 cuadros de 256 px), la grieta (192 × 96) y el marco 9-slice (192 × 128, márgenes de 32). Los cinco PNG se importan sin mipmaps. RF-643 limita la importación de los atlas de mejora a 384 × 192 y del destello a 512 × 256; el código compensa con escala 2, sin cambiar tamaño visual ni pies. Los originales y los ocho cuadros permanecen intactos. Peso de los cinco PNG: 151.135 bytes (27.924 + 53.552 + 54.987 + 10.924 + 3.748); el límite de importación reduce 75 % los texels de los tres atlas, no el peso de sus originales.
+
 Lo que aparece al mejorar una torre se retoca con un archivo, sin programar. **No hay que escribir ningún número de torre**: el texto («+3 daño · +0,5 disp/s») se calcula restando los niveles de `data/towers/<id>.tres`, así que si cambiás el daño de un `.tres`, el texto cambia solo.
 
 | Clave | Qué es |

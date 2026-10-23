@@ -1,0 +1,126 @@
+{
+  "task": "T367",
+  "status": "MUESTRAS — pendiente de aprobación",
+  "integrated": false,
+  "generator": "pack.py (Pillow; fuentes nativas, sin IA generativa)",
+  "burst": {
+    "file": "boss_burst.png",
+    "size": [
+      1024,
+      512
+    ],
+    "grid": [
+      4,
+      2
+    ],
+    "frame_size": [
+      256,
+      256
+    ],
+    "anchor": [
+      128,
+      176
+    ],
+    "duration_seconds": 0.7,
+    "fps": 11.428571428571429,
+    "order": "izquierda a derecha, arriba a abajo",
+    "minimum_margin": 8,
+    "tinted": true,
+    "mipmaps": false
+  },
+  "crack": {
+    "file": "boss_crack.png",
+    "size": [
+      192,
+      96
+    ],
+    "anchor": [
+      96,
+      48
+    ],
+    "tinted": false,
+    "duration_seconds": 0.7,
+    "mipmaps": false
+  },
+  "frame": {
+    "file": "boss_card_frame.png",
+    "size": [
+      192,
+      128
+    ],
+    "slice_margins": [
+      32,
+      32,
+      32,
+      32
+    ],
+    "display_size": [
+      720,
+      120
+    ],
+    "transparent_center": true,
+    "mipmaps": false
+  },
+  "references": {
+    "level_01_reference.png": {
+      "source": "art/t277-integracion/level_01_initial.png",
+      "sha256": "3afb0c3d115457ea6e1d1ca231f616471488e4f8ed20bdfa41a4bc5115d73aba"
+    },
+    "boss_reference.png": {
+      "source": "assets/sprites/enemies/rendered/boss.png",
+      "sha256": "7c306796286d958971eeee4e180295ecaa861352d5b8e8ab4a61870c02ffc5c9"
+    },
+    "boss_walk_reference.png": {
+      "source": "assets/sprites/enemies/rendered/boss_walk.png",
+      "sha256": "52fa3771732420269416975628e73bc0872edf0d183b9da9e9bd4b7667fde926"
+    }
+  },
+  "mockup": {
+    "foot_screen": [
+      32,
+      144
+    ],
+    "effect_top_left": [
+      -96,
+      -32
+    ],
+    "hud_bottom_y": 48,
+    "phone_scale": 1.5,
+    "phone_sidebars": 240,
+    "game_capture_is_historical": true,
+    "walking_preview_is_approximate": true
+  },
+  "tints": {
+    "neutral": "#ffffff",
+    "crimson": "#ba403e",
+    "steel": "#547ea9",
+    "green": "#72954e",
+    "data_red": "#c0392b"
+  },
+  "files": {
+    "boss_burst.png": {
+      "bytes": 54987,
+      "size": [
+        1024,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "boss_crack.png": {
+      "bytes": 10924,
+      "size": [
+        192,
+        96
+      ],
+      "mode": "RGBA"
+    },
+    "boss_card_frame.png": {
+      "bytes": 3748,
+      "size": [
+        192,
+        128
+      ],
+      "mode": "RGBA"
+    }
+  }
+}

@@ -5,8 +5,8 @@
 #
 # Lo crea `Hud.show_boss_entrance` en el momento y se borra al terminar o al saltearse (cero costo fuera de la
 # entrada, P7). Sin `_process`: un `Tween` hace todo, así que se congela con la pausa y acompaña la velocidad.
-# Estilo hierro y bronce, el mismo del cartel de entrada del nivel y del tutorial. Los números salen de
-# `data/ui/entrada_jefes.json`.
+# Estilo hierro y bronce (RF-627, D-165): un fondo oscuro liso y encima el marco aprobado en T367 (9-slice de 32 px,
+# centro transparente, que NO recibe toques). Los números salen de `data/ui/entrada_jefes.json`.
 class_name BossEntranceCard
 extends PanelContainer
 
@@ -14,13 +14,20 @@ extends PanelContainer
 signal finished
 
 const CARD_STYLE: StyleBox = preload("res://assets/ui/game_panel_style.tres")
+const FRAME: Texture2D = preload("res://assets/sprites/effects/jefe/boss_card_frame.png")
+## Márgenes del 9-slice del marco (son los de la imagen) y lo que mide su banda visible: el contenido va adentro.
+const FRAME_SLICE_PX: int = 32
+const FRAME_BAND_PX: int = 18
 const TITLE_COLOR := Color(1.0, 0.36, 0.3)
 const NAME_COLOR := Color(1.0, 0.86, 0.5)
 const TEXT_COLOR := Color(0.92, 0.92, 0.94)
 const HINT_COLOR := Color(0.72, 0.74, 0.8)
 ## Cuánto sube al entrar, en píxeles.
 const SLIDE_PX: float = 24.0
-const PADDING_PX: int = 8
+## Lo que se deja libre adentro del marco: a los lados pasa los remaches de las esquinas; arriba y abajo se mete un
+## poco en la banda para que entren los tres rótulos en 120 px.
+const PADDING_X_PX: int = 32
+const PADDING_Y_PX: int = 12
 const SKIP_HINT_PC: String = "Clic para saltear"
 const SKIP_HINT_MOBILE: String = "Tocá para saltear"
 const TITLE_FORMAT: String = "¡Llega el %s!"
@@ -35,9 +42,10 @@ var _name_label: Label
 var _line: Label
 var _hint: Label
 var _close_mark: Label
+var _frame: NinePatchRect
 
 
-## Arma los nodos del cartel (6 en el celular, 7 en PC con la «✕»): panel, retrato, tres rótulos, pista.
+## Arma los nodos del cartel (8 en el celular, 9 en PC con la «✕», contando el margen y el marco): panel, retrato, tres rótulos, pista.
 func setup(enemy: EnemyData, config: BossEntranceConfig, mobile: bool) -> BossEntranceCard:
 	_config = config
 	_mobile = mobile
@@ -49,17 +57,27 @@ func setup(enemy: EnemyData, config: BossEntranceConfig, mobile: bool) -> BossEn
 	var height: int = config.pixels("cartel_alto_px")
 	custom_minimum_size = Vector2(width, height)
 	size = Vector2(width, height)
-	var style: StyleBox = CARD_STYLE.duplicate()
-	style.content_margin_left = PADDING_PX + 4
-	style.content_margin_right = PADDING_PX + 4
-	style.content_margin_top = PADDING_PX
-	style.content_margin_bottom = PADDING_PX
+	# Fondo liso: el del panel de hierro y bronce de siempre pero sin su borde (el borde lo pone el marco).
+	var style: StyleBoxFlat = CARD_STYLE.duplicate() as StyleBoxFlat
+	style.set_border_width_all(0)
+	# Sin márgenes de contenido: el marco ocupa todo el cartel; los márgenes los pone el `MarginContainer` de abajo.
+	style.content_margin_left = 0
+	style.content_margin_right = 0
+	style.content_margin_top = 0
+	style.content_margin_bottom = 0
 	add_theme_stylebox_override("panel", style)
 	clip_contents = true
+	var inset := MarginContainer.new()
+	inset.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	inset.add_theme_constant_override("margin_left", PADDING_X_PX)
+	inset.add_theme_constant_override("margin_right", PADDING_X_PX)
+	inset.add_theme_constant_override("margin_top", PADDING_Y_PX)
+	inset.add_theme_constant_override("margin_bottom", PADDING_Y_PX)
+	add_child(inset)
 	var row := HBoxContainer.new()
 	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	row.add_theme_constant_override("separation", 14)
-	add_child(row)
+	inset.add_child(row)
 	var portrait_px: float = float(config.pixels("retrato_px"))
 	if enemy.texture != null:
 		var picture := TextureRect.new()
@@ -86,7 +104,7 @@ func setup(enemy: EnemyData, config: BossEntranceConfig, mobile: bool) -> BossEn
 	_line.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_line.max_lines_visible = 2
 	# Ancho fijo para que el texto se corte en líneas (si no, pediría una columna de una palabra y crecería el cartel).
-	_line.custom_minimum_size.x = float(width) - 2.0 * (PADDING_PX + 4) - portrait_px - 96.0 - 28.0
+	_line.custom_minimum_size.x = float(width) - 2.0 * PADDING_X_PX - portrait_px - 96.0 - 28.0
 	_line.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	texts.add_child(_title)
 	texts.add_child(_name_label)
@@ -109,6 +127,14 @@ func setup(enemy: EnemyData, config: BossEntranceConfig, mobile: bool) -> BossEn
 	_hint.custom_minimum_size.x = 96.0  # sin ancho, el autowrap pediría una letra por línea
 	_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	side.add_child(_hint)
+	_frame = NinePatchRect.new()
+	_frame.name = "Frame"
+	_frame.texture = FRAME
+	_frame.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR  # sin mipmaps (RF-628)
+	for edge: Side in [SIDE_LEFT, SIDE_TOP, SIDE_RIGHT, SIDE_BOTTOM]:
+		_frame.set_patch_margin(edge, FRAME_SLICE_PX)
+	_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_frame)  # el último hijo se dibuja arriba del contenido
 	gui_input.connect(_on_gui_input)
 	return self
 
@@ -172,6 +198,10 @@ func name_text() -> String:
 
 func line_text() -> String:
 	return _line.text
+
+
+func has_frame() -> bool:
+	return _frame != null and _frame.texture == FRAME
 
 
 func has_close_mark() -> bool:
