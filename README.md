@@ -327,13 +327,11 @@ Un cañadón de 26 × 11 del desierto con **una entrada** y un zigzag entre pare
 
 Abre el bloque 3 con un mapa grande (24 × 11) del desierto, **una entrada**, 22 oleadas, dos pozos, una mina y cinco removibles. **Ya no hay Ametralladora** (rotación de torres, RF-474), se ofrece la **Disruptora** (con su colección) y **debuta el Chamán**, solo, en la oleada 5. El bot sin recursos lo gana con 6 vidas (el nivel 10: 7 a 13); con la Disruptora el bot **pierde** (la tabla está para que Lucas decida). La ficha completa está en `specs/01-spec.md` §7.13 (RF-476) y la evidencia, en `art/campaign-t229/README.md`.
 
-### M66 · Presentación animada de jefes (spec T457, 2026-10-23)
+### M66 · Presentación animada de jefes (T457 spec, T461 código; 2026-10-23)
 
-La spec nueva reemplaza el piloto anterior de destello y cartel. La presentación ocupa la pantalla completa y pausa la partida: dura 5 s la primera vez que el guardado ve ese jefe y 3 s después. Sale en la primera oleada con jefe de una partida de campaña normal; no sale en Asedio ni en modo de pruebas. Se puede saltear tras 0,3 s con cualquier tecla o toque; `P` la saltea y deja la partida pausada. Para el jefe presentado no aparece la tarjeta «Nuevo enemigo» (PR #59). La opción se llama «Presentación de los jefes» y queda en «Partida y ayudas».
+La presentación ocupa la pantalla completa y pausa la partida desde el nacimiento del jefe: dura 5 s la primera vez que el guardado ve ese jefe y 3 s después. Sale en la primera oleada con jefe de una partida de campaña normal; no sale en Asedio ni en modo de pruebas. Se puede saltear tras 0,3 s con cualquier tecla o toque; `P` la saltea y deja la partida pausada. Para el jefe presentado no aparece la tarjeta «Nuevo enemigo» (PR #59). La opción se llama «Presentación de los jefes» (misma clave de guardado).
 
-La secuencia se animará por código sobre ilustraciones quietas, con fondos propios para el Jefe y el Coloso. El jefe supremo del nivel 15 depende de T243. La implementación, el arte y las pruebas todavía están pendientes; el piloto T366/T368 y sus assets se auditan en T461 y se retira en ese PR lo que quede sin uso. T454 y la prueba de celular real dependen de Lucas. Ver [spec M66](specs/01-spec.md), [decisiones D-187 a D-191](specs/04-decisiones.md) y [tarea T457](specs/03-tareas.md).
-
-La secuencia se animará por código sobre ilustraciones quietas, con fondos propios para el Jefe y el Coloso. El jefe supremo del nivel 15 depende de T243. La implementación, el arte y las pruebas todavía están pendientes; el piloto T366/T368 y sus assets se retiran o reemplazan en el PR de código tras revisar referencias. T454 y la prueba de celular real dependen de Lucas. Ver [spec M66](specs/01-spec.md), [decisiones D-187 a D-191](specs/04-decisiones.md) y [tarea T457](specs/03-tareas.md).
+**Estado:** el comportamiento está implementado y probado, con una **composición provisional** (el retrato que el jefe ya tenía, sobre un fondo liso). Falta el arte propio del Jefe y del Coloso (T367, sin aprobar); el jefe supremo del nivel 15 depende de T243/T463. El piloto de destello y cartel se retiró. No se probó en un celular real (T454, de Lucas) ni se midió rendimiento. Ver [spec M66](specs/01-spec.md), [decisiones D-187 a D-191](specs/04-decisiones.md) y [tarea T461](specs/03-tareas.md).
 
 ### T330 y T331 · El tutorial del nivel 1 (M63)
 

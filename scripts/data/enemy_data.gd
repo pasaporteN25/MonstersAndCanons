@@ -93,7 +93,3 @@ enum Shape { CIRCLE, TRIANGLE, SQUARE, DIAMOND, HEXAGON }
 @export var charge_slow_tolerance: float = 0.0
 @export var charge_impact_radius_tiles: float = 0.0
 @export var charge_wear_percent: float = 0.0
-
-
-# --- Entrada del jefe (M66, RF-601). Vacío = el enemigo no hace entrada. ---
-@export var entrance: BossEntranceData

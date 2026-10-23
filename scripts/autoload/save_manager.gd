@@ -18,7 +18,7 @@ const DEFAULT_SETTINGS: Dictionary = {
 	"ui_mode": 0,
 	"tutorial_enabled": true,  # M63, RF-576: el tutorial del nivel 1 está prendido
 	"upgrade_fx": true,  # M65, RF-593: animaciones de mejora de torres prendidas
-	"boss_entrance": true,  # M66, RF-600: la entrada de los jefes está prendida
+	"boss_entrance": true,  # M66, RF-672: la presentación de los jefes está prendida
 	"defeat_advice": true,  # M70, RF-644: los consejos de derrota están prendidos
 	"selector_style": 0,  # M72, RF-645: 0 = tarjetas, 1 = mapa planetario (preferencia de interfaz, desktop)
 }
@@ -354,7 +354,7 @@ func set_last_initials(name: String) -> void:
 
 # --- Opciones (RF-113) ---
 
-## M66, RF-600: ¿está prendida la «Entrada de los jefes»? Un valor que no es booleano se lee como prendida.
+## M66, RF-672: ¿está prendida la «Presentación de los jefes»? (clave `boss_entrance`, sin migración) Un valor que no es booleano se lee como prendida.
 func boss_entrance_enabled() -> bool:
 	var value: Variant = get_setting("boss_entrance")
 	return value if typeof(value) == TYPE_BOOL else true

@@ -70,13 +70,12 @@ Los niveles son JSON, un formato de texto común que se edita a mano. Un `.tres`
 | `stun_interval` / `stun_seconds` / `stun_range_tiles` | El **hechizo** que apaga torres (RF-281): cada cuántos segundos, cuánto aturde y a qué distancia. 0 = no lanza. | `8.0`, `3.0`, `4.0` |
 | `reflect_range_tiles` / `reflect_stun_seconds` | El **rebote** (RF-283): a qué distancia rebota el tiro de una torre y cuánto la aturde. La quemadura no rebota. | `2.5`, `2.0` |
 | `aura_heal_percent_per_second` | % de vida máxima por segundo que hace recuperar a los demás dentro del radio (RF-272); no mientras se queman. | `3.0` |
-| `entrance` | Dato del piloto viejo T366/T368, pendiente de reemplazo por T461; no agregar ni extender para el M66 aprobado. | `BossEntranceData`
 
-### Presentación de jefes (M66; T457, pendiente de aprobación e implementación)
+### Presentación de jefes (M66; T461)
 
-El piloto actual todavía puede tener `BossEntranceData`, `data/ui/entrada_jefes.json`, destello y cartel. Ese formato describe el concepto anterior y queda en retirada: no agregues `entrance` a más enemigos ni cambies `levels` para extenderlo. La propuesta de spec T457, pendiente del OK de Lucas, define una presentación a pantalla completa que pausa la campaña normal; el código nuevo espera el OK de Lucas. El jefe presentado no lleva tarjeta «Nuevo enemigo» (PR #59); la opción cambia de nombre y de grupo.
+**No hay campo de datos para extenderla.** El piloto viejo (`EnemyData.entrance`, `BossEntranceData`, `data/ui/entrada_jefes.json`, destello, cartel y los PNG `boss_burst`, `boss_crack` y `boss_card_frame`) se retiró en T461: no agregues `entrance` a ningún enemigo. Hoy la presentación sale para **todo enemigo peligroso** (`lives_damage` ≥ 5, RF-135): el Jefe y el Coloso. Su título, nombre y frase son los del propio enemigo (`display_name`, `description`) y los segundos (5 la primera vez, 3 después, 0,3 de protección) están en `BossPresentationRules`.
 
-T461 debe revisar todas las referencias antes de retirar lectores, datos, escenas y assets que queden sin uso. Los fondos aprobados para el Jefe y el Coloso se preparan en T367. El jefe supremo del nivel 15 queda pendiente de T243/T463. Ver [M66](specs/01-spec.md), [T457](specs/03-tareas.md) y la [ficha de muestras T367](specs/tareas/T367-arte-entrada-jefes.md).
+Cuando haya arte aprobado (T367) se le pasan la ilustración y el fondo a `BossPresentation.setup()`; hasta entonces usa el retrato del enemigo sobre un fondo liso. El jefe supremo del nivel 15 espera a T243/T463. El jefe presentado no lleva tarjeta «Nuevo enemigo» (PR #59). Ver [M66](specs/01-spec.md), [T461](specs/03-tareas.md) y la [ficha de muestras T367](specs/tareas/T367-arte-entrada-jefes.md).
 
 ---
 
@@ -564,7 +563,7 @@ El tutorial se retoca con un archivo, sin programar: `{"version": 1, "borrador":
 
 ### M65 · La animación de mejora de torres (`data/ui/mejoras.json`)
 
-El arte aprobado está integrado (M71): `assets/sprites/effects/mejora/upgrade_l2.png` y `upgrade_l3.png`, atlas de 4 × 2 cuadros de 192 px. Para los jefes, `assets/sprites/effects/jefe/` contiene el destello (4 × 2 cuadros de 256 px), la grieta (192 × 96) y el marco 9-slice (192 × 128, márgenes de 32). Los cinco PNG se importan sin mipmaps. RF-643 limita la importación de los atlas de mejora a 384 × 192 y del destello a 512 × 256; el código compensa con escala 2, sin cambiar tamaño visual ni pies. Los originales y los ocho cuadros permanecen intactos. Peso de los cinco PNG: 151.135 bytes (27.924 + 53.552 + 54.987 + 10.924 + 3.748); el límite de importación reduce 75 % los texels de los tres atlas, no el peso de sus originales.
+El arte aprobado de mejoras está integrado (M71): `assets/sprites/effects/mejora/upgrade_l2.png` y `upgrade_l3.png`, atlas de 4 × 2 cuadros de 192 px. Se importan sin mipmaps, con límite de 384 × 192 y escala 2 para mantener tamaño visual. Los tres PNG del piloto viejo de jefes (destello, grieta y marco) se retiraron en T461 junto con su código; ese concepto no estaba aprobado y esos recursos no se reutilizan para M66. El arte propio de la presentación nueva sigue pendiente de T367/T243.
 
 Lo que aparece al mejorar una torre se retoca con un archivo, sin programar. **No hay que escribir ningún número de torre**: el texto («+3 daño · +0,5 disp/s») se calcula restando los niveles de `data/towers/<id>.tres`, así que si cambiás el daño de un `.tres`, el texto cambia solo.
 
@@ -700,8 +699,6 @@ La pantalla «Novedades de esta versión» (se abre sola una vez por versión y 
 
 **Arte de Novedades (T375):** en `assets/ui/novedades/` están `news_header_1_0.png` (presentación, 4:1), `news_header_plain.png` (mejoras, 8:1) y los medallones `news_icon_<nombre>.png`, con nombres `map`, `tower`, `monster`, `siege`, `editor`, `mobile`, `book` y `upgrade`. Poné la ruta `res://` en `cabecera` o `icono` para usarlos. La cabecera se ajusta al ancho interior del panel sin recorte; el texto queda debajo. Los íconos miden 48 px en PC y 64 px en celular. Si omitís `icono`, queda un rombo de bronce; si omitís `cabecera`, no se reserva espacio. Importar sin mipmaps. La 1.0.0 sigue en borrador hasta aprobar los textos.
 
-## Presentación de jefes (M66, T457; pendiente de implementación)
+## Presentación de jefes (M66, T461)
 
-La spec nueva reemplaza el piloto de destello y cartel. La opción existente conserva su clave, pero pasa a llamarse «Presentación de los jefes» y queda en «Partida y ayudas». La presentación pausa la campaña normal, dura 5 s la primera vez que el guardado ve a ese jefe y 3 s después, y no sale en Asedio ni en modo de pruebas. Se omite la tarjeta «Nuevo enemigo» para el jefe presentado. La animación se hará por código sobre ilustraciones quietas, con un fondo propio para el Jefe y otro para el Coloso. El jefe supremo del nivel 15 espera a T243.
-
-El piloto T366/T368 todavía puede estar en el código actual; no lo extiendas ni copies sus assets como si fueran el diseño aprobado. La implementación y los pasos de prueba se documentarán después del OK de Lucas a T457. Ver [M66](specs/01-spec.md), [T457](specs/03-tareas.md) y la [ficha de arte T367](specs/tareas/T367-arte-entrada-jefes.md).
+La presentación pausa la campaña normal, dura 5 s la primera vez que el guardado ve a ese jefe y 3 s después, y no sale en Asedio ni en modo de pruebas. La opción conserva su clave (`boss_entrance`) y se llama «Presentación de los jefes»; en el menú sigue en la fila donde estaba (debajo de «Tutorial»): el agrupado «Partida y ayudas» todavía no existe en el código. La animación es por código sobre una ilustración quieta; el arte propio del Jefe y del Coloso no está aprobado (T367) y el del nivel 15 espera a T243. El piloto viejo y sus assets se retiraron. Ver [M66](specs/01-spec.md), [T461](specs/03-tareas.md) y la [ficha de arte T367](specs/tareas/T367-arte-entrada-jefes.md).

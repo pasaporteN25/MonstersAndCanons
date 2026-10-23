@@ -7,9 +7,6 @@
 #   godot --path . -s tools/perf_test.gd -- mejoras        (M65: mejora 10 torres seguidas durante la medición)
 #   godot --path . -s tools/perf_test.gd -- mejoras sin_fx (lo mismo con «Animaciones de mejora» apagadas: el anillo de siempre)
 #   godot --path . -s tools/perf_test.gd -- celular        (interfaz del celular, 1280 × 720 virtual; se puede combinar con lo anterior)
-#   godot --path . -s tools/perf_test.gd -- entrada_jefe   (M66: nivel 1 «desde el menú» y un Jefe al empezar la medición;
-#                                                         se ven el destello y el cartel durante 1,6 s. Se puede sumar `celular`)
-#   godot --path . -s tools/perf_test.gd -- entrada_jefe sin_fx (misma partida y jefe, entrada desactivada)
 #
 # Desactiva el vsync para medir cuántos FPS puede dar el juego, no los del monitor.
 extends SceneTree
@@ -38,9 +35,7 @@ var normal: EnemyData = load("res://data/enemies/normal.tres")
 var process_ms_total: float = 0.0
 var upgrades_done: int = 0
 var upgrade_timer: float = 0.0
-## M66: con `entrada_jefe`, a qué segundo nace el Jefe y si ya nació; y la suma de los tiempos de cuadro medidos.
-const BOSS_ENTRANCE_AT: float = 1.5
-var boss_entrance_fired: bool = false
+## La suma de los tiempos de cuadro medidos.
 var frame_ms_total: float = 0.0
 ## Ventana temporal idéntica con/sin efecto: evita diluir la entrada breve en los seis segundos.
 var active_process_ms_total: float = 0.0
@@ -59,12 +54,6 @@ func _create_game() -> void:
 	# Solo memoria: ninguna corrida modifica las preferencias guardadas.
 	root.get_node("/root/SaveManager").call("set_setting", "damage_numbers", not "sin_numeros" in OS.get_cmdline_user_args())
 	root.get_node("/root/SaveManager").call("set_setting", "upgrade_fx", not "sin_fx" in OS.get_cmdline_user_args())
-	root.get_node("/root/SaveManager").call("set_setting", "boss_entrance", not "sin_fx" in OS.get_cmdline_user_args())
-	if "entrada_jefe" in OS.get_cmdline_user_args():
-		# La tarjeta «Nuevo enemigo» espera la entrada: desactivarla en ambos evita medir colas distintas.
-		root.get_node("/root/SaveManager").call("mark_enemy_seen", &"boss")
-		root.get_node("/root/GameFlow").set("current_index", 0)  # campaña desde el menú: así sale la entrada
-		root.get_node("/root/SaveManager").call("set_setting", "tutorial_enabled", false)
 	root.get_node("/root/SaveManager").call("set_setting", "ui_mode", 1 if "celular" in OS.get_cmdline_user_args() else 2)
 	game = (load("res://scenes/game/game.tscn") as PackedScene).instantiate()
 	root.add_child(game)
@@ -85,18 +74,12 @@ func _process(delta: float) -> bool:
 	_fake_deaths(delta)
 	_upgrade_in_a_row(delta)
 	time += delta
-	if "entrada_jefe" in OS.get_cmdline_user_args() and not boss_entrance_fired and time > BOSS_ENTRANCE_AT:
-		boss_entrance_fired = true
-		game.spawner.spawn_now(load("res://data/enemies/boss.tres"))
-		print("Jefe generado; entradas presentadas: %d" % game.get("_boss_entrance_types").size())
 	if time > WARMUP_SECONDS:
 		frames_measured += 1
 		process_ms_total += Performance.get_monitor(Performance.TIME_PROCESS) * 1000.0
 		frame_ms_total += delta * 1000.0
-		var active_start: float = BOSS_ENTRANCE_AT if "entrada_jefe" in OS.get_cmdline_user_args() else WARMUP_SECONDS
-		# El cartel dura 1,6 s; diez mejoras y sus textos ocupan 4,9 s desde la primera.
-		var active_duration: float = 1.6 if "entrada_jefe" in OS.get_cmdline_user_args() else 4.9
-		if time >= active_start and time < active_start + active_duration:
+		# Diez mejoras y sus textos ocupan 4,9 s desde la primera.
+		if time >= WARMUP_SECONDS and time < WARMUP_SECONDS + 4.9:
 			active_frames += 1
 			active_process_ms_total += Performance.get_monitor(Performance.TIME_PROCESS) * 1000.0
 			active_frame_ms_total += delta * 1000.0

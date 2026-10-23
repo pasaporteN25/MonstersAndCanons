@@ -16,8 +16,8 @@ const ADMIN_OFF_TEXT: String = "Volver al juego normal"
 const TUTORIAL_CHECK_TEXT: String = "Tutorial del nivel 1"
 const TUTORIAL_REPLAY_TEXT: String = "Volver a verlo"
 const TUTORIAL_REPLAYED_TEXT: String = "Se verá en el nivel 1"
-## M66 (RF-600): la entrada de los jefes.
-const BOSS_ENTRANCE_TEXT: String = "Entrada de los jefes"
+## M66 (RF-672): la presentación de los jefes. La clave de guardado sigue siendo `boss_entrance`.
+const BOSS_ENTRANCE_TEXT: String = "Presentación de los jefes"
 ## M70 (RF-644): preferencia para ocultar los consejos de la pantalla de derrota.
 const DEFEAT_ADVICE_TEXT: String = "Consejos en la derrota"
 ## M68 (RF-614): la tecla de «Ver todo».
@@ -289,7 +289,7 @@ func _on_tutorial_replay() -> void:
 	_tutorial_replay.disabled = true
 
 
-## M66, RF-600: «Entrada de los jefes». Va debajo de «Mostrar números de daño» y del tutorial (y de
+## M66, RF-672: «Presentación de los jefes». Va debajo de «Mostrar números de daño» y del tutorial (y de
 ## «Animaciones de mejora» si M65 está). Una casilla simple: la lee `Game` al aparecer un jefe.
 func _build_boss_entrance_check() -> void:
 	_boss_entrance_check = CheckBox.new()
