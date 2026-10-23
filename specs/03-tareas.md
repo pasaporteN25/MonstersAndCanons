@@ -94,6 +94,10 @@
   **Hecho cuando:** las propuestas nuevas quedan en este tablero como análisis pendiente, la nueva intención de T367 reemplaza explícitamente a la muestra equivocada, T362 reutiliza arte existente y los PRs de muestras redundantes quedan cerrados; no se implementan cambios de juego.
   **Resultado (2026-10-23):** se agregó arriba el backlog recibido de Lucas (selector Campaña/Asedio y mapa, carga/pantalla completa, «Ver todo», paneles/Opciones, torres e infraestructura, demolición/lore y mobile). T362 reutiliza el arte ya aprobado de PR #22 y no necesita una segunda muestra; T367 ahora requiere análisis/especificación de una presentación animada de 3 o 5 segundos, a pantalla completa y con la partida pausada. Se cerraron los PRs #47 y #48; el #22 queda en draft hasta revisar el T367 viejo y sincronizarlo. El PR #46 original pasó CI, sigue abierto y no está mergeado; este segundo commit actualiza su mismo cambio de backlog. Sin cambios a código, assets, escenas, reglas ni opciones del juego.
 
+- [x] **T446 · 📜 Registrar B-52 a B-57 en la spec (2026-10-23).**
+  - **Hecho cuando:** las propuestas del tablero tienen entrada en `specs/01-spec.md` §13 como B-52 a B-57, sin RF ni cambio de reglas.
+  - **Resultado:** se agregó la tabla B-52…B-57 en §13, marcada «sin autorizar implementación». No se tocó código, datos ni balance, y no se corrió Godot (solo documentos). Números siguientes libres: RF-666, D-187, T447.
+
 ## Prioridad máxima · Mobile, presentación y próxima prueba (2026-10-16)
 
 > **Plan de ejecución (2026-10-16):** el orden, los modelos y las compuertas de T262 a T268 están en [12-plan-t262-t268.md](12-plan-t262-t268.md).
