@@ -132,6 +132,15 @@ func test_first_appearance_shows_the_card() -> void:
 	assert_true(SaveManager.has_seen_enemy(&"flyer"))
 
 
+func test_a_boss_gets_no_new_enemy_card_but_is_marked_seen() -> void:
+	# Lucas, 2026-10-23: el cartel del jefe y la línea «¡Llega el Jefe!» ya lo presentan.
+	for id: String in ["boss", "colossus"]:
+		_spawn(id)
+		assert_false((game.hud.get_node("%EnemyIntro") as Control).visible, "%s: sin tarjeta" % id)
+		assert_eq(game.hud._intro_queue.size(), 0, "%s: nada encolado" % id)
+		assert_true(SaveManager.has_seen_enemy(StringName(id)), "%s: queda como visto para la Wiki" % id)
+
+
 func test_card_appears_only_once_per_type() -> void:
 	_spawn("flyer")
 	var queued_after_first: int = game.hud._intro_queue.size()

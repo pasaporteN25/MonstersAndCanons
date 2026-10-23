@@ -131,21 +131,21 @@ func test_the_card_wears_the_approved_frame_without_taking_touches() -> void:
 	assert_almost_eq(card.size.y, 120.0, 0.05, "el contenido entra sin agrandar el cartel")
 
 
-func test_the_card_waits_for_the_wave_banner_and_the_new_enemy_card_waits_for_the_card() -> void:
+func test_the_card_waits_for_the_wave_banner_and_no_new_enemy_card_follows() -> void:
 	_play()
 	game.session.begin_wave()  # sale el cartel de «Oleada N» (1,5 s)
 	_spawn_boss()
 	assert_eq(_bursts().size(), 1, "el destello no espera a nadie")
 	assert_null(game.hud.entrance_card(), "el cartel de aparición espera a que se retire el de oleada")
-	assert_false(_intro_visible(), "la tarjeta «Nuevo enemigo» espera al cartel de aparición")
+	assert_false(_intro_visible(), "un jefe no lleva la tarjeta «Nuevo enemigo» (Lucas, 2026-10-23)")
 	await wait_seconds(1.7)
 	var card: BossEntranceCard = game.hud.entrance_card()
 	assert_not_null(card, "al retirarse el cartel de oleada entra el de aparición")
-	assert_false(_intro_visible(), "y la tarjeta sigue esperando")
+	assert_false(_intro_visible(), "y sigue sin haber tarjeta")
 	card.dismiss()
 	await wait_seconds(0.3)
 	assert_null(game.hud.entrance_card())
-	assert_true(_intro_visible(), "retirado el cartel, la tarjeta sale con sus 6 s de siempre")
+	assert_false(_intro_visible(), "retirado el cartel, tampoco sale la tarjeta")
 
 
 func test_the_card_lasts_one_point_six_seconds() -> void:
@@ -255,13 +255,13 @@ func test_a_touch_also_skips_it_and_a_release_does_not() -> void:
 	assert_true(card.is_dismissed())
 
 
-func test_skipping_lets_the_waiting_new_enemy_card_out() -> void:
+func test_skipping_does_not_bring_a_new_enemy_card() -> void:
 	_play()
 	_spawn_boss()
 	assert_false(_intro_visible())
 	game.hud.entrance_card().dismiss()
 	await wait_seconds(0.25)
-	assert_true(_intro_visible())
+	assert_false(_intro_visible())
 
 
 func test_pc_shows_a_cross_and_click_hint_and_mobile_does_not() -> void:
@@ -281,7 +281,7 @@ func test_option_off_leaves_the_boss_as_before() -> void:
 	_spawn_boss()
 	assert_eq(_bursts().size(), 0)
 	assert_null(game.hud.entrance_card())
-	assert_true(_intro_visible(), "la tarjeta «Nuevo enemigo» sale sin esperar a nadie")
+	assert_false(_intro_visible(), "un jefe no lleva la tarjeta «Nuevo enemigo», con la opción prendida o apagada")
 
 
 func test_an_old_save_reads_the_option_as_on() -> void:
