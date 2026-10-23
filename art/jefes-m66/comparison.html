@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>T367 · Muestra del arte de entrada de jefes</title>
+<style>
+:root{color-scheme:dark;--bg:#211f1d;--panel:#302c29;--ink:#f1e5d0;--muted:#c3b8a8;--gold:#c79a5b;--line:#55483b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.5 system-ui,sans-serif}main{max-width:1500px;margin:auto;padding:28px}h1{font-size:clamp(28px,4vw,42px);line-height:1.15;margin:0 0 12px}h2{margin:0 0 10px;font-size:26px}h3{margin:0 0 8px;font-size:19px}p{margin:8px 0 14px}.lead{font-size:19px;color:#e6d7bd}.notice{border-left:4px solid var(--gold);background:#352f29;padding:14px 18px;margin:18px 0 30px}.section{margin:34px 0;padding-top:25px;border-top:1px solid var(--line)}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}.three{grid-template-columns:repeat(3,minmax(0,1fr))}figure{margin:0;padding:12px;background:var(--panel);border:1px solid var(--line);border-radius:7px;min-width:0}figcaption{color:var(--muted);margin:0 0 9px;font-size:15px}img{display:block;max-width:100%;height:auto;margin:auto}a{color:#f0c980}a img{cursor:zoom-in}small,.note{color:var(--muted)}.atlas{background-color:#171717;background-image:linear-gradient(45deg,#282828 25%,transparent 25%),linear-gradient(-45deg,#282828 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#282828 75%),linear-gradient(-45deg,transparent 75%,#282828 75%);background-size:24px 24px;background-position:0 0,0 12px,12px -12px,-12px 0}.atlas img{width:100%}.stage{background:#6e8050;padding:12px}.tint{background-image:linear-gradient(45deg,#252321 25%,transparent 25%),linear-gradient(-45deg,#252321 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#252321 75%),linear-gradient(-45deg,transparent 75%,#252321 75%);background-size:18px 18px;background-position:0 0,0 9px,9px -9px,-9px 0}.tint img{width:100%;max-width:256px}.mobile img{width:100%}.frames{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.frames figure{padding:8px}.frames img{width:100%}.badge{display:inline-block;color:#261e16;background:#d8b877;border-radius:99px;padding:4px 10px;font-weight:700;font-size:13px;letter-spacing:.02em}.meta{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}.check{padding-left:20px}.check li{margin:6px 0}.foot{border-top:1px solid var(--line);margin-top:38px;padding-top:16px;color:var(--muted)}
+@media(max-width:850px){main{padding:17px}.grid,.three,.frames{grid-template-columns:1fr}.lead{font-size:17px}}
+</style>
+</head>
+<body><main>
+<h1>T367 · Entrada de jefes</h1>
+<p class="lead">Muestra de revisión del destello, la grieta y el marco de la tarjeta M66.</p>
+<div class="meta"><span class="badge">MUESTRA · PENDIENTE DE APROBACIÓN</span><span class="badge">No integrada en assets/</span><span class="badge">Fuentes reproducibles incluidas</span></div>
+<div class="notice"><b>Alcance de esta muestra.</b> Las piezas se dibujaron con una fuente Python nativa en <code>sources/render_sample.py</code>. No reemplazan el arte provisional del juego. Las imágenes llamadas “composición” son montajes estáticos para revisar escala y posición; solo las capturas con la etiqueta “captura real” provienen de Godot. La simulación corrió en PC con el modo de interfaz móvil, no en un teléfono físico.</div>
+
+<section class="section"><h2>1. Destello: ritmo, punto de apoyo y escala</h2>
+<div class="grid">
+<figure><figcaption>Animación de revisión · 8 cuadros · 0,7 s · 11,4 cuadros/s</figcaption><a href="boss_burst_preview.gif"><img src="boss_burst_preview.gif" alt="Animación en bucle del destello de aparición"></a></figure>
+<figure><figcaption>Atlas PNG · 1024 × 512 · 4 columnas × 2 filas; cuadros 256 × 256</figcaption><a href="boss_burst.png" class="atlas"><img src="boss_burst.png" alt="Atlas PNG de ocho cuadros del destello"></a></figure>
+<figure><figcaption>Ocho cuadros a 100 % sobre pradera; la cruz clara señala el apoyo (128,176)</figcaption><a href="burst_contact_100.png"><img src="burst_contact_100.png" alt="Hoja de ocho cuadros a tamaño original con el apoyo marcado"></a></figure>
+<figure><figcaption>Prueba de lectura a 34 px, con el Jefe de 34 px como referencia en el primer cuadro</figcaption><a href="burst_contact_34.png"><img src="burst_contact_34.png" alt="Miniaturas de los cuadros y referencia de escala del Jefe"></a></figure>
+</div>
+<p class="note">El atlas conserva alfa real. El último cuadro está completamente transparente. El efecto no lleva sombra dibujada; al colocarse en la entrada superior izquierda puede recortarse con el borde del mapa, como ocurre con el efecto provisional actual.</p></section>
+
+<section class="section"><h2>2. Tinte de facción</h2>
+<p>El PNG es claro y neutro; estas muestras multiplican el mismo cuadro de impacto por el color del enemigo. El Jefe usa el carmesí oficial. Azul y verde son ejemplos de extensibilidad.</p>
+<div class="grid three">
+<figure class="tint"><figcaption>Carmesí · Jefe · <code>#ba403e</code></figcaption><a href="burst_carmesi.png"><img src="burst_carmesi.png" alt="Destello teñido de carmesí"></a></figure>
+<figure class="tint"><figcaption>Azul acero · ejemplo · <code>#6189b7</code></figcaption><a href="burst_azul.png"><img src="burst_azul.png" alt="Destello teñido de azul acero"></a></figure>
+<figure class="tint"><figcaption>Verde · ejemplo · <code>#709d52</code></figcaption><a href="burst_verde.png"><img src="burst_verde.png" alt="Destello teñido de verde"></a></figure>
+</div></section>
+
+<section class="section"><h2>3. Grieta y marco</h2>
+<div class="grid">
+<figure class="atlas"><figcaption>Grieta quieta · 192 × 96 · alfa en los bordes; polvo apagado, sin sombra</figcaption><a href="boss_crack.png"><img src="boss_crack.png" alt="Decal de suelo con una grieta ramificada"></a></figure>
+<figure class="atlas"><figcaption>Marco fuente · 192 × 128 · márgenes 9-slice de 32 px · centro transparente</figcaption><a href="boss_card_frame.png"><img src="boss_card_frame.png" alt="Marco de hierro oscuro y bronce sin contenido central"></a></figure>
+</div>
+<h3 style="margin-top:22px">Tarjeta armada</h3>
+<div class="grid">
+<figure><figcaption>PC · lienzo 1280 × 720 · marco 720 × 120 · retrato existente de 96 px · tipografía de 20 px</figcaption><a href="level1_card_desktop.png"><img src="level1_card_desktop.png" alt="Mockup de escritorio de la tarjeta de llegada del Jefe"></a></figure>
+<figure class="mobile"><figcaption>Celular · lienzo 2400 × 1080 · vista ampliada 150 % · tarjeta 1080 × 180</figcaption><a href="level1_card_mobile_150.png"><img src="level1_card_mobile_150.png" alt="Mockup móvil al 150 por ciento"></a></figure>
+</div></section>
+
+<section class="section"><h2>4. Contexto real del nivel 1</h2>
+<p>Estas capturas reales muestran el juego actual con el arte provisional de T368. Se conservaron como referencia de escala y del orden visual; no contienen el PNG candidato.</p>
+<div class="grid">
+<figure><figcaption>Captura real de Godot · PC · cartel actual de aparición</figcaption><a href="references/gameplay_pc_provisional.png"><img src="references/gameplay_pc_provisional.png" alt="Captura real del juego en PC con el jefe y su cartel actual"></a></figure>
+<figure><figcaption>Captura real de Godot · opción de interfaz móvil · cartel actual de aparición</figcaption><a href="references/gameplay_celular_provisional.png"><img src="references/gameplay_celular_provisional.png" alt="Captura real del juego en modo de interfaz móvil"></a></figure>
+</div>
+<h3 style="margin-top:22px">Composición de escala del candidato sobre captura real</h3>
+<p>Montajes estáticos del candidato sobre el nivel 1 real, cuadro a cuadro. El jefe se volvió a componer con el primer cuadro de <code>boss_walk.png</code> para mantenerlo delante del polvo. No son capturas de una build que integre el arte; sirven para revisar si el efecto tapa al jefe, el camino o la barra superior.</p>
+<div class="frames">
+<figure><figcaption>Cuadro 1 · PC · apoyo (100,158)</figcaption><a href="references/level1_pc_frame_01.png"><img src="references/level1_pc_frame_01.png" alt="Composición del cuadro uno en nivel real"></a></figure>
+<figure><figcaption>Cuadro 2 · PC</figcaption><a href="references/level1_pc_frame_02.png"><img src="references/level1_pc_frame_02.png" alt="Composición del cuadro dos en nivel real"></a></figure>
+<figure><figcaption>Cuadro 3 · PC</figcaption><a href="references/level1_pc_frame_03.png"><img src="references/level1_pc_frame_03.png" alt="Composición del cuadro tres en nivel real"></a></figure>
+<figure><figcaption>Cuadro 4 · PC · impacto</figcaption><a href="references/level1_pc_frame_04.png"><img src="references/level1_pc_frame_04.png" alt="Composición del cuadro cuatro en nivel real"></a></figure>
+<figure><figcaption>Cuadro 5 · PC</figcaption><a href="references/level1_pc_frame_05.png"><img src="references/level1_pc_frame_05.png" alt="Composición del cuadro cinco en nivel real"></a></figure>
+<figure><figcaption>Cuadro 6 · PC</figcaption><a href="references/level1_pc_frame_06.png"><img src="references/level1_pc_frame_06.png" alt="Composición del cuadro seis en nivel real"></a></figure>
+<figure><figcaption>Cuadro 7 · PC</figcaption><a href="references/level1_pc_frame_07.png"><img src="references/level1_pc_frame_07.png" alt="Composición del cuadro siete en nivel real"></a></figure>
+<figure><figcaption>Cuadro 8 · PC · transparente</figcaption><a href="references/level1_pc_frame_08.png"><img src="references/level1_pc_frame_08.png" alt="Composición del cuadro ocho, sin efecto"></a></figure>
+</div>
+<figure class="mobile" style="margin-top:14px"><figcaption>Cuadro de impacto · captura real del modo móvil ampliada al 150 % · imagen 2400 × 1080</figcaption><a href="level1_burst_mobile.png"><img src="level1_burst_mobile.png" alt="Composición a tamaño móvil del cuadro de impacto sobre el nivel real"></a></figure>
+</section>
+
+<section class="section"><h2>5. Validación y límites</h2>
+<ul class="check">
+<li>Godot 4.7.2 importó el checkout y ejecutó <code>tools/capture_boss_entrance.tscn</code> a 1280 × 720 para PC y modo móvil. Las seis capturas del flujo provisional terminaron correctamente.</li>
+<li>Se generaron y se midieron el atlas, la grieta y el marco; el manifest registra tamaño, formato, peso y hash.</li>
+<li>La animación GIF dura 0,704 s a 88 ms por cuadro. El octavo cuadro está vacío, como exige la ficha.</li>
+<li>El editor no integró estos PNG a <code>assets/</code>; por eso todavía no se probó su importación en juego, el rendimiento de T369, los 60 FPS en PC, el límite de 1 ms/cuadro en celular ni el peso de APK.</li>
+<li>El modo móvil fue una configuración de interfaz simulada en PC. No se usó un teléfono físico ni se hizo una exportación Android.</li>
+</ul>
+<p>Fuentes y brief visual: <a href="prompts.md">prompts.md</a> y <code>sources/render_sample.py</code>. Los detalles de dimensiones y SHA-256 están en <a href="manifest.json">manifest.json</a>.</p>
+</section>
+<p class="foot">T367 sigue pendiente de aprobación de Lucas. Esta carpeta contiene muestras de revisión; nada de aquí se considera arte final ni se instaló en el juego.</p>
+</main></body></html>

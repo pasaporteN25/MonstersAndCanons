@@ -1,0 +1,318 @@
+{
+  "tarea": "T367 · Arte de entrada de jefes (M66)",
+  "estado": "muestra para revisión; pendiente de aprobación de Lucas; no integrada en assets/",
+  "origen": "sources/render_sample.py (Pillow; geometría nativa, sin generación externa)",
+  "destello": {
+    "archivo": "boss_burst.png",
+    "ruta_final_prevista": "assets/sprites/effects/jefe/boss_burst.png",
+    "formato": "PNG RGBA con alfa real",
+    "cuadro_px": [
+      256,
+      256
+    ],
+    "atlas_px": [
+      1024,
+      512
+    ],
+    "cuadros": 8,
+    "disposicion": "4 columnas × 2 filas",
+    "anclaje_pies_px": [
+      128,
+      176
+    ],
+    "duracion_s": 0.7,
+    "cuadro_8": "transparente",
+    "margen_minimo_px": 8,
+    "mipmaps": false,
+    "peso_maximo_bytes": 250000
+  },
+  "grieta": {
+    "archivo": "boss_crack.png",
+    "ruta_final_prevista": "assets/sprites/effects/jefe/boss_crack.png",
+    "formato": "PNG RGBA con alfa real",
+    "size_px": [
+      192,
+      96
+    ],
+    "teñible": false,
+    "mipmaps": false,
+    "peso_maximo_bytes": 30000
+  },
+  "marco": {
+    "archivo": "boss_card_frame.png",
+    "ruta_final_prevista": "assets/sprites/effects/jefe/boss_card_frame.png",
+    "formato": "PNG RGBA con centro transparente",
+    "size_px": [
+      192,
+      128
+    ],
+    "nine_slice_inset_px": 32,
+    "mipmaps": false,
+    "peso_maximo_bytes": 40000
+  },
+  "tintes_de_muestra": {
+    "carmesi_jefe": "#ba403e",
+    "azul_acero": "#6189b7",
+    "verde": "#709d52"
+  },
+  "contexto": {
+    "nivel": "level_01",
+    "enemigo": "boss",
+    "retrato": "assets/sprites/enemies/rendered/boss.png",
+    "caminata": "assets/sprites/enemies/rendered/boss_walk.png",
+    "dispositivo": "captura real 1280×720; modo móvil simulado en PC"
+  },
+  "captura_de_juego": {
+    "engine": "Godot 4.7.2",
+    "comando": "godot --path . res://tools/capture_boss_entrance.tscn -- /tmp/t367-live 1280x720",
+    "resultado": "las seis capturas de T368 terminaron; muestran el arte provisional existente"
+  },
+  "limites_de_validacion": [
+    "Las composiciones candidatas son montajes estáticos sobre capturas reales, no una ejecución integrada del PNG.",
+    "No se ejecutó la prueba de rendimiento T369 ni se midió APK.",
+    "No se probó en un teléfono físico ni se exportó para Android."
+  ],
+  "salidas": {
+    "boss_burst.png": {
+      "bytes": 88199,
+      "sha256": "f8c5f47464e8fd3ddbab1c34edbd5ffebc217cbb190b20e7441e9ba84b610b47",
+      "size_px": [
+        1024,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "boss_crack.png": {
+      "bytes": 5166,
+      "sha256": "1521c5b3bae1d555b95454a7b39f4038d89eaa666bcb58749238743e4396cdd7",
+      "size_px": [
+        192,
+        96
+      ],
+      "mode": "RGBA"
+    },
+    "boss_card_frame.png": {
+      "bytes": 3794,
+      "sha256": "498da09fc529fcf3391415fa975406e5b7cb200debbf0987d442dfa6aa72fdd1",
+      "size_px": [
+        192,
+        128
+      ],
+      "mode": "RGBA"
+    },
+    "boss_burst_preview.gif": {
+      "bytes": 28736,
+      "sha256": "1f26425a6ecd2de2194f5ba5f9f34a1e565739ea3d26434f278c26ba2cae012f"
+    },
+    "burst_contact_100.png": {
+      "bytes": 79965,
+      "sha256": "45e9d8dbd1d4d8c9160e72fc3da3459bece141f8340c7e5252092b05313e2d6d",
+      "size_px": [
+        1088,
+        564
+      ],
+      "mode": "RGBA"
+    },
+    "burst_contact_34.png": {
+      "bytes": 8412,
+      "sha256": "3635c6b8b385b7c66f4f49acc57533c6396be6dcf3f077a5097025d470036173",
+      "size_px": [
+        448,
+        176
+      ],
+      "mode": "RGBA"
+    },
+    "burst_carmesi.png": {
+      "bytes": 12264,
+      "sha256": "271d3ec6ea69c217af471c8cf081308e3734db337ecfa1f172a79ae835041c55",
+      "size_px": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "burst_azul.png": {
+      "bytes": 12885,
+      "sha256": "154e8210f80be30357d8d8a1c8a5811fee8c059b4e3b850c428c0b191c193a29",
+      "size_px": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "burst_verde.png": {
+      "bytes": 12706,
+      "sha256": "f7840cbff1211a820ea8d8352bc05a8b43e5db702d425dbb4afd148fcaf976cd",
+      "size_px": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "level1_burst_desktop.png": {
+      "bytes": 252754,
+      "sha256": "7dbb7caaff497a40442fe11dccaf8456d2423306144672287826e277f7d47606",
+      "size_px": [
+        1280,
+        720
+      ],
+      "mode": "RGBA"
+    },
+    "level1_burst_mobile.png": {
+      "bytes": 1468520,
+      "sha256": "bc86370a909c2baac0e0243069bf37b168636410348c9c3105cd9d8451ad11c7",
+      "size_px": [
+        2400,
+        1080
+      ],
+      "mode": "RGBA"
+    },
+    "level1_card_desktop.png": {
+      "bytes": 248661,
+      "sha256": "932512a722b0b1e48a2eabf327dc465371bd2893984c092dfa5aff4e9e5b20ec",
+      "size_px": [
+        1280,
+        720
+      ],
+      "mode": "RGBA"
+    },
+    "level1_card_mobile_150.png": {
+      "bytes": 1405872,
+      "sha256": "50942c0bc92747959cf5e71148134504d1c250a0f4c810b9ba5fbca9013d6be0",
+      "size_px": [
+        2400,
+        1080
+      ],
+      "mode": "RGBA"
+    },
+    "comparison.html": {
+      "bytes": 11339,
+      "sha256": "2745d43e53261e3cfbb0a7183574a9a5664439460a65b32120e3e7e698128245"
+    },
+    "prompts.md": {
+      "bytes": 2418,
+      "sha256": "e47fc3739bf559f22ab0cb89953d473baf0452d5a3cd865907f6d03f8ac4c589"
+    },
+    "sources/render_sample.py": {
+      "bytes": 18535,
+      "sha256": "40cd028e1dd5b36f85599c224ae8bb5c2b284ca0130e23de99c3eb2385d76a01"
+    },
+    "references/gameplay_pc_provisional.png": {
+      "bytes": 248327,
+      "sha256": "9ba49b692b5b21347353edc92ddc7846d31f1670b0c0e7753e8d0db60a32a530",
+      "size_px": [
+        1280,
+        720
+      ],
+      "mode": "RGBA"
+    },
+    "references/gameplay_celular_provisional.png": {
+      "bytes": 658715,
+      "sha256": "6d475a09c8a6051ab1d572b336969f60478699a3742c5be5442260f4c82f2f84",
+      "size_px": [
+        1280,
+        720
+      ],
+      "mode": "RGBA"
+    },
+    "references/gameplay_pc_clear_provisional.png": {
+      "bytes": 245564,
+      "sha256": "69a974607dcbbb6373443a1a37d95282956cc714b6d839a86a564b9abe4aa6f5",
+      "size_px": [
+        1280,
+        720
+      ],
+      "mode": "RGBA"
+    },
+    "references/gameplay_mobile_clear_provisional.png": {
+      "bytes": 688755,
+      "sha256": "142e7065fd990e368ee2f7bb29ac03ed49949348b5f418a4446914ec889e054c",
+      "size_px": [
+        1280,
+        720
+      ],
+      "mode": "RGBA"
+    },
+    "references/level1_pc_frame_01.png": {
+      "bytes": 246356,
+      "sha256": "cdb01195f5450dd71e40b68cb69a54c797f018c44634b0783c1973a6b43f3636",
+      "size_px": [
+        1280,
+        720
+      ],
+      "mode": "RGBA"
+    },
+    "references/level1_pc_frame_02.png": {
+      "bytes": 247757,
+      "sha256": "6de067dd522c0684e2631ae99285befe2a95a758b51d553e51f852ebf1f46fda",
+      "size_px": [
+        1280,
+        720
+      ],
+      "mode": "RGBA"
+    },
+    "references/level1_pc_frame_03.png": {
+      "bytes": 249662,
+      "sha256": "d4821ad73f46c65ce126c95dceda43126798c212bab6ce75e114c9989f5d1369",
+      "size_px": [
+        1280,
+        720
+      ],
+      "mode": "RGBA"
+    },
+    "references/level1_pc_frame_04.png": {
+      "bytes": 252754,
+      "sha256": "7dbb7caaff497a40442fe11dccaf8456d2423306144672287826e277f7d47606",
+      "size_px": [
+        1280,
+        720
+      ],
+      "mode": "RGBA"
+    },
+    "references/level1_pc_frame_05.png": {
+      "bytes": 255380,
+      "sha256": "e4410cb6489537aeefb98c006c27c287d5621d67842f1c2aa9489374ca32de3f",
+      "size_px": [
+        1280,
+        720
+      ],
+      "mode": "RGBA"
+    },
+    "references/level1_pc_frame_06.png": {
+      "bytes": 257670,
+      "sha256": "884ff9d23d5417c9c4912209241d77290082a3198729ae75df26c2ecdbc0b2db",
+      "size_px": [
+        1280,
+        720
+      ],
+      "mode": "RGBA"
+    },
+    "references/level1_pc_frame_07.png": {
+      "bytes": 257354,
+      "sha256": "a7b5bee6eec013aacb6d8cfbbab0389cc891ddc741741bb28cd69fffd36d4290",
+      "size_px": [
+        1280,
+        720
+      ],
+      "mode": "RGBA"
+    },
+    "references/level1_pc_frame_08.png": {
+      "bytes": 244966,
+      "sha256": "977a663a86dc6b1a7038273e1dc6e913b18d7036b7e32c48f07069112924f136",
+      "size_px": [
+        1280,
+        720
+      ],
+      "mode": "RGBA"
+    },
+    "references/level1_celular_frame_04.png": {
+      "bytes": 691425,
+      "sha256": "317c5c5ed0ad912eea30b7062f239f6788826d3a54f3e52632d97001607a5932",
+      "size_px": [
+        1280,
+        720
+      ],
+      "mode": "RGBA"
+    }
+  }
+}
