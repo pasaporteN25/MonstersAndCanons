@@ -1242,6 +1242,8 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
   - **Reutilizar la tarjeta «Nuevo enemigo» (RF-134):** sale una sola vez en la vida del jugador, no es una entrada.
 - **Qué cambia:** `01-spec.md` (RF-597 a RF-599, RF-602), `HUD` (el cartel), `EffectsLayer` (el destello), `Game._on_enemy_spawned`, `data/ui/entrada_jefes.json`, `assets/sprites/effects/jefe/`.
 
+**Estado histórico:** reemplazada por D-188 a D-190 y RF-666 a RF-673 (2026-10-23); el piloto sin pausa ya no rige.
+
 ## D-139 · La entrada es un dato del enemigo (`EnemyData.entrance`), con la lista de niveles en el propio recurso; el piloto es solo el Jefe en el nivel 1
 - **Fecha:** 2026-10-19 · **Estado:** programada con arte provisional (T366/T368; el arte espera el OK de Lucas, T367/T369) · **Decidió:** Lucas (piloto en el jefe del nivel 1, generalizable por datos) / Claude (dónde viven los datos)
 - **Qué:** `BossEntranceData` (`levels`, `line`, `sound`) colgado de `EnemyData.entrance`. Vacío = el enemigo no hace entrada. El piloto: `boss.tres` con `levels = ["level_01"]`. Los tiempos y tamaños, en `data/ui/entrada_jefes.json`.
@@ -1257,6 +1259,8 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
   - **Campos sueltos en `EnemyData` (`entrance_line`, `entrance_sound`…):** ensucia un recurso que usan todos los enemigos; un sub-recurso opcional lo deja limpio.
 - **Qué cambia:** `01-spec.md` (RF-601), `scripts/data/enemy_data.gd`, `scripts/data/boss_entrance_data.gd`, `data/enemies/boss.tres`, `tests/test_content.gd`, `CONTENIDO.md`.
 
+**Estado histórico:** reemplazada en alcance por D-189/D-191 y RF-668/RF-671 (2026-10-23); no elimina la posibilidad de reutilizar datos después de revisión.
+
 ## D-140 · «Entrada de los jefes» es una casilla de Opciones (clave aditiva `boss_entrance`, prendida por omisión); la tarjeta «Nuevo enemigo» espera y no se solapa
 - **Fecha:** 2026-10-19 · **Estado:** programada con arte provisional (T366/T368; el arte espera el OK de Lucas, T367/T369) · **Decidió:** Lucas (activable y desactivable) / Claude (dónde y cómo se combina con lo que ya hay)
 - **Qué:** casilla en Opciones debajo de «Animaciones de mejora» (RF-600), ajuste `"boss_entrance"` en `settings`, sin subir `SAVE_VERSION`. El cartel de aparición espera a que se retire el cartel de oleada, y la tarjeta RF-134 espera al cartel de aparición (RF-597).
@@ -1270,6 +1274,8 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
   - **Que el cartel de aparición tape el de oleada:** se leerían mal los dos y el de oleada tiene más información (número de oleada).
   - **Mostrar la entrada solo la primera vez:** queda como pregunta P-66-2.
 - **Qué cambia:** `01-spec.md` (RF-597, RF-600), `SaveManager.DEFAULT_SETTINGS`, `OptionsMenu`, `HUD.show_enemy_intro` (espera), `tests/test_old_saves.gd`.
+
+**Estado histórico:** reemplazada por D-190 y RF-669/RF-670/RF-672 (2026-10-23); la tarjeta del jefe se omite según aclaración de Lucas y PR #59.
 
 ## D-141 · «Novedades de esta versión» es una pantalla propia sobre el menú principal, que sale sola una vez por versión y se vuelve a ver desde Opciones
 - **Fecha:** 2026-10-19 · **Estado:** implementada (T371, T373, T374); el arte (T372) y los textos aprobados esperan el OK de Lucas · **Decidió:** Lucas (una pantalla al abrir el juego, una vez por versión, con opción para volver a verla) / Claude (la forma y dónde vive)
@@ -1598,3 +1604,43 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Por qué:** es una preferencia visual independiente del progreso y un archivo inválido no debe impedir jugar.
 - **Alternativas descartadas:** ampliar el guardado de campaña o persistir una imagen generada por usuario.
 - **Qué cambia:** RF-664 y las tareas T442–T443.
+
+## D-187 · La presentación de jefes es una excepción nominada a §11
+
+- **Fecha:** 2026-10-23 · **Estado:** decidida · **Decidió:** Lucas.
+- **Qué:** permitir únicamente la presentación animada de jefes M66 como excepción explícita a D-089; las demás cinemáticas animadas siguen fuera.
+- **Por qué:** Lucas aprobó esta secuencia específica sin abrir el alcance a otras cinemáticas.
+- **Alternativas descartadas:** mantener la exclusión absoluta; habilitar cinemáticas como categoría general.
+- **Qué cambia:** RF-666 a RF-673 y §11 de `01-spec.md`.
+
+## D-188 · La presentación cubre la ventana y pausa la partida
+
+- **Fecha:** 2026-10-23 · **Estado:** decidida · **Decidió:** Lucas.
+- **Qué:** secuencia a pantalla completa que pausa la partida desde el nacimiento del jefe.
+- **Por qué:** es la presentación aprobada para acercar M66 a V1.0.0.
+- **Alternativas descartadas:** destello y cartel pequeño sin pausa del piloto T368; ralentizar la partida sin pausa.
+- **Qué cambia:** RF-667 y RF-673; no altera datos de combate ni tiempos de oleada.
+
+## D-189 · Duración por jefe y partida
+
+- **Fecha:** 2026-10-23 · **Estado:** decidida · **Decidió:** Lucas.
+- **Qué:** 5 s la primera vez que ese jefe se ve en el guardado y 3 s en apariciones posteriores. La secuencia ocurre en la primera oleada con jefe de cada partida; reintentar inicia otra partida.
+- **Por qué:** presenta con más tiempo al enemigo desconocido y reduce repeticiones posteriores. El dato `seen_enemies` ya guardado es la fuente para distinguir ambas duraciones.
+- **Alternativas descartadas:** duración única de 3 s o 5 s; mostrarla cada vez que entra un jefe; mostrarla una sola vez en la vida del guardado.
+- **Qué cambia:** RF-666 y RF-668; no agrega clave ni cambia `SAVE_VERSION`.
+
+## D-190 · Salteo, modos, tarjeta y opción
+
+- **Fecha:** 2026-10-23 · **Estado:** decidida · **Decidió:** Lucas.
+- **Qué:** salteo con cualquier tecla o toque desde 0,3 s; `P` saltea y deja la partida pausada. No sale en Asedio ni en modo de pruebas; queda para campaña normal iniciada desde el menú. Se omite la tarjeta «Nuevo enemigo» para jefes, según aclaración posterior de Lucas y el comportamiento de PR #59. La opción existente se renombra «Presentación de los jefes» dentro de «Partida y ayudas», conservando su clave.
+- **Por qué:** conserva un control rápido, respeta la pausa explícita y evita duplicar la presentación del jefe con la tarjeta.
+- **Alternativas descartadas:** toque/clic solo sobre un botón; mostrar la tarjeta después; incluir Asedio o modo de pruebas; crear una opción nueva y migrar guardados.
+- **Qué cambia:** RF-666, RF-669, RF-670 y RF-672.
+
+## D-191 · Fondos propios y animación por código
+
+- **Fecha:** 2026-10-23 · **Estado:** decidida · **Decidió:** Lucas.
+- **Qué:** fondos propios para el Jefe actual, el Coloso y el jefe supremo del nivel 15; movimiento por código sobre ilustraciones quietas, sin marca de entrada en el mapa. El arte del jefe supremo espera la definición de T243.
+- **Por qué:** Lucas pidió fondos asociados a cada jefe y aprobó la animación programática sobre imágenes estáticas.
+- **Alternativas descartadas:** fondo genérico teñido; animación cuadro a cuadro; destello en el punto de entrada.
+- **Qué cambia:** RF-671 y las fichas T367/T461–T463; el arte queda sujeto a aprobación de Lucas.
