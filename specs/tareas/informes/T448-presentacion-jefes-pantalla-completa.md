@@ -402,3 +402,7 @@ NIVEL 14 con F2:         ▓3s▓ una sola vez, en la oleada 11.
 11. **Marca de por dónde entra el jefe al volver:** no.
 12. **Opciones:** la misma casilla, renombrada **«Presentación de los jefes»**, en «Partida y ayudas».
 13. **Maqueta de rectángulos 3 s vs 5 s:** **no**; se aprueba la spec directo. El arte final sigue sin producirse hasta aprobar esa spec.
+
+### Ampliación de las decisiones de Lucas (2026-10-23, segunda tanda)
+
+- **Fondos propios por jefe (aclara el punto 9):** para el **Jefe actual, el Coloso y el jefe supremo del 15**. El fondo del jefe supremo queda **pendiente** hasta que se diseñe el personaje (T243).
