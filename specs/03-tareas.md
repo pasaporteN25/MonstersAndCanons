@@ -98,6 +98,10 @@
   - **Hecho cuando:** las propuestas del tablero tienen entrada en `specs/01-spec.md` §13 como B-52 a B-57, sin RF ni cambio de reglas.
   - **Resultado:** se agregó la tabla B-52…B-57 en §13, marcada «sin autorizar implementación». No se tocó código, datos ni balance, y no se corrió Godot (solo documentos). Números siguientes libres: RF-666, D-187, T447.
 
+- [x] **T455 · 📜 Registrar las decisiones de Lucas sobre T451 y el backlog B-58 (2026-10-23).**
+  **Refs:** `specs/tareas/informes/T451-camara-panel-opciones.md` §8, B-54, B-58.
+  **Resultado:** se anotó en el informe T451 (§8) lo que Lucas decidió (sin botón «Ver todo» en PC, lupa flotante en celular, panel A sin «Nivel N/3» y con bronce/plata/oro, alcance oculto salvo el fantasma, animación cosmética de mejora, cinco grupos de Opciones) y se agregó B-58 (teclas configurables) a §13. **Solo documentos:** no son D ni RF todavía, no se implementó nada y no se corrió Godot.
+
 ## Prioridad máxima · Mobile, presentación y próxima prueba (2026-10-16)
 
 > **Plan de ejecución (2026-10-16):** el orden, los modelos y las compuertas de T262 a T268 están en [12-plan-t262-t268.md](12-plan-t262-t268.md).
