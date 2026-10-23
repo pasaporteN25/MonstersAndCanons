@@ -20,6 +20,7 @@ const DEFAULT_SETTINGS: Dictionary = {
 	"upgrade_fx": true,  # M65, RF-593: animaciones de mejora de torres prendidas
 	"boss_entrance": true,  # M66, RF-600: la entrada de los jefes está prendida
 	"defeat_advice": true,  # M70, RF-644: los consejos de derrota están prendidos
+	"selector_style": 0,  # M72, RF-645: 0 = tarjetas, 1 = mapa planetario (preferencia de interfaz, desktop)
 }
 
 ## Los tests lo cambian para no tocar el guardado real del jugador.
@@ -374,6 +375,11 @@ func get_setting(key: String) -> Variant:
 func upgrade_fx_enabled() -> bool:
 	var value: Variant = get_setting("upgrade_fx")
 	return value if typeof(value) == TYPE_BOOL else true
+
+
+## M72, RF-645: el estilo del selector de campaña (`CampaignMap.STYLE_*`). Un valor inválido vale tarjetas.
+func selector_style() -> int:
+	return CampaignMap.style_from(get_setting("selector_style"))
 
 
 func set_setting(key: String, value: Variant) -> void:

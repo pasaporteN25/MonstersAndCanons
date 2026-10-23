@@ -132,11 +132,16 @@ func test_pc_panel_shows_the_preview_and_hides_it_at_max_level() -> void:
 	assert_true(preview.visible)
 	assert_true(preview.text.begins_with("Al nivel 2:"))
 	assert_true(preview.text.contains("→"))
+	assert_false(preview.text.contains("daño"), "el daño ya se integra con la estadística principal")
+	assert_eq((game.hud.tower_panel.get_node("%Damage") as Label).text, "5 → 8")
+	assert_eq((game.hud.tower_panel.get_node("%UpgradeButton") as Button).text, "Mejorar a nivel 2 (60)  [U]")
+	assert_eq((game.hud.tower_panel.get_node("%LevelCard") as HBoxContainer).tooltip_text, "Nivel actual: 1 de 3")
 	while tower.can_upgrade():
 		tower.apply_upgrade()
 	game.hud.tower_panel.refresh(9999)
 	assert_false(preview.visible, "en el nivel máximo no hay preview")
 	assert_eq((game.hud.tower_panel.find_child("UpgradeButton", true, false) as Button).text, "Nivel máximo")
+	assert_eq((game.hud.tower_panel.get_node("%Damage") as Label).text, str(tower.stats().damage))
 	SaveManager.set_setting("ui_mode", original)
 
 

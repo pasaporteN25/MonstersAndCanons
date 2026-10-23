@@ -102,6 +102,33 @@ custom_minimum_size = Vector2(0, 38)
 layout_mode = 2
 alignment = 1
 
+[node name="StyleSwitch" type="HBoxContainer" parent="Center/Rows/Footer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="StyleLabel" type="Label" parent="Center/Rows/Footer/StyleSwitch"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Vista:"
+vertical_alignment = 1
+
+[node name="StyleCards" type="Button" parent="Center/Rows/Footer/StyleSwitch"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(130, 36)
+layout_mode = 2
+toggle_mode = true
+theme_override_font_sizes/font_size = 18
+text = "Tarjetas"
+
+[node name="StyleMap" type="Button" parent="Center/Rows/Footer/StyleSwitch"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(130, 36)
+layout_mode = 2
+toggle_mode = true
+theme_override_font_sizes/font_size = 18
+text = "Mapa"
+
 [node name="FolderButton" type="Button" parent="Center/Rows/Footer"]
 unique_name_in_owner = true
 visible = false

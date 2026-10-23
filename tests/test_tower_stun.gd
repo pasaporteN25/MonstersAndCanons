@@ -172,7 +172,7 @@ func test_the_panel_of_an_unstunned_tower_is_unchanged() -> void:
 	add_child_autofree(panel)
 	var tower: Tower = _tower()
 	panel.show_tower(tower, 10, 100)
-	assert_eq((panel.get_node("%Title") as Label).text, "Ametralladora · Nivel 1")
+	assert_eq((panel.get_node("%Title") as Label).text, "Ametralladora")
 
 
 func test_a_stunned_tower_draws_without_errors() -> void:
