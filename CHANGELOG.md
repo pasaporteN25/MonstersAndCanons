@@ -2,6 +2,10 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Herramientas para los editores *(T441, 2026-10-22)*
+
+El acceso «Editor de mapas» del menú ahora se llama **Herramientas**. Ahí podés abrir el editor de mapas; el editor de banderines figura como «Próximamente» mientras se prepara su primera versión. Al salir del editor volvés al hub, y «Probar» sigue regresando al borrador.
+
 ## Banderines de conquista y decoración del bosque *(T437, 2026-10-21; arte en revisión)*
 
 Se rehacen el tronco y el helecho con el acabado dimensional de la decoración actual. En el nivel 6, el poste muestra banderines enemigos hasta que el nivel tenga una victoria guardada; al volver a entrar después de ganarlo, muestra los del jugador. No depende de las estrellas y no cambia el progreso. Las muestras de los emblemas siguen pendientes de revisión visual.

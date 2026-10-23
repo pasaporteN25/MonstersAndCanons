@@ -2465,9 +2465,10 @@ El alcance de T425 a T432 es desktop. Mobile continúa por su propia experiencia
   **Refs:** RF-662, RF-663, reglas de arte y T437. **Depende de:** T439.
   **Hecho cuando:** paletas y emblemas abstractos se ven en postes a 220 px y a 34 px, en contacto legible y con fuente editable/procedencia. La muestra se adjunta a un PR para revisión de Lucas; no se declara aprobación ni se integra como arte final.
 
-- [ ] **T441 · [x86] · Agrupar los editores bajo Herramientas.**
+- [x] **T441 · [x86] · Agrupar los editores bajo Herramientas.**
   **Refs:** RF-660, RF-661, D-184. **Depende de:** T439.
   **Hecho cuando:** el menú abre un hub con tarjetas de mapas y banderines, las reglas de disponibilidad del editor de mapas se conservan, su salida vuelve al hub y «Probar» restaura el borrador. Tests de rutas y captura a 1280×720/1920×1080; sin cambios al guardado.
+  **Resultado (2026-10-22):** el menú abre el hub Herramientas; el editor de mapas queda disponible, banderines muestra «Próximamente», la salida normal vuelve al hub y «Probar» conserva el retorno al borrador. Capturas en `art/t441-herramientas/` a 1280×720 y 1920×1080. Corregidos dos tests del editor para desconectar la nueva ruta a `GameFlow.go_to_tools`; GUT completo: **2205/2205 tests, 23966 aserciones**. Importación Godot 4.7.2 y sintaxis de herramientas pasan localmente. No se probó mobile porque el alcance es desktop; el CI remoto del commit correctivo queda pendiente.
 
 - [ ] **T442 · [x86] · Crear catálogo y persistencia aislada de receta cosmética.**
   **Refs:** RF-662, RF-664, D-186. **Depende de:** T439.
