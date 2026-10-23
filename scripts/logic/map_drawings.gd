@@ -25,9 +25,14 @@ const FLOWERS: Texture2D = preload("res://assets/sprites/map/flores.svg")
 const SIGNAL_ROCK: Texture2D = preload("res://assets/sprites/map/roca_marcada.svg")
 const SIGNAL_PATH: Texture2D = preload("res://assets/sprites/map/sendero.svg")
 const SIGNAL_TOOL: Texture2D = preload("res://assets/sprites/map/herramienta.svg")
-const SIGNAL_RIBBONS: Texture2D = preload("res://assets/sprites/map/poste_cintas.svg")
 const SIGNAL_RUIN: Texture2D = preload("res://assets/sprites/map/simbolo_ruina.svg")
 const SIGNAL_CAMP: Texture2D = preload("res://assets/sprites/map/campamento_vacio.svg")
+## T437 (RF-655, RF-656): el poste del nivel 6 en dos variantes con la misma composición. La enemiga es la de
+## reserva; la del jugador solo aparece si quien arma el mapa dice que la campaña ya ganó el nivel.
+const POST_ENEMY: Texture2D = preload("res://assets/sprites/map/rendered/banner_post_enemy.png")
+const POST_PLAYER: Texture2D = preload("res://assets/sprites/map/rendered/banner_post_player.png")
+## El dibujo de la leyenda que usa el poste de banderines.
+const POST_DRAWING: String = "poste_cintas"
 ## T234 (RF-480): la central de energía del nivel 15, en cuatro PNG de 128 × 128 (noroeste, noreste, suroeste y
 ## sureste) sobre cuatro casillas contiguas, y las piezas de la cadena de abastecimiento. Son decoración permanente.
 const CENTRAL_1: Texture2D = preload("res://assets/sprites/map/rendered/central_1.png")
@@ -53,7 +58,7 @@ const TEXTURES: Dictionary = {
 	"helecho": MapThemes.FERN, "junco": MapThemes.REEDS, "hongo": MapThemes.MUSHROOM, "estatua": STATUES_MOSS[0],
 	"mina": MINE[0], "bosque_explotable": FOREST[0], "escombro": RUBBLE[0],
 	"roca_marcada": SIGNAL_ROCK, "sendero": SIGNAL_PATH, "herramienta": SIGNAL_TOOL,
-	"poste_cintas": SIGNAL_RIBBONS, "simbolo_ruina": SIGNAL_RUIN, "campamento_vacio": SIGNAL_CAMP,
+	"poste_cintas": POST_ENEMY, "simbolo_ruina": SIGNAL_RUIN, "campamento_vacio": SIGNAL_CAMP,
 	"central_1": CENTRAL_1, "central_2": CENTRAL_2, "central_3": CENTRAL_3, "central_4": CENTRAL_4,
 	"supply_depot": SUPPLY_DEPOT, "supply_line_pole": SUPPLY_LINE_POLE, "supply_cart": SUPPLY_CART,
 	"supply_conveyor": SUPPLY_CONVEYOR,
@@ -94,6 +99,11 @@ static func ground_colors(id: String) -> Dictionary:
 static func statue_texture(cell: Vector2i, theme: StringName) -> Texture2D:
 	var variants: Array[Texture2D] = STATUES_FROST if theme == &"nieve" else STATUES_MOSS
 	return variants[posmod(cell.x + cell.y * 7, variants.size())]
+
+
+## RF-656, RF-657: el poste según el contexto que recibe (nunca consulta el guardado).
+static func post_texture(conquered: bool = false) -> Texture2D:
+	return POST_PLAYER if conquered else POST_ENEMY
 
 
 static func state_texture(drawing: String, state: ObstacleField.State) -> Texture2D:

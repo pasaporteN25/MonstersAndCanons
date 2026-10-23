@@ -56,6 +56,76 @@ func test_the_six_community_signals_are_static_objects() -> void:
 			assert_true(texture.get_image().detect_alpha() != Image.ALPHA_NONE, "%s conserva alfa" % id)
 
 
+# --- T437: el poste de banderines (RF-656, RF-657, RF-659) ---
+
+func test_the_banner_post_has_two_distinct_variants_and_defaults_to_enemy() -> void:
+	assert_eq(MapDrawings.post_texture(), MapDrawings.POST_ENEMY, "sin contexto, la enemiga")
+	assert_eq(MapDrawings.post_texture(false), MapDrawings.POST_ENEMY)
+	assert_eq(MapDrawings.post_texture(true), MapDrawings.POST_PLAYER)
+	assert_ne(MapDrawings.POST_ENEMY, MapDrawings.POST_PLAYER)
+	assert_eq(MapDrawings.texture(MapDrawings.POST_DRAWING), MapDrawings.POST_ENEMY, "el catálogo guarda la de reserva")
+	for variant: Texture2D in [MapDrawings.POST_ENEMY, MapDrawings.POST_PLAYER]:
+		assert_eq(variant.get_size(), Vector2(128, 128))
+		assert_true(variant.get_image().detect_alpha() != Image.ALPHA_NONE, "conserva alfa")
+
+
+func test_a_map_built_without_context_shows_the_enemy_post() -> void:
+	var level: Level = _level_with("poste_cintas")
+	add_child_autofree(level)
+	var decor: LevelDecor = level.get_node("Decor") as LevelDecor
+	assert_false(level.post_conquered)
+	assert_eq(decor.object_texture(Vector2i(3, 1), "poste_cintas"), MapDrawings.POST_ENEMY)
+
+
+func test_the_conquered_context_reaches_the_decor_of_that_map_only() -> void:
+	var rows: PackedStringArray = []
+	for y: int in 9:
+		rows.append(".".repeat(20))
+	rows[4] = "A" + "#".repeat(18) + "S"
+	rows[1] = "...p".rpad(20, ".")
+	var grid: MapGrid = MapGrid.parse(rows, {"p": {"dibujo": "poste_cintas"}})
+	var conquered: Level = Level.build(grid, MapThemes.DEFAULT, true)
+	var pending: Level = Level.build(grid, MapThemes.DEFAULT)
+	add_child_autofree(conquered)
+	add_child_autofree(pending)
+	var cell := Vector2i(3, 1)
+	assert_eq((conquered.get_node("Decor") as LevelDecor).object_texture(cell, "poste_cintas"), MapDrawings.POST_PLAYER)
+	assert_eq((pending.get_node("Decor") as LevelDecor).object_texture(cell, "poste_cintas"), MapDrawings.POST_ENEMY, "el otro mapa no se contagia")
+	# Otro dibujo no cambia con el contexto.
+	assert_eq((conquered.get_node("Decor") as LevelDecor).object_texture(cell, "helecho"), MapDrawings.texture("helecho"))
+	await wait_physics_frames(2)
+
+
+func test_level_data_passes_the_post_context_and_defaults_to_enemy() -> void:
+	var data := LevelData.new()
+	data.map_rows = _level_rows()
+	data.legend = {"p": {"dibujo": "poste_cintas"}}
+	var plain: Level = data.build_map()
+	var won: Level = data.build_map(true)
+	add_child_autofree(plain)
+	add_child_autofree(won)
+	assert_false(plain.post_conquered)
+	assert_true(won.post_conquered)
+	await wait_physics_frames(2)
+
+
+func test_log_and_fern_use_the_new_png_resources() -> void:
+	for id: String in ["tronco", "helecho"]:
+		var texture: Texture2D = MapDrawings.texture(id)
+		assert_true(texture.resource_path.begins_with("res://assets/sprites/map/rendered/"), id)
+		assert_true(texture.resource_path.ends_with(".png"), id)
+		assert_eq(texture.get_size(), Vector2(128, 128))
+
+
+func _level_rows() -> PackedStringArray:
+	var rows: PackedStringArray = []
+	for y: int in 9:
+		rows.append(".".repeat(20))
+	rows[4] = "A" + "#".repeat(18) + "S"
+	rows[1] = "...p".rpad(20, ".")
+	return rows
+
+
 func test_an_unknown_drawing_is_nothing() -> void:
 	assert_false(MapDrawings.is_valid("dragon"))
 	assert_eq(MapDrawings.kind("dragon"), "")

@@ -301,3 +301,8 @@ La solicitud nueva queda en [B-45 a B-49](01-spec.md#pedidos-nuevos-de-lucas--es
 3. **Después de T426:** Gemini hace T429 y T430 en ramas separadas; Claude integra T428 cuando las bases están aprobadas. Evitar que dos ramas modifiquen simultáneamente las escenas compartidas del selector.
 4. **Opencode con modelo local** queda limitado a tareas rutinarias de Git (revisión simple, commit o push bajo instrucciones), nunca para diseño, spec, balance o refactors. Gemini, Claude y Codex son los ejecutores del trabajo sustantivo.
 5. Cada tarea tiene su propio worktree, rama `feature/`, commit y PR. La integración permanece a cargo de Lucas; ningún agente mergea.
+## 10. Decoración de campaña y posible editor de estandartes (2026-10-21)
+
+B-50 se implementa en T437: rehacer tronco, helecho y poste en el acabado dimensional de T277, y cambiar la variante del poste del nivel 6 según SaveManager.is_completed() de la campaña. La muestra queda en el PR para que Lucas la revise; D-183 está propuesta, no se declara aprobación artística. No se agrega progreso ni se exige una cantidad concreta de estrellas.
+
+B-51 queda como análisis futuro. Opus recomienda alcance y decisiones para un editor cosmético acotado; no se construye el editor hasta que Lucas decida el MVP. La skill genérica de Godot se mantiene en el repositorio Godot-Skills y en un PR independiente.

@@ -1531,3 +1531,24 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Por qué:** el pedido de Lucas es explícitamente desktop y la opacidad visual no garantiza que los clics lleguen al mapa.
 - **Alternativas descartadas:** aplicar el rediseño a mobile por semejanza; cambiar la venta/mejora; resolver el clic debajo solo con alfa.
 - **Qué cambia:** RF-646 y RF-649 a RF-654, tareas T426 y T429–T430.
+## D-181 · El poste de nivel 6 refleja si la campaña ya ganó ese nivel
+
+- **Fecha:** 2026-10-21 · **Estado:** decidida · **Decidió:** Lucas.
+- **Qué:** el poste de nivel 6 usa los estandartes enemigos mientras el nivel no figure completado en el guardado, y los del jugador tras cualquier victoria registrada, sin umbral de estrellas.
+- **Por qué:** da una señal visual de conquista en el propio mapa del nivel.
+- **Alternativas descartadas:** exigir tres estrellas o agregar una marca de progreso nueva.
+- **Qué cambia:** RF-656; es solo presentación, no modifica progreso, guardado ni balance.
+
+## D-182 · El estado de campaña se pasa explícitamente al mapa
+
+- **Fecha:** 2026-10-21 · **Estado:** decidida · **Decidió:** Codex a partir del alcance de D-181.
+- **Qué:** Game obtiene SaveManager.is_completed() solo al cargar un nivel de campaña y pasa un booleano al mapa; modos, comunidad, editor, pruebas y escenas sueltas usan el estado de reserva enemigo.
+- **Por qué:** mantiene la decoración desacoplada del autoload y evita interpretar el ID de un mapa ajeno como campaña.
+- **Qué cambia:** RF-657; no cambia la persistencia ni las reglas del editor.
+
+## D-183 · Las piezas nuevas siguen la decoración dimensional vigente
+
+- **Fecha:** 2026-10-21 · **Estado:** propuesta para revisión de Lucas.
+- **Qué:** rehacer tronco, helecho y poste en PNG RGBA, con el acabado volumétrico de T277; el poste tiene variantes enemiga y del jugador con la misma composición.
+- **Por qué:** las propuestas planas previas se alejaban del estilo vigente.
+- **Qué cambia:** RF-655 y RF-658. Las muestras y capturas se entregan para revisión antes de considerar el arte definitivo.

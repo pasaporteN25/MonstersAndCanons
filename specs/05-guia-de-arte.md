@@ -63,11 +63,19 @@ Paletas de T244 y T257, todavía **no aprobadas**: las de T244 son referencias d
 - **Los siete temas** están en la práctica en `scripts/logic/map_themes.gd` (paleta y decoración) y sus mapas de ejemplo en `tools/ejemplos/`. La revisión de M15 mostró que con el **contorno oscuro** de los enemigos ninguno se pierde sobre ningún suelo; lo que sí falló fue el **camino** (en el bosque y el pantano casi se confundía con el suelo) y por eso hay un test que mide su diferencia de claridad.
 - **El pasto, el camino y el borde de cada tema** salen de una paleta en código (plan §6.12, `MapThemes`); los dibujos de decoración son SVG en `assets/sprites/map/`.
 
+### Decoración dimensional renderizada (T277 y T437)
+
+La familia de decoración renderizada de T277 es otra técnica aprobada para el mapa: volumen pintado con materiales legibles, luz suave desde arriba a la izquierda, alfa transparente y sombra de apoyo discreta. Sus referencias activas son assets/sprites/map/rendered/tree.png, rock_a.png, rock_b.png, forest_idle.png y rubble_idle.png. Una pieza nueva que pertenezca a esa familia debe mantener su perspectiva, luz y volumen; no se vuelve a una variante plana de T260 por ser más fácil de dibujar.
+
+Las fuentes de esta familia son PNG RGBA de 128×128 en assets/sprites/map/rendered/; el juego los muestra dentro de una casilla de 64×64 con el filtro del mapa. Las decoraciones SVG históricas de 64×64 siguen vigentes donde no fueron reemplazadas. No mezclar la técnica plana SVG y la renderizada en una misma familia sin una muestra y revisión de Lucas.
+
+T437 usa esta dirección como propuesta para tronco, helecho y dos variantes del poste de banderines. Sus emblemas no definen todavía símbolos de facción ni canon. La fuente, el reescalado y las capturas están en art/t437-banderines/.
+
 ## 5. Cómo se comprueba un dibujo nuevo
 
-1. **Importa sin errores** en Godot y tiene **64×64** (los tests de sprites lo verifican).
+1. **Importa sin errores** en Godot. Los SVG de decoración son 64×64; los PNG de la familia renderizada T277 son 128×128.
 2. **Hoja de contacto:** todos los dibujos del grupo juntos, a **220 px** y a **34 px**, sobre el suelo del juego. Se mira: ¿se distinguen por la silueta?, ¿se lee lo que es?, ¿se parece a alguno existente?
-3. **En el juego:** una captura de una partida real con el dibujo en movimiento (el brillo y las facetas se ven distinto en pantalla).
+3. **En el juego:** una captura de una partida real con el dibujo en su contexto; si es una pieza animada, capturar también el movimiento (el brillo y las facetas se ven distinto en pantalla).
 4. **Lucas aprueba** las capturas antes de darlo por terminado (como con los temas, T123).
 
 ## 6. De dónde vienen los dibujos actuales
