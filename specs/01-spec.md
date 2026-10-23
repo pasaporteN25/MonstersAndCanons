@@ -1445,7 +1445,7 @@ Lucas probó los niveles **1 a 4 en desktop** y los considera bien; el 1 se sien
 
 ### Pedidos nuevos de Lucas · última prueba sobre `main`, 2026-10-23
 
-Son **propuestas registradas, sin autorización para implementar** (T446). Antes de código: análisis, spec, decisión, plan y ficha, y la aprobación escrita de Lucas. El detalle de cada una está en el tablero de `specs/03-tareas.md` («Nuevas propuestas de Lucas»).
+Son **propuestas registradas, sin autorización para implementar** (T446; B-58, T455). Antes de código: análisis, spec, decisión, plan y ficha, y la aprobación escrita de Lucas. El detalle de cada una está en el tablero de `specs/03-tareas.md` («Nuevas propuestas de Lucas»).
 
 | Entrada | Pedido | Alcance inicial |
 |---|---|---|
@@ -1455,6 +1455,7 @@ Son **propuestas registradas, sin autorización para implementar** (T446). Antes
 | B-55 | Diseñar 2 o 3 torres futuras que usen banderines e Infraestructura. | Solo informe de diseño; sin datos ni balance en el juego. |
 | B-56 | Explorar consecuencias narrativas de demoler infraestructura. | Solo análisis, contra el tono de `specs/10-universo.md`; no es regla. |
 | B-57 | Presentación de jefes (corrige T367): secuencia animada de 3 o 5 s, a pantalla completa, que pausa la partida. | Reespecificar M66/T367–T369; decidir duración, pausa, salteo y continuidad antes de producir arte. |
+| B-58 | Controles configurables: poder cambiar las teclas y los atajos de la partida (hoy solo se cambia la tecla de «Ver todo», RF-614), y quizá una tecla mantenida para ver los alcances. Idea de Lucas, 2026-10-23: quien juega mucho con teclado gana tiempo. | Backlog. Un menú general de teclas se descartó en D-161 por alcance. Sin implementar; el grupo «Controles» de Opciones lo recibiría. |
 
 ### B-45 · Dos estilos para elegir nivel: tarjetas y mapa planetario
 

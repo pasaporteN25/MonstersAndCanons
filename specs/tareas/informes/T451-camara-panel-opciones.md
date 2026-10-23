@@ -439,3 +439,19 @@ Recordatorio de `CLAUDE.md`: al cambiar un texto que ya estaba escrito (rótulo 
 - **Probado:** lectura de `camera_controller.gd`, `game.gd`, `tower_panel.gd/.tscn`, `tower_text.gd`, `upgrade_deltas.gd`, `build_controller.gd`, `tower.gd`, `options_menu.gd/.tscn`, `save_manager.gd`, los `.tres` de Cañón, Hielo y Tesla, `data/ui/mejoras.json`, `data/ui/mobile_ui.json` y los fragmentos de spec/decisiones citados; búsqueda en `tests/` de los archivos que tocan Opciones y el panel.
 - **No probado:** no se corrió Godot ni GUT, no se tomaron capturas, no se midió ancho de texto ni alto de panel, no se vio la pantalla de Opciones real (el orden de filas se dedujo del código), no se probó en celular ni se comprobó el aspecto del círculo sutil sobre los fondos. Las maquetas de texto son orientativas.
 - Los números de RF/D/T que aparecen como «nuevos» son sugerencias.
+
+## 8. Decisiones de Lucas (2026-10-23)
+
+> Registradas **después** del merge del informe, a partir de lo que Lucas respondió en la sesión. **Todavía no son D ni RF**: la spec que las convierta en requisitos (y enmiende RF-612, RF-616, RF-40, RF-73, RF-113 y D-161) es otra tarea. Nada de esto está implementado.
+
+1. **«Ver todo».** En PC queda **solo la tecla** (V, configurable como hoy, RF-614): sin botón en pantalla. En el **celular** se agrega un **botón flotante con una lupa** que aparece cuando se toca el zoom. Se mantiene el aviso de una sola vez (primera vez que se acerca o se corre el mapa). *Reemplaza el «botón y tecla, ambos» de D-161 en PC.*
+2. **Panel de mejora: propuesta A**, con dos cambios: se **quita el texto «Nivel N/3»** (el nivel ya se ve en los indicadores de la torre y en la tarjeta de tres rectángulos) y los **tres rectángulos pasan a bronce, plata y oro** para que el avance se lea de un vistazo. Se borra el bloque «Al nivel N:» (enmienda de RF-616) y cada dato aparece una sola vez, con «antes → después».
+3. **Alcance.**
+   - El **fantasma** (al construir) proyecta el alcance completo.
+   - La **torre ya construida no lo muestra al tocarla**.
+   - El alcance **reaparece como parte del efecto de la mejora** y, en PC, al **pasar el mouse sobre «Mejorar»** (vista de la ampliación, con una animación).
+   - En el celular, la mejora lleva una **animación cosmética** (la mejora se aplica al instante; no hay espera real ni cambio de balance), que se puede **apagar desde Opciones** para quien quiera una mejora automática.
+   - La opción de Opciones se simplifica a **Oculto / Sutil / Completo** para la torre seleccionada, con **Oculto por omisión** (el fantasma queda siempre completo).
+   - *Pendiente de detallar en la spec:* cómo se ve el alcance en el celular sin mouse (propuesta: primera pulsación muestra la ampliación, la segunda confirma) y si el arco celeste de las torres de apoyo sigue la misma opción.
+4. **Opciones.** Se aprueban los **cinco grupos** tal como están en §4 (Sonido, Pantalla, Partida y ayudas, Controles, Avanzado). La fila **«Interfaz»** se conserva, con **Automática** por omisión, dentro de **Avanzado**.
+5. **Controles.** Hoy solo se puede cambiar la tecla de «Ver todo»; el resto son fijas. Se registra **B-58** (teclas y atajos configurables) en el backlog, sin implementarlo.
