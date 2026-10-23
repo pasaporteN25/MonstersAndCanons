@@ -935,10 +935,13 @@ func _on_enemy_spawned(enemy: Enemy) -> void:
 		effects.heal_number(e.global_position, amount)
 		Audio.play(&"heal", 0.8))  # RF-165
 	_maybe_boss_entrance(enemy)  # M66: antes que la tarjeta de abajo, que espera al cartel de aparición
-	# RF-134: la primera vez en todo el juego que aparece este tipo, se presenta.
+	# RF-134: la primera vez en todo el juego que aparece este tipo, se presenta. Un jefe (peligroso, RF-135) no lleva
+	# la tarjeta: el cartel de aparición y la línea «¡Llega el Jefe!» ya lo presentan (Lucas, 2026-10-23); igual
+	# queda como visto para la Wiki y el guardado.
 	if not SaveManager.has_seen_enemy(enemy.data.id):
 		SaveManager.mark_enemy_seen(enemy.data.id)
-		hud.show_enemy_intro(enemy.data)
+		if not Rules.is_dangerous(enemy.data):
+			hud.show_enemy_intro(enemy.data)
 		if GameFlow.played_level() != null:
 			SaveManager.save()  # RF-117: solo jugando desde el menú (campaña o comunidad)
 
