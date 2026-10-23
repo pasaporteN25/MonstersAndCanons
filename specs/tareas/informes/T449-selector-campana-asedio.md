@@ -478,3 +478,12 @@ Los números son provisionales: los asigna la tarea 📜 que registre M75. Hay t
 9. **Limpieza visual del mapa:** se **quitan las aclaraciones «tomada / rebeldes / bloqueada»** (se sobreentienden) y a los números de nivel se les **saca el cero** a la izquierda (01 → 1); **a aclarar** en qué pantallas.
 10. **Banderines en el nivel:** la idea es un **poste con banderín** en los mapas, con la receta del editor, cuando se logran las 3 estrellas. **Hoy solo el nivel 6 tiene poste** (`level_06.json`; RF-656 lo hace cambiar con cualquier victoria, no con 3 estrellas). Lucas pidió sumar postes en los niveles 2 y 3 y en los últimos cinco, sin hacerlo en todos; cambiar mapas **requiere spec y su OK a cada uno**.
 11. **L-11:** el mapa **sí llega al celular** (ver punto 2). **L-12:** Asedio 7 al 101 % se confirma en G5.
+
+### Ampliación de las decisiones de Lucas (2026-10-23, segunda tanda)
+
+> Reemplaza el punto 10 y aclara los puntos 1, 2 y 9 de arriba. Tampoco son D ni RF todavía.
+
+- **Postes (reemplaza el punto 10):** **todos los niveles** llevan poste con banderín: **1 poste en los niveles 1 a 10 y 2 postes en el 11 a 15**. Empiezan **rebeldes** y pasan a ser **del jugador con 3 estrellas**; con 1 o 2 estrellas siguen rebeldes (no hay estado intermedio). **Ubicación:** solo en **casillas que ya no se pueden usar** (bordes, decoración o bloqueadas), para no cambiar el mapa jugable ni re-medir el balance. Claude propone la posición en cada nivel y **Lucas aprueba cada mapa**. Hoy solo el nivel 6 tiene poste y cambia con cualquier victoria (RF-656): se unifica a la regla de 3 estrellas.
+- **Mapa en celular (aclara el punto 2):** **un dedo desplaza el mapa**, **tocar una zona la selecciona** y el botón **Jugar** queda **fijo abajo**.
+- **Modo de pruebas (aclara el punto 1):** desbloquea **todo Asedio** y lo que se juega ahí **no se guarda en el progreso normal** (ya usa su propio guardado, `save_pruebas.json`).
+- **El cero (aclara el punto 9):** se saca **en todas las pantallas que muestran el número de nivel** (mapa, tarjetas, victoria, HUD, Wiki).
