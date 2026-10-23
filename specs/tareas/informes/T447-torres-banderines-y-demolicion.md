@@ -345,3 +345,13 @@ Hay cuatro piezas independientes, que se pueden tomar por separado:
 - No hice muestras de arte ni maquetas.
 - No modifiqué código, datos, spec, decisiones, tareas ni canon. El único archivo nuevo es este informe.
 - No comprobé si los nombres de trabajo (Puesto, Honda, Cohetera) chocan con otros textos del juego, salvo «Estandarte», que ya está tomado.
+
+## Decisiones de Lucas (2026-10-23)
+
+> Registradas por Claude a partir de las respuestas de Lucas en la sesión. **Todavía no son D ni RF** y nada está implementado; los números de D/RF los fija la tarea de spec. Lo que dice «a aclarar» queda abierto.
+
+1. **Torre próxima a diseñar en serio (después de la V1):** la **Cohetera**. Ninguna de las tres entra en la V1.
+2. **Cohetera, recarga:** si se hace, **sin recarga pagada** (solo recarga gratis por oleada), para no tocar la exclusión de «habilidades activas» de §11.
+3. **Banderines:** la receta del editor es **siempre estética** (no cambia oro, daño ni otros números). Se usa como **marca de territorio colonizado** al lograr 3 estrellas en un mapa (ver el informe T449, punto 8 y 10, para dónde se muestra).
+4. **Demolición:** **solo lectura en texto y mapa, después de la V1** (alternativa N-B), sin mecánica ni cambio de reglas.
+5. Sin decidir: el Puesto de banderín y la Honda de escombros quedan como ideas guardadas; las preguntas P-A1 a P-A5 y P-B1 a P-B3 que no se mencionan arriba siguen abiertas.
