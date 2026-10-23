@@ -1552,3 +1552,27 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Qué:** rehacer tronco, helecho y poste en PNG RGBA, con el acabado volumétrico de T277; el poste tiene variantes enemiga y del jugador con la misma composición.
 - **Por qué:** las propuestas planas previas se alejaban del estilo vigente.
 - **Qué cambia:** RF-655 y RF-658. Las muestras y capturas se entregan para revisión antes de considerar el arte definitivo.
+
+## D-184 · Los dos editores se agrupan bajo Herramientas
+
+- **Fecha:** 2026-10-22 · **Estado:** decidida · **Decidió:** Lucas.
+- **Qué:** reemplazar el acceso «Editor de mapas» del menú por «Herramientas», un hub con entradas independientes a «Editor de mapas» y «Editor de banderines».
+- **Por qué:** Lucas pidió un editor general junto con el editor de mapas y avanzar con la propuesta.
+- **Alternativas descartadas:** agregar un botón más al menú principal; integrar edición de banderines dentro del editor de mapas.
+- **Qué cambia:** RF-660 y RF-661; el editor de mapas conserva su escena y su flujo de borrador.
+
+## D-185 · El editor de banderines empieza en desktop y deja fija la facción enemiga
+
+- **Fecha:** 2026-10-22 · **Estado:** decidida · **Decidió:** Lucas al autorizar avanzar con la propuesta de MVP.
+- **Qué:** primera versión desktop; personaliza solo el emblema del jugador usado en el poste del nivel 6 ganado. El enemigo mantiene la variante fija. Sin editor mobile en esta entrega.
+- **Por qué:** permite cerrar un alcance chico que aprovecha el poste de conquista implementado en T437, sin abrir decisiones de canon o controles táctiles.
+- **Alternativas descartadas:** editar ambos banderines, aplicar el diseño a todo el mapa planetario, o cubrir mobile en el mismo cambio.
+- **Qué cambia:** RF-662 a RF-665; no cambia progreso ni disponibilidad del editor de mapas.
+
+## D-186 · La receta cosmética vive fuera del guardado de campaña
+
+- **Fecha:** 2026-10-22 · **Estado:** decidida para el MVP · **Decidió:** Codex a partir de la recomendación de T438 y la autorización de Lucas.
+- **Qué:** guardar ids estables de una receta cosmética en un archivo `user://` propio. Si falta o está dañado, usar los valores predeterminados. La receta no entra en `SaveManager`, `settings` ni `SAVE_VERSION`.
+- **Por qué:** es una preferencia visual independiente del progreso y un archivo inválido no debe impedir jugar.
+- **Alternativas descartadas:** ampliar el guardado de campaña o persistir una imagen generada por usuario.
+- **Qué cambia:** RF-664 y las tareas T442–T443.

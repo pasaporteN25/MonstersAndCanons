@@ -2446,10 +2446,33 @@ El alcance de T425 a T432 es desktop. Mobile continúa por su propia experiencia
 
   **Resultado (2026-10-21):** tronco, helecho y dos postes integrados como PNG RGBA 128×128; fuente original y contacto 220/34 px en art/t437-banderines/. La guía §4–5 y la regla de arte anotan la familia PNG renderizada T277, su tamaño y cómo revisar decoraciones estáticas. El poste cambia solo al entrar al nivel 6 de campaña: SaveManager informa cualquier victoria registrada; el resto de contextos conserva la variante enemiga. Capturas reales del nivel 6 a 1280×720 muestran ambos estados y la herramienta usa un guardado temporal, luego lo elimina. Importación sin SCRIPT ERROR/Parse Error; GUT completo informado por Sonnet: **2160/2160**. Tras ajustar la forma de los postes, test_map_drawings.gd: **18/18, 234 aserciones**, sin errores de script/parseo; el cierre de ese proceso reportó 2 instancias ObjectDB y 1 recurso aún en uso. El código no tiene test de escena que ejecute Game._ready; la captura sí verificó ambos estados integrados. No se probó en teléfono físico. El emblema enemigo y el del jugador son propuestas de arte, sin aprobación de canon; quedan para revisión de Lucas en el PR.
 
-- [ ] **B-51 · Definir si se implementa un editor cosmético pequeño de estandartes.**
-  **Estado:** análisis Opus completo; sin implementación. La propuesta recomienda empezar en desktop, con una receta validada separada del progreso. Antes del futuro trabajo hay que acordar emblemas/colores, controles de escritorio/celular, persistencia y si se usará en el mapa planetario. No sumar texto libre, importación de imágenes ni compartir diseños por defecto. Ver T438.
+- [x] **B-51 · Implementar editor cosmético pequeño de banderines (M74 en curso).**
+  **Estado:** Lucas autorizó avanzar con el MVP desktop: hub Herramientas, catálogo cerrado, receta cosmética aislada del progreso y uso solo en el poste del jugador del nivel 6 ganado. El arte del catálogo espera revisión; mobile, mapa planetario, texto libre e importación/compartir quedan fuera. T439–T443.
 
 - [x] **T438 · [x86] · Analizar con Opus un futuro editor cosmético de estandartes.**
   **Refs:** B-51, T437, SaveManager/UiPrefs, lore y guía de arte. **Depende de:** pedido explícito de Lucas del 2026-10-21.
   **Hecho cuando:** el informe distingue evidencia e inferencias, recomienda un MVP y estima tamaño; registra persistencia, controles desktop/mobile, accesibilidad, pruebas, riesgos y decisiones previas. No implementa el editor.
   **Resultado (2026-10-21):** Opus recomendó hacer ahora solo dos emblemas fijos en el poste, con cambio al volver a entrar y derivado del progreso existente. Estimó el editor en M para desktop y L con mobile/mapa planetario; recomendó una receta validada fuera de settings, sin imágenes ni texto libre. Señaló dos decisiones de canon pendientes: el símbolo A podría anticipar a los Moradores en el nivel 6 y el emblema de la colonia aún no existe. Informe: [T438](tareas/informes/T438-editor-estandartes-opus.md). Lectura solamente; no se ejecutó Godot.
+
+## M74 · Hub Herramientas y editor de banderines (pedido de Lucas, 2026-10-22)
+
+- [x] **T439 · [x86] · Especificar el hub Herramientas y el editor cosmético de banderines.**
+  **Refs:** B-51, RF-660 a RF-665, D-184 a D-186, T438. **Depende de:** autorización de Lucas para avanzar.
+  **Hecho cuando:** quedan registrados el alcance desktop, la separación entre ambos editores, aplicación solo al poste del jugador en nivel 6 ganado, persistencia aislada, límites del catálogo y compuerta de aprobación visual; se crean fichas implementables y orden de dependencias. Sin código de juego ni arte final.
+  **Resultado (2026-10-22):** M74 definido en RF-660–RF-665 y D-184–D-186; se crearon las fichas T439–T443 y el orden del cierre v1. El catálogo final queda bajo compuerta de revisión visual. `git diff --check` pasó; sin tests de juego porque este PR solo cambia documentación.
+
+- [ ] **T440 · [x86] · Presentar muestra visual del catálogo de banderines.**
+  **Refs:** RF-662, RF-663, reglas de arte y T437. **Depende de:** T439.
+  **Hecho cuando:** paletas y emblemas abstractos se ven en postes a 220 px y a 34 px, en contacto legible y con fuente editable/procedencia. La muestra se adjunta a un PR para revisión de Lucas; no se declara aprobación ni se integra como arte final.
+
+- [ ] **T441 · [x86] · Agrupar los editores bajo Herramientas.**
+  **Refs:** RF-660, RF-661, D-184. **Depende de:** T439.
+  **Hecho cuando:** el menú abre un hub con tarjetas de mapas y banderines, las reglas de disponibilidad del editor de mapas se conservan, su salida vuelve al hub y «Probar» restaura el borrador. Tests de rutas y captura a 1280×720/1920×1080; sin cambios al guardado.
+
+- [ ] **T442 · [x86] · Crear catálogo y persistencia aislada de receta cosmética.**
+  **Refs:** RF-662, RF-664, D-186. **Depende de:** T439.
+  **Hecho cuando:** la lógica pura valida ids y valores de catálogo; predeterminado estable ante archivo ausente, corrupto, versión no compatible o ids desconocidos; lectura/escritura no modifica progreso, `settings` ni `SAVE_VERSION`; tests focales de ida/vuelta y recuperación.
+
+- [ ] **T443 · [x86] · Integrar el editor de banderines en el poste de campaña.**
+  **Refs:** RF-663 a RF-665, D-185. **Depende de:** T440 aprobado por Lucas, T441 y T442.
+  **Hecho cuando:** UI desktop permite preview grande/34 px, aplicar, cancelar/Escape y restaurar; Game pasa contexto explícito y solo el poste del nivel 6 ganado muestra la receta del jugador. Enemigo y modos ajenos mantienen la variante fija. Capturas, tests focales y suite completa; resultado informa límites de prueba física.
