@@ -6,6 +6,7 @@ extends Node
 
 const SCREENS: Array[String] = [
 	"res://scenes/ui/main_menu.tscn",
+	"res://scenes/ui/tools_hub.tscn",
 	"options",
 	"options_admin",
 	"res://scenes/ui/level_select.tscn",
@@ -30,7 +31,10 @@ func run() -> void:
 		var parts: PackedStringArray = args[1].split("x")
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 		DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, true)
-		get_window().size = Vector2i(int(parts[0]), int(parts[1]))
+		var resolution := Vector2i(int(parts[0]), int(parts[1]))
+		get_window().content_scale_mode = Window.CONTENT_SCALE_MODE_VIEWPORT
+		get_window().content_scale_size = resolution
+		get_window().size = resolution
 		get_window().position = Vector2i.ZERO
 		for _i: int in 10:
 			await get_tree().process_frame
@@ -42,7 +46,7 @@ func run() -> void:
 			await get_tree().process_frame
 		await RenderingServer.frame_post_draw
 		get_viewport().get_texture().get_image().save_png("%s/%s_%s.png" % [out, mode, screen.get_file().get_basename()])
-		_report(screen, holder)
+		_report(screen, holder, get_viewport().get_visible_rect().size)
 		holder.queue_free()
 		await get_tree().process_frame
 	get_tree().quit()
@@ -88,7 +92,7 @@ func _inside_scroll(control: Control, holder: Node) -> bool:
 	return false
 
 
-func _report(screen: String, holder: Node) -> void:
+func _report(screen: String, holder: Node, bounds: Vector2) -> void:
 	var bad: Array[String] = []
 	var small: Array[String] = []
 	for node: Node in holder.find_children("*", "Control", true, false):
@@ -96,7 +100,7 @@ func _report(screen: String, holder: Node) -> void:
 		if not control.is_visible_in_tree() or _inside_scroll(control, holder):
 			continue
 		var rect: Rect2 = control.get_global_rect()
-		if control is Button and (rect.end.y > 720.5 or rect.end.x > 1280.5 or rect.position.y < -0.5):
+		if control is Button and (rect.end.y > bounds.y + 0.5 or rect.end.x > bounds.x + 0.5 or rect.position.y < -0.5):
 			bad.append("%s %s" % [control.name, rect])
 	for node: Node in holder.find_children("*", "Button", true, false):
 		var button: Button = node as Button

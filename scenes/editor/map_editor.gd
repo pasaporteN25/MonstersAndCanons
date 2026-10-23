@@ -80,7 +80,7 @@ func _ready() -> void:
 	_save_button.pressed.connect(save_level)
 	_save_mode_button.pressed.connect(save_to_mode)
 	_try_button.pressed.connect(try_level)
-	left.connect(GameFlow.go_to_main_menu)
+	left.connect(GameFlow.go_to_tools)
 	test_requested.connect(GameFlow.play_test)
 	_style_selected(_settings_button)
 	_style_selected(_waves_button)
@@ -255,7 +255,7 @@ func try_level() -> void:
 	test_requested.emit(result["level"])
 
 
-## RF-210, RF-218: vuelve al menú. El borrador queda en GameFlow: si se vuelve al editor, se retoma.
+## RF-210, RF-218: vuelve al hub «Herramientas» (T441). El borrador queda en GameFlow: si se vuelve al editor, se retoma.
 func leave() -> void:
 	if not draft.dirty:
 		left.emit()
