@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>T440 · Muestra de banderines</title>
+<style>
+:root { color-scheme: dark; font: 16px/1.5 system-ui, sans-serif; background: #171819; color: #f2e7ce; }
+body { max-width: 1100px; margin: 0 auto; padding: 32px 24px 64px; }
+h1, h2 { color: #ffd15a; }
+.note { color: #d7cbb2; }
+figure { margin: 24px 0 36px; }
+figure img { display: block; max-width: 100%; height: auto; border: 1px solid #66583e; border-radius: 8px; }
+figcaption { margin-top: 8px; color: #c7baa0; }
+.matrix { display: grid; grid-template-columns: auto repeat(4, minmax(0, 1fr)); gap: 8px; align-items: center; max-width: 720px; }
+.matrix .head { color: #ffd15a; font-weight: 650; text-align: center; }
+.matrix .label { color: #e9ddc6; }
+.thumb { display: block; width: 34px; height: 34px; background-image: url("contacto_34px.png"); background-repeat: no-repeat; background-size: 136px 136px; border: 1px solid #544b3b; border-radius: 4px; justify-self: center; }
+.cell { display: grid; grid-template-columns: 42px 1fr; align-items: center; gap: 8px; padding: 6px; background: #222324; border: 1px solid #393a3a; border-radius: 6px; }
+small { color: #bdb29d; }
+code { color: #ffe1a0; }
+</style>
+</head>
+<body>
+<h1>T440 · Banderines de campaña</h1>
+<p class="note">Muestra conceptual para revisar el catálogo del editor. Los diseños no son arte final ni están conectados al juego.</p>
+<figure>
+  <img src="contacto_concepto.png" alt="Matriz de cuatro paletas por cuatro emblemas en el poste de banderines del jugador">
+  <figcaption>Contacto grande: referencia cercana a 220 px por poste. Columnas: paleta. Filas: emblema.</figcaption>
+</figure>
+<h2>Lectura a tamaño de casilla</h2>
+<p class="note">Cada miniatura mide exactamente 34×34 px; ampliá la página si necesitás inspeccionarla.</p>
+<div class="matrix" aria-label="Catálogo a 34 por 34 píxeles">
+  <div></div>
+  <div class="head">Meridiana</div>
+  <div class="head">Brasa</div>
+  <div class="head">Musgo</div>
+  <div class="head">Marea</div>
+  <div class="label">Chevron</div>
+  <div class="cell"><span class="thumb" role="img" aria-label="Chevron, Meridiana" style="background-position: -0px -0px"></span><small>34 px</small></div>
+  <div class="cell"><span class="thumb" role="img" aria-label="Chevron, Brasa" style="background-position: -34px -0px"></span><small>34 px</small></div>
+  <div class="cell"><span class="thumb" role="img" aria-label="Chevron, Musgo" style="background-position: -68px -0px"></span><small>34 px</small></div>
+  <div class="cell"><span class="thumb" role="img" aria-label="Chevron, Marea" style="background-position: -102px -0px"></span><small>34 px</small></div>
+  <div class="label">Rombo</div>
+  <div class="cell"><span class="thumb" role="img" aria-label="Rombo, Meridiana" style="background-position: -0px -34px"></span><small>34 px</small></div>
+  <div class="cell"><span class="thumb" role="img" aria-label="Rombo, Brasa" style="background-position: -34px -34px"></span><small>34 px</small></div>
+  <div class="cell"><span class="thumb" role="img" aria-label="Rombo, Musgo" style="background-position: -68px -34px"></span><small>34 px</small></div>
+  <div class="cell"><span class="thumb" role="img" aria-label="Rombo, Marea" style="background-position: -102px -34px"></span><small>34 px</small></div>
+  <div class="label">Estrella</div>
+  <div class="cell"><span class="thumb" role="img" aria-label="Estrella, Meridiana" style="background-position: -0px -68px"></span><small>34 px</small></div>
+  <div class="cell"><span class="thumb" role="img" aria-label="Estrella, Brasa" style="background-position: -34px -68px"></span><small>34 px</small></div>
+  <div class="cell"><span class="thumb" role="img" aria-label="Estrella, Musgo" style="background-position: -68px -68px"></span><small>34 px</small></div>
+  <div class="cell"><span class="thumb" role="img" aria-label="Estrella, Marea" style="background-position: -102px -68px"></span><small>34 px</small></div>
+  <div class="label">Franja</div>
+  <div class="cell"><span class="thumb" role="img" aria-label="Franja, Meridiana" style="background-position: -0px -102px"></span><small>34 px</small></div>
+  <div class="cell"><span class="thumb" role="img" aria-label="Franja, Brasa" style="background-position: -34px -102px"></span><small>34 px</small></div>
+  <div class="cell"><span class="thumb" role="img" aria-label="Franja, Musgo" style="background-position: -68px -102px"></span><small>34 px</small></div>
+  <div class="cell"><span class="thumb" role="img" aria-label="Franja, Marea" style="background-position: -102px -102px"></span><small>34 px</small></div>
+</div>
+<h2>Etiquetas propuestas</h2>
+<p><strong>Paletas:</strong> <code>meridiana</code>, <code>brasa</code>, <code>musgo</code>, <code>marea</code>.</p>
+<p><strong>Emblemas:</strong> <code>chevron</code>, <code>rombo</code>, <code>estrella</code>, <code>franja</code>.</p>
+<h2>Procedencia y prompt</h2>
+<p>La forma del poste toma como referencia el PNG aprobado de T437. El concepto se generó con ImageGen; no se modificó el recurso del juego ni se genera una decisión de canon. El prompt completo y reproducible está en <a href="README.md">README.md</a>.</p>
+</body>
+</html>
