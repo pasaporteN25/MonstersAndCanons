@@ -31,13 +31,9 @@ const SIGNAL_CAMP: Texture2D = preload("res://assets/sprites/map/campamento_vaci
 ## reserva; la del jugador solo aparece si quien arma el mapa dice que la campaña ya ganó el nivel.
 const POST_ENEMY: Texture2D = preload("res://assets/sprites/map/rendered/banner_post_enemy.png")
 const POST_PLAYER: Texture2D = preload("res://assets/sprites/map/rendered/banner_post_player.png")
-## T443: catálogo cerrado de variantes aprobadas para el banderín del jugador.
-const POST_VARIANTS: Dictionary = {
-	"meridiana": {"chevron": preload("res://assets/sprites/map/rendered/banner_variants/meridiana_chevron.png"), "rombo": preload("res://assets/sprites/map/rendered/banner_variants/meridiana_rombo.png"), "estrella": preload("res://assets/sprites/map/rendered/banner_variants/meridiana_estrella.png"), "franja": preload("res://assets/sprites/map/rendered/banner_variants/meridiana_franja.png")},
-	"brasa": {"chevron": preload("res://assets/sprites/map/rendered/banner_variants/brasa_chevron.png"), "rombo": preload("res://assets/sprites/map/rendered/banner_variants/brasa_rombo.png"), "estrella": preload("res://assets/sprites/map/rendered/banner_variants/brasa_estrella.png"), "franja": preload("res://assets/sprites/map/rendered/banner_variants/brasa_franja.png")},
-	"musgo": {"chevron": preload("res://assets/sprites/map/rendered/banner_variants/musgo_chevron.png"), "rombo": preload("res://assets/sprites/map/rendered/banner_variants/musgo_rombo.png"), "estrella": preload("res://assets/sprites/map/rendered/banner_variants/musgo_estrella.png"), "franja": preload("res://assets/sprites/map/rendered/banner_variants/musgo_franja.png")},
-	"marea": {"chevron": preload("res://assets/sprites/map/rendered/banner_variants/marea_chevron.png"), "rombo": preload("res://assets/sprites/map/rendered/banner_variants/marea_rombo.png"), "estrella": preload("res://assets/sprites/map/rendered/banner_variants/marea_estrella.png"), "franja": preload("res://assets/sprites/map/rendered/banner_variants/marea_franja.png")},
-}
+## T443: una atlas compacta de 4 × 4 variantes aprobadas para el banderín del jugador.
+const POST_VARIANTS_ATLAS: Texture2D = preload("res://assets/sprites/map/rendered/banner_variants_atlas.png")
+static var _post_variant_cache: Dictionary = {}
 ## El dibujo de la leyenda que usa el poste de banderines.
 const POST_DRAWING: String = "poste_cintas"
 ## T234 (RF-480): la central de energía del nivel 15, en cuatro PNG de 128 × 128 (noroeste, noreste, suroeste y
@@ -113,7 +109,23 @@ static func post_texture(conquered: bool = false, recipe: BannerRecipe = null) -
 	if not conquered:
 		return POST_ENEMY
 	var selected: BannerRecipe = BannerRecipe.default_recipe() if recipe == null or not recipe.is_valid() else recipe
-	return POST_VARIANTS[selected.palette][selected.emblem]
+	var key: String = "%s/%s" % [selected.palette, selected.emblem]
+	if _post_variant_cache.has(key):
+		return _post_variant_cache[key]
+	var palette_index: int = BannerCatalog.palette_ids().find(selected.palette)
+	var emblem_index: int = BannerCatalog.emblem_ids().find(selected.emblem)
+	var atlas_width: int = POST_VARIANTS_ATLAS.get_width()
+	var atlas_height: int = POST_VARIANTS_ATLAS.get_height()
+	var x0: int = roundi(float(palette_index * atlas_width) / 4.0)
+	var y0: int = roundi(float(emblem_index * atlas_height) / 4.0)
+	var x1: int = roundi(float((palette_index + 1) * atlas_width) / 4.0)
+	var y1: int = roundi(float((emblem_index + 1) * atlas_height) / 4.0)
+	var region := AtlasTexture.new()
+	region.atlas = POST_VARIANTS_ATLAS
+	region.region = Rect2(x0, y0, x1 - x0, y1 - y0)
+	region.filter_clip = true
+	_post_variant_cache[key] = region
+	return region
 
 
 static func state_texture(drawing: String, state: ObstacleField.State) -> Texture2D:

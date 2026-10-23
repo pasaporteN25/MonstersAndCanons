@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dnp3xrombeqam"
-path="res://.godot/imported/marea_franja.png-7121b97fbc8d3c6adecdb081ec42529d.ctex"
+uid="uid://booflw3xdc86g"
+path="res://.godot/imported/banner_variants_atlas.png-b1a19935af09c299a3663bd2b7e07218.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/map/rendered/banner_variants/marea_franja.png"
-dest_files=["res://.godot/imported/marea_franja.png-7121b97fbc8d3c6adecdb081ec42529d.ctex"]
+source_file="res://assets/sprites/map/rendered/banner_variants_atlas.png"
+dest_files=["res://.godot/imported/banner_variants_atlas.png-b1a19935af09c299a3663bd2b7e07218.ctex"]
 
 [params]
 

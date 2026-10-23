@@ -2,7 +2,7 @@
 
 La muestra T440 y `banner_post_player.png` de T437 son las referencias visuales. Lucas aprobó la muestra de T440 antes de integrar las variantes.
 
-Se produjo una atlas PNG con fondo transparente y 16 combinaciones (4 paletas × 4 emblemas). El poste, el tamaño, la perspectiva, la luz y el banderín enemigo se mantienen iguales; solo cambia la bandera del jugador. Los recursos de runtime son los 16 PNG de 128×128 en `assets/sprites/map/rendered/banner_variants/`. La atlas 1254×1254 conserva la salida completa y los contactos permiten revisar la lectura a 220 y 34 px.
+Se produjo una atlas PNG con fondo transparente y 16 combinaciones (4 paletas × 4 emblemas). El poste, el tamaño, la perspectiva, la luz y el banderín enemigo se mantienen iguales; solo cambia la bandera del jugador. El juego carga una sola atlas de runtime de 512×512 en `assets/sprites/map/rendered/banner_variants_atlas.png`; cada una de sus 16 regiones es de 128×128. Los PNG individuales quedan en `variantes/` como fuente editable, y la atlas 1254×1254 conserva la salida completa de ImageGen. El archivo `.gdignore` evita importar al proyecto las láminas, capturas y fuentes de revisión. Los contactos permiten revisar la lectura a 220 y 34 px.
 
 La atlas se generó con la herramienta integrada ImageGen de Codex usando el arte T437 y la muestra T440 como referencias. Prompt utilizado:
 
