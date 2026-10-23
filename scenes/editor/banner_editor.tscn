@@ -1,0 +1,152 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/editor/banner_editor.gd" id="1_script"]
+[ext_resource type="Script" path="res://scenes/ui/menu_background.gd" id="2_bg"]
+[ext_resource type="Theme" path="res://assets/ui/menu_theme.tres" id="3_theme"]
+
+[node name="BannerEditor" type="Control"]
+theme = ExtResource("3_theme")
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="Background" type="Node2D" parent="."]
+script = ExtResource("2_bg")
+
+[node name="Dim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.07, 0.08, 0.1, 0.8)
+
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Card" type="PanelContainer" parent="Center"]
+custom_minimum_size = Vector2(980, 660)
+layout_mode = 2
+
+[node name="Margin" type="MarginContainer" parent="Center/Card"]
+layout_mode = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 22
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 22
+
+[node name="Columns" type="VBoxContainer" parent="Center/Card/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="Center/Card/Margin/Columns"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.84, 0.3, 1)
+theme_override_font_sizes/font_size = 34
+text = "Editor de banderines"
+horizontal_alignment = 1
+
+[node name="Body" type="HBoxContainer" parent="Center/Card/Margin/Columns"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 28
+
+[node name="Previews" type="VBoxContainer" parent="Center/Card/Margin/Columns/Body"]
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+theme_override_constants/separation = 8
+
+[node name="PreviewLabel" type="Label" parent="Center/Card/Margin/Columns/Body/Previews"]
+layout_mode = 2
+text = "Vista del poste"
+horizontal_alignment = 1
+
+[node name="LargePreview" type="TextureRect" parent="Center/Card/Margin/Columns/Body/Previews"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 300)
+layout_mode = 2
+size_flags_vertical = 3
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TileLabel" type="Label" parent="Center/Card/Margin/Columns/Body/Previews"]
+layout_mode = 2
+text = "Así se ve en el mapa (34 px)"
+horizontal_alignment = 1
+
+[node name="TilePreview" type="TextureRect" parent="Center/Card/Margin/Columns/Body/Previews"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+size_flags_horizontal = 4
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Choices" type="VBoxContainer" parent="Center/Card/Margin/Columns/Body"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="PaletteLabel" type="Label" parent="Center/Card/Margin/Columns/Body/Choices"]
+layout_mode = 2
+text = "Paleta"
+theme_override_font_sizes/font_size = 22
+
+[node name="PaletteRow" type="HBoxContainer" parent="Center/Card/Margin/Columns/Body/Choices"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="EmblemLabel" type="Label" parent="Center/Card/Margin/Columns/Body/Choices"]
+layout_mode = 2
+text = "Emblema"
+theme_override_font_sizes/font_size = 22
+
+[node name="EmblemRow" type="HBoxContainer" parent="Center/Card/Margin/Columns/Body/Choices"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Message" type="Label" parent="Center/Card/Margin/Columns"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+autowrap_mode = 2
+horizontal_alignment = 1
+
+[node name="Actions" type="HBoxContainer" parent="Center/Card/Margin/Columns"]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="RestoreButton" type="Button" parent="Center/Card/Margin/Columns/Actions"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 52)
+layout_mode = 2
+text = "Restaurar"
+
+[node name="ApplyButton" type="Button" parent="Center/Card/Margin/Columns/Actions"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 52)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 1, 0.6, 1)
+text = "Aplicar"
+
+[node name="CancelButton" type="Button" parent="Center/Card/Margin/Columns/Actions"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 52)
+layout_mode = 2
+text = "Cancelar"

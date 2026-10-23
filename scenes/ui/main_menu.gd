@@ -1,4 +1,4 @@
-# Menú principal (RF-110): Jugar, Récords, Wiki, Editor de mapas (RF-210: no en el celular), Opciones
+# Menú principal (RF-110): Jugar, Récords, Wiki, Herramientas (T441, antes «Editor de mapas»; RF-210: no en el celular), Opciones
 # y Salir. «Jugar» abre la intro la primera vez (M57, RF-498) y después va a la selección de niveles.
 class_name MainMenu
 extends Control
@@ -26,6 +26,7 @@ const MOBILE_COLUMN_GAP: float = 48.0
 ## Costuras de los tests (no cambian de escena): a dónde se va y de dónde se lee la intro.
 var open_level_select: Callable = GameFlow.go_to_level_select
 var open_first_level: Callable = GameFlow.start_level.bind(0)
+var open_tools: Callable = GameFlow.go_to_tools
 var intro_path: String = IntroData.DEFAULT_PATH
 ## M67 (RF-603, RF-608): de dónde se leen las novedades, qué versión está instalada y si se corre desde el editor.
 var news_path: String = NewsData.DEFAULT_PATH
@@ -48,7 +49,7 @@ func _ready() -> void:
 	_records_button.pressed.connect(GameFlow.go_to_records)  # RF-195
 	_wiki_button.pressed.connect(GameFlow.go_to_wiki)  # RF-230
 	_editor_button.visible = editor_available(OS.has_feature("mobile"))  # RF-210
-	_editor_button.pressed.connect(GameFlow.go_to_editor)
+	_editor_button.pressed.connect(func() -> void: open_tools.call())
 	_options_button.pressed.connect(_options.open)
 	_quit_button.pressed.connect(get_tree().quit)
 	_options.closed.connect(_play_button.grab_focus)

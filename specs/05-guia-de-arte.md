@@ -63,16 +63,24 @@ Paletas de T244 y T257, todavía **no aprobadas**: las de T244 son referencias d
 - **Los siete temas** están en la práctica en `scripts/logic/map_themes.gd` (paleta y decoración) y sus mapas de ejemplo en `tools/ejemplos/`. La revisión de M15 mostró que con el **contorno oscuro** de los enemigos ninguno se pierde sobre ningún suelo; lo que sí falló fue el **camino** (en el bosque y el pantano casi se confundía con el suelo) y por eso hay un test que mide su diferencia de claridad.
 - **El pasto, el camino y el borde de cada tema** salen de una paleta en código (plan §6.12, `MapThemes`); los dibujos de decoración son SVG en `assets/sprites/map/`.
 
+### Decoración dimensional renderizada (T277 y T437)
+
+La familia de decoración renderizada de T277 es otra técnica aprobada para el mapa: volumen pintado con materiales legibles, luz suave desde arriba a la izquierda, alfa transparente y sombra de apoyo discreta. Sus referencias activas son assets/sprites/map/rendered/tree.png, rock_a.png, rock_b.png, forest_idle.png y rubble_idle.png. Una pieza nueva que pertenezca a esa familia debe mantener su perspectiva, luz y volumen; no se vuelve a una variante plana de T260 por ser más fácil de dibujar.
+
+Las fuentes de esta familia son PNG RGBA de 128×128 en assets/sprites/map/rendered/; el juego los muestra dentro de una casilla de 64×64 con el filtro del mapa. Las decoraciones SVG históricas de 64×64 siguen vigentes donde no fueron reemplazadas. No mezclar la técnica plana SVG y la renderizada en una misma familia sin una muestra y revisión de Lucas.
+
+T437 usa esta dirección como propuesta para tronco, helecho y dos variantes del poste de banderines. Sus emblemas no definen todavía símbolos de facción ni canon. La fuente, el reescalado y las capturas están en art/t437-banderines/.
+
 ## 5. Cómo se comprueba un dibujo nuevo
 
-1. **Importa sin errores** en Godot y tiene **64×64** (los tests de sprites lo verifican).
+1. **Importa sin errores** en Godot. Los SVG de decoración son 64×64; los PNG de la familia renderizada T277 son 128×128.
 2. **Hoja de contacto:** todos los dibujos del grupo juntos, a **220 px** y a **34 px**, sobre el suelo del juego. Se mira: ¿se distinguen por la silueta?, ¿se lee lo que es?, ¿se parece a alguno existente?
-3. **En el juego:** una captura de una partida real con el dibujo en movimiento (el brillo y las facetas se ven distinto en pantalla).
+3. **En el juego:** una captura de una partida real con el dibujo en su contexto; si es una pieza animada, capturar también el movimiento (el brillo y las facetas se ven distinto en pantalla).
 4. **Lucas aprueba** las capturas antes de darlo por terminado (como con los temas, T123).
 
 ## 6. De dónde vienen los dibujos actuales
 
-- Los **nueve enemigos** se redibujaron en T127 con un generador (`redesign.py`, en `build/enemy-redesign/`, que **no se versiona**: la carpeta `build/` está ignorada por git). **La fuente de verdad es el SVG** de `assets/sprites/enemies/`; los originales de antes y las comparaciones "antes/después" quedaron en esa carpeta.
+- Los **nueve enemigos** se redibujaron en T127 con un generador (`redesign.py`, en `build/enemy-redesign/`, que **no se versiona**: la carpeta `build/` está ignorada por git). Las fuentes y comparaciones históricas quedaron en esa carpeta. Los SVG de `assets/sprites/enemies/` son fuentes editables de algunos rediseños, pero no indican por sí solos qué imagen usa el juego: cada enemigo declara su textura y atlas en `data/enemies/<id>.tres`. Los PNG consumidos por los rediseños renderizados están en `assets/sprites/enemies/rendered/`.
 - **Torres, proyectiles, íconos y decoración del mapa** son los de M4/M5 (T70–T73, T84): contorno `#2b2233` y bases de madera, piedra y piedra con oro. Se pueden rediseñar más adelante con esta misma guía; hoy conviven sin problema.
 - **Enemigos con habilidad** (B-07): el Guardián y el Curandero (M17) y el Chamán y el Espejo (M18) ya están; quedan el Excavador y el Ladrón. Sus ideas de aspecto están en el backlog y se ajustan a los tonos libres de la tabla.
 
@@ -92,7 +100,7 @@ Para las torres nuevas, esta sección reemplaza las reglas de SVG y vista latera
 
 ## 8. Monstruos renderizados (M24, D-050)
 
-Normal (diablillo rojo), Rápido (bestia turquesa) y Tanque (ogro de piedra y piel verde) son PNG RGBA de **256×256**, **una sola vista** con la luz arriba a la izquierda, sin sombra dibujada (la pone el juego). Cuerpo al 63,4 % del alto como máximo y pies al 74,55 % del alto; los genera `tools/prepare_monster_sprites.gd` desde `art/redesign-m24/sources/`. **No se reflejan en espejo** (`flip_when_walking_left = false`) y todavía no tienen cuadros de caminar: lo que falta pedir está en `art/FORMATO_PROXIMA_ENTREGA_M24.md`. Los otros diez enemigos siguen con las reglas de §1–2.
+Normal (diablillo rojo), Rápido (bestia turquesa) y Tanque (ogro de piedra y piel verde) usan PNG RGBA de **256×256** para la pose base y un atlas PNG de caminata; el juego los carga desde `assets/sprites/enemies/rendered/`. Las poses base mantienen la luz arriba a la izquierda, sin sombra dibujada, cuerpo de hasta 63,4 % del alto y pies en 74,55 %; la sombra la pone el juego. No se dibujan con espejo al caminar a la izquierda (`flip_when_walking_left = false`). Los `.tres` de `data/enemies/` indican las texturas, escalas y separación de pasos vigentes; consultar esos datos antes de reutilizar tamaños o asumir que un enemigo carece de animación. Las fuentes M24 y su generador están en `art/redesign-m24/sources/` y `tools/prepare_monster_sprites.gd`.
 
 ## M36 · Lectura de estados y efectos
 Placa de nivel: hierro/bronce, remaches ámbar siempre legibles; no depende del brillo animado. Aturdimiento: aro roto violeta y descargas sobre el mecanismo, sin tapar base/sombra. Cura: límite verde amarillento suave y brotes en cura efectiva; no usar oro ni blanco de daño. Muerte: conservar la pose y escala de la criatura, disolver con shader y ocho fragmentos facetados; sin deformaciones corporales, sombras nuevas ni nuevos ciclos falsos. Efectos finitos respetan pausa/velocidad y topes (12 residuos de muerte,16 pulsos de cura).

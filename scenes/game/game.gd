@@ -107,7 +107,11 @@ func _ready() -> void:
 	elif level_data == null:
 		level_data = GameFlow.level(0)
 
-	level = level_data.build_map()
+	# RF-656, RF-657: el guardado se consulta solo acá y solo en la campaña; el resto conserva el poste enemigo.
+	var post_conquered: bool = campaign_level != null and campaign_level.id == &"level_06" \
+			and SaveManager.is_completed(campaign_level.id)
+	var banner_recipe: BannerRecipe = BannerRecipeStore.load_recipe() if post_conquered else null
+	level = level_data.build_map(post_conquered, banner_recipe)
 	level.position = Vector2(0.0, float(MobileUiConfig.load_from().get_value("barra_alta_px"))) if UiMode.is_mobile() else MAP_OFFSET
 	add_child(level)
 	move_child(level, 0)  # primero en la lista = se dibuja debajo de todo
@@ -185,6 +189,7 @@ func _ready() -> void:
 	panel.upgrade_pressed.connect(func() -> void: build_controller.try_upgrade(build_controller.selected_placed()))
 	panel.sell_pressed.connect(func() -> void: build_controller.sell(build_controller.selected_placed()))
 	panel.targeting_pressed.connect(_on_targeting_pressed)
+	panel.close_pressed.connect(build_controller.deselect_placed)
 	session.gold_changed.connect(panel.refresh)
 	session.resources_changed.connect(_refresh_tower_panel.unbind(1))  # RF-418: la venta muestra recursos
 
@@ -624,7 +629,7 @@ func _open_intro_if_pending() -> void:
 	build_controller.input_blocked = true  # leer no cuesta tiempo ni deja construir
 	set_paused(true)
 	hud.show_paused(true, false)  # el cartel no es el menú de pausa: no dice «PAUSA»
-	level_intro.open(level_data.display_name, level_data.place_text, level_data.intro_text)
+	level_intro.open(level_data.display_name, level_data.place_text, level_data.intro_text, level_data.theme)
 	if mobile_hud != null:
 		mobile_hud.set_modal_open(true)
 

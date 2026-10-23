@@ -1,0 +1,168 @@
+<!-- Maqueta de arte provisional para el selector planetario de Cántaro; vista 2D de campaña, 1280×720. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <defs>
+    <linearGradient id="sea" x1="0" y1="0" x2="0.8" y2="1">
+      <stop offset="0" stop-color="#182a35"/>
+      <stop offset="0.55" stop-color="#203641"/>
+      <stop offset="1" stop-color="#172831"/>
+    </linearGradient>
+    <linearGradient id="land" x1="0.1" y1="0" x2="0.8" y2="1">
+      <stop offset="0" stop-color="#63764e"/>
+      <stop offset="0.52" stop-color="#465c42"/>
+      <stop offset="1" stop-color="#303f37"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#202226"/>
+      <stop offset="1" stop-color="#17191d"/>
+    </linearGradient>
+    <pattern id="contours" width="110" height="74" patternUnits="userSpaceOnUse">
+      <path d="M-20 38 C5 7 58 5 90 27 S140 54 128 77 M-5 48 C16 22 52 19 78 34 S116 54 111 72" fill="none" stroke="#d5c18f" stroke-opacity=".12" stroke-width="1.2"/>
+    </pattern>
+    <g id="star">
+      <path d="M0-8 2.3-2.5 8-2.4 3.7 1.1 5.2 7 -0 3.7 -5.2 7 -3.7 1.1 -8-2.4 -2.3-2.5Z"/>
+    </g>
+    <g id="lock" fill="none" stroke="#b3b9b4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="-6" y="-1" width="12" height="9" rx="1.7" fill="#555d5c"/>
+      <path d="M-3-1v-3a3 3 0 0 1 6 0v3"/>
+    </g>
+    <g id="flag" stroke="#2b2233" stroke-width="1.5" stroke-linejoin="round">
+      <path d="M-3 8v-17" fill="none" stroke-width="2"/>
+      <path d="M-2-8 8-5 1 0-2-1Z" fill="#df704d"/>
+    </g>
+    <g id="lander" stroke="#2b2233" stroke-width="2" stroke-linejoin="round">
+      <path d="M-10 4-7-6 0-11 7-6 10 4 5 9h-10Z" fill="#bd9a60"/>
+      <path d="M-4-4 0-8 4-4 3 2h-6Z" fill="#e6d5a4"/>
+      <path d="M-6 7-10 13M6 7l4 6M-13 13H13" fill="none" stroke="#d2ad6a" stroke-width="2.2"/>
+      <circle cx="0" cy="-2" r="1.4" fill="#f0d176" stroke="none"/>
+    </g>
+  </defs>
+
+  <!-- Base de pantalla y encabezado con la misma familia oscura y bronce del juego. -->
+  <rect width="1280" height="720" fill="#101216"/>
+  <rect width="1280" height="74" fill="#1c1e22"/>
+  <path d="M0 73.5H1280" stroke="#78522d" stroke-width="2"/>
+  <text x="34" y="32" fill="#f1ce7a" font-size="13" font-family="DejaVu Sans, sans-serif" font-weight="700" letter-spacing="1.2">CAMPAÑA · CÁNTARO</text>
+  <text x="34" y="57" fill="#f5f0df" font-size="21" font-family="DejaVu Sans, sans-serif" font-weight="700">Elegir zona</text>
+  <g font-family="DejaVu Sans, sans-serif" font-size="15" text-anchor="middle">
+    <rect x="895" y="15" width="132" height="43" rx="7" fill="#181a1e" stroke="#8a5b2e" stroke-width="2"/>
+    <text x="961" y="42" fill="#c9c5bc">Tarjetas</text>
+    <rect x="1033" y="15" width="112" height="43" rx="7" fill="#4b3827" stroke="#e3a345" stroke-width="2.5"/>
+    <text x="1089" y="42" fill="#ffe5a0" font-weight="700">Mapa</text>
+  </g>
+  <text x="1237" y="42" fill="#f1ce7a" font-size="16" font-family="DejaVu Sans, sans-serif" text-anchor="end">5 / 45 ★</text>
+
+  <!-- Carta geográfica 2D: es el atlas de la campaña, no un mapa jugable. -->
+  <rect x="20" y="90" width="1240" height="472" rx="15" fill="url(#sea)" stroke="#3b3329" stroke-width="2"/>
+  <path d="M101 316 120 268 157 236 177 196 231 176 271 143 321 151 354 125 405 143 442 125 487 151 523 136 561 164 602 156 635 179 684 163 730 184 776 170 812 190 856 182 898 208 943 206 982 232 1034 232 1066 256 1114 250 1149 278 1170 314 1153 350 1164 381 1139 412 1110 425 1083 461 1043 471 1008 492 967 483 941 513 902 503 865 523 829 507 788 532 750 511 710 525 673 501 636 511 600 480 555 488 526 456 481 469 444 442 399 452 369 424 331 427 306 399 265 408 233 383 196 388 166 359 128 360Z" fill="url(#land)" stroke="#2b2233" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M101 316 120 268 157 236 177 196 231 176 271 143 321 151 354 125 405 143 442 125 487 151 523 136 561 164 602 156 635 179 684 163 730 184 776 170 812 190 856 182 898 208 943 206 982 232 1034 232 1066 256 1114 250 1149 278 1170 314 1153 350 1164 381 1139 412 1110 425 1083 461 1043 471 1008 492 967 483 941 513 902 503 865 523 829 507 788 532 750 511 710 525 673 501 636 511 600 480 555 488 526 456 481 469 444 442 399 452 369 424 331 427 306 399 265 408 233 383 196 388 166 359 128 360Z" fill="url(#contours)" opacity=".9"/>
+  <!-- Relief landmarks and shore detail. -->
+  <g fill="none" stroke="#d7c28f" stroke-opacity=".3" stroke-width="2">
+    <path d="M189 282q45-53 86-15t85-8 87 21 84-18 94 4 80 31"/>
+    <path d="M277 348q49-31 93 6t87 3 68-24 99 15 94-2 92 34"/>
+    <path d="M438 202q31 26 49 62t57 26 69-17 58 17"/>
+    <path d="M701 273q38-39 74-8t69 4 65 30 84 0"/>
+    <path d="M831 412q40-35 77-13t78-9 67 13"/>
+    <path d="M514 410q31-24 58-3t63 1"/>
+  </g>
+  <g fill="#bdc298" opacity=".6">
+    <path d="m244 224 16-28 13 28Z"/><path d="m270 228 21-38 18 38Z"/><path d="m303 231 14-25 13 25Z"/>
+    <path d="m751 234 16-29 16 29Z"/><path d="m781 236 23-42 18 42Z"/><path d="m816 236 13-25 13 25Z"/>
+    <path d="m1034 367 15-27 15 27Z"/><path d="m1062 368 20-37 17 37Z"/>
+  </g>
+  <g fill="none" stroke="#89a3a0" stroke-opacity=".55" stroke-width="3" stroke-linecap="round">
+    <path d="M457 177q13 49 0 86t20 51 13 53 32 46"/>
+    <path d="M737 201q-16 44-8 74t30 38 12 56 31 52"/>
+    <path d="M993 277q-30 35-32 64t-29 45"/>
+  </g>
+
+  <!-- Campaña ejemplificada: una zona tomada, una rebelde y la próxima misión desbloqueada. -->
+  <path d="M174 384q35-44 91-41 54 4 75 44t-17 72q-40 34-95 21-54-12-64-52-7-22 10-44Z" fill="#c6aa5a" opacity=".25" stroke="#e8cc79" stroke-width="2" stroke-dasharray="5 4"/>
+  <path d="M284 314q38-38 90-27 42 9 59 45t-7 59q-28 24-74 19-45-5-71-33t3-63Z" fill="#a95442" opacity=".2" stroke="#df7957" stroke-width="2" stroke-dasharray="4 4"/>
+  <path d="M215 428Q274 375 348 337T456 314" fill="none" stroke="#e0bc6a" stroke-width="3" stroke-dasharray="7 7" opacity=".9"/>
+  <path d="M215 428Q274 375 348 337" fill="none" stroke="#e2cb8c" stroke-width="4" opacity=".65"/>
+
+  <!-- Marcador de aterrizaje: icono distinto a los 15 niveles. -->
+  <g transform="translate(181 465)">
+    <circle r="25" fill="#202226" stroke="#e1b45b" stroke-width="2.5"/>
+    <use href="#lander"/>
+    <path d="M-15 30h30" stroke="#e1b45b" stroke-width="2"/>
+    <rect x="-52" y="35" width="104" height="22" rx="5" fill="#1d2022" stroke="#86623a"/>
+    <text x="0" y="50" text-anchor="middle" fill="#f4d98f" font-family="DejaVu Sans, sans-serif" font-size="11" font-weight="700">ATERRIZAJE</text>
+  </g>
+
+  <!-- 15 zonas: números persistentes; estado por forma + pictograma + color. -->
+  <g font-family="DejaVu Sans, sans-serif" font-weight="700" text-anchor="middle">
+    <!-- 1: tomada, borde dorado y tres estrellas. -->
+    <g transform="translate(251 397)">
+      <circle r="22" fill="#26302a" stroke="#efcf75" stroke-width="3"/>
+      <circle r="16" fill="#b99042" stroke="#f3df9e" stroke-width="1.5"/>
+      <path d="M-7 2-2 7 8-5" fill="none" stroke="#fff0bb" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <text y="39" fill="#f1d68c" font-size="11">01 · PRADERA</text>
+      <g fill="#f0d176"><use href="#star" transform="translate(-10 -30) scale(.55)"/><use href="#star" transform="translate(0 -34) scale(.65)"/><use href="#star" transform="translate(10 -30) scale(.55)"/></g>
+    </g>
+    <!-- 2: menos de tres estrellas, estandarte rebelde visible incluso sin depender del color. -->
+    <g transform="translate(347 337)">
+      <circle r="22" fill="#302621" stroke="#de805a" stroke-width="3" stroke-dasharray="4 2"/>
+      <circle r="16" fill="#8e543c" stroke="#f1b46d" stroke-width="1.5"/>
+      <text y="6" fill="#fff1da" font-size="15">02</text>
+      <use href="#flag" transform="translate(17 -16) scale(.72)"/>
+      <text y="39" fill="#f0c09b" font-size="11">02 · REBELDE</text>
+      <g fill="#f1bd70"><use href="#star" transform="translate(-5 -30) scale(.55)"/><use href="#star" transform="translate(5 -30) scale(.55)"/></g>
+    </g>
+    <!-- 3: desbloqueada y seleccionada, sin récord. -->
+    <g transform="translate(456 314)">
+      <circle r="25" fill="#28323a" stroke="#f0cb70" stroke-width="3.5"/>
+      <circle r="18" fill="#d39b43" stroke="#f5dfa2" stroke-width="1.5"/>
+      <text y="6" fill="#25231f" font-size="15">03</text>
+      <path d="M-24 26q24 12 48 0" fill="none" stroke="#f0cb70" stroke-width="2"/>
+      <text y="46" fill="#ffe4a0" font-size="11">03 · ENCRUCIJADA</text>
+    </g>
+    <!-- El resto conserva siempre sus números, pero la cerradura y el tono apagado señalan bloqueo. -->
+    <g fill="#414b4b" stroke="#222a2b" stroke-width="2">
+      <g transform="translate(560 371)"><circle r="18"/><use href="#lock"/><text y="39" fill="#a8aeaa" stroke="none" font-size="10">04</text></g>
+      <g transform="translate(663 300)"><circle r="18"/><use href="#lock"/><text y="39" fill="#a8aeaa" stroke="none" font-size="10">05</text></g>
+      <g transform="translate(752 398)"><circle r="18"/><use href="#lock"/><text y="39" fill="#a8aeaa" stroke="none" font-size="10">06</text></g>
+      <g transform="translate(851 335)"><circle r="18"/><use href="#lock"/><text y="39" fill="#a8aeaa" stroke="none" font-size="10">07</text></g>
+      <g transform="translate(953 276)"><circle r="18"/><use href="#lock"/><text y="39" fill="#a8aeaa" stroke="none" font-size="10">08</text></g>
+      <g transform="translate(1058 321)"><circle r="18"/><use href="#lock"/><text y="39" fill="#a8aeaa" stroke="none" font-size="10">09</text></g>
+      <g transform="translate(1066 407)"><circle r="18"/><use href="#lock"/><text y="39" fill="#a8aeaa" stroke="none" font-size="10">10</text></g>
+      <g transform="translate(956 448)"><circle r="18"/><use href="#lock"/><text y="39" fill="#a8aeaa" stroke="none" font-size="10">11</text></g>
+      <g transform="translate(846 466)"><circle r="18"/><use href="#lock"/><text y="39" fill="#a8aeaa" stroke="none" font-size="10">12</text></g>
+      <g transform="translate(716 467)"><circle r="18"/><use href="#lock"/><text y="39" fill="#a8aeaa" stroke="none" font-size="10">13</text></g>
+      <g transform="translate(597 455)"><circle r="18"/><use href="#lock"/><text y="39" fill="#a8aeaa" stroke="none" font-size="10">14</text></g>
+      <g transform="translate(498 421)"><circle r="18"/><use href="#lock"/><text y="39" fill="#a8aeaa" stroke="none" font-size="10">15</text></g>
+    </g>
+  </g>
+
+  <!-- Leyenda y guía de lectura: icono + texto, no solo color. -->
+  <g font-family="DejaVu Sans, sans-serif" font-size="11">
+    <rect x="1011" y="105" width="228" height="108" rx="8" fill="#1d2021" fill-opacity=".94" stroke="#8a6038" stroke-width="1.5"/>
+    <text x="1028" y="127" fill="#f0d176" font-size="12" font-weight="700">ESTADO DE LAS ZONAS</text>
+    <circle cx="1039" cy="150" r="8" fill="#b99042" stroke="#f3df9e" stroke-width="1.5"/>
+    <path d="m1035 150 3 3 5-6" fill="none" stroke="#fff0bb" stroke-width="1.5"/>
+    <text x="1055" y="154" fill="#eee9dc">Tomada · 3 estrellas</text>
+    <use href="#flag" transform="translate(1039 177) scale(.55)"/>
+    <text x="1055" y="180" fill="#eee9dc">Rebeldes · 1–2 estrellas</text>
+    <use href="#lock" transform="translate(1039 199) scale(.75)"/>
+    <text x="1055" y="202" fill="#b8bfba">Sin explorar · bloqueada</text>
+  </g>
+  <text x="38" y="110" fill="#dfd7bf" font-family="DejaVu Sans, sans-serif" font-size="12" letter-spacing="1">ATLAS MERIDIANO · CUADRANTE 04</text>
+  <text x="38" y="131" fill="#b9c4b2" font-family="DejaVu Sans, sans-serif" font-size="11">15 zonas · progreso de campaña ilustrativo</text>
+  <g transform="translate(1207 524)" font-family="DejaVu Sans, sans-serif" text-anchor="middle">
+    <circle r="19" fill="#22282b" stroke="#98a69c" stroke-width="1.5"/>
+    <path d="M0-13 4 0 0 12-4 0Z" fill="#f0d176" stroke="#2b2233" stroke-width="1.5"/>
+    <text y="-24" fill="#dfd7bf" font-size="10">N</text>
+  </g>
+
+  <!-- Ficha de la selección activa y acción principal. -->
+  <rect x="20" y="576" width="1240" height="124" rx="12" fill="url(#panel)" stroke="#8a6038" stroke-width="2"/>
+  <path d="M816 592v92" stroke="#5c4935" stroke-width="1.5"/>
+  <text x="45" y="609" fill="#f0d176" font-family="DejaVu Sans, sans-serif" font-size="12" font-weight="700" letter-spacing="1">ZONA SELECCIONADA</text>
+  <text x="45" y="642" fill="#fff0cc" font-family="DejaVu Sans, sans-serif" font-size="24" font-weight="700">03 · Encrucijada</text>
+  <text x="45" y="670" fill="#c6c9c1" font-family="DejaVu Sans, sans-serif" font-size="14">Desbloqueada · Sin récord todavía</text>
+  <text x="849" y="611" fill="#e9e2d4" font-family="DejaVu Sans, sans-serif" font-size="13">Las estrellas mantienen sus reglas.</text>
+  <text x="849" y="635" fill="#bfc2b9" font-family="DejaVu Sans, sans-serif" font-size="12">3★ tomada · 1–2★ rebelde</text>
+  <rect x="1074" y="613" width="155" height="54" rx="8" fill="#795233" stroke="#e3ac58" stroke-width="2.5"/>
+  <text x="1151" y="647" text-anchor="middle" fill="#fff0cc" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="700">Jugar</text>
+  <text x="1238" y="690" text-anchor="end" fill="#90958f" font-family="DejaVu Sans, sans-serif" font-size="9">MUESTRA ARTÍSTICA · NO ES LA INTERFAZ FINAL</text>
+</svg>

@@ -1,8 +1,9 @@
 # El cartel de entrada de un nivel (M52, RF-466): el nombre del nivel, su lugar y las líneas de la entrada,
-# con un botón «Empezar». Mismo estilo que el menú de pausa, pero NO es el menú de pausa: no dice «PAUSA» ni se
+# con un botón «Empezar» (solo en mobile; en PC lo reemplaza la indicación de clic o tecla, T429) y el suelo del
+# tema del nivel de fondo, como en su tarjeta de selección. Mismo estilo que el menú de pausa, pero NO es el menú de pausa: no dice «PAUSA» ni se
 # abre con `P`. Solo muestra y avisa (`closed`); quien lo abre (`Game`) decide qué pasa con la partida (P6).
 #
-# Se omite con un toque o clic en cualquier parte, el botón «Empezar», `Espacio`, `Enter` o `Esc`. Todo se
+# Se omite con un toque o clic en cualquier parte, el botón «Empezar» (mobile) o cualquier tecla. Todo se
 # atiende en `_input`, antes que el resto del juego: así `Esc` no abre el menú de pausa y el clic que lo cierra
 # no llega a la construcción (el clic se traga al apretar y el cartel se cierra al soltar; en el celular el
 # toque llega como un clic emulado).
@@ -17,6 +18,15 @@ signal closed
 @onready var _place: Label = %Place
 @onready var _lines: Label = %Lines
 @onready var _start_button: Button = %StartButton
+@onready var _hint: Label = %Hint
+@onready var _backdrop: TextureRect = %ThemeBackdrop
+@onready var _tint: ColorRect = %ThemeTint
+
+const HINT_MOBILE: String = "Tocá en cualquier parte para empezar."
+const HINT_DESKTOP: String = "Hacé clic en cualquier lugar, o apretá cualquier tecla, para empezar."
+## Cuánto se deja ver el suelo del tema detrás del texto (que se siga leyendo bien).
+const BACKDROP_ALPHA: float = 0.30
+const TINT_ALPHA: float = 0.35
 
 
 func _ready() -> void:
@@ -25,14 +35,20 @@ func _ready() -> void:
 	Audio.add_click_sounds(self)
 
 
-## Lo abre. `title` es el nombre del nivel; `place`, su lugar ("" = sin subtítulo); `text`, las líneas de la entrada.
-func open(title: String, place: String, text: String) -> void:
+## Lo abre. `title` es el nombre del nivel; `place`, su lugar ("" = sin subtítulo); `text`, las líneas de la entrada;
+## `theme_id`, el tema del mapa del nivel (decide el suelo y el color del fondo).
+func open(title: String, place: String, text: String, theme_id: StringName = MapThemes.DEFAULT) -> void:
 	_title.text = title
 	_place.text = place
 	_place.visible = place != ""
 	_lines.text = text
+	_apply_theme(theme_id)
+	var mobile: bool = UiMode.is_mobile()
+	_start_button.visible = mobile  # en PC la indicación de abajo reemplaza al botón redundante
+	_hint.text = HINT_MOBILE if mobile else HINT_DESKTOP
 	visible = true
-	_start_button.grab_focus()
+	if mobile:
+		_start_button.grab_focus()
 
 
 func is_open() -> bool:
@@ -47,6 +63,14 @@ func close() -> void:
 	closed.emit()
 
 
+## El suelo y el tinte del tema; uno desconocido usa la pradera (MapThemes).
+func _apply_theme(theme_id: StringName) -> void:
+	var edge: Color = MapThemes.palette(theme_id)["edge"]
+	_backdrop.texture = MapThemes.ground_texture(theme_id)
+	_backdrop.modulate = Color(1, 1, 1, BACKDROP_ALPHA)
+	_tint.color = Color(edge.r, edge.g, edge.b, TINT_ALPHA)
+
+
 ## El texto de las líneas que se ve (para los tests).
 func lines_text() -> String:
 	return _lines.text
@@ -57,7 +81,7 @@ func _input(event: InputEvent) -> void:
 		return
 	var key := event as InputEventKey
 	if key != null and key.pressed:
-		if not key.echo and (key.keycode in [KEY_SPACE, KEY_ENTER, KEY_KP_ENTER] or event.is_action_pressed("cancel")):
+		if not key.echo:
 			close()
 		get_viewport().set_input_as_handled()  # con el cartel abierto las teclas no llegan a la partida
 		return

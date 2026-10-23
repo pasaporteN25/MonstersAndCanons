@@ -18,6 +18,9 @@ const ATLAS_OF: Dictionary = {
 var theme: StringName = MapThemes.DEFAULT
 var legend_cells: Dictionary = {}
 var removable_cells: Array[Vector2i] = []
+## RF-657: el poste de banderines del mapa muestra la variante del jugador (solo Game lo decide).
+var post_conquered: bool = false
+var banner_recipe: BannerRecipe
 ## El mapa de letras del que salió: despejar un removible lo actualiza (RF-400).
 var grid: MapGrid
 
@@ -27,12 +30,14 @@ var grid: MapGrid
 
 ## M7 (spec §7.8): arma el mapa a partir del mapa de letras (que tiene que ser válido):
 ## el suelo, un camino terrestre y uno aéreo por entrada, y la decoración.
-static func build(grid: MapGrid, map_theme: StringName = MapThemes.DEFAULT) -> Level:
+static func build(grid: MapGrid, map_theme: StringName = MapThemes.DEFAULT, conquered_post: bool = false, recipe: BannerRecipe = null) -> Level:
 	assert(grid.is_valid(), "Level.build necesita un mapa válido")
 	var level := Level.new()
 	level.name = "Level"
 	level.theme = map_theme
 	level.grid = grid
+	level.post_conquered = conquered_post
+	level.banner_recipe = recipe
 	level.legend_cells = grid.legend_cells
 	level.removable_cells = grid.removable_cells
 	level.add_child(make_ground(grid))
@@ -109,7 +114,7 @@ static func _center(cell: Vector2i) -> Vector2:
 func _ready() -> void:
 	var decor := get_node_or_null("Decor") as LevelDecor
 	if decor != null:
-		decor.paint(ground, inner_exit_cells(), theme, legend_cells, removable_cells)
+		decor.paint(ground, inner_exit_cells(), theme, legend_cells, removable_cells, post_conquered, banner_recipe)
 
 
 ## RF-400 y RF-408: el removible de `cell` queda despejado: pasto construible. No recalcula recorridos.

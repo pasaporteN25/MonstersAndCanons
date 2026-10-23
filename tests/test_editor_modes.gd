@@ -20,7 +20,7 @@ func before_each() -> void:
 	editor.maps_dir = MAPS
 	editor.modes_dir = MODES
 	editor.official_modes_dir = OFFICIAL
-	editor.left.disconnect(GameFlow.go_to_main_menu)
+	editor.left.disconnect(GameFlow.go_to_tools)
 	editor.test_requested.disconnect(GameFlow.play_test)
 	dialog = editor.dialog()
 

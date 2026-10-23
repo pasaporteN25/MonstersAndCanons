@@ -2,8 +2,35 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Editor de banderines para el nivel 6 *(T443, 2026-10-23)*
+
+Desde **Herramientas → Editor de banderines** se puede elegir una de cuatro paletas y cuatro emblemas. La vista grande y la de 34 px se actualizan al editar; «Aplicar» guarda el diseño por separado del progreso, y «Cancelar» o Escape descartan los cambios. «Restaurar» selecciona el diseño inicial, que se guarda solo al aplicar. El poste del jugador en el nivel 6 usa la elección al volver a entrar después de ganar; el banderín enemigo y los otros modos siguen con sus recursos fijos.
+
+## Herramientas para los editores *(T441, 2026-10-22)*
+
+El acceso «Editor de mapas» del menú ahora se llama **Herramientas**. Ahí podés abrir el editor de mapas y el editor de banderines. Al salir del editor de mapas volvés al hub, y «Probar» sigue regresando al borrador.
+
+## Banderines de conquista y decoración del bosque *(T437, 2026-10-21)*
+
+Se rehacen el tronco y el helecho con el acabado dimensional de la decoración actual. En el nivel 6, el poste muestra banderines enemigos hasta que el nivel tenga una victoria guardada; al volver a entrar después de ganarlo, muestra los del jugador. No depende de las estrellas y no cambia el progreso. T443 agrega el catálogo de paletas y emblemas al banderín del jugador.
+## La entrada al nivel en PC, con el paisaje del nivel *(T429, 2026-10-21)*
+
+En PC, el cartel que aparece al entrar a un nivel ya no tiene el botón «Empezar»: dice **«Hacé clic en cualquier lugar, o apretá cualquier tecla, para empezar.»** y sigue arrancando una sola vez, sin tocar la pausa ni la cuenta atrás. Detrás del texto se ve, tenue, el suelo del paisaje de ese nivel (pradera, desierto, nieve, etc.). El celular no cambia: conserva el botón y su texto.
+
+## Mapa planetario como segunda vista de la campaña en PC *(T428, 2026-10-21)*
+
+En PC, abajo del selector de campaña hay un interruptor **Vista: Tarjetas / Mapa**. El mapa dibuja Cántaro con el aterrizaje y las 15 zonas, con el estilo de la muestra que aprobó Lucas. Cada zona muestra su estado: **bloqueada** (candado), **disponible**, **presencia rebelde** (bandera, victoria con 1 o 2 estrellas) y **zona tomada** (tilde, 3 estrellas); no dependen solo del color. Se recorre con el mouse o con las flechas, y Enter o «Jugar» abren el nivel; una zona bloqueada se puede mirar pero no abrir. Lo elegido se recuerda en Opciones del guardado; los guardados viejos abren con tarjetas. Cambiar de vista no toca el progreso, los desbloqueos ni las estrellas, y el celular no cambia.
+
+## Quince niveles a la vista en desktop *(T426, 2026-10-21)*
+
+El selector de campaña ahora muestra los **15 niveles en tres filas**, sin desplazamiento, en PC. Se quitó el conteo de oleadas y las torres disponibles aparecen integradas en la tarjeta, sin cajas individuales. Los nombres, estados, desbloqueos, récords, estrellas y teclas se conservan; mobile mantiene su presentación anterior. Cada tarjeta de PC tiene un fondo temático muy tenue: el suelo del paisaje real de ese nivel (pradera, desierto, nieve, etc.), con un velo oscuro encima para que el nombre, las estrellas y las torres se sigan leyendo; es el mismo lenguaje que la entrada al nivel. Las tarjetas de mobile, de la comunidad y de los modos no cambian.
+
 ## Consejo en la derrota
 - Podés apagar «Consejos en la derrota» desde Opciones, tanto en el menú principal como durante una partida. Se guarda la preferencia y, por omisión, los consejos siguen prendidos.
+
+## Panel de torres más despejado en PC
+- El panel muestra el daño actual junto al que dará la mejora y dice a qué nivel sube. La card de tres colores identifica el nivel actual; se sacó la descripción repetida.
+- El fondo es más transparente y las áreas sin botones dejan pasar clics al mapa. Si una torre queda debajo de un botón, podés ocultar el panel con «×», elegirla y el panel vuelve a aparecer.
 
 ## Pausa que bloquea el carrito, «Ver todo» con tecla y «Mejorar» con antes → después *(T401 a T404, 2026-10-20)*
 

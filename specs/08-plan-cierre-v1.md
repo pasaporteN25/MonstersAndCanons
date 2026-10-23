@@ -7,6 +7,8 @@ Fecha: 2026-10-07. Lo preparó Claude (Opus 5.5) a pedido de Lucas, a partir de 
 > **Qué no es:** no es la spec. Los `RF` y las `D` los escriben las tareas de spec (📜) después de que Lucas responda el cuestionario [09-decisiones-pendientes-v1.md](09-decisiones-pendientes-v1.md). Las fichas de mapa de la sección 5 son **propuestas de Claude**: no están aprobadas.
 >
 > **Fuera de este plan (Lucas, 2026-10-07):** M&C 3D (documento 06), M&C 2 y Épocas. Tampoco se adelanta nada técnico pensado solo para el 3D, como separar la simulación de la vista.
+>
+> **Estado vigente (2026-10-23, auditoría T444):** en las fases 0 a 6 están hechas las tareas de spec, código y datos, salvo el resto de T235; siguen abiertas las de arte con compuerta (T216, T218 a T221 y T233) y la partida T226. En la fase 7 están hechas T236 y T237, y la intro (fase 8) está hecha. Lo que falta para cerrar la V1, ordenado y con qué falta exactamente, está al principio de [`03-tareas.md`](03-tareas.md#qué-falta-para-cerrar-la-v1--vista-de-la-auditoría-t444-2026-10-23): las partidas de Lucas (T280, T226, T283 y T238), T266, T267 y T268 antes del reenvío, el resto de T235, el arte con compuerta y la publicación (T239). Las secciones 2, 6 y 7 conservan el plan original del 2026-10-07, con algunas marcas ✅ y el «Orden vigente» de §7 agregados; el estado de cada tarea manda en el tablero.
 
 ---
 
@@ -211,14 +213,14 @@ Cada ficha detallada se completa en la tarea de cada nivel con lo que pide el 07
 | [T229](tareas/T229-niveles-11-14.md) | Nivel 11 (y, con la misma ficha, 12, 13 y 14 como T230, T231 y T232) | Sonnet medio | T217, T227 | Mediano c/u |
 | [T233](tareas/T233-arte-final.md) | 🎨 Central de energía, abastecimiento e imagen del final | **Codex** | T227 | Mediano |
 | [T243](tareas/T243-spec-jefe-supremo.md) | 📜 🚦 Spec del jefe supremo del 15 (función, contramedidas, habilidad y textos) | Sonnet alto + **Lucas** | T227 | Chico |
-| [T244](tareas/T244-arte-jefe-supremo.md) | 🎨 Arte del jefe supremo | **Codex** | T243 | Mediano |
+| [T244](tareas/T244-arte-jefe-supremo.md) | ✅ 🎨 Arte del jefe supremo (aprobado por Lucas el 2026-10-16; cerrada en T444) | **Codex** | T243 | Mediano |
 | [T234](tareas/T234-nivel-15.md) | Nivel 15 y epílogo | Sonnet alto | T228, T232, T243 (T233 y T244 para el arte final) | Mediano |
-| [T235](tareas/T235-asedio-y-modos.md) | Asedio con 15 mapas y pulido de modos | Sonnet bajo · *apto Qwen* (solo datos) | T234 | Chico |
+| [T235](tareas/T235-asedio-y-modos.md) | Asedio con 15 mapas y pulido de modos (**los 15 mapas los hizo T258**; quedan solapas y récords de modos, que piden un RF nuevo) | Sonnet bajo · *apto Qwen* (solo datos) | T234 | Chico |
 | T252 | 📜 Spec de La Cuadrilla (M55, RF-485 a RF-491, D-094): los Rateros y el Cargador, y en qué niveles entran (medido con el bot). Sin ficha propia: salió del pedido de Lucas del 2026-10-10 sobre el informe de T251 | Sonnet alto | T251 | Chico |
 | [T253](tareas/T253-cuadrilla-datos-y-reajuste.md) | Datos, oleadas y reajuste de La Cuadrilla (niveles 7, 10, 13 y 14), artículo de la Wiki y tests | Sonnet medio | T252 + el OK de Lucas a P1 de M55; **antes de T238** | Mediano |
-| T257 | 🎨 Arte de La Cuadrilla (Ratero y Cargador, con ciclo de caminata); **no bloquea a T253** | **Codex** | T252 | Mediano |
+| T257 | ✅ 🎨 Arte de La Cuadrilla (Ratero y Cargador, con ciclo de caminata); **no bloquea a T253**. Rehecho en T285 e integrado en T286 con Ratero B y Cargador A, elegidos por Lucas el 2026-10-16; cerrada en T444 | **Codex** | T252 | Mediano |
 | T256 | 📜 Spec de Asedio con porcentaje de vida por mapa (M56, RF-492 a RF-496, D-095): los 15 mapas, 115 % global y una tabla opcional por id de mapa (medida en T255). Sin ficha propia: salió del pedido de Lucas del 2026-10-10 sobre el informe de T255 | Sonnet alto | T255 | Chico |
-| [T258](tareas/T258-asedio-porcentajes-por-mapa.md) | ✅ **Hecha (2026-10-10).** Asedio con los 15 mapas y porcentaje de vida por mapa: la clave en `ModePacks`, los datos, las opciones del bot y los tests. **Resuelve los mapas de T235.** Queda **una fila a decidir por Lucas: el mapa 7 con la Cuadrilla** (ni 101 % da 3 vidas en las cinco semillas; ver el Resultado en `03-tareas.md`) | Sonnet medio | T256; **después de T253** (los mapas 7, 10, 13 y 14); **antes de T238** | Mediano |
+| [T258](tareas/T258-asedio-porcentajes-por-mapa.md) | ✅ **Hecha (2026-10-10).** Asedio con los 15 mapas y porcentaje de vida por mapa: la clave en `ModePacks`, los datos, las opciones del bot y los tests. **Resuelve los mapas de T235.** Queda **una fila a decidir por Lucas: el mapa 7 con la Cuadrilla** (ni 101 % da 3 vidas en las cinco semillas; ver el Resultado en `03-tareas.md`). *Dato posterior (T444): con el nivel 7 ajustado, T279 midió Asedio 7 al 101 %: 5 de 5 con 6 vidas; falta que Lucas lo confirme* | Sonnet medio | T256; **después de T253** (los mapas 7, 10, 13 y 14); **antes de T238** | Mediano |
 
 ### Fase 7 · Candidato de entrega
 | T | Tarea | Ejecutor | Depende de | Tamaño |
@@ -231,9 +233,9 @@ Cada ficha detallada se completa en la tarea de cada nivel con lo que pide el 07
 ### Fase 8 · Intro (última)
 | T | Tarea | Ejecutor | Depende de | Tamaño |
 |---|---|---|---|---|
-| [T240](tareas/T240-guion-intro.md) | 🚦 G6 · Guion de la intro (láminas) **· escrito 2026-10-11, falta el OK de Lucas** (`intro/guion.md`, M57, RF-497 a RF-501, D-096) | Sonnet alto + **Lucas** | T238 | Chico |
-| [T241](tareas/T241-arte-intro.md) | 🎨 Láminas ilustradas con aspecto dibujado a mano | **Codex** | T240 | Mediano |
-| [T242](tareas/T242-intro-integracion.md) | Intro: reproducir, omitir y volver a ver | Sonnet medio | T241 | Chico |
+| [T240](tareas/T240-guion-intro.md) | ✅ 🚦 G6 · Guion de la intro (láminas) **· aprobado por Lucas el 2026-10-11** (`intro/guion.md`, M57, RF-497 a RF-501, D-096) | Sonnet alto + **Lucas** | T238 | Chico |
+| [T241](tareas/T241-arte-intro.md) | ✅ 🎨 Láminas ilustradas con aspecto dibujado a mano (aprobadas por Lucas el 2026-10-11) | **Codex** | T240 | Mediano |
+| [T242](tareas/T242-intro-integracion.md) | ✅ Intro: reproducir, omitir y volver a ver | Sonnet medio | T241 | Chico |
 
 **Fuera del mínimo** (se anotan en §13 y van después de la entrega, salvo que Lucas diga otra cosa en el cuestionario):
 - Lanzamisiles (Q-28). (El líder nuevo del 15 **sí entra** en la V1 por decisión de Lucas, Q-32: T243 y T244.)
@@ -259,6 +261,15 @@ T251 ─ T252 ─ T253 (antes de T238) ; T252 ─ T257 🎨 (en paralelo, sin bl
 T255 ─ T256 ─ T258 (después de T253 y antes de T238; los mapas de T235)
 T238 ─ T240 🚦G6 ─ T241 🎨 ─ T242
 ```
+
+**Orden vigente (2026-10-23, auditoría T444; reemplaza al diagrama para lo que falta):**
+1. Una build de `main` y una sesión de Lucas con T280 (6→7→8 y variantes), T226 (6 a 10) y T283 (el 9 con el Mortero): cierra T266 o reabre el 2 o el 7, y decide RF-525.
+2. Lucas revisa el arte: el resultado integrado de T277 (para T267), el PR #22 de M71 ya sincronizado con `main` (T362 a T369) y cuáles de T216, T218 a T221 y T233 pide para la 1.0.
+3. Los agentes hacen lo que salga de 1 y 2, y la spec del resto de T235 si Lucas la quiere en la 1.0.
+4. T268: el archivo real del tester, Windows, la build de envío y la lista de salida de T375.
+5. T238 🚦 G5 en PC y en celular; después, T239.
+
+T128 queda diferida, fuera de la V1 (Q-06).
 
 - **Ya pueden arrancar, sin esperar a Lucas:** T202 (es solo un informe).
 - **Codex trabaja en paralelo** a la fase 3 en cuanto T205 fija los estados que hay que dibujar.
@@ -301,3 +312,22 @@ La solicitud nueva queda en [B-45 a B-49](01-spec.md#pedidos-nuevos-de-lucas--es
 3. **Después de T426:** Gemini hace T429 y T430 en ramas separadas; Claude integra T428 cuando las bases están aprobadas. Evitar que dos ramas modifiquen simultáneamente las escenas compartidas del selector.
 4. **Opencode con modelo local** queda limitado a tareas rutinarias de Git (revisión simple, commit o push bajo instrucciones), nunca para diseño, spec, balance o refactors. Gemini, Claude y Codex son los ejecutores del trabajo sustantivo.
 5. Cada tarea tiene su propio worktree, rama `feature/`, commit y PR. La integración permanece a cargo de Lucas; ningún agente mergea.
+## 10. Decoración de campaña y posible editor de estandartes (2026-10-21)
+
+B-50 se implementa en T437: rehacer tronco, helecho y poste en el acabado dimensional de T277, y cambiar la variante del poste del nivel 6 según SaveManager.is_completed() de la campaña. La muestra queda en el PR para que Lucas la revise; D-183 está propuesta, no se declara aprobación artística. No se agrega progreso ni se exige una cantidad concreta de estrellas.
+
+B-51 queda como análisis futuro. Opus recomienda alcance y decisiones para un editor cosmético acotado; no se construye el editor hasta que Lucas decida el MVP. La skill genérica de Godot se mantiene en el repositorio Godot-Skills y en un PR independiente.
+
+## 11. Hub de herramientas y editor de banderines (M74; pedido de Lucas, 2026-10-22)
+
+| T | Entrega | Ejecutor previsto | Depende de | Tamaño |
+|---|---|---|---|---|
+| T439 | ✅ Spec, decisiones, plan y fichas para editor de banderines + hub (PR #41) | Codex · documental, Opus ya analizó | Autorización de Lucas | Chico |
+| T440 | ✅ Muestra visual del catálogo cerrado a 220/34 px (PR #44; aprobada por Lucas) | Codex · arte | T439; aprobación antes de arte final | Chico |
+| T441 | ✅ Hub Herramientas y continuidad del editor de mapas (PR #42) | Sonnet · UI/flujo | T439 | Chico |
+| T442 | ✅ Catálogo, receta validada y persistencia aislada (PR #43) | Sonnet · lógica | T439 | Mediano |
+| T443 | ✅ UI del editor, preview y aplicación al poste del nivel 6 (PR #45) | Sonnet · integración; revisión Codex | T440 aprobada, T441 y T442 | Mediano |
+
+**Estado (2026-10-23, auditoría T444):** M74 está completo e integrado en `main` (`c120ac3`). Fuera de su alcance quedan el celular, el mapa planetario, el texto libre y compartir recetas.
+
+**Orden:** T439 define los contratos. T441 y T442 pueden implementarse en ramas independientes desde su base especificada. T440 puede preparar muestras en paralelo; T443 espera aprobación visual de Lucas y las dos piezas funcionales. Cada tarea conserva su propia rama `feature/`, commit y PR a `main`; ningún agente mergea. Opus ya completó el análisis T438. Claude Sonnet implementa UI/lógica, Gemini puede hacer revisión independiente cuando esté disponible, Codex revisa arte, pruebas e integración. Opencode local se limita a Git rutinario.

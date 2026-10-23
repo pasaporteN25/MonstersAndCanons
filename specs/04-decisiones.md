@@ -1532,3 +1532,69 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Alternativas descartadas:** quitar los consejos hasta tener evidencia de eficacia; permitir solo ocultar el texto mientras se sigue procesando cada derrota; pedir una confirmación en cada partida.
 - **Qué cambia:** RF-630/RF-644, `SaveManager`, `OptionsMenu`, `Game` y sus tests. No sube `SAVE_VERSION`.
 - **Relación con D-173:** esta decisión reemplaza la recomendación de no ofrecer la opción; queda registrada para conservar el motivo original.
+
+## D-178 · El selector de niveles desktop tiene dos estilos con una preferencia de interfaz
+- **Fecha:** 2026-10-21 · **Estado:** decidida · **Decidió:** Lucas.
+- **Qué:** conservar el selector de tarjetas rediseñado y sumar el mapa planetario 2D como estilo alternativo. La elección se guarda en `settings`; un guardado anterior usa tarjetas.
+- **Por qué:** Lucas pidió poder elegir el selector actual mejorado o el mapa; la preferencia no forma parte del progreso de campaña.
+- **Alternativas descartadas:** reemplazar el selector actual; persistir el modo en los datos de campaña; cambiar el modo móvil automáticamente.
+- **Qué cambia:** RF-645, selector desktop y preferencia de interfaz; no cambia `SAVE_VERSION` ni desbloqueos.
+
+## D-179 · Las regiones visualizan el resultado vigente, sin crear progresión nueva
+- **Fecha:** 2026-10-21 · **Estado:** decidida · **Decidió:** Lucas.
+- **Qué:** tres estrellas representan región tomada; una o dos dejan presencia rebelde. Bloqueados y niveles sin victoria tienen estados propios. El aterrizaje es el origen visual fijo del recorrido.
+- **Por qué:** representa «ganar la zona» sin confundirlo con un sistema de campaña adicional.
+- **Alternativas descartadas:** guardar regiones, cambiar el desbloqueo, hacer geografía jugable o basar conquista en otra estadística.
+- **Qué cambia:** RF-647/RF-648 y la presentación del mapa; no cambia `RF-93`, `RF-111` ni el guardado de progreso.
+
+## D-180 · Las mejoras desktop preservan las reglas de interacción y separan mobile
+- **Fecha:** 2026-10-21 · **Estado:** decidida · **Decidió:** Lucas.
+- **Qué:** selector, panel de torre y tarjeta de entrada se pulen para desktop. Mouse y teclado deben conservar acceso; el flujo táctil sigue como está. Un panel transparente no se considera por sí solo una solución al solapamiento de clics.
+- **Por qué:** el pedido de Lucas es explícitamente desktop y la opacidad visual no garantiza que los clics lleguen al mapa.
+- **Alternativas descartadas:** aplicar el rediseño a mobile por semejanza; cambiar la venta/mejora; resolver el clic debajo solo con alfa.
+- **Qué cambia:** RF-646 y RF-649 a RF-654, tareas T426 y T429–T430.
+## D-181 · El poste de nivel 6 refleja si la campaña ya ganó ese nivel
+
+- **Fecha:** 2026-10-21 · **Estado:** decidida · **Decidió:** Lucas.
+- **Qué:** el poste de nivel 6 usa los estandartes enemigos mientras el nivel no figure completado en el guardado, y los del jugador tras cualquier victoria registrada, sin umbral de estrellas.
+- **Por qué:** da una señal visual de conquista en el propio mapa del nivel.
+- **Alternativas descartadas:** exigir tres estrellas o agregar una marca de progreso nueva.
+- **Qué cambia:** RF-656; es solo presentación, no modifica progreso, guardado ni balance.
+
+## D-182 · El estado de campaña se pasa explícitamente al mapa
+
+- **Fecha:** 2026-10-21 · **Estado:** decidida · **Decidió:** Codex a partir del alcance de D-181.
+- **Qué:** Game obtiene SaveManager.is_completed() solo al cargar un nivel de campaña y pasa un booleano al mapa; modos, comunidad, editor, pruebas y escenas sueltas usan el estado de reserva enemigo.
+- **Por qué:** mantiene la decoración desacoplada del autoload y evita interpretar el ID de un mapa ajeno como campaña.
+- **Qué cambia:** RF-657; no cambia la persistencia ni las reglas del editor.
+
+## D-183 · Las piezas nuevas siguen la decoración dimensional vigente
+
+- **Fecha:** 2026-10-21 · **Estado:** propuesta para revisión de Lucas.
+- **Qué:** rehacer tronco, helecho y poste en PNG RGBA, con el acabado volumétrico de T277; el poste tiene variantes enemiga y del jugador con la misma composición.
+- **Por qué:** las propuestas planas previas se alejaban del estilo vigente.
+- **Qué cambia:** RF-655 y RF-658. Las muestras y capturas se entregan para revisión antes de considerar el arte definitivo.
+
+## D-184 · Los dos editores se agrupan bajo Herramientas
+
+- **Fecha:** 2026-10-22 · **Estado:** decidida · **Decidió:** Lucas.
+- **Qué:** reemplazar el acceso «Editor de mapas» del menú por «Herramientas», un hub con entradas independientes a «Editor de mapas» y «Editor de banderines».
+- **Por qué:** Lucas pidió un editor general junto con el editor de mapas y avanzar con la propuesta.
+- **Alternativas descartadas:** agregar un botón más al menú principal; integrar edición de banderines dentro del editor de mapas.
+- **Qué cambia:** RF-660 y RF-661; el editor de mapas conserva su escena y su flujo de borrador.
+
+## D-185 · El editor de banderines empieza en desktop y deja fija la facción enemiga
+
+- **Fecha:** 2026-10-22 · **Estado:** decidida · **Decidió:** Lucas al autorizar avanzar con la propuesta de MVP.
+- **Qué:** primera versión desktop; personaliza solo el emblema del jugador usado en el poste del nivel 6 ganado. El enemigo mantiene la variante fija. Sin editor mobile en esta entrega.
+- **Por qué:** permite cerrar un alcance chico que aprovecha el poste de conquista implementado en T437, sin abrir decisiones de canon o controles táctiles.
+- **Alternativas descartadas:** editar ambos banderines, aplicar el diseño a todo el mapa planetario, o cubrir mobile en el mismo cambio.
+- **Qué cambia:** RF-662 a RF-665; no cambia progreso ni disponibilidad del editor de mapas.
+
+## D-186 · La receta cosmética vive fuera del guardado de campaña
+
+- **Fecha:** 2026-10-22 · **Estado:** decidida para el MVP · **Decidió:** Codex a partir de la recomendación de T438 y la autorización de Lucas.
+- **Qué:** guardar ids estables de una receta cosmética en un archivo `user://` propio. Si falta o está dañado, usar los valores predeterminados. La receta no entra en `SaveManager`, `settings` ni `SAVE_VERSION`.
+- **Por qué:** es una preferencia visual independiente del progreso y un archivo inválido no debe impedir jugar.
+- **Alternativas descartadas:** ampliar el guardado de campaña o persistir una imagen generada por usuario.
+- **Qué cambia:** RF-664 y las tareas T442–T443.

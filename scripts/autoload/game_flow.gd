@@ -9,6 +9,8 @@ const GAME_SCENE: String = "res://scenes/game/game.tscn"
 const RECORDS_SCENE: String = "res://scenes/ui/records_screen.tscn"
 const WIKI_SCENE: String = "res://scenes/ui/wiki_screen.tscn"
 const EDITOR_SCENE: String = "res://scenes/editor/map_editor.tscn"
+const TOOLS_SCENE: String = "res://scenes/ui/tools_hub.tscn"
+const BANNER_EDITOR_SCENE: String = "res://scenes/editor/banner_editor.tscn"
 ## RF-581 (M64): la pantalla de carga. Son valores de interfaz: el fondo es el de los menús y el dorado, el de los títulos.
 const LOADING_THEME: Theme = preload("res://assets/ui/menu_theme.tres")
 const LOADING_MIN_SECONDS: float = 0.4
@@ -400,6 +402,28 @@ func go_to_editor() -> void:
 	current_community = null
 	_clear_mode()
 	_change_scene(EDITOR_SCENE)
+
+
+## T441 (RF-660): el hub «Herramientas». A él lleva el menú y a él vuelve el editor al salir.
+func go_to_tools() -> void:
+	if is_changing():
+		return  # RF-582: con un cambio en curso, otro toque no hace nada
+	current_index = -1
+	test_level = null
+	current_community = null
+	_clear_mode()
+	_change_scene(TOOLS_SCENE)
+
+
+## T443: editor cosmético independiente del borrador de mapas y del guardado de campaña.
+func go_to_banner_editor() -> void:
+	if is_changing():
+		return
+	current_index = -1
+	test_level = null
+	current_community = null
+	_clear_mode()
+	_change_scene(BANNER_EDITOR_SCENE)
 
 
 ## RF-195: la pantalla de récords.
