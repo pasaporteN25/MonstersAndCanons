@@ -2584,3 +2584,8 @@ El alcance de T425 a T432 es desktop. Mobile continúa por su propia experiencia
   **Refs:** RF-663 a RF-665, D-185. **Depende de:** T440 aprobado por Lucas, T441 y T442.
   **Hecho cuando:** UI desktop permite preview grande/34 px, aplicar, cancelar/Escape y restaurar; Game pasa contexto explícito y solo el poste del nivel 6 ganado muestra la receta del jugador. Enemigo y modos ajenos mantienen la variante fija. Capturas, tests focales y suite completa; resultado informa límites de prueba física.
   **Resultado (2026-10-23):** editor desktop en Herramientas con receta de borrador, guardar/cancelar/restaurar y 16 variantes en una atlas; solo la campaña completada del nivel 6 carga la receta. El resto conserva el poste fijo. Capturas reales Linux desktop a 1280×720 y 1920×1080, más poste a 34 px en el mapa del nivel 6, en `art/t443-banderines/`. GUT completo: **2224/2224 tests, 24150 aserciones**; tests focales: **30/30**. Godot 4.7.2 importó el proyecto; no se probó en celular físico ni se modificaron layouts móviles.
+
+- [ ] **T454 · `[mobile]` · Re-auditoría mobile sobre `main` y prueba en dispositivo real (ficha, 2026-10-23).**
+  **Refs:** T262–T265, T270–T276, T287–T292, T364, T369, T238, `specs/tareas/T454-reauditoria-mobile.md`.
+  **Hecho cuando:** la re-auditoría (fase 1) está en `specs/tareas/informes/T454-reauditoria-mobile.md`, Lucas completó K1 a K22 en un celular real (fase 2) y la medición en PC (fase 3) registra resolución, hardware, carga del sistema y build.
+  **Avance (2026-10-23):** solo la ficha. **Sin celular conectado (`adb devices` vacío), sin build generada, sin mediciones y sin correr Godot.** Nada se da por probado en teléfono; T364, T369 y T238 siguen abiertas.
