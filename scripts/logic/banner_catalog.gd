@@ -2,7 +2,7 @@ class_name BannerCatalog
 extends RefCounted
 ## RF-662: catálogo cerrado de paletas y emblemas abstractos para el banderín del jugador.
 ## Los ids son estables (se guardan en disco): no se renombran ni se reusan; solo se agregan.
-## Las etiquetas son para la interfaz; el arte de cada combinación lo entrega T440.
+## Las etiquetas son para la interfaz; los sprites cerrados se resuelven en MapDrawings.
 
 const DEFAULT_PALETTE: String = "meridiana"
 const DEFAULT_EMBLEM: String = "chevron"

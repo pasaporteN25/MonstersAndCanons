@@ -58,8 +58,8 @@ func uses_resources() -> bool:
 
 ## El mapa listo para agregar a la escena (un `Level`), armado con las filas de letras.
 ## `post_conquered`: contexto explícito de campaña para el poste de banderines (RF-657); por defecto, enemigo.
-func build_map(post_conquered: bool = false) -> Level:
-	return Level.build(MapGrid.parse(map_rows, legend), theme, post_conquered)
+func build_map(post_conquered: bool = false, banner_recipe: BannerRecipe = null) -> Level:
+	return Level.build(MapGrid.parse(map_rows, legend), theme, post_conquered, banner_recipe)
 
 
 ## El % de vida por oleada que rige en este nivel.

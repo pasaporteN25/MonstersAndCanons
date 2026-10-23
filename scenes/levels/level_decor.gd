@@ -16,6 +16,7 @@ var _theme: StringName = MapThemes.DEFAULT
 var _legend_cells: Dictionary = {}  # casilla → nombre del dibujo (RF-262)
 var _removable_cells: Array[Vector2i] = []
 var _post_conquered: bool = false  # RF-657: lo decide quien arma el mapa; esta clase no lee el guardado
+var _banner_recipe: BannerRecipe
 var _palette: Dictionary = MapThemes.palette(MapThemes.DEFAULT)
 
 
@@ -23,13 +24,14 @@ var _palette: Dictionary = MapThemes.palette(MapThemes.DEFAULT)
 ## `exit_cells`: salidas dentro del mapa, donde se dibuja una puerta (RF-06). `theme`: el paisaje (RF-260).
 ## `legend_cells`: los dibujos que pidió la leyenda del nivel, casilla por casilla (RF-262).
 ## `post_conquered`: true si el poste de banderines muestra la variante del jugador (RF-656, RF-657).
-func paint(ground: TileMapLayer, exit_cells: Array[Vector2i] = [], theme: StringName = MapThemes.DEFAULT, legend_cells: Dictionary = {}, removable_cells: Array[Vector2i] = [], post_conquered: bool = false) -> void:
+func paint(ground: TileMapLayer, exit_cells: Array[Vector2i] = [], theme: StringName = MapThemes.DEFAULT, legend_cells: Dictionary = {}, removable_cells: Array[Vector2i] = [], post_conquered: bool = false, banner_recipe: BannerRecipe = null) -> void:
 	_ground = ground
 	_exit_cells = exit_cells
 	_theme = theme
 	_legend_cells = legend_cells
 	_removable_cells = removable_cells
 	_post_conquered = post_conquered
+	_banner_recipe = banner_recipe
 	_palette = MapThemes.palette(theme)
 	position = ground.position
 	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS  # D-023
@@ -114,7 +116,7 @@ func object_texture(cell: Vector2i, drawing: String) -> Texture2D:
 	if drawing == "estatua":
 		return MapDrawings.statue_texture(cell, _theme)
 	if drawing == MapDrawings.POST_DRAWING:
-		return MapDrawings.post_texture(_post_conquered)
+		return MapDrawings.post_texture(_post_conquered, _banner_recipe)
 	var state: ObstacleField.State = ObstacleField.State.DISABLED if _field == null else _field.state_of(cell)
 	return MapDrawings.state_texture(drawing, state)
 

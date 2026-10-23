@@ -5,6 +5,7 @@ extends GutTest
 const HUB_SCENE: PackedScene = preload("res://scenes/ui/tools_hub.tscn")
 const MENU_SCENE: PackedScene = preload("res://scenes/ui/main_menu.tscn")
 const EDITOR_SCENE: PackedScene = preload("res://scenes/editor/map_editor.tscn")
+const BANNER_EDITOR_SCENE: PackedScene = preload("res://scenes/editor/banner_editor.tscn")
 const NORMAL_PATH: String = "user://test_tools_hub_normal.flag"
 const DEV_PATH: String = "user://test_tools_hub_dev.flag"
 
@@ -26,6 +27,7 @@ func _hub() -> ToolsHub:
 	var hub: ToolsHub = HUB_SCENE.instantiate()
 	add_child_autofree(hub)
 	hub.open_map_editor = func() -> void: _calls.append("editor")
+	hub.open_banner_editor = func() -> void: _calls.append("banner")
 	hub.go_back = func() -> void: _calls.append("back")
 	return hub
 
@@ -35,11 +37,11 @@ func test_hub_cards_availability() -> void:
 	var maps: Button = hub.get_node("%MapEditorButton")
 	var banners: Button = hub.get_node("%BannerEditorButton")
 	assert_false(maps.disabled, "el editor de mapas funciona")
-	assert_true(banners.disabled, "el de banderines llega en T443")
-	assert_true(banners.text.contains("Próximamente"))
+	assert_false(banners.disabled, "el editor de banderines está disponible")
+	assert_false(banners.text.contains("Próximamente"))
 	assert_true(banners.text.contains("Editor de banderines"))
 	assert_true(ToolsHub.is_tool_available(&"map_editor"))
-	assert_false(ToolsHub.is_tool_available(&"banner_editor"))
+	assert_true(ToolsHub.is_tool_available(&"banner_editor"))
 	assert_false(ToolsHub.is_tool_available(&"otra_cosa"), "una herramienta desconocida no está disponible")
 
 
@@ -48,14 +50,15 @@ func test_hub_buttons_route_to_editor_and_back() -> void:
 	(hub.get_node("%MapEditorButton") as Button).pressed.emit()
 	assert_eq(_calls, ["editor"])
 	(hub.get_node("%BackButton") as Button).pressed.emit()
-	assert_eq(_calls, ["editor", "back"])
+	(hub.get_node("%BannerEditorButton") as Button).pressed.emit()
+	assert_eq(_calls, ["editor", "back", "banner"])
 
 
-func test_disabled_banner_card_goes_nowhere() -> void:
+func test_banner_card_opens_editor() -> void:
 	var hub: ToolsHub = _hub()
 	var banners: Button = hub.get_node("%BannerEditorButton")
 	banners.pressed.emit()
-	assert_eq(_calls, [])
+	assert_eq(_calls, ["banner"])
 
 
 func test_cancel_goes_back_to_the_menu() -> void:
@@ -91,4 +94,6 @@ func test_editor_leave_goes_to_the_hub_and_try_keeps_returning_to_the_editor() -
 	# «Probar» sigue igual: la partida vuelve al editor, no al hub.
 	assert_eq(GameFlow.EDITOR_SCENE, "res://scenes/editor/map_editor.tscn")
 	assert_eq(GameFlow.TOOLS_SCENE, "res://scenes/ui/tools_hub.tscn")
+	assert_eq(GameFlow.BANNER_EDITOR_SCENE, "res://scenes/editor/banner_editor.tscn")
+	assert_true(BANNER_EDITOR_SCENE.can_instantiate())
 	assert_true(editor.test_requested.is_connected(GameFlow.play_test))

@@ -31,6 +31,13 @@ const SIGNAL_CAMP: Texture2D = preload("res://assets/sprites/map/campamento_vaci
 ## reserva; la del jugador solo aparece si quien arma el mapa dice que la campaña ya ganó el nivel.
 const POST_ENEMY: Texture2D = preload("res://assets/sprites/map/rendered/banner_post_enemy.png")
 const POST_PLAYER: Texture2D = preload("res://assets/sprites/map/rendered/banner_post_player.png")
+## T443: catálogo cerrado de variantes aprobadas para el banderín del jugador.
+const POST_VARIANTS: Dictionary = {
+	"meridiana": {"chevron": preload("res://assets/sprites/map/rendered/banner_variants/meridiana_chevron.png"), "rombo": preload("res://assets/sprites/map/rendered/banner_variants/meridiana_rombo.png"), "estrella": preload("res://assets/sprites/map/rendered/banner_variants/meridiana_estrella.png"), "franja": preload("res://assets/sprites/map/rendered/banner_variants/meridiana_franja.png")},
+	"brasa": {"chevron": preload("res://assets/sprites/map/rendered/banner_variants/brasa_chevron.png"), "rombo": preload("res://assets/sprites/map/rendered/banner_variants/brasa_rombo.png"), "estrella": preload("res://assets/sprites/map/rendered/banner_variants/brasa_estrella.png"), "franja": preload("res://assets/sprites/map/rendered/banner_variants/brasa_franja.png")},
+	"musgo": {"chevron": preload("res://assets/sprites/map/rendered/banner_variants/musgo_chevron.png"), "rombo": preload("res://assets/sprites/map/rendered/banner_variants/musgo_rombo.png"), "estrella": preload("res://assets/sprites/map/rendered/banner_variants/musgo_estrella.png"), "franja": preload("res://assets/sprites/map/rendered/banner_variants/musgo_franja.png")},
+	"marea": {"chevron": preload("res://assets/sprites/map/rendered/banner_variants/marea_chevron.png"), "rombo": preload("res://assets/sprites/map/rendered/banner_variants/marea_rombo.png"), "estrella": preload("res://assets/sprites/map/rendered/banner_variants/marea_estrella.png"), "franja": preload("res://assets/sprites/map/rendered/banner_variants/marea_franja.png")},
+}
 ## El dibujo de la leyenda que usa el poste de banderines.
 const POST_DRAWING: String = "poste_cintas"
 ## T234 (RF-480): la central de energía del nivel 15, en cuatro PNG de 128 × 128 (noroeste, noreste, suroeste y
@@ -102,8 +109,11 @@ static func statue_texture(cell: Vector2i, theme: StringName) -> Texture2D:
 
 
 ## RF-656, RF-657: el poste según el contexto que recibe (nunca consulta el guardado).
-static func post_texture(conquered: bool = false) -> Texture2D:
-	return POST_PLAYER if conquered else POST_ENEMY
+static func post_texture(conquered: bool = false, recipe: BannerRecipe = null) -> Texture2D:
+	if not conquered:
+		return POST_ENEMY
+	var selected: BannerRecipe = BannerRecipe.default_recipe() if recipe == null or not recipe.is_valid() else recipe
+	return POST_VARIANTS[selected.palette][selected.emblem]
 
 
 static func state_texture(drawing: String, state: ObstacleField.State) -> Texture2D:
