@@ -131,3 +131,12 @@ Hay que enmendar **RF-580**, la lista «**no incluye**» de M64 y **D-133** (no 
 - **Probado:** escala y origen de la ventana raíz con `stretch=canvas_items`/`keep` en 7 tamaños (Godot 4.7.2 headless); tiempo y bytes de `load()` de las 7 láminas en esta PC; relaciones y tamaños de los 15 mapas; lectura de `project.godot`, `desktop_window.gd`, `game_flow.gd`, `game.gd`, `rules.gd`, `scene_transition.gd`, `intro_screen.gd`, `hud.tscn`.
 - **No probado:** ninguna captura real; Windows; celular; si las franjas se ven negras o con el color de borrado; ninguna ejecución de la suite de tests (no se cambió código); tiempos y RAM reales en celular.
 - Los scripts de medición están en la carpeta temporal de la sesión y **no se incluyen** en el repositorio.
+
+## Decisiones de Lucas (2026-10-23)
+
+> Registradas por Claude a partir de las respuestas de Lucas. **No son D ni RF todavía**; nada está implementado.
+
+1. **Bordes negros:** rellenar las franjas con un **fondo temático** (la zona jugable queda igual; no se pasa a `expand`). *Pendiente:* qué fondo, de dónde sale (compuerta de arte) y cómo se ve a 16:10, 21:9 y 4:3.
+2. **Fondos de la pantalla de carga:** se usan las **láminas de la intro**, recortadas en ejecución. Requiere enmendar RF-580 y D-133 («sin imágenes»).
+3. **Antes de aprobar los fondos rotativos se mide el costo de carga en un celular real** (ficha T454, fase 2). Hasta entonces la aprobación del punto 2 queda **condicionada** a esa medición.
+4. **Sin decidir todavía:** recorte en ejecución o archivos recortados, y el tope de zoom.
