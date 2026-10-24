@@ -42,6 +42,7 @@ var _mobile_mode: bool = false
 var _mobile_infrastructure_tool: StringName = &""
 var _mobile_infrastructure_class: StringName = &""
 var _mobile_config: MobileUiConfig
+var _range_config: RangeDisplayConfig
 var _touch_gesture := TouchGesture.new()
 ## RF-552: separa el mouse real del eco de un toque.
 var _pointer_filter := PointerFilter.new()
@@ -64,6 +65,9 @@ func setup(level: Level, session: LevelSession, balance: BalanceConfig,
 	_balance = balance
 	_tower_types = tower_types
 	_container = container
+	_range_config = RangeDisplayConfig.runtime_config()
+	if not SaveManager.setting_changed.is_connected(_on_setting_changed):
+		SaveManager.setting_changed.connect(_on_setting_changed)
 	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS  # D-023: torre fantasma
 	_mobile_mode = UiMode.is_mobile()
 	if _mobile_mode:
@@ -526,8 +530,9 @@ func _accept() -> void:
 
 
 func _draw() -> void:
-	if _selected_placed != null:
-		_draw_range(_selected_placed.global_position, _selected_placed.range_px())
+	var placed_style: int = BuildController.placed_range_style(SaveManager.range_display())
+	if _selected_placed != null and placed_style > 0:
+		_draw_range(_selected_placed.global_position, _selected_placed.range_px(), placed_style)
 	var tower: TowerData = selected_tower()
 	if tower == null:
 		return
@@ -554,9 +559,32 @@ func _draw() -> void:
 	else:  # RF-156: sin dibujos, el cuadrado de color.
 		var half: float = Rules.tiles_to_px(Tower.BODY_SIZE_TILES) / 2.0 * tower.footprint
 		draw_rect(Rect2(center - Vector2(half, half), Vector2(half, half) * 2.0), Color(tower.color, 0.6))
-	_draw_range(center, Rules.tiles_to_px(tower.levels[0].range_tiles))
+	_draw_range(center, Rules.tiles_to_px(tower.levels[0].range_tiles), BuildController.ghost_range_style())
 
 
-func _draw_range(center: Vector2, radius: float) -> void:
-	draw_circle(center, radius, Color(1, 1, 1, 0.08))
-	draw_arc(center, radius, 0.0, TAU, 64, Color(1, 1, 1, 0.7), 2.0)
+static func placed_range_style(setting: int) -> int:
+	return setting if setting in [1, 2] else 0
+
+
+static func ghost_range_style() -> int:
+	return 2
+
+
+func _draw_range(center: Vector2, radius: float, style: int) -> void:
+	if style == 0:
+		return
+	var config: RangeDisplayConfig = _range_config if _range_config != null else RangeDisplayConfig.runtime_config()
+	var full: bool = style == 2
+	var color_data: Dictionary = config.values.get("color_completo", RangeDisplayConfig.DEFAULTS["color_completo"])
+	var color := Color(float(color_data["r"]), float(color_data["g"]), float(color_data["b"]))
+	if full:
+		draw_circle(center, radius, Color(color, config.get_value("completo", "opacidad_relleno")))
+	var group: String = "completo" if full else "sutil"
+	draw_arc(center, radius, 0.0, TAU, 64,
+		Color(color, config.get_value(group, "opacidad_borde")),
+		config.get_value(group, "grosor_borde_px"))
+
+
+func _on_setting_changed(key: String, _value: Variant) -> void:
+	if key == "range_display":
+		queue_redraw()

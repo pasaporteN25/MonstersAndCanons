@@ -61,6 +61,7 @@ var _flash_left: float = 0.0
 var _stun_left: float = 0.0
 var _stun_anim: float = 0.0
 var _recovery_left: float = 0.0
+var _range_config: RangeDisplayConfig
 
 
 ## Se llama ANTES de agregar la torre al árbol.
@@ -72,6 +73,9 @@ func setup(tower_data: TowerData, alt: bool = false) -> void:
 
 
 func _ready() -> void:
+	_range_config = RangeDisplayConfig.runtime_config()
+	if not SaveManager.setting_changed.is_connected(_on_setting_changed):
+		SaveManager.setting_changed.connect(_on_setting_changed)
 	_upgrade_glow = Sprite2D.new()
 	_upgrade_glow.name = "UpgradeGlow"
 	_upgrade_frame = AtlasTexture.new()
@@ -431,8 +435,10 @@ func _outline_color() -> Color:
 
 func _draw() -> void:
 	var factor: float = _scale_factor()
-	if data.support_only and not is_stunned():
-		draw_arc(Vector2.ZERO, range_px(), 0, TAU, 48, Color(0.68, 0.83, 0.9, 0.22), 1.0, true)
+	if data.support_only:
+		var support_style: int = Tower.support_range_style(SaveManager.range_display(), is_stunned())
+		if support_style > 0:
+			_draw_support_range(support_style)
 	var half: float = Rules.tiles_to_px(BODY_SIZE_TILES) / 2.0 * factor
 	var outline: Color = _outline_color()
 	# RF-150: los dibujos ocupan una casilla entera (o el cuadrado entero, RF-295), centrados en la torre.
@@ -490,6 +496,30 @@ func _draw() -> void:
 	if wear_percent > 0.0:
 		var opacity: float = lerpf(0.35,1.0,wear_percent / maxf(0.001,WEAR_BALANCE.wear_max_percent))
 		draw_texture_rect(WEAR_ICON,Rect2(Vector2(-27,3) * factor,Vector2(22,22) * factor),false,Color(1,1,1,opacity))
+
+
+## M75, RF-683: el Estandarte usa Sutil (arco actual) o Completo (radio celeste).
+static func support_range_style(style: int, stunned: bool) -> int:
+	return 0 if stunned or not style in [1, 2] else style
+
+
+func _draw_support_range(style: int) -> void:
+	var config: RangeDisplayConfig = _range_config if _range_config != null else RangeDisplayConfig.runtime_config()
+	var color_data: Dictionary = config.values.get("color_apoyo", RangeDisplayConfig.DEFAULTS["color_apoyo"])
+	var color := Color(float(color_data["r"]), float(color_data["g"]), float(color_data["b"]))
+	if style == 1:
+		draw_arc(Vector2.ZERO, range_px(), 0, TAU, 48,
+			Color(color, config.get_value("color_apoyo", "opacidad_sutil")), 1.0, true)
+		return
+	draw_circle(Vector2.ZERO, range_px(), Color(color, config.get_value("completo", "opacidad_relleno")))
+	draw_arc(Vector2.ZERO, range_px(), 0, TAU, 48,
+		Color(color, config.get_value("completo", "opacidad_borde")),
+		config.get_value("completo", "grosor_borde_px"), true)
+
+
+func _on_setting_changed(key: String, _value: Variant) -> void:
+	if key == "range_display":
+		queue_redraw()
 
 
 func _draw_level_plate(factor: float) -> void:

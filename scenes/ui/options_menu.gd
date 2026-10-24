@@ -20,6 +20,8 @@ const TUTORIAL_REPLAYED_TEXT: String = "Se verá en el nivel 1"
 const BOSS_ENTRANCE_TEXT: String = "Presentación de los jefes"
 ## M70 (RF-644): preferencia para ocultar los consejos de la pantalla de derrota.
 const DEFEAT_ADVICE_TEXT: String = "Consejos en la derrota"
+## M75, RF-678.
+const RANGE_DISPLAY_TEXT: String = "Círculo de alcance"
 ## M68 (RF-614): la tecla de «Ver todo».
 const VIEW_ALL_LABEL: String = "Tecla de «Ver todo»"
 const VIEW_ALL_PROMPT: String = "Presioná una tecla…"
@@ -76,6 +78,7 @@ var _news_data: NewsData
 var _tutorial_replay: Button
 var _boss_entrance_check: CheckBox
 var _defeat_advice_check: CheckBox
+var _range_display_selector: OptionButton
 ## M68 (RF-614): la fila de la tecla de «Ver todo» (solo con la interfaz de PC), el botón que la muestra y el aviso.
 var _view_all_button: Button
 var _view_all_restore: Button
@@ -100,6 +103,7 @@ func _ready() -> void:
 	_build_defeat_advice_check()  # M70, RF-644
 	if not UiMode.is_mobile():
 		_build_view_all_row()  # M68: sin teclado no hace falta
+	_build_range_display_selector()  # M75: después de crear las demás filas; queda junto a «Animaciones de mejora».
 	_arrange_columns()
 	_admin_button.pressed.connect(_on_admin_pressed)
 	_admin_confirm_button.pressed.connect(set_dev_mode.bind(true))
@@ -124,6 +128,7 @@ func open() -> void:
 	_fullscreen_check.set_pressed_no_signal(bool(SaveManager.get_setting("fullscreen")))
 	_damage_numbers_check.set_pressed_no_signal(bool(SaveManager.get_setting("damage_numbers")))
 	_upgrade_fx_check.set_pressed_no_signal(SaveManager.upgrade_fx_enabled())
+	_range_display_selector.select(SaveManager.range_display())
 	_ui_mode_selector.select(UiMode.read_setting(SaveManager.get_setting("ui_mode")))
 	_boss_entrance_check.set_pressed_no_signal(SaveManager.boss_entrance_enabled())  # M66
 	_defeat_advice_check.set_pressed_no_signal(SaveManager.defeat_advice_enabled())  # M70, RF-644
@@ -273,6 +278,28 @@ func _build_tutorial_row() -> void:
 	_rows.move_child(row, _damage_numbers_check.get_index() + 1)
 	_tutorial_check.toggled.connect(_on_tutorial_toggled)
 	_tutorial_replay.pressed.connect(_on_tutorial_replay)
+
+
+## M75, RF-678: Oculto también es el valor para guardados viejos.
+func _build_range_display_selector() -> void:
+	var label := Label.new()
+	label.name = "RangeDisplayLabel"
+	label.text = RANGE_DISPLAY_TEXT
+	label.add_theme_font_size_override("font_size", 20)
+	_rows.add_child(label)
+	_range_display_selector = OptionButton.new()
+	_range_display_selector.name = "RangeDisplaySelector"
+	_range_display_selector.add_item("Oculto", 0)
+	_range_display_selector.add_item("Sutil", 1)
+	_range_display_selector.add_item("Completo", 2)
+	_range_display_selector.custom_minimum_size.y = 44
+	_rows.add_child(_range_display_selector)
+	var anchor: Node = _rows.get_node_or_null("UpgradeFxCheck")
+	var index: int = anchor.get_index() + 1 if anchor != null else _damage_numbers_check.get_index() + 1
+	_rows.move_child(label, index)
+	_rows.move_child(_range_display_selector, index + 1)
+	_range_display_selector.item_selected.connect(func(selected: int) -> void:
+		SaveManager.set_setting("range_display", _range_display_selector.get_item_id(selected)))
 
 
 func _on_tutorial_toggled(on: bool) -> void:

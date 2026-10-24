@@ -5,6 +5,8 @@
 # progreso por defecto y el juego NO se cierra.
 extends Node
 
+signal setting_changed(key: String, value: Variant)
+
 const SAVE_VERSION: int = 1
 const DEFAULT_PATH: String = "user://save.json"
 const BACKUP_LIMIT: int = 10
@@ -21,6 +23,7 @@ const DEFAULT_SETTINGS: Dictionary = {
 	"boss_entrance": true,  # M66, RF-672: la presentación de los jefes está prendida
 	"defeat_advice": true,  # M70, RF-644: los consejos de derrota están prendidos
 	"selector_style": 0,  # M72, RF-645: 0 = tarjetas, 1 = mapa planetario (preferencia de interfaz, desktop)
+	"range_display": 0,  # M75, RF-678: Oculto por omisión, también para guardados viejos
 }
 
 ## Los tests lo cambian para no tocar el guardado real del jugador.
@@ -383,7 +386,24 @@ func selector_style() -> int:
 
 
 func set_setting(key: String, value: Variant) -> void:
+	if key == "range_display":
+		value = _range_display_value(value)
 	_settings[key] = value
+	setting_changed.emit(key, value)
+
+
+## M75, RF-678: modo de dibujo del alcance. Un valor inválido se interpreta como Oculto.
+func range_display() -> int:
+	var value: Variant = get_setting("range_display")
+	return _range_display_value(value)
+
+
+func _range_display_value(value: Variant) -> int:
+	if typeof(value) not in [TYPE_INT, TYPE_FLOAT]:
+		return 0
+	var numeric: float = float(value)
+	var normalized: int = roundi(numeric)
+	return normalized if is_equal_approx(numeric, float(normalized)) and normalized in [0, 1, 2] else 0
 
 
 func get_ui_prefs() -> UiPrefs:
@@ -454,5 +474,15 @@ func _read_settings(raw: Variant) -> void:
 	if not raw is Dictionary:
 		return
 	for key: String in DEFAULT_SETTINGS:
+		if key == "range_display":
+			if not raw.has(key):
+				continue
+			var range_value: Variant = raw[key]
+			if typeof(range_value) in [TYPE_INT, TYPE_FLOAT] and _range_display_value(range_value) == float(range_value) \
+					and float(range_value) in [0.0, 1.0, 2.0]:
+				_settings[key] = _range_display_value(range_value)
+			else:
+				push_warning("La opción «range_display» del guardado no es válida; se usa Oculto.")
+			continue
 		if raw.has(key) and typeof(raw[key]) in [TYPE_FLOAT, TYPE_INT, TYPE_BOOL]:
 			_settings[key] = raw[key]
