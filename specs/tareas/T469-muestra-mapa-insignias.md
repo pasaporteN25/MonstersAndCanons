@@ -11,7 +11,7 @@ CLAUDE.md, ~/.agents/AGENTS.md, specs/tareas/README.md, specs/00-constitucion.md
 
 ## Objetivo y alcance
 
-Preparar muestra que rehace T427 con geografía orgánica en serrucho oeste→este, aterrizaje en tierra y zonas no conquistadas grises; incluir círculo rebelde, partido y jugador. Conservar biomas/canon. Mostrar PC y celular a escala, con y sin desborde; determinar el ancho por legibilidad, sin forzar scroll. No producir finales antes del OK.
+Preparar una revisión visual del mapa planetario actualmente integrado por T428, cuya muestra base se presentó en T427. Aplicar las decisiones ya aprobadas: geografía en serrucho oeste→este, aterrizaje en tierra, regiones orgánicas y zonas no conquistadas más grises; sumar el círculo rebelde, partido y jugador. Conservar los elementos aprobados del mapa y los biomas/canon. Mostrar PC y celular a escala, con y sin desborde; determinar el ancho por legibilidad, sin forzar scroll. La aprobación de T459 habilita preparar la muestra, pero no integrarla: Lucas aprueba esa revisión antes de cualquier cambio en runtime.
 
 ## Archivos previstos
 

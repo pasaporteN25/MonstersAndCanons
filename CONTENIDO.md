@@ -580,7 +580,7 @@ Lo que aparece al mejorar una torre se retoca con un archivo, sin programar. **N
 
 - **Solo se muestra lo que cambió** entre niveles (con tolerancia de 0,005). El costo, las texturas, `bonus_vs_*` y `chain_range_tiles` no están en la tabla: si algún día cambian y querés mostrarlos, sumá una línea.
 - **Si agregás un campo nuevo** a `TowerLevelData` que cambia entre niveles, sumalo a la tabla: un test (`test_upgrade_deltas.gd`) avisa si falta.
-- **La misma tabla arma el «antes → después»** (M68, RF-616 a RF-618): el panel de la torre en la PC («Al nivel 2: daño 5 → 8») y la barra de abajo del celular («Al mejorar: …») muestran las estadísticas de esta tabla, en este orden y con este tope (`max_estadisticas` en la PC; `max_por_renglon` en el celular). No hay un archivo aparte.
+- **La misma tabla arma el «antes → después»** (M68, RF-616 a RF-618): el panel de la torre en la PC («Al nivel 2: daño 5 → 8») *(M75, pendiente de implementación: ese bloque «Al nivel N:» desaparece y el «antes → después» pasa a su lugar dentro del panel; la tabla y el tope siguen siendo los de acá)* y la barra de abajo del celular («Al mejorar: …») muestran las estadísticas de esta tabla, en este orden y con este tope (`max_estadisticas` en la PC; `max_por_renglon` en el celular). No hay un archivo aparte.
 - **Revisalo** con `godot --headless --path . -s tools/check_mejoras.gd`. Con un error, el juego usa el valor por omisión de ese campo y sigue andando.
 - **Se apaga** en Opciones → «Animaciones de mejora».
 
@@ -712,3 +712,13 @@ El piloto T366/T368 todavía puede estar en el código actual; no lo extiendas n
 El planeta será la vista inicial de campaña en PC/celular con migración de una vez y tarjetas alternativas. La nueva geografía en serrucho oeste→este, aterrizaje en tierra, regiones orgánicas y estados grises necesita muestra de Codex y aprobación de Lucas (T469/T471). No modifica geografía jugable. Asedio N se habilitará con campaña N ganada, manteniendo accesos anteriores y guardados de pruebas separados (T472).
 
 El círculo del número llevará fondo rebelde, partido con 1–2 estrellas o del jugador con 3. La receta del editor es solo estética. Se proponen 20 postes (1 por nivel 1–10, 2 por 11–15), rebeldes hasta 2 estrellas y del jugador con 3; reemplaza la regla anterior del 6. Las posiciones de T475 son candidatas sobre casillas permanentemente no construibles y requieren **OK de Lucas por cada uno de los 15 mapas** antes de integrar. No cambiar leyenda, casillas construibles, removibles ni recursos para hacerles lugar. M74 mantiene su editor desktop; no se habilita editor móvil por inferencia.
+
+## «Ver todo», panel de mejora, alcance y Opciones (M75, T458; pendiente de implementación)
+
+La spec M75 (RF-674 a RF-686, D-192 a D-197) todavía **no está programada**: lo de abajo describe qué datos se podrán retocar cuando se implemente, y **hoy no existe**.
+
+- **Alcance de las torres.** Una opción nueva en Opciones, «Círculo de alcance» (Oculto por omisión, Sutil o Completo). El grosor y la opacidad de cada estilo no van en el código: vivirán en un archivo de `data/ui/` que decide la tarea T466 (puntos de partida: Completo = lo de hoy, relleno 0,08 y borde 0,7 de 2 px; Sutil = borde de 1 px, opacidad ≈ 0,3). Cuando exista, se documenta acá cómo retocarlo.
+- **Panel de torre.** No hay números nuevos: el «antes → después» sigue saliendo de la tabla `estadisticas` de `data/ui/mejoras.json` (sección M65 de este documento) y todos los decimales se escribirán con coma.
+- **Textos aprobados del aviso de «Ver todo»:** PC «Acercaste el mapa. Apretá V para volver a verlo entero.»; celular «Acercaste el mapa. Tocá la lupa para volver a verlo entero.» El botón de confirmación del celular conserva visible el costo; el texto final se verifica en las capturas de implementación.
+- **Opciones.** Los cinco grupos (Sonido, Pantalla, Partida y ayudas, Controles, Avanzado) se arman con una lista de orden en el código del menú, no con datos: agregar una opción es agregarla a su grupo. Hoy Opciones sigue como está.
+- No cambia ningún dato de torres, enemigos o niveles. Ver [M75](specs/01-spec.md), [T458](specs/03-tareas.md) y la [ficha](specs/tareas/T458-ficha-camara-panel-opciones.md).

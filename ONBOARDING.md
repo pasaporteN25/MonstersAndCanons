@@ -526,9 +526,15 @@ Capturas y mediciones en `art/m53-barra/` (`README.md`).
 
 ### T402 · Probar «Ver todo» con tecla y el carrito en pausa (M68)
 
+> **Pendiente (M75, T458):** cuando se implemente T464, en la PC el botón «Ver todo» desaparece y queda solo la tecla; el procedimiento de abajo describe lo que existe hoy.
+
 **En la PC.** Abrí un nivel, acercá el mapa con la rueda. **✅ Comprobar:** aparece el botón «Ver todo» (con la ayuda «Ver todo el mapa · V»); apretá **V**, con la partida en marcha y después en pausa (`P`): el mapa vuelve entero. Con el menú de pausa abierto (`Esc`), la V no hace nada. En **Opciones → «Tecla de «Ver todo»»**, tocá el botón y apretá la **H**: dice «H» y ahora la H hace «Ver todo». Probá la **P** (avisa que ya la usa la pausa), **Esc** (cancela y no cierra Opciones) y **Restaurar**.
 
 **En el celular (o con la interfaz forzada).** **Opciones → Interfaz → Celular**, abrí un nivel, tocá el carrito (abre el catálogo) y pausá. **✅ Comprobar:** el catálogo se cierra, el carrito se ve apagado, tocarlo no abre nada y la barra de abajo dice «En pausa…»; al seguir, vuelve. En un nivel con demolición, el botón de demolición hace lo mismo. Elegí una torre ya construida: la barra trae el renglón **«Al mejorar: …»** (y en la PC, el panel, **«Al nivel N: …»**). **No se probó en un celular real.**
+
+### M75 · «Ver todo», panel, alcance y Opciones (pendiente de implementación)
+
+La spec M75 (T458) todavía no está programada; **no hay nada que probar**. Cuando se implementen T464 a T468, la verificación será: (1) **PC:** acercar el mapa no muestra ningún botón y la tecla elegida (V por omisión) lo devuelve; (2) **celular (o interfaz forzada):** al acercar aparece la lupa, y la primera vez sale el aviso aprobado «Acercaste el mapa. Tocá la lupa para volver a verlo entero.»; (3) el panel de una torre no dice «Al nivel N:» ni «Nivel N/3», cada dato sale una vez con «antes → después» y los decimales llevan coma; (4) con «Círculo de alcance» en Oculto, construir muestra el círculo completo, seleccionar una torre construida no, y el arco del Estandarte mecánico no se ve; (5) mouse sobre «Mejorar» (PC) o primer toque (celular) muestra la ampliación y el segundo toque confirma; la animación de mejora queda prendida por omisión y se puede apagar; (6) Opciones muestra los cinco grupos y «Interfaz» está en «Avanzado». Los dos toques y el tamaño de la lupa **no se probaron en un celular real**. Ver [M75](specs/01-spec.md), [T458](specs/03-tareas.md) y la [ficha](specs/tareas/T458-ficha-camara-panel-opciones.md).
 
 ### T363 · Probar la animación de mejora de torres
 

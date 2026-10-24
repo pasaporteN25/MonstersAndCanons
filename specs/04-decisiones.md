@@ -1406,7 +1406,7 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Qué cambia:** `01-spec.md` (M68, RF-610 y RF-611), `02-plan-tecnico.md` (M68), `03-tareas.md` (T401), `CHANGELOG.md`
 
 ## D-161 · «Ver todo» en PC: botón igual que en el celular y una tecla propia (acción de input `view_all`, la V)
-- **Fecha:** 2026-10-20 · **Estado:** implementada (T402) · **Decidió:** Lucas («botón y combinación de teclas, configurable, ambos») / Claude (la V por omisión, los choques y que valga en pausa)
+- **Fecha:** 2026-10-20 · **Estado:** implementada (T402); **la parte del botón de PC fue enmendada por D-192 (2026-10-23)**, la tecla sigue vigente · **Decidió:** Lucas («botón y combinación de teclas, configurable, ambos») / Claude (la V por omisión, los choques y que valga en pausa)
 - **Qué:** el botón de la PC (RF-545) se ve con otro zoom **o** con el mapa corrido, como en el celular; la acción `view_all` (V) hace lo mismo y la tecla se cambia desde Opciones con un botón que espera la próxima tecla.
 - **Por qué:**
   - **Ya había un botón, pero solo con el zoom mínimo y el mapa corrido.** Quien acerca con la rueda no tenía cómo volver salvo la rueda hacia atrás; ahora tiene botón y tecla.
@@ -1670,10 +1670,10 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 ## D-200 · Geografía orgánica en serrucho de oeste a este
 
 - **Fecha:** 2026-10-23 · **Estado:** dirección decidida; muestra y coordenadas pendientes de aprobación 🎨 · **Decidió:** Lucas.
-- **Qué:** rehacer T427 con aterrizaje en tierra, avance en serrucho oeste→este, biomas canónicos y regiones orgánicas; no conquistadas más grises. Codex prepara muestra antes de integrar; ancho y posiciones definitivos se revisan en esa muestra.
+- **Qué:** revisar el mapa planetario actualmente integrado por T428 (basado en la muestra T427): aterrizaje en tierra, avance en serrucho oeste→este, biomas canónicos y regiones orgánicas; zonas no conquistadas más grises. Codex prepara una revisión visual antes de integrar esos cambios; ancho y posiciones definitivos se revisan en esa muestra. Se conservan los elementos ya aprobados del mapa aplicado.
 - **Por qué:** el aterrizaje actual cae fuera de tierra y el anillo artificial no expresa el avance pedido.
 - **Alternativas descartadas:** mover solo el aterrizaje, conservar anillo, forzar ancho grande/scroll, convertir el planeta en mapa jugable o inventar otro canon.
-- **Enmienda:** D-178/D-179 y muestra T427; conserva RF-647/RF-652 y agrega RF-691. La muestra T427 permanece como antecedente, sin borrarla.
+- **Enmienda:** D-178/D-179, muestra T427 e integración T428; conserva RF-647/RF-652 y agrega RF-691. T427 queda como antecedente de la versión aplicada por T428; la revisión de T469 parte del mapa aplicado, no reemplaza la base aprobada.
 
 ## D-201 · Asedio se abre por victoria del mismo mapa de campaña
 
@@ -1698,3 +1698,57 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Por qué:** Lucas unificó la cantidad para toda la campaña y corrigió el poste del 6, que hoy cambia con cualquier victoria. Es representación de estrellas existentes, sin progreso adicional.
 - **Alternativas descartadas:** solo niveles 2/3 y últimos cinco, cambiar con cualquier victoria, poste partido con 1–2 estrellas, ocupar casillas construibles/removibles, dar bonus por receta, aprobar ubicaciones por el OK a esta spec.
 - **Enmienda:** RF-656/RF-657/RF-664, D-181/D-182 y alcance de M74; RF-695 a RF-697. No aprueba un emblema canónico nuevo ni habilita editor mobile.
+
+## D-192 · «Ver todo»: solo la tecla en PC, lupa flotante en el celular y un aviso de una vez
+
+- **Fecha:** 2026-10-23 · **Estado:** decidida (sin implementar; T464) · **Decidió:** Lucas, sobre las propuestas de T451 §1.
+- **Qué:** en la PC desaparece el botón «Ver todo» y queda solo la tecla de `view_all` (V por omisión, configurable como hoy). En el celular se conserva un botón flotante, ahora con una lupa, que aparece **solo al hacer zoom** (no por desplazar el mapa sin acercarlo). La primera vez que se hace zoom o se desplaza el mapa sale, sin pulso, un aviso de una línea que explica cómo volver; se recuerda con `ui_prefs.view_all_hint_seen`. Textos aprobados por Lucas: PC «Acercaste el mapa. Apretá V para volver a verlo entero.»; celular «Acercaste el mapa. Tocá la lupa para volver a verlo entero.»
+- **Por qué:** el problema de T451 era que «Ver todo» no se entendía (podía leerse como «mostrar todo el HUD»); Lucas prefirió sacar el botón en PC, donde hay teclado y no hace falta tapar el mapa, y comunicar mejor el del celular, donde no hay otra forma de volver.
+- **Alternativas descartadas:** mantener botón y tecla en la PC (lo que decía D-161); cambiar el rótulo a «Ver mapa completo» o «Centrar mapa»; un pulso de resalte la primera vez; esconder el botón detrás de un menú.
+- **Qué cambia:** enmienda D-161 (la parte del botón de PC) y RF-545/RF-612; RF-674 a RF-676 de `01-spec.md`. La acción `view_all`, la V, RF-613, RF-614 y RF-615 no cambian.
+- **Riesgos aceptados:** en la PC, quien corre el mapa con el botón central y no conoce la V depende del aviso para volver. El ícono de la lupa es arte nuevo y necesita la aprobación de Lucas.
+
+## D-193 · Panel de torre: propuesta A, sin «Al nivel N:» ni «Nivel N/3», cada dato una vez
+
+- **Fecha:** 2026-10-23 · **Estado:** decidida (sin implementar; T465) · **Decidió:** Lucas, sobre T451 §2.4.
+- **Qué:** se elimina el bloque «Al nivel N:»; lo que cambia con la mejora se muestra en su lugar con «antes → después» (daño, cadencia, alcance y efectos); un único formato decimal con coma; se quita el texto «Nivel N/3» y los tres rectángulos de la tarjeta de nivel pasan a bronce, plata y oro.
+- **Por qué:** T451 midió que la misma información salía dos y tres veces en menos de 160 px (R1 a R3) y con dos formatos decimales (I1). El nivel ya se ve en los indicadores de la torre y en la tarjeta, así que escribirlo repetía otra vez; la tarjeta de tres colores de metales hace que el avance se lea de un vistazo.
+- **Alternativas descartadas:** la conservadora (solo borrar «Al nivel N:» y dejar el bloque con «Mejora:»); escribir «Nivel N/3» al lado de la tarjeta.
+- **Qué cambia:** enmienda RF-616 y RF-650; RF-677; los tests que fijan el texto de la vista previa. El celular (RF-617) conserva su renglón «Al mejorar:», pero toma el formato decimal único.
+- **Riesgos aceptados:** que «0,75 → 0,85/s» no entre en la columna de 270 px (no se midió); el plan lo resuelve achicando la fuente de esas filas o pasando la cadencia a una línea propia.
+
+## D-194 · El alcance se oculta salvo en el fantasma; opción Oculto / Sutil / Completo, Oculto por omisión
+
+- **Fecha:** 2026-10-23 · **Estado:** decidida (sin implementar; T466) · **Decidió:** Lucas, sobre T451 §3.
+- **Qué:** el fantasma proyecta siempre el alcance completo; la torre construida no lo muestra al seleccionarla. Una opción de Opciones, «Círculo de alcance» con **Oculto / Sutil / Completo**, gobierna cómo se ve para la torre seleccionada; **Oculto** es el valor por omisión, también en guardados viejos. Se guarda como `settings.range_display` (entero), sin subir `SAVE_VERSION`.
+- **Por qué:** el círculo completo al tocar una torre tapaba el mapa y se confundía con el arco de apoyo; al construir, en cambio, es la única referencia (y en el celular no hay mouse). Tres valores son más fáciles de entender que los cinco que proponía T451.
+- **Alternativas descartadas:** Sutil o Completo por omisión; los valores «Solo al construir», «Solo al pasar el mouse» (no existe en el celular) y «Oculto también el fantasma» (construir a ciegas); dejar el círculo como estaba.
+- **Qué cambia:** enmienda RF-40, RF-73 y RF-113; RF-678, RF-679 y RF-685.
+- **Riesgos aceptados:** un jugador nuevo ya no ve el alcance al tocar una torre, solo el número y la ampliación al mejorar; el aspecto de Sutil sobre cada fondo no se probó.
+
+## D-195 · La ampliación del alcance vive en «Mejorar»: hover en PC, dos toques en el celular; la animación es cosmética
+
+- **Fecha:** 2026-10-23 · **Estado:** decidida (sin implementar; T467) · **Decidió:** Lucas, sobre T451 §3 (el «dos toques» lo aceptó Lucas).
+- **Qué:** el alcance reaparece como parte del efecto de la mejora y, en la PC, al pasar el mouse sobre «Mejorar» (la ampliación, animada). En el celular el primer toque en «Mejorar» muestra la ampliación y el segundo confirma. La mejora se aplica al instante: la animación es solo presentación, queda prendida por omisión y se apaga con la casilla «Animaciones de mejora» que ya existe.
+- **Por qué:** sin círculo permanente, la mejora es el momento en que más importa ver hasta dónde crece el alcance; el celular no tiene mouse, así que el primer toque cumple el papel del hover. Reusar `upgrade_fx` evita una opción más.
+- **Alternativas descartadas:** una espera real o cuenta atrás al mejorar (cambiaría el juego); una casilla nueva solo para la animación del alcance; mostrar la ampliación solo con el valor Completo.
+- **Qué cambia:** enmienda RF-593 y RF-512; RF-680 a RF-682. El bloqueo de 0,35 s de RF-512 se conserva.
+- **Riesgos aceptados:** en el celular una mejora cuesta un toque más (el texto del paso «Mejorar» del tutorial del nivel 1, M63, no menciona el segundo toque, y quien juega rápido pierde un toque); no se probó en un teléfono real.
+
+## D-196 · El arco celeste del Estandarte mecánico sigue la opción de alcance
+
+- **Fecha:** 2026-10-23 · **Estado:** decidida (sin implementar; T466) · **Decidió:** Lucas, sobre T451 §3.4 (que proponía lo contrario: no apagarlo).
+- **Qué:** el arco de las torres de apoyo (`support_only`) deja de ser fijo: con Oculto no se dibuja, con Sutil o Completo se ve siempre.
+- **Por qué:** Lucas decidió que el arco siga la misma opción; así una sola regla gobierna todos los círculos de alcance y no hay una excepción que explicar.
+- **Alternativas descartadas:** dejarlo siempre visible (propuesta de T451, porque indica a quién apoya); un segundo ajuste solo para el arco.
+- **Qué cambia:** el arco de `tower.gd`; RF-683.
+- **Riesgos aceptados:** con el valor por omisión nadie ve a quién da apoyo el Estandarte sin seleccionarlo y mejorarlo; es un cambio de información visible en un guardado que ya existe.
+
+## D-197 · Opciones en cinco grupos; «Interfaz» y «Automática» en Avanzado
+
+- **Fecha:** 2026-10-23 · **Estado:** decidida (sin implementar; T468) · **Decidió:** Lucas, sobre T451 §4.
+- **Qué:** Sonido, Pantalla, Partida y ayudas, Controles (solo PC) y Avanzado, con la distribución de RF-684. «Interfaz» queda en Avanzado con Automática por omisión. El orden se declara en una lista por grupo en vez de `move_child` relativos.
+- **Por qué:** «Visualización» tenía nueve filas, de las cuales solo tres eran de pantalla, y el orden era el de llegada. Lucas decidió que «Interfaz» (con Automática por omisión) quede en Avanzado.
+- **Alternativas descartadas:** «Interfaz» en Pantalla (propuesta de T451); el nombre «Acerca de y pruebas»; esconder «Controles» mientras tenga una sola tecla (Lucas aprobó el grupo); «Controles» vacío visible en el celular.
+- **Qué cambia:** enmienda RF-113, RF-576, RF-593, RF-607, RF-614 y RF-644 (de «debajo de…» a «en el grupo…»); RF-684; los tests de posición.
+- **Riesgos aceptados:** quien necesite forzar la interfaz de celular o de PC debe buscarla en «Avanzado»; la distribución del celular en dos columnas no se midió en 720 px.
