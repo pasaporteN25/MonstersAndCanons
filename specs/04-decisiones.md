@@ -1175,6 +1175,7 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Por qué:** sin archivos que copiar, el núcleo se puede llevar a otro juego como un único `.gd`; el fondo liso se ve igual en PC y en el celular y no depende de cargar nada.
 - **Alternativas descartadas:** una escena `.tscn` (dos archivos y rutas); el mapa de fondo de los menús (hay que armarlo, o sea, trabajo pesado justo mientras se carga).
 - **Qué cambia:** `01-spec.md` (RF-580), `scripts/logic/scene_transition.gd`.
+- **Enmienda condicionada (D-206/RF-703–706, 2026-10-23):** admitir textura opcional inyectada desde GameFlow solo después del anexo de medición en celular real al informe T454 y aprobación escrita de Lucas. La ficha T454 vigente no incluye esa medición. Se conserva el núcleo genérico, el respaldo liso y el bloqueo.
 
 ## D-134 · «Reintentar» también carga por la pantalla de carga, con la ruta de la escena actual
 - **Fecha:** 2026-10-19 · **Estado:** implementada en T340 · **Decidió:** Claude
@@ -1750,3 +1751,27 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Alternativas descartadas:** «Interfaz» en Pantalla (propuesta de T451); el nombre «Acerca de y pruebas»; esconder «Controles» mientras tenga una sola tecla (Lucas aprobó el grupo); «Controles» vacío visible en el celular.
 - **Qué cambia:** enmienda RF-113, RF-576, RF-593, RF-607, RF-614 y RF-644 (de «debajo de…» a «en el grupo…»); RF-684; los tests de posición.
 - **Riesgos aceptados:** quien necesite forzar la interfaz de celular o de PC debe buscarla en «Avanzado»; la distribución del celular en dos columnas no se midió en 720 px.
+
+## D-204 · Pintar fuera del marco lógico sin pasar el juego a expand
+
+- **Fecha:** 2026-10-23 · **Estado:** resultado visual decidido por Lucas; **SubViewport/host es una propuesta técnica recomendada de T460, pendiente de revisión y OK de Lucas a T460/T476 por sus efectos sobre input/escenas**.
+- **Qué:** las franjas se rellenan con dibujo temático manteniendo tablero/HUD en 1280×720 con escala uniforme. Como `keep` recorta el render al viewport, se propone una superficie física que cubra ventana y un viewport lógico fijo alojado dentro, centrado y escalado; no `expand` para el contenido jugable. Input/transición se adaptan preservando coordenadas y bloqueo.
+- **Por qué:** no se puede poner una imagen en las franjas actuales con un CanvasLayer dentro de `keep`. Lucas pidió imagen y preservar la zona jugable; T450 registra «no se pasa a expand». Eso no constituye una elección explícita del mecanismo SubViewport/host: la propuesta debe revisarse antes de programar.
+- **Alternativas descartadas por esta propuesta técnica, sujetas a revisión de Lucas:** `expand` jugable con HUD elástico; solo color liso como solución definitiva; zoom para tapar franjas; una ventana de fondo separada del juego; dibujar dentro de keep y afirmar que cubre fuera; keep_width/height que recortan HUD.
+- **Refs:** RF-699/RF-702. Revisión de scope obligatoria en T476: si alojar escenas/overlays exige alterar mecánicas, se informa y no se compensa agrandando mapa/HUD.
+
+## D-205 · Fondo por terreno como más allá del mapa, fijo y recortado en ejecución
+
+- **Fecha:** 2026-10-23 · **Estado:** dirección decidida por Lucas; muestras/encuadres pendientes 🎨.
+- **Qué:** fondo temático por terreno del nivel, fijo respecto del zoom, recorte uniforme en ejecución y tope de zoom 1,0. Codex prepara muestra de composición por terreno antes de finales/integración. Sin nivel se conserva respaldo liso externo y fondo de menú actual.
+- **Por qué:** Lucas pidió continuidad del paisaje fuera del mapa sin más casillas ni movimiento con la cámara. El recorte evita duplicar archivos por aspecto y 1,0 conserva la escala jugable.
+- **Alternativas descartadas:** fondo que se mueve con zoom/pan; negro/color liso definitivo para partidas; estirar sprites; recortes de archivo por resolución; aumentar zoom; inventar geografía/casillas fuera del mapa.
+- **Refs:** RF-700/RF-701; T477 muestra, T478 integración después del OK. La aprobación funcional no aprueba un fondo ni su encuadre.
+
+## D-206 · Láminas de intro en la carga, condicionadas al costo real en celular
+
+- **Fecha:** 2026-10-23 · **Estado:** elección de Lucas condicionada a T454; no habilita implementación de T479 todavía.
+- **Qué:** una lámina de intro por cambio aceptado, rotación sin repetir consecutiva con al menos dos válidas y recorte runtime; GameFlow la elige e inyecta en el núcleo. Color/barra primero, imagen opcional asíncrona y sin demorar la transición. Medir primero en teléfono real y obtener aprobación de Lucas con esos datos.
+- **Por qué:** reutiliza ilustraciones aprobadas; la medición headless PC de T450 no determina costo ni memoria reales en Android. Cargar la imagen síncronamente antes de mostrar la capa dañaría el objetivo de M64.
+- **Alternativas descartadas:** asumir tiempos Android a partir de PC; habilitar sin medir; poner rutas de intro en SceneTransition; cargar siete imágenes juntas; esperar el fundido antes de continuar; generar archivos precortados; reducir/importar a otra resolución sin decisión.
+- **Enmienda:** RF-580, lista de exclusiones M64 y D-133, solo admisión de imagen opcional. RF-581–588 mantienen independencia, exclusión mutua, bloqueo, pausa, tiempo mínimo y fallos. RF-703–706; T479 depende de T454 + aprobación escrita, además de T460.

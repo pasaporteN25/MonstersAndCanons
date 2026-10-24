@@ -719,3 +719,9 @@ La spec M75 (RF-674 a RF-686, D-192 a D-197) todavía **no está programada**: l
 - **Textos aprobados del aviso de «Ver todo»:** PC «Acercaste el mapa. Apretá V para volver a verlo entero.»; celular «Acercaste el mapa. Tocá la lupa para volver a verlo entero.» El botón de confirmación del celular conserva visible el costo; el texto final se verifica en las capturas de implementación.
 - **Opciones.** Los cinco grupos (Sonido, Pantalla, Partida y ayudas, Controles, Avanzado) se arman con una lista de orden en el código del menú, no con datos: agregar una opción es agregarla a su grupo. Hoy Opciones sigue como está.
 - No cambia ningún dato de torres, enemigos o niveles. Ver [M75](specs/01-spec.md), [T458](specs/03-tareas.md) y la [ficha](specs/tareas/T458-ficha-camara-panel-opciones.md).
+
+## M77 · Fondos de franjas y de carga (T460; especificado, sin implementar)
+
+Los fondos de franjas se prepararán por terreno vigente, como paisaje más allá del mapa, quietos respecto al zoom. T477 presenta fuente/procedencia, tamaños y recortes runtime por relación; Lucas aprueba cada terreno antes de finales/integración T478. No se agregan casillas ni cambios de leyenda/camino para hacer lugar. Catálogo visual en data/ui con respaldo liso si falta recurso, sin modificar los mapas jugables. El máximo de zoom queda 1,0.
+
+La carga podrá reutilizar las láminas oficiales de intro, una por cambio y sin repetición consecutiva, con recorte en ejecución y sin texto narrativo. **No se implementa hasta agregar al informe T454 una medición del costo en celular real y obtener aprobación de Lucas con esos datos**. Si se aprueba, GameFlow inyectará la imagen al núcleo genérico; no se copian siete láminas a otro directorio ni se modifica su importación/resolución por inferencia. Color/barra siguen de respaldo y una imagen tardía no demora la escena. Ver RF-699–707 y fichas T476–479.
