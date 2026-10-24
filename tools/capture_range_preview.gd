@@ -32,24 +32,24 @@ func run() -> void:
 		save.set_setting("tutorial_enabled", false)
 		flow.current_index = 0
 		flow.intro_pending = false
-		await _capture_mode(mobile)
+		await _capture_mode(mobile, save)
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(TEMP_SAVE))
 	save.save_path = save.DEFAULT_PATH
 	save.load_save()
 	print("T467: capturas guardadas en %s" % _out)
 	get_tree().quit()
 
-func _capture_mode(mobile: bool) -> void:
-	var game: Game = (load(GAME_PATH) as PackedScene).instantiate() as Game
+func _capture_mode(mobile: bool, save: Node) -> void:
+	var game: Node = (load(GAME_PATH) as PackedScene).instantiate()
 	add_child(game)
 	await _frames(6)
 	game.session.earn(100000)
-	var tower_data: TowerData
-	for data: TowerData in game.tower_types:
+	var tower_data: Resource
+	for data in game.tower_types:
 		if data.id == "cannon":
 			tower_data = data
 			break
-	var tower: Tower
+	var tower: Node
 	var best_cell: Vector2i = Vector2i(-1, -1)
 	var map_center: Vector2 = Vector2(game.level.map_size()) / 2.0
 	var best_distance: float = INF
@@ -69,9 +69,9 @@ func _capture_mode(mobile: bool) -> void:
 		push_error("No se pudo construir el cañón para la captura")
 		return
 	# Prepara el nivel 2 sin el efecto de mejora para que las capturas muestren solo la ampliación.
-	SaveManager.set_setting("upgrade_fx", false)
+	save.call("set_setting", "upgrade_fx", false)
 	game.build_controller.try_upgrade(tower)
-	SaveManager.set_setting("upgrade_fx", true)
+	save.call("set_setting", "upgrade_fx", true)
 	game.build_controller.select_placed(tower)
 	await _frames(4)
 	if mobile:
