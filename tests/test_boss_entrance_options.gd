@@ -1,4 +1,4 @@
-# La casilla «Entrada de los jefes» en Opciones (T368, M66: RF-600). No toca el guardado real.
+# La casilla «Presentación de los jefes» en Opciones (M66: RF-672, T461). No toca el guardado real.
 extends GutTest
 
 const OPTIONS_SCENE: PackedScene = preload("res://scenes/ui/options_menu.tscn")
@@ -33,7 +33,7 @@ func _check() -> CheckBox:
 
 func test_the_check_is_there_on_by_default_with_its_text() -> void:
 	assert_not_null(_check())
-	assert_eq(_check().text, "Entrada de los jefes")
+	assert_eq(_check().text, "Presentación de los jefes")
 	assert_true(_check().button_pressed)
 
 

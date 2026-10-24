@@ -547,13 +547,15 @@ M71 integra los atlas aprobados de refuerzo y maestría (importados a media reso
 **Apagarlo.** **Opciones → «Animaciones de mejora»** apagada: al mejorar solo se ven el anillo de siempre y se oye el sonido. Un guardado viejo la muestra prendida.
 
 Tests: `-gtest=res://tests/test_upgrade_deltas.gd`, `test_upgrade_fx.gd` y `test_old_saves.gd`. Para ver el efecto en imágenes: `godot --path . res://tools/capture_upgrade.tscn -- /ruta/de/salida 1280x720`. Para revisar el archivo de datos: `godot --headless --path . -s tools/check_mejoras.gd`. Para medir el rendimiento (con la máquina libre): `godot --path . -s tools/perf_test.gd -- mejoras` contra `-- mejoras sin_fx`, y con `celular` para el modo del celular.
-Para comparar M71, correr dos veces cada par con la máquina libre: `-- mejoras sin_fx` / `-- mejoras`, y `-- entrada_jefe sin_fx` / `-- entrada_jefe`; repetir ambos pares agregando `celular`. La base de entrada genera el mismo jefe con la presentación apagada; ambos lo marcan conocido en memoria para excluir la tarjeta «Nuevo enemigo» y su cola de esta medición. La herramienta crea una sola partida y fija la semilla; usar carpetas XDG de prueba aisladas para preservar el guardado real.
+Para comparar M71, correr dos veces cada par con la máquina libre: `-- mejoras sin_fx` / `-- mejoras`: `perf_test.gd` ya no tiene el modo `entrada_jefe` (T461 lo retiró con el piloto viejo); repetir el par agregando `celular`. La herramienta crea una sola partida y fija la semilla; usar carpetas XDG de prueba aisladas para preservar el guardado real.
 
-### M66 · Presentación de jefes (pendiente de implementación)
+### M66 · Presentación de jefes (T461)
 
-La spec aprobada en T457 reemplaza el procedimiento piloto de T368. El código actual de esta rama principal aún puede mostrar el destello y el cartel viejos; no los uses para verificar el comportamiento aprobado. La implementación nueva debe esperar el OK de Lucas a T457. La presentación será a pantalla completa y pausará la partida, durará 5 s la primera vez que ese jefe se vea en el guardado y 3 s luego, y no aparecerá en modo de pruebas ni en Asedio. Se saltea tras 0,3 s con cualquier tecla o toque; `P` saltea y deja la partida en pausa. El jefe presentado no recibe la tarjeta «Nuevo enemigo» (PR #59).
+**Cómo verla:** en el juego, nivel 1 jugado desde el menú, con «Presentación de los jefes» prendida en Opciones. Con un guardado nuevo, el Jefe nace en la oleada 10: la partida se pausa, aparece la pantalla completa durante 5 s (3 s si el guardado ya lo vio) y la partida sigue sola. Probá: un clic antes de 0,3 s no hace nada; después, cualquier tecla, clic o toque la cierra y reanuda; `P` y Esc la cierran y dejan la partida **en pausa** (sin abrir el menú de pausa); si la partida ya estaba en pausa, o la app pasó a segundo plano durante la presentación, queda en pausa. **El modo de pruebas y Asedio no la muestran**: para verla hay que jugar la campaña.
 
-Para la futura verificación, las capturas de PC y de interfaz celular simulada no sustituyen la prueba en un teléfono real. La medición PC requiere resolución, hardware, `uptime`/carga y build. La prueba del teléfono y su informe corresponden a Lucas/T454. Consultá M66 en `specs/01-spec.md` y la tarea T461; este procedimiento se actualizará cuando exista la implementación.
+Tests: `godot --headless -s addons/gut/gut_cmdln.gd -gtest=res://tests/test_boss_presentation.gd,res://tests/test_boss_presentation_rules.gd -gexit`, más `test_boss_entrance_options.gd` y `test_old_saves.gd` (la clave `boss_entrance`, que no cambió). `tools/balance_sim.gd` no pasa por la presentación (no tiene campaña elegida) y termina normalmente.
+
+Las capturas de PC y de interfaz celular simulada (1280 × 720) no sustituyen la prueba en un teléfono real (T454, de Lucas). **La composición es provisional**: el arte propio de los jefes (T367) no está aprobado. No se midió rendimiento.
 
 ### T421 · Probar el consejo de derrota
 

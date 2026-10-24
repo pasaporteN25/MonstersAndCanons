@@ -337,20 +337,3 @@ func _add(effect: Node2D, position_: Vector2) -> void:
 ## RF-365: aviso de robo efectivo, independiente de la opción de daño.
 func gold_stolen(position_: Vector2, amount: int) -> void:
 	_add(FloatingText.new().setup("−%d oro" % amount, GOLD_COLOR, 18, 0.7, 30.0), position_ + Vector2(0, -20))
-
-
-## M66, RF-597: el destello en la entrada del camino cuando nace un jefe. Va en la partida justo antes del nodo de
-## los enemigos (abajo de ellos, sobre el suelo y las torres que ya estaban); si la capa está suelta, va en ella.
-## Devuelve el destello (para los tests).
-func boss_entrance(position_: Vector2, color: Color, duration: float) -> BossEntranceBurst:
-	var burst: BossEntranceBurst = BossEntranceBurst.new().setup(color, duration)
-	burst.position = position_
-	var world: Node = get_parent()
-	var enemies: Node = world.get_node_or_null("Enemies") if world != null else null
-	if enemies != null:
-		world.add_child(burst)
-		world.move_child(burst, enemies.get_index())
-	else:
-		add_child(burst)
-	return burst
-

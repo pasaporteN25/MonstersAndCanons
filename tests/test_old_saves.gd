@@ -325,14 +325,14 @@ func test_ui_prefs_with_wrong_top_level_type_use_defaults() -> void:
 		assert_eq(SaveManager.get_ui_prefs().to_dict(), {"cart_side": "right", "cart_y": 0.45, "exit_side": "left", "exit_y": 0.1, "demolish_side": "right", "demolish_y": 0.8, "view_all_key": KEY_V})
 
 
-# --- La entrada de los jefes (M66, RF-600): una clave aditiva de los ajustes que los guardados viejos no tienen ---
+# --- La presentación de los jefes (M66, RF-672): una clave aditiva de los ajustes que los guardados viejos no tienen ---
 
 func test_old_saves_read_the_boss_entrance_as_on_and_keep_their_version() -> void:
 	for text: String in [SAVE_T40, SAVE_BEFORE_M50, SAVE_FULL_COLLECTIONS, SAVE_DEV]:
 		_write(text)
 		SaveManager.load_save()
 		assert_true(SaveManager.boss_entrance_enabled(), "sin la clave, prendida")
-		_assert_roundtrip_is_identical("con la entrada de los jefes")
+		_assert_roundtrip_is_identical("con la presentación de los jefes")
 		var saved: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(PATH))
 		assert_eq(int(saved["version"]), SaveManager.SAVE_VERSION, "SAVE_VERSION no cambia")
 		assert_true(bool(saved["settings"]["boss_entrance"]), "al guardar queda escrita")

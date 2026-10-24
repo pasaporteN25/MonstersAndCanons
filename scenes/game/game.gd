@@ -43,11 +43,12 @@ var camera_controller: CameraController
 var minimum_map_zoom: float = 1.0
 ## RF-217: se está probando el nivel del editor (no hay campaña: no se guarda nada).
 var testing: bool = false
-## M66 (RF-597): los números de la entrada de los jefes y lo que se lleva cuenta para no repetirla.
-var _boss_entrance_config: BossEntranceConfig
-var _boss_entrance_wave: int = -1
-var _boss_entrance_types: Array = []
-var _boss_entrance_last_s: float = BossEntranceRules.NEVER
+## M66 (RF-666 a RF-673): la presentación del jefe, mientras está abierta (null si no), si ya se mostró en esta partida,
+## si la partida ya estaba en pausa antes y si la app pasó a segundo plano durante ella (D-112).
+var presentation: BossPresentation
+var _presentation_shown: bool = false
+var _presentation_was_paused: bool = false
+var _presentation_interrupted: bool = false
 ## RF-184: el panel de pruebas. null si no es el modo de pruebas.
 var dev_panel: DevPanel
 ## RF-194: el Salón de la fama, mientras está abierto. null si no.
@@ -527,6 +528,8 @@ func _notification(what: int) -> void:
 ## Deja la partida en pausa (la misma de RF-104: se sigue con el botón Pausa). No hace nada si ya está en pausa
 ## (un menú, un diálogo o el cartel de entrada ya la pausaron) ni si la partida terminó.
 func pause_for_background() -> void:
+	if presentation != null:
+		_presentation_interrupted = true  # M66, RF-673 (D-112): al cerrarse la presentación no se reanuda sola
 	if session == null or session.is_over() or is_paused():
 		return
 	set_paused(true)
@@ -934,10 +937,10 @@ func _on_enemy_spawned(enemy: Enemy) -> void:
 	enemy.healed.connect(func(e: Enemy, amount: int) -> void:
 		effects.heal_number(e.global_position, amount)
 		Audio.play(&"heal", 0.8))  # RF-165
-	_maybe_boss_entrance(enemy)  # M66: antes que la tarjeta de abajo, que espera al cartel de aparición
+	_maybe_boss_presentation(enemy)  # M66: antes de marcarlo visto, que decide si dura 5 s o 3 s
 	# RF-134: la primera vez en todo el juego que aparece este tipo, se presenta. Un jefe (peligroso, RF-135) no lleva
-	# la tarjeta: el cartel de aparición y la línea «¡Llega el Jefe!» ya lo presentan (Lucas, 2026-10-23); igual
-	# queda como visto para la Wiki y el guardado.
+	# la tarjeta: la presentación y la línea «¡Llega el Jefe!» ya lo presentan (Lucas, 2026-10-23); igual
+	# queda como visto para la Wiki y el guardado, aunque la presentación se omita o se saltee.
 	if not SaveManager.has_seen_enemy(enemy.data.id):
 		SaveManager.mark_enemy_seen(enemy.data.id)
 		if not Rules.is_dangerous(enemy.data):
@@ -946,36 +949,52 @@ func _on_enemy_spawned(enemy: Enemy) -> void:
 			SaveManager.save()  # RF-117: solo jugando desde el menú (campaña o comunidad)
 
 
-## M66, RF-597 a RF-602: si el enemigo que nació tiene datos de entrada (`EnemyData.entrance`), el nivel está en su
-## lista, la opción está prendida y no se repitió en la oleada ni hubo otra hace menos de 8 s, sale el destello en
-## la entrada de su camino y el cartel de aparición. Solo presentación: no toca al enemigo, la oleada ni el reloj.
-## Solo en la campaña jugada desde el menú (también con el modo de pruebas): no en el editor, la comunidad,
-## Asedio ni la escena suelta.
-func _maybe_boss_entrance(enemy: Enemy) -> void:
-	if enemy.data.entrance == null:
-		return  # lo barato primero: casi todos los enemigos salen acá
+## M66, RF-666: ¿esta partida es de la campaña normal, jugada desde el menú? No lo son Asedio ni los modos, el modo
+## de pruebas, probar desde el editor, los mapas de la comunidad ni la escena suelta (F6, tests, `balance_sim`).
+func _is_normal_campaign() -> bool:
+	if DevMode.enabled or testing or not GameFlow.current_mode.is_empty() or GameFlow.current_community != null:
+		return false
 	var campaign: LevelData = GameFlow.current_level()
-	if campaign == null or level_data == null or campaign.id != level_data.id:
+	return campaign != null and level_data != null and campaign.id == level_data.id
+
+
+## M66, RF-666 a RF-673: si nace un jefe y corresponde, la partida se pausa en este mismo cuadro (el enemigo no se
+## demora ni cambia) y se abre la presentación a pantalla completa. Una vez por partida: la primera oleada con jefe.
+## Va ANTES de marcar al enemigo como visto: la duración depende de si ya se había visto (RF-668).
+func _maybe_boss_presentation(enemy: Enemy) -> void:
+	if not Rules.is_dangerous(enemy.data):
+		return  # lo barato primero: casi todos los enemigos salen acá
+	if not BossPresentationRules.is_eligible(true, SaveManager.boss_entrance_enabled(), _is_normal_campaign(),
+			_presentation_shown or presentation != null) or session.is_over():
 		return
-	if _boss_entrance_config == null:
-		_boss_entrance_config = BossEntranceConfig.load_from()
-	if session.wave != _boss_entrance_wave:
-		_boss_entrance_wave = session.wave
-		_boss_entrance_types.clear()
-	var now_s: float = Time.get_ticks_msec() / 1000.0
-	if not BossEntranceRules.should_show(enemy.data, String(level_data.id), SaveManager.boss_entrance_enabled(), now_s,
-			_boss_entrance_last_s, _boss_entrance_types, _boss_entrance_config.seconds("intervalo_min_s")):
-		return
-	_boss_entrance_last_s = now_s
-	_boss_entrance_types.append(enemy.data.id)
-	var spot: Vector2 = enemy.global_position
-	var path: Path2D = enemy.path()
-	if path != null and path.curve != null and path.curve.point_count > 0:
-		spot = path.to_global(path.curve.get_point_position(0))
-	effects.boss_entrance(spot, enemy.data.color, _boss_entrance_config.seconds("destello_s"))
-	hud.show_boss_entrance(enemy.data)
-	if enemy.data.entrance.sound != &"":
-		Audio.play(enemy.data.entrance.sound)
+	_presentation_shown = true
+	_presentation_was_paused = is_paused()
+	_presentation_interrupted = false
+	build_controller.cancel()
+	build_controller.input_blocked = true
+	set_paused(true)
+	hud.show_paused(true, false)  # la presentación no es el menú de pausa: no dice «PAUSA»
+	hud.set_presentation_active(true)  # RF-670, RF-673: el cartel de oleada y las tarjetas se congelan
+	if mobile_hud != null:
+		mobile_hud.set_modal_open(true)
+	presentation = BossPresentation.new().setup(enemy.data,
+			BossPresentationRules.seconds(SaveManager.has_seen_enemy(enemy.data.id)), mobile_hud != null)
+	presentation.closed.connect(_on_presentation_closed)
+	add_child(presentation)
+
+
+## Al cerrarse, la partida vuelve a como estaba: corriendo, salvo que ya estuviera en pausa, que la app haya pasado a
+## segundo plano (D-112) o que se haya cerrado con `P` o «Atrás» (RF-669, RF-673).
+func _on_presentation_closed(keep_paused: bool) -> void:
+	presentation = null
+	build_controller.input_blocked = false
+	if mobile_hud != null:
+		mobile_hud.set_modal_open(false)
+	hud.set_presentation_active(false)  # las tarjetas «Nuevo enemigo» que esperaban salen en su turno
+	if BossPresentationRules.should_resume(_presentation_was_paused, _presentation_interrupted, keep_paused):
+		set_paused(false)
+	else:
+		hud.show_paused(is_paused(), true)  # sigue pausada: el botón y el cartel lo dicen
 
 
 ## RF-132: el número de daño de cada golpe. Si el golpe hizo combo, su número es el aviso (RF-315) y suena (RF-316).
