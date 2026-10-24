@@ -1,0 +1,11 @@
+{
+  "temas": {
+    "pradera": "res://assets/backgrounds/stripes/pradera.png",
+    "bosque": "res://assets/backgrounds/stripes/bosque.png",
+    "ruinas": "res://assets/backgrounds/stripes/ruinas.png",
+    "desierto": "res://assets/backgrounds/stripes/desierto.png",
+    "nieve": "res://assets/backgrounds/stripes/nieve.png",
+    "volcan": "res://assets/backgrounds/stripes/volcan.png",
+    "pantano": "res://assets/backgrounds/stripes/pantano.png"
+  }
+}

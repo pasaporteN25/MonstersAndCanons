@@ -1,5 +1,9 @@
 # Novedades del juego
 
+## Franjas temáticas por terreno *(T478, 2026-10-24)*
+
+En las partidas, el espacio exterior y los márgenes internos del mapa usan el fondo aprobado para el terreno. El fondo queda fijo en pantalla mientras acercás o desplazás el mapa, y se recorta sin deformarse al cambiar la relación de aspecto. El tope de zoom queda en 1,0. Menús y contextos sin nivel conservan el respaldo liso.
+
 ## «Ver todo»: tecla en PC y aviso de cámara *(T464, 2026-10-24)*
 
 En PC, «Ver todo» queda solo en la tecla configurable (V por omisión), sin botón flotante. En celular, el botón sigue apareciendo al acercar el mapa; desplazarlo sin zoom no lo muestra. La primera vez que acercás el mapa aparece por tres segundos un aviso con la tecla o el botón para volver al encuadre completo; desplazarlo sin zoom no muestra el aviso (aclaración de Lucas, 2026-10-23). Se recuerda en el guardado y no interrumpe el tutorial. La lupa está en muestra para aprobación y todavía no se integró: hasta entonces el botón conserva el texto «Ver todo».

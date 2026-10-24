@@ -1763,7 +1763,7 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 ## D-205 · Fondo por terreno como más allá del mapa, fijo y recortado en ejecución
 
 - **Fecha:** 2026-10-23 · **Estado:** dirección decidida por Lucas; muestras/encuadres pendientes 🎨.
-- **Qué:** fondo temático por terreno del nivel, fijo respecto del zoom, recorte uniforme en ejecución y tope de zoom 1,0. Codex prepara muestra de composición por terreno antes de finales/integración. Sin nivel se conserva respaldo liso externo y fondo de menú actual.
+- **Qué:** fondo temático por terreno del nivel, fijo respecto del zoom, recorte uniforme en ejecución y tope absoluto de zoom 1,0. Codex prepara muestra de composición por terreno antes de finales/integración; al aprobarse las muestras del PR #66, T478 las integra. El tope rige en PC y celular, aunque el dato de máximo sea mayor. Sin nivel se conserva respaldo liso externo y fondo de menú actual.
 - **Por qué:** Lucas pidió continuidad del paisaje fuera del mapa sin más casillas ni movimiento con la cámara. El recorte evita duplicar archivos por aspecto y 1,0 conserva la escala jugable.
 - **Alternativas descartadas:** fondo que se mueve con zoom/pan; negro/color liso definitivo para partidas; estirar sprites; recortes de archivo por resolución; aumentar zoom; inventar geografía/casillas fuera del mapa.
 - **Refs:** RF-700/RF-701; T477 muestra, T478 integración después del OK. La aprobación funcional no aprueba un fondo ni su encuadre.

@@ -1,6 +1,6 @@
 # T477 · Muestra de fondos de franjas
 
-**Estado:** muestra conceptual para revisión de Lucas. Ningún fondo está aprobado ni se integra al juego.
+**Estado:** Lucas aprobó las siete muestras al mergear el PR #66 (2026-10-24). T478 integra esos PNG sin modificar su composición.
 
 Abrir `index.html` en un navegador. Permite alternar siete temas, cambiar entre 16:9, 16:10, 21:9, 4:3 y 20:9, y acercar el esquema del mapa sin mover el fondo. El marco lógico y el mapa esquemático sirven para conversar sobre las franjas; no son una captura ni representan un nivel existente.
 
@@ -10,4 +10,4 @@ Las imágenes se generaron con ImageGen integrado en Codex, usando como referenc
 
 La muestra no crea geografía, casillas, caminos, estructuras, símbolos de facción ni canon. En especial, no presenta T477 como reescritura del mapa planetario T427/T428/T469. El recorte es cálculo CSS para discutir encuadre; la validación real depende de T476/T478.
 
-Lucas puede revisar cada terreno y registrar si aprueba o pide cambios en composición, intensidad y recorte. El visor no guarda ni envía aprobaciones. Después de esa revisión, recién se preparan finales para los temas aprobados.
+El visor original se conserva como referencia de los recortes revisados. Las siete imágenes aprobadas son las que T478 copia a `assets/backgrounds/stripes/` para uso de runtime.
