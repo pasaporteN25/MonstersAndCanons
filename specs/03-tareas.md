@@ -2719,9 +2719,10 @@ El alcance de T425 a T432 es desktop. Mobile continúa por su propia experiencia
   **Refs:** RF-699/RF-702/RF-707. **Depende de:** T460 aprobada y OK explícito de Lucas a la propuesta técnica D-204/T476 por sus efectos en escenas/input, archivos compartidos libres. **Ficha:** `specs/tareas/T476-superficie-presentacion.md`.
   **Hecho cuando:** Marco lógico y tamaños/input conservados en todas las relaciones; flujo y bloqueo/restauración funcionan; no mecánicas nuevas. Si supera sesión, subdividir con revisión antes de mezclar.
 
-- [ ] **T477 · Muestra de fondos por terreno y recortes. `[mobile+x86]`**
+- [x] **T477 · Muestra de fondos por terreno y recortes. `[mobile+x86]`**
   **Refs:** RF-700/RF-701. **Depende de:** T460 aprobada; 🎨 Lucas aprueba cada terreno/composición antes de producir finales. **Ficha:** `specs/tareas/T477-muestra-franjas-terrenos.md`.
   **Hecho cuando:** Lucas tiene muestras por terreno a escala y puede aprobar/rechazar cada una; no se modifica arte aprobado ni se produce final antes de compuerta.
+  **Resultado (2026-10-23):** visor `art/t477-fondos-franjas/index.html` con siete estudios conceptuales, por tema de campaña y temas válidos solo en editor; permite comparar recorte 16:9/16:10/21:9/4:3/20:9 y dejar estados de revisión. Las imágenes son borradores sin aprobación, no se integraron ni importaron a Godot; Lucas tiene que decidir cada terreno antes de producir finales. Sin cambios de runtime, sin importación/GUT, teléfono ni medición.
 
 - [ ] **T478 · Integrar franjas por terreno sin moverlas con zoom. `[mobile+x86]`**
   **Refs:** RF-700/RF-701/RF-702/RF-707. **Depende de:** T476 integrada con arquitectura aprobada explícitamente por Lucas, T477 aprobada por terreno, T460 aprobada; coordinar Game/cámara con T461/T464/T475. **Ficha:** `specs/tareas/T478-integrar-franjas-tematicas.md`.
