@@ -48,6 +48,8 @@ var current_mode_index: int = -1
 var intro_pending: bool = false
 ## M64 (RF-580): el cambio de escena con pantalla de carga y la entrada bloqueada. Lo crea `_ready`.
 var transition: SceneTransition
+## T476: anfitrión persistente de presentación; es null al abrir escenas directamente (F6/tests/tools).
+var presentation_host: Node
 
 
 func _ready() -> void:
@@ -452,11 +454,40 @@ func go_to_wiki() -> void:
 func reload_current() -> void:
 	if is_changing():
 		return  # RF-582
-	var scene: Node = get_tree().current_scene
+	var scene: Node = current_screen()
 	if scene == null or scene.scene_file_path == "":
-		get_tree().reload_current_scene()
+		if presentation_host != null and is_instance_valid(presentation_host):
+			presentation_host.install_scene(load("res://scenes/ui/main_menu.tscn") as PackedScene)
+		else:
+			get_tree().reload_current_scene()
 		return
 	_change_scene(scene.scene_file_path)
+
+
+func attach_presentation(host: Node) -> void:
+	presentation_host = host
+	if transition != null:
+		transition.swapper = Callable(host, "install_scene")
+
+
+func update_presentation_scale(scale: float) -> void:
+	if transition != null:
+		transition.set_overlay_scale(scale)
+
+
+func detach_presentation(host: Node) -> void:
+	if presentation_host != host:
+		return
+	presentation_host = null
+	if transition != null:
+		transition.swapper = Callable()
+		transition.set_overlay_scale(1.0)
+
+
+func current_screen() -> Node:
+	if presentation_host != null and is_instance_valid(presentation_host):
+		return presentation_host.get_active_screen()
+	return get_tree().current_scene
 
 
 ## RF-582: ¿hay un cambio de pantalla en curso? Mientras tanto ninguna función de acá cambia nada.
