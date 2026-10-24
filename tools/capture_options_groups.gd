@@ -27,10 +27,10 @@ func run() -> void:
 	save.load_save()
 	for mode: int in [2, 1]:  # UiMode.PC y UiMode.MOBILE; valores estables del enum.
 		save.set_setting("ui_mode", mode)
-		var options: OptionsMenu = (load(OPTIONS_PATH) as PackedScene).instantiate() as OptionsMenu
-		options.admin_available = true
+		var options: Control = (load(OPTIONS_PATH) as PackedScene).instantiate()
+		options.set("admin_available", true)
 		add_child(options)
-		options.open()
+		options.call("open")
 		for i: int in 8:
 			await get_tree().process_frame
 		var tag: String = "pc" if mode == 2 else "celular-simulado"
