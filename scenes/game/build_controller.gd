@@ -570,13 +570,18 @@ static func ghost_range_style() -> int:
 	return 2
 
 
+## RF-678: el color del círculo sale de `color_completo` en `data/ui/alcance.json`.
+static func range_color(config: RangeDisplayConfig) -> Color:
+	var color_data: Dictionary = config.values.get("color_completo", RangeDisplayConfig.DEFAULTS["color_completo"])
+	return Color(float(color_data["r"]), float(color_data["g"]), float(color_data["b"]))
+
+
 func _draw_range(center: Vector2, radius: float, style: int) -> void:
 	if style == 0:
 		return
 	var config: RangeDisplayConfig = _range_config if _range_config != null else RangeDisplayConfig.runtime_config()
 	var full: bool = style == 2
-	var color_data: Dictionary = config.values.get("color_completo", RangeDisplayConfig.DEFAULTS["color_completo"])
-	var color := Color(float(color_data["r"]), float(color_data["g"]), float(color_data["b"]))
+	var color: Color = BuildController.range_color(config)
 	if full:
 		draw_circle(center, radius, Color(color, config.get_value("completo", "opacidad_relleno")))
 	var group: String = "completo" if full else "sutil"

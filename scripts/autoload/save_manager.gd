@@ -399,11 +399,13 @@ func range_display() -> int:
 
 
 func _range_display_value(value: Variant) -> int:
-	if typeof(value) not in [TYPE_INT, TYPE_FLOAT]:
-		return 0
-	var numeric: float = float(value)
-	var normalized: int = roundi(numeric)
-	return normalized if is_equal_approx(numeric, float(normalized)) and normalized in [0, 1, 2] else 0
+	return int(value) if _is_range_display_valid(value) else 0
+
+
+## Solo vale un número exactamente 0, 1 o 2 (JSON da 1.0 en vez de 1). Texto, booleanos, fracciones
+## (incluso 1.000001), infinitos y NaN no valen.
+func _is_range_display_valid(value: Variant) -> bool:
+	return typeof(value) in [TYPE_INT, TYPE_FLOAT] and float(value) in [0.0, 1.0, 2.0]
 
 
 func get_ui_prefs() -> UiPrefs:
@@ -477,10 +479,8 @@ func _read_settings(raw: Variant) -> void:
 		if key == "range_display":
 			if not raw.has(key):
 				continue
-			var range_value: Variant = raw[key]
-			if typeof(range_value) in [TYPE_INT, TYPE_FLOAT] and _range_display_value(range_value) == float(range_value) \
-					and float(range_value) in [0.0, 1.0, 2.0]:
-				_settings[key] = _range_display_value(range_value)
+			if _is_range_display_valid(raw[key]):
+				_settings[key] = _range_display_value(raw[key])
 			else:
 				push_warning("La opción «range_display» del guardado no es válida; se usa Oculto.")
 			continue

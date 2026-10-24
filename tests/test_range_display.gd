@@ -49,6 +49,11 @@ func test_mobile_options_keep_the_range_row_touchable_and_inside_the_panel() -> 
 	for _frame: int in 3:
 		await get_tree().process_frame
 	var panel: Control = options.find_child("Panel", true, false) as Control
+	var upgrade: Node = options.find_child("UpgradeFxCheck", true, false)
+	var label: Node = options.find_child("RangeDisplayLabel", true, false)
+	assert_eq(label.get_parent(), upgrade.get_parent(), "mismo contenedor en celular")
+	assert_eq(label.get_index(), upgrade.get_index() + 1)
+	assert_eq(_selector().get_index(), label.get_index() + 1)
 	assert_lte(panel.size.y, 720.0)
 	assert_gte(_selector().size.y, 44.0)
 	assert_lte(_selector().size.x, panel.size.x)
@@ -79,13 +84,32 @@ func test_each_option_is_saved_and_shown_again() -> void:
 		assert_eq(_selector().selected, value)
 
 
-func test_invalid_saved_value_warns_and_falls_back_to_hidden() -> void:
-	var file := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
-	file.store_string('{"version":1,"levels":{},"settings":{"range_display":1.5}}')
-	file.close()
-	SaveManager.load_save()
-	assert_push_warning("range_display")
-	assert_eq(SaveManager.range_display(), 0)
+func test_invalid_saved_values_warn_and_fall_back_to_hidden() -> void:
+	for literal: String in ["1.5", "1.000001", "true", '"1"', "3", "-1"]:
+		var file := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
+		file.store_string('{"version":1,"levels":{},"settings":{"range_display":%s}}' % literal)
+		file.close()
+		SaveManager.set_setting("range_display", 2)  # que el 0 sea un retroceso real, no el valor de antes
+		SaveManager.load_save()
+		assert_push_warning("range_display")
+		assert_eq(SaveManager.range_display(), 0, "guardado %s" % literal)
+
+
+func test_invalid_setter_values_fall_back_to_hidden() -> void:
+	for value: Variant in [1.5, 1.000001, true, "1", 3, -1, INF, NAN, null]:
+		SaveManager.set_setting("range_display", 2)
+		SaveManager.set_setting("range_display", value)
+		assert_eq(SaveManager.range_display(), 0, "setter %s" % str(value))
+		assert_eq(SaveManager.get_setting("range_display"), 0, "no se guarda %s" % str(value))
+	SaveManager.set_setting("range_display", 1.0)  # lo que da JSON: se acepta
+	assert_eq(SaveManager.range_display(), 1)
+
+
+func test_full_range_color_comes_from_the_data() -> void:
+	var config := RangeDisplayConfig.new()
+	config.values["color_completo"] = {"r": 0.25, "g": 0.5, "b": 0.75}
+	assert_eq(BuildController.range_color(config), Color(0.25, 0.5, 0.75))
+	assert_eq(BuildController.range_color(RangeDisplayConfig.runtime_config()), Color(1.0, 1.0, 1.0))
 
 
 func test_range_drawing_data_matches_the_approved_styles() -> void:
