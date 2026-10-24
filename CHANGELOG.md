@@ -1,6 +1,21 @@
 # Novedades del juego
 
+## «Ver todo»: tecla en PC y aviso de cámara *(T464, 2026-10-24)*
+
+En PC, «Ver todo» queda solo en la tecla configurable (V por omisión), sin botón flotante. En celular, el botón sigue apareciendo al acercar el mapa; desplazarlo sin zoom no lo muestra. La primera vez que acercás el mapa aparece por tres segundos un aviso con la tecla o el botón para volver al encuadre completo; desplazarlo sin zoom no muestra el aviso (aclaración de Lucas, 2026-10-23). Se recuerda en el guardado y no interrumpe el tutorial. La lupa está en muestra para aprobación y todavía no se integró: hasta entonces el botón conserva el texto «Ver todo».
+
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
+
+## Panel de mejora de torres *(T465, en revisión)*
+
+Al seleccionar una torre, las métricas que cambian muestran el valor actual y el de la mejora una sola vez, con decimales en coma. Los efectos que cambian aparecen debajo como «antes → después», sin repetir los datos del bloque de estadísticas. El indicador del nivel usa bronce, plata y oro; su tooltip conserva el nivel actual. Los costos y el funcionamiento de las mejoras no cambian.
+## Marco de presentación adaptable *(T476, 2026-10-23; en revisión)*
+
+El contenido conserva su espacio lógico de 1280×720 y queda centrado con escala uniforme dentro de una superficie que se adapta a la ventana. El menú, la partida y sus controles permanecen dentro del marco; el espacio de afuera tiene un respaldo oscuro mientras T478 integra los fondos aprobados por terreno. La comparación de nitidez a 1920×1080 sigue pendiente porque Godot reporta 1777×1000 en fullscreen en esta máquina.
+
+## Círculo de alcance configurable *(T466, 2026-10-23)*
+
+En **Opciones** podés elegir si el círculo de alcance de una torre seleccionada queda **Oculto**, **Sutil** o **Completo**. Por omisión queda oculto, también en guardados anteriores. Al elegir dónde construir, el fantasma sigue mostrando el círculo completo; el arco del Estandarte mecánico acompaña la opción elegida.
 
 ## Editor de banderines para el nivel 6 *(T443, 2026-10-23)*
 
