@@ -299,6 +299,16 @@ func test_the_overlay_has_title_and_a_bar_and_catches_the_mouse() -> void:
 	assert_not_null(_transition.find_child("Bar", true, false))
 
 
+func test_overlay_content_scales_with_the_logical_frame_but_keeps_its_full_window_root() -> void:
+	var root: Control = _transition.get_node("LoadingLayer/Root")
+	var center: CenterContainer = _transition.get_node("LoadingLayer/Root/Center")
+	var original_size: Vector2 = root.size
+	_transition.set_overlay_scale(1.5)
+	assert_eq(center.scale, Vector2(1.5, 1.5))
+	assert_eq(center.pivot_offset, center.size * 0.5)
+	assert_eq(root.size, original_size, "el fondo y el capturador siguen cubriendo la ventana")
+
+
 class _Listener extends Node:
 	var seen: Array
 
