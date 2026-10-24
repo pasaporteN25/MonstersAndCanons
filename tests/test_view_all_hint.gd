@@ -51,7 +51,7 @@ func test_first_eligible_camera_change_shows_one_line_and_saves_seen() -> void:
 	assert_eq(_game.hud._view_all_notice.text, "Acercaste el mapa. Apretá V para volver a verlo entero.")
 	assert_true(SaveManager.get_ui_prefs().view_all_hint_seen)
 	_game.hud._view_all_notice.hide()
-	_game._on_view_zoomed_in(true)
+	_game._on_view_zoomed_in()
 	assert_false(_game.hud._view_all_notice.visible)
 
 
@@ -64,15 +64,15 @@ func test_mobile_text_and_custom_key_are_used() -> void:
 	prefs.view_all_key = KEY_H
 	SaveManager.set_ui_prefs(prefs)
 	SaveManager.set_setting("ui_mode", UiMode.PC)
-	_game._on_view_zoomed_in(true)
+	_game._on_view_zoomed_in()
 	assert_eq(_game.hud._view_all_notice.text, "Acercaste el mapa. Apretá H para volver a verlo entero.")
 
 
-func test_non_campaign_run_does_not_show_or_remember_notice() -> void:
+func test_camera_notice_is_not_restricted_to_campaign_mode() -> void:
 	await _start(UiMode.PC)
-	_game._on_view_zoomed_in(false)
-	assert_false(_game.hud._view_all_notice.visible)
-	assert_false(SaveManager.get_ui_prefs().view_all_hint_seen)
+	_game._on_view_zoomed_in()
+	assert_true(_game.hud._view_all_notice.visible)
+	assert_true(SaveManager.get_ui_prefs().view_all_hint_seen)
 
 
 func test_pc_has_no_onscreen_view_all_control() -> void:
