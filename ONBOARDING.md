@@ -581,3 +581,12 @@ Tests: `-gtest=res://tests/test_tutorial_data.gd`, `test_tutorial_flow.gd`, `tes
 Tests: `-gtest=res://tests/test_news_data.gd`, `test_news_flow.gd`, `test_news_screen.gd`, `test_news_menu.gd` y los casos de `test_old_saves.gd`. Capturas: `godot --path . res://tools/capture_news.tscn -- <carpeta fuera del repo> 1280x720`.
 
 **Capturas del arte integrado (T375):** `godot --path . res://tools/capture_news.tscn -- /tmp/t375-captures 1280x720 official`. Captura los datos oficiales en PC y modo celular, al inicio y al final de la lista; no cambia la versión ni aprueba los textos. Para la proporción de celular real, repetir con `2400x1080` en otra carpeta. Usa `user://test_capture_news.json`, que borra al terminar. Estas capturas no reemplazan la prueba táctil en un equipo Android.
+
+
+### M76 · Comprobación prevista del selector (T459; pendiente de código)
+
+Cuando T469–T475 estén implementadas y aprobadas, usar copias de guardados bajo `user://test_*.json`: viejo con tarjetas, migrado que vuelve a elegir tarjetas, nuevo sin Asedio y viejo que ya lo jugó. Verificar que el primer ingreso pase a mapa una sola vez; cambiar de vista y reiniciar respete la preferencia; clic/toque/doble clic solo seleccione en mapa; Enter/Jugar abra una vez y las tarjetas conserven su clic directo. Probar scroll/foco hasta el nivel 15 y un dedo en celular simulado, sin seleccionar al soltar el arrastre y con Jugar fijo abajo.
+
+Verificar Asedio N habilitado por campaña N y que ganar Asedio N no abra N+1; conservar los accesos y top 5 anteriores. Entrar a pruebas, jugar un Asedio, salir y comprobar hash/datos de progreso normal intactos. Crear cinco modos propios temporales y comprobar acceso a todas las solapas y sus récords; retorno a la misma selección. No ejecutar este procedimiento sobre el archivo real de Lucas.
+
+Capturar PC 1280×720/1920×1080 y celular simulado, mapa completo o inicio/medio/final si hay scroll, 0/1/2/3 estrellas y todos los números sin cero. Los veinte postes exigen registro del OK de Lucas para **cada mapa** y comprobación de invariancia jugable. Teléfono real corresponde a T454/T238; la simulación no lo sustituye. No cambia todavía el procedimiento vigente de T197: esta sección describe la verificación futura, no una función disponible.

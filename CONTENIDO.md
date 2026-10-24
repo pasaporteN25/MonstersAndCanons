@@ -647,7 +647,7 @@ Un **modo** es un grupo de mapas con reglas propias. Aparece como una solapa en 
 **Progreso y desbloqueo:**
 - Cada mapa de un modo guarda vidas, estrellas, puntaje y su top 5 aparte, con el id `modo_<modo>_<mapa>`.
 - No cuenta para la campaña, el total de estrellas de la campaña, el Salón de la fama ni los avances.
-- En un modo oficial, cada mapa se abre al ganar el anterior; en los propios, todos están abiertos. El modo de pruebas abre todo.
+- Comportamiento vigente: en un modo oficial, cada mapa se abre al ganar el anterior; en los propios, todos están abiertos. El modo de pruebas abre todo. **Cambio especificado, pendiente de código (M76/T472):** Asedio N se abrirá al ganar campaña N, conservando acceso de guardados que ya jugaron Asedio y el archivo separado de pruebas. Los demás modos no cambian.
 
 **Si algo está mal**, el juego no se corta: un `modo.json` roto muestra una sola tarjeta "Con errores" con el motivo, y un mapa que falta o tiene errores queda como tarjeta deshabilitada, mientras los demás se juegan igual.
 
@@ -705,3 +705,10 @@ La pantalla «Novedades de esta versión» (se abre sola una vez por versión y 
 La spec nueva reemplaza el piloto de destello y cartel. La opción existente conserva su clave, pero pasa a llamarse «Presentación de los jefes» y queda en «Partida y ayudas». La presentación pausa la campaña normal, dura 5 s la primera vez que el guardado ve a ese jefe y 3 s después, y no sale en Asedio ni en modo de pruebas. Se omite la tarjeta «Nuevo enemigo» para el jefe presentado. La animación se hará por código sobre ilustraciones quietas, con un fondo propio para el Jefe y otro para el Coloso. El jefe supremo del nivel 15 espera a T243.
 
 El piloto T366/T368 todavía puede estar en el código actual; no lo extiendas ni copies sus assets como si fueran el diseño aprobado. La implementación y los pasos de prueba se documentarán después del OK de Lucas a T457. Ver [M66](specs/01-spec.md), [T457](specs/03-tareas.md) y la [ficha de arte T367](specs/tareas/T367-arte-entrada-jefes.md).
+
+
+## M76 · Mapa y postes de conquista (T459; spec, sin implementar)
+
+El planeta será la vista inicial de campaña en PC/celular con migración de una vez y tarjetas alternativas. La nueva geografía en serrucho oeste→este, aterrizaje en tierra, regiones orgánicas y estados grises necesita muestra de Codex y aprobación de Lucas (T469/T471). No modifica geografía jugable. Asedio N se habilitará con campaña N ganada, manteniendo accesos anteriores y guardados de pruebas separados (T472).
+
+El círculo del número llevará fondo rebelde, partido con 1–2 estrellas o del jugador con 3. La receta del editor es solo estética. Se proponen 20 postes (1 por nivel 1–10, 2 por 11–15), rebeldes hasta 2 estrellas y del jugador con 3; reemplaza la regla anterior del 6. Las posiciones de T475 son candidatas sobre casillas permanentemente no construibles y requieren **OK de Lucas por cada uno de los 15 mapas** antes de integrar. No cambiar leyenda, casillas construibles, removibles ni recursos para hacerles lugar. M74 mantiene su editor desktop; no se habilita editor móvil por inferencia.
