@@ -2,6 +2,10 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Marco de presentación adaptable *(T476, 2026-10-23; en revisión)*
+
+El contenido conserva su espacio lógico de 1280×720 y queda centrado con escala uniforme dentro de una superficie que se adapta a la ventana. El menú, la partida y sus controles permanecen dentro del marco; el espacio de afuera tiene un respaldo oscuro mientras T478 integra los fondos aprobados por terreno. La comparación de nitidez a 1920×1080 sigue pendiente porque Godot reporta 1777×1000 en fullscreen en esta máquina.
+
 ## Editor de banderines para el nivel 6 *(T443, 2026-10-23)*
 
 Desde **Herramientas → Editor de banderines** se puede elegir una de cuatro paletas y cuatro emblemas. La vista grande y la de 34 px se actualizan al editar; «Aplicar» guarda el diseño por separado del progreso, y «Cancelar» o Escape descartan los cambios. «Restaurar» selecciona el diseño inicial, que se guarda solo al aplicar. El poste del jugador en el nivel 6 usa la elección al volver a entrar después de ganar; el banderín enemigo y los otros modos siguen con sus recursos fijos.

@@ -103,7 +103,7 @@ func _process(delta: float) -> void:
 	if _screen_check_left > 0.0:
 		return
 	_screen_check_left = 0.25
-	var screen: Node = get_tree().current_scene
+	var screen: Node = GameFlow.current_screen()
 	if screen != null:
 		play_music(&"music_combat" if screen.scene_file_path == "res://scenes/game/game.tscn" else &"music_menu")
 
