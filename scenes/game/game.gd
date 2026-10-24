@@ -20,6 +20,8 @@ const BACK_TO_EDITOR: String = "Volver al editor"
 
 signal pause_changed(paused: bool)
 signal speed_changed(speed: float)
+## T478: la capa física recibe el tema una vez resueltos campaña, Asedio, comunidad o editor.
+signal level_theme_selected(theme: StringName)
 ## RF-323: las vidas infinitas cambiaron (con el botón o con el atajo); el panel marca su interruptor.
 signal dev_infinite_lives_changed(on: bool)
 
@@ -107,6 +109,7 @@ func _ready() -> void:
 		testing = true
 	elif level_data == null:
 		level_data = GameFlow.level(0)
+	level_theme_selected.emit(level_data.theme)
 
 	# RF-656, RF-657: el guardado se consulta solo acá y solo en la campaña; el resto conserva el poste enemigo.
 	var post_conquered: bool = campaign_level != null and campaign_level.id == &"level_06" \
@@ -429,19 +432,8 @@ func _on_tab_changed(id: StringName) -> void:
 func _fit_map() -> void:
 	var size: Vector2i = level.map_size()
 	var zoom: float = Rules.map_zoom(size.x, size.y)
+	_add_theme_backdrop()
 	if UiMode.is_mobile():
-		var backdrop_layer := CanvasLayer.new()
-		backdrop_layer.name = "MapBackdrop"
-		backdrop_layer.layer = -10
-		add_child(backdrop_layer)
-		var backdrop := TextureRect.new()
-		backdrop.name = "ThemeGround"
-		backdrop.texture = MapThemes.ground_texture(level.theme)
-		backdrop.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
-		backdrop.stretch_mode = TextureRect.STRETCH_TILE
-		backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-		backdrop_layer.add_child(backdrop)
 		var mobile_config: MobileUiConfig = MobileUiConfig.load_from()
 		var top_height: float = float(mobile_config.get_value("barra_alta_px"))
 		var bottom_height: float = float(hud.get_node("BottomBar").size.y)
@@ -457,6 +449,30 @@ func _fit_map() -> void:
 	camera.position = map_center + (Rules.SCREEN_SIZE / 2.0 - area.get_center()) / zoom
 	add_child(camera)
 	camera.make_current()
+
+
+func _add_theme_backdrop() -> void:
+	var backdrop_layer: CanvasLayer = CanvasLayer.new()
+	backdrop_layer.name = "ThemeBackdrop"
+	backdrop_layer.layer = -10
+	add_child(backdrop_layer)
+	var solid: ColorRect = ColorRect.new()
+	solid.name = "SolidFallback"
+	solid.color = PresentationBackgroundCatalog.FALLBACK_COLOR
+	solid.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	solid.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	backdrop_layer.add_child(solid)
+	var texture: Texture2D = PresentationBackgroundCatalog.load_for_theme(level.theme)
+	if texture == null:
+		return
+	var backdrop: TextureRect = TextureRect.new()
+	backdrop.name = "ThemeImage"
+	backdrop.texture = texture
+	backdrop.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	backdrop.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	backdrop_layer.add_child(backdrop)
 
 
 func _create_interactive_camera() -> Camera2D:
