@@ -376,3 +376,10 @@ En el modo celular los menús tienen **distribución propia**: el menú principa
 ### T248 · Barra con pestañas y flecha al menú (M53)
 
 En los niveles que usan infraestructura (los que tienen removibles, minas o demoledora; hoy del 6 al 10) la barra de abajo trae dos pestañas, **«Cañones»** e **«Infraestructura»**, y el panel suelto de arriba a la derecha desaparece. Los niveles 1 a 5 no cambian. Teclas nuevas: **`0`** elige la décima torre y **`Tab`** cambia de pestaña (las torres 1 a 9 siguen en `1` a `9`; la torre 11 no tiene tecla). En todos los niveles hay una flecha **«← Menú»** arriba a la izquierda que pide confirmación y avisa qué se pierde (piezas de colección recogidas y demolición en curso); al probar un mapa del editor dice «← Editor» y vuelve sin preguntar. Capturas reales en `art/m53-barra/`. Spec: M53 (RF-454 a RF-463), D-088.
+
+
+### M76 · Selector, Asedio y conquista (T459; especificado, pendiente de aprobación/código)
+
+Mapa planetario inicial en PC y celular, tarjetas como alternativa y migración de una vez. En el mapa tocar selecciona; Jugar o Enter inicia, el doble clic no. En celular un dedo desplaza y Jugar queda fijo abajo. La geografía nueva, el fondo rebelde/partido/jugador de los números y los postes se revisan antes de integrar arte o posiciones.
+
+Asedio se abrirá mapa por mapa al ganar el mismo nivel de campaña, conservando el acceso de guardados que ya lo jugaron; pruebas abre todo en su guardado separado. T473 absorbe las solapas/récords pendientes de T235. Se quitarán ceros iniciales de los números visibles sin renombrar ids. Ver M76 en la spec y fichas T469–T475; las partidas T453, el teléfono T454 y G5 siguen pendientes de Lucas.

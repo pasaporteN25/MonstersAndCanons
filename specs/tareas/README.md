@@ -102,3 +102,8 @@ Solo en fichas marcadas *apto Qwen*. Esas tareas son de **datos con validador**:
 ## Verificación
 ## Frenar si
 ```
+
+
+## 9. Ronda de cierre 2026-10-23 · M76
+
+La spec de selector es [T459](T459-selector-mapa-modos-postes.md); sus RF-687–698 y D-198–203 siguen a los de T458, aunque los PR se revisen desde bases distintas. Código T470–T475 espera OK de Lucas a T459; T469 produce muestra, no finales, y espera aprobación antes de integrar. T475 exige propuesta y aprobación **por cada uno de los 15 mapas**. T235 está absorbida por T473, con remanente funcional todavía pendiente. Una sola tarea 📜 activa y hasta dos agentes de código con archivos disjuntos. Mapa celular y desbloqueo Asedio siguen las decisiones finales de Lucas, no las recomendaciones previas de T449.

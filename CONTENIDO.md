@@ -703,6 +703,13 @@ La pantalla «Novedades de esta versión» (se abre sola una vez por versión y 
 ## Presentación de jefes (M66, T461)
 
 La presentación pausa la campaña normal, dura 5 s la primera vez que el guardado ve a ese jefe y 3 s después, y no sale en Asedio ni en modo de pruebas. La opción conserva su clave (`boss_entrance`) y se llama «Presentación de los jefes»; en el menú sigue en la fila donde estaba (debajo de «Tutorial»): el agrupado «Partida y ayudas» todavía no existe en el código. La animación es por código sobre una ilustración quieta; el arte propio del Jefe y del Coloso no está aprobado (T367) y el del nivel 15 espera a T243. El piloto viejo y sus assets se retiraron. Ver [M66](specs/01-spec.md), [T461](specs/03-tareas.md) y la [ficha de arte T367](specs/tareas/T367-arte-entrada-jefes.md).
+## M76 · Mapa y postes de conquista (T459; spec, sin implementar)
+
+El planeta será la vista inicial de campaña en PC/celular con migración de una vez y tarjetas alternativas. La nueva geografía en serrucho oeste→este, aterrizaje en tierra, regiones orgánicas y estados grises necesita muestra de Codex y aprobación de Lucas (T469/T471). No modifica geografía jugable. Asedio N se habilitará con campaña N ganada, manteniendo accesos anteriores y guardados de pruebas separados (T472).
+
+El círculo del número llevará fondo rebelde, partido con 1–2 estrellas o del jugador con 3. La receta del editor es solo estética. Se proponen 20 postes (1 por nivel 1–10, 2 por 11–15), rebeldes hasta 2 estrellas y del jugador con 3; reemplaza la regla anterior del 6. Las posiciones de T475 son candidatas sobre casillas permanentemente no construibles y requieren **OK de Lucas por cada uno de los 15 mapas** antes de integrar. No cambiar leyenda, casillas construibles, removibles ni recursos para hacerles lugar. M74 mantiene su editor desktop; no se habilita editor móvil por inferencia.
+
+
 ## «Ver todo», panel de mejora, alcance y Opciones (M75, T458; pendiente de implementación)
 
 La spec M75 (RF-674 a RF-686, D-192 a D-197) todavía **no está programada**: lo de abajo describe qué datos se podrán retocar cuando se implemente, y **hoy no existe**.

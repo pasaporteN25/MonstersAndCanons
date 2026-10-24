@@ -331,3 +331,12 @@ B-51 queda como análisis futuro. Opus recomienda alcance y decisiones para un e
 **Estado (2026-10-23, auditoría T444):** M74 está completo e integrado en `main` (`c120ac3`). Fuera de su alcance quedan el celular, el mapa planetario, el texto libre y compartir recetas.
 
 **Orden:** T439 define los contratos. T441 y T442 pueden implementarse en ramas independientes desde su base especificada. T440 puede preparar muestras en paralelo; T443 espera aprobación visual de Lucas y las dos piezas funcionales. Cada tarea conserva su propia rama `feature/`, commit y PR a `main`; ningún agente mergea. Opus ya completó el análisis T438. Claude Sonnet implementa UI/lógica, Gemini puede hacer revisión independiente cuando esté disponible, Codex revisa arte, pruebas e integración. Opencode local se limita a Git rutinario.
+
+
+## 12. Enmienda vigente · selector, modos y postes (T459; 2026-10-23)
+
+M76 registra las decisiones finales de T449 con RF-687–698/D-198–203, tras la numeración reservada de T458. T459 entrega spec/plan/fichas y espera OK de Lucas antes del código. T469 muestra planeta nuevo e insignias (Codex, compuerta de arte); T470 implementa mapa inicial/interacción/migración PC y celular; T471 integra geografía tras aprobación; T472 implementa acceso a Asedio y migración; T473 absorbe el resto de T235 (solapas/récords); T474 unifica insignias/números; T475 incorpora postes solo con OK por cada uno de los 15 mapas. T235 queda retirada como ejecución independiente, sin declarar implementado su remanente.
+
+Las recomendaciones anteriores de T449 de excluir celular o diferir el acceso por campaña fueron reemplazadas por Lucas. No se aprueba el grupo Desafíos por inferencia. Geografía/insignias requieren muestra, las posiciones siguen propuestas. El mapa inicial puede actualizarse con la geografía nueva cuando esté aprobada. T470/T471/T473/T474 se serializan por archivos del selector; T472 coordina SaveManager/GameFlow con T461/T458 y T475 espera el propietario libre de game.gd. No más de dos agentes de código y una tarea 📜 a la vez.
+
+T453 (T280/T226/T283), teléfono real T454, mediciones limpias T364/T369, versión T268 y G5 T238/publicación T239 mantienen sus compuertas humanas. Asedio 7 al 101 % lo confirma Lucas en G5, sin cambiar balance. Esta enmienda no cierra ninguna partida ni aprobación de arte.

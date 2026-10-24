@@ -1538,6 +1538,8 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Relación con D-173:** esta decisión reemplaza la recomendación de no ofrecer la opción; queda registrada para conservar el motivo original.
 
 ## D-178 · El selector de niveles desktop tiene dos estilos con una preferencia de interfaz
+
+> **Revisada por D-198/D-199/D-200:** mapa inicial también celular, migración de una vez y geografía nueva aprobable; se conserva la alternativa de tarjetas.
 - **Fecha:** 2026-10-21 · **Estado:** decidida · **Decidió:** Lucas.
 - **Qué:** conservar el selector de tarjetas rediseñado y sumar el mapa planetario 2D como estilo alternativo. La elección se guarda en `settings`; un guardado anterior usa tarjetas.
 - **Por qué:** Lucas pidió poder elegir el selector actual mejorado o el mapa; la preferencia no forma parte del progreso de campaña.
@@ -1559,6 +1561,8 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Qué cambia:** RF-646 y RF-649 a RF-654, tareas T426 y T429–T430.
 ## D-181 · El poste de nivel 6 refleja si la campaña ya ganó ese nivel
 
+> **Regla retirada por D-203/RF-696:** veinte postes en la campaña; solo 3 estrellas cambia a jugador. La alternativa que acá se descartó fue aprobada después por Lucas.
+
 - **Fecha:** 2026-10-21 · **Estado:** decidida · **Decidió:** Lucas.
 - **Qué:** el poste de nivel 6 usa los estandartes enemigos mientras el nivel no figure completado en el guardado, y los del jugador tras cualquier victoria registrada, sin umbral de estrellas.
 - **Por qué:** da una señal visual de conquista en el propio mapa del nivel.
@@ -1566,6 +1570,8 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Qué cambia:** RF-656; es solo presentación, no modifica progreso, guardado ni balance.
 
 ## D-182 · El estado de campaña se pasa explícitamente al mapa
+
+> **Ampliada por D-203/RF-697:** se conserva el paso de contexto explícito; el estado depende de estrellas y no de cualquier victoria.
 
 - **Fecha:** 2026-10-21 · **Estado:** decidida · **Decidió:** Codex a partir del alcance de D-181.
 - **Qué:** Game obtiene SaveManager.is_completed() solo al cargar un nivel de campaña y pasa un booleano al mapa; modos, comunidad, editor, pruebas y escenas sueltas usan el estado de reserva enemigo.
@@ -1642,6 +1648,54 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Por qué:** Lucas pidió fondos asociados a cada jefe y aprobó la animación programática sobre imágenes estáticas.
 - **Alternativas descartadas:** fondo genérico teñido; animación cuadro a cuadro; destello en el punto de entrada.
 - **Qué cambia:** RF-671 y las fichas T367/T461–T463; el arte queda sujeto a aprobación de Lucas.
+
+## D-198 · El mapa es la vista inicial en PC y celular, con migración de una vez
+
+- **Fecha:** 2026-10-23 · **Estado:** decidida por Lucas; contrato técnico de T459 pendiente de su revisión. **Decidió:** Lucas, T449 y ampliación.
+- **Qué:** mapa primero en ambas interfaces, tarjetas disponibles y preferencia persistida; todos los archivos anteriores pasan al mapa una vez con `settings.selector_map_migrated`, sin subir `SAVE_VERSION`.
+- **Por qué:** Lucas pidió el mapa como presentación principal y aclaró que también llega al celular. El guardado actual no distingue «elegí tarjetas» de su valor inicial.
+- **Alternativas descartadas:** tarjetas iniciales, mapa solo PC, migrar solo guardados nuevos, intentar deducir elección previa, quitar tarjetas.
+- **Enmienda:** D-178/RF-645/RF-653; RF-687/RF-689. No convierte una aprobación de dirección en aprobación del arte nuevo.
+
+## D-199 · En el mapa se selecciona antes de jugar; un dedo desplaza
+
+- **Fecha:** 2026-10-23 · **Estado:** decidida · **Decidió:** Lucas.
+- **Qué:** clic/toque solo selecciona; doble clic y segundo clic no inician; Jugar o Enter confirman. Tarjetas conservan activación con un clic. En celular, un dedo desplaza con umbral y Jugar permanece fijo abajo; scroll solo si hay desborde.
+- **Por qué:** permite explorar el planeta sin entrar por accidente y mantiene disponible la confirmación al desplazarlo.
+- **Alternativas descartadas:** clic que inicia, doble clic para iniciar, trasladar selección previa a las tarjetas, dejar celular fuera, arrastre que termina seleccionando, forzar scroll cuando todo entra.
+- **Enmienda:** RF-648; RF-688/RF-690. Umbral y área táctil se toman del sistema vigente, no se inventa otro gesto.
+
+## D-200 · Geografía orgánica en serrucho de oeste a este
+
+- **Fecha:** 2026-10-23 · **Estado:** dirección decidida; muestra y coordenadas pendientes de aprobación 🎨 · **Decidió:** Lucas.
+- **Qué:** revisar el mapa planetario actualmente integrado por T428 (basado en la muestra T427): aterrizaje en tierra, avance en serrucho oeste→este, biomas canónicos y regiones orgánicas; zonas no conquistadas más grises. Codex prepara una revisión visual antes de integrar esos cambios; ancho y posiciones definitivos se revisan en esa muestra. Se conservan los elementos ya aprobados del mapa aplicado.
+- **Por qué:** el aterrizaje actual cae fuera de tierra y el anillo artificial no expresa el avance pedido.
+- **Alternativas descartadas:** mover solo el aterrizaje, conservar anillo, forzar ancho grande/scroll, convertir el planeta en mapa jugable o inventar otro canon.
+- **Enmienda:** D-178/D-179, muestra T427 e integración T428; conserva RF-647/RF-652 y agrega RF-691. T427 queda como antecedente de la versión aplicada por T428; la revisión de T469 parte del mapa aplicado, no reemplaza la base aprobada.
+
+## D-201 · Asedio se abre por victoria del mismo mapa de campaña
+
+- **Fecha:** 2026-10-23 · **Estado:** decidida; migración técnica pendiente de revisión T459 · **Decidió:** Lucas.
+- **Qué:** Asedio N se abre al ganar campaña N, sin depender de Asedio N−1. Se conserva acceso anterior de los guardados que ya jugaron Asedio y sus récords; pruebas abre todo y usa su archivo separado. Marcas aditivas `siege_access_migrated` y `siege_legacy_unlocked` conservan derechos anteriores de una vez, no resultados de pruebas.
+- **Por qué:** Lucas eligió vincular el regreso al lugar con una victoria previa, conservando el acceso de quienes ya usaron el modo. No cambia dificultad ni relata un contraataque.
+- **Alternativas descartadas:** abrir todo desde el principio, secuencia propia de Asedio, abrir toda la solapa al ganar otro nivel, cerrar mapas ya accesibles, copiar progreso de pruebas a normal.
+- **Enmienda:** RF-390/RF-496, solo acceso de Asedio; RF-692/RF-693. La confirmación humana del 7 al 101 % queda en G5.
+
+## D-202 · Absorber T235 y limpiar el selector sin inventar otra jerarquía
+
+- **Fecha:** 2026-10-23 · **Estado:** decidida en su alcance; solución técnica de scroll y selector de récords propuesta para revisión · **Decidió:** Lucas absorbe T235; T459 concreta su remanente.
+- **Qué:** solapas alcanzables con más de dos modos propios y top 5 separado por modo. Se mantiene el orden RF-389. Se eliminan rótulos redundantes de estados del mapa y ceros iniciales de los números de nivel en todas las pantallas; ids/rutas permanecen.
+- **Por qué:** quedan dos deudas reales de T235 y Lucas pidió limpiar mapa y números. El informe recomendaba un grupo Desafíos, pero la sección final de decisiones no lo aprueba.
+- **Alternativas descartadas:** declarar T235 implementada al absorberla, fusionar campaña/modos, adoptar Desafíos por inferencia, quitar candados o información de por qué no se puede jugar, renombrar `level_01`.
+- **Refs:** RF-694/RF-695; T473/T474. T235 queda retirada como ejecución independiente, conservando el historial de lo hecho por T258.
+
+## D-203 · Conquista de tres estrellas: insignias y veinte postes cosméticos
+
+- **Fecha:** 2026-10-23 · **Estado:** regla decidida; posiciones de 15 mapas y muestras de insignias pendientes de Lucas · **Decidió:** Lucas, ampliación de T449.
+- **Qué:** en selector, sin victoria fondo rebelde, 1–2 estrellas mitad rebelde/mitad jugador, 3 estrellas jugador. En partida, 1 poste en niveles 1–10 y 2 en 11–15; rebelde hasta 2 estrellas y jugador con 3, sin estado intermedio. Solo casillas permanentemente no utilizables; propuesta y aprobación por cada mapa. La receta del editor es siempre estética y se rescata en la parte del jugador.
+- **Por qué:** Lucas unificó la cantidad para toda la campaña y corrigió el poste del 6, que hoy cambia con cualquier victoria. Es representación de estrellas existentes, sin progreso adicional.
+- **Alternativas descartadas:** solo niveles 2/3 y últimos cinco, cambiar con cualquier victoria, poste partido con 1–2 estrellas, ocupar casillas construibles/removibles, dar bonus por receta, aprobar ubicaciones por el OK a esta spec.
+- **Enmienda:** RF-656/RF-657/RF-664, D-181/D-182 y alcance de M74; RF-695 a RF-697. No aprueba un emblema canónico nuevo ni habilita editor mobile.
 
 ## D-192 · «Ver todo»: solo la tecla en PC, lupa flotante en el celular y un aviso de una vez
 
