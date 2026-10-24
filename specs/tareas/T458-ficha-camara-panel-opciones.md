@@ -33,10 +33,10 @@ T466 (alcance)    ─┘
 
 1. Sacar `_build_pc_view_all_button` y su ayuda. La PC conserva la acción `view_all`, la V, el efecto en pausa y la guarda de menús abiertos (RF-613, sin tocar).
 2. Botón del celular con ícono de lupa (SVG propio, antecedente `assets/ui/mobile_demolish.svg`; ver `.claude/rules/arte.md`). **Captura para Lucas antes de integrar.** Sin aprobación, queda el texto actual.
-3. Aviso de una vez (RF-676): `CameraController` emite una señal cuando el botón pasa de oculto a visible; `Game` decide si mostrarlo (`ui_prefs.view_all_hint_seen`, tutorial, menús) y lo marca al mostrarse. Los dos textos van en datos o constantes de interfaz, no repartidos por el código.
+3. Aviso de una vez (RF-676): `CameraController` emite una señal solo cuando aumenta el zoom (D-207); alejar o desplazar sin acercar no lo activa; `Game` decide si mostrarlo (`ui_prefs.view_all_hint_seen`, tutorial, menús) y lo marca al mostrarse. Los dos textos van en datos o constantes de interfaz, no repartidos por el código.
 4. Campo aditivo con lectura defensiva (ausente/inválido → «no visto», con `push_warning` si es inválido). `SAVE_VERSION` no cambia.
 
-**Tests:** actualizar `test_view_all_displaced.gd` y `test_view_all_binding.gd`; nuevo `test_view_all_hint.gd` (una vez, no con el tutorial, guardado viejo, solo en el paso de oculto a visible); `test_old_saves.gd`.
+**Tests:** actualizar `test_view_all_displaced.gd` y `test_view_all_binding.gd`; nuevo `test_view_all_hint.gd` (una vez, no con el tutorial, guardado viejo, solo al aumentar el zoom; alejar o desplazar sin acercar no lo activa; desplazar y luego acercar lo activa si aún no se mostró y no rige una exclusión); `test_old_saves.gd`.
 
 ## 3. T465 · Panel de torre (propuesta A)
 
