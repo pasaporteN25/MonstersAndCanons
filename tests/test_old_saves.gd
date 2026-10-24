@@ -303,7 +303,7 @@ func test_ui_prefs_are_additive_and_broken_fields_default_individually() -> void
 	_write('{"version":1,"ui_prefs":{"cart_side":"arriba","cart_y":"x","exit_side":"right","exit_y":2}}')
 	SaveManager.load_save()
 	var prefs: UiPrefs = SaveManager.get_ui_prefs()
-	assert_eq(prefs.to_dict(), {"cart_side": "right", "cart_y": 0.45, "exit_side": "right", "exit_y": 0.1, "demolish_side": "right", "demolish_y": 0.8, "view_all_key": KEY_V})
+	assert_eq(prefs.to_dict(), {"cart_side": "right", "cart_y": 0.45, "exit_side": "right", "exit_y": 0.1, "demolish_side": "right", "demolish_y": 0.8, "view_all_key": KEY_V, "view_all_hint_seen": false})
 	assert_true(SaveManager.save())
 	var file := FileAccess.open(PATH, FileAccess.READ)
 	var parsed := JSON.new()
@@ -315,14 +315,14 @@ func test_ui_prefs_are_additive_and_broken_fields_default_individually() -> void
 func test_old_save_without_ui_prefs_uses_defaults() -> void:
 	_write(SAVE_T40)
 	SaveManager.load_save()
-	assert_eq(SaveManager.get_ui_prefs().to_dict(), {"cart_side": "right", "cart_y": 0.45, "exit_side": "left", "exit_y": 0.1, "demolish_side": "right", "demolish_y": 0.8, "view_all_key": KEY_V})
+	assert_eq(SaveManager.get_ui_prefs().to_dict(), {"cart_side": "right", "cart_y": 0.45, "exit_side": "left", "exit_y": 0.1, "demolish_side": "right", "demolish_y": 0.8, "view_all_key": KEY_V, "view_all_hint_seen": false})
 
 
 func test_ui_prefs_with_wrong_top_level_type_use_defaults() -> void:
 	for raw: String in ["3", "\"mal\"", "[]"]:
 		_write('{"version":1,"ui_prefs":%s}' % raw)
 		SaveManager.load_save()
-		assert_eq(SaveManager.get_ui_prefs().to_dict(), {"cart_side": "right", "cart_y": 0.45, "exit_side": "left", "exit_y": 0.1, "demolish_side": "right", "demolish_y": 0.8, "view_all_key": KEY_V})
+		assert_eq(SaveManager.get_ui_prefs().to_dict(), {"cart_side": "right", "cart_y": 0.45, "exit_side": "left", "exit_y": 0.1, "demolish_side": "right", "demolish_y": 0.8, "view_all_key": KEY_V, "view_all_hint_seen": false})
 
 
 # --- La presentación de los jefes (M66, RF-672): una clave aditiva de los ajustes que los guardados viejos no tienen ---

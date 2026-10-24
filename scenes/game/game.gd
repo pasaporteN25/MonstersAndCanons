@@ -167,6 +167,7 @@ func _ready() -> void:
 	camera_controller.name = "CameraController"
 	add_child(camera_controller)
 	camera_controller.setup(level, camera, minimum_map_zoom, Callable(self, "_create_interactive_camera"), mobile_hud, UiMode.is_mobile())
+	camera_controller.view_zoomed_in.connect(_on_view_zoomed_in.bind(campaign_level != null))
 	if mobile_hud != null:
 		mobile_hud.view_all_pressed.connect(camera_controller.view_all)
 	build_controller.tower_built.connect(_on_tower_built)
@@ -585,6 +586,25 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 	elif event.is_action_pressed("toggle_speed"):
 		toggle_speed()
+
+
+## RF-676: el aviso dice «Acercaste», así que solo responde a un zoom que aumenta el acercamiento.
+func _on_view_zoomed_in(is_campaign: bool) -> void:
+	if not is_campaign or SaveManager.get_ui_prefs().view_all_hint_seen or tutorial != null and tutorial.is_active():
+		return
+	if pause_menu.is_open() or exit_dialog.is_open() or level_intro.is_open() or session.is_over() or presentation != null:
+		return
+	if hud.is_notice_active():
+		return
+	var prefs: UiPrefs = SaveManager.get_ui_prefs()
+	var message: String
+	if UiMode.is_mobile():
+		message = "Acercaste el mapa. Tocá la lupa para volver a verlo entero."
+	else:
+		message = "Acercaste el mapa. Apretá %s para volver a verlo entero." % ViewAllBinding.key_text(prefs.view_all_key)
+	hud.show_view_all_notice(message)
+	prefs.view_all_hint_seen = true
+	SaveManager.set_ui_prefs(prefs)
 
 
 # --- Menú de pausa (RF-114) ---

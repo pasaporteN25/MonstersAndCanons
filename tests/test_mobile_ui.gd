@@ -293,7 +293,7 @@ func test_pc_camera_input_adds_zoom_without_mobile_controls() -> void:
 
 func test_ui_prefs_fall_back_per_field_and_snap_to_nearest_edge() -> void:
 	var prefs: UiPrefs = UiPrefs.read({"cart_side": "arriba", "cart_y": 2.0, "exit_side": "right", "exit_y": 0.5})
-	assert_eq(prefs.to_dict(), {"cart_side": "right", "cart_y": 0.45, "exit_side": "right", "exit_y": 0.5, "demolish_side": "right", "demolish_y": 0.8, "view_all_key": KEY_V})
+	assert_eq(prefs.to_dict(), {"cart_side": "right", "cart_y": 0.45, "exit_side": "right", "exit_y": 0.5, "demolish_side": "right", "demolish_y": 0.8, "view_all_key": KEY_V, "view_all_hint_seen": false})
 	var snapped: Dictionary = FloatButtonLayout.snap(Vector2(1180.0, 320.0), Vector2(1280.0, 720.0),
 		64.0, 96.0, Vector2.ONE * 82.0)
 	assert_eq(snapped["side"], "right")

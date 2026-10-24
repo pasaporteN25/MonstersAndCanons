@@ -98,6 +98,8 @@ var _has_next_wave: bool = false
 
 var _metrics: Label
 var _metrics_updated: int = 0
+var _view_all_notice: Label
+var _view_all_notice_tween: Tween
 
 func _process(_delta: float) -> void:
 	if _metrics == null or not _metrics.visible:
@@ -126,6 +128,19 @@ func _ready() -> void:
 	_metrics.add_theme_constant_override("outline_size", 4)
 	_metrics.visible = false
 	add_child(_metrics)
+	_view_all_notice = Label.new()
+	_view_all_notice.name = "ViewAllNotice"
+	_view_all_notice.position = Vector2(160, 50)
+	_view_all_notice.size = Vector2(960, 36)
+	_view_all_notice.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_view_all_notice.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_view_all_notice.add_theme_font_size_override("font_size", 18)
+	_view_all_notice.add_theme_color_override("font_color", Color(1.0, 0.94, 0.78))
+	_view_all_notice.add_theme_color_override("font_outline_color", Color.BLACK)
+	_view_all_notice.add_theme_constant_override("outline_size", 5)
+	_view_all_notice.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_view_all_notice.visible = false
+	add_child(_view_all_notice)
 	var hint := Label.new()
 	hint.position = Vector2(20, 52)
 	hint.visible = false
@@ -171,6 +186,24 @@ func _ready() -> void:
 	_exit_button.pressed.connect(menu_pressed.emit)
 	show_paused(false)
 	show_speed(1.0)
+
+
+func show_view_all_notice(message: String) -> void:
+	_view_all_notice.text = message
+	_view_all_notice.modulate.a = 1.0
+	_view_all_notice.visible = true
+	if _view_all_notice_tween != null and _view_all_notice_tween.is_running():
+		_view_all_notice_tween.kill()
+	_view_all_notice_tween = create_tween()
+	_view_all_notice_tween.tween_interval(3.0)
+	_view_all_notice_tween.tween_property(_view_all_notice, "modulate:a", 0.0, 0.25)
+	_view_all_notice_tween.tween_callback(func() -> void:
+		_view_all_notice.visible = false
+		_view_all_notice.modulate.a = 1.0)
+
+
+func is_notice_active() -> bool:
+	return _intro_busy or _presentation_active or (not _wave_banner.text.is_empty() and _wave_banner.modulate.a > 0.05)
 
 
 ## RF-416: el contador de recursos de la barra superior, con el mismo formato que las otras estadísticas.

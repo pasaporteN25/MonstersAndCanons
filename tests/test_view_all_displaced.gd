@@ -1,6 +1,6 @@
 extends GutTest
 # T304 (M60, RF-545): «Ver todo» también cuando el encuadre se corrió con el zoom mínimo.
-# Celular: dos dedos. PC: botón central; el botón de la PC solo se ve con el zoom mínimo y el mapa corrido.
+# Celular: dos dedos. PC: botón central y tecla configurable; no hay botón en pantalla.
 
 var _viewport: SubViewport
 var _game: Game
@@ -72,13 +72,15 @@ func test_view_all_is_hidden_at_the_start() -> void:
 	assert_false(_game.camera_controller.is_view_displaced())
 
 
-func test_panning_at_minimum_zoom_shows_view_all_and_pressing_it_brings_the_view_back() -> void:
+func test_panning_at_minimum_zoom_keeps_button_hidden_until_zoom_and_then_returns_to_fit() -> void:
 	await _start(UiMode.MOBILE, 14)
 	var controller: CameraController = _game.camera_controller
 	_two_finger_pan()
 	assert_almost_eq(_game.camera.zoom.x, _game.minimum_map_zoom, 0.0001, "el zoom sigue siendo el mínimo")
 	assert_true(controller.is_view_displaced(), "el encuadre se corrió")
-	assert_true(_game.mobile_hud._view_all_button.visible, "«Ver todo» aparece sin cambiar el zoom")
+	assert_false(_game.mobile_hud._view_all_button.visible, "desplazar sin acercar no muestra la lupa")
+	controller._zoom_at(Vector2(640.0, 340.0), 1.3)
+	assert_true(_game.mobile_hud._view_all_button.visible, "la lupa aparece al acercar")
 	var fit: Vector2 = controller._fit_position()
 	_game.mobile_hud._view_all_button.pressed.emit()
 	assert_false(_game.mobile_hud._view_all_button.visible, "desaparece")
@@ -86,12 +88,10 @@ func test_panning_at_minimum_zoom_shows_view_all_and_pressing_it_brings_the_view
 	assert_eq(_game.camera.position, fit, "el encuadre de RF-251")
 
 
-func test_panning_a_map_that_needs_no_zoom_also_shows_view_all() -> void:
+func test_panning_a_map_that_needs_no_zoom_keeps_view_all_hidden() -> void:
 	await _start(UiMode.MOBILE, 0)  # 20×9: el zoom mínimo es 1 y al principio no hay cámara
 	assert_false(_game.mobile_hud._view_all_button.visible)
 	_two_finger_pan()
-	assert_true(_game.mobile_hud._view_all_button.visible)
-	_game.mobile_hud._view_all_button.pressed.emit()
 	assert_false(_game.mobile_hud._view_all_button.visible)
 
 
@@ -104,36 +104,21 @@ func test_zoomed_view_all_still_works_as_before() -> void:
 	assert_almost_eq(_game.camera.zoom.x, _game.minimum_map_zoom, 0.0001)
 
 
-func test_pc_has_no_button_until_the_view_is_displaced_at_minimum_zoom() -> void:
+func test_pc_has_no_button_after_pan_or_zoom() -> void:
 	await _start(UiMode.PC, 14)
-	var button: Button = _game.camera_controller._pc_view_all_button
-	assert_not_null(button, "la PC tiene su botón, escondido")
-	assert_false(button.visible, "no se ve al empezar")
-	_game.camera_controller._pan_by_screen_delta(Vector2(60.0, 0.0))  # lo que hace el botón central
-	assert_almost_eq(_game.camera.zoom.x, _game.minimum_map_zoom, 0.0001)
-	assert_true(button.visible, "zoom mínimo y mapa corrido: aparece")
-	button.pressed.emit()
-	assert_false(button.visible)
-	assert_false(_game.camera_controller.is_view_displaced())
-
-
-func test_pc_wheel_zoom_shows_the_button_too() -> void:
-	await _start(UiMode.PC, 14)
-	var button: Button = _game.camera_controller._pc_view_all_button
+	assert_null(_game.camera_controller.get_node_or_null("ViewAllLayer"))
+	_game.camera_controller._pan_by_screen_delta(Vector2(60.0, 0.0))
+	assert_null(_game.camera_controller.get_node_or_null("ViewAllLayer"))
 	_game.camera_controller._zoom_at(Vector2(640.0, 340.0), 1.3)
-	assert_gt(_game.camera.zoom.x, _game.minimum_map_zoom)
-	assert_true(button.visible, "M68 (RF-612): con otro zoom, la PC también muestra «Ver todo»")
-	button.pressed.emit()
-	assert_false(button.visible)
-	assert_almost_eq(_game.camera.zoom.x, _game.minimum_map_zoom, 0.0001)
+	assert_null(_game.camera_controller.get_node_or_null("ViewAllLayer"))
 
 
 func test_mobile_has_a_single_view_all_button() -> void:
 	await _start(UiMode.MOBILE, 14)
-	assert_null(_game.camera_controller._pc_view_all_button, "el celular usa el de su HUD")
+	assert_null(_game.camera_controller.get_node_or_null("ViewAllLayer"), "el celular usa el de su HUD")
 
 
-# --- M68 (T402, RF-612, RF-613): la tecla de «Ver todo» y la ayuda del botón de la PC ---
+# --- M68/M75 (T402/T464, RF-613/RF-674): la tecla de «Ver todo»; en PC no hay botón ---
 
 func test_pc_view_all_key_goes_back_to_the_fit_even_while_paused() -> void:
 	await _start(UiMode.PC, 14)
@@ -146,7 +131,7 @@ func test_pc_view_all_key_goes_back_to_the_fit_even_while_paused() -> void:
 	_game._unhandled_input(event)
 	assert_almost_eq(_game.camera.zoom.x, _game.minimum_map_zoom, 0.0001, "la V vuelve al encuadre")
 	assert_false(_game.camera_controller.is_view_displaced())
-	assert_false(_game.camera_controller._pc_view_all_button.visible)
+	assert_null(_game.camera_controller.get_node_or_null("ViewAllLayer"))
 
 
 func test_pc_view_all_key_does_nothing_with_the_pause_menu_open() -> void:
@@ -162,11 +147,7 @@ func test_pc_view_all_key_does_nothing_with_the_pause_menu_open() -> void:
 	_game.close_pause_menu()
 
 
-func test_pc_button_tooltip_names_the_chosen_key() -> void:
+func test_pc_has_no_button_tooltip() -> void:
 	await _start(UiMode.PC, 14)
-	_game.camera_controller._zoom_at(Vector2(640.0, 340.0), 1.3)
-	assert_eq(_game.camera_controller._pc_view_all_button.tooltip_text, "Ver todo el mapa · V")
-	ViewAllBinding.apply(KEY_H)
-	_game.camera_controller._zoom_at(Vector2(640.0, 340.0), 1.1)
-	assert_eq(_game.camera_controller._pc_view_all_button.tooltip_text, "Ver todo el mapa · H")
+	assert_null(_game.camera_controller.get_node_or_null("ViewAllLayer"))
 	ViewAllBinding.apply(ViewAllBinding.DEFAULT_KEY)
