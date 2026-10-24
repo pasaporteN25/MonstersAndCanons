@@ -7,12 +7,15 @@ signal upgrade_pressed
 signal sell_pressed
 signal targeting_pressed
 signal close_pressed
+## M75 (RF-680): el mouse entró o salió de «Mejorar». Game decide si hay algo que mostrar (oro, nivel máximo).
+signal upgrade_hover_changed(hovered: bool)
 
 var _tower: Tower
 var _sell_value: int = 0
 ## RF-418: recursos que devuelve la venta.
 var _sell_resources: int = 0
 var _gold: int = 0
+var _upgrade_hovered: bool = false
 ## RF-280: los segundos de aturdimiento que se muestran (para refrescar solo cuando cambian).
 var _shown_stun: int = 0
 var _shown_support: int = 0
@@ -45,6 +48,9 @@ func _ready() -> void:
 	_sell_button.pressed.connect(sell_pressed.emit)
 	_targeting_button.pressed.connect(targeting_pressed.emit)
 	_close_button.pressed.connect(close_pressed.emit)
+	_upgrade_button.mouse_entered.connect(_set_upgrade_hovered.bind(true))
+	_upgrade_button.mouse_exited.connect(_set_upgrade_hovered.bind(false))
+	visibility_changed.connect(_on_visibility_changed)
 	_title.resized.connect(_refresh_title_tooltip)
 	_set_mouse_filters(self)
 	_style_panel()
@@ -67,6 +73,24 @@ func show_tower(tower: Tower, sell_value: int, gold: int, sell_resources: int = 
 func _process(_delta: float) -> void:
 	if _tower != null and visible and (ceili(_tower.stun_left()) != _shown_stun or _tower.support_bonus() != _shown_support or not is_equal_approx(_tower.wear_percent, _shown_wear) or not is_equal_approx(_tower.repair_rate_received,_shown_repair)):
 		refresh(_gold)
+
+
+## M75 (RF-680): ¿el mouse está sobre «Mejorar» y el botón está activo? Apagado (sin oro o nivel máximo) no cuenta.
+func is_upgrade_hovered() -> bool:
+	return _upgrade_hovered and visible and not _upgrade_button.disabled
+
+
+func _set_upgrade_hovered(hovered: bool) -> void:
+	if _upgrade_hovered == hovered:
+		return
+	_upgrade_hovered = hovered
+	upgrade_hover_changed.emit(hovered)
+
+
+## Si el panel se esconde con el mouse encima, no siempre llega el `mouse_exited`: se da por salido.
+func _on_visibility_changed() -> void:
+	if not visible:
+		_set_upgrade_hovered(false)
 
 
 ## M63 (RF-574): los botones que el tutorial señala.

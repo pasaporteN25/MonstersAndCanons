@@ -2,6 +2,10 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Ampliación del alcance al mejorar *(T467, en revisión)*
+
+Antes de mejorar una torre podés ver hasta dónde va a llegar su alcance. **En la PC**, pasá el mouse sobre «Mejorar»: se ve el círculo del nivel siguiente creciendo desde el alcance actual (si la mejora no lo cambia, el mismo círculo quieto) y desaparece al sacar el mouse. **En el celular**, «Mejorar» pasa a tener **dos toques**: el primero muestra la ampliación (el botón pasa a «Confirmar» y sigue mostrando el costo) y el segundo mejora; tocar el mapa, soltar o elegir otra torre, tocar «Vender» o la prioridad, pausar o quedarte sin oro cancela el primer toque. Después de mejorar, el botón se bloquea 0,35 s, así que un doble toque sube un solo nivel. La mejora es instantánea y cuesta lo mismo que antes; la ampliación se ve con cualquier valor de «Círculo de alcance». Se apaga junto con el resto desde **«Animaciones de mejora»**: apagada, la ampliación se ve quieta y el efecto de mejora no la dibuja. El tutorial del nivel 1 en el celular explica los dos toques.
+
 ## Panel de mejora de torres *(T465, en revisión)*
 
 Al seleccionar una torre, las métricas que cambian muestran el valor actual y el de la mejora una sola vez, con decimales en coma. Los efectos que cambian aparecen debajo como «antes → después», sin repetir los datos del bloque de estadísticas. El indicador del nivel usa bronce, plata y oro; su tooltip conserva el nivel actual. Los costos y el funcionamiento de las mejoras no cambian.
