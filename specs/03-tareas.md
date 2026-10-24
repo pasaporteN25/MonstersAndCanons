@@ -2707,3 +2707,26 @@ El alcance de T425 a T432 es desktop. Mobile continúa por su propia experiencia
 - [ ] **T475 · Postes de campaña: propuesta por mapa e integración tras OK. `[mobile+x86]`**
   **Refs:** RF-696, RF-697, RF-698. **Depende de:** T459 aprobada; 🚦 Lucas aprueba posiciones de cada uno de los 15 mapas; T461 integrada antes de editar game.gd. **Ficha:** `specs/tareas/T475-postes-quince-niveles.md`.
   **Hecho cuando:** Veinte postes solo en posiciones aprobadas, 15 registros de aprobación, estrellas determinan variante sin otra progresión y comparación estructural confirma mapa jugable intacto. Mapas pendientes no se declaran terminados.
+
+## M77 · Franjas y carga (T460; 2026-10-23)
+
+- [x] **T460 · 📜 Especificar franjas temáticas y carga rotativa. `[mobile+x86]`**
+  **Refs:** decisiones de Lucas T450/aclaraciones, RF-699–707, D-204–206. **Depende de:** T450 y numeración reservada T458/T459. **Ficha:** `specs/tareas/T460-carga-franjas.md`.
+  **Hecho cuando:** RF/D, plan y fichas, cruces y compuertas explícitas, solución revisable para franjas fuera del viewport sin expandir juego/HUD.
+  **Resultado (2026-10-23):** M77/D-204–206 y fichas T476–479 escritas; RF-580/D-133 tienen enmienda condicionada. Se propone host físico con viewport lógico fijo y resolución de render adaptable, pendiente de revisión/aprobación. T479 sigue bloqueada hasta agregar al informe T454 la medición de láminas en celular real y obtener el OK de Lucas con esos datos; la ficha T454 vigente no la incluye. T476 mantiene la propuesta de host/viewport en revisión: Lucas debe aprobar la arquitectura antes de implementarla. Se leyeron T450, código vigente y ficha T454 remota sin editar #57; verificación documental, sin cambios de juego/arte, Godot, GUT, capturas nuevas, mediciones ni prueba de teléfono.
+
+- [ ] **T476 · Superficie física y contenido lógico fijo. `[mobile+x86]`**
+  **Refs:** RF-699/RF-702/RF-707. **Depende de:** T460 aprobada y OK explícito de Lucas a la propuesta técnica D-204/T476 por sus efectos en escenas/input, archivos compartidos libres. **Ficha:** `specs/tareas/T476-superficie-presentacion.md`.
+  **Hecho cuando:** Marco lógico y tamaños/input conservados en todas las relaciones; flujo y bloqueo/restauración funcionan; no mecánicas nuevas. Si supera sesión, subdividir con revisión antes de mezclar.
+
+- [ ] **T477 · Muestra de fondos por terreno y recortes. `[mobile+x86]`**
+  **Refs:** RF-700/RF-701. **Depende de:** T460 aprobada; 🎨 Lucas aprueba cada terreno/composición antes de producir finales. **Ficha:** `specs/tareas/T477-muestra-franjas-terrenos.md`.
+  **Hecho cuando:** Lucas tiene muestras por terreno a escala y puede aprobar/rechazar cada una; no se modifica arte aprobado ni se produce final antes de compuerta.
+
+- [ ] **T478 · Integrar franjas por terreno sin moverlas con zoom. `[mobile+x86]`**
+  **Refs:** RF-700/RF-701/RF-702/RF-707. **Depende de:** T476 integrada con arquitectura aprobada explícitamente por Lucas, T477 aprobada por terreno, T460 aprobada; coordinar Game/cámara con T461/T464/T475. **Ficha:** `specs/tareas/T478-integrar-franjas-tematicas.md`.
+  **Hecho cuando:** Fondos aprobados visibles en franjas sin movimiento al acercar/desplazar; sin huecos ni deformación, cámara máxima 1,0 y mapa/input idénticos.
+
+- [ ] **T479 · Láminas de intro rotativas en la carga. `[mobile+x86]`**
+  **Refs:** RF-703–707. **Depende de:** T460 aprobada; 🚦 anexo al informe T454 con medición real del costo de láminas en celular y aprobación escrita de Lucas con esos datos; T476 integrada. **Ficha:** `specs/tareas/T479-carga-laminas-rotativas.md`.
+  **Hecho cuando:** Rotación y asincronía cumplen criterios, entrada bloqueada y restaurada, mínimo 0,4s intacto, escena lista no espera textura/fundido; medición y aprobación previas enlazadas, verificación móvil final documentada.

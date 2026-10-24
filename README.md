@@ -383,3 +383,9 @@ En los niveles que usan infraestructura (los que tienen removibles, minas o demo
 Mapa planetario inicial en PC y celular, tarjetas como alternativa y migración de una vez. En el mapa tocar selecciona; Jugar o Enter inicia, el doble clic no. En celular un dedo desplaza y Jugar queda fijo abajo. La geografía nueva, el fondo rebelde/partido/jugador de los números y los postes se revisan antes de integrar arte o posiciones.
 
 Asedio se abrirá mapa por mapa al ganar el mismo nivel de campaña, conservando el acceso de guardados que ya lo jugaron; pruebas abre todo en su guardado separado. T473 absorbe las solapas/récords pendientes de T235. Se quitarán ceros iniciales de los números visibles sin renombrar ids. Ver M76 en la spec y fichas T469–T475; las partidas T453, el teléfono T454 y G5 siguen pendientes de Lucas.
+
+### M77 · Franjas temáticas y carga con ilustraciones (T460; spec pendiente de aprobación/código)
+
+Las franjas de pantalla completa se rellenarán con un fondo del terreno, fijo respecto al zoom y recortado en ejecución. Se propone conservar mapa/HUD en su marco lógico 1280×720, sin agrandar la zona jugable ni superar zoom 1,0. La composición de cada terreno espera muestra y aprobación de Lucas.
+
+Los fondos rotativos de carga usarán láminas de intro, **condicionados a agregar al informe T454 una medición del costo en celular real y al OK de Lucas con esos datos**. Se conserva respaldo liso, bloqueo de entrada y mínimo de 0,4 s; una imagen lenta no deberá retrasar la escena. Ver M77 y fichas T476–479. Aún no está implementado ni probado en teléfono.
