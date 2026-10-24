@@ -35,7 +35,7 @@
 		{"paso": "confirm_tower", "texto": "Tocá una casilla junto al camino y confirmá con la tilde ✓.\nTambién sirve tocar dos veces la misma casilla."},
 		{"paso": "start_wave", "texto": "Cuando estés listo, tocá «Empezar oleada»."},
 		{"paso": "select_tower", "texto": "Tocá tu torre en el mapa para elegirla."},
-		{"paso": "upgrade", "texto": "«Mejorar» hace más fuerte a la torre elegida. Cuesta oro."},
+		{"paso": "upgrade", "texto": "«Mejorar» hace más fuerte a la torre elegida. Cuesta oro.\nUn toque muestra hasta dónde llega su alcance; otro toque confirma."},
 		{"paso": "sell", "texto": "«Vender» pide dos toques y te devuelve parte del oro."},
 		{"paso": "speed", "texto": "Este botón acelera la partida al doble.\nTocalo de nuevo para volver a la velocidad normal."},
 		{"paso": "pause", "texto": "«Pausa» congela todo para que pienses con calma. Probala."},

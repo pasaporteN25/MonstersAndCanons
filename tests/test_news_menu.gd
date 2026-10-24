@@ -9,9 +9,11 @@ const MENU_SCENE: PackedScene = preload("res://scenes/ui/main_menu.tscn")
 const WINDOW: Rect2 = Rect2(0.0, 0.0, 1280.0, 720.0)
 
 var _viewport: SubViewport
+var _original_save_path: String
 
 
 func before_each() -> void:
+	_original_save_path = SaveManager.save_path
 	_cleanup()
 	SaveManager.save_path = TEST_SAVE
 	SaveManager.load_save()
@@ -25,7 +27,7 @@ func after_each() -> void:
 	DevMode.enabled = false
 	SaveManager.set_setting("ui_mode", UiMode.AUTOMATIC)
 	_cleanup()
-	SaveManager.save_path = SaveManager.DEFAULT_PATH
+	SaveManager.save_path = _original_save_path
 	SaveManager.load_save()
 
 
@@ -175,7 +177,8 @@ func test_options_button_comes_right_below_the_credits_button() -> void:
 	var options: OptionsMenu = _options("1.0.0")
 	var credits: Button = options.get_node("%CreditsButton")
 	assert_eq(options.news_button().get_parent(), credits.get_parent())
-	assert_eq(options.news_button().get_index(), credits.get_index() + 1)
+	assert_eq(options.news_button().get_index(), credits.get_index() + 1, "en «Avanzado», debajo de «Ver créditos»")
+	assert_lt(credits.get_parent().get_node("AdvancedSection").get_index(), credits.get_index())
 
 
 func test_mobile_options_still_fit_with_the_news_button() -> void:

@@ -1,5 +1,26 @@
 extends GutTest
 
+const TEST_SAVE: String = "user://test_mobile_ui_save.json"
+var _original_save_path: String
+
+
+func before_each() -> void:
+	_original_save_path = SaveManager.save_path
+	_remove_save()
+	SaveManager.save_path = TEST_SAVE
+	SaveManager.load_save()
+
+
+func after_each() -> void:
+	_remove_save()
+	SaveManager.save_path = _original_save_path
+	SaveManager.load_save()
+
+
+func _remove_save() -> void:
+	if FileAccess.file_exists(TEST_SAVE):
+		DirAccess.remove_absolute(TEST_SAVE)
+
 
 func test_ui_mode_reads_and_resolves_supported_values() -> void:
 	assert_eq(UiMode.read_setting(0), UiMode.AUTOMATIC)
@@ -169,9 +190,11 @@ func test_mobile_selected_tower_upgrade_lock_and_protected_sale() -> void:
 	game.build_controller.select_placed(tower)
 	game._refresh_tower_panel()
 	var level_before: int = tower.level_number()
+	improve.pressed.emit()  # M75 (RF-681): el primer toque arma, no mejora
+	assert_eq(tower.level_number(), level_before)
 	improve.pressed.emit()
 	improve.pressed.emit()
-	assert_eq(tower.level_number(), level_before + 1, "el doble toque mejora una sola vez")
+	assert_eq(tower.level_number(), level_before + 1, "el doble toque tras confirmar mejora una sola vez")
 	assert_true(improve.text.contains("¡Nivel 2!"))
 	await get_tree().create_timer(0.36).timeout
 	game.session.set_gold(0)

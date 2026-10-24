@@ -118,8 +118,11 @@ func test_mobile_options_fit_in_two_columns_with_back_in_view() -> void:
 	assert_not_null(scroll.find_child("TouchScroller", false, false), "el centro se desplaza con el dedo")
 	var selector: Control = options.find_child("UiModeSelector", true, false)
 	var music: Control = options.get_node("%MusicSlider")
-	assert_gt(selector.get_global_rect().position.x, music.get_global_rect().end.x, "«Interfaz» está en la columna derecha")
-	assert_lt(selector.get_global_rect().end.y, scroll.get_global_rect().end.y + 1.0, "y se ve sin desplazar")
+	var tutorial: Control = options.find_child("TutorialRow", true, false)
+	assert_gt(selector.get_global_rect().position.x, music.get_global_rect().end.x, "«Interfaz» (Avanzado) está en la columna derecha")
+	assert_gt(tutorial.get_global_rect().position.x, music.get_global_rect().end.x, "«Partida y ayudas» también")
+	assert_lt(tutorial.get_global_rect().end.y, scroll.get_global_rect().end.y + 1.0, "el tutorial se ve sin desplazar")
+	assert_null(options.find_child("ControlsSection", true, false), "sin «Controles» en el celular")
 
 
 func test_mobile_options_confirm_screen_fits_and_hides_the_rest() -> void:
@@ -155,18 +158,19 @@ func test_pc_options_keep_one_column_and_scroll_when_too_tall() -> void:
 	assert_null(options.find_child("TouchScroller", true, false), "sin desplazamiento táctil en PC")
 
 
-func test_interface_selector_sits_inside_display_before_back_in_pc() -> void:
+func test_interface_selector_sits_in_advanced_before_back_in_pc() -> void:
 	var menu: MainMenu = await _open_scene("res://scenes/ui/main_menu.tscn", UiMode.PC) as MainMenu
 	var options: OptionsMenu = menu.get_node("%OptionsMenu")
 	var rows: Control = options.get_node("Center/Panel/Margin/Frame/Scroll/Columns/Rows")
 	var names: Array[String] = []
 	for child: Node in rows.get_children():
 		names.append(child.name)
-	var damage: int = names.find("DamageNumbersCheck")
+	var advanced: int = names.find("AdvancedSection")
 	var selector: int = names.find("UiModeSelector")
 	var admin: int = names.find("AdminSection")
-	assert_gt(selector, damage, "«Interfaz» viene después de los números de daño")
-	assert_gt(admin, selector, "y antes de «Administración»")
+	assert_gt(advanced, names.find("ViewAllRow"), "«Avanzado» viene después de «Controles»")
+	assert_eq(selector, advanced + 2, "«Interfaz» abre «Avanzado» (su rótulo y el selector)")
+	assert_gt(admin, selector, "y va antes de «Administración»")
 	assert_eq(options.get_node("%BackButton").get_parent().get_child(-1), options.get_node("%BackButton"), "«Volver» es lo último")
 
 

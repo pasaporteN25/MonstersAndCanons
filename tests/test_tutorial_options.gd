@@ -44,13 +44,17 @@ func test_the_row_is_there_and_shows_the_saved_option() -> void:
 	assert_false(_check().button_pressed)
 
 
-func test_the_row_sits_under_the_damage_numbers_option() -> void:
+func test_the_row_is_the_first_of_the_game_and_help_group() -> void:
+	# RF-684: «Partida y ayudas» = Tutorial (+ Volver a verlo) · Presentación de los jefes · Consejos en la derrota.
 	var rows: Node = options.find_child("Rows", true, false)
-	var damage: Node = options.find_child("DamageNumbersCheck", true, false)
 	var row: Node = rows.find_child("TutorialRow", true, false)
 	assert_not_null(row, "la fila está en Opciones")
-	assert_gt(row.get_index(), damage.get_index(), "va después de los números de daño (M61 puede intercalar «Interfaz»)")
-	assert_lte(row.get_index() - damage.get_index(), 6, "y pegada a ellos (M65 suma «Animaciones de mejora», M61 «Interfaz» y M75 el alcance)")
+	assert_eq(row.get_parent(), rows)
+	assert_eq(rows.get_child(row.get_index() - 1).name, &"GameSection", "justo debajo del título «Partida y ayudas»")
+	assert_eq((rows.get_child(row.get_index() - 1) as Label).text, "Partida y ayudas")
+	assert_eq(rows.get_child(row.get_index() + 1).name, &"BossEntranceCheck")
+	assert_eq(_replay().get_parent(), row, "«Volver a verlo» va en la misma fila")
+	assert_gt(row.get_index(), rows.get_node("RangeDisplaySelector").get_index(), "después de «Pantalla»")
 
 
 func test_turning_it_off_saves_the_option_and_keeps_the_progress() -> void:
