@@ -22,6 +22,19 @@ func test_description_is_removed_actions_fit_and_scroll_resets_on_selection() ->
 	assert_eq(sell.focus_mode, Control.FOCUS_ALL)
 	assert_true((panel.get_node("%UpgradeButton") as Button).disabled)
 	assert_eq((panel.get_node("%Damage") as Label).text, "5 → 8")
+	var level_card: HBoxContainer = panel.get_node("%LevelCard")
+	assert_eq((level_card.get_child(0) as ColorRect).color, Color("#d7a45b"), "bronce")
+	var inactive_silver := Color("#94a8b9").darkened(0.72)
+	inactive_silver.a = 0.6
+	assert_eq((level_card.get_child(1) as ColorRect).color, inactive_silver, "plata")
+	var inactive_gold := Color("#f0d176").darkened(0.72)
+	inactive_gold.a = 0.6
+	assert_eq((level_card.get_child(2) as ColorRect).color, inactive_gold, "oro")
+	var rate: Label = panel.get_node("%Rate")
+	rate.text = "0,75 → 0,85/s"
+	var font: Font = rate.get_theme_font("font")
+	assert_lte(font.get_string_size(rate.text, HORIZONTAL_ALIGNMENT_LEFT, -1, rate.get_theme_font_size("font_size")).x,
+		rate.size.x, "la cadencia más larga entra en la columna de 270 px")
 	var details: ScrollContainer = panel.get_node("%Details")
 	details.scroll_vertical = 80
 	panel.refresh(200)

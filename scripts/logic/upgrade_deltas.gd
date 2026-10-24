@@ -67,7 +67,7 @@ static func preview(levels: Array[TowerLevelData], level_index: int, table: Arra
 
 ## Un valor sin signo: `5`, `1,5`, `30 %`.
 static func format_value(value: float, kind: String) -> String:
-	var text: String = _trim(absf(value)) if kind == "decimal" else str(roundi(absf(value)))
+	var text: String = TowerText.decimal(absf(value)) if kind == "decimal" else str(roundi(absf(value)))
 	if kind == "porcentaje":
 		text += " %"
 	return ("%s%s" % [MINUS, text]) if value < 0.0 and text != "0" else text
@@ -77,24 +77,13 @@ static func format_value(value: float, kind: String) -> String:
 static func format_number(value: float, kind: String) -> String:
 	var sign_text: String = "+" if value >= 0.0 else MINUS
 	var magnitude: float = absf(value)
-	var text: String
-	if kind == "decimal":
-		text = _trim(magnitude)
-	else:
-		text = str(roundi(magnitude))
+	var text: String = TowerText.decimal(magnitude) if kind == "decimal" else str(roundi(magnitude))
 	if kind == "porcentaje":
 		text += " %"
 	return sign_text + text
 
 
 ## 2 decimales como mucho, sin ceros finales y con coma.
-static func _trim(magnitude: float) -> String:
-	var text: String = String.num(snappedf(magnitude, 0.01), 2)
-	if text.contains("."):
-		text = text.rstrip("0").rstrip(".")
-	return text.replace(".", ",")
-
-
 ## «¡Nivel 2!», o «¡Nivel máximo!» en el último nivel.
 static func header(level_number: int, is_max: bool) -> String:
 	return "¡Nivel máximo!" if is_max else "¡Nivel %d!" % level_number

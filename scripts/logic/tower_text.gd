@@ -48,8 +48,37 @@ static func pulse_line(level: TowerLevelData, emitters: Array[String] = []) -> S
 
 ## "2,5" y "4": coma decimal y sin ceros de más.
 static func decimal(value: float) -> String:
-	var text: String = str(roundi(value)) if is_equal_approx(value, roundf(value)) else "%.1f" % value
+	var text: String = String.num(snappedf(value, 0.01), 2)
+	if text.contains("."):
+		text = text.rstrip("0").rstrip(".")
 	return text.replace(".", ",")
+
+
+## Variante del panel: daño, cadencia y radio ya tienen renglones propios arriba.
+static func panel_pulse_line(level: TowerLevelData) -> String:
+	if level.suppress_seconds <= 0.0:
+		return ""
+	return "Pulso: apaga las auras durante %s s" % decimal(level.suppress_seconds)
+
+
+## Conserva la parte que no cambia en efectos compuestos cuando el panel pasa el resto a antes → después.
+static func panel_effect_residuals(level: TowerLevelData, changed_fields: Array[String]) -> Array[String]:
+	var residuals: Array[String] = []
+	var slow_amount_changed: bool = changed_fields.has("slow_amount")
+	var slow_duration_changed: bool = changed_fields.has("slow_duration")
+	if slow_amount_changed != slow_duration_changed:
+		if slow_amount_changed:
+			residuals.append("Duración del frenado: %s s" % decimal(level.slow_duration))
+		else:
+			residuals.append("Ralentiza %d %%" % roundi(level.slow_amount * 100.0))
+	var burn_damage_changed: bool = changed_fields.has("burn_damage_per_second")
+	var burn_duration_changed: bool = changed_fields.has("burn_duration")
+	if burn_damage_changed != burn_duration_changed:
+		if burn_damage_changed:
+			residuals.append("Duración de quemadura: %s s" % decimal(level.burn_duration))
+		else:
+			residuals.append("Quema: %d por segundo" % level.burn_damage_per_second)
+	return residuals
 
 
 ## RF-450: ¿es un enemigo con aura? Lo mismo que `Enemy.has_aura()`, pero sobre los datos.
