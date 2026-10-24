@@ -12,6 +12,8 @@ signal infrastructure_tool_chosen(tool: StringName, class_id: StringName)
 signal upgrade_pressed
 signal sell_pressed
 signal targeting_pressed
+## M75 (RF-681): «Mejorar» quedó armado (primer toque) o se desarmó. Game muestra o saca la ampliación del alcance.
+signal upgrade_armed_changed(armed: bool)
 signal clear_selection_pressed
 
 var _config: MobileUiConfig
@@ -67,6 +69,10 @@ var _sell_arm_left: float = 0.0
 var _sell_elapsed: float = 0.0
 var _upgrade_lock_left: float = 0.0
 var _upgrade_level_text: String = ""
+## M75 (RF-681): primer toque dado en «Mejorar» sobre `_armed_tower`; el segundo confirma.
+var _upgrade_armed: bool = false
+var _armed_tower: Tower
+var _armed_tower_level: int = -1
 var _selected_sell_value: int = 0
 var _selected_resource_value: int = 0
 var _bottom_confirm: Button
@@ -150,7 +156,7 @@ func _build_status_bar() -> void:
 	_target_button.custom_minimum_size = Vector2(float(_config.get_value("apuntar_ancho_px")), float(_config.get_value("apuntar_alto_px")))
 	_target_button.add_theme_font_size_override("font_size", int(_config.get_value("accion_fuente_px")))
 	_target_button.mouse_filter = Control.MOUSE_FILTER_IGNORE  # un solo dueño del toque: _handle_status_touch (T291)
-	_target_button.pressed.connect(targeting_pressed.emit)
+	_target_button.pressed.connect(_on_target_pressed)
 	row.add_child(_target_button)
 	_upgrade_button = Button.new()
 	_upgrade_button.name = "MobileUpgrade"
@@ -181,6 +187,7 @@ const PAUSED_TEXT: String = "En pausa: seguí la partida para construir"
 
 
 func _set_empty_status() -> void:
+	clear_upgrade_arm()
 	_status_state = "empty"
 	_status_label.text = PAUSED_TEXT if _paused else EMPTY_TEXT
 	_status_label.visible = true
@@ -195,6 +202,7 @@ func _set_empty_status() -> void:
 ## RF-543: la herramienta de demoler/habilitar está elegida. La línea dice qué hacer (o el motivo del último
 ## toque que no sirvió) y la cruz la suelta.
 func show_tool_status(message: String = "") -> void:
+	clear_upgrade_arm()
 	_status_state = "tool"
 	_status_label.text = message if message != "" else "Demoler o habilitar: tocá un objeto del mapa"
 	_status_label.visible = true
@@ -207,6 +215,7 @@ func show_tool_status(message: String = "") -> void:
 
 
 func show_ghost_status(tower_name: String, cost_text: String) -> void:
+	clear_upgrade_arm()
 	_status_state = "ghost"
 	_ghost_status_text = "%s  ·  %s" % [tower_name, cost_text]
 	_status_label.text = _ghost_status_text
@@ -229,6 +238,7 @@ func show_selected_tower(tower: Tower, gold: int, sell_value: int, resource_valu
 		return
 	if _selected_placed != tower:
 		clear_sell_arm()
+		clear_upgrade_arm()
 	_selected_placed = tower
 	_selected_sell_value = sell_value
 	_selected_resource_value = resource_value
@@ -257,13 +267,17 @@ func show_selected_tower(tower: Tower, gold: int, sell_value: int, resource_valu
 		_upgrade_button.text = _upgrade_level_text
 		_upgrade_button.disabled = true
 	elif not tower.can_upgrade():
+		clear_upgrade_arm()
 		_upgrade_button.text = "Nivel máximo"
 		_upgrade_button.disabled = true
 	elif not can_upgrade:
+		clear_upgrade_arm()  # RF-681: si falta oro, se cancela
 		_upgrade_button.text = disabled_reason if disabled_reason != "" else "Faltan %d de oro" % maxi(0, tower.next_level_stats().cost - gold)
 		_upgrade_button.disabled = true
 	else:
-		_upgrade_button.text = "Mejorar → N%d\n%d de oro" % [tower.level_number() + 1, tower.next_level_stats().cost]
+		if _upgrade_armed and _armed_tower_level != tower.level_index:
+			clear_upgrade_arm()  # la torre cambió de nivel por otro camino: la ampliación mostrada ya no vale
+		_refresh_upgrade_button(tower)
 		_upgrade_button.disabled = false
 	_sell_button.show()
 	_sell_gap.show()
@@ -285,6 +299,38 @@ func _upgrade_preview_text(tower: Tower) -> String:
 	if changes.is_empty():
 		return ""
 	return "%s %s" % [UPGRADE_PREVIEW_PREFIX, UpgradeDeltas.SEPARATOR.join(UpgradeDeltas.rows(changes, changes.size()))]
+
+
+## RF-681: el texto de «Mejorar» activo. Armado, pide confirmar y conserva el costo a la vista.
+func _refresh_upgrade_button(tower: Tower) -> void:
+	var cost: int = tower.next_level_stats().cost
+	if _upgrade_armed:
+		_upgrade_button.text = "Confirmar → N%d\n%d de oro" % [tower.level_number() + 1, cost]
+		_upgrade_button.add_theme_color_override("font_color", Color(1.0, 0.8, 0.25))
+	else:
+		_upgrade_button.text = "Mejorar → N%d\n%d de oro" % [tower.level_number() + 1, cost]
+		_upgrade_button.remove_theme_color_override("font_color")
+
+
+func is_upgrade_armed() -> bool:
+	return _upgrade_armed
+
+
+## La torre para la que «Mejorar» espera el segundo toque (null si no está armado).
+func armed_tower() -> Tower:
+	return _armed_tower if _upgrade_armed else null
+
+
+## RF-681 punto 3: el botón vuelve a «Mejorar a nivel N» y la ampliación se va. Sin efecto si no estaba armado.
+func clear_upgrade_arm() -> void:
+	if not _upgrade_armed:
+		return
+	_upgrade_armed = false
+	_armed_tower = null
+	_upgrade_button.remove_theme_color_override("font_color")
+	if _selected_placed != null and _selected_placed.can_upgrade():
+		_refresh_upgrade_button(_selected_placed)
+	upgrade_armed_changed.emit(false)
 
 
 func begin_upgrade_lock(level_number: int) -> void:
@@ -326,12 +372,28 @@ func _double_border_style() -> StyleBoxFlat:
 
 
 func _on_upgrade_pressed() -> void:
-	if _upgrade_lock_left <= 0.0 and not _upgrade_button.disabled:
-		upgrade_pressed.emit()
+	if _upgrade_lock_left > 0.0 or _upgrade_button.disabled or _selected_placed == null:
+		return
+	if not _upgrade_armed:
+		# RF-681: el primer toque no cobra ni sube la torre: muestra la ampliación y espera la confirmación.
+		_upgrade_armed = true
+		_armed_tower = _selected_placed
+		_armed_tower_level = _selected_placed.level_index
+		_refresh_upgrade_button(_selected_placed)
+		upgrade_armed_changed.emit(true)
+		return
+	clear_upgrade_arm()
+	upgrade_pressed.emit()
+
+
+func _on_target_pressed() -> void:
+	clear_upgrade_arm()
+	targeting_pressed.emit()
 
 
 func _on_bottom_cancel_pressed() -> void:
 	if _status_state == "tower":
+		clear_upgrade_arm()
 		clear_selection_pressed.emit()
 	else:
 		cancel_placement_pressed.emit()
@@ -340,6 +402,7 @@ func _on_bottom_cancel_pressed() -> void:
 func _on_sell_pressed() -> void:
 	if _selected_placed == null:
 		return
+	clear_upgrade_arm()
 	if not _sell_armed:
 		_sell_armed = true
 		_sell_elapsed = 0.0
@@ -695,6 +758,7 @@ func set_paused(paused: bool) -> void:
 		return
 	_paused = paused
 	if paused:
+		clear_upgrade_arm()
 		close_catalog()
 	for button: Button in [_cart_button, _demolish_button]:
 		if button != null:
