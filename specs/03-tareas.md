@@ -2682,9 +2682,10 @@ El alcance de T425 a T432 es desktop. Mobile continúa por su propia experiencia
   **Hecho cuando:** RF/D definitivos sin colisiones, plan técnico y fichas delegables, fuentes y guías coherentes, alcance/compuertas explícitos y draft preparado para aprobación previa de Lucas.
   **Resultado (2026-10-23):** redactados M76, D-198–203 y fichas T469–T475, con enmiendas a selector desktop, migración de una vez, Asedio, T235 y regla de tres estrellas. Se leyeron las 15 grillas y se proponen 20 posiciones permanentemente no construibles en T475; **las 15 aprobaciones siguen pendientes**. Es trabajo documental, pendiente de revisión y OK al PR antes del código; no se implementaron juego, arte ni posiciones. Verificación: lectura de fuentes/JSON y revisión documental; no se ejecutaron Godot, GUT, bots, teléfono ni mediciones.
 
-- [ ] **T469 · Muestra del mapa nuevo e insignias de conquista. `[mobile+x86]`**
+- [x] **T469 · Muestra del mapa nuevo e insignias de conquista. `[mobile+x86]`**
   **Refs:** RF-691, RF-695, RF-652. **Depende de:** T459 aprobada; 🎨 Lucas aprueba muestra antes de integrar. **Ficha:** `specs/tareas/T469-muestra-mapa-insignias.md`.
   **Hecho cuando:** Hay fuente editable, procedencia, tamaños/peso y maqueta legible; Lucas puede aprobar cada pieza. No se declara aprobada por esta ficha.
+  **Resultado (2026-10-24):** propuesta editable en `art/t469-mapa-propuesta/`: costa y ruta oeste→este, 15 zonas, siete temas conceptuales canónicos y estados visuales ilustrativos. Visor con composición desktop y comparación móvil con desplazamiento frente al ajuste comprimido; capturas a escala en `Capturas/t469-mapa-*.png`. El mapa SVG mide 12.260 bytes; las capturas pesan 160.363 bytes (PC) y 66.606 bytes (celular). Captura reproducible con Godot 4.7.2 + Pillow; `git diff --check` y revisión visual pasaron. Sin importación del proyecto, GUT, teléfono real, integración ni aprobación de Lucas: la compuerta de arte sigue abierta.
 
 - [ ] **T470 · Mapa inicial, migración e interacción PC/celular. `[mobile+x86]`**
   **Refs:** RF-687 a RF-690. **Depende de:** T459 aprobada; coordinar SaveManager con T461/T458. **Ficha:** `specs/tareas/T470-mapa-inicial-interaccion.md`.
