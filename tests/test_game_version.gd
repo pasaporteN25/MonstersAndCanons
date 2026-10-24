@@ -2,15 +2,26 @@ extends GutTest
 # T315 (RF-553, RF-554, D-117): la versión se lee de `project.godot` y se muestra como Beta hasta la 1.0.0;
 # Opciones trae la sección «Créditos y versión» con el acceso a los créditos.
 
-var _original_mode: Variant
+const TEST_SAVE: String = "user://test_game_version.json"
+var _original_save_path: String
 
 
 func before_each() -> void:
-	_original_mode = SaveManager.get_setting("ui_mode")
+	_original_save_path = SaveManager.save_path
+	_remove_save()
+	SaveManager.save_path = TEST_SAVE
+	SaveManager.load_save()
 
 
 func after_each() -> void:
-	SaveManager.set_setting("ui_mode", _original_mode)
+	_remove_save()
+	SaveManager.save_path = _original_save_path
+	SaveManager.load_save()
+
+
+func _remove_save() -> void:
+	if FileAccess.file_exists(TEST_SAVE):
+		DirAccess.remove_absolute(TEST_SAVE)
 
 
 func test_label_for_empty_and_beta() -> void:
@@ -80,15 +91,17 @@ func test_options_show_the_version_and_open_the_credits() -> void:
 	assert_true(options.visible, "y vuelve a Opciones")
 
 
-func test_credits_section_sits_after_display_and_before_admin() -> void:
+func test_credits_section_sits_after_the_interface_row_and_before_admin_in_advanced() -> void:
 	SaveManager.set_setting("ui_mode", UiMode.PC)
 	var options: OptionsMenu = _options()
 	var rows: Control = options.get_node("Center/Panel/Margin/Frame/Scroll/Columns/Rows")
 	var names: Array[String] = []
 	for child: Node in rows.get_children():
 		names.append(child.name)
-	assert_gt(names.find("CreditsSection"), names.find("UiModeSelector"), "después de «Visualización»")
-	assert_lt(names.find("CreditsSection"), names.find("AdminSection"), "antes de «Administración»")
+	assert_gt(names.find("CreditsSection"), names.find("AdvancedSection"), "dentro de «Avanzado»")
+	assert_gt(names.find("CreditsSection"), names.find("UiModeSelector"), "después de «Interfaz»")
+	assert_eq(names.slice(names.find("CreditsSection"), names.find("AdminSection")),
+		["CreditsSection", "VersionLabel", "CreditsButton", "NewsButton"], "versión, créditos y novedades")
 
 
 func test_credits_section_is_in_the_right_column_on_mobile() -> void:
