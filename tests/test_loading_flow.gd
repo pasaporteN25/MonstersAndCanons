@@ -19,6 +19,7 @@ func before_each() -> void:
 	DevMode.set_enabled(true, DEV_PATH)  # en el modo de pruebas todos los niveles están abiertos: hay una tarjeta debajo del dedo
 	SaveManager.save_path = TEST_SAVE
 	SaveManager.load_save()
+	SaveManager.set_setting("selector_style", CampaignMap.STYLE_CARDS)  # las pruebas tocan tarjetas durante la transición
 	_swaps = []
 	_old_min = GameFlow.transition.min_seconds
 	_old_release = GameFlow.transition.release_seconds

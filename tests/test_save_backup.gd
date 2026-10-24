@@ -156,11 +156,11 @@ func test_rename_replaces_an_existing_destination_in_this_godot_version() -> voi
 
 
 func test_test_save_path_does_not_create_any_real_backups() -> void:
+	SaveManager.backup_prefix = SaveManager.BACKUP_PREFIX
 	var default_backup_count: int = SaveManager._backup_count()
 	var real_save_before: PackedByteArray = _read(SaveManager.DEFAULT_PATH)
 	SaveManager.save_path = TEST_SAVE_PATH
 	SaveManager.backup_save_path = SaveManager.DEFAULT_PATH
-	SaveManager.backup_prefix = SaveManager.BACKUP_PREFIX
 	SaveManager._backup_checked = false
 	assert_true(SaveManager.save())
 	assert_true(FileAccess.file_exists(TEST_SAVE_PATH))

@@ -20,7 +20,8 @@ const DEFAULT_SETTINGS: Dictionary = {
 	"upgrade_fx": true,  # M65, RF-593: animaciones de mejora de torres prendidas
 	"boss_entrance": true,  # M66, RF-672: la presentación de los jefes está prendida
 	"defeat_advice": true,  # M70, RF-644: los consejos de derrota están prendidos
-	"selector_style": 0,  # M72, RF-645: 0 = tarjetas, 1 = mapa planetario (preferencia de interfaz, desktop)
+	"selector_style": 1,  # M72/M76, RF-645, RF-687: 0 = tarjetas, 1 = mapa planetario (por omisión, PC y celular)
+	"selector_map_migrated": false,  # M76, RF-689: ¿este archivo ya pasó una vez al mapa? Clave aditiva
 }
 
 ## Los tests lo cambian para no tocar el guardado real del jugador.
@@ -88,6 +89,7 @@ func load_save() -> void:
 	_read_collections((parsed as Dictionary).get("collections", {}))
 	_read_levels((parsed as Dictionary).get("levels", {}))
 	_read_settings((parsed as Dictionary).get("settings", {}))
+	_migrate_selector_style((parsed as Dictionary).get("settings", {}))
 	_read_seen_enemies((parsed as Dictionary).get("seen_enemies", []))
 	_read_scores((parsed as Dictionary).get("scores", {}))
 	_read_initials((parsed as Dictionary).get("initials", {}))
@@ -105,14 +107,59 @@ func load_save() -> void:
 
 func save() -> bool:
 	_backup_save_if_needed()
-	var file := FileAccess.open(save_path, FileAccess.WRITE)
-	if file == null:
-		push_warning("No se pudo guardar en %s" % save_path)
-		return false
+	var was_migrated: bool = selector_map_migrated()
+	_settings["selector_map_migrated"] = true  # RF-689: queda registrada en este guardado exitoso
 	var data := {"version": SAVE_VERSION, "levels": _levels, "settings": _settings,
 		"seen_enemies": _seen_enemies, "scores": _scores, "initials": _last_initials, "hall_total": _hall_total, "collections": _collections,
 		"intro_seen": _intro_seen, "ui_prefs": _ui_prefs.to_dict(), "tutorial_done": _tutorial_done, "news_version": _news_version}
-	file.store_string(JSON.stringify(data, "  "))
+	var temporary_path: String = save_path + ".tmp"
+	var serialized: String = JSON.stringify(data, "  ")
+	if DirAccess.dir_exists_absolute(ProjectSettings.globalize_path(save_path)):
+		_settings["selector_map_migrated"] = was_migrated
+		push_warning("No se pudo guardar en %s: la ruta es un directorio" % save_path)
+		return false
+	var file := FileAccess.open(temporary_path, FileAccess.WRITE)
+	if file == null:
+		_settings["selector_map_migrated"] = was_migrated
+		push_warning("No se pudo crear el guardado temporal %s" % temporary_path)
+		return false
+	file.store_string(serialized)
+	file.flush()
+	var write_error: Error = file.get_error()
+	var written_size: int = file.get_length()
+	file.close()
+	if write_error != OK or written_size != serialized.to_utf8_buffer().size():
+		_remove_backup_temporary(temporary_path)
+		_settings["selector_map_migrated"] = was_migrated
+		push_warning("No se pudo escribir completo el guardado temporal %s" % temporary_path)
+		return false
+	var target_absolute: String = ProjectSettings.globalize_path(save_path)
+	var temporary_absolute: String = ProjectSettings.globalize_path(temporary_path)
+	var rename_error: Error = DirAccess.rename_absolute(temporary_absolute, target_absolute)
+	if rename_error != OK and FileAccess.file_exists(save_path):
+		# En Windows puede no permitirse reemplazar el destino con rename. Resguardarlo y
+		# restaurarlo si el segundo movimiento falla; nunca abrir el guardado anterior para truncarlo.
+		var previous_path: String = save_path + ".previous"
+		var previous_absolute: String = ProjectSettings.globalize_path(previous_path)
+		if FileAccess.file_exists(previous_path):
+			_remove_backup_temporary(temporary_path)
+			_settings["selector_map_migrated"] = was_migrated
+			push_warning("No se pudo guardar en %s: existe un temporal de reemplazo anterior" % save_path)
+			return false
+		var backup_error: Error = DirAccess.rename_absolute(target_absolute, previous_absolute)
+		if backup_error == OK:
+			rename_error = DirAccess.rename_absolute(temporary_absolute, target_absolute)
+			if rename_error == OK:
+				_remove_backup_temporary(previous_path)
+			else:
+				var restore_error: Error = DirAccess.rename_absolute(previous_absolute, target_absolute)
+				if restore_error != OK:
+					push_error("No se pudo restaurar el guardado anterior %s: %s" % [save_path, error_string(restore_error)])
+	if rename_error != OK:
+		_remove_backup_temporary(temporary_path)
+		_settings["selector_map_migrated"] = was_migrated
+		push_warning("No se pudo completar el guardado %s: %s" % [save_path, error_string(rename_error)])
+		return false
 	return true
 
 
@@ -377,9 +424,15 @@ func upgrade_fx_enabled() -> bool:
 	return value if typeof(value) == TYPE_BOOL else true
 
 
-## M72, RF-645: el estilo del selector de campaña (`CampaignMap.STYLE_*`). Un valor inválido vale tarjetas.
+## M72/M76, RF-645, RF-687: el estilo del selector de campaña (`CampaignMap.STYLE_*`). Al cargar, un valor ausente o
+## inválido ya se normalizó a mapa; un valor puesto a mano después con `set_setting` inválido vale tarjetas.
 func selector_style() -> int:
 	return CampaignMap.style_from(get_setting("selector_style"))
+
+
+## M76, RF-689: ¿el archivo actual ya registró la migración al mapa? `false` = pendiente hasta el próximo guardado.
+func selector_map_migrated() -> bool:
+	return get_setting("selector_map_migrated") == true
 
 
 func set_setting(key: String, value: Variant) -> void:
@@ -448,6 +501,16 @@ func _read_initials(raw: Variant) -> void:
 	for key: Variant in raw:
 		if raw[key] is String:
 			_last_initials[str(key)] = raw[key]
+
+
+## M76, RF-689: migración aditiva, una vez por archivo (normal o de pruebas), sin copiar nada entre archivos.
+## Sin marca `true` booleana: mapa (aunque hubiera tarjetas). Con marca: se respeta un estilo válido; ausente o dañado, mapa.
+func _migrate_selector_style(raw_settings: Variant) -> void:
+	var raw: Dictionary = raw_settings if raw_settings is Dictionary else {}
+	var migrated: bool = typeof(raw.get("selector_map_migrated")) == TYPE_BOOL and raw["selector_map_migrated"]
+	_settings["selector_map_migrated"] = migrated
+	if not migrated or not CampaignMap.is_valid_style(raw.get("selector_style")):
+		_settings["selector_style"] = CampaignMap.STYLE_MAP
 
 
 func _read_settings(raw: Variant) -> void:

@@ -17,6 +17,7 @@ const CARDS_PER_ROW: int = 5
 const VISIBLE_ROWS: int = 2
 const CAMPAIGN_VISIBLE_ROWS: int = 3
 const CAMPAIGN_CARD_SPACING: float = 10.0
+const MOBILE_MAP_ROW_SEPARATION: int = 6
 ## T426: el fondo temático de la tarjeta desktop es el suelo del tema del nivel (MapThemes), muy tenue,
 ## con un velo oscuro del color de borde del tema encima para que texto, estrellas e iconos se lean.
 const CAMPAIGN_BACKDROP_ALPHA: float = 0.30
@@ -65,6 +66,7 @@ var _dev_auto: CheckBox
 var _dev_gold: SpinBox
 
 @onready var _scroll: ScrollContainer = %Scroll
+@onready var _rows: VBoxContainer = $Center/Rows
 @onready var _cards: HFlowContainer = %Cards
 @onready var _back_button: Button = %BackButton
 @onready var _total_stars: Label = %TotalStars
@@ -111,7 +113,8 @@ func show_page(page: StringName) -> void:
 	if page != PAGE_CAMPAIGN and page != PAGE_COMMUNITY and mode.is_empty():
 		page = PAGE_CAMPAIGN  # un modo que ya no está (se borró la carpeta): se vuelve a la campaña
 	_page = page
-	var is_campaign: bool = page == PAGE_CAMPAIGN and not UiMode.is_mobile()
+	var is_campaign: bool = page == PAGE_CAMPAIGN and not UiMode.is_mobile()  # tarjetas compactas de PC
+	var is_campaign_page: bool = page == PAGE_CAMPAIGN  # el mapa y su conmutador valen en PC y en celular (RF-687)
 	_cards.add_theme_constant_override("v_separation", CAMPAIGN_CARD_SPACING if is_campaign else CARD_SPACING)
 	GameFlow.select_page = page
 	_campaign_tab.set_pressed_no_signal(page == PAGE_CAMPAIGN)
@@ -122,9 +125,11 @@ func show_page(page: StringName) -> void:
 		_cards.remove_child(card)
 		card.queue_free()
 	map_view = null
-	# RF-645: el cambio de estilo es solo de escritorio y solo de la campaña.
-	var show_map: bool = is_campaign and SaveManager.selector_style() == CampaignMap.STYLE_MAP
-	_style_switch.visible = is_campaign
+	# RF-645, RF-687: el cambio de estilo es solo de la campaña, en PC y en celular.
+	var show_map: bool = is_campaign_page and SaveManager.selector_style() == CampaignMap.STYLE_MAP
+	_rows.add_theme_constant_override("separation", MOBILE_MAP_ROW_SEPARATION \
+		if show_map and UiMode.is_mobile() else 8)
+	_style_switch.visible = is_campaign_page
 	_style_cards_button.set_pressed_no_signal(not show_map)
 	_style_map_button.set_pressed_no_signal(show_map)
 	var count: int
@@ -194,8 +199,15 @@ func _make_map_view() -> CampaignMapView:
 	var view := CampaignMapView.new()
 	view.name = "CampaignMapView"
 	view.setup(map_entries())
-	view.level_requested.connect(func(index: int) -> void: level_opener.call(index))
+	view.level_requested.connect(_request_campaign_level)
 	return view
+
+
+## Vuelve a comprobar el desbloqueo al confirmar: el estado visible del mapa puede haber quedado viejo (RF-688).
+func _request_campaign_level(index: int) -> void:
+	if index < 0 or index >= GameFlow.level_count() or not GameFlow.is_level_unlocked(index):
+		return
+	level_opener.call(index)
 
 
 # --- Modos (RF-389) ---

@@ -115,13 +115,13 @@ func test_style_from_defaults_to_cards() -> void:
 	assert_eq(CampaignMap.style_from(1.0), CampaignMap.STYLE_MAP, "JSON entrega enteros como float")
 
 
-func test_old_save_without_the_key_uses_cards() -> void:
+func test_old_save_without_the_key_uses_map() -> void:
 	var file := FileAccess.open(TEST_SAVE, FileAccess.WRITE)
 	file.store_string(JSON.stringify({"version": SaveManager.SAVE_VERSION, "levels": {"level_01": {"unlocked": true}},
 		"settings": {"music_volume": 0.5}}))
 	file.close()
 	SaveManager.load_save()
-	assert_eq(SaveManager.selector_style(), CampaignMap.STYLE_CARDS)
+	assert_eq(SaveManager.selector_style(), CampaignMap.STYLE_MAP, "RF-687/RF-689: el guardado anterior pasa al mapa")
 	assert_eq(SaveManager.SAVE_VERSION, 1, "no se sube la versión del guardado")
 
 
@@ -136,12 +136,12 @@ func test_style_round_trips_through_the_file() -> void:
 	assert_eq(SaveManager.selector_style(), CampaignMap.STYLE_CARDS)
 
 
-func test_invalid_stored_style_reads_as_cards() -> void:
+func test_invalid_stored_style_reads_as_map_after_load() -> void:
 	var file := FileAccess.open(TEST_SAVE, FileAccess.WRITE)
 	file.store_string(JSON.stringify({"version": SaveManager.SAVE_VERSION, "levels": {}, "settings": {"selector_style": "mapa"}}))
 	file.close()
 	SaveManager.load_save()
-	assert_eq(SaveManager.selector_style(), CampaignMap.STYLE_CARDS)
+	assert_eq(SaveManager.selector_style(), CampaignMap.STYLE_MAP)
 
 
 # --- Escena: estados derivados del guardado ---
@@ -192,7 +192,16 @@ func test_locked_region_is_focusable_and_distinguishable() -> void:
 
 # --- Cambio de estilo ---
 
-func test_cards_are_the_default_and_switch_is_visible_on_desktop() -> void:
+func test_map_is_the_default_and_switch_is_visible_on_desktop() -> void:
+	var select: Control = _open()
+	assert_not_null(select.map_view, "RF-687: guardado nuevo, mapa")
+	assert_true(select.get_node("%StyleSwitch").visible)
+	assert_true(select.get_node("%StyleMap").button_pressed)
+	assert_false(select.get_node("%StyleCards").button_pressed)
+
+
+func test_cards_can_be_chosen_and_switch_is_visible_on_desktop() -> void:
+	SaveManager.set_setting("selector_style", CampaignMap.STYLE_CARDS)
 	var select: Control = _open()
 	assert_null(select.map_view)
 	assert_eq(select.get_node("%Cards").get_child_count(), 15)
@@ -202,6 +211,7 @@ func test_cards_are_the_default_and_switch_is_visible_on_desktop() -> void:
 
 
 func test_switch_persists_and_does_not_change_progress() -> void:
+	SaveManager.set_setting("selector_style", CampaignMap.STYLE_CARDS)
 	SaveManager.record_victory(GameFlow.level(0).id, GameFlow.level(0).starting_lives, 50)
 	SaveManager.unlock(GameFlow.level(1).id)
 	var before: String = _progress_snapshot()
@@ -227,6 +237,7 @@ func test_switch_persists_and_does_not_change_progress() -> void:
 
 
 func test_switch_same_style_twice_is_harmless() -> void:
+	SaveManager.set_setting("selector_style", CampaignMap.STYLE_CARDS)
 	var select: Control = _open()
 	select.set_style(CampaignMap.STYLE_CARDS)
 	assert_null(select.map_view)
@@ -253,20 +264,24 @@ func test_other_pages_do_not_show_the_switch() -> void:
 
 # --- Mouse y teclado ---
 
-func test_click_on_available_region_opens_that_level_once() -> void:
+func test_click_on_available_region_selects_and_play_opens_it_once() -> void:
 	SaveManager.unlock(GameFlow.level(1).id)
 	var view: CampaignMapView = _map_select().map_view
-	view.region(1).pressed.emit()
-	assert_eq(opened, [1] as Array[int])
+	view.pointer_select(1)
+	assert_eq(opened.size(), 0, "RF-688: el clic solo selecciona")
 	assert_eq(view.selected_index(), 1)
+	view.play_button().pressed.emit()
+	assert_eq(opened, [1] as Array[int])
 
 
 func test_click_on_locked_region_selects_but_does_not_open() -> void:
 	var view: CampaignMapView = _map_select().map_view
-	view.region(7).pressed.emit()
+	view.pointer_select(7)
 	assert_eq(opened.size(), 0)
 	assert_eq(view.selected_index(), 7)
-	assert_true(view.selection_status().contains("Bloqueada"))
+	assert_true(view.selection_status().contains("Ganá el nivel anterior"))
+	assert_false(view.selection_status().to_lower().contains("bloqueada"), "RF-688: sin repetir «bloqueada»")
+	assert_eq(view.play_button().text, "Jugar", "«Jugar» siempre visible")
 	assert_true(view.play_button().disabled)
 
 

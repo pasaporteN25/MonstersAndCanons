@@ -2,17 +2,25 @@ class_name CampaignRegion
 extends Button
 ## Una región del mapa planetario (M72, RF-647, RF-648): un botón real para tener foco de teclado y clic, que
 ## dibuja su estado con forma, pictograma y color (el bloqueo y la presencia rebelde no dependen del color).
+## M76, RF-688/RF-690: la región no atiende al puntero (`MOUSE_FILTER_IGNORE`): el clic o el toque los resuelve el lienzo
+## de la vista, que solo **selecciona** y distingue el arrastre del toque. Si fuera un botón con puntero, Godot le daría
+## el foco al apretar y arrastrar desde ella seleccionaría. Aquí queda el teclado: Enter emite `confirmed`.
+
+signal confirmed(index: int)
 
 const CAPTION_WIDTH: float = 82.0
 const CAPTION_SIZE: int = 11
 const STAR_GOLD := Color("#f0d176")
 const FOCUS_COLOR := Color("#ffffff")
+## RF-550, RF-690: lado mínimo del área táctil en px lógicos.
+const TOUCH_MIN: float = 56.0
 
 var index: int = 0
 var state: CampaignMap.State = CampaignMap.State.LOCKED
 var stars: int = 0
 var level_name: String = ""
 var _selected: bool = false
+var _hovered: bool = false
 
 
 func setup(region_index: int, entry: Dictionary, center: Vector2, button_size: float) -> void:
@@ -20,7 +28,8 @@ func setup(region_index: int, entry: Dictionary, center: Vector2, button_size: f
 	state = entry["state"]
 	stars = int(entry["stars"])
 	level_name = entry["name"]
-	size = Vector2(button_size, button_size)
+	var side: float = maxf(button_size, TOUCH_MIN)
+	size = Vector2(side, side)
 	custom_minimum_size = size
 	position = center - size / 2.0
 	focus_mode = Control.FOCUS_ALL
@@ -28,17 +37,13 @@ func setup(region_index: int, entry: Dictionary, center: Vector2, button_size: f
 	if state == CampaignMap.State.REBEL or state == CampaignMap.State.TAKEN:
 		tooltip_text += " · %d de 3 estrellas" % stars
 	# Todos los estados de dibujo propios son vacíos: el dibujo está en `_draw`; solo el foco usa un anillo.
-	for style_name: String in ["normal", "hover", "pressed", "disabled", "hover_pressed"]:
+	for style_name: String in ["normal", "hover", "pressed", "disabled", "hover_pressed", "focus"]:
 		add_theme_stylebox_override(style_name, StyleBoxEmpty.new())
-	var ring := StyleBoxFlat.new()
-	ring.draw_center = false
-	ring.border_color = FOCUS_COLOR
-	ring.set_border_width_all(3)
-	ring.set_corner_radius_all(int(button_size))
-	ring.set_expand_margin_all(4.0)
-	add_theme_stylebox_override("focus", ring)
-	mouse_entered.connect(queue_redraw)
-	mouse_exited.connect(queue_redraw)
+	# El anillo de foco se dibuja en `_draw`, ajustado al círculo (el área táctil es más grande que el dibujo).
+	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	pressed.connect(func() -> void: confirmed.emit(index))  # Enter / ui_accept (sin repetición de tecla)
+	focus_entered.connect(queue_redraw)
+	focus_exited.connect(queue_redraw)
 
 
 func set_selected(value: bool) -> void:
@@ -46,12 +51,20 @@ func set_selected(value: bool) -> void:
 	queue_redraw()
 
 
+func set_hovered(value: bool) -> void:
+	if _hovered != value:
+		_hovered = value
+		queue_redraw()
+
+
 func _draw() -> void:
 	var font: Font = get_theme_default_font()
 	var center: Vector2 = size / 2.0
 	var radius: float = 18.0 if state == CampaignMap.State.LOCKED else 19.0
-	if _selected or is_hovered():
+	if _selected or _hovered:
 		draw_arc(center, radius + 6.0, 0.0, TAU, 40, Color("#f0cb70"), 2.0)
+	if has_focus():
+		draw_arc(center, radius + 11.0, 0.0, TAU, 48, FOCUS_COLOR, 3.0)
 	draw_mark(self, state, center, radius, font)
 	if state == CampaignMap.State.AVAILABLE or state == CampaignMap.State.REBEL:
 		var color: Color = Color("#25231f") if state == CampaignMap.State.AVAILABLE else Color("#fff1da")

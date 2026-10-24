@@ -1,5 +1,9 @@
 # Novedades del juego
 
+## Mapa planetario como inicio *(T470, 2026-10-24)*
+
+La campaña abre en el mapa planetario tanto en PC como en celular. En el mapa, un clic o toque selecciona el nivel; **Jugar** o **Enter** lo inicia, y el doble clic no lo saltea. El pie con la selección y el botón queda fijo mientras desplazás el mapa si no entra entero. Las tarjetas siguen iniciando con un clic. Los guardados existentes pasan al mapa una vez, al guardar; después se respeta el estilo que elijas. No se probaron teléfonos reales.
+
 ## «Ver todo»: tecla en PC y aviso de cámara *(T464, 2026-10-24)*
 
 En PC, «Ver todo» queda solo en la tecla configurable (V por omisión), sin botón flotante. En celular, el botón sigue apareciendo al acercar el mapa; desplazarlo sin zoom no lo muestra. La primera vez que acercás el mapa aparece por tres segundos un aviso con la tecla o el botón para volver al encuadre completo; desplazarlo sin zoom no muestra el aviso (aclaración de Lucas, 2026-10-23). Se recuerda en el guardado y no interrumpe el tutorial. La lupa está en muestra para aprobación y todavía no se integró: hasta entonces el botón conserva el texto «Ver todo».
