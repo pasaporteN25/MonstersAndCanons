@@ -712,11 +712,11 @@ El círculo del número llevará fondo rebelde, partido con 1–2 estrellas o de
 
 ## «Ver todo», panel de mejora, alcance y Opciones (M75, T458; pendiente de implementación)
 
-La spec M75 (RF-674 a RF-686, D-192 a D-197) todavía **no está programada**: lo de abajo describe qué datos se podrán retocar cuando se implemente, y **hoy no existe**.
+La spec M75 (RF-674 a RF-686, D-192 a D-197 y D-207) todavía **no está programada**: lo de abajo describe qué datos se podrán retocar cuando se implemente, y **hoy no existe**.
 
 - **Alcance de las torres.** Una opción nueva en Opciones, «Círculo de alcance» (Oculto por omisión, Sutil o Completo). El grosor y la opacidad de cada estilo no van en el código: vivirán en un archivo de `data/ui/` que decide la tarea T466 (puntos de partida: Completo = lo de hoy, relleno 0,08 y borde 0,7 de 2 px; Sutil = borde de 1 px, opacidad ≈ 0,3). Cuando exista, se documenta acá cómo retocarlo.
 - **Panel de torre.** No hay números nuevos: el «antes → después» sigue saliendo de la tabla `estadisticas` de `data/ui/mejoras.json` (sección M65 de este documento) y todos los decimales se escribirán con coma.
-- **Textos aprobados del aviso de «Ver todo»:** PC «Acercaste el mapa. Apretá V para volver a verlo entero.»; celular «Acercaste el mapa. Tocá la lupa para volver a verlo entero.» El botón de confirmación del celular conserva visible el costo; el texto final se verifica en las capturas de implementación.
+- **Aviso de «Ver todo» (D-207):** aparece una sola vez por guardado únicamente al acercar (aumentar el zoom); alejar o desplazar sin acercar no lo activa. Si se desplaza y luego se acerca, puede aparecer si aún no se mostró. **Textos aprobados:** PC «Acercaste el mapa. Apretá V para volver a verlo entero.»; celular «Acercaste el mapa. Tocá la lupa para volver a verlo entero.» El botón de confirmación del celular conserva visible el costo; el texto final se verifica en las capturas de implementación.
 - **Opciones.** Los cinco grupos (Sonido, Pantalla, Partida y ayudas, Controles, Avanzado) se arman con una lista de orden en el código del menú, no con datos: agregar una opción es agregarla a su grupo. Hoy Opciones sigue como está.
 - No cambia ningún dato de torres, enemigos o niveles. Ver [M75](specs/01-spec.md), [T458](specs/03-tareas.md) y la [ficha](specs/tareas/T458-ficha-camara-panel-opciones.md).
 
