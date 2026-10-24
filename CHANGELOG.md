@@ -2,6 +2,10 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Asedio se abre al ganar la campaña *(T472, 2026-10-24)*
+
+Asedio N se habilita al completar el nivel N de la campaña, con cualquier cantidad de estrellas, sin necesidad de haber ganado Asedio N−1. Ganar un mapa de Asedio guarda tu victoria y tu récord, pero ya no abre el siguiente. Si ya habías jugado Asedio, tus mapas abiertos y tus récords se conservan. En un guardado nuevo, Asedio empieza cerrado. El modo de pruebas sigue con todo abierto y no mezcla su progreso con el normal. Los otros modos no cambian.
+
 ## Panel de mejora de torres *(T465, en revisión)*
 
 Al seleccionar una torre, las métricas que cambian muestran el valor actual y el de la mejora una sola vez, con decimales en coma. Los efectos que cambian aparecen debajo como «antes → después», sin repetir los datos del bloque de estadísticas. El indicador del nivel usa bronce, plata y oro; su tooltip conserva el nivel actual. Los costos y el funcionamiento de las mejoras no cambian.
