@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>T469 · Propuesta de mapa e insignias</title>
+  <style>
+    :root { color-scheme: dark; font: 16px/1.45 system-ui, sans-serif; background:#121518; color:#ece7db; }
+    * { box-sizing:border-box; }
+    body { margin:0; }
+    header { padding:24px clamp(18px,4vw,56px); border-bottom:1px solid #634c31; background:#1b1d20; }
+    h1 { margin:0 0 6px; color:#f1ce7a; font-size:clamp(22px,3vw,34px); }
+    header p { max-width:880px; margin:0; color:#c4c4bc; }
+    main { max-width:1450px; padding:28px 20px 50px; margin:auto; }
+    h2 { margin:0 0 12px; color:#f1ce7a; font-size:21px; }
+    .notice { margin:0 0 24px; padding:12px 16px; border:1px solid #80613b; border-radius:10px; background:#211f1b; color:#e6d7b6; }
+    .view { margin:0 0 34px; padding:18px; border:1px solid #42413b; border-radius:14px; background:#1a1d20; }
+    .map-frame { overflow:hidden; border:1px solid #55452f; border-radius:10px; background:#10181c; }
+    .map-frame img { display:block; width:100%; height:auto; }
+    .legend { display:flex; flex-wrap:wrap; gap:10px 22px; margin-top:14px; color:#d7d3c7; }
+    .legend span { display:inline-flex; align-items:center; gap:8px; }
+    .swatch { display:inline-block; width:18px; height:18px; border:2px solid #e5d9b7; border-radius:50%; }
+    .owned { background:#bd8240; }.partial { background:linear-gradient(90deg,#98463b 50%,#bd8240 50%); }.locked { position:relative; background:#98463b; }
+    .locked::before { content:""; position:absolute; right:-3px; top:-7px; width:5px; height:5px; border:1px solid #e7e7df; border-bottom:0; border-radius:4px 4px 0 0; }
+    .locked::after { content:""; position:absolute; right:-4px; top:-3px; width:7px; height:6px; border:1px solid #e7e7df; border-radius:2px; background:#50585a; }
+    .caption { margin:12px 0 0; color:#aaa99f; font-size:14px; }
+    .phone-row { display:flex; flex-wrap:wrap; align-items:flex-start; gap:20px; }
+    .phone { width:390px; padding:12px; border:3px solid #67665f; border-radius:28px; background:#0b0c0d; box-shadow:0 16px 45px #0008; }
+    .phone-top { padding:4px 5px 10px; color:#ded6c5; font-size:14px; }
+    .phone-map { height:348px; overflow-x:auto; overflow-y:hidden; border-radius:9px; scrollbar-color:#876844 #202326; touch-action:pan-x; }
+    .phone-map img { position:relative; left:12px; display:block; width:1320px; max-width:none; height:450px; }
+    .phone-info { min-height:93px; padding:11px 12px; border-top:1px solid #53432f; color:#eee4d0; background:#1b1d20; }
+    .phone-info strong { display:block; color:#f1ce7a; }
+    .play { display:block; width:100%; min-height:58px; margin-top:10px; border:2px solid #e0ad5c; border-radius:9px; background:#795233; color:#fff0cc; font:700 20px system-ui; }
+    .scroll-hint { margin:8px 2px 0; color:#c7b48e; font-size:13px; }
+    .fit { width:390px; padding:12px; border:3px solid #67665f; border-radius:28px; background:#0b0c0d; }
+    .fit-map { height:348px; display:grid; place-items:center; overflow:hidden; border-radius:9px; background:#10181c; }
+    .fit-map img { width:100%; height:auto; }
+    .warning { margin:10px 0 0; color:#ffcc93; font-size:13px; }
+    .approval { margin-top:26px; padding:16px 18px; border-left:4px solid #d9a85c; background:#202124; }
+    .approval strong { color:#f1ce7a; }
+    @media (max-width:600px) { main { padding:20px 12px 36px; } .view { padding:12px; } .phone,.fit { width:min(390px,100%); } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>T469 · Mapa planetario e insignias</h1>
+    <p>Propuesta editable basada en el atlas aprobado de T427 y el mapa aplicado por T428. Es una revisión visual: no es el arte final ni una captura del juego.</p>
+  </header>
+  <main>
+    <p class="notice"><strong>Para revisar:</strong> la costa, el recorrido oeste→este, los biomas, la escala de las regiones y la lectura de los tres estados de conquista. Todas las posiciones y el progreso son ilustrativos.</p>
+    <section class="view">
+      <h2>PC · mapa completo, sin desborde</h2>
+      <div class="map-frame"><img src="mapa.svg" alt="Mapa de campaña con quince regiones en una ruta de oeste a este"></div>
+      <div class="legend"><span><i class="swatch owned"></i> 3 estrellas · insignia del jugador</span><span><i class="swatch partial"></i> 1–2 estrellas · insignia dividida</span><span><i class="swatch locked"></i> 0 estrellas · insignia rebelde; candado si está bloqueada</span></div>
+      <p class="caption">En PC entran las quince zonas sin reducir el tamaño de los marcadores. No se repiten rótulos de estado; el candado mantiene identificables las zonas inaccesibles.</p>
+    </section>
+    <section class="view">
+      <h2>Celular · desplazamiento solo si hace falta</h2>
+      <div class="phone-row">
+        <div class="phone">
+          <div class="phone-top">Campaña <span style="float:right">Mapa · Tarjetas</span></div>
+          <div class="phone-map"><img src="mapa.svg" alt="Mapa desplazable con marcadores táctiles de al menos 56 píxeles lógicos"></div>
+          <p class="scroll-hint">Deslizá el mapa con un dedo · tocá una zona para seleccionarla</p>
+          <div class="phone-info"><strong>Zona 2 · 2 estrellas</strong>Insignia mitad rebelde / mitad jugador</div>
+          <button class="play" type="button">Jugar</button>
+        </div>
+        <div class="fit">
+          <div class="phone-top">Prueba de ajuste · sin desplazamiento</div>
+          <div class="fit-map"><img src="mapa.svg" alt="El mismo mapa reducido para entrar en el ancho del celular"></div>
+          <p class="warning">Descartado: al encajar las quince zonas, cada marcador queda por debajo de los 56 px lógicos mínimos para tocar.</p>
+        </div>
+      </div>
+      <p class="caption">La versión móvil mantiene el arte a escala legible y permite desplazar solo el lienzo; la selección y el botón Jugar permanecen fijos. La comparación de ajuste muestra por qué no conviene encoger el mapa completo.</p>
+    </section>
+    <div class="approval"><strong>Decisiones que siguen abiertas a Lucas:</strong> aprobar o pedir cambios en la geografía, el tratamiento de los biomas, la forma/tamaño de las insignias y la composición móvil. Ningún asset se integra al juego hasta ese OK.</div>
+  </main>
+</body>
+</html>
