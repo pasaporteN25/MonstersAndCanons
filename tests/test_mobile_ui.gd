@@ -1,5 +1,24 @@
 extends GutTest
 
+const ZOOM_SAVE_PATH: String = "user://test_mobile_ui_zoom.json"
+
+
+func _begin_zoom_save() -> Dictionary:
+	var previous: Dictionary = {"path": SaveManager.save_path, "mode": SaveManager.get_setting("ui_mode"),
+		"prefs": SaveManager.get_ui_prefs()}
+	if FileAccess.file_exists(ZOOM_SAVE_PATH):
+		DirAccess.remove_absolute(ZOOM_SAVE_PATH)
+	SaveManager.save_path = ZOOM_SAVE_PATH
+	return previous
+
+
+func _end_zoom_save(previous: Dictionary) -> void:
+	SaveManager.set_setting("ui_mode", previous["mode"])
+	SaveManager.set_ui_prefs(previous["prefs"])
+	if FileAccess.file_exists(ZOOM_SAVE_PATH):
+		DirAccess.remove_absolute(ZOOM_SAVE_PATH)
+	SaveManager.save_path = previous["path"]
+
 
 func test_ui_mode_reads_and_resolves_supported_values() -> void:
 	assert_eq(UiMode.read_setting(0), UiMode.AUTOMATIC)
@@ -241,7 +260,7 @@ func test_camera_zoom_is_clamped_between_automatic_and_cell_limits() -> void:
 
 
 func test_mobile_double_tap_builds_once_and_deselects() -> void:
-	var original_setting: Variant = SaveManager.get_setting("ui_mode")
+	var previous: Dictionary = _begin_zoom_save()
 	SaveManager.set_setting("ui_mode", UiMode.MOBILE)
 	var game: Game = (load("res://scenes/game/game.tscn") as PackedScene).instantiate() as Game
 	add_child_autofree(game)
@@ -275,11 +294,11 @@ func test_mobile_double_tap_builds_once_and_deselects() -> void:
 	assert_true(is_equal_approx(game.camera.zoom.x, game.minimum_map_zoom))
 	assert_false(game.mobile_hud.get_node("ViewAll").visible)
 	assert_eq(controller.ghost_placement().cell, current_ghost_cell, "el zoom no mueve el fantasma")
-	SaveManager.set_setting("ui_mode", original_setting)
+	_end_zoom_save(previous)
 
 
 func test_pc_camera_input_adds_zoom_without_mobile_controls() -> void:
-	var original_setting: Variant = SaveManager.get_setting("ui_mode")
+	var previous: Dictionary = _begin_zoom_save()
 	SaveManager.set_setting("ui_mode", UiMode.PC)
 	var game: Game = (load("res://scenes/game/game.tscn") as PackedScene).instantiate() as Game
 	add_child_autofree(game)
@@ -290,12 +309,12 @@ func test_pc_camera_input_adds_zoom_without_mobile_controls() -> void:
 	game.camera_controller._pan_by_screen_delta(Vector2(5000.0, 5000.0))
 	var map_rect := Rect2(game.level.position, Vector2(game.level.map_size()) * Rules.TILE_SIZE)
 	assert_eq(game.camera.position, CameraController.clamp_center(game.camera.position, map_rect))
-	SaveManager.set_setting("ui_mode", original_setting)
+	_end_zoom_save(previous)
 
 
 func test_ui_prefs_fall_back_per_field_and_snap_to_nearest_edge() -> void:
 	var prefs: UiPrefs = UiPrefs.read({"cart_side": "arriba", "cart_y": 2.0, "exit_side": "right", "exit_y": 0.5})
-	assert_eq(prefs.to_dict(), {"cart_side": "right", "cart_y": 0.45, "exit_side": "right", "exit_y": 0.5, "demolish_side": "right", "demolish_y": 0.8, "view_all_key": KEY_V})
+	assert_eq(prefs.to_dict(), {"cart_side": "right", "cart_y": 0.45, "exit_side": "right", "exit_y": 0.5, "demolish_side": "right", "demolish_y": 0.8, "view_all_key": KEY_V, "view_all_hint_seen": false})
 	var snapped: Dictionary = FloatButtonLayout.snap(Vector2(1180.0, 320.0), Vector2(1280.0, 720.0),
 		64.0, 96.0, Vector2.ONE * 82.0)
 	assert_eq(snapped["side"], "right")
