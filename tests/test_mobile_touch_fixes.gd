@@ -244,7 +244,11 @@ func test_upgrade_goes_up_one_level_per_android_touch() -> void:
 	var center: Vector2 = _game.mobile_hud._upgrade_button.get_global_rect().get_center()
 	await _android_touch(center, true)
 	await _android_touch(center, false)
-	assert_eq(tower.level_number(), before + 1)
+	assert_eq(tower.level_number(), before, "M75 (RF-681): el primer toque solo arma «Mejorar»")
+	assert_true(_game.mobile_hud.is_upgrade_armed())
+	await _android_touch(center, true)
+	await _android_touch(center, false)
+	assert_eq(tower.level_number(), before + 1, "y el segundo toque mejora un solo nivel")
 
 
 func test_sell_needs_two_separate_touches_with_android_order() -> void:

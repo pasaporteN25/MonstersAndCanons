@@ -54,14 +54,14 @@ func _run_mode(mobile: bool) -> void:
 	await _frames(6)
 	_game.session.earn(5000)
 	var build: Node = _game.get("build_controller")
-	var tesla: TowerData = null
-	for data: TowerData in _game.tower_types:
+	var tesla: Resource
+	for data in _game.tower_types:
 		if data.id == &"tesla":
 			tesla = data
 	if tesla == null:
 		tesla = _game.tower_types[0]
 	var map_size: Vector2i = _game.level.map_size()
-	var spots: Array[Tower] = []
+	var spots: Array = []
 	for row: int in [map_size.y - 1, map_size.y / 2]:
 		for x: int in map_size.x:
 			var cell := Vector2i(x, row)
@@ -70,7 +70,7 @@ func _run_mode(mobile: bool) -> void:
 				break
 	await _frames(4)
 	var index: int = 0
-	for tower: Tower in spots:
+	for tower in spots:
 		build.select_placed(tower)
 		await _frames(3)
 		for level: int in [2, 3]:

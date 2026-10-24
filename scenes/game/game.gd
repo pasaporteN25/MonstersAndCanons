@@ -160,6 +160,8 @@ func _ready() -> void:
 		mobile_hud.clear_selection_pressed.connect(build_controller.deselect_placed)
 		build_controller.mobile_infrastructure_targeted.connect(_on_mobile_infrastructure_targeted)
 		build_controller.mobile_map_tapped.connect(mobile_hud.clear_sell_arm)
+		build_controller.mobile_map_tapped.connect(mobile_hud.clear_upgrade_arm)  # M75 (RF-681): tocar el mapa desarma «Mejorar»
+		mobile_hud.upgrade_armed_changed.connect(_sync_range_preview.unbind(1))
 		_refresh_mobile_catalog()
 		session.gold_changed.connect(_on_mobile_catalog_money_changed)
 		session.resources_changed.connect(func(_resources: int) -> void: _refresh_mobile_catalog())
@@ -193,6 +195,8 @@ func _ready() -> void:
 	panel.targeting_pressed.connect(_on_targeting_pressed)
 	panel.close_pressed.connect(build_controller.deselect_placed)
 	session.gold_changed.connect(panel.refresh)
+	panel.upgrade_hover_changed.connect(_sync_range_preview.unbind(1))  # M75 (RF-680): el mouse sobre «Mejorar»
+	session.gold_changed.connect(_sync_range_preview.unbind(1))  # sin oro, la ampliación se va
 	session.resources_changed.connect(_refresh_tower_panel.unbind(1))  # RF-418: la venta muestra recursos
 
 	session.wave_completed.connect(_collection_wave_completed)
@@ -1162,8 +1166,25 @@ func _refresh_tower_panel() -> void:
 			reason = "Faltan %d de oro" % (tower.next_level_stats().cost - session.gold)
 		mobile_hud.show_selected_tower(tower, session.gold, value, resource_value,
 		tower != null and build_controller.can_upgrade(tower), reason)
+		_sync_range_preview()
 		return
 	hud.tower_panel.show_tower(tower, value, session.gold, resource_value)
+	_sync_range_preview()
+
+
+## M75 (RF-680, RF-681): muestra o saca la ampliación del alcance. Se ve mientras el mouse está sobre «Mejorar» activo (PC)
+## o «Mejorar» está armado (celular), y la torre elegida se puede mejorar ahora. No cobra ni cambia nada.
+func _sync_range_preview() -> void:
+	var tower: Tower = build_controller.selected_placed()
+	var wanted: bool = tower != null and build_controller.can_upgrade(tower)
+	if wanted and mobile_hud != null:
+		wanted = mobile_hud.armed_tower() == tower
+	elif wanted:
+		wanted = hud.tower_panel.is_upgrade_hovered()
+	if wanted:
+		effects.show_range_preview(tower)
+	else:
+		effects.hide_range_preview()
 
 
 func _on_tower_fired(projectile: Projectile) -> void:

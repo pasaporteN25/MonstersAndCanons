@@ -188,9 +188,11 @@ func test_mobile_selected_tower_upgrade_lock_and_protected_sale() -> void:
 	game.build_controller.select_placed(tower)
 	game._refresh_tower_panel()
 	var level_before: int = tower.level_number()
+	improve.pressed.emit()  # M75 (RF-681): el primer toque arma, no mejora
+	assert_eq(tower.level_number(), level_before)
 	improve.pressed.emit()
 	improve.pressed.emit()
-	assert_eq(tower.level_number(), level_before + 1, "el doble toque mejora una sola vez")
+	assert_eq(tower.level_number(), level_before + 1, "el doble toque tras confirmar mejora una sola vez")
 	assert_true(improve.text.contains("¡Nivel 2!"))
 	await get_tree().create_timer(0.36).timeout
 	game.session.set_gold(0)
