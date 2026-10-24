@@ -963,6 +963,9 @@ func _finish_drag(pos: Vector2) -> void:
 	var y: float = float(snap["y"])
 	var snapped_position: Vector2 = FloatButtonLayout.position_for(side, y, Rules.SCREEN_SIZE,
 		float(_config.get_value("barra_alta_px")), float(_config.get_value("barra_baja_px")), _float_button_size)
+	# Otros cambios del HUD (por ejemplo, el aviso «Ver todo») pueden haber actualizado las preferencias
+	# después de crear este nodo. Partimos del guardado vigente para no pisar campos ajenos al movimiento.
+	_prefs = SaveManager.get_ui_prefs()
 	if _drag_button == _cart_button:
 		_prefs.cart_side = side
 		_prefs.cart_y = y

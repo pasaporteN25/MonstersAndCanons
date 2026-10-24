@@ -75,14 +75,26 @@ func test_keys_used_by_other_actions_are_refused() -> void:
 func test_ui_prefs_default_and_round_trip() -> void:
 	var prefs := UiPrefs.new()
 	assert_eq(prefs.view_all_key, KEY_V)
+	assert_false(prefs.view_all_hint_seen)
 	prefs.view_all_key = KEY_H
-	assert_eq(UiPrefs.read(prefs.to_dict()).view_all_key, KEY_H)
+	prefs.view_all_hint_seen = true
+	var restored: UiPrefs = UiPrefs.read(prefs.to_dict())
+	assert_eq(restored.view_all_key, KEY_H)
+	assert_true(restored.view_all_hint_seen)
 
 
 func test_old_prefs_without_the_key_read_without_warning() -> void:
 	var raw: Dictionary = {"cart_side": "left", "cart_y": 0.3, "exit_side": "right", "exit_y": 0.2,
 		"demolish_side": "left", "demolish_y": 0.5}
 	assert_eq(UiPrefs.read(raw).view_all_key, KEY_V)
+	assert_false(UiPrefs.read(raw).view_all_hint_seen)
+
+
+func test_invalid_hint_marker_falls_back_to_unseen() -> void:
+	for bad: Variant in ["true", 1, null, []]:
+		var raw: Dictionary = UiPrefs.new().to_dict()
+		raw["view_all_hint_seen"] = bad
+		assert_false(UiPrefs.read(raw).view_all_hint_seen, "valor raro %s" % str(bad))
 
 
 func test_invalid_keys_in_the_save_fall_back_to_v() -> void:
