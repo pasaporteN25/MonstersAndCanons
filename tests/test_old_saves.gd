@@ -71,7 +71,7 @@ func _snapshot() -> Dictionary:
 		"hall": SaveManager.hall_total(), "initials": [SaveManager.last_initials(3), SaveManager.last_initials(5)],
 		"seen": [SaveManager.has_seen_enemy(&"normal"), SaveManager.has_seen_enemy(&"fast"), SaveManager.has_seen_enemy(&"boss")],
 		"settings": [SaveManager.get_setting("music_volume"), SaveManager.get_setting("sfx_volume"),
-			SaveManager.get_setting("fullscreen"), SaveManager.get_setting("damage_numbers")],
+			SaveManager.get_setting("fullscreen"), SaveManager.get_setting("damage_numbers"), SaveManager.range_display()],
 		"tutorial": [SaveManager.tutorial_done(), SaveManager.tutorial_enabled()]}
 
 
@@ -331,6 +331,7 @@ func test_old_saves_read_the_boss_entrance_as_on_and_keep_their_version() -> voi
 	for text: String in [SAVE_T40, SAVE_BEFORE_M50, SAVE_FULL_COLLECTIONS, SAVE_DEV]:
 		_write(text)
 		SaveManager.load_save()
+		assert_eq(SaveManager.range_display(), 0, "un guardado viejo empieza con el alcance oculto")
 		assert_true(SaveManager.boss_entrance_enabled(), "sin la clave, prendida")
 		_assert_roundtrip_is_identical("con la presentación de los jefes")
 		var saved: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(PATH))
