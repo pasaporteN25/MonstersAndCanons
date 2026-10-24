@@ -111,3 +111,7 @@ La spec de selector es [T459](T459-selector-mapa-modos-postes.md); sus RF-687–
 ## 10. Ronda de cierre 2026-10-23 · M77
 
 [T460](T460-carga-franjas.md) define RF-699–707 y D-204–206, tras los rangos reservados T458/T459. Fichas T476–479 esperan aprobación de la spec; T477/T478 requieren muestra y OK de fondos por terreno. **T479 además espera un anexo al informe T454 con la medición de láminas en celular real y la aprobación de Lucas con esos resultados.** La arquitectura de contenedor físico/marco lógico se revisa antes de código; no usar expand jugable para resolver las franjas por inferencia. Coordinar archivos con T461/T464/T475 y T268; una sola tarea 📜 y como máximo dos agentes de código sin archivos compartidos.
+
+## 11. Enmienda documental T480 · Aviso de «Ver todo»
+
+[T480](T480-aclarar-aviso-zoom.md) registra D-207: el aviso de RF-676 se dispara únicamente al acercar (aumentar zoom), nunca al alejar o desplazar sin acercar. Si el jugador desplaza y luego acerca, el aviso puede aparecer si aún no se mostró en ese guardado. Esta tarea solo actualiza documentos; el código T464 se revisa en su propio PR.
