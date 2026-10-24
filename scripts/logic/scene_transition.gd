@@ -54,7 +54,9 @@ var _busy: bool = false
 var _progress: float = 0.0
 var _started_ms: int = 0
 var _layer: CanvasLayer
+var _center: CenterContainer
 var _bar: Control
+var _overlay_scale: float = 1.0
 var _previous_disable_input: bool = false
 var _input_blocked: bool = false
 
@@ -78,6 +80,11 @@ func is_busy() -> bool:
 ## ¿Se está viendo la capa de carga?
 func is_overlay_visible() -> bool:
 	return _layer != null and _layer.visible
+
+
+func set_overlay_scale(scale: float) -> void:
+	_overlay_scale = maxf(scale, 0.1)
+	_apply_overlay_scale()
 
 
 ## 0.0 a 1.0: cuánto se cargó de la escena pedida (de la carga en hilo).
@@ -212,6 +219,8 @@ func _build_overlay() -> void:
 	center.name = "Center"
 	center.set_anchors_preset(Control.PRESET_FULL_RECT)
 	center.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	center.resized.connect(_on_overlay_center_resized)
+	_center = center
 	root.add_child(center)
 	var column := VBoxContainer.new()
 	column.name = "Column"
@@ -231,6 +240,19 @@ func _build_overlay() -> void:
 	_bar.owner_transition = self
 	column.add_child(_bar)
 	_bar.set_process(false)
+	_apply_overlay_scale()
+
+
+func _apply_overlay_scale() -> void:
+	if _center == null:
+		return
+	_on_overlay_center_resized()
+	_center.scale = Vector2.ONE * _overlay_scale
+
+
+func _on_overlay_center_resized() -> void:
+	if _center != null:
+		_center.pivot_offset = _center.size * 0.5
 
 
 ## La barra: un riel y un tramo que va y viene. Si hay progreso real, el riel se llena hasta ahí.
