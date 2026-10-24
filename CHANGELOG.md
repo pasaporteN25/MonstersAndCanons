@@ -2,6 +2,10 @@
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Panel de mejora de torres *(T465, en revisión)*
+
+Al seleccionar una torre, las métricas que cambian muestran el valor actual y el de la mejora una sola vez, con decimales en coma. Los efectos que cambian aparecen debajo como «antes → después», sin repetir los datos del bloque de estadísticas. El indicador del nivel usa bronce, plata y oro; su tooltip conserva el nivel actual. Los costos y el funcionamiento de las mejoras no cambian.
+
 ## Editor de banderines para el nivel 6 *(T443, 2026-10-23)*
 
 Desde **Herramientas → Editor de banderines** se puede elegir una de cuatro paletas y cuatro emblemas. La vista grande y la de 34 px se actualizan al editar; «Aplicar» guarda el diseño por separado del progreso, y «Cancelar» o Escape descartan los cambios. «Restaurar» selecciona el diseño inicial, que se guarda solo al aplicar. El poste del jugador en el nivel 6 usa la elección al volver a entrar después de ganar; el banderín enemigo y los otros modos siguen con sus recursos fijos.
