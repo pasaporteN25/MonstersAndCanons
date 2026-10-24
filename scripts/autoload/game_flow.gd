@@ -173,7 +173,12 @@ func current_mode_level() -> LevelData:
 func is_mode_level_unlocked(mode: Dictionary, index: int) -> bool:
 	if ModePacks.map_level(mode, index) == null:
 		return false
-	return DevMode.enabled or ModePacks.is_open(mode, index, SaveManager.is_completed, SaveManager.is_unlocked)
+	if DevMode.enabled:
+		return true
+	if SiegeAccess.applies_to(mode):
+		# RF-692: Asedio N se abre al completar la campaña N (o por acceso heredado, RF-693), no por ganar Asedio N−1.
+		return SiegeAccess.is_open(mode, index, SaveManager.is_completed, SaveManager.siege_legacy_unlocked())
+	return ModePacks.is_open(mode, index, SaveManager.is_completed, SaveManager.is_unlocked)
 
 
 func has_next_level() -> bool:
@@ -226,7 +231,7 @@ func level_won(lives: int, score: int = 0) -> void:
 		# RF-390: progreso del mapa del modo; desbloquea el siguiente del MISMO modo, nunca la campaña.
 		SaveManager.record_victory(current_mode_level().id, lives, score)
 		var next: int = ModePacks.next_playable(current_mode, current_mode_index)
-		if next >= 0:
+		if next >= 0 and not SiegeAccess.applies_to(current_mode):  # RF-692: ganar Asedio no abre el siguiente
 			SaveManager.unlock(ModePacks.map_level(current_mode, next).id)
 		SaveManager.save()
 
