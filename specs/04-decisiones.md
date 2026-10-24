@@ -1754,10 +1754,10 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 
 ## D-204 · Pintar fuera del marco lógico sin pasar el juego a expand
 
-- **Fecha:** 2026-10-23 · **Estado:** resultado visual decidido por Lucas; **SubViewport/host es una propuesta técnica recomendada de T460, pendiente de revisión y OK de Lucas a T460/T476 por sus efectos sobre input/escenas**.
-- **Qué:** las franjas se rellenan con dibujo temático manteniendo tablero/HUD en 1280×720 con escala uniforme. Como `keep` recorta el render al viewport, se propone una superficie física que cubra ventana y un viewport lógico fijo alojado dentro, centrado y escalado; no `expand` para el contenido jugable. Input/transición se adaptan preservando coordenadas y bloqueo.
-- **Por qué:** no se puede poner una imagen en las franjas actuales con un CanvasLayer dentro de `keep`. Lucas pidió imagen y preservar la zona jugable; T450 registra «no se pasa a expand». Eso no constituye una elección explícita del mecanismo SubViewport/host: la propuesta debe revisarse antes de programar.
-- **Alternativas descartadas por esta propuesta técnica, sujetas a revisión de Lucas:** `expand` jugable con HUD elástico; solo color liso como solución definitiva; zoom para tapar franjas; una ventana de fondo separada del juego; dibujar dentro de keep y afirmar que cubre fuera; keep_width/height que recortan HUD.
+- **Fecha:** 2026-10-23 · **Estado:** aprobada por Lucas; host persistente con `SubViewportContainer` autorizado para T476 el 2026-10-23.
+- **Qué:** las franjas se rellenan con dibujo temático manteniendo tablero/HUD en 1280×720 con escala uniforme. Una superficie física cubre la ventana y aloja un viewport lógico centrado; el render del contenido se adapta al tamaño del marco y el `SubViewportContainer` reenvía la entrada dentro de sus límites. El contenido jugable no usa `expand`.
+- **Por qué:** no se puede poner una imagen en las franjas actuales con un CanvasLayer dentro de `keep`. Lucas pidió imagen y preservar la zona jugable; T450 registra «no se pasa a expand». Lucas aprobó esta arquitectura después de revisar sus efectos en escenas, input y transiciones.
+- **Alternativas descartadas:** `expand` jugable con HUD elástico; solo color liso como solución definitiva; zoom para tapar franjas; una ventana de fondo separada del juego; dibujar dentro de keep y afirmar que cubre fuera; keep_width/height que recortan HUD.
 - **Refs:** RF-699/RF-702. Revisión de scope obligatoria en T476: si alojar escenas/overlays exige alterar mecánicas, se informa y no se compensa agrandando mapa/HUD.
 
 ## D-205 · Fondo por terreno como más allá del mapa, fijo y recortado en ejecución

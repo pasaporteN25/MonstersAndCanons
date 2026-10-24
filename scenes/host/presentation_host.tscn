@@ -1,0 +1,34 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/host/presentation_host.gd" id="1_host"]
+
+[node name="PresentationHost" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_host")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.07, 0.08, 0.1, 1)
+
+[node name="ContentFrame" type="SubViewportContainer" parent="."]
+layout_mode = 0
+mouse_filter = 1
+stretch = true
+
+[node name="ContentViewport" type="SubViewport" parent="ContentFrame"]
+handle_input_locally = true
+size = Vector2i(1280, 720)
+size_2d_override = Vector2i(1280, 720)
+size_2d_override_stretch = true
+render_target_update_mode = 4

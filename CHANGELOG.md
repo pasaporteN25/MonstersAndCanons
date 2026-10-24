@@ -10,6 +10,17 @@ En PC, «Ver todo» queda solo en la tecla configurable (V por omisión), sin bo
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Panel de mejora de torres *(T465, en revisión)*
+
+Al seleccionar una torre, las métricas que cambian muestran el valor actual y el de la mejora una sola vez, con decimales en coma. Los efectos que cambian aparecen debajo como «antes → después», sin repetir los datos del bloque de estadísticas. El indicador del nivel usa bronce, plata y oro; su tooltip conserva el nivel actual. Los costos y el funcionamiento de las mejoras no cambian.
+## Marco de presentación adaptable *(T476, 2026-10-23; en revisión)*
+
+El contenido conserva su espacio lógico de 1280×720 y queda centrado con escala uniforme dentro de una superficie que se adapta a la ventana. El menú, la partida y sus controles permanecen dentro del marco; el espacio de afuera tiene un respaldo oscuro mientras T478 integra los fondos aprobados por terreno. La comparación de nitidez a 1920×1080 sigue pendiente porque Godot reporta 1777×1000 en fullscreen en esta máquina.
+
+## Círculo de alcance configurable *(T466, 2026-10-23)*
+
+En **Opciones** podés elegir si el círculo de alcance de una torre seleccionada queda **Oculto**, **Sutil** o **Completo**. Por omisión queda oculto, también en guardados anteriores. Al elegir dónde construir, el fantasma sigue mostrando el círculo completo; el arco del Estandarte mecánico acompaña la opción elegida.
+
 ## Editor de banderines para el nivel 6 *(T443, 2026-10-23)*
 
 Desde **Herramientas → Editor de banderines** se puede elegir una de cuatro paletas y cuatro emblemas. La vista grande y la de 34 px se actualizan al editar; «Aplicar» guarda el diseño por separado del progreso, y «Cancelar» o Escape descartan los cambios. «Restaurar» selecciona el diseño inicial, que se guarda solo al aplicar. El poste del jugador en el nivel 6 usa la elección al volver a entrar después de ganar; el banderín enemigo y los otros modos siguen con sus recursos fijos.
