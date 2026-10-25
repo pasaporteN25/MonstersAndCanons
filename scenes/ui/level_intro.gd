@@ -32,7 +32,7 @@ const TINT_ALPHA: float = 0.35
 func _ready() -> void:
 	visible = false
 	_start_button.pressed.connect(close)
-	Audio.add_click_sounds(self)
+	get_node("/root/Audio").call("add_click_sounds", self)
 
 
 ## Lo abre. `title` es el nombre del nivel; `place`, su lugar ("" = sin subtítulo); `text`, las líneas de la entrada;

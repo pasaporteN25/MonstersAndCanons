@@ -11,10 +11,10 @@
 </head>
 <body>
 <main>
-  <p class="meta"><span>T477 · arte conceptual</span><span>Base: origin/main debef6c</span><span>Estado: pendiente de aprobación por terreno</span></p>
+  <p class="meta"><span>T477 · fondos aprobados</span><span>Base de muestra: origin/main debef6c</span><span>Estado: aprobados por Lucas; integración T478</span></p>
   <h1>Franjas temáticas · muestra para revisar</h1>
-  <p class="lead">La propuesta llena con paisaje las áreas exteriores al marco lógico y deja el mapa/HUD en 1280×720. Estos PNG son estudios conceptuales generados para evaluar paleta, densidad y encuadre: <strong>no son arte final ni están aprobados para integrar</strong>.</p>
-  <div class="notice"><strong>Compuerta de Lucas:</strong> aprobá o pedí cambios por tema y por composición. Las siete imágenes quedan solo en <code>art/t477-fondos-franjas/</code>; no se copian a <code>assets/</code> ni se usan en el juego.</div>
+  <p class="lead">Los fondos aprobados rellenan las áreas exteriores al marco lógico y los márgenes internos del mapa. El mapa y el HUD siguen en 1280×720. T478 integra estos siete PNG sin alterar su composición ni sumar casillas jugables.</p>
+  <div class="notice"><strong>Estado:</strong> Lucas aprobó las siete imágenes con el merge del PR #66. T478 las integra como fondos de runtime en <code>assets/backgrounds/stripes/</code>; esta lámina queda como referencia de origen y encuadre.</div>
 
   <section class="toolbar" aria-label="Controles de vista previa">
     <label>Relación de ventana:</label>
@@ -67,7 +67,7 @@ const themes={
 let current='pradera';const stage=document.querySelector('#stage');
 function fitLogical(){const scale=Math.min(stage.clientWidth/16,stage.clientHeight/9);const frame=stage.querySelector('.logical');frame.style.width=`${scale*16}px`;frame.style.height=`${scale*9}px`}
 new ResizeObserver(fitLogical).observe(stage);
-function setTheme(id){current=id;const t=themes[id];stage.style.backgroundImage=`url('muestras/${t.file}')`;document.querySelector('#preview-title').textContent=`${t.name} · ${t.levels.replace('Campaña · ','').replace('Editor · ','')}`;document.querySelector('#sample-image').src=`muestras/${t.file}`;document.querySelector('#sample-image').alt=`Muestra conceptual de fondo para ${t.name.toLowerCase()}`;document.querySelector('#terrain-name').textContent=t.name;document.querySelector('#terrain-status').innerHTML=`<span>${t.levels}</span><span>pendiente de aprobación</span>`;document.querySelector('#terrain-description').textContent=t.description;document.querySelector('#ground-ref').textContent=t.ground;document.querySelectorAll('[data-theme]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.theme===id)));}
+function setTheme(id){current=id;const t=themes[id];stage.style.backgroundImage=`url('muestras/${t.file}')`;document.querySelector('#preview-title').textContent=`${t.name} · ${t.levels.replace('Campaña · ','').replace('Editor · ','')}`;document.querySelector('#sample-image').src=`muestras/${t.file}`;document.querySelector('#sample-image').alt=`Fondo aprobado para ${t.name.toLowerCase()}`;document.querySelector('#terrain-name').textContent=t.name;document.querySelector('#terrain-status').innerHTML=`<span>${t.levels}</span><span>aprobado por Lucas</span>`;document.querySelector('#terrain-description').textContent=t.description;document.querySelector('#ground-ref').textContent=t.ground;document.querySelectorAll('[data-theme]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.theme===id)));}
 const tabs=document.querySelector('#terrain-tabs');for(const [id,t] of Object.entries(themes)){const b=document.createElement('button');b.textContent=t.name;b.dataset.theme=id;b.setAttribute('aria-pressed','false');b.onclick=()=>setTheme(id);tabs.appendChild(b)}
 const notes={'16/9':'16:9: no recorta la fuente 16:9; no deja franja exterior.','16/10':'16:10: quedan franjas exteriores arriba/abajo; cover recorta 5 % de ancho por lado.','21/9':'21:9: quedan franjas exteriores a izquierda/derecha; cover recorta ≈11,9 % de alto arriba/abajo.','4/3':'4:3: quedan franjas exteriores arriba/abajo; cover recorta 12,5 % de ancho por lado.','20/9':'20:9: quedan franjas exteriores a izquierda/derecha; cover recorta 10 % de alto arriba/abajo.'};
 document.querySelectorAll('[data-ratio]').forEach(b=>b.onclick=()=>{const r=b.dataset.ratio;stage.style.aspectRatio=r;document.querySelector('#crop-note').textContent=notes[r];document.querySelectorAll('[data-ratio]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)))});
