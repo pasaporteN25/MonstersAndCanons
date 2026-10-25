@@ -25,6 +25,10 @@ func _ready() -> void:
 	content_viewport.size_2d_override = LOGICAL_SIZE
 	content_viewport.size_2d_override_stretch = true
 	content_viewport.handle_input_locally = true
+	# Mismo filtro de texturas que la ventana raíz (el del proyecto): sin esto el texto salía un 5-13 % más blando.
+	content_viewport.canvas_item_default_texture_filter = PresentationGeometry.content_texture_filter(
+		int(ProjectSettings.get_setting("rendering/textures/canvas_textures/default_texture_filter", 1))
+	) as Viewport.DefaultCanvasItemTextureFilter
 	content_viewport.process_mode = Node.PROCESS_MODE_PAUSABLE
 	GameFlow.attach_presentation(self)
 	install_scene(MAIN_MENU_SCENE)
