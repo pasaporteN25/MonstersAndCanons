@@ -37,6 +37,11 @@ static func style_from(raw: Variant) -> int:
 	return STYLE_CARDS
 
 
+## ¿`raw` es un estilo guardado válido (0 o 1, también como float de JSON)? (RF-689)
+static func is_valid_style(raw: Variant) -> bool:
+	return typeof(raw) in [TYPE_INT, TYPE_FLOAT] and float(raw) == float(int(raw)) and int(raw) in [STYLE_CARDS, STYLE_MAP]
+
+
 ## El estado de una región (D-179). Completado con 1–2 estrellas deja presencia rebelde; con 3, zona tomada.
 static func state_of(unlocked: bool, completed: bool, stars: int) -> State:
 	if not unlocked:

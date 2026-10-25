@@ -1,5 +1,26 @@
 extends GutTest
 
+const TEST_SAVE: String = "user://test_mobile_ui_save.json"
+var _original_save_path: String
+
+
+func before_each() -> void:
+	_original_save_path = SaveManager.save_path
+	_remove_save()
+	SaveManager.save_path = TEST_SAVE
+	SaveManager.load_save()
+
+
+func after_each() -> void:
+	_remove_save()
+	SaveManager.save_path = _original_save_path
+	SaveManager.load_save()
+
+
+func _remove_save() -> void:
+	if FileAccess.file_exists(TEST_SAVE):
+		DirAccess.remove_absolute(TEST_SAVE)
+
 const ZOOM_SAVE_PATH: String = "user://test_mobile_ui_zoom.json"
 
 

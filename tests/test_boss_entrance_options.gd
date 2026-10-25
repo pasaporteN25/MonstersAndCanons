@@ -37,12 +37,13 @@ func test_the_check_is_there_on_by_default_with_its_text() -> void:
 	assert_true(_check().button_pressed)
 
 
-func test_it_sits_under_the_damage_numbers_and_the_tutorial_row() -> void:
-	var damage: Node = options.find_child("DamageNumbersCheck", true, false)
+func test_it_sits_in_the_game_and_help_group_between_the_tutorial_and_the_defeat_advice() -> void:
 	var tutorial: Node = options.find_child("TutorialRow", true, false)
-	assert_eq(_check().get_parent(), damage.get_parent())
-	assert_gt(_check().get_index(), damage.get_index())
+	var advice: Node = options.find_child("DefeatAdviceCheck", true, false)
+	assert_eq(_check().get_parent(), tutorial.get_parent())
+	assert_eq(_check().get_parent().name, &"OptionsPage2", "pertenece a la página de «Partida y ayudas»")
 	assert_eq(_check().get_index(), tutorial.get_index() + 1)
+	assert_eq(advice.get_index(), _check().get_index() + 1)
 
 
 func test_turning_it_off_saves_and_turning_it_on_restores() -> void:
@@ -99,4 +100,4 @@ func test_the_panel_fits_in_a_720_pixel_window_in_pc_mode() -> void:
 			await get_tree().process_frame
 		var panel: Control = options.find_child("Panel", true, false) as Control
 		assert_lte(panel.size.y, 720.0)
-		assert_lte(panel.size.x, 520.0, "y no se ensancha de más")
+		assert_lte(panel.size.x, 920.0, "el ancho deja visibles las solapas")
