@@ -23,6 +23,7 @@ var _out: String = "user://nitidez"
 var _mode: String = "host"
 var _host: Node
 var _info: Dictionary = {}
+var _lever: String = "base"
 
 
 func _ready() -> void:
@@ -35,6 +36,8 @@ func run() -> void:
 		_out = args[0]
 	if args.size() > 1:
 		_mode = args[1]
+	if args.size() > 3:
+		_lever = args[3]
 	DirAccess.make_dir_recursive_absolute(_out)
 	var window: Window = get_window()
 	if args.size() > 2 and args[2] == "fs":
@@ -68,6 +71,28 @@ func run() -> void:
 	get_tree().quit()
 
 
+# Palancas de nitidez a probar (T476 seguimiento). "base" no toca nada. Solo experimento: lo que
+# resulte útil se aplica en el host, no aquí.
+func _apply_lever(viewport: SubViewport) -> void:
+	var frame: Control = viewport.get_parent() as Control
+	var scale: float = frame.size.x / 1280.0
+	match _lever:
+		"os_scale":
+			viewport.oversampling_override = scale
+		"os_x2":
+			viewport.oversampling_override = 2.0
+		"os_x3":
+			viewport.oversampling_override = 3.0
+		"os_flag_off":
+			viewport.oversampling = false
+		"os_flag_on":
+			viewport.oversampling = true
+		"filter_linear_mip":
+			viewport.canvas_item_default_texture_filter = Viewport.DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+		"filter_nearest":
+			viewport.canvas_item_default_texture_filter = Viewport.DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_NEAREST
+
+
 func _capture(path: String) -> void:
 	var name: String = path.get_file().get_basename()
 	var packed: PackedScene = load(path) as PackedScene
@@ -79,6 +104,7 @@ func _capture(path: String) -> void:
 		add_child(_host)
 		await get_tree().process_frame
 		_host.install_scene(packed)
+		_apply_lever(_host.get_content_viewport())
 		content = _host.get_active_screen()
 	else:
 		content = packed.instantiate()
@@ -100,6 +126,11 @@ func _capture(path: String) -> void:
 			"marco_pos": [frame.position.x, frame.position.y],
 			"marco_size": [frame.size.x, frame.size.y],
 			"escala_2d": scale,
+			"palanca": _lever,
+			"oversampling": viewport.get_oversampling(),
+			"oversampling_override": viewport.oversampling_override,
+			"oversampling_flag": viewport.oversampling,
+			"root_oversampling": get_tree().root.get_oversampling(),
 		}
 	else:
 		var win: Window = get_window()
@@ -108,6 +139,7 @@ func _capture(path: String) -> void:
 			"content_scale_mode": win.content_scale_mode,
 			"content_scale_size": [win.content_scale_size.x, win.content_scale_size.y],
 			"canvas_transform_escala": get_viewport().get_final_transform().get_scale().x,
+			"oversampling": get_viewport().get_oversampling(),
 		}
 	if _host != null:
 		_host.queue_free()

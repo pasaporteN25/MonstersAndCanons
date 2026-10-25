@@ -32,3 +32,19 @@ static func window_to_logical(position: Vector2, surface_size: Vector2) -> Vecto
 static func logical_to_window(position: Vector2, surface_size: Vector2) -> Vector2:
 	var frame: Rect2 = frame_rect(surface_size)
 	return frame.position + position * (frame.size / LOGICAL_SIZE)
+
+
+# El SubViewport del host arranca con filtro lineal, mientras que la ventana raíz usa el filtro del
+# proyecto (`rendering/textures/canvas_textures/default_texture_filter`). Con el lineal, los glifos
+# y sprites del contenido salían más blandos que en la presentación directa (T476). Esta función
+# traduce el ajuste del proyecto al enum del viewport (mismos valores: 0 vecino, 1 lineal,
+# 2 lineal con mipmaps, 3 vecino con mipmaps); un valor fuera de rango cae al lineal, el de Godot.
+static func content_texture_filter(project_setting: int) -> int:
+	match project_setting:
+		0:
+			return Viewport.DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_NEAREST
+		2:
+			return Viewport.DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+		3:
+			return Viewport.DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_NEAREST_WITH_MIPMAPS
+	return Viewport.DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_LINEAR

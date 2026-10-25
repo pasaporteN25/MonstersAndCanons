@@ -38,6 +38,9 @@ var current_community: LevelData
 ## RF-225: qué solapa de la selección de nivel se ve: &"campaign", &"community" o la de un modo
 ## (&"mode:<id>", RF-389). Se recuerda para que "Niveles" vuelva a la misma solapa al terminar.
 var select_page: StringName = &"campaign"
+## RF-694: el mapa de un modo que se jugó por última vez, para que «Niveles» vuelva a la misma selección.
+## -1 = ninguno; se borra al cambiar de solapa.
+var select_map_index: int = -1
 ## RF-389: el modo que se está jugando (una entrada de ModePacks.all()) y el índice del mapa en su lista.
 ## Vacío / -1 = no se juega un modo.
 var current_mode: Dictionary = {}
@@ -356,6 +359,7 @@ func start_mode_level(mode: Dictionary, index: int) -> void:
 	current_mode = mode
 	current_mode_index = index
 	select_page = ModePacks.page_of(mode)
+	select_map_index = index
 	intro_pending = true  # RF-468: los modos oficiales nunca lo muestran; los propios, si el mapa trae "textos"
 	_change_scene(GAME_SCENE)
 

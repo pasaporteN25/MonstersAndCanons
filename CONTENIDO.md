@@ -611,7 +611,7 @@ Los textos oficiales son **los de `specs/intro/guion.md`**: si hay que corregir 
 
 ### M49 · Modos de juego (RF-388 a RF-392)
 
-Un **modo** es un grupo de mapas con reglas propias. Aparece como una solapa en **Jugar**: los oficiales después de "Campaña" y los propios después de "Mapas de la comunidad". No hace falta programar: es una carpeta con un archivo `modo.json`.
+Un **modo** es un grupo de mapas con reglas propias. Aparece como una solapa en **Jugar** (la fila se desplaza si no entran todas): los oficiales después de "Campaña" y los propios después de "Mapas de la comunidad". **Récords** muestra el top 5 de cada modo por separado. No hace falta programar: es una carpeta con un archivo `modo.json`.
 
 **Dónde va cada uno:**
 - **Oficiales:** `data/modos/<id>/modo.json`, en el repositorio. Hoy existe **Asedio** (`data/modos/asedio/`, con los 15 mapas).

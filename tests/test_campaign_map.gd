@@ -359,3 +359,131 @@ func test_style_switch_buttons_are_keyboard_focusable() -> void:
 	assert_ne(select.get_node("%StyleCards").focus_mode, Control.FOCUS_NONE)
 	assert_ne(select.get_node("%StyleMap").focus_mode, Control.FOCUS_NONE)
 	assert_true(select.get_node("%StyleCards").toggle_mode)
+
+
+# --- Descubrimiento por zonas (M78, T487, RF-709 a RF-711, D-209): modelo puro, sin escena ni guardado ---
+
+func _unlocked_up_to(count: int) -> Array:
+	var list: Array = []
+	for i: int in CampaignMap.REGION_COUNT:
+		list.append(i < count)
+	return list
+
+
+func test_zone_of_maps_regions_to_zones() -> void:
+	assert_eq(CampaignMap.zone_of(0), CampaignMap.ZONE_A)
+	assert_eq(CampaignMap.zone_of(4), CampaignMap.ZONE_A)
+	assert_eq(CampaignMap.zone_of(5), CampaignMap.ZONE_B)
+	assert_eq(CampaignMap.zone_of(9), CampaignMap.ZONE_B)
+	assert_eq(CampaignMap.zone_of(10), CampaignMap.ZONE_C)
+	assert_eq(CampaignMap.zone_of(14), CampaignMap.ZONE_C)
+	assert_eq(CampaignMap.zone_of(-1), -1)
+	assert_eq(CampaignMap.zone_of(15), -1)
+
+
+func test_new_save_discovers_only_zone_a() -> void:
+	var unlocked: Array = _unlocked_up_to(1)
+	assert_eq(CampaignMap.furthest_discovered_zone(unlocked), CampaignMap.ZONE_A)
+	assert_eq(CampaignMap.focusable_regions(unlocked), [0, 1, 2, 3, 4] as Array[int])
+	var flags: Array[bool] = CampaignMap.discovered_regions(unlocked)
+	assert_eq(flags.size(), 15)
+	assert_eq(flags.count(true), 5)
+
+
+func test_level_five_open_is_still_zone_a() -> void:
+	assert_eq(CampaignMap.furthest_discovered_zone(_unlocked_up_to(5)), CampaignMap.ZONE_A)
+
+
+func test_level_six_open_discovers_zone_b() -> void:
+	var unlocked: Array = _unlocked_up_to(6)
+	assert_eq(CampaignMap.furthest_discovered_zone(unlocked), CampaignMap.ZONE_B)
+	assert_eq(CampaignMap.focusable_regions(unlocked).size(), 10)
+	assert_true(CampaignMap.is_region_discovered(unlocked, 9))
+	assert_false(CampaignMap.is_region_discovered(unlocked, 10))
+	assert_eq(CampaignMap.discovered_regions(unlocked).count(true), 10)
+
+
+func test_level_ten_open_keeps_zone_c_hidden() -> void:
+	assert_eq(CampaignMap.furthest_discovered_zone(_unlocked_up_to(10)), CampaignMap.ZONE_B)
+
+
+func test_level_eleven_open_discovers_zone_c() -> void:
+	var unlocked: Array = _unlocked_up_to(11)
+	assert_eq(CampaignMap.furthest_discovered_zone(unlocked), CampaignMap.ZONE_C)
+	assert_eq(CampaignMap.focusable_regions(unlocked).size(), 15)
+	assert_eq(CampaignMap.discovered_regions(unlocked).count(true), 15)
+
+
+func test_odd_save_with_eleven_open_and_six_closed_discovers_everything_before() -> void:
+	var unlocked: Array = _unlocked_up_to(0)
+	unlocked[10] = true
+	assert_eq(CampaignMap.furthest_discovered_zone(unlocked), CampaignMap.ZONE_C)
+	assert_true(CampaignMap.is_region_discovered(unlocked, 5), "la zona B no queda oculta con la C abierta")
+	assert_eq(CampaignMap.focusable_regions(unlocked).size(), 15)
+
+
+func test_odd_save_with_eight_open_and_six_closed_discovers_zone_b() -> void:
+	var unlocked: Array = _unlocked_up_to(0)
+	unlocked[7] = true
+	assert_eq(CampaignMap.furthest_discovered_zone(unlocked), CampaignMap.ZONE_B)
+
+
+func test_damaged_unlocked_falls_back_to_zone_a() -> void:
+	for bad: Variant in [null, "texto", 7, 3.5, {"a": true}, true]:
+		assert_eq(CampaignMap.furthest_discovered_zone(bad), CampaignMap.ZONE_A, "valor: %s" % str(bad))
+		assert_eq(CampaignMap.focusable_regions(bad), [0, 1, 2, 3, 4] as Array[int])
+		assert_eq(CampaignMap.discovered_regions(bad).size(), 15)
+		assert_false(CampaignMap.is_region_discovered(bad, 5))
+
+
+func test_non_boolean_elements_count_as_locked() -> void:
+	var unlocked: Array = [true, true, true, true, true, 1, "true", null, 1.0, [true], 1, "x", null, 0, 1]
+	assert_eq(CampaignMap.furthest_discovered_zone(unlocked), CampaignMap.ZONE_A)
+	unlocked[10] = true
+	assert_eq(CampaignMap.furthest_discovered_zone(unlocked), CampaignMap.ZONE_C)
+
+
+func test_array_with_other_length_than_fifteen() -> void:
+	assert_eq(CampaignMap.furthest_discovered_zone([]), CampaignMap.ZONE_A)
+	assert_eq(CampaignMap.discovered_regions([]).size(), 15)
+	assert_eq(CampaignMap.furthest_discovered_zone([true, true, true]), CampaignMap.ZONE_A)
+	var seven: Array = [false, false, false, false, false, true, true]
+	assert_eq(CampaignMap.furthest_discovered_zone(seven), CampaignMap.ZONE_B)
+	assert_eq(CampaignMap.focusable_regions(seven).size(), 10)
+	var twelve: Array = [false, false, false, false, false, false, false, false, false, false, false, true]
+	assert_eq(CampaignMap.furthest_discovered_zone(twelve), CampaignMap.ZONE_C, "un arreglo corto con el 12 abierto")
+	var only_extra: Array = _unlocked_up_to(0)
+	only_extra.append_array([true, true])
+	assert_eq(CampaignMap.furthest_discovered_zone(only_extra), CampaignMap.ZONE_A, "más allá de 15 no cuenta")
+	assert_eq(CampaignMap.discovered_regions(only_extra).size(), 15)
+
+
+func test_test_mode_all_open_discovers_three_zones() -> void:
+	var unlocked: Array = _unlocked_up_to(15)
+	assert_eq(CampaignMap.furthest_discovered_zone(unlocked), CampaignMap.ZONE_C)
+	var expected: Array[int] = []
+	for i: int in 15:
+		expected.append(i)
+	assert_eq(CampaignMap.focusable_regions(unlocked), expected)
+
+
+func test_hidden_regions_are_not_focusable() -> void:
+	var unlocked: Array = _unlocked_up_to(3)
+	var focusable: Array[int] = CampaignMap.focusable_regions(unlocked)
+	for hidden: int in range(5, 15):
+		assert_false(focusable.has(hidden))
+		assert_false(CampaignMap.is_region_discovered(unlocked, hidden))
+	assert_false(CampaignMap.is_region_discovered(unlocked, -1))
+	assert_false(CampaignMap.is_region_discovered(unlocked, 15))
+
+
+func test_discovery_never_modifies_unlocked() -> void:
+	var unlocked: Array = _unlocked_up_to(6)
+	var before: Array = unlocked.duplicate(true)
+	CampaignMap.furthest_discovered_zone(unlocked)
+	CampaignMap.discovered_regions(unlocked)
+	CampaignMap.focusable_regions(unlocked)
+	CampaignMap.is_region_discovered(unlocked, 8)
+	assert_eq(unlocked, before)
+	assert_false(unlocked[7], "descubrir la zona B no abre el nivel 8")
+	assert_false(unlocked[10], "ni la zona C")
