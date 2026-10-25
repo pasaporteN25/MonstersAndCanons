@@ -53,7 +53,7 @@ func _init() -> void:
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS  # también se puede abrir desde la pausa
-	Audio.add_click_sounds(self)
+	get_node("/root/Audio").call("add_click_sounds", self)
 
 
 ## Abre la pantalla con una entrada ya validada de `NewsData` y sus rótulos (`NewsData.labels`). Si la entrada

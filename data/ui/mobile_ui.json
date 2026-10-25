@@ -20,7 +20,7 @@
   "vender_rearmar_s": 3.0,
   "vender_min_s": 0.4,
   "mejorar_bloqueo_s": 0.35,
-  "zoom_casilla_max_px": 96,
+  "zoom_casilla_max_px": 64,
   "zoom_rueda_factor": 1.1,
   "fantasma_distancia_botones": 1,
   "fantasma_botones_arriba_px": 8,

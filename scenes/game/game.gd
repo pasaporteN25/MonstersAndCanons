@@ -20,6 +20,8 @@ const BACK_TO_EDITOR: String = "Volver al editor"
 
 signal pause_changed(paused: bool)
 signal speed_changed(speed: float)
+## T478: la capa física recibe el tema una vez resueltos campaña, Asedio, comunidad o editor.
+signal level_theme_selected(theme: StringName)
 ## RF-323: las vidas infinitas cambiaron (con el botón o con el atajo); el panel marca su interruptor.
 signal dev_infinite_lives_changed(on: bool)
 
@@ -107,6 +109,7 @@ func _ready() -> void:
 		testing = true
 	elif level_data == null:
 		level_data = GameFlow.level(0)
+	level_theme_selected.emit(level_data.theme)
 
 	# RF-656, RF-657: el guardado se consulta solo acá y solo en la campaña; el resto conserva el poste enemigo.
 	var post_conquered: bool = campaign_level != null and campaign_level.id == &"level_06" \
@@ -160,6 +163,8 @@ func _ready() -> void:
 		mobile_hud.clear_selection_pressed.connect(build_controller.deselect_placed)
 		build_controller.mobile_infrastructure_targeted.connect(_on_mobile_infrastructure_targeted)
 		build_controller.mobile_map_tapped.connect(mobile_hud.clear_sell_arm)
+		build_controller.mobile_map_tapped.connect(mobile_hud.clear_upgrade_arm)  # M75 (RF-681): tocar el mapa desarma «Mejorar»
+		mobile_hud.upgrade_armed_changed.connect(_sync_range_preview.unbind(1))
 		_refresh_mobile_catalog()
 		session.gold_changed.connect(_on_mobile_catalog_money_changed)
 		session.resources_changed.connect(func(_resources: int) -> void: _refresh_mobile_catalog())
@@ -167,6 +172,7 @@ func _ready() -> void:
 	camera_controller.name = "CameraController"
 	add_child(camera_controller)
 	camera_controller.setup(level, camera, minimum_map_zoom, Callable(self, "_create_interactive_camera"), mobile_hud, UiMode.is_mobile())
+	camera_controller.view_zoomed_in.connect(_on_view_zoomed_in)
 	if mobile_hud != null:
 		mobile_hud.view_all_pressed.connect(camera_controller.view_all)
 	build_controller.tower_built.connect(_on_tower_built)
@@ -192,6 +198,8 @@ func _ready() -> void:
 	panel.targeting_pressed.connect(_on_targeting_pressed)
 	panel.close_pressed.connect(build_controller.deselect_placed)
 	session.gold_changed.connect(panel.refresh)
+	panel.upgrade_hover_changed.connect(_sync_range_preview.unbind(1))  # M75 (RF-680): el mouse sobre «Mejorar»
+	session.gold_changed.connect(_sync_range_preview.unbind(1))  # sin oro, la ampliación se va
 	session.resources_changed.connect(_refresh_tower_panel.unbind(1))  # RF-418: la venta muestra recursos
 
 	session.wave_completed.connect(_collection_wave_completed)
@@ -424,19 +432,8 @@ func _on_tab_changed(id: StringName) -> void:
 func _fit_map() -> void:
 	var size: Vector2i = level.map_size()
 	var zoom: float = Rules.map_zoom(size.x, size.y)
+	_add_theme_backdrop()
 	if UiMode.is_mobile():
-		var backdrop_layer := CanvasLayer.new()
-		backdrop_layer.name = "MapBackdrop"
-		backdrop_layer.layer = -10
-		add_child(backdrop_layer)
-		var backdrop := TextureRect.new()
-		backdrop.name = "ThemeGround"
-		backdrop.texture = MapThemes.ground_texture(level.theme)
-		backdrop.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
-		backdrop.stretch_mode = TextureRect.STRETCH_TILE
-		backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-		backdrop_layer.add_child(backdrop)
 		var mobile_config: MobileUiConfig = MobileUiConfig.load_from()
 		var top_height: float = float(mobile_config.get_value("barra_alta_px"))
 		var bottom_height: float = float(hud.get_node("BottomBar").size.y)
@@ -452,6 +449,30 @@ func _fit_map() -> void:
 	camera.position = map_center + (Rules.SCREEN_SIZE / 2.0 - area.get_center()) / zoom
 	add_child(camera)
 	camera.make_current()
+
+
+func _add_theme_backdrop() -> void:
+	var backdrop_layer: CanvasLayer = CanvasLayer.new()
+	backdrop_layer.name = "ThemeBackdrop"
+	backdrop_layer.layer = -10
+	add_child(backdrop_layer)
+	var solid: ColorRect = ColorRect.new()
+	solid.name = "SolidFallback"
+	solid.color = PresentationBackgroundCatalog.FALLBACK_COLOR
+	solid.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	solid.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	backdrop_layer.add_child(solid)
+	var texture: Texture2D = PresentationBackgroundCatalog.load_for_theme(level.theme)
+	if texture == null:
+		return
+	var backdrop: TextureRect = TextureRect.new()
+	backdrop.name = "ThemeImage"
+	backdrop.texture = texture
+	backdrop.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	backdrop.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	backdrop_layer.add_child(backdrop)
 
 
 func _create_interactive_camera() -> Camera2D:
@@ -585,6 +606,25 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 	elif event.is_action_pressed("toggle_speed"):
 		toggle_speed()
+
+
+## RF-676: el aviso dice «Acercaste», así que solo responde a un zoom que aumenta el acercamiento.
+func _on_view_zoomed_in() -> void:
+	if SaveManager.get_ui_prefs().view_all_hint_seen or tutorial != null and tutorial.is_active():
+		return
+	if pause_menu.is_open() or exit_dialog.is_open() or level_intro.is_open() or session.is_over() or presentation != null:
+		return
+	if hud.is_notice_active():
+		return
+	var prefs: UiPrefs = SaveManager.get_ui_prefs()
+	var message: String
+	if UiMode.is_mobile():
+		message = "Acercaste el mapa. Tocá la lupa para volver a verlo entero."
+	else:
+		message = "Acercaste el mapa. Apretá %s para volver a verlo entero." % ViewAllBinding.key_text(prefs.view_all_key)
+	hud.show_view_all_notice(message)
+	prefs.view_all_hint_seen = true
+	SaveManager.set_ui_prefs(prefs)
 
 
 # --- Menú de pausa (RF-114) ---
@@ -1142,8 +1182,25 @@ func _refresh_tower_panel() -> void:
 			reason = "Faltan %d de oro" % (tower.next_level_stats().cost - session.gold)
 		mobile_hud.show_selected_tower(tower, session.gold, value, resource_value,
 		tower != null and build_controller.can_upgrade(tower), reason)
+		_sync_range_preview()
 		return
 	hud.tower_panel.show_tower(tower, value, session.gold, resource_value)
+	_sync_range_preview()
+
+
+## M75 (RF-680, RF-681): muestra o saca la ampliación del alcance. Se ve mientras el mouse está sobre «Mejorar» activo (PC)
+## o «Mejorar» está armado (celular), y la torre elegida se puede mejorar ahora. No cobra ni cambia nada.
+func _sync_range_preview() -> void:
+	var tower: Tower = build_controller.selected_placed()
+	var wanted: bool = tower != null and build_controller.can_upgrade(tower)
+	if wanted and mobile_hud != null:
+		wanted = mobile_hud.armed_tower() == tower
+	elif wanted:
+		wanted = hud.tower_panel.is_upgrade_hovered()
+	if wanted:
+		effects.show_range_preview(tower)
+	else:
+		effects.hide_range_preview()
 
 
 func _on_tower_fired(projectile: Projectile) -> void:

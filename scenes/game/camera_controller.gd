@@ -1,10 +1,13 @@
 class_name CameraController
 extends Node
 
+signal view_zoomed_in
+
 var _level: Level
 var _camera: Camera2D
 var _minimum_zoom: float = 1.0
-var _maximum_zoom: float = 1.5
+const MAX_PRESENTATION_ZOOM: float = 1.0
+var _maximum_zoom: float = MAX_PRESENTATION_ZOOM
 var _zoom_wheel_factor: float = 1.1
 var _touch_max_distance: float = 21.0
 var _top_height: float = 64.0
@@ -18,7 +21,6 @@ var _touches: Dictionary = {}
 var _pinch_distance: float = 0.0
 var _pinch_start_distance: float = 0.0
 var _pinch_midpoint: Vector2 = Vector2.ZERO
-var _pc_view_all_button: Button  # RF-545: «Ver todo» de la PC (solo con el zoom mínimo y el encuadre corrido)
 
 
 func setup(level: Level, camera: Camera2D, minimum_zoom: float, camera_factory: Callable,
@@ -30,13 +32,11 @@ func setup(level: Level, camera: Camera2D, minimum_zoom: float, camera_factory: 
 	_mobile_hud = mobile_hud
 	_mobile_mode = mobile_mode
 	var config: MobileUiConfig = MobileUiConfig.load_from()
-	_maximum_zoom = float(config.get_value("zoom_casilla_max_px")) / Rules.TILE_SIZE
+	_maximum_zoom = maximum_zoom_from_cell_pixels(float(config.get_value("zoom_casilla_max_px")))
 	_zoom_wheel_factor = float(config.get_value("zoom_rueda_factor"))
 	_touch_max_distance = float(config.get_value("toque_max_px"))
 	_top_height = float(config.get_value("barra_alta_px")) if _mobile_mode else 48.0
 	_bottom_height = float(config.get_value("barra_baja_px"))
-	if _mobile_hud == null:
-		_build_pc_view_all_button(config)
 	_update_view_all()
 
 
@@ -116,6 +116,8 @@ func _zoom_at(screen_position: Vector2, factor: float) -> void:
 	_camera.position += world_before - world_after
 	_clamp_camera_center()
 	_update_view_all()
+	if next_zoom > old_zoom:
+		view_zoomed_in.emit()
 
 
 func _pan_by_screen_delta(delta: Vector2) -> void:
@@ -142,16 +144,11 @@ func _in_map_area(screen_position: Vector2) -> bool:
 	return screen_position.y >= _top_height and screen_position.y < Rules.SCREEN_SIZE.y - _bottom_height
 
 
-## RF-506, RF-545 y RF-612: «Ver todo» aparece si el zoom pasa el mínimo **o** si el encuadre se corrió (aunque el
-## zoom sea el mínimo), tanto en el celular como en la PC. En la PC además tiene su tecla (RF-613).
+## RF-675: el botón flotante existe en celular y aparece solo mientras el mapa está acercado.
 func _update_view_all() -> void:
 	var zoomed: bool = _camera != null and _camera.zoom.x > _minimum_zoom and not is_equal_approx(_camera.zoom.x, _minimum_zoom)
 	if _mobile_hud != null:
-		_mobile_hud.show_view_all(zoomed or is_view_displaced())
-	elif _pc_view_all_button != null:
-		# M68 (RF-612): en PC, igual que en el celular: con otro zoom o con el mapa corrido.
-		_pc_view_all_button.visible = zoomed or is_view_displaced()
-		_pc_view_all_button.tooltip_text = view_all_tooltip()
+		_mobile_hud.show_view_all(zoomed)
 
 
 ## ¿El mapa está corrido respecto del encuadre de RF-251? (con la cámara todavía sin crear, no)
@@ -168,32 +165,12 @@ func _fit_position() -> Vector2:
 	return clamp_center(map_center + (Rules.SCREEN_SIZE / 2.0 - area.get_center()) / _minimum_zoom, rect)
 
 
-func _build_pc_view_all_button(config: MobileUiConfig) -> void:
-	var layer := CanvasLayer.new()
-	layer.name = "ViewAllLayer"
-	layer.layer = 2
-	add_child(layer)
-	_pc_view_all_button = Button.new()
-	_pc_view_all_button.name = "ViewAll"
-	_pc_view_all_button.theme = preload("res://assets/ui/menu_theme.tres")
-	_pc_view_all_button.text = "Ver todo"
-	_pc_view_all_button.focus_mode = Control.FOCUS_NONE
-	var button_size: float = float(config.get_value("flotante_min_px"))
-	_pc_view_all_button.custom_minimum_size = Vector2(button_size, button_size)
-	_pc_view_all_button.position = Vector2(float(config.get_value("ver_todo_x_px")), float(config.get_value("ver_todo_y_px")))
-	_pc_view_all_button.visible = false
-	_pc_view_all_button.pressed.connect(view_all)
-	layer.add_child(_pc_view_all_button)
-
-
-## M68 (RF-612): la ayuda del botón de la PC dice la tecla que tenga elegida.
-static func view_all_tooltip() -> String:
-	var key: int = ViewAllBinding.current_key()
-	return "Ver todo el mapa" if key == 0 else "Ver todo el mapa · %s" % ViewAllBinding.key_text(key)
-
-
 static func clamp_zoom(value: float, minimum: float, maximum: float) -> float:
 	return clampf(value, minimum, maximum)
+
+
+static func maximum_zoom_from_cell_pixels(cell_pixels: float) -> float:
+	return minf(MAX_PRESENTATION_ZOOM, cell_pixels / Rules.TILE_SIZE)
 
 
 static func clamp_center(center: Vector2, map_rect: Rect2) -> Vector2:

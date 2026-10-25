@@ -22,4 +22,10 @@ static func resolve(setting: int, has_mobile_feature: bool) -> bool:
 
 
 static func is_mobile() -> bool:
-	return resolve(read_setting(SaveManager.get_setting("ui_mode")), OS.has_feature("mobile"))
+	var main_loop: MainLoop = Engine.get_main_loop()
+	if main_loop is SceneTree:
+		var save_manager: Node = (main_loop as SceneTree).root.get_node_or_null("SaveManager")
+		if save_manager != null:
+			var saved_mode: Variant = save_manager.call("get_setting", "ui_mode")
+			return resolve(read_setting(saved_mode), OS.has_feature("mobile"))
+	return OS.has_feature("mobile")
