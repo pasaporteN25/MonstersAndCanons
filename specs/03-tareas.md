@@ -2697,6 +2697,11 @@ El alcance de T425 a T432 es desktop. Mobile continúa por su propia experiencia
   **Refs:** RF-691, RF-695, RF-652. **Depende de:** T459 aprobada; 🎨 Lucas aprueba muestra antes de integrar. **Ficha:** `specs/tareas/T469-muestra-mapa-insignias.md`.
   **Hecho cuando:** Hay fuente editable, procedencia, tamaños/peso y maqueta legible; Lucas puede aprobar cada pieza. No se declara aprobada por esta ficha.
 
+- [x] **T483 · Nueva muestra de recorrido orgánico sobre el atlas T428. `[mobile+x86]`**
+  **Refs:** RF-691, T469/T471; pedido de Lucas tras rechazar T482/#78. **Depende de:** ninguna integración; 🎨 aprobación de Lucas antes de usar esta muestra. **Ficha:** `specs/tareas/T483-recorrido-organico.md`.
+  **Hecho cuando:** análisis previo, fuente editable, comparación con T428/T482, captura y lámina explicativa permiten decidir el recorrido sin integrar arte.
+  **Resultado (2026-10-24):** muestra estática con la costa, mar, relieve y ríos originales T428 intactos; aterrizaje en tierra y recorrido abierto oeste→este con un único rodeo amplio hacia el sur. SVG/JSON, composición 1280×720, lámina 1280×760 y visor en `art/t483-mapa-organico/`. Dos revisiones visuales independientes, render Godot 4.7.2 aislado/Pillow y controles geométricos: 1.500 puntos de ruta en tierra, X creciente y círculos visibles completos dentro de costa. Impeccable se usó para refinar/analizar; su detector dio nueve avisos de contraste falsos por asumir blanco en vez del fondo CSS oscuro (detalle en ficha). No se pudo abrir el HTML en navegador: no hay uno disponible en CUA. No se probaron juego, input, celular ni rendimiento. **T469/T471 siguen pendientes de la elección y aprobación de Lucas; esta tarea no declara aprobada la muestra.**
+
 - [x] **T470 · Mapa inicial, migración e interacción PC/celular. `[mobile+x86]`**
   **Refs:** RF-687 a RF-690. **Depende de:** T459 aprobada; coordinar SaveManager con T461/T458. **Ficha:** `specs/tareas/T470-mapa-inicial-interaccion.md`.
   **Hecho cuando:** Casos de migración y input de RF-687–690 cubiertos, bloqueo intacto, Jugar siempre visible y marcadores táctiles sin solaparse. No toca cámara de partida.

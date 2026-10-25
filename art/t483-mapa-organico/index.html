@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="es-AR">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>T483 · Un recorrido sobre el mapa original</title>
+<style>
+:root{color-scheme:dark;--bg:#181d20;--fg:#e9e2d1;--muted:#c1c9bd;--gold:#e2c279;--line:#495349}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 Georgia,serif}main{max-width:1360px;margin:auto;padding:34px 28px 70px}h1{font-size:clamp(1.7rem,4vw,2.8rem);line-height:1.2;font-weight:normal;max-width:24ch;margin:0 0 18px}h2{font-size:1.6rem;font-weight:normal;margin:44px 0 12px}p{max-width:74ch;margin:12px 0 22px}a{color:var(--gold);text-underline-offset:.2em}button{font:600 14px/1.3 system-ui,sans-serif;background:transparent;border:1px solid var(--line);color:var(--fg);padding:13px 18px;cursor:pointer;min-height:46px}button:hover{border-color:var(--gold)}button[aria-pressed=true]{background:#e2c279;color:#1c272a;border-color:#e2c279}button:focus-visible,a:focus-visible{outline:3px solid #fff0b6;outline-offset:4px}.controls{display:flex;gap:9px;flex-wrap:wrap;margin:26px 0 15px}figure{margin:0}img{display:block;width:100%;height:auto;background:#20282b}figcaption,.note{font:14px/1.6 system-ui,sans-serif;color:var(--muted)}figcaption{padding:13px 0;min-height:72px;max-width:90ch}.decision{border-top:1px solid var(--line);padding-top:24px;margin-top:36px}.legend{display:grid;grid-template-columns:1fr 1fr;gap:20px 40px;max-width:1000px}.legend p{margin:0}.legend strong{display:block;color:var(--gold);font-family:system-ui,sans-serif;font-size:15px;margin-bottom:6px}::selection{background:#e2c279;color:#18282d}html{scrollbar-color:#727a66 #181d20}button{touch-action:manipulation}footer{font:13px/1.6 system-ui,sans-serif;border-top:1px solid var(--line);margin-top:40px;padding-top:20px;color:var(--muted)}@media(max-width:650px){main{padding:25px 16px 45px}.legend{grid-template-columns:1fr}.controls{gap:7px}button{flex:1;padding:12px 8px}h1{font-size:2rem}}
+</style>
+<main>
+<h1>Un recorrido sobre el mapa original</h1>
+<p>La propuesta conserva la costa, el mar, el relieve y los ríos de T428. Cambia el aterrizaje y abre el recorrido de oeste a este: un avance hacia el interior occidental, un rodeo amplio por el sur y la continuación hacia el extremo oriental.</p>
+<div class="controls" aria-label="Elegí la versión del mapa para comparar">
+<button type="button" data-view="new" aria-pressed="true">Nueva T483</button>
+<button type="button" data-view="original" aria-pressed="false">Original T428</button>
+<button type="button" data-view="previous" aria-pressed="false">Anterior #78 · A</button>
+</div>
+<figure>
+<img id="map" src="../../Capturas/T483-propuesta-recorrido.png" width="1280" height="720" alt="Propuesta T483: mapa original con aterrizaje en el llano oeste y recorrido abierto hacia el este.">
+<figcaption id="caption" role="status">T483 · La costa es exactamente la original. El aterrizaje baja al llano; 1–4 avanzan hacia el interior occidental, 5–9 trazan un rodeo amplio hacia el sur y 10–15 retoman el avance hacia el este.</figcaption>
+</figure>
+<p class="note">Las tres capturas tienen 1280 × 720. Cambiá de versión para comparar en el mismo lugar. Las etiquetas antiguas de la captura original son referencia; no se proponen para integrar.</p>
+<h2>Qué sostiene el recorrido</h2>
+<div class="legend">
+<p><strong>El mapa vuelve a dominar</strong>Se recuperan la escala sobria y los grises del atlas. Los puntos de la ruta tienen distancias y alturas diferentes; la mayoría queda en los tramos, fuera de los giros.</p>
+<p><strong>Un único rodeo central</strong>Se elimina la sucesión de tres ondas del #78. El rodeo ocupa varios niveles y el avance se estira hacia el este, con una llegada abierta.</p>
+</div>
+<figure style="margin-top:28px">
+<img src="../../Capturas/T483-lectura-geografica.png" width="1280" height="760" alt="Lámina anotada: aterrizaje en tierra, falda oeste, rodeo central amplio y corredor oriental.">
+<figcaption>Las cuatro marcas explican los tramos y se muestran solo en esta lámina.</figcaption>
+</figure>
+<div class="decision">
+<h2>La decisión para esta muestra</h2>
+<p>¿Este recorrido conserva el atractivo del original y se siente como un avance por el continente? Si un tramo todavía te resulta artificial, indicá entre qué niveles: la fuente permite corregirlo sin rehacer el estilo.</p>
+<p class="note">Muestra estática para aprobación visual. No integra arte al juego, no define biomas ni valida controles, teléfono o rendimiento. El diseño final de los estandartes se aprueba por separado.</p>
+</div>
+<footer>T483 · Fuente: <a href="route.svg">SVG editable</a> · <a href="../../specs/tareas/T483-recorrido-organico.md">Análisis, revisión y límites</a> · <a href="README.md">Procedencia y reproducción</a></footer>
+</main>
+<script>
+const views={new:{src:'../../Capturas/T483-propuesta-recorrido.png',alt:'Propuesta T483: mapa original con aterrizaje en el llano oeste y recorrido abierto hacia el este.',caption:'T483 · La costa es exactamente la original. El aterrizaje baja al llano; 1–4 avanzan hacia el interior occidental, 5–9 trazan un rodeo amplio hacia el sur y 10–15 retoman el avance hacia el este.'},original:{src:'../../Capturas/T483-referencia-T428.png',alt:'Referencia original T428: el recorrido vuelve al oeste y el módulo de aterrizaje está en el mar.',caption:'T428 original · Referencia de estilo y composición. El recorrido rodea el continente y vuelve al oeste; el aterrizaje está fuera de la costa. Los textos de interfaz son históricos.'},previous:{src:'../../Capturas/T483-referencia-T482-A.png',alt:'Propuesta anterior T482 A: quince marcadores equidistantes unidos por ondas repetidas.',caption:'T482 A / PR #78 · Muestra rechazada. Los marcadores equidistantes y las tres ondas similares aplanan la geografía; también se aleja de la escala y el color del original.'}};
+for(const button of document.querySelectorAll('button[data-view]'))button.addEventListener('click',()=>{const view=views[button.dataset.view];document.querySelector('#map').src=view.src;document.querySelector('#map').alt=view.alt;document.querySelector('#caption').textContent=view.caption;for(const other of document.querySelectorAll('button[data-view]'))other.setAttribute('aria-pressed',String(other===button));});
+</script>
+</html>
