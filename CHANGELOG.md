@@ -1,5 +1,9 @@
 # Novedades del juego
 
+## Insignias de conquista en el mapa de campaña *(T474, 2026-10-25; en revisión, entrega parcial)*
+
+En el mapa planetario, el círculo de cada nivel muestra ahora una insignia: roja (rebelde) si todavía no ganaste el nivel, mitad roja y mitad turquesa si lo ganaste con 1 o 2 estrellas, y turquesa (tuya) con 3. Llevan el número del nivel, las estrellas, y siguen el aro de selección y de foco. La leyenda con «Tomada», «Rebeldes» y «Bloqueada» ya no está; los niveles bloqueados siguen con su candado. Todavía faltan las tarjetas con el mismo aspecto, el halo del nivel disponible y la receta del editor. No se probaron teléfonos reales.
+
 ## Números de nivel sin cero inicial en el mapa *(T474, 2026-10-25; en revisión, entrega parcial)*
 
 En el mapa planetario los niveles se muestran como 1, 2… 15 en lugar de 01, 02… 15 (dentro del círculo, en el rótulo y en la ficha de abajo). Todavía faltan las insignias de conquista y revisar el resto de las pantallas.

@@ -370,7 +370,6 @@ func _draw_canvas() -> void:
 	_draw_hidden_zones()
 	_draw_route()
 	_draw_lander(font)
-	_draw_legend(font)
 	_draw_compass(font)
 	_canvas.draw_string(font, Vector2(14, 22), "ATLAS MERIDIANO · CÁNTARO", HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE, Color("#dfd7bf"))
 
@@ -460,19 +459,3 @@ func _draw_compass(font: Font) -> void:
 	_canvas.draw_colored_polygon(PackedVector2Array([center + Vector2(0, -13), center + Vector2(4, 0),
 		center + Vector2(0, 12), center + Vector2(-4, 0)]), Color("#f0d176"))
 	_canvas.draw_string(font, center + Vector2(-4, -radius - 5), "N", HORIZONTAL_ALIGNMENT_CENTER, 8, 10, Color("#dfd7bf"))
-
-
-## La leyenda repite los pictogramas de las regiones: el estado no depende solo del color.
-func _draw_legend(font: Font) -> void:
-	var box := Rect2(CANVAS_SIZE.x - 232.0, 8.0, 214.0, 78.0)
-	_canvas.draw_rect(box, Color(0.11, 0.125, 0.13, 0.94))
-	_canvas.draw_rect(box, Color("#8a6038"), false, 1.5)
-	var rows: Array[Array] = [
-		[CampaignMap.State.TAKEN, "Tomada · 3 estrellas"],
-		[CampaignMap.State.REBEL, "Rebeldes · 1–2 estrellas"],
-		[CampaignMap.State.LOCKED, "Bloqueada"],
-	]
-	for i: int in rows.size():
-		var y: float = box.position.y + 20.0 + i * 22.0
-		CampaignRegion.draw_mark(_canvas, rows[i][0], Vector2(box.position.x + 18.0, y), 9.0, font)
-		_canvas.draw_string(font, Vector2(box.position.x + 36.0, y + 4.0), rows[i][1], HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE, TEXT_COLOR)

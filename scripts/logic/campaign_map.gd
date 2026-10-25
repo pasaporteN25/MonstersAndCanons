@@ -4,6 +4,9 @@ extends RefCounted
 ## visual de cada región. No guarda nada: todo sale del desbloqueo y de las estrellas que ya existen.
 
 enum State { LOCKED, AVAILABLE, REBEL, TAKEN }
+## La insignia de conquista del círculo (RF-695, T474): fondo rebelde sin victoria, partido con 1–2 estrellas y del jugador
+## con 3. `NONE` es la región bloqueada, que dibuja el candado en lugar de una insignia.
+enum Badge { NONE, REBEL, SPLIT, PLAYER }
 
 const STYLE_CARDS: int = 0
 const STYLE_MAP: int = 1
@@ -124,6 +127,19 @@ static func default_selection(region_states: Array[State]) -> int:
 		if region_states[i] != State.LOCKED:
 			last_open = i
 	return last_open
+
+
+## La insignia que corresponde a un estado (RF-695). Se deriva del estado, que ya sale del progreso: no se guarda nada.
+## «Disponible» (desbloqueada, sin victoria) es rebelde; «presencia rebelde» (ganada con 1–2 estrellas) es partida.
+static func badge_of(state: State) -> Badge:
+	match state:
+		State.AVAILABLE:
+			return Badge.REBEL
+		State.REBEL:
+			return Badge.SPLIT
+		State.TAKEN:
+			return Badge.PLAYER
+	return Badge.NONE
 
 
 ## El número de nivel que se muestra (RF-695): 1…15, sin cero inicial. Los ids y rutas (`level_01`) no cambian.
