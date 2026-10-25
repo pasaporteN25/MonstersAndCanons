@@ -117,12 +117,9 @@ func test_a_map_that_does_not_load_has_a_reason_and_an_empty_id() -> void:
 	_mode(USER, "mixto", '{"version": 1, "nombre": "Mixto", "mapas": ["level_01", "no_existe"]}')
 	var sources: Array[Dictionary] = RecordSources.from_modes(ModePacks.all(OFFICIAL, USER))
 	var maps: Array = sources[0]["maps"]
-	if maps.is_empty():
-		# El modo entero puede quedar con errores si el mapa no existe: tampoco hay nada que leer.
-		assert_false((sources[0]["errors"] as PackedStringArray).is_empty())
-	else:
-		assert_eq(maps[1]["table_id"], &"")
-		assert_ne(maps[1]["error"], "")
+	assert_eq(maps.size(), 2)
+	assert_eq(maps[1]["table_id"], &"")
+	assert_ne(maps[1]["error"], "")
 
 
 func test_no_modes_no_sources() -> void:

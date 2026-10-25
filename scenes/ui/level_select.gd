@@ -225,6 +225,7 @@ func _focus_remembered_map() -> void:
 	var index: int = GameFlow.select_map_index
 	if index < 0 or _page == PAGE_CAMPAIGN or _page == PAGE_COMMUNITY:
 		return
+	GameFlow.select_map_index = -1  # se usa una sola vez: el foco no vuelve a moverse en esta pantalla
 	if index < _cards.get_child_count() and _cards.get_child(index) is Button:
 		var card: Button = _cards.get_child(index) as Button
 		if not card.disabled:
