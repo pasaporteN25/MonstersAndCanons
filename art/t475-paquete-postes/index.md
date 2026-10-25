@@ -1,6 +1,8 @@
 # T475 · Paquete de propuesta de postes de campaña
 
-**PROPUESTA NO APROBADA.** Generado el 2026-10-25 por `tools/t475_planos_postes.py` sobre `origin/main` 9ce9e18. No integra nada al juego: no toca `data/`, `game.gd`, `LevelDecor` ni código de runtime. Las 15 aprobaciones de Lucas (RF-696, D-203) siguen **pendientes**.
+**APROBADO EN BLOQUE por Lucas el 2026-10-25** («Atlas + los 20 postes tal cual», respuesta en sesión tras revisar el HTML con los 15 planos; incluye las casillas de borde o sobre señal existente de los niveles 2, 4, 8 y 9). No hay aprobaciones por mapa separadas: la aprobación es una sola, en bloque. Paquete generado el 2026-10-25 por `tools/t475_planos_postes.py` sobre `origin/main` 9ce9e18.
+
+**Estado de la integración (segundo commit de T475):** 18 de los 20 postes quedaron integrados (13 niveles). **Niveles 8 y 9 frenados**: la casilla aprobada `(0, 4)` es el símbolo de ruina canónico y, en la captura del motor real (`Capturas/T475-nivel08-poste-tapaba-senal-ampliado.png`), el poste lo tapa por completo; se dejan sin integrar y se pide una nueva ubicación. Ver `specs/tareas/informes/T475-integracion-postes.md`.
 
 ## Cómo leerlo
 
@@ -26,7 +28,7 @@
 
 | Candidato | Estado | Origen | Tipo de casilla | Vecinas (N/E/S/O) | Margen | Cercano (≤2) | Riesgo | Recomendación | OK de Lucas |
 |---|---|---|---|---|---|---|---|---|---|
-| `(13, 5)` | propuesta | Ficha | `X` bloqueada | N: camino, E: construible, S: construible, O: decoracion:estatua | 3 | — | Bajo. Pegada a la estatua (12,5), que no se pisa, y bajo el camino (13,4). | Aprobar tras ver captura del motor. | Pendiente (fecha: —, ref: —) |
+| `(13, 5)` | propuesta | Ficha | `X` bloqueada | N: camino, E: construible, S: construible, O: decoracion:estatua | 3 | — | Bajo. Pegada a la estatua (12,5), que no se pisa, y bajo el camino (13,4). | Aprobar tras ver captura del motor. | Aprobado 2026-10-25, en bloque, tras revisar el plano de cada nivel en el HTML de revisión |
 
 ### Nivel 2 · Desfiladero (20×9)
 
@@ -35,7 +37,7 @@
 
 | Candidato | Estado | Origen | Tipo de casilla | Vecinas (N/E/S/O) | Margen | Cercano (≤2) | Riesgo | Recomendación | OK de Lucas |
 |---|---|---|---|---|---|---|---|---|---|
-| `(1, 4)` | propuesta | Ficha | `s` decoracion (columna) | N: construible, E: construible, S: construible, O: construible | 1 | — | Alto. La casilla ES la columna `s`: el poste se superpondría a un dibujo existente. Margen 1. Es la única casilla no agua y no construible del mapa; no hay reemplazo sin tocar `data/`. | Lucas decide: superponer a la columna o aprobar aparte un ajuste de datos. No avanzar sin OK. | Pendiente (fecha: —, ref: —) |
+| `(1, 4)` | propuesta | Ficha | `s` decoracion (columna) | N: construible, E: construible, S: construible, O: construible | 1 | — | Alto. La casilla ES la columna `s`: el poste se superpondría a un dibujo existente. Margen 1. Es la única casilla no agua y no construible del mapa; no hay reemplazo sin tocar `data/`. | Lucas decide: superponer a la columna o aprobar aparte un ajuste de datos. No avanzar sin OK. | Aprobado 2026-10-25, en bloque, tras revisar el plano de cada nivel en el HTML de revisión |
 
 ### Nivel 3 · Encrucijada (20×9)
 
@@ -44,7 +46,7 @@
 
 | Candidato | Estado | Origen | Tipo de casilla | Vecinas (N/E/S/O) | Margen | Cercano (≤2) | Riesgo | Recomendación | OK de Lucas |
 |---|---|---|---|---|---|---|---|---|---|
-| `(15, 6)` | propuesta | Ficha | `,` decoracion (flores) | N: construible, E: construible, S: construible, O: construible | 2 | — | Bajo-medio. Cubre las flores (decoración); al este está el camino (17,6) a dos casillas. | Aprobar tras captura (revisar que las flores no asomen). | Pendiente (fecha: —, ref: —) |
+| `(15, 6)` | propuesta | Ficha | `,` decoracion (flores) | N: construible, E: construible, S: construible, O: construible | 2 | — | Bajo-medio. Cubre las flores (decoración); al este está el camino (17,6) a dos casillas. | Aprobar tras captura (revisar que las flores no asomen). | Aprobado 2026-10-25, en bloque, tras revisar el plano de cada nivel en el HTML de revisión |
 
 ### Nivel 4 · Espiral (20×9)
 
@@ -53,7 +55,7 @@
 
 | Candidato | Estado | Origen | Tipo de casilla | Vecinas (N/E/S/O) | Margen | Cercano (≤2) | Riesgo | Recomendación | OK de Lucas |
 |---|---|---|---|---|---|---|---|---|---|
-| `(19, 4)` | propuesta | Ficha | `,` decoracion (flores) | N: construible, E: fuera del mapa, S: construible, O: camino | 0 | — | Medio. Margen de borde 0 (última columna), camino pegado al oeste (18,4) y sin alternativa en datos: las únicas otras bloqueadas son el tronco (0,5), también en el borde, y el agua. LevelDecor dibuja los objetos dentro de su casilla, así que en principio no se corta, pero falta verlo en el motor. | Lucas decide con captura del motor; si se corta, ajuste de datos aparte. | Pendiente (fecha: —, ref: —) |
+| `(19, 4)` | propuesta | Ficha | `,` decoracion (flores) | N: construible, E: fuera del mapa, S: construible, O: camino | 0 | — | Medio. Margen de borde 0 (última columna), camino pegado al oeste (18,4) y sin alternativa en datos: las únicas otras bloqueadas son el tronco (0,5), también en el borde, y el agua. LevelDecor dibuja los objetos dentro de su casilla, así que en principio no se corta, pero falta verlo en el motor. | Lucas decide con captura del motor; si se corta, ajuste de datos aparte. | Aprobado 2026-10-25, en bloque, tras revisar el plano de cada nivel en el HTML de revisión |
 
 ### Nivel 5 · Fortaleza (20×9)
 
@@ -62,7 +64,7 @@
 
 | Candidato | Estado | Origen | Tipo de casilla | Vecinas (N/E/S/O) | Margen | Cercano (≤2) | Riesgo | Recomendación | OK de Lucas |
 |---|---|---|---|---|---|---|---|---|---|
-| `(17, 3)` | propuesta | Ficha | `,` decoracion (flores) | N: construible, E: construible, S: construible, O: construible | 2 | — | Bajo. Flores aisladas al este, a 4 casillas del camino (13,3). | Aprobar tras captura. | Pendiente (fecha: —, ref: —) |
+| `(17, 3)` | propuesta | Ficha | `,` decoracion (flores) | N: construible, E: construible, S: construible, O: construible | 2 | — | Bajo. Flores aisladas al este, a 4 casillas del camino (13,3). | Aprobar tras captura. | Aprobado 2026-10-25, en bloque, tras revisar el plano de cada nivel en el HTML de revisión |
 
 ### Nivel 6 · Nido (20×9)
 
@@ -71,7 +73,7 @@
 
 | Candidato | Estado | Origen | Tipo de casilla | Vecinas (N/E/S/O) | Margen | Cercano (≤2) | Riesgo | Recomendación | OK de Lucas |
 |---|---|---|---|---|---|---|---|---|---|
-| `(18, 1)` | propuesta | Ficha | `p` decoracion (poste_cintas) | N: construible, E: construible, S: construible, O: construible | 1 | — | Bajo. Ya es el poste `p` (`poste_cintas`); solo cambia la regla de estrellas (RF-696), no la posición. | Conservar la posición; aprobar. | Pendiente (fecha: —, ref: —) |
+| `(18, 1)` | propuesta | Ficha | `p` decoracion (poste_cintas) | N: construible, E: construible, S: construible, O: construible | 1 | — | Bajo. Ya es el poste `p` (`poste_cintas`); solo cambia la regla de estrellas (RF-696), no la posición. | Conservar la posición; aprobar. | Aprobado 2026-10-25, en bloque, tras revisar el plano de cada nivel en el HTML de revisión |
 
 ### Nivel 7 · Cruce (20×9)
 
@@ -80,7 +82,7 @@
 
 | Candidato | Estado | Origen | Tipo de casilla | Vecinas (N/E/S/O) | Margen | Cercano (≤2) | Riesgo | Recomendación | OK de Lucas |
 |---|---|---|---|---|---|---|---|---|---|
-| `(17, 5)` | propuesta | Ficha | `X` bloqueada | N: construible, E: construible, S: construible, O: construible | 2 | removible:arbol (15,6); entrada (19,7) | Bajo-medio. Bloqueada `X` del este; el árbol removible (15,6) y la entrada B (19,7) quedan a 2 casillas, ninguno pisado. | Aprobar tras captura. | Pendiente (fecha: —, ref: —) |
+| `(17, 5)` | propuesta | Ficha | `X` bloqueada | N: construible, E: construible, S: construible, O: construible | 2 | removible:arbol (15,6); entrada (19,7) | Bajo-medio. Bloqueada `X` del este; el árbol removible (15,6) y la entrada B (19,7) quedan a 2 casillas, ninguno pisado. | Aprobar tras captura. | Aprobado 2026-10-25, en bloque, tras revisar el plano de cada nivel en el HTML de revisión |
 
 ### Nivel 8 · Bastión (20×9)
 
@@ -89,7 +91,7 @@
 
 | Candidato | Estado | Origen | Tipo de casilla | Vecinas (N/E/S/O) | Margen | Cercano (≤2) | Riesgo | Recomendación | OK de Lucas |
 |---|---|---|---|---|---|---|---|---|---|
-| `(0, 4)` | propuesta | Ficha | `s` senal (simbolo_ruina) | N: construible, E: construible, S: construible, O: fuera del mapa | 0 | — | Medio-alto. Es el símbolo de ruina `s` (señal canónica) y está en el borde (margen 0). Las únicas casillas bloqueadas permanentes del mapa son las dos señales `s`, ambas en el borde: no hay reemplazo sin tocar `data/`. | Lucas decide si el poste puede ir sobre la señal; si no, ajuste de datos aparte. | Pendiente (fecha: —, ref: —) |
+| `(0, 4)` | propuesta | Ficha | `s` senal (simbolo_ruina) | N: construible, E: construible, S: construible, O: fuera del mapa | 0 | — | Medio-alto. Es el símbolo de ruina `s` (señal canónica) y está en el borde (margen 0). Las únicas casillas bloqueadas permanentes del mapa son las dos señales `s`, ambas en el borde: no hay reemplazo sin tocar `data/`. | Lucas decide si el poste puede ir sobre la señal; si no, ajuste de datos aparte. | Aprobado 2026-10-25, en bloque, tras revisar el plano de cada nivel en el HTML de revisión; **no integrado**: el poste tapa por completo la señal canónica (captura del motor), pendiente nueva ubicación |
 
 ### Nivel 9 · Taller asediado (20×9)
 
@@ -98,7 +100,7 @@
 
 | Candidato | Estado | Origen | Tipo de casilla | Vecinas (N/E/S/O) | Margen | Cercano (≤2) | Riesgo | Recomendación | OK de Lucas |
 |---|---|---|---|---|---|---|---|---|---|
-| `(0, 4)` | propuesta | Ficha | `s` senal (simbolo_ruina) | N: construible, E: construible, S: construible, O: fuera del mapa | 0 | — | Medio-alto. Igual que el nivel 8: señal `s` en el borde (margen 0); la otra `s` (6,0) también es borde. Sin reemplazo posible sin tocar `data/`. | Lucas decide; igual que nivel 8. | Pendiente (fecha: —, ref: —) |
+| `(0, 4)` | propuesta | Ficha | `s` senal (simbolo_ruina) | N: construible, E: construible, S: construible, O: fuera del mapa | 0 | — | Medio-alto. Igual que el nivel 8: señal `s` en el borde (margen 0); la otra `s` (6,0) también es borde. Sin reemplazo posible sin tocar `data/`. | Lucas decide; igual que nivel 8. | Aprobado 2026-10-25, en bloque, tras revisar el plano de cada nivel en el HTML de revisión; **no integrado**: igual que el nivel 8, pendiente nueva ubicación |
 
 ### Nivel 10 · La mina vieja (24×11)
 
@@ -107,7 +109,7 @@
 
 | Candidato | Estado | Origen | Tipo de casilla | Vecinas (N/E/S/O) | Margen | Cercano (≤2) | Riesgo | Recomendación | OK de Lucas |
 |---|---|---|---|---|---|---|---|---|---|
-| `(22, 2)` | propuesta | Ficha | `X` bloqueada | N: construible, E: bloqueada, S: bloqueada, O: camino | 1 | — | Bajo. Bloqueada `X` junto al camino (21,2); la mina (10,2) y las ruinas quedan lejos. | Aprobar tras captura. | Pendiente (fecha: —, ref: —) |
+| `(22, 2)` | propuesta | Ficha | `X` bloqueada | N: construible, E: bloqueada, S: bloqueada, O: camino | 1 | — | Bajo. Bloqueada `X` junto al camino (21,2); la mina (10,2) y las ruinas quedan lejos. | Aprobar tras captura. | Aprobado 2026-10-25, en bloque, tras revisar el plano de cada nivel en el HTML de revisión |
 
 ### Nivel 11 · Puesto seco (24×11)
 
@@ -116,8 +118,8 @@
 
 | Candidato | Estado | Origen | Tipo de casilla | Vecinas (N/E/S/O) | Margen | Cercano (≤2) | Riesgo | Recomendación | OK de Lucas |
 |---|---|---|---|---|---|---|---|---|---|
-| `(2, 1)` | propuesta | Ficha | `X` bloqueada | N: camino, E: construible, S: bloqueada, O: bloqueada | 1 | entrada (0,0); senal:roca_marcada (1,2) | Bajo. `X` bajo el camino (2,0); la entrada A (0,0) queda a 2 casillas y la roca marcada (1,2) en diagonal, sin pisarla. | Aprobar tras captura. | Pendiente (fecha: —, ref: —) |
-| `(20, 8)` | propuesta | Ficha | `X` bloqueada | N: bloqueada, E: construible, S: bloqueada, O: bloqueada | 2 | removible:roca (19,9) | Bajo-medio. `X` rodeada de `X` y pasto; la roca removible (19,9) está en diagonal contigua, sin pisarla. | Aprobar tras captura. | Pendiente (fecha: —, ref: —) |
+| `(2, 1)` | propuesta | Ficha | `X` bloqueada | N: camino, E: construible, S: bloqueada, O: bloqueada | 1 | entrada (0,0); senal:roca_marcada (1,2) | Bajo. `X` bajo el camino (2,0); la entrada A (0,0) queda a 2 casillas y la roca marcada (1,2) en diagonal, sin pisarla. | Aprobar tras captura. | Aprobado 2026-10-25, en bloque, tras revisar el plano de cada nivel en el HTML de revisión |
+| `(20, 8)` | propuesta | Ficha | `X` bloqueada | N: bloqueada, E: construible, S: bloqueada, O: bloqueada | 2 | removible:roca (19,9) | Bajo-medio. `X` rodeada de `X` y pasto; la roca removible (19,9) está en diagonal contigua, sin pisarla. | Aprobar tras captura. | Aprobado 2026-10-25, en bloque, tras revisar el plano de cada nivel en el HTML de revisión |
 
 ### Nivel 12 · El cañadón (26×11)
 
@@ -127,8 +129,8 @@
 | Candidato | Estado | Origen | Tipo de casilla | Vecinas (N/E/S/O) | Margen | Cercano (≤2) | Riesgo | Recomendación | OK de Lucas |
 |---|---|---|---|---|---|---|---|---|---|
 | `(5, 0)` | descartado | Ficha | `X` bloqueada | N: fuera del mapa, E: construible, S: construible, O: senal:roca_marcada | 0 | senal:roca_marcada (4,0) | Margen de borde 0 (fila superior) y roca marcada `h` en (4,0) pegada: el poste competiría con la señal y podría cortarse arriba. | Descartado: reemplazado por (5,2). | No aplica (descartado) |
-| `(5, 2)` | propuesta | Reemplazo de (5,0) | `X` bloqueada | N: construible, E: bloqueada, S: bloqueada, O: bloqueada | 2 | senal:roca_marcada (4,0) | Bajo. `X` verificada, margen 2, sin señales ni removibles en las 8 vecinas; la roca marcada (4,0) queda a 2 casillas. | Aprobar tras captura. | Pendiente (fecha: —, ref: —) |
-| `(24, 9)` | propuesta | Ficha | `X` bloqueada | N: bloqueada, E: bloqueada, S: camino, O: bloqueada | 1 | salida (25,10) | Bajo-medio. `X` sobre el camino (24,10); la salida (25,10) queda en diagonal; margen 1 por el este y por abajo. | Aprobar tras captura (revisar cercanía a la salida). | Pendiente (fecha: —, ref: —) |
+| `(5, 2)` | propuesta | Reemplazo de (5,0) | `X` bloqueada | N: construible, E: bloqueada, S: bloqueada, O: bloqueada | 2 | senal:roca_marcada (4,0) | Bajo. `X` verificada, margen 2, sin señales ni removibles en las 8 vecinas; la roca marcada (4,0) queda a 2 casillas. | Aprobar tras captura. | Aprobado 2026-10-25, en bloque, tras revisar el plano de cada nivel en el HTML de revisión |
+| `(24, 9)` | propuesta | Ficha | `X` bloqueada | N: bloqueada, E: bloqueada, S: camino, O: bloqueada | 1 | salida (25,10) | Bajo-medio. `X` sobre el camino (24,10); la salida (25,10) queda en diagonal; margen 1 por el este y por abajo. | Aprobar tras captura (revisar cercanía a la salida). | Aprobado 2026-10-25, en bloque, tras revisar el plano de cada nivel en el HTML de revisión |
 
 ### Nivel 13 · Paso alto (26×12)
 
@@ -138,9 +140,9 @@
 | Candidato | Estado | Origen | Tipo de casilla | Vecinas (N/E/S/O) | Margen | Cercano (≤2) | Riesgo | Recomendación | OK de Lucas |
 |---|---|---|---|---|---|---|---|---|---|
 | `(24, 0)` | descartado | Ficha | `X` bloqueada | N: fuera del mapa, E: bloqueada, S: construible, O: construible | 0 | — | Margen de borde 0 (fila superior): el dibujo podría cortarse. | Descartado: reemplazado por (23, 2). | No aplica (descartado) |
-| `(23, 2)` | propuesta | Reemplazo de (24,0) | `X` bloqueada | N: bloqueada, E: construible, S: construible, O: camino | 2 | — | Bajo. `X` verificada, margen 2, solo `X`, pasto y camino alrededor; sin señales ni removibles cerca. | Aprobar tras captura. | Pendiente (fecha: —, ref: —) |
+| `(23, 2)` | propuesta | Reemplazo de (24,0) | `X` bloqueada | N: bloqueada, E: construible, S: construible, O: camino | 2 | — | Bajo. `X` verificada, margen 2, solo `X`, pasto y camino alrededor; sin señales ni removibles cerca. | Aprobar tras captura. | Aprobado 2026-10-25, en bloque, tras revisar el plano de cada nivel en el HTML de revisión |
 | `(24, 11)` | descartado | Ficha | `X` bloqueada | N: construible, E: bloqueada, S: fuera del mapa, O: construible | 0 | — | Margen de borde 0 (fila inferior): el dibujo podría cortarse. | Descartado: reemplazado por (24, 9). | No aplica (descartado) |
-| `(24, 9)` | propuesta | Reemplazo de (24,11) | `X` bloqueada | N: construible, E: bloqueada, S: construible, O: bloqueada | 1 | — | Bajo. `X` verificada, margen 1 por el este y 2 por abajo, vecinas solo `X` y pasto. | Aprobar tras captura. | Pendiente (fecha: —, ref: —) |
+| `(24, 9)` | propuesta | Reemplazo de (24,11) | `X` bloqueada | N: construible, E: bloqueada, S: construible, O: bloqueada | 1 | — | Bajo. `X` verificada, margen 1 por el este y 2 por abajo, vecinas solo `X` y pasto. | Aprobar tras captura. | Aprobado 2026-10-25, en bloque, tras revisar el plano de cada nivel en el HTML de revisión |
 
 ### Nivel 14 · Los poblados vacíos (26×12)
 
@@ -149,8 +151,8 @@
 
 | Candidato | Estado | Origen | Tipo de casilla | Vecinas (N/E/S/O) | Margen | Cercano (≤2) | Riesgo | Recomendación | OK de Lucas |
 |---|---|---|---|---|---|---|---|---|---|
-| `(1, 1)` | propuesta | Ficha | `X` bloqueada | N: bloqueada, E: construible, S: construible, O: bloqueada | 1 | — | Bajo. `X` en el noroeste; el símbolo `s` (8,1) y los campamentos quedan lejos. | Aprobar tras captura. | Pendiente (fecha: —, ref: —) |
-| `(24, 10)` | propuesta | Ficha | `X` bloqueada | N: construible, E: construible, S: camino, O: bloqueada | 1 | senal:simbolo_ruina (25,9); entrada (25,11) | Medio. `X` con margen 1; el camino queda al sur (24,11), el símbolo de ruina `s` (25,9) en diagonal contigua y la entrada B (25,11) en diagonal: podría competir con la señal y la entrada. | Aprobar tras captura (revisar encuadre sudeste). | Pendiente (fecha: —, ref: —) |
+| `(1, 1)` | propuesta | Ficha | `X` bloqueada | N: bloqueada, E: construible, S: construible, O: bloqueada | 1 | — | Bajo. `X` en el noroeste; el símbolo `s` (8,1) y los campamentos quedan lejos. | Aprobar tras captura. | Aprobado 2026-10-25, en bloque, tras revisar el plano de cada nivel en el HTML de revisión |
+| `(24, 10)` | propuesta | Ficha | `X` bloqueada | N: construible, E: construible, S: camino, O: bloqueada | 1 | senal:simbolo_ruina (25,9); entrada (25,11) | Medio. `X` con margen 1; el camino queda al sur (24,11), el símbolo de ruina `s` (25,9) en diagonal contigua y la entrada B (25,11) en diagonal: podría competir con la señal y la entrada. | Aprobar tras captura (revisar encuadre sudeste). | Aprobado 2026-10-25, en bloque, tras revisar el plano de cada nivel en el HTML de revisión |
 
 ### Nivel 15 · La Central (26×12)
 
@@ -159,8 +161,8 @@
 
 | Candidato | Estado | Origen | Tipo de casilla | Vecinas (N/E/S/O) | Margen | Cercano (≤2) | Riesgo | Recomendación | OK de Lucas |
 |---|---|---|---|---|---|---|---|---|---|
-| `(5, 1)` | propuesta | Ficha | `X` bloqueada | N: camino, E: camino, S: bloqueada, O: construible | 1 | — | Bajo. `X` del noroeste entre dos tramos de camino (5,0) y (6,1); central y abastecimiento lejos. | Aprobar tras captura. | Pendiente (fecha: —, ref: —) |
-| `(23, 10)` | propuesta | Ficha | `X` bloqueada | N: camino, E: bloqueada, S: bloqueada, O: bloqueada | 1 | salida (25,9) | Bajo. `X` del sudeste bajo el camino (23,9); la salida (25,9) y el poste de abastecimiento (21,11) quedan a 2 casillas y la señal `s` (19,10) a 4. | Aprobar tras captura (revisar cercanía al poste de abastecimiento). | Pendiente (fecha: —, ref: —) |
+| `(5, 1)` | propuesta | Ficha | `X` bloqueada | N: camino, E: camino, S: bloqueada, O: construible | 1 | — | Bajo. `X` del noroeste entre dos tramos de camino (5,0) y (6,1); central y abastecimiento lejos. | Aprobar tras captura. | Aprobado 2026-10-25, en bloque, tras revisar el plano de cada nivel en el HTML de revisión |
+| `(23, 10)` | propuesta | Ficha | `X` bloqueada | N: camino, E: bloqueada, S: bloqueada, O: bloqueada | 1 | salida (25,9) | Bajo. `X` del sudeste bajo el camino (23,9); la salida (25,9) y el poste de abastecimiento (21,11) quedan a 2 casillas y la señal `s` (19,10) a 4. | Aprobar tras captura (revisar cercanía al poste de abastecimiento). | Aprobado 2026-10-25, en bloque, tras revisar el plano de cada nivel en el HTML de revisión |
 
 ## Comparación estructural «antes»
 
@@ -186,6 +188,6 @@ Hash SHA-256 de cada `data/levels/level_NN.json` en `origin/main` 9ce9e18. «Gri
 
 ## Límites
 
-- No hay capturas del motor ni prueba en partida: los planos salen de los JSON. Falta ver cada poste dentro del juego (estados 0/2/3 estrellas, encuadre y zoom) antes de aprobar.
-- No se verificó rendimiento, teléfono ni balance. No hay ninguna aprobación registrada: la columna «OK de Lucas» queda en Pendiente para los 20 candidatos vigentes.
+- Los planos salen de los JSON, no del motor. Las capturas del motor real de la integración están en `Capturas/T475-*.png` (1280×720, ventana, partida de campaña).
+- No se verificó rendimiento, teléfono ni balance.
 
