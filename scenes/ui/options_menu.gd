@@ -30,6 +30,20 @@ const VIEW_ALL_RESTORE: String = "Restaurar"
 const NEWS_BUTTON_TEXT: String = "Novedades de esta versión"
 const NEWS_EMPTY_TEXT: String = "No hay novedades"
 
+## M75 (RF-684, D-197) y RF-708: filas por solapa en orden de lectura.
+const OPTION_GROUP_NAMES: Array[String] = ["Sonido", "Pantalla", "Partida y ayudas", "Controles", "Avanzado"]
+const OPTION_GROUP_ROWS: Array = [
+	[&"MusicLabel", &"MusicSlider", &"SfxLabel", &"SfxSlider"],
+	[&"FullscreenCheck", &"DamageNumbersCheck", &"UpgradeFxCheck", &"RangeDisplayLabel", &"RangeDisplaySelector"],
+	[&"TutorialRow", &"BossEntranceCheck", &"DefeatAdviceCheck"],
+	[&"ViewAllRow"],
+	[&"UiModeLabel", &"UiModeSelector", &"CreditsSection", &"VersionLabel", &"CreditsButton", &"NewsButton",
+		&"AdminSection", &"AdminButton", &"AdminConfirm"],
+]
+const OPTIONS_PANEL_WIDTH: float = 920.0
+const MOBILE_PANEL_WIDTH: float = 880.0
+const WINDOW_MARGIN: float = 24.0
+
 ## RF-383: la sección de administración solo se ofrece desde el menú principal, nunca desde la
 ## pausa (no se cambia de guardado en medio de una partida). La prende `MainMenu`.
 var admin_available: bool = false
@@ -47,6 +61,7 @@ var normal_save_path: String = ""
 @onready var _scroll: ScrollContainer = %Scroll
 @onready var _rows: VBoxContainer = $Center/Panel/Margin/Frame/Scroll/Columns/Rows
 @onready var _side: VBoxContainer = %Side
+@onready var _tabs: HBoxContainer = %Tabs
 @onready var _admin_section: Label = %AdminSection
 @onready var _admin_button: Button = %AdminButton
 @onready var _admin_confirm: Control = %AdminConfirm
@@ -57,14 +72,10 @@ var normal_save_path: String = ""
 @onready var _credits_button: Button = %CreditsButton
 @onready var _title: Control = $Center/Panel/Margin/Frame/Title
 
-## RF-550: en el modo celular, dos columnas (la de la derecha es `_side`); en PC, una sola (RF-555).
-const MOBILE_PANEL_WIDTH: float = 880.0
-## Aire arriba y abajo de la ventana (RF-555): el centro se desplaza antes de tocar los bordes.
-const WINDOW_MARGIN: float = 24.0
-
 var _ui_mode_selector: OptionButton
-var _ui_mode_label: Label
-var _two_columns: bool = false
+var _group_pages: Array[VBoxContainer] = []
+var _tab_buttons: Array[Button] = []
+var _active_tab: int = 0
 ## RF-553: los créditos de siempre (RF-472), hijos de Opciones; al cerrarlos se vuelve acá.
 var credits: CreditsScreen
 var _tutorial_check: CheckBox
@@ -97,14 +108,13 @@ func _ready() -> void:
 		func(on: bool) -> void: SaveManager.set_setting("upgrade_fx", on))  # M65, RF-593
 	_build_tutorial_row()
 	_build_ui_mode_selector()
-	# RF-593: justo debajo de «Mostrar números de daño» (las filas de arriba también se meten ahí).
-	_rows.move_child(_upgrade_fx_check, _damage_numbers_check.get_index() + 1)
 	_build_boss_entrance_check()  # M66
 	_build_defeat_advice_check()  # M70, RF-644
 	if not UiMode.is_mobile():
 		_build_view_all_row()  # M68: sin teclado no hace falta
-	_build_range_display_selector()  # M75: después de crear las demás filas; queda junto a «Animaciones de mejora».
-	_arrange_columns()
+	_build_range_display_selector()  # M75
+	_build_news_button()  # M67
+	_build_tabs_and_pages()  # RF-708: categorías en solapas superiores
 	_admin_button.pressed.connect(_on_admin_pressed)
 	_admin_confirm_button.pressed.connect(set_dev_mode.bind(true))
 	_admin_cancel_button.pressed.connect(_on_admin_cancel)
@@ -114,7 +124,6 @@ func _ready() -> void:
 	add_child(credits)
 	credits.closed.connect(_credits_button.grab_focus)
 	_credits_button.pressed.connect(credits.open)
-	_build_news_button()
 	Audio.add_click_sounds(self)
 	_refresh_admin()
 	MenuTouch.attach(self)  # RF-550, RF-551: botones de 56 px y desplazamiento táctil en el celular
@@ -162,7 +171,7 @@ func set_dev_mode(on: bool) -> void:
 
 
 func is_admin_visible() -> bool:
-	return _admin_section.visible and _admin_button.visible
+	return _admin_section.visible and _admin_button.visible and not _admin_confirm.visible
 
 
 func is_confirm_visible() -> bool:
@@ -182,13 +191,13 @@ func _refresh_admin() -> void:
 ## RF-383: la confirmación ocupa el panel entero (solo queda el título), así el panel no crece y
 ## entra en una pantalla de 720 de alto. Al salir, vuelve todo como estaba.
 func _set_confirming(on: bool) -> void:
-	for column: Control in [_rows, _side]:
-		if column == null:
-			continue
-		for child: Node in column.get_children():
-			if child != _admin_confirm:
-				(child as Control).visible = not on
-	_rows.visible = not (on and _two_columns)  # en dos columnas, la confirmación queda sola y centrada
+	_tabs.visible = not on
+	for index: int in _group_pages.size():
+		_group_pages[index].visible = not on and index == _active_tab
+	if on and _admin_confirm.get_parent() != _rows:
+		_admin_confirm.reparent(_rows, false)
+	elif not on and _admin_confirm.get_parent() == _rows:
+		_admin_confirm.reparent(_group_pages.back(), false)
 	_back_button.visible = not on
 	_admin_confirm.visible = on
 	if not on:
@@ -196,22 +205,78 @@ func _set_confirming(on: bool) -> void:
 	_fit_scroll.call_deferred()
 
 
-## RF-550 / RF-555: en el celular, dos columnas y un panel ancho; en PC, la columna única de siempre (lo de la
-## columna derecha se agrega al final de la izquierda, en el mismo orden).
-func _arrange_columns() -> void:
-	_two_columns = UiMode.is_mobile()
-	if _two_columns:
-		_panel.custom_minimum_size.x = MOBILE_PANEL_WIDTH
-		# «Interfaz» encabeza la columna derecha: así la izquierda (sonido y pantalla) entra sin desplazar.
-		_ui_mode_label.reparent(_side, false)
-		_ui_mode_selector.reparent(_side, false)
-		_side.move_child(_ui_mode_label, 0)
-		_side.move_child(_ui_mode_selector, 1)
-		return
-	for child: Node in _side.get_children():
-		child.reparent(_rows, false)
-	_side.queue_free()
+## RF-708: cada categoría tiene una solapa y una página desplazable; «Controles» no se crea en celular.
+func _build_tabs_and_pages() -> void:
+	var by_name: Dictionary = {}
+	for column: Control in [_rows, _side]:
+		for child: Node in column.get_children():
+			by_name[StringName(child.name)] = child
+	_panel.custom_minimum_size.x = MOBILE_PANEL_WIDTH if UiMode.is_mobile() else OPTIONS_PANEL_WIDTH
+	var button_group: ButtonGroup = ButtonGroup.new()
+	for group_index: int in OPTION_GROUP_ROWS.size():
+		if UiMode.is_mobile() and group_index == 3:
+			continue
+		var page: VBoxContainer = VBoxContainer.new()
+		page.name = "OptionsPage%d" % group_index
+		page.add_theme_constant_override("separation", 12)
+		page.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		_rows.add_child(page)
+		for node_name: StringName in OPTION_GROUP_ROWS[group_index]:
+			var node: Node = by_name.get(node_name)
+			if node == null:
+				push_error("Opciones: no existe la fila «%s» de «%s»" % [node_name, OPTION_GROUP_NAMES[group_index]])
+				continue
+			node.reparent(page, false)
+		_group_pages.append(page)
+		var tab: Button = Button.new()
+		tab.name = "Tab%d" % group_index
+		tab.text = "Partida\ny ayudas" if group_index == 2 else OPTION_GROUP_NAMES[group_index]
+		tab.toggle_mode = true
+		tab.button_group = button_group
+		tab.custom_minimum_size.y = 48.0
+		tab.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		tab.add_theme_font_size_override("font_size", 17)
+		# Apariencia de solapa clásica: sin marco de botón, y una línea inferior
+		# dorada marca la categoría activa.
+		var normal: StyleBoxFlat = StyleBoxFlat.new()
+		normal.bg_color = Color.TRANSPARENT
+		normal.border_width_bottom = 2
+		normal.border_color = Color("514839")
+		var hover: StyleBoxFlat = StyleBoxFlat.new()
+		hover.bg_color = Color("252728")
+		hover.border_width_bottom = 2
+		hover.border_color = Color("a7834a")
+		var selected: StyleBoxFlat = StyleBoxFlat.new()
+		selected.bg_color = Color("262522")
+		selected.border_width_bottom = 3
+		selected.border_color = Color("e4ad4c")
+		tab.add_theme_stylebox_override("normal", normal)
+		tab.add_theme_stylebox_override("hover", hover)
+		tab.add_theme_stylebox_override("pressed", selected)
+		tab.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+		tab.pressed.connect(_select_tab.bind(_tab_buttons.size()))
+		_tabs.add_child(tab)
+		_tab_buttons.append(tab)
+	for title_name: StringName in [&"SoundSection", &"DisplaySection", &"GameSection", &"ControlsSection", &"AdvancedSection"]:
+		var title: Node = by_name.get(title_name)
+		if title != null:
+			title.free()
+	for index: int in _group_pages.size():
+		_rows.move_child(_group_pages[index], index)
+	_side.free()
 	_side = null
+	_select_tab(0)
+
+
+func _select_tab(index: int) -> void:
+	if index < 0 or index >= _group_pages.size():
+		return
+	_active_tab = index
+	for page_index: int in _group_pages.size():
+		_group_pages[page_index].visible = page_index == index
+	for button_index: int in _tab_buttons.size():
+		_tab_buttons[button_index].button_pressed = button_index == index
+	_fit_scroll.call_deferred()
 
 
 ## RF-555: el centro se desplaza si el panel no entra en la ventana; si entra, el panel mide lo que mide su
@@ -219,6 +284,8 @@ func _arrange_columns() -> void:
 func _fit_scroll() -> void:
 	if not is_inside_tree():
 		return
+	var preferred_width: float = MOBILE_PANEL_WIDTH if UiMode.is_mobile() else OPTIONS_PANEL_WIDTH
+	_panel.custom_minimum_size.x = minf(preferred_width, maxf(size.x - WINDOW_MARGIN * 2.0, 460.0))
 	var content: float = (_scroll.get_child(0) as Control).get_combined_minimum_size().y
 	var chrome: float = _panel.get_combined_minimum_size().y - _scroll.get_combined_minimum_size().y
 	var available: float = size.y - WINDOW_MARGIN * 2.0 - chrome
@@ -256,9 +323,9 @@ func _on_fullscreen_toggled(on: bool) -> void:
 
 
 ## RF-576: la casilla prende o apaga el tutorial (al prenderla de nuevo, vuelve a salir); el botón lo vuelve a
-## armar para la próxima vez que se entre al nivel 1. Va debajo de «Mostrar números de daño».
+## armar para la próxima vez que se entre al nivel 1. Va en «Partida y ayudas».
 func _build_tutorial_row() -> void:
-	var row := HBoxContainer.new()
+	var row: BoxContainer = VBoxContainer.new() if UiMode.is_mobile() else HBoxContainer.new()
 	row.name = "TutorialRow"
 	row.add_theme_constant_override("separation", 8)
 	_tutorial_check = CheckBox.new()
@@ -273,9 +340,9 @@ func _build_tutorial_row() -> void:
 	_tutorial_replay.text = TUTORIAL_REPLAY_TEXT
 	_tutorial_replay.add_theme_font_size_override("font_size", 15)
 	_tutorial_replay.custom_minimum_size.y = 44
+	_tutorial_replay.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_child(_tutorial_replay)
 	_rows.add_child(row)
-	_rows.move_child(row, _damage_numbers_check.get_index() + 1)
 	_tutorial_check.toggled.connect(_on_tutorial_toggled)
 	_tutorial_replay.pressed.connect(_on_tutorial_replay)
 
@@ -294,10 +361,6 @@ func _build_range_display_selector() -> void:
 	_range_display_selector.add_item("Completo", 2)
 	_range_display_selector.custom_minimum_size.y = 44
 	_rows.add_child(_range_display_selector)
-	var anchor: Node = _rows.get_node_or_null("UpgradeFxCheck")
-	var index: int = anchor.get_index() + 1 if anchor != null else _damage_numbers_check.get_index() + 1
-	_rows.move_child(label, index)
-	_rows.move_child(_range_display_selector, index + 1)
 	_range_display_selector.item_selected.connect(func(selected: int) -> void:
 		SaveManager.set_setting("range_display", _range_display_selector.get_item_id(selected)))
 
@@ -316,8 +379,7 @@ func _on_tutorial_replay() -> void:
 	_tutorial_replay.disabled = true
 
 
-## M66, RF-672: «Presentación de los jefes». Va debajo de «Mostrar números de daño» y del tutorial (y de
-## «Animaciones de mejora» si M65 está). Una casilla simple: la lee `Game` al aparecer un jefe.
+## M66, RF-672: «Presentación de los jefes», en «Partida y ayudas». Una casilla simple: la lee `Game` al aparecer un jefe.
 func _build_boss_entrance_check() -> void:
 	_boss_entrance_check = CheckBox.new()
 	_boss_entrance_check.name = "BossEntranceCheck"
@@ -325,11 +387,6 @@ func _build_boss_entrance_check() -> void:
 	_boss_entrance_check.add_theme_font_size_override("font_size", 20)
 	_boss_entrance_check.clip_text = true  # que la fila no ensanche el panel
 	_rows.add_child(_boss_entrance_check)
-	# Después de la fila del tutorial, que tiene que quedar pegada a «Mostrar números de daño» (RF-576).
-	var anchor: Node = _rows.get_node_or_null("TutorialRow")
-	if anchor == null:
-		anchor = _damage_numbers_check
-	_rows.move_child(_boss_entrance_check, anchor.get_index() + 1)
 	_boss_entrance_check.toggled.connect(
 		func(on: bool) -> void: SaveManager.set_setting("boss_entrance", on))
 
@@ -342,9 +399,10 @@ func _build_defeat_advice_check() -> void:
 	_defeat_advice_check.add_theme_font_size_override("font_size", 20)
 	_defeat_advice_check.clip_text = true
 	_rows.add_child(_defeat_advice_check)
-	_rows.move_child(_defeat_advice_check, _boss_entrance_check.get_index() + 1)
 	_defeat_advice_check.toggled.connect(
 		func(on: bool) -> void: SaveManager.set_setting("defeat_advice", on))
+
+
 ## M68 (RF-614): una fila con el nombre, un botón con la tecla de hoy (al pulsarlo espera la próxima tecla),
 ## «Restaurar» (vuelve a la V) y, debajo, el aviso cuando la tecla elegida ya la usa otra cosa.
 func _build_view_all_row() -> void:
@@ -378,7 +436,6 @@ func _build_view_all_row() -> void:
 	_view_all_note.visible = false
 	box.add_child(_view_all_note)
 	_rows.add_child(box)
-	_rows.move_child(box, _boss_entrance_check.get_index() + 1)
 
 
 func _refresh_view_all_row() -> void:
@@ -444,8 +501,7 @@ func _build_news_button() -> void:
 	_news_button.name = "NewsButton"
 	_news_button.custom_minimum_size.y = 44
 	_news_button.add_theme_font_size_override("font_size", 20)
-	_credits_button.get_parent().add_child(_news_button)
-	_credits_button.get_parent().move_child(_news_button, _credits_button.get_index() + 1)
+	_rows.add_child(_news_button)
 	_news_button.pressed.connect(_on_news_pressed)
 	_refresh_news_button()
 
@@ -474,9 +530,9 @@ func news_button() -> Button:
 
 
 func _build_ui_mode_selector() -> void:
-	# RF-555: «Interfaz» va dentro de «Visualización», después de los números de daño (antes quedaba tras «Volver»).
+	# RF-684: «Interfaz» va en «Avanzado», al principio.
 	var label := Label.new()
-	_ui_mode_label = label
+	label.name = "UiModeLabel"
 	label.text = "Interfaz"
 	label.add_theme_font_size_override("font_size", 20)
 	_rows.add_child(label)
@@ -487,8 +543,5 @@ func _build_ui_mode_selector() -> void:
 	_ui_mode_selector.add_item("PC", UiMode.PC)
 	_ui_mode_selector.custom_minimum_size.y = 44
 	_rows.add_child(_ui_mode_selector)
-	var after: int = _damage_numbers_check.get_index() + 1
-	_rows.move_child(label, after)
-	_rows.move_child(_ui_mode_selector, after + 1)
 	_ui_mode_selector.item_selected.connect(func(index: int) -> void:
 		SaveManager.set_setting("ui_mode", _ui_mode_selector.get_item_id(index)))

@@ -24,6 +24,7 @@ func after_each() -> void:
 
 
 func _open() -> Control:
+	SaveManager.set_setting("selector_style", CampaignMap.STYLE_CARDS)
 	var select: Control = SELECT_SCENE.instantiate()
 	select.community_dir = COMMUNITY
 	select.modes_official_dir = COMMUNITY + "official/"
