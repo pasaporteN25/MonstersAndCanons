@@ -74,10 +74,10 @@ func _draw() -> void:
 	draw_mark(self, state, center, radius, font)
 	if state == CampaignMap.State.AVAILABLE or state == CampaignMap.State.REBEL:
 		var color: Color = Color("#25231f") if state == CampaignMap.State.AVAILABLE else Color("#fff1da")
-		draw_string(font, center + Vector2(-radius, 5.0), "%02d" % (index + 1), HORIZONTAL_ALIGNMENT_CENTER, radius * 2.0, 15, color)
+		draw_string(font, center + Vector2(-radius, 5.0), CampaignMap.number_text(index), HORIZONTAL_ALIGNMENT_CENTER, radius * 2.0, 15, color)
 	if state == CampaignMap.State.REBEL or state == CampaignMap.State.TAKEN:
 		_draw_stars(center + Vector2(0, -radius - 9.0))
-	var caption: String = "%02d" % (index + 1) if state == CampaignMap.State.LOCKED else "%02d · %s" % [index + 1, level_name]
+	var caption: String = CampaignMap.number_text(index) if state == CampaignMap.State.LOCKED else "%s · %s" % [CampaignMap.number_text(index), level_name]
 	var caption_color: Color = Color("#a8aeaa") if state == CampaignMap.State.LOCKED else Color("#ffe4a0")
 	var fitted: String = _fit(font, caption)
 	draw_string(font, center + Vector2(-CAPTION_WIDTH / 2.0, radius + 15.0), fitted, HORIZONTAL_ALIGNMENT_CENTER, CAPTION_WIDTH, CAPTION_SIZE, caption_color)

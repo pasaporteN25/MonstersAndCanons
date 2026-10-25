@@ -126,6 +126,11 @@ static func default_selection(region_states: Array[State]) -> int:
 	return last_open
 
 
+## El número de nivel que se muestra (RF-695): 1…15, sin cero inicial. Los ids y rutas (`level_01`) no cambian.
+static func number_text(index: int) -> String:
+	return str(index + 1)
+
+
 static func state_text(state: State) -> String:
 	match state:
 		State.LOCKED:

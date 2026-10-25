@@ -176,7 +176,7 @@ func select(index: int) -> void:
 	_selected = clampi(index, 0, _entries.size() - 1)
 	var entry: Dictionary = _entries[_selected]
 	var state: CampaignMap.State = entry["state"]
-	_name_label.text = "%02d · %s" % [_selected + 1, entry["name"]]
+	_name_label.text = "%s · %s" % [CampaignMap.number_text(_selected), entry["name"]]
 	_status_label.text = _status_line(entry)
 	_play_button.disabled = not CampaignMap.is_open(state)  # «Jugar» siempre visible; bloqueada, deshabilitado
 	for region_node: CampaignRegion in _regions:
