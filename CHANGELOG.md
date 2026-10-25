@@ -1,5 +1,9 @@
 # Novedades del juego
 
+## Radio del área con coma *(T465, cierre de M75, 2026-10-25; en revisión)*
+
+El panel de la torre y la Wiki escriben el radio del área con coma y sin ceros de más («Área: radio 1,5», «radio 1»). Antes, el Cañón de nivel 3 mostraba «1.5» con punto. Solo cambia el texto: no cambian el área, el daño ni el precio.
+
 ## Postes de campaña según tus estrellas *(T475, 2026-10-25; en revisión)*
 
 En la campaña aparecen postes de banderines en la mayoría de los mapas: uno en los niveles 1 a 7 y 10, y dos en los niveles 11 a 15. Son rebeldes mientras tengas de 0 a 2 estrellas en el nivel y pasan a ser tuyos, con el banderín que armaste en el editor, al conseguir las 3 estrellas. El poste del nivel 6 ya no cambia con cualquier victoria: también pide las 3 estrellas. Es solo un adorno: no cambia el camino, dónde construir ni las oleadas. Los niveles 8 y 9 todavía no lo tienen, hasta elegir otra casilla. Los mapas de la comunidad, Asedio, el editor y el modo de pruebas siempre muestran el poste rebelde.
