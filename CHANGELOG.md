@@ -1,5 +1,9 @@
 # Novedades del juego
 
+## Opciones con solapas *(T481, 2026-10-24; en revisión)
+
+Las categorías Sonido, Pantalla, Partida y ayudas, Controles y Avanzado aparecen como solapas arriba de Opciones. En celular se omite «Controles». Cada solapa muestra su propia página y conserva los valores guardados.
+
 ## Franjas temáticas por terreno *(T478, 2026-10-24)*
 
 En las partidas, el espacio exterior y los márgenes internos del mapa usan el fondo aprobado para el terreno. El fondo queda fijo en pantalla mientras acercás o desplazás el mapa, y se recorta sin deformarse al cambiar la relación de aspecto. El tope de zoom queda en 1,0. Menús y contextos sin nivel conservan el respaldo liso.
@@ -9,6 +13,10 @@ En las partidas, el espacio exterior y los márgenes internos del mapa usan el f
 En PC, «Ver todo» queda solo en la tecla configurable (V por omisión), sin botón flotante. En celular, el botón sigue apareciendo al acercar el mapa; desplazarlo sin zoom no lo muestra. La primera vez que acercás el mapa aparece por tres segundos un aviso con la tecla o el botón para volver al encuadre completo; desplazarlo sin zoom no muestra el aviso (aclaración de Lucas, 2026-10-23). Se recuerda en el guardado y no interrumpe el tutorial. La lupa está en muestra para aprobación y todavía no se integró: hasta entonces el botón conserva el texto «Ver todo».
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
+
+## Opciones en cinco grupos *(T468, en revisión)*
+
+Opciones ordena los ajustes en **Sonido**, **Pantalla**, **Partida y ayudas**, **Controles** (solo en PC) y **Avanzado**. «Interfaz» queda en Avanzado con **Automática** por omisión; el celular muestra Sonido y Pantalla a la izquierda, y Partida y ayudas y Avanzado a la derecha. Si el contenido no entra a 720 px de alto, se puede desplazar sin perder «Volver». Los valores guardados y las claves existentes se conservan.
 
 ## Ampliación del alcance al mejorar *(T467, en revisión)*
 

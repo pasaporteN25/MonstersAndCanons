@@ -1,7 +1,7 @@
 # T458 · Ficha de implementación: «Ver todo», panel de mejora, alcance y Opciones (M75)
 
 - **Ejecutor sugerido:** un agente de código por tarea (Sonnet o Codex). T464 incluye un ícono: lo aprueba Lucas. **Tamaño:** cinco tareas chicas a medianas (T464 a T468), una por commit.
-- **Refs:** RF-674 a RF-686 (`specs/01-spec.md`, sección M75), D-192 a D-197 (`specs/04-decisiones.md`), plan M75 (`specs/02-plan-tecnico.md`), informe de partida `specs/tareas/informes/T451-camara-panel-opciones.md` (el «hoy» con archivo y línea), tablero `specs/03-tareas.md` (sección M75).
+- **Refs:** RF-674 a RF-686 (`specs/01-spec.md`, sección M75), D-192 a D-197 y D-208 (`specs/04-decisiones.md`), plan M75 (`specs/02-plan-tecnico.md`), informe de partida `specs/tareas/informes/T451-camara-panel-opciones.md` (el «hoy» con archivo y línea), tablero `specs/03-tareas.md` (sección M75).
 - **Protocolo común:** `specs/tareas/README.md`. Esta ficha lo da por leído.
 
 > **Compuerta.** No empezar a programar hasta que Lucas dé el OK a la spec M75. Las decisiones funcionales anotadas en `03-tareas.md` ya están cerradas; la muestra del ícono de lupa requiere aprobación de Lucas antes de integrarse.
@@ -18,7 +18,7 @@
 
 ```
 T464 («Ver todo») ─┐
-T465 (panel)      ─┼─► T467 (ampliación, dos toques)  ─► T468 (grupos de Opciones, después de T461)
+T465 (panel)      ─┼─► T467 (ampliación, dos toques)  ─► T468 (categorías de Opciones, después de T461) → T481 (solapas superiores)
 T466 (alcance)    ─┘
 ```
 
@@ -74,25 +74,30 @@ T466 (alcance)    ─┘
 
 **Tests:** `test_range_preview.gd` (hover, primer y segundo toque, un test por cada evento que desarma, 0,35 s, mejora instantánea con oro/nivel/números iguales, `upgrade_fx` apagado); actualizar/verificar `test_tutorial_data.gd` para la explicación de los dos toques. Capturas en PC y celular simulado.
 
-## 6. T468 · Reagrupar Opciones
+## 6. T468 · Categorías de Opciones
 
 **Archivos:** `scenes/ui/options_menu.gd` y `.tscn`; tests de Opciones.
 
-1. `_arrange_columns()` aplica una lista de orden declarativa por grupo (arreglo de nombres de nodo); los constructores `_build_*` dejan de usar `move_child` relativos.
-2. Títulos: Sonido, Pantalla, Partida y ayudas, Controles, Avanzado (estilo del título actual). Filas según RF-684. «Interfaz» en «Avanzado», Automática por omisión.
-3. **No cambiar** los `name` de nodo ni las claves de guardado.
-4. Celular: sin «Controles»; izquierda Sonido + Pantalla, derecha Partida y ayudas + Avanzado; si no entra en 720 px, el desplazamiento de RF-555.
+T468 fija las cinco categorías y sus filas según RF-684. «Interfaz» queda en «Avanzado», con Automática por omisión; no cambian nombres de nodos ni claves de guardado.
 
-**Tests:** reescribir los asserts de posición (`test_tutorial_options.gd:52-53`, `test_boss_entrance_options.gd`, `test_defeat_advice_options.gd`, `test_view_all_binding.gd`) y revisar `test_menu_layout.gd`, `test_mobile_ui.gd`, `test_options_admin.gd`, `test_news_menu.gd`, `test_game_version.gd`; nuevo `test_options_groups.gd`.
+## 7. T481 · Solapas superiores
 
-## 7. Riesgos (resumen; el detalle está en el plan M75)
+**Archivos:** `scenes/ui/options_menu.gd` y `.tscn`; tests de Opciones, menú, tutorial, novedades, versión, jefes, derrota y tecla de «Ver todo»; capturador de Opciones.
+
+1. Fila de solapas arriba del contenido, una página visible; PC cinco, celular cuatro sin «Controles». La primera activa es «Sonido».
+2. Mantener solapas y «Volver» fuera del `ScrollContainer`; desplazar solo la página activa si hace falta; el ancho se ajusta a la ventana y deja las solapas legibles.
+3. La confirmación del modo de pruebas oculta páginas y solapas; al cancelar restaura la página activa. No cambiar nombres/claves ni valores de preferencias.
+
+**Tests:** nueva/revisada `test_options_groups.gd`; actualizar `test_tutorial_options.gd`, `test_defeat_advice_options.gd`, `test_view_all_binding.gd`, `test_menu_layout.gd`, `test_news_menu.gd`, `test_game_version.gd` y las demás pruebas que asumían títulos/columnas. Capturas en PC y celular simulado; ningún teléfono real.
+
+## 8. Riesgos (resumen; el detalle está en el plan M75)
 
 Ancho del panel (no medido) · aspecto de Sutil sobre fondos claros (no probado) · dos toques en el celular sin prueba en teléfono real · estado «armado» olvidado que gaste oro · tests que fijan posiciones · el arco del Estandarte pasa a Oculto por omisión · la lupa es arte nuevo y requiere aprobación de Lucas · `--import` reescribe SVG.
 
-## 8. Lo que no se toca
+## 9. Lo que no se toca
 
 Balance, precios, daños, ventas y reglas de mejora; niveles, torres y enemigos; el arte ya aprobado; `project.godot`; `CHANGELOG.md` hasta que cada tarea esté implementada (entonces sí, junto con spec, plan, `CONTENIDO.md`, `README.md` y `ONBOARDING.md`). **B-58** (teclas configurables) queda en el backlog: no implementar.
 
-## 9. Resultado honesto (cada tarea)
+## 10. Resultado honesto (cada tarea)
 
 Al terminar, escribir en `03-tareas.md`: qué se hizo, qué se probó (tests y capturas) y **qué no** (en especial: ningún celular real, ningún teclado distinto del de la máquina de desarrollo).
