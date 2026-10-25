@@ -111,11 +111,15 @@ func _ready() -> void:
 		level_data = GameFlow.level(0)
 	level_theme_selected.emit(level_data.theme)
 
-	# RF-656, RF-657: el guardado se consulta solo acá y solo en la campaña; el resto conserva el poste enemigo.
-	var post_conquered: bool = campaign_level != null and campaign_level.id == &"level_06" \
-			and SaveManager.is_completed(campaign_level.id)
+	# RF-696, RF-697: el guardado se consulta solo acá y solo en la campaña normal; el resto (comunidad, modos, editor,
+	# modo de pruebas, escena suelta) conserva el poste rebelde fijo y no hereda la conquista ni la receta.
+	var post_conquered: bool = _is_normal_campaign() and CampaignPosts.is_player_variant(GameFlow.level_stars(GameFlow.current_index))
 	var banner_recipe: BannerRecipe = BannerRecipeStore.load_recipe() if post_conquered else null
-	level = level_data.build_map(post_conquered, banner_recipe)
+	# Los postes de 1–15 son del mapa de campaña (con o sin modo de pruebas); lo demás no los lleva.
+	var post_cells: Array[Vector2i] = []
+	if campaign_level != null and GameFlow.current_mode.is_empty():
+		post_cells = CampaignPosts.cells_for(campaign_level.id)
+	level = level_data.build_map(post_conquered, banner_recipe, post_cells)
 	level.position = Vector2(0.0, float(MobileUiConfig.load_from().get_value("barra_alta_px"))) if UiMode.is_mobile() else MAP_OFFSET
 	add_child(level)
 	move_child(level, 0)  # primero en la lista = se dibuja debajo de todo

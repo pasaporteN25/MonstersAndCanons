@@ -17,14 +17,16 @@ var _legend_cells: Dictionary = {}  # casilla → nombre del dibujo (RF-262)
 var _removable_cells: Array[Vector2i] = []
 var _post_conquered: bool = false  # RF-657: lo decide quien arma el mapa; esta clase no lee el guardado
 var _banner_recipe: BannerRecipe
+var _post_cells: Array[Vector2i] = []  # T475, RF-696: postes superpuestos; los pasa quien arma el mapa
 var _palette: Dictionary = MapThemes.palette(MapThemes.DEFAULT)
 
 
 ## Level la llama al estar lista (constitución P6: el padre le da lo que necesita).
 ## `exit_cells`: salidas dentro del mapa, donde se dibuja una puerta (RF-06). `theme`: el paisaje (RF-260).
 ## `legend_cells`: los dibujos que pidió la leyenda del nivel, casilla por casilla (RF-262).
-## `post_conquered`: true si el poste de banderines muestra la variante del jugador (RF-656, RF-657).
-func paint(ground: TileMapLayer, exit_cells: Array[Vector2i] = [], theme: StringName = MapThemes.DEFAULT, legend_cells: Dictionary = {}, removable_cells: Array[Vector2i] = [], post_conquered: bool = false, banner_recipe: BannerRecipe = null) -> void:
+## `post_conquered`: true si los postes de banderines muestran la variante del jugador (RF-657, RF-696).
+## `post_cells`: casillas donde se superpone un poste como capa visual, sin tocar el mapa (T475, RF-696).
+func paint(ground: TileMapLayer, exit_cells: Array[Vector2i] = [], theme: StringName = MapThemes.DEFAULT, legend_cells: Dictionary = {}, removable_cells: Array[Vector2i] = [], post_conquered: bool = false, banner_recipe: BannerRecipe = null, post_cells: Array[Vector2i] = []) -> void:
 	_ground = ground
 	_exit_cells = exit_cells
 	_theme = theme
@@ -32,6 +34,7 @@ func paint(ground: TileMapLayer, exit_cells: Array[Vector2i] = [], theme: String
 	_removable_cells = removable_cells
 	_post_conquered = post_conquered
 	_banner_recipe = banner_recipe
+	_post_cells = post_cells
 	_palette = MapThemes.palette(theme)
 	position = ground.position
 	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS  # D-023
@@ -64,6 +67,30 @@ func _draw() -> void:
 				draw_texture_rect(blocked_decor(cell, _theme), Rect2(origin, Vector2(tile, tile)), false)
 	for cell: Vector2i in _exit_cells:
 		draw_texture_rect(GATE, Rect2(Vector2(cell) * tile, Vector2(tile, tile)), false)  # RF-06
+	_draw_campaign_posts(tile)
+
+
+## T475, RF-696: un poste encima de lo que ya hay en la casilla. Si la leyenda ya dibuja ahí el poste (nivel 6),
+## no se repite.
+func _draw_campaign_posts(tile: float) -> void:
+	var texture: Texture2D = campaign_post_texture()
+	for cell: Vector2i in overlay_post_cells():
+		draw_texture_rect(texture, Rect2(Vector2(cell) * tile, Vector2(tile, tile)), false)
+
+
+## La variante de los postes superpuestos según el contexto que recibió (nunca consulta el guardado).
+func campaign_post_texture() -> Texture2D:
+	return MapDrawings.post_texture(_post_conquered, _banner_recipe)
+
+
+## Casillas donde de verdad se superpone un poste: las pedidas, dentro del mapa y sin repetir el poste que la
+## leyenda ya dibuja ahí.
+func overlay_post_cells() -> Array[Vector2i]:
+	var cells: Array[Vector2i] = []
+	for cell: Vector2i in _post_cells:
+		if _ground != null and _is_inside(cell) and _legend_cells.get(cell, "") != MapDrawings.POST_DRAWING:
+			cells.append(cell)
+	return cells
 
 
 ## RF-263: una casilla de la leyenda. Un "objeto" va sobre el suelo del tema; un "suelo" (agua, hielo,

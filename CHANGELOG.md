@@ -1,5 +1,9 @@
 # Novedades del juego
 
+## Postes de campaña según tus estrellas *(T475, 2026-10-25; en revisión)*
+
+En la campaña aparecen postes de banderines en la mayoría de los mapas: uno en los niveles 1 a 7 y 10, y dos en los niveles 11 a 15. Son rebeldes mientras tengas de 0 a 2 estrellas en el nivel y pasan a ser tuyos, con el banderín que armaste en el editor, al conseguir las 3 estrellas. El poste del nivel 6 ya no cambia con cualquier victoria: también pide las 3 estrellas. Es solo un adorno: no cambia el camino, dónde construir ni las oleadas. Los niveles 8 y 9 todavía no lo tienen, hasta elegir otra casilla. Los mapas de la comunidad, Asedio, el editor y el modo de pruebas siempre muestran el poste rebelde.
+
 ## Mapa planetario como inicio *(T470, 2026-10-24)*
 
 La campaña abre en el mapa planetario tanto en PC como en celular. En el mapa, un clic o toque selecciona el nivel; **Jugar** o **Enter** lo inicia, y el doble clic no lo saltea. El pie con la selección y el botón queda fijo mientras desplazás el mapa si no entra entero. Las tarjetas siguen iniciando con un clic. Los guardados existentes pasan al mapa una vez, al guardar; después se respeta el estilo que elijas. No se probaron teléfonos reales.
