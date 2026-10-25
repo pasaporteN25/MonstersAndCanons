@@ -4,11 +4,19 @@
 
 La campaña abre en el mapa planetario tanto en PC como en celular. En el mapa, un clic o toque selecciona el nivel; **Jugar** o **Enter** lo inicia, y el doble clic no lo saltea. El pie con la selección y el botón queda fijo mientras desplazás el mapa si no entra entero. Las tarjetas siguen iniciando con un clic. Los guardados existentes pasan al mapa una vez, al guardar; después se respeta el estilo que elijas. No se probaron teléfonos reales.
 
+## Franjas temáticas por terreno *(T478, 2026-10-24)*
+
+En las partidas, el espacio exterior y los márgenes internos del mapa usan el fondo aprobado para el terreno. El fondo queda fijo en pantalla mientras acercás o desplazás el mapa, y se recorta sin deformarse al cambiar la relación de aspecto. El tope de zoom queda en 1,0. Menús y contextos sin nivel conservan el respaldo liso.
+
 ## «Ver todo»: tecla en PC y aviso de cámara *(T464, 2026-10-24)*
 
 En PC, «Ver todo» queda solo en la tecla configurable (V por omisión), sin botón flotante. En celular, el botón sigue apareciendo al acercar el mapa; desplazarlo sin zoom no lo muestra. La primera vez que acercás el mapa aparece por tres segundos un aviso con la tecla o el botón para volver al encuadre completo; desplazarlo sin zoom no muestra el aviso (aclaración de Lucas, 2026-10-23). Se recuerda en el guardado y no interrumpe el tutorial. La lupa está en muestra para aprobación y todavía no se integró: hasta entonces el botón conserva el texto «Ver todo».
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
+
+## Ampliación del alcance al mejorar *(T467, en revisión)*
+
+Antes de mejorar una torre podés ver hasta dónde va a llegar su alcance. **En la PC**, pasá el mouse sobre «Mejorar»: se ve el círculo del nivel siguiente creciendo desde el alcance actual (si la mejora no lo cambia, el mismo círculo quieto) y desaparece al sacar el mouse. **En el celular**, «Mejorar» pasa a tener **dos toques**: el primero muestra la ampliación (el botón pasa a «Confirmar» y sigue mostrando el costo) y el segundo mejora; tocar el mapa, soltar o elegir otra torre, tocar «Vender» o la prioridad, pausar o quedarte sin oro cancela el primer toque. Después de mejorar, el botón se bloquea 0,35 s, así que un doble toque sube un solo nivel. La mejora es instantánea y cuesta lo mismo que antes; la ampliación se ve con cualquier valor de «Círculo de alcance». Se apaga junto con el resto desde **«Animaciones de mejora»**: apagada, la ampliación se ve quieta y el efecto de mejora no la dibuja. El tutorial del nivel 1 en el celular explica los dos toques.
 
 ## Panel de mejora de torres *(T465, en revisión)*
 

@@ -6,7 +6,8 @@ signal view_zoomed_in
 var _level: Level
 var _camera: Camera2D
 var _minimum_zoom: float = 1.0
-var _maximum_zoom: float = 1.5
+const MAX_PRESENTATION_ZOOM: float = 1.0
+var _maximum_zoom: float = MAX_PRESENTATION_ZOOM
 var _zoom_wheel_factor: float = 1.1
 var _touch_max_distance: float = 21.0
 var _top_height: float = 64.0
@@ -31,7 +32,7 @@ func setup(level: Level, camera: Camera2D, minimum_zoom: float, camera_factory: 
 	_mobile_hud = mobile_hud
 	_mobile_mode = mobile_mode
 	var config: MobileUiConfig = MobileUiConfig.load_from()
-	_maximum_zoom = float(config.get_value("zoom_casilla_max_px")) / Rules.TILE_SIZE
+	_maximum_zoom = maximum_zoom_from_cell_pixels(float(config.get_value("zoom_casilla_max_px")))
 	_zoom_wheel_factor = float(config.get_value("zoom_rueda_factor"))
 	_touch_max_distance = float(config.get_value("toque_max_px"))
 	_top_height = float(config.get_value("barra_alta_px")) if _mobile_mode else 48.0
@@ -166,6 +167,10 @@ func _fit_position() -> Vector2:
 
 static func clamp_zoom(value: float, minimum: float, maximum: float) -> float:
 	return clampf(value, minimum, maximum)
+
+
+static func maximum_zoom_from_cell_pixels(cell_pixels: float) -> float:
+	return minf(MAX_PRESENTATION_ZOOM, cell_pixels / Rules.TILE_SIZE)
 
 
 static func clamp_center(center: Vector2, map_rect: Rect2) -> Vector2:

@@ -365,7 +365,7 @@ func test_the_text_is_at_least_20_screen_pixels_even_with_a_small_zoom() -> void
 	var tower: Tower = _build(_tower_data("basic"))
 	tower.level_index = 1  # como si ya se hubiera mejorado: se llama a la capa directo con otro zoom
 	var view := Rect2(Vector2.ZERO, Vector2(1280, 720))
-	for zoom: float in [0.5, 1.0, 1.5]:
+	for zoom: float in [0.5, 1.0]:
 		var canvas := Transform2D(0.0, Vector2(zoom, zoom), 0.0, Vector2(100, 100))
 		assert_true(game.effects.tower_upgraded(tower, canvas, [] as Array[Rect2], view))
 		var texts: Array[Node] = _texts()

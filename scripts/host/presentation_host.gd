@@ -5,6 +5,7 @@ const LOGICAL_SIZE: Vector2i = Vector2i(1280, 720)
 
 @onready var content_frame: SubViewportContainer = $ContentFrame
 @onready var content_viewport: SubViewport = $ContentFrame/ContentViewport
+@onready var background_texture: TextureRect = $BackgroundTexture
 
 var active_screen: Node
 var _previous_content_scale_mode: int = Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
@@ -47,10 +48,13 @@ func _notification(what: int) -> void:
 func install_scene(scene: PackedScene) -> void:
 	if scene == null:
 		return
+	set_background_texture(null)
 	for child: Node in content_viewport.get_children():
 		content_viewport.remove_child(child)
 		child.queue_free()
 	active_screen = scene.instantiate()
+	if active_screen.has_signal("level_theme_selected"):
+		active_screen.connect("level_theme_selected", Callable(self, "set_background_theme"))
 	content_viewport.add_child(active_screen)
 	Audio.add_click_sounds(active_screen)
 
@@ -61,6 +65,15 @@ func get_active_screen() -> Node:
 
 func get_content_viewport() -> SubViewport:
 	return content_viewport
+
+
+func set_background_theme(theme: StringName) -> void:
+	set_background_texture(PresentationBackgroundCatalog.load_for_theme(theme))
+
+
+func set_background_texture(texture: Texture2D) -> void:
+	background_texture.texture = texture
+	background_texture.visible = texture != null
 
 
 func _update_frame() -> void:

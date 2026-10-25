@@ -1700,12 +1700,13 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 
 ## D-192 · «Ver todo»: solo la tecla en PC, lupa flotante en el celular y un aviso de una vez
 
-- **Fecha:** 2026-10-23 · **Estado:** decidida (sin implementar; T464) · **Decidió:** Lucas, sobre las propuestas de T451 §1.
-- **Qué:** en la PC desaparece el botón «Ver todo» y queda solo la tecla de `view_all` (V por omisión, configurable como hoy). En el celular se conserva un botón flotante, ahora con una lupa, que aparece **solo al hacer zoom** (no por desplazar el mapa sin acercarlo). La primera vez que se hace zoom o se desplaza el mapa sale, sin pulso, un aviso de una línea que explica cómo volver; se recuerda con `ui_prefs.view_all_hint_seen`. Textos aprobados por Lucas: PC «Acercaste el mapa. Apretá V para volver a verlo entero.»; celular «Acercaste el mapa. Tocá la lupa para volver a verlo entero.»
+- **Fecha:** 2026-10-23 · **Estado:** decidida, enmendada por D-207 (sin implementar en `main`; código T464 en PR #70) · **Decidió:** Lucas, sobre las propuestas de T451 §1.
+- **Qué:** en la PC desaparece el botón «Ver todo» y queda solo la tecla de `view_all` (V por omisión, configurable como hoy). En el celular se conserva un botón flotante, ahora con una lupa, que aparece **solo al hacer zoom** (no por desplazar el mapa sin acercarlo). El aviso de una línea, sin pulso, sale una sola vez al aumentar el zoom; D-207 aclara que alejar o desplazar sin acercar no lo activa; se recuerda con `ui_prefs.view_all_hint_seen`. Textos aprobados por Lucas: PC «Acercaste el mapa. Apretá V para volver a verlo entero.»; celular «Acercaste el mapa. Tocá la lupa para volver a verlo entero.»
 - **Por qué:** el problema de T451 era que «Ver todo» no se entendía (podía leerse como «mostrar todo el HUD»); Lucas prefirió sacar el botón en PC, donde hay teclado y no hace falta tapar el mapa, y comunicar mejor el del celular, donde no hay otra forma de volver.
 - **Alternativas descartadas:** mantener botón y tecla en la PC (lo que decía D-161); cambiar el rótulo a «Ver mapa completo» o «Centrar mapa»; un pulso de resalte la primera vez; esconder el botón detrás de un menú.
 - **Qué cambia:** enmienda D-161 (la parte del botón de PC) y RF-545/RF-612; RF-674 a RF-676 de `01-spec.md`. La acción `view_all`, la V, RF-613, RF-614 y RF-615 no cambian.
 - **Riesgos aceptados:** en la PC, quien corre el mapa con el botón central y no conoce la V depende del aviso para volver. El ícono de la lupa es arte nuevo y necesita la aprobación de Lucas.
+
 
 ## D-193 · Panel de torre: propuesta A, sin «Al nivel N:» ni «Nivel N/3», cada dato una vez
 
@@ -1763,7 +1764,7 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 ## D-205 · Fondo por terreno como más allá del mapa, fijo y recortado en ejecución
 
 - **Fecha:** 2026-10-23 · **Estado:** dirección decidida por Lucas; muestras/encuadres pendientes 🎨.
-- **Qué:** fondo temático por terreno del nivel, fijo respecto del zoom, recorte uniforme en ejecución y tope de zoom 1,0. Codex prepara muestra de composición por terreno antes de finales/integración. Sin nivel se conserva respaldo liso externo y fondo de menú actual.
+- **Qué:** fondo temático por terreno del nivel, fijo respecto del zoom, recorte uniforme en ejecución y tope absoluto de zoom 1,0. Codex prepara muestra de composición por terreno antes de finales/integración; al aprobarse las muestras del PR #66, T478 las integra. El tope rige en PC y celular, aunque el dato de máximo sea mayor. Sin nivel se conserva respaldo liso externo y fondo de menú actual.
 - **Por qué:** Lucas pidió continuidad del paisaje fuera del mapa sin más casillas ni movimiento con la cámara. El recorte evita duplicar archivos por aspecto y 1,0 conserva la escala jugable.
 - **Alternativas descartadas:** fondo que se mueve con zoom/pan; negro/color liso definitivo para partidas; estirar sprites; recortes de archivo por resolución; aumentar zoom; inventar geografía/casillas fuera del mapa.
 - **Refs:** RF-700/RF-701; T477 muestra, T478 integración después del OK. La aprobación funcional no aprueba un fondo ni su encuadre.
@@ -1775,3 +1776,11 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Por qué:** reutiliza ilustraciones aprobadas; la medición headless PC de T450 no determina costo ni memoria reales en Android. Cargar la imagen síncronamente antes de mostrar la capa dañaría el objetivo de M64.
 - **Alternativas descartadas:** asumir tiempos Android a partir de PC; habilitar sin medir; poner rutas de intro en SceneTransition; cargar siete imágenes juntas; esperar el fundido antes de continuar; generar archivos precortados; reducir/importar a otra resolución sin decisión.
 - **Enmienda:** RF-580, lista de exclusiones M64 y D-133, solo admisión de imagen opcional. RF-581–588 mantienen independencia, exclusión mutua, bloqueo, pausa, tiempo mínimo y fallos. RF-703–706; T479 depende de T454 + aprobación escrita, además de T460.
+
+## D-207 · Aviso de cámara solo al acercar
+
+- **Fecha:** 2026-10-24 · **Estado:** decidida y registrada en RF-676; aplicación en código en T464 · **Decidió:** Lucas, al precisar la consulta sobre el momento del aviso.
+- **Qué:** el aviso de una vez se activa únicamente cuando aumenta el zoom. Alejar y desplazar el mapa sin acercar no lo activa. Si el mapa se desplazó sin que apareciera el aviso, un acercamiento posterior lo muestra, salvo las exclusiones vigentes de RF-676. Se conservan los textos aprobados, la duración aproximada de 3 s y la marca aditiva por guardado.
+- **Por qué:** «Acercaste el mapa» describe el gesto de acercamiento, y el botón del celular también aparece al acercar. Avisar por un paneo o por alejar daría una instrucción que no corresponde al gesto.
+- **Alternativa de comportamiento descartada:** dispararlo ante cualquier cambio de encuadre (zoom hacia adentro o afuera, o paneo). **Alternativa técnica descartada:** dispararlo solo cuando el botón celular pasa de oculto a visible, porque no aplica a PC y puede perder un acercamiento ocurrido durante una exclusión como el tutorial.
+- **Qué cambia:** enmienda RF-676, D-192 y el plan de T464. No modifica RF-674/RF-675, textos, guardado, duración ni exclusiones.

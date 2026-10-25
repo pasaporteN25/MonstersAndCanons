@@ -48,6 +48,7 @@ func test_mobile_ui_config_loads_data_file() -> void:
 	var config: MobileUiConfig = MobileUiConfig.load_from()
 	assert_eq(config.get_value("boton_alto_px"), 56)
 	assert_eq(config.get_value("pinza_gracia_ms"), 150)
+	assert_eq(config.get_value("zoom_casilla_max_px"), 64)
 
 
 func test_options_selector_saves_without_changing_an_existing_hud() -> void:
@@ -188,9 +189,11 @@ func test_mobile_selected_tower_upgrade_lock_and_protected_sale() -> void:
 	game.build_controller.select_placed(tower)
 	game._refresh_tower_panel()
 	var level_before: int = tower.level_number()
+	improve.pressed.emit()  # M75 (RF-681): el primer toque arma, no mejora
+	assert_eq(tower.level_number(), level_before)
 	improve.pressed.emit()
 	improve.pressed.emit()
-	assert_eq(tower.level_number(), level_before + 1, "el doble toque mejora una sola vez")
+	assert_eq(tower.level_number(), level_before + 1, "el doble toque tras confirmar mejora una sola vez")
 	assert_true(improve.text.contains("¡Nivel 2!"))
 	await get_tree().create_timer(0.36).timeout
 	game.session.set_gold(0)
@@ -251,9 +254,11 @@ func test_mobile_selected_tower_upgrade_lock_and_protected_sale() -> void:
 
 
 func test_camera_zoom_is_clamped_between_automatic_and_cell_limits() -> void:
-	assert_eq(CameraController.clamp_zoom(0.25, 0.75, 1.5), 0.75)
-	assert_eq(CameraController.clamp_zoom(1.1, 0.75, 1.5), 1.1)
-	assert_eq(CameraController.clamp_zoom(2.0, 0.75, 1.5), 1.5)
+	assert_eq(CameraController.clamp_zoom(0.25, 0.75, 1.0), 0.75)
+	assert_eq(CameraController.clamp_zoom(1.0, 0.75, 1.0), 1.0)
+	assert_eq(CameraController.clamp_zoom(2.0, 0.75, 1.0), 1.0)
+	assert_eq(CameraController.maximum_zoom_from_cell_pixels(96.0), 1.0)
+	assert_eq(CameraController.maximum_zoom_from_cell_pixels(64.0), 1.0)
 	assert_eq(CameraController.clamp_center(Vector2(-10.0, 200.0), Rect2(0.0, 0.0, 100.0, 100.0)), Vector2(0.0, 100.0))
 
 
@@ -283,27 +288,18 @@ func test_mobile_double_tap_builds_once_and_deselects() -> void:
 	assert_eq(game.session.gold, starting_gold - tower.build_gold(false))
 	assert_eq(game.tower_container.get_child_count(), 1)
 	assert_null(controller.selected_tower(), "después de construir se deselecciona")
-	var camera: CameraController = game.camera_controller
-	var current_ghost_cell: Vector2i = controller.ghost_placement().cell
-	camera._zoom_at(Vector2(640.0, 344.0), 10.0)
-	assert_eq(game.camera.zoom.x, 1.5)
-	assert_true(game.mobile_hud.get_node("ViewAll").visible)
-	camera.view_all()
-	assert_true(is_equal_approx(game.camera.zoom.x, game.minimum_map_zoom))
-	assert_false(game.mobile_hud.get_node("ViewAll").visible)
-	assert_eq(controller.ghost_placement().cell, current_ghost_cell, "el zoom no mueve el fantasma")
 	_end_zoom_save(previous)
 
 
-func test_pc_camera_input_adds_zoom_without_mobile_controls() -> void:
+func test_pc_camera_input_respects_zoom_cap_without_mobile_controls() -> void:
 	var previous: Dictionary = _begin_zoom_save()
 	SaveManager.set_setting("ui_mode", UiMode.PC)
 	var game: Game = (load("res://scenes/game/game.tscn") as PackedScene).instantiate() as Game
 	add_child_autofree(game)
 	await get_tree().process_frame
 	assert_null(game.mobile_hud, "la PC no agrega botones visibles")
-	game.camera_controller._zoom_at(Vector2(640.0, 336.0), 1.1)
-	assert_true(is_equal_approx(game.camera.zoom.x, 1.1))
+	game.camera_controller._zoom_at(Vector2(640.0, 336.0), 10.0)
+	assert_true(is_equal_approx(game.camera.zoom.x, 1.0))
 	game.camera_controller._pan_by_screen_delta(Vector2(5000.0, 5000.0))
 	var map_rect := Rect2(game.level.position, Vector2(game.level.map_size()) * Rules.TILE_SIZE)
 	assert_eq(game.camera.position, CameraController.clamp_center(game.camera.position, map_rect))
