@@ -17,6 +17,10 @@
     .view { margin:0 0 34px; padding:18px; border:1px solid #42413b; border-radius:14px; background:#1a1d20; }
     .map-frame { overflow:hidden; border:1px solid #55452f; border-radius:10px; background:#10181c; }
     .map-frame img { display:block; width:100%; height:auto; }
+    .options { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:14px; }
+    .option { min-width:0; padding:10px; border:1px solid #55452f; border-radius:10px; background:#10181c; }
+    .option h3 { margin:0 0 8px; color:#f1ce7a; font-size:16px; }
+    .option img { display:block; width:100%; height:auto; border-radius:6px; }
     .legend { display:flex; flex-wrap:wrap; gap:10px 22px; margin-top:14px; color:#d7d3c7; }
     .legend span { display:inline-flex; align-items:center; gap:8px; }
     .swatch { display:inline-block; width:18px; height:18px; border:2px solid #e5d9b7; border-radius:50%; }
@@ -50,11 +54,14 @@
   <main>
     <p class="notice"><strong>Para revisar:</strong> la costa, el recorrido oeste→este, los biomas, la escala de las regiones y la lectura de los tres estados de conquista. Todas las posiciones y el progreso son ilustrativos.</p>
     <section class="view">
-      <h2>PC · mapa completo, sin desborde</h2>
-      <p class="caption">Comparación con T428: se mantiene el marco, las pestañas, la ficha y los controles. Se reemplaza solo el área geográfica del mapa.</p>
-      <div class="map-frame"><img src="../../Capturas/t469-mapa-pc.png" alt="La pantalla de T428 con solo el mapa reemplazado por la nueva propuesta"></div>
-      <p class="caption">Propuesta vectorial editable:</p>
-      <div class="map-frame"><img src="mapa.svg" alt="Mapa de campaña con quince regiones en una ruta de oeste a este"></div>
+      <h2>Tres alternativas de geografía · misma presentación de T428</h2>
+      <p class="caption">Se mantienen mar, relieve, contornos, paleta, biomas, ruta, insignias, escala y controles. La diferencia entre A, B y C es el contorno de la isla.</p>
+      <div class="options">
+        <article class="option"><h3>A · Costa continua</h3><img src="../../Capturas/T469-geografia-A.png" alt="Opción A: costa continua con serrucho regular"></article>
+        <article class="option"><h3>B · Macizo occidental y bahías</h3><img src="../../Capturas/T469-geografia-B.png" alt="Opción B: macizo occidental, costa ancha y bahías centrales"></article>
+        <article class="option"><h3>C · Istmo central</h3><img src="../../Capturas/T469-geografia-C.png" alt="Opción C: costa lobulada con estrechamiento central"></article>
+      </div>
+      <p class="caption">Las tres comparaciones usan la misma pantalla T428 y reemplazan únicamente la geografía. La insignia y el avance de ejemplo no fijan el progreso real.</p>
       <div class="legend"><span><i class="swatch owned"></i> 3 estrellas · insignia del jugador</span><span><i class="swatch partial"></i> 1–2 estrellas · insignia dividida</span><span><i class="swatch locked"></i> 0 estrellas · insignia rebelde; candado si está bloqueada</span></div>
       <p class="caption">En PC entran las quince zonas sin reducir el tamaño de los marcadores. No se repiten rótulos de estado; el candado mantiene identificables las zonas inaccesibles.</p>
     </section>

@@ -21,45 +21,39 @@ def round_rect(draw: ImageDraw.ImageDraw, box: tuple[int, int, int, int], radius
     draw.rounded_rectangle(box, radius=radius, fill=fill, outline=outline, width=width)
 
 
-def main() -> None:
-    with tempfile.TemporaryDirectory(prefix="t469-preview-") as temp:
-        temp_path = Path(temp)
-        png_path = temp_path / "mapa.png"
-        script = temp_path / "render.gd"
-        script.write_text(
-            "extends SceneTree\n"
-            "func _initialize() -> void:\n"
-            f"\tvar file := FileAccess.open({json.dumps(str(HERE / 'mapa.svg'))}, FileAccess.READ)\n"
-            "\tvar image := Image.new()\n"
-            "\tvar result := image.load_svg_from_string(file.get_as_text(), 1.0)\n"
-            "\tif result != OK:\n\t\tquit(1)\n\t\treturn\n"
-            f"\tif image.save_png({json.dumps(str(png_path))}) != OK:\n\t\tquit(1)\n\t\treturn\n"
-            "\tquit()\n",
-            encoding="utf-8",
-        )
-        subprocess.run(["godot", "--headless", "--path", temp, "--script", str(script)], check=True)
-        map_image = Image.open(png_path).convert("RGB")
-        # Godot rasteriza formas e ilustraciones, pero no conserva texto SVG;
-        # dibujamos los números con la misma tipografía sans en su posición vectorial.
-        draw = ImageDraw.Draw(map_image)
-        for level, (x, y) in enumerate([
-            (112, 266), (194, 254), (276, 296), (358, 235), (440, 278),
-            (522, 310), (604, 246), (686, 286), (768, 314), (850, 250),
-            (932, 291), (1014, 318), (1096, 245), (1178, 283), (1260, 308),
-        ], start=1):
-            color = "#25241f" if level == 1 else "#282522" if level == 2 else "#fff0c7" if level == 3 else "#c7cbc2"
-            draw.text((x, y), str(level), font=font(22, True), fill=color, anchor="mm")
+def rasterize(svg_path: Path, temp_path: Path) -> Image.Image:
+    png_path = temp_path / f"{svg_path.stem}.png"
+    script = temp_path / f"{svg_path.stem}.gd"
+    script.write_text(
+        "extends SceneTree\n"
+        "func _initialize() -> void:\n"
+        f"\tvar file := FileAccess.open({json.dumps(str(svg_path))}, FileAccess.READ)\n"
+        "\tvar image := Image.new()\n"
+        "\tvar result := image.load_svg_from_string(file.get_as_text(), 1.0)\n"
+        "\tif result != OK:\n\t\tquit(1)\n\t\treturn\n"
+        f"\tif image.save_png({json.dumps(str(png_path))}) != OK:\n\t\tquit(1)\n\t\treturn\n"
+        "\tquit()\n",
+        encoding="utf-8",
+    )
+    subprocess.run(["godot", "--headless", "--path", str(temp_path), "--script", str(script)], check=True)
+    image = Image.open(png_path).convert("RGB")
+    # Godot no rasteriza los textos SVG; se dibujan los números en su posición vectorial.
+    draw = ImageDraw.Draw(image)
+    for level, (x, y) in enumerate([
+        (112, 266), (194, 254), (276, 296), (358, 235), (440, 278),
+        (522, 310), (604, 246), (686, 286), (768, 314), (850, 250),
+        (932, 291), (1014, 318), (1096, 245), (1178, 283), (1260, 308),
+    ], start=1):
+        color = "#25241f" if level == 1 else "#282522" if level == 2 else "#fff0c7" if level == 3 else "#c7cbc2"
+        draw.text((x, y), str(level), font=font(22, True), fill=color, anchor="mm")
+    return image
 
-    out = ROOT / "Capturas"
-    out.mkdir(exist_ok=True)
 
-    # PC: conservar la captura y la interfaz de T428; sustituir solo el mapa.
+def pc_capture(map_image: Image.Image, output: Path) -> None:
     pc = Image.open(ROOT / "art/t428-mapa-propuesta/captura_producto_1280x720.png").convert("RGB")
-    map_pc = map_image.resize((996, 377), Image.Resampling.LANCZOS)
-    pc.paste(map_pc, (142, 142))
+    pc.paste(map_image.resize((996, 377), Image.Resampling.LANCZOS), (142, 142))
     d = ImageDraw.Draw(pc)
     d.text((154, 151), "ATLAS MERIDIANO · CÁNTARO", font=font(10), fill="#e3d6b6")
-    # Reemplaza la vieja leyenda de T428, cuyos estados y términos ya no aplican.
     round_rect(d, (952, 148, 1167, 227), 2, "#1a1d20", "#805b38", 1)
     for y, color, label in [
         (168, "#bd8240", "3 estrellas · jugador"),
@@ -68,7 +62,26 @@ def main() -> None:
     ]:
         d.ellipse((961, y - 7, 975, y + 7), fill=color, outline="#ded3b6", width=1)
         d.text((981, y - 7), label, font=font(11), fill="#ded8cb")
-    pc.save(out / "t469-mapa-pc.png", optimize=True)
+    pc.save(output, optimize=True)
+
+
+def main() -> None:
+    with tempfile.TemporaryDirectory(prefix="t469-preview-") as temp:
+        temp_path = Path(temp)
+        map_images = {
+            "a": rasterize(HERE / "mapa.svg", temp_path),
+            "b": rasterize(HERE / "mapa-opcion-b.svg", temp_path),
+            "c": rasterize(HERE / "mapa-opcion-c.svg", temp_path),
+        }
+
+    out = ROOT / "Capturas"
+    out.mkdir(exist_ok=True)
+
+    # Tres alternativas comparables: todo sigue igual salvo la forma de la costa.
+    for option, image in map_images.items():
+        pc_capture(image, out / f"T469-geografia-{option.upper()}.png")
+    map_image = map_images["a"]
+    pc_capture(map_image, out / "t469-mapa-pc.png")
 
     # Celular: el mismo mapa ilustrado, con desplazamiento horizontal; ficha y acción fijas.
     mobile = Image.new("RGB", (900, 1040), "#121518")

@@ -4,14 +4,14 @@ Maqueta artística editable para revisar la geografía de campaña y los tres es
 
 ## Archivos
 
-- `mapa.svg`: propuesta editable de costa, siete zonas temáticas conceptuales, recorrido y 15 marcadores. El progreso de los marcadores es solo un ejemplo. El jugador, la división jugador/rebelde y el candado usan colores y formas; no se agrega un emblema canónico.
+- `mapa.svg`, `mapa-opcion-b.svg`, `mapa-opcion-c.svg`: tres propuestas editables con el mismo mar, relieve, contornos, paleta, biomas, recorrido, insignias y marcadores. Solo varía la silueta costera: A continua, B con macizo occidental y bahías, C con penínsulas y un istmo central. El progreso es ilustrativo; no se agrega un emblema canónico.
 - `index.html`: visor PC/celular y comparación entre mapa móvil desplazable y mapa comprimido. La segunda opción se descarta porque encoge los marcadores.
 - `render_captures.py`: genera las capturas PNG con Godot 4 y Pillow.
-- [`Capturas/t469-mapa-pc.png`](../../Capturas/t469-mapa-pc.png), [`Capturas/t469-mapa-celular.png`](../../Capturas/t469-mapa-celular.png): capturas para la revisión/PR. Las fuentes SVG se rasterizan desde el mismo archivo.
+- [`Capturas/T469-geografia-A.png`](../../Capturas/T469-geografia-A.png), [`Capturas/T469-geografia-B.png`](../../Capturas/T469-geografia-B.png), [`Capturas/T469-geografia-C.png`](../../Capturas/T469-geografia-C.png): comparación de las tres costas sobre la captura de T428, conservando su presentación. [`Capturas/t469-mapa-celular.png`](../../Capturas/t469-mapa-celular.png): recorte de revisión celular.
 
 ## Revisión
 
-Las capturas muestran la PC con el mapa completo, y el celular con el lienzo desplazable a escala 1:1: cada círculo mide 58 px lógicos; selección, ficha y acción «Jugar» quedan fuera del área desplazable. El ajuste compacto se presenta en el visor como comparación descartada, no como solución.
+Las capturas muestran las tres alternativas sobre la misma pantalla de PC de T428: solo cambia la silueta de la isla. En celular, el lienzo se desplaza a escala 1:1: cada círculo mide 58 px lógicos; selección, ficha y acción «Jugar» quedan fuera del área desplazable. El ajuste compacto se presenta en el visor como comparación descartada, no como solución.
 
 Las siete manchas son estudios de ubicación y lectura de los temas ya canónicos (`pradera`, `bosque`, `desierto`, `pantano`, `nieve`, `ruinas`, `volcán`); no fijan su arte, distribución final ni la asignación definitiva de niveles. Un velo gris de borde orgánico representa tierras sin conquistar después del ejemplo de las zonas 1 y 2; no define límites jugables. Las coordenadas del aterrizaje, las zonas y el recorrido son propuestas para que Lucas las revise. La vista celular es una maqueta de revisión con el mismo lenguaje visual y un mapa desplazable.
 
