@@ -31,3 +31,15 @@ func test_render_target_uses_physical_frame_size() -> void:
 	assert_eq(PresentationGeometry.render_size(Vector2(960.0, 540.0)), Vector2i(960, 540))
 	assert_eq(PresentationGeometry.frame_scale(Vector2(1920.0, 1080.0)), 1.5)
 	assert_eq(PresentationGeometry.frame_scale(Vector2(960.0, 540.0)), 0.75)
+
+
+func test_content_texture_filter_mirrors_the_project_setting() -> void:
+	assert_eq(PresentationGeometry.content_texture_filter(0), Viewport.DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_NEAREST)
+	assert_eq(PresentationGeometry.content_texture_filter(1), Viewport.DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_LINEAR)
+	assert_eq(PresentationGeometry.content_texture_filter(2), Viewport.DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_LINEAR_WITH_MIPMAPS)
+	assert_eq(PresentationGeometry.content_texture_filter(3), Viewport.DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_NEAREST_WITH_MIPMAPS)
+
+
+func test_content_texture_filter_falls_back_to_linear_out_of_range() -> void:
+	assert_eq(PresentationGeometry.content_texture_filter(-1), Viewport.DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_LINEAR)
+	assert_eq(PresentationGeometry.content_texture_filter(9), Viewport.DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_LINEAR)
