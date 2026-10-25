@@ -70,6 +70,8 @@ var _dev_gold: SpinBox
 @onready var _cards: HFlowContainer = %Cards
 @onready var _back_button: Button = %BackButton
 @onready var _total_stars: Label = %TotalStars
+@onready var _tab_scroll: ScrollContainer = %TabScroll
+@onready var _tab_row: HBoxContainer = %TabRow
 @onready var _campaign_tab: Button = %CampaignTab
 @onready var _community_tab: Button = %CommunityTab
 @onready var _folder_button: Button = %FolderButton
@@ -92,6 +94,7 @@ func _ready() -> void:
 	_style_cards_button.pressed.connect(set_style.bind(CampaignMap.STYLE_CARDS))
 	_style_map_button.pressed.connect(set_style.bind(CampaignMap.STYLE_MAP))
 	show_page(GameFlow.select_page)  # RF-225: la solapa en la que se estaba
+	_focus_remembered_map()
 	if map_view != null:
 		map_view.focus_selected()  # RF-648: el mapa se puede recorrer con teclado desde que se abre
 	if DevMode.enabled:
@@ -101,10 +104,17 @@ func _ready() -> void:
 
 
 ## Esc (o "atrás" en Android, RF-142) vuelve al menú principal.
+## RF-694: AvPág / RePág pasan a la solapa siguiente / anterior (la fila de solapas se desplaza sola).
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("cancel"):
 		get_viewport().set_input_as_handled()
 		GameFlow.go_to_main_menu()
+	elif event.is_action_pressed("ui_page_down"):
+		get_viewport().set_input_as_handled()
+		step_page(1)
+	elif event.is_action_pressed("ui_page_up"):
+		get_viewport().set_input_as_handled()
+		step_page(-1)
 
 
 ## Cambia de solapa y vuelve a armar las tarjetas (RF-221).
@@ -116,6 +126,8 @@ func show_page(page: StringName) -> void:
 	var is_campaign: bool = page == PAGE_CAMPAIGN and not UiMode.is_mobile()  # tarjetas compactas de PC
 	var is_campaign_page: bool = page == PAGE_CAMPAIGN  # el mapa y su conmutador valen en PC y en celular (RF-687)
 	_cards.add_theme_constant_override("v_separation", CAMPAIGN_CARD_SPACING if is_campaign else CARD_SPACING)
+	if page != GameFlow.select_page:
+		GameFlow.select_map_index = -1  # otra solapa: la selección recordada ya no vale
 	GameFlow.select_page = page
 	_campaign_tab.set_pressed_no_signal(page == PAGE_CAMPAIGN)
 	_community_tab.set_pressed_no_signal(page == PAGE_COMMUNITY)
@@ -166,10 +178,58 @@ func show_page(page: StringName) -> void:
 	if show_map:
 		_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 		_scroll.custom_minimum_size.y = CampaignMapView.VIEW_SIZE.y
+	_reveal_active_tab.call_deferred()  # las medidas de las solapas se conocen después de este cuadro
 
 
 func current_page() -> StringName:
 	return _page
+
+
+## RF-389, RF-694: el orden de las solapas: Campaña, modos oficiales, Comunidad y modos propios.
+func page_order() -> Array[StringName]:
+	var order: Array[StringName] = [PAGE_CAMPAIGN]
+	for mode: Dictionary in _modes:
+		if mode["official"]:
+			order.append(ModePacks.page_of(mode))
+	order.append(PAGE_COMMUNITY)
+	for mode: Dictionary in _modes:
+		if not mode["official"]:
+			order.append(ModePacks.page_of(mode))
+	return order
+
+
+## RF-694: pasa a la solapa `delta` lugares más allá (da la vuelta) y la deja a la vista.
+func step_page(delta: int) -> void:
+	var order: Array[StringName] = page_order()
+	show_page(order[posmod(order.find(_page) + delta, order.size())])
+
+
+## La solapa de `page` (también Campaña y Comunidad), para poder desplazarla y probarla.
+func tab_button(page: StringName) -> Button:
+	if page == PAGE_CAMPAIGN:
+		return _campaign_tab
+	if page == PAGE_COMMUNITY:
+		return _community_tab
+	return mode_tab(page)
+
+
+## Desplaza la fila de solapas hasta que la activa se vea entera (con cinco modos propios no entran todas).
+func _reveal_active_tab() -> void:
+	var tab: Button = tab_button(_page)
+	if tab != null and is_inside_tree():
+		_tab_scroll.ensure_control_visible(tab)
+
+
+## RF-694: al volver de una partida de un modo, la tarjeta de ese mapa recupera el foco.
+func _focus_remembered_map() -> void:
+	var index: int = GameFlow.select_map_index
+	if index < 0 or _page == PAGE_CAMPAIGN or _page == PAGE_COMMUNITY:
+		return
+	GameFlow.select_map_index = -1  # se usa una sola vez: el foco no vuelve a moverse en esta pantalla
+	if index < _cards.get_child_count() and _cards.get_child(index) is Button:
+		var card: Button = _cards.get_child(index) as Button
+		if not card.disabled:
+			card.grab_focus()
 
 
 ## M72, RF-645: cambia el estilo de la campaña y lo recuerda en `settings`. No toca el progreso.
@@ -225,14 +285,14 @@ func _add_mode_tabs() -> void:
 		tab.add_theme_font_size_override("font_size", _campaign_tab.get_theme_font_size("font_size"))
 		var page: StringName = ModePacks.page_of(mode)
 		tab.pressed.connect(show_page.bind(page))
-		_campaign_tab.get_parent().add_child(tab)
+		_tab_row.add_child(tab)
 		if mode["official"]:
 			after_campaign += 1
 			after_community += 1
-			_campaign_tab.get_parent().move_child(tab, after_campaign)
+			_tab_row.move_child(tab, after_campaign)
 		else:
 			after_community += 1
-			_campaign_tab.get_parent().move_child(tab, after_community)
+			_tab_row.move_child(tab, after_community)
 		_mode_tabs[page] = tab
 
 

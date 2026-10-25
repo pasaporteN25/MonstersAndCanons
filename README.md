@@ -162,7 +162,7 @@ En **Jugar** hay una solapa por modo (M49):
 - **Modos oficiales**, después de "Campaña". Hoy está **Asedio**: los 15 mapas de la campaña con monstruos más duros (vida de 101 % a 118 % según el mapa, 115 % de base). Cada mapa se abre al ganar el anterior.
 - **Modos propios**, después de "Mapas de la comunidad". Todos sus mapas están abiertos.
 
-Cada modo tiene su progreso, sus estrellas y su top 5. No toca la campaña, el Salón de la fama ni los avances.
+Cada modo tiene su progreso, sus estrellas y su top 5. No toca la campaña, el Salón de la fama ni los avances. La fila de solapas se desplaza si hay muchos modos, y **Récords** tiene un selector para ver el top 5 de la Campaña o de cada modo (T473).
 
 Un modo propio se arma desde el editor con **"En un modo…"** (crea el modo o elige uno existente), o a mano con un `modo.json` en `%APPDATA%\Godot\app_userdata\JuegoA\modos\<nombre>`. El formato está en [`CONTENIDO.md`](CONTENIDO.md).
 
@@ -382,7 +382,7 @@ En los niveles que usan infraestructura (los que tienen removibles, minas o demo
 
 Mapa planetario inicial en PC y celular, tarjetas como alternativa y migración de una vez. En el mapa tocar selecciona; Jugar o Enter inicia, el doble clic no. En celular un dedo desplaza y Jugar queda fijo abajo. La geografía nueva, el fondo rebelde/partido/jugador de los números y los postes se revisan antes de integrar arte o posiciones.
 
-Asedio se abrirá mapa por mapa al ganar el mismo nivel de campaña, conservando el acceso de guardados que ya lo jugaron; pruebas abre todo en su guardado separado. T473 absorbe las solapas/récords pendientes de T235. Se quitarán ceros iniciales de los números visibles sin renombrar ids. Ver M76 en la spec y fichas T469–T475; las partidas T453, el teléfono T454 y G5 siguen pendientes de Lucas.
+Asedio se abrirá mapa por mapa al ganar el mismo nivel de campaña, conservando el acceso de guardados que ya lo jugaron; pruebas abre todo en su guardado separado. T473 (hecha: solapas desplazables y selector de modo en Récords) absorbe las solapas/récords pendientes de T235. Se quitarán ceros iniciales de los números visibles sin renombrar ids. Ver M76 en la spec y fichas T469–T475; las partidas T453, el teléfono T454 y G5 siguen pendientes de Lucas.
 
 ### M77 · Franjas temáticas y carga con ilustraciones (T460; spec aprobada)
 
