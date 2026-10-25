@@ -282,6 +282,7 @@ func test_regions_stay_56_px_in_mobile_mode() -> void:
 
 func test_canvas_fits_and_no_scroll_is_forced_at_normal_width() -> void:
 	var view: CampaignMapView = _view(await _open())
+	await _narrow(view, CampaignMapView.CANVAS_SIZE.x)  # T471: el atlas mide 1.414 px; el «ancho normal» ya no lo contiene
 	assert_false(view.overflows())
 	var bar: ScrollBar = view.map_scroll().get_h_scroll_bar()
 	assert_false(bar.visible, "sin desborde no aparece barra")
@@ -436,6 +437,7 @@ func test_no_touch_scroller_steals_the_finger_when_everything_fits() -> void:
 	SaveManager.set_setting("ui_mode", UiMode.MOBILE)
 	SaveManager.unlock(GameFlow.level(1).id)
 	var view: CampaignMapView = _view(await _open())
+	await _narrow(view, CampaignMapView.CANVAS_SIZE.x)
 	assert_false(view.overflows())
 	view.select(0)
 	var start: Vector2 = _center(view.region(1))
