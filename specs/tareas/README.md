@@ -123,3 +123,7 @@ La spec de selector es [T459](T459-selector-mapa-modos-postes.md); sus RF-687–
 ## 13. T484 · Ajuste localizado del recorrido sur
 
 [T484](T484-alternativas-tramo-sur.md) agrega al PR #79 dos alternativas para 5–9 sobre la dirección T483 aceptada. Se conservan costa, aterrizaje, 1–4 y 10–15; el visor comparativo es `art/t484-tramo-sur/index.html`. El crítico recomienda B, pero Lucas tiene que elegir. Si «parte de abajo» se refería a la silueta sur, esa costa todavía no se alteró. No se integra arte ni se cierra T469/T471 por producir las opciones.
+
+## 14. T485 · Atlas y descubrimiento por zonas
+
+[T485](T485-atlas-biomas-zonas.md) conserva la B elegida y propone silueta/terreno nuevo con los temas reales de quince niveles, verificados contra JSON. El visor `art/t485-atlas-biomas/index.html` muestra cartografía 1–5, 1–10 al desbloquear 6 y 1–15 al desbloquear 11; descubrir no abre niveles ni conquista. Todo es muestra pendiente de aprobación y futura spec de guardados/pruebas antes de runtime. #79 supersede las muestras del #78, cuyo cierre fue autorizado por Lucas una vez publicada esta revisión.
