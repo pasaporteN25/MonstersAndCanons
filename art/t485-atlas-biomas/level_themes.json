@@ -1,0 +1,77 @@
+[
+  {
+    "level": 1,
+    "name": "Pradera",
+    "theme": "pradera"
+  },
+  {
+    "level": 2,
+    "name": "Desfiladero",
+    "theme": "pradera"
+  },
+  {
+    "level": 3,
+    "name": "Encrucijada",
+    "theme": "pradera"
+  },
+  {
+    "level": 4,
+    "name": "Espiral",
+    "theme": "pradera"
+  },
+  {
+    "level": 5,
+    "name": "Fortaleza",
+    "theme": "pradera"
+  },
+  {
+    "level": 6,
+    "name": "Nido",
+    "theme": "bosque"
+  },
+  {
+    "level": 7,
+    "name": "Cruce",
+    "theme": "bosque"
+  },
+  {
+    "level": 8,
+    "name": "Bastión",
+    "theme": "ruinas"
+  },
+  {
+    "level": 9,
+    "name": "Taller asediado",
+    "theme": "ruinas"
+  },
+  {
+    "level": 10,
+    "name": "La mina vieja",
+    "theme": "desierto"
+  },
+  {
+    "level": 11,
+    "name": "Puesto seco",
+    "theme": "desierto"
+  },
+  {
+    "level": 12,
+    "name": "El cañadón",
+    "theme": "desierto"
+  },
+  {
+    "level": 13,
+    "name": "Paso alto",
+    "theme": "nieve"
+  },
+  {
+    "level": 14,
+    "name": "Los poblados vacíos",
+    "theme": "ruinas"
+  },
+  {
+    "level": 15,
+    "name": "La Central",
+    "theme": "pradera"
+  }
+]

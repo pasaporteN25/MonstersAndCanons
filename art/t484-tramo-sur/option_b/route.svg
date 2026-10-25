@@ -1,0 +1,162 @@
+<!-- T484 B: solo se propone otra geometría entre los puntos 4 y 10 de T483. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="472" viewBox="20 90 1240 472">
+  <defs>
+    <linearGradient id="sea" x1="0" y1="0" x2="0.8" y2="1">
+      <stop offset="0" stop-color="#182a35" />
+      <stop offset="0.55" stop-color="#203641" />
+      <stop offset="1" stop-color="#172831" />
+    </linearGradient>
+    <linearGradient id="land" x1="0.1" y1="0" x2="0.8" y2="1">
+      <stop offset="0" stop-color="#63764e" />
+      <stop offset="0.52" stop-color="#465c42" />
+      <stop offset="1" stop-color="#303f37" />
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#202226" />
+      <stop offset="1" stop-color="#17191d" />
+    </linearGradient>
+    <pattern id="contours" width="110" height="74" patternUnits="userSpaceOnUse">
+      <path d="M-20 38 C5 7 58 5 90 27 S140 54 128 77 M-5 48 C16 22 52 19 78 34 S116 54 111 72" fill="none" stroke="#d5c18f" stroke-opacity=".12" stroke-width="1.2" />
+    </pattern>
+    <g id="star">
+      <path d="M0-8 2.3-2.5 8-2.4 3.7 1.1 5.2 7 -0 3.7 -5.2 7 -3.7 1.1 -8-2.4 -2.3-2.5Z" />
+    </g>
+    <g id="lock" fill="none" stroke="#b3b9b4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="-6" y="-1" width="12" height="9" rx="1.7" fill="#555d5c" />
+      <path d="M-3-1v-3a3 3 0 0 1 6 0v3" />
+    </g>
+    <g id="flag" stroke="#2b2233" stroke-width="1.5" stroke-linejoin="round">
+      <path d="M-3 8v-17" fill="none" stroke-width="2" />
+      <path d="M-2-8 8-5 1 0-2-1Z" fill="#df704d" />
+    </g>
+    <g id="lander" stroke="#2b2233" stroke-width="2" stroke-linejoin="round">
+      <path d="M-10 4-7-6 0-11 7-6 10 4 5 9h-10Z" fill="#bd9a60" />
+      <path d="M-4-4 0-8 4-4 3 2h-6Z" fill="#e6d5a4" />
+      <path d="M-6 7-10 13M6 7l4 6M-13 13H13" fill="none" stroke="#d2ad6a" stroke-width="2.2" />
+      <circle cx="0" cy="-2" r="1.4" fill="#f0d176" stroke="none" />
+    </g>
+  </defs>
+  <rect x="20" y="90" width="1240" height="472" rx="15" fill="url(#sea)" stroke="#3b3329" stroke-width="2" />
+  <path d="M101 316 120 268 157 236 177 196 231 176 271 143 321 151 354 125 405 143 442 125 487 151 523 136 561 164 602 156 635 179 684 163 730 184 776 170 812 190 856 182 898 208 943 206 982 232 1034 232 1066 256 1114 250 1149 278 1170 314 1153 350 1164 381 1139 412 1110 425 1083 461 1043 471 1008 492 967 483 941 513 902 503 865 523 829 507 788 532 750 511 710 525 673 501 636 511 600 480 555 488 526 456 481 469 444 442 399 452 369 424 331 427 306 399 265 408 233 383 196 388 166 359 128 360Z" fill="url(#land)" stroke="#2b2233" stroke-width="3" stroke-linejoin="round" />
+  <path d="M101 316 120 268 157 236 177 196 231 176 271 143 321 151 354 125 405 143 442 125 487 151 523 136 561 164 602 156 635 179 684 163 730 184 776 170 812 190 856 182 898 208 943 206 982 232 1034 232 1066 256 1114 250 1149 278 1170 314 1153 350 1164 381 1139 412 1110 425 1083 461 1043 471 1008 492 967 483 941 513 902 503 865 523 829 507 788 532 750 511 710 525 673 501 636 511 600 480 555 488 526 456 481 469 444 442 399 452 369 424 331 427 306 399 265 408 233 383 196 388 166 359 128 360Z" fill="url(#contours)" opacity=".9" />
+  <g fill="none" stroke="#d7c28f" stroke-opacity=".3" stroke-width="2">
+    <path d="M189 282q45-53 86-15t85-8 87 21 84-18 94 4 80 31" />
+    <path d="M277 348q49-31 93 6t87 3 68-24 99 15 94-2 92 34" />
+    <path d="M438 202q31 26 49 62t57 26 69-17 58 17" />
+    <path d="M701 273q38-39 74-8t69 4 65 30 84 0" />
+    <path d="M831 412q40-35 77-13t78-9 67 13" />
+    <path d="M514 410q31-24 58-3t63 1" />
+  </g>
+  <g fill="#bdc298" opacity=".6">
+    <path d="m244 224 16-28 13 28Z" />
+    <path d="m270 228 21-38 18 38Z" />
+    <path d="m303 231 14-25 13 25Z" />
+    <path d="m751 234 16-29 16 29Z" />
+    <path d="m781 236 23-42 18 42Z" />
+    <path d="m816 236 13-25 13 25Z" />
+    <path d="m1034 367 15-27 15 27Z" />
+    <path d="m1062 368 20-37 17 37Z" />
+  </g>
+  <g fill="none" stroke="#89a3a0" stroke-opacity=".55" stroke-width="3" stroke-linecap="round">
+    <path d="M457 177q13 49 0 86t20 51 13 53 32 46" />
+    <path d="M737 201q-16 44-8 74t30 38 12 56 31 52" />
+    <path d="M993 277q-30 35-32 64t-29 45" />
+  </g>
+  <path d="M177 310 C198 315 218 334 242 345 C261 348 281 324 297 299 C315 270 340 249 368 250 C397 250 419 252 443 262 C467 274 478 299 493 319 C515 350 533 372 561 389 C586 404 615 427 645 427 C674 429 701 423 718 409 C745 388 747 371 768 350 C790 329 811 323 835 321 C858 319 874 326 895 323 C919 321 933 300 951 292 C968 284 984 280 1000 287 C1023 293 1044 299 1065 312 C1086 326 1107 344 1124 362" fill="none" stroke="#d2be7e" stroke-opacity=".57" stroke-width="2.4" stroke-dasharray="4 10" stroke-linecap="round" clip-path="url(#unchanged-route)" />
+  <path id="central-route" d="M443 262 C469 273 478 299 492 317 C507 332 536 329 557 343 C579 357 582 382 603 389 C626 397 653 390 682 389 C712 388 738 360 759 342 C786 320 813 320 835 321" fill="none" stroke="#d2be7e" stroke-opacity=".57" stroke-width="2.4" stroke-dasharray="4 10" stroke-linecap="round" />
+  <path d="M177 310 C198 315 218 334 242 345 C261 348 281 324 297 299 C315 270 340 249 368 250" fill="none" stroke="#edc96b" stroke-width="2.8" stroke-dasharray="4 9" stroke-linecap="round" />
+  <g transform="translate(177 310)">
+    <circle r="25" fill="#263133" stroke="#dfbb67" stroke-width="2" />
+    <use href="#lander" transform="scale(1.14)" />
+  </g>
+  <g transform="translate(242 345)">
+    <circle r="22" fill="#a98039" stroke="#f3d37f" stroke-width="2.5" />
+    <circle r="18.5" fill="none" stroke="#e2c888" stroke-width="1.2" />
+  </g>
+  <g transform="translate(297 299)">
+    <circle r="22" fill="#955239" stroke="#d7996b" stroke-width="2.5" />
+    <path d="M0-20a20 20 0 0 1 0 40Z" fill="#a98039" />
+    <circle r="22" fill="none" stroke="#d7996b" stroke-width="2.5" />
+  </g>
+  <g transform="translate(368 250)">
+    <circle r="29" fill="none" stroke="#efd482" stroke-width="1.4" />
+    <circle r="22" fill="#c78c35" stroke="#f6e2a1" stroke-width="3" />
+    <circle r="18" fill="none" stroke="#8e622a" stroke-width="1.3" />
+  </g>
+  <g transform="translate(443 262)">
+    <circle r="20" fill="#3e4c4b" stroke="#202a2b" stroke-width="2" />
+    <circle r="15" fill="none" stroke="#717c72" stroke-opacity=".38" />
+    <use href="#lock" transform="translate(15 -15) scale(.57)" />
+  </g>
+  <g transform="translate(492 317)">
+    <circle r="20" fill="#3e4c4b" stroke="#202a2b" stroke-width="2" />
+    <circle r="15" fill="none" stroke="#717c72" stroke-opacity=".38" />
+    <use href="#lock" transform="translate(15 -15) scale(.57)" />
+  </g>
+  <g transform="translate(557 343)">
+    <circle r="20" fill="#3e4c4b" stroke="#202a2b" stroke-width="2" />
+    <circle r="15" fill="none" stroke="#717c72" stroke-opacity=".38" />
+    <use href="#lock" transform="translate(15 -15) scale(.57)" />
+  </g>
+  <g transform="translate(603 389)">
+    <circle r="20" fill="#3e4c4b" stroke="#202a2b" stroke-width="2" />
+    <circle r="15" fill="none" stroke="#717c72" stroke-opacity=".38" />
+    <use href="#lock" transform="translate(15 -15) scale(.57)" />
+  </g>
+  <g transform="translate(682 389)">
+    <circle r="20" fill="#3e4c4b" stroke="#202a2b" stroke-width="2" />
+    <circle r="15" fill="none" stroke="#717c72" stroke-opacity=".38" />
+    <use href="#lock" transform="translate(15 -15) scale(.57)" />
+  </g>
+  <g transform="translate(759 342)">
+    <circle r="20" fill="#3e4c4b" stroke="#202a2b" stroke-width="2" />
+    <circle r="15" fill="none" stroke="#717c72" stroke-opacity=".38" />
+    <use href="#lock" transform="translate(15 -15) scale(.57)" />
+  </g>
+  <g transform="translate(835 321)">
+    <circle r="20" fill="#3e4c4b" stroke="#202a2b" stroke-width="2" />
+    <circle r="15" fill="none" stroke="#717c72" stroke-opacity=".38" />
+    <use href="#lock" transform="translate(15 -15) scale(.57)" />
+  </g>
+  <g transform="translate(895 323)">
+    <circle r="20" fill="#3e4c4b" stroke="#202a2b" stroke-width="2" />
+    <circle r="15" fill="none" stroke="#717c72" stroke-opacity=".38" />
+    <use href="#lock" transform="translate(15 -15) scale(.57)" />
+  </g>
+  <g transform="translate(951 292)">
+    <circle r="20" fill="#3e4c4b" stroke="#202a2b" stroke-width="2" />
+    <circle r="15" fill="none" stroke="#717c72" stroke-opacity=".38" />
+    <use href="#lock" transform="translate(15 -15) scale(.57)" />
+  </g>
+  <g transform="translate(1000 287)">
+    <circle r="20" fill="#3e4c4b" stroke="#202a2b" stroke-width="2" />
+    <circle r="15" fill="none" stroke="#717c72" stroke-opacity=".38" />
+    <use href="#lock" transform="translate(15 -15) scale(.57)" />
+  </g>
+  <g transform="translate(1065 312)">
+    <circle r="20" fill="#3e4c4b" stroke="#202a2b" stroke-width="2" />
+    <circle r="15" fill="none" stroke="#717c72" stroke-opacity=".38" />
+    <use href="#lock" transform="translate(15 -15) scale(.57)" />
+  </g>
+  <g transform="translate(1124 362)">
+    <circle r="20" fill="#3e4c4b" stroke="#202a2b" stroke-width="2" />
+    <circle r="15" fill="none" stroke="#717c72" stroke-opacity=".38" />
+    <use href="#lock" transform="translate(15 -15) scale(.57)" />
+  </g>
+  <g fill="#f4d17a" stroke="#8d713d" stroke-width=".5">
+    <use href="#star" transform="translate(230 309) scale(.57)" />
+    <use href="#star" transform="translate(242 305) scale(.62)" />
+    <use href="#star" transform="translate(254 309) scale(.57)" />
+    <use href="#star" transform="translate(290 262) scale(.57)" />
+    <use href="#star" transform="translate(304 262) scale(.57)" />
+  </g>
+  <g transform="translate(1208 524)" fill="none" stroke="#c2c6b1" stroke-width="1.2">
+    <circle r="18" />
+    <path d="M0-17 4 0 0 17-4 0Z" fill="#d7c28f" />
+    <path d="M0-13v26" />
+  </g>
+  <clipPath id="unchanged-route">
+    <rect x="20" y="90" width="423" height="472" />
+    <rect x="835" y="90" width="425" height="472" />
+  </clipPath>
+</svg>
