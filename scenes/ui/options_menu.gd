@@ -30,22 +30,19 @@ const VIEW_ALL_RESTORE: String = "Restaurar"
 const NEWS_BUTTON_TEXT: String = "Novedades de esta versión"
 const NEWS_EMPTY_TEXT: String = "No hay novedades"
 
-## M75 (RF-684, D-197): dónde va cada fila. Cada grupo declara, en orden, los nombres de nodo de su título y de sus
-## filas; `_arrange_columns` los aplica una sola vez. Agregar una opción es sumar su nombre al grupo (los
-## constructores solo crean el nodo, no lo ubican).
-const SOUND_GROUP: Array[StringName] = [&"SoundSection", &"MusicLabel", &"MusicSlider", &"SfxLabel", &"SfxSlider"]
-const DISPLAY_GROUP: Array[StringName] = [&"DisplaySection", &"FullscreenCheck", &"DamageNumbersCheck",
-		&"UpgradeFxCheck", &"RangeDisplayLabel", &"RangeDisplaySelector"]
-const GAME_GROUP: Array[StringName] = [&"GameSection", &"TutorialRow", &"BossEntranceCheck", &"DefeatAdviceCheck"]
-## Solo con la interfaz de PC (no hay teclado en el celular): en el celular ni el título ni la fila existen.
-const CONTROLS_GROUP: Array[StringName] = [&"ControlsSection", &"ViewAllRow"]
-const ADVANCED_GROUP: Array[StringName] = [&"AdvancedSection", &"UiModeLabel", &"UiModeSelector", &"CreditsSection",
-		&"VersionLabel", &"CreditsButton", &"NewsButton", &"AdminSection", &"AdminButton", &"AdminConfirm"]
-## PC: una sola columna con los cinco grupos. Celular: dos columnas, sin «Controles».
-const PC_COLUMN: Array = [SOUND_GROUP, DISPLAY_GROUP, GAME_GROUP, CONTROLS_GROUP, ADVANCED_GROUP]
-const MOBILE_LEFT_COLUMN: Array = [SOUND_GROUP, DISPLAY_GROUP]
-const MOBILE_RIGHT_COLUMN: Array = [GAME_GROUP, ADVANCED_GROUP]
-const SECTION_COLOR: Color = Color(1, 0.78, 0.38, 1)
+## M75 (RF-684, D-197) y RF-708: filas por solapa en orden de lectura.
+const OPTION_GROUP_NAMES: Array[String] = ["Sonido", "Pantalla", "Partida y ayudas", "Controles", "Avanzado"]
+const OPTION_GROUP_ROWS: Array = [
+	[&"MusicLabel", &"MusicSlider", &"SfxLabel", &"SfxSlider"],
+	[&"FullscreenCheck", &"DamageNumbersCheck", &"UpgradeFxCheck", &"RangeDisplayLabel", &"RangeDisplaySelector"],
+	[&"TutorialRow", &"BossEntranceCheck", &"DefeatAdviceCheck"],
+	[&"ViewAllRow"],
+	[&"UiModeLabel", &"UiModeSelector", &"CreditsSection", &"VersionLabel", &"CreditsButton", &"NewsButton",
+		&"AdminSection", &"AdminButton", &"AdminConfirm"],
+]
+const OPTIONS_PANEL_WIDTH: float = 920.0
+const MOBILE_PANEL_WIDTH: float = 880.0
+const WINDOW_MARGIN: float = 24.0
 
 ## RF-383: la sección de administración solo se ofrece desde el menú principal, nunca desde la
 ## pausa (no se cambia de guardado en medio de una partida). La prende `MainMenu`.
@@ -64,6 +61,7 @@ var normal_save_path: String = ""
 @onready var _scroll: ScrollContainer = %Scroll
 @onready var _rows: VBoxContainer = $Center/Panel/Margin/Frame/Scroll/Columns/Rows
 @onready var _side: VBoxContainer = %Side
+@onready var _tabs: HBoxContainer = %Tabs
 @onready var _admin_section: Label = %AdminSection
 @onready var _admin_button: Button = %AdminButton
 @onready var _admin_confirm: Control = %AdminConfirm
@@ -74,13 +72,10 @@ var normal_save_path: String = ""
 @onready var _credits_button: Button = %CreditsButton
 @onready var _title: Control = $Center/Panel/Margin/Frame/Title
 
-## RF-550: en el modo celular, dos columnas (la de la derecha es `_side`); en PC, una sola (RF-555).
-const MOBILE_PANEL_WIDTH: float = 880.0
-## Aire arriba y abajo de la ventana (RF-555): el centro se desplaza antes de tocar los bordes.
-const WINDOW_MARGIN: float = 24.0
-
 var _ui_mode_selector: OptionButton
-var _two_columns: bool = false
+var _group_pages: Array[VBoxContainer] = []
+var _tab_buttons: Array[Button] = []
+var _active_tab: int = 0
 ## RF-553: los créditos de siempre (RF-472), hijos de Opciones; al cerrarlos se vuelve acá.
 var credits: CreditsScreen
 var _tutorial_check: CheckBox
@@ -119,8 +114,7 @@ func _ready() -> void:
 		_build_view_all_row()  # M68: sin teclado no hace falta
 	_build_range_display_selector()  # M75
 	_build_news_button()  # M67
-	_build_group_titles()
-	_arrange_columns()  # M75: ubica todas las filas, una sola vez
+	_build_tabs_and_pages()  # RF-708: categorías en solapas superiores
 	_admin_button.pressed.connect(_on_admin_pressed)
 	_admin_confirm_button.pressed.connect(set_dev_mode.bind(true))
 	_admin_cancel_button.pressed.connect(_on_admin_cancel)
@@ -177,7 +171,7 @@ func set_dev_mode(on: bool) -> void:
 
 
 func is_admin_visible() -> bool:
-	return _admin_section.visible and _admin_button.visible
+	return _admin_section.visible and _admin_button.visible and not _admin_confirm.visible
 
 
 func is_confirm_visible() -> bool:
@@ -197,13 +191,13 @@ func _refresh_admin() -> void:
 ## RF-383: la confirmación ocupa el panel entero (solo queda el título), así el panel no crece y
 ## entra en una pantalla de 720 de alto. Al salir, vuelve todo como estaba.
 func _set_confirming(on: bool) -> void:
-	for column: Control in [_rows, _side]:
-		if column == null:
-			continue
-		for child: Node in column.get_children():
-			if child != _admin_confirm:
-				(child as Control).visible = not on
-	_rows.visible = not (on and _two_columns)  # en dos columnas, la confirmación queda sola y centrada
+	_tabs.visible = not on
+	for index: int in _group_pages.size():
+		_group_pages[index].visible = not on and index == _active_tab
+	if on and _admin_confirm.get_parent() != _rows:
+		_admin_confirm.reparent(_rows, false)
+	elif not on and _admin_confirm.get_parent() == _rows:
+		_admin_confirm.reparent(_group_pages.back(), false)
 	_back_button.visible = not on
 	_admin_confirm.visible = on
 	if not on:
@@ -211,38 +205,78 @@ func _set_confirming(on: bool) -> void:
 	_fit_scroll.call_deferred()
 
 
-## RF-550 / RF-555 / RF-684: en el celular, dos columnas y un panel ancho (Sonido y Pantalla a la izquierda, Partida y
-## ayudas y Avanzado a la derecha); en PC, la columna única de siempre con los cinco grupos.
-func _arrange_columns() -> void:
-	_two_columns = UiMode.is_mobile()
+## RF-708: cada categoría tiene una solapa y una página desplazable; «Controles» no se crea en celular.
+func _build_tabs_and_pages() -> void:
 	var by_name: Dictionary = {}
 	for column: Control in [_rows, _side]:
 		for child: Node in column.get_children():
 			by_name[StringName(child.name)] = child
-	if _two_columns:
-		_panel.custom_minimum_size.x = MOBILE_PANEL_WIDTH
-		_place_groups(_rows, MOBILE_LEFT_COLUMN, by_name)
-		_place_groups(_side, MOBILE_RIGHT_COLUMN, by_name)
-		return
-	_place_groups(_rows, PC_COLUMN, by_name)
-	_side.queue_free()
-	_side = null
-
-
-## Pone en `column`, en el orden declarado, los nodos de cada grupo. Cada nodo toma el índice que le da la lista, sin
-## depender de dónde estaba antes.
-func _place_groups(column: Control, groups: Array, by_name: Dictionary) -> void:
-	var index: int = 0
-	for group: Array in groups:
-		for node_name: StringName in group:
+	_panel.custom_minimum_size.x = MOBILE_PANEL_WIDTH if UiMode.is_mobile() else OPTIONS_PANEL_WIDTH
+	var button_group: ButtonGroup = ButtonGroup.new()
+	for group_index: int in OPTION_GROUP_ROWS.size():
+		if UiMode.is_mobile() and group_index == 3:
+			continue
+		var page: VBoxContainer = VBoxContainer.new()
+		page.name = "OptionsPage%d" % group_index
+		page.add_theme_constant_override("separation", 12)
+		page.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		_rows.add_child(page)
+		for node_name: StringName in OPTION_GROUP_ROWS[group_index]:
 			var node: Node = by_name.get(node_name)
 			if node == null:
-				push_error("Opciones: no existe el nodo «%s» de su grupo" % node_name)
+				push_error("Opciones: no existe la fila «%s» de «%s»" % [node_name, OPTION_GROUP_NAMES[group_index]])
 				continue
-			if node.get_parent() != column:
-				node.reparent(column, false)
-			column.move_child(node, index)
-			index += 1
+			node.reparent(page, false)
+		_group_pages.append(page)
+		var tab: Button = Button.new()
+		tab.name = "Tab%d" % group_index
+		tab.text = "Partida\ny ayudas" if group_index == 2 else OPTION_GROUP_NAMES[group_index]
+		tab.toggle_mode = true
+		tab.button_group = button_group
+		tab.custom_minimum_size.y = 48.0
+		tab.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		tab.add_theme_font_size_override("font_size", 17)
+		# Apariencia de solapa clásica: sin marco de botón, y una línea inferior
+		# dorada marca la categoría activa.
+		var normal: StyleBoxFlat = StyleBoxFlat.new()
+		normal.bg_color = Color.TRANSPARENT
+		normal.border_width_bottom = 2
+		normal.border_color = Color("514839")
+		var hover: StyleBoxFlat = StyleBoxFlat.new()
+		hover.bg_color = Color("252728")
+		hover.border_width_bottom = 2
+		hover.border_color = Color("a7834a")
+		var selected: StyleBoxFlat = StyleBoxFlat.new()
+		selected.bg_color = Color("262522")
+		selected.border_width_bottom = 3
+		selected.border_color = Color("e4ad4c")
+		tab.add_theme_stylebox_override("normal", normal)
+		tab.add_theme_stylebox_override("hover", hover)
+		tab.add_theme_stylebox_override("pressed", selected)
+		tab.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+		tab.pressed.connect(_select_tab.bind(_tab_buttons.size()))
+		_tabs.add_child(tab)
+		_tab_buttons.append(tab)
+	for title_name: StringName in [&"SoundSection", &"DisplaySection", &"GameSection", &"ControlsSection", &"AdvancedSection"]:
+		var title: Node = by_name.get(title_name)
+		if title != null:
+			title.free()
+	for index: int in _group_pages.size():
+		_rows.move_child(_group_pages[index], index)
+	_side.free()
+	_side = null
+	_select_tab(0)
+
+
+func _select_tab(index: int) -> void:
+	if index < 0 or index >= _group_pages.size():
+		return
+	_active_tab = index
+	for page_index: int in _group_pages.size():
+		_group_pages[page_index].visible = page_index == index
+	for button_index: int in _tab_buttons.size():
+		_tab_buttons[button_index].button_pressed = button_index == index
+	_fit_scroll.call_deferred()
 
 
 ## RF-555: el centro se desplaza si el panel no entra en la ventana; si entra, el panel mide lo que mide su
@@ -250,6 +284,8 @@ func _place_groups(column: Control, groups: Array, by_name: Dictionary) -> void:
 func _fit_scroll() -> void:
 	if not is_inside_tree():
 		return
+	var preferred_width: float = MOBILE_PANEL_WIDTH if UiMode.is_mobile() else OPTIONS_PANEL_WIDTH
+	_panel.custom_minimum_size.x = minf(preferred_width, maxf(size.x - WINDOW_MARGIN * 2.0, 460.0))
 	var content: float = (_scroll.get_child(0) as Control).get_combined_minimum_size().y
 	var chrome: float = _panel.get_combined_minimum_size().y - _scroll.get_combined_minimum_size().y
 	var available: float = size.y - WINDOW_MARGIN * 2.0 - chrome
@@ -509,20 +545,3 @@ func _build_ui_mode_selector() -> void:
 	_rows.add_child(_ui_mode_selector)
 	_ui_mode_selector.item_selected.connect(func(index: int) -> void:
 		SaveManager.set_setting("ui_mode", _ui_mode_selector.get_item_id(index)))
-
-
-## M75 (RF-684): los títulos nuevos, con el estilo de los de la escena. «Controles» solo se crea con la interfaz de PC.
-func _build_group_titles() -> void:
-	_add_group_title("GameSection", "Partida y ayudas")
-	_add_group_title("AdvancedSection", "Avanzado")
-	if not UiMode.is_mobile():
-		_add_group_title("ControlsSection", "Controles")
-
-
-func _add_group_title(node_name: String, text: String) -> void:
-	var title := Label.new()
-	title.name = node_name
-	title.text = text
-	title.add_theme_color_override("font_color", SECTION_COLOR)
-	title.add_theme_font_size_override("font_size", 15)
-	_rows.add_child(title)

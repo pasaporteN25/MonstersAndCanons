@@ -1,5 +1,9 @@
 # Novedades del juego
 
+## Opciones con solapas *(T481, 2026-10-24; en revisión)
+
+Las categorías Sonido, Pantalla, Partida y ayudas, Controles y Avanzado aparecen como solapas arriba de Opciones. En celular se omite «Controles». Cada solapa muestra su propia página y conserva los valores guardados.
+
 ## Franjas temáticas por terreno *(T478, 2026-10-24)*
 
 En las partidas, el espacio exterior y los márgenes internos del mapa usan el fondo aprobado para el terreno. El fondo queda fijo en pantalla mientras acercás o desplazás el mapa, y se recorta sin deformarse al cambiar la relación de aspecto. El tope de zoom queda en 1,0. Menús y contextos sin nivel conservan el respaldo liso.

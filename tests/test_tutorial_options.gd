@@ -45,16 +45,14 @@ func test_the_row_is_there_and_shows_the_saved_option() -> void:
 
 
 func test_the_row_is_the_first_of_the_game_and_help_group() -> void:
-	# RF-684: «Partida y ayudas» = Tutorial (+ Volver a verlo) · Presentación de los jefes · Consejos en la derrota.
-	var rows: Node = options.find_child("Rows", true, false)
+	# RF-684/RF-708: «Partida y ayudas» = Tutorial (+ Volver a verlo) · Presentación de los jefes · Consejos en la derrota.
+	var rows: Node = options.find_child("OptionsPage2", true, false)
 	var row: Node = rows.find_child("TutorialRow", true, false)
 	assert_not_null(row, "la fila está en Opciones")
 	assert_eq(row.get_parent(), rows)
-	assert_eq(rows.get_child(row.get_index() - 1).name, &"GameSection", "justo debajo del título «Partida y ayudas»")
-	assert_eq((rows.get_child(row.get_index() - 1) as Label).text, "Partida y ayudas")
 	assert_eq(rows.get_child(row.get_index() + 1).name, &"BossEntranceCheck")
 	assert_eq(_replay().get_parent(), row, "«Volver a verlo» va en la misma fila")
-	assert_gt(row.get_index(), rows.get_node("RangeDisplaySelector").get_index(), "después de «Pantalla»")
+	assert_eq(rows.name, &"OptionsPage2")
 
 
 func test_turning_it_off_saves_the_option_and_keeps_the_progress() -> void:
@@ -102,7 +100,7 @@ func test_the_panel_fits_in_a_720_pixel_window_from_the_pause_and_from_the_main_
 		await get_tree().process_frame
 		var panel: Control = options.find_child("Panel", true, false) as Control
 		assert_lte(panel.size.y, 720.0, "el panel de Opciones entra en 720 de alto (menú principal: %s)" % from_main_menu)
-		assert_lte(panel.size.x, 520.0, "y no se ensancha de más")
+		assert_lte(panel.size.x, 920.0, "el ancho deja visibles las solapas")
 		var row: Control = options.find_child("TutorialRow", true, false) as Control
 		assert_lte(row.size.x, panel.size.x, "la fila entra en el ancho del panel")
 
@@ -110,6 +108,6 @@ func test_the_panel_fits_in_a_720_pixel_window_from_the_pause_and_from_the_main_
 func test_the_confirmation_of_the_test_mode_hides_the_row_too() -> void:
 	options.admin_available = true
 	options._set_confirming(true)
-	assert_false((options.find_child("TutorialRow", true, false) as Control).visible, "la confirmación ocupa el panel entero")
+	assert_false((options.find_child("TutorialRow", true, false) as Control).is_visible_in_tree(), "la confirmación ocupa el panel entero")
 	options._set_confirming(false)
 	assert_true((options.find_child("TutorialRow", true, false) as Control).visible)

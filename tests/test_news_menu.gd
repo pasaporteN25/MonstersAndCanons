@@ -175,10 +175,11 @@ func test_options_button_is_disabled_when_the_file_fails_or_is_empty() -> void:
 func test_options_button_comes_right_below_the_credits_button() -> void:
 	_write_news(false)
 	var options: OptionsMenu = _options("1.0.0")
+	options._select_tab(3 if UiMode.is_mobile() else 4)
 	var credits: Button = options.get_node("%CreditsButton")
 	assert_eq(options.news_button().get_parent(), credits.get_parent())
 	assert_eq(options.news_button().get_index(), credits.get_index() + 1, "en «Avanzado», debajo de «Ver créditos»")
-	assert_lt(credits.get_parent().get_node("AdvancedSection").get_index(), credits.get_index())
+	assert_eq(credits.get_parent().name, &"OptionsPage4")
 
 
 func test_mobile_options_still_fit_with_the_news_button() -> void:
@@ -187,6 +188,7 @@ func test_mobile_options_still_fit_with_the_news_button() -> void:
 	var options: OptionsMenu = _options("1.0.0")
 	options.admin_available = true
 	options.open()
+	options._select_tab(3 if UiMode.is_mobile() else 4)
 	await get_tree().process_frame
 	await get_tree().process_frame
 	var panel: Control = options.get_node("%Panel")

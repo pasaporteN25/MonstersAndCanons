@@ -76,6 +76,7 @@ func _options() -> OptionsMenu:
 func test_options_show_the_version_and_open_the_credits() -> void:
 	var options: OptionsMenu = _options()
 	options.open()
+	options._select_tab(4)
 	await get_tree().process_frame
 	var version: Label = options.get_node("%VersionLabel") as Label
 	assert_eq(version.text, GameVersion.label(GameVersion.raw()))
@@ -94,11 +95,10 @@ func test_options_show_the_version_and_open_the_credits() -> void:
 func test_credits_section_sits_after_the_interface_row_and_before_admin_in_advanced() -> void:
 	SaveManager.set_setting("ui_mode", UiMode.PC)
 	var options: OptionsMenu = _options()
-	var rows: Control = options.get_node("Center/Panel/Margin/Frame/Scroll/Columns/Rows")
+	var page: Control = options.find_child("OptionsPage4", true, false)
 	var names: Array[String] = []
-	for child: Node in rows.get_children():
+	for child: Node in page.get_children():
 		names.append(child.name)
-	assert_gt(names.find("CreditsSection"), names.find("AdvancedSection"), "dentro de «Avanzado»")
 	assert_gt(names.find("CreditsSection"), names.find("UiModeSelector"), "después de «Interfaz»")
 	assert_eq(names.slice(names.find("CreditsSection"), names.find("AdminSection")),
 		["CreditsSection", "VersionLabel", "CreditsButton", "NewsButton"], "versión, créditos y novedades")
@@ -107,6 +107,6 @@ func test_credits_section_sits_after_the_interface_row_and_before_admin_in_advan
 func test_credits_section_is_in_the_right_column_on_mobile() -> void:
 	SaveManager.set_setting("ui_mode", UiMode.MOBILE)
 	var options: OptionsMenu = _options()
-	var side: Control = options.get_node("%Side")
-	assert_not_null(side.get_node_or_null("CreditsSection"))
-	assert_not_null(side.get_node_or_null("CreditsButton"))
+	var page: Control = options.find_child("OptionsPage4", true, false)
+	assert_not_null(page.get_node_or_null("CreditsSection"))
+	assert_not_null(page.get_node_or_null("CreditsButton"))

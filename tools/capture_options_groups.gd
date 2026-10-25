@@ -1,4 +1,4 @@
-# Capturas reales de los grupos de Opciones (M75, T468), PC y celular simulado a 1280×720.
+# Capturas reales de las solapas de Opciones (M75, T481), PC y celular simulado a 1280×720.
 # Uso con ventana y carpeta de salida fuera del repositorio:
 #   godot --path . res://tools/capture_options_groups.tscn -- /ruta/de/salida
 extends Node
@@ -33,19 +33,19 @@ func run() -> void:
 		options.call("open")
 		for i: int in 8:
 			await get_tree().process_frame
-		var tag: String = "pc" if mode == 2 else "celular-simulado"
-		_shot("t468-%s-opciones-arriba.png" % tag)
-		var scroll: ScrollContainer = options.get_node("%Scroll")
-		scroll.scroll_vertical = int(scroll.get_v_scroll_bar().max_value)
-		for i: int in 3:
-			await get_tree().process_frame
-		_shot("t468-%s-opciones-abajo.png" % tag)
+		var tabs: Array = [0, 1, 2, 3, 4] if mode == 2 else [0, 1, 2, 3]
+		for tab_index: int in tabs:
+			options.call("_select_tab", tab_index)
+			for i: int in 4:
+				await get_tree().process_frame
+			var label: String = "pc" if mode == 2 else "celular"
+			_shot("t481-%s-solapa-%d.png" % [label, tab_index + 1])
 		options.queue_free()
 		await get_tree().process_frame
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(TEMP_SAVE))
 	save.save_path = old_save_path
 	save.load_save()
-	print("T468: capturas guardadas en %s" % _out)
+	print("T481: capturas guardadas en %s" % _out)
 	get_tree().quit()
 
 func _shot(filename: String) -> void:

@@ -41,9 +41,8 @@ func test_the_option_is_on_by_default_with_its_label() -> void:
 func test_it_is_the_last_row_of_the_game_and_help_group() -> void:
 	var rows: Node = _check().get_parent()
 	assert_eq(rows.get_child(_check().get_index() - 1).name, &"BossEntranceCheck")
-	var next: Node = rows.get_child(_check().get_index() + 1)
-	assert_eq(next.name, &"ControlsSection", "después viene «Controles» (PC)")
-	assert_eq(rows.get_node("GameSection").get_index(), _check().get_index() - 3, "el grupo empieza tres filas antes")
+	assert_eq(rows.name, &"OptionsPage2", "pertenece a la solapa «Partida y ayudas»")
+	assert_eq(rows.get_child_count(), 3)
 
 
 func test_turning_it_off_persists_and_can_be_turned_on_again() -> void:

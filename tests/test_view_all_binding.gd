@@ -137,11 +137,8 @@ func test_the_row_is_in_the_controls_group_between_the_help_and_advanced_groups(
 	_open_options()
 	var row: Node = _options.find_child("ViewAllRow", true, false)
 	var parent: Node = row.get_parent()
-	var title: Node = parent.get_child(row.get_index() - 1)
-	assert_eq(title.name, &"ControlsSection")
-	assert_eq((title as Label).text, "Controles")
-	assert_eq(parent.get_child(row.get_index() - 2).name, &"DefeatAdviceCheck", "antes, el final de «Partida y ayudas»")
-	assert_eq(parent.get_child(row.get_index() + 1).name, &"AdvancedSection", "después, «Avanzado»")
+	assert_eq(parent.name, &"OptionsPage3", "página de la solapa «Controles»")
+	assert_eq(parent.get_child_count(), 1)
 	assert_eq((_options.find_child("ViewAllKeyButton", true, false) as Button).get_parent().get_parent(), row,
 		"el botón, «Restaurar» y el aviso viajan con la fila")
 	assert_eq(_options.find_child("ViewAllNote", true, false).get_parent(), row)
