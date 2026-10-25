@@ -2697,6 +2697,11 @@ El alcance de T425 a T432 es desktop. Mobile continúa por su propia experiencia
   **Refs:** RF-691, RF-695, RF-652. **Depende de:** T459 aprobada; 🎨 Lucas aprueba muestra antes de integrar. **Ficha:** `specs/tareas/T469-muestra-mapa-insignias.md`.
   **Hecho cuando:** Hay fuente editable, procedencia, tamaños/peso y maqueta legible; Lucas puede aprobar cada pieza. No se declara aprobada por esta ficha.
 
+- [x] **T482 · Revisión visual de la geografía con dos propuestas. `[x86]`**
+  **Refs:** RF-691, RF-695, RF-698. **Depende de:** crítica de Lucas al PR #74 y referencia de T428; 🚦 aprobación artística de Lucas antes de integrar T471. **Ficha:** `specs/tareas/T482-revision-mapa-propuestas.md`.
+  **Hecho cuando:** Dos costas editables, el original y capturas comparables a 1280 × 720; ruta, aterrizaje y quince marcadores dentro de tierra; la muestra no fija biomas ni posiciones jugables.
+  **Resultado (2026-10-25, listo para revisión):** propuesta A retoma el perfil quebrado de T428 con plataforma occidental más ancha; B agrega una ensenada meridional amplia. Se retiraron las manchas ovales de bioma de la propuesta anterior. La revisión visual GPT‑6.1‑sol encontró y se corrigieron el aterrizaje en agua, los márgenes de los marcadores y el desfasaje de números. Renderizado con Godot 4.7.2 aislado y Pillow, capturas 1280 × 720 inspeccionadas; sin GUT ni `--import` porque no cambió el juego. **No se aprobaron las costas ni se asignaron biomas o posiciones definitivas; la aprobación sigue pendiente de Lucas.**
+
 - [x] **T470 · Mapa inicial, migración e interacción PC/celular. `[mobile+x86]`**
   **Refs:** RF-687 a RF-690. **Depende de:** T459 aprobada; coordinar SaveManager con T461/T458. **Ficha:** `specs/tareas/T470-mapa-inicial-interaccion.md`.
   **Hecho cuando:** Casos de migración y input de RF-687–690 cubiertos, bloqueo intacto, Jugar siempre visible y marcadores táctiles sin solaparse. No toca cámara de partida.

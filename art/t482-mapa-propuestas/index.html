@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>T482 · Revisión de la costa del mapa</title>
+  <style>
+    :root { color-scheme: dark; font: 16px/1.5 system-ui, sans-serif; background:#121518; color:#ece7db; }
+    * { box-sizing:border-box; }
+    body { margin:0; }
+    header { padding:24px clamp(18px,4vw,56px); border-bottom:1px solid #634c31; background:#1b1d20; }
+    h1 { margin:0 0 8px; color:#f1ce7a; font-size:clamp(22px,3vw,34px); }
+    header p { max-width:900px; margin:0; color:#c4c4bc; }
+    main { max-width:1500px; margin:auto; padding:28px 20px 44px; }
+    .note { margin:0 0 18px; padding:13px 16px; border:1px solid #80613b; border-radius:9px; background:#211f1b; color:#e6d7b6; }
+    .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr)); gap:18px; }
+    article { min-width:0; padding:16px; border:1px solid #42413b; border-radius:12px; background:#1a1d20; }
+    h2 { margin:0 0 8px; color:#f1ce7a; font-size:20px; }
+    article p { min-height:3em; margin:0 0 12px; color:#c4c4bc; }
+    img { display:block; width:100%; height:auto; border:1px solid #55452f; border-radius:7px; }
+    .reference { margin-top:26px; }
+    .reference article { max-width:980px; }
+    .reference p { min-height:0; }
+    .foot { margin-top:24px; color:#aaa99f; font-size:14px; }
+    @media (max-width:600px) { main { padding:20px 12px 32px; } article { padding:10px; } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>T482 · Dos revisiones de la costa</h1>
+    <p>Comparación con la pantalla original de T428. Las propuestas conservan su paleta, relieve fino, ríos y símbolos; cambia la geografía de la isla y la ruta queda dentro de tierra.</p>
+  </header>
+  <main>
+    <p class="note"><strong>Propuesta A es la recomendada:</strong> retoma el perfil quebrado del mapa original y ensancha la plataforma occidental para el aterrizaje y los primeros niveles. B muestra una ensenada amplia en la costa sur. Elegí una, pedí ajustes o indicá qué parte del original querés conservar.</p>
+    <section class="cards" aria-label="Propuestas de geografía">
+      <article>
+        <h2>A · Continente del atlas</h2>
+        <p>Perfil irregular basado en T428, con una costa continua y margen para el aterrizaje, la ruta y los quince marcadores.</p>
+        <img src="../../Capturas/T482-mapa-propuesta-A.png" alt="Propuesta A: masa terrestre continua con la ruta sobre tierra">
+      </article>
+      <article>
+        <h2>B · Ensenada meridional</h2>
+        <p>La misma composición y lenguaje gráfico, con una entrada amplia desde el sur entre las zonas intermedias.</p>
+        <img src="../../Capturas/T482-mapa-propuesta-B.png" alt="Propuesta B: continente con una ensenada amplia en la costa sur">
+      </article>
+    </section>
+    <section class="reference">
+      <article>
+        <h2>Referencia · mapa original de T428</h2>
+        <p>Se incluye para comparar el lenguaje visual y la silueta. Los rótulos que aparecen en esta captura son parte de la interfaz anterior y no forman parte de estas propuestas.</p>
+        <img src="../../Capturas/T482-mapa-original-T428.png" alt="Captura original del selector de mapa T428, solo como referencia visual">
+      </article>
+    </section>
+    <p class="foot">Estas son muestras estáticas de desktop. No son arte final, no modifican el juego y no fijan la asignación de biomas ni la posición definitiva de cada zona. La integración espera tu aprobación.</p>
+  </main>
+</body>
+</html>

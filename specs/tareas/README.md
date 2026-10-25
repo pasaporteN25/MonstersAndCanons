@@ -108,6 +108,8 @@ Solo en fichas marcadas *apto Qwen*. Esas tareas son de **datos con validador**:
 
 La spec de selector es [T459](T459-selector-mapa-modos-postes.md); sus RF-687–698 y D-198–203 siguen a los de T458, aunque los PR se revisen desde bases distintas. Código T470–T475 espera OK de Lucas a T459; T469 produce muestra, no finales, y espera aprobación antes de integrar. T475 exige propuesta y aprobación **por cada uno de los 15 mapas**. T235 está absorbida por T473, con remanente funcional todavía pendiente. Una sola tarea 📜 activa y hasta dos agentes de código con archivos disjuntos. Mapa celular y desbloqueo Asedio siguen las decisiones finales de Lucas, no las recomendaciones previas de T449.
 
+T482 es una iteración de revisión visual solicitada por Lucas después de las muestras de T469: presenta la referencia T428 junto a dos perfiles de costa. No reemplaza su aprobación ni autoriza la integración T471; no fija biomas ni posiciones finales.
+
 ## 10. Ronda de cierre 2026-10-23 · M77
 
 [T460](T460-carga-franjas.md) define RF-699–707 y D-204–206, tras los rangos reservados T458/T459. Fichas T476–479 esperan aprobación de la spec; T477/T478 requieren muestra y OK de fondos por terreno. **T479 además espera un anexo al informe T454 con la medición de láminas en celular real y la aprobación de Lucas con esos resultados.** La arquitectura de contenedor físico/marco lógico se revisa antes de código; no usar expand jugable para resolver las franjas por inferencia. Coordinar archivos con T461/T464/T475 y T268; una sola tarea 📜 y como máximo dos agentes de código sin archivos compartidos.
