@@ -597,6 +597,8 @@ Cuando T469–T475 estén implementadas y aprobadas, usar copias de guardados ba
 
 Verificar Asedio N habilitado por campaña N y que ganar Asedio N no abra N+1; conservar los accesos y top 5 anteriores. Entrar a pruebas, jugar un Asedio, salir y comprobar hash/datos de progreso normal intactos. Crear cinco modos propios temporales y comprobar acceso a todas las solapas y sus récords; retorno a la misma selección. No ejecutar este procedimiento sobre el archivo real de Lucas.
 
+(T471, geografía integrada) `godot --path . res://tools/capture_campaign_map.tscn -- Capturas/x.png 1280x720 map all select=14 scroll=1` captura el mapa con los 15 niveles abiertos, la región 15 elegida y el desplazamiento al final (`mobile` simula celular); tests: `-gtest=res://tests/test_campaign_geography.gd`.
+
 Capturar PC 1280×720/1920×1080 y celular simulado, mapa completo o inicio/medio/final si hay scroll, 0/1/2/3 estrellas y todos los números sin cero. Los veinte postes exigen registro del OK de Lucas para **cada mapa** y comprobación de invariancia jugable. Teléfono real corresponde a T454/T238; la simulación no lo sustituye. No cambia todavía el procedimiento vigente de T197: esta sección describe la verificación futura, no una función disponible.
 
 ### M77 · Verificación de franjas y carga (T478 en revisión; T479 bloqueada por T454)

@@ -1,5 +1,9 @@
 # Novedades del juego
 
+## Atlas de Cántaro como fondo del mapa *(T471, 2026-10-25)*
+
+El mapa planetario usa el atlas aprobado: costa nueva, biomas (pradera, bosque, ruinas, desierto, nieve) y un recorrido por curvas de oeste a este que sale del aterrizaje, en tierra firme, hasta la región 15. Las quince regiones y el aterrizaje están sobre tierra. Para que los puntos táctiles de 56 px no se pisen, el atlas se dibuja más grande que antes: el mapa se desplaza en horizontal (también en PC) y muestra la franja central del continente. Las insignias de conquista y la vista de celular nueva siguen pendientes. No se probaron teléfonos reales.
+
 ## Mapa planetario como inicio *(T470, 2026-10-24)*
 
 La campaña abre en el mapa planetario tanto en PC como en celular. En el mapa, un clic o toque selecciona el nivel; **Jugar** o **Enter** lo inicia, y el doble clic no lo saltea. El pie con la selección y el botón queda fijo mientras desplazás el mapa si no entra entero. Las tarjetas siguen iniciando con un clic. Los guardados existentes pasan al mapa una vez, al guardar; después se respeta el estilo que elijas. No se probaron teléfonos reales.
