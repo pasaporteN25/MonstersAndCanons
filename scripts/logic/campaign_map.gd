@@ -9,6 +9,15 @@ const STYLE_CARDS: int = 0
 const STYLE_MAP: int = 1
 const REGION_COUNT: int = 15
 
+## Zonas de descubrimiento del atlas (M78, RF-709, D-209): A = niveles 1–5, B = 6–10, C = 11–15. Son índices
+## de región (desde 0): la zona B empieza en el nivel 6 (índice 5) y la C en el 11 (índice 10).
+const ZONE_A: int = 0
+const ZONE_B: int = 1
+const ZONE_C: int = 2
+const ZONE_COUNT: int = 3
+const ZONE_B_FIRST_REGION: int = 5
+const ZONE_C_FIRST_REGION: int = 10
+
 ## Coordenadas de la muestra aprobada (`art/t427-mapa-propuesta/mapa.svg`, 1280×720). El recuadro del mapa
 ## empieza en `SEA_ORIGIN` y mide `SEA_SIZE`.
 const SEA_ORIGIN := Vector2(20, 90)
@@ -91,3 +100,55 @@ static func land_polygon() -> PackedVector2Array:
 	for i: int in range(0, LAND_COORDS.size(), 2):
 		points.append(Vector2(LAND_COORDS[i], LAND_COORDS[i + 1]))
 	return points
+
+
+## La zona (ZONE_A, ZONE_B o ZONE_C) a la que pertenece la región `index`. Fuera de 0–14 no hay zona: devuelve -1.
+static func zone_of(index: int) -> int:
+	if index < 0 or index >= REGION_COUNT:
+		return -1
+	if index >= ZONE_C_FIRST_REGION:
+		return ZONE_C
+	return ZONE_B if index >= ZONE_B_FIRST_REGION else ZONE_A
+
+
+## La zona más lejana descubierta (RF-709, RF-711). Es derivada: la A siempre; la B si alguna región de la 6 en
+## adelante figura desbloqueada; la C si lo está alguna de la 11 en adelante. Solo cuenta `true` booleano:
+## un `unlocked` que no sea arreglo, o con elementos no booleanos, se trata como bloqueado. Solo mira las
+## primeras `REGION_COUNT` posiciones. No modifica `unlocked` ni guarda nada.
+static func furthest_discovered_zone(unlocked: Variant) -> int:
+	if typeof(unlocked) != TYPE_ARRAY:
+		return ZONE_A
+	var list: Array = unlocked
+	var furthest: int = ZONE_A
+	for i: int in mini(list.size(), REGION_COUNT):
+		if typeof(list[i]) == TYPE_BOOL and list[i]:
+			furthest = maxi(furthest, zone_of(i))
+	return furthest
+
+
+## ¿La región `index` está en una zona descubierta? (RF-709, RF-710). Una región oculta no se dibuja con detalle,
+## no recibe foco y no se puede seleccionar.
+static func is_region_discovered(unlocked: Variant, index: int) -> bool:
+	var zone: int = zone_of(index)
+	return zone >= 0 and zone <= furthest_discovered_zone(unlocked)
+
+
+## Para cada una de las `REGION_COUNT` regiones, si su zona está descubierta. Siempre devuelve 15 valores,
+## sin importar el largo de `unlocked`.
+static func discovered_regions(unlocked: Variant) -> Array[bool]:
+	var result: Array[bool] = []
+	var furthest: int = furthest_discovered_zone(unlocked)
+	for i: int in REGION_COUNT:
+		result.append(zone_of(i) <= furthest)
+	return result
+
+
+## Los índices de las regiones que admiten foco con las flechas y selección (RF-710), en orden. Descubrir una
+## zona no abre niveles: que se pueda jugar sigue dependiendo de `unlocked` (RF-111).
+static func focusable_regions(unlocked: Variant) -> Array[int]:
+	var result: Array[int] = []
+	var furthest: int = furthest_discovered_zone(unlocked)
+	for i: int in REGION_COUNT:
+		if zone_of(i) <= furthest:
+			result.append(i)
+	return result
