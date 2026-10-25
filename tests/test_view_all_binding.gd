@@ -133,6 +133,17 @@ func test_options_has_the_row_with_the_current_key() -> void:
 	assert_true((_options.find_child("ViewAllRestoreButton", true, false) as Button).disabled, "ya es la de siempre")
 
 
+func test_the_row_is_in_the_controls_group_between_the_help_and_advanced_groups() -> void:
+	_open_options()
+	var row: Node = _options.find_child("ViewAllRow", true, false)
+	var parent: Node = row.get_parent()
+	assert_eq(parent.name, &"OptionsPage3", "página de la solapa «Controles»")
+	assert_eq(parent.get_child_count(), 1)
+	assert_eq((_options.find_child("ViewAllKeyButton", true, false) as Button).get_parent().get_parent(), row,
+		"el botón, «Restaurar» y el aviso viajan con la fila")
+	assert_eq(_options.find_child("ViewAllNote", true, false).get_parent(), row)
+
+
 func test_choosing_a_free_key_saves_it_and_enables_restore() -> void:
 	_open_options()
 	assert_true(_options.set_view_all_key(KEY_H))
@@ -178,4 +189,6 @@ func test_a_phone_interface_has_no_key_row() -> void:
 	SaveManager.set_setting("ui_mode", UiMode.MOBILE)
 	_open_options()
 	assert_null(_options.find_child("ViewAllKeyButton", true, false))
+	assert_null(_options.find_child("ViewAllRow", true, false))
+	assert_null(_options.find_child("ControlsSection", true, false), "tampoco queda un título «Controles» vacío")
 	SaveManager.set_setting("ui_mode", original)

@@ -1751,7 +1751,8 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Por qué:** «Visualización» tenía nueve filas, de las cuales solo tres eran de pantalla, y el orden era el de llegada. Lucas decidió que «Interfaz» (con Automática por omisión) quede en Avanzado.
 - **Alternativas descartadas:** «Interfaz» en Pantalla (propuesta de T451); el nombre «Acerca de y pruebas»; esconder «Controles» mientras tenga una sola tecla (Lucas aprobó el grupo); «Controles» vacío visible en el celular.
 - **Qué cambia:** enmienda RF-113, RF-576, RF-593, RF-607, RF-614 y RF-644 (de «debajo de…» a «en el grupo…»); RF-684; los tests de posición.
-- **Riesgos aceptados:** quien necesite forzar la interfaz de celular o de PC debe buscarla en «Avanzado»; la distribución del celular en dos columnas no se midió en 720 px.
+- **Riesgos aceptados:** quien necesite forzar la interfaz de celular o de PC debe buscarla en «Avanzado»; la distribución anterior en dos columnas no se midió en 720 px.
+- **Enmienda visual:** D-208 conserva las cinco categorías pero cambia su presentación a solapas superiores, a pedido posterior de Lucas.
 
 ## D-204 · Pintar fuera del marco lógico sin pasar el juego a expand
 
@@ -1784,3 +1785,13 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Por qué:** «Acercaste el mapa» describe el gesto de acercamiento, y el botón del celular también aparece al acercar. Avisar por un paneo o por alejar daría una instrucción que no corresponde al gesto.
 - **Alternativa de comportamiento descartada:** dispararlo ante cualquier cambio de encuadre (zoom hacia adentro o afuera, o paneo). **Alternativa técnica descartada:** dispararlo solo cuando el botón celular pasa de oculto a visible, porque no aplica a PC y puede perder un acercamiento ocurrido durante una exclusión como el tutorial.
 - **Qué cambia:** enmienda RF-676, D-192 y el plan de T464. No modifica RF-674/RF-675, textos, guardado, duración ni exclusiones.
+
+
+## D-208 · Opciones navega por solapas superiores
+
+- **Fecha:** 2026-10-24 · **Estado:** decidida por Lucas; implementación en T481.
+- **Qué:** las cinco categorías de RF-684 se muestran como solapas horizontales arriba de Opciones. Se ve una página por vez y la primera solapa activa es «Sonido». En celular hay cuatro solapas: «Controles» se omite. «Volver» queda fijo y la página puede desplazarse dentro del panel. No cambian las filas, sus categorías, valores ni claves de guardado.
+- **Por qué:** Lucas pidió una navegación familiar, con pestañas en la parte superior, como es común en juegos; la lista de categorías de D-197 sigue siendo útil, pero las dos columnas o los títulos en una lista larga no presentan el acceso como él esperaba.
+- **Alternativas descartadas:** mantener las secciones apiladas; repartirlas en dos columnas en celular; renombrar o volver a agrupar las opciones.
+- **Qué cambia:** RF-708 y la presentación de RF-684; solo navegación y visibilidad del contenido.
+- **Riesgos aceptados:** una preferencia queda en otra solapa hasta que se navega a ella; la anchura de cinco solapas debe seguir legible en ventanas angostas y el contenido alto conserva el scroll de RF-555.
