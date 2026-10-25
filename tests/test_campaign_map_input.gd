@@ -117,6 +117,7 @@ func test_repeated_and_double_click_never_start() -> void:
 
 
 func test_click_on_a_locked_region_shows_detail_and_never_starts() -> void:
+	SaveManager.unlock(GameFlow.level(5).id)  # el 6 abierto descubre la zona B: el 7 queda visible, con candado (RF-710)
 	var view: CampaignMapView = _view(await _open())
 	_click(view.region(6))
 	_click(view.region(6), true)
