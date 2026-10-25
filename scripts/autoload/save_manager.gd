@@ -25,6 +25,7 @@ const DEFAULT_SETTINGS: Dictionary = {
 	"selector_style": 1,  # M72/M76, RF-645, RF-687: 0 = tarjetas, 1 = mapa planetario (por omisión, PC y celular)
 	"selector_map_migrated": false,  # M76, RF-689: ¿este archivo ya pasó una vez al mapa? Clave aditiva
 	"range_display": 0,  # M75, RF-678: Oculto por omisión, también para guardados viejos
+	"siege_access_migrated": true,  # M76, RF-693: ¿este archivo ya migró el acceso a Asedio? Clave aditiva
 }
 
 ## Los tests lo cambian para no tocar el guardado real del jugador.
@@ -33,6 +34,8 @@ var save_path: String = DEFAULT_PATH
 var backup_save_path: String = DEFAULT_PATH
 var backup_prefix: String = BACKUP_PREFIX
 var _backup_checked: bool = false
+## M76, RF-693: el Asedio oficial, leído una sola vez para validar ids (solo se usa su lista de mapas).
+var _siege_mode: Dictionary = {}
 
 var _levels: Dictionary = {}    # { "level_01": {"unlocked", "completed", "best_lives", "best_score"} }
 var _settings: Dictionary = {}
@@ -76,6 +79,7 @@ func load_save() -> void:
 	_tutorial_done = false
 	_news_version = ""
 	_ui_prefs = UiPrefs.new()
+	_settings["siege_legacy_unlocked"] = []
 	ViewAllBinding.apply(_ui_prefs.view_all_key)  # M68 (RF-613)
 	if not FileAccess.file_exists(save_path):
 		return
@@ -95,6 +99,7 @@ func load_save() -> void:
 	_migrate_selector_style((parsed as Dictionary).get("settings", {}))
 	_read_seen_enemies((parsed as Dictionary).get("seen_enemies", []))
 	_read_scores((parsed as Dictionary).get("scores", {}))
+	_migrate_siege_access((parsed as Dictionary).get("settings", {}))
 	_read_initials((parsed as Dictionary).get("initials", {}))
 	var hall_total: Variant = (parsed as Dictionary).get("hall_total", 0)
 	_hall_total = int(hall_total) if typeof(hall_total) in [TYPE_INT, TYPE_FLOAT] else 0
@@ -416,6 +421,23 @@ func defeat_advice_enabled() -> bool:
 	return value if typeof(value) == TYPE_BOOL else true
 
 
+# --- Acceso heredado a Asedio (M76, RF-692, RF-693) ---
+
+## ¿Este archivo conserva el derecho de abrir ese mapa de Asedio (`modo_asedio_*`) de antes de RF-692?
+func has_siege_legacy(level_id: StringName) -> bool:
+	return (_settings.get("siege_legacy_unlocked", []) as Array).has(String(level_id))
+
+
+## Los ids heredados de este archivo (copia).
+func siege_legacy_unlocked() -> Array:
+	return (_settings.get("siege_legacy_unlocked", []) as Array).duplicate()
+
+
+## ¿Ya quedó registrada la migración? En memoria vale `true` tras cargar; se escribe en el próximo guardado.
+func siege_access_migrated() -> bool:
+	return get_setting("siege_access_migrated") == true
+
+
 func get_setting(key: String) -> Variant:
 	return _settings.get(key, DEFAULT_SETTINGS.get(key))
 
@@ -524,6 +546,38 @@ func _read_initials(raw: Variant) -> void:
 		if raw[key] is String:
 			_last_initials[str(key)] = raw[key]
 
+
+## M76, RF-693: migración aditiva del acceso a Asedio, una vez por archivo (normal o de pruebas), sin copiar nada entre ellos.
+## Con la marca booleana `true` se respeta la lista guardada (solo ids válidos). Sin ella, si hay evidencia de que el archivo
+## jugó Asedio se suma el acceso de la regla vieja; sin evidencia la lista queda vacía. Nunca toca niveles ni récords.
+func _migrate_siege_access(raw_settings: Variant) -> void:
+	var raw: Dictionary = raw_settings if raw_settings is Dictionary else {}
+	if _siege_mode.is_empty():
+		_siege_mode = ModePacks.read(ModePacks.OFFICIAL_DIR, String(SiegeAccess.MODE_ID), true)
+	var raw_legacy: Variant = raw.get("siege_legacy_unlocked")
+	var valid_ids: Array[String] = SiegeAccess.valid_ids(_siege_mode)
+	var mode_maps: Array = _siege_mode.get("maps", [])
+	var mode_errors: PackedStringArray = _siege_mode.get("errors", PackedStringArray())
+	if not mode_errors.is_empty() or mode_maps.is_empty() or valid_ids.size() != mode_maps.size():
+		# Sin poder validar todos los ids oficiales, no consumir la migración ni borrar accesos guardados.
+		# Los strings ajenos quedan inertes: GameFlow solo compara contra el id real de un mapa cargado.
+		var pending: Array[String] = []
+		if raw_legacy is Array:
+			for value: Variant in raw_legacy:
+				if value is String and not pending.has(value):
+					pending.append(value)
+		_settings["siege_legacy_unlocked"] = pending
+		_settings["siege_access_migrated"] = false
+		return
+	var kept: Array[String] = SiegeAccess.sanitize(_siege_mode, raw_legacy)
+	var migrated: bool = typeof(raw.get("siege_access_migrated")) == TYPE_BOOL and raw["siege_access_migrated"]
+	if not migrated and SiegeAccess.has_evidence(valid_ids, _levels, _scores):
+		for id: String in SiegeAccess.legacy_access(_siege_mode, _levels):
+			if not kept.has(id):
+				kept.append(id)
+		kept = SiegeAccess.sort_by_map(_siege_mode, kept)
+	_settings["siege_legacy_unlocked"] = kept
+	_settings["siege_access_migrated"] = true
 
 ## M76, RF-689: migración aditiva, una vez por archivo (normal o de pruebas), sin copiar nada entre archivos.
 ## Sin marca `true` booleana: mapa (aunque hubiera tarjetas). Con marca: se respeta un estilo válido; ausente o dañado, mapa.

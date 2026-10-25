@@ -3,7 +3,7 @@
 ## Mapa planetario como inicio *(T470, 2026-10-24)*
 
 La campaña abre en el mapa planetario tanto en PC como en celular. En el mapa, un clic o toque selecciona el nivel; **Jugar** o **Enter** lo inicia, y el doble clic no lo saltea. El pie con la selección y el botón queda fijo mientras desplazás el mapa si no entra entero. Las tarjetas siguen iniciando con un clic. Los guardados existentes pasan al mapa una vez, al guardar; después se respeta el estilo que elijas. No se probaron teléfonos reales.
-## Opciones con solapas *(T481, 2026-10-24; en revisión)
+## Opciones con solapas *(T481, 2026-10-24; en revisión)*
 
 Las categorías Sonido, Pantalla, Partida y ayudas, Controles y Avanzado aparecen como solapas arriba de Opciones. En celular se omite «Controles». Cada solapa muestra su propia página y conserva los valores guardados.
 
@@ -16,6 +16,10 @@ En las partidas, el espacio exterior y los márgenes internos del mapa usan el f
 En PC, «Ver todo» queda solo en la tecla configurable (V por omisión), sin botón flotante. En celular, el botón sigue apareciendo al acercar el mapa; desplazarlo sin zoom no lo muestra. La primera vez que acercás el mapa aparece por tres segundos un aviso con la tecla o el botón para volver al encuadre completo; desplazarlo sin zoom no muestra el aviso (aclaración de Lucas, 2026-10-23). Se recuerda en el guardado y no interrumpe el tutorial. La lupa está en muestra para aprobación y todavía no se integró: hasta entonces el botón conserva el texto «Ver todo».
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
+
+## Asedio se abre al ganar la campaña *(T472, 2026-10-24)*
+
+Asedio N se habilita al completar el nivel N de la campaña, con cualquier cantidad de estrellas, sin necesidad de haber ganado Asedio N−1. Ganar un mapa de Asedio guarda tu victoria y tu récord, pero ya no abre el siguiente. Si ya habías jugado Asedio, tus mapas abiertos y tus récords se conservan. En un guardado nuevo, Asedio empieza cerrado. El modo de pruebas sigue con todo abierto y no mezcla su progreso con el normal. Los otros modos no cambian.
 
 ## Opciones en cinco grupos *(T468, en revisión)*
 

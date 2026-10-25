@@ -123,9 +123,10 @@ static func map_level(mode: Dictionary, index: int) -> LevelData:
 	return maps[index]["level"]
 
 
-## RF-390: ¿se puede jugar el mapa `index`? En un modo oficial, el primero jugable está abierto y cada
-## uno se habilita al ganar el jugable anterior; en los propios, todos. (El modo de pruebas, RF-183, lo
-## resuelve GameFlow.) `is_completed` e `is_unlocked` reciben un id de nivel.
+## RF-390: regla general de apertura: en un modo oficial, el primero jugable está abierto y cada uno se
+## habilita al ganar el jugable anterior; en los propios, todos. GameFlow puede aplicar excepciones aprobadas
+## para un modo oficial concreto (RF-692, Asedio). El modo de pruebas (RF-183) también lo resuelve GameFlow.
+## `is_completed` e `is_unlocked` reciben un id de nivel.
 static func is_open(mode: Dictionary, index: int, is_completed: Callable, is_unlocked: Callable) -> bool:
 	var level: LevelData = map_level(mode, index)
 	if level == null:
