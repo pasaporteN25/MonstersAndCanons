@@ -1,0 +1,58 @@
+[
+  {
+    "archivo": "assets/sprites/map/roca_marcada.svg",
+    "sha256": "73f2547862adb6f2d5f24460f11e3ae5246387dc031062603287ea4cf96f577e"
+  },
+  {
+    "archivo": "assets/sprites/map/simbolo_ruina.svg",
+    "sha256": "a5b21a59007c209b271678b0ded103fca0db43b097f55427579290c7d768dba6"
+  },
+  {
+    "archivo": "assets/tiles/rendered/ground_pradera.png",
+    "sha256": "cb98b34a2329e49c8066d2662020a10d3a43647ce5117dc37a1f348413369224"
+  },
+  {
+    "archivo": "assets/tiles/rendered/ground_bosque.png",
+    "sha256": "ea73de787b8715e88a81504407c43b8a86793b8caee9a7300226f3ce7af7633a"
+  },
+  {
+    "archivo": "assets/tiles/rendered/ground_desierto.png",
+    "sha256": "14d0bdc0fdf0cb942847917d31e5de626fbc95da45425c3391c6e4d2d6e1bc84"
+  },
+  {
+    "archivo": "assets/tiles/rendered/ground_nieve.png",
+    "sha256": "69d1d4054f7551c1f231ff9fb10933f4a05554c7bc9aa29424a29c2f44a3f74f"
+  },
+  {
+    "archivo": "assets/tiles/rendered/ground_ruinas.png",
+    "sha256": "3588c580e0de81f341e33969f0dc012dbd89dc63aa3de8c769570ff744e989cd"
+  },
+  {
+    "archivo": "assets/sprites/map/rendered/banner_post_enemy.png",
+    "sha256": "bfbe1f471e39fef1d4e13782e909bcefb6d7d346e1445fb87228f20a4a024ff5"
+  },
+  {
+    "archivo": "art/m79-inventario/antes-nivel-08-1280x720.png",
+    "sha256": "4bd5da945f16ebefb2bd1a83fdc9c90600b49b385d1cd7302eccb94068191fc1"
+  },
+  {
+    "archivo": "art/m79-inventario/antes-nivel-09-1280x720.png",
+    "sha256": "9f761f6297ca707280c40d45f5431001374059b5bdd54351f267b41d3e035c9e"
+  },
+  {
+    "archivo": "art/m79-inventario/antes-nivel-11-1280x720.png",
+    "sha256": "1f94eb09f2c7ba5fb481342f72337ba792db92bafdc4789e43142624cefb6384"
+  },
+  {
+    "archivo": "data/levels/level_08.json",
+    "sha256": "e0f1c38361a8af20325025bd6cc0fb63915e96ff93acdacecf27a9c56d358b05"
+  },
+  {
+    "archivo": "data/levels/level_09.json",
+    "sha256": "38019324f39caa34db22048031d06100c0505df16cd074b89c151a3741c1ad9a"
+  },
+  {
+    "archivo": "data/levels/level_11.json",
+    "sha256": "cbec8c23f8998a67d321d95be9d2d65bf82e1664cd99f148aee715f9fda870e6"
+  }
+]

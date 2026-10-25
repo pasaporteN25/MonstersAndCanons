@@ -1,0 +1,98 @@
+[
+  {
+    "archivo": "variants/marked_rock_v01.png",
+    "bytes": 14735,
+    "sha256": "aa9b775e96245289658bc02dc612dd950e4d6f8282ea1c2e956cc5e850eb32bc",
+    "modo": "RGBA",
+    "tamano": [
+      128,
+      128
+    ],
+    "caja_alfa": [
+      11,
+      28,
+      115,
+      117
+    ]
+  },
+  {
+    "archivo": "variants/marked_rock_v02.png",
+    "bytes": 15044,
+    "sha256": "ba0b23d6a633892366b02a67b0152c3113bf37fe5ce9558ced7b1722462d4379",
+    "modo": "RGBA",
+    "tamano": [
+      128,
+      128
+    ],
+    "caja_alfa": [
+      11,
+      28,
+      115,
+      117
+    ]
+  },
+  {
+    "archivo": "variants/marked_rock_v03.png",
+    "bytes": 15869,
+    "sha256": "74432e8c585b33629c7f977c55f925df48e3220dc3ca0a5b96581f1ba49c8dc6",
+    "modo": "RGBA",
+    "tamano": [
+      128,
+      128
+    ],
+    "caja_alfa": [
+      11,
+      28,
+      115,
+      117
+    ]
+  },
+  {
+    "archivo": "variants/ruin_symbol_v01.png",
+    "bytes": 15695,
+    "sha256": "c305e2f5d9717cc7cb62f5a1c04e3f6a2c3992abf72006044b7ebfb9303f669d",
+    "modo": "RGBA",
+    "tamano": [
+      128,
+      128
+    ],
+    "caja_alfa": [
+      13,
+      22,
+      117,
+      117
+    ]
+  },
+  {
+    "archivo": "variants/ruin_symbol_v02.png",
+    "bytes": 15907,
+    "sha256": "06c2e00beccfc3075e23003bfebfb87baed6d7edb298d41999e5e9c7530d936b",
+    "modo": "RGBA",
+    "tamano": [
+      128,
+      128
+    ],
+    "caja_alfa": [
+      13,
+      22,
+      117,
+      117
+    ]
+  },
+  {
+    "archivo": "variants/ruin_symbol_v03.png",
+    "bytes": 17051,
+    "sha256": "7c55b8b558d29c7ef281415f18644d26b840b60ce86a85b32e37b885efbd7d3a",
+    "modo": "RGBA",
+    "tamano": [
+      128,
+      128
+    ],
+    "caja_alfa": [
+      13,
+      22,
+      117,
+      117
+    ]
+  }
+]

@@ -1,0 +1,503 @@
+[
+  {
+    "archivo": "level_08_v01.png",
+    "origen": "art/m79-inventario/antes-nivel-08-1280x720.png",
+    "casillas": [
+      {
+        "casilla": [
+          12,
+          0
+        ],
+        "rectangulo": [
+          768,
+          48,
+          832,
+          112
+        ]
+      },
+      {
+        "casilla": [
+          0,
+          4
+        ],
+        "rectangulo": [
+          0,
+          304,
+          64,
+          368
+        ]
+      }
+    ],
+    "poste_hipotetico": false
+  },
+  {
+    "archivo": "level_08_v01_with_post.png",
+    "origen": "art/m79-inventario/antes-nivel-08-1280x720.png",
+    "casillas": [
+      {
+        "casilla": [
+          12,
+          0
+        ],
+        "rectangulo": [
+          768,
+          48,
+          832,
+          112
+        ]
+      },
+      {
+        "casilla": [
+          0,
+          4
+        ],
+        "rectangulo": [
+          0,
+          304,
+          64,
+          368
+        ]
+      }
+    ],
+    "poste_hipotetico": true
+  },
+  {
+    "archivo": "level_08_v02.png",
+    "origen": "art/m79-inventario/antes-nivel-08-1280x720.png",
+    "casillas": [
+      {
+        "casilla": [
+          12,
+          0
+        ],
+        "rectangulo": [
+          768,
+          48,
+          832,
+          112
+        ]
+      },
+      {
+        "casilla": [
+          0,
+          4
+        ],
+        "rectangulo": [
+          0,
+          304,
+          64,
+          368
+        ]
+      }
+    ],
+    "poste_hipotetico": false
+  },
+  {
+    "archivo": "level_08_v02_with_post.png",
+    "origen": "art/m79-inventario/antes-nivel-08-1280x720.png",
+    "casillas": [
+      {
+        "casilla": [
+          12,
+          0
+        ],
+        "rectangulo": [
+          768,
+          48,
+          832,
+          112
+        ]
+      },
+      {
+        "casilla": [
+          0,
+          4
+        ],
+        "rectangulo": [
+          0,
+          304,
+          64,
+          368
+        ]
+      }
+    ],
+    "poste_hipotetico": true
+  },
+  {
+    "archivo": "level_08_v03.png",
+    "origen": "art/m79-inventario/antes-nivel-08-1280x720.png",
+    "casillas": [
+      {
+        "casilla": [
+          12,
+          0
+        ],
+        "rectangulo": [
+          768,
+          48,
+          832,
+          112
+        ]
+      },
+      {
+        "casilla": [
+          0,
+          4
+        ],
+        "rectangulo": [
+          0,
+          304,
+          64,
+          368
+        ]
+      }
+    ],
+    "poste_hipotetico": false
+  },
+  {
+    "archivo": "level_08_v03_with_post.png",
+    "origen": "art/m79-inventario/antes-nivel-08-1280x720.png",
+    "casillas": [
+      {
+        "casilla": [
+          12,
+          0
+        ],
+        "rectangulo": [
+          768,
+          48,
+          832,
+          112
+        ]
+      },
+      {
+        "casilla": [
+          0,
+          4
+        ],
+        "rectangulo": [
+          0,
+          304,
+          64,
+          368
+        ]
+      }
+    ],
+    "poste_hipotetico": true
+  },
+  {
+    "archivo": "level_09_v01.png",
+    "origen": "art/m79-inventario/antes-nivel-09-1280x720.png",
+    "casillas": [
+      {
+        "casilla": [
+          6,
+          0
+        ],
+        "rectangulo": [
+          384,
+          48,
+          448,
+          112
+        ]
+      },
+      {
+        "casilla": [
+          0,
+          4
+        ],
+        "rectangulo": [
+          0,
+          304,
+          64,
+          368
+        ]
+      }
+    ],
+    "poste_hipotetico": false
+  },
+  {
+    "archivo": "level_09_v01_with_post.png",
+    "origen": "art/m79-inventario/antes-nivel-09-1280x720.png",
+    "casillas": [
+      {
+        "casilla": [
+          6,
+          0
+        ],
+        "rectangulo": [
+          384,
+          48,
+          448,
+          112
+        ]
+      },
+      {
+        "casilla": [
+          0,
+          4
+        ],
+        "rectangulo": [
+          0,
+          304,
+          64,
+          368
+        ]
+      }
+    ],
+    "poste_hipotetico": true
+  },
+  {
+    "archivo": "level_09_v02.png",
+    "origen": "art/m79-inventario/antes-nivel-09-1280x720.png",
+    "casillas": [
+      {
+        "casilla": [
+          6,
+          0
+        ],
+        "rectangulo": [
+          384,
+          48,
+          448,
+          112
+        ]
+      },
+      {
+        "casilla": [
+          0,
+          4
+        ],
+        "rectangulo": [
+          0,
+          304,
+          64,
+          368
+        ]
+      }
+    ],
+    "poste_hipotetico": false
+  },
+  {
+    "archivo": "level_09_v02_with_post.png",
+    "origen": "art/m79-inventario/antes-nivel-09-1280x720.png",
+    "casillas": [
+      {
+        "casilla": [
+          6,
+          0
+        ],
+        "rectangulo": [
+          384,
+          48,
+          448,
+          112
+        ]
+      },
+      {
+        "casilla": [
+          0,
+          4
+        ],
+        "rectangulo": [
+          0,
+          304,
+          64,
+          368
+        ]
+      }
+    ],
+    "poste_hipotetico": true
+  },
+  {
+    "archivo": "level_09_v03.png",
+    "origen": "art/m79-inventario/antes-nivel-09-1280x720.png",
+    "casillas": [
+      {
+        "casilla": [
+          6,
+          0
+        ],
+        "rectangulo": [
+          384,
+          48,
+          448,
+          112
+        ]
+      },
+      {
+        "casilla": [
+          0,
+          4
+        ],
+        "rectangulo": [
+          0,
+          304,
+          64,
+          368
+        ]
+      }
+    ],
+    "poste_hipotetico": false
+  },
+  {
+    "archivo": "level_09_v03_with_post.png",
+    "origen": "art/m79-inventario/antes-nivel-09-1280x720.png",
+    "casillas": [
+      {
+        "casilla": [
+          6,
+          0
+        ],
+        "rectangulo": [
+          384,
+          48,
+          448,
+          112
+        ]
+      },
+      {
+        "casilla": [
+          0,
+          4
+        ],
+        "rectangulo": [
+          0,
+          304,
+          64,
+          368
+        ]
+      }
+    ],
+    "poste_hipotetico": true
+  },
+  {
+    "archivo": "level_11_v01.png",
+    "origen": "art/m79-inventario/antes-nivel-11-1280x720.png",
+    "casillas": [
+      {
+        "casilla": [
+          1,
+          2
+        ],
+        "rectangulo": [
+          64,
+          153,
+          116,
+          205
+        ]
+      },
+      {
+        "casilla": [
+          21,
+          2
+        ],
+        "rectangulo": [
+          1111,
+          153,
+          1164,
+          205
+        ]
+      },
+      {
+        "casilla": [
+          2,
+          8
+        ],
+        "rectangulo": [
+          116,
+          467,
+          169,
+          519
+        ]
+      }
+    ],
+    "poste_hipotetico": false
+  },
+  {
+    "archivo": "level_11_v02.png",
+    "origen": "art/m79-inventario/antes-nivel-11-1280x720.png",
+    "casillas": [
+      {
+        "casilla": [
+          1,
+          2
+        ],
+        "rectangulo": [
+          64,
+          153,
+          116,
+          205
+        ]
+      },
+      {
+        "casilla": [
+          21,
+          2
+        ],
+        "rectangulo": [
+          1111,
+          153,
+          1164,
+          205
+        ]
+      },
+      {
+        "casilla": [
+          2,
+          8
+        ],
+        "rectangulo": [
+          116,
+          467,
+          169,
+          519
+        ]
+      }
+    ],
+    "poste_hipotetico": false
+  },
+  {
+    "archivo": "level_11_v03.png",
+    "origen": "art/m79-inventario/antes-nivel-11-1280x720.png",
+    "casillas": [
+      {
+        "casilla": [
+          1,
+          2
+        ],
+        "rectangulo": [
+          64,
+          153,
+          116,
+          205
+        ]
+      },
+      {
+        "casilla": [
+          21,
+          2
+        ],
+        "rectangulo": [
+          1111,
+          153,
+          1164,
+          205
+        ]
+      },
+      {
+        "casilla": [
+          2,
+          8
+        ],
+        "rectangulo": [
+          116,
+          467,
+          169,
+          519
+        ]
+      }
+    ],
+    "poste_hipotetico": false
+  }
+]
