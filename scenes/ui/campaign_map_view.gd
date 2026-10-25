@@ -1,7 +1,7 @@
 class_name CampaignMapView
 extends Control
 ## El mapa planetario 2D de la campaña (M72, RF-647, RF-648; M76, RF-688 a RF-690). Dibuja la carta de Cántaro,
-## el aterrizaje y 15 regiones con el dibujo aprobado en `art/t427-mapa-propuesta/mapa.svg`; es un atlas, no un
+## el aterrizaje y 15 regiones sobre el atlas aprobado en `art/t485-atlas-biomas/` (ruta B; T471, antes T427/T428); es un atlas, no un
 ## mapa jugable. El lienzo (`MapCanvas`) vive dentro de un `ScrollContainer` que solo se desplaza en horizontal y
 ## solo si el lienzo no entra; la ficha y «Jugar» (`InfoPanel`) quedan fijas abajo, fuera del lienzo.
 ## No lee el guardado ni cambia de escena: recibe los datos de cada región con `setup()` y avisa con
@@ -12,7 +12,12 @@ signal selection_changed(index: int)
 
 const VIEW_SIZE := Vector2(1090, 458)
 const MAP_HEIGHT: float = 380.0
-const CANVAS_SIZE := Vector2(1090, MAP_HEIGHT)
+## T471: con las coordenadas del atlas aprobado, los marcadores 12 y 13 quedan a 49,3 unidades; para que las áreas
+## táctiles de 56 px no se pisen (RF-690) el atlas se dibuja a esta escala (la mínima es 56 / 49,3 = 1,137). El lienzo es
+## más ancho que la vista y se desplaza en horizontal; en vertical se muestra la franja del atlas que arranca en `MAP_TOP`.
+const MAP_SCALE: float = 1.14
+const MAP_TOP: float = 160.0
+const CANVAS_SIZE := Vector2(CampaignMap.SEA_SIZE.x * MAP_SCALE, MAP_HEIGHT)
 const PANEL_TOP: float = 386.0
 const PANEL_HEIGHT: float = 72.0
 ## RF-550, RF-690: el área táctil de cada región mide al menos 56 px lógicos (el dibujo sigue siendo el aprobado).
@@ -45,8 +50,8 @@ var _drag_threshold: float = 12.0
 var _press_region: CampaignRegion
 var _press_dragged: bool = false
 var _press_at: Vector2 = Vector2.ZERO
-var _scale: float = MAP_HEIGHT / CampaignMap.SEA_SIZE.y
-var _offset: Vector2 = Vector2((CANVAS_SIZE.x - CampaignMap.SEA_SIZE.x * (MAP_HEIGHT / CampaignMap.SEA_SIZE.y)) / 2.0, 0.0)
+var _scale: float = MAP_SCALE
+var _offset: Vector2 = Vector2(0.0, -(MAP_TOP - CampaignMap.SEA_ORIGIN.y) * MAP_SCALE)
 
 
 func _init() -> void:
@@ -191,7 +196,7 @@ func _ensure_selected_visible() -> void:
 	if _selected >= _regions.size() or not overflows():
 		return
 	var box: Rect2 = _regions[_selected].get_rect()
-	var left: float = box.position.x - SCROLL_MARGIN
+	var left: float = box.position.x - SCROLL_MARGIN if _selected > 0 else 0.0  # la primera trae también el aterrizaje
 	var right: float = box.end.x + SCROLL_MARGIN
 	var current: float = _map_scroll.scroll_horizontal
 	if left < current:
@@ -226,6 +231,7 @@ func _build_canvas() -> void:
 	_canvas.name = "MapCanvas"
 	_canvas.custom_minimum_size = CANVAS_SIZE
 	_canvas.mouse_filter = Control.MOUSE_FILTER_STOP
+	_canvas.clip_contents = true  # el atlas es más alto que el lienzo: se recorta la franja que no se muestra
 	_canvas.draw.connect(_draw_canvas)
 	_canvas.mouse_exited.connect(_set_hover.bind(null))
 	_canvas.gui_input.connect(_on_canvas_input)
@@ -329,18 +335,40 @@ func _draw_canvas() -> void:
 	_draw_lander(font)
 	_draw_legend(font)
 	_draw_compass(font)
-	_canvas.draw_string(font, _offset + Vector2(14, 22), "ATLAS MERIDIANO · CÁNTARO", HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE, Color("#dfd7bf"))
+	_canvas.draw_string(font, Vector2(14, 22), "ATLAS MERIDIANO · CÁNTARO", HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE, Color("#dfd7bf"))
 
 
-## El recorrido arranca en el aterrizaje; el tramo ya abierto se dibuja entero y el resto, tenue.
+## El recorrido arranca en el aterrizaje y sigue las curvas del atlas (`CampaignMap.route_polyline`); el tramo ya abierto
+## se dibuja entero y el resto, tenue.
 func _draw_route() -> void:
-	var previous: Vector2 = _map_point(CampaignMap.LANDER)
 	for i: int in _regions.size():
-		var point: Vector2 = _map_point(CampaignMap.REGION_POINTS[i])
 		var open: bool = CampaignMap.is_open(_states[i])
 		var color: Color = ROUTE_COLOR if open else Color(ROUTE_COLOR, 0.28)
-		_canvas.draw_dashed_line(previous, point, color, 2.0, 7.0)
-		previous = point
+		var points := PackedVector2Array()
+		for point: Vector2 in CampaignMap.route_polyline(i):
+			points.append(_map_point(point))
+		_draw_dashed_polyline(points, color, 2.0, 7.0, 5.0)
+
+
+## Una línea de trazos que sigue una poligonal: los trazos no se reinician en cada vértice.
+func _draw_dashed_polyline(points: PackedVector2Array, color: Color, width: float, dash: float, gap: float) -> void:
+	var pen_down: bool = true
+	var left: float = dash
+	var current: Vector2 = points[0]
+	for i: int in range(1, points.size()):
+		var target: Vector2 = points[i]
+		var remaining: float = current.distance_to(target)
+		while remaining > 0.0:
+			var step: float = minf(left, remaining)
+			var next: Vector2 = current.move_toward(target, step)
+			if pen_down:
+				_canvas.draw_line(current, next, color, width)
+			current = next
+			remaining -= step
+			left -= step
+			if left <= 0.0:
+				pen_down = not pen_down
+				left = dash if pen_down else gap
 
 
 func _draw_lander(font: Font) -> void:
@@ -361,7 +389,7 @@ func _draw_lander(font: Font) -> void:
 
 
 func _draw_compass(font: Font) -> void:
-	var center: Vector2 = _map_point(Vector2(1207, 524))
+	var center: Vector2 = Vector2(CANVAS_SIZE.x - 40.0, CANVAS_SIZE.y - 42.0)  # el rincón del lienzo, siempre a la vista
 	var radius: float = 19.0 * _scale
 	_canvas.draw_circle(center, radius, Color("#22282b"))
 	_canvas.draw_arc(center, radius, 0.0, TAU, 32, Color("#98a69c"), 1.5)
