@@ -1,0 +1,32 @@
+{
+  "nota": "Bytes por archivo, sin incluir este inventario de pesos.",
+  "archivos": {
+    "compositions/level10_01_four_horns.png": 766724,
+    "compositions/level10_02_open_jaw.png": 768622,
+    "compositions/level10_03_single_socket.png": 762008,
+    "compositions/level10_04_insect_mandibles.png": 764991,
+    "compositions/level10_05_cattle_baseline.png": 765096,
+    "informe.md": 9559,
+    "sheets/contact_220.png": 300396,
+    "sheets/contact_34.png": 56841,
+    "sources/01_four_horns.json": 41669,
+    "sources/01_four_horns_work.png": 34607,
+    "sources/02_open_jaw.json": 22579,
+    "sources/02_open_jaw_work.png": 35929,
+    "sources/03_single_socket.json": 1944,
+    "sources/03_single_socket_work.png": 27614,
+    "sources/04_insect_mandibles.json": 22347,
+    "sources/04_insect_mandibles_work.png": 31424,
+    "sources/05_cattle_baseline.json": 21721,
+    "sources/05_cattle_baseline_work.png": 30649,
+    "sources/generate.py": 13581,
+    "sources/replacement_cells.json": 926,
+    "sources/validation.json": 1591,
+    "variants/01_four_horns.png": 15140,
+    "variants/02_open_jaw.png": 15541,
+    "variants/03_single_socket.png": 11876,
+    "variants/04_insect_mandibles.png": 13675,
+    "variants/05_cattle_baseline.png": 13661
+  },
+  "total_sin_este_archivo": 4550711
+}
