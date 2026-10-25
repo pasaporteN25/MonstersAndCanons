@@ -17,6 +17,10 @@ En PC, «Ver todo» queda solo en la tecla configurable (V por omisión), sin bo
 
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
 
+## Solapas y récords de los modos *(T473, 2026-10-25)*
+
+La fila de solapas de **Jugar** ahora se desplaza, así que con cinco modos propios (o más) se llega a todas: tocá la solapa, arrastrá la fila con el dedo, usá su barra o apretá **AvPág / RePág**. El orden no cambia y, al volver con «Niveles», estás en la misma solapa y en el mapa del modo que jugaste. **Récords** suma un selector arriba con la Campaña, Asedio y tus modos propios: cada uno muestra su propio top 5, sin mezclarse con los demás ni con el Salón de la fama; un modo con errores dice por qué. No se probaron teléfonos reales.
+
 ## Asedio se abre al ganar la campaña *(T472, 2026-10-24)*
 
 Asedio N se habilita al completar el nivel N de la campaña, con cualquier cantidad de estrellas, sin necesidad de haber ganado Asedio N−1. Ganar un mapa de Asedio guarda tu victoria y tu récord, pero ya no abre el siguiente. Si ya habías jugado Asedio, tus mapas abiertos y tus récords se conservan. En un guardado nuevo, Asedio empieza cerrado. El modo de pruebas sigue con todo abierto y no mezcla su progreso con el normal. Los otros modos no cambian.
