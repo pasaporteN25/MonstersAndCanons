@@ -2697,9 +2697,10 @@ El alcance de T425 a T432 es desktop. Mobile continúa por su propia experiencia
   **Refs:** RF-691, RF-695, RF-652. **Depende de:** T459 aprobada; 🎨 Lucas aprueba muestra antes de integrar. **Ficha:** `specs/tareas/T469-muestra-mapa-insignias.md`.
   **Hecho cuando:** Hay fuente editable, procedencia, tamaños/peso y maqueta legible; Lucas puede aprobar cada pieza. No se declara aprobada por esta ficha.
 
-- [ ] **T470 · Mapa inicial, migración e interacción PC/celular. `[mobile+x86]`**
+- [x] **T470 · Mapa inicial, migración e interacción PC/celular. `[mobile+x86]`**
   **Refs:** RF-687 a RF-690. **Depende de:** T459 aprobada; coordinar SaveManager con T461/T458. **Ficha:** `specs/tareas/T470-mapa-inicial-interaccion.md`.
   **Hecho cuando:** Casos de migración y input de RF-687–690 cubiertos, bloqueo intacto, Jugar siempre visible y marcadores táctiles sin solaparse. No toca cámara de partida.
+  **Resultado (2026-10-24):** mapa inicial en PC y celular; selección separada de inicio (clic/tap selecciona, Enter/Jugar confirman, doble clic no inicia), bloqueo revalidado al confirmar y tarjetas conservan su clic directo. Lienzo desplazable solo si desborda, con pie fijo, foco visible y umbral de toque existente; áreas táctiles de 56 px. La migración se aplica de manera independiente por archivo y se persiste en su primer guardado exitoso, sin copiar preferencias entre guardados. Verificación: `--headless --import` exit 0 (después `git checkout -- assets`; sin cambios de assets); suite completa GUT 2258/2258 (24485 asserts), sin SCRIPT ERROR ni errores de parseo; pruebas focales de interacción 23/23 (263 asserts) y migración 14/14 (82 asserts). Capturas Godot 4.7.2: `Capturas/T470-mapa-pc-1280x720.png`, `Capturas/T470-mapa-pc-1920x1080.png` y `Capturas/T470-mapa-celular-simulado-1280x720.png`. No se probó en teléfono real ni se evaluó rendimiento. Rama apilada sobre T464/#70 para no duplicar su trabajo de SaveManager; pendiente integrar después de #70.
 
 - [ ] **T471 · Integrar geografía aprobada del planeta. `[mobile+x86]`**
   **Refs:** RF-691, RF-698. **Depende de:** T470 integrada y T469 aprobada por Lucas 🎨. **Ficha:** `specs/tareas/T471-geografia-mapa.md`.

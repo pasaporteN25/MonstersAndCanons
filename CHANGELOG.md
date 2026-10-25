@@ -1,5 +1,8 @@
 # Novedades del juego
 
+## Mapa planetario como inicio *(T470, 2026-10-24)*
+
+La campaña abre en el mapa planetario tanto en PC como en celular. En el mapa, un clic o toque selecciona el nivel; **Jugar** o **Enter** lo inicia, y el doble clic no lo saltea. El pie con la selección y el botón queda fijo mientras desplazás el mapa si no entra entero. Las tarjetas siguen iniciando con un clic. Los guardados existentes pasan al mapa una vez, al guardar; después se respeta el estilo que elijas. No se probaron teléfonos reales.
 ## Opciones con solapas *(T481, 2026-10-24; en revisión)
 
 Las categorías Sonido, Pantalla, Partida y ayudas, Controles y Avanzado aparecen como solapas arriba de Opciones. En celular se omite «Controles». Cada solapa muestra su propia página y conserva los valores guardados.
