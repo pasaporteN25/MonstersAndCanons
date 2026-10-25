@@ -50,10 +50,14 @@ func _draw() -> void:
 	if _ground == null:
 		return
 	var tile: float = Rules.TILE_SIZE
+	var posted: Array[Vector2i] = overlay_post_cells()
 	for cell: Vector2i in _ground.get_used_cells():
 		var rng := RandomNumberGenerator.new()
 		rng.seed = hash(cell)
 		var origin: Vector2 = Vector2(cell) * tile
+		if posted.has(cell):  # el ítem de atrás (cactus, roca, columna, flores) no se dibuja bajo el poste
+			_draw_ground(origin, rng)
+			continue
 		if _legend_cells.has(cell):
 			_draw_legend(cell, origin, rng, _legend_cells[cell])
 			continue
@@ -70,8 +74,8 @@ func _draw() -> void:
 	_draw_campaign_posts(tile)
 
 
-## T475, RF-696: un poste encima de lo que ya hay en la casilla. Si la leyenda ya dibuja ahí el poste (nivel 6),
-## no se repite.
+## T475, RF-696: un poste en la casilla, sin el ítem decorativo que había detrás (solo se dibuja el suelo).
+## Si la leyenda ya dibuja ahí el poste (nivel 6), no se repite.
 func _draw_campaign_posts(tile: float) -> void:
 	var texture: Texture2D = campaign_post_texture()
 	for cell: Vector2i in overlay_post_cells():

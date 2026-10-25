@@ -38,3 +38,7 @@ La orden de integración decía además: si un poste tapa una señal canónica o
 ## Límites
 
 No se probó en teléfono real ni en Windows; no se afirma rendimiento ni balance. No se probaron 2 estrellas con captura (sí con test: 1 y 2 estrellas dan el poste rebelde). Las capturas son a 1280×720, no a 1920×1080 ni en celular simulado. El arte de los postes es el existente. Falta que Lucas elija nueva casilla para los niveles 8 y 9 (o confirme el poste sobre la señal).
+
+## Seguimiento (2026-10-25): sin el ítem de atrás
+
+Lucas vio que los estandartes quedaban encima de otro ítem del mapa. Era así: casi todos los postes están sobre una casilla `X` (no construible), que el motor dibuja con un cactus, roca o hueso del tema (`blocked_decor`), y los niveles 2 a 5 los ponen sobre la columna o las flores de la leyenda. Se eligió **borrar el ítem de atrás, no mover el poste**: `LevelDecor._draw` dibuja solo el suelo en las casillas con poste (`overlay_post_cells()`), así las posiciones aprobadas no cambian. Es solo visual: ningún `data/levels/*.json` ni la grilla jugable cambian (la comparación estructural sigue igual). Las 23 capturas `Capturas/T475-*.png` se regeneraron con el cambio. Los niveles 8 y 9 siguen sin poste. No se probó en celular real ni a 1920×1080.
