@@ -1,5 +1,5 @@
 {
-  "estado": "Muestra conceptual no aprobada; no es arte final ni recurso del juego.",
+  "estado": "Las siete muestras fueron aprobadas por Lucas al mergear el PR #66 el 2026-10-24 y T478 las integra sin cambios.",
   "generador": "image_gen integrado de Codex",
   "fecha": "2026-10-23",
   "base": "origin/main debef6c (merge PR #65)",

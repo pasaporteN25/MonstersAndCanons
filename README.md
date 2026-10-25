@@ -384,8 +384,8 @@ Mapa planetario inicial en PC y celular, tarjetas como alternativa y migración 
 
 Asedio se abrirá mapa por mapa al ganar el mismo nivel de campaña, conservando el acceso de guardados que ya lo jugaron; pruebas abre todo en su guardado separado. T473 absorbe las solapas/récords pendientes de T235. Se quitarán ceros iniciales de los números visibles sin renombrar ids. Ver M76 en la spec y fichas T469–T475; las partidas T453, el teléfono T454 y G5 siguen pendientes de Lucas.
 
-### M77 · Franjas temáticas y carga con ilustraciones (T460; spec pendiente de aprobación/código)
+### M77 · Franjas temáticas y carga con ilustraciones (T460; spec aprobada)
 
-Las franjas de pantalla completa se rellenarán con un fondo del terreno, fijo respecto al zoom y recortado en ejecución. Se propone conservar mapa/HUD en su marco lógico 1280×720, sin agrandar la zona jugable ni superar zoom 1,0. La composición de cada terreno espera muestra y aprobación de Lucas.
+T478 integra en esta rama los siete fondos aprobados del PR #66. Las franjas externas y los márgenes internos usan el tema resuelto del nivel; la imagen queda fija respecto al zoom y se recorta en ejecución. Mapa/HUD siguen en el marco lógico 1280×720 y el zoom máximo es 1,0. Menús y niveles sin recurso conservan el respaldo liso.
 
-Los fondos rotativos de carga usarán láminas de intro, **condicionados a agregar al informe T454 una medición del costo en celular real y al OK de Lucas con esos datos**. Se conserva respaldo liso, bloqueo de entrada y mínimo de 0,4 s; una imagen lenta no deberá retrasar la escena. Ver M77 y fichas T476–479. Aún no está implementado ni probado en teléfono.
+Los fondos rotativos de carga usarán láminas de intro, **condicionados a agregar al informe T454 una medición del costo en celular real y al OK de Lucas con esos datos**. Se conserva respaldo liso, bloqueo de entrada y mínimo de 0,4 s; una imagen lenta no deberá retrasar la escena. Ver M77 y fichas T476–479. Esta integración de franjas todavía no está probada en un teléfono real.
