@@ -1,6 +1,6 @@
 # T492 · 🎨 Muestras de la piedra con la A
 
-- **Ejecutor:** Sonnet · muestras (propuestas, no arte final). **No Codex.**
+- **Ejecutor:** Codex (`gpt-6.1-sol`, esfuerzo medio) · muestras (propuestas, no arte final); Sonnet o Gemini si hace falta. La elección es de Lucas.
 - **Depende de / compuerta:** 🚦 T490 aprobada por Lucas y T491 hecha. **La elección es de Lucas (T495).**
 - **Refs:** RF-713 (a), RF-714, D-210. **Rama:** `feature/t492-muestras-piedra-a`, desde `origin/main`; un commit `T492: …`, PR a main; Lucas mergea.
 
@@ -25,4 +25,4 @@ Hay 2 o 3 variantes por dibujo, A reconocible a 34 px y la misma en ambos, hoja 
 
 ## Frenar si
 
-Falta T491 o su OK; la muestra exige cambiar el canon o un JSON de nivel; el estilo cae en SVG plano viejo; hace falta otro modelo para el arte (avisar a Lucas, no delegarlo a otro).
+Falta T491 o su OK; la muestra exige cambiar el canon o un JSON de nivel; el estilo cae en SVG plano viejo.

@@ -1,6 +1,6 @@
 # T493 · 🎨 Muestras de los pinos nevados
 
-- **Ejecutor:** Sonnet · muestras (propuestas, no arte final). **No Codex.**
+- **Ejecutor:** Codex (`gpt-6.1-sol`, esfuerzo medio) · muestras (propuestas, no arte final); Sonnet o Gemini si hace falta. La elección es de Lucas.
 - **Depende de / compuerta:** 🚦 T490 aprobada por Lucas y T491 hecha. **La elección es de Lucas (T495).**
 - **Refs:** RF-713 (b), RF-714, D-210. **Rama:** `feature/t493-muestras-pinos-nevados`, desde `origin/main`; un commit `T493: …`, PR a main; Lucas mergea.
 
@@ -25,4 +25,4 @@ Hay variantes de pino, abeto y roca nevada, hoja a 220 y 34 px con los enemigos 
 
 ## Frenar si
 
-Falta T491 o su OK; la muestra exige cambiar el canon o un JSON de nivel; el estilo cae en SVG plano viejo; hace falta otro modelo para el arte (avisar a Lucas, no delegarlo a otro).
+Falta T491 o su OK; la muestra exige cambiar el canon o un JSON de nivel; el estilo cae en SVG plano viejo.

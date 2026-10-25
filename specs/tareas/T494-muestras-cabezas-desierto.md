@@ -1,6 +1,6 @@
 # T494 · 🎨 Muestras de las cabezas del desierto
 
-- **Ejecutor:** Sonnet · muestras (propuestas, no arte final). **No Codex.**
+- **Ejecutor:** Codex (`gpt-6.1-sol`, esfuerzo medio) · muestras (propuestas, no arte final); Sonnet o Gemini si hace falta. La elección es de Lucas.
 - **Depende de / compuerta:** 🚦 T490 aprobada por Lucas y T491 hecha. **La elección es de Lucas (T495).**
 - **Refs:** RF-713 (c), RF-714, D-210. **Rama:** `feature/t494-muestras-cabezas-desierto`, desde `origin/main`; un commit `T494: …`, PR a main; Lucas mergea.
 
@@ -25,4 +25,4 @@ Hay al menos cinco variantes numeradas, hoja a 220 y 34 px junto al cactus y la 
 
 ## Frenar si
 
-Falta T491 o su OK; la muestra exige cambiar el canon o un JSON de nivel; el estilo cae en SVG plano viejo; hace falta otro modelo para el arte (avisar a Lucas, no delegarlo a otro).
+Falta T491 o su OK; la muestra exige cambiar el canon o un JSON de nivel; el estilo cae en SVG plano viejo.
