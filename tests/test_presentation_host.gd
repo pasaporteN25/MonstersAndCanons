@@ -69,3 +69,11 @@ func test_container_forwards_one_click_into_the_content_viewport() -> void:
 	_test_viewport.push_input(release)
 	await wait_process_frames(1)
 	assert_eq(clicks.size(), 1, "el clic entra por el contenedor una sola vez")
+
+
+func test_content_viewport_uses_the_project_texture_filter_and_keeps_logical_size() -> void:
+	var viewport: SubViewport = _host.get_content_viewport()
+	var setting: int = int(ProjectSettings.get_setting("rendering/textures/canvas_textures/default_texture_filter", 1))
+	assert_eq(int(viewport.canvas_item_default_texture_filter), PresentationGeometry.content_texture_filter(setting))
+	assert_eq(viewport.size_2d_override, Vector2i(1280, 720))
+	assert_eq(viewport.oversampling_override, 0.0)
