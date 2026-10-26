@@ -35,10 +35,12 @@ const LOCKED_FILL := Color("#414b4b")
 const TEXT_COLOR := Color("#f5f0df")
 const MUTED_COLOR := Color("#b8bfba")
 const FONT_SIZE: int = 12
-## PROVISIONAL (T488, RF-710): tinte neutro con que se tapa el terreno de una zona sin descubrir. La máscara gris
-## definitiva todavía no la aprobó Lucas (muestra en preparación, `feature/t469-muestra-insignias`); cuando la apruebe,
-## se reemplaza `_draw_hidden_zones` por la máscara del arte y se borra esta constante.
-const HIDDEN_ZONE_TINT_PLACEHOLDER := Color(0.55, 0.57, 0.58, 1.0)
+## T488, RF-710: la máscara gris G2 («relieve desvaído») de cada zona sin descubrir. Son del tamaño del atlas y se dibujan con
+## su misma escala y origen; la zona A siempre está descubierta, así que no tiene.
+const HIDDEN_ZONE_MASKS: Dictionary = {
+	CampaignMap.ZONE_B: preload("res://assets/ui/campaign_hidden_zones/hidden_zone_b.svg"),
+	CampaignMap.ZONE_C: preload("res://assets/ui/campaign_hidden_zones/hidden_zone_c.svg"),
+}
 
 var _entries: Array[Dictionary] = []
 var _states: Array[CampaignMap.State] = []
@@ -375,29 +377,22 @@ func _draw_canvas() -> void:
 	_canvas.draw_string(font, Vector2(14, 22), "ATLAS MERIDIANO · CÁNTARO", HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE, Color("#dfd7bf"))
 
 
-## RF-710: el terreno de las zonas sin descubrir se tapa con un tinte neutro. PROVISIONAL (ver
-## `HIDDEN_ZONE_TINT_PLACEHOLDER`): corta la costa por la línea vertical a mitad de camino entre la última región de una
-## zona y la primera de la siguiente; la máscara aprobada la reemplazará.
+## RF-710: las zonas sin descubrir se tapan con su máscara gris (G2), sin animación y sin ningún elemento encima.
 func _draw_hidden_zones() -> void:
-	var first_hidden: int = -1
-	for i: int in _discovered.size():
-		if not _discovered[i]:
-			first_hidden = i
-			break
-	if first_hidden < 0:
-		return
-	var split_x: float = (CampaignMap.REGION_POINTS[first_hidden - 1].x + CampaignMap.REGION_POINTS[first_hidden].x) / 2.0
-	var east: float = CampaignMap.SEA_ORIGIN.x + CampaignMap.SEA_SIZE.x
-	var south: float = CampaignMap.SEA_ORIGIN.y + CampaignMap.SEA_SIZE.y
-	var cut := PackedVector2Array([Vector2(split_x, CampaignMap.SEA_ORIGIN.y), Vector2(east, CampaignMap.SEA_ORIGIN.y),
-		Vector2(east, south), Vector2(split_x, south)])
-	for piece: PackedVector2Array in Geometry2D.intersect_polygons(CampaignMap.land_polygon(), cut):
-		if Geometry2D.is_polygon_clockwise(piece):
-			continue  # un hueco de la costa (lago): no se tapa
-		var mapped := PackedVector2Array()
-		for point: Vector2 in piece:
-			mapped.append(_map_point(point))
-		_canvas.draw_colored_polygon(mapped, HIDDEN_ZONE_TINT_PLACEHOLDER)
+	var sea := Rect2(_offset, CampaignMap.SEA_SIZE * _scale)
+	for zone: int in hidden_zones():
+		_canvas.draw_texture_rect(HIDDEN_ZONE_MASKS[zone], sea, false)
+
+
+## Las zonas sin descubrir (`CampaignMap.ZONE_B`, `ZONE_C`), de oeste a este, según el progreso recibido en `setup()`.
+func hidden_zones() -> Array[int]:
+	var zones: Array[int] = []
+	var firsts: Dictionary = {CampaignMap.ZONE_B: CampaignMap.ZONE_B_FIRST_REGION, CampaignMap.ZONE_C: CampaignMap.ZONE_C_FIRST_REGION}
+	for zone: int in firsts:
+		var first: int = firsts[zone]
+		if first < _discovered.size() and not _discovered[first]:
+			zones.append(zone)
+	return zones
 
 
 ## El recorrido arranca en el aterrizaje y sigue las curvas del atlas (`CampaignMap.route_polyline`); el tramo ya abierto
