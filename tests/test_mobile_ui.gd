@@ -167,7 +167,7 @@ func test_mobile_placement_buttons_are_compact_and_disable_invalid_placement() -
 	assert_eq(confirm.tooltip_text, "Ahí no")
 	assert_true((mobile_hud.find_child("BottomConfirmPlacement", true, false) as Button).visible)
 	assert_eq((mobile_hud.find_child("MobileUpgrade", true, false) as Button).custom_minimum_size.y, 84.0)
-	assert_eq((mobile_hud.find_child("MobileSell", true, false) as Button).custom_minimum_size.y, 82.0)
+	assert_eq((mobile_hud.find_child("MobileSell", true, false) as Button).custom_minimum_size.y, 84.0)
 
 
 func test_mobile_selected_tower_upgrade_lock_and_protected_sale() -> void:
@@ -199,8 +199,8 @@ func test_mobile_selected_tower_upgrade_lock_and_protected_sale() -> void:
 	var target: Button = game.mobile_hud.find_child("MobileTargeting", true, false) as Button
 	var sell: Button = game.mobile_hud.find_child("MobileSell", true, false) as Button
 	assert_true(status.text.contains(tower.data.display_name))
-	assert_true(status.text.contains("Nivel 1 de"))
-	assert_true(status.text.contains("Daño") and status.text.contains("Cadencia") and status.text.contains("Alcance"))
+	assert_true(status.text.contains("●○○"), "los puntos de nivel (RF-722)")
+	assert_true(status.text.contains("Daño") and status.text.contains("/s") and status.text.contains("Alc."))
 	assert_true(improve.text.contains("Mejorar"))
 	assert_false(improve.disabled)
 	var clear_selection: Button = game.mobile_hud.find_child("BottomCancelPlacement", true, false) as Button
@@ -270,7 +270,7 @@ func test_mobile_selected_tower_upgrade_lock_and_protected_sale() -> void:
 	add_child_autofree(support_tower)
 	await get_tree().process_frame
 	game.mobile_hud.show_selected_tower(support_tower, game.session.gold, 0, 0, false)
-	assert_true(target.disabled, "una torre de apoyo no admite prioridad de apuntado")
+	assert_false(target.visible, "T514 (RF-722): una torre de apoyo no admite prioridad de apuntado y no muestra el botón")
 	SaveManager.set_setting("ui_mode", original_setting)
 
 

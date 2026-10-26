@@ -60,6 +60,12 @@ var _target_positions: Array[Vector2] = [Vector2(-1000.0, -1000.0), Vector2(-100
 var _status_bar: Control
 var _status_label: Label
 var _upgrade_button: Button
+var _upgrade_styles: Array[StyleBoxFlat] = []  # T514: los estilos de «Mejorar» (para dejar o no lugar a la parte de abajo)
+var _upgrade_coin: TextureRect  # T514: la moneda pegada al costo del título de «Mejorar»
+var _tower_name_line: String = ""  # T514: los renglones del texto de la torre elegida («Hielo ●○○», «Aturdida», «Daño 2 · …»)
+var _tower_state_line: String = ""
+var _tower_stats_line: String = ""
+var _upgrade_change: Label  # T514 (RF-722): la parte de abajo de «Mejorar», lo que se compra
 var _target_button: Button
 var _sell_button: Button
 var _status_state: String = "empty"
@@ -91,6 +97,12 @@ const CONFIRM_ICON: Texture2D = preload("res://assets/ui/mobile_confirm.svg")
 const CLOSE_ICON: Texture2D = preload("res://assets/ui/mobile_close.svg")
 const DEMOLISH_ICON: Texture2D = preload("res://assets/ui/mobile_demolish.svg")
 ## T464: lupa de «Ver todo» (aprobada por Lucas el 2026-10-26; muestra en art/t464-muestra-lupa/).
+const GOLD_ICON: Texture2D = preload("res://assets/sprites/ui/stat_gold.svg")
+## T514: la mira de «Apuntar». Provisoria: dibujada con figuras simples (trazo de 1,6 como los íconos de la maqueta)
+## hasta que arte apruebe un ícono; no es un asset del juego.
+const AIM_SVG: String = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="#f0e8d9" stroke-width="1.6" stroke-linecap="round"><circle cx="8" cy="8" r="5"/><path d="M8 1v3M8 12v3M1 8h3M12 8h3"/></svg>'
+const UPGRADE_AFTER_COLOR: Color = Color("bfe699")  # el «después» de la maqueta (--next)
+const UPGRADE_MUTED_COLOR: Color = Color("a39d92")
 const VIEW_ALL_ICON: Texture2D = preload("res://assets/ui/mobile_view_all.svg")
 
 
@@ -135,7 +147,7 @@ func _build_status_bar() -> void:
 	_status_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_status_label.custom_minimum_size.x = float(_config.get_value("barra_texto_min_ancho_px"))
-	_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART  # fuera del estado «torre»; ahí son dos renglones sin partir
 	_status_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_status_label.add_theme_font_size_override("font_size", int(_config.get_value("barra_fuente_px")))
 	_status_label.resized.connect(func() -> void:
@@ -159,7 +171,13 @@ func _build_status_bar() -> void:
 	_target_button = Button.new()
 	_target_button.name = "MobileTargeting"
 	_target_button.custom_minimum_size = Vector2(float(_config.get_value("apuntar_ancho_px")), float(_config.get_value("apuntar_alto_px")))
-	_target_button.add_theme_font_size_override("font_size", int(_config.get_value("accion_fuente_px")))
+	_target_button.add_theme_font_size_override("font_size", int(_config.get_value("apuntar_fuente_px")))
+	_target_button.icon = _aim_texture()
+	_target_button.expand_icon = false
+	_target_button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_target_button.vertical_icon_alignment = VERTICAL_ALIGNMENT_TOP
+	_target_button.clip_text = true
+	_target_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER  # T514: miden su alto (84), no el de la fila
 	_target_button.mouse_filter = Control.MOUSE_FILTER_IGNORE  # un solo dueño del toque: _handle_status_touch (T291)
 	_target_button.pressed.connect(_on_target_pressed)
 	row.add_child(_target_button)
@@ -167,8 +185,10 @@ func _build_status_bar() -> void:
 	_upgrade_button.name = "MobileUpgrade"
 	_upgrade_button.custom_minimum_size = Vector2(float(_config.get_value("mejorar_ancho_px")), float(_config.get_value("mejorar_alto_px")))
 	_upgrade_button.add_theme_font_size_override("font_size", int(_config.get_value("accion_fuente_px")))
+	_upgrade_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER  # T514: miden su alto (84), no el de la fila
 	_upgrade_button.mouse_filter = Control.MOUSE_FILTER_IGNORE  # un solo dueño del toque: _handle_status_touch (T291)
 	_upgrade_button.pressed.connect(_on_upgrade_pressed)
+	_style_upgrade_button()
 	row.add_child(_upgrade_button)
 	_sell_gap = Control.new()
 	_sell_gap.name = "SellSeparation"
@@ -179,14 +199,62 @@ func _build_status_bar() -> void:
 	_sell_button.name = "MobileSell"
 	_sell_button.custom_minimum_size = Vector2(float(_config.get_value("vender_ancho_px")), float(_config.get_value("vender_alto_px")))
 	_sell_button.add_theme_font_size_override("font_size", int(_config.get_value("accion_fuente_px")))
+	_sell_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER  # T514: miden su alto (84), no el de la fila
 	_sell_button.mouse_filter = Control.MOUSE_FILTER_IGNORE  # un solo dueño del toque: _handle_status_touch (T291)
 	_sell_button.pressed.connect(_on_sell_pressed)
 	row.add_child(_sell_button)
 	_set_empty_status()
 
 
+## T514 (RF-722): la mira de «Apuntar» como textura (provisoria, ver `AIM_SVG`).
+func _aim_texture() -> Texture2D:
+	var image := Image.new()
+	if image.load_svg_from_string(AIM_SVG, float(_config.get_value("apuntar_icono_px")) / 16.0) != OK:
+		return null
+	return ImageTexture.create_from_image(image)
+
+
+## T514 (RF-722): «Mejorar» de dos partes. Arriba (el texto del botón) «Mejorar → N2» con el costo y la moneda; abajo,
+## un rótulo hijo con lo que se compra, en el verde del «después». El texto se sube dejando lugar abajo con el margen
+## del estilo, así `_upgrade_button.text` sigue siendo el título (los toques y los estados no cambian).
+func _style_upgrade_button() -> void:
+	var change_h: float = float(_config.get_value("mejorar_cambio_alto_px"))
+	for state: String in ["normal", "hover", "pressed", "hover_pressed", "disabled", "focus"]:
+		var style: StyleBoxFlat = _mobile_theme.get_stylebox(state, "Button").duplicate() as StyleBoxFlat
+		style.content_margin_left = 6.0
+		style.content_margin_right = 6.0
+		style.content_margin_top = 4.0
+		style.content_margin_bottom = change_h + 6.0
+		_upgrade_button.add_theme_stylebox_override(state, style)
+		_upgrade_styles.append(style)
+	var coin_px: float = float(_config.get_value("mejorar_moneda_px"))
+	_upgrade_coin = TextureRect.new()
+	_upgrade_coin.name = "MobileUpgradeCoin"
+	_upgrade_coin.texture = GOLD_ICON
+	_upgrade_coin.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_upgrade_coin.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	_upgrade_coin.custom_minimum_size = Vector2(coin_px, coin_px)
+	_upgrade_coin.size = Vector2(coin_px, coin_px)
+	_upgrade_coin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_upgrade_button.add_child(_upgrade_coin)
+	_upgrade_change = Label.new()
+	_upgrade_change.name = "MobileUpgradeChange"
+	_upgrade_change.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_upgrade_change.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_upgrade_change.clip_text = true
+	_upgrade_change.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_upgrade_change.anchor_left = 0.0
+	_upgrade_change.anchor_right = 1.0
+	_upgrade_change.anchor_top = 1.0
+	_upgrade_change.anchor_bottom = 1.0
+	_upgrade_change.offset_left = 6.0
+	_upgrade_change.offset_right = -6.0
+	_upgrade_change.offset_bottom = -8.0
+	_upgrade_change.offset_top = -8.0 - change_h
+	_upgrade_button.add_child(_upgrade_change)
+
+
 ## M68 (RF-610): con la partida en pausa no se construye; la línea de abajo lo dice.
-const UPGRADE_PREVIEW_PREFIX: String = "Al mejorar:"
 const EMPTY_TEXT: String = "Tocá el carrito para elegir una torre"
 const PAUSED_TEXT: String = "En pausa: seguí la partida para construir"
 
@@ -251,38 +319,39 @@ func show_selected_tower(tower: Tower, gold: int, sell_value: int, resource_valu
 	_selected_sell_value = sell_value
 	_selected_resource_value = resource_value
 	_status_state = "tower"
-	var level_text: String = "Nivel %d de %d" % [tower.level_number(), tower.data.levels.size()]
 	var dots: String = "●".repeat(tower.level_number()) + "○".repeat(maxi(0, tower.data.levels.size() - tower.level_number()))
-	var state_text: String = ""
+	_tower_state_line = ""
 	if tower.stun_left() > 0.0:
-		state_text = "  ·  Aturdida"
+		_tower_state_line = "Aturdida"
 	elif tower.wear_percent > 0:
-		state_text = "  ·  Desgaste %d%%" % tower.wear_percent
+		_tower_state_line = "Desgaste %d %%" % tower.wear_percent
 	var stats: TowerLevelData = tower.stats()
-	# T511: nombre y nivel comparten renglón; cadencia y alcance usan el formato decimal compartido (RF-677.4).
-	_status_label.text = "%s%s  ·  %s %s\nDaño %d  ·  Cadencia %s  ·  Alcance %s" % [
-		tower.data.display_name, state_text, level_text, dots, stats.damage,
-		TowerText.decimal(tower.effective_fire_rate()), TowerText.decimal(stats.range_tiles)]
-	var preview: String = _upgrade_preview_text(tower)
-	if preview != "":
-		_status_label.text += "\n" + preview
+	# T514 (RF-722): dos renglones cortos. Arriba el nombre con los puntos de nivel (y el estado de la torre);
+	# abajo el estado actual abreviado, con la coma decimal y el alcance con su decimal (`TowerText`, como la PC).
+	_tower_name_line = "%s %s" % [tower.data.display_name, dots]
+	_tower_stats_line = TowerText.bar_state(stats.damage, tower.effective_fire_rate(), stats.range_tiles, tower.data.support_only)
+	_status_label.text = _tower_text(true)
 	_status_label.visible = true
 	_fit_status_font()
-	_target_button.show()
 	_bottom_cancel.show()
-	_target_button.text = "Apuntar: %s" % tower.targeting_name()
-	_target_button.disabled = tower.data.support_only or tower.is_pulse_tower()
+	# RF-722: «Apuntar» es un ícono con el modo y no se agrega si la torre no apunta (apoyo, pulso).
+	_target_button.visible = not (tower.data.support_only or tower.is_pulse_tower())
+	_target_button.text = tower.targeting_name()
+	_target_button.tooltip_text = "Apuntar: %s" % tower.targeting_name()
+	_target_button.disabled = false
 	_upgrade_button.show()
 	if _upgrade_lock_left > 0.0:
-		_upgrade_button.text = _upgrade_level_text
+		_set_upgrade_texts(_upgrade_level_text, "", false)
 		_upgrade_button.disabled = true
 	elif not tower.can_upgrade():
 		clear_upgrade_arm()
-		_upgrade_button.text = "Nivel máximo"
+		_set_upgrade_texts("Nivel máximo", "", false)
 		_upgrade_button.disabled = true
 	elif not can_upgrade:
 		clear_upgrade_arm()  # RF-681: si falta oro, se cancela
-		_upgrade_button.text = disabled_reason if disabled_reason != "" else "Faltan %d de oro" % maxi(0, tower.next_level_stats().cost - gold)
+		var missing: String = disabled_reason if disabled_reason != "" else "Faltan %d de oro" % maxi(0, tower.next_level_stats().cost - gold)
+		_set_upgrade_texts(missing, _upgrade_change_text(tower), false)
+		_upgrade_change.add_theme_color_override("font_color", UPGRADE_MUTED_COLOR)
 		_upgrade_button.disabled = true
 	else:
 		if _upgrade_armed and _armed_tower_level != tower.level_index:
@@ -299,51 +368,103 @@ func show_selected_tower(tower: Tower, gold: int, sell_value: int, resource_valu
 	_refresh_sell_button(sell_value, resource_value)
 
 
-## T511: la barra mide `barra_baja_px`. Si el texto de la torre elegida no entra en ese alto, baja la letra de a un
-## punto (hasta `barra_fuente_min_px`) en lugar de empujar los botones fuera de la pantalla. Fuera del estado
-## «torre» vuelve a la letra normal.
+## T514 (RF-722): en el estado «torre» el texto son dos renglones que no se parten (cada uno entra en una línea). Si el
+## más ancho no entra en el lugar que dejan los botones, la letra baja de a un punto desde `barra_torre_fuente_px`
+## hasta `barra_torre_fuente_min_px`; no se corta nada (`clip_text` solo es la red de seguridad). Fuera del estado
+## «torre» vuelve la letra normal y el texto que se parte en renglones.
 func _fit_status_font() -> void:
-	var size_px: int = int(_config.get_value("barra_fuente_px"))
-	_status_label.add_theme_font_size_override("font_size", size_px)
 	if _status_state != "tower":
+		_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		_status_label.clip_text = false
+		_status_label.add_theme_font_size_override("font_size", int(_config.get_value("barra_fuente_px")))
 		return
-	var available_h: float = float(_config.get_value("barra_baja_px")) - float(_config.get_value("barra_margen_y_px")) * 2.0
-	var min_px: int = int(_config.get_value("barra_fuente_min_px"))
-	var width: float = maxf(_status_label.size.x, _status_label.custom_minimum_size.x)
+	_status_label.autowrap_mode = TextServer.AUTOWRAP_OFF
+	_status_label.clip_text = true
+	var size_px: int = int(_config.get_value("barra_torre_fuente_px"))
+	var min_px: int = int(_config.get_value("barra_torre_fuente_min_px"))
 	var font: Font = _status_label.get_theme_font("font")
-	var spacing: float = float(_status_label.get_theme_constant("line_spacing"))
-	while size_px > min_px:
-		var line_h: float = font.get_height(size_px)
-		var lines: int = 0
-		for paragraph: String in _status_label.text.split("\n"):
-			var wrapped: float = font.get_multiline_string_size(paragraph, HORIZONTAL_ALIGNMENT_LEFT, width, size_px).y
-			lines += maxi(1, roundi(wrapped / line_h))
-		if float(lines) * (line_h + spacing) <= available_h:
-			break
+	var merged: String = _tower_text(true)
+	var split: String = _tower_text(false)
+	var width: float = _status_label.size.x
+	# 1.º el estado (aturdida, desgaste) va en el renglón del nombre; si ni a la letra mínima entra, pasa a un renglón
+	# propio (tres renglones cortos, que caben en los 92 px de la fila) antes que cortarse.
+	var text: String = merged
+	if widest_line(font, merged, min_px) > width:
+		text = split
+	var available_h: float = float(_config.get_value("barra_baja_px")) - float(_config.get_value("barra_margen_y_px")) * 2.0
+	while size_px > min_px and (widest_line(font, text, size_px) > width \
+			or float(text.count("\n") + 1) * font.get_height(size_px) > available_h):
 		size_px -= 1
+	_status_label.text = text
 	_status_label.add_theme_font_size_override("font_size", size_px)
 
 
-## M68 (RF-617): «Al mejorar: daño 5 → 8 · alcance 3 → 3,5». Los números salen de los dos niveles de la torre y la
-## tabla de `data/ui/mejoras.json` (la misma de las animaciones de mejora). Vacío en el nivel máximo.
-func _upgrade_preview_text(tower: Tower) -> String:
+## El texto de la torre elegida: nombre (con el estado, si `merged`), y el estado actual abreviado.
+func _tower_text(merged: bool) -> String:
+	if _tower_state_line == "":
+		return "%s\n%s" % [_tower_name_line, _tower_stats_line]
+	if merged:
+		return "%s · %s\n%s" % [_tower_name_line, _tower_state_line, _tower_stats_line]
+	return "%s\n%s\n%s" % [_tower_name_line, _tower_state_line, _tower_stats_line]
+
+
+## El ancho en px del renglón más ancho de `text` con la letra `font` a `size_px`.
+static func widest_line(font: Font, text: String, size_px: int) -> float:
+	var widest: float = 0.0
+	for line: String in text.split("\n"):
+		widest = maxf(widest, font.get_string_size(line, HORIZONTAL_ALIGNMENT_LEFT, -1, size_px).x)
+	return widest
+
+
+## T514 (RF-722, RF-617 enmendado): lo que se compra con «Mejorar», hasta 2 estadísticas («alcance 2,5 → 3 · …»), para
+## la parte de abajo del botón. Los números salen de los dos niveles de la torre y de la tabla de
+## `data/ui/mejoras.json` (RF-618: un solo origen, el mismo de las animaciones de mejora), con la coma decimal de
+## `TowerText.decimal`. Vacío en el nivel máximo.
+func _upgrade_change_text(tower: Tower) -> String:
 	if _upgrade_fx_config == null:
 		_upgrade_fx_config = UpgradeFxConfig.load_from()
 	var changes: Array[Dictionary] = UpgradeDeltas.preview(tower.data.levels, tower.level_index, _upgrade_fx_config.stats,
-			int(_upgrade_fx_config.get_number("max_por_renglon")))
+			int(_config.get_value("mejorar_cambio_max")))
 	if changes.is_empty():
 		return ""
-	return "%s %s" % [UPGRADE_PREVIEW_PREFIX, UpgradeDeltas.SEPARATOR.join(UpgradeDeltas.rows(changes, changes.size()))]
+	return UpgradeDeltas.SEPARATOR.join(UpgradeDeltas.rows(changes, changes.size()))
+
+
+## Escribe las dos partes de «Mejorar»: el título (con la moneda si lleva costo) y lo que se compra. La letra de la
+## parte de abajo baja de a un punto si no entra en el ancho del botón.
+func _set_upgrade_texts(title: String, change: String, with_cost: bool) -> void:
+	_upgrade_button.text = title
+	# sin parte de abajo («Nivel máximo», «¡Nivel 2!») el título se centra en todo el botón
+	var title_height: float = float(_config.get_value("mejorar_alto_px")) - (float(_config.get_value("mejorar_cambio_alto_px")) + 6.0 if change != "" else 4.0)
+	for style: StyleBoxFlat in _upgrade_styles:
+		style.content_margin_bottom = float(_config.get_value("mejorar_alto_px")) - title_height
+	_upgrade_coin.visible = with_cost
+	if with_cost:
+		# la moneda va justo después del costo: el título está centrado en la parte de arriba del botón
+		var title_font: Font = _upgrade_button.get_theme_font("font")
+		var title_w: float = title_font.get_string_size(title, HORIZONTAL_ALIGNMENT_LEFT, -1, int(_config.get_value("accion_fuente_px"))).x
+		_upgrade_coin.position = Vector2((float(_config.get_value("mejorar_ancho_px")) + title_w) / 2.0 + 6.0,
+				(4.0 + title_height) / 2.0 - _upgrade_coin.size.y / 2.0)
+	_upgrade_change.text = change
+	_upgrade_change.visible = change != ""
+	_upgrade_change.add_theme_color_override("font_color", UPGRADE_AFTER_COLOR)
+	var size_px: int = int(_config.get_value("mejorar_cambio_fuente_px"))
+	var font: Font = _upgrade_change.get_theme_font("font")
+	var width: float = float(_config.get_value("mejorar_ancho_px")) - 12.0
+	while size_px > 12 and widest_line(font, change, size_px) > width:
+		size_px -= 1
+	_upgrade_change.add_theme_font_size_override("font_size", size_px)
 
 
 ## RF-681: el texto de «Mejorar» activo. Armado, pide confirmar y conserva el costo a la vista.
 func _refresh_upgrade_button(tower: Tower) -> void:
 	var cost: int = tower.next_level_stats().cost
+	var change: String = _upgrade_change_text(tower)
 	if _upgrade_armed:
-		_upgrade_button.text = "Confirmar → N%d\n%d de oro" % [tower.level_number() + 1, cost]
+		_set_upgrade_texts("Tocá para confirmar  %d" % cost, change, true)
 		_upgrade_button.add_theme_color_override("font_color", Color(1.0, 0.8, 0.25))
 	else:
-		_upgrade_button.text = "Mejorar → N%d\n%d de oro" % [tower.level_number() + 1, cost]
+		_set_upgrade_texts("Mejorar → N%d  %d" % [tower.level_number() + 1, cost], change, true)
 		_upgrade_button.remove_theme_color_override("font_color")
 
 
@@ -388,7 +509,8 @@ func _refresh_sell_button(sell_value: int, resource_value: int = 0) -> void:
 		_sell_button.add_theme_color_override("font_color", Color(1.0, 0.8, 0.25))
 		_sell_button.add_theme_stylebox_override("normal", _double_border_style())
 	else:
-		_sell_button.text = "Vender"
+		# RF-722: lo que devuelve va abajo, corto («+70» o «+210 +2» si también devuelve recursos).
+		_sell_button.text = "Vender\n+%d%s" % [sell_value, " +%d" % resource_value if resource_value > 0 else ""]
 		_sell_button.remove_theme_color_override("font_color")
 		_sell_button.remove_theme_stylebox_override("normal")
 

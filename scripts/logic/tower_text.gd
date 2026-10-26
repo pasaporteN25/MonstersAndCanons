@@ -59,6 +59,14 @@ static func _change(level: TowerLevelData, next: TowerLevelData, field: String, 
 	return before if before == after else "%s %s %s" % [before, UpgradeDeltas.ARROW, after]
 
 
+## T514 (RF-722): el estado actual abreviado de la barra del celular, «Daño 5 · 0,6/s · Alc. 3». Una torre de apoyo
+## no tiene daño ni cadencia propios: solo «Alc. 2,5». Coma decimal y alcance con su decimal, el mismo `decimal` de la PC.
+static func bar_state(damage: int, fire_rate: float, range_tiles: float, support_only: bool) -> String:
+	if support_only:
+		return "Alc. %s" % decimal(range_tiles)
+	return "Daño %d · %s/s · Alc. %s" % [damage, decimal(fire_rate), decimal(range_tiles)]
+
+
 ## RF-450: el pulso de la Disruptora, armado con los números del nivel (RF-164):
 ## "Pulso cada 4 s · radio 2,5 · apaga las auras 2,5 s · 5 de daño". Con `emitters` (los nombres de los
 ## enemigos con aura, en plural) suma "Apaga el aura de Guardianes y Curanderos." Vacío si no es de pulso.
