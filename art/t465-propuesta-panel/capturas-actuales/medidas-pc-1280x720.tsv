@@ -1,0 +1,115 @@
+caso	bloque	y_logico	alto_logico	ancho_logico	alto_pantalla	nota
+cannon-n1	PANEL	260	320	270	320	
+cannon-n1	TitleRow	12	34	242	34	Cañón
+cannon-n1	Metrics	52	39	242	39	20 → 32 | 0,6/s | 3
+cannon-n1	Divider	97	4	242	4	
+cannon-n1	Details	107	60	242	60	contenido 47 px · entra (sobra 13 px) · +25 % de daño a ralentizados | Voladores: no
+cannon-n1	TargetingButton	173	32	242	32	Apuntar: Primero
+cannon-n1	UpgradePreview	211	18	242	18	área 1 → 1,2
+cannon-n1	UpgradeButton	235	34	242	34	Mejorar a nivel 2 (110)  [U]
+cannon-n1	SellButton	275	32	242	32	Vender (+70)  [S]
+cannon-n2	PANEL	260	320	270	320	
+cannon-n2	TitleRow	12	34	242	34	Cañón
+cannon-n2	Metrics	52	39	242	39	32 → 50 | 0,6/s | 3 → 3,5
+cannon-n2	Divider	97	4	242	4	
+cannon-n2	Details	107	60	242	60	contenido 47 px · entra (sobra 13 px) · +25 % de daño a ralentizados | Voladores: no
+cannon-n2	TargetingButton	173	32	242	32	Apuntar: Primero
+cannon-n2	UpgradePreview	211	18	242	18	área 1,2 → 1,5
+cannon-n2	UpgradeButton	235	34	242	34	Mejorar a nivel 3 (170)  [U]
+cannon-n2	SellButton	275	32	242	32	Vender (+147)  [S]
+cannon-n3	PANEL	260	320	270	320	
+cannon-n3	TitleRow	12	34	242	34	Cañón
+cannon-n3	Metrics	52	39	242	39	50 | 0,6/s | 3,5
+cannon-n3	Divider	97	4	242	4	
+cannon-n3	Details	107	84	242	84	contenido 70 px · entra (sobra 14 px) · Área: radio 1,5 ⏎ +25 % de daño a ralentizados | Voladores: no
+cannon-n3	TargetingButton	197	32	242	32	Apuntar: Primero
+cannon-n3	UpgradeButton	235	34	242	34	Nivel máximo (apagado)
+cannon-n3	SellButton	275	32	242	32	Vender (+266)  [S]
+tesla-n1	PANEL	260	320	270	320	
+tesla-n1	TitleRow	12	34	242	34	Eléctrica
+tesla-n1	Metrics	52	39	242	39	13 → 19 | 0,75 → 0,85/s | 2,5
+tesla-n1	Divider	97	4	242	4	
+tesla-n1	Details	107	60	242	60	contenido 47 px · entra (sobra 13 px) · +30 % de daño a quemados | Voladores: sí
+tesla-n1	TargetingButton	173	32	242	32	Apuntar: Primero
+tesla-n1	UpgradePreview	211	18	242	18	saltos 2 → 3
+tesla-n1	UpgradeButton	235	34	242	34	Mejorar a nivel 2 (120)  [U]
+tesla-n1	SellButton	275	32	242	32	Vender (+91)  [S]
+tesla-n2	PANEL	260	320	270	320	
+tesla-n2	TitleRow	12	34	242	34	Eléctrica
+tesla-n2	Metrics	52	39	242	39	19 → 27 | 0,85 → 0,95/s | 2,5 → 3
+tesla-n2	Divider	97	4	242	4	
+tesla-n2	Details	107	60	242	60	contenido 47 px · entra (sobra 13 px) · +30 % de daño a quemados | Voladores: sí
+tesla-n2	TargetingButton	173	32	242	32	Apuntar: Primero
+tesla-n2	UpgradePreview	211	18	242	18	saltos 3 → 4
+tesla-n2	UpgradeButton	235	34	242	34	Mejorar a nivel 3 (180)  [U]
+tesla-n2	SellButton	275	32	242	32	Vender (+175)  [S]
+frost-n1	PANEL	260	320	270	320	
+frost-n1	TitleRow	12	34	242	34	Hielo
+frost-n1	Metrics	52	39	242	39	2 | 1/s | 2,5 → 3
+frost-n1	Divider	97	4	242	4	
+frost-n1	Details	107	60	242	60	contenido 93 px · NECESITA SCROLL · Combo: Cañón y Francotirador +25 % a los que frena ⏎ Duración del frenado: 2 s | Voladores: sí
+frost-n1	TargetingButton	173	32	242	32	Apuntar: Primero
+frost-n1	UpgradePreview	211	18	242	18	frenado 40 % → 50 %
+frost-n1	UpgradeButton	235	34	242	34	Mejorar a nivel 2 (80)  [U]
+frost-n1	SellButton	275	32	242	32	Vender (+52)  [S]
+frost-n2	PANEL	260	320	270	320	
+frost-n2	TitleRow	12	34	242	34	Hielo
+frost-n2	Metrics	52	39	242	39	2 → 4 | 1/s | 3
+frost-n2	Divider	97	4	242	4	
+frost-n2	Details	107	39	242	39	contenido 70 px · NECESITA SCROLL · Combo: Cañón y Francotirador +25 % a los que frena | Voladores: sí
+frost-n2	TargetingButton	152	32	242	32	Apuntar: Primero
+frost-n2	UpgradePreview	190	39	242	39	frenado 50 % → 60 % · s de frenado 2 → 3
+frost-n2	UpgradeButton	235	34	242	34	Mejorar a nivel 3 (120)  [U]
+frost-n2	SellButton	275	32	242	32	Vender (+108)  [S]
+frost-n3	PANEL	260	320	270	320	
+frost-n3	TitleRow	12	34	242	34	Hielo
+frost-n3	Metrics	52	39	242	39	4 | 1/s | 3
+frost-n3	Divider	97	4	242	4	
+frost-n3	Details	107	84	242	84	contenido 93 px · NECESITA SCROLL · Ralentiza 60 % durante 3 s ⏎ Combo: Cañón y Francotirador +25 % a los que frena | Voladores: sí
+frost-n3	TargetingButton	197	32	242	32	Apuntar: Primero
+frost-n3	UpgradeButton	235	34	242	34	Nivel máximo (apagado)
+frost-n3	SellButton	275	32	242	32	Vender (+192)  [S]
+disruptor-n1	PANEL	260	320	270	320	
+disruptor-n1	TitleRow	12	34	242	34	Disruptora
+disruptor-n1	Metrics	52	39	242	39	5 | 0,25/s | 2,5 → 3
+disruptor-n1	Divider	97	4	242	4	
+disruptor-n1	Details	107	60	242	60	contenido 47 px · entra (sobra 13 px) · Recursos invertidos: 2 | Voladores: sí
+disruptor-n1	TargetingButton	173	32	242	32	Apuntar: Primero (apagado)
+disruptor-n1	UpgradePreview	211	18	242	18	s de pulso 2,5 → 3
+disruptor-n1	UpgradeButton	235	34	242	34	Mejorar a nivel 2 (100)  [U]
+disruptor-n1	SellButton	275	32	242	32	Vender (+91 y 1 recurso)  [S]
+fire-n1	PANEL	260	320	270	320	
+fire-n1	TitleRow	12	34	242	34	Incendiaria
+fire-n1	Metrics	52	39	242	39	5 → 7 | 1/s | 2,5
+fire-n1	Divider	97	4	242	4	
+fire-n1	Details	107	60	242	60	contenido 93 px · NECESITA SCROLL · Combo: Eléctrica +30 % a los que quema ⏎ Duración de quemadura: 3 s | Voladores: sí
+fire-n1	TargetingButton	173	32	242	32	Apuntar: Primero
+fire-n1	UpgradePreview	211	18	242	18	quemadura/s 8 → 12
+fire-n1	UpgradeButton	235	34	242	34	Mejorar a nivel 2 (90)  [U]
+fire-n1	SellButton	275	32	242	32	Vender (+63)  [S]
+mortar-n2	PANEL	260	320	270	320	
+mortar-n2	TitleRow	12	34	242	34	Mortero
+mortar-n2	Metrics	52	39	242	39	140 → 220 | 0,25/s | 5 → 5,5
+mortar-n2	Divider	97	4	242	4	
+mortar-n2	Details	107	60	242	60	contenido 70 px · NECESITA SCROLL · +25 % de daño a ralentizados ⏎ Recursos invertidos: 3 | Voladores: no
+mortar-n2	TargetingButton	173	32	242	32	Apuntar: Primero
+mortar-n2	UpgradePreview	211	18	242	18	área 1,8 → 2,2
+mortar-n2	UpgradeButton	235	34	242	34	Mejorar a nivel 3 (350)  [U]
+mortar-n2	SellButton	275	32	242	32	Vender (+385 y 2 recursos)  [S]
+basic-n1-sin-oro	PANEL	260	320	270	320	
+basic-n1-sin-oro	TitleRow	12	34	242	34	Ametralladora
+basic-n1-sin-oro	Metrics	52	39	242	39	5 → 8 | 2 → 2,5/s | 3
+basic-n1-sin-oro	Divider	97	4	242	4	
+basic-n1-sin-oro	Details	107	84	242	84	contenido 20 px · entra (sobra 64 px) · Voladores: sí
+basic-n1-sin-oro	TargetingButton	197	32	242	32	Apuntar: Primero
+basic-n1-sin-oro	UpgradeButton	235	34	242	34	Mejorar a nivel 2 (60)  [U] (apagado)
+basic-n1-sin-oro	SellButton	275	32	242	32	Vender (+35)  [S]
+mechanical_standard-n1	PANEL	260	320	270	320	
+mechanical_standard-n1	TitleRow	12	55	242	55	Estandarte mecánico
+mechanical_standard-n1	Metrics	73	39	242	39	0 | Apoyo | 2 → 2,5
+mechanical_standard-n1	Divider	118	4	242	4	
+mechanical_standard-n1	Details	128	18	242	18	contenido 20 px · NECESITA SCROLL · Voladores: no
+mechanical_standard-n1	TargetingButton	152	32	242	32	Apuntar: Primero (apagado)
+mechanical_standard-n1	UpgradePreview	190	39	242	39	apoyo 10 % → 15 % · reparación/s 2 → 3
+mechanical_standard-n1	UpgradeButton	235	34	242	34	Mejorar a nivel 2 (100)  [U]
+mechanical_standard-n1	SellButton	275	32	242	32	Vender (+84)  [S]
