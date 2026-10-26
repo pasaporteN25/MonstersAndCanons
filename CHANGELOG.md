@@ -1,5 +1,9 @@
 # Novedades del juego
 
+## La barra de la torre en el celular entra en la pantalla *(T511, 2026-10-26; en revisión)*
+
+Al elegir una torre en el modo celular, la barra de abajo se salía de la pantalla y cortaba el renglón «Al mejorar». Ahora entra entera (nombre y nivel comparten renglón y la letra se ajusta si hace falta). Además, la cadencia y el alcance se escriben con coma y con el valor real: el Hielo y la Eléctrica de nivel 1 dicen «Alcance 2,5» (antes «2») y «Cadencia 0,75» en lugar de «0.75». Los botones no cambiaron de lugar.
+
 ## Los niveles 12 y 13 del mapa ya no se pisan *(T502, 2026-10-26; en revisión)*
 
 En el mapa de campaña, el nivel 13 (Paso alto) quedó un poco más al este y el mapa se dibuja algo más grande. Así, el aro de selección y el de foco del nivel 12 ya no tapan la insignia del 13 (ni los de ningún otro par). Como el mapa es más ancho, hay que desplazarlo un poco más para llegar al extremo este. Los nombres de los niveles 10 a 13 todavía se montan un poco entre sí; eso queda para decidir.

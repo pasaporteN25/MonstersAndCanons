@@ -46,6 +46,7 @@ const DEFAULTS: Dictionary = {
 	"catalogo_tarjeta_fuente_px": 15,
 	"catalogo_icono_ancho_px": 68,
 	"barra_fuente_px": 16,
+	"barra_fuente_min_px": 12,
 	"accion_fuente_px": 17,
 	"apuntar_ancho_px": 172,
 	"apuntar_alto_px": 88,
