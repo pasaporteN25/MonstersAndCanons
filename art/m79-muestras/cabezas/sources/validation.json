@@ -1,0 +1,89 @@
+{
+  "variantes": [
+    {
+      "archivo": "01_four_horns.png",
+      "bytes": 15140,
+      "modo": "RGBA",
+      "tamaño": [
+        128,
+        128
+      ],
+      "caja_alfa": [
+        11,
+        16,
+        116,
+        110
+      ],
+      "montaje_sin_cambios_fuera_de_26_casillas": true
+    },
+    {
+      "archivo": "02_open_jaw.png",
+      "bytes": 15541,
+      "modo": "RGBA",
+      "tamaño": [
+        128,
+        128
+      ],
+      "caja_alfa": [
+        11,
+        21,
+        116,
+        110
+      ],
+      "montaje_sin_cambios_fuera_de_26_casillas": true
+    },
+    {
+      "archivo": "03_single_socket.png",
+      "bytes": 11876,
+      "modo": "RGBA",
+      "tamaño": [
+        128,
+        128
+      ],
+      "caja_alfa": [
+        18,
+        29,
+        116,
+        110
+      ],
+      "montaje_sin_cambios_fuera_de_26_casillas": true
+    },
+    {
+      "archivo": "04_insect_mandibles.png",
+      "bytes": 13675,
+      "modo": "RGBA",
+      "tamaño": [
+        128,
+        128
+      ],
+      "caja_alfa": [
+        18,
+        26,
+        116,
+        110
+      ],
+      "montaje_sin_cambios_fuera_de_26_casillas": true
+    },
+    {
+      "archivo": "05_cattle_baseline.png",
+      "bytes": 13661,
+      "modo": "RGBA",
+      "tamaño": [
+        128,
+        128
+      ],
+      "caja_alfa": [
+        8,
+        20,
+        116,
+        110
+      ],
+      "montaje_sin_cambios_fuera_de_26_casillas": true
+    }
+  ],
+  "casillas_unicas": 26,
+  "todas_las_casillas_son_X": true,
+  "motor_ejecutado": false,
+  "telefono_real": false,
+  "rendimiento_medido": false
+}

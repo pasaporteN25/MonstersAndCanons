@@ -1,0 +1,2768 @@
+{
+  "1": [
+    {
+      "cell": [
+        24,
+        0
+      ],
+      "piece": "snow_rock",
+      "variant": 1
+    },
+    {
+      "cell": [
+        25,
+        0
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        0,
+        1
+      ],
+      "piece": "fir",
+      "variant": 1
+    },
+    {
+      "cell": [
+        2,
+        1
+      ],
+      "piece": "snow_rock",
+      "variant": 1
+    },
+    {
+      "cell": [
+        3,
+        1
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        6,
+        1
+      ],
+      "piece": "snow_rock",
+      "variant": 1
+    },
+    {
+      "cell": [
+        8,
+        1
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        9,
+        1
+      ],
+      "piece": "fir",
+      "variant": 1
+    },
+    {
+      "cell": [
+        11,
+        1
+      ],
+      "piece": "fir",
+      "variant": 1
+    },
+    {
+      "cell": [
+        14,
+        1
+      ],
+      "piece": "snow_rock",
+      "variant": 1
+    },
+    {
+      "cell": [
+        15,
+        1
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        16,
+        1
+      ],
+      "piece": "snow_rock",
+      "variant": 1
+    },
+    {
+      "cell": [
+        18,
+        1
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        19,
+        1
+      ],
+      "piece": "snow_rock",
+      "variant": 1
+    },
+    {
+      "cell": [
+        21,
+        1
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        23,
+        1
+      ],
+      "piece": "fir",
+      "variant": 1
+    },
+    {
+      "cell": [
+        25,
+        1
+      ],
+      "piece": "fir",
+      "variant": 1
+    },
+    {
+      "cell": [
+        0,
+        2
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        2,
+        2
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        3,
+        2
+      ],
+      "piece": "snow_rock",
+      "variant": 1
+    },
+    {
+      "cell": [
+        7,
+        2
+      ],
+      "piece": "snow_rock",
+      "variant": 1
+    },
+    {
+      "cell": [
+        10,
+        2
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        11,
+        2
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        14,
+        2
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        15,
+        2
+      ],
+      "piece": "snow_rock",
+      "variant": 1
+    },
+    {
+      "cell": [
+        17,
+        2
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        18,
+        2
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        19,
+        2
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        21,
+        2
+      ],
+      "piece": "snow_rock",
+      "variant": 1
+    },
+    {
+      "cell": [
+        25,
+        2
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        0,
+        3
+      ],
+      "piece": "snow_rock",
+      "variant": 1
+    },
+    {
+      "cell": [
+        24,
+        3
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        25,
+        3
+      ],
+      "piece": "snow_rock",
+      "variant": 1
+    },
+    {
+      "cell": [
+        1,
+        4
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        3,
+        4
+      ],
+      "piece": "snow_rock",
+      "variant": 1
+    },
+    {
+      "cell": [
+        4,
+        4
+      ],
+      "piece": "snow_rock",
+      "variant": 1
+    },
+    {
+      "cell": [
+        7,
+        4
+      ],
+      "piece": "snow_rock",
+      "variant": 1
+    },
+    {
+      "cell": [
+        8,
+        4
+      ],
+      "piece": "snow_rock",
+      "variant": 1
+    },
+    {
+      "cell": [
+        12,
+        4
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        13,
+        4
+      ],
+      "piece": "snow_rock",
+      "variant": 1
+    },
+    {
+      "cell": [
+        14,
+        4
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        18,
+        4
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        19,
+        4
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        20,
+        4
+      ],
+      "piece": "fir",
+      "variant": 1
+    },
+    {
+      "cell": [
+        22,
+        4
+      ],
+      "piece": "snow_rock",
+      "variant": 1
+    },
+    {
+      "cell": [
+        23,
+        4
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        25,
+        4
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        0,
+        5
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        1,
+        5
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        4,
+        5
+      ],
+      "piece": "snow_rock",
+      "variant": 1
+    },
+    {
+      "cell": [
+        7,
+        5
+      ],
+      "piece": "fir",
+      "variant": 1
+    },
+    {
+      "cell": [
+        8,
+        5
+      ],
+      "piece": "fir",
+      "variant": 1
+    },
+    {
+      "cell": [
+        10,
+        5
+      ],
+      "piece": "fir",
+      "variant": 1
+    },
+    {
+      "cell": [
+        11,
+        5
+      ],
+      "piece": "fir",
+      "variant": 1
+    },
+    {
+      "cell": [
+        18,
+        5
+      ],
+      "piece": "snow_rock",
+      "variant": 1
+    },
+    {
+      "cell": [
+        19,
+        5
+      ],
+      "piece": "fir",
+      "variant": 1
+    },
+    {
+      "cell": [
+        22,
+        5
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        23,
+        5
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        25,
+        5
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        0,
+        6
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        0,
+        7
+      ],
+      "piece": "fir",
+      "variant": 1
+    },
+    {
+      "cell": [
+        1,
+        7
+      ],
+      "piece": "fir",
+      "variant": 1
+    },
+    {
+      "cell": [
+        3,
+        7
+      ],
+      "piece": "snow_rock",
+      "variant": 1
+    },
+    {
+      "cell": [
+        4,
+        7
+      ],
+      "piece": "fir",
+      "variant": 1
+    },
+    {
+      "cell": [
+        5,
+        7
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        6,
+        7
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        7,
+        7
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        10,
+        7
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        11,
+        7
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        12,
+        7
+      ],
+      "piece": "snow_rock",
+      "variant": 1
+    },
+    {
+      "cell": [
+        14,
+        7
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        15,
+        7
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        17,
+        7
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        20,
+        7
+      ],
+      "piece": "snow_rock",
+      "variant": 1
+    },
+    {
+      "cell": [
+        21,
+        7
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        23,
+        7
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        25,
+        7
+      ],
+      "piece": "snow_rock",
+      "variant": 1
+    },
+    {
+      "cell": [
+        0,
+        8
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        1,
+        8
+      ],
+      "piece": "snow_rock",
+      "variant": 1
+    },
+    {
+      "cell": [
+        3,
+        8
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        4,
+        8
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        5,
+        8
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        6,
+        8
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        7,
+        8
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        9,
+        8
+      ],
+      "piece": "fir",
+      "variant": 1
+    },
+    {
+      "cell": [
+        11,
+        8
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        12,
+        8
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        13,
+        8
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        15,
+        8
+      ],
+      "piece": "snow_rock",
+      "variant": 1
+    },
+    {
+      "cell": [
+        16,
+        8
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        17,
+        8
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        21,
+        8
+      ],
+      "piece": "snow_rock",
+      "variant": 1
+    },
+    {
+      "cell": [
+        22,
+        8
+      ],
+      "piece": "snow_rock",
+      "variant": 1
+    },
+    {
+      "cell": [
+        23,
+        8
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        25,
+        8
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        0,
+        9
+      ],
+      "piece": "snow_rock",
+      "variant": 1
+    },
+    {
+      "cell": [
+        23,
+        9
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        25,
+        9
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        0,
+        10
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        2,
+        10
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        3,
+        10
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        6,
+        10
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        7,
+        10
+      ],
+      "piece": "snow_rock",
+      "variant": 1
+    },
+    {
+      "cell": [
+        9,
+        10
+      ],
+      "piece": "fir",
+      "variant": 1
+    },
+    {
+      "cell": [
+        10,
+        10
+      ],
+      "piece": "fir",
+      "variant": 1
+    },
+    {
+      "cell": [
+        12,
+        10
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        13,
+        10
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        16,
+        10
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        17,
+        10
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        18,
+        10
+      ],
+      "piece": "snow_rock",
+      "variant": 1
+    },
+    {
+      "cell": [
+        21,
+        10
+      ],
+      "piece": "fir",
+      "variant": 1
+    },
+    {
+      "cell": [
+        23,
+        10
+      ],
+      "piece": "snow_rock",
+      "variant": 1
+    },
+    {
+      "cell": [
+        25,
+        10
+      ],
+      "piece": "pine",
+      "variant": 1
+    },
+    {
+      "cell": [
+        24,
+        11
+      ],
+      "piece": "fir",
+      "variant": 1
+    },
+    {
+      "cell": [
+        25,
+        11
+      ],
+      "piece": "pine",
+      "variant": 1
+    }
+  ],
+  "2": [
+    {
+      "cell": [
+        24,
+        0
+      ],
+      "piece": "snow_rock",
+      "variant": 2
+    },
+    {
+      "cell": [
+        25,
+        0
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        0,
+        1
+      ],
+      "piece": "fir",
+      "variant": 2
+    },
+    {
+      "cell": [
+        2,
+        1
+      ],
+      "piece": "snow_rock",
+      "variant": 2
+    },
+    {
+      "cell": [
+        3,
+        1
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        6,
+        1
+      ],
+      "piece": "snow_rock",
+      "variant": 2
+    },
+    {
+      "cell": [
+        8,
+        1
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        9,
+        1
+      ],
+      "piece": "fir",
+      "variant": 2
+    },
+    {
+      "cell": [
+        11,
+        1
+      ],
+      "piece": "fir",
+      "variant": 2
+    },
+    {
+      "cell": [
+        14,
+        1
+      ],
+      "piece": "snow_rock",
+      "variant": 2
+    },
+    {
+      "cell": [
+        15,
+        1
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        16,
+        1
+      ],
+      "piece": "snow_rock",
+      "variant": 2
+    },
+    {
+      "cell": [
+        18,
+        1
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        19,
+        1
+      ],
+      "piece": "snow_rock",
+      "variant": 2
+    },
+    {
+      "cell": [
+        21,
+        1
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        23,
+        1
+      ],
+      "piece": "fir",
+      "variant": 2
+    },
+    {
+      "cell": [
+        25,
+        1
+      ],
+      "piece": "fir",
+      "variant": 2
+    },
+    {
+      "cell": [
+        0,
+        2
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        2,
+        2
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        3,
+        2
+      ],
+      "piece": "snow_rock",
+      "variant": 2
+    },
+    {
+      "cell": [
+        7,
+        2
+      ],
+      "piece": "snow_rock",
+      "variant": 2
+    },
+    {
+      "cell": [
+        10,
+        2
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        11,
+        2
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        14,
+        2
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        15,
+        2
+      ],
+      "piece": "snow_rock",
+      "variant": 2
+    },
+    {
+      "cell": [
+        17,
+        2
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        18,
+        2
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        19,
+        2
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        21,
+        2
+      ],
+      "piece": "snow_rock",
+      "variant": 2
+    },
+    {
+      "cell": [
+        25,
+        2
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        0,
+        3
+      ],
+      "piece": "snow_rock",
+      "variant": 2
+    },
+    {
+      "cell": [
+        24,
+        3
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        25,
+        3
+      ],
+      "piece": "snow_rock",
+      "variant": 2
+    },
+    {
+      "cell": [
+        1,
+        4
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        3,
+        4
+      ],
+      "piece": "snow_rock",
+      "variant": 2
+    },
+    {
+      "cell": [
+        4,
+        4
+      ],
+      "piece": "snow_rock",
+      "variant": 2
+    },
+    {
+      "cell": [
+        7,
+        4
+      ],
+      "piece": "snow_rock",
+      "variant": 2
+    },
+    {
+      "cell": [
+        8,
+        4
+      ],
+      "piece": "snow_rock",
+      "variant": 2
+    },
+    {
+      "cell": [
+        12,
+        4
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        13,
+        4
+      ],
+      "piece": "snow_rock",
+      "variant": 2
+    },
+    {
+      "cell": [
+        14,
+        4
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        18,
+        4
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        19,
+        4
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        20,
+        4
+      ],
+      "piece": "fir",
+      "variant": 2
+    },
+    {
+      "cell": [
+        22,
+        4
+      ],
+      "piece": "snow_rock",
+      "variant": 2
+    },
+    {
+      "cell": [
+        23,
+        4
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        25,
+        4
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        0,
+        5
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        1,
+        5
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        4,
+        5
+      ],
+      "piece": "snow_rock",
+      "variant": 2
+    },
+    {
+      "cell": [
+        7,
+        5
+      ],
+      "piece": "fir",
+      "variant": 2
+    },
+    {
+      "cell": [
+        8,
+        5
+      ],
+      "piece": "fir",
+      "variant": 2
+    },
+    {
+      "cell": [
+        10,
+        5
+      ],
+      "piece": "fir",
+      "variant": 2
+    },
+    {
+      "cell": [
+        11,
+        5
+      ],
+      "piece": "fir",
+      "variant": 2
+    },
+    {
+      "cell": [
+        18,
+        5
+      ],
+      "piece": "snow_rock",
+      "variant": 2
+    },
+    {
+      "cell": [
+        19,
+        5
+      ],
+      "piece": "fir",
+      "variant": 2
+    },
+    {
+      "cell": [
+        22,
+        5
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        23,
+        5
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        25,
+        5
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        0,
+        6
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        0,
+        7
+      ],
+      "piece": "fir",
+      "variant": 2
+    },
+    {
+      "cell": [
+        1,
+        7
+      ],
+      "piece": "fir",
+      "variant": 2
+    },
+    {
+      "cell": [
+        3,
+        7
+      ],
+      "piece": "snow_rock",
+      "variant": 2
+    },
+    {
+      "cell": [
+        4,
+        7
+      ],
+      "piece": "fir",
+      "variant": 2
+    },
+    {
+      "cell": [
+        5,
+        7
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        6,
+        7
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        7,
+        7
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        10,
+        7
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        11,
+        7
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        12,
+        7
+      ],
+      "piece": "snow_rock",
+      "variant": 2
+    },
+    {
+      "cell": [
+        14,
+        7
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        15,
+        7
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        17,
+        7
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        20,
+        7
+      ],
+      "piece": "snow_rock",
+      "variant": 2
+    },
+    {
+      "cell": [
+        21,
+        7
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        23,
+        7
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        25,
+        7
+      ],
+      "piece": "snow_rock",
+      "variant": 2
+    },
+    {
+      "cell": [
+        0,
+        8
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        1,
+        8
+      ],
+      "piece": "snow_rock",
+      "variant": 2
+    },
+    {
+      "cell": [
+        3,
+        8
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        4,
+        8
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        5,
+        8
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        6,
+        8
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        7,
+        8
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        9,
+        8
+      ],
+      "piece": "fir",
+      "variant": 2
+    },
+    {
+      "cell": [
+        11,
+        8
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        12,
+        8
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        13,
+        8
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        15,
+        8
+      ],
+      "piece": "snow_rock",
+      "variant": 2
+    },
+    {
+      "cell": [
+        16,
+        8
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        17,
+        8
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        21,
+        8
+      ],
+      "piece": "snow_rock",
+      "variant": 2
+    },
+    {
+      "cell": [
+        22,
+        8
+      ],
+      "piece": "snow_rock",
+      "variant": 2
+    },
+    {
+      "cell": [
+        23,
+        8
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        25,
+        8
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        0,
+        9
+      ],
+      "piece": "snow_rock",
+      "variant": 2
+    },
+    {
+      "cell": [
+        23,
+        9
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        25,
+        9
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        0,
+        10
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        2,
+        10
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        3,
+        10
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        6,
+        10
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        7,
+        10
+      ],
+      "piece": "snow_rock",
+      "variant": 2
+    },
+    {
+      "cell": [
+        9,
+        10
+      ],
+      "piece": "fir",
+      "variant": 2
+    },
+    {
+      "cell": [
+        10,
+        10
+      ],
+      "piece": "fir",
+      "variant": 2
+    },
+    {
+      "cell": [
+        12,
+        10
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        13,
+        10
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        16,
+        10
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        17,
+        10
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        18,
+        10
+      ],
+      "piece": "snow_rock",
+      "variant": 2
+    },
+    {
+      "cell": [
+        21,
+        10
+      ],
+      "piece": "fir",
+      "variant": 2
+    },
+    {
+      "cell": [
+        23,
+        10
+      ],
+      "piece": "snow_rock",
+      "variant": 2
+    },
+    {
+      "cell": [
+        25,
+        10
+      ],
+      "piece": "pine",
+      "variant": 2
+    },
+    {
+      "cell": [
+        24,
+        11
+      ],
+      "piece": "fir",
+      "variant": 2
+    },
+    {
+      "cell": [
+        25,
+        11
+      ],
+      "piece": "pine",
+      "variant": 2
+    }
+  ],
+  "3": [
+    {
+      "cell": [
+        24,
+        0
+      ],
+      "piece": "snow_rock",
+      "variant": 3
+    },
+    {
+      "cell": [
+        25,
+        0
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        0,
+        1
+      ],
+      "piece": "fir",
+      "variant": 3
+    },
+    {
+      "cell": [
+        2,
+        1
+      ],
+      "piece": "snow_rock",
+      "variant": 3
+    },
+    {
+      "cell": [
+        3,
+        1
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        6,
+        1
+      ],
+      "piece": "snow_rock",
+      "variant": 3
+    },
+    {
+      "cell": [
+        8,
+        1
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        9,
+        1
+      ],
+      "piece": "fir",
+      "variant": 3
+    },
+    {
+      "cell": [
+        11,
+        1
+      ],
+      "piece": "fir",
+      "variant": 3
+    },
+    {
+      "cell": [
+        14,
+        1
+      ],
+      "piece": "snow_rock",
+      "variant": 3
+    },
+    {
+      "cell": [
+        15,
+        1
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        16,
+        1
+      ],
+      "piece": "snow_rock",
+      "variant": 3
+    },
+    {
+      "cell": [
+        18,
+        1
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        19,
+        1
+      ],
+      "piece": "snow_rock",
+      "variant": 3
+    },
+    {
+      "cell": [
+        21,
+        1
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        23,
+        1
+      ],
+      "piece": "fir",
+      "variant": 3
+    },
+    {
+      "cell": [
+        25,
+        1
+      ],
+      "piece": "fir",
+      "variant": 3
+    },
+    {
+      "cell": [
+        0,
+        2
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        2,
+        2
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        3,
+        2
+      ],
+      "piece": "snow_rock",
+      "variant": 3
+    },
+    {
+      "cell": [
+        7,
+        2
+      ],
+      "piece": "snow_rock",
+      "variant": 3
+    },
+    {
+      "cell": [
+        10,
+        2
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        11,
+        2
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        14,
+        2
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        15,
+        2
+      ],
+      "piece": "snow_rock",
+      "variant": 3
+    },
+    {
+      "cell": [
+        17,
+        2
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        18,
+        2
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        19,
+        2
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        21,
+        2
+      ],
+      "piece": "snow_rock",
+      "variant": 3
+    },
+    {
+      "cell": [
+        25,
+        2
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        0,
+        3
+      ],
+      "piece": "snow_rock",
+      "variant": 3
+    },
+    {
+      "cell": [
+        24,
+        3
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        25,
+        3
+      ],
+      "piece": "snow_rock",
+      "variant": 3
+    },
+    {
+      "cell": [
+        1,
+        4
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        3,
+        4
+      ],
+      "piece": "snow_rock",
+      "variant": 3
+    },
+    {
+      "cell": [
+        4,
+        4
+      ],
+      "piece": "snow_rock",
+      "variant": 3
+    },
+    {
+      "cell": [
+        7,
+        4
+      ],
+      "piece": "snow_rock",
+      "variant": 3
+    },
+    {
+      "cell": [
+        8,
+        4
+      ],
+      "piece": "snow_rock",
+      "variant": 3
+    },
+    {
+      "cell": [
+        12,
+        4
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        13,
+        4
+      ],
+      "piece": "snow_rock",
+      "variant": 3
+    },
+    {
+      "cell": [
+        14,
+        4
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        18,
+        4
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        19,
+        4
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        20,
+        4
+      ],
+      "piece": "fir",
+      "variant": 3
+    },
+    {
+      "cell": [
+        22,
+        4
+      ],
+      "piece": "snow_rock",
+      "variant": 3
+    },
+    {
+      "cell": [
+        23,
+        4
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        25,
+        4
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        0,
+        5
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        1,
+        5
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        4,
+        5
+      ],
+      "piece": "snow_rock",
+      "variant": 3
+    },
+    {
+      "cell": [
+        7,
+        5
+      ],
+      "piece": "fir",
+      "variant": 3
+    },
+    {
+      "cell": [
+        8,
+        5
+      ],
+      "piece": "fir",
+      "variant": 3
+    },
+    {
+      "cell": [
+        10,
+        5
+      ],
+      "piece": "fir",
+      "variant": 3
+    },
+    {
+      "cell": [
+        11,
+        5
+      ],
+      "piece": "fir",
+      "variant": 3
+    },
+    {
+      "cell": [
+        18,
+        5
+      ],
+      "piece": "snow_rock",
+      "variant": 3
+    },
+    {
+      "cell": [
+        19,
+        5
+      ],
+      "piece": "fir",
+      "variant": 3
+    },
+    {
+      "cell": [
+        22,
+        5
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        23,
+        5
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        25,
+        5
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        0,
+        6
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        0,
+        7
+      ],
+      "piece": "fir",
+      "variant": 3
+    },
+    {
+      "cell": [
+        1,
+        7
+      ],
+      "piece": "fir",
+      "variant": 3
+    },
+    {
+      "cell": [
+        3,
+        7
+      ],
+      "piece": "snow_rock",
+      "variant": 3
+    },
+    {
+      "cell": [
+        4,
+        7
+      ],
+      "piece": "fir",
+      "variant": 3
+    },
+    {
+      "cell": [
+        5,
+        7
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        6,
+        7
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        7,
+        7
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        10,
+        7
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        11,
+        7
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        12,
+        7
+      ],
+      "piece": "snow_rock",
+      "variant": 3
+    },
+    {
+      "cell": [
+        14,
+        7
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        15,
+        7
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        17,
+        7
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        20,
+        7
+      ],
+      "piece": "snow_rock",
+      "variant": 3
+    },
+    {
+      "cell": [
+        21,
+        7
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        23,
+        7
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        25,
+        7
+      ],
+      "piece": "snow_rock",
+      "variant": 3
+    },
+    {
+      "cell": [
+        0,
+        8
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        1,
+        8
+      ],
+      "piece": "snow_rock",
+      "variant": 3
+    },
+    {
+      "cell": [
+        3,
+        8
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        4,
+        8
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        5,
+        8
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        6,
+        8
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        7,
+        8
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        9,
+        8
+      ],
+      "piece": "fir",
+      "variant": 3
+    },
+    {
+      "cell": [
+        11,
+        8
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        12,
+        8
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        13,
+        8
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        15,
+        8
+      ],
+      "piece": "snow_rock",
+      "variant": 3
+    },
+    {
+      "cell": [
+        16,
+        8
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        17,
+        8
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        21,
+        8
+      ],
+      "piece": "snow_rock",
+      "variant": 3
+    },
+    {
+      "cell": [
+        22,
+        8
+      ],
+      "piece": "snow_rock",
+      "variant": 3
+    },
+    {
+      "cell": [
+        23,
+        8
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        25,
+        8
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        0,
+        9
+      ],
+      "piece": "snow_rock",
+      "variant": 3
+    },
+    {
+      "cell": [
+        23,
+        9
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        25,
+        9
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        0,
+        10
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        2,
+        10
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        3,
+        10
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        6,
+        10
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        7,
+        10
+      ],
+      "piece": "snow_rock",
+      "variant": 3
+    },
+    {
+      "cell": [
+        9,
+        10
+      ],
+      "piece": "fir",
+      "variant": 3
+    },
+    {
+      "cell": [
+        10,
+        10
+      ],
+      "piece": "fir",
+      "variant": 3
+    },
+    {
+      "cell": [
+        12,
+        10
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        13,
+        10
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        16,
+        10
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        17,
+        10
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        18,
+        10
+      ],
+      "piece": "snow_rock",
+      "variant": 3
+    },
+    {
+      "cell": [
+        21,
+        10
+      ],
+      "piece": "fir",
+      "variant": 3
+    },
+    {
+      "cell": [
+        23,
+        10
+      ],
+      "piece": "snow_rock",
+      "variant": 3
+    },
+    {
+      "cell": [
+        25,
+        10
+      ],
+      "piece": "pine",
+      "variant": 3
+    },
+    {
+      "cell": [
+        24,
+        11
+      ],
+      "piece": "fir",
+      "variant": 3
+    },
+    {
+      "cell": [
+        25,
+        11
+      ],
+      "piece": "pine",
+      "variant": 3
+    }
+  ]
+}

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://7d7jkpfpojp1"
-path="res://.godot/imported/basic.png-a335dd6e6ac9eecdd3884f41a35b95e2.ctex"
+uid="uid://by4bo2nd271kr"
+path="res://.godot/imported/snow_rock.png-91e88950eef6a0cf136d4f934078a085.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://art/redesign-m23/sources/basic.png"
-dest_files=["res://.godot/imported/basic.png-a335dd6e6ac9eecdd3884f41a35b95e2.ctex"]
+source_file="res://assets/sprites/map/rendered/snow_rock.png"
+dest_files=["res://.godot/imported/snow_rock.png-91e88950eef6a0cf136d4f934078a085.ctex"]
 
 [params]
 

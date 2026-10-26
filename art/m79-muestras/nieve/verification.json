@@ -1,0 +1,138 @@
+{
+  "status": "Verificación de archivos y composición correcta; sin motor.",
+  "sprites": [
+    {
+      "file": "pine_01.png",
+      "alpha_bbox": [
+        30,
+        7,
+        98,
+        120
+      ],
+      "border_transparent": true
+    },
+    {
+      "file": "pine_02.png",
+      "alpha_bbox": [
+        30,
+        7,
+        98,
+        120
+      ],
+      "border_transparent": true
+    },
+    {
+      "file": "pine_03.png",
+      "alpha_bbox": [
+        30,
+        7,
+        98,
+        120
+      ],
+      "border_transparent": true
+    },
+    {
+      "file": "fir_01.png",
+      "alpha_bbox": [
+        24,
+        12,
+        104,
+        120
+      ],
+      "border_transparent": true
+    },
+    {
+      "file": "fir_02.png",
+      "alpha_bbox": [
+        24,
+        12,
+        105,
+        120
+      ],
+      "border_transparent": true
+    },
+    {
+      "file": "fir_03.png",
+      "alpha_bbox": [
+        24,
+        12,
+        104,
+        120
+      ],
+      "border_transparent": true
+    },
+    {
+      "file": "snow_rock_01.png",
+      "alpha_bbox": [
+        16,
+        26,
+        112,
+        106
+      ],
+      "border_transparent": true
+    },
+    {
+      "file": "snow_rock_02.png",
+      "alpha_bbox": [
+        12,
+        22,
+        115,
+        106
+      ],
+      "border_transparent": true
+    },
+    {
+      "file": "snow_rock_03.png",
+      "alpha_bbox": [
+        15,
+        52,
+        112,
+        107
+      ],
+      "border_transparent": true
+    }
+  ],
+  "png_readable": [
+    "contact_034.png",
+    "contact_220.png",
+    "contact_220_path.png",
+    "decoration_detail.png",
+    "fir_01.png",
+    "fir_02.png",
+    "fir_03.png",
+    "level_13_proposal_01.png",
+    "level_13_proposal_02.png",
+    "level_13_proposal_03.png",
+    "pine_01.png",
+    "pine_02.png",
+    "pine_03.png",
+    "reference_board.png",
+    "snow_rock_01.png",
+    "snow_rock_02.png",
+    "snow_rock_03.png",
+    "spider_comparison.png"
+  ],
+  "map_checks": [
+    {
+      "variant": 1,
+      "replaced_cells": 115,
+      "outside_changes": false,
+      "posts_preserved": true
+    },
+    {
+      "variant": 2,
+      "replaced_cells": 115,
+      "outside_changes": false,
+      "posts_preserved": true
+    },
+    {
+      "variant": 3,
+      "replaced_cells": 115,
+      "outside_changes": false,
+      "posts_preserved": true
+    }
+  ],
+  "engine_run": false,
+  "phone_tested": false,
+  "performance_measured": false
+}
