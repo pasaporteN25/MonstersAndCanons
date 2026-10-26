@@ -18,6 +18,9 @@ const TOUCH_MIN: float = 56.0
 ## de la insignia llega a 26 px, dentro del área táctil de 56 px (el diámetro del borde es 52 px).
 const BADGE_RADIUS: float = 19.5
 const BADGE_EDGE: float = 26.0
+## T502: distancia del aro de selección (31 px del centro) y del aro de foco (36 px) al borde de la insignia.
+const SELECT_RING_GAP: float = 5.0
+const FOCUS_RING_GAP: float = 10.0
 ## Lado lógico con el que se dibuja el SVG de 64×64 (1:1), sin depender de la escala con la que Godot lo rasterice.
 const BADGE_TEXTURE_SIDE: float = 64.0
 const LOCK_RADIUS: float = 18.0
@@ -95,9 +98,9 @@ func _draw() -> void:
 	if CampaignMap.has_halo(state):
 		draw_halo(self, center)
 	if _selected or _hovered:
-		draw_arc(center, edge + 5.0, 0.0, TAU, 40, Color("#f0cb70"), 2.0)
+		draw_arc(center, edge + SELECT_RING_GAP, 0.0, TAU, 40, Color("#f0cb70"), 2.0)
 	if has_focus():
-		draw_arc(center, edge + 10.0, 0.0, TAU, 48, FOCUS_COLOR, 3.0)
+		draw_arc(center, edge + FOCUS_RING_GAP, 0.0, TAU, 48, FOCUS_COLOR, 3.0)
 	draw_badge(self, state, index, center, font)
 	if state == CampaignMap.State.REBEL or state == CampaignMap.State.TAKEN:
 		_draw_stars(center + Vector2(0, -edge - 8.0))

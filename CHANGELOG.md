@@ -1,5 +1,9 @@
 # Novedades del juego
 
+## Los niveles 12 y 13 del mapa ya no se pisan *(T502, 2026-10-26; en revisión)*
+
+En el mapa de campaña, el nivel 13 (Paso alto) quedó un poco más al este y el mapa se dibuja algo más grande. Así, el aro de selección y el de foco del nivel 12 ya no tapan la insignia del 13 (ni los de ningún otro par). Como el mapa es más ancho, hay que desplazarlo un poco más para llegar al extremo este. Los nombres de los niveles 10 a 13 todavía se montan un poco entre sí; eso queda para decidir.
+
 ## Insignias también en las tarjetas *(T501, 2026-10-25; en revisión)*
 
 La vista de tarjetas de la campaña muestra ahora, arriba a la izquierda de cada nivel, la misma insignia que el mapa: roja si todavía no lo ganaste (con halo punteado si ya podés jugarlo), mitad roja y turquesa con 1 o 2 estrellas, turquesa con 3, y candado si está bloqueado. Para hacerle lugar, el nombre del nivel y el lugar bajaron un poco.
