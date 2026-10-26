@@ -1,5 +1,9 @@
 # Novedades del juego
 
+## Cabezas de ganado nuevas en el desierto *(T498, 2026-10-26; en revisión)*
+
+En el desierto (niveles 10, 11 y 12), las cabezas de ganado que decoran el mapa tienen un dibujo nuevo, con dos pares de cuernos, volumen y luz como el resto de la decoración renderizada. Están en las mismas casillas que antes y siguen siendo decoración donde no se construye: no cambia el camino, las oleadas ni el mapa. No se probaron teléfonos reales.
+
 ## «Ver todo» del celular, ahora con una lupa *(T464, 2026-10-26; en revisión)*
 
 En el celular, el botón «Ver todo» (el que aparece al acercar el mapa) pasó de un texto a una lupa dentro de un círculo, igual de grande que el carrito, la X y la demolición (64 px). Con el texto, el botón se salía 7 px por el borde derecho de la pantalla; ahora entra entero y no tapa a los otros botones. El aviso de la primera vez («Acercaste el mapa. Tocá la lupa para volver a verlo entero.») es el mismo. En la PC sigue sin haber botón: se vuelve con la tecla. Todavía no se probó en un celular real.

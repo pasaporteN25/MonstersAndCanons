@@ -22,6 +22,8 @@ const KNOWN_UNUSED: Array[String] = [
 	"res://assets/sprites/towers/rendered/cannon_level_2_icon.png",
 	"res://assets/sprites/towers/rendered/disruptor_suppression_arc_1.png",
 	"res://assets/sprites/towers/rendered/disruptor_pulse_ring.png",
+	# T498: reemplazada por bones_skull.png en el tema desierto; se conserva hasta que Lucas autorice borrarla.
+	"res://assets/sprites/map/huesos.svg",
 ]
 
 var _files: Dictionary = {}   # { ruta: texto } de todo lo que puede nombrar un recurso
