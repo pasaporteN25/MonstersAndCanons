@@ -33,6 +33,9 @@ El panel de la torre y la Wiki escriben el radio del área con coma y sin ceros 
 ## Zonas del atlas que se descubren *(T488, 2026-10-25; en revisión, entrega parcial)*
 
 En el mapa de campaña, los niveles 6 a 10 y 11 a 15 aparecen recién cuando abrís el 6 o el 11: hasta entonces su terreno se ve en gris y sin números, candados ni estrellas, y las flechas del teclado no entran ahí. Los niveles se siguen abriendo de a uno, al ganar el anterior. El modo de pruebas muestra las tres zonas, y las tarjetas no cambian. El gris es **provisional**: falta la aprobación de la máscara definitiva.
+## Pinos, abetos y rocas nevadas nuevos en el nivel 13 *(T497, 2026-10-26; en revisión)*
+
+En el Paso alto (nivel 13), los pinos, los abetos y las rocas con nieve tienen un dibujo nuevo, con volumen y luz como el resto de la decoración renderizada. Están en las mismas casillas que antes y siguen siendo decoración donde no se construye: no cambia el camino, las oleadas ni el mapa. No se probaron teléfonos reales.
 
 ## Postes de campaña según tus estrellas *(T475, 2026-10-25; en revisión)*
 
