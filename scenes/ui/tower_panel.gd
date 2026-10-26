@@ -1,5 +1,6 @@
-# Panel de la torre seleccionada (RF-70, RF-74, RF-76): nivel, estadísticas,
+# Panel de la torre seleccionada (RF-70, RF-74, RF-76; ficha PC-A de T513, RF-721, D-214): nivel, estadísticas,
 # modo de apuntado y botones Mejorar / Vender. Solo MUESTRA y AVISA: no cobra ni vende.
+# 270 px de ancho; el alto sale del contenido (tope `MAX_HEIGHT`) y la lista solo desplaza si lo pasa.
 class_name TowerPanel
 extends PanelContainer
 
@@ -24,19 +25,38 @@ var _shown_repair: float = 0.0
 ## RF-317: las torres de este nivel, para decir con cuáles combina la seleccionada. Lo pone Game.
 var partner_towers: Array[TowerData] = []
 
-@onready var _title: Label = %Title
-@onready var _stats: Label = %Stats
+## RF-721: ancho fijo y tope del alto (px lógicos). Pasado el tope, y solo ahí, la lista desplaza.
+const WIDTH: float = 270.0
+const MAX_HEIGHT: float = 320.0
 const LEVEL_COLORS: Array[Color] = [Color("#d7a45b"), Color("#94a8b9"), Color("#f0d176")]
-var _upgrade_preview: Label
+## RF-721 punto 6: «Vender» conserva un borde ladrillo apagado para no confundirse con «Mejorar».
+const SELL_BORDER: Color = Color(0.5, 0.26, 0.21)
+const UPGRADE_BORDER: Color = Color(0.74, 0.52, 0.24)
+const HALF_BUTTON_MARGIN: float = 6.0
+
 var _upgrade_fx_config: UpgradeFxConfig
+var _fit_queued: bool = false
+
+@onready var _title: Label = %Title
+@onready var _rows: VBoxContainer = $Margin/Rows
+@onready var _stats: Label = %Stats
+@onready var _facts: GridContainer = %Facts
+@onready var _damage_caption: Label = %DamageCaption
 @onready var _damage: Label = %Damage
+@onready var _rate_caption: Label = %RateCaption
 @onready var _rate: Label = %Rate
 @onready var _range: Label = %Range
-@onready var _air: Label = %Air
+@onready var _air: TextureRect = %Air
+@onready var _air_strike: Line2D = %AirStrike
 @onready var _details: ScrollContainer = %Details
+@onready var _content: VBoxContainer = %Content
 @onready var _status: Label = %Status
 @onready var _targeting_button: Button = %TargetingButton
 @onready var _upgrade_button: Button = %UpgradeButton
+@onready var _upgrade_info: HBoxContainer = %UpgradeInfo
+@onready var _missing: Label = %Missing
+@onready var _cost: Label = %Cost
+@onready var _key: Label = %Key
 @onready var _sell_button: Button = %SellButton
 @onready var _close_button: Button = %CloseButton
 @onready var _level_card: HBoxContainer = %LevelCard
@@ -52,7 +72,12 @@ func _ready() -> void:
 	_upgrade_button.mouse_exited.connect(_set_upgrade_hovered.bind(false))
 	visibility_changed.connect(_on_visibility_changed)
 	_title.resized.connect(_refresh_title_tooltip)
+	_title.resized.connect(_queue_fit)
+	_content.minimum_size_changed.connect(_queue_fit)
 	_set_mouse_filters(self)
+	# Los íconos con tooltip lo necesitan: PASS no se queda con los clics, que siguen hacia el mapa (RF-74).
+	_air.mouse_filter = Control.MOUSE_FILTER_PASS
+	_level_card.mouse_filter = Control.MOUSE_FILTER_PASS
 	_style_panel()
 	_style_buttons()
 
@@ -102,55 +127,20 @@ func sell_button() -> Button:
 	return _sell_button
 
 
-## M68 (RF-616): encima de «Mejorar», lo que cambia al subir de nivel (antes → después). Se crea la primera vez.
-func _refresh_upgrade_preview() -> void:
-	if _upgrade_preview == null:
-		_upgrade_preview = Label.new()
-		_upgrade_preview.name = "UpgradePreview"
-		_upgrade_preview.add_theme_font_size_override("font_size", 13)
-		_upgrade_preview.add_theme_color_override("font_color", Color(0.75, 0.9, 0.6))
-		_upgrade_preview.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		_upgrade_preview.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		_upgrade_button.get_parent().add_child(_upgrade_preview)
-		_upgrade_button.get_parent().move_child(_upgrade_preview, _upgrade_button.get_index())
+## RF-721 punto 3: Daño, Cadencia y Alcance son filas rótulo-valor y, si la mejora los cambia, dicen «antes → después».
+## Una torre de apoyo no tiene Daño ni Cadencia (la fila no se muestra). Los efectos van en `_refresh_effects`.
+func _refresh_metrics(next: TowerLevelData) -> void:
 	if _upgrade_fx_config == null:
 		_upgrade_fx_config = UpgradeFxConfig.load_from()
-	var changes: Array[Dictionary] = UpgradeDeltas.preview(_tower.data.levels, _tower.level_index, _upgrade_fx_config.stats, 99)
-	var display_changes: Array[Dictionary] = []
-	var changed_effect_fields: Array[String] = []
-	var changed_effect_prefixes: PackedStringArray = []
 	var metric_changes: Dictionary = {}
-	for change: Dictionary in changes:
-		var field: String = String(change.get("campo", ""))
-		if field in ["damage", "fire_rate", "range_tiles"]:
-			metric_changes[field] = change
-		else:
-			display_changes.append(change)
-			changed_effect_fields.append(field)
-			var prefix: String = _effect_prefix(field)
-			if not prefix.is_empty():
-				changed_effect_prefixes.append(prefix)
+	for change: Dictionary in UpgradeDeltas.preview(_tower.data.levels, _tower.level_index, _upgrade_fx_config.stats, 99):
+		metric_changes[String(change.get("campo", ""))] = change
+	var shoots: bool = not _tower.data.support_only
+	for node: Control in [_damage_caption, _damage, _rate_caption, _rate]:
+		node.visible = shoots
 	_damage.text = _metric_text("damage", "entero", int(_tower.stats().damage), metric_changes)
-	_rate.text = "Apoyo" if _tower.data.support_only else "%s/s" % _metric_text("fire_rate", "decimal", _tower.effective_fire_rate(), metric_changes)
+	_rate.text = "%s/s" % _metric_text("fire_rate", "decimal", _tower.effective_fire_rate(), metric_changes)
 	_range.text = _metric_text("range_tiles", "decimal", _tower.stats().range_tiles, metric_changes)
-	if display_changes.is_empty():
-		_upgrade_preview.visible = false
-	else:
-		_upgrade_preview.text = "\n".join(UpgradeDeltas.rows(display_changes, int(_upgrade_fx_config.get_number("max_por_renglon"))))
-		_upgrade_preview.visible = true
-	if not changed_effect_prefixes.is_empty():
-		var effect_lines: PackedStringArray = PackedStringArray()
-		for line: String in _stats.text.split("\n"):
-			var keep_line: bool = true
-			for prefix: String in changed_effect_prefixes:
-				if line.begins_with(prefix):
-					keep_line = false
-					break
-			if keep_line:
-				effect_lines.append(line)
-		effect_lines.append_array(TowerText.panel_effect_residuals(_tower.stats(), changed_effect_fields))
-		_stats.text = "\n".join(effect_lines)
-		_stats.visible = not _stats.text.is_empty()
 
 
 func _metric_text(field: String, kind: String, current: float, changes: Dictionary) -> String:
@@ -161,30 +151,23 @@ func _metric_text(field: String, kind: String, current: float, changes: Dictiona
 		UpgradeDeltas.format_value(float(change["despues"]), kind)]
 
 
-static func _effect_prefix(field: String) -> String:
-	match field:
-		"chain_extra_targets": return "El rayo salta"
-		"splash_radius_tiles": return "Área:"
-		"burst_count": return "Lanza "
-		"extra_targets": return "Dispara a "
-		"slow_amount", "slow_duration": return "Ralentiza "
-		"burn_damage_per_second", "burn_duration": return "Quema:"
-		"suppress_seconds": return "Pulso:"
-		"support_rate_percent": return "Apoyo:"
-		"support_repair_per_second": return "Repara "
-	return ""
-
-
+## RF-650 (T512): tres rectángulos en fila, bronce, plata y oro; los que faltan llevan el contorno del metal, sin relleno.
 func _refresh_level_card() -> void:
 	var level: int = _tower.level_number()
 	_level_card.tooltip_text = "Nivel actual: %d de 3" % level
 	for index: int in _level_card.get_child_count():
-		var segment: ColorRect = _level_card.get_child(index) as ColorRect
-		var color: Color = LEVEL_COLORS[index]
-		if index >= level:
-			color = color.darkened(0.72)
-			color.a = 0.6
-		segment.color = color
+		var segment: Panel = _level_card.get_child(index) as Panel
+		segment.add_theme_stylebox_override("panel", _level_style(LEVEL_COLORS[index], index < level))
+
+
+static func _level_style(color: Color, filled: bool) -> StyleBoxFlat:
+	var style: StyleBoxFlat = StyleBoxFlat.new()
+	style.bg_color = color
+	style.draw_center = filled
+	style.border_color = color if filled else color.darkened(0.12)
+	style.set_border_width_all(2)
+	style.set_corner_radius_all(2)
+	return style
 
 
 func _refresh_title_tooltip() -> void:
@@ -211,39 +194,53 @@ func _style_panel() -> void:
 	add_theme_stylebox_override("panel", panel_style)
 
 
+## RF-650 (T512), RF-721 punto 6: los botones son los del tema de los menús (hierro oscuro, borde bronce, texto ámbar
+## con el mouse). Solo se ajustan los márgenes de los chicos, el borde de «Vender» y el bronce más claro de «Mejorar».
 func _style_buttons() -> void:
-	_style_button(_targeting_button, Color("#48535d"))
-	_style_button(_upgrade_button, Color("#526c4b"))
-	_style_button(_sell_button, Color("#755144"))
-	_style_button(_close_button, Color("#66533a"))
+	_tune_button(_close_button, 4.0, Color.TRANSPARENT)
+	_tune_button(_targeting_button, HALF_BUTTON_MARGIN, Color.TRANSPARENT)
+	_tune_button(_sell_button, HALF_BUTTON_MARGIN, SELL_BORDER)
+	_tune_button(_upgrade_button, 12.0, UPGRADE_BORDER)
+	for button: Button in [_targeting_button, _sell_button, _upgrade_button, _close_button]:
+		button.add_theme_constant_override("outline_size", 0)
 
 
-func _style_button(button: Button, base_color: Color) -> void:
-	button.add_theme_color_override("font_color", Color("#f5f0df"))
-	button.add_theme_color_override("font_hover_color", Color("#ffffff"))
-	button.add_theme_color_override("font_pressed_color", Color("#ffffff"))
-	button.add_theme_color_override("font_disabled_color", Color("#a7a39b"))
-	var normal: StyleBoxFlat = _button_style(base_color, 0.96)
-	var hover: StyleBoxFlat = _button_style(base_color.lightened(0.16), 1.0)
-	var pressed: StyleBoxFlat = _button_style(base_color.darkened(0.16), 1.0)
-	var disabled: StyleBoxFlat = _button_style(base_color.darkened(0.42), 0.62)
-	button.add_theme_stylebox_override("normal", normal)
-	button.add_theme_stylebox_override("hover", hover)
-	button.add_theme_stylebox_override("pressed", pressed)
-	button.add_theme_stylebox_override("disabled", disabled)
+func _tune_button(button: Button, margin: float, border: Color) -> void:
+	for state: String in ["normal", "disabled"]:
+		var style: StyleBoxFlat = button.get_theme_stylebox(state).duplicate() as StyleBoxFlat
+		style.content_margin_left = margin
+		style.content_margin_right = margin
+		if border.a > 0.0:
+			style.border_color = border if state == "normal" else border.darkened(0.5)
+		button.add_theme_stylebox_override(state, style)
+	for state: String in ["hover", "pressed", "hover_pressed"]:
+		var style: StyleBoxFlat = button.get_theme_stylebox(state).duplicate() as StyleBoxFlat
+		style.content_margin_left = margin
+		style.content_margin_right = margin
+		button.add_theme_stylebox_override(state, style)
 
 
-func _button_style(color: Color, alpha: float) -> StyleBoxFlat:
-	var style: StyleBoxFlat = StyleBoxFlat.new()
-	style.bg_color = Color(color.r, color.g, color.b, alpha)
-	style.border_color = color.lightened(0.18)
-	style.set_border_width_all(1)
-	style.set_corner_radius_all(5)
-	style.content_margin_left = 8.0
-	style.content_margin_right = 8.0
-	style.content_margin_top = 4.0
-	style.content_margin_bottom = 4.0
-	return style
+## RF-721 punto 1: el alto sale del contenido. La lista (`Details`) toma el alto de lo que contiene y solo desplaza
+## si todo el panel pasaría de `MAX_HEIGHT`. El borde de abajo queda fijo y el panel crece hacia arriba.
+func _queue_fit() -> void:
+	if _fit_queued:
+		return
+	_fit_queued = true
+	_fit_height.call_deferred()
+
+
+func _fit_height() -> void:
+	_fit_queued = false
+	if not is_inside_tree() or not visible or _tower == null:
+		return
+	_details.custom_minimum_size.y = 0.0
+	var chrome: float = get_combined_minimum_size().y
+	var wanted: float = minf(_content.get_combined_minimum_size().y, maxf(MAX_HEIGHT - chrome, 0.0))
+	if absf(_details.custom_minimum_size.y - wanted) > 0.01:
+		_details.custom_minimum_size.y = wanted
+	var top: float = offset_bottom - (chrome + wanted)
+	if absf(offset_top - top) > 0.01:
+		offset_top = top
 
 
 func refresh(gold: int) -> void:
@@ -251,6 +248,7 @@ func refresh(gold: int) -> void:
 		return
 	_gold = gold
 	var s: TowerLevelData = _tower.stats()
+	var next: TowerLevelData = _tower.next_level_stats()
 	_shown_stun = ceili(_tower.stun_left())
 	_title.text = _tower.data.display_name
 	_refresh_title_tooltip()
@@ -265,18 +263,19 @@ func refresh(gold: int) -> void:
 	_status.visible = not states.is_empty()
 	_status.text = " · ".join(states)
 	_shown_support = _tower.support_bonus()
-	_rate.text = "Apoyo" if _tower.data.support_only else "%.2f/s" % _tower.effective_fire_rate()
-	_range.text = "%.1f" % s.range_tiles
-	_air.text = "Voladores: %s" % ("sí" if _tower.data.can_hit_air else "no")
-	var effect_lines: Array[String] = TowerText.effects(s)
-	if s.suppress_seconds > 0.0:
-		effect_lines[0] = TowerText.panel_pulse_line(s)
+	# RF-721 punto 2: «Voladores» es un ícono con tooltip en el encabezado, tachado si la torre no los golpea.
+	_air.tooltip_text = "Golpea voladores" if _tower.data.can_hit_air else "No golpea voladores"
+	_air.modulate = Color.WHITE if _tower.data.can_hit_air else Color(0.62, 0.62, 0.62, 0.7)
+	_air_strike.visible = not _tower.data.can_hit_air
+	_refresh_metrics(next)
+	# RF-721 punto 4: la frase de cada efecto lleva su cambio adentro (una función de TowerText, un solo lugar).
+	var effect_lines: Array[String] = TowerText.effect_phrases(s, next)
 	_stats.text = "\n".join(effect_lines)
 	var invested: String = TowerText.invested_line(_tower.data, _tower.resources_invested)  # RF-418
 	if invested != "":
 		_stats.text += "\n" + invested
 	if _shown_repair > 0:
-		_stats.text += "\nReparación recibida: %.1f puntos/s" % _shown_repair
+		_stats.text += "\nReparación recibida: %s puntos/s" % TowerText.decimal(_shown_repair)
 	if _tower.data.support_only and _shown_wear > 0:
 		_stats.text += "\nPrestaciones actuales: %.0f %%" % (WearRules.ratio(_shown_wear) * 100.0)
 	if _shown_support > 0:
@@ -286,15 +285,29 @@ func refresh(gold: int) -> void:
 		_stats.text += "\n" + line.replace(" %", " %")
 	_stats.text = _stats.text.strip_edges()
 	_stats.visible = not _stats.text.is_empty()
-	_targeting_button.disabled = _tower.data.support_only or _tower.is_pulse_tower()  # RF-438: el pulso no apunta
-	_targeting_button.text = "Apuntar: %s" % _tower.targeting_name()
-	var next: TowerLevelData = _tower.next_level_stats()
-	_refresh_upgrade_preview()
+	# RF-721 punto 5: una torre que no apunta (apoyo, pulso: RF-438) no muestra «Apuntar», ni apagado.
+	_targeting_button.visible = not (_tower.data.support_only or _tower.is_pulse_tower())
+	_targeting_button.text = _tower.targeting_name()
+	_targeting_button.tooltip_text = "Apuntar: %s (clic para cambiar la prioridad de objetivo)" % _tower.targeting_name()
+	_refresh_upgrade_button(next, gold)
+	_sell_button.text = "Vender +%s [S]" % TowerText.refund_text(_sell_value, _sell_resources)
+	_queue_fit()
+
+
+## RF-721 punto 7: «Mejorar a nivel N» con la moneda y el costo y la tecla; sin oro queda apagado y dice «faltan N» a la vista.
+func _refresh_upgrade_button(next: TowerLevelData, gold: int) -> void:
 	if next == null:
 		_upgrade_button.text = "Nivel máximo"
 		_upgrade_button.disabled = true
-	else:
-		_upgrade_button.text = "Mejorar a nivel %d (%d)  [U]" % [_tower.level_number() + 1, next.cost]
-		_upgrade_button.disabled = gold < next.cost
-	_upgrade_button.tooltip_text = "Nivel máximo alcanzado" if next == null else ("Faltan %d de oro" % (next.cost - gold) if gold < next.cost else "Mejorar torre · U")
-	_sell_button.text = "Vender (+%s)  [S]" % TowerText.refund_text(_sell_value, _sell_resources)
+		_upgrade_info.visible = false
+		_upgrade_button.tooltip_text = "Nivel máximo alcanzado"
+		return
+	var short: int = next.cost - gold
+	_upgrade_button.text = "Mejorar a nivel %d" % (_tower.level_number() + 1)
+	_upgrade_button.disabled = short > 0
+	_upgrade_info.visible = true
+	_cost.text = str(next.cost)
+	_missing.visible = short > 0
+	_missing.text = "faltan %d" % maxi(short, 0)
+	_key.visible = short <= 0
+	_upgrade_button.tooltip_text = "Faltan %d de oro" % short if short > 0 else "Mejorar torre · U"

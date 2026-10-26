@@ -1,6 +1,6 @@
 # Tests de la vista del atlas con zonas sin descubrir (M78, T488 parcial, RF-709, RF-710, RF-688, D-209).
 # Instancian `CampaignMapView` solos, con entradas armadas a mano: no tocan el guardado ni cambian de escena.
-# La máscara gris es provisional (`HIDDEN_ZONE_TINT_PLACEHOLDER`); acá se prueba el comportamiento, no el arte.
+# La máscara gris G2 se prueba en `tests/test_campaign_hidden_masks.gd`; acá, el comportamiento de las zonas ocultas.
 extends GutTest
 
 var requested: Array[int] = []
