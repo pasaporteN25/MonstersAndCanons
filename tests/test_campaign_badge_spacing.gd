@@ -4,7 +4,7 @@ extends GutTest
 
 ## Holgura mínima, en px lógicos, entre los bordes de dos insignias (T502: el par más apretado, 12–13, tiene 17,6).
 const MIN_BADGE_GAP: float = 8.0
-## Holgura mínima entre el aro de foco (36 px) de una región y el borde (26 px) de la insignia de cualquier otra (T502, D-212).
+## Holgura mínima entre el aro de foco (36 px) de una región y el borde (26 px) de la insignia de cualquier otra (T502, D-213).
 const MIN_RING_GAP: float = 5.0
 
 

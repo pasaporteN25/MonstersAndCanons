@@ -1823,7 +1823,7 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Qué cambia:** agrega RF-715. No toca RF-111, RF-710 ni la receta del editor (RF-697). La tarjeta lleva un cuadro de 40 px arriba a la izquierda y baja el nombre del nivel a esa altura.
 - **Riesgos aceptados:** en una tarjeta desktop el número de la insignia mide ~10 px; en celular real podría estar al límite y no se probó. Con las coordenadas actuales el aro de selección (31 px) y el de foco (36 px) de una región pisan a su vecina en el par 12–13 (ver T500): no se resolvió porque mover un nodo toca el atlas aprobado.
 
-## D-212 · Separar los pares 12–13 con más escala y el nodo 13 al este
+## D-213 · Separar los pares 12–13 con más escala y el nodo 13 al este
 
 - **Fecha:** 2026-10-26 · **Estado:** decidido por Lucas (2026-10-26, combinando las opciones A y B de T500) · **Propone:** Claude (T500 midió y planteó A, B y C).
 - **Qué:** (A) `CampaignMapView.MAP_SCALE` sube de 1,14 a **1,26**; (B) el nodo 13 del atlas pasa de (1000, 287) a **(1006, 287)** (6 unidades al este) y sus dos curvas vecinas se corren igual para que las tangentes no cambien (tramo 12→13: segundo control (984, 280) → (990, 280); tramo 13→14: primer control (1023, 293) → (1029, 293)). El resto del atlas, la costa, el fondo y los otros 14 nodos no se tocan.

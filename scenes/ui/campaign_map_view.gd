@@ -13,7 +13,7 @@ signal selection_changed(index: int)
 const VIEW_SIZE := Vector2(1090, 458)
 const MAP_HEIGHT: float = 380.0
 ## T471 y T502: con las coordenadas del atlas aprobado, los marcadores 12 y 13 quedan a 55,2 unidades (el 13 está 6 corrido al
-## este, D-212). A esta escala las áreas táctiles de 56 px no se pisan (RF-690) y ni siquiera el aro de selección (31 px) ni el de
+## este, D-213). A esta escala las áreas táctiles de 56 px no se pisan (RF-690) y ni siquiera el aro de selección (31 px) ni el de
 ## foco (36 px) de una región tocan la insignia de la vecina. El lienzo es más ancho que la vista y se desplaza en horizontal;
 ## en vertical se muestra la franja del atlas que arranca en `MAP_TOP`.
 const MAP_SCALE: float = 1.26
