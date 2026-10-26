@@ -19,12 +19,15 @@ var index: int = 0
 var state: CampaignMap.State = CampaignMap.State.LOCKED
 var stars: int = 0
 var level_name: String = ""
+## RF-709/RF-710: una región de una zona sin descubrir no se dibuja, no recibe foco y no se puede inspeccionar.
+var discovered: bool = true
 var _selected: bool = false
 var _hovered: bool = false
 
 
-func setup(region_index: int, entry: Dictionary, center: Vector2, button_size: float) -> void:
+func setup(region_index: int, entry: Dictionary, center: Vector2, button_size: float, is_discovered: bool = true) -> void:
 	index = region_index
+	discovered = is_discovered
 	state = entry["state"]
 	stars = int(entry["stars"])
 	level_name = entry["name"]
@@ -32,10 +35,11 @@ func setup(region_index: int, entry: Dictionary, center: Vector2, button_size: f
 	size = Vector2(side, side)
 	custom_minimum_size = size
 	position = center - size / 2.0
-	focus_mode = Control.FOCUS_ALL
-	tooltip_text = "Nivel %d · %s · %s" % [index + 1, level_name, CampaignMap.state_text(state)]
-	if state == CampaignMap.State.REBEL or state == CampaignMap.State.TAKEN:
-		tooltip_text += " · %d de 3 estrellas" % stars
+	focus_mode = Control.FOCUS_ALL if discovered else Control.FOCUS_NONE
+	if discovered:
+		tooltip_text = "Nivel %d · %s · %s" % [index + 1, level_name, CampaignMap.state_text(state)]
+		if state == CampaignMap.State.REBEL or state == CampaignMap.State.TAKEN:
+			tooltip_text += " · %d de 3 estrellas" % stars
 	# Todos los estados de dibujo propios son vacíos: el dibujo está en `_draw`; solo el foco usa un anillo.
 	for style_name: String in ["normal", "hover", "pressed", "disabled", "hover_pressed", "focus"]:
 		add_theme_stylebox_override(style_name, StyleBoxEmpty.new())
@@ -58,6 +62,8 @@ func set_hovered(value: bool) -> void:
 
 
 func _draw() -> void:
+	if not discovered:
+		return  # RF-710: ni número, ni candado, ni estrellas, ni rótulo
 	var font: Font = get_theme_default_font()
 	var center: Vector2 = size / 2.0
 	var radius: float = 18.0 if state == CampaignMap.State.LOCKED else 19.0

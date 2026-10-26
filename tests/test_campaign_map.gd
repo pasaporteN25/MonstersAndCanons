@@ -184,7 +184,7 @@ func test_new_save_has_only_first_region_available() -> void:
 
 func test_locked_region_is_focusable_and_distinguishable() -> void:
 	var view: CampaignMapView = _map_select().map_view
-	var locked: CampaignRegion = view.region(5)
+	var locked: CampaignRegion = view.region(3)  # bloqueada de la zona A (descubierta); las de zonas ocultas no admiten foco (T488)
 	assert_eq(locked.focus_mode, Control.FOCUS_ALL)
 	assert_true(locked.tooltip_text.contains("Bloqueada"), "el estado también está en texto")
 	assert_true(view.region(0).tooltip_text.contains("Disponible"))
@@ -275,6 +275,7 @@ func test_click_on_available_region_selects_and_play_opens_it_once() -> void:
 
 
 func test_click_on_locked_region_selects_but_does_not_open() -> void:
+	SaveManager.unlock(GameFlow.level(5).id)  # el 6 abierto descubre la zona B: el 8 queda visible, con candado (RF-710)
 	var view: CampaignMapView = _map_select().map_view
 	view.pointer_select(7)
 	assert_eq(opened.size(), 0)
@@ -292,7 +293,7 @@ func test_play_button_opens_selected_and_locked_confirm_is_ignored() -> void:
 	assert_false(view.play_button().disabled)
 	view.play_button().pressed.emit()
 	assert_eq(opened, [1] as Array[int])
-	view.select(9)
+	view.select(3)
 	view.request_selected()  # confirmar con un nivel bloqueado enfocado
 	assert_eq(opened.size(), 1)
 
@@ -307,6 +308,8 @@ func test_focus_selects_without_opening() -> void:
 
 
 func test_arrow_navigation_visits_all_fifteen_in_order() -> void:
+	for level_index: int in range(1, 15):  # con los quince abiertos (como el modo de pruebas) las tres zonas están descubiertas
+		SaveManager.unlock(GameFlow.level(level_index).id)
 	var view: CampaignMapView = _map_select().map_view
 	view.region(0).grab_focus()
 	for i: int in 14:
