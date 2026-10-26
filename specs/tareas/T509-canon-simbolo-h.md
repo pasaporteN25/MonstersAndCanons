@@ -1,7 +1,7 @@
 # T509 · 🚦 Documentos de canon y menciones del símbolo (A → H)
 
 - **Ejecutor:** Sonnet · solo documentos.
-- **Depende de / compuerta:** 🚦 **OK escrito de Lucas** al cambio de canon (registrado en T506) y T508 integrada. **Sin ese OK no se edita `10-universo.md` ni ningún documento de canon.**
+- **Depende de / compuerta:** 🚦 **El OK escrito de Lucas al cambio de canon A→H ya se recibió el 2026-10-26 y debe transcribirse en T506;** además, hacen falta la aprobación del glifo exacto en T506 y T508 integrada. Sin la aprobación del glifo no se edita `10-universo.md` ni ningún documento de canon.
 - **Refs:** RF-718, D-212. **Rama:** `feature/t509-canon-simbolo-h`, desde `origin/main`; un commit `T509: …`, PR a main; Lucas mergea.
 
 ## Leer
@@ -22,8 +22,4 @@ Todas las menciones «cambiar» y «regla» de D-212 están al día, la búsqued
 
 ## Frenar si
 
-Falta el OK escrito; Lucas decide un símbolo distinto de la H; una mención «histórica» parece en realidad una regla vigente (preguntar).
-
-## Registro (2026-10-26)
-
-**OK de Lucas al cambio de canon A → H (2026-10-26):** Lucas dio su OK al cambio de canon. **El glifo exacto sigue necesitando su aprobación por muestra** (T505/T506); T509 (edición de `10-universo.md` y demás menciones) queda habilitada recién cuando apruebe el glifo exacto. Mientras tanto no se edita `10-universo.md` ni `11-textos-lore.md`.
+Falta la aprobación del glifo exacto; Lucas decide un símbolo distinto de la H; una mención «histórica» parece en realidad una regla vigente (preguntar).

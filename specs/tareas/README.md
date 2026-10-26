@@ -130,4 +130,4 @@ La spec de selector es [T459](T459-selector-mapa-modos-postes.md); sus RF-687–
 
 ## 15. Cierre honesto de M75 · T458, T480, T464 a T467
 
-El informe [M75-cierre-honesto](informes/M75-cierre-honesto.md) revisa cada criterio contra `main` y una ventana real. T464 a T467 no tenían ficha propia (salían de la [ficha T458](T458-ficha-camara-panel-opciones.md)). Ahora la tienen y reflejan lo ya hecho: [T464](T464-ver-todo-lupa-aviso.md) (abierta: falta el OK de la lupa), [T465](T465-panel-torre-sin-repeticiones.md) (abierta: RF-677.1 espera una decisión de Lucas), [T466](T466-opcion-circulo-alcance.md) y [T467](T467-ampliacion-alcance.md) (cerradas). Las capturas y la medición se rehacen con `tools/capture_m75_cierre.gd`.
+El informe [M75-cierre-honesto](informes/M75-cierre-honesto.md) revisó cada criterio contra `main` y una ventana real. **Estado actualizado (2026-10-26, T517):** T464, T465, T466, T467, T468, T481, T513 y T514 están cerradas en `main`; T465 se cerró tras el merge de T513/T514. El informe conserva abajo la fotografía anterior y su hallazgo documental H-5.
