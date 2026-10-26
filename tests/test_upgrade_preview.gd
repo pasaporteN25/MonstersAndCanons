@@ -122,74 +122,104 @@ func _build_one(game: Game) -> Tower:
 	return null
 
 
-func test_pc_panel_shows_the_preview_and_hides_it_at_max_level() -> void:
+func test_pc_panel_has_no_preview_block_and_shows_the_change_in_place() -> void:
 	var original: Variant = SaveManager.get_setting("ui_mode")
 	var game: Game = await _spawn_game(UiMode.PC)
 	var tower: Tower = _build_one(game)
-	game.hud.tower_panel.show_tower(tower, 10, 9999)
-	var preview: Label = game.hud.tower_panel.find_child("UpgradePreview", true, false) as Label
-	assert_not_null(preview)
-	assert_false(preview.visible, "el cañón solo cambia daño y cadencia, que se muestran arriba")
-	assert_false(preview.text.contains("Al nivel"))
-	assert_false(preview.text.contains("Nivel 2/3"))
-	assert_eq((game.hud.tower_panel.get_node("%Damage") as Label).text, "5 → 8")
-	assert_eq((game.hud.tower_panel.get_node("%Rate") as Label).text, "2 → 2,5/s")
-	assert_eq((game.hud.tower_panel.get_node("%UpgradeButton") as Button).text, "Mejorar a nivel 2 (60)  [U]")
-	assert_eq((game.hud.tower_panel.get_node("%LevelCard") as HBoxContainer).tooltip_text, "Nivel actual: 1 de 3")
+	var panel: TowerPanel = game.hud.tower_panel
+	panel.show_tower(tower, 10, 9999)
+	assert_null(panel.find_child("UpgradePreview", true, false), "T513: se retira el bloque UpgradePreview")
+	assert_eq((panel.get_node("%Damage") as Label).text, "5 → 8")
+	assert_eq((panel.get_node("%Rate") as Label).text, "2 → 2,5/s")
+	assert_eq((panel.get_node("%UpgradeButton") as Button).text, "Mejorar a nivel 2")
+	assert_eq((panel.get_node("%Cost") as Label).text, "60", "el costo va en el botón, con la moneda")
+	assert_eq((panel.get_node("%LevelCard") as HBoxContainer).tooltip_text, "Nivel actual: 1 de 3")
 	while tower.can_upgrade():
 		tower.apply_upgrade()
-	game.hud.tower_panel.refresh(9999)
-	assert_false(preview.visible, "en el nivel máximo no hay preview")
-	assert_eq((game.hud.tower_panel.find_child("UpgradeButton", true, false) as Button).text, "Nivel máximo")
-	assert_eq((game.hud.tower_panel.get_node("%Damage") as Label).text, str(tower.stats().damage))
+	panel.refresh(9999)
+	assert_eq((panel.find_child("UpgradeButton", true, false) as Button).text, "Nivel máximo")
+	assert_eq((panel.get_node("%Damage") as Label).text, str(tower.stats().damage), "en el nivel máximo no hay flecha")
 	SaveManager.set_setting("ui_mode", original)
 
 
-func test_panel_shows_each_upgrade_value_once_for_cannon_tesla_ice_and_disruptor() -> void:
+func _panel_with(id: String, level_index: int) -> TowerPanel:
 	var panel := (load("res://scenes/ui/tower_panel.tscn") as PackedScene).instantiate() as TowerPanel
 	add_child_autofree(panel)
-	for id: String in ["cannon", "tesla", "frost", "fire", "disruptor"]:
-		var tower := (load("res://scenes/towers/tower.tscn") as PackedScene).instantiate() as Tower
-		tower.setup(_tower(id))
-		add_child_autofree(tower)
-		for level_index: int in tower.data.levels.size() - 1:
-			tower.level_index = level_index
-			panel.show_tower(tower, 0, 9999)
-			var preview := panel.find_child("UpgradePreview", true, false) as Label
-			var changes: Array[Dictionary] = UpgradeDeltas.preview(tower.data.levels, level_index, _table, 99)
+	var tower := (load("res://scenes/towers/tower.tscn") as PackedScene).instantiate() as Tower
+	tower.setup(_tower(id))
+	add_child_autofree(tower)
+	tower.level_index = level_index
+	panel.show_tower(tower, 0, 9999)
+	return panel
+
+
+func _count(text: String, part: String) -> int:
+	return text.count(part)
+
+
+## T513 (RF-721 punto 4): la frase de cada efecto lleva su «antes → después» adentro, y aparece UNA vez.
+func test_effect_phrases_carry_the_change_inside_and_appear_once_for_every_tower_and_level() -> void:
+	for file: String in DirAccess.get_files_at("res://data/towers"):
+		if not file.ends_with(".tres"):
+			continue
+		var id: String = file.trim_suffix(".tres")
+		var data: TowerData = _tower(id)
+		for level_index: int in data.levels.size():
+			var next: TowerLevelData = data.levels[level_index + 1] if level_index + 1 < data.levels.size() else null
+			var panel: TowerPanel = _panel_with(id, level_index)
 			var message: String = "%s nivel %d" % [id, level_index + 1]
-			assert_false(preview.text.contains("Al nivel"))
-			var full_text: String = "%s %s %s %s" % [panel.get_node("%Damage").text, panel.get_node("%Rate").text,
-				panel.get_node("%Range").text, panel.get_node("%Stats").text + " " + preview.text]
-			assert_false(full_text.contains("."), "%s: decimales con coma" % message)
-			if id == "frost" and level_index == 0:
-				assert_string_contains(panel.get_node("%Stats").text, "Duración del frenado: 2 s", "se conserva el dato que no cambió")
-			if id == "fire" and level_index == 0:
-				assert_string_contains(panel.get_node("%Stats").text, "Duración de quemadura: 3 s", "se conserva el dato que no cambió")
-			for change: Dictionary in changes:
-				var field: String = String(change["campo"])
-				if field == "damage":
-					assert_true(panel.get_node("%Damage").text.contains("%s → %s" % [UpgradeDeltas.format_value(change["antes"], change["formato"]), UpgradeDeltas.format_value(change["despues"], change["formato"])]), message)
-				elif field == "fire_rate":
-					assert_true(panel.get_node("%Rate").text.contains("%s → %s" % [UpgradeDeltas.format_value(change["antes"], change["formato"]), UpgradeDeltas.format_value(change["despues"], change["formato"])]), message)
-				elif field == "range_tiles":
-					assert_true(panel.get_node("%Range").text.contains("%s → %s" % [UpgradeDeltas.format_value(change["antes"], change["formato"]), UpgradeDeltas.format_value(change["despues"], change["formato"])]), message)
-				else:
-					assert_true(preview.text.contains(String(change["texto"])), "%s: %s una vez en antes → después" % [message, field])
-					assert_false(panel.get_node("%Stats").text.contains(TowerPanel._effect_prefix(field)), "%s: efecto vigente no duplica %s" % [message, field])
+			var stats: String = (panel.get_node("%Stats") as Label).text
+			for phrase: String in TowerText.effect_phrases(data.levels[level_index], next):
+				assert_eq(_count(stats, phrase), 1, "%s: «%s» una sola vez en %s" % [message, phrase, stats])
+			var visible_text: String = stats
+			for name: String in ["Damage", "Rate", "Range"]:
+				visible_text += " " + (panel.get_node("%" + name) as Label).text
+			assert_false(visible_text.contains("."), "%s: decimales con coma (%s)" % [message, visible_text])
+			if next == null:
+				assert_false(visible_text.contains(UpgradeDeltas.ARROW), "%s: último nivel sin flechas" % message)
+			assert_null(panel.find_child("UpgradePreview", true, false))
+			panel.queue_free()
+
+
+func test_phrases_for_the_cases_of_rf_686() -> void:
+	var tesla: TowerData = _tower("tesla")
+	assert_eq(TowerText.effect_phrases(tesla.levels[0], tesla.levels[1])[0], "El rayo salta a 2 → 3 enemigos más")
+	var frost: TowerData = _tower("frost")
+	assert_eq(TowerText.effect_phrases(frost.levels[0], frost.levels[1])[0], "Ralentiza 40 → 50 % durante 2 s", "la duración no cambia: sin flecha")
+	assert_eq(TowerText.effect_phrases(frost.levels[1], frost.levels[2])[0], "Ralentiza 50 → 60 % durante 2 → 3 s")
+	var disruptor: TowerData = _tower("disruptor")
+	assert_eq(TowerText.effect_phrases(disruptor.levels[0], disruptor.levels[1])[0], "Pulso: apaga las auras durante 2,5 → 3 s")
+	var standard: TowerData = _tower("mechanical_standard")
+	var support: Array[String] = TowerText.effect_phrases(standard.levels[0], standard.levels[1])
+	assert_eq(support[0], "Apoyo: +10 → 15 % de cadencia; solo el mayor")
+	assert_eq(support[1], "Repara 2 → 3 puntos de desgaste/s; solo la mayor tasa")
+	var cannon: TowerData = _tower("cannon")
+	assert_eq(TowerText.effect_phrases(cannon.levels[0], cannon.levels[1])[0], "Área: radio 1 → 1,2")
+
+
+func test_effect_phrases_without_next_level_are_the_plain_effects() -> void:
+	for file: String in DirAccess.get_files_at("res://data/towers"):
+		if not file.ends_with(".tres"):
+			continue
+		var data: TowerData = _tower(file.trim_suffix(".tres"))
+		for level: TowerLevelData in data.levels:
+			var plain: Array[String] = TowerText.effects(level)
+			var phrases: Array[String] = TowerText.effect_phrases(level, null, false)
+			assert_eq(phrases, plain, "%s: sin nivel siguiente no hay flechas" % file)
+			for line: String in phrases:
+				assert_false(line.contains(UpgradeDeltas.ARROW))
+	# Caso de borde: una mejora que agrega un efecto que el nivel actual no tiene no lo pierde.
+	var from := TowerLevelData.new()
+	var to := TowerLevelData.new()
+	to.chain_extra_targets = 2
+	assert_eq(TowerText.effect_phrases(from, to)[0], "El rayo salta a 0 → 2 enemigos más")
 
 
 ## RF-677 (caso de borde del cierre de M75): en el nivel 3 no hay flechas ni decimales con punto. El Cañón de
 ## nivel 3 mostraba «Área: radio 1.5» porque `TowerText.effects` usaba `%.1f`.
 func test_panel_at_level_three_has_no_arrows_and_no_decimal_point() -> void:
-	var panel := (load("res://scenes/ui/tower_panel.tscn") as PackedScene).instantiate() as TowerPanel
-	add_child_autofree(panel)
 	for id: String in ["cannon", "tesla", "frost", "disruptor"]:
-		var tower := (load("res://scenes/towers/tower.tscn") as PackedScene).instantiate() as Tower
-		tower.setup(_tower(id))
-		add_child_autofree(tower)
-		tower.level_index = tower.data.levels.size() - 1
-		panel.show_tower(tower, 0, 9999)
+		var panel: TowerPanel = _panel_with(id, 2)
 		var full_text: String = "%s %s %s %s" % [panel.get_node("%Damage").text, panel.get_node("%Rate").text,
 			panel.get_node("%Range").text, panel.get_node("%Stats").text]
 		assert_false(full_text.contains("."), "%s nivel 3: decimales con coma (%s)" % [id, full_text])

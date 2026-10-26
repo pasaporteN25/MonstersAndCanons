@@ -81,7 +81,7 @@ func test_wiki_and_panel_explain_repair_and_show_effective_state() -> void:
 	panel.show_tower(cannon,35,200)
 	assert_string_contains((panel.get_node("%Status") as Label).text,"Desgaste 18")
 	assert_string_contains((panel.get_node("%Status") as Label).text,"Aturdida")
-	assert_string_contains((panel.get_node("%Stats") as Label).text,"Reparación recibida: 2.0")
+	assert_string_contains((panel.get_node("%Stats") as Label).text,"Reparación recibida: 2 puntos/s")
 
 func test_actual_pause_freezes_and_speed_scales_repair() -> void:
 	var cannon: Tower = _tower(Vector2.ZERO)

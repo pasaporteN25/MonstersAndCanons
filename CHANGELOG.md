@@ -1,5 +1,9 @@
 # Novedades del juego
 
+## Panel de la torre más chico y más claro *(T513, 2026-10-26; en revisión)*
+
+El panel de la torre elegida en la PC ya no mide siempre 320 px de alto: mantiene los 270 de ancho pero su alto sale de lo que muestra (entre 200 y 300 px, según la torre) y nunca necesita barra de desplazamiento. El cambio de una mejora ahora se lee dentro de la frase de cada efecto («El rayo salta a 2 → 3 enemigos más», «Ralentiza 40 → 50 % durante 2 s», «Pulso: apaga las auras durante 2,5 → 3 s»), así que ningún efecto desaparece al subir de nivel. El Estandarte ya no muestra «Daño 0» ni «Cadencia Apoyo» ni un «Apuntar» apagado, la Disruptora tampoco muestra «Apuntar», y «Voladores» pasó a un ícono junto al nombre (tachado si la torre no los golpea). «Mejorar» dice «faltan N» a la vista cuando no te alcanza el oro, y los botones son los de hierro y bronce de los menús, con «Apuntar» y «Vender» lado a lado. Todos los decimales llevan coma. No cambia ningún precio, daño ni regla.
+
 ## «Ver todo» del celular, ahora con una lupa *(T464, 2026-10-26; en revisión)*
 
 En el celular, el botón «Ver todo» (el que aparece al acercar el mapa) pasó de un texto a una lupa dentro de un círculo, igual de grande que el carrito, la X y la demolición (64 px). Con el texto, el botón se salía 7 px por el borde derecho de la pantalla; ahora entra entero y no tapa a los otros botones. El aviso de la primera vez («Acercaste el mapa. Tocá la lupa para volver a verlo entero.») es el mismo. En la PC sigue sin haber botón: se vuelve con la tecla. Todavía no se probó en un celular real.
