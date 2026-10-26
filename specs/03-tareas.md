@@ -2975,7 +2975,17 @@ Spec en **M80** (RF-716 a RF-719), razones y canon en **D-212**, el cómo en la 
 - [x] **T518 · Proponer el rediseño de la pantalla de niveles. `[mobile+x86]`**
   **Pedido:** Lucas, 2026-10-26. **Ficha:** `specs/tareas/T518-redisenar-selector.md`. **Muestras:** `art/t518-selector/README.md` y `Capturas/T518-*.png`.
   **Hecho cuando:** hay tres composiciones de la vista completa, con adaptaciones PC/celular; el mapa y las tarjetas conservan su contenido; wordings, espacio y estilo están representados y se explicita qué falta decidir para hacer la spec de implementación.
-  **Resultado (2026-10-26, Codex `gpt-6.1-sol` esfuerzo alto con Impeccable 4.7.0; revisión de Sonnet):** presentadas Mesa de mando, Bastidor de campaña (recomendada) y Lienzo primero, cada una en PC 1280×720 y celular 720×1280. Se usaron capturas de mapa T515 y tarjetas T501; las seis imágenes son maquetas generadas, no capturas de Godot. Se propone «Elegir nivel», progreso en cabecera, tres destinos actuales, selector Mapa/Tarjetas y pie con nivel, estado y «Jugar». `git diff --check` y regeneración local de PNG correctos. **Sin verificar:** medidas en motor, controles, accesibilidad táctil o teléfono real. No se tocaron código ni reglas. Falta que Lucas elija la composición; después se escribirá la spec de implementación antes de programar.
+  **Resultado (2026-10-26, Codex `gpt-6.1-sol` esfuerzo alto con Impeccable 4.7.0; revisión de Sonnet):** presentadas Mesa de mando, Bastidor de campaña (recomendada) y Lienzo primero, cada una en PC 1280×720 y celular 720×1280. Se usaron capturas de mapa T515 y tarjetas T501; las seis imágenes son maquetas generadas, no capturas de Godot. Se propone «Elegir nivel», progreso en cabecera, tres destinos actuales, selector Mapa/Tarjetas y pie con nivel, estado y «Jugar». `git diff --check` y regeneración local de PNG correctos. **Sin verificar:** medidas en motor, controles, accesibilidad táctil o teléfono real. No se tocaron código ni reglas. Actualización (2026-10-26): Lucas eligió Mesa de mando y pidió acortar la pestaña a «Comunidad»; T519 registra la spec y T520 implementa el marco.
+
+
+- [x] **T519 · Especificar Mesa de mando para el selector de niveles. `[x86]`**
+  **Pedido:** Lucas, 2026-10-26; eligió Mesa de mando y pidió acortar «Mapas de la comunidad» a «Comunidad». **Refs:** RF-723, D-215, RF-687 a RF-698, RF-711; T518. **Solo documentos.** **Ficha:** `specs/tareas/T519-selector-mesa-de-mando.md`.
+  **Hecho cuando:** el requisito define el marco general, adaptación apaisada, textos, preservación de mapa/tarjetas y pruebas; decisión, plan y ficha T520 quedan enlazados; `git diff --check` pasa. Sin código ni arte.
+  **Resultado (2026-10-26):** RF-723 y D-215 fijan la composición elegida, adaptación horizontal 1280×720, preservación del atlas/tarjetas y rótulo «Comunidad». T520 implementa el cambio. No se tocó runtime, datos ni arte; no se corrieron Godot/GUT por ser documental.
+
+- [ ] **T520 · Implementar Mesa de mando en el selector de niveles. `[mobile+x86]`**
+  **Refs:** RF-723, D-215, RF-687 a RF-698, RF-711. **Depende de:** T519 integrada. **Ficha:** `specs/tareas/T520-implementar-selector-mesa-de-mando.md`.
+  **Hecho cuando:** composición general adaptable de PC y celular simulado; solapa «Comunidad»; sin cambios al mapa/tarjetas ni a conducta de páginas; tests de geometría, navegación dinámica, carpeta y controles existentes; capturas de PC/celular simulado; `--import` y GUT completo sin `SCRIPT ERROR`.
 
 - [x] **T512 · Enmiendas de spec del panel de torre (PC-A y CEL-B). `[mobile+x86]`**
   **Refs:** RF-512, RF-616, RF-617, RF-650, RF-677, RF-681, RF-686, RF-721, RF-722, D-214, T510. **Pedido:** Lucas, 2026-10-26 (eligió PC-A y CEL-B). **Solo documentos.**
