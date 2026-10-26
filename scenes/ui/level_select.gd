@@ -250,9 +250,13 @@ func map_entries() -> Array[Dictionary]:
 	for i: int in GameFlow.level_count():
 		var level: LevelData = GameFlow.level(i)
 		var stars: int = GameFlow.level_stars(i)
-		entries.append({"name": level.display_name, "place": level.place_text, "stars": stars,
-			"state": CampaignMap.state_of(GameFlow.is_level_unlocked(i), SaveManager.is_completed(level.id), stars)})
+		entries.append({"name": level.display_name, "place": level.place_text, "stars": stars, "state": campaign_state(i)})
 	return entries
+
+
+## T501, RF-695: el estado visual de un nivel de la campaña. Es el mismo para el mapa y para las tarjetas.
+func campaign_state(index: int) -> CampaignMap.State:
+	return CampaignMap.state_of(GameFlow.is_level_unlocked(index), SaveManager.is_completed(GameFlow.level(index).id), GameFlow.level_stars(index))
 
 
 func _make_map_view() -> CampaignMapView:
@@ -475,7 +479,18 @@ func _make_card(index: int) -> Button:
 	_add_tower_icons(card, index, level, unlocked, compact)
 	card.pressed.connect(GameFlow.start_level.bind(index))
 	_add_campaign_stars(card, GameFlow.level_stars(index), unlocked, index, compact)
+	_add_badge_icon(card, index)
 	return card
+
+
+## T501, RF-695: la misma insignia que el mapa, arriba a la izquierda. Se agrega al final para que quede encima del fondo
+## y del velo, y no se atenúa con el resto de una tarjeta bloqueada (el candado ya es el aviso).
+func _add_badge_icon(card: Button, index: int) -> void:
+	var icon := CampaignBadgeIcon.new()
+	icon.name = "Badge"
+	icon.setup(campaign_state(index), index)
+	icon.position = Vector2(CARD_CONTENT_LEFT - 2.0, 0.0)
+	card.add_child(icon)
 
 
 ## T426: suelo del tema del nivel (uno desconocido usa la pradera) y velo oscuro, detrás de todo lo demás.
@@ -508,14 +523,17 @@ func _add_theme_background(card: Button, theme_id: StringName) -> void:
 func _add_campaign_card_text(card: Button, index: int, level: LevelData, unlocked: bool, compact: bool = false) -> void:
 	var card_size: Vector2 = CAMPAIGN_CARD_SIZE if compact else CARD_SIZE
 	var number_text: String = "Nivel %d" % (index + 1) if compact else "Nivel %d · %d oleadas" % [index + 1, level.waves.size()]
-	_card_label(card, "LevelNumber", number_text, 13 if compact else 14, Rect2(8, 3, card_size.x - 16, 19 if compact else 23))
-	var title_y: float = 28.0
-	var title_height: float = 24.0 if compact else 36.0
+	# T501: la insignia ocupa la esquina de arriba a la izquierda; en la tarjeta ancha el rótulo se corre para no pisarla.
+	var number_left: float = CampaignBadgeIcon.SIDE + 8.0
+	_card_label(card, "LevelNumber", number_text, 13 if compact else 14, Rect2(number_left, 3, card_size.x - number_left - 8.0, 19 if compact else 23))
+	# T501: el nombre baja hasta debajo de la insignia (40 px) para que ningún rótulo pise su cuadro.
+	var title_y: float = CampaignBadgeIcon.SIDE
+	var title_height: float = 24.0
 	var title: Label = _card_label(card, "LevelName", level.display_name, 16 if compact else CAMPAIGN_TITLE_FONT_SIZE, Rect2(8, title_y, card_size.x - 16, title_height))
 	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	if unlocked and level.place_text != "":
 		var place_font_size: int = 12 if compact else PLACE_FONT_SIZE
-		var place_y: float = 54.0 if compact else 64.0
+		var place_y: float = title_y + title_height
 		var place_height: float = 18.0 if compact else 23.0
 		var place_text: String = _fit_line(level.place_text, get_theme_font("font"), place_font_size, card_size.x - 40.0)
 		var place: Label = _card_label(card, "Place", place_text, place_font_size, Rect2(8, place_y, card_size.x - 16, place_height))

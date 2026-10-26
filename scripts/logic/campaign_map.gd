@@ -142,6 +142,12 @@ static func badge_of(state: State) -> Badge:
 	return Badge.NONE
 
 
+## ¿La región lleva el halo punteado de «disponible»? (T499, RF-695) Solo la desbloqueada sin victoria: es la única cuya
+## insignia (rebelde) es igual a la de otra con otro sentido, así que el halo la distingue de las que ya se jugaron.
+static func has_halo(state: State) -> bool:
+	return state == State.AVAILABLE
+
+
 ## El número de nivel que se muestra (RF-695): 1…15, sin cero inicial. Los ids y rutas (`level_01`) no cambian.
 static func number_text(index: int) -> String:
 	return str(index + 1)
