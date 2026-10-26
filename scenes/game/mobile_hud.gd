@@ -90,6 +90,8 @@ const CART_ICON: Texture2D = preload("res://assets/ui/mobile_cart.svg")
 const CONFIRM_ICON: Texture2D = preload("res://assets/ui/mobile_confirm.svg")
 const CLOSE_ICON: Texture2D = preload("res://assets/ui/mobile_close.svg")
 const DEMOLISH_ICON: Texture2D = preload("res://assets/ui/mobile_demolish.svg")
+## T464: lupa de «Ver todo» (aprobada por Lucas el 2026-10-26; muestra en art/t464-muestra-lupa/).
+const VIEW_ALL_ICON: Texture2D = preload("res://assets/ui/mobile_view_all.svg")
 
 
 func _ready() -> void:
@@ -472,8 +474,12 @@ func _build_placement_buttons() -> void:
 func _build_view_all_button() -> void:
 	_view_all_button = Button.new()
 	_view_all_button.name = "ViewAll"
-	_view_all_button.theme = MOBILE_THEME
-	_view_all_button.text = "Ver todo"
+	# Botón redondo con la lupa, sin texto visible (T464): mismo estilo que carrito, X y demolición.
+	_style_icon_button(_view_all_button, VIEW_ALL_ICON)
+	# A diferencia de los otros, este se toca directo (no se arrastra): recupera el filtro del mouse.
+	_view_all_button.mouse_filter = Control.MOUSE_FILTER_STOP
+	_view_all_button.tooltip_text = "Ver todo"
+	_view_all_button.accessibility_name = "Ver todo"
 	var floating_size: float = float(_config.get_value("flotante_min_px"))
 	_view_all_button.custom_minimum_size = Vector2(floating_size, floating_size)
 	_view_all_button.position = Vector2(
@@ -481,6 +487,8 @@ func _build_view_all_button() -> void:
 	_view_all_button.visible = false
 	_view_all_button.pressed.connect(view_all_pressed.emit)
 	add_child(_view_all_button)
+	# El tamaño se fija ya dentro del árbol: antes, el ícono le sumaba un mínimo provisorio (72 px).
+	_view_all_button.size = _view_all_button.custom_minimum_size
 
 
 func _build_floating_buttons() -> void:
