@@ -1,5 +1,9 @@
 # Novedades del juego
 
+## Pinos, abetos y rocas nevadas nuevos en el nivel 13 *(T497, 2026-10-26; en revisión)*
+
+En el Paso alto (nivel 13), los pinos, los abetos y las rocas con nieve tienen un dibujo nuevo, con volumen y luz como el resto de la decoración renderizada. Están en las mismas casillas que antes y siguen siendo decoración donde no se construye: no cambia el camino, las oleadas ni el mapa. No se probaron teléfonos reales.
+
 ## Postes de campaña según tus estrellas *(T475, 2026-10-25; en revisión)*
 
 En la campaña aparecen postes de banderines en la mayoría de los mapas: uno en los niveles 1 a 7 y 10, y dos en los niveles 11 a 15. Son rebeldes mientras tengas de 0 a 2 estrellas en el nivel y pasan a ser tuyos, con el banderín que armaste en el editor, al conseguir las 3 estrellas. El poste del nivel 6 ya no cambia con cualquier victoria: también pide las 3 estrellas. Es solo un adorno: no cambia el camino, dónde construir ni las oleadas. Los niveles 8 y 9 todavía no lo tienen, hasta elegir otra casilla. Los mapas de la comunidad, Asedio, el editor y el modo de pruebas siempre muestran el poste rebelde.
