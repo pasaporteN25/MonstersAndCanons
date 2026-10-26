@@ -1,5 +1,9 @@
 # Novedades del juego
 
+## Insignias también en las tarjetas *(T501, 2026-10-25; en revisión)*
+
+La vista de tarjetas de la campaña muestra ahora, arriba a la izquierda de cada nivel, la misma insignia que el mapa: roja si todavía no lo ganaste (con halo punteado si ya podés jugarlo), mitad roja y turquesa con 1 o 2 estrellas, turquesa con 3, y candado si está bloqueado. Para hacerle lugar, el nombre del nivel y el lugar bajaron un poco.
+
 ## Insignias del mapa sin pisarse *(T500, 2026-10-25; en revisión)*
 
 Se midió la separación entre las quince insignias del mapa de campaña: ninguna se pisa (la más cercana, 12 y 13, deja 4 px entre bordes), así que el mapa no cambió. Lo que sí se cruza un poco en ese par son los aros de selección y de foco, y algunos rótulos largos; quedó anotado para decidir.
