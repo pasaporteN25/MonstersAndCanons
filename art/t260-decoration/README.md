@@ -1,5 +1,7 @@
 # T260 · Mejora del arte de la decoración del mapa
 
+> **Nota histórica (T516, 2026-10-26):** `render_contact.gd`, `refine_vectors.py` y `manifest.json` de esta carpeta leían `assets/sprites/map/{pino,abeto,roca_nieve,huesos}.svg`. Esos cuatro SVG se **retiraron del proyecto el 2026-10-26** (con OK de Lucas) porque los reemplazan `pine_snow.png`, `fir_snow.png`, `snow_rock.png` y `bones_skull.png` (T497 y T498). Las herramientas no se reescribieron: si se vuelven a correr, fallarán o saltearán esos cuatro. El arte viejo sigue en `sources/before/` (y el pulido de T260, en el historial de git).
+
 **PROVISIONAL: pendiente de aprobación artística de Lucas.** Pedido y estilo decididos por Lucas el 2026-10-11: pulido en el mismo lenguaje vectorial de la guía, con más detalle, sombras suaves y variedad, conservando el tono y los colores base de cada bioma. Esta entrega no declara arte definitivo.
 
 Abrir [comparison.html](comparison.html) para comparar las hojas ANTES/DESPUÉS a **220 y 34 px**, las muestras individuales a tamaño real y las galerías. [manifest.json](manifest.json) enumera los 27 archivos, sus posiciones en las hojas y sus hashes. `sources/before/` conserva los SVG anteriores, sin redibujarlos.
