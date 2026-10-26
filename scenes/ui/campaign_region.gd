@@ -25,6 +25,13 @@ const NUMBER_SIZE: int = 15
 const NUMBER_SIZE_TWO_DIGITS: int = 14
 const NUMBER_COLOR := Color("#fff7e6")
 const NUMBER_OUTLINE := Color("#1c1620")
+## T499: halo de «disponible». Radio entre el borde de la insignia (26) y el aro de selección (31); 24 rayitas de media
+## separación, dorado claro. Es estático: sin animación (RF-710).
+const HALO_RADIUS: float = BADGE_EDGE + 2.5
+const HALO_WIDTH: float = 2.0
+const HALO_DASHES: int = 24
+const HALO_DASH_FRACTION: float = 0.5
+const HALO_COLOR := Color("#ffdf8a")
 const BADGES: Dictionary = {
 	CampaignMap.Badge.REBEL: preload("res://assets/ui/campaign_badges/badge_rebel.svg"),
 	CampaignMap.Badge.SPLIT: preload("res://assets/ui/campaign_badges/badge_split.svg"),
@@ -85,19 +92,13 @@ func _draw() -> void:
 	var locked: bool = state == CampaignMap.State.LOCKED
 	# El aro de selección y el de foco rodean el borde de lo que se dibuja (la insignia llega a BADGE_EDGE).
 	var edge: float = LOCK_RADIUS if locked else BADGE_EDGE
+	if CampaignMap.has_halo(state):
+		draw_halo(self, center)
 	if _selected or _hovered:
 		draw_arc(center, edge + 5.0, 0.0, TAU, 40, Color("#f0cb70"), 2.0)
 	if has_focus():
 		draw_arc(center, edge + 10.0, 0.0, TAU, 48, FOCUS_COLOR, 3.0)
-	if locked:
-		_draw_lock(center, LOCK_RADIUS)
-	else:
-		var badge: CampaignMap.Badge = CampaignMap.badge_of(state)
-		draw_texture_rect(BADGES[badge], Rect2(center - Vector2(BADGE_TEXTURE_SIDE, BADGE_TEXTURE_SIDE) / 2.0, Vector2(BADGE_TEXTURE_SIDE, BADGE_TEXTURE_SIDE)), false)
-		var number: String = CampaignMap.number_text(index)
-		var number_size: int = NUMBER_SIZE_TWO_DIGITS if number.length() > 1 else NUMBER_SIZE
-		draw_string_outline(font, center + Vector2(-BADGE_RADIUS, number_size * 0.36), number, HORIZONTAL_ALIGNMENT_CENTER, BADGE_RADIUS * 2.0, number_size, 3, NUMBER_OUTLINE)
-		draw_string(font, center + Vector2(-BADGE_RADIUS, number_size * 0.36), number, HORIZONTAL_ALIGNMENT_CENTER, BADGE_RADIUS * 2.0, number_size, NUMBER_COLOR)
+	draw_badge(self, state, index, center, font)
 	if state == CampaignMap.State.REBEL or state == CampaignMap.State.TAKEN:
 		_draw_stars(center + Vector2(0, -edge - 8.0))
 	var caption: String = CampaignMap.number_text(index) if locked else "%s · %s" % [CampaignMap.number_text(index), level_name]
@@ -126,11 +127,45 @@ func _fit(font: Font, text: String) -> String:
 	return result + "…" if result != text else result
 
 
+## T474/T499/T501: lo que dibuja una región por dentro (el candado o la insignia V3 con su número), sin halo ni estrellas ni
+## rótulo. Lo comparten el mapa y las tarjetas del selector para que los estados se vean igual; `unit` achica el dibujo
+## completo (insignia, candado y número) para las tarjetas y vale 1 en el mapa.
+static func draw_badge(canvas: CanvasItem, badge_state: CampaignMap.State, level_index: int, center: Vector2, font: Font, unit: float = 1.0) -> void:
+	if badge_state == CampaignMap.State.LOCKED:
+		draw_lock(canvas, center, LOCK_RADIUS * unit)
+		return
+	var badge: CampaignMap.Badge = CampaignMap.badge_of(badge_state)
+	var side: Vector2 = Vector2(BADGE_TEXTURE_SIDE, BADGE_TEXTURE_SIDE) * unit
+	canvas.draw_texture_rect(BADGES[badge], Rect2(center - side / 2.0, side), false)
+	var number: String = CampaignMap.number_text(level_index)
+	var number_size: int = roundi((NUMBER_SIZE_TWO_DIGITS if number.length() > 1 else NUMBER_SIZE) * unit)
+	var origin: Vector2 = center + Vector2(-BADGE_RADIUS * unit, number_size * 0.36)
+	canvas.draw_string_outline(font, origin, number, HORIZONTAL_ALIGNMENT_CENTER, BADGE_RADIUS * unit * 2.0, number_size, 3, NUMBER_OUTLINE)
+	canvas.draw_string(font, origin, number, HORIZONTAL_ALIGNMENT_CENTER, BADGE_RADIUS * unit * 2.0, number_size, NUMBER_COLOR)
+
+
+## T499, RF-695: los tramos del halo punteado de «disponible» como pares de ángulos (inicio, fin), en radianes. Son
+## `HALO_DASHES` rayitas iguales con un hueco entre ellas: no es un círculo continuo (como la selección) ni gira (RF-710).
+static func halo_dashes() -> Array[Vector2]:
+	var result: Array[Vector2] = []
+	var period: float = TAU / float(HALO_DASHES)
+	for k: int in HALO_DASHES:
+		result.append(Vector2(k * period, k * period + period * HALO_DASH_FRACTION))
+	return result
+
+
+## T499: dibuja el halo dorado punteado alrededor de una insignia de nivel disponible. Queda justo afuera del borde de la
+## insignia (26 px) y adentro del aro de selección (r+5): ni lo tapa ni se confunde con él (continuo) ni con el foco (blanco).
+static func draw_halo(canvas: CanvasItem, center: Vector2, unit: float = 1.0) -> void:
+	for dash: Vector2 in halo_dashes():
+		canvas.draw_arc(center, HALO_RADIUS * unit, dash.x, dash.y, 4, HALO_COLOR, HALO_WIDTH * maxf(unit, 0.75))
+
+
 ## El candado de una región bloqueada: no depende del color para distinguirse de las abiertas (RF-695).
-func _draw_lock(center: Vector2, radius: float) -> void:
-	draw_circle(center, radius, Color("#414b4b"))
-	draw_arc(center, radius, 0.0, TAU, 40, Color("#222a2b"), 2.0)
+static func draw_lock(canvas: CanvasItem, center: Vector2, radius: float) -> void:
+	canvas.draw_circle(center, radius, Color("#414b4b"))
+	canvas.draw_arc(center, radius, 0.0, TAU, 40, Color("#222a2b"), 2.0)
 	var body := Rect2(center + Vector2(-0.33, -0.05) * radius, Vector2(0.66, 0.5) * radius)
-	draw_rect(body, Color("#555d5c"))
-	draw_rect(body, Color("#b3b9b4"), false, 1.5)
-	draw_arc(center + Vector2(0, -0.05) * radius, radius * 0.22, PI, TAU, 10, Color("#b3b9b4"), 1.7)
+	canvas.draw_rect(body, Color("#555d5c"))
+	canvas.draw_rect(body, Color("#b3b9b4"), false, 1.5)
+	canvas.draw_arc(center + Vector2(0, -0.05) * radius, radius * 0.22, PI, TAU, 10, Color("#b3b9b4"), 1.7)

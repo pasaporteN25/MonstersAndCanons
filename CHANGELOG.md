@@ -1,5 +1,9 @@
 # Novedades del juego
 
+## Halo en los niveles disponibles *(T499, 2026-10-25; en revisión)*
+
+En el mapa de campaña, un nivel que ya podés jugar pero todavía no ganaste lleva un halo dorado punteado alrededor de su insignia roja, para no confundirlo con los que ya jugaste. No se mueve ni parpadea, y se distingue del aro continuo de selección y del aro blanco del teclado.
+
 ## Insignias de conquista en el mapa de campaña *(T474, 2026-10-25; en revisión, entrega parcial)*
 
 En el mapa planetario, el círculo de cada nivel muestra ahora una insignia: roja (rebelde) si todavía no ganaste el nivel, mitad roja y mitad turquesa si lo ganaste con 1 o 2 estrellas, y turquesa (tuya) con 3. Llevan el número del nivel, las estrellas, y siguen el aro de selección y de foco. La leyenda con «Tomada», «Rebeldes» y «Bloqueada» ya no está; los niveles bloqueados siguen con su candado. Todavía faltan las tarjetas con el mismo aspecto, el halo del nivel disponible y la receta del editor. No se probaron teléfonos reales.
