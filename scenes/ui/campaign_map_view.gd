@@ -97,6 +97,7 @@ func setup(entries: Array[Dictionary], selected: int = -1) -> void:
 			region.focus_entered.connect(select.bind(i))
 		_canvas.add_child(region)
 		_regions.append(region)
+	_update_caption_contexts()
 	# RF-688/RF-710: las flechas siguen el orden y saltan las regiones de zonas sin descubrir (que no admiten foco).
 	var focusable: Array[int] = []
 	for i: int in _regions.size():
@@ -186,6 +187,18 @@ func select(index: int) -> void:
 		region_node.set_selected(region_node.index == _selected)
 	selection_changed.emit(_selected)
 	_ensure_selected_visible.call_deferred()
+
+
+## T515: a cada región le dice dónde está el lienzo y qué ocupan las demás (insignias y estrellas), para que el rótulo de la
+## elegida o con foco no se salga ni tape a otra. Las regiones ocultas no cuentan: no dibujan nada.
+func _update_caption_contexts() -> void:
+	var bounds := Rect2(Vector2.ZERO, CANVAS_SIZE)
+	for region_node: CampaignRegion in _regions:
+		var others: Array[Rect2] = []
+		for other: CampaignRegion in _regions:
+			if other != region_node and other.discovered:
+				others.append_array(CampaignRegion.obstacle_rects(other.position + other.size / 2.0, other.state, other.stars))
+		region_node.set_caption_context(bounds, others)
 
 
 ## Clic o toque en una región (RF-688): la marca y le da el foco, sin iniciar nada.
