@@ -33,8 +33,8 @@ Totales de interés: cabezas de ganado (`huesos.svg`) en 10, 11 y 12: **74** cas
 |---|---|---|---|
 | `simbolo_ruina` (piedra con la A) | `assets/sprites/map/simbolo_ruina.svg` | SVG plano (M4/M5) | viewBox 64×64 |
 | `roca_marcada` (piedra con la A) | `assets/sprites/map/roca_marcada.svg` | SVG plano | viewBox 64×64 |
-| `huesos` (cabeza de ganado) | `assets/sprites/map/huesos.svg` | SVG plano | viewBox 64×64 |
-| `pino` / `abeto` / `roca_nieve` | `assets/sprites/map/pino.svg`, `abeto.svg`, `roca_nieve.svg` | SVG plano | viewBox 64×64 |
+| `huesos` (cabeza de ganado) | `assets/sprites/map/huesos.svg` *(retirado el 2026-10-26, T516)* | SVG plano | viewBox 64×64 |
+| `pino` / `abeto` / `roca_nieve` | `assets/sprites/map/pino.svg`, `abeto.svg`, `roca_nieve.svg` *(retirados el 2026-10-26, T516)* | SVG plano | viewBox 64×64 |
 | `cactus` / `roca_roja` | `assets/sprites/map/cactus.svg`, `roca_roja.svg` | SVG plano | viewBox 64×64 |
 | `columna` / `bloque` / `estatua` (ruinas) | `assets/sprites/map/columna.svg`, `bloque.svg`, `estatua.svg` | SVG plano | viewBox 64×64 |
 | `campamento_vacio` | `assets/sprites/map/campamento_vacio.svg` | SVG plano | 64×64 |

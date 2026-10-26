@@ -1,5 +1,9 @@
 # Novedades del juego
 
+## Limpieza de dibujos viejos de decoración *(T516, 2026-10-26; en revisión)*
+
+Se borraron del proyecto cuatro dibujos planos de decoración que ya no se usaban porque los reemplazaron los nuevos (pino, abeto y roca con nieve del nivel 13, y la cabeza de ganado del desierto). El juego se ve igual: no cambia el camino, las oleadas ni dónde se puede construir.
+
 ## Cabezas de ganado nuevas en el desierto *(T498, 2026-10-26; en revisión)*
 
 En el desierto (niveles 10, 11 y 12), las cabezas de ganado que decoran el mapa tienen un dibujo nuevo, con dos pares de cuernos, volumen y luz como el resto de la decoración renderizada. Están en las mismas casillas que antes y siguen siendo decoración donde no se construye: no cambia el camino, las oleadas ni el mapa. No se probaron teléfonos reales.
