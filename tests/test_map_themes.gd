@@ -112,6 +112,51 @@ func test_the_new_drawings_exist_and_are_64_square() -> void:
 		assert_eq(texture.get_width(), texture.get_height(), "%s es cuadrado" % file_name)
 
 
+## T498 (RF-713 c, RF-714, D-210): la cabeza de ganado del desierto (niveles 10 a 12) es el PNG aprobado de 128 × 128 (variante 01,
+## dos pares de cuernos); cada casilla que antes mostraba `huesos.svg` resuelve al arte nuevo y los datos no cambiaron.
+const DESERT_HASHES: Dictionary = {
+	10: "21af960b29532957099e39c7b97c7c7ed101e3e5ef2646c003bfc091607e7fdf",
+	11: "cbec8c23f8998a67d321d95be9d2d65bf82e1664cd99f148aee715f9fda870e6",
+	12: "0a884be2b4cbfdfec6bc8daa40b7ab96e0ace79205d076baa384c3ebbba08a67",
+}
+const DESERT_BONES_CELLS: Dictionary = {10: 26, 11: 25, 12: 23}   # T491: casillas de cabeza en cada nivel
+
+
+func test_desert_bones_is_the_approved_128_png() -> void:
+	var path: String = "res://assets/sprites/map/rendered/bones_skull.png"
+	assert_eq(MapThemes.BONES.resource_path, path)
+	assert_eq(MapThemes.BONES.get_width(), 128)
+	assert_eq(MapThemes.BONES.get_height(), 128)
+	assert_true(MapThemes.BONES.get_image().detect_alpha() != Image.ALPHA_NONE, "tiene alfa")
+	assert_eq(MapThemes.BLOCKED[&"desierto"], [MapThemes.CACTUS, MapThemes.RED_ROCK, MapThemes.BONES, MapThemes.CACTUS,
+		MapThemes.RED_ROCK], "la misma lista de cinco: no cambia qué casilla usa cada dibujo")
+
+
+func test_desert_levels_use_the_new_bones_in_the_same_cells_and_data_is_untouched() -> void:
+	for number: int in DESERT_HASHES:
+		var file: String = "res://data/levels/level_%02d.json" % number
+		var text: String = FileAccess.get_file_as_string(file)
+		assert_eq(text.sha256_text(), DESERT_HASHES[number], "%s no cambió" % file)
+		var data: Dictionary = JSON.parse_string(text)
+		assert_eq(data["tema"], "desierto")
+		var rows: Array = data["mapa"]
+		var bones: int = 0
+		var others: int = 0
+		for y: int in rows.size():
+			var row: String = rows[y]
+			for x: int in row.length():
+				if row[x] != "X":
+					continue
+				var texture: Texture2D = MapThemes.blocked_decor(&"desierto", Vector2i(x, y))
+				if texture == MapThemes.BONES:
+					bones += 1
+				else:
+					assert_true(texture == MapThemes.CACTUS or texture == MapThemes.RED_ROCK, "(%d, %d) sigue siendo cactus o roca roja" % [x, y])
+					others += 1
+		assert_eq(bones, DESERT_BONES_CELLS[number], "casillas con cabeza en el nivel %d" % number)
+		assert_gt(others, 0, "el cactus y la roca roja siguen en el nivel %d" % number)
+
+
 ## T497 (RF-713 b, RF-714): el pino, el abeto y la roca nevada del nivel 13 son los PNG aprobados de 128 × 128; cada `X` del
 ## nivel resuelve a uno de los tres y los datos del nivel no cambiaron (mismo hash que `test_campaign_posts.gd`).
 const LEVEL_13_HASH: String = "0577701868f5455858abd257393a3eb33cb740ce9754455510170986926cf3a1"
