@@ -30,7 +30,7 @@ const LANDER := Vector2(177, 310)
 const REGION_POINTS: Array[Vector2] = [
 	Vector2(242, 345), Vector2(297, 299), Vector2(368, 250), Vector2(443, 262), Vector2(492, 317),
 	Vector2(557, 343), Vector2(603, 389), Vector2(682, 389), Vector2(759, 342), Vector2(835, 321),
-	Vector2(895, 323), Vector2(951, 292), Vector2(1000, 287), Vector2(1065, 312), Vector2(1124, 362),
+	Vector2(895, 323), Vector2(951, 292), Vector2(1006, 287), Vector2(1065, 312), Vector2(1124, 362),
 ]
 ## Curva de cada tramo del recorrido, de oeste a este: tres puntos por tramo (control 1, control 2 y destino). El
 ## tramo `i` va desde `LANDER` (i = 0) o desde `REGION_POINTS[i - 1]` hasta `REGION_POINTS[i]` (Bézier cúbica).
@@ -47,8 +47,8 @@ const ROUTE_CONTROLS: Array[Vector2] = [
 	Vector2(786, 320), Vector2(813, 320), Vector2(835, 321),
 	Vector2(858, 319), Vector2(874, 326), Vector2(895, 323),
 	Vector2(919, 321), Vector2(933, 300), Vector2(951, 292),
-	Vector2(968, 284), Vector2(984, 280), Vector2(1000, 287),
-	Vector2(1023, 293), Vector2(1044, 299), Vector2(1065, 312),
+	Vector2(968, 284), Vector2(990, 280), Vector2(1006, 287),
+	Vector2(1029, 293), Vector2(1044, 299), Vector2(1065, 312),
 	Vector2(1086, 326), Vector2(1107, 344), Vector2(1124, 362),
 ]
 ## La costa del continente, aplanada de la fuente (cada curva en cuatro tramos).

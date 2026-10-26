@@ -111,3 +111,44 @@ func test_default_view_all_button_does_not_overlap_the_other_floating_buttons() 
 		var rect := Rect2(button.position, button.size)
 		assert_gt(rect.size.x, 0.0, "%s tiene tamaño" % button.name)
 		assert_false(view_all_rect.intersects(rect), "«Ver todo» no pisa %s" % button.name)
+
+
+# --- (d) T464: la lupa del celular (geometría real, sin texto) ---
+
+func test_view_all_button_is_a_64px_round_icon_without_visible_text() -> void:
+	await _open(UiMode.MOBILE, 14)
+	var button: Button = _game.mobile_hud._view_all_button
+	assert_eq(button.size, Vector2(64.0, 64.0), "mide 64 × 64 px")
+	assert_eq(button.text, "", "sin texto visible")
+	assert_not_null(button.icon, "lleva la lupa")
+	assert_eq(button.icon.resource_path, "res://assets/ui/mobile_view_all.svg")
+	assert_eq(button.tooltip_text, "Ver todo", "la ayuda dice «Ver todo»")
+	assert_eq(button.accessibility_name, "Ver todo", "nombre accesible")
+	var style := button.get_theme_stylebox("normal") as StyleBoxFlat
+	assert_eq(style.corner_radius_top_left, 32, "redondo como carrito, X y demolición")
+
+
+func test_view_all_button_fits_inside_the_1280x720_screen_by_default() -> void:
+	await _open(UiMode.MOBILE, 14)
+	var button: Button = _game.mobile_hud._view_all_button
+	button.visible = true
+	var rect := Rect2(button.position, button.size)
+	assert_true(Rect2(Vector2.ZERO, Vector2(1280.0, 720.0)).encloses(rect), "entra en la pantalla: %s" % rect)
+
+
+func test_view_all_button_never_overlaps_the_others_even_with_the_demolition_visible() -> void:
+	await _open(UiMode.MOBILE, 14)
+	var hud: MobileHud = _game.mobile_hud
+	hud._view_all_button.visible = true
+	var view_all_rect := Rect2(hud._view_all_button.position, hud._view_all_button.size)
+	for button: Button in [hud._cart_button, hud._exit_button, hud._demolish_button]:
+		assert_false(view_all_rect.intersects(Rect2(button.position, button.size)), button.name)
+
+
+func test_pc_still_has_no_view_all_button() -> void:
+	await _open(UiMode.PC, 14)
+	assert_null(_game.mobile_hud, "en PC no se arma el HUD del celular")
+	_game.camera_controller._zoom_at(Vector2(640.0, 360.0), 1.3)
+	for node: Node in _game.find_children("*", "Button", true, false):
+		assert_ne((node as Button).accessibility_name, "Ver todo", "ningún botón «Ver todo» en PC")
+		assert_ne((node as Button).tooltip_text, "Ver todo")
