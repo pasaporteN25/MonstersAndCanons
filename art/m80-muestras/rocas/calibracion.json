@@ -1,0 +1,187 @@
+{
+  "15": {
+    "origen_px": [
+      16.0,
+      48
+    ],
+    "casilla_px": 48.0,
+    "escala_sobre_64": 0.75,
+    "columnas": 26,
+    "filas": 12,
+    "mapa_alto_px": 576,
+    "anclas": [
+      {
+        "casilla": [
+          2,
+          4
+        ],
+        "centro_px": [
+          136.0,
+          264.0
+        ],
+        "coincide_con_captura": true
+      },
+      {
+        "casilla": [
+          19,
+          10
+        ],
+        "centro_px": [
+          952.0,
+          552.0
+        ],
+        "coincide_con_captura": true
+      }
+    ],
+    "metodo": "Banda jugable y=48..624; casillas cuadradas; ancho máximo del JSON centrado. Verificado visualmente con caminos y señales."
+  },
+  "11": {
+    "origen_px": [
+      11.636363636363626,
+      48
+    ],
+    "casilla_px": 52.36363636363637,
+    "escala_sobre_64": 0.8181818181818182,
+    "columnas": 24,
+    "filas": 11,
+    "mapa_alto_px": 576,
+    "anclas": [
+      {
+        "casilla": [
+          1,
+          2
+        ],
+        "centro_px": [
+          90.18181818181817,
+          178.9090909090909
+        ],
+        "coincide_con_captura": true
+      },
+      {
+        "casilla": [
+          21,
+          2
+        ],
+        "centro_px": [
+          1137.4545454545455,
+          178.9090909090909
+        ],
+        "coincide_con_captura": true
+      },
+      {
+        "casilla": [
+          2,
+          8
+        ],
+        "centro_px": [
+          142.54545454545453,
+          493.0909090909091
+        ],
+        "coincide_con_captura": true
+      }
+    ],
+    "metodo": "Banda jugable y=48..624; casillas cuadradas; ancho máximo del JSON centrado. Verificado visualmente con caminos y señales."
+  },
+  "14": {
+    "origen_px": [
+      16.0,
+      48
+    ],
+    "casilla_px": 48.0,
+    "escala_sobre_64": 0.75,
+    "columnas": 26,
+    "filas": 12,
+    "mapa_alto_px": 576,
+    "anclas": [
+      {
+        "casilla": [
+          8,
+          1
+        ],
+        "centro_px": [
+          424.0,
+          120.0
+        ],
+        "coincide_con_captura": true
+      },
+      {
+        "casilla": [
+          24,
+          1
+        ],
+        "centro_px": [
+          1192.0,
+          120.0
+        ],
+        "coincide_con_captura": true
+      },
+      {
+        "casilla": [
+          18,
+          2
+        ],
+        "centro_px": [
+          904.0,
+          168.0
+        ],
+        "coincide_con_captura": true
+      },
+      {
+        "casilla": [
+          3,
+          5
+        ],
+        "centro_px": [
+          184.0,
+          312.0
+        ],
+        "coincide_con_captura": true
+      },
+      {
+        "casilla": [
+          14,
+          5
+        ],
+        "centro_px": [
+          712.0,
+          312.0
+        ],
+        "coincide_con_captura": true
+      },
+      {
+        "casilla": [
+          7,
+          7
+        ],
+        "centro_px": [
+          376.0,
+          408.0
+        ],
+        "coincide_con_captura": true
+      },
+      {
+        "casilla": [
+          13,
+          8
+        ],
+        "centro_px": [
+          664.0,
+          456.0
+        ],
+        "coincide_con_captura": true
+      },
+      {
+        "casilla": [
+          25,
+          9
+        ],
+        "centro_px": [
+          1240.0,
+          504.0
+        ],
+        "coincide_con_captura": true
+      }
+    ],
+    "metodo": "Banda jugable y=48..624; casillas cuadradas; ancho máximo del JSON centrado. Verificado visualmente con caminos y señales."
+  }
+}

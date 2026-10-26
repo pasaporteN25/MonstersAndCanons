@@ -1,0 +1,390 @@
+[
+  {
+    "archivo": "comp_nivel_12.png",
+    "tipo": "hoja o composición",
+    "glifo": null,
+    "semilla": 50526,
+    "sha256": "18e4ef8e1d76e1ba2c876190cea0347d6895bf032c8fbc20608959536da582ed"
+  },
+  {
+    "archivo": "comp_nivel_12_con_poste.png",
+    "tipo": "hoja o composición",
+    "glifo": null,
+    "semilla": 50526,
+    "sha256": "db30e7e3870f710e0cc810267a43b1328ec252aa245a9029778206142097b1d7"
+  },
+  {
+    "archivo": "comp_nivel_12_detalle.png",
+    "tipo": "hoja o composición",
+    "glifo": null,
+    "semilla": 50526,
+    "sha256": "4e0b38d90ff94961558eedaf4fb62e187b36607b46b277d69201d44b579d6dc3"
+  },
+  {
+    "archivo": "comp_nivel_13.png",
+    "tipo": "hoja o composición",
+    "glifo": null,
+    "semilla": 50526,
+    "sha256": "661d2d97b269ed886fead715bff5f10e04d48cbc8afe7f468675dd2895cd24da"
+  },
+  {
+    "archivo": "comp_nivel_13_con_poste.png",
+    "tipo": "hoja o composición",
+    "glifo": null,
+    "semilla": 50526,
+    "sha256": "0913a09f165e1a7719ed43360b68762f3cf59e2c155da3091412466f8e0f0c9e"
+  },
+  {
+    "archivo": "comp_nivel_13_detalle.png",
+    "tipo": "hoja o composición",
+    "glifo": null,
+    "semilla": 50526,
+    "sha256": "c64c4f4c91607bc25cefe70032a28b59a7bf333967e18eee467a04056f44e978"
+  },
+  {
+    "archivo": "comp_nivel_14.png",
+    "tipo": "hoja o composición",
+    "glifo": null,
+    "semilla": 50526,
+    "sha256": "74b178a32aa96112d1ecd2a817817727244e451a1725bd89686c4711cbff978c"
+  },
+  {
+    "archivo": "comp_nivel_14_con_poste.png",
+    "tipo": "hoja o composición",
+    "glifo": null,
+    "semilla": 50526,
+    "sha256": "cd12a19f4ffff8e6f23bb1f7b778c1a850956f4a04719cfb9bccad04ec0a7d2a"
+  },
+  {
+    "archivo": "comp_nivel_14_detalle.png",
+    "tipo": "hoja o composición",
+    "glifo": null,
+    "semilla": 50526,
+    "sha256": "8c45290e21c4061b77760feea65bb468163d9f79dca4f822bcfa6e7a717fb6c8"
+  },
+  {
+    "archivo": "composiciones.json",
+    "tipo": "documentación",
+    "glifo": null,
+    "semilla": 50526,
+    "sha256": "8875f06d9100f128210435bd50972c28d2f4acd9280d66afefc6fb203db4c5d8"
+  },
+  {
+    "archivo": "marca_banderin_g1.png",
+    "tipo": "banderin",
+    "glifo": "g1",
+    "semilla": 50526,
+    "sha256": "da26df95a1934a8e82f96ae5eadfd2b46bdc3680afa9a92d05f209f436893014",
+    "tamaño": [
+      128,
+      128
+    ],
+    "bbox_alfa": [
+      19,
+      11,
+      108,
+      119
+    ]
+  },
+  {
+    "archivo": "marca_banderin_g2.png",
+    "tipo": "banderin",
+    "glifo": "g2",
+    "semilla": 50526,
+    "sha256": "e1598b75182dd26e857ff88b3431e45f0d8e0d6f9602a703b920eda8d0fa0350",
+    "tamaño": [
+      128,
+      128
+    ],
+    "bbox_alfa": [
+      19,
+      11,
+      108,
+      119
+    ]
+  },
+  {
+    "archivo": "marca_banderin_g3.png",
+    "tipo": "banderin",
+    "glifo": "g3",
+    "semilla": 50526,
+    "sha256": "e2d9ac2a3fae7a5964d3ce62e415edf06068da04a471ce5993c967f969ae646c",
+    "tamaño": [
+      128,
+      128
+    ],
+    "bbox_alfa": [
+      19,
+      11,
+      108,
+      119
+    ]
+  },
+  {
+    "archivo": "marca_cinta_g1.png",
+    "tipo": "cinta",
+    "glifo": "g1",
+    "semilla": 50526,
+    "sha256": "3485a1fe15a72e3ee766d04d419c84291abc13353deea60868b1048e4b886bd9",
+    "tamaño": [
+      128,
+      128
+    ],
+    "bbox_alfa": [
+      35,
+      14,
+      97,
+      118
+    ]
+  },
+  {
+    "archivo": "marca_cinta_g2.png",
+    "tipo": "cinta",
+    "glifo": "g2",
+    "semilla": 50526,
+    "sha256": "747f16a59b30a5fa52c1a6346b25fa55b57ff6c36e67135f106fb13bb3b78dcb",
+    "tamaño": [
+      128,
+      128
+    ],
+    "bbox_alfa": [
+      35,
+      14,
+      97,
+      118
+    ]
+  },
+  {
+    "archivo": "marca_cinta_g3.png",
+    "tipo": "cinta",
+    "glifo": "g3",
+    "semilla": 50526,
+    "sha256": "641e377493e2b846c326ae503ea9a591bb084f8cc4a5b8bf98ec7ee2bf4ae4a5",
+    "tamaño": [
+      128,
+      128
+    ],
+    "bbox_alfa": [
+      35,
+      14,
+      97,
+      118
+    ]
+  },
+  {
+    "archivo": "marca_hito_g1.png",
+    "tipo": "hito",
+    "glifo": "g1",
+    "semilla": 50526,
+    "sha256": "8e5d8d37ef9f33340f952181ea3483f5acf48a58846dd85048b690f9b1387009",
+    "tamaño": [
+      128,
+      128
+    ],
+    "bbox_alfa": [
+      15,
+      19,
+      111,
+      118
+    ]
+  },
+  {
+    "archivo": "marca_hito_g2.png",
+    "tipo": "hito",
+    "glifo": "g2",
+    "semilla": 50526,
+    "sha256": "9be050b62a22aacbbc5ef0d37b25ad2c689cb89d344270e8c6b9bf10a4fa1d14",
+    "tamaño": [
+      128,
+      128
+    ],
+    "bbox_alfa": [
+      15,
+      19,
+      111,
+      118
+    ]
+  },
+  {
+    "archivo": "marca_hito_g3.png",
+    "tipo": "hito",
+    "glifo": "g3",
+    "semilla": 50526,
+    "sha256": "94f8fb57f61f1e8d409c896b91d2e959b5bf849f6d63b85ec01277281b3e2004",
+    "tamaño": [
+      128,
+      128
+    ],
+    "bbox_alfa": [
+      15,
+      19,
+      111,
+      118
+    ]
+  },
+  {
+    "archivo": "marca_tablilla_g1.png",
+    "tipo": "tablilla",
+    "glifo": "g1",
+    "semilla": 50526,
+    "sha256": "ead57b04ee64192934dcabc28c9b8a5477f932e455bc1a61d01e3f0739d7d948",
+    "tamaño": [
+      128,
+      128
+    ],
+    "bbox_alfa": [
+      17,
+      31,
+      102,
+      117
+    ]
+  },
+  {
+    "archivo": "marca_tablilla_g2.png",
+    "tipo": "tablilla",
+    "glifo": "g2",
+    "semilla": 50526,
+    "sha256": "871ebfb22fdd5ffdd20142e71a47d53c31e76767c169b5ff767a89afd1ce85c6",
+    "tamaño": [
+      128,
+      128
+    ],
+    "bbox_alfa": [
+      17,
+      31,
+      102,
+      117
+    ]
+  },
+  {
+    "archivo": "marca_tablilla_g3.png",
+    "tipo": "tablilla",
+    "glifo": "g3",
+    "semilla": 50526,
+    "sha256": "d32fbaad42c4a1019a991d66d56b6de5cf6920f5b656fcfe550488fd6375a620",
+    "tamaño": [
+      128,
+      128
+    ],
+    "bbox_alfa": [
+      17,
+      31,
+      102,
+      117
+    ]
+  },
+  {
+    "archivo": "marcas_hoja_034.png",
+    "tipo": "hoja o composición",
+    "glifo": null,
+    "semilla": 50526,
+    "sha256": "e7258e7f422877f899cb2ac563a10ebcb9a1a24735aef5eae5ee0cd8b3179364"
+  },
+  {
+    "archivo": "marcas_hoja_220.png",
+    "tipo": "hoja o composición",
+    "glifo": null,
+    "semilla": 50526,
+    "sha256": "8ae90c24c1b17c71603eb48be84aa74761bd506d5f670eda08a6af8ffe80c2ce"
+  },
+  {
+    "archivo": "procedencia.md",
+    "tipo": "documentación",
+    "glifo": null,
+    "semilla": 50526,
+    "sha256": "606b2e39eff718a61e1fd5b617fa0b5cbc56e85215212b1d0c08befa27604ab5"
+  },
+  {
+    "archivo": "revision.md",
+    "tipo": "documentación",
+    "glifo": null,
+    "semilla": 50526,
+    "sha256": "be9a5e7a216de110cebc86baed754e314778a07d79ea521fc725d591a83d87c1"
+  },
+  {
+    "archivo": "revision_x3.png",
+    "tipo": "hoja o composición",
+    "glifo": null,
+    "semilla": 50526,
+    "sha256": "573ee65e54bf1b65c19f94b0a6b992b2a8ee50ddb72864a6b717ceb9b11a1f2e"
+  },
+  {
+    "archivo": "signal_level_12_g1.png",
+    "tipo": "roca grabada de composición",
+    "glifo": "g1",
+    "semilla": 50526,
+    "sha256": "4b628c0f548cef7ab426330c192a51cb34de2a971780ac1059908a6f7bb9478a",
+    "tamaño": [
+      128,
+      128
+    ],
+    "bbox_alfa": [
+      13,
+      32,
+      116,
+      115
+    ]
+  },
+  {
+    "archivo": "signal_level_13_g2.png",
+    "tipo": "roca grabada de composición",
+    "glifo": "g2",
+    "semilla": 50526,
+    "sha256": "3f8d87fee89037fc793859f6b689acb4475b3ca5f8b3e66ef151e9925a9dd1d9",
+    "tamaño": [
+      128,
+      128
+    ],
+    "bbox_alfa": [
+      15,
+      26,
+      113,
+      107
+    ]
+  },
+  {
+    "archivo": "signal_level_14_g3.png",
+    "tipo": "roca grabada de composición",
+    "glifo": "g3",
+    "semilla": 50526,
+    "sha256": "87be5c6c085fcc3bea7e842bc3d22f25c36a4488eb1b598923f3805133b347ee",
+    "tamaño": [
+      128,
+      128
+    ],
+    "bbox_alfa": [
+      13,
+      32,
+      116,
+      115
+    ]
+  },
+  {
+    "archivo": "signal_review_x3.png",
+    "tipo": "hoja o composición",
+    "glifo": null,
+    "semilla": 50526,
+    "sha256": "b9c39124fc0e9800ad387acfaafeb16926bf0ddc144bc534f44c391d832f4bac"
+  },
+  {
+    "archivo": "sources/generate_marcas.py",
+    "tipo": "fuente",
+    "glifo": null,
+    "semilla": 50526,
+    "sha256": "15442c3804321a660b39a32a99231af9edd02bd3580338966d6912ea2ae01034"
+  },
+  {
+    "archivo": "sources/procedencia.md",
+    "tipo": "documentación",
+    "glifo": null,
+    "semilla": 50526,
+    "sha256": "606b2e39eff718a61e1fd5b617fa0b5cbc56e85215212b1d0c08befa27604ab5"
+  },
+  {
+    "archivo": "sources/verify_samples.py",
+    "tipo": "fuente",
+    "glifo": null,
+    "semilla": 50526,
+    "sha256": "5e0165ab7801a2957b0cec6ee98a65af7cba518925f63c1ff2f9e822a2bd79cd"
+  }
+]
