@@ -28,9 +28,10 @@ const CACTUS: Texture2D = preload("res://assets/sprites/map/cactus.svg")
 const RED_ROCK: Texture2D = preload("res://assets/sprites/map/roca_roja.svg")
 # T498 (RF-713 c): cabeza de ganado del desierto, PNG RGBA de 128 × 128 (muestra 01 de T494, dos pares de cuernos, elegida por Lucas) mostrado a la casilla.
 const BONES: Texture2D = preload("res://assets/sprites/map/rendered/bones_skull.png")
-const PINE: Texture2D = preload("res://assets/sprites/map/pino.svg")
-const FIR: Texture2D = preload("res://assets/sprites/map/abeto.svg")
-const SNOW_ROCK: Texture2D = preload("res://assets/sprites/map/roca_nieve.svg")
+# T497 (RF-713 b): pino, abeto y roca nevada del nivel de nieve, PNG RGBA de 128 × 128 (muestras 01 de T493 elegidas por Lucas) mostrados a la casilla.
+const PINE: Texture2D = preload("res://assets/sprites/map/rendered/pine_snow.png")
+const FIR: Texture2D = preload("res://assets/sprites/map/rendered/fir_snow.png")
+const SNOW_ROCK: Texture2D = preload("res://assets/sprites/map/rendered/snow_rock.png")
 const BLACK_ROCK: Texture2D = preload("res://assets/sprites/map/roca_negra.svg")
 const CRACK: Texture2D = preload("res://assets/sprites/map/grieta.svg")
 const COLUMN: Texture2D = preload("res://assets/sprites/map/columna.svg")

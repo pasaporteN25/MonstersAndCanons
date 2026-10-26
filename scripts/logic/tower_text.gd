@@ -6,30 +6,57 @@ extends RefCounted
 
 ## Los efectos especiales del nivel (área, rayo, púas, quemadura…). Vacío si es una torre común.
 static func effects(level: TowerLevelData) -> Array[String]:
+	return effect_phrases(level, null, false)
+
+
+## T513 (RF-721): las frases de los efectos con el cambio ADENTRO («El rayo salta a 2 → 3 enemigos más»).
+## `next` es el nivel al que se mejora: cada número que cambia sale «antes → después» y el que no, igual que siempre.
+## Con `next` null (último nivel) no hay flechas y la salida es la de `effects`. `panel` = true usa la frase corta
+## del pulso (daño, cadencia y alcance ya tienen su fila). Un solo lugar para la PC y el celular; los números
+## salen de los dos `TowerLevelData`, las plantillas son las de siempre y la coma decimal es `decimal`.
+static func effect_phrases(level: TowerLevelData, next: TowerLevelData = null, panel: bool = true) -> Array[String]:
 	var lines: Array[String] = []
-	if level.suppress_seconds > 0.0:  # RF-450
-		lines.append(pulse_line(level))
-	if level.support_rate_percent > 0:
-		lines.append("Apoyo: +%d %% de cadencia; solo el mayor" % level.support_rate_percent)
-	if level.support_repair_per_second > 0.0:
-		lines.append("Repara %.0f puntos de desgaste/s; solo la mayor tasa" % level.support_repair_per_second)
-	if level.splash_radius_tiles > 0.0:
-		lines.append("Área: radio %s" % decimal(level.splash_radius_tiles))  # RF-677: coma decimal (antes «1.5»)
-	if level.chain_extra_targets > 0:
-		lines.append("El rayo salta a %d enemigos más" % level.chain_extra_targets)
-	if level.burst_count > 0:
-		lines.append("Lanza %d púas en círculo" % level.burst_count)
-	if level.extra_targets > 0:
-		lines.append("Dispara a %d enemigos a la vez" % (1 + level.extra_targets))
-	if level.burn_damage_per_second > 0:
-		lines.append("Quema: %d por segundo durante %.0f s" % [level.burn_damage_per_second, level.burn_duration])
-	if level.bonus_vs_slowed_percent > 0:  # RF-313
-		lines.append("+%d %% de daño a ralentizados" % level.bonus_vs_slowed_percent)
-	if level.bonus_vs_burning_percent > 0:
-		lines.append("+%d %% de daño a quemados" % level.bonus_vs_burning_percent)
-	if level.slow_amount > 0.0:
-		lines.append("Ralentiza %d %% durante %.0f s" % [roundi(level.slow_amount * 100.0), level.slow_duration])
+	if level.suppress_seconds > 0.0 or (next != null and next.suppress_seconds > 0.0):  # RF-450
+		if panel:
+			lines.append("Pulso: apaga las auras durante %s s" % _change(level, next, "suppress_seconds"))
+		else:
+			lines.append(pulse_line(level))
+	if _has(level, next, "support_rate_percent"):
+		lines.append("Apoyo: +%s %% de cadencia; solo el mayor" % _change(level, next, "support_rate_percent"))
+	if _has(level, next, "support_repair_per_second"):
+		lines.append("Repara %s puntos de desgaste/s; solo la mayor tasa" % _change(level, next, "support_repair_per_second"))
+	if _has(level, next, "splash_radius_tiles"):
+		lines.append("Área: radio %s" % _change(level, next, "splash_radius_tiles"))  # RF-677: coma decimal (antes «1.5»)
+	if _has(level, next, "chain_extra_targets"):
+		lines.append("El rayo salta a %s enemigos más" % _change(level, next, "chain_extra_targets"))
+	if _has(level, next, "burst_count"):
+		lines.append("Lanza %s púas en círculo" % _change(level, next, "burst_count"))
+	if _has(level, next, "extra_targets"):
+		lines.append("Dispara a %s enemigos a la vez" % _change(level, next, "extra_targets", 1.0))
+	if _has(level, next, "burn_damage_per_second"):
+		lines.append("Quema: %s por segundo durante %s s" % [_change(level, next, "burn_damage_per_second"), _change(level, next, "burn_duration")])
+	if _has(level, next, "bonus_vs_slowed_percent"):  # RF-313
+		lines.append("+%s %% de daño a ralentizados" % _change(level, next, "bonus_vs_slowed_percent"))
+	if _has(level, next, "bonus_vs_burning_percent"):
+		lines.append("+%s %% de daño a quemados" % _change(level, next, "bonus_vs_burning_percent"))
+	if _has(level, next, "slow_amount"):
+		lines.append("Ralentiza %s %% durante %s s" % [_change(level, next, "slow_amount", 0.0, 100.0), _change(level, next, "slow_duration")])
 	return lines
+
+
+## ¿El efecto existe en este nivel o en el siguiente? (Así una mejora que lo agrega o lo quita no lo pierde.)
+static func _has(level: TowerLevelData, next: TowerLevelData, field: String) -> bool:
+	return float(level.get(field)) > 0.0 or (next != null and float(next.get(field)) > 0.0)
+
+
+## El valor de `field` en `level` y, si `next` lo cambia, «antes → después». `offset` y `scale` se aplican a los dos
+## lados antes de formatear (el «a la vez» suma 1; el frenado pasa de 0,4 a 40 %).
+static func _change(level: TowerLevelData, next: TowerLevelData, field: String, offset: float = 0.0, scale: float = 1.0) -> String:
+	var before: String = decimal((float(level.get(field)) + offset) * scale)
+	if next == null:
+		return before
+	var after: String = decimal((float(next.get(field)) + offset) * scale)
+	return before if before == after else "%s %s %s" % [before, UpgradeDeltas.ARROW, after]
 
 
 ## RF-450: el pulso de la Disruptora, armado con los números del nivel (RF-164):
@@ -52,33 +79,6 @@ static func decimal(value: float) -> String:
 	if text.contains("."):
 		text = text.rstrip("0").rstrip(".")
 	return text.replace(".", ",")
-
-
-## Variante del panel: daño, cadencia y radio ya tienen renglones propios arriba.
-static func panel_pulse_line(level: TowerLevelData) -> String:
-	if level.suppress_seconds <= 0.0:
-		return ""
-	return "Pulso: apaga las auras durante %s s" % decimal(level.suppress_seconds)
-
-
-## Conserva la parte que no cambia en efectos compuestos cuando el panel pasa el resto a antes → después.
-static func panel_effect_residuals(level: TowerLevelData, changed_fields: Array[String]) -> Array[String]:
-	var residuals: Array[String] = []
-	var slow_amount_changed: bool = changed_fields.has("slow_amount")
-	var slow_duration_changed: bool = changed_fields.has("slow_duration")
-	if slow_amount_changed != slow_duration_changed:
-		if slow_amount_changed:
-			residuals.append("Duración del frenado: %s s" % decimal(level.slow_duration))
-		else:
-			residuals.append("Ralentiza %d %%" % roundi(level.slow_amount * 100.0))
-	var burn_damage_changed: bool = changed_fields.has("burn_damage_per_second")
-	var burn_duration_changed: bool = changed_fields.has("burn_duration")
-	if burn_damage_changed != burn_duration_changed:
-		if burn_damage_changed:
-			residuals.append("Duración de quemadura: %s s" % decimal(level.burn_duration))
-		else:
-			residuals.append("Quema: %d por segundo" % level.burn_damage_per_second)
-	return residuals
 
 
 ## RF-450: ¿es un enemigo con aura? Lo mismo que `Enemy.has_aura()`, pero sobre los datos.

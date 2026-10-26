@@ -138,6 +138,9 @@ func _build_status_bar() -> void:
 	_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_status_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_status_label.add_theme_font_size_override("font_size", int(_config.get_value("barra_fuente_px")))
+	_status_label.resized.connect(func() -> void:
+		if _status_state == "tower":
+			_fit_status_font())
 	row.add_child(_status_label)
 	_bottom_confirm = Button.new()
 	_bottom_confirm.name = "BottomConfirmPlacement"
@@ -191,6 +194,7 @@ const PAUSED_TEXT: String = "En pausa: seguí la partida para construir"
 func _set_empty_status() -> void:
 	clear_upgrade_arm()
 	_status_state = "empty"
+	_fit_status_font()  # T511: letra normal fuera del estado «torre»
 	_status_label.text = PAUSED_TEXT if _paused else EMPTY_TEXT
 	_status_label.visible = true
 	_target_button.hide()
@@ -206,6 +210,7 @@ func _set_empty_status() -> void:
 func show_tool_status(message: String = "") -> void:
 	clear_upgrade_arm()
 	_status_state = "tool"
+	_fit_status_font()  # T511: letra normal fuera del estado «torre»
 	_status_label.text = message if message != "" else "Demoler o habilitar: tocá un objeto del mapa"
 	_status_label.visible = true
 	_target_button.hide()
@@ -219,6 +224,7 @@ func show_tool_status(message: String = "") -> void:
 func show_ghost_status(tower_name: String, cost_text: String) -> void:
 	clear_upgrade_arm()
 	_status_state = "ghost"
+	_fit_status_font()  # T511: letra normal fuera del estado «torre»
 	_ghost_status_text = "%s  ·  %s" % [tower_name, cost_text]
 	_status_label.text = _ghost_status_text
 	_status_label.visible = true
@@ -253,13 +259,15 @@ func show_selected_tower(tower: Tower, gold: int, sell_value: int, resource_valu
 	elif tower.wear_percent > 0:
 		state_text = "  ·  Desgaste %d%%" % tower.wear_percent
 	var stats: TowerLevelData = tower.stats()
-	_status_label.text = "%s%s\n%s  %s  ·  Daño %d  ·  Cadencia %.2f  ·  Alcance %d" % [
+	# T511: nombre y nivel comparten renglón; cadencia y alcance usan el formato decimal compartido (RF-677.4).
+	_status_label.text = "%s%s  ·  %s %s\nDaño %d  ·  Cadencia %s  ·  Alcance %s" % [
 		tower.data.display_name, state_text, level_text, dots, stats.damage,
-		tower.effective_fire_rate(), stats.range_tiles]
+		TowerText.decimal(tower.effective_fire_rate()), TowerText.decimal(stats.range_tiles)]
 	var preview: String = _upgrade_preview_text(tower)
 	if preview != "":
 		_status_label.text += "\n" + preview
 	_status_label.visible = true
+	_fit_status_font()
 	_target_button.show()
 	_bottom_cancel.show()
 	_target_button.text = "Apuntar: %s" % tower.targeting_name()
@@ -289,6 +297,31 @@ func show_selected_tower(tower: Tower, gold: int, sell_value: int, resource_valu
 	else:
 		_sell_button.tooltip_text = "Devuelve %d de oro" % sell_value
 	_refresh_sell_button(sell_value, resource_value)
+
+
+## T511: la barra mide `barra_baja_px`. Si el texto de la torre elegida no entra en ese alto, baja la letra de a un
+## punto (hasta `barra_fuente_min_px`) en lugar de empujar los botones fuera de la pantalla. Fuera del estado
+## «torre» vuelve a la letra normal.
+func _fit_status_font() -> void:
+	var size_px: int = int(_config.get_value("barra_fuente_px"))
+	_status_label.add_theme_font_size_override("font_size", size_px)
+	if _status_state != "tower":
+		return
+	var available_h: float = float(_config.get_value("barra_baja_px")) - float(_config.get_value("barra_margen_y_px")) * 2.0
+	var min_px: int = int(_config.get_value("barra_fuente_min_px"))
+	var width: float = maxf(_status_label.size.x, _status_label.custom_minimum_size.x)
+	var font: Font = _status_label.get_theme_font("font")
+	var spacing: float = float(_status_label.get_theme_constant("line_spacing"))
+	while size_px > min_px:
+		var line_h: float = font.get_height(size_px)
+		var lines: int = 0
+		for paragraph: String in _status_label.text.split("\n"):
+			var wrapped: float = font.get_multiline_string_size(paragraph, HORIZONTAL_ALIGNMENT_LEFT, width, size_px).y
+			lines += maxi(1, roundi(wrapped / line_h))
+		if float(lines) * (line_h + spacing) <= available_h:
+			break
+		size_px -= 1
+	_status_label.add_theme_font_size_override("font_size", size_px)
 
 
 ## M68 (RF-617): «Al mejorar: daño 5 → 8 · alcance 3 → 3,5». Los números salen de los dos niveles de la torre y la

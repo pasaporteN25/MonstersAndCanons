@@ -1,5 +1,7 @@
 # T498 · Integrar las cabezas del desierto aprobadas
 
+> **Habilitada (Lucas, 2026-10-26):** integrar la variante **01 · dos pares de cuernos** del PR #97 (una sola cabeza, sin secundaria). Depende del merge del PR #97 y de T497. Antes de integrar, verificar las reglas de RF-713 (c): no humanoide, sin símbolo ni marcas de Moradores, sin parecerse al Lobo, la Araña o el Escarabajo, y sin la palabra «alien» en ningún texto.
+
 - **Ejecutor:** Sonnet · integración.
 - **Depende de / compuerta:** 🚦🎨 T495 y T497 integrada (mismos archivos). **No empezar antes.**
 - **Refs:** RF-713 (c), RF-714, D-210. **Rama:** `feature/t498-integrar-cabezas-desierto`, desde `origin/main`; un commit `T498: …`, PR a main; Lucas mergea.

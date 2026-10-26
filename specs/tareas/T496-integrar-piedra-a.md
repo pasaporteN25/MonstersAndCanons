@@ -1,5 +1,7 @@
 # T496 · Integrar la piedra con la A aprobada
 
+> **Reemplazada por M80 (Lucas, 2026-10-26).** La piedra con la A ya no se integra: se hace con T507 (sistema de marcas) y T508 (rocas por niveles), tras la aprobación de T506. El cambio de canon A → H requiere el OK escrito de Lucas (D-212). No hacer esta tarea.
+
 - **Ejecutor:** Sonnet · integración.
 - **Depende de / compuerta:** 🚦🎨 T495 con la variante elegida. **No empezar antes.**
 - **Refs:** RF-713 (a), RF-714, D-210. **Rama:** `feature/t496-integrar-piedra-a`, desde `origin/main`; un commit `T496: …`, PR a main; Lucas mergea.
