@@ -80,7 +80,7 @@ func test_the_community_tab_says_how_many_maps() -> void:
 	_write("uno.json", _good_map("Uno"))
 	_write("dos.json", _good_map("Dos"))
 	var select: Control = _open()
-	assert_eq((select.get_node("%CommunityTab") as Button).text, "Mapas de la comunidad (2)")
+	assert_eq((select.get_node("%CommunityTab") as Button).text, "Comunidad")
 	assert_eq((select.get_node("%TotalStars") as Label).text, "2 mapas")
 
 
@@ -197,7 +197,7 @@ func test_with_no_maps_it_says_where_to_put_them() -> void:
 	assert_true((cards[0] as Label).text.contains("Todavía no hay mapas"))
 	assert_true((cards[0] as Label).text.contains(".json"))
 	assert_true((cards[0] as Label).text.contains("test_community_select"), "dice la carpeta")
-	assert_eq((select.get_node("%CommunityTab") as Button).text, "Mapas de la comunidad (0)")
+	assert_eq((select.get_node("%CommunityTab") as Button).text, "Comunidad")
 	assert_eq((select.get_node("%TotalStars") as Label).text, "0 mapas")
 
 
@@ -227,7 +227,7 @@ func test_a_map_added_later_appears_when_the_screen_opens_again() -> void:
 	assert_eq(_cards(first).size(), 1, "el mensaje de vacío")
 	_write("nuevo.json", _good_map("Nuevo"))
 	var second: Control = _open()
-	assert_eq((second.get_node("%CommunityTab") as Button).text, "Mapas de la comunidad (1)")
+	assert_eq((second.get_node("%CommunityTab") as Button).text, "Comunidad")
 	assert_true((_cards(second)[0] as Button).text.begins_with("Nuevo"))
 
 

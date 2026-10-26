@@ -17,6 +17,8 @@ func before_each() -> void:
 	SaveManager.save_path = TEST_PATH
 	SaveManager.load_save()
 	SaveManager.set_setting("selector_style", CampaignMap.STYLE_CARDS)  # las pruebas de T41/T42 recorren tarjetas
+	GameFlow.select_page = &"campaign"
+	GameFlow.select_map_index = -1
 	GameFlow.current_index = -1
 
 

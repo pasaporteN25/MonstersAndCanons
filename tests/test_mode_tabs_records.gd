@@ -151,8 +151,9 @@ func test_every_tab_is_reachable_by_scrolling_and_by_mouse() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 	var scroll: ScrollContainer = select.get_node("%TabScroll")
-	var content_width: float = (select.get_node("%TabRow") as Control).size.x
-	assert_gt(content_width, scroll.size.x, "no entran todas: hace falta desplazar")
+	assert_eq(scroll.horizontal_scroll_mode, ScrollContainer.SCROLL_MODE_DISABLED)
+	assert_eq(scroll.vertical_scroll_mode, ScrollContainer.SCROLL_MODE_AUTO)
+	assert_gt(scroll.size.y, 0.0, "el rail deja espacio para recorrer las páginas")
 	for page: StringName in select.page_order():
 		(select.tab_button(page) as Button).pressed.emit()
 		await get_tree().process_frame
@@ -161,9 +162,9 @@ func test_every_tab_is_reachable_by_scrolling_and_by_mouse() -> void:
 		assert_eq(GameFlow.select_page, page, "RF-225")
 		var tab: Button = select.tab_button(page)
 		assert_true(tab.button_pressed)
-		var left: float = tab.global_position.x - scroll.global_position.x
-		assert_gte(left, -1.0, "la solapa activa se ve entera (borde izquierdo): %s" % page)
-		assert_lte(left + tab.size.x, scroll.size.x + 1.0, "la solapa activa se ve entera (borde derecho): %s" % page)
+		var top: float = tab.global_position.y - scroll.global_position.y
+		assert_gte(top, -1.0, "la solapa activa se ve entera (borde superior): %s" % page)
+		assert_lte(top + tab.size.y, scroll.size.y + 1.0, "la solapa activa se ve entera (borde inferior): %s" % page)
 
 
 func test_keyboard_steps_through_all_tabs_and_wraps() -> void:
@@ -183,6 +184,7 @@ func test_keyboard_steps_through_all_tabs_and_wraps() -> void:
 
 func test_touch_drag_scrolls_the_tab_row_on_the_phone() -> void:
 	SaveManager.set_setting("ui_mode", UiMode.MOBILE)
+	_viewport.size = Vector2i(900, 720)  # sin ancho para el rail: usa la fila táctil horizontal
 	_five_own_modes()
 	var select: Control = _open_select(_viewport)
 	await get_tree().process_frame
@@ -229,6 +231,38 @@ func test_without_modes_the_two_tabs_still_fit_without_scrolling() -> void:
 	assert_eq(select.page_order(), [&"campaign", &"community"] as Array[StringName])
 	var scroll: ScrollContainer = select.get_node("%TabScroll")
 	assert_lte((select.get_node("%TabRow") as Control).size.x, scroll.size.x + 1.0)
+
+
+func test_mobile_width_switches_to_a_horizontal_tab_row() -> void:
+	SaveManager.set_setting("ui_mode", UiMode.MOBILE)
+	_viewport.size = Vector2i(900, 720)
+	_five_own_modes()
+	var select: Control = _open_select(_viewport)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var scroll: ScrollContainer = select.get_node("%TabScroll")
+	assert_eq(scroll.horizontal_scroll_mode, ScrollContainer.SCROLL_MODE_AUTO)
+	assert_eq(scroll.vertical_scroll_mode, ScrollContainer.SCROLL_MODE_DISABLED)
+	assert_gt((select.get_node("%TabRow") as Control).size.x, scroll.size.x)
+
+
+func test_wide_rail_reveals_modes_below_the_fold() -> void:
+	_five_own_modes()
+	for index: int in range(6, 12):
+		_mode(USER, "propio%d" % index, '{"version": 1, "nombre": "Modo %d", "mapas": ["level_01"]}' % index)
+	var select: Control = _open_select()
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var order: Array[StringName] = select.page_order()
+	assert_eq(order.size(), 14)
+	var last_tab: Button = select.tab_button(order.back())
+	last_tab.pressed.emit()
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var scroll: ScrollContainer = select.get_node("%TabScroll")
+	var top: float = last_tab.global_position.y - scroll.global_position.y
+	assert_gte(top, -1.0, "la última página queda a la vista")
+	assert_lte(top + last_tab.size.y, scroll.size.y + 1.0, "la última página entra completa en el rail")
 
 
 func test_back_to_the_same_tab_and_map_after_playing_an_own_mode() -> void:

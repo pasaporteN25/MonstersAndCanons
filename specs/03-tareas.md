@@ -2983,9 +2983,10 @@ Spec en **M80** (RF-716 a RF-719), razones y canon en **D-212**, el cómo en la 
   **Hecho cuando:** el requisito define el marco general, adaptación apaisada, textos, preservación de mapa/tarjetas y pruebas; decisión, plan y ficha T520 quedan enlazados; `git diff --check` pasa. Sin código ni arte.
   **Resultado (2026-10-26):** RF-723 y D-215 fijan la composición elegida, adaptación horizontal 1280×720, preservación del atlas/tarjetas y rótulo «Comunidad». T520 implementa el cambio. No se tocó runtime, datos ni arte; no se corrieron Godot/GUT por ser documental.
 
-- [ ] **T520 · Implementar Mesa de mando en el selector de niveles. `[mobile+x86]`**
+- [x] **T520 · Implementar Mesa de mando en el selector de niveles. `[mobile+x86]`**
   **Refs:** RF-723, D-215, RF-687 a RF-698, RF-711. **Depende de:** T519 integrada. **Ficha:** `specs/tareas/T520-implementar-selector-mesa-de-mando.md`.
   **Hecho cuando:** composición general adaptable de PC y celular simulado; solapa «Comunidad»; sin cambios al mapa/tarjetas ni a conducta de páginas; tests de geometría, navegación dinámica, carpeta y controles existentes; capturas de PC/celular simulado; `--import` y GUT completo sin `SCRIPT ERROR`.
+  **Resultado (2026-10-26):** la vista usa Mesa de mando con navegación lateral en pantallas anchas y navegación superior desplazable en anchos menores; se conserva el mapa, las tarjetas y la navegación dinámica. «Mapas de la comunidad» pasa a «Comunidad». Se agregaron pruebas de geometría, orientación, adaptación y selección de página; se corrigió el aislamiento del test de flujo. `godot --headless --import` terminó con exit 0 y GUT completo con 2517/2517 tests y 39.410 asserts, sin `SCRIPT ERROR` (3 warnings). Ocho capturas de PC y celular simulado cubren Mapa, Tarjetas, Comunidad y Asedio en 1280×720. **Sin verificar:** teléfono físico, accesibilidad táctil en dispositivo real y rendimiento.
 
 - [x] **T512 · Enmiendas de spec del panel de torre (PC-A y CEL-B). `[mobile+x86]`**
   **Refs:** RF-512, RF-616, RF-617, RF-650, RF-677, RF-681, RF-686, RF-721, RF-722, D-214, T510. **Pedido:** Lucas, 2026-10-26 (eligió PC-A y CEL-B). **Solo documentos.**
