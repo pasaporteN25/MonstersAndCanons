@@ -304,7 +304,7 @@ func test_focus_selects_without_opening() -> void:
 	view.region(1).grab_focus()
 	assert_eq(view.selected_index(), 1)
 	assert_eq(opened.size(), 0)
-	assert_true(view.selection_name().contains("02"))
+	assert_true(view.selection_name().begins_with("2 · "), "número sin cero inicial (RF-695)")
 
 
 func test_arrow_navigation_visits_all_fifteen_in_order() -> void:

@@ -101,7 +101,7 @@ func test_single_click_selects_without_starting() -> void:
 	_click(view.region(1))
 	assert_eq(view.selected_index(), 1)
 	assert_eq(opened.size(), 0)
-	assert_true(view.selection_name().contains("02"), "la ficha se actualiza")
+	assert_true(view.selection_name().begins_with("2 · "), "la ficha se actualiza, con el número sin cero inicial")
 
 
 func test_repeated_and_double_click_never_start() -> void:

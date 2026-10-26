@@ -14,6 +14,22 @@ const STAR_GOLD := Color("#f0d176")
 const FOCUS_COLOR := Color("#ffffff")
 ## RF-550, RF-690: lado mínimo del área táctil en px lógicos.
 const TOUCH_MIN: float = 56.0
+## T474, RF-695: insignias de conquista V3 (aprobadas por Lucas). El disco del estado mide 19,5 px de radio; el borde exterior
+## de la insignia llega a 26 px, dentro del área táctil de 56 px (el diámetro del borde es 52 px).
+const BADGE_RADIUS: float = 19.5
+const BADGE_EDGE: float = 26.0
+## Lado lógico con el que se dibuja el SVG de 64×64 (1:1), sin depender de la escala con la que Godot lo rasterice.
+const BADGE_TEXTURE_SIDE: float = 64.0
+const LOCK_RADIUS: float = 18.0
+const NUMBER_SIZE: int = 15
+const NUMBER_SIZE_TWO_DIGITS: int = 14
+const NUMBER_COLOR := Color("#fff7e6")
+const NUMBER_OUTLINE := Color("#1c1620")
+const BADGES: Dictionary = {
+	CampaignMap.Badge.REBEL: preload("res://assets/ui/campaign_badges/badge_rebel.svg"),
+	CampaignMap.Badge.SPLIT: preload("res://assets/ui/campaign_badges/badge_split.svg"),
+	CampaignMap.Badge.PLAYER: preload("res://assets/ui/campaign_badges/badge_player.svg"),
+}
 
 var index: int = 0
 var state: CampaignMap.State = CampaignMap.State.LOCKED
@@ -66,21 +82,28 @@ func _draw() -> void:
 		return  # RF-710: ni número, ni candado, ni estrellas, ni rótulo
 	var font: Font = get_theme_default_font()
 	var center: Vector2 = size / 2.0
-	var radius: float = 18.0 if state == CampaignMap.State.LOCKED else 19.0
+	var locked: bool = state == CampaignMap.State.LOCKED
+	# El aro de selección y el de foco rodean el borde de lo que se dibuja (la insignia llega a BADGE_EDGE).
+	var edge: float = LOCK_RADIUS if locked else BADGE_EDGE
 	if _selected or _hovered:
-		draw_arc(center, radius + 6.0, 0.0, TAU, 40, Color("#f0cb70"), 2.0)
+		draw_arc(center, edge + 5.0, 0.0, TAU, 40, Color("#f0cb70"), 2.0)
 	if has_focus():
-		draw_arc(center, radius + 11.0, 0.0, TAU, 48, FOCUS_COLOR, 3.0)
-	draw_mark(self, state, center, radius, font)
-	if state == CampaignMap.State.AVAILABLE or state == CampaignMap.State.REBEL:
-		var color: Color = Color("#25231f") if state == CampaignMap.State.AVAILABLE else Color("#fff1da")
-		draw_string(font, center + Vector2(-radius, 5.0), "%02d" % (index + 1), HORIZONTAL_ALIGNMENT_CENTER, radius * 2.0, 15, color)
+		draw_arc(center, edge + 10.0, 0.0, TAU, 48, FOCUS_COLOR, 3.0)
+	if locked:
+		_draw_lock(center, LOCK_RADIUS)
+	else:
+		var badge: CampaignMap.Badge = CampaignMap.badge_of(state)
+		draw_texture_rect(BADGES[badge], Rect2(center - Vector2(BADGE_TEXTURE_SIDE, BADGE_TEXTURE_SIDE) / 2.0, Vector2(BADGE_TEXTURE_SIDE, BADGE_TEXTURE_SIDE)), false)
+		var number: String = CampaignMap.number_text(index)
+		var number_size: int = NUMBER_SIZE_TWO_DIGITS if number.length() > 1 else NUMBER_SIZE
+		draw_string_outline(font, center + Vector2(-BADGE_RADIUS, number_size * 0.36), number, HORIZONTAL_ALIGNMENT_CENTER, BADGE_RADIUS * 2.0, number_size, 3, NUMBER_OUTLINE)
+		draw_string(font, center + Vector2(-BADGE_RADIUS, number_size * 0.36), number, HORIZONTAL_ALIGNMENT_CENTER, BADGE_RADIUS * 2.0, number_size, NUMBER_COLOR)
 	if state == CampaignMap.State.REBEL or state == CampaignMap.State.TAKEN:
-		_draw_stars(center + Vector2(0, -radius - 9.0))
-	var caption: String = "%02d" % (index + 1) if state == CampaignMap.State.LOCKED else "%02d · %s" % [index + 1, level_name]
-	var caption_color: Color = Color("#a8aeaa") if state == CampaignMap.State.LOCKED else Color("#ffe4a0")
+		_draw_stars(center + Vector2(0, -edge - 8.0))
+	var caption: String = CampaignMap.number_text(index) if locked else "%s · %s" % [CampaignMap.number_text(index), level_name]
+	var caption_color: Color = Color("#a8aeaa") if locked else Color("#ffe4a0")
 	var fitted: String = _fit(font, caption)
-	draw_string(font, center + Vector2(-CAPTION_WIDTH / 2.0, radius + 15.0), fitted, HORIZONTAL_ALIGNMENT_CENTER, CAPTION_WIDTH, CAPTION_SIZE, caption_color)
+	draw_string(font, center + Vector2(-CAPTION_WIDTH / 2.0, edge + 15.0), fitted, HORIZONTAL_ALIGNMENT_CENTER, CAPTION_WIDTH, CAPTION_SIZE, caption_color)
 
 
 func _draw_stars(center: Vector2) -> void:
@@ -103,33 +126,11 @@ func _fit(font: Font, text: String) -> String:
 	return result + "…" if result != text else result
 
 
-## El círculo y el pictograma de un estado. También lo usa la leyenda del mapa.
-static func draw_mark(canvas: CanvasItem, mark_state: CampaignMap.State, center: Vector2, radius: float, _font: Font) -> void:
-	match mark_state:
-		CampaignMap.State.TAKEN:
-			canvas.draw_circle(center, radius, Color("#26302a"))
-			canvas.draw_arc(center, radius, 0.0, TAU, 40, Color("#efcf75"), 3.0)
-			canvas.draw_circle(center, radius * 0.72, Color("#b99042"))
-			canvas.draw_polyline(PackedVector2Array([center + Vector2(-0.35, 0.1) * radius, center + Vector2(-0.1, 0.4) * radius,
-				center + Vector2(0.4, -0.25) * radius]), Color("#fff0bb"), maxf(radius * 0.16, 1.5))
-		CampaignMap.State.REBEL:
-			canvas.draw_circle(center, radius, Color("#302621"))
-			for k: int in 12:
-				var from_angle: float = k * TAU / 12.0
-				canvas.draw_arc(center, radius, from_angle, from_angle + TAU / 20.0 * 1.6, 6, Color("#de805a"), 3.0)
-			canvas.draw_circle(center, radius * 0.72, Color("#8e543c"))
-			var pole: Vector2 = center + Vector2(0.62, -0.1) * radius
-			canvas.draw_line(pole, pole + Vector2(0, -radius * 0.7), Color("#2b2233"), 2.0)
-			canvas.draw_colored_polygon(PackedVector2Array([pole + Vector2(0, -radius * 0.7), pole + Vector2(radius * 0.5, -radius * 0.5),
-				pole + Vector2(0, -radius * 0.3)]), Color("#df704d"))
-		CampaignMap.State.AVAILABLE:
-			canvas.draw_circle(center, radius, Color("#28323a"))
-			canvas.draw_arc(center, radius, 0.0, TAU, 40, Color("#f0cb70"), 3.5)
-			canvas.draw_circle(center, radius * 0.74, Color("#d39b43"))
-		CampaignMap.State.LOCKED:
-			canvas.draw_circle(center, radius, Color("#414b4b"))
-			canvas.draw_arc(center, radius, 0.0, TAU, 40, Color("#222a2b"), 2.0)
-			var body := Rect2(center + Vector2(-0.33, -0.05) * radius, Vector2(0.66, 0.5) * radius)
-			canvas.draw_rect(body, Color("#555d5c"))
-			canvas.draw_rect(body, Color("#b3b9b4"), false, 1.5)
-			canvas.draw_arc(center + Vector2(0, -0.05) * radius, radius * 0.22, PI, TAU, 10, Color("#b3b9b4"), 1.7)
+## El candado de una región bloqueada: no depende del color para distinguirse de las abiertas (RF-695).
+func _draw_lock(center: Vector2, radius: float) -> void:
+	draw_circle(center, radius, Color("#414b4b"))
+	draw_arc(center, radius, 0.0, TAU, 40, Color("#222a2b"), 2.0)
+	var body := Rect2(center + Vector2(-0.33, -0.05) * radius, Vector2(0.66, 0.5) * radius)
+	draw_rect(body, Color("#555d5c"))
+	draw_rect(body, Color("#b3b9b4"), false, 1.5)
+	draw_arc(center + Vector2(0, -0.05) * radius, radius * 0.22, PI, TAU, 10, Color("#b3b9b4"), 1.7)
