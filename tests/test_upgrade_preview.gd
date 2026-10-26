@@ -179,6 +179,25 @@ func test_panel_shows_each_upgrade_value_once_for_cannon_tesla_ice_and_disruptor
 					assert_false(panel.get_node("%Stats").text.contains(TowerPanel._effect_prefix(field)), "%s: efecto vigente no duplica %s" % [message, field])
 
 
+## RF-677 (caso de borde del cierre de M75): en el nivel 3 no hay flechas ni decimales con punto. El Cañón de
+## nivel 3 mostraba «Área: radio 1.5» porque `TowerText.effects` usaba `%.1f`.
+func test_panel_at_level_three_has_no_arrows_and_no_decimal_point() -> void:
+	var panel := (load("res://scenes/ui/tower_panel.tscn") as PackedScene).instantiate() as TowerPanel
+	add_child_autofree(panel)
+	for id: String in ["cannon", "tesla", "frost", "disruptor"]:
+		var tower := (load("res://scenes/towers/tower.tscn") as PackedScene).instantiate() as Tower
+		tower.setup(_tower(id))
+		add_child_autofree(tower)
+		tower.level_index = tower.data.levels.size() - 1
+		panel.show_tower(tower, 0, 9999)
+		var full_text: String = "%s %s %s %s" % [panel.get_node("%Damage").text, panel.get_node("%Rate").text,
+			panel.get_node("%Range").text, panel.get_node("%Stats").text]
+		assert_false(full_text.contains("."), "%s nivel 3: decimales con coma (%s)" % [id, full_text])
+		assert_false(full_text.contains(UpgradeDeltas.ARROW), "%s nivel 3: sin flechas" % id)
+		assert_eq((panel.get_node("%UpgradeButton") as Button).text, "Nivel máximo")
+	assert_eq(TowerText.effects(_tower("cannon").levels[2])[0], "Área: radio 1,5")
+
+
 func test_mobile_status_line_shows_the_preview() -> void:
 	var original: Variant = SaveManager.get_setting("ui_mode")
 	var game: Game = await _spawn_game(UiMode.MOBILE)

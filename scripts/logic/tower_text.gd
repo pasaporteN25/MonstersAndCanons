@@ -14,7 +14,7 @@ static func effects(level: TowerLevelData) -> Array[String]:
 	if level.support_repair_per_second > 0.0:
 		lines.append("Repara %.0f puntos de desgaste/s; solo la mayor tasa" % level.support_repair_per_second)
 	if level.splash_radius_tiles > 0.0:
-		lines.append("Área: radio %.1f" % level.splash_radius_tiles)
+		lines.append("Área: radio %s" % decimal(level.splash_radius_tiles))  # RF-677: coma decimal (antes «1.5»)
 	if level.chain_extra_targets > 0:
 		lines.append("El rayo salta a %d enemigos más" % level.chain_extra_targets)
 	if level.burst_count > 0:
