@@ -1,5 +1,9 @@
 # Novedades del juego
 
+## Zonas del atlas que se descubren *(T488, 2026-10-25; en revisión, entrega parcial)*
+
+En el mapa de campaña, los niveles 6 a 10 y 11 a 15 aparecen recién cuando abrís el 6 o el 11: hasta entonces su terreno se ve en gris y sin números, candados ni estrellas, y las flechas del teclado no entran ahí. Los niveles se siguen abriendo de a uno, al ganar el anterior. El modo de pruebas muestra las tres zonas, y las tarjetas no cambian. El gris es **provisional**: falta la aprobación de la máscara definitiva.
+
 ## Postes de campaña según tus estrellas *(T475, 2026-10-25; en revisión)*
 
 En la campaña aparecen postes de banderines en la mayoría de los mapas: uno en los niveles 1 a 7 y 10, y dos en los niveles 11 a 15. Son rebeldes mientras tengas de 0 a 2 estrellas en el nivel y pasan a ser tuyos, con el banderín que armaste en el editor, al conseguir las 3 estrellas. El poste del nivel 6 ya no cambia con cualquier victoria: también pide las 3 estrellas. Es solo un adorno: no cambia el camino, dónde construir ni las oleadas. Los niveles 8 y 9 todavía no lo tienen, hasta elegir otra casilla. Los mapas de la comunidad, Asedio, el editor y el modo de pruebas siempre muestran el poste rebelde.

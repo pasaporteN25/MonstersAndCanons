@@ -1,6 +1,6 @@
 # Captura el selector planetario con una partida temporal para revisar sus estados en desktop.
-# Uso: godot --path . res://tools/capture_campaign_map.tscn -- <salida.png> <ancho>x<alto> [map|cards] [mobile] [all] [select=N] [scroll=0..1]
-# `mobile`: modo celular simulado; `all`: los 15 niveles abiertos con estrellas variadas; `select=`: región seleccionada y con foco (0 a 14); `scroll=`: fracción del desplazamiento horizontal (T471).
+# Uso: godot --path . res://tools/capture_campaign_map.tscn -- <salida.png> <ancho>x<alto> [map|cards] [mobile] [all] [open=N] [select=N] [scroll=0..1]
+# `mobile`: modo celular simulado; `all`: los 15 niveles abiertos con estrellas variadas; `open=N`: abre los niveles 1 a N (3 a 15; sin él, la partida temporal abre 1 a 3, solo la zona A), con victorias en los anteriores (T488); `select=`: región seleccionada y con foco (0 a 14); `scroll=`: fracción del desplazamiento horizontal (T471).
 extends Node
 
 const TEMP_SAVE: String = "user://test_capture_campaign_map.json"
@@ -49,6 +49,13 @@ func capture() -> void:
 			save.call("unlock", level.id)
 			if i < 9:
 				save.call("record_victory", level.id, level.starting_lives if i % 2 == 0 else maxi(level.starting_lives / 2, 1), 100)
+	for arg: String in args:
+		if arg.begins_with("open="):  # T488: abre los niveles hasta el N (N→N+1): `open=6` descubre la zona B, `open=11` la C
+			var last_open: int = clampi(int(arg.trim_prefix("open=")), 3, 15)
+			for i: int in range(3, last_open):
+				var level: LevelData = game_flow.call("level", i) as LevelData
+				save.call("record_victory", (game_flow.call("level", i - 1) as LevelData).id, (game_flow.call("level", i - 1) as LevelData).starting_lives, 100)
+				save.call("unlock", level.id)
 	game_flow.set("select_page", &"campaign")
 	var select: Control = (load(SELECT_SCENE) as PackedScene).instantiate() as Control
 	get_tree().root.add_child(select)

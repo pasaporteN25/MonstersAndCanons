@@ -34,9 +34,15 @@ const LOCKED_FILL := Color("#414b4b")
 const TEXT_COLOR := Color("#f5f0df")
 const MUTED_COLOR := Color("#b8bfba")
 const FONT_SIZE: int = 12
+## PROVISIONAL (T488, RF-710): tinte neutro con que se tapa el terreno de una zona sin descubrir. La máscara gris
+## definitiva todavía no la aprobó Lucas (muestra en preparación, `feature/t469-muestra-insignias`); cuando la apruebe,
+## se reemplaza `_draw_hidden_zones` por la máscara del arte y se borra esta constante.
+const HIDDEN_ZONE_TINT_PLACEHOLDER := Color(0.55, 0.57, 0.58, 1.0)
 
 var _entries: Array[Dictionary] = []
 var _states: Array[CampaignMap.State] = []
+## RF-709: por región, si su zona está descubierta. Se deriva de los estados (abierta = `unlocked`) en cada `setup()`.
+var _discovered: Array[bool] = []
 var _selected: int = 0
 var _regions: Array[CampaignRegion] = []
 var _name_label: Label
@@ -71,6 +77,10 @@ func setup(entries: Array[Dictionary], selected: int = -1) -> void:
 	_states = []
 	for entry: Dictionary in entries:
 		_states.append(entry["state"])
+	var unlocked: Array = []
+	for state: CampaignMap.State in _states:
+		unlocked.append(CampaignMap.is_open(state))
+	_discovered = CampaignMap.discovered_regions(unlocked)
 	for region: CampaignRegion in _regions:
 		_canvas.remove_child(region)
 		region.queue_free()
@@ -78,24 +88,48 @@ func setup(entries: Array[Dictionary], selected: int = -1) -> void:
 	for i: int in mini(entries.size(), CampaignMap.REGION_COUNT):
 		var region := CampaignRegion.new()
 		region.name = "Region_%d" % i
-		region.setup(i, entries[i], _map_point(CampaignMap.REGION_POINTS[i]), REGION_SIZE)
+		region.setup(i, entries[i], _map_point(CampaignMap.REGION_POINTS[i]), REGION_SIZE, _discovered[i])
 		region.confirmed.connect(_request)  # Enter sobre la región enfocada
-		region.focus_entered.connect(select.bind(i))
+		if _discovered[i]:
+			region.focus_entered.connect(select.bind(i))
 		_canvas.add_child(region)
 		_regions.append(region)
+	# RF-688/RF-710: las flechas siguen el orden y saltan las regiones de zonas sin descubrir (que no admiten foco).
+	var focusable: Array[int] = []
 	for i: int in _regions.size():
-		if i > 0:
-			_regions[i].focus_neighbor_left = NodePath("../Region_%d" % (i - 1))
-			_regions[i].focus_neighbor_top = NodePath("../Region_%d" % (i - 1))  # RF-688: las flechas siguen el orden
-		if i < _regions.size() - 1:
-			_regions[i].focus_neighbor_right = NodePath("../Region_%d" % (i + 1))
-			_regions[i].focus_neighbor_bottom = NodePath("../Region_%d" % (i + 1))
-	select(CampaignMap.default_selection(_states) if selected < 0 else selected)
+		if _discovered[i]:
+			focusable.append(i)
+	for position_in_list: int in focusable.size():
+		var current: CampaignRegion = _regions[focusable[position_in_list]]
+		if position_in_list > 0:
+			var previous: NodePath = NodePath("../Region_%d" % focusable[position_in_list - 1])
+			current.focus_neighbor_left = previous
+			current.focus_neighbor_top = previous
+		if position_in_list < focusable.size() - 1:
+			var next: NodePath = NodePath("../Region_%d" % focusable[position_in_list + 1])
+			current.focus_neighbor_right = next
+			current.focus_neighbor_bottom = next
+	var start: int = CampaignMap.default_selection(_states) if selected < 0 else selected
+	select(start if is_region_discovered(start) else CampaignMap.default_selection(_states))
 	_canvas.queue_redraw()
 
 
 func region(index: int) -> CampaignRegion:
 	return _regions[index]
+
+
+## ¿La zona de la región `index` está descubierta? (RF-709). Fuera de rango, no.
+func is_region_discovered(index: int) -> bool:
+	return index >= 0 and index < _discovered.size() and _discovered[index]
+
+
+## Las regiones que admiten foco y selección, en orden (RF-710).
+func focusable_indices() -> Array[int]:
+	var result: Array[int] = []
+	for i: int in _discovered.size():
+		if _discovered[i]:
+			result.append(i)
+	return result
 
 
 func region_count() -> int:
@@ -137,8 +171,8 @@ func selection_status() -> String:
 
 ## Marca una región y muestra su ficha. No abre nada (RF-648: cambiar el foco no inicia una partida).
 func select(index: int) -> void:
-	if _entries.is_empty():
-		return
+	if _entries.is_empty() or not is_region_discovered(clampi(index, 0, _entries.size() - 1)):
+		return  # RF-710: una región de zona sin descubrir no se selecciona
 	_selected = clampi(index, 0, _entries.size() - 1)
 	var entry: Dictionary = _entries[_selected]
 	var state: CampaignMap.State = entry["state"]
@@ -153,7 +187,7 @@ func select(index: int) -> void:
 
 ## Clic o toque en una región (RF-688): la marca y le da el foco, sin iniciar nada.
 func pointer_select(index: int) -> void:
-	if index < 0 or index >= _regions.size():
+	if not is_region_discovered(index) or index >= _regions.size():
 		return
 	select(index)
 	_regions[index].grab_focus()
@@ -171,7 +205,7 @@ func focus_selected() -> void:
 
 
 func _request(index: int) -> void:
-	if index < 0 or index >= _states.size() or not CampaignMap.is_open(_states[index]):
+	if index < 0 or index >= _states.size() or not is_region_discovered(index) or not CampaignMap.is_open(_states[index]):
 		return
 	level_requested.emit(index)
 
@@ -274,6 +308,8 @@ func _region_at(at: Vector2) -> CampaignRegion:
 	var best: CampaignRegion = null
 	var best_distance: float = INF
 	for region_node: CampaignRegion in _regions:
+		if not region_node.discovered:
+			continue
 		var distance: float = at.distance_to(region_node.position + region_node.size / 2.0)
 		if distance <= region_node.size.x / 2.0 and distance < best_distance:
 			best = region_node
@@ -331,6 +367,7 @@ func _draw_canvas() -> void:
 	var font: Font = _canvas.get_theme_default_font()
 	var sea := Rect2(_offset, CampaignMap.SEA_SIZE * _scale)
 	_canvas.draw_texture_rect(MAP_BACKGROUND, sea, false)
+	_draw_hidden_zones()
 	_draw_route()
 	_draw_lander(font)
 	_draw_legend(font)
@@ -338,10 +375,37 @@ func _draw_canvas() -> void:
 	_canvas.draw_string(font, Vector2(14, 22), "ATLAS MERIDIANO · CÁNTARO", HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE, Color("#dfd7bf"))
 
 
+## RF-710: el terreno de las zonas sin descubrir se tapa con un tinte neutro. PROVISIONAL (ver
+## `HIDDEN_ZONE_TINT_PLACEHOLDER`): corta la costa por la línea vertical a mitad de camino entre la última región de una
+## zona y la primera de la siguiente; la máscara aprobada la reemplazará.
+func _draw_hidden_zones() -> void:
+	var first_hidden: int = -1
+	for i: int in _discovered.size():
+		if not _discovered[i]:
+			first_hidden = i
+			break
+	if first_hidden < 0:
+		return
+	var split_x: float = (CampaignMap.REGION_POINTS[first_hidden - 1].x + CampaignMap.REGION_POINTS[first_hidden].x) / 2.0
+	var east: float = CampaignMap.SEA_ORIGIN.x + CampaignMap.SEA_SIZE.x
+	var south: float = CampaignMap.SEA_ORIGIN.y + CampaignMap.SEA_SIZE.y
+	var cut := PackedVector2Array([Vector2(split_x, CampaignMap.SEA_ORIGIN.y), Vector2(east, CampaignMap.SEA_ORIGIN.y),
+		Vector2(east, south), Vector2(split_x, south)])
+	for piece: PackedVector2Array in Geometry2D.intersect_polygons(CampaignMap.land_polygon(), cut):
+		if Geometry2D.is_polygon_clockwise(piece):
+			continue  # un hueco de la costa (lago): no se tapa
+		var mapped := PackedVector2Array()
+		for point: Vector2 in piece:
+			mapped.append(_map_point(point))
+		_canvas.draw_colored_polygon(mapped, HIDDEN_ZONE_TINT_PLACEHOLDER)
+
+
 ## El recorrido arranca en el aterrizaje y sigue las curvas del atlas (`CampaignMap.route_polyline`); el tramo ya abierto
 ## se dibuja entero y el resto, tenue.
 func _draw_route() -> void:
 	for i: int in _regions.size():
+		if not _discovered[i]:
+			continue  # RF-710: el tramo hacia una región oculta no se adelanta
 		var open: bool = CampaignMap.is_open(_states[i])
 		var color: Color = ROUTE_COLOR if open else Color(ROUTE_COLOR, 0.28)
 		var points := PackedVector2Array()
