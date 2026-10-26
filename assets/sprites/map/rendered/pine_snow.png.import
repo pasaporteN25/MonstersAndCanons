@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bfww0ogoa7nl4"
-path="res://.godot/imported/en_juego.png-c41594e05a5951042da0deda5328d8e5.ctex"
+uid="uid://l1h02fiwgu4y"
+path="res://.godot/imported/pine_snow.png-2329bc70fc8205f679541d5540c5c5d7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://art/redesign-m23/en_juego.png"
-dest_files=["res://.godot/imported/en_juego.png-c41594e05a5951042da0deda5328d8e5.ctex"]
+source_file="res://assets/sprites/map/rendered/pine_snow.png"
+dest_files=["res://.godot/imported/pine_snow.png-2329bc70fc8205f679541d5540c5c5d7.ctex"]
 
 [params]
 

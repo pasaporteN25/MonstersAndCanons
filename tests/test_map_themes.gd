@@ -104,12 +104,52 @@ func test_the_meadow_decoration_is_the_old_one() -> void:
 
 
 func test_the_new_drawings_exist_and_are_64_square() -> void:
-	var names: PackedStringArray = ["cactus", "roca_roja", "huesos", "pino", "roca_nieve", "roca_negra", "grieta",
+	var names: PackedStringArray = ["cactus", "roca_roja", "huesos", "roca_negra", "grieta",
 		"columna", "bloque", "estatua", "tronco", "helecho", "junco", "hongo", "flores"]
 	for file_name: String in names:
 		var texture: Texture2D = load("res://assets/sprites/map/%s.svg" % file_name)
 		assert_not_null(texture, file_name)
 		assert_eq(texture.get_width(), texture.get_height(), "%s es cuadrado" % file_name)
+
+
+## T497 (RF-713 b, RF-714): el pino, el abeto y la roca nevada del nivel 13 son los PNG aprobados de 128 × 128; cada `X` del
+## nivel resuelve a uno de los tres y los datos del nivel no cambiaron (mismo hash que `test_campaign_posts.gd`).
+const LEVEL_13_HASH: String = "0577701868f5455858abd257393a3eb33cb740ce9754455510170986926cf3a1"
+
+
+func test_snow_decor_is_the_approved_128_png() -> void:
+	var files: Dictionary = {
+		MapThemes.PINE: "res://assets/sprites/map/rendered/pine_snow.png",
+		MapThemes.FIR: "res://assets/sprites/map/rendered/fir_snow.png",
+		MapThemes.SNOW_ROCK: "res://assets/sprites/map/rendered/snow_rock.png",
+	}
+	for texture: Texture2D in files:
+		assert_eq(texture.resource_path, files[texture])
+		assert_eq(texture.get_width(), 128, files[texture])
+		assert_eq(texture.get_height(), 128, files[texture])
+		assert_true(texture.get_image().detect_alpha() != Image.ALPHA_NONE, "%s tiene alfa" % files[texture])
+	assert_eq(MapThemes.BLOCKED[&"nieve"], [MapThemes.PINE, MapThemes.SNOW_ROCK, MapThemes.PINE, MapThemes.FIR,
+		MapThemes.SNOW_ROCK, MapThemes.PINE], "la misma lista de seis: no cambia qué casilla usa cada dibujo")
+
+
+func test_every_blocked_cell_of_level_13_uses_the_new_art_and_the_data_is_untouched() -> void:
+	var text: String = FileAccess.get_file_as_string("res://data/levels/level_13.json")
+	assert_eq(text.sha256_text(), LEVEL_13_HASH, "data/levels/level_13.json no cambió")
+	var rows: Array = (JSON.parse_string(text) as Dictionary)["mapa"]
+	var counts: Dictionary = {MapThemes.PINE: 0, MapThemes.FIR: 0, MapThemes.SNOW_ROCK: 0}
+	for y: int in rows.size():
+		var row: String = rows[y]
+		for x: int in row.length():
+			if row[x] != "X":
+				continue
+			var texture: Texture2D = LevelDecor.blocked_decor(Vector2i(x, y), &"nieve")
+			assert_true(counts.has(texture), "la casilla (%d, %d) usa pino, abeto o roca nevada nuevos" % [x, y])
+			if counts.has(texture):
+				counts[texture] += 1
+	assert_eq(counts[MapThemes.PINE] + counts[MapThemes.FIR] + counts[MapThemes.SNOW_ROCK], 117,
+		"las 117 casillas `X` del nivel 13 (T491)")
+	for texture: Texture2D in counts:
+		assert_gt(counts[texture], 0, "se usa cada uno de los tres")
 
 
 # --- Pintar cada tema ---

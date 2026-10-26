@@ -3,6 +3,9 @@
 ## La barra de la torre en el celular entra en la pantalla *(T511, 2026-10-26; en revisión)*
 
 Al elegir una torre en el modo celular, la barra de abajo se salía de la pantalla y cortaba el renglón «Al mejorar». Ahora entra entera (nombre y nivel comparten renglón y la letra se ajusta si hace falta). Además, la cadencia y el alcance se escriben con coma y con el valor real: el Hielo y la Eléctrica de nivel 1 dicen «Alcance 2,5» (antes «2») y «Cadencia 0,75» en lugar de «0.75». Los botones no cambiaron de lugar.
+## Panel de la torre más chico y más claro *(T513, 2026-10-26; en revisión)*
+
+El panel de la torre elegida en la PC ya no mide siempre 320 px de alto: mantiene los 270 de ancho pero su alto sale de lo que muestra (entre 200 y 300 px, según la torre) y nunca necesita barra de desplazamiento. El cambio de una mejora ahora se lee dentro de la frase de cada efecto («El rayo salta a 2 → 3 enemigos más», «Ralentiza 40 → 50 % durante 2 s», «Pulso: apaga las auras durante 2,5 → 3 s»), así que ningún efecto desaparece al subir de nivel. El Estandarte ya no muestra «Daño 0» ni «Cadencia Apoyo» ni un «Apuntar» apagado, la Disruptora tampoco muestra «Apuntar», y «Voladores» pasó a un ícono junto al nombre (tachado si la torre no los golpea). «Mejorar» dice «faltan N» a la vista cuando no te alcanza el oro, y los botones son los de hierro y bronce de los menús, con «Apuntar» y «Vender» lado a lado. Todos los decimales llevan coma. No cambia ningún precio, daño ni regla.
 
 ## «Ver todo» del celular, ahora con una lupa *(T464, 2026-10-26; en revisión)*
 
@@ -34,9 +37,13 @@ En el mapa planetario los niveles se muestran como 1, 2… 15 en lugar de 01, 02
 ## Radio del área con coma *(T465, cierre de M75, 2026-10-25; en revisión)*
 
 El panel de la torre y la Wiki escriben el radio del área con coma y sin ceros de más («Área: radio 1,5», «radio 1»). Antes, el Cañón de nivel 3 mostraba «1.5» con punto. Solo cambia el texto: no cambian el área, el daño ni el precio.
-## Zonas del atlas que se descubren *(T488, 2026-10-25; en revisión, entrega parcial)*
+## Zonas del atlas que se descubren *(T488, 2026-10-26; en revisión)*
 
 En el mapa de campaña, los niveles 6 a 10 y 11 a 15 aparecen recién cuando abrís el 6 o el 11: hasta entonces su terreno se ve en gris y sin números, candados ni estrellas, y las flechas del teclado no entran ahí. Los niveles se siguen abriendo de a uno, al ganar el anterior. El modo de pruebas muestra las tres zonas, y las tarjetas no cambian. El gris es **provisional**: falta la aprobación de la máscara definitiva.
+## Pinos, abetos y rocas nevadas nuevos en el nivel 13 *(T497, 2026-10-26; en revisión)*
+
+En el Paso alto (nivel 13), los pinos, los abetos y las rocas con nieve tienen un dibujo nuevo, con volumen y luz como el resto de la decoración renderizada. Están en las mismas casillas que antes y siguen siendo decoración donde no se construye: no cambia el camino, las oleadas ni el mapa. No se probaron teléfonos reales.
+En el mapa de campaña, los niveles 6 a 10 y 11 a 15 aparecen recién cuando abrís el 6 o el 11: hasta entonces su terreno se ve en gris y sin números, candados ni estrellas, y las flechas del teclado no entran ahí. Los niveles se siguen abriendo de a uno, al ganar el anterior. El modo de pruebas muestra las tres zonas, y las tarjetas no cambian. La zona sin descubrir ahora se ve como el atlas en grises (se adivinan el relieve, las ruinas y la nieve, sin colores de bioma) y con el borde bien marcado contra la zona descubierta; no se mueve ni parpadea.
 
 ## Postes de campaña según tus estrellas *(T475, 2026-10-25; en revisión)*
 

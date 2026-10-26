@@ -101,8 +101,9 @@ func test_panel_opens_on_selection_and_closes_on_deselection() -> void:
 	game.build_controller.select_placed(tower)
 	assert_true(game.hud.tower_panel.visible)
 	assert_eq(_panel_text("Title"), "Ametralladora")
-	assert_eq(_panel_text("UpgradeButton"), "Mejorar a nivel 2 (60)  [U]")
-	assert_eq(_panel_text("SellButton"), "Vender (+35)  [S]")
+	assert_eq(_panel_text("UpgradeButton"), "Mejorar a nivel 2")
+	assert_eq(_panel_text("Cost"), "60", "el costo va junto a la moneda en el botón")
+	assert_eq(_panel_text("SellButton"), "Vender +35 [S]")
 	game.build_controller.deselect_placed()
 	assert_false(game.hud.tower_panel.visible)
 
@@ -111,8 +112,8 @@ func test_panel_updates_after_upgrade() -> void:
 	game.build_controller.select_placed(tower)
 	game.build_controller.try_upgrade(tower)
 	assert_eq(_panel_text("Title"), "Ametralladora")
-	assert_eq(_panel_text("UpgradeButton"), "Mejorar a nivel 3 (100)  [U]")
-	assert_eq(_panel_text("SellButton"), "Vender (+77)  [S]")
+	assert_eq(_panel_text("UpgradeButton"), "Mejorar a nivel 3")
+	assert_eq(_panel_text("SellButton"), "Vender +77 [S]")
 	assert_eq((game.hud.tower_panel.get_node("%LevelCard") as HBoxContainer).tooltip_text, "Nivel actual: 2 de 3")
 
 

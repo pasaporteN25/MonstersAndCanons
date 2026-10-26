@@ -1,0 +1,182 @@
+[
+  {
+    "file": "contact_034.png",
+    "bytes": 360506,
+    "size": [
+      1280,
+      834
+    ],
+    "mode": "RGBA",
+    "sha256": "1aa98681d65abaea1fa5946c4ff4e1dfbdbad52a202857b1a534490643f70f92"
+  },
+  {
+    "file": "contact_220.png",
+    "bytes": 1973718,
+    "size": [
+      1280,
+      2555
+    ],
+    "mode": "RGBA",
+    "sha256": "0cc09ba52a63f0f050516b9be6005825c4dc38d4fbb847b40b50dda67d8345ff"
+  },
+  {
+    "file": "contact_220_path.png",
+    "bytes": 2084082,
+    "size": [
+      1280,
+      2555
+    ],
+    "mode": "RGBA",
+    "sha256": "5935f46c63d2e504dfc50de7f8cb75367008562da20f70c0a87cf52f47e1a610"
+  },
+  {
+    "file": "decoration_detail.png",
+    "bytes": 713780,
+    "size": [
+      1280,
+      970
+    ],
+    "mode": "RGBA",
+    "sha256": "02c7dc7d20bb471cff95049662666cbc4ad4b2255ba517e0ed21a09a378cf223"
+  },
+  {
+    "file": "fir_01.png",
+    "bytes": 15826,
+    "size": [
+      128,
+      128
+    ],
+    "mode": "RGBA",
+    "sha256": "cba7da9e44241572a2e5a2602ddc9c7608458951f7143455af6dff02cf4b2972"
+  },
+  {
+    "file": "fir_02.png",
+    "bytes": 15136,
+    "size": [
+      128,
+      128
+    ],
+    "mode": "RGBA",
+    "sha256": "54fcb08701007a6560d07998841c1c3912e01e856f7cca02d2a062bc83f7739a"
+  },
+  {
+    "file": "fir_03.png",
+    "bytes": 15650,
+    "size": [
+      128,
+      128
+    ],
+    "mode": "RGBA",
+    "sha256": "9ffb53f74e1531cd5d671daa865cc24256971c1a6662d92630a7496a85b5842e"
+  },
+  {
+    "file": "level_13_proposal_01.png",
+    "bytes": 367080,
+    "size": [
+      1280,
+      720
+    ],
+    "mode": "RGBA",
+    "sha256": "c20829e34b62b9efe2d8c747e4e1bc491207a48b8766a0bddb63626adf76c652"
+  },
+  {
+    "file": "level_13_proposal_02.png",
+    "bytes": 369035,
+    "size": [
+      1280,
+      720
+    ],
+    "mode": "RGBA",
+    "sha256": "3e3f3fed7a16efd376666fe70d7b78b8a26aeb425c8284ea0892fc8da5c97bb5"
+  },
+  {
+    "file": "level_13_proposal_03.png",
+    "bytes": 361451,
+    "size": [
+      1280,
+      720
+    ],
+    "mode": "RGBA",
+    "sha256": "5e28c649a22f039117b9a91afa7b48c2830b5852495bbabe316ad0022867fa58"
+  },
+  {
+    "file": "pine_01.png",
+    "bytes": 14133,
+    "size": [
+      128,
+      128
+    ],
+    "mode": "RGBA",
+    "sha256": "33a53a453283724233b4bacf78ceeb8b5dfb341da2bbe94abadd0f811a31d258"
+  },
+  {
+    "file": "pine_02.png",
+    "bytes": 13972,
+    "size": [
+      128,
+      128
+    ],
+    "mode": "RGBA",
+    "sha256": "9beb1ade4fdaf1e66c3f8c1e50eee5c6aa9314addcbae52df4932a8986fef9ab"
+  },
+  {
+    "file": "pine_03.png",
+    "bytes": 14087,
+    "size": [
+      128,
+      128
+    ],
+    "mode": "RGBA",
+    "sha256": "62d42a6068334929cd76ce9c28f654ab1fd143d1da1cc238942ebdf966dc8eb7"
+  },
+  {
+    "file": "reference_board.png",
+    "bytes": 313547,
+    "size": [
+      1280,
+      440
+    ],
+    "mode": "RGBA",
+    "sha256": "be7a597c2f735ce2580efd071d4bd1c7648dcb9a943d783b0cde045759a3529e"
+  },
+  {
+    "file": "snow_rock_01.png",
+    "bytes": 15707,
+    "size": [
+      128,
+      128
+    ],
+    "mode": "RGBA",
+    "sha256": "3b2af0a9dd0448760ca072fb0dd9b1ac7034ddeb7e01a4ec26a6ee7d173ce683"
+  },
+  {
+    "file": "snow_rock_02.png",
+    "bytes": 16528,
+    "size": [
+      128,
+      128
+    ],
+    "mode": "RGBA",
+    "sha256": "441f7aba4ad381491e3ec19507a1e7b6c6c7f245a301b4ceba2f45a8198dfe88"
+  },
+  {
+    "file": "snow_rock_03.png",
+    "bytes": 11010,
+    "size": [
+      128,
+      128
+    ],
+    "mode": "RGBA",
+    "sha256": "6c047863f3974f4988894bedb03baf42476a78c4bdf58322d475135b79b48114"
+  },
+  {
+    "file": "spider_comparison.png",
+    "bytes": 316290,
+    "size": [
+      1280,
+      590
+    ],
+    "mode": "RGBA",
+    "sha256": "fb4e15c86b455ad278a1ef00cd136faf3fa2db74e1d7caff5380ec19466ed505"
+  }
+]
