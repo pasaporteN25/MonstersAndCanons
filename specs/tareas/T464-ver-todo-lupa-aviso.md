@@ -35,8 +35,10 @@ Hecho y comprobado:
 Falta:
 1. **🎨 OK de Lucas a la lupa** (`art/t464-muestra-lupa/lupa.svg`, visor `index.html`) y su integración en `mobile_hud.gd:443` (hoy dice «Ver todo», como pide la ficha mientras no haya aprobación).
 2. **Hallazgo:** con el texto «Ver todo» el botón mide 99 × 64 px y, en `ver_todo_x_px = 1188` (`data/ui/mobile_ui.json:27`), termina en x = 1287: **sale 7 px de la pantalla de 1280** (captura `Capturas/M75-T464-celular-simulado-ver-todo.png`). Con la lupa cuadrada de 64 px entra (1188 + 64 = 1252). Si la lupa se demora, ajustar la posición o el ancho.
-3. Tests que pide el plan y no existen: que el aviso **no** salga con el tutorial del nivel 1 activo (el código lo excluye en `game.gd:617`, pero ningún test lo prueba) y que **desplazar y después acercar** sí lo muestre.
-4. Test de que el botón no pisa carrito/X/demolición: hoy solo se comprobó con las posiciones por omisión en la herramienta `tools/capture_m75_cierre.gd` (no se pisan); los otros botones se pueden arrastrar.
+3. ✅ **Hecho en `tests/test_view_all_hint_edges.gd` (2026-10-25):** tests que pedía el plan y no existían: que el aviso **no** salga con el tutorial del nivel 1 activo (el código lo excluye en `game.gd:617`, pero ningún test lo prueba) y que **desplazar y después acercar** sí lo muestre.
+4. ✅ **Hecho** (posiciones por omisión, sin teléfono): `test_default_view_all_button_does_not_overlap_the_other_floating_buttons` comprueba que el rectángulo de «Ver todo» no se cruza con carrito, X ni demolición. **No** comprueba que quepa en la pantalla (el hallazgo 2 sigue abierto: hoy sale 7 px) ni cubre botones arrastrados por el jugador.
+
+**Avance (2026-10-25, `feature/t464-tests-aviso-ver-todo`):** `test_view_all_hint_edges.gd` agrega 5 tests: sin aviso con el tutorial activo (PC y celular; no gasta la única vez), el aviso vuelve al terminar el tutorial, «desplazar y después acercar» y la no superposición por omisión. Sin el `tutorial.is_active()` de `game.gd` fallan 3 de los 5. No hubo cambios de código. Siguen abiertos el OK de la lupa y su integración.
 
 ## Hecho cuando
 
