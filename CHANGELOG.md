@@ -1,5 +1,8 @@
 # Novedades del juego
 
+## La barra de la torre en el celular entra en la pantalla *(T511, 2026-10-26; en revisión)*
+
+Al elegir una torre en el modo celular, la barra de abajo se salía de la pantalla y cortaba el renglón «Al mejorar». Ahora entra entera (nombre y nivel comparten renglón y la letra se ajusta si hace falta). Además, la cadencia y el alcance se escriben con coma y con el valor real: el Hielo y la Eléctrica de nivel 1 dicen «Alcance 2,5» (antes «2») y «Cadencia 0,75» en lugar de «0.75». Los botones no cambiaron de lugar.
 ## Panel de la torre más chico y más claro *(T513, 2026-10-26; en revisión)*
 
 El panel de la torre elegida en la PC ya no mide siempre 320 px de alto: mantiene los 270 de ancho pero su alto sale de lo que muestra (entre 200 y 300 px, según la torre) y nunca necesita barra de desplazamiento. El cambio de una mejora ahora se lee dentro de la frase de cada efecto («El rayo salta a 2 → 3 enemigos más», «Ralentiza 40 → 50 % durante 2 s», «Pulso: apaga las auras durante 2,5 → 3 s»), así que ningún efecto desaparece al subir de nivel. El Estandarte ya no muestra «Daño 0» ni «Cadencia Apoyo» ni un «Apuntar» apagado, la Disruptora tampoco muestra «Apuntar», y «Voladores» pasó a un ícono junto al nombre (tachado si la torre no los golpea). «Mejorar» dice «faltan N» a la vista cuando no te alcanza el oro, y los botones son los de hierro y bronce de los menús, con «Apuntar» y «Vender» lado a lado. Todos los decimales llevan coma. No cambia ningún precio, daño ni regla.
