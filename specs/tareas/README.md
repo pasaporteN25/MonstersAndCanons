@@ -127,3 +127,7 @@ La spec de selector es [T459](T459-selector-mapa-modos-postes.md); sus RF-687–
 ## 14. T485 · Atlas y descubrimiento por zonas
 
 [T485](T485-atlas-biomas-zonas.md) conserva la B elegida y propone silueta/terreno nuevo con los temas reales de quince niveles, verificados contra JSON. El visor `art/t485-atlas-biomas/index.html` muestra cartografía 1–5, 1–10 al desbloquear 6 y 1–15 al desbloquear 11; descubrir no abre niveles ni conquista. Todo es muestra pendiente de aprobación y futura spec de guardados/pruebas antes de runtime. #79 supersede las muestras del #78, cuyo cierre fue autorizado por Lucas una vez publicada esta revisión.
+
+## 15. Cierre honesto de M75 · T458, T480, T464 a T467
+
+El informe [M75-cierre-honesto](informes/M75-cierre-honesto.md) revisa cada criterio contra `main` y una ventana real. T464 a T467 no tenían ficha propia (salían de la [ficha T458](T458-ficha-camara-panel-opciones.md)). Ahora la tienen y reflejan lo ya hecho: [T464](T464-ver-todo-lupa-aviso.md) (abierta: falta el OK de la lupa), [T465](T465-panel-torre-sin-repeticiones.md) (abierta: RF-677.1 espera una decisión de Lucas), [T466](T466-opcion-circulo-alcance.md) y [T467](T467-ampliacion-alcance.md) (cerradas). Las capturas y la medición se rehacen con `tools/capture_m75_cierre.gd`.
