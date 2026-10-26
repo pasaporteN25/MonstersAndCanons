@@ -1,5 +1,7 @@
 # T495 · 🚦🎨 Lucas elige las variantes y contesta M79
 
+> **Avance (Lucas, 2026-10-26):** respondió sobre las muestras (pinos 01/abeto 01/roca nevada 01, cabeza 01, piedra descartada y pasada a M80). Las ocho preguntas originales no se respondieron una por una; las abiertas están en la entrada de T495 de `specs/03-tareas.md` y en D-210. Queda `[ ]`.
+
 - **Ejecutor:** Lucas (no es de agente).
 - **Depende de / compuerta:** T492, T493 y T494 hechas, con sus hojas y capturas.
 - **Refs:** RF-712 a RF-714, D-210. **Rama:** `(sin rama: se registra en el PR de las muestras)`, desde `origin/main`; un commit `T495: …`, PR a main; Lucas mergea.

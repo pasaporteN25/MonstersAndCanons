@@ -76,7 +76,8 @@
 | T233 | Central (T267b/T277). | Abastecimiento, `hito.svg` e imagen del epílogo. |
 | T362 → T364 · T367 → T369 | T362: usar la muestra aprobada existente en PR #22, sin otra propuesta visual. T367: alcance corregido a presentación animada a pantalla completa que pausa la partida. | El PR #22 ya está mergeado (T489); lo de jefes quedó reemplazado por M66/T461. T364/T369 aún necesitan mediciones limpias y un dispositivo real. |
 | T437 (hecha) | Postes rehechos e integrados. | Los emblemas quedaron «para revisión de Lucas en el PR»; el merge del PR #38 no se toma como aprobación de canon (T438). |
-| **M79 · T491 a T498** (spec en T490) | Pedido de Lucas del 2026-10-25: la spec M79 (RF-712 a RF-714, D-210, B-62) está escrita y espera su revisión. | Inventario (T491, Haiku) → muestras de la piedra con la A, los pinos nevados y las cabezas del desierto (T492 a T494, Sonnet, sin integrar) → elección y respuestas de Lucas (T495 🎨) → integración (T496 a T498). Estética actual, no la vieja. |
+| **M79 · T491 a T498** (spec en T490) | Pedido de Lucas del 2026-10-25: la spec M79 (RF-712 a RF-714, D-210, B-62) está escrita. **Actualizado 2026-10-26:** Lucas respondió a las muestras (ver T495): pinos (T497) y cabezas (T498) habilitados; la piedra (T492/T496) pasa a M80. | Inventario (T491, Haiku) → muestras de la piedra con la A, los pinos nevados y las cabezas del desierto (T492 a T494, Sonnet, sin integrar) → elección y respuestas de Lucas (T495 🎨) → integración (T496 a T498). Estética actual, no la vieja. |
+| **M80 · T503 a T509** (spec en T503) | Respuesta de Lucas del 2026-10-26 a las muestras de la piedra: rocas genéricas en 3 colores, marcas por datos sobre el sistema de postes y el símbolo de los Moradores de la A a una H (RF-716 a RF-719, D-212, B-63). Espera su revisión y su OK escrito al cambio de canon. | Muestras de roca (T504) → muestra del glifo H y de los tipos de marca (T505) → 🎨 aprobación de Lucas y OK de canon (T506) → sistema de marcas por datos (T507) → rocas por niveles (T508) → documentos de canon (T509). |
 
 **6 · Diferido, fuera de la V1**
 
@@ -2875,7 +2876,7 @@ El alcance de T425 a T432 es desktop. Mobile continúa por su propia experiencia
   **Refs:** RF-712, D-210. **Depende de:** T490 aprobada por Lucas. **Ficha:** `specs/tareas/T491-inventario-assets-altos.md`.
   **Hecho cuando:** `art/m79-inventario/inventario.md` lista por nivel 8 a 15 tema, dibujos, cantidad de casillas, archivo, técnica (plana/dimensional) y la captura «antes» a 1280×720; no cambia nada fuera de esa carpeta.
 
-- [ ] **T492 · 🎨 Muestras de la piedra con la A. `[x86]`**
+- [-] **T492 · 🎨 Muestras de la piedra con la A. `[x86]`** *(2026-10-26: **descartada por Lucas**; reemplazada por M80, T504 y T505. Las muestras del PR #95 no se integran.)*
   **Refs:** RF-713 (a), D-210. **Depende de:** T491. **Ficha:** `specs/tareas/T492-muestras-piedra-a.md`.
   **Hecho cuando:** hay variantes de `roca_marcada` y de `simbolo_ruina` en la estética actual, misma A canónica, hoja a 220 y 34 px y una captura sobre el mapa; sin integrar.
 
@@ -2887,22 +2888,60 @@ El alcance de T425 a T432 es desktop. Mobile continúa por su propia experiencia
   **Refs:** RF-713 (c), D-210. **Depende de:** T491. **Ficha:** `specs/tareas/T494-muestras-cabezas-desierto.md`.
   **Hecho cuando:** hay al menos cuatro variantes de cabeza (monstruo o criatura alienígena) más la línea de base, hoja a 220 y 34 px junto al cactus y la roca roja y una captura sobre el mapa del 10; sin integrar.
 
-- [ ] **T495 · 🚦🎨 Lucas elige las variantes y contesta las preguntas de M79. `[x86]`**
+- [ ] **T495 · 🚦🎨 Lucas elige las variantes y contesta las preguntas de M79. `[x86]`** *(avance parcial del 2026-10-26, abajo; sigue `[ ]` porque quedan preguntas abiertas)*
   **Refs:** RF-712 a RF-714, D-210. **Depende de:** T492, T493 y T494. **Ficha:** `specs/tareas/T495-aprobacion-assets-altos.md`.
   **Hecho cuando:** quedan escritas en esta entrada y en D-210 la variante elegida por caso y las respuestas a las ocho preguntas, con fecha; ejecutor: Lucas.
+  **Respuestas de Lucas (2026-10-26, transcripción; también en D-210):**
+  - **Piedra con la A (PR #95):** se descartan las tres variantes de «roca marcada» y las tres de «piedra de ruina» (la A salía como letra tipográfica sobre una lápida). Literal: *«Hagamos un modelo de roca genérico en 3 colores. Mejor hagamos 2 o 3 modelos de roca realistas en línea con lo que ya venimos trabajando en 3 colores para poder usarlos en distintos mapas. Y usemos el mismo sistema que usamos para los banderines pero para poner distintas cosas, idealmente un símbolo no una A, ya que estamos que sea una H algo rara simulando un estilo gótico quizá. Así que sería rehacer con este enfoque».* → M80 (RF-716 a RF-719, D-212, T503 a T509).
+  - **Pinos y abetos nevados (PR #96):** integrar; sin elegir variante propia, **las recomendadas por el informe: pino 01, abeto 01 y roca nevada 01**.
+  - **Cabezas del desierto (PR #97):** elegida la variante **01 · dos pares de cuernos**.
+  - **Máscara gris de zonas ocultas:** G2 (de M78/T488). **Bordes 12–13:** A+B (lo toma otro agente; no se toca acá).
+  **Qué no se contestó y queda abierto:** las ocho preguntas originales de M79 **no se respondieron una por una**. Abiertas: (1) niveles 8 y 9 para la piedra, que ahora depende de M80 (pregunta 5 de M80); (6) si una cabeza debe parecerse a un enemigo real (T498 aplica las reglas de RF-713 (c) y frena si no se cumplen); (7) el retiro de los SVG viejos, que espera el OK final tras integrar; (8) los demás dibujos planos (siguen fuera de alcance). Superadas o resueltas: (2) cuál es la piedra (M80), (3) tamaño (misma huella, RF-714/RF-719), (4) nieve (pino 01, abeto 01, roca nevada 01; el reparto 3 : 1 : 2 no se tocó) y (5) cabezas (una sola, la 01). **Dependencias reales:** T493 y T494 siguen en los PR #96 y #97, sin mergear al 2026-10-26; sus fuentes y PNG no están en `main` (tampoco el inventario de T491), así que T497 y T498 empiezan cuando Lucas los mergee.
 
-- [ ] **T496 · Integrar la piedra con la A aprobada. `[mobile+x86]`**
+- [-] **T496 · Integrar la piedra con la A aprobada. `[mobile+x86]`** *(2026-10-26: **reemplazada por M80**; no se hace. La piedra se integra con T507 y T508, tras la aprobación de T506.)*
   **Refs:** RF-713 (a), RF-714, D-210. **Depende de:** T495. **Ficha:** `specs/tareas/T496-integrar-piedra-a.md`.
   **Hecho cuando:** `roca_marcada` y `simbolo_ruina` (según T495) muestran el arte aprobado en los niveles que los usan, con los `data/levels` intactos, tests y capturas.
 
 - [ ] **T497 · Integrar los pinos nevados aprobados. `[mobile+x86]`**
-  **Refs:** RF-713 (b), RF-714, D-210. **Depende de:** T495; T496 integrada (comparten `map_themes.gd` y su test). **Ficha:** `specs/tareas/T497-integrar-pinos-nevados.md`.
+  **Refs:** RF-713 (b), RF-714, D-210. **Habilitada (2026-10-26):** variantes **pino 01, abeto 01 y roca nevada 01** (las recomendadas por el informe del PR #96, que Lucas pidió usar). **Depende de:** T495 (parcial, ver arriba) y del merge del PR #96; ya **no** espera a T496, que quedó reemplazada. Una integración a la vez con T498, T507 y T508 (comparten `map_themes.gd`, `map_drawings.gd` y `tests/test_map_themes.gd`). **Ficha:** `specs/tareas/T497-integrar-pinos-nevados.md`.
   **Hecho cuando:** el tema `nieve` usa el arte aprobado, el nivel 13 sigue igual en grilla y datos, tests y capturas.
 
 - [ ] **T498 · Integrar las cabezas del desierto aprobadas. `[mobile+x86]`**
-  **Refs:** RF-713 (c), RF-714, D-210. **Depende de:** T495; T497 integrada (mismos archivos). **Ficha:** `specs/tareas/T498-integrar-cabezas-desierto.md`.
+  **Refs:** RF-713 (c), RF-714, D-210. **Habilitada (2026-10-26):** variante **01 · dos pares de cuernos** (la que eligió Lucas del PR #97; una sola cabeza). **Depende de:** T495 (parcial) y del merge del PR #97; T497 integrada (mismos archivos). **Ficha:** `specs/tareas/T498-integrar-cabezas-desierto.md`.
   **Hecho cuando:** el tema `desierto` usa la(s) cabeza(s) elegida(s), los niveles 10 a 12 siguen iguales en grilla y datos, tests y capturas.
 
+## M80 · Rocas genéricas y marcas sobre el sistema de postes (T503 a T509)
+
+Spec en **M80** (RF-716 a RF-719), razones y canon en **D-212**, el cómo en la sección M80 del plan. Nace de la respuesta de Lucas del 2026-10-26 a las muestras de la piedra (T495). **Una integración a la vez** (T507 y T508 comparten `map_drawings.gd` y `level_decor.gd`; T497 y T498 comparten `map_themes.gd`). Nada de T504 en adelante empieza antes de la revisión de este PR y, para el glifo, del **OK escrito de Lucas al cambio de canon A → H**.
+
+- [ ] **T503 · 📜 Especificar rocas genéricas y marcas sobre el sistema de postes (M80). `[x86]`**
+  **Refs:** RF-716 a RF-719, D-212, B-63; respuesta de Lucas del 2026-10-26; RF-696 (postes). **Depende de:** ninguna integración. **Ficha:** `specs/tareas/T503-spec-rocas-y-marcas.md`.
+  **Hecho cuando:** hay RF con Dado/Cuando/Entonces, decisión con alternativas descartadas y la lista de menciones del símbolo A con ruta y línea, tareas con fichas y dependencias, y las respuestas de Lucas transcriptas en T495 y D-210; no se tocan código, arte, `data/`, `10-universo.md`, `11-textos-lore.md` ni CHANGELOG.
+  **Resultado (2026-10-26, para revisión):** redactados M80 (RF-716 a RF-719), D-212, B-63, la sección M80 del plan y las fichas T503 a T509; transcriptas las respuestas de Lucas en T495 y D-210, y actualizadas T492, T496, T497 y T498 (y sus fichas). Se leyó el estado real de `origin/main` (`b1f178f`): tabla de las 28 casillas de señal en 9 niveles sacada de los JSON, mecanismo de los postes (`CampaignPosts`, `postes_campana.json`, `overlay_post_cells()`, informe de T475) y las menciones del símbolo A (D-212). **No se pudo comprobar:** el inventario de T491 (no está en `main`), cómo se ven hoy las señales en el motor, ni que la búsqueda de menciones sea exhaustiva (es por frases; D-212 lo dice y T509 la repite). No se corrió Godot ni tests: solo documentos. **El cambio de canon espera el OK escrito de Lucas.**
+
+- [ ] **T504 · 🎨 Muestras de rocas genéricas en tres colores. `[x86]`**
+  **Refs:** RF-716, RF-719, D-212. **Depende de:** T503 revisada por Lucas. **Ficha:** `specs/tareas/T504-muestras-rocas-genericas.md`.
+  **Hecho cuando:** hay 2 o 3 modelos de roca realistas en tres colores (PNG RGBA 128×128, estética T277, luz arriba a la izquierda), sin ningún símbolo, con fuentes editables y procedencia, hoja a 220 y 34 px sobre el suelo de pradera, bosque, desierto, nieve y ruinas, y una captura sobre el mapa de un nivel de la tabla de M80; sin integrar. Ejecutor: Codex `gpt-6.1-sol`, esfuerzo medio.
+
+- [ ] **T505 · 🎨 Muestras del glifo H gótico y de los tipos de marca. `[x86]`**
+  **Refs:** RF-717, RF-718, RF-719, D-212. **Depende de:** T504 (las marcas se prueban sobre las rocas de la muestra) y el OK de Lucas a que el cambio de canon se **explore** (no a que se adopte). **Ficha:** `specs/tareas/T505-muestras-glifo-y-marcas.md`.
+  **Hecho cuando:** hay 3 variantes del glifo (una «H» rara, de estilo gótico, que se lee como signo tallado y no como letra de fuente) y al menos 3 tipos de marca (grabada, estela, pintada) en la estética actual, a 220 y 34 px, sobre rocas de T504 y en una captura de un nivel; sin integrar y con fuentes. Ejecutor: Codex `gpt-6.1-sol`, esfuerzo medio.
+
+- [ ] **T506 · 🚦🎨 Lucas elige las rocas, el glifo y los tipos de marca, y confirma el canon por escrito. `[x86]`**
+  **Refs:** RF-716 a RF-719, D-212. **Depende de:** T504 y T505. **Ficha:** `specs/tareas/T506-aprobacion-rocas-y-marcas.md`.
+  **Hecho cuando:** quedan escritos en esta entrada y en D-212, con fecha, los modelos y colores elegidos, el glifo, los tipos de marca, las respuestas a las seis preguntas de M80 y, aparte, **la confirmación escrita del cambio de canon A → H (o su rechazo)**; ejecutor: Lucas.
+
+- [ ] **T507 · Sistema de marcas por datos. `[mobile+x86]`**
+  **Refs:** RF-717, RF-719, D-212. **Depende de:** T506 (con el glifo aprobado) y del merge de T497 y T498 si siguen abiertas. **Ficha:** `specs/tareas/T507-integrar-sistema-marcas.md`.
+  **Hecho cuando:** `data/ui/marcas_campana.json` y su clase de lectura tolerante, la capa superpuesta en `LevelDecor`, los tipos aprobados y los tests de casillas prohibidas en los 15 niveles pasan, con los 15 JSON de niveles y `postes_campana.json` idénticos a `origin/main`; capturas 1280×720 y celular simulado; GUT sin `SCRIPT ERROR`. Ejecutor: Sonnet.
+
+- [ ] **T508 · Integrar las rocas genéricas en los niveles. `[mobile+x86]`**
+  **Refs:** RF-716, RF-719, D-212. **Depende de:** T507. **Ficha:** `specs/tareas/T508-integrar-rocas-por-niveles.md`.
+  **Hecho cuando:** `roca_marcada` y `simbolo_ruina` se dibujan como la roca del color del tema, más la marca grabada, en los 9 niveles de la tabla de M80, sin cambiar ids ni JSON; los SVG viejos **siguen en el repositorio** hasta el OK final de Lucas; capturas y GUT en verde. Ejecutor: Sonnet.
+
+- [ ] **T509 · 🚦 Documentos de canon y menciones del símbolo (A → H). `[x86]`**
+  **Refs:** RF-718, D-212. **Depende de:** el **OK escrito de Lucas** (T506) y T508 integrada. **Ficha:** `specs/tareas/T509-canon-simbolo-h.md`.
+  **Hecho cuando:** se actualizan solo las menciones marcadas «cambiar» en D-212 (`10-universo.md`, specs y documentos vigentes), la búsqueda de menciones se repite sin dejar ninguna vigente con la A, `11-textos-lore.md` y `data/` quedan sin tocar (o se explica por qué se tocaron), y el CHANGELOG suma la entrada de lo que ve el jugador. Ejecutor: Sonnet.
 - [x] **T510 · Propuesta de rediseño del panel de torre (PC y celular). `[mobile+x86]`**
   **Refs:** RF-616, RF-617, RF-650, RF-677 a RF-686, RF-512, RF-550, D-193 a D-197; T465 (abierta). **Pedido:** Lucas, 2026-10-26. **Informe:** `specs/tareas/informes/T510-panel-torre-critica.md`.
   **Hecho cuando:** hay capturas reales del motor del panel actual en PC (1280 × 720 y 1920 × 1080) y en el celular simulado, una crítica medida (qué sirve para decidir, cuánto ocupa cada bloque, jerarquía, estética, tamaños táctiles, qué RF/D enmendar), al menos tres maquetas de PC y tres de celular a escala real con la paleta del juego, una comparación (espacio, información, coste, tests) y una recomendación; sin tocar código, escenas, datos ni `assets/` del juego.
