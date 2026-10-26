@@ -8,8 +8,15 @@ extends Button
 
 signal confirmed(index: int)
 
-const CAPTION_WIDTH: float = 82.0
+## T515: el rótulo completo «N · Nombre» solo lo lleva la región elegida o con foco (una a la vez), así que puede ser más ancho
+## que el de 82 px de antes sin pisarse con otro. El resto muestra solo el número dentro de la insignia (o bajo el candado).
+const CAPTION_WIDTH: float = 150.0
 const CAPTION_SIZE: int = 11
+## Aire entre el rótulo y lo que lo rodea (aro de foco, insignias vecinas, bordes del lienzo).
+const CAPTION_PAD: float = 2.0
+const CAPTION_SHIFT_STEP: float = 6.0
+## Radio con el que una insignia vecina (borde, halo) cuenta como obstáculo del rótulo.
+const OBSTACLE_RADIUS: float = BADGE_EDGE + 3.0
 const STAR_GOLD := Color("#f0d176")
 const FOCUS_COLOR := Color("#ffffff")
 ## RF-550, RF-690: lado mínimo del área táctil en px lógicos.
@@ -49,6 +56,10 @@ var level_name: String = ""
 var discovered: bool = true
 var _selected: bool = false
 var _hovered: bool = false
+## T515: el lienzo donde vive (en su sistema de coordenadas) y lo que el rótulo no puede tapar (insignias y estrellas de las
+## demás regiones). Lo informa la vista con `set_caption_context`; sin eso el rótulo va centrado debajo.
+var _canvas_rect: Rect2 = Rect2()
+var _obstacles: Array[Rect2] = []
 
 
 func setup(region_index: int, entry: Dictionary, center: Vector2, button_size: float, is_discovered: bool = true) -> void:
@@ -74,6 +85,40 @@ func setup(region_index: int, entry: Dictionary, center: Vector2, button_size: f
 	pressed.connect(func() -> void: confirmed.emit(index))  # Enter / ui_accept (sin repetición de tecla)
 	focus_entered.connect(queue_redraw)
 	focus_exited.connect(queue_redraw)
+
+
+## T515: dónde está el lienzo y qué ocupan las demás regiones, para poner el rótulo sin que se salga ni tape otra insignia.
+func set_caption_context(canvas_rect: Rect2, obstacles: Array[Rect2]) -> void:
+	_canvas_rect = canvas_rect
+	_obstacles = obstacles
+	queue_redraw()
+
+
+## T515, RF-695: ¿lleva el rótulo completo «N · Nombre»? Solo la región elegida o con foco, y nunca una oculta (RF-710).
+func shows_full_caption() -> bool:
+	return discovered and (_selected or has_focus())
+
+
+## T515: el texto bajo la insignia. Completo («N · Nombre») en la elegida o con foco; en las demás, vacío, salvo bajo el candado,
+## que no tiene número adentro y lleva el número a secas.
+func caption_text() -> String:
+	if not discovered:
+		return ""
+	if shows_full_caption():
+		return "%s · %s" % [CampaignMap.number_text(index), level_name]
+	return CampaignMap.number_text(index) if state == CampaignMap.State.LOCKED else ""
+
+
+## T515: el rectángulo del rótulo en el sistema del lienzo (vacío si no hay rótulo).
+func caption_rect() -> Rect2:
+	var text: String = caption_text()
+	if text.is_empty():
+		return Rect2()
+	var font: Font = get_theme_default_font()
+	var fitted: String = _fit(font, text)
+	var box := Vector2(font.get_string_size(fitted, HORIZONTAL_ALIGNMENT_LEFT, -1, CAPTION_SIZE).x, font.get_height(CAPTION_SIZE))
+	var locked: bool = state == CampaignMap.State.LOCKED
+	return place_caption(box, position + size / 2.0, LOCK_RADIUS if locked else BADGE_EDGE, _canvas_rect, _obstacles)
 
 
 func set_selected(value: bool) -> void:
@@ -104,10 +149,14 @@ func _draw() -> void:
 	draw_badge(self, state, index, center, font)
 	if state == CampaignMap.State.REBEL or state == CampaignMap.State.TAKEN:
 		_draw_stars(center + Vector2(0, -edge - 8.0))
-	var caption: String = CampaignMap.number_text(index) if locked else "%s · %s" % [CampaignMap.number_text(index), level_name]
-	var caption_color: Color = Color("#a8aeaa") if locked else Color("#ffe4a0")
-	var fitted: String = _fit(font, caption)
-	draw_string(font, center + Vector2(-CAPTION_WIDTH / 2.0, edge + 15.0), fitted, HORIZONTAL_ALIGNMENT_CENTER, CAPTION_WIDTH, CAPTION_SIZE, caption_color)
+	var text: String = caption_text()
+	if not text.is_empty():
+		var fitted: String = _fit(font, text)
+		var rect: Rect2 = caption_rect()
+		var caption_color: Color = Color("#a8aeaa") if locked and not shows_full_caption() else Color("#ffe4a0")
+		var baseline: float = rect.position.y - position.y + font.get_ascent(CAPTION_SIZE)
+		draw_string_outline(font, Vector2(rect.position.x - position.x, baseline), fitted, HORIZONTAL_ALIGNMENT_LEFT, -1, CAPTION_SIZE, 3, NUMBER_OUTLINE)
+		draw_string(font, Vector2(rect.position.x - position.x, baseline), fitted, HORIZONTAL_ALIGNMENT_LEFT, -1, CAPTION_SIZE, caption_color)
 
 
 func _draw_stars(center: Vector2) -> void:
@@ -128,6 +177,51 @@ func _fit(font: Font, text: String) -> String:
 	while result.length() > 1 and font.get_string_size(result, HORIZONTAL_ALIGNMENT_LEFT, -1, CAPTION_SIZE).x > CAPTION_WIDTH:
 		result = result.left(result.length() - 1)
 	return result + "…" if result != text else result
+
+
+## T515: lo que una región ocupa y un rótulo ajeno no puede tapar: su insignia (con el halo) y, si las lleva, sus estrellas.
+static func obstacle_rects(center: Vector2, region_state: CampaignMap.State, region_stars: int) -> Array[Rect2]:
+	var result: Array[Rect2] = []
+	var radius: float = LOCK_RADIUS if region_state == CampaignMap.State.LOCKED else OBSTACLE_RADIUS
+	result.append(Rect2(center - Vector2(radius, radius), Vector2(radius, radius) * 2.0))
+	if region_state == CampaignMap.State.LOCKED:  # el número a secas que lleva bajo el candado
+		result.append(Rect2(center + Vector2(-10.0, BADGE_EDGE + FOCUS_RING_GAP), Vector2(20.0, 16.0)))
+	if region_state == CampaignMap.State.REBEL or region_state == CampaignMap.State.TAKEN:
+		var width: float = 11.0 * maxi(region_stars - 1, 0) + 12.0
+		result.append(Rect2(center + Vector2(-width / 2.0, -BADGE_EDGE - 14.0), Vector2(width, 12.0)))
+	return result
+
+
+## T515: dónde va un rótulo de tamaño `box` para la región de centro `center` (en el sistema del lienzo): centrado debajo del
+## aro de foco; si ahí tapa a otra región o se sale de `bounds`, se corre de a pasos a los costados y, por último, se pone
+## arriba de las estrellas. Si ningún sitio sirve, queda el menos malo (centrado debajo, adentro del lienzo).
+static func place_caption(box: Vector2, center: Vector2, edge: float, bounds: Rect2, obstacles: Array[Rect2]) -> Rect2:
+	var below_top: float = center.y + maxf(edge, BADGE_EDGE) + FOCUS_RING_GAP + CAPTION_PAD
+	var above_top: float = center.y - BADGE_EDGE - 14.0 - CAPTION_PAD - box.y
+	var reach: float = box.x / 2.0 + OBSTACLE_RADIUS
+	for top: float in [below_top, above_top]:
+		var shift: float = 0.0
+		while shift <= reach:
+			for sign_value: float in [1.0, -1.0]:
+				var rect := Rect2(Vector2(center.x - box.x / 2.0 + sign_value * shift, top), box)
+				if _caption_fits(rect, bounds, obstacles):
+					return rect
+			shift += CAPTION_SHIFT_STEP
+	var fallback := Rect2(Vector2(center.x - box.x / 2.0, below_top), box)
+	if bounds.size != Vector2.ZERO:
+		fallback.position.x = clampf(fallback.position.x, bounds.position.x, bounds.end.x - box.x)
+		fallback.position.y = clampf(fallback.position.y, bounds.position.y, bounds.end.y - box.y)
+	return fallback
+
+
+static func _caption_fits(rect: Rect2, bounds: Rect2, obstacles: Array[Rect2]) -> bool:
+	if bounds.size != Vector2.ZERO and not bounds.encloses(rect):
+		return false
+	var padded: Rect2 = rect.grow(CAPTION_PAD)
+	for obstacle: Rect2 in obstacles:
+		if padded.intersects(obstacle):
+			return false
+	return true
 
 
 ## T474/T499/T501: lo que dibuja una región por dentro (el candado o la insignia V3 con su número), sin halo ni estrellas ni
