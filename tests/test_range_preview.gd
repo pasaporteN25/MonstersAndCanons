@@ -368,11 +368,11 @@ func test_mobile_first_tap_arms_without_charging_and_shows_the_circle_with_the_c
 	assert_almost_eq(preview._to_radius, Rules.tiles_to_px(3.5), 0.001)
 	assert_eq(game.mobile_hud.armed_tower(), tower)
 	var button: Button = _mobile_upgrade_button()
-	assert_true(button.text.contains("Confirmar"), "el botón espera confirmación")
+	assert_true(button.text.contains("Tocá para confirmar"), "el botón espera confirmación")
 	assert_true(button.text.contains(str(tower.next_level_stats().cost)), "y conserva el costo")
 	await get_tree().process_frame
 	assert_true(game.mobile_hud.is_upgrade_armed(), "el refresco de cada cuadro no lo desarma")
-	assert_true(button.text.contains("Confirmar"))
+	assert_true(button.text.contains("Tocá para confirmar"))
 
 
 func test_mobile_second_tap_upgrades_once_instantly() -> void:
@@ -538,7 +538,7 @@ func test_mobile_a_disarmed_button_goes_back_to_the_initial_text() -> void:
 	game.mobile_hud.clear_upgrade_arm()
 	var button: Button = _mobile_upgrade_button()
 	assert_true(button.text.contains("Mejorar → N%d" % (tower.level_number() + 1)))
-	assert_false(button.text.contains("Confirmar"))
+	assert_false(button.text.contains("Tocá para confirmar"))
 	game.mobile_hud.clear_upgrade_arm()  # desarmar de más no rompe nada
 	assert_false(game.mobile_hud.is_upgrade_armed())
 
