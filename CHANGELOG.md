@@ -8,6 +8,9 @@ En el mapa planetario, el círculo de cada nivel muestra ahora una insignia: roj
 
 En el mapa planetario los niveles se muestran como 1, 2… 15 en lugar de 01, 02… 15 (dentro del círculo, en el rótulo y en la ficha de abajo). Todavía faltan las insignias de conquista y revisar el resto de las pantallas.
 
+## Radio del área con coma *(T465, cierre de M75, 2026-10-25; en revisión)*
+
+El panel de la torre y la Wiki escriben el radio del área con coma y sin ceros de más («Área: radio 1,5», «radio 1»). Antes, el Cañón de nivel 3 mostraba «1.5» con punto. Solo cambia el texto: no cambian el área, el daño ni el precio.
 ## Zonas del atlas que se descubren *(T488, 2026-10-25; en revisión, entrega parcial)*
 
 En el mapa de campaña, los niveles 6 a 10 y 11 a 15 aparecen recién cuando abrís el 6 o el 11: hasta entonces su terreno se ve en gris y sin números, candados ni estrellas, y las flechas del teclado no entran ahí. Los niveles se siguen abriendo de a uno, al ganar el anterior. El modo de pruebas muestra las tres zonas, y las tarjetas no cambian. El gris es **provisional**: falta la aprobación de la máscara definitiva.
