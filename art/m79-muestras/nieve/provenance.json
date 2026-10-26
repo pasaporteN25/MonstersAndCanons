@@ -1,0 +1,196 @@
+{
+  "method": "Python 3 y Pillow; dibujo procedural original de árboles y derivación de rocas T277.",
+  "image_model_used": false,
+  "inputs": [
+    {
+      "path": "art/m79-inventario/antes-nivel-13-1280x720.png",
+      "sha256": "08c0e0cd5962d06b66de3d0823e9e051305dbea122c580f0f56f3920dc9c69aa"
+    },
+    {
+      "path": "assets/sprites/enemies/rendered/armored.png",
+      "sha256": "fe93e0ff2b18c91dbadef911fde479d22d6066d47db17e47aec26a9c5fcd88a8"
+    },
+    {
+      "path": "assets/sprites/enemies/rendered/boss.png",
+      "sha256": "7c306796286d958971eeee4e180295ecaa861352d5b8e8ab4a61870c02ffc5c9"
+    },
+    {
+      "path": "assets/sprites/enemies/rendered/cargador.png",
+      "sha256": "3e199ed46cf86cf14dae33d0a71e75e30004725ac799894e45d7dcb65df79749"
+    },
+    {
+      "path": "assets/sprites/enemies/rendered/colossus.png",
+      "sha256": "3dae9124d74db9934b2845ced391129d48160a8f23e32e03771dc82674861b3e"
+    },
+    {
+      "path": "assets/sprites/enemies/rendered/colossus_shard.png",
+      "sha256": "b8faa6df519850e29ad8a6daa0f0e95aff57caaa17b57c79b9a0749be0fb8b48"
+    },
+    {
+      "path": "assets/sprites/enemies/rendered/fast.png",
+      "sha256": "4c11a14ddfb35d743bc5b9827dcaf695e2191c9d93bc71d89a52bb6ff7eb16a2"
+    },
+    {
+      "path": "assets/sprites/enemies/rendered/flyer.png",
+      "sha256": "154971304e51352852a1d4b8ded46577451f50b1983ff6b301d27bbc58fe9f3b"
+    },
+    {
+      "path": "assets/sprites/enemies/rendered/guardian.png",
+      "sha256": "270509b656c6cfcdd9e92ebbef84c2c5fbaa8c7dc667fc8fb8bcf4966dd24bb0"
+    },
+    {
+      "path": "assets/sprites/enemies/rendered/healer_m43.png",
+      "sha256": "c161560f838d6911a0a71d2a3fb0f9377d2a4e626d6e9b86d045ba01660d71a6"
+    },
+    {
+      "path": "assets/sprites/enemies/rendered/mirror.png",
+      "sha256": "546e5d4979bc6001537f0efe8218b389ecde734b1ea16fcd59f16bc3a0cc75b8"
+    },
+    {
+      "path": "assets/sprites/enemies/rendered/normal.png",
+      "sha256": "b598e12a3a332d6499f0adff6d5ecffec16864e3d24d96265c2f857ef9df946f"
+    },
+    {
+      "path": "assets/sprites/enemies/rendered/ratero.png",
+      "sha256": "ee12d85d8b766d5acfa979d3da3a3e47cbb521ebd6aad8d1bbddb79e3dfcfb9d"
+    },
+    {
+      "path": "assets/sprites/enemies/rendered/shaman.png",
+      "sha256": "b5e7555b52628bd1311ba69ca605bcafa73f83ad8bd152ef6aff2480897170c5"
+    },
+    {
+      "path": "assets/sprites/enemies/rendered/spider.png",
+      "sha256": "3a2fa30f23628e7af17f5961c576ed8546a837deaffe865414d237e426f00094"
+    },
+    {
+      "path": "assets/sprites/enemies/rendered/spiderling.png",
+      "sha256": "5108f33f19be42a000cc8c2d07cec1f7c0b1e26f56d3c6ad1e3ebb9853592283"
+    },
+    {
+      "path": "assets/sprites/enemies/rendered/tank.png",
+      "sha256": "795ab1ede535ce74cf44c65d775fbdf4a4e003ed22634bad413f08020c77aea5"
+    },
+    {
+      "path": "assets/sprites/enemies/rendered/troll.png",
+      "sha256": "4028650b9ef3818fd31f9e6180cde6e7a606b6e0d66f92b8ee26b9872dcb9ee8"
+    },
+    {
+      "path": "assets/sprites/map/rendered/banner_post_enemy.png",
+      "sha256": "bfbe1f471e39fef1d4e13782e909bcefb6d7d346e1445fb87228f20a4a024ff5"
+    },
+    {
+      "path": "assets/sprites/map/rendered/forest_idle.png",
+      "sha256": "f07c088aa6da71f8b946e1043beaebccc57d9006677c25b0c2cbf11ae197c351"
+    },
+    {
+      "path": "assets/sprites/map/rendered/rock_a.png",
+      "sha256": "32a4d02630bd3667aa1080e0a282d2e2971e01eb48a666fb46508875de75d682"
+    },
+    {
+      "path": "assets/sprites/map/rendered/rock_b.png",
+      "sha256": "9444496e4fdf5e94d32102347923e2625ec04f8f538a3d87cefc57a05ccf9f48"
+    },
+    {
+      "path": "assets/sprites/map/rendered/statue_basic_frost.png",
+      "sha256": "31a99b3c6ab6f76634c076bc3ac8032b35d4ab40e49fc6b22c8651eee210fe4a"
+    },
+    {
+      "path": "assets/sprites/map/rendered/tree.png",
+      "sha256": "3d9e01d1acd892c21d4e9b6c19b2432ba8362678569f7c5b37606d5c9ce2c1b3"
+    },
+    {
+      "path": "assets/tiles/rendered/ground_nieve.png",
+      "sha256": "69d1d4054f7551c1f231ff9fb10933f4a05554c7bc9aa29424a29c2f44a3f74f"
+    },
+    {
+      "path": "assets/tiles/rendered/path.png",
+      "sha256": "14cd62dc1474ea477351cd859f82cff149bc2587caa068076666a067715b1a1d"
+    },
+    {
+      "path": "data/enemies/armored.tres",
+      "sha256": "c69ddf276ed658fb3851bfd6316face7a286703768add6f9e04546df7e62e11a"
+    },
+    {
+      "path": "data/enemies/boss.tres",
+      "sha256": "e51c584357ff1126db21ac680574732d91f2c562d27146f94bbc3567b1179b70"
+    },
+    {
+      "path": "data/enemies/cargador.tres",
+      "sha256": "370d5d2050b7913e456858c0534e196dfab8a034ba501bee3f663a4a685f57cb"
+    },
+    {
+      "path": "data/enemies/colossus.tres",
+      "sha256": "7cb9f43789deb398bc44e13b24d042c5d75ce927c33386f18382ca3cd9191d5d"
+    },
+    {
+      "path": "data/enemies/colossus_shard.tres",
+      "sha256": "333358d31cdff8d34b0e128ca336864ef755a4d3015a021e0278338c984f34ff"
+    },
+    {
+      "path": "data/enemies/fast.tres",
+      "sha256": "94448a53294422164a0e576ed69abc58fd2fb556c2a79bd777abde9d28015589"
+    },
+    {
+      "path": "data/enemies/flyer.tres",
+      "sha256": "6633171f893596141cd10080a67bc3f8121712f0fda35a2c00ea7019aec5e6d8"
+    },
+    {
+      "path": "data/enemies/guardian.tres",
+      "sha256": "fbc1c87a78e3e62b021daac0635c6bbb357421edb5ba4044cec26623a78b2147"
+    },
+    {
+      "path": "data/enemies/healer.tres",
+      "sha256": "ca1388aa873d098b515d8a90666f067b213c7bc5234b535d5a54a03fbb6f5e34"
+    },
+    {
+      "path": "data/enemies/mirror.tres",
+      "sha256": "4e6f7a88986bce0578a61e34e126b85b9e7f6d485e9e7dd57d33bc43ed7b2d41"
+    },
+    {
+      "path": "data/enemies/normal.tres",
+      "sha256": "1c285679183baf3c4aa1fa4db78632bc6a9ce60761b0ffaebcfd3f9bc4e207d6"
+    },
+    {
+      "path": "data/enemies/ratero.tres",
+      "sha256": "0257a7ac7e9f16442864ed40fd5e57db95b5679d8a7745db99d12dcf22946450"
+    },
+    {
+      "path": "data/enemies/shaman.tres",
+      "sha256": "b33e71a41a225cfbeb011469ed6fea587cdec1014fb1dfdd84866abac42e2ff4"
+    },
+    {
+      "path": "data/enemies/spider.tres",
+      "sha256": "4c040fa555e4fae318e3f2e935bc04371425259aac0cc017b61dc194970d2552"
+    },
+    {
+      "path": "data/enemies/spiderling.tres",
+      "sha256": "446fd08952774e04cffab3630f8fad96e1cb4836336efaa8148c95c24d7dc2d2"
+    },
+    {
+      "path": "data/enemies/tank.tres",
+      "sha256": "61069ff3a0741fe1d3382952f0f7b90b3c00dcce035c2bd955378c2fff83455d"
+    },
+    {
+      "path": "data/enemies/troll.tres",
+      "sha256": "4a465a80f59d4e588fd907d566f0d4d03aebb0d76000b34fb2e071c8a83e5962"
+    },
+    {
+      "path": "data/levels/level_13.json",
+      "sha256": "0577701868f5455858abd257393a3eb33cb740ce9754455510170986926cf3a1"
+    },
+    {
+      "path": "data/ui/postes_campana.json",
+      "sha256": "c64f1cb2e25bb76f28c616039aeefe750a1644ecf7a866bc6b3e65b0caad2888"
+    }
+  ],
+  "editable_sources": [
+    {
+      "file": "generate_samples.py",
+      "sha256": "aa332f576f221f64fcefa7539d9afa262a38bf35282c465be64596a86d3ddae9"
+    },
+    {
+      "file": "verify_samples.py",
+      "sha256": "a068b927ef11964e0c8f0dd45a5227070104779a20c387cc23dab44e466db11b"
+    }
+  ]
+}
