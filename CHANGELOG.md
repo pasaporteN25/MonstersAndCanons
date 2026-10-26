@@ -1,5 +1,9 @@
 # Novedades del juego
 
+## Insignias del mapa sin pisarse *(T500, 2026-10-25; en revisión)*
+
+Se midió la separación entre las quince insignias del mapa de campaña: ninguna se pisa (la más cercana, 12 y 13, deja 4 px entre bordes), así que el mapa no cambió. Lo que sí se cruza un poco en ese par son los aros de selección y de foco, y algunos rótulos largos; quedó anotado para decidir.
+
 ## Halo en los niveles disponibles *(T499, 2026-10-25; en revisión)*
 
 En el mapa de campaña, un nivel que ya podés jugar pero todavía no ganaste lleva un halo dorado punteado alrededor de su insignia roja, para no confundirlo con los que ya jugaste. No se mueve ni parpadea, y se distingue del aro continuo de selección y del aro blanco del teclado.
