@@ -228,17 +228,18 @@ func test_panel_at_level_three_has_no_arrows_and_no_decimal_point() -> void:
 	assert_eq(TowerText.effects(_tower("cannon").levels[2])[0], "Área: radio 1,5")
 
 
-func test_mobile_status_line_shows_the_preview() -> void:
+func test_mobile_upgrade_button_shows_the_preview_and_the_status_has_no_third_line() -> void:
 	var original: Variant = SaveManager.get_setting("ui_mode")
 	var game: Game = await _spawn_game(UiMode.MOBILE)
 	var tower: Tower = _build_one(game)
 	game.build_controller.select_placed(tower)
 	game._refresh_tower_panel()
 	var status: Label = game.mobile_hud.find_child("StatusText", true, false) as Label
-	assert_true(status.text.contains("Al mejorar:"), status.text)
-	assert_true(status.text.contains("→"))
+	var change: Label = game.mobile_hud.find_child("MobileUpgradeChange", true, false) as Label
+	assert_false(status.text.contains("Al mejorar"), "T514 (RF-722): se retira el renglón «Al mejorar:»")
+	assert_true(change.visible and change.text.contains("→"), "lo que se compra va abajo en «Mejorar»: " + change.text)
 	while tower.can_upgrade():
 		tower.apply_upgrade()
 	game._refresh_tower_panel()
-	assert_false(status.text.contains("Al mejorar:"), "en el nivel máximo no se ofrece nada")
+	assert_false(change.visible, "en el nivel máximo no se ofrece nada")
 	SaveManager.set_setting("ui_mode", original)
