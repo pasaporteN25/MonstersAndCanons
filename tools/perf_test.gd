@@ -7,8 +7,6 @@
 #   godot --path . -s tools/perf_test.gd -- mejoras        (M65: mejora 10 torres seguidas durante la medición)
 #   godot --path . -s tools/perf_test.gd -- mejoras sin_fx (lo mismo con «Animaciones de mejora» apagadas: el anillo de siempre)
 #   godot --path . -s tools/perf_test.gd -- celular        (interfaz del celular, 1280 × 720 virtual; se puede combinar con lo anterior)
-#   godot --path . -s tools/perf_test.gd -- entrada_jefe   (M66: nivel 1 «desde el menú» y un Jefe al empezar la medición;
-#                                                         se ven el destello y el cartel durante 1,6 s. Se puede sumar `celular`)
 #
 # Desactiva el vsync para medir cuántos FPS puede dar el juego, no los del monitor.
 extends SceneTree
@@ -37,36 +35,33 @@ var normal: EnemyData = load("res://data/enemies/normal.tres")
 var process_ms_total: float = 0.0
 var upgrades_done: int = 0
 var upgrade_timer: float = 0.0
-## M66: con `entrada_jefe`, a qué segundo nace el Jefe y si ya nació; y la suma de los tiempos de cuadro medidos.
-const BOSS_ENTRANCE_AT: float = 1.5
-var boss_entrance_fired: bool = false
+## La suma de los tiempos de cuadro medidos.
 var frame_ms_total: float = 0.0
+## Ventana temporal idéntica con/sin efecto: evita diluir la entrada breve en los seis segundos.
+var active_process_ms_total: float = 0.0
+var active_frame_ms_total: float = 0.0
+var active_frames: int = 0
 
 
 func _initialize() -> void:
+	seed(629)  # misma secuencia para cada par con y sin efecto
 	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
 	Engine.max_fps = 0
 
 
 ## Los autoloads todavía no existen en `_initialize` (este script se compila antes): la partida se crea en el primer cuadro.
 func _create_game() -> void:
-	if "entrada_jefe" in OS.get_cmdline_user_args():
-		root.get_node("/root/GameFlow").set("current_index", 0)  # campaña desde el menú: así sale la entrada
-		root.get_node("/root/SaveManager").call("set_setting", "tutorial_enabled", false)
-	if "celular" in OS.get_cmdline_user_args():
-		root.get_node("/root/SaveManager").call("set_setting", "ui_mode", 1)
+	# Solo memoria: ninguna corrida modifica las preferencias guardadas.
+	root.get_node("/root/SaveManager").call("set_setting", "damage_numbers", not "sin_numeros" in OS.get_cmdline_user_args())
+	root.get_node("/root/SaveManager").call("set_setting", "upgrade_fx", not "sin_fx" in OS.get_cmdline_user_args())
+	root.get_node("/root/SaveManager").call("set_setting", "ui_mode", 1 if "celular" in OS.get_cmdline_user_args() else 2)
 	game = (load("res://scenes/game/game.tscn") as PackedScene).instantiate()
 	root.add_child(game)
 
 
 func _process(delta: float) -> bool:
 	if game == null:
-		# Los autoloads todavía no existen en `_initialize`: la partida se crea en el primer cuadro.
-		if "celular" in OS.get_cmdline_user_args():
-			root.get_node("/root/SaveManager").call("set_setting", "ui_mode", 1)  # solo en memoria: no se guarda
-			print("Interfaz: celular")
-		game = (load("res://scenes/game/game.tscn") as PackedScene).instantiate()
-		root.add_child(game)
+		# Una sola partida: duplicarla altera la carga y vuelve inválida la comparación.
 		_create_game()
 		return false
 	if game.enemies.get_child_count() == 0 and time == 0.0:
@@ -79,13 +74,15 @@ func _process(delta: float) -> bool:
 	_fake_deaths(delta)
 	_upgrade_in_a_row(delta)
 	time += delta
-	if "entrada_jefe" in OS.get_cmdline_user_args() and not boss_entrance_fired and time > BOSS_ENTRANCE_AT:
-		boss_entrance_fired = true
-		game.spawner.spawn_now(load("res://data/enemies/boss.tres"))
 	if time > WARMUP_SECONDS:
 		frames_measured += 1
 		process_ms_total += Performance.get_monitor(Performance.TIME_PROCESS) * 1000.0
 		frame_ms_total += delta * 1000.0
+		# Diez mejoras y sus textos ocupan 4,9 s desde la primera.
+		if time >= WARMUP_SECONDS and time < WARMUP_SECONDS + 4.9:
+			active_frames += 1
+			active_process_ms_total += Performance.get_monitor(Performance.TIME_PROCESS) * 1000.0
+			active_frame_ms_total += delta * 1000.0
 		worst_frame_ms = maxf(worst_frame_ms, delta * 1000.0)
 		if delta * 1000.0 > 1000.0 / 60.0:
 			slow_frames += 1
@@ -100,6 +97,8 @@ func _process(delta: float) -> bool:
 		print("FPS promedio: %.0f · frame más lento: %.1f ms · frames de más de 16,6 ms: %d de %d" % [
 			fps, worst_frame_ms, slow_frames, frames_measured])
 		print("Tiempo de cuadro promedio: %.2f ms" % (frame_ms_total / maxf(1.0, float(frames_measured))))
+		print("Ventana activa simétrica: proceso %.2f ms · cuadro %.2f ms · %d cuadros" % [
+			active_process_ms_total / maxi(active_frames, 1), active_frame_ms_total / maxi(active_frames, 1), active_frames])
 		print("RESULTADO: %s (objetivo: 60 FPS)" % ("OK" if fps >= 60.0 else "LENTO"))
 		return true
 	return false
@@ -107,6 +106,7 @@ func _process(delta: float) -> bool:
 
 func _populate() -> void:
 	game.session.earn(100000)
+	game.session.add_resources(100000)  # las torres actuales pueden cobrar recursos además de oro
 	if "apoyo" in OS.get_cmdline_user_args():
 		var support: TowerData = load("res://data/towers/mechanical_standard.tres")
 		game.tower_types.append(support)
@@ -116,8 +116,12 @@ func _populate() -> void:
 	for cell: Vector2i in game.level.ground.get_used_cells():
 		if built >= TOWER_COUNT:
 			break
-		if game.build_controller.try_build(game.tower_types[built % game.tower_types.size()], cell):
+		if game.build_controller.try_build(game.available_towers[built % game.available_towers.size()], cell):
 			built += 1
+	if built != TOWER_COUNT:
+		push_error("Carga de rendimiento incompleta: %d de %d torres" % [built, TOWER_COUNT])
+		quit(1)
+		return
 	var path: Path2D = game.level.get_ground_path(0)
 	var length: float = path.curve.get_baked_length()
 	for i: int in ENEMY_COUNT:

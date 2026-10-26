@@ -75,14 +75,26 @@ func test_keys_used_by_other_actions_are_refused() -> void:
 func test_ui_prefs_default_and_round_trip() -> void:
 	var prefs := UiPrefs.new()
 	assert_eq(prefs.view_all_key, KEY_V)
+	assert_false(prefs.view_all_hint_seen)
 	prefs.view_all_key = KEY_H
-	assert_eq(UiPrefs.read(prefs.to_dict()).view_all_key, KEY_H)
+	prefs.view_all_hint_seen = true
+	var restored: UiPrefs = UiPrefs.read(prefs.to_dict())
+	assert_eq(restored.view_all_key, KEY_H)
+	assert_true(restored.view_all_hint_seen)
 
 
 func test_old_prefs_without_the_key_read_without_warning() -> void:
 	var raw: Dictionary = {"cart_side": "left", "cart_y": 0.3, "exit_side": "right", "exit_y": 0.2,
 		"demolish_side": "left", "demolish_y": 0.5}
 	assert_eq(UiPrefs.read(raw).view_all_key, KEY_V)
+	assert_false(UiPrefs.read(raw).view_all_hint_seen)
+
+
+func test_invalid_hint_marker_falls_back_to_unseen() -> void:
+	for bad: Variant in ["true", 1, null, []]:
+		var raw: Dictionary = UiPrefs.new().to_dict()
+		raw["view_all_hint_seen"] = bad
+		assert_false(UiPrefs.read(raw).view_all_hint_seen, "valor raro %s" % str(bad))
 
 
 func test_invalid_keys_in_the_save_fall_back_to_v() -> void:
@@ -119,6 +131,17 @@ func test_options_has_the_row_with_the_current_key() -> void:
 	assert_not_null(button)
 	assert_eq(button.text, "V")
 	assert_true((_options.find_child("ViewAllRestoreButton", true, false) as Button).disabled, "ya es la de siempre")
+
+
+func test_the_row_is_in_the_controls_group_between_the_help_and_advanced_groups() -> void:
+	_open_options()
+	var row: Node = _options.find_child("ViewAllRow", true, false)
+	var parent: Node = row.get_parent()
+	assert_eq(parent.name, &"OptionsPage3", "página de la solapa «Controles»")
+	assert_eq(parent.get_child_count(), 1)
+	assert_eq((_options.find_child("ViewAllKeyButton", true, false) as Button).get_parent().get_parent(), row,
+		"el botón, «Restaurar» y el aviso viajan con la fila")
+	assert_eq(_options.find_child("ViewAllNote", true, false).get_parent(), row)
 
 
 func test_choosing_a_free_key_saves_it_and_enables_restore() -> void:
@@ -166,4 +189,6 @@ func test_a_phone_interface_has_no_key_row() -> void:
 	SaveManager.set_setting("ui_mode", UiMode.MOBILE)
 	_open_options()
 	assert_null(_options.find_child("ViewAllKeyButton", true, false))
+	assert_null(_options.find_child("ViewAllRow", true, false))
+	assert_null(_options.find_child("ControlsSection", true, false), "tampoco queda un título «Controles» vacío")
 	SaveManager.set_setting("ui_mode", original)

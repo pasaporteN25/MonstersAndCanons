@@ -17,6 +17,7 @@ const CARDS_PER_ROW: int = 5
 const VISIBLE_ROWS: int = 2
 const CAMPAIGN_VISIBLE_ROWS: int = 3
 const CAMPAIGN_CARD_SPACING: float = 10.0
+const MOBILE_MAP_ROW_SEPARATION: int = 6
 ## T426: el fondo temático de la tarjeta desktop es el suelo del tema del nivel (MapThemes), muy tenue,
 ## con un velo oscuro del color de borde del tema encima para que texto, estrellas e iconos se lean.
 const CAMPAIGN_BACKDROP_ALPHA: float = 0.30
@@ -65,9 +66,12 @@ var _dev_auto: CheckBox
 var _dev_gold: SpinBox
 
 @onready var _scroll: ScrollContainer = %Scroll
+@onready var _rows: VBoxContainer = $Center/Rows
 @onready var _cards: HFlowContainer = %Cards
 @onready var _back_button: Button = %BackButton
 @onready var _total_stars: Label = %TotalStars
+@onready var _tab_scroll: ScrollContainer = %TabScroll
+@onready var _tab_row: HBoxContainer = %TabRow
 @onready var _campaign_tab: Button = %CampaignTab
 @onready var _community_tab: Button = %CommunityTab
 @onready var _folder_button: Button = %FolderButton
@@ -90,6 +94,7 @@ func _ready() -> void:
 	_style_cards_button.pressed.connect(set_style.bind(CampaignMap.STYLE_CARDS))
 	_style_map_button.pressed.connect(set_style.bind(CampaignMap.STYLE_MAP))
 	show_page(GameFlow.select_page)  # RF-225: la solapa en la que se estaba
+	_focus_remembered_map()
 	if map_view != null:
 		map_view.focus_selected()  # RF-648: el mapa se puede recorrer con teclado desde que se abre
 	if DevMode.enabled:
@@ -99,10 +104,17 @@ func _ready() -> void:
 
 
 ## Esc (o "atrás" en Android, RF-142) vuelve al menú principal.
+## RF-694: AvPág / RePág pasan a la solapa siguiente / anterior (la fila de solapas se desplaza sola).
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("cancel"):
 		get_viewport().set_input_as_handled()
 		GameFlow.go_to_main_menu()
+	elif event.is_action_pressed("ui_page_down"):
+		get_viewport().set_input_as_handled()
+		step_page(1)
+	elif event.is_action_pressed("ui_page_up"):
+		get_viewport().set_input_as_handled()
+		step_page(-1)
 
 
 ## Cambia de solapa y vuelve a armar las tarjetas (RF-221).
@@ -111,8 +123,11 @@ func show_page(page: StringName) -> void:
 	if page != PAGE_CAMPAIGN and page != PAGE_COMMUNITY and mode.is_empty():
 		page = PAGE_CAMPAIGN  # un modo que ya no está (se borró la carpeta): se vuelve a la campaña
 	_page = page
-	var is_campaign: bool = page == PAGE_CAMPAIGN and not UiMode.is_mobile()
+	var is_campaign: bool = page == PAGE_CAMPAIGN and not UiMode.is_mobile()  # tarjetas compactas de PC
+	var is_campaign_page: bool = page == PAGE_CAMPAIGN  # el mapa y su conmutador valen en PC y en celular (RF-687)
 	_cards.add_theme_constant_override("v_separation", CAMPAIGN_CARD_SPACING if is_campaign else CARD_SPACING)
+	if page != GameFlow.select_page:
+		GameFlow.select_map_index = -1  # otra solapa: la selección recordada ya no vale
 	GameFlow.select_page = page
 	_campaign_tab.set_pressed_no_signal(page == PAGE_CAMPAIGN)
 	_community_tab.set_pressed_no_signal(page == PAGE_COMMUNITY)
@@ -122,9 +137,11 @@ func show_page(page: StringName) -> void:
 		_cards.remove_child(card)
 		card.queue_free()
 	map_view = null
-	# RF-645: el cambio de estilo es solo de escritorio y solo de la campaña.
-	var show_map: bool = is_campaign and SaveManager.selector_style() == CampaignMap.STYLE_MAP
-	_style_switch.visible = is_campaign
+	# RF-645, RF-687: el cambio de estilo es solo de la campaña, en PC y en celular.
+	var show_map: bool = is_campaign_page and SaveManager.selector_style() == CampaignMap.STYLE_MAP
+	_rows.add_theme_constant_override("separation", MOBILE_MAP_ROW_SEPARATION \
+		if show_map and UiMode.is_mobile() else 8)
+	_style_switch.visible = is_campaign_page
 	_style_cards_button.set_pressed_no_signal(not show_map)
 	_style_map_button.set_pressed_no_signal(show_map)
 	var count: int
@@ -161,10 +178,58 @@ func show_page(page: StringName) -> void:
 	if show_map:
 		_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 		_scroll.custom_minimum_size.y = CampaignMapView.VIEW_SIZE.y
+	_reveal_active_tab.call_deferred()  # las medidas de las solapas se conocen después de este cuadro
 
 
 func current_page() -> StringName:
 	return _page
+
+
+## RF-389, RF-694: el orden de las solapas: Campaña, modos oficiales, Comunidad y modos propios.
+func page_order() -> Array[StringName]:
+	var order: Array[StringName] = [PAGE_CAMPAIGN]
+	for mode: Dictionary in _modes:
+		if mode["official"]:
+			order.append(ModePacks.page_of(mode))
+	order.append(PAGE_COMMUNITY)
+	for mode: Dictionary in _modes:
+		if not mode["official"]:
+			order.append(ModePacks.page_of(mode))
+	return order
+
+
+## RF-694: pasa a la solapa `delta` lugares más allá (da la vuelta) y la deja a la vista.
+func step_page(delta: int) -> void:
+	var order: Array[StringName] = page_order()
+	show_page(order[posmod(order.find(_page) + delta, order.size())])
+
+
+## La solapa de `page` (también Campaña y Comunidad), para poder desplazarla y probarla.
+func tab_button(page: StringName) -> Button:
+	if page == PAGE_CAMPAIGN:
+		return _campaign_tab
+	if page == PAGE_COMMUNITY:
+		return _community_tab
+	return mode_tab(page)
+
+
+## Desplaza la fila de solapas hasta que la activa se vea entera (con cinco modos propios no entran todas).
+func _reveal_active_tab() -> void:
+	var tab: Button = tab_button(_page)
+	if tab != null and is_inside_tree():
+		_tab_scroll.ensure_control_visible(tab)
+
+
+## RF-694: al volver de una partida de un modo, la tarjeta de ese mapa recupera el foco.
+func _focus_remembered_map() -> void:
+	var index: int = GameFlow.select_map_index
+	if index < 0 or _page == PAGE_CAMPAIGN or _page == PAGE_COMMUNITY:
+		return
+	GameFlow.select_map_index = -1  # se usa una sola vez: el foco no vuelve a moverse en esta pantalla
+	if index < _cards.get_child_count() and _cards.get_child(index) is Button:
+		var card: Button = _cards.get_child(index) as Button
+		if not card.disabled:
+			card.grab_focus()
 
 
 ## M72, RF-645: cambia el estilo de la campaña y lo recuerda en `settings`. No toca el progreso.
@@ -185,17 +250,28 @@ func map_entries() -> Array[Dictionary]:
 	for i: int in GameFlow.level_count():
 		var level: LevelData = GameFlow.level(i)
 		var stars: int = GameFlow.level_stars(i)
-		entries.append({"name": level.display_name, "place": level.place_text, "stars": stars,
-			"state": CampaignMap.state_of(GameFlow.is_level_unlocked(i), SaveManager.is_completed(level.id), stars)})
+		entries.append({"name": level.display_name, "place": level.place_text, "stars": stars, "state": campaign_state(i)})
 	return entries
+
+
+## T501, RF-695: el estado visual de un nivel de la campaña. Es el mismo para el mapa y para las tarjetas.
+func campaign_state(index: int) -> CampaignMap.State:
+	return CampaignMap.state_of(GameFlow.is_level_unlocked(index), SaveManager.is_completed(GameFlow.level(index).id), GameFlow.level_stars(index))
 
 
 func _make_map_view() -> CampaignMapView:
 	var view := CampaignMapView.new()
 	view.name = "CampaignMapView"
 	view.setup(map_entries())
-	view.level_requested.connect(func(index: int) -> void: level_opener.call(index))
+	view.level_requested.connect(_request_campaign_level)
 	return view
+
+
+## Vuelve a comprobar el desbloqueo al confirmar: el estado visible del mapa puede haber quedado viejo (RF-688).
+func _request_campaign_level(index: int) -> void:
+	if index < 0 or index >= GameFlow.level_count() or not GameFlow.is_level_unlocked(index):
+		return
+	level_opener.call(index)
 
 
 # --- Modos (RF-389) ---
@@ -213,14 +289,14 @@ func _add_mode_tabs() -> void:
 		tab.add_theme_font_size_override("font_size", _campaign_tab.get_theme_font_size("font_size"))
 		var page: StringName = ModePacks.page_of(mode)
 		tab.pressed.connect(show_page.bind(page))
-		_campaign_tab.get_parent().add_child(tab)
+		_tab_row.add_child(tab)
 		if mode["official"]:
 			after_campaign += 1
 			after_community += 1
-			_campaign_tab.get_parent().move_child(tab, after_campaign)
+			_tab_row.move_child(tab, after_campaign)
 		else:
 			after_community += 1
-			_campaign_tab.get_parent().move_child(tab, after_community)
+			_tab_row.move_child(tab, after_community)
 		_mode_tabs[page] = tab
 
 
@@ -403,7 +479,18 @@ func _make_card(index: int) -> Button:
 	_add_tower_icons(card, index, level, unlocked, compact)
 	card.pressed.connect(GameFlow.start_level.bind(index))
 	_add_campaign_stars(card, GameFlow.level_stars(index), unlocked, index, compact)
+	_add_badge_icon(card, index)
 	return card
+
+
+## T501, RF-695: la misma insignia que el mapa, arriba a la izquierda. Se agrega al final para que quede encima del fondo
+## y del velo, y no se atenúa con el resto de una tarjeta bloqueada (el candado ya es el aviso).
+func _add_badge_icon(card: Button, index: int) -> void:
+	var icon := CampaignBadgeIcon.new()
+	icon.name = "Badge"
+	icon.setup(campaign_state(index), index)
+	icon.position = Vector2(CARD_CONTENT_LEFT - 2.0, 0.0)
+	card.add_child(icon)
 
 
 ## T426: suelo del tema del nivel (uno desconocido usa la pradera) y velo oscuro, detrás de todo lo demás.
@@ -436,14 +523,17 @@ func _add_theme_background(card: Button, theme_id: StringName) -> void:
 func _add_campaign_card_text(card: Button, index: int, level: LevelData, unlocked: bool, compact: bool = false) -> void:
 	var card_size: Vector2 = CAMPAIGN_CARD_SIZE if compact else CARD_SIZE
 	var number_text: String = "Nivel %d" % (index + 1) if compact else "Nivel %d · %d oleadas" % [index + 1, level.waves.size()]
-	_card_label(card, "LevelNumber", number_text, 13 if compact else 14, Rect2(8, 3, card_size.x - 16, 19 if compact else 23))
-	var title_y: float = 28.0
-	var title_height: float = 24.0 if compact else 36.0
+	# T501: la insignia ocupa la esquina de arriba a la izquierda; en la tarjeta ancha el rótulo se corre para no pisarla.
+	var number_left: float = CampaignBadgeIcon.SIDE + 8.0
+	_card_label(card, "LevelNumber", number_text, 13 if compact else 14, Rect2(number_left, 3, card_size.x - number_left - 8.0, 19 if compact else 23))
+	# T501: el nombre baja hasta debajo de la insignia (40 px) para que ningún rótulo pise su cuadro.
+	var title_y: float = CampaignBadgeIcon.SIDE
+	var title_height: float = 24.0
 	var title: Label = _card_label(card, "LevelName", level.display_name, 16 if compact else CAMPAIGN_TITLE_FONT_SIZE, Rect2(8, title_y, card_size.x - 16, title_height))
 	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	if unlocked and level.place_text != "":
 		var place_font_size: int = 12 if compact else PLACE_FONT_SIZE
-		var place_y: float = 54.0 if compact else 64.0
+		var place_y: float = title_y + title_height
 		var place_height: float = 18.0 if compact else 23.0
 		var place_text: String = _fit_line(level.place_text, get_theme_font("font"), place_font_size, card_size.x - 40.0)
 		var place: Label = _card_label(card, "Place", place_text, place_font_size, Rect2(8, place_y, card_size.x - 16, place_height))

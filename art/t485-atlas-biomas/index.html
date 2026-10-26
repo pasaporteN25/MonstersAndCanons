@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="es-AR">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>T485 · Atlas y biomas</title>
+<style>
+:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#181d20;color:#e9e2d1;font:16px/1.6 Georgia,serif}main{max-width:1360px;margin:auto;padding:34px 28px 70px}h1{font-size:clamp(1.8rem,4vw,2.8rem);line-height:1.2;font-weight:normal;max-width:27ch;margin:0 0 18px}h2{font-size:1.6rem;font-weight:normal;margin:38px 0 12px}p{max-width:74ch;margin:12px 0 22px}a{color:#e2c279;text-underline-offset:.2em}.controls{display:flex;gap:9px;flex-wrap:wrap;margin:26px 0 15px}button{font:600 14px/1.3 system-ui,sans-serif;background:#181d20;border:1px solid #495349;color:#e9e2d1;padding:13px 18px;cursor:pointer;min-height:46px;touch-action:manipulation}button:hover{border-color:#e2c279}button[aria-pressed=true]{background:#e2c279;color:#1c272a;border-color:#e2c279}button:focus-visible,a:focus-visible{outline:3px solid #fff0b6;outline-offset:4px}figure{margin:0}img{display:block;width:100%;height:auto;background:#20282b}figcaption,.note{font:14px/1.6 system-ui,sans-serif;color:#c1c9bd}figcaption{padding:13px 0;min-height:60px;max-width:90ch}::selection{background:#e2c279;color:#18282d}html{scrollbar-color:#727a66 #181d20}footer{font:13px/1.6 system-ui,sans-serif;border-top:1px solid #495349;margin-top:40px;padding-top:20px;color:#c1c9bd}table{border-collapse:collapse;font:14px/1.6 system-ui,sans-serif;width:100%;max-width:1000px}th,td{text-align:left;padding:10px 14px;border-bottom:1px solid #495349}th{color:#e2c279;font-weight:600}.table-wrap{overflow:auto}@media(max-width:650px){main{padding:25px 16px 45px}.controls{gap:7px}button{flex:1;padding:12px 8px}}
+</style>
+<main><h1>Una geografía para el recorrido B</h1>
+<p>El recorrido elegido se conserva. La nueva costa, el relieve y las transiciones de terreno buscan que el atlas se sienta continuo. Los biomas salen de los temas reales de los quince niveles; la ilustración sigue siendo una propuesta para aprobar.</p>
+<div class="controls" aria-label="Elegí una etapa de cartografía para revisar">
+<button type="button" data-view="inicio" aria-pressed="false">Primer bloque · 1–5</button>
+<button type="button" data-view="nivel-6" aria-pressed="false">Al desbloquear 6 · 1–10</button>
+<button type="button" data-view="nivel-11" aria-pressed="true">Al desbloquear 11 · 1–15</button>
+</div>
+<figure><img id="map" src="../../Capturas/T485-atlas-nivel-11.png" width="1280" height="720" alt="Propuesta de atlas completo: pradera al oeste, bosque central, ruinas, desierto, paso nevado 13, ruinas 14 y valle verde 15."><figcaption id="caption" role="status">Al desbloquear el nivel 11, esta propuesta revela la cartografía de 11–15. Se ven sus terrenos, pero 12–15 siguen con candado: descubrir una zona no abre todos sus niveles ni significa haberla conquistado.</figcaption></figure>
+<p class="note">Son tres estados de una misma maqueta, sin guardados ni partidas reales. El botón «Jugar» dibujado pertenece a la composición estática. Las fuentes de arte y los estados propuestos no se integraron al juego.</p>
+<h2>Qué cambia en el atlas</h2>
+<p>La costa tiene promontorios y entradas de mar de tamaños distintos. El terreno pasa gradualmente de la pradera al bosque, los restos y el desierto. El 13 ocupa un paso nevado reconocible; el 14 conserva restos sobre terreno pétreo y el 15 vuelve a una pradera verde junto a la costa. Las formas y los ríos son concepto visual, sin fijar geografía canónica nueva.</p>
+<h2>Qué propone el descubrimiento por zonas</h2>
+<p>Al principio se muestra 1–5; el resto mantiene su silueta en gris. Al desbloquear el 6 se revela 6–10 y al desbloquear el 11 se revela 11–15. Las fronteras de cartografía siguen corredores irregulares y suaves. Los candados continúan abriendo niveles de a uno, y las estrellas conservan su significado propio.</p>
+<p class="note">Esta regla es una propuesta para decidir, no una función implementada. Antes del código hacen falta la aprobación de Lucas y la especificación de guardados anteriores, modo de pruebas y separación de descubrimiento, acceso y conquista. Los bloques visibles no cambian el orden, las grillas ni el balance de campaña.</p>
+<h2>Biomas verificados nivel por nivel</h2>
+<p>El color y los motivos se basan en el campo «tema» de los JSON vigentes. En el 10 se conservan restos como transición al desierto. Ningún nivel de esta campaña usa volcán o pantano.</p>
+<div class="table-wrap"><table><thead><tr><th>Nivel</th><th>Nombre</th><th>Tema del archivo</th><th>Bloque</th></tr></thead><tbody><tr><td>1</td><td>Pradera</td><td><a href="../../data/levels/level_01.json">pradera</a></td><td>1</td></tr>
+<tr><td>2</td><td>Desfiladero</td><td><a href="../../data/levels/level_02.json">pradera</a></td><td>1</td></tr>
+<tr><td>3</td><td>Encrucijada</td><td><a href="../../data/levels/level_03.json">pradera</a></td><td>1</td></tr>
+<tr><td>4</td><td>Espiral</td><td><a href="../../data/levels/level_04.json">pradera</a></td><td>1</td></tr>
+<tr><td>5</td><td>Fortaleza</td><td><a href="../../data/levels/level_05.json">pradera</a></td><td>1</td></tr>
+<tr><td>6</td><td>Nido</td><td><a href="../../data/levels/level_06.json">bosque</a></td><td>2</td></tr>
+<tr><td>7</td><td>Cruce</td><td><a href="../../data/levels/level_07.json">bosque</a></td><td>2</td></tr>
+<tr><td>8</td><td>Bastión</td><td><a href="../../data/levels/level_08.json">ruinas</a></td><td>2</td></tr>
+<tr><td>9</td><td>Taller asediado</td><td><a href="../../data/levels/level_09.json">ruinas</a></td><td>2</td></tr>
+<tr><td>10</td><td>La mina vieja</td><td><a href="../../data/levels/level_10.json">desierto</a></td><td>2</td></tr>
+<tr><td>11</td><td>Puesto seco</td><td><a href="../../data/levels/level_11.json">desierto</a></td><td>3</td></tr>
+<tr><td>12</td><td>El cañadón</td><td><a href="../../data/levels/level_12.json">desierto</a></td><td>3</td></tr>
+<tr><td>13</td><td>Paso alto</td><td><a href="../../data/levels/level_13.json">nieve</a></td><td>3</td></tr>
+<tr><td>14</td><td>Los poblados vacíos</td><td><a href="../../data/levels/level_14.json">ruinas</a></td><td>3</td></tr>
+<tr><td>15</td><td>La Central</td><td><a href="../../data/levels/level_15.json">pradera</a></td><td>3</td></tr>
+</tbody></table></div>
+<h2>Qué necesita tu decisión</h2>
+<p>¿Te convence esta silueta y el reparto de terrenos sobre B? ¿Aprobás que la cartografía se descubra en esos tres bloques, al desbloquear 6 y 11? Podés aprobar el arte y pedir otro criterio de descubrimiento por separado.</p>
+<p class="note">No se validaron controles, teléfono o rendimiento con estas imágenes. Las fichas de partidas y las compuertas humanas siguen su curso propio.</p>
+<footer>T485 · <a href="../../specs/tareas/T485-atlas-biomas-zonas.md">Análisis, revisión y límites</a> · <a href="README.md">Fuentes y reproducción</a> · <a href="../t484-tramo-sur/index.html">Dirección B elegida</a></footer>
+</main>
+<script>
+const views={inicio:{src:'../../Capturas/T485-atlas-inicio.png',alt:'Primer bloque: cartografía de 1–5 visible; las zonas 6–15 permanecen grises y sus niveles conservan candados.',caption:'Primer bloque · La maqueta muestra 1–2 ganados y 3 disponible. Toda la cartografía 1–5 se ve; 4–5 siguen bloqueados. Las zonas 6–15 quedan grises.'},'nivel-6':{src:'../../Capturas/T485-atlas-nivel-6.png',alt:'Al desbloquear 6 se revela la cartografía de 6–10, con bosque, ruinas y transición al desierto; 7–10 siguen bloqueados.',caption:'Al desbloquear el nivel 6, esta propuesta revela 6–10. El bosque, las ruinas y la transición del 10 al desierto quedan visibles; los niveles 7–10 siguen con candado. La zona 11–15 queda gris.'},'nivel-11':{src:'../../Capturas/T485-atlas-nivel-11.png',alt:'Atlas completo: se ven los terrenos de 11–15, pero 12–15 permanecen bloqueados.',caption:'Al desbloquear el nivel 11, esta propuesta revela la cartografía de 11–15. Se ven sus terrenos, pero 12–15 siguen con candado: descubrir una zona no abre todos sus niveles ni significa haberla conquistado.'}};
+for(const button of document.querySelectorAll('button[data-view]'))button.addEventListener('click',()=>{const view=views[button.dataset.view];document.querySelector('#map').src=view.src;document.querySelector('#map').alt=view.alt;document.querySelector('#caption').textContent=view.caption;for(const other of document.querySelectorAll('button[data-view]'))other.setAttribute('aria-pressed',String(other===button));});
+</script></html>

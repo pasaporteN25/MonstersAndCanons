@@ -1175,6 +1175,7 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Por qué:** sin archivos que copiar, el núcleo se puede llevar a otro juego como un único `.gd`; el fondo liso se ve igual en PC y en el celular y no depende de cargar nada.
 - **Alternativas descartadas:** una escena `.tscn` (dos archivos y rutas); el mapa de fondo de los menús (hay que armarlo, o sea, trabajo pesado justo mientras se carga).
 - **Qué cambia:** `01-spec.md` (RF-580), `scripts/logic/scene_transition.gd`.
+- **Enmienda condicionada (D-206/RF-703–706, 2026-10-23):** admitir textura opcional inyectada desde GameFlow solo después del anexo de medición en celular real al informe T454 y aprobación escrita de Lucas. La ficha T454 vigente no incluye esa medición. Se conserva el núcleo genérico, el respaldo liso y el bloqueo.
 
 ## D-134 · «Reintentar» también carga por la pantalla de carga, con la ruta de la escena actual
 - **Fecha:** 2026-10-19 · **Estado:** implementada en T340 · **Decidió:** Claude
@@ -1242,6 +1243,8 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
   - **Reutilizar la tarjeta «Nuevo enemigo» (RF-134):** sale una sola vez en la vida del jugador, no es una entrada.
 - **Qué cambia:** `01-spec.md` (RF-597 a RF-599, RF-602), `HUD` (el cartel), `EffectsLayer` (el destello), `Game._on_enemy_spawned`, `data/ui/entrada_jefes.json`, `assets/sprites/effects/jefe/`.
 
+**Estado histórico:** reemplazada por D-188 a D-190 y RF-666 a RF-673 (2026-10-23); el piloto sin pausa ya no rige.
+
 ## D-139 · La entrada es un dato del enemigo (`EnemyData.entrance`), con la lista de niveles en el propio recurso; el piloto es solo el Jefe en el nivel 1
 - **Fecha:** 2026-10-19 · **Estado:** programada con arte provisional (T366/T368; el arte espera el OK de Lucas, T367/T369) · **Decidió:** Lucas (piloto en el jefe del nivel 1, generalizable por datos) / Claude (dónde viven los datos)
 - **Qué:** `BossEntranceData` (`levels`, `line`, `sound`) colgado de `EnemyData.entrance`. Vacío = el enemigo no hace entrada. El piloto: `boss.tres` con `levels = ["level_01"]`. Los tiempos y tamaños, en `data/ui/entrada_jefes.json`.
@@ -1257,6 +1260,8 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
   - **Campos sueltos en `EnemyData` (`entrance_line`, `entrance_sound`…):** ensucia un recurso que usan todos los enemigos; un sub-recurso opcional lo deja limpio.
 - **Qué cambia:** `01-spec.md` (RF-601), `scripts/data/enemy_data.gd`, `scripts/data/boss_entrance_data.gd`, `data/enemies/boss.tres`, `tests/test_content.gd`, `CONTENIDO.md`.
 
+**Estado histórico:** reemplazada en alcance por D-189/D-191 y RF-668/RF-671 (2026-10-23); no elimina la posibilidad de reutilizar datos después de revisión.
+
 ## D-140 · «Entrada de los jefes» es una casilla de Opciones (clave aditiva `boss_entrance`, prendida por omisión); la tarjeta «Nuevo enemigo» espera y no se solapa
 - **Fecha:** 2026-10-19 · **Estado:** programada con arte provisional (T366/T368; el arte espera el OK de Lucas, T367/T369) · **Decidió:** Lucas (activable y desactivable) / Claude (dónde y cómo se combina con lo que ya hay)
 - **Qué:** casilla en Opciones debajo de «Animaciones de mejora» (RF-600), ajuste `"boss_entrance"` en `settings`, sin subir `SAVE_VERSION`. El cartel de aparición espera a que se retire el cartel de oleada, y la tarjeta RF-134 espera al cartel de aparición (RF-597).
@@ -1270,6 +1275,8 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
   - **Que el cartel de aparición tape el de oleada:** se leerían mal los dos y el de oleada tiene más información (número de oleada).
   - **Mostrar la entrada solo la primera vez:** queda como pregunta P-66-2.
 - **Qué cambia:** `01-spec.md` (RF-597, RF-600), `SaveManager.DEFAULT_SETTINGS`, `OptionsMenu`, `HUD.show_enemy_intro` (espera), `tests/test_old_saves.gd`.
+
+**Estado histórico:** reemplazada por D-190 y RF-669/RF-670/RF-672 (2026-10-23); la tarjeta del jefe se omite según aclaración de Lucas y PR #59.
 
 ## D-141 · «Novedades de esta versión» es una pantalla propia sobre el menú principal, que sale sola una vez por versión y se vuelve a ver desde Opciones
 - **Fecha:** 2026-10-19 · **Estado:** implementada (T371, T373, T374); el arte (T372) y los textos aprobados esperan el OK de Lucas · **Decidió:** Lucas (una pantalla al abrir el juego, una vez por versión, con opción para volver a verla) / Claude (la forma y dónde vive)
@@ -1400,7 +1407,7 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Qué cambia:** `01-spec.md` (M68, RF-610 y RF-611), `02-plan-tecnico.md` (M68), `03-tareas.md` (T401), `CHANGELOG.md`
 
 ## D-161 · «Ver todo» en PC: botón igual que en el celular y una tecla propia (acción de input `view_all`, la V)
-- **Fecha:** 2026-10-20 · **Estado:** implementada (T402) · **Decidió:** Lucas («botón y combinación de teclas, configurable, ambos») / Claude (la V por omisión, los choques y que valga en pausa)
+- **Fecha:** 2026-10-20 · **Estado:** implementada (T402); **la parte del botón de PC fue enmendada por D-192 (2026-10-23)**, la tecla sigue vigente · **Decidió:** Lucas («botón y combinación de teclas, configurable, ambos») / Claude (la V por omisión, los choques y que valga en pausa)
 - **Qué:** el botón de la PC (RF-545) se ve con otro zoom **o** con el mapa corrido, como en el celular; la acción `view_all` (V) hace lo mismo y la tecla se cambia desde Opciones con un botón que espera la próxima tecla.
 - **Por qué:**
   - **Ya había un botón, pero solo con el zoom mínimo y el mapa corrido.** Quien acerca con la rueda no tenía cómo volver salvo la rueda hacia atrás; ahora tiene botón y tecla.
@@ -1451,6 +1458,26 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Alternativas descartadas:** reservar de verdad la franja (achicar el mapa a los costados): Lucas prefirió sacarla.
 - **Qué cambia:** `01-spec.md` (RF-507, M60, §13), `02-plan-tecnico.md`, `CONTENIDO.md`, `README.md`, `specs/tareas/informes/T289-auditoria-mobile-implementado.md` (§7), `CHANGELOG.md`
 
+## D-165 · [parte de jefes RETIRADA 2026-10-23] El atlas del efecto de mejora se integra en `Sprite2D` (un solo efecto teñido por `modulate`, mezcla normal)
+- **Fecha:** 2026-10-20 · **Estado:** vigente solo para `UpgradeEffect` (T411–T415). El arte y el código del concepto viejo de jefes no estaban aprobados para la presentación nueva y se retiraron en T461 (2026-10-23): `BossEntranceBurst`, `BossEntranceCard` y sus tres PNG ya no están en el juego. La presentación nueva sigue M66/T448; no reutiliza esos recursos. · **Decidió:** Lucas (aprobó el estilo de las muestras de mejora T362; el piloto viejo de jefes no fue aprobado) / Claude (cómo se conecta al código de mejora)
+- **Qué:** `UpgradeEffect` usa únicamente `upgrade_l2.png` / `upgrade_l3.png`, importados sin mipmaps. Los comportamientos de mejora (`Tween`, sin `_process`, opción, pausa y velocidad) no cambian.
+- **Por qué:**
+  - **Un `Sprite2D` con `hframes`/`vframes` es lo más barato** que hay en Godot para un atlas: un nodo, una textura, cero código por cuadro más allá de elegir el número. Cumple RF-595 y RF-629 sin gastar en dibujar curvas cada cuadro, que es lo que hacía el `_draw` provisional.
+  - **`modulate` y mezcla normal:** las muestras de mejora fueron revisadas multiplicadas por el color de la torre (`upgrade_glow_color`); la mezcla aditiva nunca se vio en Godot (Codex lo dejó como «no verificado»).
+  - **Las opciones siguen mandando:** el efecto de mejora solo se crea con su opción prendida (RF-596).
+- **Alternativas descartadas:**
+  - **Un `AnimatedSprite2D` con `SpriteFrames`:** más nodos y recursos por una animación que el `Tween` ya mueve (y que se congela con la pausa y acompaña la velocidad sin trabajo extra).
+  - **Mezcla aditiva:** sin revisión visual en Godot; se puede probar después con un cambio de una línea.
+  - **Efecto distinto por familia de torre:** sigue siendo P-65-6; se aprobó el efecto único teñido.
+- **Qué cambia:** `01-spec.md` (M71 solo para mejoras; los RF-626/627 de jefes quedan retirados y no se reutilizan), `02-plan-tecnico.md`, `03-tareas.md` (T410 a T415; los restos de jefe se retiraron en T461), `scenes/effects/upgrade_effect.gd`, `assets/sprites/effects/mejora/`, `CHANGELOG.md`, `CONTENIDO.md`, `README.md`, `ONBOARDING.md`.
+
+## D-176 · Importar los atlas de M71 a media resolución y compensar su escala *(vigente solo para los dos atlas de mejora; el destello del jefe quedó retirado el 2026-10-23)*
+- **Fecha:** 2026-10-20 · **Estado:** aprobada para optimización y medición (T414) · **Decidió:** Lucas (autorizó reducir atlas para RF-629) / Codex (importación y compensación).
+- **Qué:** `process/size_limit` de 384 en los dos atlas de mejora. El límite de 512 del destello quedó retirado junto con el concepto de jefes en T461; sus PNG ya no están en `assets/`. Se mantiene el tamaño visual de los atlas de mejora con escala 2 y el punto de pies con el offset reducido a la mitad antes de escalar.
+- **Por qué:** reduce de 835.584 a 208.896 texels entre los dos atlas (75 %), sin eliminar poses ni cambiar tiempos. La reducción de memoria es concreta; la mejora de tiempo por cuadro debe medirse y no se presupone.
+- **Alternativas descartadas:** regenerar el arte aprobado; quitar cuadros; cambiar las reglas o la cola del cartel y de «Nuevo enemigo» para favorecer el banco.
+- **Medición:** una partida, 200 enemigos, 60 torres realmente construidas, semilla fija, pares con/sin efecto, preferencias y guardados aislados. Jefe conocido solo en memoria en ambos lados para evitar que la tarjeta «Nuevo enemigo» y su cola sesguen la comparación. Promedio de seis segundos y ventana activa simétrica. Los números antiguos con dos partidas o 8–9 torres no son comparables.
+- **Límites:** no se certifica aspecto en celular real ni se atribuye toda variación de proceso a la textura; se registra cualquier incumplimiento RF-629 y la base por debajo de 60 FPS.
 ## D-170 · Integrar el arte aprobado de Novedades sin publicar la 1.0.0
 - **Fecha:** 2026-10-20 · **Estado:** Aceptada · **Decidió:** Lucas (aprobación del arte y encargo de T375); Codex (detalle de integración).
 - **Qué:** copiar los diez `news_*.png` de `art/t372-muestras/` sin cambios a `assets/ui/novedades/`, con importación sin pérdida y sin mipmaps. Conectar la cabecera y siete medallones desde JSON. El octavo medallón y la banda sobria quedan disponibles sin inventar contenido. Cabecera proporcional al ancho interior, texto debajo sobre el panel y medallones de 48 px en PC / 64 px en celular. Se conserva el rombo si falta ícono y la carga al abrir de RF-604.
@@ -1512,6 +1539,8 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Relación con D-173:** esta decisión reemplaza la recomendación de no ofrecer la opción; queda registrada para conservar el motivo original.
 
 ## D-178 · El selector de niveles desktop tiene dos estilos con una preferencia de interfaz
+
+> **Revisada por D-198/D-199/D-200:** mapa inicial también celular, migración de una vez y geografía nueva aprobable; se conserva la alternativa de tarjetas.
 - **Fecha:** 2026-10-21 · **Estado:** decidida · **Decidió:** Lucas.
 - **Qué:** conservar el selector de tarjetas rediseñado y sumar el mapa planetario 2D como estilo alternativo. La elección se guarda en `settings`; un guardado anterior usa tarjetas.
 - **Por qué:** Lucas pidió poder elegir el selector actual mejorado o el mapa; la preferencia no forma parte del progreso de campaña.
@@ -1533,6 +1562,8 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Qué cambia:** RF-646 y RF-649 a RF-654, tareas T426 y T429–T430.
 ## D-181 · El poste de nivel 6 refleja si la campaña ya ganó ese nivel
 
+> **Regla retirada por D-203/RF-696:** veinte postes en la campaña; solo 3 estrellas cambia a jugador. La alternativa que acá se descartó fue aprobada después por Lucas.
+
 - **Fecha:** 2026-10-21 · **Estado:** decidida · **Decidió:** Lucas.
 - **Qué:** el poste de nivel 6 usa los estandartes enemigos mientras el nivel no figure completado en el guardado, y los del jugador tras cualquier victoria registrada, sin umbral de estrellas.
 - **Por qué:** da una señal visual de conquista en el propio mapa del nivel.
@@ -1540,6 +1571,8 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Qué cambia:** RF-656; es solo presentación, no modifica progreso, guardado ni balance.
 
 ## D-182 · El estado de campaña se pasa explícitamente al mapa
+
+> **Ampliada por D-203/RF-697:** se conserva el paso de contexto explícito; el estado depende de estrellas y no de cualquier victoria.
 
 - **Fecha:** 2026-10-21 · **Estado:** decidida · **Decidió:** Codex a partir del alcance de D-181.
 - **Qué:** Game obtiene SaveManager.is_completed() solo al cargar un nivel de campaña y pasa un booleano al mapa; modos, comunidad, editor, pruebas y escenas sueltas usan el estado de reserva enemigo.
@@ -1576,3 +1609,226 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Por qué:** es una preferencia visual independiente del progreso y un archivo inválido no debe impedir jugar.
 - **Alternativas descartadas:** ampliar el guardado de campaña o persistir una imagen generada por usuario.
 - **Qué cambia:** RF-664 y las tareas T442–T443.
+
+## D-187 · La presentación de jefes es una excepción nominada a §11
+
+- **Fecha:** 2026-10-23 · **Estado:** decidida · **Decidió:** Lucas.
+- **Qué:** permitir únicamente la presentación animada de jefes M66 como excepción explícita a D-089; las demás cinemáticas animadas siguen fuera.
+- **Por qué:** Lucas aprobó esta secuencia específica sin abrir el alcance a otras cinemáticas.
+- **Alternativas descartadas:** mantener la exclusión absoluta; habilitar cinemáticas como categoría general.
+- **Qué cambia:** RF-666 a RF-673 y §11 de `01-spec.md`.
+
+## D-188 · La presentación cubre la ventana y pausa la partida
+
+- **Fecha:** 2026-10-23 · **Estado:** decidida · **Decidió:** Lucas.
+- **Qué:** secuencia a pantalla completa que pausa la partida desde el nacimiento del jefe.
+- **Por qué:** es la presentación aprobada para acercar M66 a V1.0.0.
+- **Alternativas descartadas:** destello y cartel pequeño sin pausa del piloto T368; ralentizar la partida sin pausa.
+- **Qué cambia:** RF-667 y RF-673; no altera datos de combate ni tiempos de oleada.
+
+## D-189 · Duración por jefe y partida
+
+- **Fecha:** 2026-10-23 · **Estado:** decidida · **Decidió:** Lucas.
+- **Qué:** 5 s la primera vez que ese jefe se ve en el guardado y 3 s en apariciones posteriores. La secuencia ocurre en la primera oleada con jefe de cada partida; reintentar inicia otra partida.
+- **Por qué:** presenta con más tiempo al enemigo desconocido y reduce repeticiones posteriores. El dato `seen_enemies` ya guardado es la fuente para distinguir ambas duraciones.
+- **Alternativas descartadas:** duración única de 3 s o 5 s; mostrarla cada vez que entra un jefe; mostrarla una sola vez en la vida del guardado.
+- **Qué cambia:** RF-666 y RF-668; no agrega clave ni cambia `SAVE_VERSION`.
+
+## D-190 · Salteo, modos, tarjeta y opción
+
+- **Fecha:** 2026-10-23 · **Estado:** decidida · **Decidió:** Lucas.
+- **Qué:** salteo con cualquier tecla o toque desde 0,3 s; `P` saltea y deja la partida pausada. No sale en Asedio ni en modo de pruebas; queda para campaña normal iniciada desde el menú. Se omite la tarjeta «Nuevo enemigo» para jefes, según aclaración posterior de Lucas y el comportamiento de PR #59. La opción existente se renombra «Presentación de los jefes» dentro de «Partida y ayudas», conservando su clave.
+- **Por qué:** conserva un control rápido, respeta la pausa explícita y evita duplicar la presentación del jefe con la tarjeta.
+- **Alternativas descartadas:** toque/clic solo sobre un botón; mostrar la tarjeta después; incluir Asedio o modo de pruebas; crear una opción nueva y migrar guardados.
+- **Qué cambia:** RF-666, RF-669, RF-670 y RF-672.
+
+## D-191 · Fondos propios y animación por código
+
+- **Fecha:** 2026-10-23 · **Estado:** decidida · **Decidió:** Lucas.
+- **Qué:** fondos propios para el Jefe actual, el Coloso y el jefe supremo del nivel 15; movimiento por código sobre ilustraciones quietas, sin marca de entrada en el mapa. El arte del jefe supremo espera la definición de T243.
+- **Por qué:** Lucas pidió fondos asociados a cada jefe y aprobó la animación programática sobre imágenes estáticas.
+- **Alternativas descartadas:** fondo genérico teñido; animación cuadro a cuadro; destello en el punto de entrada.
+- **Qué cambia:** RF-671 y las fichas T367/T461–T463; el arte queda sujeto a aprobación de Lucas.
+
+## D-198 · El mapa es la vista inicial en PC y celular, con migración de una vez
+
+- **Fecha:** 2026-10-23 · **Estado:** decidida por Lucas; contrato técnico de T459 pendiente de su revisión. **Decidió:** Lucas, T449 y ampliación.
+- **Qué:** mapa primero en ambas interfaces, tarjetas disponibles y preferencia persistida; todos los archivos anteriores pasan al mapa una vez con `settings.selector_map_migrated`, sin subir `SAVE_VERSION`.
+- **Por qué:** Lucas pidió el mapa como presentación principal y aclaró que también llega al celular. El guardado actual no distingue «elegí tarjetas» de su valor inicial.
+- **Alternativas descartadas:** tarjetas iniciales, mapa solo PC, migrar solo guardados nuevos, intentar deducir elección previa, quitar tarjetas.
+- **Enmienda:** D-178/RF-645/RF-653; RF-687/RF-689. No convierte una aprobación de dirección en aprobación del arte nuevo.
+
+## D-199 · En el mapa se selecciona antes de jugar; un dedo desplaza
+
+- **Fecha:** 2026-10-23 · **Estado:** decidida · **Decidió:** Lucas.
+- **Qué:** clic/toque solo selecciona; doble clic y segundo clic no inician; Jugar o Enter confirman. Tarjetas conservan activación con un clic. En celular, un dedo desplaza con umbral y Jugar permanece fijo abajo; scroll solo si hay desborde.
+- **Por qué:** permite explorar el planeta sin entrar por accidente y mantiene disponible la confirmación al desplazarlo.
+- **Alternativas descartadas:** clic que inicia, doble clic para iniciar, trasladar selección previa a las tarjetas, dejar celular fuera, arrastre que termina seleccionando, forzar scroll cuando todo entra.
+- **Enmienda:** RF-648; RF-688/RF-690. Umbral y área táctil se toman del sistema vigente, no se inventa otro gesto.
+
+## D-200 · Geografía orgánica en serrucho de oeste a este
+
+- **Fecha:** 2026-10-23 · **Estado:** dirección decidida; muestra y coordenadas pendientes de aprobación 🎨 · **Decidió:** Lucas.
+- **Qué:** revisar el mapa planetario actualmente integrado por T428 (basado en la muestra T427): aterrizaje en tierra, avance en serrucho oeste→este, biomas canónicos y regiones orgánicas; zonas no conquistadas más grises. Codex prepara una revisión visual antes de integrar esos cambios; ancho y posiciones definitivos se revisan en esa muestra. Se conservan los elementos ya aprobados del mapa aplicado.
+- **Por qué:** el aterrizaje actual cae fuera de tierra y el anillo artificial no expresa el avance pedido.
+- **Alternativas descartadas:** mover solo el aterrizaje, conservar anillo, forzar ancho grande/scroll, convertir el planeta en mapa jugable o inventar otro canon.
+- **Enmienda:** D-178/D-179, muestra T427 e integración T428; conserva RF-647/RF-652 y agrega RF-691. T427 queda como antecedente de la versión aplicada por T428; la revisión de T469 parte del mapa aplicado, no reemplaza la base aprobada.
+
+## D-201 · Asedio se abre por victoria del mismo mapa de campaña
+
+- **Fecha:** 2026-10-23 · **Estado:** decidida; migración técnica pendiente de revisión T459 · **Decidió:** Lucas.
+- **Qué:** Asedio N se abre al ganar campaña N, sin depender de Asedio N−1. Se conserva acceso anterior de los guardados que ya jugaron Asedio y sus récords; pruebas abre todo y usa su archivo separado. Marcas aditivas `siege_access_migrated` y `siege_legacy_unlocked` conservan derechos anteriores de una vez, no resultados de pruebas.
+- **Por qué:** Lucas eligió vincular el regreso al lugar con una victoria previa, conservando el acceso de quienes ya usaron el modo. No cambia dificultad ni relata un contraataque.
+- **Alternativas descartadas:** abrir todo desde el principio, secuencia propia de Asedio, abrir toda la solapa al ganar otro nivel, cerrar mapas ya accesibles, copiar progreso de pruebas a normal.
+- **Enmienda:** RF-390/RF-496, solo acceso de Asedio; RF-692/RF-693. La confirmación humana del 7 al 101 % queda en G5.
+
+## D-202 · Absorber T235 y limpiar el selector sin inventar otra jerarquía
+
+- **Fecha:** 2026-10-23 · **Estado:** decidida en su alcance; solución técnica de scroll y selector de récords propuesta para revisión · **Decidió:** Lucas absorbe T235; T459 concreta su remanente.
+- **Qué:** solapas alcanzables con más de dos modos propios y top 5 separado por modo. Se mantiene el orden RF-389. Se eliminan rótulos redundantes de estados del mapa y ceros iniciales de los números de nivel en todas las pantallas; ids/rutas permanecen.
+- **Por qué:** quedan dos deudas reales de T235 y Lucas pidió limpiar mapa y números. El informe recomendaba un grupo Desafíos, pero la sección final de decisiones no lo aprueba.
+- **Alternativas descartadas:** declarar T235 implementada al absorberla, fusionar campaña/modos, adoptar Desafíos por inferencia, quitar candados o información de por qué no se puede jugar, renombrar `level_01`.
+- **Refs:** RF-694/RF-695; T473/T474. T235 queda retirada como ejecución independiente, conservando el historial de lo hecho por T258.
+
+## D-203 · Conquista de tres estrellas: insignias y veinte postes cosméticos
+
+- **Fecha:** 2026-10-23 · **Estado:** regla decidida; posiciones de 15 mapas y muestras de insignias pendientes de Lucas · **Decidió:** Lucas, ampliación de T449.
+- **Qué:** en selector, sin victoria fondo rebelde, 1–2 estrellas mitad rebelde/mitad jugador, 3 estrellas jugador. En partida, 1 poste en niveles 1–10 y 2 en 11–15; rebelde hasta 2 estrellas y jugador con 3, sin estado intermedio. Solo casillas permanentemente no utilizables; propuesta y aprobación por cada mapa. La receta del editor es siempre estética y se rescata en la parte del jugador.
+- **Por qué:** Lucas unificó la cantidad para toda la campaña y corrigió el poste del 6, que hoy cambia con cualquier victoria. Es representación de estrellas existentes, sin progreso adicional.
+- **Alternativas descartadas:** solo niveles 2/3 y últimos cinco, cambiar con cualquier victoria, poste partido con 1–2 estrellas, ocupar casillas construibles/removibles, dar bonus por receta, aprobar ubicaciones por el OK a esta spec.
+- **Enmienda:** RF-656/RF-657/RF-664, D-181/D-182 y alcance de M74; RF-695 a RF-697. No aprueba un emblema canónico nuevo ni habilita editor mobile.
+
+## D-192 · «Ver todo»: solo la tecla en PC, lupa flotante en el celular y un aviso de una vez
+
+- **Fecha:** 2026-10-23 · **Estado:** decidida, enmendada por D-207 (sin implementar en `main`; código T464 en PR #70) · **Decidió:** Lucas, sobre las propuestas de T451 §1.
+- **Qué:** en la PC desaparece el botón «Ver todo» y queda solo la tecla de `view_all` (V por omisión, configurable como hoy). En el celular se conserva un botón flotante, ahora con una lupa, que aparece **solo al hacer zoom** (no por desplazar el mapa sin acercarlo). El aviso de una línea, sin pulso, sale una sola vez al aumentar el zoom; D-207 aclara que alejar o desplazar sin acercar no lo activa; se recuerda con `ui_prefs.view_all_hint_seen`. Textos aprobados por Lucas: PC «Acercaste el mapa. Apretá V para volver a verlo entero.»; celular «Acercaste el mapa. Tocá la lupa para volver a verlo entero.»
+- **Por qué:** el problema de T451 era que «Ver todo» no se entendía (podía leerse como «mostrar todo el HUD»); Lucas prefirió sacar el botón en PC, donde hay teclado y no hace falta tapar el mapa, y comunicar mejor el del celular, donde no hay otra forma de volver.
+- **Alternativas descartadas:** mantener botón y tecla en la PC (lo que decía D-161); cambiar el rótulo a «Ver mapa completo» o «Centrar mapa»; un pulso de resalte la primera vez; esconder el botón detrás de un menú.
+- **Qué cambia:** enmienda D-161 (la parte del botón de PC) y RF-545/RF-612; RF-674 a RF-676 de `01-spec.md`. La acción `view_all`, la V, RF-613, RF-614 y RF-615 no cambian.
+- **Riesgos aceptados:** en la PC, quien corre el mapa con el botón central y no conoce la V depende del aviso para volver. El ícono de la lupa es arte nuevo y necesita la aprobación de Lucas.
+
+
+## D-193 · Panel de torre: propuesta A, sin «Al nivel N:» ni «Nivel N/3», cada dato una vez
+
+- **Fecha:** 2026-10-23 · **Estado:** decidida (sin implementar; T465) · **Decidió:** Lucas, sobre T451 §2.4.
+- **Qué:** se elimina el bloque «Al nivel N:»; lo que cambia con la mejora se muestra en su lugar con «antes → después» (daño, cadencia, alcance y efectos); un único formato decimal con coma; se quita el texto «Nivel N/3» y los tres rectángulos de la tarjeta de nivel pasan a bronce, plata y oro.
+- **Por qué:** T451 midió que la misma información salía dos y tres veces en menos de 160 px (R1 a R3) y con dos formatos decimales (I1). El nivel ya se ve en los indicadores de la torre y en la tarjeta, así que escribirlo repetía otra vez; la tarjeta de tres colores de metales hace que el avance se lea de un vistazo.
+- **Alternativas descartadas:** la conservadora (solo borrar «Al nivel N:» y dejar el bloque con «Mejora:»); escribir «Nivel N/3» al lado de la tarjeta.
+- **Qué cambia:** enmienda RF-616 y RF-650; RF-677; los tests que fijan el texto de la vista previa. El celular (RF-617) conserva su renglón «Al mejorar:», pero toma el formato decimal único.
+- **Riesgos aceptados:** que «0,75 → 0,85/s» no entre en la columna de 270 px (no se midió); el plan lo resuelve achicando la fuente de esas filas o pasando la cadencia a una línea propia.
+
+## D-194 · El alcance se oculta salvo en el fantasma; opción Oculto / Sutil / Completo, Oculto por omisión
+
+- **Fecha:** 2026-10-23 · **Estado:** decidida (sin implementar; T466) · **Decidió:** Lucas, sobre T451 §3.
+- **Qué:** el fantasma proyecta siempre el alcance completo; la torre construida no lo muestra al seleccionarla. Una opción de Opciones, «Círculo de alcance» con **Oculto / Sutil / Completo**, gobierna cómo se ve para la torre seleccionada; **Oculto** es el valor por omisión, también en guardados viejos. Se guarda como `settings.range_display` (entero), sin subir `SAVE_VERSION`.
+- **Por qué:** el círculo completo al tocar una torre tapaba el mapa y se confundía con el arco de apoyo; al construir, en cambio, es la única referencia (y en el celular no hay mouse). Tres valores son más fáciles de entender que los cinco que proponía T451.
+- **Alternativas descartadas:** Sutil o Completo por omisión; los valores «Solo al construir», «Solo al pasar el mouse» (no existe en el celular) y «Oculto también el fantasma» (construir a ciegas); dejar el círculo como estaba.
+- **Qué cambia:** enmienda RF-40, RF-73 y RF-113; RF-678, RF-679 y RF-685.
+- **Riesgos aceptados:** un jugador nuevo ya no ve el alcance al tocar una torre, solo el número y la ampliación al mejorar; el aspecto de Sutil sobre cada fondo no se probó.
+
+## D-195 · La ampliación del alcance vive en «Mejorar»: hover en PC, dos toques en el celular; la animación es cosmética
+
+- **Fecha:** 2026-10-23 · **Estado:** decidida (sin implementar; T467) · **Decidió:** Lucas, sobre T451 §3 (el «dos toques» lo aceptó Lucas).
+- **Qué:** el alcance reaparece como parte del efecto de la mejora y, en la PC, al pasar el mouse sobre «Mejorar» (la ampliación, animada). En el celular el primer toque en «Mejorar» muestra la ampliación y el segundo confirma. La mejora se aplica al instante: la animación es solo presentación, queda prendida por omisión y se apaga con la casilla «Animaciones de mejora» que ya existe.
+- **Por qué:** sin círculo permanente, la mejora es el momento en que más importa ver hasta dónde crece el alcance; el celular no tiene mouse, así que el primer toque cumple el papel del hover. Reusar `upgrade_fx` evita una opción más.
+- **Alternativas descartadas:** una espera real o cuenta atrás al mejorar (cambiaría el juego); una casilla nueva solo para la animación del alcance; mostrar la ampliación solo con el valor Completo.
+- **Qué cambia:** enmienda RF-593 y RF-512; RF-680 a RF-682. El bloqueo de 0,35 s de RF-512 se conserva.
+- **Riesgos aceptados:** en el celular una mejora cuesta un toque más (el texto del paso «Mejorar» del tutorial del nivel 1, M63, no menciona el segundo toque, y quien juega rápido pierde un toque); no se probó en un teléfono real.
+
+## D-196 · El arco celeste del Estandarte mecánico sigue la opción de alcance
+
+- **Fecha:** 2026-10-23 · **Estado:** decidida (sin implementar; T466) · **Decidió:** Lucas, sobre T451 §3.4 (que proponía lo contrario: no apagarlo).
+- **Qué:** el arco de las torres de apoyo (`support_only`) deja de ser fijo: con Oculto no se dibuja, con Sutil o Completo se ve siempre.
+- **Por qué:** Lucas decidió que el arco siga la misma opción; así una sola regla gobierna todos los círculos de alcance y no hay una excepción que explicar.
+- **Alternativas descartadas:** dejarlo siempre visible (propuesta de T451, porque indica a quién apoya); un segundo ajuste solo para el arco.
+- **Qué cambia:** el arco de `tower.gd`; RF-683.
+- **Riesgos aceptados:** con el valor por omisión nadie ve a quién da apoyo el Estandarte sin seleccionarlo y mejorarlo; es un cambio de información visible en un guardado que ya existe.
+
+## D-197 · Opciones en cinco grupos; «Interfaz» y «Automática» en Avanzado
+
+- **Fecha:** 2026-10-23 · **Estado:** decidida (sin implementar; T468) · **Decidió:** Lucas, sobre T451 §4.
+- **Qué:** Sonido, Pantalla, Partida y ayudas, Controles (solo PC) y Avanzado, con la distribución de RF-684. «Interfaz» queda en Avanzado con Automática por omisión. El orden se declara en una lista por grupo en vez de `move_child` relativos.
+- **Por qué:** «Visualización» tenía nueve filas, de las cuales solo tres eran de pantalla, y el orden era el de llegada. Lucas decidió que «Interfaz» (con Automática por omisión) quede en Avanzado.
+- **Alternativas descartadas:** «Interfaz» en Pantalla (propuesta de T451); el nombre «Acerca de y pruebas»; esconder «Controles» mientras tenga una sola tecla (Lucas aprobó el grupo); «Controles» vacío visible en el celular.
+- **Qué cambia:** enmienda RF-113, RF-576, RF-593, RF-607, RF-614 y RF-644 (de «debajo de…» a «en el grupo…»); RF-684; los tests de posición.
+- **Riesgos aceptados:** quien necesite forzar la interfaz de celular o de PC debe buscarla en «Avanzado»; la distribución anterior en dos columnas no se midió en 720 px.
+- **Enmienda visual:** D-208 conserva las cinco categorías pero cambia su presentación a solapas superiores, a pedido posterior de Lucas.
+
+## D-204 · Pintar fuera del marco lógico sin pasar el juego a expand
+
+- **Fecha:** 2026-10-23 · **Estado:** aprobada por Lucas; host persistente con `SubViewportContainer` autorizado para T476 el 2026-10-23.
+- **Qué:** las franjas se rellenan con dibujo temático manteniendo tablero/HUD en 1280×720 con escala uniforme. Una superficie física cubre la ventana y aloja un viewport lógico centrado; el render del contenido se adapta al tamaño del marco y el `SubViewportContainer` reenvía la entrada dentro de sus límites. El contenido jugable no usa `expand`.
+- **Por qué:** no se puede poner una imagen en las franjas actuales con un CanvasLayer dentro de `keep`. Lucas pidió imagen y preservar la zona jugable; T450 registra «no se pasa a expand». Lucas aprobó esta arquitectura después de revisar sus efectos en escenas, input y transiciones.
+- **Alternativas descartadas:** `expand` jugable con HUD elástico; solo color liso como solución definitiva; zoom para tapar franjas; una ventana de fondo separada del juego; dibujar dentro de keep y afirmar que cubre fuera; keep_width/height que recortan HUD.
+- **Refs:** RF-699/RF-702. Revisión de scope obligatoria en T476: si alojar escenas/overlays exige alterar mecánicas, se informa y no se compensa agrandando mapa/HUD.
+
+## D-205 · Fondo por terreno como más allá del mapa, fijo y recortado en ejecución
+
+- **Fecha:** 2026-10-23 · **Estado:** dirección decidida por Lucas; muestras/encuadres pendientes 🎨.
+- **Qué:** fondo temático por terreno del nivel, fijo respecto del zoom, recorte uniforme en ejecución y tope absoluto de zoom 1,0. Codex prepara muestra de composición por terreno antes de finales/integración; al aprobarse las muestras del PR #66, T478 las integra. El tope rige en PC y celular, aunque el dato de máximo sea mayor. Sin nivel se conserva respaldo liso externo y fondo de menú actual.
+- **Por qué:** Lucas pidió continuidad del paisaje fuera del mapa sin más casillas ni movimiento con la cámara. El recorte evita duplicar archivos por aspecto y 1,0 conserva la escala jugable.
+- **Alternativas descartadas:** fondo que se mueve con zoom/pan; negro/color liso definitivo para partidas; estirar sprites; recortes de archivo por resolución; aumentar zoom; inventar geografía/casillas fuera del mapa.
+- **Refs:** RF-700/RF-701; T477 muestra, T478 integración después del OK. La aprobación funcional no aprueba un fondo ni su encuadre.
+
+## D-206 · Láminas de intro en la carga, condicionadas al costo real en celular
+
+- **Fecha:** 2026-10-23 · **Estado:** elección de Lucas condicionada a T454; no habilita implementación de T479 todavía.
+- **Qué:** una lámina de intro por cambio aceptado, rotación sin repetir consecutiva con al menos dos válidas y recorte runtime; GameFlow la elige e inyecta en el núcleo. Color/barra primero, imagen opcional asíncrona y sin demorar la transición. Medir primero en teléfono real y obtener aprobación de Lucas con esos datos.
+- **Por qué:** reutiliza ilustraciones aprobadas; la medición headless PC de T450 no determina costo ni memoria reales en Android. Cargar la imagen síncronamente antes de mostrar la capa dañaría el objetivo de M64.
+- **Alternativas descartadas:** asumir tiempos Android a partir de PC; habilitar sin medir; poner rutas de intro en SceneTransition; cargar siete imágenes juntas; esperar el fundido antes de continuar; generar archivos precortados; reducir/importar a otra resolución sin decisión.
+- **Enmienda:** RF-580, lista de exclusiones M64 y D-133, solo admisión de imagen opcional. RF-581–588 mantienen independencia, exclusión mutua, bloqueo, pausa, tiempo mínimo y fallos. RF-703–706; T479 depende de T454 + aprobación escrita, además de T460.
+
+## D-207 · Aviso de cámara solo al acercar
+
+- **Fecha:** 2026-10-24 · **Estado:** decidida y registrada en RF-676; aplicación en código en T464 · **Decidió:** Lucas, al precisar la consulta sobre el momento del aviso.
+- **Qué:** el aviso de una vez se activa únicamente cuando aumenta el zoom. Alejar y desplazar el mapa sin acercar no lo activa. Si el mapa se desplazó sin que apareciera el aviso, un acercamiento posterior lo muestra, salvo las exclusiones vigentes de RF-676. Se conservan los textos aprobados, la duración aproximada de 3 s y la marca aditiva por guardado.
+- **Por qué:** «Acercaste el mapa» describe el gesto de acercamiento, y el botón del celular también aparece al acercar. Avisar por un paneo o por alejar daría una instrucción que no corresponde al gesto.
+- **Alternativa de comportamiento descartada:** dispararlo ante cualquier cambio de encuadre (zoom hacia adentro o afuera, o paneo). **Alternativa técnica descartada:** dispararlo solo cuando el botón celular pasa de oculto a visible, porque no aplica a PC y puede perder un acercamiento ocurrido durante una exclusión como el tutorial.
+- **Qué cambia:** enmienda RF-676, D-192 y el plan de T464. No modifica RF-674/RF-675, textos, guardado, duración ni exclusiones.
+
+
+## D-208 · Opciones navega por solapas superiores
+
+- **Fecha:** 2026-10-24 · **Estado:** decidida por Lucas; implementación en T481.
+- **Qué:** las cinco categorías de RF-684 se muestran como solapas horizontales arriba de Opciones. Se ve una página por vez y la primera solapa activa es «Sonido». En celular hay cuatro solapas: «Controles» se omite. «Volver» queda fijo y la página puede desplazarse dentro del panel. No cambian las filas, sus categorías, valores ni claves de guardado.
+- **Por qué:** Lucas pidió una navegación familiar, con pestañas en la parte superior, como es común en juegos; la lista de categorías de D-197 sigue siendo útil, pero las dos columnas o los títulos en una lista larga no presentan el acceso como él esperaba.
+- **Alternativas descartadas:** mantener las secciones apiladas; repartirlas en dos columnas en celular; renombrar o volver a agrupar las opciones.
+- **Qué cambia:** RF-708 y la presentación de RF-684; solo navegación y visibilidad del contenido.
+- **Riesgos aceptados:** una preferencia queda en otra solapa hasta que se navega a ella; la anchura de cinco solapas debe seguir legible en ventanas angostas y el contenido alto conserva el scroll de RF-555.
+
+## D-209 · Atlas que se descubre por zonas, derivado del desbloqueo existente
+
+- **Fecha:** 2026-10-25 · **Estado:** propuesta de Claude sobre la idea de Lucas (T485); Lucas confirmó los cuatro puntos abiertos el 2026-10-25 (opciones recomendadas); falta su OK al PR de T486 antes de implementar · **Propone:** Claude (T486).
+- **Qué:** el atlas muestra la zona A (1–5) siempre, la B (6–10) cuando el nivel 6 está desbloqueado y la C (11–15) cuando lo está el 11. El descubrimiento se **calcula** a partir de `levels[*].unlocked`; no se guarda nada. Una zona sin descubrir se dibuja gris/niebla y sus regiones no se pueden seleccionar ni reciben foco. Descubrir una zona no abre niveles: el acceso sigue siendo N→N+1.
+- **Por qué:** Lucas quiere que el mapa se vaya revelando por grupos de cinco, pero sin cambiar la regla de acceso de RF-111. Derivarlo evita claves nuevas, migraciones y guardados incoherentes: un guardado viejo ya muestra lo que le corresponde, y el modo de pruebas (todo desbloqueado) muestra las tres zonas sin lógica extra.
+- **Alternativas descartadas:** (a) **desbloquear cinco niveles de golpe** al entrar en una zona (contradice RF-111 y cambia la dificultad/progresión); (b) **guardar una marca por zona** (`zones_seen`): obliga a migrar guardados viejos, puede quedar desfasada del progreso y duplica una verdad que ya está en `unlocked`; (c) **descubrir por conquista** (ganar los cinco niveles de la zona anterior): retrasa el mapa respecto del acceso real, porque el 6 se abre con solo ganar el 5; (d) mostrar números con candado en la zona oculta (Lucas lo descartó el 2026-10-25); (e) animación de revelado con marca guardada (Lucas la descartó para esta versión).
+- **Qué cambia:** agrega RF-709 a RF-711. No enmienda RF-111 ni RF-695. Precisa RF-688 (foco) y RF-691 (el atlas). La vista de tarjetas no cambia.
+- **Riesgos aceptados:** si más adelante Lucas quiere una animación de una sola vez habrá que agregar una clave aditiva; hasta entonces la zona simplemente aparece al volver al mapa. El tono gris de lo no descubierto sigue pendiente de la muestra T485/T469.
+
+## D-210 · Mejorar los assets de los niveles altos con muestras aprobadas antes de integrar
+
+- **Fecha:** 2026-10-25 · **Estado:** propuesta de Claude sobre un pedido de Lucas; sus ocho preguntas de M79 siguen abiertas (con recomendación escrita) y nada se integra hasta su aprobación.
+- **Decisión propuesta:** abrir M79 (RF-712 a RF-714) como una mejora **solo de arte** de la decoración de los niveles altos (10 a 15, y 8 y 9 por la piedra con la A si Lucas lo confirma): la piedra con la A (`roca_marcada` y `simbolo_ruina`), los pinos nevados (nivel 13) y las cabezas de ganado (`huesos`, desierto). Flujo con compuerta 🎨: inventario → muestras por caso (para las cabezas, al menos cuatro, con cabezas de «monstruo» o de criatura alienígena) → Lucas elige → integración. Estética **actual** (atlas de Cántaro M76/T471, postes T437/T475, decoración renderizada T277, UI vigente), nunca la vieja.
+- **Por qué:** Lucas ve que esos tres dibujos, planos y de M4/M5, desentonan con la decoración y los postes dimensionales ya integrados. Las muestras primero evitan integrar arte que él no eligió, igual que en T267b y T437.
+- **Alternativas descartadas:** (a) **rehacer todos los dibujos planos** del tramo (cactus, roca roja, columna, bloque, estatua, campamento) sin que Lucas lo pidiera: ensancha el alcance y toca la identidad de las ruinas del 14; queda como pregunta 8; (b) **integrar la primera propuesta** sin elegir: contradice el pedido de «varios ejemplos» y la regla de aprobación 🎨; (c) **cambiar el significado o la posición de la A** (por ejemplo, sacarla de la roca): es canon aprobado en G2, solo se toca su ejecución gráfica; (d) **modificar mapas o leyendas** para acomodar el arte: rompe «solo arte», los tests de cada nivel y los postes de T475; (e) **usar Codex** para el arte final: Lucas lo descartó para este trabajo; las muestras las propone Sonnet y decide Lucas; (f) **volver al SVG plano** porque es más simple: choca con el requisito de estética actual y con la guía §4; (g) **la palabra «alien» en los textos**: el canon fija «monstruo» como palabra general (§4) y evita «aliens» (§8), así que «alien» es solo una pista de forma para las muestras.
+- **Qué cambia:** agrega RF-712 a RF-714. No enmienda RF previos. Cuando se integre, hay que actualizar la tabla de la guía de arte §4 con los archivos nuevos y los tests que listan los dibujos. No toca `SAVE_VERSION`.
+- **Riesgos aceptados:** una cabeza muy extraña puede leerse como enemigo o como especie nueva (se juzga en la hoja a 34 px y queda la pregunta 6); el arte renderizado pesa más que el SVG y no se afirma nada sobre rendimiento; si el poste cubre una señal (niveles 8 y 9) el arte nuevo de esa señal no se verá en esa casilla.
+
+## D-211 · Halo punteado para «disponible» y tarjetas con las mismas insignias
+
+- **Fecha:** 2026-10-25 · **Estado:** pedido de Lucas (T499 y T501) · **Propone:** Claude.
+- **Qué:** con las insignias V3 (T474), un nivel desbloqueado sin victoria usa la insignia rebelde y se veía igual que uno ya jugado. Se lo marca con un halo dorado punteado (24 rayitas, radio 28,5 px a escala del mapa: afuera del borde de 26 px de la insignia y adentro del aro de selección de 31 px; el foco blanco queda en 36 px). La vista de tarjetas dibuja la misma insignia, número, candado y halo con el mismo código (`CampaignRegion.draw_badge`/`draw_halo`) a escala 0,69.
+- **Por qué:** RF-695 pide que las dos vistas coincidan y que el estado no dependa solo del color; el halo es una señal de forma, estática, que no pelea con la selección (continua) ni con el foco (blanco). Reutilizar el mismo código evita que mapa y tarjetas se desalineen.
+- **Alternativas descartadas:** (a) halo como en la muestra T469 (radio 22,7 px, **dentro** de la insignia real de 26 px: queda tapado); (b) pulso o brillo animado (RF-710 prohíbe la animación); (c) un cuarto color de insignia (arte nuevo que nadie aprobó, D-203); (d) dibujar las tarjetas con arte propio (se desalinean con el mapa).
+- **Qué cambia:** agrega RF-715. No toca RF-111, RF-710 ni la receta del editor (RF-697). La tarjeta lleva un cuadro de 40 px arriba a la izquierda y baja el nombre del nivel a esa altura.
+- **Riesgos aceptados:** en una tarjeta desktop el número de la insignia mide ~10 px; en celular real podría estar al límite y no se probó. Con las coordenadas actuales el aro de selección (31 px) y el de foco (36 px) de una región pisan a su vecina en el par 12–13 (ver T500): no se resolvió porque mover un nodo toca el atlas aprobado.
+
+## D-213 · Separar los pares 12–13 con más escala y el nodo 13 al este
+
+- **Fecha:** 2026-10-26 · **Estado:** decidido por Lucas (2026-10-26, combinando las opciones A y B de T500) · **Propone:** Claude (T500 midió y planteó A, B y C).
+- **Qué:** (A) `CampaignMapView.MAP_SCALE` sube de 1,14 a **1,26**; (B) el nodo 13 del atlas pasa de (1000, 287) a **(1006, 287)** (6 unidades al este) y sus dos curvas vecinas se corren igual para que las tangentes no cambien (tramo 12→13: segundo control (984, 280) → (990, 280); tramo 13→14: primer control (1023, 293) → (1029, 293)). El resto del atlas, la costa, el fondo y los otros 14 nodos no se tocan.
+- **Por qué:** con 1,14 y el nodo en 1000, los nodos 12 y 13 quedaban a 56,2 px: las insignias de 26 px no se pisaban (4,2 px de aire), pero el aro de selección (31 px) y sobre todo el de foco (36 px) de una región entraban en la insignia de la vecina. Con 1,26 y el nodo corrido quedan a **69,6 px**: 17,6 px entre bordes de insignia y **7,6 px** entre el aro de foco de una y la insignia de la otra. Es el par más apretado; los demás tienen entre 13,6 y 51,7 px con foco.
+- **Alternativas descartadas:** (C sola) achicar los aros a borde + 3 y borde + 6: cambia lo que Lucas aprobó en T469 y no resuelve nada más; (dejarlo) aceptar el cruce de aros en 12–13: es justo el par que se ve al terminar la campaña, con foco de teclado o de mando; (A sola) llegar a 1,26 deja el par 12–13 en 62 px, es decir sin aire entre aro de foco e insignia vecina; (B sola) 6 unidades al 1,14 dan 62,9 px, con apenas 0,9 px de holgura con foco.
+- **Qué cambia:** el lienzo del mapa pasa de 1413,6 a **1562,4 px** de ancho (472 px más que la vista de 1090: hay más desplazamiento horizontal en PC, es esperado). La altura (380 px) no cambia; la franja del atlas visible arranca igual en `MAP_TOP` = 160 y ahora cubre 301,6 unidades de alto en lugar de 333,3. No cambia ningún RF (RF-690 sigue pidiendo áreas táctiles de 56 px sin pisarse; ahora ni los aros se pisan). El fondo (`assets/ui/campaign_map_background.svg`) no cambia: no dibuja nodos ni ruta.
+- **Riesgos aceptados:** (1) **los rótulos** de 82 px («10 · La mina vieja», «11 · Puesto sec…», «12 · El cañadón», «13 · Paso alto») **siguen montándose** porque los nodos están a 70–80 px: no se resolvió y no se implementa sin decisión de diseño (ver T502); (2) más desplazamiento en celular; (3) la máscara G2 (T488) y cualquier arte futuro del mapa deben usar estas coordenadas y esta escala.
+

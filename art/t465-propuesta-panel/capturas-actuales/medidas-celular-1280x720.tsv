@@ -1,0 +1,36 @@
+caso	bloque	y_logico	alto_logico	ancho_logico	alto_pantalla	nota
+cannon-n1	StatusText	626	127	265	127	renglones 5 (visibles 5) · renglón más ancho sin cortar 446 px · entra · Cañón ⏎ Nivel 1 de 3  ●○○  ·  Daño 20  ·  Cadencia 0.60  ·  Alcance 3 ⏎ Al mejorar: daño 20 → 32 · área 1 → 1,2
+cannon-n1	BottomCancelPlacement	657	64	64	64	
+cannon-n1	MobileTargeting	626	127	175	127	Apuntar: Primero
+cannon-n1	MobileUpgrade	626	127	196	127	Mejorar → N2 ⏎ 110 de oro
+cannon-n1	MobileSell	626	127	150	127	Vender
+tesla-n1	StatusText	626	127	265	127	renglones 5 (visibles 5) · renglón más ancho sin cortar 446 px · entra · Eléctrica ⏎ Nivel 1 de 3  ●○○  ·  Daño 13  ·  Cadencia 0.75  ·  Alcance 2 ⏎ Al mejorar: daño 13 → 19 · disp/s 0,75 → 0,85
+tesla-n1	BottomCancelPlacement	657	64	64	64	
+tesla-n1	MobileTargeting	626	127	175	127	Apuntar: Primero
+tesla-n1	MobileUpgrade	626	127	196	127	Mejorar → N2 ⏎ 120 de oro
+tesla-n1	MobileSell	626	127	150	127	Vender
+frost-n1	StatusText	626	127	265	127	renglones 5 (visibles 5) · renglón más ancho sin cortar 437 px · entra · Hielo ⏎ Nivel 1 de 3  ●○○  ·  Daño 2  ·  Cadencia 1.00  ·  Alcance 2 ⏎ Al mejorar: alcance 2,5 → 3 · frenado 40 % → 50 %
+frost-n1	BottomCancelPlacement	657	64	64	64	
+frost-n1	MobileTargeting	626	127	175	127	Apuntar: Primero
+frost-n1	MobileUpgrade	626	127	196	127	Mejorar → N2 ⏎ 80 de oro
+frost-n1	MobileSell	626	127	150	127	Vender
+frost-n3	StatusText	634	75	265	75	renglones 3 (visibles 3) · renglón más ancho sin cortar 437 px · entra · Hielo ⏎ Nivel 3 de 3  ●●●  ·  Daño 4  ·  Cadencia 1.00  ·  Alcance 3
+frost-n3	BottomCancelPlacement	640	64	64	64	
+frost-n3	MobileTargeting	626	92	175	92	Apuntar: Primero
+frost-n3	MobileUpgrade	626	92	196	92	Nivel máximo (apagado)
+frost-n3	MobileSell	626	92	150	92	Vender
+disruptor-n1	StatusText	626	127	268	127	renglones 5 (visibles 5) · renglón más ancho sin cortar 437 px · entra · Disruptora ⏎ Nivel 1 de 3  ●○○  ·  Daño 5  ·  Cadencia 0.25  ·  Alcance 2 ⏎ Al mejorar: alcance 2,5 → 3 · s de pulso 2,5 → 3
+disruptor-n1	BottomCancelPlacement	657	64	64	64	
+disruptor-n1	MobileTargeting	626	127	172	127	Apuntar: Primero (apagado)
+disruptor-n1	MobileUpgrade	626	127	196	127	Mejorar → N2 ⏎ 100 de oro
+disruptor-n1	MobileSell	626	127	150	127	Vender
+basic-n1-sin-oro	StatusText	626	127	265	127	renglones 5 (visibles 5) · renglón más ancho sin cortar 437 px · entra · Ametralladora ⏎ Nivel 1 de 3  ●○○  ·  Daño 5  ·  Cadencia 2.00  ·  Alcance 3 ⏎ Al mejorar: daño 5 → 8 · disp/s 2 → 2,5
+basic-n1-sin-oro	BottomCancelPlacement	657	64	64	64	
+basic-n1-sin-oro	MobileTargeting	626	127	175	127	Apuntar: Primero
+basic-n1-sin-oro	MobileUpgrade	626	127	196	127	Faltan 25 de oro (apagado)
+basic-n1-sin-oro	MobileSell	626	127	150	127	Vender
+cannon-n1-armado	StatusText	626	127	265	127	renglones 5 (visibles 5) · renglón más ancho sin cortar 446 px · entra · Cañón ⏎ Nivel 1 de 3  ●○○  ·  Daño 20  ·  Cadencia 0.60  ·  Alcance 3 ⏎ Al mejorar: daño 20 → 32 · área 1 → 1,2
+cannon-n1-armado	BottomCancelPlacement	657	64	64	64	
+cannon-n1-armado	MobileTargeting	626	127	175	127	Apuntar: Primero
+cannon-n1-armado	MobileUpgrade	626	127	196	127	Confirmar → N2 ⏎ 110 de oro
+cannon-n1-armado	MobileSell	626	127	150	127	Vender

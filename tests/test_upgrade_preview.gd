@@ -129,11 +129,11 @@ func test_pc_panel_shows_the_preview_and_hides_it_at_max_level() -> void:
 	game.hud.tower_panel.show_tower(tower, 10, 9999)
 	var preview: Label = game.hud.tower_panel.find_child("UpgradePreview", true, false) as Label
 	assert_not_null(preview)
-	assert_true(preview.visible)
-	assert_true(preview.text.begins_with("Al nivel 2:"))
-	assert_true(preview.text.contains("→"))
-	assert_false(preview.text.contains("daño"), "el daño ya se integra con la estadística principal")
+	assert_false(preview.visible, "el cañón solo cambia daño y cadencia, que se muestran arriba")
+	assert_false(preview.text.contains("Al nivel"))
+	assert_false(preview.text.contains("Nivel 2/3"))
 	assert_eq((game.hud.tower_panel.get_node("%Damage") as Label).text, "5 → 8")
+	assert_eq((game.hud.tower_panel.get_node("%Rate") as Label).text, "2 → 2,5/s")
 	assert_eq((game.hud.tower_panel.get_node("%UpgradeButton") as Button).text, "Mejorar a nivel 2 (60)  [U]")
 	assert_eq((game.hud.tower_panel.get_node("%LevelCard") as HBoxContainer).tooltip_text, "Nivel actual: 1 de 3")
 	while tower.can_upgrade():
@@ -143,6 +143,59 @@ func test_pc_panel_shows_the_preview_and_hides_it_at_max_level() -> void:
 	assert_eq((game.hud.tower_panel.find_child("UpgradeButton", true, false) as Button).text, "Nivel máximo")
 	assert_eq((game.hud.tower_panel.get_node("%Damage") as Label).text, str(tower.stats().damage))
 	SaveManager.set_setting("ui_mode", original)
+
+
+func test_panel_shows_each_upgrade_value_once_for_cannon_tesla_ice_and_disruptor() -> void:
+	var panel := (load("res://scenes/ui/tower_panel.tscn") as PackedScene).instantiate() as TowerPanel
+	add_child_autofree(panel)
+	for id: String in ["cannon", "tesla", "frost", "fire", "disruptor"]:
+		var tower := (load("res://scenes/towers/tower.tscn") as PackedScene).instantiate() as Tower
+		tower.setup(_tower(id))
+		add_child_autofree(tower)
+		for level_index: int in tower.data.levels.size() - 1:
+			tower.level_index = level_index
+			panel.show_tower(tower, 0, 9999)
+			var preview := panel.find_child("UpgradePreview", true, false) as Label
+			var changes: Array[Dictionary] = UpgradeDeltas.preview(tower.data.levels, level_index, _table, 99)
+			var message: String = "%s nivel %d" % [id, level_index + 1]
+			assert_false(preview.text.contains("Al nivel"))
+			var full_text: String = "%s %s %s %s" % [panel.get_node("%Damage").text, panel.get_node("%Rate").text,
+				panel.get_node("%Range").text, panel.get_node("%Stats").text + " " + preview.text]
+			assert_false(full_text.contains("."), "%s: decimales con coma" % message)
+			if id == "frost" and level_index == 0:
+				assert_string_contains(panel.get_node("%Stats").text, "Duración del frenado: 2 s", "se conserva el dato que no cambió")
+			if id == "fire" and level_index == 0:
+				assert_string_contains(panel.get_node("%Stats").text, "Duración de quemadura: 3 s", "se conserva el dato que no cambió")
+			for change: Dictionary in changes:
+				var field: String = String(change["campo"])
+				if field == "damage":
+					assert_true(panel.get_node("%Damage").text.contains("%s → %s" % [UpgradeDeltas.format_value(change["antes"], change["formato"]), UpgradeDeltas.format_value(change["despues"], change["formato"])]), message)
+				elif field == "fire_rate":
+					assert_true(panel.get_node("%Rate").text.contains("%s → %s" % [UpgradeDeltas.format_value(change["antes"], change["formato"]), UpgradeDeltas.format_value(change["despues"], change["formato"])]), message)
+				elif field == "range_tiles":
+					assert_true(panel.get_node("%Range").text.contains("%s → %s" % [UpgradeDeltas.format_value(change["antes"], change["formato"]), UpgradeDeltas.format_value(change["despues"], change["formato"])]), message)
+				else:
+					assert_true(preview.text.contains(String(change["texto"])), "%s: %s una vez en antes → después" % [message, field])
+					assert_false(panel.get_node("%Stats").text.contains(TowerPanel._effect_prefix(field)), "%s: efecto vigente no duplica %s" % [message, field])
+
+
+## RF-677 (caso de borde del cierre de M75): en el nivel 3 no hay flechas ni decimales con punto. El Cañón de
+## nivel 3 mostraba «Área: radio 1.5» porque `TowerText.effects` usaba `%.1f`.
+func test_panel_at_level_three_has_no_arrows_and_no_decimal_point() -> void:
+	var panel := (load("res://scenes/ui/tower_panel.tscn") as PackedScene).instantiate() as TowerPanel
+	add_child_autofree(panel)
+	for id: String in ["cannon", "tesla", "frost", "disruptor"]:
+		var tower := (load("res://scenes/towers/tower.tscn") as PackedScene).instantiate() as Tower
+		tower.setup(_tower(id))
+		add_child_autofree(tower)
+		tower.level_index = tower.data.levels.size() - 1
+		panel.show_tower(tower, 0, 9999)
+		var full_text: String = "%s %s %s %s" % [panel.get_node("%Damage").text, panel.get_node("%Rate").text,
+			panel.get_node("%Range").text, panel.get_node("%Stats").text]
+		assert_false(full_text.contains("."), "%s nivel 3: decimales con coma (%s)" % [id, full_text])
+		assert_false(full_text.contains(UpgradeDeltas.ARROW), "%s nivel 3: sin flechas" % id)
+		assert_eq((panel.get_node("%UpgradeButton") as Button).text, "Nivel máximo")
+	assert_eq(TowerText.effects(_tower("cannon").levels[2])[0], "Área: radio 1,5")
 
 
 func test_mobile_status_line_shows_the_preview() -> void:

@@ -20,6 +20,8 @@ const BACK_TO_EDITOR: String = "Volver al editor"
 
 signal pause_changed(paused: bool)
 signal speed_changed(speed: float)
+## T478: la capa física recibe el tema una vez resueltos campaña, Asedio, comunidad o editor.
+signal level_theme_selected(theme: StringName)
 ## RF-323: las vidas infinitas cambiaron (con el botón o con el atajo); el panel marca su interruptor.
 signal dev_infinite_lives_changed(on: bool)
 
@@ -43,11 +45,12 @@ var camera_controller: CameraController
 var minimum_map_zoom: float = 1.0
 ## RF-217: se está probando el nivel del editor (no hay campaña: no se guarda nada).
 var testing: bool = false
-## M66 (RF-597): los números de la entrada de los jefes y lo que se lleva cuenta para no repetirla.
-var _boss_entrance_config: BossEntranceConfig
-var _boss_entrance_wave: int = -1
-var _boss_entrance_types: Array = []
-var _boss_entrance_last_s: float = BossEntranceRules.NEVER
+## M66 (RF-666 a RF-673): la presentación del jefe, mientras está abierta (null si no), si ya se mostró en esta partida,
+## si la partida ya estaba en pausa antes y si la app pasó a segundo plano durante ella (D-112).
+var presentation: BossPresentation
+var _presentation_shown: bool = false
+var _presentation_was_paused: bool = false
+var _presentation_interrupted: bool = false
 ## RF-184: el panel de pruebas. null si no es el modo de pruebas.
 var dev_panel: DevPanel
 ## RF-194: el Salón de la fama, mientras está abierto. null si no.
@@ -106,12 +109,17 @@ func _ready() -> void:
 		testing = true
 	elif level_data == null:
 		level_data = GameFlow.level(0)
+	level_theme_selected.emit(level_data.theme)
 
-	# RF-656, RF-657: el guardado se consulta solo acá y solo en la campaña; el resto conserva el poste enemigo.
-	var post_conquered: bool = campaign_level != null and campaign_level.id == &"level_06" \
-			and SaveManager.is_completed(campaign_level.id)
+	# RF-696, RF-697: el guardado se consulta solo acá y solo en la campaña normal; el resto (comunidad, modos, editor,
+	# modo de pruebas, escena suelta) conserva el poste rebelde fijo y no hereda la conquista ni la receta.
+	var post_conquered: bool = _is_normal_campaign() and CampaignPosts.is_player_variant(GameFlow.level_stars(GameFlow.current_index))
 	var banner_recipe: BannerRecipe = BannerRecipeStore.load_recipe() if post_conquered else null
-	level = level_data.build_map(post_conquered, banner_recipe)
+	# Los postes de 1–15 son del mapa de campaña (con o sin modo de pruebas); lo demás no los lleva.
+	var post_cells: Array[Vector2i] = []
+	if campaign_level != null and GameFlow.current_mode.is_empty():
+		post_cells = CampaignPosts.cells_for(campaign_level.id)
+	level = level_data.build_map(post_conquered, banner_recipe, post_cells)
 	level.position = Vector2(0.0, float(MobileUiConfig.load_from().get_value("barra_alta_px"))) if UiMode.is_mobile() else MAP_OFFSET
 	add_child(level)
 	move_child(level, 0)  # primero en la lista = se dibuja debajo de todo
@@ -159,6 +167,8 @@ func _ready() -> void:
 		mobile_hud.clear_selection_pressed.connect(build_controller.deselect_placed)
 		build_controller.mobile_infrastructure_targeted.connect(_on_mobile_infrastructure_targeted)
 		build_controller.mobile_map_tapped.connect(mobile_hud.clear_sell_arm)
+		build_controller.mobile_map_tapped.connect(mobile_hud.clear_upgrade_arm)  # M75 (RF-681): tocar el mapa desarma «Mejorar»
+		mobile_hud.upgrade_armed_changed.connect(_sync_range_preview.unbind(1))
 		_refresh_mobile_catalog()
 		session.gold_changed.connect(_on_mobile_catalog_money_changed)
 		session.resources_changed.connect(func(_resources: int) -> void: _refresh_mobile_catalog())
@@ -166,6 +176,7 @@ func _ready() -> void:
 	camera_controller.name = "CameraController"
 	add_child(camera_controller)
 	camera_controller.setup(level, camera, minimum_map_zoom, Callable(self, "_create_interactive_camera"), mobile_hud, UiMode.is_mobile())
+	camera_controller.view_zoomed_in.connect(_on_view_zoomed_in)
 	if mobile_hud != null:
 		mobile_hud.view_all_pressed.connect(camera_controller.view_all)
 	build_controller.tower_built.connect(_on_tower_built)
@@ -191,6 +202,8 @@ func _ready() -> void:
 	panel.targeting_pressed.connect(_on_targeting_pressed)
 	panel.close_pressed.connect(build_controller.deselect_placed)
 	session.gold_changed.connect(panel.refresh)
+	panel.upgrade_hover_changed.connect(_sync_range_preview.unbind(1))  # M75 (RF-680): el mouse sobre «Mejorar»
+	session.gold_changed.connect(_sync_range_preview.unbind(1))  # sin oro, la ampliación se va
 	session.resources_changed.connect(_refresh_tower_panel.unbind(1))  # RF-418: la venta muestra recursos
 
 	session.wave_completed.connect(_collection_wave_completed)
@@ -423,19 +436,8 @@ func _on_tab_changed(id: StringName) -> void:
 func _fit_map() -> void:
 	var size: Vector2i = level.map_size()
 	var zoom: float = Rules.map_zoom(size.x, size.y)
+	_add_theme_backdrop()
 	if UiMode.is_mobile():
-		var backdrop_layer := CanvasLayer.new()
-		backdrop_layer.name = "MapBackdrop"
-		backdrop_layer.layer = -10
-		add_child(backdrop_layer)
-		var backdrop := TextureRect.new()
-		backdrop.name = "ThemeGround"
-		backdrop.texture = MapThemes.ground_texture(level.theme)
-		backdrop.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
-		backdrop.stretch_mode = TextureRect.STRETCH_TILE
-		backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-		backdrop_layer.add_child(backdrop)
 		var mobile_config: MobileUiConfig = MobileUiConfig.load_from()
 		var top_height: float = float(mobile_config.get_value("barra_alta_px"))
 		var bottom_height: float = float(hud.get_node("BottomBar").size.y)
@@ -451,6 +453,30 @@ func _fit_map() -> void:
 	camera.position = map_center + (Rules.SCREEN_SIZE / 2.0 - area.get_center()) / zoom
 	add_child(camera)
 	camera.make_current()
+
+
+func _add_theme_backdrop() -> void:
+	var backdrop_layer: CanvasLayer = CanvasLayer.new()
+	backdrop_layer.name = "ThemeBackdrop"
+	backdrop_layer.layer = -10
+	add_child(backdrop_layer)
+	var solid: ColorRect = ColorRect.new()
+	solid.name = "SolidFallback"
+	solid.color = PresentationBackgroundCatalog.FALLBACK_COLOR
+	solid.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	solid.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	backdrop_layer.add_child(solid)
+	var texture: Texture2D = PresentationBackgroundCatalog.load_for_theme(level.theme)
+	if texture == null:
+		return
+	var backdrop: TextureRect = TextureRect.new()
+	backdrop.name = "ThemeImage"
+	backdrop.texture = texture
+	backdrop.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	backdrop.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	backdrop_layer.add_child(backdrop)
 
 
 func _create_interactive_camera() -> Camera2D:
@@ -527,6 +553,8 @@ func _notification(what: int) -> void:
 ## Deja la partida en pausa (la misma de RF-104: se sigue con el botón Pausa). No hace nada si ya está en pausa
 ## (un menú, un diálogo o el cartel de entrada ya la pausaron) ni si la partida terminó.
 func pause_for_background() -> void:
+	if presentation != null:
+		_presentation_interrupted = true  # M66, RF-673 (D-112): al cerrarse la presentación no se reanuda sola
 	if session == null or session.is_over() or is_paused():
 		return
 	set_paused(true)
@@ -582,6 +610,25 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 	elif event.is_action_pressed("toggle_speed"):
 		toggle_speed()
+
+
+## RF-676: el aviso dice «Acercaste», así que solo responde a un zoom que aumenta el acercamiento.
+func _on_view_zoomed_in() -> void:
+	if SaveManager.get_ui_prefs().view_all_hint_seen or tutorial != null and tutorial.is_active():
+		return
+	if pause_menu.is_open() or exit_dialog.is_open() or level_intro.is_open() or session.is_over() or presentation != null:
+		return
+	if hud.is_notice_active():
+		return
+	var prefs: UiPrefs = SaveManager.get_ui_prefs()
+	var message: String
+	if UiMode.is_mobile():
+		message = "Acercaste el mapa. Tocá la lupa para volver a verlo entero."
+	else:
+		message = "Acercaste el mapa. Apretá %s para volver a verlo entero." % ViewAllBinding.key_text(prefs.view_all_key)
+	hud.show_view_all_notice(message)
+	prefs.view_all_hint_seen = true
+	SaveManager.set_ui_prefs(prefs)
 
 
 # --- Menú de pausa (RF-114) ---
@@ -934,45 +981,64 @@ func _on_enemy_spawned(enemy: Enemy) -> void:
 	enemy.healed.connect(func(e: Enemy, amount: int) -> void:
 		effects.heal_number(e.global_position, amount)
 		Audio.play(&"heal", 0.8))  # RF-165
-	_maybe_boss_entrance(enemy)  # M66: antes que la tarjeta de abajo, que espera al cartel de aparición
-	# RF-134: la primera vez en todo el juego que aparece este tipo, se presenta.
+	_maybe_boss_presentation(enemy)  # M66: antes de marcarlo visto, que decide si dura 5 s o 3 s
+	# RF-134: la primera vez en todo el juego que aparece este tipo, se presenta. Un jefe (peligroso, RF-135) no lleva
+	# la tarjeta: la presentación y la línea «¡Llega el Jefe!» ya lo presentan (Lucas, 2026-10-23); igual
+	# queda como visto para la Wiki y el guardado, aunque la presentación se omita o se saltee.
 	if not SaveManager.has_seen_enemy(enemy.data.id):
 		SaveManager.mark_enemy_seen(enemy.data.id)
-		hud.show_enemy_intro(enemy.data)
+		if not Rules.is_dangerous(enemy.data):
+			hud.show_enemy_intro(enemy.data)
 		if GameFlow.played_level() != null:
 			SaveManager.save()  # RF-117: solo jugando desde el menú (campaña o comunidad)
 
 
-## M66, RF-597 a RF-602: si el enemigo que nació tiene datos de entrada (`EnemyData.entrance`), el nivel está en su
-## lista, la opción está prendida y no se repitió en la oleada ni hubo otra hace menos de 8 s, sale el destello en
-## la entrada de su camino y el cartel de aparición. Solo presentación: no toca al enemigo, la oleada ni el reloj.
-## Solo en la campaña jugada desde el menú (también con el modo de pruebas): no en el editor, la comunidad,
-## Asedio ni la escena suelta.
-func _maybe_boss_entrance(enemy: Enemy) -> void:
-	if enemy.data.entrance == null:
-		return  # lo barato primero: casi todos los enemigos salen acá
+## M66, RF-666: ¿esta partida es de la campaña normal, jugada desde el menú? No lo son Asedio ni los modos, el modo
+## de pruebas, probar desde el editor, los mapas de la comunidad ni la escena suelta (F6, tests, `balance_sim`).
+func _is_normal_campaign() -> bool:
+	if DevMode.enabled or testing or not GameFlow.current_mode.is_empty() or GameFlow.current_community != null:
+		return false
 	var campaign: LevelData = GameFlow.current_level()
-	if campaign == null or level_data == null or campaign.id != level_data.id:
+	return campaign != null and level_data != null and campaign.id == level_data.id
+
+
+## M66, RF-666 a RF-673: si nace un jefe y corresponde, la partida se pausa en este mismo cuadro (el enemigo no se
+## demora ni cambia) y se abre la presentación a pantalla completa. Una vez por partida: la primera oleada con jefe.
+## Va ANTES de marcar al enemigo como visto: la duración depende de si ya se había visto (RF-668).
+func _maybe_boss_presentation(enemy: Enemy) -> void:
+	if not Rules.is_dangerous(enemy.data):
+		return  # lo barato primero: casi todos los enemigos salen acá
+	if not BossPresentationRules.is_eligible(true, SaveManager.boss_entrance_enabled(), _is_normal_campaign(),
+			_presentation_shown or presentation != null) or session.is_over():
 		return
-	if _boss_entrance_config == null:
-		_boss_entrance_config = BossEntranceConfig.load_from()
-	if session.wave != _boss_entrance_wave:
-		_boss_entrance_wave = session.wave
-		_boss_entrance_types.clear()
-	var now_s: float = Time.get_ticks_msec() / 1000.0
-	if not BossEntranceRules.should_show(enemy.data, String(level_data.id), SaveManager.boss_entrance_enabled(), now_s,
-			_boss_entrance_last_s, _boss_entrance_types, _boss_entrance_config.seconds("intervalo_min_s")):
-		return
-	_boss_entrance_last_s = now_s
-	_boss_entrance_types.append(enemy.data.id)
-	var spot: Vector2 = enemy.global_position
-	var path: Path2D = enemy.path()
-	if path != null and path.curve != null and path.curve.point_count > 0:
-		spot = path.to_global(path.curve.get_point_position(0))
-	effects.boss_entrance(spot, enemy.data.color, _boss_entrance_config.seconds("destello_s"))
-	hud.show_boss_entrance(enemy.data)
-	if enemy.data.entrance.sound != &"":
-		Audio.play(enemy.data.entrance.sound)
+	_presentation_shown = true
+	_presentation_was_paused = is_paused()
+	_presentation_interrupted = false
+	build_controller.cancel()
+	build_controller.input_blocked = true
+	set_paused(true)
+	hud.show_paused(true, false)  # la presentación no es el menú de pausa: no dice «PAUSA»
+	hud.set_presentation_active(true)  # RF-670, RF-673: el cartel de oleada y las tarjetas se congelan
+	if mobile_hud != null:
+		mobile_hud.set_modal_open(true)
+	presentation = BossPresentation.new().setup(enemy.data,
+			BossPresentationRules.seconds(SaveManager.has_seen_enemy(enemy.data.id)), mobile_hud != null)
+	presentation.closed.connect(_on_presentation_closed)
+	add_child(presentation)
+
+
+## Al cerrarse, la partida vuelve a como estaba: corriendo, salvo que ya estuviera en pausa, que la app haya pasado a
+## segundo plano (D-112) o que se haya cerrado con `P` o «Atrás» (RF-669, RF-673).
+func _on_presentation_closed(keep_paused: bool) -> void:
+	presentation = null
+	build_controller.input_blocked = false
+	if mobile_hud != null:
+		mobile_hud.set_modal_open(false)
+	hud.set_presentation_active(false)  # las tarjetas «Nuevo enemigo» que esperaban salen en su turno
+	if BossPresentationRules.should_resume(_presentation_was_paused, _presentation_interrupted, keep_paused):
+		set_paused(false)
+	else:
+		hud.show_paused(is_paused(), true)  # sigue pausada: el botón y el cartel lo dicen
 
 
 ## RF-132: el número de daño de cada golpe. Si el golpe hizo combo, su número es el aviso (RF-315) y suena (RF-316).
@@ -1120,8 +1186,25 @@ func _refresh_tower_panel() -> void:
 			reason = "Faltan %d de oro" % (tower.next_level_stats().cost - session.gold)
 		mobile_hud.show_selected_tower(tower, session.gold, value, resource_value,
 		tower != null and build_controller.can_upgrade(tower), reason)
+		_sync_range_preview()
 		return
 	hud.tower_panel.show_tower(tower, value, session.gold, resource_value)
+	_sync_range_preview()
+
+
+## M75 (RF-680, RF-681): muestra o saca la ampliación del alcance. Se ve mientras el mouse está sobre «Mejorar» activo (PC)
+## o «Mejorar» está armado (celular), y la torre elegida se puede mejorar ahora. No cobra ni cambia nada.
+func _sync_range_preview() -> void:
+	var tower: Tower = build_controller.selected_placed()
+	var wanted: bool = tower != null and build_controller.can_upgrade(tower)
+	if wanted and mobile_hud != null:
+		wanted = mobile_hud.armed_tower() == tower
+	elif wanted:
+		wanted = hud.tower_panel.is_upgrade_hovered()
+	if wanted:
+		effects.show_range_preview(tower)
+	else:
+		effects.hide_range_preview()
 
 
 func _on_tower_fired(projectile: Projectile) -> void:

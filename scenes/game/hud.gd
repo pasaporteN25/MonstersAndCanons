@@ -39,12 +39,11 @@ var _tower_buttons: Array[Button] = []
 ## RF-134: si llegan dos enemigos nuevos juntos, sus tarjetas salen una detrás de otra.
 var _intro_queue: Array[EnemyData] = []
 var _intro_busy: bool = false
-## M66 (RF-597): el cartel de aparición de un jefe, el jefe que espera su turno y cuántos carteles de oleada
-## (RF-127) siguen en pantalla. El orden es cartel de oleada, cartel de aparición y tarjeta «Nuevo enemigo».
-var _entrance_card: BossEntranceCard
-var _entrance_pending: EnemyData
-var _wave_banners_active: int = 0
-var _entrance_config: BossEntranceConfig
+## M66 (RF-670, RF-673): mientras la presentación de un jefe está arriba, las animaciones de la interfaz se congelan
+## (el HUD sigue activo con la partida en pausa, así que sus `Tween` no se detienen solos) y las tarjetas
+## «Nuevo enemigo» que esperan no salen hasta que se cierra.
+var _presentation_active: bool = false
+var _tweens: Array[Tween] = []
 ## -1 = todavía no se mostró ningún valor (para no animar el primero).
 var _last_gold: int = -1
 var _last_lives: int = -1
@@ -99,6 +98,8 @@ var _has_next_wave: bool = false
 
 var _metrics: Label
 var _metrics_updated: int = 0
+var _view_all_notice: Label
+var _view_all_notice_tween: Tween
 
 func _process(_delta: float) -> void:
 	if _metrics == null or not _metrics.visible:
@@ -127,6 +128,19 @@ func _ready() -> void:
 	_metrics.add_theme_constant_override("outline_size", 4)
 	_metrics.visible = false
 	add_child(_metrics)
+	_view_all_notice = Label.new()
+	_view_all_notice.name = "ViewAllNotice"
+	_view_all_notice.position = Vector2(160, 50)
+	_view_all_notice.size = Vector2(960, 36)
+	_view_all_notice.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_view_all_notice.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_view_all_notice.add_theme_font_size_override("font_size", 18)
+	_view_all_notice.add_theme_color_override("font_color", Color(1.0, 0.94, 0.78))
+	_view_all_notice.add_theme_color_override("font_outline_color", Color.BLACK)
+	_view_all_notice.add_theme_constant_override("outline_size", 5)
+	_view_all_notice.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_view_all_notice.visible = false
+	add_child(_view_all_notice)
 	var hint := Label.new()
 	hint.position = Vector2(20, 52)
 	hint.visible = false
@@ -172,6 +186,24 @@ func _ready() -> void:
 	_exit_button.pressed.connect(menu_pressed.emit)
 	show_paused(false)
 	show_speed(1.0)
+
+
+func show_view_all_notice(message: String) -> void:
+	_view_all_notice.text = message
+	_view_all_notice.modulate.a = 1.0
+	_view_all_notice.visible = true
+	if _view_all_notice_tween != null and _view_all_notice_tween.is_running():
+		_view_all_notice_tween.kill()
+	_view_all_notice_tween = create_tween()
+	_view_all_notice_tween.tween_interval(3.0)
+	_view_all_notice_tween.tween_property(_view_all_notice, "modulate:a", 0.0, 0.25)
+	_view_all_notice_tween.tween_callback(func() -> void:
+		_view_all_notice.visible = false
+		_view_all_notice.modulate.a = 1.0)
+
+
+func is_notice_active() -> bool:
+	return _intro_busy or _presentation_active or (not _wave_banner.text.is_empty() and _wave_banner.modulate.a > 0.05)
 
 
 ## RF-416: el contador de recursos de la barra superior, con el mismo formato que las otras estadísticas.
@@ -302,62 +334,39 @@ func show_enemy_intro(enemy: EnemyData) -> void:
 		_show_next_intro()
 
 
-## M66, RF-597: ¿hay un cartel de aparición en pantalla o esperando su turno? La tarjeta de arriba espera.
-func entrance_blocks_intro() -> bool:
-	return _entrance_pending != null or _entrance_card != null
+## M66 (RF-670, RF-673): congela o reanuda los carteles y las tarjetas del HUD. Al reanudar, la tarjeta «Nuevo enemigo»
+## que esperaba en la cola sale en su turno.
+func set_presentation_active(active: bool) -> void:
+	_presentation_active = active
+	for tween: Tween in _tweens:
+		if tween.is_valid():
+			if active:
+				tween.pause()
+			else:
+				tween.play()
+	if not active and not _intro_busy and not _intro_queue.is_empty():
+		_show_next_intro()
 
 
-## M66, RF-597: el cartel de aparición del jefe (retrato, «¡Llega el Jefe!», nombre y frase). Espera a que se
-## retire el cartel de oleada y a una tarjeta «Nuevo enemigo» que ya esté en pantalla; la tarjeta de este mismo
-## jefe espera a su vez a que el cartel se retire. No pausa nada. Un cartel en curso se reemplaza.
-func show_boss_entrance(enemy: EnemyData) -> void:
-	if enemy == null:
-		return
-	if _entrance_card != null and is_instance_valid(_entrance_card):
-		_entrance_card.dismiss()
-	_entrance_pending = enemy
-	_try_open_entrance()
+func is_presentation_active() -> bool:
+	return _presentation_active
 
 
-## El cartel de aparición que está en pantalla (o null), para los tests.
-func entrance_card() -> BossEntranceCard:
-	return _entrance_card
-
-
-func _try_open_entrance() -> void:
-	if _entrance_pending == null or _wave_banners_active > 0 or _intro_busy:
-		return
-	var enemy: EnemyData = _entrance_pending
-	_entrance_pending = null
-	if _entrance_config == null:
-		_entrance_config = BossEntranceConfig.load_from()
-	var card: BossEntranceCard = BossEntranceCard.new().setup(enemy, _entrance_config, _mobile_mode)
-	card.finished.connect(_on_entrance_finished.bind(card))
-	add_child(card)
-	_entrance_card = card
-	var top: float = float(_entrance_config.pixels("arriba_celular_px" if _mobile_mode else "arriba_pc_px"))
-	card.start(get_viewport().get_visible_rect().size.x, top)
-
-
-func _on_entrance_finished(card: BossEntranceCard) -> void:
-	if _entrance_card == card:
-		_entrance_card = null
-	if _entrance_pending == null and not _intro_busy and not _intro_queue.is_empty():
-		_show_next_intro()  # la tarjeta «Nuevo enemigo» que esperaba
-
-
-func _on_wave_banner_done() -> void:
-	_wave_banners_active = maxi(0, _wave_banners_active - 1)
-	_try_open_entrance()
+## Un `Tween` del HUD que se congela con la presentación de un jefe. Se crea ya en pausa si la presentación está arriba.
+func _tween() -> Tween:
+	for i: int in range(_tweens.size() - 1, -1, -1):
+		if not _tweens[i].is_valid():
+			_tweens.remove_at(i)
+	var tween: Tween = create_tween()
+	_tweens.append(tween)
+	if _presentation_active:
+		tween.pause()
+	return tween
 
 
 func _show_next_intro() -> void:
-	if entrance_blocks_intro():
-		# M66: la tarjeta espera al cartel de aparición; si hay uno pendiente, ya puede salir.
-		_intro_busy = false
-		_intro.visible = false
-		_try_open_entrance()
-		return
+	if _presentation_active:
+		return  # M66 (RF-670): espera a que se cierre la presentación; `set_presentation_active(false)` la retoma
 	if _intro_queue.is_empty():
 		_intro_busy = false
 		_intro.visible = false
@@ -371,7 +380,7 @@ func _show_next_intro() -> void:
 	_intro_text.text = enemy.description
 	_intro.visible = true
 	_intro.modulate.a = 0.0
-	var tween: Tween = create_tween()
+	var tween: Tween = _tween()
 	tween.tween_property(_intro, "modulate:a", 1.0, 0.25)
 	tween.tween_interval(INTRO_SECONDS)
 	tween.tween_property(_intro, "modulate:a", 0.0, 0.4)
@@ -804,14 +813,12 @@ func _show_wave_banner(wave: int) -> void:
 	_wave_banner.pivot_offset = _wave_banner.size / 2.0
 	_wave_banner.modulate.a = 0.0
 	_wave_banner.scale = Vector2(0.8, 0.8)
-	var tween: Tween = create_tween()
+	var tween: Tween = _tween()
 	tween.tween_property(_wave_banner, "modulate:a", 1.0, 0.2)
 	tween.parallel().tween_property(_wave_banner, "scale", Vector2.ONE, 0.25) \
 		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	tween.tween_interval(0.9)
 	tween.tween_property(_wave_banner, "modulate:a", 0.0, 0.4)
-	_wave_banners_active += 1  # M66: el cartel de aparición de un jefe espera a que este se retire
-	tween.finished.connect(_on_wave_banner_done)
 	# RF-135: si la oleada trae un enemigo peligroso, una línea roja abajo, que dura más.
 	var danger: EnemyData = null
 	if wave - 1 < _waves.size():
@@ -819,7 +826,7 @@ func _show_wave_banner(wave: int) -> void:
 	_boss_line.text = "¡Llega el %s!" % danger.display_name if danger != null else ""
 	_boss_line.modulate.a = 0.0
 	if danger != null:
-		var boss_tween: Tween = create_tween()
+		var boss_tween: Tween = _tween()
 		boss_tween.tween_property(_boss_line, "modulate:a", 1.0, 0.2)
 		boss_tween.tween_interval(2.0)
 		boss_tween.tween_property(_boss_line, "modulate:a", 0.0, 0.5)
@@ -829,12 +836,12 @@ func _show_wave_banner(wave: int) -> void:
 func _pop(label: Label) -> void:
 	label.pivot_offset = label.size / 2.0
 	label.scale = Vector2(1.25, 1.25)
-	create_tween().tween_property(label, "scale", Vector2.ONE, 0.15)
+	_tween().tween_property(label, "scale", Vector2.ONE, 0.15)
 
 
 ## RF-128: parpadea dos veces.
 func _blink(label: Label) -> void:
-	var tween: Tween = create_tween()
+	var tween: Tween = _tween()
 	for i: int in 2:
 		tween.tween_property(label, "modulate", Color(1, 1, 1, 0.25), 0.06)
 		tween.tween_property(label, "modulate", Color.WHITE, 0.06)

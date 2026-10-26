@@ -1,0 +1,64 @@
+{
+  "estado": "Las siete muestras fueron aprobadas por Lucas al mergear el PR #66 el 2026-10-24 y T478 las integra sin cambios.",
+  "generador": "image_gen integrado de Codex",
+  "fecha": "2026-10-23",
+  "base": "origin/main debef6c (merge PR #65)",
+  "referencias_por_terreno": {
+    "pradera": [
+      "assets/tiles/rendered/ground_pradera.png"
+    ],
+    "bosque": [
+      "assets/tiles/rendered/ground_bosque.png",
+      "assets/sprites/map/rendered/tree.png"
+    ],
+    "ruinas": [
+      "assets/tiles/rendered/ground_ruinas.png"
+    ],
+    "desierto": [
+      "assets/tiles/rendered/ground_desierto.png"
+    ],
+    "nieve": [
+      "assets/tiles/rendered/ground_nieve.png",
+      "assets/sprites/map/rendered/tree.png"
+    ],
+    "volcan": [
+      "assets/tiles/rendered/ground_volcan.png"
+    ],
+    "pantano": [
+      "assets/tiles/rendered/ground_pantano.png"
+    ]
+  },
+  "campania": {
+    "pradera": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      15
+    ],
+    "bosque": [
+      6,
+      7
+    ],
+    "ruinas": [
+      8,
+      9,
+      14
+    ],
+    "desierto": [
+      10,
+      11,
+      12
+    ],
+    "nieve": [
+      13
+    ]
+  },
+  "editor_only": [
+    "volcan",
+    "pantano"
+  ],
+  "resolucion_muestras": "1672×941 px, relación de aspecto 16:9",
+  "prompts": "prompts.md"
+}

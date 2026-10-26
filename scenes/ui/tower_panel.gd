@@ -7,12 +7,15 @@ signal upgrade_pressed
 signal sell_pressed
 signal targeting_pressed
 signal close_pressed
+## M75 (RF-680): el mouse entró o salió de «Mejorar». Game decide si hay algo que mostrar (oro, nivel máximo).
+signal upgrade_hover_changed(hovered: bool)
 
 var _tower: Tower
 var _sell_value: int = 0
 ## RF-418: recursos que devuelve la venta.
 var _sell_resources: int = 0
 var _gold: int = 0
+var _upgrade_hovered: bool = false
 ## RF-280: los segundos de aturdimiento que se muestran (para refrescar solo cuando cambian).
 var _shown_stun: int = 0
 var _shown_support: int = 0
@@ -23,8 +26,7 @@ var partner_towers: Array[TowerData] = []
 
 @onready var _title: Label = %Title
 @onready var _stats: Label = %Stats
-const UPGRADE_PREVIEW_TITLE: String = "Al nivel %d:"
-const LEVEL_COLORS: Array[Color] = [Color("#94a8b9"), Color("#d7a45b"), Color("#f0d176")]
+const LEVEL_COLORS: Array[Color] = [Color("#d7a45b"), Color("#94a8b9"), Color("#f0d176")]
 var _upgrade_preview: Label
 var _upgrade_fx_config: UpgradeFxConfig
 @onready var _damage: Label = %Damage
@@ -46,6 +48,10 @@ func _ready() -> void:
 	_sell_button.pressed.connect(sell_pressed.emit)
 	_targeting_button.pressed.connect(targeting_pressed.emit)
 	_close_button.pressed.connect(close_pressed.emit)
+	_upgrade_button.mouse_entered.connect(_set_upgrade_hovered.bind(true))
+	_upgrade_button.mouse_exited.connect(_set_upgrade_hovered.bind(false))
+	visibility_changed.connect(_on_visibility_changed)
+	_title.resized.connect(_refresh_title_tooltip)
 	_set_mouse_filters(self)
 	_style_panel()
 	_style_buttons()
@@ -67,6 +73,24 @@ func show_tower(tower: Tower, sell_value: int, gold: int, sell_resources: int = 
 func _process(_delta: float) -> void:
 	if _tower != null and visible and (ceili(_tower.stun_left()) != _shown_stun or _tower.support_bonus() != _shown_support or not is_equal_approx(_tower.wear_percent, _shown_wear) or not is_equal_approx(_tower.repair_rate_received,_shown_repair)):
 		refresh(_gold)
+
+
+## M75 (RF-680): ¿el mouse está sobre «Mejorar» y el botón está activo? Apagado (sin oro o nivel máximo) no cuenta.
+func is_upgrade_hovered() -> bool:
+	return _upgrade_hovered and visible and not _upgrade_button.disabled
+
+
+func _set_upgrade_hovered(hovered: bool) -> void:
+	if _upgrade_hovered == hovered:
+		return
+	_upgrade_hovered = hovered
+	upgrade_hover_changed.emit(hovered)
+
+
+## Si el panel se esconde con el mouse encima, no siempre llega el `mouse_exited`: se da por salido.
+func _on_visibility_changed() -> void:
+	if not visible:
+		_set_upgrade_hovered(false)
 
 
 ## M63 (RF-574): los botones que el tutorial señala.
@@ -91,29 +115,64 @@ func _refresh_upgrade_preview() -> void:
 		_upgrade_button.get_parent().move_child(_upgrade_preview, _upgrade_button.get_index())
 	if _upgrade_fx_config == null:
 		_upgrade_fx_config = UpgradeFxConfig.load_from()
-	var changes: Array[Dictionary] = UpgradeDeltas.preview(_tower.data.levels, _tower.level_index, _upgrade_fx_config.stats,
-			int(_upgrade_fx_config.get_number("max_estadisticas")))
-	var other_changes: Array[Dictionary] = []
-	var damage_change: Dictionary = {}
+	var changes: Array[Dictionary] = UpgradeDeltas.preview(_tower.data.levels, _tower.level_index, _upgrade_fx_config.stats, 99)
+	var display_changes: Array[Dictionary] = []
+	var changed_effect_fields: Array[String] = []
+	var changed_effect_prefixes: PackedStringArray = []
+	var metric_changes: Dictionary = {}
 	for change: Dictionary in changes:
-		if String(change.get("campo", "")) == "damage":
-			damage_change = change
+		var field: String = String(change.get("campo", ""))
+		if field in ["damage", "fire_rate", "range_tiles"]:
+			metric_changes[field] = change
 		else:
-			other_changes.append(change)
-	if damage_change.is_empty():
-		_damage.text = str(_tower.stats().damage)
-	else:
-		_damage.text = "%s %s %s" % [
-			UpgradeDeltas.format_value(float(damage_change["antes"]), "entero"), UpgradeDeltas.ARROW,
-			UpgradeDeltas.format_value(float(damage_change["despues"]), "entero"),
-		]
-	if other_changes.is_empty():
+			display_changes.append(change)
+			changed_effect_fields.append(field)
+			var prefix: String = _effect_prefix(field)
+			if not prefix.is_empty():
+				changed_effect_prefixes.append(prefix)
+	_damage.text = _metric_text("damage", "entero", int(_tower.stats().damage), metric_changes)
+	_rate.text = "Apoyo" if _tower.data.support_only else "%s/s" % _metric_text("fire_rate", "decimal", _tower.effective_fire_rate(), metric_changes)
+	_range.text = _metric_text("range_tiles", "decimal", _tower.stats().range_tiles, metric_changes)
+	if display_changes.is_empty():
 		_upgrade_preview.visible = false
-		return
-	var lines: Array[String] = [UPGRADE_PREVIEW_TITLE % (_tower.level_number() + 1)]
-	lines.append_array(UpgradeDeltas.rows(other_changes, int(_upgrade_fx_config.get_number("max_por_renglon"))))
-	_upgrade_preview.text = "\n".join(lines)
-	_upgrade_preview.visible = true
+	else:
+		_upgrade_preview.text = "\n".join(UpgradeDeltas.rows(display_changes, int(_upgrade_fx_config.get_number("max_por_renglon"))))
+		_upgrade_preview.visible = true
+	if not changed_effect_prefixes.is_empty():
+		var effect_lines: PackedStringArray = PackedStringArray()
+		for line: String in _stats.text.split("\n"):
+			var keep_line: bool = true
+			for prefix: String in changed_effect_prefixes:
+				if line.begins_with(prefix):
+					keep_line = false
+					break
+			if keep_line:
+				effect_lines.append(line)
+		effect_lines.append_array(TowerText.panel_effect_residuals(_tower.stats(), changed_effect_fields))
+		_stats.text = "\n".join(effect_lines)
+		_stats.visible = not _stats.text.is_empty()
+
+
+func _metric_text(field: String, kind: String, current: float, changes: Dictionary) -> String:
+	if not changes.has(field):
+		return UpgradeDeltas.format_value(current, kind)
+	var change: Dictionary = changes[field]
+	return "%s %s %s" % [UpgradeDeltas.format_value(float(change["antes"]), kind), UpgradeDeltas.ARROW,
+		UpgradeDeltas.format_value(float(change["despues"]), kind)]
+
+
+static func _effect_prefix(field: String) -> String:
+	match field:
+		"chain_extra_targets": return "El rayo salta"
+		"splash_radius_tiles": return "Área:"
+		"burst_count": return "Lanza "
+		"extra_targets": return "Dispara a "
+		"slow_amount", "slow_duration": return "Ralentiza "
+		"burn_damage_per_second", "burn_duration": return "Quema:"
+		"suppress_seconds": return "Pulso:"
+		"support_rate_percent": return "Apoyo:"
+		"support_repair_per_second": return "Repara "
+	return ""
 
 
 func _refresh_level_card() -> void:
@@ -126,6 +185,10 @@ func _refresh_level_card() -> void:
 			color = color.darkened(0.72)
 			color.a = 0.6
 		segment.color = color
+
+
+func _refresh_title_tooltip() -> void:
+	_title.tooltip_text = _title.text if _title.get_line_count() > _title.get_visible_line_count() else ""
 
 
 func _set_mouse_filters(node: Node) -> void:
@@ -190,7 +253,7 @@ func refresh(gold: int) -> void:
 	var s: TowerLevelData = _tower.stats()
 	_shown_stun = ceili(_tower.stun_left())
 	_title.text = _tower.data.display_name
-	_title.tooltip_text = _title.text
+	_refresh_title_tooltip()
 	_refresh_level_card()
 	_shown_wear = _tower.wear_percent
 	_shown_repair = _tower.repair_rate_received
@@ -205,7 +268,10 @@ func refresh(gold: int) -> void:
 	_rate.text = "Apoyo" if _tower.data.support_only else "%.2f/s" % _tower.effective_fire_rate()
 	_range.text = "%.1f" % s.range_tiles
 	_air.text = "Voladores: %s" % ("sí" if _tower.data.can_hit_air else "no")
-	_stats.text = "\n".join(TowerText.effects(s))
+	var effect_lines: Array[String] = TowerText.effects(s)
+	if s.suppress_seconds > 0.0:
+		effect_lines[0] = TowerText.panel_pulse_line(s)
+	_stats.text = "\n".join(effect_lines)
 	var invested: String = TowerText.invested_line(_tower.data, _tower.resources_invested)  # RF-418
 	if invested != "":
 		_stats.text += "\n" + invested

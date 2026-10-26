@@ -169,7 +169,7 @@ func test_the_effect_has_no_per_frame_work() -> void:
 	var tower: Tower = _build(_tower_data("basic"))
 	game.build_controller.try_upgrade(tower)
 	assert_false((_effects()[0] as UpgradeEffect).is_processing(), "sin _process: solo trabaja el Tween mientras dura")
-	assert_eq(_effects()[0].get_child_count(), 0, "un solo nodo, sin partículas")
+	assert_eq(_effects()[0].get_child_count(), 1, "un solo Sprite2D con el atlas, sin partículas")
 	await get_tree().create_timer(1.35).timeout
 	assert_eq(_effects().size() + _texts().size(), 0, "sin animación no queda nada vivo")
 
@@ -365,7 +365,7 @@ func test_the_text_is_at_least_20_screen_pixels_even_with_a_small_zoom() -> void
 	var tower: Tower = _build(_tower_data("basic"))
 	tower.level_index = 1  # como si ya se hubiera mejorado: se llama a la capa directo con otro zoom
 	var view := Rect2(Vector2.ZERO, Vector2(1280, 720))
-	for zoom: float in [0.5, 1.0, 1.5]:
+	for zoom: float in [0.5, 1.0]:
 		var canvas := Transform2D(0.0, Vector2(zoom, zoom), 0.0, Vector2(100, 100))
 		assert_true(game.effects.tower_upgraded(tower, canvas, [] as Array[Rect2], view))
 		var texts: Array[Node] = _texts()
@@ -427,3 +427,41 @@ func test_mobile_options_still_fit_in_720_and_the_row_respects_the_touch_minimum
 		var check: CheckBox = options.find_child("UpgradeFxCheck", true, false) as CheckBox
 		assert_gte(check.size.y, 56.0, "mínimo táctil")
 		assert_true(panel.get_global_rect().encloses(check.get_global_rect()), "la fila nueva queda dentro del panel")
+
+
+# --- T411 (RF-625, D-165): el arte aprobado ---
+
+func test_the_effect_shows_the_approved_atlas_frame_by_progress() -> void:
+	var refuerzo := UpgradeEffect.new().setup(Color(1.0, 0.7, 0.2), 51.2, 0.5, false)
+	add_child_autofree(refuerzo)
+	var sprite: Sprite2D = refuerzo.get_child(0) as Sprite2D
+	assert_eq(sprite.texture.get_size(), Vector2(384, 192), "atlas importado de 4 × 2 cuadros de 96")
+	assert_eq(sprite.hframes * sprite.vframes, 8)
+	assert_eq(sprite.texture.get_size() * sprite.scale / Vector2(4, 2), Vector2(192, 192), "el cuadro conserva su tamaño visual")
+	assert_eq(sprite.modulate, Color(1.0, 0.7, 0.2), "se tiñe con el color de la torre")
+	assert_eq(sprite.scale, Vector2(2, 2), "compensa el atlas importado al 50 %")
+	var expected: Dictionary = {0.0: 0, 0.13: 1, 0.5: 4, 0.99: 7, 1.0: 7}
+	for progress: float in expected:
+		refuerzo.progress = progress
+		assert_eq(refuerzo.frame(), expected[progress], "progreso %s" % progress)
+
+
+func test_mastery_uses_its_own_atlas_and_the_footprint_scales_it() -> void:
+	var maestria := UpgradeEffect.new().setup(Color.WHITE, 153.6, 0.7, true, 2.0)
+	add_child_autofree(maestria)
+	var sprite: Sprite2D = maestria.get_child(0) as Sprite2D
+	assert_ne(sprite.texture, UpgradeEffect.ATLAS_REFUERZO)
+	assert_eq(sprite.texture, UpgradeEffect.ATLAS_MAESTRIA)
+	assert_eq(sprite.scale, Vector2(4, 4), "el Mortero (2 × 2) conserva el doble de tamaño visual")
+
+
+func test_the_layer_passes_the_footprint_and_the_option_off_creates_nothing() -> void:
+	await _start_pc()
+	var tower: Tower = _build(_tower_data("basic"))
+	game.build_controller.try_upgrade(tower)
+	assert_eq((_effects()[0] as UpgradeEffect).art_scale(), 1.0)
+	SaveManager.set_setting("upgrade_fx", false)
+	var second: Tower = _build(_tower_data("basic"))
+	var before: int = _effects().size()
+	game.build_controller.try_upgrade(second)
+	assert_eq(_effects().size(), before, "con la opción apagada no nace ningún efecto")

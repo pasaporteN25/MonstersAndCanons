@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>T477 · Muestra de fondos de franjas</title>
+<style>
+:root{color-scheme:dark;--ink:#f2ebd9;--muted:#bdb8aa;--panel:#22252b;--line:#4b505a;--gold:#d6a95c;--blue:#72b8cb}
+*{box-sizing:border-box}body{margin:0;background:#17191d;color:var(--ink);font:16px/1.5 system-ui,sans-serif}main{max-width:1280px;margin:auto;padding:28px 24px 60px}h1,h2,h3,p{margin-top:0}h1{font-size:clamp(28px,4vw,44px);line-height:1.1;margin-bottom:12px}h2{font-size:25px;margin-bottom:8px}h3{font-size:18px;margin-bottom:8px}.lead{font-size:18px;color:#ded8ca;max-width:900px}.notice{padding:14px 16px;border:1px solid #927044;border-left:5px solid var(--gold);border-radius:8px;background:#342d23;margin:20px 0 24px}.notice strong{color:#ffe0a1}.toolbar,.meta,.terrain-tabs,.aspect-tabs{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.toolbar{padding:14px;background:var(--panel);border:1px solid var(--line);border-radius:12px;margin-bottom:16px}.toolbar label{color:var(--muted);margin-right:4px}.toolbar button,.terrain-tabs button,.aspect-tabs button{font:inherit;color:var(--ink);background:#30343c;border:1px solid #59616d;border-radius:7px;padding:8px 12px;cursor:pointer}.toolbar button:hover,.terrain-tabs button:hover,.aspect-tabs button:hover{border-color:var(--gold)}button[aria-pressed="true"]{background:#55442a;border-color:var(--gold)}.meta{color:var(--muted);font-size:14px}.meta span{padding:4px 8px;background:#2a2d33;border-radius:20px}.preview{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px}.stage-wrap{display:flex;justify-content:center;width:100%;padding:16px;background:#0d0f12;border-radius:8px;overflow:hidden}.stage{position:relative;width:min(100%,1100px);aspect-ratio:16/9;background:#5a604d center/cover no-repeat;overflow:hidden;isolation:isolate;transition:aspect-ratio .25s ease}.stage::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#10131816,#10131830);pointer-events:none}.logical{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border:2px solid #f5cd76;box-shadow:0 0 0 999px #0b0d1260;overflow:hidden;z-index:1}.logical-content{position:absolute;inset:0;transition:transform .25s ease;transform-origin:center}.hud-top,.hud-bottom{position:absolute;left:0;right:0;background:#222933d9;border-color:#f5cd768c;border-style:solid}.hud-top{top:0;height:11%;border-width:0 0 1px}.hud-bottom{bottom:0;height:15%;border-width:1px 0 0}.mock-label{position:absolute;inset:35% 10% auto;text-align:center;color:#f6eedf;text-shadow:0 2px 4px #111;font-weight:700;font-size:clamp(12px,2.1vw,23px)}.mock-map{position:absolute;left:25%;top:22%;width:50%;height:49%;border:1px dashed #f2ebd9a8;background:#3d5b4555;transform:skewY(-3deg)}.mock-path{position:absolute;left:12%;top:58%;width:76%;height:3px;background:#e5d5a8;transform:rotate(-8deg);box-shadow:0 0 6px #e5d5a8}.stage.zoom .logical-content{transform:scale(1.13)}.stage.zoom .hud-top,.stage.zoom .hud-bottom{opacity:.65}.stage.hide-frame .logical{opacity:0}.stage.hide-frame::after{display:none}.legend{display:flex;gap:18px;flex-wrap:wrap;color:var(--muted);font-size:14px;margin-top:12px}.key{display:inline-block;width:13px;height:13px;border:2px solid #f5cd76;vertical-align:-2px;margin-right:6px}.crop-key{display:inline-block;width:13px;height:13px;background:#0b0d1260;border:1px solid #6e7680;vertical-align:-2px;margin-right:6px}.terrain-tabs{margin:18px 0 10px}.terrain-card{display:grid;grid-template-columns:minmax(260px,1.2fr) minmax(240px,.8fr);gap:20px;margin-top:18px}.sample-image{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border:1px solid var(--line);border-radius:8px;background:#111}.sample-details{padding:10px 0}.sample-details p{color:#d1cbbb}.caption{color:var(--muted);font-size:13px}.review{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px}.review-card{padding:12px;border:1px solid var(--line);border-radius:8px;background:#1b1e23}.review-card p{margin-bottom:0;color:#d1cbbb}.matrix{margin-top:24px;border-collapse:collapse;width:100%;font-size:14px}.matrix th,.matrix td{padding:9px;text-align:left;border-bottom:1px solid var(--line)}.matrix th{color:#eed39c}.small{font-size:13px;color:var(--muted)}@media(max-width:760px){main{padding:20px 14px 42px}.terrain-card{grid-template-columns:1fr}.review{grid-template-columns:1fr}.preview{padding:10px}.stage-wrap{padding:8px}.toolbar{align-items:flex-start}.matrix{font-size:12px}.matrix th,.matrix td{padding:7px 4px}}
+</style>
+</head>
+<body>
+<main>
+  <p class="meta"><span>T477 · fondos aprobados</span><span>Base de muestra: origin/main debef6c</span><span>Estado: aprobados por Lucas; integración T478</span></p>
+  <h1>Franjas temáticas · muestra para revisar</h1>
+  <p class="lead">Los fondos aprobados rellenan las áreas exteriores al marco lógico y los márgenes internos del mapa. El mapa y el HUD siguen en 1280×720. T478 integra estos siete PNG sin alterar su composición ni sumar casillas jugables.</p>
+  <div class="notice"><strong>Estado:</strong> Lucas aprobó las siete imágenes con el merge del PR #66. T478 las integra como fondos de runtime en <code>assets/backgrounds/stripes/</code>; esta lámina queda como referencia de origen y encuadre.</div>
+
+  <section class="toolbar" aria-label="Controles de vista previa">
+    <label>Relación de ventana:</label>
+    <div class="aspect-tabs">
+      <button data-ratio="16/9" aria-pressed="true">16:9</button><button data-ratio="16/10" aria-pressed="false">16:10</button><button data-ratio="21/9" aria-pressed="false">21:9</button><button data-ratio="4/3" aria-pressed="false">4:3</button><button data-ratio="20/9" aria-pressed="false">20:9 simulado</button>
+    </div>
+    <button id="zoom" aria-pressed="false">Acercar solo el mapa</button>
+    <button id="frame" aria-pressed="true">Mostrar marco lógico</button>
+  </section>
+  <section class="preview">
+    <h2 id="preview-title">Pradera · niveles 1–5 y 15</h2>
+    <p id="preview-note" class="small">Fondo de pantalla completo; el rectángulo dorado representa el marco lógico 16:9. La grilla central es esquemática y no representa ningún nivel.</p>
+    <div class="stage-wrap"><div class="stage" id="stage" style="background-image:url('muestras/pradera.png')">
+      <div class="logical"><div class="logical-content"><div class="hud-top"></div><div class="hud-bottom"></div><div class="mock-map"></div><div class="mock-path"></div><div class="mock-label">MAPA / HUD ACTUAL · ESQUEMA</div></div></div>
+    </div></div>
+    <div class="legend"><span><i class="key"></i>marco lógico 16:9 centrado</span><span><i class="crop-key"></i>área exterior que mostraría el fondo</span><span>El zoom de demostración mueve solo el esquema del mapa.</span></div>
+    <p id="crop-note" class="caption">16:9: no recorta la fuente 16:9; no deja franja exterior.</p>
+  </section>
+
+  <div class="terrain-tabs" id="terrain-tabs" aria-label="Temas"></div>
+  <section class="terrain-card">
+    <img class="sample-image" id="sample-image" src="muestras/pradera.png" alt="Muestra conceptual de fondo para pradera">
+    <div class="sample-details"><h2 id="terrain-name">Pradera</h2><div class="meta" id="terrain-status"></div><p id="terrain-description"></p><p class="caption">Material de referencia activo: <code id="ground-ref"></code></p><p class="caption">Fuente del PNG: <code>image_gen</code>, muestra conceptual. Ver <a href="prompts.md">prompts y límites</a>.</p></div>
+  </section>
+
+  <div class="review">
+    <div class="review-card"><h3>Composición</h3><p>¿El paisaje se siente como «el más allá del mapa» sin agregar una extensión jugable o un hito?</p></div>
+    <div class="review-card"><h3>Legibilidad</h3><p>¿La textura y el contraste acompañan al HUD, sin competir con el mapa ni las tropas?</p></div>
+    <div class="review-card"><h3>Recorte</h3><p>¿Se conserva lo importante al cambiar entre 16:10, 21:9, 4:3 y 20:9?</p></div>
+  </div>
+
+  <h2 style="margin-top:30px">Qué recorta <code>cover</code> al llenar la ventana</h2>
+  <p class="small">Cálculo teórico para fuentes 16:9, centradas; no es una captura de Godot. Compará con la imagen elegida arriba.</p>
+  <table class="matrix"><thead><tr><th>Ventana</th><th>Franja exterior del marco 16:9</th><th>Recorte de la imagen 16:9</th></tr></thead><tbody>
+  <tr><td>16:9</td><td>ninguna</td><td>0 %</td></tr><tr><td>16:10</td><td>5 % arriba y abajo</td><td>5 % de ancho por lado</td></tr><tr><td>21:9</td><td>12,5 % a cada lado</td><td>≈11,9 % de alto arriba y abajo</td></tr><tr><td>4:3</td><td>12,5 % arriba y abajo</td><td>12,5 % de ancho por lado</td></tr><tr><td>20:9</td><td>10 % a cada lado</td><td>10 % de alto arriba y abajo</td></tr>
+  </tbody></table>
+  <p class="small" style="margin-top:22px">Temas oficiales de campaña según los 15 JSON: pradera (1–5, 15), bosque (6–7), ruinas (8–9, 14), desierto (10–12), nieve (13). Volcán y pantano son temas válidos del editor, pero no aparecen en la campaña vigente. El nivel 15 usa <code>pradera</code>.</p>
+  <p class="small">T477 no implementa cámara, fondos, UI ni datos. Las capturas reales en ventana y la prueba de nitidez pertenecen a T476/T478.</p>
+</main>
+<script>
+const themes={
+ pradera:{name:'Pradera',levels:'Campaña · niveles 1–5 y 15',file:'pradera.png',ground:'assets/tiles/rendered/ground_pradera.png',description:'Verde templado y terreno abierto. Mantener centro tranquilo para que la grilla existente y sus tropas se lean por delante.'},
+ bosque:{name:'Bosque',levels:'Campaña · niveles 6–7',file:'bosque.png',ground:'assets/tiles/rendered/ground_bosque.png',description:'Sombra verde con profundidad periférica. Evitar que troncos/ramas parezcan obstáculos o agreguen casillas.'},
+ ruinas:{name:'Ruinas',levels:'Campaña · niveles 8–9 y 14',file:'ruinas.png',ground:'assets/tiles/rendered/ground_ruinas.png',description:'Piedra gastada en tono neutro. La muestra no define la ubicación, antigüedad ni historia de ninguna estructura.'},
+ desierto:{name:'Desierto',levels:'Campaña · niveles 10–12',file:'desierto.png',ground:'assets/tiles/rendered/ground_desierto.png',description:'Gama cálida de arena y roca. Sin caminos ni señales que se puedan interpretar como extensiones del mapa.'},
+ nieve:{name:'Nieve',levels:'Campaña · nivel 13',file:'nieve.png',ground:'assets/tiles/rendered/ground_nieve.png',description:'Nieve y roca fría con contraste contenido; la prueba final debe verificar que HUD y mapa sigan legibles.'},
+ volcan:{name:'Volcán',levels:'Editor · sin niveles de campaña',file:'volcan.png',ground:'assets/tiles/rendered/ground_volcan.png',description:'Tema válido para mapas del editor, sin vincularlo a un nivel oficial o a un dato de lore.'},
+ pantano:{name:'Pantano',levels:'Editor · sin niveles de campaña',file:'pantano.png',ground:'assets/tiles/rendered/ground_pantano.png',description:'Tema válido para mapas del editor; la imagen es solo una propuesta de color y densidad.'}
+};
+let current='pradera';const stage=document.querySelector('#stage');
+function fitLogical(){const scale=Math.min(stage.clientWidth/16,stage.clientHeight/9);const frame=stage.querySelector('.logical');frame.style.width=`${scale*16}px`;frame.style.height=`${scale*9}px`}
+new ResizeObserver(fitLogical).observe(stage);
+function setTheme(id){current=id;const t=themes[id];stage.style.backgroundImage=`url('muestras/${t.file}')`;document.querySelector('#preview-title').textContent=`${t.name} · ${t.levels.replace('Campaña · ','').replace('Editor · ','')}`;document.querySelector('#sample-image').src=`muestras/${t.file}`;document.querySelector('#sample-image').alt=`Fondo aprobado para ${t.name.toLowerCase()}`;document.querySelector('#terrain-name').textContent=t.name;document.querySelector('#terrain-status').innerHTML=`<span>${t.levels}</span><span>aprobado por Lucas</span>`;document.querySelector('#terrain-description').textContent=t.description;document.querySelector('#ground-ref').textContent=t.ground;document.querySelectorAll('[data-theme]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.theme===id)));}
+const tabs=document.querySelector('#terrain-tabs');for(const [id,t] of Object.entries(themes)){const b=document.createElement('button');b.textContent=t.name;b.dataset.theme=id;b.setAttribute('aria-pressed','false');b.onclick=()=>setTheme(id);tabs.appendChild(b)}
+const notes={'16/9':'16:9: no recorta la fuente 16:9; no deja franja exterior.','16/10':'16:10: quedan franjas exteriores arriba/abajo; cover recorta 5 % de ancho por lado.','21/9':'21:9: quedan franjas exteriores a izquierda/derecha; cover recorta ≈11,9 % de alto arriba/abajo.','4/3':'4:3: quedan franjas exteriores arriba/abajo; cover recorta 12,5 % de ancho por lado.','20/9':'20:9: quedan franjas exteriores a izquierda/derecha; cover recorta 10 % de alto arriba/abajo.'};
+document.querySelectorAll('[data-ratio]').forEach(b=>b.onclick=()=>{const r=b.dataset.ratio;stage.style.aspectRatio=r;document.querySelector('#crop-note').textContent=notes[r];document.querySelectorAll('[data-ratio]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)))});
+document.querySelector('#zoom').onclick=e=>{const active=stage.classList.toggle('zoom');e.currentTarget.setAttribute('aria-pressed',String(active))};
+document.querySelector('#frame').onclick=e=>{const active=stage.classList.toggle('hide-frame');e.currentTarget.setAttribute('aria-pressed',String(!active));e.currentTarget.textContent=active?'Mostrar marco lógico':'Ocultar marco lógico'};
+setTheme(current);fitLogical();
+</script>
+</body>
+</html>

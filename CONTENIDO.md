@@ -70,24 +70,13 @@ Los niveles son JSON, un formato de texto común que se edita a mano. Un `.tres`
 | `stun_interval` / `stun_seconds` / `stun_range_tiles` | El **hechizo** que apaga torres (RF-281): cada cuántos segundos, cuánto aturde y a qué distancia. 0 = no lanza. | `8.0`, `3.0`, `4.0` |
 | `reflect_range_tiles` / `reflect_stun_seconds` | El **rebote** (RF-283): a qué distancia rebota el tiro de una torre y cuánto la aturde. La quemadura no rebota. | `2.5`, `2.0` |
 | `aura_heal_percent_per_second` | % de vida máxima por segundo que hace recuperar a los demás dentro del radio (RF-272); no mientras se queman. | `3.0` |
-| `entrance` | La **entrada** del jefe (RF-601, M66): vacío = el enemigo no hace entrada. Ver más abajo. | `BossEntranceData` |
+| `entrance` | Dato del piloto viejo T366/T368, pendiente de reemplazo por T461; no agregar ni extender para el M66 aprobado. | `BossEntranceData`
 
-### Darle una entrada a un jefe (M66, RF-601)
+### Presentación de jefes (M66; T461)
 
-Cuando un enemigo con `entrance` aparece en una partida de la **campaña jugada desde el menú** (también en el modo de pruebas), sale un **destello** en la entrada del camino y un **cartel** de 1,6 s con su retrato, «¡Llega el <nombre>!», su nombre y su frase. No hace falta código ni arte: el retrato es su `texture`, el nombre su `display_name` y el destello se tiñe con su `color`.
+**No hay campo de datos para extenderla.** El piloto viejo (`EnemyData.entrance`, `BossEntranceData`, `data/ui/entrada_jefes.json`, destello, cartel y los PNG `boss_burst`, `boss_crack` y `boss_card_frame`) se retiró en T461: no agregues `entrance` a ningún enemigo. Hoy la presentación sale para **todo enemigo peligroso** (`lives_damage` ≥ 5, RF-135): el Jefe y el Coloso. Su título, nombre y frase son los del propio enemigo (`display_name`, `description`) y los segundos (5 la primera vez, 3 después, 0,3 de protección) están en `BossPresentationRules`.
 
-1. En el `.tres` del enemigo, en el Inspector de Godot, el campo **`entrance`** → *Nuevo BossEntranceData*.
-2. Completá lo que haga falta:
-
-| Campo | Qué es | Ejemplo |
-|---|---|---|
-| `levels` | Ids de los niveles donde sale. **Vacía = en todos.** Un id que no existe es un error. | `["level_01"]` o vacía |
-| `line` | La frase del cartel (80 caracteres como máximo). **Vacía = usa la `description` del enemigo.** | `¡Viene por la salida!` |
-| `sound` | Id de un sonido que ya existe (un `.wav` de `assets/audio/`). Vacío = ninguno. | `impact` |
-
-3. Revisalo: `godot --headless --path . -s tools/check_entrada_jefes.gd` dice, en castellano, qué está mal.
-
-**Hoy** solo el **Jefe** (`boss.tres`) tiene `entrance`, con `levels = ["level_01"]`: es el piloto. **No se activó en los demás a propósito** (spec M66, P-66-7). Para extenderlo: **(a)** el Jefe en sus otros 14 niveles = vaciar la lista `levels` de `boss.tres`; **(b)** el Coloso (nivel 15) = agregarle una `entrance` con `levels` vacía o `["level_15"]` a `colossus.tres`. Los tiempos y el tamaño del cartel están en `data/ui/entrada_jefes.json` (`destello_s`, `cartel_entra_s`, `cartel_quieto_s`, `cartel_sale_s`, `cartel_ancho_px` hasta 720, `cartel_alto_px` hasta 120, `intervalo_min_s`, fuentes) y el mismo validador los revisa. El jugador la prende y la apaga en **Opciones → «Entrada de los jefes»**. Solo sale una vez por oleada y por tipo, y no más de una cada 8 s.
+Cuando haya arte aprobado (T367) se le pasan la ilustración y el fondo a `BossPresentation.setup()`; hasta entonces usa el retrato del enemigo sobre un fondo liso. El jefe supremo del nivel 15 espera a T243/T463. El jefe presentado no lleva tarjeta «Nuevo enemigo» (PR #59). Ver [M66](specs/01-spec.md), [T461](specs/03-tareas.md) y la [ficha de muestras T367](specs/tareas/T367-arte-entrada-jefes.md).
 
 ---
 
@@ -491,7 +480,7 @@ Campaña ampliada con level_08 (Bastión) y level_09 (Taller asediado). JSON en 
 
 ### M58 · Interfaz para el celular (spec escrita; todavía no está en el juego)
 
-El modo celular (RF-502 a RF-515, D-097) **no agrega enemigos, torres ni niveles**, pero tiene **un archivo de números** que se podrá ajustar sin programar cuando lo haga T271: **`data/ui/mobile_ui.json`** (todavía no existe). Ahí van el alto de los botones de la barra (56 px), el de la barra de arriba (64 px), el tamaño mínimo de los botones flotantes (82 px o 7,6 mm), cuánto debe moverse un dedo para dejar de ser un toque (2 mm), los segundos de «Vender» armado (3 s), la espera mínima entre los dos toques de «Vender» (0,4 s), el bloqueo de «Mejorar» (0,35 s), la opacidad con fantasma (45 %) y la casilla máxima del zoom (96 px). **Los valores son los de la spec, a medir en un celular real**; un archivo dañado usa los valores por omisión.
+El modo celular (RF-502 a RF-515, D-097) **no agrega enemigos, torres ni niveles**, pero tiene un archivo de números ajustables en **`data/ui/mobile_ui.json`**. Ahí van el alto de los botones de la barra (56 px), el de la barra de arriba (64 px), el tamaño mínimo de los botones flotantes (64 px o 6 mm), cuánto debe moverse un dedo para dejar de ser un toque (2 mm), los segundos de «Vender» armado (3 s), la espera mínima entre los dos toques de «Vender» (0,4 s), el bloqueo de «Mejorar» (0,35 s), la opacidad con fantasma (45 %) y la casilla máxima del zoom (64 px, tope 1,0 según D-205). Un archivo dañado usa los valores por omisión.
 
 - **Lo que cada jugador elige** no es contenido: se guarda en su `save.json`. La opción **«Interfaz»** (Automática / Celular / PC) está en `settings` como `ui_mode`, y la **posición de los botones flotantes** en la clave nueva `ui_prefs` (`cart_side`, `cart_y`, `exit_side`, `exit_y`). Sin ellas el juego usa los valores por omisión.
 - **Las tarjetas de nivel con Insignias** (RF-514) muestran **las torres que ya ofrece cada nivel**: no hay nada para agregar a mano.
@@ -575,6 +564,8 @@ El tutorial se retoca con un archivo, sin programar: `{"version": 1, "borrador":
 
 ### M65 · La animación de mejora de torres (`data/ui/mejoras.json`)
 
+El arte aprobado está integrado (M71): `assets/sprites/effects/mejora/upgrade_l2.png` y `upgrade_l3.png`, atlas de 4 × 2 cuadros de 192 px. Para los jefes, `assets/sprites/effects/jefe/` contiene el destello (4 × 2 cuadros de 256 px), la grieta (192 × 96) y el marco 9-slice (192 × 128, márgenes de 32). Los cinco PNG se importan sin mipmaps. RF-643 limita la importación de los atlas de mejora a 384 × 192 y del destello a 512 × 256; el código compensa con escala 2, sin cambiar tamaño visual ni pies. Los originales y los ocho cuadros permanecen intactos. Peso de los cinco PNG: 151.135 bytes (27.924 + 53.552 + 54.987 + 10.924 + 3.748); el límite de importación reduce 75 % los texels de los tres atlas, no el peso de sus originales.
+
 Lo que aparece al mejorar una torre se retoca con un archivo, sin programar. **No hay que escribir ningún número de torre**: el texto («+3 daño · +0,5 disp/s») se calcula restando los niveles de `data/towers/<id>.tres`, así que si cambiás el daño de un `.tres`, el texto cambia solo.
 
 | Clave | Qué es |
@@ -589,7 +580,7 @@ Lo que aparece al mejorar una torre se retoca con un archivo, sin programar. **N
 
 - **Solo se muestra lo que cambió** entre niveles (con tolerancia de 0,005). El costo, las texturas, `bonus_vs_*` y `chain_range_tiles` no están en la tabla: si algún día cambian y querés mostrarlos, sumá una línea.
 - **Si agregás un campo nuevo** a `TowerLevelData` que cambia entre niveles, sumalo a la tabla: un test (`test_upgrade_deltas.gd`) avisa si falta.
-- **La misma tabla arma el «antes → después»** (M68, RF-616 a RF-618): el panel de la torre en la PC («Al nivel 2: daño 5 → 8») y la barra de abajo del celular («Al mejorar: …») muestran las estadísticas de esta tabla, en este orden y con este tope (`max_estadisticas` en la PC; `max_por_renglon` en el celular). No hay un archivo aparte.
+- **La misma tabla arma el «antes → después»** (M68, RF-616 a RF-618): el panel de la torre en la PC («Al nivel 2: daño 5 → 8») *(M75, pendiente de implementación: ese bloque «Al nivel N:» desaparece y el «antes → después» pasa a su lugar dentro del panel; la tabla y el tope siguen siendo los de acá)* y la barra de abajo del celular («Al mejorar: …») muestran las estadísticas de esta tabla, en este orden y con este tope (`max_estadisticas` en la PC; `max_por_renglon` en el celular). No hay un archivo aparte.
 - **Revisalo** con `godot --headless --path . -s tools/check_mejoras.gd`. Con un error, el juego usa el valor por omisión de ese campo y sigue andando.
 - **Se apaga** en Opciones → «Animaciones de mejora».
 
@@ -620,7 +611,7 @@ Los textos oficiales son **los de `specs/intro/guion.md`**: si hay que corregir 
 
 ### M49 · Modos de juego (RF-388 a RF-392)
 
-Un **modo** es un grupo de mapas con reglas propias. Aparece como una solapa en **Jugar**: los oficiales después de "Campaña" y los propios después de "Mapas de la comunidad". No hace falta programar: es una carpeta con un archivo `modo.json`.
+Un **modo** es un grupo de mapas con reglas propias. Aparece como una solapa en **Jugar** (la fila se desplaza si no entran todas): los oficiales después de "Campaña" y los propios después de "Mapas de la comunidad". **Récords** muestra el top 5 de cada modo por separado. No hace falta programar: es una carpeta con un archivo `modo.json`.
 
 **Dónde va cada uno:**
 - **Oficiales:** `data/modos/<id>/modo.json`, en el repositorio. Hoy existe **Asedio** (`data/modos/asedio/`, con los 15 mapas).
@@ -708,3 +699,29 @@ La pantalla «Novedades de esta versión» (se abre sola una vez por versión y 
 
 
 **Arte de Novedades (T375):** en `assets/ui/novedades/` están `news_header_1_0.png` (presentación, 4:1), `news_header_plain.png` (mejoras, 8:1) y los medallones `news_icon_<nombre>.png`, con nombres `map`, `tower`, `monster`, `siege`, `editor`, `mobile`, `book` y `upgrade`. Poné la ruta `res://` en `cabecera` o `icono` para usarlos. La cabecera se ajusta al ancho interior del panel sin recorte; el texto queda debajo. Los íconos miden 48 px en PC y 64 px en celular. Si omitís `icono`, queda un rombo de bronce; si omitís `cabecera`, no se reserva espacio. Importar sin mipmaps. La 1.0.0 sigue en borrador hasta aprobar los textos.
+
+## Presentación de jefes (M66, T461)
+
+La presentación pausa la campaña normal, dura 5 s la primera vez que el guardado ve a ese jefe y 3 s después, y no sale en Asedio ni en modo de pruebas. La opción conserva su clave (`boss_entrance`) y se llama «Presentación de los jefes»; en el menú sigue en la fila donde estaba (debajo de «Tutorial»): el agrupado «Partida y ayudas» todavía no existe en el código. La animación es por código sobre una ilustración quieta; el arte propio del Jefe y del Coloso no está aprobado (T367) y el del nivel 15 espera a T243. El piloto viejo y sus assets se retiraron. Ver [M66](specs/01-spec.md), [T461](specs/03-tareas.md) y la [ficha de arte T367](specs/tareas/T367-arte-entrada-jefes.md).
+## M76 · Mapa y postes de conquista (T459; spec, sin implementar)
+
+El planeta será la vista inicial de campaña en PC/celular con migración de una vez y tarjetas alternativas. La geografía en serrucho oeste→este (atlas de T485, ruta B, aprobada por Lucas el 2026-10-25) ya está integrada por T471: `CampaignMap` (`REGION_POINTS`, `LANDER`, `ROUTE_CONTROLS`, `LAND_COORDS`) y `assets/ui/campaign_map_background.svg` salen de la misma fuente con `python3 -I art/t471-geografia/build_background.py`; no se retocan a mano por separado. Las insignias de conquista y la vista celular nueva (T469) y el descubrimiento por zonas (T488) siguen pendientes. No modifica geografía jugable. Asedio N se habilitará con campaña N ganada, manteniendo accesos anteriores y guardados de pruebas separados (T472).
+
+El círculo del número llevará fondo rebelde, partido con 1–2 estrellas o del jugador con 3. La receta del editor es solo estética. Se proponen 20 postes (1 por nivel 1–10, 2 por 11–15), rebeldes hasta 2 estrellas y del jugador con 3; reemplaza la regla anterior del 6. Las posiciones de T475 son candidatas sobre casillas permanentemente no construibles y requieren **OK de Lucas por cada uno de los 15 mapas** antes de integrar. No cambiar leyenda, casillas construibles, removibles ni recursos para hacerles lugar. M74 mantiene su editor desktop; no se habilita editor móvil por inferencia.
+
+
+## «Ver todo», panel de mejora, alcance y Opciones (M75, T458; pendiente de implementación)
+
+La spec M75 (RF-674 a RF-686, D-192 a D-197 y D-207) todavía **no está programada**: lo de abajo describe qué datos se podrán retocar cuando se implemente, y **hoy no existe**.
+
+- **Alcance de las torres.** Una opción nueva en Opciones, «Círculo de alcance» (Oculto por omisión, Sutil o Completo). El grosor y la opacidad de cada estilo no van en el código: vivirán en un archivo de `data/ui/` que decide la tarea T466 (puntos de partida: Completo = lo de hoy, relleno 0,08 y borde 0,7 de 2 px; Sutil = borde de 1 px, opacidad ≈ 0,3). Cuando exista, se documenta acá cómo retocarlo.
+- **Panel de torre.** No hay números nuevos: el «antes → después» sigue saliendo de la tabla `estadisticas` de `data/ui/mejoras.json` (sección M65 de este documento) y todos los decimales se escribirán con coma.
+- **Aviso de «Ver todo» (D-207):** aparece una sola vez por guardado únicamente al acercar (aumentar el zoom); alejar o desplazar sin acercar no lo activa. Si se desplaza y luego se acerca, puede aparecer si aún no se mostró. **Textos aprobados:** PC «Acercaste el mapa. Apretá V para volver a verlo entero.»; celular «Acercaste el mapa. Tocá la lupa para volver a verlo entero.» El botón de confirmación del celular conserva visible el costo; el texto final se verifica en las capturas de implementación.
+- **Opciones.** Las cinco categorías (Sonido, Pantalla, Partida y ayudas, Controles, Avanzado) se muestran como solapas superiores; en celular se omite Controles. Cada categoría abre su propia página y cambiar de solapa no toca las preferencias. La interfaz está implementada en la rama del PR #73 y espera revisión de Lucas.
+- No cambia ningún dato de torres, enemigos o niveles. Ver [M75](specs/01-spec.md), [T458](specs/03-tareas.md) y la [ficha](specs/tareas/T458-ficha-camara-panel-opciones.md).
+
+## M77 · Fondos de franjas y de carga (T460; spec aprobada)
+
+T478 integra los siete fondos aprobados del PR #66, asociados al tema del nivel en `data/ui/presentation_backgrounds.json`. Rellenan las franjas externas y los márgenes internos sin crear casillas ni cambiar leyenda/camino; quedan fijos respecto al zoom y se recortan en ejecución. El respaldo exterior es liso si el tema o el recurso no está disponible. El máximo de zoom es 1,0.
+
+La carga podrá reutilizar las láminas oficiales de intro, una por cambio y sin repetición consecutiva, con recorte en ejecución y sin texto narrativo. **No se implementa hasta agregar al informe T454 una medición del costo en celular real y obtener aprobación de Lucas con esos datos**. Si se aprueba, GameFlow inyectará la imagen al núcleo genérico; no se copian siete láminas a otro directorio ni se modifica su importación/resolución por inferencia. Color/barra siguen de respaldo y una imagen tardía no demora la escena. Ver RF-699–707 y fichas T476–479.

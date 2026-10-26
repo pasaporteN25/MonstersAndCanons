@@ -5,6 +5,8 @@
 # progreso por defecto y el juego NO se cierra.
 extends Node
 
+signal setting_changed(key: String, value: Variant)
+
 const SAVE_VERSION: int = 1
 const DEFAULT_PATH: String = "user://save.json"
 const BACKUP_LIMIT: int = 10
@@ -18,9 +20,12 @@ const DEFAULT_SETTINGS: Dictionary = {
 	"ui_mode": 0,
 	"tutorial_enabled": true,  # M63, RF-576: el tutorial del nivel 1 está prendido
 	"upgrade_fx": true,  # M65, RF-593: animaciones de mejora de torres prendidas
-	"boss_entrance": true,  # M66, RF-600: la entrada de los jefes está prendida
+	"boss_entrance": true,  # M66, RF-672: la presentación de los jefes está prendida
 	"defeat_advice": true,  # M70, RF-644: los consejos de derrota están prendidos
-	"selector_style": 0,  # M72, RF-645: 0 = tarjetas, 1 = mapa planetario (preferencia de interfaz, desktop)
+	"selector_style": 1,  # M72/M76, RF-645, RF-687: 0 = tarjetas, 1 = mapa planetario (por omisión, PC y celular)
+	"selector_map_migrated": false,  # M76, RF-689: ¿este archivo ya pasó una vez al mapa? Clave aditiva
+	"range_display": 0,  # M75, RF-678: Oculto por omisión, también para guardados viejos
+	"siege_access_migrated": true,  # M76, RF-693: ¿este archivo ya migró el acceso a Asedio? Clave aditiva
 }
 
 ## Los tests lo cambian para no tocar el guardado real del jugador.
@@ -29,6 +34,8 @@ var save_path: String = DEFAULT_PATH
 var backup_save_path: String = DEFAULT_PATH
 var backup_prefix: String = BACKUP_PREFIX
 var _backup_checked: bool = false
+## M76, RF-693: el Asedio oficial, leído una sola vez para validar ids (solo se usa su lista de mapas).
+var _siege_mode: Dictionary = {}
 
 var _levels: Dictionary = {}    # { "level_01": {"unlocked", "completed", "best_lives", "best_score"} }
 var _settings: Dictionary = {}
@@ -72,6 +79,7 @@ func load_save() -> void:
 	_tutorial_done = false
 	_news_version = ""
 	_ui_prefs = UiPrefs.new()
+	_settings["siege_legacy_unlocked"] = []
 	ViewAllBinding.apply(_ui_prefs.view_all_key)  # M68 (RF-613)
 	if not FileAccess.file_exists(save_path):
 		return
@@ -88,8 +96,10 @@ func load_save() -> void:
 	_read_collections((parsed as Dictionary).get("collections", {}))
 	_read_levels((parsed as Dictionary).get("levels", {}))
 	_read_settings((parsed as Dictionary).get("settings", {}))
+	_migrate_selector_style((parsed as Dictionary).get("settings", {}))
 	_read_seen_enemies((parsed as Dictionary).get("seen_enemies", []))
 	_read_scores((parsed as Dictionary).get("scores", {}))
+	_migrate_siege_access((parsed as Dictionary).get("settings", {}))
 	_read_initials((parsed as Dictionary).get("initials", {}))
 	var hall_total: Variant = (parsed as Dictionary).get("hall_total", 0)
 	_hall_total = int(hall_total) if typeof(hall_total) in [TYPE_INT, TYPE_FLOAT] else 0
@@ -105,14 +115,59 @@ func load_save() -> void:
 
 func save() -> bool:
 	_backup_save_if_needed()
-	var file := FileAccess.open(save_path, FileAccess.WRITE)
-	if file == null:
-		push_warning("No se pudo guardar en %s" % save_path)
-		return false
+	var was_migrated: bool = selector_map_migrated()
+	_settings["selector_map_migrated"] = true  # RF-689: queda registrada en este guardado exitoso
 	var data := {"version": SAVE_VERSION, "levels": _levels, "settings": _settings,
 		"seen_enemies": _seen_enemies, "scores": _scores, "initials": _last_initials, "hall_total": _hall_total, "collections": _collections,
 		"intro_seen": _intro_seen, "ui_prefs": _ui_prefs.to_dict(), "tutorial_done": _tutorial_done, "news_version": _news_version}
-	file.store_string(JSON.stringify(data, "  "))
+	var temporary_path: String = save_path + ".tmp"
+	var serialized: String = JSON.stringify(data, "  ")
+	if DirAccess.dir_exists_absolute(ProjectSettings.globalize_path(save_path)):
+		_settings["selector_map_migrated"] = was_migrated
+		push_warning("No se pudo guardar en %s: la ruta es un directorio" % save_path)
+		return false
+	var file := FileAccess.open(temporary_path, FileAccess.WRITE)
+	if file == null:
+		_settings["selector_map_migrated"] = was_migrated
+		push_warning("No se pudo crear el guardado temporal %s" % temporary_path)
+		return false
+	file.store_string(serialized)
+	file.flush()
+	var write_error: Error = file.get_error()
+	var written_size: int = file.get_length()
+	file.close()
+	if write_error != OK or written_size != serialized.to_utf8_buffer().size():
+		_remove_backup_temporary(temporary_path)
+		_settings["selector_map_migrated"] = was_migrated
+		push_warning("No se pudo escribir completo el guardado temporal %s" % temporary_path)
+		return false
+	var target_absolute: String = ProjectSettings.globalize_path(save_path)
+	var temporary_absolute: String = ProjectSettings.globalize_path(temporary_path)
+	var rename_error: Error = DirAccess.rename_absolute(temporary_absolute, target_absolute)
+	if rename_error != OK and FileAccess.file_exists(save_path):
+		# En Windows puede no permitirse reemplazar el destino con rename. Resguardarlo y
+		# restaurarlo si el segundo movimiento falla; nunca abrir el guardado anterior para truncarlo.
+		var previous_path: String = save_path + ".previous"
+		var previous_absolute: String = ProjectSettings.globalize_path(previous_path)
+		if FileAccess.file_exists(previous_path):
+			_remove_backup_temporary(temporary_path)
+			_settings["selector_map_migrated"] = was_migrated
+			push_warning("No se pudo guardar en %s: existe un temporal de reemplazo anterior" % save_path)
+			return false
+		var backup_error: Error = DirAccess.rename_absolute(target_absolute, previous_absolute)
+		if backup_error == OK:
+			rename_error = DirAccess.rename_absolute(temporary_absolute, target_absolute)
+			if rename_error == OK:
+				_remove_backup_temporary(previous_path)
+			else:
+				var restore_error: Error = DirAccess.rename_absolute(previous_absolute, target_absolute)
+				if restore_error != OK:
+					push_error("No se pudo restaurar el guardado anterior %s: %s" % [save_path, error_string(restore_error)])
+	if rename_error != OK:
+		_remove_backup_temporary(temporary_path)
+		_settings["selector_map_migrated"] = was_migrated
+		push_warning("No se pudo completar el guardado %s: %s" % [save_path, error_string(rename_error)])
+		return false
 	return true
 
 
@@ -354,7 +409,7 @@ func set_last_initials(name: String) -> void:
 
 # --- Opciones (RF-113) ---
 
-## M66, RF-600: ¿está prendida la «Entrada de los jefes»? Un valor que no es booleano se lee como prendida.
+## M66, RF-672: ¿está prendida la «Presentación de los jefes»? (clave `boss_entrance`, sin migración) Un valor que no es booleano se lee como prendida.
 func boss_entrance_enabled() -> bool:
 	var value: Variant = get_setting("boss_entrance")
 	return value if typeof(value) == TYPE_BOOL else true
@@ -364,6 +419,23 @@ func boss_entrance_enabled() -> bool:
 func defeat_advice_enabled() -> bool:
 	var value: Variant = get_setting("defeat_advice")
 	return value if typeof(value) == TYPE_BOOL else true
+
+
+# --- Acceso heredado a Asedio (M76, RF-692, RF-693) ---
+
+## ¿Este archivo conserva el derecho de abrir ese mapa de Asedio (`modo_asedio_*`) de antes de RF-692?
+func has_siege_legacy(level_id: StringName) -> bool:
+	return (_settings.get("siege_legacy_unlocked", []) as Array).has(String(level_id))
+
+
+## Los ids heredados de este archivo (copia).
+func siege_legacy_unlocked() -> Array:
+	return (_settings.get("siege_legacy_unlocked", []) as Array).duplicate()
+
+
+## ¿Ya quedó registrada la migración? En memoria vale `true` tras cargar; se escribe en el próximo guardado.
+func siege_access_migrated() -> bool:
+	return get_setting("siege_access_migrated") == true
 
 
 func get_setting(key: String) -> Variant:
@@ -377,13 +449,38 @@ func upgrade_fx_enabled() -> bool:
 	return value if typeof(value) == TYPE_BOOL else true
 
 
-## M72, RF-645: el estilo del selector de campaña (`CampaignMap.STYLE_*`). Un valor inválido vale tarjetas.
+## M72/M76, RF-645, RF-687: el estilo del selector de campaña (`CampaignMap.STYLE_*`). Al cargar, un valor ausente o
+## inválido ya se normalizó a mapa; un valor puesto a mano después con `set_setting` inválido vale tarjetas.
 func selector_style() -> int:
 	return CampaignMap.style_from(get_setting("selector_style"))
 
 
+## M76, RF-689: ¿el archivo actual ya registró la migración al mapa? `false` = pendiente hasta el próximo guardado.
+func selector_map_migrated() -> bool:
+	return get_setting("selector_map_migrated") == true
+
+
 func set_setting(key: String, value: Variant) -> void:
+	if key == "range_display":
+		value = _range_display_value(value)
 	_settings[key] = value
+	setting_changed.emit(key, value)
+
+
+## M75, RF-678: modo de dibujo del alcance. Un valor inválido se interpreta como Oculto.
+func range_display() -> int:
+	var value: Variant = get_setting("range_display")
+	return _range_display_value(value)
+
+
+func _range_display_value(value: Variant) -> int:
+	return int(value) if _is_range_display_valid(value) else 0
+
+
+## Solo vale un número exactamente 0, 1 o 2 (JSON da 1.0 en vez de 1). Texto, booleanos, fracciones
+## (incluso 1.000001), infinitos y NaN no valen.
+func _is_range_display_valid(value: Variant) -> bool:
+	return typeof(value) in [TYPE_INT, TYPE_FLOAT] and float(value) in [0.0, 1.0, 2.0]
 
 
 func get_ui_prefs() -> UiPrefs:
@@ -450,9 +547,59 @@ func _read_initials(raw: Variant) -> void:
 			_last_initials[str(key)] = raw[key]
 
 
+## M76, RF-693: migración aditiva del acceso a Asedio, una vez por archivo (normal o de pruebas), sin copiar nada entre ellos.
+## Con la marca booleana `true` se respeta la lista guardada (solo ids válidos). Sin ella, si hay evidencia de que el archivo
+## jugó Asedio se suma el acceso de la regla vieja; sin evidencia la lista queda vacía. Nunca toca niveles ni récords.
+func _migrate_siege_access(raw_settings: Variant) -> void:
+	var raw: Dictionary = raw_settings if raw_settings is Dictionary else {}
+	if _siege_mode.is_empty():
+		_siege_mode = ModePacks.read(ModePacks.OFFICIAL_DIR, String(SiegeAccess.MODE_ID), true)
+	var raw_legacy: Variant = raw.get("siege_legacy_unlocked")
+	var valid_ids: Array[String] = SiegeAccess.valid_ids(_siege_mode)
+	var mode_maps: Array = _siege_mode.get("maps", [])
+	var mode_errors: PackedStringArray = _siege_mode.get("errors", PackedStringArray())
+	if not mode_errors.is_empty() or mode_maps.is_empty() or valid_ids.size() != mode_maps.size():
+		# Sin poder validar todos los ids oficiales, no consumir la migración ni borrar accesos guardados.
+		# Los strings ajenos quedan inertes: GameFlow solo compara contra el id real de un mapa cargado.
+		var pending: Array[String] = []
+		if raw_legacy is Array:
+			for value: Variant in raw_legacy:
+				if value is String and not pending.has(value):
+					pending.append(value)
+		_settings["siege_legacy_unlocked"] = pending
+		_settings["siege_access_migrated"] = false
+		return
+	var kept: Array[String] = SiegeAccess.sanitize(_siege_mode, raw_legacy)
+	var migrated: bool = typeof(raw.get("siege_access_migrated")) == TYPE_BOOL and raw["siege_access_migrated"]
+	if not migrated and SiegeAccess.has_evidence(valid_ids, _levels, _scores):
+		for id: String in SiegeAccess.legacy_access(_siege_mode, _levels):
+			if not kept.has(id):
+				kept.append(id)
+		kept = SiegeAccess.sort_by_map(_siege_mode, kept)
+	_settings["siege_legacy_unlocked"] = kept
+	_settings["siege_access_migrated"] = true
+
+## M76, RF-689: migración aditiva, una vez por archivo (normal o de pruebas), sin copiar nada entre archivos.
+## Sin marca `true` booleana: mapa (aunque hubiera tarjetas). Con marca: se respeta un estilo válido; ausente o dañado, mapa.
+func _migrate_selector_style(raw_settings: Variant) -> void:
+	var raw: Dictionary = raw_settings if raw_settings is Dictionary else {}
+	var migrated: bool = typeof(raw.get("selector_map_migrated")) == TYPE_BOOL and raw["selector_map_migrated"]
+	_settings["selector_map_migrated"] = migrated
+	if not migrated or not CampaignMap.is_valid_style(raw.get("selector_style")):
+		_settings["selector_style"] = CampaignMap.STYLE_MAP
+
+
 func _read_settings(raw: Variant) -> void:
 	if not raw is Dictionary:
 		return
 	for key: String in DEFAULT_SETTINGS:
+		if key == "range_display":
+			if not raw.has(key):
+				continue
+			if _is_range_display_valid(raw[key]):
+				_settings[key] = _range_display_value(raw[key])
+			else:
+				push_warning("La opción «range_display» del guardado no es válida; se usa Oculto.")
+			continue
 		if raw.has(key) and typeof(raw[key]) in [TYPE_FLOAT, TYPE_INT, TYPE_BOOL]:
 			_settings[key] = raw[key]

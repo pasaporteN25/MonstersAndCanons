@@ -79,13 +79,16 @@ func test_the_per_map_health_of_the_mode_reaches_the_spawner() -> void:
 		await get_tree().process_frame
 
 
-func test_winning_map_9_opens_map_10_of_asedio() -> void:
+func test_winning_map_9_of_asedio_does_not_open_map_10() -> void:
+	# RF-692: ganar un Asedio registra la victoria pero no abre el siguiente; lo abre la campaña 10.
 	GameFlow.current_mode_index = 8
 	var game: Game = _play()
 	_win(game)
 	assert_true(SaveManager.is_completed(ModePacks.map_level(siege, 8).id))
-	assert_true(GameFlow.is_mode_level_unlocked(siege, 9), "el 10 se abre al ganar el 9")
-	assert_false(GameFlow.is_mode_level_unlocked(siege, 10), "el 11 sigue cerrado")
+	assert_false(GameFlow.is_mode_level_unlocked(siege, 9), "el 10 sigue cerrado")
+	assert_false(GameFlow.has_next_level())
+	SaveManager.record_victory(GameFlow.level(9).id, 5)
+	assert_true(GameFlow.is_mode_level_unlocked(siege, 9), "se abre al ganar la campaña 10")
 	assert_true(GameFlow.has_next_level())
 
 
@@ -108,15 +111,16 @@ func test_played_level_is_the_mode_map() -> void:
 	assert_null(GameFlow.played_level())
 
 
-func test_winning_saves_its_own_progress_and_opens_the_next_map() -> void:
+func test_winning_saves_its_own_progress_without_opening_the_next_map() -> void:
+	SaveManager.record_victory(GameFlow.level(0).id, 5)  # RF-692: sin campaña 1 ganada el mapa 1 está cerrado
 	var game: Game = _play()
 	game.session.lose_lives(2)
 	_win(game)
 	var id: StringName = ModePacks.map_level(siege, 0).id
 	assert_true(SaveManager.is_completed(id))
 	assert_eq(SaveManager.best_lives(id), game.level_data.starting_lives - 2)
-	assert_true(GameFlow.is_mode_level_unlocked(siege, 1), "el siguiente del mismo modo")
-	assert_true(GameFlow.has_next_level(), "se ofrece 'Siguiente nivel'")
+	assert_false(GameFlow.is_mode_level_unlocked(siege, 1), "RF-692: el siguiente no se abre por ganar Asedio")
+	assert_false(GameFlow.has_next_level(), "no se ofrece 'Siguiente nivel'")
 
 
 func test_a_mode_victory_never_touches_the_campaign() -> void:
@@ -129,8 +133,8 @@ func test_a_mode_victory_never_touches_the_campaign() -> void:
 	assert_eq(SaveManager.collected_sources(&"technology").size(), 0)
 
 
-func test_the_next_map_is_locked_before_winning() -> void:
-	assert_true(GameFlow.is_mode_level_unlocked(siege, 0))
+func test_asedio_is_locked_until_its_campaign_level_is_won() -> void:
+	assert_false(GameFlow.is_mode_level_unlocked(siege, 0), "RF-693: sin campaña ni herencia, ni el mapa 1")
 	assert_false(GameFlow.is_mode_level_unlocked(siege, 1))
 	assert_false(GameFlow.has_next_level())
 

@@ -1,0 +1,6 @@
+{
+  "sutil": { "opacidad_borde": 0.3, "grosor_borde_px": 1.0 },
+  "completo": { "opacidad_relleno": 0.08, "opacidad_borde": 0.7, "grosor_borde_px": 2.0 },
+  "color_completo": { "r": 1.0, "g": 1.0, "b": 1.0 },
+  "color_apoyo": { "r": 0.68, "g": 0.83, "b": 0.9, "opacidad_sutil": 0.22 }
+}

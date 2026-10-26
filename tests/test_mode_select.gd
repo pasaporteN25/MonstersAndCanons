@@ -19,6 +19,7 @@ func before_each() -> void:
 		DirAccess.remove_absolute(TEST_SAVE)
 	SaveManager.save_path = TEST_SAVE
 	SaveManager.load_save()
+	SaveManager.set_setting("selector_style", CampaignMap.STYLE_CARDS)  # las pruebas de modos inspeccionan tarjetas
 	GameFlow.select_page = &"campaign"
 
 
@@ -105,7 +106,7 @@ func test_choosing_a_mode_shows_its_maps_in_order() -> void:
 	assert_eq((select.get_node("%TotalStars") as Label).text, "Estrellas: 0 de 9")
 
 
-func test_the_real_asedio_shows_15_cards_with_only_the_first_open() -> void:
+func test_the_real_asedio_shows_15_cards_and_campaign_progress_opens_the_matching_one() -> void:
 	DirAccess.make_dir_recursive_absolute(ModePacks.dir_of(OFFICIAL, "asedio"))
 	var text: String = FileAccess.get_file_as_string(ModePacks.OFFICIAL_DIR + "asedio/" + ModePacks.FILE_NAME)
 	var file := FileAccess.open(ModePacks.dir_of(OFFICIAL, "asedio") + ModePacks.FILE_NAME, FileAccess.WRITE)
@@ -113,9 +114,13 @@ func test_the_real_asedio_shows_15_cards_with_only_the_first_open() -> void:
 	file.close()
 	var cards: Array[Node] = _cards(_open(&"mode:asedio"))
 	assert_eq(cards.size(), 15, "T258: los 15 mapas")
-	assert_false((cards[0] as Button).disabled)
-	for i: int in range(1, 15):
+	for i: int in 15:
 		assert_true((cards[i] as Button).disabled, "mapa %d bloqueado en un guardado nuevo" % (i + 1))
+	SaveManager.record_victory(GameFlow.level(0).id, 1, 100)
+	cards = _cards(_open(&"mode:asedio"))
+	assert_false((cards[0] as Button).disabled, "ganar Campaña 1 abre Asedio 1")
+	for i: int in range(1, 15):
+		assert_true((cards[i] as Button).disabled, "mapa %d sigue cerrado" % (i + 1))
 
 
 func test_the_remembered_mode_page_opens_again() -> void:
@@ -133,30 +138,30 @@ func test_a_page_of_a_mode_that_is_gone_falls_back_to_the_campaign() -> void:
 
 # --- Bloqueo y estado (RF-390) ---
 
-func test_official_maps_open_one_after_the_other() -> void:
+func test_campaign_opens_the_matching_official_siege_map_not_a_chain() -> void:
 	_with_modes()
-	var select: Control = _open(&"mode:asedio")
-	var cards: Array[Node] = _cards(select)
-	assert_false((cards[0] as Button).disabled)
-	assert_true((cards[1] as Button).disabled, "cerrado hasta ganar el mapa 1 del modo")
-	assert_true((cards[1] as Button).text.contains("Bloqueado"))
+	SaveManager.record_victory(GameFlow.level(1).id, 1, 100)
+	var cards: Array[Node] = _cards(_open(&"mode:asedio"))
+	assert_true((cards[0] as Button).disabled, "Campaña 1 no habilita Asedio 1")
+	assert_false((cards[1] as Button).disabled, "Campaña 2 habilita Asedio 2")
+	assert_true((cards[2] as Button).disabled, "Asedio 3 depende de Campaña 3")
 
 
-func test_winning_a_mode_map_opens_the_next_one_on_the_screen() -> void:
+func test_winning_a_siege_map_records_result_but_does_not_open_the_next() -> void:
 	_with_modes()
 	var mode: Dictionary = ModePacks.read(OFFICIAL, "asedio", true)
 	SaveManager.record_victory(ModePacks.map_level(mode, 0).id, 18, 500)
+	assert_eq(SaveManager.best_lives(ModePacks.map_level(mode, 0).id), 18)
 	var cards: Array[Node] = _cards(_open(&"mode:asedio"))
-	assert_true((cards[0] as Button).text.contains("Mejor: 18 vidas"))
-	assert_false((cards[1] as Button).disabled)
-	assert_true((cards[1] as Button).text.contains("¡Jugar!"))
+	assert_true((cards[1] as Button).disabled, "ganar Asedio 1 no abre Asedio 2")
 
 
-func test_winning_the_campaign_level_does_not_open_the_mode_map() -> void:
+func test_winning_the_campaign_level_opens_the_matching_mode_map() -> void:
 	_with_modes()
-	SaveManager.record_victory(GameFlow.level(0).id, 20, 500)
+	SaveManager.record_victory(GameFlow.level(0).id, 1, 100)
 	var cards: Array[Node] = _cards(_open(&"mode:asedio"))
-	assert_true((cards[1] as Button).disabled, "RF-390: el progreso de cada modo es aparte")
+	assert_false((cards[0] as Button).disabled, "RF-692: Campaña 1 habilita Asedio 1")
+	assert_true((cards[1] as Button).disabled, "la campaña no habilita el Asedio siguiente")
 
 
 func test_own_mode_maps_are_all_open() -> void:

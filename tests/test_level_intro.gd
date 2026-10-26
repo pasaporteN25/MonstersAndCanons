@@ -15,6 +15,7 @@ func before_each() -> void:
 		DirAccess.remove_absolute(TEST_SAVE)
 	SaveManager.save_path = TEST_SAVE
 	SaveManager.load_save()
+	SaveManager.set_setting("selector_style", CampaignMap.STYLE_CARDS)  # estas pruebas inspeccionan tarjetas
 	GameFlow.intro_pending = false
 	GameFlow.select_page = &"campaign"
 

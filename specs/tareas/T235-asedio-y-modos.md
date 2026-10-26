@@ -1,5 +1,7 @@
 # T235 · Asedio con 15 mapas y pulido de modos
 
+> **Retirada como ejecución independiente y absorbida por T473 (T459/RF-694).** Los 15 mapas fueron implementados por T258. Este archivo conserva el historial; solapas/récords siguen pendientes y su ficha vigente es `T473-modos-solapas-records.md`, después del OK de Lucas a T459.
+
 - **Ejecutor:** Sonnet 5.5 · esfuerzo **bajo**. La parte 1 es *apta Qwen* (solo datos).
 - **Depende de:** T234 · **Compuerta:** ninguna · **Tamaño:** chico
 

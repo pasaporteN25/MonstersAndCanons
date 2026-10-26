@@ -1,6 +1,89 @@
 # Novedades del juego
 
+## «Ver todo» del celular, ahora con una lupa *(T464, 2026-10-26; en revisión)*
+
+En el celular, el botón «Ver todo» (el que aparece al acercar el mapa) pasó de un texto a una lupa dentro de un círculo, igual de grande que el carrito, la X y la demolición (64 px). Con el texto, el botón se salía 7 px por el borde derecho de la pantalla; ahora entra entero y no tapa a los otros botones. El aviso de la primera vez («Acercaste el mapa. Tocá la lupa para volver a verlo entero.») es el mismo. En la PC sigue sin haber botón: se vuelve con la tecla. Todavía no se probó en un celular real.
+## Los niveles 12 y 13 del mapa ya no se pisan *(T502, 2026-10-26; en revisión)*
+
+En el mapa de campaña, el nivel 13 (Paso alto) quedó un poco más al este y el mapa se dibuja algo más grande. Así, el aro de selección y el de foco del nivel 12 ya no tapan la insignia del 13 (ni los de ningún otro par). Como el mapa es más ancho, hay que desplazarlo un poco más para llegar al extremo este. Los nombres de los niveles 10 a 13 todavía se montan un poco entre sí; eso queda para decidir.
+
+## Insignias también en las tarjetas *(T501, 2026-10-25; en revisión)*
+
+La vista de tarjetas de la campaña muestra ahora, arriba a la izquierda de cada nivel, la misma insignia que el mapa: roja si todavía no lo ganaste (con halo punteado si ya podés jugarlo), mitad roja y turquesa con 1 o 2 estrellas, turquesa con 3, y candado si está bloqueado. Para hacerle lugar, el nombre del nivel y el lugar bajaron un poco.
+
+## Insignias del mapa sin pisarse *(T500, 2026-10-25; en revisión)*
+
+Se midió la separación entre las quince insignias del mapa de campaña: ninguna se pisa (la más cercana, 12 y 13, deja 4 px entre bordes), así que el mapa no cambió. Lo que sí se cruza un poco en ese par son los aros de selección y de foco, y algunos rótulos largos; quedó anotado para decidir.
+
+## Halo en los niveles disponibles *(T499, 2026-10-25; en revisión)*
+
+En el mapa de campaña, un nivel que ya podés jugar pero todavía no ganaste lleva un halo dorado punteado alrededor de su insignia roja, para no confundirlo con los que ya jugaste. No se mueve ni parpadea, y se distingue del aro continuo de selección y del aro blanco del teclado.
+
+## Insignias de conquista en el mapa de campaña *(T474, 2026-10-25; en revisión, entrega parcial)*
+
+En el mapa planetario, el círculo de cada nivel muestra ahora una insignia: roja (rebelde) si todavía no ganaste el nivel, mitad roja y mitad turquesa si lo ganaste con 1 o 2 estrellas, y turquesa (tuya) con 3. Llevan el número del nivel, las estrellas, y siguen el aro de selección y de foco. La leyenda con «Tomada», «Rebeldes» y «Bloqueada» ya no está; los niveles bloqueados siguen con su candado. Todavía faltan las tarjetas con el mismo aspecto, el halo del nivel disponible y la receta del editor. No se probaron teléfonos reales.
+
+## Números de nivel sin cero inicial en el mapa *(T474, 2026-10-25; en revisión, entrega parcial)*
+
+En el mapa planetario los niveles se muestran como 1, 2… 15 en lugar de 01, 02… 15 (dentro del círculo, en el rótulo y en la ficha de abajo). Todavía faltan las insignias de conquista y revisar el resto de las pantallas.
+
+## Radio del área con coma *(T465, cierre de M75, 2026-10-25; en revisión)*
+
+El panel de la torre y la Wiki escriben el radio del área con coma y sin ceros de más («Área: radio 1,5», «radio 1»). Antes, el Cañón de nivel 3 mostraba «1.5» con punto. Solo cambia el texto: no cambian el área, el daño ni el precio.
+## Zonas del atlas que se descubren *(T488, 2026-10-25; en revisión, entrega parcial)*
+
+En el mapa de campaña, los niveles 6 a 10 y 11 a 15 aparecen recién cuando abrís el 6 o el 11: hasta entonces su terreno se ve en gris y sin números, candados ni estrellas, y las flechas del teclado no entran ahí. Los niveles se siguen abriendo de a uno, al ganar el anterior. El modo de pruebas muestra las tres zonas, y las tarjetas no cambian. El gris es **provisional**: falta la aprobación de la máscara definitiva.
+
+## Postes de campaña según tus estrellas *(T475, 2026-10-25; en revisión)*
+
+En la campaña aparecen postes de banderines en la mayoría de los mapas: uno en los niveles 1 a 7 y 10, y dos en los niveles 11 a 15. Son rebeldes mientras tengas de 0 a 2 estrellas en el nivel y pasan a ser tuyos, con el banderín que armaste en el editor, al conseguir las 3 estrellas. El poste del nivel 6 ya no cambia con cualquier victoria: también pide las 3 estrellas. Es solo un adorno: no cambia el camino, dónde construir ni las oleadas. Los niveles 8 y 9 todavía no lo tienen, hasta elegir otra casilla. Los mapas de la comunidad, Asedio, el editor y el modo de pruebas siempre muestran el poste rebelde.
+## Atlas de Cántaro como fondo del mapa *(T471, 2026-10-25)*
+
+El mapa planetario usa el atlas aprobado: costa nueva, biomas (pradera, bosque, ruinas, desierto, nieve) y un recorrido por curvas de oeste a este que sale del aterrizaje, en tierra firme, hasta la región 15. Las quince regiones y el aterrizaje están sobre tierra. Para que los puntos táctiles de 56 px no se pisen, el atlas se dibuja más grande que antes: el mapa se desplaza en horizontal (también en PC) y muestra la franja central del continente. Las insignias de conquista y la vista de celular nueva siguen pendientes. No se probaron teléfonos reales.
+
+## Mapa planetario como inicio *(T470, 2026-10-24)*
+
+La campaña abre en el mapa planetario tanto en PC como en celular. En el mapa, un clic o toque selecciona el nivel; **Jugar** o **Enter** lo inicia, y el doble clic no lo saltea. El pie con la selección y el botón queda fijo mientras desplazás el mapa si no entra entero. Las tarjetas siguen iniciando con un clic. Los guardados existentes pasan al mapa una vez, al guardar; después se respeta el estilo que elijas. No se probaron teléfonos reales.
+## Opciones con solapas *(T481, 2026-10-24; en revisión)*
+
+Las categorías Sonido, Pantalla, Partida y ayudas, Controles y Avanzado aparecen como solapas arriba de Opciones. En celular se omite «Controles». Cada solapa muestra su propia página y conserva los valores guardados.
+
+## Franjas temáticas por terreno *(T478, 2026-10-24)*
+
+En las partidas, el espacio exterior y los márgenes internos del mapa usan el fondo aprobado para el terreno. El fondo queda fijo en pantalla mientras acercás o desplazás el mapa, y se recorta sin deformarse al cambiar la relación de aspecto. El tope de zoom queda en 1,0. Menús y contextos sin nivel conservan el respaldo liso.
+
+## «Ver todo»: tecla en PC y aviso de cámara *(T464, 2026-10-24)*
+
+En PC, «Ver todo» queda solo en la tecla configurable (V por omisión), sin botón flotante. En celular, el botón sigue apareciendo al acercar el mapa; desplazarlo sin zoom no lo muestra. La primera vez que acercás el mapa aparece por tres segundos un aviso con la tecla o el botón para volver al encuadre completo; desplazarlo sin zoom no muestra el aviso (aclaración de Lucas, 2026-10-23). Se recuerda en el guardado y no interrumpe el tutorial. La lupa está en muestra para aprobación y todavía no se integró: hasta entonces el botón conserva el texto «Ver todo».
+
 Lo que cambió para quien juega, de lo más nuevo a lo más viejo. El detalle técnico está en `specs/03-tareas.md` y las razones, en `specs/04-decisiones.md`.
+
+## Solapas y récords de los modos *(T473, 2026-10-25)*
+
+La fila de solapas de **Jugar** ahora se desplaza, así que con cinco modos propios (o más) se llega a todas: tocá la solapa, arrastrá la fila con el dedo, usá su barra o apretá **AvPág / RePág**. El orden no cambia y, al volver con «Niveles», estás en la misma solapa y en el mapa del modo que jugaste. **Récords** suma un selector arriba con la Campaña, Asedio y tus modos propios: cada uno muestra su propio top 5, sin mezclarse con los demás ni con el Salón de la fama; un modo con errores dice por qué. No se probaron teléfonos reales.
+
+## Asedio se abre al ganar la campaña *(T472, 2026-10-24)*
+
+Asedio N se habilita al completar el nivel N de la campaña, con cualquier cantidad de estrellas, sin necesidad de haber ganado Asedio N−1. Ganar un mapa de Asedio guarda tu victoria y tu récord, pero ya no abre el siguiente. Si ya habías jugado Asedio, tus mapas abiertos y tus récords se conservan. En un guardado nuevo, Asedio empieza cerrado. El modo de pruebas sigue con todo abierto y no mezcla su progreso con el normal. Los otros modos no cambian.
+
+## Opciones en cinco grupos *(T468, en revisión)*
+
+Opciones ordena los ajustes en **Sonido**, **Pantalla**, **Partida y ayudas**, **Controles** (solo en PC) y **Avanzado**. «Interfaz» queda en Avanzado con **Automática** por omisión; el celular muestra Sonido y Pantalla a la izquierda, y Partida y ayudas y Avanzado a la derecha. Si el contenido no entra a 720 px de alto, se puede desplazar sin perder «Volver». Los valores guardados y las claves existentes se conservan.
+
+## Ampliación del alcance al mejorar *(T467, en revisión)*
+
+Antes de mejorar una torre podés ver hasta dónde va a llegar su alcance. **En la PC**, pasá el mouse sobre «Mejorar»: se ve el círculo del nivel siguiente creciendo desde el alcance actual (si la mejora no lo cambia, el mismo círculo quieto) y desaparece al sacar el mouse. **En el celular**, «Mejorar» pasa a tener **dos toques**: el primero muestra la ampliación (el botón pasa a «Confirmar» y sigue mostrando el costo) y el segundo mejora; tocar el mapa, soltar o elegir otra torre, tocar «Vender» o la prioridad, pausar o quedarte sin oro cancela el primer toque. Después de mejorar, el botón se bloquea 0,35 s, así que un doble toque sube un solo nivel. La mejora es instantánea y cuesta lo mismo que antes; la ampliación se ve con cualquier valor de «Círculo de alcance». Se apaga junto con el resto desde **«Animaciones de mejora»**: apagada, la ampliación se ve quieta y el efecto de mejora no la dibuja. El tutorial del nivel 1 en el celular explica los dos toques.
+
+## Panel de mejora de torres *(T465, en revisión)*
+
+Al seleccionar una torre, las métricas que cambian muestran el valor actual y el de la mejora una sola vez, con decimales en coma. Los efectos que cambian aparecen debajo como «antes → después», sin repetir los datos del bloque de estadísticas. El indicador del nivel usa bronce, plata y oro; su tooltip conserva el nivel actual. Los costos y el funcionamiento de las mejoras no cambian.
+## Marco de presentación adaptable *(T476, 2026-10-23; en revisión)*
+
+El contenido conserva su espacio lógico de 1280×720 y queda centrado con escala uniforme dentro de una superficie que se adapta a la ventana. El menú, la partida y sus controles permanecen dentro del marco; el espacio de afuera tiene un respaldo oscuro mientras T478 integra los fondos aprobados por terreno. La comparación de nitidez a 1920×1080 sigue pendiente porque Godot reporta 1777×1000 en fullscreen en esta máquina.
+
+## Círculo de alcance configurable *(T466, 2026-10-23)*
+
+En **Opciones** podés elegir si el círculo de alcance de una torre seleccionada queda **Oculto**, **Sutil** o **Completo**. Por omisión queda oculto, también en guardados anteriores. Al elegir dónde construir, el fantasma sigue mostrando el círculo completo; el arco del Estandarte mecánico acompaña la opción elegida.
 
 ## Editor de banderines para el nivel 6 *(T443, 2026-10-23)*
 
@@ -55,10 +138,19 @@ Al elegir un nivel, volver al menú, reintentar o pasar al siguiente nivel, el j
 
 Al mejorar una torre sale ahora un **efecto breve sobre ella**, distinto según el nivel: un anillo de luz con chispas al **nivel 2** (medio segundo) y uno más grande, con doble anillo, destello en cruz y chispas en abanico, al **nivel máximo** (0,7 s). Se tiñe con el color de la torre. Junto con el efecto sube un **texto con lo que sumó la mejora**, leído de los datos reales de la torre y solo lo que cambió: por ejemplo, la Ametralladora al nivel 2 dice «¡Nivel 2!» y «+3 daño · +0,5 disp/s»; la Tesla al máximo, «¡Nivel máximo!», «+8 daño · +0,1 disp/s» y «+1 saltos · +0,5 alcance».
 
-El texto no tapa la barra de abajo, la tilde, la cruz ni los botones flotantes del celular, se corre hacia adentro del mapa si la torre está en un borde y se agranda para leerse con el zoom. Se apaga en **Opciones → «Animaciones de mejora»** (debajo de «Mostrar números de daño»): apagada, queda el anillo y el sonido de siempre. **El dibujo del efecto es provisional** (lo reemplazará el arte que apruebe Lucas) y el juego no cambia en nada: costos, niveles y balance son los de antes.
-## Entrada del Jefe en el nivel 1 *(T366 y T368, 2026-10-19; arte provisional)*
+El texto no tapa la barra de abajo, la tilde, la cruz ni los botones flotantes del celular, se corre hacia adentro del mapa si la torre está en un borde y se agranda para leerse con el zoom. Se apaga en **Opciones → «Animaciones de mejora»** (debajo de «Mostrar números de daño»): apagada, queda el anillo y el sonido de siempre. El dibujo usa ahora los atlas aprobados de refuerzo y maestría (M71) y el juego no cambia en nada: costos, niveles y balance son los de antes.
+## Presentación de los jefes: pantalla completa y partida en pausa *(T461, 2026-10-23)*
 
-Cuando llega el **Jefe de la oleada 10 del nivel 1** (jugado desde el menú), sale una entrada corta: un **destello con una grieta** en la entrada del camino, en el mismo instante en que nace, y, cuando se va el cartel de «Oleada 10», un **cartel arriba del mapa** con su retrato, «¡Llega el Jefe!», su nombre y su frase. Dura **1,6 segundos**; con un **toque o un clic sobre el cartel** se saltea al instante (en PC tiene una «✕» chica). **No pausa la partida, no mueve la cámara y no cambia nada del Jefe**: el mapa de alrededor sigue recibiendo toques y se puede construir mientras tanto. La tarjeta «Nuevo enemigo» del Jefe espera a que el cartel se retire y no se pisan. En **Opciones** hay una casilla nueva, **«Entrada de los jefes»** (prendida por omisión; un guardado viejo la lee prendida). El dibujo del destello es **provisional**. Se puede ver sin jugar diez oleadas con el modo de pruebas (F1 → hacer aparecer un Jefe).
+Cuando nace el **primer jefe de una partida de campaña** (jugada desde el menú), el juego se **pausa en ese mismo instante** y una pantalla completa lo presenta: «¡Llega el Jefe!», su retrato, su nombre y su frase. Dura **5 segundos la primera vez** que tu guardado ve a ese jefe y **3 segundos** las veces siguientes. Pasados **0,3 segundos** la salteás con cualquier tecla, clic o toque. **`P`** (o «Atrás») la cierra y deja la partida **en pausa**. Al terminar, la partida sigue exactamente como estaba, salvo que ya estuviera en pausa o que la app haya pasado a segundo plano: en esos casos queda pausada hasta que la continúes vos. Es solo presentación: el jefe nace igual, no cambian oro, vidas ni balance, y mientras se muestra, el cartel de oleada y las tarjetas «Nuevo enemigo» que esperan quedan congelados. El jefe presentado no lleva su propia tarjeta «Nuevo enemigo».
+
+**No aparece** en Asedio, en el modo de pruebas, probando desde el editor ni en mapas de la comunidad. Se apaga en **Opciones → «Presentación de los jefes»** (es la casilla de antes, con otro nombre; conserva tu preferencia).
+
+**Límite visual:** la composición es **provisional** (retrato que el jefe ya tenía sobre un fondo liso teñido, movido por código). Las ilustraciones y los fondos propios del Jefe y del Coloso esperan la aprobación de Lucas (T367); el jefe supremo del nivel 15 espera a T243/T463. No se probó en un celular real. Reemplaza al destello, la grieta y el cartel de 1,6 s de más abajo, que se retiraron.
+
+## Piloto de entrada del Jefe *(T366 y T368, retirado por T461)*
+
+El piloto anterior de destello, grieta y cartel de 1,6 segundos quedó retirado al incorporarse la presentación a pantalla completa. Sus recursos y opción ya no forman parte del juego. La presentación vigente y sus límites están descritos arriba.
+
 ## «Novedades de esta versión»: una pantalla con lo nuevo, una vez por versión *(T371 y T373, 2026-10-19)*
 
 - **Al abrir el juego, una pantalla muestra lo nuevo de la versión instalada**, una sola vez por versión: un panel con título, subtítulo, la lista de novedades (hasta 8, con íconos si los hay) y el botón **«Entendido»**. Se cierra con «Entendido», `Esc` o el «atrás» del celular, y el toque que cierra **no** activa nada del menú de abajo. Si la lista no entra, se desplaza (rueda y barra en PC, un dedo con inercia en el celular).

@@ -51,6 +51,9 @@ var _heal_pulses_alive: int = 0
 ## M65: mejoras con efecto o texto vivo, { id de la torre: {"effect", "texts"} }, y los números de RF-594.
 var _upgrade_live: Dictionary = {}
 var _upgrade_config: UpgradeFxConfig
+## M75 (RF-680, RF-681): la ampliación del alcance que se ve mientras «Mejorar» está bajo el mouse o armado.
+var _range_preview: RangePreview
+var _range_preview_key: String = ""
 
 var _damage_numbers_alive: int = 0
 var _combo_numbers_alive: int = 0
@@ -239,13 +242,54 @@ func tower_upgraded(tower: Tower, canvas: Transform2D = Transform2D.IDENTITY, sa
 	if tower.current_turret_atlas() != null:
 		center += TowerVisual.MOUNT_OFFSET * float(footprint)
 	var effect := UpgradeEffect.new().setup(color, Rules.TILE_SIZE * 0.8 * footprint * float(variant["escala"]),
-			float(variant["duracion_s"]), level_number >= 3)
+			float(variant["duracion_s"]), level_number >= 3, float(footprint))
 	_add(effect, center)
-	var entry: Dictionary = {"effect": effect, "texts": [] as Array[FloatingText]}
+	# M75 (RF-680): el círculo con el alcance ya mejorado, que se desvanece con el efecto (con cualquier opción de alcance).
+	var range_effect := RangePreview.new().setup(tower.range_px(), tower.range_px(), float(variant["duracion_s"]), true, true)
+	_add(range_effect, tower.global_position)
+	var entry: Dictionary = {"effect": effect, "range": range_effect, "texts": [] as Array[FloatingText]}
 	_upgrade_live[key] = entry
 	if _upgrade_text_blocks() < int(config.get_number("tope_textos")):
 		entry["texts"] = _upgrade_texts(tower, center, color, canvas, safe_rects, view_rect)
 	return true
+
+
+## M75, RF-680 y RF-681: la ampliación de `tower` al nivel siguiente, del alcance actual al nuevo. Se queda hasta que se
+## llame a `hide_range_preview`. Si ya se muestra la misma (torre y nivel) no se reinicia. Con la casilla «Animaciones de
+## mejora» apagada sale quieta y ya en el radio nuevo. El Tween respeta la pausa y la velocidad del juego. Devuelve false si la torre no tiene nivel siguiente.
+func show_range_preview(tower: Tower) -> bool:
+	if tower == null or tower.data == null or tower.next_level_stats() == null:
+		hide_range_preview()
+		return false
+	var key: String = "%d:%d" % [tower.get_instance_id(), tower.level_index]
+	if key == _range_preview_key and _has_range_preview():
+		return true
+	hide_range_preview()
+	if _upgrade_config == null:
+		_upgrade_config = UpgradeFxConfig.load_from()
+	var animated: bool = SaveManager.upgrade_fx_enabled()
+	var preview := RangePreview.new().setup(tower.range_px(), Rules.tiles_to_px(tower.next_level_stats().range_tiles),
+			float(_upgrade_config.variant_for(2)["duracion_s"]), animated)
+	_add(preview, tower.global_position)
+	_range_preview = preview
+	_range_preview_key = key
+	return true
+
+
+func hide_range_preview() -> void:
+	if _has_range_preview():
+		_range_preview.queue_free()
+	_range_preview = null
+	_range_preview_key = ""
+
+
+## La ampliación que se está mostrando (null si no hay).
+func range_preview() -> RangePreview:
+	return _range_preview if _has_range_preview() else null
+
+
+func _has_range_preview() -> bool:
+	return is_instance_valid(_range_preview) and not _range_preview.is_queued_for_deletion()
 
 
 ## Cuántas mejoras tienen efecto o texto vivo (para los tests).
@@ -269,7 +313,7 @@ func _forget_upgrade_fx(key: int) -> void:
 		return
 	var entry: Dictionary = _upgrade_live[key]
 	_upgrade_live.erase(key)
-	var nodes: Array = [entry["effect"]]
+	var nodes: Array = [entry["effect"], entry["range"]]
 	nodes.append_array(entry["texts"])
 	for node: Variant in nodes:
 		if is_instance_valid(node) and not (node as Node).is_queued_for_deletion():
@@ -281,6 +325,7 @@ func _prune_upgrade_fx() -> void:
 	for key: int in _upgrade_live.keys():
 		var entry: Dictionary = _upgrade_live[key]
 		var alive: bool = is_instance_valid(entry["effect"]) and not (entry["effect"] as Node).is_queued_for_deletion()
+		alive = alive or (is_instance_valid(entry["range"]) and not (entry["range"] as Node).is_queued_for_deletion())
 		for text: Variant in entry["texts"]:
 			alive = alive or (is_instance_valid(text) and not (text as Node).is_queued_for_deletion())
 		if not alive:
@@ -337,20 +382,3 @@ func _add(effect: Node2D, position_: Vector2) -> void:
 ## RF-365: aviso de robo efectivo, independiente de la opción de daño.
 func gold_stolen(position_: Vector2, amount: int) -> void:
 	_add(FloatingText.new().setup("−%d oro" % amount, GOLD_COLOR, 18, 0.7, 30.0), position_ + Vector2(0, -20))
-
-
-## M66, RF-597: el destello en la entrada del camino cuando nace un jefe. Va en la partida justo antes del nodo de
-## los enemigos (abajo de ellos, sobre el suelo y las torres que ya estaban); si la capa está suelta, va en ella.
-## Devuelve el destello (para los tests).
-func boss_entrance(position_: Vector2, color: Color, duration: float) -> BossEntranceBurst:
-	var burst: BossEntranceBurst = BossEntranceBurst.new().setup(color, duration)
-	burst.position = position_
-	var world: Node = get_parent()
-	var enemies: Node = world.get_node_or_null("Enemies") if world != null else null
-	if enemies != null:
-		world.add_child(burst)
-		world.move_child(burst, enemies.get_index())
-	else:
-		add_child(burst)
-	return burst
-

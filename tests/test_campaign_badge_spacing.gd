@@ -1,0 +1,76 @@
+# Geometría de las insignias del mapa (T500, RF-690, RF-695): los bordes de 26 px de radio de dos regiones nunca se pisan, a la
+# escala con la que se dibuja el atlas, y entre vecinas queda una holgura mínima.
+extends GutTest
+
+## Holgura mínima, en px lógicos, entre los bordes de dos insignias (T502: el par más apretado, 12–13, tiene 17,6).
+const MIN_BADGE_GAP: float = 8.0
+## Holgura mínima entre el aro de foco (36 px) de una región y el borde (26 px) de la insignia de cualquier otra (T502, D-213).
+const MIN_RING_GAP: float = 5.0
+
+
+func _screen_distance(i: int, j: int) -> float:
+	return CampaignMap.REGION_POINTS[i].distance_to(CampaignMap.REGION_POINTS[j]) * CampaignMapView.MAP_SCALE
+
+
+func test_no_two_badges_overlap_at_the_map_scale() -> void:
+	var diameter: float = CampaignRegion.BADGE_EDGE * 2.0
+	for i: int in CampaignMap.REGION_COUNT:
+		for j: int in range(i + 1, CampaignMap.REGION_COUNT):
+			assert_gte(_screen_distance(i, j) - diameter, MIN_BADGE_GAP, "las insignias %d y %d no se pisan (holgura mínima %s px)" % [i + 1, j + 1, MIN_BADGE_GAP])
+
+
+func test_overlap_check_would_catch_two_badges_too_close() -> void:
+	# Control del propio test: con el radio exterior de la insignia en 34 px el par 12–13 ya no tendría la holgura.
+	assert_lt(_screen_distance(11, 12) - 68.0, MIN_BADGE_GAP, "con un borde de 34 px el par 12–13 se pasaría de la holgura")
+
+
+func test_neighbours_keep_their_gap_along_the_route() -> void:
+	var tightest: int = -1
+	var smallest: float = INF
+	for i: int in CampaignMap.REGION_COUNT - 1:
+		var gap: float = _screen_distance(i, i + 1) - CampaignRegion.BADGE_EDGE * 2.0
+		if gap < smallest:
+			smallest = gap
+			tightest = i
+	assert_eq(tightest, 11, "el par más apretado es el 12–13")
+	assert_gte(smallest, MIN_BADGE_GAP)
+	# Los tramos 1–3 que se sospechaban apretados tienen holgura de sobra.
+	assert_gt(_screen_distance(0, 1) - CampaignRegion.BADGE_EDGE * 2.0, 20.0, "1–2")
+	assert_gt(_screen_distance(1, 2) - CampaignRegion.BADGE_EDGE * 2.0, 20.0, "2–3")
+
+
+func test_selection_and_focus_rings_do_not_touch_any_other_badge() -> void:
+	# T502: el aro de foco (borde + 10 = 36 px) y el de selección (borde + 5 = 31 px) de una región no pisan la insignia de ninguna otra.
+	var focus_radius: float = CampaignRegion.BADGE_EDGE + CampaignRegion.FOCUS_RING_GAP
+	var select_radius: float = CampaignRegion.BADGE_EDGE + CampaignRegion.SELECT_RING_GAP
+	assert_eq(focus_radius, 36.0)
+	assert_eq(select_radius, 31.0)
+	for i: int in CampaignMap.REGION_COUNT:
+		for j: int in CampaignMap.REGION_COUNT:
+			if i != j:
+				assert_gte(_screen_distance(i, j) - focus_radius - CampaignRegion.BADGE_EDGE, MIN_RING_GAP, "el aro de foco de %d no pisa la insignia %d" % [i + 1, j + 1])
+
+
+func test_tightest_pair_is_still_12_13_and_node_13_moved_east() -> void:
+	assert_eq(CampaignMap.REGION_POINTS[12], Vector2(1006, 287), "T502: el nodo 13 está 6 unidades al este (antes 1000, 287)")
+	assert_almost_eq(CampaignMap.REGION_POINTS[11].distance_to(CampaignMap.REGION_POINTS[12]), 55.2, 0.1)
+	assert_gte(CampaignMapView.MAP_SCALE, 1.26, "T502: escala mínima del atlas")
+
+
+func test_touch_areas_do_not_overlap_either() -> void:
+	for i: int in CampaignMap.REGION_COUNT - 1:
+		assert_gte(_screen_distance(i, i + 1), CampaignRegion.TOUCH_MIN, "áreas táctiles de %d y %d" % [i + 1, i + 2])
+
+
+func test_badge_edges_stay_inside_the_canvas() -> void:
+	var view := CampaignMapView.new()
+	add_child_autofree(view)
+	var entries: Array[Dictionary] = []
+	for i: int in CampaignMap.REGION_COUNT:
+		entries.append({"name": "N%d" % i, "place": "", "stars": 0, "state": CampaignMap.State.AVAILABLE})
+	view.setup(entries)
+	for i: int in CampaignMap.REGION_COUNT:
+		var region: CampaignRegion = view.region(i)
+		var center: Vector2 = region.position + region.size / 2.0
+		var rect := Rect2(center - Vector2.ONE * CampaignRegion.BADGE_EDGE, Vector2.ONE * CampaignRegion.BADGE_EDGE * 2.0)
+		assert_true(Rect2(Vector2.ZERO, CampaignMapView.CANVAS_SIZE).encloses(rect), "el borde de la insignia %d entra en el lienzo" % (i + 1))

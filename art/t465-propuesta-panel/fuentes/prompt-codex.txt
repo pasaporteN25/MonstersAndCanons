@@ -1,0 +1,38 @@
+Sos un director de diseño de interfaces de juegos (pensá como un agente de diseño tipo «impeccable»: jerarquía, carga cognitiva, quitar lo que no gana su lugar, sin perder información para decidir). Proyecto: «Monsters & Canons», tower defense 2D en Godot 4.7 (GDScript). Todo lo que escribas va en español rioplatense; nombres de archivo en inglés.
+
+TAREA: proponer rediseños SIMPLIFICADOS del panel de la torre elegida, para PC y para celular. Es solo diseño: NO toques nada fuera de `art/t465-propuesta-panel/codex/`. No modifiques scripts/, scenes/, data/, assets/, specs/ ni tests/. No hagas commit (no podés; lo hace quien te lanzó).
+
+LEÉ PRIMERO (solo lectura):
+- `art/t465-propuesta-panel/capturas-actuales/hoja-actual-pc-1920x1080.png` (13 casos del panel actual de PC a 1920×1080, escala 1,5).
+- `art/t465-propuesta-panel/capturas-actuales/hoja-actual-celular-1280x720.png` (barra de la torre del celular simulado).
+- `art/t465-propuesta-panel/capturas-actuales/T510-actual-pc-pantalla-tesla-n1-1920x1080.png` y `T510-actual-celular-pantalla-frost-n1-1280x720.png` (pantalla entera).
+- `art/t465-propuesta-panel/capturas-actuales/medidas-pc-1920x1080.tsv` y `medidas-celular-1280x720.tsv` (alto de cada bloque medido en Godot).
+- `scenes/ui/tower_panel.tscn` y `.gd`, `scenes/game/mobile_hud.gd` (función `show_selected_tower`), `scripts/logic/tower_text.gd`, `data/ui/mejoras.json`, `data/ui/mobile_ui.json`, `assets/ui/menu_theme.tres`, `assets/ui/game_panel_style.tres`.
+- `specs/01-spec.md`: RF-616, RF-617, RF-618, RF-650, RF-677 a RF-686, RF-512, RF-550. `specs/04-decisiones.md`: D-193 a D-197.
+
+CRÍTICA YA MEDIDA (píxeles lógicos del lienzo 1280×720; a 1920×1080 todo se ve ×1,5):
+PC — panel fijo de 270 × 320 px en x 1000-1270, y 260-580 (tapa ~15 % del mapa). Bloques: título 34 (55 si el nombre se parte, «Estandarte mecánico»); DAÑO/CADENCIA/ALCANCE 39; separador 4; lista de efectos con scroll 18-84; Apuntar 32; renglón de mejora suelto 18-39; Mejorar 34; Vender 32; separaciones 6. Los tres botones a lo ancho suman 110 px (34 % del alto).
+1. En 6 de 13 casos la lista de efectos necesita scroll (Hielo 1-3, Incendiaria 1, Mortero 2, Estandarte 1); en Hielo 3 «Voladores: sí» queda cortado. En la Ametralladora sobran 64 px vacíos. Alto fijo + scroll = mal uso del espacio.
+2. Cuando un efecto cambia con la mejora, el panel BORRA la frase del efecto y la reemplaza por un renglón con rótulos de animación entre Apuntar y Mejorar: «saltos 2 → 3», «s de pulso 2,5 → 3», «s de frenado 2 → 3», «quemadura/s 8 → 12», «área 1 → 1,2». Resultado: la Eléctrica nunca dice que el rayo salta, la Disruptora nunca dice que apaga auras (niveles 1 y 2), el Estandarte no dice que da apoyo. RF-677.1 pedía el «antes → después» EN SU LUGAR, dentro de la frase del efecto.
+3. Estandarte mecánico: «DAÑO 0», «Voladores: no» y «Apuntar» apagado: tres datos que no aplican a una torre de apoyo. La Disruptora también muestra «Apuntar» apagado.
+4. «Mejorar» apagado por falta de oro no dice por qué (solo tooltip «Faltan N de oro»).
+5. La cadencia usa 12 px y daño/alcance 15 px (se achicó para que entre «0,75 → 0,85/s»): jerarquía inconsistente.
+6. La tarjeta de nivel son 3 barritas verticales estiradas de 9 × 34 px; las vacías casi no se ven. Se leen como un medidor de señal, no como bronce/plata/oro.
+7. Los botones usan rellenos planos verde/rojo ladrillo/pizarra que no son el lenguaje actual del juego (hierro oscuro con borde bronce y texto ámbar al pasar el mouse, como «Pausa [P]» y los menús). «Vender» pesa visualmente igual que «Mejorar» y está a 6 px.
+8. Combo («Combo: Cañón y Francotirador +25 % a los que frena») ocupa 2 renglones; «Recursos invertidos: 2» repite lo que ya dice «Vender (+91 y 1 recurso)».
+CELULAR — barra inferior de 96 px (modo celular simulado a 1280×720; el juego es solo apaisado, no hay vertical). Botones: X 64×64, Apuntar 172×88, Mejorar 196×84 («Mejorar → N2 / 110 de oro»; primer toque arma «Confirmar → N2», RF-681), Vender 150×82, con una separación de seguridad de 35 mm (~372 px) entre Mejorar y Vender.
+9. GRAVE: el texto queda en una columna de 265 px, se parte en 5 renglones (127 px) y la barra se desborda: los renglones 4 y 5 («Al mejorar: …», RF-617) y el borde de abajo de los botones quedan FUERA de la pantalla (31 px).
+10. Formato roto: «Cadencia 0.60» con punto (RF-677.4 pide coma) y «Alcance %d» trunca 2,5 a «2» (dato falso; el renglón de mejora dice «alcance 2,5 → 3»).
+11. «Nivel 1 de 3 ●○○» repite el nivel dos veces. Letra de 16 px (≈ 9,5 sp en un teléfono de 6,5"; Android pide ≥ 12 sp).
+12. Apuntar ocupa 172 px aunque la torre no pueda apuntar (Disruptora, Estandarte).
+
+LÍMITES (no negociables):
+- Mismo estilo visual del juego: hierro oscuro (#1b1c20, panel bg Color(0.105,0.11,0.125)), borde bronce (#855c2b), ámbar del título (#ffd673), texto crema (#f0e8d9), bronce/plata/oro de nivel (#d7a45b / #94a8b9 / #f0d176), resalte del «después» verde claro (#bfe699). Botones del tema: fondo hierro, borde bronce 2 px (4 px abajo), radio 6, sombra suave; al pasar el mouse borde ámbar (#ffb833) y texto ámbar.
+- Los números salen de los datos (`data/towers/*.tres`, `data/ui/mejoras.json`): no inventes estadísticas ni cambies balance. Textos en español, decimales SIEMPRE con coma y sin ceros de más («0,75», «3», «2,5»), nunca con punto.
+- No cambia precio, daño, venta ni reglas de mejora. La PC sigue con hover en Mejorar (ampliación del alcance) y teclas U / S; el celular sigue con dos toques para mejorar (RF-681) y confirmación de venta, con botones de al menos 56 px lógicos (RF-550) y Vender lejos de Mejorar.
+- Torres de ejemplo con valores reales: Eléctrica n1 (daño 13 → 19, cadencia 0,75 → 0,85/s, alcance 2,5, salta a 2 → 3 enemigos, +30 % de daño a quemados, voladores sí, mejora 120, venta 91); Hielo n1 (daño 2, cadencia 1/s, alcance 2,5 → 3, ralentiza 40 → 50 % durante 2 s, combo Cañón y Francotirador +25 % a los que frena, voladores sí, mejora 80, venta 52); Cañón n3 (daño 50, 0,6/s, alcance 3,5, área radio 1,5, +25 % a ralentizados, voladores no, nivel máximo, venta 266); Estandarte mecánico n1 (apoyo +10 → 15 % de cadencia, repara 2 → 3 puntos de desgaste/s, alcance 2 → 2,5, mejora 100, venta 84); Ametralladora n1 sin oro (daño 5 → 8, cadencia 2 → 2,5/s, alcance 3, voladores sí, mejora 60, faltan 25 de oro, venta 35).
+
+ENTREGABLE (solo en `art/t465-propuesta-panel/codex/`):
+1. `propuesta-codex.md`: tus 3 propuestas para PC y 3 para celular, distintas entre sí (no tres variantes de color de lo mismo). Para cada una: idea en una frase, qué se ve y qué se esconde o se mueve, medidas en px lógicos (ancho × alto en los casos Eléctrica n1, Hielo n1, Estandarte n1), qué información de decisión conserva, qué RF/D habría que enmendar, coste de implementación (bajo/medio/alto) y qué tests de `tests/test_upgrade_preview.gd` y `tests/test_tower_panel_layout.gd` se verían afectados. Cerrá con tu recomendación y por qué.
+2. `maquetas-codex.html`: un HTML autocontenido (CSS en línea, sin fuentes ni scripts externos) con las 6 maquetas a escala real en px lógicos (1 px CSS = 1 px lógico), con la paleta de arriba, cada una rotulada «maqueta, no motor». Usá la Eléctrica n1 como caso principal y mostrá también Hielo n1 y Estandarte n1 en tu opción recomendada.
+Sé concreto y honesto: si algo no lo pudiste verificar, decilo.

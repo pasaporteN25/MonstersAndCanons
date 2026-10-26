@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="es-AR">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>T484 · Alternativas para el tramo sur</title>
+<style>
+:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#181d20;color:#e9e2d1;font:16px/1.6 Georgia,serif}main{max-width:1360px;margin:auto;padding:34px 28px 70px}h1{font-size:clamp(1.7rem,4vw,2.8rem);line-height:1.2;font-weight:normal;max-width:25ch;margin:0 0 18px}h2{font-size:1.6rem;font-weight:normal;margin:40px 0 12px}p{max-width:74ch;margin:12px 0 22px}a{color:#e2c279;text-underline-offset:.2em}button{font:600 14px/1.3 system-ui,sans-serif;background:#181d20;border:1px solid #495349;color:#e9e2d1;padding:13px 18px;cursor:pointer;min-height:46px;touch-action:manipulation}button:hover{border-color:#e2c279}button[aria-pressed=true]{background:#e2c279;color:#1c272a;border-color:#e2c279}button:focus-visible,a:focus-visible{outline:3px solid #fff0b6;outline-offset:4px}.controls{display:flex;gap:9px;flex-wrap:wrap;margin:26px 0 15px}figure{margin:0}img{display:block;width:100%;height:auto;background:#20282b}figcaption,.note{font:14px/1.6 system-ui,sans-serif;color:#c1c9bd}figcaption{padding:13px 0;min-height:72px;max-width:90ch}.decision{border-top:1px solid #495349;padding-top:20px;margin-top:30px}.alternatives{display:grid;grid-template-columns:1fr 1fr;gap:20px 40px;max-width:1000px}.alternatives p{margin:0}.alternatives strong{display:block;color:#e2c279;font-family:system-ui,sans-serif;font-size:15px;margin-bottom:6px}::selection{background:#e2c279;color:#18282d}html{scrollbar-color:#727a66 #181d20}footer{font:13px/1.6 system-ui,sans-serif;border-top:1px solid #495349;margin-top:40px;padding-top:20px;color:#c1c9bd}@media(max-width:650px){main{padding:25px 16px 45px}.alternatives{grid-template-columns:1fr}.controls{gap:7px}button{flex:1;padding:12px 8px}h1{font-size:2rem}}
+</style>
+<main>
+<h1>Dos alternativas para el tramo sur</h1>
+<p>Tomamos «la parte de abajo» como el rodeo de los niveles 5–9. Estas opciones conservan la costa original, el aterrizaje, los puntos 1–4 y todo el corredor 10–15. Solo cambia el tramo central entre los anclajes 4 y 10.</p>
+<div class="controls" aria-label="Elegí el tramo central para comparar">
+<button type="button" data-view="current" aria-pressed="false">Actual T483</button>
+<button type="button" data-view="a" aria-pressed="false">A · Menos profundo</button>
+<button type="button" data-view="b" aria-pressed="true">B · Tramos desiguales</button>
+</div>
+<figure>
+<img id="map" src="../../Capturas/T484-alternativa-B.png" width="1280" height="720" alt="Alternativa B: el tramo 5–9 utiliza dos diagonales desiguales y un centro más tendido.">
+<figcaption id="caption" role="status">B · El rodeo deja de ser un arco continuo: entra por una diagonal corta, cambia el paso en el 6 y retoma el este desde un centro tendido. Mantiene más amplitud que A.</figcaption>
+</figure>
+<p class="note">Las tres capturas tienen 1280 × 720. Cambiá de versión para comparar sin mover el marco. Las imágenes son composiciones estáticas y no capturas de una integración al juego.</p>
+<div class="alternatives">
+<p><strong>A · Menos profundo</strong>Acerca 5–9 a la franja central del continente. El punto 7 pasa de y=427 a y=366. Conserva una curva suave más tenue; deja más espacio libre al sur.</p>
+<p><strong>B · Tramos desiguales</strong>El punto 7 queda en y=389. Descompone la bajada en diagonales de largo distinto, mantiene el centro tendido y vuelve hacia 9 con una conexión más larga. La recomendación para revisar es B.</p>
+</div>
+<h2>Las tres versiones en la misma lámina</h2>
+<figure>
+<img src="../../Capturas/T484-comparacion-tramo-sur.png" width="1280" height="1650" alt="Comparación vertical del tramo central actual T483 y de las alternativas A y B, con el resto del mapa idéntico.">
+<figcaption>De arriba hacia abajo: actual T483, A y B. Las coordenadas describen solo la composición de la muestra; no asignan altitud ni lore.</figcaption>
+</figure>
+<div class="decision">
+<h2>Qué falta elegir</h2>
+<p>¿Preferís A o B para el recorrido 5–9? Si «la parte de abajo» se refería a la costa o a otro elemento de la pantalla, indicá cuál: en estas variantes se conservó.</p>
+<p class="note">Las dos opciones esperan tu decisión. No integran arte final ni validan controles, teléfono o rendimiento; los estandartes siguen con su aprobación por separado.</p>
+</div>
+<footer>T484 · <a href="../../specs/tareas/T484-alternativas-tramo-sur.md">Análisis, revisión y límites</a> · <a href="README.md">Fuentes y reproducción</a> · <a href="../t483-mapa-organico/index.html">Comparación anterior T483</a></footer>
+</main>
+<script>
+const views={current:{src:'../../Capturas/T483-propuesta-recorrido.png',alt:'T483 actual: recorrido con un rodeo central profundo entre 5 y 9.',caption:'Actual T483 · El punto 7 baja hasta y=427. Es la dirección aceptada por Lucas, con el tramo inferior todavía por ajustar.'},a:{src:'../../Capturas/T484-alternativa-A.png',alt:'Alternativa A: el rodeo central es menos profundo y se mantiene como una curva suave.',caption:'A · Acerca los niveles 5–9 a la franja central: el punto 7 pasa de y=427 a y=366. El trazo se abre y se aplana más.'},b:{src:'../../Capturas/T484-alternativa-B.png',alt:'Alternativa B: el tramo 5–9 utiliza dos diagonales desiguales y un centro más tendido.',caption:'B · El rodeo deja de ser un arco continuo: entra por una diagonal corta, cambia el paso en el 6 y retoma el este desde un centro tendido. Mantiene más amplitud que A.'}};
+for(const button of document.querySelectorAll('button[data-view]'))button.addEventListener('click',()=>{const view=views[button.dataset.view];document.querySelector('#map').src=view.src;document.querySelector('#map').alt=view.alt;document.querySelector('#caption').textContent=view.caption;for(const other of document.querySelectorAll('button[data-view]'))other.setAttribute('aria-pressed',String(other===button));});
+</script>
+</html>

@@ -38,6 +38,9 @@ var current_community: LevelData
 ## RF-225: qué solapa de la selección de nivel se ve: &"campaign", &"community" o la de un modo
 ## (&"mode:<id>", RF-389). Se recuerda para que "Niveles" vuelva a la misma solapa al terminar.
 var select_page: StringName = &"campaign"
+## RF-694: el mapa de un modo que se jugó por última vez, para que «Niveles» vuelva a la misma selección.
+## -1 = ninguno; se borra al cambiar de solapa.
+var select_map_index: int = -1
 ## RF-389: el modo que se está jugando (una entrada de ModePacks.all()) y el índice del mapa en su lista.
 ## Vacío / -1 = no se juega un modo.
 var current_mode: Dictionary = {}
@@ -48,6 +51,8 @@ var current_mode_index: int = -1
 var intro_pending: bool = false
 ## M64 (RF-580): el cambio de escena con pantalla de carga y la entrada bloqueada. Lo crea `_ready`.
 var transition: SceneTransition
+## T476: anfitrión persistente de presentación; es null al abrir escenas directamente (F6/tests/tools).
+var presentation_host: Node
 
 
 func _ready() -> void:
@@ -171,7 +176,12 @@ func current_mode_level() -> LevelData:
 func is_mode_level_unlocked(mode: Dictionary, index: int) -> bool:
 	if ModePacks.map_level(mode, index) == null:
 		return false
-	return DevMode.enabled or ModePacks.is_open(mode, index, SaveManager.is_completed, SaveManager.is_unlocked)
+	if DevMode.enabled:
+		return true
+	if SiegeAccess.applies_to(mode):
+		# RF-692: Asedio N se abre al completar la campaña N (o por acceso heredado, RF-693), no por ganar Asedio N−1.
+		return SiegeAccess.is_open(mode, index, SaveManager.is_completed, SaveManager.siege_legacy_unlocked())
+	return ModePacks.is_open(mode, index, SaveManager.is_completed, SaveManager.is_unlocked)
 
 
 func has_next_level() -> bool:
@@ -224,7 +234,7 @@ func level_won(lives: int, score: int = 0) -> void:
 		# RF-390: progreso del mapa del modo; desbloquea el siguiente del MISMO modo, nunca la campaña.
 		SaveManager.record_victory(current_mode_level().id, lives, score)
 		var next: int = ModePacks.next_playable(current_mode, current_mode_index)
-		if next >= 0:
+		if next >= 0 and not SiegeAccess.applies_to(current_mode):  # RF-692: ganar Asedio no abre el siguiente
 			SaveManager.unlock(ModePacks.map_level(current_mode, next).id)
 		SaveManager.save()
 
@@ -349,6 +359,7 @@ func start_mode_level(mode: Dictionary, index: int) -> void:
 	current_mode = mode
 	current_mode_index = index
 	select_page = ModePacks.page_of(mode)
+	select_map_index = index
 	intro_pending = true  # RF-468: los modos oficiales nunca lo muestran; los propios, si el mapa trae "textos"
 	_change_scene(GAME_SCENE)
 
@@ -452,11 +463,40 @@ func go_to_wiki() -> void:
 func reload_current() -> void:
 	if is_changing():
 		return  # RF-582
-	var scene: Node = get_tree().current_scene
+	var scene: Node = current_screen()
 	if scene == null or scene.scene_file_path == "":
-		get_tree().reload_current_scene()
+		if presentation_host != null and is_instance_valid(presentation_host):
+			presentation_host.install_scene(load("res://scenes/ui/main_menu.tscn") as PackedScene)
+		else:
+			get_tree().reload_current_scene()
 		return
 	_change_scene(scene.scene_file_path)
+
+
+func attach_presentation(host: Node) -> void:
+	presentation_host = host
+	if transition != null:
+		transition.swapper = Callable(host, "install_scene")
+
+
+func update_presentation_scale(scale: float) -> void:
+	if transition != null:
+		transition.set_overlay_scale(scale)
+
+
+func detach_presentation(host: Node) -> void:
+	if presentation_host != host:
+		return
+	presentation_host = null
+	if transition != null:
+		transition.swapper = Callable()
+		transition.set_overlay_scale(1.0)
+
+
+func current_screen() -> Node:
+	if presentation_host != null and is_instance_valid(presentation_host):
+		return presentation_host.get_active_screen()
+	return get_tree().current_scene
 
 
 ## RF-582: ¿hay un cambio de pantalla en curso? Mientras tanto ninguna función de acá cambia nada.
