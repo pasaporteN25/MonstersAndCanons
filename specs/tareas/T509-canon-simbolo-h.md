@@ -23,3 +23,7 @@ Todas las menciones «cambiar» y «regla» de D-212 están al día, la búsqued
 ## Frenar si
 
 Falta el OK escrito; Lucas decide un símbolo distinto de la H; una mención «histórica» parece en realidad una regla vigente (preguntar).
+
+## Registro (2026-10-26)
+
+**OK de Lucas al cambio de canon A → H (2026-10-26):** Lucas dio su OK al cambio de canon. **El glifo exacto sigue necesitando su aprobación por muestra** (T505/T506); T509 (edición de `10-universo.md` y demás menciones) queda habilitada recién cuando apruebe el glifo exacto. Mientras tanto no se edita `10-universo.md` ni `11-textos-lore.md`.

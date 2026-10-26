@@ -23,3 +23,7 @@ Quedan escritos modelos, colores, glifo, tipos de marca y las seis respuestas, y
 ## Frenar si
 
 Lucas no contestó alguna pregunta: esa parte queda sin integrar; no se asume la recomendación ni se da por aprobado el cambio de canon.
+
+## Registro (2026-10-26)
+
+**OK de Lucas al cambio de canon A → H (2026-10-26):** Lucas dio su OK al cambio de canon. **El glifo exacto sigue necesitando su aprobación por muestra** (T505/T506); T509 (edición de `10-universo.md` y demás menciones) queda habilitada recién cuando apruebe el glifo exacto. Mientras tanto no se edita `10-universo.md` ni `11-textos-lore.md`. Falta el resto de la aprobación de esta ficha.

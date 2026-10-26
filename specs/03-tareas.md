@@ -2940,6 +2940,7 @@ Spec en **M80** (RF-716 a RF-719), razones y canon en **D-212**, el cómo en la 
 - [ ] **T506 · 🚦🎨 Lucas elige las rocas, el glifo y los tipos de marca, y confirma el canon por escrito. `[x86]`**
   **Refs:** RF-716 a RF-719, D-212. **Depende de:** T504 y T505. **Ficha:** `specs/tareas/T506-aprobacion-rocas-y-marcas.md`.
   **Hecho cuando:** quedan escritos en esta entrada y en D-212, con fecha, los modelos y colores elegidos, el glifo, los tipos de marca, las respuestas a las seis preguntas de M80 y, aparte, **la confirmación escrita del cambio de canon A → H (o su rechazo)**; ejecutor: Lucas.
+  **Avance (2026-10-26):** Lucas dio su OK al cambio de canon A → H (transcripto por Claude). **El glifo exacto sigue necesitando su aprobación por muestra** (T505/T506); T509 (edición de `10-universo.md` y demás menciones) queda habilitada recién cuando apruebe el glifo exacto. Mientras tanto no se edita `10-universo.md` ni `11-textos-lore.md`. Sigue `[ ]`: faltan la elección de modelos, colores, glifo y tipos de marca y las seis respuestas.
 
 - [ ] **T507 · Sistema de marcas por datos. `[mobile+x86]`**
   **Refs:** RF-717, RF-719, D-212. **Depende de:** T506 (con el glifo aprobado) y del merge de T497 y T498 si siguen abiertas. **Ficha:** `specs/tareas/T507-integrar-sistema-marcas.md`.
@@ -2952,6 +2953,7 @@ Spec en **M80** (RF-716 a RF-719), razones y canon en **D-212**, el cómo en la 
 - [ ] **T509 · 🚦 Documentos de canon y menciones del símbolo (A → H). `[x86]`**
   **Refs:** RF-718, D-212. **Depende de:** el **OK escrito de Lucas** (T506) y T508 integrada. **Ficha:** `specs/tareas/T509-canon-simbolo-h.md`.
   **Hecho cuando:** se actualizan solo las menciones marcadas «cambiar» en D-212 (`10-universo.md`, specs y documentos vigentes), la búsqueda de menciones se repite sin dejar ninguna vigente con la A, `11-textos-lore.md` y `data/` quedan sin tocar (o se explica por qué se tocaron), y el CHANGELOG suma la entrada de lo que ve el jugador. Ejecutor: Sonnet.
+  **Compuerta (2026-10-26):** Lucas dio su OK al cambio de canon A → H; T509 queda habilitada recién cuando apruebe el glifo exacto (T506) y T508 esté integrada. No se hace antes.
 - [x] **T510 · Propuesta de rediseño del panel de torre (PC y celular). `[mobile+x86]`**
   **Refs:** RF-616, RF-617, RF-650, RF-677 a RF-686, RF-512, RF-550, D-193 a D-197; T465 (abierta). **Pedido:** Lucas, 2026-10-26. **Informe:** `specs/tareas/informes/T510-panel-torre-critica.md`.
   **Hecho cuando:** hay capturas reales del motor del panel actual en PC (1280 × 720 y 1920 × 1080) y en el celular simulado, una crítica medida (qué sirve para decidir, cuánto ocupa cada bloque, jerarquía, estética, tamaños táctiles, qué RF/D enmendar), al menos tres maquetas de PC y tres de celular a escala real con la paleta del juego, una comparación (espacio, información, coste, tests) y una recomendación; sin tocar código, escenas, datos ni `assets/` del juego.
