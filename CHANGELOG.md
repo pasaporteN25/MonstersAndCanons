@@ -1,5 +1,8 @@
 # Novedades del juego
 
+## Cabezas de ganado nuevas en el desierto *(T498, 2026-10-26; en revisión)*
+
+En el desierto (niveles 10, 11 y 12), las cabezas de ganado que decoran el mapa tienen un dibujo nuevo, con dos pares de cuernos, volumen y luz como el resto de la decoración renderizada. Están en las mismas casillas que antes y siguen siendo decoración donde no se construye: no cambia el camino, las oleadas ni el mapa. No se probaron teléfonos reales.
 ## La barra de la torre en el celular entra en la pantalla *(T511, 2026-10-26; en revisión)*
 
 Al elegir una torre en el modo celular, la barra de abajo se salía de la pantalla y cortaba el renglón «Al mejorar». Ahora entra entera (nombre y nivel comparten renglón y la letra se ajusta si hace falta). Además, la cadencia y el alcance se escriben con coma y con el valor real: el Hielo y la Eléctrica de nivel 1 dicen «Alcance 2,5» (antes «2») y «Cadencia 0,75» en lugar de «0.75». Los botones no cambiaron de lugar.

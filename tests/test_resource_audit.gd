@@ -22,6 +22,8 @@ const KNOWN_UNUSED: Array[String] = [
 	"res://assets/sprites/towers/rendered/cannon_level_2_icon.png",
 	"res://assets/sprites/towers/rendered/disruptor_suppression_arc_1.png",
 	"res://assets/sprites/towers/rendered/disruptor_pulse_ring.png",
+	# T498: reemplazada por bones_skull.png en el tema desierto; se conserva hasta que Lucas autorice borrarla.
+	"res://assets/sprites/map/huesos.svg",
 	# T497: reemplazada por snow_rock.png en el tema nieve; se conserva hasta que Lucas autorice borrarla (pino.svg y abeto.svg
 	# tampoco se usan, pero su nombre aparece en otros textos y la auditoría no los marca).
 	"res://assets/sprites/map/roca_nieve.svg",
