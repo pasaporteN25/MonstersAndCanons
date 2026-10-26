@@ -1,0 +1,284 @@
+[
+  {
+    "caras_por_bloque": 17,
+    "bbox_cuerpo_opaco": [
+      16,
+      35,
+      113,
+      109
+    ],
+    "altura_cuerpo_px": 74,
+    "rectangulo_frontal": {
+      "rectangulo_frontal_30px_alto": [
+        33,
+        66,
+        73,
+        96
+      ],
+      "ancho_px": 40
+    },
+    "archivo": "roca_a_caliza.png",
+    "modelo": "a",
+    "color": "caliza",
+    "tamaño": [
+      128,
+      128
+    ],
+    "semilla": 50417,
+    "sha256": "b80ce03747b22cbe907930b73f267ab7eca6cdee9485c44c7f2bafbee051ef41",
+    "bbox_alfa": [
+      13,
+      32,
+      116,
+      113
+    ]
+  },
+  {
+    "caras_por_bloque": 17,
+    "bbox_cuerpo_opaco": [
+      16,
+      35,
+      113,
+      109
+    ],
+    "altura_cuerpo_px": 74,
+    "rectangulo_frontal": {
+      "rectangulo_frontal_30px_alto": [
+        33,
+        66,
+        73,
+        96
+      ],
+      "ancho_px": 40
+    },
+    "archivo": "roca_a_arenisca.png",
+    "modelo": "a",
+    "color": "arenisca",
+    "tamaño": [
+      128,
+      128
+    ],
+    "semilla": 50417,
+    "sha256": "4ec82868e4dac27809592f8100e370ed385ca7564547396d9d8672dddae9828b",
+    "bbox_alfa": [
+      13,
+      32,
+      116,
+      113
+    ]
+  },
+  {
+    "caras_por_bloque": 17,
+    "bbox_cuerpo_opaco": [
+      16,
+      35,
+      113,
+      109
+    ],
+    "altura_cuerpo_px": 74,
+    "rectangulo_frontal": {
+      "rectangulo_frontal_30px_alto": [
+        33,
+        66,
+        73,
+        96
+      ],
+      "ancho_px": 40
+    },
+    "archivo": "roca_a_oscura.png",
+    "modelo": "a",
+    "color": "oscura",
+    "tamaño": [
+      128,
+      128
+    ],
+    "semilla": 50417,
+    "sha256": "b635f289b8c9ec8afb333b461a2fdf809ff882a7de3bea2dfa329a6452146295",
+    "bbox_alfa": [
+      13,
+      32,
+      116,
+      113
+    ]
+  },
+  {
+    "caras_por_bloque": 19,
+    "bbox_cuerpo_opaco": [
+      16,
+      35,
+      114,
+      106
+    ],
+    "altura_cuerpo_px": 71,
+    "rectangulo_frontal": null,
+    "archivo": "roca_b_caliza.png",
+    "modelo": "b",
+    "color": "caliza",
+    "tamaño": [
+      128,
+      128
+    ],
+    "semilla": 50439,
+    "sha256": "b86426cc0ad04e78b01b4c36364c847edb3bcf0f7a81b0fabbf3a14dac06336c",
+    "bbox_alfa": [
+      13,
+      32,
+      117,
+      113
+    ]
+  },
+  {
+    "caras_por_bloque": 19,
+    "bbox_cuerpo_opaco": [
+      16,
+      35,
+      114,
+      106
+    ],
+    "altura_cuerpo_px": 71,
+    "rectangulo_frontal": null,
+    "archivo": "roca_b_arenisca.png",
+    "modelo": "b",
+    "color": "arenisca",
+    "tamaño": [
+      128,
+      128
+    ],
+    "semilla": 50439,
+    "sha256": "ac274ce6b6eda5293d3f450d9c86caa23d0a4cd586e01671c9a96fca25bed103",
+    "bbox_alfa": [
+      13,
+      32,
+      117,
+      113
+    ]
+  },
+  {
+    "caras_por_bloque": 19,
+    "bbox_cuerpo_opaco": [
+      16,
+      35,
+      114,
+      106
+    ],
+    "altura_cuerpo_px": 71,
+    "rectangulo_frontal": null,
+    "archivo": "roca_b_oscura.png",
+    "modelo": "b",
+    "color": "oscura",
+    "tamaño": [
+      128,
+      128
+    ],
+    "semilla": 50439,
+    "sha256": "4e9f7c1cfe5931edf94a20b7b4fe642b9726ec9a76ea764527bec388716392e3",
+    "bbox_alfa": [
+      13,
+      32,
+      117,
+      113
+    ]
+  },
+  {
+    "caras_por_bloque": 17,
+    "bbox_cuerpo_opaco": [
+      25,
+      26,
+      104,
+      108
+    ],
+    "altura_cuerpo_px": 82,
+    "rectangulo_frontal": {
+      "rectangulo_frontal_30px_alto": [
+        42,
+        59,
+        82,
+        89
+      ],
+      "ancho_px": 40
+    },
+    "archivo": "roca_c_caliza.png",
+    "modelo": "c",
+    "color": "caliza",
+    "tamaño": [
+      128,
+      128
+    ],
+    "semilla": 50483,
+    "sha256": "bc2e819a39703ddff46e68fd2afc1c306087e41414bf80b0d01b11580eed4baf",
+    "bbox_alfa": [
+      22,
+      23,
+      107,
+      113
+    ]
+  },
+  {
+    "caras_por_bloque": 17,
+    "bbox_cuerpo_opaco": [
+      25,
+      26,
+      104,
+      108
+    ],
+    "altura_cuerpo_px": 82,
+    "rectangulo_frontal": {
+      "rectangulo_frontal_30px_alto": [
+        42,
+        59,
+        82,
+        89
+      ],
+      "ancho_px": 40
+    },
+    "archivo": "roca_c_arenisca.png",
+    "modelo": "c",
+    "color": "arenisca",
+    "tamaño": [
+      128,
+      128
+    ],
+    "semilla": 50483,
+    "sha256": "00fea2512fcdfd9c98c14072fdaf11729114aeba8e3e34e3a97c12a5fa6fc691",
+    "bbox_alfa": [
+      22,
+      23,
+      107,
+      113
+    ]
+  },
+  {
+    "caras_por_bloque": 17,
+    "bbox_cuerpo_opaco": [
+      25,
+      26,
+      104,
+      108
+    ],
+    "altura_cuerpo_px": 82,
+    "rectangulo_frontal": {
+      "rectangulo_frontal_30px_alto": [
+        42,
+        59,
+        82,
+        89
+      ],
+      "ancho_px": 40
+    },
+    "archivo": "roca_c_oscura.png",
+    "modelo": "c",
+    "color": "oscura",
+    "tamaño": [
+      128,
+      128
+    ],
+    "semilla": 50483,
+    "sha256": "396f48bbcb1e77bf46bcf7cbd8421ebe4a02af8b8fc92f4d0b44a878f0223aa4",
+    "bbox_alfa": [
+      22,
+      23,
+      107,
+      113
+    ]
+  }
+]

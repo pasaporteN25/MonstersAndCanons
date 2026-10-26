@@ -1,0 +1,545 @@
+{
+  "12": {
+    "captura": "art/m79-inventario/antes-nivel-12-1280x720.png",
+    "suelo": "desierto",
+    "glifo_unico": "g1",
+    "calibracion": {
+      "origen_px": [
+        0.0,
+        65.23076923076923
+      ],
+      "casilla_px": 49.23076923076923,
+      "columnas": 26,
+      "filas": 11,
+      "metodo": "T504: banda 48..624 y casillas centradas; límite por ancho de Rules.map_zoom en nivel 12. Nivel 14 cotejado exactamente con calibracion.json."
+    },
+    "casillas": [
+      {
+        "tipo": "roca grabada",
+        "glifo": "g1",
+        "casilla": [
+          4,
+          0
+        ],
+        "caracter_anterior": "h",
+        "suelo_repintado": true,
+        "rectangulo_px": [
+          197,
+          65,
+          246,
+          114
+        ],
+        "fuente": "art/m80-muestras/rocas/roca_a_arenisca.png; cara receptora remapeada desde su fuente"
+      },
+      {
+        "tipo": "roca grabada",
+        "glifo": "g1",
+        "casilla": [
+          0,
+          3
+        ],
+        "caracter_anterior": "h",
+        "suelo_repintado": true,
+        "rectangulo_px": [
+          0,
+          213,
+          49,
+          262
+        ],
+        "fuente": "art/m80-muestras/rocas/roca_a_arenisca.png; cara receptora remapeada desde su fuente"
+      },
+      {
+        "tipo": "roca grabada",
+        "glifo": "g1",
+        "casilla": [
+          1,
+          6
+        ],
+        "caracter_anterior": "h",
+        "suelo_repintado": true,
+        "rectangulo_px": [
+          49,
+          361,
+          98,
+          410
+        ],
+        "fuente": "art/m80-muestras/rocas/roca_a_arenisca.png; cara receptora remapeada desde su fuente"
+      },
+      {
+        "tipo": "banderin",
+        "glifo": "g1",
+        "casilla": [
+          9,
+          1
+        ],
+        "caracter_anterior": "X",
+        "suelo_repintado": true,
+        "rectangulo_px": [
+          443,
+          114,
+          492,
+          164
+        ],
+        "fuente": "marca_banderin_g1.png"
+      },
+      {
+        "tipo": "tablilla",
+        "glifo": "g1",
+        "casilla": [
+          16,
+          4
+        ],
+        "caracter_anterior": "X",
+        "suelo_repintado": true,
+        "rectangulo_px": [
+          788,
+          262,
+          837,
+          311
+        ],
+        "fuente": "marca_tablilla_g1.png"
+      },
+      {
+        "tipo": "hito",
+        "glifo": "g1",
+        "casilla": [
+          23,
+          6
+        ],
+        "caracter_anterior": "X",
+        "suelo_repintado": true,
+        "rectangulo_px": [
+          1132,
+          361,
+          1182,
+          410
+        ],
+        "fuente": "marca_hito_g1.png"
+      },
+      {
+        "tipo": "cinta",
+        "glifo": "g1",
+        "casilla": [
+          5,
+          9
+        ],
+        "caracter_anterior": "X",
+        "suelo_repintado": true,
+        "rectangulo_px": [
+          246,
+          508,
+          295,
+          558
+        ],
+        "fuente": "marca_cinta_g1.png"
+      }
+    ],
+    "postes_campana": [
+      [
+        5,
+        2
+      ],
+      [
+        24,
+        9
+      ]
+    ],
+    "verificaciones": "X sin leyenda; exclusión de camino/entrada/salida/construible/removible/extracción/dibujo/poste; sin duplicados; un reemplazo por casilla."
+  },
+  "13": {
+    "captura": "art/m79-inventario/antes-nivel-13-1280x720.png",
+    "suelo": "nieve",
+    "glifo_unico": "g2",
+    "calibracion": {
+      "origen_px": [
+        16.0,
+        48.0
+      ],
+      "casilla_px": 48.0,
+      "columnas": 26,
+      "filas": 12,
+      "metodo": "T504: banda 48..624 y casillas centradas; límite por ancho de Rules.map_zoom en nivel 12. Nivel 14 cotejado exactamente con calibracion.json."
+    },
+    "casillas": [
+      {
+        "tipo": "roca grabada",
+        "glifo": "g2",
+        "casilla": [
+          7,
+          1
+        ],
+        "caracter_anterior": "h",
+        "suelo_repintado": true,
+        "rectangulo_px": [
+          352,
+          96,
+          400,
+          144
+        ],
+        "fuente": "art/m79-muestras/nieve/snow_rock_01.png"
+      },
+      {
+        "tipo": "roca grabada",
+        "glifo": "g2",
+        "casilla": [
+          11,
+          4
+        ],
+        "caracter_anterior": "h",
+        "suelo_repintado": true,
+        "rectangulo_px": [
+          544,
+          240,
+          592,
+          288
+        ],
+        "fuente": "art/m79-muestras/nieve/snow_rock_01.png"
+      },
+      {
+        "tipo": "roca grabada",
+        "glifo": "g2",
+        "casilla": [
+          20,
+          5
+        ],
+        "caracter_anterior": "h",
+        "suelo_repintado": true,
+        "rectangulo_px": [
+          976,
+          288,
+          1024,
+          336
+        ],
+        "fuente": "art/m79-muestras/nieve/snow_rock_01.png"
+      },
+      {
+        "tipo": "roca grabada",
+        "glifo": "g2",
+        "casilla": [
+          8,
+          7
+        ],
+        "caracter_anterior": "h",
+        "suelo_repintado": true,
+        "rectangulo_px": [
+          400,
+          384,
+          448,
+          432
+        ],
+        "fuente": "art/m79-muestras/nieve/snow_rock_01.png"
+      },
+      {
+        "tipo": "banderin",
+        "glifo": "g2",
+        "casilla": [
+          3,
+          1
+        ],
+        "caracter_anterior": "X",
+        "suelo_repintado": true,
+        "rectangulo_px": [
+          160,
+          96,
+          208,
+          144
+        ],
+        "fuente": "marca_banderin_g2.png"
+      },
+      {
+        "tipo": "tablilla",
+        "glifo": "g2",
+        "casilla": [
+          13,
+          4
+        ],
+        "caracter_anterior": "X",
+        "suelo_repintado": true,
+        "rectangulo_px": [
+          640,
+          240,
+          688,
+          288
+        ],
+        "fuente": "marca_tablilla_g2.png"
+      },
+      {
+        "tipo": "hito",
+        "glifo": "g2",
+        "casilla": [
+          5,
+          8
+        ],
+        "caracter_anterior": "X",
+        "suelo_repintado": true,
+        "rectangulo_px": [
+          256,
+          432,
+          304,
+          480
+        ],
+        "fuente": "marca_hito_g2.png + nieve procedural"
+      },
+      {
+        "tipo": "cinta",
+        "glifo": "g2",
+        "casilla": [
+          17,
+          10
+        ],
+        "caracter_anterior": "X",
+        "suelo_repintado": true,
+        "rectangulo_px": [
+          832,
+          528,
+          880,
+          576
+        ],
+        "fuente": "marca_cinta_g2.png"
+      }
+    ],
+    "postes_campana": [
+      [
+        23,
+        2
+      ],
+      [
+        24,
+        9
+      ]
+    ],
+    "verificaciones": "X sin leyenda; exclusión de camino/entrada/salida/construible/removible/extracción/dibujo/poste; sin duplicados; un reemplazo por casilla."
+  },
+  "14": {
+    "captura": "art/m79-inventario/antes-nivel-14-1280x720.png",
+    "suelo": "ruinas",
+    "glifo_unico": "g3",
+    "calibracion": {
+      "origen_px": [
+        16.0,
+        48.0
+      ],
+      "casilla_px": 48.0,
+      "columnas": 26,
+      "filas": 12,
+      "metodo": "T504: banda 48..624 y casillas centradas; límite por ancho de Rules.map_zoom en nivel 12. Nivel 14 cotejado exactamente con calibracion.json."
+    },
+    "casillas": [
+      {
+        "tipo": "roca grabada",
+        "glifo": "g3",
+        "casilla": [
+          8,
+          1
+        ],
+        "caracter_anterior": "s",
+        "suelo_repintado": true,
+        "rectangulo_px": [
+          400,
+          96,
+          448,
+          144
+        ],
+        "fuente": "art/m80-muestras/rocas/roca_a_oscura.png; cara receptora remapeada desde su fuente"
+      },
+      {
+        "tipo": "roca grabada",
+        "glifo": "g3",
+        "casilla": [
+          24,
+          1
+        ],
+        "caracter_anterior": "s",
+        "suelo_repintado": true,
+        "rectangulo_px": [
+          1168,
+          96,
+          1216,
+          144
+        ],
+        "fuente": "art/m80-muestras/rocas/roca_a_oscura.png; cara receptora remapeada desde su fuente"
+      },
+      {
+        "tipo": "roca grabada",
+        "glifo": "g3",
+        "casilla": [
+          18,
+          2
+        ],
+        "caracter_anterior": "s",
+        "suelo_repintado": true,
+        "rectangulo_px": [
+          880,
+          144,
+          928,
+          192
+        ],
+        "fuente": "art/m80-muestras/rocas/roca_a_oscura.png; cara receptora remapeada desde su fuente"
+      },
+      {
+        "tipo": "roca grabada",
+        "glifo": "g3",
+        "casilla": [
+          3,
+          5
+        ],
+        "caracter_anterior": "s",
+        "suelo_repintado": true,
+        "rectangulo_px": [
+          160,
+          288,
+          208,
+          336
+        ],
+        "fuente": "art/m80-muestras/rocas/roca_a_oscura.png; cara receptora remapeada desde su fuente"
+      },
+      {
+        "tipo": "roca grabada",
+        "glifo": "g3",
+        "casilla": [
+          14,
+          5
+        ],
+        "caracter_anterior": "s",
+        "suelo_repintado": true,
+        "rectangulo_px": [
+          688,
+          288,
+          736,
+          336
+        ],
+        "fuente": "art/m80-muestras/rocas/roca_a_oscura.png; cara receptora remapeada desde su fuente"
+      },
+      {
+        "tipo": "roca grabada",
+        "glifo": "g3",
+        "casilla": [
+          7,
+          7
+        ],
+        "caracter_anterior": "s",
+        "suelo_repintado": true,
+        "rectangulo_px": [
+          352,
+          384,
+          400,
+          432
+        ],
+        "fuente": "art/m80-muestras/rocas/roca_a_oscura.png; cara receptora remapeada desde su fuente"
+      },
+      {
+        "tipo": "roca grabada",
+        "glifo": "g3",
+        "casilla": [
+          13,
+          8
+        ],
+        "caracter_anterior": "s",
+        "suelo_repintado": true,
+        "rectangulo_px": [
+          640,
+          432,
+          688,
+          480
+        ],
+        "fuente": "art/m80-muestras/rocas/roca_a_oscura.png; cara receptora remapeada desde su fuente"
+      },
+      {
+        "tipo": "roca grabada",
+        "glifo": "g3",
+        "casilla": [
+          25,
+          9
+        ],
+        "caracter_anterior": "s",
+        "suelo_repintado": true,
+        "rectangulo_px": [
+          1216,
+          480,
+          1264,
+          528
+        ],
+        "fuente": "art/m80-muestras/rocas/roca_a_oscura.png; cara receptora remapeada desde su fuente"
+      },
+      {
+        "tipo": "banderin",
+        "glifo": "g3",
+        "casilla": [
+          11,
+          1
+        ],
+        "caracter_anterior": "X",
+        "suelo_repintado": true,
+        "rectangulo_px": [
+          544,
+          96,
+          592,
+          144
+        ],
+        "fuente": "marca_banderin_g3.png"
+      },
+      {
+        "tipo": "tablilla",
+        "glifo": "g3",
+        "casilla": [
+          1,
+          5
+        ],
+        "caracter_anterior": "X",
+        "suelo_repintado": true,
+        "rectangulo_px": [
+          64,
+          288,
+          112,
+          336
+        ],
+        "fuente": "marca_tablilla_g3.png"
+      },
+      {
+        "tipo": "hito",
+        "glifo": "g3",
+        "casilla": [
+          18,
+          7
+        ],
+        "caracter_anterior": "X",
+        "suelo_repintado": true,
+        "rectangulo_px": [
+          880,
+          384,
+          928,
+          432
+        ],
+        "fuente": "marca_hito_g3.png"
+      },
+      {
+        "tipo": "cinta",
+        "glifo": "g3",
+        "casilla": [
+          7,
+          10
+        ],
+        "caracter_anterior": "X",
+        "suelo_repintado": true,
+        "rectangulo_px": [
+          352,
+          528,
+          400,
+          576
+        ],
+        "fuente": "marca_cinta_g3.png"
+      }
+    ],
+    "postes_campana": [
+      [
+        1,
+        1
+      ],
+      [
+        24,
+        10
+      ]
+    ],
+    "verificaciones": "X sin leyenda; exclusión de camino/entrada/salida/construible/removible/extracción/dibujo/poste; sin duplicados; un reemplazo por casilla."
+  }
+}

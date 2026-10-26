@@ -103,8 +103,9 @@ func test_the_meadow_decoration_is_the_old_one() -> void:
 	assert_eq(list.size(), 6, "las mismas seis, con las rocas repetidas")
 
 
+## T516: `huesos.svg` salió de la lista (se retiró el 2026-10-26); su reemplazo, `bones_skull.png`, lo cubre `test_desert_bones_is_the_approved_128_png`.
 func test_the_new_drawings_exist_and_are_64_square() -> void:
-	var names: PackedStringArray = ["cactus", "roca_roja", "huesos", "roca_negra", "grieta",
+	var names: PackedStringArray = ["cactus", "roca_roja", "roca_negra", "grieta",
 		"columna", "bloque", "estatua", "tronco", "helecho", "junco", "hongo", "flores"]
 	for file_name: String in names:
 		var texture: Texture2D = load("res://assets/sprites/map/%s.svg" % file_name)
@@ -113,7 +114,7 @@ func test_the_new_drawings_exist_and_are_64_square() -> void:
 
 
 ## T498 (RF-713 c, RF-714, D-210): la cabeza de ganado del desierto (niveles 10 a 12) es el PNG aprobado de 128 × 128 (variante 01,
-## dos pares de cuernos); cada casilla que antes mostraba `huesos.svg` resuelve al arte nuevo y los datos no cambiaron.
+## dos pares de cuernos); cada casilla que antes mostraba `huesos.svg` (retirado en T516) resuelve al arte nuevo y los datos no cambiaron.
 const DESERT_HASHES: Dictionary = {
 	10: "21af960b29532957099e39c7b97c7c7ed101e3e5ef2646c003bfc091607e7fdf",
 	11: "cbec8c23f8998a67d321d95be9d2d65bf82e1664cd99f148aee715f9fda870e6",

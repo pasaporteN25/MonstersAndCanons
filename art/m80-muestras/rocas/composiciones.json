@@ -1,0 +1,266 @@
+{
+  "15": {
+    "captura": "art/m79-inventario/antes-nivel-15-1280x720.png",
+    "suelo": "pradera",
+    "casillas": [
+      {
+        "casilla": [
+          2,
+          4
+        ],
+        "caracter": "s",
+        "uso": "señal",
+        "pieza": "roca_a_caliza.png",
+        "rectangulo_px": [
+          112,
+          240,
+          160,
+          288
+        ],
+        "item_anterior_borrado": true
+      },
+      {
+        "casilla": [
+          19,
+          10
+        ],
+        "caracter": "s",
+        "uso": "señal",
+        "pieza": "roca_b_caliza.png",
+        "rectangulo_px": [
+          928,
+          528,
+          976,
+          576
+        ],
+        "item_anterior_borrado": true
+      },
+      {
+        "casilla": [
+          3,
+          4
+        ],
+        "caracter": "X",
+        "uso": "comparación X",
+        "pieza": "roca_b_caliza.png",
+        "rectangulo_px": [
+          160,
+          240,
+          208,
+          288
+        ],
+        "item_anterior_borrado": true
+      },
+      {
+        "casilla": [
+          4,
+          4
+        ],
+        "caracter": "X",
+        "uso": "comparación X",
+        "pieza": "roca_c_caliza.png",
+        "rectangulo_px": [
+          208,
+          240,
+          256,
+          288
+        ],
+        "item_anterior_borrado": true
+      }
+    ],
+    "discrepancias": [],
+    "nota": "Las X de comparación reemplazan decoración previa; vecinos rock_a/rock_b intactos."
+  },
+  "11": {
+    "captura": "art/m79-inventario/antes-nivel-11-1280x720.png",
+    "suelo": "desierto",
+    "casillas": [
+      {
+        "casilla": [
+          1,
+          2
+        ],
+        "caracter": "h",
+        "uso": "señal",
+        "pieza": "roca_a_arenisca.png",
+        "rectangulo_px": [
+          64,
+          153,
+          116,
+          205
+        ],
+        "item_anterior_borrado": true
+      },
+      {
+        "casilla": [
+          21,
+          2
+        ],
+        "caracter": "h",
+        "uso": "señal",
+        "pieza": "roca_b_arenisca.png",
+        "rectangulo_px": [
+          1111,
+          153,
+          1164,
+          205
+        ],
+        "item_anterior_borrado": true
+      },
+      {
+        "casilla": [
+          2,
+          8
+        ],
+        "caracter": "h",
+        "uso": "señal",
+        "pieza": "roca_c_arenisca.png",
+        "rectangulo_px": [
+          116,
+          467,
+          169,
+          519
+        ],
+        "item_anterior_borrado": true
+      }
+    ],
+    "discrepancias": [],
+    "nota": "Casillas de señal coincidentes; no se modifican postes, columnas ni extracciones."
+  },
+  "14": {
+    "captura": "art/m79-inventario/antes-nivel-14-1280x720.png",
+    "suelo": "ruinas",
+    "casillas": [
+      {
+        "casilla": [
+          8,
+          1
+        ],
+        "caracter": "s",
+        "uso": "señal",
+        "pieza": "roca_a_oscura.png",
+        "rectangulo_px": [
+          400,
+          96,
+          448,
+          144
+        ],
+        "item_anterior_borrado": true
+      },
+      {
+        "casilla": [
+          24,
+          1
+        ],
+        "caracter": "s",
+        "uso": "señal",
+        "pieza": "roca_b_oscura.png",
+        "rectangulo_px": [
+          1168,
+          96,
+          1216,
+          144
+        ],
+        "item_anterior_borrado": true
+      },
+      {
+        "casilla": [
+          18,
+          2
+        ],
+        "caracter": "s",
+        "uso": "señal",
+        "pieza": "roca_c_oscura.png",
+        "rectangulo_px": [
+          880,
+          144,
+          928,
+          192
+        ],
+        "item_anterior_borrado": true
+      },
+      {
+        "casilla": [
+          3,
+          5
+        ],
+        "caracter": "s",
+        "uso": "señal",
+        "pieza": "roca_a_oscura.png",
+        "rectangulo_px": [
+          160,
+          288,
+          208,
+          336
+        ],
+        "item_anterior_borrado": true
+      },
+      {
+        "casilla": [
+          14,
+          5
+        ],
+        "caracter": "s",
+        "uso": "señal",
+        "pieza": "roca_b_oscura.png",
+        "rectangulo_px": [
+          688,
+          288,
+          736,
+          336
+        ],
+        "item_anterior_borrado": true
+      },
+      {
+        "casilla": [
+          7,
+          7
+        ],
+        "caracter": "s",
+        "uso": "señal",
+        "pieza": "roca_c_oscura.png",
+        "rectangulo_px": [
+          352,
+          384,
+          400,
+          432
+        ],
+        "item_anterior_borrado": true
+      },
+      {
+        "casilla": [
+          13,
+          8
+        ],
+        "caracter": "s",
+        "uso": "señal",
+        "pieza": "roca_a_oscura.png",
+        "rectangulo_px": [
+          640,
+          432,
+          688,
+          480
+        ],
+        "item_anterior_borrado": true
+      },
+      {
+        "casilla": [
+          25,
+          9
+        ],
+        "caracter": "s",
+        "uso": "señal",
+        "pieza": "roca_b_oscura.png",
+        "rectangulo_px": [
+          1216,
+          480,
+          1264,
+          528
+        ],
+        "item_anterior_borrado": true
+      }
+    ],
+    "discrepancias": [],
+    "nota": "Casillas de señal coincidentes; no se modifican postes, columnas ni extracciones."
+  }
+}

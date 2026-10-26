@@ -1,0 +1,253 @@
+[
+  {
+    "archivo": "ficha.md",
+    "tipo": "documentación",
+    "glifo": null,
+    "semilla": 50526,
+    "sha256": "d7046d840b9f6120489c87dcc75a2b556d747277596afc7e22e3cfcf131e30a3"
+  },
+  {
+    "archivo": "g1_banderin.png",
+    "tipo": "banderin",
+    "glifo": "g1",
+    "semilla": 50526,
+    "sha256": "da26df95a1934a8e82f96ae5eadfd2b46bdc3680afa9a92d05f209f436893014",
+    "tamaño": [
+      128,
+      128
+    ],
+    "bbox_alfa": [
+      19,
+      11,
+      108,
+      119
+    ]
+  },
+  {
+    "archivo": "g1_grabada_roca.png",
+    "tipo": "grabada_roca",
+    "glifo": "g1",
+    "semilla": 50526,
+    "sha256": "4e4fd39f85ff93c2d807b65d07c5e978d3b379ac90a7931d0e51be41a4876807",
+    "tamaño": [
+      128,
+      128
+    ],
+    "bbox_alfa": [
+      13,
+      32,
+      116,
+      115
+    ]
+  },
+  {
+    "archivo": "g1_relieve_ruina.png",
+    "tipo": "relieve_ruina",
+    "glifo": "g1",
+    "semilla": 50526,
+    "sha256": "8688417f65e07cc5787aa71ec8906f4abd121d73d21d04f38f46b3ff1212b246",
+    "tamaño": [
+      128,
+      128
+    ],
+    "bbox_alfa": [
+      7,
+      40,
+      115,
+      113
+    ]
+  },
+  {
+    "archivo": "g2_banderin.png",
+    "tipo": "banderin",
+    "glifo": "g2",
+    "semilla": 50526,
+    "sha256": "e1598b75182dd26e857ff88b3431e45f0d8e0d6f9602a703b920eda8d0fa0350",
+    "tamaño": [
+      128,
+      128
+    ],
+    "bbox_alfa": [
+      19,
+      11,
+      108,
+      119
+    ]
+  },
+  {
+    "archivo": "g2_grabada_roca.png",
+    "tipo": "grabada_roca",
+    "glifo": "g2",
+    "semilla": 50526,
+    "sha256": "1b6950172fb1746d00161094065ae07538e1adf1914bf02e15214a6de0eb6ad0",
+    "tamaño": [
+      128,
+      128
+    ],
+    "bbox_alfa": [
+      13,
+      32,
+      116,
+      115
+    ]
+  },
+  {
+    "archivo": "g2_relieve_ruina.png",
+    "tipo": "relieve_ruina",
+    "glifo": "g2",
+    "semilla": 50526,
+    "sha256": "02c0f553f8fa40c22331e62a71603dc57699d5d4b5985606298a5503ff6fc13d",
+    "tamaño": [
+      128,
+      128
+    ],
+    "bbox_alfa": [
+      7,
+      40,
+      115,
+      113
+    ]
+  },
+  {
+    "archivo": "g3_banderin.png",
+    "tipo": "banderin",
+    "glifo": "g3",
+    "semilla": 50526,
+    "sha256": "e2d9ac2a3fae7a5964d3ce62e415edf06068da04a471ce5993c967f969ae646c",
+    "tamaño": [
+      128,
+      128
+    ],
+    "bbox_alfa": [
+      19,
+      11,
+      108,
+      119
+    ]
+  },
+  {
+    "archivo": "g3_grabada_roca.png",
+    "tipo": "grabada_roca",
+    "glifo": "g3",
+    "semilla": 50526,
+    "sha256": "e2a60452a5c9bf43a6efc4d9e572f042a992ab1c69be780988d630da0a8d97b6",
+    "tamaño": [
+      128,
+      128
+    ],
+    "bbox_alfa": [
+      13,
+      32,
+      116,
+      115
+    ]
+  },
+  {
+    "archivo": "g3_relieve_ruina.png",
+    "tipo": "relieve_ruina",
+    "glifo": "g3",
+    "semilla": 50526,
+    "sha256": "ab8353422b1669ab678a93b95a8f0467fa4a38207b469146ce6f99fc8494844e",
+    "tamaño": [
+      128,
+      128
+    ],
+    "bbox_alfa": [
+      7,
+      40,
+      115,
+      113
+    ]
+  },
+  {
+    "archivo": "glifo_hoja_034.png",
+    "tipo": "hoja o composición",
+    "glifo": null,
+    "semilla": 50526,
+    "sha256": "12711536b906d3c26f870429a5c62f026b7c4112c48f81bc02a8db1033e1c9e4"
+  },
+  {
+    "archivo": "glifo_hoja_220.png",
+    "tipo": "hoja o composición",
+    "glifo": null,
+    "semilla": 50526,
+    "sha256": "997e7c4f03f7f76face2c6f2601deb2427544a9fb6ae56275055438eb1dd2172"
+  },
+  {
+    "archivo": "glifo_solo.png",
+    "tipo": "hoja o composición",
+    "glifo": null,
+    "semilla": 50526,
+    "sha256": "8e5763716b2fc57937d627688869d19989555f8c3edbd0211ae76d14484f7708"
+  },
+  {
+    "archivo": "procedencia.md",
+    "tipo": "documentación",
+    "glifo": null,
+    "semilla": 50526,
+    "sha256": "fb54e7f0536bf858692369304010cc127b8ad7d6894ecc93f749ab059306eba0"
+  },
+  {
+    "archivo": "references.png",
+    "tipo": "hoja o composición",
+    "glifo": null,
+    "semilla": 50526,
+    "sha256": "7f9898b408940b23fa5c6c535611b989e01f80bc9d907a5da7a65c0f07e287d9"
+  },
+  {
+    "archivo": "revision.md",
+    "tipo": "documentación",
+    "glifo": null,
+    "semilla": 50526,
+    "sha256": "be9a5e7a216de110cebc86baed754e314778a07d79ea521fc725d591a83d87c1"
+  },
+  {
+    "archivo": "revision_x3.png",
+    "tipo": "hoja o composición",
+    "glifo": null,
+    "semilla": 50526,
+    "sha256": "a9042cd2305dc74162d53fc91fa17cb44b94309a7468a98a744fdd3ffe6cb5fb"
+  },
+  {
+    "archivo": "sources/generate_glifo.py",
+    "tipo": "fuente",
+    "glifo": null,
+    "semilla": 50526,
+    "sha256": "9a9d37c5a2a9000f29349a8d1d2ab83664067e1c79c76b9ff25e71db6df3d8bd"
+  },
+  {
+    "archivo": "sources/glyph_g1.svg",
+    "tipo": "fuente",
+    "glifo": null,
+    "semilla": 50526,
+    "sha256": "2ba5e5acb582459314823216cf4b136eafe47456dd3ab64ff542c37559d73526"
+  },
+  {
+    "archivo": "sources/glyph_g2.svg",
+    "tipo": "fuente",
+    "glifo": null,
+    "semilla": 50526,
+    "sha256": "d5ec65ce2133fe426712161ef1579815d63800eb7fbed80508373cc81ad68e3f"
+  },
+  {
+    "archivo": "sources/glyph_g3.svg",
+    "tipo": "fuente",
+    "glifo": null,
+    "semilla": 50526,
+    "sha256": "662c3f2c03455fcef47bebc52f980c183bd264a2d61d1a410c460f01eb0af08e"
+  },
+  {
+    "archivo": "sources/glyphs.py",
+    "tipo": "fuente",
+    "glifo": null,
+    "semilla": 50526,
+    "sha256": "d82fc377b48f8b4aa279939c8deae93145e2cb12c04d8d014f79a120ef2eb816"
+  },
+  {
+    "archivo": "sources/procedencia.md",
+    "tipo": "documentación",
+    "glifo": null,
+    "semilla": 50526,
+    "sha256": "fb54e7f0536bf858692369304010cc127b8ad7d6894ecc93f749ab059306eba0"
+  }
+]
