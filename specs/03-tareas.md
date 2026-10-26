@@ -76,6 +76,7 @@
 | T233 | Central (T267b/T277). | Abastecimiento, `hito.svg` e imagen del epílogo. |
 | T362 → T364 · T367 → T369 | T362: usar la muestra aprobada existente en PR #22, sin otra propuesta visual. T367: alcance corregido a presentación animada a pantalla completa que pausa la partida. | El PR #22 ya está mergeado (T489); lo de jefes quedó reemplazado por M66/T461. T364/T369 aún necesitan mediciones limpias y un dispositivo real. |
 | T437 (hecha) | Postes rehechos e integrados. | Los emblemas quedaron «para revisión de Lucas en el PR»; el merge del PR #38 no se toma como aprobación de canon (T438). |
+| **M79 · T491 a T498** (spec en T490) | Pedido de Lucas del 2026-10-25: la spec M79 (RF-712 a RF-714, D-210, B-62) está escrita y espera su revisión. | Inventario (T491, Haiku) → muestras de la piedra con la A, los pinos nevados y las cabezas del desierto (T492 a T494, Sonnet, sin integrar) → elección y respuestas de Lucas (T495 🎨) → integración (T496 a T498). Estética actual, no la vieja. |
 
 **6 · Diferido, fuera de la V1**
 
@@ -2795,3 +2796,40 @@ El alcance de T425 a T432 es desktop. Mobile continúa por su propia experiencia
 - [ ] **T479 · Láminas de intro rotativas en la carga. `[mobile+x86]`**
   **Refs:** RF-703–707. **Depende de:** T460 aprobada; 🚦 anexo al informe T454 con medición real del costo de láminas en celular y aprobación escrita de Lucas con esos datos; T476 integrada. **Ficha:** `specs/tareas/T479-carga-laminas-rotativas.md`.
   **Hecho cuando:** Rotación y asincronía cumplen criterios, entrada bloqueada y restaurada, mínimo 0,4s intacto, escena lista no espera textura/fundido; medición y aprobación previas enlazadas, verificación móvil final documentada.
+
+- [x] **T490 · 📜 Especificar la mejora de los assets de los niveles altos (M79). `[x86]`**
+  **Refs:** RF-712 a RF-714, D-210, B-62; pedido de Lucas del 2026-10-25; guía de arte §4; `10-universo.md` §6. **Depende de:** ninguna integración; 🚦 Lucas revisa y contesta las ocho preguntas de M79 antes de T491 a T498. **Ficha:** `specs/tareas/T490-spec-mejora-assets-altos.md`.
+  **Hecho cuando:** hay RF con Dado/Cuando/Entonces, decisión con alternativas descartadas, inventario real de qué sprites y niveles entran, tareas con fichas, dependencias y archivos, y las preguntas abiertas con recomendación; no se tocan código, SVG, PNG, `data/` ni CHANGELOG.
+  **Resultado (2026-10-25, para revisión):** redactados M79 (RF-712 a RF-714), D-210, la sección M79 del plan, B-62 y las fichas T490 a T498. Se verificó en `origin/main` (`e121f0c`) qué usa cada caso: la piedra con la A son `roca_marcada.svg` (niveles 7, 11, 12, 13, 15) y `simbolo_ruina.svg` (8, 9, 10, 14); los pinos nevados son `pino.svg` y `abeto.svg` del tema `nieve`, que en los quince niveles solo usa el 13; las cabezas de ganado son `huesos.svg` del tema `desierto` (10, 11, 12). Todos son SVG planos de 64×64. **No se pudo comprobar:** el reparto exacto de cada dibujo en pantalla (depende del hash de cada casilla; los conteos son de la grilla, no de una captura), cómo se ven hoy en el motor (eso lo mide T491) y por qué `10-universo.md` §6 ubica la roca marcada en el 1 y el 5 cuando esos JSON hoy usan `estatua`. No se corrió Godot ni tests: solo documentos.
+
+- [ ] **T491 · Inventario de los assets de los niveles altos. `[x86]`**
+  **Refs:** RF-712, D-210. **Depende de:** T490 aprobada por Lucas. **Ficha:** `specs/tareas/T491-inventario-assets-altos.md`.
+  **Hecho cuando:** `art/m79-inventario/inventario.md` lista por nivel 8 a 15 tema, dibujos, cantidad de casillas, archivo, técnica (plana/dimensional) y la captura «antes» a 1280×720; no cambia nada fuera de esa carpeta.
+
+- [ ] **T492 · 🎨 Muestras de la piedra con la A. `[x86]`**
+  **Refs:** RF-713 (a), D-210. **Depende de:** T491. **Ficha:** `specs/tareas/T492-muestras-piedra-a.md`.
+  **Hecho cuando:** hay variantes de `roca_marcada` y de `simbolo_ruina` en la estética actual, misma A canónica, hoja a 220 y 34 px y una captura sobre el mapa; sin integrar.
+
+- [ ] **T493 · 🎨 Muestras de los pinos nevados. `[x86]`**
+  **Refs:** RF-713 (b), D-210. **Depende de:** T491. **Ficha:** `specs/tareas/T493-muestras-pinos-nevados.md`.
+  **Hecho cuando:** hay variantes de pino, abeto y roca nevada en la estética actual, hoja a 220 y 34 px con los enemigos sobre la nieve y una captura sobre el mapa del 13; sin integrar.
+
+- [ ] **T494 · 🎨 Muestras de las cabezas del desierto. `[x86]`**
+  **Refs:** RF-713 (c), D-210. **Depende de:** T491. **Ficha:** `specs/tareas/T494-muestras-cabezas-desierto.md`.
+  **Hecho cuando:** hay al menos cuatro variantes de cabeza (monstruo o criatura alienígena) más la línea de base, hoja a 220 y 34 px junto al cactus y la roca roja y una captura sobre el mapa del 10; sin integrar.
+
+- [ ] **T495 · 🚦🎨 Lucas elige las variantes y contesta las preguntas de M79. `[x86]`**
+  **Refs:** RF-712 a RF-714, D-210. **Depende de:** T492, T493 y T494. **Ficha:** `specs/tareas/T495-aprobacion-assets-altos.md`.
+  **Hecho cuando:** quedan escritas en esta entrada y en D-210 la variante elegida por caso y las respuestas a las ocho preguntas, con fecha; ejecutor: Lucas.
+
+- [ ] **T496 · Integrar la piedra con la A aprobada. `[mobile+x86]`**
+  **Refs:** RF-713 (a), RF-714, D-210. **Depende de:** T495. **Ficha:** `specs/tareas/T496-integrar-piedra-a.md`.
+  **Hecho cuando:** `roca_marcada` y `simbolo_ruina` (según T495) muestran el arte aprobado en los niveles que los usan, con los `data/levels` intactos, tests y capturas.
+
+- [ ] **T497 · Integrar los pinos nevados aprobados. `[mobile+x86]`**
+  **Refs:** RF-713 (b), RF-714, D-210. **Depende de:** T495; T496 integrada (comparten `map_themes.gd` y su test). **Ficha:** `specs/tareas/T497-integrar-pinos-nevados.md`.
+  **Hecho cuando:** el tema `nieve` usa el arte aprobado, el nivel 13 sigue igual en grilla y datos, tests y capturas.
+
+- [ ] **T498 · Integrar las cabezas del desierto aprobadas. `[mobile+x86]`**
+  **Refs:** RF-713 (c), RF-714, D-210. **Depende de:** T495; T497 integrada (mismos archivos). **Ficha:** `specs/tareas/T498-integrar-cabezas-desierto.md`.
+  **Hecho cuando:** el tema `desierto` usa la(s) cabeza(s) elegida(s), los niveles 10 a 12 siguen iguales en grilla y datos, tests y capturas.
