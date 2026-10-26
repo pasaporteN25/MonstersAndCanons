@@ -1,5 +1,9 @@
 # Novedades del juego
 
+## Un solo rótulo en el mapa de campaña *(T515, 2026-10-26; en revisión)*
+
+En el mapa de campaña, el nombre del nivel («12 · El cañadón») se muestra solo en el nivel que elegiste o que tiene el foco; los demás muestran el número dentro de la insignia. Así los nombres de los niveles 10 a 13 ya no se montan ni se cortan. El nombre se corre si hace falta para no salirse del mapa ni tapar otra insignia, y el nombre completo sigue en la ficha de abajo y al pasar el puntero. No cambian las insignias, el tamaño del mapa ni los estados. Se probó con capturas del motor en PC y en celular simulado; no se probó en un teléfono real.
+
 ## Cabezas de ganado nuevas en el desierto *(T498, 2026-10-26; en revisión)*
 
 En el desierto (niveles 10, 11 y 12), las cabezas de ganado que decoran el mapa tienen un dibujo nuevo, con dos pares de cuernos, volumen y luz como el resto de la decoración renderizada. Están en las mismas casillas que antes y siguen siendo decoración donde no se construye: no cambia el camino, las oleadas ni el mapa. No se probaron teléfonos reales.
