@@ -48,6 +48,10 @@ Falta:
 
 `godot --headless -s addons/gut/gut_cmdln.gd -gdir=res://tests -gexit` sin `SCRIPT ERROR`. Captura del celular simulado con la lupa: `DISPLAY=:0 godot --path . -s res://tools/capture_m75_cierre.gd -- /ruta/fuera/del/repo 1280x720` (la línea «T464 celular · … dentro de 1280×720» tiene que decir `true`). **No se puede probar acá:** un teléfono real (tamaño táctil de la lupa, pinza) ni Windows.
 
+## Cierre (2026-10-26, `feature/t464-integrar-lupa`)
+
+Lucas aprobó la lupa de la muestra el 2026-10-26. Quedó integrada como `assets/ui/mobile_view_all.svg` en un botón redondo de 64 × 64 px sin texto (ayuda y nombre accesible «Ver todo»), dentro de 1280 × 720 (1188 + 64 = 1252) y sin cruzarse con carrito, X ni demolición. Los puntos 1, 2 y 4 de «Falta» están cumplidos (tests ampliados en `test_view_all_hint_edges.gd` con la geometría real) y las capturas están en `Capturas/T464-lupa-*.png`. Todos los «Hecho cuando» quedan cumplidos; **lo único sin probar** es lo que depende de un celular real (tamaño táctil de la lupa, pinza) y Windows.
+
 ## Frenar si
 
 Lucas pide otro dibujo de lupa (volver a la muestra, no integrar) o la lupa necesita más de 64 px.
