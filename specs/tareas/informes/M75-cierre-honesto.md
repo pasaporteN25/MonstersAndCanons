@@ -125,7 +125,7 @@ Leyenda: ✅ cumplido (con la prueba) · ◐ parcial · ❌ no se cumple · ⏳ 
 - **H-2 (T464):** con el texto «Ver todo», el botón del celular mide 99 × 64 y empieza en `ver_todo_x_px = 1188` (`data/ui/mobile_ui.json:27`, `mobile_hud.gd:446`): **termina en x = 1287 y sale 7 px de la pantalla de 1280**. Se ve cortado en `Capturas/T464-ver-todo-celular.png` y en `M75-T464-celular-simulado-ver-todo.png`. La lupa de 64 × 64 lo resuelve (termina en 1252). No se tocó: depende de la lupa.
 - **H-3 (T464):** la exclusión del aviso con el tutorial activo (`game.gd:617`) y el caso «desplazar y después acercar» no tienen test, aunque el plan de la ficha T458 §2 los pide.
 - **H-4 (T465):** RF-677 punto 1 dice que se elimina el bloque aparte (`UpgradePreview`) y que los efectos muestran el «antes → después» **en su lugar**. El código conserva `UpgradePreview` sin rótulo, entre «Apuntar» y «Mejorar» (`tower_panel.gd:106-140`), y saca de la lista el renglón que cambia. Ejemplos en la captura: «área 1 → 1,2», «saltos 2 → 3», «s de pulso 2,5 → 3». Además: el Hielo necesita barra de desplazamiento en la lista de efectos (en el nivel 3, «Voladores: sí» queda debajo del corte), el Hielo de nivel 2 parte «… s de frenado 2 → 3» en dos renglones, y los rótulos cortos («s de frenado», «s de pulso») se entienden poco.
-- **H-5 (documentos viejos, no se tocaron porque no son de estas entradas):** `CONTENIDO.md:713-715` («todavía **no está programada** … hoy no existe»), `ONBOARDING.md:529` («cuando se implemente T464…») y `specs/01-spec.md:4184` («sin implementar») quedaron viejos: el código de T464 a T468 y T481 está en `main`. También B-54 (`01-spec.md:1454`: «aún sin integrar a main»).
+- **H-5 (resuelto en T517):** `CONTENIDO.md:713-715` («todavía **no está programada** … hoy no existe»), `ONBOARDING.md:529` («cuando se implemente T464…») y `specs/01-spec.md:4184` («sin implementar») habían quedado viejos: el código de T464 a T468 y T481 está en `main`. También B-54 (`01-spec.md:1454`: «aún sin integrar a main»).
 - **H-6 (menor):** `TowerText.describe` (`tower_text.gd:203-204`) todavía usa `%.1f`. Hoy no lo llama ninguna escena; no se tocó.
 
 ## 4. Lo que queda y de quién
@@ -134,10 +134,12 @@ Leyenda: ✅ cumplido (con la prueba) · ◐ parcial · ❌ no se cumple · ⏳ 
 |---|---|---|---|
 | T458 | cerrada | — | — |
 | T480 | cerrada | — | — |
-| T464 | abierta | 🎨 OK de la lupa e integrarla (resuelve H-2); tests de H-3 | Lucas (OK) → Sonnet (integración y tests) |
-| T465 | abierta | decidir H-4: aceptar el bloque sobre «Mejorar» y enmendar RF-677.1, o mover los renglones a la lista de efectos | Lucas (decisión) → 📜 o Sonnet |
+| T464 | cerrada en main (T517) | H-2 resuelto con la lupa aprobada e integrada; H-3 cubierto en los tests de cierre | — |
+| T465 | cerrada en main (T517) | PC-A y CEL-B integradas por T513/T514; queda la prueba de CEL-B en teléfono real a cargo de Lucas | Lucas (teléfono real) |
 | T466 | cerrada | (opcional) Sutil más visible en arena y nieve | Lucas decide si se retoca (solo datos) |
 | T467 | cerrada | — | — |
+
+**Actualización T517 (2026-10-26):** H-5 quedó corregido en los documentos listados. Las tablas de hallazgos y estado de las secciones 3–4 describen la revisión original del 2025-10-25, salvo las filas T464/T465 que se actualizaron arriba.
 
 ## 5. Recomendaciones (no implementadas)
 
@@ -150,3 +152,8 @@ Leyenda: ✅ cumplido (con la prueba) · ◐ parcial · ❌ no se cumple · ⏳ 
 - Herramienta: `tools/capture_m75_cierre.gd` (panel ×12 con medición, hover real, Sutil/Completo ×15, botón del celular).
 - Capturas: `Capturas/M75-T464-celular-simulado-ver-todo.png`, `Capturas/M75-T465-panel-12-casos-1920x1080.png`, `Capturas/M75-T465-panel-12-casos-1280x720.png`, `Capturas/M75-T465-panel-tesla-n1-1920x1080.png`, `Capturas/M75-T466-alcance-sutil-15-niveles-recorte-1920x1080.png`, `Capturas/M75-T466-alcance-completo-15-niveles-recorte.png`, `Capturas/M75-T467-pc-hover-real-1920x1080.png`, `Capturas/M75-T467-pc-hover-real-1280x720.png`.
 - Fichas nuevas: `specs/tareas/T464-ver-todo-lupa-aviso.md`, `T465-panel-torre-sin-repeticiones.md`, `T466-opcion-circulo-alcance.md`, `T467-ampliacion-alcance.md`.
+
+
+## Actualización de estado T517 (2026-10-26)
+
+El hallazgo H-5 se resolvió en la rama documental `feature/t517-limpieza-backlog`: se actualizaron `CONTENIDO.md`, `ONBOARDING.md`, el estado M75 de `specs/01-spec.md` y B-54. La lupa de T464 fue aprobada e integrada en PR #105; T465 cerró al integrarse T513 y T514 (PR #112). El informe y sus tablas siguen siendo la fotografía de la revisión del 2026-10-25.

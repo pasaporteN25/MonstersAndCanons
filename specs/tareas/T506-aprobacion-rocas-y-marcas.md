@@ -1,4 +1,4 @@
-# T506 · 🚦🎨 Lucas elige rocas, glifo y marcas, y confirma el canon
+# T506 · 🚦🎨 Lucas elige rocas, glifo y marcas; se registra el OK de canon ya recibido
 
 - **Ejecutor:** Lucas (no es de agente).
 - **Depende de / compuerta:** T504 y T505 hechas, con sus hojas y capturas.
@@ -10,7 +10,7 @@ CLAUDE.md, ~/.agents/AGENTS.md, specs/00-constitucion.md, `.claude/rules/arte.md
 
 ## Objetivo y alcance
 
-Elegir modelos y colores de roca, el glifo y los tipos de marca; contestar las seis preguntas de M80 y **confirmar o rechazar por escrito el cambio de canon A → H**. El agente que lo asista solo transcribe en la entrada de T506 y en D-212, con fecha, sin decidir por él. Si Lucas no confirma la H, T507 y T508 pueden hacerse con otro símbolo o sin símbolo grabado, y T509 no se hace.
+Elegir modelos y colores de roca, el glifo y los tipos de marca, y contestar las seis preguntas de M80. Lucas ya confirmó por escrito el cambio de canon A→H el 2026-10-26; la entrada de T506 y D-212 deben registrar ese OK junto con las nuevas elecciones. El agente que lo asista solo transcribe sus respuestas con fecha, sin decidir por él. Si el glifo no se aprueba, T507 y T508 no integran una H; T509 espera hasta que se elija el glifo.
 
 ## Archivos (propietario único)
 
@@ -22,4 +22,4 @@ Quedan escritos modelos, colores, glifo, tipos de marca y las seis respuestas, y
 
 ## Frenar si
 
-Lucas no contestó alguna pregunta: esa parte queda sin integrar; no se asume la recomendación ni se da por aprobado el cambio de canon.
+Lucas no contestó alguna de las elecciones pendientes: esa parte queda sin integrar y no se asume la recomendación. El OK escrito de Lucas al cambio de canon A→H ya fue recibido el 2026-10-26; no equivale a aprobar una variante de glifo.
