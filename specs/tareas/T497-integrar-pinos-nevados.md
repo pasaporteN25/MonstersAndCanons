@@ -1,5 +1,7 @@
 # T497 · Integrar los pinos nevados aprobados
 
+> **Habilitada (Lucas, 2026-10-26):** integrar **pino 01, abeto 01 y roca nevada 01**, las variantes recomendadas por el informe del PR #96 (Lucas no eligió otras). Ya no depende de T496 (reemplazada por M80); depende del merge del PR #96, porque las fuentes y los PNG de las muestras no están en `main`. Una integración a la vez con T498, T507 y T508.
+
 - **Ejecutor:** Sonnet · integración.
 - **Depende de / compuerta:** 🚦🎨 T495 y T496 integrada (comparten archivos). **No empezar antes.**
 - **Refs:** RF-713 (b), RF-714, D-210. **Rama:** `feature/t497-integrar-pinos-nevados`, desde `origin/main`; un commit `T497: …`, PR a main; Lucas mergea.

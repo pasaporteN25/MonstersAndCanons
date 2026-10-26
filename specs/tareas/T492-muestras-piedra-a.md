@@ -1,5 +1,7 @@
 # T492 · 🎨 Muestras de la piedra con la A
 
+> **Descartada (Lucas, 2026-10-26).** Las muestras del PR #95 no se integran: la A salía como letra tipográfica sobre una lápida. Reemplazada por M80: rocas genéricas (T504), glifo H y marcas (T505). Ver D-212 y la entrada de T495. No hacer esta tarea.
+
 - **Ejecutor:** Codex (`gpt-6.1-sol`, esfuerzo medio) · muestras (propuestas, no arte final); Sonnet o Gemini si hace falta. La elección es de Lucas.
 - **Depende de / compuerta:** 🚦 T490 aprobada por Lucas y T491 hecha. **La elección es de Lucas (T495).**
 - **Refs:** RF-713 (a), RF-714, D-210. **Rama:** `feature/t492-muestras-piedra-a`, desde `origin/main`; un commit `T492: …`, PR a main; Lucas mergea.
