@@ -1,5 +1,9 @@
 # Novedades del juego
 
+## La barra de la torre del celular muestra lo que comprás con «Mejorar» *(T514, 2026-10-26; en revisión)*
+
+En el celular, al elegir una torre, la barra de abajo ahora tiene dos renglones cortos: el nombre con los puntos de nivel (y si está aturdida o con desgaste) y, debajo, su estado en pocas palabras, por ejemplo «Daño 13 · 0,75/s · Alc. 2,5», con coma decimal y el alcance con su decimal. «Mejorar» pasó a ser un botón ancho de dos partes: arriba dice a qué nivel pasa y cuánto cuesta, y abajo, en verde, lo que cambia («daño 13 → 19 · disp/s 0,75 → 0,85»); el renglón «Al mejorar:» ya no existe. Con un toque pide «Tocá para confirmar», sin oro dice «Faltan N de oro» y mantiene los cambios a la vista, y en el nivel máximo dice «Nivel máximo». «Apuntar» es ahora un ícono con el modo debajo y no aparece en las torres que no apuntan (Estandarte, Disruptora). «Vender» muestra lo que devuelve. La separación de seguridad entre «Mejorar» y «Vender» sigue siendo de 35 mm. No cambia ningún precio, daño ni regla.
+
 ## Cabezas de ganado nuevas en el desierto *(T498, 2026-10-26; en revisión)*
 
 En el desierto (niveles 10, 11 y 12), las cabezas de ganado que decoran el mapa tienen un dibujo nuevo, con dos pares de cuernos, volumen y luz como el resto de la decoración renderizada. Están en las mismas casillas que antes y siguen siendo decoración donde no se construye: no cambia el camino, las oleadas ni el mapa. No se probaron teléfonos reales.
