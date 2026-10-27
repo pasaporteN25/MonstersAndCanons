@@ -157,3 +157,7 @@ Las fichas [T523](T523-muestras-adornos-m79.md) y [T524](T524-integrar-adornos-m
 ## 21. Presentación y localización · T530
 
 [T530](T530-spec-presentacion-localizacion.md) fija RF-724 a RF-727 y D-217: tarjetas solo con niveles habilitados, confirmación de salida breve, franjas laterales menos llamativas y juego completo en inglés con español predeterminado. T531/T532 implementan la presentación; T533 inventaría textos y prepara la infraestructura sin exponer inglés incompleto; T534 traduce y entonces habilita el selector. Las tareas de código esperan el merge de T530; T534 espera la revisión del inventario T533.
+
+## 22. Muestra original de música de combate · T536
+
+[T536](T536-musica-combate-sol.md) entrega «Vigilia de frontera», WAV sintetizado reproducible y [reproductor HTML](../../art/t536-combat-music/revision.html). Muestra pendiente de escucha y aprobación de Lucas; sin integración ni cambios al audio activo.

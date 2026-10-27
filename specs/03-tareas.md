@@ -1421,6 +1421,13 @@
 
   **Resultado T181:** ocho entregables completos. B-20/24/25/26/27 integrados (placa/remaches, muerte con pose actual, rebote/aturdimiento, cura y audio). B-21/22/23 con muestras, candidatos y laboratorio de36 casos; elegir/activar esas mecánicas sigue pendiente, conforme al alcance de investigación.898/898 GUT,8150 asserts,70 scripts; sin SCRIPT ERROR/Parse Error. Diez capturas revisadas. Rendimiento200 enemigos/60 torres con nuevos residuos:100FPS promedio,28,8ms peor cuadro,7/601 cuadros por encima de16,6ms. Windows normal/pruebas y Linux exportados; ambos Windows arrancan con salida0. Sin ejecución física Linux/Android ni evaluación auditiva humana; aviso previo de certificados y limpieza de recursos al cerrar herramientas declarados. Evidencia/reproducción en art/redesign-m36/README.md. M34 previo conservado fuera del commit.
 
+#### Continuidad de M36 · Muestra de música de combate
+
+- [ ] **T536 · Nueva muestra original de música de combate («Vigilia de frontera»).**
+  **Refs:** RF-354, D-020; [ficha T536](tareas/T536-musica-combate-sol.md). Pedido de Lucas tras rechazar T535 por demasiado básica; sin reutilizar su melodía.
+  **Hecho cuando:** muestra original de 90–120 s con motivo y seis secciones, WAV estéreo, generador local reproducible y HTML con reproductor relativo; verificaciones técnicas registradas y escucha/aprobación expresa de Lucas antes de cerrar la tarea. No integrar audio en esta entrega.
+  **Resultado provisional T536:** producida «Vigilia de frontera» (106,057 s, PCM estéreo 44.100 Hz / 16 bits), generador Python estándar, visor y notas en `art/t536-combat-music/`. Verificados dos renders idénticos byte a byte, archivo no vacío, pico cercano a −2 dBFS y cero muestras a escala completa, energía, estéreo y rutas locales del HTML; evidencia en `verification.json`. **Pendiente de escucha y aprobación de Lucas**; sin evaluación auditiva humana, prueba de fatiga/mezcla con efectos ni reproducción en navegador. No se ejecutaron Godot/GUT. Audio activo intacto; propuesta publicada para revisión, sin integración.
+
 ### T182 · Depurar el backlog con Lucas
 - [x] **T182 · Cerrar B-02 y reorganizar B-03/B-15.**
   **Refs:** D-063, backlog §13. No añade requisitos de juego.

@@ -1,0 +1,89 @@
+{
+  "task": "T536",
+  "date": "2026-10-27",
+  "status": "Muestra pendiente de escucha y aprobación de Lucas; no integrada",
+  "environment": {
+    "python": "3.14.4 (main, Aug 20 2026, 10:41:58) [GCC 15.2.0]",
+    "platform": "Linux-7.0.0-38-generic-x86_64-with-glibc2.43"
+  },
+  "audio": {
+    "file": "frontier-vigil.wav",
+    "sha256": "984d4fda56e8b0dfa50bf6c479c155336dfe5bfcba8a43211625da3d971dd0f4",
+    "frames": 4677120,
+    "seconds": 106.05714285714286,
+    "sample_rate": 44100,
+    "channels": 2,
+    "bits": 16,
+    "bytes": 18708524,
+    "peak_dbfs": -2.0002,
+    "full_scale_samples": 0,
+    "rms_dbfs": [
+      -20.164,
+      -20.004
+    ],
+    "dc_offset": [
+      0.00037187,
+      0.00036998
+    ],
+    "stereo_difference_rms": 0.020017,
+    "window_rms_dbfs": [
+      -28.65,
+      -24.79,
+      -18.74,
+      -18.52,
+      -19.78,
+      -20.29,
+      -19.9,
+      -20.18,
+      -18.38,
+      -16.57,
+      -17.72,
+      -24.34,
+      -29.86,
+      -35.07
+    ]
+  },
+  "reproducibility": {
+    "complete_renders": 2,
+    "byte_identical": true,
+    "sha256": "984d4fda56e8b0dfa50bf6c479c155336dfe5bfcba8a43211625da3d971dd0f4",
+    "scope": "Mismo generador y entorno; sin afirmar identidad entre plataformas"
+  },
+  "section_rms_dbfs": {
+    "introduccion": -26.23,
+    "exposicion": -18.44,
+    "contraste": -20.27,
+    "tension": -20.15,
+    "climax": -16.65,
+    "salida": -24.93
+  },
+  "endpoints": {
+    "first_frame": [
+      0,
+      0
+    ],
+    "last_frame": [
+      0,
+      0
+    ]
+  },
+  "html": {
+    "review": "Estática con HTMLParser",
+    "relative_references": [
+      "frontier-vigil.wav",
+      "generate.py",
+      "verification.json"
+    ],
+    "no_scripts": true,
+    "autoplay": false,
+    "loop": false,
+    "browser_playback_tested": false
+  },
+  "limits": [
+    "Sin evaluación auditiva humana ni aprobación de Lucas",
+    "Sin prueba de fatiga en partida larga ni mezcla con efectos",
+    "Sin reproducción en navegador",
+    "Sin verificación de unicidad contra YouTube",
+    "Sin Godot/GUT; no hay cambios de juego"
+  ]
+}

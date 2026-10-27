@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="es-AR">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>T536 · Vigilia de frontera · Muestra de combate</title>
+<style>
+  :root { color-scheme: dark; font-family: system-ui, sans-serif; background: #101923; color: #e3eaf0; }
+  body { max-width: 900px; margin: auto; padding: 32px 22px 64px; line-height: 1.65; }
+  h1 { font-size: clamp(2rem, 6vw, 3.4rem); line-height: 1.1; margin: .4em 0; }
+  h2 { color: #a6dbd4; margin-top: 2rem; }
+  .status { color: #ffd599; border-left: 4px solid #d6a65c; padding: 12px 18px; background: #26303a; }
+  audio { width: 100%; margin: 16px 0; }
+  a { color: #9cddd7; } code { overflow-wrap: anywhere; }
+  pre { white-space: pre-wrap; padding: 16px; background: #1c2833; }
+  table { border-collapse: collapse; width: 100%; } th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid #3b4a56; vertical-align: top; }
+  .subtitle { color: #b5c6d1; }
+</style>
+<main>
+  <p class="subtitle">MONSTERS &amp; CANONS / T536 / PROPUESTA DE MÚSICA DE COMBATE</p>
+  <h1>Vigilia de frontera</h1>
+  <p class="status"><strong>Muestra original pendiente de escucha y aprobación de Lucas.</strong>
+  No es audio aprobado ni integrado. La pista activa de producción permanece intacta.</p>
+  <p>Una guardia sostiene el perímetro: el pulso grave representa la maquinaria, la percusión
+  tiene acentos desparejos y las balizas electrónicas responden desde el paisaje.
+  La intención es dar impulso al combate sin ocupar todo el espacio de los efectos.</p>
+  <audio controls preload="metadata" aria-label="Escuchar Vigilia de frontera, muestra T536">
+    <source src="frontier-vigil.wav" type="audio/wav">
+    Tu navegador no ofrece reproductor de audio. Podés descargar el WAV desde el enlace siguiente.
+  </audio>
+  <p><a href="frontier-vigil.wav" download>Descargar WAV estéreo</a> ·
+  <a href="generate.py">Ver generador</a> · <a href="verification.json">Ver mediciones</a></p>
+  <p>Escuchala primero a volumen moderado. El reproductor no arranca solo ni repite automáticamente.
+  Abrí este HTML desde la carpeta descargada o desde un servidor que publique esta carpeta del PR;
+  la vista de código de GitHub no ejecuta el reproductor. El audio se carga por ruta relativa y no usa servicios externos.</p>
+
+  <h2>Motivo e identidad</h2>
+  <p>El motivo de dos compases canta <strong>re5–la5–fa5–mi5 / do5–si♭4–la4</strong>.
+  El salto inicial de quinta abre el horizonte; el descenso posterior cede espacio al combate.
+  Su ritmo en negras es <code>0, 1, 1¾, 3 / ½, 1¼, 2</code>, con notas sostenidas y silencios.
+  La respuesta asciende fa–sol antes de resolver en re. No se trata de recorrer un acorde en bucle:
+  hay una frase principal, una respuesta, otra melodía de contraste y fragmentos graves durante la tensión.</p>
+  <p>Centro en re menor, con novenas y acordes abiertos. El contraste se desplaza a fa mayor,
+  do y mi♭ antes de la suspensión sobre la; el regreso recupera el motivo inicial.
+  Es una composición nueva escrita para T536. No se leyó ni se usó como plantilla la melodía de T535.
+  No se verificó unicidad contra YouTube ni contra catálogos musicales.</p>
+
+  <h2>Recorrido · 112 BPM · 48 compases</h2>
+  <table>
+    <thead><tr><th>Tiempo</th><th>Sección</th><th>Qué cambia</th></tr></thead>
+    <tbody>
+      <tr><td>0:00–0:17,14</td><td>Introducción</td><td>Pad abierto, bajo y pulso espaciado; entran caja y un anticipo incompleto del motivo.</td></tr>
+      <tr><td>0:17,14–0:34,29</td><td>Exposición</td><td>Motivo completo y respuesta alternados. El bajo anticipa golpes y deja huecos.</td></tr>
+      <tr><td>0:34,29–0:51,43</td><td>Respuesta / contraste</td><td>Melodía más sostenida, otra armonía, menor energía y campanas en contracanto.</td></tr>
+      <tr><td>0:51,43–1:08,57</td><td>Tensión</td><td>El motivo se fragmenta una octava abajo; aparecen señales cortas y más síncopas en el bajo.</td></tr>
+      <tr><td>1:08,57–1:25,71</td><td>Clímax</td><td>Regreso completo del tema con contracanto lateral y la mayor energía de la pieza.</td></tr>
+      <tr><td>1:25,71–1:46,06</td><td>Salida / cierre</td><td>Se retiran golpes y capas; respuesta, descenso a re y acorde final con cola suave.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Instrumentos sintéticos</h2>
+  <ul>
+    <li><strong>Pulso grave:</strong> seno y armónicos suaves, ataque corto y caída de cuerda pulsada.</li>
+    <li><strong>Percusión:</strong> bombo con barrido de frecuencia, caja de ruido filtrado y tono, hats de ruido, toms de afinación descendente. Acentos alternados y retraso leve de contratiempos para sugerir un pulso orgánico.</li>
+    <li><strong>Armonía:</strong> senos desafinados levemente, voces abiertas, entradas lentas y movimiento tímbrico.</li>
+    <li><strong>Voz principal:</strong> síntesis aditiva con modulación de fase transitoria, vibrato gradual y ecos cruzados discretos.</li>
+    <li><strong>Texturas y contracanto:</strong> campanas FM de parciales casi inarmónicos; balizas irregulares con espacio estéreo.</li>
+  </ul>
+  <p>Todos los sonidos salen de osciladores, ruido con semilla fija y envolventes matemáticas.
+  Sin samples, loops, música ajena, descargas ni dependencias nuevas. Reverberación corta por retardos;
+  ganancia lineal con margen, sin limitador ni distorsión de salida.</p>
+
+  <h2>Formato y regeneración</h2>
+  <p>WAV PCM estéreo, 44.100 Hz, 16 bits, <strong>106,057 s</strong>, aproximadamente 18,7 MB decimales.
+  Pico de salida cercano a −2 dBFS. Dither triangular de baja amplitud con semilla fija.
+  Se entrega con cierre: todavía no es un loop listo para integrar.</p>
+  <p>Desde la raíz del repositorio, con Python 3 y su biblioteca estándar:</p>
+  <pre><code>python3 art/t536-combat-music/generate.py
+python3 art/t536-combat-music/generate.py --output /tmp/t536-check.wav
+python3 art/t536-combat-music/generate.py --inspect /tmp/t536-check.wav</code></pre>
+  <p>El primer comando regenera únicamente el WAV de esta propuesta. No depende del directorio
+  de ejecución. Puede tardar algunos minutos; requiere aproximadamente 140 MB de memoria.
+  La semilla es 5362026; el generador imprime formato, SHA-256 y mediciones.</p>
+
+  <h2>Estado de la revisión</h2>
+  <p>Se verificaron formato, energía, margen de pico, ausencia de muestras a escala completa,
+  offset continuo, diferencia estéreo, regeneración idéntica byte a byte en este entorno y rutas
+  locales del HTML. Las mediciones se adjuntan en <a href="verification.json">verification.json</a>.</p>
+  <p><strong>Falta la escucha y aprobación de Lucas.</strong> No hubo evaluación auditiva humana,
+  prueba de fatiga en una partida larga, mezcla con efectos del juego ni prueba de reproducción en navegador.
+  No se ejecutó Godot ni GUT. La dirección musical y su comodidad todavía requieren esa escucha.</p>
+  <p>Para revisar: ¿se recuerda el motivo después de escucharlo?, ¿el contraste deja respirar?,
+  ¿el clímax conserva espacio para disparos y avisos?, ¿el timbre acompaña el combate sin cansar?</p>
+</main>
+</html>
