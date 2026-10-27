@@ -83,12 +83,12 @@ func _with_modes() -> void:
 func test_official_modes_go_after_the_campaign_and_own_modes_after_the_community() -> void:
 	_with_modes()
 	var names: PackedStringArray = _tab_names(_open())
-	assert_eq(names, PackedStringArray(["Campaña", "Asedio", "Mapas de la comunidad (0)", "Mío"]))
+	assert_eq(names, PackedStringArray(["Campaña", "Asedio", "Comunidad", "Mío"]))
 
 
 func test_without_modes_only_the_two_tabs_are_there() -> void:
 	var names: PackedStringArray = _tab_names(_open())
-	assert_eq(names, PackedStringArray(["Campaña", "Mapas de la comunidad (0)"]))
+	assert_eq(names, PackedStringArray(["Campaña", "Comunidad"]))
 
 
 func test_choosing_a_mode_shows_its_maps_in_order() -> void:

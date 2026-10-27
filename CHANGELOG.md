@@ -1,5 +1,9 @@
 # Novedades del juego
 
+## Mesa de mando para elegir niveles *(T520, 2026-10-26)*
+
+La pantalla de niveles ahora organiza las páginas en un rail lateral cuando hay espacio y en una fila desplazable cuando la ventana es angosta. El progreso queda en la cabecera y las acciones de vista, carpeta y regreso se agrupan al pie. La solapa «Mapas de la comunidad» ahora dice «Comunidad»; el total de mapas sigue visible en el indicador superior. El mapa, las tarjetas, el orden de páginas y las reglas de selección se conservan. Se capturó en PC y celular simulado a 1280 × 720; no se probó en un teléfono real.
+
 ## Un solo rótulo en el mapa de campaña *(T515, 2026-10-26; en revisión)*
 
 En el mapa de campaña, el nombre del nivel («12 · El cañadón») se muestra solo en el nivel que elegiste o que tiene el foco; los demás muestran el número dentro de la insignia. Así los nombres de los niveles 10 a 13 ya no se montan ni se cortan. El nombre se corre si hace falta para no salirse del mapa ni tapar otra insignia, y el nombre completo sigue en la ficha de abajo y al pasar el puntero. No cambian las insignias, el tamaño del mapa ni los estados. Se probó con capturas del motor en PC y en celular simulado; no se probó en un teléfono real.

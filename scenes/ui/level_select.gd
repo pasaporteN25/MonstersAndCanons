@@ -18,6 +18,9 @@ const VISIBLE_ROWS: int = 2
 const CAMPAIGN_VISIBLE_ROWS: int = 3
 const CAMPAIGN_CARD_SPACING: float = 10.0
 const MOBILE_MAP_ROW_SEPARATION: int = 6
+## T520: debajo de este ancho la navegación pasa de rail vertical a fila horizontal desplazable.
+const COMMAND_RAIL_MIN_WIDTH: float = 1120.0
+const COMMAND_RAIL_WIDTH: float = 164.0
 ## T426: el fondo temático de la tarjeta desktop es el suelo del tema del nivel (MapThemes), muy tenue,
 ## con un velo oscuro del color de borde del tema encima para que texto, estrellas e iconos se lean.
 const CAMPAIGN_BACKDROP_ALPHA: float = 0.30
@@ -66,12 +69,14 @@ var _dev_auto: CheckBox
 var _dev_gold: SpinBox
 
 @onready var _scroll: ScrollContainer = %Scroll
+@onready var _center: MarginContainer = $Center
 @onready var _rows: VBoxContainer = $Center/Rows
+@onready var _title: Label = $Center/Rows/CommandHeader/Title
 @onready var _cards: HFlowContainer = %Cards
 @onready var _back_button: Button = %BackButton
 @onready var _total_stars: Label = %TotalStars
 @onready var _tab_scroll: ScrollContainer = %TabScroll
-@onready var _tab_row: HBoxContainer = %TabRow
+@onready var _tab_row: GridContainer = %TabRow
 @onready var _campaign_tab: Button = %CampaignTab
 @onready var _community_tab: Button = %CommunityTab
 @onready var _folder_button: Button = %FolderButton
@@ -80,17 +85,26 @@ var _dev_gold: SpinBox
 @onready var _style_map_button: Button = %StyleMap
 ## M72: el mapa planetario cuando la campaña está en ese estilo; null con tarjetas.
 var map_view: CampaignMapView
+var _wide_layout: bool = true
+@onready var _navigation_rail: PanelContainer = $Center/Rows/CommandBody/NavigationRail
+@onready var _content_area: VBoxContainer = $Center/Rows/CommandBody/ContentArea
+@onready var _body: Control = $Center/Rows/CommandBody
+@onready var _actions: HFlowContainer = $Center/Rows/CommandActions
 
 
 func _ready() -> void:
+	_build_command_layout()
+	get_viewport().size_changed.connect(_apply_command_layout)
+	_apply_command_layout()
 	_back_button.pressed.connect(GameFlow.go_to_main_menu)
 	_folder_button.pressed.connect(open_folder)
 	_campaign_tab.pressed.connect(show_page.bind(PAGE_CAMPAIGN))
 	_community_tab.pressed.connect(show_page.bind(PAGE_COMMUNITY))
 	_entries = CommunityMaps.scan(community_dir)  # RF-226: se vuelve a buscar cada vez que se abre
-	_community_tab.text = "Mapas de la comunidad (%d)" % _entries.size()
+	_community_tab.text = "Comunidad"
 	_modes = ModePacks.all(modes_official_dir, modes_user_dir)  # RF-389: también cada vez
 	_add_mode_tabs()
+	_apply_command_layout()  # RF-694: también mide las solapas de modos que nacen en este cuadro.
 	_style_cards_button.pressed.connect(set_style.bind(CampaignMap.STYLE_CARDS))
 	_style_map_button.pressed.connect(set_style.bind(CampaignMap.STYLE_MAP))
 	show_page(GameFlow.select_page)  # RF-225: la solapa en la que se estaba
@@ -101,6 +115,88 @@ func _ready() -> void:
 		_add_dev_strip()
 	Audio.add_click_sounds(self)
 	MenuTouch.attach(self)  # RF-550, RF-551: botones de 56 px y desplazamiento táctil en el celular
+
+
+## T520: arma la mesa de mando alrededor de los controles existentes; el contenido de cada página
+## sigue siendo el mismo nodo para conservar foco, señales y scroll.
+func _build_command_layout() -> void:
+	_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	_title.add_theme_font_size_override("font_size", 38)
+	_back_button.custom_minimum_size = Vector2(160, 56)
+	_folder_button.custom_minimum_size = Vector2(220, 56)
+	_style_cards_button.custom_minimum_size.y = 56
+	_style_map_button.custom_minimum_size.y = 56
+	_style_switch.custom_minimum_size.y = 56
+	_style_switch.alignment = BoxContainer.ALIGNMENT_CENTER
+	for tab: Node in _tab_row.get_children():
+		(tab as Button).custom_minimum_size.y = 56
+		(tab as Button).size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		(tab as Button).size_flags_vertical = Control.SIZE_EXPAND_FILL
+		(tab as Button).add_theme_font_size_override("font_size", 17)
+
+	# Restaurar el orden de páginas en el rail: la fila original se conserva y se adapta por columnas.
+
+
+func _apply_command_layout() -> void:
+	var use_rail := get_viewport_rect().size.x >= COMMAND_RAIL_MIN_WIDTH
+	if _wide_layout != use_rail:
+		_wide_layout = use_rail
+	_center.add_theme_constant_override("margin_left", 18 if use_rail else 12)
+	_center.add_theme_constant_override("margin_right", 18 if use_rail else 12)
+	_navigation_rail.visible = true
+	_tab_scroll.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_tab_scroll.offset_left = 0
+	_tab_scroll.offset_top = 0
+	_tab_scroll.offset_right = 0
+	_tab_scroll.offset_bottom = 0
+	if use_rail:
+		_navigation_rail.anchor_left = 0.0
+		_navigation_rail.anchor_top = 0.0
+		_navigation_rail.anchor_right = 0.0
+		_navigation_rail.anchor_bottom = 1.0
+		_navigation_rail.offset_left = 0
+		_navigation_rail.offset_top = 0
+		_navigation_rail.offset_right = COMMAND_RAIL_WIDTH
+		_navigation_rail.offset_bottom = 0
+		_content_area.anchor_left = 0.0
+		_content_area.anchor_top = 0.0
+		_content_area.anchor_right = 1.0
+		_content_area.anchor_bottom = 1.0
+		_content_area.offset_left = COMMAND_RAIL_WIDTH + 10
+		_content_area.offset_top = 0
+		_content_area.offset_right = 0
+		_content_area.offset_bottom = 0
+		_tab_scroll.custom_minimum_size = Vector2(COMMAND_RAIL_WIDTH - 24, 0)
+		_tab_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		_tab_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+		_tab_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+		_tab_row.columns = 1
+		for tab: Node in _tab_row.get_children():
+			(tab as Button).custom_minimum_size.x = COMMAND_RAIL_WIDTH - 34
+	else:
+		_navigation_rail.anchor_left = 0.0
+		_navigation_rail.anchor_top = 0.0
+		_navigation_rail.anchor_right = 1.0
+		_navigation_rail.anchor_bottom = 0.0
+		_navigation_rail.offset_left = 0
+		_navigation_rail.offset_top = 0
+		_navigation_rail.offset_right = 0
+		_navigation_rail.offset_bottom = 64
+		_content_area.anchor_left = 0.0
+		_content_area.anchor_top = 0.0
+		_content_area.anchor_right = 1.0
+		_content_area.anchor_bottom = 1.0
+		_content_area.offset_left = 0
+		_content_area.offset_top = 76
+		_content_area.offset_right = 0
+		_content_area.offset_bottom = 0
+		_tab_scroll.custom_minimum_size = Vector2(0, 56)
+		_tab_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		_tab_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+		_tab_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+		_tab_row.columns = maxi(_tab_row.get_child_count(), 1)
+		for tab: Node in _tab_row.get_children():
+			(tab as Button).custom_minimum_size.x = 138
 
 
 ## Esc (o "atrás" en Android, RF-142) vuelve al menú principal.

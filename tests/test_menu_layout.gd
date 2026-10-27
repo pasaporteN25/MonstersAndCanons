@@ -202,6 +202,27 @@ func test_mobile_level_select_is_touch_ready() -> void:
 	var content: Control = scroll.get_child(0) as Control
 	if scroll.get_v_scroll_bar().visible:
 		assert_almost_eq(content.size.x, scroll.size.x - 22.0, 0.5, "la barra de 22 px no tapa el borde de las tarjetas")
+	assert_true((screen.get_node("%BackButton") as Button).is_visible_in_tree(), "Volver queda accesible")
+	assert_true((screen.get_node("%StyleCards") as Button).is_visible_in_tree(), "se conserva el selector de vista")
+	assert_true((screen.get_node("%StyleMap") as Button).is_visible_in_tree(), "se conserva el selector de mapa")
+	assert_eq((screen.get_node("%CommunityTab") as Button).text, "Comunidad")
+	assert_true((screen.find_child("NavigationRail", true, false) as Control).visible, "ancho suficiente: rail vertical")
+	screen.call("show_page", &"community")
+	await get_tree().process_frame
+	assert_true((screen.get_node("%FolderButton") as Button).visible, "la acción para abrir mapas sigue disponible")
+	var map_count: String = (screen.get_node("%TotalStars") as Label).text
+	assert_true(map_count.ends_with("mapa") or map_count.ends_with("mapas"), "el conteo sigue en el indicador superior")
+
+
+func test_narrow_mobile_level_select_uses_a_horizontal_navigation_row() -> void:
+	_viewport.size = Vector2i(900, 720)
+	var screen: Node = await _assert_touch_screen("res://scenes/ui/level_select.tscn", "niveles angosto")
+	var rail: Control = screen.find_child("NavigationRail", true, false) as Control
+	assert_true(rail.visible)
+	assert_almost_eq(rail.size.x, 876.0, 1.0, "el rail se extiende arriba cuando falta ancho para la columna lateral; incluye los márgenes")
+	var tab_scroll: ScrollContainer = screen.get_node("%TabScroll")
+	assert_eq(tab_scroll.horizontal_scroll_mode, ScrollContainer.SCROLL_MODE_AUTO)
+	assert_eq(tab_scroll.vertical_scroll_mode, ScrollContainer.SCROLL_MODE_DISABLED)
 
 
 func test_mobile_wiki_is_touch_ready() -> void:
