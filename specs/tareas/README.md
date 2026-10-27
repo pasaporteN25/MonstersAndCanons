@@ -141,3 +141,7 @@ Las fichas [T523](T523-muestras-adornos-m79.md) y [T524](T524-integrar-adornos-m
 ## 17. Revisión de cactus y campamento M79 · T525
 
 [T525](T525-revisar-cactus-campamento-m79.md) registra la revisión solicitada por Lucas de las dos variantes de cactus y campamento vacío. Las cuatro opciones nuevas quedan pendientes de aprobación; roca roja, columna, bloque y estatua conservaron el visto bueno recibido. T524 integra únicamente lo que Lucas apruebe y espera primero a T508.
+
+## 18. Galería M79 para aprobación visual · T526
+
+[T526](T526-galeria-aprobacion-m79.md) presenta las opciones nuevas de cactus y campamento de [T523/T525](../../art/m79-muestras/adornos/revision.html) a detalle, a 34 px y sobre mapas de muestra. Lucas elige una variante por motivo o pide cambios; esta página no envía ni guarda elecciones. T524 sigue esperando T508 y el OK visual explícito.

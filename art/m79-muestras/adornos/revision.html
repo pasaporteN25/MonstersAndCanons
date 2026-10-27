@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Revisión de cactus y campamento · M79</title>
+  <style>
+    :root { color-scheme: dark; --bg:#17191b; --panel:#24272a; --line:#55483a; --gold:#c69b57; --ink:#f1e8d8; --muted:#c0b4a2; --red:#8e4438; }
+    * { box-sizing: border-box; }
+    body { margin:0; background:radial-gradient(ellipse at top,#302923 0,#17191b 52rem); color:var(--ink); font:16px/1.55 system-ui,sans-serif; }
+    main { width:min(1120px,calc(100% - 32px)); margin:0 auto; padding:36px 0 64px; }
+    header { border-bottom:1px solid var(--line); padding-bottom:24px; margin-bottom:30px; }
+    .eyebrow { color:var(--gold); font-size:.78rem; font-weight:750; letter-spacing:.15em; text-transform:uppercase; }
+    h1,h2,h3,p { margin-top:0; }
+    h1 { font-family:Georgia,serif; font-weight:600; font-size:clamp(2rem,5vw,3.5rem); line-height:1.08; margin:10px 0 14px; }
+    h2 { font-family:Georgia,serif; font-size:2rem; margin-bottom:8px; }
+    h3 { font-size:1.15rem; margin-bottom:4px; }
+    p { color:var(--muted); }
+    .notice { border-left:4px solid var(--gold); background:#28241e; padding:14px 18px; border-radius:0 8px 8px 0; }
+    section { margin:38px 0 48px; }
+    .sub { margin-bottom:18px; }
+    .options { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; }
+    article { background:linear-gradient(145deg,#2a2c2d,#202224); border:1px solid var(--line); border-radius:12px; overflow:hidden; box-shadow:0 12px 28px #0005; }
+    .option-head { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:16px 18px 10px; }
+    .option-head p { margin:0; font-size:.9rem; }
+    label { display:inline-flex; align-items:center; gap:8px; color:var(--ink); font-weight:700; cursor:pointer; }
+    input { accent-color:var(--gold); width:18px; height:18px; }
+    .sprite-stage { min-height:210px; display:grid; place-items:center; margin:0 16px; border:1px solid #6b5c49; border-radius:8px; background-color:#82785f; background-image:linear-gradient(45deg,#746b55 25%,transparent 25%),linear-gradient(-45deg,#746b55 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#746b55 75%),linear-gradient(-45deg,transparent 75%,#746b55 75%); background-size:22px 22px; background-position:0 0,0 11px,11px -11px,-11px 0; }
+    .sprite-stage img { width:220px; height:220px; object-fit:contain; image-rendering:auto; filter:drop-shadow(0 6px 4px #1118); }
+    .scales { display:flex; align-items:center; gap:14px; padding:12px 18px 16px; color:var(--muted); font-size:.82rem; }
+    .scale { display:flex; align-items:center; gap:8px; }
+    .scale img { width:34px; height:34px; object-fit:contain; image-rendering:pixelated; background:#82785f; border:1px solid #998a6b; }
+    .contexts { display:grid; grid-template-columns:1fr 1fr; gap:10px; padding:0 16px 16px; }
+    .contexts figure { margin:0; }
+    .contexts img { display:block; width:100%; border-radius:6px; border:1px solid #514b40; }
+    figcaption { color:var(--muted); font-size:.78rem; margin-top:5px; }
+    .decision { position:sticky; bottom:12px; margin-top:32px; padding:14px 18px; border:1px solid var(--gold); border-radius:10px; background:#1e2022f2; box-shadow:0 10px 28px #0009; display:flex; align-items:center; justify-content:space-between; gap:14px; }
+    .decision p { margin:0; }
+    .decision output { color:var(--gold); font-weight:700; text-align:right; }
+    .foot { border-top:1px solid var(--line); padding-top:18px; font-size:.9rem; }
+    a { color:#e0b66f; }
+    @media(max-width:720px) { .options { grid-template-columns:1fr; } .contexts { grid-template-columns:1fr; } .decision { position:static; display:block; } .decision output { display:block; text-align:left; margin-top:4px; } }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="eyebrow">Monsters &amp; Canons · M79 · T525</div>
+    <h1>Cactus y campamento vacío</h1>
+    <p>Comparación de las cuatro propuestas nuevas. Las piezas todavía son muestras externas: no están integradas al juego.</p>
+    <div class="notice"><strong>Qué se necesita decidir:</strong> elegí una opción para el cactus y otra para el campamento, o indicá qué habría que corregir. Roca roja, columna, bloque y estatua ya tienen tu visto bueno y no se modifican en esta revisión. La integración M79 espera que M80/T508 entre primero.</div>
+  </header>
+
+  <section id="cactus">
+    <h2>Cactus · nivel 10</h2>
+    <p class="sub">La hoja muestra cada sprite a 220 px; debajo, el control a 34 px y su composición sobre el mapa del desierto.</p>
+    <div class="options">
+      <article>
+        <div class="option-head"><div><h3>Opción 01</h3><p>Tronco alto, brazo curvo y brote corto.</p></div><label><input type="radio" name="cactus" value="Cactus 01"> Elegir</label></div>
+        <div class="sprite-stage"><img src="variants/cactus_01.png" alt="Cactus, opción 01, sobre fondo de transparencia"></div>
+        <div class="scales"><span class="scale"><img src="variants/cactus_01.png" alt="Cactus 01 a 34 píxeles">34 px</span><span>Escala de casilla: 64 × 64 px</span></div>
+        <div class="contexts"><figure><img src="context_level_10_01.png" alt="Nivel 10 con la propuesta de cactus 01"><figcaption>Montaje externo · nivel 10</figcaption></figure></div>
+      </article>
+      <article>
+        <div class="option-head"><div><h3>Opción 02</h3><p>Tres tallos carnosos, de alturas distintas.</p></div><label><input type="radio" name="cactus" value="Cactus 02"> Elegir</label></div>
+        <div class="sprite-stage"><img src="variants/cactus_02.png" alt="Cactus, opción 02, sobre fondo de transparencia"></div>
+        <div class="scales"><span class="scale"><img src="variants/cactus_02.png" alt="Cactus 02 a 34 píxeles">34 px</span><span>Escala de casilla: 64 × 64 px</span></div>
+        <div class="contexts"><figure><img src="context_level_10_02.png" alt="Nivel 10 con la propuesta de cactus 02"><figcaption>Montaje externo · nivel 10</figcaption></figure></div>
+      </article>
+    </div>
+  </section>
+
+  <section id="campamento">
+    <h2>Campamento vacío · niveles 14 y 15</h2>
+    <p class="sub">Compará la silueta y el contraste en ruinas y pradera. En ambas opciones el fogón está apagado y separado de la lona.</p>
+    <div class="options">
+      <article>
+        <div class="option-head"><div><h3>Opción 01</h3><p>Lona ocre vencida, varas expuestas y fogón a la derecha.</p></div><label><input type="radio" name="camp" value="Campamento 01"> Elegir</label></div>
+        <div class="sprite-stage"><img src="variants/empty_camp_01.png" alt="Campamento vacío, opción 01, sobre fondo de transparencia"></div>
+        <div class="scales"><span class="scale"><img src="variants/empty_camp_01.png" alt="Campamento 01 a 34 píxeles">34 px</span><span>Escala de casilla: 64 × 64 px</span></div>
+        <div class="contexts"><figure><img src="context_level_14_01.png" alt="Nivel 14 con campamento 01"><figcaption>Ruinas · nivel 14</figcaption></figure><figure><img src="context_level_15_01.png" alt="Nivel 15 con campamento 01"><figcaption>Pradera · nivel 15</figcaption></figure></div>
+      </article>
+      <article>
+        <div class="option-head"><div><h3>Opción 02</h3><p>Lona gris caída, soporte cruzado y fogón a la izquierda.</p></div><label><input type="radio" name="camp" value="Campamento 02"> Elegir</label></div>
+        <div class="sprite-stage"><img src="variants/empty_camp_02.png" alt="Campamento vacío, opción 02, sobre fondo de transparencia"></div>
+        <div class="scales"><span class="scale"><img src="variants/empty_camp_02.png" alt="Campamento 02 a 34 píxeles">34 px</span><span>Escala de casilla: 64 × 64 px</span></div>
+        <div class="contexts"><figure><img src="context_level_14_02.png" alt="Nivel 14 con campamento 02"><figcaption>Ruinas · nivel 14</figcaption></figure><figure><img src="context_level_15_02.png" alt="Nivel 15 con campamento 02"><figcaption>Pradera · nivel 15</figcaption></figure></div>
+      </article>
+    </div>
+  </section>
+
+  <div class="decision"><p>Tu selección local (no se envía ni se guarda):</p><output id="selection">Todavía no elegiste opciones.</output></div>
+  <p class="foot">Las composiciones de mapa son montajes externos sobre capturas de T491, no capturas del juego con estos assets. La ficha completa, procedencia y límites están en <a href="report.md">el informe de T523/T525</a>. Para registrar la aprobación, respondé en el PR indicando cactus 01/02 y campamento 01/02, más cualquier corrección.</p>
+</main>
+<script>
+  const update = () => {
+    const cactus = document.querySelector('input[name="cactus"]:checked')?.value;
+    const camp = document.querySelector('input[name="camp"]:checked')?.value;
+    document.querySelector('#selection').textContent = cactus || camp
+      ? `${cactus || 'Cactus sin elegir'} · ${camp || 'campamento sin elegir'}`
+      : 'Todavía no elegiste opciones.';
+  };
+  document.querySelectorAll('input[type="radio"]').forEach((input) => input.addEventListener('change', update));
+</script>
+</body>
+</html>
