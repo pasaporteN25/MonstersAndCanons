@@ -136,3 +136,8 @@ El informe [M75-cierre-honesto](informes/M75-cierre-honesto.md) revisó cada cri
 ## 16. M79 · Adornos adicionales aprobados para muestras (T522)
 
 Las fichas [T523](T523-muestras-adornos-m79.md) y [T524](T524-integrar-adornos-m79.md) cubren seis adornos pedidos por Lucas. T523 solo propone muestras; cada pieza y su aplicación requieren aprobación visual escrita antes de integrar por T524. T524 espera T508 para evitar colisiones en `MapThemes`/`MapDrawings`.
+
+
+## 17. Revisión de cactus y campamento M79 · T525
+
+[T525](T525-revisar-cactus-campamento-m79.md) registra la revisión solicitada por Lucas de las dos variantes de cactus y campamento vacío. Las cuatro opciones nuevas quedan pendientes de aprobación; roca roja, columna, bloque y estatua conservaron el visto bueno recibido. T524 integra únicamente lo que Lucas apruebe y espera primero a T508.

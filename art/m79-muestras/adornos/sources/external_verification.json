@@ -1,0 +1,16 @@
+[
+  {
+    "script": "art/m79-muestras/nieve/verify_samples.py",
+    "exit_code": 0,
+    "stdout": "Verificación correcta: nueve RGBA con margen, PNG legibles, tres montajes sin cambios fuera de sus casillas y rótulo, postes conservados.",
+    "stderr": "",
+    "execution": "Copia temporal en /tmp; referencias por enlaces de solo lectura; sin --rebuild; ninguna escritura fuera de adornos en el repositorio."
+  },
+  {
+    "script": "art/m80-muestras/marcas/sources/verify_samples.py",
+    "exit_code": 0,
+    "stdout": "Correcto: 21 piezas + 3 rocas auxiliares, 6 composiciones, casillas, alfa, manifiestos y alcance de edición. Regeneración idéntica: False",
+    "stderr": "",
+    "execution": "Copia temporal en /tmp; referencias por enlaces de solo lectura; sin --rebuild; ninguna escritura fuera de adornos en el repositorio."
+  }
+]
