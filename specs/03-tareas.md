@@ -313,6 +313,7 @@
   **Refs:** T280, T226, T283, `specs/tareas/T453-sesion-humana-lucas.md`, `specs/pruebas/2026-10-sesion-humana.md`.
   **Hecho cuando:** Lucas jugó la sesión y anotó la plantilla; T280, T226 y T283 se marcan con lo que anotó. **Esta tarea solo prepara.**
   **Avance (2026-10-23):** instrucciones y plantilla escritas (orden de juego, preguntas de T226 y T283, regla «manda la partida humana», salidas D-100 y RF-525). **No se generó la build, no se jugó nada y no se corrió Godot**; ninguna compuerta se da por pasada.
+  **Avance (2026-10-26):** preparación técnica lista en `specs/pruebas/2026-10-26-sesion-humana.md`, desde `origin/main` (`e5cffb84c6432caf506637d23a1d36d409b14202`): Godot 4.7.2, `godot --headless --import` con salida 0 y export Linux con `godot --headless --path . --export-release "Linux" build/MonstersCanons.x86_64`; `file` confirma ELF 64-bit x86-64, SHA-256 `3a0732165e949b4e641d5081e8558b573a2a482472151f9ccd3606e8759015c1`, tamaño 267838928 bytes. La primera exportación falló porque faltaba el directorio `build/`; tras crearlo (ignorado por Git), la segunda terminó con código 0. `--import` avisó que usó Android SDK 35.0.1 por discrepancia con el objetivo y que no pudo conectar con `adb`; no hubo 139. **No se abrió el juego ni se creó guardado**; `~/pruebas-sesion` no existía al preparar esto. Para la sesión se prevé usar `XDG_DATA_HOME=~/pruebas-sesion/data`, sin tocar el guardado real. La build no se versiona ni se adjunta al PR. **Pendiente:** partida y respuestas de Lucas; T280, T226 y T283 siguen abiertas.
 
 ## M0 — Preparación
 
