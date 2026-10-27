@@ -1,0 +1,21 @@
+{
+  "task": "T535",
+  "name": "Combat music proposal 01",
+  "status": "sample awaiting Lucas review",
+  "composition": "original procedural synthesis",
+  "source": "build_preview.gd",
+  "engine": "Godot 4.7.2",
+  "sample_rate_hz": 44100,
+  "channels": 2,
+  "bit_depth": 16,
+  "tempo_bpm": 108,
+  "bars": 32,
+  "key_center": "D minor with Phrygian color",
+  "duration_seconds": 71.111,
+  "peak": 0.540,
+  "rms": 0.068,
+  "sha256": "95fac6efce9a368339924002435f65aefe535944f30172d7901746b8b3ecffdf",
+  "external_audio_sources": [],
+  "production_assets_modified": false,
+  "approval": "pending"
+}
