@@ -8,7 +8,7 @@
 
 ## Objetivo
 
-Preparar al **Ratero**, chico, bajo, alargado y rápido, y al **Cargador**, ancho y lento, con una bolsa más grande que el cuerpo. Deben leerse distintos del Ladrón y entre sí a 34 px, sin capucha, capa, símbolo A ni marcas de las comunidades. Ninguno manda al otro.
+Preparar al **Ratero**, chico, bajo, alargado y rápido, y al **Cargador**, ancho y lento, con una bolsa más grande que el cuerpo. Deben leerse distintos del Ladrón y entre sí a 34 px, sin capucha, capa, símbolo de los Moradores ni marcas de las comunidades. Ninguno manda al otro.
 
 ## Leer
 

@@ -36,7 +36,7 @@ Siete láminas, unos **50 segundos** (51 con las duraciones sugeridas), que cuen
 
 **El truco de color.** Las seis primeras láminas **no tienen verde**: hierro, bronce, ámbar de lámpara, azul de noche y ocre. El verde recién aparece como un **punto** en la 4, como un **hilo de luz** en la 6 y como **todo el cuadro** en la 7. Que el oasis sea lo único vivo es lo que hace que la última lámina pegue.
 
-**Por qué no hay conflicto.** Nada en la intro sabe que el planeta tiene habitantes. El único «otro» del cuadro es el espacio. **«En medio de la nada» es lo que ven los colonos**, no un hecho: el juego se encarga después (símbolo A, ruinas, Moradores) de mostrar que no era cierto, y la intro **no lo desmiente ni lo confirma**.
+**Por qué no hay conflicto.** Nada en la intro sabe que el planeta tiene habitantes. El único «otro» del cuadro es el espacio. **«En medio de la nada» es lo que ven los colonos**, no un hecho: el juego se encarga después (marca de los Moradores, ruinas, Moradores) de mostrar que no era cierto, y la intro **no lo desmiente ni lo confirma**.
 
 ---
 
@@ -50,7 +50,7 @@ Siete láminas, unos **50 segundos** (51 con las duraciones sugeridas), que cuen
 5. **Vocabulario:** sí «la Compañía», «la nave», «los colonos», «el reconocimiento»; **no** «enemigo», «peligro», «bestia», «salvaje», «invasor», «nativo», «indio», «alien», «monstruo», «malvado», «héroe».
 
 **Qué no adelanta** (lo que Lucas pidió cuidar):
-- **Ninguna lámina muestra a los Moradores, animales, criaturas, ruinas ni el símbolo A.** El primer encuentro con la marca es en el nivel 1, **sin texto** (biblia §6, regla 1); la intro no se lo gasta.
+- **Ninguna lámina muestra a los Moradores, animales, criaturas, ruinas ni la marca de los Moradores.** El primer encuentro con la marca es en el nivel 1, **sin texto** (biblia §6, regla 1); la intro no se lo gasta.
 - **Ninguna lámina muestra humo, fuegos ni luces en el horizonte.** En el epílogo (nivel 15, `epilogue.png`) hay fuegos a lo lejos; en la lámina 7 el horizonte está **vacío**. La diferencia entre los dos cuadros es el único comentario que el juego hace del costo, y no hace falta decirlo.
 - **No se nombra al planeta.** «Cántaro» es un nombre que le ponen los colonos **después**, por el oasis (artículo «Cántaro» de la Wiki, que se abre al ganar el 2). La intro dice «el planeta».
 - **No explica cómo se juega.** La intro cuenta la llegada; las torres, el oro y las oleadas se aprenden en el nivel 1.
@@ -229,7 +229,7 @@ Cada ficha trae: **qué cuenta**, la **ilustración** (para Codex: plano, quién
 - **Luz:** **primeras horas de la mañana**, baja y clara, sombras largas, cielo pálido. El verde del oasis es **el único color saturado de las siete láminas**.
 - **El horizonte, vacío:** sin humo, sin luces, sin figuras, sin marcas. (Ver §2.)
 - **Zona de texto:** el pasto oscuro y la tierra del primer plano, sin detalle.
-- **No:** animales, aves, el símbolo A, rocas con marcas, construcciones, ruinas, fuegos lejanos, el nombre del planeta.
+- **No:** animales, aves, la marca de los Moradores, rocas con marcas, construcciones, ruinas, fuegos lejanos, el nombre del planeta.
 
 **Texto** *(2 líneas, 71 caracteres)*
 > Un valle chico, con agua y pasto, en medio de la nada.

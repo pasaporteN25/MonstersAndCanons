@@ -11,7 +11,7 @@
 - **Siete láminas**, una por cada una del guion: **PNG de 1920 × 1080 (16:9)**, **sin texto dentro** (el texto lo pone el juego).
 - **El 22 % de abajo (de y = 842 a y = 1080) es la zona del texto:** tranquila, oscura y sin nada que importe; el juego pone ahí una franja. **La lámina se ve entera** (no se recorta): no hace falta un «área segura» lateral.
 - **Coherencia:** la misma nave, los mismos cuatro colonos y el mismo oasis en todas, según la **hoja de continuidad** (`guion.md` §3). Hierro, bronce, cristal y mecanismos: sin láseres, sin trajes espaciales, sin armas (07 §2).
-- **Lo que no aparece:** los Moradores, animales o criaturas, ruinas, el **símbolo A**, humo o fuegos en el horizonte, el nombre del planeta. **El verde solo desde la lámina 4**, como punto; la 7 es lo único vivo (guion de color de `guion.md` §3).
+- **Lo que no aparece:** los Moradores, animales o criaturas, ruinas, la **marca de los Moradores**, humo o fuegos en el horizonte, el nombre del planeta. **El verde solo desde la lámina 4**, como punto; la 7 es lo único vivo (guion de color de `guion.md` §3).
 - Fuentes, prompts y manifest en `art/intro-v1/` (como `art/redesign-m43/`: `sources/`, `prompts.md`, `manifest.json`). Los finales, en `assets/intro/` con los nombres del manifest (`01_la_nave.png`, `02_la_bodega.png`, `03_los_turnos.png`, `04_la_ventana.png`, `05_el_descenso.png`, `06_los_motores_apagados.png`, `07_el_oasis.png`).
 - **Una hoja con las siete en miniatura**, para revisar la continuidad.
 
