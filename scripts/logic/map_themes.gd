@@ -24,8 +24,9 @@ const ROCK_A: Texture2D = preload("res://assets/sprites/map/rendered/rock_a.png"
 const ROCK_B: Texture2D = preload("res://assets/sprites/map/rendered/rock_b.png")
 const TREE: Texture2D = preload("res://assets/sprites/map/rendered/tree.png")
 const BUSH: Texture2D = preload("res://assets/sprites/map/rendered/bush.png")
-const CACTUS: Texture2D = preload("res://assets/sprites/map/cactus.svg")
-const RED_ROCK: Texture2D = preload("res://assets/sprites/map/roca_roja.svg")
+## T524: variantes aprobadas de M79; assets de 128×128 mostrados en una casilla.
+const CACTUS: Texture2D = preload("res://assets/sprites/map/rendered/m79/cactus_02.png")
+const RED_ROCK: Array[Texture2D] = [preload("res://assets/sprites/map/rendered/m79/red_rock_01.png"), preload("res://assets/sprites/map/rendered/m79/red_rock_02.png")]
 # T498 (RF-713 c): cabeza de ganado del desierto, PNG RGBA de 128 × 128 (muestra 01 de T494, dos pares de cuernos, elegida por Lucas) mostrado a la casilla.
 const BONES: Texture2D = preload("res://assets/sprites/map/rendered/bones_skull.png")
 # T497 (RF-713 b): pino, abeto y roca nevada del nivel de nieve, PNG RGBA de 128 × 128 (muestras 01 de T493 elegidas por Lucas) mostrados a la casilla.
@@ -34,9 +35,9 @@ const FIR: Texture2D = preload("res://assets/sprites/map/rendered/fir_snow.png")
 const SNOW_ROCK: Texture2D = preload("res://assets/sprites/map/rendered/snow_rock.png")
 const BLACK_ROCK: Texture2D = preload("res://assets/sprites/map/roca_negra.svg")
 const CRACK: Texture2D = preload("res://assets/sprites/map/grieta.svg")
-const COLUMN: Texture2D = preload("res://assets/sprites/map/columna.svg")
-const BLOCK: Texture2D = preload("res://assets/sprites/map/bloque.svg")
-const STATUE: Texture2D = preload("res://assets/sprites/map/estatua.svg")
+const COLUMN: Array[Texture2D] = [preload("res://assets/sprites/map/rendered/m79/column_01.png"), preload("res://assets/sprites/map/rendered/m79/column_02.png")]
+const BLOCK: Array[Texture2D] = [preload("res://assets/sprites/map/rendered/m79/block_01.png"), preload("res://assets/sprites/map/rendered/m79/block_02.png")]
+const STATUE: Array[Texture2D] = [preload("res://assets/sprites/map/rendered/m79/statue_01.png"), preload("res://assets/sprites/map/rendered/m79/statue_02.png")]
 const LOG: Texture2D = preload("res://assets/sprites/map/rendered/log.png")
 const FERN: Texture2D = preload("res://assets/sprites/map/rendered/fern.png")
 const REEDS: Texture2D = preload("res://assets/sprites/map/junco.svg")
@@ -46,12 +47,12 @@ const MUSHROOM: Texture2D = preload("res://assets/sprites/map/hongo.svg")
 ## (RF-154: en la pradera, las rocas son "acá no se construye").
 const BLOCKED: Dictionary = {
 	&"pradera": [ROCK_A, ROCK_B, TREE, ROCK_A, BUSH, ROCK_B],
-	&"desierto": [CACTUS, RED_ROCK, BONES, CACTUS, RED_ROCK],
+	&"desierto": [CACTUS, RED_ROCK[0], BONES, CACTUS, RED_ROCK[1]],
 	&"nieve": [PINE, SNOW_ROCK, PINE, FIR, SNOW_ROCK, PINE],
-	&"volcan": [BLACK_ROCK, CRACK, COLUMN, BLACK_ROCK, CRACK],
+	&"volcan": [BLACK_ROCK, CRACK, COLUMN[0], BLACK_ROCK, CRACK],
 	&"bosque": [TREE, TREE, LOG, FERN, BUSH, TREE, FERN],
 	&"pantano": [REEDS, LOG, MUSHROOM, REEDS, MUSHROOM, REEDS],
-	&"ruinas": [COLUMN, BLOCK, STATUE, BLOCK, COLUMN, BLOCK],
+	&"ruinas": [COLUMN[0], BLOCK[0], STATUE[0], BLOCK[1], COLUMN[1], STATUE[1]],
 }
 
 ## La paleta de cada tema. `fill_grass` y `fill_path` son el color de fondo de las casillas de suelo

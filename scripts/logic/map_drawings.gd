@@ -24,7 +24,8 @@ const KINDS: Dictionary = {
 const FLOWERS: Texture2D = preload("res://assets/sprites/map/flores.svg")
 const SIGNAL_PATH: Texture2D = preload("res://assets/sprites/map/sendero.svg")
 const SIGNAL_TOOL: Texture2D = preload("res://assets/sprites/map/herramienta.svg")
-const SIGNAL_CAMP: Texture2D = preload("res://assets/sprites/map/campamento_vacio.svg")
+## T524: variante 02 aprobada por Lucas el 2026-10-27; niveles 14 y 15, donde ya existe la leyenda.
+const SIGNAL_CAMP: Texture2D = preload("res://assets/sprites/map/rendered/m79/empty_camp_02.png")
 ## T508: los tres modelos aprobados en caliza, arenisca y piedra oscura.
 const SIGNAL_ROCKS: Dictionary = {
 	"caliza": [preload("res://assets/sprites/map/rendered/signal_rock_a_caliza.png"), preload("res://assets/sprites/map/rendered/signal_rock_b_caliza.png"), preload("res://assets/sprites/map/rendered/signal_rock_c_caliza.png")],
@@ -61,7 +62,7 @@ const STATUES_FROST: Array[Texture2D] = [preload("res://assets/sprites/map/rende
 ## El dibujo de cada objeto. Van con `preload` (se cargan con el script).
 const TEXTURES: Dictionary = {
 	"roca": MapThemes.ROCK_A, "arbol": MapThemes.TREE, "arbusto": MapThemes.BUSH, "flores": FLOWERS,
-	"cactus": MapThemes.CACTUS, "pino": MapThemes.PINE, "columna": MapThemes.COLUMN, "tronco": MapThemes.LOG,
+	"cactus": MapThemes.CACTUS, "pino": MapThemes.PINE, "columna": MapThemes.COLUMN[0], "tronco": MapThemes.LOG,
 	"helecho": MapThemes.FERN, "junco": MapThemes.REEDS, "hongo": MapThemes.MUSHROOM, "estatua": STATUES_MOSS[0],
 	"mina": MINE[0], "bosque_explotable": FOREST[0], "escombro": RUBBLE[0],
 	"roca_marcada": SIGNAL_ROCKS["caliza"][0], "sendero": SIGNAL_PATH, "herramienta": SIGNAL_TOOL,
@@ -98,6 +99,10 @@ static func texture(id: String) -> Texture2D:
 
 
 ## T508: la variante depende solo de la casilla; la paleta sigue el bioma, sin consumir azar.
+static func m79_column_texture(cell: Vector2i) -> Texture2D:
+	return MapThemes.COLUMN[posmod(cell.x + cell.y * 7, MapThemes.COLUMN.size())]
+
+
 static func signal_rock_texture(cell: Vector2i, theme: StringName) -> Texture2D:
 	var color: String = "caliza"
 	if theme == &"desierto":
@@ -115,6 +120,8 @@ static func ground_colors(id: String) -> Dictionary:
 
 ## La variante depende solo de la coordenada, sin tocar las casillas del mapa.
 static func statue_texture(cell: Vector2i, theme: StringName) -> Texture2D:
+	if theme == &"ruinas":
+		return MapThemes.STATUE[posmod(cell.x + cell.y * 7, MapThemes.STATUE.size())]
 	var variants: Array[Texture2D] = STATUES_FROST if theme == &"nieve" else STATUES_MOSS
 	return variants[posmod(cell.x + cell.y * 7, variants.size())]
 

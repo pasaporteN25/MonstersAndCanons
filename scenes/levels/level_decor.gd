@@ -187,6 +187,8 @@ func object_texture(cell: Vector2i, drawing: String) -> Texture2D:
 		return MapDrawings.signal_rock_texture(cell, _theme)
 	if drawing == "estatua":
 		return MapDrawings.statue_texture(cell, _theme)
+	if drawing == "columna":
+		return MapDrawings.m79_column_texture(cell)
 	if drawing == MapDrawings.POST_DRAWING:
 		return MapDrawings.post_texture(_post_conquered, _banner_recipe)
 	var state: ObstacleField.State = ObstacleField.State.DISABLED if _field == null else _field.state_of(cell)

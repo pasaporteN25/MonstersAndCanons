@@ -1,5 +1,9 @@
 # Novedades del juego
 
+## Adornos dimensionales para desierto y ruinas *(T524, 2026-10-27)*
+
+El desierto suma el cactus elegido y dos variantes de roca roja. En ruinas aparecen columnas, bloques y estatuas de piedra con más volumen; el volcán conserva su lista de adornos y reemplaza solo la columna. Los campamentos vacíos de los niveles 14 y 15 usan el diseño elegido. Todo ocupa las mismas casillas decorativas de antes: no cambia el recorrido, la construcción ni el balance.
+
 ## Rocas de señal con la H G2 *(T508, 2026-10-26; en revisión)*
 
 Las 28 señales de los niveles 7 a 15 ahora usan uno de tres modelos de roca, con caliza en pradera y bosque, arenisca rojiza en desierto y piedra oscura en ruinas y nieve. La H G2 aparece grabada en la roca y también en el escombro activo. Se conservan las mismas casillas y el mismo espacio de una casilla: no cambia el camino, las oleadas ni el balance.
