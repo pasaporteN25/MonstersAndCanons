@@ -157,3 +157,7 @@ Las fichas [T523](T523-muestras-adornos-m79.md) y [T524](T524-integrar-adornos-m
 ## 21. Presentación y localización · T530
 
 [T530](T530-spec-presentacion-localizacion.md) fija RF-724 a RF-727 y D-217: tarjetas solo con niveles habilitados, confirmación de salida breve, franjas laterales menos llamativas y juego completo en inglés con español predeterminado. T531/T532 implementan la presentación; T533 inventaría textos y prepara la infraestructura sin exponer inglés incompleto; T534 traduce y entonces habilita el selector. Las tareas de código esperan el merge de T530; T534 espera la revisión del inventario T533.
+
+## 22. Galería de arte vigente · T537
+
+[T537](T537-galeria-arte-vigente.md) deja capturas actuales de los niveles 1, 14 y 15 en [`art/t537-arte-campana/revision.html`](../../art/t537-arte-campana/revision.html). Distingue lo integrado de la muestra de epílogo T233 pendiente y del concepto de abastecimiento T527 ya aceptado como dirección, aún sin integrar. No incluye propuestas antiguas sin integrar del PR #132 ni cierra las decisiones de Lucas sobre T267/T434/T233.
