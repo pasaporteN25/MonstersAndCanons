@@ -145,3 +145,7 @@ Las fichas [T523](T523-muestras-adornos-m79.md) y [T524](T524-integrar-adornos-m
 ## 18. Galería M79 para aprobación visual · T526
 
 [T526](T526-galeria-aprobacion-m79.md) presenta las opciones nuevas de cactus y campamento de [T523/T525](../../art/m79-muestras/adornos/revision.html) a detalle, a 34 px y sobre mapas de muestra. Lucas elige una variante por motivo o pide cambios; esta página no envía ni guarda elecciones. T524 sigue esperando T508 y el OK visual explícito.
+
+## 20. Partidas manuales de campaña post-V1 · T528
+
+[T528](T528-campana-post-v1.md) registra D-216: T280, T226, T283 y T238 se hacen después de publicar V1; T453 prepara la sesión corta. T239 deja de depender de T238. El guardado viejo del tester no se usa y el checklist de la build de entrega sigue en T268/T375.

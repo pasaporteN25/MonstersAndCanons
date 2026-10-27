@@ -1,6 +1,8 @@
-# T226 · 🚦 G4 · Lucas juega del 6 al 10
+# T226 · 🚦 G4 post-V1 · Lucas juega del 6 al 10
 
-- **Ejecutor:** **Lucas** (Sonnet bajo prepara la plantilla y después pasa el informe a tareas) · **Depende de:** T225 · **Tamaño:** 2 a 3 horas
+- **Ejecutor:** **Lucas** (Sonnet bajo prepara la plantilla y después pasa el informe a tareas) · **Depende de:** publicación de V1 (T239); preparar junto con T280/T283 mediante T453 · **Tamaño:** 2 a 3 horas
+
+**Estado (D-216, 2026-10-27):** ejecutar después de publicar V1. G4 conserva su nombre como hito de validación; ya no bloquea T239. Sus resultados pueden motivar una actualización.
 
 ## Preparación (Sonnet bajo, antes)
 1. Exportar una build de prueba, o explicar cómo correr desde el editor de Godot en esta máquina.
@@ -23,4 +25,4 @@ Jugar del 6 al 10 en orden, desde un guardado con el 5 ganado. Una vez **sin** d
 Pasar cada problema a la tarea que corresponde (un ajuste de nivel vuelve a T223, T224 o T225 como "Ajuste", y un error de sistema va a una tarea nueva con su número), y marcar G4 en el plan 08.
 
 ## Desbloquea
-T227 (el bloque 3 se diseña con lo aprendido acá).
+No bloquea una tarea de V1. Los hallazgos informan correcciones y actualizaciones posteriores.
