@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "nota": "T507, RF-717: marcas (señales) que la campaña dibuja como capa visual, por nivel: casilla (x, y) y tipo. Hoy solo las 28 señales grabadas de la tabla de M80 (T506, 2026-10-26). Los tipos estela y pintada están definidos en CampaignMarks pero no se cargan en ninguna casilla hasta que Lucas apruebe dónde. Solo dato visual: no cambia ningún mapa jugable.",
+  "niveles": {
+    "level_07": [{"casilla": [1, 3], "tipo": "grabada"}],
+    "level_08": [{"casilla": [12, 0], "tipo": "grabada"}, {"casilla": [0, 4], "tipo": "grabada"}],
+    "level_09": [{"casilla": [6, 0], "tipo": "grabada"}, {"casilla": [0, 4], "tipo": "grabada"}],
+    "level_10": [{"casilla": [1, 4], "tipo": "grabada"}, {"casilla": [1, 6], "tipo": "grabada"}, {"casilla": [20, 8], "tipo": "grabada"}],
+    "level_11": [{"casilla": [1, 2], "tipo": "grabada"}, {"casilla": [21, 2], "tipo": "grabada"}, {"casilla": [2, 8], "tipo": "grabada"}],
+    "level_12": [{"casilla": [4, 0], "tipo": "grabada"}, {"casilla": [0, 3], "tipo": "grabada"}, {"casilla": [1, 6], "tipo": "grabada"}],
+    "level_13": [{"casilla": [7, 1], "tipo": "grabada"}, {"casilla": [11, 4], "tipo": "grabada"}, {"casilla": [20, 5], "tipo": "grabada"}, {"casilla": [8, 7], "tipo": "grabada"}],
+    "level_14": [{"casilla": [8, 1], "tipo": "grabada"}, {"casilla": [24, 1], "tipo": "grabada"}, {"casilla": [18, 2], "tipo": "grabada"}, {"casilla": [3, 5], "tipo": "grabada"}, {"casilla": [14, 5], "tipo": "grabada"}, {"casilla": [7, 7], "tipo": "grabada"}, {"casilla": [13, 8], "tipo": "grabada"}, {"casilla": [25, 9], "tipo": "grabada"}],
+    "level_15": [{"casilla": [2, 4], "tipo": "grabada"}, {"casilla": [19, 10], "tipo": "grabada"}]
+  }
+}
