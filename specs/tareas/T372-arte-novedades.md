@@ -8,7 +8,7 @@
 `specs/tareas/README.md` §6, `.claude/rules/arte.md`, **`specs/05-guia-de-arte.md` entera** (sobre todo §2, §5, §7 «Familia A: hierro oscuro, bronce y madera» y M37 «Apoyo y avance coleccionable»), y de `01-spec.md` solo **M67** (RF-604, RF-605 y el borrador de la 1.0.0). Mirar `assets/ui/menu_theme.tres` (colores y paneles del menú), `assets/sprites/ui/` o donde estén los íconos de T221, el logo del menú principal (`tools/prepare_logo.gd`) y las láminas de la intro (`assets/intro/`, estilo «Cuaderno de bitácora») para que la cabecera **se vea de la misma familia**. Canon del universo: `specs/10-universo.md` (colonia, Moradores, tono).
 
 ## Qué hay que producir
-Tres cosas, todas **sin texto** (el texto lo pone el juego) y **sin el símbolo A** ni emblemas de comunidades:
+Tres cosas, todas **sin texto** (el texto lo pone el juego) y **sin el símbolo de los Moradores** ni emblemas de comunidades:
 
 1. **Cabecera de la presentación** (`news_header_1_0.png`): una ilustración **apaisada** para la parte de arriba de la pantalla de la **1.0.0**. Una vista **amplia y optimista** del campamento en el oasis: **varias torres de distintos estilos en línea de defensa**, el camino al fondo y, a lo lejos, la silueta de **uno o dos monstruos grandes** (el Jefe carmesí y el Coloso de basalto) sin amenaza inmediata. Mismo mundo que las láminas de la intro, pero **más luminoso** (es la salida del juego, no el comienzo). **Sin personas en primer plano**. **El centro y la parte baja tienen que quedar tranquilos** (ahí cae el título y el subtítulo que dibuja el juego; zona libre de detalles importantes: el **40 % de abajo**).
 2. **Cabecera sobria de «Mejoras»** (`news_header_plain.png`): una **banda** de hierro y bronce con remaches y un grabado abstracto (engranajes, tornillos, líneas de plano), **sin escena**, que sirve para **todas** las versiones siguientes sin rehacerla. Que no compita con el texto.
@@ -51,7 +51,7 @@ La cabecera de la presentación, la sobria, los 8 íconos (o los de la lista fin
 
 ## Frenar si
 - Lucas no contestó P-67-1 (la lista de ítems cambia los íconos) o P-67-6 (si no quiere imágenes, **no se produce**).
-- Una ilustración muestra a los **Moradores**, animales, ruinas, el **símbolo A** o el nombre del planeta, que el canon reserva para otros momentos (`10-universo.md`, y la lista de «lo que no aparece» de T241): **preguntar**.
+- Una ilustración muestra a los **Moradores**, animales, ruinas, el **símbolo de los Moradores** o el nombre del planeta, que el canon reserva para otros momentos (`10-universo.md`, y la lista de «lo que no aparece» de T241): **preguntar**.
 - Un ícono necesita más de 3 colores para leerse a 48 px: **simplificar el dibujo**, no agregar color.
 - La cabecera no entra en el peso sin perder calidad visible: **avisar el peso** y proponer 1280 × 240 antes de recortar a ciegas.
 - El estilo de la cabecera no se parece a las láminas de la intro ni al menú: **mostrarle a Lucas la comparación lado a lado** antes de seguir.
