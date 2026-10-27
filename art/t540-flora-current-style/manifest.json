@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "status": "concepts_pending_lucas_review",
+  "date": "2026-10-27",
+  "scope": "Flora proposals only; no active game assets changed.",
+  "source_images": "Image generation; model not exposed. Full outputs preserved under sources/generated/.",
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "1c6d5cccb7e07f4e3d3de2f71e0fa2440c7fb3eb6ff509f84bac5a73e221f40e"
+    },
+    {
+      "path": "contact_sheet.png",
+      "sha256": "242e41ac4d8eefaebece82887c393c668c448c1bd639b1b21ddb556008afd066",
+      "dimensions": {
+        "width": 1190,
+        "height": 1080,
+        "mode": "RGB"
+      }
+    },
+    {
+      "path": "context/level_01_a.png",
+      "sha256": "59fb0f7d266a2efcaaa8d3186056295a3c97fd4d85f68c39749cec210ccf9d85",
+      "dimensions": {
+        "width": 1280,
+        "height": 720,
+        "mode": "RGBA"
+      },
+      "transparent_pixels": 0
+    },
+    {
+      "path": "context/level_01_b.png",
+      "sha256": "694fec63d2494026117a7349ca0ba4523f4d15124f769f1e9f14aed32d449f3c",
+      "dimensions": {
+        "width": 1280,
+        "height": 720,
+        "mode": "RGBA"
+      },
+      "transparent_pixels": 0
+    },
+    {
+      "path": "context/level_01_c.png",
+      "sha256": "d7adc5a567241709e57fb16ec0f72181a61db5d864949a271d98ad8a83c6875a",
+      "dimensions": {
+        "width": 1280,
+        "height": 720,
+        "mode": "RGBA"
+      },
+      "transparent_pixels": 0
+    },
+    {
+      "path": "preview.html",
+      "sha256": "dd811ca3e009a364d65ee2e8fb4094246638bd5dcb4b7c7fa1a41a4768359306"
+    },
+    {
+      "path": "prompts.md",
+      "sha256": "95053b58fb4bfc98137801bc236e8c9d547f8ac93b83de506fda0bf46c5bf7c9"
+    },
+    {
+      "path": "sources/generated/a_trumpets.png",
+      "sha256": "3e837404686c75b633d7a34d4f7f0054cea85a9da55b7582acf005faeac49b71",
+      "dimensions": {
+        "width": 1299,
+        "height": 1211,
+        "mode": "RGBA"
+      },
+      "transparent_pixels": 1572333
+    },
+    {
+      "path": "sources/generated/b_capsules.png",
+      "sha256": "a2c45f2bbc30164db87f357c2c7a4bc9d649bad0a6603f32e2162e0d1a773cda",
+      "dimensions": {
+        "width": 1254,
+        "height": 1254,
+        "mode": "RGBA"
+      },
+      "transparent_pixels": 1571875
+    },
+    {
+      "path": "sources/generated/c_rosette.png",
+      "sha256": "3ef924b57ab44368cebcc9a429ebdb2a8a55cdd86b351b0ff0208d3aae44638b",
+      "dimensions": {
+        "width": 1374,
+        "height": 1145,
+        "mode": "RGBA"
+      },
+      "transparent_pixels": 1572467
+    },
+    {
+      "path": "variants/a.png",
+      "sha256": "df1a5f998c34fdb2cff3bf3382effa8082cfe0fb115a0ec99543a229efec76fd",
+      "dimensions": {
+        "width": 128,
+        "height": 128,
+        "mode": "RGBA"
+      },
+      "transparent_pixels": 15891
+    },
+    {
+      "path": "variants/b.png",
+      "sha256": "9e9411de1bd292bc12386f352c0205977e9f2aa5ea96b0ebb18d24e2535425c2",
+      "dimensions": {
+        "width": 128,
+        "height": 128,
+        "mode": "RGBA"
+      },
+      "transparent_pixels": 15924
+    },
+    {
+      "path": "variants/c.png",
+      "sha256": "8c0d00987f0a67d4561f3b83b55b9fce81a14d6c2fe1ccb6cd20b342a2c8e7f9",
+      "dimensions": {
+        "width": 128,
+        "height": 128,
+        "mode": "RGBA"
+      },
+      "transparent_pixels": 16028
+    }
+  ]
+}
