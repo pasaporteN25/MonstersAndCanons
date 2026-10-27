@@ -1,0 +1,500 @@
+[
+  {
+    "output": "context_level_10_01.png",
+    "source": "antes-nivel-10-1280x720.png",
+    "theme": "desierto",
+    "tile_screen_px": 52.36363636363637,
+    "origin": [
+      11.636363636363626,
+      48
+    ],
+    "changes": [
+      {
+        "piece": "cactus_01",
+        "cell": [
+          0,
+          0
+        ],
+        "original_character": "X",
+        "rect": [
+          12,
+          48,
+          64,
+          100
+        ]
+      },
+      {
+        "piece": "cactus_01",
+        "cell": [
+          1,
+          0
+        ],
+        "original_character": "X",
+        "rect": [
+          64,
+          48,
+          116,
+          100
+        ]
+      },
+      {
+        "piece": "red_rock_01",
+        "cell": [
+          7,
+          0
+        ],
+        "original_character": "X",
+        "rect": [
+          378,
+          48,
+          431,
+          100
+        ]
+      },
+      {
+        "piece": "red_rock_01",
+        "cell": [
+          11,
+          0
+        ],
+        "original_character": "X",
+        "rect": [
+          588,
+          48,
+          640,
+          100
+        ]
+      },
+      {
+        "piece": "column_01",
+        "cell": [
+          1,
+          3
+        ],
+        "original_character": "p",
+        "rect": [
+          64,
+          205,
+          116,
+          257
+        ]
+      }
+    ],
+    "note": "Composición externa; coordenadas de celda x,y desde cero; captura desplazada 60 px por rótulo."
+  },
+  {
+    "output": "context_level_10_02.png",
+    "source": "antes-nivel-10-1280x720.png",
+    "theme": "desierto",
+    "tile_screen_px": 52.36363636363637,
+    "origin": [
+      11.636363636363626,
+      48
+    ],
+    "changes": [
+      {
+        "piece": "cactus_02",
+        "cell": [
+          0,
+          0
+        ],
+        "original_character": "X",
+        "rect": [
+          12,
+          48,
+          64,
+          100
+        ]
+      },
+      {
+        "piece": "cactus_02",
+        "cell": [
+          1,
+          0
+        ],
+        "original_character": "X",
+        "rect": [
+          64,
+          48,
+          116,
+          100
+        ]
+      },
+      {
+        "piece": "red_rock_02",
+        "cell": [
+          7,
+          0
+        ],
+        "original_character": "X",
+        "rect": [
+          378,
+          48,
+          431,
+          100
+        ]
+      },
+      {
+        "piece": "red_rock_02",
+        "cell": [
+          11,
+          0
+        ],
+        "original_character": "X",
+        "rect": [
+          588,
+          48,
+          640,
+          100
+        ]
+      },
+      {
+        "piece": "column_02",
+        "cell": [
+          1,
+          3
+        ],
+        "original_character": "p",
+        "rect": [
+          64,
+          205,
+          116,
+          257
+        ]
+      }
+    ],
+    "note": "Composición externa; coordenadas de celda x,y desde cero; captura desplazada 60 px por rótulo."
+  },
+  {
+    "output": "context_level_14_01.png",
+    "source": "antes-nivel-14-1280x720.png",
+    "theme": "ruinas",
+    "tile_screen_px": 48,
+    "origin": [
+      16.0,
+      48
+    ],
+    "changes": [
+      {
+        "piece": "column_01",
+        "cell": [
+          0,
+          0
+        ],
+        "original_character": "X",
+        "rect": [
+          16,
+          48,
+          64,
+          96
+        ]
+      },
+      {
+        "piece": "block_01",
+        "cell": [
+          1,
+          0
+        ],
+        "original_character": "X",
+        "rect": [
+          64,
+          48,
+          112,
+          96
+        ]
+      },
+      {
+        "piece": "statue_01",
+        "cell": [
+          1,
+          1
+        ],
+        "original_character": "X",
+        "rect": [
+          64,
+          96,
+          112,
+          144
+        ]
+      },
+      {
+        "piece": "empty_camp_01",
+        "cell": [
+          16,
+          1
+        ],
+        "original_character": "c",
+        "rect": [
+          784,
+          96,
+          832,
+          144
+        ]
+      },
+      {
+        "piece": "column_01",
+        "cell": [
+          4,
+          2
+        ],
+        "original_character": "p",
+        "rect": [
+          208,
+          144,
+          256,
+          192
+        ]
+      },
+      {
+        "piece": "block_01",
+        "cell": [
+          6,
+          1
+        ],
+        "original_character": "X",
+        "rect": [
+          304,
+          96,
+          352,
+          144
+        ]
+      },
+      {
+        "piece": "statue_01",
+        "cell": [
+          14,
+          1
+        ],
+        "original_character": "X",
+        "rect": [
+          688,
+          96,
+          736,
+          144
+        ]
+      }
+    ],
+    "note": "Composición externa; coordenadas de celda x,y desde cero; captura desplazada 60 px por rótulo."
+  },
+  {
+    "output": "context_level_14_02.png",
+    "source": "antes-nivel-14-1280x720.png",
+    "theme": "ruinas",
+    "tile_screen_px": 48,
+    "origin": [
+      16.0,
+      48
+    ],
+    "changes": [
+      {
+        "piece": "column_02",
+        "cell": [
+          0,
+          0
+        ],
+        "original_character": "X",
+        "rect": [
+          16,
+          48,
+          64,
+          96
+        ]
+      },
+      {
+        "piece": "block_02",
+        "cell": [
+          1,
+          0
+        ],
+        "original_character": "X",
+        "rect": [
+          64,
+          48,
+          112,
+          96
+        ]
+      },
+      {
+        "piece": "statue_02",
+        "cell": [
+          1,
+          1
+        ],
+        "original_character": "X",
+        "rect": [
+          64,
+          96,
+          112,
+          144
+        ]
+      },
+      {
+        "piece": "empty_camp_02",
+        "cell": [
+          16,
+          1
+        ],
+        "original_character": "c",
+        "rect": [
+          784,
+          96,
+          832,
+          144
+        ]
+      },
+      {
+        "piece": "column_02",
+        "cell": [
+          4,
+          2
+        ],
+        "original_character": "p",
+        "rect": [
+          208,
+          144,
+          256,
+          192
+        ]
+      },
+      {
+        "piece": "block_02",
+        "cell": [
+          6,
+          1
+        ],
+        "original_character": "X",
+        "rect": [
+          304,
+          96,
+          352,
+          144
+        ]
+      },
+      {
+        "piece": "statue_02",
+        "cell": [
+          14,
+          1
+        ],
+        "original_character": "X",
+        "rect": [
+          688,
+          96,
+          736,
+          144
+        ]
+      }
+    ],
+    "note": "Composición externa; coordenadas de celda x,y desde cero; captura desplazada 60 px por rótulo."
+  },
+  {
+    "output": "context_level_15_01.png",
+    "source": "antes-nivel-15-1280x720.png",
+    "theme": "pradera",
+    "tile_screen_px": 48,
+    "origin": [
+      16.0,
+      48
+    ],
+    "changes": [
+      {
+        "piece": "empty_camp_01",
+        "cell": [
+          23,
+          5
+        ],
+        "original_character": "c",
+        "rect": [
+          1120,
+          288,
+          1168,
+          336
+        ]
+      },
+      {
+        "piece": "empty_camp_01",
+        "cell": [
+          1,
+          9
+        ],
+        "original_character": "c",
+        "rect": [
+          64,
+          480,
+          112,
+          528
+        ]
+      },
+      {
+        "piece": "empty_camp_01",
+        "cell": [
+          8,
+          10
+        ],
+        "original_character": "c",
+        "rect": [
+          400,
+          528,
+          448,
+          576
+        ]
+      }
+    ],
+    "note": "Composición externa; coordenadas de celda x,y desde cero; captura desplazada 60 px por rótulo."
+  },
+  {
+    "output": "context_level_15_02.png",
+    "source": "antes-nivel-15-1280x720.png",
+    "theme": "pradera",
+    "tile_screen_px": 48,
+    "origin": [
+      16.0,
+      48
+    ],
+    "changes": [
+      {
+        "piece": "empty_camp_02",
+        "cell": [
+          23,
+          5
+        ],
+        "original_character": "c",
+        "rect": [
+          1120,
+          288,
+          1168,
+          336
+        ]
+      },
+      {
+        "piece": "empty_camp_02",
+        "cell": [
+          1,
+          9
+        ],
+        "original_character": "c",
+        "rect": [
+          64,
+          480,
+          112,
+          528
+        ]
+      },
+      {
+        "piece": "empty_camp_02",
+        "cell": [
+          8,
+          10
+        ],
+        "original_character": "c",
+        "rect": [
+          400,
+          528,
+          448,
+          576
+        ]
+      }
+    ],
+    "note": "Composición externa; coordenadas de celda x,y desde cero; captura desplazada 60 px por rótulo."
+  }
+]

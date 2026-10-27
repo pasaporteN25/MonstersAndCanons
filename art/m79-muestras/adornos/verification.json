@@ -1,0 +1,13 @@
+{
+  "variants": 12,
+  "rgba_128": true,
+  "transparent_corners": true,
+  "partial_alpha": true,
+  "png_hashes_checked": 42,
+  "source_hashes_checked": 19,
+  "result": "PASS",
+  "runtime_tested": false,
+  "mobile_tested": false,
+  "performance_tested": false,
+  "asset_output_scope": "Solo art/m79-muestras/adornos/; el estado T523 se registra por separado en specs/03-tareas.md."
+}

@@ -1,0 +1,925 @@
+{
+  "task": "T523",
+  "status": "Muestras sin integrar; aprobación de Lucas pendiente",
+  "date": "2026-10-26",
+  "author": "Codex (OpenAI)",
+  "model": "gpt-6.1-sol",
+  "reasoning_effort": "medium",
+  "tool": {
+    "python": "3.14.4",
+    "pillow": "12.1.1",
+    "renderer": "Pillow procedural supersampling 3x + derivados cromáticos de PNG propios",
+    "resampling": "Lanczos, aproximación de revisión; no emula GPU de Godot"
+  },
+  "sprite_size": [
+    128,
+    128
+  ],
+  "intended_tile_size": [
+    64,
+    64
+  ],
+  "review_sizes": [
+    220,
+    64,
+    34
+  ],
+  "seed_policy": "Semillas fijas literales en generate_samples.py; sin aleatoriedad global",
+  "inputs": [
+    {
+      "original_path": "assets/sprites/towers/rendered/cannon_atlas.png",
+      "snapshot": "sources/references/cannon_atlas.png",
+      "sha256": "e0621a0ccadfdd62c79eb8b085f574f911b6305175fee13d63998ccc47e9fc4d"
+    },
+    {
+      "original_path": "assets/sprites/towers/rendered/basic_atlas.png",
+      "snapshot": "sources/references/basic_atlas.png",
+      "sha256": "7ff072602b1311209645cf4769efc6fc1b8dde9aa2d1a220c87284a3351acca4"
+    },
+    {
+      "original_path": "assets/sprites/towers/rendered/base_1.png",
+      "snapshot": "sources/references/base_1.png",
+      "sha256": "36fcb741b461e2fb0a51dac7318097b8da615e99a724e9fda4f1b0e27e402722"
+    },
+    {
+      "original_path": "assets/sprites/towers/rendered/mechanical_standard_m43.png",
+      "snapshot": "sources/references/mechanical_standard_m43.png",
+      "sha256": "b289323482077d7758b591911f691ffa428ff1b9bfdbbf0cebbcce6e6eb2e571"
+    },
+    {
+      "original_path": "assets/sprites/map/rendered/rock_a.png",
+      "snapshot": "sources/references/rock_a.png",
+      "sha256": "32a4d02630bd3667aa1080e0a282d2e2971e01eb48a666fb46508875de75d682"
+    },
+    {
+      "original_path": "assets/sprites/map/rendered/rock_b.png",
+      "snapshot": "sources/references/rock_b.png",
+      "sha256": "9444496e4fdf5e94d32102347923e2625ec04f8f538a3d87cefc57a05ccf9f48"
+    },
+    {
+      "original_path": "assets/sprites/map/rendered/rubble_idle.png",
+      "snapshot": "sources/references/rubble_idle.png",
+      "sha256": "e8bfd55a9c452217c48693fe22fcfc66be7ecfdd5127f2f55e1365d3f9c5f087"
+    },
+    {
+      "original_path": "assets/sprites/map/rendered/statue_cannon_moss.png",
+      "snapshot": "sources/references/statue_cannon_moss.png",
+      "sha256": "3c1d4547a4b4d89ad1c3ea8a095aead65c3a10a2c97a8b05b12e8d4e91682c22"
+    },
+    {
+      "original_path": "assets/sprites/map/rendered/statue_basic_moss.png",
+      "snapshot": "sources/references/statue_basic_moss.png",
+      "sha256": "ae8f7f938f0b952a1e91207b23e83109409d6469f34e9ac10dec1da5a232387f"
+    },
+    {
+      "original_path": "assets/tiles/rendered/ground_desierto.png",
+      "snapshot": "sources/references/ground_desierto.png",
+      "sha256": "14d0bdc0fdf0cb942847917d31e5de626fbc95da45425c3391c6e4d2d6e1bc84"
+    },
+    {
+      "original_path": "assets/tiles/rendered/ground_ruinas.png",
+      "snapshot": "sources/references/ground_ruinas.png",
+      "sha256": "3588c580e0de81f341e33969f0dc012dbd89dc63aa3de8c769570ff744e989cd"
+    },
+    {
+      "original_path": "assets/tiles/rendered/ground_volcan.png",
+      "snapshot": "sources/references/ground_volcan.png",
+      "sha256": "4921fb8183aea67b51ab7fca46e1bc3e9e0942d1bc48b990462814b41f61e81c"
+    },
+    {
+      "original_path": "assets/tiles/rendered/ground_pradera.png",
+      "snapshot": "sources/references/ground_pradera.png",
+      "sha256": "cb98b34a2329e49c8066d2662020a10d3a43647ce5117dc37a1f348413369224"
+    },
+    {
+      "original_path": "art/m79-inventario/antes-nivel-10-1280x720.png",
+      "snapshot": "sources/references/antes-nivel-10-1280x720.png",
+      "sha256": "983fdb73ac5bdf7f98218d578fe93dc6cbf677e1d107337dee9532900d6e1e2c"
+    },
+    {
+      "original_path": "art/m79-inventario/antes-nivel-14-1280x720.png",
+      "snapshot": "sources/references/antes-nivel-14-1280x720.png",
+      "sha256": "8b4fd041181c5fe59da9c8ae7aeb2376ab495dc77f510fe98603e86168fac8ea"
+    },
+    {
+      "original_path": "art/m79-inventario/antes-nivel-15-1280x720.png",
+      "snapshot": "sources/references/antes-nivel-15-1280x720.png",
+      "sha256": "d50e1fda13209beb46b24f527539e2a5d6a8cdf9837e809305313f8d25106593"
+    },
+    {
+      "original_path": "data/levels/level_10.json",
+      "snapshot": "sources/references/level_10.json",
+      "sha256": "21af960b29532957099e39c7b97c7c7ed101e3e5ef2646c003bfc091607e7fdf"
+    },
+    {
+      "original_path": "data/levels/level_14.json",
+      "snapshot": "sources/references/level_14.json",
+      "sha256": "150929389daa85941b826cbca70aaa9f25b73f97b95ea38149afa2e057112a20"
+    },
+    {
+      "original_path": "data/levels/level_15.json",
+      "snapshot": "sources/references/level_15.json",
+      "sha256": "0e67f0becbaa63a93af17edf3fab828216fd51a6979f7fa34d9f7e089a1baaa3"
+    }
+  ],
+  "pngs": [
+    {
+      "file": "contact_034_context.png",
+      "size": [
+        616,
+        539
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        255,
+        255
+      ],
+      "alpha_bbox": [
+        0,
+        0,
+        616,
+        539
+      ],
+      "sha256": "860f7a120d6fdb57ea98a81e4d589cb1b49cb451ae5dad26adacdca4c6ddaa52"
+    },
+    {
+      "file": "contact_034_transparent.png",
+      "size": [
+        616,
+        539
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "alpha_bbox": [
+        17,
+        11,
+        580,
+        489
+      ],
+      "sha256": "58d9695b28f81071de0166d1064a4b584b54e0935e2c9d1f0cf319a2737f3005"
+    },
+    {
+      "file": "contact_064_context.png",
+      "size": [
+        616,
+        719
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        255,
+        255
+      ],
+      "alpha_bbox": [
+        0,
+        0,
+        616,
+        719
+      ],
+      "sha256": "ec95035042e1ea5ef82d3462b9c736982818a0c36a2a1e978758883352a8759a"
+    },
+    {
+      "file": "contact_064_transparent.png",
+      "size": [
+        616,
+        719
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "alpha_bbox": [
+        17,
+        11,
+        580,
+        669
+      ],
+      "sha256": "99c667d193576dd930f0aa394d2e890156856e41c8f6606154c891b88733c40d"
+    },
+    {
+      "file": "contact_220_context.png",
+      "size": [
+        996,
+        1655
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        255,
+        255
+      ],
+      "alpha_bbox": [
+        0,
+        0,
+        996,
+        1655
+      ],
+      "sha256": "330fcaef96bf0f30b2abbb93c01dc7af7e4072fb4d2217f3ad9ae7ca46da5e58"
+    },
+    {
+      "file": "contact_220_transparent.png",
+      "size": [
+        996,
+        1655
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "alpha_bbox": [
+        17,
+        11,
+        962,
+        1605
+      ],
+      "sha256": "8a94bb05c39db57945cc74ec9cbf9ba785cde918d5cbb149852bc7c460af2232"
+    },
+    {
+      "file": "context_level_10_01.png",
+      "size": [
+        1280,
+        780
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        255,
+        255
+      ],
+      "alpha_bbox": [
+        0,
+        0,
+        1280,
+        780
+      ],
+      "sha256": "b9a92185a59a568c7fdfa1298b724150bf35fd74bf38cdb504c300b2576fbd87"
+    },
+    {
+      "file": "context_level_10_02.png",
+      "size": [
+        1280,
+        780
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        255,
+        255
+      ],
+      "alpha_bbox": [
+        0,
+        0,
+        1280,
+        780
+      ],
+      "sha256": "2e9987745e900d43aff2af8eb789332eb11b61534f33ba4938b05aab5f7b8e7b"
+    },
+    {
+      "file": "context_level_14_01.png",
+      "size": [
+        1280,
+        780
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        255,
+        255
+      ],
+      "alpha_bbox": [
+        0,
+        0,
+        1280,
+        780
+      ],
+      "sha256": "3f302b73c226c665e734f1c26fba500bef1f271deb8314816d6396967e2e3555"
+    },
+    {
+      "file": "context_level_14_02.png",
+      "size": [
+        1280,
+        780
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        255,
+        255
+      ],
+      "alpha_bbox": [
+        0,
+        0,
+        1280,
+        780
+      ],
+      "sha256": "7dea473ba2f1c65219f993d4a45cf8ee4866be70a42191eba3e404c4dbf18238"
+    },
+    {
+      "file": "context_level_15_01.png",
+      "size": [
+        1280,
+        780
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        255,
+        255
+      ],
+      "alpha_bbox": [
+        0,
+        0,
+        1280,
+        780
+      ],
+      "sha256": "f104777b1c05b88f31908b0a27a73682b2a577f2ab2ded616fd40163c8907dfc"
+    },
+    {
+      "file": "context_level_15_02.png",
+      "size": [
+        1280,
+        780
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        255,
+        255
+      ],
+      "alpha_bbox": [
+        0,
+        0,
+        1280,
+        780
+      ],
+      "sha256": "a9d1661e3aa522fa5b6719bbb3fa235b2e2431da3041c04c1ffdb02943a7ce00"
+    },
+    {
+      "file": "reference_board.png",
+      "size": [
+        900,
+        340
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        255,
+        255
+      ],
+      "alpha_bbox": [
+        0,
+        0,
+        900,
+        340
+      ],
+      "sha256": "24ee57473dac18b5c2e1dad74621520333c0fb1b3a5e4c9d4866709c032fc594"
+    },
+    {
+      "file": "sources/references/antes-nivel-10-1280x720.png",
+      "size": [
+        1280,
+        720
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        255,
+        255
+      ],
+      "alpha_bbox": [
+        0,
+        0,
+        1280,
+        720
+      ],
+      "sha256": "983fdb73ac5bdf7f98218d578fe93dc6cbf677e1d107337dee9532900d6e1e2c"
+    },
+    {
+      "file": "sources/references/antes-nivel-14-1280x720.png",
+      "size": [
+        1280,
+        720
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        255,
+        255
+      ],
+      "alpha_bbox": [
+        0,
+        0,
+        1280,
+        720
+      ],
+      "sha256": "8b4fd041181c5fe59da9c8ae7aeb2376ab495dc77f510fe98603e86168fac8ea"
+    },
+    {
+      "file": "sources/references/antes-nivel-15-1280x720.png",
+      "size": [
+        1280,
+        720
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        255,
+        255
+      ],
+      "alpha_bbox": [
+        0,
+        0,
+        1280,
+        720
+      ],
+      "sha256": "d50e1fda13209beb46b24f527539e2a5d6a8cdf9837e809305313f8d25106593"
+    },
+    {
+      "file": "sources/references/base_1.png",
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "alpha_bbox": [
+        3,
+        20,
+        125,
+        108
+      ],
+      "sha256": "36fcb741b461e2fb0a51dac7318097b8da615e99a724e9fda4f1b0e27e402722"
+    },
+    {
+      "file": "sources/references/basic_atlas.png",
+      "size": [
+        512,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "alpha_bbox": [
+        12,
+        17,
+        503,
+        238
+      ],
+      "sha256": "7ff072602b1311209645cf4769efc6fc1b8dde9aa2d1a220c87284a3351acca4"
+    },
+    {
+      "file": "sources/references/cannon_atlas.png",
+      "size": [
+        512,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "alpha_bbox": [
+        11,
+        15,
+        496,
+        236
+      ],
+      "sha256": "e0621a0ccadfdd62c79eb8b085f574f911b6305175fee13d63998ccc47e9fc4d"
+    },
+    {
+      "file": "sources/references/ground_desierto.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        255,
+        255
+      ],
+      "alpha_bbox": [
+        0,
+        0,
+        256,
+        256
+      ],
+      "sha256": "14d0bdc0fdf0cb942847917d31e5de626fbc95da45425c3391c6e4d2d6e1bc84"
+    },
+    {
+      "file": "sources/references/ground_pradera.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        255,
+        255
+      ],
+      "alpha_bbox": [
+        0,
+        0,
+        256,
+        256
+      ],
+      "sha256": "cb98b34a2329e49c8066d2662020a10d3a43647ce5117dc37a1f348413369224"
+    },
+    {
+      "file": "sources/references/ground_ruinas.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        255,
+        255
+      ],
+      "alpha_bbox": [
+        0,
+        0,
+        256,
+        256
+      ],
+      "sha256": "3588c580e0de81f341e33969f0dc012dbd89dc63aa3de8c769570ff744e989cd"
+    },
+    {
+      "file": "sources/references/ground_volcan.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        255,
+        255
+      ],
+      "alpha_bbox": [
+        0,
+        0,
+        256,
+        256
+      ],
+      "sha256": "4921fb8183aea67b51ab7fca46e1bc3e9e0942d1bc48b990462814b41f61e81c"
+    },
+    {
+      "file": "sources/references/mechanical_standard_m43.png",
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "alpha_bbox": [
+        11,
+        8,
+        117,
+        120
+      ],
+      "sha256": "b289323482077d7758b591911f691ffa428ff1b9bfdbbf0cebbcce6e6eb2e571"
+    },
+    {
+      "file": "sources/references/rock_a.png",
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "alpha_bbox": [
+        6,
+        16,
+        122,
+        116
+      ],
+      "sha256": "32a4d02630bd3667aa1080e0a282d2e2971e01eb48a666fb46508875de75d682"
+    },
+    {
+      "file": "sources/references/rock_b.png",
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "alpha_bbox": [
+        6,
+        46,
+        122,
+        116
+      ],
+      "sha256": "9444496e4fdf5e94d32102347923e2625ec04f8f538a3d87cefc57a05ccf9f48"
+    },
+    {
+      "file": "sources/references/rubble_idle.png",
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "alpha_bbox": [
+        13,
+        18,
+        116,
+        102
+      ],
+      "sha256": "e8bfd55a9c452217c48693fe22fcfc66be7ecfdd5127f2f55e1365d3f9c5f087"
+    },
+    {
+      "file": "sources/references/statue_basic_moss.png",
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "alpha_bbox": [
+        13,
+        15,
+        111,
+        117
+      ],
+      "sha256": "ae8f7f938f0b952a1e91207b23e83109409d6469f34e9ac10dec1da5a232387f"
+    },
+    {
+      "file": "sources/references/statue_cannon_moss.png",
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "alpha_bbox": [
+        21,
+        12,
+        115,
+        112
+      ],
+      "sha256": "3c1d4547a4b4d89ad1c3ea8a095aead65c3a10a2c97a8b05b12e8d4e91682c22"
+    },
+    {
+      "file": "statue_comparison.png",
+      "size": [
+        940,
+        315
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        255,
+        255
+      ],
+      "alpha_bbox": [
+        0,
+        0,
+        940,
+        315
+      ],
+      "sha256": "cf8d4c9753ad1bb908b514bc039cc2c80148a3358e2387a825047a8660ea530f"
+    },
+    {
+      "file": "variants/block_01.png",
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "alpha_bbox": [
+        14,
+        50,
+        111,
+        119
+      ],
+      "sha256": "7fdba505070e91d7beb18b632ff142191a0b7fd3e904eec046053778760cf8ad"
+    },
+    {
+      "file": "variants/block_02.png",
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "alpha_bbox": [
+        12,
+        47,
+        115,
+        119
+      ],
+      "sha256": "9b08130daafe240516797babb7c97eebd8ce32150941a0f57105b394766d0daf"
+    },
+    {
+      "file": "variants/cactus_01.png",
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "alpha_bbox": [
+        21,
+        12,
+        100,
+        123
+      ],
+      "sha256": "b71b9f6ea220db8ee8ca83a66d96251f31aadaa332d56a9560a4830cd4c6e07c"
+    },
+    {
+      "file": "variants/cactus_02.png",
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "alpha_bbox": [
+        24,
+        18,
+        109,
+        125
+      ],
+      "sha256": "c509dabbd16f51eb088693bb06faa7e24fcc35d6f83aa972bdfa03d79dc9cdff"
+    },
+    {
+      "file": "variants/column_01.png",
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "alpha_bbox": [
+        21,
+        24,
+        111,
+        119
+      ],
+      "sha256": "2cc399e29d28409adfc7c1fa005a0a9452b38723b2d945903e658fd89d11dab7"
+    },
+    {
+      "file": "variants/column_02.png",
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "alpha_bbox": [
+        14,
+        56,
+        115,
+        119
+      ],
+      "sha256": "5c84884349a9750db2fdd1f1f40ae29c246046d12c5d10be95d2d32f62e4d720"
+    },
+    {
+      "file": "variants/empty_camp_01.png",
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "alpha_bbox": [
+        15,
+        66,
+        112,
+        117
+      ],
+      "sha256": "8db77e2908ba3aad1c681b582dedcf907ab5beab14ba688e259c6502e9191cd8"
+    },
+    {
+      "file": "variants/empty_camp_02.png",
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "alpha_bbox": [
+        15,
+        71,
+        112,
+        117
+      ],
+      "sha256": "022e9e863f2e49f69905bc55a32624f0656ec332c3f86c128b2ac603f6c7cf2d"
+    },
+    {
+      "file": "variants/red_rock_01.png",
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "alpha_bbox": [
+        6,
+        16,
+        122,
+        116
+      ],
+      "sha256": "a8786f48674ffd28d6574f3dccfe7ec8f6f22c9cd014ceac2f6b18839a01b32d"
+    },
+    {
+      "file": "variants/red_rock_02.png",
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "alpha_bbox": [
+        6,
+        46,
+        122,
+        116
+      ],
+      "sha256": "701fe5e3b30552dc29aa1fdc95a2935855b56753716b6145ed044c2942acfac8"
+    },
+    {
+      "file": "variants/statue_01.png",
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "alpha_bbox": [
+        21,
+        12,
+        115,
+        112
+      ],
+      "sha256": "c91cd2b9b120fcf261b2621c458692e6ba6f46b1ad326708c4dde8ffe11541ca"
+    },
+    {
+      "file": "variants/statue_02.png",
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "alpha_bbox": [
+        13,
+        15,
+        111,
+        117
+      ],
+      "sha256": "7c9b4523a47816e3ca843af3d90a163b984b6a70af57b345483761e67d5bbd98"
+    }
+  ]
+}
