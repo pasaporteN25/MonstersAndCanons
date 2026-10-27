@@ -1,23 +1,25 @@
 # T453 · Sesión de partidas de Lucas: T280 + T226 + T283 (instrucciones)
 
+**Estado (D-216, 2026-10-27):** esta sesión se ejecuta después de publicar V1, en una build identificada de esa versión. No bloquea T239. Usar un guardado nuevo en la carpeta de pruebas aislada; cualquier hallazgo se registra para una actualización.
+
 - **Ejecutor:** **Lucas** (las partidas no las reemplazan tests ni bots) · **Prepara:** Claude (este documento, la plantilla y la build) · **Tamaño:** 2 a 3 horas, partible en dos días
 - **Refs:** T280 (`03-tareas.md`), T226 y `specs/tareas/T226-prueba-bloque-2.md`, T283, RF-518 punto 4, RF-524 punto 6, RF-525, `specs/tareas/informes/T266-auditoria-dificultad.md` §7, T268.
 - **Plantilla para completar:** `specs/pruebas/2026-10-sesion-humana.md` (copiarla a un archivo con la fecha de la sesión).
 
-> **Qué cierra y qué no.** Esta sesión alimenta tres compuertas: **T280** (niveles 2 y 7), **T226 / G4** (niveles 6 a 10) y **T283** (el 9 con el Mortero). **No cierra T238 / G5** (campaña completa en PC *y* celular): esa va al final y necesita antes T268 y un celular real. Una compuerta se marca `[x]` solo cuando Lucas anotó los resultados; hasta entonces **ni el bot ni los tests** la dan por pasada, y **no se reenvía el juego al tester** (T266 y T268 siguen abiertas).
+> **Qué cierra y qué no.** Esta sesión alimenta tres validaciones post-V1: **T280** (niveles 2 y 7), **T226 / G4** (niveles 6 a 10) y **T283** (el 9 con el Mortero). **No cierra T238 / G5** (campaña completa en PC *y* celular), que se hace aparte después de T239 con un celular real. Cada tarea sigue abierta hasta que Lucas anote resultados; **ni el bot ni los tests** reemplazan sus partidas.
 
 ## 0. Antes de jugar (lo hace Claude o Lucas, 10 minutos)
 
-1. **Build de `main`.** Anotar el commit en la plantilla (`git rev-parse --short origin/main`). La exportación de Linux está configurada (`export_presets.cfg`, preset «Linux»):
+1. **Build publicada de V1.** Anotar la etiqueta y el commit de la versión que se prueba. Si se genera un ejecutable de escritorio para la sesión, partir del tag publicado y no de un `main` posterior. La exportación de Linux está configurada (`export_presets.cfg`, preset «Linux»):
 
    ```bash
-   cd ~/Documentos/Proyectos/TDv1        # o el worktree de trabajo, ya en origin/main
+   cd ~/Documentos/Proyectos/TDv1
    godot --headless --import
    git checkout -- assets                # --import a veces reescribe SVG
    godot --headless --path . --export-release "Linux" build/MonstersCanons.x86_64
    ```
 
-   Comprobar con `file build/MonstersCanons.x86_64` (debe decir `ELF 64-bit`). Las plantillas de exportación son las de `ONBOARDING.md` §5. *(Alternativa sin exportar: abrir el proyecto en el editor de Godot y darle a Jugar; se juega igual.)* **Esta build no está generada ni probada todavía:** quien la genere anota el resultado de `file` en la plantilla.
+   Comprobar con `file build/MonstersCanons.x86_64` (debe decir `ELF 64-bit`). Las plantillas de exportación son las de `ONBOARDING.md` §5. *(Alternativa sin exportar: abrir el proyecto en el editor de Godot del tag publicado.)* Anotar el resultado de `file` en la plantilla.
 2. **Guardado aparte, para no tocar el tuyo y empezar «como un tester».** El juego guarda en `~/.local/share/godot/app_userdata/JuegoA/` (`save.json`). Para jugar con un guardado nuevo sin tocar el real:
 
    ```bash
@@ -58,8 +60,8 @@ Las cifras del bot (T279: nivel 2 `mix` ~16 vidas, `smart` ~17; nivel 7 `smart` 
 | Qué pasa | Qué se hace (lo decide Lucas) |
 |---|---|
 | El 2 es más difícil que el 1 pero no un muro; el 3 no se siente más fácil que el 2 | T280 cumplido para 1–3. |
-| El 2 es un muro | Pasar a la variante B del 2 (D-100). Pendiente de tu OK. |
-| El 7 es un muro, o el 8 no se siente respiro | Reabrir el 7 antes de reenviar. |
+| El 2 es un muro | Registrar para una actualización y proponer la variante B del 2 (D-100). Pendiente de tu OK. |
+| El 7 es un muro, o el 8 no se siente respiro | Registrar el ajuste para una actualización. |
 | El 9: el Mortero no se alcanza o alcanzarlo cuesta vidas | Elegir entre **A** (bajar el costo de demoler solo en el 9), **B** (la ruina de la pieza da su recurso; enmienda RF-428), **C** (bajar el oro del Mortero; descartada de entrada, toca los niveles 10 a 15) o **D** (dejarlo así). Recién entonces se especifica como tarea nueva. |
 | Un error o algo raro | Tarea nueva con número, no un arreglo al vuelo. |
 
@@ -69,12 +71,12 @@ Claude pasa cada problema a la tarea que corresponde (un ajuste de nivel vuelve 
 
 - Ni el celular ni Windows (la sesión es Linux/PC): lo cubren T238 y la ficha mobile (T454).
 - Ni el rendimiento (FPS): se mide aparte, con la máquina libre.
-- Ni los niveles 11 a 15 (T238).
+- Ni los niveles 11 a 15 (T238, que también es post-V1).
 - **Asedio 7 al 101 %** (hallazgo 2 de T444: el bot dio 5 de 5 con 6 vidas, pero T258 y P3 de M56 dicen que no cumple): si querés confirmarlo, es una partida más, aparte, y se anota en la plantilla; no bloquea las tres compuertas.
 
 ## 4. Atajo si te falta tiempo (menos fiel)
 
-El **modo de pruebas** (Opciones → Activar modo de pruebas; `-- --pruebas` al arrancar) desbloquea todos los niveles y escribe `pruebas_stats.json` con la oleada, las vidas, el oro y las torres de cada oleada (`ONBOARDING.md` §6.1.11). Sirve para saltar directo al 6, pero **tiene otro guardado, no muestra los textos y no es la experiencia de un tester**. Si lo usás, anotalo en la plantilla («jugado en modo de pruebas»): la compuerta T226 pedía el guardado con el 5 ganado, así que una partida así cuenta como parcial y Lucas decide si alcanza.
+El **modo de pruebas** (Opciones → Activar modo de pruebas; `-- --pruebas` al arrancar) desbloquea todos los niveles y escribe `pruebas_stats.json` con la oleada, las vidas, el oro y las torres de cada oleada (`ONBOARDING.md` §6.1.11). Sirve para saltar directo al 6, pero **tiene otro guardado, no muestra los textos y no es la experiencia de un tester**. Si lo usás, anotalo en la plantilla («jugado en modo de pruebas»): T226 queda como resultado parcial y Lucas decide si alcanza.
 
 ## Hecho cuando
 

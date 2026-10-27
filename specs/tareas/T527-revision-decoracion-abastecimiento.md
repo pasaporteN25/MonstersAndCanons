@@ -14,7 +14,7 @@ Identificar los tres adornos que Lucas señaló en la captura de La Central y pr
 - Proponer un taller/herrería de frontera en ruinas para `supply_depot` y una pareja restaurada.
 - Para `supply_line_pole`, evaluar reutilizar un recurso ya existente, sin producir otro asset. Candidato a revisar: `assets/sprites/ui/stat_resources.svg` (lingotes de hierro y bronce); no se cambia su uso ni tamaño sin aprobación.
 - Registrar si existe un estado de zona controlada que permita alternar adornos. Si no existe, dejar la restauración como idea posterior sin diseñar progresión ni guardado.
-- Guardar la hoja conceptual, el prompt y una galería de revisión. No integrar sprites, alterar mapas, código, leyendas ni mecánicas.
+- Guardar la hoja conceptual, el prompt y una galería de revisión. Si Lucas pide cambios, conservar la versión anterior y mostrar la revisión. No integrar sprites, alterar mapas, código, leyendas ni mecánicas.
 
 ## Hecho cuando
 
@@ -24,8 +24,12 @@ Identificar los tres adornos que Lucas señaló en la captura de La Central y pr
 
 ## Verificación
 
-Revisión estática del JSON, `MapDrawings` y referencias de arte. `git diff --check`. No correr Godot/GUT: no hay assets integrados ni cambios de juego.
+Revisión estática del JSON, `MapDrawings` y referencias de arte; revisión visual de la hoja actualizada; `git diff --check`. No correr Godot/GUT: no hay assets integrados ni cambios de juego.
 
 ## Frenar si
 
 La propuesta requiere cambiar el significado jugable de la cadena de abastecimiento, agregar progresión por zona controlada o cambiar recursos/guardados. Eso necesita otra spec y aprobación.
+
+## Revisión de Lucas · 2026-10-27
+
+Lucas indicó que le gustan los conceptos y pidió que el módulo luminoso de la nave destruida se vea como un farol roto oscuro y apagado. La galería muestra la revisión `sources/conceptos-farol-roto.png` y conserva la hoja inicial para comparar. La dirección conceptual de nave/taller quedó aceptada; la reutilización de lingotes en el lugar del poste y el uso concreto de las piezas siguen pendientes de confirmación antes de cualquier integración.

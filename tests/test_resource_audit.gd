@@ -11,6 +11,8 @@ const PATH_PATTERN: String = "res://[A-Za-z0-9_./\\-]+\\.(?:svg|png|wav|ogg|mp3|
 ## y «agotado» esperan a que alguien los enchufe, y el ícono de supresión y los anillos de la Disruptora quedaron
 ## sin cablear. Si se usan, se sacan de esta lista; si se borran, también. Un dibujo NUEVO sin uso hace fallar el test.
 const KNOWN_UNUSED: Array[String] = [
+	# T524 reemplazó la roca plana del desierto; se conserva el SVG histórico en el proyecto.
+	"res://assets/sprites/map/roca_roja.svg",
 	# T375 / D-170: arte aprobado disponible; faltan entradas futuras sin inventar textos de novedades.
 	"res://assets/ui/novedades/news_header_plain.png",
 	"res://assets/ui/novedades/news_icon_upgrade.png",

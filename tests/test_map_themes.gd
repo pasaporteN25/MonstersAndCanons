@@ -113,6 +113,24 @@ func test_the_new_drawings_exist_and_are_64_square() -> void:
 		assert_eq(texture.get_width(), texture.get_height(), "%s es cuadrado" % file_name)
 
 
+## T524: las muestras aprobadas son assets RGBA de una casilla y reemplazan los temas/casillas existentes.
+func test_m79_adornments_use_the_approved_rendered_pngs() -> void:
+	var files: Array[String] = ["cactus_02", "red_rock_01", "red_rock_02", "column_01", "column_02",
+		"block_01", "block_02", "statue_01", "statue_02", "empty_camp_02"]
+	for name: String in files:
+		var path: String = "res://assets/sprites/map/rendered/m79/%s.png" % name
+		var texture: Texture2D = load(path)
+		assert_not_null(texture, name)
+		if texture == null:
+			continue
+		assert_eq(texture.get_size(), Vector2(128, 128), name)
+		assert_true(texture.get_image().detect_alpha() != Image.ALPHA_NONE, "%s conserva alfa" % name)
+	assert_eq(MapThemes.CACTUS.resource_path, "res://assets/sprites/map/rendered/m79/cactus_02.png")
+	assert_true(MapDrawings.texture("campamento_vacio").resource_path.ends_with("/empty_camp_02.png"))
+	assert_eq(MapDrawings.statue_texture(Vector2i(2, 3), &"ruinas").resource_path.begins_with("res://assets/sprites/map/rendered/m79/statue_"), true)
+	assert_true(MapDrawings.m79_column_texture(Vector2i(2, 3)).resource_path.begins_with("res://assets/sprites/map/rendered/m79/column_"))
+
+
 ## T498 (RF-713 c, RF-714, D-210): la cabeza de ganado del desierto (niveles 10 a 12) es el PNG aprobado de 128 × 128 (variante 01,
 ## dos pares de cuernos); cada casilla que antes mostraba `huesos.svg` (retirado en T516) resuelve al arte nuevo y los datos no cambiaron.
 const DESERT_HASHES: Dictionary = {
@@ -129,8 +147,8 @@ func test_desert_bones_is_the_approved_128_png() -> void:
 	assert_eq(MapThemes.BONES.get_width(), 128)
 	assert_eq(MapThemes.BONES.get_height(), 128)
 	assert_true(MapThemes.BONES.get_image().detect_alpha() != Image.ALPHA_NONE, "tiene alfa")
-	assert_eq(MapThemes.BLOCKED[&"desierto"], [MapThemes.CACTUS, MapThemes.RED_ROCK, MapThemes.BONES, MapThemes.CACTUS,
-		MapThemes.RED_ROCK], "la misma lista de cinco: no cambia qué casilla usa cada dibujo")
+	assert_eq(MapThemes.BLOCKED[&"desierto"], [MapThemes.CACTUS, MapThemes.RED_ROCK[0], MapThemes.BONES, MapThemes.CACTUS,
+		MapThemes.RED_ROCK[1]], "la misma lista de cinco posiciones: cambia solo el arte")
 
 
 func test_desert_levels_use_the_new_bones_in_the_same_cells_and_data_is_untouched() -> void:
@@ -152,7 +170,7 @@ func test_desert_levels_use_the_new_bones_in_the_same_cells_and_data_is_untouche
 				if texture == MapThemes.BONES:
 					bones += 1
 				else:
-					assert_true(texture == MapThemes.CACTUS or texture == MapThemes.RED_ROCK, "(%d, %d) sigue siendo cactus o roca roja" % [x, y])
+					assert_true(texture == MapThemes.CACTUS or MapThemes.RED_ROCK.has(texture), "(%d, %d) sigue siendo cactus o roca roja" % [x, y])
 					others += 1
 		assert_eq(bones, DESERT_BONES_CELLS[number], "casillas con cabeza en el nivel %d" % number)
 		assert_gt(others, 0, "el cactus y la roca roja siguen en el nivel %d" % number)
