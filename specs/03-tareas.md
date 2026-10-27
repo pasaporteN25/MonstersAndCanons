@@ -3086,3 +3086,7 @@ Spec en **M80** (RF-716 a RF-719), razones y canon en **D-212**, el cómo en la 
 - [ ] **T534 · Completar textos ingleses y validar ambas lenguas. `[mobile+x86]`**
   **Refs:** RF-727, D-217. **Depende de:** T533 mergeada y revisión del inventario por Lucas. **Ficha:** `specs/tareas/T534-traduccion-ingles-completa.md`.
   **Hecho cuando:** todo texto normal visible por el jugador tiene inglés y español; no faltan placeholders/plurales/formatos; se habilita entonces el selector y se valida persistencia, guardados de progreso inalterados, Wiki/tutorial/modos/campaña y cuadros en PC y celular simulado; ninguna pantalla deja texto accidentalmente en español en modo inglés; GUT completo sin `SCRIPT ERROR`. No agregar doblaje ni idiomas extra.
+
+- [x] **T539 · Muestras de vegetación alienígena para la pradera. `[x86]`**
+  **Refs:** pedido de Lucas del 2026-10-27; T277/T524 y guía de arte §4–5. **Ficha:** `tareas/T539-muestras-flora-alienigena.md`.
+  **Resultado (2026-10-27):** se prepararon tres direcciones en `art/t539-flora-alien-review/`, con galería a 220/34 px y composiciones aproximadas para los niveles 1, 3, 4 y 5, que hoy usan `dibujo:flores`. XML SVG, JSON del manifiesto, hashes y enlaces locales verificados; sin cambios a `assets/`, `data/` ni runtime. Lucas todavía debe elegir o pedir cambios antes de producir e integrar; no se ejecutó Godot/GUT ni hubo captura real del juego.

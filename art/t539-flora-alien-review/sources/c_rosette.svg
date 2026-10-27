@@ -1,0 +1,20 @@
+<!-- Roseta estrellada de hojas carnosas con pequeña flor plegada; vista elevada lateral hacia la derecha; fondo transparente. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" stroke-linecap="round" stroke-linejoin="round">
+<defs><linearGradient id="leaf" x1="0" y1="0" x2=".25" y2="1"><stop offset="0" stop-color="#b0b49a"/><stop offset=".52" stop-color="#778c79"/><stop offset="1" stop-color="#455c55"/></linearGradient><linearGradient id="petal" x1="0" y1="0" x2=".25" y2="1"><stop offset="0" stop-color="#dcc1cb"/><stop offset=".52" stop-color="#af879f"/><stop offset="1" stop-color="#725d7b"/></linearGradient><linearGradient id="warm" x1="0" y1="0" x2=".25" y2="1"><stop offset="0" stop-color="#dfc4ae"/><stop offset=".52" stop-color="#bb958a"/><stop offset="1" stop-color="#806b76"/></linearGradient></defs>
+<!-- Apoyo discreto del mapa: dos elipses transparentes, sin filtro ni desenfoque. -->
+<ellipse cx="32" cy="55" rx="23" ry="4" fill="#2b2233" opacity=".08"/>
+<ellipse cx="32" cy="55" rx="16" ry="2.5" fill="#2b2233" opacity=".10"/>
+<g stroke="#2b2233" stroke-width="2">
+<!-- Láminas anchas, curvadas y desiguales: estrella orgánica, sin puntas de cristal. -->
+<path fill="url(#leaf)" d="M31 44C22 36 21 25 27 17C36 22 38 33 35 43Z"/>
+<path fill="url(#leaf)" d="M33 43C35 29 45 23 53 24C54 35 46 41 36 46Z"/>
+<path fill="url(#leaf)" d="M30 46C17 45 9 38 8 29C20 27 29 34 33 42Z"/>
+<path fill="url(#leaf)" d="M34 43C46 37 54 39 59 46C52 55 42 54 33 48Z"/>
+<path fill="url(#leaf)" d="M32 44C24 39 13 45 7 51C16 58 28 56 34 49Z"/>
+<path fill="url(#leaf)" d="M33 44C41 45 45 51 43 58C33 59 27 54 28 49Z"/>
+<!-- Flor central plegada y pequeña, sin corola terrestre. -->
+<path fill="url(#petal)" d="M25 43C22 37 27 32 32 35C34 29 42 32 42 37C48 40 40 48 34 49C29 49 26 47 25 43Z"/>
+<path fill="url(#warm)" d="M28 41Q35 37 40 40Q36 47 30 46Z"/>
+<path d="M13 32Q22 32 27 39" fill="none" stroke="#d4d7b7" stroke-width="2.2"/>
+</g>
+</svg>

@@ -1,0 +1,16 @@
+<!-- Flor alienígena de láminas anulares espiraladas y tallo corto; vista elevada lateral hacia la derecha; fondo transparente. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" stroke-linecap="round" stroke-linejoin="round">
+<defs><linearGradient id="leaf" x1="0" y1="0" x2=".25" y2="1"><stop offset="0" stop-color="#b0b49a"/><stop offset=".52" stop-color="#778c79"/><stop offset="1" stop-color="#455c55"/></linearGradient><linearGradient id="petal" x1="0" y1="0" x2=".25" y2="1"><stop offset="0" stop-color="#dcc1cb"/><stop offset=".52" stop-color="#af879f"/><stop offset="1" stop-color="#725d7b"/></linearGradient><linearGradient id="warm" x1="0" y1="0" x2=".25" y2="1"><stop offset="0" stop-color="#dfc4ae"/><stop offset=".52" stop-color="#bb958a"/><stop offset="1" stop-color="#806b76"/></linearGradient></defs>
+<!-- Apoyo discreto del mapa: dos elipses transparentes, sin filtro ni desenfoque. -->
+<ellipse cx="32" cy="55" rx="23" ry="4" fill="#2b2233" opacity=".08"/>
+<ellipse cx="32" cy="55" rx="16" ry="2.5" fill="#2b2233" opacity=".10"/>
+<g stroke="#2b2233" stroke-width="2">
+<path fill="url(#leaf)" d="M28 54Q34 45 30 34L37 33Q34 47 38 55Z"/>
+<path fill="url(#leaf)" d="M32 53C19 56 10 50 9 42C22 40 29 43 32 53ZM35 53C39 40 49 40 56 43C54 52 46 56 35 53Z"/>
+<!-- Tres láminas carnosas enrolladas; hueco irregular abierto a la derecha. -->
+<path fill="url(#petal)" d="M48 23C45 12 33 10 22 15C9 21 10 36 20 41C28 45 35 41 38 36C25 40 19 33 22 26C25 18 38 17 43 25Z"/>
+<path fill="url(#warm)" d="M26 17C37 11 50 17 52 27C54 37 47 43 37 42L28 38C40 39 46 33 43 27C41 23 36 22 31 24Z"/>
+<path fill="url(#petal)" d="M21 27C19 35 28 40 36 36C40 34 42 30 40 27C36 31 31 32 28 29C25 27 27 24 31 24L32 19C26 18 22 21 21 27Z"/>
+<path d="M17 27Q19 19 28 18" fill="none" stroke="#f0d9d8" stroke-width="2.2"/>
+</g>
+</svg>

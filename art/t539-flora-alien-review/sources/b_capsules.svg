@@ -1,0 +1,17 @@
+<!-- Hongo-flor bajo de cápsulas asimétricas y hojas basales; vista elevada lateral hacia la derecha; fondo transparente. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" stroke-linecap="round" stroke-linejoin="round">
+<defs><linearGradient id="leaf" x1="0" y1="0" x2=".25" y2="1"><stop offset="0" stop-color="#b0b49a"/><stop offset=".52" stop-color="#778c79"/><stop offset="1" stop-color="#455c55"/></linearGradient><linearGradient id="petal" x1="0" y1="0" x2=".25" y2="1"><stop offset="0" stop-color="#dcc1cb"/><stop offset=".52" stop-color="#af879f"/><stop offset="1" stop-color="#725d7b"/></linearGradient><linearGradient id="warm" x1="0" y1="0" x2=".25" y2="1"><stop offset="0" stop-color="#dfc4ae"/><stop offset=".52" stop-color="#bb958a"/><stop offset="1" stop-color="#806b76"/></linearGradient></defs>
+<!-- Apoyo discreto del mapa: dos elipses transparentes, sin filtro ni desenfoque. -->
+<ellipse cx="32" cy="55" rx="23" ry="4" fill="#2b2233" opacity=".08"/>
+<ellipse cx="32" cy="55" rx="16" ry="2.5" fill="#2b2233" opacity=".10"/>
+<g stroke="#2b2233" stroke-width="2">
+<path fill="url(#leaf)" d="M26 54Q30 44 24 33L30 31Q36 44 34 55ZM37 53Q43 42 44 37L49 37Q49 49 43 55Z"/>
+<path fill="url(#leaf)" d="M30 54C17 56 10 51 8 43C20 40 29 45 30 54ZM34 54C37 42 47 44 57 46C53 55 44 57 34 54Z"/>
+<!-- Cápsula mayor torcida, vientre plegado y dos crecimientos desparejos. -->
+<path fill="url(#petal)" d="M12 29C13 20 25 16 34 20C43 24 41 33 34 38C27 43 21 39 18 35C14 36 10 34 12 29Z"/>
+<path fill="url(#warm)" d="M18 35Q27 30 36 32Q32 43 24 41Q19 40 18 35Z"/>
+<path fill="url(#warm)" d="M40 29C45 25 52 28 55 34C59 43 50 46 44 42C39 39 37 33 40 29Z"/>
+<path fill="url(#petal)" d="M9 45C8 39 13 35 18 38C22 40 21 47 16 49C12 50 10 48 9 45Z"/>
+<path d="M17 27Q23 21 30 23" fill="none" stroke="#f0d9d8" stroke-width="2.2"/>
+</g>
+</svg>
