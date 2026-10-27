@@ -1,6 +1,6 @@
 {
   "task": "T523",
-  "status": "Muestras sin integrar; aprobación de Lucas pendiente",
+  "status": "Sin integrar; cactus y campamento revisados pendientes de Lucas; otros cuatro motivos con visto bueno 2026-10-26",
   "date": "2026-10-26",
   "author": "Codex (OpenAI)",
   "model": "gpt-6.1-sol",
@@ -8,7 +8,7 @@
   "tool": {
     "python": "3.14.4",
     "pillow": "12.1.1",
-    "renderer": "Pillow procedural supersampling 3x + derivados cromáticos de PNG propios",
+    "renderer": "Revisión cactus/campamento: image_gen nativo, raster original preservado y reducción uniforme Pillow a caja 112x112 en RGBA 128x128; ocho PNG aprobados leídos sin reescritura",
     "resampling": "Lanczos, aproximación de revisión; no emula GPU de Godot"
   },
   "sprite_size": [
@@ -24,7 +24,126 @@
     64,
     34
   ],
-  "seed_policy": "Semillas fijas literales en generate_samples.py; sin aleatoriedad global",
+  "seed_policy": "Reproducción determinista desde fuentes raster preservadas; regenerar con IA desde prompts no garantiza el mismo raster",
+  "revision_provenance": {
+    "date": "2026-10-26",
+    "author": "Codex gpt-6.1-sol, esfuerzo medio",
+    "reproduction": "Raster IA no determinista desde prompt; fuentes preservadas para reproducción exacta con Pillow sin red.",
+    "images": [
+      {
+        "name": "cactus_01",
+        "source": "sources/generated/cactus_01.png",
+        "prompt": "Use case: stylized-concept. Create ONE isolated game map decoration sprite: a living desert cactus, option 01. Hand-painted dimensional game art consistent with the rocks in reference_board.png: organic solid volumes, rough matte painted material, soft upper-left illumination, discreet contact shadow, elevated orthographic three-quarter view. Cactus is a weathered saguaro with subtly bowed tapering thick ribbed trunk, unequal undulating ribs, tiny clustered ivory spines and corky base. One older low branch curves left and upward with irregular elbow, a much shorter young side shoot on right at a different height. Strongly asymmetrical, naturally grown, never a regular cactus icon, pipes, right angles or symmetrical arms. Muted sage olive green with warm sunlit rib edges, deep cool green grooves, no face, flower or colored fruit. Entire object fully inside square canvas with 9% transparent margin; use nearly full height, broad recognizable silhouette at 34px. No ground tile, no surrounding scenery, no pedestal, no tower, no text. True transparent background. Reference image is style only, do not copy its objects.",
+        "tool": "image_gen.imagegen (herramienta nativa)",
+        "model": "No expuesto por la herramienta; no se atribuye gpt-6.1-sol al modelo de imagen",
+        "transparent_background": true,
+        "reference_image": "sources/references/generation_reference_board.png",
+        "original_output": "/home/newman/.codex/generated_images/01a17ae0-83d8-7b32-a220-09875848552a/exec-28548dce-8a65-4696-8028-ccb98d7d9a8e.png",
+        "reference_input_note": "Copia exacta de reference_board.png tal como se envió a la herramienta, antes de actualizar su rótulo."
+      },
+      {
+        "name": "cactus_02",
+        "source": "sources/generated/cactus_02.png",
+        "prompt": "Use case: stylized-concept. ONE isolated desert cactus game decoration, option 02, genuinely transparent background. Hand-painted dimensional material and elevated orthographic 3/4 view like the rock game sprites in the attached style reference; soft light upper left, very small contact shadow. Distinct squat clustered old cactus: three unequal ribbed fleshy stems grow together from an irregular corked root, tallest thick stem bends slightly toward right, left stem shorter leans outward, tiny offset new shoot at bottom right. Non-symmetric natural columnar desert plant with irregular swollen lobes and deep sinuous longitudinal ribs, sparse ivory spine clusters catching light. No straight pipe arms, no geometric right-angle elbows, no matching silhouettes, no glossy plastic, no outline icon. Muted dusty olive/sage green, warm pale upper-left edges, dark cool-green creases, small tan healed scars. Readable simple plant mass at 34px, a few thicker ribs survive reduction. No platform, pedestal, tower, face, flowers, text, loose equipment, terrain tile or scenery. Entire plant and shadow within square canvas with 9% clear transparent margin. Use full useful height, style reference only do not copy rocks.",
+        "tool": "image_gen.imagegen (herramienta nativa)",
+        "model": "No expuesto por la herramienta; no se atribuye gpt-6.1-sol al modelo de imagen",
+        "transparent_background": true,
+        "reference_image": "sources/references/generation_reference_board.png",
+        "original_output": "/home/newman/.codex/generated_images/01a17ae0-83d8-7b32-a220-09875848552a/exec-931571cc-5aeb-4a6a-9e8b-f2ac65dc02b7.png",
+        "reference_input_note": "Copia exacta de reference_board.png tal como se envió a la herramienta, antes de actualizar su rótulo."
+      },
+      {
+        "name": "empty_camp_01",
+        "source": "sources/generated/empty_camp_01.png",
+        "prompt": "Use case: stylized-concept. ONE isolated abandoned empty campsite game map sprite, option 01, true transparent background. Dimensional hand-painted matte game art matching attached rock style reference, elevated orthographic three-quarter view, soft upper-left lighting and discreet contact shadow. Main silhouette a broken ochre canvas lean-to, partially collapsed but still clearly a ruined shelter: one exposed leaning forked wooden pole, snapped ridge pole, sagging torn canvas draped diagonally from the remaining support into thick folds on ground. Wide dark triangular empty interior visible under the cloth. Shelter fills upper-left two thirds of useful sprite. Foreground right, clearly separated from cloth by transparent gap: large extinguished stone firepit, a thick elliptical ring of 7 chunky pale grey stones surrounding dark charcoal ash center and two burnt black logs; no flames or glowing embers. Firepit approximately one third of sprite width so circle and dark center remain clear at 34px. Make structure and drooping fabric clearly readable at 34px; broad folds and bold masses, no tiny clutter. Warm faded tan canvas contrasts with dark timber and grey firepit. Everything fits a single square tile with 8% clear transparent margin, nearly full useful width and 70% useful height. No people, flags, emblems, text, crates, barrels, weapons, workbench, loot, machinery, intact building, tower, terrain patch or scenery. Reference for material/view/light only.",
+        "tool": "image_gen.imagegen (herramienta nativa)",
+        "model": "No expuesto por la herramienta; no se atribuye gpt-6.1-sol al modelo de imagen",
+        "transparent_background": true,
+        "reference_image": "sources/references/generation_reference_board.png",
+        "original_output": "/home/newman/.codex/generated_images/01a17ae0-83d8-7b32-a220-09875848552a/exec-e083dddb-44e4-46f5-ba06-58afe5da01ed.png",
+        "reference_input_note": "Copia exacta de reference_board.png tal como se envió a la herramienta, antes de actualizar su rótulo."
+      },
+      {
+        "name": "empty_camp_02",
+        "source": "sources/generated/empty_camp_02.png",
+        "prompt": "Use case: stylized-concept. ONE isolated abandoned empty campsite map decoration sprite, option 02, transparent background. Dimensional hand-painted game art, rough matte surfaces, elevated orthographic three-quarter view matching attached game rocks, soft upper-left illumination, minimal contact shadow. A ruined faded grey-khaki canvas A-frame shelter, off center to right, with one side fallen down: exposed crossed wooden poles at upper right and a visibly snapped ridge stick, draped cloth sagging in heavy angular organic folds to left, torn ragged open entrance with broad dark empty void. Not an intact usable tent. Shelter occupies upper two thirds of useful height, substantial silhouette even at 34px. A separate large extinguished firepit sits foreground left, separated from canvas: thick oval ring of 7 chunky pale grey stones, very dark charcoal center, two black burnt log remnants, no flame or glow. Firepit one third sprite width, strong ring and center contrast readable at 34px. Broad readable folds and exposed structure, nothing else. Whole group stays within one square footprint with 8% clear transparent margins, use almost full useful width. No figures, flag, emblem, text, crates, barrels, tools, weapon, loot, platform, tower, workbench, intact building, ground tile or scenic background. Image reference only for dimensional painted style/material/light.",
+        "tool": "image_gen.imagegen (herramienta nativa)",
+        "model": "No expuesto por la herramienta; no se atribuye gpt-6.1-sol al modelo de imagen",
+        "transparent_background": true,
+        "reference_image": "sources/references/generation_reference_board.png",
+        "original_output": "/home/newman/.codex/generated_images/01a17ae0-83d8-7b32-a220-09875848552a/exec-1a42a578-57dc-487a-82c9-f4364418105a.png",
+        "reference_input_note": "Copia exacta de reference_board.png tal como se envió a la herramienta, antes de actualizar su rótulo."
+      }
+    ]
+  },
+  "protected_variants": {
+    "variants/statue_02.png": "7c9b4523a47816e3ca843af3d90a163b984b6a70af57b345483761e67d5bbd98",
+    "variants/column_01.png": "2cc399e29d28409adfc7c1fa005a0a9452b38723b2d945903e658fd89d11dab7",
+    "variants/red_rock_02.png": "701fe5e3b30552dc29aa1fdc95a2935855b56753716b6145ed044c2942acfac8",
+    "variants/statue_01.png": "c91cd2b9b120fcf261b2621c458692e6ba6f46b1ad326708c4dde8ffe11541ca",
+    "variants/block_01.png": "7fdba505070e91d7beb18b632ff142191a0b7fd3e904eec046053778760cf8ad",
+    "variants/column_02.png": "5c84884349a9750db2fdd1f1f40ae29c246046d12c5d10be95d2d32f62e4d720",
+    "variants/red_rock_01.png": "a8786f48674ffd28d6574f3dccfe7ec8f6f22c9cd014ceac2f6b18839a01b32d",
+    "variants/block_02.png": "9b08130daafe240516797babb7c97eebd8ce32150941a0f57105b394766d0daf"
+  },
+  "source_files": [
+    {
+      "file": "prompts.md",
+      "sha256": "ad2b4d6853257320c91e97b1c57091e2b46804677033c3577c918790ca4a987c"
+    },
+    {
+      "file": "report.md",
+      "sha256": "26162e764992a3d379e460a58f4309a96fb8ffd9e4ac552c45c134258f4e4089"
+    },
+    {
+      "file": "sources/compositions.json",
+      "sha256": "bd8f08330ecb32f32361db5e617dc98455e07b35fd60eb865b6d0e82d962b083"
+    },
+    {
+      "file": "sources/external_verification.json",
+      "sha256": "40b6e653ef4443d1e32e1da41c16d6fce269c6065e38b3ea925abfd34755e89e"
+    },
+    {
+      "file": "sources/generate_samples.py",
+      "sha256": "722b2d6edd665d3d0cc111940fe8415af41be82797c67dd9e33ed265df614a43"
+    },
+    {
+      "file": "sources/generation.json",
+      "sha256": "9c5c7196c9ca456558d379054bed20e19594f757d60cd85e13b00e1cdb8c3970"
+    },
+    {
+      "file": "sources/iterations/initial/generate_samples.py",
+      "sha256": "a717add253c582f0612de1072a6613f13070428c0be590b0296a3835593be6d1"
+    },
+    {
+      "file": "sources/iterations/initial/manifest.json",
+      "sha256": "3ac1f9261eb6c6f35530b7d270ca10d199fe3cff9e7f2ff05e9938f37288e909"
+    },
+    {
+      "file": "sources/iterations/initial/prompts.md",
+      "sha256": "2c0ea4399995edc07bbdd19b4b1e6cc2411299aac518f8d9a3b9398672644e3d"
+    },
+    {
+      "file": "sources/iterations/initial/protected_hashes.json",
+      "sha256": "b33f88918d29eb521bab9b757ac55f8dd8b5269944f819886d742e86da77bf46"
+    },
+    {
+      "file": "sources/references/level_10.json",
+      "sha256": "21af960b29532957099e39c7b97c7c7ed101e3e5ef2646c003bfc091607e7fdf"
+    },
+    {
+      "file": "sources/references/level_14.json",
+      "sha256": "150929389daa85941b826cbca70aaa9f25b73f97b95ea38149afa2e057112a20"
+    },
+    {
+      "file": "sources/references/level_15.json",
+      "sha256": "0e67f0becbaa63a93af17edf3fab828216fd51a6979f7fa34d9f7e089a1baaa3"
+    },
+    {
+      "file": "sources/verify_samples.py",
+      "sha256": "ed7fbad113e27be307f4c17ca4c2aa7eccc215a6a90e31a8a390f2045d15a4be"
+    }
+  ],
   "inputs": [
     {
       "original_path": "assets/sprites/towers/rendered/cannon_atlas.png",
@@ -140,7 +259,7 @@
         616,
         539
       ],
-      "sha256": "860f7a120d6fdb57ea98a81e4d589cb1b49cb451ae5dad26adacdca4c6ddaa52"
+      "sha256": "9e8ad7a09a31b2c86a3dfa091e645deba153e4b95ca3aa3ddd8e8494a2bbbc59"
     },
     {
       "file": "contact_034_transparent.png",
@@ -159,7 +278,7 @@
         580,
         489
       ],
-      "sha256": "58d9695b28f81071de0166d1064a4b584b54e0935e2c9d1f0cf319a2737f3005"
+      "sha256": "99a4445fee11f9071c2484c3195f3c8dd5043b1be8917e248fd112233a0aac18"
     },
     {
       "file": "contact_064_context.png",
@@ -178,7 +297,7 @@
         616,
         719
       ],
-      "sha256": "ec95035042e1ea5ef82d3462b9c736982818a0c36a2a1e978758883352a8759a"
+      "sha256": "94744c29044e9b641cd6ad12bfd4268665fcdacd1c1b50c10d3c8f909012b50c"
     },
     {
       "file": "contact_064_transparent.png",
@@ -197,7 +316,7 @@
         580,
         669
       ],
-      "sha256": "99c667d193576dd930f0aa394d2e890156856e41c8f6606154c891b88733c40d"
+      "sha256": "f0901b0802b845c7afe10f78bc4ae6599818405afdd1b37da81f35f85587ca37"
     },
     {
       "file": "contact_220_context.png",
@@ -216,7 +335,7 @@
         996,
         1655
       ],
-      "sha256": "330fcaef96bf0f30b2abbb93c01dc7af7e4072fb4d2217f3ad9ae7ca46da5e58"
+      "sha256": "9b06047c8818b3b92fb2a1ba0df3a62db8b265f15ad6938379707d3261f3e899"
     },
     {
       "file": "contact_220_transparent.png",
@@ -235,7 +354,7 @@
         962,
         1605
       ],
-      "sha256": "8a94bb05c39db57945cc74ec9cbf9ba785cde918d5cbb149852bc7c460af2232"
+      "sha256": "5af0bbff005a104b6b9950dfa613001be1bb39f23fdb80df7d7757f34e4dc273"
     },
     {
       "file": "context_level_10_01.png",
@@ -254,7 +373,7 @@
         1280,
         780
       ],
-      "sha256": "b9a92185a59a568c7fdfa1298b724150bf35fd74bf38cdb504c300b2576fbd87"
+      "sha256": "dac260194c189248f88b90d19b7d71e6bb3b34d2ed9b699d5e87f6fd9c75bb46"
     },
     {
       "file": "context_level_10_02.png",
@@ -273,7 +392,7 @@
         1280,
         780
       ],
-      "sha256": "2e9987745e900d43aff2af8eb789332eb11b61534f33ba4938b05aab5f7b8e7b"
+      "sha256": "7622b3ffddc770e9ae497d5b63aeacab19e36f27f72adde47430488607af29e2"
     },
     {
       "file": "context_level_14_01.png",
@@ -292,7 +411,7 @@
         1280,
         780
       ],
-      "sha256": "3f302b73c226c665e734f1c26fba500bef1f271deb8314816d6396967e2e3555"
+      "sha256": "46a04b351068364dcdb8d4c10f7a07586ce1c80d4652b9c0e2e84787216adb56"
     },
     {
       "file": "context_level_14_02.png",
@@ -311,7 +430,7 @@
         1280,
         780
       ],
-      "sha256": "7dea473ba2f1c65219f993d4a45cf8ee4866be70a42191eba3e404c4dbf18238"
+      "sha256": "668172f4146e8174f1aa984cac96d6e09f7bfc1cc21b9357195a7961445f250b"
     },
     {
       "file": "context_level_15_01.png",
@@ -330,7 +449,7 @@
         1280,
         780
       ],
-      "sha256": "f104777b1c05b88f31908b0a27a73682b2a577f2ab2ded616fd40163c8907dfc"
+      "sha256": "e5d2c7b75e3b03dba4e33e8a6b9c124f5276d0a86b6938b640e3bb47393bbc63"
     },
     {
       "file": "context_level_15_02.png",
@@ -349,7 +468,7 @@
         1280,
         780
       ],
-      "sha256": "a9d1661e3aa522fa5b6719bbb3fa235b2e2431da3041c04c1ffdb02943a7ce00"
+      "sha256": "b18bbc88ce0e11c35cbf58fccf6a031d6b359372bedaa273457a46eebd898120"
     },
     {
       "file": "reference_board.png",
@@ -368,7 +487,159 @@
         900,
         340
       ],
-      "sha256": "24ee57473dac18b5c2e1dad74621520333c0fb1b3a5e4c9d4866709c032fc594"
+      "sha256": "ea25af12c0c1804d6373fcf914ecf24a930aab6e894c350ecb80c30e23a1c50e"
+    },
+    {
+      "file": "sources/generated/cactus_01.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "alpha_bbox": [
+        0,
+        31,
+        1214,
+        1254
+      ],
+      "sha256": "dd7d1bfc9a498f801d0bef5f5604ccd7b9f8c663022b90b92a38f7d2adfdf784"
+    },
+    {
+      "file": "sources/generated/cactus_02.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "alpha_bbox": [
+        0,
+        15,
+        1240,
+        1238
+      ],
+      "sha256": "0980f5a7ccafb9fe6dcb4b0b168ebb702b5c82d91766f4169fbd3633861e593b"
+    },
+    {
+      "file": "sources/generated/empty_camp_01.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "alpha_bbox": [
+        0,
+        23,
+        1251,
+        1254
+      ],
+      "sha256": "4232e09b13c2fb18808963e1128f1304fbe35977a925d7ff43c83039657a2275"
+    },
+    {
+      "file": "sources/generated/empty_camp_02.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "alpha_bbox": [
+        0,
+        23,
+        1244,
+        1254
+      ],
+      "sha256": "468479cd6b324035f3364849d098640ce4de8a1b058afbd5cc54c36b5ada6da5"
+    },
+    {
+      "file": "sources/iterations/initial/cactus_01.png",
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "alpha_bbox": [
+        21,
+        12,
+        100,
+        123
+      ],
+      "sha256": "b71b9f6ea220db8ee8ca83a66d96251f31aadaa332d56a9560a4830cd4c6e07c"
+    },
+    {
+      "file": "sources/iterations/initial/cactus_02.png",
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "alpha_bbox": [
+        24,
+        18,
+        109,
+        125
+      ],
+      "sha256": "c509dabbd16f51eb088693bb06faa7e24fcc35d6f83aa972bdfa03d79dc9cdff"
+    },
+    {
+      "file": "sources/iterations/initial/empty_camp_01.png",
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "alpha_bbox": [
+        15,
+        66,
+        112,
+        117
+      ],
+      "sha256": "8db77e2908ba3aad1c681b582dedcf907ab5beab14ba688e259c6502e9191cd8"
+    },
+    {
+      "file": "sources/iterations/initial/empty_camp_02.png",
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "alpha_bbox": [
+        15,
+        71,
+        112,
+        117
+      ],
+      "sha256": "022e9e863f2e49f69905bc55a32624f0656ec332c3f86c128b2ac603f6c7cf2d"
     },
     {
       "file": "sources/references/antes-nivel-10-1280x720.png",
@@ -483,6 +754,25 @@
         236
       ],
       "sha256": "e0621a0ccadfdd62c79eb8b085f574f911b6305175fee13d63998ccc47e9fc4d"
+    },
+    {
+      "file": "sources/references/generation_reference_board.png",
+      "size": [
+        900,
+        340
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        255,
+        255
+      ],
+      "alpha_bbox": [
+        0,
+        0,
+        900,
+        340
+      ],
+      "sha256": "24ee57473dac18b5c2e1dad74621520333c0fb1b3a5e4c9d4866709c032fc594"
     },
     {
       "file": "sources/references/ground_desierto.png",
@@ -743,12 +1033,12 @@
         255
       ],
       "alpha_bbox": [
-        21,
-        12,
-        100,
-        123
+        25,
+        9,
+        102,
+        119
       ],
-      "sha256": "b71b9f6ea220db8ee8ca83a66d96251f31aadaa332d56a9560a4830cd4c6e07c"
+      "sha256": "9e267145119a89d7b67b6ad90b4540a65707c5320d1e040fe1dae1662d6d0995"
     },
     {
       "file": "variants/cactus_02.png",
@@ -762,12 +1052,12 @@
         255
       ],
       "alpha_bbox": [
-        24,
-        18,
-        109,
-        125
+        14,
+        12,
+        106,
+        114
       ],
-      "sha256": "c509dabbd16f51eb088693bb06faa7e24fcc35d6f83aa972bdfa03d79dc9cdff"
+      "sha256": "fbf2b7edbbcce39aa985e3d2eeb364f933a6c6a6a400559835fda05cf355842d"
     },
     {
       "file": "variants/column_01.png",
@@ -819,12 +1109,12 @@
         255
       ],
       "alpha_bbox": [
-        15,
-        66,
-        112,
-        117
+        10,
+        12,
+        118,
+        111
       ],
-      "sha256": "8db77e2908ba3aad1c681b582dedcf907ab5beab14ba688e259c6502e9191cd8"
+      "sha256": "06d7ac9744269275b1bbf3ef328e75d20a281478f4c99ecc7af242f2ad0932de"
     },
     {
       "file": "variants/empty_camp_02.png",
@@ -838,12 +1128,12 @@
         255
       ],
       "alpha_bbox": [
+        10,
         15,
-        71,
-        112,
-        117
+        120,
+        115
       ],
-      "sha256": "022e9e863f2e49f69905bc55a32624f0656ec332c3f86c128b2ac603f6c7cf2d"
+      "sha256": "e46833d3797e25ddc596b947e0239cc050e9c15574b0f0d1f85f230aabc340d9"
     },
     {
       "file": "variants/red_rock_01.png",

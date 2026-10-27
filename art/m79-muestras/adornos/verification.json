@@ -3,11 +3,17 @@
   "rgba_128": true,
   "transparent_corners": true,
   "partial_alpha": true,
-  "png_hashes_checked": 42,
+  "png_hashes_checked": 51,
   "source_hashes_checked": 19,
+  "protected_variants_unchanged": 8,
+  "initial_versions_preserved": 4,
+  "revised_variants": 4,
+  "transparent_borders": true,
+  "composition_outside_cells_unchanged": 6,
+  "reproduced_from_tmp": true,
+  "asset_output_scope": "Solo art/m79-muestras/adornos/",
   "result": "PASS",
   "runtime_tested": false,
   "mobile_tested": false,
-  "performance_tested": false,
-  "asset_output_scope": "Solo art/m79-muestras/adornos/; el estado T523 se registra por separado en specs/03-tareas.md."
+  "performance_tested": false
 }
