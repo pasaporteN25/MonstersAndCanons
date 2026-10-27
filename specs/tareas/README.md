@@ -145,3 +145,7 @@ Las fichas [T523](T523-muestras-adornos-m79.md) y [T524](T524-integrar-adornos-m
 ## 18. Galería M79 para aprobación visual · T526
 
 [T526](T526-galeria-aprobacion-m79.md) presenta las opciones nuevas de cactus y campamento de [T523/T525](../../art/m79-muestras/adornos/revision.html) a detalle, a 34 px y sobre mapas de muestra. Lucas elige una variante por motivo o pide cambios; esta página no envía ni guarda elecciones. T524 sigue esperando T508 y el OK visual explícito.
+
+## 19. Cadena de abastecimiento de La Central · T527
+
+[T527](T527-revision-decoracion-abastecimiento.md) identifica `supply_cart`, `supply_line_pole` y `supply_depot` en el nivel 15. La galería `../../art/t527-abastecimiento/revision.html` propone nave y taller en estados arruinado/restaurado, y reutilizar los lingotes existentes para el poste. Todo queda como concepto pendiente de aprobación; no hay integración ni alternancia actual por zona controlada.

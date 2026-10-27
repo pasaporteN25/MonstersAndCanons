@@ -1,0 +1,12 @@
+{
+  "task": "T527",
+  "purpose": "muestra conceptual pendiente de aprobación; no es arte final ni se integra al juego",
+  "generator": "image_gen.imagegen",
+  "outputs": ["sources/conceptos.png", "sources/referencia-nivel15.png"],
+  "review": {
+    "gameplay_changes": false,
+    "assets_integrated": false,
+    "godot_or_gut_run": false,
+    "approval_required": true
+  }
+}
