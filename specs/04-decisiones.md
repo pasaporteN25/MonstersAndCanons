@@ -1879,3 +1879,13 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Motivo:** la vista actual concentra controles y contenido en una columna rígida y deja mal aprovechado el espacio; Mesa de mando da jerarquía y navegación acorde con la UI actual. El mapa y las tarjetas ya están aprobados como contenido y no necesitan rediseño interno.
 - **Alcance:** RF-723 regula el marco y distribución; T520 implementa y verifica. No agrega arte, modos, datos ni reglas de selección. T520 depende de T519 integrado. Los PR de spec y código apuntan ambos a `main`; el de código explica esa dependencia.
 - **Riesgo/condición:** no afirmar prueba de celular real. Si Mesa de mando exige cambiar el contenido visual o la interacción aprobada del atlas o las tarjetas, se conserva lo existente y se consulta a Lucas antes de ampliar el alcance.
+
+## D-216 · Pasar las partidas manuales de campaña a después de V1 (2026-10-27)
+
+- **Decidió:** Lucas, respuesta explícita del 2026-10-27.
+- **Qué:** las pruebas manuales de campaña T280 (niveles 2 y 7), T226 (6–10), T283 (nivel 9 con Mortero), su sesión conjunta T453 y T238 (campaña completa 1–15 en PC y celular, desde un guardado nuevo) se hacen después de publicar V1. T266 queda abierta hasta la validación humana de T280, pero esa validación deja de bloquear la publicación. T239 ya no depende de T238; puede usar las capturas vigentes de T236. T238 pasa a ser seguimiento de la versión publicada y cualquier problema se registra como tarea para una actualización, sin cambiar silenciosamente la versión publicada.
+- **Guardados:** no se prueba ni migra el guardado viejo del primer tester. La campaña post-V1 comienza desde cero. El análisis de guardados nuevos para balance/rendimiento sigue diferido hasta después de V1, como quedó registrado en T522.
+- **T268:** sigue antes de V1 para preparar/identificar la build y sostener el checklist de publicación. No se valida el archivo viejo del tester; la lista de salida de 1.0.0 está en T375.
+- **Motivo:** Lucas quiere cerrar/publicar la V1 antes de invertir en las partidas completas; el guardado anterior ya quedó en el pasado y la validación se hará sobre el guardado nuevo.
+- **Alternativa descartada:** mantener T238 como compuerta de T239 y dejar toda la campaña manual dentro del cierre previo a publicar.
+- **Riesgo aceptado:** la versión publicada todavía no tendrá resultados de esas partidas humanas; si muestran un defecto, habrá que priorizar y publicar una actualización. La decisión no marca pruebas como hechas ni reemplaza pruebas de código, mediciones ni la revisión de arte.

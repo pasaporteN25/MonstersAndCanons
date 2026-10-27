@@ -1,6 +1,6 @@
 # T239 · Publicación (código fuente y página)
 
-- **Ejecutor:** **Lucas** decide y publica; Sonnet 5.5 · esfuerzo **bajo** prepara los textos · **Depende de:** T238 (y, si la intro entra en la 1.0, T242) · **Tamaño:** chico
+- **Ejecutor:** **Lucas** decide y publica; Sonnet 5.5 · esfuerzo **bajo** prepara los textos · **Depende de:** T268/T375 y, si la intro entra en la 1.0, T242; **no depende de T238** (D-216) · **Tamaño:** chico
 
 ## Antes de publicar (Sonnet bajo prepara, Lucas confirma cada paso)
 1. **Código fuente (GPL, D-077 y Q-05):**
@@ -9,7 +9,7 @@
    - **Pasar el repositorio a público y crear la etiqueta `v1.0` lo hace Lucas**, porque son acciones visibles para todos.
 2. **Página** (itch.io u otra, según Q-05): borrador del texto en `specs/publicacion/pagina.md`, con:
    - descripción corta y larga;
-   - capturas (de T236 o T238);
+   - capturas vigentes de T236 (la partida T238 se hará post-V1);
    - requisitos;
    - licencia y enlace al código;
    - "Hecho con Godot" y su aviso MIT (RF-387).

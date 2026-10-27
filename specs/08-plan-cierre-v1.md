@@ -8,7 +8,7 @@ Fecha: 2026-10-07. Lo preparó Claude (Opus 5.5) a pedido de Lucas, a partir de 
 >
 > **Fuera de este plan (Lucas, 2026-10-07):** M&C 3D (documento 06), M&C 2 y Épocas. Tampoco se adelanta nada técnico pensado solo para el 3D, como separar la simulación de la vista.
 >
-> **Estado vigente (2026-10-23, auditoría T444):** en las fases 0 a 6 están hechas las tareas de spec, código y datos, salvo el resto de T235; siguen abiertas las de arte con compuerta (T216, T218 a T221 y T233) y la partida T226. En la fase 7 están hechas T236 y T237, y la intro (fase 8) está hecha. Lo que falta para cerrar la V1, ordenado y con qué falta exactamente, está al principio de [`03-tareas.md`](03-tareas.md#qué-falta-para-cerrar-la-v1--vista-de-la-auditoría-t444-2026-10-23): las partidas de Lucas (T280, T226, T283 y T238), T266, T267 y T268 antes del reenvío, el resto de T235, el arte con compuerta y la publicación (T239). Las secciones 2, 6 y 7 conservan el plan original del 2026-10-07, con algunas marcas ✅ y el «Orden vigente» de §7 agregados; el estado de cada tarea manda en el tablero.
+> **Estado vigente (actualizado por D-216, 2026-10-27):** el cierre de V1 ya no espera las partidas manuales de campaña. El trabajo previo sigue incluyendo las compuertas de arte que Lucas elija como requisito, la revisión visual T267, la preparación de build/checklist T268/T375 y la publicación T239. T280, T226, T283, T453 y T238 quedan como validación post-V1. La auditoría T444 y sus resultados originales se conservan como fotografía histórica; el tablero `03-tareas.md` tiene el orden vigente.
 
 ---
 
@@ -93,8 +93,8 @@ Las compuertas 🚦 son los puntos donde **se pide intervención de Lucas**. Un 
 | **3 · Sistemas** | El código, con arte provisional. | — |
 | **4 · Disruptora** | Spec, arte y código. | 🎨 concepto de arte (T216) |
 | **5 · Arte del bloque 2** | Codex: señales, removibles, extracción e íconos. | 🎨 cada ficha de arte |
-| **6 · Campaña** | Retoque de 1 a 9, nivel 10, partida de Lucas, y después 11 a 15 con el lore. | 🚦 **G4**: Lucas juega del 6 al 10 (T226) |
-| **7 · Candidato de entrega** | Regresión, marca, exportaciones y partida completa. | 🚦 **G5**: Lucas juega del 1 al 15 (T238) |
+| **6 · Campaña** | Retoque de 1 a 9, nivel 10, y después 11 a 15 con el lore. Las partidas humanas se validan post-V1. | T226 / G4 post-V1 |
+| **7 · Publicación y validación posterior** | Regresión, marca, exportaciones y entrega de V1; después, campaña completa desde guardado nuevo. | T239 publica; G5/T238 post-V1 |
 | **8 · Intro** | Guion, láminas e integración. **Va última.** | 🚦 **G6**: Lucas aprueba el guion (T240) |
 
 ---
@@ -205,10 +205,10 @@ Cada ficha detallada se completa en la tarea de cada nivel con lo que pide el 07
 | [T223](tareas/T223-niveles-6-7.md) | Niveles 6 y 7: bosque, removibles, primer drop de recursos y rebalance | Sonnet medio | T208, T209, T204 | Mediano |
 | [T224](tareas/T224-niveles-8-9.md) | Niveles 8 y 9: ruinas, piezas 1 y 2, debut del Mortero y rebalance | Sonnet medio | T209, T211, T223 | Mediano |
 | [T225](tareas/T225-nivel-10.md) | Nivel 10: la mina vieja (extracción y pieza 3/3; cierre del bloque 2) | Sonnet alto | T210, T211, T214, T224 | Mediano |
-| [T226](tareas/T226-prueba-bloque-2.md) | 🚦 G4 · Lucas juega del 6 al 10 y llena el informe | **Lucas** | T225 | 2–3 h |
+| [T226](tareas/T226-prueba-bloque-2.md) | 🚦 G4 post-V1 · Lucas juega del 6 al 10 y llena el informe | **Lucas** | T239; coordinar T280/T283 por T453 | 2–3 h |
 | T247 | 📜 🚦 Spec de la barra con pestañas (Cañones / Infraestructura) y de la flecha al menú (M53; sin ficha propia: se hizo desde el pedido de Lucas del 2026-10-08) | Sonnet alto + **Lucas** | T225 | Chico |
 | [T248](tareas/T248-barra-con-pestanas.md) | Barra con pestañas y flecha al menú: código | Sonnet medio | T247 🚦, T207, T208, T210 | Mediano |
-| [T227](tareas/T227-spec-lore-bloque-3.md) | 📜 Spec del lore en el juego (enmienda de §11), del bloque 3 y del final | Sonnet alto | T201, T226 | Mediano |
+| [T227](tareas/T227-spec-lore-bloque-3.md) | 📜 Spec del lore en el juego (enmienda de §11), del bloque 3 y del final | Sonnet alto | T201 (hecha); G4 alimenta una revisión post-V1 | Mediano |
 | [T228](tareas/T228-textos-wiki-lore.md) | Textos por nivel, pantalla de entrada y victoria, y categoría Lore en la Wiki | Sonnet medio | T227 | Mediano |
 | [T229](tareas/T229-niveles-11-14.md) | Nivel 11 (y, con la misma ficha, 12, 13 y 14 como T230, T231 y T232) | Sonnet medio | T217, T227 | Mediano c/u |
 | [T233](tareas/T233-arte-final.md) | 🎨 Central de energía, abastecimiento e imagen del final | **Codex** | T227 | Mediano |
@@ -227,13 +227,13 @@ Cada ficha detallada se completa en la tarea de cada nivel con lo que pide el 07
 |---|---|---|---|---|
 | [T236](tareas/T236-regresion-rendimiento.md) | Regresión, guardados viejos, rendimiento P7 y auditoría de recursos | Sonnet medio | T234 | Mediano |
 | [T237](tareas/T237-marca-exportaciones.md) | Marca (si Q-04) y exportaciones de Windows, Linux y Android | Sonnet bajo | T236 | Chico |
-| [T238](tareas/T238-prueba-completa.md) | 🚦 G5 · Lucas juega del 1 al 15 desde un guardado nuevo, en PC y en celular | **Lucas** | T237 | 1–2 días |
-| [T239](tareas/T239-publicacion.md) | Publicación: fuente pública y página (según Q-05) | **Lucas** + Sonnet bajo | T238 | Chico |
+| [T238](tareas/T238-prueba-completa.md) | 🚦 G5 post-V1 · Lucas juega del 1 al 15 desde un guardado nuevo, en PC y celular real | **Lucas** | T239 + T375 | 1–2 días |
+| [T239](tareas/T239-publicacion.md) | Publicación: fuente pública y página (según Q-05) | **Lucas** + Sonnet bajo | T268/T375; T242 si la intro entra en 1.0 | Chico |
 
 ### Fase 8 · Intro (última)
 | T | Tarea | Ejecutor | Depende de | Tamaño |
 |---|---|---|---|---|
-| [T240](tareas/T240-guion-intro.md) | ✅ 🚦 G6 · Guion de la intro (láminas) **· aprobado por Lucas el 2026-10-11** (`intro/guion.md`, M57, RF-497 a RF-501, D-096) | Sonnet alto + **Lucas** | T238 | Chico |
+| [T240](tareas/T240-guion-intro.md) | ✅ 🚦 G6 · Guion de la intro (láminas) **· aprobado por Lucas el 2026-10-11** (`intro/guion.md`, M57, RF-497 a RF-501, D-096) | Sonnet alto + **Lucas** | Ninguna (G6 aprobada) | Chico |
 | [T241](tareas/T241-arte-intro.md) | ✅ 🎨 Láminas ilustradas con aspecto dibujado a mano (aprobadas por Lucas el 2026-10-11) | **Codex** | T240 | Mediano |
 | [T242](tareas/T242-intro-integracion.md) | ✅ Intro: reproducir, omitir y volver a ver | Sonnet medio | T241 | Chico |
 
@@ -254,20 +254,21 @@ T200 (Lucas) ──┬─ T202 ─ T201 🚦G2 ───────────
                │                                  └─ T211 ───────────────┘
                │          T205 ─ T215 ─ T216 🎨 / T217
                │          T205 ─ T219 / T220 / T221 🎨 (en paralelo, Codex)
-T226 ─ T227 ─ T228 ─ T229..T232 ─ T234 ─ T235 ─ T236 ─ T237 ─ T238 🚦G5 ─ T239
+T227 ─ T228 ─ T229..T232 ─ T234 ─ T235 ─ T236 ─ T237 ─ T239 (publicación)
                                   T233 🎨 ──┘
+T239 ─ T453 [T280 + T226 + T283] ─ T238 🚦G5 (post-V1, guardado nuevo)
 T227 ─ T243 🚦 ─ T244 🎨 ─ (T234)
-T251 ─ T252 ─ T253 (antes de T238) ; T252 ─ T257 🎨 (en paralelo, sin bloquear)
-T255 ─ T256 ─ T258 (después de T253 y antes de T238; los mapas de T235)
-T238 ─ T240 🚦G6 ─ T241 🎨 ─ T242
+T251 ─ T252 ─ T253 (hechas antes de la validación post-V1) ; T252 ─ T257 🎨 (hecha en paralelo)
+T255 ─ T256 ─ T258 (hechas después de T253; el remanente de Asedio 7 se confirma con G5 post-V1)
+T240 🚦G6 ─ T241 🎨 ─ T242 ── (si la intro entra en V1, antes de T239)
 ```
 
-**Orden vigente (2026-10-23, auditoría T444; reemplaza al diagrama para lo que falta):**
-1. Una build de `main` y una sesión de Lucas con T280 (6→7→8 y variantes), T226 (6 a 10) y T283 (el 9 con el Mortero): cierra T266 o reabre el 2 o el 7, y decide RF-525.
-2. Lucas revisa el arte: el resultado integrado de T277 (para T267), el arte de M71 (T362 a T369), cuyo PR #22 ya está mergeado en `main` (T489) pero con T364 y T369 sin medir y cuáles de T216, T218 a T221 y T233 pide para la 1.0.
-3. Los agentes hacen lo que salga de 1 y 2, y la spec del resto de T235 si Lucas la quiere en la 1.0.
-4. T268: build de envío identificada, versión y lista de salida de T375. Se retiró la validación del guardado viejo (Lucas, 2026-10-26); el análisis de guardados nuevos queda después de V1.
-5. T238 🚦 G5 con guardado nuevo, en PC y celular; después, T239.
+**Orden vigente (D-216, 2026-10-27):**
+1. Lucas revisa el arte T267 integrado y decide qué piezas faltantes requiere para 1.0.
+2. Completar T268/T375 y las aprobaciones de publicación. La validación del guardado viejo ya fue retirada; la campaña posterior empieza desde cero.
+3. Lucas publica V1 por T239, con las dependencias vigentes de su ficha.
+4. Después de publicar, preparar una build identificada de esa versión y ejecutar T453 (T280/T226/T283).
+5. Jugar T238 del 1 al 15, desde cero, en PC y celular real. Registrar los hallazgos para una actualización; T238 no bloquea T239.
 
 T128 queda diferida, fuera de la V1 (Q-06).
 
@@ -339,7 +340,7 @@ M76 registra las decisiones finales de T449 con RF-687–698/D-198–203, tras l
 
 Las recomendaciones anteriores de T449 de excluir celular o diferir el acceso por campaña fueron reemplazadas por Lucas. No se aprueba el grupo Desafíos por inferencia. Geografía/insignias requieren muestra, las posiciones siguen propuestas. El mapa inicial puede actualizarse con la geografía nueva cuando esté aprobada. T470/T471/T473/T474 se serializan por archivos del selector; T472 coordina SaveManager/GameFlow con T461/T458 y T475 espera el propietario libre de game.gd. No más de dos agentes de código y una tarea 📜 a la vez.
 
-T453 (T280/T226/T283), teléfono real T454, mediciones limpias T364/T369, versión T268 y G5 T238/publicación T239 mantienen sus compuertas humanas. Asedio 7 al 101 % lo confirma Lucas en G5, sin cambiar balance. Esta enmienda no cierra ninguna partida ni aprobación de arte.
+T453 (T280/T226/T283) y T238/G5 son validaciones humanas post-V1 según D-216; no bloquean T239. El teléfono real T454 y las mediciones limpias T364/T369 conservan sus compuertas propias. Asedio 7 al 101 % queda para confirmar durante G5, sin cambiar balance automáticamente. Esta enmienda no cierra ninguna partida ni aprobación de arte.
 
 ## 13. Enmienda vigente · franjas y carga (T460; 2026-10-23)
 
