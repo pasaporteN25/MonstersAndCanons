@@ -62,8 +62,10 @@ func _draw() -> void:
 		if posted.has(cell):  # el ítem de atrás (cactus, roca, columna, flores) no se dibuja bajo el poste
 			_draw_ground(origin, rng)
 			continue
-		if marked.has(cell):  # la marca es el único ítem de la casilla: solo el suelo debajo
+		if marked.has(cell):  # la marca es el único ítem libre; en una señal forma una roca de dos capas
 			_draw_ground(origin, rng)
+			if CampaignMarks.SIGNAL_DRAWINGS.has(_legend_cells.get(cell, "")):
+				draw_texture_rect(MapDrawings.signal_rock_texture(cell, _theme), Rect2(origin, Vector2(tile, tile)), false)
 			continue
 		if _legend_cells.has(cell):
 			_draw_legend(cell, origin, rng, _legend_cells[cell])
@@ -181,6 +183,8 @@ func bind_field(field: ObstacleField) -> void:
 
 
 func object_texture(cell: Vector2i, drawing: String) -> Texture2D:
+	if CampaignMarks.SIGNAL_DRAWINGS.has(drawing):
+		return MapDrawings.signal_rock_texture(cell, _theme)
 	if drawing == "estatua":
 		return MapDrawings.statue_texture(cell, _theme)
 	if drawing == MapDrawings.POST_DRAWING:

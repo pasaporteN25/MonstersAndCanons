@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cix7o0m8gfvle"
-path="res://.godot/imported/simbolo_ruina.svg-1f655e8cc019945c001a53f6f64df9db.ctex"
+uid="uid://dm8225ubkreg1"
+path="res://.godot/imported/signal_rock_b_arenisca.png-3514bf85976a71ba816883d53e9a793e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/map/simbolo_ruina.svg"
-dest_files=["res://.godot/imported/simbolo_ruina.svg-1f655e8cc019945c001a53f6f64df9db.ctex"]
+source_file="res://assets/sprites/map/rendered/signal_rock_b_arenisca.png"
+dest_files=["res://.godot/imported/signal_rock_b_arenisca.png-3514bf85976a71ba816883d53e9a793e.ctex"]
 
 [params]
 
@@ -38,6 +38,3 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
-svg/scale=2.0
-editor/scale_with_editor_scale=false
-editor/convert_colors_with_editor_theme=false
