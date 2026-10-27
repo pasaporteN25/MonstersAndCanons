@@ -18,8 +18,8 @@ Copiar el mecanismo de los postes para las marcas: `data/ui/marcas_campana.json`
 
 ## Hecho cuando
 
-Las marcas aprobadas se ven en los niveles pedidos; el test de casillas prohibidas pasa en los 15 niveles; los 15 JSON y `postes_campana.json` son idénticos; capturas a 1280×720 y celular simulado (identificado como tal), con y sin poste; GUT completo sin `SCRIPT ERROR` (`--import` primero; si cae con 139, relanzar y registrar ambos intentos); `git status` revisado (`git checkout -- assets` para SVG reescritos sin querer). No se afirma rendimiento ni prueba en teléfono real.
+El sistema admite los tres tipos aprobados. Las marcas grabadas acompañan las 28 señales de la tabla M80; no inventar ubicaciones runtime nuevas para estelas/pintadas hasta tener aprobación de aplicación. Las marcas aprobadas se ven en los niveles pedidos; el test de casillas prohibidas pasa en los 15 niveles; los 15 JSON y `postes_campana.json` son idénticos; capturas a 1280×720 y celular simulado (identificado como tal), con y sin poste; GUT completo sin `SCRIPT ERROR` (`--import` primero; si cae con 139, relanzar y registrar ambos intentos); `git status` revisado (`git checkout -- assets` para SVG reescritos sin querer). No se afirma rendimiento ni prueba en teléfono real.
 
 ## Frenar si
 
-Falta el OK de Lucas o el glifo aprobado; hay que tocar un JSON de nivel o la grilla; el poste y una marca caen en la misma casilla; un test de otro nivel falla sin causa evidente.
+Se intenta introducir una ubicación runtime de estela/pintada sin aprobación escrita; hay que tocar un JSON de nivel o la grilla; el poste y una marca caen en la misma casilla; un test de otro nivel falla sin causa evidente.

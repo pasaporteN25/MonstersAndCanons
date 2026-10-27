@@ -9,7 +9,7 @@
    - ¿El final se siente como "aseguramos el hogar, no el planeta"?
    - ¿Algún nivel se hizo largo o repetitivo?
    - En el celular: ¿se lee todo? ¿Algún botón chico? ¿Se calienta o va lento?
-3. Probar un guardado **viejo** (del juego de antes): ¿se conservó el progreso?
+La partida usa un guardado nuevo; no probar/migrar guardados viejos (Lucas, 2026-10-26). Cualquier análisis de guardados nuevos para ajustar balance o rendimiento se difiere a después de V1.
 
 ## Después (Sonnet bajo)
 Pasar cada problema a una tarea (con el siguiente número libre), corregirlos **antes de la intro** (07 §11.E) y marcar G5 en el plan 08.
