@@ -1,0 +1,698 @@
+{
+	"1": {
+		"legend": [
+			{
+				"cell": [
+					18,
+					0
+				],
+				"drawing": "agua",
+				"screen_origin": [
+					1152.0,
+					48.0
+				]
+			},
+			{
+				"cell": [
+					6,
+					2
+				],
+				"drawing": "flores",
+				"screen_origin": [
+					384.0,
+					176.0
+				]
+			},
+			{
+				"cell": [
+					12,
+					5
+				],
+				"drawing": "estatua",
+				"screen_origin": [
+					768.0,
+					368.0
+				]
+			},
+			{
+				"cell": [
+					9,
+					8
+				],
+				"drawing": "flores",
+				"screen_origin": [
+					576.0,
+					560.0
+				]
+			}
+		],
+		"theme": "pradera",
+		"tile_screen_px": 64.0
+	},
+	"11": {
+		"legend": [
+			{
+				"cell": [
+					6,
+					1
+				],
+				"drawing": "roca",
+				"screen_origin": [
+					325.818206787109,
+					100.363632202148
+				]
+			},
+			{
+				"cell": [
+					1,
+					2
+				],
+				"drawing": "roca_marcada",
+				"screen_origin": [
+					64.0000076293945,
+					152.727264404297
+				]
+			},
+			{
+				"cell": [
+					11,
+					2
+				],
+				"drawing": "mina",
+				"screen_origin": [
+					587.636352539062,
+					152.727264404297
+				]
+			},
+			{
+				"cell": [
+					16,
+					2
+				],
+				"drawing": "escombro",
+				"screen_origin": [
+					849.454528808594,
+					152.727264404297
+				]
+			},
+			{
+				"cell": [
+					21,
+					2
+				],
+				"drawing": "roca_marcada",
+				"screen_origin": [
+					1111.27270507812,
+					152.727264404297
+				]
+			},
+			{
+				"cell": [
+					6,
+					3
+				],
+				"drawing": "agua",
+				"screen_origin": [
+					325.818206787109,
+					205.090911865234
+				]
+			},
+			{
+				"cell": [
+					12,
+					6
+				],
+				"drawing": "roca",
+				"screen_origin": [
+					640.0,
+					362.181823730469
+				]
+			},
+			{
+				"cell": [
+					16,
+					7
+				],
+				"drawing": "agua",
+				"screen_origin": [
+					849.454528808594,
+					414.545440673828
+				]
+			},
+			{
+				"cell": [
+					2,
+					8
+				],
+				"drawing": "roca_marcada",
+				"screen_origin": [
+					116.363639831543,
+					466.909088134766
+				]
+			},
+			{
+				"cell": [
+					7,
+					9
+				],
+				"drawing": "escombro",
+				"screen_origin": [
+					378.181823730469,
+					519.272705078125
+				]
+			},
+			{
+				"cell": [
+					19,
+					9
+				],
+				"drawing": "roca",
+				"screen_origin": [
+					1006.54541015625,
+					519.272705078125
+				]
+			}
+		],
+		"theme": "desierto",
+		"tile_screen_px": 52.3636363636364
+	},
+	"13": {
+		"legend": [
+			{
+				"cell": [
+					7,
+					1
+				],
+				"drawing": "roca_marcada",
+				"screen_origin": [
+					352.0,
+					95.9999923706055
+				]
+			},
+			{
+				"cell": [
+					10,
+					1
+				],
+				"drawing": "mina",
+				"screen_origin": [
+					496.0,
+					95.9999923706055
+				]
+			},
+			{
+				"cell": [
+					6,
+					2
+				],
+				"drawing": "roca",
+				"screen_origin": [
+					304.0,
+					143.999984741211
+				]
+			},
+			{
+				"cell": [
+					11,
+					4
+				],
+				"drawing": "roca_marcada",
+				"screen_origin": [
+					543.999938964844,
+					239.999984741211
+				]
+			},
+			{
+				"cell": [
+					15,
+					4
+				],
+				"drawing": "hielo",
+				"screen_origin": [
+					735.999938964844,
+					239.999984741211
+				]
+			},
+			{
+				"cell": [
+					16,
+					4
+				],
+				"drawing": "hielo",
+				"screen_origin": [
+					783.999938964844,
+					239.999984741211
+				]
+			},
+			{
+				"cell": [
+					17,
+					4
+				],
+				"drawing": "hielo",
+				"screen_origin": [
+					831.999938964844,
+					239.999984741211
+				]
+			},
+			{
+				"cell": [
+					3,
+					5
+				],
+				"drawing": "escombro",
+				"screen_origin": [
+					160.000015258789,
+					287.999969482422
+				]
+			},
+			{
+				"cell": [
+					14,
+					5
+				],
+				"drawing": "roca",
+				"screen_origin": [
+					687.999938964844,
+					287.999969482422
+				]
+			},
+			{
+				"cell": [
+					15,
+					5
+				],
+				"drawing": "hielo",
+				"screen_origin": [
+					735.999938964844,
+					287.999969482422
+				]
+			},
+			{
+				"cell": [
+					16,
+					5
+				],
+				"drawing": "hielo",
+				"screen_origin": [
+					783.999938964844,
+					287.999969482422
+				]
+			},
+			{
+				"cell": [
+					17,
+					5
+				],
+				"drawing": "hielo",
+				"screen_origin": [
+					831.999938964844,
+					287.999969482422
+				]
+			},
+			{
+				"cell": [
+					20,
+					5
+				],
+				"drawing": "roca_marcada",
+				"screen_origin": [
+					975.999938964844,
+					287.999969482422
+				]
+			},
+			{
+				"cell": [
+					8,
+					7
+				],
+				"drawing": "roca_marcada",
+				"screen_origin": [
+					400.0,
+					383.999969482422
+				]
+			},
+			{
+				"cell": [
+					16,
+					7
+				],
+				"drawing": "escombro",
+				"screen_origin": [
+					783.999938964844,
+					383.999969482422
+				]
+			},
+			{
+				"cell": [
+					20,
+					8
+				],
+				"drawing": "roca",
+				"screen_origin": [
+					975.999938964844,
+					431.999969482422
+				]
+			},
+			{
+				"cell": [
+					11,
+					10
+				],
+				"drawing": "bosque_explotable",
+				"screen_origin": [
+					543.999938964844,
+					527.999938964844
+				]
+			}
+		],
+		"theme": "nieve",
+		"tile_screen_px": 48.0
+	},
+	"15": {
+		"legend": [
+			{
+				"cell": [
+					8,
+					1
+				],
+				"drawing": "escombro",
+				"screen_origin": [
+					400.0,
+					95.9999923706055
+				]
+			},
+			{
+				"cell": [
+					21,
+					1
+				],
+				"drawing": "escombro",
+				"screen_origin": [
+					1023.99993896484,
+					95.9999923706055
+				]
+			},
+			{
+				"cell": [
+					1,
+					2
+				],
+				"drawing": "escombro",
+				"screen_origin": [
+					64.0000228881836,
+					143.999984741211
+				]
+			},
+			{
+				"cell": [
+					21,
+					2
+				],
+				"drawing": "bosque_explotable",
+				"screen_origin": [
+					1023.99993896484,
+					143.999984741211
+				]
+			},
+			{
+				"cell": [
+					2,
+					4
+				],
+				"drawing": "roca_marcada",
+				"screen_origin": [
+					112.000022888184,
+					239.999984741211
+				]
+			},
+			{
+				"cell": [
+					20,
+					4
+				],
+				"drawing": "escombro",
+				"screen_origin": [
+					975.999938964844,
+					239.999984741211
+				]
+			},
+			{
+				"cell": [
+					23,
+					5
+				],
+				"drawing": "campamento_vacio",
+				"screen_origin": [
+					1119.99987792969,
+					287.999969482422
+				]
+			},
+			{
+				"cell": [
+					25,
+					5
+				],
+				"drawing": "supply_depot",
+				"screen_origin": [
+					1215.99987792969,
+					287.999969482422
+				]
+			},
+			{
+				"cell": [
+					18,
+					7
+				],
+				"drawing": "escombro",
+				"screen_origin": [
+					879.999938964844,
+					383.999969482422
+				]
+			},
+			{
+				"cell": [
+					24,
+					7
+				],
+				"drawing": "central_1",
+				"screen_origin": [
+					1167.99987792969,
+					383.999969482422
+				]
+			},
+			{
+				"cell": [
+					25,
+					7
+				],
+				"drawing": "central_2",
+				"screen_origin": [
+					1215.99987792969,
+					383.999969482422
+				]
+			},
+			{
+				"cell": [
+					3,
+					8
+				],
+				"drawing": "bosque_explotable",
+				"screen_origin": [
+					160.000015258789,
+					431.999969482422
+				]
+			},
+			{
+				"cell": [
+					24,
+					8
+				],
+				"drawing": "central_3",
+				"screen_origin": [
+					1167.99987792969,
+					431.999969482422
+				]
+			},
+			{
+				"cell": [
+					25,
+					8
+				],
+				"drawing": "central_4",
+				"screen_origin": [
+					1215.99987792969,
+					431.999969482422
+				]
+			},
+			{
+				"cell": [
+					1,
+					9
+				],
+				"drawing": "campamento_vacio",
+				"screen_origin": [
+					64.0000228881836,
+					479.999969482422
+				]
+			},
+			{
+				"cell": [
+					8,
+					10
+				],
+				"drawing": "campamento_vacio",
+				"screen_origin": [
+					400.0,
+					527.999938964844
+				]
+			},
+			{
+				"cell": [
+					12,
+					10
+				],
+				"drawing": "mina",
+				"screen_origin": [
+					591.999938964844,
+					527.999938964844
+				]
+			},
+			{
+				"cell": [
+					19,
+					10
+				],
+				"drawing": "roca_marcada",
+				"screen_origin": [
+					927.999938964844,
+					527.999938964844
+				]
+			},
+			{
+				"cell": [
+					15,
+					11
+				],
+				"drawing": "supply_cart",
+				"screen_origin": [
+					735.999938964844,
+					575.999938964844
+				]
+			},
+			{
+				"cell": [
+					21,
+					11
+				],
+				"drawing": "supply_line_pole",
+				"screen_origin": [
+					1023.99993896484,
+					575.999938964844
+				]
+			}
+		],
+		"theme": "pradera",
+		"tile_screen_px": 48.0
+	},
+	"3": {
+		"legend": [
+			{
+				"cell": [
+					10,
+					2
+				],
+				"drawing": "estatua",
+				"screen_origin": [
+					640.0,
+					176.0
+				]
+			},
+			{
+				"cell": [
+					4,
+					4
+				],
+				"drawing": "flores",
+				"screen_origin": [
+					256.0,
+					304.0
+				]
+			},
+			{
+				"cell": [
+					11,
+					6
+				],
+				"drawing": "agua",
+				"screen_origin": [
+					704.0,
+					432.0
+				]
+			},
+			{
+				"cell": [
+					15,
+					6
+				],
+				"drawing": "flores",
+				"screen_origin": [
+					960.0,
+					432.0
+				]
+			}
+		],
+		"theme": "pradera",
+		"tile_screen_px": 64.0
+	},
+	"5": {
+		"legend": [
+			{
+				"cell": [
+					10,
+					1
+				],
+				"drawing": "estatua",
+				"screen_origin": [
+					640.0,
+					112.0
+				]
+			},
+			{
+				"cell": [
+					17,
+					3
+				],
+				"drawing": "flores",
+				"screen_origin": [
+					1088.0,
+					240.0
+				]
+			},
+			{
+				"cell": [
+					3,
+					4
+				],
+				"drawing": "estatua",
+				"screen_origin": [
+					192.0,
+					304.0
+				]
+			},
+			{
+				"cell": [
+					10,
+					6
+				],
+				"drawing": "estatua",
+				"screen_origin": [
+					640.0,
+					432.0
+				]
+			}
+		],
+		"theme": "pradera",
+		"tile_screen_px": 64.0
+	}
+}

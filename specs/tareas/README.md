@@ -153,3 +153,7 @@ Las fichas [T523](T523-muestras-adornos-m79.md) y [T524](T524-integrar-adornos-m
 ## 20. Partidas manuales de campaña post-V1 · T528
 
 [T528](T528-campana-post-v1.md) registra D-216: T280, T226, T283 y T238 se hacen después de publicar V1; T453 prepara la sesión corta. T239 deja de depender de T238. El guardado viejo del tester no se usa y el checklist de la build de entrega sigue en T268/T375.
+
+## 21. Galería actualizada de revisión de arte T267 · T529
+
+[T529](T529-revision-visual-t267.md) refresca las capturas después de T508/T524 y presenta mina, bosque explotable, Central y estatua por separado en `../../art/t529-review-t267/revision.html`. La hoja `../../art/t529-review-t267/review/comparaciones-por-pieza.png` se puede ver directamente en GitHub. Las muestras no están integradas ni aprobadas; el escombro queda pendiente de actualizar a H G2. Las decisiones de Lucas y la prioridad V1 siguen en T267.

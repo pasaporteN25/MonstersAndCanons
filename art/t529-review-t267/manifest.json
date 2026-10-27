@@ -1,0 +1,12 @@
+{
+  "tarea": "T529",
+  "base_commit": "b775feb",
+  "godot": "4.7.2.stable.official.ed1daf0bf",
+  "resolucion": "1280x720",
+  "niveles": [1, 3, 5, 11, 13, 15],
+  "comparaciones": ["mina", "bosque_explotable", "central_1..4", "estatua"],
+  "escombro": "fuera de la seleccion: la muestra historica usa la A anterior a M80 y debe actualizarse a H G2",
+  "integrado_en_juego": false,
+  "tests": "no ejecutados; tarea de captura/revisión visual",
+  "import": "godot --headless --import termino con salida 0; la primera captura, antes del import, dio errores de recursos y se repitio luego de importar"
+}
