@@ -266,8 +266,8 @@ T238 ─ T240 🚦G6 ─ T241 🎨 ─ T242
 1. Una build de `main` y una sesión de Lucas con T280 (6→7→8 y variantes), T226 (6 a 10) y T283 (el 9 con el Mortero): cierra T266 o reabre el 2 o el 7, y decide RF-525.
 2. Lucas revisa el arte: el resultado integrado de T277 (para T267), el arte de M71 (T362 a T369), cuyo PR #22 ya está mergeado en `main` (T489) pero con T364 y T369 sin medir y cuáles de T216, T218 a T221 y T233 pide para la 1.0.
 3. Los agentes hacen lo que salga de 1 y 2, y la spec del resto de T235 si Lucas la quiere en la 1.0.
-4. T268: el archivo real del tester, Windows, la build de envío y la lista de salida de T375.
-5. T238 🚦 G5 en PC y en celular; después, T239.
+4. T268: build de envío identificada, versión y lista de salida de T375. Se retiró la validación del guardado viejo (Lucas, 2026-10-26); el análisis de guardados nuevos queda después de V1.
+5. T238 🚦 G5 con guardado nuevo, en PC y celular; después, T239.
 
 T128 queda diferida, fuera de la V1 (Q-06).
 

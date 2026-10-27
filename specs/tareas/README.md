@@ -131,3 +131,8 @@ La spec de selector es [T459](T459-selector-mapa-modos-postes.md); sus RF-687–
 ## 15. Cierre honesto de M75 · T458, T480, T464 a T467
 
 El informe [M75-cierre-honesto](informes/M75-cierre-honesto.md) revisó cada criterio contra `main` y una ventana real. **Estado actualizado (2026-10-26, T517):** T464, T465, T466, T467, T468, T481, T513 y T514 están cerradas en `main`; T465 se cerró tras el merge de T513/T514. El informe conserva abajo la fotografía anterior y su hallazgo documental H-5.
+
+
+## 16. M79 · Adornos adicionales aprobados para muestras (T522)
+
+Las fichas [T523](T523-muestras-adornos-m79.md) y [T524](T524-integrar-adornos-m79.md) cubren seis adornos pedidos por Lucas. T523 solo propone muestras; cada pieza y su aplicación requieren aprobación visual escrita antes de integrar por T524. T524 espera T508 para evitar colisiones en `MapThemes`/`MapDrawings`.
