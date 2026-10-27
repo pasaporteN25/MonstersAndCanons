@@ -1,5 +1,9 @@
 # Novedades del juego
 
+## Las señales de los niveles 7 a 15 llevan una marca nueva *(T507, 2026-10-26; en revisión)*
+
+Las rocas con señal de los niveles 7 a 15 (28 en total) ahora se dibujan con una **H gótica grabada** en la piedra, el nuevo símbolo de los Moradores. Son las mismas casillas de antes y siguen siendo decoración donde no se construye: no cambia el camino, las oleadas ni el balance. Por ahora la roca es gris en todos los niveles; los colores de cada paisaje llegan con la próxima tarea.
+
 ## Mesa de mando para elegir niveles *(T520, 2026-10-26)*
 
 La pantalla de niveles ahora organiza las páginas en un rail lateral cuando hay espacio y en una fila desplazable cuando la ventana es angosta. El progreso queda en la cabecera y las acciones de vista, carpeta y regreso se agrupan al pie. La solapa «Mapas de la comunidad» ahora dice «Comunidad»; el total de mapas sigue visible en el indicador superior. El mapa, las tarjetas, el orden de páginas y las reglas de selección se conservan. Se capturó en PC y celular simulado a 1280 × 720; no se probó en un teléfono real.

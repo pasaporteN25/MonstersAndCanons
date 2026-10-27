@@ -117,9 +117,11 @@ func _ready() -> void:
 	var banner_recipe: BannerRecipe = BannerRecipeStore.load_recipe() if post_conquered else null
 	# Los postes de 1–15 son del mapa de campaña (con o sin modo de pruebas); lo demás no los lleva.
 	var post_cells: Array[Vector2i] = []
+	var mark_cells: Dictionary = {}  # T507, RF-717: las marcas siguen la misma regla que los postes
 	if campaign_level != null and GameFlow.current_mode.is_empty():
 		post_cells = CampaignPosts.cells_for(campaign_level.id)
-	level = level_data.build_map(post_conquered, banner_recipe, post_cells)
+		mark_cells = CampaignMarks.marks_for(campaign_level.id)
+	level = level_data.build_map(post_conquered, banner_recipe, post_cells, mark_cells)
 	level.position = Vector2(0.0, float(MobileUiConfig.load_from().get_value("barra_alta_px"))) if UiMode.is_mobile() else MAP_OFFSET
 	add_child(level)
 	move_child(level, 0)  # primero en la lista = se dibuja debajo de todo

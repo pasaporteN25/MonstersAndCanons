@@ -18,6 +18,7 @@ var _removable_cells: Array[Vector2i] = []
 var _post_conquered: bool = false  # RF-657: lo decide quien arma el mapa; esta clase no lee el guardado
 var _banner_recipe: BannerRecipe
 var _post_cells: Array[Vector2i] = []  # T475, RF-696: postes superpuestos; los pasa quien arma el mapa
+var _mark_cells: Dictionary = {}  # T507, RF-717: casilla → tipo de marca (CampaignMarks); los pasa quien arma el mapa
 var _palette: Dictionary = MapThemes.palette(MapThemes.DEFAULT)
 
 
@@ -26,7 +27,8 @@ var _palette: Dictionary = MapThemes.palette(MapThemes.DEFAULT)
 ## `legend_cells`: los dibujos que pidió la leyenda del nivel, casilla por casilla (RF-262).
 ## `post_conquered`: true si los postes de banderines muestran la variante del jugador (RF-657, RF-696).
 ## `post_cells`: casillas donde se superpone un poste como capa visual, sin tocar el mapa (T475, RF-696).
-func paint(ground: TileMapLayer, exit_cells: Array[Vector2i] = [], theme: StringName = MapThemes.DEFAULT, legend_cells: Dictionary = {}, removable_cells: Array[Vector2i] = [], post_conquered: bool = false, banner_recipe: BannerRecipe = null, post_cells: Array[Vector2i] = []) -> void:
+## `mark_cells`: casilla → tipo de las marcas (señales) superpuestas, también solo visuales (T507, RF-717).
+func paint(ground: TileMapLayer, exit_cells: Array[Vector2i] = [], theme: StringName = MapThemes.DEFAULT, legend_cells: Dictionary = {}, removable_cells: Array[Vector2i] = [], post_conquered: bool = false, banner_recipe: BannerRecipe = null, post_cells: Array[Vector2i] = [], mark_cells: Dictionary = {}) -> void:
 	_ground = ground
 	_exit_cells = exit_cells
 	_theme = theme
@@ -35,6 +37,7 @@ func paint(ground: TileMapLayer, exit_cells: Array[Vector2i] = [], theme: String
 	_post_conquered = post_conquered
 	_banner_recipe = banner_recipe
 	_post_cells = post_cells
+	_mark_cells = mark_cells
 	_palette = MapThemes.palette(theme)
 	position = ground.position
 	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS  # D-023
@@ -51,11 +54,15 @@ func _draw() -> void:
 		return
 	var tile: float = Rules.TILE_SIZE
 	var posted: Array[Vector2i] = overlay_post_cells()
+	var marked: Array[Vector2i] = overlay_mark_cells()
 	for cell: Vector2i in _ground.get_used_cells():
 		var rng := RandomNumberGenerator.new()
 		rng.seed = hash(cell)
 		var origin: Vector2 = Vector2(cell) * tile
 		if posted.has(cell):  # el ítem de atrás (cactus, roca, columna, flores) no se dibuja bajo el poste
+			_draw_ground(origin, rng)
+			continue
+		if marked.has(cell):  # la marca es el único ítem de la casilla: solo el suelo debajo
 			_draw_ground(origin, rng)
 			continue
 		if _legend_cells.has(cell):
@@ -72,6 +79,7 @@ func _draw() -> void:
 	for cell: Vector2i in _exit_cells:
 		draw_texture_rect(GATE, Rect2(Vector2(cell) * tile, Vector2(tile, tile)), false)  # RF-06
 	_draw_campaign_posts(tile)
+	_draw_campaign_marks(tile)
 
 
 ## T475, RF-696: un poste en la casilla, sin el ítem decorativo que había detrás (solo se dibuja el suelo).
@@ -80,6 +88,12 @@ func _draw_campaign_posts(tile: float) -> void:
 	var texture: Texture2D = campaign_post_texture()
 	for cell: Vector2i in overlay_post_cells():
 		draw_texture_rect(texture, Rect2(Vector2(cell) * tile, Vector2(tile, tile)), false)
+
+
+## T507, RF-717: cada marca con el dibujo de su tipo, sobre el suelo de su casilla.
+func _draw_campaign_marks(tile: float) -> void:
+	for cell: Vector2i in overlay_mark_cells():
+		draw_texture_rect(CampaignMarks.texture_of(_mark_cells[cell]), Rect2(Vector2(cell) * tile, Vector2(tile, tile)), false)
 
 
 ## La variante de los postes superpuestos según el contexto que recibió (nunca consulta el guardado).
@@ -94,6 +108,29 @@ func overlay_post_cells() -> Array[Vector2i]:
 	for cell: Vector2i in _post_cells:
 		if _ground != null and _is_inside(cell) and _legend_cells.get(cell, "") != MapDrawings.POST_DRAWING:
 			cells.append(cell)
+	return cells
+
+
+## T507, RF-717: casillas donde de verdad se dibuja una marca. Una marca sin arte aprobado, fuera del mapa, de un tipo
+## desconocido o en una casilla que no le corresponde se ignora: la grabada va sobre una señal de la leyenda (`roca_marcada`
+## o `simbolo_ruina`, no removible); estela y pintada, sobre una `X` libre. Nunca sobre un poste ni sobre el camino,
+## una entrada, la salida, una casilla construible o una leyenda de otro tipo.
+func overlay_mark_cells() -> Array[Vector2i]:
+	var cells: Array[Vector2i] = []
+	if _ground == null:
+		return cells
+	for cell: Vector2i in _mark_cells:
+		var type_id: StringName = _mark_cells[cell]
+		if CampaignMarks.texture_of(type_id) == null or not _is_inside(cell) or _post_cells.has(cell):
+			continue
+		if _ground.get_cell_atlas_coords(cell) != Level.ATLAS_BLOCKED or _removable_cells.has(cell):
+			continue
+		var is_signal: bool = CampaignMarks.SIGNAL_DRAWINGS.has(_legend_cells.get(cell, ""))
+		if (CampaignMarks.support_of(type_id) == CampaignMarks.Support.SIGNAL) != is_signal:
+			continue
+		if not is_signal and _legend_cells.has(cell):
+			continue
+		cells.append(cell)
 	return cells
 
 
