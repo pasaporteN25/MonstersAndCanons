@@ -52,8 +52,46 @@ func test_the_six_community_signals_are_static_objects() -> void:
 		var texture: Texture2D = MapDrawings.texture(id)
 		assert_not_null(texture, "%s usa una textura precargada" % id)
 		if texture != null:
-			assert_eq(texture.get_size(), Vector2(128, 128), "%s: SVG importado a 2x" % id)
+			assert_eq(texture.get_size(), Vector2(128, 128), "%s: recurso renderizado de 128 px" % id)
 			assert_true(texture.get_image().detect_alpha() != Image.ALPHA_NONE, "%s conserva alfa" % id)
+		if id in CampaignMarks.SIGNAL_DRAWINGS:
+			assert_true(texture.resource_path.begins_with("res://assets/sprites/map/rendered/signal_rock_"), "%s usa roca genérica" % id)
+
+
+func test_signal_rocks_use_three_models_and_theme_colors_stably() -> void:
+	var cell: Vector2i = Vector2i(7, 3)
+	for theme: StringName in [&"pradera", &"bosque"]:
+		var texture: Texture2D = MapDrawings.signal_rock_texture(cell, theme)
+		assert_true(texture.resource_path.contains("_caliza.png"), String(theme))
+		assert_eq(texture, MapDrawings.signal_rock_texture(cell, theme), "la misma casilla no cambia")
+	for theme: StringName in [&"desierto"]:
+		assert_true(MapDrawings.signal_rock_texture(cell, theme).resource_path.contains("_arenisca.png"))
+	for theme: StringName in [&"ruinas", &"nieve"]:
+		assert_true(MapDrawings.signal_rock_texture(cell, theme).resource_path.contains("_oscura.png"), String(theme))
+	var models: Dictionary = {}
+	for x: int in 20:
+		models[MapDrawings.signal_rock_texture(Vector2i(x, 4), &"pradera")] = true
+	assert_eq(models.size(), 3, "las casillas distribuyen los tres modelos")
+	for model: String in ["a", "b", "c"]:
+		for color: String in ["caliza", "arenisca", "oscura"]:
+			var path: String = "res://assets/sprites/map/rendered/signal_rock_%s_%s.png" % [model, color]
+			var texture: Texture2D = load(path)
+			assert_not_null(texture, path)
+			if texture != null:
+				assert_eq(texture.get_size(), Vector2(128, 128), path)
+				assert_true(texture.get_image().detect_alpha() != Image.ALPHA_NONE, path)
+
+
+func test_engraved_g2_is_a_transparent_layer_over_the_signal_rock() -> void:
+	var mark: Texture2D = CampaignMarks.texture_of(CampaignMarks.GRABADA)
+	assert_not_null(mark)
+	if mark == null:
+		return
+	assert_eq(mark.get_size(), Vector2(128, 128))
+	var bounds: Rect2i = mark.get_image().get_used_rect()
+	assert_gt(bounds.size.x, 20, "la H tiene ancho visible")
+	assert_lt(bounds.size.x, 100, "la textura contiene el grabado, no otra roca completa")
+	assert_true(mark.get_image().detect_alpha() != Image.ALPHA_NONE)
 
 
 # --- T437: el poste de banderines (RF-656, RF-657, RF-659) ---

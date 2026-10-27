@@ -22,11 +22,15 @@ const KINDS: Dictionary = {
 }
 
 const FLOWERS: Texture2D = preload("res://assets/sprites/map/flores.svg")
-const SIGNAL_ROCK: Texture2D = preload("res://assets/sprites/map/roca_marcada.svg")
 const SIGNAL_PATH: Texture2D = preload("res://assets/sprites/map/sendero.svg")
 const SIGNAL_TOOL: Texture2D = preload("res://assets/sprites/map/herramienta.svg")
-const SIGNAL_RUIN: Texture2D = preload("res://assets/sprites/map/simbolo_ruina.svg")
 const SIGNAL_CAMP: Texture2D = preload("res://assets/sprites/map/campamento_vacio.svg")
+## T508: los tres modelos aprobados en caliza, arenisca y piedra oscura.
+const SIGNAL_ROCKS: Dictionary = {
+	"caliza": [preload("res://assets/sprites/map/rendered/signal_rock_a_caliza.png"), preload("res://assets/sprites/map/rendered/signal_rock_b_caliza.png"), preload("res://assets/sprites/map/rendered/signal_rock_c_caliza.png")],
+	"arenisca": [preload("res://assets/sprites/map/rendered/signal_rock_a_arenisca.png"), preload("res://assets/sprites/map/rendered/signal_rock_b_arenisca.png"), preload("res://assets/sprites/map/rendered/signal_rock_c_arenisca.png")],
+	"oscura": [preload("res://assets/sprites/map/rendered/signal_rock_a_oscura.png"), preload("res://assets/sprites/map/rendered/signal_rock_b_oscura.png"), preload("res://assets/sprites/map/rendered/signal_rock_c_oscura.png")],
+}
 ## T437 (RF-655, RF-656): el poste del nivel 6 en dos variantes con la misma composición. La enemiga es la de
 ## reserva; la del jugador solo aparece si quien arma el mapa dice que la campaña ya ganó el nivel.
 const POST_ENEMY: Texture2D = preload("res://assets/sprites/map/rendered/banner_post_enemy.png")
@@ -60,8 +64,8 @@ const TEXTURES: Dictionary = {
 	"cactus": MapThemes.CACTUS, "pino": MapThemes.PINE, "columna": MapThemes.COLUMN, "tronco": MapThemes.LOG,
 	"helecho": MapThemes.FERN, "junco": MapThemes.REEDS, "hongo": MapThemes.MUSHROOM, "estatua": STATUES_MOSS[0],
 	"mina": MINE[0], "bosque_explotable": FOREST[0], "escombro": RUBBLE[0],
-	"roca_marcada": SIGNAL_ROCK, "sendero": SIGNAL_PATH, "herramienta": SIGNAL_TOOL,
-	"poste_cintas": POST_ENEMY, "simbolo_ruina": SIGNAL_RUIN, "campamento_vacio": SIGNAL_CAMP,
+	"roca_marcada": SIGNAL_ROCKS["caliza"][0], "sendero": SIGNAL_PATH, "herramienta": SIGNAL_TOOL,
+	"poste_cintas": POST_ENEMY, "simbolo_ruina": SIGNAL_ROCKS["caliza"][0], "campamento_vacio": SIGNAL_CAMP,
 	"central_1": CENTRAL_1, "central_2": CENTRAL_2, "central_3": CENTRAL_3, "central_4": CENTRAL_4,
 	"supply_depot": SUPPLY_DEPOT, "supply_line_pole": SUPPLY_LINE_POLE, "supply_cart": SUPPLY_CART,
 	"supply_conveyor": SUPPLY_CONVEYOR,
@@ -91,6 +95,17 @@ static func kind(id: String) -> String:
 ## El dibujo de un objeto (null si es un suelo o no existe).
 static func texture(id: String) -> Texture2D:
 	return TEXTURES.get(id)
+
+
+## T508: la variante depende solo de la casilla; la paleta sigue el bioma, sin consumir azar.
+static func signal_rock_texture(cell: Vector2i, theme: StringName) -> Texture2D:
+	var color: String = "caliza"
+	if theme == &"desierto":
+		color = "arenisca"
+	elif theme == &"ruinas" or theme == &"nieve":
+		color = "oscura"
+	var variants: Array = SIGNAL_ROCKS[color]
+	return variants[posmod(hash(cell), variants.size())]
 
 
 ## Los colores de un suelo (vacío si es un objeto o no existe).

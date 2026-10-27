@@ -1,8 +1,8 @@
 # Novedades del juego
 
-## Las señales de los niveles 7 a 15 llevan una marca nueva *(T507, 2026-10-26; en revisión)*
+## Rocas de señal con la H G2 *(T508, 2026-10-26; en revisión)*
 
-Las rocas con señal de los niveles 7 a 15 (28 en total) ahora se dibujan con una **H gótica grabada** en la piedra, el nuevo símbolo de los Moradores. Son las mismas casillas de antes y siguen siendo decoración donde no se construye: no cambia el camino, las oleadas ni el balance. Por ahora la roca es gris en todos los niveles; los colores de cada paisaje llegan con la próxima tarea.
+Las 28 señales de los niveles 7 a 15 ahora usan uno de tres modelos de roca, con caliza en pradera y bosque, arenisca rojiza en desierto y piedra oscura en ruinas y nieve. La H G2 aparece grabada en la roca y también en el escombro activo. Se conservan las mismas casillas y el mismo espacio de una casilla: no cambia el camino, las oleadas ni el balance.
 
 ## Mesa de mando para elegir niveles *(T520, 2026-10-26)*
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d32g4mdq32jx1"
-path="res://.godot/imported/escombro.svg-3520f4048cfc20b64ccec8a9cdefd422.ctex"
+uid="uid://dxv50ia0y6uwk"
+path="res://.godot/imported/signal_rock_b_oscura.png-8afeb1b4a78b4cdeb76c1e1968f4fe44.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/map/escombro.svg"
-dest_files=["res://.godot/imported/escombro.svg-3520f4048cfc20b64ccec8a9cdefd422.ctex"]
+source_file="res://assets/sprites/map/rendered/signal_rock_b_oscura.png"
+dest_files=["res://.godot/imported/signal_rock_b_oscura.png-8afeb1b4a78b4cdeb76c1e1968f4fe44.ctex"]
 
 [params]
 
@@ -38,6 +38,3 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
-svg/scale=2.0
-editor/scale_with_editor_scale=false
-editor/convert_colors_with_editor_theme=false
