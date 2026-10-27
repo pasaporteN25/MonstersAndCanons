@@ -3045,3 +3045,8 @@ Spec en **M80** (RF-716 a RF-719), razones y canon en **D-212**, el cómo en la 
 - [ ] **T524 · Integrar adornos M79 aprobados por Lucas. `[mobile+x86]`**
   **Refs:** M79, RF-712 a RF-714, D-210. **Depende de:** T523 mergeada y aprobación visual escrita de Lucas para cada asset y su aplicación. T508 debe estar integrada antes por compartir `MapThemes`/`MapDrawings`. **Ficha:** `specs/tareas/T524-integrar-adornos-m79.md`.
   **Hecho cuando:** solo las piezas aprobadas se integran en su uso aprobado; mapas, leyendas, grillas y mecánicas no cambian; capturas y GUT completo pasan sin `SCRIPT ERROR`. Si Lucas no aprobó el arte o falta decidir un nivel/tema, esa pieza no se integra.
+
+- [x] **T526 · Galería de aprobación visual de cactus y campamento M79. `[x86]`**
+  **Refs:** M79, RF-712 a RF-714, D-210; T523/T525. **Depende de:** muestras T523/T525 mergeadas; elección explícita de Lucas antes de T524. **Ficha:** `specs/tareas/T526-galeria-aprobacion-m79.md`.
+  **Hecho cuando:** ambas opciones de cactus y campamento se pueden comparar a detalle, a 34 px y sobre los niveles de muestra; no se integra arte ni se infiere una elección.
+  **Resultado (2026-10-27):** galería HTML en `art/m79-muestras/adornos/revision.html`, con montajes externos de niveles 10, 14 y 15, selector local (no envía ni guarda), y guía para responder. Las otras cuatro piezas con visto bueno no requieren una decisión nueva en esta galería. Enlaces relativos revisados y `git diff --check` limpio. Sin Godot/GUT ni prueba en dispositivo.
