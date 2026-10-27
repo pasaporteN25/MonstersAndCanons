@@ -79,7 +79,7 @@
 |---|---|---|---|
 | **Pradera / oasis** | Niveles 1–5 y el valle del 15 | Agua dulce, pasto, flores, el sitio de aterrizaje. Es el único lugar seguro. **[CANON]** | Señales discretas: rocas marcadas, senderos, herramientas. |
 | **Bosque** | Niveles 6–7 | Árboles y rocas que estorban el avance; madera para la colonia. **[CANON]** | Postes y cintas, caminos que alguien mantiene. |
-| **Ruinas** | Niveles 8–10 y 14 | Construcciones de piedra y metal viejo, a medio enterrar; de ahí salen los avances. **[CANON]** | El símbolo A en piedra. |
+| **Ruinas** | Niveles 8–10 y 14 | Construcciones de piedra y metal viejo, a medio enterrar; de ahí salen los avances. **[CANON]** | La marca G2 de los Moradores en piedra. |
 | **Desierto** | Niveles 10–12 | Poca agua, minas, caminos secos. **[CANON]** | Hitos, pozos, huellas. |
 | **Nieve** | Nivel 13 | El paso que comunica con el resto de la región. **[CANON]** | Marcas de paso y avisos. |
 | **Volcán** | — (no se usa en la V1) | Tierra negra, calor, minerales. **[PROPUESTA]** | Nada todavía: región sin visitar. |
@@ -89,7 +89,7 @@ Volcán y pantano **existen** en el planeta pero la colonia no llega a ellos. So
 
 **Las dos reglas de las regiones:**
 1. **Cada región tiene continuidad geográfica**: se pasa del oasis al bosque, del bosque a las ruinas y de ahí al desierto por caminos reales, no por saltos. **[CANON]** (07 §3)
-2. **El símbolo A aparece en todas las regiones que se visitan** (§5 y §6). **[CANON]** (plan 08 §5)
+2. **La marca de los Moradores aparece en todas las regiones que se visitan** (§5 y §6). **[CANON]** (plan 08 §5)
 
 ---
 
@@ -151,13 +151,13 @@ Animales de este planeta. **No están organizados**: atacan por hambre, por terr
 
 Seres especiales o mágicos que **van por su cuenta**. No pertenecen a ninguna comunidad y no obedecen a nadie. **[CANON]** (07 §2.3) Son el primer indicio de que el planeta tiene *alguien más* que animales.
 
-- **Ladrón** — *encapuchado gris violeta con bolsa.* Roba oro de la caja de la colonia mientras está en pantalla y no baja de cierto mínimo. **Busca:** lo que brilla; no se sabe para qué. Es el ejemplo que dio Lucas de criatura independiente. **Regla de lore:** **nunca lleva el símbolo A**, para no confundirlo con el Chamán (T202 los marca como "los dos encapuchados"). *Es una regla de arte que sale de este documento: no se verificó contra el dibujo.* **[PROPUESTA]**
+- **Ladrón** — *encapuchado gris violeta con bolsa.* Roba oro de la caja de la colonia mientras está en pantalla y no baja de cierto mínimo. **Busca:** lo que brilla; no se sabe para qué. Es el ejemplo que dio Lucas de criatura independiente. **Regla de lore:** **nunca lleva el símbolo de los Moradores**, para no confundirlo con el Chamán (T202 los marca como "los dos encapuchados"). *Es una regla de arte que sale de este documento: no se verificó contra el dibujo.* **[PROPUESTA]**
 - **Espejo** — *tortuga de cristal facetado.* Devuelve los tiros de las torres cercanas y las aturde. **Busca:** nada que se sepa. Aparece en el nivel 12, **junto a las comunidades**, sin que quede claro si ellas la guían o si solo comparten el camino. La ambigüedad es intencional. **[PROPUESTA]**
 - **La Cuadrilla** — una **banda** de dos especies que salen juntas. **[CANON]** (Lucas, 2026-10-10; RF-485 a RF-491, D-094)
   - **Ratero** — *criatura chica, baja y alargada, sin capa.* Veloz y frágil; anda en grupo. Roba oro de la caja mientras está en pantalla, como el Ladrón, pero **cada uno el suyo y todos a la vez**. **Busca:** lo que brilla; no se sabe para qué. **[PROPUESTA]**
   - **Cargador** — *criatura ancha y lenta, con una bolsa más grande que el cuerpo.* Es la que **lleva lo de todas**: roba, aguanta y tarda en caer. **Busca:** lo mismo que los Rateros, que lo siguen o lo preceden sin que se vea quién va adelante. **[PROPUESTA]**
-  - **Qué es y qué no es. [CANON]** Criaturas **independientes**, de **otra especie que el Ladrón**: por eso el texto aprobado de la Wiki, *«el Ladrón va solo»*, sigue siendo cierto. **No son Moradores, no llevan el símbolo A y no tienen jefe ni mando:** «cuadrilla» es **cómo las llaman los colonos** porque llegan juntas (como una cuadrilla de obra), no porque se sepa que se organicen. Se juntan por lo mismo que cada una busca. **No obedecen a nadie** (07 §2.3), como el Ladrón y el Espejo.
-  - **Regla de lore (arte):** ninguna lleva el símbolo A ni capucha. Se distinguen del Ladrón (gris violeta, con capa y bolsa) por el **tamaño y la silueta**.
+  - **Qué es y qué no es. [CANON]** Criaturas **independientes**, de **otra especie que el Ladrón**: por eso el texto aprobado de la Wiki, *«el Ladrón va solo»*, sigue siendo cierto. **No son Moradores, no llevan el símbolo de los Moradores y no tienen jefe ni mando:** «cuadrilla» es **cómo las llaman los colonos** porque llegan juntas (como una cuadrilla de obra), no porque se sepa que se organicen. Se juntan por lo mismo que cada una busca. **No obedecen a nadie** (07 §2.3), como el Ladrón y el Espejo.
+  - **Regla de lore (arte):** ninguna lleva el símbolo de los Moradores ni capucha. Se distinguen del Ladrón (gris violeta, con capa y bolsa) por el **tamaño y la silueta**.
   - **Por qué no una «tribu organizada».** Una banda que se organiza para robar sería de la capa 3, y eso convertiría a los habitantes en ladrones: lo que §8 pide evitar. Con criaturas independientes la ambigüedad del juego queda intacta.
   - **Dónde se ve. [PROPUESTA]** (pendiente del OK de Lucas, P1 de M55) Debuta en el **nivel 7** (El aserradero) y reaparece en el 10, el 13 y el 14. No está en el 15.
 
@@ -170,7 +170,7 @@ Las que **ya estaban** y se organizan para proteger lo suyo: **protegen** (Guard
 | Opción | Por qué |
 |---|---|
 | **A · Moradores** | Neutro y correcto: los que moran, los que viven acá. Es lo que diría un informe prolijo. |
-| **B · Marcados** | Por el símbolo A. Es cómo los verían los colonos: por su marca, no por su nombre. Un nombre que ya los reduce. |
+| **B · Marcados** | Por la marca de los Moradores. Es cómo los verían los colonos: por su marca, no por su nombre. Un nombre que ya los reduce. |
 | **C · Primeros** | Quienes estaban antes. Más cargado y más ambiguo: ¿primeros en qué, primeros frente a quién? |
 
 **Una alianza o un solo pueblo (P-1).** Los tres oficios se ven **muy distintos**: un gólem de piedra, una criatura vegetal y un encapuchado. Dos formas de leerlo:
@@ -205,7 +205,7 @@ El resto del documento escribe "las comunidades" y vale para las dos lecturas.
 
 **Qué busca. [CANON]** Nada que se sepa. No habla, no tiene gesto de nada: avanza. Un cuerpo que se parte no tiene intención ni mensaje.
 
-**Pertenencia ambigua. [CANON]** (como el Espejo, §4.2) No se dice si los Moradores lo guían o si solo comparten camino con él. Lo único que se ve es que su piedra se parece a la de los Guardianes. **No lleva el símbolo A.** Es intencional: un gólem con la marca sería «el líder de ellos», y la biblia pide no tener villano (§8).
+**Pertenencia ambigua. [CANON]** (como el Espejo, §4.2) No se dice si los Moradores lo guían o si solo comparten camino con él. Lo único que se ve es que su piedra se parece a la de los Guardianes. **No lleva el símbolo de los Moradores.** Es intencional: un gólem con la marca sería «el líder de ellos», y la biblia pide no tener villano (§8).
 
 **En la Wiki.** El texto de lore está en `11-textos-lore.md`, artículo «La Central»: *«Los colonos lo llaman el Coloso. Es de la misma piedra que los Guardianes. Cuando cae, se parte en tres y los pedazos siguen camino.»*
 
@@ -227,7 +227,7 @@ El primer avance es lo nuestro y el segundo es lo ajeno. La colonia pasa de **re
 **Qué son las ruinas. [CANON]** Construcciones de piedra y metal viejo que **bloquean posiciones** y guardan avances (07 §6). En el juego se demuelen para despejar la casilla y recuperar la pieza.
 
 **Quién las dejó (P-4). [OPCIÓN]** Puede quedar ambiguo, y lo que **sí** es canon es lo siguiente:
-- **Todas llevan el símbolo A**, el mismo que las señales del oasis. **[CANON]** (plan 08 §5)
+- **Todas llevan la misma marca G2 que las señales del oasis.** **[CANON]** (plan 08 §5)
 - Las comunidades de hoy **no construyen así**. **[PROPUESTA]**
 - La colonia las llama "las ruinas" y las trata como un yacimiento. **[PROPUESTA]**
 
@@ -236,7 +236,7 @@ Tres lecturas posibles que el juego **no resuelve**:
 - **Antepasados.** Las dejaron las mismas comunidades, hace mucho, cuando eran otra cosa.
 - **Un lugar compartido.** Estaban antes que todos y las comunidades las respetan sin haberlas hecho.
 
-**Qué significa el símbolo A.** Tampoco se dice. Se puede leer como **pertenencia** ("esto es nuestro"), como **aviso** ("hasta acá") o como **memoria**. Cada jugador puede leerlo distinto. **[PROPUESTA]**
+**Qué significa la marca de los Moradores.** Tampoco se dice. Se puede leer como **pertenencia** ("esto es nuestro"), como **aviso** ("hasta acá") o como **memoria**. Cada jugador puede leerlo distinto. **[PROPUESTA]**
 
 **La ironía que no se subraya.** Con la tecnología de las ruinas la colonia construye la **Disruptora**, que corta las auras del Guardián y del Curandero: es decir, usa lo que dejaron esos mismos habitantes **contra** ellos. El juego lo muestra y no lo comenta. **[PROPUESTA]**
 
@@ -250,11 +250,11 @@ Las señales son objetos del terreno que **parecen decoración** al principio y 
 
 | Señal | Id de arte (T218) | Dónde | Qué parece al principio | Qué revela después |
 |---|---|---|---|---|
-| **Roca marcada** | `roca_marcada` | 1 y 5; las ruinas del 8 | Una piedra con una marca tallada: un detalle. | La marca es **el símbolo A**. Se repite. |
+| **Roca marcada** | `roca_marcada` | 1 y 5; las ruinas del 8 | Una piedra con una marca tallada: un detalle. | La marca es el símbolo de los Moradores, glifo H G2. Se repite. |
 | **Sendero de piedras** | `sendero` | 2 | Piedras planas acomodadas junto al agua. | Alguien **mantiene** el camino: lo usa a menudo. |
 | **Herramienta tallada** | `herramienta` | 3 | Un objeto de hueso o madera tirado en la huerta. | Hay manos que trabajan, hay oficio. |
 | **Poste con cintas** | `poste_cintas` | 4 | Un palo con tiras de tela, junto al pozo. | Es una **señal para otros**: avisa algo. |
-| **Símbolo en piedra de ruina** | `simbolo_ruina` | 8 a 10 | El símbolo A, ahora en piedra vieja. | **La revelación:** la marca de las rocas del oasis es la misma de las ruinas. |
+| **Símbolo en piedra de ruina** | `simbolo_ruina` | 8 a 10 | El glifo H G2, ahora en piedra vieja. | **La revelación:** la marca de las rocas del oasis es la misma de las ruinas. |
 | **Campamento vacío** | `campamento_vacio` | 14 y 15 | Restos de fuego, cuerdas, pieles. | Alguien se fue **hace poco**. Las comunidades se retiraron. |
 | **Hito de piedra** *(opcional)* | `hito` | 11 a 13 | Una pila de piedras en el camino seco. | Marca un límite, y el límite ahora está del lado de ellos. **[OPCIÓN, P-6]** |
 
@@ -265,13 +265,13 @@ La lista de T218 cubre hasta el 10 y el 14–15, y no tiene nada para el 11–13
 | Bloque | Qué sabe el jugador | Cómo se muestra |
 |---|---|---|
 | **1–5 · El oasis** | Casi nada. Hay detalles raros. | Solo decoración. **Sin texto que lo explique.** |
-| **6–10 · Fuera del oasis** | Que esas marcas son de alguien, y que ese alguien también estuvo en las ruinas. | El símbolo A en piedra vieja. Los primeros enemigos que *no son bestias*. |
+| **6–10 · Fuera del oasis** | Que esas marcas son de alguien, y que ese alguien también estuvo en las ruinas. | La marca G2 en piedra vieja. Los primeros enemigos que *no son bestias*. |
 | **11–15 · Territorio disputado** | Que ese alguien existe, que se organiza y que **se está yendo**. | Ataques coordinados, hitos de límite y campamentos vacíos. |
 
 **Reglas de las señales.**
 1. **Mostrar antes que explicar.** La primera vez que aparece una señal no lleva texto. **[PROPUESTA]**
 2. **No se confunden con lo jugable.** El `sendero` no tiene que parecer el camino de los enemigos, y lo que se puede demoler se distingue de lo permanente (07 §6, Q-16). **[CANON]**
-3. **El símbolo A se repite**, siempre igual. Su diseño exacto lo dibuja T218 y lo aprueba Lucas.
+3. **La marca G2 se repite**, siempre igual. Lucas aprobó este glifo (T505/T506).
 
 ---
 
@@ -286,14 +286,14 @@ Una línea por mapa, para guiar los textos de T227. Los nombres y lugares vienen
 | 2 | **Desfiladero** · El paso del agua | El acceso al agua dulce. | Un sendero de piedras: parece natural, no lo es. |
 | 3 | **Encrucijada** · Las huertas | La tierra para cultivar. | Una herramienta tallada, abandonada. |
 | 4 | **Espiral** · El pozo | La fuente de agua. | Un poste con cintas. |
-| 5 | **Fortaleza** · La empalizada | El primer perímetro cerrado. | El símbolo A **otra vez**, en varias rocas. Último avance (Estandarte mecánico). |
+| 5 | **Fortaleza** · La empalizada | El primer perímetro cerrado. | La marca G2 **otra vez**, en varias rocas. Último avance (Estandarte mecánico). |
 
 ### Bloque 2 · Fuera del oasis (6–10): posiciones avanzadas y abastecimiento
 | # | Mapa · lugar | Qué asegura la colonia | Qué se ve o se sabe |
 |---|---|---|---|
 | 6 | **Nido** · El lindero | El borde del bosque. | Primeros árboles que se talan. Aparecen el Ladrón y el Embestidor. |
-| 7 | **Cruce** · El aserradero | La madera, que es lo que la colonia necesita para crecer. | Primer indicio decorativo del símbolo A. **[PROPUESTA]** Debuta la Cuadrilla (§4.2). |
-| 8 | **Bastión** · El bastión sobre ruinas | Una posición alta, construida sobre piedra vieja. | **Revelación:** las ruinas tienen el símbolo A. Debuta el Guardián. Pieza 1/3. |
+| 7 | **Cruce** · El aserradero | La madera, que es lo que la colonia necesita para crecer. | Primer indicio decorativo de la marca de los Moradores. **[PROPUESTA]** Debuta la Cuadrilla (§4.2). |
+| 8 | **Bastión** · El bastión sobre ruinas | Una posición alta, construida sobre piedra vieja. | **Revelación:** las ruinas tienen la misma marca de los Moradores. Debuta el Guardián. Pieza 1/3. |
 | 9 | **Taller asediado** · El taller | El primer taller de la colonia fuera del oasis. | Una ruina con la pieza 2/3. Debuta el Curandero y el Mortero. |
 | 10 | **La mina vieja** *(nombre provisorio)* · Primer puesto de abastecimiento | Una mina que *ya estaba cavada*. | Las galerías son de otros; la colonia las retoma. Pieza 3/3. Cierra el bloque. **[PROPUESTA]** Reaparece la Cuadrilla. |
 
@@ -303,7 +303,7 @@ Una línea por mapa, para guiar los textos de T227. Los nombres y lugares vienen
 | 11 | **Puesto seco** · Desierto | Un punto de agua en el camino seco. | Debuta el Chamán: el primer sabotaje. Llega la Disruptora. |
 | 12 | **El cañadón** · Desierto | El paso hacia el norte. | Debuta el Espejo. Las auras y el aturdimiento se combinan. |
 | 13 | **Paso alto** · Nieve | El paso que comunica con el resto de la región. | Ataques coordinados: escolta con dos entradas. Hitos de límite. **[PROPUESTA]** Reaparece la Cuadrilla. |
-| 14 | **Los poblados vacíos** · Ruinas | Los asentamientos que las comunidades dejaron. | Campamentos vacíos, fuegos fríos, el símbolo A por todas partes: **se fueron**. **[PROPUESTA]** Reaparece la Cuadrilla. |
+| 14 | **Los poblados vacíos** · Ruinas | Los asentamientos que las comunidades dejaron. | Campamentos vacíos, fuegos fríos, la marca G2 por todas partes: **se fueron**. **[PROPUESTA]** Reaparece la Cuadrilla. |
 | 15 | **La Central** · Valle | La central de energía y la cadena de abastecimiento. | Defensa final contra el jefe supremo y su escolta. Epílogo. |
 
 ### El final (nivel 15)
@@ -353,7 +353,7 @@ Hay que mostrar **el logro y su costo**, sin conclusión moral (07 §1). **[CANO
 - La V1 se juega **siempre como los colonizadores**.
 - Las torres son **artillería del perímetro**; la tecnología es **hierro, bronce, cristal y mecanismos**, sin láseres ni soldados espaciales.
 - Cuatro capas de habitantes: fauna, criaturas independientes, comunidades organizadas y el Soberano.
-- **El símbolo A es el mismo en las señales y en las ruinas.**
+- **El glifo G2 es el mismo en las señales y en las ruinas.**
 - El final **asegura el hogar en una región, no el planeta**, y deja ambiguo el costo.
 - El tono: ambigüedad, consecuencias sin sentencia, nada de caricaturas, textos breves.
 - Los nombres elegidos en G2 (planeta, colonia, comunidades) y el glosario de T202 aprobado.
@@ -370,7 +370,7 @@ Ninguna se diseña ni se implementa en la V1. Están acá para que el canon **no
 | **El nombre y la lengua de las comunidades** | §4.3 | Los colonos las nombran; ellas no. |
 | **Volcán y pantano** | §2 | Regiones sin visitar. |
 | **Contar con el escenario en 3D** (ruinas, estatuas, campamentos) | 06 §9 | Las señales de la V1 pueden crecer en esa dirección. |
-| **La Cuadrilla en la v2 en 3D** (la banda que anda junta, sin jefe) | Lucas, 2026-10-10; T252 | Que sigan **sin mando ni símbolo A**. En 3D se podrían ver andando juntas por el mismo terreno, con el Cargador marcando el paso. **No se prepara nada de 3D en la V1** (ni modelos, ni campos ni nombres reservados). |
+| **La Cuadrilla en la v2 en 3D** (la banda que anda junta, sin jefe) | Lucas, 2026-10-10; T252 | Que sigan **sin mando ni la marca de los Moradores**. En 3D se podrían ver andando juntas por el mismo terreno, con el Cargador marcando el paso. **No se prepara nada de 3D en la V1** (ni modelos, ni campos ni nombres reservados). |
 
 ---
 

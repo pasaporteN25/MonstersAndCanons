@@ -120,7 +120,7 @@ Embestidor: anatomía pesada del antiguo Curandero, casco óseo/cuerno frontal, 
 
 ### T257 · La Cuadrilla (provisional, RF-490)
 
-Ratero y Cargador son criaturas independientes: sin símbolo A, marcas comunitarias, capucha ni capa. Ratero bajo y horizontal; Cargador ancho con bolsa más grande que el cuerpo. Familia cobre rosado / terracota; lona neutra. Fuentes SVG nativas rasterizadas a PNG RGBA 256×256 y ciclos 1024×1024 (4 direcciones × 4 fases), apoyo en y=191, sin sombra. La iluminación no se refleja con la dirección. Las paletas y siluetas están **pendientes de aprobación de Lucas**; hoja con el Ladrón aprobado en `art/t257-cuadrilla/captures/contact_sheet.png`. Es una propuesta vectorial más simple que los PNG renderizados, no arte definitivo. No integrada ni capturada en partida en este despacho.
+Ratero y Cargador son criaturas independientes: sin la marca de los Moradores ni otras marcas comunitarias, capucha ni capa. Ratero bajo y horizontal; Cargador ancho con bolsa más grande que el cuerpo. Familia cobre rosado / terracota; lona neutra. Fuentes SVG nativas rasterizadas a PNG RGBA 256×256 y ciclos 1024×1024 (4 direcciones × 4 fases), apoyo en y=191, sin sombra. La iluminación no se refleja con la dirección. Las paletas y siluetas están **pendientes de aprobación de Lucas**; hoja con el Ladrón aprobado en `art/t257-cuadrilla/captures/contact_sheet.png`. Es una propuesta vectorial más simple que los PNG renderizados, no arte definitivo. No integrada ni capturada en partida en este despacho.
 
 ## 9. Estatuas decorativas de torres (M58, RF-515, D-098)
 
