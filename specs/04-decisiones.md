@@ -1924,3 +1924,18 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Alcance:** RF-729 (enmienda de RF-471). Sin cambios en el guardado, `SAVE_VERSION`, balance, desbloqueos, créditos ni en el texto del epílogo. T546 implementa tras T545 y la aprobación de las muestras; T547 retira el arte viejo de T233.
 - **Enmienda (2026-10-28, Lucas):** la luminosa **no es arte nuevo**: es la imagen vigente `assets/sprites/story/epilogue.png` (T233), sin cambios ni retiro; las dos muestras luminosas nuevas se descartan. La oscura es la muestra «Oscura 01» de `art/t546-final/`, integrada como `assets/sprites/story/epilogue_dark.png`. Créditos iguales, sin variante intermedia, frase sin cambios. La regla de estrellas y el cálculo al abrir no cambian. La «Alternativa descartada» de la tercera imagen queda cerrada: son dos.
 - **Riesgos/condiciones:** (1) si en el futuro cambia `Rules.stars_for`, cambia quién ve la luminosa, sin tocar guardados; (2) la regla recorre `level_count()`, así que una campaña con más o menos de 15 niveles sigue funcionando; (3) las muestras de arte fuera de `assets/` necesitan OK escrito de Lucas y la compuerta de estilo de `05-guia-de-arte.md`; hoy no hay arte aprobado, así que la integración no puede cerrarse sin él.
+
+
+## D-220 · El paquete exportado excluye `Capturas/`
+
+- **Fecha:** 2026-10-28 · **Decidió:** Claude (política técnica de empaquetado, a partir del hallazgo H1 de la auditoría T538 pedida por Lucas); sin cambios de jugabilidad. **Estado:** vigente salvo que Lucas diga otra cosa.
+- **Qué:** el `exclude_filter` de los tres presets suma `Capturas/*` y la carpeta lleva un `.gdignore`. Lo especifica RF-730.
+- **Motivo:** el export de hoy empaquetaba 257 capturas de documentación importadas sin pérdida: **176 MB de 236,8 MB del `.pck` (74 %)**, sin que el juego las use (ningún `.gd`, `.tscn`, `.tres`, `.json` ni `project.godot` las nombra). Con la exclusión el `.pck` pesa 60,7 MB. Es un cambio de configuración, sin tocar arte, código ni datos.
+- **Alternativas descartadas:**
+  - **Mover o borrar `Capturas/` del repositorio** (Releases, LFS, otra rama): es la decisión D1 del informe T538 y es de Lucas; el `README.md` muestra tres capturas de `T520-*` desde esa carpeta. No se decide acá.
+  - **Reescribir el historial** para sacar los blobs (141 MB): decisión D2 de Lucas; implica `push --force`, que está prohibido sin permiso.
+  - **Solo `.gdignore`, sin filtro:** una carpeta ignorada no entra al paquete, pero el filtro es explícito, se ve en `export_presets.cfg` y protege si alguien quita el `.gdignore`. Se hacen las dos cosas.
+  - **Solo el filtro, sin `.gdignore`:** Godot seguiría importando las capturas (unos 170 MB de caché y minutos de `--import`, en CI y en cada worktree) y generaría archivos `.import` sin seguimiento que ensucian `git status`. Se comprobó que ninguna herramienta (`tools/*.gd`, `art/**/capture*.gd`) ni test lee `res://Capturas`, así que el `.gdignore` es seguro.
+  - **Excluir más carpetas:** `art/*` ya estaba excluido y el baseline no muestra otra carpeta de documentación en el paquete (`scenes`, `scripts` y `data` suman menos de 1 MB). No hay nada más que filtrar.
+- **Alcance:** RF-730, T550. Sin cambios de guardado, balance ni jugabilidad.
+- **Riesgos/condiciones:** (1) quien quiera ver las capturas desde el editor de Godot ya no las ve en el panel de archivos; siguen en disco y en GitHub; (2) una herramienta nueva que cargue `res://Capturas/...` fallaría: tendría que leer desde disco o usar otra carpeta.
