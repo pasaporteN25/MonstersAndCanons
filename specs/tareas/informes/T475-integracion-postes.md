@@ -57,6 +57,6 @@ Lucas vio que los estandartes quedaban encima de otro ítem del mapa. Era así: 
 
 **Verificación**
 - Capturas a 1280×720 (ventana, `game.tscn`, DISPLAY=:0), vistas a ojo las cuatro: el poste de (18, 1) queda completo en el rincón noreste, rojo con 0 estrellas y turquesa/blanco con 3; **no tapa ninguna señal** (los símbolos de (12,0)/(6,0) y (0,4) se ven), ni camino, ni removible, ni la barra superior.
-- `test_campaign_posts.gd`: 18/18, 7034 aserciones. GUT completo: ver el Resultado de T475 en `specs/03-tareas.md`.
+- `test_campaign_posts.gd`: 18/18, 7034 aserciones. GUT completo tras mergear main: 2553/2553, 0 `SCRIPT ERROR`.
 
 **No se probó:** una torre construida sobre el poste en (18, 1) (por diseño debería taparlo; no se capturó), 2 estrellas con captura, 1920×1080, celular simulado o real, Windows, rendimiento.
