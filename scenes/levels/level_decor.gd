@@ -185,6 +185,8 @@ func bind_field(field: ObstacleField) -> void:
 func object_texture(cell: Vector2i, drawing: String) -> Texture2D:
 	if CampaignMarks.SIGNAL_DRAWINGS.has(drawing):
 		return MapDrawings.signal_rock_texture(cell, _theme)
+	if drawing == "flores":
+		return MapDrawings.flower_texture(cell)
 	if drawing == "estatua":
 		return MapDrawings.statue_texture(cell, _theme)
 	if drawing == "columna":
