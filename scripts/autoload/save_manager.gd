@@ -25,6 +25,7 @@ const DEFAULT_SETTINGS: Dictionary = {
 	"selector_style": 1,  # M72/M76, RF-645, RF-687: 0 = tarjetas, 1 = mapa planetario (por omisión, PC y celular)
 	"selector_map_migrated": false,  # M76, RF-689: ¿este archivo ya pasó una vez al mapa? Clave aditiva
 	"range_display": 0,  # M75, RF-678: Oculto por omisión, también para guardados viejos
+	"language": "es",  # T533, RF-727: idioma de la interfaz (preferencia; no es progreso). Clave aditiva, sin subir SAVE_VERSION
 	"siege_access_migrated": true,  # M76, RF-693: ¿este archivo ya migró el acceso a Asedio? Clave aditiva
 }
 
@@ -463,8 +464,16 @@ func selector_map_migrated() -> bool:
 func set_setting(key: String, value: Variant) -> void:
 	if key == "range_display":
 		value = _range_display_value(value)
+	elif key == "language":
+		value = String(Localization.normalize(value))
+		Localization.set_language(value)
 	_settings[key] = value
 	setting_changed.emit(key, value)
+
+
+## T533, RF-727: el idioma elegido (`&"es"` o `&"en"`). Un valor ausente o inválido vale español.
+func language() -> StringName:
+	return Localization.normalize(get_setting("language"))
 
 
 ## M75, RF-678: modo de dibujo del alcance. Un valor inválido se interpreta como Oculto.
@@ -593,6 +602,11 @@ func _read_settings(raw: Variant) -> void:
 	if not raw is Dictionary:
 		return
 	for key: String in DEFAULT_SETTINGS:
+		if key == "language":
+			# T533, RF-727: texto (no número ni booleano). Ausente o inválido vale español.
+			if raw.has(key):
+				_settings[key] = String(Localization.normalize(raw[key]))
+			continue
 		if key == "range_display":
 			if not raw.has(key):
 				continue

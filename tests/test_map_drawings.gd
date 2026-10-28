@@ -82,6 +82,37 @@ func test_signal_rocks_use_three_models_and_theme_colors_stably() -> void:
 				assert_true(texture.get_image().detect_alpha() != Image.ALPHA_NONE, path)
 
 
+func test_approved_alien_flora_rotates_stably_across_campaign_flowers() -> void:
+	var model_paths: Array[String] = [
+		"res://assets/sprites/map/rendered/cantaro/flora_trumpets.png",
+		"res://assets/sprites/map/rendered/cantaro/flora_capsules.png",
+		"res://assets/sprites/map/rendered/cantaro/flora_rosette.png",
+	]
+	var models_used: Dictionary = {}
+	for path: String in model_paths:
+		var texture: Texture2D = load(path)
+		assert_not_null(texture, path)
+		if texture != null:
+			assert_eq(texture.get_size(), Vector2(128, 128), path)
+			assert_true(texture.get_image().detect_alpha() != Image.ALPHA_NONE, path)
+	var levels_with_flowers: Array[int] = [1, 3, 4, 5]
+	var decor: LevelDecor = LevelDecor.new()
+	add_child_autofree(decor)
+	for level_number: int in levels_with_flowers:
+		var data: LevelData = GameFlow.level(level_number - 1)
+		var grid: MapGrid = MapGrid.parse(data.map_rows, data.legend)
+		for cell: Vector2i in grid.legend_cells:
+			if grid.legend_cells[cell] != "flores":
+				continue
+			var selected: Texture2D = decor.object_texture(cell, "flores")
+			assert_eq(selected, MapDrawings.flower_texture(cell), "nivel %d, casilla %s" % [level_number, cell])
+			assert_eq(selected, decor.object_texture(cell, "flores"), "la casilla conserva su modelo")
+			models_used[selected.resource_path] = true
+	assert_eq(models_used.size(), 3, "las flores actuales muestran los tres modelos aprobados")
+	assert_eq(MapDrawings.texture("flores"), MapDrawings.FLOWER_VARIANTS[0], "el catálogo expone una referencia nueva")
+	assert_true(MapDrawings.texture("flores").resource_path.begins_with("res://assets/sprites/map/rendered/cantaro/"))
+
+
 func test_engraved_g2_is_a_transparent_layer_over_the_signal_rock() -> void:
 	var mark: Texture2D = CampaignMarks.texture_of(CampaignMarks.GRABADA)
 	assert_not_null(mark)
