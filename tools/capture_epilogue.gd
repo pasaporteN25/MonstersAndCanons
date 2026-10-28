@@ -23,17 +23,18 @@ func run() -> void:
 	get_window().position = Vector2i.ZERO
 	for _i: int in 10:
 		await get_tree().process_frame
-	var epilogue := EpilogueScreen.new()
+	# Se carga en ejecución: EpilogueScreen usa autoloads y --check-only no los ve al compilar la herramienta.
+	var epilogue: Node = (load("res://scenes/ui/epilogue_screen.gd") as GDScript).new()
 	add_child(epilogue)
 	var flow: Node = get_node("/root/GameFlow")
 	var text: String = flow.level(flow.level_count() - 1).epilogue_text
 	for variant: Array in [["luminosa", true], ["oscura", false]]:
-		epilogue.open(text, variant[1])
+		epilogue.call("open", text, variant[1])
 		for _i: int in 6:
 			await get_tree().process_frame
 		var image: Image = get_viewport().get_texture().get_image()
 		var path: String = "%s/epilogo_%s_%dx%d.png" % [out, variant[0], size.x, size.y]
 		image.save_png(path)
 		print("guardada ", path, " ", image.get_size())
-		epilogue.close()
+		epilogue.call("close")
 	get_tree().quit()
