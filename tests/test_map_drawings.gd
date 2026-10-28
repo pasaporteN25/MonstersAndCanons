@@ -33,7 +33,7 @@ func test_every_object_has_a_drawing_and_every_ground_has_colors() -> void:
 				fail_test("%s no es ni suelo ni objeto" % id)
 
 
-func test_the_catalog_has_four_grounds_and_twenty_nine_objects() -> void:
+func test_the_catalog_has_four_grounds_and_twenty_eight_objects() -> void:
 	var grounds: int = 0
 	var objects: int = 0
 	for id: String in MapDrawings.ids():
@@ -42,7 +42,7 @@ func test_the_catalog_has_four_grounds_and_twenty_nine_objects() -> void:
 		else:
 			objects += 1
 	assert_eq(grounds, 4)
-	assert_eq(objects, 29)
+	assert_eq(objects, 28)
 
 
 func test_the_six_community_signals_are_static_objects() -> void:
@@ -187,6 +187,22 @@ func test_level_data_passes_the_post_context_and_defaults_to_enemy() -> void:
 	assert_true(won.post_conquered)
 	assert_eq((custom.get_node("Decor") as LevelDecor).object_texture(Vector2i(3, 1), "poste_cintas"), MapDrawings.post_texture(true, BannerRecipe.make("brasa", "estrella")))
 	await wait_physics_frames(2)
+
+
+func test_supply_pieces_use_the_t527_png_family_and_not_the_old_svg() -> void:
+	var expected: Dictionary = {
+		"supply_cart": "ship_wreck.png", "supply_depot": "forge_ruin.png", "supply_line_pole": "ingot_pile.png",
+	}
+	for id: String in expected:
+		assert_true(MapDrawings.is_valid(id), id)
+		var texture: Texture2D = MapDrawings.texture(id)
+		assert_eq(texture.resource_path, "res://assets/sprites/map/rendered/t527/" + String(expected[id]))
+		assert_eq(texture.get_size(), Vector2(128, 128), "%s: PNG de 128 px" % id)
+		var image: Image = texture.get_image()
+		assert_true(image.detect_alpha() != Image.ALPHA_NONE, "%s conserva alfa" % id)
+		assert_eq(image.get_pixel(0, 0).a, 0.0, "%s: esquina transparente" % id)
+		assert_eq(image.get_pixel(127, 127).a, 0.0, "%s: esquina transparente" % id)
+	assert_false(MapDrawings.is_valid("supply_conveyor"), "la cinta de T233 sale del catálogo (sin uso)")
 
 
 func test_log_and_fern_use_the_new_png_resources() -> void:
