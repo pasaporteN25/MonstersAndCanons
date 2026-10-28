@@ -1,0 +1,44 @@
+{
+	"14": {
+		"supply": [],
+		"tile_px": 48.0
+	},
+	"15": {
+		"supply": [
+			{
+				"cell": [
+					25,
+					5
+				],
+				"drawing": "supply_depot",
+				"screen_origin": [
+					1215.99987792969,
+					287.999969482422
+				]
+			},
+			{
+				"cell": [
+					15,
+					11
+				],
+				"drawing": "supply_cart",
+				"screen_origin": [
+					735.999938964844,
+					575.999938964844
+				]
+			},
+			{
+				"cell": [
+					21,
+					11
+				],
+				"drawing": "supply_line_pole",
+				"screen_origin": [
+					1023.99993896484,
+					575.999938964844
+				]
+			}
+		],
+		"tile_px": 48.0
+	}
+}
