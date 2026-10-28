@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://art/t545-revision/capture_t545.gd" id="1"]
+
+[node name="CaptureT545" type="Node"]
+script = ExtResource("1")
