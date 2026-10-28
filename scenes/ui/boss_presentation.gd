@@ -79,6 +79,7 @@ func _build() -> void:
 		art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 		_root.add_child(art)
+		_add_text_shade()
 	var column := VBoxContainer.new()
 	column.name = "Column"
 	column.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -100,6 +101,41 @@ func _build() -> void:
 	_hint = _label("Hint", HINT_MOBILE if _mobile else HINT_DESKTOP, 18, Color(0.7, 0.68, 0.64))
 	_hint.modulate.a = 0.0
 	column.add_child(_hint)
+
+
+## T548: con un fondo pintado, una franja que se oscurece hacia abajo detrás del texto (color, alto y opacidad: `data/ui/boss_presentation.json`).
+func _add_text_shade() -> void:
+	var shade: Dictionary = BossPresentationArt.shade()
+	var opacity: float = shade["opacidad"]
+	var height: float = shade["alto"]
+	if opacity <= 0.0 or height <= 0.0:
+		return
+	var color: Color = shade["color"]
+	var gradient := Gradient.new()
+	gradient.set_color(0, Color(color, 0.0))
+	gradient.set_color(1, Color(color, opacity))
+	gradient.add_point(0.55, Color(color, opacity * 0.6))
+	var texture := GradientTexture2D.new()
+	texture.gradient = gradient
+	texture.fill_from = Vector2(0.0, 0.0)
+	texture.fill_to = Vector2(0.0, 1.0)
+	texture.width = 4
+	texture.height = 256
+	var rect := TextureRect.new()
+	rect.name = "TextShade"
+	rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	rect.texture = texture
+	rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	rect.stretch_mode = TextureRect.STRETCH_SCALE
+	rect.anchor_left = 0.0
+	rect.anchor_right = 1.0
+	rect.anchor_top = 1.0 - height
+	rect.anchor_bottom = 1.0
+	rect.offset_left = 0.0
+	rect.offset_right = 0.0
+	rect.offset_top = 0.0
+	rect.offset_bottom = 0.0
+	_root.add_child(rect)
 
 
 func _label(node_name: String, text: String, size: int, color: Color) -> Label:

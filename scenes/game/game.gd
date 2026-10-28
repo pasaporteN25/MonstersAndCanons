@@ -1024,7 +1024,8 @@ func _maybe_boss_presentation(enemy: Enemy) -> void:
 	if mobile_hud != null:
 		mobile_hud.set_modal_open(true)
 	presentation = BossPresentation.new().setup(enemy.data,
-			BossPresentationRules.seconds(SaveManager.has_seen_enemy(enemy.data.id)), mobile_hud != null)
+			BossPresentationRules.seconds(SaveManager.has_seen_enemy(enemy.data.id)), mobile_hud != null,
+			null, BossPresentationArt.backdrop_for(enemy.data.id))  # T548: solo el Coloso tiene fondo propio
 	presentation.closed.connect(_on_presentation_closed)
 	add_child(presentation)
 
