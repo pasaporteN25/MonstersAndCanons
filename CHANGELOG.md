@@ -1,5 +1,9 @@
 # Novedades del juego
 
+## Nave, taller y lingotes en La Central *(T549, 2026-10-28; en revisión)*
+
+En el nivel 15 el borde del mapa ya no muestra el depósito, el poste y la vagoneta de antes: ahora hay una nave exploradora destruida con el farol roto y apagado, un taller de frontera en ruinas y una pila de lingotes de hierro y bronce. Son solo decoración y el mapa no cambió.
+
 ## Tarjetas solo con niveles disponibles y salida más corta *(T531, 2026-10-28)*
 
 En la vista **Tarjetas** de la campaña ahora aparecen únicamente los niveles que ya podés jugar: con una partida nueva, solo el nivel 1. El **mapa** sigue mostrando (y dejando mirar) los niveles bloqueados, y el total de estrellas sigue contando toda la campaña. Al tocar «← Menú» en plena partida, el cuadro muestra solo el título, los dos botones y un único aviso: «No se guardará el progreso de esta partida.» Sigue pausando el juego y no cambia nada de tu guardado.

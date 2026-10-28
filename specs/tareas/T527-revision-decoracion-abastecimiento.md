@@ -33,3 +33,7 @@ La propuesta requiere cambiar el significado jugable de la cadena de abastecimie
 ## Revisión de Lucas · 2026-10-27
 
 Lucas indicó que le gustan los conceptos y pidió que el módulo luminoso de la nave destruida se vea como un farol roto oscuro y apagado. La galería muestra la revisión `sources/conceptos-farol-roto.png` y conserva la hoja inicial para comparar. La dirección conceptual de nave/taller quedó aceptada; la reutilización de lingotes en el lugar del poste y el uso concreto de las piezas siguen pendientes de confirmación antes de cualquier integración.
+
+## Integración · 2026-10-28
+
+Lucas decidió integrar el concepto ya. **T549** lo llevó al nivel 15 (nave destruida, taller en ruinas y lingotes; estados restaurados reservados). Ver `specs/03-tareas.md`.
