@@ -214,12 +214,13 @@ Una «línea» es un renglón del archivo (separado por `\n`), no lo que ocupa e
 
 ## 2. Epílogo (solo el nivel 15)
 
-**Decisión de Lucas, 2026-10-28:** se descartan las cuatro líneas anteriores y el epílogo queda en una sola frase, ambigua a propósito. Quien se la pregunta es el personaje del jugador: puede leerse como egoísmo (le importa la supervivencia humana) o como duda por lo que se está arrasando. **Borrador hasta que Lucas diga que sí; no se carga en el juego.** Todo este bloque se vuelve a revisar con T545.
+**Decisión de Lucas, 2026-10-28:** se descartan las cuatro líneas anteriores y el epílogo queda en una sola frase, ambigua a propósito. Quien se la pregunta es el personaje del jugador: puede leerse como egoísmo (le importa la supervivencia humana) o como duda por lo que se está arrasando. Se muestra partida en **3 líneas** (el mínimo que valida `LevelFile`), con las palabras exactas de la frase. Todo este bloque se vuelve a revisar con T545.
 
-- La máquina sigue avanzando, pero ¿por cuánto tiempo más? ¿A qué costo?
+- La máquina sigue avanzando,
+- pero ¿por cuánto tiempo más?
+- ¿A qué costo?
 
-*1 línea, 75 caracteres. **Choque con el límite:** la tabla de arriba y `LevelFile` piden 3 a 5 líneas para el epílogo; una sola frase no pasa la validación. Lucas decide si se baja el mínimo (hace falta RF y D nuevos) o si la frase se parte en tres líneas. El `level_15.json` vigente sigue con las cuatro líneas viejas hasta entonces.*
-
+*3 líneas, 75 caracteres.*
 
 ---
 

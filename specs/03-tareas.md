@@ -3117,7 +3117,7 @@ Spec en **M80** (RF-716 a RF-719), razones y canon en **D-212**, el cómo en la 
 
 - [x] **T544 · 📜 Reemplazar el texto del epílogo por la frase nueva. `[x86]`**
   **Refs:** pedido de Lucas del 2026-10-28; `specs/11-textos-lore.md` §2. **Hecho cuando:** el epílogo de `11-textos-lore.md` dice solo la frase nueva y queda marcado como borrador.
-  **Resultado (2026-10-28):** las cuatro líneas anteriores se descartaron en `11-textos-lore.md`; quedó «La máquina sigue avanzando, pero ¿por cuánto tiempo más? ¿A qué costo?» como borrador. **No** se tocó `level_15.json` (sigue con las cuatro líneas viejas) ni el código. Queda abierto el choque con el mínimo de 3 líneas de `LevelFile`. Solo documentación; sin Godot/GUT.
+  **Resultado (2026-10-28):** las cuatro líneas anteriores se descartaron en `11-textos-lore.md`; quedó «La máquina sigue avanzando, pero ¿por cuánto tiempo más? ¿A qué costo?» como borrador. `LevelFile` exige de 3 a 5 líneas, así que la frase se parte en tres con sus palabras exactas; se actualizaron `data/levels/level_15.json` y `tests/test_epilogue.gd` (4→3 líneas). Si Lucas prefiere una sola línea, hace falta RF y D nuevos (T545).
 
 - [ ] **T545 · 📜 Revisión integral de textos e imágenes de lore, nombres de niveles y descripciones. `[x86]`**
   **Refs:** pedido de Lucas del 2026-10-28; `specs/10-universo.md`, `specs/11-textos-lore.md`. **Hecho cuando:** Lucas revisó y aprobó (o corrigió) los 15 lugares, entradas y victorias, los nombres y descripciones de los niveles, el epílogo, los créditos y los artículos de Lore, y las imágenes del mismo estilo; lo aprobado queda en `11-textos-lore.md` y recién después se carga en el juego. Resolver acá el choque del mínimo de líneas del epílogo (RF y D nuevos si cambia).
