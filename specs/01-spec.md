@@ -810,7 +810,7 @@ Hoy todos los mapas se ven igual (pradera) y lo bloqueado lo dibuja el juego al 
   | Dibujo | Qué es | Tipo |
   |---|---|---|
   | `roca`, `arbol`, `arbusto` | los de siempre | objeto sobre el suelo |
-  | `flores` | un parche de flores del color del tema | objeto (decoración) |
+  | `flores` | vegetación de Cántaro; tres variantes alienígenas pintadas que rotan de forma estable por casilla (D-218/RF-728) | objeto (decoración) |
   | `agua` | un lago o un río, con reflejos | **suelo** (cubre toda la casilla y se une con los vecinos) |
   | `hielo` | hielo agrietado | suelo |
   | `lava` | lava con brillo | suelo |
@@ -4419,3 +4419,12 @@ Son 9 niveles y 28 casillas de señal. La clave de leyenda `h` de los niveles 11
 **Fuera de alcance:** ampliar el viewport 2D o cambiar el marco lógico; rediseñar el mapa o las tarjetas; cambiar contenido bloqueado del mapa; modificar guardados de progreso o `SAVE_VERSION`; añadir doblaje, nuevos idiomas o traducción automática; cambiar canon, balance o identificadores de datos; integrar o sustituir arte; editar música. La composición de una canción original electrónica de ciencia ficción se registra aparte, después de confirmar si es para menú, combate o ambos.
 
 **Plan de entrega:** T530 especifica; T531 implementa RF-724 y RF-725; T532 implementa RF-726; T533 inventaría los textos y prepara el catálogo/infraestructura sin exponer un modo inglés incompleto; T534 completa las traducciones y recién entonces habilita el selector persistente. T531–T533 dependen de esta spec aprobada; T534 depende de T533 y de la revisión de Lucas al inventario. No se requiere una skill de traducción para habilitarlo: el catálogo y las pruebas se mantienen dentro del proyecto.
+
+
+## M84 · Vegetación alienígena de Cántaro (T541; decisiones de Lucas, 2026-10-27)
+
+- **RF-728 · Rotación estable de la flora aprobada** (D-218; T540/T541/T542; amplía RF-263). El dibujo de leyenda existente `flores` usa las tres propuestas aprobadas por Lucas en T540: A (`flora_trumpets.png`), B (`flora_capsules.png`) y C (`flora_rosette.png`), PNG RGBA de 128×128 de la familia dimensional pintada vigente. Las tres se conservan y se distribuyen en rotación estable por casilla usando una función determinista de sus coordenadas; la misma casilla siempre muestra la misma variante al abrir, reabrir o jugar otra vez. El reparto no usa azar del juego, progreso, guardado ni cambia los datos de nivel. En la campaña actual las seis casillas con `dibujo: flores` de los niveles 1, 3, 4 y 5 deben incluir las tres variantes. Los mapas de comunidad que ya usan `flores` reciben la misma regla automáticamente. La forma puede recordar a plantas terrestres, pero los pliegues, asimetría y paleta mantienen una lectura extraña, propia de la flora de otro planeta; no se agregan explicación biológica, especie nueva ni otro canon. Al completar T542, el SVG histórico `assets/sprites/map/flores.svg` deja de ser un recurso activo y no se usa como referencia visual; se conserva en el repositorio sin cargarlo. Hasta ese merge, la implementación actual todavía usa ese archivo. **Dado** un mapa con `flores` en las mismas coordenadas → **Cuando** se carga en dos sesiones → **Entonces** cada casilla conserva su variante; **Dado** los niveles 1, 3, 4 y 5 → **Cuando** se recorren todas sus flores → **Entonces** están representadas A, B y C; **Dado** mapas sin `flores` → **Entonces** no cambia su dibujo; datos, construcción, camino, balance, guardado y reglas permanecen idénticos.
+
+**Dirección visual aprobada:** Lucas aceptó las tres variantes T540 el 2026-10-27 y pidió conservarlas/rotarlas. A, B y C son los modelos aprobados para la familia de flora de Cántaro. T542 los convierte en activos; hasta entonces el runtime aún carga `flores.svg`, que después queda solo como archivo histórico. La dirección permite siluetas reconocibles como vegetación, con rasgos raros y no literales de la Tierra. El arte aprobado no se redibuja ni se recolorea durante la integración.
+
+**Plan:** T541 registra la decisión y requisitos; T542 integra las tres PNG como reemplazo del dibujo activo y rota por coordenada. T542 depende de T541 y del merge de T540 (#139), que incorpora los PNG y la compuerta de estilo. No se cambia el nombre de leyenda `flores` ni se editan JSON de niveles.

@@ -1,6 +1,6 @@
 # T540 · Flora de Cántaro en la familia visual vigente
 
-Abrí [`preview.html`](preview.html) o mirá [`contact_sheet.png`](contact_sheet.png). Esta galería reemplaza como propuesta a las muestras SVG de T539, que Lucas rechazó el 2026-10-27 por usar un lenguaje visual fuera de uso. Son conceptos para elegir dirección; no son arte aprobado ni están integrados.
+Abrí [`preview.html`](preview.html) o mirá [`contact_sheet.png`](contact_sheet.png). Esta galería reemplaza como propuesta a las muestras SVG de T539, que Lucas rechazó el 2026-10-27 por usar un lenguaje visual fuera de uso. Lucas aprobó las tres direcciones el 2026-10-27 para conservarlas y rotarlas; todavía no están integradas.
 
 ## Qué se propone
 
@@ -20,8 +20,8 @@ T540 agrega esa compuerta a `specs/05-guia-de-arte.md`: primero se identifica la
 
 Se inspeccionaron visualmente `tree.png`, `rock_a.png`, `forest_idle.png` y `m79/cactus_02.png` en `assets/sprites/map/rendered/`, además de la captura vigente de nivel 1 en `art/t537-arte-campana/captures/level_01_active.png`. La referencia que guía la forma de producción es la familia pintada de volumen, luz superior izquierda y materiales mates; no el dibujo vectorial histórico.
 
-Las fuentes generadas originales están en `sources/generated/`; los PNG RGBA de 128×128 usados en la galería, en `variants/`. Son tres propuestas nuevas generadas con la herramienta de imágenes; los originales se preservan para auditar esta reducción. La guía no declara ninguna elegida. Lucas puede escoger una, pedir cambios por variante o rechazar las tres.
+Las fuentes generadas originales están en `sources/generated/`; los PNG RGBA de 128×128 usados en la galería, en `variants/`. Son tres propuestas nuevas generadas con la herramienta de imágenes; los originales se preservan para auditar esta reducción. Lucas aprobó las tres sin pedir redibujo. En T542 se integrarán sin recolorear y rotarán de forma estable por casilla.
 
 ## Límites y verificación
 
-No se cambiaron sprites activos, mapas, código, niveles ni ubicaciones. No se corrieron Godot ni GUT. Se verificaron dimensiones y alfa de las tres variantes, aperturas/rutas de la galería, PNG de contacto y `git diff --check`. Hace falta aprobación escrita de Lucas antes de cualquier integración.
+No se cambiaron sprites activos, mapas, código, niveles ni ubicaciones. No se corrieron Godot ni GUT. Se verificaron dimensiones y alfa de las tres variantes, aperturas/rutas de la galería, PNG de contacto y `git diff --check`. La aprobación visual escrita llegó el 2026-10-27; cualquier cambio posterior fuera de estas tres muestras requerirá nueva revisión.

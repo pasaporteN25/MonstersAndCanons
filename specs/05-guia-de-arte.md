@@ -138,3 +138,8 @@ Lucas (2026-10-16): las estatuas de los mapas representan **torres**, no persona
 - **Sin círculo de alcance, sin panel, no seleccionables**: es decoración (un objeto del mapa, `KIND_OBJECT` de `MapDrawings`, como el resto de `assets/sprites/map/`).
 - **No se confunde con el Estandarte mecánico** (la torre de ingeniería del canon, `10-universo.md` §3): el Estandarte es de **hierro, plata y bronce**, con engranaje y base de torre; la estatua es de **piedra** y **no tiene color de metal, engranaje ni base mecánica**. Comprobar poniéndolas juntas a escala real: tienen que distinguirse en un vistazo.
 - **Antes de integrar:** muestras aisladas a escala real, aprobadas por Lucas (B-38, T267).
+
+
+### Flora de Cántaro (T540/T541)
+
+La familia de flores aprobada para integración se basa en los tres PNG aprobados por Lucas en T540: trompetas enrolladas, cápsulas plegadas y roseta baja, en `assets/sprites/map/rendered/cantaro/`. T542 los hace activos y los rota de manera determinista por casilla en las ubicaciones existentes del dibujo `flores`. Son los modelos visuales vigentes para esta familia; hasta T542 el runtime todavía carga `assets/sprites/map/flores.svg`, que luego queda como archivo histórico sin referencia de runtime ni autoridad estilística. Se conserva una lectura vegetal reconocible, con pliegues, asimetría y paleta rara que evoquen Cántaro como otro planeta; no se añade canon biológico. Véanse M84/D-218.

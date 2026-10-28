@@ -162,7 +162,10 @@ Las fichas [T523](T523-muestras-adornos-m79.md) y [T524](T524-integrar-adornos-m
 
 [T537](T537-galeria-arte-vigente.md) deja capturas actuales de los niveles 1, 14 y 15 en [`art/t537-arte-campana/revision.html`](../../art/t537-arte-campana/revision.html). Distingue lo integrado de la muestra de epílogo T233 pendiente y del concepto de abastecimiento T527 ya aceptado como dirección, aún sin integrar. No incluye propuestas antiguas sin integrar del PR #132 ni cierra las decisiones de Lucas sobre T267/T434/T233.
 
-
 ## 23. Muestras de flora en estilo vigente · T540
 
-[T540](T540-rehacer-muestras-flora-familia-vigente.md) reemplaza las propuestas vectoriales T539, rechazadas por Lucas el 2026-10-27. La galería [`art/t540-flora-current-style/preview.html`](../../art/t540-flora-current-style/preview.html) ofrece tres propuestas rasterizadas, a escala de mapa y en montajes sobre el nivel 1. La guía de arte ahora exige identificar e inspeccionar la familia vigente antes de producir, y revisar en contexto antes de pedir aprobación. No se integra ninguna variante hasta que Lucas elija o apruebe por escrito.
+[T540](T540-rehacer-muestras-flora-familia-vigente.md) reemplazó las propuestas vectoriales T539, rechazadas por Lucas por estilo obsoleto. La galería [`art/t540-flora-current-style/preview.html`](../../art/t540-flora-current-style/preview.html) presentó tres propuestas rasterizadas en contexto. Lucas aprobó A/B/C el 2026-10-27; T541 registra el modelo vigente y T542 integra las tres variantes. La guía de arte exige inspección de la familia activa y revisión contextual antes de presentar futuras muestras.
+
+## 24. Flora alienígena rotativa · T541/T542
+
+T541 registra RF-728/D-218 a partir de la elección explícita de Lucas del 2026-10-27: conservar A/B/C de T540 y rotarlas de forma estable por casilla. Los PNG nuevos son los modelos aprobados para volverse activos en T542; hasta entonces `flores.svg` sigue en uso y después queda histórico. La dirección conserva lectura vegetal con rasgos extraños de Cántaro, sin inventar canon. T542 integra los PNG ya aprobados en el dibujo de leyenda `flores`, sin cambiar los datos de nivel. T542 depende de T541 y del merge de #139; el PR de implementación apunta a `main` y explicita las dependencias.
