@@ -1907,3 +1907,19 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Dirección de Cántaro:** Lucas aprobó las tres muestras y señaló que se perciben como plantas terrestres extrañas; se conserva esa lectura vegetal, con sus pliegues, asimetría y paleta inusual como señal de otro planeta. No se agrega lore, nombre de especie ni propiedad biológica. Los PNG aprobados se integran sin redibujar ni recolorear.
 - **Alcance:** RF-728 amplía el dibujo `flores` existente para las casillas oficiales de los niveles 1, 3, 4 y 5 y mapas de comunidad que ya lo declaran. No se alteran leyendas, ubicaciones, casillas, balance, progreso o guardados. T541 documenta; T542 implementa tras el merge de T540 (#139) y T541.
 - **Alternativa descartada:** elegir una sola variante o cambiar al azar por partida; Lucas pidió conservar las tres, y la aleatoriedad haría que una misma casilla cambiara de aspecto entre sesiones. También se descarta seguir usando la SVG histórica como modelo visual porque no pertenece a la familia actual.
+
+
+## D-219 · El final del juego muestra una imagen luminosa solo con toda la campaña en 3 estrellas
+
+- **Fecha:** 2026-10-28 · **Decidió:** Lucas, pedido directo en la conversación (la frase del epílogo y la regla de las dos imágenes).
+- **Qué:** el epílogo conserva su estructura y su frase única, y tiene **dos variantes de imagen**: la luminosa (colonia iluminada, fuegos de los Moradores alejándose) **solo** si los 15 niveles de la campaña tienen 3 estrellas; en cualquier otro caso, la misma escena con una **referencia oscura** (clima y colores en un punto lejano). Lo especifica RF-729.
+- **Motivo:** el final deja la pregunta «¿por cuánto tiempo más? ¿A qué costo?» abierta a propósito; la imagen refleja que el logro perfecto cierra con esperanza y cualquier otro cierre deja una sombra lejana. Premia dominar la campaña sin agregar mecánicas ni contenido de juego.
+- **Cómo se decide:** se **deriva** al abrir el epílogo de `GameFlow.level_stars()` (que sale de la mejor cantidad de vidas guardada, RF-93), igual que `is_campaign_complete()` deriva «campaña terminada» de los niveles completados. Una función nueva `GameFlow.is_campaign_perfect()` lo expresa.
+- **Alternativas descartadas:**
+  - **Un campo nuevo en el guardado** («final luminoso desbloqueado»): obligaría a agregar una clave (aunque aditiva), a decidir cuándo escribirla, a arreglar guardados existentes y a que el epílogo escriba al verse (hoy no escribe nada, RF-471). Con la derivación el resultado siempre coincide con las estrellas reales del guardado y no toca `SAVE_VERSION`.
+  - **Contar solo las estrellas de la partida que acaba de terminar:** un jugador perfecto que gana el 15 con 2 estrellas por una vida perdida vería la oscura aunque ya tuvo 3 en ese nivel; las estrellas del juego son por mejor marca (RF-93).
+  - **Un umbral más laxo** (por ejemplo, 14 de 15 niveles, o un promedio): Lucas pidió «todos con 3 estrellas».
+  - **Una sola imagen para todos:** pierde el premio por completar la campaña.
+  - **Una tercera imagen intermedia:** no la pidió Lucas; queda como pregunta Q2 de RF-729. No se agrega por cuenta propia.
+- **Alcance:** RF-729 (enmienda de RF-471). Sin cambios en el guardado, `SAVE_VERSION`, balance, desbloqueos, créditos ni en el texto del epílogo. T546 implementa tras T545 y la aprobación de las muestras; T547 retira el arte viejo de T233.
+- **Riesgos/condiciones:** (1) si en el futuro cambia `Rules.stars_for`, cambia quién ve la luminosa, sin tocar guardados; (2) la regla recorre `level_count()`, así que una campaña con más o menos de 15 niveles sigue funcionando; (3) las muestras de arte fuera de `assets/` necesitan OK escrito de Lucas y la compuerta de estilo de `05-guia-de-arte.md`; hoy no hay arte aprobado, así que la integración no puede cerrarse sin él.
