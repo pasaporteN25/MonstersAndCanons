@@ -125,6 +125,17 @@ func test_the_colossus_is_presented_too() -> void:
 	assert_not_null(game.presentation)
 
 
+## T548: Game le pasa el fondo solo al Coloso; el Jefe sigue con la composición provisional.
+func test_game_gives_the_backdrop_only_to_the_colossus() -> void:
+	_play()
+	game.spawner.spawn_now(load("res://data/enemies/colossus.tres"))
+	assert_not_null(game.presentation.find_child("BackdropArt", true, false))
+	game.free()
+	_play()
+	_spawn_boss()
+	assert_null(game.presentation.find_child("BackdropArt", true, false))
+
+
 # --- RF-666: dónde NO sale ---
 
 func test_it_does_not_open_with_the_option_off() -> void:
