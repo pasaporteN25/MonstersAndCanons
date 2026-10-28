@@ -3112,3 +3112,18 @@ Spec en **M80** (RF-716 a RF-719), razones y canon en **D-212**, el cómo en la 
 - [ ] **T542 · Integrar y rotar la flora alienígena aprobada. `[mobile+x86]`**
   **Refs:** RF-263/RF-728, D-218, T540/T541. **Depende de:** #139 (T540) mergeado y T541 mergeada. **Ficha:** `tareas/T542-integrar-flora-cantaro-rotativa.md`.
   **Hecho cuando:** A/B/C reemplazan la textura activa de `flores`, se eligen de forma estable por casilla, todas las variantes aparecen entre los niveles 1, 3, 4 y 5, el mapa no cambia y los tests/capturas confirman el resultado. PR contra `main` con dependencias declaradas.
+
+## M85 · Epílogo y revisión de textos e imágenes de lore (pedido de Lucas, 2026-10-28)
+
+- [x] **T544 · 📜 Reemplazar el texto del epílogo por la frase nueva. `[x86]`**
+  **Refs:** pedido de Lucas del 2026-10-28; `specs/11-textos-lore.md` §2. **Hecho cuando:** el epílogo de `11-textos-lore.md` dice solo la frase nueva y queda marcado como borrador.
+  **Resultado (2026-10-28):** las cuatro líneas anteriores se descartaron en `11-textos-lore.md`; quedó «La máquina sigue avanzando, pero ¿por cuánto tiempo más? ¿A qué costo?» como borrador. **No** se tocó `level_15.json` (sigue con las cuatro líneas viejas) ni el código. Queda abierto el choque con el mínimo de 3 líneas de `LevelFile`. Solo documentación; sin Godot/GUT.
+
+- [ ] **T545 · 📜 Revisión integral de textos e imágenes de lore, nombres de niveles y descripciones. `[x86]`**
+  **Refs:** pedido de Lucas del 2026-10-28; `specs/10-universo.md`, `specs/11-textos-lore.md`. **Hecho cuando:** Lucas revisó y aprobó (o corrigió) los 15 lugares, entradas y victorias, los nombres y descripciones de los niveles, el epílogo, los créditos y los artículos de Lore, y las imágenes del mismo estilo; lo aprobado queda en `11-textos-lore.md` y recién después se carga en el juego. Resolver acá el choque del mínimo de líneas del epílogo (RF y D nuevos si cambia).
+
+- [ ] **T546 · 🎨 Imagen del final con dos variantes según estrellas. `[mobile+x86]`**
+  **Refs:** pedido de Lucas del 2026-10-28; T233, T545. **Depende de:** T545 y la frase del epílogo aprobada. **Hecho cuando:** el epílogo muestra una imagen con una referencia oscura (clima y colores en un punto lejano) cuando la campaña no está completa con 3 estrellas en todos los niveles, y la imagen luminosa (colonia iluminada y fuegos alejándose) solo cuando sí lo está. Spec (RF y D) antes de programar; muestras fuera de `assets/` con OK escrito de Lucas; el arte nuevo sigue la familia visual vigente (`05-guia-de-arte.md`).
+
+- [ ] **T547 · Retirar o reemplazar el arte viejo de T233. `[mobile+x86]`**
+  **Refs:** pedido de Lucas del 2026-10-28; T233, T527, T538. **Hecho cuando:** lo que sigue en el repositorio del arte de T233 se retiró o se reemplazó, sin dejar referencias rotas: `assets/sprites/map/supply_depot.svg`, `supply_line_pole.svg`, `supply_cart.svg`, `supply_conveyor.svg` (usados por `MapDrawings` y el nivel 15), `hito.svg`, `assets/sprites/story/epilogue.png` (precargada en `epilogue_screen.gd`) y `art/t233-final/`; la galería T537 deja de mostrarlo. El abastecimiento del nivel 15 lo cubre el concepto T527 (ya con OK de dirección). GUT completo sin `SCRIPT ERROR`.
