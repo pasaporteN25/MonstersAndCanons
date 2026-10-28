@@ -42,3 +42,21 @@ No se probó en teléfono real ni en Windows; no se afirma rendimiento ni balanc
 ## Seguimiento (2026-10-25): sin el ítem de atrás
 
 Lucas vio que los estandartes quedaban encima de otro ítem del mapa. Era así: casi todos los postes están sobre una casilla `X` (no construible), que el motor dibuja con un cactus, roca o hueso del tema (`blocked_decor`), y los niveles 2 a 5 los ponen sobre la columna o las flores de la leyenda. Se eligió **borrar el ítem de atrás, no mover el poste**: `LevelDecor._draw` dibuja solo el suelo en las casillas con poste (`overlay_post_cells()`), así las posiciones aprobadas no cambian. Es solo visual: ningún `data/levels/*.json` ni la grilla jugable cambian (la comparación estructural sigue igual). Las 23 capturas `Capturas/T475-*.png` se regeneraron con el cambio. Los niveles 8 y 9 siguen sin poste. No se probó en celular real ni a 1920×1080.
+
+## Cierre (2026-10-28): niveles 8 y 9 con el poste en (18, 1)
+
+> Rama `feature/t475-integrar-postes-8-y-9`, sobre el PR #148 (candidatas de casilla).
+
+**Decisión de Lucas (2026-10-28):** en los niveles 8 y 9 el poste va en la candidata C1, la casilla **(18, 1)**, en ambos; reemplaza a la `(0, 4)` aprobada antes (símbolo de ruina canónico, que el poste tapaba). Con esto quedan **20 postes en los 15 niveles** y el veredicto «integración parcial» de arriba queda superado.
+
+**Qué se hizo**
+- `data/ui/postes_campana.json`: `level_08` y `level_09` con `[[18, 1]]`; la clave documental `sin_integrar` pasó a `casillas_libres` (explica la excepción). Ningún `data/levels/*.json` se tocó (sus hashes siguen en `BEFORE_HASH`).
+- **Casilla construible, decisión de diseño:** (18, 1) es `.` (pasto libre) en ambos niveles. `CampaignPosts`/`LevelDecor` dibujan el poste como capa visual sin tocar la grilla (esa invariancia es el criterio de T475), así que **la casilla sigue siendo construible** y la torre que se ponga encima se dibuja sobre el poste (las torres son nodos aparte, por encima de `LevelDecor`). Volverla no construible exigiría cambiar la grilla (JSON o lógica), o sea la jugabilidad y los hashes, y no se hizo. Si Lucas quiere que no se pueda construir ahí, es una decisión aparte.
+- `tests/test_campaign_posts.gd`: conteo 18→20 y 13→15 niveles; `FROZEN` pasa a `FREE_CELL_LEVELS` (única excepción a «casilla no construible»); test nuevo de los niveles 8 y 9 (casilla `.` sin leyenda, sin señal ni removible a menos de 2 casillas, sigue siendo `GRASS`, el overlay la reconoce); «no cambia nada jugable» ahora corre con los 15 postes reales (antes los dos frenados usaban un poste de relleno).
+- Capturas reales regeneradas: `Capturas/T475-nivel08-{0,3}est-1280x720.png` y `Capturas/T475-nivel09-{0,3}est-1280x720.png`.
+
+**Verificación**
+- Capturas a 1280×720 (ventana, `game.tscn`, DISPLAY=:0), vistas a ojo las cuatro: el poste de (18, 1) queda completo en el rincón noreste, rojo con 0 estrellas y turquesa/blanco con 3; **no tapa ninguna señal** (los símbolos de (12,0)/(6,0) y (0,4) se ven), ni camino, ni removible, ni la barra superior.
+- `test_campaign_posts.gd`: 18/18, 7034 aserciones. GUT completo: ver el Resultado de T475 en `specs/03-tareas.md`.
+
+**No se probó:** una torre construida sobre el poste en (18, 1) (por diseño debería taparlo; no se capturó), 2 estrellas con captura, 1920×1080, celular simulado o real, Windows, rendimiento.

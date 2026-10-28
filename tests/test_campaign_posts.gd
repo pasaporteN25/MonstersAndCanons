@@ -11,13 +11,15 @@ const APPROVED: Dictionary = {
 	"level_01": [Vector2i(13, 5)], "level_02": [Vector2i(1, 4)], "level_03": [Vector2i(15, 6)],
 	"level_04": [Vector2i(19, 4)], "level_05": [Vector2i(17, 3)], "level_06": [Vector2i(18, 1)],
 	"level_07": [Vector2i(17, 5)],
+	"level_08": [Vector2i(18, 1)], "level_09": [Vector2i(18, 1)],
 	"level_10": [Vector2i(22, 2)], "level_11": [Vector2i(2, 1), Vector2i(20, 8)],
 	"level_12": [Vector2i(5, 2), Vector2i(24, 9)], "level_13": [Vector2i(23, 2), Vector2i(24, 9)],
 	"level_14": [Vector2i(1, 1), Vector2i(24, 10)], "level_15": [Vector2i(5, 1), Vector2i(23, 10)],
 }
 
-## Niveles frenados: el poste aprobado (0, 4) tapa por completo el símbolo de ruina canónico (captura del motor real).
-const FROZEN: PackedStringArray = ["level_08", "level_09"]
+## Niveles 8 y 9: Lucas (2026-10-28) eligió (18, 1), una casilla libre construible, porque la aprobada antes, (0, 4), es el
+## símbolo de ruina canónico y el poste lo tapaba por completo. Es la única excepción a «casilla no construible».
+const FREE_CELL_LEVELS: PackedStringArray = ["level_08", "level_09"]
 const SIGNAL_DRAWINGS: PackedStringArray = ["roca_marcada", "simbolo_ruina", "campamento_vacio", "sendero", "herramienta"]
 
 ## SHA-256 de cada data/levels/level_NN.json «antes» de T475 (art/t475-paquete-postes/index.md, base 9ce9e18).
@@ -91,18 +93,46 @@ func _play(level_index: int) -> Game:
 
 # --- Datos ---
 
-func test_the_data_has_the_eighteen_integrated_posts_and_two_levels_are_held_back() -> void:
-	assert_eq(CampaignPosts.total_count(), 18, "20 aprobados menos los 2 de los niveles 8 y 9, frenados")
-	assert_eq(CampaignPosts.level_ids().size(), 13)
-	for id: String in FROZEN:
-		assert_true(CampaignPosts.cells_for(StringName(id)).is_empty(), "%s no se integra hasta nueva ubicación" % id)
-		var level: Dictionary = _json(id)
-		var letter: String = String(level["mapa"][4])[0]
-		assert_eq(level["leyenda"][letter]["dibujo"], "simbolo_ruina", "%s: la casilla aprobada (0, 4) es una señal canónica" % id)
+func test_the_data_has_the_twenty_posts_in_the_fifteen_levels() -> void:
+	assert_eq(CampaignPosts.total_count(), 20, "los 20 postes aprobados")
+	assert_eq(CampaignPosts.level_ids().size(), 15)
 	for id: String in APPROVED:
 		assert_eq(CampaignPosts.cells_for(StringName(id)), Array(APPROVED[id], TYPE_VECTOR2I, "", null), id)
-		var expected: int = 1 if int(id.substr(6)) <= 10 else 2
+		var expected: int = 2 if int(id.substr(6)) >= 11 else 1
 		assert_eq(CampaignPosts.cells_for(StringName(id)).size(), expected, "%s: 1 poste en 1–10 y 2 en 11–15" % id)
+	assert_eq(APPROVED.size(), 15)
+
+
+func test_levels_eight_and_nine_put_the_post_on_a_free_cell_away_from_every_signal() -> void:
+	for id: String in FREE_CELL_LEVELS:
+		var level: Dictionary = _json(id)
+		var rows: Array = level["mapa"]
+		var cell := Vector2i(18, 1)
+		assert_eq(CampaignPosts.cells_for(StringName(id)), [cell] as Array[Vector2i], id)
+		assert_eq(String(rows[cell.y])[cell.x], ".", "%s: casilla libre sin dibujo" % id)
+		assert_false(level["leyenda"].has("."), "%s: '.' no tiene entrada de leyenda" % id)
+		# ni una señal, un removible ni una entrada/salida a menos de dos casillas
+		for dy: int in range(-2, 3):
+			for dx: int in range(-2, 3):
+				var x: int = cell.x + dx
+				var y: int = cell.y + dy
+				if y < 0 or y >= rows.size() or x < 0 or x >= String(rows[y]).length():
+					continue
+				var letter: String = String(rows[y])[x]
+				if letter == "." or letter == "X":
+					continue
+				var entry: Dictionary = level["leyenda"].get(letter, {})
+				if entry.is_empty():
+					continue  # camino, entrada o salida del mapa se comprueban abajo
+				assert_false(SIGNAL_DRAWINGS.has(entry.get("dibujo", "")), "%s: señal %s a menos de 2 casillas" % [id, Vector2i(x, y)])
+				assert_false(entry.has("removible"), "%s: removible %s a menos de 2 casillas" % [id, Vector2i(x, y)])
+	for index: int in [7, 8]:
+		var data: LevelData = GameFlow.level(index)
+		var map: Level = data.build_map(false, null, CampaignPosts.cells_for(data.id))
+		add_child_autofree(map)
+		assert_eq(map.grid.cell_type(Vector2i(18, 1)), MapGrid.Cell.GRASS, "%s: el poste es visual, la casilla sigue construible" % data.id)
+		assert_eq((map.get_node("Decor") as LevelDecor).overlay_post_cells(), [Vector2i(18, 1)] as Array[Vector2i])
+	await wait_physics_frames(2)
 
 
 func test_a_level_without_posts_or_a_broken_file_gives_none() -> void:
@@ -135,6 +165,8 @@ func test_the_level_files_are_the_same_as_before() -> void:
 
 func test_every_post_sits_on_a_permanently_unbuildable_free_cell() -> void:
 	for id: String in APPROVED:
+		if FREE_CELL_LEVELS.has(id):
+			continue  # 8 y 9: casilla libre elegida por Lucas el 2026-10-28, ver el test siguiente
 		var level: Dictionary = _json(id)
 		var rows: Array = level["mapa"]
 		var legend: Dictionary = level.get("leyenda", {})
@@ -155,9 +187,7 @@ func test_the_posts_change_nothing_playable_in_any_of_the_fifteen_maps() -> void
 	for index: int in GameFlow.level_count():
 		var data: LevelData = GameFlow.level(index)
 		var cells: Array[Vector2i] = CampaignPosts.cells_for(data.id)
-		assert_eq(cells.is_empty(), FROZEN.has(String(data.id)), "%s: postes salvo los frenados" % data.id)
-		if cells.is_empty():
-			cells = [Vector2i(13, 5)]  # aun sin postes propios, pasar una capa no puede cambiar el mapa jugable
+		assert_false(cells.is_empty(), "%s: tiene poste" % data.id)
 		var plain: Level = data.build_map()
 		var with_posts: Level = data.build_map(true, BannerRecipe.make("marea", "estrella"), cells)
 		add_child_autofree(plain)

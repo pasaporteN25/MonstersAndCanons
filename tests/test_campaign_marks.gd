@@ -148,7 +148,7 @@ func test_malformed_unknown_and_repeated_entries_are_ignored() -> void:
 func test_the_level_files_and_the_posts_file_are_the_same_as_origin_main() -> void:
 	for id: String in LEVEL_HASH:
 		assert_eq(FileAccess.get_sha256("res://data/levels/%s.json" % id), LEVEL_HASH[id], "%s cambió" % id)
-	assert_eq(FileAccess.get_sha256("res://data/ui/postes_campana.json"), "c64f1cb2e25bb76f28c616039aeefe750a1644ecf7a866bc6b3e65b0caad2888", "postes_campana.json cambió")
+	assert_eq(FileAccess.get_sha256("res://data/ui/postes_campana.json"), "f0059799cd1c2c11d323cdf36d934a8a952c3d60eaec9add3cb6dba062b4d062", "postes_campana.json cambió")
 
 
 func test_no_mark_sits_on_a_forbidden_cell_in_any_of_the_fifteen_levels() -> void:
