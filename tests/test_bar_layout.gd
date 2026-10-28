@@ -126,45 +126,14 @@ func test_a_level_with_only_decoration_does_not_use_infrastructure() -> void:
 	assert_false(_level_from({}).uses_infrastructure(), "borde: sin nada")
 
 
-# --- ExitText (RF-460) ---
+# --- ExitText (RF-725) ---
 
-func test_exit_text_without_pieces_has_only_the_two_lines() -> void:
-	var text: String = ExitText.message([] as Array[String], false)
-	assert_string_contains(text, "Se abandona esta partida. El oro, las torres y la oleada actual no se guardan.")
-	assert_string_contains(text, "Lo que ya ganaste (niveles, estrellas, récords y piezas guardadas) se conserva.")
-	assert_false(text.contains("Perdés"), "sin piezas no dice que se pierda ninguna")
-	assert_false(text.contains("demolición"), "sin trabajo no habla de la demolición")
-
-
-func test_exit_text_counts_the_pieces_and_names_their_collections() -> void:
-	var two: Array[String] = ["technology", "disruptor"]
-	var text: String = ExitText.message(two, false)
-	assert_string_contains(text, "Perdés 2 piezas de colección recogidas en esta partida (Avances tecnológicos, Disruptora). Se guardan recién al terminar la partida.")
-
-
-func test_exit_text_one_piece_and_the_same_collection_twice() -> void:
-	var one: Array[String] = ["disruptor"]
-	assert_string_contains(ExitText.message(one, false), "Perdés 1 pieza de colección recogida en esta partida (Disruptora).")
-	var twice: Array[String] = ["disruptor", "disruptor"]
-	var text: String = ExitText.message(twice, false)
-	assert_string_contains(text, "Perdés 2 piezas")
-	assert_string_contains(text, "(Disruptora)")
-	assert_false(text.contains("Disruptora, Disruptora"), "el nombre sale una sola vez")
-
-
-func test_exit_text_warns_about_the_demolition_in_progress() -> void:
-	var text: String = ExitText.message([] as Array[String], true)
-	assert_string_contains(text, "La demolición en curso se pierde y no devuelve el oro.")
-
-
-func test_exit_text_order_is_always_then_pieces_then_job_then_kept() -> void:
-	var pieces: Array[String] = ["disruptor"]
-	var text: String = ExitText.message(pieces, true)
-	var always: int = text.find("Se abandona")
-	var lost: int = text.find("Perdés")
-	var job: int = text.find("demolición")
-	var kept: int = text.find("Lo que ya ganaste")
-	assert_true(always < lost and lost < job and job < kept, "el orden del RF-460")
+func test_exit_text_is_only_the_short_warning() -> void:
+	var text: String = ExitText.message()
+	assert_eq(text, "No se guardará el progreso de esta partida.")
+	for banned: String in ["Perdés", "demolición", "oro", "oleada", "piezas", "Lo que ya ganaste"]:
+		assert_false(text.contains(banned), "RF-725: sin '%s'" % banned)
+	assert_eq(ExitText.TITLE, "¿Volver al menú principal?")
 
 
 # --- InfrastructureText (RF-457, RF-458) ---
