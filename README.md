@@ -51,6 +51,7 @@ El proyecto todavía no ofrece una descarga pública. Si querés jugar o colabor
 - **Motor:** Godot 4.7.2, con GDScript.
 - **Plataformas en desarrollo:** escritorio y una interfaz adaptable a celular. La experiencia en teléfono real todavía requiere validaciones.
 - **Código, datos y arte propio:** licencia GNU GPL v3 o posterior; ver [`LICENSE`](LICENSE).
+- **Idioma:** el juego está en español. Está en preparación el soporte de inglés (catálogos en `data/i18n/`, inventario de textos en `specs/tareas/informes/`); el selector todavía no está disponible.
 - **Tests:** el proyecto usa GUT. Para correr toda la suite desde la raíz:
 
   ```bash
