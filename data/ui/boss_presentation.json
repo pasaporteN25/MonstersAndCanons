@@ -1,0 +1,12 @@
+{
+  "degradado": {
+    "color": [0.03, 0.02, 0.04],
+    "alto": 0.55,
+    "opacidad": 0.82
+  },
+  "jefes": {
+    "colossus": {
+      "fondo": "res://assets/backgrounds/boss/colossus.png"
+    }
+  }
+}

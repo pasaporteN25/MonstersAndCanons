@@ -1,5 +1,8 @@
 # Novedades del juego
 
+## Fondo propio para la presentación del Coloso *(T548, 2026-10-28)*
+
+Cuando aparece el Coloso en el nivel 15, la pantalla de presentación ahora tiene su fondo propio: un claro sombrío de basalto con vetas ámbar. Detrás del nombre y la frase hay una franja oscura para que se lean bien. El Jefe del nivel 1 sigue como antes. No cambia la partida, las oleadas ni el balance; la ilustración propia del Coloso todavía no está.
 ## Nave, taller y lingotes en La Central *(T549, 2026-10-28; en revisión)*
 
 En el nivel 15 el borde del mapa ya no muestra el depósito, el poste y la vagoneta de antes: ahora hay una nave exploradora destruida con el farol roto y apagado, un taller de frontera en ruinas y una pila de lingotes de hierro y bronce. Son solo decoración y el mapa no cambió.

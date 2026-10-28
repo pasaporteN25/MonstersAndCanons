@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>T463 · Fondo del Coloso · revisión</title>
+<style>
+:root{color-scheme:dark;--ink:#f2eadb;--muted:#c3c1b6;--bg:#171a1d;--panel:#23272a;--line:#41464a;--brass:#bd8a3c}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,sans-serif}
+main{max-width:1180px;margin:0 auto;padding:24px 16px 64px}h1{font-size:2rem;margin:.2em 0}h2{margin-top:2.2em;border-bottom:1px solid var(--line);padding-bottom:.2em}
+.eyebrow{color:var(--brass);text-transform:uppercase;letter-spacing:.08em;font-size:.8rem}.muted{color:var(--muted)}
+img{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:4px;background:#000}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(340px,1fr))}
+figure{margin:0;background:var(--panel);padding:10px;border-radius:6px}figcaption{margin-top:8px;font-size:.9rem;color:var(--muted)}
+.q{background:var(--panel);border-left:4px solid var(--brass);padding:12px 16px;margin-top:2em}
+.tag{display:inline-block;font-size:.75rem;border:1px solid var(--brass);color:var(--brass);padding:0 6px;border-radius:3px;margin-right:6px}
+</style>
+</head>
+<body><main>
+<header><div class="eyebrow">Monsters &amp; Canons · T463</div><h1>Fondo de la presentación del Coloso</h1>
+<p class="muted">Propuesta sin aprobar. Dos muestras dentro de la familia visual vigente del mapa. Las capturas de «en contexto» son de la escena real <code>BossPresentation</code> corriendo en Godot con una muestra pasada por <code>setup(..., backdrop)</code> y la ilustración <b>provisional</b> actual (el sprite de 256 px del Coloso); el arte definitivo de la ilustración es T367 y no está hecho.</p></header>
+
+<h2>1 · Lo que hay hoy (referencia)</h2>
+<div class="grid">
+<figure><img src="context/vigente_coloso.png" alt="Presentación vigente del Coloso"><figcaption>Presentación vigente del Coloso (captura real del motor, 1280×720): fondo liso teñido, sin arte propio.</figcaption></figure>
+<figure><img src="context/vigente_jefe.png" alt="Presentación vigente del Jefe"><figcaption>Presentación vigente del Jefe (Soberano): mismo esquema provisional.</figcaption></figure>
+<figure><img src="context/juego_nivel15.png" alt="Nivel 15 en el juego"><figcaption>Nivel 15 en el juego (captura real de T537): la familia a respetar. Rocas y árboles pintados, pasto oliva, camino ocre, luz arriba a la izquierda, cámara elevada.</figcaption></figure>
+</div>
+
+<h2>2 · Muestras propuestas (1280×720)</h2>
+<div class="grid">
+<figure><img src="muestra_01_claro.png" alt="Muestra 01"><figcaption><span class="tag">01</span>Claro de frontera. Pasto oliva y tierra, anillo de rocas facetadas y matorrales. Continuidad directa con el nivel 15 de hoy.</figcaption></figure>
+<figure><img src="muestra_02_sombrio.png" alt="Muestra 02"><figcaption><span class="tag">02</span>Claro sombrío. Mismo lenguaje, más oscuro, basalto con vetas ámbar (las del propio Coloso) y un camino ondulado. Es la de «cierre».</figcaption></figure>
+</div>
+
+<h2>3 · En contexto: Coloso sobre cada muestra</h2>
+<div class="grid">
+<figure><img src="context/coloso_con_muestra_01.png" alt="Coloso con muestra 01"><figcaption>Captura real del motor con la muestra 01 como <code>backdrop</code> (ilustración provisional de 256 px, sin ajustes de código).</figcaption></figure>
+<figure><img src="context/coloso_con_muestra_02.png" alt="Coloso con muestra 02"><figcaption>Ídem con la muestra 02. El Coloso se despega mejor del suelo oscuro, y el camino cruza justo bajo el nombre.</figcaption></figure>
+</div>
+<p class="muted">Observaciones honestas: (a) la descripción de dos renglones queda sobre roca y matorral y pierde contraste en ambas; haría falta un degradé oscuro por código detrás del texto (fuera del arte); (b) la ilustración de 256 px estirada a 360 px se ve blanda: la definitiva tiene que ser una pieza propia; (c) en la 02 el camino pasa detrás del renglón del nombre; se corrige en una segunda ronda si Lucas elige esa línea.</p>
+
+<div class="q"><strong>Qué necesito de Lucas.</strong> ¿01, 02, ninguna, o una mezcla (por ejemplo, la 01 en ánimo de la 02)? Todas las preguntas abiertas están en <code>specs/tareas/informes/T463-propuesta-fondo-coloso.md</code>, §6.</div>
+
+<p class="muted">Archivos: <a href="prompts.md">prompts</a> · <a href="README.md">cómo se generó y la compuerta de estilo</a> · <a href="sources/raw_a.png">propuesta descartada (cañón cinematográfico)</a>.</p>
+</main></body></html>

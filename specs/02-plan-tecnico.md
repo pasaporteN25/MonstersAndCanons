@@ -1520,7 +1520,7 @@ Los textos, números de tamaño y posiciones nuevos viven en `mobile_ui.json` (P
 
 ### M66 / T457, T461–T463 · Presentación animada de jefes (RF-666 a RF-673, D-187 a D-191)
 
-**Estado:** T457 fijó la spec (aprobada por Lucas con el PR #61). T461 implementó el comportamiento con composición provisional (2026-10-23); el arte final sigue esperando T367/T243. PR #59 ya está mergeado en la base `398c016` y establece que la tarjeta RF-134 se omite para el jefe; esta rama solo lo refleja en la spec.
+**Estado:** T457 fijó la spec (aprobada por Lucas con el PR #61). T461 implementó el comportamiento con composición provisional (2026-10-23); el arte final sigue esperando T367/T243. **T548 (2026-10-28)** integró el fondo del Coloso (muestra 02): `data/ui/boss_presentation.json` + `BossPresentationArt` (`scripts/data/`) + franja de contraste en `BossPresentation`; `Game` pasa `backdrop` solo si el dato lo tiene. No cambia la spec ni el balance. PR #59 ya está mergeado en la base `398c016` y establece que la tarjeta RF-134 se omite para el jefe; esta rama solo lo refleja en la spec.
 
 1. **Disparador y modo:** integrar solo en campaña normal iniciada desde el menú, primera oleada con jefe por partida. Omitir en Asedio, modo de pruebas, editor, comunidad y escenas sueltas. El flujo introductorio del tutorial no se excluye si forma parte de la campaña normal. Reintento equivale a partida nueva.
 2. **Pausa/modal:** el controlador de presentación toma una instantánea del estado previo de pausa, pausa el árbol desde el nacimiento y anima con reloj real. No cambiar `Engine.time_scale`, la cámara ni las reglas del enemigo. Al terminar, solo reanudar si la app no pasó a segundo plano y no había pausa previa; `P` saltea y deja pausa. D-112 manda al perder foco.
