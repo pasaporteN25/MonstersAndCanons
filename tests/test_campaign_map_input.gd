@@ -233,6 +233,8 @@ func test_release_outside_the_region_does_not_select() -> void:
 # --- Tarjetas: un clic ---
 
 func test_cards_keep_starting_with_one_click() -> void:
+	for level: int in GameFlow.level_count():
+		SaveManager.unlock(GameFlow.level(level).id)  # RF-724: Tarjetas solo arma los habilitados
 	var select: Control = await _open(CampaignMap.STYLE_CARDS)
 	assert_null(select.map_view)
 	var cards: Array[Node] = select.get_node("%Cards").get_children()

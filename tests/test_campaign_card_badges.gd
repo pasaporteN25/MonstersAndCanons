@@ -73,7 +73,7 @@ func test_every_campaign_card_has_a_badge_with_its_level_state() -> void:
 	for mode: int in [2, 1]:
 		var select: Control = await _open(CampaignMap.STYLE_CARDS, mode)
 		var icons: Array[CampaignBadgeIcon] = _card_icons(select)
-		assert_eq(icons.size(), GameFlow.level_count(), "una insignia por tarjeta (modo %d)" % mode)
+		assert_eq(icons.size(), 4, "una insignia por tarjeta habilitada: 1 a 4 (RF-724, modo %d)" % mode)
 		for i: int in icons.size():
 			assert_eq(icons[i].level_index, i, "la insignia lleva el número de su nivel")
 			assert_eq(icons[i].state, select.campaign_state(i), "estado de la tarjeta %d" % (i + 1))
@@ -91,8 +91,9 @@ func test_cards_and_map_show_the_same_states() -> void:
 	await get_tree().process_frame
 	var map_screen: Control = await _open(CampaignMap.STYLE_MAP, 2)
 	var view: CampaignMapView = map_screen.map_view
-	assert_eq(view.region_count(), from_cards.size())
-	for i: int in view.region_count():
+	assert_eq(view.region_count(), GameFlow.level_count(), "el mapa conserva los 15")
+	assert_eq(from_cards.size(), 4, "las tarjetas solo traen los habilitados")
+	for i: int in from_cards.size():
 		assert_eq(view.region(i).state, from_cards[i], "el mapa y las tarjetas coinciden en el nivel %d" % (i + 1))
 
 
@@ -108,15 +109,16 @@ func test_all_four_model_states_appear_on_cards() -> void:
 		elif icon.state == CampaignMap.State.LOCKED:
 			assert_eq(CampaignMap.badge_of(icon.state), CampaignMap.Badge.NONE, "bloqueado dibuja el candado")
 			assert_false(CampaignMap.has_halo(icon.state))
-	for expected: int in [CampaignMap.State.LOCKED, CampaignMap.State.AVAILABLE, CampaignMap.State.REBEL, CampaignMap.State.TAKEN]:
+	for expected: int in [CampaignMap.State.AVAILABLE, CampaignMap.State.REBEL, CampaignMap.State.TAKEN]:
 		assert_true(seen.has(expected), "aparece el estado %d" % expected)
-	assert_eq(seen.size(), 4, "los cuatro estados del modelo; rebelde y partido comparten el estado REBEL con 1 y 2 estrellas")
+	assert_false(seen.has(CampaignMap.State.LOCKED), "RF-724: las tarjetas ya no muestran bloqueados")
+	assert_eq(seen.size(), 3, "los tres estados iniciables; rebelde y partido comparten el estado REBEL con 1 y 2 estrellas")
 
 
 func test_badge_follows_the_victory_when_the_save_changes() -> void:
 	var select: Control = await _open(CampaignMap.STYLE_CARDS, 2)
 	assert_eq(_card_icons(select)[0].state, CampaignMap.State.AVAILABLE, "sin victorias el primero está disponible")
-	assert_eq(_card_icons(select)[1].state, CampaignMap.State.LOCKED)
+	assert_eq(_card_icons(select).size(), 1, "RF-724: el segundo, bloqueado, no tiene tarjeta")
 	select.queue_free()
 	await get_tree().process_frame
 	_progress()
@@ -131,9 +133,9 @@ func test_badge_is_not_dimmed_and_does_not_take_clicks() -> void:
 	for icon: CampaignBadgeIcon in _card_icons(select):
 		assert_eq(icon.mouse_filter, Control.MOUSE_FILTER_IGNORE, "el clic sigue siendo de la tarjeta")
 		assert_eq(icon.modulate, Color.WHITE, "la insignia no se atenúa ni en tarjetas bloqueadas")
-	var cards: Node = select.find_child("Cards", true, false)
-	var locked_card: Button = cards.get_child(5) as Button
-	assert_true(locked_card.disabled, "una tarjeta bloqueada sigue deshabilitada")
+	var locked_card: Button = select._make_card(5)
+	add_child_autofree(locked_card)
+	assert_true(locked_card.disabled, "una tarjeta bloqueada (armada a mano) sigue deshabilitada")
 
 
 func test_badge_fits_inside_the_card_corner_and_the_level_label_moves_aside_on_wide_cards() -> void:
