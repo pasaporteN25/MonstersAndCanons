@@ -1,5 +1,9 @@
 # Novedades del juego
 
+## Dos finales según tus estrellas *(T546, 2026-10-28)*
+
+El epílogo ahora tiene **dos imágenes**. Si ganaste los **15 niveles con 3 estrellas**, ves la colonia iluminada y los fuegos de los Moradores de siempre. En cualquier otro caso ves la misma historia con una **tormenta lejana** sobre el valle, sin nada reconocible: la duda de la frase queda abierta. Se decide al abrir el epílogo con lo que ya está guardado, así que si más tarde conseguís las estrellas que faltan, la próxima vez ves la luminosa. El texto, los botones y los créditos no cambian, y no se guarda nada nuevo.
+
 ## Tarjetas solo con niveles disponibles y salida más corta *(T531, 2026-10-28)*
 
 En la vista **Tarjetas** de la campaña ahora aparecen únicamente los niveles que ya podés jugar: con una partida nueva, solo el nivel 1. El **mapa** sigue mostrando (y dejando mirar) los niveles bloqueados, y el total de estrellas sigue contando toda la campaña. Al tocar «← Menú» en plena partida, el cuadro muestra solo el título, los dos botones y un único aviso: «No se guardará el progreso de esta partida.» Sigue pausando el juego y no cambia nada de tu guardado.

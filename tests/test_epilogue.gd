@@ -198,7 +198,8 @@ func test_epilogue_button_opens_the_picture_with_the_three_lines_and_two_buttons
 	assert_true(game.epilogue.is_open())
 	assert_eq(game.epilogue.text(), GameFlow.level(_last_index()).epilogue_text)
 	assert_eq(game.epilogue.text().split("\n").size(), 3, "tres líneas")
-	assert_eq(EpilogueScreen.IMAGE.get_size(), Vector2(1920, 1080), "la imagen de T233")
+	for path: String in [EpilogueScreen.BRIGHT_PATH, EpilogueScreen.DARK_PATH]:
+		assert_eq((load(path) as Texture2D).get_size(), Vector2(1920, 1080), "16:9 a 1920×1080: " + path)
 	var texts: Array = []
 	for button: Node in game.epilogue.find_children("*", "Button", true, false):
 		texts.append((button as Button).text)
@@ -349,3 +350,129 @@ func test_the_credits_screen_scrolls_when_the_text_does_not_fit_and_shows_the_ba
 	credits.close()
 	credits.close()
 	assert_signal_emit_count(credits, "closed", 1, "borde: cerrar dos veces avisa una sola")
+
+
+# --- Las dos variantes de imagen (RF-729, D-219) ---
+
+## Registra la victoria del nivel `index` con `percent` % de las vidas iniciales (100 = 3 estrellas, 70 = 2).
+func _win_with(index: int, percent: int) -> void:
+	var lvl: LevelData = GameFlow.level(index)
+	SaveManager.record_victory(lvl.id, maxi(1, lvl.starting_lives * percent / 100), 100)
+
+
+func _win_all(percent: int) -> void:
+	for i: int in GameFlow.level_count():
+		_win_with(i, percent)
+
+
+func test_a_new_save_and_an_empty_campaign_are_not_perfect() -> void:
+	assert_false(GameFlow.is_campaign_perfect(), "guardado nuevo")
+	assert_eq(GameFlow.level_stars(0), 0)
+	_win_with(0, 100)
+	assert_false(GameFlow.is_campaign_perfect(), "borde: solo uno")
+
+
+func test_perfect_needs_all_fifteen_levels_with_three_stars() -> void:
+	_win_all(100)
+	assert_eq(GameFlow.total_stars(), GameFlow.max_stars())
+	assert_true(GameFlow.is_campaign_perfect())
+
+
+func test_fourteen_with_three_stars_and_the_last_with_three_is_perfect_and_with_two_is_not() -> void:
+	for i: int in _last_index():
+		_win_with(i, 100)
+	assert_false(GameFlow.is_campaign_perfect(), "borde: el 15 sin ganar")
+	assert_false(GameFlow.is_campaign_complete())
+	_win_with(_last_index(), 70)
+	assert_eq(GameFlow.level_stars(_last_index()), 2)
+	assert_true(GameFlow.is_campaign_complete())
+	assert_false(GameFlow.is_campaign_perfect(), "el 15 con 2 estrellas")
+	_win_with(_last_index(), 100)
+	assert_true(GameFlow.is_campaign_perfect(), "la mejor marca sube a 3 estrellas")
+
+
+func test_one_middle_level_with_two_stars_is_not_perfect() -> void:
+	for i: int in GameFlow.level_count():
+		_win_with(i, 70 if i == 6 else 100)
+	assert_true(GameFlow.is_campaign_complete())
+	assert_false(GameFlow.is_campaign_perfect())
+
+
+func test_winning_the_last_level_with_fewer_lives_keeps_the_best_mark() -> void:
+	_win_all(100)
+	_win_with(_last_index(), 60)
+	assert_true(GameFlow.is_campaign_perfect(), "las estrellas salen de la mejor marca (RF-93)")
+
+
+func test_the_epilogue_shows_the_dark_image_by_default_and_the_bright_one_when_perfect() -> void:
+	var epilogue := EpilogueScreen.new()
+	add_child_autofree(epilogue)
+	epilogue.open("Texto.")
+	assert_false(epilogue.is_bright())
+	assert_eq(epilogue.image_texture().resource_path, EpilogueScreen.DARK_PATH)
+	epilogue.close()
+	epilogue.open("Texto.", true)
+	assert_true(epilogue.is_bright())
+	assert_eq(epilogue.image_texture().resource_path, EpilogueScreen.BRIGHT_PATH)
+	epilogue.close()
+	epilogue.open("Texto.", false)
+	assert_eq(epilogue.image_texture().resource_path, EpilogueScreen.DARK_PATH, "se calcula cada vez que se abre")
+
+
+func test_the_game_opens_the_variant_that_matches_the_stars() -> void:
+	for i: int in _last_index():
+		_win_with(i, 100)
+	_win_level(_last_index())  # el 15 se gana con las vidas de la partida (3 estrellas)
+	_next_button(game.end_screen).pressed.emit()
+	assert_eq(GameFlow.is_campaign_perfect(), game.epilogue.is_bright(), "coincide con el guardado")
+	game.epilogue.close()
+	DirAccess.remove_absolute(TEST_SAVE)  # la partida anterior guardó: se parte de un guardado nuevo
+	SaveManager.load_save()
+	for i: int in _last_index():
+		_win_with(i, 70)
+	_win_level(_last_index())
+	_next_button(game.end_screen).pressed.emit()
+	assert_false(game.epilogue.is_bright(), "con estrellas de menos, la oscura")
+	assert_eq(game.epilogue.image_texture().resource_path, EpilogueScreen.DARK_PATH)
+
+
+func test_a_missing_image_falls_back_to_the_plain_background_without_crashing() -> void:
+	var epilogue := EpilogueScreen.new()
+	add_child_autofree(epilogue)
+	epilogue.bright_path = "res://assets/sprites/story/no_existe_epilogo.png"
+	epilogue.dark_path = "res://assets/sprites/story/no_existe_epilogo_oscuro.png"
+	epilogue.open("Texto.", true)
+	assert_null(epilogue.image_texture(), "luminosa sin archivo")
+	assert_true(epilogue.is_open())
+	assert_eq(epilogue.text(), "Texto.")
+	epilogue.close()
+	epilogue.open("Texto.", false)
+	assert_null(epilogue.image_texture(), "oscura sin archivo")
+	assert_gt(epilogue.find_children("*", "ColorRect", true, false).size(), 0, "el fondo provisional está")
+
+
+func test_seeing_either_variant_leaves_the_save_and_its_version_unchanged() -> void:
+	_win_all(100)
+	SaveManager.save()
+	var before: String = FileAccess.get_file_as_string(TEST_SAVE)
+	var epilogue := EpilogueScreen.new()
+	add_child_autofree(epilogue)
+	epilogue.open("Texto.", GameFlow.is_campaign_perfect())
+	epilogue.close()
+	epilogue.open("Texto.", false)
+	epilogue.close()
+	assert_eq(FileAccess.get_file_as_string(TEST_SAVE), before)
+	assert_eq(SaveManager.SAVE_VERSION, 1, "SAVE_VERSION no cambió")
+	var saved: Dictionary = JSON.parse_string(before)
+	assert_false(saved.has("campaign_perfect") or saved.has("epilogue_variant"), "ningún campo nuevo")
+
+
+func test_community_and_test_mode_have_no_epilogue_even_with_a_perfect_save() -> void:
+	_win_all(100)
+	GameFlow.current_index = _last_index()
+	GameFlow.current_community = GameFlow.level(_last_index())
+	assert_false(GameFlow.has_epilogue(), "comunidad")
+	GameFlow.current_community = null
+	DevMode.enabled = true
+	_win_level(_last_index())
+	assert_false(_next_button(game.end_screen).visible, "modo de pruebas")

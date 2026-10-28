@@ -1278,7 +1278,7 @@ func open_epilogue() -> void:
 		epilogue = EpilogueScreen.new()
 		add_child(epilogue)
 		epilogue.levels_pressed.connect(GameFlow.go_to_level_select)
-	epilogue.open(level_data.epilogue_text)
+	epilogue.open(level_data.epilogue_text, GameFlow.is_campaign_perfect())  # RF-729
 
 
 # --- Récords (RF-191 a RF-193) ---
