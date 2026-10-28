@@ -214,14 +214,13 @@ Una «línea» es un renglón del archivo (separado por `\n`), no lo que ocupa e
 
 ## 2. Epílogo (solo el nivel 15)
 
-Se muestra después de ganar el 15, con la imagen del final (T233) arriba: la colonia asentada y, a lo lejos, los fuegos de los Moradores. Es el único texto que describe el costo, y lo hace con un dato (los fuegos están más lejos), no con un adjetivo.
+**Decisión de Lucas, 2026-10-28:** se descartan las cuatro líneas anteriores y el epílogo queda en una sola frase, ambigua a propósito. Quien se la pregunta es el personaje del jugador: puede leerse como egoísmo (le importa la supervivencia humana) o como duda por lo que se está arrasando. Se muestra partida en **3 líneas** (el mínimo que valida `LevelFile`), con las palabras exactas de la frase. Todo este bloque se vuelve a revisar con T545.
 
-- La central se encendió al anochecer. La colonia tiene, por primera vez, luz propia.
-- Hay agua, energía y un camino de abastecimiento que une la mina con el valle.
-- Del otro lado del paso, los fuegos de los Moradores se ven cada vez más lejos.
-- El resto de Cántaro sigue ahí.
+- La máquina sigue avanzando,
+- pero ¿por cuánto tiempo más?
+- ¿A qué costo?
 
-*4 líneas, 271 caracteres.*
+*3 líneas, 75 caracteres.*
 
 ---
 
