@@ -1,0 +1,2670 @@
+{
+ "version": 1,
+ "generado": "2026-10-28",
+ "descripcion": "Opciones de redacción para la revisión manual de T545. Cada entrada trae el texto actual (tal cual está en el repositorio), sus límites, los hallazgos del informe que le aplican y de 0 a 3 alternativas. Nada de esto está cargado en el juego.",
+ "hallazgos": {
+  "H1": {
+   "prioridad": "Alta",
+   "titulo": "El agua del oasis y el nivel 2 se contradicen"
+  },
+  "H2": {
+   "prioridad": "Alta",
+   "titulo": "Victoria del 15 / hilo de independencia frente al epílogo nuevo"
+  },
+  "H3": {
+   "prioridad": "Alta",
+   "titulo": "Epílogo: «la máquina» sin referente y partida en 3 líneas"
+  },
+  "H4": {
+   "prioridad": "Media",
+   "titulo": "La imagen del final todavía es la de T233 (luminosa)"
+  },
+  "H5": {
+   "prioridad": "Media",
+   "titulo": "Nivel 13: «hitos de piedra» vs rocas marcadas en el mapa"
+  },
+  "H6": {
+   "prioridad": "Media",
+   "titulo": "Dos nombres por nivel y de estilo mezclado"
+  },
+  "H7": {
+   "prioridad": "Media",
+   "titulo": "Nivel 14: lo «vacío» se anuncia tres veces"
+  },
+  "H8": {
+   "prioridad": "Media",
+   "titulo": "Jefe en el juego, Soberano en el lore"
+  },
+  "H9": {
+   "prioridad": "Media",
+   "titulo": "Dónde queda la Central / cuál es «el valle»"
+  },
+  "H10": {
+   "prioridad": "Baja",
+   "titulo": "Voz: «informe» y «nosotros» mezclados"
+  },
+  "H11": {
+   "prioridad": "Baja",
+   "titulo": "Nivel 11: «paso asegurado» vs «El punto de agua»"
+  },
+  "H12": {
+   "prioridad": "Baja",
+   "titulo": "Repeticiones entre campos del mismo nivel"
+  },
+  "H13": {
+   "prioridad": "Baja",
+   "titulo": "Entradas con relleno o referencias sueltas"
+  },
+  "H14": {
+   "prioridad": "Baja",
+   "titulo": "Wiki repite la victoria / anticipa el epílogo"
+  },
+  "H15": {
+   "prioridad": "Baja",
+   "titulo": "Créditos: solo lo comprobable"
+  },
+  "H16": {
+   "prioridad": "Baja",
+   "titulo": "Intro: tiempos verbales y dato que choca con H1"
+  }
+ },
+ "entradas": [
+  {
+   "id": "nivel_01.nombre",
+   "seccion": "Niveles",
+   "grupo": "Nivel 1 · Pradera",
+   "titulo": "Nivel 1 · nombre",
+   "fuente": "data/levels/level_01.json",
+   "campo": "nombre",
+   "actual": "Pradera",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 1,
+    "caracteres": 24,
+    "linea": 24,
+    "orientativo": true
+   },
+   "limite_tipo": "nombre",
+   "hallazgos": [],
+   "captura": [],
+   "opciones": [],
+   "nota_para_lucas": "Sin alternativas: no hay un hallazgo que lo justifique. Escribí tu redacción si querés cambiarlo."
+  },
+  {
+   "id": "nivel_01.lugar",
+   "seccion": "Niveles",
+   "grupo": "Nivel 1 · Pradera",
+   "titulo": "Nivel 1 · lugar",
+   "fuente": "data/levels/level_01.json → textos.lugar",
+   "campo": "lugar",
+   "actual": "Campamento de aterrizaje",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 1,
+    "caracteres": 32,
+    "linea": 32
+   },
+   "limite_tipo": "lugar",
+   "hallazgos": [],
+   "captura": [],
+   "opciones": [],
+   "nota_para_lucas": "Sin alternativas: no hay un hallazgo que lo justifique. Escribí tu redacción si querés cambiarlo."
+  },
+  {
+   "id": "nivel_01.entrada",
+   "seccion": "Niveles",
+   "grupo": "Nivel 1 · Pradera",
+   "titulo": "Nivel 1 · entrada",
+   "fuente": "data/levels/level_01.json → textos.entrada",
+   "campo": "entrada",
+   "actual": "La nave quedó en el borde del oasis.\nHay agua, pasto y un terreno firme donde armar el campamento.\nAntes de descargar, hay que defenderlo.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 3,
+    "caracteres": 240,
+    "linea": 90
+   },
+   "limite_tipo": "entrada",
+   "hallazgos": [
+    "H1"
+   ],
+   "captura": [
+    "captures/entrada_01.png"
+   ],
+   "opciones": [],
+   "nota_para_lucas": "Sin alternativas: «Hay agua, pasto…» es correcto una vez que el nivel 2 deja de decir que no hay agua (H1)."
+  },
+  {
+   "id": "nivel_01.victoria",
+   "seccion": "Niveles",
+   "grupo": "Nivel 1 · Pradera",
+   "titulo": "Nivel 1 · victoria",
+   "fuente": "data/levels/level_01.json → textos.victoria",
+   "campo": "victoria",
+   "actual": "Campamento asegurado. Las primeras torres quedaron en pie.\nLa carga de la nave se baja esta noche.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 2,
+    "caracteres": 160,
+    "linea": 90
+   },
+   "limite_tipo": "victoria",
+   "hallazgos": [],
+   "captura": [
+    "captures/victoria_01.png"
+   ],
+   "opciones": [],
+   "nota_para_lucas": "Sin alternativas: no hay un hallazgo que lo justifique. Escribí tu redacción si querés cambiarlo."
+  },
+  {
+   "id": "nivel_02.nombre",
+   "seccion": "Niveles",
+   "grupo": "Nivel 2 · Desfiladero",
+   "titulo": "Nivel 2 · nombre",
+   "fuente": "data/levels/level_02.json",
+   "campo": "nombre",
+   "actual": "Desfiladero",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 1,
+    "caracteres": 24,
+    "linea": 24,
+    "orientativo": true
+   },
+   "limite_tipo": "nombre",
+   "hallazgos": [],
+   "captura": [],
+   "opciones": [],
+   "nota_para_lucas": "Sin alternativas: no hay un hallazgo que lo justifique. Escribí tu redacción si querés cambiarlo."
+  },
+  {
+   "id": "nivel_02.lugar",
+   "seccion": "Niveles",
+   "grupo": "Nivel 2 · Desfiladero",
+   "titulo": "Nivel 2 · lugar",
+   "fuente": "data/levels/level_02.json → textos.lugar",
+   "campo": "lugar",
+   "actual": "El paso del agua",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 1,
+    "caracteres": 32,
+    "linea": 32
+   },
+   "limite_tipo": "lugar",
+   "hallazgos": [
+    "H1",
+    "H12"
+   ],
+   "captura": [],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "Del arroyo",
+     "resuelve": "H1, H12: ya no habla del agua como algo ausente; no repite «paso» de la victoria",
+     "texto": "El paso del arroyo"
+    },
+    {
+     "id": "B",
+     "etiqueta": "De la vertiente",
+     "resuelve": "H1, H12: acompaña la opción B de entrada y victoria",
+     "texto": "El camino a la vertiente"
+    },
+    {
+     "id": "C",
+     "etiqueta": "De las cañerías",
+     "resuelve": "H1, H12: acompaña la opción C; el problema no es el agua sino cómo llega",
+     "texto": "El tendido de cañerías"
+    }
+   ]
+  },
+  {
+   "id": "nivel_02.entrada",
+   "seccion": "Niveles",
+   "grupo": "Nivel 2 · Desfiladero",
+   "titulo": "Nivel 2 · entrada",
+   "fuente": "data/levels/level_02.json → textos.entrada",
+   "campo": "entrada",
+   "actual": "El agua dulce más cercana está al otro lado del desfiladero.\nSin ese paso, el campamento no aguanta.\nHay que sostenerlo antes de tender las cañerías.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 3,
+    "caracteres": 240,
+    "linea": 90
+   },
+   "limite_tipo": "entrada",
+   "hallazgos": [
+    "H1"
+   ],
+   "captura": [
+    "captures/entrada_02.png"
+   ],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "A · El arroyo (recomendada por el informe)",
+     "resuelve": "H1: el oasis tiene agua pero no alcanza; el arroyo explica el desfiladero y deja el nivel 4 como continuación",
+     "texto": "El agua del oasis no alcanza para toda una colonia.\nEl arroyo más cercano está al otro lado del desfiladero.\nHay que sostener el paso antes de tender las cañerías."
+    },
+    {
+     "id": "B",
+     "etiqueta": "B · La vertiente",
+     "resuelve": "H1: no usa «arroyo» (queda libre para el 4); el agua que falta es nueva y nadie la midió",
+     "texto": "El agua del oasis alcanza para los primeros días, no para una colonia.\nArriba del desfiladero hay una vertiente que nadie midió todavía.\nHay que sostener el paso antes de tender las cañerías."
+    },
+    {
+     "id": "C",
+     "etiqueta": "C · Llevar el agua más lejos",
+     "resuelve": "H1: no hay agua nueva; el campamento creció y el agua no llega a todos los frentes",
+     "texto": "El campamento ya es más grande que el borde del oasis.\nPara que el agua llegue a todos los frentes hay que cruzar el desfiladero.\nHay que sostener el paso antes de tender las cañerías."
+    }
+   ]
+  },
+  {
+   "id": "nivel_02.victoria",
+   "seccion": "Niveles",
+   "grupo": "Nivel 2 · Desfiladero",
+   "titulo": "Nivel 2 · victoria",
+   "fuente": "data/levels/level_02.json → textos.victoria",
+   "campo": "victoria",
+   "actual": "Paso asegurado. El agua llega al campamento por primera vez.\nFaltan tres tramos de cañería.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 2,
+    "caracteres": 160,
+    "linea": 90
+   },
+   "limite_tipo": "victoria",
+   "hallazgos": [
+    "H1",
+    "H12"
+   ],
+   "captura": [],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "A · Agua del arroyo (par de la entrada A)",
+     "resuelve": "H1, H12: el agua que «llega por primera vez» es la del arroyo, no la del campamento",
+     "texto": "Paso asegurado. El agua del arroyo llega al campamento por primera vez.\nFaltan tres tramos de cañería."
+    },
+    {
+     "id": "B",
+     "etiqueta": "B · Vertiente a tiro de cañería (par de B)",
+     "resuelve": "H1, H12: no promete agua todavía, promete que se puede traer",
+     "texto": "Paso asegurado. La vertiente quedó a tiro de cañería.\nFaltan tres tramos para que el agua llegue al campamento."
+    },
+    {
+     "id": "C",
+     "etiqueta": "C · Las cañerías cruzan (par de C)",
+     "resuelve": "H1, H12: cambia la fórmula «Paso asegurado» por una imagen concreta",
+     "texto": "Las cañerías cruzan el desfiladero. El paso quedó asegurado.\nFaltan tres tramos para que el agua llegue a todos los frentes."
+    }
+   ]
+  },
+  {
+   "id": "nivel_03.nombre",
+   "seccion": "Niveles",
+   "grupo": "Nivel 3 · Encrucijada",
+   "titulo": "Nivel 3 · nombre",
+   "fuente": "data/levels/level_03.json",
+   "campo": "nombre",
+   "actual": "Encrucijada",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 1,
+    "caracteres": 24,
+    "linea": 24,
+    "orientativo": true
+   },
+   "limite_tipo": "nombre",
+   "hallazgos": [
+    "H6"
+   ],
+   "captura": [],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "Por el cruce de dos caminos",
+     "resuelve": "H6: se aleja de «Cruce» (7), casi sinónimo",
+     "texto": "Dos caminos"
+    }
+   ]
+  },
+  {
+   "id": "nivel_03.lugar",
+   "seccion": "Niveles",
+   "grupo": "Nivel 3 · Encrucijada",
+   "titulo": "Nivel 3 · lugar",
+   "fuente": "data/levels/level_03.json → textos.lugar",
+   "campo": "lugar",
+   "actual": "Las huertas",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 1,
+    "caracteres": 32,
+    "linea": 32
+   },
+   "limite_tipo": "lugar",
+   "hallazgos": [],
+   "captura": [],
+   "opciones": [],
+   "nota_para_lucas": "Sin alternativas: no hay un hallazgo que lo justifique. Escribí tu redacción si querés cambiarlo."
+  },
+  {
+   "id": "nivel_03.entrada",
+   "seccion": "Niveles",
+   "grupo": "Nivel 3 · Encrucijada",
+   "titulo": "Nivel 3 · entrada",
+   "fuente": "data/levels/level_03.json → textos.entrada",
+   "campo": "entrada",
+   "actual": "Al norte del campamento hay tierra buena para sembrar.\nDos caminos se cruzan justo ahí, y por los dos llegan manadas.\nSin huerta no hay cosecha.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 3,
+    "caracteres": 240,
+    "linea": 90
+   },
+   "limite_tipo": "entrada",
+   "hallazgos": [
+    "H13"
+   ],
+   "captura": [
+    "captures/entrada_03.png"
+   ],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "Sin la línea 3",
+     "resuelve": "H13: se quita la frase casi tautológica (el límite es «hasta» 3 líneas)",
+     "texto": "Al norte del campamento hay tierra buena para sembrar.\nDos caminos se cruzan justo ahí, y por los dos llegan manadas."
+    },
+    {
+     "id": "B",
+     "etiqueta": "Línea 3 con consecuencia",
+     "resuelve": "H13: dice qué se pierde en vez de repetir la idea",
+     "texto": "Al norte del campamento hay tierra buena para sembrar.\nDos caminos se cruzan justo ahí, y por los dos llegan manadas.\nSin huerta no hay con qué alimentar a la colonia."
+    }
+   ]
+  },
+  {
+   "id": "nivel_03.victoria",
+   "seccion": "Niveles",
+   "grupo": "Nivel 3 · Encrucijada",
+   "titulo": "Nivel 3 · victoria",
+   "fuente": "data/levels/level_03.json → textos.victoria",
+   "campo": "victoria",
+   "actual": "Huertas aseguradas. Se sembró el primer surco.\nLo que crezca depende de que las torres aguanten.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 2,
+    "caracteres": 160,
+    "linea": 90
+   },
+   "limite_tipo": "victoria",
+   "hallazgos": [],
+   "captura": [],
+   "opciones": [],
+   "nota_para_lucas": "Sin alternativas: no hay un hallazgo que lo justifique. Escribí tu redacción si querés cambiarlo."
+  },
+  {
+   "id": "nivel_04.nombre",
+   "seccion": "Niveles",
+   "grupo": "Nivel 4 · Espiral",
+   "titulo": "Nivel 4 · nombre",
+   "fuente": "data/levels/level_04.json",
+   "campo": "nombre",
+   "actual": "Espiral",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 1,
+    "caracteres": 24,
+    "linea": 24,
+    "orientativo": true
+   },
+   "limite_tipo": "nombre",
+   "hallazgos": [],
+   "captura": [],
+   "opciones": [],
+   "nota_para_lucas": "Sin alternativas: no hay un hallazgo que lo justifique. Escribí tu redacción si querés cambiarlo."
+  },
+  {
+   "id": "nivel_04.lugar",
+   "seccion": "Niveles",
+   "grupo": "Nivel 4 · Espiral",
+   "titulo": "Nivel 4 · lugar",
+   "fuente": "data/levels/level_04.json → textos.lugar",
+   "campo": "lugar",
+   "actual": "El pozo",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 1,
+    "caracteres": 32,
+    "linea": 32
+   },
+   "limite_tipo": "lugar",
+   "hallazgos": [],
+   "captura": [],
+   "opciones": [],
+   "nota_para_lucas": "Sin alternativas: no hay un hallazgo que lo justifique. Escribí tu redacción si querés cambiarlo."
+  },
+  {
+   "id": "nivel_04.entrada",
+   "seccion": "Niveles",
+   "grupo": "Nivel 4 · Espiral",
+   "titulo": "Nivel 4 · entrada",
+   "fuente": "data/levels/level_04.json → textos.entrada",
+   "campo": "entrada",
+   "actual": "El arroyo no alcanza para toda la colonia.\nHay que cavar un pozo en el centro del valle.\nEl camino hasta ahí da muchas vueltas: que les cueste llegar.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 3,
+    "caracteres": 240,
+    "linea": 90
+   },
+   "limite_tipo": "entrada",
+   "hallazgos": [
+    "H13",
+    "H1"
+   ],
+   "captura": [
+    "captures/entrada_04.png"
+   ],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "Con «las manadas»",
+     "resuelve": "H13: «les» tenía el referente suelto; ahora son las manadas (vocabulario del canon)",
+     "texto": "El arroyo no alcanza para toda la colonia.\nHay que cavar un pozo en el centro del valle.\nEl camino hasta ahí da muchas vueltas: conviene que a las manadas les cueste llegar."
+    },
+    {
+     "id": "B",
+     "etiqueta": "Sin «les»",
+     "resuelve": "H13: lo mismo como hecho del terreno, sin destinatario",
+     "texto": "El arroyo no alcanza para toda la colonia.\nHay que cavar un pozo en el centro del valle.\nEl camino hasta ahí da muchas vueltas, y cada vuelta cuenta."
+    }
+   ],
+   "nota_para_lucas": "Si en el nivel 2 elegís una opción sin «arroyo» (B o C), la frase «El arroyo no alcanza» del 4 pierde el eslabón: conviene cambiarla en el mismo paso."
+  },
+  {
+   "id": "nivel_04.victoria",
+   "seccion": "Niveles",
+   "grupo": "Nivel 4 · Espiral",
+   "titulo": "Nivel 4 · victoria",
+   "fuente": "data/levels/level_04.json → textos.victoria",
+   "campo": "victoria",
+   "actual": "Pozo terminado. Hay agua para toda la colonia.\nSe armó un turno de guardia para cuidarlo.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 2,
+    "caracteres": 160,
+    "linea": 90
+   },
+   "limite_tipo": "victoria",
+   "hallazgos": [],
+   "captura": [],
+   "opciones": [],
+   "nota_para_lucas": "Sin alternativas: no hay un hallazgo que lo justifique. Escribí tu redacción si querés cambiarlo."
+  },
+  {
+   "id": "nivel_05.nombre",
+   "seccion": "Niveles",
+   "grupo": "Nivel 5 · Fortaleza",
+   "titulo": "Nivel 5 · nombre",
+   "fuente": "data/levels/level_05.json",
+   "campo": "nombre",
+   "actual": "Fortaleza",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 1,
+    "caracteres": 24,
+    "linea": 24,
+    "orientativo": true
+   },
+   "limite_tipo": "nombre",
+   "hallazgos": [
+    "H6"
+   ],
+   "captura": [],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "Igual que el lugar",
+     "resuelve": "H6: nombre = lugar, sin dos palabras para lo mismo",
+     "texto": "Empalizada"
+    },
+    {
+     "id": "B",
+     "etiqueta": "Primer cerco",
+     "resuelve": "H6: nombre de mapa que cuenta lo que pasa en el nivel",
+     "texto": "El primer cerco"
+    },
+    {
+     "id": "C",
+     "etiqueta": "Palabra del canon",
+     "resuelve": "H6: usa «perímetro», vocabulario de la biblia",
+     "texto": "Perímetro"
+    }
+   ]
+  },
+  {
+   "id": "nivel_05.lugar",
+   "seccion": "Niveles",
+   "grupo": "Nivel 5 · Fortaleza",
+   "titulo": "Nivel 5 · lugar",
+   "fuente": "data/levels/level_05.json → textos.lugar",
+   "campo": "lugar",
+   "actual": "La empalizada",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 1,
+    "caracteres": 32,
+    "linea": 32
+   },
+   "limite_tipo": "lugar",
+   "hallazgos": [],
+   "captura": [],
+   "opciones": [],
+   "nota_para_lucas": "Sin alternativas: no hay un hallazgo que lo justifique. Escribí tu redacción si querés cambiarlo."
+  },
+  {
+   "id": "nivel_05.entrada",
+   "seccion": "Niveles",
+   "grupo": "Nivel 5 · Fortaleza",
+   "titulo": "Nivel 5 · entrada",
+   "fuente": "data/levels/level_05.json → textos.entrada",
+   "campo": "entrada",
+   "actual": "El campamento ya es un pueblo y todavía no tiene cerco.\nHoy se cierra el primer perímetro.\nLo que quede afuera, queda afuera.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 3,
+    "caracteres": 240,
+    "linea": 90
+   },
+   "limite_tipo": "entrada",
+   "hallazgos": [],
+   "captura": [
+    "captures/entrada_05.png"
+   ],
+   "opciones": [],
+   "nota_para_lucas": "Sin alternativas: no hay un hallazgo que lo justifique. Escribí tu redacción si querés cambiarlo."
+  },
+  {
+   "id": "nivel_05.victoria",
+   "seccion": "Niveles",
+   "grupo": "Nivel 5 · Fortaleza",
+   "titulo": "Nivel 5 · victoria",
+   "fuente": "data/levels/level_05.json → textos.victoria",
+   "campo": "victoria",
+   "actual": "Empalizada cerrada. Es el primer perímetro de la colonia.\nPor primera vez, dormimos adentro.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 2,
+    "caracteres": 160,
+    "linea": 90
+   },
+   "limite_tipo": "victoria",
+   "hallazgos": [
+    "H10"
+   ],
+   "captura": [],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "Impersonal",
+     "resuelve": "H10: sin primera persona del plural",
+     "texto": "Empalizada cerrada. Es el primer perímetro de la colonia.\nPor primera vez, se duerme adentro."
+    }
+   ]
+  },
+  {
+   "id": "nivel_06.nombre",
+   "seccion": "Niveles",
+   "grupo": "Nivel 6 · Nido",
+   "titulo": "Nivel 6 · nombre",
+   "fuente": "data/levels/level_06.json",
+   "campo": "nombre",
+   "actual": "Nido",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 1,
+    "caracteres": 24,
+    "linea": 24,
+    "orientativo": true
+   },
+   "limite_tipo": "nombre",
+   "hallazgos": [
+    "H6"
+   ],
+   "captura": [],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "Bosque",
+     "resuelve": "H6: «Nido» no aparece en ningún texto del 6",
+     "texto": "Bosque"
+    },
+    {
+     "id": "B",
+     "etiqueta": "Linde del bosque",
+     "resuelve": "H6: se ata a la entrada («donde termina el cerco») sin repetir el lugar «El lindero»",
+     "texto": "Linde del bosque"
+    },
+    {
+     "id": "C",
+     "etiqueta": "Madera",
+     "resuelve": "H6: nombre por lo que se busca en el nivel",
+     "texto": "Madera"
+    }
+   ]
+  },
+  {
+   "id": "nivel_06.lugar",
+   "seccion": "Niveles",
+   "grupo": "Nivel 6 · Nido",
+   "titulo": "Nivel 6 · lugar",
+   "fuente": "data/levels/level_06.json → textos.lugar",
+   "campo": "lugar",
+   "actual": "El lindero",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 1,
+    "caracteres": 32,
+    "linea": 32
+   },
+   "limite_tipo": "lugar",
+   "hallazgos": [],
+   "captura": [],
+   "opciones": [],
+   "nota_para_lucas": "Sin alternativas: no hay un hallazgo que lo justifique. Escribí tu redacción si querés cambiarlo."
+  },
+  {
+   "id": "nivel_06.entrada",
+   "seccion": "Niveles",
+   "grupo": "Nivel 6 · Nido",
+   "titulo": "Nivel 6 · entrada",
+   "fuente": "data/levels/level_06.json → textos.entrada",
+   "campo": "entrada",
+   "actual": "El bosque empieza donde termina el cerco.\nHay madera para varios años, y también criaturas que no habíamos visto.\nDel campamento empezaron a faltar cosas.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 3,
+    "caracteres": 240,
+    "linea": 90
+   },
+   "limite_tipo": "entrada",
+   "hallazgos": [
+    "H10"
+   ],
+   "captura": [
+    "captures/entrada_06.png"
+   ],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "Impersonal",
+     "resuelve": "H10: sin «habíamos visto»",
+     "texto": "El bosque empieza donde termina el cerco.\nHay madera para varios años, y también criaturas que nadie había visto.\nDel campamento empezaron a faltar cosas."
+    }
+   ]
+  },
+  {
+   "id": "nivel_06.victoria",
+   "seccion": "Niveles",
+   "grupo": "Nivel 6 · Nido",
+   "titulo": "Nivel 6 · victoria",
+   "fuente": "data/levels/level_06.json → textos.victoria",
+   "campo": "victoria",
+   "actual": "Lindero asegurado. Se taló el primer tramo.\nLa madera alcanza para dos casas.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 2,
+    "caracteres": 160,
+    "linea": 90
+   },
+   "limite_tipo": "victoria",
+   "hallazgos": [],
+   "captura": [],
+   "opciones": [],
+   "nota_para_lucas": "Sin alternativas: no hay un hallazgo que lo justifique. Escribí tu redacción si querés cambiarlo."
+  },
+  {
+   "id": "nivel_07.nombre",
+   "seccion": "Niveles",
+   "grupo": "Nivel 7 · Cruce",
+   "titulo": "Nivel 7 · nombre",
+   "fuente": "data/levels/level_07.json",
+   "campo": "nombre",
+   "actual": "Cruce",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 1,
+    "caracteres": 24,
+    "linea": 24,
+    "orientativo": true
+   },
+   "limite_tipo": "nombre",
+   "hallazgos": [
+    "H6"
+   ],
+   "captura": [],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "Aserradero",
+     "resuelve": "H6: se distancia de «Encrucijada» (3) y coincide con el lugar",
+     "texto": "Aserradero"
+    },
+    {
+     "id": "B",
+     "etiqueta": "Cruce de caminos",
+     "resuelve": "H6: queda claro que no es la encrucijada del 3",
+     "texto": "Cruce de caminos"
+    },
+    {
+     "id": "C",
+     "etiqueta": "Corte de madera",
+     "resuelve": "H6: nombre por la actividad",
+     "texto": "Corte de madera"
+    }
+   ]
+  },
+  {
+   "id": "nivel_07.lugar",
+   "seccion": "Niveles",
+   "grupo": "Nivel 7 · Cruce",
+   "titulo": "Nivel 7 · lugar",
+   "fuente": "data/levels/level_07.json → textos.lugar",
+   "campo": "lugar",
+   "actual": "El aserradero",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 1,
+    "caracteres": 32,
+    "linea": 32
+   },
+   "limite_tipo": "lugar",
+   "hallazgos": [],
+   "captura": [],
+   "opciones": [],
+   "nota_para_lucas": "Sin alternativas: no hay un hallazgo que lo justifique. Escribí tu redacción si querés cambiarlo."
+  },
+  {
+   "id": "nivel_07.entrada",
+   "seccion": "Niveles",
+   "grupo": "Nivel 7 · Cruce",
+   "titulo": "Nivel 7 · entrada",
+   "fuente": "data/levels/level_07.json → textos.entrada",
+   "campo": "entrada",
+   "actual": "El mejor sitio para cortar madera es un cruce de caminos.\nSe arma un aserradero, y para eso hay que despejar el terreno.\nTodo lo que estorbe se retira.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 3,
+    "caracteres": 240,
+    "linea": 90
+   },
+   "limite_tipo": "entrada",
+   "hallazgos": [],
+   "captura": [
+    "captures/entrada_07.png"
+   ],
+   "opciones": [],
+   "nota_para_lucas": "Sin alternativas: no hay un hallazgo que lo justifique. Escribí tu redacción si querés cambiarlo."
+  },
+  {
+   "id": "nivel_07.victoria",
+   "seccion": "Niveles",
+   "grupo": "Nivel 7 · Cruce",
+   "titulo": "Nivel 7 · victoria",
+   "fuente": "data/levels/level_07.json → textos.victoria",
+   "campo": "victoria",
+   "actual": "Aserradero en marcha. La colonia ya tiene madera propia.\nLa primera carga sale mañana hacia el campamento.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 2,
+    "caracteres": 160,
+    "linea": 90
+   },
+   "limite_tipo": "victoria",
+   "hallazgos": [
+    "H2"
+   ],
+   "captura": [],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "Sin independencia",
+     "resuelve": "H2: no usa «propia»; el hilo de independencia queda para el 9 y el 15",
+     "texto": "Aserradero en marcha. Hay madera para empezar a construir en serio.\nLa primera carga sale mañana hacia el campamento."
+    },
+    {
+     "id": "B",
+     "etiqueta": "Solo el hecho",
+     "resuelve": "H2: no promete nada; ya se cortó, no se cuenta",
+     "texto": "Aserradero en marcha. Los primeros troncos ya están en el patio.\nLa primera carga sale mañana hacia el campamento."
+    },
+    {
+     "id": "C",
+     "etiqueta": "Con costo",
+     "resuelve": "H2: el logro trae su sombra; encaja con «Todo lo que estorbe se retira»",
+     "texto": "Aserradero en marcha. El terreno quedó despejado de punta a punta.\nLa primera carga sale mañana hacia el campamento."
+    }
+   ]
+  },
+  {
+   "id": "nivel_08.nombre",
+   "seccion": "Niveles",
+   "grupo": "Nivel 8 · Bastión",
+   "titulo": "Nivel 8 · nombre",
+   "fuente": "data/levels/level_08.json",
+   "campo": "nombre",
+   "actual": "Bastión",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 1,
+    "caracteres": 24,
+    "linea": 24,
+    "orientativo": true
+   },
+   "limite_tipo": "nombre",
+   "hallazgos": [
+    "H6"
+   ],
+   "captura": [],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "La loma",
+     "resuelve": "H6: nombre geográfico, sin «bastión» ni «ruinas»",
+     "texto": "La loma"
+    },
+    {
+     "id": "B",
+     "etiqueta": "Muros viejos",
+     "resuelve": "H6: toma la imagen de la entrada («piedra vieja»)",
+     "texto": "Muros viejos"
+    },
+    {
+     "id": "C",
+     "etiqueta": "Piedra vieja",
+     "resuelve": "H6: palabra exacta de la entrada; evita «ruinas» antes de la revelación",
+     "texto": "Piedra vieja"
+    }
+   ]
+  },
+  {
+   "id": "nivel_08.lugar",
+   "seccion": "Niveles",
+   "grupo": "Nivel 8 · Bastión",
+   "titulo": "Nivel 8 · lugar",
+   "fuente": "data/levels/level_08.json → textos.lugar",
+   "campo": "lugar",
+   "actual": "El bastión sobre ruinas",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 1,
+    "caracteres": 32,
+    "linea": 32
+   },
+   "limite_tipo": "lugar",
+   "hallazgos": [
+    "H6"
+   ],
+   "captura": [],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "La loma",
+     "resuelve": "H6: no repite el nombre ni adelanta «ruinas»",
+     "texto": "La loma"
+    },
+    {
+     "id": "B",
+     "etiqueta": "El bastión",
+     "resuelve": "H6: lugar breve, sin «ruinas»",
+     "texto": "El bastión"
+    },
+    {
+     "id": "C",
+     "etiqueta": "Los muros viejos",
+     "resuelve": "H6: usa «viejos» como la entrada",
+     "texto": "Los muros viejos"
+    }
+   ]
+  },
+  {
+   "id": "nivel_08.entrada",
+   "seccion": "Niveles",
+   "grupo": "Nivel 8 · Bastión",
+   "titulo": "Nivel 8 · entrada",
+   "fuente": "data/levels/level_08.json → textos.entrada",
+   "campo": "entrada",
+   "actual": "Sobre la loma hay muros de piedra vieja, a medio enterrar.\nLas rocas tienen la misma marca que las del campamento.\nAlguien la puso antes que nosotros.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 3,
+    "caracteres": 240,
+    "linea": 90
+   },
+   "limite_tipo": "entrada",
+   "hallazgos": [
+    "H10"
+   ],
+   "captura": [
+    "captures/entrada_08.png"
+   ],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "Impersonal",
+     "resuelve": "H10: sin «nosotros»",
+     "texto": "Sobre la loma hay muros de piedra vieja, a medio enterrar.\nLas rocas tienen la misma marca que las del campamento.\nAlguien la puso antes que la colonia."
+    }
+   ]
+  },
+  {
+   "id": "nivel_08.victoria",
+   "seccion": "Niveles",
+   "grupo": "Nivel 8 · Bastión",
+   "titulo": "Nivel 8 · victoria",
+   "fuente": "data/levels/level_08.json → textos.victoria",
+   "campo": "victoria",
+   "actual": "Bastión asegurado. La colonia tiene una posición alta sobre la loma.\nLos muros son de otros; los usamos igual.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 2,
+    "caracteres": 160,
+    "linea": 90
+   },
+   "limite_tipo": "victoria",
+   "hallazgos": [
+    "H10"
+   ],
+   "captura": [
+    "captures/victoria_08.png"
+   ],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "Impersonal",
+     "resuelve": "H10: sin «los usamos»",
+     "texto": "Bastión asegurado. La colonia tiene una posición alta sobre la loma.\nLos muros son de otros; se usan igual."
+    }
+   ]
+  },
+  {
+   "id": "nivel_09.nombre",
+   "seccion": "Niveles",
+   "grupo": "Nivel 9 · Taller asediado",
+   "titulo": "Nivel 9 · nombre",
+   "fuente": "data/levels/level_09.json",
+   "campo": "nombre",
+   "actual": "Taller asediado",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 1,
+    "caracteres": 24,
+    "linea": 24,
+    "orientativo": true
+   },
+   "limite_tipo": "nombre",
+   "hallazgos": [
+    "H6"
+   ],
+   "captura": [],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "Taller en ruinas",
+     "resuelve": "H6: ya no choca con el modo «Asedio»",
+     "texto": "Taller en ruinas"
+    },
+    {
+     "id": "B",
+     "etiqueta": "El galpón",
+     "resuelve": "H6: toma la palabra de la entrada",
+     "texto": "El galpón"
+    },
+    {
+     "id": "C",
+     "etiqueta": "Taller",
+     "resuelve": "H6: igual al lugar; nada que choque",
+     "texto": "Taller"
+    }
+   ]
+  },
+  {
+   "id": "nivel_09.lugar",
+   "seccion": "Niveles",
+   "grupo": "Nivel 9 · Taller asediado",
+   "titulo": "Nivel 9 · lugar",
+   "fuente": "data/levels/level_09.json → textos.lugar",
+   "campo": "lugar",
+   "actual": "El taller",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 1,
+    "caracteres": 32,
+    "linea": 32
+   },
+   "limite_tipo": "lugar",
+   "hallazgos": [],
+   "captura": [],
+   "opciones": [],
+   "nota_para_lucas": "Sin alternativas: no hay un hallazgo que lo justifique. Escribí tu redacción si querés cambiarlo."
+  },
+  {
+   "id": "nivel_09.entrada",
+   "seccion": "Niveles",
+   "grupo": "Nivel 9 · Taller asediado",
+   "titulo": "Nivel 9 · entrada",
+   "fuente": "data/levels/level_09.json → textos.entrada",
+   "campo": "entrada",
+   "actual": "Entre las ruinas hay un galpón que puede servir de taller.\nLos que lo rodean no parecen animales: algunos curan a los suyos.\nHoy se prueba el primer mortero de la colonia.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 3,
+    "caracteres": 240,
+    "linea": 90
+   },
+   "limite_tipo": "entrada",
+   "hallazgos": [
+    "H13"
+   ],
+   "captura": [
+    "captures/entrada_09.png"
+   ],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "Sin nombrar la torre",
+     "resuelve": "H13: «el primer mortero» es mecánica y estaba A REVISAR TRAS G4",
+     "texto": "Entre las ruinas hay un galpón que puede servir de taller.\nLos que lo rodean no parecen animales: algunos curan a los suyos.\nHoy se prueba la primera pieza que sale de la forja."
+    },
+    {
+     "id": "B",
+     "etiqueta": "Defender antes del horno",
+     "resuelve": "H13: línea 3 como hecho del mundo; no repite el horno de la victoria",
+     "texto": "Entre las ruinas hay un galpón que puede servir de taller.\nLos que lo rodean no parecen animales: algunos curan a los suyos.\nHay que defenderlo antes de encender el horno."
+    }
+   ]
+  },
+  {
+   "id": "nivel_09.victoria",
+   "seccion": "Niveles",
+   "grupo": "Nivel 9 · Taller asediado",
+   "titulo": "Nivel 9 · victoria",
+   "fuente": "data/levels/level_09.json → textos.victoria",
+   "campo": "victoria",
+   "actual": "Taller asegurado. El horno se encendió por primera vez fuera del oasis.\nLa forja ya no depende de lo que trajo la nave.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 2,
+    "caracteres": 160,
+    "linea": 90
+   },
+   "limite_tipo": "victoria",
+   "hallazgos": [],
+   "captura": [],
+   "opciones": [],
+   "nota_para_lucas": "Sin alternativas: no hay un hallazgo que lo justifique. Escribí tu redacción si querés cambiarlo."
+  },
+  {
+   "id": "nivel_10.nombre",
+   "seccion": "Niveles",
+   "grupo": "Nivel 10 · La mina vieja",
+   "titulo": "Nivel 10 · nombre",
+   "fuente": "data/levels/level_10.json",
+   "campo": "nombre",
+   "actual": "La mina vieja",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 1,
+    "caracteres": 24,
+    "linea": 24,
+    "orientativo": true
+   },
+   "limite_tipo": "nombre",
+   "hallazgos": [
+    "H6"
+   ],
+   "captura": [],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "La mina",
+     "resuelve": "H6: sin «vieja» (nombre provisorio de la biblia)",
+     "texto": "La mina"
+    },
+    {
+     "id": "B",
+     "etiqueta": "Mina vieja",
+     "resuelve": "H6: estilo sin artículo",
+     "texto": "Mina vieja"
+    },
+    {
+     "id": "C",
+     "etiqueta": "Las galerías",
+     "resuelve": "H6: toma la imagen de la entrada",
+     "texto": "Las galerías"
+    }
+   ]
+  },
+  {
+   "id": "nivel_10.lugar",
+   "seccion": "Niveles",
+   "grupo": "Nivel 10 · La mina vieja",
+   "titulo": "Nivel 10 · lugar",
+   "fuente": "data/levels/level_10.json → textos.lugar",
+   "campo": "lugar",
+   "actual": "Primer puesto de abastecimiento",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 1,
+    "caracteres": 32,
+    "linea": 32
+   },
+   "limite_tipo": "lugar",
+   "hallazgos": [
+    "H12"
+   ],
+   "captura": [],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "La boca de la mina",
+     "resuelve": "H12: ya no se repite tal cual en la victoria",
+     "texto": "La boca de la mina"
+    },
+    {
+     "id": "B",
+     "etiqueta": "El primer puesto",
+     "resuelve": "H12: corto; deja «abastecimiento» a la victoria",
+     "texto": "El primer puesto"
+    },
+    {
+     "id": "C",
+     "etiqueta": "Puesto de abastecimiento",
+     "resuelve": "H12: sin «primer» (que dice la victoria)",
+     "texto": "Puesto de abastecimiento"
+    }
+   ]
+  },
+  {
+   "id": "nivel_10.entrada",
+   "seccion": "Niveles",
+   "grupo": "Nivel 10 · La mina vieja",
+   "titulo": "Nivel 10 · entrada",
+   "fuente": "data/levels/level_10.json → textos.entrada",
+   "campo": "entrada",
+   "actual": "Las galerías ya estaban cavadas cuando llegamos.\nSi se las retoma, la colonia tiene mineral a pocos días del campamento.\nHay que sostener la boca de la mina.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 3,
+    "caracteres": 240,
+    "linea": 90
+   },
+   "limite_tipo": "entrada",
+   "hallazgos": [
+    "H10"
+   ],
+   "captura": [
+    "captures/entrada_10.png"
+   ],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "Impersonal",
+     "resuelve": "H10: sin «cuando llegamos»",
+     "texto": "Las galerías ya estaban cavadas cuando llegó la Compañía.\nSi se las retoma, la colonia tiene mineral a pocos días del campamento.\nHay que sostener la boca de la mina."
+    }
+   ]
+  },
+  {
+   "id": "nivel_10.victoria",
+   "seccion": "Niveles",
+   "grupo": "Nivel 10 · La mina vieja",
+   "titulo": "Nivel 10 · victoria",
+   "fuente": "data/levels/level_10.json → textos.victoria",
+   "campo": "victoria",
+   "actual": "Mina asegurada. Es el primer puesto de abastecimiento de la colonia.\nLas galerías no las cavamos nosotros, y nadie vino a reclamarlas.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 2,
+    "caracteres": 160,
+    "linea": 90
+   },
+   "limite_tipo": "victoria",
+   "hallazgos": [
+    "H12",
+    "H10"
+   ],
+   "captura": [
+    "captures/victoria_10.png"
+   ],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "Primer mineral",
+     "resuelve": "H12: no repite el lugar; el hito es el mineral",
+     "texto": "Mina asegurada. De acá sale el primer mineral de la colonia.\nLas galerías no las cavamos nosotros, y nadie vino a reclamarlas."
+    },
+    {
+     "id": "B",
+     "etiqueta": "Impersonal",
+     "resuelve": "H12, H10: sin «cavamos nosotros»; conserva la mejor línea",
+     "texto": "Mina asegurada. Es el primer puesto de abastecimiento de la colonia.\nLas galerías no las cavó la colonia, y nadie vino a reclamarlas."
+    }
+   ]
+  },
+  {
+   "id": "nivel_11.nombre",
+   "seccion": "Niveles",
+   "grupo": "Nivel 11 · Puesto seco",
+   "titulo": "Nivel 11 · nombre",
+   "fuente": "data/levels/level_11.json",
+   "campo": "nombre",
+   "actual": "Puesto seco",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 1,
+    "caracteres": 24,
+    "linea": 24,
+    "orientativo": true
+   },
+   "limite_tipo": "nombre",
+   "hallazgos": [
+    "H6"
+   ],
+   "captura": [],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "Los pozos",
+     "resuelve": "H6, H11: nombre por lo que se asegura",
+     "texto": "Los pozos"
+    },
+    {
+     "id": "B",
+     "etiqueta": "Camino seco",
+     "resuelve": "H6: estilo sin artículo, descriptivo",
+     "texto": "Camino seco"
+    },
+    {
+     "id": "C",
+     "etiqueta": "Puesto",
+     "resuelve": "H6: mínimo",
+     "texto": "Puesto"
+    }
+   ]
+  },
+  {
+   "id": "nivel_11.lugar",
+   "seccion": "Niveles",
+   "grupo": "Nivel 11 · Puesto seco",
+   "titulo": "Nivel 11 · lugar",
+   "fuente": "data/levels/level_11.json → textos.lugar",
+   "campo": "lugar",
+   "actual": "El punto de agua",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 1,
+    "caracteres": 32,
+    "linea": 32
+   },
+   "limite_tipo": "lugar",
+   "hallazgos": [
+    "H11"
+   ],
+   "captura": [],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "Los dos pozos",
+     "resuelve": "H11: más concreto; acerca el lugar a la victoria",
+     "texto": "Los dos pozos"
+    },
+    {
+     "id": "B",
+     "etiqueta": "El camino seco",
+     "resuelve": "H11: coincide con la entrada",
+     "texto": "El camino seco"
+    }
+   ]
+  },
+  {
+   "id": "nivel_11.entrada",
+   "seccion": "Niveles",
+   "grupo": "Nivel 11 · Puesto seco",
+   "titulo": "Nivel 11 · entrada",
+   "fuente": "data/levels/level_11.json → textos.entrada",
+   "campo": "entrada",
+   "actual": "Pasada la mina, el camino se vuelve seco.\nLos dos pozos que hay ya tenían huellas alrededor.\nDesde hoy, algunas torres se apagan sin que nadie las toque.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 3,
+    "caracteres": 240,
+    "linea": 90
+   },
+   "limite_tipo": "entrada",
+   "hallazgos": [],
+   "captura": [
+    "captures/entrada_11.png"
+   ],
+   "opciones": [],
+   "nota_para_lucas": "Sin alternativas: no hay un hallazgo que lo justifique. Escribí tu redacción si querés cambiarlo."
+  },
+  {
+   "id": "nivel_11.victoria",
+   "seccion": "Niveles",
+   "grupo": "Nivel 11 · Puesto seco",
+   "titulo": "Nivel 11 · victoria",
+   "fuente": "data/levels/level_11.json → textos.victoria",
+   "campo": "victoria",
+   "actual": "Informe del puesto seco: paso asegurado.\nDos pozos quedaron dentro del perímetro.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 2,
+    "caracteres": 160,
+    "linea": 90
+   },
+   "limite_tipo": "victoria",
+   "hallazgos": [
+    "H11"
+   ],
+   "captura": [],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "Punto de agua asegurado",
+     "resuelve": "H11: el informe habla del lugar, no de un paso (cambia la frase de la biblia)",
+     "texto": "Informe del puesto seco: punto de agua asegurado.\nDos pozos quedaron dentro del perímetro."
+    },
+    {
+     "id": "B",
+     "etiqueta": "Pozos asegurados",
+     "resuelve": "H11: nombra lo asegurado",
+     "texto": "Informe del puesto seco: pozos asegurados.\nQuedaron dentro del perímetro."
+    },
+    {
+     "id": "C",
+     "etiqueta": "Perímetro cerrado",
+     "resuelve": "H11: usa «perímetro», vocabulario del canon",
+     "texto": "Informe del puesto seco: perímetro cerrado.\nDos pozos quedaron adentro."
+    }
+   ]
+  },
+  {
+   "id": "nivel_12.nombre",
+   "seccion": "Niveles",
+   "grupo": "Nivel 12 · El cañadón",
+   "titulo": "Nivel 12 · nombre",
+   "fuente": "data/levels/level_12.json",
+   "campo": "nombre",
+   "actual": "El cañadón",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 1,
+    "caracteres": 24,
+    "linea": 24,
+    "orientativo": true
+   },
+   "limite_tipo": "nombre",
+   "hallazgos": [
+    "H6"
+   ],
+   "captura": [],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "Cañadón",
+     "resuelve": "H6: estilo sin artículo",
+     "texto": "Cañadón"
+    },
+    {
+     "id": "B",
+     "etiqueta": "Paredes altas",
+     "resuelve": "H6: imagen de la entrada",
+     "texto": "Paredes altas"
+    },
+    {
+     "id": "C",
+     "etiqueta": "El eco",
+     "resuelve": "H6: toma la mecánica del nivel como hecho del paisaje",
+     "texto": "El eco"
+    }
+   ]
+  },
+  {
+   "id": "nivel_12.lugar",
+   "seccion": "Niveles",
+   "grupo": "Nivel 12 · El cañadón",
+   "titulo": "Nivel 12 · lugar",
+   "fuente": "data/levels/level_12.json → textos.lugar",
+   "campo": "lugar",
+   "actual": "El paso hacia el norte",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 1,
+    "caracteres": 32,
+    "linea": 32
+   },
+   "limite_tipo": "lugar",
+   "hallazgos": [
+    "H12"
+   ],
+   "captura": [],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "Las paredes altas",
+     "resuelve": "H12: no repite «el paso hacia el norte» de la entrada",
+     "texto": "Las paredes altas"
+    },
+    {
+     "id": "B",
+     "etiqueta": "La boca del cañadón",
+     "resuelve": "H12: lugar concreto",
+     "texto": "La boca del cañadón"
+    }
+   ]
+  },
+  {
+   "id": "nivel_12.entrada",
+   "seccion": "Niveles",
+   "grupo": "Nivel 12 · El cañadón",
+   "titulo": "Nivel 12 · entrada",
+   "fuente": "data/levels/level_12.json → textos.entrada",
+   "campo": "entrada",
+   "actual": "El único paso hacia el norte es un cañadón de paredes altas.\nLos tiros vuelven contra las torres, como si las paredes los devolvieran.\nCruzarlo es la única forma de llegar al resto de la región.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 3,
+    "caracteres": 240,
+    "linea": 90
+   },
+   "limite_tipo": "entrada",
+   "hallazgos": [
+    "H12",
+    "H13"
+   ],
+   "captura": [
+    "captures/entrada_12.png"
+   ],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "Solo cambia la línea 3",
+     "resuelve": "H13: «único» ya no se repite",
+     "texto": "El único paso hacia el norte es un cañadón de paredes altas.\nLos tiros vuelven contra las torres, como si las paredes los devolvieran.\nCruzarlo es llegar al resto de la región."
+    },
+    {
+     "id": "B",
+     "etiqueta": "Cambia la línea 1",
+     "resuelve": "H12, H13: el lugar ya dijo «el paso»; acá queda el paisaje",
+     "texto": "El camino al norte se estrecha en un cañadón de paredes altas.\nLos tiros vuelven contra las torres, como si las paredes los devolvieran.\nCruzarlo es la única forma de llegar al resto de la región."
+    }
+   ]
+  },
+  {
+   "id": "nivel_12.victoria",
+   "seccion": "Niveles",
+   "grupo": "Nivel 12 · El cañadón",
+   "titulo": "Nivel 12 · victoria",
+   "fuente": "data/levels/level_12.json → textos.victoria",
+   "campo": "victoria",
+   "actual": "Cañadón asegurado. El paso al norte quedó abierto.\nEn las paredes quedaron las marcas de los tiros que volvieron.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 2,
+    "caracteres": 160,
+    "linea": 90
+   },
+   "limite_tipo": "victoria",
+   "hallazgos": [],
+   "captura": [],
+   "opciones": [],
+   "nota_para_lucas": "Sin alternativas: no hay un hallazgo que lo justifique. Escribí tu redacción si querés cambiarlo."
+  },
+  {
+   "id": "nivel_13.nombre",
+   "seccion": "Niveles",
+   "grupo": "Nivel 13 · Paso alto",
+   "titulo": "Nivel 13 · nombre",
+   "fuente": "data/levels/level_13.json",
+   "campo": "nombre",
+   "actual": "Paso alto",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 1,
+    "caracteres": 24,
+    "linea": 24,
+    "orientativo": true
+   },
+   "limite_tipo": "nombre",
+   "hallazgos": [
+    "H6"
+   ],
+   "captura": [],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "El paso alto",
+     "resuelve": "H6: estilo con artículo, como 11 a 15 hoy",
+     "texto": "El paso alto"
+    },
+    {
+     "id": "B",
+     "etiqueta": "Rocas marcadas",
+     "resuelve": "H5, H6: nombre por lo que el mapa dibuja",
+     "texto": "Rocas marcadas"
+    },
+    {
+     "id": "C",
+     "etiqueta": "El límite",
+     "resuelve": "H6: nombre por la idea de la entrada",
+     "texto": "El límite"
+    }
+   ]
+  },
+  {
+   "id": "nivel_13.lugar",
+   "seccion": "Niveles",
+   "grupo": "Nivel 13 · Paso alto",
+   "titulo": "Nivel 13 · lugar",
+   "fuente": "data/levels/level_13.json → textos.lugar",
+   "campo": "lugar",
+   "actual": "El camino al resto de la región",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 1,
+    "caracteres": 32,
+    "linea": 32
+   },
+   "limite_tipo": "lugar",
+   "hallazgos": [],
+   "captura": [],
+   "opciones": [],
+   "nota_para_lucas": "Sin alternativas: no hay un hallazgo que lo justifique. Escribí tu redacción si querés cambiarlo."
+  },
+  {
+   "id": "nivel_13.entrada",
+   "seccion": "Niveles",
+   "grupo": "Nivel 13 · Paso alto",
+   "titulo": "Nivel 13 · entrada",
+   "fuente": "data/levels/level_13.json → textos.entrada",
+   "campo": "entrada",
+   "actual": "En el paso alto el camino se parte en dos.\nYa no llegan de a uno: cada grupo trae quien protege, quien cura y quien apaga torres.\nHay hitos de piedra en el camino. Marcan un límite, y ya lo pasamos.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 3,
+    "caracteres": 240,
+    "linea": 90
+   },
+   "limite_tipo": "entrada",
+   "hallazgos": [
+    "H5",
+    "H10"
+   ],
+   "captura": [
+    "captures/entrada_13.png"
+   ],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "A · Rocas marcadas (informe)",
+     "resuelve": "H5: el texto coincide con lo que el mapa dibuja (roca_marcada)",
+     "texto": "En el paso alto el camino se parte en dos.\nYa no llegan de a uno: cada grupo trae quien protege, quien cura y quien apaga torres.\nHay rocas marcadas en el camino. Marcan un límite, y ya lo pasamos."
+    },
+    {
+     "id": "B",
+     "etiqueta": "B · La marca de siempre",
+     "resuelve": "H5: une con la revelación del 8 («la misma marca»)",
+     "texto": "En el paso alto el camino se parte en dos.\nYa no llegan de a uno: cada grupo trae quien protege, quien cura y quien apaga torres.\nHay rocas con la marca de siempre. Marcan un límite, y ya lo pasamos."
+    },
+    {
+     "id": "C",
+     "etiqueta": "C · Escolta más corta",
+     "resuelve": "H5, H10: rocas marcadas, línea 2 sin enumerar la mecánica y sin «nosotros»",
+     "texto": "En el paso alto el camino se parte en dos.\nYa no llegan de a uno: cada grupo trae quien lo cuide y quien apague torres.\nHay rocas marcadas en el camino. Marcan un límite, y el límite ya quedó atrás."
+    }
+   ],
+   "nota_para_lucas": "La alternativa H5-B del informe (dibujar el hito en vez de cambiar el texto) es de arte: si dejás el texto actual, hay que pedir ese dibujo."
+  },
+  {
+   "id": "nivel_13.victoria",
+   "seccion": "Niveles",
+   "grupo": "Nivel 13 · Paso alto",
+   "titulo": "Nivel 13 · victoria",
+   "fuente": "data/levels/level_13.json → textos.victoria",
+   "campo": "victoria",
+   "actual": "Paso alto asegurado. La región queda comunicada con el valle.\nLos hitos quedaron del lado de adentro.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 2,
+    "caracteres": 160,
+    "linea": 90
+   },
+   "limite_tipo": "victoria",
+   "hallazgos": [
+    "H5",
+    "H9"
+   ],
+   "captura": [],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "A · Rocas y campamento",
+     "resuelve": "H5, H9: «rocas marcadas» y comunicada con el campamento (no «el valle»)",
+     "texto": "Paso alto asegurado. La región queda comunicada con el campamento.\nLas rocas marcadas quedaron del lado de adentro."
+    },
+    {
+     "id": "B",
+     "etiqueta": "B · Camino abierto",
+     "resuelve": "H5, H9: sin «valle»; la marca queda en plural corto",
+     "texto": "Paso alto asegurado. El camino al resto de la región está abierto.\nLas marcas quedaron del lado de adentro."
+    },
+    {
+     "id": "C",
+     "etiqueta": "C · Ir y volver",
+     "resuelve": "H5, H9: dice qué cambia para la colonia",
+     "texto": "Paso alto asegurado. Ya se puede ir y volver del campamento al resto de la región.\nLas rocas marcadas quedaron del lado de adentro."
+    }
+   ]
+  },
+  {
+   "id": "nivel_14.nombre",
+   "seccion": "Niveles",
+   "grupo": "Nivel 14 · Los poblados vacíos",
+   "titulo": "Nivel 14 · nombre",
+   "fuente": "data/levels/level_14.json",
+   "campo": "nombre",
+   "actual": "Los poblados vacíos",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 1,
+    "caracteres": 24,
+    "linea": 24,
+    "orientativo": true
+   },
+   "limite_tipo": "nombre",
+   "hallazgos": [
+    "H6",
+    "H7"
+   ],
+   "captura": [],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "Los poblados",
+     "resuelve": "H7, H6: sin «vacíos» en el nombre (opción B del informe)",
+     "texto": "Los poblados"
+    },
+    {
+     "id": "B",
+     "etiqueta": "Poblados",
+     "resuelve": "H7, H6: sin artículo",
+     "texto": "Poblados"
+    },
+    {
+     "id": "C",
+     "etiqueta": "El valle bajo",
+     "resuelve": "H7: nombre geográfico (el artículo de la Wiki dice «valle bajo»)",
+     "texto": "El valle bajo"
+    }
+   ]
+  },
+  {
+   "id": "nivel_14.lugar",
+   "seccion": "Niveles",
+   "grupo": "Nivel 14 · Los poblados vacíos",
+   "titulo": "Nivel 14 · lugar",
+   "fuente": "data/levels/level_14.json → textos.lugar",
+   "campo": "lugar",
+   "actual": "Asentamientos de los Moradores",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 1,
+    "caracteres": 32,
+    "linea": 32
+   },
+   "limite_tipo": "lugar",
+   "hallazgos": [
+    "H6",
+    "H7"
+   ],
+   "captura": [],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "Poblados de los Moradores",
+     "resuelve": "H6: usa «poblados» como el resto",
+     "texto": "Poblados de los Moradores"
+    },
+    {
+     "id": "B",
+     "etiqueta": "Lo que dejaron los Moradores",
+     "resuelve": "H7: no dice «vacíos» pero lo insinúa",
+     "texto": "Lo que dejaron los Moradores"
+    },
+    {
+     "id": "C",
+     "etiqueta": "Los caminos pisados",
+     "resuelve": "H7: lo que se ve, sin nombrar a nadie",
+     "texto": "Los caminos pisados"
+    }
+   ]
+  },
+  {
+   "id": "nivel_14.entrada",
+   "seccion": "Niveles",
+   "grupo": "Nivel 14 · Los poblados vacíos",
+   "titulo": "Nivel 14 · entrada",
+   "fuente": "data/levels/level_14.json → textos.entrada",
+   "campo": "entrada",
+   "actual": "Los poblados están a la vista, pero no sale humo de ninguno.\nLos Moradores se llevaron lo que pudieron.\nAun así, algo todavía defiende el lugar.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 3,
+    "caracteres": 240,
+    "linea": 90
+   },
+   "limite_tipo": "entrada",
+   "hallazgos": [
+    "H7"
+   ],
+   "captura": [
+    "captures/entrada_14.png"
+   ],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "A · Fogones armados (informe)",
+     "resuelve": "H7: el descubrimiento de que están vacíos queda en la victoria",
+     "texto": "Los poblados están a la vista, pero no sale humo de ninguno.\nLos fogones están armados y no se ve a nadie.\nAun así, algo todavía defiende el lugar."
+    },
+    {
+     "id": "B",
+     "etiqueta": "B · Solo lo que se ve",
+     "resuelve": "H7: no anuncia que se fueron; la mecánica entra en la línea 2",
+     "texto": "Los poblados están a la vista.\nNo sale humo de ninguno, pero algo sigue defendiendo el lugar.\nHay que cruzarlos de punta a punta."
+    },
+    {
+     "id": "C",
+     "etiqueta": "C · Caminos pisados",
+     "resuelve": "H7: la señal es el rastro, no la ausencia",
+     "texto": "Más allá hay poblados de piedra y paja.\nLos caminos que los unen están bien pisados.\nAlgo todavía los defiende."
+    }
+   ]
+  },
+  {
+   "id": "nivel_14.victoria",
+   "seccion": "Niveles",
+   "grupo": "Nivel 14 · Los poblados vacíos",
+   "titulo": "Nivel 14 · victoria",
+   "fuente": "data/levels/level_14.json → textos.victoria",
+   "campo": "victoria",
+   "actual": "Los poblados están vacíos.\nLas brasas todavía están tibias.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 2,
+    "caracteres": 160,
+    "linea": 90
+   },
+   "limite_tipo": "victoria",
+   "hallazgos": [
+    "H7"
+   ],
+   "captura": [],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "No quedó nadie",
+     "resuelve": "H7: golpe más seco",
+     "texto": "No quedó nadie.\nLas brasas todavía están tibias."
+    },
+    {
+     "id": "B",
+     "etiqueta": "Fogones tibios",
+     "resuelve": "H7, H14: la imagen cambia de «brasas» a «fogones» (la Wiki puede conservar «brasas»)",
+     "texto": "Los poblados están vacíos.\nLos fogones todavía están tibios."
+    }
+   ],
+   "nota_para_lucas": "Con cualquier entrada del 14 o con el nombre «Los poblados», la victoria actual funciona tal cual: el golpe se guarda para el final."
+  },
+  {
+   "id": "nivel_15.nombre",
+   "seccion": "Niveles",
+   "grupo": "Nivel 15 · La Central",
+   "titulo": "Nivel 15 · nombre",
+   "fuente": "data/levels/level_15.json",
+   "campo": "nombre",
+   "actual": "La Central",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 1,
+    "caracteres": 24,
+    "linea": 24,
+    "orientativo": true
+   },
+   "limite_tipo": "nombre",
+   "hallazgos": [
+    "H6"
+   ],
+   "captura": [],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "Central",
+     "resuelve": "H6: estilo sin artículo",
+     "texto": "Central"
+    },
+    {
+     "id": "B",
+     "etiqueta": "El último valle",
+     "resuelve": "H6, H9: nombre geográfico que fija dónde queda",
+     "texto": "El último valle"
+    },
+    {
+     "id": "C",
+     "etiqueta": "La línea",
+     "resuelve": "H6: por lo que une la central con la mina",
+     "texto": "La línea"
+    }
+   ]
+  },
+  {
+   "id": "nivel_15.lugar",
+   "seccion": "Niveles",
+   "grupo": "Nivel 15 · La Central",
+   "titulo": "Nivel 15 · lugar",
+   "fuente": "data/levels/level_15.json → textos.lugar",
+   "campo": "lugar",
+   "actual": "Energía y abastecimiento",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 1,
+    "caracteres": 32,
+    "linea": 32
+   },
+   "limite_tipo": "lugar",
+   "hallazgos": [
+    "H12"
+   ],
+   "captura": [],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "La central",
+     "resuelve": "H12: no repite «abastecimiento» de la victoria",
+     "texto": "La central"
+    },
+    {
+     "id": "B",
+     "etiqueta": "La central y la línea",
+     "resuelve": "H12: dice qué hay, sin repetir",
+     "texto": "La central y la línea"
+    }
+   ]
+  },
+  {
+   "id": "nivel_15.entrada",
+   "seccion": "Niveles",
+   "grupo": "Nivel 15 · La Central",
+   "titulo": "Nivel 15 · entrada",
+   "fuente": "data/levels/level_15.json → textos.entrada",
+   "campo": "entrada",
+   "actual": "Falta cerrar el valle: la central de energía y la línea que la une con la mina.\nSi se sostiene, la colonia queda asentada en esta región.\nHoy llega lo más grande que vimos hasta ahora, y no viene solo.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 3,
+    "caracteres": 240,
+    "linea": 90
+   },
+   "limite_tipo": "entrada",
+   "hallazgos": [
+    "H2",
+    "H9",
+    "H10"
+   ],
+   "captura": [
+    "captures/entrada_15.png"
+   ],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "A · Último valle (informe)",
+     "resuelve": "H9: fija «el último valle» (el extremo del mapa)",
+     "texto": "Falta cerrar el último valle: la central de energía y la línea que la une con la mina.\nSi se sostiene, la colonia queda asentada en esta región.\nHoy llega lo más grande que vimos hasta ahora, y no viene solo."
+    },
+    {
+     "id": "B",
+     "etiqueta": "B · Más corta",
+     "resuelve": "H9, H10: sin «valle», más corta (hoy ocupa 5 renglones en pantalla) y sin «vimos»",
+     "texto": "Falta la central de energía y la línea que la une con la mina.\nSi se sostiene, la colonia queda asentada en esta región.\nHoy llega lo más grande que se vio hasta ahora, y no viene solo."
+    },
+    {
+     "id": "C",
+     "etiqueta": "C · Con duda",
+     "resuelve": "H2, H9: «asentada» se vuelve condicional; prepara el epílogo",
+     "texto": "Falta cerrar el último valle: la central de energía y la línea hasta la mina.\nSi se sostiene, la colonia puede quedarse en esta región.\nHoy llega lo más grande que vimos, y no viene solo."
+    }
+   ]
+  },
+  {
+   "id": "nivel_15.victoria",
+   "seccion": "Niveles",
+   "grupo": "Nivel 15 · La Central",
+   "titulo": "Nivel 15 · victoria",
+   "fuente": "data/levels/level_15.json → textos.victoria",
+   "campo": "victoria",
+   "actual": "Central encendida. La línea de abastecimiento está completa.\nLa colonia tiene luz propia.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 2,
+    "caracteres": 160,
+    "linea": 90
+   },
+   "limite_tipo": "victoria",
+   "hallazgos": [
+    "H2",
+    "H9",
+    "H12"
+   ],
+   "captura": [
+    "captures/victoria_15.png"
+   ],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "A · La luz se ve (informe B)",
+     "resuelve": "H2: menos triunfal; mira hacia afuera",
+     "texto": "Central encendida. La línea de abastecimiento está completa.\nLa luz se ve desde los poblados vacíos."
+    },
+    {
+     "id": "B",
+     "etiqueta": "B · Ya no depende de la nave (informe C)",
+     "resuelve": "H2: sin «propia»; cierra el hilo del 9",
+     "texto": "Central encendida. La línea de abastecimiento está completa.\nLa colonia ya no depende de la nave."
+    },
+    {
+     "id": "C",
+     "etiqueta": "C · Con costo",
+     "resuelve": "H2: el logro trae una pregunta, en voz de informe; prepara el epílogo",
+     "texto": "Central encendida. La línea de abastecimiento está completa.\nNadie escribió cuánto cuesta mantenerla."
+    }
+   ]
+  },
+  {
+   "id": "selector",
+   "seccion": "Niveles",
+   "grupo": "Selector de campaña",
+   "titulo": "Selector de campaña (vista de mapa)",
+   "fuente": "scenes/ui/level_select.gd, campaign_map_view.gd",
+   "campo": "vista",
+   "actual": "Título «Elegir nivel»; en el mapa, «15 · La Central» bajo la insignia del nivel elegido y, en la franja de abajo, «Disponible · sin victorias todavía».",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 0,
+    "caracteres": 0,
+    "linea": 0,
+    "orientativo": true
+   },
+   "limite_tipo": "wiki",
+   "hallazgos": [
+    "H6"
+   ],
+   "captura": [
+    "captures/selector.jpg"
+   ],
+   "opciones": [],
+   "fijo": true,
+   "nota_para_lucas": "Solo muestra el nombre del nivel: lo que decidas en los nombres (nivel_NN.nombre) cambia esta pantalla. Sin alternativas propias."
+  },
+  {
+   "id": "epilogo",
+   "seccion": "Epílogo, imagen y créditos",
+   "grupo": "Epílogo",
+   "titulo": "Epílogo (nivel 15)",
+   "fuente": "data/levels/level_15.json → textos.epilogo",
+   "campo": "epilogo",
+   "actual": "La máquina sigue avanzando,\npero ¿por cuánto tiempo más?\n¿A qué costo?",
+   "limites": {
+    "lineas_min": 3,
+    "lineas_max": 5,
+    "caracteres": 400,
+    "linea": 90
+   },
+   "limite_tipo": "epilogo",
+   "hallazgos": [
+    "H2",
+    "H3"
+   ],
+   "captura": [
+    "captures/epilogo.jpg"
+   ],
+   "opciones": [],
+   "fijo": true,
+   "nota_para_lucas": "La frase es tuya y queda en 3 líneas sin cambios. Alternativas solo para lo que la rodea: la victoria del 15 (nivel_15.victoria), la entrada del 15 (nivel_15.entrada) y el artículo lore.la_central, que puede darle referente a «la máquina»."
+  },
+  {
+   "id": "epilogo.imagen",
+   "seccion": "Epílogo, imagen y créditos",
+   "grupo": "Epílogo",
+   "titulo": "Imagen del epílogo",
+   "fuente": "assets/sprites/story/epilogue.png",
+   "campo": "imagen",
+   "actual": "La colonia iluminada con una central de vapor en primer plano y una mina arriba a la izquierda; al fondo a la derecha un río y varias fogatas pequeñas que se alejan por el valle. Atardecer cálido adelante, horizonte frío atrás.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 0,
+    "caracteres": 0,
+    "linea": 0,
+    "orientativo": true
+   },
+   "limite_tipo": "wiki",
+   "hallazgos": [
+    "H4"
+   ],
+   "captura": [
+    "captures/epilogo.jpg"
+   ],
+   "opciones": [],
+   "fijo": true,
+   "nota_para_lucas": "Es una imagen, no un texto: se resuelve en T546 (dos variantes según estrellas) y T547 (retira esta). Acá solo anotá tu parecer."
+  },
+  {
+   "id": "creditos",
+   "seccion": "Epílogo, imagen y créditos",
+   "grupo": "Créditos",
+   "titulo": "Créditos",
+   "fuente": "data/creditos.json → lineas",
+   "campo": "creditos",
+   "actual": "Monsters & Canons\nUn juego de Lucas\nHecho con Godot Engine\nSoftware libre bajo la licencia GPL-3.0-or-later (los detalles, en Wiki → Licencias)",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 4,
+    "caracteres": 400,
+    "linea": 90
+   },
+   "limite_tipo": "creditos",
+   "hallazgos": [
+    "H15"
+   ],
+   "captura": [
+    "captures/creditos.png"
+   ],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "Licencia más corta",
+     "resuelve": "H15: la línea 4 deja de ocupar dos renglones en pantalla",
+     "texto": "Monsters & Canons\nUn juego de Lucas\nHecho con Godot Engine\nSoftware libre (GPL-3.0-or-later). Detalles en Wiki → Licencias"
+    },
+    {
+     "id": "B",
+     "etiqueta": "Cierre amable, sin licencia",
+     "resuelve": "H15: cierra con una frase en vez de la licencia. Ojo: la licencia sigue en Wiki → Licencias, pero hay que confirmar que RF-472 no la exija en la pantalla de créditos",
+     "texto": "Monsters & Canons\nUn juego de Lucas\nHecho con Godot Engine\nGracias por jugar"
+    }
+   ],
+   "nota_para_lucas": "Si querés sumar nombres, agradecimientos o quién hizo el arte y los sonidos, escribilo en «Mi redacción» (máximo 4 líneas)."
+  },
+  {
+   "id": "intro.lamina_1",
+   "seccion": "Intro de láminas",
+   "grupo": "Lámina 1",
+   "titulo": "Lámina 1 · la nave",
+   "fuente": "data/intro/intro.json → laminas[0].texto (fuente: specs/intro/guion.md)",
+   "campo": "texto",
+   "actual": "La Compañía Meridiana mandó una sola nave.\nNo lleva soldados: lleva gente de oficio.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 2,
+    "caracteres": 160,
+    "linea": 90
+   },
+   "limite_tipo": "intro",
+   "hallazgos": [],
+   "captura": [
+    "captures/intro/lamina_1.jpg"
+   ],
+   "opciones": [],
+   "nota_para_lucas": "Sin alternativas: no hay un hallazgo que lo justifique. Escribí tu redacción si querés cambiarlo."
+  },
+  {
+   "id": "intro.lamina_2",
+   "seccion": "Intro de láminas",
+   "grupo": "Lámina 2",
+   "titulo": "Lámina 2 · la bodega",
+   "fuente": "data/intro/intro.json → laminas[1].texto (fuente: specs/intro/guion.md)",
+   "campo": "texto",
+   "actual": "Herreros, carpinteros, ingenieros, agricultores: cada uno trajo su oficio.\nHay semillas, planos y piezas para empezar de cero.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 2,
+    "caracteres": 160,
+    "linea": 90
+   },
+   "limite_tipo": "intro",
+   "hallazgos": [],
+   "captura": [
+    "captures/intro/lamina_2.jpg"
+   ],
+   "opciones": [],
+   "nota_para_lucas": "Sin alternativas: no hay un hallazgo que lo justifique. Escribí tu redacción si querés cambiarlo."
+  },
+  {
+   "id": "intro.lamina_3",
+   "seccion": "Intro de láminas",
+   "grupo": "Lámina 3",
+   "titulo": "Lámina 3 · los turnos",
+   "fuente": "data/intro/intro.json → laminas[2].texto (fuente: specs/intro/guion.md)",
+   "campo": "texto",
+   "actual": "Fueron años de viaje. Se durmió por turnos y lo que se rompía se arreglaba a bordo.\nEra un viaje de ida.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 2,
+    "caracteres": 160,
+    "linea": 90
+   },
+   "limite_tipo": "intro",
+   "hallazgos": [],
+   "captura": [
+    "captures/intro/lamina_3.jpg"
+   ],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "Una sola frase de viaje",
+     "resuelve": "Ritmo: junta la primera y la segunda oración y deja «ida» como golpe",
+     "texto": "Fueron años de viaje, durmiendo por turnos y arreglando a bordo lo que se rompía.\nEra un viaje de ida."
+    }
+   ],
+   "nota_para_lucas": "Sin hallazgo; la alternativa es solo de ritmo."
+  },
+  {
+   "id": "intro.lamina_4",
+   "seccion": "Intro de láminas",
+   "grupo": "Lámina 4",
+   "titulo": "Lámina 4 · la ventana",
+   "fuente": "data/intro/intro.json → laminas[3].texto (fuente: specs/intro/guion.md)",
+   "campo": "texto",
+   "actual": "El reconocimiento vio agua en un solo lugar de todo el planeta.\nHacia ahí apuntó la nave.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 2,
+    "caracteres": 160,
+    "linea": 90
+   },
+   "limite_tipo": "intro",
+   "hallazgos": [
+    "H1",
+    "H16"
+   ],
+   "captura": [
+    "captures/intro/lamina_4.jpg"
+   ],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "Un valle con agua",
+     "resuelve": "H1, H16: «un solo valle», no «un solo lugar de todo el planeta»; compatible con arroyo o vertiente en el nivel 2",
+     "texto": "El reconocimiento encontró un solo valle con agua para asentarse.\nHacia ahí apuntó la nave."
+    },
+    {
+     "id": "B",
+     "etiqueta": "Tierra seca y un valle",
+     "resuelve": "H1, H16: dice lo que se vio sin afirmar que no hay más agua en el planeta",
+     "texto": "El reconocimiento vio mucha tierra seca y, en medio, un valle con agua.\nHacia ahí apuntó la nave."
+    },
+    {
+     "id": "C",
+     "etiqueta": "Agua, y poco más",
+     "resuelve": "H1, H16: tono de bitácora; deja lugar a que haya más agua en otro lado",
+     "texto": "El reconocimiento mostró agua en un solo valle, y poco más.\nHacia ahí apuntó la nave."
+    }
+   ]
+  },
+  {
+   "id": "intro.lamina_5",
+   "seccion": "Intro de láminas",
+   "grupo": "Lámina 5",
+   "titulo": "Lámina 5 · el descenso",
+   "fuente": "data/intro/intro.json → laminas[4].texto (fuente: specs/intro/guion.md)",
+   "campo": "texto",
+   "actual": "La bajada fue brusca. El casco crujió entero, pero aguantó.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 2,
+    "caracteres": 160,
+    "linea": 90
+   },
+   "limite_tipo": "intro",
+   "hallazgos": [],
+   "captura": [
+    "captures/intro/lamina_5.jpg"
+   ],
+   "opciones": [],
+   "nota_para_lucas": "Sin alternativas: no hay un hallazgo que lo justifique. Escribí tu redacción si querés cambiarlo."
+  },
+  {
+   "id": "intro.lamina_6",
+   "seccion": "Intro de láminas",
+   "grupo": "Lámina 6",
+   "titulo": "Lámina 6 · los motores apagados",
+   "fuente": "data/intro/intro.json → laminas[5].texto (fuente: specs/intro/guion.md)",
+   "campo": "texto",
+   "actual": "Los motores se apagaron al tocar tierra.\nLa nave ya no va a despegar.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 2,
+    "caracteres": 160,
+    "linea": 90
+   },
+   "limite_tipo": "intro",
+   "hallazgos": [
+    "H16"
+   ],
+   "captura": [
+    "captures/intro/lamina_6.jpg"
+   ],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "Todo en presente",
+     "resuelve": "H16: presente en las dos líneas, como las láminas 1 y 7",
+     "texto": "Los motores se apagan al tocar tierra.\nLa nave ya no va a despegar."
+    },
+    {
+     "id": "B",
+     "etiqueta": "Todo en pasado",
+     "resuelve": "H16: pasado, como las láminas 3 a 5",
+     "texto": "Los motores se apagaron al tocar tierra.\nLa nave no iba a despegar de nuevo."
+    }
+   ]
+  },
+  {
+   "id": "intro.lamina_7",
+   "seccion": "Intro de láminas",
+   "grupo": "Lámina 7",
+   "titulo": "Lámina 7 · el oasis",
+   "fuente": "data/intro/intro.json → laminas[6].texto (fuente: specs/intro/guion.md)",
+   "campo": "texto",
+   "actual": "Un valle chico, con agua y pasto, en medio de la nada.\nAcá nos quedamos.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 2,
+    "caracteres": 160,
+    "linea": 90
+   },
+   "limite_tipo": "intro",
+   "hallazgos": [
+    "H10",
+    "H16"
+   ],
+   "captura": [
+    "captures/intro/lamina_7.jpg"
+   ],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "Se queda la Compañía",
+     "resuelve": "H10: sin «nosotros»",
+     "texto": "Un valle chico, con agua y pasto, en medio de la nada.\nAcá se queda la Compañía."
+    },
+    {
+     "id": "B",
+     "etiqueta": "Acá empieza la colonia",
+     "resuelve": "H10, H16: cierre más de comienzo que de encierro",
+     "texto": "Un valle chico, con agua y pasto, en medio de la nada.\nAcá empieza la colonia."
+    }
+   ]
+  },
+  {
+   "id": "lore.el_oasis",
+   "seccion": "Wiki · Lore",
+   "grupo": "El oasis",
+   "titulo": "Wiki · El oasis",
+   "fuente": "data/wiki/lore/el_oasis.json",
+   "campo": "bloques",
+   "actual": "El oasis es un valle chico de agua dulce, pasto y flores, rodeado de tierra seca. Es el único sitio con agua a la vista que encontró el reconocimiento, y por eso la nave bajó acá.\n\nLos primeros días se armó el campamento junto al agua. Desde entonces, todo lo que la colonia necesita (madera, mineral, un lugar donde sembrar) hay que ir a buscarlo más lejos.\n\nLos registros de la Compañía lo llaman «el único lugar seguro». No aclaran seguro de qué.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 0,
+    "caracteres": 0,
+    "linea": 0,
+    "orientativo": true
+   },
+   "limite_tipo": "wiki",
+   "hallazgos": [
+    "H1"
+   ],
+   "captura": [],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "El sitio con más agua",
+     "resuelve": "H1: «más agua» en vez de «único con agua»; deja lugar al arroyo del nivel 2",
+     "texto": "El oasis es un valle chico de agua dulce, pasto y flores, rodeado de tierra seca. Es el sitio con más agua a la vista que encontró el reconocimiento, y por eso la nave bajó acá.\n\nLos primeros días se armó el campamento junto al agua. Desde entonces, todo lo que la colonia necesita (madera, mineral, un lugar donde sembrar) hay que ir a buscarlo más lejos.\n\nLos registros de la Compañía lo llaman «el único lugar seguro». No aclaran seguro de qué."
+    },
+    {
+     "id": "B",
+     "etiqueta": "Agua que no alcanza",
+     "resuelve": "H1: dice en voz de informe que el oasis es chico para una colonia (liga con la opción A del nivel 2)",
+     "texto": "El oasis es un valle chico de agua dulce, pasto y flores, rodeado de tierra seca. Es el sitio con agua más a mano que encontró el reconocimiento, y por eso la nave bajó acá. Alcanza para empezar, no para quedarse.\n\nLos primeros días se armó el campamento junto al agua. Desde entonces, todo lo que la colonia necesita (madera, mineral, un lugar donde sembrar) hay que ir a buscarlo más lejos.\n\nLos registros de la Compañía lo llaman «el único lugar seguro». No aclaran seguro de qué."
+    },
+    {
+     "id": "C",
+     "etiqueta": "Sin hablar de cuánta agua",
+     "resuelve": "H1: solo dice dónde bajó la nave (liga con cualquier nivel 2)",
+     "texto": "El oasis es un valle chico de agua dulce, pasto y flores, rodeado de tierra seca. Fue el sitio que eligió el reconocimiento, y por eso la nave bajó acá.\n\nLos primeros días se armó el campamento junto al agua. Desde entonces, todo lo que la colonia necesita (madera, mineral, un lugar donde sembrar) hay que ir a buscarlo más lejos.\n\nLos registros de la Compañía lo llaman «el único lugar seguro». No aclaran seguro de qué."
+    }
+   ],
+   "subtitulo": "Donde aterrizó la nave",
+   "desbloqueo": "level_01"
+  },
+  {
+   "id": "lore.planeta_cantaro",
+   "seccion": "Wiki · Lore",
+   "grupo": "Cántaro",
+   "titulo": "Wiki · Cántaro",
+   "fuente": "data/wiki/lore/planeta_cantaro.json",
+   "campo": "bloques",
+   "actual": "Los colonos le pusieron Cántaro al planeta, por el oasis: un poco de agua guardada en una tierra seca.\n\nLo que se conoce es un solo rincón: el oasis y lo que lo rodea. Más allá, todavía no se llegó.\n\nCada tramo que se asegura se agrega al mapa de la Compañía. El mapa tiene más blanco que dibujo.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 0,
+    "caracteres": 0,
+    "linea": 0,
+    "orientativo": true
+   },
+   "limite_tipo": "wiki",
+   "hallazgos": [],
+   "captura": [],
+   "opciones": [],
+   "subtitulo": "El planeta, o lo que se conoce de él",
+   "desbloqueo": "level_02",
+   "nota_para_lucas": "Sin alternativas: no hay un hallazgo que lo justifique. Escribí tu redacción si querés cambiarlo."
+  },
+  {
+   "id": "lore.la_compania",
+   "seccion": "Wiki · Lore",
+   "grupo": "La Compañía Meridiana",
+   "titulo": "Wiki · La Compañía Meridiana",
+   "fuente": "data/wiki/lore/la_compania.json",
+   "campo": "bloques",
+   "actual": "La Compañía Meridiana armó la expedición. No es un ejército: es gente de oficio (ingenieros, herreros, carpinteros, agricultores) con herramientas, semillas y planos.\n\nLa nave no puede volver a despegar. Se la va desarmando de a poco para hacer casas, cañerías y torres, y lo que se rompe se arregla con lo que hay.\n\nPor eso las torres son de hierro, bronce y cristal: se pueden reparar en el lugar. Entre la carga venían también planos y piezas de repuesto, que se van recuperando de entre los restos del aterrizaje.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 0,
+    "caracteres": 0,
+    "linea": 0,
+    "orientativo": true
+   },
+   "limite_tipo": "wiki",
+   "hallazgos": [],
+   "captura": [],
+   "opciones": [],
+   "subtitulo": "Quiénes somos",
+   "desbloqueo": "level_03",
+   "nota_para_lucas": "Sin alternativas: no hay un hallazgo que lo justifique. Escribí tu redacción si querés cambiarlo."
+  },
+  {
+   "id": "lore.el_soberano",
+   "seccion": "Wiki · Lore",
+   "grupo": "El Soberano",
+   "titulo": "Wiki · El Soberano",
+   "fuente": "data/wiki/lore/el_soberano.json",
+   "campo": "bloques",
+   "actual": "Al final de una oleada aparece a veces un animal enorme, carmesí y cornudo. Las manadas parecen seguirlo, o dejarle paso. Los colonos le dicen Soberano.\n\nNo es uno solo: hay uno por cada paraje, y ninguno se parece del todo al anterior. Nadie sabe si manda o si solo va adelante.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 0,
+    "caracteres": 0,
+    "linea": 0,
+    "orientativo": true
+   },
+   "limite_tipo": "wiki",
+   "hallazgos": [
+    "H8"
+   ],
+   "captura": [],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "A · Aclarar en el parte",
+     "resuelve": "H8: el artículo suma la relación Jefe / Soberano sin tocar el juego",
+     "texto": "Al final de una oleada aparece a veces un animal enorme, carmesí y cornudo. Las manadas parecen seguirlo, o dejarle paso. Los colonos le dicen Soberano; en los partes del campamento se lo anota como el Jefe de la oleada.\n\nNo es uno solo: hay uno por cada paraje, y ninguno se parece del todo al anterior. Nadie sabe si manda o si solo va adelante."
+    },
+    {
+     "id": "B",
+     "etiqueta": "B · Pasar el artículo a «Jefe»",
+     "resuelve": "H8: el artículo habla como el juego; «Soberano» queda como apodo",
+     "texto": "Al final de una oleada aparece a veces un animal enorme, carmesí y cornudo. Las manadas parecen seguirlo, o dejarle paso. El campamento lo llama el Jefe; algunos colonos, entre ellos, dicen Soberano.\n\nNo es uno solo: hay uno por cada paraje, y ninguno se parece del todo al anterior. Nadie sabe si manda o si solo va adelante."
+    },
+    {
+     "id": "C",
+     "etiqueta": "C · Cambiar el juego a «Soberano»",
+     "resuelve": "H8: el artículo queda tal cual y el juego pasa a decir «Soberano» (contradice Q-2 de T202). Lo aplica otra tarea",
+     "texto": "Al final de una oleada aparece a veces un animal enorme, carmesí y cornudo. Las manadas parecen seguirlo, o dejarle paso. Los colonos le dicen Soberano.\n\nNo es uno solo: hay uno por cada paraje, y ninguno se parece del todo al anterior. Nadie sabe si manda o si solo va adelante.",
+     "accion_externa": "Cambiar el nombre visible «Jefe» a «Soberano» en el juego (toca boss.tres, presentación y tests)"
+    }
+   ],
+   "subtitulo": "Quien va al frente de las manadas",
+   "desbloqueo": "level_04",
+   "nota_para_lucas": "La opción C la aplica otra tarea (toca código del juego)."
+  },
+  {
+   "id": "lore.criaturas_solas",
+   "seccion": "Wiki · Lore",
+   "grupo": "Las criaturas que van solas",
+   "titulo": "Wiki · Las criaturas que van solas",
+   "fuente": "data/wiki/lore/criaturas_solas.json",
+   "campo": "bloques",
+   "actual": "En el bosque hay seres que no andan con ninguna manada. El Ladrón, por ejemplo, va solo, con una capa gris y una bolsa, y se lleva lo que brilla del campamento: monedas, herramientas, un botón.\n\nLos informes las llaman criaturas, para distinguirlas de los animales. No obedecen a nadie, y nadie sabe cuántas hay.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 0,
+    "caracteres": 0,
+    "linea": 0,
+    "orientativo": true
+   },
+   "limite_tipo": "wiki",
+   "hallazgos": [],
+   "captura": [],
+   "opciones": [],
+   "subtitulo": "Lo que no pertenece a ninguna manada",
+   "desbloqueo": "level_06",
+   "nota_para_lucas": "Sin alternativas: no hay un hallazgo que lo justifique. Escribí tu redacción si querés cambiarlo."
+  },
+  {
+   "id": "lore.la_cuadrilla",
+   "seccion": "Wiki · Lore",
+   "grupo": "La Cuadrilla",
+   "titulo": "Wiki · La Cuadrilla",
+   "fuente": "data/wiki/lore/la_cuadrilla.json",
+   "campo": "bloques",
+   "actual": "Cerca del aserradero se vieron criaturas chicas y rápidas que se llevan lo que brilla, igual que el Ladrón. A diferencia de él, no andan solas: llegan juntas, y los colonos las llaman Rateros.\n\nCon ellas viene siempre una más grande y lenta, con una bolsa más grande que ella misma donde parece juntarse lo de todas. La llaman el Cargador, y a todas juntas, la cuadrilla, por cómo llegan.\n\nNadie vio que alguna mande ni que alguna obedezca. Parece que van juntas porque buscan lo mismo.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 0,
+    "caracteres": 0,
+    "linea": 0,
+    "orientativo": true
+   },
+   "limite_tipo": "wiki",
+   "hallazgos": [],
+   "captura": [],
+   "opciones": [],
+   "subtitulo": "Los que andan juntos",
+   "desbloqueo": "level_07",
+   "nota_para_lucas": "Sin alternativas: no hay un hallazgo que lo justifique. Escribí tu redacción si querés cambiarlo."
+  },
+  {
+   "id": "lore.las_ruinas",
+   "seccion": "Wiki · Lore",
+   "grupo": "Las ruinas",
+   "titulo": "Wiki · Las ruinas",
+   "fuente": "data/wiki/lore/las_ruinas.json",
+   "campo": "bloques",
+   "actual": "Sobre la loma del bastión hay muros de piedra y metal, a medio enterrar. Los colonos los llaman «las ruinas» y los tratan como un yacimiento: se despeja, se anota y se recupera lo que sirve.\n\nTodas llevan la misma marca que las rocas del oasis. Nadie sabe qué quiere decir: puede ser «esto es nuestro», «hasta acá» o un recuerdo.\n\nEl informe de la Compañía dice que las dejó una gente que ya no está. No dice cómo lo sabe.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 0,
+    "caracteres": 0,
+    "linea": 0,
+    "orientativo": true
+   },
+   "limite_tipo": "wiki",
+   "hallazgos": [],
+   "captura": [],
+   "opciones": [],
+   "subtitulo": "Lo que había antes",
+   "desbloqueo": "level_08",
+   "nota_para_lucas": "Sin alternativas: no hay un hallazgo que lo justifique. Escribí tu redacción si querés cambiarlo."
+  },
+  {
+   "id": "lore.los_moradores",
+   "seccion": "Wiki · Lore",
+   "grupo": "Los Moradores",
+   "titulo": "Wiki · Los Moradores",
+   "fuente": "data/wiki/lore/los_moradores.json",
+   "campo": "bloques",
+   "actual": "Así llama la Compañía a las comunidades que viven en Cántaro. Es un nombre de informe: cómo se llaman ellos a sí mismos no figura en ningún registro.\n\nHasta ahora se vieron dos oficios: los que protegen, de piedra y escudo dorado, y los que curan, con una semilla en el pecho. No está claro si son un solo pueblo o varios que se juntaron.\n\nTampoco está claro si guían a los animales de las manadas o si solo cuidan sus propios caminos.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 0,
+    "caracteres": 0,
+    "linea": 0,
+    "orientativo": true
+   },
+   "limite_tipo": "wiki",
+   "hallazgos": [],
+   "captura": [],
+   "opciones": [],
+   "subtitulo": "Los que ya estaban",
+   "desbloqueo": "level_09",
+   "nota_para_lucas": "Sin alternativas: no hay un hallazgo que lo justifique. Escribí tu redacción si querés cambiarlo."
+  },
+  {
+   "id": "lore.los_pozos",
+   "seccion": "Wiki · Lore",
+   "grupo": "Los pozos",
+   "titulo": "Wiki · Los pozos",
+   "fuente": "data/wiki/lore/los_pozos.json",
+   "campo": "bloques",
+   "actual": "En el camino seco hay pocos pozos, y todos tienen huellas alrededor. Dos quedaron dentro del perímetro del puesto.\n\nEl mismo día en que se aseguró el paso empezaron los fallos: torres que se apagan sin motivo. Las observaciones coinciden en un encapuchado con un bastón que chispea, que se acerca a las torres y no a los colonos.\n\nNo ataca a las personas. Ataca lo que construimos.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 0,
+    "caracteres": 0,
+    "linea": 0,
+    "orientativo": true
+   },
+   "limite_tipo": "wiki",
+   "hallazgos": [
+    "H10"
+   ],
+   "captura": [],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "Sin «construimos»",
+     "resuelve": "H10: tercera persona, como el resto de la Wiki",
+     "texto": "En el camino seco hay pocos pozos, y todos tienen huellas alrededor. Dos quedaron dentro del perímetro del puesto.\n\nEl mismo día en que se aseguró el paso empezaron los fallos: torres que se apagan sin motivo. Las observaciones coinciden en un encapuchado con un bastón que chispea, que se acerca a las torres y no a los colonos.\n\nNo ataca a las personas. Ataca lo que construye la colonia."
+    }
+   ],
+   "subtitulo": "Informe del puesto seco",
+   "desbloqueo": "level_11"
+  },
+  {
+   "id": "lore.poblados_vacios",
+   "seccion": "Wiki · Lore",
+   "grupo": "Los poblados vacíos",
+   "titulo": "Wiki · Los poblados vacíos",
+   "fuente": "data/wiki/lore/poblados_vacios.json",
+   "campo": "bloques",
+   "actual": "Los poblados del valle bajo son de piedra y paja. Tienen fogones, cuerdas y pieles todavía en su sitio.\n\nNo hay nadie. Las brasas están tibias, así que se fueron hace poco, y se llevaron lo que podían cargar.\n\nLa Compañía registra los poblados como «posiciones desocupadas».",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 0,
+    "caracteres": 0,
+    "linea": 0,
+    "orientativo": true
+   },
+   "limite_tipo": "wiki",
+   "hallazgos": [
+    "H14"
+   ],
+   "captura": [],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "Sin las brasas",
+     "resuelve": "H14: no repite «brasas tibias» de la victoria del 14",
+     "texto": "Los poblados del valle bajo son de piedra y paja. Tienen fogones, cuerdas y pieles todavía en su sitio.\n\nNo hay nadie. Se fueron hace poco y se llevaron lo que podían cargar.\n\nLa Compañía registra los poblados como «posiciones desocupadas»."
+    },
+    {
+     "id": "B",
+     "etiqueta": "Sin «posiciones desocupadas»",
+     "resuelve": "H14: saca la línea que la spec ya marcaba como la que podía sobrar",
+     "texto": "Los poblados del valle bajo son de piedra y paja. Tienen fogones, cuerdas y pieles todavía en su sitio.\n\nNo hay nadie. Las brasas están tibias, así que se fueron hace poco, y se llevaron lo que podían cargar."
+    },
+    {
+     "id": "C",
+     "etiqueta": "Las dos cosas",
+     "resuelve": "H14: más corto: solo lo que queda en pie y que se fueron",
+     "texto": "Los poblados del valle bajo son de piedra y paja. Tienen fogones, cuerdas y pieles todavía en su sitio.\n\nNo hay nadie. Se fueron hace poco y se llevaron lo que podían cargar."
+    }
+   ],
+   "subtitulo": "Lo que quedó en pie",
+   "desbloqueo": "level_14"
+  },
+  {
+   "id": "lore.la_central",
+   "seccion": "Wiki · Lore",
+   "grupo": "La Central",
+   "titulo": "Wiki · La Central",
+   "fuente": "data/wiki/lore/la_central.json",
+   "campo": "bloques",
+   "actual": "La central quedó en el valle donde aterrizó la nave. Produce la energía que necesita la colonia y alimenta la línea que la une con la mina.\n\nCon ella, la región queda asegurada: agua, luz y camino. No es todo el planeta, y nadie en la Compañía dice que lo sea.\n\nLos colonos lo llaman el Coloso. Es de la misma piedra que los Guardianes. Cuando cae, se parte en tres y los pedazos siguen camino.\n\nEl informe termina ahí. No dice qué se hará con lo que falta.",
+   "limites": {
+    "lineas_min": 1,
+    "lineas_max": 0,
+    "caracteres": 0,
+    "linea": 0,
+    "orientativo": true
+   },
+   "limite_tipo": "wiki",
+   "hallazgos": [
+    "H3",
+    "H9",
+    "H14"
+   ],
+   "captura": [],
+   "opciones": [
+    {
+     "id": "A",
+     "etiqueta": "A · Último valle",
+     "resuelve": "H9, H14: fija dónde queda y saca el párrafo 4, que anticipa el epílogo",
+     "texto": "La central quedó en el último valle, el del este. Produce la energía que necesita la colonia y alimenta la línea que la une con la mina.\n\nCon ella, la región queda asegurada: agua, luz y camino. No es todo el planeta, y nadie en la Compañía dice que lo sea.\n\nLos colonos lo llaman el Coloso. Es de la misma piedra que los Guardianes. Cuando cae, se parte en tres y los pedazos siguen camino."
+    },
+    {
+     "id": "B",
+     "etiqueta": "B · «La máquina» tiene referente",
+     "resuelve": "H3, H9, H14: los colonos llaman «la máquina» a la central, y el epílogo apunta a algo. Riesgo: puede leerse como la colonia entera",
+     "texto": "La central quedó en el último valle, el del este. Los colonos le dicen «la máquina»: produce la energía que necesita la colonia y alimenta la línea que la une con la mina.\n\nCon ella, la región queda asegurada: agua, luz y camino. No es todo el planeta, y nadie en la Compañía dice que lo sea.\n\nLos colonos lo llaman el Coloso. Es de la misma piedra que los Guardianes. Cuando cae, se parte en tres y los pedazos siguen camino.\n\nEl informe termina ahí. No dice qué se hará con lo que falta."
+    },
+    {
+     "id": "C",
+     "etiqueta": "C · Solo sacar el párrafo 4",
+     "resuelve": "H14: el artículo no repite la pregunta del epílogo; el resto igual",
+     "texto": "La central quedó en el valle donde aterrizó la nave. Produce la energía que necesita la colonia y alimenta la línea que la une con la mina.\n\nCon ella, la región queda asegurada: agua, luz y camino. No es todo el planeta, y nadie en la Compañía dice que lo sea.\n\nLos colonos lo llaman el Coloso. Es de la misma piedra que los Guardianes. Cuando cae, se parte en tres y los pedazos siguen camino."
+    }
+   ],
+   "subtitulo": "Energía y abastecimiento",
+   "desbloqueo": "level_15",
+   "nota_para_lucas": "Acá se puede resolver el referente de «la máquina» (H3) sin tocar tu epílogo."
+  }
+ ]
+}
