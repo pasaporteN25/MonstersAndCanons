@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://art/t537-arte-campana/capture_current.gd" id="1"]
+
+[node name="CaptureCurrentArt" type="Node"]
+script = ExtResource("1")
