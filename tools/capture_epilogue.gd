@@ -25,7 +25,8 @@ func run() -> void:
 		await get_tree().process_frame
 	var epilogue := EpilogueScreen.new()
 	add_child(epilogue)
-	var text: String = GameFlow.level(GameFlow.level_count() - 1).epilogue_text
+	var flow: Node = get_node("/root/GameFlow")
+	var text: String = flow.level(flow.level_count() - 1).epilogue_text
 	for variant: Array in [["luminosa", true], ["oscura", false]]:
 		epilogue.open(text, variant[1])
 		for _i: int in 6:
