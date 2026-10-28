@@ -5,9 +5,12 @@ extends RefCounted
 ## Nunca bloquea el juego: un archivo ausente o dañado da la receta predeterminada.
 
 const DEFAULT_PATH: String = "user://banner.json"
+## Costura para los tests (T474): quien no pasa ruta usa esta; un test la cambia a `user://test_*.json` y la restaura.
+static var current_path: String = DEFAULT_PATH
 
 
-static func load_recipe(path: String = DEFAULT_PATH) -> BannerRecipe:
+static func load_recipe(path_override: String = "") -> BannerRecipe:
+	var path: String = current_path if path_override == "" else path_override
 	if not FileAccess.file_exists(path):
 		return BannerRecipe.default_recipe()
 	var file := FileAccess.open(path, FileAccess.READ)
@@ -22,7 +25,8 @@ static func load_recipe(path: String = DEFAULT_PATH) -> BannerRecipe:
 	return BannerRecipe.from_dict(json.data)
 
 
-static func save_recipe(recipe: BannerRecipe, path: String = DEFAULT_PATH) -> bool:
+static func save_recipe(recipe: BannerRecipe, path_override: String = "") -> bool:
+	var path: String = current_path if path_override == "" else path_override
 	## Escribe en un temporal y lo renombra, para no dejar un archivo a medias.
 	## Una receta inválida no se guarda. Devuelve si pudo guardar.
 	if recipe == null or not recipe.is_valid():

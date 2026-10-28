@@ -1,5 +1,9 @@
 # Novedades del juego
 
+## «Mejor: 1 vida» en singular *(T474, 2026-10-28)*
+
+En las tarjetas de niveles, cuando tu mejor resultado fue ganar con una sola vida, ahora dice «Mejor: 1 vida» y no «1 vidas». Además se revisaron todas las pantallas con números de nivel (selector, récords, Wiki, final, entrada y juego): ninguna muestra ceros de más.
+
 <<<<<<< HEAD
 ## Dos finales según tus estrellas *(T546, 2026-10-28)*
 
