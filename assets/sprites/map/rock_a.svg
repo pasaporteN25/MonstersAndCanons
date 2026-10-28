@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- Roca grande (casilla bloqueada). -->
-  <ellipse cx="35" cy="50" rx="23" ry="7" fill="#000000" opacity="0.22"/>
-  <path d="M12 44 L10 30 L20 18 L36 14 L50 20 L55 34 L50 46 L32 50 Z" fill="#85858d"/>
-  <polygon points="20,18 36,14 50,20 42,28 24,28" fill="#a7a7af"/>
-  <polygon points="42,28 50,20 55,34 50,46" fill="#6c6c74"/>
-  <path d="M26 33 L31 39 L29 46" fill="none" stroke="#5c5c64" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M12 44 L10 30 L20 18 L36 14 L50 20 L55 34 L50 46 L32 50 Z" fill="none" stroke="#2b2233" stroke-width="2.5" stroke-linejoin="round"/>
-</svg>
