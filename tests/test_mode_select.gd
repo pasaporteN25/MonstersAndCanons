@@ -133,7 +133,7 @@ func test_the_remembered_mode_page_opens_again() -> void:
 func test_a_page_of_a_mode_that_is_gone_falls_back_to_the_campaign() -> void:
 	var select: Control = _open(&"mode:borrado")
 	assert_eq(select.current_page(), &"campaign")
-	assert_eq(_cards(select).size(), GameFlow.level_count())
+	assert_eq(_cards(select).size(), 1, "RF-724: guardado nuevo, solo el nivel 1")
 
 
 # --- Bloqueo y estado (RF-390) ---

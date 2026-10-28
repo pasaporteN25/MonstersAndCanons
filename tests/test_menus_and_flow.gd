@@ -103,11 +103,11 @@ func test_main_menu_has_its_buttons() -> void:
 		assert_not_null(menu.get_node_or_null("%" + button_name), button_name)
 
 
-func test_level_select_shows_one_card_per_level() -> void:
+func test_level_select_shows_one_card_per_unlocked_level() -> void:
 	var select: Control = (load("res://scenes/ui/level_select.tscn") as PackedScene).instantiate()
 	add_child_autofree(select)
 	var cards: HFlowContainer = select.get_node("%Cards")
-	assert_eq(cards.get_child_count(), GameFlow.level_count())
+	assert_eq(cards.get_child_count(), 1, "RF-724: guardado nuevo, solo el nivel 1")
 	assert_false((cards.get_child(0) as Button).disabled, "el nivel 1 se puede elegir")
 	assert_eq(select.status_text(0), "¡Jugar!")
 
@@ -166,6 +166,8 @@ func _select_with(total: int) -> Control:
 		GameFlow.campaign.levels.pop_back()
 	while GameFlow.campaign.levels.size() < total:
 		GameFlow.campaign.levels.append(GameFlow.campaign.levels[0])
+	for index: int in GameFlow.level_count():
+		SaveManager.unlock(GameFlow.level(index).id)  # RF-724: Tarjetas solo arma los habilitados
 	var select: Control = (load("res://scenes/ui/level_select.tscn") as PackedScene).instantiate()
 	add_child_autofree(select)
 	await wait_process_frames(3)
