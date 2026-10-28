@@ -30,11 +30,7 @@ const KNOWN_UNUSED: Array[String] = [
 	"res://assets/sprites/towers/rendered/cannon_level_2_icon.png",
 	"res://assets/sprites/towers/rendered/disruptor_suppression_arc_1.png",
 	"res://assets/sprites/towers/rendered/disruptor_pulse_ring.png",
-	# 2) Pendiente de revisión por pedido de Lucas (T547, T549): dejaron de usarse en el nivel 15 pero siguen en el
-	# catálogo de MapDrawings por su nombre; se conservan a propósito hasta esa revisión.
-	"res://assets/sprites/map/supply_depot.svg", "res://assets/sprites/map/supply_line_pole.svg",
-	"res://assets/sprites/map/supply_cart.svg",
-	# 3) SVG fuente heredados (H4 de T538): los reemplazaron los PNG de `rendered/` o los objetos que MapDrawings
+	# 2) SVG fuente heredados (H4 de T538): los reemplazaron los PNG de `rendered/` o los objetos que MapDrawings
 	# dibuja con `_draw`. NO se retiran ni se mueven hasta que Lucas resuelva D5 (¿a `art/` o se borran?).
 	# Los que `tools/` precarga (boss, base_3, turret_cannon, flyer) no figuran: sí tienen un uso.
 	# SVG fuente de «effects»:
