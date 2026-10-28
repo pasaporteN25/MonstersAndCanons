@@ -36,7 +36,7 @@ const LEVEL_HASH: Dictionary = {
 	"level_12": "0a884be2b4cbfdfec6bc8daa40b7ab96e0ace79205d076baa384c3ebbba08a67",
 	"level_13": "0577701868f5455858abd257393a3eb33cb740ce9754455510170986926cf3a1",
 	"level_14": "150929389daa85941b826cbca70aaa9f25b73f97b95ea38149afa2e057112a20",
-	"level_15": "0e67f0becbaa63a93af17edf3fab828216fd51a6979f7fa34d9f7e089a1baaa3",
+	"level_15": "79aa035ddc396bcb4e9e2549af031256ba1a5ff7542945ec8ac3c0de41e1f6a2",
 }
 
 var _game: Game
