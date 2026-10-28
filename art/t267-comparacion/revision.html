@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>T267 · Antes y después</title>
+<style>
+:root{--bg:#14161c;--panel:#1d2029;--ink:#eceff4;--mute:#9aa3b5;--line:#343a4a;--acc:#f0b84a;--new:#6fcf8a;--old:#e08a6a}
+@media (prefers-color-scheme:light){:root{--bg:#f4f1ea;--panel:#fff;--ink:#1c1f27;--mute:#5d6577;--line:#d8d3c5;--acc:#9a6200;--new:#1d7a3c;--old:#a4482a}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,sans-serif}
+main{max-width:1100px;margin:0 auto;padding:16px}
+h1{font-size:1.6rem;margin:.3em 0}
+h2{font-size:1.3rem;margin:1.6em 0 .4em;border-bottom:2px solid var(--acc);padding-bottom:.2em}
+h3{font-size:1.05rem;margin:1.2em 0 .4em}
+p,li{max-width:70ch}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;margin:12px 0}
+.nuevo{color:var(--new);font-weight:600}.viejo{color:var(--old);font-weight:600}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.tabs button{background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px 12px;font:inherit;cursor:pointer;min-height:44px}
+.tabs button[aria-pressed=true]{border-color:var(--acc);background:var(--acc);color:#14161c;font-weight:700}
+.cmp{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;border-radius:8px;border:1px solid var(--line);background:#000;touch-action:pan-y;user-select:none}
+.cmp img{position:absolute;inset:0;width:100%;height:100%;display:block;image-rendering:auto}
+.cmp .top{clip-path:inset(0 0 0 var(--p,50%))}
+.cmp .bar{position:absolute;top:0;bottom:0;left:var(--p,50%);width:3px;background:var(--acc);transform:translateX(-1.5px);pointer-events:none}
+.cmp .tag{position:absolute;top:8px;padding:2px 8px;border-radius:6px;background:#000c;color:#fff;font-size:.8rem;pointer-events:none}
+.cmp .tag.l{left:8px}.cmp .tag.r{right:8px}
+input[type=range]{width:100%;height:44px;accent-color:var(--acc)}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pair figure,.solo figure{margin:0}
+.pair img,.solo img{width:100%;height:auto;display:block;border-radius:6px;border:1px solid var(--line);image-rendering:pixelated;background:#000}
+figcaption{font-size:.85rem;color:var(--mute);margin-top:2px}
+.item{margin:16px 0}
+.item h4{margin:0 0 4px;font-size:1rem}
+.item p{margin:2px 0 6px;color:var(--mute);font-size:.92rem}
+.solo{max-width:420px}
+.dec{border:2px dashed var(--acc);border-radius:10px;padding:12px;margin:16px 0}
+.dec label{display:inline-flex;gap:8px;align-items:center;margin-right:18px;min-height:44px}
+.dec input[type=checkbox]{width:22px;height:22px}
+.dec textarea{width:100%;min-height:60px;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:8px;font:inherit}
+.note{font-size:.9rem;color:var(--mute)}
+ul{padding-left:1.2em}
+@media (max-width:560px){.pair{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main>
+<h1>T267 · Antes y después de los niveles 1, 14 y 15</h1>
+<div class="card">
+<p><b>Qué es.</b> Capturas reales del juego a 1280×720, hechas con el mismo script en dos versiones del proyecto. <b>Antes</b> = commit <code>377fd65</code>, el último anterior a la integración del arte renderizado (T277, <code>c30c91c</code>), con las rocas, adornos y flora viejos. <b>Después</b> = <code>origin/main</code> actual (con T277, T508 rocas, T524 adornos M79, T542 flora y T544).</p>
+<p><b>Cómo mirar.</b> Arrastrá el control de cada nivel: lo que queda a la izquierda es el <span class="viejo">antes</span> y lo de la derecha el <span class="nuevo">después</span>. Debajo hay ampliaciones de cada pieza que cambió. Abajo de cada nivel está la casilla para tu decisión.</p>
+<p class="note">Son pantallas preparadas con el estado real del campo (mina y bosque habilitados, escombro en trabajo, reservas agotadas), no partidas jugadas. Solo se muestran estados que cambian algo: el nivel 1 no tiene mina, bosque ni escombro, por eso tiene una sola captura.</p>
+</div>
+
+<!-- NIVEL 1 -->
+<h2>Nivel 1 · Pradera</h2>
+<div class="cmp" data-a="antes/level_01_initial.png" data-d="despues/level_01_initial.png"></div>
+<div class="card">
+<p><span class="nuevo">Cambió (3 piezas):</span></p>
+<ul>
+<li><b>Estatua de leyenda</b> (casilla bloqueada junto al árbol): el muñeco gris pasó a un <b>cañón de piedra con musgo</b> (T267b/T277).</li>
+<li><b>Dos matas de flores</b> (arriba a la izquierda y abajo al centro): ahora son <b>flora alienígena de Cántaro</b> (capullos violáceos, T542).</li>
+</ul>
+<p><span class="viejo">Sigue igual:</span> terreno de pasto, camino, árbol, agua de la entrada, barra superior e inferior. Si esperabas ver más arte nuevo en el 1, esto es todo lo que hay: el resto del mapa no cambió.</p>
+</div>
+<div class="item"><h4>Estatua de leyenda</h4><p>El cañón reemplaza al muñeco gris. Misma casilla, no construible, no abre panel.</p>
+<div class="pair"><figure><img src="crops/n01_estatua_a.png" alt="Antes: estatua gris"><figcaption>Antes</figcaption></figure><figure><img src="crops/n01_estatua_d.png" alt="Después: cañón de piedra"><figcaption>Después</figcaption></figure></div></div>
+<div class="item"><h4>Flora (arriba)</h4><div class="pair"><figure><img src="crops/n01_flora_a_a.png" alt="Antes: flores"><figcaption>Antes</figcaption></figure><figure><img src="crops/n01_flora_a_d.png" alt="Después: flora alienígena"><figcaption>Después</figcaption></figure></div></div>
+<div class="item"><h4>Flora (abajo)</h4><div class="pair"><figure><img src="crops/n01_flora_b_a.png" alt="Antes: flores"><figcaption>Antes</figcaption></figure><figure><img src="crops/n01_flora_b_d.png" alt="Después: flora alienígena"><figcaption>Después</figcaption></figure></div></div>
+<div class="dec" data-k="n1"><b>Decisión de Lucas, nivel 1:</b><br>
+<label><input type="checkbox" data-v="ok"> Aprobado</label><label><input type="checkbox" data-v="aj"> Ajustar</label>
+<br><label style="display:block">Pieza a ajustar:</label><textarea placeholder="→ pieza y qué cambiar"></textarea></div>
+
+<!-- NIVEL 14 -->
+<h2>Nivel 14 · Ruinas</h2>
+<div class="tabs" data-for="n14"></div>
+<div class="cmp" id="n14"></div>
+<div class="card">
+<p><span class="nuevo">Cambió:</span></p>
+<ul>
+<li><b>Estatuas de leyenda</b> (las figuras sobre los bloques): pasan de muñecos grises a <b>cañones y ametralladoras de piedra</b> con musgo (T277).</li>
+<li><b>Bloques, columnas y lápidas decorativas</b>: ahora son rocas y bloques genéricos más chicos y de piedra lisa (T508); las <b>marcas «A»</b> pasaron a <b>rocas oscuras</b> (T508/M80).</li>
+<li><b>Ruinas / campamento</b>: las carpas rojas se cambiaron por <b>carpas y fogatas de campamento abandonado</b> (T524, M79).</li>
+<li><b>Mina</b> (3 estados), <b>bosque explotable</b> (3 estados) y <b>escombro en trabajo</b>: ahora usan los dibujos renderizados aprobados en T267b (antes eran formas hechas por código) (T277).</li>
+<li><b>Borde del mapa</b>: aparece una franja de terreno pintado a izquierda y derecha.</li>
+</ul>
+<p><span class="viejo">Sigue viejo / sin arte aprobado:</span> el <b>escombro intacto</b> (el montón con rombo) y el <b>escombro despejado</b> (suelo liso) se ven igual; el <b>indicador de reserva</b> (segmentos verdes) y la barra de progreso siguen dibujados por código (T543). Los caminos, el HUD y los botones no cambiaron.</p>
+</div>
+<div class="item"><h4>Zona de estatuas, bloques y rocas</h4><p>Misma franja del mapa. Las columnas altas del antes pasan a ser bloques bajos; los muñecos, cañones; la «A», una roca oscura.</p>
+<div class="pair"><figure><img src="crops/n14_zona_a.png" alt="Antes"><figcaption>Antes</figcaption></figure><figure><img src="crops/n14_zona_d.png" alt="Después"><figcaption>Después</figcaption></figure></div></div>
+<div class="item"><h4>Ruinas con campamento</h4><div class="pair"><figure><img src="crops/n14_ruinas_a.png" alt="Antes"><figcaption>Antes</figcaption></figure><figure><img src="crops/n14_ruinas_d.png" alt="Después"><figcaption>Después</figcaption></figure></div></div>
+<div class="item"><h4>Mina habilitada</h4><div class="pair"><figure><img src="crops/n14_mina_activa_a.png" alt="Antes"><figcaption>Antes</figcaption></figure><figure><img src="crops/n14_mina_activa_d.png" alt="Después"><figcaption>Después</figcaption></figure></div></div>
+<div class="item"><h4>Mina agotada</h4><div class="pair"><figure><img src="crops/n14_mina_agotada_a.png" alt="Antes"><figcaption>Antes</figcaption></figure><figure><img src="crops/n14_mina_agotada_d.png" alt="Después"><figcaption>Después</figcaption></figure></div></div>
+<div class="item"><h4>Bosque habilitado</h4><div class="pair"><figure><img src="crops/n14_bosque_activo_a.png" alt="Antes"><figcaption>Antes</figcaption></figure><figure><img src="crops/n14_bosque_activo_d.png" alt="Después"><figcaption>Después</figcaption></figure></div></div>
+<div class="item"><h4>Bosque agotado</h4><div class="pair"><figure><img src="crops/n14_bosque_agotado_a.png" alt="Antes"><figcaption>Antes</figcaption></figure><figure><img src="crops/n14_bosque_agotado_d.png" alt="Después"><figcaption>Después</figcaption></figure></div></div>
+<div class="item"><h4>Escombro en trabajo</h4><p>La barra de progreso y el rombo siguen siendo por código; cambia el montón.</p><div class="pair"><figure><img src="crops/n14_escombro_trabajo_a.png" alt="Antes"><figcaption>Antes</figcaption></figure><figure><img src="crops/n14_escombro_trabajo_d.png" alt="Después"><figcaption>Después</figcaption></figure></div></div>
+<div class="dec" data-k="n14"><b>Decisión de Lucas, nivel 14:</b><br>
+<label><input type="checkbox" data-v="ok"> Aprobado</label><label><input type="checkbox" data-v="aj"> Ajustar</label>
+<br><label style="display:block">Pieza a ajustar:</label><textarea placeholder="→ pieza y qué cambiar"></textarea></div>
+
+<!-- NIVEL 15 -->
+<h2>Nivel 15 · Central</h2>
+<div class="tabs" data-for="n15"></div>
+<div class="cmp" id="n15"></div>
+<div class="card">
+<p><span class="nuevo">Cambió:</span></p>
+<ul>
+<li><b>Central</b> (abajo a la derecha, 2×2 casillas): del edificio celeste de dibujo plano a una <b>pieza continua renderizada</b> de ladrillo y cobre (T277).</li>
+<li><b>Mina</b> y <b>bosque explotable</b> (todos los estados) y <b>escombro en trabajo</b>: renderizados (T277).</li>
+<li><b>Marcas «A»</b>: pasaron a <b>rocas</b> (T508); <b>carpas rojas</b> pasaron a <b>campamento abandonado</b> (T524).</li>
+<li><b>Borde del mapa</b>: franja de terreno pintado a izquierda y derecha.</li>
+</ul>
+<p><span class="viejo">Sigue viejo, sin arte aprobado:</span> el <b>abastecimiento</b> (la casa con techo marrón, el carro minero y el poste) es todavía el de T233, idéntico al de antes; lo reemplazará T549. También siguen iguales el <b>árbol y la roca decorativos</b> de relleno, el indicador de reserva por código, <code>hito.svg</code> y la imagen del epílogo.</p>
+</div>
+<div class="item"><h4>Central</h4><div class="pair"><figure><img src="crops/n15_central_a.png" alt="Antes"><figcaption>Antes</figcaption></figure><figure><img src="crops/n15_central_d.png" alt="Después"><figcaption>Después</figcaption></figure></div></div>
+<div class="item"><h4>Mina habilitada</h4><div class="pair"><figure><img src="crops/n15_mina_activa_a.png" alt="Antes"><figcaption>Antes</figcaption></figure><figure><img src="crops/n15_mina_activa_d.png" alt="Después"><figcaption>Después</figcaption></figure></div></div>
+<div class="item"><h4>Mina agotada</h4><div class="pair"><figure><img src="crops/n15_mina_agotada_a.png" alt="Antes"><figcaption>Antes</figcaption></figure><figure><img src="crops/n15_mina_agotada_d.png" alt="Después"><figcaption>Después</figcaption></figure></div></div>
+<div class="item"><h4>Bosque habilitado</h4><div class="pair"><figure><img src="crops/n15_bosque_activo_a.png" alt="Antes"><figcaption>Antes</figcaption></figure><figure><img src="crops/n15_bosque_activo_d.png" alt="Después"><figcaption>Después</figcaption></figure></div></div>
+<div class="item"><h4>Marca «A» de la ruina</h4><div class="pair"><figure><img src="crops/n15_roca_marca_a.png" alt="Antes"><figcaption>Antes</figcaption></figure><figure><img src="crops/n15_roca_marca_d.png" alt="Después"><figcaption>Después</figcaption></figure></div></div>
+<div class="item"><h4>Campamento</h4><div class="pair"><figure><img src="crops/n15_campamento_a.png" alt="Antes"><figcaption>Antes</figcaption></figure><figure><img src="crops/n15_campamento_d.png" alt="Después"><figcaption>Después</figcaption></figure></div></div>
+<h3 class="viejo">Sigue viejo: abastecimiento de T233 (idéntico antes y después)</h3>
+<p class="note">Se muestra una sola imagen porque no cambió. Es lo que reemplazará T549.</p>
+<div class="pair solo" style="max-width:none">
+<figure><img src="crops/n15_abastecimiento_casa_d.png" alt="Casa de abastecimiento"><figcaption>Casa</figcaption></figure>
+<figure><img src="crops/n15_abastecimiento_carro_d.png" alt="Carro minero"><figcaption>Carro</figcaption></figure>
+<figure><img src="crops/n15_abastecimiento_poste_d.png" alt="Poste"><figcaption>Poste</figcaption></figure></div>
+<div class="dec" data-k="n15"><b>Decisión de Lucas, nivel 15:</b><br>
+<label><input type="checkbox" data-v="ok"> Aprobado</label><label><input type="checkbox" data-v="aj"> Ajustar</label>
+<br><label style="display:block">Pieza a ajustar:</label><textarea placeholder="→ pieza y qué cambiar"></textarea></div>
+
+<h2>Qué no se pudo mostrar</h2>
+<ul>
+<li>Capturas en un celular real, otros niveles intermedios y partidas completas.</li>
+<li>Animaciones (olas, polvo, torres disparando): son imágenes fijas.</li>
+<li>La imagen del epílogo y <code>hito.svg</code> (no aparecen en el mapa).</li>
+<li>Una captura intermedia solo con T277 (sin rocas, adornos ni flora posteriores): el «después» ya incluye todo lo integrado hasta hoy.</li>
+</ul>
+<p class="note">Las decisiones se guardan solo en este navegador; pasale el resultado al agente en el chat.</p>
+</main>
+<script>
+(function(){
+function mk(box,pairs,label){
+  box.innerHTML='';
+  var a=document.createElement('img');a.src=pairs[0];a.alt='Antes: '+label;a.loading='lazy';
+  var d=document.createElement('img');d.src=pairs[1];d.alt='Después: '+label;d.className='top';d.loading='lazy';
+  var bar=document.createElement('div');bar.className='bar';
+  var l=document.createElement('span');l.className='tag l';l.textContent='ANTES';
+  var r=document.createElement('span');r.className='tag r';r.textContent='DESPUÉS';
+  box.append(a,d,bar,l,r);
+  var rg=box.nextElementSibling&&box.nextElementSibling.type==='range'?box.nextElementSibling:null;
+  if(!rg){rg=document.createElement('input');rg.type='range';rg.min=0;rg.max=100;rg.value=50;rg.setAttribute('aria-label','Deslizar entre antes y después');box.after(rg);}
+  var set=function(){box.style.setProperty('--p',rg.value+'%');};
+  rg.oninput=set;set();
+}
+var states={initial:'Inicial',active:'Mina y bosque habilitados, escombro en trabajo',depleted:'Reservas agotadas'};
+document.querySelectorAll('.cmp').forEach(function(box){
+  if(box.dataset.a){mk(box,[box.dataset.a,box.dataset.d],'nivel 1');return;}
+  var n=box.id.slice(1),tabs=document.querySelector('.tabs[data-for='+box.id+']');
+  Object.keys(states).forEach(function(s,i){
+    var b=document.createElement('button');b.textContent=states[s];b.setAttribute('aria-pressed',i===0);
+    b.onclick=function(){tabs.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed',x===b)});
+      mk(box,['antes/level_'+n+'_'+s+'.png','despues/level_'+n+'_'+s+'.png'],'nivel '+n+' '+states[s]);};
+    tabs.appendChild(b);
+    if(i===0)b.click();
+  });
+});
+document.querySelectorAll('.dec').forEach(function(dec){
+  var k='t267-'+dec.dataset.k,ta=dec.querySelector('textarea'),cbs=dec.querySelectorAll('input[type=checkbox]');
+  try{var s=JSON.parse(localStorage.getItem(k)||'{}');ta.value=s.t||'';cbs.forEach(function(c){c.checked=!!s[c.dataset.v]});}catch(e){}
+  function save(){try{var o={t:ta.value};cbs.forEach(function(c){o[c.dataset.v]=c.checked});localStorage.setItem(k,JSON.stringify(o));}catch(e){}}
+  ta.oninput=save;cbs.forEach(function(c){c.onchange=function(){if(c.checked)cbs.forEach(function(x){if(x!==c)x.checked=false});save();}});
+});
+})();
+</script>
+</body>
+</html>
