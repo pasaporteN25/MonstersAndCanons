@@ -17,7 +17,6 @@ const KINDS: Dictionary = {
 	"poste_cintas": KIND_OBJECT, "simbolo_ruina": KIND_OBJECT, "campamento_vacio": KIND_OBJECT,
 	"central_1": KIND_OBJECT, "central_2": KIND_OBJECT, "central_3": KIND_OBJECT, "central_4": KIND_OBJECT,
 	"supply_depot": KIND_OBJECT, "supply_line_pole": KIND_OBJECT, "supply_cart": KIND_OBJECT,
-	"supply_conveyor": KIND_OBJECT,
 	"agua": KIND_GROUND, "hielo": KIND_GROUND, "lava": KIND_GROUND, "barro": KIND_GROUND,
 }
 
@@ -54,10 +53,13 @@ const CENTRAL_1: Texture2D = preload("res://assets/sprites/map/rendered/central_
 const CENTRAL_2: Texture2D = preload("res://assets/sprites/map/rendered/central_2.png")
 const CENTRAL_3: Texture2D = preload("res://assets/sprites/map/rendered/central_3.png")
 const CENTRAL_4: Texture2D = preload("res://assets/sprites/map/rendered/central_4.png")
-const SUPPLY_DEPOT: Texture2D = preload("res://assets/sprites/map/supply_depot.svg")
-const SUPPLY_LINE_POLE: Texture2D = preload("res://assets/sprites/map/supply_line_pole.svg")
-const SUPPLY_CART: Texture2D = preload("res://assets/sprites/map/supply_cart.svg")
-const SUPPLY_CONVEYOR: Texture2D = preload("res://assets/sprites/map/supply_conveyor.svg")
+## T549: el concepto T527 (OK de dirección de Lucas, 2026-10-28) reemplaza los SVG de T233. Los nombres del catálogo
+## no cambian (el nivel 15 sigue pidiendo `supply_*`): `supply_depot` es el taller en ruinas, `supply_cart` la nave
+## exploradora destruida (farol roto y apagado) y `supply_line_pole` una pila de lingotes de hierro y bronce, que reusa
+## el significado de material genérico de los lingotes de la interfaz. Los estados restaurados quedan reservados, sin evento que los active.
+const SUPPLY_DEPOT: Texture2D = preload("res://assets/sprites/map/rendered/t527/forge_ruin.png")
+const SUPPLY_LINE_POLE: Texture2D = preload("res://assets/sprites/map/rendered/t527/ingot_pile.png")
+const SUPPLY_CART: Texture2D = preload("res://assets/sprites/map/rendered/t527/ship_wreck.png")
 
 ## T277: arte aprobado; los estados son visuales y no agregan ids a la leyenda.
 const MINE: Array[Texture2D] = [preload("res://assets/sprites/map/rendered/mine_idle.png"), preload("res://assets/sprites/map/rendered/mine_active.png"), preload("res://assets/sprites/map/rendered/mine_depleted.png")]
@@ -76,7 +78,6 @@ const TEXTURES: Dictionary = {
 	"poste_cintas": POST_ENEMY, "simbolo_ruina": SIGNAL_ROCKS["caliza"][0], "campamento_vacio": SIGNAL_CAMP,
 	"central_1": CENTRAL_1, "central_2": CENTRAL_2, "central_3": CENTRAL_3, "central_4": CENTRAL_4,
 	"supply_depot": SUPPLY_DEPOT, "supply_line_pole": SUPPLY_LINE_POLE, "supply_cart": SUPPLY_CART,
-	"supply_conveyor": SUPPLY_CONVEYOR,
 }
 
 ## Los colores de cada suelo: el fondo, un tono claro (reflejos), uno oscuro (fondo, sombras) y el borde.

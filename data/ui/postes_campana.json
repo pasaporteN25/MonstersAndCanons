@@ -1,7 +1,7 @@
 {
   "version": 1,
   "nota": "T475, RF-696: casillas (x, y) donde la campaña dibuja un poste como capa visual. Aprobadas por Lucas el 2026-10-25 (Atlas + los 20 postes tal cual). Solo dato visual: no cambia ningún mapa jugable.",
-  "sin_integrar": "Niveles 8 y 9: la casilla aprobada (0, 4) es el símbolo de ruina canónico y el poste lo tapa por completo en la captura del motor; frenados hasta que Lucas indique otra casilla. Esta clave es solo documentación.",
+  "casillas_libres": "Niveles 8 y 9 (Lucas, 2026-10-28): el poste va en (18, 1), una casilla libre construible; la anterior (0, 4) es el símbolo de ruina y quedó descartada. El poste es solo capa visual: la casilla sigue siendo construible y una torre se dibuja encima. Esta clave es solo documentación.",
   "niveles": {
     "level_01": [[13, 5]],
     "level_02": [[1, 4]],
@@ -10,6 +10,8 @@
     "level_05": [[17, 3]],
     "level_06": [[18, 1]],
     "level_07": [[17, 5]],
+    "level_08": [[18, 1]],
+    "level_09": [[18, 1]],
     "level_10": [[22, 2]],
     "level_11": [[2, 1], [20, 8]],
     "level_12": [[5, 2], [24, 9]],
