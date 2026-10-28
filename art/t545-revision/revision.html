@@ -1,0 +1,651 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>T545 · Revisión de textos e imágenes del lore</title>
+<style>
+:root{--bg:#f6f2e8;--fg:#201c14;--mut:#6a604c;--card:#fffdf6;--line:#d8cfb8;--acc:#8a5a14;--A:#b3261e;--M:#a86a00;--B:#4d6b2f;--quote:#efe7d2}
+@media (prefers-color-scheme:dark){:root{--bg:#14161b;--fg:#ece6d6;--mut:#a39a84;--card:#1d2027;--line:#343845;--acc:#e0b050;--A:#ff8a80;--M:#f2b14a;--B:#a5c98a;--quote:#262a33}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:980px;margin:0 auto;padding:16px}
+h1{font-size:1.6rem;margin:.6em 0 .2em}h2{font-size:1.3rem;margin:1.8em 0 .5em;border-bottom:2px solid var(--line);padding-bottom:.2em}
+h3{font-size:1.05rem;margin:0 0 .4em}
+.lead{color:var(--mut)}
+nav{position:sticky;top:0;background:var(--bg);padding:8px 0;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:6px 14px;z-index:5;font-size:.9rem}
+nav a{color:var(--acc);text-decoration:none}
+.piece{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;margin:14px 0}
+.src,.lim{font-size:.82rem;color:var(--mut);margin:.1em 0}
+.field{margin:.5em 0}.field b{display:block;font-size:.78rem;color:var(--mut);text-transform:uppercase;letter-spacing:.04em}
+.field blockquote{margin:.15em 0;padding:.35em .7em;background:var(--quote);border-left:3px solid var(--acc);white-space:pre-line}
+.obs{margin:.6em 0}
+.tag{display:inline-block;font-size:.75rem;font-weight:700;padding:1px 7px;border-radius:99px;border:1px solid currentColor;margin-right:4px}
+.tag.A{color:var(--A)}.tag.M{color:var(--M)}.tag.B{color:var(--B)}
+img{max-width:100%;height:auto;border-radius:6px;border:1px solid var(--line);display:block;margin:.3em 0}
+figure{margin:.6em 0}figcaption{font-size:.8rem;color:var(--mut)}
+.imgs{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:10px}
+.dec{margin-top:.8em;padding:10px;border:2px dashed var(--acc);border-radius:8px;background:var(--bg)}
+.dec b{color:var(--acc)}.dec label{margin-right:14px;white-space:nowrap}
+.dec input[type=text]{width:100%;margin-top:6px;padding:8px;font:inherit;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:6px}
+.dec input[type=checkbox]{width:20px;height:20px;vertical-align:middle}
+table{border-collapse:collapse;width:100%;font-size:.88rem;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}
+.alt{background:var(--quote);border-radius:6px;padding:8px 10px;margin:6px 0;white-space:pre-line}
+.alt b{display:block}
+button{font:inherit;padding:10px 16px;border-radius:8px;border:1px solid var(--acc);background:var(--acc);color:#fff;cursor:pointer}
+textarea{width:100%;min-height:160px;font:13px/1.4 ui-monospace,monospace;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:6px;padding:8px}
+@media (max-width:600px){main{padding:12px}.imgs{grid-template-columns:1fr}}
+</style></head><body><main>
+<h1>T545 · Revisión de textos e imágenes del lore</h1>
+<p class="lead">Preparado el 2026-10-28 para que Lucas lea y decida. No se cambió ningún texto del juego. Cada pieza muestra el texto actual tal cual, su fuente, límites y observaciones; donde hay un problema real, 1 o 2 alternativas. Tildá <b>Aprobado</b> o escribí el cambio; al final hay un botón que junta todo en un texto para pegar. Las capturas son de PC, 1280×720, tomadas con el motor.</p>
+<nav><a href="#resumen">Resumen</a><a href="#niveles">Niveles</a><a href="#final">Epílogo y créditos</a><a href="#intro">Intro</a><a href="#wiki">Wiki Lore</a><a href="#alts">Hallazgos y alternativas</a><a href="#imgs">Imágenes</a><a href="#preguntas">Preguntas</a></nav>
+
+<h2 id="resumen">Resumen de hallazgos</h2><table><tr><th>#</th><th>Prioridad</th><th>Hallazgo</th></tr>
+<tr><td><a href="#alt-H1">H1</a></td><td><span class="tag A">Alta</span></td><td>El agua del oasis y el nivel 2 se contradicen</td></tr>
+<tr><td><a href="#alt-H2">H2</a></td><td><span class="tag A">Alta</span></td><td>Victoria del 15 («luz propia», «línea de abastecimiento completa») frente al epílogo nuevo</td></tr>
+<tr><td><a href="#alt-H3">H3</a></td><td><span class="tag A">Alta</span></td><td>El epílogo: «la máquina» no tiene referente en el canon y la partida en 3 líneas</td></tr>
+<tr><td><a href="#alt-H4">H4</a></td><td><span class="tag M">Media</span></td><td>La imagen del final todavía es la de T233 (luminosa)</td></tr>
+<tr><td><a href="#alt-H5">H5</a></td><td><span class="tag M">Media</span></td><td>Nivel 13: el texto habla de «hitos de piedra» pero el mapa dibuja rocas marcadas</td></tr>
+<tr><td><a href="#alt-H6">H6</a></td><td><span class="tag M">Media</span></td><td>Dos nombres por nivel y de estilo mezclado</td></tr>
+<tr><td><a href="#alt-H7">H7</a></td><td><span class="tag M">Media</span></td><td>Nivel 14: lo «vacío» se anuncia tres veces</td></tr>
+<tr><td><a href="#alt-H8">H8</a></td><td><span class="tag M">Media</span></td><td>Jefe en el juego, Soberano en el lore</td></tr>
+<tr><td><a href="#alt-H9">H9</a></td><td><span class="tag M">Media</span></td><td>Dónde queda la Central</td></tr>
+<tr><td><a href="#alt-H10">H10</a></td><td><span class="tag B">Baja</span></td><td>Voz: «informe» y «nosotros» mezclados</td></tr>
+<tr><td><a href="#alt-H11">H11</a></td><td><span class="tag B">Baja</span></td><td>Nivel 11: «paso asegurado» frente al lugar «El punto de agua»</td></tr>
+<tr><td><a href="#alt-H12">H12</a></td><td><span class="tag B">Baja</span></td><td>Repeticiones entre campos del mismo nivel</td></tr>
+<tr><td><a href="#alt-H13">H13</a></td><td><span class="tag B">Baja</span></td><td>Entradas con frases de relleno o referencias sueltas</td></tr>
+<tr><td><a href="#alt-H14">H14</a></td><td><span class="tag B">Baja</span></td><td>Wiki: «Los poblados vacíos» repite la victoria del 14</td></tr>
+<tr><td><a href="#alt-H15">H15</a></td><td><span class="tag B">Baja</span></td><td>Créditos: solo lo comprobable</td></tr>
+<tr><td><a href="#alt-H16">H16</a></td><td><span class="tag B">Baja</span></td><td>Intro: tiempos verbales y un dato que choca con H1</td></tr>
+</table>
+<p class='lead'>Vocabulario vetado de la biblia: no aparece en ningún texto de lore. Todos los límites de caracteres se cumplen.</p>
+<h2 id="niveles">1. Niveles: nombre, lugar, entrada y victoria</h2>
+<section class="piece" data-id="SEL" data-title="Selector de campaña (vista de mapa)">
+<h3>Selector de campaña (vista de mapa)</h3>
+<p class="src">Fuente: scenes/ui/level_select.gd, campaign_map_view.gd; los nombres salen de `nombre` de cada data/levels/level_NN.json</p><p class="lim">Límites: nombre: una línea, se recorta con «…» si no entra</p>
+<div class="imgs">
+<figure><a href="captures/selector.jpg"><img loading="lazy" src="captures/selector.jpg" alt="Selector (captura 1280×720)"></a><figcaption>Selector (captura 1280×720)</figcaption></figure>
+</div>
+<div class="field"><b>Qué se lee</b><blockquote>Título «Elegir nivel»; en el mapa, «15 · La Central» bajo la insignia del nivel elegido y, en la franja de abajo, «Disponible · sin victorias todavía». El lugar de cada nivel no se ve en el mapa: aparece en la vista de tarjetas (bajo el nombre) y en el cartel de entrada.</blockquote></div>
+<p class="obs"><b>Observaciones:</b> Solo lleva el nombre del nivel (H6). La captura es con 14 niveles completados para ver el mapa entero. <a class="tag M" href="#alt-H6">H6</a></p>
+<div class="dec"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…escribí acá el cambio"></div>
+</section>
+<section class="piece" data-id="N01" data-title="Nivel 1 · Pradera">
+<h3>Nivel 1 · Pradera</h3>
+<p class="src">Fuente: data/levels/level_01.json (campo `textos`; texto fuente: specs/11-textos-lore.md §1)</p><p class="lim">Límites: lugar 24/32 · entrada 138/240 (3 líneas, máx. línea 61/90) · victoria 98/160 (2 líneas, máx. línea 58/90)</p>
+<div class="imgs">
+<figure><a href="captures/entrada_01.png"><img loading="lazy" src="captures/entrada_01.png" alt="Entrada (captura 1280×720)"></a><figcaption>Entrada (captura 1280×720)</figcaption></figure>
+<figure><a href="captures/victoria_01.png"><img loading="lazy" src="captures/victoria_01.png" alt="Victoria (captura 1280×720)"></a><figcaption>Victoria (captura 1280×720)</figcaption></figure>
+</div>
+<div class="field"><b>Nombre (tarjeta y mapa)</b><blockquote>Pradera</blockquote></div>
+<div class="field"><b>Lugar</b><blockquote>Campamento de aterrizaje</blockquote></div>
+<div class="field"><b>Entrada</b><blockquote>La nave quedó en el borde del oasis.
+Hay agua, pasto y un terreno firme donde armar el campamento.
+Antes de descargar, hay que defenderlo.</blockquote></div>
+<div class="field"><b>Victoria</b><blockquote>Campamento asegurado. Las primeras torres quedaron en pie.
+La carga de la nave se baja esta noche.</blockquote></div>
+<p class="obs"><b>Observaciones:</b> Sin problemas de tono. «La carga de la nave se baja esta noche» es coherente con la intro (la nave no vuelve a despegar). Confirma que en el nivel 1 el agua está en el oasis (ver H1). <a class="tag A" href="#alt-H1">H1</a></p>
+<div class="dec"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…escribí acá el cambio"></div>
+</section>
+<section class="piece" data-id="N02" data-title="Nivel 2 · Desfiladero">
+<h3>Nivel 2 · Desfiladero</h3>
+<p class="src">Fuente: data/levels/level_02.json (campo `textos`; texto fuente: specs/11-textos-lore.md §1)</p><p class="lim">Límites: lugar 16/32 · entrada 149/240 (3 líneas, máx. línea 60/90) · victoria 91/160 (2 líneas, máx. línea 60/90)</p>
+<div class="imgs">
+<figure><a href="captures/entrada_02.png"><img loading="lazy" src="captures/entrada_02.png" alt="Entrada (captura 1280×720)"></a><figcaption>Entrada (captura 1280×720)</figcaption></figure>
+</div>
+<div class="field"><b>Nombre (tarjeta y mapa)</b><blockquote>Desfiladero</blockquote></div>
+<div class="field"><b>Lugar</b><blockquote>El paso del agua</blockquote></div>
+<div class="field"><b>Entrada</b><blockquote>El agua dulce más cercana está al otro lado del desfiladero.
+Sin ese paso, el campamento no aguanta.
+Hay que sostenerlo antes de tender las cañerías.</blockquote></div>
+<div class="field"><b>Victoria</b><blockquote>Paso asegurado. El agua llega al campamento por primera vez.
+Faltan tres tramos de cañería.</blockquote></div>
+<p class="obs"><b>Observaciones:</b> Contradice la intro, el nivel 1 y el artículo «El oasis» (H1). «Faltan tres tramos de cañería» es un dato de juego que no se vuelve a nombrar. El lugar «El paso del agua» y «Paso asegurado» repiten «paso» (H12). <a class="tag A" href="#alt-H1">H1</a><a class="tag B" href="#alt-H12">H12</a></p>
+<div class="dec"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…escribí acá el cambio"></div>
+</section>
+<section class="piece" data-id="N03" data-title="Nivel 3 · Encrucijada">
+<h3>Nivel 3 · Encrucijada</h3>
+<p class="src">Fuente: data/levels/level_03.json (campo `textos`; texto fuente: specs/11-textos-lore.md §1)</p><p class="lim">Límites: lugar 11/32 · entrada 144/240 (3 líneas, máx. línea 62/90) · victoria 96/160 (2 líneas, máx. línea 49/90)</p>
+<div class="imgs">
+<figure><a href="captures/entrada_03.png"><img loading="lazy" src="captures/entrada_03.png" alt="Entrada (captura 1280×720)"></a><figcaption>Entrada (captura 1280×720)</figcaption></figure>
+</div>
+<div class="field"><b>Nombre (tarjeta y mapa)</b><blockquote>Encrucijada</blockquote></div>
+<div class="field"><b>Lugar</b><blockquote>Las huertas</blockquote></div>
+<div class="field"><b>Entrada</b><blockquote>Al norte del campamento hay tierra buena para sembrar.
+Dos caminos se cruzan justo ahí, y por los dos llegan manadas.
+Sin huerta no hay cosecha.</blockquote></div>
+<div class="field"><b>Victoria</b><blockquote>Huertas aseguradas. Se sembró el primer surco.
+Lo que crezca depende de que las torres aguanten.</blockquote></div>
+<p class="obs"><b>Observaciones:</b> La línea 3 es casi tautológica (H13). «Manadas» se usa por primera vez: es el vocabulario de la biblia. <a class="tag B" href="#alt-H13">H13</a></p>
+<div class="dec"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…escribí acá el cambio"></div>
+</section>
+<section class="piece" data-id="N04" data-title="Nivel 4 · Espiral">
+<h3>Nivel 4 · Espiral</h3>
+<p class="src">Fuente: data/levels/level_04.json (campo `textos`; texto fuente: specs/11-textos-lore.md §1)</p><p class="lim">Límites: lugar 7/32 · entrada 150/240 (3 líneas, máx. línea 61/90) · victoria 89/160 (2 líneas, máx. línea 46/90)</p>
+<div class="imgs">
+<figure><a href="captures/entrada_04.png"><img loading="lazy" src="captures/entrada_04.png" alt="Entrada (captura 1280×720)"></a><figcaption>Entrada (captura 1280×720)</figcaption></figure>
+</div>
+<div class="field"><b>Nombre (tarjeta y mapa)</b><blockquote>Espiral</blockquote></div>
+<div class="field"><b>Lugar</b><blockquote>El pozo</blockquote></div>
+<div class="field"><b>Entrada</b><blockquote>El arroyo no alcanza para toda la colonia.
+Hay que cavar un pozo en el centro del valle.
+El camino hasta ahí da muchas vueltas: que les cueste llegar.</blockquote></div>
+<div class="field"><b>Victoria</b><blockquote>Pozo terminado. Hay agua para toda la colonia.
+Se armó un turno de guardia para cuidarlo.</blockquote></div>
+<p class="obs"><b>Observaciones:</b> «que les cueste llegar»: sin referente (H13). El «arroyo» es el mismo que podría haber traído el nivel 2 (H1). Victoria: buena, concreta. <a class="tag B" href="#alt-H13">H13</a><a class="tag A" href="#alt-H1">H1</a></p>
+<div class="dec"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…escribí acá el cambio"></div>
+</section>
+<section class="piece" data-id="N05" data-title="Nivel 5 · Fortaleza">
+<h3>Nivel 5 · Fortaleza</h3>
+<p class="src">Fuente: data/levels/level_05.json (campo `textos`; texto fuente: specs/11-textos-lore.md §1)</p><p class="lim">Límites: lugar 13/32 · entrada 125/240 (3 líneas, máx. línea 55/90) · victoria 92/160 (2 líneas, máx. línea 57/90)</p>
+<div class="imgs">
+<figure><a href="captures/entrada_05.png"><img loading="lazy" src="captures/entrada_05.png" alt="Entrada (captura 1280×720)"></a><figcaption>Entrada (captura 1280×720)</figcaption></figure>
+</div>
+<div class="field"><b>Nombre (tarjeta y mapa)</b><blockquote>Fortaleza</blockquote></div>
+<div class="field"><b>Lugar</b><blockquote>La empalizada</blockquote></div>
+<div class="field"><b>Entrada</b><blockquote>El campamento ya es un pueblo y todavía no tiene cerco.
+Hoy se cierra el primer perímetro.
+Lo que quede afuera, queda afuera.</blockquote></div>
+<div class="field"><b>Victoria</b><blockquote>Empalizada cerrada. Es el primer perímetro de la colonia.
+Por primera vez, dormimos adentro.</blockquote></div>
+<p class="obs"><b>Observaciones:</b> Fuerte y coherente con la biblia (consecuencia, sin sentencia). «Lo que quede afuera, queda afuera» puede leerse como indiferencia, que es lo que se busca. Primera persona en «dormimos» (H10). El nombre «Fortaleza» no se parece al lugar «La empalizada» (H6). <a class="tag B" href="#alt-H10">H10</a><a class="tag M" href="#alt-H6">H6</a></p>
+<div class="dec"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…escribí acá el cambio"></div>
+</section>
+<section class="piece" data-id="N06" data-title="Nivel 6 · Nido">
+<h3>Nivel 6 · Nido</h3>
+<p class="src">Fuente: data/levels/level_06.json (campo `textos`; texto fuente: specs/11-textos-lore.md §1)</p><p class="lim">Límites: lugar 10/32 · entrada 154/240 (3 líneas, máx. línea 71/90) · victoria 77/160 (2 líneas, máx. línea 43/90)</p>
+<div class="imgs">
+<figure><a href="captures/entrada_06.png"><img loading="lazy" src="captures/entrada_06.png" alt="Entrada (captura 1280×720)"></a><figcaption>Entrada (captura 1280×720)</figcaption></figure>
+</div>
+<div class="field"><b>Nombre (tarjeta y mapa)</b><blockquote>Nido</blockquote></div>
+<div class="field"><b>Lugar</b><blockquote>El lindero</blockquote></div>
+<div class="field"><b>Entrada</b><blockquote>El bosque empieza donde termina el cerco.
+Hay madera para varios años, y también criaturas que no habíamos visto.
+Del campamento empezaron a faltar cosas.</blockquote></div>
+<div class="field"><b>Victoria</b><blockquote>Lindero asegurado. Se taló el primer tramo.
+La madera alcanza para dos casas.</blockquote></div>
+<p class="obs"><b>Observaciones:</b> «Nido» no aparece en el texto (H6). «criaturas que no habíamos visto» usa el término del canon («criaturas»). «Del campamento empezaron a faltar cosas» presenta al Ladrón sin nombrarlo: buena. <a class="tag M" href="#alt-H6">H6</a><a class="tag B" href="#alt-H10">H10</a></p>
+<div class="dec"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…escribí acá el cambio"></div>
+</section>
+<section class="piece" data-id="N07" data-title="Nivel 7 · Cruce">
+<h3>Nivel 7 · Cruce</h3>
+<p class="src">Fuente: data/levels/level_07.json (campo `textos`; texto fuente: specs/11-textos-lore.md §1)</p><p class="lim">Límites: lugar 13/32 · entrada 151/240 (3 líneas, máx. línea 62/90) · victoria 106/160 (2 líneas, máx. línea 56/90)</p>
+<div class="imgs">
+<figure><a href="captures/entrada_07.png"><img loading="lazy" src="captures/entrada_07.png" alt="Entrada (captura 1280×720)"></a><figcaption>Entrada (captura 1280×720)</figcaption></figure>
+</div>
+<div class="field"><b>Nombre (tarjeta y mapa)</b><blockquote>Cruce</blockquote></div>
+<div class="field"><b>Lugar</b><blockquote>El aserradero</blockquote></div>
+<div class="field"><b>Entrada</b><blockquote>El mejor sitio para cortar madera es un cruce de caminos.
+Se arma un aserradero, y para eso hay que despejar el terreno.
+Todo lo que estorbe se retira.</blockquote></div>
+<div class="field"><b>Victoria</b><blockquote>Aserradero en marcha. La colonia ya tiene madera propia.
+La primera carga sale mañana hacia el campamento.</blockquote></div>
+<p class="obs"><b>Observaciones:</b> «Todo lo que estorbe se retira» es neutral para quien solo ve árboles y rocas y puede leerse distinto después de saber lo de los Moradores: parece buscado. «madera propia» abre el hilo de independencia (7, 9, 15; ver H2). <a class="tag A" href="#alt-H2">H2</a><a class="tag M" href="#alt-H6">H6</a></p>
+<div class="dec"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…escribí acá el cambio"></div>
+</section>
+<section class="piece" data-id="N08" data-title="Nivel 8 · Bastión">
+<h3>Nivel 8 · Bastión</h3>
+<p class="src">Fuente: data/levels/level_08.json (campo `textos`; texto fuente: specs/11-textos-lore.md §1)</p><p class="lim">Límites: lugar 23/32 · entrada 150/240 (3 líneas, máx. línea 58/90) · victoria 110/160 (2 líneas, máx. línea 68/90)</p>
+<div class="imgs">
+<figure><a href="captures/entrada_08.png"><img loading="lazy" src="captures/entrada_08.png" alt="Entrada (captura 1280×720)"></a><figcaption>Entrada (captura 1280×720)</figcaption></figure>
+<figure><a href="captures/victoria_08.png"><img loading="lazy" src="captures/victoria_08.png" alt="Victoria (captura 1280×720)"></a><figcaption>Victoria (captura 1280×720)</figcaption></figure>
+</div>
+<div class="field"><b>Nombre (tarjeta y mapa)</b><blockquote>Bastión</blockquote></div>
+<div class="field"><b>Lugar</b><blockquote>El bastión sobre ruinas</blockquote></div>
+<div class="field"><b>Entrada</b><blockquote>Sobre la loma hay muros de piedra vieja, a medio enterrar.
+Las rocas tienen la misma marca que las del campamento.
+Alguien la puso antes que nosotros.</blockquote></div>
+<div class="field"><b>Victoria</b><blockquote>Bastión asegurado. La colonia tiene una posición alta sobre la loma.
+Los muros son de otros; los usamos igual.</blockquote></div>
+<p class="obs"><b>Observaciones:</b> Parte del ejemplo de la biblia. La mejor entrada y la mejor victoria del bloque 2. El lugar «El bastión sobre ruinas» repite el nombre del nivel y adelanta la palabra «ruinas», que la entrada evita (dice «piedra vieja») (H6). <a class="tag M" href="#alt-H6">H6</a><a class="tag B" href="#alt-H10">H10</a></p>
+<div class="dec"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…escribí acá el cambio"></div>
+</section>
+<section class="piece" data-id="N09" data-title="Nivel 9 · Taller asediado">
+<h3>Nivel 9 · Taller asediado</h3>
+<p class="src">Fuente: data/levels/level_09.json (campo `textos`; texto fuente: specs/11-textos-lore.md §1)</p><p class="lim">Límites: lugar 9/32 · entrada 171/240 (3 líneas, máx. línea 65/90) · victoria 119/160 (2 líneas, máx. línea 71/90)</p>
+<div class="imgs">
+<figure><a href="captures/entrada_09.png"><img loading="lazy" src="captures/entrada_09.png" alt="Entrada (captura 1280×720)"></a><figcaption>Entrada (captura 1280×720)</figcaption></figure>
+</div>
+<div class="field"><b>Nombre (tarjeta y mapa)</b><blockquote>Taller asediado</blockquote></div>
+<div class="field"><b>Lugar</b><blockquote>El taller</blockquote></div>
+<div class="field"><b>Entrada</b><blockquote>Entre las ruinas hay un galpón que puede servir de taller.
+Los que lo rodean no parecen animales: algunos curan a los suyos.
+Hoy se prueba el primer mortero de la colonia.</blockquote></div>
+<div class="field"><b>Victoria</b><blockquote>Taller asegurado. El horno se encendió por primera vez fuera del oasis.
+La forja ya no depende de lo que trajo la nave.</blockquote></div>
+<p class="obs"><b>Observaciones:</b> «no parecen animales: algunos curan a los suyos» es buena. «el primer mortero» es mecánica y está marcada A REVISAR TRAS G4 (H13). El nombre «Taller asediado» choca con el modo «Asedio» (H6). <a class="tag M" href="#alt-H6">H6</a><a class="tag B" href="#alt-H13">H13</a></p>
+<div class="dec"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…escribí acá el cambio"></div>
+</section>
+<section class="piece" data-id="N10" data-title="Nivel 10 · La mina vieja">
+<h3>Nivel 10 · La mina vieja</h3>
+<p class="src">Fuente: data/levels/level_10.json (campo `textos`; texto fuente: specs/11-textos-lore.md §1)</p><p class="lim">Límites: lugar 31/32 · entrada 157/240 (3 líneas, máx. línea 71/90) · victoria 134/160 (2 líneas, máx. línea 68/90)</p>
+<div class="imgs">
+<figure><a href="captures/entrada_10.png"><img loading="lazy" src="captures/entrada_10.png" alt="Entrada (captura 1280×720)"></a><figcaption>Entrada (captura 1280×720)</figcaption></figure>
+<figure><a href="captures/victoria_10.png"><img loading="lazy" src="captures/victoria_10.png" alt="Victoria (captura 1280×720)"></a><figcaption>Victoria (captura 1280×720)</figcaption></figure>
+</div>
+<div class="field"><b>Nombre (tarjeta y mapa)</b><blockquote>La mina vieja</blockquote></div>
+<div class="field"><b>Lugar</b><blockquote>Primer puesto de abastecimiento</blockquote></div>
+<div class="field"><b>Entrada</b><blockquote>Las galerías ya estaban cavadas cuando llegamos.
+Si se las retoma, la colonia tiene mineral a pocos días del campamento.
+Hay que sostener la boca de la mina.</blockquote></div>
+<div class="field"><b>Victoria</b><blockquote>Mina asegurada. Es el primer puesto de abastecimiento de la colonia.
+Las galerías no las cavamos nosotros, y nadie vino a reclamarlas.</blockquote></div>
+<p class="obs"><b>Observaciones:</b> «nadie vino a reclamarlas» es la línea más fina del bloque. El lugar tiene 31 de 32 caracteres y se repite tal cual en la victoria (H12). Nombre provisorio según la biblia («La mina vieja»). <a class="tag B" href="#alt-H12">H12</a><a class="tag M" href="#alt-H6">H6</a></p>
+<div class="dec"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…escribí acá el cambio"></div>
+</section>
+<section class="piece" data-id="N11" data-title="Nivel 11 · Puesto seco">
+<h3>Nivel 11 · Puesto seco</h3>
+<p class="src">Fuente: data/levels/level_11.json (campo `textos`; texto fuente: specs/11-textos-lore.md §1)</p><p class="lim">Límites: lugar 16/32 · entrada 153/240 (3 líneas, máx. línea 60/90) · victoria 81/160 (2 líneas, máx. línea 40/90)</p>
+<div class="imgs">
+<figure><a href="captures/entrada_11.png"><img loading="lazy" src="captures/entrada_11.png" alt="Entrada (captura 1280×720)"></a><figcaption>Entrada (captura 1280×720)</figcaption></figure>
+</div>
+<div class="field"><b>Nombre (tarjeta y mapa)</b><blockquote>Puesto seco</blockquote></div>
+<div class="field"><b>Lugar</b><blockquote>El punto de agua</blockquote></div>
+<div class="field"><b>Entrada</b><blockquote>Pasada la mina, el camino se vuelve seco.
+Los dos pozos que hay ya tenían huellas alrededor.
+Desde hoy, algunas torres se apagan sin que nadie las toque.</blockquote></div>
+<div class="field"><b>Victoria</b><blockquote>Informe del puesto seco: paso asegurado.
+Dos pozos quedaron dentro del perímetro.</blockquote></div>
+<p class="obs"><b>Observaciones:</b> La victoria es el ejemplo de la biblia. Habla de «paso» cuando el lugar es «El punto de agua» (H11). «Desde hoy, algunas torres se apagan…» anuncia la mecánica como un hecho del mundo, y funciona. <a class="tag B" href="#alt-H11">H11</a></p>
+<div class="dec"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…escribí acá el cambio"></div>
+</section>
+<section class="piece" data-id="N12" data-title="Nivel 12 · El cañadón">
+<h3>Nivel 12 · El cañadón</h3>
+<p class="src">Fuente: data/levels/level_12.json (campo `textos`; texto fuente: specs/11-textos-lore.md §1)</p><p class="lim">Límites: lugar 22/32 · entrada 194/240 (3 líneas, máx. línea 73/90) · victoria 113/160 (2 líneas, máx. línea 62/90)</p>
+<div class="imgs">
+<figure><a href="captures/entrada_12.png"><img loading="lazy" src="captures/entrada_12.png" alt="Entrada (captura 1280×720)"></a><figcaption>Entrada (captura 1280×720)</figcaption></figure>
+</div>
+<div class="field"><b>Nombre (tarjeta y mapa)</b><blockquote>El cañadón</blockquote></div>
+<div class="field"><b>Lugar</b><blockquote>El paso hacia el norte</blockquote></div>
+<div class="field"><b>Entrada</b><blockquote>El único paso hacia el norte es un cañadón de paredes altas.
+Los tiros vuelven contra las torres, como si las paredes los devolvieran.
+Cruzarlo es la única forma de llegar al resto de la región.</blockquote></div>
+<div class="field"><b>Victoria</b><blockquote>Cañadón asegurado. El paso al norte quedó abierto.
+En las paredes quedaron las marcas de los tiros que volvieron.</blockquote></div>
+<p class="obs"><b>Observaciones:</b> Las líneas 1 y 3 repiten «único» (H13). «Los tiros vuelven contra las torres…» explica la mecánica del Espejo en voz de informe. La victoria es muy buena (la marca queda en el paisaje). <a class="tag B" href="#alt-H13">H13</a><a class="tag B" href="#alt-H12">H12</a></p>
+<div class="dec"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…escribí acá el cambio"></div>
+</section>
+<section class="piece" data-id="N13" data-title="Nivel 13 · Paso alto">
+<h3>Nivel 13 · Paso alto</h3>
+<p class="src">Fuente: data/levels/level_13.json (campo `textos`; texto fuente: specs/11-textos-lore.md §1)</p><p class="lim">Límites: lugar 31/32 · entrada 198/240 (3 líneas, máx. línea 86/90) · victoria 101/160 (2 líneas, máx. línea 61/90)</p>
+<div class="imgs">
+<figure><a href="captures/entrada_13.png"><img loading="lazy" src="captures/entrada_13.png" alt="Entrada (captura 1280×720)"></a><figcaption>Entrada (captura 1280×720)</figcaption></figure>
+</div>
+<div class="field"><b>Nombre (tarjeta y mapa)</b><blockquote>Paso alto</blockquote></div>
+<div class="field"><b>Lugar</b><blockquote>El camino al resto de la región</blockquote></div>
+<div class="field"><b>Entrada</b><blockquote>En el paso alto el camino se parte en dos.
+Ya no llegan de a uno: cada grupo trae quien protege, quien cura y quien apaga torres.
+Hay hitos de piedra en el camino. Marcan un límite, y ya lo pasamos.</blockquote></div>
+<div class="field"><b>Victoria</b><blockquote>Paso alto asegurado. La región queda comunicada con el valle.
+Los hitos quedaron del lado de adentro.</blockquote></div>
+<p class="obs"><b>Observaciones:</b> «Hitos de piedra» (H5). La línea 2 enumera la mecánica de la escolta («quien protege, quien cura y quien apaga torres»). La línea 3 tiene 86 de 90 caracteres. «La región… con el valle» no precisa cuál (H9). <a class="tag M" href="#alt-H5">H5</a><a class="tag M" href="#alt-H9">H9</a></p>
+<div class="dec"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…escribí acá el cambio"></div>
+</section>
+<section class="piece" data-id="N14" data-title="Nivel 14 · Los poblados vacíos">
+<h3>Nivel 14 · Los poblados vacíos</h3>
+<p class="src">Fuente: data/levels/level_14.json (campo `textos`; texto fuente: specs/11-textos-lore.md §1)</p><p class="lim">Límites: lugar 30/32 · entrada 144/240 (3 líneas, máx. línea 60/90) · victoria 59/160 (2 líneas, máx. línea 32/90)</p>
+<div class="imgs">
+<figure><a href="captures/entrada_14.png"><img loading="lazy" src="captures/entrada_14.png" alt="Entrada (captura 1280×720)"></a><figcaption>Entrada (captura 1280×720)</figcaption></figure>
+</div>
+<div class="field"><b>Nombre (tarjeta y mapa)</b><blockquote>Los poblados vacíos</blockquote></div>
+<div class="field"><b>Lugar</b><blockquote>Asentamientos de los Moradores</blockquote></div>
+<div class="field"><b>Entrada</b><blockquote>Los poblados están a la vista, pero no sale humo de ninguno.
+Los Moradores se llevaron lo que pudieron.
+Aun así, algo todavía defiende el lugar.</blockquote></div>
+<div class="field"><b>Victoria</b><blockquote>Los poblados están vacíos.
+Las brasas todavía están tibias.</blockquote></div>
+<p class="obs"><b>Observaciones:</b> El golpe de la victoria ya está gastado en el nombre y la entrada (H7). El lugar usa «Asentamientos», el nombre y el artículo «poblados»: dos palabras para lo mismo. 59 caracteres: la victoria más corta, a propósito. <a class="tag M" href="#alt-H7">H7</a><a class="tag B" href="#alt-H14">H14</a></p>
+<div class="dec"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…escribí acá el cambio"></div>
+</section>
+<section class="piece" data-id="N15" data-title="Nivel 15 · La Central">
+<h3>Nivel 15 · La Central</h3>
+<p class="src">Fuente: data/levels/level_15.json (campo `textos`; texto fuente: specs/11-textos-lore.md §1)</p><p class="lim">Límites: lugar 24/32 · entrada 201/240 (3 líneas, máx. línea 79/90) · victoria 89/160 (2 líneas, máx. línea 60/90)</p>
+<div class="imgs">
+<figure><a href="captures/entrada_15.png"><img loading="lazy" src="captures/entrada_15.png" alt="Entrada (captura 1280×720)"></a><figcaption>Entrada (captura 1280×720)</figcaption></figure>
+<figure><a href="captures/victoria_15.png"><img loading="lazy" src="captures/victoria_15.png" alt="Victoria (captura 1280×720)"></a><figcaption>Victoria (captura 1280×720)</figcaption></figure>
+</div>
+<div class="field"><b>Nombre (tarjeta y mapa)</b><blockquote>La Central</blockquote></div>
+<div class="field"><b>Lugar</b><blockquote>Energía y abastecimiento</blockquote></div>
+<div class="field"><b>Entrada</b><blockquote>Falta cerrar el valle: la central de energía y la línea que la une con la mina.
+Si se sostiene, la colonia queda asentada en esta región.
+Hoy llega lo más grande que vimos hasta ahora, y no viene solo.</blockquote></div>
+<div class="field"><b>Victoria</b><blockquote>Central encendida. La línea de abastecimiento está completa.
+La colonia tiene luz propia.</blockquote></div>
+<p class="obs"><b>Observaciones:</b> La victoria («luz propia») y la entrada («línea que la une con la mina», «asentada en esta región») continuaban el epílogo viejo; con el nuevo se leen como logro puro (H2). «El valle» no es claro (H9). La entrada es la más larga: 201 de 240 caracteres y 5 renglones visibles en pantalla (captura). <a class="tag A" href="#alt-H2">H2</a><a class="tag M" href="#alt-H9">H9</a></p>
+<div class="dec"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…escribí acá el cambio"></div>
+</section>
+<h2 id="final">2. Epílogo, imagen del final y créditos</h2>
+<section class="piece" data-id="EP" data-title="Epílogo (nivel 15)">
+<h3>Epílogo (nivel 15)</h3>
+<p class="src">Fuente: data/levels/level_15.json (`textos.epilogo`); pantalla: scenes/ui/epilogue_screen.gd; spec: specs/11-textos-lore.md §2</p><p class="lim">Límites: 3 líneas, 70 caracteres (límite 3 a 5 líneas, 400, 90 por línea)</p>
+<div class="imgs">
+<figure><a href="captures/epilogo.jpg"><img loading="lazy" src="captures/epilogo.jpg" alt="Epílogo en pantalla (captura 1280×720)"></a><figcaption>Epílogo en pantalla (captura 1280×720)</figcaption></figure>
+</div>
+<div class="field"><b>Texto</b><blockquote>La máquina sigue avanzando,
+pero ¿por cuánto tiempo más?
+¿A qué costo?</blockquote></div>
+<p class="obs"><b>Observaciones:</b> Decisión de Lucas del 2026-10-28. La frase es una sola oración partida en 3 renglones y se lee bien sobre la franja oscura. Se mantiene la botonera «Créditos» y «Niveles». Con el epílogo nuevo, la victoria del 15 y el nivel 15 ya no tienen continuidad con él (H2); «la máquina» no tiene referente (H3). <a class="tag A" href="#alt-H2">H2</a><a class="tag A" href="#alt-H3">H3</a></p>
+<div class="dec"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…escribí acá el cambio"></div>
+</section>
+<section class="piece" data-id="IMG-EP" data-title="Imagen del epílogo (assets/sprites/story/epilogue.png)">
+<h3>Imagen del epílogo (assets/sprites/story/epilogue.png)</h3>
+<p class="src">Fuente: assets/sprites/story/epilogue.png (1920×1080, precargada en scenes/ui/epilogue_screen.gd). Arte de T233, sin OK de arte, a retirar o reemplazar en T546 y T547.</p><p class="lim">Límites: 1920×1080, recortada a 16:9 de la ventana</p>
+<div class="imgs">
+<figure><a href="captures/epilogo.jpg"><img loading="lazy" src="captures/epilogo.jpg" alt="Imagen vista con el texto"></a><figcaption>Imagen vista con el texto</figcaption></figure>
+</div>
+<div class="field"><b>Qué muestra</b><blockquote>La colonia iluminada con una central de vapor en primer plano y una mina arriba a la izquierda; al fondo a la derecha un río y varias fogatas pequeñas que se alejan por el valle (los Moradores retirándose, según la biblia §7). Atardecer cálido adelante, horizonte frío atrás.</blockquote></div>
+<p class="obs"><b>Observaciones:</b> Calza con la biblia (logro adelante, retirada atrás), pero con la frase nueva dice «logro» más fuerte que la duda del texto (H4). T546 propone dos variantes según estrellas (una con referencia oscura) y T547 retira esta imagen. <a class="tag M" href="#alt-H4">H4</a></p>
+<div class="dec"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…escribí acá el cambio"></div>
+</section>
+<section class="piece" data-id="CR" data-title="Créditos">
+<h3>Créditos</h3>
+<p class="src">Fuente: data/creditos.json; pantalla scenes/ui/credits_screen.gd; spec: specs/11-textos-lore.md §3</p><p class="lim">Límites: 4 líneas</p>
+<div class="imgs">
+<figure><a href="captures/creditos.png"><img loading="lazy" src="captures/creditos.png" alt="Créditos en pantalla (captura 1280×720)"></a><figcaption>Créditos en pantalla (captura 1280×720)</figcaption></figure>
+</div>
+<div class="field"><b>Líneas</b><blockquote>Monsters &amp; Canons
+Un juego de Lucas
+Hecho con Godot Engine
+Software libre bajo la licencia GPL-3.0-or-later (los detalles, en Wiki → Licencias)</blockquote></div>
+<p class="obs"><b>Observaciones:</b> Solo lo que se puede comprobar en el repositorio (copyright y licencia salen de Wiki → Licencias). Sin nombres ni agradecimientos (H15). <a class="tag B" href="#alt-H15">H15</a></p>
+<div class="dec"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…escribí acá el cambio"></div>
+</section>
+<h2 id="intro">3. Intro de láminas</h2>
+<section class="piece" data-id="IN1" data-title="Lámina 1 · la nave">
+<h3>Lámina 1 · la nave</h3>
+<p class="src">Fuente: data/intro/intro.json (fuente: specs/intro/guion.md); imagen assets/intro/01_la_nave.webp; pantalla scenes/ui/intro_screen.gd</p><p class="lim">Límites: 84 caracteres, 2 línea(s), 7 s (límite 2 líneas, 160, 90 por línea)</p>
+<div class="imgs">
+<figure><a href="captures/intro/lamina_1.jpg"><img loading="lazy" src="captures/intro/lamina_1.jpg" alt="Lámina con su texto (captura 1280×720)"></a><figcaption>Lámina con su texto (captura 1280×720)</figcaption></figure>
+</div>
+<div class="field"><b>Texto</b><blockquote>La Compañía Meridiana mandó una sola nave.
+No lleva soldados: lleva gente de oficio.</blockquote></div>
+<p class="obs"><b>Observaciones:</b> El «no lleva soldados» es una frase de bitácora coherente con la biblia (gente de oficio). </p>
+<div class="dec"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…escribí acá el cambio"></div>
+</section>
+<section class="piece" data-id="IN2" data-title="Lámina 2 · la bodega">
+<h3>Lámina 2 · la bodega</h3>
+<p class="src">Fuente: data/intro/intro.json (fuente: specs/intro/guion.md); imagen assets/intro/02_la_bodega.webp; pantalla scenes/ui/intro_screen.gd</p><p class="lim">Límites: 126 caracteres, 2 línea(s), 9 s (límite 2 líneas, 160, 90 por línea)</p>
+<div class="imgs">
+<figure><a href="captures/intro/lamina_2.jpg"><img loading="lazy" src="captures/intro/lamina_2.jpg" alt="Lámina con su texto (captura 1280×720)"></a><figcaption>Lámina con su texto (captura 1280×720)</figcaption></figure>
+</div>
+<div class="field"><b>Texto</b><blockquote>Herreros, carpinteros, ingenieros, agricultores: cada uno trajo su oficio.
+Hay semillas, planos y piezas para empezar de cero.</blockquote></div>
+<p class="obs"><b>Observaciones:</b> Dos líneas de 79 y 52 caracteres; repite la idea de la lámina 1 (oficios) con más detalle. </p>
+<div class="dec"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…escribí acá el cambio"></div>
+</section>
+<section class="piece" data-id="IN3" data-title="Lámina 3 · los turnos">
+<h3>Lámina 3 · los turnos</h3>
+<p class="src">Fuente: data/intro/intro.json (fuente: specs/intro/guion.md); imagen assets/intro/03_los_turnos.webp; pantalla scenes/ui/intro_screen.gd</p><p class="lim">Límites: 104 caracteres, 2 línea(s), 8 s (límite 2 líneas, 160, 90 por línea)</p>
+<div class="imgs">
+<figure><a href="captures/intro/lamina_3.jpg"><img loading="lazy" src="captures/intro/lamina_3.jpg" alt="Lámina con su texto (captura 1280×720)"></a><figcaption>Lámina con su texto (captura 1280×720)</figcaption></figure>
+</div>
+<div class="field"><b>Texto</b><blockquote>Fueron años de viaje. Se durmió por turnos y lo que se rompía se arreglaba a bordo.
+Era un viaje de ida.</blockquote></div>
+<p class="obs"><b>Observaciones:</b> «Era un viaje de ida» es el dato canónico (no hay rescate ni regreso). </p>
+<div class="dec"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…escribí acá el cambio"></div>
+</section>
+<section class="piece" data-id="IN4" data-title="Lámina 4 · la ventana">
+<h3>Lámina 4 · la ventana</h3>
+<p class="src">Fuente: data/intro/intro.json (fuente: specs/intro/guion.md); imagen assets/intro/04_la_ventana.webp; pantalla scenes/ui/intro_screen.gd</p><p class="lim">Límites: 89 caracteres, 2 línea(s), 7 s (límite 2 líneas, 160, 90 por línea)</p>
+<div class="imgs">
+<figure><a href="captures/intro/lamina_4.jpg"><img loading="lazy" src="captures/intro/lamina_4.jpg" alt="Lámina con su texto (captura 1280×720)"></a><figcaption>Lámina con su texto (captura 1280×720)</figcaption></figure>
+</div>
+<div class="field"><b>Texto</b><blockquote>El reconocimiento vio agua en un solo lugar de todo el planeta.
+Hacia ahí apuntó la nave.</blockquote></div>
+<p class="obs"><b>Observaciones:</b> Choca con el nivel 2 (H1): «agua en un solo lugar de todo el planeta». La imagen muestra el punto verde dentro de un círculo, como dice el guion. <a class="tag A" href="#alt-H1">H1</a><a class="tag B" href="#alt-H16">H16</a></p>
+<div class="dec"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…escribí acá el cambio"></div>
+</section>
+<section class="piece" data-id="IN5" data-title="Lámina 5 · el descenso">
+<h3>Lámina 5 · el descenso</h3>
+<p class="src">Fuente: data/intro/intro.json (fuente: specs/intro/guion.md); imagen assets/intro/05_el_descenso.webp; pantalla scenes/ui/intro_screen.gd</p><p class="lim">Límites: 59 caracteres, 1 línea(s), 5 s (límite 2 líneas, 160, 90 por línea)</p>
+<div class="imgs">
+<figure><a href="captures/intro/lamina_5.jpg"><img loading="lazy" src="captures/intro/lamina_5.jpg" alt="Lámina con su texto (captura 1280×720)"></a><figcaption>Lámina con su texto (captura 1280×720)</figcaption></figure>
+</div>
+<div class="field"><b>Texto</b><blockquote>La bajada fue brusca. El casco crujió entero, pero aguantó.</blockquote></div>
+<p class="obs"><b>Observaciones:</b> Una sola línea. </p>
+<div class="dec"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…escribí acá el cambio"></div>
+</section>
+<section class="piece" data-id="IN6" data-title="Lámina 6 · los motores apagados">
+<h3>Lámina 6 · los motores apagados</h3>
+<p class="src">Fuente: data/intro/intro.json (fuente: specs/intro/guion.md); imagen assets/intro/06_los_motores_apagados.webp; pantalla scenes/ui/intro_screen.gd</p><p class="lim">Límites: 69 caracteres, 2 línea(s), 6 s (límite 2 líneas, 160, 90 por línea)</p>
+<div class="imgs">
+<figure><a href="captures/intro/lamina_6.jpg"><img loading="lazy" src="captures/intro/lamina_6.jpg" alt="Lámina con su texto (captura 1280×720)"></a><figcaption>Lámina con su texto (captura 1280×720)</figcaption></figure>
+</div>
+<div class="field"><b>Texto</b><blockquote>Los motores se apagaron al tocar tierra.
+La nave ya no va a despegar.</blockquote></div>
+<p class="obs"><b>Observaciones:</b> «La nave ya no va a despegar» es el segundo dato canónico; cambia a presente (H16). <a class="tag B" href="#alt-H16">H16</a></p>
+<div class="dec"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…escribí acá el cambio"></div>
+</section>
+<section class="piece" data-id="IN7" data-title="Lámina 7 · el oasis">
+<h3>Lámina 7 · el oasis</h3>
+<p class="src">Fuente: data/intro/intro.json (fuente: specs/intro/guion.md); imagen assets/intro/07_el_oasis.webp; pantalla scenes/ui/intro_screen.gd</p><p class="lim">Límites: 72 caracteres, 2 línea(s), 9 s (límite 2 líneas, 160, 90 por línea)</p>
+<div class="imgs">
+<figure><a href="captures/intro/lamina_7.jpg"><img loading="lazy" src="captures/intro/lamina_7.jpg" alt="Lámina con su texto (captura 1280×720)"></a><figcaption>Lámina con su texto (captura 1280×720)</figcaption></figure>
+</div>
+<div class="field"><b>Texto</b><blockquote>Un valle chico, con agua y pasto, en medio de la nada.
+Acá nos quedamos.</blockquote></div>
+<p class="obs"><b>Observaciones:</b> «en medio de la nada» es la mirada de los colonos y el juego después la desmiente (adrede). «Acá nos quedamos»: primera persona del plural (H10). El horizonte de la imagen está vacío; en el epílogo hay fogatas. <a class="tag B" href="#alt-H10">H10</a><a class="tag B" href="#alt-H16">H16</a></p>
+<div class="dec"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…escribí acá el cambio"></div>
+</section>
+<h2 id="wiki">4. Artículos de Lore de la Wiki</h2>
+<section class="piece" data-id="W-el_oasis" data-title="Wiki · El oasis">
+<h3>Wiki · El oasis</h3>
+<p class="src">Fuente: data/wiki/lore/el_oasis.json (spec: specs/11-textos-lore.md §4; se abre al ganar `level_01`)</p><p class="lim">Límites: 3 párrafos, 445 caracteres; orden 1</p>
+<div class="field"><b>Subtítulo</b><blockquote>Donde aterrizó la nave</blockquote></div>
+<div class="field"><b>Párrafo 1</b><blockquote>El oasis es un valle chico de agua dulce, pasto y flores, rodeado de tierra seca. Es el único sitio con agua a la vista que encontró el reconocimiento, y por eso la nave bajó acá.</blockquote></div>
+<div class="field"><b>Párrafo 2</b><blockquote>Los primeros días se armó el campamento junto al agua. Desde entonces, todo lo que la colonia necesita (madera, mineral, un lugar donde sembrar) hay que ir a buscarlo más lejos.</blockquote></div>
+<div class="field"><b>Párrafo 3</b><blockquote>Los registros de la Compañía lo llaman «el único lugar seguro». No aclaran seguro de qué.</blockquote></div>
+<p class="obs"><b>Observaciones:</b> «No aclaran seguro de qué» es una buena última línea. Dice «agua dulce»: choca con el nivel 2 (H1). <a class="tag A" href="#alt-H1">H1</a></p>
+<div class="dec"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…escribí acá el cambio"></div>
+</section>
+<section class="piece" data-id="W-planeta_cantaro" data-title="Wiki · Cántaro">
+<h3>Wiki · Cántaro</h3>
+<p class="src">Fuente: data/wiki/lore/planeta_cantaro.json (spec: specs/11-textos-lore.md §4; se abre al ganar `level_02`)</p><p class="lim">Límites: 3 párrafos, 292 caracteres; orden 2</p>
+<div class="field"><b>Subtítulo</b><blockquote>El planeta, o lo que se conoce de él</blockquote></div>
+<div class="field"><b>Párrafo 1</b><blockquote>Los colonos le pusieron Cántaro al planeta, por el oasis: un poco de agua guardada en una tierra seca.</blockquote></div>
+<div class="field"><b>Párrafo 2</b><blockquote>Lo que se conoce es un solo rincón: el oasis y lo que lo rodea. Más allá, todavía no se llegó.</blockquote></div>
+<div class="field"><b>Párrafo 3</b><blockquote>Cada tramo que se asegura se agrega al mapa de la Compañía. El mapa tiene más blanco que dibujo.</blockquote></div>
+<p class="obs"><b>Observaciones:</b> Buen cierre («más blanco que dibujo»). Su nombre aparece primero acá (la intro lo evita a propósito). </p>
+<div class="dec"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…escribí acá el cambio"></div>
+</section>
+<section class="piece" data-id="W-la_compania" data-title="Wiki · La Compañía Meridiana">
+<h3>Wiki · La Compañía Meridiana</h3>
+<p class="src">Fuente: data/wiki/lore/la_compania.json (spec: specs/11-textos-lore.md §4; se abre al ganar `level_03`)</p><p class="lim">Límites: 3 párrafos, 513 caracteres; orden 3</p>
+<div class="field"><b>Subtítulo</b><blockquote>Quiénes somos</blockquote></div>
+<div class="field"><b>Párrafo 1</b><blockquote>La Compañía Meridiana armó la expedición. No es un ejército: es gente de oficio (ingenieros, herreros, carpinteros, agricultores) con herramientas, semillas y planos.</blockquote></div>
+<div class="field"><b>Párrafo 2</b><blockquote>La nave no puede volver a despegar. Se la va desarmando de a poco para hacer casas, cañerías y torres, y lo que se rompe se arregla con lo que hay.</blockquote></div>
+<div class="field"><b>Párrafo 3</b><blockquote>Por eso las torres son de hierro, bronce y cristal: se pueden reparar en el lugar. Entre la carga venían también planos y piezas de repuesto, que se van recuperando de entre los restos del aterrizaje.</blockquote></div>
+<p class="obs"><b>Observaciones:</b> El más largo (513 caracteres). «La nave no puede volver a despegar» coincide con la intro lámina 6. </p>
+<div class="dec"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…escribí acá el cambio"></div>
+</section>
+<section class="piece" data-id="W-el_soberano" data-title="Wiki · El Soberano">
+<h3>Wiki · El Soberano</h3>
+<p class="src">Fuente: data/wiki/lore/el_soberano.json (spec: specs/11-textos-lore.md §4; se abre al ganar `level_04`)</p><p class="lim">Límites: 2 párrafos, 277 caracteres; orden 4</p>
+<div class="field"><b>Subtítulo</b><blockquote>Quien va al frente de las manadas</blockquote></div>
+<div class="field"><b>Párrafo 1</b><blockquote>Al final de una oleada aparece a veces un animal enorme, carmesí y cornudo. Las manadas parecen seguirlo, o dejarle paso. Los colonos le dicen Soberano.</blockquote></div>
+<div class="field"><b>Párrafo 2</b><blockquote>No es uno solo: hay uno por cada paraje, y ninguno se parece del todo al anterior. Nadie sabe si manda o si solo va adelante.</blockquote></div>
+<p class="obs"><b>Observaciones:</b> «Soberano» no se ve en ninguna otra pantalla: el juego dice «Jefe» (H8). <a class="tag M" href="#alt-H8">H8</a></p>
+<div class="dec"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…escribí acá el cambio"></div>
+</section>
+<section class="piece" data-id="W-criaturas_solas" data-title="Wiki · Las criaturas que van solas">
+<h3>Wiki · Las criaturas que van solas</h3>
+<p class="src">Fuente: data/wiki/lore/criaturas_solas.json (spec: specs/11-textos-lore.md §4; se abre al ganar `level_06`)</p><p class="lim">Límites: 2 párrafos, 310 caracteres; orden 5</p>
+<div class="field"><b>Subtítulo</b><blockquote>Lo que no pertenece a ninguna manada</blockquote></div>
+<div class="field"><b>Párrafo 1</b><blockquote>En el bosque hay seres que no andan con ninguna manada. El Ladrón, por ejemplo, va solo, con una capa gris y una bolsa, y se lleva lo que brilla del campamento: monedas, herramientas, un botón.</blockquote></div>
+<div class="field"><b>Párrafo 2</b><blockquote>Los informes las llaman criaturas, para distinguirlas de los animales. No obedecen a nadie, y nadie sabe cuántas hay.</blockquote></div>
+<p class="obs"><b>Observaciones:</b> Se abre al ganar el 6 y el Ladrón se ve desde el 6: coherente. «Los informes las llaman criaturas» confirma el término. </p>
+<div class="dec"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…escribí acá el cambio"></div>
+</section>
+<section class="piece" data-id="W-la_cuadrilla" data-title="Wiki · La Cuadrilla">
+<h3>Wiki · La Cuadrilla</h3>
+<p class="src">Fuente: data/wiki/lore/la_cuadrilla.json (spec: specs/11-textos-lore.md §4; se abre al ganar `level_07`)</p><p class="lim">Límites: 3 párrafos, 482 caracteres; orden 6</p>
+<div class="field"><b>Subtítulo</b><blockquote>Los que andan juntos</blockquote></div>
+<div class="field"><b>Párrafo 1</b><blockquote>Cerca del aserradero se vieron criaturas chicas y rápidas que se llevan lo que brilla, igual que el Ladrón. A diferencia de él, no andan solas: llegan juntas, y los colonos las llaman Rateros.</blockquote></div>
+<div class="field"><b>Párrafo 2</b><blockquote>Con ellas viene siempre una más grande y lenta, con una bolsa más grande que ella misma donde parece juntarse lo de todas. La llaman el Cargador, y a todas juntas, la cuadrilla, por cómo llegan.</blockquote></div>
+<div class="field"><b>Párrafo 3</b><blockquote>Nadie vio que alguna mande ni que alguna obedezca. Parece que van juntas porque buscan lo mismo.</blockquote></div>
+<p class="obs"><b>Observaciones:</b> Se abre al ganar el 7 y su `orden` va entre el 5 y el 6. «No andan solas» contrasta con el artículo 5 («va solo»): intencional. </p>
+<div class="dec"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…escribí acá el cambio"></div>
+</section>
+<section class="piece" data-id="W-las_ruinas" data-title="Wiki · Las ruinas">
+<h3>Wiki · Las ruinas</h3>
+<p class="src">Fuente: data/wiki/lore/las_ruinas.json (spec: specs/11-textos-lore.md §4; se abre al ganar `level_08`)</p><p class="lim">Límites: 3 párrafos, 418 caracteres; orden 7</p>
+<div class="field"><b>Subtítulo</b><blockquote>Lo que había antes</blockquote></div>
+<div class="field"><b>Párrafo 1</b><blockquote>Sobre la loma del bastión hay muros de piedra y metal, a medio enterrar. Los colonos los llaman «las ruinas» y los tratan como un yacimiento: se despeja, se anota y se recupera lo que sirve.</blockquote></div>
+<div class="field"><b>Párrafo 2</b><blockquote>Todas llevan la misma marca que las rocas del oasis. Nadie sabe qué quiere decir: puede ser «esto es nuestro», «hasta acá» o un recuerdo.</blockquote></div>
+<div class="field"><b>Párrafo 3</b><blockquote>El informe de la Compañía dice que las dejó una gente que ya no está. No dice cómo lo sabe.</blockquote></div>
+<p class="obs"><b>Observaciones:</b> Repite la «misma marca que las rocas» de la entrada del 8; después de la victoria funciona como confirmación. «No dice cómo lo sabe» es muy buena. </p>
+<div class="dec"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…escribí acá el cambio"></div>
+</section>
+<section class="piece" data-id="W-los_moradores" data-title="Wiki · Los Moradores">
+<h3>Wiki · Los Moradores</h3>
+<p class="src">Fuente: data/wiki/lore/los_moradores.json (spec: specs/11-textos-lore.md §4; se abre al ganar `level_09`)</p><p class="lim">Límites: 3 párrafos, 431 caracteres; orden 8</p>
+<div class="field"><b>Subtítulo</b><blockquote>Los que ya estaban</blockquote></div>
+<div class="field"><b>Párrafo 1</b><blockquote>Así llama la Compañía a las comunidades que viven en Cántaro. Es un nombre de informe: cómo se llaman ellos a sí mismos no figura en ningún registro.</blockquote></div>
+<div class="field"><b>Párrafo 2</b><blockquote>Hasta ahora se vieron dos oficios: los que protegen, de piedra y escudo dorado, y los que curan, con una semilla en el pecho. No está claro si son un solo pueblo o varios que se juntaron.</blockquote></div>
+<div class="field"><b>Párrafo 3</b><blockquote>Tampoco está claro si guían a los animales de las manadas o si solo cuidan sus propios caminos.</blockquote></div>
+<p class="obs"><b>Observaciones:</b> Habla de dos oficios porque el Chamán debuta en el 11. Sin juicio. </p>
+<div class="dec"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…escribí acá el cambio"></div>
+</section>
+<section class="piece" data-id="W-los_pozos" data-title="Wiki · Los pozos">
+<h3>Wiki · Los pozos</h3>
+<p class="src">Fuente: data/wiki/lore/los_pozos.json (spec: specs/11-textos-lore.md §4; se abre al ganar `level_11`)</p><p class="lim">Límites: 3 párrafos, 377 caracteres; orden 9</p>
+<div class="field"><b>Subtítulo</b><blockquote>Informe del puesto seco</blockquote></div>
+<div class="field"><b>Párrafo 1</b><blockquote>En el camino seco hay pocos pozos, y todos tienen huellas alrededor. Dos quedaron dentro del perímetro del puesto.</blockquote></div>
+<div class="field"><b>Párrafo 2</b><blockquote>El mismo día en que se aseguró el paso empezaron los fallos: torres que se apagan sin motivo. Las observaciones coinciden en un encapuchado con un bastón que chispea, que se acerca a las torres y no a los colonos.</blockquote></div>
+<div class="field"><b>Párrafo 3</b><blockquote>No ataca a las personas. Ataca lo que construimos.</blockquote></div>
+<p class="obs"><b>Observaciones:</b> Repite «dos pozos quedaron dentro del perímetro» de la victoria del 11, a propósito. Cierra con «Ataca lo que construimos»: primera persona, y dice «ataca» de una criatura (permitido: es un hecho). <a class="tag B" href="#alt-H10">H10</a></p>
+<div class="dec"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…escribí acá el cambio"></div>
+</section>
+<section class="piece" data-id="W-poblados_vacios" data-title="Wiki · Los poblados vacíos">
+<h3>Wiki · Los poblados vacíos</h3>
+<p class="src">Fuente: data/wiki/lore/poblados_vacios.json (spec: specs/11-textos-lore.md §4; se abre al ganar `level_14`)</p><p class="lim">Límites: 3 párrafos, 270 caracteres; orden 10</p>
+<div class="field"><b>Subtítulo</b><blockquote>Lo que quedó en pie</blockquote></div>
+<div class="field"><b>Párrafo 1</b><blockquote>Los poblados del valle bajo son de piedra y paja. Tienen fogones, cuerdas y pieles todavía en su sitio.</blockquote></div>
+<div class="field"><b>Párrafo 2</b><blockquote>No hay nadie. Las brasas están tibias, así que se fueron hace poco, y se llevaron lo que podían cargar.</blockquote></div>
+<div class="field"><b>Párrafo 3</b><blockquote>La Compañía registra los poblados como «posiciones desocupadas».</blockquote></div>
+<p class="obs"><b>Observaciones:</b> Repite la victoria del 14 y la entrada (H14). «posiciones desocupadas» ya marcado en la spec como la línea que podría sobrar. <a class="tag B" href="#alt-H14">H14</a></p>
+<div class="dec"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…escribí acá el cambio"></div>
+</section>
+<section class="piece" data-id="W-la_central" data-title="Wiki · La Central">
+<h3>Wiki · La Central</h3>
+<p class="src">Fuente: data/wiki/lore/la_central.json (spec: specs/11-textos-lore.md §4; se abre al ganar `level_15`)</p><p class="lim">Límites: 4 párrafos, 451 caracteres; orden 11</p>
+<div class="field"><b>Subtítulo</b><blockquote>Energía y abastecimiento</blockquote></div>
+<div class="field"><b>Párrafo 1</b><blockquote>La central quedó en el valle donde aterrizó la nave. Produce la energía que necesita la colonia y alimenta la línea que la une con la mina.</blockquote></div>
+<div class="field"><b>Párrafo 2</b><blockquote>Con ella, la región queda asegurada: agua, luz y camino. No es todo el planeta, y nadie en la Compañía dice que lo sea.</blockquote></div>
+<div class="field"><b>Párrafo 3</b><blockquote>Los colonos lo llaman el Coloso. Es de la misma piedra que los Guardianes. Cuando cae, se parte en tres y los pedazos siguen camino.</blockquote></div>
+<div class="field"><b>Párrafo 4</b><blockquote>El informe termina ahí. No dice qué se hará con lo que falta.</blockquote></div>
+<p class="obs"><b>Observaciones:</b> Último párrafo anticipa la pregunta del epílogo (H14). «El valle donde aterrizó la nave» (H9). Nombra al Coloso una sola vez en todo el lore. <a class="tag M" href="#alt-H9">H9</a><a class="tag B" href="#alt-H14">H14</a></p>
+<div class="dec"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…escribí acá el cambio"></div>
+</section>
+<h2 id="alts">Hallazgos con alternativas</h2>
+<section class="piece" id="alt-H1"><h3><span class="tag A">Alta</span> H1 · El agua del oasis y el nivel 2 se contradicen</h3><p>La intro (lámina 4) dice que el reconocimiento vio agua «en un solo lugar de todo el planeta»; el artículo «El oasis» lo llama «valle chico de agua dulce» y el nivel 1 dice «Hay agua, pasto…». Pero la entrada del nivel 2 afirma «El agua dulce más cercana está al otro lado del desfiladero» y su victoria, «El agua llega al campamento por primera vez». Leído en orden, el jugador ve agua en el campamento y después se le dice que no hay.</p>
+<div class="alt"><b>Opción A (cambia solo el nivel 2)</b>Entrada:
+El agua del oasis no alcanza para toda una colonia.
+El arroyo más cercano está al otro lado del desfiladero.
+Hay que sostener el paso antes de tender las cañerías.
+
+Victoria:
+Paso asegurado. El agua del arroyo llega al campamento por primera vez.
+Faltan tres tramos de cañería.
+
+(El «arroyo» ya aparece en el nivel 4: «El arroyo no alcanza para toda la colonia», que así queda como continuación.)</div>
+<div class="alt"><b>Opción B (cambia la intro y la Wiki)</b>Dejar el nivel 2 y suavizar las dos piezas que dicen que el oasis es el único lugar con agua: la lámina 4 («…vio agua en un solo lugar de todo el planeta…») y el artículo «El oasis». Toca piezas ya aprobadas y no arregla del todo que el nivel 1 diga «Hay agua»; no se recomienda.</div>
+<div class="dec" data-id="H1" data-title="Hallazgo H1"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado (dejar como está)</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…opción elegida o texto propio"></div></section>
+<section class="piece" id="alt-H2"><h3><span class="tag A">Alta</span> H2 · Victoria del 15 («luz propia», «línea de abastecimiento completa») frente al epílogo nuevo</h3><p>El epílogo viejo continuaba esas dos ideas; el nuevo («La máquina sigue avanzando, pero ¿por cuánto tiempo más? ¿A qué costo?») ya no. Ahora la victoria suena triunfal y el epílogo la pone en duda. Eso encaja con la biblia («logro y costo») si es a propósito: la victoria es el logro y el epílogo es el costo. Pero hoy la victoria no tiene ni una pizca de costo, y «luz propia» repite el hilo de independencia de «madera propia» (7) y «ya no depende de lo que trajo la nave» (9), que sí cierra bien. Decisión de Lucas.</p>
+<div class="alt"><b>Opción A (no cambiar)</b>La victoria es el logro y el epílogo es el costo, como pide la biblia. El contraste hace trabajar la frase.</div>
+<div class="alt"><b>Opción B (un cierre menos triunfal)</b>Central encendida. La línea de abastecimiento está completa.
+La luz se ve desde los poblados vacíos.</div>
+<div class="alt"><b>Opción C (sin «propia»)</b>Central encendida. La línea de abastecimiento está completa.
+La colonia ya no depende de la nave.</div>
+<div class="dec" data-id="H2" data-title="Hallazgo H2"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado (dejar como está)</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…opción elegida o texto propio"></div></section>
+<section class="piece" id="alt-H3"><h3><span class="tag A">Alta</span> H3 · El epílogo: «la máquina» no tiene referente en el canon y la partida en 3 líneas</h3><p>«Máquina» no aparece en la biblia ni en los textos como nombre de nada (las torres son «máquinas robustas» en la biblia §3, y «demoledora» es una mecánica). Es ambiguo a propósito, pero puede leerse como la colonia, la central, las torres o el jugador. Sobre el choque del mínimo de líneas (T545): `LevelFile` exige 3 a 5 líneas y la frase se parte en 3 respetando sus palabras exactas, que se ve bien en pantalla (captura). Opción 1: dejar la partida en 3 (sin RF ni D nuevos; es solo cómo se renglonea). Opción 2: permitir 1 línea: exige RF y D nuevos y cambiar `EPILOGUE_MIN_LINES`, el validador y `tests/test_epilogue.gd`. Recomendación: opción 1.</p>
+<div class="alt"><b>Opción 1 (recomendada)</b>Mantener las 3 líneas tal cual (La máquina sigue avanzando, / pero ¿por cuánto tiempo más? / ¿A qué costo?). Sin RF ni D nuevos: T545 se cierra con la decisión de Lucas anotada en la spec.</div>
+<div class="alt"><b>Opción 2</b>Una sola línea de 75 caracteres: RF y D nuevos (mínimo de líneas del epílogo de 3 a 1), cambiar `LevelTexts` y `tests/test_epilogue.gd`.</div>
+<div class="alt"><b>Sobre «la máquina»</b>Si Lucas quiere acotar sin explicar, el artículo «La Central» podría llamar «la máquina» a la central (hoy dice «La central… produce la energía»), dejando el resto abierto. No es necesario si prefiere la ambigüedad total.</div>
+<div class="dec" data-id="H3" data-title="Hallazgo H3"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado (dejar como está)</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…opción elegida o texto propio"></div></section>
+<section class="piece" id="alt-H4"><h3><span class="tag M">Media</span> H4 · La imagen del final todavía es la de T233 (luminosa)</h3><p>La captura muestra la colonia iluminada y fuegos de los Moradores alejándose, con la frase nueva encima. T546 prevé dos variantes (según estrellas) y T547 retira esta imagen: no se revisa su arte acá, solo que con la frase nueva el cuadro dice «logro» más fuerte que la duda del texto.</p>
+<div class="dec" data-id="H4" data-title="Hallazgo H4"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado (dejar como está)</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…opción elegida o texto propio"></div></section>
+<section class="piece" id="alt-H5"><h3><span class="tag M">Media</span> H5 · Nivel 13: el texto habla de «hitos de piedra» pero el mapa dibuja rocas marcadas</h3><p>`11-textos-lore.md` ya avisaba que el 13 depende de dibujar la señal `hito`. `data/levels/level_13.json` usa `roca_marcada` en su leyenda; `assets/sprites/map/hito.svg` existe pero ningún nivel ni script lo usa (búsqueda en el repositorio). El jugador lee «hitos» y ve rocas marcadas.</p>
+<div class="alt"><b>Opción A (texto)</b>Entrada, línea 3: «Hay rocas marcadas en el camino. Marcan un límite, y ya lo pasamos.»
+Victoria, línea 2: «Las rocas marcadas quedaron del lado de adentro.»</div>
+<div class="alt"><b>Opción B (arte)</b>Dibujar de verdad el `hito` (ya existe `hito.svg`, sin usar) en el nivel 13 y dejar el texto. Requiere OK de arte; T233 lo traía.</div>
+<div class="dec" data-id="H5" data-title="Hallazgo H5"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado (dejar como está)</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…opción elegida o texto propio"></div></section>
+<section class="piece" id="alt-H6"><h3><span class="tag M">Media</span> H6 · Dos nombres por nivel y de estilo mezclado</h3><p>La tarjeta del selector muestra el nombre (campo `nombre`) y debajo el lugar. Los nombres 1 a 10 son de mapa y vienen de antes del lore (Pradera, Desfiladero, Encrucijada, Espiral, Fortaleza, Nido, Cruce, Bastión, Taller asediado, La mina vieja); del 11 al 15 llevan artículo y cuentan algo (El cañadón, Los poblados vacíos, La Central). Casos concretos: «Nido» no aparece en ningún texto del 6 (la entrada habla del lindero y del bosque); «Encrucijada» (3) y «Cruce» (7) son casi sinónimos; «Fortaleza» (5) y «Bastión» (8) también compiten; «Taller asediado» usa «asedio», que es además el nombre de un modo del selector; «Puesto seco» (11) tiene lugar «El punto de agua». Los lugares también cambian de forma: sustantivos cortos (7 a 16 caracteres) en 1 a 9 y 11, y frases descriptivas de 22 a 31 caracteres en 8, 10, 12, 13, 14 y 15.</p>
+<div class="alt"><b>Opción A (mínima)</b>Renombrar solo «Nido» y «Taller asediado»; el resto queda. Por ejemplo «Nido» → «Bosque» y «Taller asediado» → «Taller en ruinas». Hay que actualizar los lugares en el selector, los tests que mencionan nombres y los documentos.</div>
+<div class="alt"><b>Opción B (estilo único)</b>Dejar el nombre de mapa como etiqueta corta y fija (sustantivo sin artículo) y que lo narrativo viva solo en el lugar. Es decir: no tocar 1 a 10 y pasar 11 a 15 a «Puesto seco», «Cañadón», «Paso alto», «Poblados», «Central». Menos nombres que revelan.</div>
+<div class="alt"><b>Opción C (no cambiar)</b>Mantener la mezcla: el nombre es del mapa, el lugar es del relato.</div>
+<div class="dec" data-id="H6" data-title="Hallazgo H6"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado (dejar como está)</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…opción elegida o texto propio"></div></section>
+<section class="piece" id="alt-H7"><h3><span class="tag M">Media</span> H7 · Nivel 14: lo «vacío» se anuncia tres veces</h3><p>El nombre del nivel es «Los poblados vacíos», la entrada dice «Los Moradores se llevaron lo que pudieron» y la victoria recién «descubre» «Los poblados están vacíos». El golpe de la victoria (la mejor del juego según la biblia) ya está gastado antes de jugar. Además la entrada cierra con «algo todavía defiende el lugar», que es mecánica (hay enemigos) y choca un poco con «vacíos».</p>
+<div class="alt"><b>Opción A (entrada)</b>Línea 2: «Los fogones están armados y no se ve a nadie.» (el descubrimiento queda en la victoria)</div>
+<div class="alt"><b>Opción B (nombre)</b>Mantener la entrada y renombrar el nivel a «Los poblados».</div>
+<div class="dec" data-id="H7" data-title="Hallazgo H7"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado (dejar como está)</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…opción elegida o texto propio"></div></section>
+<section class="piece" id="alt-H8"><h3><span class="tag M">Media</span> H8 · Jefe en el juego, Soberano en el lore</h3><p>El artículo «El Soberano» (se abre al ganar el 4) dice que los colonos le llaman Soberano, pero el juego lo llama «Jefe» en la presentación («¡Llega el Jefe!»), en el bestiario y en los consejos; «Soberano» no aparece en ningún texto de juego fuera de ese artículo (búsqueda en `data/`, `scenes/` y `scripts/`). La biblia dejó que gane el nombre que ve el jugador (Q-2 de T202); acá no se ve la relación entre uno y otro.</p>
+<div class="alt"><b>Opción A</b>Dejar el nombre del juego y sumar al artículo una frase como «En los partes del campamento se lo anota como el Jefe de la oleada.»</div>
+<div class="alt"><b>Opción B</b>Cambiar el nombre visible «Jefe» a «Soberano» en presentación, bestiario y consejos (toca `boss.tres`, la presentación y tests). Lo contradice la decisión Q-2 de T202.</div>
+<div class="dec" data-id="H8" data-title="Hallazgo H8"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado (dejar como está)</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…opción elegida o texto propio"></div></section>
+<section class="piece" id="alt-H9"><h3><span class="tag M">Media</span> H9 · Dónde queda la Central</h3><p>El artículo «La Central» dice «quedó en el valle donde aterrizó la nave» y la entrada del 15 «Falta cerrar el valle». En el mapa de la campaña (captura del selector) el 15 está en el extremo opuesto al 1. Tampoco queda claro cuál es «el valle» de la victoria del 13 («comunicada con el valle»).</p>
+<div class="alt"><b>Opción A</b>Cambiar el artículo: «La central quedó en el valle de más al este…» / «en el último valle» (la que mejor calza con la captura del mapa).</div>
+<div class="alt"><b>Opción B</b>Dejar el texto y mover el 15 en el mapa de campaña (arte de selector), lo que es más caro.</div>
+<div class="dec" data-id="H9" data-title="Hallazgo H9"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado (dejar como está)</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…opción elegida o texto propio"></div></section>
+<section class="piece" id="alt-H10"><h3><span class="tag B">Baja</span> H10 · Voz: «informe» y «nosotros» mezclados</h3><p>La biblia pide voz de informe de trabajo. Los niveles pasan a primera persona del plural en: entrada 6 («no habíamos visto»), 8 («antes que nosotros»), 10 («cuando llegamos»), 13 («ya lo pasamos»), 15 («vimos»); victoria 5 («dormimos»), 8 («los usamos»), 10 («no las cavamos nosotros») y la lámina 7 de la intro («Acá nos quedamos»). El resto, y toda la Wiki, es impersonal o tercera persona («los colonos»). Funciona (da calidez al jugador-colono), pero no es uniforme y la Wiki habla de «los colonos» como otros.</p>
+<div class="dec" data-id="H10" data-title="Hallazgo H10"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado (dejar como está)</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…opción elegida o texto propio"></div></section>
+<section class="piece" id="alt-H11"><h3><span class="tag B">Baja</span> H11 · Nivel 11: «paso asegurado» frente al lugar «El punto de agua»</h3><p>La victoria viene de la biblia (ejemplo de tono) y funciona como informe, pero habla de un paso mientras el lugar y el nombre hablan de un puesto y un punto de agua. «Paso» ya se usa en 2 («El paso del agua»), 12 y 13 y es la palabra que más se repite del lore de niveles.</p>
+<div class="alt"><b>Opción</b>«Informe del puesto seco: punto de agua asegurado.» (cambia la frase de la biblia; hay que anotarlo)</div>
+<div class="dec" data-id="H11" data-title="Hallazgo H11"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado (dejar como está)</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…opción elegida o texto propio"></div></section>
+<section class="piece" id="alt-H12"><h3><span class="tag B">Baja</span> H12 · Repeticiones entre campos del mismo nivel</h3><p>El lugar y la entrada o la victoria se repiten: 2 (lugar «El paso del agua» y victoria «Paso asegurado»), 10 (el lugar «Primer puesto de abastecimiento» aparece tal cual en la victoria), 12 («El paso hacia el norte» dos veces: lugar y primera línea), 15 («Energía y abastecimiento» y «abastecimiento» en la victoria). Además, nueve de las quince victorias abren con «X asegurado/a» (1, 2, 3, 6, 8, 9, 10, 12, 13): es la fórmula del canon, no un error, pero la secuencia es muy pareja.</p>
+<div class="dec" data-id="H12" data-title="Hallazgo H12"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado (dejar como está)</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…opción elegida o texto propio"></div></section>
+<section class="piece" id="alt-H13"><h3><span class="tag B">Baja</span> H13 · Entradas con frases de relleno o referencias sueltas</h3><p>Nivel 3: «Sin huerta no hay cosecha» es casi tautológica. Nivel 4: «que les cueste llegar»: el «les» no tiene referente en el texto. Nivel 12: «único paso» y «única forma» en la misma entrada. Nivel 9: «Hoy se prueba el primer mortero de la colonia» nombra una torre (mecánica) y la spec lo marcó «A REVISAR TRAS G4».</p>
+<div class="alt"><b>Nivel 3</b>Quitar la línea 3 (el límite es «hasta» 3 líneas) o: «Sin huerta no hay con qué alimentar a la colonia.»</div>
+<div class="alt"><b>Nivel 4</b>«El camino hasta ahí da muchas vueltas: conviene que a las manadas les cueste llegar.»</div>
+<div class="alt"><b>Nivel 12</b>Línea 3: «Cruzarlo es llegar al resto de la región.»</div>
+<div class="dec" data-id="H13" data-title="Hallazgo H13"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado (dejar como está)</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…opción elegida o texto propio"></div></section>
+<section class="piece" id="alt-H14"><h3><span class="tag B">Baja</span> H14 · Wiki: «Los poblados vacíos» repite la victoria del 14</h3><p>El artículo se abre justo al ganar el 14 y su segundo párrafo («Las brasas están tibias… se llevaron lo que podían cargar») repite la victoria y la entrada. Su última línea («posiciones desocupadas») ya figura en `11-textos-lore.md` §5 como la que podría sobrar. El último párrafo de «La Central» («No dice qué se hará con lo que falta») anticipa la pregunta del epílogo («¿por cuánto tiempo más?») y puede sobrar.</p>
+<div class="alt"><b>Opción</b>Párrafo 2: «No hay nadie. Se fueron hace poco y se llevaron lo que podían cargar.» (sin las brasas) y sacar el párrafo 3 si Lucas prefiere. En «La Central», quitar el párrafo 4.</div>
+<div class="dec" data-id="H14" data-title="Hallazgo H14"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado (dejar como está)</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…opción elegida o texto propio"></div></section>
+<section class="piece" id="alt-H15"><h3><span class="tag B">Baja</span> H15 · Créditos: solo lo comprobable</h3><p>Cuatro líneas, sin nombres ni agradecimientos, sin decir quién hizo los dibujos, los sonidos ni qué herramientas se usaron además de Godot. Es lo que se acordó (RF-472, P7 de M52); queda como pregunta abierta por si Lucas quiere sumar algo.</p>
+<div class="dec" data-id="H15" data-title="Hallazgo H15"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado (dejar como está)</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…opción elegida o texto propio"></div></section>
+<section class="piece" id="alt-H16"><h3><span class="tag B">Baja</span> H16 · Intro: tiempos verbales y un dato que choca con H1</h3><p>Las láminas pasan del presente (1: «lleva», 6: «ya no va a despegar») al pasado (3, 4, 5) y de nuevo al presente (7). No es un error (es el relato de una bitácora) pero es irregular. El dato de la lámina 4 es el que choca con el nivel 2 (H1). La lámina 7 («en medio de la nada») es lo que ven los colonos, y el juego después muestra que no era cierto (adrede, ver `specs/intro/guion.md` §1).</p>
+<div class="dec" data-id="H16" data-title="Hallazgo H16"><b>Decisión de Lucas:</b> <label><input type="checkbox" class="ok"> Aprobado (dejar como está)</label> <label><input type="checkbox" class="chg"> Cambiar →</label><input type="text" class="note" placeholder="…opción elegida o texto propio"></div></section>
+<h2 id="imgs">Imágenes narrativas: dónde se usan</h2><table><tr><th>Imagen</th><th>Archivo</th><th>Dónde se usa</th><th>Estado</th></tr>
+<tr><td>Láminas de la intro (7)</td><td>assets/intro/01_la_nave.webp … 07_el_oasis.webp</td><td>scenes/ui/intro_screen.gd, datos en data/intro/intro.json</td><td>Aprobadas (guion G6, 2026-10-11). Se ven en la sección Intro.</td></tr>
+<tr><td>Imagen del epílogo</td><td>assets/sprites/story/epilogue.png</td><td>scenes/ui/epilogue_screen.gd</td><td>Arte T233 sin OK; T546 la reemplaza por dos variantes, T547 la retira.</td></tr>
+<tr><td>Ilustración de jefes (Jefe y Coloso)</td><td>no existe arte propio: la presentación usa el sprite (`assets/sprites/enemies/boss.svg`, `colossus`)</td><td>scenes/ui/boss_presentation.gd</td><td>T367 sigue abierta (sin muestras ni OK). Hay un cartel «¡Llega el Jefe!» genérico.</td></tr>
+<tr><td>Artículos de Lore</td><td>sin imágenes</td><td>data/wiki/lore/*.json (solo bloques `texto`)</td><td>Nada que revisar.</td></tr>
+<tr><td>Señales del mapa (roca marcada, símbolo de ruina, sendero, herramienta, poste con cintas, campamento vacío)</td><td>assets/sprites/map/*.svg y leyendas de data/levels</td><td>scripts/logic/map_drawings.gd</td><td>Narrativas pero sin texto; no se revisan acá. `hito.svg` sin uso (H5).</td></tr>
+<tr><td>Mapa de la campaña</td><td>assets/ui/campaign_map_background.svg, assets/ui/campaign_badges/</td><td>scenes/ui/level_select.gd, campaign_map_view.gd</td><td>Se ve en la captura del selector. Dibuja los biomas 1→15 de oeste a este (H9).</td></tr>
+<tr><td>Logo del menú</td><td>assets/ui/logo.png</td><td>scenes/ui/main_menu.tscn</td><td>No se revisó.</td></tr>
+</table>
+<h2 id="preguntas">Preguntas para Lucas, por prioridad</h2><ol>
+<li><span class="tag A">Alta</span> Nivel 2 y el agua (H1): ¿opción A (cambia el nivel 2: «El arroyo más cercano…») u opción B (cambiar la intro y el artículo)? Recomiendo A.</li>
+<li><span class="tag A">Alta</span> Victoria del 15 (H2): ¿la dejamos (logro que luego el epílogo pone en duda), la hacemos menos triunfal (B o C) o la cambiamos por otra?</li>
+<li><span class="tag A">Alta</span> Epílogo (H3): ¿mantenemos las 3 líneas sin RF ni D nuevos o preferís una sola línea (RF y D nuevos)? ¿Querés que «la máquina» tenga referente (por ejemplo, la central)?</li>
+<li><span class="tag M">Media</span> Nombres de nivel (H6): ¿mantenemos «nombre de mapa» + «lugar» o unificamos? Y si mantenemos: ¿renombramos «Nido» y «Taller asediado» (choca con el modo Asedio)? ¿Algún otro de los 15 que no te cierre?</li>
+<li><span class="tag M">Media</span> Nivel 13 (H5): ¿dibujamos el hito (arte) o pasamos el texto a «rocas marcadas»?</li>
+<li><span class="tag M">Media</span> Nivel 14 (H7): ¿sacamos de la entrada que los Moradores se llevaron lo que pudieron y/o renombramos el nivel, para guardar el golpe de la victoria?</li>
+<li><span class="tag M">Media</span> Jefe o Soberano (H8): ¿cómo lo ve el jugador? ¿Se aclara en el lore, o se cambia el nombre visible?</li>
+<li><span class="tag M">Media</span> Dónde queda la Central (H9): ¿«el valle donde aterrizó la nave» o el último valle del este?</li>
+<li><span class="tag M">Media</span> Imagen del final (H4): confirmar que T546/T547 siguen como están. Si la imagen luminosa se mantiene como variante de 3 estrellas, ¿te sirve ya con la frase nueva?</li>
+<li><span class="tag B">Baja</span> Voz (H10): ¿dejamos la mezcla de informe impersonal y «nosotros» o la unificamos?</li>
+<li><span class="tag B">Baja</span> Nivel 11 (H11): ¿«paso asegurado» como está en la biblia o «punto de agua asegurado»?</li>
+<li><span class="tag B">Baja</span> Frases de relleno (H13): niveles 3, 4 y 12. ¿Aplicamos las alternativas?</li>
+<li><span class="tag B">Baja</span> Wiki (H14): ¿sacamos «posiciones desocupadas», las brasas del artículo del 14 y el último párrafo de «La Central»?</li>
+<li><span class="tag B">Baja</span> Créditos (H15): ¿sumás tu nombre completo, agradecimientos, o quién hizo el arte y los sonidos?</li>
+</ol><h2>Lo que esta revisión no cubre</h2><ul>
+<li>No se leyeron ni se capturaron en celular (interfaz móvil): todas las capturas son de PC a 1280×720; la entrada de 5 renglones del nivel 15 y el 3-líneas del epílogo no se probaron en un teléfono real.</li>
+<li>El selector solo se capturó en vista de mapa; la vista de tarjetas (donde se ve el lugar bajo el nombre) no se capturó.</li>
+<li>No se revisaron los textos mecánicos (Wiki de cómo se juega, tutorial, consejos de derrota, descripciones del bestiario, novedades, opciones): no son de tono lore. Los consejos de derrota usan voseo y «matalos» (mecánico, permitido por la biblia); no se tocan.</li>
+<li>No se probó nada en el juego más allá de las capturas; no hace falta correr GUT porque solo se agregaron documentos y un script de capturas bajo `art/`, y no se tocó `data/`, `scripts/`, `scenes/` ni `tests/`.</li>
+<li>No se evaluó la calidad estética de las láminas ni del epílogo; solo qué muestran y si calzan con la biblia.</li>
+<li>Los textos de `specs/11-textos-lore.md` y `data/` coinciden entre sí (comprobado por script: los 15 niveles, el epílogo y los 11 artículos); no se verificó el resto del repositorio por inconsistencias con la biblia más allá de la búsqueda de las palabras vetadas, que no apareció en ningún texto de lore.</li>
+</ul>
+<h2>Juntar mis decisiones</h2><p><button id="go">Generar texto con mis decisiones</button></p><textarea id="out" readonly placeholder="Acá aparece el resumen para pegarlo en el chat."></textarea>
+<script>
+document.getElementById('go').onclick=function(){
+  var out=[];
+  document.querySelectorAll('[data-id]').forEach(function(s){
+    var ok=s.querySelector('.ok'),chg=s.querySelector('.chg'),n=s.querySelector('.note');
+    if(ok.checked||chg.checked||n.value.trim()){
+      out.push(s.getAttribute('data-id')+' ('+s.getAttribute('data-title')+'): '+(ok.checked?'APROBADO':'')+(chg.checked?'CAMBIAR':'')+(n.value.trim()?' -> '+n.value.trim():''));
+    }
+  });
+  var t=document.getElementById('out');t.value=out.length?out.join('\n'):'(Sin decisiones marcadas todavía)';
+};
+</script></main></body></html>
