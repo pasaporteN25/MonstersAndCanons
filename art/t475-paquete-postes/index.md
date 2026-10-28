@@ -2,7 +2,7 @@
 
 **APROBADO EN BLOQUE por Lucas el 2026-10-25** («Atlas + los 20 postes tal cual», respuesta en sesión tras revisar el HTML con los 15 planos; incluye las casillas de borde o sobre señal existente de los niveles 2, 4, 8 y 9). No hay aprobaciones por mapa separadas: la aprobación es una sola, en bloque. Paquete generado el 2026-10-25 por `tools/t475_planos_postes.py` sobre `origin/main` 9ce9e18.
 
-**Estado de la integración (segundo commit de T475):** 18 de los 20 postes quedaron integrados (13 niveles). **Niveles 8 y 9 frenados**: la casilla aprobada `(0, 4)` es el símbolo de ruina canónico y, en la captura del motor real (`Capturas/T475-nivel08-poste-tapaba-senal-ampliado.png`), el poste lo tapa por completo; se dejan sin integrar y se pide una nueva ubicación. Ver `specs/tareas/informes/T475-integracion-postes.md`.
+**Estado de la integración (2026-10-28, tercer paso de T475): los 20 postes están integrados (15 niveles).** En los niveles 8 y 9 la casilla aprobada `(0, 4)` es el símbolo de ruina canónico y el poste lo tapaba por completo (`Capturas/T475-nivel08-poste-tapaba-senal-ampliado.png`); **decisión de Lucas del 2026-10-28:** el poste va en la candidata C1, la casilla libre `(18, 1)`, en ambos niveles (análisis en `art/t475-casillas-8-y-9/index.md`). Ver `specs/tareas/informes/T475-integracion-postes.md`.
 
 ## Cómo leerlo
 
@@ -91,7 +91,8 @@
 
 | Candidato | Estado | Origen | Tipo de casilla | Vecinas (N/E/S/O) | Margen | Cercano (≤2) | Riesgo | Recomendación | OK de Lucas |
 |---|---|---|---|---|---|---|---|---|---|
-| `(0, 4)` | propuesta | Ficha | `s` senal (simbolo_ruina) | N: construible, E: construible, S: construible, O: fuera del mapa | 0 | — | Medio-alto. Es el símbolo de ruina `s` (señal canónica) y está en el borde (margen 0). Las únicas casillas bloqueadas permanentes del mapa son las dos señales `s`, ambas en el borde: no hay reemplazo sin tocar `data/`. | Lucas decide si el poste puede ir sobre la señal; si no, ajuste de datos aparte. | Aprobado 2026-10-25, en bloque, tras revisar el plano de cada nivel en el HTML de revisión; **no integrado**: el poste tapa por completo la señal canónica (captura del motor), pendiente nueva ubicación |
+| `(0, 4)` | propuesta | Ficha | `s` senal (simbolo_ruina) | N: construible, E: construible, S: construible, O: fuera del mapa | 0 | — | Medio-alto. Es el símbolo de ruina `s` (señal canónica) y está en el borde (margen 0). Las únicas casillas bloqueadas permanentes del mapa son las dos señales `s`, ambas en el borde: no hay reemplazo sin tocar `data/`. | Lucas decide si el poste puede ir sobre la señal; si no, ajuste de datos aparte. | Aprobado 2026-10-25 en bloque, **reemplazada el 2026-10-28**: el poste tapaba la señal; descartada |
+| `(18, 1)` | **elegida** | Candidata C1 (`art/t475-casillas-8-y-9/`) | `.` libre construible | N: construible, E: construible, S: construible, O: construible | 1 | camino a 2 casillas (fila 3); sin señales ni removibles cerca | Medio: la casilla sigue construible (el poste es solo capa visual; una torre se dibuja encima). | Integrada. | Lucas, 2026-10-28, decisión en sesión: poste en C1 `(18, 1)` en el nivel 8 (casilla libre construible; el poste es solo capa visual). |
 
 ### Nivel 9 · Taller asediado (20×9)
 
@@ -100,7 +101,8 @@
 
 | Candidato | Estado | Origen | Tipo de casilla | Vecinas (N/E/S/O) | Margen | Cercano (≤2) | Riesgo | Recomendación | OK de Lucas |
 |---|---|---|---|---|---|---|---|---|---|
-| `(0, 4)` | propuesta | Ficha | `s` senal (simbolo_ruina) | N: construible, E: construible, S: construible, O: fuera del mapa | 0 | — | Medio-alto. Igual que el nivel 8: señal `s` en el borde (margen 0); la otra `s` (6,0) también es borde. Sin reemplazo posible sin tocar `data/`. | Lucas decide; igual que nivel 8. | Aprobado 2026-10-25, en bloque, tras revisar el plano de cada nivel en el HTML de revisión; **no integrado**: igual que el nivel 8, pendiente nueva ubicación |
+| `(0, 4)` | propuesta | Ficha | `s` senal (simbolo_ruina) | N: construible, E: construible, S: construible, O: fuera del mapa | 0 | — | Medio-alto. Igual que el nivel 8: señal `s` en el borde (margen 0); la otra `s` (6,0) también es borde. Sin reemplazo posible sin tocar `data/`. | Lucas decide; igual que nivel 8. | Aprobado 2026-10-25 en bloque, **reemplazada el 2026-10-28**: el poste tapaba la señal; descartada |
+| `(18, 1)` | **elegida** | Candidata C1 (`art/t475-casillas-8-y-9/`) | `.` libre construible | N: construible, E: construible, S: construible, O: construible | 1 | camino a 2 casillas (fila 3); sin señales ni removibles cerca | Medio: la casilla sigue construible (el poste es solo capa visual; una torre se dibuja encima). | Integrada. | Lucas, 2026-10-28, decisión en sesión: poste en C1 `(18, 1)` en el nivel 9 (casilla libre construible; el poste es solo capa visual). |
 
 ### Nivel 10 · La mina vieja (24×11)
 
