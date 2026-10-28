@@ -1,4 +1,8 @@
 {
+  "franjas": {
+    "brillo": 0.55,
+    "saturacion": 0.6
+  },
   "temas": {
     "pradera": "res://assets/backgrounds/stripes/pradera.png",
     "bosque": "res://assets/backgrounds/stripes/bosque.png",
