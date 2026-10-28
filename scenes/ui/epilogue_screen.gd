@@ -2,6 +2,9 @@
 # (recortada a lo que entre), el texto `"epilogo"` del nivel sobre una franja de abajo y dos botones: «Créditos»
 # y «Niveles». `Esc` o un toque sobre la imagen vuelven a la pantalla de victoria (esta pantalla se cierra).
 # No guarda nada: la campaña está «terminada» cuando los 15 niveles figuran completados (GameFlow).
+# La imagen tiene dos variantes (RF-729, D-219): la luminosa (`epilogue.png`) si los 15 niveles tienen 3 estrellas,
+# y la oscura (`epilogue_dark.png`, tormenta lejana) en cualquier otro caso. Quien la abre dice cuál; si falta el
+# archivo, se usa un fondo liso dibujado en código y se avisa por la consola.
 # Solo muestra y avisa: a dónde va «Niveles» lo decide quien la abre (constitución P6).
 class_name EpilogueScreen
 extends CanvasLayer
@@ -10,7 +13,9 @@ extends CanvasLayer
 signal closed
 signal levels_pressed
 
-const IMAGE: Texture2D = preload("res://assets/sprites/story/epilogue.png")
+const BRIGHT_PATH: String = "res://assets/sprites/story/epilogue.png"
+const DARK_PATH: String = "res://assets/sprites/story/epilogue_dark.png"
+const FALLBACK_COLOR := Color(0.07, 0.08, 0.12)
 const CREDITS_TEXT: String = "Créditos"
 const LEVELS_TEXT: String = "Niveles"
 const TEXT_COLOR := Color(0.96, 0.94, 0.88)
@@ -18,6 +23,12 @@ const STRIP_COLOR := Color(0.04, 0.045, 0.06, 0.78)
 const THEME: Theme = preload("res://assets/ui/menu_theme.tres")
 
 var credits: CreditsScreen
+## Rutas de las dos imágenes (variables para poder probar el respaldo sin tocar los archivos).
+var bright_path: String = BRIGHT_PATH
+var dark_path: String = DARK_PATH
+var _image: TextureRect
+var _fallback: ColorRect
+var _perfect: bool = false
 var _text: Label
 var _credits_button: Button
 var _levels_button: Button
@@ -33,8 +44,13 @@ func _init() -> void:
 	_root.mouse_filter = Control.MOUSE_FILTER_STOP
 	_root.gui_input.connect(_on_root_gui_input)
 	add_child(_root)
+	_fallback = ColorRect.new()  # respaldo: se ve solo si falta el archivo de la variante
+	_fallback.color = FALLBACK_COLOR
+	_fallback.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_fallback.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_root.add_child(_fallback)
 	var image := TextureRect.new()
-	image.texture = IMAGE
+	_image = image
 	image.set_anchors_preset(Control.PRESET_FULL_RECT)
 	image.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	image.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED  # 16:9 recortada a lo que entre
@@ -87,8 +103,11 @@ func _ready() -> void:
 	Audio.add_click_sounds(self)
 
 
-## Abre el epílogo con el texto del nivel (las líneas del campo `"epilogo"`).
-func open(text: String) -> void:
+## Abre el epílogo con el texto del nivel (las líneas del campo `"epilogo"`). `perfect` elige la imagen luminosa
+## (los 15 niveles con 3 estrellas, `GameFlow.is_campaign_perfect()`); sin él, la oscura.
+func open(text: String, perfect: bool = false) -> void:
+	_perfect = perfect
+	_apply_image()
 	_text.text = text
 	visible = true
 	_credits_button.grab_focus()
@@ -109,6 +128,29 @@ func close() -> void:
 
 func open_credits() -> void:
 	credits.open()
+
+
+## La imagen de la variante, o `null` si el archivo falta (entonces se ve el fondo liso).
+func _load_image() -> Texture2D:
+	var path: String = bright_path if _perfect else dark_path
+	if not ResourceLoader.exists(path):
+		print("Epílogo: falta la imagen %s; se usa el fondo provisional." % path)
+		return null
+	return load(path) as Texture2D
+
+
+func _apply_image() -> void:
+	_image.texture = _load_image()
+	_fallback.visible = _image.texture == null
+
+
+## La textura que se ve ahora (`null` con el respaldo) y si la variante es la luminosa (para los tests).
+func image_texture() -> Texture2D:
+	return _image.texture
+
+
+func is_bright() -> bool:
+	return _perfect
 
 
 ## El texto que se ve (para los tests).

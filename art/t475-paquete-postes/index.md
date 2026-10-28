@@ -2,7 +2,7 @@
 
 **APROBADO EN BLOQUE por Lucas el 2026-10-25** («Atlas + los 20 postes tal cual», respuesta en sesión tras revisar el HTML con los 15 planos; incluye las casillas de borde o sobre señal existente de los niveles 2, 4, 8 y 9). No hay aprobaciones por mapa separadas: la aprobación es una sola, en bloque. Paquete generado el 2026-10-25 por `tools/t475_planos_postes.py` sobre `origin/main` 9ce9e18.
 
-**Estado de la integración (2026-10-28, tercer paso de T475): los 20 postes están integrados (15 niveles).** En los niveles 8 y 9 la casilla aprobada `(0, 4)` es el símbolo de ruina canónico y el poste lo tapaba por completo (`Capturas/T475-nivel08-poste-tapaba-senal-ampliado.png`); **decisión de Lucas del 2026-10-28:** el poste va en la candidata C1, la casilla libre `(18, 1)`, en ambos niveles (análisis en `art/t475-casillas-8-y-9/index.md`). Ver `specs/tareas/informes/T475-integracion-postes.md`.
+**Estado de la integración (2026-10-28, tercer paso de T475): los 20 postes están integrados (15 niveles).** En los niveles 8 y 9 la casilla aprobada `(0, 4)` es el símbolo de ruina canónico y el poste lo tapaba por completo (`Capturas/T475-nivel08-poste-tapaba-senal-ampliado.png`); **decisión de Lucas del 2026-10-28:** el poste va en la candidata C1, la casilla `(18, 1)`, en ambos niveles (análisis en `art/t475-casillas-8-y-9/index.md`), y esa casilla pasa de `.` a `X` (**no construible**) en `data/levels/level_08.json` y `level_09.json`: es lo único que cambia en esos dos JSON respecto de «antes» (hashes nuevos abajo). Ver `specs/tareas/informes/T475-integracion-postes.md`.
 
 ## Cómo leerlo
 
@@ -92,7 +92,7 @@
 | Candidato | Estado | Origen | Tipo de casilla | Vecinas (N/E/S/O) | Margen | Cercano (≤2) | Riesgo | Recomendación | OK de Lucas |
 |---|---|---|---|---|---|---|---|---|---|
 | `(0, 4)` | propuesta | Ficha | `s` senal (simbolo_ruina) | N: construible, E: construible, S: construible, O: fuera del mapa | 0 | — | Medio-alto. Es el símbolo de ruina `s` (señal canónica) y está en el borde (margen 0). Las únicas casillas bloqueadas permanentes del mapa son las dos señales `s`, ambas en el borde: no hay reemplazo sin tocar `data/`. | Lucas decide si el poste puede ir sobre la señal; si no, ajuste de datos aparte. | Aprobado 2026-10-25 en bloque, **reemplazada el 2026-10-28**: el poste tapaba la señal; descartada |
-| `(18, 1)` | **elegida** | Candidata C1 (`art/t475-casillas-8-y-9/`) | `.` libre construible | N: construible, E: construible, S: construible, O: construible | 1 | camino a 2 casillas (fila 3); sin señales ni removibles cerca | Medio: la casilla sigue construible (el poste es solo capa visual; una torre se dibuja encima). | Integrada. | Lucas, 2026-10-28, decisión en sesión: poste en C1 `(18, 1)` en el nivel 8 (casilla libre construible; el poste es solo capa visual). |
+| `(18, 1)` | **elegida** | Candidata C1 (`art/t475-casillas-8-y-9/`) | `X` bloqueada (antes `.` libre; Lucas la volvió `X` el 2026-10-28) | N: construible, E: construible, S: construible, O: construible | 1 | camino a 2 casillas (fila 3); sin señales ni removibles cerca | Bajo: no construible, así que ninguna torre tapa el poste. Cambia el JSON del nivel (una casilla). | Integrada. | Lucas, 2026-10-28, decisión en sesión: poste en C1 `(18, 1)` en el nivel 8 (casilla libre; el mismo día Lucas decidió hacerla `X`, no construible, para que una torre no tape el poste). |
 
 ### Nivel 9 · Taller asediado (20×9)
 
@@ -102,7 +102,7 @@
 | Candidato | Estado | Origen | Tipo de casilla | Vecinas (N/E/S/O) | Margen | Cercano (≤2) | Riesgo | Recomendación | OK de Lucas |
 |---|---|---|---|---|---|---|---|---|---|
 | `(0, 4)` | propuesta | Ficha | `s` senal (simbolo_ruina) | N: construible, E: construible, S: construible, O: fuera del mapa | 0 | — | Medio-alto. Igual que el nivel 8: señal `s` en el borde (margen 0); la otra `s` (6,0) también es borde. Sin reemplazo posible sin tocar `data/`. | Lucas decide; igual que nivel 8. | Aprobado 2026-10-25 en bloque, **reemplazada el 2026-10-28**: el poste tapaba la señal; descartada |
-| `(18, 1)` | **elegida** | Candidata C1 (`art/t475-casillas-8-y-9/`) | `.` libre construible | N: construible, E: construible, S: construible, O: construible | 1 | camino a 2 casillas (fila 3); sin señales ni removibles cerca | Medio: la casilla sigue construible (el poste es solo capa visual; una torre se dibuja encima). | Integrada. | Lucas, 2026-10-28, decisión en sesión: poste en C1 `(18, 1)` en el nivel 9 (casilla libre construible; el poste es solo capa visual). |
+| `(18, 1)` | **elegida** | Candidata C1 (`art/t475-casillas-8-y-9/`) | `X` bloqueada (antes `.` libre; Lucas la volvió `X` el 2026-10-28) | N: construible, E: construible, S: construible, O: construible | 1 | camino a 2 casillas (fila 3); sin señales ni removibles cerca | Bajo: no construible, así que ninguna torre tapa el poste. Cambia el JSON del nivel (una casilla). | Integrada. | Lucas, 2026-10-28, decisión en sesión: poste en C1 `(18, 1)` en el nivel 9 (casilla libre; el mismo día Lucas decidió hacerla `X`, no construible, para que una torre no tape el poste). |
 
 ### Nivel 10 · La mina vieja (24×11)
 
@@ -168,7 +168,7 @@
 
 ## Comparación estructural «antes»
 
-Hash SHA-256 de cada `data/levels/level_NN.json` en `origin/main` 9ce9e18. «Grilla» es el hash de `mapa` + `leyenda` (JSON canónico, claves ordenadas). Para probar después que el mapa jugable no cambió: `python3 tools/t475_planos_postes.py --verify` (debe decir «igual» en los 15).
+Hash SHA-256 de cada `data/levels/level_NN.json` en `origin/main` 9ce9e18. «Grilla» es el hash de `mapa` + `leyenda` (JSON canónico, claves ordenadas). Para probar después que el mapa jugable no cambió: `python3 tools/t475_planos_postes.py --verify` (desde 2026-10-28 dice «CAMBIÓ» en el 8 y el 9 a propósito, por la `X` en (18, 1); en el 15 ya decía «CAMBIÓ» antes de este cambio porque el índice quedó viejo respecto de un cambio posterior del nivel 15).
 
 | Nivel | JSON completo (SHA-256) | Grilla + leyenda (SHA-256) |
 |---|---|---|
@@ -179,8 +179,8 @@ Hash SHA-256 de cada `data/levels/level_NN.json` en `origin/main` 9ce9e18. «Gri
 | 05 | `abef553788fe90aea726f370047e6bb7743e14cf55b1bed93b80e6c027d26cef` | `0e448d6575118a5f4849a949298c2a3006b8d6ce8ff372e735da0e2f1427adc4` |
 | 06 | `091dc4aa81958fd7ccee54b24857d8a75885da1a49f73171d106635f8f6c0a01` | `4baa260407f648f0080c2314b0afe71c935c969a5151e937bffebff5ab73d4a4` |
 | 07 | `d250d69eba3a1b47638892f291aa70c76a5332219c17f770f56fda01e763699a` | `f122de9fd58754be44969358ed6f4795f4fbc291e198b285f5af6cd9412354aa` |
-| 08 | `e0f1c38361a8af20325025bd6cc0fb63915e96ff93acdacecf27a9c56d358b05` | `e148de2fca0155f2dc799a714fbaa13e0c202162537c44223f82ff450c9c37dd` |
-| 09 | `38019324f39caa34db22048031d06100c0505df16cd074b89c151a3741c1ad9a` | `490d7dcafa836a709e442e04ed0af88def8bbf38cece2fd7e5cb58bf05fa4281` |
+| 08 | `e0f1c38361a8af20325025bd6cc0fb63915e96ff93acdacecf27a9c56d358b05` (con la `X` en (18, 1): `3b11c91ede82521c7521af539b5e6f23d44e4f79260ae37ab0497180d707713b`) | `e148de2fca0155f2dc799a714fbaa13e0c202162537c44223f82ff450c9c37dd` |
+| 09 | `38019324f39caa34db22048031d06100c0505df16cd074b89c151a3741c1ad9a` (con la `X` en (18, 1): `cafb60f81576d636ed76f0c7afaeb6a5aeb3c5f552fc5a64433907377053c360`) | `490d7dcafa836a709e442e04ed0af88def8bbf38cece2fd7e5cb58bf05fa4281` |
 | 10 | `21af960b29532957099e39c7b97c7c7ed101e3e5ef2646c003bfc091607e7fdf` | `bd9fbdad2d1bf22058e4b567b66af964e83d90f862104965156a084cd5de0580` |
 | 11 | `cbec8c23f8998a67d321d95be9d2d65bf82e1664cd99f148aee715f9fda870e6` | `5cffcbf5bc77696215c927536d84eb4a650c8ee148f0778b3ba51c3e5c6164e8` |
 | 12 | `0a884be2b4cbfdfec6bc8daa40b7ab96e0ace79205d076baa384c3ebbba08a67` | `266982fda29354c7df227869fa8d1bb6228f8dcadd4d160a2051746f526be588` |

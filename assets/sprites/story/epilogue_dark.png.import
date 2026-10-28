@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dd62f4tg5hw81"
-path="res://.godot/imported/supply_conveyor.svg-eda249e49cba5f9c9d0acedc61fc23a5.ctex"
+uid="uid://b6eniw1m44lnu"
+path="res://.godot/imported/epilogue_dark.png-38faed085d89b762374059c2332d0902.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/map/supply_conveyor.svg"
-dest_files=["res://.godot/imported/supply_conveyor.svg-eda249e49cba5f9c9d0acedc61fc23a5.ctex"]
+source_file="res://assets/sprites/story/epilogue_dark.png"
+dest_files=["res://.godot/imported/epilogue_dark.png-38faed085d89b762374059c2332d0902.ctex"]
 
 [params]
 
@@ -38,6 +38,3 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
-svg/scale=2.0
-editor/scale_with_editor_scale=false
-editor/convert_colors_with_editor_theme=false

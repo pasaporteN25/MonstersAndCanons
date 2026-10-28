@@ -1,5 +1,7 @@
 # T546 · Imagen del final con dos variantes según estrellas
 
+> **Enmienda de Lucas (2026-10-28):** la **luminosa** es la imagen vigente `assets/sprites/story/epilogue.png` (T233), sin cambios y **sin retirarla** (T547 no la toca); las dos muestras luminosas nuevas se descartaron. La **oscura** es «Oscura 01» de `art/t546-final/`, integrada como `assets/sprites/story/epilogue_dark.png`. Créditos iguales, sin variante intermedia. Donde la ficha pide «dos imágenes nuevas» o nombra `epilogue_bright.png`, vale esto. Implementada: ver el «Resultado» en `03-tareas.md`.
+
 - **Ejecutor:** Sonnet 5.5 · GDScript; arte con Codex o quien Lucas indique; revisión Codex.
 - **Depende de:** T545 mergeada (frase del epílogo aprobada); respuestas de Lucas a Q1 a Q5 de RF-729; **OK escrito de Lucas** sobre las muestras de las dos imágenes. Coordinar con T547 (retira el arte viejo de T233). PR propio a `main`; el cuerpo debe indicar las dependencias.
 - **Refs:** RF-729, D-219 (enmienda RF-471); RF-93; T233, T544, T545, T547.

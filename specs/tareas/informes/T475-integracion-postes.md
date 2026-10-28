@@ -60,3 +60,17 @@ Lucas vio que los estandartes quedaban encima de otro ítem del mapa. Era así: 
 - `test_campaign_posts.gd`: 18/18, 7034 aserciones. GUT completo tras mergear main: 2553/2553, 0 `SCRIPT ERROR`.
 
 **No se probó:** una torre construida sobre el poste en (18, 1) (por diseño debería taparlo; no se capturó), 2 estrellas con captura, 1920×1080, celular simulado o real, Windows, rendimiento.
+
+## Seguimiento (2026-10-28): la casilla (18, 1) de los niveles 8 y 9 pasa a no construible
+
+> Rama `feature/t475-casilla-no-construible-8-y-9`, sobre `origin/main`.
+
+**Decisión de Lucas (2026-10-28):** la casilla (18, 1) de los niveles 8 y 9, que era `.` (pasto libre), pasa a ser **no construible** para que una torre no tape el poste. Esto reemplaza lo dicho arriba («la casilla sigue construible»). Se autorizó tocar `data/levels/level_08.json` y `level_09.json` **solo en esa casilla**.
+
+**Qué se hizo**
+- En cada JSON, la fila 1 cambia un carácter: nivel 8 `A########...........` pasa a `A########.........X.`; nivel 9 `A#####....#.........` pasa a `A#####....#.......X.`. Se usó `X` (bloqueada del motor, sin entrada de leyenda): ninguno de los dos niveles tenía `X` ni decoración sin significado, y no se inventó ningún símbolo. No cambian camino, entradas, salida, removibles ni leyenda (`check_level.gd`: «Todo bien» en ambos; el camino pasa a 2 casillas de la nueva `X`).
+- Hashes nuevos: nivel 8 `3b11c91e…713b`, nivel 9 `cafb60f8…c053c360` (completos en `art/t475-paquete-postes/index.md`), actualizados en `tests/test_campaign_posts.gd` y `tests/test_campaign_marks.gd` (no estaban en ningún otro archivo).
+- Tests: el de las casillas de 8 y 9 ahora comprueba que (18, 1) es `X`, que es la **única** diferencia con el mapa de antes (las otras 8 filas y el resto de la fila 1 iguales) y que el motor la ve `BLOCKED`; «nada jugable cambia» sigue comparando con y sin la capa de postes.
+- Visual: con poste el motor dibuja solo el suelo bajo él, así que la `X` no muestra cactus, roca ni hueso: **las 4 capturas reales (niveles 8 y 9, 0 y 3 estrellas, 1280×720) se regeneraron y salieron idénticas byte a byte** a las anteriores (mismo hash de objeto). Vistas a ojo: poste completo en el rincón noreste, sin tapar señales, camino ni barra.
+
+**Balance (bot `mix`, semilla 12345, `level=8` y `level=9`, antes y después):** idéntico. Nivel 8: VICTORIA, oleada 18/18, 14 vidas, oro sobrante 320, oro robado 23, antes y después. Nivel 9: VICTORIA, oleada 20/20, 11 vidas, oro sobrante 362, oro robado 18, antes y después. El bot nunca construía en esa casilla (rincón lejos del camino). **No se probó** con otras estrategias (`heavy`, `demoler`, `mortero`…) ni otras semillas, y una persona podría usar esa casilla; se pierde 1 casilla construible de cada mapa.

@@ -13,8 +13,6 @@ const PATH_PATTERN: String = "res://[A-Za-z0-9_./\\-]+\\.(?:svg|png|wav|ogg|mp3|
 const KNOWN_UNUSED: Array[String] = [
 	# T524 reemplazó la roca plana del desierto; se conserva el SVG histórico en el proyecto.
 	"res://assets/sprites/map/roca_roja.svg",
-	# T549: el concepto T527 reemplazó el abastecimiento de T233; la cinta ya no está en el catálogo (retiro pendiente en T547).
-	"res://assets/sprites/map/supply_conveyor.svg",
 	# T375 / D-170: arte aprobado disponible; faltan entradas futuras sin inventar textos de novedades.
 	"res://assets/ui/novedades/news_header_plain.png",
 	"res://assets/ui/novedades/news_icon_upgrade.png",

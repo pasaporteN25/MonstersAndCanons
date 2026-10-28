@@ -1798,7 +1798,9 @@ T530 fija la regla antes del código. T531 usa la misma fuente de desbloqueo que
 
 ### M86 / T546 · El final con dos variantes de imagen (RF-729, D-219)
 
-**Solo plan; no hay código en esta entrega.** Cómo se programa después:
+**Implementado (2026-10-28).** Enmienda de Lucas: la luminosa es la imagen vigente `epilogue.png` (sin cambios; T547 **no** debe retirarla) y la oscura es `epilogue_dark.png` (muestra «Oscura 01»). Quedó así: `GameFlow.is_campaign_perfect()` junto a `is_campaign_complete()`; `Game.open_epilogue()` llama `epilogue.open(texto, GameFlow.is_campaign_perfect())`; `EpilogueScreen` carga la textura al abrirse con `ResourceLoader.exists` y, si falta el archivo, deja un fondo liso (`ColorRect`) y avisa por consola. Las rutas son `EpilogueScreen.BRIGHT_PATH` y `DARK_PATH` (constantes de interfaz, no de balance). Captura: `tools/capture_epilogue.tscn`. El plan original, abajo, quedó con estas diferencias (nombres de archivo y arte nuevo).
+
+Plan original:
 
 - **Condición:** `GameFlow.is_campaign_perfect() -> bool` junto a `is_campaign_complete()`: `false` si `level_count() == 0`; si no, exige `level_stars(i) == StarsDisplay.MAX_STARS` en todos los niveles. No agrega campos al guardado, no sube `SAVE_VERSION` y no escribe al verse el epílogo. Se evalúa al abrir (`Game.open_epilogue()`), después de `record_victory` del 15.
 - **Pantalla:** `EpilogueScreen.open(text)` recibe además la variante (por ejemplo `open(text, perfect: bool)`) y elige entre dos constantes `preload` (`epilogue_bright.png` y `epilogue_dark.png`, nombres a confirmar con las muestras). La pantalla solo muestra (constitución P6): la decisión la toma `Game`/`GameFlow`. El fondo provisional de código de RF-471 queda como respaldo si falta un archivo.

@@ -209,6 +209,17 @@ func is_campaign_complete() -> bool:
 	return true
 
 
+## RF-729: la campaña está «perfecta» cuando los 15 niveles (todos los que haya) tienen 3 estrellas. Se deriva de
+## `level_stars` (mejor marca, RF-93); no se guarda nada ni cambia SAVE_VERSION.
+func is_campaign_perfect() -> bool:
+	if level_count() == 0:
+		return false
+	for i: int in level_count():
+		if level_stars(i) != StarsDisplay.MAX_STARS:
+			return false
+	return true
+
+
 ## RF-500: ¿el guardado tiene algún nivel de la campaña ganado? Decide a dónde va la intro al terminar.
 func has_won_campaign_level() -> bool:
 	for i: int in level_count():

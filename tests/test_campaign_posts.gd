@@ -17,12 +17,19 @@ const APPROVED: Dictionary = {
 	"level_14": [Vector2i(1, 1), Vector2i(24, 10)], "level_15": [Vector2i(5, 1), Vector2i(23, 10)],
 }
 
-## Niveles 8 y 9: Lucas (2026-10-28) eligió (18, 1), una casilla libre construible, porque la aprobada antes, (0, 4), es el
-## símbolo de ruina canónico y el poste lo tapaba por completo. Es la única excepción a «casilla no construible».
+## Niveles 8 y 9: Lucas (2026-10-28) eligió (18, 1) porque la aprobada antes, (0, 4), es el símbolo de ruina canónico y el
+## poste lo tapaba. Era una casilla libre `.`; Lucas decidió después volverla `X` (no construible) para que una torre no tape el
+## poste. Es la única diferencia de los dos JSON respecto de «antes» de T475.
 const FREE_CELL_LEVELS: PackedStringArray = ["level_08", "level_09"]
+const OLD_MAP: Dictionary = {
+	"level_08": ["............s.......", "A########...........", "........#...........", "........###########.", "s.................#.", "..#################.", "..#....u...e...e....", "..#################S", "..............e....."],
+	"level_09": ["......s...B.........", "A#####....#.........", "...e.#....#...e.....", ".....#############..", "s................#..", "..################..", "..#........u........", "..#################S", ".......e............"],
+}
+const OLD_ROW_1: Dictionary = {"level_08": "A########...........", "level_09": "A#####....#........."}
 const SIGNAL_DRAWINGS: PackedStringArray = ["roca_marcada", "simbolo_ruina", "campamento_vacio", "sendero", "herramienta"]
 
-## SHA-256 de cada data/levels/level_NN.json «antes» de T475 (art/t475-paquete-postes/index.md, base 9ce9e18).
+## SHA-256 de cada data/levels/level_NN.json «antes» de T475 (art/t475-paquete-postes/index.md, base 9ce9e18), salvo 08 y 09,
+## que llevan el hash con la `X` en (18, 1) (decisión de Lucas, 2026-10-28; el hash original está en el índice del paquete).
 const BEFORE_HASH: Dictionary = {
 	"level_01": "a69feaf78d87b41f020177f1292482f8b03d6ff2decbd2b7928102de71d52d64",
 	"level_02": "989d596338c37c3d62482ba7aadd863b72a2bf79a5bd6449838d31683acd01b8",
@@ -31,8 +38,8 @@ const BEFORE_HASH: Dictionary = {
 	"level_05": "abef553788fe90aea726f370047e6bb7743e14cf55b1bed93b80e6c027d26cef",
 	"level_06": "091dc4aa81958fd7ccee54b24857d8a75885da1a49f73171d106635f8f6c0a01",
 	"level_07": "d250d69eba3a1b47638892f291aa70c76a5332219c17f770f56fda01e763699a",
-	"level_08": "e0f1c38361a8af20325025bd6cc0fb63915e96ff93acdacecf27a9c56d358b05",
-	"level_09": "38019324f39caa34db22048031d06100c0505df16cd074b89c151a3741c1ad9a",
+	"level_08": "3b11c91ede82521c7521af539b5e6f23d44e4f79260ae37ab0497180d707713b",
+	"level_09": "cafb60f81576d636ed76f0c7afaeb6a5aeb3c5f552fc5a64433907377053c360",
 	"level_10": "21af960b29532957099e39c7b97c7c7ed101e3e5ef2646c003bfc091607e7fdf",
 	"level_11": "cbec8c23f8998a67d321d95be9d2d65bf82e1664cd99f148aee715f9fda870e6",
 	"level_12": "0a884be2b4cbfdfec6bc8daa40b7ab96e0ace79205d076baa384c3ebbba08a67",
@@ -103,14 +110,20 @@ func test_the_data_has_the_twenty_posts_in_the_fifteen_levels() -> void:
 	assert_eq(APPROVED.size(), 15)
 
 
-func test_levels_eight_and_nine_put_the_post_on_a_free_cell_away_from_every_signal() -> void:
+func test_levels_eight_and_nine_put_the_post_on_a_blocked_cell_away_from_every_signal() -> void:
 	for id: String in FREE_CELL_LEVELS:
 		var level: Dictionary = _json(id)
 		var rows: Array = level["mapa"]
 		var cell := Vector2i(18, 1)
 		assert_eq(CampaignPosts.cells_for(StringName(id)), [cell] as Array[Vector2i], id)
-		assert_eq(String(rows[cell.y])[cell.x], ".", "%s: casilla libre sin dibujo" % id)
-		assert_false(level["leyenda"].has("."), "%s: '.' no tiene entrada de leyenda" % id)
+		assert_eq(String(rows[cell.y])[cell.x], "X", "%s: casilla bloqueada (no construible), sin dibujo de leyenda" % id)
+		assert_false(level["leyenda"].has("X"), "%s: 'X' no tiene entrada de leyenda" % id)
+		# la única diferencia con el mapa de antes de T475 es esa casilla (. -> X)
+		var before: String = String(OLD_ROW_1[id])
+		assert_eq(String(rows[cell.y]), before.substr(0, cell.x) + "X" + before.substr(cell.x + 1), "%s: solo cambió (18, 1)" % id)
+		for y: int in rows.size():
+			if y != cell.y:
+				assert_eq(String(rows[y]), String(OLD_MAP[id][y]), "%s: la fila %d no cambió" % [id, y])
 		# ni una señal, un removible ni una entrada/salida a menos de dos casillas
 		for dy: int in range(-2, 3):
 			for dx: int in range(-2, 3):
@@ -130,7 +143,7 @@ func test_levels_eight_and_nine_put_the_post_on_a_free_cell_away_from_every_sign
 		var data: LevelData = GameFlow.level(index)
 		var map: Level = data.build_map(false, null, CampaignPosts.cells_for(data.id))
 		add_child_autofree(map)
-		assert_eq(map.grid.cell_type(Vector2i(18, 1)), MapGrid.Cell.GRASS, "%s: el poste es visual, la casilla sigue construible" % data.id)
+		assert_eq(map.grid.cell_type(Vector2i(18, 1)), MapGrid.Cell.BLOCKED, "%s: la casilla del poste no es construible" % data.id)
 		assert_eq((map.get_node("Decor") as LevelDecor).overlay_post_cells(), [Vector2i(18, 1)] as Array[Vector2i])
 	await wait_physics_frames(2)
 
@@ -166,7 +179,7 @@ func test_the_level_files_are_the_same_as_before() -> void:
 func test_every_post_sits_on_a_permanently_unbuildable_free_cell() -> void:
 	for id: String in APPROVED:
 		if FREE_CELL_LEVELS.has(id):
-			continue  # 8 y 9: casilla libre elegida por Lucas el 2026-10-28, ver el test siguiente
+			continue  # 8 y 9: X sin leyenda, ya la cubre su test propio (arriba)
 		var level: Dictionary = _json(id)
 		var rows: Array = level["mapa"]
 		var legend: Dictionary = level.get("leyenda", {})
