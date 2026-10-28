@@ -4,8 +4,8 @@
 
 ## Resumen
 
-- Candidatos a texto visible: **1609** en **166** archivos.
-- Por tipo de fuente: GDScript **1150**, Escenas (.tscn) **108**, Recursos (.tres) **60**, Datos (.json) **291**.
+- Candidatos a texto visible: **1622** en **167** archivos.
+- Por tipo de fuente: GDScript **1163**, Escenas (.tscn) **108**, Recursos (.tres) **60**, Datos (.json) **291**.
 
 | Pantalla / grupo | Archivos | Candidatos | Con placeholder | Concatenados | Plural | Multilínea |
 |---|---:|---:|---:|---:|---:|---:|
@@ -28,7 +28,8 @@
 | Editor de mapas y comunidad | 12 | 287 | 104 | 29 | 9 | 11 |
 | Mensajes técnicos y de desarrollo (a decidir si se traducen) | 9 | 27 | 6 | 0 | 0 | 0 |
 | Coleccionables y hallazgos | 1 | 2 | 2 | 0 | 0 | 0 |
-| **Total** | **166** | **1609** | **558** | **45** | **73** | **61** |
+| Otros (sin clasificar; revisar) | 1 | 13 | 11 | 0 | 0 | 0 |
+| **Total** | **167** | **1622** | **569** | **45** | **73** | **61** |
 
 ## Cómo leer los candidatos
 
@@ -2479,7 +2480,7 @@
 
 <details><summary><code>scripts/autoload/save_manager.gd</code> · GDScript · 1</summary>
 
-- L221 `[^A-Za-z0-9._-]`
+- L222 `[^A-Za-z0-9._-]`
 
 </details>
 
@@ -2531,5 +2532,25 @@
 
 - L80 `La colección \"%s\" pide %d piezas pero tiene %d fuentes.` `placeholder`
 - L82 `La colección \"%s\" tiene un origen desconocido: \"%s\".` `placeholder`
+
+</details>
+
+### Otros (sin clasificar; revisar)
+
+<details><summary><code>scripts/logic/localization_catalog.gd</code> · GDScript · 13</summary>
+
+- L10 `^[a-z][a-z0-9_]*(\\.[a-z0-9_]+)+$`
+- L11 `\\{([A-Za-z0-9_]+)\\}` `placeholder`
+- L19 `No existe el catálogo %s.` `placeholder`
+- L25 `catálogo`
+- L29 `%s no es un JSON válido (objeto).` `placeholder`
+- L35 `%s: «entradas» debe ser una lista.` `placeholder`
+- L42 `%s: una entrada no tiene «clave» y «texto» de tipo texto.` `placeholder`
+- L82 `[%s] clave duplicada: %s` `placeholder`
+- L85 `[%s] clave con formato inválido: %s` `placeholder`
+- L90 `[%s] clave que no existe en el catálogo base: %s` `placeholder`
+- L94 `[%s] clave sin traducción: %s` `placeholder`
+- L97 `[%s] placeholders distintos en %s: %s contra %s` `placeholder`
+- L100 `[%s] traducción vacía: %s` `placeholder`
 
 </details>
