@@ -31,9 +31,9 @@ CROPS = [
     ("n15_bosque_activo", "15", "active", (155, 430, 215, 482)),
     ("n15_roca_marca", "15", "initial", (100, 240, 175, 295)),
     ("n15_campamento", "15", "initial", (1100, 285, 1170, 340)),
-    ("n15_abastecimiento_casa", "15", "initial", (1205, 285, 1260, 345)),
-    ("n15_abastecimiento_carro", "15", "initial", (730, 580, 790, 625)),
-    ("n15_abastecimiento_poste", "15", "initial", (1020, 570, 1085, 625)),
+    ("n15_abastecimiento_taller", "15", "initial", (1205, 285, 1265, 345)),
+    ("n15_abastecimiento_nave", "15", "initial", (730, 570, 790, 620)),
+    ("n15_abastecimiento_lingotes", "15", "initial", (1020, 570, 1080, 620)),
 ]
 
 for sub in ("antes", "despues", "crops"):

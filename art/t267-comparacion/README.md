@@ -9,10 +9,10 @@ Sirve para que Lucas valide **visualmente** el arte integrado de T267b/T277 (má
 ## Qué se compara
 
 - **Antes:** commit `377fd65`, el último anterior a la integración del arte renderizado (T277, `c30c91c`).
-- **Después:** `origin/main` (`adc88d7`), que suma T508 (rocas), T524 (adornos M79), T542 (flora) y T544.
+- **Después:** `origin/main` (`4ce3f3e`, 28/10/2026), que suma T508 (rocas), T524 (adornos M79), T542 (flora), T544 y T549 (abastecimiento nuevo del nivel 15: restos de nave, taller en ruinas y pila de lingotes). Reemplaza a la comparación anterior (PR #155), que usaba un main previo a T549 y mostraba el abastecimiento viejo de T233.
 - Mismo script en los dos: `capture.gd` + `capture.tscn`, 1280×720, estados reales del campo de infraestructura (mina/bosque habilitados, escombro en trabajo, reservas agotadas). No son partidas jugadas.
 - Nivel 1: una sola captura, porque no tiene mina, bosque ni escombro y los otros estados salían idénticos. Niveles 14 y 15: tres estados que sí difieren.
-- Las ampliaciones se generan con `make_crops.py`. Se omitió el escombro despejado del 14 (se ve igual) y el abastecimiento del 15 se muestra una sola vez (sigue siendo el de T233).
+- Las ampliaciones se generan con `make_crops.py`. Se omitió el escombro despejado del 14 (se ve igual) y el abastecimiento nuevo del 15 se muestra solo en el después. Quedan en pantalla sin arte nuevo: escombro intacto y despejado, columnas altas del 14, árbol y roca decorativos del 15 e indicador de reserva por código. La casa grande del 15 es la Central (T277, aprobada).
 
 ## Reproducir
 

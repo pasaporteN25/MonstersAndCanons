@@ -47,7 +47,7 @@ ul{padding-left:1.2em}
 <main>
 <h1>T267 · Antes y después de los niveles 1, 14 y 15</h1>
 <div class="card">
-<p><b>Qué es.</b> Capturas reales del juego a 1280×720, hechas con el mismo script en dos versiones del proyecto. <b>Antes</b> = commit <code>377fd65</code>, el último anterior a la integración del arte renderizado (T277, <code>c30c91c</code>), con las rocas, adornos y flora viejos. <b>Después</b> = <code>origin/main</code> actual (con T277, T508 rocas, T524 adornos M79, T542 flora y T544).</p>
+<p><b>Qué es.</b> Capturas reales del juego a 1280×720, hechas con el mismo script en dos versiones del proyecto. <b>Antes</b> = commit <code>377fd65</code>, el último anterior a la integración del arte renderizado (T277, <code>c30c91c</code>), con las rocas, adornos y flora viejos. <b>Después</b> = <code>origin/main</code> en <code>4ce3f3e</code> (28/10/2026), que ya incluye T277, T508 rocas, T524 adornos M79, T542 flora, T544 y <b>T549, el abastecimiento nuevo del nivel 15</b>. Esta versión reemplaza a la anterior, que mostraba el abastecimiento viejo de T233.</p>
 <p><b>Cómo mirar.</b> Arrastrá el control de cada nivel: lo que queda a la izquierda es el <span class="viejo">antes</span> y lo de la derecha el <span class="nuevo">después</span>. Debajo hay ampliaciones de cada pieza que cambió. Abajo de cada nivel está la casilla para tu decisión.</p>
 <p class="note">Son pantallas preparadas con el estado real del campo (mina y bosque habilitados, escombro en trabajo, reservas agotadas), no partidas jugadas. Solo se muestran estados que cambian algo: el nivel 1 no tiene mina, bosque ni escombro, por eso tiene una sola captura.</p>
 </div>
@@ -79,14 +79,14 @@ ul{padding-left:1.2em}
 <p><span class="nuevo">Cambió:</span></p>
 <ul>
 <li><b>Estatuas de leyenda</b> (las figuras sobre los bloques): pasan de muñecos grises a <b>cañones y ametralladoras de piedra</b> con musgo (T277).</li>
-<li><b>Bloques, columnas y lápidas decorativas</b>: ahora son rocas y bloques genéricos más chicos y de piedra lisa (T508); las <b>marcas «A»</b> pasaron a <b>rocas oscuras</b> (T508/M80).</li>
+<li><b>Bloques decorativos</b>: ahora son rocas y bloques bajos de piedra lisa (T508); las <b>marcas «A»</b> pasaron a <b>rocas oscuras</b> (T508/M80).</li>
 <li><b>Ruinas / campamento</b>: las carpas rojas se cambiaron por <b>carpas y fogatas de campamento abandonado</b> (T524, M79).</li>
 <li><b>Mina</b> (3 estados), <b>bosque explotable</b> (3 estados) y <b>escombro en trabajo</b>: ahora usan los dibujos renderizados aprobados en T267b (antes eran formas hechas por código) (T277).</li>
 <li><b>Borde del mapa</b>: aparece una franja de terreno pintado a izquierda y derecha.</li>
 </ul>
-<p><span class="viejo">Sigue viejo / sin arte aprobado:</span> el <b>escombro intacto</b> (el montón con rombo) y el <b>escombro despejado</b> (suelo liso) se ven igual; el <b>indicador de reserva</b> (segmentos verdes) y la barra de progreso siguen dibujados por código (T543). Los caminos, el HUD y los botones no cambiaron.</p>
+<p><span class="viejo">Sigue viejo / sin arte aprobado:</span> las <b>columnas altas</b> (las piedras en pie) se ven casi igual que antes, sin dibujo nuevo reconocible; el <b>escombro intacto</b> (el montón con rombo naranja) y el <b>escombro despejado</b> (suelo liso) se ven igual; el <b>indicador de reserva</b> (segmentos verdes) y la barra de progreso siguen dibujados por código (T543). Los caminos, el HUD y los botones no cambiaron.</p>
 </div>
-<div class="item"><h4>Zona de estatuas, bloques y rocas</h4><p>Misma franja del mapa. Las columnas altas del antes pasan a ser bloques bajos; los muñecos, cañones; la «A», una roca oscura.</p>
+<div class="item"><h4>Zona de estatuas, bloques y rocas</h4><p>Misma franja del mapa. Los bloques con musgo pasan a ser bloques bajos lisos; los muñecos, cañones; la «A», una roca oscura. Las columnas altas siguen ahí.</p>
 <div class="pair"><figure><img src="crops/n14_zona_a.png" alt="Antes"><figcaption>Antes</figcaption></figure><figure><img src="crops/n14_zona_d.png" alt="Después"><figcaption>Después</figcaption></figure></div></div>
 <div class="item"><h4>Ruinas con campamento</h4><div class="pair"><figure><img src="crops/n14_ruinas_a.png" alt="Antes"><figcaption>Antes</figcaption></figure><figure><img src="crops/n14_ruinas_d.png" alt="Después"><figcaption>Después</figcaption></figure></div></div>
 <div class="item"><h4>Mina habilitada</h4><div class="pair"><figure><img src="crops/n14_mina_activa_a.png" alt="Antes"><figcaption>Antes</figcaption></figure><figure><img src="crops/n14_mina_activa_d.png" alt="Después"><figcaption>Después</figcaption></figure></div></div>
@@ -108,9 +108,10 @@ ul{padding-left:1.2em}
 <li><b>Central</b> (abajo a la derecha, 2×2 casillas): del edificio celeste de dibujo plano a una <b>pieza continua renderizada</b> de ladrillo y cobre (T277).</li>
 <li><b>Mina</b> y <b>bosque explotable</b> (todos los estados) y <b>escombro en trabajo</b>: renderizados (T277).</li>
 <li><b>Marcas «A»</b>: pasaron a <b>rocas</b> (T508); <b>carpas rojas</b> pasaron a <b>campamento abandonado</b> (T524).</li>
+<li><b>Abastecimiento (T549)</b>: la casita, el carro minero y el poste de T233 <b>ya no están</b>. Ahora hay <b>restos de nave</b> (casco roto, abajo en el centro), un <b>taller en ruinas</b> (a la derecha, con chimenea y trapo naranja) y una <b>pila de lingotes</b> (abajo a la derecha). Se ven más abajo.</li>
 <li><b>Borde del mapa</b>: franja de terreno pintado a izquierda y derecha.</li>
 </ul>
-<p><span class="viejo">Sigue viejo, sin arte aprobado:</span> el <b>abastecimiento</b> (la casa con techo marrón, el carro minero y el poste) es todavía el de T233, idéntico al de antes; lo reemplazará T549. También siguen iguales el <b>árbol y la roca decorativos</b> de relleno, el indicador de reserva por código, <code>hito.svg</code> y la imagen del epílogo.</p>
+<p><span class="viejo">Sigue viejo, sin arte aprobado:</span> lo que sigue sin arte nuevo en pantalla es el <b>escombro intacto</b> (los montones chicos con rombo naranja), el <b>árbol y la roca decorativos</b> de relleno, y el <b>indicador de reserva</b> (barrita verde sobre mina y bosque) y la barra de progreso, dibujados por código. Los caminos, el HUD y los botones no cambiaron. No aparece más ninguna pieza de T233.</p>
 </div>
 <div class="item"><h4>Central</h4><div class="pair"><figure><img src="crops/n15_central_a.png" alt="Antes"><figcaption>Antes</figcaption></figure><figure><img src="crops/n15_central_d.png" alt="Después"><figcaption>Después</figcaption></figure></div></div>
 <div class="item"><h4>Mina habilitada</h4><div class="pair"><figure><img src="crops/n15_mina_activa_a.png" alt="Antes"><figcaption>Antes</figcaption></figure><figure><img src="crops/n15_mina_activa_d.png" alt="Después"><figcaption>Después</figcaption></figure></div></div>
@@ -118,12 +119,15 @@ ul{padding-left:1.2em}
 <div class="item"><h4>Bosque habilitado</h4><div class="pair"><figure><img src="crops/n15_bosque_activo_a.png" alt="Antes"><figcaption>Antes</figcaption></figure><figure><img src="crops/n15_bosque_activo_d.png" alt="Después"><figcaption>Después</figcaption></figure></div></div>
 <div class="item"><h4>Marca «A» de la ruina</h4><div class="pair"><figure><img src="crops/n15_roca_marca_a.png" alt="Antes"><figcaption>Antes</figcaption></figure><figure><img src="crops/n15_roca_marca_d.png" alt="Después"><figcaption>Después</figcaption></figure></div></div>
 <div class="item"><h4>Campamento</h4><div class="pair"><figure><img src="crops/n15_campamento_a.png" alt="Antes"><figcaption>Antes</figcaption></figure><figure><img src="crops/n15_campamento_d.png" alt="Después"><figcaption>Después</figcaption></figure></div></div>
-<h3 class="viejo">Sigue viejo: abastecimiento de T233 (idéntico antes y después)</h3>
-<p class="note">Se muestra una sola imagen porque no cambió. Es lo que reemplazará T549.</p>
+<h3 class="nuevo">Abastecimiento nuevo (T549), solo después</h3>
+<p class="note">Estas tres piezas reemplazan a la casita, el carro y el poste de T233. En el «antes» (377fd65) esas casillas tenían otros dibujos; acá se muestra solo el después.</p>
 <div class="pair solo" style="max-width:none">
-<figure><img src="crops/n15_abastecimiento_casa_d.png" alt="Casa de abastecimiento"><figcaption>Casa</figcaption></figure>
-<figure><img src="crops/n15_abastecimiento_carro_d.png" alt="Carro minero"><figcaption>Carro</figcaption></figure>
-<figure><img src="crops/n15_abastecimiento_poste_d.png" alt="Poste"><figcaption>Poste</figcaption></figure></div>
+<figure><img src="crops/n15_abastecimiento_nave_d.png" alt="Restos de nave"><figcaption>Restos de nave</figcaption></figure>
+<figure><img src="crops/n15_abastecimiento_taller_d.png" alt="Taller en ruinas"><figcaption>Taller en ruinas</figcaption></figure>
+<figure><img src="crops/n15_abastecimiento_lingotes_d.png" alt="Pila de lingotes"><figcaption>Pila de lingotes</figcaption></figure></div>
+<h3>Para que no se confunda: la Central</h3>
+<p class="note">La casa grande con techo naranja junto a la salida <b>no es</b> el abastecimiento viejo: es la <b>Central</b>, arte aprobado de T277.</p>
+<div class="solo"><figure><img src="crops/n15_central_d.png" alt="Central, arte aprobado de T277"><figcaption>Central (T277, aprobada), no es una casita de T233</figcaption></figure></div>
 <div class="dec" data-k="n15"><b>Decisión de Lucas, nivel 15:</b><br>
 <label><input type="checkbox" data-v="ok"> Aprobado</label><label><input type="checkbox" data-v="aj"> Ajustar</label>
 <br><label style="display:block">Pieza a ajustar:</label><textarea placeholder="→ pieza y qué cambiar"></textarea></div>
@@ -136,6 +140,7 @@ ul{padding-left:1.2em}
 <li>Una captura intermedia solo con T277 (sin rocas, adornos ni flora posteriores): el «después» ya incluye todo lo integrado hasta hoy.</li>
 </ul>
 <p class="note">Las decisiones se guardan solo en este navegador; pasale el resultado al agente en el chat.</p>
+<p class="note" style="margin-top:2em">Generado el 28/10/2026 · después = <code>origin/main</code> <code>4ce3f3e</code> · antes = <code>377fd65</code>.</p>
 </main>
 <script>
 (function(){
