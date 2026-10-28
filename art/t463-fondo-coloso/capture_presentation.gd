@@ -24,6 +24,10 @@ func run() -> void:
 	for key: String in BACKDROPS:
 		var image: Image = Image.load_from_file(ProjectSettings.globalize_path(BACKDROPS[key]))
 		await present(colossus, ImageTexture.create_from_image(image), "coloso_con_" + key)
+	# T548: el fondo integrado, tal como lo pasa Game (con la franja de contraste), al tamaño real de la ventana.
+	# El WM puede dar una ventana de otro tamaño: la captura se normaliza (Lanczos, 16:9) a 1280×720 y 1920×1080.
+	await present(colossus, BossPresentationArt.backdrop_for(colossus.id), "t548_coloso", [Vector2i(1280, 720), Vector2i(1920, 1080)])
+	await present(boss, BossPresentationArt.backdrop_for(boss.id), "t548_jefe_sin_fondo", [Vector2i(1280, 720)])
 	var audio: Node = get_node("/root/Audio")
 	audio.set_process(false)
 	for frame: int in 5:
@@ -31,14 +35,20 @@ func run() -> void:
 	get_tree().quit()
 
 
-func present(data: EnemyData, backdrop: Texture2D, label: String) -> void:
+func present(data: EnemyData, backdrop: Texture2D, label: String, sizes: Array[Vector2i] = []) -> void:
 	var presentation: BossPresentation = BossPresentation.new().setup(data, 5.0, false, null, backdrop)
 	add_child(presentation)
 	# Dentro de la ventana de movimiento (la ilustración crece de 0,9 a 1,04) y con el fundido de entrada terminado.
 	presentation.advance_clock_for_test(0.0)
 	await get_tree().create_timer(1.2, true, false, true).timeout
 	await RenderingServer.frame_post_draw
-	assert(get_viewport().get_texture().get_image().save_png(OUT + label + ".png") == OK)
+	var image: Image = get_viewport().get_texture().get_image()
+	if sizes.is_empty():
+		assert(image.save_png(OUT + label + ".png") == OK)
+	for size: Vector2i in sizes:
+		var scaled: Image = image.duplicate()
+		scaled.resize(size.x, size.y, Image.INTERPOLATE_LANCZOS)
+		assert(scaled.save_png(OUT + "%s_%dx%d.png" % [label, size.x, size.y]) == OK)
 	print("T463: ", label)
 	presentation.queue_free()
 	await get_tree().process_frame

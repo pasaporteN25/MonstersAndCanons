@@ -1,5 +1,9 @@
 # Novedades del juego
 
+## Fondo propio para la presentación del Coloso *(T548, 2026-10-28)*
+
+Cuando aparece el Coloso en el nivel 15, la pantalla de presentación ahora tiene su fondo propio: un claro sombrío de basalto con vetas ámbar. Detrás del nombre y la frase hay una franja oscura para que se lean bien. El Jefe del nivel 1 sigue como antes. No cambia la partida, las oleadas ni el balance; la ilustración propia del Coloso todavía no está.
+
 ## Flora extraña de Cántaro *(T542, 2026-10-27)*
 
 Las flores de los niveles 1, 3, 4 y 5 ahora alternan de forma estable entre los tres modelos nuevos aprobados. Conservan una lectura vegetal reconocible, con formas extrañas propias de Cántaro; cada casilla mantiene su modelo entre partidas. Los PNG nuevos son la referencia activa. `flores.svg` queda preservado como material histórico sin uso. No cambian los mapas, el camino ni la construcción.
