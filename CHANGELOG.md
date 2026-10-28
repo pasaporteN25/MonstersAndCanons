@@ -1,5 +1,9 @@
 # Novedades del juego
 
+## Franjas laterales más apagadas *(T532, 2026-10-28; en revisión)*
+
+En pantallas anchas, las franjas a los costados del mapa conservan el paisaje de cada terreno pero se ven con menos brillo y color, para que el mapa y los controles se lleven la atención. El área de juego, el zoom y la cámara no cambian.
+
 ## Adornos dimensionales para desierto y ruinas *(T524, 2026-10-27)*
 
 El desierto suma el cactus elegido y dos variantes de roca roja. En ruinas aparecen columnas, bloques y estatuas de piedra con más volumen; el volcán conserva su lista de adornos y reemplaza solo la columna. Los campamentos vacíos de los niveles 14 y 15 usan el diseño elegido. Todo ocupa las mismas casillas decorativas de antes: no cambia el recorrido, la construcción ni el balance.
