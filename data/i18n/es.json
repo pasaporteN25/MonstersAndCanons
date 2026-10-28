@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "idioma": "es",
+  "entradas": [
+    {"clave": "options.language.label", "texto": "Idioma"},
+    {"clave": "options.language.es", "texto": "Español"},
+    {"clave": "options.language.en", "texto": "Inglés"},
+    {"clave": "common.stars.one", "texto": "{n} estrella"},
+    {"clave": "common.stars.other", "texto": "{n} estrellas"}
+  ]
+}
