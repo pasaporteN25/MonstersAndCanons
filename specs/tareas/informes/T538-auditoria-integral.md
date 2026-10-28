@@ -312,3 +312,11 @@ Los números de tarea, RF y D los asigna quien escriba la spec; acá no se inven
 - El análisis del empaquetado debe arrancar con el baseline de export en una carpeta temporal; esa medición read-only no necesita esperar una decisión de política. Después se especifica y aprueba el cambio de inclusión. No se genera APK en esta máquina.
 - Sobre T527: los conceptos de nave y taller con el farol oscuro ya recibieron conformidad visual de Lucas. Los SVG del nivel 15 siguen en el juego hasta implementar el reemplazo; la galería T537 no era esa integración. Reutilizar `stat_resources.svg` y mantener `supply_conveyor` son decisiones de alcance todavía separadas.
 - El usuario ya pidió iniciar la vegetación alienígena de los cuatro mapas de pradera. T539 prepara muestras visuales, sin integración.
+
+---
+
+## Nota de seguimiento (2026-10-28, T551): P3 hecho y parte segura de P4
+
+- **P3 (H5):** `tests/test_resource_audit.gd` ya exige la ruta `res://` completa o el `uid` para los dibujos y mira también `webp` y `jpg`. `KNOWN_UNUSED` quedó explícita y comentada en tres grupos (arte aprobado a la espera, pendiente de revisión de Lucas y SVG fuente a la espera de D5). El test detecta los SVG fuente de `assets/` sin uso (50 listados) y habría detectado `rammer.png` y `rendered/healer.png`.
+- **P4 (solo PNG):** esos dos PNG (H3) se movieron a `art/t551-retirados/` con `.gdignore`, sin borrarlos del repositorio (orden reversible §3, pasos 1 y 2), y se quitaron sus `.import`. GUT completo (2573 pruebas), `--import` y `--check-only` de los 39 `tools/*.gd` pasan.
+- **Sigue abierto:** los SVG fuente (D5, decisión de Lucas) no se movieron; el ahorro en el paquete no se midió (falta el export de P1); el borrado definitivo es otra tarea.
