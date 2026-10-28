@@ -183,7 +183,7 @@ func test_two_to_four_supply_pieces_along_the_border_and_two_or_three_empty_camp
 	var level: LevelData = _load(15)
 	var drawn: Dictionary = _drawn_cells(level)
 	var pieces: int = 0
-	for id: String in ["supply_depot", "supply_line_pole", "supply_cart", "supply_conveyor"]:
+	for id: String in ["supply_depot", "supply_line_pole", "supply_cart"]:
 		for cell: Vector2i in drawn.get(id, []):
 			pieces += 1
 			assert_true(cell.x == 0 or cell.y == 0 or cell.x == 25 or cell.y == 11, "%s en %s: a lo largo del borde" % [id, cell])

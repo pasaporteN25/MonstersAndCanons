@@ -33,7 +33,7 @@ func test_every_object_has_a_drawing_and_every_ground_has_colors() -> void:
 				fail_test("%s no es ni suelo ni objeto" % id)
 
 
-func test_the_catalog_has_four_grounds_and_twenty_nine_objects() -> void:
+func test_the_catalog_has_four_grounds_and_twenty_eight_objects() -> void:
 	var grounds: int = 0
 	var objects: int = 0
 	for id: String in MapDrawings.ids():
@@ -42,7 +42,7 @@ func test_the_catalog_has_four_grounds_and_twenty_nine_objects() -> void:
 		else:
 			objects += 1
 	assert_eq(grounds, 4)
-	assert_eq(objects, 29)
+	assert_eq(objects, 28)
 
 
 func test_the_six_community_signals_are_static_objects() -> void:
@@ -228,7 +228,7 @@ func test_every_drawing_paints_in_a_level_without_errors() -> void:
 		add_child_autofree(level)
 		assert_eq(level.legend_cells.size(), 8, id)
 		await wait_physics_frames(2)
-	assert_true(true, "se pintaron los 33")
+	assert_true(true, "se pintaron los 32")
 
 
 func test_every_drawing_paints_in_every_theme() -> void:

@@ -17,7 +17,6 @@ const KINDS: Dictionary = {
 	"poste_cintas": KIND_OBJECT, "simbolo_ruina": KIND_OBJECT, "campamento_vacio": KIND_OBJECT,
 	"central_1": KIND_OBJECT, "central_2": KIND_OBJECT, "central_3": KIND_OBJECT, "central_4": KIND_OBJECT,
 	"supply_depot": KIND_OBJECT, "supply_line_pole": KIND_OBJECT, "supply_cart": KIND_OBJECT,
-	"supply_conveyor": KIND_OBJECT,
 	"agua": KIND_GROUND, "hielo": KIND_GROUND, "lava": KIND_GROUND, "barro": KIND_GROUND,
 }
 
@@ -54,10 +53,6 @@ const CENTRAL_1: Texture2D = preload("res://assets/sprites/map/rendered/central_
 const CENTRAL_2: Texture2D = preload("res://assets/sprites/map/rendered/central_2.png")
 const CENTRAL_3: Texture2D = preload("res://assets/sprites/map/rendered/central_3.png")
 const CENTRAL_4: Texture2D = preload("res://assets/sprites/map/rendered/central_4.png")
-const SUPPLY_DEPOT: Texture2D = preload("res://assets/sprites/map/supply_depot.svg")
-const SUPPLY_LINE_POLE: Texture2D = preload("res://assets/sprites/map/supply_line_pole.svg")
-const SUPPLY_CART: Texture2D = preload("res://assets/sprites/map/supply_cart.svg")
-const SUPPLY_CONVEYOR: Texture2D = preload("res://assets/sprites/map/supply_conveyor.svg")
 
 ## T277: arte aprobado; los estados son visuales y no agregan ids a la leyenda.
 const MINE: Array[Texture2D] = [preload("res://assets/sprites/map/rendered/mine_idle.png"), preload("res://assets/sprites/map/rendered/mine_active.png"), preload("res://assets/sprites/map/rendered/mine_depleted.png")]
@@ -75,8 +70,8 @@ const TEXTURES: Dictionary = {
 	"roca_marcada": SIGNAL_ROCKS["caliza"][0], "sendero": SIGNAL_PATH, "herramienta": SIGNAL_TOOL,
 	"poste_cintas": POST_ENEMY, "simbolo_ruina": SIGNAL_ROCKS["caliza"][0], "campamento_vacio": SIGNAL_CAMP,
 	"central_1": CENTRAL_1, "central_2": CENTRAL_2, "central_3": CENTRAL_3, "central_4": CENTRAL_4,
-	"supply_depot": SUPPLY_DEPOT, "supply_line_pole": SUPPLY_LINE_POLE, "supply_cart": SUPPLY_CART,
-	"supply_conveyor": SUPPLY_CONVEYOR,
+	# ENSAYO T547: fallback temporal (escombro) hasta integrar las piezas de T527.
+	"supply_depot": RUBBLE[0], "supply_line_pole": RUBBLE[0], "supply_cart": RUBBLE[0],
 }
 
 ## Los colores de cada suelo: el fondo, un tono claro (reflejos), uno oscuro (fondo, sombras) y el borde.
