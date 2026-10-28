@@ -23,6 +23,12 @@ func after_each() -> void:
 	SaveManager.load_save()
 
 
+## RF-724: Tarjetas solo arma los niveles habilitados; estos tests miran los 15.
+func _unlock_all() -> void:
+	for i: int in GameFlow.level_count():
+		SaveManager.unlock(GameFlow.level(i).id)
+
+
 func _open() -> Control:
 	SaveManager.set_setting("selector_style", CampaignMap.STYLE_CARDS)
 	var select: Control = SELECT_SCENE.instantiate()
@@ -44,6 +50,7 @@ func test_each_desktop_card_background_comes_from_its_level_theme() -> void:
 	if UiMode.is_mobile():
 		pending("el fondo temático es solo de desktop")
 		return
+	_unlock_all()
 	var select: Control = _open()
 	var cards: Array[Button] = _campaign_cards(select)
 	assert_eq(cards.size(), GameFlow.level_count(), "una tarjeta por nivel")
@@ -67,6 +74,7 @@ func test_card_background_stays_low_contrast_and_behind_the_content() -> void:
 	if UiMode.is_mobile():
 		pending("el fondo temático es solo de desktop")
 		return
+	_unlock_all()
 	for card: Button in _campaign_cards(_open()):
 		var backdrop: TextureRect = card.get_node("ThemeBackdrop")
 		var scrim: ColorRect = card.get_node("ThemeScrim")
@@ -89,8 +97,9 @@ func test_locked_card_dims_its_background_without_losing_the_alpha() -> void:
 		pending("el fondo temático es solo de desktop")
 		return
 	var select: Control = _open()
-	var cards: Array[Button] = _campaign_cards(select)
-	var locked: Button = cards[cards.size() - 1]
+	# RF-724: la lista ya no trae tarjetas bloqueadas; la fábrica sigue atenuando la de un nivel bloqueado.
+	var locked: Button = select._make_card(GameFlow.level_count() - 1)
+	add_child_autofree(locked)
 	assert_true(locked.disabled, "el último nivel empieza bloqueado")
 	var backdrop: TextureRect = locked.get_node("ThemeBackdrop")
 	assert_lt(backdrop.modulate.r, 1.0, "el fondo se atenúa con la tarjeta")

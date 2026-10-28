@@ -732,7 +732,7 @@ func lost_pieces() -> Array[String]:
 
 ## El texto del diálogo para el estado actual de la partida.
 func exit_message() -> String:
-	return ExitText.message(lost_pieces(), infrastructure.field.has_job())
+	return ExitText.message()
 
 
 ## RF-460: pregunta qué se pierde y pausa la partida. Probando desde el editor no se pierde nada: vuelve directo.

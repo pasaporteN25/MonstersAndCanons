@@ -358,6 +358,12 @@ func test_the_win_text_does_not_break_the_initials_entry() -> void:
 
 # --- La tarjeta (RF-465) ---
 
+## RF-724: Tarjetas solo arma los niveles habilitados; estas pruebas miran los 15.
+func _unlock_all() -> void:
+	for index: int in GameFlow.level_count():
+		SaveManager.unlock(GameFlow.level(index).id)
+
+
 func _card(select: Control, index: int) -> Button:
 	return select.get_node("%Cards").get_child(index)
 
@@ -382,7 +388,9 @@ func test_a_locked_card_does_not_show_the_place() -> void:
 	var select: Control = SELECT_SCENE.instantiate()
 	add_child_autofree(select)
 	await wait_process_frames(2)
-	var locked: Button = _card(select, 7)
+	assert_eq(select.get_node("%Cards").get_child_count(), 1, "RF-724: la lista ya no trae el nivel 8 bloqueado")
+	var locked: Button = select._make_card(7)  # la fábrica sigue sin adelantar el lugar de un nivel bloqueado
+	add_child_autofree(locked)
 	assert_true(locked.disabled)
 	assert_null(locked.get_node_or_null("Place"), "no adelanta el nivel")
 	assert_false(locked.tooltip_text.contains("El bastión sobre ruinas"), "el lugar tampoco se filtra por tooltip")
@@ -393,7 +401,9 @@ func test_the_place_follows_the_unlock_state() -> void:
 	var select: Control = SELECT_SCENE.instantiate()
 	add_child_autofree(select)
 	await wait_process_frames(2)
-	assert_not_null(_card(select, 7).get_node_or_null("Place"), "ganar el 7 abre el 8")
+	var cards: Node = select.get_node("%Cards")
+	assert_eq(cards.get_child_count(), 3, "los niveles 1, 7 (ganado) y 8 (abierto)")
+	assert_not_null(_card(select, 2).get_node_or_null("Place"), "ganar el 7 abre el 8")
 
 
 func test_a_card_without_a_place_is_the_same_as_before() -> void:
@@ -425,6 +435,7 @@ func test_the_place_and_tower_icons_fit_below_the_name() -> void:
 
 
 func test_campaign_cards_keep_the_same_tower_offer_as_unboxed_icons() -> void:
+	_unlock_all()
 	var select: Control = SELECT_SCENE.instantiate()
 	add_child_autofree(select)
 	await wait_process_frames(2)
@@ -459,6 +470,7 @@ func test_campaign_cards_keep_the_same_tower_offer_as_unboxed_icons() -> void:
 func test_desktop_campaign_shows_all_fifteen_cards_without_scroll() -> void:
 	if UiMode.is_mobile():
 		return
+	_unlock_all()
 	var select: Control = SELECT_SCENE.instantiate()
 	add_child_autofree(select)
 	await wait_process_frames(2)
@@ -470,7 +482,7 @@ func test_desktop_campaign_shows_all_fifteen_cards_without_scroll() -> void:
 		"la tercera fila aparece debajo de la segunda")
 	assert_eq(cards.get_child(14).size, select.CAMPAIGN_CARD_SIZE)
 	assert_false(cards.get_child(0).disabled)
-	assert_true(cards.get_child(14).disabled, "se conservan los bloqueos de la campaña")
+	assert_false(cards.get_child(14).disabled, "con todo habilitado, todas las tarjetas se pueden iniciar")
 
 
 func _tower_ids(towers: Array[TowerData]) -> Array[String]:

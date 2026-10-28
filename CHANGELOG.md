@@ -1,5 +1,9 @@
 # Novedades del juego
 
+## Tarjetas solo con niveles disponibles y salida más corta *(T531, 2026-10-28)*
+
+En la vista **Tarjetas** de la campaña ahora aparecen únicamente los niveles que ya podés jugar: con una partida nueva, solo el nivel 1. El **mapa** sigue mostrando (y dejando mirar) los niveles bloqueados, y el total de estrellas sigue contando toda la campaña. Al tocar «← Menú» en plena partida, el cuadro muestra solo el título, los dos botones y un único aviso: «No se guardará el progreso de esta partida.» Sigue pausando el juego y no cambia nada de tu guardado.
+
 ## Adornos dimensionales para desierto y ruinas *(T524, 2026-10-27)*
 
 El desierto suma el cactus elegido y dos variantes de roca roja. En ruinas aparecen columnas, bloques y estatuas de piedra con más volumen; el volcán conserva su lista de adornos y reemplaza solo la columna. Los campamentos vacíos de los niveles 14 y 15 usan el diseño elegido. Todo ocupa las mismas casillas decorativas de antes: no cambia el recorrido, la construcción ni el balance.

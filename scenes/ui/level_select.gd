@@ -245,10 +245,14 @@ func show_page(page: StringName) -> void:
 		if show_map:
 			map_view = _make_map_view()
 			_cards.add_child(map_view)
-		else:
-			for i: int in GameFlow.level_count():
-				_cards.add_child(_make_card(i))
 		count = GameFlow.level_count()
+		if not show_map:
+			# RF-724: Tarjetas solo ofrece lo que se puede iniciar; el mapa sigue mostrando los bloqueados.
+			count = 0
+			for i: int in GameFlow.level_count():
+				if GameFlow.is_level_unlocked(i):
+					_cards.add_child(_make_card(i))
+					count += 1
 		_total_stars.text = "Estrellas: %d de %d" % [GameFlow.total_stars(), GameFlow.max_stars()]
 	elif page == PAGE_COMMUNITY:
 		for entry: Dictionary in _entries:
