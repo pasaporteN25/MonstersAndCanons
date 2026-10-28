@@ -21,7 +21,14 @@ const KINDS: Dictionary = {
 	"agua": KIND_GROUND, "hielo": KIND_GROUND, "lava": KIND_GROUND, "barro": KIND_GROUND,
 }
 
-const FLOWERS: Texture2D = preload("res://assets/sprites/map/flores.svg")
+## T542: modelos nuevos aprobados por Lucas; la selección es estable por casilla.
+const FLOWER_VARIANTS: Array[Texture2D] = [
+	preload("res://assets/sprites/map/rendered/cantaro/flora_trumpets.png"),
+	preload("res://assets/sprites/map/rendered/cantaro/flora_capsules.png"),
+	preload("res://assets/sprites/map/rendered/cantaro/flora_rosette.png"),
+]
+## El catálogo conserva una textura de referencia; los mapas usan flower_texture().
+const FLOWERS: Texture2D = FLOWER_VARIANTS[0]
 const SIGNAL_PATH: Texture2D = preload("res://assets/sprites/map/sendero.svg")
 const SIGNAL_TOOL: Texture2D = preload("res://assets/sprites/map/herramienta.svg")
 ## T524: variante 02 aprobada por Lucas el 2026-10-27; niveles 14 y 15, donde ya existe la leyenda.
@@ -101,6 +108,11 @@ static func texture(id: String) -> Texture2D:
 ## T508: la variante depende solo de la casilla; la paleta sigue el bioma, sin consumir azar.
 static func m79_column_texture(cell: Vector2i) -> Texture2D:
 	return MapThemes.COLUMN[posmod(cell.x + cell.y * 7, MapThemes.COLUMN.size())]
+
+
+## T542: flores alienígenas de los modelos aprobados; el ciclo no cambia entre partidas.
+static func flower_texture(cell: Vector2i) -> Texture2D:
+	return FLOWER_VARIANTS[posmod(cell.x + cell.y * 2, FLOWER_VARIANTS.size())]
 
 
 static func signal_rock_texture(cell: Vector2i, theme: StringName) -> Texture2D:
