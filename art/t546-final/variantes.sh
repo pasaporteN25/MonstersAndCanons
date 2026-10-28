@@ -1,0 +1,6 @@
+A="VARIANTE LUMINOSA: atardecer limpio y cálido, cielo despejado azul pálido a ámbar, la colonia con sus ventanas y faroles encendidos, y a lo lejos en la planicie, a la derecha, pequeños fuegos de campamento y tiendas de otras comunidades (los Moradores) alejándose por un camino, en puntitos cálidos sin figuras detalladas. Nada oscuro ni amenazante en ningún lugar."
+B="VARIANTE OSCURA: la misma escena base (colonia sobre loma, camino a la derecha con unos pocos fuegos lejanos), pero en el horizonte lejano, a la derecha, un frente de tormenta lejana ambiguo: banco de nubes y lluvia en colores apagados (gris pizarra, verdoso y violeta desaturado), sin forma reconocible, sin silueta de máquina ni criatura, sin rayos dramáticos; solo una duda en el clima, que no señala ninguna amenaza concreta. La colonia sigue con luz cálida."
+if [ "$VAR" = "3" ]; then
+A="$A Composición alternativa: la colonia a la derecha sobre la loma y el camino con los fuegos de los Moradores alejándose hacia la izquierda y el fondo; cielo de crepúsculo dorado más sereno."
+B="$B Composición alternativa: la colonia a la derecha y la tormenta lejana en el horizonte de la izquierda; sin columnas de humo ni fuegos en el horizonte, solo el frente de clima."
+fi
