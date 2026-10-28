@@ -12,6 +12,25 @@ static func load_for_theme(theme: StringName) -> Texture2D:
 	return load_texture(path)
 
 
+# Tono de las franjas externas (T532, RF-726): brillo y saturación entre 0 y 1; 1 = sin cambio.
+static func strip_tone(catalog: Variant) -> Dictionary:
+	var tone: Dictionary = {"brillo": 1.0, "saturacion": 1.0}
+	if typeof(catalog) != TYPE_DICTIONARY:
+		return tone
+	var strips: Variant = (catalog as Dictionary).get("franjas", {})
+	if typeof(strips) != TYPE_DICTIONARY:
+		return tone
+	for key: String in ["brillo", "saturacion"]:
+		var value: Variant = (strips as Dictionary).get(key, 1.0)
+		if typeof(value) == TYPE_FLOAT or typeof(value) == TYPE_INT:
+			tone[key] = clampf(float(value), 0.0, 1.0)
+	return tone
+
+
+static func load_strip_tone() -> Dictionary:
+	return strip_tone(_read_catalog(CATALOG_PATH))
+
+
 static func load_texture(path: String) -> Texture2D:
 	if not path.begins_with("res://") or not ResourceLoader.exists(path):
 		return null

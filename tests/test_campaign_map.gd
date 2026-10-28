@@ -204,7 +204,7 @@ func test_cards_can_be_chosen_and_switch_is_visible_on_desktop() -> void:
 	SaveManager.set_setting("selector_style", CampaignMap.STYLE_CARDS)
 	var select: Control = _open()
 	assert_null(select.map_view)
-	assert_eq(select.get_node("%Cards").get_child_count(), 15)
+	assert_eq(select.get_node("%Cards").get_child_count(), 1, "RF-724: guardado nuevo, solo el nivel 1")
 	assert_true(select.get_node("%StyleSwitch").visible)
 	assert_true(select.get_node("%StyleCards").button_pressed)
 	assert_false(select.get_node("%StyleMap").button_pressed)
@@ -223,7 +223,7 @@ func test_switch_persists_and_does_not_change_progress() -> void:
 	select.get_node("%StyleCards").pressed.emit()
 	await get_tree().process_frame
 	assert_null(select.map_view)
-	assert_eq(select.get_node("%Cards").get_child_count(), 15)
+	assert_eq(select.get_node("%Cards").get_child_count(), 2, "RF-724: los niveles 1 y 2 habilitados")
 	assert_eq(SaveManager.selector_style(), CampaignMap.STYLE_CARDS)
 	assert_eq(_progress_snapshot(), before)
 	assert_eq(opened.size(), 0, "cambiar de estilo no abre niveles")

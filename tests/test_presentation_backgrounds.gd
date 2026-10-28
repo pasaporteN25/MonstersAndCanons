@@ -17,6 +17,32 @@ func test_runtime_catalog_maps_every_approved_theme_to_a_texture() -> void:
 		assert_not_null(PresentationBackgroundCatalog.load_for_theme(StringName(theme)), theme)
 
 
+func test_strip_tone_reads_catalog_and_clamps_invalid_values() -> void:
+	var tone: Dictionary = PresentationBackgroundCatalog.load_strip_tone()
+	assert_lt(float(tone["brillo"]), 1.0)
+	assert_lt(float(tone["saturacion"]), 1.0)
+	assert_gt(float(tone["brillo"]), 0.0)
+	assert_eq(PresentationBackgroundCatalog.strip_tone(null), {"brillo": 1.0, "saturacion": 1.0})
+	assert_eq(PresentationBackgroundCatalog.strip_tone({"franjas": 3}), {"brillo": 1.0, "saturacion": 1.0})
+	var odd: Dictionary = PresentationBackgroundCatalog.strip_tone({"franjas": {"brillo": 7, "saturacion": "x"}})
+	assert_eq(float(odd["brillo"]), 1.0)
+	assert_eq(float(odd["saturacion"]), 1.0)
+	var low: Dictionary = PresentationBackgroundCatalog.strip_tone({"franjas": {"brillo": -2.0}})
+	assert_eq(float(low["brillo"]), 0.0)
+
+
+func test_only_the_external_background_is_dimmed_not_the_playable_viewport() -> void:
+	var host: Control = HOST_SCENE.instantiate() as Control
+	add_child_autofree(host)
+	var background: TextureRect = host.get_node("BackgroundTexture") as TextureRect
+	var strip_material: ShaderMaterial = background.material as ShaderMaterial
+	assert_not_null(strip_material)
+	assert_lt(float(strip_material.get_shader_parameter("brightness")), 1.0)
+	assert_lt(float(strip_material.get_shader_parameter("saturation")), 1.0)
+	assert_null((host.get_node("ContentFrame") as CanvasItem).material)
+	assert_null((host.get_node("Background") as CanvasItem).material)
+
+
 func test_invalid_theme_or_catalog_entry_uses_the_solid_fallback() -> void:
 	assert_null(PresentationBackgroundCatalog.load_for_theme(&"sin_tema"))
 	assert_eq(PresentationBackgroundCatalog.path_for_theme(null, &"pradera"), "")

@@ -70,7 +70,7 @@ func test_it_opens_on_the_campaign_by_default() -> void:
 	_write("mio.json", _good_map("Mío"))
 	var select: Control = _open(&"campaign")
 	assert_eq(select.current_page(), &"campaign")
-	assert_eq(_cards(select).size(), GameFlow.level_count())
+	assert_eq(_cards(select).size(), 1, "RF-724: guardado nuevo, solo el nivel 1")
 	assert_true((select.get_node("%CampaignTab") as Button).button_pressed)
 	assert_false((select.get_node("%CommunityTab") as Button).button_pressed)
 	assert_false((select.get_node("%FolderButton") as Button).visible, "la carpeta es de la comunidad")
@@ -94,7 +94,7 @@ func test_switching_tabs_rebuilds_the_cards() -> void:
 	assert_true((select.get_node("%CommunityTab") as Button).button_pressed)
 	assert_false((select.get_node("%CampaignTab") as Button).button_pressed)
 	select.show_page(&"campaign")
-	assert_eq(_cards(select).size(), GameFlow.level_count())
+	assert_eq(_cards(select).size(), 1, "RF-724: guardado nuevo, solo el nivel 1")
 	assert_true((select.get_node("%TotalStars") as Label).text.begins_with("Estrellas: "), "vuelven las estrellas de la campaña")
 
 

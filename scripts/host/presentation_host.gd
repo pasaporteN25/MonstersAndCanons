@@ -1,6 +1,7 @@
 extends Control
 
 const MAIN_MENU_SCENE: PackedScene = preload("res://scenes/ui/main_menu.tscn")
+const STRIP_TONE_SHADER: Shader = preload("res://assets/shaders/strip_tone.gdshader")
 const LOGICAL_SIZE: Vector2i = Vector2i(1280, 720)
 
 @onready var content_frame: SubViewportContainer = $ContentFrame
@@ -22,6 +23,7 @@ func _enter_tree() -> void:
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	_apply_strip_tone()
 	content_viewport.size_2d_override = LOGICAL_SIZE
 	content_viewport.size_2d_override_stretch = true
 	content_viewport.handle_input_locally = true
@@ -61,6 +63,16 @@ func install_scene(scene: PackedScene) -> void:
 		active_screen.connect("level_theme_selected", Callable(self, "set_background_theme"))
 	content_viewport.add_child(active_screen)
 	Audio.add_click_sounds(active_screen)
+
+
+# RF-726: el apagado vive solo en el fondo externo; el viewport jugable no pasa por este material.
+func _apply_strip_tone() -> void:
+	var tone: Dictionary = PresentationBackgroundCatalog.load_strip_tone()
+	var strip_material: ShaderMaterial = ShaderMaterial.new()
+	strip_material.shader = STRIP_TONE_SHADER
+	strip_material.set_shader_parameter("brightness", float(tone["brillo"]))
+	strip_material.set_shader_parameter("saturation", float(tone["saturacion"]))
+	background_texture.material = strip_material
 
 
 func get_active_screen() -> Node:

@@ -4,6 +4,13 @@
 
 Cuando aparece el Coloso en el nivel 15, la pantalla de presentación ahora tiene su fondo propio: un claro sombrío de basalto con vetas ámbar. Detrás del nombre y la frase hay una franja oscura para que se lean bien. El Jefe del nivel 1 sigue como antes. No cambia la partida, las oleadas ni el balance; la ilustración propia del Coloso todavía no está.
 
+## Tarjetas solo con niveles disponibles y salida más corta *(T531, 2026-10-28)*
+
+En la vista **Tarjetas** de la campaña ahora aparecen únicamente los niveles que ya podés jugar: con una partida nueva, solo el nivel 1. El **mapa** sigue mostrando (y dejando mirar) los niveles bloqueados, y el total de estrellas sigue contando toda la campaña. Al tocar «← Menú» en plena partida, el cuadro muestra solo el título, los dos botones y un único aviso: «No se guardará el progreso de esta partida.» Sigue pausando el juego y no cambia nada de tu guardado.
+## Franjas laterales más apagadas *(T532, 2026-10-28; en revisión)*
+
+En pantallas anchas, las franjas a los costados del mapa conservan el paisaje de cada terreno pero se ven con menos brillo y color, para que el mapa y los controles se lleven la atención. El área de juego, el zoom y la cámara no cambian.
+
 ## Flora extraña de Cántaro *(T542, 2026-10-27)*
 
 Las flores de los niveles 1, 3, 4 y 5 ahora alternan de forma estable entre los tres modelos nuevos aprobados. Conservan una lectura vegetal reconocible, con formas extrañas propias de Cántaro; cada casilla mantiene su modelo entre partidas. Los PNG nuevos son la referencia activa. `flores.svg` queda preservado como material histórico sin uso. No cambian los mapas, el camino ni la construcción.

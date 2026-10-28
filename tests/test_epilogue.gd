@@ -191,13 +191,13 @@ func test_the_campaign_is_complete_when_the_fifteen_levels_are_completed_without
 
 # --- El epílogo y los créditos (RF-471, RF-472) ---
 
-func test_epilogue_button_opens_the_picture_with_the_four_lines_and_two_buttons() -> void:
+func test_epilogue_button_opens_the_picture_with_the_three_lines_and_two_buttons() -> void:
 	_win_level(_last_index())
 	_next_button(game.end_screen).pressed.emit()
 	assert_not_null(game.epilogue)
 	assert_true(game.epilogue.is_open())
 	assert_eq(game.epilogue.text(), GameFlow.level(_last_index()).epilogue_text)
-	assert_eq(game.epilogue.text().split("\n").size(), 4, "cuatro líneas")
+	assert_eq(game.epilogue.text().split("\n").size(), 3, "tres líneas")
 	assert_eq(EpilogueScreen.IMAGE.get_size(), Vector2(1920, 1080), "la imagen de T233")
 	var texts: Array = []
 	for button: Node in game.epilogue.find_children("*", "Button", true, false):
@@ -212,7 +212,7 @@ func test_the_epilogue_text_is_the_approved_one() -> void:
 	for raw: String in section.split("\n"):
 		if raw.begins_with("- "):
 			lines.append(raw.substr(2).strip_edges())
-	assert_eq(lines.size(), 4)
+	assert_eq(lines.size(), 3)
 	assert_eq(GameFlow.level(_last_index()).epilogue_text, "\n".join(lines))
 	var errors: PackedStringArray = []
 	LevelTexts.parse({"epilogo": GameFlow.level(_last_index()).epilogue_text}, errors)
