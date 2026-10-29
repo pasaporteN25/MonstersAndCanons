@@ -1,5 +1,5 @@
 # Panel de pruebas (RF-184, D-028). Solo existe en el modo de pruebas: Game lo crea si
-# DevMode.enabled. Se abre y cierra con F1 o con el botón "Pruebas" de la barra de arriba.
+# DevMode.enabled. Se abre y cierra con F1 o con el botón «Pruebas» de la barra de arriba.
 # Solo avisa a Game qué hacer (constitución P6): las acciones están en game.gd (dev_…).
 class_name DevPanel
 extends PanelContainer
@@ -30,33 +30,33 @@ func setup(game: Game) -> DevPanel:
 	box.add_theme_constant_override("separation", 6)
 	margin.add_child(box)
 	var title := Label.new()
-	title.text = "Pruebas"
+	title.text = Localization.t(&"dev.title")
 	title.add_theme_color_override("font_color", Color(1, 0.55, 0.3))
 	title.add_theme_font_size_override("font_size", 20)
 	box.add_child(title)
-	box.add_child(_section("Recursos"))
-	box.add_child(_button("+1000 de oro", game.dev_add_gold))
-	box.add_child(_button("+10 recursos", game.dev_add_resources))
-	box.add_child(_button("Terminar demolición", game.dev_finish_demolition))
-	var support_toggle: CheckButton = _toggle("Habilitar estandartes", game.dev_enable_support)
+	box.add_child(_section(Localization.t(&"dev.section_resources")))
+	box.add_child(_button(Localization.t(&"dev.add_gold"), game.dev_add_gold))
+	box.add_child(_button(Localization.t(&"dev.add_resources"), game.dev_add_resources))
+	box.add_child(_button(Localization.t(&"dev.finish_demolition"), game.dev_finish_demolition))
+	var support_toggle: CheckButton = _toggle(Localization.t(&"dev.enable_banners"), game.dev_enable_support)
 	support_toggle.set_pressed_no_signal(DevMode.support_unlocked)
 	box.add_child(support_toggle)
-	var collections_toggle: CheckButton = _toggle("Habilitar todas las colecciones", game.dev_enable_collections)
+	var collections_toggle: CheckButton = _toggle(Localization.t(&"dev.enable_collections"), game.dev_enable_collections)
 	collections_toggle.set_pressed_no_signal(DevMode.collections_unlocked)
 	box.add_child(collections_toggle)
-	_lives_toggle = _toggle("Vidas infinitas  [%s]" % DevMode.key_label(&"dev_infinite_lives"), game.dev_set_infinite_lives)
+	_lives_toggle = _toggle(Localization.t_fmt(&"dev.infinite_lives", {"key": DevMode.key_label(&"dev_infinite_lives")}), game.dev_set_infinite_lives)
 	box.add_child(_lives_toggle)
 	game.dev_infinite_lives_changed.connect(_lives_toggle.set_pressed_no_signal)
-	box.add_child(_section("Partida"))
-	box.add_child(_button("Saltar oleada  [%s]" % DevMode.key_label(&"dev_skip_wave"), game.dev_skip_wave))
-	box.add_child(_button("Matar a todos  [%s]" % DevMode.key_label(&"dev_kill_all"), game.dev_kill_all))
-	box.add_child(_button("Ganar", game.dev_finish.bind(true)))
-	box.add_child(_button("Perder", game.dev_finish.bind(false)))
-	box.add_child(_section("Simulación"))
+	box.add_child(_section(Localization.t(&"dev.section_match")))
+	box.add_child(_button(Localization.t_fmt(&"dev.skip_wave", {"key": DevMode.key_label(&"dev_skip_wave")}), game.dev_skip_wave))
+	box.add_child(_button(Localization.t_fmt(&"dev.kill_all", {"key": DevMode.key_label(&"dev_kill_all")}), game.dev_kill_all))
+	box.add_child(_button(Localization.t(&"dev.win"), game.dev_finish.bind(true)))
+	box.add_child(_button(Localization.t(&"dev.lose"), game.dev_finish.bind(false)))
+	box.add_child(_section(Localization.t(&"dev.section_simulation")))
 	box.add_child(_speed_row())
 	game.speed_changed.connect(_on_speed_changed)
 	box.add_child(_enemy_row())
-	box.add_child(_toggle("Mostrar FPS", metrics_toggled.emit))
+	box.add_child(_toggle(Localization.t(&"dev.show_fps"), metrics_toggled.emit))
 	return self
 
 
@@ -64,7 +64,7 @@ func setup(game: Game) -> DevPanel:
 func _speed_row() -> Control:
 	var column := VBoxContainer.new()
 	var title := Label.new()
-	title.text = "Velocidad  [%s / %s]" % [DevMode.key_label(&"dev_slower"), DevMode.key_label(&"dev_faster")]
+	title.text = Localization.t_fmt(&"dev.speed", {"slower": DevMode.key_label(&"dev_slower"), "faster": DevMode.key_label(&"dev_faster")})
 	column.add_child(title)
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 2)
@@ -106,7 +106,7 @@ func _enemy_row() -> Control:
 	_enemy_choice.name = "EnemyChoice"
 	_enemy_choice.focus_mode = Control.FOCUS_NONE
 	_enemy_choice.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_enemy_choice.tooltip_text = "Rueda: cambiar enemigo. Clic: abrir la lista completa."
+	_enemy_choice.tooltip_text = Localization.t(&"dev.enemy_tip")
 	_enemy_choice.gui_input.connect(_on_enemy_choice_input)
 	var popup: PopupMenu = _enemy_choice.get_popup()
 	popup.max_size = Vector2i(600,320)
@@ -124,7 +124,7 @@ func _enemy_row() -> Control:
 	for enemy: EnemyData in _enemy_types:
 		_enemy_choice.add_item(enemy.name_text())
 	row.add_child(_enemy_choice)
-	row.add_child(_button("Aparecer", func() -> void:
+	row.add_child(_button(Localization.t(&"dev.spawn"), func() -> void:
 		_game.dev_spawn(_enemy_types[_enemy_choice.selected])))
 	return row
 

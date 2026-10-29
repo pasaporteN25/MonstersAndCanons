@@ -109,7 +109,7 @@ func _process(_delta: float) -> void:
 		return
 	_metrics_updated = now
 	var fps: float = Engine.get_frames_per_second()
-	_metrics.text = "%d FPS · %.1f ms/cuadro" % [fps, 1000.0 / maxf(fps, 1.0)]
+	_metrics.text = Localization.t_fmt(&"hud.metrics", {"fps": int(fps), "ms": "%.1f" % (1000.0 / maxf(fps, 1.0))})
 
 func show_metrics(enabled: bool) -> void:
 	_metrics.visible = enabled
@@ -119,6 +119,7 @@ func _ready() -> void:
 	Localization.apply(self, {"NextWaveTitle": &"hud.next_wave", "StartWaveButton": &"hud.start_wave", "PauseLabel": &"hud.paused_label",
 			"ExitButton": &"hud.exit_menu", "BuildInfoName": &"hud.build_info_placeholder", "BuildInfoText": &"hud.build_info_text_placeholder",
 			"IntroName": &"hud.new_enemy_title"})
+	_exit_button.tooltip_text = Localization.t(&"hud.exit_menu_tip")  # T534: la ayuda de la escena está en español
 	obstacle_panel = ObstaclePanel.new()
 	obstacle_panel.name = "ObstaclePanel"
 	add_child(obstacle_panel)

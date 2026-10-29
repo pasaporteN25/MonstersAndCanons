@@ -26,6 +26,9 @@ func _ready() -> void:
 	_apply_button.pressed.connect(apply_draft)
 	_cancel_button.pressed.connect(cancel_editing)
 	_restore_button.pressed.connect(restore_default)
+	Localization.apply(self, {"Title": &"tools.banner_editor", "PreviewLabel": &"banner.preview_label", "TileLabel": &"banner.tile_label",
+		"PaletteLabel": &"banner.palette", "EmblemLabel": &"banner.emblem", "RestoreButton": &"banner.restore", "ApplyButton": &"banner.apply",
+		"CancelButton": &"editor.cancel"})
 	Audio.add_click_sounds(self)
 	_refresh()
 	(_palette_row.get_child(0) as Control).grab_focus()
@@ -47,15 +50,15 @@ func select_emblem(id: String) -> void:
 
 func restore_default() -> void:
 	draft = BannerRecipe.default_recipe()
-	_message.text = "Predeterminado seleccionado. Aplicalo para guardarlo."
+	_message.text = Localization.t(&"banner.default_selected")
 	_refresh()
 
 
 func apply_draft() -> bool:
 	if not BannerRecipeStore.save_recipe(draft, store_path):
-		_message.text = "No se pudo guardar. Revisá el espacio y los permisos del dispositivo."
+		_message.text = Localization.t(&"banner.save_failed")
 		return false
-	_message.text = "Diseño aplicado."
+	_message.text = Localization.t(&"banner.applied")
 	applied.emit(draft)
 	close_editor.call()
 	return true

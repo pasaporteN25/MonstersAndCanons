@@ -62,7 +62,7 @@ func _init() -> void:
 			accept())
 	_list.item_selected.connect(func(_index: int) -> void: _ok.disabled = false)
 	_ok.pressed.connect(accept)
-	_cancel.text = "Cancelar"
+	_cancel.text = Localization.t(&"editor.cancel")
 	_cancel.pressed.connect(cancel)
 	for node: Control in [_title, _message, _field, _note, _list]:
 		box.add_child(node)

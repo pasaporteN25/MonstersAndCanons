@@ -15,19 +15,19 @@ static var _load_warning_shown: bool = false
 static func load_data(path: String = PATH) -> Dictionary:
 	var errors: PackedStringArray = []
 	if not FileAccess.file_exists(path):
-		return _unavailable("No existe el archivo %s." % path)
+		return _unavailable(Localization.t_fmt(&"obstaclecat.no_file", {"path": path}))
 	var parser := JSON.new()
 	if parser.parse(FileAccess.get_file_as_string(path)) != OK or not parser.data is Dictionary:
-		return _unavailable("El archivo %s no contiene un objeto JSON válido." % path)
+		return _unavailable(Localization.t_fmt(&"obstaclecat.not_object", {"path": path}))
 	var data: Dictionary = parser.data
 	_check_keys(data, ROOT_KEYS, "", errors)
 	if not data.has("version") or not _is_number(data["version"]) or float(data["version"]) != 1.0:
-		errors.append("version: tiene que ser 1.")
+		errors.append(Localization.t(&"obstaclecat.version"))
 	_check_machine(data.get("demoledora"), errors)
 	_check_classes(data.get("removibles"), REMOVABLE_CLASSES, REMOVABLE_KEYS, "removibles", errors)
 	_check_classes(data.get("extraccion"), EXTRACTION_CLASSES, EXTRACTION_KEYS, "extraccion", errors)
 	if not errors.is_empty():
-		return _unavailable("El archivo %s tiene errores: %s" % [path, "; ".join(errors)])
+		return _unavailable(Localization.t_fmt(&"obstaclecat.has_errors", {"path": path, "errors": "; ".join(errors)}))
 	return {"data": data, "errors": errors}
 
 
@@ -70,53 +70,53 @@ static func _check_machine(value: Variant, errors: PackedStringArray) -> void:
 		return
 	for key: String in MACHINE_KEYS:
 		if not value.has(key):
-			errors.append("demoledora: falta \"%s\"." % key)
+			errors.append(Localization.t_fmt(&"obstaclecat.machine_missing", {"key": key}))
 		elif not _is_number(value[key]) or float(value[key]) < 0.0:
-			errors.append("demoledora.%s: tiene que ser un número de 0 para arriba." % key)
+			errors.append(Localization.t_fmt(&"obstaclecat.machine_nonneg", {"key": key}))
 		elif float(value[key]) != floorf(float(value[key])):
-			errors.append("demoledora.%s: tiene que ser un número entero." % key)
+			errors.append(Localization.t_fmt(&"obstaclecat.machine_whole", {"key": key}))
 
 
 static func _check_classes(value: Variant, class_ids: PackedStringArray, known: PackedStringArray, where: String, errors: PackedStringArray) -> void:
 	if not value is Dictionary:
-		errors.append("%s: tiene que ser un objeto." % where)
+		errors.append(Localization.t_fmt(&"obstaclecat.where_not_object", {"where": where}))
 		return
 	for class_id: String in class_ids:
 		if not value.has(class_id):
-			errors.append("%s: falta la clase \"%s\"." % [where, class_id])
+			errors.append(Localization.t_fmt(&"obstaclecat.class_missing", {"where": where, "class": class_id}))
 	for class_key: Variant in value.keys():
 		var entry: Variant = value[class_key]
 		if not entry is Dictionary:
-			errors.append("%s.%s: tiene que ser un objeto." % [where, class_key])
+			errors.append(Localization.t_fmt(&"obstaclecat.entry_not_object", {"where": where, "class": class_key}))
 			continue
 		_check_values(entry, known, "%s.%s" % [where, class_key], errors)
 		if not class_ids.has(str(class_key)):
-			errors.append("%s: la clase \"%s\" no existe." % [where, class_key])
+			errors.append(Localization.t_fmt(&"obstaclecat.class_unknown", {"where": where, "class": class_key}))
 		var required: PackedStringArray = ["costo", "tiempo", "recursos", "probabilidad"] if where == "removibles" \
 			else ["costo", "produccion", "reserva"]
 		if class_key == "escombro":
 			required.append("recursos_si_recuperado")
 		elif entry.has("recursos_si_recuperado"):
-			errors.append("%s.%s: \"recursos_si_recuperado\" solo corresponde a escombro." % [where, class_key])
+			errors.append(Localization.t_fmt(&"obstaclecat.recovered_only_rubble", {"where": where, "class": class_key}))
 		for key: String in required:
 			if not entry.has(key):
-				errors.append("%s.%s: falta \"%s\"." % [where, class_key, key])
+				errors.append(Localization.t_fmt(&"obstaclecat.key_missing", {"where": where, "class": class_key, "key": key}))
 		for key: String in entry:
 			var number: Variant = entry[key]
 			if not _is_number(number) or float(number) < 0.0:
-				errors.append("%s.%s: tiene que ser un número de 0 para arriba." % [class_key, key])
+				errors.append(Localization.t_fmt(&"obstaclecat.value_nonneg", {"class": class_key, "key": key}))
 				continue
 			if key in ["costo", "tiempo"] and float(number) <= 0.0:
-				errors.append("%s.%s: tiene que ser mayor que 0." % [class_key, key])
+				errors.append(Localization.t_fmt(&"obstaclecat.value_positive", {"class": class_key, "key": key}))
 			if key != "tiempo" and float(number) != floorf(float(number)):
-				errors.append("%s.%s: tiene que ser un número entero." % [class_key, key])
+				errors.append(Localization.t_fmt(&"obstaclecat.value_whole", {"class": class_key, "key": key}))
 			if key == "probabilidad" and float(number) > 100.0:
-				errors.append("%s.probabilidad: no puede superar 100." % class_key)
+				errors.append(Localization.t_fmt(&"obstaclecat.probability_max", {"class": class_key}))
 
 
 static func _check_values(value: Variant, known: PackedStringArray, where: String, errors: PackedStringArray) -> void:
 	if not value is Dictionary:
-		errors.append("%s: tiene que ser un objeto." % where)
+		errors.append(Localization.t_fmt(&"obstaclecat.where_not_object", {"where": where}))
 		return
 	_check_keys(value, known, where, errors)
 
@@ -124,7 +124,7 @@ static func _check_values(value: Variant, known: PackedStringArray, where: Strin
 static func _check_keys(data: Dictionary, known: PackedStringArray, where: String, errors: PackedStringArray) -> void:
 	for key: Variant in data.keys():
 		if not known.has(str(key)):
-			errors.append("%s: clave desconocida \"%s\"." % [where, key])
+			errors.append(Localization.t_fmt(&"obstaclecat.unknown_key", {"where": where, "key": key}))
 
 
 static func _is_number(value: Variant) -> bool:

@@ -9,8 +9,7 @@ extends Node
 const EDITOR_ARG: String = "--pruebas"
 ## RF-181: guardado del modo de pruebas.
 const SAVE_PATH: String = "user://save_pruebas.json"
-## RF-182: el texto del cartel (sin la velocidad).
-const BANNER_TEXT: String = "MODO PRUEBAS · F1: panel"
+## RF-182: el texto del cartel (sin la velocidad) es la clave `dev.banner` ("MODO PRUEBAS · F1: panel" en español).
 ## RF-325: dónde se escribe el informe de la partida de pruebas.
 const STATS_PATH: String = "user://pruebas_stats.json"
 
@@ -102,7 +101,7 @@ func show_speed(speed: float) -> void:
 
 ## RF-182 y RF-322: el texto del cartel.
 func banner_text() -> String:
-	var text: String = BANNER_TEXT
+	var text: String = Localization.t(&"dev.banner")
 	if not is_equal_approx(_speed, 1.0):
 		text += " · %s" % Rules.speed_text(_speed)
 	return text

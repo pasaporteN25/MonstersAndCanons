@@ -59,12 +59,12 @@ static func _read(dir: String, file: String) -> Dictionary:
 	}
 	if not LevelDraft.is_valid_file_id(file_id):
 		entry["errors"] = PackedStringArray([
-			"Nombre de archivo no válido: solo minúsculas, números y _ (hasta %d letras)." % LevelDraft.FILE_ID_MAX])
+			Localization.t_fmt(&"communitymap.bad_file_name", {"max": LevelDraft.FILE_ID_MAX})])
 		return entry
 	var size: int = _size(dir + file)
 	if size > MAX_FILE_BYTES:
 		entry["errors"] = PackedStringArray([
-			"El archivo es demasiado grande (%d KB; el máximo es %d KB)." % [ceili(size / 1000.0), MAX_FILE_BYTES / 1000]])
+			Localization.t_fmt(&"communitymap.too_big", {"kb": ceili(size / 1000.0), "max": MAX_FILE_BYTES / 1000})])
 		return entry
 	var result: Dictionary = LevelFile.parse(FileAccess.get_file_as_string(dir + file), entry["id"])
 	entry["level"] = result["level"]

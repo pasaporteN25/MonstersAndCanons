@@ -3,6 +3,11 @@
 
 Uso, desde la raíz del proyecto:  python3 tools/localization_inventory.py [--salida ruta]
 Solo LEE el proyecto. Es una heurística: marca candidatos para que Lucas y T534 los revisen.
+
+T534: con `--auditoria [ruta]` NO regenera el inventario; hace la auditoría final de lo que sigue en español fuera del catálogo
+(`data/i18n/`): descarta los textos que ya están en el catálogo español y las líneas que ya llaman a `Localization`, clasifica el
+resto (Lore, mensajes de validación de datos para desarrollo, nombres técnicos) y escribe el informe en
+`specs/tareas/informes/T534-auditoria-textos.md` (o en `ruta`). Los números que imprime son los del informe.
 """
 import json
 import os
@@ -196,7 +201,148 @@ def group_of(path):
     return OTHER
 
 
+# ---------- T534: auditoría de lo que queda en español fuera del catálogo ----------
+
+LORE_JSON = ("data/levels/", "data/intro/", "data/wiki/lore/", "data/creditos.json")
+DEV_VALIDATION_LINE = re.compile(r"(errors|warnings|problems|reasons)\.append\(|data\.errors|_failed\(|_article_failed\(|return \"[a-záéíóúñ¿]|\"errors\"|_add\(errors")
+TECH_NAME = re.compile(r"^[A-Za-z][A-Za-z0-9_ /.%]*$")
+FORMAT_ONLY = re.compile(r"%[0-9.]*[sdf]|⏎|\\n|\\t|[\s\d\W_]")
+JSON_WRITER = re.compile(r'^\s*\\"\w+\\": |^[ ]*%s: %s$|^\^|\(\?')
+
+def catalog_texts():
+    d = json.load(open(os.path.join(ROOT, "data/i18n/es.json"), encoding="utf-8"))
+    return [e["texto"] for e in d["entradas"]]
+
+
+def unescape(s):
+    return s.replace("\\n", "\n").replace('\\"', '"').replace("\\\\", "\\")
+
+
+VALIDATION_FILES = ("scripts/logic/advice_data.gd", "scripts/logic/news_data.gd", "scripts/logic/tutorial_data.gd", "scripts/logic/intro_data.gd",
+                    "scripts/logic/credits.gd", "scripts/logic/wiki.gd", "scripts/logic/localization_catalog.gd", "scripts/logic/balance_args.gd",
+                    "scripts/logic/collection_definitions.gd", "scripts/data/range_display_config.gd", "scripts/data/upgrade_fx_config.gd")
+DEV_TOOL_FILES = ("scripts/logic/intro_doc.gd",)
+SVG_PATH = re.compile(r"^[MLHVCZmlhvcz0-9 .\-]+$")
+
+
+def classify(path, kind, line_text, text):
+    """Devuelve la categoría de un candidato que no está en el catálogo."""
+    plain = text.split("] ", 1)[-1] if text.startswith("[") else text
+    if kind == "Datos (.json)":
+        if path.startswith(LORE_JSON):
+            return "Lore"
+        if text.startswith(("[nota]", "[casillas_libres]", "[comentario]")):
+            return "Notas internas de archivos de datos (no se muestran)"
+        return "Revisar a mano"
+    if kind in ("Escenas (.tscn)", "Recursos (.tres)"):
+        return "Texto por omisión de escena (el código lo reemplaza o está oculto)"
+    if path in DEV_TOOL_FILES:
+        return "Herramienta de desarrollo (documento y mensajes de tools/intro_doc.gd)"
+    if path in VALIDATION_FILES or DEV_VALIDATION_LINE.search(line_text):
+        return "Validación de datos de desarrollo (solo consola/tests)"
+    if path == "scripts/autoload/dev_mode.gd" and line_text.lstrip().startswith('{"action"'):
+        return "Texto sin uso (campo `text` de `DevMode.ACTIONS`, que ningún código lee)"
+    letters = re.sub(FORMAT_ONLY, "", plain.replace("FPS", "").replace("ms", ""))
+    if len(letters) <= 1 or SVG_PATH.match(plain) or JSON_WRITER.search(plain) or plain.startswith((" → ", "[^")) or plain in (". # X S",):
+        return "Nombre técnico, id o formato (no es texto de jugador)"
+    if re.match(r"^[./]*[A-Za-z][A-Za-z0-9_ /.%]*$", plain) and not re.search(r"[áéíóúñ]", plain) and len(plain.split()) <= 2:
+        return "Nombre técnico, id o formato (no es texto de jugador)"
+    if "para el mapa" in plain:
+        return "Nombre técnico, id o formato (no es texto de jugador)"
+    return "Revisar a mano"
+
+
+CATEGORIES = ("Lore", "Validación de datos de desarrollo (solo consola/tests)", "Herramienta de desarrollo (documento y mensajes de tools/intro_doc.gd)",
+              "Texto por omisión de escena (el código lo reemplaza o está oculto)", "Texto sin uso (campo `text` de `DevMode.ACTIONS`, que ningún código lee)",
+              "Nombre técnico, id o formato (no es texto de jugador)", "Notas internas de archivos de datos (no se muestran)", "Revisar a mano")
+
+
+CATEGORY_NOTES = {
+    "Lore": "**Es lo único que queda en español como texto de jugador** (D-222): lugar, entrada y victoria y nombre de los 15 niveles, intro, "
+            "créditos (incluye «Un juego de Lucas», «Hecho con Godot Engine» y la línea de licencia) y los 11 artículos de Lore de la Wiki. "
+            "Se traduce después de T545/T558 y con el OK de Lucas; mientras tanto el respaldo en español los muestra. También son Lore los "
+            "nombres de nivel que salen en el selector, en Récords y en la lista «Abrir un nivel» del editor.",
+    "Validación de datos de desarrollo (solo consola/tests)": "Mensajes de los lectores de `data/` (tutorial, intro, consejos, novedades, "
+            "artículos de la Wiki, créditos, configuraciones de alcance y de mejoras, el catálogo de idiomas, `balance_args`, "
+            "`collection_definitions`). Solo llegan a `push_warning`/`push_error` o a los tests; ninguna pantalla los muestra. "
+            "D-222 dejó la consola en español. Los de mapas, modos y textos de nivel **sí** se tradujeron (`lvlfile.*`, `grid.*`, `modepack.*`…).",
+    "Herramienta de desarrollo (documento y mensajes de tools/intro_doc.gd)": "El documento editable de la intro y sus mensajes (herramienta de línea de comandos).",
+    "Texto por omisión de escena (el código lo reemplaza o está oculto)": "Texto que trae el `.tscn` y que el código pisa antes de mostrarlo "
+            "(verificado con `tools/capture_menus.gd`, que en inglés no lo encuentra en pantalla) o que está oculto (`WaveBanner`, `BossLine`).",
+    "Texto sin uso (campo `text` de `DevMode.ACTIONS`, que ningún código lee)": "Campo `text` de `DevMode.ACTIONS`: ningún código lo lee (el panel usa `dev.*`).",
+    "Nombre técnico, id o formato (no es texto de jugador)": "Nombres de nodos, ids, expresiones regulares, fragmentos de formato (`%s · %s`, ` ⏎ `), "
+            "trozos de JSON que escribe el editor y rutas de clave (` → removible → `): no son texto de jugador.",
+    "Notas internas de archivos de datos (no se muestran)": "Claves `nota` de `data/ui/*.json`: comentarios para quien edita el archivo.",
+    "Revisar a mano": "Lo que la heurística no supo clasificar.",
+}
+
+
+def audit(salida):
+    cat = catalog_texts()
+    cat_blob = "\n".join(cat)
+    sources = [("GDScript", scan_gd()), ("Escenas (.tscn)", scan_tscn()), ("Recursos (.tres)", scan_tres()), ("Datos (.json)", scan_json())]
+    res = defaultdict(lambda: defaultdict(list))
+    skipped_catalogued = 0
+    for kind, files in sources:
+        for path, items in files.items():
+            lines = open(os.path.join(ROOT, path), encoding="utf-8").read().split("\n") if kind != "Datos (.json)" else []
+            for n, s, ks in items:
+                line_text = lines[n - 1] if n and n <= len(lines) else ""
+                raw = s.split("] ", 1)[-1] if s.startswith("[") else s
+                if "Localization." in line_text:
+                    continue
+                if kind == "GDScript" and "#" in line_text and raw and line_text.find("#") < line_text.find(raw.replace('\\"', '"')):
+                    continue  # el texto está dentro de un comentario
+                data_literal = kind == "GDScript" and re.match(r'\s*(const |\{"|&"|"[^"]+": |\[")', line_text)
+                if (kind != "GDScript" or data_literal) and unescape(raw) in cat:
+                    skipped_catalogued += 1
+                    continue
+                if kind == "Datos (.json)" and len(raw) > 3 and unescape(raw) in cat_blob:
+                    skipped_catalogued += 1
+                    continue
+                category = classify(path, kind, line_text, s)
+                res[category][path].append((n, s))
+    L = ["# T534 · Auditoría de textos que siguen en español fuera del catálogo\n",
+         "*Generada con `python3 tools/localization_inventory.py --auditoria` (solo lee el proyecto). Parte de los candidatos del inventario T533 "
+         "(`T533-inventario-textos.md`) y descarta los textos que ya viven en `data/i18n/es.json` y las líneas que ya llaman a `Localization`. "
+         "Es una heurística: lo que queda se clasificó por ruta y por forma de la línea.*\n",
+         "- Candidatos del inventario ya cubiertos por el catálogo (descartados): **%d**." % skipped_catalogued]
+    total = 0
+    for category in CATEGORIES:
+        files = res.get(category, {})
+        count = sum(len(v) for v in files.values())
+        total += count
+        L.append("- %s: **%d** en **%d** archivos." % (category, count, len(files)))
+    L.append("- Total que sigue fuera del catálogo: **%d**.\n" % total)
+    for category in CATEGORIES:
+        files = res.get(category, {})
+        L.append("## %s\n" % category)
+        if category in CATEGORY_NOTES:
+            L.append("*%s*\n" % CATEGORY_NOTES[category])
+        if not files:
+            L.append("Ninguno.\n")
+            continue
+        for path in sorted(files):
+            items = files[path]
+            L.append("<details><summary><code>%s</code> · %d</summary>\n" % (path, len(items)))
+            for n, s in items:
+                s1 = s.replace("\\n", " ⏎ ").replace("\n", " ").replace("|", "\\|").replace("`", "'")
+                if len(s1) > 140:
+                    s1 = s1[:137] + "…"
+                L.append("- %s`%s`" % (("L%d " % n) if n else "", s1))
+            L.append("\n</details>\n")
+    os.makedirs(os.path.dirname(salida), exist_ok=True)
+    open(salida, "w", encoding="utf-8").write("\n".join(L))
+    print("catalogados", skipped_catalogued)
+    for category, files in res.items():
+        print(category, sum(len(v) for v in files.values()), len(files))
+
+
 def main():
+    if "--auditoria" in sys.argv:
+        i = sys.argv.index("--auditoria")
+        audit(sys.argv[i + 1] if i + 1 < len(sys.argv) else os.path.join(ROOT, "specs/tareas/informes/T534-auditoria-textos.md"))
+        return
     salida = os.path.join(ROOT, "specs/tareas/informes/T533-inventario-textos.md")
     if "--salida" in sys.argv:
         salida = sys.argv[sys.argv.index("--salida") + 1]

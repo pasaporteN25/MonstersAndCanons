@@ -44,7 +44,7 @@ static func all(official_dir: String = OFFICIAL_DIR, user_dir: String = USER_DIR
 		if official_ids.has(mode["id"]):
 			# Los PackedStringArray se copian por valor: hay que volver a guardarlo en el diccionario.
 			var errors: PackedStringArray = mode["errors"]
-			errors.append("Ya hay un modo oficial llamado '%s': cambiale el nombre a la carpeta." % mode["id"])
+			errors.append(Localization.t_fmt(&"modepack.official_exists", {"id": mode["id"]}))
 			mode["errors"] = errors
 		modes.append(mode)
 	return modes
@@ -79,14 +79,14 @@ static func read(dir: String, id: String, official: bool) -> Dictionary:
 
 static func _read_into(mode: Dictionary, errors: PackedStringArray) -> void:
 	if not LevelDraft.is_valid_file_id(String(mode["id"])):
-		errors.append("Nombre de carpeta no válido: solo minúsculas, números y _ (hasta %d letras)." % LevelDraft.FILE_ID_MAX)
+		errors.append(Localization.t_fmt(&"modepack.bad_folder", {"max": LevelDraft.FILE_ID_MAX}))
 		return
 	var path: String = mode["dir"] + FILE_NAME
 	if not FileAccess.file_exists(path):
-		errors.append("Falta el archivo %s en la carpeta del modo." % FILE_NAME)
+		errors.append(Localization.t_fmt(&"modepack.file_missing", {"file": FILE_NAME}))
 		return
 	if _size(path) > CommunityMaps.MAX_FILE_BYTES:
-		errors.append("%s es demasiado grande." % FILE_NAME)
+		errors.append(Localization.t_fmt(&"modepack.file_too_big", {"file": FILE_NAME}))
 		return
 	var data: Dictionary = _parse(FileAccess.get_file_as_string(path), errors)
 	if not errors.is_empty():
@@ -181,16 +181,16 @@ static func create(user_dir: String, display_name: String, official_dir: String 
 static func name_problem(user_dir: String, display_name: String, official_dir: String = OFFICIAL_DIR) -> String:
 	var clean_name: String = display_name.strip_edges()
 	if clean_name == "":
-		return "Escribí un nombre."
+		return Localization.t(&"modepack.name_empty")
 	if clean_name.length() > MAX_NAME_LENGTH:
-		return "El nombre tiene %d letras y el máximo es %d." % [clean_name.length(), MAX_NAME_LENGTH]
+		return Localization.t_fmt(&"lvlfile.name_too_long", {"n": clean_name.length(), "max": MAX_NAME_LENGTH})
 	var id: String = LevelDraft.clean_file_id(clean_name)
 	if id == "":
-		return "El nombre necesita al menos una letra o un número."
+		return Localization.t(&"modepack.name_needs_char")
 	if DirAccess.dir_exists_absolute(dir_of(official_dir, id)):
-		return "'%s' es un modo oficial: elegí otro nombre." % id
+		return Localization.t_fmt(&"modepack.name_official", {"id": id})
 	if DirAccess.dir_exists_absolute(dir_of(user_dir, id)):
-		return "Ya tenés un modo llamado '%s'." % id
+		return Localization.t_fmt(&"modepack.name_taken", {"id": id})
 	return ""
 
 
@@ -201,7 +201,7 @@ static func add_map(mode_dir: String, map_id: String) -> String:
 	var errors: PackedStringArray = []
 	var data: Dictionary = _parse(FileAccess.get_file_as_string(path), errors) if FileAccess.file_exists(path) else {}
 	if not errors.is_empty() or data.is_empty():
-		return "No se pudo leer %s del modo." % FILE_NAME
+		return Localization.t_fmt(&"modepack.read_failed", {"file": FILE_NAME})
 	var maps: Array = data.get("mapas", []) if data.get("mapas") is Array else []
 	if not maps.has(map_id):
 		maps.append(map_id)
@@ -220,21 +220,21 @@ static func display_name(user_dir: String, mode_id: String) -> String:
 static func _read_settings(data: Dictionary, errors: PackedStringArray) -> Dictionary:
 	for key: Variant in data.keys():
 		if not KEYS.has(str(key)):
-			errors.append("Clave desconocida \"%s\" (se usan: %s)." % [key, ", ".join(KEYS)])
+			errors.append(Localization.t_fmt(&"modepack.unknown_key", {"key": key, "known": ", ".join(KEYS)}))
 	if not data.get("version") is float or int(data["version"]) != VERSION:
-		errors.append("\"version\" tiene que ser %d." % VERSION)
+		errors.append(Localization.t_fmt(&"modepack.version", {"n": VERSION}))
 	var settings: Dictionary = {"name": "", "description": "", "maps": PackedStringArray(),
 		"towers": PackedStringArray(), "rules": {}}
 	var name_value: Variant = data.get("nombre")
 	if not name_value is String or (name_value as String).strip_edges() == "":
-		errors.append("\"nombre\" tiene que ser un texto, como \"Asedio\".")
+		errors.append(Localization.t(&"modepack.name_not_text"))
 	elif (name_value as String).length() > MAX_NAME_LENGTH:
-		errors.append("El nombre tiene %d letras y el máximo es %d." % [(name_value as String).length(), MAX_NAME_LENGTH])
+		errors.append(Localization.t_fmt(&"lvlfile.name_too_long", {"n": (name_value as String).length(), "max": MAX_NAME_LENGTH}))
 	else:
 		settings["name"] = (name_value as String).strip_edges()
 	if data.has("descripcion"):
 		if not data["descripcion"] is String or (data["descripcion"] as String).length() > MAX_DESCRIPTION_LENGTH:
-			errors.append("\"descripcion\" tiene que ser un texto de hasta %d letras." % MAX_DESCRIPTION_LENGTH)
+			errors.append(Localization.t_fmt(&"modepack.description_bad", {"max": MAX_DESCRIPTION_LENGTH}))
 		else:
 			settings["description"] = data["descripcion"]
 	settings["maps"] = _read_map_list(data.get("mapas"), errors)
@@ -248,17 +248,17 @@ static func _read_settings(data: Dictionary, errors: PackedStringArray) -> Dicti
 static func _read_map_list(value: Variant, errors: PackedStringArray) -> PackedStringArray:
 	var maps := PackedStringArray()
 	if not value is Array:
-		errors.append("\"mapas\" tiene que ser una lista de nombres de mapa, como [\"level_01\"].")
+		errors.append(Localization.t(&"modepack.maps_not_list"))
 		return maps
 	var list: Array = value
 	if list.size() > MAX_MAPS:
-		errors.append("\"mapas\" tiene %d mapas y el máximo es %d." % [list.size(), MAX_MAPS])
+		errors.append(Localization.t_fmt(&"modepack.maps_too_many", {"n": list.size(), "max": MAX_MAPS}))
 		return maps
 	for item: Variant in list:
 		if not item is String or not LevelDraft.is_valid_file_id(item) or item == RESERVED_MAP_ID:
-			errors.append("\"mapas\": '%s' no es un nombre de mapa válido (minúsculas, números y _)." % str(item))
+			errors.append(Localization.t_fmt(&"modepack.map_bad_name", {"id": str(item)}))
 		elif maps.has(item):
-			errors.append("\"mapas\": '%s' está repetido." % item)
+			errors.append(Localization.t_fmt(&"modepack.map_repeated", {"id": item}))
 		else:
 			maps.append(item)
 	return maps
@@ -268,11 +268,11 @@ static func _read_towers(value: Variant, errors: PackedStringArray) -> PackedStr
 	var towers := PackedStringArray()
 	var known: PackedStringArray = LevelFile.tower_ids()
 	if not value is Array or (value as Array).is_empty():
-		errors.append("\"torres\" tiene que ser una lista con al menos una torre, como [\"basic\", \"cannon\"].")
+		errors.append(Localization.t(&"modepack.towers_not_list"))
 		return towers
 	for item: Variant in value:
 		if not item is String or not known.has(item):
-			errors.append("\"torres\": la torre '%s' no existe. Las que hay: %s." % [str(item), ", ".join(known)])
+			errors.append(Localization.t_fmt(&"modepack.tower_unknown", {"id": str(item), "known": ", ".join(known)}))
 		else:
 			towers.append(item)
 	return towers
@@ -281,12 +281,12 @@ static func _read_towers(value: Variant, errors: PackedStringArray) -> PackedStr
 static func _read_rules(value: Variant, map_ids: PackedStringArray, errors: PackedStringArray) -> Dictionary:
 	var rules: Dictionary = {}
 	if not value is Dictionary:
-		errors.append("\"reglas\" tiene que estar entre { }, como {\"vida_monstruos_%\": 150}.")
+		errors.append(Localization.t(&"modepack.rules_not_object"))
 		return rules
 	var data: Dictionary = value
 	for key: Variant in data.keys():
 		if not RULE_KEYS.has(str(key)):
-			errors.append("\"reglas\": clave desconocida \"%s\" (se usan: %s)." % [key, ", ".join(RULE_KEYS)])
+			errors.append(Localization.t_fmt(&"modepack.rule_unknown", {"key": key, "known": ", ".join(RULE_KEYS)}))
 	for key: String in [RULE_GOLD, RULE_HEALTH]:
 		if data.has(key):
 			rules[key] = _whole(data[key], key, MIN_PERCENT, MAX_PERCENT, errors)
@@ -301,13 +301,12 @@ static func _read_rules(value: Variant, map_ids: PackedStringArray, errors: Pack
 static func _read_health_by_map(value: Variant, map_ids: PackedStringArray, errors: PackedStringArray) -> Dictionary:
 	var table: Dictionary = {}
 	if not value is Dictionary:
-		errors.append("\"reglas\": \"%s\" tiene que estar entre { }, como {\"level_01\": 105}." % RULE_HEALTH_BY_MAP)
+		errors.append(Localization.t_fmt(&"modepack.rule_table_not_object", {"key": RULE_HEALTH_BY_MAP}))
 		return table
 	for key: Variant in (value as Dictionary).keys():
 		var map_id: String = str(key)
 		if not map_ids.has(map_id):
-			errors.append("\"reglas\": \"%s\" nombra el mapa '%s', que no está en \"mapas\" (los del modo: %s)." \
-				% [RULE_HEALTH_BY_MAP, map_id, ", ".join(map_ids)])
+			errors.append(Localization.t_fmt(&"modepack.rule_map_not_in_mode", {"key": RULE_HEALTH_BY_MAP, "id": map_id, "known": ", ".join(map_ids)}))
 			continue
 		table[map_id] = _whole(value[key], "%s\" para el mapa \"%s" % [RULE_HEALTH_BY_MAP, map_id], MIN_PERCENT, MAX_PERCENT, errors)
 	return table
@@ -315,7 +314,7 @@ static func _read_health_by_map(value: Variant, map_ids: PackedStringArray, erro
 
 static func _whole(value: Variant, key: String, minimum: int, maximum: int, errors: PackedStringArray) -> int:
 	if not value is float or value != floorf(value) or value < minimum or value > maximum:
-		errors.append("\"reglas\": \"%s\" tiene que ser un número entero entre %d y %d." % [key, minimum, maximum])
+		errors.append(Localization.t_fmt(&"modepack.rule_whole_range", {"key": key, "min": minimum, "max": maximum}))
 		return minimum
 	return int(value)
 
@@ -327,10 +326,10 @@ static func _read_map(mode: Dictionary, map_id: String, settings: Dictionary) ->
 	if not FileAccess.file_exists(path):
 		path = LevelFile.LEVELS_DIR + map_id + ".json"
 	if not FileAccess.file_exists(path):
-		entry["errors"] = PackedStringArray(["No existe el mapa '%s': ni en la carpeta del modo ni entre los niveles oficiales." % map_id])
+		entry["errors"] = PackedStringArray([Localization.t_fmt(&"modepack.map_missing", {"id": map_id})])
 		return entry
 	if _size(path) > CommunityMaps.MAX_FILE_BYTES:
-		entry["errors"] = PackedStringArray(["El mapa '%s' es demasiado grande." % map_id])
+		entry["errors"] = PackedStringArray([Localization.t_fmt(&"modepack.map_too_big", {"id": map_id})])
 		return entry
 	var result: Dictionary = LevelFile.parse(FileAccess.get_file_as_string(path), level_id(mode["id"], map_id))
 	entry["errors"] = result["errors"]
@@ -367,17 +366,16 @@ static func _towers_conflict(level: LevelData, map_id: String) -> String:
 	for id: String in level.towers:
 		if level.allowed_towers.has(id):
 			return ""
-	return "El mapa '%s' ofrece las torres %s y este modo permite %s: no tienen ninguna en común, así que no habría con qué defenderse." \
-		% [map_id, ", ".join(level.towers), ", ".join(level.allowed_towers)]
+	return Localization.t_fmt(&"modepack.towers_conflict", {"id": map_id, "offered": ", ".join(level.towers), "allowed": ", ".join(level.allowed_towers)})
 
 
 static func _parse(text: String, errors: PackedStringArray) -> Dictionary:
 	var json := JSON.new()
 	if json.parse(text) != OK:
-		errors.append("%s no es un JSON válido (línea %d: %s)." % [FILE_NAME, json.get_error_line(), json.get_error_message()])
+		errors.append(Localization.t_fmt(&"modepack.bad_json", {"file": FILE_NAME, "line": json.get_error_line(), "message": json.get_error_message()}))
 		return {}
 	if not json.data is Dictionary:
-		errors.append("%s tiene que empezar con { y terminar con }." % FILE_NAME)
+		errors.append(Localization.t_fmt(&"modepack.bad_braces", {"file": FILE_NAME}))
 		return {}
 	return json.data
 
@@ -385,7 +383,7 @@ static func _parse(text: String, errors: PackedStringArray) -> Dictionary:
 static func _write(path: String, data: Dictionary) -> String:
 	var file := FileAccess.open(path, FileAccess.WRITE)
 	if file == null:
-		return "No se pudo escribir %s (%s)." % [path, error_string(FileAccess.get_open_error())]
+		return Localization.t_fmt(&"modepack.write_failed", {"path": path, "error": error_string(FileAccess.get_open_error())})
 	file.store_string(JSON.stringify(_whole_numbers(data), "\t", false) + "\n")
 	return ""
 

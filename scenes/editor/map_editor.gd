@@ -11,12 +11,12 @@ const ERROR_COLOR := Color(1.0, 0.5, 0.5)
 const SELECTED_COLOR := Color(1.0, 0.84, 0.3)
 ## RF-212: nombre y tecla de cada herramienta, en el orden de LevelDraft.Tool.
 ## RF-434: los últimos cinco son los pinceles de objetos (árbol y roca removibles, escombro, mina y bosque explotable).
-const TOOL_NAMES: Array[String] = ["Pasto", "Camino", "Bloqueada", "Entrada", "Salida", "Árbol", "Roca", "Escombro", "Mina", "Bosque"]
+const TOOL_NAME_KEYS: Array[StringName] = [&"editor.tool.grass", &"editor.tool.path", &"editor.tool.blocked", &"editor.tool.entrance",
+	&"editor.tool.exit", &"editor.tool.tree", &"editor.tool.rock", &"editor.tool.rubble", &"editor.tool.mine", &"editor.tool.forest"]
 const TOOL_KEYS: Array[Key] = [KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9, KEY_0]
-const TOOL_TIPS: Array[String] = ["", "", "", "", "",
-	"Árbol removible: se despeja pagando oro (Demoler)", "Roca removible: se despeja pagando oro (Demoler)",
-	"Escombro: ruinas removibles; en la campaña pueden esconder una pieza",
-	"Mina: punto de extracción de recursos", "Bosque explotable: punto de extracción de recursos"]
+## T534: la ayuda de cada herramienta (`&""` = sin ayuda), en el mismo orden.
+const TOOL_TIP_KEYS: Array[StringName] = [&"", &"", &"", &"", &"", &"editor.tip.tree", &"editor.tip.rock", &"editor.tip.rubble",
+	&"editor.tip.mine", &"editor.tip.forest"]
 
 ## Se sale del editor (GameFlow lleva al menú). Es una señal para poder probarlo sin cambiar de pantalla.
 signal left
@@ -82,6 +82,11 @@ func _ready() -> void:
 	_try_button.pressed.connect(try_level)
 	left.connect(GameFlow.go_to_tools)
 	test_requested.connect(GameFlow.play_test)
+	Localization.apply(self, {"%Title": &"editor.map_editor", "%NewButton": &"editor.new", "%OpenButton": &"editor.open", "%SaveButton": &"editor.save",
+		"%SaveModeButton": &"editor.in_mode", "%TryButton": &"editor.try", "%SettingsButton": &"editor.settings", "%WavesButton": &"editor.waves",
+		"%ObjectsButton": &"editor.objects", "%BackButton": &"editor.exit", "%Messages": &"editor.valid_short"})
+	_save_mode_button.tooltip_text = Localization.t(&"editor.in_mode_tip")
+	_objects_button.tooltip_text = Localization.t(&"editor.objects_tip")
 	_style_selected(_settings_button)
 	_style_selected(_waves_button)
 	_style_selected(_objects_button)
@@ -195,12 +200,12 @@ func dialog() -> EditorDialog:
 
 ## RF-215: un nivel en blanco. Con cambios sin guardar, pregunta antes (RF-218).
 func new_level() -> void:
-	_when_safe("Nuevo nivel", func() -> void: _use_draft(LevelDraft.new_level(), "Nivel nuevo"))
+	_when_safe(Localization.t(&"editor.new_level_title"), func() -> void: _use_draft(LevelDraft.new_level(), Localization.t(&"draft.new_name")))
 
 
 ## RF-216: abre un mapa propio o un nivel oficial (como plantilla).
 func open_level() -> void:
-	_when_safe("Abrir otro nivel", _ask_which_to_open)
+	_when_safe(Localization.t(&"editor.open_other_title"), _ask_which_to_open)
 
 
 ## RF-216: guarda en \`maps_dir\` (o en su modo, RF-392). Si todavía no tiene nombre de archivo, lo pide.
@@ -214,12 +219,12 @@ func save_level() -> void:
 ## RF-392: guarda el mapa dentro de un modo propio. Se elige uno existente o se crea uno nuevo, y
 ## después el nombre del archivo. Desde ahí, "Guardar" sigue guardando en ese modo.
 func save_to_mode() -> void:
-	var items: Array[Dictionary] = [{"text": "— Mis modos —", "selectable": false}]
+	var items: Array[Dictionary] = [{"text": Localization.t(&"editor.my_modes"), "selectable": false}]
 	for mode_id: String in ModePacks.user_ids(modes_dir):
 		items.append({"text": "%s (%s)" % [ModePacks.display_name(modes_dir, mode_id), mode_id], "value": mode_id})
-	items.append({"text": "+ Nuevo modo…", "value": ""})
+	items.append({"text": Localization.t(&"editor.new_mode_item"), "value": ""})
 	_pending = _on_mode_chosen
-	_dialog.ask_choice("Guardar en un modo", "Elegí el modo donde se guarda este mapa.", items, "Elegir")
+	_dialog.ask_choice(Localization.t(&"editor.save_in_mode_title"), Localization.t(&"editor.save_in_mode_message"), items, Localization.t(&"editor.choose"))
 
 
 func _on_mode_chosen(value: Variant) -> void:
@@ -230,11 +235,11 @@ func _on_mode_chosen(value: Variant) -> void:
 	_pending = func(name: Variant) -> void:
 		var result: Dictionary = ModePacks.create(modes_dir, str(name), official_modes_dir)
 		if result["error"] != "":
-			_show_error("✗ No se creó el modo: " + str(result["error"]))
+			_show_error(Localization.t_fmt(&"editor.mode_not_created", {"error": str(result["error"])}))
 			return
 		_ask_file_name_in(result["id"])
-	_dialog.ask_text("Nuevo modo", "Nombre del modo (se ve como una solapa en la selección de nivel):",
-		"", "Crear", _check_mode_name)
+	_dialog.ask_text(Localization.t(&"editor.new_mode_title"), Localization.t(&"editor.new_mode_message"),
+		"", Localization.t(&"editor.create"), _check_mode_name)
 
 
 ## Revisa el nombre del modo nuevo mientras se escribe (RF-392).
@@ -243,14 +248,14 @@ func _check_mode_name(text: String) -> Dictionary:
 	if problem != "":
 		return {"ok": false, "note": problem, "kind": &"error"}
 	var folder: String = ModePacks.dir_of(modes_dir, LevelDraft.clean_file_id(text))
-	return {"ok": true, "note": "Se crea la carpeta " + ProjectSettings.globalize_path(folder), "kind": &"info"}
+	return {"ok": true, "note": Localization.t_fmt(&"editor.folder_created", {"path": ProjectSettings.globalize_path(folder)}), "kind": &"info"}
 
 
 ## RF-217: juega el nivel del editor. Un nivel con errores no se puede probar.
 func try_level() -> void:
 	var result: Dictionary = draft.check()
 	if result["level"] == null:
-		_show_error("✗ No se puede probar todavía: " + str(result["errors"][0]))
+		_show_error(Localization.t_fmt(&"editor.cannot_test", {"error": str(result["errors"][0])}))
 		return
 	test_requested.emit(result["level"])
 
@@ -261,9 +266,9 @@ func leave() -> void:
 		left.emit()
 		return
 	_pending = func(_value: Variant) -> void: left.emit()
-	_dialog.ask_confirm("Salir del editor",
-		"Hay cambios sin guardar. Si cerrás el juego se pierden.\n(Mientras el juego siga abierto, el borrador se conserva y se retoma al volver.)",
-		"Salir igual")
+	_dialog.ask_confirm(Localization.t(&"editor.leave_title"),
+		Localization.t(&"editor.leave_message"),
+		Localization.t(&"editor.leave_anyway"))
 
 
 ## Hace \`action\` ya, o después de confirmar si hay cambios sin guardar (RF-218).
@@ -272,7 +277,7 @@ func _when_safe(title: String, action: Callable) -> void:
 		action.call()
 		return
 	_pending = func(_value: Variant) -> void: action.call()
-	_dialog.ask_confirm(title, "Hay cambios sin guardar. Si seguís, se pierden.", "Descartar y seguir")
+	_dialog.ask_confirm(title, Localization.t(&"editor.unsaved_continue"), Localization.t(&"editor.discard_continue"))
 
 
 func _on_dialog_accepted(value: Variant) -> void:
@@ -310,24 +315,24 @@ func _ask_file_name_in(mode_id: String) -> void:
 		draft.mode_id = mode_id
 		draft.file_id = str(value)
 		_write()
-	var title: String = "Guardar el mapa" if mode_id == "" else "Guardar el mapa en el modo '%s'" % mode_id
-	_dialog.ask_text(title, "Nombre del archivo (minúsculas, números y _):",
-		suggestion, "Guardar", _check_file_name.bind(mode_id))
+	var title: String = Localization.t(&"editor.save_map_title") if mode_id == "" else Localization.t_fmt(&"editor.save_map_in_mode_title", {"id": mode_id})
+	_dialog.ask_text(title, Localization.t(&"editor.file_name_message"),
+		suggestion, Localization.t(&"editor.save"), _check_file_name.bind(mode_id))
 
 
 ## Revisa el nombre mientras se escribe (RF-216, RF-392).
 func _check_file_name(text: String, mode_id: String = "") -> Dictionary:
 	if text == "":
-		return {"ok": false, "note": "Escribí un nombre.", "kind": &"error"}
+		return {"ok": false, "note": Localization.t(&"modepack.name_empty"), "kind": &"error"}
 	if not LevelDraft.is_valid_file_id(text):
-		return {"ok": false, "note": "Solo minúsculas, números y _ (hasta %d letras)." % LevelDraft.FILE_ID_MAX, "kind": &"error"}
+		return {"ok": false, "note": Localization.t_fmt(&"editor.file_name_chars", {"max": LevelDraft.FILE_ID_MAX}), "kind": &"error"}
 	if LevelDraft.is_official_id(text):
-		return {"ok": false, "note": "'%s' es el nombre de un nivel oficial: elegí otro para no pisarlo." % text, "kind": &"error"}
+		return {"ok": false, "note": Localization.t_fmt(&"draft.official_name", {"name": text}), "kind": &"error"}
 	if mode_id != "" and text == ModePacks.RESERVED_MAP_ID:
-		return {"ok": false, "note": "'%s' está reservado para el archivo del modo: elegí otro." % text, "kind": &"error"}
+		return {"ok": false, "note": Localization.t_fmt(&"editor.file_name_reserved", {"name": text}), "kind": &"error"}
 	if LevelDraft.saved_ids(_dir_for(mode_id)).has(text):
-		return {"ok": true, "note": "Ya hay un mapa con ese nombre: se va a reemplazar.", "kind": &"warning"}
-	return {"ok": true, "note": "Se guarda en " + _file_path(text, mode_id), "kind": &"info"}
+		return {"ok": true, "note": Localization.t(&"editor.file_will_replace"), "kind": &"warning"}
+	return {"ok": true, "note": Localization.t_fmt(&"editor.saved_in_path_note", {"path": _file_path(text, mode_id)}), "kind": &"info"}
 
 
 func _write() -> void:
@@ -337,10 +342,10 @@ func _write() -> void:
 		problem = ModePacks.add_map(dir, draft.file_id)  # RF-392: el mapa entra en la lista del modo
 	if problem != "":
 		draft.file_id = ""  # no quedó guardado: la próxima vez vuelve a pedir el nombre
-		_show_error("✗ No se guardó: " + problem)
+		_show_error(Localization.t_fmt(&"editor.not_saved", {"problem": problem}))
 		return
 	refresh()
-	_notice = "Guardado en " + _file_path(draft.file_id, draft.mode_id)
+	_notice = Localization.t_fmt(&"editor.saved_in", {"path": _file_path(draft.file_id, draft.mode_id)})
 	_update_messages()
 
 
@@ -350,10 +355,10 @@ func _dir_for(mode_id: String) -> String:
 
 
 func _ask_which_to_open() -> void:
-	var items: Array[Dictionary] = [{"text": "— Mis mapas —", "selectable": false}]
+	var items: Array[Dictionary] = [{"text": Localization.t(&"editor.my_maps"), "selectable": false}]
 	var saved: PackedStringArray = LevelDraft.saved_ids(maps_dir)
 	if saved.is_empty():
-		items.append({"text": "(todavía no guardaste ninguno)", "selectable": false})
+		items.append({"text": Localization.t(&"editor.no_maps_yet"), "selectable": false})
 	for id: String in saved:
 		items.append({"text": id, "value": {"kind": "saved", "id": id}})
 	# RF-392: los mapas guardados dentro de cada modo propio.
@@ -362,16 +367,16 @@ func _ask_which_to_open() -> void:
 		mode_maps.erase(ModePacks.RESERVED_MAP_ID)  # el modo.json no es un mapa
 		if mode_maps.is_empty():
 			continue
-		items.append({"text": "— Modo %s —" % ModePacks.display_name(modes_dir, mode_id), "selectable": false})
+		items.append({"text": Localization.t_fmt(&"editor.mode_header", {"name": ModePacks.display_name(modes_dir, mode_id)}), "selectable": false})
 		for id: String in mode_maps:
 			items.append({"text": id, "value": {"kind": "mode", "mode": mode_id, "id": id}})
-	items.append({"text": "— Niveles oficiales (se abren como plantilla) —", "selectable": false})
+	items.append({"text": Localization.t(&"editor.official_header"), "selectable": false})
 	for id: String in LevelFile.campaign_ids():
 		var official: LevelData = LevelFile.load_level(LevelFile.LEVELS_DIR + id + ".json")["level"]
 		items.append({"text": "%s · %s" % [id, official.display_name if official != null else "?"],
 			"value": {"kind": "official", "id": id}})
 	_pending = _open_choice
-	_dialog.ask_choice("Abrir un nivel", "", items, "Abrir")
+	_dialog.ask_choice(Localization.t(&"editor.open_title"), "", items, Localization.t(&"editor.open"))
 
 
 func _open_choice(value: Variant) -> void:
@@ -386,11 +391,11 @@ func _open_choice(value: Variant) -> void:
 	else:
 		opened = LevelDraft.open_official(choice["id"])
 	if opened == null:
-		_show_error("✗ No se pudo abrir " + str(choice["id"]))
+		_show_error(Localization.t_fmt(&"editor.cannot_open", {"id": str(choice["id"])}))
 		return
-	var notice: String = "Abierto: %s" % choice["id"]
+	var notice: String = Localization.t_fmt(&"editor.opened", {"id": choice["id"]})
 	if choice["kind"] == "official":
-		notice = "Abierto como plantilla: %s (al guardarlo pide otro nombre)" % choice["id"]
+		notice = Localization.t_fmt(&"editor.opened_template", {"id": choice["id"]})
 	_use_draft(opened, notice)
 
 
@@ -411,7 +416,7 @@ func refresh() -> void:
 	_notice = ""
 	_view.show_map(draft.rows(), draft.grid(), draft.theme())
 	_update_messages()
-	_title.text = "Editor de mapas · %s%s" % [draft.level_name(), " *" if draft.dirty else ""]
+	_title.text = Localization.t_fmt(&"editor.title", {"name": draft.level_name(), "mark": " *" if draft.dirty else ""})
 	_undo_button.disabled = not draft.can_undo()
 	_redo_button.disabled = not draft.can_redo()
 	for panel: EditorPanel in [_settings_panel, _waves_panel, _objects_panel]:
@@ -425,7 +430,7 @@ func _on_panel_edited() -> void:
 	_notice = ""
 	_view.show_map(draft.rows(), draft.grid(), draft.theme())
 	_update_messages()
-	_title.text = "Editor de mapas · %s%s" % [draft.level_name(), " *" if draft.dirty else ""]
+	_title.text = Localization.t_fmt(&"editor.title", {"name": draft.level_name(), "mark": " *" if draft.dirty else ""})
 	_undo_button.disabled = not draft.can_undo()
 	_redo_button.disabled = not draft.can_redo()
 
@@ -460,7 +465,7 @@ func _update_messages() -> void:
 	var warnings: PackedStringArray = result["warnings"]
 	if not errors.is_empty():
 		_message_kind = &"error"
-		_messages.text = "✗ " + errors[0] + ("" if errors.size() == 1 else "   (y %d más)" % (errors.size() - 1))
+		_messages.text = "✗ " + errors[0] + ("" if errors.size() == 1 else Localization.t_fmt(&"editor.more_errors", {"n": (errors.size() - 1)}))
 		_messages.add_theme_color_override("font_color", ERROR_COLOR)
 	elif not warnings.is_empty():
 		_message_kind = &"warning"
@@ -468,7 +473,7 @@ func _update_messages() -> void:
 		_messages.add_theme_color_override("font_color", WARNING_COLOR)
 	else:
 		_message_kind = &"ok"
-		_messages.text = "✓ Nivel válido · " + _routes_summary()
+		_messages.text = Localization.t_fmt(&"editor.valid", {"routes": _routes_summary()})
 		_messages.add_theme_color_override("font_color", OK_COLOR)
 	if _notice != "":
 		_messages.text += "\n" + _notice
@@ -479,33 +484,33 @@ func _routes_summary() -> String:
 	var grid: MapGrid = draft.grid()
 	var parts: PackedStringArray = []
 	for i: int in grid.routes.size():
-		parts.append("Entrada %s: %d casillas" % [MapGrid.ENTRANCE_LETTERS[i], grid.routes[i].size()])
+		parts.append(Localization.t_plural(&"editor.route", grid.routes[i].size(), {"letter": MapGrid.ENTRANCE_LETTERS[i]}))
 	return " · ".join(parts)
 
 
 func _build_tools() -> void:
 	var group := ButtonGroup.new()
-	for i: int in TOOL_NAMES.size():
+	for i: int in TOOL_NAME_KEYS.size():
 		var button := Button.new()
-		button.text = "%s (%d)" % [TOOL_NAMES[i], (i + 1) % 10]
+		button.text = "%s (%d)" % [Localization.t(TOOL_NAME_KEYS[i]), (i + 1) % 10]
 		button.toggle_mode = true
 		button.button_group = group
 		button.focus_mode = Control.FOCUS_NONE  # las teclas 1 a 5 no se las come el botón
-		button.tooltip_text = TOOL_TIPS[i]
+		button.tooltip_text = "" if TOOL_TIP_KEYS[i] == &"" else Localization.t(TOOL_TIP_KEYS[i])
 		_style_selected(button)
 		button.pressed.connect(set_tool.bind(i))
 		_tools_row.add_child(button)
 		_tool_buttons.append(button)
 	var hint := Label.new()
-	hint.text = "Clic der.: borra · Ctrl+Z/Y · Ctrl+S"
+	hint.text = Localization.t(&"editor.hint")
 	hint.clip_text = true
 	hint.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	hint.add_theme_font_size_override("font_size", 13)
 	hint.add_theme_color_override("font_color", EditorPanel.HEADER_COLOR)
 	_tools_row.add_child(hint)
-	_undo_button = _action_button("Deshacer", undo)
-	_redo_button = _action_button("Rehacer", redo)
+	_undo_button = _action_button(Localization.t(&"editor.undo"), undo)
+	_redo_button = _action_button(Localization.t(&"editor.redo"), redo)
 
 
 ## La herramienta elegida se ve con marco y letras doradas (sobre la barra oscura, el gris no alcanza).

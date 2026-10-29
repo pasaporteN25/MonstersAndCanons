@@ -12,6 +12,7 @@ enum Tool { GRASS, PATH, BLOCKED, ENTRANCE, EXIT, TREE, ROCK, RUBBLE, MINE, FORE
 const MAPS_DIR: String = "user://maps/"
 ## RF-212: cuántos pasos se pueden deshacer.
 const UNDO_LIMIT: int = 50
+## El nombre de un nivel nuevo en español (el que se guarda en los tests); `new_name()` lo da en el idioma activo.
 const NEW_NAME: String = "Nivel nuevo"
 const TEMPLATE_SUFFIX: String = "_copia"
 const FILE_ID_MAX: int = 40
@@ -58,6 +59,11 @@ var _stroke_snapshot: Dictionary = {}
 
 # --- Crear y leer ---
 
+## T534: el nombre de un nivel nuevo en el idioma activo (en español es `NEW_NAME`).
+static func new_name() -> String:
+	return Localization.t(&"draft.new_name")
+
+
 ## El nivel nuevo (RF-215): una recta de la entrada A a la salida y una oleada de ejemplo. Es válido.
 static func new_level() -> LevelDraft:
 	var rows: Array = []
@@ -67,7 +73,7 @@ static func new_level() -> LevelDraft:
 	rows[middle] = MapGrid.ENTRANCE_LETTERS[0] + MapGrid.PATH.repeat(MapGrid.MIN_WIDTH - 2) + MapGrid.EXIT
 	var draft := LevelDraft.new()
 	draft.data = {
-		"version": LevelFile.VERSION, "nombre": NEW_NAME, "oro": 200, "vidas": 20,
+		"version": LevelFile.VERSION, "nombre": new_name(), "oro": 200, "vidas": 20,
 		"mapa": rows, "oleadas": [[default_group()]],
 	}
 	return draft
@@ -696,13 +702,13 @@ static func is_official_id(id: String) -> bool:
 ## Guarda el borrador como `file_id` (RF-216). Devuelve "" si salió bien o el motivo si no.
 func save(dir: String = MAPS_DIR) -> String:
 	if not is_valid_file_id(file_id):
-		return "El nombre del archivo solo puede tener minúsculas, números y _."
+		return Localization.t(&"draft.file_name_chars")
 	if is_official_id(file_id):
-		return "'%s' es el nombre de un nivel oficial: elegí otro para no pisarlo." % file_id
+		return Localization.t_fmt(&"draft.official_name", {"name": file_id})
 	DirAccess.make_dir_recursive_absolute(dir)
 	var file := FileAccess.open(dir + file_id + ".json", FileAccess.WRITE)
 	if file == null:
-		return "No se pudo escribir el archivo (error %d)." % FileAccess.get_open_error()
+		return Localization.t_fmt(&"draft.write_failed", {"code": FileAccess.get_open_error()})
 	file.store_string(to_text())
 	file.close()
 	dirty = false
@@ -831,11 +837,11 @@ func _apply_obstacle_tool(tool: Tool, cell: Vector2i) -> bool:
 		# Pintar encima de la última casilla de otro objeto libera su letra, así que ese lugar cuenta.
 		var freed: int = 1 if _is_last_obstacle_cell(current) else 0
 		if _legend().size() - freed >= LevelFile.MAX_LEGEND:
-			last_problem = "La leyenda ya tiene %d letras, que es el máximo. Borrá todos los objetos de una clase para poder usar otra." % LevelFile.MAX_LEGEND
+			last_problem = Localization.t_fmt(&"draft.legend_full", {"max": LevelFile.MAX_LEGEND})
 			return false
 		letter = _spare_letter(spec["letra"])
 		if letter == "":
-			last_problem = "No quedan letras libres para la leyenda."
+			last_problem = Localization.t(&"draft.no_letters")
 			return false
 	_record()
 	if is_new:

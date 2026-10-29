@@ -16,7 +16,6 @@ signal levels_pressed
 const BRIGHT_PATH: String = "res://assets/sprites/story/epilogue.png"
 const DARK_PATH: String = "res://assets/sprites/story/epilogue_dark.png"
 const FALLBACK_COLOR := Color(0.07, 0.08, 0.12)
-const CREDITS_TEXT: String = "Créditos"
 const TEXT_COLOR := Color(0.96, 0.94, 0.88)
 const STRIP_COLOR := Color(0.04, 0.045, 0.06, 0.78)
 const THEME: Theme = preload("res://assets/ui/menu_theme.tres")
@@ -88,7 +87,7 @@ func _init() -> void:
 	buttons.alignment = BoxContainer.ALIGNMENT_CENTER
 	buttons.add_theme_constant_override("separation", 24)
 	rows.add_child(buttons)
-	_credits_button = _button(CREDITS_TEXT)
+	_credits_button = _button(Localization.t(&"credits.title"))
 	_credits_button.pressed.connect(open_credits)
 	buttons.add_child(_credits_button)
 	_levels_button = _button(Localization.t(&"epilogue.levels"))
