@@ -17,41 +17,41 @@ var _all_towers: Array[TowerData] = []
 
 func _init() -> void:
 	super()  # arma el recuadro y el título (no se llama solo cuando la clase hija tiene su _init)
-	set_title("Ajustes del nivel")
+	set_title(Localization.t(&"editor.settings_title"))
 	_name_edit.max_length = 30
 	_name_edit.custom_minimum_size = Vector2(260, 0)
 	# El nombre se guarda al terminar de escribir, no letra por letra (cada letra sería un paso de deshacer).
 	_name_edit.text_submitted.connect(func(_text: String) -> void: _commit_name())
 	_name_edit.focus_exited.connect(_commit_name)
-	_gold_spin = _spin(0, 9999, 10, " de oro", func(value: float) -> void: draft.set_gold(int(value)))
-	_lives_spin = _spin(1, 999, 1, " vidas", func(value: float) -> void: draft.set_lives(int(value)))
+	_gold_spin = _spin(0, 9999, 10, Localization.t(&"editor.suffix_gold"), func(value: float) -> void: draft.set_gold(int(value)))
+	_lives_spin = _spin(1, 999, 1, Localization.t(&"editor.suffix_lives"), func(value: float) -> void: draft.set_lives(int(value)))
 	_scale_spin = _spin(0, 300, 1, " %", func(value: float) -> void: draft.set_health_scale(int(value)))
-	_scale_spin.tooltip_text = "Vida extra de los enemigos en cada oleada. 0 = usar el general (spec §7.4)."
+	_scale_spin.tooltip_text = Localization.t(&"editor.health_scale_tip")
 	var grid := GridContainer.new()
 	grid.columns = 2
 	grid.add_theme_constant_override("h_separation", 16)
 	grid.add_theme_constant_override("v_separation", 10)
 	for row: Array in [
-		["Nombre", _name_edit], ["Oro inicial", _gold_spin], ["Vidas", _lives_spin],
-		["Vida extra por oleada", _scale_spin],
+		[Localization.t(&"editor.field_name"), _name_edit], [Localization.t(&"editor.field_gold"), _gold_spin],
+		[Localization.t(&"editor.field_lives"), _lives_spin], [Localization.t(&"editor.field_scale"), _scale_spin],
 	]:
 		var label := Label.new()
 		label.text = row[0]
 		grid.add_child(label)
 		grid.add_child(row[1])
 	_body.add_child(grid)
-	var note := _header("0 en la vida extra = usar el general del juego. Los niveles oficiales van de 10 % a 35 %.")
+	var note := _header(Localization.t(&"editor.scale_note"))
 	note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	note.custom_minimum_size = Vector2(380, 0)
 	_body.add_child(note)
-	_machine_check.text = "Demoledora disponible"
-	_machine_check.tooltip_text = "El nivel habilita comprar la demoledora para despejar removibles (RF-411)."
+	_machine_check.text = Localization.t(&"editor.machine_check")
+	_machine_check.tooltip_text = Localization.t(&"editor.machine_tip")
 	_machine_check.toggled.connect(func(on: bool) -> void:
 		if not _filling and draft != null and draft.set_machine_enabled(on):
 			edited.emit())
 	_body.add_child(_machine_check)
 	var towers_title := Label.new()
-	towers_title.text = "Torres del mapa"
+	towers_title.text = Localization.t(&"editor.towers_title")
 	towers_title.add_theme_color_override("font_color", TITLE_COLOR)
 	_body.add_child(towers_title)
 	_tower_box.columns = 2
@@ -61,7 +61,7 @@ func _init() -> void:
 	_towers_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_towers_note.custom_minimum_size = Vector2(380, 0)
 	_body.add_child(_towers_note)
-	_default_towers_button.text = "Usar las de siempre"
+	_default_towers_button.text = Localization.t(&"editor.default_towers")
 	_default_towers_button.name = "DefaultTowersButton"
 	_default_towers_button.pressed.connect(func() -> void:
 		if draft != null and draft.use_default_towers():
@@ -100,8 +100,8 @@ func _fill_towers() -> void:
 	for id: String in _tower_checks:
 		(_tower_checks[id] as CheckBox).set_pressed_no_signal(offered.has(id))
 	_default_towers_button.disabled = not draft.has_tower_list()
-	_towers_note.text = "El mapa ofrece solo las marcadas (RF-393). Tiene que quedar al menos una." if draft.has_tower_list() \
-		else "Sin lista propia: se ofrecen las de siempre (las comunes más las de torres_extra). Marcar o desmarcar una arma la lista."
+	_towers_note.text = Localization.t(&"editor.towers_note_own") if draft.has_tower_list() \
+		else Localization.t(&"editor.towers_note_default")
 
 
 ## Para los tests y para el editor: aplica el nombre que hay escrito.

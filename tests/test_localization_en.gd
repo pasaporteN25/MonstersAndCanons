@@ -7,7 +7,8 @@ const SOURCE_DIRS: Array[String] = ["res://scenes", "res://scripts"]
 ## Textos que son iguales en ambos idiomas por decisión (D-222): nombre del juego, siglas, formatos.
 const SAME_IN_BOTH: Array[String] = ["menu.main.wiki", "options.advanced.interface_pc", "version.beta", "enemy.normal.name", "enemy.troll.name",
 		"towertext.combo_group", "towertext.combo_line", "common.no", "hud.tower_tip", "hud.exit_editor", "game.resources_float",
-		"select.community_card", "tutorial.ui.titulo", "wiki.efectos.b9", "wiki.cat_lore", "wiki.title", "wiki.combos", "news.v1_0_0.title"]
+		"select.community_card", "tutorial.ui.titulo", "wiki.efectos.b9", "wiki.cat_lore", "wiki.title", "wiki.combos", "news.v1_0_0.title",
+		"editor.suffix_seconds", "editor.suffix_percent", "lvlfile.where_legend", "banner_palette.meridiana.name", "banner_emblem.chevron.name"]
 ## Nombres propios que se conservan en español en el inglés (D-222).
 const KEPT_NAMES: Array[String] = ["cántaro", "compañía meridiana"]
 const SPANISH_MARKS: Array[String] = ["á", "é", "í", "ó", "ú", "ñ", "¿", "¡", "ción"]

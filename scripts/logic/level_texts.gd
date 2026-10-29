@@ -30,25 +30,25 @@ static func parse(raw: Variant, errors: PackedStringArray) -> Dictionary:
 	if raw == null:
 		return result
 	if not raw is Dictionary:
-		errors.append("textos: tiene que ser un objeto con %s, como {\"lugar\": \"El paso del agua\"}." % ", ".join(KEYS))
+		errors.append(Localization.t_fmt(&"leveltexts.not_object", {"keys": ", ".join(KEYS)}))
 		return result
 	var data: Dictionary = raw
 	for key: Variant in data.keys():
 		if not KEYS.has(str(key)):
-			errors.append("textos: clave desconocida \"%s\" (se usan: %s)." % [key, ", ".join(KEYS)])
+			errors.append(Localization.t_fmt(&"leveltexts.unknown_key", {"key": key, "known": ", ".join(KEYS)}))
 	for key: String in KEYS:
 		if not data.has(key):
 			continue
 		var value: Variant = data[key]
 		if not value is String:
-			errors.append("textos \"%s\": tiene que ser un texto entre comillas." % key)
+			errors.append(Localization.t_fmt(&"leveltexts.not_text", {"key": key}))
 			continue
 		var text: String = value
 		if text.strip_edges().is_empty():
-			errors.append("textos \"%s\" está vacío: sacá la clave si no querés texto." % key)
+			errors.append(Localization.t_fmt(&"leveltexts.empty", {"key": key}))
 			continue
 		if _has_control_chars(text):
-			errors.append("textos \"%s\": tiene caracteres de control (solo se permite el salto de línea \\n)." % key)
+			errors.append(Localization.t_fmt(&"leveltexts.control_chars", {"key": key}))
 			continue
 		var before: int = errors.size()
 		_check_limits(key, text, errors)
@@ -86,16 +86,16 @@ static func _check_limits(key: String, text: String, errors: PackedStringArray) 
 			min_lines = EPILOGUE_MIN_LINES
 			max_lines = EPILOGUE_MAX_LINES
 	if lines.size() > max_lines:
-		errors.append("textos \"%s\" tiene %d líneas y el máximo es %d." % [key, lines.size(), max_lines])
+		errors.append(Localization.t_fmt(&"leveltexts.too_many_lines", {"key": key, "n": lines.size(), "max": max_lines}))
 	elif lines.size() < min_lines:
-		errors.append("textos \"%s\" tiene %d líneas y el mínimo es %d." % [key, lines.size(), min_lines])
+		errors.append(Localization.t_fmt(&"leveltexts.too_few_lines", {"key": key, "n": lines.size(), "min": min_lines}))
 	if text.length() > max_chars:
-		errors.append("textos \"%s\" tiene %d caracteres y el máximo es %d." % [key, text.length(), max_chars])
+		errors.append(Localization.t_fmt(&"leveltexts.too_long", {"key": key, "n": text.length(), "max": max_chars}))
 	for i: int in lines.size():
 		if lines[i].strip_edges().is_empty():
-			errors.append("textos \"%s\": la línea %d está en blanco." % [key, i + 1])
+			errors.append(Localization.t_fmt(&"leveltexts.blank_line", {"key": key, "n": i + 1}))
 		elif lines[i].length() > LINE_MAX_CHARS:
-			errors.append("textos \"%s\": la línea %d tiene %d caracteres y el máximo por línea es %d." % [key, i + 1, lines[i].length(), LINE_MAX_CHARS])
+			errors.append(Localization.t_fmt(&"leveltexts.line_too_long", {"key": key, "line": i + 1, "n": lines[i].length(), "max": LINE_MAX_CHARS}))
 
 
 static func _has_control_chars(text: String) -> bool:

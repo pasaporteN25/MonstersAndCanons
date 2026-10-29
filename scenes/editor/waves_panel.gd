@@ -25,7 +25,7 @@ var _remove: Button
 
 func _init() -> void:
 	super()  # arma el recuadro y el título (no se llama solo cuando la clase hija tiene su _init)
-	set_title("Oleadas")
+	set_title(Localization.t(&"editor.waves"))
 	for id: String in LevelFile.enemy_ids():
 		_enemies.append(LevelFile.find_enemy(id))
 	_enemies.sort_custom(func(a: EnemyData, b: EnemyData) -> bool: return a.name_text() < b.name_text())
@@ -36,14 +36,14 @@ func _init() -> void:
 	_wave_label.custom_minimum_size = Vector2(150, 0)
 	_wave_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_next = _button("►", "Next", func() -> void: show_wave(_wave + 1))
-	_remove = _button("Quitar", "RemoveWave", _remove_wave)
+	_remove = _button(Localization.t(&"editor.remove"), "RemoveWave", _remove_wave)
 	for node: Control in [_prev, _wave_label, _next]:
 		header.add_child(node)
 	var spacer := Control.new()
 	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.add_child(spacer)
-	header.add_child(_button("Agregar", "AddWave", _add_wave))
-	header.add_child(_button("Copiar", "CopyWave", _copy_wave))
+	header.add_child(_button(Localization.t(&"editor.add"), "AddWave", _add_wave))
+	header.add_child(_button(Localization.t(&"editor.copy"), "CopyWave", _copy_wave))
 	header.add_child(_remove)
 	_body.add_child(header)
 
@@ -58,7 +58,7 @@ func _init() -> void:
 	_groups_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.add_child(_groups_box)
 	_body.add_child(scroll)
-	_body.add_child(_button("+ Agregar grupo", "AddGroup", _add_group))
+	_body.add_child(_button(Localization.t(&"editor.add_group"), "AddGroup", _add_group))
 
 
 # --- Lo que se ve ---
@@ -88,7 +88,7 @@ func total_text() -> String:
 
 func _fill() -> void:
 	_wave = clampi(_wave, 0, draft.wave_count() - 1)
-	_wave_label.text = "Oleada %d de %d" % [_wave + 1, draft.wave_count()]
+	_wave_label.text = Localization.t_fmt(&"editor.wave_of", {"n": _wave + 1, "total": draft.wave_count()})
 	_prev.disabled = _wave == 0
 	_next.disabled = _wave >= draft.wave_count() - 1
 	_remove.disabled = draft.wave_count() <= 1  # RF-215: un nivel necesita al menos una oleada
@@ -107,10 +107,10 @@ func _fill() -> void:
 
 
 func _update_total() -> void:
-	_total_label.text = "Enemigos en esta oleada: %d" % draft.enemy_total(_wave)
+	_total_label.text = Localization.t_fmt(&"editor.wave_enemies", {"n": draft.enemy_total(_wave)})
 	for i: int in draft.group_count(_wave):
 		if float(draft.group(_wave,i)["probabilidad"]) < 1.0:
-			_total_label.text += " (máximo; incluye opcionales)"
+			_total_label.text += Localization.t(&"editor.wave_optional")
 			break
 
 
@@ -118,8 +118,8 @@ func _update_total() -> void:
 func _columns() -> Control:
 	var row_box := HBoxContainer.new()
 	row_box.add_theme_constant_override("separation", 8)
-	for column: Array in [["Enemigo", ENEMY_WIDTH], ["Cantidad", COUNT_WIDTH], ["Cada", SECONDS_WIDTH],
-			["Desde", SECONDS_WIDTH], ["Entrada", ENTRANCE_WIDTH], ["Azar %", COUNT_WIDTH], ["", REMOVE_WIDTH]]:
+	for column: Array in [[Localization.t(&"editor.col_enemy"), ENEMY_WIDTH], [Localization.t(&"editor.col_count"), COUNT_WIDTH], [Localization.t(&"editor.col_every"), SECONDS_WIDTH],
+			[Localization.t(&"editor.col_from"), SECONDS_WIDTH], [Localization.t(&"editor.tool.entrance"), ENTRANCE_WIDTH], [Localization.t(&"editor.col_chance"), COUNT_WIDTH], ["", REMOVE_WIDTH]]:
 		var label := _header(column[0])
 		label.custom_minimum_size = Vector2(column[1], 0)
 		row_box.add_child(label)
@@ -139,7 +139,7 @@ func _add_row(g: int) -> void:
 	var current: int = _enemy_index(enemy, data["enemigo"])
 	if current < 0:
 		# Un archivo con un enemigo que no existe: se muestra tal cual (el editor ya avisa el error).
-		enemy.add_item("%s (no existe)" % data["enemigo"])
+		enemy.add_item(Localization.t_fmt(&"editor.enemy_missing", {"name": data["enemigo"]}))
 		enemy.set_item_metadata(enemy.item_count - 1, data["enemigo"])
 		current = enemy.item_count - 1
 	enemy.select(current)
@@ -177,13 +177,13 @@ func _add_row(g: int) -> void:
 		draft.set_group(_wave, g, "probabilidad", value / 100.0))
 	chance.custom_minimum_size = Vector2(COUNT_WIDTH, 0)
 	chance.set_value_no_signal(float(data["probabilidad"]) * 100.0)
-	chance.tooltip_text = "Probabilidad de que salga este grupo al iniciar la oleada.100%: siempre."
+	chance.tooltip_text = Localization.t(&"editor.chance_tip")
 	var remove: Button = _button("×", "", func() -> void:
 		draft.remove_group(_wave, g)
 		refresh()
 		edited.emit())
 	remove.custom_minimum_size = Vector2(REMOVE_WIDTH, 0)
-	remove.tooltip_text = "Quitar este grupo"
+	remove.tooltip_text = Localization.t(&"editor.remove_group_tip")
 
 	for node: Control in [enemy, count, every, from, entrance, chance, remove]:
 		row_box.add_child(node)

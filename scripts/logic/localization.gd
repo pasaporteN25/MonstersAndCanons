@@ -1,13 +1,13 @@
 # Idioma de la interfaz y búsqueda de textos por clave (T533, RF-727, D-217).
-# Lógica pura, sin escena (P10). T533 dejó la base; T534 (D-222) migra por tandas: menús, opciones, pausa, salida, récords y, en la segunda, HUD, resultados, tutorial, selector, Wiki, torres y enemigos.
-# El selector de Opciones sigue oculto (`SELECTOR_ENABLED`) hasta que el resto de las pantallas y el Lore estén en inglés.
+# Lógica pura, sin escena (P10). T533 dejó la base; T534 (D-222) migra por tandas: menús, opciones, pausa, salida, récords y, en la segunda, HUD, resultados, tutorial, selector, Wiki, torres y enemigos y, en la tercera, el editor de mapas y de banderines, los mensajes de validación para quienes hacen mapas o modos y el panel del modo de pruebas.
+# El selector de Opciones sigue oculto (`SELECTOR_ENABLED`) hasta que el Lore esté en inglés y Lucas apruebe habilitarlo.
 class_name Localization
 extends RefCounted
 
 const DEFAULT_LANGUAGE: StringName = &"es"
 const SUPPORTED: Array[StringName] = [&"es", &"en"]
-## T533/T534: el inglés todavía no cubre el editor, los mensajes de validación ni el Lore (queda en español por el respaldo), así que
-## el selector NO se muestra. Se pasa a `true` cuando el inglés quede coherente.
+## T533/T534: el inglés todavía no cubre el Lore (queda en español por el respaldo) y Lucas no aprobó mostrar el selector, así que
+## NO se muestra. Se pasa a `true` cuando el Lore esté traducido y Lucas lo apruebe.
 const SELECTOR_ENABLED: bool = false
 ## Costura para pruebas: ¿se arma el selector? Vale `SELECTOR_ENABLED`; `reset()` lo restaura.
 static var selector_visible: bool = SELECTOR_ENABLED

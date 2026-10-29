@@ -1749,6 +1749,7 @@ Los cuatro enemigos que gustaron, con lo necesario para convertirlos en spec cua
 
 ### Sugerencias de Claude *(consultar antes de implementar)*
 *Regla de Lucas, 2026-09-29: las ideas que Claude propone por su cuenta se anotan acá y no se implementan hasta que Lucas las apruebe.*
+- **El editor de mapas ya no cabe en 1280 × 720** *(2026-10-29, hallazgo de T534)*: con la ventana de 1280 px la barra de arriba del editor se pasa del borde («Salir» queda con 35 px fuera) y la de abajo también («Rehacer» y las herramientas de los extremos); en inglés se pasa menos, pero se pasa. Y con el panel de Ajustes abierto, las casillas de torres de la lista de abajo caen bajo el borde de 720 px. Ya era así en español antes de T534. Propuesta: pasar la barra de herramientas a dos filas o acortar los rótulos, y dejar el panel de Ajustes con desplazamiento. No se implementa hasta que Lucas diga que sí.
 - ~~**Aviso «te sobra oro» (propuesta B de T350)**~~ *(2026-10-20)*: **descartada por Lucas.** No se implementa ni se vuelve a proponer sin que él lo pida.
 - **Consejo en la derrota: qué torre conviene para las oleadas (propuesta A de T350, reencuadrada en M70)** *(2026-10-20)*: Lucas la aprobó reencuadrada: en vez de un consejo genérico, que la pantalla de derrota diga **qué torre conviene según las oleadas** del nivel. Su spec es M70 (rama `feature/m70-consejo-derrota`); no se hace en M68.
 

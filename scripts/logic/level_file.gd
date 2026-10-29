@@ -36,7 +36,7 @@ const MAX_LEGEND: int = 12
 ## (los avisos, RF-207, no impiden jugar).
 static func load_level(path: String) -> Dictionary:
 	if not FileAccess.file_exists(path):
-		return _failed(["No existe el archivo %s." % path])
+		return _failed([Localization.t_fmt(&"lvlfile.no_file", {"path": path})])
 	return parse(FileAccess.get_file_as_string(path), StringName(path.get_file().get_basename()))
 
 
@@ -47,7 +47,7 @@ static func parse(text: String, id: StringName) -> Dictionary:
 	if not errors.is_empty():
 		return _failed(errors)
 	if not root is Dictionary:
-		return _failed(["El archivo tiene que empezar con { y terminar con }."])
+		return _failed([Localization.t(&"lvlfile.bad_braces")])
 	var data: Dictionary = root
 	_check_keys(data, LEVEL_KEYS, "", errors)
 	_check_version(data, errors)
@@ -56,7 +56,7 @@ static func parse(text: String, id: StringName) -> Dictionary:
 	level.id = id
 	level.display_name = _text(data, "nombre", "", errors)
 	if level.display_name.length() > MAX_NAME_LENGTH:
-		errors.append("El nombre tiene %d letras y el máximo es %d." % [level.display_name.length(), MAX_NAME_LENGTH])
+		errors.append(Localization.t_fmt(&"lvlfile.name_too_long", {"n": level.display_name.length(), "max": MAX_NAME_LENGTH}))
 	level.starting_gold = _whole(data, "oro", "", 0, MAX_GOLD, errors)
 	level.starting_lives = _whole(data, "vidas", "", 1, MAX_LIVES, errors)
 	if data.has("aumento_vida"):
@@ -66,7 +66,7 @@ static func parse(text: String, id: StringName) -> Dictionary:
 	level.legend = _read_legend(data, errors)
 	if data.has("demoledora"):
 		if not data["demoledora"] is bool:
-			errors.append("demoledora: tiene que ser true o false.")
+			errors.append(Localization.t(&"lvlfile.machine_bool"))
 		else:
 			level.machine_enabled = data["demoledora"]
 	var texts: Dictionary = LevelTexts.parse(data.get("textos"), errors)  # RF-464
@@ -79,9 +79,9 @@ static func parse(text: String, id: StringName) -> Dictionary:
 
 	var grid: MapGrid = null
 	if not data.has("mapa"):
-		errors.append("Falta \"mapa\".")
+		errors.append(Localization.t(&"lvlfile.map_missing"))
 	elif not _is_list_of_text(data["mapa"]):
-		errors.append("mapa: tiene que ser una lista de filas entre comillas, como [\"....\", \"A###\"].")
+		errors.append(Localization.t(&"lvlfile.map_not_list"))
 	else:
 		level.map_rows = PackedStringArray(data["mapa"])
 		grid = MapGrid.parse(level.map_rows, level.legend)
@@ -93,15 +93,15 @@ static func parse(text: String, id: StringName) -> Dictionary:
 		level.obstacles = _read_obstacles(level.map_rows, level.legend, errors)
 
 	if not data.has("oleadas"):
-		errors.append("Falta \"oleadas\".")
+		errors.append(Localization.t(&"lvlfile.waves_missing"))
 	elif not data["oleadas"] is Array or (data["oleadas"] as Array).is_empty():
-		errors.append("oleadas: tiene que ser una lista con al menos una oleada.")
+		errors.append(Localization.t(&"lvlfile.waves_not_list"))
 	elif (data["oleadas"] as Array).size() > MAX_WAVES:
-		errors.append("oleadas: hay %d y el máximo es %d." % [(data["oleadas"] as Array).size(), MAX_WAVES])
+		errors.append(Localization.t_fmt(&"lvlfile.waves_too_many", {"n": (data["oleadas"] as Array).size(), "max": MAX_WAVES}))
 	else:
 		var waves: Array = data["oleadas"]
 		for w: int in waves.size():
-			level.waves.append(_read_wave(waves[w], "oleada %d" % (w + 1), grid, errors))
+			level.waves.append(_read_wave(waves[w], Localization.t_fmt(&"lvlfile.where_wave", {"n": (w + 1)}), grid, errors))
 
 	if not errors.is_empty():
 		return _failed(errors)
@@ -109,11 +109,11 @@ static func parse(text: String, id: StringName) -> Dictionary:
 	for problem: String in grid.warnings:
 		warnings.append("mapa: " + problem)
 	if level.machine_enabled and level.obstacles.filter(func(obstacle: ObstacleSpec) -> bool: return obstacle.kind == ObstacleSpec.Kind.REMOVABLE).is_empty():
-		warnings.append("demoledora: el nivel la habilita pero no tiene removibles.")
+		warnings.append(Localization.t(&"lvlfile.warn_machine_no_removables"))
 	if not level.uses_resources():  # RF-421: ofrece una torre que cuesta recursos y no hay cómo conseguirlos
 		for tower: TowerData in level.available_towers(Wiki._all_towers()):
 			if tower.resource_cost > 0:
-				warnings.append("torres: el %s cuesta recursos y este mapa no tiene cómo conseguirlos." % tower.display_name)
+				warnings.append(Localization.t_fmt(&"lvlfile.warn_tower_needs_resources", {"name": tower.display_name}))
 	return {"level": level, "errors": errors, "warnings": warnings}
 
 
@@ -138,14 +138,14 @@ static func campaign_ids(path: String = CAMPAIGN_PATH) -> PackedStringArray:
 	var root: Variant = _parse_json(FileAccess.get_file_as_string(path), errors) \
 		if FileAccess.file_exists(path) else null
 	if root == null and errors.is_empty():
-		errors.append("No existe el archivo.")
+		errors.append(Localization.t(&"lvlfile.no_file_plain"))
 	elif root is Dictionary:
 		_check_keys(root, CAMPAIGN_KEYS, "", errors)
 		_check_version(root, errors)
 		if not _is_list_of_text(root.get("niveles")):
-			errors.append("\"niveles\" tiene que ser una lista de nombres de nivel, como [\"level_01\"].")
+			errors.append(Localization.t(&"lvlfile.levels_not_list"))
 	elif errors.is_empty():
-		errors.append("El archivo tiene que empezar con { y terminar con }.")
+		errors.append(Localization.t(&"lvlfile.bad_braces"))
 	if not errors.is_empty():
 		push_error("La campaña (%s) tiene errores:\n- %s" % [path, "\n- ".join(errors)])
 		return PackedStringArray()
@@ -157,16 +157,16 @@ static func campaign_ids(path: String = CAMPAIGN_PATH) -> PackedStringArray:
 static func _read_wave(value: Variant, where: String, grid: MapGrid, errors: PackedStringArray) -> WaveData:
 	var wave := WaveData.new()
 	if not value is Array or (value as Array).is_empty():
-		_add(errors, where, "tiene que ser una lista con al menos un grupo, como [{\"enemigo\": \"normal\", \"cantidad\": 5, \"cada\": 1.0}].")
+		_add(errors, where, Localization.t(&"lvlfile.groups_not_list"))
 		return wave
 	var groups: Array = value
 	if groups.size() > MAX_GROUPS:
-		_add(errors, where, "tiene %d grupos y el máximo es %d." % [groups.size(), MAX_GROUPS])
+		_add(errors, where, Localization.t_fmt(&"lvlfile.groups_too_many", {"n": groups.size(), "max": MAX_GROUPS}))
 		return wave
 	for g: int in groups.size():
-		var group_where: String = "%s, grupo %d" % [where, g + 1]
+		var group_where: String = Localization.t_fmt(&"lvlfile.where_group", {"where": where, "n": g + 1})
 		if not groups[g] is Dictionary:
-			_add(errors, group_where, "tiene que estar entre { }.")
+			_add(errors, group_where, Localization.t(&"lvlfile.group_not_object"))
 			continue
 		wave.groups.append(_read_group(groups[g], group_where, grid, errors))
 	return wave
@@ -179,23 +179,23 @@ static func _read_group(data: Dictionary, where: String, grid: MapGrid, errors: 
 	if not enemy_name.is_empty():
 		group.enemy = find_enemy(enemy_name)
 		if group.enemy == null:
-			_add(errors, where, "no existe el enemigo '%s' (tiene que ser un archivo de data/enemies/)." % enemy_name)
+			_add(errors, where, Localization.t_fmt(&"lvlfile.enemy_unknown", {"id": enemy_name}))
 	group.count = _whole(data, "cantidad", where, 1, MAX_COUNT, errors)
 	if data.has("probabilidad"):
 		group.probability = _number(data, "probabilidad", where, 1.0, errors)
 	if data.has("cada") or group.count > 1:
 		group.interval = _number(data, "cada", where, MAX_EVERY, errors)
 		if group.count > 1 and group.interval <= 0.0 and data.has("cada") and _is_number(data["cada"]):
-			_add(errors, where, "\"cada\" tiene que ser mayor que 0 (si no, salen todos juntos).")
+			_add(errors, where, Localization.t(&"lvlfile.every_zero"))
 	if data.has("desde"):
 		group.start_delay = _number(data, "desde", where, MAX_FROM, errors)
 	if data.has("entrada"):
 		var letter: Variant = data["entrada"]
 		var index: int = MapGrid.ENTRANCE_LETTERS.find(str(letter)) if letter is String and (letter as String).length() == 1 else -1
 		if index < 0:
-			_add(errors, where, "\"entrada\" tiene que ser una letra, como \"A\" o \"B\".")
+			_add(errors, where, Localization.t(&"lvlfile.entrance_letter"))
 		elif grid != null and index >= grid.entrances.size():
-			_add(errors, where, "la entrada %s no está en el mapa." % letter)
+			_add(errors, where, Localization.t_fmt(&"lvlfile.entrance_not_on_map", {"letter": letter}))
 		else:
 			group.entrance_index = index
 	return group
@@ -246,12 +246,12 @@ static func _read_extra_towers(data: Dictionary, errors: PackedStringArray) -> P
 	if not data.has("torres_extra"):
 		return result
 	if not _is_list_of_text(data["torres_extra"]):
-		errors.append("torres_extra: tiene que ser una lista de nombres de torre entre comillas, como [\"mortar\"].")
+		errors.append(Localization.t(&"lvlfile.extra_towers_not_list"))
 		return result
 	var known: PackedStringArray = tower_ids()
 	for id: String in data["torres_extra"]:
 		if not known.has(id):
-			errors.append("torres_extra: la torre \"%s\" no existe. Las que hay: %s." % [id, ", ".join(known)])
+			errors.append(Localization.t_fmt(&"lvlfile.extra_tower_unknown", {"id": id, "known": ", ".join(known)}))
 		elif not result.has(id):
 			result.append(id)
 	return result
@@ -264,12 +264,12 @@ static func _read_towers(data: Dictionary, errors: PackedStringArray) -> PackedS
 	if not data.has("torres"):
 		return result
 	if not _is_list_of_text(data["torres"]) or (data["torres"] as Array).is_empty():
-		errors.append("torres: tiene que ser una lista con al menos una torre entre comillas, como [\"frost\", \"cannon\"].")
+		errors.append(Localization.t(&"lvlfile.towers_not_list"))
 		return result
 	var known: PackedStringArray = tower_ids()
 	for id: String in data["torres"]:
 		if not known.has(id):
-			errors.append("torres: la torre \"%s\" no existe. Las que hay: %s." % [id, ", ".join(known)])
+			errors.append(Localization.t_fmt(&"lvlfile.tower_unknown", {"id": id, "known": ", ".join(known)}))
 		elif not result.has(id):
 			result.append(id)
 	return result
@@ -283,7 +283,7 @@ static func _read_theme(data: Dictionary, errors: PackedStringArray) -> StringNa
 		return MapThemes.DEFAULT
 	var value: Variant = data["tema"]
 	if not value is String or not MapThemes.is_valid(value):
-		errors.append("tema: %s no existe. Los que hay: %s." % [JSON.stringify(value), ", ".join(MapThemes.IDS)])
+		errors.append(Localization.t_fmt(&"lvlfile.theme_unknown", {"value": JSON.stringify(value), "known": ", ".join(MapThemes.IDS)}))
 		return MapThemes.DEFAULT
 	return StringName(value)
 
@@ -300,29 +300,29 @@ static func _read_legend(data: Dictionary, errors: PackedStringArray) -> Diction
 	if not data.has("leyenda"):
 		return legend
 	if not data["leyenda"] is Dictionary:
-		errors.append("leyenda: tiene que ser un objeto con una letra por entrada, como {\"~\": {\"dibujo\": \"agua\"}}.")
+		errors.append(Localization.t(&"lvlfile.legend_not_object"))
 		return legend
 	var source: Dictionary = data["leyenda"]
 	var catalog_result: Dictionary = ObstacleCatalog.load_data()
 	var catalog: Dictionary = catalog_result["data"]
 	if source.size() > MAX_LEGEND:
-		errors.append("leyenda: hay %d letras y el máximo es %d." % [source.size(), MAX_LEGEND])
+		errors.append(Localization.t_fmt(&"lvlfile.legend_too_many", {"n": source.size(), "max": MAX_LEGEND}))
 	for key: Variant in source.keys():
 		var letter: String = str(key)
-		var where: String = "leyenda \"%s\"" % letter
+		var where: String = Localization.t_fmt(&"lvlfile.where_legend", {"letter": letter})
 		var problem: String = _legend_letter_problem(letter)
 		if problem != "":
 			errors.append("%s: %s" % [where, problem])
 			continue
 		if not source[key] is Dictionary:
-			errors.append("%s: tiene que ser un objeto, como {\"dibujo\": \"agua\"}." % where)
+			errors.append(Localization.t_fmt(&"lvlfile.legend_entry_not_object", {"where": where}))
 			continue
 		var entry: Dictionary = source[key]
 		_check_keys(entry, LEGEND_KEYS, where, errors)
 		var has_removable: bool = entry.has("removible")
 		var has_extraction: bool = entry.has("extraccion")
 		if has_removable and has_extraction:
-			errors.append("%s: no puede tener \"removible\" y \"extraccion\" a la vez." % where)
+			errors.append(Localization.t_fmt(&"lvlfile.legend_both_kinds", {"where": where}))
 			continue
 		var category: String = "removibles" if has_removable else "extraccion" if has_extraction else ""
 		var obstacle_data: Dictionary = {}
@@ -338,26 +338,26 @@ static func _read_legend(data: Dictionary, errors: PackedStringArray) -> Diction
 			else:
 				var raw_obstacle: Variant = entry[obstacle_key]
 				if not raw_obstacle is Dictionary or not raw_obstacle.get("clase") is String:
-					_add(errors, where, "%s: falta \"clase\" (tiene que ser un texto)." % category)
+					_add(errors, where, Localization.t_fmt(&"lvlfile.legend_class_missing", {"category": category}))
 					continue
 				expected_drawing = raw_obstacle["clase"]
 		var drawing: Variant = entry.get("dibujo", expected_drawing)
 		if entry.has("dibujo") or category == "":
 			if not drawing is String or not MapDrawings.is_valid(drawing):
-				errors.append("%s: el dibujo %s no existe. Los que hay: %s." % [where, JSON.stringify(drawing), ", ".join(MapDrawings.ids())])
+				errors.append(Localization.t_fmt(&"lvlfile.drawing_unknown", {"where": where, "value": JSON.stringify(drawing), "known": ", ".join(MapDrawings.ids())}))
 				continue
 		elif category != "" and not MapDrawings.is_valid(drawing):
-			errors.append("%s: el dibujo de la clase \"%s\" no existe." % [where, expected_drawing])
+			errors.append(Localization.t_fmt(&"lvlfile.class_drawing_unknown", {"where": where, "class": expected_drawing}))
 			continue
 		if category != "" and drawing != expected_drawing:
-			errors.append("%s: el dibujo tiene que ser \"%s\", como la clase." % [where, expected_drawing])
+			errors.append(Localization.t_fmt(&"lvlfile.drawing_must_match", {"where": where, "class": expected_drawing}))
 			continue
 		var buildable: Variant = entry.get("construible", false)
 		if not buildable is bool:
-			errors.append("%s: \"construible\" tiene que ser true o false." % where)
+			errors.append(Localization.t_fmt(&"lvlfile.buildable_bool", {"where": where}))
 			continue
 		if category != "" and buildable:
-			errors.append("%s: \"construible\" no puede ser true en un removible ni en una extracción." % where)
+			errors.append(Localization.t_fmt(&"lvlfile.buildable_on_object", {"where": where}))
 			continue
 		var normalized: Dictionary = {"dibujo": drawing, "construible": buildable}
 		if has_removable and not obstacle_data.is_empty():
@@ -370,19 +370,19 @@ static func _read_legend(data: Dictionary, errors: PackedStringArray) -> Diction
 
 static func _read_obstacle_entry(value: Variant, category: String, where: String, catalog: Dictionary, errors: PackedStringArray) -> Dictionary:
 	if not value is Dictionary:
-		_add(errors, where, "\"%s\" tiene que ser un objeto." % category)
+		_add(errors, where, Localization.t_fmt(&"lvlfile.category_not_object", {"category": category}))
 		return {}
 	var source: Dictionary = value
 	var allowed: PackedStringArray = ["clase", "costo", "tiempo", "recursos", "probabilidad", "hallazgo"] if category == "removibles" \
 		else ["clase", "costo", "produccion", "reserva"]
 	_check_keys(source, allowed, where + " → " + category, errors)
 	if not source.has("clase") or not source["clase"] is String:
-		_add(errors, where, "%s: falta \"clase\" (tiene que ser un texto)." % category)
+		_add(errors, where, Localization.t_fmt(&"lvlfile.legend_class_missing", {"category": category}))
 		return {}
 	var class_id: String = source["clase"]
 	var defaults: Dictionary = ObstacleCatalog.removable(class_id, catalog) if category == "removibles" else ObstacleCatalog.extraction(class_id, catalog)
 	if defaults.is_empty():
-		_add(errors, where, "%s: la clase \"%s\" no existe. Las que hay: %s." % [category, class_id, ", ".join(ObstacleCatalog.class_ids(catalog))])
+		_add(errors, where, Localization.t_fmt(&"lvlfile.class_unknown", {"category": category, "class": class_id, "known": ", ".join(ObstacleCatalog.class_ids(catalog))}))
 		return {}
 	var result: Dictionary = defaults.duplicate(true)
 	for key: Variant in source.keys():
@@ -402,11 +402,11 @@ static func _read_obstacle_entry(value: Variant, category: String, where: String
 		result["repeat_reward"] = int(defaults.get("recursos_si_recuperado", 0))
 		if source.has("hallazgo"):
 			if class_id != "escombro":
-				_add(errors, where, "\"hallazgo\" solo se puede usar en un escombro.")
+				_add(errors, where, Localization.t(&"lvlfile.finding_only_rubble"))
 				return {}
 			var collections: Dictionary = _collection_definitions()
 			if not collections.has(source["hallazgo"]):
-				_add(errors, where, "la colección \"%s\" no existe en progression.json." % source["hallazgo"])
+				_add(errors, where, Localization.t_fmt(&"lvlfile.finding_collection_unknown", {"id": source["hallazgo"]}))
 				return {}
 	else:
 		for key: String in ["costo", "produccion", "reserva"]:
@@ -449,7 +449,7 @@ static func _read_obstacles(rows: PackedStringArray, legend: Dictionary, errors:
 					else:
 						finding_letters[letter] = true
 						if findings.has(obstacle.finding_collection):
-							_add(errors, "leyenda \"%s\" en %s" % [letter, MapGrid.where(obstacle.cell)], "ya hay un hallazgo de la colección \"%s\" en este nivel (letra \"%s\")." % [obstacle.finding_collection, findings[obstacle.finding_collection]])
+							_add(errors, Localization.t_fmt(&"lvlfile.legend_letter_in", {"letter": letter, "where": MapGrid.where(obstacle.cell)}), Localization.t_fmt(&"lvlfile.finding_repeated", {"id": obstacle.finding_collection, "letter": findings[obstacle.finding_collection]}))
 						else:
 							findings[obstacle.finding_collection] = letter
 			else:
@@ -468,14 +468,14 @@ static func _collection_definitions() -> Dictionary:
 
 static func _nonnegative_whole(value: Variant, where: String, errors: PackedStringArray, must_be_positive: bool) -> bool:
 	if not _is_number(value) or float(value) != floorf(float(value)) or float(value) < 0.0 or (must_be_positive and float(value) <= 0.0):
-		_add(errors, where, "tiene que ser %s." % ("un número entero mayor que 0" if must_be_positive else "un número entero de 0 para arriba"))
+		_add(errors, where, Localization.t_fmt(&"lvlfile.must_be", {"what": (Localization.t(&"lvlfile.whole_positive") if must_be_positive else Localization.t(&"lvlfile.whole_nonneg"))}))
 		return false
 	return true
 
 
 static func _positive_number(value: Variant, where: String, errors: PackedStringArray) -> bool:
 	if not _is_number(value) or float(value) <= 0.0:
-		_add(errors, where, "tiene que ser mayor que 0.")
+		_add(errors, where, Localization.t(&"lvlfile.greater_than_zero"))
 		return false
 	return true
 
@@ -483,7 +483,7 @@ static func _positive_number(value: Variant, where: String, errors: PackedString
 static func _probability(value: Variant, where: String, errors: PackedStringArray) -> bool:
 	if not _nonnegative_whole(value, where + " → probabilidad", errors, false) or float(value) > 100.0:
 		if _is_number(value) and float(value) > 100.0:
-			_add(errors, where, "\"probabilidad\" no puede superar 100.")
+			_add(errors, where, Localization.t(&"lvlfile.probability_max"))
 		return false
 	return true
 
@@ -491,11 +491,11 @@ static func _probability(value: Variant, where: String, errors: PackedStringArra
 ## Por qué una letra no sirve para la leyenda ("" si sirve): una sola, y que no sea una que ya significa algo.
 static func _legend_letter_problem(letter: String) -> String:
 	if letter.length() != 1:
-		return "tiene que ser una sola letra o símbolo."
+		return Localization.t(&"lvlfile.letter_single")
 	if ". # X S".contains(letter) or MapGrid.ENTRANCE_LETTERS.contains(letter):
-		return "esa letra ya significa algo (. # X S y las entradas A a H)."
+		return Localization.t(&"lvlfile.letter_reserved")
 	if letter == " " or letter == "\"" or letter == "\\":
-		return "no puede ser un espacio, una comilla ni una barra."
+		return Localization.t(&"lvlfile.letter_forbidden")
 	return ""
 
 
@@ -504,8 +504,7 @@ static func _legend_letter_problem(letter: String) -> String:
 static func _parse_json(text: String, errors: PackedStringArray) -> Variant:
 	var json := JSON.new()
 	if json.parse(text) != OK:
-		errors.append("El archivo no es un JSON válido (línea %d: %s). Revisá comas, comillas y llaves." \
-			% [json.get_error_line(), json.get_error_message()])
+		errors.append(Localization.t_fmt(&"lvlfile.bad_json", {"line": json.get_error_line(), "message": json.get_error_message()}))
 		return null
 	return json.data
 
@@ -514,22 +513,22 @@ static func _parse_json(text: String, errors: PackedStringArray) -> Variant:
 static func _check_keys(data: Dictionary, known: PackedStringArray, where: String, errors: PackedStringArray) -> void:
 	for key: Variant in data.keys():
 		if not known.has(str(key)):
-			_add(errors, where, "clave desconocida \"%s\" (se usan: %s)." % [key, ", ".join(known)])
+			_add(errors, where, Localization.t_fmt(&"lvlfile.unknown_key", {"key": key, "known": ", ".join(known)}))
 
 
 static func _check_version(data: Dictionary, errors: PackedStringArray) -> void:
 	if not data.has("version"):
-		errors.append("Falta \"version\" (hoy es %d)." % VERSION)
+		errors.append(Localization.t_fmt(&"lvlfile.version_missing", {"n": VERSION}))
 	elif not _is_number(data["version"]) or int(data["version"]) != VERSION:
-		errors.append("La versión %s no se puede leer: este juego lee la %d." % [_shown(data["version"]), VERSION])
+		errors.append(Localization.t_fmt(&"lvlfile.version_unreadable", {"found": _shown(data["version"]), "n": VERSION}))
 
 
 static func _text(data: Dictionary, key: String, where: String, errors: PackedStringArray) -> String:
 	if not data.has(key):
-		_add(errors, where, "falta \"%s\"." % [key])
+		_add(errors, where, Localization.t_fmt(&"lvlfile.key_missing", {"key": key}))
 		return ""
 	if not data[key] is String or (data[key] as String).strip_edges().is_empty():
-		_add(errors, where, "\"%s\" tiene que ser un texto entre comillas." % [key])
+		_add(errors, where, Localization.t_fmt(&"lvlfile.key_text", {"key": key}))
 		return ""
 	return data[key]
 
@@ -538,17 +537,17 @@ static func _text(data: Dictionary, key: String, where: String, errors: PackedSt
 ## Se compara como decimal ANTES de convertir a entero: un número gigante no desborda.
 static func _whole(data: Dictionary, key: String, where: String, minimum: int, maximum: int, errors: PackedStringArray) -> int:
 	if not data.has(key):
-		_add(errors, where, "falta \"%s\"." % [key])
+		_add(errors, where, Localization.t_fmt(&"lvlfile.key_missing", {"key": key}))
 		return minimum
 	var value: Variant = data[key]
 	if not _is_number(value) or float(value) != floorf(float(value)):
-		_add(errors, where, "\"%s\" tiene que ser un número entero." % [key])
+		_add(errors, where, Localization.t_fmt(&"lvlfile.key_whole", {"key": key}))
 		return minimum
 	if float(value) < minimum:
-		_add(errors, where, "\"%s\" tiene que ser %d o más." % [key, minimum])
+		_add(errors, where, Localization.t_fmt(&"lvlfile.key_min", {"key": key, "n": minimum}))
 		return minimum
 	if float(value) > maximum:
-		_add(errors, where, "\"%s\" tiene que ser %d o menos (es demasiado grande)." % [key, maximum])
+		_add(errors, where, Localization.t_fmt(&"lvlfile.key_max", {"key": key, "n": maximum}))
 		return minimum
 	return int(value)
 
@@ -556,14 +555,14 @@ static func _whole(data: Dictionary, key: String, where: String, minimum: int, m
 ## Un número (con decimales o no) de 0 a `maximum`: segundos (RF-223).
 static func _number(data: Dictionary, key: String, where: String, maximum: float, errors: PackedStringArray) -> float:
 	if not data.has(key):
-		_add(errors, where, "falta \"%s\"." % [key])
+		_add(errors, where, Localization.t_fmt(&"lvlfile.key_missing", {"key": key}))
 		return 0.0
 	var value: Variant = data[key]
 	if not _is_number(value) or float(value) < 0.0:
-		_add(errors, where, "\"%s\" tiene que ser un número de 0 para arriba (segundos)." % [key])
+		_add(errors, where, Localization.t_fmt(&"lvlfile.key_seconds", {"key": key}))
 		return 0.0
 	if float(value) > maximum:
-		_add(errors, where, "\"%s\" tiene que ser %s segundos o menos." % [key, _shown(maximum)])
+		_add(errors, where, Localization.t_fmt(&"lvlfile.key_seconds_max", {"key": key, "n": _shown(maximum)}))
 		return 0.0
 	return float(value)
 

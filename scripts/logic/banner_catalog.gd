@@ -2,7 +2,7 @@ class_name BannerCatalog
 extends RefCounted
 ## RF-662: catálogo cerrado de paletas y emblemas abstractos para el banderín del jugador.
 ## Los ids son estables (se guardan en disco): no se renombran ni se reusan; solo se agregan.
-## Las etiquetas son para la interfaz; los sprites cerrados se resuelven en MapDrawings.
+## Las etiquetas (en español; el inglés está en el catálogo `banner_palette.*`/`banner_emblem.*`) son para la interfaz; los sprites cerrados se resuelven en MapDrawings.
 
 const DEFAULT_PALETTE: String = "meridiana"
 const DEFAULT_EMBLEM: String = "chevron"
@@ -45,8 +45,8 @@ static func has_emblem(id: Variant) -> bool:
 
 
 static func palette_label(id: String) -> String:
-	return str(PALETTES.get(id, ""))
+	return Localization.data_text("banner_palette", StringName(id), "name", str(PALETTES.get(id, "")))
 
 
 static func emblem_label(id: String) -> String:
-	return str(EMBLEMS.get(id, ""))
+	return Localization.data_text("banner_emblem", StringName(id), "name", str(EMBLEMS.get(id, "")))

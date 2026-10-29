@@ -3,7 +3,6 @@
 class_name LoreUnlock
 extends RefCounted
 
-const CLOSED_PREFIX: String = "Se abre al ganar el nivel "
 
 
 ## ¿Está abierto? `is_completed` es una función (id del nivel → bool). Sin función, todo está abierto
@@ -18,8 +17,8 @@ static func is_open(unlock_level: StringName, is_completed: Callable) -> bool:
 static func locked_text(unlock_level: StringName, campaign_ids: Array) -> String:
 	var number: int = level_number(unlock_level, campaign_ids)
 	if number <= 0:
-		return "Se abre al ganar un nivel de la campaña."
-	return "%s%d." % [CLOSED_PREFIX, number]
+		return Localization.t(&"wiki.lore_locked_generic")
+	return Localization.t_fmt(&"wiki.lore_locked", {"n": number})
 
 
 ## El número del nivel (desde 1). 0 si el id no parece de nivel.

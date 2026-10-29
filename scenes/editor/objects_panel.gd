@@ -5,20 +5,15 @@
 class_name ObjectsPanel
 extends EditorPanel
 
-const CLASS_NAMES: Dictionary = {
-	"arbol": "Árbol removible", "roca": "Roca removible", "escombro": "Escombro",
-	"mina": "Mina", "bosque_explotable": "Bosque explotable",
+const CLASS_NAME_KEYS: Dictionary = {
+	"arbol": &"editor.class.arbol", "roca": &"editor.class.roca", "escombro": &"editor.class.escombro",
+	"mina": &"editor.class.mina", "bosque_explotable": &"editor.class.bosque_explotable",
 }
 ## Lo que se ve de cada dato: texto, sufijo, mínimo, máximo y paso.
-const FIELD_LABELS: Dictionary = {
-	"costo": "Costo", "tiempo": "Tiempo", "recursos": "Recursos", "probabilidad": "Probabilidad",
-	"produccion": "Producción por oleada", "reserva": "Reserva",
+const FIELD_LABEL_KEYS: Dictionary = {
+	"costo": &"editor.field.costo", "tiempo": &"editor.field.tiempo", "recursos": &"editor.field.recursos", "probabilidad": &"editor.field.probabilidad",
+	"produccion": &"editor.field.produccion", "reserva": &"editor.field.reserva",
 }
-const FIELD_SUFFIXES: Dictionary = {
-	"costo": " de oro", "tiempo": " s", "recursos": "", "probabilidad": " %", "produccion": "", "reserva": "",
-}
-const NO_FINDING_TEXT: String = "(sin pieza)"
-const FINDING_LOCKED_TEXT: String = "Las piezas de colección solo se consiguen en la campaña"
 
 var _letter: String = ""
 var _letter_option := OptionButton.new()
@@ -30,16 +25,32 @@ var _finding_option := OptionButton.new()
 var _finding_note: Label
 
 
+## T534: lo que se ve de cada dato: sufijo según el idioma.
+static func field_suffix(key: String) -> String:
+	match key:
+		"costo":
+			return Localization.t(&"editor.suffix_gold")
+		"tiempo":
+			return Localization.t(&"editor.suffix_seconds")
+		"probabilidad":
+			return Localization.t(&"editor.suffix_percent")
+	return ""
+
+
+static func finding_locked_text() -> String:
+	return Localization.t(&"editor.finding_locked")
+
+
 func _init() -> void:
 	super()
-	set_title("Objetos del mapa")
-	_empty_note = _header("Todavía no hay objetos. Pintá un árbol, una roca, un escombro, una mina o un bosque explotable y volvé acá para cambiar sus valores.")
+	set_title(Localization.t(&"editor.objects_title"))
+	_empty_note = _header(Localization.t(&"editor.objects_empty"))
 	_empty_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_empty_note.custom_minimum_size = Vector2(380, 0)
 	_body.add_child(_empty_note)
 	_letter_option.custom_minimum_size = Vector2(300, 0)
 	_letter_option.item_selected.connect(_on_letter_selected)
-	_letter_option.tooltip_text = "Cada letra de la leyenda es una clase de objeto. Lo que cambies vale para todas sus casillas."
+	_letter_option.tooltip_text = Localization.t(&"editor.letter_tip")
 	_body.add_child(_letter_option)
 	_fields_box.add_theme_constant_override("separation", 8)
 	_body.add_child(_fields_box)
@@ -50,8 +61,8 @@ func _init() -> void:
 	_fields_box.add_child(grid)
 	for key: String in ["costo", "tiempo", "recursos", "probabilidad", "produccion", "reserva"]:
 		var label := Label.new()
-		label.text = FIELD_LABELS[key]
-		var spin: SpinBox = _spin(0.0, LevelDraft.OBSTACLE_VALUE_MAX, 1.0, FIELD_SUFFIXES[key],
+		label.text = Localization.t(FIELD_LABEL_KEYS[key])
+		var spin: SpinBox = _spin(0.0, LevelDraft.OBSTACLE_VALUE_MAX, 1.0, field_suffix(key),
 			func(value: float) -> void: draft.set_obstacle_value(_letter, key, value))
 		spin.name = "Spin_" + key
 		grid.add_child(label)
@@ -61,17 +72,17 @@ func _init() -> void:
 	(_field_rows["tiempo"]["spin"] as SpinBox).max_value = LevelDraft.OBSTACLE_TIME_MAX
 	(_field_rows["probabilidad"]["spin"] as SpinBox).max_value = 100.0
 	var finding_label := Label.new()
-	finding_label.text = "Pieza de colección"
+	finding_label.text = Localization.t(&"editor.finding_label")
 	_finding_row.add_theme_constant_override("separation", 16)
 	_finding_row.add_child(finding_label)
 	_finding_option.item_selected.connect(_on_finding_selected)
 	_finding_row.add_child(_finding_option)
 	_fields_box.add_child(_finding_row)
-	_finding_note = _header(FINDING_LOCKED_TEXT)
+	_finding_note = _header(finding_locked_text())
 	_finding_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_finding_note.custom_minimum_size = Vector2(380, 0)
 	_fields_box.add_child(_finding_note)
-	var note := _header("Los valores en gris claro de cada dato son los de la clase: si escribís el mismo número, la sobrescritura se borra.")
+	var note := _header(Localization.t(&"editor.objects_note"))
 	note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	note.custom_minimum_size = Vector2(380, 0)
 	_fields_box.add_child(note)
@@ -90,7 +101,7 @@ func _fill() -> void:
 		_letter = letters[0]
 	for i: int in letters.size():
 		var class_id: String = draft.obstacle_class(letters[i])
-		_letter_option.add_item("%s · %s" % [letters[i], CLASS_NAMES.get(class_id, class_id)])
+		_letter_option.add_item("%s · %s" % [letters[i], Localization.t(CLASS_NAME_KEYS[class_id]) if CLASS_NAME_KEYS.has(class_id) else class_id])
 		_letter_option.set_item_metadata(i, letters[i])
 		if letters[i] == _letter:
 			_letter_option.select(i)
@@ -109,8 +120,8 @@ func _fill_fields() -> void:
 			continue
 		spin.set_value_no_signal(draft.obstacle_value(_letter, key))
 		var default_value: float = draft.obstacle_default(_letter, key)
-		label.text = "%s (clase: %s)" % [FIELD_LABELS[key], _shown_number(default_value)]
-		spin.tooltip_text = "De la clase: %s%s" % [_shown_number(default_value), FIELD_SUFFIXES[key]]
+		label.text = Localization.t_fmt(&"editor.field_with_class", {"field": Localization.t(FIELD_LABEL_KEYS[key]), "value": _shown_number(default_value)})
+		spin.tooltip_text = Localization.t_fmt(&"editor.from_class_tip", {"value": _shown_number(default_value), "suffix": field_suffix(key)})
 	_fill_finding()
 
 
@@ -121,7 +132,7 @@ func _fill_finding() -> void:
 	if not is_rubble:
 		return
 	_finding_option.clear()
-	_finding_option.add_item(NO_FINDING_TEXT)
+	_finding_option.add_item(Localization.t(&"editor.no_finding"))
 	_finding_option.set_item_metadata(0, "")
 	var current: String = draft.finding(_letter)
 	var known: Array[StringName] = CollectionDefinitions.ids()
@@ -135,7 +146,7 @@ func _fill_finding() -> void:
 	if current == "":
 		_finding_option.select(0)
 	_finding_option.disabled = not draft.can_edit_finding(_letter)
-	_finding_option.tooltip_text = FINDING_LOCKED_TEXT if _finding_option.disabled else "Qué colección entrega la pieza escondida entre estas ruinas."
+	_finding_option.tooltip_text = finding_locked_text() if _finding_option.disabled else Localization.t(&"editor.finding_tip")
 
 
 func _on_letter_selected(index: int) -> void:

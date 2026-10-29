@@ -99,17 +99,17 @@ func corners(entrance_index: int) -> Array[Vector2i]:
 
 ## "fila 4, columna 7": para los mensajes (contadas desde 1).
 static func where(cell: Vector2i) -> String:
-	return "fila %d, columna %d" % [cell.y + 1, cell.x + 1]
+	return Localization.t_fmt(&"grid.where", {"row": cell.y + 1, "col": cell.x + 1})
 
 
 func _read(rows: PackedStringArray) -> void:
 	if rows.size() < MIN_HEIGHT or rows.size() > MAX_HEIGHT:
-		errors.append("El mapa tiene %d filas y tiene que tener entre %d y %d." % [rows.size(), MIN_HEIGHT, MAX_HEIGHT])
+		errors.append(Localization.t_fmt(&"grid.rows_range", {"n": rows.size(), "min": MIN_HEIGHT, "max": MAX_HEIGHT}))
 		return
 	height = rows.size()
 	width = rows[0].length()
 	if width < MIN_WIDTH or width > MAX_WIDTH:
-		errors.append("La fila 1 tiene %d letras y tiene que tener entre %d y %d." % [width, MIN_WIDTH, MAX_WIDTH])
+		errors.append(Localization.t_fmt(&"grid.width_range", {"n": width, "min": MIN_WIDTH, "max": MAX_WIDTH}))
 		return
 	var found: Dictionary = {}  # letra de entrada → casilla
 	var exits: Array[Vector2i] = []
@@ -118,7 +118,7 @@ func _read(rows: PackedStringArray) -> void:
 	for y: int in height:
 		var row: String = rows[y]
 		if row.length() != width:
-			errors.append("La fila %d tiene %d letras y la fila 1 tiene %d: todas las filas tienen que tener el mismo largo." % [y + 1, row.length(), width])
+			errors.append(Localization.t_fmt(&"grid.row_length", {"row": y + 1, "n": row.length(), "width": width}))
 			continue
 		for x: int in width:
 			var cell := Vector2i(x, y)
@@ -136,7 +136,7 @@ func _read(rows: PackedStringArray) -> void:
 			elif ENTRANCE_LETTERS.contains(letter):
 				_cells[cell] = Cell.PATH
 				if found.has(letter):
-					errors.append("La entrada %s está dos veces (%s y %s)." % [letter, where(found[letter]), where(cell)])
+					errors.append(Localization.t_fmt(&"grid.entrance_twice", {"letter": letter, "first": where(found[letter]), "second": where(cell)}))
 				found[letter] = cell
 			elif _legend.has(letter):
 				var entry: Dictionary = _legend[letter]
@@ -149,30 +149,30 @@ func _read(rows: PackedStringArray) -> void:
 					removable_cells.append(cell)
 				used_legend[letter] = true
 			else:
-				errors.append("Letra desconocida '%s' en %s. Se usan: . # X S, las entradas A, B, C… y las letras que declares en la \"leyenda\" del nivel." % [letter, where(cell)])
+				errors.append(Localization.t_fmt(&"grid.unknown_letter", {"letter": letter, "where": where(cell)}))
 	if not errors.is_empty():
 		return
 	if exits.is_empty():
-		errors.append("Falta la salida (S).")
+		errors.append(Localization.t(&"grid.no_exit"))
 	elif exits.size() > 1:
-		errors.append("Hay %d salidas (S) y tiene que haber una sola." % exits.size())
+		errors.append(Localization.t_fmt(&"grid.many_exits", {"n": exits.size()}))
 	else:
 		exit_cell = exits[0]
 	if found.is_empty():
-		errors.append("Falta la entrada A.")
+		errors.append(Localization.t(&"grid.no_entrance_a"))
 	for i: int in ENTRANCE_LETTERS.length():
 		var letter: String = ENTRANCE_LETTERS[i]
 		if found.has(letter):
 			if entrances.size() < i:
-				errors.append("Está la entrada %s pero falta la %s." % [letter, ENTRANCE_LETTERS[entrances.size()]])
+				errors.append(Localization.t_fmt(&"grid.entrance_gap", {"letter": letter, "missing": ENTRANCE_LETTERS[entrances.size()]}))
 				break
 			entrances.append(found[letter])
 	if grass == 0:
-		errors.append("No hay pasto (.): no se podría construir ninguna torre.")
+		errors.append(Localization.t(&"grid.no_grass"))
 	if errors.is_empty():
 		for letter: String in _legend.keys():
 			if not used_legend.has(letter):
-				warnings.append("La letra '%s' está en la leyenda pero no se usa en el mapa." % letter)
+				warnings.append(Localization.t_fmt(&"grid.unused_letter", {"letter": letter}))
 
 
 ## RF-202: el camino más corto de cada entrada a la salida. Primero se mide, desde la salida,
@@ -192,7 +192,7 @@ func _find_routes() -> void:
 		var letter: String = ENTRANCE_LETTERS[i]
 		var cell: Vector2i = entrances[i]
 		if not steps.has(cell):
-			errors.append("La entrada %s (%s) no tiene camino hasta la salida." % [letter, where(cell)])
+			errors.append(Localization.t_fmt(&"grid.no_path", {"letter": letter, "where": where(cell)}))
 			continue
 		var route: Array[Vector2i] = [cell]
 		while cell != exit_cell:
@@ -201,7 +201,7 @@ func _find_routes() -> void:
 				if steps.get(cell + dir, -1) == steps[cell] - 1:
 					closer.append(cell + dir)
 			if closer.size() > 1:
-				errors.append("Desde la entrada %s hay dos recorridos igual de cortos: se separan en %s. Cerrá uno (con X o pasto) o hacelo más largo." % [letter, where(cell)])
+				errors.append(Localization.t_fmt(&"grid.tied_routes", {"letter": letter, "where": where(cell)}))
 				break
 			cell = closer[0]
 			route.append(cell)
@@ -226,7 +226,4 @@ func _find_unused_cells() -> void:
 	for cell: Vector2i in unused_cells.slice(0, 6):
 		shown.append(where(cell))
 	var more: String = "…" if unused_cells.size() > shown.size() else ""
-	warnings.append(("Hay %d casillas de camino que ningún recorrido usa (%s%s). Puede ser un atajo: "
-		+ "dos partes del camino quedaron en casillas vecinas y el enemigo se salta el tramo del medio. "
-		+ "También puede ser un callejón sin salida o un camino de dos casillas de ancho.")
-		% [unused_cells.size(), "; ".join(shown), more])
+	warnings.append(Localization.t_plural(&"grid.unused_path", unused_cells.size(), {"cells": "; ".join(shown), "more": more}))
