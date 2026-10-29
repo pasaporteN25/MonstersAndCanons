@@ -12,7 +12,7 @@
   },
   "textos": {
     "lugar": "Las huertas",
-    "entrada": "Al norte del campamento hay tierra buena para sembrar.\nDos caminos se cruzan justo ahí, y por los dos llegan manadas.\nSin huerta no hay cosecha.",
+    "entrada": "Al norte del campamento hay tierra buena para sembrar.\nDos caminos se cruzan justo ahí, y por los dos llegan manadas.\nSin huerta no hay con qué alimentar a la colonia.",
     "victoria": "Huertas aseguradas. Se sembró el primer surco.\nLo que crezca depende de que las torres aguanten."
   },
   "mapa": [

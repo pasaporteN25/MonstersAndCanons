@@ -1,5 +1,9 @@
 # Novedades del juego
 
+## Textos de la campaña revisados *(T558, 2026-10-29)*
+
+Se aplicaron las primeras decisiones de la revisión de textos. **Nombres de niveles:** el 12 pasa a llamarse «Cañadón», el 14 «Poblados» y el 15 «Central» (el 11 sigue «Puesto seco» y el 13 «Paso alto»). **Victoria del nivel 15:** «Central encendida. La línea de abastecimiento está completa. La colonia ya no depende de la nave.» **Niveles 3, 4 y 12:** una línea de la entrada ahora dice algo más concreto. **Nivel 11:** la victoria habla del punto de agua. **Nivel 13:** en lugar de «hitos de piedra» el texto dice «rocas marcadas», y la victoria habla del valle de más al este. **Nivel 14:** la entrada dice «Los fogones están armados y no se ve a nadie.» **Wiki → Lore:** «Los poblados vacíos» ya no habla de las brasas y «La Central» queda en el último valle, el de más al este, sin su párrafo final. **Créditos:** suman el nombre y el mail de Lucas. No cambian el epílogo ni el progreso guardado.
+
 ## «Mejor: 1 vida» en singular *(T474, 2026-10-28)*
 
 En las tarjetas de niveles, cuando tu mejor resultado fue ganar con una sola vida, ahora dice «Mejor: 1 vida» y no «1 vidas». Además se revisaron todas las pantallas con números de nivel (selector, récords, Wiki, final, entrada y juego): ninguna muestra ceros de más.

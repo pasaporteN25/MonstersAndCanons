@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "nombre": "La Central",
+  "nombre": "Central",
   "oro": 520,
   "vidas": 20,
   "aumento_vida": 23,
@@ -24,7 +24,7 @@
   "textos": {
     "lugar": "Energía y abastecimiento",
     "entrada": "Falta cerrar el valle: la central de energía y la línea que la une con la mina.\nSi se sostiene, la colonia queda asentada en esta región.\nHoy llega lo más grande que vimos hasta ahora, y no viene solo.",
-    "victoria": "Central encendida. La línea de abastecimiento está completa.\nLa colonia tiene luz propia.",
+    "victoria": "Central encendida. La línea de abastecimiento está completa.\nLa colonia ya no depende de la nave.",
     "epilogo": "La máquina sigue avanzando,\npero ¿por cuánto tiempo más?\n¿A qué costo?"
   },
   "mapa": [

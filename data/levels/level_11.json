@@ -17,7 +17,7 @@
   "textos": {
     "lugar": "El punto de agua",
     "entrada": "Pasada la mina, el camino se vuelve seco.\nLos dos pozos que hay ya tenían huellas alrededor.\nDesde hoy, algunas torres se apagan sin que nadie las toque.",
-    "victoria": "Informe del puesto seco: paso asegurado.\nDos pozos quedaron dentro del perímetro."
+    "victoria": "Informe del puesto seco: punto de agua asegurado.\nDos pozos quedaron dentro del perímetro."
   },
   "mapa": [
     "A######################.",

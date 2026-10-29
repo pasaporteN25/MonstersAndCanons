@@ -307,7 +307,7 @@ func test_the_credits_file_has_the_approved_lines_and_nothing_unverifiable() -> 
 	for raw: String in section.split("\n"):
 		if raw.begins_with("- "):
 			approved.append(raw.substr(2).strip_edges())
-	assert_eq(approved.size(), 4)
+	assert_eq(approved.size(), 6)
 	assert_eq(result["lines"], approved)
 	var licenses: String = FileAccess.get_file_as_string("res://data/wiki/licencias.json")
 	assert_true(licenses.contains("Monsters & Canons") and licenses.contains("versión 3 o, a tu elección, cualquier versión posterior"),

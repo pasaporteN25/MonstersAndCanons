@@ -118,7 +118,7 @@ func test_level_15_closes_the_campaign_in_the_valley_with_three_entrances() -> v
 	assert_eq(LevelFile.campaign_ids().slice(13, 15), PackedStringArray(["level_14", "level_15"]))
 	assert_eq(LevelFile.campaign_ids().size(), 15, "la campaña tiene 15 niveles")
 	var level: LevelData = _load(15)
-	assert_eq(level.display_name, "La Central")
+	assert_eq(level.display_name, "Central")
 	assert_eq(level.theme, &"pradera", "el valle, como el oasis: el círculo se cierra")
 	assert_eq(level.waves.size(), 30)
 	assert_eq(level.starting_gold, 520)
@@ -353,7 +353,7 @@ func test_the_mine_and_the_forests_pay_a_mortar() -> void:
 
 func test_the_place_the_entry_and_the_victory_are_the_approved_ones() -> void:
 	var doc: String = FileAccess.get_file_as_string(DOC_PATH)
-	var section: String = doc.split("### Nivel 15 · La Central")[1].split("## 2. Epílogo")[0]
+	var section: String = doc.split("### Nivel 15 · Central")[1].split("## 2. Epílogo")[0]
 	var place: String = ""
 	var entry: PackedStringArray = []
 	var victory: PackedStringArray = []

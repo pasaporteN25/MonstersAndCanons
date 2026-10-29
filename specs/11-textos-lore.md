@@ -8,6 +8,8 @@
 
 > **Agregado por T252 (2026-10-10):** el artículo **11, «La Cuadrilla»** (§4.11), sobre la banda de Rateros y Cargador que Lucas eligió para la V1 (M55, RF-489, D-094). **Lucas lo aprobó el 2026-10-10** (P3 de M55, en el encargo de T253) y **T253 lo cargó** en `data/wiki/lore/la_cuadrilla.json`, tal cual. No cambia ningún otro texto de este documento: en particular, el artículo 5 sigue diciendo que el Ladrón va solo.
 
+> **Agregado por T558 (2026-10-29), decisiones de Lucas sobre los hallazgos de T545** (`tareas/informes/T545-decisiones-hallazgos.md`). Cambió, y está cargado en el juego: la **victoria del 15** (H2-C); la **entrada y la victoria del 13**, con «rocas marcadas», y «el valle de más al este» en vez de «el valle» (H5-A, H9-A); los **nombres de nivel** 12, 14 y 15 pasan a «Cañadón», «Poblados» y «Central» (H6-B; el 11 «Puesto seco» y el 13 «Paso alto» ya se llamaban así), y los encabezados de abajo los siguen; la **entrada del 14**, línea 2 (H7-A); la **victoria del 11**, que dice «punto de agua asegurado» (H11: **cambia la frase de ejemplo de la biblia** `10-universo.md` §8, «Informe del puesto seco: paso asegurado»; la biblia no se toca, esta es la versión vigente); el relleno de las entradas del 3, el 4 y el 12 (H13); los artículos «Los poblados vacíos» (párrafo 2 sin las brasas) y «La Central» (ahora «en el último valle, el de más al este», y sin el párrafo 4) (H9-A, H14), y los **créditos**, con el nombre y el mail de Lucas (H15). **No cambió** el epílogo. **Sigue sin cargarse** lo que espera a Lucas: H1-B, H8 y H12, en `tareas/informes/T545-propuestas-pendientes.md`. Los títulos de los artículos de la Wiki no cambian.
+
 > **Agregado por T240 (2026-10-11):** los **textos de la intro de láminas** (siete láminas de 1 o 2 líneas) **no están acá**: viven en [`specs/intro/guion.md`](intro/guion.md), junto a la ilustración de cada una, porque no se pueden corregir sin verla. Es **el único lugar** donde se escriben y se corrigen, con la misma regla que este documento (T242 los copia tal cual a `data/intro/intro.json`) y los mismos límites de RF-464 para la victoria (2 líneas, 160 caracteres, 90 por línea). Su spec es M57 (RF-497 a RF-501). **No cambia ningún texto de este documento.**
 
 **Qué es este documento.** Los textos finales que muestra el juego (M52, `01-spec.md`): el **lugar**, la **entrada** y la **victoria** de los 15 niveles, el **epílogo**, los **créditos** y **10 artículos** de la categoría Lore de la Wiki (más el borrador del 11, T252). Es el **único lugar** donde viven los textos: la ficha de cada nivel (§7.13 a §7.17 de la spec) y las tareas T228 a T234 los **copian tal cual** de acá, y si Lucas corrige uno se corrige acá primero.
@@ -37,7 +39,7 @@ Una «línea» es un renglón del archivo (separado por `\n`), no lo que ocupa e
 - **Niveles 1 a 5: ningún texto explica las señales** (la roca marcada, el sendero, la herramienta, el poste con cintas). La biblia pide *mostrar antes que explicar*. La primera vez que el texto habla de la marca es en el **8**, y es la «revelación».
 - **El 8, el 11 y el 14 parten de los tres ejemplos de tono de la biblia** (§8). El 11 y el 14 usan sus frases de victoria casi tal cual (partidas en dos líneas); el 8 reescribe la entrada de ejemplo en tres líneas. Esos ejemplos eran *ilustraciones de tono, no textos finales*: que Lucas haya aprobado la biblia en G2 no los vuelve definitivos, así que también necesitan su OK.
 - **Las victorias no suponen nada opcional.** Ninguna menciona una pieza de colección, un recurso ni la demoledora: se ganan igual sin ellas.
-- **El 13 habla de «hitos de piedra»**: depende de que se dibuje la señal `hito` (P-6 de la biblia, ver T233). Si Lucas no quiere ese dibujo, la entrada y la victoria del 13 se reescriben con «las rocas marcadas».
+- **El 13 habla de «rocas marcadas»** (H5-A de T545): el dibujo `hito` se descartó y la entrada y la victoria usan la roca marcada de siempre.
 - **El 15 no dice nada del jefe supremo en su entrada ni en su victoria** más que «lo más grande que vimos hasta ahora»: no hace falta, el jugador lo ve venir. **El Coloso (T243, RF-484, D-092) se nombra una sola vez, en el artículo «La Central» (§4.10)**, que se abre recién al ganar el 15.
 
 ---
@@ -73,7 +75,7 @@ Una «línea» es un renglón del archivo (separado por `\n`), no lo que ocupa e
 - **Entrada** (3 líneas):
   - Al norte del campamento hay tierra buena para sembrar.
   - Dos caminos se cruzan justo ahí, y por los dos llegan manadas.
-  - Sin huerta no hay cosecha.
+  - Sin huerta no hay con qué alimentar a la colonia.
 - **Victoria** (2 líneas):
   - Huertas aseguradas. Se sembró el primer surco.
   - Lo que crezca depende de que las torres aguanten.
@@ -84,7 +86,7 @@ Una «línea» es un renglón del archivo (separado por `\n`), no lo que ocupa e
 - **Entrada** (3 líneas):
   - El arroyo no alcanza para toda la colonia.
   - Hay que cavar un pozo en el centro del valle.
-  - El camino hasta ahí da muchas vueltas: que les cueste llegar.
+  - El camino hasta ahí da muchas vueltas: conviene que a las manadas les cueste llegar.
 - **Victoria** (2 líneas):
   - Pozo terminado. Hay agua para toda la colonia.
   - Se armó un turno de guardia para cuidarlo.
@@ -163,16 +165,16 @@ Una «línea» es un renglón del archivo (separado por `\n`), no lo que ocupa e
   - Los dos pozos que hay ya tenían huellas alrededor.
   - Desde hoy, algunas torres se apagan sin que nadie las toque.
 - **Victoria** (2 líneas):
-  - Informe del puesto seco: paso asegurado.
+  - Informe del puesto seco: punto de agua asegurado.
   - Dos pozos quedaron dentro del perímetro.
 
-### Nivel 12 · El cañadón
+### Nivel 12 · Cañadón
 
 - **Lugar** (22 caracteres): El paso hacia el norte
 - **Entrada** (3 líneas):
   - El único paso hacia el norte es un cañadón de paredes altas.
   - Los tiros vuelven contra las torres, como si las paredes los devolvieran.
-  - Cruzarlo es la única forma de llegar al resto de la región.
+  - Cruzarlo es llegar al resto de la región.
 - **Victoria** (2 líneas):
   - Cañadón asegurado. El paso al norte quedó abierto.
   - En las paredes quedaron las marcas de los tiros que volvieron.
@@ -183,23 +185,23 @@ Una «línea» es un renglón del archivo (separado por `\n`), no lo que ocupa e
 - **Entrada** (3 líneas):
   - En el paso alto el camino se parte en dos.
   - Ya no llegan de a uno: cada grupo trae quien protege, quien cura y quien apaga torres.
-  - Hay hitos de piedra en el camino. Marcan un límite, y ya lo pasamos.
+  - Hay rocas marcadas en el camino. Marcan un límite, y ya lo pasamos.
 - **Victoria** (2 líneas):
-  - Paso alto asegurado. La región queda comunicada con el valle.
-  - Los hitos quedaron del lado de adentro.
+  - Paso alto asegurado. La región queda comunicada con el valle de más al este.
+  - Las rocas marcadas quedaron del lado de adentro.
 
-### Nivel 14 · Los poblados vacíos
+### Nivel 14 · Poblados
 
 - **Lugar** (30 caracteres): Asentamientos de los Moradores
 - **Entrada** (3 líneas):
   - Los poblados están a la vista, pero no sale humo de ninguno.
-  - Los Moradores se llevaron lo que pudieron.
+  - Los fogones están armados y no se ve a nadie.
   - Aun así, algo todavía defiende el lugar.
 - **Victoria** (2 líneas):
   - Los poblados están vacíos.
   - Las brasas todavía están tibias.
 
-### Nivel 15 · La Central
+### Nivel 15 · Central
 
 - **Lugar** (24 caracteres): Energía y abastecimiento
 - **Entrada** (3 líneas):
@@ -208,7 +210,7 @@ Una «línea» es un renglón del archivo (separado por `\n`), no lo que ocupa e
   - Hoy llega lo más grande que vimos hasta ahora, y no viene solo.
 - **Victoria** (2 líneas):
   - Central encendida. La línea de abastecimiento está completa.
-  - La colonia tiene luz propia.
+  - La colonia ya no depende de la nave.
 
 ---
 
@@ -226,10 +228,12 @@ Una «línea» es un renglón del archivo (separado por `\n`), no lo que ocupa e
 
 ## 3. Créditos
 
-Pantalla sencilla a la que se llega desde el epílogo (RF-472). **Solo lleva lo que se puede comprobar en el repositorio** (el copyright y la licencia salen de `data/wiki/licencias.json`). Lo que Lucas quiera sumar (nombres, agradecimientos, herramientas) lo escribe él: ver la pregunta P7 de M52.
+Pantalla sencilla a la que se llega desde el epílogo (RF-472). **Solo lleva lo que se puede comprobar en el repositorio** (el copyright y la licencia salen de `data/wiki/licencias.json`). Desde T558 (H15 de T545) suma, por pedido expreso de Lucas, su nombre y su mail, cada uno en su línea; el mail es público porque él lo pidió. Lo demás que quiera sumar (agradecimientos, herramientas) lo escribe él: ver la pregunta P7 de M52.
 
 - Monsters & Canons
 - Un juego de Lucas
+- Lucas Felici
+- lucas.a.felici@gmail.com
 - Hecho con Godot Engine
 - Software libre bajo la licencia GPL-3.0-or-later (los detalles, en Wiki → Licencias)
 
@@ -354,7 +358,7 @@ Diez artículos aprobados en `data/wiki/lore/` (RF-469), más un **undécimo en 
 
   > Los poblados del valle bajo son de piedra y paja. Tienen fogones, cuerdas y pieles todavía en su sitio.
 
-  > No hay nadie. Las brasas están tibias, así que se fueron hace poco, y se llevaron lo que podían cargar.
+  > No hay nadie. Se fueron hace poco y se llevaron lo que podían cargar.
 
   > La Compañía registra los poblados como «posiciones desocupadas».
 
@@ -364,13 +368,12 @@ Diez artículos aprobados en `data/wiki/lore/` (RF-469), más un **undécimo en 
 - **Se abre al ganar:** el nivel 15 (`level_15`)
 - **Texto** (un bloque `texto` por párrafo):
 
-  > La central quedó en el valle donde aterrizó la nave. Produce la energía que necesita la colonia y alimenta la línea que la une con la mina.
+  > La central quedó en el último valle, el de más al este, lejos del oasis donde aterrizó la nave. Produce la energía que necesita la colonia y alimenta la línea que la une con la mina.
 
   > Con ella, la región queda asegurada: agua, luz y camino. No es todo el planeta, y nadie en la Compañía dice que lo sea.
 
   > Los colonos lo llaman el Coloso. Es de la misma piedra que los Guardianes. Cuando cae, se parte en tres y los pedazos siguen camino.
 
-  > El informe termina ahí. No dice qué se hará con lo que falta.
 
 ### 11. La Cuadrilla *(aprobado por Lucas el 2026-10-10; cargado por T253)*
 

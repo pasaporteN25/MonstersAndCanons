@@ -135,8 +135,8 @@ func test_m79_adornments_use_the_approved_rendered_pngs() -> void:
 ## dos pares de cuernos); cada casilla que antes mostraba `huesos.svg` (retirado en T516) resuelve al arte nuevo y los datos no cambiaron.
 const DESERT_HASHES: Dictionary = {
 	10: "21af960b29532957099e39c7b97c7c7ed101e3e5ef2646c003bfc091607e7fdf",
-	11: "cbec8c23f8998a67d321d95be9d2d65bf82e1664cd99f148aee715f9fda870e6",
-	12: "0a884be2b4cbfdfec6bc8daa40b7ab96e0ace79205d076baa384c3ebbba08a67",
+	11: "c6b7ff220c08a61ce502afeddcbcfd6d63175012877afc93387a7c2d6688fed0",
+	12: "f13288247f7d0b333baa6ea52a4e4a4d7bf7fb0da3698e15ba571b8680a4f6a1",
 }
 const DESERT_BONES_CELLS: Dictionary = {10: 26, 11: 25, 12: 23}   # T491: casillas de cabeza en cada nivel
 
@@ -178,7 +178,7 @@ func test_desert_levels_use_the_new_bones_in_the_same_cells_and_data_is_untouche
 
 ## T497 (RF-713 b, RF-714): el pino, el abeto y la roca nevada del nivel 13 son los PNG aprobados de 128 × 128; cada `X` del
 ## nivel resuelve a uno de los tres y los datos del nivel no cambiaron (mismo hash que `test_campaign_posts.gd`).
-const LEVEL_13_HASH: String = "0577701868f5455858abd257393a3eb33cb740ce9754455510170986926cf3a1"
+const LEVEL_13_HASH: String = "7786e8111b0e06eb2a15e010a8afefa6b340eeb95d068d9604b286d62bc6c65a"
 
 
 func test_snow_decor_is_the_approved_128_png() -> void:

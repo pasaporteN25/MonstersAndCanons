@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "nombre": "El cañadón",
+  "nombre": "Cañadón",
   "oro": 440,
   "vidas": 20,
   "aumento_vida": 27,
@@ -15,7 +15,7 @@
   "demoledora": false,
   "textos": {
     "lugar": "El paso hacia el norte",
-    "entrada": "El único paso hacia el norte es un cañadón de paredes altas.\nLos tiros vuelven contra las torres, como si las paredes los devolvieran.\nCruzarlo es la única forma de llegar al resto de la región.",
+    "entrada": "El único paso hacia el norte es un cañadón de paredes altas.\nLos tiros vuelven contra las torres, como si las paredes los devolvieran.\nCruzarlo es llegar al resto de la región.",
     "victoria": "Cañadón asegurado. El paso al norte quedó abierto.\nEn las paredes quedaron las marcas de los tiros que volvieron."
   },
   "mapa": [
