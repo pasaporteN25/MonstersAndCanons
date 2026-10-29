@@ -135,9 +135,9 @@ func _build_job_card() -> void:
 	box.add_theme_constant_override("separation", 1)
 	_job_card.add_child(box)
 	var title: Label = _label(box, TITLE_COLOR)
-	title.text = "Trabajo en curso"
+	title.text = Localization.t(&"infrastructure.job_title")
 	_job_empty = _label(box, MUTED_COLOR, true)
-	_job_empty.text = InfrastructureText.EMPTY_JOB
+	_job_empty.text = InfrastructureText.empty_job()
 	_job_empty.add_theme_font_size_override("font_size", 12)
 	_job_box = VBoxContainer.new()
 	_job_box.add_theme_constant_override("separation", 1)
@@ -154,9 +154,9 @@ func _build_job_card() -> void:
 	_job_box.add_child(line)
 	_job_left = _label(line)
 	_job_left.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_cancel_button = _button(line, "Cancelar")
+	_cancel_button = _button(line, Localization.t(&"infrastructure.cancel"))
 	_cancel_button.custom_minimum_size = Vector2(70, 22)
-	_cancel_button.tooltip_text = "Cancelar la demolición y recuperar todo el oro"
+	_cancel_button.tooltip_text = Localization.t(&"infrastructure.cancel_tip")
 	_cancel_button.pressed.connect(cancel_pressed.emit)
 
 
@@ -168,7 +168,7 @@ func _build_machine_card() -> void:
 	_machine_title = _label(box, GOLD_COLOR)
 	_machine_effect = _label(box, MUTED_COLOR, true)
 	_machine_effect.add_theme_font_size_override("font_size", 12)
-	_buy_button = _button(box, "Comprar")
+	_buy_button = _button(box, Localization.t(&"infrastructure.buy"))
 	_buy_button.pressed.connect(buy_pressed.emit)
 
 
@@ -188,11 +188,11 @@ func _build_sites_card() -> void:
 	row.add_child(arrows)
 	_prev_button = _button(arrows, "◀")
 	_prev_button.custom_minimum_size = Vector2(30, 26)
-	_prev_button.tooltip_text = "Puntos anteriores"
+	_prev_button.tooltip_text = Localization.t(&"infrastructure.prev_tip")
 	_prev_button.pressed.connect(_scroll_sites.bind(-1))
 	_next_button = _button(arrows, "▶")
 	_next_button.custom_minimum_size = Vector2(30, 26)
-	_next_button.tooltip_text = "Puntos siguientes"
+	_next_button.tooltip_text = Localization.t(&"infrastructure.next_tip")
 	_next_button.pressed.connect(_scroll_sites.bind(1))
 
 
@@ -242,7 +242,7 @@ func show_machine(enabled: bool, owned: bool, price: int, gold: int, effect_text
 	_buy_button.visible = not owned
 	_buy_button.text = InfrastructureText.buy_text(price, gold)
 	_buy_button.disabled = gold < price
-	_buy_button.tooltip_text = "Comprar la demoledora" if gold >= price else _buy_button.text
+	_buy_button.tooltip_text = Localization.t(&"infrastructure.buy_machine_tip") if gold >= price else _buy_button.text
 
 
 ## Tarjeta 3: una ficha por punto (`InfrastructureText.sites`). Sin puntos, la tarjeta no se dibuja.
@@ -289,7 +289,7 @@ func _site_row(site: Dictionary) -> Control:
 	var state: ObstacleField.State = site["state"]
 	var name_button := _button(row, String(site["kind_name"]))
 	name_button.custom_minimum_size = Vector2(58, 24)
-	name_button.tooltip_text = "Ver en el mapa"
+	name_button.tooltip_text = Localization.t(&"infrastructure.show_on_map")
 	name_button.pressed.connect(site_selected.emit.bind(cell))
 	var line: String = InfrastructureText.site_line(state, site["price"], site["reserve"], site["max_reserve"], site["production"])
 	if state == ObstacleField.State.DISABLED:
@@ -297,7 +297,7 @@ func _site_row(site: Dictionary) -> Control:
 		enable.custom_minimum_size = Vector2(0, 24)
 		enable.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		enable.disabled = _gold < int(site["price"])
-		enable.tooltip_text = "Habilitar el punto" if not enable.disabled else InfrastructureText.buy_text(int(site["price"]), _gold)
+		enable.tooltip_text = Localization.t(&"infrastructure.enable_site_tip") if not enable.disabled else InfrastructureText.buy_text(int(site["price"]), _gold)
 		enable.pressed.connect(enable_pressed.emit.bind(cell))
 	else:
 		var label: Label = _label(row, Color.WHITE if state == ObstacleField.State.ACTIVE else MUTED_COLOR)

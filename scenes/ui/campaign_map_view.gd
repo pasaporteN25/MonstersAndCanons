@@ -231,10 +231,10 @@ func _status_line(entry: Dictionary) -> String:
 	var text: String = CampaignMap.state_text(state)
 	match state:
 		CampaignMap.State.LOCKED:
-			return "Ganá el nivel anterior para abrirla"  # RF-688: el candado ya dice que está bloqueada
+			return Localization.t(&"campaign.win_previous")  # RF-688: el candado ya dice que está bloqueada
 		CampaignMap.State.AVAILABLE:
-			return "%s · sin victorias todavía" % text
-	return "%s · %d de 3 estrellas" % [text, int(entry["stars"])]
+			return Localization.t_fmt(&"campaign.no_wins", {"text": text})
+	return Localization.t_fmt(&"campaign.stars_of_3", {"text": text, "n": int(entry["stars"])})
 
 
 func _map_point(point: Vector2) -> Vector2:
@@ -358,7 +358,7 @@ func _build_panel() -> void:
 	_panel.add_child(_status_label)
 	_play_button = Button.new()
 	_play_button.name = "PlayButton"
-	_play_button.text = "Jugar"
+	_play_button.text = Localization.t(&"campaign.play")
 	_play_button.custom_minimum_size = Vector2(170, 56)
 	_play_button.position = Vector2(VIEW_SIZE.x - 188, 8)
 	_play_button.size = Vector2(170, 56)
@@ -387,7 +387,7 @@ func _draw_canvas() -> void:
 	_draw_route()
 	_draw_lander(font)
 	_draw_compass(font)
-	_canvas.draw_string(font, Vector2(14, 22), "ATLAS MERIDIANO · CÁNTARO", HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE, Color("#dfd7bf"))
+	_canvas.draw_string(font, Vector2(14, 22), Localization.t(&"campaign.atlas_title"), HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE, Color("#dfd7bf"))
 
 
 ## RF-710: las zonas sin descubrir se tapan con su máscara gris (G2), sin animación y sin ningún elemento encima.
@@ -457,7 +457,7 @@ func _draw_lander(font: Font) -> void:
 	var label_rect := Rect2(center + Vector2(-44, 26), Vector2(88, 18))
 	_canvas.draw_rect(label_rect, Color("#1d2022"))
 	_canvas.draw_rect(label_rect, Color("#86623a"), false, 1.0)
-	_canvas.draw_string(font, label_rect.position + Vector2(0, 13), "ATERRIZAJE", HORIZONTAL_ALIGNMENT_CENTER, label_rect.size.x, 11, Color("#f4d98f"))
+	_canvas.draw_string(font, label_rect.position + Vector2(0, 13), Localization.t(&"campaign.landing"), HORIZONTAL_ALIGNMENT_CENTER, label_rect.size.x, 11, Color("#f4d98f"))
 
 
 func _draw_compass(font: Font) -> void:

@@ -61,7 +61,7 @@ func _ready() -> void:
 func open(entry: Dictionary, labels: Dictionary) -> void:
 	_clear()
 	_mobile = UiMode.is_mobile()
-	_build(entry, labels)
+	_build(NewsData.localized_entry(entry), NewsData.localized_labels(labels))
 	_opened = true
 	visible = true
 	if is_inside_tree():

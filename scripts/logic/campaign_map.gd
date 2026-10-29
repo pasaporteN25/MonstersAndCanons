@@ -155,18 +155,18 @@ static func number_text(index: int) -> String:
 
 ## «Mejor: 1 vida» / «Mejor: 20 vidas»: el singular con 1 (T474, formato de números en tarjetas).
 static func best_lives_text(lives: int) -> String:
-	return "Mejor: %d %s" % [lives, "vida" if lives == 1 else "vidas"]
+	return Localization.t_plural(&"campaign.best_lives", lives)
 
 
 static func state_text(state: State) -> String:
 	match state:
 		State.LOCKED:
-			return "Bloqueada"
+			return Localization.t(&"campaign.state_locked")
 		State.AVAILABLE:
-			return "Disponible"
+			return Localization.t(&"campaign.state_available")
 		State.REBEL:
-			return "Presencia rebelde"
-	return "Zona tomada"
+			return Localization.t(&"campaign.state_rebel")
+	return Localization.t(&"campaign.state_taken")
 
 
 ## Si la región se puede abrir (RF-111): todo menos bloqueada.

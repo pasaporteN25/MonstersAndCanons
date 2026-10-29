@@ -78,22 +78,22 @@ func show_obstacle(spec: ObstacleSpec, state: ObstacleField.State, busy: bool, g
 	var seconds: float = spec.seconds if current_seconds < 0.0 else current_seconds
 	_cost.text = ObstacleText.cost_line(cost)
 	if machine_cost >= 0:
-		_cost.text += "\nCon la demoledora: %d de oro" % machine_cost
+		_cost.text += "\n" + Localization.t_fmt(&"obstacle.with_machine", {"n": machine_cost})
 	_time.text = ObstacleText.time_line(seconds)
 	_reward.text = ObstacleText.reward_line(spec, recovered, collects)
 	_note.visible = false
 	_button.visible = true
 	_cancel_mode = state == ObstacleField.State.WORKING
 	if state == ObstacleField.State.WORKING:
-		_cost.text = "Pagado: %d de oro" % cost
+		_cost.text = Localization.t_fmt(&"obstacle.paid", {"n": cost})
 		_time.text = ObstacleText.seconds_left_line(seconds_left)
-		_button.text = "Cancelar (devuelve %d)" % cost
+		_button.text = Localization.t_fmt(&"obstacle.cancel_refund", {"n": cost})
 		_button.disabled = false
-		_button.tooltip_text = "Cancelar la demolición y recuperar todo el oro"
+		_button.tooltip_text = Localization.t(&"infrastructure.cancel_tip")
 	elif busy:
 		_note.visible = true
-		_note.text = "Hay una demolición en curso"
-		_button.text = "Demoler (%d)" % cost
+		_note.text = Localization.t(&"obstacle.busy")
+		_button.text = Localization.t_fmt(&"obstacle.demolish", {"n": cost})
 		_button.disabled = true
 		_button.tooltip_text = _note.text
 	elif gold < cost:
@@ -101,9 +101,9 @@ func show_obstacle(spec: ObstacleSpec, state: ObstacleField.State, busy: bool, g
 		_button.disabled = true
 		_button.tooltip_text = _button.text
 	else:
-		_button.text = "Demoler (%d)" % cost
+		_button.text = Localization.t_fmt(&"obstacle.demolish", {"n": cost})
 		_button.disabled = false
-		_button.tooltip_text = "Demoler"
+		_button.tooltip_text = Localization.t(&"obstacle.demolish_tip")
 
 
 ## RF-422 y RF-424: un punto de extracción. `state` es DISABLED, ACTIVE o DEPLETED.
@@ -111,7 +111,7 @@ func _show_extraction(spec: ObstacleSpec, state: ObstacleField.State, gold: int,
 	_title.text = "%s · %s" % [ObstacleText.display_name(spec), ObstacleText.state_line(state)]
 	_cost.text = ObstacleText.production_line(spec.production)
 	_time.text = ObstacleText.reserve_line(reserve_left, spec.reserve)
-	_reward.text = "Entrega al completar cada oleada" if state != ObstacleField.State.DEPLETED else "Ya no entrega más"
+	_reward.text = Localization.t(&"obstacle.delivers" if state != ObstacleField.State.DEPLETED else &"obstacle.delivers_no_more")
 	_note.visible = false
 	_cancel_mode = false
 	if state == ObstacleField.State.ACTIVE or state == ObstacleField.State.DEPLETED:

@@ -74,9 +74,9 @@ func setup(region_index: int, entry: Dictionary, center: Vector2, button_size: f
 	position = center - size / 2.0
 	focus_mode = Control.FOCUS_ALL if discovered else Control.FOCUS_NONE
 	if discovered:
-		tooltip_text = "Nivel %d · %s · %s" % [index + 1, level_name, CampaignMap.state_text(state)]
+		tooltip_text = Localization.t_fmt(&"campaign.region_tip", {"n": index + 1, "name": level_name, "state": CampaignMap.state_text(state)})
 		if state == CampaignMap.State.REBEL or state == CampaignMap.State.TAKEN:
-			tooltip_text += " · %d de 3 estrellas" % stars
+			tooltip_text += Localization.t_fmt(&"campaign.region_stars_tip", {"n": stars})
 	# Todos los estados de dibujo propios son vacíos: el dibujo está en `_draw`; solo el foco usa un anillo.
 	for style_name: String in ["normal", "hover", "pressed", "disabled", "hover_pressed", "focus"]:
 		add_theme_stylebox_override(style_name, StyleBoxEmpty.new())

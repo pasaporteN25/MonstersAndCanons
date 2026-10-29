@@ -29,8 +29,8 @@ const COMBO_BURNING_COLOR := Color(1.0, 0.55, 0.15)
 const COMBO_FONT_SIZE: int = 20
 ## RF-315: la primera vez en la partida que salta cada combo, un texto que lo nombra.
 const COMBO_FIRST_TEXTS: Dictionary = {
-	Enemy.Combo.SLOWED: "¡Combo de hielo!",
-	Enemy.Combo.BURNING: "¡Combo de fuego!",
+	Enemy.Combo.SLOWED: &"effects.combo_ice",
+	Enemy.Combo.BURNING: &"effects.combo_fire",
 }
 ## RF-315: un combo a menos de esta distancia y este tiempo de otro solo muestra su anillo (golpes de área).
 const COMBO_GROUP_PX: float = 40.0
@@ -84,7 +84,7 @@ func combo(position_: Vector2, damage: int, kind: Enemy.Combo) -> bool:
 	_add(RingEffect.new().setup(Color(color, 0.95), 8.0, 28.0, 0.3, 3.0), position_)
 	if not _combo_seen.has(kind):
 		_combo_seen[kind] = true
-		_add(FloatingText.new().setup(COMBO_FIRST_TEXTS[kind], color, 18, 0.9, 30.0), position_ + Vector2(0, -36))
+		_add(FloatingText.new().setup(Localization.t(COMBO_FIRST_TEXTS[kind]), color, 18, 0.9, 30.0), position_ + Vector2(0, -36))
 	if _is_near_recent_combo(position_):
 		return false
 	_recent_combos.append([position_, _clock])
@@ -205,7 +205,7 @@ func reflect(mirror_position: Vector2, tower_position: Vector2, first: bool) -> 
 	_add(ReflectionEffect.new().setup(tower_position - mirror_position), mirror_position)
 	_add(RingEffect.new().setup(Color(REFLECT_COLOR, 0.9), 6.0, 24.0, 0.2, 3.0), mirror_position)
 	if first:
-		_add(FloatingText.new().setup("¡Rebote!", REFLECT_COLOR, 18, 0.9, 30.0), mirror_position + Vector2(0, -22))
+		_add(FloatingText.new().setup(Localization.t(&"effects.reflect"), REFLECT_COLOR, 18, 0.9, 30.0), mirror_position + Vector2(0, -22))
 		_add(RingEffect.new().setup(Color(REFLECT_COLOR, 0.8), 8.0, Rules.TILE_SIZE * 0.6, 0.35, 3.0), tower_position)
 
 
@@ -381,4 +381,4 @@ func _add(effect: Node2D, position_: Vector2) -> void:
 
 ## RF-365: aviso de robo efectivo, independiente de la opción de daño.
 func gold_stolen(position_: Vector2, amount: int) -> void:
-	_add(FloatingText.new().setup("−%d oro" % amount, GOLD_COLOR, 18, 0.7, 30.0), position_ + Vector2(0, -20))
+	_add(FloatingText.new().setup(Localization.t_fmt(&"effects.gold_stolen", {"n": amount}), GOLD_COLOR, 18, 0.7, 30.0), position_ + Vector2(0, -20))

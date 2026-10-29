@@ -17,7 +17,6 @@ const ARTICLE_KEYS: PackedStringArray = ["version", "titulo", "subtitulo", "orde
 const LORE_KEYS: PackedStringArray = ["version", "titulo", "subtitulo", "orden", "bloques", "desbloqueo"]
 const DEFAULT_ORDER: int = 100
 const LOCKED_TITLE: String = "???"
-const LOCKED_TEXT: String = "Todavía no te cruzaste con este enemigo. Aparece acá cuando lo enfrentes en una partida."
 
 
 ## Las categorías con sus entradas. Una categoría sin entradas no se incluye (RF-232).
@@ -38,11 +37,11 @@ static func categories(campaign: Array[LevelData] = [], is_seen: Callable = Call
 
 static func _providers() -> Array[Dictionary]:
 	return [
-		{"id": &"enemigos", "title": "Enemigos", "build": _enemy_entries},
-		{"id": &"torres", "title": "Torres", "build": _tower_entries},
-		{"id": &"colecciones", "title": "Colecciones", "build": _collection_entries},
-		{"id": &"guia", "title": "Guía", "build": _article_entries},
-		{"id": &"lore", "title": "Lore", "build": _lore_entries},  # RF-469
+		{"id": &"enemigos", "title": Localization.t(&"wiki.cat_enemies"), "build": _enemy_entries},
+		{"id": &"torres", "title": Localization.t(&"wiki.cat_towers"), "build": _tower_entries},
+		{"id": &"colecciones", "title": Localization.t(&"wiki.cat_collections"), "build": _collection_entries},
+		{"id": &"guia", "title": Localization.t(&"wiki.cat_guide"), "build": _article_entries},
+		{"id": &"lore", "title": Localization.t(&"wiki.cat_lore"), "build": _lore_entries},  # RF-469
 	]
 
 
@@ -74,7 +73,7 @@ static func locked_enemy_entry(enemy: EnemyData) -> WikiEntry:
 	entry.locked = true
 	if enemy.texture != null:
 		entry.icon.append(enemy.texture)
-	entry.add_text(LOCKED_TEXT)
+	entry.add_text(Localization.t(&"wiki.locked_enemy"))
 	return entry
 
 
@@ -84,59 +83,59 @@ static func enemy_entry(enemy: EnemyData, all_enemies: Array[EnemyData], campaig
 		towers: Array[TowerData] = []) -> WikiEntry:
 	var entry := WikiEntry.new()
 	entry.id = enemy.id
-	entry.title = enemy.display_name
-	var kind: String = "Vuela" if enemy.is_flying else "Terrestre"
-	entry.subtitle = kind + (" · Peligroso" if Rules.is_dangerous(enemy) else "")
+	entry.title = enemy.name_text()
+	var kind: String = Localization.t(&"wiki.enemy.flies" if enemy.is_flying else &"wiki.enemy.ground")
+	entry.subtitle = kind + (Localization.t(&"wiki.enemy.dangerous") if Rules.is_dangerous(enemy) else "")
 	if enemy.texture != null:
 		entry.icon.append(enemy.texture)
-	if enemy.description != "":
-		entry.add_text(enemy.description)
+	if enemy.description_text() != "":
+		entry.add_text(enemy.description_text())
 	var facts: Array = [
-		["Vida (oleada 1)", str(enemy.max_health)],
-		["Velocidad", "%.1f casillas por segundo" % enemy.speed_tiles],
-		["Armadura", str(enemy.armor) if enemy.armor > 0 else "ninguna"],
-		["Oro al morir", str(enemy.reward)],
-		["Vidas que quita", str(enemy.lives_damage)],
-		["Vuela", "sí" if enemy.is_flying else "no"],
+		[Localization.t(&"wiki.fact.health"), str(enemy.max_health)],
+		[Localization.t(&"wiki.fact.speed"), Localization.t_fmt(&"wiki.fact.speed_value", {"x": "%.1f" % enemy.speed_tiles})],
+		[Localization.t(&"wiki.fact.armor"), str(enemy.armor) if enemy.armor > 0 else Localization.t(&"wiki.fact.none")],
+		[Localization.t(&"wiki.fact.reward"), str(enemy.reward)],
+		[Localization.t(&"wiki.fact.lives"), str(enemy.lives_damage)],
+		[Localization.t(&"wiki.fact.flies"), Localization.t(&"common.yes" if enemy.is_flying else &"common.no")],
 	]
 	if enemy.slow_resistance > 0.0:
-		facts.append(["Resistencia a la ralentización", "%d %%" % roundi(enemy.slow_resistance * 100.0)])
+		facts.append([Localization.t(&"wiki.fact.slow_resist"), "%d %%" % roundi(enemy.slow_resistance * 100.0)])
 	if enemy.regen_percent_per_second > 0.0:
-		facts.append(["Se cura", "%.0f %% de su vida por segundo" % enemy.regen_percent_per_second])
+		facts.append([Localization.t(&"wiki.fact.regen"), Localization.t_fmt(&"wiki.fact.regen_value", {"x": "%.0f" % enemy.regen_percent_per_second})])
 	if enemy.gold_drain_amount > 0 and enemy.gold_drain_interval > 0.0:
-		facts.append(["Robo", "%d de oro cada %s s; piso %d, hasta morir o escapar" % [enemy.gold_drain_amount,_number(enemy.gold_drain_interval),enemy.gold_drain_floor]])
+		facts.append([Localization.t(&"wiki.fact.steal"), Localization.t_fmt(&"wiki.fact.steal_value", {"n": enemy.gold_drain_amount, "s": _number(enemy.gold_drain_interval), "floor": enemy.gold_drain_floor})])
 	if enemy.charge_distance_tiles > 0.0:
-		facts.append(["Carga", "tras %s casillas rectas, velocidad ×%s; slow mayor al %s %% la interrumpe" % [_number(enemy.charge_distance_tiles),_number(enemy.charge_multiplier),_number(enemy.charge_slow_tolerance * 100.0)]])
-		facts.append(["Impacto", "%s %% de desgaste a una torre a ≤%s casillas del extremo de la recta; sin destrucción" % [_number(enemy.charge_wear_percent),_number(enemy.charge_impact_radius_tiles)]])
+		facts.append([Localization.t(&"wiki.fact.charge"), Localization.t_fmt(&"wiki.fact.charge_value", {"tiles": _number(enemy.charge_distance_tiles), "mult": _number(enemy.charge_multiplier), "slow": _number(enemy.charge_slow_tolerance * 100.0)})])
+		facts.append([Localization.t(&"wiki.fact.impact"), Localization.t_fmt(&"wiki.fact.impact_value", {"wear": _number(enemy.charge_wear_percent), "radius": _number(enemy.charge_impact_radius_tiles)})])
 	if enemy.death_spawn != null and enemy.death_spawn_count > 0:
-		facts.append(["Al morir suelta", "%d × %s" % [enemy.death_spawn_count, enemy.death_spawn.display_name]])
+		facts.append([Localization.t(&"wiki.fact.death_spawn"), "%d × %s" % [enemy.death_spawn_count, enemy.death_spawn.name_text()]])
 	if enemy.stun_interval > 0.0:  # RF-281, RF-287
-		facts.append(["Hechizo", "apaga la torre más cercana (a menos de %s casillas) durante %s s, cada %s s" % [_number(enemy.stun_range_tiles), _number(enemy.stun_seconds), _number(enemy.stun_interval)]])
+		facts.append([Localization.t(&"wiki.fact.spell"), Localization.t_fmt(&"wiki.fact.spell_value", {"range": _number(enemy.stun_range_tiles), "s": _number(enemy.stun_seconds), "every": _number(enemy.stun_interval)})])
 	if enemy.reflect_range_tiles > 0.0:  # RF-283, RF-287
-		facts.append(["Rebota los tiros", "de las torres a menos de %s casillas, y las aturde %s s" % [_number(enemy.reflect_range_tiles), _number(enemy.reflect_stun_seconds)]])
+		facts.append([Localization.t(&"wiki.fact.reflect"), Localization.t_fmt(&"wiki.fact.reflect_value", {"range": _number(enemy.reflect_range_tiles), "s": _number(enemy.reflect_stun_seconds)})])
 	if enemy.aura_radius_tiles > 0.0:  # RF-270, RF-277
-		var reach: String = "a menos de %s casillas" % _number(enemy.aura_radius_tiles)
+		var reach: String = Localization.t_fmt(&"wiki.fact.reach", {"r": _number(enemy.aura_radius_tiles)})
 		if enemy.aura_armor_bonus > 0:
-			facts.append(["Aura de armadura", "+%d de armadura a los enemigos %s" % [enemy.aura_armor_bonus, reach]])
+			facts.append([Localization.t(&"wiki.fact.aura_armor"), Localization.t_fmt(&"wiki.fact.aura_armor_value", {"n": enemy.aura_armor_bonus, "reach": reach})])
 		if enemy.aura_heal_percent_per_second > 0.0:
-			facts.append(["Aura de cura", "cura %s %% de la vida por segundo a los enemigos %s" % [_number(enemy.aura_heal_percent_per_second), reach]])
+			facts.append([Localization.t(&"wiki.fact.aura_heal"), Localization.t_fmt(&"wiki.fact.aura_heal_value", {"x": _number(enemy.aura_heal_percent_per_second), "reach": reach})])
 	var counters: Array[String] = TowerText.suppressors_of(enemy, towers if not towers.is_empty() else _all_towers())
 	if not counters.is_empty():  # RF-450: "Contramedida", leída de los datos de las torres
-		facts.append(["Contramedida", "%s (le apaga el aura unos segundos)" % TowerText.join_names(counters)])
+		facts.append([Localization.t(&"wiki.fact.counter"), Localization.t_fmt(&"wiki.fact.counter_value", {"names": TowerText.join_names(counters)})])
 	entry.add_facts(facts)
 
-	entry.add_heading("Dónde aparece")
+	entry.add_heading(Localization.t(&"wiki.where"))
 	var levels: PackedStringArray = _levels_with(enemy, campaign)
 	var released_by: PackedStringArray = []
 	for other: EnemyData in all_enemies:
 		if other.death_spawn != null and other.death_spawn.id == enemy.id and other.death_spawn_count > 0:
-			released_by.append(other.display_name)
+			released_by.append(other.name_text())
 	if not levels.is_empty():
 		entry.add_text("\n".join(levels))
 	elif released_by.is_empty():
-		entry.add_text("No aparece en la campaña.")
+		entry.add_text(Localization.t(&"wiki.not_in_campaign"))
 	if not released_by.is_empty():
-		entry.add_text("Lo suelta al morir: %s." % ", ".join(released_by))
+		entry.add_text(Localization.t_fmt(&"wiki.released_by", {"names": ", ".join(released_by)}))
 	return entry
 
 
@@ -156,7 +155,7 @@ static func _levels_with(enemy: EnemyData, campaign: Array[LevelData]) -> Packed
 				if group.enemy != null and group.enemy.id == enemy.id:
 					appears = true
 		if appears:
-			found.append("Nivel %d · %s" % [i + 1, level.display_name])
+			found.append(Localization.t_fmt(&"wiki.level_line", {"n": i + 1, "name": level.display_name}))
 	return found
 
 
@@ -197,31 +196,33 @@ static func _all_towers() -> Array[TowerData]:
 static func tower_entry(tower: TowerData, towers: Array[TowerData] = []) -> WikiEntry:
 	var entry := WikiEntry.new()
 	entry.id = tower.id
-	entry.title = tower.display_name
-	entry.subtitle = "Apoyo · no dispara" if tower.support_only else ("Golpea voladores" if tower.can_hit_air else "Solo terrestres")
+	entry.title = tower.name_text()
+	entry.subtitle = Localization.t(&"wiki.tower.support") if tower.support_only else Localization.t(&"wiki.tower.air" if tower.can_hit_air else &"wiki.tower.ground_only")
 	var first: TowerLevelData = tower.levels[0]
 	var icon: Texture2D = TowerVisual.mounted_icon(first.base_texture,
 		TowerVisual.frame_texture(tower.turret_atlas, -PI / 2.0) if tower.turret_atlas != null else tower.turret_texture)
 	if icon != null:
 		entry.icon.append(icon)
-	if tower.description != "":
-		entry.add_text(tower.description)
-	var facts: Array = [["Función", "Apoyo de cadencia; no dispara"]] if tower.support_only else [["Golpea voladores", "sí" if tower.can_hit_air else "no"]]
+	if tower.description_text() != "":
+		entry.add_text(tower.description_text())
+	var facts: Array = [[Localization.t(&"wiki.fact.function"), Localization.t(&"wiki.fact.function_support")]] if tower.support_only \
+			else [[Localization.t(&"wiki.tower.air"), Localization.t(&"common.yes" if tower.can_hit_air else &"common.no")]]
 	if tower.required_collection != &"":
-		facts.append(["Requisito", "%d %s distintos y permiso del nivel" % [CollectionDefinitions.required(tower.required_collection), "avances" if CollectionDefinitions.origin(tower.required_collection) == CollectionDefinitions.ORIGIN_CARRIER else "piezas"]])
+		facts.append([Localization.t(&"wiki.fact.requirement"), Localization.t_fmt(&"wiki.fact.requirement_value", {"n": CollectionDefinitions.required(tower.required_collection), "word": Localization.t(&"wiki.word.advances" if CollectionDefinitions.origin(tower.required_collection) == CollectionDefinitions.ORIGIN_CARRIER else &"wiki.word.pieces")})])
 	if first.suppress_seconds > 0.0:  # RF-444, RF-450
-		facts.append(["Pulso", TowerText.pulse_line(first, TowerText.emitter_names(_all_enemies()))])
-		facts.append(["Límites", "No alcanza al Espejo y no apaga otras habilidades."])
+		facts.append([Localization.t(&"wiki.fact.pulse"), TowerText.pulse_line(first, TowerText.emitter_names(_all_enemies()))])
+		facts.append([Localization.t(&"wiki.fact.limits"), Localization.t(&"wiki.fact.limits_value")])
 	if tower.footprint > 1:  # RF-298
-		facts.append(["Tamaño", "%d×%d casillas" % [tower.footprint, tower.footprint]])
+		facts.append([Localization.t(&"wiki.fact.size"), Localization.t_fmt(&"wiki.fact.size_value", {"n": tower.footprint})])
 	facts.append_array(TowerText.cost_facts(tower))  # RF-437
 	entry.add_facts(facts)
-	entry.add_heading("Niveles")
-	var rows: Array = [["Nivel", "Oro", "Daño", "Cadencia", "Daño/s", "Alcance"]]
+	entry.add_heading(Localization.t(&"wiki.levels"))
+	var rows: Array = [[Localization.t(&"wiki.col.level"), Localization.t(&"wiki.col.gold"), Localization.t(&"wiki.col.damage"), Localization.t(&"wiki.col.rate"),
+			Localization.t(&"wiki.col.dps"), Localization.t(&"wiki.col.range")]]
 	for i: int in tower.levels.size():
 		var level: TowerLevelData = tower.levels[i]
 		rows.append([
-			"%d (%s)" % [i + 1, "construir" if i == 0 else "mejorar"],
+			"%d (%s)" % [i + 1, Localization.t(&"wiki.level_build" if i == 0 else &"wiki.level_upgrade")],
 			str(level.cost),
 			str(level.damage),
 			"%.1f/s" % level.fire_rate,
@@ -234,13 +235,13 @@ static func tower_entry(tower: TowerData, towers: Array[TowerData] = []) -> Wiki
 		var effects: Array[String] = TowerText.effects(tower.levels[i])
 		if not effects.is_empty():
 			if not has_effects:
-				entry.add_heading("Efectos")
+				entry.add_heading(Localization.t(&"wiki.effects"))
 				has_effects = true
-			entry.add_text("Nivel %d: %s" % [i + 1, " · ".join(effects)])
+			entry.add_text(Localization.t_fmt(&"wiki.effects_line", {"n": i + 1, "effects": " · ".join(effects)}))
 	# RF-317: la torre que pone un estado dice con quién combina (en la Wiki, con todas las torres).
 	var partners: Array[String] = TowerText.combo_partners(tower, towers if not towers.is_empty() else _all_towers())
 	if not partners.is_empty():
-		entry.add_heading("Combos")
+		entry.add_heading(Localization.t(&"wiki.combos"))
 		for line: String in partners:
 			entry.add_text(line)
 	return entry
@@ -274,15 +275,15 @@ static func collection_entry(id: StringName, collected: int, towers: Array[Tower
 	if ResourceLoader.exists(icon_path):
 		entry.icon.append(load(icon_path) as Texture2D)
 	var from_finding: bool = CollectionDefinitions.origin(id) == CollectionDefinitions.ORIGIN_FINDING
-	entry.subtitle = "Piezas en ruinas" if from_finding else "Avances de enemigos portadores"
+	entry.subtitle = Localization.t(&"wiki.collection.pieces" if from_finding else &"wiki.collection.advances")
 	var unlocks := PackedStringArray()
 	for tower: TowerData in towers:
 		if tower.required_collection == id:
-			unlocks.append(tower.display_name)
-	entry.add_text("Se completa con %d piezas distintas, una por nivel de origen. Se guardan al terminar la partida." % CollectionDefinitions.required(id))
+			unlocks.append(tower.name_text())
+	entry.add_text(Localization.t_fmt(&"wiki.collection.how", {"n": CollectionDefinitions.required(id)}))
 	entry.add_facts([
-		["Progreso", "%d/%d" % [collected, CollectionDefinitions.required(id)]],
-		["Desbloquea", ", ".join(unlocks) if not unlocks.is_empty() else "todavía ninguna torre"],
+		[Localization.t(&"wiki.collection.progress"), "%d/%d" % [collected, CollectionDefinitions.required(id)]],
+		[Localization.t(&"wiki.collection.unlocks"), ", ".join(unlocks) if not unlocks.is_empty() else Localization.t(&"wiki.collection.no_tower")],
 	])
 	return entry
 
@@ -403,12 +404,34 @@ static func parse_article(text: String, id: StringName, lore: bool = false, camp
 				blocks.append(block)
 	if not errors.is_empty():
 		return _article_failed(errors)
+	if not lore and Localization.language != Localization.DEFAULT_LANGUAGE:  # T534: el Lore queda en español (D-222)
+		title = Localization.data_text("wiki", id, "title", title)
+		subtitle = Localization.data_text("wiki", id, "subtitle", subtitle)
+		blocks = _translate_blocks(id, blocks)
 	var entry := WikiEntry.new()
 	entry.id = id
 	entry.title = title
 	entry.subtitle = subtitle
 	entry.blocks = blocks
 	return {"entry": entry, "order": order, "unlock": unlock, "errors": errors}
+
+
+## T534: los bloques de un artículo de la Guía en el idioma activo. Los textos son `wiki.<id>.b<n>` (n desde 1); las celdas
+## de una tabla o de datos, `wiki.<id>.b<n>.r<fila>c<columna>` (desde 1 y 0). Lo que no tiene traducción queda como está.
+static func _translate_blocks(id: StringName, blocks: Array[Dictionary]) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for i: int in blocks.size():
+		var block: Dictionary = blocks[i].duplicate(true)
+		if block.has("texto"):
+			block["texto"] = Localization.data_text("wiki", id, "b%d" % (i + 1), String(block["texto"]))
+		else:
+			var rows: Array = block["filas"]
+			for r: int in rows.size():
+				var cells: Array = rows[r]
+				for c: int in cells.size():
+					cells[c] = Localization.data_text("wiki", id, "b%d.r%dc%d" % [i + 1, r + 1, c], str(cells[c]))
+		result.append(block)
+	return result
 
 
 static func _read_block(raw: Variant, where: String, errors: PackedStringArray) -> Variant:

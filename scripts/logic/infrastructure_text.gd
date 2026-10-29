@@ -3,8 +3,15 @@
 class_name InfrastructureText
 extends RefCounted
 
-const EMPTY_JOB: String = "Sin demolición en curso. Tocá un objeto del mapa para demolerlo."
-const TAB_TITLE: String = "Infraestructura"
+
+## T534: el título de la solapa y el aviso sin trabajo, en el idioma activo.
+static func tab_title() -> String:
+	return Localization.t(&"infrastructure.tab")
+
+
+static func empty_job() -> String:
+	return Localization.t(&"infrastructure.empty_job")
+
 
 
 ## RF-458: los segundos del aviso del título («Infraestructura · 4 s»), hacia arriba: una demolición que falta 0,2 s
@@ -15,24 +22,24 @@ static func seconds_text(seconds_left: float) -> String:
 
 ## RF-457, tarjeta 1: «Faltan 4 s».
 static func job_left_line(seconds_left: float) -> String:
-	return "Faltan %s" % seconds_text(seconds_left)
+	return Localization.t_fmt(&"infrastructure.job_left", {"x": seconds_text(seconds_left)})
 
 
 ## RF-457, tarjeta 2: sin comprar, «Demoledora · 180 de oro».
 static func machine_title(price: int, owned: bool) -> String:
-	return "Demoledora activa" if owned else "Demoledora · %d de oro" % price
+	return Localization.t(&"infrastructure.machine_owned") if owned else Localization.t_fmt(&"infrastructure.machine_price", {"n": price})
 
 
 ## RF-413: la ventaja, leída de los datos: «Cada demolición cuesta el 10 % y tarda el 80 %».
 static func machine_effect(machine: Dictionary = {}) -> String:
 	var data: Dictionary = machine if not machine.is_empty() else ObstacleCatalog.machine()
-	return "Cada demolición cuesta el %d %% y tarda el %d %%" % [
-		int(data.get("costo_uso_porcentaje", 100)), int(data.get("tiempo_porcentaje", 100))]
+	return Localization.t_fmt(&"infrastructure.machine_effect", {"cost": int(data.get("costo_uso_porcentaje", 100)),
+			"time": int(data.get("tiempo_porcentaje", 100))})
 
 
 ## El botón de compra: «Comprar», o lo que falta si no alcanza el oro.
 static func buy_text(price: int, gold: int) -> String:
-	return "Comprar" if gold >= price else "Te faltan %d de oro" % (price - gold)
+	return Localization.t(&"infrastructure.buy") if gold >= price else Localization.t_fmt(&"infrastructure.buy_missing", {"n": price - gold})
 
 
 ## RF-457, tarjeta 3: una ficha por punto, según el estado (`ObstacleField.State`).
@@ -40,20 +47,20 @@ static func buy_text(price: int, gold: int) -> String:
 static func site_line(state: ObstacleField.State, price: int, reserve: int, max_reserve: int, production: int) -> String:
 	match state:
 		ObstacleField.State.ACTIVE:
-			return "Activa · reserva %d/%d · +%d por oleada" % [reserve, max_reserve, production]
+			return Localization.t_fmt(&"infrastructure.site_active", {"left": reserve, "max": max_reserve, "prod": production})
 		ObstacleField.State.DEPLETED:
-			return "Agotada"
-	return "Habilitar · %d de oro" % price
+			return Localization.t(&"infrastructure.site_depleted")
+	return Localization.t_fmt(&"infrastructure.site_enable", {"n": price})
 
 
 ## RF-457, tarjeta 4: «Recursos: 3».
 static func resources_line(have: int) -> String:
-	return "Recursos: %d" % have
+	return Localization.t_fmt(&"infrastructure.resources", {"n": have})
 
 
 ## «Al terminar la oleada: +2». Vacío si no hay nada que esperar.
 static func expected_line(expected: int) -> String:
-	return "Al terminar la oleada: +%d" % expected if expected > 0 else ""
+	return Localization.t_fmt(&"infrastructure.expected", {"n": expected}) if expected > 0 else ""
 
 
 ## RF-457, tarjeta 4: la suma de `min(producción, reserva)` de los puntos activos: lo mismo que entrega

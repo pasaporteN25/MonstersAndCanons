@@ -16,6 +16,9 @@ const SCREENS: Array[String] = [
 	"res://scenes/ui/pause_menu.tscn",
 	"pause_options",
 	"credits",
+	"end_defeat",
+	"end_victory",
+	"res://scenes/game/hud.tscn",
 ]
 
 
@@ -63,6 +66,8 @@ func _open(screen: String) -> Node:
 		path = "res://scenes/ui/pause_menu.tscn"
 	elif screen == "credits":
 		path = ""
+	elif screen == "end_defeat" or screen == "end_victory":
+		path = "res://scenes/ui/end_screen.tscn"
 	var node: Node
 	if path == "":
 		node = (load("res://scenes/ui/credits_screen.gd") as GDScript).new()
@@ -82,6 +87,10 @@ func _open(screen: String) -> Node:
 			node.call("_open_options")
 	elif screen == "credits":
 		node.open()
+	elif screen == "end_defeat":
+		node.call("show_defeat", 7, 10, true, 320, "Against flyers, try Machine Gun and Sniper.")
+	elif screen == "end_victory":
+		node.call("show_victory", 4, 3, true, true, 540, "")
 	return node
 
 

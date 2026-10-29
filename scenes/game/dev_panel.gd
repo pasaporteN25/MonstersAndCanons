@@ -120,9 +120,9 @@ func _enemy_row() -> Control:
 	# LevelFile.enemy_ids() entiende los nombres del ejecutable exportado (.tres.remap).
 	for id: String in LevelFile.enemy_ids():
 		_enemy_types.append(LevelFile.find_enemy(id))
-	_enemy_types.sort_custom(func(a: EnemyData, b: EnemyData) -> bool: return a.display_name < b.display_name)
+	_enemy_types.sort_custom(func(a: EnemyData, b: EnemyData) -> bool: return a.name_text() < b.name_text())
 	for enemy: EnemyData in _enemy_types:
-		_enemy_choice.add_item(enemy.display_name)
+		_enemy_choice.add_item(enemy.name_text())
 	row.add_child(_enemy_choice)
 	row.add_child(_button("Aparecer", func() -> void:
 		_game.dev_spawn(_enemy_types[_enemy_choice.selected])))

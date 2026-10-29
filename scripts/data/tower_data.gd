@@ -37,6 +37,15 @@ extends Resource
 @export var levels: Array[TowerLevelData] = []
 
 
+## T534: el nombre y la frase en el idioma activo (en español, los del `.tres`; en inglés, `tower.<id>.name`/`.description`).
+func name_text() -> String:
+	return Localization.data_text("tower", id, "name", display_name)
+
+
+func description_text() -> String:
+	return Localization.data_text("tower", id, "description", description)
+
+
 ## RF-419: true si se puede comprar de dos formas (oro, u oro más recursos).
 func has_alt_payment() -> bool:
 	return alt_resource_cost > 0

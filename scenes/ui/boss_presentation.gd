@@ -17,9 +17,6 @@ extends CanvasLayer
 signal closed(keep_paused: bool)
 
 const LAYER_ABOVE_DIALOGS: int = 30
-const TITLE: String = "¡Llega el Jefe!"
-const HINT_MOBILE: String = "Tocá para seguir"
-const HINT_DESKTOP: String = "Clic o cualquier tecla para seguir  ·  P deja la pausa"
 const FADE_IN_SECONDS: float = 0.25
 ## Cuánto de su alto ocupa la ilustración.
 const ILLUSTRATION_HEIGHT_RATIO: float = 0.5
@@ -87,7 +84,7 @@ func _build() -> void:
 	column.alignment = BoxContainer.ALIGNMENT_CENTER
 	column.add_theme_constant_override("separation", 14)
 	_root.add_child(column)
-	column.add_child(_label("Title", TITLE, 34, Color(0.95, 0.35, 0.28)))
+	column.add_child(_label("Title", Localization.t(&"boss_intro.title"), 34, Color(0.95, 0.35, 0.28)))
 	_illustration = TextureRect.new()
 	_illustration.name = "Illustration"
 	_illustration.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -96,9 +93,9 @@ func _build() -> void:
 	_illustration.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	_illustration.custom_minimum_size = Vector2(0.0, 720.0 * ILLUSTRATION_HEIGHT_RATIO)
 	column.add_child(_illustration)
-	column.add_child(_label("Name", _data.display_name, 52, Color(0.96, 0.92, 0.82)))
-	column.add_child(_label("Line", _data.description, 22, Color(0.85, 0.82, 0.76)))
-	_hint = _label("Hint", HINT_MOBILE if _mobile else HINT_DESKTOP, 18, Color(0.7, 0.68, 0.64))
+	column.add_child(_label("Name", _data.name_text(), 52, Color(0.96, 0.92, 0.82)))
+	column.add_child(_label("Line", _data.description_text(), 22, Color(0.85, 0.82, 0.76)))
+	_hint = _label("Hint", Localization.t(&"boss_intro.hint_mobile" if _mobile else &"boss_intro.hint_desktop"), 18, Color(0.7, 0.68, 0.64))
 	_hint.modulate.a = 0.0
 	column.add_child(_hint)
 

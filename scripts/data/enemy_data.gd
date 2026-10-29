@@ -93,3 +93,12 @@ enum Shape { CIRCLE, TRIANGLE, SQUARE, DIAMOND, HEXAGON }
 @export var charge_slow_tolerance: float = 0.0
 @export var charge_impact_radius_tiles: float = 0.0
 @export var charge_wear_percent: float = 0.0
+
+
+## T534: el nombre y la frase en el idioma activo (en español, los del `.tres`; en inglés, `enemy.<id>.name`/`.description`).
+func name_text() -> String:
+	return Localization.data_text("enemy", id, "name", display_name)
+
+
+func description_text() -> String:
+	return Localization.data_text("enemy", id, "description", description)

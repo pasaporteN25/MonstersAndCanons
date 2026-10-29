@@ -436,7 +436,7 @@ func _move_mobile_ghost(cell: Vector2i) -> void:
 	_ghost_placement.clamp_inside(_level.map_size())
 	var reason: String = ""
 	if not cells_free(tower, _ghost_placement.cell):
-		reason = "Ahí no"
+		reason = Localization.t(&"game.blocked_there")
 	else:
 		reason = TowerText.missing_text(tower, _pay_alt, _session.gold, _session.resources, true)
 	_ghost_placement.move_to(_ghost_placement.cell, reason == "", reason)

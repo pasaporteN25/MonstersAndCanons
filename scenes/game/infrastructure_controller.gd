@@ -164,9 +164,9 @@ func _on_job_finished(cell: Vector2i, reward: Dictionary) -> void:
 	var resources: int = reward.get("resources", 0)
 	_session.add_resources(resources)
 	if resources > 0:
-		_float_text(cell, "+%d %s" % [resources, "recurso" if resources == 1 else "recursos"])
+		_float_text(cell, Localization.t_fmt(&"game.resources_float", {"n": resources, "word": TowerText.resources_word(resources)}))
 	if not (reward.get("finding", {}) as Dictionary).is_empty() and _collects_pieces:
-		_float_text(cell, "¡Pieza encontrada!")
+		_float_text(cell, Localization.t(&"game.piece_found"))
 	Audio.play(&"build")  # RF-408: un sonido que ya existe
 	if cell == _selected:
 		_selected = NONE

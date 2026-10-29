@@ -28,7 +28,7 @@ static func compute(from: TowerLevelData, to: TowerLevelData, table: Array[Dicti
 		var kind: String = String(row["formato"])
 		result.append({
 			"campo": field, "delta": delta, "formato": kind,
-			"texto": "%s %s" % [format_number(delta, kind), String(row["etiqueta"])],
+			"texto": "%s %s" % [format_number(delta, kind), stat_label(field, String(row["etiqueta"]))],
 		})
 	return result
 
@@ -46,7 +46,7 @@ static func before_after(from: TowerLevelData, to: TowerLevelData, table: Array[
 		for row: Dictionary in table:
 			if String(row["campo"]) == field:
 				scale = float(row.get("escala", 1.0))
-				label = String(row["etiqueta"])
+				label = stat_label(field, String(row["etiqueta"]))
 				break
 		var kind: String = String(delta["formato"])
 		var before: float = float(from.get(field)) * scale
@@ -63,6 +63,11 @@ static func preview(levels: Array[TowerLevelData], level_index: int, table: Arra
 	if level_index < 0 or level_index + 1 >= levels.size():
 		return []
 	return before_after(levels[level_index], levels[level_index + 1], table, max_stats)
+
+
+## T534: la etiqueta de una estadística en el idioma activo (en español, la de `data/ui/mejoras.json`).
+static func stat_label(field: String, fallback: String) -> String:
+	return Localization.data_text("upgrade_stat", StringName(field), "label", fallback)
 
 
 ## Un valor sin signo: `5`, `1,5`, `30 %`.
@@ -86,7 +91,7 @@ static func format_number(value: float, kind: String) -> String:
 ## 2 decimales como mucho, sin ceros finales y con coma.
 ## «¡Nivel 2!», o «¡Nivel máximo!» en el último nivel.
 static func header(level_number: int, is_max: bool) -> String:
-	return "¡Nivel máximo!" if is_max else "¡Nivel %d!" % level_number
+	return Localization.t(&"upgrade.level_max") if is_max else Localization.t_fmt(&"upgrade.level", {"n": level_number})
 
 
 ## Los textos de las estadísticas repartidos en renglones de `per_row`, separados con « · ».

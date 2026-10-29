@@ -116,6 +116,9 @@ func show_metrics(enabled: bool) -> void:
 	_metrics_updated = 0
 
 func _ready() -> void:
+	Localization.apply(self, {"NextWaveTitle": &"hud.next_wave", "StartWaveButton": &"hud.start_wave", "PauseLabel": &"hud.paused_label",
+			"ExitButton": &"hud.exit_menu", "BuildInfoName": &"hud.build_info_placeholder", "BuildInfoText": &"hud.build_info_text_placeholder",
+			"IntroName": &"hud.new_enemy_title"})
 	obstacle_panel = ObstaclePanel.new()
 	obstacle_panel.name = "ObstaclePanel"
 	add_child(obstacle_panel)
@@ -164,7 +167,8 @@ func _ready() -> void:
 	if _mobile_mode:
 		get_node("BottomBar").theme = preload("res://assets/ui/menu_theme.tres")
 		get_node("BottomBar").color = Color(0.105, 0.11, 0.125, 1)
-	for pair: Array in [["Gold", "Oro"], ["Lives", "Vidas"], ["Score", "Puntos"], ["Wave", "Oleada"], ["Technology", "Avances tecnológicos"]]:
+	for pair: Array in [["Gold", Localization.t(&"hud.gold")], ["Lives", Localization.t(&"hud.lives")], ["Score", Localization.t(&"hud.score")],
+			["Wave", Localization.t(&"hud.wave")], ["Technology", Localization.t(&"hud.technology")]]:
 		var icon: Control = bar.get_node("Stats/" + pair[0] + "Stat/" + pair[0] + "Icon")
 		icon.tooltip_text = pair[1]
 		icon.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -220,7 +224,7 @@ func _build_resource_stat(stats: Control) -> void:
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	icon.texture = _resource_texture(30)
-	icon.tooltip_text = "Recursos (solo de esta partida)"
+	icon.tooltip_text = Localization.t(&"hud.resources_tip")
 	icon.mouse_filter = Control.MOUSE_FILTER_STOP
 	icon.focus_mode = Control.FOCUS_ALL
 	_resource_stat.add_child(icon)
@@ -286,7 +290,7 @@ func setup_resources(enabled: bool) -> void:
 ## RF-104: texto del botón y cartel "PAUSA".
 ## `show_label` = false cuando el menú de pausa ya lo dice (no mostrar dos veces).
 func show_paused(paused: bool, show_label: bool = true) -> void:
-	_pause_button.text = ("Seguir" if paused else "Pausa") if _mobile_mode else ("Seguir  [P]" if paused else "Pausa  [P]")
+	_pause_button.text = Localization.t(&"hud.resume" if paused else &"hud.pause") + ("" if _mobile_mode else "  [P]")
 	_pause_label.visible = paused and show_label
 
 
@@ -315,7 +319,7 @@ func show_next_wave(wave: WaveData) -> void:
 			if group.enemy == enemy and group.probability < 1.0:
 				icon.uncertain = true
 				icon.mouse_filter = Control.MOUSE_FILTER_PASS
-				icon.tooltip_text += " · encuentro opcional (grupo %.0f %%)" % (group.probability * 100.0)
+				icon.tooltip_text += Localization.t_fmt(&"hud.optional_group", {"pct": "%.0f" % (group.probability * 100.0)})
 		_next_wave_icons.add_child(icon)
 
 
@@ -376,8 +380,8 @@ func _show_next_intro() -> void:
 	for child: Node in _intro_icon_slot.get_children():
 		child.queue_free()
 	_intro_icon_slot.add_child(EnemyIcon.new().setup(enemy))
-	_intro_name.text = "Nuevo enemigo: %s" % enemy.display_name
-	_intro_text.text = enemy.description
+	_intro_name.text = Localization.t_fmt(&"hud.new_enemy", {"name": enemy.name_text()})
+	_intro_text.text = enemy.description_text()
 	_intro.visible = true
 	_intro.modulate.a = 0.0
 	var tween: Tween = _tween()
@@ -420,8 +424,8 @@ func setup_bar(tabs: bool) -> void:
 	bar_tabs.position = Vector2(12, 2)
 	bottom.add_child(bar_tabs)
 	var list: Array[Dictionary] = [
-		{"id": TAB_CANNONS, "text": "Cañones"},
-		{"id": TAB_INFRASTRUCTURE, "text": InfrastructureText.TAB_TITLE},
+		{"id": TAB_CANNONS, "text": Localization.t(&"hud.tab_cannons")},
+		{"id": TAB_INFRASTRUCTURE, "text": InfrastructureText.tab_title()},
 	]
 	bar_tabs.setup(list)
 	bar_tabs.tab_selected.connect(_on_tab_selected)
@@ -539,12 +543,12 @@ func setup_towers(tower_types: Array[TowerData]) -> void:
 		button.text = TowerText.bar_text(tower)  # RF-418: "300 + 3"
 		var key: String = BarLayout.key_label(i)
 		if key != "" and not _mobile_mode:
-			button.tooltip_text = "%s (tecla %s): %s" % [tower.display_name, key, TowerText.cost_text(tower)]
+			button.tooltip_text = Localization.t_fmt(&"hud.tower_tip_key", {"name": tower.name_text(), "key": key, "cost": TowerText.cost_text(tower)})
 			button.add_child(_key_label(key))
 		elif key != "":
-			button.tooltip_text = "%s: %s" % [tower.display_name, TowerText.cost_text(tower)]
+			button.tooltip_text = Localization.t_fmt(&"hud.tower_tip", {"name": tower.name_text(), "cost": TowerText.cost_text(tower)})
 		else:  # RF-456: de la torre 11 en adelante no hay tecla
-			button.tooltip_text = "%s: %s" % [tower.display_name, TowerText.cost_text(tower)]
+			button.tooltip_text = Localization.t_fmt(&"hud.tower_tip", {"name": tower.name_text(), "cost": TowerText.cost_text(tower)})
 		button.add_theme_font_size_override("font_size", _cost_font_size(button, width))
 		button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		button.vertical_icon_alignment = VERTICAL_ALIGNMENT_TOP
@@ -560,7 +564,7 @@ func setup_towers(tower_types: Array[TowerData]) -> void:
 		if TowerText.uses_resources(tower):
 			button.add_child(_resource_badge(tower, width))
 		if tower.has_alt_payment():
-			button.tooltip_text += " · o " + TowerText.cost_text(tower, true)
+			button.tooltip_text += Localization.t_fmt(&"hud.or_cost", {"cost": TowerText.cost_text(tower, true)})
 		button.pressed.connect(tower_button_pressed.emit.bind(i))
 		_tower_button_row.add_child(button)
 		_tower_buttons.append(button)
@@ -599,7 +603,7 @@ func _resource_badge(tower: TowerData, button_width: int) -> Control:
 	if tower.has_alt_payment():
 		var other := Label.new()
 		# Angosto: «120+1» sin el «o» ni los espacios (la otra forma de pago completa está en la ayuda al pasar el mouse).
-		other.text = TowerText.bar_text(tower, true).replace(" ", "") if narrow else "o " + TowerText.bar_text(tower, true)
+		other.text = TowerText.bar_text(tower, true).replace(" ", "") if narrow else Localization.t_fmt(&"hud.or_short", {"cost": TowerText.bar_text(tower, true)})
 		other.add_theme_font_size_override("font_size", 9 if narrow else 10)
 		other.modulate = Color(1, 1, 1, 0.75)
 		other.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -649,7 +653,7 @@ func show_selected_tower(index: int) -> void:
 	if index >= 0:
 		var tower: TowerData = _tower_types[index]
 		if tower.has_alt_payment():  # RF-419: dos botones chicos; el nombre queda sin precio
-			_build_info_name.text = tower.display_name
+			_build_info_name.text = tower.name_text()
 			_pay_gold_button.text = TowerText.cost_text(tower)
 			_pay_alt_button.text = TowerText.cost_text(tower, true)
 			_pay_gold_button.visible = true
@@ -657,10 +661,10 @@ func show_selected_tower(index: int) -> void:
 			show_payment(false)
 			_refresh_payment_buttons()
 		else:
-			_build_info_name.text = "%s · %s" % [tower.display_name, TowerText.cost_text(tower)]
-		_build_info_text.text = tower.description
+			_build_info_name.text = "%s · %s" % [tower.name_text(), TowerText.cost_text(tower)]
+		_build_info_text.text = tower.description_text()
 		if tower.footprint > 1:  # RF-298
-			_build_info_text.text += " Necesita %d×%d casillas libres." % [tower.footprint, tower.footprint]
+			_build_info_text.text += Localization.t_fmt(&"hud.needs_space", {"n": tower.footprint})
 		if tower.levels[0].suppress_seconds > 0.0:  # RF-450
 			_build_info_text.text += " " + TowerText.pulse_line(tower.levels[0], TowerText.emitter_names(Wiki._all_enemies()))
 		var combo: String = TowerText.combo_hint(tower, _tower_types)  # RF-317
@@ -736,7 +740,7 @@ func _on_lives_changed(lives: int) -> void:
 
 
 func _on_wave_changed(wave: int, total_waves: int) -> void:
-	_wave_label.tooltip_text = "Oleada"
+	_wave_label.tooltip_text = Localization.t(&"hud.wave")
 	_total_waves = total_waves
 	if wave > 0 and wave != _last_wave + 1:
 		# RF-319 (modo de pruebas): se saltó a una oleada; la que dice es la que viene, sin cartel de inicio.
@@ -752,26 +756,26 @@ func _on_wave_changed(wave: int, total_waves: int) -> void:
 
 func _on_wave_completed(wave: int, bonus: int) -> void:
 	_wave_label.text = "%d/%d ✓" % [wave, _total_waves]
-	_wave_label.tooltip_text = "Oleada completada (+%d de oro)" % bonus
+	_wave_label.tooltip_text = Localization.t_fmt(&"hud.wave_completed_tip", {"n": bonus})
 
 
 func _on_state_changed(state: LevelSession.State) -> void:
 	match state:
 		LevelSession.State.BUILDING:
-			_set_button("Empezar oleada", true)
+			_set_button(Localization.t(&"hud.start_wave"), true)
 		LevelSession.State.WAVE_RUNNING:
-			_set_button("Oleada en curso", false)
+			_set_button(Localization.t(&"hud.wave_running"), false)
 		LevelSession.State.COUNTDOWN:
-			_set_button("Empezar oleada", true)
+			_set_button(Localization.t(&"hud.start_wave"), true)
 		LevelSession.State.WON:
-			_set_button("¡Victoria!", false)
+			_set_button(Localization.t(&"end.victory"), false)
 		LevelSession.State.LOST:
-			_set_button("Derrota", false)
+			_set_button(Localization.t(&"end.defeat"), false)
 
 
 ## RF-34 / RF-102: el botón muestra la cuenta atrás.
 func _on_countdown_changed(seconds_left: float) -> void:
-	_start_wave_button.text = "Empezar oleada (%d)" % ceili(seconds_left)
+	_start_wave_button.text = Localization.t_fmt(&"hud.start_wave_countdown", {"n": ceili(seconds_left)})
 	if _mobile_mode:
 		_wave_label.text = "%s · %ds" % [_wave_label.text.get_slice(" · ", 0), ceili(seconds_left)]
 
@@ -785,7 +789,7 @@ func _configure_mobile_top_bar(bar: Control) -> void:
 	bar.get_node("Stats").position.x = 20.0
 	bar.get_node("Stats").size.y = height
 	_exit_button.hide()
-	_pause_button.text = "Pausa"
+	_pause_button.text = Localization.t(&"hud.pause")
 	_speed_button.text = "x1"
 	var button_height: float = float(_mobile_config.get_value("boton_alto_px"))
 	_pause_button.custom_minimum_size.y = button_height
@@ -809,7 +813,7 @@ func _set_button(text: String, enabled: bool) -> void:
 
 ## RF-127: cartel grande "Oleada N" en el centro, que aparece y se desvanece.
 func _show_wave_banner(wave: int) -> void:
-	_wave_banner.text = "Oleada %d" % wave
+	_wave_banner.text = Localization.t_fmt(&"hud.wave_banner", {"n": wave})
 	_wave_banner.pivot_offset = _wave_banner.size / 2.0
 	_wave_banner.modulate.a = 0.0
 	_wave_banner.scale = Vector2(0.8, 0.8)
@@ -823,7 +827,7 @@ func _show_wave_banner(wave: int) -> void:
 	var danger: EnemyData = null
 	if wave - 1 < _waves.size():
 		danger = dangerous_enemy_in(_waves[wave - 1])
-	_boss_line.text = "¡Llega el %s!" % danger.display_name if danger != null else ""
+	_boss_line.text = Localization.t_fmt(&"hud.boss_incoming", {"name": danger.name_text()}) if danger != null else ""
 	_boss_line.modulate.a = 0.0
 	if danger != null:
 		var boss_tween: Tween = _tween()
@@ -853,6 +857,6 @@ func show_collection(count: int, required: int, state: String, collection: Strin
 	if ResourceLoader.exists(icon_path):
 		icon.texture = load(icon_path) as Texture2D
 	if collection == &"technology":
-		icon.tooltip_text = "Avances tecnológicos: %s. Una pieza por cada nivel del 1 al 5; se guarda al terminar, abandonar descarta." % state
+		icon.tooltip_text = Localization.t_fmt(&"hud.collect_technology", {"state": state})
 	else:
-		icon.tooltip_text = "Piezas de la %s: %s. Una pieza por ruina; se guarda al terminar, abandonar descarta." % [CollectionDefinitions.name_of(collection), state]
+		icon.tooltip_text = Localization.t_fmt(&"hud.collect_other", {"name": CollectionDefinitions.name_of(collection), "state": state})

@@ -21,8 +21,6 @@ const TIP_COLOR := Color(1, 0.88, 0.6)
 const TIP_FONT_SIZE: int = 16
 ## Un poco menos que el ancho útil del panel (352): así el texto con salto de línea no ensancha el panel.
 const TIP_WIDTH: float = 340.0
-const NEXT_TEXT: String = "Siguiente nivel"
-const EPILOGUE_TEXT: String = "Epílogo"
 
 @onready var _rows: VBoxContainer = %Rows
 @onready var _title: Label = %Title
@@ -47,6 +45,7 @@ var _epilogue_mode: bool = false
 
 func _ready() -> void:
 	visible = false
+	Localization.apply(self, {"%RetryButton": &"end.retry", "%LevelsButton": &"end.levels"})
 	_retry_button.pressed.connect(retry_pressed.emit)
 	_next_button.pressed.connect(_on_next_button_pressed)
 	_levels_button.pressed.connect(levels_pressed.emit)
@@ -81,17 +80,17 @@ func set_levels_text(text: String) -> void:
 ## `has_epilogue` (RF-471): es el último nivel de la campaña; en lugar de «Siguiente nivel» (que no existe) está «Epílogo».
 func show_victory(lives_left: int, stars: int, has_next: bool, in_campaign: bool, score: int = 0, win_text: String = "",
 		has_epilogue: bool = false) -> void:
-	_title.text = "¡Victoria!"
+	_title.text = Localization.t(&"end.victory")
 	_stars.count = stars  # RF-93
 	_stars.visible = true
 	_title.add_theme_color_override("font_color", Color(1, 0.84, 0.3))
-	_detail.text = "Vidas restantes: %d" % lives_left
+	_detail.text = Localization.t_fmt(&"end.lives_left", {"n": lives_left})
 	_win_label.text = win_text
 	_win_label.visible = win_text != ""
 	_show_tips("")  # M70: los consejos son solo de la derrota
-	_score_label.text = "Puntos: %d" % score  # RF-190
+	_score_label.text = Localization.t_fmt(&"end.score", {"n": score})  # RF-190
 	_epilogue_mode = has_epilogue
-	_next_button.text = EPILOGUE_TEXT if has_epilogue else NEXT_TEXT
+	_next_button.text = Localization.t(&"end.epilogue" if has_epilogue else &"end.next")
 	_show_next = has_next or has_epilogue
 	_show_levels = in_campaign
 	_set_buttons_visible(true)
@@ -100,15 +99,15 @@ func show_victory(lives_left: int, stars: int, has_next: bool, in_campaign: bool
 
 ## `tower_tip` (M70, RF-630): los consejos de la derrota; "" = no se ve esa línea.
 func show_defeat(wave: int, total_waves: int, in_campaign: bool, score: int = 0, tower_tip: String = "") -> void:
-	_title.text = "Derrota"
+	_title.text = Localization.t(&"end.defeat")
 	_stars.visible = false
 	_title.add_theme_color_override("font_color", Color(1, 0.45, 0.45))
-	_detail.text = "Llegaste a la oleada %d de %d" % [wave, total_waves]
+	_detail.text = Localization.t_fmt(&"end.reached_wave", {"wave": wave, "total": total_waves})
 	_win_label.visible = false  # RF-467: no hay texto en la derrota
 	_show_tips(tower_tip)
-	_score_label.text = "Puntos: %d" % score  # RF-190
+	_score_label.text = Localization.t_fmt(&"end.score", {"n": score})  # RF-190
 	_epilogue_mode = false
-	_next_button.text = NEXT_TEXT
+	_next_button.text = Localization.t(&"end.next")
 	_show_next = false
 	_show_levels = in_campaign
 	_set_buttons_visible(true)

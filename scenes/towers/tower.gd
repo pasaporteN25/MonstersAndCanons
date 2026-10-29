@@ -16,7 +16,7 @@ var repair_rate_received: float = 0.0
 
 ## RF-54: a qué enemigo apunta, entre los que están en su alcance.
 enum TargetMode { FIRST, LAST, STRONGEST, CLOSEST }
-const TARGET_MODE_NAMES: Array[String] = ["Primero", "Último", "Más fuerte", "Más cercano"]
+const TARGET_MODE_KEYS: Array[StringName] = [&"tower.target.first", &"tower.target.last", &"tower.target.strongest", &"tower.target.closest"]
 
 const PROJECTILE_SCENE: PackedScene = preload("res://scenes/towers/projectile.tscn")
 ## Lado del cuadrado que se dibuja, en casillas.
@@ -179,7 +179,7 @@ func cycle_targeting() -> void:
 
 
 func targeting_name() -> String:
-	return TARGET_MODE_NAMES[targeting]
+	return Localization.t(TARGET_MODE_KEYS[targeting])
 
 
 func support_bonus() -> int:

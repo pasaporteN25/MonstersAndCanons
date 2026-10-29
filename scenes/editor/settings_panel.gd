@@ -85,7 +85,7 @@ func _fill_towers() -> void:
 		_all_towers = TowerOffer.canonical_towers()
 		for tower: TowerData in _all_towers:
 			var check := CheckBox.new()
-			check.text = tower.display_name
+			check.text = tower.name_text()
 			check.name = "Tower_" + String(tower.id)
 			var id: String = String(tower.id)
 			check.toggled.connect(func(on: bool) -> void:
