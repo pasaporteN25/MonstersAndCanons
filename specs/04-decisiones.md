@@ -1940,6 +1940,13 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Alcance:** RF-730, T550. Sin cambios de guardado, balance ni jugabilidad.
 - **Riesgos/condiciones:** (1) quien quiera ver las capturas desde el editor de Godot ya no las ve en el panel de archivos; siguen en disco y en GitHub; (2) una herramienta nueva que cargue `res://Capturas/...` fallaría: tendría que leer desde disco o usar otra carpeta.
 
+## D-221 · La receta cosmética del editor solo se ve en los postes, no en las insignias del selector
+
+- **Fecha:** 2026-10-28 · **Decidió:** Lucas (propuesta aceptada: «T553 con la enmienda»). **Estado:** vigente.
+- **Qué:** RF-697 dejaba abierto que la mitad del jugador de la insignia del selector (mapa y tarjetas) usara la receta del editor de banderines. Se enmienda para que la receta se vea **solo en los postes del jugador con 3 estrellas**. La insignia del selector sigue con las V3 aprobadas fijas, que es lo que hace el código.
+- **Motivo:** el código nunca lo implementó; hacerlo exigía pasar el contexto de la receta por Game hasta `CampaignRegion` y cambiar lo que se ve en el selector de forma no trivial, a pocas semanas de la V1.
+- **Alternativas descartadas:** implementarlo ya (más superficie y riesgo antes de publicar; se puede retomar después de la V1 si Lucas lo quiere).
+- **Alcance:** RF-697 y RF-664 (texto), T553. Sin cambios de código, guardado, balance ni jugabilidad.
 
 ## D-222 · Inglés por tandas: nombres propios, Lore diferido y selector oculto hasta que esté coherente (2026-10-28)
 
@@ -1949,3 +1956,4 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Alternativas descartadas:** traducir también el Lore ya (retrabajo); traducir «Cántaro» y «Compañía Meridiana» (son el canon de `specs/10-universo.md`); habilitar el selector con el inglés parcial; usar el texto en español como clave (se rompería al corregir la redacción).
 - **Alcance:** RF-727 (estado de implementación), T534. Sin cambios de guardado (`settings.language` ya existe; el idioma se conserva al entrar y salir del modo de pruebas), balance ni canon.
 - **Riesgos/condiciones:** (1) mientras el selector siga oculto, nadie puede elegir inglés desde el juego; solo los tests y `tools/capture_menus.gd` lo usan; (2) los textos aún no migrados salen en español en modo inglés; (3) el inglés de esta tanda lo revisa Lucas junto con el del Lore.
+

@@ -58,7 +58,7 @@ Los niveles son JSON, un formato de texto común que se edita a mano. Un `.tres`
 | `is_flying` | Vuela en línea recta; el Cañón y la Ráfaga no le pegan (RF-53). | `false` |
 | `slow_resistance` | Parte de la ralentización que ignora (0,5 = la mitad). | `0.0` |
 | `color` | Color del estallido al morir. | verde |
-| `texture` | El dibujo. Los tres monstruos de M24 (Normal, Rápido, Tanque) usan PNG de 256×256 de una sola vista en `assets/sprites/enemies/rendered/`. | `troll.svg` |
+| `texture` | El dibujo. Los tres monstruos de M24 (Normal, Rápido, Tanque) usan PNG de 256×256 de una sola vista en `assets/sprites/enemies/rendered/`. | `troll.png` |
 | `flip_when_walking_left` | Si el dibujo se refleja en espejo al caminar hacia la izquierda (por defecto sí). Apagarlo para un PNG con luz propia (la luz no cambia de lado); entonces el enemigo mira siempre hacia el mismo lado. | `false` |
 | `size_tiles` | Radio, en casillas (máximo 0,5). | `0.32` |
 | `shape` | Forma geométrica si no hay dibujo. | `CIRCLE` |

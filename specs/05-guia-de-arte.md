@@ -88,7 +88,7 @@ T437 usa esta dirección como propuesta para tronco, helecho y dos variantes del
 
 ## 6. De dónde vienen los dibujos actuales
 
-- Los **nueve enemigos** se redibujaron en T127 con un generador (`redesign.py`, en `build/enemy-redesign/`, que **no se versiona**: la carpeta `build/` está ignorada por git). Las fuentes y comparaciones históricas quedaron en esa carpeta. Los SVG de `assets/sprites/enemies/` son fuentes editables de algunos rediseños, pero no indican por sí solos qué imagen usa el juego: cada enemigo declara su textura y atlas en `data/enemies/<id>.tres`. Los PNG consumidos por los rediseños renderizados están en `assets/sprites/enemies/rendered/`.
+- Los **nueve enemigos** se redibujaron en T127 con un generador (`redesign.py`, en `build/enemy-redesign/`, que **no se versiona**: la carpeta `build/` está ignorada por git). Las fuentes y comparaciones históricas quedaron en esa carpeta. Los SVG fuente heredados de los enemigos se borraron en T555: cada enemigo declara su textura y atlas en `data/enemies/<id>.tres`. Los PNG consumidos por los rediseños renderizados están en `assets/sprites/enemies/rendered/`.
 - **Torres, proyectiles, íconos y decoración del mapa** son los de M4/M5 (T70–T73, T84): contorno `#2b2233` y bases de madera, piedra y piedra con oro. Se pueden rediseñar más adelante con esta misma guía; hoy conviven sin problema.
 - **Enemigos con habilidad** (B-07): el Guardián y el Curandero (M17) y el Chamán y el Espejo (M18) ya están; quedan el Excavador y el Ladrón. Sus ideas de aspecto están en el backlog y se ajustan a los tonos libres de la tabla.
 

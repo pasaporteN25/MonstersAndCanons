@@ -12,7 +12,7 @@ const PATH_PATTERN: String = "res://[A-Za-z0-9_./\\-]+\\.(?:svg|png|wav|ogg|mp3|
 ## Dibujos que están en el repositorio pero el juego no usa. Un dibujo NUEVO sin uso hace fallar el test; si se usa o
 ## se borra, se saca de esta lista. Un recurso cuenta como usado si algún archivo de texto de `data/`, `scenes/`,
 ## `scripts/`, `assets/` o `tools/` nombra su ruta `res://` completa o su `uid` (T551, H5 de T538): ya no alcanza con
-## que su nombre aparezca suelto en otro lado. Hay tres grupos.
+## que su nombre aparezca suelto en otro lado. Hay un grupo.
 const KNOWN_UNUSED: Array[String] = [
 	# 1) Arte aprobado o histórico que espera ser enchufado (hallazgo de T236, 2026-10-09; tareas T219, T220, T249 y M43):
 	# los SVG de «trabajo» y «agotado» esperan a alguien que los use, y el ícono de supresión y los anillos de la
@@ -30,44 +30,6 @@ const KNOWN_UNUSED: Array[String] = [
 	"res://assets/sprites/towers/rendered/cannon_level_2_icon.png",
 	"res://assets/sprites/towers/rendered/disruptor_suppression_arc_1.png",
 	"res://assets/sprites/towers/rendered/disruptor_pulse_ring.png",
-	# 2) SVG fuente heredados (H4 de T538): los reemplazaron los PNG de `rendered/` o los objetos que MapDrawings
-	# dibuja con `_draw`. NO se retiran ni se mueven hasta que Lucas resuelva D5 (¿a `art/` o se borran?).
-	# Los que `tools/` precarga (boss, base_3, turret_cannon, flyer) no figuran: sí tienen un uso.
-	# SVG fuente de «effects»:
-	"res://assets/sprites/effects/flame.svg",
-	# SVG fuente de «enemies»:
-	"res://assets/sprites/enemies/armored.svg", "res://assets/sprites/enemies/fast.svg",
-	"res://assets/sprites/enemies/guardian.svg", "res://assets/sprites/enemies/healer.svg",
-	"res://assets/sprites/enemies/mirror.svg", "res://assets/sprites/enemies/normal.svg",
-	"res://assets/sprites/enemies/shaman.svg", "res://assets/sprites/enemies/spider.svg",
-	"res://assets/sprites/enemies/spiderling.svg", "res://assets/sprites/enemies/tank.svg",
-	"res://assets/sprites/enemies/thief.svg", "res://assets/sprites/enemies/troll.svg",
-	# SVG fuente de «map»:
-	"res://assets/sprites/map/bloque.svg", "res://assets/sprites/map/bosque_explotable.svg",
-	"res://assets/sprites/map/bush.svg", "res://assets/sprites/map/cactus.svg",
-	"res://assets/sprites/map/campamento_vacio.svg", "res://assets/sprites/map/columna.svg",
-	"res://assets/sprites/map/estatua.svg", "res://assets/sprites/map/flores.svg",
-	"res://assets/sprites/map/gate.svg", "res://assets/sprites/map/helecho.svg",
-	"res://assets/sprites/map/mina.svg", "res://assets/sprites/map/poste_cintas.svg",
-	"res://assets/sprites/map/rock_a.svg", "res://assets/sprites/map/rock_b.svg",
-	"res://assets/sprites/map/tree.svg", "res://assets/sprites/map/tronco.svg",
-	# SVG fuente de «projectiles»:
-	"res://assets/sprites/projectiles/basic.svg", "res://assets/sprites/projectiles/burst.svg",
-	"res://assets/sprites/projectiles/cannon.svg", "res://assets/sprites/projectiles/fire.svg",
-	"res://assets/sprites/projectiles/frost.svg", "res://assets/sprites/projectiles/mortar.svg",
-	"res://assets/sprites/projectiles/multi.svg", "res://assets/sprites/projectiles/sniper.svg",
-	"res://assets/sprites/projectiles/tesla.svg",
-	# SVG fuente de «towers»:
-	"res://assets/sprites/towers/base_1.svg", "res://assets/sprites/towers/base_2.svg",
-	"res://assets/sprites/towers/mechanical_standard.svg", "res://assets/sprites/towers/turret_basic.svg",
-	"res://assets/sprites/towers/turret_burst.svg", "res://assets/sprites/towers/turret_fire.svg",
-	"res://assets/sprites/towers/turret_frost.svg", "res://assets/sprites/towers/turret_mortar.svg",
-	"res://assets/sprites/towers/turret_multi.svg", "res://assets/sprites/towers/turret_sniper.svg",
-	"res://assets/sprites/towers/turret_tesla.svg",
-	# SVG fuente de «ui»:
-	"res://assets/sprites/ui/demoledora.svg",
-	# Retirados por T551 (aislados en `art/t551-retirados/`, ya no están en `assets/`): enemies/rammer.png y
-	# enemies/rendered/healer.png (H3 de T538). El test los detectaría de nuevo si volvieran a `assets/` sin uso.
 ]
 
 var _files: Dictionary = {}   # { ruta: texto } de todo lo que puede nombrar un recurso
@@ -256,11 +218,7 @@ func test_retired_png_stay_out_of_assets() -> void:
 	assert_false(haystack.contains("sprites/enemies/rendered/healer.png"))
 
 
-func test_known_unused_svg_sources_are_listed() -> void:
-	# H4 / D5: los SVG fuente sin uso están listados (no movidos); sin esa lista, el test de arriba fallaría.
-	var svg: int = 0
-	for asset: String in KNOWN_UNUSED:
-		if asset.get_extension() == "svg":
-			svg += 1
-	assert_gt(svg, 40, "los SVG fuente heredados figuran en KNOWN_UNUSED")
-	assert_has(KNOWN_UNUSED, "res://assets/sprites/enemies/armored.svg")
+func test_legacy_svg_sources_are_gone() -> void:
+	# T555 y T556 / D5: los 50 SVG fuente heredados se borraron; los PNG de `rendered/` los reemplazan.
+	for file_name: String in ["enemies/armored", "towers/turret_basic", "projectiles/basic", "map/tree", "map/flores", "ui/demoledora"]:
+		assert_false(FileAccess.file_exists("res://assets/sprites/%s.svg" % file_name), "%s.svg ya se borró" % file_name)
