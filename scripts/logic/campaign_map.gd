@@ -153,6 +153,11 @@ static func number_text(index: int) -> String:
 	return str(index + 1)
 
 
+## «Mejor: 1 vida» / «Mejor: 20 vidas»: el singular con 1 (T474, formato de números en tarjetas).
+static func best_lives_text(lives: int) -> String:
+	return "Mejor: %d %s" % [lives, "vida" if lives == 1 else "vidas"]
+
+
 static func state_text(state: State) -> String:
 	match state:
 		State.LOCKED:

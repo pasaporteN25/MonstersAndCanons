@@ -1,5 +1,9 @@
 # Novedades del juego
 
+## «Mejor: 1 vida» en singular *(T474, 2026-10-28)*
+
+En las tarjetas de niveles, cuando tu mejor resultado fue ganar con una sola vida, ahora dice «Mejor: 1 vida» y no «1 vidas». Además se revisaron todas las pantallas con números de nivel (selector, récords, Wiki, final, entrada y juego): ninguna muestra ceros de más.
+
 ## Dos finales según tus estrellas *(T546, 2026-10-28)*
 
 El epílogo ahora tiene **dos imágenes**. Si ganaste los **15 niveles con 3 estrellas**, ves la colonia iluminada y los fuegos de los Moradores de siempre. En cualquier otro caso ves la misma historia con una **tormenta lejana** sobre el valle, sin nada reconocible: la duda de la frase queda abierta. Se decide al abrir el epílogo con lo que ya está guardado, así que si más tarde conseguís las estrellas que faltan, la próxima vez ves la luminosa. El texto, los botones y los créditos no cambian, y no se guarda nada nuevo.

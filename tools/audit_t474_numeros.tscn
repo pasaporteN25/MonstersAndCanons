@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://tools/audit_t474_numeros.gd" id="1"]
+
+[node name="AuditT474" type="Node"]
+script = ExtResource("1")

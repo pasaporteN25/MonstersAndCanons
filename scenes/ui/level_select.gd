@@ -457,7 +457,7 @@ func mode_status_text(mode: Dictionary, index: int) -> String:
 		return "Bloqueado"
 	var id: StringName = ModePacks.map_level(mode, index).id
 	if SaveManager.is_completed(id):
-		return "Mejor: %d vidas" % SaveManager.best_lives(id)
+		return CampaignMap.best_lives_text(SaveManager.best_lives(id))
 	return "¡Jugar!"
 
 
@@ -834,7 +834,7 @@ func status_text(index: int) -> String:
 	if not GameFlow.is_level_unlocked(index):
 		return "Bloqueado"
 	if SaveManager.is_completed(id):
-		return "Mejor: %d vidas" % SaveManager.best_lives(id)
+		return CampaignMap.best_lives_text(SaveManager.best_lives(id))
 	return "¡Jugar!"
 
 
@@ -842,5 +842,5 @@ func status_text(index: int) -> String:
 func community_status_text(entry: Dictionary) -> String:
 	var id: StringName = entry["id"]
 	if SaveManager.is_completed(id):
-		return "Mejor: %d vidas" % SaveManager.best_lives(id)
+		return CampaignMap.best_lives_text(SaveManager.best_lives(id))
 	return "¡Jugar!"
