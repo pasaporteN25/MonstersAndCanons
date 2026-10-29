@@ -81,6 +81,7 @@ func load_save() -> void:
 	_news_version = ""
 	_ui_prefs = UiPrefs.new()
 	_settings["siege_legacy_unlocked"] = []
+	Localization.set_language(_settings["language"])
 	ViewAllBinding.apply(_ui_prefs.view_all_key)  # M68 (RF-613)
 	if not FileAccess.file_exists(save_path):
 		return
@@ -97,6 +98,7 @@ func load_save() -> void:
 	_read_collections((parsed as Dictionary).get("collections", {}))
 	_read_levels((parsed as Dictionary).get("levels", {}))
 	_read_settings((parsed as Dictionary).get("settings", {}))
+	Localization.set_language(_settings["language"])  # T534: el idioma guardado rige desde el arranque
 	_migrate_selector_style((parsed as Dictionary).get("settings", {}))
 	_read_seen_enemies((parsed as Dictionary).get("seen_enemies", []))
 	_read_scores((parsed as Dictionary).get("scores", {}))

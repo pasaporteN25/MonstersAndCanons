@@ -71,8 +71,10 @@ func set_enabled(on: bool, save_path: String = "") -> void:
 	if save_path == "":
 		save_path = SAVE_PATH if on else SaveManager.DEFAULT_PATH
 	SaveManager.save_path = save_path
+	var language: StringName = SaveManager.language()  # T534: el idioma es del jugador, no del guardado; no cambia al entrar o salir
 	stats_path = save_path.get_basename() + "_stats.json" if on and save_path != SAVE_PATH else STATS_PATH
 	SaveManager.load_save()
+	SaveManager.set_setting("language", language)
 	if on:
 		register_actions()
 	else:

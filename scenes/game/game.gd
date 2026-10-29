@@ -16,7 +16,7 @@ const FAST_SPEED: float = 2.0
 ## RF-193: título de la tabla de récords en la pantalla final.
 const LEVEL_RECORDS_TITLE: String = "Récords del nivel"
 ## RF-217: cómo se llama el botón que vuelve al editor cuando se está probando un nivel.
-const BACK_TO_EDITOR: String = "Volver al editor"
+const BACK_TO_EDITOR_KEY: StringName = &"pause.back_to_editor"  # T534
 
 signal pause_changed(paused: bool)
 signal speed_changed(speed: float)
@@ -217,7 +217,7 @@ func _ready() -> void:
 	if testing:
 		# RF-217: al terminar o salir, se vuelve al editor con el borrador intacto.
 		end_screen.levels_pressed.connect(GameFlow.go_to_editor)
-		end_screen.set_levels_text(BACK_TO_EDITOR)
+		end_screen.set_levels_text(Localization.t(BACK_TO_EDITOR_KEY))
 	else:
 		end_screen.levels_pressed.connect(GameFlow.go_to_level_select)
 	end_screen.name_entered.connect(_on_record_name_entered)
@@ -232,7 +232,7 @@ func _ready() -> void:
 	pause_menu.retry_pressed.connect(restart)
 	if testing:
 		pause_menu.quit_pressed.connect(GameFlow.go_to_editor)
-		pause_menu.set_quit_text(BACK_TO_EDITOR)
+		pause_menu.set_quit_text(Localization.t(BACK_TO_EDITOR_KEY))
 	else:
 		pause_menu.quit_pressed.connect(GameFlow.go_to_main_menu)
 

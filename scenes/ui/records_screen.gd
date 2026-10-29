@@ -4,9 +4,6 @@
 # los anota la pantalla final.
 extends Control
 
-const HALL_SUBTITLE: String = "Para quien ganó todos los niveles"
-const HALL_EMPTY: String = "Todavía nadie ganó todos los niveles"
-
 ## RF-388: dónde se buscan los modos (los tests usan otras carpetas; se cambian ANTES de agregar la pantalla).
 var modes_official_dir: String = ModePacks.OFFICIAL_DIR
 var modes_user_dir: String = ModePacks.USER_DIR
@@ -31,6 +28,8 @@ var _hall: HallOfFame
 
 
 func _ready() -> void:
+	Localization.apply(self, {"Center/Rows/Title": &"records.title", "%HallButton": &"records.hall_button",
+			"%BackButton": &"records.back"})
 	var margin := MarginContainer.new()
 	for side: String in ["left", "top", "right", "bottom"]:
 		margin.add_theme_constant_override("margin_" + side, 14)
@@ -62,7 +61,7 @@ func current_source() -> int:
 
 ## Nombre de la fuente `index` (0 = Campaña).
 func source_name(index: int) -> String:
-	return "Campaña" if index == 0 else String(_sources[index - 1]["name"])
+	return Localization.t(&"records.campaign") if index == 0 else String(_sources[index - 1]["name"])
 
 
 ## Pasa a otra fuente (da la vuelta) y vuelve a su primer mapa.
@@ -100,7 +99,7 @@ func show_level(index: int) -> void:
 	if _source == 0:
 		_index = posmod(index, count)
 		var level: LevelData = GameFlow.level(_index)
-		_level_name.text = "Nivel %d · %s" % [_index + 1, level.display_name]
+		_level_name.text = Localization.t_fmt(&"records.level", {"n": _index + 1, "name": level.display_name})
 		_table.show_scores(SaveManager.scores(level.id))
 		return
 	var source: Dictionary = _sources[_source - 1]
@@ -108,14 +107,14 @@ func show_level(index: int) -> void:
 	if not errors.is_empty():
 		# El modo no se pudo leer: se dice por qué y no se busca ningún registro.
 		_index = 0
-		_level_name.text = "Modo con errores"
+		_level_name.text = Localization.t(&"records.mode_errors")
 		_table_panel.visible = false
 		_diagnosis.text = errors[0]
 		_diagnosis.visible = true
 		return
 	if count == 0:
 		_index = 0
-		_level_name.text = "Sin mapas"
+		_level_name.text = Localization.t(&"records.no_maps")
 		_table.show_scores([])
 		return
 	_index = posmod(index, count)
@@ -146,7 +145,7 @@ func open_hall_of_fame() -> void:
 	var entries: Array = GameFlow.hall_of_fame()
 	_hall = HallOfFame.new()
 	add_child(_hall)
-	_hall.show_table(entries, -1, HALL_SUBTITLE if not entries.is_empty() else HALL_EMPTY)
+	_hall.show_table(entries, -1, Localization.t(&"records.hall_subtitle" if not entries.is_empty() else &"records.hall_empty"))
 	_hall.closed.connect(close_hall_of_fame)
 
 

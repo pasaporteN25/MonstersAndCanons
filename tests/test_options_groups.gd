@@ -71,7 +71,7 @@ func test_every_option_row_is_declared_in_exactly_one_tab() -> void:
 		for node_name: StringName in group:
 			assert_false(seen.has(node_name), "«%s» está en una sola solapa" % node_name)
 			seen[node_name] = true
-	assert_eq(seen.size(), 22)
+	assert_eq(seen.size(), 24, "22 filas de siempre + las 2 del selector de idioma (T534)")
 
 
 func test_pc_shows_five_tabs_and_keeps_the_rows_in_their_pages() -> void:

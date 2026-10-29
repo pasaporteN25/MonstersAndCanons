@@ -18,6 +18,8 @@ func _ready() -> void:
 	visible = false
 	_keep_button.pressed.connect(_on_keep_pressed)
 	_leave_button.pressed.connect(_on_leave_pressed)
+	Localization.apply(self, {"DialogPanel/Center/Panel/Margin/Rows/Title": &"exit.title", "%KeepButton": &"exit.keep",
+			"%LeaveButton": &"exit.leave"})
 	Audio.add_click_sounds(self)
 
 

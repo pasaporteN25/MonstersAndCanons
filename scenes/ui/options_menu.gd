@@ -10,34 +10,25 @@ signal closed
 ## (el menú principal se vuelve a armar).
 signal dev_mode_changed(on: bool)
 
-const ADMIN_ON_TEXT: String = "Activar modo de pruebas"
-const ADMIN_OFF_TEXT: String = "Volver al juego normal"
-## M63 (RF-576): el tutorial del nivel 1, en una sola fila para que el panel no crezca.
-const TUTORIAL_CHECK_TEXT: String = "Tutorial del nivel 1"
-const TUTORIAL_REPLAY_TEXT: String = "Volver a verlo"
-const TUTORIAL_REPLAYED_TEXT: String = "Se verá en el nivel 1"
-## M66 (RF-672): la presentación de los jefes. La clave de guardado sigue siendo `boss_entrance`.
-const BOSS_ENTRANCE_TEXT: String = "Presentación de los jefes"
-## M70 (RF-644): preferencia para ocultar los consejos de la pantalla de derrota.
-const DEFEAT_ADVICE_TEXT: String = "Consejos en la derrota"
-## M75, RF-678.
-const RANGE_DISPLAY_TEXT: String = "Círculo de alcance"
-## M68 (RF-614): la tecla de «Ver todo».
-const VIEW_ALL_LABEL: String = "Tecla de «Ver todo»"
-const VIEW_ALL_PROMPT: String = "Presioná una tecla…"
-const VIEW_ALL_RESTORE: String = "Restaurar"
-## M67 (RF-607): el botón de las novedades y su texto cuando no hay nada para abrir.
-const NEWS_BUTTON_TEXT: String = "Novedades de esta versión"
-const NEWS_EMPTY_TEXT: String = "No hay novedades"
+## T534: los textos viven en el catálogo de idiomas (`data/i18n/`, claves `options.*`). Textos fijos de la escena:
+const TEXT_KEYS: Dictionary = {
+	"Title": &"options.title", "BackButton": &"options.back", "MusicLabel": &"options.audio.music",
+	"SfxLabel": &"options.audio.sfx", "FullscreenCheck": &"options.display.fullscreen",
+	"DamageNumbersCheck": &"options.display.damage_numbers", "UpgradeFxCheck": &"options.display.upgrade_fx",
+	"CreditsSection": &"options.advanced.credits_section", "CreditsButton": &"options.advanced.credits_button",
+	"AdminSection": &"options.admin.section", "AdminConfirmText": &"options.admin.confirm_text",
+	"AdminConfirmButton": &"options.admin.confirm_yes", "AdminCancelButton": &"options.admin.confirm_no",
+}
 
 ## M75 (RF-684, D-197) y RF-708: filas por solapa en orden de lectura.
-const OPTION_GROUP_NAMES: Array[String] = ["Sonido", "Pantalla", "Partida y ayudas", "Controles", "Avanzado"]
+const OPTION_GROUP_KEYS: Array[StringName] = [&"options.group.sound", &"options.group.display", &"options.group.game",
+		&"options.group.controls", &"options.group.advanced"]
 const OPTION_GROUP_ROWS: Array = [
 	[&"MusicLabel", &"MusicSlider", &"SfxLabel", &"SfxSlider"],
 	[&"FullscreenCheck", &"DamageNumbersCheck", &"UpgradeFxCheck", &"RangeDisplayLabel", &"RangeDisplaySelector"],
 	[&"TutorialRow", &"BossEntranceCheck", &"DefeatAdviceCheck"],
 	[&"ViewAllRow"],
-	[&"UiModeLabel", &"UiModeSelector", &"CreditsSection", &"VersionLabel", &"CreditsButton", &"NewsButton",
+	[&"LanguageLabel", &"LanguageSelector", &"UiModeLabel", &"UiModeSelector", &"CreditsSection", &"VersionLabel", &"CreditsButton", &"NewsButton",
 		&"AdminSection", &"AdminButton", &"AdminConfirm"],
 ]
 const OPTIONS_PANEL_WIDTH: float = 920.0
@@ -73,6 +64,11 @@ var normal_save_path: String = ""
 @onready var _title: Control = $Center/Panel/Margin/Frame/Title
 
 var _ui_mode_selector: OptionButton
+var _language_label: Label
+var _language_selector: OptionButton
+var _range_display_label: Label
+var _ui_mode_label: Label
+var _view_all_label: Label
 var _group_pages: Array[VBoxContainer] = []
 var _tab_buttons: Array[Button] = []
 var _active_tab: int = 0
@@ -107,6 +103,7 @@ func _ready() -> void:
 	_upgrade_fx_check.toggled.connect(
 		func(on: bool) -> void: SaveManager.set_setting("upgrade_fx", on))  # M65, RF-593
 	_build_tutorial_row()
+	_build_language_selector()  # T534: oculto mientras `Localization.SELECTOR_ENABLED` sea false
 	_build_ui_mode_selector()
 	_build_boss_entrance_check()  # M66
 	_build_defeat_advice_check()  # M70, RF-644
@@ -119,7 +116,6 @@ func _ready() -> void:
 	_admin_confirm_button.pressed.connect(set_dev_mode.bind(true))
 	_admin_cancel_button.pressed.connect(_on_admin_cancel)
 	_back_button.pressed.connect(close)
-	_version_label.text = GameVersion.label(GameVersion.raw())  # RF-554
 	credits = CreditsScreen.new()
 	add_child(credits)
 	credits.closed.connect(_credits_button.grab_focus)
@@ -128,6 +124,10 @@ func _ready() -> void:
 	_refresh_admin()
 	MenuTouch.attach(self)  # RF-550, RF-551: botones de 56 px y desplazamiento táctil en el celular
 	resized.connect(_fit_scroll)
+	_apply_texts()
+	SaveManager.setting_changed.connect(func(key: String, _value: Variant) -> void:
+		if key == "language":
+			_apply_texts())
 
 
 func open() -> void:
@@ -144,8 +144,10 @@ func open() -> void:
 	_tutorial_check.set_pressed_no_signal(SaveManager.tutorial_enabled())
 	_stop_view_all_capture()
 	_refresh_view_all_row()
-	_tutorial_replay.text = TUTORIAL_REPLAY_TEXT
+	_tutorial_replay.text = Localization.t(&"options.game.tutorial_replay")
 	_tutorial_replay.disabled = false
+	if _language_selector != null:
+		_language_selector.select(_language_selector.get_item_index(Localization.SUPPORTED.find(SaveManager.language())))
 	_refresh_news_button()
 	_set_confirming(false)
 	visible = true
@@ -185,7 +187,7 @@ func admin_button_text() -> String:
 func _refresh_admin() -> void:
 	_admin_section.visible = admin_available
 	_admin_button.visible = admin_available
-	_admin_button.text = ADMIN_OFF_TEXT if DevMode.enabled else ADMIN_ON_TEXT
+	_admin_button.text = Localization.t(&"options.admin.disable" if DevMode.enabled else &"options.admin.enable")
 
 
 ## RF-383: la confirmación ocupa el panel entero (solo queda el título), así el panel no crece y
@@ -223,14 +225,17 @@ func _build_tabs_and_pages() -> void:
 		_rows.add_child(page)
 		for node_name: StringName in OPTION_GROUP_ROWS[group_index]:
 			var node: Node = by_name.get(node_name)
+			if node == null and node_name in [&"LanguageLabel", &"LanguageSelector"]:
+				continue  # T534: el selector de idioma no existe mientras esté oculto
 			if node == null:
-				push_error("Opciones: no existe la fila «%s» de «%s»" % [node_name, OPTION_GROUP_NAMES[group_index]])
+				push_error("Opciones: no existe la fila «%s» de «%s»" % [node_name, OPTION_GROUP_KEYS[group_index]])
 				continue
 			node.reparent(page, false)
 		_group_pages.append(page)
 		var tab: Button = Button.new()
 		tab.name = "Tab%d" % group_index
-		tab.text = "Partida\ny ayudas" if group_index == 2 else OPTION_GROUP_NAMES[group_index]
+		tab.text = _tab_text(group_index)
+		tab.set_meta("group_index", group_index)  # T534: en el celular falta «Controles», así que el índice de la solapa no alcanza
 		tab.toggle_mode = true
 		tab.button_group = button_group
 		tab.custom_minimum_size.y = 48.0
@@ -330,14 +335,14 @@ func _build_tutorial_row() -> void:
 	row.add_theme_constant_override("separation", 8)
 	_tutorial_check = CheckBox.new()
 	_tutorial_check.name = "TutorialCheck"
-	_tutorial_check.text = TUTORIAL_CHECK_TEXT
+	_tutorial_check.text = Localization.t(&"options.game.tutorial")
 	_tutorial_check.add_theme_font_size_override("font_size", 18)
 	_tutorial_check.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_tutorial_check.clip_text = true  # que la fila no ensanche el panel (M61 fija 460 px)
 	row.add_child(_tutorial_check)
 	_tutorial_replay = Button.new()
 	_tutorial_replay.name = "TutorialReplay"
-	_tutorial_replay.text = TUTORIAL_REPLAY_TEXT
+	_tutorial_replay.text = Localization.t(&"options.game.tutorial_replay")
 	_tutorial_replay.add_theme_font_size_override("font_size", 15)
 	_tutorial_replay.custom_minimum_size.y = 44
 	_tutorial_replay.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -349,16 +354,14 @@ func _build_tutorial_row() -> void:
 
 ## M75, RF-678: Oculto también es el valor para guardados viejos.
 func _build_range_display_selector() -> void:
-	var label := Label.new()
-	label.name = "RangeDisplayLabel"
-	label.text = RANGE_DISPLAY_TEXT
-	label.add_theme_font_size_override("font_size", 20)
-	_rows.add_child(label)
+	_range_display_label = Label.new()
+	_range_display_label.name = "RangeDisplayLabel"
+	_range_display_label.add_theme_font_size_override("font_size", 20)
+	_rows.add_child(_range_display_label)
 	_range_display_selector = OptionButton.new()
 	_range_display_selector.name = "RangeDisplaySelector"
-	_range_display_selector.add_item("Oculto", 0)
-	_range_display_selector.add_item("Sutil", 1)
-	_range_display_selector.add_item("Completo", 2)
+	for id: int in 3:
+		_range_display_selector.add_item("", id)
 	_range_display_selector.custom_minimum_size.y = 44
 	_rows.add_child(_range_display_selector)
 	_range_display_selector.item_selected.connect(func(selected: int) -> void:
@@ -375,7 +378,7 @@ func _on_tutorial_toggled(on: bool) -> void:
 func _on_tutorial_replay() -> void:
 	SaveManager.reset_tutorial()
 	_tutorial_check.set_pressed_no_signal(true)
-	_tutorial_replay.text = TUTORIAL_REPLAYED_TEXT
+	_tutorial_replay.text = Localization.t(&"options.game.tutorial_replayed")
 	_tutorial_replay.disabled = true
 
 
@@ -383,7 +386,7 @@ func _on_tutorial_replay() -> void:
 func _build_boss_entrance_check() -> void:
 	_boss_entrance_check = CheckBox.new()
 	_boss_entrance_check.name = "BossEntranceCheck"
-	_boss_entrance_check.text = BOSS_ENTRANCE_TEXT
+	_boss_entrance_check.text = Localization.t(&"options.game.boss_entrance")
 	_boss_entrance_check.add_theme_font_size_override("font_size", 20)
 	_boss_entrance_check.clip_text = true  # que la fila no ensanche el panel
 	_rows.add_child(_boss_entrance_check)
@@ -395,7 +398,7 @@ func _build_boss_entrance_check() -> void:
 func _build_defeat_advice_check() -> void:
 	_defeat_advice_check = CheckBox.new()
 	_defeat_advice_check.name = "DefeatAdviceCheck"
-	_defeat_advice_check.text = DEFEAT_ADVICE_TEXT
+	_defeat_advice_check.text = Localization.t(&"options.game.defeat_advice")
 	_defeat_advice_check.add_theme_font_size_override("font_size", 20)
 	_defeat_advice_check.clip_text = true
 	_rows.add_child(_defeat_advice_check)
@@ -409,10 +412,9 @@ func _build_view_all_row() -> void:
 	var box := VBoxContainer.new()
 	box.name = "ViewAllRow"
 	box.add_theme_constant_override("separation", 4)
-	var label := Label.new()
-	label.text = VIEW_ALL_LABEL
-	label.add_theme_font_size_override("font_size", 20)
-	box.add_child(label)
+	_view_all_label = Label.new()
+	_view_all_label.add_theme_font_size_override("font_size", 20)
+	box.add_child(_view_all_label)
 	var line := HBoxContainer.new()
 	line.add_theme_constant_override("separation", 8)
 	box.add_child(line)
@@ -423,7 +425,7 @@ func _build_view_all_row() -> void:
 	line.add_child(_view_all_button)
 	_view_all_restore = Button.new()
 	_view_all_restore.name = "ViewAllRestoreButton"
-	_view_all_restore.text = VIEW_ALL_RESTORE
+	_view_all_restore.text = Localization.t(&"options.controls.view_all_restore")
 	_view_all_restore.custom_minimum_size = Vector2(120, 40)
 	_view_all_restore.pressed.connect(set_view_all_key.bind(ViewAllBinding.DEFAULT_KEY))
 	line.add_child(_view_all_restore)
@@ -442,7 +444,7 @@ func _refresh_view_all_row() -> void:
 	if _view_all_button == null:
 		return
 	var key: int = SaveManager.get_ui_prefs().view_all_key
-	_view_all_button.text = VIEW_ALL_PROMPT if _view_all_capturing else ViewAllBinding.key_text(key)
+	_view_all_button.text = Localization.t(&"options.controls.view_all_prompt") if _view_all_capturing else ViewAllBinding.key_text(key)
 	_view_all_restore.disabled = key == ViewAllBinding.DEFAULT_KEY
 
 
@@ -462,7 +464,7 @@ func set_view_all_key(keycode: int) -> bool:
 	_view_all_capturing = false
 	var owner_name: String = "" if keycode == ViewAllBinding.DEFAULT_KEY else ViewAllBinding.conflict(keycode)
 	if owner_name != "":
-		_view_all_note.text = "Esa tecla ya la usa %s. Elegí otra." % owner_name
+		_view_all_note.text = Localization.t_fmt(&"options.controls.key_conflict", {"owner": owner_name})
 		_view_all_note.visible = true
 		_refresh_view_all_row()
 		return false
@@ -512,7 +514,11 @@ func _refresh_news_button() -> void:
 	if not _news_data.is_valid():
 		push_warning("Las novedades no se pueden abrir: %s" % "; ".join(_news_data.errors))
 	_news_button.disabled = not usable
-	_news_button.text = NEWS_BUTTON_TEXT if usable else String(_news_data.labels.get("sin_novedades", NEWS_EMPTY_TEXT))
+	# El texto vacío del archivo de novedades (`labels.sin_novedades`) es de datos; solo en español se respeta (T534).
+	var empty_text: String = Localization.t(&"options.advanced.news_empty")
+	if Localization.language == Localization.DEFAULT_LANGUAGE:
+		empty_text = String(_news_data.labels.get("sin_novedades", empty_text))
+	_news_button.text = Localization.t(&"options.advanced.news_button") if usable else empty_text
 
 
 func _on_news_pressed() -> void:
@@ -531,17 +537,72 @@ func news_button() -> Button:
 
 func _build_ui_mode_selector() -> void:
 	# RF-684: «Interfaz» va en «Avanzado», al principio.
-	var label := Label.new()
-	label.name = "UiModeLabel"
-	label.text = "Interfaz"
-	label.add_theme_font_size_override("font_size", 20)
-	_rows.add_child(label)
+	_ui_mode_label = Label.new()
+	_ui_mode_label.name = "UiModeLabel"
+	_ui_mode_label.add_theme_font_size_override("font_size", 20)
+	_rows.add_child(_ui_mode_label)
 	_ui_mode_selector = OptionButton.new()
 	_ui_mode_selector.name = "UiModeSelector"
-	_ui_mode_selector.add_item("Automática", UiMode.AUTOMATIC)
-	_ui_mode_selector.add_item("Celular", UiMode.MOBILE)
-	_ui_mode_selector.add_item("PC", UiMode.PC)
+	for id: int in [UiMode.AUTOMATIC, UiMode.MOBILE, UiMode.PC]:
+		_ui_mode_selector.add_item("", id)
 	_ui_mode_selector.custom_minimum_size.y = 44
 	_rows.add_child(_ui_mode_selector)
 	_ui_mode_selector.item_selected.connect(func(index: int) -> void:
 		SaveManager.set_setting("ui_mode", _ui_mode_selector.get_item_id(index)))
+
+
+## T534, RF-727: el selector de idioma, al principio de «Avanzado». Solo se arma con `Localization.selector_visible`
+## (`SELECTOR_ENABLED`; los tests lo prenden). Cambiar el idioma se guarda como preferencia y se aplica al momento.
+func _build_language_selector() -> void:
+	if not Localization.selector_visible:
+		return
+	_language_label = Label.new()
+	_language_label.name = "LanguageLabel"
+	_language_label.add_theme_font_size_override("font_size", 20)
+	_rows.add_child(_language_label)
+	_language_selector = OptionButton.new()
+	_language_selector.name = "LanguageSelector"
+	for index: int in Localization.SUPPORTED.size():
+		_language_selector.add_item("", index)  # el nombre de cada idioma se pone en `_apply_texts`
+	_language_selector.custom_minimum_size.y = 44
+	_rows.add_child(_language_selector)
+	_language_selector.item_selected.connect(func(selected: int) -> void:
+		SaveManager.set_setting("language", Localization.SUPPORTED[_language_selector.get_item_id(selected)]))
+
+
+func language_selector() -> OptionButton:
+	return _language_selector
+
+
+func _tab_text(group_index: int) -> String:
+	return Localization.t(&"options.group.game_tab" if group_index == 2 else OPTION_GROUP_KEYS[group_index])
+
+
+## T534: pone (o vuelve a poner, al cambiar el idioma) todos los textos de la pantalla.
+func _apply_texts() -> void:
+	Localization.apply(self, TEXT_KEYS)
+	_version_label.text = GameVersion.label(GameVersion.raw())  # RF-554
+	_refresh_admin()
+	for index: int in _tab_buttons.size():
+		_tab_buttons[index].text = _tab_text(int(_tab_buttons[index].get_meta("group_index")))
+	if _language_selector != null:
+		_language_label.text = Localization.t(&"options.language.label")
+		for index: int in Localization.SUPPORTED.size():
+			_language_selector.set_item_text(index, Localization.t(StringName("options.language.%s" % Localization.SUPPORTED[index])))
+	_tutorial_check.text = Localization.t(&"options.game.tutorial")
+	_tutorial_replay.text = Localization.t(&"options.game.tutorial_replayed" if _tutorial_replay.disabled else &"options.game.tutorial_replay")
+	_boss_entrance_check.text = Localization.t(&"options.game.boss_entrance")
+	_defeat_advice_check.text = Localization.t(&"options.game.defeat_advice")
+	_range_display_label.text = Localization.t(&"options.display.range")
+	var range_keys: Array[StringName] = [&"options.display.range_hidden", &"options.display.range_subtle", &"options.display.range_full"]
+	for index: int in range_keys.size():
+		_range_display_selector.set_item_text(index, Localization.t(range_keys[index]))
+	_ui_mode_label.text = Localization.t(&"options.advanced.interface")
+	var mode_keys: Dictionary = {UiMode.AUTOMATIC: &"options.advanced.interface_auto", UiMode.MOBILE: &"options.advanced.interface_mobile", UiMode.PC: &"options.advanced.interface_pc"}
+	for index: int in _ui_mode_selector.item_count:
+		_ui_mode_selector.set_item_text(index, Localization.t(mode_keys[_ui_mode_selector.get_item_id(index)]))
+	if _view_all_label != null:
+		_view_all_label.text = Localization.t(&"options.controls.view_all")
+		_view_all_restore.text = Localization.t(&"options.controls.view_all_restore")
+		_refresh_view_all_row()
+	_refresh_news_button()

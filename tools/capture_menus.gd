@@ -1,6 +1,7 @@
 # Capturas reales de los menús (M61, T310): instancia cada pantalla en el tamaño de ventana que se pida,
 # con la interfaz forzada a celular o a PC, y guarda un PNG por pantalla. Se corre con ventana (no `--headless`):
-#   godot --path . res://tools/capture_menus.tscn -- /ruta/de/salida 1280x720 mobile|pc
+#   godot --path . res://tools/capture_menus.tscn -- /ruta/de/salida 1280x720 mobile|pc [es|en]
+# El idioma (T534) es opcional y solo vale para esta corrida (no se guarda): sin él, el de siempre.
 # Imprime, por pantalla, qué botones quedan fuera de la ventana virtual (1280 × 720).
 extends Node
 
@@ -39,13 +40,15 @@ func run() -> void:
 		for _i: int in 10:
 			await get_tree().process_frame
 	get_node("/root/SaveManager").call("set_setting", "ui_mode", 1 if mode == "mobile" else 2)
+	if args.size() > 3:
+		get_node("/root/SaveManager").call("set_setting", "language", args[3])
 	print("ventana %s, contenido %s, modo %s" % [get_window().size, get_window().content_scale_size, mode])
 	for screen: String in SCREENS:
 		var holder: Node = await _open(screen)
 		for _i: int in 4:
 			await get_tree().process_frame
 		await RenderingServer.frame_post_draw
-		get_viewport().get_texture().get_image().save_png("%s/%s_%s.png" % [out, mode, screen.get_file().get_basename()])
+		get_viewport().get_texture().get_image().save_png("%s/%s_%s%s.png" % [out, mode, screen.get_file().get_basename(), "_" + args[3] if args.size() > 3 else ""])
 		_report(screen, holder, get_viewport().get_visible_rect().size)
 		holder.queue_free()
 		await get_tree().process_frame

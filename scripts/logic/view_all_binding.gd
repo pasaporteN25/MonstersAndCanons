@@ -21,9 +21,9 @@ static func is_valid_key(keycode: int) -> bool:
 ## Las teclas F1 a F12 y las reservadas cuentan como ocupadas (el panel de pruebas, F1, y sus atajos).
 static func conflict(keycode: int) -> String:
 	if not is_valid_key(keycode):
-		return "una tecla reservada"
+		return Localization.t(&"options.controls.reserved_key")
 	if keycode >= KEY_F1 and keycode <= KEY_F12:
-		return "el panel de pruebas"
+		return Localization.t(&"options.controls.test_panel")
 	for action: StringName in InputMap.get_actions():
 		if action == ACTION or String(action).begins_with("ui_"):
 			continue
@@ -37,13 +37,15 @@ static func conflict(keycode: int) -> String:
 ## Cómo se llama cada acción de teclado en los avisos de Opciones.
 static func label_for_action(action: StringName) -> String:
 	var names: Dictionary = {
-		&"switch_tab": "cambiar de pestaña", &"cancel": "cancelar", &"start_wave": "empezar la oleada",
-		&"pause": "pausa", &"toggle_speed": "velocidad", &"upgrade": "mejorar", &"sell": "vender",
+		&"switch_tab": &"options.controls.action_switch_tab", &"cancel": &"options.controls.action_cancel",
+		&"start_wave": &"options.controls.action_start_wave", &"pause": &"options.controls.action_pause",
+		&"toggle_speed": &"options.controls.action_toggle_speed", &"upgrade": &"options.controls.action_upgrade",
+		&"sell": &"options.controls.action_sell",
 	}
 	if names.has(action):
-		return names[action]
+		return Localization.t(names[action])
 	if String(action).begins_with("build_"):
-		return "elegir una torre"
+		return Localization.t(&"options.controls.action_build")
 	return String(action)
 
 
@@ -72,5 +74,5 @@ static func current_key() -> int:
 ## El nombre de la tecla para mostrar («V», «Tab», «Espacio»).
 static func key_text(keycode: int) -> String:
 	if keycode == KEY_SPACE:
-		return "Espacio"
+		return Localization.t(&"options.controls.key_space")
 	return OS.get_keycode_string(keycode)

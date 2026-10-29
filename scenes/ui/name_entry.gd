@@ -29,7 +29,7 @@ func setup(length: int, initial: String) -> NameEntry:
 		_letters.append(HighScores.LETTERS.find(clean[i]))
 		row.add_child(_slot_column(i))
 	var done := Button.new()
-	done.text = "Listo  [Enter]"
+	done.text = Localization.t(&"name_entry.done")
 	done.focus_mode = Control.FOCUS_NONE
 	done.custom_minimum_size = Vector2(0, 44)
 	done.pressed.connect(confirm)

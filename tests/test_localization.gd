@@ -101,7 +101,8 @@ func test_selector_stays_hidden_until_the_english_is_complete() -> void:
 	assert_false(Localization.SELECTOR_ENABLED)
 	var options: Node = preload("res://scenes/ui/options_menu.tscn").instantiate()
 	add_child_autofree(options)
-	assert_null(options.find_child("LanguageOption", true, false))
+	assert_null(options.find_child("LanguageSelector", true, false), "no existe mientras esté oculto")
+	assert_null(options.find_child("LanguageLabel", true, false))
 
 
 func test_language_is_a_setting_that_does_not_change_the_save_version_or_progress() -> void:

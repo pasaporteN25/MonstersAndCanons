@@ -41,7 +41,16 @@ var news_screen: NewsScreen
 var _two_columns: bool = false
 
 
+## T534: los textos fijos de la escena, por clave del catálogo (`data/i18n/`).
+const TEXT_KEYS: Dictionary = {
+	"%PlayButton": &"menu.main.play", "%RecordsButton": &"menu.main.records", "%WikiButton": &"menu.main.wiki",
+	"%EditorButton": &"menu.main.tools", "%OptionsButton": &"menu.main.options", "%QuitButton": &"menu.main.quit",
+}
+
+
 func _ready() -> void:
+	_apply_texts()
+	SaveManager.setting_changed.connect(_on_setting_changed)
 	intro_screen = IntroScreen.new()
 	add_child(intro_screen)
 	intro_screen.finished.connect(_on_intro_finished)
@@ -68,6 +77,15 @@ func _ready() -> void:
 	add_child(news_screen)
 	news_screen.closed.connect(_play_button.grab_focus)
 	_show_news_if_new()
+
+
+func _apply_texts() -> void:
+	Localization.apply(self, TEXT_KEYS)
+
+
+func _on_setting_changed(key: String, _value: Variant) -> void:
+	if key == "language":
+		_apply_texts()
 
 
 ## RF-498: «Jugar». Abre la intro si el guardado no la vio (fuera del modo de pruebas y con el archivo en orden);

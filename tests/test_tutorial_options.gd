@@ -82,12 +82,12 @@ func test_the_replay_button_rearms_it_and_says_where_it_will_be_seen() -> void:
 	assert_true(SaveManager.tutorial_enabled())
 	assert_false(SaveManager.tutorial_done())
 	assert_true(_check().button_pressed)
-	assert_eq(_replay().text, OptionsMenu.TUTORIAL_REPLAYED_TEXT)
+	assert_eq(_replay().text, Localization.t(&"options.game.tutorial_replayed"))
 	assert_true(_replay().disabled, "ya está armado: no hay nada más que apretar")
 	SaveManager.load_save()
 	assert_false(SaveManager.tutorial_done(), "se guardó enseguida")
 	options.open()
-	assert_eq(_replay().text, OptionsMenu.TUTORIAL_REPLAY_TEXT, "al volver a abrir Opciones el botón vuelve a estar")
+	assert_eq(_replay().text, Localization.t(&"options.game.tutorial_replay"), "al volver a abrir Opciones el botón vuelve a estar")
 	assert_false(_replay().disabled)
 
 

@@ -3,9 +3,6 @@
 class_name ToolsHub
 extends Control
 
-const MAP_EDITOR_TITLE: String = "Editor de mapas"
-const BANNER_EDITOR_TITLE: String = "Editor de banderines"
-
 ## Costuras de los tests (no cambian de escena): a dónde va cada botón.
 var open_map_editor: Callable = GameFlow.go_to_editor
 var open_banner_editor: Callable = GameFlow.go_to_banner_editor
@@ -17,9 +14,9 @@ var go_back: Callable = GameFlow.go_to_main_menu
 
 
 func _ready() -> void:
-	_map_editor_button.text = MAP_EDITOR_TITLE
+	Localization.apply(self, {"%MapEditorButton": &"tools.map_editor", "%BannerEditorButton": &"tools.banner_editor",
+			"%BackButton": &"tools.back", "Center/Rows/Title": &"tools.title"})
 	_map_editor_button.disabled = not is_tool_available(&"map_editor")
-	_banner_editor_button.text = BANNER_EDITOR_TITLE
 	_banner_editor_button.disabled = not is_tool_available(&"banner_editor")
 	_map_editor_button.pressed.connect(func() -> void: open_map_editor.call())
 	_banner_editor_button.pressed.connect(func() -> void: open_banner_editor.call())
