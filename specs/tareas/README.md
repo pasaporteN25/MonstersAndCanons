@@ -169,3 +169,7 @@ Las fichas [T523](T523-muestras-adornos-m79.md) y [T524](T524-integrar-adornos-m
 ## 24. Flora alienígena rotativa · T541/T542
 
 T541 registra RF-728/D-218 a partir de la elección explícita de Lucas del 2026-10-27: conservar A/B/C de T540 y rotarlas de forma estable por casilla. Los PNG nuevos son los modelos aprobados para volverse activos en T542; hasta entonces `flores.svg` sigue en uso y después queda histórico. La dirección conserva lectura vegetal con rasgos extraños de Cántaro, sin inventar canon. T542 integra los PNG ya aprobados en el dibujo de leyenda `flores`, sin cambiar los datos de nivel. T542 depende de T541 y del merge de #139; el PR de implementación apunta a `main` y explicita las dependencias.
+
+## 23. Limpieza del backlog · T559
+
+T559 (2026-10-29) reconcilia tres entradas abiertas contra `origin/main`, solo en documentos. **T233 y T548 pasan a `[x]`**: T233 quedó cubierta por T267b/T277 (Central), T549 (abastecimiento), T547 (retiro del arte viejo y de `hito`) y T546 (imagen del final), y T548 ya tenía su Resultado en otra entrada. **T532 sigue `[ ]`**: el código y las capturas están, pero falta la validación de Lucas en pantalla real. La ficha [T233](T233-arte-final.md) queda como antecedente.
