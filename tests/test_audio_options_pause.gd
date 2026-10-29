@@ -1,7 +1,7 @@
 # Tests de sonido, opciones y menú de pausa (T46-T48, RF-113, RF-114, RF-116).
 extends GutTest
 
-const TEST_PATH: String = "user://test_save.json"
+var TEST_PATH: String = "user://test_save_%d.json" % OS.get_process_id()  # único por proceso (T560)
 const GAME_SCENE: PackedScene = preload("res://scenes/game/game.tscn")
 
 

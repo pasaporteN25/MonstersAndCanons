@@ -4,7 +4,7 @@ extends GutTest
 
 const SELECT_SCENE: PackedScene = preload("res://scenes/ui/level_select.tscn")
 const TEST_DIR: String = "user://test_community_select/"
-const TEST_SAVE: String = "user://test_save.json"
+var TEST_SAVE: String = "user://test_save_%d.json" % OS.get_process_id()  # único por proceso (T560)
 const SCREEN_WIDTH: float = 1280.0
 
 var opened_folders: Array[String] = []

@@ -10,6 +10,9 @@ Uso (desde la raíz del proyecto, requiere Pillow):
     python3 tools/t475_planos_postes.py --verify   # compara los JSON de nivel con los hashes del índice
                                                    # (sale con código 1 si algún mapa jugable cambió)
 
+OJO (T560): el índice tiene a mano la sección «Referencia vigente» con los hashes posteriores a T475/T558.
+Regenerar el índice sin esa sección hace que `--verify` vuelva a marcar «CAMBIÓ» en 3, 4, 8, 9 y 11 a 15.
+
 Los planos NO son capturas del motor: son un dibujo de la grilla leída de los JSON. El arte del poste
 (assets/sprites/map/rendered/banner_post_enemy.png) se pega solo como referencia de tamaño.
 La clasificación de letras replica scripts/logic/map_grid.gd y scripts/logic/level_file.gd.

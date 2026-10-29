@@ -6,7 +6,7 @@ extends GutTest
 const EDITOR_SCENE: PackedScene = preload("res://scenes/editor/map_editor.tscn")
 const BANNER_SCENE: PackedScene = preload("res://scenes/editor/banner_editor.tscn")
 const GAME_SCENE: PackedScene = preload("res://scenes/game/game.tscn")
-const NORMAL_PATH: String = "user://test_save.json"
+var NORMAL_PATH: String = "user://test_save_%d.json" % OS.get_process_id()  # único por proceso (T560)
 const DEV_PATH: String = "user://test_save_pruebas.json"
 const MODES_DIR: String = "user://test_loc_modes/"
 

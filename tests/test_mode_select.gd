@@ -6,7 +6,7 @@ const SELECT_SCENE: PackedScene = preload("res://scenes/ui/level_select.tscn")
 const OFFICIAL: String = "user://test_mode_select_official/"
 const USER: String = "user://test_mode_select_user/"
 const COMMUNITY: String = "user://test_mode_select_community/"
-const TEST_SAVE: String = "user://test_save.json"
+var TEST_SAVE: String = "user://test_save_%d.json" % OS.get_process_id()  # único por proceso (T560)
 
 var opened_folders: Array[String] = []
 

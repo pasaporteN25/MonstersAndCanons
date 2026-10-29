@@ -1,7 +1,7 @@
 # Tests del modo de pruebas (T86, spec §10.2, D-028).
 extends GutTest
 
-const NORMAL_PATH: String = "user://test_save.json"
+var NORMAL_PATH: String = "user://test_save_%d.json" % OS.get_process_id()  # único por proceso (T560)
 ## Los tests usan su propio archivo de pruebas, nunca el save_pruebas.json de verdad.
 const DEV_PATH: String = "user://test_save_pruebas.json"
 

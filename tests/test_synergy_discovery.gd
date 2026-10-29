@@ -4,7 +4,7 @@
 extends GutTest
 
 const GAME_SCENE: PackedScene = preload("res://scenes/game/game.tscn")
-const TEST_PATH: String = "user://test_save.json"
+var TEST_PATH: String = "user://test_save_%d.json" % OS.get_process_id()  # único por proceso (T560)
 const DT: float = 1.0 / 60.0
 
 var basic: TowerData = load("res://data/towers/basic.tres")

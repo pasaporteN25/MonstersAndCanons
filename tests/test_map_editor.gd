@@ -4,7 +4,7 @@ extends GutTest
 
 const EDITOR_SCENE: PackedScene = preload("res://scenes/editor/map_editor.tscn")
 const MENU_SCENE: PackedScene = preload("res://scenes/ui/main_menu.tscn")
-const NORMAL_PATH: String = "user://test_save.json"
+var NORMAL_PATH: String = "user://test_save_%d.json" % OS.get_process_id()  # único por proceso (T560)
 const DEV_PATH: String = "user://test_save_pruebas.json"
 ## Dónde cae el mouse dentro del área del mapa para apuntar a una casilla (el centro).
 const HALF_TILE := Vector2(32, 32)
