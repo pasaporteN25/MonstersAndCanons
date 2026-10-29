@@ -2,7 +2,7 @@
 extends GutTest
 
 const GAME_SCENE: PackedScene = preload("res://scenes/game/game.tscn")
-const TEST_PATH: String = "user://test_save.json"
+var TEST_PATH: String = "user://test_save_%d.json" % OS.get_process_id()  # único por proceso (T560)
 
 
 func before_each() -> void:

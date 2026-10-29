@@ -5,7 +5,7 @@ extends GutTest
 
 const EDITOR_SCENE: PackedScene = preload("res://scenes/editor/map_editor.tscn")
 const TEST_DIR: String = "user://test_editor_maps/"
-const NORMAL_PATH: String = "user://test_save.json"
+var NORMAL_PATH: String = "user://test_save_%d.json" % OS.get_process_id()  # único por proceso (T560)
 const DEV_PATH: String = "user://test_save_pruebas.json"
 
 var editor: MapEditor

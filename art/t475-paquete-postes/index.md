@@ -188,6 +188,22 @@ Hash SHA-256 de cada `data/levels/level_NN.json` en `origin/main` 9ce9e18. «Gri
 | 14 | `150929389daa85941b826cbca70aaa9f25b73f97b95ea38149afa2e057112a20` | `341c00645a48fad0944a0f43207fe0da613c883bfecdec63cc4cb8b811124d69` |
 | 15 | `0e67f0becbaa63a93af17edf3fab828216fd51a6979f7fa34d9f7e089a1baaa3` | `70e7f2b47342d8fdfc6d59239499bdd43072d44effacc5eb8963ec37b295a5ca` |
 
+## Referencia vigente (T560, 2026-10-29)
+
+Después de T475 (niveles 8 y 9) y de T558 (textos de los niveles 3, 4, 11, 12, 13, 14 y 15) los hashes de arriba quedaron viejos para esos niveles. Cambios **esperados y revisados**: en 8 y 9 solo la casilla `(18, 1)` pasó de `.` a `X` (no construible; la grilla cambia, la leyenda no); en 3, 4, 11, 12, 13, 14 y 15 cambiaron únicamente textos (`entrada`, `victoria`, `nombre`; en el 15, el abastecimiento) y la **grilla y la leyenda siguen idénticas** a «antes». `--verify` acepta estos hashes además de los de arriba; si un mapa vuelve a cambiar, tiene que agregarse acá con su motivo.
+
+| Nivel | JSON completo vigente (SHA-256) | Grilla + leyenda vigente (SHA-256) |
+|---|---|---|
+| 03 | `95d8e53ae13c4224803cea8f87af93a18c13adb74529f0ebb7b66181981c506c` | `987f367b379c75d1fc4b04545c904ea3b3149a216798a50c846776192a4d09eb` |
+| 04 | `d9215c2d7091cc8c77f7fb6dd479139f00ad32e094be5142852223a1d2393643` | `6748181e2245573784da7068164c4f239a92f70944aa05e95c1a6329ec87ea5c` |
+| 08 | `3b11c91ede82521c7521af539b5e6f23d44e4f79260ae37ab0497180d707713b` | `392a1b8082afdc2d681d500c8f864f7a56a011383014c8a8c075d78ba5fb4962` |
+| 09 | `cafb60f81576d636ed76f0c7afaeb6a5aeb3c5f552fc5a64433907377053c360` | `3d3adf12f0256d6bf2c8122de6d4a0b311b5943dccd876ca45d9bca1f1fe5325` |
+| 11 | `c6b7ff220c08a61ce502afeddcbcfd6d63175012877afc93387a7c2d6688fed0` | `5cffcbf5bc77696215c927536d84eb4a650c8ee148f0778b3ba51c3e5c6164e8` |
+| 12 | `f13288247f7d0b333baa6ea52a4e4a4d7bf7fb0da3698e15ba571b8680a4f6a1` | `266982fda29354c7df227869fa8d1bb6228f8dcadd4d160a2051746f526be588` |
+| 13 | `7786e8111b0e06eb2a15e010a8afefa6b340eeb95d068d9604b286d62bc6c65a` | `b2d7fb1946527dc68d4a648189c2ea36758a071883f658040bf865425ec7e592` |
+| 14 | `aa1dfb186cc5b8040625fa492d2088138017c9db2c6b6550938f24a233cc4a41` | `341c00645a48fad0944a0f43207fe0da613c883bfecdec63cc4cb8b811124d69` |
+| 15 | `32f78a4cb309777821bd06b864bfa354acbb6ad418ea623b347d4b158ed0e09d` | `70e7f2b47342d8fdfc6d59239499bdd43072d44effacc5eb8963ec37b295a5ca` |
+
 ## Límites
 
 - Los planos salen de los JSON, no del motor. Las capturas del motor real de la integración están en `Capturas/T475-*.png` (1280×720, ventana, partida de campaña).

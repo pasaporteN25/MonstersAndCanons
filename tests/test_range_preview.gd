@@ -283,9 +283,13 @@ func test_the_upgrade_effect_range_removes_itself_when_it_ends() -> void:
 	var tower: Tower = await _select_tower("cannon", 1)
 	game.build_controller.try_upgrade(tower)
 	assert_eq(_fading_previews().size(), 1)
+	# Se espera a que termine por el reloj de la partida, no por una cantidad fija de cuadros: en headless un cuadro
+	# puede durar 1 ms, y 6 cuadros a x100 (0,6 s de juego) no siempre alcanzan para el desvanecido y los textos (T560).
 	Engine.time_scale = 100.0
-	for i: int in 6:
+	var frames: int = 0
+	while frames < 600 and (not _fading_previews().is_empty() or game.effects.upgrade_fx_alive() > 0):
 		await get_tree().process_frame
+		frames += 1
 	Engine.time_scale = 1.0
 	assert_eq(_fading_previews().size(), 0, "se borra solo")
 	assert_eq(game.effects.upgrade_fx_alive(), 0, "y no queda contada como viva")
