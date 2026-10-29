@@ -1939,3 +1939,11 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
   - **Excluir más carpetas:** `art/*` ya estaba excluido y el baseline no muestra otra carpeta de documentación en el paquete (`scenes`, `scripts` y `data` suman menos de 1 MB). No hay nada más que filtrar.
 - **Alcance:** RF-730, T550. Sin cambios de guardado, balance ni jugabilidad.
 - **Riesgos/condiciones:** (1) quien quiera ver las capturas desde el editor de Godot ya no las ve en el panel de archivos; siguen en disco y en GitHub; (2) una herramienta nueva que cargue `res://Capturas/...` fallaría: tendría que leer desde disco o usar otra carpeta.
+
+## D-221 · La receta cosmética del editor solo se ve en los postes, no en las insignias del selector
+
+- **Fecha:** 2026-10-28 · **Decidió:** Lucas (propuesta aceptada: «T553 con la enmienda»). **Estado:** vigente.
+- **Qué:** RF-697 dejaba abierto que la mitad del jugador de la insignia del selector (mapa y tarjetas) usara la receta del editor de banderines. Se enmienda para que la receta se vea **solo en los postes del jugador con 3 estrellas**. La insignia del selector sigue con las V3 aprobadas fijas, que es lo que hace el código.
+- **Motivo:** el código nunca lo implementó; hacerlo exigía pasar el contexto de la receta por Game hasta `CampaignRegion` y cambiar lo que se ve en el selector de forma no trivial, a pocas semanas de la V1.
+- **Alternativas descartadas:** implementarlo ya (más superficie y riesgo antes de publicar; se puede retomar después de la V1 si Lucas lo quiere).
+- **Alcance:** RF-697 y RF-664 (texto), T553. Sin cambios de código, guardado, balance ni jugabilidad.

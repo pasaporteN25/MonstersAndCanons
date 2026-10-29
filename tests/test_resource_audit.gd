@@ -12,7 +12,7 @@ const PATH_PATTERN: String = "res://[A-Za-z0-9_./\\-]+\\.(?:svg|png|wav|ogg|mp3|
 ## Dibujos que están en el repositorio pero el juego no usa. Un dibujo NUEVO sin uso hace fallar el test; si se usa o
 ## se borra, se saca de esta lista. Un recurso cuenta como usado si algún archivo de texto de `data/`, `scenes/`,
 ## `scripts/`, `assets/` o `tools/` nombra su ruta `res://` completa o su `uid` (T551, H5 de T538): ya no alcanza con
-## que su nombre aparezca suelto en otro lado. Hay dos grupos.
+## que su nombre aparezca suelto en otro lado. Hay un grupo.
 const KNOWN_UNUSED: Array[String] = [
 	# 1) Arte aprobado o histórico que espera ser enchufado (hallazgo de T236, 2026-10-09; tareas T219, T220, T249 y M43):
 	# los SVG de «trabajo» y «agotado» esperan a alguien que los use, y el ícono de supresión y los anillos de la
@@ -30,14 +30,6 @@ const KNOWN_UNUSED: Array[String] = [
 	"res://assets/sprites/towers/rendered/cannon_level_2_icon.png",
 	"res://assets/sprites/towers/rendered/disruptor_suppression_arc_1.png",
 	"res://assets/sprites/towers/rendered/disruptor_pulse_ring.png",
-	# 2) SVG fuente heredados que quedan (T555, D5 de T538): los otros 44 se borraron. Estos 6 los leen herramientas
-	# históricas de `art/` o no tienen reemplazo verificado; se deciden aparte.
-	"res://assets/sprites/map/bosque_explotable.svg",
-	"res://assets/sprites/map/campamento_vacio.svg",
-	"res://assets/sprites/map/flores.svg",
-	"res://assets/sprites/map/mina.svg",
-	"res://assets/sprites/map/poste_cintas.svg",
-	"res://assets/sprites/ui/demoledora.svg",
 ]
 
 var _files: Dictionary = {}   # { ruta: texto } de todo lo que puede nombrar un recurso
@@ -226,8 +218,7 @@ func test_retired_png_stay_out_of_assets() -> void:
 	assert_false(haystack.contains("sprites/enemies/rendered/healer.png"))
 
 
-func test_known_unused_svg_sources_are_listed() -> void:
-	# T555 / D5: se borraron 44 SVG fuente; quedan listados solo los 6 que esperan decisión.
-	assert_has(KNOWN_UNUSED, "res://assets/sprites/map/flores.svg")
-	assert_false(KNOWN_UNUSED.has("res://assets/sprites/enemies/armored.svg"), "armored.svg ya se borró")
-	assert_false(FileAccess.file_exists("res://assets/sprites/enemies/armored.svg"), "armored.svg ya se borró")
+func test_legacy_svg_sources_are_gone() -> void:
+	# T555 y T556 / D5: los 50 SVG fuente heredados se borraron; los PNG de `rendered/` los reemplazan.
+	for file_name: String in ["enemies/armored", "towers/turret_basic", "projectiles/basic", "map/tree", "map/flores", "ui/demoledora"]:
+		assert_false(FileAccess.file_exists("res://assets/sprites/%s.svg" % file_name), "%s.svg ya se borró" % file_name)
