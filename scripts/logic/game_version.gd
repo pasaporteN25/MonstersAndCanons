@@ -22,7 +22,7 @@ static func label(version: String) -> String:
 	if parts.is_empty():
 		return "%s %s" % [BETA, text]  # no se entiende: se muestra tal cual, todavía como beta
 	if int(parts["major"]) >= 1 and String(parts["suffix"]) == "":
-		return "Versión %s" % text
+		return Localization.t_fmt(&"version.release", {"version": text})
 	return "%s %s" % [BETA, text]
 
 

@@ -13,7 +13,6 @@ signal closed
 const GOLD := Color(1.0, 0.84, 0.3)
 const DARK := Color(0.105, 0.11, 0.125)
 const TROPHY: Texture2D = preload("res://assets/sprites/ui/trophy.svg")
-const TITLE: String = "SALÓN DE LA FAMA"
 
 var _subtitle: Label
 var _entry_slot: VBoxContainer
@@ -52,7 +51,7 @@ func _init() -> void:
 	trophy.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	trophy.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	rows.add_child(trophy)
-	rows.add_child(_label(TITLE, 38, GOLD, 8))
+	rows.add_child(_label(Localization.t(&"hall.title"), 38, GOLD, 8))
 	_subtitle = _label("", 20, Color(1, 1, 1, 0.9), 0)
 	rows.add_child(_subtitle)
 	_entry_slot = VBoxContainer.new()
@@ -62,7 +61,7 @@ func _init() -> void:
 	_table.visible = false
 	rows.add_child(_table)
 	_continue = Button.new()
-	_continue.text = "Continuar"
+	_continue.text = Localization.t(&"hall.continue")
 	_continue.focus_mode = Control.FOCUS_NONE
 	_continue.custom_minimum_size = Vector2(0, 50)
 	_continue.add_theme_font_size_override("font_size", 22)
@@ -82,7 +81,7 @@ func _init() -> void:
 
 ## Pide las 5 letras para anotar `total` (RF-194).
 func ask_name(total: int, initial: String) -> void:
-	_subtitle.text = "¡Ganaste todos los niveles!\nTotal de la campaña: %d puntos" % total
+	_subtitle.text = Localization.t_fmt(&"hall.won_all", {"points": total})
 	_table.visible = false
 	_continue.visible = false
 	var entry: NameEntry = NameEntry.new().setup(HighScores.HALL_NAME_LENGTH, initial)

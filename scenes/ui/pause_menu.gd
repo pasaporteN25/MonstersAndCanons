@@ -9,10 +9,21 @@ signal quit_pressed
 
 @onready var _panel: Control = %MenuPanel
 @onready var _options: OptionsMenu = %OptionsMenu
+var _quit_override: String = ""
+
+
+## T534: los textos fijos de la escena, por clave del catálogo.
+const TEXT_KEYS: Dictionary = {
+	"MenuPanel/Center/Panel/Margin/Rows/Title": &"pause.title", "%ResumeButton": &"pause.resume", "%RetryButton": &"pause.retry", "%OptionsButton": &"pause.options",
+}
 
 
 func _ready() -> void:
 	visible = false
+	_apply_texts()
+	SaveManager.setting_changed.connect(func(key: String, _value: Variant) -> void:
+		if key == "language":
+			_apply_texts())
 	(%ResumeButton as Button).pressed.connect(resume_pressed.emit)
 	(%RetryButton as Button).pressed.connect(retry_pressed.emit)
 	(%OptionsButton as Button).pressed.connect(_open_options)
@@ -24,7 +35,13 @@ func _ready() -> void:
 
 ## Cómo se llama el botón de salir ("Salir al menú", o "Volver al editor" al probar, RF-217).
 func set_quit_text(text: String) -> void:
+	_quit_override = text
 	(%QuitButton as Button).text = text
+
+
+func _apply_texts() -> void:
+	Localization.apply(self, TEXT_KEYS)
+	(%QuitButton as Button).text = _quit_override if _quit_override != "" else Localization.t(&"pause.quit")
 
 
 func open() -> void:

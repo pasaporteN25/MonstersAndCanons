@@ -33,7 +33,7 @@ func _check() -> CheckBox:
 
 func test_the_option_is_on_by_default_with_its_label() -> void:
 	assert_not_null(_check())
-	assert_eq(_check().text, OptionsMenu.DEFEAT_ADVICE_TEXT)
+	assert_eq(_check().text, Localization.t(&"options.game.defeat_advice"))
 	assert_true(_check().button_pressed)
 	assert_true(SaveManager.defeat_advice_enabled())
 

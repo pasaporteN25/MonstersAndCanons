@@ -3,11 +3,12 @@
 class_name ExitText
 extends RefCounted
 
-const TITLE: String = "¿Volver al menú principal?"
-## Única advertencia permitida en el cuerpo (RF-725). No enumera oro, oleada, piezas ni demolición.
-const WARNING: String = "No se guardará el progreso de esta partida."
+## T534: los textos viven en el catálogo de idiomas (`exit.title`, `exit.warning`).
+static func title() -> String:
+	return Localization.t(&"exit.title")
 
 
-## El cuerpo del diálogo: siempre el mismo aviso, sin importar el estado de la partida.
+## El cuerpo del diálogo: siempre el mismo aviso breve (RF-725), sin importar el estado de la partida. No enumera oro,
+## oleada, piezas ni demolición.
 static func message() -> String:
-	return WARNING
+	return Localization.t(&"exit.warning")

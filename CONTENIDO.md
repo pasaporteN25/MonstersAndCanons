@@ -732,5 +732,6 @@ La carga podrá reutilizar las láminas oficiales de intro, una por cambio y sin
 ## Idioma e inventario de textos *(T533, RF-727; base interna, sin cambios visibles)*
 
 - Los catálogos de idioma viven en `data/i18n/es.json` y `data/i18n/en.json`: una lista de `{"clave": "...", "texto": "..."}`. Las claves son en inglés y con puntos (`options.language.label`); los valores usan marcadores `{nombre}` (iguales en los dos idiomas) y los plurales se escriben como `clave.one` y `clave.other`.
-- Todavía **ninguna pantalla lee el catálogo** y el selector de idioma está oculto; el inglés se completa en T534. No agregues textos de juego nuevos acá hasta entonces.
+- **T534 (en curso):** ya leen el catálogo el menú principal, Herramientas, Opciones, la pausa, el diálogo de salida, Récords y el Salón de la fama. El resto de las pantallas y el Lore siguen con su texto en español (el Lore se traduce después de T545, D-222). El selector de idioma sigue oculto. Si agregás un texto a una pantalla ya migrada, ponelo en **los dos** catálogos con la misma clave (`tests/test_localization_en.gd` falla si falta alguno o si el inglés tiene tildes o «¿»).
+- Los nombres propios «Cántaro» y «Compañía Meridiana», «Monsters & Canons», las iniciales de los récords y el formato de números y versión no se traducen.
 - Para ver todos los textos visibles del juego agrupados por pantalla: `python3 tools/localization_inventory.py` (escribe `specs/tareas/informes/T533-inventario-textos.md`).

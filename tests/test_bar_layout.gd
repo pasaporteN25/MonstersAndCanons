@@ -133,7 +133,7 @@ func test_exit_text_is_only_the_short_warning() -> void:
 	assert_eq(text, "No se guardará el progreso de esta partida.")
 	for banned: String in ["Perdés", "demolición", "oro", "oleada", "piezas", "Lo que ya ganaste"]:
 		assert_false(text.contains(banned), "RF-725: sin '%s'" % banned)
-	assert_eq(ExitText.TITLE, "¿Volver al menú principal?")
+	assert_eq(ExitText.title(), "¿Volver al menú principal?")
 
 
 # --- InfrastructureText (RF-457, RF-458) ---

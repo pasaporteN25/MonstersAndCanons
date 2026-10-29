@@ -20,7 +20,7 @@ func show_scores(table: Array, highlight: int = -1) -> void:
 		remove_child(child)
 		child.queue_free()
 	if table.is_empty():
-		add_child(_cell("Todavía no hay récords", 0, NORMAL_COLOR, HORIZONTAL_ALIGNMENT_CENTER))
+		add_child(_cell(Localization.t(&"records.empty"), 0, NORMAL_COLOR, HORIZONTAL_ALIGNMENT_CENTER))
 		return
 	for i: int in table.size():
 		var color: Color = HIGHLIGHT_COLOR if i == highlight else NORMAL_COLOR

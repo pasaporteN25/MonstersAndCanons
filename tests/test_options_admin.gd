@@ -50,7 +50,7 @@ func test_main_menu_options_offer_dev_mode() -> void:
 	options.admin_available = true
 	options.open()
 	assert_true(options.is_admin_visible(), "RF-383")
-	assert_eq(options.admin_button_text(), OptionsMenu.ADMIN_ON_TEXT)
+	assert_eq(options.admin_button_text(), Localization.t(&"options.admin.enable"))
 	assert_false(options.is_confirm_visible(), "la confirmación aparece recién al tocar el botón")
 
 
@@ -92,7 +92,7 @@ func test_confirming_turns_on_dev_mode_with_its_own_save() -> void:
 	assert_eq(SaveManager.save_path, DEV_PATH, "RF-181: guardado aparte")
 	assert_true(DevMode.is_banner_visible(), "RF-182: el cartel avisa")
 	assert_signal_emitted_with_parameters(options, "dev_mode_changed", [true])
-	assert_eq(options.admin_button_text(), OptionsMenu.ADMIN_OFF_TEXT)
+	assert_eq(options.admin_button_text(), Localization.t(&"options.admin.disable"))
 	assert_false(options.is_confirm_visible())
 
 
@@ -106,7 +106,7 @@ func test_back_to_normal_needs_no_confirmation() -> void:
 	assert_false(options.is_confirm_visible(), "sin confirmación")
 	assert_eq(SaveManager.save_path, NORMAL_PATH)
 	assert_signal_emitted_with_parameters(options, "dev_mode_changed", [false])
-	assert_eq(options.admin_button_text(), OptionsMenu.ADMIN_ON_TEXT)
+	assert_eq(options.admin_button_text(), Localization.t(&"options.admin.enable"))
 
 
 func test_real_progress_is_untouched_by_dev_mode() -> void:
