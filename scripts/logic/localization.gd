@@ -1,12 +1,12 @@
 # Idioma de la interfaz y búsqueda de textos por clave (T533, RF-727, D-217).
-# Lógica pura, sin escena (P10). T533 dejó la base; T534 (D-222) migró menús, opciones, pausa, salida y récords.
+# Lógica pura, sin escena (P10). T533 dejó la base; T534 (D-222) migra por tandas: menús, opciones, pausa, salida, récords y, en la segunda, HUD, resultados, tutorial, selector, Wiki, torres y enemigos.
 # El selector de Opciones sigue oculto (`SELECTOR_ENABLED`) hasta que el resto de las pantallas y el Lore estén en inglés.
 class_name Localization
 extends RefCounted
 
 const DEFAULT_LANGUAGE: StringName = &"es"
 const SUPPORTED: Array[StringName] = [&"es", &"en"]
-## T533/T534: el inglés todavía no cubre HUD, Wiki, tutorial, editor ni el Lore (queda en español por el respaldo), así que
+## T533/T534: el inglés todavía no cubre el editor, los mensajes de validación ni el Lore (queda en español por el respaldo), así que
 ## el selector NO se muestra. Se pasa a `true` cuando el inglés quede coherente.
 const SELECTOR_ENABLED: bool = false
 ## Costura para pruebas: ¿se arma el selector? Vale `SELECTOR_ENABLED`; `reset()` lo restaura.
@@ -59,6 +59,17 @@ static func t(key: StringName) -> String:
 		return own[k]
 	var base: Dictionary = _entries(DEFAULT_LANGUAGE)
 	return base[k] if base.has(k) else k
+
+
+## T534 (D-222): el texto de un campo de un archivo de `data/` (`tower.basic.name`, `enemy.fast.description`). En español
+## manda el propio archivo (`fallback`, que no cambia); en otro idioma, la clave `<dominio>.<id>.<campo>` del catálogo, y
+## si no está, el español.
+static func data_text(domain: String, id: StringName, field: String, fallback: String) -> String:
+	if language == DEFAULT_LANGUAGE:
+		return fallback
+	var own: Dictionary = _entries(language)
+	var key: String = "%s.%s.%s" % [domain, String(id), field]
+	return own[key] if own.has(key) else fallback
 
 
 ## Como `t`, reemplazando `{nombre}` por los valores de `values`. Un marcador sin valor queda tal cual.

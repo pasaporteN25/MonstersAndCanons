@@ -22,7 +22,7 @@ func setup(enemy_data: EnemyData, enemy_count: int = 0) -> EnemyIcon:
 	custom_minimum_size = SIZE_WITH_COUNT if count > 0 else SIZE_ALONE
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS  # D-023
-	tooltip_text = enemy.display_name
+	tooltip_text = enemy.name_text()
 	return self
 
 

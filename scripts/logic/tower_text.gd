@@ -18,29 +18,29 @@ static func effect_phrases(level: TowerLevelData, next: TowerLevelData = null, p
 	var lines: Array[String] = []
 	if level.suppress_seconds > 0.0 or (next != null and next.suppress_seconds > 0.0):  # RF-450
 		if panel:
-			lines.append("Pulso: apaga las auras durante %s s" % _change(level, next, "suppress_seconds"))
+			lines.append(Localization.t_fmt(&"towertext.pulse_panel", {"x": _change(level, next, "suppress_seconds")}))
 		else:
 			lines.append(pulse_line(level))
 	if _has(level, next, "support_rate_percent"):
-		lines.append("Apoyo: +%s %% de cadencia; solo el mayor" % _change(level, next, "support_rate_percent"))
+		lines.append(Localization.t_fmt(&"towertext.support", {"x": _change(level, next, "support_rate_percent")}))
 	if _has(level, next, "support_repair_per_second"):
-		lines.append("Repara %s puntos de desgaste/s; solo la mayor tasa" % _change(level, next, "support_repair_per_second"))
+		lines.append(Localization.t_fmt(&"towertext.repair", {"x": _change(level, next, "support_repair_per_second")}))
 	if _has(level, next, "splash_radius_tiles"):
-		lines.append("Área: radio %s" % _change(level, next, "splash_radius_tiles"))  # RF-677: coma decimal (antes «1.5»)
+		lines.append(Localization.t_fmt(&"towertext.area", {"x": _change(level, next, "splash_radius_tiles")}))  # RF-677: coma decimal (antes «1.5»)
 	if _has(level, next, "chain_extra_targets"):
-		lines.append("El rayo salta a %s enemigos más" % _change(level, next, "chain_extra_targets"))
+		lines.append(Localization.t_fmt(&"towertext.chain", {"x": _change(level, next, "chain_extra_targets")}))
 	if _has(level, next, "burst_count"):
-		lines.append("Lanza %s púas en círculo" % _change(level, next, "burst_count"))
+		lines.append(Localization.t_fmt(&"towertext.burst", {"x": _change(level, next, "burst_count")}))
 	if _has(level, next, "extra_targets"):
-		lines.append("Dispara a %s enemigos a la vez" % _change(level, next, "extra_targets", 1.0))
+		lines.append(Localization.t_fmt(&"towertext.extra_targets", {"x": _change(level, next, "extra_targets", 1.0)}))
 	if _has(level, next, "burn_damage_per_second"):
-		lines.append("Quema: %s por segundo durante %s s" % [_change(level, next, "burn_damage_per_second"), _change(level, next, "burn_duration")])
+		lines.append(Localization.t_fmt(&"towertext.burn", {"x": _change(level, next, "burn_damage_per_second"), "y": _change(level, next, "burn_duration")}))
 	if _has(level, next, "bonus_vs_slowed_percent"):  # RF-313
-		lines.append("+%s %% de daño a ralentizados" % _change(level, next, "bonus_vs_slowed_percent"))
+		lines.append(Localization.t_fmt(&"towertext.vs_slowed", {"x": _change(level, next, "bonus_vs_slowed_percent")}))
 	if _has(level, next, "bonus_vs_burning_percent"):
-		lines.append("+%s %% de daño a quemados" % _change(level, next, "bonus_vs_burning_percent"))
+		lines.append(Localization.t_fmt(&"towertext.vs_burning", {"x": _change(level, next, "bonus_vs_burning_percent")}))
 	if _has(level, next, "slow_amount"):
-		lines.append("Ralentiza %s %% durante %s s" % [_change(level, next, "slow_amount", 0.0, 100.0), _change(level, next, "slow_duration")])
+		lines.append(Localization.t_fmt(&"towertext.slow", {"x": _change(level, next, "slow_amount", 0.0, 100.0), "y": _change(level, next, "slow_duration")}))
 	return lines
 
 
@@ -63,8 +63,8 @@ static func _change(level: TowerLevelData, next: TowerLevelData, field: String, 
 ## no tiene daño ni cadencia propios: solo «Alc. 2,5». Coma decimal y alcance con su decimal, el mismo `decimal` de la PC.
 static func bar_state(damage: int, fire_rate: float, range_tiles: float, support_only: bool) -> String:
 	if support_only:
-		return "Alc. %s" % decimal(range_tiles)
-	return "Daño %d · %s/s · Alc. %s" % [damage, decimal(fire_rate), decimal(range_tiles)]
+		return Localization.t_fmt(&"towertext.bar_support", {"range": decimal(range_tiles)})
+	return Localization.t_fmt(&"towertext.bar_state", {"damage": damage, "rate": decimal(fire_rate), "range": decimal(range_tiles)})
 
 
 ## RF-450: el pulso de la Disruptora, armado con los números del nivel (RF-164):
@@ -74,10 +74,10 @@ static func pulse_line(level: TowerLevelData, emitters: Array[String] = []) -> S
 	if level.suppress_seconds <= 0.0:
 		return ""
 	var period: float = 1.0 / level.fire_rate if level.fire_rate > 0.0 else 0.0
-	var line: String = "Pulso cada %s s · radio %s · apaga las auras %s s · %d de daño" % [
-		decimal(period), decimal(level.range_tiles), decimal(level.suppress_seconds), level.damage]
+	var line: String = Localization.t_fmt(&"towertext.pulse_line", {"period": decimal(period), "radius": decimal(level.range_tiles),
+			"seconds": decimal(level.suppress_seconds), "damage": level.damage})
 	if not emitters.is_empty():
-		line += ". Apaga el aura de %s." % join_names(emitters)
+		line += ". " + Localization.t_fmt(&"towertext.pulse_auras", {"names": join_names(emitters)})
 	return line
 
 
@@ -103,14 +103,16 @@ static func emitter_names(enemies: Array[EnemyData]) -> Array[String]:
 	sorted.sort_custom(func(a: EnemyData, b: EnemyData) -> bool: return String(a.id) < String(b.id))
 	var names: Array[String] = []
 	for enemy: EnemyData in sorted:
-		names.append(plural(enemy.display_name))
+		names.append(plural(enemy.name_text()))
 	return names
 
 
-## Plural simple en castellano: "Guardián" → "Guardianes", "Curandero" → "Curanderos".
+## Plural simple en castellano: "Guardián" → "Guardianes", "Curandero" → "Curanderos". En inglés basta una «s».
 static func plural(word: String) -> String:
 	if word.is_empty():
 		return word
+	if Localization.language != Localization.DEFAULT_LANGUAGE:
+		return word + "s"
 	var last: String = word.substr(word.length() - 1)
 	if last in ["á", "é", "í", "ó", "ú"] or last in ["a", "e", "o"]:
 		return word + "s"
@@ -131,7 +133,7 @@ static func suppressors_of(enemy: EnemyData, towers: Array[TowerData]) -> Array[
 	for tower: TowerData in towers:
 		for level: TowerLevelData in tower.levels:
 			if level.suppress_seconds > 0.0:
-				names.append(tower.display_name)
+				names.append(tower.name_text())
 				break
 	names.sort()
 	return names
@@ -146,11 +148,11 @@ static func combo_partners(tower: TowerData, towers: Array[TowerData]) -> Array[
 		return lines
 	var first: TowerLevelData = tower.levels[0]
 	if first.slow_amount > 0.0:
-		var line: String = _partners_line(tower, towers, &"bonus_vs_slowed_percent", "a los que frena")
+		var line: String = _partners_line(tower, towers, &"bonus_vs_slowed_percent", Localization.t(&"towertext.who_slowed"))
 		if line != "":
 			lines.append(line)
 	if first.burn_damage_per_second > 0:
-		var line: String = _partners_line(tower, towers, &"bonus_vs_burning_percent", "a los que quema")
+		var line: String = _partners_line(tower, towers, &"bonus_vs_burning_percent", Localization.t(&"towertext.who_burning"))
 		if line != "":
 			lines.append(line)
 	return lines
@@ -164,9 +166,9 @@ static func combo_hint(tower: TowerData, towers: Array[TowerData]) -> String:
 	var sentences: Array[String] = []
 	var first: TowerLevelData = tower.levels[0]
 	if first.bonus_vs_slowed_percent > 0:
-		sentences.append("Combo: +%d %% a ralentizados." % first.bonus_vs_slowed_percent)
+		sentences.append(Localization.t_fmt(&"towertext.combo_slowed", {"x": first.bonus_vs_slowed_percent}))
 	if first.bonus_vs_burning_percent > 0:
-		sentences.append("Combo: +%d %% a quemados." % first.bonus_vs_burning_percent)
+		sentences.append(Localization.t_fmt(&"towertext.combo_burning", {"x": first.bonus_vs_burning_percent}))
 	for line: String in combo_partners(tower, towers):
 		sentences.append(line + ".")
 	return " ".join(sentences)
@@ -191,28 +193,28 @@ static func _partners_line(tower: TowerData, towers: Array[TowerData], field: St
 		if not names_by_percent.has(percent):
 			var names: Array[String] = []
 			names_by_percent[percent] = names
-		(names_by_percent[percent] as Array[String]).append(other.display_name)
+		(names_by_percent[percent] as Array[String]).append(other.name_text())
 	var groups: Array[String] = []
 	for percent: int in names_by_percent:
-		groups.append("%s +%d %%" % [join_names(names_by_percent[percent]), percent])
-	return "Combo: %s %s" % [", ".join(groups), who]
+		groups.append(Localization.t_fmt(&"towertext.combo_group", {"names": join_names(names_by_percent[percent]), "x": percent}))
+	return Localization.t_fmt(&"towertext.combo_line", {"groups": ", ".join(groups), "who": who})
 
 
 ## "Cañón", "Cañón y Francotirador", "Cañón, Francotirador y Mortero".
 static func join_names(names: Array[String]) -> String:
 	if names.size() <= 1:
 		return "" if names.is_empty() else names[0]
-	return "%s y %s" % [", ".join(names.slice(0, names.size() - 1)), names[names.size() - 1]]
+	return "%s%s%s" % [", ".join(names.slice(0, names.size() - 1)), Localization.t(&"common.and"), names[names.size() - 1]]
 
 
 ## Todo el texto del panel: daño, cadencia, alcance, efectos y si golpea voladores.
 static func describe(level: TowerLevelData, can_hit_air: bool) -> String:
 	var lines: Array[String] = [
-		"Daño: %d   ·   Cadencia: %.1f/s" % [level.damage, level.fire_rate],
-		"Alcance: %.1f casillas" % level.range_tiles,
+		Localization.t_fmt(&"towertext.describe_stats", {"damage": level.damage, "rate": "%.1f" % level.fire_rate}),
+		Localization.t_fmt(&"towertext.describe_range", {"x": "%.1f" % level.range_tiles}),
 	]
 	lines.append_array(effects(level))
-	lines.append("Golpea voladores: %s" % ("sí" if can_hit_air else "no"))
+	lines.append(Localization.t_fmt(&"towertext.describe_air", {"answer": Localization.t(&"common.yes" if can_hit_air else &"common.no")}))
 	return "\n".join(lines)
 
 
@@ -220,12 +222,12 @@ static func describe(level: TowerLevelData, can_hit_air: bool) -> String:
 
 ## "recurso" o "recursos" según la cantidad.
 static func resources_word(amount: int) -> String:
-	return "recurso" if amount == 1 else "recursos"
+	return Localization.t_plural(&"towertext.resource", amount)
 
 
 ## "300 de oro + 3 recursos" o, sin recursos, "150 de oro". `alt` = la segunda forma de pago.
 static func cost_text(tower: TowerData, alt: bool = false) -> String:
-	var text: String = "%d de oro" % tower.build_gold(alt)
+	var text: String = Localization.t_fmt(&"towertext.gold", {"x": tower.build_gold(alt)})
 	var resources: int = tower.build_resources(alt)
 	if resources > 0:
 		text += " + %d %s" % [resources, resources_word(resources)]
@@ -251,20 +253,20 @@ static func missing_text(tower: TowerData, alt: bool, gold: int, resources: int,
 	var resource_cost: int = tower.build_resources(alt)
 	var parts: Array[String] = []
 	if gold < gold_cost:
-		parts.append("%d de oro" % (gold_cost - gold))
+		parts.append(Localization.t_fmt(&"towertext.gold", {"x": gold_cost - gold}))
 	if resource_cost > resources:
 		if not map_has_resources:
-			parts.append("recursos (este mapa no tiene cómo conseguirlos)")
+			parts.append(Localization.t(&"towertext.no_resources_map"))
 		else:
 			parts.append("%d %s" % [resource_cost - resources, resources_word(resource_cost - resources)])
-	return "" if parts.is_empty() else "Faltan " + " y ".join(parts)
+	return "" if parts.is_empty() else Localization.t_fmt(&"towertext.missing", {"parts": Localization.t(&"common.and").join(parts)})
 
 
 ## RF-418: "70 de oro" o "210 y 2 recursos" para el botón Vender del panel.
 static func refund_text(gold: int, resources: int) -> String:
 	if resources <= 0:
 		return str(gold)
-	return "%d y %d %s" % [gold, resources, resources_word(resources)]
+	return Localization.t_fmt(&"towertext.refund_both", {"gold": gold, "resources": resources, "word": resources_word(resources)})
 
 
 ## RF-418: la línea del panel con lo que costó la torre en recursos. Vacía si no costó ninguno
@@ -272,14 +274,14 @@ static func refund_text(gold: int, resources: int) -> String:
 static func invested_line(tower: TowerData, resources_invested: int) -> String:
 	if not uses_resources(tower):
 		return ""
-	return "Recursos invertidos: %d" % resources_invested
+	return Localization.t_fmt(&"towertext.invested", {"x": resources_invested})
 
 
 ## RF-437: los datos de costo para la ficha de la Wiki: [[rótulo, valor], ...]. Vacío si la torre solo usa oro.
 static func cost_facts(tower: TowerData) -> Array:
 	var facts: Array = []
 	if tower.resource_cost > 0:
-		facts.append(["Costo de construcción", cost_text(tower)])
+		facts.append([Localization.t(&"towertext.fact_build_cost"), cost_text(tower)])
 	if tower.has_alt_payment():
-		facts.append(["Formas de pago", "%s, o %s" % [cost_text(tower), cost_text(tower, true)]])
+		facts.append([Localization.t(&"towertext.fact_payment"), Localization.t_fmt(&"towertext.payment_or", {"a": cost_text(tower), "b": cost_text(tower, true)})])
 	return facts

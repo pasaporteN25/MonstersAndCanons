@@ -96,6 +96,9 @@ static func _read_into(mode: Dictionary, errors: PackedStringArray) -> void:
 		return
 	mode["name"] = settings["name"]
 	mode["description"] = settings["description"]
+	if bool(mode["official"]):  # T534: los modos oficiales traen su nombre y descripción en el catálogo
+		mode["name"] = Localization.data_text("mode", StringName(mode["id"]), "name", String(mode["name"]))
+		mode["description"] = Localization.data_text("mode", StringName(mode["id"]), "description", String(mode["description"]))
 	var maps: Array = mode["maps"]
 	for map_id: String in settings["maps"]:
 		maps.append(_read_map(mode, map_id, settings))

@@ -255,15 +255,13 @@ func _style_upgrade_button() -> void:
 
 
 ## M68 (RF-610): con la partida en pausa no se construye; la línea de abajo lo dice.
-const EMPTY_TEXT: String = "Tocá el carrito para elegir una torre"
-const PAUSED_TEXT: String = "En pausa: seguí la partida para construir"
 
 
 func _set_empty_status() -> void:
 	clear_upgrade_arm()
 	_status_state = "empty"
 	_fit_status_font()  # T511: letra normal fuera del estado «torre»
-	_status_label.text = PAUSED_TEXT if _paused else EMPTY_TEXT
+	_status_label.text = Localization.t(&"mobile.paused" if _paused else &"mobile.empty")
 	_status_label.visible = true
 	_target_button.hide()
 	_upgrade_button.hide()
@@ -279,7 +277,7 @@ func show_tool_status(message: String = "") -> void:
 	clear_upgrade_arm()
 	_status_state = "tool"
 	_fit_status_font()  # T511: letra normal fuera del estado «torre»
-	_status_label.text = message if message != "" else "Demoler o habilitar: tocá un objeto del mapa"
+	_status_label.text = message if message != "" else Localization.t(&"mobile.tool_hint")
 	_status_label.visible = true
 	_target_button.hide()
 	_upgrade_button.hide()
@@ -324,11 +322,11 @@ func show_selected_tower(tower: Tower, gold: int, sell_value: int, resource_valu
 	if tower.stun_left() > 0.0:
 		_tower_state_line = "Aturdida"
 	elif tower.wear_percent > 0:
-		_tower_state_line = "Desgaste %d %%" % tower.wear_percent
+		_tower_state_line = Localization.t_fmt(&"mobile.wear", {"n": int(tower.wear_percent)})
 	var stats: TowerLevelData = tower.stats()
 	# T514 (RF-722): dos renglones cortos. Arriba el nombre con los puntos de nivel (y el estado de la torre);
 	# abajo el estado actual abreviado, con la coma decimal y el alcance con su decimal (`TowerText`, como la PC).
-	_tower_name_line = "%s %s" % [tower.data.display_name, dots]
+	_tower_name_line = "%s %s" % [tower.data.name_text(), dots]
 	_tower_stats_line = TowerText.bar_state(stats.damage, tower.effective_fire_rate(), stats.range_tiles, tower.data.support_only)
 	_status_label.text = _tower_text(true)
 	_status_label.visible = true
@@ -337,7 +335,7 @@ func show_selected_tower(tower: Tower, gold: int, sell_value: int, resource_valu
 	# RF-722: «Apuntar» es un ícono con el modo y no se agrega si la torre no apunta (apoyo, pulso).
 	_target_button.visible = not (tower.data.support_only or tower.is_pulse_tower())
 	_target_button.text = tower.targeting_name()
-	_target_button.tooltip_text = "Apuntar: %s" % tower.targeting_name()
+	_target_button.tooltip_text = Localization.t_fmt(&"mobile.aim", {"mode": tower.targeting_name()})
 	_target_button.disabled = false
 	_upgrade_button.show()
 	if _upgrade_lock_left > 0.0:
@@ -345,11 +343,11 @@ func show_selected_tower(tower: Tower, gold: int, sell_value: int, resource_valu
 		_upgrade_button.disabled = true
 	elif not tower.can_upgrade():
 		clear_upgrade_arm()
-		_set_upgrade_texts("Nivel máximo", "", false)
+		_set_upgrade_texts(Localization.t(&"tower_panel.max_level"), "", false)
 		_upgrade_button.disabled = true
 	elif not can_upgrade:
 		clear_upgrade_arm()  # RF-681: si falta oro, se cancela
-		var missing: String = disabled_reason if disabled_reason != "" else "Faltan %d de oro" % maxi(0, tower.next_level_stats().cost - gold)
+		var missing: String = disabled_reason if disabled_reason != "" else Localization.t_fmt(&"tower_panel.missing_gold", {"n": maxi(0, tower.next_level_stats().cost - gold)})
 		_set_upgrade_texts(missing, _upgrade_change_text(tower), false)
 		_upgrade_change.add_theme_color_override("font_color", UPGRADE_MUTED_COLOR)
 		_upgrade_button.disabled = true
@@ -362,9 +360,9 @@ func show_selected_tower(tower: Tower, gold: int, sell_value: int, resource_valu
 	_sell_gap.show()
 	_bottom_confirm.hide()
 	if resource_value > 0:
-		_sell_button.tooltip_text = "Devuelve %d de oro y %d recursos" % [sell_value, resource_value]
+		_sell_button.tooltip_text = Localization.t_fmt(&"mobile.refund_both", {"gold": sell_value, "resources": resource_value})
 	else:
-		_sell_button.tooltip_text = "Devuelve %d de oro" % sell_value
+		_sell_button.tooltip_text = Localization.t_fmt(&"mobile.refund_gold", {"n": sell_value})
 	_refresh_sell_button(sell_value, resource_value)
 
 
@@ -461,10 +459,10 @@ func _refresh_upgrade_button(tower: Tower) -> void:
 	var cost: int = tower.next_level_stats().cost
 	var change: String = _upgrade_change_text(tower)
 	if _upgrade_armed:
-		_set_upgrade_texts("Tocá para confirmar  %d" % cost, change, true)
+		_set_upgrade_texts(Localization.t_fmt(&"mobile.confirm_upgrade", {"cost": cost}), change, true)
 		_upgrade_button.add_theme_color_override("font_color", Color(1.0, 0.8, 0.25))
 	else:
-		_set_upgrade_texts("Mejorar → N%d  %d" % [tower.level_number() + 1, cost], change, true)
+		_set_upgrade_texts(Localization.t_fmt(&"mobile.upgrade", {"level": tower.level_number() + 1, "cost": cost}), change, true)
 		_upgrade_button.remove_theme_color_override("font_color")
 
 
@@ -491,7 +489,7 @@ func clear_upgrade_arm() -> void:
 
 func begin_upgrade_lock(level_number: int) -> void:
 	_upgrade_lock_left = float(_config.get_value("mejorar_bloqueo_s"))
-	_upgrade_level_text = "¡Nivel %d!" % level_number
+	_upgrade_level_text = Localization.t_fmt(&"upgrade.level", {"n": level_number})
 
 
 func clear_sell_arm() -> void:
@@ -505,12 +503,12 @@ func clear_sell_arm() -> void:
 func _refresh_sell_button(sell_value: int, resource_value: int = 0) -> void:
 	if _sell_armed:
 		var refund: String = TowerText.refund_text(sell_value, resource_value)
-		_sell_button.text = "Vender por %s\nConfirmar venta" % refund
+		_sell_button.text = Localization.t_fmt(&"mobile.confirm_sell", {"x": refund})
 		_sell_button.add_theme_color_override("font_color", Color(1.0, 0.8, 0.25))
 		_sell_button.add_theme_stylebox_override("normal", _double_border_style())
 	else:
 		# RF-722: lo que devuelve va abajo, corto («+70» o «+210 +2» si también devuelve recursos).
-		_sell_button.text = "Vender\n+%d%s" % [sell_value, " +%d" % resource_value if resource_value > 0 else ""]
+		_sell_button.text = Localization.t_fmt(&"mobile.sell", {"gold": sell_value, "extra": " +%d" % resource_value if resource_value > 0 else ""})
 		_sell_button.remove_theme_color_override("font_color")
 		_sell_button.remove_theme_stylebox_override("normal")
 
@@ -600,8 +598,8 @@ func _build_view_all_button() -> void:
 	_style_icon_button(_view_all_button, VIEW_ALL_ICON)
 	# A diferencia de los otros, este se toca directo (no se arrastra): recupera el filtro del mouse.
 	_view_all_button.mouse_filter = Control.MOUSE_FILTER_STOP
-	_view_all_button.tooltip_text = "Ver todo"
-	_view_all_button.accessibility_name = "Ver todo"
+	_view_all_button.tooltip_text = Localization.t(&"mobile.view_all")
+	_view_all_button.accessibility_name = Localization.t(&"mobile.view_all")
 	var floating_size: float = float(_config.get_value("flotante_min_px"))
 	_view_all_button.custom_minimum_size = Vector2(floating_size, floating_size)
 	_view_all_button.position = Vector2(
@@ -617,11 +615,11 @@ func _build_floating_buttons() -> void:
 	var minimum_size: float = _minimum_touch_size()
 	_float_button_size = Vector2.ONE * minimum_size
 	_cart_button = _floating_button("CartButton", CART_ICON)
-	_cart_button.tooltip_text = "Elegir torre"
+	_cart_button.tooltip_text = Localization.t(&"mobile.choose_tower")
 	_exit_button = _floating_button("ExitButton", CLOSE_ICON)
-	_exit_button.tooltip_text = "Salir al menú"
+	_exit_button.tooltip_text = Localization.t(&"mobile.exit_menu")
 	_demolish_button = _floating_button("DemolishButton", DEMOLISH_ICON)
-	_demolish_button.tooltip_text = "Demoler o habilitar"
+	_demolish_button.tooltip_text = Localization.t(&"mobile.demolish")
 	_demolish_button.visible = false
 	_cart_button.pressed.connect(_on_cart_pressed)
 	_exit_button.pressed.connect(exit_pressed.emit)
@@ -703,7 +701,7 @@ func _build_empty_catalog() -> void:
 	var heading := HBoxContainer.new()
 	rows.add_child(heading)
 	var title := Label.new()
-	title.text = "Elegí una opción"
+	title.text = Localization.t(&"mobile.choose_option")
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title.add_theme_font_size_override("font_size", int(_config.get_value("catalogo_titulo_fuente_px")))
 	heading.add_child(title)
@@ -769,7 +767,7 @@ func _refresh_catalog() -> void:
 		var cost_text: String = TowerText.cost_text(tower, use_alt)
 		if tower.has_alt_payment():
 			cost_text = "%s / %s" % [TowerText.cost_text(tower), TowerText.cost_text(tower, true)]
-		descriptors.append({"key": "tower:%s" % tower.id, "title": tower.display_name,
+		descriptors.append({"key": "tower:%s" % tower.id, "title": tower.name_text(),
 			"cost": cost_text, "reason": reason, "icon": _tower_icon(tower),
 			"tower_index": i, "use_alt": use_alt, "tool": &""})
 	if not _machine_option.is_empty():
@@ -881,9 +879,9 @@ func show_placement(world_position: Vector2, cost_text: String, valid: bool, rea
 	_ghost_size = ghost_size
 	_ghost_visible = true
 	_confirm_button.disabled = not valid
-	_confirm_button.tooltip_text = "Confirmar construcción" if valid else reason
+	_confirm_button.tooltip_text = Localization.t(&"mobile.confirm_build") if valid else reason
 	_status_label.text = _ghost_status_text if valid else "%s  ·  %s" % [_ghost_status_text, reason]
-	_cancel_button.tooltip_text = "Cancelar construcción"
+	_cancel_button.tooltip_text = Localization.t(&"mobile.cancel_build")
 	_bottom_confirm.visible = true
 	_bottom_cancel.visible = true
 	_bottom_confirm.disabled = _confirm_button.disabled
@@ -927,7 +925,7 @@ func set_paused(paused: bool) -> void:
 		if button != null:
 			button.disabled = paused
 	if _status_state == "empty":
-		_status_label.text = PAUSED_TEXT if paused else EMPTY_TEXT
+		_status_label.text = Localization.t(&"mobile.paused" if paused else &"mobile.empty")
 
 
 func is_paused() -> bool:
@@ -937,7 +935,7 @@ func is_paused() -> bool:
 ## Un toque en un botón apagado por la pausa explica por qué; si hay una torre elegida, la línea no se pisa.
 func _show_paused_hint() -> void:
 	if _status_state == "empty":
-		_status_label.text = PAUSED_TEXT
+		_status_label.text = Localization.t(&"mobile.paused")
 		_status_label.visible = true
 
 

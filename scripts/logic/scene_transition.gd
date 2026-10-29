@@ -38,7 +38,7 @@ var blocks_input: bool = true
 ## true = cargar en un hilo; false = cargar de una vez (se bloquea el motor, pero la capa ya se dibujó).
 var use_threads: bool = true
 ## Lo que se ve en la capa.
-var title: String = "Cargando…"
+var title: String = Localization.t(&"transition.loading")
 var background_color: Color = Color(0.07, 0.08, 0.1, 1.0)
 var text_color: Color = Color(0.9, 0.92, 0.96, 1.0)
 var accent_color: Color = Color(1.0, 0.84, 0.3, 1.0)

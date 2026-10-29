@@ -34,7 +34,7 @@ static func tower_tip(data: AdviceData, log: LeakLog, wave_counts: Dictionary, o
 		for tower: TowerData in towers:
 			ids.append(String(tower.id))
 		best_score = score
-		best = {"id": rule["id"], "text": String(rule["text"]).replace(AdviceData.PLACEHOLDER_TOWERS, join_names(towers)),
+		best = {"id": rule["id"], "text": Localization.data_text("advice", StringName(rule["id"]), "text", String(rule["text"])).replace(AdviceData.PLACEHOLDER_TOWERS, join_names(towers)),
 				"towers": ids, "score": score, "share": score * 100.0 / total}
 	return best
 
@@ -70,7 +70,7 @@ static func suggested_towers(data: AdviceData, rule: Dictionary, offered: Array[
 static func join_names(towers: Array[TowerData]) -> String:
 	var names: PackedStringArray = []
 	for tower: TowerData in towers:
-		names.append(tower.display_name)
+		names.append(tower.name_text())
 	if names.size() <= 1:
 		return "".join(names)
-	return "%s y %s" % [", ".join(names.slice(0, names.size() - 1)), names[names.size() - 1]]
+	return "%s%s%s" % [", ".join(names.slice(0, names.size() - 1)), Localization.t(&"common.and"), names[names.size() - 1]]

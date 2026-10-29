@@ -5,7 +5,7 @@ var cell: Vector2i = Vector2i.ZERO
 var tower_id: StringName = &""
 var size: int = 1
 var valid: bool = false
-var reason: String = "Ahí no"
+var reason: String = Localization.t(&"game.blocked_there")
 var gold_cost: int = 0
 var resource_cost: int = 0
 var _last_tap_cell: Vector2i = Vector2i(-1000, -1000)
@@ -18,13 +18,13 @@ func select_tower(id: StringName, footprint: int, cost_gold: int, cost_resources
 	gold_cost = cost_gold
 	resource_cost = cost_resources
 	valid = false
-	reason = "Ahí no"
+	reason = Localization.t(&"game.blocked_there")
 
 
-func move_to(next_cell: Vector2i, is_valid: bool, invalid_reason: String = "Ahí no") -> void:
+func move_to(next_cell: Vector2i, is_valid: bool, invalid_reason: String = "") -> void:
 	cell = next_cell
 	valid = is_valid
-	reason = "" if is_valid else invalid_reason
+	reason = "" if is_valid else (invalid_reason if invalid_reason != "" else Localization.t(&"game.blocked_there"))
 
 
 func move_by_cells(delta: Vector2i, map_size: Vector2i) -> void:
@@ -41,9 +41,9 @@ func can_confirm(gold: int, resources: int) -> Dictionary:
 	if not valid:
 		return {"ok": false, "motivo": reason, "faltan": 0}
 	if gold < gold_cost:
-		return {"ok": false, "motivo": "Faltan %d de oro" % (gold_cost - gold), "faltan": gold_cost - gold}
+		return {"ok": false, "motivo": Localization.t_fmt(&"tower_panel.missing_gold", {"n": gold_cost - gold}), "faltan": gold_cost - gold}
 	if resources < resource_cost:
-		return {"ok": false, "motivo": "Faltan %d recursos" % (resource_cost - resources), "faltan": resource_cost - resources}
+		return {"ok": false, "motivo": Localization.t_fmt(&"ghost.missing_resources", {"n": resource_cost - resources}), "faltan": resource_cost - resources}
 	return {"ok": true, "motivo": "", "faltan": 0}
 
 

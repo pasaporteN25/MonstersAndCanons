@@ -55,7 +55,7 @@ static func origin(collection_id: StringName) -> StringName:
 
 
 static func name_of(collection_id: StringName) -> String:
-	return String(_definition(collection_id).get("nombre", String(collection_id).capitalize()))
+	return Localization.data_text("collection", collection_id, "name", String(_definition(collection_id).get("nombre", String(collection_id).capitalize())))
 
 
 ## La ruta del `icono` de los datos, o la del disco plateado si la colección no trae uno.

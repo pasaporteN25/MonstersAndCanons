@@ -28,7 +28,7 @@ func _init() -> void:
 	set_title("Oleadas")
 	for id: String in LevelFile.enemy_ids():
 		_enemies.append(LevelFile.find_enemy(id))
-	_enemies.sort_custom(func(a: EnemyData, b: EnemyData) -> bool: return a.display_name < b.display_name)
+	_enemies.sort_custom(func(a: EnemyData, b: EnemyData) -> bool: return a.name_text() < b.name_text())
 
 	var header := HBoxContainer.new()
 	header.add_theme_constant_override("separation", 8)
@@ -134,7 +134,7 @@ func _add_row(g: int) -> void:
 	var enemy := OptionButton.new()
 	enemy.custom_minimum_size = Vector2(ENEMY_WIDTH, 0)
 	for e: EnemyData in _enemies:
-		enemy.add_item(e.display_name)
+		enemy.add_item(e.name_text())
 		enemy.set_item_metadata(enemy.item_count - 1, String(e.id))
 	var current: int = _enemy_index(enemy, data["enemigo"])
 	if current < 0:

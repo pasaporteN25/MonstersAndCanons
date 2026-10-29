@@ -93,6 +93,8 @@ var _wide_layout: bool = true
 
 
 func _ready() -> void:
+	Localization.apply(self, {"Title": &"select.title", "StyleLabel": &"select.view", "StyleCards": &"select.view_cards", "StyleMap": &"select.view_map",
+			"BackButton": &"select.back", "CampaignTab": &"select.campaign"})
 	_build_command_layout()
 	get_viewport().size_changed.connect(_apply_command_layout)
 	_apply_command_layout()
@@ -101,7 +103,7 @@ func _ready() -> void:
 	_campaign_tab.pressed.connect(show_page.bind(PAGE_CAMPAIGN))
 	_community_tab.pressed.connect(show_page.bind(PAGE_COMMUNITY))
 	_entries = CommunityMaps.scan(community_dir)  # RF-226: se vuelve a buscar cada vez que se abre
-	_community_tab.text = "Comunidad"
+	_community_tab.text = Localization.t(&"select.community")
 	_modes = ModePacks.all(modes_official_dir, modes_user_dir)  # RF-389: también cada vez
 	_add_mode_tabs()
 	_apply_command_layout()  # RF-694: también mide las solapas de modos que nacen en este cuadro.
@@ -253,7 +255,7 @@ func show_page(page: StringName) -> void:
 				if GameFlow.is_level_unlocked(i):
 					_cards.add_child(_make_card(i))
 					count += 1
-		_total_stars.text = "Estrellas: %d de %d" % [GameFlow.total_stars(), GameFlow.max_stars()]
+		_total_stars.text = Localization.t_fmt(&"select.stars", {"n": GameFlow.total_stars(), "max": GameFlow.max_stars()})
 	elif page == PAGE_COMMUNITY:
 		for entry: Dictionary in _entries:
 			_cards.add_child(_make_community_card(entry))
@@ -265,7 +267,7 @@ func show_page(page: StringName) -> void:
 		count = _show_mode(mode)
 	_folder_button.visible = (page == PAGE_COMMUNITY or (not mode.is_empty() and not mode["official"])) \
 		and can_add_maps()
-	_folder_button.text = "Abrir carpeta del modo" if not mode.is_empty() else "Abrir carpeta de mapas"
+	_folder_button.text = Localization.t(&"select.open_mode_folder" if not mode.is_empty() else &"select.open_maps_folder")
 	# Alto del área: las filas que hay, hasta VISIBLE_ROWS (con una sola fila no sobra espacio).
 	var rows: int = maxi(ceili(float(count) / CARDS_PER_ROW), 1)
 	var visible_rows: int = CAMPAIGN_VISIBLE_ROWS if is_campaign else VISIBLE_ROWS
@@ -383,7 +385,7 @@ func _add_mode_tabs() -> void:
 	for mode: Dictionary in _modes:
 		var tab := Button.new()
 		tab.toggle_mode = true
-		tab.text = mode["name"] if (mode["errors"] as PackedStringArray).is_empty() else "%s (con errores)" % mode["id"]
+		tab.text = mode["name"] if (mode["errors"] as PackedStringArray).is_empty() else Localization.t_fmt(&"select.mode_with_errors", {"id": mode["id"]})
 		tab.tooltip_text = mode["description"]
 		tab.custom_minimum_size = Vector2(130, 42)
 		tab.add_theme_font_size_override("font_size", _campaign_tab.get_theme_font_size("font_size"))
@@ -417,11 +419,11 @@ func _show_mode(mode: Dictionary) -> int:
 	var maps: Array = mode["maps"]
 	if not errors.is_empty():
 		_cards.add_child(_error_card(String(mode["id"]), errors))
-		_total_stars.text = "Modo con errores"
+		_total_stars.text = Localization.t(&"select.mode_errors")
 		return 1
 	if maps.is_empty():
-		_cards.add_child(_message_label("Este modo todavía no tiene mapas.\n\nEn el editor de mapas, \"Guardar en un modo\" los agrega."))
-		_total_stars.text = "0 mapas"
+		_cards.add_child(_message_label(Localization.t(&"select.mode_empty")))
+		_total_stars.text = Localization.t(&"select.zero_maps")
 		return 1
 	var stars: int = 0
 	var playable: int = 0
@@ -431,7 +433,7 @@ func _show_mode(mode: Dictionary) -> int:
 		if level != null:
 			playable += 1
 			stars += GameFlow.map_stars(level)
-	_total_stars.text = "Estrellas: %d de %d" % [stars, playable * StarsDisplay.MAX_STARS]
+	_total_stars.text = Localization.t_fmt(&"select.stars", {"n": stars, "max": playable * StarsDisplay.MAX_STARS})
 	return maps.size()
 
 
@@ -443,8 +445,8 @@ func _make_mode_card(mode: Dictionary, index: int) -> Button:
 		return _error_card(entry["file"], entry["errors"])
 	var unlocked: bool = GameFlow.is_mode_level_unlocked(mode, index)
 	var card := _new_card()
-	card.text = "Mapa %d\n%s\n%d oleadas\n%s\n\n" % [index + 1, level.display_name, level.waves.size(),
-		mode_status_text(mode, index)]
+	card.text = Localization.t_fmt(&"select.mode_card", {"n": index + 1, "name": level.display_name,
+		"waves": Localization.t_plural(&"select.waves", level.waves.size()), "status": mode_status_text(mode, index)})
 	card.disabled = not unlocked
 	card.pressed.connect(GameFlow.start_mode_level.bind(mode, index))
 	_add_stars(card, GameFlow.map_stars(level), unlocked)
@@ -454,16 +456,16 @@ func _make_mode_card(mode: Dictionary, index: int) -> Button:
 ## Texto de estado de la tarjeta de un mapa de un modo (público para poder testearlo).
 func mode_status_text(mode: Dictionary, index: int) -> String:
 	if not GameFlow.is_mode_level_unlocked(mode, index):
-		return "Bloqueado"
+		return Localization.t(&"select.locked")
 	var id: StringName = ModePacks.map_level(mode, index).id
 	if SaveManager.is_completed(id):
 		return CampaignMap.best_lives_text(SaveManager.best_lives(id))
-	return "¡Jugar!"
+	return Localization.t(&"select.play")
 
 
 func _error_card(title: String, errors: PackedStringArray) -> Button:
 	var card := _new_card()
-	card.text = "%s\nCon errores\n\n\n" % title
+	card.text = Localization.t_fmt(&"select.card_errors", {"title": title})
 	card.disabled = true
 	card.tooltip_text = errors[0] if not errors.is_empty() else ""
 	card.add_theme_color_override("font_disabled_color", ERROR_COLOR)
@@ -478,16 +480,16 @@ func _add_dev_strip() -> void:
 	dev_strip.name = "DevStrip"
 	dev_strip.custom_minimum_size = Vector2(1090, 36)
 	dev_strip.add_theme_constant_override("separation", 10)
-	var title: Label = _dev_label("Pruebas")
+	var title: Label = _dev_label(Localization.t(&"select.dev_title"))
 	title.add_theme_color_override("font_color", Color(1, 0.55, 0.3))
 	dev_strip.add_child(title)
-	dev_strip.add_child(_dev_label("Oleada inicial"))
+	dev_strip.add_child(_dev_label(Localization.t(&"select.dev_wave")))
 	_dev_wave = _dev_spin(1, _max_waves(), 1)
 	_dev_wave.value_changed.connect(_on_dev_wave_changed)
 	dev_strip.add_child(_dev_wave)
-	dev_strip.add_child(_dev_label("Oro inicial"))
+	dev_strip.add_child(_dev_label(Localization.t(&"select.dev_gold")))
 	_dev_auto = CheckBox.new()
-	_dev_auto.text = "Automático"
+	_dev_auto.text = Localization.t(&"select.dev_auto")
 	_dev_auto.button_pressed = true
 	_dev_auto.focus_mode = Control.FOCUS_NONE
 	_dev_auto.toggled.connect(_on_dev_gold_changed.unbind(1))
@@ -496,7 +498,7 @@ func _add_dev_strip() -> void:
 	_dev_gold.editable = false
 	_dev_gold.value_changed.connect(_on_dev_gold_changed.unbind(1))
 	dev_strip.add_child(_dev_gold)
-	var hint: Label = _dev_label("Si pasa del total del nivel, se usa la última oleada.")
+	var hint: Label = _dev_label(Localization.t(&"select.dev_hint"))
 	hint.add_theme_font_size_override("font_size", 15)
 	hint.modulate = Color(1, 1, 1, 0.7)
 	dev_strip.add_child(hint)
@@ -568,9 +570,9 @@ func _make_card(index: int) -> Button:
 	var card := _new_card(CAMPAIGN_CARD_SIZE if compact else CARD_SIZE)
 	card.text = ""
 	if level.extra_towers.has("mechanical_standard"):
-		card.tooltip_text = "Estandarte mecánico: requiere cinco avances de niveles1–5 (%d/5)." % SaveManager.collected_sources(&"technology").size()
+		card.tooltip_text = Localization.t_fmt(&"select.standard_tip", {"n": SaveManager.collected_sources(&"technology").size()})
 	elif CollectibleRun.eligible(&"technology", level.id):
-		card.tooltip_text = "Avance de este nivel: %s. Una pieza distinta por nivel1–5." % ("conseguido" if SaveManager.collected_sources(&"technology").has(String(level.id)) else "pendiente")
+		card.tooltip_text = Localization.t_fmt(&"select.advance_tip", {"state": Localization.t(&"select.advance_done" if SaveManager.collected_sources(&"technology").has(String(level.id)) else &"select.advance_pending")})
 	var unlocked: bool = GameFlow.is_level_unlocked(index)
 	card.disabled = not unlocked
 	if compact:
@@ -622,7 +624,7 @@ func _add_theme_background(card: Button, theme_id: StringName) -> void:
 ## dentro del texto del botón, que Godot puede descartar al dibujarlo.
 func _add_campaign_card_text(card: Button, index: int, level: LevelData, unlocked: bool, compact: bool = false) -> void:
 	var card_size: Vector2 = CAMPAIGN_CARD_SIZE if compact else CARD_SIZE
-	var number_text: String = "Nivel %d" % (index + 1) if compact else "Nivel %d · %d oleadas" % [index + 1, level.waves.size()]
+	var number_text: String = Localization.t_fmt(&"select.level_short", {"n": index + 1}) if compact else Localization.t_fmt(&"select.level_long", {"n": index + 1, "waves": Localization.t_plural(&"select.waves", level.waves.size())})
 	# T501: la insignia ocupa la esquina de arriba a la izquierda; en la tarjeta ancha el rótulo se corre para no pisarla.
 	var number_left: float = CampaignBadgeIcon.SIDE + 8.0
 	_card_label(card, "LevelNumber", number_text, 13 if compact else 14, Rect2(number_left, 3, card_size.x - number_left - 8.0, 19 if compact else 23))
@@ -699,7 +701,7 @@ func _add_tower_icons(card: Button, index: int, level: LevelData, unlocked: bool
 		card.add_child(plate)
 		var title := Label.new()
 		title.name = "TowerTitle"
-		title.text = "Torres  ·  %d" % offered.size()
+		title.text = Localization.t_fmt(&"select.towers_title", {"n": offered.size()})
 		title.add_theme_font_size_override("font_size", 11)
 		title.add_theme_color_override("font_color", Color(0.76, 0.59, 0.34))
 		title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -733,7 +735,7 @@ func _add_tower_icons(card: Button, index: int, level: LevelData, unlocked: bool
 		icon.modulate = Color.WHITE if unlocked else Color(0.58, 0.58, 0.58, 1.0)
 		icon.size = Vector2(icon_size, icon_size)
 		var is_new: bool = fresh.has(String(tower.id))
-		card.tooltip_text += "%s%s%s" % ["\n" if card.tooltip_text != "" else "", tower.display_name, " · Nueva" if is_new else ""]
+		card.tooltip_text += "%s%s%s" % ["\n" if card.tooltip_text != "" else "", tower.name_text(), Localization.t(&"select.tower_new") if is_new else ""]
 		if is_new:
 			var mark := ColorRect.new()
 			mark.name = "NewMark"
@@ -768,7 +770,7 @@ func _make_community_card(entry: Dictionary) -> Button:
 	if level == null:
 		return _error_card(entry["file"], entry["errors"])
 	var card := _new_card()
-	card.text = "%s\n%d oleadas\n%s\n\n" % [level.display_name, level.waves.size(), community_status_text(entry)]
+	card.text = Localization.t_fmt(&"select.community_card", {"name": level.display_name, "waves": Localization.t_plural(&"select.waves", level.waves.size()), "status": community_status_text(entry)})
 	card.pressed.connect(GameFlow.start_community.bind(level))
 	_add_stars(card, GameFlow.community_stars(level), true)
 	return card
@@ -812,9 +814,8 @@ func _add_campaign_stars(card: Button, count: int, shown: bool, index: int, comp
 ## Lo que se ve cuando la solapa de la comunidad está vacía: dónde poner los mapas (RF-221).
 func _empty_message() -> Label:
 	if can_add_maps():
-		return _message_label("Todavía no hay mapas de la comunidad.\n\nCopiá archivos .json a esta carpeta y aparecen acá:\n%s\n\nLos mapas que hacés con el editor de mapas también aparecen solos." \
-			% CommunityMaps.folder_path(community_dir))
-	return _message_label("Todavía no hay mapas de la comunidad.\n\nEn el celular no se pueden agregar mapas: usá la versión de computadora.")
+		return _message_label(Localization.t_fmt(&"select.community_empty_pc", {"path": CommunityMaps.folder_path(community_dir)}))
+	return _message_label(Localization.t(&"select.community_empty_mobile"))
 
 
 func _message_label(text: String) -> Label:
@@ -832,10 +833,10 @@ func _message_label(text: String) -> Label:
 func status_text(index: int) -> String:
 	var id: StringName = GameFlow.level(index).id
 	if not GameFlow.is_level_unlocked(index):
-		return "Bloqueado"
+		return Localization.t(&"select.locked")
 	if SaveManager.is_completed(id):
 		return CampaignMap.best_lives_text(SaveManager.best_lives(id))
-	return "¡Jugar!"
+	return Localization.t(&"select.play")
 
 
 ## Texto de estado de la tarjeta de un mapa de la comunidad: no hay desbloqueo (RF-221).
@@ -843,4 +844,4 @@ func community_status_text(entry: Dictionary) -> String:
 	var id: StringName = entry["id"]
 	if SaveManager.is_completed(id):
 		return CampaignMap.best_lives_text(SaveManager.best_lives(id))
-	return "¡Jugar!"
+	return Localization.t(&"select.play")

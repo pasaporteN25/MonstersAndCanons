@@ -22,8 +22,6 @@ signal closed
 @onready var _backdrop: TextureRect = %ThemeBackdrop
 @onready var _tint: ColorRect = %ThemeTint
 
-const HINT_MOBILE: String = "Tocá en cualquier parte para empezar."
-const HINT_DESKTOP: String = "Hacé clic en cualquier lugar, o apretá cualquier tecla, para empezar."
 ## Cuánto se deja ver el suelo del tema detrás del texto (que se siga leyendo bien).
 const BACKDROP_ALPHA: float = 0.30
 const TINT_ALPHA: float = 0.35
@@ -31,6 +29,7 @@ const TINT_ALPHA: float = 0.35
 
 func _ready() -> void:
 	visible = false
+	Localization.apply(self, {"%StartButton": &"level_intro.start"})
 	_start_button.pressed.connect(close)
 	get_node("/root/Audio").call("add_click_sounds", self)
 
@@ -45,7 +44,7 @@ func open(title: String, place: String, text: String, theme_id: StringName = Map
 	_apply_theme(theme_id)
 	var mobile: bool = UiMode.is_mobile()
 	_start_button.visible = mobile  # en PC la indicación de abajo reemplaza al botón redundante
-	_hint.text = HINT_MOBILE if mobile else HINT_DESKTOP
+	_hint.text = Localization.t(&"level_intro.hint_mobile" if mobile else &"level_intro.hint_desktop")
 	visible = true
 	if mobile:
 		_start_button.grab_focus()

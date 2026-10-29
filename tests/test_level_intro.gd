@@ -111,10 +111,10 @@ func test_desktop_replaces_the_start_button_with_a_mouse_and_keyboard_hint() -> 
 	var hint: Label = intro.get_node("%Hint")
 	if UiMode.is_mobile():
 		assert_true(button.visible, "mobile conserva el botón")
-		assert_eq(hint.text, LevelIntro.HINT_MOBILE)
+		assert_eq(hint.text, Localization.t(&"level_intro.hint_mobile"))
 		return
 	assert_false(button.visible, "en PC no hay botón redundante")
-	assert_eq(hint.text, LevelIntro.HINT_DESKTOP)
+	assert_eq(hint.text, Localization.t(&"level_intro.hint_desktop"))
 	assert_true(hint.text.contains("clic") and hint.text.contains("cualquier tecla"),
 		"la indicación nombra mouse y teclado")
 

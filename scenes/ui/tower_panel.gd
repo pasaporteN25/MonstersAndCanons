@@ -64,6 +64,10 @@ var _fit_queued: bool = false
 
 func _ready() -> void:
 	visible = false
+	Localization.apply(self, {"%DamageCaption": &"tower_panel.damage", "%RateCaption": &"tower_panel.rate", "%RangeCaption": &"tower_panel.range"})
+	(%RangeCaption as Label).tooltip_text = Localization.t(&"tower_panel.range_tip")
+	_close_button.tooltip_text = Localization.t(&"tower_panel.close_tip")
+	_sell_button.tooltip_text = Localization.t(&"tower_panel.sell_tip")
 	_upgrade_button.pressed.connect(upgrade_pressed.emit)
 	_sell_button.pressed.connect(sell_pressed.emit)
 	_targeting_button.pressed.connect(targeting_pressed.emit)
@@ -154,7 +158,7 @@ func _metric_text(field: String, kind: String, current: float, changes: Dictiona
 ## RF-650 (T512): tres rectángulos en fila, bronce, plata y oro; los que faltan llevan el contorno del metal, sin relleno.
 func _refresh_level_card() -> void:
 	var level: int = _tower.level_number()
-	_level_card.tooltip_text = "Nivel actual: %d de 3" % level
+	_level_card.tooltip_text = Localization.t_fmt(&"tower_panel.level_tip", {"n": level})
 	for index: int in _level_card.get_child_count():
 		var segment: Panel = _level_card.get_child(index) as Panel
 		segment.add_theme_stylebox_override("panel", _level_style(LEVEL_COLORS[index], index < level))
@@ -250,21 +254,21 @@ func refresh(gold: int) -> void:
 	var s: TowerLevelData = _tower.stats()
 	var next: TowerLevelData = _tower.next_level_stats()
 	_shown_stun = ceili(_tower.stun_left())
-	_title.text = _tower.data.display_name
+	_title.text = _tower.data.name_text()
 	_refresh_title_tooltip()
 	_refresh_level_card()
 	_shown_wear = _tower.wear_percent
 	_shown_repair = _tower.repair_rate_received
 	var states: PackedStringArray = []
 	if _shown_stun > 0:
-		states.append("Aturdida (%d s)" % _shown_stun)
+		states.append(Localization.t_fmt(&"tower_panel.status_stunned", {"n": _shown_stun}))
 	if _shown_wear > 0.0:
-		states.append("Desgaste %.0f %%" % _shown_wear)
+		states.append(Localization.t_fmt(&"tower_panel.status_wear", {"n": "%.0f" % _shown_wear}))
 	_status.visible = not states.is_empty()
 	_status.text = " · ".join(states)
 	_shown_support = _tower.support_bonus()
 	# RF-721 punto 2: «Voladores» es un ícono con tooltip en el encabezado, tachado si la torre no los golpea.
-	_air.tooltip_text = "Golpea voladores" if _tower.data.can_hit_air else "No golpea voladores"
+	_air.tooltip_text = Localization.t(&"tower_panel.hits_air" if _tower.data.can_hit_air else &"tower_panel.no_air")
 	_air.modulate = Color.WHITE if _tower.data.can_hit_air else Color(0.62, 0.62, 0.62, 0.7)
 	_air_strike.visible = not _tower.data.can_hit_air
 	_refresh_metrics(next)
@@ -275,11 +279,11 @@ func refresh(gold: int) -> void:
 	if invested != "":
 		_stats.text += "\n" + invested
 	if _shown_repair > 0:
-		_stats.text += "\nReparación recibida: %s puntos/s" % TowerText.decimal(_shown_repair)
+		_stats.text += "\n" + Localization.t_fmt(&"tower_panel.repair_received", {"x": TowerText.decimal(_shown_repair)})
 	if _tower.data.support_only and _shown_wear > 0:
-		_stats.text += "\nPrestaciones actuales: %.0f %%" % (WearRules.ratio(_shown_wear) * 100.0)
+		_stats.text += "\n" + Localization.t_fmt(&"tower_panel.performance", {"n": "%.0f" % (WearRules.ratio(_shown_wear) * 100.0)})
 	if _shown_support > 0:
-		_stats.text += "\nApoyo recibido: +%d %% cadencia" % _shown_support
+		_stats.text += "\n" + Localization.t_fmt(&"tower_panel.support_received", {"n": _shown_support})
 	for line: String in TowerText.combo_partners(_tower.data, partner_towers):  # RF-317
 		# Espacio que no corta: si la línea no entra, que no quede "+25" arriba y "%" abajo.
 		_stats.text += "\n" + line.replace(" %", " %")
@@ -288,26 +292,26 @@ func refresh(gold: int) -> void:
 	# RF-721 punto 5: una torre que no apunta (apoyo, pulso: RF-438) no muestra «Apuntar», ni apagado.
 	_targeting_button.visible = not (_tower.data.support_only or _tower.is_pulse_tower())
 	_targeting_button.text = _tower.targeting_name()
-	_targeting_button.tooltip_text = "Apuntar: %s (clic para cambiar la prioridad de objetivo)" % _tower.targeting_name()
+	_targeting_button.tooltip_text = Localization.t_fmt(&"tower_panel.aim_tip", {"mode": _tower.targeting_name()})
 	_refresh_upgrade_button(next, gold)
-	_sell_button.text = "Vender +%s [S]" % TowerText.refund_text(_sell_value, _sell_resources)
+	_sell_button.text = Localization.t_fmt(&"tower_panel.sell", {"x": TowerText.refund_text(_sell_value, _sell_resources)})
 	_queue_fit()
 
 
 ## RF-721 punto 7: «Mejorar a nivel N» con la moneda y el costo y la tecla; sin oro queda apagado y dice «faltan N» a la vista.
 func _refresh_upgrade_button(next: TowerLevelData, gold: int) -> void:
 	if next == null:
-		_upgrade_button.text = "Nivel máximo"
+		_upgrade_button.text = Localization.t(&"tower_panel.max_level")
 		_upgrade_button.disabled = true
 		_upgrade_info.visible = false
-		_upgrade_button.tooltip_text = "Nivel máximo alcanzado"
+		_upgrade_button.tooltip_text = Localization.t(&"tower_panel.max_level_tip")
 		return
 	var short: int = next.cost - gold
-	_upgrade_button.text = "Mejorar a nivel %d" % (_tower.level_number() + 1)
+	_upgrade_button.text = Localization.t_fmt(&"tower_panel.upgrade_to", {"n": _tower.level_number() + 1})
 	_upgrade_button.disabled = short > 0
 	_upgrade_info.visible = true
 	_cost.text = str(next.cost)
 	_missing.visible = short > 0
-	_missing.text = "faltan %d" % maxi(short, 0)
+	_missing.text = Localization.t_fmt(&"tower_panel.missing", {"n": maxi(short, 0)})
 	_key.visible = short <= 0
-	_upgrade_button.tooltip_text = "Faltan %d de oro" % short if short > 0 else "Mejorar torre · U"
+	_upgrade_button.tooltip_text = Localization.t_fmt(&"tower_panel.missing_gold", {"n": short}) if short > 0 else Localization.t(&"tower_panel.upgrade_tip")

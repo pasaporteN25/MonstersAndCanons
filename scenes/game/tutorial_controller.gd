@@ -98,9 +98,8 @@ func _enter_step() -> void:
 		_ensure_tower_selected()
 	overlay.card_over_bottom_bar = id == "pick_card"  # el catálogo ya oscurece la barra de abajo
 	var step: Dictionary = flow.current()
-	var ui: Dictionary = _data.ui
-	var header: String = "%s · %s" % [ui["titulo"], String(ui["paso"]) % [flow.number(), flow.count()]]
-	overlay.show_step(header, step["texto"], flow.is_reading(), flow.is_last(), ui["siguiente"], ui["terminar"], ui["saltar"])
+	var header: String = "%s · %s" % [_data.ui_text("titulo"), _data.ui_text("paso") % [flow.number(), flow.count()]]
+	overlay.show_step(header, step["texto"], flow.is_reading(), flow.is_last(), _data.ui_text("siguiente"), _data.ui_text("terminar"), _data.ui_text("saltar"))
 
 
 ## ¿El paso de acción ya se cumplió antes de llegar a él? (el jugador se adelantó)

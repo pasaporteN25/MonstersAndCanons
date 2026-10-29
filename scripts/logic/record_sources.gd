@@ -20,10 +20,10 @@ static func from_modes(modes: Array[Dictionary]) -> Array[Dictionary]:
 				if level == null:
 					var entry: Dictionary = mode["maps"][i]
 					var reasons: PackedStringArray = entry["errors"]
-					maps.append({"label": "Mapa %d · %s" % [i + 1, entry["file"]], "table_id": &"",
-						"error": reasons[0] if not reasons.is_empty() else "El mapa no se pudo cargar"})
+					maps.append({"label": Localization.t_fmt(&"records.map_label", {"n": i + 1, "name": entry["file"]}), "table_id": &"",
+						"error": reasons[0] if not reasons.is_empty() else Localization.t(&"records.map_failed")})
 				else:
-					maps.append({"label": "Mapa %d · %s" % [i + 1, level.display_name], "table_id": level.id, "error": ""})
+					maps.append({"label": Localization.t_fmt(&"records.map_label", {"n": i + 1, "name": level.display_name}), "table_id": level.id, "error": ""})
 		sources.append({"id": mode["id"], "name": mode["name"] if errors.is_empty() else String(mode["id"]),
 			"errors": errors, "maps": maps})
 	return sources

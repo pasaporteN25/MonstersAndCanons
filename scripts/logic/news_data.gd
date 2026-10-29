@@ -26,6 +26,34 @@ var errors: PackedStringArray = []
 
 
 ## Lee el archivo. Si no existe, no se puede leer o no es JSON, el resultado trae el error y ninguna versión.
+## T534: la entrada de una versión en el idioma activo. En español queda como está en `novedades.json`; en otro idioma se
+## cambian el título, el subtítulo y cada novedad por `news.<v1_0_0>.title`/`.subtitle`/`.n<i>_title`/`.n<i>_text`.
+static func localized_entry(entry: Dictionary) -> Dictionary:
+	if Localization.language == Localization.DEFAULT_LANGUAGE:
+		return entry
+	var result: Dictionary = entry.duplicate(true)
+	var id: StringName = StringName("v" + String(entry.get("id", "")).replace(".", "_"))
+	result["titulo"] = Localization.data_text("news", id, "title", String(entry.get("titulo", "")))
+	if entry.has("subtitulo"):
+		result["subtitulo"] = Localization.data_text("news", id, "subtitle", String(entry["subtitulo"]))
+	var items: Array = result.get("novedades", [])
+	for i: int in items.size():
+		var item: Dictionary = items[i]
+		item["titulo"] = Localization.data_text("news", id, "n%d_title" % (i + 1), String(item.get("titulo", "")))
+		item["texto"] = Localization.data_text("news", id, "n%d_text" % (i + 1), String(item.get("texto", "")))
+	return result
+
+
+## T534: los rótulos de la pantalla (`news.ui.<clave>`) en el idioma activo.
+static func localized_labels(labels: Dictionary) -> Dictionary:
+	if Localization.language == Localization.DEFAULT_LANGUAGE:
+		return labels
+	var result: Dictionary = labels.duplicate()
+	for key: Variant in labels:
+		result[key] = Localization.data_text("news", &"ui", String(key), String(labels[key]))
+	return result
+
+
 static func load_file(path: String = DEFAULT_PATH) -> NewsData:
 	var data := NewsData.new()
 	if not FileAccess.file_exists(path):

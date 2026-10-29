@@ -120,7 +120,21 @@ func is_valid() -> bool:
 
 ## Los pasos del modo: `[{"paso": String, "texto": String}]`.
 func steps_for(mobile: bool) -> Array[Dictionary]:
-	return mobile_steps if mobile else pc_steps
+	var steps: Array[Dictionary] = mobile_steps if mobile else pc_steps
+	if Localization.language == Localization.DEFAULT_LANGUAGE:
+		return steps
+	# T534: en otro idioma el texto sale del catálogo (`tutorial.<modo>_<paso>.text`); los pasos y eventos son los mismos.
+	var translated: Array[Dictionary] = []
+	for step: Dictionary in steps:
+		var copy: Dictionary = step.duplicate()
+		copy["texto"] = Localization.data_text("tutorial", StringName("%s_%s" % [MODE_MOBILE if mobile else MODE_PC, step["paso"]]), "text", String(step["texto"]))
+		translated.append(copy)
+	return translated
+
+
+## T534: un rótulo de la tarjeta (`"titulo"`, `"paso"`, …) en el idioma activo.
+func ui_text(key: String) -> String:
+	return Localization.data_text("tutorial", &"ui", key, String(ui[key]))
 
 
 ## El evento que espera un paso (`EVENT_NONE` si se lee y se toca «Siguiente», o si el paso no existe).

@@ -14,7 +14,6 @@ const COMBO_SOUND_GAP: float = 0.15
 ## RF-105: velocidad rápida.
 const FAST_SPEED: float = 2.0
 ## RF-193: título de la tabla de récords en la pantalla final.
-const LEVEL_RECORDS_TITLE: String = "Récords del nivel"
 ## RF-217: cómo se llama el botón que vuelve al editor cuando se está probando un nivel.
 const BACK_TO_EDITOR_KEY: StringName = &"pause.back_to_editor"  # T534
 
@@ -241,7 +240,7 @@ func _ready() -> void:
 	exit_dialog.confirmed.connect(_on_exit_confirmed)
 	exit_dialog.cancelled.connect(_on_exit_cancelled)
 	if testing:
-		hud.set_exit_text("← Editor", "Volver al editor")
+		hud.set_exit_text(Localization.t(&"hud.exit_editor"), Localization.t(&"hud.exit_editor_tip"))
 
 	# RF-116: sonidos de la partida (los disparos, al construir cada torre).
 	session.wave_changed.connect(func(wave: int, _total: int) -> void:
@@ -327,7 +326,7 @@ func _on_mobile_demolish_pressed() -> void:
 func _on_mobile_infrastructure_targeted(cell: Vector2i, _tool: StringName, _class_id: StringName) -> void:
 	var spec: ObstacleSpec = infrastructure.obstacle_at(cell)
 	if spec == null:
-		_tool_message = "Ahí no hay nada para demoler ni habilitar"
+		_tool_message = Localization.t(&"game.tool_nothing")
 		return
 	var field: ObstacleField = infrastructure.field
 	var removable: bool = spec.kind == ObstacleSpec.Kind.REMOVABLE
@@ -335,22 +334,22 @@ func _on_mobile_infrastructure_targeted(cell: Vector2i, _tool: StringName, _clas
 	var cost: int = field.cost_of(cell)
 	_tool_message = ""
 	if reason == &"busy":
-		_tool_message = "Ya hay una demolición en curso"
+		_tool_message = Localization.t(&"game.tool_busy")
 	elif reason == &"active":
-		_tool_message = "El punto ya está activo"
+		_tool_message = Localization.t(&"game.tool_site_active")
 	elif reason == &"depleted":
-		_tool_message = "El punto está agotado"
+		_tool_message = Localization.t(&"game.tool_site_depleted")
 	elif reason != &"":
-		_tool_message = "No se puede usar ahí"
+		_tool_message = Localization.t(&"game.tool_cannot")
 	elif session.gold < cost:
-		_tool_message = "Faltan %d de oro" % (cost - session.gold)
+		_tool_message = Localization.t_fmt(&"tower_panel.missing_gold", {"n": cost - session.gold})
 	if _tool_message != "":
 		return
 	var completed: bool = infrastructure.order(cell) if removable else infrastructure.enable(cell)
 	if completed:
 		build_controller.cancel()
 	else:
-		_tool_message = "No se pudo"
+		_tool_message = Localization.t(&"game.tool_failed")
 
 
 func _on_mobile_catalog_money_changed(_gold: int) -> void:
@@ -379,8 +378,8 @@ func _mobile_machine_option() -> Dictionary:
 	if not infrastructure.machine_enabled or infrastructure.field.has_machine:
 		return {}
 	var machine_price: int = infrastructure.field.machine_price()
-	var machine_reason: String = "Faltan %d de oro" % (machine_price - session.gold) if session.gold < machine_price else ""
-	return {"tool": &"machine", "name": "Demoledora", "cost_text": "%d de oro" % machine_price,
+	var machine_reason: String = Localization.t_fmt(&"tower_panel.missing_gold", {"n": machine_price - session.gold}) if session.gold < machine_price else ""
+	return {"tool": &"machine", "name": Localization.t(&"game.machine_name"), "cost_text": Localization.t_fmt(&"towertext.gold", {"x": machine_price}),
 		"disabled_reason": machine_reason, "icon": null}
 
 
@@ -516,14 +515,14 @@ func _process(delta: float) -> void:
 			var can_improve: bool = placed != null and build_controller.can_upgrade(placed)
 			var unavailable_reason: String = ""
 			if placed != null and placed.can_upgrade() and session.gold < placed.next_level_stats().cost:
-				unavailable_reason = "Faltan %d de oro" % (placed.next_level_stats().cost - session.gold)
+				unavailable_reason = Localization.t_fmt(&"tower_panel.missing_gold", {"n": placed.next_level_stats().cost - session.gold})
 			if placed == null and tool_active:
 				mobile_hud.show_tool_status(_tool_message)
 			else:
 				mobile_hud.show_selected_tower(placed, session.gold, refund, resource_refund,
 					can_improve, unavailable_reason)
 		else:
-			mobile_hud.show_ghost_status(selected_tower.display_name, TowerText.cost_text(selected_tower, build_controller.pay_alt()))
+			mobile_hud.show_ghost_status(selected_tower.name_text(), TowerText.cost_text(selected_tower, build_controller.pay_alt()))
 			var ghost: GhostPlacement = build_controller.ghost_placement()
 			var ghost_world_pos: Vector2 = level.cell_center(ghost.cell)
 			var zoom: float = camera.zoom.x if camera != null else minimum_map_zoom
@@ -625,9 +624,9 @@ func _on_view_zoomed_in() -> void:
 	var prefs: UiPrefs = SaveManager.get_ui_prefs()
 	var message: String
 	if UiMode.is_mobile():
-		message = "Acercaste el mapa. Tocá la lupa para volver a verlo entero."
+		message = Localization.t(&"game.zoom_touch")
 	else:
-		message = "Acercaste el mapa. Apretá %s para volver a verlo entero." % ViewAllBinding.key_text(prefs.view_all_key)
+		message = Localization.t_fmt(&"game.zoom_key", {"key": ViewAllBinding.key_text(prefs.view_all_key)})
 	hud.show_view_all_notice(message)
 	prefs.view_all_hint_seen = true
 	SaveManager.set_ui_prefs(prefs)
@@ -876,7 +875,7 @@ func _add_dev_panel() -> void:
 	hud.add_child(dev_panel)
 	dev_panel.metrics_toggled.connect(hud.show_metrics)
 	var button := Button.new()
-	button.text = "Pruebas [F1]"
+	button.text = Localization.t(&"game.dev_button")
 	button.focus_mode = Control.FOCUS_NONE
 	button.position = Vector2(880, 8)
 	button.size = Vector2(126, 32)
@@ -963,7 +962,7 @@ func _on_enemy_spawned(enemy: Enemy) -> void:
 		_carrier = enemy
 	enemy.died.connect(_on_enemy_died)
 	enemy.charged_impact.connect(func(_rammer: Enemy, tower: Tower) -> void:
-		var text := FloatingText.new().setup("¡Desgaste!", Color(1,0.67,0.27), 18, 0.7, 30.0)
+		var text := FloatingText.new().setup(Localization.t(&"game.wear_float"), Color(1,0.67,0.27), 18, 0.7, 30.0)
 		text.position = tower.global_position + Vector2(0,-20)
 		effects.add_child(text)
 		Audio.play(&"impact", 0.2))
@@ -1186,7 +1185,7 @@ func _refresh_tower_panel() -> void:
 		hud.tower_panel.hide()
 		var reason: String = ""
 		if tower != null and tower.can_upgrade() and session.gold < tower.next_level_stats().cost:
-			reason = "Faltan %d de oro" % (tower.next_level_stats().cost - session.gold)
+			reason = Localization.t_fmt(&"tower_panel.missing_gold", {"n": tower.next_level_stats().cost - session.gold})
 		mobile_hud.show_selected_tower(tower, session.gold, value, resource_value,
 		tower != null and build_controller.can_upgrade(tower), reason)
 		_sync_range_preview()
@@ -1287,16 +1286,16 @@ func open_epilogue() -> void:
 ## Si los puntos entran en el top 5 del nivel, pide las iniciales; si no, muestra la tabla.
 func _show_level_records() -> void:
 	if GameFlow.level_score_qualifies(session.score):
-		end_screen.ask_name("¡Nuevo récord! Escribí tus iniciales", HighScores.LEVEL_NAME_LENGTH,
+		end_screen.ask_name(Localization.t(&"game.new_record"), HighScores.LEVEL_NAME_LENGTH,
 			SaveManager.last_initials(HighScores.LEVEL_NAME_LENGTH))
 	else:
-		end_screen.show_scores(LEVEL_RECORDS_TITLE, GameFlow.current_level_scores())
+		end_screen.show_scores(Localization.t(&"game.level_records"), GameFlow.current_level_scores())
 		_show_hall_of_fame_if_earned()
 
 
 func _on_record_name_entered(name: String) -> void:
 	var index: int = GameFlow.record_level_score(name, session.score)
-	end_screen.show_scores(LEVEL_RECORDS_TITLE, GameFlow.current_level_scores(), index)
+	end_screen.show_scores(Localization.t(&"game.level_records"), GameFlow.current_level_scores(), index)
 	_show_hall_of_fame_if_earned()
 
 
@@ -1335,14 +1334,14 @@ func _setup_collection() -> void:
 func _update_collection_notice() -> void:
 	var id: StringName = CollectionDefinitions.collection_of_level(level_data.id)
 	var count: int = SaveManager.collected_sources(id).size()
-	var state: String = "conseguido aquí" if SaveManager.collected_sources(id).has(String(level_data.id)) else "pendiente aquí"
+	var state: String = Localization.t(&"hud.collect_done_here" if SaveManager.collected_sources(id).has(String(level_data.id)) else &"hud.collect_pending_here")
 	if id == &"technology":
 		if collectible != null and collectible.picked_wave > 0:
 			count += 1
-			state = "oleada confirmada; pendiente del resultado" if collectible.confirmed else "completar oleada"
+			state = Localization.t(&"hud.collect_confirmed" if collectible.confirmed else &"hud.collect_complete_wave")
 	elif findings.has_piece(id, level_data.id):
 		count += 1
-		state = "oleada confirmada; pendiente del resultado" if findings.is_confirmed(id, level_data.id) else "completar oleada"
+		state = Localization.t(&"hud.collect_confirmed" if findings.is_confirmed(id, level_data.id) else &"hud.collect_complete_wave")
 	hud.show_collection(count, CollectionDefinitions.required(id), state, id)
 
 func _collection_wave_completed(wave: int, _bonus: int) -> void:

@@ -9,20 +9,20 @@ const NAMES: Dictionary = {
 
 
 static func display_name(spec: ObstacleSpec) -> String:
-	return NAMES.get(spec.class_id, String(spec.class_id).capitalize())
+	return Localization.data_text("obstacle", spec.class_id, "name", NAMES.get(spec.class_id, String(spec.class_id).capitalize()))
 
 
 static func cost_line(cost: int) -> String:
-	return "Costo: %d de oro" % cost
+	return Localization.t_fmt(&"obstacle.cost", {"n": cost})
 
 
 static func time_line(seconds: float) -> String:
-	return "Tiempo: %s s" % _seconds(seconds)
+	return Localization.t_fmt(&"obstacle.time", {"x": _seconds(seconds)})
 
 
 ## Lo que falta para pagar: "Te faltan 15 de oro".
 static func missing_gold(cost: int, gold: int) -> String:
-	return "Te faltan %d de oro" % maxi(cost - gold, 0)
+	return Localization.t_fmt(&"obstacle.short_gold", {"n": maxi(cost - gold, 0)})
 
 
 ## RF-404: la recompensa sin mostrar el sorteo.
@@ -30,16 +30,16 @@ static func missing_gold(cost: int, gold: int) -> String:
 static func reward_line(spec: ObstacleSpec, recovered: bool, collects: bool = true) -> String:
 	if spec.finding_collection != &"":
 		if not collects:
-			return "Aquí no se recogen piezas"
+			return Localization.t(&"obstacle.no_pieces")
 		var name: String = CollectionDefinitions.name_of(spec.finding_collection)
-		return "Pieza de la %s: %s" % [name, "ya recuperada" if recovered else "pendiente"]
+		return Localization.t_fmt(&"obstacle.piece", {"name": name, "state": Localization.t(&"obstacle.piece_recovered" if recovered else &"obstacle.piece_pending")})
 	if spec.chance_percent > 0 and spec.reward_amount > 0:
-		return "Puede dar %d %s (%d %%)" % [spec.reward_amount, "recurso" if spec.reward_amount == 1 else "recursos", spec.chance_percent]
-	return "No da recursos"
+		return Localization.t_fmt(&"obstacle.may_give", {"n": spec.reward_amount, "word": TowerText.resources_word(spec.reward_amount), "pct": spec.chance_percent})
+	return Localization.t(&"obstacle.gives_nothing")
 
 
 static func seconds_left_line(seconds: float) -> String:
-	return "Falta: %s s" % _seconds(ceilf(seconds))
+	return Localization.t_fmt(&"obstacle.time_left", {"x": _seconds(ceilf(seconds))})
 
 
 static func _seconds(seconds: float) -> String:
@@ -48,22 +48,22 @@ static func _seconds(seconds: float) -> String:
 
 ## RF-422: el botón de un punto sin habilitar.
 static func enable_line(cost: int) -> String:
-	return "Habilitar extracción (%d de oro)" % cost
+	return Localization.t_fmt(&"obstacle.enable", {"n": cost})
 
 
 static func production_line(production: int) -> String:
-	return "Produce %d %s por oleada" % [production, "recurso" if production == 1 else "recursos"]
+	return Localization.t_fmt(&"obstacle.production", {"n": production, "word": TowerText.resources_word(production)})
 
 
 ## RF-424: "Reserva 6/8".
 static func reserve_line(left: int, total: int) -> String:
-	return "Reserva %d/%d" % [left, total]
+	return Localization.t_fmt(&"obstacle.reserve", {"left": left, "total": total})
 
 
 static func state_line(state: ObstacleField.State) -> String:
 	match state:
 		ObstacleField.State.ACTIVE:
-			return "Activa"
+			return Localization.t(&"obstacle.state_active")
 		ObstacleField.State.DEPLETED:
-			return "Agotada"
-	return "Sin habilitar"
+			return Localization.t(&"obstacle.state_depleted")
+	return Localization.t(&"obstacle.state_disabled")

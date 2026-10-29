@@ -161,7 +161,7 @@ func _build_layout() -> void:
 	margin.add_child(rows)
 
 	var title := Label.new()
-	title.text = "Wiki"
+	title.text = Localization.t(&"wiki.title")
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_font_size_override("font_size", 44)
 	title.add_theme_color_override("font_color", GOLD)
@@ -186,7 +186,7 @@ func _build_layout() -> void:
 	list_rows.add_theme_constant_override("separation", 8)
 	list_panel.add_child(list_rows)
 	_intro_button = Button.new()  # RF-501: arriba de la lista, solo en la solapa Lore
-	_intro_button.text = "Ver la intro"
+	_intro_button.text = Localization.t(&"wiki.view_intro")
 	_intro_button.custom_minimum_size = Vector2(0, 46)
 	_intro_button.add_theme_font_size_override("font_size", 21)
 	_intro_button.visible = false
@@ -210,7 +210,7 @@ func _build_layout() -> void:
 	_detail_scroll.add_child(_detail)
 
 	_back_button = Button.new()
-	_back_button.text = "Volver"
+	_back_button.text = Localization.t(&"wiki.back")
 	_back_button.custom_minimum_size = Vector2(220, 48)
 	_back_button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	_back_button.add_theme_font_size_override("font_size", 22)

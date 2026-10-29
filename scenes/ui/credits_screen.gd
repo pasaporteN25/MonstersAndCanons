@@ -7,8 +7,6 @@ extends CanvasLayer
 ## Se cerró la pantalla (por «Volver», `Esc` o el «atrás» de Android).
 signal closed
 
-const TITLE: String = "Créditos"
-const BACK_TEXT: String = "Volver"
 const GOLD := Color(1.0, 0.84, 0.3)
 const TEXT_COLOR := Color(0.92, 0.92, 0.96)
 const THEME: Theme = preload("res://assets/ui/menu_theme.tres")
@@ -35,7 +33,7 @@ func _init() -> void:
 	column.offset_bottom = -36.0
 	column.add_theme_constant_override("separation", 18)
 	dim.add_child(column)
-	column.add_child(_label(TITLE, 40, GOLD))
+	column.add_child(_label(Localization.t(&"credits.title"), 40, GOLD))
 	_scroll = ScrollContainer.new()
 	_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -45,7 +43,7 @@ func _init() -> void:
 	_rows.add_theme_constant_override("separation", 14)
 	_scroll.add_child(_rows)
 	_back_button = Button.new()
-	_back_button.text = BACK_TEXT
+	_back_button.text = Localization.t(&"credits.back")
 	_back_button.custom_minimum_size = Vector2(220, 52)
 	_back_button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	_back_button.add_theme_font_size_override("font_size", 22)
