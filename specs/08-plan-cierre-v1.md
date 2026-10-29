@@ -211,7 +211,7 @@ Cada ficha detallada se completa en la tarea de cada nivel con lo que pide el 07
 | [T227](tareas/T227-spec-lore-bloque-3.md) | 📜 Spec del lore en el juego (enmienda de §11), del bloque 3 y del final | Sonnet alto | T201 (hecha); G4 alimenta una revisión post-V1 | Mediano |
 | [T228](tareas/T228-textos-wiki-lore.md) | Textos por nivel, pantalla de entrada y victoria, y categoría Lore en la Wiki | Sonnet medio | T227 | Mediano |
 | [T229](tareas/T229-niveles-11-14.md) | Nivel 11 (y, con la misma ficha, 12, 13 y 14 como T230, T231 y T232) | Sonnet medio | T217, T227 | Mediano c/u |
-| [T233](tareas/T233-arte-final.md) | 🎨 Central de energía, abastecimiento e imagen del final | **Codex** | T227 | Mediano |
+| [T233](tareas/T233-arte-final.md) | ✅ 🎨 Central de energía, abastecimiento e imagen del final (cerrada en T559, 2026-10-29: Central por T267b/T277, abastecimiento por T549, retiro del arte viejo por T547 y finales por T546) | **Codex** | T227 | Mediano |
 | [T243](tareas/T243-spec-jefe-supremo.md) | 📜 🚦 Spec del jefe supremo del 15 (función, contramedidas, habilidad y textos) | Sonnet alto + **Lucas** | T227 | Chico |
 | [T244](tareas/T244-arte-jefe-supremo.md) | ✅ 🎨 Arte del jefe supremo (aprobado por Lucas el 2026-10-16; cerrada en T444) | **Codex** | T243 | Mediano |
 | [T234](tareas/T234-nivel-15.md) | Nivel 15 y epílogo | Sonnet alto | T228, T232, T243 (T233 y T244 para el arte final) | Mediano |
