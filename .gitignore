@@ -25,3 +25,8 @@ art/redesign-m23/*.log
 .env
 *.apk
 *.aab
+
+# Capturas de revisión (D1 de T538): las nuevas no se versionan; siguen las ya versionadas y las del README.
+/Capturas/*
+!/Capturas/.gdignore
+!/Capturas/T520-*
