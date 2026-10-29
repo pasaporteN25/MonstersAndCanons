@@ -104,9 +104,9 @@ func test_the_meadow_decoration_is_the_old_one() -> void:
 
 
 ## T516: `huesos.svg` salió de la lista (se retiró el 2026-10-26); su reemplazo, `bones_skull.png`, lo cubre `test_desert_bones_is_the_approved_128_png`.
+## T555: también salieron `cactus`, `columna`, `bloque`, `estatua`, `tronco` y `helecho`; sus PNG los cubre `test_m79_adornments_use_the_approved_rendered_pngs`.
 func test_the_new_drawings_exist_and_are_64_square() -> void:
-	var names: PackedStringArray = ["cactus", "roca_roja", "roca_negra", "grieta",
-		"columna", "bloque", "estatua", "tronco", "helecho", "junco", "hongo", "flores"]
+	var names: PackedStringArray = ["roca_roja", "roca_negra", "grieta", "junco", "hongo", "flores"]
 	for file_name: String in names:
 		var texture: Texture2D = load("res://assets/sprites/map/%s.svg" % file_name)
 		assert_not_null(texture, file_name)
