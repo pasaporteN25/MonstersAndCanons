@@ -114,13 +114,13 @@ En el editor: **Editor → Administrar plantillas de exportación** → **Descar
 
 ## 6. Exportar para Windows (`.exe`)
 
-La configuración ya está en el repositorio (`export_presets.cfg`, preset **"Windows Desktop"**). Deja fuera del juego los tests, las herramientas, las specs y GUT.
+La configuración ya está en el repositorio (`export_presets.cfg`, preset **"Windows Desktop"**). Deja fuera del juego los tests, las herramientas, las specs, GUT, el arte fuente (`art/`) y las capturas de verificación (`Capturas/`, RF-730, D-220); la misma lista está en los tres presets (Windows, Android y Linux) y, si se agrega un preset nuevo, hay que repetirla. Para ver qué entró en un paquete sin hacer el ejecutable: `godot --headless --path . --export-pack "Linux" /tmp/prueba.pck` (con `Capturas/` fuera, el `.pck` pesa unos 61 MB).
 
 ```bash
 godot --headless --path . --export-release "Windows Desktop" build/MonstersCanons.exe
 ```
 
-**✅ Comprobar:** se crea `build/MonstersCanons.exe` (~110 MB, casi todo es el motor). Copiarlo a otra carpeta y abrirlo: tiene que funcionar sin Godot.
+**✅ Comprobar:** se crea `build/MonstersCanons.exe` (unos 170 MB: ~109 MB del motor de Windows y ~61 MB del juego; **estimado**, el `.exe` de Windows no se midió desde Linux). Copiarlo a otra carpeta y abrirlo: tiene que funcionar sin Godot.
 
 > ℹ️ La carpeta `build/` no se sube a git.
 
@@ -212,7 +212,7 @@ godot --headless --path . --export-release "Linux" build/MonstersCanons.x86_64
 tar --mode=755 -czf build/MonstersCanons_linux.tar.gz -C build MonstersCanons.x86_64
 ```
 
-**✅ Comprobar:** se crea `build/MonstersCanons.x86_64` (~75 MB). Para verificar que es de Linux: `file build/MonstersCanons.x86_64` dice "ELF 64-bit LSB executable, x86-64". Necesita las plantillas de Linux, que vienen con las de Windows (paso 6, arriba).
+**✅ Comprobar:** se crea `build/MonstersCanons.x86_64` (unos 134 MB, medido el 2026-10-28: ~74 MB del motor y ~61 MB del juego; antes de excluir `Capturas/` eran 310 MB). Para verificar que es de Linux: `file build/MonstersCanons.x86_64` dice "ELF 64-bit LSB executable, x86-64". Necesita las plantillas de Linux, que vienen con las de Windows (paso 6, arriba).
 
 **En una computadora Linux:** `tar -xzf MonstersCanons_linux.tar.gz` y `./MonstersCanons.x86_64`. Si se copió el archivo suelto desde Windows, hay que darle permiso: `chmod +x MonstersCanons.x86_64`.
 

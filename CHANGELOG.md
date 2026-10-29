@@ -1,17 +1,16 @@
 # Novedades del juego
 
-<<<<<<< HEAD
 ## Dos finales según tus estrellas *(T546, 2026-10-28)*
 
 El epílogo ahora tiene **dos imágenes**. Si ganaste los **15 niveles con 3 estrellas**, ves la colonia iluminada y los fuegos de los Moradores de siempre. En cualquier otro caso ves la misma historia con una **tormenta lejana** sobre el valle, sin nada reconocible: la duda de la frase queda abierta. Se decide al abrir el epílogo con lo que ya está guardado, así que si más tarde conseguís las estrellas que faltan, la próxima vez ves la luminosa. El texto, los botones y los créditos no cambian, y no se guarda nada nuevo.
-=======
+
 ## Fondo propio para la presentación del Coloso *(T548, 2026-10-28)*
 
 Cuando aparece el Coloso en el nivel 15, la pantalla de presentación ahora tiene su fondo propio: un claro sombrío de basalto con vetas ámbar. Detrás del nombre y la frase hay una franja oscura para que se lean bien. El Jefe del nivel 1 sigue como antes. No cambia la partida, las oleadas ni el balance; la ilustración propia del Coloso todavía no está.
+
 ## Nave, taller y lingotes en La Central *(T549, 2026-10-28; en revisión)*
 
 En el nivel 15 el borde del mapa ya no muestra el depósito, el poste y la vagoneta de antes: ahora hay una nave exploradora destruida con el farol roto y apagado, un taller de frontera en ruinas y una pila de lingotes de hierro y bronce. Son solo decoración y el mapa no cambió.
->>>>>>> origin/main
 
 ## Tarjetas solo con niveles disponibles y salida más corta *(T531, 2026-10-28)*
 
