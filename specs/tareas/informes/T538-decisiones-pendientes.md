@@ -30,7 +30,7 @@ Ahorro estimado 8–12 MB sobre 60 MB (franjas: 18,4 MB). Riesgo: pérdida visib
 ### D4 · ¿La música pasa a OGG? — **DECIDIDO (2026-10-28): después de la V1**
 Ahorro 1,5–2 MB. Requiere escucha y verificar los bucles. **Recomendado: después de la V1.**
 
-### D5 · ¿Qué hacemos con los ~50 SVG fuente que están en `assets/`? — **EN CURSO: Lucas pidió un documento que muestre cuáles son; probablemente se borran**
+### D5 · ¿Qué hacemos con los ~50 SVG fuente que están en `assets/`? — **EN CURSO: documento listo (T554); falta que Lucas marque cuáles se borran**
 No los usa el juego (el arte vigente son PNG renderizados) y están listados como «sin uso» en el test. Ahorro < 1,5 MB, pero confunden.
 - A. Moverlos a `art/` (quedan como fuente, reversible). *Recomendado, después de la V1.*
 - B. Borrarlos.
@@ -54,4 +54,4 @@ Hoy los usan solo los mapas de la comunidad; ningún nivel de campaña. **Recome
 - D1 A: `.gitignore` deja de versionar capturas nuevas (T552); se conservan las ya versionadas y las del README.
 - D2: no se reescribe el historial; no hay `push --force`.
 - D3 y D4: sin compresión ni OGG antes de la V1.
-- D5: documento con los SVG fuente y su estado, para decidir el borrado.
+- D5: documento con los SVG fuente y su estado, para decidir el borrado. **Hecho en T554** (`art/t554-svg-fuente/revision.html` e informe `T554-svg-fuente.md`): de los 50 SVG, 44 se recomiendan para BORRAR (57.403 bytes), 0 para MOVER y 6 para REVISAR (12.588 bytes, los lee algún script de `art/` o no se verificó el reemplazo). A la espera de la decisión de Lucas; no se borró nada.
