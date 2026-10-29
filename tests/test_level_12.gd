@@ -101,7 +101,7 @@ func _corners(grid: MapGrid) -> Array[Vector2i]:
 func test_level_12_follows_the_eleventh_in_a_canyon_of_26_by_11_with_one_entrance() -> void:
 	assert_eq(LevelFile.campaign_ids().slice(10, 12), PackedStringArray(["level_11", "level_12"]))
 	var level: LevelData = _load(12)
-	assert_eq(level.display_name, "El cañadón")
+	assert_eq(level.display_name, "Cañadón")
 	assert_eq(level.theme, &"desierto")
 	assert_eq(level.waves.size(), 24)
 	assert_eq(level.starting_gold, 440)

@@ -7,7 +7,7 @@
  "bloques": [
   {
    "tipo": "texto",
-   "texto": "La central quedó en el valle donde aterrizó la nave. Produce la energía que necesita la colonia y alimenta la línea que la une con la mina."
+   "texto": "La central quedó en el último valle, el de más al este, lejos del oasis donde aterrizó la nave. Produce la energía que necesita la colonia y alimenta la línea que la une con la mina."
   },
   {
    "tipo": "texto",
@@ -16,10 +16,6 @@
   {
    "tipo": "texto",
    "texto": "Los colonos lo llaman el Coloso. Es de la misma piedra que los Guardianes. Cuando cae, se parte en tres y los pedazos siguen camino."
-  },
-  {
-   "tipo": "texto",
-   "texto": "El informe termina ahí. No dice qué se hará con lo que falta."
   }
  ]
 }

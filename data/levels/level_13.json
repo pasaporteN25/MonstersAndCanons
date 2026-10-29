@@ -17,8 +17,8 @@
   "demoledora": false,
   "textos": {
     "lugar": "El camino al resto de la región",
-    "entrada": "En el paso alto el camino se parte en dos.\nYa no llegan de a uno: cada grupo trae quien protege, quien cura y quien apaga torres.\nHay hitos de piedra en el camino. Marcan un límite, y ya lo pasamos.",
-    "victoria": "Paso alto asegurado. La región queda comunicada con el valle.\nLos hitos quedaron del lado de adentro."
+    "entrada": "En el paso alto el camino se parte en dos.\nYa no llegan de a uno: cada grupo trae quien protege, quien cura y quien apaga torres.\nHay rocas marcadas en el camino. Marcan un límite, y ya lo pasamos.",
+    "victoria": "Paso alto asegurado. La región queda comunicada con el valle de más al este.\nLas rocas marcadas quedaron del lado de adentro."
   },
   "mapa": [
     "A######################.XX",

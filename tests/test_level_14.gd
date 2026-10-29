@@ -126,7 +126,7 @@ func _all_together(wave: WaveData) -> bool:
 func test_level_14_follows_the_thirteenth_in_a_ruined_map_of_26_by_12_with_two_entrances() -> void:
 	assert_eq(LevelFile.campaign_ids().slice(12, 14), PackedStringArray(["level_13", "level_14"]))
 	var level: LevelData = _load(14)
-	assert_eq(level.display_name, "Los poblados vacíos")
+	assert_eq(level.display_name, "Poblados")
 	assert_eq(level.theme, &"ruinas")
 	assert_eq(level.waves.size(), 26)
 	assert_eq(level.starting_gold, 480)

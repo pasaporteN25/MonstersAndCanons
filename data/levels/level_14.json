@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "nombre": "Los poblados vacíos",
+  "nombre": "Poblados",
   "oro": 480,
   "vidas": 20,
   "aumento_vida": 30,
@@ -18,7 +18,7 @@
   "demoledora": false,
   "textos": {
     "lugar": "Asentamientos de los Moradores",
-    "entrada": "Los poblados están a la vista, pero no sale humo de ninguno.\nLos Moradores se llevaron lo que pudieron.\nAun así, algo todavía defiende el lugar.",
+    "entrada": "Los poblados están a la vista, pero no sale humo de ninguno.\nLos fogones están armados y no se ve a nadie.\nAun así, algo todavía defiende el lugar.",
     "victoria": "Los poblados están vacíos.\nLas brasas todavía están tibias."
   },
   "mapa": [
