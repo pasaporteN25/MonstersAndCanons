@@ -13,7 +13,7 @@ Estado del repo al escribir esto: `main` incluye hasta el PR #175. No hay PRs ni
 ### A1 · T545 · Revisar los textos del juego, uno por uno
 - **Archivo a editar:** `specs/tareas/informes/T545-decisiones-redaccion.md` (82 textos; cada uno trae el actual, opciones con casilla, `Mi redacción` y `Nota`).
 - **Alternativa visual:** `art/t545-revision/opciones.html` (abrir en el navegador; trae capturas y contadores de caracteres; «Copiar mis decisiones» te da el texto para pegarle a Claude).
-- **Ya decidido (no hace falta repetirlo):** `specs/tareas/informes/T545-decisiones-hallazgos.md`. Ya está cargado en el juego lo de los niveles 3, 4, 5, 11 a 15, créditos y Wiki (PR #171).
+- **Ya decidido (no hace falta repetirlo):** `specs/tareas/informes/T545-decisiones-hallazgos.md`. Ya está cargado en el juego lo de los niveles 3, 4, 11, 12, 13, 14 y 15, los créditos y la Wiki (PR #171).
 - **Cómo avanzar:** si preferís por tandas, completá diez textos y pasámelos; no hace falta terminar los 82.
 - Respuesta / avance: 
 
@@ -46,7 +46,7 @@ Archivo: `specs/tareas/informes/T545-propuestas-pendientes.md` (2 o 3 opciones p
 - [ ] Están bien. Cerrar T532.
 - [ ] Más oscuras / menos saturadas: brillo ____ saturación ____
 - [ ] Más claras / más saturadas: brillo ____ saturación ____
-- Capturas existentes: `art/t532-*` (faltan pradera, bosque, ruinas y pantano).
+- Capturas existentes: `art/t532-franjas/` (faltan pradera, bosque, ruinas y pantano).
 
 ### B3 · T216 · Arte de la Disruptora
 - **Qué mirar:** `art/m51-disruptora/` (arte provisional, ya en partida).
