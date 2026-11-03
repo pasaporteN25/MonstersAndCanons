@@ -121,7 +121,8 @@ func _assert_bar_ok(game: Game, label_text: String) -> void:
 	var upgrade: Button = _upgrade(game)
 	assert_eq(upgrade.size, Vector2(320.0, 84.0), label_text + ": «Mejorar» mide 320 × 84")
 	assert_eq(_node(game, "MobileSell").size, Vector2(150.0, 84.0), label_text + ": «Vender» mide 150 × 84")
-	var gap: float = _node(game, "MobileSell").global_position.x - (upgrade.global_position.x + upgrade.size.x)
+	var sell_node: Control = _node(game, "MobileSell")
+	var gap: float = upgrade.global_position.x - (sell_node.global_position.x + sell_node.size.x)
 	assert_gte(gap, _required_separation(game), "%s: «Mejorar» y «Vender» separados al menos 35 mm (%.0f px)" % [label_text, gap])
 	var change: Label = _change(game)
 	if change.visible:
@@ -142,9 +143,9 @@ func test_frost_level_one_has_the_cel_b_order_sizes_and_two_short_lines() -> voi
 	assert_eq(lines[1], "Daño 2 · 1/s · Alc. 2,5", "renglón 2: el estado actual abreviado, con el alcance real y con coma")
 	assert_eq(_node(game, "MobileTargeting").size, Vector2(112.0, 84.0), "«Apuntar» es un ícono de 112 × 84")
 	assert_eq(_node(game, "BottomCancelPlacement").size, Vector2(64.0, 64.0), "la × no cambia")
-	# El orden de izquierda a derecha de la maqueta: texto, ×, Apuntar, Mejorar, separación, Vender.
+	# T566 (RF-736): ×, texto, Vender, separación, Apuntar, Mejorar.
 	var xs: Array[float] = []
-	for node_name: String in ["StatusText", "BottomCancelPlacement", "MobileTargeting", "MobileUpgrade", "SellSeparation", "MobileSell"]:
+	for node_name: String in ["BottomCancelPlacement", "StatusText", "MobileSell", "SellSeparation", "MobileTargeting", "MobileUpgrade"]:
 		xs.append(_node(game, node_name).global_position.x)
 	for i: int in range(1, xs.size()):
 		assert_gt(xs[i], xs[i - 1], "el hijo %d va a la derecha del anterior" % i)
@@ -247,18 +248,46 @@ func test_pulse_tower_has_no_aim_button() -> void:
 	_assert_bar_ok(game, "Disruptora 1")
 
 
-func test_safety_gap_between_upgrade_and_sell_is_measured_against_35_mm() -> void:
+func test_safety_gap_between_sell_and_upgrade_is_measured_against_35_mm() -> void:
 	var game: Game = await _new_game()
 	_select(game, "tesla")
 	await wait_process_frames(5)
 	var upgrade: Control = _upgrade(game)
 	var sell: Control = _node(game, "MobileSell")
-	var gap: float = sell.global_position.x - upgrade.get_global_rect().end.x
+	var gap: float = upgrade.global_position.x - sell.get_global_rect().end.x
 	var required: float = _required_separation(game)
-	gut.p("T514 medido: «Mejorar» → «Vender» %.1f px lógicos (35 mm = %.1f px; la maqueta CEL-B deja ≈ 312 px)" % [gap, required])
+	gut.p("T566 medido: «Vender» → «Mejorar» %.1f px lógicos (35 mm = %.1f px)" % [gap, required])
 	assert_gte(gap, required, "la separación real no baja de 35 mm")
-	assert_gt(gap, 312.0, "y supera la de la maqueta, que no alcanzaba")
 	assert_gte(_node(game, "SellSeparation").size.x, required, "el espaciador solo ya mide 35 mm")
+
+
+func test_cancel_cross_starts_at_the_left_margin_and_children_are_in_rf_736_order() -> void:
+	var game: Game = await _new_game()
+	_select(game, "frost")
+	await wait_process_frames(5)
+	var cross: Control = _node(game, "BottomCancelPlacement")
+	var margin_x: float = float(MobileUiConfig.load_from().get_value("barra_margen_x_px"))
+	assert_almost_eq(cross.global_position.x, margin_x, 0.5, "la × empieza en el margen izquierdo de la barra")
+	var row: Node = _node(game, "StatusText").get_parent()
+	var order: Array[String] = []
+	for child: Node in row.get_children():
+		if (child as Control).visible:
+			order.append(String(child.name))
+	assert_eq(order, ["BottomCancelPlacement", "StatusText", "MobileSell", "SellSeparation", "MobileTargeting", "MobileUpgrade"], "orden de RF-736")
+
+
+func test_sell_never_overlaps_start_wave_button() -> void:
+	var game: Game = await _new_game()
+	var start: Control = game.hud.find_child("StartWaveButton", true, false) as Control
+	assert_not_null(start)
+	for id: String in ALL_TOWERS:
+		var tower: Tower = _select(game, id)
+		if tower == null:
+			continue
+		await wait_process_frames(3)
+		var sell_rect: Rect2 = _node(game, "MobileSell").get_global_rect()
+		var start_rect: Rect2 = start.get_global_rect()
+		assert_false(sell_rect.intersects(start_rect), "%s: «Vender» %s no se cruza con «Empezar oleada» %s" % [id, sell_rect, start_rect])
 
 
 func test_bar_font_returns_to_normal_when_selection_is_released() -> void:

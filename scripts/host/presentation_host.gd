@@ -7,8 +7,10 @@ const LOGICAL_SIZE: Vector2i = Vector2i(1280, 720)
 @onready var content_frame: SubViewportContainer = $ContentFrame
 @onready var content_viewport: SubViewport = $ContentFrame/ContentViewport
 @onready var background_texture: TextureRect = $BackgroundTexture
+@onready var side_rails: SideRails = $SideRails
 
 var active_screen: Node
+var _presentation_backdrop: BossBackdrop
 var _previous_content_scale_mode: int = Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
 var _previous_content_scale_aspect: int = Window.CONTENT_SCALE_ASPECT_KEEP
 
@@ -92,8 +94,44 @@ func set_background_texture(texture: Texture2D) -> void:
 	background_texture.visible = texture != null
 
 
+## RF-738: mientras dura la presentación de un jefe, el fondo del jefe cubre toda la superficie, franjas incluidas.
+## Va entre el fondo del terreno y el marco, y no pasa por el material de RF-726 (ese apagado es solo de las franjas).
+func show_presentation_backdrop(tint: Color, art: Texture2D) -> void:
+	clear_presentation_backdrop()
+	_presentation_backdrop = BossBackdrop.new().setup(tint, art)
+	_presentation_backdrop.name = "PresentationBackdrop"
+	add_child(_presentation_backdrop)
+	move_child(_presentation_backdrop, content_frame.get_index())
+
+
+func set_presentation_backdrop_alpha(alpha: float) -> void:
+	if _presentation_backdrop != null:
+		_presentation_backdrop.modulate.a = alpha
+
+
+## Quita el fondo temporal; el del terreno (`BackgroundTexture`) nunca se tocó, así que vuelve solo.
+func clear_presentation_backdrop() -> void:
+	if _presentation_backdrop == null:
+		return
+	if is_instance_valid(_presentation_backdrop):
+		# queue_free y no remove_child: esto puede llamarse mientras el árbol se desarma (el padre está "ocupado").
+		_presentation_backdrop.visible = false
+		_presentation_backdrop.name = "PresentationBackdropGone"  # libera el nombre por si se abre otra enseguida
+		_presentation_backdrop.queue_free()
+	_presentation_backdrop = null
+
+
+func has_presentation_backdrop() -> bool:
+	return _presentation_backdrop != null
+
+
+func surface_size() -> Vector2:
+	return get_viewport_rect().size
+
+
 func _update_frame() -> void:
 	var frame: Rect2 = PresentationGeometry.frame_rect(get_viewport_rect().size)
 	content_frame.position = frame.position
 	content_frame.size = frame.size
 	GameFlow.update_presentation_scale(PresentationGeometry.frame_scale(frame.size))
+	side_rails.set_frame_scale(PresentationGeometry.frame_scale(frame.size))

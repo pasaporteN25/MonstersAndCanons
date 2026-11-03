@@ -18,8 +18,8 @@ signal closed(keep_paused: bool)
 
 const LAYER_ABOVE_DIALOGS: int = 30
 const FADE_IN_SECONDS: float = 0.25
-## Cuánto de su alto ocupa la ilustración.
-const ILLUSTRATION_HEIGHT_RATIO: float = 0.5
+## Alto lógico del marco; el resto de la composición (RF-738) sale de `data/ui/boss_presentation.json`.
+const LOGICAL_HEIGHT: float = 720.0
 
 var _data: EnemyData
 var _seconds: float = BossPresentationRules.REPEAT_SECONDS
@@ -35,6 +35,10 @@ var _root: Control
 var _illustration: TextureRect
 var _hint: Label
 var _tween: Tween
+var _backdrop_layer: BossBackdrop
+var _host: Node  # el anfitrión que dibuja las franjas; solo en el celular (RF-738)
+var _surface_size: Vector2 = Vector2.ZERO
+var _layout: Dictionary = {}
 
 
 ## `seconds`: RF-668. `illustration` y `backdrop`: el arte aprobado; null = la composición provisional.
@@ -50,6 +54,7 @@ func setup(data: EnemyData, seconds_: float, mobile: bool, illustration: Texture
 func _ready() -> void:
 	layer = LAYER_ABOVE_DIALOGS
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	_layout = BossPresentationArt.layout(_mobile)
 	_build()
 	_started_ms = Time.get_ticks_msec()
 	_animate()
@@ -61,78 +66,28 @@ func _build() -> void:
 	_root.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_root.mouse_filter = Control.MOUSE_FILTER_STOP  # ni el clic ni el toque llegan a la partida
 	add_child(_root)
-	var base := ColorRect.new()
-	base.name = "Backdrop"
-	base.set_anchors_preset(Control.PRESET_FULL_RECT)
-	base.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	base.color = Color(0.05, 0.04, 0.06).lerp(_data.color, 0.18)
-	_root.add_child(base)
-	if _backdrop_texture != null:
-		var art := TextureRect.new()
-		art.name = "BackdropArt"
-		art.set_anchors_preset(Control.PRESET_FULL_RECT)
-		art.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		art.texture = _backdrop_texture
-		art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
-		_root.add_child(art)
-		_add_text_shade()
+	_build_backdrop()
 	var column := VBoxContainer.new()
 	column.name = "Column"
 	column.set_anchors_preset(Control.PRESET_FULL_RECT)
 	column.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	column.alignment = BoxContainer.ALIGNMENT_CENTER
-	column.add_theme_constant_override("separation", 14)
+	column.add_theme_constant_override("separation", int(_layout["separacion"]))
 	_root.add_child(column)
-	column.add_child(_label("Title", Localization.t(&"boss_intro.title"), 34, Color(0.95, 0.35, 0.28)))
+	column.add_child(_label("Title", Localization.t(&"boss_intro.title"), int(_layout["letra_titulo"]), Color(0.95, 0.35, 0.28)))
 	_illustration = TextureRect.new()
 	_illustration.name = "Illustration"
 	_illustration.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_illustration.texture = _illustration_texture
 	_illustration.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	_illustration.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	_illustration.custom_minimum_size = Vector2(0.0, 720.0 * ILLUSTRATION_HEIGHT_RATIO)
+	_illustration.custom_minimum_size = Vector2(0.0, LOGICAL_HEIGHT * float(_layout["alto_retrato"]))
 	column.add_child(_illustration)
-	column.add_child(_label("Name", _data.name_text(), 52, Color(0.96, 0.92, 0.82)))
-	column.add_child(_label("Line", _data.description_text(), 22, Color(0.85, 0.82, 0.76)))
-	_hint = _label("Hint", Localization.t(&"boss_intro.hint_mobile" if _mobile else &"boss_intro.hint_desktop"), 18, Color(0.7, 0.68, 0.64))
+	column.add_child(_label("Name", _data.name_text(), int(_layout["letra_nombre"]), Color(0.96, 0.92, 0.82)))
+	column.add_child(_label("Line", _data.description_text(), int(_layout["letra_texto"]), Color(0.85, 0.82, 0.76)))
+	_hint = _label("Hint", Localization.t(&"boss_intro.hint_mobile" if _mobile else &"boss_intro.hint_desktop"), int(_layout["letra_pista"]), Color(0.7, 0.68, 0.64))
 	_hint.modulate.a = 0.0
 	column.add_child(_hint)
-
-
-## T548: con un fondo pintado, una franja que se oscurece hacia abajo detrás del texto (color, alto y opacidad: `data/ui/boss_presentation.json`).
-func _add_text_shade() -> void:
-	var shade: Dictionary = BossPresentationArt.shade()
-	var opacity: float = shade["opacidad"]
-	var height: float = shade["alto"]
-	if opacity <= 0.0 or height <= 0.0:
-		return
-	var color: Color = shade["color"]
-	var gradient := Gradient.new()
-	gradient.set_color(0, Color(color, 0.0))
-	gradient.set_color(1, Color(color, opacity))
-	gradient.add_point(0.55, Color(color, opacity * 0.6))
-	var texture := GradientTexture2D.new()
-	texture.gradient = gradient
-	texture.fill_from = Vector2(0.0, 0.0)
-	texture.fill_to = Vector2(0.0, 1.0)
-	texture.width = 4
-	texture.height = 256
-	var rect := TextureRect.new()
-	rect.name = "TextShade"
-	rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	rect.texture = texture
-	rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	rect.stretch_mode = TextureRect.STRETCH_SCALE
-	rect.anchor_left = 0.0
-	rect.anchor_right = 1.0
-	rect.anchor_top = 1.0 - height
-	rect.anchor_bottom = 1.0
-	rect.offset_left = 0.0
-	rect.offset_right = 0.0
-	rect.offset_top = 0.0
-	rect.offset_bottom = 0.0
-	_root.add_child(rect)
 
 
 func _label(node_name: String, text: String, size: int, color: Color) -> Label:
@@ -142,13 +97,52 @@ func _label(node_name: String, text: String, size: int, color: Color) -> Label:
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	label.custom_minimum_size = Vector2(900.0, 0.0)
+	label.custom_minimum_size = Vector2(float(_layout["ancho_texto"]), 0.0)
 	label.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	label.add_theme_font_size_override("font_size", size)
 	label.add_theme_color_override("font_color", color)
 	label.add_theme_constant_override("outline_size", 6)
 	label.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.0, 0.85))
 	return label
+
+
+## RF-738: en el celular el fondo cubre toda la superficie física. El anfitrión lo dibuja fuera del marco y acá se
+## dibuja el mismo fondo, extendido hacia afuera del marco lógico, así que el empalme no se ve. Sin anfitrión (o en la
+## PC) el fondo es el de siempre: llena el marco.
+func _build_backdrop() -> void:
+	_backdrop_layer = BossBackdrop.new().setup(_data.color, _backdrop_texture)
+	_root.add_child(_backdrop_layer)
+	_host = GameFlow.presentation_host if _mobile else null
+	if _host == null or not is_instance_valid(_host) or not _host.has_method("show_presentation_backdrop"):
+		_host = null
+		return
+	_host.call("show_presentation_backdrop", _data.color, _backdrop_texture)
+	_fit_surface()
+
+
+## Acomoda el fondo de adentro a la superficie física (que cambia si se gira el teléfono).
+func _fit_surface() -> void:
+	if _host == null or _backdrop_layer == null:
+		return
+	var size_: Vector2 = _host.call("surface_size")
+	if size_ == _surface_size:
+		return
+	_surface_size = size_
+	var rect: Rect2 = PresentationGeometry.logical_surface_rect(size_)
+	_backdrop_layer.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	_backdrop_layer.position = rect.position
+	_backdrop_layer.size = rect.size
+
+
+func _exit_tree() -> void:
+	_release_host()
+
+
+## El fondo temporal del anfitrión se saca por cualquier camino: tiempo, salteo, «Atrás» o si se libera la partida.
+func _release_host() -> void:
+	if _host != null and is_instance_valid(_host):
+		_host.call("clear_presentation_backdrop")
+	_host = null
 
 
 ## Todo el movimiento sale de código: aparece, la ilustración crece despacio y se muestra la pista cuando ya se puede saltear.
@@ -184,6 +178,9 @@ func is_closing() -> bool:
 func _process(_delta: float) -> void:
 	if _done:
 		return
+	if _host != null:
+		_fit_surface()
+		_host.call("set_presentation_backdrop_alpha", _root.modulate.a)
 	if _closing:
 		if (Time.get_ticks_msec() - _closing_ms) / 1000.0 >= BossPresentationRules.FADE_OUT_SECONDS:
 			_finish()
@@ -210,6 +207,7 @@ func _finish() -> void:
 	_done = true
 	if _tween != null and _tween.is_valid():
 		_tween.kill()
+	_release_host()
 	closed.emit(_close_keep_paused)
 	queue_free()
 

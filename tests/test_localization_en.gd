@@ -360,3 +360,8 @@ func test_campaign_texts_in_english() -> void:
 	assert_eq(CampaignMap.best_lives_text(1), "Best: 1 life")
 	assert_eq(CampaignMap.best_lives_text(20), "Best: 20 lives")
 	assert_eq(CampaignMap.state_text(CampaignMap.State.LOCKED), "Locked")
+
+
+func test_marked_grid_option_has_english_text() -> void:
+	Localization.set_language("en")
+	assert_eq(Localization.t(&"options.game.map_grid"), "Marked grid")

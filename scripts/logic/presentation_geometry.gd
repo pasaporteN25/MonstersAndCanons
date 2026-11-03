@@ -12,6 +12,16 @@ static func frame_rect(surface_size: Vector2) -> Rect2:
 	return Rect2((surface_size - size) * 0.5, size)
 
 
+## La superficie física completa, en coordenadas del marco lógico (las del contenido): empieza en negativo cuando
+## hay franjas. Sirve para estirar un fondo de adentro hasta donde llega el de afuera (T571).
+static func logical_surface_rect(surface_size: Vector2) -> Rect2:
+	var frame: Rect2 = frame_rect(surface_size)
+	var scale: float = frame_scale(frame.size)
+	if scale <= 0.0:
+		return Rect2(Vector2.ZERO, LOGICAL_SIZE)
+	return Rect2(-frame.position / scale, surface_size / scale)
+
+
 static func render_size(frame_size: Vector2) -> Vector2i:
 	return Vector2i(maxi(2, roundi(frame_size.x)), maxi(2, roundi(frame_size.y)))
 
@@ -20,6 +30,24 @@ static func frame_scale(frame_size: Vector2) -> float:
 	if frame_size.x <= 0.0 or frame_size.y <= 0.0:
 		return 0.0
 	return minf(frame_size.x / LOGICAL_SIZE.x, frame_size.y / LOGICAL_SIZE.y)
+
+
+## Devuelve los rieles físicos entre el marco lógico y los bordes seguros de la superficie.
+## safe_area está expresada en coordenadas de la superficie; un Rect2 vacío significa sin inset.
+static func side_rail_rects(surface_size: Vector2, safe_area: Rect2, min_logical_px: float) -> Array[Rect2]:
+	var frame: Rect2 = frame_rect(surface_size)
+	var scale: float = frame_scale(frame.size)
+	if scale <= 0.0 or min_logical_px <= 0.0:
+		return []
+	var safe: Rect2 = Rect2(Vector2.ZERO, surface_size) if safe_area.size == Vector2.ZERO else safe_area.intersection(Rect2(Vector2.ZERO, surface_size))
+	if safe.size.x <= 0.0 or safe.size.y <= 0.0:
+		return []
+	var left: Rect2 = Rect2(safe.position.x, frame.position.y, frame.position.x - safe.position.x, frame.size.y)
+	var right_x: float = frame.end.x
+	var right: Rect2 = Rect2(right_x, frame.position.y, safe.end.x - right_x, frame.size.y)
+	if left.size.x / scale < min_logical_px or right.size.x / scale < min_logical_px:
+		return []
+	return [left, right]
 
 
 static func window_to_logical(position: Vector2, surface_size: Vector2) -> Vector2:

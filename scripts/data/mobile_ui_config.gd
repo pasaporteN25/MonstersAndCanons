@@ -24,8 +24,9 @@ const DEFAULTS: Dictionary = {
 	"vender_rearmar_s": 3.0,
 	"vender_min_s": 0.4,
 	"mejorar_bloqueo_s": 0.35,
-	"zoom_casilla_max_px": 64,
+	"zoom_casilla_max_px": 128,
 	"zoom_rueda_factor": 1.1,
+	"zoom_boton_factor": 1.25,
 	"fantasma_distancia_botones": 1,
 	"fantasma_botones_arriba_px": 8,
 	"ver_todo_x_px": 1188,
@@ -76,6 +77,13 @@ const DEFAULTS: Dictionary = {
 	"scroll_velocidad_min_px": 30,
 	"scroll_barra_px": 22,
 	"menu_deslizador_alto_px": 44,
+	"marca_torre_color": "#ffd400",
+	"marca_torre_grosor_px": 3.0,
+	"marca_torre_esquina": 0.3,
+	"marca_torre_pulso_velocidad": 3.0,
+	"marca_torre_opacidad_min": 0.55,
+
+	"riel_min_px": 96,
 }
 
 var values: Dictionary = DEFAULTS.duplicate(true)

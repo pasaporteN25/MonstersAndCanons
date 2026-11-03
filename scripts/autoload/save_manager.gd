@@ -22,6 +22,7 @@ const DEFAULT_SETTINGS: Dictionary = {
 	"upgrade_fx": true,  # M65, RF-593: animaciones de mejora de torres prendidas
 	"boss_entrance": true,  # M66, RF-672: la presentación de los jefes está prendida
 	"defeat_advice": true,  # M70, RF-644: los consejos de derrota están prendidos
+	"map_grid": false,  # T565, RF-741: la cuadrícula marcada está apagada por omisión
 	"selector_style": 1,  # M72/M76, RF-645, RF-687: 0 = tarjetas, 1 = mapa planetario (por omisión, PC y celular)
 	"selector_map_migrated": false,  # M76, RF-689: ¿este archivo ya pasó una vez al mapa? Clave aditiva
 	"range_display": 0,  # M75, RF-678: Oculto por omisión, también para guardados viejos
@@ -422,6 +423,12 @@ func boss_entrance_enabled() -> bool:
 func defeat_advice_enabled() -> bool:
 	var value: Variant = get_setting("defeat_advice")
 	return value if typeof(value) == TYPE_BOOL else true
+
+
+## T565, RF-741: un valor dañado se interpreta como apagado.
+func map_grid_enabled() -> bool:
+	var value: Variant = get_setting("map_grid")
+	return value if typeof(value) == TYPE_BOOL else false
 
 
 # --- Acceso heredado a Asedio (M76, RF-692, RF-693) ---

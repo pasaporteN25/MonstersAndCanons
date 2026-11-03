@@ -1,5 +1,45 @@
 # Novedades del juego
 
+## El tutorial señala lo que hay que tocar con un anillo y oscurece lo demás *(T574, 2026-11-03; sin probar en un teléfono real)*
+
+En los pasos del tutorial que piden **hacer algo** (elegir una torre, construirla, abrir el carrito, empezar la oleada, cambiar la velocidad, pausar), ahora **todo se oscurece menos lo que tenés que tocar**, y de ahí salen **anillos que se expanden** con un rótulo al lado: **«Hacé clic acá»** en la PC y **«Tocá acá»** en el celular. Lo oscurecido **no bloquea nada**: un toque sobre lo señalado llega al botón o a la casilla como siempre, y la partida **no se pausa**. Los pasos que solo se leen (el camino, el oro, las vidas, «Mejorar», «Vender») no oscurecen: siguen marcando con el recuadro que parpadea. Cuando el paso señala varias zonas a la vez (la casilla y la tilde), un solo hueco las cubre; si ese hueco ocuparía demasiada pantalla, ese paso no oscurece. **En un teléfono con rieles**, si el botón señalado está en un riel (el carrito de la derecha, «Vender» de la izquierda), el propio botón **pulsa con su anillo**, los otros botones del riel se apagan, el marco se oscurece entero en los pasos de acción y el rótulo aparece en el borde del mapa, del lado de ese riel. Cuánto oscurece, qué tan rápido se expande el anillo y los rótulos se retocan en `data/tutorial/tutorial.json` (sección `"foco"`). Las capturas de estos pasos todavía no se tomaron (no había ventana).
+
+## Los controles del celular pasan a los costados, con «+» y «−» *(T570, 2026-11-03; sin probar en un teléfono real)*
+
+En un teléfono alargado (donde sobran franjas a los costados del mapa), los botones salen del mapa y se ponen en dos **rieles laterales**, así el mapa queda despejado. **A la izquierda**, de arriba abajo: **Menú**, **«+»** (acercar), **«−»** (alejar), la **lupa** de «Ver todo» (solo cuando acercaste) y, abajo de todo, **«Vender»** (solo con una torre elegida). **A la derecha**: el **carrito** y, debajo, **«Demoler»** (solo en los niveles que lo tienen). Estos botones no se arrastran, y «Vender» ya no está en la barra de abajo: el texto de la torre gana ese lugar. «+» y «−» acercan o alejan un poco (×1,25) alrededor del centro del mapa que ves, se apagan al llegar al tope y avisan igual que la pinza. «Vender» sigue pidiendo **dos toques**. Los rieles se esconden con el menú, el cartel de entrada, la presentación del jefe y al terminar la partida. Si la pantalla no tiene ese ancho (16:9), todo queda como antes, y la pinza sigue andando. Los íconos de «+» y «−» son provisionales. Si moviste los botones flotantes de lugar, esas posiciones se conservan (no se usan mientras hay rieles). El tutorial marca con un anillo el carrito y «Vender» del riel (T574).
+
+## «Llega el jefe» ocupa toda la pantalla del celular *(T571, 2026-11-03; sin probar en un teléfono real)*
+
+En el celular, la presentación del jefe ahora cubre **toda la superficie del teléfono**, también las franjas de los costados: se ve el fondo del Coloso, o el color del jefe si no tiene fondo, sin el terreno asomando. Al terminar (por tiempo, tocando o con «Atrás») vuelve el fondo del terreno. El título, el retrato, el nombre, la descripción y la pista entran enteros en español y en inglés, con letra de al menos 16 px. En la PC no cambia nada, ni los tiempos, la pausa o el salteo.
+
+## «Menú» en lugar de la X en el celular *(T567, 2026-11-03; sin probar en un teléfono real)*
+
+En el celular, el botón flotante de arriba ya no es una X: ahora es **«Menú»** (tres rayas) y abre el **mismo menú de pausa que la PC**, con Continuar, Reintentar, Opciones y Salir. Así se pueden cambiar las opciones sin salir de la partida. **«Salir»** sigue preguntando «¿Volver al menú principal?» y qué se pierde; si tocás «Seguir jugando», volvés al menú de pausa (no a la partida). Probando un mapa desde el editor, «Salir» vuelve al editor sin preguntar. En la PC no cambia. El ícono es provisional.
+
+## Doble toque en una casilla vacía abre la compra *(T573, 2026-11-03; sin probar en un teléfono real)*
+
+Ahora **dos toques seguidos en la misma casilla libre de pasto** abren la compra, sin ir a buscar el carrito. En el celular se abre el **catálogo** (sin elegir torre ni cobrar nada). En la PC, que no tiene catálogo, el doble clic **pasa a la pestaña de torres** de la barra de abajo y la hace **pulsar un instante**. No pasa nada en el camino, en una casilla bloqueada, sobre una torre o un objeto, con la partida en pausa o terminada, con un cuadro abierto ni con una herramienta (como «Demoler») elegida. Con la torre fantasma puesta, el doble toque sigue **confirmando la compra** como antes, y un toque simple sigue soltando la selección. Si arrastrás el mapa entre los dos toques, no cuenta.
+
+## Zoom hasta 2,0 y un dedo mueve el mapa *(T568, 2026-11-02; sin probar en un teléfono real)*
+
+Ahora se puede **acercar de verdad**: el zoom máximo llega a 2,0 (la casilla se ve el doble de grande que a tamaño natural), con la pinza en el celular y con la rueda en la PC. En el celular, con el mapa acercado, **un dedo que arrastra mueve el mapa** sin elegir ni comprar nada; si hay una torre elegida (con su fantasma), el dedo sigue moviendo el fantasma como antes, y con el zoom mínimo un dedo no desplaza. Con el zoom máximo se llega a las cuatro esquinas del mapa. Además, al elegir una torre en el celular, el fantasma aparece cerca del centro de **lo que ves**, no del centro del mapa. «Ver todo» sigue volviendo al encuadre de siempre.
+
+## Barra de la torre en el celular: cerrar a la izquierda *(T566, 2026-11-02)*
+
+En el celular, con una torre elegida, la **× para cerrar** ahora queda pegada al borde izquierdo de la barra de abajo, y **«Vender»** pasó al lado del texto, lejos de «Empezar oleada» (que está a la derecha), así un toque de más ahí no lo vende. Después de «Vender» sigue la separación de seguridad de 35 mm, y luego «Apuntar» y «Mejorar». Vender sigue pidiendo dos toques; los tamaños y los textos no cambian.
+
+## Torre elegida con marca en el celular *(T564, 2026-11-02)*
+
+En el celular, la torre que tocaste ahora lleva **cuatro esquinas amarillas que pulsan suavemente** sobre sus casillas, así se ve cuál es la que muestra la barra de abajo. El Mortero, que ocupa 2 × 2 casillas, tiene la marca en su cuadrado entero. La marca se va al soltar la torre o venderla, se achica y crece con el zoom, y no cambia nada de la partida. En la PC no cambia.
+
+## Cuadrícula marcada *(T565, 2026-11-02)*
+
+En Opciones → Partida y ayudas se puede prender «Cuadrícula marcada» para distinguir los bordes de todas las casillas durante la partida. Se guarda entre sesiones y se aplica al instante; el editor de mapas no la muestra.
+
+## Ráfaga más rápida al mejorar *(T563, 2026-11-03)*
+
+La Ráfaga ahora dispara más seguido cuando la mejorás: el nivel 2 pasa de 0,9 a **1,1** disparos por segundo y el nivel 3 de 1,0 a **1,4**. El nivel 1 sigue en 0,8. Daño, púas, alcance y costos no cambian, y el panel de mejoras y la Wiki muestran los valores nuevos.
+
 ## Textos de la campaña revisados *(T558, 2026-10-29)*
 
 Se aplicaron las primeras decisiones de la revisión de textos. **Nombres de niveles:** el 12 pasa a llamarse «Cañadón», el 14 «Poblados» y el 15 «Central» (el 11 sigue «Puesto seco» y el 13 «Paso alto»). **Victoria del nivel 15:** «Central encendida. La línea de abastecimiento está completa. La colonia ya no depende de la nave.» **Niveles 3, 4 y 12:** una línea de la entrada ahora dice algo más concreto. **Nivel 11:** la victoria habla del punto de agua. **Nivel 13:** en lugar de «hitos de piedra» el texto dice «rocas marcadas», y la victoria habla del valle de más al este. **Nivel 14:** la entrada dice «Los fogones están armados y no se ve a nadie.» **Wiki → Lore:** «Los poblados vacíos» ya no habla de las brasas y «La Central» queda en el último valle, el de más al este, sin su párrafo final. **Créditos:** suman el nombre y el mail de Lucas. No cambian el epílogo ni el progreso guardado.

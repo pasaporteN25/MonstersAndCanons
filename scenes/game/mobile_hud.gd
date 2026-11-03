@@ -5,13 +5,16 @@ signal confirm_placement_pressed
 signal cancel_placement_pressed
 signal view_all_pressed
 signal demolish_pressed
-signal exit_pressed
+signal menu_pressed
 signal catalog_opened(open: bool)
 signal tower_chosen(index: int, use_alt_payment: bool)
 signal infrastructure_tool_chosen(tool: StringName, class_id: StringName)
 signal upgrade_pressed
 signal sell_pressed
 signal targeting_pressed
+## T570 (RF-734): los «+» y «−» de los rieles. Quien los conecta (Game) los lleva a `CameraController.zoom_step`.
+signal zoom_in_pressed
+signal zoom_out_pressed
 ## M75 (RF-681): «Mejorar» quedó armado (primer toque) o se desarmó. Game muestra o saca la ampliación del alcance.
 signal upgrade_armed_changed(armed: bool)
 signal clear_selection_pressed
@@ -90,11 +93,24 @@ var _status_touch_start: Vector2
 var _status_touch_moved: bool = false
 var _ghost_status_text: String = ""
 var _mobile_theme: Theme
+# T570 (RF-733, RF-734): los rieles laterales. Con rieles, los controles flotantes y «Vender» salen del marco: acá viven
+# los botones del riel (otros nodos, en el host) y los flotantes quedan ocultos. Sin rieles todo queda como antes.
+var _rails: SideRails
+var _rails_active: bool = false
+var _rails_syncing: bool = false
+var _rail_buttons: Dictionary = {}  # id (StringName) -> Button, solo mientras hay rieles
+var _view_all_wanted: bool = false
+var _sell_shown: bool = false
+var _cart_active: bool = false
+var _demolish_active: bool = false
+var _can_zoom_in: bool = true
+var _can_zoom_out: bool = false
 
 const MOBILE_THEME: Theme = preload("res://assets/ui/menu_theme.tres")
 const CART_ICON: Texture2D = preload("res://assets/ui/mobile_cart.svg")
 const CONFIRM_ICON: Texture2D = preload("res://assets/ui/mobile_confirm.svg")
 const CLOSE_ICON: Texture2D = preload("res://assets/ui/mobile_close.svg")
+const MENU_ICON: Texture2D = preload("res://assets/ui/mobile_menu.svg")
 const DEMOLISH_ICON: Texture2D = preload("res://assets/ui/mobile_demolish.svg")
 ## T464: lupa de «Ver todo» (aprobada por Lucas el 2026-10-26; muestra en art/t464-muestra-lupa/).
 const GOLD_ICON: Texture2D = preload("res://assets/sprites/ui/stat_gold.svg")
@@ -104,6 +120,11 @@ const AIM_SVG: String = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16
 const UPGRADE_AFTER_COLOR: Color = Color("bfe699")  # el «después» de la maqueta (--next)
 const UPGRADE_MUTED_COLOR: Color = Color("a39d92")
 const VIEW_ALL_ICON: Texture2D = preload("res://assets/ui/mobile_view_all.svg")
+## T570: íconos provisionales de «+» y «−» (trazo simple en el color de la mira de «Apuntar»).
+const ZOOM_IN_SVG: String = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="#f0e8d9" stroke-width="1.8" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg>'
+const ZOOM_OUT_SVG: String = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="#f0e8d9" stroke-width="1.8" stroke-linecap="round"><path d="M3 8h10"/></svg>'
+const RAIL_ICON_PX: float = 28.0  # el mismo `icon_max_width` de los flotantes, en píxeles lógicos
+const RAIL_SELL_HEIGHT_FACTOR: float = 1.4
 
 
 func _ready() -> void:
@@ -122,6 +143,24 @@ func _ready() -> void:
 	_build_empty_catalog()
 	set_placement_visible(false)
 	_apply_saved_positions()
+	var rails: SideRails = GameFlow.side_rails()
+	if rails != null:
+		set_side_rails(rails)
+
+
+func _exit_tree() -> void:
+	# Los rieles viven en el host y sobreviven a la partida: se vacían para no dejar botones sueltos.
+	if _rails != null and is_instance_valid(_rails):
+		if _rails.layout_changed.is_connected(_sync_rails):
+			_rails.layout_changed.disconnect(_sync_rails)
+		if _rails.button_pressed.is_connected(_on_rail_button_pressed):
+			_rails.button_pressed.disconnect(_on_rail_button_pressed)
+		_rails.clear_focus()
+		_rails.set_buttons([], [])
+		_rails.set_visible_for_modal(true)
+	_rails = null
+	_rails_active = false
+	_rail_buttons.clear()
 
 
 func _build_status_bar() -> void:
@@ -142,6 +181,14 @@ func _build_status_bar() -> void:
 	row.mouse_filter = Control.MOUSE_FILTER_IGNORE  # T288
 	row.add_theme_constant_override("separation", int(_config.get_value("separacion_px")))
 	_status_bar.add_child(row)
+	# T566 (RF-736): la × va primero, pegada al borde izquierdo; «Vender» queda lejos de «Empezar oleada» (derecha).
+	_bottom_cancel = Button.new()
+	_bottom_cancel.name = "BottomCancelPlacement"
+	_bottom_cancel.text = "×"
+	_style_icon_button(_bottom_cancel, CLOSE_ICON)
+	_bottom_cancel.custom_minimum_size = Vector2(float(_config.get_value("cruz_lado_px")), float(_config.get_value("cruz_lado_px")))
+	_bottom_cancel.pressed.connect(_on_bottom_cancel_pressed)
+	row.add_child(_bottom_cancel)
 	_status_label = Label.new()
 	_status_label.name = "StatusText"
 	_status_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -154,6 +201,19 @@ func _build_status_bar() -> void:
 		if _status_state == "tower":
 			_fit_status_font())
 	row.add_child(_status_label)
+	_sell_button = Button.new()
+	_sell_button.name = "MobileSell"
+	_sell_button.custom_minimum_size = Vector2(float(_config.get_value("vender_ancho_px")), float(_config.get_value("vender_alto_px")))
+	_sell_button.add_theme_font_size_override("font_size", int(_config.get_value("accion_fuente_px")))
+	_sell_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER  # T514: miden su alto (84), no el de la fila
+	_sell_button.mouse_filter = Control.MOUSE_FILTER_IGNORE  # un solo dueño del toque: _handle_status_touch (T291)
+	_sell_button.pressed.connect(_on_sell_pressed)
+	row.add_child(_sell_button)
+	_sell_gap = Control.new()
+	_sell_gap.name = "SellSeparation"
+	_sell_gap.custom_minimum_size.x = _catalog_virtual_mm(float(_config.get_value("vender_separacion_mm")))
+	_sell_gap.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(_sell_gap)
 	_bottom_confirm = Button.new()
 	_bottom_confirm.name = "BottomConfirmPlacement"
 	_bottom_confirm.text = "✓"
@@ -161,13 +221,6 @@ func _build_status_bar() -> void:
 	_bottom_confirm.custom_minimum_size = Vector2(float(_config.get_value("tilde_ancho_px")), float(_config.get_value("tilde_alto_px")))
 	_bottom_confirm.pressed.connect(confirm_placement_pressed.emit)
 	row.add_child(_bottom_confirm)
-	_bottom_cancel = Button.new()
-	_bottom_cancel.name = "BottomCancelPlacement"
-	_bottom_cancel.text = "×"
-	_style_icon_button(_bottom_cancel, CLOSE_ICON)
-	_bottom_cancel.custom_minimum_size = Vector2(float(_config.get_value("cruz_lado_px")), float(_config.get_value("cruz_lado_px")))
-	_bottom_cancel.pressed.connect(_on_bottom_cancel_pressed)
-	row.add_child(_bottom_cancel)
 	_target_button = Button.new()
 	_target_button.name = "MobileTargeting"
 	_target_button.custom_minimum_size = Vector2(float(_config.get_value("apuntar_ancho_px")), float(_config.get_value("apuntar_alto_px")))
@@ -190,20 +243,16 @@ func _build_status_bar() -> void:
 	_upgrade_button.pressed.connect(_on_upgrade_pressed)
 	_style_upgrade_button()
 	row.add_child(_upgrade_button)
-	_sell_gap = Control.new()
-	_sell_gap.name = "SellSeparation"
-	_sell_gap.custom_minimum_size.x = _catalog_virtual_mm(float(_config.get_value("vender_separacion_mm")))
-	_sell_gap.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	row.add_child(_sell_gap)
-	_sell_button = Button.new()
-	_sell_button.name = "MobileSell"
-	_sell_button.custom_minimum_size = Vector2(float(_config.get_value("vender_ancho_px")), float(_config.get_value("vender_alto_px")))
-	_sell_button.add_theme_font_size_override("font_size", int(_config.get_value("accion_fuente_px")))
-	_sell_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER  # T514: miden su alto (84), no el de la fila
-	_sell_button.mouse_filter = Control.MOUSE_FILTER_IGNORE  # un solo dueño del toque: _handle_status_touch (T291)
-	_sell_button.pressed.connect(_on_sell_pressed)
-	row.add_child(_sell_button)
 	_set_empty_status()
+
+
+## T566 (RF-736): el único lugar que decide si «Vender» (y su separación de RF-512) está en la barra. T570 lo cambia
+## para sacar «Vender» de la barra cuando haya rieles.
+func _set_sell_in_bar(shown: bool) -> void:
+	_sell_shown = shown
+	_sell_button.visible = shown and not _rails_active
+	_sell_gap.visible = shown and not _rails_active
+	_apply_rail_state()
 
 
 ## T514 (RF-722): la mira de «Apuntar» como textura (provisoria, ver `AIM_SVG`).
@@ -265,8 +314,7 @@ func _set_empty_status() -> void:
 	_status_label.visible = true
 	_target_button.hide()
 	_upgrade_button.hide()
-	_sell_button.hide()
-	_sell_gap.hide()
+	_set_sell_in_bar(false)
 	_bottom_confirm.hide()
 	_bottom_cancel.hide()
 
@@ -281,8 +329,7 @@ func show_tool_status(message: String = "") -> void:
 	_status_label.visible = true
 	_target_button.hide()
 	_upgrade_button.hide()
-	_sell_button.hide()
-	_sell_gap.hide()
+	_set_sell_in_bar(false)
 	_bottom_confirm.hide()
 	_bottom_cancel.show()
 
@@ -296,8 +343,7 @@ func show_ghost_status(tower_name: String, cost_text: String) -> void:
 	_status_label.visible = true
 	_target_button.hide()
 	_upgrade_button.hide()
-	_sell_button.hide()
-	_sell_gap.hide()
+	_set_sell_in_bar(false)
 	_bottom_confirm.show()
 	_bottom_cancel.show()
 	_bottom_confirm.disabled = _confirm_button.disabled
@@ -356,13 +402,14 @@ func show_selected_tower(tower: Tower, gold: int, sell_value: int, resource_valu
 			clear_upgrade_arm()  # la torre cambió de nivel por otro camino: la ampliación mostrada ya no vale
 		_refresh_upgrade_button(tower)
 		_upgrade_button.disabled = false
-	_sell_button.show()
-	_sell_gap.show()
+	_set_sell_in_bar(true)
 	_bottom_confirm.hide()
 	if resource_value > 0:
 		_sell_button.tooltip_text = Localization.t_fmt(&"mobile.refund_both", {"gold": sell_value, "resources": resource_value})
 	else:
 		_sell_button.tooltip_text = Localization.t_fmt(&"mobile.refund_gold", {"n": sell_value})
+	if _rail_buttons.has(&"sell"):
+		(_rail_buttons[&"sell"] as Button).tooltip_text = _sell_button.tooltip_text
 	_refresh_sell_button(sell_value, resource_value)
 
 
@@ -501,16 +548,23 @@ func clear_sell_arm() -> void:
 
 
 func _refresh_sell_button(sell_value: int, resource_value: int = 0) -> void:
-	if _sell_armed:
-		var refund: String = TowerText.refund_text(sell_value, resource_value)
-		_sell_button.text = Localization.t_fmt(&"mobile.confirm_sell", {"x": refund})
-		_sell_button.add_theme_color_override("font_color", Color(1.0, 0.8, 0.25))
-		_sell_button.add_theme_stylebox_override("normal", _double_border_style())
-	else:
-		# RF-722: lo que devuelve va abajo, corto («+70» o «+210 +2» si también devuelve recursos).
-		_sell_button.text = Localization.t_fmt(&"mobile.sell", {"gold": sell_value, "extra": " +%d" % resource_value if resource_value > 0 else ""})
-		_sell_button.remove_theme_color_override("font_color")
-		_sell_button.remove_theme_stylebox_override("normal")
+	var buttons: Array[Button] = [_sell_button]
+	var rail_sell: Button = _rail_buttons.get(&"sell") as Button
+	if rail_sell != null:
+		buttons.append(rail_sell)
+	for button: Button in buttons:
+		var on_rail: bool = button == rail_sell
+		if _sell_armed:
+			var refund: String = TowerText.refund_text(sell_value, resource_value)
+			# En el riel el botón es angosto: «Confirmar venta» en tres renglones cortos, sin «Vender por».
+			button.text = Localization.t_fmt(&"mobile.rail_confirm_sell" if on_rail else &"mobile.confirm_sell", {"x": refund})
+			button.add_theme_color_override("font_color", Color(1.0, 0.8, 0.25))
+			button.add_theme_stylebox_override("normal", _double_border_style())
+		else:
+			# RF-722: lo que devuelve va abajo, corto («+70» o «+210 +2» si también devuelve recursos).
+			button.text = Localization.t_fmt(&"mobile.sell", {"gold": sell_value, "extra": " +%d" % resource_value if resource_value > 0 else ""})
+			button.remove_theme_color_override("font_color")
+			button.remove_theme_stylebox_override("normal")
 
 
 func _double_border_style() -> StyleBoxFlat:
@@ -616,13 +670,13 @@ func _build_floating_buttons() -> void:
 	_float_button_size = Vector2.ONE * minimum_size
 	_cart_button = _floating_button("CartButton", CART_ICON)
 	_cart_button.tooltip_text = Localization.t(&"mobile.choose_tower")
-	_exit_button = _floating_button("ExitButton", CLOSE_ICON)
-	_exit_button.tooltip_text = Localization.t(&"mobile.exit_menu")
+	_exit_button = _floating_button("MenuButton", MENU_ICON)
+	_exit_button.tooltip_text = Localization.t(&"mobile.open_menu")
 	_demolish_button = _floating_button("DemolishButton", DEMOLISH_ICON)
 	_demolish_button.tooltip_text = Localization.t(&"mobile.demolish")
 	_demolish_button.visible = false
 	_cart_button.pressed.connect(_on_cart_pressed)
-	_exit_button.pressed.connect(exit_pressed.emit)
+	_exit_button.pressed.connect(menu_pressed.emit)
 	_demolish_button.pressed.connect(demolish_pressed.emit)
 	if _confirm_button != null:
 		_confirm_button.custom_minimum_size.x = maxf(_confirm_button.custom_minimum_size.x, minimum_size)
@@ -908,8 +962,10 @@ func set_placement_visible(enabled: bool) -> void:
 
 
 func show_view_all(enabled: bool) -> void:
+	_view_all_wanted = enabled
 	if _view_all_button != null:
-		_view_all_button.visible = enabled
+		_view_all_button.visible = enabled and not _rails_active
+	_apply_rail_state()
 
 
 ## M68 (RF-610, RF-611, D-160): en pausa el carrito y el botón de demolición quedan apagados (se ven grises) y no
@@ -924,6 +980,7 @@ func set_paused(paused: bool) -> void:
 	for button: Button in [_cart_button, _demolish_button]:
 		if button != null:
 			button.disabled = paused
+	_apply_rail_state()
 	if _status_state == "empty":
 		_status_label.text = Localization.t(&"mobile.paused" if paused else &"mobile.empty")
 
@@ -940,8 +997,10 @@ func _show_paused_hint() -> void:
 
 
 func set_cart_active(active: bool) -> void:
+	_cart_active = active
 	if _cart_button != null:
 		_cart_button.self_modulate = Color("#ffe0a0") if active else Color.WHITE
+	_apply_rail_state()
 
 
 ## RF-542: el botón de demolición solo existe en los niveles con removibles o puntos de extracción.
@@ -955,8 +1014,10 @@ func set_demolish_available(available: bool) -> void:
 
 
 func set_demolish_active(active: bool) -> void:
+	_demolish_active = active
 	if _demolish_button != null:
 		_demolish_button.self_modulate = Color("#ffe0a0") if active else Color.WHITE
+	_apply_rail_state()
 
 
 func set_game_over(over: bool) -> void:
@@ -975,9 +1036,16 @@ func set_modal_open(open: bool) -> void:
 
 
 func _update_floating_visibility() -> void:
-	_cart_button.visible = not _game_over and not _modal_open
-	_exit_button.visible = not _game_over and not _modal_open
-	_demolish_button.visible = _demolish_available and not _game_over and not _modal_open
+	var shown: bool = not _game_over and not _modal_open
+	_cart_button.visible = shown and not _rails_active
+	_exit_button.visible = shown and not _rails_active
+	_demolish_button.visible = _demolish_available and shown and not _rails_active
+	if _view_all_button != null:
+		_view_all_button.visible = _view_all_wanted and not _rails_active
+	# RF-733: los modales, el fin de partida y la presentación del jefe ocultan los rieles enteros.
+	if _rails != null:
+		_rails.set_visible_for_modal(shown)
+	_apply_rail_state()
 
 
 ## M63 (RF-574): el control que señala el tutorial (null si no existe o no se ve ahora). Nombres: `cart`,
@@ -1000,6 +1068,10 @@ func target_control(target: StringName) -> Control:
 			control = _upgrade_button
 		&"sell":
 			control = _sell_button
+	# T574: con rieles, el carrito y «Vender» son los botones del riel (están en la superficie, fuera del marco):
+	# `is_rail_control` los distingue, y el tutorial los marca con `focus_rail`, no con un recuadro.
+	if _rails_active and (target == &"cart" or target == &"sell"):
+		control = _rail_buttons.get(target) as Button
 	return control if control != null and control.is_visible_in_tree() else null
 
 
@@ -1151,7 +1223,7 @@ func _handle_drag_touch(index: int, pos: Vector2, pressed: bool) -> void:
 				else:
 					demolish_pressed.emit()
 			else:
-				exit_pressed.emit()
+				menu_pressed.emit()
 	_drag_button = null
 	_drag_index = -1
 	_dragging = false
@@ -1277,14 +1349,221 @@ func _apply_float_positions(targets: Array[Vector2], animate: bool) -> void:
 
 
 func _update_floating_layout() -> void:
-	if _cart_button == null:
-		return
+	if _cart_button == null or _rails_active:
+		return  # RF-734: con rieles los flotantes no se ven ni se acomodan; sus posiciones guardadas se conservan
 	if not _ghost_visible:
 		_apply_float_positions(_base_positions.duplicate(), true)
 		return
 	var screen_pos: Vector2 = get_viewport().get_canvas_transform() * _world_position
 	var ghost_rect := Rect2(screen_pos - _ghost_size / 2.0, _ghost_size)
 	_apply_float_positions(_arranged_positions(ghost_rect, float(_config.get_value("fantasma_distancia_botones"))), true)
+
+
+## T570 (RF-733): ¿se dibujan los rieles ahora? (hay un `SideRails` y las franjas tienen el ancho mínimo)
+func rails_active() -> bool:
+	return _rails_active
+
+
+## T570: los botones del riel por su nombre (`menu`, `zoom_in`, `zoom_out`, `view_all`, `sell`, `cart`, `demolish`).
+## Vacío si no hay rieles. Sirve a los tests y al tutorial.
+func rail_button(id: StringName) -> Button:
+	return _rail_buttons.get(id) as Button
+
+
+## T574: ¿este control es un botón de los rieles? (su rectángulo está en la superficie, no en el marco)
+func is_rail_control(control: Control) -> bool:
+	return control != null and _rails_active and control.has_meta(&"rail_id") and _rail_buttons.values().has(control)
+
+
+## T574: el rectángulo de un botón del riel en coordenadas del marco (las del contenido): `x` es negativa para el
+## riel izquierdo y pasa de 1280 para el derecho. Vacío si no hay rieles.
+func rail_rect_in_frame(control: Control) -> Rect2:
+	if _rails == null or not is_rail_control(control):
+		return Rect2()
+	var surface: Vector2 = _rails.get_viewport_rect().size
+	var frame: Rect2 = PresentationGeometry.frame_rect(surface)
+	var scale: float = PresentationGeometry.frame_scale(frame.size)
+	if scale <= 0.0:
+		return Rect2()
+	var rect: Rect2 = control.get_global_rect()
+	return Rect2((rect.position - frame.position) / scale, rect.size / scale)
+
+
+## T574: el botón del riel que el tutorial tiene marcado ahora (null si ninguno).
+func focused_rail_control() -> Control:
+	return _rails.focused_button() if _rails != null else null
+
+
+## T574: marca un botón del riel (anillo) y apaga los otros; `null` quita la marca.
+func focus_rail(control: Control, darkness: float, ring_seconds: float) -> void:
+	if _rails == null:
+		return
+	if control == null or not is_rail_control(control):
+		_rails.clear_focus()
+		return
+	_rails.set_focus(control, darkness, ring_seconds)
+
+
+## T570: conecta la capa de rieles del host (`GameFlow.side_rails()`; los tests pasan la suya). Se llama una sola vez.
+func set_side_rails(rails: SideRails) -> void:
+	if rails == null or _rails == rails:
+		return
+	_rails = rails
+	_rails.layout_changed.connect(_sync_rails)
+	_rails.button_pressed.connect(_on_rail_button_pressed)
+	_sync_rails()
+
+
+## T570: «+» y «−» se apagan en cada tope del zoom. Lo avisa `CameraController`.
+func set_zoom_limits(can_zoom_in: bool, can_zoom_out: bool) -> void:
+	_can_zoom_in = can_zoom_in
+	_can_zoom_out = can_zoom_out
+	_apply_rail_state()
+
+
+## T570: crea o saca los botones de los rieles según haya ancho (también al girar o redimensionar la ventana, sin
+## dejar botones duplicados), y deja a los flotantes ocultos o visibles. Un botón del riel y su flotante nunca conviven.
+func _sync_rails() -> void:
+	if _rails == null or _rails_syncing:
+		return
+	_rails_syncing = true
+	var wanted: bool = _rails.has_room()
+	if wanted != _rails_active:
+		_rails_active = wanted
+		if wanted:
+			_build_rail_buttons()
+		else:
+			_rails.set_buttons([], [])
+			_rail_buttons.clear()
+		_set_sell_in_bar(_sell_shown)
+		_update_floating_visibility()
+		if not wanted:
+			_update_floating_layout()
+	elif wanted:
+		_style_rail_metrics()
+	_rails_syncing = false
+
+
+func _build_rail_buttons() -> void:
+	_rail_buttons.clear()
+	var left: Array[Control] = []
+	var right: Array[Control] = []
+	left.append(_rail_icon_button(&"menu", MENU_ICON, &"mobile.open_menu"))
+	left.append(_rail_icon_button(&"zoom_in", _svg_texture(ZOOM_IN_SVG), &"mobile.zoom_in"))
+	left.append(_rail_icon_button(&"zoom_out", _svg_texture(ZOOM_OUT_SVG), &"mobile.zoom_out"))
+	left.append(_rail_icon_button(&"view_all", VIEW_ALL_ICON, &"mobile.view_all"))
+	var spacer := Control.new()
+	spacer.name = "RailSpacer"
+	spacer.set_meta(SideRails.SPACER_META, true)
+	left.append(spacer)
+	var sell := Button.new()
+	sell.name = "RailSell"
+	sell.theme = _mobile_theme
+	sell.focus_mode = Control.FOCUS_NONE
+	sell.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	sell.clip_text = true
+	sell.set_meta(SideRails.HEIGHT_FACTOR_META, RAIL_SELL_HEIGHT_FACTOR)
+	sell.set_meta(&"rail_id", &"sell")
+	_rail_buttons[&"sell"] = sell
+	left.append(sell)
+	right.append(_rail_icon_button(&"cart", CART_ICON, &"mobile.choose_tower"))
+	right.append(_rail_icon_button(&"demolish", DEMOLISH_ICON, &"mobile.demolish"))
+	_rails.set_buttons(left, right)
+	if _selected_placed != null:
+		sell.tooltip_text = _sell_button.tooltip_text
+		_refresh_sell_button(_selected_sell_value, _selected_resource_value)
+	_style_rail_metrics()
+
+
+func _rail_icon_button(id: StringName, icon: Texture2D, tooltip_key: StringName) -> Button:
+	var button := Button.new()
+	button.name = "Rail" + String(id).capitalize().replace(" ", "")
+	_style_icon_button(button, icon)
+	button.tooltip_text = Localization.t(tooltip_key)
+	button.accessibility_name = Localization.t(tooltip_key)
+	button.set_meta(&"rail_id", id)
+	_rail_buttons[id] = button
+	return button
+
+
+## Los íconos y las letras del riel están en píxeles de la superficie, no del marco: se escalan con el marco.
+func _style_rail_metrics() -> void:
+	if _rails == null:
+		return
+	var scale: float = maxf(_rails.frame_scale(), 0.01)
+	for id: StringName in _rail_buttons:
+		var button: Button = _rail_buttons[id] as Button
+		if button == null or not is_instance_valid(button):
+			continue
+		if id == &"sell":
+			button.add_theme_font_size_override("font_size", maxi(8, roundi(float(_config.get_value("apuntar_fuente_px")) * scale)))
+		else:
+			button.add_theme_constant_override("icon_max_width", maxi(8, roundi(RAIL_ICON_PX * scale)))
+			for state: String in ["normal", "hover", "pressed", "hover_pressed", "disabled"]:
+				var style: StyleBoxFlat = button.get_theme_stylebox(state) as StyleBoxFlat
+				if style != null:
+					style.set_corner_radius_all(roundi(float(_config.get_value("icono_radio_px")) * scale))
+					style.set_content_margin_all(float(_config.get_value("icono_padding_px")) * scale)
+	_apply_rail_state()
+
+
+func _svg_texture(svg: String) -> Texture2D:
+	var image := Image.new()
+	if image.load_svg_from_string(svg, 4.0) != OK:
+		return null
+	return ImageTexture.create_from_image(image)
+
+
+## Qué botones del riel se ven y cómo: hoy el mismo estado que el de sus flotantes (RF-734).
+func _apply_rail_state() -> void:
+	if not _rails_active:
+		return
+	var tint: Color = Color(0.55, 0.55, 0.55) if _paused else Color.WHITE
+	var active_color: Color = Color("#ffe0a0")
+	_set_rail(&"menu", true)
+	_set_rail(&"zoom_in", true, not _can_zoom_in)
+	_set_rail(&"zoom_out", true, not _can_zoom_out)
+	_set_rail(&"view_all", _view_all_wanted)
+	_set_rail(&"sell", _sell_shown)
+	_set_rail(&"cart", true)
+	_set_rail(&"demolish", _demolish_available)
+	var cart: Button = _rail_buttons.get(&"cart") as Button
+	if cart != null:
+		cart.self_modulate = active_color if _cart_active else Color.WHITE
+		cart.modulate = tint
+	var demolish: Button = _rail_buttons.get(&"demolish") as Button
+	if demolish != null:
+		demolish.self_modulate = active_color if _demolish_active else Color.WHITE
+		demolish.modulate = tint
+
+
+func _set_rail(id: StringName, shown: bool, disabled: bool = false) -> void:
+	var button: Button = _rail_buttons.get(id) as Button
+	if button == null or not is_instance_valid(button):
+		return
+	button.visible = shown
+	button.disabled = disabled
+
+
+func _on_rail_button_pressed(button: Control) -> void:
+	match StringName(button.get_meta(&"rail_id", &"")):
+		&"menu":
+			menu_pressed.emit()
+		&"zoom_in":
+			zoom_in_pressed.emit()
+		&"zoom_out":
+			zoom_out_pressed.emit()
+		&"view_all":
+			view_all_pressed.emit()
+		&"sell":
+			_on_sell_pressed()  # los mismos dos toques, el mismo armado y el mismo `vender_min_s` (RF-513)
+		&"cart":
+			_on_cart_pressed()
+		&"demolish":
+			if _paused:
+				_show_paused_hint()
+			else:
+				demolish_pressed.emit()
 
 
 func _on_cart_pressed() -> void:
@@ -1318,9 +1597,11 @@ func _update_placement_position() -> void:
 	var confirm_size: Vector2 = _confirm_button.size
 	var cancel_size: Vector2 = _cancel_button.size
 	var above: float = float(_config.get_value("fantasma_botones_arriba_px"))
-	var float_rects: Array[Rect2] = [Rect2(_cart_button.position, _float_button_size), Rect2(_exit_button.position, _float_button_size)]
-	if _demolish_available:
-		float_rects.append(Rect2(_demolish_button.position, _float_button_size))
+	var float_rects: Array[Rect2] = []
+	if not _rails_active:
+		float_rects = [Rect2(_cart_button.position, _float_button_size), Rect2(_exit_button.position, _float_button_size)]
+		if _demolish_available:
+			float_rects.append(Rect2(_demolish_button.position, _float_button_size))
 	var side: String = FloatButtonLayout.tick_side(Rect2(screen_pos - _ghost_size / 2.0, _ghost_size),
 		float_rects, Rules.SCREEN_SIZE.x, float(_config.get_value("flotante_min_px")))
 	if side == "right":

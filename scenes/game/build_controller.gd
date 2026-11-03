@@ -19,6 +19,11 @@ signal selection_changed(index: int)
 signal placed_selection_changed(tower: Tower)
 signal mobile_infrastructure_targeted(cell: Vector2i, tool: StringName, class_id: StringName)
 signal mobile_map_tapped
+## RF-732: un dedo arrastró el mapa sin fantasma ni herramienta; la cámara decide si desplaza.
+signal mobile_map_pan_requested(screen_delta: Vector2)
+## T573 (RF-740): dos toques o clics seguidos en la misma casilla vacía, sin fantasma ni herramienta. `Game` decide
+## qué abrir (el catálogo en el celular, la pestaña de torres en la PC); este nodo no cobra nada.
+signal empty_cell_double_tapped(cell: Vector2i)
 
 const TOWER_SCENE: PackedScene = preload("res://scenes/towers/tower.tscn")
 const VALID_TINT := Color(0.3, 1.0, 0.3, 0.3)
@@ -47,6 +52,9 @@ var _touch_gesture := TouchGesture.new()
 ## RF-552: separa el mouse real del eco de un toque.
 var _pointer_filter := PointerFilter.new()
 var _ghost_placement := GhostPlacement.new()
+## T573 (RF-740): recuerda el último toque sobre una casilla vacía. Vale en la PC y en el celular.
+var _empty_tap := EmptyCellDoubleTap.new()
+var _double_tap_ms: int = 350
 var _touch_start_screen_cell: Vector2i = Vector2i.ZERO
 var _touch_start_ghost_cell: Vector2i = Vector2i.ZERO
 var _mouse_touch_start_cell: Vector2i = Vector2i.ZERO
@@ -70,6 +78,7 @@ func setup(level: Level, session: LevelSession, balance: BalanceConfig,
 		SaveManager.setting_changed.connect(_on_setting_changed)
 	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS  # D-023: torre fantasma
 	_mobile_mode = UiMode.is_mobile()
+	_double_tap_ms = roundi(float(MobileUiConfig.load_from().get_value("doble_toque_s")) * 1000.0)  # D-227: igual en la PC
 	if _mobile_mode:
 		_mobile_config = MobileUiConfig.load_from()
 		_touch_gesture.configure(float(_mobile_config.get_value("toque_max_px")), int(_mobile_config.get_value("pinza_gracia_ms")))
@@ -318,6 +327,8 @@ func _handle_mobile_input(event: InputEvent) -> bool:
 			var current_cell: Vector2i = _level.cell_at(_screen_to_world(drag.position))
 			var delta: Vector2i = current_cell - _touch_start_screen_cell
 			_move_mobile_ghost(_touch_start_ghost_cell + delta)
+		elif result == TouchGesture.Gesture.DRAG and _can_pan_with_one_finger() and _in_map_area(drag.position):
+			mobile_map_pan_requested.emit(drag.relative)
 		_accept()
 		return true
 	# RF-552 (D-116): manda el dispositivo, no la plataforma. El clic emulado de un toque se descarta (el toque ya
@@ -350,6 +361,12 @@ func _handle_mobile_input(event: InputEvent) -> bool:
 				_move_mobile_ghost(_mouse_touch_start_ghost + current_cell - _mouse_touch_start_cell)
 			_accept()
 			return true
+		if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+			var pan_result: TouchGesture.Gesture = _touch_gesture.move(PointerFilter.MOUSE_FINGER, motion.position, now_ms)
+			if pan_result == TouchGesture.Gesture.DRAG and _can_pan_with_one_finger() and _in_map_area(motion.position):
+				mobile_map_pan_requested.emit(motion.relative)
+			_accept()
+			return true
 	if event.is_action_pressed("cancel"):
 		if _selected >= 0 or _mobile_infrastructure_tool != &"":
 			cancel()
@@ -364,6 +381,11 @@ func _handle_mobile_input(event: InputEvent) -> bool:
 			_accept()
 			return true
 	return false
+
+
+## RF-732: un dedo desplaza el mapa solo sin fantasma y sin herramienta de infraestructura.
+func _can_pan_with_one_finger() -> bool:
+	return _selected < 0 and _mobile_infrastructure_tool == &""
 
 
 func _screen_to_world(screen_pos: Vector2) -> Vector2:
@@ -381,10 +403,12 @@ func _mobile_map_tap(world_pos: Vector2, time_ms: int) -> void:
 	if not _level.is_inside(cell):
 		return
 	if _mobile_infrastructure_tool != &"":
+		_empty_tap.reset()
 		mobile_infrastructure_targeted.emit(cell, _mobile_infrastructure_tool, _mobile_infrastructure_class)
 		return
 	if _selected < 0:
 		var tower: Tower = tower_at(cell)
+		var double_tapped: bool = _empty_tap.register(cell, _is_empty_tap_cell(cell), time_ms, _double_tap_ms)
 		if tower != null:
 			select_placed(tower)
 		elif obstacles != null and obstacles.obstacle_at(cell) != null:
@@ -393,17 +417,29 @@ func _mobile_map_tap(world_pos: Vector2, time_ms: int) -> void:
 			deselect_placed()
 			if obstacles != null:
 				obstacles.deselect()
+		if double_tapped:
+			empty_cell_double_tapped.emit(cell)  # RF-740
 		return
+	_empty_tap.reset()  # con fantasma, el doble toque confirma la compra (RF-505)
 	if tower_at(cell) != null:
 		cancel()
 		select_placed(tower_at(cell))
 		return
-	var double_tap_ms: int = roundi(float(_mobile_config.get_value("doble_toque_s")) * 1000.0)
+	var double_tap_ms: int = _double_tap_ms
 	if _ghost_placement.is_double_tap(cell, time_ms, double_tap_ms):
 		_move_mobile_ghost(cell)
 		confirm_ghost()
 		return
 	_move_mobile_ghost(cell)
+
+
+## RF-740: ¿vale la casilla para el doble toque? Pasto construible, libre de torre y de objeto, sin herramienta ni
+## torre elegida para construir, sin pausa y con la partida en curso. Camino y casillas bloqueadas no son construibles.
+func _is_empty_tap_cell(cell: Vector2i) -> bool:
+	return _level.is_inside(cell) and _selected < 0 and _mobile_infrastructure_tool == &"" \
+		and _level.is_buildable(cell) and not is_occupied(cell) \
+		and (obstacles == null or obstacles.obstacle_at(cell) == null) \
+		and not _session.is_over() and not get_tree().paused
 
 
 func _start_mobile_ghost() -> void:
@@ -412,7 +448,7 @@ func _start_mobile_ghost() -> void:
 		return
 	_ghost_placement.select_tower(tower.id, tower.footprint, tower.build_gold(_pay_alt), tower.build_resources(_pay_alt))
 	var map_size: Vector2i = _level.map_size()
-	var center := Vector2i(floori(float(map_size.x) / 2.0), floori(float(map_size.y) / 2.0))
+	var center: Vector2i = visible_center_cell()
 	var best_cell: Vector2i = center
 	var best_distance: float = INF
 	for y: int in map_size.y:
@@ -425,6 +461,15 @@ func _start_mobile_ghost() -> void:
 				best_distance = distance
 				best_cell = candidate
 	_move_mobile_ghost(best_cell)
+
+
+## H-07 (RF-505): la casilla del centro de **lo que se ve** (el área entre las barras), dentro del mapa.
+func visible_center_cell() -> Vector2i:
+	var top: float = float(_mobile_config.get_value("barra_alta_px"))
+	var screen_center := Vector2(Rules.SCREEN_SIZE.x / 2.0, (top + 624.0) / 2.0)
+	var cell: Vector2i = _level.cell_at(_screen_to_world(screen_center))
+	var map_size: Vector2i = _level.map_size()
+	return Vector2i(clampi(cell.x, 0, map_size.x - 1), clampi(cell.y, 0, map_size.y - 1))
 
 
 func _move_mobile_ghost(cell: Vector2i) -> void:
@@ -493,15 +538,7 @@ func _handle_selection_input(event: InputEvent) -> void:
 		var cell: Vector2i = _level.cell_at(get_global_mouse_position())
 		if not _level.is_inside(cell):
 			return  # clic fuera del mapa (por ejemplo, en el HUD): no tocar la selección
-		var tower: Tower = tower_at(cell)
-		if obstacles != null and tower == null and obstacles.obstacle_at(cell) != null:
-			_select_obstacle(cell)
-		elif tower != null:
-			select_placed(tower)
-		else:
-			deselect_placed()
-			if obstacles != null:
-				obstacles.deselect()  # un clic fuera deselecciona
+		_selection_click(cell, Time.get_ticks_msec())
 		_accept()
 	elif obstacles != null and obstacles.has_selection() \
 			and (event.is_action_pressed("cancel") or _is_click(event, MOUSE_BUTTON_RIGHT)):
@@ -518,6 +555,23 @@ func _handle_selection_input(event: InputEvent) -> void:
 	elif event.is_action_pressed("sell"):
 		sell(_selected_placed)
 		_accept()
+
+
+## Clic de la PC sobre una casilla del mapa sin torre elegida para construir: elige, o suelta la selección. Si es el
+## segundo clic seguido sobre una casilla vacía, avisa con `empty_cell_double_tapped` (RF-740).
+func _selection_click(cell: Vector2i, time_ms: int) -> void:
+	var tower: Tower = tower_at(cell)
+	var double_clicked: bool = _empty_tap.register(cell, _is_empty_tap_cell(cell), time_ms, _double_tap_ms)
+	if obstacles != null and tower == null and obstacles.obstacle_at(cell) != null:
+		_select_obstacle(cell)
+	elif tower != null:
+		select_placed(tower)
+	else:
+		deselect_placed()
+		if obstacles != null:
+			obstacles.deselect()  # un clic fuera deselecciona
+	if double_clicked:
+		empty_cell_double_tapped.emit(cell)
 
 
 func _is_click(event: InputEvent, button: MouseButton) -> bool:

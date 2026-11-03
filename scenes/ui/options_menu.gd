@@ -26,7 +26,7 @@ const OPTION_GROUP_KEYS: Array[StringName] = [&"options.group.sound", &"options.
 const OPTION_GROUP_ROWS: Array = [
 	[&"MusicLabel", &"MusicSlider", &"SfxLabel", &"SfxSlider"],
 	[&"FullscreenCheck", &"DamageNumbersCheck", &"UpgradeFxCheck", &"RangeDisplayLabel", &"RangeDisplaySelector"],
-	[&"TutorialRow", &"BossEntranceCheck", &"DefeatAdviceCheck"],
+	[&"TutorialRow", &"BossEntranceCheck", &"DefeatAdviceCheck", &"MapGridCheck"],
 	[&"ViewAllRow"],
 	[&"LanguageLabel", &"LanguageSelector", &"UiModeLabel", &"UiModeSelector", &"CreditsSection", &"VersionLabel", &"CreditsButton", &"NewsButton",
 		&"AdminSection", &"AdminButton", &"AdminConfirm"],
@@ -85,6 +85,7 @@ var _news_data: NewsData
 var _tutorial_replay: Button
 var _boss_entrance_check: CheckBox
 var _defeat_advice_check: CheckBox
+var _map_grid_check: CheckBox
 var _range_display_selector: OptionButton
 ## M68 (RF-614): la fila de la tecla de «Ver todo» (solo con la interfaz de PC), el botón que la muestra y el aviso.
 var _view_all_button: Button
@@ -107,6 +108,7 @@ func _ready() -> void:
 	_build_ui_mode_selector()
 	_build_boss_entrance_check()  # M66
 	_build_defeat_advice_check()  # M70, RF-644
+	_build_map_grid_check()  # T565, RF-741
 	if not UiMode.is_mobile():
 		_build_view_all_row()  # M68: sin teclado no hace falta
 	_build_range_display_selector()  # M75
@@ -141,6 +143,7 @@ func open() -> void:
 	_ui_mode_selector.select(UiMode.read_setting(SaveManager.get_setting("ui_mode")))
 	_boss_entrance_check.set_pressed_no_signal(SaveManager.boss_entrance_enabled())  # M66
 	_defeat_advice_check.set_pressed_no_signal(SaveManager.defeat_advice_enabled())  # M70, RF-644
+	_map_grid_check.set_pressed_no_signal(SaveManager.map_grid_enabled())
 	_tutorial_check.set_pressed_no_signal(SaveManager.tutorial_enabled())
 	_stop_view_all_capture()
 	_refresh_view_all_row()
@@ -406,6 +409,18 @@ func _build_defeat_advice_check() -> void:
 		func(on: bool) -> void: SaveManager.set_setting("defeat_advice", on))
 
 
+## T565, RF-741: la cuadrícula marcada vive en «Partida y ayudas».
+func _build_map_grid_check() -> void:
+	_map_grid_check = CheckBox.new()
+	_map_grid_check.name = "MapGridCheck"
+	_map_grid_check.text = Localization.t(&"options.game.map_grid")
+	_map_grid_check.add_theme_font_size_override("font_size", 20)
+	_map_grid_check.clip_text = true
+	_rows.add_child(_map_grid_check)
+	_map_grid_check.toggled.connect(
+		func(on: bool) -> void: SaveManager.set_setting("map_grid", on))
+
+
 ## M68 (RF-614): una fila con el nombre, un botón con la tecla de hoy (al pulsarlo espera la próxima tecla),
 ## «Restaurar» (vuelve a la V) y, debajo, el aviso cuando la tecla elegida ya la usa otra cosa.
 func _build_view_all_row() -> void:
@@ -593,6 +608,7 @@ func _apply_texts() -> void:
 	_tutorial_replay.text = Localization.t(&"options.game.tutorial_replayed" if _tutorial_replay.disabled else &"options.game.tutorial_replay")
 	_boss_entrance_check.text = Localization.t(&"options.game.boss_entrance")
 	_defeat_advice_check.text = Localization.t(&"options.game.defeat_advice")
+	_map_grid_check.text = Localization.t(&"options.game.map_grid")
 	_range_display_label.text = Localization.t(&"options.display.range")
 	var range_keys: Array[StringName] = [&"options.display.range_hidden", &"options.display.range_subtle", &"options.display.range_full"]
 	for index: int in range_keys.size():

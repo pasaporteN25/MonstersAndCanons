@@ -4,6 +4,26 @@
     "alto": 0.55,
     "opacidad": 0.82
   },
+  "composicion": {
+    "pc": {
+      "letra_titulo": 34,
+      "letra_nombre": 52,
+      "letra_texto": 22,
+      "letra_pista": 18,
+      "alto_retrato": 0.5,
+      "ancho_texto": 900,
+      "separacion": 14
+    },
+    "celular": {
+      "letra_titulo": 34,
+      "letra_nombre": 52,
+      "letra_texto": 22,
+      "letra_pista": 18,
+      "alto_retrato": 0.5,
+      "ancho_texto": 900,
+      "separacion": 14
+    }
+  },
   "jefes": {
     "colossus": {
       "fondo": "res://assets/backgrounds/boss/colossus.png"

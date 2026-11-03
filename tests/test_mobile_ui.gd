@@ -69,7 +69,7 @@ func test_mobile_ui_config_loads_data_file() -> void:
 	var config: MobileUiConfig = MobileUiConfig.load_from()
 	assert_eq(config.get_value("boton_alto_px"), 56)
 	assert_eq(config.get_value("pinza_gracia_ms"), 150)
-	assert_eq(config.get_value("zoom_casilla_max_px"), 64)
+	assert_eq(config.get_value("zoom_casilla_max_px"), 128)
 
 
 func test_options_selector_saves_without_changing_an_existing_hud() -> void:
@@ -278,8 +278,11 @@ func test_camera_zoom_is_clamped_between_automatic_and_cell_limits() -> void:
 	assert_eq(CameraController.clamp_zoom(0.25, 0.75, 1.0), 0.75)
 	assert_eq(CameraController.clamp_zoom(1.0, 0.75, 1.0), 1.0)
 	assert_eq(CameraController.clamp_zoom(2.0, 0.75, 1.0), 1.0)
-	assert_eq(CameraController.maximum_zoom_from_cell_pixels(96.0), 1.0)
+	# T568 (D-223): el tope absoluto pasó de 1,0 a 2,0; 128 px por casilla dan 2,0 y más no se acepta.
+	assert_eq(CameraController.maximum_zoom_from_cell_pixels(96.0), 1.5)
 	assert_eq(CameraController.maximum_zoom_from_cell_pixels(64.0), 1.0)
+	assert_eq(CameraController.maximum_zoom_from_cell_pixels(128.0), 2.0)
+	assert_eq(CameraController.maximum_zoom_from_cell_pixels(512.0), 2.0)
 	assert_eq(CameraController.clamp_center(Vector2(-10.0, 200.0), Rect2(0.0, 0.0, 100.0, 100.0)), Vector2(0.0, 100.0))
 
 
@@ -320,7 +323,7 @@ func test_pc_camera_input_respects_zoom_cap_without_mobile_controls() -> void:
 	await get_tree().process_frame
 	assert_null(game.mobile_hud, "la PC no agrega botones visibles")
 	game.camera_controller._zoom_at(Vector2(640.0, 336.0), 10.0)
-	assert_true(is_equal_approx(game.camera.zoom.x, 1.0))
+	assert_true(is_equal_approx(game.camera.zoom.x, 2.0), "T568 (D-223): el tope pasó de 1,0 a 2,0")
 	game.camera_controller._pan_by_screen_delta(Vector2(5000.0, 5000.0))
 	var map_rect := Rect2(game.level.position, Vector2(game.level.map_size()) * Rules.TILE_SIZE)
 	assert_eq(game.camera.position, CameraController.clamp_center(game.camera.position, map_rect))
@@ -346,7 +349,7 @@ func test_ui_prefs_fall_back_per_field_and_snap_to_nearest_edge() -> void:
 	assert_true(absf(separated[0].y - separated[1].y) >= 164.0)
 
 
-func test_mobile_hud_catalog_and_exit_keep_the_game_state() -> void:
+func test_mobile_hud_catalog_and_menu_keep_the_game_state() -> void:
 	var original_setting: Variant = SaveManager.get_setting("ui_mode")
 	SaveManager.set_setting("ui_mode", UiMode.MOBILE)
 	var game: Game = (load("res://scenes/game/game.tscn") as PackedScene).instantiate() as Game
@@ -358,27 +361,70 @@ func test_mobile_hud_catalog_and_exit_keep_the_game_state() -> void:
 	assert_true(game.build_controller.input_blocked)
 	game.mobile_hud.close_catalog()
 	assert_false(game.build_controller.input_blocked)
-	game.mobile_hud.exit_pressed.emit()
-	assert_true(game.exit_dialog.is_open())
+	game.mobile_hud.menu_pressed.emit()
+	assert_true(game.pause_menu.is_open(), "RF-735: «Menú» abre el menú de pausa")
+	assert_false(game.exit_dialog.is_open(), "y no el diálogo de salida")
 	assert_true(game.is_paused())
-	game.exit_dialog.handle_cancel()
-	assert_false(game.is_paused(), "seguir jugando restaura el estado previo")
+	game.close_pause_menu()
+	assert_false(game.is_paused())
 	SaveManager.set_setting("ui_mode", original_setting)
 
 
-func test_mobile_exit_from_editor_returns_directly_without_confirmation() -> void:
+func test_mobile_menu_opens_options_and_quit_confirms_then_cancel_returns_to_the_menu() -> void:
+	var original_setting: Variant = SaveManager.get_setting("ui_mode")
+	SaveManager.set_setting("ui_mode", UiMode.MOBILE)
+	var game: Game = (load("res://scenes/game/game.tscn") as PackedScene).instantiate() as Game
+	var left: Array[String] = []
+	game.leave_to_menu = func() -> void: left.append("menu")
+	add_child_autofree(game)
+	await get_tree().process_frame
+	game.mobile_hud.menu_pressed.emit()
+	(game.pause_menu.get_node("%OptionsButton") as Button).pressed.emit()
+	assert_true(game.pause_menu._options.visible, "Opciones se abre desde el menú")
+	game.pause_menu._options.close()
+	assert_true(game.pause_menu.is_open())
+	game.pause_menu.quit_pressed.emit()
+	assert_true(game.exit_dialog.is_open(), "«Salir» pide la confirmación de RF-460")
+	assert_false(game.pause_menu.is_open())
+	assert_true(game.is_paused(), "la partida sigue en pausa")
+	assert_eq(left, [] as Array[String], "todavía no salió")
+	game.exit_dialog.handle_cancel()
+	assert_false(game.exit_dialog.is_open())
+	assert_true(game.pause_menu.is_open(), "al cancelar vuelve al menú de pausa, no a la partida")
+	assert_true(game.is_paused())
+	assert_false(game.build_controller.input_blocked)
+	game.pause_menu.quit_pressed.emit()
+	game.exit_dialog._leave_button.pressed.emit()
+	assert_eq(left, ["menu"], "confirmar sale al menú principal")
+	SaveManager.set_setting("ui_mode", original_setting)
+
+
+func test_pc_pause_menu_quit_does_not_ask() -> void:
+	var original_setting: Variant = SaveManager.get_setting("ui_mode")
+	SaveManager.set_setting("ui_mode", UiMode.PC)
+	var game: Game = (load("res://scenes/game/game.tscn") as PackedScene).instantiate() as Game
+	add_child_autofree(game)
+	await get_tree().process_frame
+	game.open_pause_menu()
+	assert_false(game.exit_dialog.is_open())
+	assert_true(game.pause_menu.is_open())
+	game.close_pause_menu()
+	SaveManager.set_setting("ui_mode", original_setting)
+
+
+func test_mobile_menu_quit_from_editor_returns_directly_without_confirmation() -> void:
 	var original_setting: Variant = SaveManager.get_setting("ui_mode")
 	SaveManager.set_setting("ui_mode", UiMode.MOBILE)
 	var game: Game = (load("res://scenes/game/game.tscn") as PackedScene).instantiate() as Game
 	game.testing = true
-	var editor_calls: Array[String] = []
-	game.leave_to_editor = func() -> void: editor_calls.append("editor")
 	add_child_autofree(game)
 	await get_tree().process_frame
-	game.mobile_hud.exit_pressed.emit()
-	assert_eq(editor_calls, ["editor"])
+	game.mobile_hud.menu_pressed.emit()
+	assert_true(game.pause_menu.is_open(), "RF-735: también abre el menú de pausa")
+	# «Salir» está conectado directo al editor (no pasa por la confirmación); no se emite porque cambiaría de escena.
+	assert_true(game.pause_menu.quit_pressed.is_connected(GameFlow.go_to_editor), "«Salir» vuelve al editor")
+	assert_false(game.pause_menu.quit_pressed.is_connected(game._on_pause_quit_pressed), "sin confirmación")
 	assert_false(game.exit_dialog.is_open())
-	assert_false(game.is_paused())
 	SaveManager.set_setting("ui_mode", original_setting)
 
 
