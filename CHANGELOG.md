@@ -1,5 +1,9 @@
 # Novedades del juego
 
+## Barra de la torre en el celular: cerrar a la izquierda *(T566, 2026-11-02)*
+
+En el celular, con una torre elegida, la **× para cerrar** ahora queda pegada al borde izquierdo de la barra de abajo, y **«Vender»** pasó al lado del texto, lejos de «Empezar oleada» (que está a la derecha), así un toque de más ahí no lo vende. Después de «Vender» sigue la separación de seguridad de 35 mm, y luego «Apuntar» y «Mejorar». Vender sigue pidiendo dos toques; los tamaños y los textos no cambian.
+
 ## Textos de la campaña revisados *(T558, 2026-10-29)*
 
 Se aplicaron las primeras decisiones de la revisión de textos. **Nombres de niveles:** el 12 pasa a llamarse «Cañadón», el 14 «Poblados» y el 15 «Central» (el 11 sigue «Puesto seco» y el 13 «Paso alto»). **Victoria del nivel 15:** «Central encendida. La línea de abastecimiento está completa. La colonia ya no depende de la nave.» **Niveles 3, 4 y 12:** una línea de la entrada ahora dice algo más concreto. **Nivel 11:** la victoria habla del punto de agua. **Nivel 13:** en lugar de «hitos de piedra» el texto dice «rocas marcadas», y la victoria habla del valle de más al este. **Nivel 14:** la entrada dice «Los fogones están armados y no se ve a nadie.» **Wiki → Lore:** «Los poblados vacíos» ya no habla de las brasas y «La Central» queda en el último valle, el de más al este, sin su párrafo final. **Créditos:** suman el nombre y el mail de Lucas. No cambian el epílogo ni el progreso guardado.
