@@ -21,6 +21,11 @@ const MAX_UI_CHARS: int = 40
 
 ## Los rótulos de la tarjeta (`"interfaz"`). `paso` lleva dos `%d` (número y total).
 const UI_KEYS: PackedStringArray = ["titulo", "paso", "siguiente", "saltar", "terminar"]
+## T574 (RF-739): el efecto de foco (`"foco"`): cuánto se oscurece lo demás, cuánto tarda cada anillo y los rótulos.
+const FOCUS_KEYS: PackedStringArray = ["oscuridad", "anillo_segundos", "rotulo_pc", "rotulo_celular", "agujero_max"]
+const FOCUS_MAX_ALPHA: float = 0.9
+const FOCUS_MIN_SECONDS: float = 0.3
+const FOCUS_MAX_SECONDS: float = 5.0
 
 ## Los eventos que hacen pasar de paso (los emite `TutorialController`). Vacío = paso de lectura: avanza con «Siguiente».
 const EVENT_NONE: StringName = &""
@@ -67,6 +72,8 @@ var level_id: String = ""
 ## `true` mientras Lucas no aprobó los textos (RF-571). No cambia el comportamiento: solo avisa.
 var draft: bool = true
 var ui: Dictionary = {}
+## T574: el efecto de foco ya validado (`oscuridad` y `anillo_segundos` son números; los rótulos, textos).
+var focus: Dictionary = {}
 var pc_steps: Array[Dictionary] = []
 var mobile_steps: Array[Dictionary] = []
 var errors: PackedStringArray = []
@@ -109,6 +116,7 @@ static func parse(raw: Variant) -> TutorialData:
 	else:
 		data.level_id = level_raw
 	_parse_ui(dict.get("interfaz"), data)
+	_parse_focus(dict.get("foco"), data)
 	data.pc_steps = _parse_steps(MODE_PC, dict.get(MODE_PC), data.errors)
 	data.mobile_steps = _parse_steps(MODE_MOBILE, dict.get(MODE_MOBILE), data.errors)
 	return data
@@ -135,6 +143,27 @@ func steps_for(mobile: bool) -> Array[Dictionary]:
 ## T534: un rótulo de la tarjeta (`"titulo"`, `"paso"`, …) en el idioma activo.
 func ui_text(key: String) -> String:
 	return Localization.data_text("tutorial", &"ui", key, String(ui[key]))
+
+
+## T574: el rótulo del anillo en el idioma activo («Hacé clic acá» en la PC, «Tocá acá» en el celular).
+func focus_label(mobile: bool) -> String:
+	var key: String = "rotulo_celular" if mobile else "rotulo_pc"
+	return Localization.data_text("tutorial", &"foco", key, String(focus.get(key, "")))
+
+
+## T574: cuánto se oscurece lo que no se señala (0 a 0,9).
+func focus_darkness() -> float:
+	return float(focus.get("oscuridad", 0.0))
+
+
+## T574: cuánto tarda cada anillo en expandirse, en segundos.
+func focus_ring_seconds() -> float:
+	return float(focus.get("anillo_segundos", 1.0))
+
+
+## T574: la parte de la pantalla que puede ocupar lo iluminado (0 a 1); si lo señalado pide más, no se oscurece.
+func focus_hole_max() -> float:
+	return float(focus.get("agujero_max", 0.3))
 
 
 ## El evento que espera un paso (`EVENT_NONE` si se lee y se toca «Siguiente», o si el paso no existe).
@@ -165,6 +194,39 @@ static func _parse_ui(raw: Variant, data: TutorialData) -> void:
 	for key: Variant in ui_raw.keys():
 		if not UI_KEYS.has(str(key)):
 			data.errors.append("tutorial: \"interfaz\" no usa la clave \"%s\" (se usan: %s)." % [key, ", ".join(UI_KEYS)])
+
+
+static func _parse_focus(raw: Variant, data: TutorialData) -> void:
+	if not raw is Dictionary:
+		data.errors.append("tutorial: \"foco\" tiene que ser un objeto con %s." % ", ".join(FOCUS_KEYS))
+		return
+	var focus_raw: Dictionary = raw
+	var dark: Variant = focus_raw.get("oscuridad")
+	if not _is_number(dark) or float(dark) < 0.0 or float(dark) > FOCUS_MAX_ALPHA:
+		data.errors.append("tutorial: \"foco\" \"oscuridad\" tiene que ser un número de 0 a %s." % str(FOCUS_MAX_ALPHA))
+	else:
+		data.focus["oscuridad"] = float(dark)
+	var seconds: Variant = focus_raw.get("anillo_segundos")
+	if not _is_number(seconds) or float(seconds) < FOCUS_MIN_SECONDS or float(seconds) > FOCUS_MAX_SECONDS:
+		data.errors.append("tutorial: \"foco\" \"anillo_segundos\" tiene que ser un número de %s a %s." % [str(FOCUS_MIN_SECONDS), str(FOCUS_MAX_SECONDS)])
+	else:
+		data.focus["anillo_segundos"] = float(seconds)
+	var hole: Variant = focus_raw.get("agujero_max")
+	if not _is_number(hole) or float(hole) <= 0.0 or float(hole) > 1.0:
+		data.errors.append("tutorial: \"foco\" \"agujero_max\" tiene que ser un número mayor que 0 y hasta 1 (la parte de la pantalla que puede ocupar lo iluminado).")
+	else:
+		data.focus["agujero_max"] = float(hole)
+	for key: String in ["rotulo_pc", "rotulo_celular"]:
+		var value: Variant = focus_raw.get(key)
+		if not value is String or (value as String).strip_edges().is_empty():
+			data.errors.append("tutorial: \"foco\" \"%s\" tiene que ser un texto no vacío." % key)
+		elif (value as String).length() > MAX_UI_CHARS:
+			data.errors.append("tutorial: \"foco\" \"%s\" tiene %d caracteres y el máximo es %d." % [key, (value as String).length(), MAX_UI_CHARS])
+		else:
+			data.focus[key] = value
+	for key: Variant in focus_raw.keys():
+		if not FOCUS_KEYS.has(str(key)):
+			data.errors.append("tutorial: \"foco\" no usa la clave \"%s\" (se usan: %s)." % [key, ", ".join(FOCUS_KEYS)])
 
 
 static func _parse_steps(mode: String, raw: Variant, errors: PackedStringArray) -> Array[Dictionary]:

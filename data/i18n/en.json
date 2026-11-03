@@ -447,6 +447,8 @@
     {"clave": "tutorial.ui.siguiente", "texto": "Next"},
     {"clave": "tutorial.ui.saltar", "texto": "Skip tutorial"},
     {"clave": "tutorial.ui.terminar", "texto": "Let's play!"},
+    {"clave": "tutorial.foco.rotulo_pc", "texto": "Click here"},
+    {"clave": "tutorial.foco.rotulo_celular", "texto": "Tap here"},
     {"clave": "tutorial.pc_welcome.text", "texto": "Welcome! In a minute you'll learn the basics.\nYou can skip the tutorial whenever you want."},
     {"clave": "tutorial.pc_path.text", "texto": "Monsters come in here and follow the path to the exit.\nIf they get there, you lose lives."},
     {"clave": "tutorial.pc_gold.text", "texto": "This is your gold. You earn it by defeating monsters and finishing waves."},

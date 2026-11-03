@@ -29,6 +29,7 @@ func _raw(overrides: Dictionary = {}) -> Dictionary:
 	var raw: Dictionary = {
 		"version": 1, "borrador": true, "nivel": "level_01",
 		"interfaz": {"titulo": "Tutorial", "paso": "Paso %d de %d", "siguiente": "Siguiente", "saltar": "Saltar tutorial", "terminar": "¡A jugar!"},
+		"foco": {"oscuridad": 0.55, "anillo_segundos": 1.2, "agujero_max": 0.3, "rotulo_pc": "Hacé clic acá", "rotulo_celular": "Tocá acá"},
 		"pc": _steps(_pc_ids()), "celular": _steps(_mobile_ids()),
 	}
 	raw.merge(overrides, true)

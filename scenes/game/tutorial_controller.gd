@@ -46,6 +46,11 @@ func setup(game: Game, data: TutorialData) -> void:
 	overlay.name = "TutorialOverlay"
 	overlay.targets_provider = _targets
 	overlay.fills_provider = _fills
+	overlay.rail_provider = _rail_rect
+	overlay.focus_darkness = data.focus_darkness()
+	overlay.focus_ring_seconds = data.focus_ring_seconds()
+	overlay.focus_hole_max = data.focus_hole_max()
+	overlay.focus_label = data.focus_label(_mobile)
 	add_child(overlay)
 	overlay.area = _map_area()
 	overlay.next_pressed.connect(flow.next)
@@ -71,6 +76,18 @@ func begin() -> void:
 	_enter_step()
 
 
+func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS  # el foco del riel también se mantiene en pausa
+
+
+func _process(_delta: float) -> void:
+	_sync_rail_focus()
+
+
+func _exit_tree() -> void:
+	_clear_rail_focus()
+
+
 func is_active() -> bool:
 	return _begun and not _stopped and not flow.is_finished()
 
@@ -83,6 +100,11 @@ func current_targets() -> Array[Rect2]:
 ## La casilla que el tutorial sugiere para construir (la que cubre más camino).
 func suggested_cell() -> Vector2i:
 	return _pick_build_cell()
+
+
+## T574: el botón del riel que se señala ahora, para los tests (null si el paso no apunta a un riel).
+func current_rail_control() -> Control:
+	return _rail_control()
 
 
 # --- Pasos ---
@@ -99,6 +121,7 @@ func _enter_step() -> void:
 	overlay.card_over_bottom_bar = id == "pick_card"  # el catálogo ya oscurece la barra de abajo
 	var step: Dictionary = flow.current()
 	var header: String = "%s · %s" % [_data.ui_text("titulo"), _data.ui_text("paso") % [flow.number(), flow.count()]]
+	_sync_rail_focus()
 	overlay.show_step(header, step["texto"], flow.is_reading(), flow.is_last(), _data.ui_text("siguiente"), _data.ui_text("terminar"), _data.ui_text("saltar"))
 
 
@@ -188,11 +211,13 @@ func _on_state_changed(state: LevelSession.State) -> void:
 	if state == LevelSession.State.WON or state == LevelSession.State.LOST:
 		_stopped = true
 		overlay.hide_step()
+		_clear_rail_focus()
 
 
 func _on_flow_finished(completed: bool) -> void:
 	_stopped = true
 	overlay.hide_step()
+	_clear_rail_focus()
 	SaveManager.mark_tutorial_done()  # RF-575: ni completado ni saltado se repite
 	finished.emit(completed)
 
@@ -264,9 +289,51 @@ func _add_cell(rects: Array[Rect2], cell: Vector2i) -> void:
 		rects.append(_cell_rect(cell))
 
 
+## Un control del marco suma su recuadro. Un botón de los rieles (T574) no: está fuera del marco y se marca con
+## `_sync_rail_focus` (el anillo lo dibuja `SideRails`) y con `_rail_rect` (el rótulo en el borde del marco).
 func _add_control(rects: Array[Rect2], control: Control) -> void:
-	if control != null:
+	if control != null and not _is_rail(control):
 		rects.append(control.get_global_rect())
+
+
+func _is_rail(control: Control) -> bool:
+	return _game.mobile_hud != null and _game.mobile_hud.is_rail_control(control)
+
+
+## El botón del riel que el paso actual señala, o null.
+func _rail_control() -> Control:
+	if _stopped or flow == null or flow.is_finished() or not _mobile or _game.mobile_hud == null:
+		return null
+	var control: Control = null
+	match flow.current_id():
+		"open_cart":
+			control = _game.mobile_hud.target_control(&"cart")
+		"sell":
+			control = _game.mobile_hud.target_control(&"sell")
+	return control if control != null and _is_rail(control) else null
+
+
+## El rectángulo de ese botón en coordenadas del marco (vacío si no hay).
+func _rail_rect() -> Rect2:
+	var control: Control = _rail_control()
+	return _game.mobile_hud.rail_rect_in_frame(control) if control != null else Rect2()
+
+
+## Marca en la capa de rieles el botón que el paso señala y quita la marca si ya no corresponde. Se pide en cada
+## cuadro: los rieles se rearman al girar el teléfono y el botón puede ser otro objeto.
+func _sync_rail_focus() -> void:
+	if _game == null or _game.mobile_hud == null:
+		return
+	var control: Control = _rail_control()
+	if control == null:
+		_clear_rail_focus()
+	elif _game.mobile_hud.focused_rail_control() != control:
+		_game.mobile_hud.focus_rail(control, _data.focus_darkness(), _data.focus_ring_seconds())
+
+
+func _clear_rail_focus() -> void:
+	if _game != null and is_instance_valid(_game.mobile_hud) and _game.mobile_hud.focused_rail_control() != null:
+		_game.mobile_hud.focus_rail(null, 0.0, 0.0)
 
 
 ## El rectángulo en pantalla de una casilla (o de un cuadrado de `size` casillas desde `cell`).
