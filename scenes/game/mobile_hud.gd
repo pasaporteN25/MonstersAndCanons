@@ -155,6 +155,7 @@ func _exit_tree() -> void:
 			_rails.layout_changed.disconnect(_sync_rails)
 		if _rails.button_pressed.is_connected(_on_rail_button_pressed):
 			_rails.button_pressed.disconnect(_on_rail_button_pressed)
+		_rails.clear_focus()
 		_rails.set_buttons([], [])
 		_rails.set_visible_for_modal(true)
 	_rails = null
@@ -1067,8 +1068,10 @@ func target_control(target: StringName) -> Control:
 			control = _upgrade_button
 		&"sell":
 			control = _sell_button
-	# T570: con rieles, el carrito y «Vender» no están en esta capa: el anillo del tutorial no sabría dónde dibujarse
-	# (lo arregla T574). El paso sigue andando, porque los botones del riel actúan igual.
+	# T574: con rieles, el carrito y «Vender» son los botones del riel (están en la superficie, fuera del marco):
+	# `is_rail_control` los distingue, y el tutorial los marca con `focus_rail`, no con un recuadro.
+	if _rails_active and (target == &"cart" or target == &"sell"):
+		control = _rail_buttons.get(target) as Button
 	return control if control != null and control.is_visible_in_tree() else null
 
 
@@ -1365,6 +1368,40 @@ func rails_active() -> bool:
 ## Vacío si no hay rieles. Sirve a los tests y al tutorial.
 func rail_button(id: StringName) -> Button:
 	return _rail_buttons.get(id) as Button
+
+
+## T574: ¿este control es un botón de los rieles? (su rectángulo está en la superficie, no en el marco)
+func is_rail_control(control: Control) -> bool:
+	return control != null and _rails_active and control.has_meta(&"rail_id") and _rail_buttons.values().has(control)
+
+
+## T574: el rectángulo de un botón del riel en coordenadas del marco (las del contenido): `x` es negativa para el
+## riel izquierdo y pasa de 1280 para el derecho. Vacío si no hay rieles.
+func rail_rect_in_frame(control: Control) -> Rect2:
+	if _rails == null or not is_rail_control(control):
+		return Rect2()
+	var surface: Vector2 = _rails.get_viewport_rect().size
+	var frame: Rect2 = PresentationGeometry.frame_rect(surface)
+	var scale: float = PresentationGeometry.frame_scale(frame.size)
+	if scale <= 0.0:
+		return Rect2()
+	var rect: Rect2 = control.get_global_rect()
+	return Rect2((rect.position - frame.position) / scale, rect.size / scale)
+
+
+## T574: el botón del riel que el tutorial tiene marcado ahora (null si ninguno).
+func focused_rail_control() -> Control:
+	return _rails.focused_button() if _rails != null else null
+
+
+## T574: marca un botón del riel (anillo) y apaga los otros; `null` quita la marca.
+func focus_rail(control: Control, darkness: float, ring_seconds: float) -> void:
+	if _rails == null:
+		return
+	if control == null or not is_rail_control(control):
+		_rails.clear_focus()
+		return
+	_rails.set_focus(control, darkness, ring_seconds)
 
 
 ## T570: conecta la capa de rieles del host (`GameFlow.side_rails()`; los tests pasan la suya). Se llama una sola vez.

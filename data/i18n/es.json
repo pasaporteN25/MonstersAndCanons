@@ -447,6 +447,8 @@
     {"clave": "tutorial.ui.siguiente", "texto": "Siguiente"},
     {"clave": "tutorial.ui.saltar", "texto": "Saltar tutorial"},
     {"clave": "tutorial.ui.terminar", "texto": "¡A jugar!"},
+    {"clave": "tutorial.foco.rotulo_pc", "texto": "Hacé clic acá"},
+    {"clave": "tutorial.foco.rotulo_celular", "texto": "Tocá acá"},
     {"clave": "tutorial.pc_welcome.text", "texto": "¡Bienvenido! En un minuto aprendés lo básico.\nPodés saltar el tutorial cuando quieras."},
     {"clave": "tutorial.pc_path.text", "texto": "Los monstruos entran por acá y siguen el camino hasta la salida.\nSi llegan, perdés vidas."},
     {"clave": "tutorial.pc_gold.text", "texto": "Este es tu oro. Lo ganás derrotando monstruos y terminando oleadas."},

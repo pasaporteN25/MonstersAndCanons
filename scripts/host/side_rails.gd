@@ -20,6 +20,15 @@ var _safe_area_provider: Callable
 var _frame_scale: float = 1.0
 var _modal_visible: bool = true
 var _ignore_emulated_mouse: bool = false
+## T574 (RF-739): el foco del tutorial. Un botón del riel pulsa con un anillo y los demás se apagan. El dibujo vive
+## en una capa propia que ignora el mouse y los toques, así que el botón sigue recibiéndolos.
+const FOCUS_COLOR: Color = Color(1.0, 0.82, 0.30)
+const FOCUS_RING_REACH: float = 0.9  # cuánto crece el anillo, en lados de botón
+const FOCUS_STROKE: float = 4.0
+var _focus_layer: Control
+var _focus_button: Control
+var _focus_darkness: float = 0.55
+var _focus_seconds: float = 1.2
 
 
 func _ready() -> void:
@@ -28,6 +37,13 @@ func _ready() -> void:
 	_right_column = _make_column()
 	add_child(_left_column)
 	add_child(_right_column)
+	_focus_layer = Control.new()
+	_focus_layer.name = "FocusLayer"
+	_focus_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_focus_layer.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_focus_layer.draw.connect(_draw_focus)
+	add_child(_focus_layer)
+	set_process(false)
 	_rebuild_columns()
 	_update_layout()
 
@@ -63,6 +79,60 @@ func set_buttons(left: Array[Control], right: Array[Control]) -> void:
 	_buttons_right = right.duplicate()
 	_rebuild_columns()
 	_update_layout()
+
+
+## T574: marca un botón del riel (anillo que se expande y los demás oscurecidos). `darkness` va de 0 a 1 y
+## `ring_seconds` es lo que tarda cada anillo. Un botón que no es de este riel no se marca.
+func set_focus(button: Control, darkness: float, ring_seconds: float) -> void:
+	if button == null or not (_buttons_left + _buttons_right).has(button):
+		clear_focus()
+		return
+	_focus_button = button
+	_focus_darkness = clampf(darkness, 0.0, 1.0)
+	_focus_seconds = maxf(ring_seconds, 0.1)
+	set_process(true)
+	_focus_layer.queue_redraw()
+
+
+func clear_focus() -> void:
+	_focus_button = null
+	set_process(false)
+	if _focus_layer != null:
+		_focus_layer.queue_redraw()
+
+
+## El botón marcado ahora (null si no hay foco o el botón ya no existe).
+func focused_button() -> Control:
+	return _focus_button if _focus_button != null and is_instance_valid(_focus_button) else null
+
+
+func _process(_delta: float) -> void:
+	if focused_button() == null:
+		clear_focus()
+		return
+	_focus_layer.queue_redraw()
+
+
+func _draw_focus() -> void:
+	var target: Control = focused_button()
+	if target == null or not target.is_visible_in_tree():
+		return
+	var origin: Vector2 = _focus_layer.get_global_rect().position
+	var dim := Color(0.0, 0.0, 0.0, _focus_darkness)
+	for control: Control in _buttons_left + _buttons_right:
+		if control == null or not is_instance_valid(control) or control == target or control.has_meta(SPACER_META) \
+				or not control.is_visible_in_tree():
+			continue
+		var rect: Rect2 = control.get_global_rect()
+		_focus_layer.draw_rect(Rect2(rect.position - origin, rect.size), dim)
+	var box: Rect2 = target.get_global_rect()
+	box.position -= origin
+	_focus_layer.draw_rect(box, FOCUS_COLOR, false, FOCUS_STROKE)
+	var reach: float = minf(box.size.x, box.size.y) * FOCUS_RING_REACH
+	for offset: float in [0.0, 0.5]:  # dos anillos desfasados: siempre hay uno naciendo
+		var phase: float = TutorialLayout.ring_phase(Time.get_ticks_msec() + int(offset * _focus_seconds * 1000.0), _focus_seconds)
+		var ring: Rect2 = box.grow(reach * phase)
+		_focus_layer.draw_rect(ring, Color(FOCUS_COLOR.r, FOCUS_COLOR.g, FOCUS_COLOR.b, 1.0 - phase), false, FOCUS_STROKE)
 
 
 func set_visible_for_modal(visible_for_modal: bool) -> void:

@@ -74,3 +74,80 @@ static func arrow_points(target: Rect2, card: Rect2, size: float, screen: Rect2)
 	var cx: float = clampf(target.get_center().x, screen.position.x + size, screen.end.x - size)
 	var points := PackedVector2Array([Vector2(cx, tip_y), Vector2(cx - size * 0.6, base_y), Vector2(cx + size * 0.6, base_y)])
 	return points
+
+
+# --- T574 (RF-739): el efecto de foco. Todo esto es geometría pura; `TutorialOverlay` solo lo dibuja. ---
+
+## Cuánto se agranda el anillo respecto del recuadro, en píxeles, cuando termina de expandirse.
+const RING_REACH: float = 28.0
+## Alto extra del rótulo respecto del texto, y el espacio entre el rótulo y lo señalado.
+const LABEL_PAD: Vector2 = Vector2(14.0, 8.0)
+
+
+## Dónde está el anillo en su ciclo (0 a 1). Se calcula con el reloj, no con el tiempo de juego: la partida
+## puede estar en pausa o a ×2 y el efecto tiene que verse igual. `msec` viene de `Time.get_ticks_msec()`.
+static func ring_phase(msec: int, seconds: float) -> float:
+	if seconds <= 0.0:
+		return 0.0
+	return fposmod(float(msec) / 1000.0, seconds) / seconds
+
+
+## El agujero del oscurecido: un solo rectángulo que cubre lo señalado (más `grow` de aire), recortado a la pantalla.
+## Si cubrir todo pide más que `max_fraction` de la pantalla, o no hay nada que cubrir, devuelve un `Rect2` vacío:
+## en ese caso no se oscurece (un agujero enorme no enfoca nada).
+static func focus_hole(targets: Array[Rect2], grow: float, screen: Rect2, max_fraction: float) -> Rect2:
+	if targets.is_empty():
+		return Rect2()
+	var hole: Rect2 = targets[0].grow(grow)
+	for i: int in range(1, targets.size()):
+		hole = hole.merge(targets[i].grow(grow))
+	hole = hole.intersection(screen)
+	if hole.size.x <= 0.0 or hole.size.y <= 0.0:
+		return Rect2()
+	if hole.get_area() > screen.get_area() * max_fraction:
+		return Rect2()
+	return hole
+
+
+## Los cuatro rectángulos que oscurecen todo menos el agujero: [arriba, abajo, izquierda, derecha]. Sin agujero
+## (`hole` vacío) oscurece la pantalla entera: arriba la cubre y los otros tres quedan vacíos.
+static func shade_rects(hole: Rect2, screen: Rect2) -> Array[Rect2]:
+	if hole.size == Vector2.ZERO:
+		return [screen, Rect2(), Rect2(), Rect2()]
+	var top := Rect2(screen.position, Vector2(screen.size.x, hole.position.y - screen.position.y))
+	var bottom := Rect2(Vector2(screen.position.x, hole.end.y), Vector2(screen.size.x, screen.end.y - hole.end.y))
+	var left := Rect2(Vector2(screen.position.x, hole.position.y), Vector2(hole.position.x - screen.position.x, hole.size.y))
+	var right := Rect2(Vector2(hole.end.x, hole.position.y), Vector2(screen.end.x - hole.end.x, hole.size.y))
+	return [top, bottom, left, right]
+
+
+## Dónde va el rótulo («Tocá acá») junto a lo señalado: prefiere el lado opuesto a la tarjeta (arriba o abajo),
+## después los costados, y nunca tapa la tarjeta ni se sale de la pantalla. Si nada entra, lo aprieta contra la pantalla.
+static func label_rect(label_size: Vector2, target: Rect2, card: Rect2, screen: Rect2) -> Rect2:
+	var cx: float = target.get_center().x - label_size.x / 2.0
+	var cy: float = target.get_center().y - label_size.y / 2.0
+	var above := Rect2(Vector2(cx, target.position.y - GAP - label_size.y), label_size)
+	var below := Rect2(Vector2(cx, target.end.y + GAP), label_size)
+	var right := Rect2(Vector2(target.end.x + GAP, cy), label_size)
+	var left := Rect2(Vector2(target.position.x - GAP - label_size.x, cy), label_size)
+	var candidates: Array[Rect2] = []
+	if card.get_center().y < target.get_center().y:
+		candidates.append_array([below, above, right, left])
+	else:
+		candidates.append_array([above, below, right, left])
+	for candidate: Rect2 in candidates:
+		var inside := Rect2(candidate.position.clamp(screen.position, screen.end - label_size), label_size)
+		if inside.is_equal_approx(candidate) and not candidate.intersects(card) and not candidate.intersects(target):
+			return candidate
+	var fallback: Rect2 = candidates[0]
+	fallback.position = fallback.position.clamp(screen.position, screen.end - label_size)
+	return fallback
+
+
+## El rótulo de un botón del riel, que queda fuera del marco: se apoya en el borde del marco del lado del riel,
+## a la altura del botón, dejando `arrow_room` entre el borde y el rótulo para la flecha. `rail_rect` está en coordenadas del marco (puede tener x negativa o pasarse del ancho).
+static func rail_label_rect(label_size: Vector2, rail_rect: Rect2, screen: Rect2, arrow_room: float = 0.0) -> Rect2:
+	var on_left: bool = rail_rect.get_center().x < screen.get_center().x
+	var x: float = screen.position.x + MARGIN + arrow_room if on_left else screen.end.x - MARGIN - arrow_room - label_size.x
+	var y: float = clampf(rail_rect.get_center().y - label_size.y / 2.0, screen.position.y + MARGIN, screen.end.y - MARGIN - label_size.y)
+	return Rect2(Vector2(x, y), label_size)
