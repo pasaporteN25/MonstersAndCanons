@@ -49,6 +49,7 @@
     {"clave": "options.game.tutorial_replayed", "texto": "It will show in level 1"},
     {"clave": "options.game.boss_entrance", "texto": "Boss introductions"},
     {"clave": "options.game.defeat_advice", "texto": "Defeat tips"},
+    {"clave": "options.game.map_grid", "texto": "Marked grid"},
     {"clave": "options.controls.view_all", "texto": "“View all” key"},
     {"clave": "options.controls.view_all_prompt", "texto": "Press a key…"},
     {"clave": "options.controls.view_all_restore", "texto": "Restore"},
