@@ -1,5 +1,9 @@
 # Novedades del juego
 
+## «Llega el jefe» ocupa toda la pantalla del celular *(T571, 2026-11-03; sin probar en un teléfono real)*
+
+En el celular, la presentación del jefe ahora cubre **toda la superficie del teléfono**, también las franjas de los costados: se ve el fondo del Coloso, o el color del jefe si no tiene fondo, sin el terreno asomando. Al terminar (por tiempo, tocando o con «Atrás») vuelve el fondo del terreno. El título, el retrato, el nombre, la descripción y la pista entran enteros en español y en inglés, con letra de al menos 16 px. En la PC no cambia nada, ni los tiempos, la pausa o el salteo.
+
 ## Zoom hasta 2,0 y un dedo mueve el mapa *(T568, 2026-11-02; sin probar en un teléfono real)*
 
 Ahora se puede **acercar de verdad**: el zoom máximo llega a 2,0 (la casilla se ve el doble de grande que a tamaño natural), con la pinza en el celular y con la rueda en la PC. En el celular, con el mapa acercado, **un dedo que arrastra mueve el mapa** sin elegir ni comprar nada; si hay una torre elegida (con su fantasma), el dedo sigue moviendo el fantasma como antes, y con el zoom mínimo un dedo no desplaza. Con el zoom máximo se llega a las cuatro esquinas del mapa. Además, al elegir una torre en el celular, el fantasma aparece cerca del centro de **lo que ves**, no del centro del mapa. «Ver todo» sigue volviendo al encuadre de siempre.

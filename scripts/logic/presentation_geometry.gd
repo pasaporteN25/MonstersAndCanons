@@ -12,6 +12,16 @@ static func frame_rect(surface_size: Vector2) -> Rect2:
 	return Rect2((surface_size - size) * 0.5, size)
 
 
+## La superficie física completa, en coordenadas del marco lógico (las del contenido): empieza en negativo cuando
+## hay franjas. Sirve para estirar un fondo de adentro hasta donde llega el de afuera (T571).
+static func logical_surface_rect(surface_size: Vector2) -> Rect2:
+	var frame: Rect2 = frame_rect(surface_size)
+	var scale: float = frame_scale(frame.size)
+	if scale <= 0.0:
+		return Rect2(Vector2.ZERO, LOGICAL_SIZE)
+	return Rect2(-frame.position / scale, surface_size / scale)
+
+
 static func render_size(frame_size: Vector2) -> Vector2i:
 	return Vector2i(maxi(2, roundi(frame_size.x)), maxi(2, roundi(frame_size.y)))
 

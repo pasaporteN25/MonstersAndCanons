@@ -54,6 +54,34 @@ static func shade(catalog: Variant = null) -> Dictionary:
 	return result
 
 
+## La composición (RF-738): tamaños de letra, alto del retrato (fracción de 720), ancho de la columna de texto y
+## separación, en `data/ui/boss_presentation.json` bajo «composicion» → «pc» / «celular». Lo que falte, o no sea un número
+## positivo, cae al valor de siempre; en el celular la letra no baja de `LETRA_MINIMA` (16 px lógicos).
+const LETRA_MINIMA: int = 16
+const DEFAULT_LAYOUT: Dictionary = {
+	"letra_titulo": 34, "letra_nombre": 52, "letra_texto": 22, "letra_pista": 18,
+	"alto_retrato": 0.5, "ancho_texto": 900.0, "separacion": 14,
+}
+
+
+static func layout(mobile: bool, catalog: Variant = null) -> Dictionary:
+	var result: Dictionary = DEFAULT_LAYOUT.duplicate()
+	if catalog == null:
+		catalog = read_catalog(CATALOG_PATH)
+	if typeof(catalog) == TYPE_DICTIONARY:
+		var all: Variant = (catalog as Dictionary).get("composicion", {})
+		var mine: Variant = (all as Dictionary).get("celular" if mobile else "pc", {}) if typeof(all) == TYPE_DICTIONARY else {}
+		if typeof(mine) == TYPE_DICTIONARY:
+			for key: String in result:
+				var value: Variant = (mine as Dictionary).get(key, null)
+				if typeof(value) in [TYPE_FLOAT, TYPE_INT] and float(value) > 0.0:
+					result[key] = float(value) if key in ["alto_retrato", "ancho_texto"] else int(value)
+	if mobile:
+		for key: String in ["letra_titulo", "letra_nombre", "letra_texto", "letra_pista"]:
+			result[key] = maxi(int(result[key]), LETRA_MINIMA)
+	return result
+
+
 static func read_catalog(path: String) -> Variant:
 	if not FileAccess.file_exists(path):
 		return null
