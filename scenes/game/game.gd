@@ -184,6 +184,7 @@ func _ready() -> void:
 	if mobile_hud != null:
 		mobile_hud.view_all_pressed.connect(camera_controller.view_all)
 	build_controller.tower_built.connect(_on_tower_built)
+	build_controller.empty_cell_double_tapped.connect(_on_empty_cell_double_tapped)
 	build_controller.tower_upgraded.connect(_on_tower_upgraded)
 	build_controller.tower_sold.connect(_on_tower_sold)
 	build_controller.selection_changed.connect(hud.show_selected_tower)
@@ -298,6 +299,19 @@ func _setup_infrastructure() -> void:
 		infrastructure.changed.connect(_refresh_infrastructure_tab)
 		session.resources_changed.connect(_refresh_infrastructure_tab.unbind(1))
 		_refresh_infrastructure_tab()
+
+
+## T573 (RF-740, D-227): doble toque en una casilla vacía. Celular: abre el catálogo del carrito (no cobra nada).
+## PC: no tiene catálogo, así que muestra la pestaña de torres y hace pulsar la barra de abajo.
+func _on_empty_cell_double_tapped(_cell: Vector2i) -> void:
+	if session.is_over() or is_paused() or presentation != null:
+		return
+	if exit_dialog.is_open() or pause_menu.is_open() or level_intro.is_open():
+		return
+	if mobile_hud != null:
+		mobile_hud.open_catalog()
+	else:
+		hud.show_buy_tab()
 
 
 func _on_mobile_catalog_opened(open: bool) -> void:

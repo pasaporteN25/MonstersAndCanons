@@ -1,5 +1,9 @@
 # Novedades del juego
 
+## Doble toque en una casilla vacía abre la compra *(T573, 2026-11-03; sin probar en un teléfono real)*
+
+Ahora **dos toques seguidos en la misma casilla libre de pasto** abren la compra, sin ir a buscar el carrito. En el celular se abre el **catálogo** (sin elegir torre ni cobrar nada). En la PC, que no tiene catálogo, el doble clic **pasa a la pestaña de torres** de la barra de abajo y la hace **pulsar un instante**. No pasa nada en el camino, en una casilla bloqueada, sobre una torre o un objeto, con la partida en pausa o terminada, con un cuadro abierto ni con una herramienta (como «Demoler») elegida. Con la torre fantasma puesta, el doble toque sigue **confirmando la compra** como antes, y un toque simple sigue soltando la selección. Si arrastrás el mapa entre los dos toques, no cuenta.
+
 ## Zoom hasta 2,0 y un dedo mueve el mapa *(T568, 2026-11-02; sin probar en un teléfono real)*
 
 Ahora se puede **acercar de verdad**: el zoom máximo llega a 2,0 (la casilla se ve el doble de grande que a tamaño natural), con la pinza en el celular y con la rueda en la PC. En el celular, con el mapa acercado, **un dedo que arrastra mueve el mapa** sin elegir ni comprar nada; si hay una torre elegida (con su fantasma), el dedo sigue moviendo el fantasma como antes, y con el zoom mínimo un dedo no desplaza. Con el zoom máximo se llega a las cuatro esquinas del mapa. Además, al elegir una torre en el celular, el fantasma aparece cerca del centro de **lo que ves**, no del centro del mapa. «Ver todo» sigue volviendo al encuadre de siempre.

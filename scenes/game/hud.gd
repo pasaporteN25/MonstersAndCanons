@@ -462,6 +462,16 @@ func show_tab(id: StringName) -> void:
 	infrastructure_tab.visible = id == TAB_INFRASTRUCTURE
 
 
+## T573 (RF-740): el doble toque en una casilla vacía lleva a la pestaña de torres (si hay pestañas) y hace pulsar
+## la barra de abajo un instante, para que se vea dónde se compra. No elige ninguna torre ni cobra.
+func show_buy_tab() -> void:
+	show_tab(TAB_CANNONS)
+	var bottom: Control = get_node("BottomBar")
+	var tween: Tween = _tween()
+	tween.tween_property(bottom, "modulate", Color(1.5, 1.5, 1.2), 0.12)
+	tween.tween_property(bottom, "modulate", Color.WHITE, 0.25)
+
+
 ## RF-456 (`Tab`): pasa a la pestaña que sigue y avisa. Sin pestañas no hace nada.
 func switch_tab() -> void:
 	if bar_tabs == null:
