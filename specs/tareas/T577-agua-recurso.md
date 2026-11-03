@@ -1,32 +1,18 @@
-# T577 · El agua como recurso
+# T577 · Pozos que aportan recursos
 
-- Ejecutor · Sonnet · esfuerzo alto
-- Depende de · T575 con OK de Lucas · Compuerta · 🚦 · Tamaño · Se fija en T575
-
-> **Ficha incompleta a propósito.** T575 la completa o la cancela, según lo que elija Lucas. Sin eso, no empezar. Si Lucas elige una segunda moneda, T575 la divide en varias tareas.
+- Ejecutor · Sonnet · alto · Depende de · T575 · Compuerta · 🚦 decisiones de mapas y sinergia; spec complementaria · Tamaño · dividir si excede una sesión
 
 ## Leer
+RF-398–404, RF-747, D-233, informe T575 §3, reglas de datos, canon del agua y `specs/tareas/README.md`.
 
-La elección registrada en T575 y sus `RF`. `specs/01-spec.md`: RF-398 en adelante, RF-403. `.claude/rules/datos.md`. `specs/10-universo.md`.
+## Objetivo y alcance
+Agregar clase de extracción `pozo`, habilitada como mina, que aporta recursos existentes a producción constante por ronda. No crear moneda de agua. Los dos sitios de agua del nivel 11 son referencia; Lucas debe definir dónde agregar fuentes para tres pozos, si la potencia depende de pozos activos y si reemplazan la mina del 11. Sinergia requiere mapas con tres o más fuentes y reglas precisas aprobadas antes de implementarla. El ejemplo 3 pozos/5 por ronda y la propuesta 1 por ronda/reserva 4 no son valores aprobados. Costo, producción, reserva y bonus: **a fijar con el bot en la tarea T577**.
 
-## Objetivo
-
-Que el agua aporte a la partida de la forma elegida.
-
-## Alcance
-
-**Sí:** lo que fije T575.
-
-**No:** niveles, canon o monedas que T575 no nombre.
+## Archivos y pasos
+Revisar `data/obstaculos.json`, niveles aprobados, catálogo/validador y editor de mapas, dibujo de extracción, textos `data/i18n/`, bot y tests correspondientes. Primero resolver preguntas y documentar reglas; medir línea de base y seleccionar valores con bot. Integrar clase, estados y dibujo provisional; actualizar editor, validadores, textos, tests y mapas autorizados. Arte definitivo requiere 🎨.
 
 ## Hecho cuando
+Pozos dan recursos por ronda según datos y sinergia aprobada, mapas autorizados validan, mapas sin pozo y guardados viejos siguen funcionando, extracción y sinergia están probadas y el balance medido con cinco semillas cumple la regla de oro.
 
-Se cumple lo que fije T575. Los niveles sin agua explotable se juegan igual, y los mapas de la comunidad y los guardados viejos abren (RF-403). El bot sigue ganando los niveles que cambien. Hay arte provisional o aprobado (🎨).
-
-## Verificación
-
-Suite completa sin `SCRIPT ERROR`, `tools/check_level.gd` en cada nivel tocado y el bot.
-
-## Frenar si
-
-La ficha no fue completada por T575, o el balance de un nivel cambia sin que T575 lo haya previsto.
+## Verificación y freno
+`check_level` por mapa, suite completa sin errores de script, bot `sin_recursos`, `extraer_temprano` y `extraer_tarde` con cinco semillas; comparar línea de base identificada. Frenar ante respuestas o spec complementaria faltantes, o si el bot pierde un nivel que debía ganar.

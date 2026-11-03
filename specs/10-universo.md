@@ -368,6 +368,8 @@ Ninguna se diseña ni se implementa en la V1. Están acá para que el canon **no
 | **Épocas** (la guerra evoluciona) | 06 §15, D-076 | **No** entra en este universo de forma automática: es otro modo. |
 | **Quién hizo las ruinas** | §5 | Mantener las tres lecturas abiertas. |
 | **El nombre y la lengua de las comunidades** | §4.3 | Los colonos las nombran; ellas no. |
+| **Agua como segunda economía** | Informe T575 §5 | Posible abastecimiento de colonia y pozos de los Moradores; explorar elección de bando sin prometerlo ni alterar canon. En V1 el pozo suma a recursos existentes. |
+| **Agua como terreno, reconstrucción y otro uso de recursos** | Informe T575 §5; 06 §15; T447 A3 | Explorar vados, puentes, reparar o reconstruir torres y Cohetera en parte 2 o 3D; no son compromisos. |
 | **Volcán y pantano** | §2 | Regiones sin visitar. |
 | **Contar con el escenario en 3D** (ruinas, estatuas, campamentos) | 06 §9 | Las señales de la V1 pueden crecer en esa dirección. |
 | **La Cuadrilla en la v2 en 3D** (la banda que anda junta, sin jefe) | Lucas, 2026-10-10; T252 | Que sigan **sin mando ni la marca de los Moradores**. En 3D se podrían ver andando juntas por el mismo terreno, con el Cargador marcando el paso. **No se prepara nada de 3D en la V1** (ni modelos, ni campos ni nombres reservados). |

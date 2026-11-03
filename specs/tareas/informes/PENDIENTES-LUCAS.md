@@ -157,7 +157,7 @@ Todo M89 está hecho y probado **solo en la computadora**: tests, y capturas rea
 - [ ] **Caminata a la izquierda (T572):** mirá un nivel donde los enemigos vayan hacia la izquierda. ¿Se ven rotos o solo distintos? (El informe de T572 midió las hojas y no vio un error de código; no se vio en partida.)
 
 ### F13 · Lo que espera una decisión tuya
-- [ ] **T575:** elegir recursos, agua y estandartes (`specs/tareas/informes/T575-mecanicas-y-agua.md`). Hasta que elijas, T576 (tutorial con todas las mecánicas) y T577 (agua como recurso) esperan.
+- [x] **T575:** elecciones generales registradas el 2026-11-03; quedan preguntas concretas en H.
 - [ ] **Arte de T572 y T367:** no se produjo ni se aprobó arte nuevo (caminata a la izquierda; ilustración de los jefes).
 - [ ] **B-64:** ¿mapas más largos para el celular? Recomendación: no por ahora (D-224).
 - [ ] **T578:** PvP por red local, solo investigado: el informe recomienda posponerlo (`specs/tareas/informes/T578-investigacion-pvp-lan.md`).
@@ -167,6 +167,15 @@ Todo M89 está hecho y probado **solo en la computadora**: tests, y capturas rea
 
 - [ ] **B-65 / T580:** investigación de la carrera PvP entre niveles, post-V1 y de prioridad baja; revisar el informe cuando exista.
 - [ ] **B-66:** definir el enemigo que congela torres en una zona y sus contramedidas.
-- [ ] **B-67 / T575:** elegir la economía de recursos, incluidas las nuevas ideas y su relación con Q-22, dentro de T575.
-- [ ] **B-68 / T575:** elegir el futuro de los Estandartes y torres de apoyo, considerando V2 y 3D.
+- [x] **B-67 / T575:** dirección elegida; Q-22 se mantiene. Ver H para el canje y valores.
+- [x] **B-68 / T575:** desarrollar mejor ahora; T589 presenta diseño para aprobación.
 - [ ] **B-69:** decidir si «Reintentar» pide confirmación desde pausa y desde el fin de partida.
+
+
+## H · Preguntas abiertas de T575 (2026-11-03)
+
+- [ ] **Pozos:** ¿en qué niveles agregamos fuentes de agua para que haya al menos tres pozos y pueda verse la sinergia? ¿«Potenciar» depende de la cantidad de pozos activos? ¿En el nivel 11 los dos pozos reemplazan la mina, como propone el informe, o la conservamos?
+- [ ] **Canje por bloque:** al alcanzar N, ¿se canjea automáticamente y en silencio o se ilumina un botón para que el jugador lo haga? Claude propone aviso visible o botón, pendiente de tu OK, para no consumir recursos que necesita el Mortero. Las tasas deben evitar que el oro neto suba en 13–15.
+- [ ] **Tutorial:** aprobar los textos finales de las dos tarjetas y pasos nuevos que redacte T576; ¿se conserva `welcome` o se acorta? No se asumió que Lucas eligió quitarlo.
+- [ ] **Apoyos:** revisar y aprobar o pedir cambios al diseño que presente T589, incluyendo su relación con B-66.
+- [ ] **Valores de balance:** producción, costo, reserva y bonus de pozos, **a fijar con el bot en la tarea T577**; duración, renovación y reducción de oro, **a fijar con el bot en la tarea T583**; N, tasas y bonus del canje, **a fijar con el bot en la tarea T584**. T585 remide con cinco semillas.

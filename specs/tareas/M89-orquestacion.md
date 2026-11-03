@@ -1,6 +1,6 @@
 # M89 · Orquestación de las mejoras de celular
 
-Guía para el agente coordinador. Reparte T563 a T579 entre Haiku, Sonnet, Codex (Terra 6.1) y Opus. La spec es M89 en `specs/01-spec.md`; las decisiones, D-223 a D-230.
+Guía para el agente coordinador. Reparte T563 a T589 entre Haiku, Sonnet, Codex (Terra 6.1) y Opus. La spec es M89 en `specs/01-spec.md`; las decisiones, D-223 a D-230.
 
 **Antes de empezar:** el PR de T562 tiene que estar mergeado. Ese merge es el OK de Lucas a la spec y a sus valores propuestos.
 
@@ -27,12 +27,12 @@ Guía para el agente coordinador. Reparte T563 a T579 entre Haiku, Sonnet, Codex
 | 4 | T570 | Controles en los rieles | Sonnet · alto | T566, T567, T568, T569 | — | `scenes/game/mobile_hud.gd`, `scenes/game/game.gd` |
 | 5 | T574 | Foco del tutorial | Sonnet · medio | T570 | — | `scenes/ui/tutorial_overlay.gd`, `scenes/game/tutorial_controller.gd` |
 | 6 | T579 | Revisión integrada | Sonnet · medio | T563 a T574, T578 | — | documentos y capturas |
-| Después del OK | T576 | Tutorial con las mecánicas | Sonnet · medio | T574, T575 | 🚦 | `data/tutorial/tutorial.json`, tutorial |
-| Después del OK | T577 | Agua como recurso | Sonnet · alto | T575 | 🚦 (se puede cancelar) | lo fija T575 |
+| Después del OK | T576 | Tutorial con las mecánicas | Sonnet · medio | T568, T573, T574, T575 | textos 🚦 | `data/tutorial/tutorial.json`, tutorial |
+| Después del OK | T577 | Agua como recurso | Sonnet · alto | T575 | 🚦 mapas y sinergia | `pozo`, mapas y extracción |
 
 **Dentro de una ola**, las tareas no comparten archivos de código, salvo T564 y T567/T570, que tocan zonas distintas de `game.gd`. No correr dos tareas a la vez sobre `mobile_hud.gd`.
 
-**T576 y T577 no frenan el resto:** si Lucas todavía no eligió en T575, se sigue hasta T579 y se le avisa. T579 no depende de ellas.
+**T575 quedó cerrada en documentos:** Lucas eligió el 2026-11-03. T576 espera aprobación de textos; T577 espera decisiones de mapas y sinergia y spec complementaria. T579 no depende de ellas. Ver RF-743–750 y tareas T581–T589.
 
 ## Ramas y PR
 
@@ -59,7 +59,7 @@ Esto reemplaza el paso 5 de la sección 4 del README solo para M89. Los conflict
 
 ## Qué frena al coordinador
 
-- T575 sin elección de Lucas: T576 y T577 esperan.
+- T576 espera aprobación de textos; T577 espera decisiones sobre pozos y spec complementaria. T584 espera modalidad de canje; T589 requiere OK de diseño.
 - T572 propone arte: no se produce sin el OK de Lucas.
 - T568 muestra que el suelo se ve mal a 2,0: se avisa a Lucas, que puede pedir otro tope.
 - T563: el bot pierde un nivel que antes ganaba, o gana con una holgura rara.
@@ -87,3 +87,8 @@ Esto reemplaza el paso 5 de la sección 4 del README solo para M89. Los conflict
 | El agua como recurso | T575, T577 |
 | Opción de cuadrícula más marcada | RF-741, T565 |
 | La Ráfaga debería ganar más velocidad | RF-742, T563 |
+
+
+## Continuación T575 · decisiones del 2026-11-03
+
+T581 lecciones por nivel; T582 R1/R2; T583 fuentes y oro; T584 canje; T585 remedición; T586–T588 explicación, avance y medición del Estandarte; T589 diseño de apoyos con 🚦. Dependencias y alcance en cada ficha y tablero. T577 y T584 no resuelven por su cuenta las preguntas de Lucas; los valores se fijan con el bot en T577, T583 y T584. Coordinar archivos compartidos y no paralelizar tareas que los editen.

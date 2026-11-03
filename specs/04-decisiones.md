@@ -2014,7 +2014,7 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 
 ## D-229 · Recursos, agua y estandartes se deciden con un informe antes de tocar el tutorial
 
-- **Fecha:** 2026-11-02 · **Estado:** propuesta desde las notas de Lucas; aprobada al mergear T562. La compuerta de T575 sigue abierta hasta que Lucas elija.
+- **Fecha:** 2026-11-02 · **Estado:** propuesta desde las notas de Lucas; aprobada al mergear T562. Lucas eligió el 2026-11-03; ver D-231 a D-234 y las preguntas aún abiertas.
 - **Qué:** T575 (Opus) propone cómo cerrar recursos y estandartes, si el agua es un recurso, qué enseña el nivel 1 y qué se presenta o se guarda para la parte 2 y la versión 3D. **Lucas elige** y recién ahí se escriben los `RF` y arrancan T576 y T577.
 - **Por qué:** Lucas pidió que el primer nivel explique todas las mecánicas, pero reconoció que recursos y estandartes todavía no están afinados. Hoy el nivel 1 no tiene ni unos ni otros: el Estandarte exige cinco avances y no se puede construir en los niveles 1 a 5 (RF-360), y RF-577 prohíbe cambiar el mapa, el oro y las oleadas de ese nivel. Enseñar eso exige decidir antes cuál regla cambia. El agua además toca canon: el oasis y el nombre Cántaro ya dependen de ella (`10-universo.md`).
 - **Alternativas descartadas:** escribir ya el tutorial completo (se rehace cuando cambien las mecánicas); decidir el agua en esta spec (Lucas pidió pensarlo bien).
@@ -2026,3 +2026,24 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Qué:** T578 (Opus) investiga qué tan fácil es una competencia en tiempo real, con dos teléfonos o PC en la misma red. **No se escribe código del juego.**
 - **Por qué:** Lucas lo pidió como investigación, sin aplicarlo todavía.
 - **Refs:** T578.
+
+
+## D-231 · Tutorial escalonado T-2
+- **Fecha:** 2026-11-03 · **Decidió:** Lucas · **Estado:** elegido.
+- **Qué y por qué:** el nivel 1 presenta gestos, avance y lo que viene; lecciones breves en 6–11 enseñan cada mecánica al aparecer. Evita modificar el mapa básico y reparte la enseñanza. T576 y T581; RF-743–744.
+- **Alternativas:** T-1 sola no enseña luego cada mecánica; T-3 exige cambiar mapa y progresión. Textos finales sujetos a aprobación de Lucas.
+
+## D-232 · Recursos confiables, estratégicos y canjeables
+- **Fecha:** 2026-11-03 · **Decidió:** Lucas · **Estado:** dirección elegida; valores y activación del bloque pendientes.
+- **Qué y por qué:** R1/R2, menos oro alto medido, fuentes de distinta duración y canje unitario bajo y por bloque con bonus; hacer los recursos comprensibles y útiles. RF-745, RF-746, RF-748; T581–T585.
+- **Alternativas:** no se eligió cobrar recursos por mejoras ni nuevos precios de torres; se mantiene Q-22, RF-418 y D-083. Claude propone aviso o botón en vez de canje silencioso por el Mortero; es propuesta sin OK. Tasas deben evitar subir oro neto en 13–15.
+
+## D-233 · Agua suma a los recursos existentes
+- **Fecha:** 2026-11-03 · **Decidió:** Lucas · **Estado:** dirección elegida; mapas y sinergia pendientes.
+- **Qué y por qué:** clase `pozo` con producción constante y sinergia entre varios; no crea segunda moneda en V1. RF-747, T577. El agua como economía separada queda como semilla futura.
+- **Alternativas:** segunda moneda ahora o dejar el agua solo como historia. No se dio OK a los valores ni al reemplazo de mina propuestos en el informe.
+
+## D-234 · Estandarte: explicar, asegurar avance y diseñar apoyos
+- **Fecha:** 2026-11-03 · **Decidió:** Lucas · **Estado:** base elegida; rediseño pendiente de compuerta.
+- **Qué y por qué:** E1 nombre y explicación, E2 avance al ganar aun si escapa, E3 medición; desarrollar mejor el Estandarte y apoyos ahora mediante diseño T589, con B-66 y parte 2/3D. RF-749–750, T586–T589.
+- **Alternativas:** solo explicar y postergar todo el desarrollo; implementar de inmediato un rediseño concreto, que Lucas todavía no eligió.

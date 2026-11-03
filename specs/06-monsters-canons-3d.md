@@ -451,3 +451,7 @@ Ideas que pasan de la V1 a este juego (o a *M&C 2*). Igual que en la V1, no se p
 2. Definir la lista de épocas y de imperios, con sus torres y monstruos.
 3. Integrarlo con el lore (B-03 de la V1).
 4. Decidir si va en M&C 3D o se guarda para M&C 2.
+
+### 3D-02 · Agua del terreno y otras semillas de T575
+
+**Exploración, no promesa:** agua como terreno (vados que frenan, orillas que potencian Hielo o puentes), aprovechando alturas y caminos en dos niveles (§4.3). Considerar pantano y volcán como regiones futuras. Enlazar la alternativa futura de reparar o reconstruir torres destruidas (M37 de `01-spec.md`) y un segundo uso del recurso, como la Cohetera de T447 A3. La economía separada de agua queda como semilla de parte 2 en `10-universo.md` §9. T589 estudia apoyos en V1 sin dar por decidido su futuro en 3D.

@@ -1356,8 +1356,8 @@ Ideas **aprobadas como dirección**, pero **sin fecha**: no se programan hasta c
 |---|---|---|
 | [B-65](#b-65--modo-pvp-por-carrera-de-niveles) | PvP por carrera de niveles. | T580: solo investigación, post-V1 y prioridad baja. |
 | [B-66](#b-66--enemigo-que-congela-torres-en-una-zona) | Enemigo que congela torres en una zona. | Idea abierta, sin implementar. |
-| [B-67](#b-67--rediseño-de-la-economía-de-recursos) | Rediseño de la economía de recursos. | Se decide dentro de T575. |
-| [B-68](#b-68--futuro-de-los-estandartes-y-torres-de-apoyo) | Futuro de los Estandartes y torres de apoyo. | Para considerar en T575. |
+| [B-67](#b-67--rediseño-de-la-economía-de-recursos) | Rediseño de la economía de recursos. | Dirección elegida en T575; valores y canje pendientes. |
+| [B-68](#b-68--futuro-de-los-estandartes-y-torres-de-apoyo) | Futuro de los Estandartes y torres de apoyo. | Desarrollo elegido; diseño T589 con compuerta. |
 | [B-69](#b-69--confirmación-al-reintentar-un-nivel) | Confirmación al reintentar un nivel. | Pregunta abierta, sin implementar. |
 
 ### Guardados después de V1 (Lucas, 2026-10-26)
@@ -1772,13 +1772,11 @@ Los cuatro enemigos que gustaron, con lo necesario para convertirlos en spec cua
 
 ### B-67 · Rediseño de la economía de recursos
 
-**Idea de Lucas:** en niveles altos sobra oro. Propone bajar el oro que cae y que los recursos salgan siempre, sin sorteo. También plantea fuentes renovables o que duren más y otras agotables, ubicadas estratégicamente: algunas convendrían por su ubicación y otras por dar más recursos. Los recursos podrían servir para comprar y mejorar torres directamente, con precios en monedas y recursos; otra opción es venderlos o transarlos por oro, por ejemplo recibir mucho oro de golpe al acumular 20.
-
-El [informe T575](tareas/informes/T575-mecanicas-y-agua.md) ya presenta las opciones R1–R4 y espera la elección de Lucas. Cobrar recursos por mejorar choca con **Q-22** («mejorar no cuesta recursos», RF-418 y D-083). La elección, incluida cualquier revisión de esa decisión, se resuelve dentro de T575, no antes. Sin implementar ni escribir nuevos RF todavía.
+Lucas eligió R1 y R2, menos oro en niveles altos medido con el bot, fuentes estratégicas renovables o agotables y canje manual unitario y por bloques con bonus. Los detalles y valores esperan RF-745 a RF-747 y T582–T585. **Q-22 se mantiene:** mejorar no cuesta recursos (RF-418, D-083). No se eligieron precios nuevos en recursos para torres ni mejoras.
 
 ### B-68 · Futuro de los Estandartes y torres de apoyo
 
-**Idea de Lucas:** los Estandartes están «medio de más»: o se terminan de desarrollar mejor, o sirven para introducir algo que se mejore en la V2 y la versión 3D. Considerar las opciones E1–E4 y §5 sobre parte 2 y 3D del [informe T575](tareas/informes/T575-mecanicas-y-agua.md), cuya elección sigue pendiente. Sin implementar.
+Lucas eligió desarrollarlos mejor ahora. E1–E3 son la base (RF-749–750); T589 diseña alternativas con compuerta 🚦, vinculadas con B-66 y las semillas de parte 2 y 3D. No se aprobó ni implementó una mecánica nueva de apoyo.
 
 ### B-69 · Confirmación al reintentar un nivel
 
@@ -2005,8 +2003,8 @@ Lucas eligió entre las propuestas de la tanda 1 (`art/redesign-m24/`): **Normal
 
 ### M37 · Avances y Estandarte, primera etapa de B-07/B-22
 Lucas, 2026-10-03. Disponibilidad por nivel, con colección persistente como condición adicional para estandartes. Primera entrega: avances y apoyo de cadencia; ampliada con Ladrón, Embestidor/desgaste y reparación en M39–M41.
-- **RF-358** Colección genérica por id, con fuentes únicas: un avance plateado por cada nivel oficial1–5, total5. Dado un nivel con avance pendiente, al comenzar se elige al azar un enemigo original de sus oleadas como portador; cuando muere entrega el avance automáticamente. Si escapa, se puede rejugar el nivel. Crías/admin/comunidad/editor no generan avances; niveles sin fuente no generan drops. No altera oro, daño, oleadas ni balance1–5.
-- **RF-359** El avance recogido queda pendiente hasta completar su oleada. Dada una derrota posterior o victoria, se conserva; derrota durante esa oleada no lo conserva. Abandonar/reintentar/cerrar antes del resultado descarta los avances de esa partida, incluso si la oleada terminó. El guardado es aditivo y compatible con versión1; no se conceden avances retrospectivos por victorias viejas.
+- **RF-358** Colección genérica por id, con fuentes únicas: un avance plateado por cada nivel oficial1–5, total5. Dado un nivel con avance pendiente, al comenzar se elige al azar un enemigo original de sus oleadas como portador; cuando muere entrega el avance automáticamente. Si escapa y se gana el nivel, se entrega al ganar; si se pierde o abandona, no se entrega por el escape (RF-750). Crías/admin/comunidad/editor no generan avances; niveles sin fuente no generan drops. No altera oro, daño, oleadas ni balance1–5.
+- **RF-359** El avance recogido queda pendiente hasta completar su oleada; si el portador escapó, rige la entrega al ganar de RF-750. Dada una derrota posterior o victoria, se conserva; derrota durante esa oleada no lo conserva. Abandonar/reintentar/cerrar antes del resultado descarta los avances de esa partida, incluso si la oleada terminó. El guardado es aditivo y compatible con versión1; no se conceden avances retrospectivos por victorias viejas.
 - **RF-360** Estandarte mecánico reservado disponible desde nivel6 cuando el nivel lo permita y existan5 avances distintos. Dada una colección incompleta no puede construirse; con5 y sin disponibilidad tampoco. Niveles1–5 no lo permiten. Admin tiene habilitación explícita de estandartes sin reunir avances, aplicable al nivel actual y sin escribir colección/progreso normal.
 - **RF-361** Torre de apoyo sin disparos: radio2/2,5/3 y cadencia extra10/15/20%, costos120/100/160 como valores iniciales en datos. Dadas varias auras solo vale la mayor; no potencia a sí misma ni a otras torres de apoyo; venta, mejora y aturdimiento actualizan el efecto. Pausa/velocidad respetadas. UI/Wiki distinguen apoyo de daño, alcance del aura y condición de colección. Icono de avance genérico plateado y estatua de engranaje/casco, diseño inicial revisable por Lucas.
 
@@ -2216,7 +2214,7 @@ Valores: los números de este bloque son **iniciales** (los pidió así Lucas en
 - **RF-416** **Un mapa "con recursos" y el contador:**
   - Un mapa **tiene recursos** si tiene **alguna fuente**: un removible con `probabilidad` y `recursos` mayores que 0, o un punto de extracción. Las torres que cuestan recursos **no** cuentan, para que el contador no aparezca en los niveles 1 a 6, que ofrecen al Francotirador (con su forma de pago en recursos) pero no tienen ninguna fuente.
   - **Solo en un mapa con recursos** el HUD muestra el **contador** (ícono y cantidad) en la barra superior, con el mismo tamaño y formato que las otras estadísticas. En un mapa sin recursos no se ve ni cambia nada.
-- **RF-417** **El drop es al azar, con semilla (Q-18 ✎):** esta es la **única excepción a "sin sorteos"** de la V1.
+- **RF-417** **Regla histórica de drop al azar (Q-18 ✎), reemplazada por RF-745.** Los siguientes puntos describen el comportamiento anterior, pendiente de reemplazo en T582:
   - Al **empezar la partida** se sortea, **una vez por cada removible** y en orden fijo de fila y columna, si **entregará** su recurso: sale con probabilidad `probabilidad` por ciento usando un generador con **semilla**. El resultado queda fijado y **se revela recién al terminar la demolición**. Así cancelar y volver a ordenar **no vuelve a sortear**, y el resultado no depende del orden en que se demuele.
   - La **semilla** es nueva en cada partida. El bot de balance y los tests la fijan (`seed=`) para repetir exactamente la misma partida (Q-07). Reintentar usa una semilla nueva.
   - Los niveles 1 a 5 no tienen removibles, y el nivel 6 los escribe con `probabilidad: 0` (solo abren casillas, Q-18). Desde el nivel 7 las clases dan recursos.
@@ -3481,7 +3479,7 @@ Pedido de Lucas: (A) bajar el peso de las imágenes de la intro para que la APK 
 
 **Idea en pocas palabras.** Al entrar al nivel 1 desde el menú, una **tarjeta** chica (arriba o abajo del mapa, donde no tape nada) dice qué hacer, y un **recuadro amarillo que parpadea, con una flecha**, señala el botón o la casilla. Hay dos clases de paso: los de **lectura** (oro, vidas, camino…) se pasan con **«Siguiente»**; los de **acción** (elegir la torre, construirla, empezar la oleada…) **esperan a que el jugador lo haga de verdad** y pasan solos. La partida **sigue corriendo**: el tutorial no la pausa, no cobra ni construye nada por el jugador. **«Saltar tutorial»** está siempre a la vista.
 
-- **RF-570** **Cuándo sale solo.** El tutorial arranca solo cuando se cumplen **todas** estas condiciones:
+- **RF-570** **Cuándo sale solo.** Para lecciones de niveles 6–11, ver la enmienda RF-744. El tutorial arranca solo cuando se cumplen **todas** estas condiciones:
   1. la partida es la del **nivel que dice el archivo** (`"nivel"`, hoy `level_01`), **jugada desde el menú** (la selección de niveles o «Siguiente nivel»): no desde F6, ni probando un mapa del editor, ni un mapa de la comunidad ni un modo (Asedio);
   2. **no** es el **modo de pruebas** (RF-180);
   3. la opción **«Tutorial del nivel 1»** de Opciones está **prendida** (RF-576; por omisión sí);
@@ -3491,7 +3489,7 @@ Pedido de Lucas: (A) bajar el peso de las imágenes de la intro para que la APK 
   - **«Reintentar»** (RF-92) recarga el nivel: si el tutorial no se completó ni se saltó, **vuelve a empezar desde el primer paso** (no se guarda por qué paso iba).
   - Con la **intro** (M57) no se mezcla: la intro termina en el nivel 1 con su cartel, y recién después empieza el tutorial.
 
-- **RF-571** **Los datos del tutorial** *(archivo nuevo, `data/tutorial/tutorial.json`)*:
+- **RF-571** **Los datos del tutorial** (ampliados por RF-743) *(archivo nuevo, `data/tutorial/tutorial.json`)*:
 
   ```json
   {
@@ -3522,7 +3520,7 @@ Pedido de Lucas: (A) bajar el peso de las imágenes de la intro para que la APK 
   - **Errores en castellano** que nombran el paso: «el paso 2 de pc ("path") tiene 3 líneas y el máximo es 2», «la lista "celular" no tiene el paso "confirm_tower" y hace falta», «el paso "open_cart" no se usa en la PC».
   - **Un validador, como el resto del proyecto** (RF-578): `godot --headless --path . -s tools/check_tutorial.gd` dice qué hay que arreglar, y un test revisa el archivo oficial.
 
-- **RF-572** **Los pasos en PC (teclado y mouse).** Cada paso de **lectura** tiene el botón «Siguiente» (el último dice «¡A jugar!»); cada paso de **acción** espera su evento y **no** tiene botón de avance:
+- **RF-572** (ampliado por RF-743) **Los pasos en PC (teclado y mouse).** Cada paso de **lectura** tiene el botón «Siguiente» (el último dice «¡A jugar!»); cada paso de **acción** espera su evento y **no** tiene botón de avance:
 
   | Paso | Qué señala | Qué espera | Texto (borrador) |
   |---|---|---|---|
@@ -3541,7 +3539,7 @@ Pedido de Lucas: (A) bajar el peso de las imágenes de la intro para que la APK 
   | `resume` | el botón «Seguir» | **reanudar** | Apretá «Seguir». |
   | `done` | nada | «¡A jugar!» | Cierre. |
 
-- **RF-573** **Los pasos en el modo celular** *(RF-502 a RF-515)*. Mismos pasos que en PC **salvo** estos, que reemplazan a `pick_tower` y `place_tower`; los textos hablan de toques y no de teclas:
+- **RF-573** (ampliado por RF-743) **Los pasos en el modo celular** *(RF-502 a RF-515)*. Mismos pasos que en PC **salvo** estos, que reemplazan a `pick_tower` y `place_tower`; los textos hablan de toques y no de teclas:
 
   | Paso | Qué señala | Qué espera |
   |---|---|---|
@@ -3561,7 +3559,7 @@ Pedido de Lucas: (A) bajar el peso de las imágenes de la intro para que la APK 
   - **Si pasa algo más grande** (menú de pausa o diálogo de salida abiertos, partida ganada o perdida): lo de encima manda (el tutorial queda por debajo, capa 12) y, al terminar la partida, **se esconde sin marcarse como completado**.
   - **No suma sonidos ni animaciones** más que el parpadeo.
 
-- **RF-575** **Guardado y compatibilidad.**
+- **RF-575** **Guardado y compatibilidad.** RF-744 agrega marcas de lecciones.
   - **La marca:** `"tutorial_done"` (booleano), **clave nueva y aditiva** del guardado (como `intro_seen`, `hall_total` o `ui_prefs`). **`SAVE_VERSION` no cambia** (sigue en 1) y **una versión anterior del juego la ignora**. Se escribe **al completar o al saltar** el tutorial (los dos cuentan: **no se repite**); cerrar el juego a la mitad **no** la escribe.
   - **Guardados viejos:** un guardado **sin la clave** (o con una que no es booleana) se lee así: si **ya ganó el nivel 1** → «hecho» (quien ya jugó no necesita el tutorial); si no → «no hecho» (lo ve una vez). **Una clave booleana explícita manda** (`false` aunque haya ganado el nivel 1: lo pidió con «Volver a verlo»).
   - **La opción:** `"tutorial_enabled"` (booleano) dentro de `settings`, **por omisión `true`**. Un valor que no es booleano ni número se lee como `true`.
@@ -3574,11 +3572,11 @@ Pedido de Lucas: (A) bajar el peso de las imágenes de la intro para que la APK 
   - Disponible **desde el menú principal y desde la pausa** (a diferencia del modo de pruebas, RF-383: no cambia de guardado). Se aplica **a la próxima partida**, no a la que está en curso.
   - **El panel de Opciones se desplaza si no entra** en 720 de alto (con las opciones que se sumaron en M58 y M63 ya no entraba): las filas van dentro de un contenedor con desplazamiento que crece hasta 600 px; si entran, se ve igual que antes.
 
-- **RF-577** **Dónde no sale y qué no cambia.** No sale en: el modo de pruebas, el editor («Probar»), los mapas de la comunidad, los modos (Asedio), los niveles 2 a 15, ni cuando se abre la escena sin pasar por el menú (F6, tests). **No cambia**: el oro, las vidas, las oleadas ni el mapa del nivel 1, el balance, las torres, el orden de los controles, ni lo que cuesta nada: el tutorial **no construye, no vende, no mejora, no empieza la oleada ni cambia la velocidad por el jugador**.
+- **RF-577** **Dónde no sale y qué no cambia.** RF-744 exceptúa las lecciones de los niveles 6–11. No sale en: el modo de pruebas, el editor («Probar»), los mapas de la comunidad, los modos (Asedio), los niveles 2 a 15, ni cuando se abre la escena sin pasar por el menú (F6, tests). **No cambia**: el oro, las vidas, las oleadas ni el mapa del nivel 1, el balance, las torres, el orden de los controles, ni lo que cuesta nada: el tutorial **no construye, no vende, no mejora, no empieza la oleada ni cambia la velocidad por el jugador**.
 
 - **RF-578** **El validador.** `tools/check_tutorial.gd` y los tests de `tests/test_tutorial_data.gd` revisan el archivo con los errores de RF-571; los datos oficiales los revisa un test: que no tenga errores, que enseñe todo lo pedido en los dos modos, que siga marcado como borrador hasta que Lucas lo apruebe, y que los textos del celular y de PC no se mezclen.
 
-> **Criterio de aceptación RF-570 a RF-578**
+> **Criterio de aceptación RF-570 a RF-578** (recorrido original, ampliado por RF-743–744; sus cantidades de pasos son históricas)
 > **Dado** un guardado nuevo → **Cuando** se entra al nivel 1 desde la selección → **Entonces** (después del cartel de entrada) aparece la tarjeta «Tutorial · Paso 1 de 14» (15 en el celular) y la partida **no** está en pausa.
 > **Dado** el tutorial abierto en PC → **Cuando** se recorre: «Siguiente» ×4, elegir la primera torre, construirla, empezar la oleada, elegir la torre construida, «Siguiente» ×2, cambiar la velocidad, pausar y reanudar, «¡A jugar!» → **Entonces** cada paso de acción avanzó **solo** al hacer la acción, el guardado dice `"tutorial_done": true` y la tarjeta se fue.
 > **Dado** el modo celular → **Cuando** se recorre con el carrito, la tarjeta del catálogo, un toque en la casilla sugerida y la tilde (o un doble toque) → **Entonces** pasa lo mismo, y ningún texto habla de teclado, mouse ni clic.
@@ -4535,7 +4533,21 @@ Sale de las anotaciones de Lucas de sus pruebas en un celular y de los comentari
 **Queda fuera de M89:**
 
 - Un sistema de mapas distinto para el celular (B-64).
-- Una segunda moneda (T575 la evalúa, pero no se implementa sin el OK de Lucas).
+- Una segunda moneda de agua: Lucas la reserva como posibilidad futura (RF-747).
 - Multijugador en el juego: sigue excluido (§11 y D-230); T578 solo investiga.
-- Enseñar recursos y estandartes en el tutorial: lo define T575 y lo implementa T576 después del OK.
+- Las lecciones de recursos y Estandarte fuera del nivel 1 corresponden a T581 (RF-744).
 - La marca de selección en la PC (ver «Sugerencias de Claude», §13).
+
+
+## M90 · Elecciones de mecánicas de T575 (Lucas, 2026-11-03)
+
+Estos requisitos describen el comportamiento elegido, todavía pendiente de implementación. Sus enmiendas prevalecen sobre los textos anteriores que difieran. Las preguntas y valores sin definir bloquean la parte dependiente, no autorizan a inventarla.
+
+- **RF-743 · Tutorial del nivel 1** (D-231; enmienda RF-571–573). Conserva los pasos actuales, agrega zoom por rueda en PC o pinza/«+» en celular; en celular agrega arrastre con un dedo y doble toque en casilla vacía, omitidos en PC. Son pasos de acción; presenta con dos tarjetas de lectura el avance y lo que desbloquea y las mecánicas que vendrán. Mantiene salteo y «volver a verlo»; no cambia mapa ni balance (RF-577). **Dado** el tutorial en PC o celular, **cuando** se recorren los pasos, **entonces** se practican los gestos correspondientes y se muestran ambas tarjetas. T576 redacta los textos para aprobación de Lucas.
+- **RF-744 · Lecciones por nivel** (D-231; enmienda RF-570, RF-575 y RF-577 solo para estas lecciones). En campaña, una lección salteable de 2–3 tarjetas aparece una sola vez por nivel y guardado al entrar por primera vez: 6 demolición y Estandarte si está disponible; 7 recursos, demoledora y pago alternativo del Francotirador; 8 pieza; 9 Mortero; 10 mina; 11 pozos y Disruptora. Combinar contenidos en tarjetas cuando haga falta; no prometer disponibilidad de una torre bloqueada. Guardar marcas aditivas compatibles; conservar exclusiones de pruebas, comunidad, editor y modos. **Dado** un guardado sin la marca del nivel 8, **cuando** entra por campaña, **entonces** ve la lección salteable de la pieza; al volver no aparece automáticamente. T581 define detalle de acciones y textos sin alterar balance.
+- **RF-745 · Recursos sin sorteo y explicación** (D-232; reemplaza RF-417 en la probabilidad de entrega). Todo removible configurado para dar recursos los entrega siempre, probabilidad 100; los que no dan recursos siguen sin darlos. La Wiki, el panel del removible y las lecciones explican origen y usos disponibles en el mapa. **Dado** un removible con recursos, **cuando** termina su demolición, **entonces** entrega su cantidad sin sorteo y el panel informa su uso. Datos y textos: T582; lecciones: T581.
+- **RF-746 · Fuentes estratégicas y oro** (D-232). Algunas fuentes duran más o se renuevan y otras se agotan; su ubicación o cantidad ofrecen motivos distintos para explotarlas. Reducir el oro en niveles altos con medición, cuidando que 13–15 están justos. Duraciones, renovación, distribución y reducción: **a fijar con el bot en la tarea T583**; reglas precisas de renovación requieren spec complementaria antes de implementar. **Dado** un mapa con fuentes distintas, **cuando** se comparan, **entonces** se distinguen sus condiciones y elección estratégica. T585 remide con cinco semillas.
+- **RF-747 · Pozos y sinergia** (D-233; enmienda RF-398, RF-399, RF-401 y RF-402 al incorporar la clase `pozo`). El agua no es otra moneda: un pozo se habilita y explota como una mina y aporta una cantidad constante de los recursos existentes por ronda mientras produce. Producción, costo y reserva: **a fijar con el bot en la tarea T577**; 1 por ronda y reserva 4 son solo propuesta del informe, no valores aprobados. Varios pozos se potencian: el ejemplo de tres que dan 5 por ronda es orientativo y el valor queda **a fijar con el bot en la tarea T577**. Hoy solo el nivel 11 tiene dos casillas de agua; probar sinergia de tres necesita mapas con al menos tres fuentes. **Pregunta abierta para Lucas:** en qué niveles agregarlas y si la potencia depende de la cantidad de pozos activos. El alcance del reemplazo de la mina del 11 también requiere su definición, no se presume aceptada la recomendación del informe. **Dado** un pozo habilitado, **cuando** completa una ronda mientras produce, **entonces** suma su producción constante al contador existente. La sinergia espera respuesta y especificación complementaria; agua como moneda aparte queda para explorar en otras versiones.
+- **RF-748 · Canje de recursos por oro** (D-232). Canje manual unitario a tasa baja y canje por bloque con bonus al alcanzar un umbral N; el bloque rinde más por recurso que el manual. N, tasas y bonus: **a fijar con el bot en la tarea T584**, con remedición T585 para que el oro neto no suba respecto de hoy en 13–15. **Pregunta abierta para Lucas:** automático silencioso o botón que se ilumina al alcanzar N. Propuesta de Claude pendiente de OK: bloque con aviso visible o botón, para no consumir recursos necesarios para el Mortero. Antes de implementar definir activación, aplicación del umbral, cantidades y protección de recursos en spec complementaria. **Dado** un recurso disponible, **cuando** se ejecuta el canje unitario, **entonces** se entrega oro a la tasa baja; **dado** N recursos, **cuando** se concreta el canje por bloque según la decisión pendiente, **entonces** entrega el bonus definido. RF-418 y D-083 siguen vigentes: mejorar no cuesta recursos.
+- **RF-749 · Nombre y explicación del Estandarte** (D-234; amplía RF-362). La torre se llama «Estandarte mecánico» en todos los textos pertinentes, y se distingue de banderas de campaña y postes. La ayuda del contador explica qué desbloquean cinco avances; descripción y Wiki explican que acelera y repara torres cercanas. **Dado** el contador de avances, **cuando** se consulta su ayuda, **entonces** se informa el desbloqueo y su nombre. T586.
+- **RF-750 · Avance si escapa el portador** (D-234; enmienda RF-358 y RF-359 solo para el escape). Si el portador escapa y se gana el nivel oficial fuente, se concede su avance pendiente al terminar; si se pierde o abandona, el escape no lo concede. La recogida por derrota del portador conserva su confirmación por oleada y reglas de abandono. Sin duplicados ni concesión retroactiva. **Dado** un portador escapado, **cuando** se gana su nivel, **entonces** se guarda el avance una vez; si se pierde o abandona no se concede por escape. T587; T588 mide el Estandarte con y sin él en 6–15.
