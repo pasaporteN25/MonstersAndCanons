@@ -1,5 +1,9 @@
 # Novedades del juego
 
+## Los controles del celular pasan a los costados, con «+» y «−» *(T570, 2026-11-03; sin probar en un teléfono real)*
+
+En un teléfono alargado (donde sobran franjas a los costados del mapa), los botones salen del mapa y se ponen en dos **rieles laterales**, así el mapa queda despejado. **A la izquierda**, de arriba abajo: **Menú**, **«+»** (acercar), **«−»** (alejar), la **lupa** de «Ver todo» (solo cuando acercaste) y, abajo de todo, **«Vender»** (solo con una torre elegida). **A la derecha**: el **carrito** y, debajo, **«Demoler»** (solo en los niveles que lo tienen). Estos botones no se arrastran, y «Vender» ya no está en la barra de abajo: el texto de la torre gana ese lugar. «+» y «−» acercan o alejan un poco (×1,25) alrededor del centro del mapa que ves, se apagan al llegar al tope y avisan igual que la pinza. «Vender» sigue pidiendo **dos toques**. Los rieles se esconden con el menú, el cartel de entrada, la presentación del jefe y al terminar la partida. Si la pantalla no tiene ese ancho (16:9), todo queda como antes, y la pinza sigue andando. Los íconos de «+» y «−» son provisionales. Si moviste los botones flotantes de lugar, esas posiciones se conservan (no se usan mientras hay rieles). El tutorial todavía no marca con el anillo los botones del riel (lo arregla T574), pero se puede seguir.
+
 ## «Llega el jefe» ocupa toda la pantalla del celular *(T571, 2026-11-03; sin probar en un teléfono real)*
 
 En el celular, la presentación del jefe ahora cubre **toda la superficie del teléfono**, también las franjas de los costados: se ve el fondo del Coloso, o el color del jefe si no tiene fondo, sin el terreno asomando. Al terminar (por tiempo, tocando o con «Atrás») vuelve el fondo del terreno. El título, el retrato, el nombre, la descripción y la pista entran enteros en español y en inglés, con letra de al menos 16 px. En la PC no cambia nada, ni los tiempos, la pausa o el salteo.

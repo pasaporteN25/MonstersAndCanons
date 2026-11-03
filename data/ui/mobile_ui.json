@@ -22,6 +22,7 @@
   "mejorar_bloqueo_s": 0.35,
   "zoom_casilla_max_px": 128,
   "zoom_rueda_factor": 1.1,
+  "zoom_boton_factor": 1.25,
   "fantasma_distancia_botones": 1,
   "fantasma_botones_arriba_px": 8,
   "ver_todo_x_px": 1188,

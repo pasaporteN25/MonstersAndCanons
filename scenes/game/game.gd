@@ -184,6 +184,8 @@ func _ready() -> void:
 	build_controller.mobile_map_pan_requested.connect(camera_controller.pan_with_one_finger)  # RF-732
 	if mobile_hud != null:
 		mobile_hud.view_all_pressed.connect(camera_controller.view_all)
+		mobile_hud.zoom_in_pressed.connect(camera_controller.zoom_in_step)  # RF-734: «+» y «−» de los rieles
+		mobile_hud.zoom_out_pressed.connect(camera_controller.zoom_out_step)
 	build_controller.tower_built.connect(_on_tower_built)
 	build_controller.empty_cell_double_tapped.connect(_on_empty_cell_double_tapped)
 	build_controller.tower_upgraded.connect(_on_tower_upgraded)

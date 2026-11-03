@@ -97,7 +97,7 @@ func test_side_rails_are_empty_until_buttons_are_supplied_and_forward_once() -> 
 	rails.set_buttons(left, right)
 	await get_tree().process_frame
 	var touch: InputEventScreenTouch = InputEventScreenTouch.new()
-	touch.position = Vector2(60, 60)
+	touch.position = button.get_global_rect().get_center()  # T570: los botones del riel quedan centrados, no llenan el ancho
 	touch.index = 0
 	touch.pressed = true
 	_test_viewport.push_input(touch)
