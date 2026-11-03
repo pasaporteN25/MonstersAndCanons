@@ -2,6 +2,15 @@ class_name SideRails
 extends Control
 
 signal button_pressed(button: Control)
+## T570: el riel cambió de medidas (tamaño de la superficie, área segura o escala del marco). Quien lo usa vuelve a
+## preguntar `has_room()` y `button_size()`.
+signal layout_changed
+
+## T570: un control con este metadato es un separador flexible (no se toca, no mide nada, ocupa el espacio que sobra).
+## Sirve para dejar un botón (por ejemplo «Vender») abajo de todo del riel.
+const SPACER_META: StringName = &"rail_spacer"
+## T570: un control con este metadato mide `button_size() * factor` de alto (por ejemplo, «Vender» con dos renglones).
+const HEIGHT_FACTOR_META: StringName = &"rail_height_factor"
 
 var _left_column: VBoxContainer
 var _right_column: VBoxContainer
@@ -61,6 +70,21 @@ func set_visible_for_modal(visible_for_modal: bool) -> void:
 	visible = _modal_visible and not _rails_rects().is_empty()
 
 
+## T570: ¿alcanza el ancho de las franjas para dibujar los rieles (RF-733)? Sin ancho, los controles quedan en el marco.
+func has_room() -> bool:
+	return not _rails_rects().is_empty()
+
+
+## T570: el lado (en píxeles de la superficie) del botón mínimo del riel: 6 mm en un teléfono, `flotante_min_px` escalado
+## por el marco en la PC.
+func button_size() -> float:
+	return _minimum_button_physical_px()
+
+
+func frame_scale() -> float:
+	return _frame_scale
+
+
 func set_frame_scale(value: float) -> void:
 	_frame_scale = maxf(value, 0.0)
 	_update_layout()
@@ -89,12 +113,27 @@ func _add_buttons(column: VBoxContainer, buttons: Array[Control]) -> void:
 	for control: Control in buttons:
 		if control == null:
 			continue
+		_apply_control_size(control)
+		if control.has_meta(SPACER_META):
+			column.add_child(control)
+			continue
 		control.mouse_filter = Control.MOUSE_FILTER_STOP
-		control.custom_minimum_size = Vector2.ONE * _minimum_button_physical_px()
 		if control is BaseButton:
 			var button: BaseButton = control as BaseButton
 			button.pressed.connect(_on_button_pressed.bind(control))
 		column.add_child(control)
+
+
+func _apply_control_size(control: Control) -> void:
+	if control.has_meta(SPACER_META):
+		control.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		control.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		control.custom_minimum_size = Vector2.ZERO
+		return
+	var side: float = _minimum_button_physical_px()
+	# Los botones con alto propio (como «Vender») llenan el ancho del riel; el resto queda cuadrado y centrado.
+	control.size_flags_horizontal = Control.SIZE_FILL if control.has_meta(HEIGHT_FACTOR_META) else Control.SIZE_SHRINK_CENTER
+	control.custom_minimum_size = Vector2(side, side * float(control.get_meta(HEIGHT_FACTOR_META, 1.0)))
 
 
 func _on_button_pressed(button: Control) -> void:
@@ -127,13 +166,16 @@ func _update_layout() -> void:
 	var rects: Array[Rect2] = _rails_rects()
 	visible = _modal_visible and not rects.is_empty()
 	if rects.is_empty():
+		layout_changed.emit()
 		return
 	_left_column.position = rects[0].position
 	_left_column.size = rects[0].size
 	_right_column.position = rects[1].position
 	_right_column.size = rects[1].size
 	for control: Control in _buttons_left + _buttons_right:
-		control.custom_minimum_size = Vector2.ONE * _minimum_button_physical_px()
+		if control != null and is_instance_valid(control):
+			_apply_control_size(control)
+	layout_changed.emit()
 
 
 func _minimum_button_physical_px() -> float:

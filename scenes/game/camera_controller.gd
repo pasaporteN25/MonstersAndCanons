@@ -10,6 +10,7 @@ var _minimum_zoom: float = 1.0
 const ABSOLUTE_MAX_ZOOM: float = 2.0
 var _maximum_zoom: float = ABSOLUTE_MAX_ZOOM
 var _zoom_wheel_factor: float = 1.1
+var _zoom_button_factor: float = 1.25
 var _touch_max_distance: float = 21.0
 var _top_height: float = 64.0
 var _bottom_height: float = 96.0
@@ -35,6 +36,7 @@ func setup(level: Level, camera: Camera2D, minimum_zoom: float, camera_factory: 
 	var config: MobileUiConfig = MobileUiConfig.load_from()
 	_maximum_zoom = maximum_zoom_from_cell_pixels(float(config.get_value("zoom_casilla_max_px")))
 	_zoom_wheel_factor = float(config.get_value("zoom_rueda_factor"))
+	_zoom_button_factor = float(config.get_value("zoom_boton_factor"))
 	_touch_max_distance = float(config.get_value("toque_max_px"))
 	_top_height = float(config.get_value("barra_alta_px")) if _mobile_mode else 48.0
 	_bottom_height = float(config.get_value("barra_baja_px"))
@@ -121,6 +123,38 @@ func _zoom_at(screen_position: Vector2, factor: float) -> void:
 		view_zoomed_in.emit()
 
 
+## RF-734 (T570): los botones «+» y «−» de los rieles. Acercan o alejan por `factor` alrededor del centro del mapa
+## visible (el área entre las dos barras), no de un dedo. Respetan los mismos topes que la pinza y la rueda, y el aviso
+## de RF-676 sale igual que al acercar con los dedos.
+func zoom_step(factor: float) -> void:
+	_zoom_at(visible_area_center(), factor)
+
+
+func zoom_in_step() -> void:
+	zoom_step(_zoom_button_factor)
+
+
+func zoom_out_step() -> void:
+	zoom_step(1.0 / _zoom_button_factor)
+
+
+## El centro del área del mapa que se ve (entre la barra de arriba y la de abajo), en coordenadas de pantalla.
+func visible_area_center() -> Vector2:
+	return Vector2(Rules.SCREEN_SIZE.x / 2.0, _top_height + (Rules.SCREEN_SIZE.y - _top_height - _bottom_height) / 2.0)
+
+
+## ¿Se puede acercar más? (el zoom actual no llegó al tope de RF-731)
+func can_zoom_in() -> bool:
+	var zoom: float = _camera.zoom.x if _camera != null and _camera.zoom.x > 0.0 else _minimum_zoom
+	return zoom < _maximum_zoom and not is_equal_approx(zoom, _maximum_zoom)
+
+
+## ¿Se puede alejar más? (el zoom actual no llegó al mínimo de RF-251)
+func can_zoom_out() -> bool:
+	var zoom: float = _camera.zoom.x if _camera != null and _camera.zoom.x > 0.0 else _minimum_zoom
+	return zoom > _minimum_zoom and not is_equal_approx(zoom, _minimum_zoom)
+
+
 ## RF-732: un dedo desplaza el mapa. Lo pide `BuildController` (el único dueño del gesto de un dedo) y solo
 ## vale con el mapa acercado por encima del mínimo; con el zoom mínimo no hace nada.
 func pan_with_one_finger(screen_delta: Vector2) -> void:
@@ -162,6 +196,7 @@ func _in_map_area(screen_position: Vector2) -> bool:
 func _update_view_all() -> void:
 	if _mobile_hud != null:
 		_mobile_hud.show_view_all(is_zoomed_in())
+		_mobile_hud.set_zoom_limits(can_zoom_in(), can_zoom_out())  # T570: «+» y «−» se apagan en cada tope
 
 
 ## ¿El mapa está corrido respecto del encuadre de RF-251? (con la cámara todavía sin crear, no)
