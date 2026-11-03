@@ -76,6 +76,11 @@ const DEFAULTS: Dictionary = {
 	"scroll_velocidad_min_px": 30,
 	"scroll_barra_px": 22,
 	"menu_deslizador_alto_px": 44,
+	"marca_torre_color": "#ffd400",
+	"marca_torre_grosor_px": 3.0,
+	"marca_torre_esquina": 0.3,
+	"marca_torre_pulso_velocidad": 3.0,
+	"marca_torre_opacidad_min": 0.55,
 }
 
 var values: Dictionary = DEFAULTS.duplicate(true)

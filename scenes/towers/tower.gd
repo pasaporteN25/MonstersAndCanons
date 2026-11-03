@@ -62,6 +62,10 @@ var _stun_left: float = 0.0
 var _stun_anim: float = 0.0
 var _recovery_left: float = 0.0
 var _range_config: RangeDisplayConfig
+## RF-737: marca de la torre elegida en el celular. Apagada, no gasta nada (ni `_process`).
+var _selected_marker: bool = false
+var _marker_time: float = 0.0
+static var _marker_config: MobileUiConfig
 
 
 ## Se llama ANTES de agregar la torre al árbol.
@@ -74,6 +78,7 @@ func setup(tower_data: TowerData, alt: bool = false) -> void:
 
 func _ready() -> void:
 	_range_config = RangeDisplayConfig.runtime_config()
+	set_process(_selected_marker)  # RF-737: sin marca, `_process` no corre
 	if not SaveManager.setting_changed.is_connected(_on_setting_changed):
 		SaveManager.setting_changed.connect(_on_setting_changed)
 	_upgrade_glow = Sprite2D.new()
@@ -415,6 +420,62 @@ func _scale_factor() -> float:
 	return float(data.footprint)
 
 
+## RF-737: lado de la marca en píxeles del mundo: el cuadrado entero de la torre (2 × 2 en el Mortero).
+func marker_side_px() -> float:
+	return Rules.TILE_SIZE * _scale_factor()
+
+
+## RF-737: prende o apaga la marca de la torre elegida. La llama Game solo en el celular.
+func set_selected_marker(enabled: bool) -> void:
+	_selected_marker = enabled
+	_marker_time = 0.0
+	set_process(enabled)
+	queue_redraw()
+
+
+func has_selected_marker() -> bool:
+	return _selected_marker
+
+
+## RF-737: pasa la marca de una torre a otra. `previous` puede ser null o una torre ya liberada (al venderla);
+## por eso es Variant: un parámetro tipado rechazaría una instancia liberada.
+static func move_marker(previous: Variant, next: Tower) -> void:
+	if is_instance_valid(previous) and previous != next:
+		previous.set_selected_marker(false)
+	if next != null:
+		next.set_selected_marker(true)
+
+
+func _process(delta: float) -> void:
+	_marker_time += delta
+	queue_redraw()
+
+
+static func _marker_settings() -> MobileUiConfig:
+	if _marker_config == null:
+		_marker_config = MobileUiConfig.load_from()
+	return _marker_config
+
+
+## RF-737: cuatro esquinas que respiran (color, grosor, largo y velocidad en `data/ui/mobile_ui.json`).
+func _draw_selected_marker() -> void:
+	var config: MobileUiConfig = _marker_settings()
+	var side: float = marker_side_px()
+	var color := Color.html(String(config.get_value("marca_torre_color")))
+	var low: float = float(config.get_value("marca_torre_opacidad_min"))
+	var wave: float = (sin(_marker_time * float(config.get_value("marca_torre_pulso_velocidad"))) + 1.0) / 2.0
+	color.a = lerpf(low, 1.0, wave)
+	var width: float = float(config.get_value("marca_torre_grosor_px"))
+	var arm: float = side * float(config.get_value("marca_torre_esquina"))
+	# Las esquinas van por dentro del cuadrado, con la mitad del grosor de margen, para no salir de la casilla.
+	var half: float = side / 2.0 - width / 2.0
+	for sx: float in [-1.0, 1.0]:
+		for sy: float in [-1.0, 1.0]:
+			var corner := Vector2(sx * half, sy * half)
+			draw_line(corner, corner - Vector2(sx * arm, 0.0), color, width)
+			draw_line(corner, corner - Vector2(0.0, sy * arm), color, width)
+
+
 func _barrel_length() -> float:
 	return Rules.TILE_SIZE * 0.48 * _scale_factor()
 
@@ -496,6 +557,8 @@ func _draw() -> void:
 	if wear_percent > 0.0:
 		var opacity: float = lerpf(0.35,1.0,wear_percent / maxf(0.001,WEAR_BALANCE.wear_max_percent))
 		draw_texture_rect(WEAR_ICON,Rect2(Vector2(-27,3) * factor,Vector2(22,22) * factor),false,Color(1,1,1,opacity))
+	if _selected_marker:
+		_draw_selected_marker()
 
 
 ## M75, RF-683: el Estandarte usa Sutil (arco actual) o Completo (radio celeste).
