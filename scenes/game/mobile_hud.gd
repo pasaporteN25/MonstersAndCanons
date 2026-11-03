@@ -142,6 +142,14 @@ func _build_status_bar() -> void:
 	row.mouse_filter = Control.MOUSE_FILTER_IGNORE  # T288
 	row.add_theme_constant_override("separation", int(_config.get_value("separacion_px")))
 	_status_bar.add_child(row)
+	# T566 (RF-736): la × va primero, pegada al borde izquierdo; «Vender» queda lejos de «Empezar oleada» (derecha).
+	_bottom_cancel = Button.new()
+	_bottom_cancel.name = "BottomCancelPlacement"
+	_bottom_cancel.text = "×"
+	_style_icon_button(_bottom_cancel, CLOSE_ICON)
+	_bottom_cancel.custom_minimum_size = Vector2(float(_config.get_value("cruz_lado_px")), float(_config.get_value("cruz_lado_px")))
+	_bottom_cancel.pressed.connect(_on_bottom_cancel_pressed)
+	row.add_child(_bottom_cancel)
 	_status_label = Label.new()
 	_status_label.name = "StatusText"
 	_status_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -154,6 +162,19 @@ func _build_status_bar() -> void:
 		if _status_state == "tower":
 			_fit_status_font())
 	row.add_child(_status_label)
+	_sell_button = Button.new()
+	_sell_button.name = "MobileSell"
+	_sell_button.custom_minimum_size = Vector2(float(_config.get_value("vender_ancho_px")), float(_config.get_value("vender_alto_px")))
+	_sell_button.add_theme_font_size_override("font_size", int(_config.get_value("accion_fuente_px")))
+	_sell_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER  # T514: miden su alto (84), no el de la fila
+	_sell_button.mouse_filter = Control.MOUSE_FILTER_IGNORE  # un solo dueño del toque: _handle_status_touch (T291)
+	_sell_button.pressed.connect(_on_sell_pressed)
+	row.add_child(_sell_button)
+	_sell_gap = Control.new()
+	_sell_gap.name = "SellSeparation"
+	_sell_gap.custom_minimum_size.x = _catalog_virtual_mm(float(_config.get_value("vender_separacion_mm")))
+	_sell_gap.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(_sell_gap)
 	_bottom_confirm = Button.new()
 	_bottom_confirm.name = "BottomConfirmPlacement"
 	_bottom_confirm.text = "✓"
@@ -161,13 +182,6 @@ func _build_status_bar() -> void:
 	_bottom_confirm.custom_minimum_size = Vector2(float(_config.get_value("tilde_ancho_px")), float(_config.get_value("tilde_alto_px")))
 	_bottom_confirm.pressed.connect(confirm_placement_pressed.emit)
 	row.add_child(_bottom_confirm)
-	_bottom_cancel = Button.new()
-	_bottom_cancel.name = "BottomCancelPlacement"
-	_bottom_cancel.text = "×"
-	_style_icon_button(_bottom_cancel, CLOSE_ICON)
-	_bottom_cancel.custom_minimum_size = Vector2(float(_config.get_value("cruz_lado_px")), float(_config.get_value("cruz_lado_px")))
-	_bottom_cancel.pressed.connect(_on_bottom_cancel_pressed)
-	row.add_child(_bottom_cancel)
 	_target_button = Button.new()
 	_target_button.name = "MobileTargeting"
 	_target_button.custom_minimum_size = Vector2(float(_config.get_value("apuntar_ancho_px")), float(_config.get_value("apuntar_alto_px")))
@@ -190,20 +204,14 @@ func _build_status_bar() -> void:
 	_upgrade_button.pressed.connect(_on_upgrade_pressed)
 	_style_upgrade_button()
 	row.add_child(_upgrade_button)
-	_sell_gap = Control.new()
-	_sell_gap.name = "SellSeparation"
-	_sell_gap.custom_minimum_size.x = _catalog_virtual_mm(float(_config.get_value("vender_separacion_mm")))
-	_sell_gap.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	row.add_child(_sell_gap)
-	_sell_button = Button.new()
-	_sell_button.name = "MobileSell"
-	_sell_button.custom_minimum_size = Vector2(float(_config.get_value("vender_ancho_px")), float(_config.get_value("vender_alto_px")))
-	_sell_button.add_theme_font_size_override("font_size", int(_config.get_value("accion_fuente_px")))
-	_sell_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER  # T514: miden su alto (84), no el de la fila
-	_sell_button.mouse_filter = Control.MOUSE_FILTER_IGNORE  # un solo dueño del toque: _handle_status_touch (T291)
-	_sell_button.pressed.connect(_on_sell_pressed)
-	row.add_child(_sell_button)
 	_set_empty_status()
+
+
+## T566 (RF-736): el único lugar que decide si «Vender» (y su separación de RF-512) está en la barra. T570 lo cambia
+## para sacar «Vender» de la barra cuando haya rieles.
+func _set_sell_in_bar(shown: bool) -> void:
+	_sell_button.visible = shown
+	_sell_gap.visible = shown
 
 
 ## T514 (RF-722): la mira de «Apuntar» como textura (provisoria, ver `AIM_SVG`).
@@ -265,8 +273,7 @@ func _set_empty_status() -> void:
 	_status_label.visible = true
 	_target_button.hide()
 	_upgrade_button.hide()
-	_sell_button.hide()
-	_sell_gap.hide()
+	_set_sell_in_bar(false)
 	_bottom_confirm.hide()
 	_bottom_cancel.hide()
 
@@ -281,8 +288,7 @@ func show_tool_status(message: String = "") -> void:
 	_status_label.visible = true
 	_target_button.hide()
 	_upgrade_button.hide()
-	_sell_button.hide()
-	_sell_gap.hide()
+	_set_sell_in_bar(false)
 	_bottom_confirm.hide()
 	_bottom_cancel.show()
 
@@ -296,8 +302,7 @@ func show_ghost_status(tower_name: String, cost_text: String) -> void:
 	_status_label.visible = true
 	_target_button.hide()
 	_upgrade_button.hide()
-	_sell_button.hide()
-	_sell_gap.hide()
+	_set_sell_in_bar(false)
 	_bottom_confirm.show()
 	_bottom_cancel.show()
 	_bottom_confirm.disabled = _confirm_button.disabled
@@ -356,8 +361,7 @@ func show_selected_tower(tower: Tower, gold: int, sell_value: int, resource_valu
 			clear_upgrade_arm()  # la torre cambió de nivel por otro camino: la ampliación mostrada ya no vale
 		_refresh_upgrade_button(tower)
 		_upgrade_button.disabled = false
-	_sell_button.show()
-	_sell_gap.show()
+	_set_sell_in_bar(true)
 	_bottom_confirm.hide()
 	if resource_value > 0:
 		_sell_button.tooltip_text = Localization.t_fmt(&"mobile.refund_both", {"gold": sell_value, "resources": resource_value})
