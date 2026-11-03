@@ -64,7 +64,7 @@ func _on_setting_changed(key: String, value: Variant) -> void:
 func _draw() -> void:
 	if not _enabled or _grid == null:
 		return
-	var size: Vector2i = _grid.map_size()
+	var size := Vector2i(_grid.width, _grid.height)
 	var transform: Transform2D = get_viewport_transform()
 	var screen_scale: float = maxf(transform.x.length(), transform.y.length())
 	var width: float = maxf(_line_width, 1.0 / maxf(screen_scale, 0.001))
