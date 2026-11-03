@@ -326,8 +326,8 @@ func test_burst_tower_matches_spec() -> void:
 	assert_almost_eq(burst.projectile_speed_tiles, 6.0, 0.001)
 	_assert_levels("burst", [
 		{"cost": 110, "damage": 10, "fire_rate": 0.8, "range_tiles": 2.0, "burst_count": 8},
-		{"cost": 100, "damage": 13, "fire_rate": 0.9, "burst_count": 10},
-		{"cost": 150, "damage": 17, "fire_rate": 1.0, "range_tiles": 2.5, "burst_count": 12},
+		{"cost": 100, "damage": 13, "fire_rate": 1.1, "burst_count": 10},
+		{"cost": 150, "damage": 17, "fire_rate": 1.4, "range_tiles": 2.5, "burst_count": 12},
 	])
 
 
