@@ -177,3 +177,8 @@ T559 (2026-10-29) reconcilia tres entradas abiertas contra `origin/main`, solo e
 ## 25. M89 · Mejoras de celular · T562
 
 [M89-orquestacion](M89-orquestacion.md) reparte T563 a T579 entre Haiku, Sonnet, Codex (Terra 6.1) y Opus, en olas, con su tablero de dependencias y archivos. Salen de las pruebas de Lucas y de un amigo en el celular (RF-731 a RF-742, D-223 a D-230). Para M89, los PR van contra `feature/m89-integracion`, no contra `main`. T575 espera una elección de Lucas; T576 y T577 no empiezan sin ella.
+
+
+## T575 · Elecciones del 2026-11-03
+
+Lucas eligió T-2, pozos como fuente de recursos, R1/R2, fuentes estratégicas y canje, E1–E3 y diseño de apoyos. RF-743–750 y D-231–234 registran alcance y límites. T576 requiere aprobación de textos; T577 requiere decisiones de pozos y spec complementaria; T581–T589 tienen fichas y dependencias propias. T584 espera decisión del canje; T589 es diseño con compuerta 🚦. Preguntas y valores pendientes: [PENDIENTES-LUCAS](informes/PENDIENTES-LUCAS.md). No implementar propuestas sin aprobar ni inventar valores.

@@ -1827,3 +1827,11 @@ Orden, ejecutores y archivos de cada tarea: [`specs/tareas/M89-orquestacion.md`]
 - **Fondo del jefe (T571).** El host ya tiene `set_background_texture`. Se agrega un modo temporal sin el material de apagado de RF-726, y al cerrar se vuelve al fondo del terreno.
 - **Foco del tutorial (T574).** `TutorialOverlay` sigue en su capa dentro del marco. El oscurecido se dibuja como cuatro rectángulos alrededor de lo señalado, con `MOUSE_FILTER_IGNORE`. Para un botón del riel, `SideRails` ofrece un estado de foco y `targets_provider` no devuelve rectángulo.
 - **Reutilizar:** `MobileUiConfig` para datos nuevos, `TutorialLayout` para ubicar la tarjeta y `Localization` con `data/i18n/es.json` y `en.json` para todo texto nuevo (RF-727).
+
+
+### M90 / T575 · Tutorial, recursos, pozos y apoyos (RF-743–750, D-231–234)
+
+- T576 extiende los datos y controlador del tutorial con gestos y dos lecturas; T581 generaliza lecciones por nivel y marcas aditivas, sin duplicar señales ni cambiar partidas externas a campaña. Textos en ambos catálogos.
+- T582 ajusta datos de probabilidad y explicaciones en Wiki y panel; T583 diseña fuentes y rebalanceo con cinco semillas, con spec complementaria para renovación antes de código. T584 espera resolución y spec del canje; T585 compara contra línea de base identificada, regla de oro y oro neto de 13–15. Valores de balance en datos, a fijar con el bot en T583 y T584.
+- T577 extiende catálogo, validador, editor, dibujo y extracción con `pozo`; compatibilidad de mapas y guardados. La sinergia y mapas adicionales esperan respuesta y spec complementaria; costo, reserva y producción a fijar con el bot en T577.
+- T586 aclara nombre y textos, T587 agrega la entrega por victoria sin duplicados y T588 compara con/sin Estandarte en 6–15. T589 es solo diseño con aprobación de Lucas antes de cualquier implementación y considera B-66 y las semillas futuras. Coordinar archivos compartidos y correr las tareas dependientes en orden.
