@@ -1350,6 +1350,16 @@ Cosas que **no** hace falta decidir ahora; se deciden antes del hito indicado.
 
 Ideas **aprobadas como dirección**, pero **sin fecha**: no se programan hasta convertirse en un hito con sus propias reglas (RF) y tareas. Se anotan aquí para no perderlas ni mezclarlas con el trabajo actual.
 
+### Ideas de Lucas · 2026-11-03
+
+| Entrada | Idea | Estado |
+|---|---|---|
+| [B-65](#b-65--modo-pvp-por-carrera-de-niveles) | PvP por carrera de niveles. | T580: solo investigación, post-V1 y prioridad baja. |
+| [B-66](#b-66--enemigo-que-congela-torres-en-una-zona) | Enemigo que congela torres en una zona. | Idea abierta, sin implementar. |
+| [B-67](#b-67--rediseño-de-la-economía-de-recursos) | Rediseño de la economía de recursos. | Se decide dentro de T575. |
+| [B-68](#b-68--futuro-de-los-estandartes-y-torres-de-apoyo) | Futuro de los Estandartes y torres de apoyo. | Para considerar en T575. |
+| [B-69](#b-69--confirmación-al-reintentar-un-nivel) | Confirmación al reintentar un nivel. | Pregunta abierta, sin implementar. |
+
 ### Guardados después de V1 (Lucas, 2026-10-26)
 
 Diferir el análisis de guardados nuevos para ajustar balance y rendimiento hasta después de V1. La campaña de validación T238 usa un guardado nuevo; la prueba de compatibilidad con el guardado viejo queda retirada por obsoleta. Este análisis posterior no bloquea la entrega.
@@ -1749,6 +1759,30 @@ Los cuatro enemigos que gustaron, con lo necesario para convertirlos en spec cua
 
 ### B-64 · Mapas más largos para el celular
 **Lucas, 2026-11-02 (T562, D-224). Sin fecha.** Lucas preguntó si tiene sentido, porque en los teléfonos sobra espacio a los costados. **Recomendación: por ahora no.** Ese mismo espacio pasa a los rieles de M89; un mapa más largo exigiría salir del marco lógico (D-204), mantener y balancear una variante de cada nivel por tipo de pantalla, y no serviría en 16:9. Volver a mirarlo después de jugar con los rieles y el zoom nuevo, o directamente para la versión 3D, que se diseña sin ese marco.
+
+### B-65 · Modo PvP por carrera de niveles
+
+**Idea de Lucas, post-V1 y prioridad baja:** no se pelea directamente contra el otro. Cada jugador juega su propia partida, nivel tras nivel, hasta que uno pierde todas sus vidas. Evaluar también (a) una cantidad X de reinicios de vida o vidas extra por jugador y (b) vidas infinitas, con victoria para quien perdió menos vidas en total; para esta última variante hay que definir cuándo termina la carrera. Lucas aceptó posponer el PvP.
+
+**T580** investiga reglas, acumulación de vidas entre niveles, final, pausa, ×2, desconexión y segundo plano, arquitectura host/cliente con ENet, costos, riesgos y recomendación. Parte del [informe T578](tareas/informes/T578-investigacion-pvp-lan.md), modo A «carrera en paralelo», incluida la semilla compartida y el problema de FPS y equidad. Solo investigación; no cambia el juego.
+
+### B-66 · Enemigo que congela torres en una zona
+
+**Idea de Lucas:** hoy casi ningún enemigo ataca torres. Propone uno nuevo que llega, golpea un sector y congela o deshabilita por unos segundos las torres de esa zona. Quedan abiertas la extensión del golpe, la duración, cómo se avisa al jugador, qué lo contrarresta, su relación con el Sanador y el Estandarte que reparan, y el balance en niveles altos. Sin implementar.
+
+### B-67 · Rediseño de la economía de recursos
+
+**Idea de Lucas:** en niveles altos sobra oro. Propone bajar el oro que cae y que los recursos salgan siempre, sin sorteo. También plantea fuentes renovables o que duren más y otras agotables, ubicadas estratégicamente: algunas convendrían por su ubicación y otras por dar más recursos. Los recursos podrían servir para comprar y mejorar torres directamente, con precios en monedas y recursos; otra opción es venderlos o transarlos por oro, por ejemplo recibir mucho oro de golpe al acumular 20.
+
+El [informe T575](tareas/informes/T575-mecanicas-y-agua.md) ya presenta las opciones R1–R4 y espera la elección de Lucas. Cobrar recursos por mejorar choca con **Q-22** («mejorar no cuesta recursos», RF-418 y D-083). La elección, incluida cualquier revisión de esa decisión, se resuelve dentro de T575, no antes. Sin implementar ni escribir nuevos RF todavía.
+
+### B-68 · Futuro de los Estandartes y torres de apoyo
+
+**Idea de Lucas:** los Estandartes están «medio de más»: o se terminan de desarrollar mejor, o sirven para introducir algo que se mejore en la V2 y la versión 3D. Considerar las opciones E1–E4 y §5 sobre parte 2 y 3D del [informe T575](tareas/informes/T575-mecanicas-y-agua.md), cuya elección sigue pendiente. Sin implementar.
+
+### B-69 · Confirmación al reintentar un nivel
+
+**Pregunta de Lucas:** en el celular, «Reintentar» desde el menú de pausa reinicia sin confirmación. ¿Conviene pedir confirmación o presentar un «reiniciar nivel»? Decidir si se confirma o no tanto desde la pausa como desde el fin de partida. Se relaciona con la sugerencia previa sobre confirmación al abandonar, pero esta pregunta es de Lucas. Sin implementar.
 
 ### Sugerencias de Claude *(consultar antes de implementar)*
 *Regla de Lucas, 2026-09-29: las ideas que Claude propone por su cuenta se anotan acá y no se implementan hasta que Lucas las apruebe.*
