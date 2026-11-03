@@ -1959,3 +1959,70 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 - **Segunda tanda (2026-10-29):** se aplicó la misma regla a la partida, resultados, tutorial, selector, Wiki, novedades, torres y enemigos. Criterios que se fijaron al hacerlo: los archivos de `data/` conservan el español y el inglés vive en el catálogo con la clave `<dominio>.<id>.<campo>` (`Localization.data_text`); los números siguen con coma decimal en los dos idiomas; «1 oleadas» en español no se corrige (un test lo exige y no es parte de esta tarea); los mensajes de validación para quienes hacen mapas, modos o datos y los avisos de consola quedan en español por ahora. Falta todavía el Lore, el editor y esos mensajes, así que el selector sigue oculto.
 - **Tercera tanda (2026-10-29):** se tradujo el editor de mapas y de banderines, los mensajes de validación para quienes hacen mapas, modos y datos de obstáculos (`LevelFile`, `MapGrid`, `LevelDraft`, `ModePacks`, `CommunityMaps`, `LevelTexts`, `ObstacleCatalog`) y el panel del modo de pruebas. Criterios que se fijaron: (1) el español de cada mensaje no cambia ni una letra y los marcadores son `{nombre}` (los plurales usan `.one`/`.other`); (2) las claves de JSON que un mensaje cita entre comillas (`"cantidad"`, `mapa:`) **no se traducen**, porque quien edita el archivo las escribe en español; (3) los mensajes de validación de los **datos de desarrollo** (tutorial, intro, consejos, novedades, artículos de la Wiki, créditos, configuraciones de alcance y de mejoras, el propio catálogo de idiomas, `balance_args`, `collection_definitions`) **quedan en español**: solo salen por `push_warning`/`push_error` o en tests, nunca en una pantalla, y D-222 ya dejó fuera la consola; (4) «Meridiana» (paleta de banderines) y «Chevron» quedan iguales en inglés por ser el nombre de la compañía y una palabra de heráldica ya inglesa. **Qué falta para habilitar el selector:** el inglés del Lore (lugar/entrada/victoria y nombres de nivel, epílogo, créditos, 11 artículos de Lore, intro) y que **Lucas apruebe** poner `Localization.SELECTOR_ENABLED = true`; hasta entonces el inglés solo se ve con los tests y `tools/capture_menus.gd`.
 
+
+## D-223 · El zoom llega a 2,0 y un dedo mueve el mapa acercado
+
+- **Fecha:** 2026-11-02 · **Estado:** propuesta desde las notas de Lucas; aprobada al mergear T562. **Reemplaza en parte a D-205**: solo el tope de 1,0 y su alternativa descartada «aumentar zoom».
+- **Qué:** tope de zoom 2,0 en PC y celular (RF-731). Con zoom y sin fantasma, un dedo desplaza el mapa (RF-732).
+- **Por qué:** Lucas informó que el acercamiento es muy chico y que no se puede mover libremente. La causa está medida: en 20 × 9 el zoom va de 0,97 a 1,0, y los niveles 1 a 9 son todos de ese tamaño. D-205 fijó el tope para conservar la escala jugable, pero en la práctica deja sin zoom a casi toda la campaña.
+- **Alternativas descartadas:** subir el tope solo en el celular (son el mismo código y el mismo dato, y la PC tampoco acerca en 20 × 9); achicar el encuadre mínimo (el mapa ya entra entero); desplazar con un dedo también en el zoom mínimo (se movería el mapa por accidente al intentar tocar una casilla).
+- **Riesgos:** el suelo y los adornos pueden verse blandos a 2,0. T568 lo muestra en capturas; si se ve mal, Lucas elige un tope menor cambiando el dato.
+- **Refs:** RF-731, RF-732, RF-505, RF-506, RF-701, H-07 de T454.
+
+## D-224 · Los costados se usan para controles, no para más mapa
+
+- **Fecha:** 2026-11-02 · **Estado:** propuesta desde las notas de Lucas; aprobada al mergear T562. **Mantiene D-204**: el juego sigue en un marco de 1280 × 720. **Enmienda RF-702**: un botón del riel sí actúa; el resto de la franja, no.
+- **Qué:** rieles de botones en las franjas cuando hay al menos 96 px lógicos por lado (RF-733, RF-734). La presentación de jefes también cubre esas franjas (RF-738). **No** se hacen mapas más largos para el celular por ahora (B-64).
+- **Por qué:** Lucas preguntó si conviene hacer mapas más largos o usar ese espacio para despejar la pantalla, y las dos ideas compiten por los mismos píxeles. Los rieles sirven en los 15 niveles sin tocar el balance y dejan los controles donde caen los pulgares. Los mapas largos exigirían salir del marco lógico (D-204), mantener variantes por pantalla de cada nivel y volver a balancearlas, y no servirían en 16:9. Además, los niveles 12 a 15 ya usan 26 columnas de ancho.
+- **Alternativas descartadas:** pasar a `expand` (ya descartado en D-204); agrandar la barra de abajo (tapa más mapa); rieles también en 16:9 (no hay lugar sin tapar el mapa).
+- **Riesgos:** los botones viven fuera del `SubViewport`, así que el tutorial no los puede señalar con su capa (RF-739 lo resuelve) y hay que evitar una doble acción por toque. El área segura del sistema (H-19 de T454) puede comerse el riel: por eso el ancho se mide después de descontarla.
+- **Refs:** RF-699, RF-702, RF-733, RF-734, RF-738, B-64.
+
+## D-225 · «Menú» reemplaza a la X en el celular
+
+- **Fecha:** 2026-11-02 · **Estado:** propuesta desde las notas de Lucas; aprobada al mergear T562. Enmienda RF-511.
+- **Qué:** el botón abre el menú de pausa de la PC, y «Salir» confirma con RF-460 (RF-735).
+- **Por qué:** Lucas pidió que el botón de salir sea el menú de opciones que hay en la PC antes de elegir salir. La confirmación se mantiene en el celular porque hoy ya protege contra perder la partida, y queda un toque más lejos.
+- **Alternativas descartadas:** dejar la X y sumar un botón «Opciones» (más botones sobre el mapa); salir sin confirmar, como el menú de pausa de la PC (el dedo se equivoca más que el mouse).
+- **Refs:** RF-114, RF-460, RF-511, RF-735.
+
+## D-226 · La barra de la torre: cerrar a la izquierda, vender lejos y marca de selección
+
+- **Fecha:** 2026-11-02 · **Estado:** propuesta desde las notas de Lucas; aprobada al mergear T562. Enmienda RF-512, RF-513 y RF-722 en el orden, no en los tamaños.
+- **Qué:** nuevo orden de RF-736 y marca de RF-737.
+- **Por qué:** Lucas informó que «Vender» cae donde estaba «Empezar oleada» y no le convence aunque pida confirmación, que la × debe ir totalmente a la izquierda y que no se ve qué torre está elegida. El reordenamiento entra sin achicar nada: los anchos de hoy suman 1263 px de los 1264 disponibles.
+- **Consecuencia aceptada:** sin rieles, «Mejorar» pasa a ocupar la zona de «Empezar oleada». Es el mal menor: un toque de más solo lo arma, sin cobrar (RF-681). Con rieles, la zona de «Vender» queda en otro costado.
+- **Alternativas descartadas:** ocultar «Vender» detrás de un submenú (un toque más para una acción común); cambiar «Empezar oleada» de lugar (es el botón más repetido y funciona).
+- **Refs:** RF-513, RF-681, RF-722, RF-736, RF-737.
+
+## D-227 · Doble toque en una casilla vacía: el catálogo en el celular y la barra en la PC
+
+- **Fecha:** 2026-11-02 · **Estado:** propuesta desde las notas de Lucas; aprobada al mergear T562.
+- **Qué:** RF-740.
+- **Por qué:** Lucas pidió que el doble toque abra el carrito en PC y celular. La PC no tiene carrito: tiene las torres siempre a la vista en la barra. Lo más fiel y barato es llevar al jugador a esa pestaña y hacerla pulsar. El gesto con fantasma ya confirma una compra (RF-505), así que se conserva.
+- **Alternativas descartadas:** portar el catálogo a la PC (`MobileHud` no existe en ese modo y duplicaría la barra); abrir también en camino o en bloqueadas (ahí no se puede construir).
+- **Refs:** RF-505, RF-510, RF-740.
+
+## D-228 · La Ráfaga mejora su cadencia 0,8 / 1,1 / 1,4
+
+- **Fecha:** 2026-11-02 · **Estado:** propuesta desde las notas de Lucas; aprobada al mergear T562.
+- **Qué:** RF-742. La cadencia sube +37 % y +27 % por nivel, frente a +12 % y +11 % de hoy.
+- **Por qué:** Lucas informó que el aumento se nota poco y que casi nadie compra la torre. La Ametralladora sube +25 % y +20 %; la Ráfaga queda apenas por encima porque es una torre de corto alcance que falla muchas púas.
+- **Límite honesto:** subir la mejora no cambia por sí solo la decisión de comprar el nivel 1. Si después de T563 se sigue sin comprar, lo siguiente a mirar es su alcance de 2 casillas (sugerencia anotada en §13).
+- **Alternativas descartadas:** bajar el precio o subir el alcance (no se pidió).
+- **Refs:** RF-162, RF-742.
+
+## D-229 · Recursos, agua y estandartes se deciden con un informe antes de tocar el tutorial
+
+- **Fecha:** 2026-11-02 · **Estado:** propuesta desde las notas de Lucas; aprobada al mergear T562. La compuerta de T575 sigue abierta hasta que Lucas elija.
+- **Qué:** T575 (Opus) propone cómo cerrar recursos y estandartes, si el agua es un recurso, qué enseña el nivel 1 y qué se presenta o se guarda para la parte 2 y la versión 3D. **Lucas elige** y recién ahí se escriben los `RF` y arrancan T576 y T577.
+- **Por qué:** Lucas pidió que el primer nivel explique todas las mecánicas, pero reconoció que recursos y estandartes todavía no están afinados. Hoy el nivel 1 no tiene ni unos ni otros: el Estandarte exige cinco avances y no se puede construir en los niveles 1 a 5 (RF-360), y RF-577 prohíbe cambiar el mapa, el oro y las oleadas de ese nivel. Enseñar eso exige decidir antes cuál regla cambia. El agua además toca canon: el oasis y el nombre Cántaro ya dependen de ella (`10-universo.md`).
+- **Alternativas descartadas:** escribir ya el tutorial completo (se rehace cuando cambien las mecánicas); decidir el agua en esta spec (Lucas pidió pensarlo bien).
+- **Refs:** RF-360, RF-361, RF-398, RF-417, RF-574, RF-577, `10-universo.md`, `06-monsters-canons-3d.md`.
+
+## D-230 · PvP: solo investigación
+
+- **Fecha:** 2026-11-02 · **Estado:** pedido de Lucas. El multijugador sigue excluido de la V1.
+- **Qué:** T578 (Opus) investiga qué tan fácil es una competencia en tiempo real, con dos teléfonos o PC en la misma red. **No se escribe código del juego.**
+- **Por qué:** Lucas lo pidió como investigación, sin aplicarlo todavía.
+- **Refs:** T578.
