@@ -3238,3 +3238,45 @@ Spec en **M80** (RF-716 a RF-719), razones y canon en **D-212**, el cómo en la 
 - [x] **T561 · Lista única de pendientes de Lucas. `[x86]`**
   **Refs:** pedido de Lucas del 2026-10-31 («un PR con todo lo que tengo que decidir/modificar, para atacarlo desde otra máquina»). **Hecho cuando:** existe `specs/tareas/informes/PENDIENTES-LUCAS.md` con cada decisión, validación o edición pendiente, el archivo donde se hace y una casilla o línea de respuesta.
   **Resultado (2026-10-31, Claude Sonnet 5.5):** documento escrito; solo documentos, sin código ni datos. Se basa en el estado de `main` hasta el PR #175. **No se verificó** que cada vínculo de `art/` abra bien en navegador.
+
+## M89 · Mejoras de celular por las pruebas de Lucas y de un amigo (2026-11-02)
+
+> Spec: M89 en `01-spec.md`. Orden, modelos y archivos: [`tareas/M89-orquestacion.md`](tareas/M89-orquestacion.md). Cada ficha tiene su detalle y su «Hecho cuando» completo.
+
+- [x] **T562 · Volcar las anotaciones de celular a spec, decisiones y fichas. `[mobile+x86]`**
+  **Refs:** M89, RF-731 a RF-742, D-223 a D-230. **Hecho cuando:** cada anotación de Lucas tiene un `RF`, una tarea o una entrada de backlog; hay una ficha por tarea y un documento de orquestación; está el PR.
+  **Resultado (2026-11-02, Claude Opus 5.5):** escritos M89, D-223 a D-230, el plan, T563 a T579, sus fichas, B-64 y el documento de orquestación. Solo documentos: no se tocó código ni datos y no se corrieron tests. Las causas del zoom y de «Vender» salen de leer el código y calcular, **no** de un teléfono; la presentación del jefe y la caminata no se vieron en pantalla y sus fichas piden capturas primero.
+- [ ] **T563 · Ráfaga: más cadencia al mejorar. `[mobile+x86]`**
+  **Refs:** RF-742, D-228. **Ejecutor:** Haiku, alto. **Ficha:** `tareas/T563-rafaga-cadencia.md`. **Hecho cuando:** `burst.tres` tiene 0,8 / 1,1 / 1,4; los tests están actualizados; el bot `mix` compara antes y después y no pierde niveles que ganaba.
+- [ ] **T564 · Indicador de la torre elegida en el celular. `[mobile]`**
+  **Refs:** RF-737, D-226. **Ejecutor:** Haiku, alto. **Ficha:** `tareas/T564-indicador-torre-elegida.md`. **Hecho cuando:** solo la torre elegida lleva la marca, también en el Mortero; los números están en datos; hay tests y capturas del celular simulado.
+- [ ] **T565 · Opción «Cuadrícula marcada». `[mobile+x86]`**
+  **Refs:** RF-741. **Ejecutor:** Codex · Terra 6.1, medio. **Ficha:** `tareas/T565-cuadricula-marcada.md`. **Hecho cuando:** la opción se guarda sin subir `SAVE_VERSION`, se aplica en el acto y dibuja todas las casillas en 20 × 9 y 26 × 12 con cualquier zoom; hay textos en español e inglés y tests.
+- [ ] **T566 · Barra de la torre: × a la izquierda y «Vender» lejos de «Empezar oleada». `[mobile]`**
+  **Refs:** RF-736, D-226. **Ejecutor:** Sonnet, medio. **Ficha:** `tareas/T566-barra-torre-orden.md`. **Hecho cuando:** el orden es el de RF-736; un test comprueba que «Vender» no se cruza con «Empezar oleada» y mide la separación; los dos toques no cambian.
+- [ ] **T567 · «Menú» reemplaza a la X en el celular. `[mobile]`**
+  **Refs:** RF-735, D-225. **Ejecutor:** Sonnet, medio. **Depende de:** T566. **Ficha:** `tareas/T567-menu-en-lugar-de-x.md`. **Hecho cuando:** el botón abre el menú de pausa; «Salir» confirma con RF-460 y al cancelar vuelve al menú; el editor sale sin confirmación; la PC no cambia.
+- [ ] **T568 · Zoom hasta 2,0 y un dedo mueve el mapa. `[mobile+x86]`**
+  **Refs:** RF-731, RF-732, RF-505, H-07, D-223. **Ejecutor:** Sonnet, alto. **Ficha:** `tareas/T568-zoom-y-arrastre.md`. **Hecho cuando:** en 20 × 9 el zoom llega a 2,0; un dedo mueve el mapa acercado sin elegir ni comprar; un toque acierta la casilla a cualquier zoom; el fantasma nace en lo que se ve; hay capturas a 2,0.
+- [ ] **T569 · Capa de rieles laterales en el host. `[mobile]`**
+  **Refs:** RF-733, D-224. **Ejecutor:** Codex · Terra 6.1, alto. **Ficha:** `tareas/T569-capa-rieles.md`. **Hecho cuando:** la función de geometría da los rieles correctos en 16:9, 16:10, 19,5:9, 20:9 y 21:9 con y sin área segura; un botón de prueba actúa una sola vez por toque; la franja vacía no actúa.
+- [ ] **T570 · Pasar los controles a los rieles y sumar «+» y «−». `[mobile]`**
+  **Refs:** RF-734, RF-736, D-224. **Ejecutor:** Sonnet, alto. **Depende de:** T566, T567, T568, T569. **Ficha:** `tareas/T570-controles-en-rieles.md`. **Hecho cuando:** con rieles los botones salen del marco, y sin rieles todo queda como antes; «+» y «−» respetan los topes; los modales ocultan los rieles; hay capturas en 16:9 y 20:9.
+- [ ] **T571 · Presentación del jefe a pantalla completa en el celular. `[mobile]`**
+  **Refs:** RF-738, RF-667, D-224. **Ejecutor:** Sonnet, medio. **Depende de:** T569. **Ficha:** `tareas/T571-presentacion-jefe-mobile.md`. **Hecho cuando:** en las cuatro proporciones no se ven franjas y el texto entra; al cerrar vuelve el fondo del terreno; tiempos, pausa y salteo no cambian.
+- [ ] **T572 · Caminata hacia la izquierda: verla en partida y medirla. `[mobile+x86]`**
+  **Refs:** T431, D-049. **Ejecutor:** Codex · Terra 6.1, medio. **Compuerta:** 🎨 para cualquier arte nuevo. **Ficha:** `tareas/T572-caminata-izquierda-en-partida.md`. **Hecho cuando:** un informe dice, por enemigo y con capturas de partida real, si la izquierda está rota, falta o solo se ve distinta; si es un error de código, se corrige con test; el arte queda como propuesta para Lucas.
+- [ ] **T573 · Doble toque en una casilla vacía abre la compra. `[mobile+x86]`**
+  **Refs:** RF-740, D-227. **Ejecutor:** Sonnet, medio. **Depende de:** T568. **Ficha:** `tareas/T573-doble-toque-compra.md`. **Hecho cuando:** abre el catálogo en el celular y la pestaña de torres en la PC; con fantasma sigue confirmando; las exclusiones de RF-740 tienen test.
+- [ ] **T574 · Efecto de foco en el tutorial. `[mobile+x86]`**
+  **Refs:** RF-739, RF-574. **Ejecutor:** Sonnet, medio. **Depende de:** T570. **Ficha:** `tareas/T574-foco-tutorial.md`. **Hecho cuando:** los pasos de acción oscurecen lo demás y señalan con el anillo; los toques pasan; funciona sobre botones del riel; hay capturas de PC y de celular.
+- [ ] **T575 · 📜🚦 Definir recursos, agua, estandartes y lo que se guarda para la parte 2 y la versión 3D. `[mobile+x86]`**
+  **Refs:** D-229, RF-360, RF-361, RF-398, RF-574, RF-577. **Ejecutor:** Opus, alto. **Ficha:** `tareas/T575-mecanicas-y-agua.md`. **Hecho cuando:** un informe trae opciones con costos y una recomendación; Lucas eligió y su elección está registrada; se escribieron los `RF` y `D`, y se completaron T576 y T577.
+- [ ] **T576 · Tutorial del nivel 1 con todas las mecánicas elegidas. `[mobile+x86]`**
+  **Refs:** se definen en T575. **Ejecutor:** Sonnet, medio. **Depende de:** T574, T575 con OK de Lucas. **Ficha:** `tareas/T576-tutorial-mecanicas.md`. **Hecho cuando:** el tutorial enseña lo que eligió Lucas en PC y celular, y el nivel 1 sigue ganándose con el bot.
+- [ ] **T577 · El agua como recurso. `[mobile+x86]`**
+  **Refs:** se definen en T575. **Ejecutor:** Sonnet, alto. **Depende de:** T575 con OK de Lucas (se cancela si elige no hacerlo). **Ficha:** `tareas/T577-agua-recurso.md`. **Hecho cuando:** se cumple lo que fije T575; los niveles sin agua explotable se juegan igual y los guardados viejos abren.
+- [ ] **T578 · Investigar PvP en tiempo real por red local. `[mobile+x86]`**
+  **Refs:** D-230. **Ejecutor:** Opus, alto. **Ficha:** `tareas/T578-investigacion-pvp-lan.md`. **Hecho cuando:** hay un informe con modos posibles, arquitectura, qué parte del código sirve, riesgos, costo en tareas y una recomendación; no cambia nada del juego.
+- [ ] **T579 · Revisión integrada de M89 y lista para el teléfono. `[mobile+x86]`**
+  **Refs:** M89. **Ejecutor:** Sonnet, medio. **Depende de:** T563 a T574 y T578. **Ficha:** `tareas/T579-revision-integrada.md`. **Hecho cuando:** todos los documentos coinciden con lo hecho, los tests pasan, hay capturas en las cuatro proporciones y una lista de pruebas para que Lucas la haga en un teléfono real.

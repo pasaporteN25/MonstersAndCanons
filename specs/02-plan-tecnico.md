@@ -1814,3 +1814,14 @@ Plan original:
 ### M87 / T550 · Qué entra en el paquete exportado (RF-730, D-220)
 
 `export_presets.cfg`: los tres presets (Windows Desktop, Android, Linux) usan `exclude_filter="tests/*, tools/*, specs/*, addons/gut/*, art/*, Capturas/*"`. `Capturas/.gdignore` (archivo vacío) evita la importación de las capturas. Cómo medir el paquete sin plantillas de Windows: `godot --headless --path . --export-pack "Linux" <ruta>.pck` y leer la tabla del `.pck` (formato 4: cabecera de 32 B, desplazamiento del directorio, 64 B reservados, y por archivo largo de ruta, ruta, desplazamiento, tamaño, md5 y banderas). Los archivos importados se llaman `<archivo>-<md5 de res://ruta>.ctex`, así se atribuye cada uno a su carpeta. Si se agrega un preset nuevo, repetir el filtro; si se agrega otra carpeta de documentación o arte fuente, sumarla acá y en los presets.
+
+
+### M89 / T562 · Mejoras de celular (RF-731 a RF-742, D-223 a D-230)
+
+Orden, ejecutores y archivos de cada tarea: [`specs/tareas/M89-orquestacion.md`](tareas/M89-orquestacion.md). Lo técnico que une a varias tareas:
+
+- **Zoom (T568).** `CameraController.MAX_PRESENTATION_ZOOM` y `maximum_zoom_from_cell_pixels` pasan a un tope de 2,0, con `zoom_casilla_max_px = 128`. El gesto de un dedo se resuelve en un solo dueño: `BuildController` ya recibe el arrastre (`TouchGesture.Gesture.DRAG`) y `CameraController` solo sigue dos dedos. Hay que evitar que los dos actúen a la vez. Se arregla también H-07: `_start_mobile_ghost` tiene que buscar desde el centro de lo que se ve, como ya pide RF-505.
+- **Rieles (T569 y T570).** `PresentationGeometry` suma una función pura que recibe la superficie y el área segura y devuelve los dos rectángulos o ninguno. `presentation_host.gd` agrega una capa `SideRails`, hermana de `ContentFrame` y fuera del `SubViewport`. `GameFlow` la expone a la escena. `Game` y `MobileHud` le pasan botones y reciben señales (P6). Como el contenedor limita la entrada al marco (RF-702), los rieles no pasan por él y no duplican el toque.
+- **Fondo del jefe (T571).** El host ya tiene `set_background_texture`. Se agrega un modo temporal sin el material de apagado de RF-726, y al cerrar se vuelve al fondo del terreno.
+- **Foco del tutorial (T574).** `TutorialOverlay` sigue en su capa dentro del marco. El oscurecido se dibuja como cuatro rectángulos alrededor de lo señalado, con `MOUSE_FILTER_IGNORE`. Para un botón del riel, `SideRails` ofrece un estado de foco y `targets_provider` no devuelve rectángulo.
+- **Reutilizar:** `MobileUiConfig` para datos nuevos, `TutorialLayout` para ubicar la tarjeta y `Localization` con `data/i18n/es.json` y `en.json` para todo texto nuevo (RF-727).

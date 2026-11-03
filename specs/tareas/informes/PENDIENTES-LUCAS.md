@@ -91,3 +91,8 @@ No se genera build ni versión hasta que lo digas.
 - **T479:** láminas rotativas en la carga, bloqueada.
 - **T128:** tema y leyenda en el editor de mapas, diferida.
 - **T218, T219, T220 y T221:** arte parcial (señales, removibles, mina y bosque, íconos).
+
+## E · M89, mejoras de celular (2026-11-02)
+
+- [ ] **PR de T562:** revisar los valores propuestos en la spec M89 y mergear. Ese merge es el OK para arrancar al coordinador (`specs/tareas/M89-orquestacion.md`).
+- [ ] **T575:** elegir cómo quedan recursos, agua y estandartes cuando esté el informe. Hasta entonces, T576 y T577 esperan.

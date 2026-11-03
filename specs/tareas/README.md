@@ -173,3 +173,7 @@ T541 registra RF-728/D-218 a partir de la elección explícita de Lucas del 2026
 ## 23. Limpieza del backlog · T559
 
 T559 (2026-10-29) reconcilia tres entradas abiertas contra `origin/main`, solo en documentos. **T233 y T548 pasan a `[x]`**: T233 quedó cubierta por T267b/T277 (Central), T549 (abastecimiento), T547 (retiro del arte viejo y de `hito`) y T546 (imagen del final), y T548 ya tenía su Resultado en otra entrada. **T532 sigue `[ ]`**: el código y las capturas están, pero falta la validación de Lucas en pantalla real. La ficha [T233](T233-arte-final.md) queda como antecedente.
+
+## 25. M89 · Mejoras de celular · T562
+
+[M89-orquestacion](M89-orquestacion.md) reparte T563 a T579 entre Haiku, Sonnet, Codex (Terra 6.1) y Opus, en olas, con su tablero de dependencias y archivos. Salen de las pruebas de Lucas y de un amigo en el celular (RF-731 a RF-742, D-223 a D-230). Para M89, los PR van contra `feature/m89-integracion`, no contra `main`. T575 espera una elección de Lucas; T576 y T577 no empiezan sin ella.
