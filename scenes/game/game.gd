@@ -89,6 +89,7 @@ var obstacle_layer: ObstacleLayer
 var tutorial: TutorialController
 ## RF-460: si la partida ya estaba en pausa (con `P`) cuando se abrió el diálogo.
 var _exit_was_paused: bool = false
+var _exit_from_pause_menu: bool = false  # RF-735: el diálogo se abrió desde «Salir» del menú de pausa
 var _tool_message: String = ""  # RF-543: por qué no sirvió el último toque de la herramienta de demolición
 ## Costuras para los tests (`.claude/rules/tests.md`): a dónde sale la flecha. Por omisión, las pantallas de verdad.
 var leave_to_menu: Callable = func() -> void: GameFlow.go_to_main_menu()
@@ -157,7 +158,7 @@ func _ready() -> void:
 		add_child(mobile_hud)
 		mobile_hud.confirm_placement_pressed.connect(build_controller.confirm_ghost)
 		mobile_hud.cancel_placement_pressed.connect(build_controller.cancel)
-		mobile_hud.exit_pressed.connect(_request_exit)
+		mobile_hud.menu_pressed.connect(_on_mobile_menu_pressed)  # RF-735: el menú de pausa, no la X
 		mobile_hud.tower_chosen.connect(_on_mobile_tower_chosen)
 		mobile_hud.infrastructure_tool_chosen.connect(_on_mobile_infrastructure_tool_chosen)
 		mobile_hud.demolish_pressed.connect(_on_mobile_demolish_pressed)
@@ -236,7 +237,7 @@ func _ready() -> void:
 		pause_menu.quit_pressed.connect(GameFlow.go_to_editor)
 		pause_menu.set_quit_text(Localization.t(BACK_TO_EDITOR_KEY))
 	else:
-		pause_menu.quit_pressed.connect(GameFlow.go_to_main_menu)
+		pause_menu.quit_pressed.connect(_on_pause_quit_pressed)
 
 	# RF-459 a RF-461: la flecha «← Menú» pregunta antes de salir; probando un mapa del editor vuelve directo.
 	hud.menu_pressed.connect(_request_exit)
@@ -650,6 +651,13 @@ func open_pause_menu() -> void:
 		mobile_hud.set_modal_open(true)
 
 
+## RF-735: el botón «Menú» del celular. No hace nada con otro diálogo abierto o la partida terminada.
+func _on_mobile_menu_pressed() -> void:
+	if pause_menu.is_open() or exit_dialog.is_open() or level_intro.is_open() or session.is_over():
+		return
+	open_pause_menu()
+
+
 func close_pause_menu() -> void:
 	pause_menu.close()
 	set_paused(false)
@@ -756,8 +764,28 @@ func _request_exit() -> void:
 		mobile_hud.set_modal_open(true)
 
 
+## «Salir» del menú de pausa. En la PC sale directo (RF-114); en el celular pide la confirmación de RF-460 (RF-735).
+## Probando un mapa del editor, `quit_pressed` está conectado al editor y no pasa por acá.
+func _on_pause_quit_pressed() -> void:
+	if not UiMode.is_mobile():
+		GameFlow.go_to_main_menu()
+		return
+	if exit_dialog.is_open():
+		return
+	_exit_from_pause_menu = true
+	pause_menu.close()  # solo se oculta: la partida sigue en pausa
+	build_controller.input_blocked = true
+	exit_dialog.open(exit_message())
+
+
 ## «Seguir jugando» o Esc: la partida vuelve al estado anterior (corriendo a la misma velocidad, o en pausa si ya lo estaba).
+## Si se llegó desde el menú de pausa, vuelve a ese menú (RF-735) y la partida sigue en pausa.
 func _on_exit_cancelled() -> void:
+	if _exit_from_pause_menu:
+		_exit_from_pause_menu = false
+		build_controller.input_blocked = false
+		pause_menu.open()
+		return
 	build_controller.input_blocked = false
 	set_paused(_exit_was_paused)
 	if mobile_hud != null:
@@ -766,6 +794,7 @@ func _on_exit_cancelled() -> void:
 
 ## «Salir al menú»: no se guarda nada (ni piezas ni progreso ni récords), así que no se llama a `_commit_collection()`.
 func _on_exit_confirmed() -> void:
+	_exit_from_pause_menu = false
 	build_controller.input_blocked = false
 	leave_to_menu.call()
 

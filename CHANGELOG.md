@@ -1,5 +1,9 @@
 # Novedades del juego
 
+## «Menú» en lugar de la X en el celular *(T567, 2026-11-03; sin probar en un teléfono real)*
+
+En el celular, el botón flotante de arriba ya no es una X: ahora es **«Menú»** (tres rayas) y abre el **mismo menú de pausa que la PC**, con Continuar, Reintentar, Opciones y Salir. Así se pueden cambiar las opciones sin salir de la partida. **«Salir»** sigue preguntando «¿Volver al menú principal?» y qué se pierde; si tocás «Seguir jugando», volvés al menú de pausa (no a la partida). Probando un mapa desde el editor, «Salir» vuelve al editor sin preguntar. En la PC no cambia. El ícono es provisional.
+
 ## Zoom hasta 2,0 y un dedo mueve el mapa *(T568, 2026-11-02; sin probar en un teléfono real)*
 
 Ahora se puede **acercar de verdad**: el zoom máximo llega a 2,0 (la casilla se ve el doble de grande que a tamaño natural), con la pinza en el celular y con la rueda en la PC. En el celular, con el mapa acercado, **un dedo que arrastra mueve el mapa** sin elegir ni comprar nada; si hay una torre elegida (con su fantasma), el dedo sigue moviendo el fantasma como antes, y con el zoom mínimo un dedo no desplaza. Con el zoom máximo se llega a las cuatro esquinas del mapa. Además, al elegir una torre en el celular, el fantasma aparece cerca del centro de **lo que ves**, no del centro del mapa. «Ver todo» sigue volviendo al encuadre de siempre.
