@@ -10,6 +10,7 @@ const ATLAS_GRASS := Vector2i(0, 0)
 const ATLAS_PATH := Vector2i(1, 0)
 const ATLAS_BLOCKED := Vector2i(2, 0)
 const TILESET: TileSet = preload("res://assets/tiles/tileset.tres")
+const GRID_OVERLAY_SCRIPT: Script = preload("res://scenes/levels/map_grid_overlay.gd")
 const ATLAS_OF: Dictionary = {
 	MapGrid.Cell.GRASS: ATLAS_GRASS, MapGrid.Cell.PATH: ATLAS_PATH, MapGrid.Cell.BLOCKED: ATLAS_BLOCKED,
 }
@@ -65,6 +66,11 @@ static func build(grid: MapGrid, map_theme: StringName = MapThemes.DEFAULT, conq
 	var decor := LevelDecor.new()
 	decor.name = "Decor"
 	level.add_child(decor)
+	var grid_overlay := Node2D.new()
+	grid_overlay.set_script(GRID_OVERLAY_SCRIPT)
+	grid_overlay.name = "MapGridOverlay"
+	level.add_child(grid_overlay)
+	grid_overlay.call("setup", grid)
 	return level
 
 

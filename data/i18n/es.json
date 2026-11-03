@@ -49,6 +49,7 @@
     {"clave": "options.game.tutorial_replayed", "texto": "Se verá en el nivel 1"},
     {"clave": "options.game.boss_entrance", "texto": "Presentación de los jefes"},
     {"clave": "options.game.defeat_advice", "texto": "Consejos en la derrota"},
+    {"clave": "options.game.map_grid", "texto": "Cuadrícula marcada"},
     {"clave": "options.controls.view_all", "texto": "Tecla de «Ver todo»"},
     {"clave": "options.controls.view_all_prompt", "texto": "Presioná una tecla…"},
     {"clave": "options.controls.view_all_restore", "texto": "Restaurar"},

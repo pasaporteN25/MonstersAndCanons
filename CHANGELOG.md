@@ -12,6 +12,10 @@ En el celular, con una torre elegida, la **× para cerrar** ahora queda pegada a
 
 En el celular, la torre que tocaste ahora lleva **cuatro esquinas amarillas que pulsan suavemente** sobre sus casillas, así se ve cuál es la que muestra la barra de abajo. El Mortero, que ocupa 2 × 2 casillas, tiene la marca en su cuadrado entero. La marca se va al soltar la torre o venderla, se achica y crece con el zoom, y no cambia nada de la partida. En la PC no cambia.
 
+## Cuadrícula marcada *(T565, 2026-11-02)*
+
+En Opciones → Partida y ayudas se puede prender «Cuadrícula marcada» para distinguir los bordes de todas las casillas durante la partida. Se guarda entre sesiones y se aplica al instante; el editor de mapas no la muestra.
+
 ## Textos de la campaña revisados *(T558, 2026-10-29)*
 
 Se aplicaron las primeras decisiones de la revisión de textos. **Nombres de niveles:** el 12 pasa a llamarse «Cañadón», el 14 «Poblados» y el 15 «Central» (el 11 sigue «Puesto seco» y el 13 «Paso alto»). **Victoria del nivel 15:** «Central encendida. La línea de abastecimiento está completa. La colonia ya no depende de la nave.» **Niveles 3, 4 y 12:** una línea de la entrada ahora dice algo más concreto. **Nivel 11:** la victoria habla del punto de agua. **Nivel 13:** en lugar de «hitos de piedra» el texto dice «rocas marcadas», y la victoria habla del valle de más al este. **Nivel 14:** la entrada dice «Los fogones están armados y no se ve a nadie.» **Wiki → Lore:** «Los poblados vacíos» ya no habla de las brasas y «La Central» queda en el último valle, el de más al este, sin su párrafo final. **Créditos:** suman el nombre y el mail de Lucas. No cambian el epílogo ni el progreso guardado.

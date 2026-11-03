@@ -8,7 +8,7 @@ const WINDOW: Rect2 = Rect2(0.0, 0.0, 1280.0, 720.0)
 const PC_TABS: Array[String] = ["Sonido", "Pantalla", "Partida\ny ayudas", "Controles", "Avanzado"]
 const MOBILE_TABS: Array[String] = ["Sonido", "Pantalla", "Partida\ny ayudas", "Avanzado"]
 const SETTING_KEYS: Array[String] = ["music_volume", "sfx_volume", "fullscreen", "damage_numbers", "upgrade_fx",
-	"range_display", "ui_mode", "tutorial_enabled", "boss_entrance", "defeat_advice"]
+	"range_display", "ui_mode", "tutorial_enabled", "boss_entrance", "defeat_advice", "map_grid"]
 
 var _viewport: SubViewport
 var _original_save_path: String
@@ -71,7 +71,7 @@ func test_every_option_row_is_declared_in_exactly_one_tab() -> void:
 		for node_name: StringName in group:
 			assert_false(seen.has(node_name), "«%s» está en una sola solapa" % node_name)
 			seen[node_name] = true
-	assert_eq(seen.size(), 24, "22 filas de siempre + las 2 del selector de idioma (T534)")
+	assert_eq(seen.size(), 25, "23 filas de siempre + las 2 del selector de idioma (T534)")
 
 
 func test_pc_shows_five_tabs_and_keeps_the_rows_in_their_pages() -> void:
@@ -79,7 +79,7 @@ func test_pc_shows_five_tabs_and_keeps_the_rows_in_their_pages() -> void:
 	assert_eq(_tab_texts(options), PC_TABS)
 	assert_eq(_names(options._group_pages[0]), ["MusicLabel", "MusicSlider", "SfxLabel", "SfxSlider"])
 	assert_eq(_names(options._group_pages[1]), ["FullscreenCheck", "DamageNumbersCheck", "UpgradeFxCheck", "RangeDisplayLabel", "RangeDisplaySelector"])
-	assert_eq(_names(options._group_pages[2]), ["TutorialRow", "BossEntranceCheck", "DefeatAdviceCheck"])
+	assert_eq(_names(options._group_pages[2]), ["TutorialRow", "BossEntranceCheck", "DefeatAdviceCheck", "MapGridCheck"])
 	assert_eq(_names(options._group_pages[3]), ["ViewAllRow"])
 	assert_eq(_names(options._group_pages[4]), ["UiModeLabel", "UiModeSelector", "CreditsSection", "VersionLabel", "CreditsButton", "NewsButton", "AdminSection", "AdminButton", "AdminConfirm"])
 
