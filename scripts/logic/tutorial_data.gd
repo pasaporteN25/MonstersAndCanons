@@ -23,6 +23,9 @@ const MAX_UI_CHARS: int = 40
 const UI_KEYS: PackedStringArray = ["titulo", "paso", "siguiente", "saltar", "terminar"]
 ## T574 (RF-739): el efecto de foco (`"foco"`): cuánto se oscurece lo demás, cuánto tarda cada anillo y los rótulos.
 const FOCUS_KEYS: PackedStringArray = ["oscuridad", "anillo_segundos", "rotulo_pc", "rotulo_celular", "agujero_max"]
+## Margen interno de la tarjeta (`"tarjeta"`, `"margen_px"`): el aire entre el borde del panel y su contenido.
+const CARD_KEYS: PackedStringArray = ["margen_px"]
+const CARD_MAX_MARGIN: float = 48.0
 const FOCUS_MAX_ALPHA: float = 0.9
 const FOCUS_MIN_SECONDS: float = 0.3
 const FOCUS_MAX_SECONDS: float = 5.0
@@ -74,6 +77,8 @@ var draft: bool = true
 var ui: Dictionary = {}
 ## T574: el efecto de foco ya validado (`oscuridad` y `anillo_segundos` son números; los rótulos, textos).
 var focus: Dictionary = {}
+## El aspecto de la tarjeta ya validado (`margen_px`).
+var card: Dictionary = {}
 var pc_steps: Array[Dictionary] = []
 var mobile_steps: Array[Dictionary] = []
 var errors: PackedStringArray = []
@@ -116,6 +121,7 @@ static func parse(raw: Variant) -> TutorialData:
 	else:
 		data.level_id = level_raw
 	_parse_ui(dict.get("interfaz"), data)
+	_parse_card(dict.get("tarjeta"), data)
 	_parse_focus(dict.get("foco"), data)
 	data.pc_steps = _parse_steps(MODE_PC, dict.get(MODE_PC), data.errors)
 	data.mobile_steps = _parse_steps(MODE_MOBILE, dict.get(MODE_MOBILE), data.errors)
@@ -149,6 +155,12 @@ func ui_text(key: String) -> String:
 func focus_label(mobile: bool) -> String:
 	var key: String = "rotulo_celular" if mobile else "rotulo_pc"
 	return Localization.data_text("tutorial", &"foco", key, String(focus.get(key, "")))
+
+
+## Margen interno de la tarjeta del tutorial, en píxeles del marco: el texto y «Saltar tutorial» quedan a esta
+## distancia del borde del panel.
+func card_margin() -> float:
+	return float(card.get("margen_px", 0.0))
 
 
 ## T574: cuánto se oscurece lo que no se señala (0 a 0,9).
@@ -194,6 +206,21 @@ static func _parse_ui(raw: Variant, data: TutorialData) -> void:
 	for key: Variant in ui_raw.keys():
 		if not UI_KEYS.has(str(key)):
 			data.errors.append("tutorial: \"interfaz\" no usa la clave \"%s\" (se usan: %s)." % [key, ", ".join(UI_KEYS)])
+
+
+static func _parse_card(raw: Variant, data: TutorialData) -> void:
+	if not raw is Dictionary:
+		data.errors.append("tutorial: \"tarjeta\" tiene que ser un objeto con %s." % ", ".join(CARD_KEYS))
+		return
+	var card_raw: Dictionary = raw
+	var margin: Variant = card_raw.get("margen_px")
+	if not _is_number(margin) or float(margin) < 0.0 or float(margin) > CARD_MAX_MARGIN:
+		data.errors.append("tutorial: \"tarjeta\" \"margen_px\" tiene que ser un número de 0 a %s (el aire entre el borde del panel y el texto)." % str(CARD_MAX_MARGIN))
+	else:
+		data.card["margen_px"] = float(margin)
+	for key: Variant in card_raw.keys():
+		if not CARD_KEYS.has(str(key)):
+			data.errors.append("tutorial: \"tarjeta\" no usa la clave \"%s\" (se usan: %s)." % [key, ", ".join(CARD_KEYS)])
 
 
 static func _parse_focus(raw: Variant, data: TutorialData) -> void:

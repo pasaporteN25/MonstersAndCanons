@@ -47,6 +47,7 @@ func setup(game: Game, data: TutorialData) -> void:
 	overlay.targets_provider = _targets
 	overlay.fills_provider = _fills
 	overlay.rail_provider = _rail_rect
+	overlay.card_margin = data.card_margin()
 	overlay.focus_darkness = data.focus_darkness()
 	overlay.focus_ring_seconds = data.focus_ring_seconds()
 	overlay.focus_hole_max = data.focus_hole_max()

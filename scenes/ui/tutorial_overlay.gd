@@ -44,6 +44,8 @@ var fills_provider: Callable = Callable()
 var area: Rect2 = Rect2(0.0, 48.0, 1280.0, 576.0)
 ## La tarjeta puede apoyarse sobre la barra de abajo (cuando una sombra de pantalla entera ya la tapa).
 var card_over_bottom_bar: bool = false
+## Margen interno de la tarjeta, en píxeles: sale de `data/tutorial/tutorial.json` (`"tarjeta"`, `TutorialData`).
+var card_margin: float = 16.0
 ## T574: cuánto oscurece lo que no se señala (0 a 1), cuánto tarda cada anillo, la parte de la pantalla que puede
 ## ocupar lo iluminado y el rótulo del anillo. Salen de `data/tutorial/tutorial.json` (`TutorialData`).
 var focus_darkness: float = 0.55
@@ -184,7 +186,12 @@ func _build_card() -> void:
 	_card = PanelContainer.new()
 	_card.name = "Card"
 	_card.theme = MENU_THEME
-	_card.add_theme_stylebox_override("panel", CARD_STYLE)
+	var style: StyleBox = CARD_STYLE.duplicate()
+	style.content_margin_left = card_margin  # sin esto el texto y «Saltar tutorial» tocan el borde del panel
+	style.content_margin_right = card_margin
+	style.content_margin_top = card_margin
+	style.content_margin_bottom = card_margin
+	_card.add_theme_stylebox_override("panel", style)
 	_card.mouse_filter = Control.MOUSE_FILTER_STOP
 	_card.custom_minimum_size.x = CARD_WIDTH_PX
 	add_child(_card)
@@ -205,7 +212,7 @@ func _build_card() -> void:
 	_text = Label.new()
 	_text.name = "Text"
 	_text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_text.custom_minimum_size.x = CARD_WIDTH_PX - 40.0
+	_text.custom_minimum_size.x = CARD_WIDTH_PX - card_margin * 2.0
 	_text.add_theme_font_size_override("font_size", TEXT_FONT_MOBILE if _mobile else TEXT_FONT_PC)
 	rows.add_child(_text)
 	var bottom := HBoxContainer.new()
