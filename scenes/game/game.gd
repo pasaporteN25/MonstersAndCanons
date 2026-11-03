@@ -40,6 +40,8 @@ var level: Level
 ## RF-251: solo existe si el mapa es más grande que 20×9 (hay que achicar el mundo para que entre).
 var camera: Camera2D
 var mobile_hud: MobileHud
+## RF-737: la torre que lleva la marca de elegida en el celular (null si ninguna).
+var _marked_tower: Tower
 var camera_controller: CameraController
 var minimum_map_zoom: float = 1.0
 ## RF-217: se está probando el nivel del editor (no hay campaña: no se guarda nada).
@@ -1189,6 +1191,9 @@ func _refresh_tower_panel() -> void:
 			reason = Localization.t_fmt(&"tower_panel.missing_gold", {"n": tower.next_level_stats().cost - session.gold})
 		mobile_hud.show_selected_tower(tower, session.gold, value, resource_value,
 		tower != null and build_controller.can_upgrade(tower), reason)
+		# RF-737: la marca pasa a la torre elegida; al soltarla o venderla (tower null) se va.
+		Tower.move_marker(_marked_tower, tower)
+		_marked_tower = tower
 		_sync_range_preview()
 		return
 	hud.tower_panel.show_tower(tower, value, session.gold, resource_value)
