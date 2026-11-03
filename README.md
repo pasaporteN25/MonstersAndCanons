@@ -42,6 +42,8 @@ La campaña es el recorrido principal. También podés volver a jugar sus mapas 
 
 Las capturas de celular se tomaron en un escritorio con el modo móvil simulado; no son pruebas en un teléfono físico.
 
+En un celular alargado (20:9 o más), los controles pasan a dos rieles a los costados del mapa, con «+» y «−» para el zoom (hasta 2,0), «Menú» en lugar de la X, la torre elegida con marca, doble toque para abrir la compra y una opción de cuadrícula marcada (M89). Todo eso se probó con el celular simulado, **no** en un teléfono real.
+
 ## Para empezar
 
 El proyecto todavía no ofrece una descarga pública. Si querés jugar o colaborar con una copia local, consultá la [guía de instalación y uso](ONBOARDING.md). Para conocer los enemigos, torres, niveles y formatos de mapas, está la guía de [contenido](CONTENIDO.md).
