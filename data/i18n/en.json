@@ -378,7 +378,7 @@
     {"clave": "mobile.sell", "texto": "Sell\n+{gold}{extra}"},
     {"clave": "mobile.view_all", "texto": "View all"},
     {"clave": "mobile.choose_tower", "texto": "Choose tower"},
-    {"clave": "mobile.exit_menu", "texto": "Exit to menu"},
+    {"clave": "mobile.open_menu", "texto": "Menu"},
     {"clave": "mobile.demolish", "texto": "Demolish or enable"},
     {"clave": "mobile.choose_option", "texto": "Choose an option"},
     {"clave": "mobile.confirm_build", "texto": "Confirm construction"},

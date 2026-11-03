@@ -5,7 +5,7 @@ signal confirm_placement_pressed
 signal cancel_placement_pressed
 signal view_all_pressed
 signal demolish_pressed
-signal exit_pressed
+signal menu_pressed
 signal catalog_opened(open: bool)
 signal tower_chosen(index: int, use_alt_payment: bool)
 signal infrastructure_tool_chosen(tool: StringName, class_id: StringName)
@@ -95,6 +95,7 @@ const MOBILE_THEME: Theme = preload("res://assets/ui/menu_theme.tres")
 const CART_ICON: Texture2D = preload("res://assets/ui/mobile_cart.svg")
 const CONFIRM_ICON: Texture2D = preload("res://assets/ui/mobile_confirm.svg")
 const CLOSE_ICON: Texture2D = preload("res://assets/ui/mobile_close.svg")
+const MENU_ICON: Texture2D = preload("res://assets/ui/mobile_menu.svg")
 const DEMOLISH_ICON: Texture2D = preload("res://assets/ui/mobile_demolish.svg")
 ## T464: lupa de «Ver todo» (aprobada por Lucas el 2026-10-26; muestra en art/t464-muestra-lupa/).
 const GOLD_ICON: Texture2D = preload("res://assets/sprites/ui/stat_gold.svg")
@@ -620,13 +621,13 @@ func _build_floating_buttons() -> void:
 	_float_button_size = Vector2.ONE * minimum_size
 	_cart_button = _floating_button("CartButton", CART_ICON)
 	_cart_button.tooltip_text = Localization.t(&"mobile.choose_tower")
-	_exit_button = _floating_button("ExitButton", CLOSE_ICON)
-	_exit_button.tooltip_text = Localization.t(&"mobile.exit_menu")
+	_exit_button = _floating_button("MenuButton", MENU_ICON)
+	_exit_button.tooltip_text = Localization.t(&"mobile.open_menu")
 	_demolish_button = _floating_button("DemolishButton", DEMOLISH_ICON)
 	_demolish_button.tooltip_text = Localization.t(&"mobile.demolish")
 	_demolish_button.visible = false
 	_cart_button.pressed.connect(_on_cart_pressed)
-	_exit_button.pressed.connect(exit_pressed.emit)
+	_exit_button.pressed.connect(menu_pressed.emit)
 	_demolish_button.pressed.connect(demolish_pressed.emit)
 	if _confirm_button != null:
 		_confirm_button.custom_minimum_size.x = maxf(_confirm_button.custom_minimum_size.x, minimum_size)
@@ -1155,7 +1156,7 @@ func _handle_drag_touch(index: int, pos: Vector2, pressed: bool) -> void:
 				else:
 					demolish_pressed.emit()
 			else:
-				exit_pressed.emit()
+				menu_pressed.emit()
 	_drag_button = null
 	_drag_index = -1
 	_dragging = false
