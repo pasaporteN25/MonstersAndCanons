@@ -76,6 +76,7 @@ const DEFAULTS: Dictionary = {
 	"scroll_velocidad_min_px": 30,
 	"scroll_barra_px": 22,
 	"menu_deslizador_alto_px": 44,
+	"riel_min_px": 96,
 }
 
 var values: Dictionary = DEFAULTS.duplicate(true)
