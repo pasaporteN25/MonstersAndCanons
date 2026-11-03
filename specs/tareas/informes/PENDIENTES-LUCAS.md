@@ -170,6 +170,7 @@ Todo M89 está hecho y probado **solo en la computadora**: tests, y capturas rea
 - [x] **B-67 / T575:** dirección elegida; Q-22 se mantiene. Ver H para el canje y valores.
 - [x] **B-68 / T575:** desarrollar mejor ahora; T589 presenta diseño para aprobación.
 - [ ] **B-69:** decidir si «Reintentar» pide confirmación desde pausa y desde el fin de partida.
+- [ ] **B-70 / T590:** informe de música con licencia libre para itch.io; revisarlo cuando exista y decidir qué pistas se prueban.
 
 
 ## H · Preguntas abiertas de T575 (2026-11-03)

@@ -3335,3 +3335,6 @@ Spec en **M80** (RF-716 a RF-719), razones y canon en **D-212**, el cómo en la 
 
 - [ ] **T589 · Diseñar Estandarte y apoyos. `[mobile+x86]`**
   **Refs:** RF-749–750, D-231–234; **Ejecutor:** Opus, alto. **Depende de:** T588. **Ficha:** `tareas/T589-diseno-apoyos.md`. **Hecho cuando:** diseño y alternativas con compuerta 🚦 para Lucas.
+
+- [ ] **T590 · Informe: música con licencia libre para el juego. `[mobile+x86]`**
+  **Refs:** B-70, RF-354, RF-472. **Ejecutor:** Codex · Terra 6.1, medio. **Ficha:** `tareas/T590-informe-musica-licencia-libre.md`. **Hecho cuando:** existe `specs/tareas/informes/T590-musica-licencia-libre.md` con repositorios, licencias, géneros y sugerencias por momento del juego, y cómo acreditar cada pista; no se bajó ni se integró música.

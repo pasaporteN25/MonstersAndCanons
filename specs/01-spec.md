@@ -1359,6 +1359,7 @@ Ideas **aprobadas como dirección**, pero **sin fecha**: no se programan hasta c
 | [B-67](#b-67--rediseño-de-la-economía-de-recursos) | Rediseño de la economía de recursos. | Dirección elegida en T575; valores y canje pendientes. |
 | [B-68](#b-68--futuro-de-los-estandartes-y-torres-de-apoyo) | Futuro de los Estandartes y torres de apoyo. | Desarrollo elegido; diseño T589 con compuerta. |
 | [B-69](#b-69--confirmación-al-reintentar-un-nivel) | Confirmación al reintentar un nivel. | Pregunta abierta, sin implementar. |
+| [B-70](#b-70--buscar-música-con-licencia-libre) | Buscar música con licencia libre (informe). | T590: solo investigación, sin integrar música. |
 
 ### Guardados después de V1 (Lucas, 2026-10-26)
 
@@ -1781,6 +1782,12 @@ Lucas eligió desarrollarlos mejor ahora. E1–E3 son la base (RF-749–750); T5
 ### B-69 · Confirmación al reintentar un nivel
 
 **Pregunta de Lucas:** en el celular, «Reintentar» desde el menú de pausa reinicia sin confirmación. ¿Conviene pedir confirmación o presentar un «reiniciar nivel»? Decidir si se confirma o no tanto desde la pausa como desde el fin de partida. Se relaciona con la sugerencia previa sobre confirmación al abandonar, pero esta pregunta es de Lucas. Sin implementar.
+
+### B-70 · Buscar música con licencia libre
+
+**Idea de Lucas, 2026-11-03.** Buscar en repositorios de música con licencia libre pistas que sirvan para el juego, que se va a distribuir **gratis en itch.io**. **T590** hace solo el informe: repositorios, licencias, géneros y sugerencias por momento del juego. **No se baja ni se integra música.**
+
+Reglas que ya quedan fijadas: las licencias tienen que permitir **redistribuir** el juego; se prefieren CC0 y CC BY, y las que prohíben uso comercial (por ejemplo CC BY-NC) se marcan aparte porque cerrarían una venta futura; **toda pista que entre al juego suma su crédito en la pantalla de créditos (RF-472)** y su licencia en un archivo de licencias dentro del paquete. Meter cualquier pista al juego necesita el OK de Lucas. Antecedentes: la música actual es original por síntesis (RF-354) y hay propuestas de combate en T535 y T536.
 
 ### Sugerencias de Claude *(consultar antes de implementar)*
 *Regla de Lucas, 2026-09-29: las ideas que Claude propone por su cuenta se anotan acá y no se implementan hasta que Lucas las apruebe.*
