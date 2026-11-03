@@ -77,3 +77,62 @@ func test_content_viewport_uses_the_project_texture_filter_and_keeps_logical_siz
 	assert_eq(int(viewport.canvas_item_default_texture_filter), PresentationGeometry.content_texture_filter(setting))
 	assert_eq(viewport.size_2d_override, Vector2i(1280, 720))
 	assert_eq(viewport.oversampling_override, 0.0)
+
+
+func test_side_rails_are_empty_until_buttons_are_supplied_and_forward_once() -> void:
+	_test_viewport.size = Vector2i(2400, 1080)
+	_host.size = Vector2(2400, 1080)
+	_host.side_rails.set_safe_area_provider(func() -> Rect2: return Rect2(Vector2.ZERO, Vector2(2400, 1080)))
+	_host._update_frame()
+	await get_tree().process_frame
+	var rails: SideRails = _host.side_rails
+	assert_true(rails.visible)
+	assert_eq(rails.get_node("LeftColumn").get_child_count(), 0)
+	var button := Button.new()
+	button.text = "Prueba"
+	var left: Array[Control] = [button]
+	var right: Array[Control] = []
+	var actions: Array[Control] = []
+	rails.button_pressed.connect(func(pressed: Control) -> void: actions.append(pressed))
+	rails.set_buttons(left, right)
+	await get_tree().process_frame
+	var touch: InputEventScreenTouch = InputEventScreenTouch.new()
+	touch.position = Vector2(60, 60)
+	touch.index = 0
+	touch.pressed = true
+	_test_viewport.push_input(touch)
+	await wait_process_frames(1)
+	var emulated_click: InputEventMouseButton = InputEventMouseButton.new()
+	emulated_click.position = touch.position
+	emulated_click.global_position = touch.position
+	emulated_click.device = InputEvent.DEVICE_ID_EMULATION
+	emulated_click.button_index = MOUSE_BUTTON_LEFT
+	emulated_click.pressed = true
+	_test_viewport.push_input(emulated_click)
+	await wait_process_frames(1)
+	var release: InputEventScreenTouch = touch.duplicate() as InputEventScreenTouch
+	release.pressed = false
+	_test_viewport.push_input(release)
+	var emulated_release: InputEventMouseButton = emulated_click.duplicate() as InputEventMouseButton
+	emulated_release.pressed = false
+	_test_viewport.push_input(emulated_release)
+	await wait_process_frames(1)
+	assert_eq(actions.size(), 1, "el botón del riel actúa una sola vez")
+
+
+func test_empty_side_rail_does_not_emit_an_action() -> void:
+	_test_viewport.size = Vector2i(2400, 1080)
+	_host.size = Vector2(2400, 1080)
+	_host.side_rails.set_safe_area_provider(func() -> Rect2: return Rect2(Vector2.ZERO, Vector2(2400, 1080)))
+	_host._update_frame()
+	await get_tree().process_frame
+	var actions: Array[Control] = []
+	_host.side_rails.button_pressed.connect(func(pressed: Control) -> void: actions.append(pressed))
+	var click: InputEventMouseButton = InputEventMouseButton.new()
+	click.position = Vector2(60, 60)
+	click.global_position = click.position
+	click.button_index = MOUSE_BUTTON_LEFT
+	click.pressed = true
+	_test_viewport.push_input(click)
+	await wait_process_frames(1)
+	assert_true(actions.is_empty())

@@ -495,6 +495,12 @@ func update_presentation_scale(scale: float) -> void:
 		transition.set_overlay_scale(scale)
 
 
+func side_rails() -> SideRails:
+	if presentation_host == null or not is_instance_valid(presentation_host):
+		return null
+	return presentation_host.get_node_or_null("SideRails") as SideRails
+
+
 func detach_presentation(host: Node) -> void:
 	if presentation_host != host:
 		return

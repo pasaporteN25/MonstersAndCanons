@@ -81,6 +81,8 @@ const DEFAULTS: Dictionary = {
 	"marca_torre_esquina": 0.3,
 	"marca_torre_pulso_velocidad": 3.0,
 	"marca_torre_opacidad_min": 0.55,
+
+	"riel_min_px": 96,
 }
 
 var values: Dictionary = DEFAULTS.duplicate(true)

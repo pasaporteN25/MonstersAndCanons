@@ -7,6 +7,7 @@ const LOGICAL_SIZE: Vector2i = Vector2i(1280, 720)
 @onready var content_frame: SubViewportContainer = $ContentFrame
 @onready var content_viewport: SubViewport = $ContentFrame/ContentViewport
 @onready var background_texture: TextureRect = $BackgroundTexture
+@onready var side_rails: SideRails = $SideRails
 
 var active_screen: Node
 var _previous_content_scale_mode: int = Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
@@ -97,3 +98,4 @@ func _update_frame() -> void:
 	content_frame.position = frame.position
 	content_frame.size = frame.size
 	GameFlow.update_presentation_scale(PresentationGeometry.frame_scale(frame.size))
+	side_rails.set_frame_scale(PresentationGeometry.frame_scale(frame.size))
