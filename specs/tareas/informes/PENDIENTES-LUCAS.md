@@ -162,3 +162,11 @@ Todo M89 está hecho y probado **solo en la computadora**: tests, y capturas rea
 - [ ] **B-64:** ¿mapas más largos para el celular? Recomendación: no por ahora (D-224).
 - [ ] **T578:** PvP por red local, solo investigado: el informe recomienda posponerlo (`specs/tareas/informes/T578-investigacion-pvp-lan.md`).
 - [ ] **PR de `feature/m89-integracion` a `main`:** lo mergeás vos.
+
+## G · Ideas de Lucas registradas en el backlog
+
+- [ ] **B-65 / T580:** investigación de la carrera PvP entre niveles, post-V1 y de prioridad baja; revisar el informe cuando exista.
+- [ ] **B-66:** definir el enemigo que congela torres en una zona y sus contramedidas.
+- [ ] **B-67 / T575:** elegir la economía de recursos, incluidas las nuevas ideas y su relación con Q-22, dentro de T575.
+- [ ] **B-68 / T575:** elegir el futuro de los Estandartes y torres de apoyo, considerando V2 y 3D.
+- [ ] **B-69:** decidir si «Reintentar» pide confirmación desde pausa y desde el fin de partida.
