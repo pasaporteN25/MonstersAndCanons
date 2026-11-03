@@ -178,6 +178,7 @@ func _ready() -> void:
 	add_child(camera_controller)
 	camera_controller.setup(level, camera, minimum_map_zoom, Callable(self, "_create_interactive_camera"), mobile_hud, UiMode.is_mobile())
 	camera_controller.view_zoomed_in.connect(_on_view_zoomed_in)
+	build_controller.mobile_map_pan_requested.connect(camera_controller.pan_with_one_finger)  # RF-732
 	if mobile_hud != null:
 		mobile_hud.view_all_pressed.connect(camera_controller.view_all)
 	build_controller.tower_built.connect(_on_tower_built)
