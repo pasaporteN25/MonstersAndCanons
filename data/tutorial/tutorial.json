@@ -9,6 +9,9 @@
 		"saltar": "Saltar tutorial",
 		"terminar": "¡A jugar!"
 	},
+	"tarjeta": {
+		"margen_px": 16
+	},
 	"foco": {
 		"oscuridad": 0.55,
 		"anillo_segundos": 1.2,

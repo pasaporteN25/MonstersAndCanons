@@ -1,5 +1,9 @@
 # Novedades del juego
 
+## El panel del tutorial tiene aire y «Saltar tutorial» ya no se sale
+
+En el celular (y en la PC), el texto del panel del tutorial ya no queda pegado al borde y el botón «Saltar tutorial» entra dentro del panel. El margen se retoca en `data/tutorial/tutorial.json` (`"tarjeta"`). Sin probar en un teléfono real.
+
 ## El tutorial señala lo que hay que tocar con un anillo y oscurece lo demás *(T574, 2026-11-03; sin probar en un teléfono real)*
 
 En los pasos del tutorial que piden **hacer algo** (elegir una torre, construirla, abrir el carrito, empezar la oleada, cambiar la velocidad, pausar), ahora **todo se oscurece menos lo que tenés que tocar**, y de ahí salen **anillos que se expanden** con un rótulo al lado: **«Hacé clic acá»** en la PC y **«Tocá acá»** en el celular. Lo oscurecido **no bloquea nada**: un toque sobre lo señalado llega al botón o a la casilla como siempre, y la partida **no se pausa**. Los pasos que solo se leen (el camino, el oro, las vidas, «Mejorar», «Vender») no oscurecen: siguen marcando con el recuadro que parpadea. Cuando el paso señala varias zonas a la vez (la casilla y la tilde), un solo hueco las cubre; si ese hueco ocuparía demasiada pantalla, ese paso no oscurece. **En un teléfono con rieles**, si el botón señalado está en un riel (el carrito de la derecha, «Vender» de la izquierda), el propio botón **pulsa con su anillo**, los otros botones del riel se apagan, el marco se oscurece entero en los pasos de acción y el rótulo aparece en el borde del mapa, del lado de ese riel. Cuánto oscurece, qué tan rápido se expande el anillo y los rótulos se retocan en `data/tutorial/tutorial.json` (sección `"foco"`). Las capturas de estos pasos todavía no se tomaron (no había ventana).

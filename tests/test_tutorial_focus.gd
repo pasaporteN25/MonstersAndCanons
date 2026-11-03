@@ -160,7 +160,7 @@ func test_a_broken_focus_section_is_reported_in_spanish() -> void:
 
 # --- La escena real ---
 
-func _open(mobile: bool, with_rails: bool = false) -> Game:
+func _open(mobile: bool, with_rails: bool = false, surface_size: Vector2i = SURFACE_20_9) -> Game:
 	SaveManager.set_setting("ui_mode", UiMode.MOBILE if mobile else UiMode.PC)
 	_viewport = SubViewport.new()
 	_viewport.size = Vector2i(1280, 720)
@@ -169,13 +169,13 @@ func _open(mobile: bool, with_rails: bool = false) -> Game:
 	_viewport.add_child(_game)
 	if with_rails:
 		_surface = SubViewport.new()
-		_surface.size = SURFACE_20_9
+		_surface.size = surface_size
 		add_child_autofree(_surface)
 		_rails = SideRails.new()
 		_surface.add_child(_rails)
-		_rails.size = Vector2(SURFACE_20_9)
-		_rails.set_safe_area_provider(func() -> Rect2: return Rect2(Vector2.ZERO, Vector2(SURFACE_20_9)))
-		_rails.set_frame_scale(PresentationGeometry.frame_scale(PresentationGeometry.frame_rect(Vector2(SURFACE_20_9)).size))
+		_rails.size = Vector2(surface_size)
+		_rails.set_safe_area_provider(func() -> Rect2: return Rect2(Vector2.ZERO, Vector2(surface_size)))
+		_rails.set_frame_scale(PresentationGeometry.frame_scale(PresentationGeometry.frame_rect(Vector2(surface_size)).size))
 		_game.mobile_hud.set_side_rails(_rails)
 	await _settle()
 	return _game
@@ -459,3 +459,55 @@ func test_pc_without_rails_has_no_rail_focus_at_all() -> void:
 	await _read_steps(4)
 	assert_eq(_overlay().rail_target(), Rect2())
 	assert_null(_game.tutorial.current_rail_control())
+
+
+# --- La tarjeta: margen interno y «Saltar tutorial» dentro del panel ---
+
+## Mide en el paso actual: el rótulo y el texto tienen aire contra el borde del panel y «Saltar tutorial» queda adentro.
+func _check_card_margins(label: String) -> void:
+	var margin: float = _game.tutorial._data.card_margin()
+	assert_gt(margin, 0.0, "%s: el margen sale de los datos" % label)
+	var card: Rect2 = _overlay().card_rect()
+	var inner: Rect2 = card.grow(-margin + 0.5)  # 0,5 px de tolerancia por redondeos del contenedor
+	var header: Label = _overlay().get_node("Card").find_child("Header", true, false)
+	var text: Label = _overlay().get_node("Card").find_child("Text", true, false)
+	var skip: Button = _overlay().skip_button()
+	for control: Control in [header, text, skip]:
+		var rect := Rect2(control.global_position, control.size)
+		assert_true(inner.encloses(rect), "%s: %s (%s) queda a %s px o más del borde del panel (%s)" % [label, control.name, rect, margin, card])
+	assert_lt(skip.global_position.x + skip.size.x, card.end.x - margin + 0.5, "%s: «Saltar tutorial» no pisa el borde derecho" % label)
+	assert_gt(header.global_position.x, card.position.x + margin - 0.5, "%s: el rótulo no toca el borde izquierdo" % label)
+	assert_gt(text.global_position.x, card.position.x + margin - 0.5, "%s: el texto no toca el borde izquierdo" % label)
+
+
+func test_pc_card_text_has_margin_and_skip_button_stays_inside() -> void:
+	await _open(false)
+	_check_card_margins("PC")
+	await _next()
+	_check_card_margins("PC, paso 2")
+
+
+func test_mobile_card_text_has_margin_and_skip_button_stays_inside_in_every_aspect() -> void:
+	var aspects: Dictionary = {"16:9": Vector2i(1920, 1080), "20:9": Vector2i(2400, 1080), "19,5:9": Vector2i(2340, 1080), "21:9": Vector2i(2520, 1080)}
+	for aspect: String in aspects.keys():
+		await _open(true, true, aspects[aspect])
+		_check_card_margins("celular %s" % aspect)
+		await _next()
+		_check_card_margins("celular %s, paso 2" % aspect)
+		_viewport.queue_free()
+		_surface.queue_free()
+		await _settle()
+
+
+func test_card_margin_is_read_from_the_data_file_and_validated() -> void:
+	var raw: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(TutorialData.DEFAULT_PATH))
+	assert_gt(TutorialData.parse(raw).card_margin(), 0.0)
+	var broken: Dictionary = raw.duplicate(true)
+	broken["tarjeta"]["margen_px"] = -3
+	broken["tarjeta"]["raro"] = 1
+	var errors: String = "\n".join(TutorialData.parse(broken).errors)
+	assert_true(errors.contains("\"margen_px\" tiene que ser un número de 0 a"), errors)
+	assert_true(errors.contains("\"tarjeta\" no usa la clave \"raro\""), errors)
+	var missing: Dictionary = raw.duplicate(true)
+	missing.erase("tarjeta")
+	assert_true("\n".join(TutorialData.parse(missing).errors).contains("\"tarjeta\" tiene que ser un objeto"))

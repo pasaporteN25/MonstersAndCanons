@@ -550,6 +550,8 @@ El consejo que sale al perder se retoca con un archivo, sin programar: `{"versio
 
 El tutorial se retoca con un archivo, sin programar: `{"version": 1, "borrador": true, "nivel": "level_01", "interfaz": {…}, "pc": [{"paso": "welcome", "texto": "…"}, …], "celular": [ … ]}`.
 
+**El margen de la tarjeta.** El archivo trae una sección `"tarjeta"`: `{"margen_px": 16}`, el aire (de 0 a 48 píxeles) entre el borde del panel y su texto, el rótulo «Tutorial · Paso N de M» y «Saltar tutorial».
+
 **El efecto de foco (T574).** El archivo trae una sección `"foco"`: `{"oscuridad": 0.55, "anillo_segundos": 1.2, "agujero_max": 0.3, "rotulo_pc": "Hacé clic acá", "rotulo_celular": "Tocá acá"}`. `oscuridad` va de 0 a 0,9 (cuánto se apaga lo que no se señala en los pasos de acción), `anillo_segundos` de 0,3 a 5 (lo que tarda cada anillo), `agujero_max` es la parte de la pantalla (0 a 1) que puede ocupar lo iluminado: si lo señalado pide más, ese paso no oscurece. Los rótulos en inglés están en `data/i18n/en.json` (`tutorial.foco.rotulo_pc` y `rotulo_celular`).
 
 | Clave | Qué es | Límite |
