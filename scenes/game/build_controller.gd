@@ -19,6 +19,8 @@ signal selection_changed(index: int)
 signal placed_selection_changed(tower: Tower)
 signal mobile_infrastructure_targeted(cell: Vector2i, tool: StringName, class_id: StringName)
 signal mobile_map_tapped
+## RF-732: un dedo arrastró el mapa sin fantasma ni herramienta; la cámara decide si desplaza.
+signal mobile_map_pan_requested(screen_delta: Vector2)
 
 const TOWER_SCENE: PackedScene = preload("res://scenes/towers/tower.tscn")
 const VALID_TINT := Color(0.3, 1.0, 0.3, 0.3)
@@ -318,6 +320,8 @@ func _handle_mobile_input(event: InputEvent) -> bool:
 			var current_cell: Vector2i = _level.cell_at(_screen_to_world(drag.position))
 			var delta: Vector2i = current_cell - _touch_start_screen_cell
 			_move_mobile_ghost(_touch_start_ghost_cell + delta)
+		elif result == TouchGesture.Gesture.DRAG and _can_pan_with_one_finger() and _in_map_area(drag.position):
+			mobile_map_pan_requested.emit(drag.relative)
 		_accept()
 		return true
 	# RF-552 (D-116): manda el dispositivo, no la plataforma. El clic emulado de un toque se descarta (el toque ya
@@ -350,6 +354,12 @@ func _handle_mobile_input(event: InputEvent) -> bool:
 				_move_mobile_ghost(_mouse_touch_start_ghost + current_cell - _mouse_touch_start_cell)
 			_accept()
 			return true
+		if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+			var pan_result: TouchGesture.Gesture = _touch_gesture.move(PointerFilter.MOUSE_FINGER, motion.position, now_ms)
+			if pan_result == TouchGesture.Gesture.DRAG and _can_pan_with_one_finger() and _in_map_area(motion.position):
+				mobile_map_pan_requested.emit(motion.relative)
+			_accept()
+			return true
 	if event.is_action_pressed("cancel"):
 		if _selected >= 0 or _mobile_infrastructure_tool != &"":
 			cancel()
@@ -364,6 +374,11 @@ func _handle_mobile_input(event: InputEvent) -> bool:
 			_accept()
 			return true
 	return false
+
+
+## RF-732: un dedo desplaza el mapa solo sin fantasma y sin herramienta de infraestructura.
+func _can_pan_with_one_finger() -> bool:
+	return _selected < 0 and _mobile_infrastructure_tool == &""
 
 
 func _screen_to_world(screen_pos: Vector2) -> Vector2:
@@ -412,7 +427,7 @@ func _start_mobile_ghost() -> void:
 		return
 	_ghost_placement.select_tower(tower.id, tower.footprint, tower.build_gold(_pay_alt), tower.build_resources(_pay_alt))
 	var map_size: Vector2i = _level.map_size()
-	var center := Vector2i(floori(float(map_size.x) / 2.0), floori(float(map_size.y) / 2.0))
+	var center: Vector2i = visible_center_cell()
 	var best_cell: Vector2i = center
 	var best_distance: float = INF
 	for y: int in map_size.y:
@@ -425,6 +440,15 @@ func _start_mobile_ghost() -> void:
 				best_distance = distance
 				best_cell = candidate
 	_move_mobile_ghost(best_cell)
+
+
+## H-07 (RF-505): la casilla del centro de **lo que se ve** (el área entre las barras), dentro del mapa.
+func visible_center_cell() -> Vector2i:
+	var top: float = float(_mobile_config.get_value("barra_alta_px"))
+	var screen_center := Vector2(Rules.SCREEN_SIZE.x / 2.0, (top + 624.0) / 2.0)
+	var cell: Vector2i = _level.cell_at(_screen_to_world(screen_center))
+	var map_size: Vector2i = _level.map_size()
+	return Vector2i(clampi(cell.x, 0, map_size.x - 1), clampi(cell.y, 0, map_size.y - 1))
 
 
 func _move_mobile_ghost(cell: Vector2i) -> void:

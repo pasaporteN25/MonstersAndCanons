@@ -69,7 +69,7 @@ func test_mobile_ui_config_loads_data_file() -> void:
 	var config: MobileUiConfig = MobileUiConfig.load_from()
 	assert_eq(config.get_value("boton_alto_px"), 56)
 	assert_eq(config.get_value("pinza_gracia_ms"), 150)
-	assert_eq(config.get_value("zoom_casilla_max_px"), 64)
+	assert_eq(config.get_value("zoom_casilla_max_px"), 128)
 
 
 func test_options_selector_saves_without_changing_an_existing_hud() -> void:
@@ -278,8 +278,11 @@ func test_camera_zoom_is_clamped_between_automatic_and_cell_limits() -> void:
 	assert_eq(CameraController.clamp_zoom(0.25, 0.75, 1.0), 0.75)
 	assert_eq(CameraController.clamp_zoom(1.0, 0.75, 1.0), 1.0)
 	assert_eq(CameraController.clamp_zoom(2.0, 0.75, 1.0), 1.0)
-	assert_eq(CameraController.maximum_zoom_from_cell_pixels(96.0), 1.0)
+	# T568 (D-223): el tope absoluto pasó de 1,0 a 2,0; 128 px por casilla dan 2,0 y más no se acepta.
+	assert_eq(CameraController.maximum_zoom_from_cell_pixels(96.0), 1.5)
 	assert_eq(CameraController.maximum_zoom_from_cell_pixels(64.0), 1.0)
+	assert_eq(CameraController.maximum_zoom_from_cell_pixels(128.0), 2.0)
+	assert_eq(CameraController.maximum_zoom_from_cell_pixels(512.0), 2.0)
 	assert_eq(CameraController.clamp_center(Vector2(-10.0, 200.0), Rect2(0.0, 0.0, 100.0, 100.0)), Vector2(0.0, 100.0))
 
 
@@ -320,7 +323,7 @@ func test_pc_camera_input_respects_zoom_cap_without_mobile_controls() -> void:
 	await get_tree().process_frame
 	assert_null(game.mobile_hud, "la PC no agrega botones visibles")
 	game.camera_controller._zoom_at(Vector2(640.0, 336.0), 10.0)
-	assert_true(is_equal_approx(game.camera.zoom.x, 1.0))
+	assert_true(is_equal_approx(game.camera.zoom.x, 2.0), "T568 (D-223): el tope pasó de 1,0 a 2,0")
 	game.camera_controller._pan_by_screen_delta(Vector2(5000.0, 5000.0))
 	var map_rect := Rect2(game.level.position, Vector2(game.level.map_size()) * Rules.TILE_SIZE)
 	assert_eq(game.camera.position, CameraController.clamp_center(game.camera.position, map_rect))
