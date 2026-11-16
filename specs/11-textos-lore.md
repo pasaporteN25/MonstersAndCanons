@@ -234,6 +234,7 @@ Pantalla sencilla a la que se llega desde el epílogo (RF-472). **Solo lleva lo 
 - Un juego de Lucas
 - Lucas Felici
 - lucas.a.felici@gmail.com
+- Música de combate: «Tower Defense Theme» y «Tower Defense Theme 3», de DST (CC0)
 - Hecho con Godot Engine
 - Software libre bajo la licencia GPL-3.0-or-later (los detalles, en Wiki → Licencias)
 

@@ -18,3 +18,7 @@ Todos los archivos son síntesis original de `tools/make_sounds.gd`, sin descarg
 Música: `assets/audio/music_menu.wav` y `music_combat.wav`. Efectos individuales en la misma carpeta; `reflect.wav`, `stun.wav`, `heal.wav`, `impact.wav` son nuevos. Regenerar con `godot --headless --path . -s tools/make_sounds.gd`; luego importar. Los bucles se conservan con edit/loop_mode=2 en sus .import.
 
 Verificación: bucles, tasa y estéreo por GUT; separación de voces y misma pista sin reinicio; picos/RMS por manifest. Escuchar muestras y una partida completa con Opciones al50% permite la revisión humana de gusto/fatiga, que no se puede sustituir por esos checks. No se ejecutó una prueba auditiva humana en esta sesión.
+
+## Actualización T591 (2026-11-16)
+
+La música de combate sintetizada (`music_combat.wav`) se retiró: Lucas la reemplazó por dos pistas de DST con licencia CC0 (RF-751, D-235). Lo que este documento dice de la música de combate queda como historia; la de menú y los efectos siguen siendo síntesis original. La procedencia de las pistas nuevas está en `LICENCIAS-TERCEROS.md`.

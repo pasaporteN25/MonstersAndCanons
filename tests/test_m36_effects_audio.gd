@@ -55,13 +55,57 @@ func test_shots_cannot_replace_alert_voices() -> void:
 	assert_eq(Audio._voices[9].stream, alert)
 
 func test_new_sounds_and_both_music_loops_are_imported() -> void:
-	for name_: String in ["heal", "reflect", "stun", "impact", "music_menu", "music_combat"]:
+	for name_: String in ["heal", "reflect", "stun", "impact", "music_menu"]:
 		assert_true(Audio.has_sound(StringName(name_)), name_)
-	for name_: String in ["music_menu", "music_combat"]:
-		var stream: AudioStreamWAV = load("res://assets/audio/%s.wav" % name_)
-		assert_eq(stream.loop_mode, AudioStreamWAV.LOOP_FORWARD)
-		assert_true(stream.stereo)
-		assert_eq(stream.mix_rate, 44100)
+	var stream: AudioStreamWAV = load("res://assets/audio/music_menu.wav")
+	assert_eq(stream.loop_mode, AudioStreamWAV.LOOP_FORWARD)
+	assert_true(stream.stereo)
+	assert_eq(stream.mix_rate, 44100)
+	assert_false(Audio.has_sound(&"music_combat"), "RF-751: la pista de combate sintetizada se retiró")
+
+
+# --- RF-751: música de combate de DST (dos pistas que se turnan) ---
+
+func test_combat_music_alternates_each_time_a_match_starts() -> void:
+	var saved: Array = [Audio._in_combat, Audio._combat_index]
+	Audio._in_combat = false
+	Audio._combat_index = -1
+	assert_eq(Audio.COMBAT_TRACKS.size(), 2)
+	assert_eq(Audio.music_for_screen(false), Audio.MENU_TRACK, "fuera de la partida, la de menú")
+	var first: StringName = Audio.music_for_screen(true)
+	assert_eq(first, Audio.COMBAT_TRACKS[0], "la primera partida empieza por la primera pista")
+	assert_eq(Audio.music_for_screen(true), first, "dentro de la misma partida (o al reintentar) no cambia")
+	assert_eq(Audio.music_for_screen(false), Audio.MENU_TRACK)
+	assert_eq(Audio.music_for_screen(true), Audio.COMBAT_TRACKS[1], "la partida siguiente usa la otra pista")
+	Audio.music_for_screen(false)
+	assert_eq(Audio.music_for_screen(true), first, "y después vuelve a la primera")
+	Audio._in_combat = saved[0]
+	Audio._combat_index = saved[1]
+
+
+func test_combat_tracks_are_looping_mp3_and_quieter_than_the_menu() -> void:
+	for track: StringName in Audio.COMBAT_TRACKS:
+		var music: AudioStreamMP3 = load("res://assets/audio/%s.mp3" % track)
+		assert_not_null(music, String(track))
+		assert_true(music.loop, "%s vuelve a empezar sola" % track)
+		assert_gt(music.get_length(), 60.0, "%s dura más de un minuto" % track)
+		assert_lt(Audio.music_volume_db(track), Audio.MUSIC_VOLUME_DB, "%s se baja para no tapar los efectos" % track)
+	assert_eq(Audio.music_volume_db(Audio.MENU_TRACK), Audio.MUSIC_VOLUME_DB)
+
+
+func test_combat_tracks_are_credited_and_their_license_is_documented() -> void:
+	var credits: String = "\n".join(Credits.load_file()["lines"])
+	var licenses: String = FileAccess.get_file_as_string("res://LICENCIAS-TERCEROS.md")
+	var wiki: String = FileAccess.get_file_as_string("res://data/wiki/licencias.json")
+	for text: String in [credits, licenses, wiki]:
+		assert_string_contains(text, "Tower Defense Theme")
+		assert_string_contains(text, "Tower Defense Theme 3")
+		assert_string_contains(text, "DST")
+		assert_string_contains(text, "CC0")
+	for track: StringName in Audio.COMBAT_TRACKS:
+		assert_string_contains(licenses, "%s.mp3" % track, "cada archivo figura con su origen")
+	assert_string_contains(licenses, "https://opengameart.org/content/tower-defense-theme")
+	assert_string_contains(licenses, "https://creativecommons.org/publicdomain/zero/1.0/")
 
 func test_master_limits_simultaneous_voices_and_sources_have_headroom() -> void:
 	var limiter: AudioEffectHardLimiter = AudioServer.get_bus_effect(0, 0)

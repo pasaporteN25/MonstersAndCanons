@@ -17,7 +17,7 @@
 | Artículos de la Wiki | `data/wiki/` | Un `.json` por artículo (ver "La Wiki") |
 | Modo de pruebas | `data/dev_config.tres` | El oro del botón "+1000 de oro" y las cinco velocidades del panel (`DevConfig`) |
 | Dibujos | `assets/sprites/` | SVG (o PNG). Ver "Reglas de los dibujos" |
-| Sonidos | `assets/audio/` | `.wav`. Cada torre usa `shot_<id>.wav` |
+| Sonidos | `assets/audio/` | `.wav`. Cada torre usa `shot_<id>.wav`. La música de combate son `.mp3` de terceros (RF-751): para sumar o cambiar una pista, ver `COMBAT_TRACKS` en `scripts/autoload/audio.gd` y anotar su licencia en `LICENCIAS-TERCEROS.md` |
 
 Los niveles son JSON, un formato de texto común que se edita a mano. Un `.tres` (enemigos y torres) es un archivo de texto de Godot. Se edita cómodo en el editor (panel **Inspector**), aunque también se puede abrir con cualquier editor de texto.
 

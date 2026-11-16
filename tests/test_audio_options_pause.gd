@@ -36,10 +36,14 @@ func test_every_game_event_has_a_sound() -> void:
 
 
 func test_music_loops() -> void:
-	for track: String in ["music_menu", "music_combat"]:
-		assert_true(Audio.has_sound(StringName(track)), "%s está disponible" % track)
-		var music: AudioStreamWAV = load("res://assets/audio/%s.wav" % track)
-		assert_eq(music.loop_mode, AudioStreamWAV.LOOP_FORWARD, "%s no se corta" % track)
+	assert_true(Audio.has_sound(&"music_menu"), "la música de menú está disponible")
+	var menu: AudioStreamWAV = load("res://assets/audio/music_menu.wav")
+	assert_eq(menu.loop_mode, AudioStreamWAV.LOOP_FORWARD, "la música de menú no se corta")
+	# RF-751: las pistas de combate son .mp3; su bucle se pide en el .import (loop=true).
+	for track: StringName in Audio.COMBAT_TRACKS:
+		assert_true(Audio.has_sound(track), "%s está disponible" % track)
+		var music: AudioStreamMP3 = load("res://assets/audio/%s.mp3" % track)
+		assert_true(music.loop, "%s no se corta" % track)
 
 
 func test_play_returns_false_for_unknown_sounds() -> void:

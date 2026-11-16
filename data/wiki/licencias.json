@@ -10,7 +10,7 @@
   },
   {
    "tipo": "texto",
-   "texto": "Copyright (C) 2026 Lucas.\n\nEste juego es software libre y se regala: podés usarlo, copiarlo, compartirlo y modificarlo bajo los términos de la Licencia Pública General de GNU (GPL) publicada por la Free Software Foundation, versión 3 o, a tu elección, cualquier versión posterior. Eso vale para su código, sus datos, sus dibujos y sus sonidos."
+   "texto": "Copyright (C) 2026 Lucas.\n\nEste juego es software libre y se regala: podés usarlo, copiarlo, compartirlo y modificarlo bajo los términos de la Licencia Pública General de GNU (GPL) publicada por la Free Software Foundation, versión 3 o, a tu elección, cualquier versión posterior. Eso vale para su código, sus datos, sus dibujos y sus sonidos. La música de combate es de otro autor y tiene su propia licencia (ver «Música», más abajo)."
   },
   {
    "tipo": "texto",
@@ -35,6 +35,14 @@
   {
    "tipo": "texto",
    "texto": "Los tests automáticos usan GUT (Godot Unit Test, licencia MIT). Es solo una herramienta de desarrollo y no va dentro de los ejecutables."
+  },
+  {
+   "tipo": "titulo",
+   "texto": "Música"
+  },
+  {
+   "tipo": "texto",
+   "texto": "La música de combate son dos obras de DST (https://www.nosoapradio.us): «Tower Defense Theme» (https://opengameart.org/content/tower-defense-theme) y «Tower Defense Theme 3» (https://opengameart.org/content/tower-defense-theme-3).\n\nSu autor las dedicó al dominio público con la licencia CC0 1.0 (https://creativecommons.org/publicdomain/zero/1.0/): se pueden copiar, modificar y distribuir sin pedir permiso. La música del menú y todos los efectos de sonido son propios del juego."
   }
  ]
 }

@@ -63,14 +63,6 @@
 		"source": "Síntesis original tools/make_sounds.gd; sin muestras externas",
 		"stereo": false
 	},
-	"music_combat": {
-		"peak": 0.350809097290039,
-		"rate": 44100,
-		"rms": 0.0758594989721257,
-		"seconds": 34.2857142857143,
-		"source": "Síntesis original tools/make_sounds.gd; sin muestras externas",
-		"stereo": true
-	},
 	"music_loop": {
 		"peak": 0.213636264204979,
 		"rate": 44100,

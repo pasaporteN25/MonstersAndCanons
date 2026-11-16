@@ -1,5 +1,9 @@
 # Novedades del juego
 
+## Música de combate nueva *(T591, 2026-11-16; falta escucharla en una partida)*
+
+El combate tiene música nueva: **«Tower Defense Theme»** y **«Tower Defense Theme 3»**, de **DST**, dos temas electrónicos de dominio público (licencia CC0). Se turnan: cada vez que entrás a una partida suena el otro, y al reintentar el nivel sigue el mismo. El menú conserva su música. Las dos pistas suenan más bajas que el archivo original para no tapar los disparos y los avisos; si te resultan fuertes o bajas, se ajusta con «Volumen de la música» en Opciones. El crédito está en Créditos y en Wiki → Licencias.
+
 ## El panel del tutorial tiene aire y «Saltar tutorial» ya no se sale
 
 En el celular (y en la PC), el texto del panel del tutorial ya no queda pegado al borde y el botón «Saltar tutorial» entra dentro del panel. El margen se retoca en `data/tutorial/tutorial.json` (`"tarjeta"`). Sin probar en un teléfono real.

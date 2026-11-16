@@ -10,8 +10,9 @@
 # basta con reemplazar el .wav con el mismo nombre.
 #
 # OJO con la música: al importar el .wav, Godot NO respeta el bucle guardado.
-# El bucle se pide en assets/audio/music_loop.wav.import (edit/loop_mode=2,
+# El bucle se pide en assets/audio/music_menu.wav.import (edit/loop_mode=2,
 # o en el editor: panel Importar → Loop Mode: Forward). Lo vigila un test.
+# La música de combate NO sale de acá: son .mp3 de terceros (RF-751), con `loop=true` en su .import.
 extends SceneTree
 
 const RATE: int = 44100
@@ -62,10 +63,10 @@ func _init() -> void:
 	_save("heal", _notes(Wave.SINE, [659.25, 880, 987.77], 0.1, 0.22))
 	_save("impact", _mix([_tone(Wave.NOISE, 0, 0, 0.06, 0.25), _tone(Wave.SINE, 240, 80, 0.09, 0.3)]))
 	# --- Música (bucle) ---
-	var menu: PackedFloat32Array = _music(false)
+	# La música de combate ya no se sintetiza: son dos .mp3 de DST con licencia CC0 (RF-751, D-235).
+	var menu: PackedFloat32Array = _music()
 	_save("music_loop", menu, true)  # compatibilidad con recursos anteriores
 	_save("music_menu", menu, true)
-	_save("music_combat", _music(true), true)
 	var report_file: FileAccess = FileAccess.open("res://art/redesign-m36/audio_manifest.json", FileAccess.WRITE)
 	report_file.store_string(JSON.stringify(_report, "\t"))
 	quit()
@@ -129,8 +130,8 @@ func _mix(layers: Array) -> PackedFloat32Array:
 
 
 ## Un bucle tranquilo de 16 compases: bajo + arpegio sobre 4 acordes (La m, Fa, Do, Sol).
-func _music(combat: bool) -> PackedFloat32Array:
-	var beat: float = 60.0 / (112.0 if combat else 84.0)
+func _music() -> PackedFloat32Array:
+	var beat: float = 60.0 / 84.0
 	var chords: Array = [[220.0, 261.6, 329.6], [174.6, 220.0, 261.6], [261.6, 329.6, 392.0], [196.0, 246.9, 293.7]]
 	var result := PackedFloat32Array()
 	for bar: int in 16:
@@ -146,11 +147,7 @@ func _music(combat: bool) -> PackedFloat32Array:
 		var arpeggio := PackedFloat32Array()
 		for step: int in 8:
 			var hz: float = chord[step % 3] * (2.0 if step >= 4 else 1.0)
-			var pluck: PackedFloat32Array = _tone(Wave.TRIANGLE, hz, hz, beat / 2.0, 0.075)
-			if combat:
-				pluck = _mix([pluck, _tone(Wave.SINE, 95, 42, beat / 2.0, 0.2 if step % 2 == 0 else 0.04),
-					_tone(Wave.NOISE, 0, 0, 0.045, 0.07 if step % 2 == 1 else 0.025)])
-			arpeggio.append_array(pluck)
+			arpeggio.append_array(_tone(Wave.TRIANGLE, hz, hz, beat / 2.0, 0.075))
 		result.append_array(_mix([bass, pad, arpeggio]))
 	return result
 
