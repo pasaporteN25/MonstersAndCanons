@@ -2,8 +2,8 @@
 # NO es un test: es una herramienta. Imprime cómo termina cada oleada.
 #
 # Uso (desde la carpeta del proyecto):
-#   godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- smart
-#   godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- naive
+#   godot --headless --path . --fixed-fps 60 -s tools/run_balance_sim.gd -- smart
+#   godot --headless --path . --fixed-fps 60 -s tools/run_balance_sim.gd -- naive
 #
 # Estrategias:
 #   smart  → mezcla las 4 torres de M1–M2 y las pone donde cubren más camino.
@@ -21,6 +21,7 @@
 #                      colección (T245), y nada más. Sirve para ver si la pieza se alcanza sin perder.
 #   mortero          → como sin_recursos, pero después de las 2 primeras torres junta oro y demuele los tres escombros
 #                      comunes del nivel 9 para intentar comprar el Mortero (T282).
+#                      mortero_desde=N demora la inversión hasta la oleada N, para defender primero (RF-754).
 #   extraer_temprano → habilita los puntos de extracción desde la oleada 1 y construye torres con recursos apenas puede.
 #   extraer_tarde    → defiende primero y habilita los puntos a mitad del nivel.
 #   Para juntar oro, el bot deja de comprar torres (después de las 2 primeras) hasta pagar lo que quiere.
@@ -29,18 +30,18 @@
 #   check_rule=1    comprueba la regla de oro (RF-432): juega sin_recursos con 5 semillas en cada mapa con recursos
 #                   y termina con código 1 si algún mapa gana menos de 4. Sin level/levels/file/modo, mira toda la
 #                   campaña y se salta los mapas sin recursos. Ejemplos:
-#     godot ... -s tools/balance_sim.gd -- x check_rule=1 file=tools/ejemplos/mapa_recursos.json
-#     godot ... -s tools/balance_sim.gd -- x check_rule=1 levels=10-15
+#     godot ... -s tools/run_balance_sim.gd -- x check_rule=1 file=tools/ejemplos/mapa_recursos.json
+#     godot ... -s tools/run_balance_sim.gd -- x check_rule=1 levels=10-15
 #   Con las estrategias de infraestructura la tabla suma: momento de la máquina, recursos obtenidos y sobrantes,
 #   oro invertido en infraestructura y oleada de la primera torre con recursos.
 #
 # Después de la estrategia se pueden agregar ajustes para probar números sin tocar
 # los archivos (ver _apply_override). Ejemplo:
-#   godot ... -s tools/balance_sim.gd -- smart hp=2 cannon.damage=20
-#   godot ... -s tools/balance_sim.gd -- smart level=2          (jugar el nivel 2 de la campaña)
-#   godot ... -s tools/balance_sim.gd -- smart level=3 levelscale=25   (probar otro % de vida por oleada)
-#   godot ... -s tools/balance_sim.gd -- mix file=tools/ejemplos/mapa_grande.json   (jugar un archivo de nivel cualquiera)
-#   godot ... -s tools/balance_sim.gd -- mix modo=asedio level=2   (jugar el mapa 2 del modo Asedio, con sus reglas)
+#   godot ... -s tools/run_balance_sim.gd -- smart hp=2 cannon.damage=20
+#   godot ... -s tools/run_balance_sim.gd -- smart level=2          (jugar el nivel 2 de la campaña)
+#   godot ... -s tools/run_balance_sim.gd -- smart level=3 levelscale=25   (probar otro % de vida por oleada)
+#   godot ... -s tools/run_balance_sim.gd -- mix file=tools/ejemplos/mapa_grande.json   (jugar un archivo de nivel cualquiera)
+#   godot ... -s tools/run_balance_sim.gd -- mix modo=asedio level=2   (jugar el mapa 2 del modo Asedio, con sus reglas)
 #
 # Varias semillas y varios mapas en una sola corrida (T204):
 #   seed=N          una semilla (por defecto 12345). Fija TODO el azar de la partida: el temblor de
@@ -51,8 +52,8 @@
 #   report=ruta     además de la tabla final, la guarda en JSON (por ejemplo report=user://balance.json).
 #                   Cada partida incluye `tower_usage`, contador por id de las torres que realmente se construyeron.
 #   Ejemplos:
-#     godot ... -s tools/balance_sim.gd -- mix level=6 seeds=5
-#     godot ... -s tools/balance_sim.gd -- mix levels=6-9 seeds=5 report=user://balance.json
+#     godot ... -s tools/run_balance_sim.gd -- mix level=6 seeds=5
+#     godot ... -s tools/run_balance_sim.gd -- mix levels=6-9 seeds=5 report=user://balance.json
 #   La misma semilla da siempre el mismo resultado. Al final imprime una tabla: mapa, estrategia,
 #   semilla, resultado, vidas, oleada y oro sobrante.
 #
@@ -70,8 +71,8 @@
 #                     (tools/asedio_politicas.json, o politicas=ruta), imprime la tabla y el promedio de vidas por
 #                     bloque (1–5, 6–10, 11–15) y termina con código 1 si algún mapa no gana las 5 con 3 vidas o más
 #                     o si los promedios por bloque suben. levels=A-B juega solo esos mapas. Ejemplos:
-#     godot ... -s tools/balance_sim.gd -- x perfil=asedio
-#     godot ... -s tools/balance_sim.gd -- sin_recursos modo=asedio levels=1-15 seeds=5 mejoras=llenar
+#     godot ... -s tools/run_balance_sim.gd -- x perfil=asedio
+#     godot ... -s tools/run_balance_sim.gd -- sin_recursos modo=asedio levels=1-15 seeds=5 mejoras=llenar
 #   vida=N            fuerza el % de vida de los monstruos del mapa (para remedir un porcentaje de la tabla de Asedio sin
 #                     tocar el modo.json; la variante impresa dice el % efectivo).
 #   Cada partida imprime la variante que usó (estrategia, mejoras, vida de los monstruos y semilla).
@@ -81,7 +82,7 @@
 #   solo=a,b     el bot compra solo esos ids de torre (los que el mapa ofrece), en el orden de "mix".
 #   consejo=1    al perder, imprime el consejo (regla y torres), las fugas por tipo, y los suma
 #                al informe (report=). Ejemplo:
-#     godot ... -s tools/balance_sim.gd -- sin_recursos levels=1-15 seeds=2 limite=3 consejo=1 report=user://consejo.json
+#     godot ... -s tools/run_balance_sim.gd -- sin_recursos levels=1-15 seeds=2 limite=3 consejo=1 report=user://consejo.json
 #
 # --fixed-fps 60 hace que cada frame cuente como 1/60 s sin esperar al reloj real,
 # así una partida de ~10 minutos se simula en segundos.
@@ -131,6 +132,7 @@ var mode_id: String = ""
 ## levelscale=N: prueba otro % de vida por oleada para el nivel elegido (D-019). -1 = no tocar.
 var level_scale_override: int = -1
 var starting_gold_override: int = -1
+var mortar_from_wave: int = 0
 ## T258: regla de mejoras de la partida en curso ("", "llenar" o "temprana") y la que se pidió con mejoras=.
 var upgrades_mode: String = ""
 var upgrades_requested: String = ""
@@ -375,6 +377,9 @@ func _apply_override(arg: String) -> void:
 		return
 	if parts[0] == "level":
 		level_number = int(value)
+		return
+	if parts[0] == "mortero_desde":
+		mortar_from_wave = maxi(0, int(value))
 		return
 	if parts[0] == "levelscale":
 		level_scale_override = int(value)  # se aplica al elegir el nivel
@@ -987,7 +992,7 @@ func _run_piece(controller: Node, session: LevelSession) -> int:
 
 ## Estrategia "mortero": tras las dos torres iniciales, demuele solo los tres escombros comunes del nivel 9.
 func _run_mortar(controller: Node, session: LevelSession) -> int:
-	if built < MIN_DEFENSE:
+	if built < MIN_DEFENSE or session.wave < mortar_from_wave:
 		return 0
 	var field: ObstacleField = controller.field
 	if field.has_job():
@@ -1003,7 +1008,8 @@ func _run_mortar(controller: Node, session: LevelSession) -> int:
 			return 0
 		return cost
 	for tower: TowerData in game.available_towers:
-		if tower.id == &"mortar" and session.resources >= tower.resource_cost:
+		# Cuando el Mortero ya es pagable, la reserva no debe volver a descontar su precio.
+		if tower.id == &"mortar" and session.resources >= tower.resource_cost and session.gold < tower.build_gold(false):
 			return tower.build_gold(false)
 	return 0
 

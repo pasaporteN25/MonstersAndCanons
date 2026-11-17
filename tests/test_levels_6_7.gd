@@ -27,7 +27,7 @@ func test_levels_6_and_7_are_forest_with_the_expected_removables() -> void:
 			assert_eq(obstacle.kind, ObstacleSpec.Kind.REMOVABLE, "nivel %d" % n)
 
 
-func test_level_6_gives_no_resources_and_level_7_gives_one_at_random() -> void:
+func test_level_6_gives_no_resources_and_level_7_guarantees_demolition_rewards() -> void:
 	var six: LevelData = _load(6)
 	assert_false(six.uses_resources(), "Q-18: el 6 no da recursos")
 	assert_false(six.machine_enabled)
@@ -35,8 +35,8 @@ func test_level_6_gives_no_resources_and_level_7_gives_one_at_random() -> void:
 	assert_true(seven.uses_resources(), "Q-18: el 7 es el primer drop")
 	assert_true(seven.machine_enabled, "el 7 habilita la demoledora")
 	for obstacle: ObstacleSpec in seven.obstacles:
-		assert_eq(obstacle.reward_amount, 1)
-		assert_between(obstacle.chance_percent, 1, 99, "al azar, ni seguro ni nunca")
+		assert_eq(obstacle.reward_amount, 2 if obstacle.class_id == &"roca" else 1)
+		assert_eq(obstacle.chance_percent, 100, "RF-753: recurso garantizado")
 
 
 func test_removables_do_not_change_the_routes() -> void:

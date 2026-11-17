@@ -83,6 +83,9 @@ func setup(level: Level, session: LevelSession, balance: BalanceConfig,
 		_mobile_config = MobileUiConfig.load_from()
 		_touch_gesture.configure(float(_mobile_config.get_value("toque_max_px")), int(_mobile_config.get_value("pinza_gracia_ms")))
 		_pointer_filter.configure(int(_mobile_config.get_value("puntero_duplicado_ms")), float(_mobile_config.get_value("puntero_duplicado_px")))
+		if not session.gold_changed.is_connected(_on_mobile_balance_changed):
+			session.gold_changed.connect(_on_mobile_balance_changed)
+			session.resources_changed.connect(_on_mobile_balance_changed)
 
 
 # --- Elegir torre para construir (RF-40, RF-43) ---
@@ -102,7 +105,7 @@ func select(index: int, use_alt_payment: bool = false) -> void:
 	_mobile_infrastructure_tool = &""
 	_mobile_infrastructure_class = &""
 	_selected = -1 if already_selected else index
-	set_pay_alt(use_alt_payment)  # RF-419: usa la forma que se puede pagar desde el catálogo
+	set_pay_alt(use_alt_payment)
 	if _mobile_mode and _selected >= 0:
 		_start_mobile_ghost()
 	selection_changed.emit(_selected)
@@ -141,6 +144,8 @@ func set_pay_alt(alt: bool) -> void:
 	if alt == _pay_alt:
 		return
 	_pay_alt = alt
+	if _mobile_mode and tower != null and _ghost_placement.tower_id == tower.id:
+		_move_mobile_ghost(_ghost_placement.cell)
 	payment_changed.emit(_pay_alt)
 	queue_redraw()
 
@@ -477,6 +482,8 @@ func _move_mobile_ghost(cell: Vector2i) -> void:
 	if tower == null:
 		return
 	_ghost_placement.size = tower.footprint
+	_ghost_placement.gold_cost = tower.build_gold(_pay_alt)
+	_ghost_placement.resource_cost = tower.build_resources(_pay_alt)
 	_ghost_placement.cell = cell
 	_ghost_placement.clamp_inside(_level.map_size())
 	var reason: String = ""
@@ -487,6 +494,11 @@ func _move_mobile_ghost(cell: Vector2i) -> void:
 	_ghost_placement.move_to(_ghost_placement.cell, reason == "", reason)
 	_hover_cell = _ghost_placement.cell
 	queue_redraw()
+
+
+func _on_mobile_balance_changed(_amount: int) -> void:
+	if _selected >= 0:
+		_move_mobile_ghost(_ghost_placement.cell)
 
 
 func ghost_placement() -> GhostPlacement:

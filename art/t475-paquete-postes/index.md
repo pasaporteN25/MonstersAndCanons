@@ -204,6 +204,21 @@ Después de T475 (niveles 8 y 9) y de T558 (textos de los niveles 3, 4, 11, 12, 
 | 14 | `aa1dfb186cc5b8040625fa492d2088138017c9db2c6b6550938f24a233cc4a41` | `341c00645a48fad0944a0f43207fe0da613c883bfecdec63cc4cb8b811124d69` |
 | 15 | `32f78a4cb309777821bd06b864bfa354acbb6ad418ea623b347d4b158ed0e09d` | `70e7f2b47342d8fdfc6d59239499bdd43072d44effacc5eb8963ec37b295a5ca` |
 
+## Referencia de V1 (T594)
+
+Estos niveles incorporan recompensas de demolición garantizadas y, en algunas clases, más recursos (RF-753). Las casillas de la grilla siguen en las mismas posiciones. Los hashes de la leyenda cambian por los datos de cada removible.
+
+| Nivel | JSON completo (SHA-256) | Grilla + leyenda (SHA-256) |
+|---|---|---|
+| 07 | `ca2185722f6c04e528633ab7032773854c1a3acf1ceb276a8ae652852905b591` | `c5b5c52969fbba14d2fd0ad6d3ccab96fff2500be6f8fe594b439b88d99ab0ba` |
+| 08 | `fa9adabb0be583f5773a10ed82907157a5b320f52e51b6073a6cfc6ef2d58d8e` | `666f088f98dfe5b0cb063e702bdf943f5cc02a58a2f81c7f5c505f474ec23a89` |
+| 10 | `750c094b9675fac448b6752e087cd82ba9663e095794c44cff0e982a15fae49e` | `c3bcd23c12e9352d46178cc9a63e0facb7ea4abc65f9148eb4bb7936929a6580` |
+| 11 | `fd4b0b0234aba4de451d98d26d637a20b0867509d55506ed44cd190f99154b04` | `cf99b00210eff84fe2c5c2cbff5d92c15e342af69f2229545a8bbe8c78fe0a97` |
+| 12 | `67ab22453fa55cc035dee02bd87d12848e2cef2b194356b5fcad89bc1e13e2f1` | `7b7f06a3da36d99c5ea77499782101243dbe1a5ef84735c61a6976fd63a435d9` |
+| 13 | `be3c5e18190418e87b2cd8e8fb875d6dcfafeccfc78af153ecf530235d87155d` | `19d08aa1713082802fc7bdcc18849f2507d5cd9a0487bd97ec72b54377ba404c` |
+| 14 | `541e9c99e3d629102ca2aed62578604bfd1c5040aec214f782988cbe85871fc0` | `9392e23b77a01658a0741d5f7f9c62bd5ab124fcbdac990e89718c784cf000ca` |
+| 15 | `ca93df91bd8aab4c4860df04075436d5ea688fc24dae164db91cf010a5a3a217` | `0678c00099d4ada279aaca5ad4add04cc450232cac18aeb7a01618092e6261fe` |
+
 ## Límites
 
 - Los planos salen de los JSON, no del motor. Las capturas del motor real de la integración están en `Capturas/T475-*.png` (1280×720, ventana, partida de campaña).

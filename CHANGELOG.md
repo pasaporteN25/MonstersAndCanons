@@ -1,5 +1,17 @@
 # Novedades del juego
 
+## La demolición rinde más y las compras mixtas cuestan menos oro (T594)
+
+Los obstáculos de campaña que dan recursos ahora indican la cantidad que vas a recibir al demolerlos. Las rocas y los escombros seleccionados dan dos. Con recursos, el Francotirador cuesta 95 de oro y un recurso. El Mortero cuesta 250 de oro y tres recursos, y la Disruptora, 100 de oro y dos recursos.
+
+## Elegí cómo pagar al construir (T593)
+
+Cuando una torre tiene dos precios, ves cuánto cuesta con solo oro y cuánto cuesta usando recursos. Empezás con «Solo oro» y podés elegir «Usar recursos» antes de confirmar. La compra indica qué te falta y cobra la opción que elegiste.
+
+## El Estandarte mecánico se habilita directamente (T592)
+
+La torre de apoyo aparece desde el nivel 6 en los mapas que la ofrecen. Ya no tenés que reunir avances para acceder a ella. Su precio, el aumento de cadencia y la reparación se mantienen. Los hallazgos de la Disruptora conservan su propio recorrido.
+
 ## El panel del tutorial tiene aire y «Saltar tutorial» ya no se sale
 
 En el celular (y en la PC), el texto del panel del tutorial ya no queda pegado al borde y el botón «Saltar tutorial» entra dentro del panel. El margen se retoca en `data/tutorial/tutorial.json` (`"tarjeta"`). Sin probar en un teléfono real.

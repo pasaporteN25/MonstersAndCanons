@@ -8,6 +8,7 @@ signal demolish_pressed
 signal menu_pressed
 signal catalog_opened(open: bool)
 signal tower_chosen(index: int, use_alt_payment: bool)
+signal payment_pressed(use_resources: bool)
 signal infrastructure_tool_chosen(tool: StringName, class_id: StringName)
 signal upgrade_pressed
 signal sell_pressed
@@ -86,12 +87,14 @@ var _selected_sell_value: int = 0
 var _selected_resource_value: int = 0
 var _bottom_confirm: Button
 var _bottom_cancel: Button
+var _use_resources_button: CheckButton
 var _sell_gap: Control
 var _status_touch_button: Button
 var _status_touch_index: int = -1
 var _status_touch_start: Vector2
 var _status_touch_moved: bool = false
 var _ghost_status_text: String = ""
+var _ghost_alternative_text: String = ""
 var _mobile_theme: Theme
 # T570 (RF-733, RF-734): los rieles laterales. Con rieles, los controles flotantes y «Vender» salen del marco: acá viven
 # los botones del riel (otros nodos, en el host) y los flotantes quedan ocultos. Sin rieles todo queda como antes.
@@ -214,6 +217,14 @@ func _build_status_bar() -> void:
 	_sell_gap.custom_minimum_size.x = _catalog_virtual_mm(float(_config.get_value("vender_separacion_mm")))
 	_sell_gap.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	row.add_child(_sell_gap)
+	_use_resources_button = CheckButton.new()
+	_use_resources_button.name = "UseResources"
+	_use_resources_button.custom_minimum_size.y = float(_config.get_value("tilde_alto_px"))
+	_use_resources_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	_use_resources_button.focus_mode = Control.FOCUS_NONE
+	_use_resources_button.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_use_resources_button.pressed.connect(_on_payment_pressed)
+	row.add_child(_use_resources_button)
 	_bottom_confirm = Button.new()
 	_bottom_confirm.name = "BottomConfirmPlacement"
 	_bottom_confirm.text = "✓"
@@ -317,6 +328,7 @@ func _set_empty_status() -> void:
 	_set_sell_in_bar(false)
 	_bottom_confirm.hide()
 	_bottom_cancel.hide()
+	_use_resources_button.hide()
 
 
 ## RF-543: la herramienta de demoler/habilitar está elegida. La línea dice qué hacer (o el motivo del último
@@ -332,14 +344,24 @@ func show_tool_status(message: String = "") -> void:
 	_set_sell_in_bar(false)
 	_bottom_confirm.hide()
 	_bottom_cancel.show()
+	_use_resources_button.hide()
 
 
-func show_ghost_status(tower_name: String, cost_text: String) -> void:
+func show_ghost_status(tower_name: String, cost_text: String,
+		payment_tower: TowerData = null, use_resources: bool = false) -> void:
 	clear_upgrade_arm()
 	_status_state = "ghost"
 	_fit_status_font()  # T511: letra normal fuera del estado «torre»
 	_ghost_status_text = "%s  ·  %s" % [tower_name, cost_text]
-	_status_label.text = _ghost_status_text
+	_ghost_alternative_text = ""
+	_use_resources_button.visible = payment_tower != null and payment_tower.has_alt_payment() and _catalog_uses_resources
+	if _use_resources_button.visible:
+		_use_resources_button.disabled = _paused or _game_over or _modal_open
+		_use_resources_button.set_pressed_no_signal(use_resources)
+		_use_resources_button.text = Localization.t(&"towertext.pay_resources")
+		var other_label: StringName = &"towertext.pay_gold" if use_resources else &"towertext.with_resources"
+		_ghost_alternative_text = "\n%s · %s" % [Localization.t(other_label), TowerText.cost_text(payment_tower, not use_resources)]
+	_status_label.text = _ghost_status_text + _ghost_alternative_text
 	_status_label.visible = true
 	_target_button.hide()
 	_upgrade_button.hide()
@@ -347,6 +369,12 @@ func show_ghost_status(tower_name: String, cost_text: String) -> void:
 	_bottom_confirm.show()
 	_bottom_cancel.show()
 	_bottom_confirm.disabled = _confirm_button.disabled
+
+
+func _on_payment_pressed() -> void:
+	var use_resources: bool = not _use_resources_button.button_pressed
+	_use_resources_button.set_pressed_no_signal(use_resources)
+	payment_pressed.emit(use_resources)
 
 
 func show_selected_tower(tower: Tower, gold: int, sell_value: int, resource_value: int,
@@ -404,6 +432,7 @@ func show_selected_tower(tower: Tower, gold: int, sell_value: int, resource_valu
 		_upgrade_button.disabled = false
 	_set_sell_in_bar(true)
 	_bottom_confirm.hide()
+	_use_resources_button.hide()
 	if resource_value > 0:
 		_sell_button.tooltip_text = Localization.t_fmt(&"mobile.refund_both", {"gold": sell_value, "resources": resource_value})
 	else:
@@ -805,29 +834,22 @@ func _refresh_catalog() -> void:
 	var descriptors: Array[Dictionary] = []
 	for i: int in _available_towers.size():
 		var tower: TowerData = _available_towers[i]
-		var primary_reason: String = TowerText.missing_text(tower, false,
+		var has_choice: bool = tower.has_alt_payment() and _catalog_uses_resources
+		var reason: String = TowerText.missing_text(tower, false,
 			_catalog_gold, _catalog_resources, _catalog_uses_resources)
-		var use_alt: bool = false
-		var reason: String = ""
-		if primary_reason != "":
-			var alternate_reason: String = TowerText.missing_text(tower, true,
-				_catalog_gold, _catalog_resources, _catalog_uses_resources)
-			if tower.has_alt_payment() and alternate_reason == "":
-				use_alt = true
-			else:
-				reason = primary_reason
-				if tower.has_alt_payment() and alternate_reason != "":
-					reason = alternate_reason if alternate_reason.length() < primary_reason.length() else primary_reason
-		var cost_text: String = TowerText.cost_text(tower, use_alt)
-		if tower.has_alt_payment():
-			cost_text = "%s / %s" % [TowerText.cost_text(tower), TowerText.cost_text(tower, true)]
+		var cost_text: String = TowerText.cost_text(tower)
+		if has_choice:
+			cost_text = Localization.t_fmt(&"towertext.payment_or", {"a": cost_text, "b": TowerText.cost_text(tower, true)})
+			var alternate_reason: String = TowerText.missing_text(tower, true, _catalog_gold, _catalog_resources, true)
+			if alternate_reason.is_empty():
+				reason = ""
 		descriptors.append({"key": "tower:%s" % tower.id, "title": tower.name_text(),
 			"cost": cost_text, "reason": reason, "icon": _tower_icon(tower),
-			"tower_index": i, "use_alt": use_alt, "tool": &""})
+			"tower_index": i, "can_inspect": has_choice, "tool": &""})
 	if not _machine_option.is_empty():
 		descriptors.append({"key": "tool:machine", "title": String(_machine_option.get("name", "Demoledora")),
 			"cost": String(_machine_option.get("cost_text", "")), "reason": String(_machine_option.get("disabled_reason", "")),
-			"icon": _machine_option.get("icon"), "tower_index": -1, "use_alt": false, "tool": &"machine"})
+			"icon": _machine_option.get("icon"), "tower_index": -1, "tool": &"machine"})
 	_sync_catalog_grid(_tower_grid, descriptors)
 
 
@@ -888,7 +910,6 @@ func _apply_card(card: Button, descriptor: Dictionary) -> void:
 	var tooltip: String = reason if reason != "" else "%s · %s" % [title, cost]
 	card.set_meta("key", descriptor["key"])
 	card.set_meta("tower_index", descriptor["tower_index"])
-	card.set_meta("use_alt", descriptor["use_alt"])
 	card.set_meta("tool", descriptor["tool"])
 	if card.text != text:
 		card.text = text
@@ -896,19 +917,19 @@ func _apply_card(card: Button, descriptor: Dictionary) -> void:
 		card.tooltip_text = tooltip
 	if descriptor["icon"] is Texture2D and card.icon != descriptor["icon"]:
 		card.icon = descriptor["icon"]
-	card.disabled = reason != ""
+	card.disabled = reason != "" and not descriptor.get("can_inspect", false)
 
 
 func _on_catalog_card_pressed(card: Button) -> void:
 	var tower_index: int = card.get_meta("tower_index", -1)
 	if tower_index >= 0:
-		_on_tower_card_pressed(tower_index, card.get_meta("use_alt", false))
+		_on_tower_card_pressed(tower_index)
 	else:
 		_on_infrastructure_card_pressed(card.get_meta("tool", &""))
 
 
-func _on_tower_card_pressed(index: int, use_alt_payment: bool) -> void:
-	tower_chosen.emit(index, use_alt_payment)
+func _on_tower_card_pressed(index: int) -> void:
+	tower_chosen.emit(index, false)
 	close_catalog()
 
 
@@ -934,7 +955,8 @@ func show_placement(world_position: Vector2, cost_text: String, valid: bool, rea
 	_ghost_visible = true
 	_confirm_button.disabled = not valid
 	_confirm_button.tooltip_text = Localization.t(&"mobile.confirm_build") if valid else reason
-	_status_label.text = _ghost_status_text if valid else "%s  ·  %s" % [_ghost_status_text, reason]
+	var status: String = _ghost_status_text if valid else "%s  ·  %s" % [_ghost_status_text, reason]
+	_status_label.text = status + _ghost_alternative_text
 	_cancel_button.tooltip_text = Localization.t(&"mobile.cancel_build")
 	_bottom_confirm.visible = true
 	_bottom_cancel.visible = true
@@ -958,6 +980,7 @@ func set_placement_visible(enabled: bool) -> void:
 		if _bottom_confirm != null:
 			_bottom_confirm.hide()
 			_bottom_cancel.hide()
+			_use_resources_button.hide()
 		_update_floating_layout()
 
 
@@ -1119,7 +1142,7 @@ func is_interactive_at(screen_pos: Vector2) -> bool:
 	if _catalog_open and (_catalog_panel.get_global_rect().has_point(screen_pos) or _catalog_dim.get_global_rect().has_point(screen_pos)):
 		return true
 	for button: Button in [_confirm_button, _cancel_button, _view_all_button, _cart_button, _exit_button,
-			_demolish_button, _upgrade_button, _target_button, _sell_button]:
+			_demolish_button, _upgrade_button, _target_button, _sell_button, _use_resources_button]:
 		if button != null and button.visible and button.get_global_rect().has_point(screen_pos):
 			return true
 	return false
@@ -1171,7 +1194,8 @@ func _input(event: InputEvent) -> void:
 
 func _handle_status_touch(index: int, pos: Vector2, pressed: bool) -> bool:
 	if pressed:
-		for button: Button in [_confirm_button, _cancel_button, _bottom_confirm, _bottom_cancel, _target_button, _upgrade_button, _sell_button]:
+		for button: Button in [_confirm_button, _cancel_button, _bottom_confirm, _bottom_cancel,
+				_use_resources_button, _target_button, _upgrade_button, _sell_button]:
 			if button != null and button.visible and button.get_global_rect().has_point(pos):
 				_status_touch_button = button
 				_status_touch_index = index

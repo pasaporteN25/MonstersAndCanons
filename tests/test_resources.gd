@@ -65,11 +65,11 @@ func _set_resources(amount: int) -> void:
 
 func test_the_data_of_the_two_towers() -> void:
 	assert_eq(mortar.resource_cost, 3, "RF-420")
-	assert_eq(mortar.levels[0].cost, 300)
+	assert_eq(mortar.levels[0].cost, 250)
 	assert_eq(mortar.alt_resource_cost, 0)
 	assert_eq(sniper.resource_cost, 0, "RF-419")
 	assert_eq(sniper.levels[0].cost, 150, "la forma de oro cuesta lo de siempre")
-	assert_eq(sniper.alt_gold_cost, 120)
+	assert_eq(sniper.alt_gold_cost, 95)
 	assert_eq(sniper.alt_resource_cost, 1)
 
 
@@ -143,15 +143,15 @@ func test_mortar_needs_both_gold_and_resources() -> void:
 	_start_game()
 	var origin: Vector2i = _free_block()
 	_set_resources(2)
-	assert_false(game.build_controller.try_build(mortar, origin), "300 de oro y 2 recursos: no")
+	assert_false(game.build_controller.try_build(mortar, origin), "250 de oro y 2 recursos: no")
 	assert_eq(game.session.gold, 1000, "no cobró nada")
 	assert_eq(game.session.resources, 2)
 	_set_resources(3)
-	game.session.spend(game.session.gold - 299)
-	assert_false(game.build_controller.try_build(mortar, origin), "299 de oro y 3 recursos: no")
+	game.session.spend(game.session.gold - 249)
+	assert_false(game.build_controller.try_build(mortar, origin), "249 de oro y 3 recursos: no")
 	assert_eq(game.session.resources, 3, "no cobró recursos")
 	game.session.earn(1)
-	assert_true(game.build_controller.try_build(mortar, origin), "300 y 3: sí")
+	assert_true(game.build_controller.try_build(mortar, origin), "250 y 3: sí")
 	assert_eq(game.session.gold, 0)
 	assert_eq(game.session.resources, 0)
 
@@ -178,8 +178,8 @@ func test_selling_returns_gold_and_resources_rounded_down() -> void:
 	assert_eq(tower.resources_invested, 3)
 	assert_eq(game.build_controller.sell_resource_value(tower), 2, "floor(3 × 70 / 100)")
 	game.session.spend(game.session.gold)
-	assert_eq(game.build_controller.sell(tower), 210)
-	assert_eq(game.session.gold, 210)
+	assert_eq(game.build_controller.sell(tower), 175)
+	assert_eq(game.session.gold, 175)
 	assert_eq(game.session.resources, 2)
 
 
@@ -201,18 +201,18 @@ func test_sniper_gold_payment_is_as_always() -> void:
 	assert_eq(game.session.resources, 0)
 
 
-func test_sniper_alt_payment_charges_120_and_1_resource() -> void:
+func test_sniper_alt_payment_charges_95_and_1_resource() -> void:
 	_start_game()
-	game.session.spend(game.session.gold - 120)
+	game.session.spend(game.session.gold - 95)
 	_set_resources(1)
-	assert_false(game.build_controller.can_build(sniper, Vector2i(0, 0)), "con 120 de oro la forma común no alcanza")
+	assert_false(game.build_controller.can_build(sniper, Vector2i(0, 0)), "con 95 de oro la forma común no alcanza")
 	assert_true(game.build_controller.try_build(sniper, Vector2i(0, 0), true))
 	assert_eq(game.session.gold, 0)
 	assert_eq(game.session.resources, 0)
 	var tower: Tower = game.build_controller.tower_at(Vector2i(0, 0))
-	assert_eq(tower.total_invested, 120)
+	assert_eq(tower.total_invested, 95)
 	game.build_controller.sell(tower)
-	assert_eq(game.session.gold, 84)
+	assert_eq(game.session.gold, 66)
 	assert_eq(game.session.resources, 0, "con 1 recurso la venta devuelve 0 (Q-23)")
 
 
@@ -299,7 +299,7 @@ func _bar_button(tower: TowerData) -> Button:
 func test_bar_shows_both_prices_and_disables_with_the_reason() -> void:
 	_start_game(true, 100)
 	var button: Button = _bar_button(mortar)
-	assert_eq(button.text, "300 + 3")
+	assert_eq(button.text, "250 + 3")
 	assert_true(button.disabled, "0 recursos")
 	assert_string_contains(button.tooltip_text, "Faltan 3 recursos")
 	game.session.add_resources(3)
@@ -319,7 +319,7 @@ func test_sniper_button_stays_enabled_with_gold_only() -> void:
 	var button: Button = _bar_button(sniper)
 	assert_eq(button.text, "150")
 	assert_false(button.disabled)
-	assert_string_contains(button.tooltip_text, "120 de oro + 1 recurso")
+	assert_false(button.tooltip_text.contains(TowerText.cost_text(sniper, true)), "el mapa sin fuentes ofrece solo oro")
 
 
 func test_sniper_help_shows_two_payment_buttons() -> void:
@@ -328,31 +328,36 @@ func test_sniper_help_shows_two_payment_buttons() -> void:
 	var gold_button: Button = game.hud._pay_gold_button
 	var alt_button: Button = game.hud._pay_alt_button
 	assert_true(gold_button.visible and alt_button.visible)
-	assert_eq(gold_button.text, "150 de oro")
-	assert_eq(alt_button.text, "120 de oro + 1 recurso")
+	assert_eq(gold_button.text, "Solo oro · %s" % TowerText.cost_text(sniper))
+	assert_eq(alt_button.text, "Usar recursos · %s" % TowerText.cost_text(sniper, true))
 	assert_true(gold_button.button_pressed, "solo oro de entrada")
-	assert_true(alt_button.disabled, "sin recursos")
-	assert_string_contains(alt_button.tooltip_text, "Faltan 1 recurso")
-	game.session.add_resources(1)
-	assert_false(alt_button.disabled)
+	assert_false(alt_button.disabled, "se puede elegir e inspeccionar aunque no alcance")
 	alt_button.pressed.emit()
 	assert_true(game.build_controller.pay_alt())
 	assert_true(alt_button.button_pressed)
 	assert_false(gold_button.button_pressed)
+	var hint: Label = game.hud.get_node("%BuildInfoText")
+	assert_string_contains(hint.text, "Faltan 1 recurso")
+	game.session.add_resources(sniper.build_resources(true))
+	assert_true(hint.text.begins_with(sniper.description_text()))
+	gold_button.pressed.emit()
+	assert_false(game.build_controller.pay_alt())
+	assert_true(gold_button.button_pressed)
+	assert_false(alt_button.button_pressed)
 
 
-func test_second_payment_is_disabled_on_a_map_without_resources() -> void:
+func test_second_payment_is_hidden_on_a_map_without_resources() -> void:
 	_start_game(false)
 	game.build_controller.select(game.available_towers.find(sniper))
-	assert_true(game.hud._pay_alt_button.disabled)
-	assert_string_contains(game.hud._pay_alt_button.tooltip_text, "no tiene cómo conseguirlos")
+	assert_false(game.hud._pay_alt_button.visible)
+	assert_string_contains((game.hud.get_node("%BuildInfoName") as Label).text, TowerText.cost_text(sniper))
 
 
 func test_help_of_a_normal_tower_hides_the_payment_buttons() -> void:
 	_start_game(true, 100)
 	game.build_controller.select(game.available_towers.find(mortar))
 	assert_false(game.hud._pay_gold_button.visible)
-	assert_string_contains((game.hud.get_node("%BuildInfoName") as Label).text, "300 de oro + 3 recursos")
+	assert_string_contains((game.hud.get_node("%BuildInfoName") as Label).text, TowerText.cost_text(mortar))
 
 
 # --- Panel y Wiki (RF-418, RF-437) ---
@@ -364,25 +369,25 @@ func test_panel_shows_what_the_sale_returns() -> void:
 	game.build_controller.try_build(mortar, origin)
 	game.build_controller.select_placed(game.build_controller.tower_at(origin))
 	var sell_button: Button = game.hud.tower_panel.get_node("%SellButton")
-	assert_string_contains(sell_button.text, "210 y 2 recursos")
+	assert_string_contains(sell_button.text, "175 y 2 recursos")
 
 
 func test_text_helpers_read_the_data() -> void:
-	assert_eq(TowerText.cost_text(mortar), "300 de oro + 3 recursos")
+	assert_eq(TowerText.cost_text(mortar), "250 de oro + 3 recursos")
 	assert_eq(TowerText.cost_text(sniper), "150 de oro")
-	assert_eq(TowerText.cost_text(sniper, true), "120 de oro + 1 recurso")
+	assert_eq(TowerText.cost_text(sniper, true), "95 de oro + 1 recurso")
 	assert_eq(TowerText.refund_text(70, 0), "70")
 	assert_eq(TowerText.refund_text(84, 0), "84")
-	assert_eq(TowerText.missing_text(mortar, false, 300, 3, true), "", "alcanza")
-	assert_eq(TowerText.missing_text(mortar, false, 250, 1, true), "Faltan 50 de oro y 2 recursos")
+	assert_eq(TowerText.missing_text(mortar, false, 250, 3, true), "", "alcanza")
+	assert_eq(TowerText.missing_text(mortar, false, 200, 1, true), "Faltan 50 de oro y 2 recursos")
 	assert_eq(TowerText.invested_line(load("res://data/towers/basic.tres"), 0), "")
 
 
 func test_wiki_sheet_shows_the_resource_cost() -> void:
 	var mortar_entry: WikiEntry = Wiki.tower_entry(mortar)
 	var sniper_entry: WikiEntry = Wiki.tower_entry(sniper)
-	assert_true(str(mortar_entry.blocks).contains("300 de oro + 3 recursos"))
-	assert_true(str(sniper_entry.blocks).contains("120 de oro + 1 recurso"))
+	assert_true(str(mortar_entry.blocks).contains("250 de oro + 3 recursos"))
+	assert_true(str(sniper_entry.blocks).contains("95 de oro + 1 recurso"))
 	var basic_entry: WikiEntry = Wiki.tower_entry(load("res://data/towers/basic.tres"))
 	assert_false(str(basic_entry.blocks).contains("recurso"), "las torres de oro no cambian")
 

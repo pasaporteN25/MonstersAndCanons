@@ -85,11 +85,8 @@ func test_levels_8_and_9_are_ruins_with_removables_and_resources() -> void:
 				pieces += 1
 				assert_eq(obstacle.cell, EXPECTED[n][1], "nivel %d: dónde está la pieza" % n)
 			else:
-				assert_eq(obstacle.reward_amount, 1)
-				if n == 9:
-					assert_eq(obstacle.chance_percent, 100, "nivel 9: los escombros comunes siempre dan su recurso")
-				else:
-					assert_between(obstacle.chance_percent, 1, 99, "nivel 8: al azar")
+				assert_eq(obstacle.reward_amount, 1 if n == 9 else 2)
+				assert_eq(obstacle.chance_percent, 100, "RF-753: recurso garantizado")
 		assert_eq(pieces, 1, "nivel %d: una sola pieza" % n)
 
 
@@ -99,7 +96,7 @@ func test_the_mortar_debuts_in_level_9_only() -> void:
 	assert_true(_load(8).extra_towers.has("mechanical_standard"), "el Mecánico se conserva")
 	assert_true(_load(9).extra_towers.has("mechanical_standard"))
 	var mortar: TowerData = load("res://data/towers/mortar.tres")
-	assert_eq(mortar.levels[0].cost, 300)
+	assert_eq(mortar.levels[0].cost, 250)
 	assert_eq(mortar.resource_cost, 3)
 
 

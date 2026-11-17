@@ -78,12 +78,9 @@ func test_winning_eight_unlocks_nine_and_each_next_one_until_the_last() -> void:
 	assert_eq(GameFlow.level(GameFlow.current_index).id, &"level_15", "el último es el 15")
 	assert_false(GameFlow.has_next_level(), "el último de la campaña no tiene siguiente")
 
-func test_campaign_tail_and_collection_gate_for_the_new_levels() -> void:
+func test_campaign_tail_offers_support_without_technology_advances() -> void:
 	assert_eq(LevelFile.campaign_ids().slice(7, 10),PackedStringArray(["level_08","level_09","level_10"]))
-	for index: int in [7,8,9]:
-		assert_false(GameFlow.level(index).available_towers([STANDARD],SaveManager.collection_complete).has(STANDARD))
-	for source: String in (CollectibleRun.definitions()["technology"]["sources"] as Array):
-		SaveManager.collect_source(&"technology",StringName(source))
+	assert_false(SaveManager.collection_complete(&"technology"))
 	for index: int in [7,8,9]:
 		assert_true(GameFlow.level(index).available_towers([STANDARD],SaveManager.collection_complete).has(STANDARD))
 		var rng: RandomNumberGenerator = RandomNumberGenerator.new()

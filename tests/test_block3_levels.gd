@@ -96,13 +96,14 @@ func test_every_level_offers_the_rotation_without_the_machine_gun_and_without_th
 		assert_eq(level.starting_gold, GOLD[n], "nivel %d: oro de la ficha" % n)
 
 
-func test_without_collections_a_level_has_eight_towers_and_with_them_ten() -> void:
+func test_without_collections_a_level_has_nine_towers_including_the_standard() -> void:
 	var all: Array[TowerData] = TowerOffer.canonical_towers()
 	for n: int in _block():
 		var level: LevelData = _load(n)
 		var without: Array = _ids(level.available_towers(all, func(_c: StringName) -> bool: return false))
-		assert_eq(without.size(), 8, "nivel %d: sin colecciones, 8 torres" % n)
-		assert_false(without.has("disruptor") or without.has("mechanical_standard"))
+		assert_eq(without.size(), 9, "nivel %d: sin colecciones, 9 torres" % n)
+		assert_false(without.has("disruptor"))
+		assert_true(without.has("mechanical_standard"))
 		assert_true(without.has("mortar"), "nivel %d: el Mortero no pide colección" % n)
 		var with_all: Array = _ids(level.available_towers(all, func(_c: StringName) -> bool: return true))
 		assert_eq(with_all.size(), 10, "nivel %d: con las colecciones, 10 torres" % n)
@@ -117,12 +118,12 @@ func test_the_eleventh_marks_the_disruptor_as_new() -> void:
 		"el 11 es el primero que ofrece la Disruptora; la Ametralladora no debuta: se retira")
 
 
-func test_the_bar_shows_eight_towers_without_the_machine_gun_and_the_opening_is_viable() -> void:
+func test_the_bar_shows_nine_towers_without_the_machine_gun_and_the_opening_is_viable() -> void:
 	for n: int in _block():
 		_start(n)
-		assert_eq(_ids(game.available_towers).size(), 8)
+		assert_eq(_ids(game.available_towers).size(), 9)
 		assert_false(_ids(game.available_towers).has("basic"), "nivel %d: la barra no tiene la Ametralladora" % n)
-		assert_eq(game.hud._tower_buttons.size(), 8, "nivel %d: ocho botones" % n)
+		assert_eq(game.hud._tower_buttons.size(), 9, "nivel %d: nueve botones" % n)
 		# RF-474: el oro alcanza para Hielo (75) y una torre de 90 a 110 en la primera oleada.
 		var frost: TowerData = load("res://data/towers/frost.tres")
 		var middle: Array[TowerData] = []

@@ -56,7 +56,7 @@ func test_the_wiki_tower_entry_shows_pulse_and_limits() -> void:
 	var text: String = Wiki.tower_entry(disruptor).plain_text()
 	assert_string_contains(text, "Pulso cada 4 s")
 	assert_string_contains(text, "No alcanza al Espejo y no apaga otras habilidades.")
-	assert_string_contains(text, "130 de oro + 2 recursos")
+	assert_string_contains(text, "100 de oro + 2 recursos")
 
 
 func test_the_effects_article_explains_suppression_without_numbers() -> void:

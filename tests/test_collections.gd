@@ -82,8 +82,10 @@ func test_both_collections_coexist_and_technology_is_unchanged() -> void:
 	assert_true(CollectionDefinitions.exists(&"disruptor"))
 	assert_eq(CollectionDefinitions.required(&"technology"), 5)
 	assert_eq(CollectionDefinitions.origin(&"technology"), CollectionDefinitions.ORIGIN_CARRIER)
+	assert_true(CollectionDefinitions.is_suspended(&"technology"))
 	assert_eq(CollectionDefinitions.sources(&"technology"), PackedStringArray(["level_01", "level_02", "level_03", "level_04", "level_05"]))
 	assert_eq(CollectionDefinitions.required(&"disruptor"), 3)
+	assert_false(CollectionDefinitions.is_suspended(&"disruptor"))
 	assert_eq(CollectionDefinitions.origin(&"disruptor"), CollectionDefinitions.ORIGIN_FINDING)
 	assert_eq(CollectionDefinitions.name_of(&"disruptor"), "Disruptora")
 	assert_eq(CollectionDefinitions.sources(&"disruptor"), PackedStringArray(["level_08", "level_09", "level_10"]))
@@ -99,11 +101,11 @@ func test_collectible_run_wrappers_match_definitions() -> void:
 	assert_eq(CollectibleRun.required(&"nope"), 0)
 
 
-func test_collection_of_level_falls_back_to_technology() -> void:
-	assert_eq(CollectionDefinitions.collection_of_level(&"level_02"), &"technology")
+func test_collection_of_level_omits_the_suspended_collection() -> void:
+	assert_eq(CollectionDefinitions.collection_of_level(&"level_02"), &"")
 	assert_eq(CollectionDefinitions.collection_of_level(&"level_09"), &"disruptor")
-	assert_eq(CollectionDefinitions.collection_of_level(&"level_06"), &"technology", "no es fuente de ninguna")
-	assert_eq(CollectionDefinitions.collection_of_level(&"prueba"), &"technology")
+	assert_eq(CollectionDefinitions.collection_of_level(&"level_06"), &"", "no es fuente de ninguna activa")
+	assert_eq(CollectionDefinitions.collection_of_level(&"prueba"), &"")
 
 
 # --- FindingRun (RF-426, RF-427) ---
@@ -138,6 +140,7 @@ func test_repeating_a_piece_does_not_duplicate() -> void:
 func test_a_level_that_is_not_a_source_gives_no_piece() -> void:
 	var run := FindingRun.new()
 	assert_false(run.pick(&"disruptor", &"level_06", 1))
+	assert_false(run.pick(&"technology", &"level_01", 1), "la colección suspendida conserva su fuente pero no da piezas")
 	assert_false(run.pick(&"nope", &"level_08", 1))
 	assert_true(run.pending().is_empty())
 
@@ -294,16 +297,18 @@ func test_community_and_test_mode_do_not_collect() -> void:
 func test_hud_bar_shows_the_collection_of_the_level() -> void:
 	SaveManager.collect_source(&"disruptor", &"level_09")
 	_start_campaign(_ruin_level())
+	assert_true((game.hud.get_node("TopBar/Stats/TechnologyStat") as Control).visible)
 	assert_eq((game.hud.get_node("%TechnologyLabel") as Label).text, "1/3")
 	_demolish()
 	assert_eq((game.hud.get_node("%TechnologyLabel") as Label).text, "2/3", "la pendiente se suma a la barra")
 	GameFlow.campaign.levels = [GameFlow.level(0)] as Array[LevelData]
 
 
-func test_technology_level_keeps_showing_technology_in_the_bar() -> void:
+func test_technology_level_hides_the_stat_even_with_saved_advances() -> void:
 	SaveManager.collect_source(&"technology", &"level_02")
 	_start_campaign(_ruin_level(&"level_01"))
-	assert_eq((game.hud.get_node("%TechnologyLabel") as Label).text, "1/5")
+	assert_false((game.hud.get_node("TopBar/Stats/TechnologyStat") as Control).visible)
+	assert_eq(SaveManager.collected_sources(&"technology"), PackedStringArray(["level_02"]))
 
 
 # --- Textos y Wiki (RF-431) ---
@@ -324,5 +329,6 @@ func test_wiki_has_a_collections_category() -> void:
 	for category: WikiCategory in Wiki.categories(GameFlow.campaign.levels):
 		if category.id == &"colecciones":
 			found = true
-			assert_eq(category.entries.size(), CollectionDefinitions.ids().size())
+			assert_eq(category.entries.size(), 1)
+			assert_eq(category.entries[0].id, &"disruptor")
 	assert_true(found)

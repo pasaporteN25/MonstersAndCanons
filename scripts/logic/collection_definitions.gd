@@ -7,7 +7,7 @@ extends RefCounted
 const PATH: String = "res://data/progression.json"
 const ORIGIN_CARRIER: StringName = &"portador"
 const ORIGIN_FINDING: StringName = &"hallazgo"
-## Colección que muestra la barra cuando el nivel no es fuente de ninguna (RF-431).
+## Colección histórica de la barra cuando el nivel no es fuente de ninguna (RF-431).
 const DEFAULT_COLLECTION: StringName = &"technology"
 ## El disco plateado de siempre: lo usa toda colección que no trae su propio `icono` (la silueta propia
 ## de cada colección llega con el arte, Q-39).
@@ -41,6 +41,11 @@ static func required(collection_id: StringName) -> int:
 	return int(_definition(collection_id).get("required", 0))
 
 
+## RF-751: la suspensión es jugable; definición, fuentes y progreso siguen siendo válidos.
+static func is_suspended(collection_id: StringName) -> bool:
+	return _definition(collection_id).get("suspendida", false) == true
+
+
 static func sources(collection_id: StringName) -> PackedStringArray:
 	return PackedStringArray(_definition(collection_id).get("sources", []))
 
@@ -63,12 +68,12 @@ static func icon_of(collection_id: StringName) -> String:
 	return String(_definition(collection_id).get("icono", DEFAULT_ICON))
 
 
-## RF-431: la colección de la que `level_id` es fuente, o `technology` si no es fuente de ninguna.
+## RF-431/RF-751: colección visible en la barra o cadena vacía si está suspendida.
 static func collection_of_level(level_id: StringName) -> StringName:
 	for id: StringName in ids():
-		if eligible(id, level_id):
+		if eligible(id, level_id) and not is_suspended(id):
 			return id
-	return DEFAULT_COLLECTION
+	return &"" if is_suspended(DEFAULT_COLLECTION) else DEFAULT_COLLECTION
 
 
 ## RF-425: un `required` que no coincide con la cantidad de `sources` es un error. Devuelve los

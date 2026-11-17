@@ -222,6 +222,9 @@ func test_ruin_with_finding_gives_piece_or_repeat_resources() -> void:
 func test_panel_texts_come_from_data() -> void:
 	var spec: ObstacleSpec = _specs(50)[1]
 	assert_eq(ObstacleText.reward_line(spec, false), "Puede dar 1 recurso (50 %)")
+	spec.chance_percent = 100
+	spec.reward_amount = 2
+	assert_eq(ObstacleText.reward_line(spec, false), "Da 2 recursos")
 	spec.chance_percent = 0
 	assert_eq(ObstacleText.reward_line(spec, false), "No da recursos")
 	assert_eq(ObstacleText.missing_gold(40, 25), "Te faltan 15 de oro")
