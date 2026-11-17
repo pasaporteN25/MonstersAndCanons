@@ -319,7 +319,7 @@ func test_sniper_button_stays_enabled_with_gold_only() -> void:
 	var button: Button = _bar_button(sniper)
 	assert_eq(button.text, "150")
 	assert_false(button.disabled)
-	assert_string_contains(button.tooltip_text, "120 de oro + 1 recurso")
+	assert_false(button.tooltip_text.contains(TowerText.cost_text(sniper, true)), "el mapa sin fuentes ofrece solo oro")
 
 
 func test_sniper_help_shows_two_payment_buttons() -> void:
@@ -328,31 +328,36 @@ func test_sniper_help_shows_two_payment_buttons() -> void:
 	var gold_button: Button = game.hud._pay_gold_button
 	var alt_button: Button = game.hud._pay_alt_button
 	assert_true(gold_button.visible and alt_button.visible)
-	assert_eq(gold_button.text, "150 de oro")
-	assert_eq(alt_button.text, "120 de oro + 1 recurso")
+	assert_eq(gold_button.text, "Solo oro · %s" % TowerText.cost_text(sniper))
+	assert_eq(alt_button.text, "Usar recursos · %s" % TowerText.cost_text(sniper, true))
 	assert_true(gold_button.button_pressed, "solo oro de entrada")
-	assert_true(alt_button.disabled, "sin recursos")
-	assert_string_contains(alt_button.tooltip_text, "Faltan 1 recurso")
-	game.session.add_resources(1)
-	assert_false(alt_button.disabled)
+	assert_false(alt_button.disabled, "se puede elegir e inspeccionar aunque no alcance")
 	alt_button.pressed.emit()
 	assert_true(game.build_controller.pay_alt())
 	assert_true(alt_button.button_pressed)
 	assert_false(gold_button.button_pressed)
+	var hint: Label = game.hud.get_node("%BuildInfoText")
+	assert_string_contains(hint.text, "Faltan 1 recurso")
+	game.session.add_resources(sniper.build_resources(true))
+	assert_true(hint.text.begins_with(sniper.description_text()))
+	gold_button.pressed.emit()
+	assert_false(game.build_controller.pay_alt())
+	assert_true(gold_button.button_pressed)
+	assert_false(alt_button.button_pressed)
 
 
-func test_second_payment_is_disabled_on_a_map_without_resources() -> void:
+func test_second_payment_is_hidden_on_a_map_without_resources() -> void:
 	_start_game(false)
 	game.build_controller.select(game.available_towers.find(sniper))
-	assert_true(game.hud._pay_alt_button.disabled)
-	assert_string_contains(game.hud._pay_alt_button.tooltip_text, "no tiene cómo conseguirlos")
+	assert_false(game.hud._pay_alt_button.visible)
+	assert_string_contains((game.hud.get_node("%BuildInfoName") as Label).text, TowerText.cost_text(sniper))
 
 
 func test_help_of_a_normal_tower_hides_the_payment_buttons() -> void:
 	_start_game(true, 100)
 	game.build_controller.select(game.available_towers.find(mortar))
 	assert_false(game.hud._pay_gold_button.visible)
-	assert_string_contains((game.hud.get_node("%BuildInfoName") as Label).text, "300 de oro + 3 recursos")
+	assert_string_contains((game.hud.get_node("%BuildInfoName") as Label).text, TowerText.cost_text(mortar))
 
 
 # --- Panel y Wiki (RF-418, RF-437) ---

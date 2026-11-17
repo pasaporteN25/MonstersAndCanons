@@ -1,5 +1,9 @@
 # Novedades del juego
 
+## Elegí cómo pagar al construir (T593)
+
+Cuando una torre tiene dos precios, ves cuánto cuesta con solo oro y cuánto cuesta usando recursos. Empezás con «Solo oro» y podés elegir «Usar recursos» antes de confirmar. La compra indica qué te falta y cobra la opción que elegiste.
+
 ## El Estandarte mecánico se habilita directamente (T592)
 
 La torre de apoyo aparece desde el nivel 6 en los mapas que la ofrecen. Ya no tenés que reunir avances para acceder a ella. Su precio, el aumento de cadencia y la reparación se mantienen. Los hallazgos de la Disruptora conservan su propio recorrido.
