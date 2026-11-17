@@ -3338,3 +3338,11 @@ Spec en **M80** (RF-716 a RF-719), razones y canon en **D-212**, el cómo en la 
 
 - [ ] **T590 · Informe: música con licencia libre para el juego. `[mobile+x86]`**
   **Refs:** B-70, RF-354, RF-472. **Ejecutor:** Codex · Terra 6.1, medio. **Ficha:** `tareas/T590-informe-musica-licencia-libre.md`. **Hecho cuando:** existe `specs/tareas/informes/T590-musica-licencia-libre.md` con repositorios, licencias, géneros y sugerencias por momento del juego, y cómo acreditar cada pista; no se bajó ni se integró música.
+
+## M91 · Candidata 1.0 (D-236)
+
+- [ ] **T592 · Dar acceso directo al Estandarte mecánico.** RF-751. Depende de D-236. [Ficha](tareas/T592-estandarte-v1.md). **Hecho cuando** los mapas que la ofrecen habilitan la torre sin exigir avances y el público deja de ver la colección suspendida.
+- [ ] **T593 · Elegir cómo pagar al construir.** RF-752. Depende de D-236. [Ficha](tareas/T593-eleccion-de-pago.md). **Hecho cuando** PC y celular permiten elegir ambas vías y confirman exactamente el precio indicado.
+- [ ] **T594 · Medir y ajustar demolición y compras mixtas.** RF-753. Depende de D-236. [Ficha](tareas/T594-recursos-y-precios.md). **Hecho cuando** los datos del candidato tienen cantidades y precios comprobados con los controles 7 y 9.
+- [ ] **T595 · Medir el ingreso de oro en niveles altos.** RF-754. Depende de T592 y T594 para la comparación final. [Ficha](tareas/T595-oro-en-niveles-altos.md). **Hecho cuando** se registran base y candidato, resultados por mapa y qué ajustes pasan el criterio.
+- [ ] **T596 · Preparar la prueba 1.0.** RF-755. Depende de T592–T595 según el resultado de admisión, y de T268/T375 para exportación de entrega. [Ficha](tareas/T596-candidata-de-prueba.md). **Hecho cuando** hay una revisión identificada, pruebas registradas y paquetes verificables de las plataformas acordadas para Lucas.
