@@ -263,13 +263,17 @@ Las dos líneas tienen que tener una ruta, no `""`.
 
 ### 7.3 Exportar
 
-La configuración está en `export_presets.cfg`, preset **"Android"**: paquete `com.juegoa.towerdefense`, solo celulares de 64 bits (arm64), sin Gradle. El proyecto ya tiene activada la compresión de texturas **ETC2/ASTC** (la que usan los celulares) y un ícono propio (`assets/icon.png`, generado con `tools/make_icon.gd`).
+La configuración está en `export_presets.cfg`, preset **"Android"**. El paquete actual es `com.monsterscanons.v1`. Revisá en ese preset las arquitecturas habilitadas antes de preparar la entrega. El proyecto tiene activada la compresión de texturas **ETC2/ASTC** y usa un ícono propio (`assets/icon.png`).
 
 ```bash
 godot --headless --path . --export-debug "Android" build/MonstersCanons.apk
 ```
 
 Se usa `--export-debug` porque la versión de **prueba** se firma sola con la clave de depuración. (Publicar en la Play Store requiere una clave propia y `--export-release`; eso no está hecho.) Mientras no esté el SDK de Android (T237), la APK `MonstersCanons.apk` no se genera en la máquina Linux.
+
+### 7.3.1 Actualizar una APK ya instalada
+
+Para una actualización por APK, conservá el identificador del paquete y el certificado de firma de la instalación que querés actualizar. Incrementá `version/code` en el preset de Android y actualizá el nombre de versión y las notas del juego. Antes de compartirla, instalá la APK nueva sobre la anterior en un teléfono de prueba y comprobá que conserva el progreso. Guardá el APK, el commit de `main`, su SHA-256 y la huella pública del certificado para poder reconocer la próxima actualización. La [guía de actualizaciones de Android](https://developer.android.com/google/play/app-updates) describe los requisitos de instalación.
 
 ### 7.4 Instalar en el celular
 
