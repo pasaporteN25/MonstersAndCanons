@@ -6,8 +6,8 @@
   "aumento_vida": 24,
   "tema": "bosque",
   "leyenda": {
-    "t": {"removible":{"clase":"arbol","probabilidad":50.0,"recursos":1.0}},
-    "r": {"removible":{"clase":"roca","probabilidad":50.0,"recursos":1.0}},
+    "t": {"removible":{"clase":"arbol","probabilidad":100.0,"recursos":1.0}},
+    "r": {"removible":{"clase":"roca","probabilidad":100.0,"recursos":2.0}},
     "m": {"dibujo":"roca_marcada"},
     "f": {"dibujo":"helecho"}
   },

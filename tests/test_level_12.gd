@@ -140,8 +140,8 @@ func test_a_forest_instead_of_the_mine_five_removables_markers_and_no_findings()
 			continue
 		removables += 1
 		assert_eq(obstacle.finding_collection, &"", "sin hallazgos")
-		assert_eq(obstacle.reward_amount, 1)
-		assert_between(obstacle.chance_percent, 1, 99, "al azar, con semilla (RF-417)")
+		assert_eq(obstacle.reward_amount, 2)
+		assert_eq(obstacle.chance_percent, 100, "RF-753: recurso garantizado")
 	assert_eq(sources, 1)
 	assert_between(removables, 4, 6, "de 4 a 6 removibles")
 	assert_true(level.uses_resources())
@@ -237,7 +237,7 @@ func test_the_forest_pays_for_a_mortar_in_two_waves_and_the_level_works_without_
 	game.session.state = LevelSession.State.WAVE_RUNNING
 	game.session.complete_wave()
 	assert_eq(game.session.resources, 4)
-	assert_true(game.build_controller.try_build(mortar, MORTAR_BLOCKS[0]), "300 de oro y 3 recursos")
+	assert_true(game.build_controller.try_build(mortar, MORTAR_BLOCKS[0]), "250 de oro y 3 recursos")
 	assert_eq(game.session.resources, 1)
 
 

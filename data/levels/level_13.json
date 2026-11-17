@@ -6,8 +6,8 @@
   "aumento_vida": 40,
   "tema": "nieve",
   "leyenda": {
-    "e": {"removible":{"clase":"escombro","probabilidad":50.0,"recursos":1.0}},
-    "r": {"removible":{"clase":"roca","probabilidad":50.0,"recursos":1.0}},
+    "e": {"removible":{"clase":"escombro","probabilidad":100.0,"recursos":2.0}},
+    "r": {"removible":{"clase":"roca","probabilidad":100.0,"recursos":2.0}},
     "m": {"extraccion":{"clase":"mina"}},
     "b": {"extraccion":{"clase":"bosque_explotable"}},
     "i": {"dibujo":"hielo"},

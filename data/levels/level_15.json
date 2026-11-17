@@ -15,7 +15,7 @@
     "v": {"dibujo":"supply_cart"},
     "m": {"extraccion":{"clase":"mina"}},
     "b": {"extraccion":{"clase":"bosque_explotable"}},
-    "e": {"removible":{"clase":"escombro","probabilidad":50.0,"recursos":1.0}},
+    "e": {"removible":{"clase":"escombro","probabilidad":100.0,"recursos":2.0}},
     "c": {"dibujo":"campamento_vacio"},
     "s": {"dibujo":"roca_marcada"}
   },

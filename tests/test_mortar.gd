@@ -41,7 +41,7 @@ func test_the_mortar_has_the_numbers_of_the_spec() -> void:
 	assert_false(mortar.can_hit_air, "no le pega a los voladores")
 	assert_eq(mortar.projectile_speed_tiles, 6.0)
 	assert_eq(mortar.levels.size(), 3)
-	var costs: Array[int] = [300, 250, 350]
+	var costs: Array[int] = [250, 250, 350]
 	var damage: Array[int] = [90, 140, 220]
 	var ranges: Array[float] = [5.0, 5.0, 5.5]
 	var splash: Array[float] = [1.5, 1.8, 2.2]
@@ -81,7 +81,7 @@ func test_key_9_chooses_the_mortar() -> void:
 
 func test_the_bar_shows_the_mortar_with_its_cost_and_key() -> void:
 	var button: Button = game.hud._tower_buttons[8]
-	assert_eq(button.text, "300 + 3", "RF-418: oro y recursos")
+	assert_eq(button.text, "250 + 3", "RF-418: oro y recursos")
 	assert_string_contains(button.tooltip_text, "Mortero")
 	assert_string_contains(button.tooltip_text, "tecla 9")
 
@@ -97,19 +97,19 @@ func test_choosing_the_mortar_says_it_needs_a_square() -> void:
 
 # --- En el juego (RF-291, RF-296) ---
 
-func test_building_a_real_mortar_takes_four_cells_and_its_300_gold() -> void:
+func test_building_a_real_mortar_takes_four_cells_and_its_250_gold() -> void:
 	var origin: Vector2i = _free_block()
 	assert_ne(origin, Vector2i(-1, -1))
 	var gold: int = game.session.gold
 	assert_true(game.build_controller.try_build(mortar, origin))
-	assert_eq(game.session.gold, gold - 300)
+	assert_eq(game.session.gold, gold - 250)
 	assert_eq(game.build_controller.tower_at(origin + Vector2i(1, 1)), game.build_controller.tower_at(origin))
 
 
-func test_the_mortar_needs_its_300_gold() -> void:
+func test_the_mortar_needs_its_250_gold() -> void:
 	var origin: Vector2i = _free_block()
-	game.session.spend(game.session.gold - 299)
-	assert_false(game.build_controller.try_build(mortar, origin), "con 299 no alcanza")
+	game.session.spend(game.session.gold - 249)
+	assert_false(game.build_controller.try_build(mortar, origin), "con 249 no alcanza")
 	assert_true(game.build_controller._level.is_buildable(origin), "la casilla sigue libre")
 
 

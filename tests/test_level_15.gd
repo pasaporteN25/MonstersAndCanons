@@ -205,7 +205,7 @@ func test_one_mine_two_forests_four_to_six_removables_and_no_findings() -> void:
 			continue
 		removables += 1
 		assert_eq(obstacle.finding_collection, &"", "sin hallazgos")
-		assert_between(obstacle.chance_percent, 1, 99, "al azar, con semilla (RF-417)")
+		assert_eq(obstacle.chance_percent, 100, "RF-753: recurso garantizado")
 	classes.sort()
 	assert_eq(classes, ["bosque_explotable", "bosque_explotable", "mina"])
 	assert_between(removables, 4, 6, "de 4 a 6 removibles")

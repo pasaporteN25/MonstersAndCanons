@@ -7,8 +7,8 @@
   "tema": "desierto",
   "leyenda": {
     "u": {"removible":{"clase":"escombro","hallazgo":"disruptor"}},
-    "e": {"removible":{"clase":"escombro","probabilidad":50.0,"recursos":1.0}},
-    "r": {"removible":{"clase":"roca","probabilidad":50.0,"recursos":1.0}},
+    "e": {"removible":{"clase":"escombro","probabilidad":100.0,"recursos":2.0}},
+    "r": {"removible":{"clase":"roca","probabilidad":100.0,"recursos":2.0}},
     "m": {"extraccion":{"clase":"mina"}},
     "s": {"dibujo":"simbolo_ruina"},
     "p": {"dibujo":"columna"}

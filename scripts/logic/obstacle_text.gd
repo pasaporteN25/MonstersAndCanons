@@ -25,7 +25,7 @@ static func missing_gold(cost: int, gold: int) -> String:
 	return Localization.t_fmt(&"obstacle.short_gold", {"n": maxi(cost - gold, 0)})
 
 
-## RF-404: la recompensa sin mostrar el sorteo.
+## RF-404 y RF-753: distinguir entre una recompensa garantizada y una probable.
 ## RF-428 y RF-429: `collects` = false cuando la partida no recoge piezas (modos, comunidad, editor, pruebas).
 static func reward_line(spec: ObstacleSpec, recovered: bool, collects: bool = true) -> String:
 	if spec.finding_collection != &"":
@@ -34,6 +34,8 @@ static func reward_line(spec: ObstacleSpec, recovered: bool, collects: bool = tr
 		var name: String = CollectionDefinitions.name_of(spec.finding_collection)
 		return Localization.t_fmt(&"obstacle.piece", {"name": name, "state": Localization.t(&"obstacle.piece_recovered" if recovered else &"obstacle.piece_pending")})
 	if spec.chance_percent > 0 and spec.reward_amount > 0:
+		if spec.chance_percent == 100:
+			return Localization.t_fmt(&"obstacle.gives", {"n": spec.reward_amount, "word": TowerText.resources_word(spec.reward_amount)})
 		return Localization.t_fmt(&"obstacle.may_give", {"n": spec.reward_amount, "word": TowerText.resources_word(spec.reward_amount), "pct": spec.chance_percent})
 	return Localization.t(&"obstacle.gives_nothing")
 

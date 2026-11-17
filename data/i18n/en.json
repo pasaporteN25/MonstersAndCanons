@@ -336,6 +336,7 @@
     {"clave": "obstacle.piece_recovered", "texto": "already recovered"},
     {"clave": "obstacle.piece_pending", "texto": "pending"},
     {"clave": "obstacle.may_give", "texto": "May give {n} {word} ({pct} %)"},
+    {"clave": "obstacle.gives", "texto": "Gives {n} {word}"},
     {"clave": "obstacle.gives_nothing", "texto": "Gives no resources"},
     {"clave": "obstacle.time_left", "texto": "Left: {x} s"},
     {"clave": "obstacle.enable", "texto": "Enable extraction ({n} gold)"},
