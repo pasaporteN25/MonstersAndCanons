@@ -861,6 +861,10 @@ func _blink(label: Label) -> void:
 		tween.tween_property(label, "modulate", Color(1, 1, 1, 0.25), 0.06)
 		tween.tween_property(label, "modulate", Color.WHITE, 0.06)
 
+func set_collection_visible(shown: bool) -> void:
+	($TopBar/Stats/TechnologyStat as Control).visible = shown
+
+
 func show_collection(count: int, required: int, state: String, collection: StringName = &"technology") -> void:
 	(%TechnologyLabel as Label).text = "%d/%d" % [count, required]
 	var icon: TextureRect = get_node("TopBar/Stats/TechnologyStat/TechnologyIcon")

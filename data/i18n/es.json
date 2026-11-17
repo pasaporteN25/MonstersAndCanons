@@ -108,7 +108,7 @@
     {"clave": "tower.frost.name", "texto": "Hielo"},
     {"clave": "tower.frost.description", "texto": "Casi no hace daño, pero frena a los enemigos para que las demás torres les peguen más."},
     {"clave": "tower.mechanical_standard.name", "texto": "Estandarte mecánico"},
-    {"clave": "tower.mechanical_standard.description", "texto": "Estatua de ingeniería: aumenta la cadencia de los cañones cercanos. No dispara ni acumula su apoyo con otros estandartes. Requiere cinco avances y permiso del nivel. Repara desgaste dentro del radio (no aturdimiento), sin autorrepararse ni acumular tasas."},
+    {"clave": "tower.mechanical_standard.description", "texto": "Estatua de ingeniería: aumenta la cadencia de los cañones cercanos. No dispara ni acumula su apoyo con otros estandartes. Repara desgaste dentro del radio (no aturdimiento), sin autorrepararse ni acumular tasas."},
     {"clave": "tower.mortar.name", "texto": "Mortero"},
     {"clave": "tower.mortar.description", "texto": "Bomba lenta de gran daño en área y largo alcance. Ideal contra blindados y jefes."},
     {"clave": "tower.multi.name", "texto": "Múltiple"},

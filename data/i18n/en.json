@@ -108,7 +108,7 @@
     {"clave": "tower.frost.name", "texto": "Frost"},
     {"clave": "tower.frost.description", "texto": "Hardly does any damage, but slows enemies down so the other towers hit them harder."},
     {"clave": "tower.mechanical_standard.name", "texto": "Mechanical Banner"},
-    {"clave": "tower.mechanical_standard.description", "texto": "Engineering statue: raises the fire rate of nearby cannons. It doesn't shoot and its support doesn't stack with other banners. Requires five advances and the level's permission. Repairs wear inside its radius (not stun), without repairing itself or stacking rates."},
+    {"clave": "tower.mechanical_standard.description", "texto": "Engineering statue: raises the fire rate of nearby cannons. It doesn't shoot and its support doesn't stack with other banners. Repairs wear inside its radius (not stun), without repairing itself or stacking rates."},
     {"clave": "tower.mortar.name", "texto": "Mortar"},
     {"clave": "tower.mortar.description", "texto": "Slow bomb with big area damage and long range. Ideal against armored enemies and bosses."},
     {"clave": "tower.multi.name", "texto": "Multi"},

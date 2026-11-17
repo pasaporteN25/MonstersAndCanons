@@ -17,7 +17,7 @@ static func piece_id(collection: StringName, source: StringName) -> String:
 ## Recoge la pieza (queda pendiente). Devuelve false si el nivel no es fuente de esa colección o si
 ## la pieza ya está recogida en esta partida: repetir no duplica.
 func pick(collection: StringName, source: StringName, wave_to_confirm: int) -> bool:
-	if not CollectionDefinitions.eligible(collection, source):
+	if CollectionDefinitions.is_suspended(collection) or not CollectionDefinitions.eligible(collection, source):
 		return false
 	var id: String = piece_id(collection, source)
 	if _pending.has(id) or _confirmed.has(id):

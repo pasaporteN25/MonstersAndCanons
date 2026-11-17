@@ -1,5 +1,9 @@
 # Novedades del juego
 
+## El Estandarte mecánico se habilita directamente (T592)
+
+La torre de apoyo aparece desde el nivel 6 en los mapas que la ofrecen. Ya no tenés que reunir avances para acceder a ella. Su precio, el aumento de cadencia y la reparación se mantienen. Los hallazgos de la Disruptora conservan su propio recorrido.
+
 ## El panel del tutorial tiene aire y «Saltar tutorial» ya no se sale
 
 En el celular (y en la PC), el texto del panel del tutorial ya no queda pegado al borde y el botón «Saltar tutorial» entra dentro del panel. El margen se retoca en `data/tutorial/tutorial.json` (`"tarjeta"`). Sin probar en un teléfono real.

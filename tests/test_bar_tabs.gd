@@ -368,14 +368,14 @@ func test_an_eleventh_tower_has_no_key_and_no_key_tooltip() -> void:
 	assert_eq(game.build_controller.selected_tower(), game.available_towers[10], "la 11 se elige con el mouse o el dedo")
 
 
-func test_the_testing_mode_can_add_the_collection_towers_and_the_bar_rearranges() -> void:
+func test_the_testing_mode_can_add_the_disruptor_and_the_bar_rearranges() -> void:
 	await _start(10)
-	assert_eq(game.hud._tower_buttons.size(), 9, "sin colecciones, 9 torres")
+	assert_eq(game.hud._tower_buttons.size(), 10, "el Estandarte está disponible sin avances")
 	DevMode.enabled = true  # `dev_enable_collections` solo actúa con el modo de pruebas (RF-436)
 	game.dev_enable_collections(true)
 	DevMode.enabled = false
 	DevMode.collections_unlocked = false
-	assert_eq(game.hud._tower_buttons.size(), 11, "RF-447: «todas las colecciones» suma las torres")
+	assert_eq(game.hud._tower_buttons.size(), 11, "RF-447: «todas las colecciones» suma la Disruptora")
 	await get_tree().process_frame
 	var previous_end: float = 0.0
 	for button: Button in game.hud._tower_buttons:
@@ -674,11 +674,10 @@ func test_a_confirmed_piece_without_a_result_is_also_lost_and_listed() -> void:
 	assert_false(FileAccess.file_exists(SAVE_PATH))
 
 
-func test_a_technology_piece_is_counted_with_its_name() -> void:
+func test_the_exit_dialog_does_not_count_a_suspended_piece() -> void:
 	await _start(1)
-	assert_not_null(game.collectible, "el nivel 1 es fuente de avances tecnológicos")
-	game.collectible.pick(1)
-	assert_eq(game.lost_pieces(), ["technology"])
+	assert_null(game.collectible, "el portador del nivel 1 está suspendido en V1")
+	assert_true(game.lost_pieces().is_empty())
 	game.hud._exit_button.pressed.emit()
 	assert_eq(game.exit_dialog._message.text, ExitText.message())
 	game.exit_dialog._leave_button.pressed.emit()

@@ -3341,7 +3341,7 @@ Spec en **M80** (RF-716 a RF-719), razones y canon en **D-212**, el cómo en la 
 
 ## M91 · Candidata 1.0 (D-236)
 
-- [ ] **T592 · Dar acceso directo al Estandarte mecánico.** RF-751. Depende de D-236. [Ficha](tareas/T592-estandarte-v1.md). **Hecho cuando** los mapas que la ofrecen habilitan la torre sin exigir avances y el público deja de ver la colección suspendida.
+- [x] **T592 · Dar acceso directo al Estandarte mecánico.** RF-751. Depende de D-236. [Ficha](tareas/T592-estandarte-v1.md). **Hecho cuando** los mapas que la ofrecen habilitan la torre sin exigir avances y el público deja de ver la colección suspendida. **Resultado** · Colección suspendida en V1, datos y progreso conservados, acceso directo por mapa y Disruptora independiente. GUT focalizado 170/170 y arranque headless. La prueba en teléfono real queda para T596.
 - [ ] **T593 · Elegir cómo pagar al construir.** RF-752. Depende de D-236. [Ficha](tareas/T593-eleccion-de-pago.md). **Hecho cuando** PC y celular permiten elegir ambas vías y confirman exactamente el precio indicado.
 - [ ] **T594 · Medir y ajustar demolición y compras mixtas.** RF-753. Depende de D-236. [Ficha](tareas/T594-recursos-y-precios.md). **Hecho cuando** los datos del candidato tienen cantidades y precios comprobados con los controles 7 y 9.
 - [ ] **T595 · Medir el ingreso de oro en niveles altos.** RF-754. Depende de T592 y T594 para la comparación final. [Ficha](tareas/T595-oro-en-niveles-altos.md). **Hecho cuando** se registran base y candidato, resultados por mapa y qué ajustes pasan el criterio.

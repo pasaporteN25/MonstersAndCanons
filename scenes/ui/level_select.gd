@@ -569,10 +569,11 @@ func _make_card(index: int) -> Button:
 	var compact: bool = not UiMode.is_mobile()
 	var card := _new_card(CAMPAIGN_CARD_SIZE if compact else CARD_SIZE)
 	card.text = ""
-	if level.extra_towers.has("mechanical_standard"):
-		card.tooltip_text = Localization.t_fmt(&"select.standard_tip", {"n": SaveManager.collected_sources(&"technology").size()})
-	elif CollectibleRun.eligible(&"technology", level.id):
-		card.tooltip_text = Localization.t_fmt(&"select.advance_tip", {"state": Localization.t(&"select.advance_done" if SaveManager.collected_sources(&"technology").has(String(level.id)) else &"select.advance_pending")})
+	if not CollectionDefinitions.is_suspended(&"technology"):
+		if level.extra_towers.has("mechanical_standard"):
+			card.tooltip_text = Localization.t_fmt(&"select.standard_tip", {"n": SaveManager.collected_sources(&"technology").size()})
+		elif CollectibleRun.eligible(&"technology", level.id):
+			card.tooltip_text = Localization.t_fmt(&"select.advance_tip", {"state": Localization.t(&"select.advance_done" if SaveManager.collected_sources(&"technology").has(String(level.id)) else &"select.advance_pending")})
 	var unlocked: bool = GameFlow.is_level_unlocked(index)
 	card.disabled = not unlocked
 	if compact:

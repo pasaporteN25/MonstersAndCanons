@@ -1366,7 +1366,7 @@ func _show_hall_of_fame_if_earned() -> void:
 		hall_of_fame = null)
 
 func _setup_collection() -> void:
-	if DevMode.enabled or testing or GameFlow.current_index < 0 or GameFlow.current_community != null:
+	if CollectionDefinitions.is_suspended(&"technology") or not _collects_pieces():
 		return
 	if not CollectibleRun.eligible(&"technology", level_data.id):
 		return
@@ -1381,9 +1381,12 @@ func _setup_collection() -> void:
 		collectible.setup(&"technology", level_data.id, count, rng)
 	_update_collection_notice()
 
-## RF-362 y RF-431: la barra muestra la colección de la que este nivel es fuente (o `technology`).
+## RF-431/RF-751: la barra muestra la colección visible de la que es fuente este nivel.
 func _update_collection_notice() -> void:
 	var id: StringName = CollectionDefinitions.collection_of_level(level_data.id)
+	hud.set_collection_visible(id != &"")
+	if id == &"":
+		return
 	var count: int = SaveManager.collected_sources(id).size()
 	var state: String = Localization.t(&"hud.collect_done_here" if SaveManager.collected_sources(id).has(String(level_data.id)) else &"hud.collect_pending_here")
 	if id == &"technology":
