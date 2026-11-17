@@ -1,5 +1,7 @@
 # 08 — Plan de cierre de Monsters & Canons V1, dividido en tareas
 
+> **Actualización del 2026-11-17.** Para decidir qué entra a la 1.0, ver [§15 · Alcance propuesto](#15-cierre-de-v1--alcance-propuesto-el-2026-11-17). La fotografía y decisiones anteriores quedan como referencia.
+
 Fecha: 2026-10-07. Lo preparó Claude (Opus 5.5) a pedido de Lucas, a partir de [07-lore-y-cierre-v1.md](07-lore-y-cierre-v1.md), del backlog (§13 de la spec) y del estado real del repositorio.
 
 > **Qué es:** el plan de trabajo para terminar la V1. Son 15 niveles con su lore y los sistemas que pide el 07 (demolición, recursos, extracción, colecciones y Disruptora), más la **base de la franquicia**. Está dividido en tareas `Txxx`. Cada una tiene su **ficha de delegación** en [`specs/tareas/`](tareas/), lista para pasársela a otro agente.
@@ -351,3 +353,43 @@ T476/T478/T479 se serializan por GameFlow/SceneTransition/Game/cámara y con jef
 ## 14. Flora alienígena de Cántaro (M84; T541/T542, 2026-10-27)
 
 Lucas aprobó las tres muestras A/B/C de T540 y pidió conservarlas y rotarlas. T541 registra RF-728/D-218, identifica los PNG T540 como modelos visuales aprobados para ser activos tras T542 y deja explícito que `flores.svg` solo es histórico cuando se complete el reemplazo. T542 integra los tres PNG en `MapDrawings` como selección estable por coordenada, usada por las seis casillas oficiales de los niveles 1, 3, 4 y 5, y por cualquier mapa que ya declare `flores`. La rotación debe usar las tres variantes sin RNG ni cambios de nivel/datos. Los archivos, datos, casillas, balance y guardado no cambian fuera de reemplazar la textura de ese dibujo. T542 espera los merges de #139 (T540) y T541; PR separado contra `main`, sin integración hasta que ambos estén en `main`.
+
+## 15. Cierre de V1 · Alcance propuesto el 2026-11-17
+
+Base revisada en el remoto · `main` en `4dc9a57`. Campaña de 15 niveles con final, Asedio con 15 mapas, tutorial inicial, infraestructura, modo de pruebas y herramientas ya integrados. M89 entró en `main` por el PR #178. T579 registró una suite de 2749/2749 y exportó una APK de depuración en su rama de integración, con capturas de interfaz simulada en 16:9 y 20:9. La prueba con teléfono real, las proporciones 19,5:9 y 21:9 y la validación de la build final siguen pendientes.
+
+### Qué hacer con el backlog
+
+| Grupo | Propuesta para la 1.0 |
+|---|---|
+| Estandarte y economía | Resolver la presentación del Estandarte (B-68, D-235) y medir un piloto chico de economía (B-67, parte de T582/T583/T585). Redefinir las fichas antes de ejecutar. |
+| Candidato y publicación | T268/T375 y T239. Aprobar Novedades, cerrar metadatos de versión, verificar el paquete y preparar página, licencias, notas y builds. |
+| Revisión de lo que ya está | T267, T545 y T534 son revisión sobre arte, textos e inglés ya integrados. Hacer una pasada acotada y corregir problemas concretos de legibilidad, datos o navegación. T454 y T579 dan la base para la prueba corta en Android real. Revisar T364/T369 si la prueba reproduce tirones, toques perdidos o problemas con la entrada de jefes. |
+| Post-V1 | Campaña manual completa y sesiones focalizadas (T238, T453, T280, T226 y T283), como fija D-216. También se propone diferir pozos (T577), canje (T584), nuevas fuentes de producción (parte de T583), ampliación del tutorial y lecciones (T576/T581), PvP (T580), confirmación de reintento (B-69), música nueva (T590 y rama T591), rotación de pantallas de carga (T479), franjas (T532), mejoras del editor y arte pendiente que no afecte la lectura (T216, T218–T221, T367 y T463). |
+| M&C 2 y M&C 3D | Guardar el sistema de avances y los apoyos (T586–T589, B-66/B-68) con la decisión, recursos y referencias de [D-235](04-decisiones.md#d-235--alcance-propuesto-para-el-cierre-de-v1). |
+
+La lista anterior propone prioridades. El [tablero 03](03-tareas.md) conserva los estados y las compuertas de cada tarea.
+
+### Por qué medir antes de tocar precios
+
+Hoy el oro entra al arrancar, por bajas y por cerrar oleadas. El bono por oleada es `20 + 5 × número de oleada` en `data/balance.tres`. Esta cuenta en los datos oficiales suma las recompensas base de los grupos programados, ponderadas por su probabilidad, suponiendo que mueren todos los que aparecen. Excluye crías, enemigos que escapan, robos, compras y devoluciones.
+
+| Nivel | Oleadas | Oro inicial | Oro por bajas programadas, aprox. | Bono acumulado |
+|---|---:|---:|---:|---:|
+| 9 | 20 | 320 | 6.444 | 1.450 |
+| 13 | 24 | 460 | 6.759 | 1.980 |
+| 14 | 26 | 480 | 9.009 | 2.275 |
+| 15 | 30 | 520 | 9.553 | 2.925 |
+
+El bono incluye el de la oleada final, cuando ya no hay compras. La cuenta estima ingreso bruto, y el sobrante real se mide durante la partida. La medición histórica que cita T575 dejó entre 2 y 5 vidas en 13–15 con `sin_recursos`. El 12 también tiene un antecedente de derrota con `mix mejoras=temprana` (T563/T579). Conviene evitar un porcentaje uniforme y distinguir los picos de oro de un mapa difícil que termina con mucho dinero en caja.
+
+El Francotirador ya se compra por **150 de oro** o **120 de oro + 1 recurso**. El Mortero cuesta **300 + 3** y la Disruptora **130 + 2**, con su propia condición de colección. Con la segunda vía opcional se puede bajar el precio en oro de una compra sin convertir los recursos en un peaje para toda la defensa. Extraer o demoler también cuesta oro y tiempo, así que el ahorro debe medirse descontando esa inversión.
+
+### Orden de ejecución y criterio de salida
+
+1. **Fijar alcance y escribir la enmienda.** Resolver si «ocultar el Estandarte» significa ocultar la colección y dar acceso a la torre, o sacar la torre de la partida y trasladar su efecto. Se recomienda la primera opción por su impacto acotado. Si se elige la segunda, acordar la regla del efecto antes del código. Definir en la misma enmienda el alcance del piloto económico y cuáles de las tareas antiguas pasan a una actualización. Crear fichas cortas con criterios de aceptación.
+2. **Tomar la línea de base y aislar el Estandarte.** Medir el mismo conjunto de mapas y semillas antes del cambio y con el candidato del Estandarte. Para la opción recomendada, comprobar catálogo y acceso en PC y celular desde un guardado nuevo y otro que ya tenga avances, y verificar que ni el HUD/perfil de campaña ni las recompensas muestren avances de `technology`. Probar que la disponibilidad por mapa, los tres hallazgos de la Disruptora, lo cosmético y los avances guardados sigan siendo válidos. Tomar nota de Asedio, Comunidad, editor, modo de pruebas y sus excepciones al formalizar la spec.
+3. **Probar la economía en campaña.** Comparar 11–15 con cinco semillas iguales por mapa y variante (`sin_recursos` y estrategias con infraestructura del bot), con 7 y 9 como controles del origen de recursos y del debut del Mortero. Primero desglosar ingresos, robos y gastos por tramo. Después variar una fuente de ingreso por vez, conservando la apertura y probando los recortes donde aparezca el excedente. El bot ya permite simular un multiplicador de oro por baja con `reward=`; un ajuste de bono requiere una variante separada. Confirmar que la lógica de oro efectivo, el texto de la recompensa y el arranque desde oleada avanzada sean coherentes, y evaluar récords por separado porque los puntos por baja hoy leen la misma recompensa base.
+4. **Decidir qué entra del piloto.** Medir victorias, vidas, oleada alcanzada, oro disponible antes del final, oro invertido en infraestructura y primera compra mixta. El cambio entra si reduce el sobrante donde se confirmó, sostiene al menos cuatro victorias de cinco sin recursos (RF-432), conserva el acceso al Mortero en el 9, y demuestra una compra mixta que valga el esfuerzo en una partida alcanzable. Comparar con la base por mapa y documentar cualquier fallo preexistente, en especial el 12. Si el resultado sigue abierto, la propuesta es dejar el ajuste de economía para una actualización y sacar la 1.0 con las vías de compra vigentes. En los mapas modificados alcanza una ayuda contextual en el catálogo y la Wiki que explique origen, costo y alcance local.
+5. **Preparar y probar un único candidato 1.0.0.** Completar T268/T375, GUT y validadores en el commit de entrega, incluido `check_novedades.gd`. Exportar desde `main` según [ONBOARDING](../ONBOARDING.md), con versión, código Android, plataformas acordadas y hashes. En PC y Android real hacer una prueba corta de arranque, guardado, tutorial y compra/venta, y saltar a un mapa con recursos y al tramo final para validar HUD, rendimiento y resultado. Usar la lista de [T579](tareas/T579-revision-integrada.md) como apoyo. Registrar el dispositivo y cualquier cobertura pendiente; T238 y T453 siguen después de publicar.
+6. **Publicar con T239.** Lucas aprueba Novedades y los materiales, publica la página, sube los paquetes y etiqueta la versión según la ficha. El candidato debe estar identificado, con la suite y las verificaciones de entrega registradas. Cualquier corrección visible se anota en el changelog del candidato.

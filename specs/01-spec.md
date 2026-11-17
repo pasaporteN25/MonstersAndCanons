@@ -1356,8 +1356,8 @@ Ideas **aprobadas como dirección**, pero **sin fecha**: no se programan hasta c
 |---|---|---|
 | [B-65](#b-65--modo-pvp-por-carrera-de-niveles) | PvP por carrera de niveles. | T580: solo investigación, post-V1 y prioridad baja. |
 | [B-66](#b-66--enemigo-que-congela-torres-en-una-zona) | Enemigo que congela torres en una zona. | Idea abierta, sin implementar. |
-| [B-67](#b-67--rediseño-de-la-economía-de-recursos) | Rediseño de la economía de recursos. | Dirección elegida en T575; valores y canje pendientes. |
-| [B-68](#b-68--futuro-de-los-estandartes-y-torres-de-apoyo) | Futuro de los Estandartes y torres de apoyo. | Desarrollo elegido; diseño T589 con compuerta. |
+| [B-67](#b-67--rediseño-de-la-economía-de-recursos) | Rediseño de la economía de recursos. | Piloto acotado propuesto para V1 en D-235; valores pendientes. |
+| [B-68](#b-68--futuro-de-los-estandartes-y-torres-de-apoyo) | Futuro de los Estandartes y torres de apoyo. | Simplificación de V1 en D-235; rediseño para M&C 2 y M&C 3D. |
 | [B-69](#b-69--confirmación-al-reintentar-un-nivel) | Confirmación al reintentar un nivel. | Pregunta abierta, sin implementar. |
 | [B-70](#b-70--buscar-música-con-licencia-libre) | Buscar música con licencia libre (informe). | T590: solo investigación, sin integrar música. |
 
@@ -1773,11 +1773,13 @@ Los cuatro enemigos que gustaron, con lo necesario para convertirlos en spec cua
 
 ### B-67 · Rediseño de la economía de recursos
 
+Para cerrar V1, Lucas plantea bajar el ingreso de oro en los niveles altos y darle al recurso un papel directo en la compra de torres. El piloto propuesto reutiliza el precio alternativo del Francotirador (RF-419) y evalúa hasta una torre adicional con las fuentes existentes. La selección de mapas, torres y valores sale de la medición. Ver [D-235](04-decisiones.md#d-235--alcance-propuesto-para-el-cierre-de-v1) y el [plan de cierre](08-plan-cierre-v1.md#15-cierre-de-v1--alcance-propuesto-el-2026-11-17).
+
 Lucas eligió R1 y R2, menos oro en niveles altos medido con el bot, fuentes estratégicas renovables o agotables y canje manual unitario y por bloques con bonus. Los detalles y valores esperan RF-745 a RF-747 y T582–T585. **Q-22 se mantiene:** mejorar no cuesta recursos (RF-418, D-083). No se eligieron precios nuevos en recursos para torres ni mejoras.
 
 ### B-68 · Futuro de los Estandartes y torres de apoyo
 
-Lucas eligió desarrollarlos mejor ahora. E1–E3 son la base (RF-749–750); T589 diseña alternativas con compuerta 🚦, vinculadas con B-66 y las semillas de parte 2 y 3D. No se aprobó ni implementó una mecánica nueva de apoyo.
+Para cerrar V1, Lucas plantea ocultar el sistema del Estandarte y dar acceso directo a lo que habilitaba. Se conservan los datos y el funcionamiento para retomarlos en M&C 2 y M&C 3D. La presentación exacta y el alcance de la habilitación se especifican según [D-235](04-decisiones.md#d-235--alcance-propuesto-para-el-cierre-de-v1). E1–E3 (RF-749–750) y T589 quedan como antecedentes del próximo diseño de apoyos, junto con B-66.
 
 ### B-69 · Confirmación al reintentar un nivel
 
