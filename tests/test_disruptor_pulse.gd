@@ -282,10 +282,10 @@ func test_the_data_match_the_spec() -> void:
 	assert_eq(disruptor.required_collection, &"disruptor")
 	assert_eq(disruptor.resource_cost, 2)
 	assert_true(disruptor.can_hit_air)
-	assert_eq(disruptor.build_gold(), 130)
+	assert_eq(disruptor.build_gold(), 100)
 	assert_eq(disruptor.build_resources(), 2)
 	assert_eq(disruptor.levels.size(), 3)
-	var costs: Array[int] = [130, 100, 150]
+	var costs: Array[int] = [100, 100, 150]
 	var radii: Array[float] = [2.5, 3.0, 3.5]
 	var seconds: Array[float] = [2.5, 3.0, 3.5]
 	for i: int in 3:

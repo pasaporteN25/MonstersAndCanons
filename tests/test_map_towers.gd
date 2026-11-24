@@ -110,10 +110,10 @@ func test_the_example_level_is_valid() -> void:
 
 # --- RF-395: la colección sigue mandando ---
 
-func test_the_collection_still_applies() -> void:
-	var level: LevelData = _level(["basic", "mechanical_standard"])
-	assert_eq(_ids(level.available_towers(all_towers, func(_c: StringName) -> bool: return false)), ["basic"])
-	assert_eq(_ids(level.available_towers(all_towers, func(_c: StringName) -> bool: return true)), ["basic", "mechanical_standard"])
+func test_only_active_collections_still_apply() -> void:
+	var level: LevelData = _level(["basic", "mechanical_standard", "disruptor"])
+	assert_eq(_ids(level.available_towers(all_towers, func(_c: StringName) -> bool: return false)), ["basic", "mechanical_standard"])
+	assert_eq(_ids(level.available_towers(all_towers, func(_c: StringName) -> bool: return true)), ["basic", "disruptor", "mechanical_standard"])
 
 
 # --- RF-396: modo y nivel juntos ---

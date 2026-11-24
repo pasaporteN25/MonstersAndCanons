@@ -59,6 +59,7 @@ var _resource_stat: HBoxContainer
 var _resource_label: Label
 var _pay_gold_button: Button
 var _pay_alt_button: Button
+var _build_description: String
 var _mobile_mode: bool = false
 var _mobile_config: MobileUiConfig
 
@@ -253,10 +254,13 @@ static func _resource_texture(size: int) -> Texture2D:
 	return ImageTexture.create_from_image(image)
 
 
-## RF-419: los dos botones chicos de pago de la ayuda de construcción. Solo se ven con una torre de dos precios.
+## RF-752: selección exclusiva de pago para torres con dos precios en mapas con recursos.
 func _build_payment_buttons() -> void:
 	_pay_gold_button = _payment_button(false)
 	_pay_alt_button = _payment_button(true)
+	var group := ButtonGroup.new()
+	_pay_gold_button.button_group = group
+	_pay_alt_button.button_group = group
 	_build_info.add_child(_pay_gold_button)
 	_build_info.add_child(_pay_alt_button)
 	_build_info.move_child(_pay_gold_button, 1)
@@ -270,6 +274,9 @@ func _payment_button(alt: bool) -> Button:
 	button.focus_mode = Control.FOCUS_NONE
 	button.visible = false
 	button.add_theme_font_size_override("font_size", 14)
+	var selected_color: Color = _build_info_name.get_theme_color("font_color")
+	button.add_theme_color_override("font_pressed_color", selected_color)
+	button.add_theme_color_override("font_hover_pressed_color", selected_color)
 	button.custom_minimum_size = Vector2(0, 28)
 	button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	button.pressed.connect(payment_pressed.emit.bind(alt))
@@ -572,9 +579,9 @@ func setup_towers(tower_types: Array[TowerData]) -> void:
 			button.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 		else:  # RF-156: sin dibujo, un cuadradito de su color.
 			button.icon = _color_swatch(tower.color)
-		if TowerText.uses_resources(tower):
+		if tower.resource_cost > 0 or (tower.has_alt_payment() and _uses_resources):
 			button.add_child(_resource_badge(tower, width))
-		if tower.has_alt_payment():
+		if tower.has_alt_payment() and _uses_resources:
 			button.tooltip_text += Localization.t_fmt(&"hud.or_cost", {"cost": TowerText.cost_text(tower, true)})
 		button.pressed.connect(tower_button_pressed.emit.bind(i))
 		_tower_button_row.add_child(button)
@@ -663,24 +670,24 @@ func show_selected_tower(index: int) -> void:
 	_pay_alt_button.visible = false
 	if index >= 0:
 		var tower: TowerData = _tower_types[index]
-		if tower.has_alt_payment():  # RF-419: dos botones chicos; el nombre queda sin precio
+		_build_description = tower.description_text()
+		if tower.footprint > 1:  # RF-298
+			_build_description += Localization.t_fmt(&"hud.needs_space", {"n": tower.footprint})
+		if tower.levels[0].suppress_seconds > 0.0:  # RF-450
+			_build_description += " " + TowerText.pulse_line(tower.levels[0], TowerText.emitter_names(Wiki._all_enemies()))
+		var combo: String = TowerText.combo_hint(tower, _tower_types)  # RF-317
+		if combo != "":
+			_build_description += " " + combo
+		_build_info_text.text = _build_description
+		if tower.has_alt_payment() and _uses_resources:
 			_build_info_name.text = tower.name_text()
-			_pay_gold_button.text = TowerText.cost_text(tower)
-			_pay_alt_button.text = TowerText.cost_text(tower, true)
+			_pay_gold_button.text = "%s · %s" % [Localization.t(&"towertext.pay_gold"), TowerText.cost_text(tower)]
+			_pay_alt_button.text = "%s · %s" % [Localization.t(&"towertext.pay_resources"), TowerText.cost_text(tower, true)]
 			_pay_gold_button.visible = true
 			_pay_alt_button.visible = true
 			show_payment(false)
-			_refresh_payment_buttons()
 		else:
 			_build_info_name.text = "%s · %s" % [tower.name_text(), TowerText.cost_text(tower)]
-		_build_info_text.text = tower.description_text()
-		if tower.footprint > 1:  # RF-298
-			_build_info_text.text += Localization.t_fmt(&"hud.needs_space", {"n": tower.footprint})
-		if tower.levels[0].suppress_seconds > 0.0:  # RF-450
-			_build_info_text.text += " " + TowerText.pulse_line(tower.levels[0], TowerText.emitter_names(Wiki._all_enemies()))
-		var combo: String = TowerText.combo_hint(tower, _tower_types)  # RF-317
-		if combo != "":
-			_build_info_text.text += " " + combo
 
 
 func _on_gold_changed(gold: int) -> void:
@@ -702,37 +709,37 @@ func _on_resources_changed(resources: int) -> void:
 	_refresh_tower_buttons()
 
 
-## RF-101 y RF-418: gris si no alcanza el oro o los recursos; el motivo, en el tooltip. Una torre con dos
-## formas de pago se puede elegir si alcanza cualquiera de las dos (RF-419).
+## RF-101 y RF-418: gris si no alcanza el oro o los recursos. RF-752 permite inspeccionar las dos opciones aun sin saldo.
 func _refresh_tower_buttons() -> void:
 	for i: int in _tower_buttons.size():
 		var tower: TowerData = _tower_types[i]
 		var reason: String = TowerText.missing_text(tower, false, _gold, _resources, _uses_resources)
-		if reason != "" and tower.has_alt_payment():
+		if reason != "" and tower.has_alt_payment() and _uses_resources:
 			reason = reason if TowerText.missing_text(tower, true, _gold, _resources, _uses_resources) != "" else ""
-		_tower_buttons[i].disabled = reason != ""
+		_tower_buttons[i].disabled = reason != "" and not (tower.has_alt_payment() and _uses_resources)
 		var base: String = _tower_buttons[i].tooltip_text.split("\n")[0]
 		_tower_buttons[i].tooltip_text = base + ("\n" + reason if reason != "" else "")
 	_refresh_payment_buttons()
 
 
-## RF-419: la segunda opción se apaga, con el motivo, si faltan recursos o el mapa no los tiene.
+## RF-752: se puede elegir la forma de pago aunque falte saldo; el faltante no impide inspeccionarla.
 func _refresh_payment_buttons() -> void:
-	if _selected_index < 0 or _selected_index >= _tower_types.size() or not _tower_types[_selected_index].has_alt_payment():
+	if not _pay_alt_button.visible or _selected_index < 0 or _selected_index >= _tower_types.size():
 		return
 	var tower: TowerData = _tower_types[_selected_index]
-	var reason: String = TowerText.missing_text(tower, true, _gold, _resources, _uses_resources)
-	_pay_alt_button.disabled = reason != ""
-	_pay_alt_button.tooltip_text = reason
-	var reason_gold: String = TowerText.missing_text(tower, false, _gold, _resources, _uses_resources)
-	_pay_gold_button.disabled = reason_gold != ""
+	var reason_gold: String = TowerText.missing_text(tower, false, _gold, _resources, true)
+	var reason_alt: String = TowerText.missing_text(tower, true, _gold, _resources, true)
 	_pay_gold_button.tooltip_text = reason_gold
+	_pay_alt_button.tooltip_text = reason_alt
+	var reason: String = reason_alt if _pay_alt_button.button_pressed else reason_gold
+	_build_info_text.text = _build_description if reason.is_empty() else reason
 
 
 ## RF-419: marca el botón de pago elegido.
 func show_payment(alt: bool) -> void:
 	_pay_gold_button.set_pressed_no_signal(not alt)
 	_pay_alt_button.set_pressed_no_signal(alt)
+	_refresh_payment_buttons()
 
 
 ## RF-190: los puntos, con el mismo "pop" que el oro.
@@ -860,6 +867,10 @@ func _blink(label: Label) -> void:
 	for i: int in 2:
 		tween.tween_property(label, "modulate", Color(1, 1, 1, 0.25), 0.06)
 		tween.tween_property(label, "modulate", Color.WHITE, 0.06)
+
+func set_collection_visible(shown: bool) -> void:
+	($TopBar/Stats/TechnologyStat as Control).visible = shown
+
 
 func show_collection(count: int, required: int, state: String, collection: StringName = &"technology") -> void:
 	(%TechnologyLabel as Label).text = "%d/%d" % [count, required]

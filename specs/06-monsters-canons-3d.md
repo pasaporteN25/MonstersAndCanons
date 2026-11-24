@@ -418,6 +418,8 @@ godot --path . res://art/b21-vista/vista_lab.tscn -- camara
 
 ## 15. Backlog de Monsters & Canons 3D
 
+**Apoyos y estandartes (2026-11-17).** Para M&C 3D y M&C 2, recuperar los antecedentes del Estandarte mecánico de V1: colección de avances, aura local de cadencia y reparación, y posibles contramedidas de los enemigos. [D-235](04-decisiones.md#d-235--alcance-propuesto-para-el-cierre-de-v1) registra el recorte propuesto para V1 y la conservación de esos materiales para el diseño futuro.
+
 Ideas que pasan de la V1 a este juego (o a *M&C 2*). Igual que en la V1, no se programan hasta convertirse en un hito con su spec.
 
 ### 3D-01 · Épocas: la guerra evoluciona con el tiempo *(viene de B-01 y B-05 de la V1; trasladado por Lucas el 2026-10-07, D-076)*

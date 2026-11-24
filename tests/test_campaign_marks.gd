@@ -20,7 +20,7 @@ const SIGNALS: Dictionary = {
 	"level_15": [Vector2i(2, 4), Vector2i(19, 10)],
 }
 
-## SHA-256 de cada data/levels/level_NN.json (los mismos que fija test_campaign_posts.gd; idénticos a `origin/main`).
+## SHA-256 de cada data/levels/level_NN.json (los mismos que fija test_campaign_posts.gd; incluye la enmienda T594).
 const LEVEL_HASH: Dictionary = {
 	"level_01": "a69feaf78d87b41f020177f1292482f8b03d6ff2decbd2b7928102de71d52d64",
 	"level_02": "989d596338c37c3d62482ba7aadd863b72a2bf79a5bd6449838d31683acd01b8",
@@ -28,15 +28,15 @@ const LEVEL_HASH: Dictionary = {
 	"level_04": "d9215c2d7091cc8c77f7fb6dd479139f00ad32e094be5142852223a1d2393643",
 	"level_05": "abef553788fe90aea726f370047e6bb7743e14cf55b1bed93b80e6c027d26cef",
 	"level_06": "091dc4aa81958fd7ccee54b24857d8a75885da1a49f73171d106635f8f6c0a01",
-	"level_07": "d250d69eba3a1b47638892f291aa70c76a5332219c17f770f56fda01e763699a",
-	"level_08": "3b11c91ede82521c7521af539b5e6f23d44e4f79260ae37ab0497180d707713b",
+	"level_07": "ca2185722f6c04e528633ab7032773854c1a3acf1ceb276a8ae652852905b591",
+	"level_08": "fa9adabb0be583f5773a10ed82907157a5b320f52e51b6073a6cfc6ef2d58d8e",
 	"level_09": "cafb60f81576d636ed76f0c7afaeb6a5aeb3c5f552fc5a64433907377053c360",
-	"level_10": "21af960b29532957099e39c7b97c7c7ed101e3e5ef2646c003bfc091607e7fdf",
-	"level_11": "c6b7ff220c08a61ce502afeddcbcfd6d63175012877afc93387a7c2d6688fed0",
-	"level_12": "f13288247f7d0b333baa6ea52a4e4a4d7bf7fb0da3698e15ba571b8680a4f6a1",
-	"level_13": "7786e8111b0e06eb2a15e010a8afefa6b340eeb95d068d9604b286d62bc6c65a",
-	"level_14": "aa1dfb186cc5b8040625fa492d2088138017c9db2c6b6550938f24a233cc4a41",
-	"level_15": "32f78a4cb309777821bd06b864bfa354acbb6ad418ea623b347d4b158ed0e09d",
+	"level_10": "750c094b9675fac448b6752e087cd82ba9663e095794c44cff0e982a15fae49e",
+	"level_11": "fd4b0b0234aba4de451d98d26d637a20b0867509d55506ed44cd190f99154b04",
+	"level_12": "67ab22453fa55cc035dee02bd87d12848e2cef2b194356b5fcad89bc1e13e2f1",
+	"level_13": "be3c5e18190418e87b2cd8e8fb875d6dcfafeccfc78af153ecf530235d87155d",
+	"level_14": "541e9c99e3d629102ca2aed62578604bfd1c5040aec214f782988cbe85871fc0",
+	"level_15": "ca93df91bd8aab4c4860df04075436d5ea688fc24dae164db91cf010a5a3a217",
 }
 
 var _game: Game

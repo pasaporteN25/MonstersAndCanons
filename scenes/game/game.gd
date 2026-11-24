@@ -160,6 +160,7 @@ func _ready() -> void:
 		mobile_hud.cancel_placement_pressed.connect(build_controller.cancel)
 		mobile_hud.menu_pressed.connect(_on_mobile_menu_pressed)  # RF-735: el menú de pausa, no la X
 		mobile_hud.tower_chosen.connect(_on_mobile_tower_chosen)
+		mobile_hud.payment_pressed.connect(build_controller.set_pay_alt)
 		mobile_hud.infrastructure_tool_chosen.connect(_on_mobile_infrastructure_tool_chosen)
 		mobile_hud.demolish_pressed.connect(_on_mobile_demolish_pressed)
 		mobile_hud.catalog_opened.connect(_on_mobile_catalog_opened)
@@ -542,12 +543,14 @@ func _process(delta: float) -> void:
 				mobile_hud.show_selected_tower(placed, session.gold, refund, resource_refund,
 					can_improve, unavailable_reason)
 		else:
-			mobile_hud.show_ghost_status(selected_tower.name_text(), TowerText.cost_text(selected_tower, build_controller.pay_alt()))
+			var use_resources: bool = build_controller.pay_alt()
+			var cost: String = TowerText.cost_text(selected_tower, use_resources)
+			mobile_hud.show_ghost_status(selected_tower.name_text(), cost, selected_tower, use_resources)
 			var ghost: GhostPlacement = build_controller.ghost_placement()
 			var ghost_world_pos: Vector2 = level.cell_center(ghost.cell)
 			var zoom: float = camera.zoom.x if camera != null else minimum_map_zoom
 			var ghost_size: Vector2 = Vector2.ONE * Rules.TILE_SIZE * selected_tower.footprint * zoom
-			mobile_hud.show_placement(ghost_world_pos, TowerText.cost_text(selected_tower, build_controller.pay_alt()), ghost.valid, ghost.reason, ghost_size)
+			mobile_hud.show_placement(ghost_world_pos, cost, ghost.valid, ghost.reason, ghost_size)
 	if dev_stats != null and not get_tree().paused and not session.is_over():
 		dev_stats.seconds += delta  # RF-325: tiempo de juego, sin pausa
 	# RF-128: se mueve todo el "mundo"; el HUD está en otra capa y no se sacude.
@@ -1366,7 +1369,7 @@ func _show_hall_of_fame_if_earned() -> void:
 		hall_of_fame = null)
 
 func _setup_collection() -> void:
-	if DevMode.enabled or testing or GameFlow.current_index < 0 or GameFlow.current_community != null:
+	if CollectionDefinitions.is_suspended(&"technology") or not _collects_pieces():
 		return
 	if not CollectibleRun.eligible(&"technology", level_data.id):
 		return
@@ -1381,9 +1384,12 @@ func _setup_collection() -> void:
 		collectible.setup(&"technology", level_data.id, count, rng)
 	_update_collection_notice()
 
-## RF-362 y RF-431: la barra muestra la colección de la que este nivel es fuente (o `technology`).
+## RF-431/RF-751: la barra muestra la colección visible de la que es fuente este nivel.
 func _update_collection_notice() -> void:
 	var id: StringName = CollectionDefinitions.collection_of_level(level_data.id)
+	hud.set_collection_visible(id != &"")
+	if id == &"":
+		return
 	var count: int = SaveManager.collected_sources(id).size()
 	var state: String = Localization.t(&"hud.collect_done_here" if SaveManager.collected_sources(id).has(String(level_data.id)) else &"hud.collect_pending_here")
 	if id == &"technology":

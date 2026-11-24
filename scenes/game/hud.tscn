@@ -142,6 +142,7 @@ text = "0/0"
 vertical_alignment = 1
 
 [node name="TechnologyStat" type="HBoxContainer" parent="TopBar/Stats"]
+visible = false
 layout_mode = 2
 theme_override_constants/separation = 6
 

@@ -50,6 +50,12 @@ func _game(index: int, campaign: bool = false) -> Game:
 	add_child_autofree(game)
 	return game
 
+## Mantiene la cobertura del portador histórico aunque V1 no lo asigne a una partida nueva.
+func _game_with_legacy_carrier() -> Game:
+	var game: Game = _game(0, true)
+	game.collectible = _run()
+	return game
+
 func test_one_random_carrier_per_run_and_escaping_gives_nothing() -> void:
 	var run: CollectibleRun = _run()
 	var carriers: int = 0
@@ -101,10 +107,12 @@ func test_old_save_and_malformed_collection_are_safe() -> void:
 	assert_eq(SaveManager.best_lives(&"level_01"), 17)
 	assert_false(SaveManager.collection_complete(&"technology"))
 
-func test_level_permission_and_collection_are_both_required() -> void:
+func test_level_permission_is_required_but_the_suspended_collection_is_not() -> void:
 	var first: LevelData = GameFlow.level(0)
 	var sixth: LevelData = GameFlow.level(5)
-	assert_false(sixth.available_towers([STANDARD], SaveManager.collection_complete).has(STANDARD))
+	assert_true(sixth.available_towers([STANDARD], SaveManager.collection_complete).has(STANDARD))
+	assert_false(first.available_towers([STANDARD], SaveManager.collection_complete).has(STANDARD))
+	assert_false(SaveManager.collection_complete(&"technology"))
 	_collect_all()
 	assert_true(sixth.available_towers([STANDARD], SaveManager.collection_complete).has(STANDARD))
 	assert_false(first.available_towers([STANDARD], SaveManager.collection_complete).has(STANDARD))
@@ -130,7 +138,7 @@ func test_normal_mode_cannot_use_admin_enable() -> void:
 	assert_false(game.build_controller.can_build(STANDARD, Vector2i.ZERO))
 
 func test_game_does_not_persist_collection_before_result_and_keeps_it_on_later_defeat() -> void:
-	var game: Game = _game(0, true)
+	var game: Game = _game_with_legacy_carrier()
 	assert_not_null(game.collectible)
 	game.collectible.pick(1)
 	game.session.begin_wave()
@@ -143,14 +151,14 @@ func test_game_does_not_persist_collection_before_result_and_keeps_it_on_later_d
 	assert_true(SaveManager.collected_sources(&"technology").has("level_01"))
 
 func test_defeat_during_pickup_wave_does_not_keep_drop() -> void:
-	var game: Game = _game(0, true)
+	var game: Game = _game_with_legacy_carrier()
 	game.session.begin_wave()
 	game.collectible.pick(1)
 	game.session.lose_lives(1000)
 	assert_true(SaveManager.collected_sources(&"technology").is_empty())
 
 func test_original_spawn_is_carrier_but_admin_spawn_is_not() -> void:
-	var game: Game = _game(0, true)
+	var game: Game = _game_with_legacy_carrier()
 	game.collectible.carrier_index = 0
 	game.spawner.spawn_now(preload("res://data/enemies/normal.tres"))
 	assert_eq(game.collectible.spawned, 0)
@@ -168,7 +176,7 @@ func test_second_play_of_collected_source_has_no_drop() -> void:
 	assert_null(_game(0, true).collectible)
 
 func test_abandoning_a_game_after_confirmation_does_not_write_collection() -> void:
-	var game: Game = _game(0, true)
+	var game: Game = _game_with_legacy_carrier()
 	game.collectible.pick(1)
 	game.session.begin_wave()
 	game.session.complete_wave()
@@ -192,10 +200,10 @@ func test_community_map_never_supplies_an_official_collection_source() -> void:
 	assert_null(_game(0, true).collectible)
 	GameFlow.current_community = old
 
-func test_wiki_support_explains_its_role_and_requirement() -> void:
+func test_wiki_support_explains_its_role_and_omits_the_suspended_requirement() -> void:
 	var entry: WikiEntry = Wiki.tower_entry(STANDARD)
 	assert_string_contains(entry.subtitle, "no dispara")
-	assert_string_contains(entry.plain_text(), "5 avances distintos")
+	assert_false(entry.plain_text().contains("avances"))
 	assert_string_contains(entry.plain_text(), "+10")
 
 func test_aura_bounds_disabled_source_and_nonstacking() -> void:
@@ -237,18 +245,17 @@ func test_first_five_levels_do_not_offer_new_support_even_when_unlocked() -> voi
 		assert_false(GameFlow.level(i).available_towers([STANDARD], SaveManager.collection_complete).has(STANDARD))
 	assert_true(GameFlow.level(6).available_towers([STANDARD], SaveManager.collection_complete).has(STANDARD))
 
-func test_collection_counter_is_top_bar_and_tracks_pending_confirmed_and_saved() -> void:
-	SaveManager.collect_source(&"technology",&"level_02")
-	var game: Game = _game(0,true)
-	var value: Label = game.hud.get_node("TopBar/Stats/TechnologyStat/TechnologyLabel")
-	assert_eq(value.text,"1/5")
-	game.collectible.pick(1)
-	game._update_collection_notice()
-	assert_eq(value.text,"2/5")
-	var icon: Control = game.hud.get_node("TopBar/Stats/TechnologyStat/TechnologyIcon")
-	assert_string_contains(icon.tooltip_text,"completar oleada")
-	game.session.begin_wave()
-	game.session.complete_wave()
-	assert_string_contains(icon.tooltip_text,"confirmada")
-	game.session.lose_lives(1000)
-	assert_eq(value.text,"2/5")
+func test_campaign_source_does_not_assign_a_carrier_or_expose_a_counter() -> void:
+	var game: Game = _game(0, true)
+	assert_null(game.collectible)
+	var stat: Control = game.hud.get_node("TopBar/Stats/TechnologyStat")
+	assert_false(stat.visible)
+	game.session.finish(true)
+	assert_true(SaveManager.collected_sources(&"technology").is_empty())
+
+
+func test_campaign_catalog_offers_support_with_an_empty_save() -> void:
+	var game: Game = _game(5, true)
+	assert_true(game.available_towers.has(STANDARD))
+	assert_eq(game.hud._tower_buttons.size(), game.available_towers.size())
+	assert_true(SaveManager.collected_sources(&"technology").is_empty())

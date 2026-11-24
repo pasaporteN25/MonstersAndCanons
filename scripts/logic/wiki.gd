@@ -207,7 +207,7 @@ static func tower_entry(tower: TowerData, towers: Array[TowerData] = []) -> Wiki
 		entry.add_text(tower.description_text())
 	var facts: Array = [[Localization.t(&"wiki.fact.function"), Localization.t(&"wiki.fact.function_support")]] if tower.support_only \
 			else [[Localization.t(&"wiki.tower.air"), Localization.t(&"common.yes" if tower.can_hit_air else &"common.no")]]
-	if tower.required_collection != &"":
+	if tower.required_collection != &"" and not CollectionDefinitions.is_suspended(tower.required_collection):
 		facts.append([Localization.t(&"wiki.fact.requirement"), Localization.t_fmt(&"wiki.fact.requirement_value", {"n": CollectionDefinitions.required(tower.required_collection), "word": Localization.t(&"wiki.word.advances" if CollectionDefinitions.origin(tower.required_collection) == CollectionDefinitions.ORIGIN_CARRIER else &"wiki.word.pieces")})])
 	if first.suppress_seconds > 0.0:  # RF-444, RF-450
 		facts.append([Localization.t(&"wiki.fact.pulse"), TowerText.pulse_line(first, TowerText.emitter_names(_all_enemies()))])
@@ -254,7 +254,8 @@ static func _collection_entries(_campaign: Array[LevelData], _is_seen: Callable,
 	# SaveManager es un autoload: se lo busca por el árbol para que `tools/` (que se compila antes que los
 	# autoloads) pueda cargar este script. Sin autoload (herramientas), el progreso es 0.
 	for id: StringName in CollectionDefinitions.ids():
-		entries.append(collection_entry(id, _collected_count(id), _all_towers()))
+		if not CollectionDefinitions.is_suspended(id):
+			entries.append(collection_entry(id, _collected_count(id), _all_towers()))
 	return entries
 
 

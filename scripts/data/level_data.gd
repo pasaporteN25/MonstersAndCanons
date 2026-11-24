@@ -80,7 +80,9 @@ func available_towers(all_towers: Array[TowerData], is_collected: Callable = Cal
 			allowed = towers.has(String(tower.id))  # RF-393: la lista del nivel manda; nombrar una reservada la habilita
 		if not allowed_towers.is_empty() and not allowed_towers.has(String(tower.id)):
 			allowed = false  # RF-388: el modo limita las torres
-		var collected: bool = tower.required_collection == &"" or (is_collected.is_valid() and is_collected.call(tower.required_collection))
+		var collection: StringName = tower.required_collection
+		var collected: bool = collection == &"" or CollectionDefinitions.is_suspended(collection) \
+			or (is_collected.is_valid() and is_collected.call(collection))
 		if allowed and collected:
 			result.append(tower)
 	return result

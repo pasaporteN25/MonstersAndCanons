@@ -504,3 +504,59 @@ func test_mobile_catalog_selects_a_tower_in_two_touches_without_spending() -> vo
 	game._unhandled_input(back)
 	assert_true(game.pause_menu.is_open(), "atrás sin selección abre Pausa")
 	SaveManager.set_setting("ui_mode", original_setting)
+
+
+func test_mobile_build_chooses_payment_explicitly_and_refreshes_with_balance() -> void:
+	SaveManager.set_setting("ui_mode", UiMode.MOBILE)
+	var game: Game = (load("res://scenes/game/game.tscn") as PackedScene).instantiate() as Game
+	game.level_data = GameFlow.level(8)
+	add_child_autofree(game)
+	await get_tree().process_frame
+	var build: BuildController = game.build_controller
+	var hud: MobileHud = game.mobile_hud
+	var sniper: TowerData = load("res://data/towers/sniper.tres")
+	var alt_gold: int = sniper.build_gold(true)
+	var resource_cost: int = sniper.build_resources(true)
+	game.session.set_gold(alt_gold)
+	game.session.add_resources(resource_cost)
+	hud.open_catalog()
+	var card: Button = hud.find_child("CatalogCard_%s" % sniper.name_text().to_snake_case(), true, false)
+	assert_not_null(card)
+	assert_string_contains(card.text, TowerText.cost_text(sniper))
+	assert_string_contains(card.text, TowerText.cost_text(sniper, true))
+	card.pressed.emit()
+	await get_tree().process_frame
+	var toggle: CheckButton = hud._use_resources_button
+	assert_true(toggle.visible)
+	assert_false(toggle.button_pressed, "solo oro por omisión aunque solo alcance la otra vía")
+	assert_false(build.pay_alt(), "el catálogo no elige recursos automáticamente")
+	assert_true(hud._bottom_confirm.disabled)
+	assert_string_contains(hud._status_label.text, "Faltan")
+	assert_false(build.confirm_ghost(), "elegir la torre no autoriza a pagar con recursos")
+	assert_eq(game.session.gold, alt_gold)
+	assert_eq(game.session.resources, resource_cost)
+	var original_cell: Vector2i = build.ghost_placement().cell
+	var touch_position: Vector2 = toggle.get_global_rect().get_center()
+	assert_true(hud._handle_status_touch(0, touch_position, true))
+	assert_true(hud._handle_status_touch(0, touch_position, false))
+	await get_tree().process_frame
+	assert_true(toggle.button_pressed)
+	assert_eq(build.ghost_placement().cell, original_cell)
+	assert_eq(build.ghost_placement().gold_cost, alt_gold)
+	assert_eq(build.ghost_placement().resource_cost, resource_cost)
+	assert_false(hud._bottom_confirm.disabled)
+	assert_true(hud._status_bar.get_global_rect().encloses(hud._bottom_confirm.get_global_rect()))
+	assert_eq(game.session.steal(1, 0), 1, "cambia el saldo con el fantasma quieto")
+	await get_tree().process_frame
+	assert_true(hud._bottom_confirm.disabled)
+	assert_string_contains(hud._status_label.text, "Faltan")
+	assert_false(build.confirm_ghost())
+	game.session.earn(1)
+	await get_tree().process_frame
+	assert_false(hud._bottom_confirm.disabled)
+	hud._bottom_confirm.pressed.emit()
+	assert_eq(game.session.gold, 0)
+	assert_eq(game.session.resources, 0)
+	assert_not_null(build.tower_at(original_cell))
+	await get_tree().process_frame
+	assert_false(toggle.visible)

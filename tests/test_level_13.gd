@@ -169,8 +169,8 @@ func test_an_ice_lagoon_markers_a_mine_and_a_forest_one_per_entrance_and_five_re
 			continue
 		removables += 1
 		assert_eq(obstacle.finding_collection, &"", "sin hallazgos")
-		assert_eq(obstacle.reward_amount, 1)
-		assert_between(obstacle.chance_percent, 1, 99, "al azar, con semilla (RF-417)")
+		assert_eq(obstacle.reward_amount, 2)
+		assert_eq(obstacle.chance_percent, 100, "RF-753: recurso garantizado")
 	classes.sort()
 	assert_eq(classes, ["bosque_explotable", "mina"], "una mina y un bosque explotable (16 recursos en total si se habilitan los dos)")
 	assert_between(removables, 4, 6, "de 4 a 6 removibles")
@@ -265,5 +265,5 @@ func test_the_mine_and_the_forest_together_pay_a_mortar_after_one_wave() -> void
 	game.session.state = LevelSession.State.WAVE_RUNNING
 	game.session.complete_wave()
 	assert_eq(game.session.resources, 4, "2 de la mina y 2 del bosque en una sola oleada")
-	assert_true(game.build_controller.try_build(mortar, MORTAR_BLOCKS[0]), "300 de oro y 3 recursos")
+	assert_true(game.build_controller.try_build(mortar, MORTAR_BLOCKS[0]), "250 de oro y 3 recursos")
 	assert_eq(game.session.resources, 1)

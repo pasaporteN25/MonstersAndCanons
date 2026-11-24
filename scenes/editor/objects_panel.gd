@@ -135,7 +135,8 @@ func _fill_finding() -> void:
 	_finding_option.add_item(Localization.t(&"editor.no_finding"))
 	_finding_option.set_item_metadata(0, "")
 	var current: String = draft.finding(_letter)
-	var known: Array[StringName] = CollectionDefinitions.ids()
+	var known: Array[StringName] = CollectionDefinitions.ids().filter(
+		func(id: StringName) -> bool: return not CollectionDefinitions.is_suspended(id))
 	if current != "" and not known.has(StringName(current)):
 		known.append(StringName(current))  # un hallazgo escrito a mano que no se reconoce se muestra igual: no se pierde
 	for id: StringName in known:
