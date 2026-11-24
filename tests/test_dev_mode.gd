@@ -64,6 +64,7 @@ func test_dev_mode_uses_its_own_save() -> void:
 
 func test_one_export_per_platform_and_none_is_a_test_build() -> void:
 	# RF-386 (D-077): el modo de pruebas se activa desde Opciones; no hay ejecutables ni APK aparte.
+	# RF-756 (D-237): Android suma el AAB para Google Play, que tampoco es de pruebas.
 	var presets := ConfigFile.new()
 	assert_eq(presets.load("res://export_presets.cfg"), OK)
 	var names: PackedStringArray = []
@@ -74,4 +75,4 @@ func test_one_export_per_platform_and_none_is_a_test_build() -> void:
 		names.append(preset_name)
 		assert_eq(presets.get_value(section, "custom_features", ""), "", "%s no trae ninguna característica especial" % preset_name)
 		i += 1
-	assert_eq(names, PackedStringArray(["Windows Desktop", "Android", "Linux"]))
+	assert_eq(names, PackedStringArray(["Windows Desktop", "Android", "Linux", "Android Play"]))

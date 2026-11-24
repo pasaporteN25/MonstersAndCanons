@@ -1,5 +1,9 @@
 # Novedades del juego
 
+## El juego se prepara para Google Play (T597)
+
+La versión de Android se va a poder bajar desde Google Play. Para eso la app cambió de identificador: si tenías instalada una APK de prueba, la nueva aparece como otra app y el progreso de la vieja **no pasa**. Podés desinstalar la vieja a mano. El juego sigue sin pedir permisos, sin internet, sin anuncios y sin compras ([política de privacidad](PRIVACY.md)).
+
 ## La demolición rinde más y las compras mixtas cuestan menos oro (T594)
 
 Los obstáculos de campaña que dan recursos ahora indican la cantidad que vas a recibir al demolerlos. Las rocas y los escombros seleccionados dan dos. Con recursos, el Francotirador cuesta 95 de oro y un recurso. El Mortero cuesta 250 de oro y tres recursos, y la Disruptora, 100 de oro y dos recursos.

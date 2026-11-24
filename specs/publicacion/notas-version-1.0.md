@@ -20,7 +20,7 @@ Primera versión pública. El juego pasó a llamarse **Monsters & Canons** y la 
 ### Cosas para tener en cuenta
 
 - **El progreso se conserva en PC** respecto de versiones anteriores del juego.
-- **En el celular se instala como una app nueva** (`com.monsterscanons.v1`). La APK anterior queda aparte y su progreso **no pasa** a la nueva.
+- **En el celular se instala como una app nueva** (`com.monsterscanonsv1.game`, también la de Google Play). Una APK anterior queda aparte y su progreso **no pasa** a la nueva.
 - **Una versión anterior del juego no abre un modo propio** que use la tabla de dureza por mapa de Asedio.
 - **El Ratero y el Cargador** se ven por ahora como formas de color, sin dibujo propio **[confirmar si T257 ya les puso arte antes de publicar]**.
 - La APK es de firma de depuración y no se probó en un dispositivo real **[confirmar]**.
