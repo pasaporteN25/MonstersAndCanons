@@ -2074,3 +2074,8 @@ Lucas se dio de alta como desarrollador en Google Play y quiere subir el juego. 
 - **Versión:** `version/code = 4` en los dos presets de Android; `version/name` queda vacío para que Android use `config/version` del proyecto (una sola fuente, como pide `test_game_version.gd`). Mientras T268/T375 no la pase a `1.0.0`, la versión que muestra Play es «beta», lo que alcanza para la prueba interna.
 
 **Alternativas descartadas.** (1) Subir la APK: Play no acepta APK en apps nuevas. (2) Mantener `com.monsterscanons.v1`: Lucas prefirió otro nombre antes de que quede fijo. (3) Versionar `android/`: son cientos de archivos generados por Godot que se pueden reinstalar con un comando. (4) Automatizar la subida desde GitHub Actions ya: requiere una cuenta de servicio y la clave en los secretos; queda en Sugerencias de Claude (§13) hasta que Lucas lo pida.
+
+### D-238 · Nueva historia de llegada y expedición científico-militar
+- **Fecha:** 2026-11-24 · **Estado:** Aceptada · **Decidió:** Lucas
+- **Decisión:** usar el texto acordado y las cinco imágenes elegidas; la expedición incluye científicos, personal técnico y soldados. La Compañía llega para quedarse a un planeta habitado.
+- **Presentación:** el último texto se reparte en dos láminas con la misma imagen, para conservarlo y respetar los límites y tiempos de lectura existentes. Esta decisión actualiza el contenido anterior de D-096.

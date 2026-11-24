@@ -17,92 +17,79 @@ Cada línea del texto empieza con `> `. Las **notas** son solo para vos: no se c
 - Versión del formato: 1
 - Fundido entre láminas (segundos): 0.6
 
-## Lámina 1 · La nave
+## Lámina 1 · Story 01
 
-- Imagen: res://assets/intro/01_la_nave.webp
-- Segundos: 7
-- Voz o sonido: ninguno
-
-Texto:
-
-> La Compañía Meridiana mandó una sola nave.
-> No lleva soldados: lleva gente de oficio.
-
-Notas:
-
-## Lámina 2 · La bodega
-
-- Imagen: res://assets/intro/02_la_bodega.webp
-- Segundos: 9
-- Voz o sonido: ninguno
-
-Texto:
-
-> Herreros, carpinteros, ingenieros, agricultores: cada uno trajo su oficio.
-> Hay semillas, planos y piezas para empezar de cero.
-
-Notas:
-
-## Lámina 3 · Los turnos
-
-- Imagen: res://assets/intro/03_los_turnos.webp
-- Segundos: 8
-- Voz o sonido: ninguno
-
-Texto:
-
-> Fueron años de viaje. Se durmió por turnos y lo que se rompía se arreglaba a bordo.
-> Era un viaje de ida.
-
-Notas:
-
-## Lámina 4 · La ventana
-
-- Imagen: res://assets/intro/04_la_ventana.webp
-- Segundos: 7
-- Voz o sonido: ninguno
-
-Texto:
-
-> El reconocimiento vio agua en un solo lugar de todo el planeta.
-> Hacia ahí apuntó la nave.
-
-Notas:
-
-## Lámina 5 · El descenso
-
-- Imagen: res://assets/intro/05_el_descenso.webp
+- Imagen: res://assets/intro/story_01.jpg
 - Segundos: 5
 - Voz o sonido: ninguno
 
 Texto:
 
-> La bajada fue brusca. El casco crujió entero, pero aguantó.
+> La Compañía Meridiana llevaba años viajando.
 
 Notas:
 
-## Lámina 6 · Los motores apagados
+## Lámina 2 · Story 02
 
-- Imagen: res://assets/intro/06_los_motores_apagados.webp
-- Segundos: 6
-- Voz o sonido: ninguno
-
-Texto:
-
-> Los motores se apagaron al tocar tierra.
-> La nave ya no va a despegar.
-
-Notas:
-
-## Lámina 7 · El oasis
-
-- Imagen: res://assets/intro/07_el_oasis.webp
+- Imagen: res://assets/intro/story_02.jpg
 - Segundos: 9
 - Voz o sonido: ninguno
 
 Texto:
 
-> Un valle chico, con agua y pasto, en medio de la nada.
-> Acá nos quedamos.
+> Al otro lado de las ventanas, Cántaro era apenas un punto entre las estrellas.
+> Habían dejado atrás sus hogares para construir uno nuevo.
+
+Notas:
+
+## Lámina 3 · Story 03
+
+- Imagen: res://assets/intro/story_03.jpg
+- Segundos: 9
+- Voz o sonido: ninguno
+
+Texto:
+
+> Durante el viaje, aprendieron a vivir entre pasillos, depósitos y cultivos. Todo
+> lo que necesitaban para empezar de nuevo estaba allí.
+
+Notas:
+
+## Lámina 4 · Story 04
+
+- Imagen: res://assets/intro/story_04.jpg
+- Segundos: 10
+- Voz o sonido: ninguno
+
+Texto:
+
+> Cuando por fin encontraron agua, hicieron descender la nave. A su alrededor
+> levantaron los primeros refugios y comenzaron a estudiar la tierra.
+
+Notas:
+
+## Lámina 5 · Story 05
+
+- Imagen: res://assets/intro/story_05.jpg
+- Segundos: 9
+- Voz o sonido: ninguno
+
+Texto:
+
+> Nos dimos cuenta de que entre las piedras había marcas que nadie de la
+> expedición recordaba haber hecho. Ahí fue cuando aparecieron.
+
+Notas:
+
+## Lámina 6 · Story 05
+
+- Imagen: res://assets/intro/story_05.jpg
+- Segundos: 8
+- Voz o sonido: ninguno
+
+Texto:
+
+> ¡Monstruos! Criaturas cerca del campamento. Rápidamente, los soldados levantaron
+> torres para protegernos.
 
 Notas:

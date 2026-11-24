@@ -1,5 +1,9 @@
 # Novedades del juego
 
+## Una nueva historia de llegada
+
+La introducción cuenta el viaje y la llegada con cinco imágenes nuevas. La expedición incluye personal científico y militar.
+
 ## El juego se prepara para Google Play (T597)
 
 La versión de Android se va a poder bajar desde Google Play. Para eso la app cambió de identificador: si tenías instalada una APK de prueba, la nueva aparece como otra app y el progreso de la vieja **no pasa**. Podés desinstalar la vieja a mano. El juego sigue sin pedir permisos, sin internet, sin anuncios y sin compras ([política de privacidad](PRIVACY.md)).

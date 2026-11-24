@@ -3,39 +3,34 @@
 	"fundido_s": 0.6,
 	"laminas": [
 		{
-			"imagen": "res://assets/intro/01_la_nave.webp",
-			"texto": "La Compañía Meridiana mandó una sola nave.\nNo lleva soldados: lleva gente de oficio.",
-			"segundos": 7
-		},
-		{
-			"imagen": "res://assets/intro/02_la_bodega.webp",
-			"texto": "Herreros, carpinteros, ingenieros, agricultores: cada uno trajo su oficio.\nHay semillas, planos y piezas para empezar de cero.",
-			"segundos": 9
-		},
-		{
-			"imagen": "res://assets/intro/03_los_turnos.webp",
-			"texto": "Fueron años de viaje. Se durmió por turnos y lo que se rompía se arreglaba a bordo.\nEra un viaje de ida.",
-			"segundos": 8
-		},
-		{
-			"imagen": "res://assets/intro/04_la_ventana.webp",
-			"texto": "El reconocimiento vio agua en un solo lugar de todo el planeta.\nHacia ahí apuntó la nave.",
-			"segundos": 7
-		},
-		{
-			"imagen": "res://assets/intro/05_el_descenso.webp",
-			"texto": "La bajada fue brusca. El casco crujió entero, pero aguantó.",
+			"imagen": "res://assets/intro/story_01.jpg",
+			"texto": "La Compañía Meridiana llevaba años viajando.",
 			"segundos": 5
 		},
 		{
-			"imagen": "res://assets/intro/06_los_motores_apagados.webp",
-			"texto": "Los motores se apagaron al tocar tierra.\nLa nave ya no va a despegar.",
-			"segundos": 6
+			"imagen": "res://assets/intro/story_02.jpg",
+			"texto": "Al otro lado de las ventanas, Cántaro era apenas un punto entre las estrellas.\nHabían dejado atrás sus hogares para construir uno nuevo.",
+			"segundos": 9
 		},
 		{
-			"imagen": "res://assets/intro/07_el_oasis.webp",
-			"texto": "Un valle chico, con agua y pasto, en medio de la nada.\nAcá nos quedamos.",
+			"imagen": "res://assets/intro/story_03.jpg",
+			"texto": "Durante el viaje, aprendieron a vivir entre pasillos, depósitos y cultivos. Todo\nlo que necesitaban para empezar de nuevo estaba allí.",
 			"segundos": 9
+		},
+		{
+			"imagen": "res://assets/intro/story_04.jpg",
+			"texto": "Cuando por fin encontraron agua, hicieron descender la nave. A su alrededor\nlevantaron los primeros refugios y comenzaron a estudiar la tierra.",
+			"segundos": 10
+		},
+		{
+			"imagen": "res://assets/intro/story_05.jpg",
+			"texto": "Nos dimos cuenta de que entre las piedras había marcas que nadie de la\nexpedición recordaba haber hecho. Ahí fue cuando aparecieron.",
+			"segundos": 9
+		},
+		{
+			"imagen": "res://assets/intro/story_05.jpg",
+			"texto": "¡Monstruos! Criaturas cerca del campamento. Rápidamente, los soldados levantaron\ntorres para protegernos.",
+			"segundos": 8
 		}
 	]
 }

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dgavfxlufnndw"
-path="res://.godot/imported/04_la_ventana.webp-7119f42f839828852168408f6a481d83.ctex"
+uid="uid://de3q4ivq6l72e"
+path="res://.godot/imported/story_04.jpg-635d535c9a836034b57f94f3e1d28b12.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/intro/04_la_ventana.webp"
-dest_files=["res://.godot/imported/04_la_ventana.webp-7119f42f839828852168408f6a481d83.ctex"]
+source_file="res://assets/intro/story_04.jpg"
+dest_files=["res://.godot/imported/story_04.jpg-635d535c9a836034b57f94f3e1d28b12.ctex"]
 
 [params]
 

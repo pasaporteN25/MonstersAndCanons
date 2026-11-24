@@ -684,7 +684,8 @@ Los textos, los segundos de cada lámina y el fundido de la intro viven en `data
 
 **Reglas** (las mismas que revisa el juego, RF-497): de 5 a 8 láminas; texto de 1 o 2 líneas, hasta 90 caracteres por línea y 160 en total; segundos enteros de 4 a 12; fundido de 0 a 2; la imagen tiene que existir. Un **aviso** (no un error) te dice si una lámina dura menos de lo que pide su texto para leerse (`2 s + caracteres / 20`).
 
-**Dos cosas que conviene saber:**
+**Cosas que conviene saber:**
+- Las notas se identifican por imagen: las láminas 5 y 6 comparten la quinta imagen y, por eso, comparten sus notas al exportar.
 - Los textos oficiales **también** están en `specs/intro/guion.md`, y un test (`tests/test_intro_data.gd`) los compara con `intro.json`. Si cambiás un texto con esta herramienta, **el test va a avisar** hasta que el guion diga lo mismo: pedile a Claude que lo actualice o corregilo vos.
 - La herramienta **no crea imágenes**: el campo `Imagen` solo puede apuntar a un archivo que ya exista (por ejemplo, para reordenar láminas). Cambiar qué imagen va con qué texto cambia cómo se ve el juego: conviene hablarlo antes.
 

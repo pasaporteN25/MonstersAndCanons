@@ -1,3 +1,5 @@
+> **Actualización del 24-11-2026:** la intro usa cinco imágenes y seis láminas; la quinta imagen se mantiene durante los dos párrafos de la quinta parte. El texto acordado nombra Cántaro y monstruos; reemplaza las restricciones anteriores sobre esos términos. Las imágenes elegidas miden 2752 × 1536. Las demás reglas de M57 siguen vigentes.
+
 # 01 — Especificación del juego (el "QUÉ")
 
 > **Qué es este documento:** describe **qué hace el juego**, como si se lo explicaras a alguien que va a jugarlo. **No** habla de código, escenas ni Godot; eso está en [`02-plan-tecnico.md`](02-plan-tecnico.md).
@@ -2998,11 +3000,11 @@ Cortas y en orden de importancia. Ninguna frena a T258: el código y el formato 
 
 ### M57 · La intro de láminas (Lucas, 2026-10-11; T240)
 
-**Estado: APROBADA por Lucas el 2026-10-11 (compuerta 🚦 G6, P1 a P5 como se recomendaban). Programada en T242** (pasos 1 a 5, 7 y 8; con láminas **provisorias**: las definitivas son de **T241** y el paso 6, medir el texto y reexportar, sigue pendiente). El guion, con los textos, las siete ilustraciones descriptas, las referencias de estilo y las dudas, es **`specs/intro/guion.md`**. La decisión es **D-096**.
+**Estado:** aprobada en T240 y programada en T242; contenido actualizado por Lucas el 24-11-2026 (D-238). El guion, con los textos, las cinco imágenes elegidas y las seis láminas, es **`specs/intro/guion.md`**. La decisión es **D-096**.
 
-**Qué pidió Lucas.** *(2026-10-11, en el encargo de T240; manda sobre la ficha)* Una **mini película casera hecha con imágenes tipo diapositiva y el texto abajo**, con **fuerte sensación de nave y de viaje**, que **termina con una lámina panorámica del oasis verde en medio de la nada**; **después aparece el mapa jugable**. **Entra en la versión 1.0.** Se ve **la primera vez que se toca «Jugar»**, **se puede omitir siempre**, **se puede volver a ver** desde la Wiki o con un botón «Intro», y **avanza con un toque o sola**. De 5 a 8 láminas; sin adelantar el conflicto con las comunidades.
+**Pedido anterior de Lucas.** *(2026-10-11, en el encargo de T240; el contenido visual y narrativo fue actualizado por D-238)* Una **mini película casera hecha con imágenes tipo diapositiva y el texto abajo**, con **fuerte sensación de nave y de viaje**, que **termina con una lámina panorámica del oasis verde en medio de la nada**; **después aparece el mapa jugable**. **Entra en la versión 1.0.** Se ve **la primera vez que se toca «Jugar»**, **se puede omitir siempre**, **se puede volver a ver** desde la Wiki o con un botón «Intro», y **avanza con un toque o sola**. De 5 a 8 láminas; sin adelantar el conflicto con las comunidades.
 
-**Idea en pocas palabras.** Una pantalla de intro que muestra **siete láminas quietas** (imagen 16:9 y, abajo, una franja con 1 o 2 líneas de texto) con un **fundido** entre una y otra. Las láminas, los textos y las duraciones salen de **un archivo de datos**, así que se pueden corregir sin tocar código. Q-01 (D-089) ya permitía «una intro de láminas que se pueda omitir y volver a ver» y excluía «cinemáticas animadas» y «voces»: **esto no cambia ninguna regla de §11.** Las láminas **no se animan** (el fundido es una transición, no una animación de personajes) y **la intro no explica cómo se juega**: eso es del nivel 1.
+**Idea en pocas palabras.** Una pantalla de intro que muestra **seis láminas quietas** (cinco imágenes elegidas y, abajo, una franja con 1 o 2 líneas de texto) con un **fundido** entre una y otra. Las láminas, los textos y las duraciones salen de **un archivo de datos**, así que se pueden corregir sin tocar código. Q-01 (D-089) ya permitía «una intro de láminas que se pueda omitir y volver a ver» y excluía «cinemáticas animadas» y «voces»: **esto no cambia ninguna regla de §11.** Las láminas **no se animan** (el fundido es una transición, no una animación de personajes) y **la intro no explica cómo se juega**: eso es del nivel 1.
 
 - **RF-497** **Los datos de la intro** *(archivo nuevo, `data/intro/intro.json`)*: la intro es una lista de **5 a 8 láminas** con esta forma:
 
@@ -3011,9 +3013,9 @@ Cortas y en orden de importancia. Ninguna frena a T258: el código y el formato 
     "version": 1,
     "fundido_s": 0.6,
     "laminas": [
-      {"imagen": "res://assets/intro/01_la_nave.webp",
-       "texto": "La Compañía Meridiana mandó una sola nave.\nNo lleva soldados: lleva gente de oficio.",
-       "segundos": 7}
+      {"imagen": "res://assets/intro/story_01.jpg",
+       "texto": "La Compañía Meridiana llevaba años viajando.",
+       "segundos": 5}
     ]
   }
   ```
@@ -3023,7 +3025,7 @@ Cortas y en orden de importancia. Ninguna frena a T258: el código y el formato 
   | `"version"` | Versión del formato. | Entero, hoy **1**. Otra → error. |
   | `"fundido_s"` | Cuánto dura el fundido entre láminas, en segundos. | Número de **0 a 2**. Opcional (por omisión 0,6). |
   | `"laminas"` | Las láminas, en orden. | **De 5 a 8**. |
-  | `"imagen"` | El PNG de la lámina. | Una ruta `res://` que **existe**. **1920 × 1080**, sin texto dibujado adentro. |
+  | `"imagen"` | La imagen de la lámina. | Una ruta `res://` que **existe**. Las imágenes oficiales miden **2752 × 1536**. |
   | `"texto"` | Lo que se lee abajo. | **1 o 2 líneas** (separadas por `\n`), **90 caracteres por línea**, **160 en total**, texto plano; no vacío. Son los límites de la victoria de un nivel (RF-464). |
   | `"segundos"` | Cuánto se queda sola la lámina antes de pasar a la siguiente. | Entero de **4 a 12**. |
 
@@ -3070,7 +3072,7 @@ Cortas y en orden de importancia. Ninguna frena a T258: el código y el formato 
 > **Dado** el **modo de pruebas** → **Cuando** se toca «Jugar» → **Entonces** va a la selección de niveles sin intro; **Cuando** se toca «Ver la intro» en la Wiki → **Entonces** se ve.
 > **Dado** un mapa de la comunidad, un modo (Asedio), «Probar» o «Siguiente nivel» → **Entonces** no se abre la intro.
 > **Dado** un `intro.json` con 4 o 9 láminas, una línea de 91 caracteres, un texto de 3 líneas o de 161 caracteres, un texto vacío, una duración de 3 o de 13, un fundido de 3, una imagen que no existe o un `"version"` distinto de 1 → **Entonces** el lector devuelve un error en castellano que nombra la lámina, **y «Jugar» sigue yendo a la selección de niveles**.
-> **Dado** los **datos oficiales** → **Entonces** hay de 5 a 8 láminas, cada imagen existe y mide **1920 × 1080**, cada texto es **el mismo** que figura en `specs/intro/guion.md`, ninguno usa las palabras vetadas del vocabulario (`11-textos-lore.md`, «Cómo se escribió») ni nombra al planeta, y cada duración cumple la regla de lectura de RF-497.
+> **Dado** los **datos oficiales** → **Entonces** hay de 5 a 8 láminas, cada imagen existe y mide **2752 × 1536**, cada texto es **el mismo** que figura en `specs/intro/guion.md`, y cada duración cumple la regla de lectura de RF-497.
 > **Dado** una ventana 16:9, 20:9 o 4:3 → **Entonces** la lámina se ve entera y el texto entra en su franja sin salirse.
 > **Dado** el guardado → **Entonces** la clave nueva **no** cambia niveles, récords, colecciones, ajustes ni Salón de la fama, y un guardado que la trae sigue cargando en la versión anterior del juego (la ignora).
 
@@ -3474,7 +3476,7 @@ Pedido de Lucas: (A) bajar el peso de las imágenes de la intro para que la APK 
 - **RF-563** **Cómo se edita, documentado:** una sección corta en `CONTENIDO.md` («Editar los textos de la intro»). Aviso escrito allí: **los textos oficiales también viven en `specs/intro/guion.md`** y un test los compara con el JSON; si Lucas cambia un texto, **hay que reflejarlo en el guion** (la tarea que lo cargue lo hace) o el test avisa.
 
 > **Criterio de aceptación RF-561 a RF-563**
-> **Dado** el `intro.json` oficial → **Cuando** se corre `export` → **Entonces** el documento trae 7 láminas con los mismos textos, imágenes y segundos. **Cuando** se edita un texto y se corre `import` → **Entonces** `intro.json` cambia solo en ese texto. **Dado** un documento con 3 líneas en una lámina, una imagen inexistente o sin «Segundos» → **Cuando** se corre `import` → **Entonces** hay un error en castellano con la línea, `intro.json` no se modifica y el código de salida es 1.
+> **Dado** el `intro.json` oficial → **Cuando** se corre `export` → **Entonces** el documento trae 6 láminas con los mismos textos, imágenes y segundos. **Cuando** se edita un texto y se corre `import` → **Entonces** `intro.json` cambia solo en ese texto. **Dado** un documento con 3 líneas en una lámina, una imagen inexistente o sin «Segundos» → **Cuando** se corre `import` → **Entonces** hay un error en castellano con la línea, `intro.json` no se modifica y el código de salida es 1.
 
 #### Lo que M62 no incluye
 - **No cambia ningún texto ni ninguna imagen de la intro**, y **no carga textos nuevos** en el juego.

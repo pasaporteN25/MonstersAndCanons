@@ -1,5 +1,5 @@
 # Comprueba, dentro del paquete exportado, que la intro carga (M57, T242 paso 6): los datos oficiales son válidos,
-# cada lámina se carga como textura de 1920 × 1080 y `IntroScreen` abre, avanza hasta la última y termina.
+# cada lámina se carga como textura de 2752 × 1536 y `IntroScreen` abre, avanza hasta la última y termina.
 # Se corre como escena, con el proyecto o con un ejecutable exportado, sin ventana. Sale con 0 si todo está bien y
 # con 1 si algo falla:
 #   godot --headless --path . res://tools/check_intro_pack.tscn
@@ -10,7 +10,7 @@ extends Node
 
 ## Se carga en tiempo de ejecución: la revisión de sintaxis compila este script sin los autoloads (`Audio`).
 const INTRO_PATH: String = "res://scenes/ui/intro_screen.gd"
-const EXPECTED_SIZE := Vector2i(1920, 1080)
+const EXPECTED_SIZE := Vector2i(2752, 1536)
 
 var _failures: int = 0
 var _finished: int = 0
@@ -23,7 +23,7 @@ func _ready() -> void:
 func run() -> void:
 	var data: IntroData = IntroData.load_file()
 	_check(data.is_valid(), "los datos de la intro son válidos %s" % [data.errors])
-	_check(data.slides.size() == 7, "hay 7 láminas (hay %d)" % data.slides.size())
+	_check(data.slides.size() == 6, "hay 6 láminas (hay %d)" % data.slides.size())
 	for slide: Dictionary in data.slides:
 		var path: String = String(slide["imagen"])
 		var texture := load(path) as Texture2D
