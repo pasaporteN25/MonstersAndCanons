@@ -2059,3 +2059,18 @@ La etapa 1 del relieve (orden por profundidad) queda como opcional en la V1. Doc
 ## D-236 · Ejecutar el cierre con más peso para los recursos
 
 Lucas aprobó el plan y pidió subir el rendimiento de demolición, bajar el oro necesario en las compras mixtas y hacer explícita la elección de pago. Para V1 se toma el acceso directo a la torre del plan de D-235. El alcance, las condiciones del piloto económico y el candidato de prueba quedan en M91 (RF-751–755) y T592–T596. Se conserva la idea de publicar primero una V1 jugable y continuar el pulido de celular mediante actualizaciones. La publicación sigue a cargo de Lucas (T239).
+
+## D-237 · Publicar en Android por Google Play
+
+**Fecha:** 2026-11-24 · **Estado:** aceptada · **Decidió:** Lucas (canal e identificador); Claude propuso la forma técnica.
+
+Lucas se dio de alta como desarrollador en Google Play y quiere subir el juego. Hasta ahora el plan de publicación (T239) pensaba en itch.io con una APK de depuración. Play exige un **Android App Bundle** (AAB) firmado con una clave propia, un identificador que no se puede cambiar nunca y una ficha con política de privacidad.
+
+- **Canal:** Google Play para Android. itch.io (PC y APK) sigue siendo una opción de T239 y no se descarta.
+- **Identificador:** `com.monsterscanonsv1.game`, elegido por Lucas. Reemplaza a `com.monsterscanons.v1` también en el preset de APK, para que haya un solo identificador. Consecuencia: una APK de prueba ya instalada con el paquete viejo queda como otra app y su progreso no pasa a la nueva (lo mismo que pasó con T237).
+- **AAB con Gradle:** se agrega el preset «Android Play» y se conserva el de APK (más rápido, sin Gradle, sirve para probar a mano). La carpeta `android/` que instala Godot no se versiona: se instala con `--install-android-build-template` en cada máquina.
+- **Firma:** *Play App Signing* (Google guarda la clave de la app) con una **clave de subida** que crea y guarda Lucas. Ningún agente crea ni escribe contraseñas de firma.
+- **Primero pruebas, después producción:** la primera subida va a **prueba interna**. Las cuentas personales nuevas tienen que pasar una prueba cerrada (según las reglas vigentes de Google, 12 testers durante 14 días) antes de pedir producción; Lucas lo confirma en su consola.
+- **Versión:** `version/code = 4` en los dos presets de Android; `version/name` queda vacío para que Android use `config/version` del proyecto (una sola fuente, como pide `test_game_version.gd`). Mientras T268/T375 no la pase a `1.0.0`, la versión que muestra Play es «beta», lo que alcanza para la prueba interna.
+
+**Alternativas descartadas.** (1) Subir la APK: Play no acepta APK en apps nuevas. (2) Mantener `com.monsterscanons.v1`: Lucas prefirió otro nombre antes de que quede fijo. (3) Versionar `android/`: son cientos de archivos generados por Godot que se pueden reinstalar con un comando. (4) Automatizar la subida desde GitHub Actions ya: requiere una cuenta de servicio y la clave en los secretos; queda en Sugerencias de Claude (§13) hasta que Lucas lo pida.

@@ -12,6 +12,7 @@ godot --headless -s addons/gut/gut_cmdln.gd -gdir=res://tests -gexit   # todos l
 godot --headless -s addons/gut/gut_cmdln.gd -gtest=res://tests/test_x.gd -gexit   # uno solo
 godot --headless --path . --fixed-fps 60 -s tools/balance_sim.gd -- mix level=3  # el bot de balance (uso en el encabezado del archivo)
 godot --headless --path . --export-release "Windows Desktop" build/MonstersCanons.exe   # el único ejecutable de Windows (el modo de pruebas se activa en Opciones, D-077)
+godot --headless --path . --install-android-build-template --export-release "Android Play" build/MonstersCanons.aab   # AAB para Google Play (D-237; clave de subida de Lucas; ONBOARDING §7.5)
 ```
 
 - Un test que pasa pero imprime `SCRIPT ERROR` **es un fallo**: mirar la salida completa, no solo el resumen.

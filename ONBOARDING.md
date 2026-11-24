@@ -17,7 +17,7 @@
 | 4 | [Comprobar los tests (GUT)](#4-tests-gut) | Sí | 145 tests en verde |
 | 5 | [Plantillas de exportación](#5-plantillas-de-exportación) | Para exportar | aparece `export_templates/4.7.2.stable` |
 | 6 | [Exportar para Windows](#6-exportar-para-windows-exe) | Para exportar | se crea `build/MonstersCanons.exe` |
-| 7 | [Preparar Android](#7-android-apk) | Solo para el celular | se crea `build/MonstersCanons.apk` |
+| 7 | [Preparar Android](#7-android-apk) | Solo para el celular | se crea `build/MonstersCanons.apk` (y, para Google Play, `build/MonstersCanons.aab`, §7.5) |
 
 Las versiones exactas con las que se hizo el proyecto están en [Versiones de referencia](#versiones-de-referencia).
 
@@ -205,7 +205,7 @@ La spec M58 (RF-502) agrega en **Opciones** un selector **«Interfaz»**: *Autom
 - **Ver los menús del celular en la computadora:** **Opciones → Interfaz → Celular** y volver al menú principal (se ve en dos columnas). Para **capturas reales** de cada pantalla y un informe de qué botón queda fuera de la ventana o mide menos de 56 px: `godot --path . res://tools/capture_menus.tscn -- /carpeta/de/salida 1280x720 mobile` (o `pc`; hace falta ventana, no sirve `--headless`). En un celular apaisado 16:9 o 20:9 el juego dibuja siempre 1280 × 720 (en el 20:9 sobran franjas a los costados), así que 1280 × 720 es la medida que vale.
 - **Desplazar listas con el dedo:** en el celular, las listas de niveles, la Wiki, Opciones y Créditos se mueven arrastrando un dedo (aunque empiece sobre una tarjeta), con inercia. En la computadora con el modo celular forzado el mouse **no** arrastra listas: usar la rueda o la barra (un clic en la barra de la derecha).
 - **Mouse en Android** (DeX, Chromebook, teclado y mouse): en el modo celular un clic real hace de dedo (mapa, carrito, X, tilde, cruz); el clic que Android fabrica a partir de un toque se descarta. Ya no hace falta «Interfaz: PC». **Nunca se probó en un aparato real: si en DeX algo no responde o se duplica, anotar qué dispositivo era y ajustar `puntero_duplicado_ms` y `puntero_duplicado_px` en `data/ui/mobile_ui.json`.**
-- **La versión** (Opciones → «Créditos y versión» muestra «Beta») se cambia **solo** en `project.godot`, `config/version`. Al exportar un `.exe` hay que mirar que Windows tenga su `file_version` y `product_version` numéricos (hoy `0.0.0.0`, en `export_presets.cfg`); el APK toma la versión del proyecto (su `version/name` está vacío). **Todavía no se exportó nada con este cambio.**
+- **La versión** (Opciones → «Créditos y versión» muestra «Beta») se cambia **solo** en `project.godot`, `config/version`. Al exportar un `.exe` hay que mirar que Windows tenga su `file_version` y `product_version` numéricos (hoy `0.0.0.0`, en `export_presets.cfg`); los dos presets de Android toman el nombre de versión del proyecto (su `version/name` está vacío) y tienen su propio `version/code`, que hay que subir en cada entrega. **Todavía no se exportó nada con este cambio.**
 
 ### 6.2 La versión para GNU/Linux
 
@@ -263,13 +263,18 @@ Las dos líneas tienen que tener una ruta, no `""`.
 
 ### 7.3 Exportar
 
-La configuración está en `export_presets.cfg`, preset **"Android"**. El paquete actual es `com.monsterscanons.v1`. Revisá en ese preset las arquitecturas habilitadas antes de preparar la entrega. El proyecto tiene activada la compresión de texturas **ETC2/ASTC** y usa un ícono propio (`assets/icon.png`).
+La configuración está en `export_presets.cfg`, con **dos presets de Android** que comparten paquete, versión y arquitectura (D-237):
+
+- **"Android"**: una **APK** para instalar a mano en un teléfono de prueba. Es rápida y no usa Gradle.
+- **"Android Play"**: un **AAB** (*Android App Bundle*) para subir a Google Play. Usa la compilación de Gradle (ver 7.5).
+
+El paquete es **`com.monsterscanonsv1.game`** (hasta el 2026-11-24 era `com.monsterscanons.v1`: una APK vieja queda como otra app y su progreso no pasa). Revisá las arquitecturas habilitadas antes de preparar la entrega. El proyecto tiene activada la compresión de texturas **ETC2/ASTC** y usa un ícono propio (`assets/icon.png`).
 
 ```bash
 godot --headless --path . --export-debug "Android" build/MonstersCanons.apk
 ```
 
-Se usa `--export-debug` porque la versión de **prueba** se firma sola con la clave de depuración. (Publicar en la Play Store requiere una clave propia y `--export-release`; eso no está hecho.) Mientras no esté el SDK de Android (T237), la APK `MonstersCanons.apk` no se genera en la máquina Linux.
+Se usa `--export-debug` porque la versión de **prueba** se firma sola con la clave de depuración. Para Google Play se usa el preset "Android Play" con `--export-release` y la clave de subida de Lucas (7.5).
 
 ### 7.3.1 Actualizar una APK ya instalada
 
@@ -289,6 +294,32 @@ Para una actualización por APK, conservá el identificador del paquete y el cer
 **Opción B — copiando el archivo:** pasar `MonstersCanons.apk` al celular (cable, Drive, WhatsApp…), abrirlo y aceptar **"Permitir instalar apps de origen desconocido"**. Android lo pide porque no viene de la Play Store.
 
 **Cómo se juega en el celular** (spec §9.4): tocar = clic; el botón **"atrás"** = `Esc` (abre el menú de pausa y **no** cierra el juego); el juego queda siempre en horizontal.
+
+### 7.5 Google Play (AAB) *(T597, D-237)*
+
+La guía completa de la consola (ficha, formularios, prueba interna y cerrada) está en [`specs/publicacion/play-store.md`](specs/publicacion/play-store.md). Lo técnico:
+
+1. **Plantilla de compilación.** Gradle necesita la carpeta `android/` del proyecto. No se versiona (está en `.gitignore`): la instala Godot con `--install-android-build-template` (o desde el editor: *Proyecto → Instalar plantilla de compilación de Android*). La plantilla de Godot 4.7.2 compila con el SDK 36 (`build-tools` 36.1.0, `platforms/android-36`), mínimo Android 7 (API 24).
+2. **Clave de subida.** La crea y la guarda Lucas (pasos en `play-store.md` §4). Godot la lee del preset (guardada en `.godot/export_credentials.cfg`, que no se versiona) o de las variables `GODOT_ANDROID_KEYSTORE_RELEASE_PATH`, `GODOT_ANDROID_KEYSTORE_RELEASE_USER` y `GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD`.
+3. **Exportar:**
+   ```powershell
+   godot --headless --path . --install-android-build-template --export-release "Android Play" build/MonstersCanons.aab
+   ```
+   La primera vez Gradle baja unos cientos de MB de dependencias, así que tarda varios minutos y necesita internet. Para probar sin la clave de subida, `--export-debug "Android Play" build/MonstersCanons-debug.aab` firma con la clave de depuración (ese AAB **no** sirve para Play).
+4. **Antes de cada subida, subir `version/code`** en los dos presets de Android. Play rechaza un código repetido.
+
+> ⚠️ **Trampa conocida: Avast y Java.** El escudo web de Avast inspecciona HTTPS con un certificado propio. Windows lo conoce, pero el Java de Android Studio no, y Gradle falla con `PKIX path building failed … unable to find valid certification path` al bajar de `github.com` o `maven.google.com`. (`-Djavax.net.ssl.trustStoreType=Windows-ROOT` **no** sirve: ese Java no trae el módulo de Windows.) Dos salidas:
+> - **A.** En Avast, *Protección → Escudos principales → Escudo web*, desactivar el análisis de HTTPS mientras se exporta (y volverlo a activar).
+> - **B.** Armar un almacén de certificados para Java con la raíz de Avast y pasárselo a Gradle con `JAVA_TOOL_OPTIONS` (no cambia nada del sistema). En PowerShell:
+>   ```powershell
+>   $jbr = "C:\Program Files\Android\Android Studio\jbr"; $dir = "$env:USERPROFILE\.gradle"; New-Item -ItemType Directory -Force $dir | Out-Null
+>   $cert = Get-ChildItem Cert:\LocalMachine\Root | Where-Object Subject -like "*Avast Web/Mail Shield Root*" | Select-Object -First 1
+>   [IO.File]::WriteAllBytes("$dir\avast-root.cer", $cert.RawData)
+>   Copy-Item "$jbr\lib\security\cacerts" "$dir\java-truststore.jks" -Force
+>   & "$jbr\bin\keytool.exe" -importcert -noprompt -alias avast-web-shield -file "$dir\avast-root.cer" -keystore "$dir\java-truststore.jks" -storepass changeit
+>   $env:JAVA_TOOL_OPTIONS = "-Djavax.net.ssl.trustStore=$dir\java-truststore.jks"
+>   ```
+>   La última línea vale solo para esa ventana de PowerShell: exportá desde ahí (o abrí el editor de Godot desde ahí). `changeit` es la contraseña pública por omisión de los almacenes de Java, no un secreto.
 
 ---
 
