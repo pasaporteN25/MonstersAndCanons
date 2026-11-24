@@ -46,7 +46,12 @@ En un celular alargado (20:9 o más), los controles pasan a dos rieles a los cos
 
 ## Para empezar
 
-El proyecto todavía no ofrece una descarga pública. Si querés jugar o colaborar con una copia local, consultá la [guía de instalación y uso](ONBOARDING.md). Para conocer los enemigos, torres, niveles y formatos de mapas, está la guía de [contenido](CONTENIDO.md).
+- **Windows y Linux (x86-64).** Las descargas de escritorio y el archivo `SHA256SUMS.txt` para verificar su integridad están en [GitHub Releases](https://github.com/pasaporteN25/MonstersAndCanons/releases). En Windows, abrí el `.exe`. En Linux, extraé el `.tar.gz` y ejecutá `./MonstersCanons.x86_64`.
+- **Android.** El juego está en prueba cerrada en Google Play, disponible para las cuentas invitadas. El enlace a la ficha pública se agregará cuando esté disponible en producción.
+
+Para jugar desde el código fuente o colaborar, consultá la [guía de instalación y uso](ONBOARDING.md). Para conocer los enemigos, torres, niveles y formatos de mapas, está la [guía de contenido](CONTENIDO.md).
+
+Desarrollado por [Lucas Felici](https://github.com/pasaporteN25).
 
 ## Información técnica
 
