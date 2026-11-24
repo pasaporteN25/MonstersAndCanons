@@ -3359,3 +3359,7 @@ Spec en **M80** (RF-716 a RF-719), razones y canon en **D-212**, el cómo en la 
 ## Auditoría de preparación de la V1 (2026-11-24)
 
 - [x] **T599 · Auditar el cierre técnico y limpiar archivos obsoletos.** **Resultado** · Se revisó `main` en `73e58f4`, el backlog y los presets. CI 2.760/2.760, GUT local 2.760/2.760 tras la limpieza y APK debug exportada con firma y alineación verificadas. Se retiraron un fixture de arte viejo y un log duplicado, y se trasladó la skill de carga a Godot-Skills. Quedan pendientes el AAB de entrega y la prueba en Android físico. [Informe](tareas/informes/T599-auditoria-cierre-v1.md).
+
+## Identidad visual de la V1
+
+- [x] **T600 · Renovar el ícono en Android, Windows y Linux.** RF-159, D-239. **Resultado (2026-11-24)** · Se integró la ilustración aprobada y se actualizó la copia de la ficha de Play. Godot 4.7.2 importó el recurso y exportó bases de verificación de Windows, Linux y Android. Se comprobó el ícono extraído del ejecutable Windows, el PNG del paquete Linux y los recursos del lanzador del APK. GUT focalizado 15/15. No se verificó en un teléfono ni en un escritorio Linux, ni se exportó un AAB de entrega.

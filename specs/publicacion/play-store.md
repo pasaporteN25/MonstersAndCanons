@@ -49,7 +49,7 @@
 
 | Qué pide Play | Archivo | Estado |
 |---|---|---|
-| Ícono, 512 × 512, PNG de 32 bits, hasta 1 MB | `art/play-store/icon_512.png` (copia de `assets/icon.png`) | Listo. Play recorta las esquinas solo: el borde redondeado amarillo del ícono puede verse doble. Si molesta, hacer una versión cuadrada sin borde. |
+| Ícono, 512 × 512, PNG de 32 bits, hasta 1 MB | `art/play-store/icon_512.png` (copia de `assets/icon.png`) | Listo. Ilustración del monstruo y el cañón, con esquinas cuadradas para el recorte automático de Play (T600). |
 | Gráfico destacado, 1024 × 500, sin transparencia | `art/play-store/feature_graphic_1024x500.png` (lámina «El oasis» + logo) | Listo; se regenera con `tools/play_store_graphics.gd`. |
 | Capturas de teléfono: de 2 a 8, PNG o JPEG, el lado largo **no más del doble** del corto | **Pendiente.** | Sacarlas en el teléfono, jugando (ver abajo). |
 
