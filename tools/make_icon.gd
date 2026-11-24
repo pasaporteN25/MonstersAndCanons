@@ -1,6 +1,6 @@
-# Genera el ícono del juego (assets/icon.png, 512×512) con los dibujos del juego (RF-159):
+# Recrea el ícono histórico (512 × 512) con los dibujos originales del juego:
 # una torre de nivel 3 con el Cañón apuntando al Jefe, sobre pasto, con borde dorado.
-# Se usa para la ventana, el .exe (export_presets.cfg) y el celular.
+# Guarda la muestra en user://legacy_icon.png. El ícono vigente es assets/icon.png (T600).
 #
 # Uso: godot --headless --path . -s tools/make_icon.gd
 extends SceneTree
@@ -26,8 +26,9 @@ func _init() -> void:
 	_circle(img, Vector2(258, 301), 19, FLASH)                         # destello del disparo
 	# El Jefe, a la derecha, dado vuelta para mirar a la torre.
 	_paste_svg(img, "res://assets/sprites/enemies/boss.svg", 3.8, Vector2i(250, 96), true)
-	print("icon: ", img.save_png("res://assets/icon.png"))
-	quit()
+	var error: Error = img.save_png("user://legacy_icon.png")
+	print("Ícono histórico: ", error_string(error))
+	quit(0 if error == OK else 1)
 
 
 ## Dibuja un SVG del juego sobre el ícono. `scale` 4 = cada unidad del SVG mide 4 píxeles.

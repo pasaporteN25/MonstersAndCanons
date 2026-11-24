@@ -357,7 +357,7 @@ Se ejecutan desde la carpeta del proyecto. Más detalle dentro de cada archivo.
 | `godot --path . res://tools/perf_levels.tscn -- level=15 from=27` | Rendimiento en un nivel real (T236): `level` es el mapa, `from` cuántas oleadas se dan por jugadas antes de medir; opciones `to`, `towers`, `seconds`, `vsync=1`. Imprime los FPS de cada oleada. Abre una ventana. |
 | `godot --headless --path . -s tools/make_sounds.gd` | Volver a generar los sonidos (D-020). Con `-- shot_fire`, solo ese. |
 | `godot --headless --path . -s tools/check_level.gd -- data/levels/level_06.json` | Revisar un nivel sin jugarlo (sin archivo: todos los de la campaña). Cómo hacer un nivel: `CONTENIDO.md`. |
-| `godot --headless --path . -s tools/make_icon.gd` | Volver a generar el ícono del juego (`assets/icon.png`). |
+| `godot --headless --path . -s tools/make_icon.gd` | Recrear el ícono histórico en `user://legacy_icon.png`. El ícono vigente está en `assets/icon.png`. |
 
 > ⚠️ **Trampa conocida (para quien escriba herramientas nuevas):** los scripts que se ejecutan con `-s` se compilan **antes** que los autoloads. No pueden usar `GameFlow`, `SaveManager` ni `Audio` por su nombre, ni declarar variables de tipo `Game`. Hay que declarar la partida como `Node2D` (plan técnico §7).
 

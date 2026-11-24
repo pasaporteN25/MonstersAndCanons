@@ -1,5 +1,9 @@
 # Novedades del juego
 
+## Nuevo ícono de Monsters & Canons
+
+El monstruo rojo y el cañón de bronce estrenan ilustración en Android, Windows y Linux.
+
 ## Una nueva historia de llegada
 
 La introducción cuenta el viaje y la llegada con cinco imágenes nuevas. La expedición incluye personal científico y militar.

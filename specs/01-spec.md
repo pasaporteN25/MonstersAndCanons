@@ -1182,7 +1182,7 @@ Dibujos simples para dejar de ver formas geométricas. Es un **primer intento "p
 - **RF-156** **Reemplazable:** cada dibujo es un archivo en `assets/sprites/`, y los datos de cada torre y cada enemigo dicen qué archivo usan. Si a un dato le falta el dibujo, se usa la **forma geométrica** de antes: así nada se rompe si falta un archivo.
 - **RF-157** Con los dibujos, el juego sigue cumpliendo P7 (60 FPS con 200 enemigos y 60 torres).
 - **RF-158** *(M5)* **Efectos de lo nuevo:** el enemigo que se quema lleva **llamitas** encima; el que se regenera muestra "+N" verdes (RF-165); el rayo en cadena se ve como un **zigzag** amarillo entre los enemigos golpeados; las púas de la Ráfaga salen en círculo. Las torres y enemigos nuevos tienen sus dibujos, con el mismo estilo que el resto.
-- **RF-159** *(M5)* **Ícono del juego:** hecho con los dibujos (una torre frente a una bestia), el mismo en la ventana, en el `.exe` y en el celular.
+- **RF-159** *(M5)* **Ícono del juego:** ilustración aprobada de un monstruo rojo y un cañón (D-239). Se usa en la ventana de Windows y Linux, el ejecutable de Windows y el lanzador de Android. La ficha de Google Play usa la misma ilustración.
 
 ---
 

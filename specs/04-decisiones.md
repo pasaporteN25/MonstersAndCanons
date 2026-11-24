@@ -2079,3 +2079,8 @@ Lucas se dio de alta como desarrollador en Google Play y quiere subir el juego. 
 - **Fecha:** 2026-11-24 · **Estado:** Aceptada · **Decidió:** Lucas
 - **Decisión:** usar el texto acordado y las cinco imágenes elegidas; la expedición incluye científicos, personal técnico y soldados. La Compañía llega para quedarse a un planeta habitado.
 - **Presentación:** el último texto se reparte en dos láminas con la misma imagen, para conservarlo y respetar los límites y tiempos de lectura existentes. Esta decisión actualiza el contenido anterior de D-096.
+
+### D-239 · Renovar el ícono del juego
+- **Fecha:** 2026-11-24 · **Estado:** Aceptada · **Decidió:** Lucas
+- **Decisión:** usar la ilustración aprobada para Google Play también en Android, Windows y Linux.
+- **Implementación:** conservar el PNG compartido y la copia para la ficha de Play. El generador histórico escribe fuera de los recursos del juego (RF-159, T600).

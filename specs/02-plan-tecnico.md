@@ -1843,3 +1843,7 @@ Orden, ejecutores y archivos de cada tarea: [`specs/tareas/M89-orquestacion.md`]
 - **Plantilla de compilación:** `godot --headless --path . --install-android-build-template --export-release "Android Play" build/MonstersCanons.aab` la instala en `android/` (ignorada por `.gitignore`) y exporta. La primera vez Gradle baja sus dependencias (necesita internet). El SDK de Android tiene que tener `build-tools` 36.1.0 y `platforms/android-36`.
 - **Firma de entrega:** Godot lee la clave de subida de `.godot/export_credentials.cfg` (lo escribe el editor al cargar el keystore en el preset) o de las variables `GODOT_ANDROID_KEYSTORE_RELEASE_PATH`, `GODOT_ANDROID_KEYSTORE_RELEASE_USER` y `GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD`. Ninguna de las dos fuentes se versiona.
 - **Gráficos:** `tools/play_store_graphics.gd` (sin ventana) arma el gráfico destacado de 1024 × 500 con una lámina de la intro y el logo, y copia el ícono de 512 × 512 a `art/play-store/`. Las capturas salen de las herramientas `tools/capture_*.gd` a 1280 × 720 o del teléfono de Lucas.
+
+### T600 · Ícono compartido (RF-159, D-239)
+
+Usar `assets/icon.png` como fuente. `application/config/icon` lo suministra a la ventana y a los presets de Android, y `application/icon` lo suministra al ejecutable de Windows. Copiar el PNG de 512 × 512 a `art/play-store/icon_512.png` para la ficha.
