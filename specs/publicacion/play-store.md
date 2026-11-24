@@ -24,7 +24,7 @@
 
 **Descripción larga** (máx. 4.000 caracteres):
 
-> **Monsters & Canons** es un tower defense en 2D. Una colonia de gente de oficio llega a Cántaro, un planeta seco, y los monstruos del lugar no la quieren ahí. Tu trabajo es que ninguno llegue a la salida: elegís dónde poner cada torre, cuándo mejorarla y cómo repartir el oro y los recursos para aguantar hasta la última oleada.
+> **Monsters & Canons** es un tower defense en 2D. Una expedición científico-militar llega a Cántaro para quedarse. Mientras levanta su campamento, aparecen criaturas cerca del perímetro. Tu trabajo es que ninguno llegue a la salida: elegís dónde poner cada torre, cuándo mejorarla y cómo repartir el oro y los recursos para aguantar hasta la última oleada.
 >
 > **Qué vas a encontrar**
 >

@@ -4,7 +4,7 @@ extends Node
 # entrada mientras dura. NÚCLEO GENÉRICO: no nombra nada de este proyecto (ni autoloads, ni guardado, ni
 # escenas, ni colores propios), así que se puede copiar tal cual a otro juego de Godot 4.
 #
-# Cómo se usa (el detalle está en docs/skills-borrador/godot-pantalla-de-carga/SKILL.md):
+# Cómo se usa (ver M64 en specs/02-plan-tecnico.md):
 #   var transition := SceneTransition.new()
 #   add_child(transition)            # en un autoload, que vive toda la partida
 #   transition.go(ruta_de_la_escena)   # false si ya hay un cambio en curso (se ignora)

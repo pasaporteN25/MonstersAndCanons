@@ -1503,7 +1503,7 @@ Los textos, números de tamaño y posiciones nuevos viven en `mobile_ui.json` (P
 | `scripts/logic/scene_transition.gd` (`SceneTransition`) | **Núcleo genérico**, sin nombres del proyecto. `go(path)`, `is_busy()`, `progress()`, señales `started`/`finished`/`failed`; propiedades de tiempos, colores, tema y las costuras `swapper` y `load_override`. Corrutina `_run`: dibuja la capa, carga en hilo, espera el mínimo, cambia, espera cuadros y gracia, libera. |
 | `GameFlow.transition`, `is_changing()`, `_change_scene()`, `reload_current()` | **Capa fina:** crea el núcleo con el tema de los menús, el mínimo y los colores; todo `go_to_*`/`start_*` pasa por ahí y sale antes de tocar el estado si hay un cambio en curso. |
 | `Game.restart` | Llama a `GameFlow.reload_current()`. |
-| `docs/skills-borrador/godot-pantalla-de-carga/SKILL.md` | Borrador de skill (T341). No se instala. |
+| [Godot-Skills](https://github.com/pasaporteN25/Godot-Skills/blob/4609643/skills/godot-pantalla-de-carga/SKILL.md) | Skill original de T341, trasladada en T599. |
 
 **Cómo se bloquea la entrada:** `get_tree().root.set_disable_input(true)` (corta `_input`, la GUI y las acciones), una capa con `MOUSE_FILTER_STOP` y `GameFlow._notification` ignorando el «atrás» de Android. **Cómo se prueba:** `tests/test_scene_transition.gd` (núcleo, con `swapper` falso, eventos reales y experimentos de control) y `tests/test_loading_flow.gd` (la selección real, tarjetas tocadas durante el cambio). Suite completa sin `SCRIPT ERROR` ni `Parse Error`.
 ### M65 / T360 a T364 · Animaciones de mejora de torres (RF-590 a RF-596, D-135 a D-137)
