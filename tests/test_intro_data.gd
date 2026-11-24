@@ -3,7 +3,7 @@
 extends GutTest
 
 const DOC_PATH: String = "res://specs/intro/guion.md"
-const IMAGE: String = "res://assets/intro/01_la_nave.webp"
+const IMAGE: String = "res://assets/intro/story_01.jpg"
 
 
 ## Una lámina válida; `overrides` pisa campos.
@@ -118,7 +118,7 @@ func test_missing_image_names_the_slide() -> void:
 	raw["laminas"][2] = _slide({"imagen": "res://assets/intro/no_existe.webp"})
 	var data: IntroData = IntroData.parse(raw)
 	assert_true(_has_error(data, "la lámina 3 no encuentra la imagen `res://assets/intro/no_existe.webp`"))
-	raw["laminas"][2] = _slide({"imagen": "assets/intro/01_la_nave.webp"})
+	raw["laminas"][2] = _slide({"imagen": "assets/intro/story_01.jpg"})
 	assert_true(_has_error(IntroData.parse(raw), "la lámina 3: \"imagen\" tiene que ser una ruta que empiece con res://"))
 
 

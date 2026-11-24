@@ -3629,7 +3629,7 @@ Pedido de Lucas: (A) bajar el peso de las imágenes de la intro para que la APK 
 - **RF-586** **Respeta la pausa.** El nodo trabaja con el árbol en pausa (por ejemplo, «Niveles» desde el menú de pausa) y no cambia la pausa de nadie.
 - **RF-587** **Si falla, se vuelve.** Si la escena no existe o no carga, se avisa con `push_warning` y la señal `failed`, la escena vieja queda donde estaba y la entrada se libera. Si el nodo sale del árbol a mitad de un cambio, la entrada también se libera.
 - **RF-588** **No cambia lo demás.** El modo de pruebas (RF-180), el editor de mapas y las partidas de la comunidad se comportan igual; solo cambia cómo se llega a ellos.
-- **RF-589** **Una skill reutilizable (borrador).** `docs/skills-borrador/godot-pantalla-de-carga/SKILL.md` explica el patrón, las trampas y un ejemplo mínimo para otros proyectos. No se instala en ningún lado (T341).
+- **RF-589** **Una skill reutilizable.** [Pantalla de carga en Godot-Skills](https://github.com/pasaporteN25/Godot-Skills/blob/4609643/skills/godot-pantalla-de-carga/SKILL.md) explica el patrón, las trampas y un ejemplo mínimo para otros proyectos (T341 y T599).
 
 > **Criterio de aceptación RF-580 a RF-589**
 > **Dado** la selección de niveles con varios niveles abiertos → **Cuando** se toca un nivel y, durante la carga, se tocan otras tarjetas (mouse o toque), se toca «atrás» o se llama a otra función del flujo → **Entonces** se carga **un solo** nivel (el primero) y `current_index` no cambia.

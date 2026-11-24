@@ -3,7 +3,7 @@
 extends GutTest
 
 const DIR: String = "user://test_intro_doc"
-const IMAGE: String = "res://assets/intro/01_la_nave.webp"
+const IMAGE: String = "res://assets/intro/story_01.jpg"
 
 
 func after_each() -> void:
@@ -104,7 +104,7 @@ func test_no_edit_means_no_changes() -> void:
 
 
 func test_titles_come_from_the_image_name() -> void:
-	assert_eq(IntroDoc.title_of("res://assets/intro/01_la_nave.webp"), "La nave")
+	assert_eq(IntroDoc.title_of("res://assets/intro/story_01.jpg"), "Story 01")
 	assert_eq(IntroDoc.title_of("res://assets/intro/06_los_motores_apagados.webp"), "Los motores apagados")
 	assert_eq(IntroDoc.title_of("res://assets/intro/x.webp"), "X")
 	assert_eq(IntroDoc.title_of(""), "sin título")
