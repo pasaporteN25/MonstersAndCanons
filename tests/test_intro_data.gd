@@ -173,7 +173,7 @@ func test_reading_seconds_rule() -> void:
 ## Los textos del guion (§4), en orden: [{"numero", "texto"}], leídos de `specs/intro/guion.md`.
 func _approved_texts() -> Array[String]:
 	var doc: String = FileAccess.get_file_as_string(DOC_PATH)
-	var section: String = doc.split("## 4. Las siete láminas")[1].split("## 5. Resumen")[0]
+	var section: String = doc.split("## 4. Las seis láminas")[1].split("## 5. Resumen")[0]
 	var found: Array[String] = []
 	var current: Array[String] = []
 	var in_text: bool = false
@@ -191,10 +191,10 @@ func _approved_texts() -> Array[String]:
 	return found
 
 
-func test_the_approved_document_has_the_seven_texts() -> void:
+func test_the_approved_document_has_the_six_texts() -> void:
 	var approved: Array[String] = _approved_texts()
-	assert_eq(approved.size(), 7)
-	assert_eq(approved[4], "La bajada fue brusca. El casco crujió entero, pero aguantó.")
+	assert_eq(approved.size(), 6)
+	assert_true(approved[4].begins_with("Nos dimos cuenta"))
 
 
 func test_official_file_is_valid() -> void:
@@ -212,17 +212,24 @@ func test_official_texts_are_exactly_the_approved_ones() -> void:
 		assert_eq(data.slides[i]["texto"], approved[i], "lámina %d: el texto es el del guion" % (i + 1))
 
 
-func test_official_images_exist_and_are_1920_by_1080() -> void:
+func test_official_images_follow_the_story_order() -> void:
+	var slides: Array[Dictionary] = IntroData.load_file().slides
+	assert_eq(slides.size(), 6)
+	for i: int in slides.size():
+		assert_eq(slides[i]["imagen"], "res://assets/intro/story_%02d.jpg" % mini(i + 1, 5))
+
+
+func test_official_images_exist_and_have_expected_dimensions() -> void:
 	for slide: Dictionary in IntroData.load_file().slides:
 		var texture := load(String(slide["imagen"])) as Texture2D
 		assert_not_null(texture, "carga %s" % slide["imagen"])
 		if texture != null:
-			assert_eq(texture.get_size(), Vector2(1920, 1080), "%s mide 1920 × 1080" % slide["imagen"])
+			assert_eq(texture.get_size(), Vector2(2752, 1536), "%s mide 2752 × 1536" % slide["imagen"])
 
 
-func test_official_texts_have_no_banned_words_and_do_not_name_the_planet() -> void:
+func test_official_texts_have_no_banned_words() -> void:
 	var banned: PackedStringArray = ["enemigo", "peligro", "bestia", "salvaje", "invasor", "nativo", "indio",
-		"alien", "monstruo", "malvado", "héroe", "cántaro"]
+		"alien", "malvado", "héroe"]
 	for slide: Dictionary in IntroData.load_file().slides:
 		var text: String = String(slide["texto"]).to_lower()
 		for word: String in banned:

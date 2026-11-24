@@ -95,7 +95,7 @@ Volcán y pantano **existen** en el planeta pero la colonia no llega a ellos. So
 
 ## 3. La colonia
 
-**Quiénes son.** Una expedición civil con ingenieros, constructores y gente de oficio, no un ejército. No hay soldados espaciales ni armas de energía (07 §2). **[CANON]**
+**Quiénes son.** Una expedición científico-militar con científicos, ingenieros, constructores, gente de oficio y soldados. Sus integrantes investigan el planeta, levantan el asentamiento y defienden el perímetro. No hace falta introducir armas de energía. **[CANON: cambio solicitado por Lucas]**
 
 **Nombre de la colonia (N-2). [OPCIÓN]** Sirve a la vez para la expedición y para el asentamiento que funda.
 
@@ -122,7 +122,7 @@ Volcán y pantano **existen** en el planeta pero la colonia no llega a ellos. So
 
 **Oro y recursos.** El **oro** es la caja de la colonia; el **recurso** es material crudo de acá (madera, piedra, mineral) y vale solo en el mapa donde se junta (07 §7). El juego no explica más que eso. **[PROPUESTA]**
 
-**Aspecto de la expedición** (para la intro y las pantallas de final): gente con ropa de trabajo, herramientas, carros y una nave que ya no va a despegar. Colores cálidos de bronce y madera sobre el verde del oasis; la nave se ve vieja y desarmándose de a poco para hacer casas y torres. **[PROPUESTA]**
+**Aspecto de la expedición** (para la intro y las pantallas de final): científicos, personal técnico y soldados, con herramientas, equipos, vehículos y una nave asentada junto al oasis. Colores cálidos de bronce y madera sobre el verde del oasis; la nave se ve vieja y desarmándose de a poco para hacer casas y torres. **[PROPUESTA]**
 
 ---
 
@@ -351,7 +351,7 @@ Hay que mostrar **el logro y su costo**, sin conclusión moral (07 §1). **[CANO
 ### Canon fijo (lo que no se contradice)
 - La expedición llega para **quedarse**; no hay rescate ni baliza de salida. (07 §9 lo descartó)
 - La V1 se juega **siempre como los colonizadores**.
-- Las torres son **artillería del perímetro**; la tecnología es **hierro, bronce, cristal y mecanismos**, sin láseres ni soldados espaciales.
+- Las torres son **artillería del perímetro**; la tecnología es **hierro, bronce, cristal y mecanismos**, sin necesidad de láseres; la expedición incluye personal científico y militar.
 - Cuatro capas de habitantes: fauna, criaturas independientes, comunidades organizadas y el Soberano.
 - **El glifo G2 es el mismo en las señales y en las ruinas.**
 - El final **asegura el hogar en una región, no el planeta**, y deja ambiguo el costo.

@@ -12,6 +12,11 @@
 
 ---
 
+## T598 · Nueva historia e imágenes de la intro [mobile+x86]
+
+- [x] Integrar el texto y las cinco imágenes acordadas y actualizar el canon científico-militar.
+  **Resultado (2026-11-24):** cinco imágenes en seis láminas; la quinta imagen acompaña ambos párrafos finales. Se conservó el texto acordado y se actualizaron la biblia, la Wiki, el guion y el documento editable. La suite completa pasó 2758 de 2759 pruebas; la única falla señaló cinco imágenes anteriores sin uso, que se retiraron. Luego pasaron las 84 pruebas de intro y auditoría de recursos, y la carga y el avance en Godot. Los cinco textos coinciden con el material original salvo saltos de presentación. No se repitió la suite completa ni se verificó visualmente en celular.
+
 ## Qué falta para cerrar la V1 · actualizado por D-216 (2026-10-27; base T444)
 
 > La fotografía original corresponde a la auditoría T444 (2026-10-23). **Enmienda D-216 (2026-10-27):** las partidas manuales de campaña pasan a después de publicar V1. No se marcan como hechas y ya no bloquean T239; sus instrucciones y compuertas se conservan para validar la versión publicada.

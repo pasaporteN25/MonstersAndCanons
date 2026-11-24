@@ -288,7 +288,7 @@ Diez artículos aprobados en `data/wiki/lore/` (RF-469), más un **undécimo en 
 - **Se abre al ganar:** el nivel 3 (`level_03`)
 - **Texto** (un bloque `texto` por párrafo):
 
-  > La Compañía Meridiana armó la expedición. No es un ejército: es gente de oficio (ingenieros, herreros, carpinteros, agricultores) con herramientas, semillas y planos.
+  > La Compañía Meridiana armó una expedición científico-militar: científicos, gente de oficio y soldados investigan, construyen y defienden el asentamiento.
 
   > La nave no puede volver a despegar. Se la va desarmando de a poco para hacer casas, cañerías y torres, y lo que se rompe se arregla con lo que hay.
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c86p4ftdi4v1p"
-path="res://.godot/imported/02_la_bodega.webp-dfa201a49b73927210bf0c5298baa1cf.ctex"
+uid="uid://c4mgn2uvjtpmx"
+path="res://.godot/imported/story_05.jpg-191b1577382bcd2f9dfe4ecaf5667f8c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/intro/02_la_bodega.webp"
-dest_files=["res://.godot/imported/02_la_bodega.webp-dfa201a49b73927210bf0c5298baa1cf.ctex"]
+source_file="res://assets/intro/story_05.jpg"
+dest_files=["res://.godot/imported/story_05.jpg-191b1577382bcd2f9dfe4ecaf5667f8c.ctex"]
 
 [params]
 

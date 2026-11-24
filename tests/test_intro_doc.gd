@@ -84,18 +84,18 @@ func test_the_written_file_is_read_by_the_game_loader() -> void:
 	file.close()
 	var data: IntroData = IntroData.load_file(path)
 	assert_true(data.is_valid(), str(data.errors))
-	assert_eq(data.slides.size(), 7)
+	assert_eq(data.slides.size(), 6)
 
 
 func test_editing_one_text_changes_only_that_text() -> void:
 	var raw: Dictionary = _official_raw()
-	var markdown: String = IntroDoc.to_markdown(raw).replace("> La bajada fue brusca. El casco crujió entero, pero aguantó.", "> La bajada fue brusca.")
+	var markdown: String = IntroDoc.to_markdown(raw).replace("> La Compañía Meridiana llevaba años viajando.", "> La Compañía viajaba.")
 	var result: Dictionary = IntroDoc.parse_markdown(markdown)
 	assert_eq(result["errors"], PackedStringArray())
 	var changes: PackedStringArray = IntroDoc.describe_changes(raw, result["raw"])
 	assert_eq(changes.size(), 1, str(changes))
-	assert_true(changes[0].begins_with("lámina 5, texto:"))
-	assert_eq(result["raw"]["laminas"][4]["texto"], "La bajada fue brusca.")
+	assert_true(changes[0].begins_with("lámina 1, texto:"))
+	assert_eq(result["raw"]["laminas"][0]["texto"], "La Compañía viajaba.")
 
 
 func test_no_edit_means_no_changes() -> void:
@@ -114,11 +114,11 @@ func test_titles_come_from_the_image_name() -> void:
 
 func test_notes_are_read_and_kept_by_image_on_export() -> void:
 	var raw: Dictionary = _official_raw()
-	var markdown: String = IntroDoc.to_markdown(raw).replace("## Lámina 2 · La bodega\n", "## Lámina 2 · La bodega\n")
-	var with_notes: String = markdown.replace("> Era un viaje de ida.\n\nNotas:\n", "> Era un viaje de ida.\n\nNotas:\n\nProbar con menos años.\nY una pausa.\n")
+	var markdown: String = IntroDoc.to_markdown(raw)
+	var with_notes: String = markdown.replace("> La Compañía Meridiana llevaba años viajando.\n\nNotas:\n", "> La Compañía Meridiana llevaba años viajando.\n\nNotas:\n\nProbar con menos años.\nY una pausa.\n")
 	var result: Dictionary = IntroDoc.parse_markdown(with_notes)
 	assert_eq(result["errors"], PackedStringArray())
-	var image: String = raw["laminas"][2]["imagen"]
+	var image: String = raw["laminas"][0]["imagen"]
 	assert_eq(result["notes"][image], "Probar con menos años.\nY una pausa.")
 	assert_eq(result["notes"].size(), 1)
 	# Al volver a exportar con esas notas, siguen en el documento y el JSON no se entera.

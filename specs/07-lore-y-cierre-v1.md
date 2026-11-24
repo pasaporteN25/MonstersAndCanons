@@ -39,7 +39,7 @@ D-077 establece una sola aplicación por plataforma, modo de pruebas desde Opcio
 
 La organización explica el cambio de tácticas, no exige convertir toda embestida animal en un acto militar. Antes de reordenar enemigos se deben revisar los debuts actuales y el balance de la campaña.
 
-Las torres fijas encajan como artillería del perímetro y de las instalaciones coloniales. La expedición llega desde otro planeta, pero no exige cambiar hierro, bronce, cristales y mecanismos por una estética de láseres y soldados espaciales.
+**Actualización del 24-11-2026:** la expedición incluye personal científico y militar; ver `10-universo.md`. Las torres fijas encajan como artillería del perímetro y de las instalaciones coloniales. La expedición llega desde otro planeta, pero no exige cambiar hierro, bronce, cristales y mecanismos por una estética de láseres y soldados espaciales.
 
 ### Señales y ambigüedad
 
